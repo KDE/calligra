@@ -58,6 +58,8 @@ signals:
     void characterStyleSelected(KoCharacterStyle *style);
 
 private:
+    void removeStyle(int styleId);
+
     Ui::StylesWidget widget;
     Type m_type;
     KoStyleManager *m_styleManager;

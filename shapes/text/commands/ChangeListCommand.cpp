@@ -63,6 +63,14 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
                  llp = m_listStyle->level(1);
 }
             llp.setStyle(style);
+            if(style == KoListStyle::SquareItem || style == KoListStyle::DiscItem ||
+                    style == KoListStyle::CircleItem || style == KoListStyle::BoxItem ||
+                    style == KoListStyle::RhombusItem || style == KoListStyle::HeavyCheckMarkItem ||
+                    style == KoListStyle::BallotXItem || style == KoListStyle::RightArrowItem ||
+                    style == KoListStyle::RightArrowHeadItem)
+                llp.setListItemSuffix(""); // for non-numbered items, remove any suffix.
+            else
+                llp.setListItemSuffix("."); // for numbered items, add a trailing dot.
             m_listStyle->setLevel(llp);
         }
     }

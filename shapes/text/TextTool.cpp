@@ -348,6 +348,18 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
                 plugin->finishedWord(m_textShapeData->document(), m_caret.position());
         }
     }
+    else if(event->button() ==  Qt::MidButton) { // Paste
+        QClipboard *clipboard = QApplication::clipboard();
+        QString paste = clipboard->text(QClipboard::Selection);
+        if(! paste.isEmpty()) {
+            if (m_caret.hasSelection())
+                m_selectionHandler.deleteInlineObjects();
+            m_caret.insertText(paste);
+            ensureCursorVisible();
+            editingPluginEvents();
+            emit blockChanged(m_caret.block());
+        }
+    }
 }
 
 void TextTool::setShapeData(KoTextShapeData *data) {
@@ -377,9 +389,15 @@ void TextTool::updateSelectionHandler() {
     m_selectionHandler.setShapeData(m_textShapeData);
     m_selectionHandler.setCaret(&m_caret);
     emit sigSelectionChanged(m_caret.hasSelection());
+
+    if(m_caret.hasSelection()) {
+        QClipboard *clipboard = QApplication::clipboard();
+        if(clipboard->supportsSelection())
+            clipboard->setText(m_caret.selectedText(), QClipboard::Selection);
+    }
 }
 
-void TextTool::copy() {
+void TextTool::copy() const {
     if(m_textShapeData == 0 || !m_caret.hasSelection()) return;
     int from = m_caret.position();
     int to = m_caret.anchor();
@@ -398,6 +416,32 @@ void TextTool::copy() {
     data->setData("application/vnd.oasis.opendocument.text", bytes);
     QApplication::clipboard()->setMimeData(data);
 kDebug() << "output: " << QString::fromUtf8(bytes) << endl;
+}
+
+bool TextTool::paste() {
+    const QMimeData *data = QApplication::clipboard()->mimeData();
+
+    if(data->hasFormat("application/vnd.oasi.opendocument.text")) {
+        kDebug() << "TODO load ODF style text!\n";
+        // TODO create a KoTextShapeData::loadOdf() method and call it here.
+    }
+    else if(data->hasHtml()) {
+        if (m_caret.hasSelection())
+            m_selectionHandler.deleteInlineObjects();
+        m_caret.insertHtml(data->html());
+    }
+    else if(data->hasText()) {
+        if (m_caret.hasSelection())
+            m_selectionHandler.deleteInlineObjects();
+        m_caret.insertText(data->text());
+    }
+    else
+        return false;
+
+    ensureCursorVisible();
+    editingPluginEvents();
+    emit blockChanged(m_caret.block());
+    return true;
 }
 
 int TextTool::pointToPosition(const QPointF & point) const {

@@ -132,7 +132,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     d->currentMasterPage = "Standard";
     if ( !loadPageLayout(context, d->currentMasterPage) )
         return false;
-    // It's quit possible that the following line asserts if we load e.g. an document
+    // It's quite possible that the following line asserts if we load e.g. an document
     // that does not contain anything except a single table.
     //Q_ASSERT( context.oasisStyles().masterPages().contains( d->currentMasterPage ) );
 
@@ -196,7 +196,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
         fs->loadOasisContent( body, context );
         KWFrame* frame = new KWFrame( fs, 29, 42, 566-29, 798-42 );
-        frame->setFrameBehavior( KWFrame::AutoCreateNewFrame );
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
         // load padding, background and borders for the main frame
@@ -240,7 +239,6 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     Q_ASSERT(factory);
     KoShape *shape = factory->createDefaultShape();
     KWTextFrame *frame = new KWTextFrame(shape, fs);
-    frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
     d->document->addFrameSet(fs);
 
     QTextCursor cursor( fs->document() );
@@ -485,7 +483,6 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
     Q_ASSERT(factory);
     KoShape *shape = factory->createDefaultShape();
     KWTextFrame *frame = new KWTextFrame(shape, fs);
-    frame->setFrameBehavior(KWord::AutoExtendFrameBehavior);
     d->document->addFrameSet(fs);
 
     QTextCursor cursor( fs->document() );

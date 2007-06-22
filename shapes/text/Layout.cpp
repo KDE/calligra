@@ -616,12 +616,12 @@ static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyl
         // Ok, try the waves :)
         pen.setStyle(Qt::SolidLine);
         painter->setPen(pen);
-        int x = x1;
-        int halfWaveWidth = 2 * painter->fontMetrics().lineWidth();
-        int halfWaveLength = 6 * painter->fontMetrics().lineWidth();
-        int startAngle = 0 * 16;
-        int middleAngle = 180 * 16;
-        int endAngle = 180 * 16;
+        double x = x1;
+        const double halfWaveWidth = 2 * painter->fontMetrics().lineWidth();
+        const double halfWaveLength = 6 * painter->fontMetrics().lineWidth();
+        const int startAngle = 0 * 16;
+        const int middleAngle = 180 * 16;
+        const int endAngle = 180 * 16;
         while (x < x2) {
             QRectF rectangle1(x, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
             if (type == KoCharacterStyle::DoubleLine) {
@@ -658,12 +658,12 @@ static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyl
         painter->setPen(pen);
         if (type == KoCharacterStyle::DoubleLine) {
             painter->translate(0, -pen.width());
-            painter->drawLine(x1, y, x2, y);
+            painter->drawLine(QPointF(x1, y), QPointF(x2, y));
             painter->translate(0, 2*pen.width());
-            painter->drawLine(x1, y, x2, y);
+            painter->drawLine(QPointF(x1, y), QPointF(x2, y));
             painter->translate(0, -pen.width());
         } else {
-            painter->drawLine(x1, y, x2, y);
+            painter->drawLine(QPointF(x1, y), QPointF(x2, y));
         }
     }
     painter->setPen(penBackup);

@@ -33,6 +33,7 @@
 
 // koffice libs includes
 #include <KoCopyController.h>
+#include <KoPasteController.h>
 #include <KoShape.h>
 #include <KoText.h>
 #include <KoShapeContainer.h>
@@ -207,6 +208,9 @@ void KWView::setupActions() {
     action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
     new KoCopyController(kwcanvas(), action);
 
+    action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
+    new KoPasteController(kwcanvas(), action);
+
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
 This saves problems with finding out which we missed near the end.
@@ -225,7 +229,6 @@ This saves problems with finding out which we missed near the end.
     // -------------- Edit actions
     m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
     m_actionEditCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( editCopy() ));
-    m_actionEditPaste = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", this, SLOT( editPaste() ));
     m_actionEditFind = actionCollection()->addAction(KStandardAction::Find,  "edit_find", this, SLOT( editFind() ));
     m_actionEditFindNext = actionCollection()->addAction(KStandardAction::FindNext,  "edit_findnext", this, SLOT( editFindNext() ));
     m_actionEditFindPrevious = actionCollection()->addAction(KStandardAction::FindPrev,  "edit_findprevious", this, SLOT( editFindPrevious() ));

@@ -23,7 +23,8 @@
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 
-#include <kdebug.h>
+#include <KDebug>
+#include <KInputDialog>
 
 StylesWidget::StylesWidget(Type type, QWidget *parent)
     : QWidget(parent),
@@ -36,6 +37,10 @@ StylesWidget::StylesWidget(Type type, QWidget *parent)
     connect(widget.newStyle, SIGNAL(pressed()), this, SLOT(newStyleClicked()));
     connect(widget.deleteStyle, SIGNAL(pressed()), this, SLOT(deleteStyleClicked()));
     connect(widget.styleList, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(editStyle(QListWidgetItem*)));
+
+    widget.newStyle->setIcon( KIcon("edit-add") );
+    widget.deleteStyle->setIcon( KIcon("edit-delete") );
+    widget.deleteStyle->setEnabled(false);
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm) {
@@ -82,6 +87,7 @@ void StylesWidget::itemSelected(QListWidgetItem *item) {
         emit characterStyleSelected(m_styleManager->characterStyle(styleId));
     else
         emit paragraphStyleSelected(m_styleManager->paragraphStyle(styleId));
+    widget.deleteStyle->setEnabled( widget.styleList->currentRow() > 0);
 }
 
 void StylesWidget::setCurrentFormat(const QTextBlockFormat &format) {
@@ -127,11 +133,38 @@ void StylesWidget::setCurrentFormat(const QTextCharFormat &format) {
 }
 
 void StylesWidget::newStyleClicked() {
-    // TODO
+    bool ok;
+    QString name = KInputDialog::getText(i18n("New Style"), i18n("Enter style name:"), i18n("New Style"), &ok, this);
+    if(! ok)
+        return;
+    if(m_type == CharacterStyle) {
+        KoCharacterStyle *style = new KoCharacterStyle();
+        style->setName(name);
+        m_styleManager->add(style);
+    }
+    else {
+        KoParagraphStyle *style = new KoParagraphStyle();
+        style->setName(name);
+        style->characterStyle()->setName(name);
+        m_styleManager->add(style);
+    }
 }
 
 void StylesWidget::deleteStyleClicked() {
-    // TODO
+    QListWidgetItem *item = widget.styleList->currentItem();
+    Q_ASSERT(item);
+    int row = widget.styleList->row(item);
+    int styleId = item->data(99).toInt();
+    if(m_type == CharacterStyle) {
+        KoCharacterStyle *style = m_styleManager->characterStyle(styleId);
+        Q_ASSERT(style);
+        m_styleManager->remove(style);
+    }
+    else {
+        KoParagraphStyle *style = m_styleManager->paragraphStyle(styleId);
+        Q_ASSERT(style);
+        m_styleManager->remove(style);
+    }
 }
 
 void StylesWidget::editStyle(QListWidgetItem *item) {
@@ -170,12 +203,32 @@ void StylesWidget::addCharacterStyle(KoCharacterStyle *style) {
 
 void StylesWidget::removeParagraphStyle(KoParagraphStyle *style) {
     Q_ASSERT(m_type == ParagraphStyle);
-    // TODO
+    removeStyle(style->styleId());
 }
 
 void StylesWidget::removeCharacterStyle(KoCharacterStyle *style) {
     Q_ASSERT(m_type == CharacterStyle);
-    // TODO
+    removeStyle(style->styleId());
+}
+
+void StylesWidget::removeStyle(int styleId) {
+    for(int i=0; i < widget.styleList->count(); i++) {
+        QListWidgetItem *item = widget.styleList->currentItem();
+        int id = item->data(99).toInt();
+        if(id == styleId) {
+            delete item;
+
+            widget.deleteStyle->setEnabled( false );
+            item = widget.styleList->currentItem();
+            if(item) {
+                widget.deleteStyle->setEnabled( widget.styleList->count() > 1 );
+
+                if(widget.styleList->row(item) == 0)
+                    widget.styleList->setCurrentRow(1);
+            }
+            return;
+        }
+    }
 }
 
 #include <StylesWidget.moc>

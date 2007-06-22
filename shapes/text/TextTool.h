@@ -66,7 +66,9 @@ public:
     /// reimplemented from superclass
     virtual void deactivate();
     /// reimplemented from superclass
-    virtual void copy();
+    virtual void copy() const;
+    /// reimplemented from superclass
+    virtual bool paste();
 
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
