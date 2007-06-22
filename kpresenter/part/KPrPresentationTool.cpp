@@ -69,11 +69,26 @@ void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
             m_viewMode.activateSavedViewMode();
             break;
         case Qt::Key_Home:
+            m_viewMode.navigate( KPrAnimationDirector::FirstPage );
+            break;
+        case Qt::Key_Up:
         case Qt::Key_PageUp:
-        case Qt::Key_PageDown:
-        case Qt::Key_End:
+            m_viewMode.navigate( KPrAnimationDirector::PreviousPage );
+            break;
+        case Qt::Key_Backspace:
+        case Qt::Key_Left:
+            m_viewMode.navigate( KPrAnimationDirector::PreviousStep );
+            break;
+        case Qt::Key_Right:
         case Qt::Key_Space:
-            m_viewMode.navigate();
+            m_viewMode.navigate( KPrAnimationDirector::NextStep );
+            break;
+        case Qt::Key_Down:            
+        case Qt::Key_PageDown:
+            m_viewMode.navigate( KPrAnimationDirector::NextPage );
+            break;
+        case Qt::Key_End:
+            m_viewMode.navigate( KPrAnimationDirector::LastPage );
             break;
         default:    
             event->ignore();

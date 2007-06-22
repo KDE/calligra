@@ -30,7 +30,6 @@
 #include <KoPADocument.h>
 #include <KoPADocument.h>
 #include <KoPAView.h>
-#include "KPrAnimationDirector.h"
 #include "KPrPresentationTool.h"
 
 KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * canvas )
@@ -130,7 +129,7 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
     return m_animationDirector;
 }
 
-void KPrViewModePresentation::navigate()
+void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
-    m_animationDirector->navigate();
+    m_animationDirector->navigate( navigation );
 }

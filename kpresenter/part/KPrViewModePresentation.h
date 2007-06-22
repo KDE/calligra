@@ -21,9 +21,9 @@
 #define KPRVIEWMODEPRESENTATION_H
 
 #include <KoPAViewMode.h>
+#include "KPrAnimationDirector.h"
 
 class QWidget;
-class KPrAnimationDirector;
 class KPrPresentationTool;
 
 class KPrViewModePresentation : public KoPAViewMode
@@ -65,7 +65,7 @@ public:
     /**
      * Navigate in the presentation.
      */
-    void navigate();
+    void navigate( KPrAnimationDirector::Navigation navigation );
 
 private:
     KoPAViewMode * m_savedViewMode;

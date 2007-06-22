@@ -78,7 +78,7 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
     KApplication::kApplication()->syncX();
 }
 
-bool KPrAnimationDirector::navigate()
+bool KPrAnimationDirector::navigate( Navigation navigation )
 {
     if ( m_pageEffect ) {
         m_pageEffect->finish();

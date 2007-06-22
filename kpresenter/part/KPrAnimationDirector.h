@@ -38,13 +38,25 @@ class KPrAnimationDirector : public QObject
 {
     Q_OBJECT
 public:
+    enum Navigation
+    {
+        FirstPage,
+        PreviousPage,
+        PreviousStep,
+        NextStep,
+        NextPage,
+        LastPage
+    };
+
     KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages );
     virtual ~KPrAnimationDirector();
 
     void paintEvent( QPaintEvent* event );
 
-    // do the next step in the presentation
-    bool navigate();
+    /**
+     * do the next step in the presentation
+     */
+    bool navigate( Navigation navigation );
 
 protected:
     // set the page to be shon and update the UI
