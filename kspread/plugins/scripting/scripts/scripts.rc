@@ -27,4 +27,12 @@
             interpreter="python"
             file="extensions/odfpyexport.py" />
     </collection>
+    <collection name="functions" text="Functions" comment="Scripting formula functions">
+        <script
+            name="yweather"
+            text="Y! Weather"
+            comment="YAHOO! Weather formula function"
+            interpreter="python"
+            file="functions/yweather.py" />
+    </collection>
 </KrossScripting>

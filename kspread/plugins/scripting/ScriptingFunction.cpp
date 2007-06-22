@@ -67,6 +67,7 @@ class ScriptingFunctionImpl : public KSpread::Function
                 list.append( args[i].asString() );
             }
 
+            funcimpl->m_function->setError( QString() );
             funcimpl->m_function->setResult( QVariant() );
 
             if( ! QMetaObject::invokeMethod(funcimpl->m_function, "called", QGenericReturnArgument(), Q_ARG(QVariantList, list)) ) {
@@ -75,17 +76,22 @@ class ScriptingFunctionImpl : public KSpread::Function
                 return err;
             }
 
-            //TODO
+            const QString error = funcimpl->m_function->error();
+            if( ! error.isEmpty() ) {
+                KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
+                err.setError( '#' + error );
+                return err;
+            }
+
             QVariant result = funcimpl->m_function->result();
             if( ! result.isValid() ) {
                 KSpread::Value err = KSpread::Value::errorVALUE(); //errorNAME();
                 err.setError( '#' + i18n("No return value.") );
                 return err;
             }
+
             kDebug() << "result=" << result.toString() << endl;
             return KSpread::Value( result.toString() );
-
-            //kDebug() << "result=" << result << endl;
             //return KSpread::Value( result );
         }
 
@@ -128,6 +134,7 @@ class ScriptingFunction::Private
         int maxparam;
         QString comment;
         QString syntax;
+        QString error;
         QVariant result;
 
         QDomDocument document;
@@ -164,6 +171,8 @@ QString ScriptingFunction::syntax() const { return d->syntax; }
 void ScriptingFunction::setSyntax(const QString& syntax) { d->syntax = syntax; }
 QVariant ScriptingFunction::result() const { return d->result; }
 void ScriptingFunction::setResult(const QVariant& result) { d->result = result; }
+QString ScriptingFunction::error() const { return d->error; }
+void ScriptingFunction::setError(const QString& error) { d->error = error; }
 
 void ScriptingFunction::addExample(const QString& example)
 {
