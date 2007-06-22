@@ -17,9 +17,8 @@ set(SheetTest_test_SRCS
 )
 
 kde4_automoc(${SheetTest_test_SRCS})
-kde4_add_unit_test(SheetTest ${SheetTest_test_SRCS})
+kde4_add_unit_test(SheetTest TESTNAME shapes-musicshape-SheetTest ${SheetTest_test_SRCS})
 target_link_libraries(SheetTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
-add_test(shapes-musicshape-SheetTest ${EXECUTABLE_OUTPUT_PATH}/SheetTest)
 
 
 ########### next target ###############
@@ -31,9 +30,8 @@ set(VoiceBarTest_test_SRCS
 )
 
 kde4_automoc(${VoiceBarTest_test_SRCS})
-kde4_add_unit_test(VoiceBarTest ${VoiceBarTest_test_SRCS})
+kde4_add_unit_test(VoiceBarTest TESTNAME shapes-musicshape-VoiceBarTest ${VoiceBarTest_test_SRCS})
 target_link_libraries(VoiceBarTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
-add_test(shapes-musicshape-VoiceBarTest ${EXECUTABLE_OUTPUT_PATH}/VoiceBarTest)
 
 ########### next target ###############
 
@@ -52,9 +50,8 @@ set(MusicXmlWriterTest_test_SRCS
 )
 
 kde4_automoc(${MusicXmlWriterTest_test_SRCS})
-kde4_add_unit_test(MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})
+kde4_add_unit_test(MusicXmlWriterTest TESTNAME shapes-musicshape-MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})
 target_link_libraries(MusicXmlWriterTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kstore)
-add_test(shapes-musicshape-MusicXmlWriterTest ${EXECUTABLE_OUTPUT_PATH}/MusicXmlWriterTest)
 
 
 
