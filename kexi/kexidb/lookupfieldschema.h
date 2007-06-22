@@ -22,6 +22,7 @@
 
 #include <q3valuelist.h>
 #include <qstringlist.h>
+#include <kexidb/global.h>
 
 class QDomElement;
 class QDomDocument;

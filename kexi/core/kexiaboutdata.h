@@ -23,6 +23,7 @@
 #define _KEXI_ABOU_DATA_
 
 #include <KAboutData>
+#include <kexi_export.h>
 
 namespace Kexi {
 

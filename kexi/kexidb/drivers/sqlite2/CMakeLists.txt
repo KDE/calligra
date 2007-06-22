@@ -3,7 +3,7 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${CMAKE_SOURCE_DIR}/kexi/3rdparty/kexisql/src ${CMAKE_BUILD_DIR}/kexi/kexidb/drivers/sqlite
 ${KDE4_INCLUDES}  )
 
-ADD_DEFINITIONS( -D__KEXIDB__= -DSQLITE2= -include ${CMAKE_SOURCE_DIR}/kexi/kexidb/global.h )
+ADD_DEFINITIONS( -D__KEXIDB__= -DSQLITE2= )
 
 ########### next target ###############
 

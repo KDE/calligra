@@ -18,11 +18,18 @@ Legend:
 TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
-===================== Kexi 2.0 Alpha =====================
-
 KDE4: TODO:
 - fix KMenu::addTitle():
   http://api.kde.org/4.0-api/kdelibs-apidocs/kdeui/html/kmenu_8cpp-source.html#l00144
+
+===================== Kexi 2.0 Alpha =====================
+
+2007-06-22
+- msvc: added #warning substitute: #pragma WARNING(Your message)
+- win32 compilation started
+Build System
+- #pragma WARNING() added for msvc as a substitute for #warning
+- dropped unportable gcc's -include option
 
 2007-06-18
 KexiDB

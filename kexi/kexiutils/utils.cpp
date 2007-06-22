@@ -19,6 +19,7 @@
 
 #include "utils.h"
 #include "utils_p.h"
+#include <kexi_global.h>
 
 #include <qregexp.h>
 #include <qpainter.h>
@@ -36,10 +37,6 @@
 #include <kiconeffect.h>
 #include <kpixmapeffect.h>
 #include <kiconloader.h>
-
-#if defined(Q_WS_WIN)
-# include <win32_utils.h>
-#endif
 
 using namespace KexiUtils;
 
@@ -394,7 +391,11 @@ void KexiUtils::simpleDecrypt(QString& string)
 void KexiUtils::drawPixmap( QPainter& p, const WidgetMargins& margins, const QRect& rect, 
 	const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio)
 {
+#ifdef __GNUC__
 #warning TODO KexiUtils::drawPixmap
+#else
+#pragma WARNING(TODO KexiUtils::drawPixmap)
+#endif
 #if 0 //todo
 	if (pixmap.isNull())
 		return;

@@ -3,7 +3,6 @@
 include_directories( ${KOMAIN_INCLUDES} ${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS( 
--include ${CMAKE_SOURCE_DIR}/kexi/kexi_global.h
 -DKEXI_NO_CTXT_HELP=1
 )
 

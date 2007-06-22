@@ -61,4 +61,26 @@
 # define FUTURE_I18N_NOOP(x) (x)
 #endif
 
+#ifdef _MSC_VER
+/* WARNING preprocessor directive
+ Reserved: preprocessor needs two indirections to replace __LINE__ with actual
+ string
+*/
+#define _MSG0(msg)     #msg
+/* Preprocessor needs two indirections to replace __LINE__ or __FILE__
+ with actual string. */
+#define _MSG1(msg)    _MSG0(msg)
+
+/*! Creates message prolog with the name of the source file and the line
+   number where a preprocessor message has been inserted.
+
+  Example:
+     #pragma KMESSAGE(Your message)
+  Output:
+     C:\MyCode.cpp(111) : Your message
+*/
+# define _MSGLINENO __FILE__ "(" _MSG1(__LINE__) ") : warning: "
+# define WARNING(msg) message(_MSGLINENO #msg)
+#endif /*_MSC_VER*/
+
 #endif /* _KEXI_GLOBAL_ */
