@@ -10,5 +10,5 @@ install(FILES
 
 install(FILES
     functions.py
-    yweather.py
+    yfinance.py yweather.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/functions)

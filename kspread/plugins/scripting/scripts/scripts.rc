@@ -29,6 +29,12 @@
     </collection>
     <collection name="functions" text="Functions" comment="Scripting formula functions">
         <script
+            name="yfinance"
+            text="Y! Finance"
+            comment="YAHOO! Finance formula function"
+            interpreter="python"
+            file="functions/yfinance.py" />
+        <script
             name="yweather"
             text="Y! Weather"
             comment="YAHOO! Weather formula function"

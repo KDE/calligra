@@ -1,8 +1,7 @@
 #!/usr/bin/env kross
 
 """
-Python script that provides additional formula-functions
-to KSpread.
+KSpread python script that provides the YAHOO! Weather formula function.
 
 Yahoo! Terms of Use
 The feeds are provided free of charge for use by individuals and non-profit
@@ -36,8 +35,8 @@ class Yweather:
         func.minparam = 1
         func.maxparam = 2
         func.comment = (
-            "The YWEATHER() function uses the YAHOO! Weather Service to "
-            "display the weather of a location. "
+            "The YWEATHER() function uses the YAHOO! Weather Web Service "
+            "to display the weather of a location. "
         )
         func.syntax = "YWEATHER(string;string)"
         func.addParameter("String", "The US zip code, Location ID or cell that contains them.")
