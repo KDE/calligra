@@ -58,7 +58,7 @@ class Yweather:
 
             url = "http://weather.yahooapis.com/forecastrss?p=%s" % location
             if len(argument) >= 2:
-                url += "&c=%s" % argument[1]
+                url += "&u=%s" % argument[1]
 
             print "url=%s" % url
             namespace = 'http://xml.weather.yahoo.com/ns/rss/1.0'
