@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 1.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="1.1">
+ <identification/>
+ <part-list>
+  <part-group type="start" number="1">
+   <group-name>group 1</group-name>
+   <group-barline>yes</group-barline>
+  </part-group>
+  <score-part id="P0">
+   <part-name>part 0</part-name>
+  </score-part>
+  <score-part id="P1">
+   <part-name>part 1</part-name>
+  </score-part>
+  <part-group type="stop" number="1"/>
+  <part-group type="start" number="2">
+   <group-symbol>brace</group-symbol>
+   <group-barline>yes</group-barline>
+  </part-group>
+  <score-part id="P2">
+   <part-name>part 2</part-name>
+  </score-part>
+  <score-part id="P3">
+   <part-name>part 3</part-name>
+  </score-part>
+  <part-group type="stop" number="2"/>
+  <part-group type="start" number="3">
+   <group-symbol>line</group-symbol>
+   <group-barline>yes</group-barline>
+  </part-group>
+  <score-part id="P4">
+   <part-name>part 4</part-name>
+  </score-part>
+  <score-part id="P5">
+   <part-name>part 5</part-name>
+  </score-part>
+  <part-group type="stop" number="3"/>
+  <part-group type="start" number="4">
+   <group-symbol>bracket</group-symbol>
+   <group-barline>no</group-barline>
+  </part-group>
+  <score-part id="P6">
+   <part-name>part 6</part-name>
+  </score-part>
+  <score-part id="P7">
+   <part-name>part 7</part-name>
+  </score-part>
+  <part-group type="stop" number="4"/>
+ </part-list>
+ <part id="P0">
+  <measure number="1"/>
+ </part>
+ <part id="P1">
+  <measure number="1"/>
+ </part>
+ <part id="P2">
+  <measure number="1"/>
+ </part>
+ <part id="P3">
+  <measure number="1"/>
+ </part>
+ <part id="P4">
+  <measure number="1"/>
+ </part>
+ <part id="P5">
+  <measure number="1"/>
+ </part>
+ <part id="P6">
+  <measure number="1"/>
+ </part>
+ <part id="P7">
+  <measure number="1"/>
+ </part>
+</score-partwise>

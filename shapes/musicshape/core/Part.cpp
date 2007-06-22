@@ -66,9 +66,9 @@ void Part::setName(const QString& name)
     d->name = name;
 }
 
-QString Part::shortName() const
+QString Part::shortName(bool useFull) const
 {
-    if (d->shortName.isNull()) {
+    if (d->shortName.isNull() && useFull) {
         return d->name;
     } else {
         return d->shortName;

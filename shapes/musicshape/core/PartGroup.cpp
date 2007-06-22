@@ -38,6 +38,7 @@ PartGroup::PartGroup(Sheet* sheet, int firstPart, int lastPart) : d(new Private)
     d->symbol = DefaultSymbol;
     d->firstPart = firstPart;
     d->lastPart = lastPart;
+    d->commonBarLines = true;
 }
 
 PartGroup::~PartGroup()
@@ -75,6 +76,11 @@ void PartGroup::setLastPart(int index)
 QString PartGroup::name() const
 {
     return d->name;
+}
+
+void PartGroup::setName(QString name)
+{
+    d->name = name;
 }
 
 PartGroup::GroupSymbol PartGroup::symbol() const

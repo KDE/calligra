@@ -72,9 +72,9 @@ public:
     /**
      * Returns the short name of this part. In typical music the long name of a part is printed before the first
      * staff system, and the short name will be printed in front of the other staff systems. If no short name has been
-     * specified, the normal name will be returned.
+     * specified, the normal name will be returned if useFull is true, otherwise a null string will be returned.
      */
-    QString shortName() const;
+    QString shortName(bool useFull = true) const;
 
     /**
      * Change the short name of this part.

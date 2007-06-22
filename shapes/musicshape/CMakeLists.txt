@@ -21,6 +21,8 @@ set( musiccore_SRCS
     core/Clef.cpp
     core/KeySignature.cpp
     core/TimeSignature.cpp
+    
+    core/MusicXmlWriter.cpp
 )
 
 SET (musicshape_LIB_SRCS
@@ -52,7 +54,7 @@ kde4_add_ui_files(musicshape_LIB_SRCS
 kde4_automoc(${musicshape_LIB_SRCS})
 kde4_add_plugin(musicshape ${musicshape_LIB_SRCS})
 
-target_link_libraries(musicshape flake koguiutils)
+target_link_libraries(musicshape flake koguiutils kstore)
 install(TARGETS musicshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

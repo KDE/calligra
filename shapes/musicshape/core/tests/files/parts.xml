@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 1.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="1.1">
+ <identification/>
+ <part-list>
+  <score-part id="P0">
+   <part-name>first part</part-name>
+   <part-abbreviation>part1</part-abbreviation>
+  </score-part>
+  <score-part id="P1">
+   <part-name>second part</part-name>
+  </score-part>
+ </part-list>
+ <part id="P0">
+  <measure number="1"/>
+ </part>
+ <part id="P1">
+  <measure number="1"/>
+ </part>
+</score-partwise>
