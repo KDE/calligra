@@ -1,20 +1,30 @@
 <KrossScripting>
-    <script
+    <collection name="import" text="Import" comment="Import content">
+        <script
+            name="pycsvimport"
+            text="CSV Import"
+            comment="Import from a Comma-Separated-Value File"
+            interpreter="python"
+            file="extensions/csvimport.py" />
+    </collection>
+    <collection name="export" text="Export" comment="Export content">
+        <script
             name="pycsvexport"
             text="CSV Export"
-            comment="Export an OpenDocument Spreadsheet File to a CSV File"
+            comment="Export to a Comma-Separated-Value File"
             interpreter="python"
             file="extensions/csvexport.py" />
-    <script
+        <script
             name="pyhtmlexport"
             text="HTML Export"
-            comment="Export an OpenDocument Spreadsheet File to a HTML File"
+            comment="Export to a HTML File"
             interpreter="python"
             file="extensions/htmlexport.py" />
-    <script
+        <script
             name="odfpyexport"
             text="OdfPy Export"
-            comment="Export an OpenDocument Spreadsheet File to an OpenDocument File"
+            comment="Export to an OpenDocument File"
             interpreter="python"
             file="extensions/odfpyexport.py" />
+    </collection>
 </KrossScripting>

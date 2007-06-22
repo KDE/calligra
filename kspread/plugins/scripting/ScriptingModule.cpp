@@ -24,6 +24,7 @@
 #include "ScriptingFunction.h"
 #include "ScriptingWidgets.h"
 #include "ScriptingReader.h"
+#include "ScriptingWriter.h"
 
 #include <QPointer>
 #include <QApplication>
@@ -177,6 +178,11 @@ bool ScriptingModule::exportUrl(const QString& url)
 QObject* ScriptingModule::reader()
 {
     return new ScriptingReader(this);
+}
+
+QObject* ScriptingModule::writer()
+{
+    return new ScriptingWriter(this);
 }
 
 QWidget* ScriptingModule::createSheetsListView(QWidget* parent)

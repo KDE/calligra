@@ -3,7 +3,7 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts)
 
 install(FILES
-    csvexport.py csvexportoptions.ui
+    csvimport.py csvexport.py csvoptions.ui
     htmlexport.py htmlexportinfos.ui
     odfpyexport.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/extensions)

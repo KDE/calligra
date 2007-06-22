@@ -153,6 +153,12 @@ class ScriptingModule : public KoScriptingModule
         QObject* reader();
 
         /**
+        * Create and return a new \a ScriptingWriter object that provides us an
+        * abstract high-level API to write content to KSpread sheets.
+        */
+        QObject* writer();
+
+        /**
         * Create and return a new \a ScriptingSheetsListView widget instance which
         * could be used to select 0..n sheets from a list of all available sheets.
         */

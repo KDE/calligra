@@ -1,8 +1,8 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script to export an ISO OpenDocument spreadsheet file to
-a comma-separated-value file.
+Python script to import content from a comma-separated-value
+file to KSpread.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
@@ -13,43 +13,44 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 import os, datetime, sys, traceback, urlparse, csv
 import Kross, KSpread
 
-class CsvExporter:
+class CsvImport:
 
     def __init__(self, scriptaction):
         self.scriptaction = scriptaction
         self.currentpath = self.scriptaction.currentPath()
 
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("CSV Export")
+        self.dialog = self.forms.createDialog("CSV Import")
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        savepage = self.dialog.addPage("Save","Export to CSV File","document-save")
-        self.savewidget = self.forms.createFileWidget(savepage, "kfiledialog:///kspreadcsvexportsave")
-        self.savewidget.setMode("Saving")
-        self.savewidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
-
-        datapage = self.dialog.addPage("Sheets","Export Sheets","spreadsheet")
-        self.sheetslistview = KSpread.createSheetsListView(datapage)
+        openpage = self.dialog.addPage("Open","Import from CSV File","document-open")
+        self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kspreadcsvimportopen")
+        self.openwidget.setMode("Opening")
+        self.openwidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
 
         optionspage = self.dialog.addPage("Options","Comma Separated Value Options","configure")
         self.optionswidget = self.forms.createWidgetFromUIFile(optionspage, os.path.join(self.currentpath, "csvoptions.ui"))
 
         if self.dialog.exec_loop():
             try:
-                self.doExport()
+                self.doImport()
             except:
                 self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
-    def doExport(self):
-        reader = KSpread.reader()
-        reader.setSheets( self.sheetslistview.sheets() )
+    def doImport(self):
+        currentSheet = KSpread.currentSheet()
+        if not currentSheet:
+            raise "No current sheet."
+        writer = KSpread.writer()
+        if not writer.setSheet(currentSheet.sheetName()):
+            raise "Failed to set sheet '%s'" % currentSheet.sheetName()
+        if not writer.setCell("A1"):
+            raise "Failed to determinate first row."
 
-        csvfilename = self.savewidget.selectedFile()
-        if not csvfilename:
-            raise "No CSV file choosen"
-        if os.path.splitext(csvfilename)[1] == '':
-            csvfilename += '.csv'
+        csvfilename = self.openwidget.selectedFile()
+        if not os.path.isfile(csvfilename):
+            raise "File '%s' not found." % csvfilename
 
         class CustomDialect(csv.excel): pass
         setattr(CustomDialect, 'delimiter', self.optionswidget["DelimiterComboBox"].currentText)
@@ -73,21 +74,21 @@ class CsvExporter:
         csv.register_dialect("custom", CustomDialect)
         dialectname = "custom"
 
-        csvfile = open(csvfilename,'w')
-        csvwriter = csv.writer(csvfile, dialect=dialectname)
+        #writer.connect("valueChanged()",writer.next)
 
-        def changedSheet(sheetname):
-            print "changedSheet sheetname=%s" % sheetname
-            #csvfile.write("# %s\n" % sheetname)
+        csvfile = open(csvfilename,'r')
+        try:
+            csvreader = csv.reader(csvfile, dialect=dialectname)
+            try:
+                while True:
+                    record = csvreader.next()
+                    if not writer.setValues(record):
+                        print "Failed to set all of '%s' to cell '%s'" % (record,writer.cell())
+                    #writer.insertValues(record)
+                    writer.next()
+            except StopIteration:
+                pass
+        finally:
+            csvfile.close()
 
-        def changedRow(row):
-            values = reader.currentValues()
-            #print "changedRow row=%i values=%s" % (row,values)
-            csvwriter.writerow(values)
-
-        reader.connect("changedSheet(QString)",changedSheet)
-        reader.connect("changedRow(int)",changedRow)
-        reader.start()
-        csvfile.close()
-
-CsvExporter( self )
+CsvImport( self )

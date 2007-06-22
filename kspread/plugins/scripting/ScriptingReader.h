@@ -37,6 +37,39 @@
 /**
 * The ScriptingReader class provides abstract high-level functionality to read
 * content from KSpread sheets.
+*
+* The following python sample demonstrates how to use the ScriptingReader to
+* read content from KSpread.
+* \code
+* # Import the KSpread module
+* import KSpread
+*
+* # Create a ScriptingReader object
+* reader = KSpread.reader()
+* # We like to read all of Sheet1
+* reader.setSheet("Sheet1")
+* # and from Sheet2 only the range A5:F12
+* reader.setSheet("Sheet2","A5:F12")
+*
+* # This function got called in our case two times.
+* # One time if we switch to Sheet1 and the other
+* # time if switched to Sheet2.
+* def changedSheet(sheetname):
+*     print "sheetname=%s" % sheetname
+*
+* # This function got called for each row that got
+* # readed.
+* def changedRow(row):
+*     values = reader.currentValues()
+*     print "row=%i values=%s" % (row,values)
+*
+* # Now let's connect our both functions to matching
+* # signals the reader provides.
+* reader.connect("changedSheet(QString)",changedSheet)
+* reader.connect("changedRow(int)",changedRow)
+* # and finally start the reader.
+* reader.start()
+* \endcode
 */
 class ScriptingReader : public QObject
 {
@@ -89,21 +122,23 @@ class ScriptingReader : public QObject
         * reader is stopped and can be started again by using the \a start() method false
         * got returned.
         */
-        bool isRunning() {
+        bool isRunning() const {
             return m_state != Stopped;
         }
 
         /**
-        * \return the names of the sheets that should be readed.
+        * \return the names of the sheets that should be readed. If the list is empty and the
+        * reader got started, then the reader will walk through all sheets the document has.
         */
-        QStringList sheetNames() {
+        QStringList sheetNames() const {
             return m_sheetnames;
         }
 
         /**
-        * \return the defined ranges for the \p sheetname .
+        * \return the defined ranges for the \p sheetname . If there was no range defined,
+        * then we walk over all the data the sheet has.
         */
-        QVariantList range(const QString& sheetname) {
+        QVariantList range(const QString& sheetname) const {
             return m_ranges.contains(sheetname) ? m_ranges[sheetname] : QVariantList();
         }
 
@@ -125,9 +160,9 @@ class ScriptingReader : public QObject
         /**
         * Set the sheets and there ranges.
         *
-        * For example in python following structure is a valid definition for 3
-        * 3 sheets where Sheet1 and Sheet2 are selected. Sheet1 also does
-        * define the range A1:B2.
+        * For example in python following structure is a valid definition
+        * for 3 sheets where Sheet1 and Sheet2 are selected. Sheet1 also
+        * does define the range A1:B2.
         * [['Sheet1', 1, [1, 1, 2, 2]], ['Sheet2', 1], ['Sheet3', 0]]
         *
         * Each sheet contains a tuple of
@@ -135,7 +170,7 @@ class ScriptingReader : public QObject
         * \li 1=enabled or 0=disabled
         * \li optional range tuple [from column, from row, to column, to row]
         */
-        void setSheets(const QVariantList& sheets) {
+        void setSheets(const QVariantList& sheets = QVariantList()) {
             m_sheetnames.clear();
             m_ranges.clear();
             foreach(QVariant item, sheets) {
@@ -144,10 +179,12 @@ class ScriptingReader : public QObject
                 if( ! args[1].toBool() ) continue;
                 const QString sheetname = args[0].toString();
                 if( sheetname.isEmpty() ) continue;
-                args.removeFirst();
-                args.removeFirst();
                 m_sheetnames.append(sheetname);
-                if( args.count() > 0 ) m_ranges[sheetname] = args;
+                if( args.count() > 2 ) {
+                    args.removeFirst();
+                    args.removeFirst();
+                    m_ranges[sheetname] = args;
+                }
             }
         }
 
@@ -173,7 +210,8 @@ class ScriptingReader : public QObject
             if( ! region.isValid() ) return;
             for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                 const QRect rect = (*it)->rect();
-                if( ! rect.isNull() ) ranges.append(rect);
+                if( rect.isNull() ) continue;
+                ranges.append(rect);
             }
             m_ranges[sheetname] = ranges;
         }
@@ -182,7 +220,7 @@ class ScriptingReader : public QObject
         * \return the sheetname the reader currently is on. An empty/null string will be
         * returned if there is no current sheet (e.g. if the reader just doesn't run currently).
         */
-        QString currentSheetName() {
+        QString currentSheetName() const {
             return m_currentSheet ? m_currentSheet->sheetName() : QString();
         }
 
@@ -190,15 +228,29 @@ class ScriptingReader : public QObject
         * \return the current row number the reader is on. This will be -1 if the reader
         * isn't running.
         */
-        int currentRow() {
+        int currentRow() const {
             return m_currentRow;
+        }
+
+        /**
+        * \return the most left column the current row has or -1 if there is no current row.
+        */
+        int currentFirstColumn() const {
+            return m_currentLeft;
+        }
+
+        /**
+        * \return the most right column the current row has or -1 if there is no current row.
+        */
+        int currentLastColumn() const {
+            return m_currentRight;
         }
 
         /**
         * \return a list of values for the current row. This will be an empty list of the
         * reader isn't running.
         */
-        QVariantList currentValues() {
+        QVariantList currentValues() const {
             QVariantList values;
             if( m_currentSheet && m_currentRow >= 0 ) {
                 for(int col = m_currentLeft; col <= m_currentRight; ++col) {
@@ -228,8 +280,8 @@ class ScriptingReader : public QObject
 
         /**
         * This signal is emitted once the reading started with the \a start() method
-        * changed to the sheet with name \p sheetname cause reading the probably
-        * previous sheet was done.
+        * changed to the sheet with name \p sheetname cause e.g. reading the previous
+        * sheet was done.
         */
         void changedSheet(const QString& sheetname);
 
@@ -254,7 +306,7 @@ class ScriptingReader : public QObject
         void clear() {
             m_state = Stopped;
             m_currentSheet = 0;
-            m_currentRow = -1;
+            m_currentRow = m_currentLeft = m_currentRight = -1;
         }
 
         void readSheet(const QString& sheetname) {
