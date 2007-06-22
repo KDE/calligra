@@ -21,11 +21,12 @@
 #ifndef SCRIPTINGWRITER_H
 #define SCRIPTINGWRITER_H
 
+#include "ScriptingModule.h"
+
 #include <QString>
 #include <QStringList>
 #include <QObject>
-
-#include "ScriptingModule.h"
+#include <klocale.h>
 
 #include <Doc.h>
 #include <Sheet.h>
@@ -33,6 +34,7 @@
 #include <Region.h>
 #include <Cell.h>
 #include <Value.h>
+#include <DataManipulators.h>
 
 /**
 * The ScriptingWriter class provides abstract high-level functionality to write
@@ -56,7 +58,7 @@ class ScriptingWriter : public QObject
         */
         virtual ~ScriptingWriter() {}
 
-    public slots:
+    public Q_SLOTS:
 
         /**
         * \return the current sheetname the writer is on. All operations done with
@@ -158,33 +160,44 @@ class ScriptingWriter : public QObject
         //QVariant value() {}
         //QVariantList values() {}
 
-        bool setValue(const QVariant& value) {
+        bool setValue(const QVariant& value, bool parse = true) {
             KSpread::Value v;
-            switch( value.type() ) {
-                case QVariant::Invalid:     v = KSpread::Value(); break;
-                case QVariant::Bool:        v = KSpread::Value( value.toBool() ); break;
-                case QVariant::Int:         v = KSpread::Value( value.toInt() ); break;
-                case QVariant::ULongLong:   v = KSpread::Value( value.toLongLong() ); break;
-                case QVariant::Double:      v = KSpread::Value( value.toDouble() ); break;
-                case QVariant::String:      v = KSpread::Value( value.toString() ); break;
-                //case QVariant::Date:      v = KSpread::Value( value.toDate() ); break;
-                //case QVariant::Time:      v = KSpread::Value( value.toTime() ); break;
-                //case QVariant::DateTime:  v = KSpread::Value( value.toDateTime() ); break;
-                default: return false;
+            if( parse )
+                v = KSpread::Value( value.toString() );
+            else {
+                switch( value.type() ) {
+                    case QVariant::Invalid:     v = KSpread::Value(); break;
+                    case QVariant::Bool:        v = KSpread::Value( value.toBool() ); break;
+                    case QVariant::Int:         v = KSpread::Value( value.toInt() ); break;
+                    case QVariant::ULongLong:   v = KSpread::Value( value.toLongLong() ); break;
+                    case QVariant::Double:      v = KSpread::Value( value.toDouble() ); break;
+                    case QVariant::String:      v = KSpread::Value( value.toString() ); break;
+                    case QVariant::Date:        v = KSpread::Value( value.toDate(), m_module->kspreadDoc() ); break;
+                    case QVariant::Time:        v = KSpread::Value( value.toTime(), m_module->kspreadDoc() ); break;
+                    case QVariant::DateTime:    v = KSpread::Value( value.toDateTime(), m_module->kspreadDoc() ); break;
+                    default: return false;
+                }
             }
-            KSpread::Cell* c = getCell();
-            c->setValue(v);
-            return true;
+            //KSpread::Cell* c = getCell();
+            //c->setValue(v);
+            KSpread::DataManipulator *dm = new KSpread::DataManipulator();
+            dm->setSheet(m_sheet);
+            dm->setValue(v);
+            dm->setParsing(parse);
+            dm->add(QPoint(m_column, m_row));
+            return dm->execute();
         }
 
-        bool setValues(const QVariantList& values) {
+        bool setValues(const QVariantList& values, bool parse = true) {
             bool ok = true;
             const int prevcolumn = m_column;
+            m_module->doc()->beginMacro(i18n( "Set Values" ));
             foreach(QVariant v, values) {
-                if( ! setValue(v) ) ok = false;
+                if( ! setValue(v, parse) ) ok = false;
                 m_column++;
                 clearCell();
             }
+            m_module->doc()->endMacro();
             m_column = prevcolumn;
             return ok;
         }
