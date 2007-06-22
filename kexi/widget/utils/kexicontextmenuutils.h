@@ -20,7 +20,7 @@
 #ifndef KexiContextMenuUtils_H
 #define KexiContextMenuUtils_H
 
-#include <kexi_export.h>
+#include <kexi_global.h>
 #include <kexidb/queryschema.h>
 #include <KMenu>
 #include <KUrl>

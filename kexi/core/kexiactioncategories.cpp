@@ -24,6 +24,7 @@
 
 #include <qmap.h>
 #include <q3asciidict.h>
+#include <kexi_global.h>
 
 namespace Kexi {
 

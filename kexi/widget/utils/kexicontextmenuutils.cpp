@@ -31,10 +31,10 @@
 #include <qfiledialog.h>
 #include <qapplication.h>
 
-#ifdef Q_WS_WIN
+/*#ifdef Q_WS_WIN
 #include <win32_utils.h>
 #include <krecentdirs.h>
-#endif
+#endif*/
 
 #ifdef __GNUC__
 #warning KexiImageContextMenu ported to Qt4 but not tested
@@ -112,6 +112,12 @@ KexiImageContextMenu::~KexiImageContextMenu()
 void KexiImageContextMenu::insertFromFile()
 {
 //	QWidget *focusWidget = qApp->focusWidget();
+#ifdef __GNUC__
+#warning TODO Q3FileDialog::getOpenFileName for win32
+#else
+#pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
+#endif
+/* TODO
 #ifdef Q_WS_WIN
 	QString recentDir;
 	QString fileName = Q3FileDialog::getOpenFileName(
@@ -122,13 +128,13 @@ void KexiImageContextMenu::insertFromFile()
 	KUurl url;
 	if (!fileName.isEmpty())
 		url.setPath( fileName );
-#else
+#else*/
 	KUrl url( KFileDialog::getImageOpenUrl(
 		KUrl("kfiledialog:///LastVisitedImagePath"), this, i18n("Insert Image From File")) );
 //	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
 
 	//! @todo download the file if remote, then set fileName properly
-#endif
+//#endif
 	if (!url.isValid()) {
 		//focus the app again to avoid annoying the user with unfocused main window
 		if (qApp->mainWidget()) {
@@ -140,12 +146,17 @@ void KexiImageContextMenu::insertFromFile()
 	}
 	kDebug() << "fname=" << url.prettyUrl() << endl;
 
-#ifdef Q_WS_WIN
+#ifdef __GNUC__
+#warning TODO Q3FileDialog::getOpenFileName for win32
+#else
+#pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
+#endif
+/*#ifdef Q_WS_WIN
 	//save last visited path
 //	KUrl url(fileName);
 	if (url.isLocalFile())
 		KRecentDirs::add("kfiledialog:///LastVisitedImagePath", url.directory());
-#endif
+#endif*/
 
 	emit insertFromFileRequested(url);
 	if (qApp->mainWidget()) {
@@ -173,6 +184,12 @@ void KexiImageContextMenu::saveAs()
 		fileExtension = "png";
 	}
 	
+#ifdef __GNUC__
+#warning TODO Q3FileDialog::getOpenFileName for win32
+#else
+#pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
+#endif
+/*TODO
 #ifdef Q_WS_WIN
 	QString recentDir;
 	QString fileName = Q3FileDialog::getSaveFileName(
@@ -180,12 +197,12 @@ void KexiImageContextMenu::saveAs()
 		 + origFilename,
 		convertKFileDialogFilterToQ3FileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
 		this, 0, i18n("Save Image to File"));
-#else
+#else*/
 	//! @todo add originalFileName! (requires access to KRecentDirs)
 	QString fileName = KFileDialog::getSaveFileName(
 		KUrl("kfiledialog:///LastVisitedImagePath"), 
 		KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
-#endif
+//#endif
 	if (fileName.isEmpty())
 		return;
 	
@@ -195,11 +212,16 @@ void KexiImageContextMenu::saveAs()
 	KUrl url;
 	url.setPath( fileName );
 
-#ifdef Q_WS_WIN
+#ifdef __GNUC__
+#warning TODO Q3FileDialog::getOpenFileName for win32
+#else
+#pragma WARNING( Q3FileDialog::getOpenFileName for win32 )
+#endif
+/*#ifdef Q_WS_WIN
 	//save last visited path
 	if (url.isLocalFile())
 		KRecentDirs::add("kfiledialog:///LastVisitedImagePath", url.directory());
-#endif
+#endif*/
 
 	QFile f(fileName);
 	if (f.exists() && KMessageBox::Yes != KMessageBox::warningYesNo(this, 
@@ -252,8 +274,10 @@ void KexiImageContextMenu::updateActionsAvailability()
 	d->copyAction->setEnabled( !valueIsNull );
 	d->pasteAction->setEnabled( !valueIsReadOnly );
 	d->deleteAction->setEnabled( !valueIsNull && !valueIsReadOnly );
+#ifdef KEXI_NO_UNFINISHED 
 	if (d->propertiesAction)
 		d->propertiesAction->setEnabled( !valueIsNull );
+#endif
 }
 
 KActionCollection* KexiImageContextMenu::actionCollection() const

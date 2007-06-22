@@ -30,6 +30,7 @@
 #include <qwidget.h>
 #include <q3signal.h>
 #include <qicon.h>
+#include <kexi_global.h>
 
 KAction_setEnabled_Helper::KAction_setEnabled_Helper(KexiActionProxy* proxy)
  : QObject()

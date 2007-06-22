@@ -20,9 +20,9 @@
 #ifndef KEXIFLOWLAYOUT_H
 #define KEXIFLOWLAYOUT_H
 
-#include <kexi_export.h>
 #include <QLayout>
 #include <QList>
+#include <kexi_global.h>
 
 //! @short a special "flow" layout
 class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout

@@ -21,9 +21,10 @@
 #ifndef KEXIMAINWINDOWIFACE_H
 #define KEXIMAINWINDOWIFACE_H
 
-#include <qmap.h>
+#include <QMap>
 #include <Q3CString>
 
+#include <kexi_global.h>
 #include <kmainwindow.h>
 #include <kexiutils/tristate.h>
 

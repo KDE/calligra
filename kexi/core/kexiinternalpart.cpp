@@ -35,6 +35,7 @@
 //#include <kmimetypetrader.h>
 #include <kparts/componentfactory.h>
 #include <kexidb/msghandler.h>
+#include <kexi_global.h>
 
 //! @internal
 class KexiInternalPartManager

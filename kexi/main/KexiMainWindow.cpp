@@ -1578,6 +1578,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 #else
 #pragma WARNING( TODO - remove win32 case )
 #endif
+/*TODO?
 #ifdef Q_WS_WIN
 	//! @todo remove
 		QString recentDir = KGlobalSettings::documentPath();
@@ -1595,7 +1596,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 			if (url.isLocalFile())
 				KRecentDirs::add(startDir, url.directory());
 		}
-#else
+#else*/
 		Q_UNUSED(projectData);
 		if (fname.isEmpty() &&
 			!projectData.constConnectionData()->dbFileName().isEmpty())
@@ -1617,9 +1618,7 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 		fname = dlg.selectedFile();
 		if (!fname.isEmpty())
 			KRecentDocument::add(fname);
-//		fname = KFileDialog::getSaveFileName(fname.isEmpty() ? startDir : fname, 
-	//		mimetypes.join(" "), this, caption);
-#endif
+//#endif
 		if ( fname.isEmpty() )
 			return cancelled;
 		if (KexiStartupFileWidget::askForOverwriting(fname, this))

@@ -24,6 +24,7 @@
 #include "KexiMainWindowIface.h"
 
 #include <kexiutils/utils.h>
+#include <kexi_global.h>
 
 #include <QApplication>
 #include <kiconloader.h>

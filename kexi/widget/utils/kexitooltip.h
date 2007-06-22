@@ -20,7 +20,7 @@
 #ifndef KEXITOOLTIP_H
 #define KEXITOOLTIP_H
 
-#include <kexi_export.h>
+#include <kexi_global.h>
 
 #include <QWidget>
 #include <QVariant>

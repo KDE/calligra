@@ -81,10 +81,10 @@
 #include "kexicsvwidgets.h"
 #include <kexi_global.h>
 
-#ifdef Q_WS_WIN
+/*#ifdef Q_WS_WIN
 #include <krecentdirs.h>
 #include <windows.h>
-#endif
+#endif*/
 
 #if 0
 #include <kspread_cell.h>
@@ -323,6 +323,12 @@ if ( m_mode == Clipboard )
 
 	if (m_mode == File) {
 		QStringList mimetypes( csvMimeTypes() );
+#ifdef __GNUC__
+#warning TODO KFileDialog::getStartUrl for win32
+#else
+#pragma WARNING( TODO KFileDialog::getStartUrl for win32 )
+#endif
+/*TODO
 #ifdef Q_WS_WIN
 		//! @todo remove
 		QString recentDir = KGlobalSettings::documentPath();
@@ -337,10 +343,10 @@ if ( m_mode == Clipboard )
 			if (url.isLocalFile())
 				KRecentDirs::add("kfiledialog:///CSVImportExport", url.directory());
 		}
-#else
+#else*/
 		m_fname = KFileDialog::getOpenFileName(
 			KUrl("kfiledialog:///CSVImportExport"), mimetypes.join(" "), this, caption);
-#endif
+//#endif
 		//cancel action !
 		if ( m_fname.isEmpty() ) {
 			enableButtonOk( false );
