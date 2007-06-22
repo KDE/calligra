@@ -55,6 +55,7 @@
 #include <widget/utils/kexiflowlayout.h>
 #include <widget/kexismalltoolbutton.h>
 #include <kexidb/utils.h>
+#include <kexi_global.h>
 
 /*
 class KexiBrowserView : public QWidget
@@ -104,10 +105,10 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 	m_list->setTooltipColumn(0);
 	m_list->renameLineEdit()->setValidator( new KexiUtils::IdentifierValidator(this) );
 	m_list->setResizeMode(Q3ListView::LastColumn);
-	connect(m_list, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint &)),
-		this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem *, const QPoint&)));
 	connect(m_list, SIGNAL(selectionChanged(Q3ListViewItem*)), this,
 		SLOT(slotSelectionChanged(Q3ListViewItem*)));
+	connect(m_list, SIGNAL(contextMenu(K3ListView *, Q3ListViewItem *, const QPoint &)),
+		this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem *, const QPoint&)));
 	
 	KConfigGroup mainWindowGroup = KGlobal::config()->group("MainWindow");
 	if ((m_features & SingleClickOpensItemOptionEnabled) 
@@ -123,11 +124,9 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 	}
 
 	// actions
-	m_actions->addAction("open_object",
-		m_openAction = new KAction(KIcon("document-open"), i18n("&Open"), this) );
-	m_openAction->setToolTip(i18n("Open object"));
-	m_openAction->setWhatsThis(i18n("Opens object selected in the list"));
-	connect(m_openAction, SIGNAL(triggered()), this, SLOT(slotOpenObject()));
+	m_openAction = addAction("open_object", KIcon("document-open"), i18n("&Open"), 
+		i18n("Open object"), i18n("Opens object selected in the list"),
+		SLOT(slotOpenObject()));
 
 //	m_openAction->plug(m_toolbar);
 	KexiSmallToolButton *btn;
@@ -146,43 +145,38 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 		m_newObjectMenu = 0;
 	}
 	else {
-		m_actions->addAction("edit_delete",
-			m_deleteAction = new KAction(KIcon("edit-delete"), i18n("&Delete"), this) );
-		m_deleteAction->setToolTip(i18n("Delete object"));
-		m_deleteAction->setWhatsThis(i18n("Deletes the object selected in the list"));
-		connect(m_deleteAction, SIGNAL(triggered()), this, SLOT(slotRemove()));
+		m_deleteAction = addAction("edit_delete", KIcon("edit-delete"), i18n("&Delete"),
+			i18n("Delete object"), i18n("Deletes the object selected in the list"),
+			SLOT(slotRemove()));
 
-		m_actions->addAction("edit_rename",
-			m_renameAction = new KAction(i18n("&Rename"), this) );
-		connect(m_renameAction, SIGNAL(triggered()), this, SLOT(slotRename()));
+		m_renameAction = addAction("edit_rename", KIcon(), i18n("&Rename"),
+			i18n("Rename object"), i18n("Renames the object selected in the list"),
+			SLOT(slotRename()));
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 		//todo	plugSharedAction("edit_cut",SLOT(slotCut()));
 		//todo	plugSharedAction("edit_copy",SLOT(slotCopy()));
 		//todo	plugSharedAction("edit_paste",SLOT(slotPaste()));
 #endif
 
-		m_designAction = new KAction(KIcon("edit"), i18n("&Design"), this);
-		m_designAction->setObjectName("design_object");
-		m_designAction->setToolTip(i18n("Design object"));
-		m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
-		connect(m_designAction, SIGNAL(triggered()), this, SLOT(slotDesignObject()));
+		m_designAction = addAction("design_object", KIcon("edit"), i18n("&Design"),
+			i18n("Design object"), i18n("Starts designing of the object selected in the list"),
+			SLOT(slotDesignObject()));
 		if (m_features & Toolbar) {
 			btn = new KexiSmallToolButton(m_designAction, this);
+//			m_designAction->setEnabled(false);
 			buttons_flyr->add(btn);
 		}
 
-		m_editTextAction = new KAction(i18n("Open in &Text View"), this);
-		m_editTextAction->setObjectName("editText_object");
-		m_editTextAction->setToolTip(i18n("Open object in text view"));
-		m_editTextAction->setWhatsThis(i18n("Opens selected object in the list in text view"));
-		connect(m_editTextAction, SIGNAL(triggered()), this, SLOT(slotEditTextObject()));
+		m_editTextAction = addAction("editText_object", KIcon(), i18n("Open in &Text View"),
+			i18n("Open object in text view"), i18n("Opens selected object in the list in text view"),
+			SLOT(slotEditTextObject()));
 
-		m_newObjectAction = new KAction(KIcon("document-new"), QString(), this);
-		m_newObjectAction->setObjectName("new_object");
-		connect(m_newObjectAction, SIGNAL(triggered()), this, SLOT(slotNewObject()));
+		m_newObjectAction = addAction("new_object", KIcon("document-new"), QString(),
+			QString(), QString(),
+			SLOT(slotNewObject()));
+			
 		if (m_features & Toolbar) {
 			m_newObjectToolButton = new KexiSmallToolButton(this);
-			m_newObjectToolButton->setObjectName("new_object");
 			m_newObjectMenu = new KMenu(this);
 			m_newObjectMenu->setObjectName("newObjectMenu");
 			connect(m_newObjectMenu, SIGNAL(aboutToShow()),
@@ -200,91 +194,40 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 		}
 	}
 
-	m_executeAction = new KAction(KIcon("media-playback-start"), i18n("Execute"), this);
-	m_executeAction->setObjectName("data_execute");
-	connect(m_executeAction, SIGNAL(triggered()), this, SLOT(slotExecuteObject()));
+	m_executeAction = addAction("data_execute", KIcon("media-playback-start"), i18n("Execute"),
+//! @todo tooltip, what's this
+		QString(), QString(),
+		SLOT(slotExecuteObject()));
 
-	m_exportActionMenu = new KActionMenu(i18n("Export"), this);
-	m_dataExportAction = new KAction( KIcon("table"),
-		i18nc("Export->To File As Data &Table... ", "To &File As Data Table..."), this);
-	m_dataExportAction->setObjectName("exportAsDataTable");
-	connect(m_dataExportAction, SIGNAL(triggered()), 
-		this, SLOT(slotExportAsDataTable()));
-	m_dataExportAction->setWhatsThis(
-		i18n("Exports data from the currently selected table or query data to a file."));
+	m_actions->addAction("export_object",
+		m_exportActionMenu = new KActionMenu(i18n("Export"), this) );
+	m_dataExportAction = addAction( "exportAsDataTable", KIcon("table"),
+		i18nc("Export->To File As Data &Table... ", "To &File As Data Table..."),
+		i18n("Export data to a file"),
+		i18n("Exports data from the currently selected table or query data to a file."),
+		SLOT(slotExportAsDataTable()));
 	m_exportActionMenu->addAction( m_dataExportAction );
 
-	m_printAction = new KAction(KIcon("document-print"), i18n("&Print..."), this);
-	m_printAction->setObjectName("printItem");
-	connect(m_printAction, SIGNAL(triggered()), 
-		this, SLOT(slotPrintItem()));
-	m_printAction->setWhatsThis(
-		i18n("Prints data from the currently selected table or query."));
-	m_pageSetupAction = new KAction(i18n("Page Setup..."), this);
-	m_pageSetupAction->setObjectName("pageSetupForItem");
-	connect(m_pageSetupAction, SIGNAL(triggered()), 
-		this, SLOT(slotPageSetupForItem()));
-	m_pageSetupAction->setWhatsThis(
-		i18n("Shows page setup for printing the active table or query."));
+	m_printAction = addAction("print_object", KIcon("document-print"), i18n("&Print..."),
+		i18n("Print data"),
+		i18n("Prints data from the currently selected table or query."),
+		SLOT(slotPrintObject()));
+		
+	m_pageSetupAction = addAction("pageSetupForObject", KIcon(), i18n("Page Setup..."),
+		i18n("Page setup for data"),
+		i18n("Shows page setup for printing the active table or query."),
+		SLOT(slotPageSetupForObject()));
 
 	if (KexiMainWindowIface::global()->userMode()) {
 //! @todo some of these actions can be supported once we deliver ACLs...
 		m_partMenu = 0;
 	}
 	else {
-		m_partMenu = new KMenu(this);
-		m_partMenu->setObjectName("partMenu");
-		m_partMenuTitle = m_partMenu->addTitle(QString());
-		m_partMenu->addAction(m_newObjectAction);
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-		m_partMenu->addSeparator();
-		plugSharedAction("edit_paste", m_partMenu);
-#endif
+		m_partMenu = new KexiGroupMenu(this, m_actions);
 	}
 
 	if (m_features & ContextMenus) {
-		//init menus
-		m_itemMenu = new KMenu(this);
-		m_itemMenu->setObjectName("itemMenu");
-		m_itemMenuTitle = m_itemMenu->addTitle(QString());
-		m_itemMenu->addAction(m_openAction);
-
-		if (m_designAction) {
-			m_itemMenu->addAction(m_designAction);
-		}
-
-		if (m_editTextAction) {
-			m_itemMenu->addAction(m_editTextAction);
-		}
-
-		if (m_newObjectAction) {
-			m_itemMenu->addAction(m_newObjectAction);
-			m_itemMenu->addSeparator();
-		}
-#ifdef KEXI_SHOW_UNIMPLEMENTED
-	//todo	plugSharedAction("edit_cut", m_itemMenu);
-	//todo	plugSharedAction("edit_copy", m_itemMenu);
-	//todo	m_itemMenu->addSeparator();
-#endif
-		m_itemMenu->addAction(m_executeAction);
-
-		m_itemMenu->addAction(m_exportActionMenu);
-		m_exportActionMenu_sep = m_itemMenu->addSeparator();
-
-		m_itemMenu->addAction(m_printAction);
-
-		m_itemMenu->addAction(m_pageSetupAction);
-		if (m_renameAction || m_deleteAction) {
-			m_pageSetupAction_sep = m_itemMenu->addSeparator();
-		}
-		else {
-			m_pageSetupAction_sep = 0;
-		}
-
-		if (m_renameAction)
-			m_itemMenu->addAction(m_renameAction);
-		if (m_deleteAction)
-			m_itemMenu->addAction(m_deleteAction);
+		m_itemMenu = new KexiItemMenu(this, m_actions);
 	}
 	else {
 		m_itemMenu = 0;
@@ -362,6 +305,17 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsMimeType,
 		partManagerErrorMessages->append("</ul></p>");
 }
 
+KAction* KexiBrowser::addAction(const QString& name, const KIcon& icon, const QString& text,
+	const QString& toolTip, const QString& whatsThis, const char* slot)
+{
+	KAction *action = new KAction(icon, text, this);
+	m_actions->addAction(name, action);
+	action->setToolTip(toolTip);
+	action->setWhatsThis(whatsThis);
+	connect(action, SIGNAL(triggered()), this, slot);
+	return action;
+}
+
 QString KexiBrowser::itemsMimeType() const
 {
 	return m_itemsMimeType;
@@ -383,7 +337,7 @@ KexiBrowserItem* KexiBrowser::addItem(KexiPart::Item& item)
 	//part object for this item
 	KexiBrowserItem *parent = item.mimeType().isEmpty() 
 		? 0 : m_baseItems.value( item.mimeType().toLower() );
-	return addItem(item, parent, parent->info());
+	return addItem(item, parent, parent->partInfo());
 }
 
 KexiBrowserItem* KexiBrowser::addItem(KexiPart::Item& item, KexiBrowserItem *parent, KexiPart::Info* info)
@@ -429,30 +383,15 @@ KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const Q
 		return;
 	KexiBrowserItem *bit = static_cast<KexiBrowserItem*>(item);
 	KMenu *pm = 0;
-	if (bit->item()) {
+	if (bit->partItem()) {
 		pm = m_itemMenu;
-		//update menu title
-		QString title_text = bit->text(0).trimmed();
 		KexiBrowserItem *par_it = static_cast<KexiBrowserItem*>(bit->parent());
-		KexiPart::Part* par_part = 0;
-		if (par_it && par_it->info() && ((par_part = Kexi::partManager().part(par_it->info()))) && !par_part->instanceCaption().isEmpty()) {
-			//add part type name
-			title_text +=  (" : " + par_part->instanceCaption());
-		}
-		m_itemMenuTitle->setText(title_text);
-		m_itemMenuTitle->setIcon(KIcon(bit->info()->itemIcon()));
+		m_itemMenu->update(par_it->partInfo(), bit->partItem());
 	}
 	else if (m_partMenu) {
 		pm = m_partMenu;
-		QString title_text = bit->text(0).trimmed();
-		m_itemMenuTitle->setText(title_text);
-		m_itemMenuTitle->setIcon(KIcon(bit->info()->itemIcon()));
-/*		KexiPart::Part* part = Kexi::partManager().part(bit->info());
-		if (part)
-			m_newObjectAction->setText(i18n("&Create Object: %1...").arg( part->instanceName() ));
-		else
-			m_newObjectAction->setText(i18n("&Create Object..."));
-		m_newObjectAction->setIcon( KIcon(bit->info()->itemIcon()) );*/
+		m_newObjectAction->setIcon( KIcon(bit->partInfo()->itemIcon()) );
+		m_partMenu->update(bit->partInfo());
 		m_list->setCurrentItem(item);
 		m_list->repaintItem(item);
 	}
@@ -467,14 +406,14 @@ KexiBrowser::slotExecuteItem(Q3ListViewItem *vitem)
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(vitem);
 	if (!it)
 		return;
-	if (!it->item() && !m_singleClick /*annoying when in single click mode*/) {
+	if (!it->partItem() && !m_singleClick /*annoying when in single click mode*/) {
 		m_list->setOpen( vitem, !vitem->isOpen() );
 		return;
 	}
-	if (it->info()->isExecuteSupported())
-		emit executeItem( it->item() );
+	if (it->partInfo()->isExecuteSupported())
+		emit executeItem( it->partItem() );
 	else
-		emit openOrActivateItem( it->item(), Kexi::DataViewMode );
+		emit openOrActivateItem( it->partItem(), Kexi::DataViewMode );
 }
 
 void
@@ -483,16 +422,16 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
 	if (!it)
 		return;
-	KexiPart::Part* part = Kexi::partManager().part(it->info());
+	KexiPart::Part* part = Kexi::partManager().part(it->partInfo());
 	if (!part) {
 		it = static_cast<KexiBrowserItem*>(it->parent());
 		if (it) {
-			part = Kexi::partManager().part(it->info());
+			part = Kexi::partManager().part(it->partInfo());
 		}
 	}
 
-	const bool gotitem = it && it->item();
-	//bool gotgroup = it && !it->item();
+	const bool gotitem = it && it->partItem();
+	//bool gotgroup = it && !it->partItem();
 //TODO: also check if the item is not read only
 	if (m_deleteAction) {
 		m_deleteAction->setEnabled(gotitem && !m_readOnly);
@@ -507,34 +446,33 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 #endif
 
 	m_openAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DataViewMode));
-	if (m_designAction)
+	if (m_designAction) {
+//		m_designAction->setVisible(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
 		m_designAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
+	}
 	if (m_editTextAction)
 		m_editTextAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::TextViewMode));
 
-	if (m_features & ContextMenus) {
-		m_openAction->setVisible(m_openAction->isEnabled());
-		if (m_designAction)
-			m_designAction->setVisible(m_designAction->isEnabled());
-		if (m_editTextAction)
-			m_editTextAction->setVisible(part && m_editTextAction->isEnabled());
-		if (m_executeAction)
-			m_executeAction->setVisible(gotitem && it->info()->isExecuteSupported());
-		if (m_exportActionMenu) {
-			m_exportActionMenu->setVisible(gotitem && it->info()->isDataExportSupported());
-			m_exportActionMenu_sep->setVisible(gotitem && it->info()->isDataExportSupported());
-		}
-		if (m_printAction)
-			m_printAction->setVisible(gotitem && it->info()->isPrintingSupported());
-		if (m_pageSetupAction) {
-			m_pageSetupAction->setVisible(gotitem && it->info()->isPrintingSupported());
-			if (m_pageSetupAction_sep)
-				m_pageSetupAction_sep->setVisible(gotitem && it->info()->isPrintingSupported());
-		}
-	}
+//	if (m_features & ContextMenus) {
+//		m_openAction->setVisible(m_openAction->isEnabled());
+//		if (m_designAction)
+	//		m_designAction->setVisible(m_designAction->isEnabled());
+//		if (m_editTextAction)
+//			m_editTextAction->setVisible(part && m_editTextAction->isEnabled());
+//		if (m_executeAction)
+//			m_executeAction->setVisible(gotitem && it->partInfo()->isExecuteSupported());
+//		if (m_exportActionMenu) {
+			//m_exportActionMenu->setVisible(gotitem && it->partInfo()->isDataExportSupported());
+//		}
+//		if (m_printAction)
+//			m_printAction->setVisible(gotitem && it->partInfo()->isPrintingSupported());
+//		if (m_pageSetupAction) {
+//			m_pageSetupAction->setVisible(gotitem && it->partInfo()->isPrintingSupported());
+//		}
+//	}
 
 	if (m_prevSelectedPart != part) {
-	m_prevSelectedPart = part;
+		m_prevSelectedPart = part;
 		if (part) {
 			if (m_newObjectAction) {
 				m_newObjectAction->setText(
@@ -561,7 +499,7 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 			}
 		}
 	}
-	emit selectionChanged(it ? it->item() : 0);
+	emit selectionChanged(it ? it->partItem() : 0);
 }
 
 void KexiBrowser::installEventFilter ( QObject * filterObj )
@@ -575,7 +513,7 @@ void KexiBrowser::installEventFilter ( QObject * filterObj )
 bool KexiBrowser::eventFilter ( QObject *o, QEvent * e )
 {
 	if (o==m_list && e->type()==QEvent::Resize) {
-		kDebug() << "resize!" << endl;
+		kexidbg << "resize!" << endl;
 	}
 	if (o==m_list->renameLineEdit()) {
 		if (e->type()==QEvent::Hide) 
@@ -629,9 +567,9 @@ void KexiBrowser::slotRemove()
 	if (!m_deleteAction || !m_deleteAction->isEnabled() || !(m_features & Writable))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
-	if (!it || !it->item())
+	if (!it || !it->partItem())
 		return;
-	emit removeItem( it->item() );
+	emit removeItem( it->partItem() );
 }
 
 void KexiBrowser::slotNewObject()
@@ -639,17 +577,17 @@ void KexiBrowser::slotNewObject()
 	if (!m_newObjectAction || !(m_features & Writable))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
-	if (!it || !it->info())
+	if (!it || !it->partInfo())
 		return;
-	emit newItem( it->info() );
+	emit newItem( it->partInfo() );
 }
 
 void KexiBrowser::slotOpenObject()
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
-	if (!it || !it->item())
+	if (!it || !it->partItem())
 		return;
-	emit openItem( it->item(), Kexi::DataViewMode );
+	emit openItem( it->partItem(), Kexi::DataViewMode );
 }
 
 void KexiBrowser::slotDesignObject()
@@ -657,9 +595,9 @@ void KexiBrowser::slotDesignObject()
 	if (!m_designAction)
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
-	if (!it || !it->item())
+	if (!it || !it->partItem())
 		return;
-	emit openItem( it->item(), Kexi::DesignViewMode );
+	emit openItem( it->partItem(), Kexi::DesignViewMode );
 }
 
 void KexiBrowser::slotEditTextObject()
@@ -667,9 +605,9 @@ void KexiBrowser::slotEditTextObject()
 	if (!m_editTextAction)
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
-	if (!it || !it->item())
+	if (!it || !it->partItem())
 		return;
-	emit openItem( it->item(), Kexi::TextViewMode );
+	emit openItem( it->partItem(), Kexi::TextViewMode );
 }
 
 void KexiBrowser::slotCut()
@@ -711,13 +649,13 @@ void KexiBrowser::itemRenameDone()
 	if (!it)
 		return;
 	QString txt = it->text(0).trimmed();
-	bool ok = it->item()->name().toLower()!=txt.toLower(); //the new name must be different
+	bool ok = it->partItem()->name().toLower()!=txt.toLower(); //the new name must be different
 	if (ok) {
 		/* TODO */
-		emit renameItem(it->item(), txt, ok);
+		emit renameItem(it->partItem(), txt, ok);
 	}
 	if (!ok) {
-		txt = it->item()->name(); //revert
+		txt = it->partItem()->name(); //revert
 	}
 	//"modified" flag has been removed before editing: readd it
 	if (m_list->nameEndsWithAsterisk) {
@@ -772,6 +710,7 @@ void KexiBrowser::clearSelection()
 
 void KexiBrowser::slotNewObjectMenuAboutToShow()
 {
+	kexidbg << "KexiBrowser::slotNewObjectMenuAboutToShow()" << endl;
 	if ((m_features & Toolbar) && m_newObjectMenu && m_newObjectMenu->isEmpty()) {
 		//preload items
 		KexiPart::PartInfoList *plist
@@ -811,7 +750,7 @@ void KexiBrowser::slotExportAsDataTable()
 KexiPart::Item* KexiBrowser::selectedPartItem() const
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
-	return it ? it->item() : 0;
+	return it ? it->partItem() : 0;
 }
 
 bool KexiBrowser::actionEnabled(const Q3CString& actionName) const
@@ -822,7 +761,7 @@ bool KexiBrowser::actionEnabled(const Q3CString& actionName) const
 	return false;
 }
 
-void KexiBrowser::slotPrintItem()
+void KexiBrowser::slotPrintObject()
 {
 	if (!m_printAction)
 		return;
@@ -831,7 +770,7 @@ void KexiBrowser::slotPrintItem()
 		emit printItem( item );
 }
 
-void KexiBrowser::slotPageSetupForItem()
+void KexiBrowser::slotPageSetupForObject()
 {
 	if (!m_pageSetupAction)
 		return;
@@ -885,7 +824,7 @@ void KexiBrowserListView::rename(Q3ListViewItem *item, int c)
 	if (renameLineEdit()->isVisible())
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(item);
-	if (it->item() && c==0) {
+	if (it->partItem() && c==0) {
 		//only edit 1st column for items, not item groups
 //TODO: also check it this item is not read-only
 //		item->setText(0, item->text(0).mid(1,item->text(0).length()-2));
@@ -901,6 +840,115 @@ void KexiBrowserListView::rename(Q3ListViewItem *item, int c)
 bool KexiBrowserListView::isExecuteArea( const QPoint& point )
 {
 	return enableExecuteArea && K3ListView::isExecuteArea(point);
+}
+
+//--------------------------------------------
+KexiMenuBase::KexiMenuBase(QWidget* parent, KActionCollection *col)
+ : KMenu(parent)
+ , m_actionCollection(col)
+{
+}
+
+KexiMenuBase::~KexiMenuBase()
+{
+}
+
+QAction* KexiMenuBase::addAction(const QString& actionName)
+{
+	QAction* action = m_actionCollection->action(actionName);
+	if (action)
+		KMenu::addAction(action);
+	return action;
+}
+
+//--------------------------------------------
+KexiItemMenu::KexiItemMenu(QWidget* parent, KActionCollection *col)
+ : KexiMenuBase(parent, col)
+{
+}
+
+KexiItemMenu::~KexiItemMenu()
+{
+}
+
+void KexiItemMenu::update(KexiPart::Info* partInfo, KexiPart::Item* partItem)
+{
+	clear();
+	QString title_text( partItem->name() );
+	KexiPart::Part *part = partInfo ? Kexi::partManager().part(partInfo) : 0;
+	if (part && !part->instanceCaption().isEmpty()) {
+		//+ type name
+		title_text +=  (" : " + part->instanceCaption());
+	}
+	addTitle( KIcon(partInfo->itemIcon()), title_text );
+	
+	if (m_actionCollection->action("open_object")
+		&& m_actionCollection->action("open_object")->isEnabled()
+		&& partItem && part && (part->supportedViewModes() & Kexi::DataViewMode))
+	{
+		addAction("open_object");
+	}
+	if (m_actionCollection->action("design_object")
+		&& m_actionCollection->action("design_object")->isEnabled()
+		&& partItem && part && (part->supportedViewModes() & Kexi::DesignViewMode))
+	{
+		addAction("design_object");
+	}
+	if (m_actionCollection->action("editText_object")
+		&& m_actionCollection->action("editText_object")->isEnabled()
+		&& partItem && part && (part->supportedViewModes() & Kexi::TextViewMode))
+	{
+		addAction("editText_object");
+	}
+	if (addAction("new_object"))
+		addSeparator();
+
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+	//todo	plugSharedAction("edit_cut", m_itemMenu);
+	//todo	plugSharedAction("edit_copy", m_itemMenu);
+	//todo	addSeparator();
+#endif
+	bool addSep = false;
+	if (partItem && partInfo->isExecuteSupported()) {
+		addAction("data_execute");
+		addSep = true;
+	}
+	if (partItem && partInfo->isDataExportSupported()) {
+		addAction("export_object");
+		addSep = true;
+	}
+	if (addSep)
+		addSeparator();
+	
+	if (partItem && partInfo->isPrintingSupported())
+		addAction("print_object");
+	if (partItem && partInfo->isPrintingSupported())
+		addAction("pageSetupForObject");
+	if (m_actionCollection->action("edit_rename") || m_actionCollection->action("edit_delete"))
+		addSeparator();
+	addAction("edit_rename");
+	addAction("edit_delete");
+}
+
+//--------------------------------------------
+KexiGroupMenu::KexiGroupMenu(QWidget* parent, KActionCollection *col)
+ : KexiMenuBase(parent, col)
+{
+}
+
+KexiGroupMenu::~KexiGroupMenu()
+{
+}
+
+void KexiGroupMenu::update(KexiPart::Info* partInfo)
+{
+	clear();
+	addTitle(KIcon(partInfo->itemIcon()), partInfo->groupName());
+	addAction("new_object");
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+//	addSeparator();
+//	qobject_cast<KexiBrowser*>(parent())->plugSharedAction("edit_paste", this);
+#endif
 }
 
 #include "kexibrowser.moc"

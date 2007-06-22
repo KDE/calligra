@@ -45,14 +45,17 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 
 		void updateAction();
 
-		virtual void setIcon( const KIcon& icon );
+		virtual void setIcon( const QIcon& icon );
 		virtual void setIcon( const QString& icon );
 		virtual void setText( const QString& text );
+	
+	protected slots:
+		void slotActionChanged();
 
 	protected:
-		void update(const QString& text, const KIcon& icon, bool tipToo = false);
+		void update(const QString& text, const QIcon& icon, bool tipToo = false);
 		void init();
-		virtual void paintEvent(QPaintEvent *pe);
+//		virtual void paintEvent(QPaintEvent *pe);
 
 		QPointer<KAction> m_action;
 };

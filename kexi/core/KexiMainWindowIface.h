@@ -212,7 +212,7 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		virtual tristate executeCustomActionForObject(KexiPart::Item* item, const QString& actionName) = 0;
 
 	protected: // slots:
-		virtual void slotObjectRenamed(const KexiPart::Item &item, const Q3CString& oldName) = 0;
+		virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName) = 0;
 
 };
 

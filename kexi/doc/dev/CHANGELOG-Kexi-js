@@ -20,6 +20,16 @@ TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
 ===================== Kexi 2.0 Alpha =====================
 
+KDE4: TODO:
+- fix KMenu::addTitle():
+  http://api.kde.org/4.0-api/kdelibs-apidocs/kdeui/html/kmenu_8cpp-source.html#l00144
+
+2007-06-18
+KexiDB
+- fixed SQLiteConnection::isReadOnly() on Linux
+Main Window
+- fixes for Project Navigator
+
 2007-06-13
 Main Window
 - display Project Navigator

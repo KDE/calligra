@@ -51,10 +51,10 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowserItem : public K3ListViewItem
 		void clearChildren();
 
 		//! \return part info; should not be null.
-		KexiPart::Info *info() const { return m_info; }
+		KexiPart::Info *partInfo() const { return m_info; }
 
-		//! \return part item. Can be null if the browser item is a "folder", i.e. a parent node.
-		KexiPart::Item* item() const { return m_item; }
+		//! \return part item. Can be null if the browser item is a "folder/group", i.e. a parent node.
+		KexiPart::Item* partItem() const { return m_item; }
 
 	protected:
 		void initItem();

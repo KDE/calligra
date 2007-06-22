@@ -22,9 +22,11 @@
 #include <QStyle>
 #include <QStyleOption>
 #include <QPainter>
+#include <QActionEvent>
 
 #include <kiconloader.h>
 #include <kglobalsettings.h>
+#include <kdebug.h>
 
 #include <core/kexi.h>
 
@@ -54,7 +56,11 @@ KexiSmallToolButton::KexiSmallToolButton(KAction* action, QWidget* parent)
  : QToolButton(parent)
  , m_action(action)
 {
-	setText(m_action->objectName());
+	if (m_action) {
+		connect(m_action, SIGNAL(changed()), this, SLOT(slotActionChanged()));
+		update(m_action->text(), m_action->icon(), false);
+		setToolTip(m_action->toolTip());
+	}
 	init();
 //	connect(this, SIGNAL(clicked()), action, SLOT(activate()));
 //	connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)));
@@ -67,8 +73,9 @@ KexiSmallToolButton::~KexiSmallToolButton()
 
 void KexiSmallToolButton::updateAction()
 {
-	setDefaultAction(0);
-	setDefaultAction(m_action);
+//	setDefaultAction(0);
+//	setDefaultAction(m_action);
+
 /*
 	if (!m_action)
 		return;
@@ -92,7 +99,7 @@ void KexiSmallToolButton::init()
 	setAutoRaise(true);
 }
 
-void KexiSmallToolButton::update(const QString& text, const KIcon& icon, bool tipToo)
+void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool tipToo)
 {
 	int width = 0;
 	if (text.isEmpty()) {
@@ -113,7 +120,7 @@ void KexiSmallToolButton::update(const QString& text, const KIcon& icon, bool ti
 	setFixedWidth( width );
 }
 
-void KexiSmallToolButton::setIcon( const KIcon& icon )
+void KexiSmallToolButton::setIcon( const QIcon& icon )
 {
 	update(text(), icon);
 }
@@ -128,13 +135,14 @@ void KexiSmallToolButton::setText( const QString& text )
 	update(text, KIcon(icon()));
 }
 
+#if 0
 void KexiSmallToolButton::paintEvent(QPaintEvent *pe)
 {
 #ifdef __GNUC__
 #warning TODO KexiSmallToolButton::drawButton() - painting OK?
 #endif
 	QToolButton::paintEvent(pe);
-	QPainter painter(this);
+/*	QPainter painter(this);
 	if (QToolButton::menu()) {
 		QStyle::State arrowFlags = QStyle::State_None;
 		QStyleOption option;
@@ -144,7 +152,14 @@ void KexiSmallToolButton::paintEvent(QPaintEvent *pe)
 		if (isEnabled())
 			option.state |= QStyle::State_Enabled;
 		style()->drawPrimitive(QStyle::PE_IndicatorButtonDropDown, &option, &painter, this);
-	}
+	}*/
+}
+#endif
+
+void KexiSmallToolButton::slotActionChanged()
+{
+	kDebug() << "slotActionChanged()" << m_action->isEnabled() << endl;
+	setEnabled( m_action->isEnabled() );
 }
 
 #include "kexismalltoolbutton.moc"

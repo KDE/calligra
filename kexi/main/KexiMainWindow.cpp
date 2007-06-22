@@ -99,7 +99,7 @@
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
 
-#include "kde2_closebutton.xpm"
+//#include "kde2_closebutton.xpm"
 
 #include <widget/kexibrowser.h>
 #include <widget/kexipropertyeditorview.h>
@@ -143,7 +143,7 @@
 //#define PROPEDITOR_VISIBILITY_CHANGES
 
 //temporary fix to manage layout
-#include "ksplitter.h"
+//2.0: #include "ksplitter.h"
 //2.0: #define KDOCKWIDGET_P 1
 
 #ifndef KEXI_NO_FEEDBACK_AGENT
@@ -162,6 +162,15 @@
 KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent)
  : KTabWidget(parent)
 {
+	// close-tab button:
+	QToolButton* rightWidget = new QToolButton( this );
+	connect( rightWidget, SIGNAL( clicked() ),
+		this, SIGNAL( closeTab() ) );
+	rightWidget->setIcon( KIcon( "tab-remove" ) );
+	rightWidget->setAutoRaise(true);
+	rightWidget->adjustSize();
+	rightWidget->setToolTip( i18n("Close the current tab"));
+	setCornerWidget( rightWidget, Qt::TopRightCorner );
 }
 
 KexiMainWindowTabWidget::~KexiMainWindowTabWidget()
@@ -265,14 +274,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
  , d(new KexiMainWindow::Private(this) )
 {
 	setObjectName("KexiMainWindow");
-	
-	d->tabWidget = new KexiMainWindowTabWidget(this);
-	setCentralWidget( d->tabWidget );
-//<tmp>
-	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 1");
-	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 2");
-	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 3");
-//</tmp>
+	setupCentralWidget();
 	
 //kde4: removed 	KImageIO::registerFormats();
 
@@ -1870,17 +1872,33 @@ void KexiMainWindow::setupContextHelp() {
 #endif
 }
 
+void KexiMainWindow::setupCentralWidget()
+{
+	QWidget *centralWidget = new QWidget(this);
+	QVBoxLayout *centralWidgetLyr = new QVBoxLayout(centralWidget);
+	d->tabWidget = new KexiMainWindowTabWidget(centralWidget);
+	centralWidgetLyr->setContentsMargins( 0, KDialog::marginHint(), 0, 0 );
+	centralWidgetLyr->addWidget(d->tabWidget);
+	setCentralWidget( centralWidget );
+//<tmp>
+	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 1");
+	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 2");
+	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 3");
+//</tmp>
+}
+
 void KexiMainWindow::setupProjectNavigator()
 {
 	if (!d->isProjectNavigatorVisible)
 		return;
 
 	if (!d->nav) {
-		d->navDockWidget = new QDockWidget(i18n("Project Navigator"), this);
+		d->navDockWidget = new QDockWidget(this);
 		d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
 		addDockWidget( Qt::LeftDockWidgetArea, d->navDockWidget, Qt::Vertical );
 		d->nav = new KexiBrowser(this);
 		d->nav->installEventFilter(this);
+		d->navDockWidget->setWindowTitle(d->nav->windowTitle());
 		d->navDockWidget->setWidget( d->nav );
 		
 #warning TODO	d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
@@ -2674,7 +2692,7 @@ KexiMainWindow::createKexiProject(KexiProjectData* new_data)
 //	d->prj = ::createKexiProject(new_data);
 //provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
 //provided by KexiMessageHandler	connect(d->prj, SIGNAL(error(const QString&,const QString&)), this, SLOT(showErrorMessage(const QString&,const QString&)));
-	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const Q3CString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const Q3CString&)));
+	connect(d->prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)), this, SLOT(slotObjectRenamed(const KexiPart::Item&, const QString&)));
 
 	if (d->nav)
 		connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)), d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
@@ -3983,7 +4001,7 @@ void KexiMainWindow::renameObject( KexiPart::Item *item, const QString& _newName
 	d->pendingWindowsExist();
 }
 
-void KexiMainWindow::slotObjectRenamed(const KexiPart::Item &item, const Q3CString& /*oldName*/)
+void KexiMainWindow::slotObjectRenamed(const KexiPart::Item &item, const QString& /*oldName*/)
 {
 #ifndef KEXI_NO_PENDING_DIALOGS
 	Private::PendingJobType pendingType;

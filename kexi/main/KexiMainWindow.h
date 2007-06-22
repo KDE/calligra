@@ -52,10 +52,12 @@ class KXMLGUIFactory;
 //! @internal tab widget acting as central widget for KexiMainWindow
 class KexiMainWindowTabWidget : public KTabWidget
 {
+	Q_OBJECT
 	public:
 		KexiMainWindowTabWidget(QWidget *parent);
 		virtual ~KexiMainWindowTabWidget();
-		
+	signals:
+		void closeTab();
 };
 
 /**
@@ -265,6 +267,9 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void projectOpened();
 
 	protected:
+		/*! Setups central widget with tabs. */
+		void setupCentralWidget();
+		
 		/*! Setups the User Mode: constructs window according to kexi__final database
 		 and loads the specified part.
 		 \return true on success or false if e.g. kexi__final does not exist
@@ -434,7 +439,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		/*! Reaction for object rename (signalled by KexiProject).
 		 If this item has opened window, it's caption is updated,
 		 and also optionally application's caption. */
-		virtual void slotObjectRenamed(const KexiPart::Item &item, const Q3CString& oldName);
+		virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName);
 
 #warning TODO		virtual void fillWindowMenu();
 

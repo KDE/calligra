@@ -236,7 +236,7 @@ public:
 			}
 			KexiBrowserItem* bitem = dynamic_cast<KexiBrowserItem*>(it.current());
 			if (bitem) {
-				if (bitem->info()->objectName() == actionName)
+				if (bitem->partInfo()->objectName() == actionName)
 					return it.current();
 			}
 		}
@@ -671,11 +671,11 @@ void KexiActionSelectionDialog::slotActionCategorySelected(Q3ListViewItem* item)
 	// other case
 	KexiBrowserItem* browserItem = dynamic_cast<KexiBrowserItem*>(item);
 	if (browserItem) {
-		d->updateSelectActionToBeExecutedMessage(browserItem->info()->objectName());
-		if (d->objectsListView->itemsMimeType().toLatin1()!=browserItem->info()->mimeType()) {
+		d->updateSelectActionToBeExecutedMessage(browserItem->partInfo()->objectName());
+		if (d->objectsListView->itemsMimeType().toLatin1()!=browserItem->partInfo()->mimeType()) {
 			d->objectsListView->setProject(
-				KexiMainWindowIface::global()->project(), browserItem->info()->mimeType());
-			d->actionToExecuteListView->showActionsForMimeType( browserItem->info()->mimeType() );
+				KexiMainWindowIface::global()->project(), browserItem->partInfo()->mimeType());
+			d->actionToExecuteListView->showActionsForMimeType( browserItem->partInfo()->mimeType() );
 			d->setActionToExecuteSectionVisible(false);
 		}
 		if (d->secondAnd3rdColumnStack->currentWidget()!=d->secondAnd3rdColumnMainWidget) {

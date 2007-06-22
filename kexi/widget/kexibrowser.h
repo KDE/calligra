@@ -28,6 +28,7 @@
 #include <kexi_export.h>
 
 class Q3ListViewItem;
+class KIcon;
 class KMenu;
 class KAction;
 class KActionMenu;
@@ -45,6 +46,8 @@ namespace KexiPart
 	class Part;
 }
 class KexiProject;
+class KexiItemMenu;
+class KexiGroupMenu;
 
 //! @short The Main Kexi navigator widget
 class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
@@ -146,19 +149,23 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void slotRename();
 		void slotExecuteObject();
 		void slotExportAsDataTable();
-		void slotPrintItem();
-		void slotPageSetupForItem();
+		void slotPrintObject();
+		void slotPageSetupForObject();
 
 	protected:
 		void itemRenameDone();
-		KexiBrowserItem* addItem(KexiPart::Item& item, KexiBrowserItem *parent, KexiPart::Info* info);
+		KexiBrowserItem* addItem(KexiPart::Item& item, 
+			KexiBrowserItem *parent, KexiPart::Info* info);
+		KAction* addAction(const QString& name, const KIcon& icon, const QString& text,
+			const QString& toolTip, const QString& whatsThis, const char* slot);
 
 		Features m_features;
 		KexiBrowserListView *m_list;
 		KActionCollection *m_actions;
 		QHash<QString, KexiBrowserItem*> m_baseItems;
 		QHash<int, KexiBrowserItem*> m_normalItems;
-		KMenu *m_itemMenu, *m_partMenu;
+		KexiItemMenu *m_itemMenu;
+		KexiGroupMenu *m_partMenu;
 		KAction *m_deleteAction, *m_renameAction, 
 			*m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
@@ -168,10 +175,6 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		KMenu* m_newObjectMenu;
 		QAction *m_itemMenuTitle, *m_partMenuTitle,
 			*m_exportActionMenu_sep, *m_pageSetupAction_sep;
-//		int m_openAction_id, m_designAction_id, m_editTextAction_id,
-			//m_executeAction_id,
-			//m_exportActionMenu_id, m_exportActionMenu_id_sep,
-			//m_printAction_id, m_pageSetupAction_id, m_pageSetupAction_id_sep;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;
