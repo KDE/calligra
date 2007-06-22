@@ -39,7 +39,7 @@ class Yweather:
             "The YWEATHER() function uses the YAHOO! Weather Service to "
             "display the weather of a location. "
         )
-        func.syntax = "YWEATHER(string)"
+        func.syntax = "YWEATHER(string;string)"
         func.addParameter("String", "The US zip code, Location ID or cell that contains them.")
         func.addParameter("String", "Units for temperature. f=Fahrenheit and c=Celsius")
         func.addExample("YWEATHER(\"=A1\")")
