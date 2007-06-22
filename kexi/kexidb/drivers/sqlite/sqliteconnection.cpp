@@ -361,7 +361,8 @@ bool SQLiteConnection::isReadOnly() const
 #ifdef SQLITE2
 	return Connection::isReadOnly();
 #else
-	return d->data ? sqlite3_is_readonly(d->data) : false;
+	return (d->data ? sqlite3_is_readonly(d->data) : false)
+		|| Connection::isReadOnly();
 #endif
 }
 
