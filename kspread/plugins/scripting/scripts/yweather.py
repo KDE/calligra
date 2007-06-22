@@ -23,7 +23,7 @@ http://www.koffice.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
-import urllib
+import re, urllib
 from xml.dom import minidom
 import Kross, KSpread
 
@@ -46,19 +46,20 @@ class Yweather:
         func.addExample("YWEATHER(\"GMXX0151\";\"c\")")
 
         def update(argument):
-            print "Yweather.update !!!!!!!!!!!!!!!!!!!!"
-            location = argument[0] #"GMXX0151" #hardcoded for now
+            print "Yweather.update !"
+            location = argument[0] #e.g. "GMXX0151"
             if location.startswith('='):
                 sheet = KSpread.currentSheet()
                 location = sheet.text(location[1:])
 
-            if location == None or location == "":
+            if location == None or location == "" or not re.compile('^[a-zA-Z0-9\\!\\.\\-\s\\_]+$').match(location):
                 func.error = "Invalid location"
                 return
 
             url = "http://weather.yahooapis.com/forecastrss?p=%s" % location
             if len(argument) >= 2:
-                url += "&u=%s" % argument[1]
+                if argument[1] == 'f' or argument[1] == 'c':
+                    url += "&u=%s" % argument[1]
 
             print "url=%s" % url
             namespace = 'http://xml.weather.yahoo.com/ns/rss/1.0'
