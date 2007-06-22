@@ -62,7 +62,7 @@ public:
      * \return \c false if the command fails, was already executed once or is not approved
      * \see setRegisterUndo, isApproved
      */
-    bool execute();
+    virtual bool execute();
 
     /**
      * Executes the actual operation.
