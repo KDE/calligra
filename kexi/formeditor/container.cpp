@@ -104,7 +104,11 @@ EventEater::~EventEater()
 
 // Container itself
 
+#ifdef __GNUC__
 #warning Container::Private: move more m_* here
+#else
+#pragma WARNING( Container::Private: move more m_* here )
+#endif
 class Container::Private
 {
 	public:

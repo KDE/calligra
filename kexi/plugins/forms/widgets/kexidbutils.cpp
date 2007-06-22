@@ -54,7 +54,11 @@ void KexiDBWidgetContextMenuExtender::createTitle(QMenu *menu)
 		return;
 	m_contextMenu = menu;
 	KMenu *kmenu = dynamic_cast<KMenu*>(menu);
+#ifdef __GNUC__
 #warning TODO KexiDBWidgetContextMenuExtender::createTitle() what to do to insert title into KMenu?
+#else
+#pragma WARNING( TODO KexiDBWidgetContextMenuExtender::createTitle() what to do to insert title into KMenu? )
+#endif
 	if (!kmenu)
 		return;
 	m_titleAction = kmenu->addTitle(QString(), m_contextMenu->actions().first());

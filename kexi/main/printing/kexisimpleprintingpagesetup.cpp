@@ -515,7 +515,11 @@ void KexiSimplePrintingPageSetup::slotChangePageSizeAndMargins()
 {
 	KoHeadFoot headfoot; //dummy
 
+#ifdef __GNUC__
 #warning TODO reenable when KoPageLayoutDia is ported
+#else
+#pragma WARNING( TODO reenable when KoPageLayoutDia is ported )
+#endif
 #if 0//TODO
 	if (int(QDialog::Accepted) != KoPageLayoutDia::pageLayout( 
 		m_settings.pageLayout, headfoot, FORMAT_AND_BORDERS | DISABLE_UNIT, m_unit, this ))

@@ -154,7 +154,11 @@ KexiDBForm::drawRects(const QList<QRect> &list, int type)
 {
 	QPainter p;
 	p.begin(this);
+#ifdef __GNUC__
 #warning ???	p.begin(this, true);
+#else
+#pragma WARNING( ???	p.begin(this, true); )
+#endif
 	bool unclipped = testAttribute( Qt::WA_PaintUnclipped );
 	setAttribute( Qt::WA_PaintUnclipped, true );
 
@@ -197,7 +201,11 @@ void
 KexiDBForm::clearForm()
 {
 	QPainter p;
+#ifdef __GNUC__
 #warning ??	p.begin(this, true);
+#else
+#pragma WARNING( ??	p.begin(this, true); )
+#endif
 	p.begin(this);
 	bool unclipped = testAttribute( Qt::WA_PaintUnclipped );
 	setAttribute( Qt::WA_PaintUnclipped, true );
@@ -222,7 +230,11 @@ KexiDBForm::highlightWidgets(QWidget *from, QWidget *to)//, const QPoint &point)
 		toPoint = to->parentWidget()->mapTo(this, to->pos());
 
 	QPainter p;
+#ifdef __GNUC__
 #warning ???	p.begin(this, true);
+#else
+#pragma WARNING( ???	p.begin(this, true); )
+#endif
 	p.begin(this);
 	bool unclipped = testAttribute( Qt::WA_PaintUnclipped );
 	setAttribute( Qt::WA_PaintUnclipped, true );

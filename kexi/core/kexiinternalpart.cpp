@@ -115,7 +115,11 @@ KexiWindow* KexiInternalPart::findOrCreateKexiWindow(
 		m_uniqueWidget = wnd; //recall unique!
 	wnd->addView(view);
 	wnd->setWindowTitle( view->windowTitle() );
+#ifdef __GNUC__
 #warning TODO	wnd->setTabCaption( view->caption() );
+#else
+#pragma WARNING( TODO	wnd->setTabCaption( view->caption() ); )
+#endif
 	wnd->resize(view->sizeHint());
 	wnd->setMinimumSize(view->minimumSizeHint().width(),view->minimumSizeHint().height());
 	wnd->setId( KexiMainWindowIface::global()->project()->generatePrivateID() );

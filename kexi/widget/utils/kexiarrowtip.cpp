@@ -31,7 +31,11 @@
 
 #include <kexiutils/utils.h>
 
+#ifdef __GNUC__
 #warning KexiArrowTip ported to Qt4 but not tested
+#else
+#pragma WARNING( KexiArrowTip ported to Qt4 but not tested )
+#endif
 
 KexiArrowTip::KexiArrowTip(const QString& text, QWidget* parent)
  : KexiToolTip(text, parent)

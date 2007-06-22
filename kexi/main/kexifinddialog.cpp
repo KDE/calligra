@@ -53,7 +53,11 @@ class KexiFindDialog::Private
 		//! at global scope of the dialog \a parent.
 		void setActionAndShortcut(KAction *action, QWidget* parent, const char* member)
 		{
+#ifdef __GNUC__
 #warning not tested: setActionAndShortcut::setActionAndShortcut()
+#else
+#pragma WARNING( not tested: setActionAndShortcut::setActionAndShortcut() )
+#endif
 			if (!action)
 				return;
 			QObject::connect(parent, member, action, SLOT(activate()));

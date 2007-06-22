@@ -27,7 +27,11 @@
 #include <kexidb/queryschemaparameter.h>
 #include <kexidb/utils.h>
 #include <kexi_global.h>
+#ifdef __GNUC__
 #warning TODO include "utils/kexidatetimeformatter.h"
+#else
+#pragma WARNING( TODO include \"utils/kexidatetimeformatter.h\" )
+#endif
 
 //static
 Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent, 
@@ -68,7 +72,11 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			break;
 		}
 		case KexiDB::Field::Date: {
+#ifdef __GNUC__
 #warning TODO reenable when formatter is ported: case KexiDB::Field::Date:
+#else
+#pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::Date: )
+#endif
 #if 0
 			KexiDateFormatter df;
 			const QString result = KInputDialog::getText( 
@@ -82,7 +90,11 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			break;
 		}
 		case KexiDB::Field::DateTime: {
+#ifdef __GNUC__
 #warning TODO reenable when formatter is ported: case KexiDB::Field::DateTime:
+#else
+#pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::DateTime: )
+#endif
 #if 0
 			KexiDateFormatter df;
 			KexiTimeFormatter tf;
@@ -97,7 +109,11 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			break;
 		}
 		case KexiDB::Field::Time: {
+#ifdef __GNUC__
 #warning TODO reenable when formatter is ported: case KexiDB::Field::Time:
+#else
+#pragma WARNING( TODO reenable when formatter is ported: case KexiDB::Field::Time: )
+#endif
 #if 0
 			KexiTimeFormatter tf;
 			const QString result = KInputDialog::getText( 

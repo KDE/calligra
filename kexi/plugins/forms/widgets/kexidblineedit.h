@@ -31,7 +31,11 @@
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
+#ifdef __GNUC__
 #warning reenable when formatter is ported #include <widget/tableview/kexitextformatter.h>
+#else
+#pragma WARNING( reenable when formatter is ported #include <widget/tableview/kexitextformatter.h> )
+#endif
 
 class KexiDBWidgetContextMenuExtender;
 
@@ -139,7 +143,11 @@ class KEXIFORMUTILS_EXPORT KexiDBLineEdit :
 		virtual bool appendStretchRequired(KexiDBAutoField* autoField) const;
 
 		//! Used to format text
+#ifdef __GNUC__
 #warning reenable when formatter is ported		KexiTextFormatter m_textFormatter;
+#else
+#pragma WARNING( reenable when formatter is ported		KexiTextFormatter m_textFormatter; )
+#endif
 
 		//! Used for read only flag to disable editing
 		QPointer<QValidator> m_readOnlyValidator;

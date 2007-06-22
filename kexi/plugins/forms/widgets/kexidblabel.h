@@ -129,7 +129,11 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 		virtual void enabledChange( bool enabled );
 
 		virtual void paletteChange( const QPalette& oldPal );
+#ifdef __GNUC__
 #warning TODO virtual void frameChanged();
+#else
+#pragma WARNING( TODO virtual void frameChanged(); )
+#endif
 		virtual void showEvent( QShowEvent* e );
 
 		//! Reimplemented to paint using real frame color instead of froeground. 

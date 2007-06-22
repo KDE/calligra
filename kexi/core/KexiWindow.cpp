@@ -108,7 +108,11 @@ KexiWindow::KexiWindow(/*const QString &caption, */ QWidget *parent,
 {
 	d->part = &part;
 	d->item = &item;
+#ifdef __GNUC__
 #warning todo KexiWindow: caption, parent?
+#else
+#pragma WARNING( todo KexiWindow: caption, parent? )
+#endif
 //kde4	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 //kde4	m_stack = new Q3WidgetStack(this, "stack");
 //kde4	lyr->addWidget(m_stack);
@@ -128,7 +132,11 @@ KexiWindow::KexiWindow()
  , d( new Private() )
  , m_destroying(false)
 {
+#ifdef __GNUC__
 #warning todo KexiWindow: caption, parent?
+#else
+#pragma WARNING( todo KexiWindow: caption, parent? )
+#endif
 //kde4	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
 //kde4	m_stack = new Q3WidgetStack(this, "stack");
 //kde4	lyr->addWidget(m_stack);
@@ -252,7 +260,11 @@ void KexiWindow::registerWindow()
 		m_parentWindow->detachWindow(this, true);
 	}
 	else */
+#ifdef __GNUC__
 #warning KexiWindow::registerWindow()
+#else
+#pragma WARNING( KexiWindow::registerWindow() )
+#endif
 //kde4 todo		KexiMainWindo::global()->addWindow(this, KexiMdiMainFrm::StandardAdd);
 }
 
@@ -601,7 +613,11 @@ void KexiWindow::updateCaption()
 	QString fullCapt = capt;
 	if (d->part)
 		fullCapt += (" : " + d->part->instanceCaption());
+#ifdef __GNUC__
 #warning TODO KexiWindow::updateCaption()
+#else
+#pragma WARNING( TODO KexiWindow::updateCaption() )
+#endif
 #if 0 //TODO
 	if (isDirty()) {
 		QStackedWidget::setCaption(fullCapt+"*");
@@ -751,9 +767,17 @@ void KexiWindow::activate()
 {
 	KexiView *v = selectedView();
 	//kDebug() << "focusWidget(): " << focusWidget()->name() << endl;
+#ifdef __GNUC__
 #warning TODO KexiWindow::activate() OK instead of focusedChildWidget()?
+#else
+#pragma WARNING( TODO KexiWindow::activate() OK instead of focusedChildWidget()? )
+#endif
 	if (KexiUtils::hasParent( v, /*kde4*/ KexiMainWindowIface::global()->focusWidget() )) //QStackedWidget::focusedChildWidget()))
+#ifdef __GNUC__
 #warning TODO		QStackedWidget::activate();
+#else
+#pragma WARNING( TODO		QStackedWidget::activate(); )
+#endif
 	#if 0
 	else
 	#endif

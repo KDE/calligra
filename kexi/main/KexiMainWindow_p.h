@@ -260,7 +260,11 @@ void updatePropEditorDockWidthInfo() {
 	
 	void disableMenuItem(const QString& menuName, const QString& itemText)
 	{
+#ifdef __GNUC__
 #warning reimplement disableMenuItem()
+#else
+#pragma WARNING( reimplement disableMenuItem() )
+#endif
 		Q3PopupMenu *pm = popups[menuName.toLatin1()];
 		if (!pm)
 			return;
@@ -275,7 +279,11 @@ void updatePropEditorDockWidthInfo() {
 
 	void updatePropEditorVisibility(Kexi::ViewMode viewMode)
 	{
+#ifdef __GNUC__
 #warning TODO updatePropEditorVisibility
+#else
+#pragma WARNING( TODO updatePropEditorVisibility )
+#endif
 #if 0 //TODO reenable
 		if (propEditorToolWindow) {
 			if (viewMode==0 || viewMode==Kexi::DataViewMode) {

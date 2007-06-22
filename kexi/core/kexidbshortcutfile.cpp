@@ -62,7 +62,11 @@ KexiDBShortcutFile::~KexiDBShortcutFile()
 
 bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupKey)
 {
+#ifdef __GNUC__
 #warning KexiDBShortcutFile::loadProjectData: how about readOnly arg?
+#else
+#pragma WARNING( KexiDBShortcutFile::loadProjectData: how about readOnly arg? )
+#endif
 	KConfig config(d->fileName, KConfig::OnlyLocal );
 	KConfigGroup cg = config.group("File Information");
 	data.formatVersion = cg.readEntry("version", KexiDBShortcutFile_version);
@@ -159,7 +163,11 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data, 
 	bool savePassword, QString* _groupKey, bool overwriteFirstGroup)
 {
+#ifdef __GNUC__
 #warning KexiDBShortcutFile::saveProjectData: how about readOnly arg?
+#else
+#pragma WARNING( KexiDBShortcutFile::saveProjectData: how about readOnly arg? )
+#endif
 	KConfig config(d->fileName, KConfig::OnlyLocal );
 	KConfigGroup cg = config.group("File Information");
 

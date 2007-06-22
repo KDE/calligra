@@ -65,7 +65,11 @@ public:
 		Q3ValueList<Q3CString> actions;
 		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
 			<< "edit_undo" << "edit_redo" << "edit_select_all";
+#ifdef __GNUC__
 #warning TODO	plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj));
+#else
+#pragma WARNING( TODO	plugSharedActionsToExternalGUI(actions, dynamic_cast<KXMLGUIClient*>(obj)); )
+#endif
 #endif
 	}
 };
@@ -113,8 +117,16 @@ KexiEditor::KexiEditor(QWidget *parent)
 		return;
 	d->view = d->doc->createView(fr);
 
+#ifdef __GNUC__
 #warning TODO	Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container("edit", mainWin) );
+#else
+#pragma WARNING( TODO	Q3PopupMenu *pop = qobject_cast<Q3PopupMenu*>( mainWin->factory()->container(\"edit\", mainWin) ); )
+#endif
+#ifdef __GNUC__
 #warning TODO	d->view->setContextMenu(pop);
+#else
+#pragma WARNING( TODO	d->view->setContextMenu(pop); )
+#endif
 /*	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
 	if(popupInt) {
 		Q3PopupMenu *pop = (Q3PopupMenu*) mainWin->factory()->container("edit", mainWin);
@@ -263,7 +275,11 @@ void KexiEditor::clearUndoRedo()
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	//TODO how to remove undo/redo from a KTextEdit?
 #else
+#ifdef __GNUC__
 #warning TODO KexiEditor::clearUndoRedo()
+#else
+#pragma WARNING( TODO KexiEditor::clearUndoRedo() )
+#endif
 /*
 	KTextEditor::UndoInterface* u = KTextEditor::undoInterface( d->doc );
 	u->clearUndo();

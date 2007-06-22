@@ -178,7 +178,11 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 		optionHeader.rect = r;
 		optionHeader.state = QStyle::State_Raised;
 		style()->drawControl( QStyle::CE_HeaderSection, &optionHeader, &p );
+#ifdef __GNUC__
 #warning 2.0: TODO?
+#else
+#pragma WARNING( 2.0: TODO? )
+#endif
 /* 2.0: TODO		
 		, r,
 			(d->currentRow == i) ? selectedColorGroup : (d->highlightedRow == i ? highlightedColorGroup : colorGroup()), 

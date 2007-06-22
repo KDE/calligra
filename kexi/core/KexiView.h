@@ -251,7 +251,11 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 
 		QString m_defaultIconName;
 
+#ifdef __GNUC__
 #warning todo: add some protected access methods
+#else
+#pragma WARNING( todo: add some protected access methods )
+#endif
 /*
 
 		KexiMainWindow *m_mainWin;

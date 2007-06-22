@@ -36,7 +36,11 @@
 #include <krecentdirs.h>
 #endif
 
+#ifdef __GNUC__
 #warning KexiImageContextMenu ported to Qt4 but not tested
+#else
+#pragma WARNING( KexiImageContextMenu ported to Qt4 but not tested )
+#endif
 
 //! @internal
 class KexiImageContextMenu::Private

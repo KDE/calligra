@@ -141,7 +141,11 @@ class KexiTableView::WhatsThis : public Q3WhatsThis
 
 //-----------------------------------------
 
+#ifdef __GNUC__
 #warning TODO KexiTableViewCellToolTip
+#else
+#pragma WARNING( TODO KexiTableViewCellToolTip )
+#endif
 /* TODO
 KexiTableViewCellToolTip::KexiTableViewCellToolTip( KexiTableView * tableView )
  : QToolTip() // 2.0: tableView->viewport())
@@ -328,7 +332,11 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 //will be updated by setAppearance:	updateFonts();
 	setAppearance(d->appearance); //refresh
 
+#ifdef __GNUC__
 #warning TODO d->cellToolTip = new KexiTableViewCellToolTip(this);
+#else
+#pragma WARNING( TODO d->cellToolTip = new KexiTableViewCellToolTip(this); )
+#endif
 	new WhatsThis(this);
 }
 
@@ -555,7 +563,11 @@ QSize KexiTableView::minimumSizeHint() const
 
 void KexiTableView::createBuffer(int width, int height)
 {
+#ifdef __GNUC__
 #warning TODO KexiTableView::createBuffer(): remove buffering a Qt4 has internal buffers
+#else
+#pragma WARNING( TODO KexiTableView::createBuffer(): remove buffering a Qt4 has internal buffers )
+#endif
 	if(!d->pBufferPm)
 		d->pBufferPm = new QPixmap(width, height);
 	else
@@ -1258,7 +1270,11 @@ bool KexiTableView::shortCutPressed( QKeyEvent *e, const QString &action_name )
 	if (action) {
 		if (!action->isEnabled())//this action is disabled - don't process it!
 			return false;
+#ifdef __GNUC__
 #warning OK? (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() )
+#else
+#pragma WARNING( OK? (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() ) )
+#endif
 		if (action->shortcut().primary() == QKeySequence( e->key()|e->modifiers() )
 		  ||(action->shortcut().alternate() == QKeySequence( e->key()|e->modifiers() )))
 		{

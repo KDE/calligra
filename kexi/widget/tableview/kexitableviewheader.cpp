@@ -29,7 +29,11 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/styleproxy.h>
 
+#ifdef __GNUC__
 #warning KexiTableViewHeader ported but not tested
+#else
+#pragma WARNING( KexiTableViewHeader ported but not tested )
+#endif
 
 //! @internal A style that allows to temporary change background color while
 //!           drawing header section primitive. Used in KexiTableViewHeader.
@@ -143,7 +147,11 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
 		const int section = sectionAt( static_cast<QMouseEvent*>(e)->x() );
 		if (section != m_lastToolTipSection && section >= 0 && section < (int)m_toolTips.count()) {
 			//QToolTip::remove(this, m_toolTipRect);
+#ifdef __GNUC__
 #warning TODO	
+#else
+#pragma WARNING( TODO	 )
+#endif
 			QString tip = m_toolTips[ section ];
 			if (tip.isEmpty()) { //try label
 				QFontMetrics fm(font());
@@ -159,7 +167,11 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
 				m_lastToolTipSection = -1;
 			}
 			else {
+#ifdef __GNUC__
 #warning QToolTip::showText() OK?
+#else
+#pragma WARNING( QToolTip::showText() OK? )
+#endif
 				QToolTip::showText(static_cast<QMouseEvent*>(e)->globalPos(), tip,
 					this, m_toolTipRect = sectionRect(section));
 				m_lastToolTipSection = section;
@@ -168,7 +180,11 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
 	}
   else if (e->type() == QEvent::ToolTip) {
 		QHelpEvent *helpEvent = static_cast<QHelpEvent *>(e);
+#ifdef __GNUC__
 #warning TODO
+#else
+#pragma WARNING( TODO )
+#endif
 	}
 //			if (e->type()==QEvent::MouseButtonPress) {
 //	todo
@@ -180,7 +196,11 @@ void KexiTableViewHeader::slotSizeChange(int /*section*/, int /*oldSize*/, int /
 {
 	if (m_lastToolTipSection>0)
 		QToolTip::hideText();
+#ifdef __GNUC__
 #warning TODO OK?
+#else
+#pragma WARNING( TODO OK? )
+#endif
 //		QToolTip::remove(this, m_toolTipRect);
 	m_lastToolTipSection = -1; //tooltip's rect is now invalid
 }

@@ -158,7 +158,11 @@ class KEXICORE_EXPORT KexiWindow
 		virtual void detachFromGUIClient();
 
 		//! \return true if the window is attached within the main window
+#ifdef __GNUC__
 #warning TODO isAttached()
+#else
+#pragma WARNING( TODO isAttached() )
+#endif
 		bool isAttached() const { return true; }
 
 		/*! True if contents (data) of the dialog is dirty and need to be saved

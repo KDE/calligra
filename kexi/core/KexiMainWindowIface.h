@@ -68,26 +68,50 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		//! Project data of currently opened project or NULL if no project here yet.
 		virtual KexiProject *project() = 0;
 
+#ifdef __GNUC__
 #warning TODO	virtual KActionCollection* actionCollection() const = 0;
+#else
+#pragma WARNING( TODO	virtual KActionCollection* actionCollection() const = 0; )
+#endif
 		virtual KActionCollection* actionCollection() const = 0;
 
+#ifdef __GNUC__
 #warning TODO virtual QWidget* focusWidget() const = 0;
+#else
+#pragma WARNING( TODO virtual QWidget* focusWidget() const = 0; )
+#endif
 		virtual QWidget* focusWidget() const = 0;
 		
 		//! Implemented by KXMLGUIClient
+#ifdef __GNUC__
 #warning TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0;
+#else
+#pragma WARNING( TODO virtual void plugActionList(const QString& name, const QList<KAction *>& actionList) = 0; )
+#endif
 		virtual void plugActionList(const QString& name,
 			const QList<KAction *>& actionList) = 0;
 			
+#ifdef __GNUC__
 #warning TODO KXMLGUIClient* guiClient() const = 0;
+#else
+#pragma WARNING( TODO KXMLGUIClient* guiClient() const = 0; )
+#endif
 		virtual KXMLGUIClient* guiClient() const = 0;
 			
 		//! Implemented by KXMLGUIClient
+#ifdef __GNUC__
 #warning TODO virtual void unplugActionList (const QString &name) = 0;
+#else
+#pragma WARNING( TODO virtual void unplugActionList (const QString &name) = 0; )
+#endif
 		virtual void unplugActionList (const QString &name) = 0;
   
   	//! Implemented by KMainWindow
+#ifdef __GNUC__
 #warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0;
+#else
+#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory() = 0; )
+#endif
 		virtual KXMLGUIFactory * guiFactory() = 0;
 
 		/*! Registers window \a window for watching and adds it to the main window's stack. */

@@ -156,11 +156,19 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
 	foreach(KAction* a, d->sharedActions) {
 		//setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
+#ifdef __GNUC__
 #warning TODO:		if (!insideKexiWindow && d->mainWin->actionCollection()!=a->parentCollection()) {
+#else
+#pragma WARNING( TODO:		if (!insideKexiWindow && d->mainWin->actionCollection()!=a->parentCollection()) { )
+#endif
 			//o is not KexiKexiWindow or its child:
 			// only invalidate action if it comes from mainwindow's KActionCollection
 			// (thus part-actions are untouched when the focus is e.g. in the Property Editor)
+#ifdef __GNUC__
 #warning TODO			continue;
+#else
+#pragma WARNING( TODO			continue; )
+#endif
 //todo		}
 		const bool avail = p && p->isAvailable(a->objectName());
 		KexiVolatileActionData *va = d->volatileActions[ a ];

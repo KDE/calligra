@@ -146,7 +146,11 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 		return;
 	}
 
+#ifdef __GNUC__
 #warning TODO KexiDBComboBox::paintEvent()
+#else
+#pragma WARNING( TODO KexiDBComboBox::paintEvent() )
+#endif
 #if 0 //TODO
 //! @todo support reverse layout
 //bool reverse = QApplication::reverseLayout();
@@ -175,7 +179,11 @@ void KexiDBComboBox::paintEvent( QPaintEvent * )
 
 QRect KexiDBComboBox::editorGeometry() const
 {
+#ifdef __GNUC__
 #warning KexiDBComboBox::editorGeometry() OK?
+#else
+#pragma WARNING( KexiDBComboBox::editorGeometry() OK? )
+#endif
 	QRect r( QStyle::visualRect(
 		qApp->layoutDirection(), 
 		d->paintedCombo->geometry(),
@@ -240,7 +248,11 @@ QRect KexiDBComboBox::buttonGeometry() const
 	QRect arrowRect( 
 		style()->subControlRect( 
 			QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxArrow, d->paintedCombo) );
+#ifdef __GNUC__
 #warning KexiDBComboBox::buttonGeometry() OK?
+#else
+#pragma WARNING( KexiDBComboBox::buttonGeometry() OK? )
+#endif
 	arrowRect = QStyle::visualRect(
 		qApp->layoutDirection(), d->paintedCombo->geometry(), arrowRect);
 	arrowRect.setHeight( qMax(  height() - (2 * arrowRect.y()), arrowRect.height() ) ); // a fix for Motif style

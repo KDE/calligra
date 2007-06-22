@@ -1757,7 +1757,11 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 
 	if (m_scrollbarToolTipsEnabled) {
 //		const QRect r( verticalScrollBar()->sliderRect() );
+#ifdef __GNUC__
 #warning ported but not tested KexiDataAwareObjectInterface::vScrollBarValueChanged()
+#else
+#pragma WARNING( ported but not tested KexiDataAwareObjectInterface::vScrollBarValueChanged() )
+#endif
 		QStyleOptionComplex styleOption;
 		styleOption.initFrom(verticalScrollBar());
 		const QRect r( verticalScrollBar()->style()->subControlRect(

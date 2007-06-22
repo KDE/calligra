@@ -645,11 +645,27 @@ void KexiStartupDialog::connectionItemForOpenExistingHighlighted(ConnectionDataL
 void KexiStartupDialog::slotOk() {
 //	kDebug()<<"KexiStartupDialog::slotOk()"<<endl;
 	if (currentPage()==d->pageOpenExisting) {
+#ifdef __GNUC__
 #warning UNUSED? KFileWidget		if (d->openExistingFileDlg) {
+#else
+#pragma WARNING( UNUSED? KFileWidget		if (d->openExistingFileDlg) { )
+#endif
+#ifdef __GNUC__
 #warning UNUSED? 			if (d->openExistingFileDlg->okButton())
+#else
+#pragma WARNING( UNUSED? 			if (d->openExistingFileDlg->okButton()) )
+#endif
+#ifdef __GNUC__
 #warning UNUSED? 				d->openExistingFileDlg->okButton()->animateClick();
+#else
+#pragma WARNING( UNUSED? 				d->openExistingFileDlg->okButton()->animateClick(); )
+#endif
 //			return;
+#ifdef __GNUC__
 #warning UNUSED?		}
+#else
+#pragma WARNING( UNUSED?		} )
+#endif
 	}
 }
 

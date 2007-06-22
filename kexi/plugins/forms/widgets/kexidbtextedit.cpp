@@ -99,7 +99,11 @@ bool KexiDBTextEdit::isReadOnly() const
 void KexiDBTextEdit::setReadOnly( bool readOnly )
 {
 	KTextEdit::setReadOnly( readOnly );
+#ifdef __GNUC__
 #warning TODO KexiDBTextEdit::setReadOnly() - bg color
+#else
+#pragma WARNING( TODO KexiDBTextEdit::setReadOnly() - bg color )
+#endif
 #if 0//TODO
 	QPalette p = palette();
 	QColor c(readOnly 

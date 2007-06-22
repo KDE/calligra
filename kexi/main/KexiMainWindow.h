@@ -75,21 +75,41 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		virtual KActionCollection* actionCollection() const;
 
+#ifdef __GNUC__
 #warning TODO virtual QWidget* focusWidget() const;
+#else
+#pragma WARNING( TODO virtual QWidget* focusWidget() const; )
+#endif
 		virtual QWidget* focusWidget() const { return QMainWindow::focusWidget(); }
 
+#ifdef __GNUC__
 #warning TODO 	virtual void plugActionList(const QString& name,
+#else
+#pragma WARNING( TODO 	virtual void plugActionList(const QString& name, )
+#endif
 		virtual void plugActionList(const QString& name,
 			const QList<KAction *>& actionList) {}
 
+#ifdef __GNUC__
 #warning TODO KXMLGUIClient* guiClient() const;
+#else
+#pragma WARNING( TODO KXMLGUIClient* guiClient() const; )
+#endif
 		virtual KXMLGUIClient* guiClient() const;
 
+#ifdef __GNUC__
 #warning TODO virtual void unplugActionList (const QString &name);
+#else
+#pragma WARNING( TODO virtual void unplugActionList (const QString &name); )
+#endif
 		virtual void unplugActionList (const QString &name) {}
   	
   	//! Implemented by KMainWindow
+#ifdef __GNUC__
 #warning TODO virtual KXMLGUIFactory * KMainWindow::guiFactory();
+#else
+#pragma WARNING( TODO virtual KXMLGUIFactory * KMainWindow::guiFactory(); )
+#endif
 		virtual KXMLGUIFactory* guiFactory();
 
 
@@ -146,10 +166,18 @@ class KEXIMAIN_EXPORT KexiMainWindow
 	public slots:
 		/*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
 			Just calls closeWindow(). Use closeWindow() if you need, not this one. */
+#ifdef __GNUC__
 #warning TODO virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true);
+#else
+#pragma WARNING( TODO virtual void closeWindow(KMdiChildView *pWnd, bool layoutTaskBar = true); )
+#endif
 
 		/*! Reimplemented for internal reasons. */
+#ifdef __GNUC__
 #warning TODO virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd );
+#else
+#pragma WARNING( TODO virtual void addWindow( KMdiChildView* pView, int flags = KMdi::StandardAdd ); )
+#endif
 
 		/*! Implemented for KexiMainWindow */
 		virtual tristate closeWindow(KexiWindow *window);
@@ -160,8 +188,16 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 (see kexi/tests/altertable/ directory). */
 		tristate closeWindow(KexiWindow *window, bool layoutTaskBar, bool doNotSaveChanges = false);
 
+#ifdef __GNUC__
 #warning TODO 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
+#else
+#pragma WARNING( TODO 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true); )
+#endif
+#ifdef __GNUC__
 #warning TODO 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
+#else
+#pragma WARNING( TODO 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false); )
+#endif
 
 //! @todo move part of this to KexiProject, because currently KexiProject::openObject() allows multiple opens!
 		/*! Opens object pointed by \a item in a view \a viewMode.
@@ -330,7 +366,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 (in case when server database project was selected). */
 		KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, QString *shortcutFileName = 0);
 
+#ifdef __GNUC__
 #warning TODO		void setWindowMenu(Q3PopupMenu *menu);
+#else
+#pragma WARNING( TODO		void setWindowMenu(Q3PopupMenu *menu); )
+#endif
 
 		/*! \return focused kexi window (KexiWindow or KexiDockBase subclass) */
 //		QWidget* focusWindow() const;
@@ -381,15 +421,27 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void slotAutoOpenObjectsLater();
 
 		/*! This slot is called if a window changes */
+#ifdef __GNUC__
 #warning TODO		void activeWindowChanged(KMdiChildView *dlg);
+#else
+#pragma WARNING( TODO		void activeWindowChanged(KMdiChildView *dlg); )
+#endif
 
 		/*! This slot is called if a window gets colsed and will unregister stuff */
+#ifdef __GNUC__
 #warning TODO		void childClosed(KMdiChildView *dlg);
+#else
+#pragma WARNING( TODO		void childClosed(KMdiChildView *dlg); )
+#endif
 
 		void slotPartLoaded(KexiPart::Part* p);
 
 		void slotCaptionForCurrentMDIChild(bool childrenMaximized);
+#ifdef __GNUC__
 #warning TODO		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
+#else
+#pragma WARNING( TODO		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*); )
+#endif
 		void slotLastChildViewClosed();
 		void slotChildViewIsDetachedNow(QWidget*);
 
@@ -441,7 +493,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 and also optionally application's caption. */
 		virtual void slotObjectRenamed(const KexiPart::Item &item, const QString& oldName);
 
+#ifdef __GNUC__
 #warning TODO		virtual void fillWindowMenu();
+#else
+#pragma WARNING( TODO		virtual void fillWindowMenu(); )
+#endif
 
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();
@@ -511,7 +567,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		/*! Handles changes in 'dirty' flag for windows. */
 		void slotDirtyFlagChanged(KexiWindow*);
 
+#ifdef __GNUC__
 #warning TODO		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);
+#else
+#pragma WARNING( TODO		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode); )
+#endif
 
 		//! reimplemented to add "restart is required" message box
 //2.0: unused		virtual void switchToIDEAlMode();
@@ -545,7 +605,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		//! Shows "print" dialog for \a item and \a settings.
 		//! \return true on success.
+#ifdef __GNUC__
 #warning TODO reenable when ported		bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString());
+#else
+#pragma WARNING( TODO reenable when ported		bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString()); )
+#endif
 		
 		/*! Shows "print preview" window for \a item. 
 		 The preview windoe is cached, so \a reload == true is sometimes needed 
@@ -555,12 +619,20 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		//! Shows "print preview" window. 
 		//! \return true on success.
+#ifdef __GNUC__
 #warning TODO reenable when ported		bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString(), bool reload = false);
+#else
+#pragma WARNING( TODO reenable when ported		bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, const QString& titleText = QString(), bool reload = false); )
+#endif
 
 		/*! Implemented for KexiMainWindow. Helper for printItem() and printPreviewForItem().
 		 Also used by KexiFormEventAction.
 		 \return true on success and cancelled when the action was cancelled. */
+#ifdef __GNUC__
 #warning TODO reenable when ported		tristate printActionForItem(KexiPart::Item* item, PrintActionType action);
+#else
+#pragma WARNING( TODO reenable when ported		tristate printActionForItem(KexiPart::Item* item, PrintActionType action); )
+#endif
 
 	private:
 		class MessageHandler;

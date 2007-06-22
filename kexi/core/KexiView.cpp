@@ -127,7 +127,11 @@ tristate KexiView::afterSwitchFrom(Kexi::ViewMode mode)
 
 QSize KexiView::preferredSizeHint(const QSize& otherSize)
 {
+#ifdef __GNUC__
 #warning KexiView::preferredSizeHint()
+#else
+#pragma WARNING( KexiView::preferredSizeHint() )
+#endif
 #if 0 //todo
 	KexiWindow* w = d->window;
 	if (dlg && dlg->mdiParent()) {

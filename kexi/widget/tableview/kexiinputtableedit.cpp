@@ -82,7 +82,11 @@ void KexiInputTableEdit::init()
 //	kDebug() << "KexiInputTableEdit: type== " << field()->typeName() << endl;
 //	kDebug() << "KexiInputTableEdit: displayed type== " << displayedField()->typeName() << endl;
 
+#ifdef __GNUC__
 #warning TODO reenable 	m_textFormatter.setField( field() );
+#else
+#pragma WARNING( TODO reenable 	m_textFormatter.setField( field() ); )
+#endif
 
 	//init settings
 	m_decsym = KGlobal::locale()->decimalSymbol();
@@ -122,7 +126,11 @@ void KexiInputTableEdit::init()
 void KexiInputTableEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 	QString text; //tmp
+#ifdef __GNUC__
 #warning TODO reenable 	QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+#else
+#pragma WARNING( TODO reenable 	QString text( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) ); )
+#endif
 	if (text.isEmpty()) {
 		if (m_origValue.toString().isEmpty()) {
 			//we have to set NULL initial value:
@@ -343,7 +351,11 @@ void KexiInputTableEdit::handleCopyAction(const QVariant& value, const QVariant&
 {
 	Q_UNUSED(visibleValue);
 //! @todo handle rich text?
+#ifdef __GNUC__
 #warning TODO reenable	qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) );
+#else
+#pragma WARNING( TODO reenable	qApp->clipboard()->setText( m_textFormatter.valueToText(value, QString()) ); )
+#endif
 }
 
 void KexiInputTableEdit::handleAction(const QString& actionName)
@@ -371,8 +383,16 @@ bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect&
 	const QFontMetrics& fm, bool focused)
 {
 	QString text; //tmp
+#ifdef __GNUC__
 #warning TODO reenable	QString text( value.type()==QVariant::String ? value.toString()
+#else
+#pragma WARNING( TODO reenable	QString text( value.type()==QVariant::String ? value.toString() )
+#endif
+#ifdef __GNUC__
 #warning TODO reenable		: m_textFormatter.valueToText(value, QString()) );
+#else
+#pragma WARNING( TODO reenable		: m_textFormatter.valueToText(value, QString()) ); )
+#endif
 	QRect internalRect(rect);
 	internalRect.setLeft(rect.x()+leftMargin());
 	internalRect.setWidth(internalRect.width()-rightMargin(focused)-2*3);

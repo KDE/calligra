@@ -203,7 +203,11 @@ QPixmap KexiDBInternalLabel::getShadowPixmap() {
 	*/
 	painter.begin( &tempPixmap );
 	painter.setFont( font() );
+#ifdef __GNUC__
 #warning Qt4 TODO	drawContents( &painter );
+#else
+#pragma WARNING( Qt4 TODO	drawContents( &painter ); )
+#endif
 	painter.end();
 	setPaletteForegroundColor( textColor );
 
@@ -625,7 +629,11 @@ void KexiDBLabel::setPaletteForegroundColor ( const QColor& color )
 	d->foregroundColor = color;
 }*/
 
+#ifdef __GNUC__
 #warning TODO 
+#else
+#pragma WARNING( TODO  )
+#endif
 /*TODO
 void KexiDBLabel::frameChanged()
 {

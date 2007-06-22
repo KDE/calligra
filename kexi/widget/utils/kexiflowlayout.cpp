@@ -21,7 +21,11 @@
 
 #include <KDebug>
 
+#ifdef __GNUC__
 #warning KexiFlowLayout ported to Qt4 but not tested
+#else
+#pragma WARNING( KexiFlowLayout ported to Qt4 but not tested )
+#endif
 
 /* 2.0 removed
 /// Iterator class

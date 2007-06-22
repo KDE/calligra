@@ -194,7 +194,11 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_conn_sel->showSimpleConn();
 	//anyway, db files will be _saved_
 	m_conn_sel->fileWidget->setMode( KexiStartupFileWidget::SavingFileBasedDB );
+#ifdef __GNUC__
 #warning TODO KFileWidget	connect(m_conn_sel->m_fileDlg,SIGNAL(accepted()),this,SLOT(accept()));
+#else
+#pragma WARNING( TODO KFileWidget	connect(m_conn_sel->m_fileDlg,SIGNAL(accepted()),this,SLOT(accept())); )
+#endif
 	m_conn_sel->showAdvancedConn();
 	connect(m_conn_sel,SIGNAL(connectionItemExecuted(ConnectionDataLVItem*)),
 		this,SLOT(next()));

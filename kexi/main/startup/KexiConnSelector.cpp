@@ -247,7 +247,11 @@ void KexiConnSelectorWidget::showSimpleConn()
 
 		for (QWidget *w = parentWidget(); w; w=w->parentWidget()) {
 			if (w->windowType()==Qt::Dialog) {
+#ifdef __GNUC__
 #warning TODO KFileWidget				connect(m_fileDlg, SIGNAL(rejected()), qobject_cast<QDialog*>(w), SLOT(reject()));
+#else
+#pragma WARNING( TODO KFileWidget				connect(m_fileDlg, SIGNAL(rejected()), qobject_cast<QDialog*>(w), SLOT(reject())); )
+#endif
 				break;
 			}
 		}

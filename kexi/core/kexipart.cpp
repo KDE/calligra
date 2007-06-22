@@ -159,7 +159,11 @@ void Part::createGUIClients()//KexiMainWindow *win)
 		);
 		act->setObjectName(KexiPart::nameForCreateAction(*info()));
 		connect(act, SIGNAL(triggered()), this, SLOT(slotCreate()));
+#ifdef __GNUC__
 #warning TODO		KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently
+#else
+#pragma WARNING( TODO		KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently )
+#endif
 
 		//default actions for part instance's gui client:
 		//NONE
@@ -274,7 +278,11 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, Kexi::ViewMode viewMode,
  - displaying the same as above in tabCaption (or not) */
 	window->setId(item.identifier()); //not needed, but we did it
 	window->setWindowIcon( SmallIcon( window->itemIcon() ) );
+#ifdef __GNUC__
 #warning todo
+#else
+#pragma WARNING( todo )
+#endif
 #if 0
 	if (window->mdiParent())
 		window->mdiParent()->setIcon( *window->icon() );
@@ -344,7 +352,11 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, Kexi::ViewMode viewMode,
 	window->registerWindow(); //ok?
 	window->show();
 
+#ifdef __GNUC__
 #warning Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows
+#else
+#pragma WARNING( Part::openInstance(): resize window->resize(window->sizeHint()) for standalone windows )
+#endif
 #if 0
 	if (window->mdiParent() && window->mdiParent()->state()==KexiMdiMainFrm::Normal) //only resize the window if it is in normal state
 		window->resize(window->sizeHint());
@@ -507,7 +519,11 @@ void Part::setNewObjectsAreDirty(bool set)
 
 GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)
  : QObject(part)
+#ifdef __GNUC__
 #warning TODO , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient())
+#else
+#pragma WARNING( TODO , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient()) )
+#endif
 {
 	setObjectName(
 		part->info()->objectName() 

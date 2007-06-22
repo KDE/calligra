@@ -281,7 +281,11 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 	if (d->userMode)
 		kDebug() << "KexiMainWindow::KexiMainWindow(): starting up in the User Mode" << endl;
 
+#ifdef __GNUC__
 #warning TODO initialGeometrySet()
+#else
+#pragma WARNING( TODO initialGeometrySet() )
+#endif
 #if 0 //TODO port ??
 	if ( !initialGeometrySet() ) {
 		int scnum = QApplication::desktop()->screenNumber(parentWidget());
@@ -308,7 +312,11 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //2.0: unused 	connect( m_pMdi, SIGNAL(nowMaximized(bool)), this, SLOT(slotCaptionForCurrentMDIChild(bool)) );
 //2.0: unused 	connect( m_pMdi, SIGNAL(noMaximizedChildFrmLeft(KMdiChildFrm*)), this, SLOT(slotNoMaximizedChildFrmLeft(KMdiChildFrm*)));
 //	connect( this, SIGNAL(lastChildFrmClosed()), this, SLOT(slotLastChildFrmClosed()));
+#ifdef __GNUC__
 #warning TODO	connect( this, SIGNAL(lastChildViewClosed()), this, SLOT(slotLastChildViewClosed()));
+#else
+#pragma WARNING( TODO	connect( this, SIGNAL(lastChildViewClosed()), this, SLOT(slotLastChildViewClosed())); )
+#endif
 
 //2.0: unused 	connect( this, SIGNAL(childViewIsDetachedNow(QWidget*)), this, SLOT(slotChildViewIsDetachedNow(QWidget*)));
 //2.0: unused 	connect( this, SIGNAL(mdiModeHasBeenChangedTo(KMdi::MdiMode)),
@@ -365,8 +373,16 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 		kmdi_tooldock_menu_action->setEnabled(false);
 	}*/
 
+#ifdef __GNUC__
 #warning TODO window menu
+#else
+#pragma WARNING( TODO window menu )
+#endif
+#ifdef __GNUC__
 #warning TODO userMode
+#else
+#pragma WARNING( TODO userMode )
+#endif
 #if 0 
 	if (!isFakingSDIApplication()/* && !d->userMode*/) {
 //		QMenu *menu = (QMenu*) child( "window", "KMenu" );
@@ -401,7 +417,11 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //	}
 
 //2.0: unused setTabWidgetVisibility(KMdi::AlwaysShowTabs);
+#ifdef __GNUC__
 #warning TODO	if (mdiMode()==KMdi::IDEAlMode) {
+#else
+#pragma WARNING( TODO	if (mdiMode()==KMdi::IDEAlMode) { )
+#endif
 #if 0 //TODO
 		d->config->setGroup("MainWindow");
 		tabWidget()->setHoverCloseButton(d->config->readBoolEntry("HoverCloseButtonForTabs", false));
@@ -997,7 +1017,11 @@ void KexiMainWindow::setupActions()
 
 	//WINDOW MENU
 #ifndef Q_WS_WIN
+#ifdef __GNUC__
 #warning kde4 TODO closeWindowAction->setShortcut(KSandardShortcut::close());
+#else
+#pragma WARNING( kde4 TODO closeWindowAction->setShortcut(KSandardShortcut::close()); )
+#endif
 /* TODO???
 	//KMDI <= 3.5.1 has no shortcut here:
 	QAction *closeWindowAction = actionCollection()->action("window_close");
@@ -1390,8 +1414,16 @@ void KexiMainWindow::invalidateProjectWideActions()
 
 	//WINDOW MENU
 	if (d->action_window_next) {
+#ifdef __GNUC__
 #warning TODO		d->action_window_next->setEnabled(!m_pDocumentViews->isEmpty());
+#else
+#pragma WARNING( TODO		d->action_window_next->setEnabled(!m_pDocumentViews->isEmpty()); )
+#endif
+#ifdef __GNUC__
 #warning TODO		d->action_window_previous->setEnabled(!m_pDocumentViews->isEmpty());
+#else
+#pragma WARNING( TODO		d->action_window_previous->setEnabled(!m_pDocumentViews->isEmpty()); )
+#endif
 	}
 
 	//DOCKS
@@ -1424,8 +1456,16 @@ tristate KexiMainWindow::startup()
 {
 	switch (Kexi::startupHandler().action()) {
 	case KexiStartupHandler::CreateBlankProject:
+#ifdef __GNUC__
 #warning TODO		if (d->propEditor)
+#else
+#pragma WARNING( TODO		if (d->propEditor) )
+#endif
+#ifdef __GNUC__
 #warning TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
+#else
+#pragma WARNING( TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) ); )
+#endif
 		return createBlankProject();
 	case KexiStartupHandler::CreateFromTemplate:
 		return createProjectFromTemplate(*Kexi::startupHandler().projectData());
@@ -1437,8 +1477,16 @@ tristate KexiMainWindow::startup()
 			Kexi::startupHandler().importActionData().fileName
 		);
 	default:;
+#ifdef __GNUC__
 #warning TODO		if (d->propEditor)
+#else
+#pragma WARNING( TODO		if (d->propEditor) )
+#endif
+#ifdef __GNUC__
 #warning TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
+#else
+#pragma WARNING( TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) ); )
+#endif
 	}
 	return true;
 }
@@ -1525,7 +1573,11 @@ tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projec
 	const QString caption( i18n("Select New Project's Location") );
 	
 	while (true) {
+#ifdef __GNUC__
 #warning TODO - remove win32 case
+#else
+#pragma WARNING( TODO - remove win32 case )
+#endif
 #ifdef Q_WS_WIN
 	//! @todo remove
 		QString recentDir = KGlobalSettings::documentPath();
@@ -1749,7 +1801,11 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 //2.0	d->restoreNavigatorWidth();
 
 	if (d->nav) {
+#ifdef __GNUC__
 #warning NEEDED?		d->nav->updateGeometry();
+#else
+#pragma WARNING( NEEDED?		d->nav->updateGeometry(); )
+#endif
 	}
 	qApp->processEvents();
 	emit projectOpened();
@@ -1793,8 +1849,16 @@ tristate KexiMainWindow::closeProject()
 //		makeDockInvisible( manager()->findWidgetParentDock(d->propEditor) );
 
 		if (d->propEditor) {
+#ifdef __GNUC__
 #warning TODO			if (d->openedWindowsCount() == 0)
+#else
+#pragma WARNING( TODO			if (d->openedWindowsCount() == 0) )
+#endif
+#ifdef __GNUC__
 #warning TODO				makeWidgetDockVisible(d->propEditorTabWidget);
+#else
+#pragma WARNING( TODO				makeWidgetDockVisible(d->propEditorTabWidget); )
+#endif
 			KDockWidget *dw = (KDockWidget *)d->propEditorTabWidget->parentWidget();
 			KDockSplitter *ds = (KDockSplitter *)dw->parentWidget();
 			if(ds)
@@ -1830,15 +1894,27 @@ tristate KexiMainWindow::closeProject()
 		return false;
 
 	if(d->nav) {
+#ifdef __GNUC__
 #warning TODO		d->navWasVisibleBeforeProjectClosing = manager()->findWidgetParentDock(d->nav)->isVisible();
+#else
+#pragma WARNING( TODO		d->navWasVisibleBeforeProjectClosing = manager()->findWidgetParentDock(d->nav)->isVisible(); )
+#endif
 		d->nav->clear();
 #if 0 //do not confuse users 
 		d->navToolWindow->hide();
 #endif
 	}
 
+#ifdef __GNUC__
 #warning TODO	if (d->propEditor)
+#else
+#pragma WARNING( TODO	if (d->propEditor) )
+#endif
+#ifdef __GNUC__
 #warning TODO		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
+#else
+#pragma WARNING( TODO		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) ); )
+#endif
 
 //	if(d->propEditorToolWindow)
 	//	d->propEditorToolWindow->hide();
@@ -1901,7 +1977,11 @@ void KexiMainWindow::setupProjectNavigator()
 		d->navDockWidget->setWindowTitle(d->nav->windowTitle());
 		d->navDockWidget->setWidget( d->nav );
 		
+#ifdef __GNUC__
 #warning TODO	d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
+#else
+#pragma WARNING( TODO	d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, \"2\"*/); )
+#endif
 //		d->navToolWindow->hide();
 
 		connect(d->nav,SIGNAL(openItem(KexiPart::Item*,int)),
@@ -1947,7 +2027,11 @@ void KexiMainWindow::setupProjectNavigator()
 		d->forceShowProjectNavigatorOnCreation = false;
 	}
 	else if (d->forceHideProjectNavigatorOnCreation) {
+#ifdef __GNUC__
 #warning TODO d->navToolWindow->hide();
+#else
+#pragma WARNING( TODO d->navToolWindow->hide(); )
+#endif
 //		makeDockInvisible( manager()->findWidgetParentDock(d->nav) );
 		d->forceHideProjectNavigatorOnCreation = false;
 	}
@@ -2023,7 +2107,11 @@ void KexiMainWindow::slotPartLoaded(KexiPart::Part* p)
 //! internal
 void KexiMainWindow::slotCaptionForCurrentMDIChild(bool childrenMaximized)
 {
+#ifdef __GNUC__
 #warning TODO: slotCaptionForCurrentMDIChild
+#else
+#pragma WARNING( TODO: slotCaptionForCurrentMDIChild )
+#endif
 #if 0//TODO
 //! @todo allow to set custom "static" app caption
 
@@ -2067,7 +2155,11 @@ void KexiMainWindow::updateAppCaption()
 //		d->appCaptionPrefix = d->appCaptionPrefix;
 
 	bool max = false;
+#ifdef __GNUC__
 #warning TODO	if (d->curWindow && d->curWindow->mdiParent()) max = d->curWindow->mdiParent()->state()==KMdiChildFrm::Maximized;
+#else
+#pragma WARNING( TODO	if (d->curWindow && d->curWindow->mdiParent()) max = d->curWindow->mdiParent()->state()==KMdiChildFrm::Maximized; )
+#endif
 
 	slotCaptionForCurrentMDIChild(max);
 /*
@@ -2103,11 +2195,23 @@ void KexiMainWindow::slotNoMaximizedChildFrmLeft(KMdiChildFrm*)
 
 void KexiMainWindow::slotLastChildViewClosed() //slotLastChildFrmClosed()
 {
+#ifdef __GNUC__
 #warning TODO	if (m_pDocumentViews->count()>0) //a fix for KMDI bug (will be fixed in KDE 3.4)
+#else
+#pragma WARNING( TODO	if (m_pDocumentViews->count()>0) //a fix for KMDI bug (will be fixed in KDE 3.4) )
+#endif
+#ifdef __GNUC__
 #warning TODO		return;
+#else
+#pragma WARNING( TODO		return; )
+#endif
 
 	slotCaptionForCurrentMDIChild(false);
+#ifdef __GNUC__
 #warning TODO	activeWindowChanged(0);
+#else
+#pragma WARNING( TODO	activeWindowChanged(0); )
+#endif
 }
 
 void KexiMainWindow::slotChildViewIsDetachedNow(QWidget*)
@@ -2151,7 +2255,11 @@ KexiMainWindow::restoreSettings()
 	KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
 
 	// Saved settings
+#ifdef __GNUC__
 #warning TODO applyMainWindowSettings()
+#else
+#pragma WARNING( TODO applyMainWindowSettings() )
+#endif
 #if 0//TODO ?
 	applyMainWindowSettings( d->config, "MainWindow" );
 
@@ -2208,7 +2316,11 @@ KexiMainWindow::storeSettings()
 	kDebug() << "KexiMainWindow::storeSettings()" << endl;
 
 //	saveWindowSize( d->config ); //componentData().config() );
+#ifdef __GNUC__
 #warning TODO	saveMainWindowSettings( d->config, "MainWindow" );
+#else
+#pragma WARNING( TODO	saveMainWindowSettings( d->config, \"MainWindow\" ); )
+#endif
 	KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
 /*2.0:	KMdi::MdiMode modeToSave = mdiMode();
 	if (d->mdiModeToSwitchAfterRestart!=(KMdi::MdiMode)0)
@@ -2270,7 +2382,11 @@ KexiMainWindow::storeSettings()
 void
 KexiMainWindow::restoreWindowConfiguration(KConfig *config)
 {
+#ifdef __GNUC__
 #warning TODO restoreWindowConfiguration()
+#else
+#pragma WARNING( TODO restoreWindowConfiguration() )
+#endif
 #if 0//TODO?
 	kDebug()<<"preparing session restoring"<<endl;
 
@@ -2291,7 +2407,11 @@ KexiMainWindow::restoreWindowConfiguration(KConfig *config)
 void
 KexiMainWindow::storeWindowConfiguration(KConfig *config)
 {
+#ifdef __GNUC__
 #warning TODO storeWindowConfiguration()
+#else
+#pragma WARNING( TODO storeWindowConfiguration() )
+#endif
 #if 0//TODO?
 	kDebug()<<"preparing session saving"<<endl;
 	config->setGroup("MainWindow");
@@ -2333,8 +2453,16 @@ void
 KexiMainWindow::registerChild(KexiWindow *window)
 {
 	kDebug() << "KexiMainWindow::registerChild()" << endl;
+#ifdef __GNUC__
 #warning TODO	connect(window, SIGNAL(activated(KMdiChildView *)), this, SLOT(activeWindowChanged(KMdiChildView *)));
+#else
+#pragma WARNING( TODO	connect(window, SIGNAL(activated(KMdiChildView *)), this, SLOT(activeWindowChanged(KMdiChildView *))); )
+#endif
+#ifdef __GNUC__
 #warning TODO	connect(window, SIGNAL(dirtyChanged(KexiWindow*)),	this, SLOT(slotDirtyFlagChanged(KexiWindow*)));
+#else
+#pragma WARNING( TODO	connect(window, SIGNAL(dirtyChanged(KexiWindow*)),	this, SLOT(slotDirtyFlagChanged(KexiWindow*))); )
+#endif
 
 	if(window->id() != -1) {
 		d->insertWindow(window);
@@ -2351,7 +2479,11 @@ KexiMainWindow::registerChild(KexiWindow *window)
 void
 KexiMainWindow::updateWindowViewGUIClient(KXMLGUIClient *viewClient)
 {
+#ifdef __GNUC__
 #warning TODO updateDialogViewGUIClient()
+#else
+#pragma WARNING( TODO updateDialogViewGUIClient() )
+#endif
 #if 0//TODO
 	if (viewClient!=d->curWindowViewGUIClient) {
 		//view clients differ
@@ -3063,16 +3195,32 @@ KexiMainWindow::slotProjectQuit()
 void KexiMainWindow::slotViewNavigator()
 {
 	if (!d->nav 
+#ifdef __GNUC__
 #warning TODO	|| !d->navToolWindow
+#else
+#pragma WARNING( TODO	|| !d->navToolWindow )
+#endif
 	)
 		return;
+#ifdef __GNUC__
 #warning TODO		if (!d->nav->isVisible())
+#else
+#pragma WARNING( TODO		if (!d->nav->isVisible()) )
+#endif
+#ifdef __GNUC__
 #warning TODO			makeWidgetDockVisible(d->nav);
+#else
+#pragma WARNING( TODO			makeWidgetDockVisible(d->nav); )
+#endif
 //		makeDockVisible(dynamic_cast<KDockWidget*>(d->navToolWindow->wrapperWidget()));
 //		d->navToolWindow->wrapperWidget()->show();
 //		d->navToolWindow->show(KDockWidget::DockLeft, getMainDockWidget());
 
+#ifdef __GNUC__
 #warning TODO	d->navToolWindow->wrapperWidget()->raise();
+#else
+#pragma WARNING( TODO	d->navToolWindow->wrapperWidget()->raise(); )
+#endif
 //
 //2.0: unused	d->block_KMdiMainFrm_eventFilter=true;
 		d->nav->setFocus();
@@ -3088,18 +3236,34 @@ void KexiMainWindow::slotViewMainArea()
 void KexiMainWindow::slotViewPropertyEditor()
 {
 	if (!d->propEditor
+#ifdef __GNUC__
 #warning TODO	|| !d->propEditorToolWindow
+#else
+#pragma WARNING( TODO	|| !d->propEditorToolWindow )
+#endif
 	)
 		return;
 
 //js		d->config->setGroup("MainWindow");
 //js		ds->setSeparatorPos(d->config->readEntry("RightDockPosition", 80/* % */), true);
 
+#ifdef __GNUC__
 #warning TODO	if (!d->propEditorTabWidget->isVisible())
+#else
+#pragma WARNING( TODO	if (!d->propEditorTabWidget->isVisible()) )
+#endif
+#ifdef __GNUC__
 #warning TODO		makeWidgetDockVisible(d->propEditorTabWidget);
+#else
+#pragma WARNING( TODO		makeWidgetDockVisible(d->propEditorTabWidget); )
+#endif
 
 
+#ifdef __GNUC__
 #warning TODO	d->propEditorToolWindow->wrapperWidget()->raise();
+#else
+#pragma WARNING( TODO	d->propEditorToolWindow->wrapperWidget()->raise(); )
+#endif
 
 //2.0: unused	d->block_KMdiMainFrm_eventFilter=true;
 	if (d->propEditorTabWidget->currentWidget())
@@ -3320,7 +3484,11 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window)
 
 tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, bool doNotSaveChanges)
 {
+#ifdef __GNUC__
 #warning TODO KexiMainWindow::closeWindow()
+#else
+#pragma WARNING( TODO KexiMainWindow::closeWindow() )
+#endif
 	if (!window) 
 		return true;
 	if (d->insideCloseWindow)
@@ -3463,7 +3631,11 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 
 //2.0: unused	const bool isInMaximizedChildFrmMode = this->isInMaximizedChildFrmMode();
 
+#ifdef __GNUC__
 #warning TODO	KMdiMainFrm::closeWindow(window, layoutTaskBar);
+#else
+#pragma WARNING( TODO	KMdiMainFrm::closeWindow(window, layoutTaskBar); )
+#endif
 
 	//focus navigator if nothing else available
 	if (d->openedWindowsCount()==0) {
@@ -4445,7 +4617,11 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
 
 bool KexiMainWindow::printItem(KexiPart::Item* item, const QString& titleText)
 {
+#ifdef __GNUC__
 #warning TODO printItem(item, KexiSimplePrintingSettings::load(), titleText);
+#else
+#pragma WARNING( TODO printItem(item, KexiSimplePrintingSettings::load(), titleText); )
+#endif
 	return false;
 }
 
@@ -4456,7 +4632,11 @@ tristate KexiMainWindow::printItem(KexiPart::Item* item)
 
 bool KexiMainWindow::printPreviewForItem(KexiPart::Item* item, const QString& titleText, bool reload)
 {
+#ifdef __GNUC__
 #warning TODO printPreviewForItem(item, KexiSimplePrintingSettings::load(), titleText, reload);
+#else
+#pragma WARNING( TODO printPreviewForItem(item, KexiSimplePrintingSettings::load(), titleText, reload); )
+#endif
 	return false;
 }
 
@@ -4471,11 +4651,19 @@ tristate KexiMainWindow::showPageSetupForItem(KexiPart::Item* item)
 {
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
 //! @todo: accept row changes...
+#ifdef __GNUC__
 #warning TODO	printActionForItem(item, PageSetupForItem);
+#else
+#pragma WARNING( TODO	printActionForItem(item, PageSetupForItem); )
+#endif
 	return false;
 }
 
+#ifdef __GNUC__
 #warning TODO reenable printItem() when ported
+#else
+#pragma WARNING( TODO reenable printItem() when ported )
+#endif
 #if 0//TODO
 bool KexiMainWindow::printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings,
 	const QString& titleText)
@@ -4724,7 +4912,11 @@ void KexiMainWindow::slotEditReplaceAll()
 	slotEditReplace( true );
 }
 
+#ifdef __GNUC__
 #warning TODO addWindow(()
+#else
+#pragma WARNING( TODO addWindow(() )
+#endif
 #if 0//TODO
 void KexiMainWindow::addWindow( KMdiChildView* pView, int flags )
 {

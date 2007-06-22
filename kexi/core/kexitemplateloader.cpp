@@ -35,7 +35,11 @@ KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
 	KexiTemplateInfo::List list;
 //	const QString subdir = QString(kapp->instanceName()) + "/templates";
 #ifdef __GNUC
+#ifdef __GNUC__
 #warning KexiTemplateLoader::loadListInfo() -- OK? KGlobal::mainComponent().componentName()
+#else
+#pragma WARNING( KexiTemplateLoader::loadListInfo() -- OK? KGlobal::mainComponent().componentName() )
+#endif
 #endif
 	const QString subdir = KGlobal::mainComponent().componentName() + "/templates";
 	QString lang( KGlobal::locale()->language() );

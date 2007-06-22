@@ -852,7 +852,11 @@ tristate KexiStartupHandler::detectActionForFile(
 			"project file.\nDo you want to convert the project to a new \"%3\" format (recommended)?",
 				detectedDriverName, QDir::convertSeparators(dbFileName), newFileFormat)) )
 	{
+#ifdef __GNUC__
 #warning reenable when SQLite2ToSQLite3Migration is ported
+#else
+#pragma WARNING( reenable when SQLite2ToSQLite3Migration is ported )
+#endif
 #if 0 //TODO
 		SQLite2ToSQLite3Migration migr( finfo.absoluteFilePath() );
 		tristate res = migr.run();

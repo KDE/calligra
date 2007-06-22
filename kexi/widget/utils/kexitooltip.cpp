@@ -28,7 +28,11 @@
 #include <qfontmetrics.h>
 #include <qtimer.h>
 
+#ifdef __GNUC__
 #warning KexiToolTip ported to Qt4 but not tested
+#else
+#pragma WARNING( KexiToolTip ported to Qt4 but not tested )
+#endif
 
 KexiToolTip::KexiToolTip(const QVariant& value, QWidget* parent)
  : QWidget(parent)

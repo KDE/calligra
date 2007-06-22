@@ -87,14 +87,22 @@ void KexiDBLineEdit::setInvalidState( const QString& displayText )
 void KexiDBLineEdit::setValueInternal(const QVariant& add, bool removeOld)
 {
 	m_slotTextChanged_enabled = false;
+#ifdef __GNUC__
 #warning reenable when formatter is ported	setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) );
+#else
+#pragma WARNING( reenable when formatter is ported	setText( m_textFormatter.valueToText(removeOld ? QVariant() : m_origValue, add.toString()) ); )
+#endif
 	setCursorPosition(0); //ok?
 	m_slotTextChanged_enabled = true;
 }
 
 QVariant KexiDBLineEdit::value()
 {
+#ifdef __GNUC__
 #warning reenable when formatter is ported return m_textFormatter.textToValue( text() );
+#else
+#pragma WARNING( reenable when formatter is ported return m_textFormatter.textToValue( text() ); )
+#endif
 	return "";
 }
 
@@ -112,13 +120,21 @@ bool KexiDBLineEdit::valueIsNull()
 
 bool KexiDBLineEdit::valueIsEmpty()
 {
+#ifdef __GNUC__
 #warning reenable when formatter is ported	return m_textFormatter.valueIsEmpty( text() );
+#else
+#pragma WARNING( reenable when formatter is ported	return m_textFormatter.valueIsEmpty( text() ); )
+#endif
 	return true;
 }
 
 bool KexiDBLineEdit::valueIsValid()
 {
+#ifdef __GNUC__
 #warning reenable when formatter is ported	return m_textFormatter.valueIsValid( text() );
+#else
+#pragma WARNING( reenable when formatter is ported	return m_textFormatter.valueIsValid( text() ); )
+#endif
 	return true;
 }
 
@@ -192,7 +208,11 @@ void KexiDBLineEdit::clear()
 void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
+#ifdef __GNUC__
 #warning reenable when formatter is ported	m_textFormatter.setField( cinfo ? cinfo->field : 0 );
+#else
+#pragma WARNING( reenable when formatter is ported	m_textFormatter.setField( cinfo ? cinfo->field : 0 ); )
+#endif
 
 	if (!cinfo)
 		return;
@@ -201,7 +221,11 @@ void KexiDBLineEdit::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 	setValidator( new KexiDB::FieldValidator(*cinfo->field, this) );
 
 	const QString inputMask
+#ifdef __GNUC__
 #warning reenable when formatter is ported:	(m_textFormatter.inputMask())
+#else
+#pragma WARNING( reenable when formatter is ported:	(m_textFormatter.inputMask()) )
+#endif
 	;
 	if (!inputMask.isEmpty())
 		setInputMask( inputMask );

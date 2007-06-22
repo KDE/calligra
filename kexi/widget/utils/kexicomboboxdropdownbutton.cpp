@@ -26,7 +26,11 @@
 #include <QPainter>
 #include <QEvent>
 
+#ifdef __GNUC__
 #warning KexiComboBoxDropDownButton ported to Qt4 but not tested
+#else
+#pragma WARNING( KexiComboBoxDropDownButton ported to Qt4 but not tested )
+#endif
 
 KexiComboBoxDropDownButton::KexiComboBoxDropDownButton( QWidget *parent )
  : KPushButton(parent)
@@ -63,13 +67,21 @@ void KexiComboBoxDropDownButton::paintEvent(QPaintEvent *pe)
 		option.state = QStyle::State_HasFocus 
 			| (isDown() ? QStyle::State_Raised : QStyle::State_Sunken);
 
+#ifdef __GNUC__
 #warning TODO compare to Qt code for QStyles
+#else
+#pragma WARNING( TODO compare to Qt code for QStyles )
+#endif
 		style()->drawComplexControl( QStyle::CC_ComboBox, &option, &p,
 			m_fixForHeight>0 ? (const QWidget*)m_paintedCombo : this);
 // TODO flags, (uint)(QStyle::SC_ComboBoxArrow), QStyle::SC_None );
 	}
 	else {
+#ifdef __GNUC__
 #warning TODO compare to Qt code for QStyles
+#else
+#pragma WARNING( TODO compare to Qt code for QStyles )
+#endif
 		r.setWidth(r.width()+2);
 		QStyleOption option;
 		option.initFrom(this);
@@ -88,7 +100,11 @@ bool KexiComboBoxDropDownButton::event( QEvent *event )
 
 void KexiComboBoxDropDownButton::styleChanged()
 {
+#ifdef __GNUC__
 #warning TODO simplify KexiComboBoxDropDownButton::styleChanged()
+#else
+#pragma WARNING( TODO simplify KexiComboBoxDropDownButton::styleChanged() )
+#endif
 	//<hack>
 	if (style()->objectName().toLower()=="thinkeramik") {
 		m_fixForHeight = 3;
