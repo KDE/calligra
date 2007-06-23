@@ -14,6 +14,7 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     Layout.cpp
     ListItemsHelper.cpp
+    PluginHelperAction.cpp
 
     ChangeTracker.cpp
     TextChanges.cpp

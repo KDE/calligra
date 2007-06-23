@@ -82,6 +82,8 @@ public:
     /// Return the view converter for this view.
     KoViewConverter *viewConverter() { return &m_zoomHandler; }
 
+    void popupContextMenu(QPoint globalPosition, const QList<QAction*> &actions);
+
 private:
     void setupActions();
 

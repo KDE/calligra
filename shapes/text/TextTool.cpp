@@ -19,6 +19,7 @@
 
 #include "TextTool.h"
 #include "ChangeTracker.h"
+#include "PluginHelperAction.h"
 #include "dialogs/SimpleStyleWidget.h"
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
@@ -228,6 +229,17 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_selectall", action);
 
+    // setup the context list.
+    QList<QAction*> list;
+    list.append(this->action("text_default"));
+    list.append(this->action("format_font"));
+    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
+        if(factory->showInMenu())
+            list.append(new PluginHelperAction(factory->title(), this, factory->id()));
+    }
+    setPopupActionList(list);
+
     connect(&m_selectionHandler, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
     connect(&m_selectionHandler, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
 }
@@ -318,37 +330,7 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
     }
     updateActions();
 
-    if(event->button() ==  Qt::RightButton) {
-        QMenu menu(m_canvas->canvasWidget());
-        menu.addAction(action("text_default"));
-        menu.addAction(action("format_font"));
-
-        foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
-            KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
-            if(factory->showInMenu()) {
-                QAction *action = new QAction(factory->title(), &menu);
-                action->setData(factory->id());
-                menu.addAction(action);
-            }
-        }
-
-        QAction * action = menu.exec(event->globalPos());
-        KoTextEditingPlugin *plugin = 0;
-        if(action)
-           plugin = m_textEditingPlugins.value(qvariant_cast<QString>(action->data()));
-        if(plugin) {
-            if(m_caret.hasSelection()) {
-                int from = m_caret.position();
-                int to = m_caret.anchor();
-                if(from > to) // make sure we call the plugin consistently
-                    qSwap(from, to);
-                plugin->checkSection(m_textShapeData->document(), from, to);
-            }
-            else
-                plugin->finishedWord(m_textShapeData->document(), m_caret.position());
-        }
-    }
-    else if(event->button() ==  Qt::MidButton) { // Paste
+    if(event->button() ==  Qt::MidButton) { // Paste
         QClipboard *clipboard = QApplication::clipboard();
         QString paste = clipboard->text(QClipboard::Selection);
         if(! paste.isEmpty()) {
@@ -457,7 +439,10 @@ int TextTool::pointToPosition(const QPointF & point) const {
 }
 
 void TextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
-    Q_UNUSED(event); // all positioning has ben done by the first click
+    if(m_canvas->shapeManager()->shapeAt(event->point) != m_textShape) {
+        event->ignore(); // allow the event to be used by another
+        return;
+    }
     m_caret.clearSelection();
     int pos = m_caret.position();
     m_caret.movePosition(QTextCursor::WordLeft);
@@ -1190,6 +1175,20 @@ void TextTool::showStyleManager() {
     }
 }
 
+void TextTool::startTextEditingPlugin(const QString &pluginId) {
+    KoTextEditingPlugin *plugin = m_textEditingPlugins.value(pluginId);
+    if(plugin) {
+        if(m_caret.hasSelection()) {
+            int from = m_caret.position();
+            int to = m_caret.anchor();
+            if(from > to) // make sure we call the plugin consistently
+                qSwap(from, to);
+            plugin->checkSection(m_textShapeData->document(), from, to);
+        }
+        else
+            plugin->finishedWord(m_textShapeData->document(), m_caret.position());
+    }
+}
 
 // ---------- editing plugins methods.
 void TextTool::editingPluginEvents() {

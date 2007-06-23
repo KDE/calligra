@@ -80,6 +80,8 @@ public:
     /// add a command to the undo stack, executing it as well.
     void addCommand(QUndoCommand *command);
 
+    void startTextEditingPlugin(const QString &pluginId);
+
 signals:
     /// emitted every time a different styleManager is set.
     void styleManagerChanged(KoStyleManager *manager);

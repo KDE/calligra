@@ -57,12 +57,14 @@
 #include <QHBoxLayout>
 #include <QTextDocument>
 #include <QTimer>
+#include <QMenu>
 #include <QPrinter>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
+#include <kxmlguifactory.h>
 
 KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     : KoView( document, parent )
@@ -1044,6 +1046,14 @@ if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() << "spliting...
 }
 
 // end of actions
+
+void KWView::popupContextMenu(QPoint globalPosition, const QList<QAction*> &actions) {
+    unplugActionList( "frameset_type_action" );
+    plugActionList( "frameset_type_action", actions );
+    QMenu *menu = dynamic_cast<QMenu*> (factory()->container("frame_popup", this));
+    if(menu)
+        menu->exec(globalPosition);
+}
 
 void KWView::zoomChanged (KoZoomMode::Mode mode, double zoom) {
     m_document->setZoom(qRound(zoom * 100.0));
