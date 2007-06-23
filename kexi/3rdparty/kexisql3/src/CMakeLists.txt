@@ -68,7 +68,7 @@ install(TARGETS ksqlite  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(FILES ksqlite2to3  DESTINATION ${BIN_INSTALL_DIR})
+install(PROGRAMS ksqlite2to3  DESTINATION ${BIN_INSTALL_DIR})
 
 
 
