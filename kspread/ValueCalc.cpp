@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
+   Copyright (C) 2005-2007 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 
 #include "ValueCalc.h"
 
+#include "Number.h"
 #include "ValueConverter.h"
 
 #include <kdebug.h>
@@ -140,13 +141,6 @@ void awDevSqA (ValueCalc *c, Value &res, Value val,
 }
 
 
-bool isDate (Value val) {
-  Value::Format fmt = val.format();
-  if ((fmt == Value::fmt_Date) || (fmt == Value::fmt_DateTime))
-    return true;
-  return false;
-}
-
 // ***********************
 // ****** ValueCalc ******
 // ***********************
@@ -182,23 +176,20 @@ Value ValueCalc::add (const Value &a, const Value &b)
       || a.isInteger() && b.isInteger())
   {
     int aa, bb;
-    aa = converter->asInteger (a).asInteger();
-    bb = converter->asInteger (b).asInteger();
+    aa = converter->toInteger (a);
+    bb = converter->toInteger (b);
     res = Value (aa + bb);
   }
   else
   {
-    double aa, bb;
-    aa = converter->asFloat (a).asFloat();
-    bb = converter->asFloat (b).asFloat();
+    Number aa, bb;
+    aa = converter->toFloat (a);
+    bb = converter->toFloat (b);
     res = Value (aa + bb);
   }
 
   if (a.isNumber() || a.isEmpty())
-    res.setFormat (format (a.format(), b.format()));
-  // operation on two dates should produce a number
-  if (isDate(a) && isDate(b))
-    res.setFormat (Value::fmt_Number);
+    res.setFormat (format (a, b));
 
   return res;
 }
@@ -207,16 +198,13 @@ Value ValueCalc::sub (const Value &a, const Value &b)
 {
   if (a.isError()) return a;
   if (b.isError()) return b;
-  double aa, bb;
-  aa = converter->asFloat (a).asFloat();
-  bb = converter->asFloat (b).asFloat();
+  Number aa, bb;
+  aa = converter->toFloat (a);
+  bb = converter->toFloat (b);
   Value res = Value (aa - bb);
 
   if (a.isNumber() || a.isEmpty())
-    res.setFormat (format (a.format(), b.format()));
-  // operation on two dates should produce a number
-  if (isDate(a) && isDate(b))
-    res.setFormat (Value::fmt_Number);
+    res.setFormat (format (a, b));
 
   return res;
 }
@@ -225,16 +213,13 @@ Value ValueCalc::mul (const Value &a, const Value &b)
 {
   if (a.isError()) return a;
   if (b.isError()) return b;
-  double aa, bb;
-  aa = converter->asFloat (a).asFloat();
-  bb = converter->asFloat (b).asFloat();
+  Number aa, bb;
+  aa = converter->toFloat (a);
+  bb = converter->toFloat (b);
   Value res = Value (aa * bb);
 
   if (a.isNumber() || a.isEmpty())
-    res.setFormat (format (a.format(), b.format()));
-  // operation on two dates should produce a number
-  if (isDate(a) && isDate(b))
-    res.setFormat (Value::fmt_Number);
+    res.setFormat (format (a, b));
 
   return res;
 }
@@ -243,9 +228,9 @@ Value ValueCalc::div (const Value &a, const Value &b)
 {
   if (a.isError()) return a;
   if (b.isError()) return b;
-  double aa, bb;
-  aa = converter->asFloat (a).asFloat();
-  bb = converter->asFloat (b).asFloat();
+  Number aa, bb;
+  aa = converter->toFloat (a);
+  bb = converter->toFloat (b);
   Value res;
   if (bb == 0.0)
     return Value::errorDIV0();
@@ -253,10 +238,7 @@ Value ValueCalc::div (const Value &a, const Value &b)
     res = Value (aa / bb);
 
   if (a.isNumber() || a.isEmpty())
-    res.setFormat (format (a.format(), b.format()));
-  // operation on two dates should produce a number
-  if (isDate(a) && isDate(b))
-    res.setFormat (Value::fmt_Number);
+    res.setFormat (format (a, b));
 
   return res;
 }
@@ -265,15 +247,15 @@ Value ValueCalc::mod (const Value &a, const Value &b)
 {
   if (a.isError()) return a;
   if (b.isError()) return b;
-  double aa, bb;
-  aa = converter->asFloat (a).asFloat();
-  bb = converter->asFloat (b).asFloat();
+  Number aa, bb;
+  aa = converter->toFloat (a);
+  bb = converter->toFloat (b);
   Value res;
   if (bb == 0.0)
     return Value::errorDIV0();
   else
   {
-    double m = fmod (aa, bb);
+    Number m = fmod (aa, bb);
     // the following adjustments are needed by OpenFormula:
     // can't simply use fixed increases/decreases, because the implementation
     // of fmod may differ on various platforms, and we should always return
@@ -291,9 +273,7 @@ Value ValueCalc::mod (const Value &a, const Value &b)
   }
 
   if (a.isNumber() || a.isEmpty())
-    res.setFormat (format (a.format(), b.format()));
-  if (isDate(a) && isDate(b))
-    res.setFormat (Value::fmt_Number);
+    res.setFormat (format (a, b));
 
   return res;
 }
@@ -302,16 +282,13 @@ Value ValueCalc::pow (const Value &a, const Value &b)
 {
   if (a.isError()) return a;
   if (b.isError()) return b;
-  double aa, bb;
-  aa = converter->asFloat (a).asFloat();
-  bb = converter->asFloat (b).asFloat();
-  Value res = Value (::pow (aa, bb));
+  Number aa, bb;
+  aa = converter->toFloat (a);
+  bb = converter->toFloat (b);
+  Value res = Value (KSpread::pow (aa, bb));
 
   if (a.isNumber() || a.isEmpty())
-    res.setFormat (format (a.format(), b.format()));
-  // operation on date(s) should produce a number
-  if (isDate(a) || isDate(b))
-    res.setFormat (Value::fmt_Number);
+    res.setFormat (format (a, b));
 
   return res;
 }
@@ -325,20 +302,17 @@ Value ValueCalc::sqr (const Value &a)
 Value ValueCalc::sqrt (const Value &a)
 {
   if (a.isError()) return a;
-  Value res = Value (::sqrt (converter->asFloat(a).asFloat()));
+  Value res = Value (KSpread::pow (converter->toFloat(a), 0.5));
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
-  // operation on date(s) should produce a number
-  if (isDate(a))
-    res.setFormat (Value::fmt_Number);
 
   return res;
 }
 
-Value ValueCalc::add (const Value &a, double b)
+Value ValueCalc::add (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (converter->asFloat(a).asFloat() + b);
+  Value res = Value (converter->toFloat(a) + b);
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -346,10 +320,10 @@ Value ValueCalc::add (const Value &a, double b)
   return res;
 }
 
-Value ValueCalc::sub (const Value &a, double b)
+Value ValueCalc::sub (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (converter->asFloat(a).asFloat() - b);
+  Value res = Value (converter->toFloat(a) - b);
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -357,10 +331,10 @@ Value ValueCalc::sub (const Value &a, double b)
   return res;
 }
 
-Value ValueCalc::mul (const Value &a, double b)
+Value ValueCalc::mul (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (converter->asFloat(a).asFloat() * b);
+  Value res = Value (converter->toFloat(a) * b);
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -368,14 +342,14 @@ Value ValueCalc::mul (const Value &a, double b)
   return res;
 }
 
-Value ValueCalc::div (const Value &a, double b)
+Value ValueCalc::div (const Value &a, Number b)
 {
   if (a.isError()) return a;
   Value res;
   if (b == 0.0)
     return Value::errorDIV0();
 
-  res = Value (converter->asFloat(a).asFloat() / b);
+  res = Value (converter->toFloat(a) / b);
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -383,10 +357,10 @@ Value ValueCalc::div (const Value &a, double b)
   return res;
 }
 
-Value ValueCalc::pow (const Value &a, double b)
+Value ValueCalc::pow (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (::pow (converter->asFloat(a).asFloat(), b));
+  Value res = Value (KSpread::pow (converter->toFloat(a), b));
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -397,28 +371,28 @@ Value ValueCalc::pow (const Value &a, double b)
 Value ValueCalc::abs (const Value &a)
 {
   if (a.isError()) return a;
-  return Value (fabs (converter->asFloat (a).asFloat()));
+  return Value (fabs (converter->toFloat (a)));
 }
 
 bool ValueCalc::isZero (const Value &a)
 {
   if (a.isError()) return false;
-  return (converter->asFloat (a).asFloat() == 0.0);
+  return (converter->toFloat (a) == 0.0);
 }
 
 bool ValueCalc::isEven (const Value &a)
 {
   if (a.isError()) return false;
   if (gequal(a, Value( 0 ) ) ) {
-      return ((converter->asInteger (roundDown(a) ).asInteger() % 2) == 0);
+      return ((converter->toInteger (roundDown(a) ) % 2) == 0);
   } else {
-      return ((converter->asInteger (roundUp(a) ).asInteger() % 2) == 0);
+      return ((converter->toInteger (roundUp(a) ) % 2) == 0);
   }
 }
 
 bool ValueCalc::equal (const Value &a, const Value &b)
 {
-  return (converter->asFloat (a).asFloat() == converter->asFloat (b).asFloat());
+  return (converter->toFloat (a) == converter->toFloat (b));
 }
 
 /*********************************************************************
@@ -429,18 +403,18 @@ bool ValueCalc::equal (const Value &a, const Value &b)
  *********************************************************************/
 bool ValueCalc::approxEqual (const Value &a, const Value &b)
 {
-  double aa = converter->asFloat (a).asFloat();
-  double bb = converter->asFloat (b).asFloat();
+  Number aa = converter->toFloat (a);
+  Number bb = converter->toFloat (b);
   if (aa == bb)
     return true;
-  double x = aa - bb;
+  Number x = aa - bb;
   return (x < 0.0 ? -x : x)  <  ((aa < 0.0 ? -aa : aa) * DBL_EPSILON);
 }
 
 bool ValueCalc::greater (const Value &a, const Value &b)
 {
-  double aa = converter->asFloat (a).asFloat();
-  double bb = converter->asFloat (b).asFloat();
+  Number aa = converter->toFloat (a);
+  Number bb = converter->toFloat (b);
   return (aa > bb);
 }
 
@@ -554,7 +528,7 @@ Value ValueCalc::roundDown (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
 
-  val = Value (floor (converter->asFloat (val).asFloat()));
+  val = Value (floor (numToDouble (converter->toFloat (val))));
 
   if (digits > 0)
     for (int i = 0; i < digits; ++i)
@@ -576,7 +550,7 @@ Value ValueCalc::roundUp (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
 
-  val = Value (ceil (converter->asFloat (val).asFloat()));
+  val = Value (ceil (numToDouble (converter->toFloat (val))));
 
   if (digits > 0)
     for (int i = 0; i < digits; ++i)
@@ -598,7 +572,7 @@ Value ValueCalc::round (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
 
-  val = Value (int(converter->asFloat (val).asFloat()+0.5));
+  val = Value (converter->toInteger (Value (converter->toFloat (val)+0.5)));
 
   if (digits > 0)
     for (int i = 0; i < digits; ++i)
@@ -611,7 +585,7 @@ Value ValueCalc::round (const Value &a, int digits)
 
 int ValueCalc::sign (const Value &a)
 {
-  double val = converter->asFloat (a).asFloat ();
+  Number val = converter->toFloat (a);
   if (val == 0) return 0;
   if (val > 0) return 1;
   return -1;
@@ -621,14 +595,14 @@ int ValueCalc::sign (const Value &a)
 Value ValueCalc::log (const Value &number,
     const Value &base)
 {
-  double logbase = converter->asFloat (base).asFloat();
+  Number logbase = converter->toFloat (base);
   if (logbase == 1.0)
     return Value::errorDIV0();
   if (logbase <= 0.0)
     return Value::errorNA();
 
-  logbase = log10 (logbase);
-  Value res = Value (log10 (converter->asFloat (number).asFloat()) / logbase);
+  logbase = KSpread::log (logbase, 10);
+  Value res = Value (KSpread::log (converter->toFloat (number), 10) / logbase);
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -638,7 +612,7 @@ Value ValueCalc::log (const Value &number,
 
 Value ValueCalc::ln (const Value &number)
 {
-  Value res = Value (::log (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::ln (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -646,15 +620,15 @@ Value ValueCalc::ln (const Value &number)
   return res;
 }
 
-Value ValueCalc::log (const Value &number, double base)
+Value ValueCalc::log (const Value &number, Number base)
 {
   if (base <= 0.0)
     return Value::errorNA();
   if (base == 1.0)
     return Value::errorDIV0();
 
-  double num = converter->asFloat (number).asFloat();
-  Value res = Value (log10 (num) / log10 (base));
+  Number num = converter->toFloat (number);
+  Value res = Value (KSpread::log (num, base));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -664,7 +638,7 @@ Value ValueCalc::log (const Value &number, double base)
 
 Value ValueCalc::exp (const Value &number)
 {
-  return Value (::exp (converter->asFloat (number).asFloat()));
+  return Value (KSpread::exp (converter->toFloat (number)));
 }
 
 Value ValueCalc::pi ()
@@ -682,14 +656,14 @@ Value ValueCalc::eps ()
   return Value (DBL_EPSILON);
 }
 
-Value ValueCalc::random (double range)
+Value ValueCalc::random (Number range)
 {
   return Value (range * (double) rand() / (RAND_MAX + 1.0));
 }
 
 Value ValueCalc::random (Value range)
 {
-  return random (converter->asFloat (range).asFloat());
+  return random (converter->toFloat (range));
 }
 
 Value ValueCalc::fact (const Value &which)
@@ -739,8 +713,8 @@ Value ValueCalc::combin (int n, int k)
 {
   if (n >= 15)
   {
-    double result = ::exp(lgamma (n + 1) - lgamma (k + 1) - lgamma (n-k+1));
-    return Value (floor(result + 0.5));
+    Number result = KSpread::exp(Number (lgamma (n + 1) - lgamma (k + 1) - lgamma (n-k+1)));
+    return Value (floor(numToDouble (result + 0.5)));
   }
   else
     return div (div (fact (n), fact (k)), fact (n - k));
@@ -748,8 +722,8 @@ Value ValueCalc::combin (int n, int k)
 
 Value ValueCalc::combin (Value n, Value k)
 {
-  int nn = converter->asInteger (n).asInteger();
-  int kk = converter->asInteger (k).asInteger();
+  int nn = converter->toInteger (n);
+  int kk = converter->toInteger (k);
   return combin (nn, kk);
 }
 
@@ -794,19 +768,19 @@ Value ValueCalc::base (const Value &val, int base, int prec, int minLength)
   if ((base < 2) || (base > 36))
     return Value::errorVALUE();
 
-  double value = converter->asFloat (val).asFloat();
-  QString result = QString::number ((int)value, base);
+  Number value = converter->toFloat (val);
+  QString result = QString::number ((int)numToDouble (value), base);
   if ( result.length() < minLength )
       result = result.rightJustified( minLength, QChar( '0' ) );
 
   if (prec > 0)
   {
-    result += '.'; value = value - (int)value;
+    result += '.'; value = value - (int)numToDouble (value);
 
     int ix;
     for( int i = 0; i < prec; i++ )
     {
-      ix = (int) value * base;
+      ix = (int) numToDouble (value * base);
       result += "0123456789abcdefghijklmnopqrstuvwxyz"[ix];
       value = base * (value - (double)ix/base);
     }
@@ -828,7 +802,7 @@ Value ValueCalc::fromBase (const Value &val, int base)
 
 Value ValueCalc::sin (const Value &number)
 {
-  Value res = Value (::sin (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::sin (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -838,7 +812,7 @@ Value ValueCalc::sin (const Value &number)
 
 Value ValueCalc::cos (const Value &number)
 {
-  Value res = Value (::cos (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::cos (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -848,7 +822,7 @@ Value ValueCalc::cos (const Value &number)
 
 Value ValueCalc::tg (const Value &number)
 {
-  Value res = Value (::tan (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::tg (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -858,7 +832,7 @@ Value ValueCalc::tg (const Value &number)
 
 Value ValueCalc::cotg (const Value &number)
 {
-  Value res = Value (div (Value(1), Value(::tan (converter->asFloat (number).asFloat()))));
+  Value res = div (1, Value (KSpread::tg (converter->toFloat (number))));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -869,7 +843,7 @@ Value ValueCalc::cotg (const Value &number)
 Value ValueCalc::asin (const Value &number)
 {
   errno = 0;
-  Value res = Value (::asin (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::asin (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -882,7 +856,7 @@ Value ValueCalc::asin (const Value &number)
 Value ValueCalc::acos (const Value &number)
 {
   errno = 0;
-  Value res = Value (::acos (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::acos (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -895,7 +869,7 @@ Value ValueCalc::acos (const Value &number)
 Value ValueCalc::atg (const Value &number)
 {
   errno = 0;
-  Value res = Value (::atan (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::atg (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -907,14 +881,14 @@ Value ValueCalc::atg (const Value &number)
 
 Value ValueCalc::atan2 (const Value &y, const Value &x)
 {
-  double yy = converter->asFloat (y).asFloat();
-  double xx = converter->asFloat (x).asFloat();
-  return Value (::atan2 (yy, xx));
+  Number yy = converter->toFloat (y);
+  Number xx = converter->toFloat (x);
+  return Value (KSpread::atan2 (yy, xx));
 }
 
 Value ValueCalc::sinh (const Value &number)
 {
-  Value res = Value (::sinh (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::sinh (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -924,7 +898,7 @@ Value ValueCalc::sinh (const Value &number)
 
 Value ValueCalc::cosh (const Value &number)
 {
-  Value res = Value (::cosh (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::cosh (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -934,7 +908,7 @@ Value ValueCalc::cosh (const Value &number)
 
 Value ValueCalc::tgh (const Value &number)
 {
-  Value res = Value (::tanh (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::tgh (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -945,7 +919,7 @@ Value ValueCalc::tgh (const Value &number)
 Value ValueCalc::asinh (const Value &number)
 {
   errno = 0;
-  Value res = Value (::asinh (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::asinh (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -958,7 +932,7 @@ Value ValueCalc::asinh (const Value &number)
 Value ValueCalc::acosh (const Value &number)
 {
   errno = 0;
-  Value res = Value (::acosh (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::acosh (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -971,7 +945,7 @@ Value ValueCalc::acosh (const Value &number)
 Value ValueCalc::atgh (const Value &number)
 {
   errno = 0;
-  Value res = Value (::atanh (converter->asFloat (number).asFloat()));
+  Value res = Value (KSpread::atgh (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -1002,7 +976,7 @@ static double taylor_helper (double* pPolynom, uint nMax, double x)
 Value ValueCalc::gauss (Value xx)
 // this is a weird function
 {
-  double x = converter->asFloat (xx).asFloat();
+  Number x = converter->toFloat (xx);
 
   double t0[] =
     { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
@@ -1028,7 +1002,7 @@ Value ValueCalc::gauss (Value xx)
       0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
   double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
 
-  double xAbs = fabs(x);
+  double xAbs = numToDouble (KSpread::abs(x));
   uint xShort = static_cast<uint>(floor(xAbs));
   double nVal = 0.0;
   if (xShort == 0)
@@ -1039,7 +1013,7 @@ Value ValueCalc::gauss (Value xx)
     nVal = taylor_helper(t4, 20, (xAbs - 4.0));
   else
   {
-    double phiAbs = converter->asFloat (phi (Value(xAbs))).asFloat();
+    double phiAbs = numToDouble (converter->toFloat (phi (Value(xAbs))));
     nVal = 0.5 + phiAbs * taylor_helper(asympt, 4, 1.0 / (xAbs * xAbs)) / xAbs;
   }
 
@@ -1052,7 +1026,7 @@ Value ValueCalc::gauss (Value xx)
 Value ValueCalc::gaussinv (Value xx)
 // this is a weird function
 {
-  double x = converter->asFloat (xx).asFloat();
+  double x = numToDouble (converter->toFloat (xx));
 
   double q,t,z;
 
@@ -1252,7 +1226,7 @@ static double GammaHelp(double& x, bool& bReflect)
 
 Value ValueCalc::GetGamma (Value _x)
 {
-  double x = converter->asFloat (_x).asFloat();
+  double x = numToDouble (converter->toFloat (_x));
 
   bool bReflect;
   double G = GammaHelp(x, bReflect);
@@ -1264,7 +1238,7 @@ Value ValueCalc::GetGamma (Value _x)
 
 Value ValueCalc::GetLogGamma (Value _x)
 {
-  double x = converter->asFloat (_x).asFloat();
+  double x = numToDouble (converter->toFloat (_x));
 
   bool bReflect;
   double G = GammaHelp(x, bReflect);
@@ -1277,9 +1251,9 @@ Value ValueCalc::GetLogGamma (Value _x)
 Value ValueCalc::GetGammaDist (Value _x, Value _alpha,
     Value _beta)
 {
-  double x = converter->asFloat (_x).asFloat();
-  double alpha = converter->asFloat (_alpha).asFloat();
-  double beta = converter->asFloat (_beta).asFloat();
+  double x = numToDouble (converter->toFloat (_x));
+  double alpha = numToDouble (converter->toFloat (_alpha));
+  double beta = numToDouble (converter->toFloat (_beta));
 
   if (x == 0.0)
     return Value (0.0);
@@ -1316,7 +1290,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha,
   double z3 = z*z2;
   double z4 = z2*z2;
   double z5 = z2*z3;
-  double a = ( z - 0.5 ) * ::log(z) - z + c;
+  double a = ( z - 0.5 ) * ::log10(z) - z + c;
   double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
     d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
   // double g = exp(a+b) / den;
@@ -1350,9 +1324,9 @@ Value ValueCalc::GetBeta (Value _x, Value _alpha,
     // 1.0 - pow (1.0-_x, _beta)
     return sub (Value(1.0), pow (sub (Value(1.0), _x), _beta));
 
-  double x = converter->asFloat (_x).asFloat();
-  double alpha = converter->asFloat (_alpha).asFloat();
-  double beta = converter->asFloat (_beta).asFloat();
+  double x = numToDouble (converter->toFloat (_x));
+  double alpha = numToDouble (converter->toFloat (_alpha));
+  double beta = numToDouble (converter->toFloat (_beta));
 
   double fEps = 1.0E-8;
   bool bReflect;
@@ -1407,8 +1381,8 @@ Value ValueCalc::GetBeta (Value _x, Value _alpha,
     if (fB < fEps)
       b1 = 1.0E30;
     else
-      b1 = ::exp(GetLogGamma(Value(fA)).asFloat()+GetLogGamma(Value(fB)).asFloat()-
-          GetLogGamma(Value(fA+fB)).asFloat());
+      b1 = ::exp(numToDouble (GetLogGamma(Value(fA)).asFloat()+GetLogGamma(Value(fB)).asFloat()-
+          GetLogGamma(Value(fA+fB)).asFloat()));
 
     cf *= ::pow(x, fA)*::pow(1.0-x,fB)/(fA*b1);
   }
@@ -1565,42 +1539,42 @@ static double ccmath_nbes(double v,double x)
 
 Value ValueCalc::besseli (Value v, Value x)
 {
-  double vv = converter->asFloat (v).asFloat ();
-  double xx = converter->asFloat (x).asFloat ();
-  return Value (ccmath_ibes (vv, xx));
+  Number vv = converter->toFloat (v);
+  Number xx = converter->toFloat (x);
+  return Value (ccmath_ibes (numToDouble (vv), numToDouble (xx)));
 }
 
 Value ValueCalc::besselj (Value v, Value x)
 {
-  double vv = converter->asFloat (v).asFloat ();
-  double xx = converter->asFloat (x).asFloat ();
-  return Value (ccmath_jbes (vv, xx));
+  Number vv = converter->toFloat (v);
+  Number xx = converter->toFloat (x);
+  return Value (ccmath_jbes (numToDouble (vv), numToDouble (xx)));
 }
 
 Value ValueCalc::besselk (Value v, Value x)
 {
-  double vv = converter->asFloat (v).asFloat ();
-  double xx = converter->asFloat (x).asFloat ();
-  return Value (ccmath_kbes (vv, xx));
+  Number vv = converter->toFloat (v);
+  Number xx = converter->toFloat (x);
+  return Value (ccmath_kbes (numToDouble (vv), numToDouble (xx)));
 }
 
 Value ValueCalc::besseln (Value v, Value x)
 {
-  double vv = converter->asFloat (v).asFloat ();
-  double xx = converter->asFloat (x).asFloat ();
-  return Value (ccmath_nbes (vv, xx));
+  Number vv = converter->toFloat (v);
+  Number xx = converter->toFloat (x);
+  return Value (ccmath_nbes (numToDouble (vv), numToDouble (xx)));
 }
 
 // ------------------------------------------------------
 
 Value ValueCalc::erf (Value x)
 {
-  return Value (::erf (converter->asFloat (x).asFloat()));
+  return Value (::erf (numToDouble (converter->toFloat (x))));
 }
 
 Value ValueCalc::erfc (Value x)
 {
-  return Value (::erfc (converter->asFloat (x).asFloat()));
+  return Value (::erfc (numToDouble (converter->toFloat (x))));
 }
 
 // ------------------------------------------------------
@@ -1665,7 +1639,7 @@ void ValueCalc::twoArrayWalk (const Value &a1, const Value &a2,
       else {
         func (this, res, v1, v2);
         if (res.format() == Value::fmt_None)
-          res.setFormat (format (v1.format(), v2.format()));
+          res.setFormat (format (v1, v2));
       }
     }
 }
@@ -1919,12 +1893,24 @@ Value ValueCalc::stddevP (QVector<Value> range,
   return sqrt (div (res, cnt));
 }
 
-Value::Format ValueCalc::format (Value::Format a,
-    Value::Format b)
+bool isDate (Value::Format fmt) {
+  if ((fmt == Value::fmt_Date) || (fmt == Value::fmt_DateTime))
+    return true;
+  return false;
+}
+
+Value::Format ValueCalc::format (Value a, Value b)
 {
-  if ((a == Value::fmt_None) || (a == Value::fmt_Boolean))
-    return b;
-  return a;
+  Value::Format af = a.format ();
+  Value::Format bf = b.format ();
+
+  // operation on two dates should produce a number
+  if (isDate(af) && isDate(bf))
+    return Value::fmt_Number;
+
+  if ((af == Value::fmt_None) || (af == Value::fmt_Boolean))
+    return bf;
+  return af;
 }
 
 
@@ -1937,7 +1923,7 @@ void ValueCalc::getCond (Condition &cond, Value val)
   if (!val.isString()) {
     cond.comp = isEqual;
     cond.type = numeric;
-    cond.value = converter->asFloat (val).asFloat();
+    cond.value = converter->toFloat (val);
     return;
   }
   QString text = converter->asString (val).asString();
@@ -2001,7 +1987,7 @@ bool ValueCalc::matches (const Condition &cond, Value val)
   if (val.isEmpty())
   return false;
   if (cond.type == numeric) {
-    double d = converter->asFloat (val).asFloat();
+    Number d = converter->toFloat (val);
     switch ( cond.comp )
     {
       case isEqual:

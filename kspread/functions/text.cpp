@@ -264,7 +264,7 @@ Value func_dollar (valVector args, ValueCalc *calc, FuncExtra *)
   // This function converts data to double/int, hence it won't support
   // larger precision.
 
-  double value = calc->conv()->asFloat (args[0]).asFloat();
+  double value = numToDouble (calc->conv()->toFloat (args[0]));
   int precision = 2;
   if (args.count() == 2)
     precision = calc->conv()->asInteger (args[1]).asInteger();
@@ -317,7 +317,7 @@ Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
   bool decimalsIsNegative = false;
   bool no_commas = false;
 
-  double number = calc->conv()->asFloat (args[0]).asFloat();
+  double number = numToDouble (calc->conv()->toFloat (args[0]));
   if (args.count() > 1)
   {
     if ( args[1].less( Value( 0 ) ) )

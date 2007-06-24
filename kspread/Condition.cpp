@@ -164,7 +164,7 @@ bool Conditions::currentCondition( const Cell& cell, Conditional & condition ) c
     /* for now, the first condition that is true is the one that will be used */
 
     QLinkedList<Conditional>::const_iterator it;
-    double value   = cell.value().asFloat();
+    double value   = numToDouble (cell.value().asFloat());
     QString strVal = cell.value().asString();
 
 

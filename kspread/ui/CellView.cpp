@@ -1090,14 +1090,14 @@ void CellView::paintText( QPainter& painter,
       x = indent + cellRect.x() + d->textX;
     else
       x = indent + cellRect.x() + d->textX
-          - ( fontMetrics.descent() + fontMetrics.ascent() ) * sin( angle * M_PI / 180 );
+          - ( fontMetrics.descent() + fontMetrics.ascent() ) * ::sin( angle * M_PI / 180 );
     double y;
     if ( angle > 0 )
       y = cellRect.y() + d->textY;
     else
       y = cellRect.y() + d->textY + d->textHeight;
-    const QPointF position( x * cos( angle * M_PI / 180 ) + y * sin( angle * M_PI / 180 ),
-                           -x * sin( angle * M_PI / 180 ) + y * cos( angle * M_PI / 180 ) );
+    const QPointF position( x * ::cos( angle * M_PI / 180 ) + y * ::sin( angle * M_PI / 180 ),
+                           -x * ::sin( angle * M_PI / 180 ) + y * ::cos( angle * M_PI / 180 ) );
     drawText( painter, effectiveFont( paintDevice ), position, d->displayText, cell );
     painter.rotate( -angle );
   }
@@ -1940,7 +1940,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
       }
       else
       {
-        d->textY = effTop + ascent * cos( tmpAngle * M_PI / 180 );
+        d->textY = effTop + ascent * ::cos( tmpAngle * M_PI / 180 );
       }
       break;
     }
@@ -1961,7 +1961,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
           }
           else
           {
-            d->textY = effBottom - d->textHeight + ascent * cos( tmpAngle * M_PI / 180 );
+            d->textY = effBottom - d->textHeight + ascent * ::cos( tmpAngle * M_PI / 180 );
           }
         }
         else
@@ -1972,7 +1972,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
           }
           else
           {
-            d->textY = effTop + ascent * cos( tmpAngle * M_PI / 180 );
+            d->textY = effTop + ascent * ::cos( tmpAngle * M_PI / 180 );
           }
         }
       }
@@ -2020,7 +2020,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
           }
           else
           {
-            d->textY = ( h - d->textHeight ) / 2 + ascent * cos( tmpAngle * M_PI / 180 );
+            d->textY = ( h - d->textHeight ) / 2 + ascent * ::cos( tmpAngle * M_PI / 180 );
           }
         }
         else
@@ -2031,7 +2031,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
           }
           else
           {
-            d->textY = effTop + ascent * cos( tmpAngle * M_PI / 180 );
+            d->textY = effTop + ascent * ::cos( tmpAngle * M_PI / 180 );
           }
         }
       }
@@ -2115,9 +2115,9 @@ void CellView::textSize( const QFontMetrics& fm )
 
         const double height = fm.ascent() + fm.descent();
         const double width  = fm.width( d->displayText );
-        d->textHeight = height * cos( tmpAngle * M_PI / 180 ) + qAbs( width * sin( tmpAngle * M_PI / 180 ) );
+        d->textHeight = height * ::cos( tmpAngle * M_PI / 180 ) + qAbs( width * ::sin( tmpAngle * M_PI / 180 ) );
 
-        d->textWidth = qAbs( height * sin( tmpAngle * M_PI / 180 ) ) + width * cos( tmpAngle * M_PI / 180 );
+        d->textWidth = qAbs( height * ::sin( tmpAngle * M_PI / 180 ) ) + width * ::cos( tmpAngle * M_PI / 180 );
     }
     else {
         // Vertical text.

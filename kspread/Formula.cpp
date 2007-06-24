@@ -1651,7 +1651,7 @@ QString Formula::dump() const
     QString vtext;
     Value val = d->constants[c];
     if( val.isString() ) vtext = QString("[%1]").arg( val.asString() );
-    else if( val.isNumber() ) vtext = QString("%1").arg( val.asFloat() );
+    else if( val.isNumber() ) vtext = QString("%1").arg( numToDouble (val.asFloat()) );
     else if( val.isBoolean() ) vtext = QString("%1").arg( val.asBoolean() ? "True":"False");
     else if( val.isError() ) vtext = "error";
     else vtext = "???";

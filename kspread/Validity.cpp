@@ -719,7 +719,7 @@ bool Validity::testValidity( const Cell* cell ) const
         if ( cell->value().isNumber() &&
             (d->restriction == Number ||
              (d->restriction == Integer &&
-              cell->value().asFloat() == ceil(cell->value().asFloat()))))
+              numToDouble (cell->value().asFloat()) == ceil(numToDouble (cell->value().asFloat())))))
         {
             switch( d->cond)
             {

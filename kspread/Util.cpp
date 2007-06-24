@@ -48,7 +48,7 @@ int KSpread::Util::decodeColumnLabelText( const QString &_col )
     int counterColumn = 0;
     for ( int i=0; i < _col.length(); i++ )
     {
-        counterColumn = (int) pow(26.0 , static_cast<int>(_col.length() - i - 1));
+        counterColumn = (int) ::pow(26.0 , static_cast<int>(_col.length() - i - 1));
         if( _col[i] >= 'A' && _col[i] <= 'Z' )
             col += counterColumn * ( _col[i].toLatin1() - 'A' + 1);  // okay here (Werner)
         else if( _col[i] >= 'a' && _col[i] <= 'z' )

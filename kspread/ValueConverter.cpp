@@ -58,7 +58,7 @@ Value ValueConverter::asBoolean (const Value &value) const
       val = Value((value.asFloat() == 0.0) ? false : true);
     break;
     case Value::Complex:
-      val = Value((value.asComplex().real() == complex<double>( 0.0, 0.0 ) ) ? false : true);
+      val = Value((value.asComplex().real() == complex<Number>( 0.0, 0.0 ) ) ? false : true);
     break;
     case Value::String:
       val = m_parser->tryParseBool (value.asString(), &ok);
@@ -166,14 +166,14 @@ Value ValueConverter::asComplex( const Value &value ) const
     switch (value.type())
     {
         case Value::Empty:
-            val = Value( complex<double>( 0.0, 0.0 ) );
+            val = Value( complex<Number>( 0.0, 0.0 ) );
             break;
         case Value::Boolean:
-            val = Value( complex<double>( value.asBoolean() ? 1.0 : 0.0, 0.0 ) );
+            val = Value( complex<Number>( value.asBoolean() ? 1.0 : 0.0, 0.0 ) );
             break;
         case Value::Integer:
         case Value::Float:
-            val = Value( complex<double>( value.asFloat(), 0.0 ) );
+            val = Value( complex<Number>( value.asFloat(), 0.0 ) );
             break;
         case Value::Complex:
             val = value;
@@ -181,7 +181,7 @@ Value ValueConverter::asComplex( const Value &value ) const
         case Value::String:
             val = m_parser->parse(value.asString());
             if (!val.isNumber())
-                val = Value( complex<double>( 0.0, 0.0 ) );
+                val = Value( complex<Number>( 0.0, 0.0 ) );
             val = Value(val.asComplex());
             break;
         case Value::Array:
@@ -191,7 +191,7 @@ Value ValueConverter::asComplex( const Value &value ) const
             /* NOTHING */
             break;
         case Value::Error:
-            val = Value( complex<double>( 0.0, 0.0 ) );
+            val = Value( complex<Number>( 0.0, 0.0 ) );
             break;
     };
 
@@ -277,7 +277,7 @@ Value ValueConverter::asString (const Value &value) const
       else
       {
         //convert the number, change decimal point from English to local
-        s = QString::number (value.asFloat(), 'g', 10);
+        s = QString::number (numToDouble (value.asFloat()), 'g', 10);
         const QString decimalSymbol = m_parser->locale()->decimalSymbol();
         if (!decimalSymbol.isNull() && ((pos = s.indexOf('.')) != -1))
           s = s.replace( pos, 1, decimalSymbol );
@@ -298,10 +298,10 @@ Value ValueConverter::asString (const Value &value) const
       {
         //convert the number, change decimal point from English to local
         const QString decimalSymbol = m_parser->locale()->decimalSymbol();
-        QString real = QString::number (value.asComplex().real(), 'g', 10);
+        QString real = QString::number (numToDouble (value.asComplex().real()), 'g', 10);
         if (!decimalSymbol.isNull() && ((pos = real.indexOf('.')) != -1))
             real = real.replace( pos, 1, decimalSymbol );
-        QString imag = QString::number (value.asComplex().imag(), 'g', 10);
+        QString imag = QString::number (numToDouble (value.asComplex().imag()), 'g', 10);
         if (!decimalSymbol.isNull() && ((pos = imag.indexOf('.')) != -1))
             imag = imag.replace( pos, 1, decimalSymbol );
         s = real;
@@ -443,4 +443,44 @@ Value ValueConverter::asTime (const Value &value) const
   };
 
   return val;
+}
+
+bool ValueConverter::toBoolean( const Value& value ) const
+{
+  return asBoolean (value).asBoolean ();
+}
+
+int ValueConverter::toInteger( const Value& value ) const
+{
+  return asInteger (value).asInteger ();
+}
+
+Number ValueConverter::toFloat( const Value& value ) const
+{
+  return asFloat (value).asFloat ();
+}
+
+complex<Number> ValueConverter::toComplex( const Value& value ) const
+{
+  return asComplex (value).asComplex ();
+}
+
+QString ValueConverter::toString( const Value& value ) const
+{
+  return asString (value).asString();
+}
+
+QDateTime ValueConverter::toDateTime( const Value& value ) const
+{
+  return asDateTime (value).asDateTime (doc());
+}
+
+QDate ValueConverter::toDate( const Value& value ) const
+{
+  return asDate (value).asDate (doc());
+}
+
+QTime ValueConverter::toTime( const Value& value ) const
+{
+  return asTime (value).asTime (doc());
 }

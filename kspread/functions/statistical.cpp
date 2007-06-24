@@ -419,7 +419,7 @@ void func_mode_helper (Value range, ValueCalc *calc, ContentSheet &sh)
 {
   if (!range.isArray())
   {
-    double d = calc->conv()->asFloat (range).asFloat();
+    double d = numToDouble (calc->conv()->toFloat (range));
     sh[d]++;
     return;
   }
@@ -430,7 +430,7 @@ void func_mode_helper (Value range, ValueCalc *calc, ContentSheet &sh)
       if (v.isArray())
         func_mode_helper (v, calc, sh);
       else {
-        double d = calc->conv()->asFloat (v).asFloat();
+        double d = numToDouble (calc->conv()->toFloat (v));
         sh[d]++;
       }
     }
@@ -519,7 +519,7 @@ void func_array_helper (Value range, ValueCalc *calc,
 {
   if (!range.isArray())
   {
-    array << calc->conv()->asFloat (range).asFloat();
+    array << numToDouble (calc->conv()->toFloat (range));
     ++number;
     return;
   }
@@ -530,7 +530,7 @@ void func_array_helper (Value range, ValueCalc *calc,
       if (v.isArray ())
         func_array_helper (v, calc, array, number);
       else {
-        array << calc->conv()->asFloat (v).asFloat();
+        array << numToDouble (calc->conv()->toFloat (v));
         ++number;
       }
     }
@@ -977,7 +977,7 @@ Value func_frequency( valVector args, ValueCalc*, FuncExtra* )
     for ( int v = 0; v < args[0].count(); ++v )
     {
         if ( args[0].element( v ).isNumber() )
-            data.append( args[0].element( v ).asFloat() );
+            data.append( numToDouble (args[0].element( v ).asFloat()) );
     }
 
     // no intervals given?
@@ -996,7 +996,7 @@ Value func_frequency( valVector args, ValueCalc*, FuncExtra* )
             continue;
         it = qUpperBound( begin, data.constEnd(), bins.element( v ).asFloat() );
         // exact match?
-        if ( *it == bins.element( v ).asFloat() )
+        if ( *it == numToDouble (bins.element( v ).asFloat()) )
             ++it;
         // add the number of values in this interval to the result
         result.setElement( 0, v, Value( static_cast<qint64>( it - begin ) ) );
@@ -1178,9 +1178,9 @@ Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *) {
       for (qint64 i = 1; i <= nEnd; i++)
       {
         // fFak *= i
-        fFak = calc->mul (fFak, i);
+        fFak = calc->mul (fFak, (int)i);
         // result += pow (lambda, i) / fFak
-        result = calc->add (result, calc->div (calc->pow (lambda, i), fFak));
+        result = calc->add (result, calc->div (calc->pow (lambda, (int)i), fFak));
       }
       result = calc->mul (result, ex);
     }

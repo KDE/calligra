@@ -275,7 +275,7 @@ void SeriesManipulator::setupSeries (const QPoint &_marker, double start,
     * when n = ln(end/start) / ln(step)
     */
     // DBL_EPSILON is added to prevent rounding errors
-    numberOfCells = (int) (log (end / start) / log (step) + DBL_EPSILON) + 1;
+    numberOfCells = (int) (::log (end / start) / ::log (step) + DBL_EPSILON) + 1;
 
   // with this, generate range information
   Region range (_marker.x(), _marker.y(), (mode == Column) ? 1 : numberOfCells,

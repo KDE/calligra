@@ -926,13 +926,13 @@ Value func_db (valVector args, ValueCalc *calc, FuncExtra *)
   // This function doesn't support extended datatypes, it simply
   // converts everything to double - because it does quite a bit
   // of computing, and, well, I'm lazy to convert it all (Tomas)
-  double cost = calc->conv()->asFloat (args[0]).asFloat();
-  double salvage = calc->conv()->asFloat (args[1]).asFloat();
-  double life = calc->conv()->asFloat (args[2]).asFloat();
-  double period = calc->conv()->asFloat (args[3]).asFloat();
+  double cost = numToDouble (calc->conv()->toFloat (args[0]));
+  double salvage = numToDouble (calc->conv()->toFloat (args[1]));
+  double life = numToDouble (calc->conv()->toFloat (args[2]));
+  double period = numToDouble (calc->conv()->toFloat (args[3]));
   double month = 12;
   if (args.count() == 5)
-    month = calc->conv()->asFloat (args[4]).asFloat();
+    month = numToDouble (calc->conv()->toFloat (args[4]));
 
   // sentinel check
   if (cost == 0 || life <= 0.0 || period == 0)
@@ -961,13 +961,13 @@ Value func_db (valVector args, ValueCalc *calc, FuncExtra *)
 /* depreciation per period */
 Value func_ddb (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double cost = calc->conv()->asFloat (args[0]).asFloat();
-  double salvage = calc->conv()->asFloat (args[1]).asFloat();
-  double life = calc->conv()->asFloat (args[2]).asFloat();
-  double period = calc->conv()->asFloat (args[3]).asFloat();
+  double cost = numToDouble (calc->conv()->toFloat (args[0]));
+  double salvage = numToDouble (calc->conv()->toFloat (args[1]));
+  double life = numToDouble (calc->conv()->toFloat (args[2]));
+  double period = numToDouble (calc->conv()->toFloat (args[3]));
   double factor = 2;
   if (args.count() == 5)
-    factor = calc->conv()->asFloat (args[4]).asFloat();
+    factor = numToDouble (calc->conv()->toFloat (args[4]));
 
   if ( cost < 0.0 || salvage < 0.0 || life <= 0.0 || period < 0.0 || factor < 0.0 )
     return Value::errorVALUE();
@@ -1036,7 +1036,7 @@ Value func_euro (valVector args, ValueCalc *calc, FuncExtra *)
 // EUROCONVERT(number,source,target)
 Value func_euroconvert (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double number = calc->conv()->asFloat (args[0]).asFloat();
+  double number = numToDouble (calc->conv()->toFloat (args[0]));
   QString source = calc->conv()->asString (args[1]).asString();
   QString target = calc->conv()->asString (args[2]).asString();
   

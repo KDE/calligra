@@ -108,7 +108,7 @@ QVariant TableModel::data( const QModelIndex& index, int role ) const
         case Value::Boolean:
         case Value::Complex:
         case Value::Array:
-            variant.setValue<double>( value.asFloat() );
+            variant.setValue<double>( numToDouble (value.asFloat()) );
             break;
         case Value::String:
         case Value::Error:

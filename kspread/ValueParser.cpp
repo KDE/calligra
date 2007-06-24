@@ -76,7 +76,7 @@ Value ValueParser::parse( const QString& str ) const
     return val;
 
   // Test for money number
-  double money = m_doc->locale()->readMoney (strStripped, &ok);
+  Number money = m_doc->locale()->readMoney (strStripped, &ok);
   if (ok)
   {
     val = Value( money );
@@ -208,7 +208,7 @@ Value ValueParser::readNumber( const QString& _str, bool *ok ) const
   return isInt ? Value(tot.toLongLong(ok)) : Value(tot.toDouble(ok));
 }
 
-double ValueParser::readImaginary( const QString& str, bool* ok ) const
+Number ValueParser::readImaginary( const QString& str, bool* ok ) const
 {
     if ( str.isEmpty() )
     {
@@ -216,7 +216,7 @@ double ValueParser::readImaginary( const QString& str, bool* ok ) const
         return 0.0;
     }
 
-    double imag = 0.0;
+    Number imag = 0.0;
     if ( str[0] == 'i' || str[0] == 'j' )
     {
         if ( str.length() == 1 )
@@ -253,7 +253,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
     Value value;
     if ( str.endsWith( '%' ) ) // percentage
     {
-        const double val = readNumber( str.left( str.length()-1 ).trimmed(), ok ).asFloat();
+        const Number val = readNumber( str.left( str.length()-1 ).trimmed(), ok ).asFloat();
         if ( *ok )
         {
             //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
@@ -264,8 +264,8 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
     }
     else if ( str.count( 'i' ) == 1 || str.count( 'j' ) == 1 ) // complex number
     {
-        double real = 0.0;
-        double imag = 0.0;
+        Number real = 0.0;
+        Number imag = 0.0;
         const QString minus( m_doc->locale()->negativeSign() );
         // both parts, real and imaginary, present?
         int sepPos;
@@ -294,7 +294,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
                 real = 0.0;
         }
         if ( *ok )
-            value = Value( complex<double>( real, imag ) );
+            value = Value( complex<Number>( real, imag ) );
     }
     else // real number
         value = readNumber( str, ok );

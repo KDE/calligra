@@ -32,6 +32,8 @@
 
 #include "kspread_export.h"
 
+#include "Number.h"
+
 using namespace std;
 
 namespace KSpread
@@ -122,11 +124,15 @@ class KSPREAD_EXPORT Value
      * Creates a floating-point value.
      */
     explicit Value( double f );
+    /**
+     * Creates a floating-point value.
+     */
+    explicit Value( Number f );
 
     /**
      * Creates a complex number value.
      */
-    explicit Value( const complex<double>& c );
+    explicit Value( const complex<Number>& c );
 
     /**
      * Creates a string value.
@@ -248,14 +254,14 @@ class KSPREAD_EXPORT Value
      *
      * Call this function only if isNumber() returns true.
      */
-    double asFloat() const;
+    Number asFloat() const;
 
     /**
      * Returns the complex number value of this value.
      *
      * Call this function only if isNumber() returns true.
      */
-    complex<double> asComplex() const;
+    complex<Number> asComplex() const;
 
     /**
      * Returns the string value of this value.
@@ -433,11 +439,11 @@ class KSPREAD_EXPORT Value
     bool operator==( const Value& v ) const;
     inline bool operator!=( const Value& other ) const { return !operator==( other ); }
 
-    static int compare( double v1, double v2 );
+    static int compare( Number v1, Number v2 );
 
     bool isZero() const;
 
-    static bool isZero( double v );
+    static bool isZero( Number v );
 
 private:
     class Private;

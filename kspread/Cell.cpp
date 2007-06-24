@@ -1185,7 +1185,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
           if (value().isInteger())
             str = QString::number(value().asInteger());
           else
-            str = QString::number(value().asFloat(), 'g', DBL_DIG);
+            str = QString::number(numToDouble (value().asFloat()), 'g', DBL_DIG);
       }
   }
 
@@ -1394,14 +1394,14 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
       if (value().isInteger())
         xmlWriter.addAttribute( "office:value", QString::number( value().asInteger() ) );
       else
-        xmlWriter.addAttribute( "office:value", QString::number( value().asFloat(), 'g', DBL_DIG ) );
+        xmlWriter.addAttribute( "office:value", QString::number( numToDouble (value().asFloat()), 'g', DBL_DIG ) );
       break;
     }
     case Value::fmt_Percent:
     {
       xmlWriter.addAttribute( "office:value-type", "percentage" );
       xmlWriter.addAttribute( "office:value",
-          QString::number( value().asFloat() ) );
+          QString::number( numToDouble (value().asFloat() )) );
       break;
     }
     case Value::fmt_Money:
@@ -1413,7 +1413,7 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
         Currency currency = style.currency();
         xmlWriter.addAttribute( "office:currency", currency.code() );
       }
-      xmlWriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
+      xmlWriter.addAttribute( "office:value", QString::number( numToDouble (value().asFloat()) ) );
       break;
     }
     case Value::fmt_DateTime: break;  //NOTHING HERE
@@ -2187,7 +2187,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
           if (value().isInteger())
             t = locale->formatNumber( value().asInteger() * 100 );
           else
-            t = locale->formatNumber( value().asFloat() * 100.0, precision );
+            t = locale->formatNumber( numToDouble (value().asFloat() * 100.0), precision );
           setUserInput( pasteOperation( t, userInput(), op ) );
           setUserInput( userInput() + '%' );
         }
@@ -2196,7 +2196,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
           if (value().isInteger())
             t = locale->formatLong(value().asInteger());
           else
-            t = locale->formatNumber(value().asFloat(), precision);
+            t = locale->formatNumber(numToDouble (value().asFloat()), precision);
           setUserInput( pasteOperation( t, userInput(), op ) );
         }
       }

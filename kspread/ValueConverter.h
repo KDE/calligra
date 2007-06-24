@@ -97,6 +97,16 @@ public:
      */
     Value asTime( const Value& value ) const;
 
+
+    bool toBoolean( const Value& value ) const;
+    int toInteger( const Value& value ) const;
+    Number toFloat( const Value& value ) const;
+    complex<Number> toComplex( const Value& value ) const;
+    QString toString( const Value& value ) const;
+    QDateTime toDateTime( const Value& value ) const;
+    QDate toDate( const Value& value ) const;
+    QTime toTime( const Value& value ) const;
+
 private:
     const ValueParser* m_parser;
 };

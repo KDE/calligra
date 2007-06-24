@@ -601,8 +601,8 @@ Value func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // this function will not support arbitrary precision
 
-  double d  = calc->conv()->asFloat (args[0]).asFloat();
-  int    tr = calc->conv()->asInteger (args[1]).asInteger();
+  double d  = numToDouble (calc->conv()->toFloat (args[0]));
+  int    tr = calc->conv()->toInteger (args[1]);
 
   if ( d < 0 || d > 1 )
     return Value::errorVALUE();
@@ -630,8 +630,8 @@ Value func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // this function will not support arbitrary precision
 
-  double d  = calc->conv()->asFloat (args[0]).asFloat();
-  int    f = calc->conv()->asInteger (args[1]).asInteger();
+  double d  = numToDouble (calc->conv()->toFloat (args[0]));
+  int    f = calc->conv()->toInteger (args[1]);
 
   if ( d < 0 || d > 1 )
     return Value::errorVALUE();
@@ -1035,7 +1035,7 @@ static Eigen::MatrixX<double> convert( const Value& matrix, ValueCalc *calc )
     {
         for ( int col = 0; col < dim; ++col )
         {
-            eMatrix( row, col ) = calc->conv()->asFloat( matrix.element( col, row ) ).asFloat();
+            eMatrix( row, col ) = numToDouble (calc->conv()->toFloat( matrix.element( col, row ) ));
         }
     }
     return eMatrix;

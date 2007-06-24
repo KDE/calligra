@@ -852,9 +852,9 @@ Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // This function won't support arbitrary precision.
 
-  double value = calc->conv()->asFloat (args[0]).asFloat ();
-  QString fromUnit = calc->conv()->asString (args[1]).asString();
-  QString toUnit = calc->conv()->asString (args[2]).asString();
+  double value = numToDouble (calc->conv()->toFloat (args[0]));
+  QString fromUnit = calc->conv()->toString (args[1]);
+  QString toUnit = calc->conv()->toString (args[2]);
 
   double result = value;
 
@@ -882,48 +882,48 @@ Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: COMPLEX
 Value func_complex (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    const double real = calc->conv()->asFloat( args[0] ).asFloat();
-    const double imag = calc->conv()->asFloat( args[1] ).asFloat();
-    return Value( complex<double>( real, imag ) );
+    const double real = numToDouble (calc->conv()->toFloat( args[0] ));
+    const double imag = numToDouble (calc->conv()->toFloat( args[1] ));
+    return Value( complex<Number>( real, imag ) );
 }
 
 // Function: IMAGINARY
 Value func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value( calc->conv()->asComplex( args[0] ).asComplex().imag() );
+    return Value( calc->conv()->toComplex( args[0] ).imag() );
 }
 
 // Function: IMREAL
 Value func_complex_real (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value( calc->conv()->asComplex( args[0] ).asComplex().real() );
+    return Value( calc->conv()->toComplex( args[0] ).real() );
 }
 
 void awImSum (ValueCalc *c, Value &res, Value val, Value)
 {
-    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
-    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    const complex<Number> c1 = c->conv()->toComplex( res );
+    const complex<Number> c2 = c->conv()->toComplex( val );
     res = Value( c1 + c2 );
 }
 
 void awImSub (ValueCalc *c, Value &res, Value val, Value)
 {
-    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
-    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    const complex<Number> c1 = c->conv()->toComplex( res );
+    const complex<Number> c2 = c->conv()->toComplex( val );
     res = Value( c1 - c2 );
 }
 
 void awImMul (ValueCalc *c, Value &res, Value val, Value)
 {
-    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
-    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    const complex<Number> c1 = c->conv()->toComplex( res );
+    const complex<Number> c2 = c->conv()->toComplex( val );
     res = Value( c1 * c2 );
 }
 
 void awImDiv (ValueCalc *c, Value &res, Value val, Value)
 {
-    const complex<double> c1 = c->conv()->asComplex( res ).asComplex();
-    const complex<double> c2 = c->conv()->asComplex( val ).asComplex();
+    const complex<Number> c1 = c->conv()->toComplex( res );
+    const complex<Number> c2 = c->conv()->toComplex( val );
     res = Value( c1 / c2 );
 }
 
@@ -1049,33 +1049,33 @@ Value func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: IMLOG2
 Value func_imlog2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value( std::log( calc->conv()->asComplex( args[0] ).asComplex() ) / static_cast<double>( M_LN2l ) );
+    return Value( std::log( calc->conv()->toComplex( args[0] )) / static_cast<Number>( double (M_LN2l) ) );
 }
 
 // Function: IMLOG10
 Value func_imlog10 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value( std::log10( calc->conv()->asComplex( args[0] ).asComplex() ) );
+    return Value( std::log10( calc->conv()->toComplex( args[0] ) ) );
 }
 
 
 // Function: IMEXP
 Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value( std::exp( calc->conv()->asComplex( args[0] ).asComplex() ) );
+    return Value( std::exp( calc->conv()->toComplex( args[0] ) ) );
 }
 
 // Function: IMSQRT
 Value func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value( std::sqrt( calc->conv()->asComplex( args[0] ).asComplex() ) );
+    return Value( std::sqrt( calc->conv()->toComplex( args[0] ) ) );
 }
 
 // Function: IMPOWER
 Value func_impower (valVector args, ValueCalc *calc, FuncExtra *)
 {
-    return Value( std::pow( calc->conv()->asComplex( args[0] ).asComplex(),
-                            calc->conv()->asComplex( args[1] ).asComplex() ) );
+    return Value( std::pow( calc->conv()->toComplex( args[0] ),
+                            calc->conv()->toComplex( args[1] ) ) );
 }
 
 // Function: DELTA

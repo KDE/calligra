@@ -551,10 +551,10 @@ QSizeF AdjustColumnRowManipulator::textSize( const QString& text, const Style& s
 
         const double height = fontMetrics.ascent() + fontMetrics.descent();
         const double width  = fontMetrics.width( text );
-        size.setHeight( height * cos( style.angle() * M_PI / 180 )
-                        + qAbs( width * sin( style.angle() * M_PI / 180 ) ) );
-        size.setWidth( qAbs( height * sin( style.angle() * M_PI / 180 ) )
-                       + width * cos( style.angle() * M_PI / 180 ) );
+        size.setHeight( height * ::cos( style.angle() * M_PI / 180 )
+                        + qAbs( width * ::sin( style.angle() * M_PI / 180 ) ) );
+        size.setWidth( qAbs( height * ::sin( style.angle() * M_PI / 180 ) )
+                       + width * ::cos( style.angle() * M_PI / 180 ) );
     }
     else
     {

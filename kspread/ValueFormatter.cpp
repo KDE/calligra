@@ -212,7 +212,7 @@ QString ValueFormatter::removeTrailingZeros( const QString& str, const QString& 
   return result;
 }
 
-QString ValueFormatter::createNumberFormat ( double value, int precision,
+QString ValueFormatter::createNumberFormat ( Number value, int precision,
     Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol)
 {
     // NOTE: If precision (obtained from the cell style) is -1 (arbitrary),
@@ -237,28 +237,29 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
   if( fmt != Format::Scientific )
   {
     double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
-    double mm = (p > 10) ? pow(10.0,p) : m[p];
+    double mm = (p > 10) ? ::pow(10.0,p) : m[p];
     bool neg = value < 0;
-    value = floor( fabs(value)*mm + 0.5 ) / mm;
+    value = floor( numToDouble (fabs(value)*mm + 0.5) ) / mm;
     if( neg ) value = -value;
   }
 
+  double val = numToDouble (value);
   switch (fmt)
   {
     case Format::Number:
-      localizedNumber = m_converter->locale()->formatNumber(value, p);
+      localizedNumber = m_converter->locale()->formatNumber(val, p);
       break;
     case Format::Percentage:
-      localizedNumber = m_converter->locale()->formatNumber (value, p)+ " %";
+      localizedNumber = m_converter->locale()->formatNumber (val, p)+ " %";
       break;
     case Format::Money:
-      localizedNumber = m_converter->locale()->formatMoney (value,
+      localizedNumber = m_converter->locale()->formatMoney (val,
         currencySymbol.isEmpty() ? m_converter->locale()->currencySymbol() : currencySymbol, p );
       break;
     case Format::Scientific:
     {
       const QString decimalSymbol = m_converter->locale()->decimalSymbol();
-      localizedNumber = QString::number (value, 'E', p);
+      localizedNumber = QString::number (val, 'E', p);
       if ((pos = localizedNumber.indexOf('.')) != -1)
         localizedNumber = localizedNumber.replace (pos, 1, decimalSymbol);
       break;
@@ -289,15 +290,15 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
   return localizedNumber;
 }
 
-QString ValueFormatter::fractionFormat (double value, Format::Type fmtType)
+QString ValueFormatter::fractionFormat (Number value, Format::Type fmtType)
 {
-  double result = value - floor(value);
+  Number result = value - floor(numToDouble (value));
   int index;
   int limit = 0;
 
   /* return w/o fraction part if not necessary */
   if (result == 0)
-    return QString::number(value);
+    return QString::number(numToDouble (value));
 
   switch (fmtType) {
   case Format::fraction_half:
@@ -332,7 +333,7 @@ QString ValueFormatter::fractionFormat (double value, Format::Type fmtType)
     break;
   default:
     kDebug(36001) << "Error in Fraction format\n";
-    return QString::number(value);
+    return QString::number(numToDouble (value));
     break;
   } /* switch */
 
@@ -342,9 +343,9 @@ QString ValueFormatter::fractionFormat (double value, Format::Type fmtType)
   if (fmtType != Format::fraction_three_digits
     && fmtType != Format::fraction_two_digits
     && fmtType != Format::fraction_one_digit) {
-    double calc = 0;
+    Number calc = 0;
     int index1 = 0;
-    double diff = result;
+    Number diff = result;
     for (int i = 1; i <= index; i++) {
       calc = i * 1.0 / index;
       if (fabs(result - calc) < diff) {
@@ -352,13 +353,13 @@ QString ValueFormatter::fractionFormat (double value, Format::Type fmtType)
         diff = fabs(result - calc);
       }
     }
-    if( index1 == 0 ) return QString("%1").arg( floor(value) );
-    if( index1 == index ) return QString("%1").arg( floor(value)+1 );
-    if( floor(value) == 0)
+    if( index1 == 0 ) return QString("%1").arg( floor(numToDouble (value)) );
+    if( index1 == index ) return QString("%1").arg( floor(numToDouble (value))+1 );
+    if( floor (numToDouble (value)) == 0)
       return QString("%1/%2").arg( index1 ).arg( index );
 
     return QString("%1 %2/%3")
-        .arg( floor(value) )
+        .arg( floor(numToDouble (value)) )
         .arg( index1 )
         .arg( index );
   }
@@ -370,13 +371,13 @@ QString ValueFormatter::fractionFormat (double value, Format::Type fmtType)
   double precision, denominator, numerator;
 
   do {
-    double val1 = result;
-    double val2 = rint(result);
+    double val1 = numToDouble (result);
+    double val2 = rint (numToDouble (result));
     double inter2 = 1;
     double inter4, p,  q;
     inter4 = p = q = 0;
 
-    precision = pow(10.0, -index);
+    precision = ::pow(10.0, -index);
     numerator = val2;
     denominator = 1;
 
@@ -391,20 +392,20 @@ QString ValueFormatter::fractionFormat (double value, Format::Type fmtType)
       denominator = q;
     }
     index--;
-  } while (fabs(denominator) > limit);
+  } while (::fabs(denominator) > limit);
 
-  denominator = fabs(denominator);
-  numerator = fabs(numerator);
+  denominator = ::fabs(denominator);
+  numerator = ::fabs(numerator);
 
   if (denominator == numerator)
-    return QString().setNum(floor(value + 1));
+    return QString().setNum(floor(numToDouble (value + 1)));
   else
   {
-    if ( floor(value) == 0 )
+    if ( floor(numToDouble (value)) == 0 )
       return QString("%1/%2").arg(numerator).arg(denominator);
     else
       return QString("%1 %2/%3")
-        .arg(floor(value))
+        .arg(floor(numToDouble (value)))
         .arg(numerator)
         .arg(denominator);
   }
@@ -631,8 +632,8 @@ QString ValueFormatter::complexFormat( const Value& value, int precision,
 {
     // FIXME Stefan: percentage, currency and scientific formats!
     QString str;
-    const double real = value.asComplex().real();
-    const double imag = value.asComplex().imag();
+    const Number real = value.asComplex().real();
+    const Number imag = value.asComplex().imag();
     str = createNumberFormat( real, precision, formatType, floatFormat, QString() );
     str += createNumberFormat( imag, precision, formatType, Style::AlwaysSigned, currencySymbol );
     str += 'i';

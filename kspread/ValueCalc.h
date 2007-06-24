@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
+   Copyright (C) 2005-2007 Tomas Mecir <mecirt@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 
 #include <QVector>
 
+#include "Number.h"
 #include "Value.h"
 
 namespace KSpread
@@ -40,7 +41,7 @@ struct Condition
 {
   Comp     comp;
   int      index;
-  double   value;
+  Number   value;
   QString  stringValue;
   Type     type;
 };
@@ -50,17 +51,10 @@ typedef void (*arrayWalkFunc) (ValueCalc *, Value &result,
 
 /**
 The ValueCalc class is used to perform all sorts of calculations.
-No other means of calculation should be performed, to achieve
-transparency, and to ease addition of new datatypes.
 
-Currently, most functions simply convert data to double and work with that.
-The idea is such that after we add support for bigger precision, we only need
-to adjust this class and the parsing/formatting/converting classes. All
-function implementations will remain exactly the same.
-
-Of course, for some functions, it might be impossible to apply them
-on all datatypes, but since all of them can be applied on both
-doubles and GnuMP-based numbers, that is not of much concern ;)
+Usage of this class for simpler calculations is deprecated, as we now use
+the Number object directly for that. This class is to be used for computations
+of more complicated and ranged functions.
 */
 
 class ValueCalc {
@@ -82,11 +76,11 @@ class ValueCalc {
   Value pow (const Value &a, const Value &b);
   Value sqr (const Value &a);
   Value sqrt (const Value &a);
-  Value add (const Value &a, double b);
-  Value sub (const Value &a, double b);
-  Value mul (const Value &a, double b);
-  Value div (const Value &a, double b);
-  Value pow (const Value &a, double b);
+  Value add (const Value &a, Number b);
+  Value sub (const Value &a, Number b);
+  Value mul (const Value &a, Number b);
+  Value div (const Value &a, Number b);
+  Value pow (const Value &a, Number b);
   Value abs (const Value &a);
 
   /** comparison and related */
@@ -122,18 +116,18 @@ class ValueCalc {
   int sign (const Value &a);
 
   // just a quick workaround
-  Value add(double a, const Value& b){ return add(Value(a), b); }
-  Value sub(double a, const Value& b){ return sub(Value(a), b); }
-  Value mul(double a, const Value& b){ return mul(Value(a), b); }
-  Value div(double a, const Value& b){ return div(Value(a), b); }
-  Value pow(double a, const Value& b){ return pow(Value(a), b); }
+  Value add(Number a, const Value& b){ return add(Value(a), b); }
+  Value sub(Number a, const Value& b){ return sub(Value(a), b); }
+  Value mul(Number a, const Value& b){ return mul(Value(a), b); }
+  Value div(Number a, const Value& b){ return div(Value(a), b); }
+  Value pow(Number a, const Value& b){ return pow(Value(a), b); }
 
-  bool equal (const Value &a, double b)   { return equal(a, Value(b)); }
-  bool greater (const Value &a, double b) { return greater(a, Value(b)); }
-  bool lower (const Value &a, double b)   { return lower(a, Value(b)); }
-  bool equal (double a, const Value &b)   { return equal(Value(a), b); }
-  bool greater (double a, const Value &b) { return greater(Value(a), b); }
-  bool lower (double a, const Value &b)   { return lower(Value(a), b); }
+  bool equal (const Value &a, Number b)   { return equal(a, Value(b)); }
+  bool greater (const Value &a, Number b) { return greater(a, Value(b)); }
+  bool lower (const Value &a, Number b)   { return lower(a, Value(b)); }
+  bool equal (Number a, const Value &b)   { return equal(Value(a), b); }
+  bool greater (Number a, const Value &b) { return greater(Value(a), b); }
+  bool lower (Number a, const Value &b)   { return lower(Value(a), b); }
 
 
   /** rounding */
@@ -146,7 +140,7 @@ class ValueCalc {
 
   /** logarithms and exponentials */
   Value log (const Value &number, const Value &base);
-  Value log (const Value &number, double base = 10);
+  Value log (const Value &number, Number base = 10);
   Value ln (const Value &number);
   Value exp (const Value &number);
 
@@ -155,14 +149,14 @@ class ValueCalc {
   Value eps ();
 
   /** random number from <0.0, range) */
-  Value random (double range = 1.0);
+  Value random (Number range = 1.0);
   Value random (Value range);
 
   /** some computational functions */
   Value fact (const Value &which);
   Value fact (const Value &which, const Value &end);
   Value fact (int which, int end = 0);
-  /** double factorial (every other number multiplied) */
+  /** Number factorial (every other number multiplied) */
   Value factDouble (int which);
   Value factDouble (Value which);
 
@@ -282,10 +276,11 @@ class ValueCalc {
   */
   bool matches (const Condition &cond, Value d);
 
+  /** return formatting for the result, based on formattings of input values */
+  Value::Format format (Value a, Value b);
+
  protected:
   ValueConverter* converter;
-  /** return result formatting, based on these two values */
-  Value::Format format (Value::Format a, Value::Format b);
 
   Doc *_doc;
 

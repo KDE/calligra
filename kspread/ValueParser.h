@@ -25,6 +25,7 @@
 #include <QDateTime>
 
 #include "Format.h"
+#include "Number.h"
 
 class KLocale;
 
@@ -104,7 +105,7 @@ protected:
     /**
      * A helper function to read the imaginary part of a complex number.
      */
-    double readImaginary( const QString& str, bool* ok ) const;
+    Number readImaginary( const QString& str, bool* ok ) const;
 
     /**
      * A helper function to read integers.

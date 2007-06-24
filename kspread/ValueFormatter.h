@@ -24,6 +24,7 @@
 #include <QDateTime>
 
 #include "Global.h"
+#include "Number.h"
 #include "Style.h"
 
 namespace KSpread
@@ -92,7 +93,7 @@ protected:
      * \param floatFormat the number format, i.e. signed/unsigned information
      * \param currencySymbol the currency symbol
      */
-    QString createNumberFormat( double value, int precision,
+    QString createNumberFormat( Number value, int precision,
                                 Format::Type formatType,
                                 Style::FloatFormat floatFormat,
                                 const QString& currencySymbol );
@@ -101,7 +102,7 @@ protected:
      * Creates a fraction format.
      * \param formatType the value format, e.g. number, date
      */
-    QString fractionFormat( double value, Format::Type formatType );
+    QString fractionFormat( Number value, Format::Type formatType );
 
     /**
      * Creates a complex number format.

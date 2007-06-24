@@ -299,7 +299,7 @@ void GoalSeekDialog::buttonOkClicked()
 
     m_restored = false;
 
-    startCalc( m_sourceCell.value().asFloat(), goal );
+    startCalc( numToDouble (m_sourceCell.value().asFloat()), goal );
     m_pView->slotUpdateView( m_pView->activeSheet() );
 
     return;
@@ -364,7 +364,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
   double resultA, resultB;
 
   // save old value
-  m_oldSource = m_sourceCell.value().asFloat();
+  m_oldSource = numToDouble (m_sourceCell.value().asFloat());
   resultA = _goal;
 
   // initialize start value
@@ -379,11 +379,11 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     startB = x;
 
     m_sourceCell.setValue(Value(startA));
-    resultA = m_targetCell.value().asFloat() - _goal;
+    resultA = numToDouble (m_targetCell.value().asFloat()) - _goal;
     //    kDebug() << "Target A: " << m_targetCell.value().asFloat() << ", " << m_targetCell.userInput() << " Calc: " << resultA << endl;
 
     m_sourceCell.setValue(Value(startB));
-    resultB = m_targetCell.value().asFloat() - _goal;
+    resultB = numToDouble (m_targetCell.value().asFloat()) - _goal;
     /*
       kDebug() << "Target B: " << m_targetCell.value().asFloat() << ", " << m_targetCell.userInput() << " Calc: " << resultB << endl;
 

@@ -47,8 +47,8 @@ class Value::Private : public QSharedData
     {
       bool b;
       qint64 i;
-      double f;
-      complex<double>* pc;
+      Number *f;
+      complex<Number>* pc;
       QString* ps;
       ValueArray* pa;
     };
@@ -74,10 +74,10 @@ class Value::Private : public QSharedData
                 i = o.i;
                 break;
             case Value::Float:
-                f = o.f;
+                f = new Number (*o.f);
                 break;
             case Value::Complex:
-                pc = new complex<double>( *o.pc );
+                pc = new complex<Number>( *o.pc );
                 break;
             case Value::String:
             case Value::Error:
@@ -209,7 +209,7 @@ bool Value::operator==( const Value& o ) const
     case Empty:   return true;
     case Boolean: return o.d->b == d->b;
     case Integer: return o.d->i == d->i;
-    case Float:   return compare( o.d->f, d->f ) == 0;
+    case Float:   return compare( *(o.d->f), *(d->f) ) == 0;
     case Complex: return ( !d->pc && !o.d->pc ) || ( ( d->pc && o.d->pc ) && ( *o.d->pc == *d->pc ) );
     case String:  return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
     case Array:   return ( !d->pa && !o.d->pa ) || ( ( d->pa && o.d->pa ) && ( *o.d->pa == *d->pa ) );
@@ -249,19 +249,28 @@ Value::Value( int i )
 
 // create a floating-point value
 Value::Value( double f )
+  : d( Private::null() )
+{
+  d->type = Float;
+  d->f = new Number (f);
+  d->format = fmt_Number;
+}
+
+// create a floating-point value
+Value::Value( Number f )
     : d( Private::null() )
 {
     d->type = Float;
-    d->f = f;
+    d->f = new Number (f);
     d->format = fmt_Number;
 }
 
 // create a complex number value
-Value::Value( const complex<double>& c )
+Value::Value( const complex<Number>& c )
     : d( Private::null() )
 {
     d->type = Complex;
-    d->pc = new complex<double>( c );
+    d->pc = new complex<Number>( c );
     d->format = fmt_Number;
 }
 
@@ -291,8 +300,8 @@ Value::Value( const QDateTime& dt, const Doc* doc )
     const QTime refTime( 0, 0 );  // reference time is midnight
 
     d->type = Float;
-    d->f = refDate.daysTo( dt.date() );
-    d->f += static_cast<double>( refTime.msecsTo( dt.time() ) ) / 86400000.0; // 24*60*60*1000
+    d->f = new Number (refDate.daysTo( dt.date() ));
+    *(d->f) += static_cast<double>( refTime.msecsTo( dt.time() ) ) / 86400000.0; // 24*60*60*1000
     d->format = fmt_DateTime;
 }
 
@@ -304,7 +313,7 @@ Value::Value( const QTime& time, const Doc* doc )
     const QTime refTime( 0, 0 );  // reference time is midnight
 
     d->type = Float;
-    d->f = static_cast<double>( refTime.msecsTo( time ) ) / 86400000.0; // 24*60*60*1000
+    d->f = new Number (static_cast<double>( refTime.msecsTo( time ) ) / 86400000.0); // 24*60*60*1000
     d->format = fmt_Time;
 }
 
@@ -352,35 +361,35 @@ qint64 Value::asInteger() const
     if ( type() == Integer )
         result = d->i;
     else if ( type() == Float )
-        result = static_cast<qint64>( floor( d->f ) );
+        result = static_cast<qint64>(floor (numToDouble ( *(d->f) ) ) );
     else if ( type() == Complex )
-        result = static_cast<qint64>( floor( d->pc->real() ) );
+        result = static_cast<qint64>( floor (numToDouble ( d->pc->real() ) ) );
     return result;
 }
 
 // get the value as floating-point
-double Value::asFloat() const
+Number Value::asFloat() const
 {
-    double result = 0.0;
+    Number result = 0.0;
     if ( type() == Float )
-        result = d->f;
+        result = *(d->f);
     else if ( type() == Integer )
-        result = static_cast<double>(d->i);
+        result = static_cast<int>(d->i);
     else if ( type() == Complex )
         result = d->pc->real();
     return result;
 }
 
 // get the value as complex number
-complex<double> Value::asComplex() const
+complex<Number> Value::asComplex() const
 {
-    complex<double> result( 0.0, 0.0 );
+    complex<Number> result( 0.0, 0.0 );
     if ( type() == Complex )
         result = *d->pc;
     else if ( type() == Float )
-        result = d->f;
+        result = *(d->f);
     else if ( type() == Integer )
-        result = static_cast<double>(d->i);
+        result = static_cast<int>(d->i);
     return result;
 }
 
@@ -422,7 +431,7 @@ QDateTime Value::asDateTime( const Doc* doc ) const
   QDateTime datetime( doc->referenceDate(), QTime(), Qt::UTC );
 
   const int days = asInteger();
-  const int msecs = qRound( ( asFloat() - days ) * 86400000.0 ); // 24*60*60*1000
+  const int msecs = qRound( ( numToDouble (asFloat() - days) ) * 86400000.0 ); // 24*60*60*1000
   datetime = datetime.addDays( days );
   datetime = datetime.addMSecs( msecs );
 
@@ -447,7 +456,7 @@ QTime Value::asTime( const Doc* doc ) const
   QTime dt;
 
   const int days = asInteger();
-  const int msecs = qRound( ( asFloat() - days ) * 86400000.0 ); // 24*60*60*1000
+  const int msecs = qRound( numToDouble ( asFloat() - double(days) ) * 86400000.0 ); // 24*60*60*1000
   dt = dt.addMSecs( msecs );
 
   return dt;
@@ -591,17 +600,17 @@ const Value& Value::errorVALUE()
   return ks_error_value;
 }
 
-int Value::compare( double v1, double v2 )
+int Value::compare( Number v1, Number v2 )
 {
-  double v3 = v1 - v2;
+  Number v3 = v1 - v2;
   if( v3 > DBL_EPSILON ) return 1;
   if( v3 < -DBL_EPSILON ) return -1;
   return 0;
 }
 
-bool Value::isZero( double v )
+bool Value::isZero( Number v )
 {
-  return fabs( v ) < DBL_EPSILON;
+  return abs(v) < DBL_EPSILON;
 }
 
 bool Value::isZero() const
@@ -811,15 +820,15 @@ QTextStream& operator<<( QTextStream& ts, Value value )
       ts << ": " << value.asInteger(); break;
 
     case Value::Float:
-      ts << ": " << value.asFloat(); break;
+      ts << ": " << numToDouble (value.asFloat()); break;
 
     case Value::Complex:
     {
-      const complex<double> complex( value.asComplex() );
-      ts << ": " << complex.real();
+      const complex<Number> complex( value.asComplex() );
+      ts << ": " << numToDouble (complex.real());
       if ( complex.imag() >= 0.0 )
           ts << '+';
-      ts << complex.imag() << 'i';
+      ts << numToDouble (complex.imag()) << 'i';
       break;
     }
 

@@ -78,7 +78,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const Cell& cell )
     }
     else if ( cell.value().isFloat() || cell.isTime() )
     {
-        m_DValue = cell.value().asFloat();
+        m_DValue = numToDouble (cell.value().asFloat());
         m_Type = FLOAT;
     }
     else if ( !cell.userInput().isEmpty() )
@@ -800,12 +800,12 @@ void AutoFillCommand::fillSequence( const QList<Cell>& _srcList,
         if ( cell.isTime() )
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append( Value( QTime( 1, 0 ), m_sheet->doc() ).asFloat() );
+            deltaSequence.append( numToDouble (Value( QTime( 1, 0 ), m_sheet->doc() ).asFloat() ));
         }
         else if ( cell.isDate() )
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append( Value( QDate( 0, 0, 1 ), m_sheet->doc() ).asInteger() );
+            deltaSequence.append( numToDouble ((int) Value( QDate( 0, 0, 1 ), m_sheet->doc() ).asInteger() ));
         }
         else
             deltaSequence.append( 0.0 );
