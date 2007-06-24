@@ -10,7 +10,7 @@ http://www.koffice.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
-import os, datetime, sys, traceback, urlparse, csv
+import os, datetime, sys, traceback, csv
 import Kross, KSpread
 
 class CsvImport:
@@ -29,6 +29,10 @@ class CsvImport:
         self.openwidget.setMode("Opening")
         self.openwidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
 
+        datapage = self.dialog.addPage("Import","Import to sheet beginning at cell","spreadsheet")
+        self.sheetslistview = KSpread.createSheetsListView(datapage)
+        self.sheetslistview.setEditorType("Cell")
+
         optionspage = self.dialog.addPage("Options","Comma Separated Value Options","configure")
         self.optionswidget = self.forms.createWidgetFromUIFile(optionspage, os.path.join(self.currentpath, "csvoptions.ui"))
 
@@ -38,20 +42,7 @@ class CsvImport:
             except:
                 self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
-    def doImport(self):
-        currentSheet = KSpread.currentSheet()
-        if not currentSheet:
-            raise "No current sheet."
-        writer = KSpread.writer()
-        if not writer.setSheet(currentSheet.sheetName()):
-            raise "Failed to set sheet '%s'" % currentSheet.sheetName()
-        if not writer.setCell("A1"):
-            raise "Failed to determinate first row."
-
-        csvfilename = self.openwidget.selectedFile()
-        if not os.path.isfile(csvfilename):
-            raise "File '%s' not found." % csvfilename
-
+    def getCustomDialect(self):
         class CustomDialect(csv.excel): pass
         setattr(CustomDialect, 'delimiter', self.optionswidget["DelimiterComboBox"].currentText)
         lineterm = self.optionswidget["LineTerminatorComboBox"].currentText.strip()
@@ -71,14 +62,32 @@ class CsvImport:
         setattr(CustomDialect, 'quoting', self.optionswidget["QuotingCheckBox"].checked)
         setattr(CustomDialect, 'skipinitialspace', self.optionswidget["SkipInitialSpaceCheckBox"].checked)
         setattr(CustomDialect, 'strict', self.optionswidget["StrictCheckBox"].checked)
-        csv.register_dialect("custom", CustomDialect)
-        dialectname = "custom"
+        return CustomDialect
+
+    def doImport(self):
+        currentSheet = self.sheetslistview.sheet()
+        if not currentSheet:
+            raise "No current sheet."
+
+        writer = KSpread.writer()
+        if not writer.setSheet(currentSheet):
+            raise "Invalid sheet \"%s\" defined." % currentSheet
+
+        cell = self.sheetslistview.editor()
+        if not writer.setCell(cell):
+            raise "Invalid cell \"%s\" defined." % cell
+
+        csvfilename = self.openwidget.selectedFile()
+        if not os.path.isfile(csvfilename):
+            raise "File '%s' not found." % csvfilename
 
         #writer.connect("valueChanged()",writer.next)
 
+        csv.register_dialect("custom", self.getCustomDialect())
+
         csvfile = open(csvfilename,'r')
         try:
-            csvreader = csv.reader(csvfile, dialect=dialectname)
+            csvreader = csv.reader(csvfile, dialect="custom")
             try:
                 while True:
                     record = csvreader.next()

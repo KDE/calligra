@@ -10,7 +10,7 @@ http://www.koffice.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
-import os, datetime, sys, traceback, urlparse, csv
+import os, datetime, sys, traceback, csv
 import Kross, KSpread
 
 class CsvExporter:
@@ -29,8 +29,10 @@ class CsvExporter:
         self.savewidget.setMode("Saving")
         self.savewidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
 
-        datapage = self.dialog.addPage("Sheets","Export Sheets","spreadsheet")
+        datapage = self.dialog.addPage("Export","Export Sheets and ranges","spreadsheet")
         self.sheetslistview = KSpread.createSheetsListView(datapage)
+        self.sheetslistview.setSelectionType("MultiSelect")
+        self.sheetslistview.setEditorType("Range")
 
         optionspage = self.dialog.addPage("Options","Comma Separated Value Options","configure")
         self.optionswidget = self.forms.createWidgetFromUIFile(optionspage, os.path.join(self.currentpath, "csvoptions.ui"))
@@ -41,16 +43,7 @@ class CsvExporter:
             except:
                 self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
 
-    def doExport(self):
-        reader = KSpread.reader()
-        reader.setSheets( self.sheetslistview.sheets() )
-
-        csvfilename = self.savewidget.selectedFile()
-        if not csvfilename:
-            raise "No CSV file choosen"
-        if os.path.splitext(csvfilename)[1] == '':
-            csvfilename += '.csv'
-
+    def getCustomDialect(self):
         class CustomDialect(csv.excel): pass
         setattr(CustomDialect, 'delimiter', self.optionswidget["DelimiterComboBox"].currentText)
         lineterm = self.optionswidget["LineTerminatorComboBox"].currentText.strip()
@@ -70,11 +63,25 @@ class CsvExporter:
         setattr(CustomDialect, 'quoting', self.optionswidget["QuotingCheckBox"].checked)
         setattr(CustomDialect, 'skipinitialspace', self.optionswidget["SkipInitialSpaceCheckBox"].checked)
         setattr(CustomDialect, 'strict', self.optionswidget["StrictCheckBox"].checked)
-        csv.register_dialect("custom", CustomDialect)
-        dialectname = "custom"
+        return CustomDialect
+
+    def doExport(self):
+        reader = KSpread.reader()
+        reader.setSheets( self.sheetslistview.sheets() )
+
+        #if len(reader.sheetNames()) == 0:
+            #raise "No sheet to export selected"
+
+        csvfilename = self.savewidget.selectedFile()
+        if not csvfilename:
+            raise "No CSV file choosen"
+        if os.path.splitext(csvfilename)[1] == '':
+            csvfilename += '.csv'
+
+        csv.register_dialect("custom", self.getCustomDialect())
 
         csvfile = open(csvfilename,'w')
-        csvwriter = csv.writer(csvfile, dialect=dialectname)
+        csvwriter = csv.writer(csvfile, dialect="custom")
 
         def changedSheet(sheetname):
             print "changedSheet sheetname=%s" % sheetname

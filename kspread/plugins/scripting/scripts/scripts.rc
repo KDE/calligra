@@ -1,4 +1,5 @@
 <KrossScripting>
+
     <collection name="import" text="Import" comment="Import content">
         <script
             name="pycsvimport"
@@ -7,6 +8,7 @@
             interpreter="python"
             file="extensions/csvimport.py" />
     </collection>
+
     <collection name="export" text="Export" comment="Export content">
         <script
             name="pycsvexport"
@@ -27,18 +29,20 @@
             interpreter="python"
             file="extensions/odfpyexport.py" />
     </collection>
+
     <collection name="functions" text="Functions" comment="Scripting formula functions">
         <script
             name="yfinance"
-            text="Y! Finance"
-            comment="YAHOO! Finance formula function"
+            text="YFinance"
+            comment="Yahoo! Finance formula function"
             interpreter="python"
             file="functions/yfinance.py" />
         <script
             name="yweather"
-            text="Y! Weather"
-            comment="YAHOO! Weather formula function"
+            text="YWeather"
+            comment="Yahoo! Weather formula function"
             interpreter="python"
             file="functions/yweather.py" />
     </collection>
+
 </KrossScripting>

@@ -37,6 +37,8 @@ class ScriptingModule;
 class ScriptingSheetsListView : public QWidget
 {
         Q_OBJECT
+        Q_ENUMS(SelectionType)
+        Q_ENUMS(EditorType)
     public:
 
         /**
@@ -52,7 +54,16 @@ class ScriptingSheetsListView : public QWidget
         */
         virtual ~ScriptingSheetsListView();
 
+        enum SelectionType { SingleSelect, MultiSelect };
+        enum EditorType { Disabled, Cell, Range };
+
     public slots:
+
+        void setSelectionType(const QString& selectiontype);
+        void setEditorType(const QString& editortype);
+
+        QString sheet();
+        QString editor();
 
         /**
         * Return the list of all selected sheets. Selected are those sheets the
@@ -76,6 +87,9 @@ class ScriptingSheetsListView : public QWidget
         QTreeView* m_view;
         bool m_initialized;
         QVariantList m_prevlist;
+
+        SelectionType m_selectiontype;
+        EditorType m_editortype;
 
         void initialize();
         void finalize();

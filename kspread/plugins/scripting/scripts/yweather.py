@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script that provides the YAHOO! Weather formula function.
+KSpread python script that provides the Yahoo! Weather formula function.
 
 Yahoo! Terms of Use
 The feeds are provided free of charge for use by individuals and non-profit
@@ -10,16 +10,16 @@ attribution to Yahoo! Weather in connection with your use of the feeds.
 If you provide this attribution in text, please use: "Yahoo! Weather." If
 you provide this attribution with a graphic, please use the Yahoo! Weather
 logo that we have included in the feed itself.
- We reserve all rights in and to the Yahoo! Weather logo, and your right
- to use the Yahoo! Weather logo is limited to providing attribution in
- connection with these RSS feeds. 
+We reserve all rights in and to the Yahoo! Weather logo, and your right
+to use the Yahoo! Weather logo is limited to providing attribution in
+connection with these RSS feeds. 
 Yahoo! also reserves the right to require you to cease distributing these
 feeds at any time for any reason.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
 http://www.koffice.org/kspread
-Dual-licensed under LGPL v2+higher and the BSD license.
+This script is licensed under the BSD license.
 """
 
 import re, urllib
@@ -35,7 +35,7 @@ class Yweather:
         func.minparam = 1
         func.maxparam = 2
         func.comment = (
-            "The YWEATHER() function uses the YAHOO! Weather Web Service "
+            "The YWEATHER() function uses the Yahoo! Weather Web Service "
             "to display the weather of a location. "
         )
         func.syntax = "YWEATHER(string;string)"
@@ -51,14 +51,13 @@ class Yweather:
                 sheet = KSpread.currentSheet()
                 location = sheet.text(location[1:])
 
-            if location == None or location == "" or not re.compile('^[a-zA-Z0-9\\!\\.\\-\s\\_]+$').match(location):
+            if location == None or not re.compile('^[a-zA-Z0-9]+$').match(location):
                 func.error = "Invalid location"
                 return
 
             url = "http://weather.yahooapis.com/forecastrss?p=%s" % location
             if len(argument) >= 2:
-                if argument[1] == 'f' or argument[1] == 'c':
-                    url += "&u=%s" % argument[1]
+                url += "&u=%s" % urllib.quote_plus(argument[1])
 
             print "url=%s" % url
             namespace = 'http://xml.weather.yahoo.com/ns/rss/1.0'

@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 
 """
-KSpread python script that provides the YAHOO! Finance formula function.
+KSpread python script that provides the Yahoo! Finance formula function.
 
 Yahoo! Terms of Use
 The feeds are provided free of charge for use by individuals and non-profit
@@ -10,16 +10,16 @@ attribution to Yahoo! Weather in connection with your use of the feeds.
 If you provide this attribution in text, please use: "Yahoo! Weather." If
 you provide this attribution with a graphic, please use the Yahoo! Weather
 logo that we have included in the feed itself.
- We reserve all rights in and to the Yahoo! Weather logo, and your right
- to use the Yahoo! Weather logo is limited to providing attribution in
- connection with these RSS feeds. 
+We reserve all rights in and to the Yahoo! Weather logo, and your right
+to use the Yahoo! Weather logo is limited to providing attribution in
+connection with these RSS feeds. 
 Yahoo! also reserves the right to require you to cease distributing these
 feeds at any time for any reason.
 
 (C)2007 Sebastian Sauer <mail@dipe.org>
 http://kross.dipe.org
 http://www.koffice.org/kspread
-Dual-licensed under LGPL v2+higher and the BSD license.
+This script is licensed under the BSD license.
 """
 
 import re, urllib
@@ -34,7 +34,7 @@ class Yfinance:
         func.minparam = 3
         func.maxparam = 3
         func.comment = (
-            "The YFINANCE() function uses the YAHOO! Finance Web Service "
+            "The YFINANCE() function uses the Yahoo! Finance Web Service "
             "to display stock values of a defined ticker symbol. "
         )
         func.syntax = "YFINANCE(string,string,string)"

@@ -251,6 +251,8 @@ class OdfPyExport:
                 if not exportSheets:
                     datapage = dialog.addPage("Sheets","Export Sheets","spreadsheet")
                     self.sheetslistview = self.kspread.createSheetsListView(datapage)
+                    self.sheetslistview.setSelectionType("MultiSelect")
+                    self.sheetslistview.setEditorType("Range")
 
                 if not dialog.exec_loop():
                     return

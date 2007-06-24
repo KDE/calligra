@@ -21,6 +21,8 @@
 #include "ScriptingWidgets.h"
 #include "ScriptingModule.h"
 
+#include <QMetaObject>
+#include <QMetaEnum>
 #include <QVBoxLayout>
 #include <QTreeView>
 #include <QStandardItemModel>
@@ -28,6 +30,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <View.h>
 #include <Doc.h>
 #include <Map.h>
 #include <Sheet.h>
@@ -35,7 +38,7 @@
 #include <Region.h>
 
 ScriptingSheetsListView::ScriptingSheetsListView(ScriptingModule* module, QWidget* parent)
-    : QWidget(parent), m_module(module), m_initialized(false)
+    : QWidget(parent), m_module(module), m_initialized(false), m_selectiontype(SingleSelect), m_editortype(Disabled)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(0);
@@ -55,6 +58,20 @@ ScriptingSheetsListView::~ScriptingSheetsListView()
 {
 }
 
+void ScriptingSheetsListView::setSelectionType(const QString& selectiontype)
+{
+    QMetaEnum e = metaObject()->enumerator( metaObject()->indexOfEnumerator("SelectionType") );
+    int v = e.keysToValue( selectiontype.toUtf8() );
+    if( v >= 0 ) m_selectiontype = (SelectionType) v;
+}
+
+void ScriptingSheetsListView::setEditorType(const QString& editortype)
+{
+    QMetaEnum e = metaObject()->enumerator( metaObject()->indexOfEnumerator("EditorType") );
+    int v = e.keysToValue( editortype.toUtf8() );
+    if( v >= 0 ) m_editortype = (EditorType) v;
+}
+
 void ScriptingSheetsListView::initialize()
 {
     if( m_initialized )
@@ -62,48 +79,73 @@ void ScriptingSheetsListView::initialize()
 
     kDebug()<<"ScriptingSheetsListView::initialize()"<<endl;
 
+    QStringList headers;
+    headers << i18n("Sheet");
+    switch( m_editortype ) {
+        case Disabled: break;
+        case Cell: headers << i18n("Cell"); break;
+        case Range: headers << i18n("Range"); break;
+    }
+
     QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
-    model->setHorizontalHeaderLabels( QStringList() << i18n("Sheet") << i18n("Range") );
+    model->setHorizontalHeaderLabels(headers);
     KSpread::Doc* doc = m_module->kspreadDoc();
+    KSpread::View* view = m_module->kspreadView();
+    KSpread::Sheet* activeSheet = view ? view->activeSheet() : 0;
     if( doc && doc->map() ) {
         foreach(KSpread::Sheet* sheet, doc->map()->sheetList()) {
+            if( ! sheet || sheet->isHidden() )
+                continue;
             QRect area = sheet->usedArea();
-            bool enabled = area.isValid() && ! sheet->isHidden();
-
-            QString range;
-            foreach(QVariant v, m_prevlist) {
-                QVariantList l = v.toList();
-                if( l.count() < 1 || l[0].toString() != sheet->sheetName() )
-                    continue;
-                if( l.count() >= 2 )
-                    enabled = l[1].toBool();
-                if( l.count() >= 3 ) {
-                    QStringList rangelist;
-                    for(int i = 2; i < l.count(); ++i) {
-                        const QRect rect = l[i].toRect();
-                        if( rect.isNull() )
-                            continue;
-                        KSpread::Region region(rect, sheet);
-                        for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
-                            const QString n = (*it)->name(sheet);
-                            if( ! n.isEmpty() )
-                                rangelist.append(n);
-                        }
-                    }
-                    range = rangelist.join(";");
-                }
-                break;
-            }
+            bool enabled = area.isValid();
+            QList< QStandardItem* > items;
 
             QStandardItem* nameitem = new QStandardItem( sheet->sheetName() );
-            nameitem->setCheckable(true);
             nameitem->setEditable(false);
-            nameitem->setCheckState( enabled ? Qt::Checked : Qt::Unchecked );
+            if( m_selectiontype == MultiSelect ) {
+                nameitem->setCheckable(true);
+                nameitem->setCheckState( (activeSheet == sheet) ? Qt::Checked : Qt::Unchecked );
+            }
+            items << nameitem;
 
-            if( range.isEmpty() && area.isValid() )
-                range = KSpread::Region(area, sheet).name(sheet);
+            if( m_editortype != Disabled ) {
+                QString range;
+                foreach(QVariant v, m_prevlist) {
+                    QVariantList l = v.toList();
+                    if( l.count() < 1 || l[0].toString() != sheet->sheetName() )
+                        continue;
+                    if( l.count() >= 2 )
+                        if( m_selectiontype == MultiSelect )
+                            nameitem->setCheckState( l[1].toBool() ? Qt::Checked : Qt::Unchecked );
+                    if( l.count() >= 3 ) {
+                        QStringList rangelist;
+                        for(int i = 2; i < l.count(); ++i) {
+                            const QRect rect = l[i].toRect();
+                            if( rect.isNull() )
+                                continue;
+                            KSpread::Region region(rect, sheet);
+                            for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+                                const QString n = (*it)->name(sheet);
+                                if( ! n.isEmpty() )
+                                    rangelist.append(n);
+                            }
+                        }
+                        range = rangelist.join(";");
+                    }
+                    break;
+                }
+                if( range.isEmpty() && area.isValid() )
+                    range = KSpread::Region(area, sheet).name(sheet);
+                if( m_editortype == Cell ) {
+                    int p = range.indexOf(':');
+                    range = p>0 ? range.left(p) : "A1";
+                }
+                items << new QStandardItem(range);
+            }
 
-            model->appendRow( QList< QStandardItem* >() << nameitem << new QStandardItem(range) );
+            model->appendRow(items);
+            if( activeSheet == sheet )
+                m_view->setCurrentIndex( nameitem->index() );
         }
     }
 
@@ -127,6 +169,26 @@ void ScriptingSheetsListView::showEvent(QShowEvent* event)
     finalize();
     QWidget::showEvent(event);
     initialize();
+}
+
+QString ScriptingSheetsListView::sheet()
+{
+    if( ! m_initialized )
+        initialize();
+    QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
+    QStandardItem* current = model->itemFromIndex( m_view->currentIndex() );
+    QStandardItem* nameitem = current ? model->item(current->row(),0) : 0;
+    return nameitem ? nameitem->text() : QString();
+}
+
+QString ScriptingSheetsListView::editor()
+{
+    if( ! m_initialized )
+        initialize();
+    QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());
+    QStandardItem* current = model->itemFromIndex( m_view->currentIndex() );
+    QStandardItem* rangeitem = current ? model->item(current->row(),1) : 0;
+    return rangeitem ? rangeitem->text() : QString();
 }
 
 QVariantList ScriptingSheetsListView::sheets()
@@ -153,13 +215,14 @@ QVariantList ScriptingSheetsListView::sheets()
         l << sheetname << enabled;
 
         QStandardItem* rangeitem = model->item(row,1);
-        Q_ASSERT(rangeitem);
-        const QString range = rangeitem->text();
-        KSpread::Region region(m_module->kspreadDoc()->map(), range, sheet);
-        for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
-            const QRect rect = (*it)->rect();
-            if( ! rect.isNull() )
-                l << rect;
+        if( rangeitem ) {
+            const QString range = rangeitem->text();
+            KSpread::Region region(m_module->kspreadDoc()->map(), range, sheet);
+            for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
+                const QRect rect = (*it)->rect();
+                if( ! rect.isNull() )
+                    l << rect;
+            }
         }
 
         list.append(l);

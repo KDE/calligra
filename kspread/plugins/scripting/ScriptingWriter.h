@@ -101,8 +101,8 @@ class ScriptingWriter : public QObject
             const KSpread::Region region(m_sheet->doc()->map(), cellname, m_sheet);
             if( region.firstRange().isNull() ) return false;
             QPoint point = region.firstRange().topLeft();
-            m_column = point.y();
-            m_row = point.x();
+            m_column = point.x();
+            m_row = point.y();
             clearCell();
             return true;
         }
