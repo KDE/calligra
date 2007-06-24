@@ -271,4 +271,5 @@ void SimpleEntryTool::noteLengthChanged(QAction* action)
 void SimpleEntryTool::voiceChanged(int voice)
 {
     m_voice = voice;
+    m_musicshape->repaint();
 }
