@@ -27,6 +27,7 @@ public:
     Sheet* sheet;
     GroupSymbol symbol;
     QString name;
+    QString shortName;
     int firstPart;
     int lastPart;
     bool commonBarLines;
@@ -81,6 +82,20 @@ QString PartGroup::name() const
 void PartGroup::setName(QString name)
 {
     d->name = name;
+}
+
+QString PartGroup::shortName(bool useFull) const
+{
+    if (d->shortName.isNull() && useFull) {
+        return d->name;
+    } else {
+        return d->shortName;
+    }
+}
+
+void PartGroup::setShortName(const QString& shortName)
+{
+    d->shortName = shortName;
 }
 
 PartGroup::GroupSymbol PartGroup::symbol() const

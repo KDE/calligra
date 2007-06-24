@@ -100,6 +100,16 @@ public:
     void setName(QString name);
 
     /**
+     * Returns the short name of this part group.
+     */
+    QString shortName(bool useFull = true) const;
+
+    /**
+     * Changes the short name of this part group.
+     */
+    void setShortName(const QString& shortName);
+    
+    /**
      * Returns the grouping symbol of this group.
      */
     GroupSymbol symbol() const;

@@ -45,7 +45,11 @@ static void writePartGroup(KoXmlWriter& w, int id, PartGroup* group)
         w.addTextNode(group->name());
         w.endElement(); // group-name
     }
-    // TODO group-abbreviation
+    if (!group->shortName(false).isNull()) {
+        w.startElement("group-abbreviation");
+        w.addTextNode(group->shortName());
+        w.endElement(); // group-abbreviation
+    }
 
     if (group->symbol() != PartGroup::None) {
         w.startElement("group-symbol");
