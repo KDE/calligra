@@ -73,8 +73,9 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff )
         for (int i = 0; i < staff->lineCount(); i++) {
             painter.drawLine(QPointF(p.x(), p.y() + y + i * dy), QPointF(p.x() + bar->size(), p.y() + y + i * dy));
         }
+        RenderState state;
         for (int e = 0; e < bar->staffElementCount(staff); e++) {
-            renderStaffElement(painter, bar->staffElement(staff, e), p.x(), p.y(), bar->scale());
+            renderStaffElement(painter, bar->staffElement(staff, e), p.x(), p.y(), state, bar->scale());
         }
     }
 }
@@ -109,13 +110,11 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, double x,
     // TODO: make this less hacky
     Chord *c = dynamic_cast<Chord*>(me);
     if (c) renderChord(painter, c, QPointF(x, y), state, xScale, color);
-    KeySignature *ks = dynamic_cast<KeySignature*>(me);
-    if (ks) renderKeySignature(painter, ks, x, state, xScale);
     TimeSignature* ts = dynamic_cast<TimeSignature*>(me);
     if (ts) renderTimeSignature( painter, ts, x, xScale);
 }
 
-void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, double x, double y, double xScale)
+void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, double x, double y, RenderState& state, double xScale)
 {
     double top = y;
     top += se->staff()->top();
@@ -126,12 +125,15 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
     }
 
     Clef *cl = dynamic_cast<Clef*>(se);
-    if (cl) renderClef(painter, cl, x, xScale);
+    if (cl) renderClef(painter, cl, x, state, xScale);
+    KeySignature *ks = dynamic_cast<KeySignature*>(se);
+    if (ks) renderKeySignature(painter, ks, x, state, xScale);
 }
 
 
-void MusicRenderer::renderClef(QPainter& painter, Clef *c, double x, double xScale)
+void MusicRenderer::renderClef(QPainter& painter, Clef *c, double x, RenderState& state, double xScale)
 {
+    state.clef = c;
     Staff* s = c->staff();
     m_style->renderClef(painter, x + c->x() * xScale, s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }

@@ -26,15 +26,9 @@ public:
     int accidentals[7];
 };
 
-KeySignature::KeySignature(int accidentals) : d(new Private)
+KeySignature::KeySignature(Staff* staff, int startTime, int accidentals) : StaffElement(staff, startTime), d(new Private)
 {
     setAccidentals(accidentals);
-}
-
-KeySignature::KeySignature(Staff* staff, int accidentals) : d(new Private)
-{
-    setAccidentals(accidentals);
-    setStaff(staff);
 }
 
 KeySignature::~KeySignature()

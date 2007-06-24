@@ -19,7 +19,7 @@
 #ifndef MUSIC_CORE_KEYSIGNATURE_H
 #define MUSIC_CORE_KEYSIGNATURE_H
 
-#include "VoiceElement.h"
+#include "StaffElement.h"
 
 namespace MusicCore {
 
@@ -28,20 +28,15 @@ class Staff;
 /**
  * This class represents a key signature.
  */
-class KeySignature : public VoiceElement {
+class KeySignature : public StaffElement {
 public:
     /**
-     * Create a new key signature instance.
+     * Create a new key signature instance that should be placed on a specific staff.
      *
      * @param accidentals the number of accidentals in this key signature, positive values for sharps, negative values
      * for flats.
      */
-    explicit KeySignature(int accidentals);
-
-    /**
-     * Create a new key signature instance that should be placed on a specific staff.
-     */
-    KeySignature(Staff* staff, int accidentals);
+    KeySignature(Staff* staff, int startTime, int accidentals);
 
     /**
      * Destructor.
