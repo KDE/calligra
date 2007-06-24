@@ -29,19 +29,11 @@ public:
     Private() : beats(0), beat(0), type(Classical) {}
 };
 
-TimeSignature::TimeSignature(int beats, int beat, TimeSignatureType type) : d(new Private)
+TimeSignature::TimeSignature(Staff* staff, int startTime, int beats, int beat, TimeSignatureType type) : StaffElement(staff, startTime), d(new Private)
 {
     setBeats(beats);
     setBeat(beat);
     d->type = type;
-}
-
-TimeSignature::TimeSignature(Staff* staff, int beats, int beat, TimeSignatureType type) : d(new Private)
-{
-    setBeats(beats);
-    setBeat(beat);
-    d->type = type;
-    setStaff(staff);
 }
 
 TimeSignature::~TimeSignature()

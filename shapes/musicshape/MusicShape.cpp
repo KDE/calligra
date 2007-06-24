@@ -70,7 +70,7 @@ MusicShape::MusicShape()
 
     b1->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
     b1->addStaffElement(new KeySignature(staff, 0, -4));
-    voice->bar(b1)->addElement(new TimeSignature(staff, 4, 4));
+    b1->addStaffElement(new TimeSignature(staff, 0, 4, 4));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 1));
     voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 2));
@@ -84,7 +84,7 @@ MusicShape::MusicShape()
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
     b1->addStaffElement(new Clef(staff2, 0, Clef::Bass, 3, 0));
     b1->addStaffElement(new KeySignature(staff2, 0, 5));
-    voice2->bar(b1)->addElement(new TimeSignature(staff2, 4, 4, TimeSignature::Number));
+    b1->addStaffElement(new TimeSignature(staff2, 0, 4, 4, TimeSignature::Number));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Eighth));

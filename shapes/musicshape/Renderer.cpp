@@ -110,8 +110,6 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, double x,
     // TODO: make this less hacky
     Chord *c = dynamic_cast<Chord*>(me);
     if (c) renderChord(painter, c, QPointF(x, y), state, xScale, color);
-    TimeSignature* ts = dynamic_cast<TimeSignature*>(me);
-    if (ts) renderTimeSignature( painter, ts, x, xScale);
 }
 
 void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, double x, double y, RenderState& state, double xScale)
@@ -128,6 +126,8 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
     if (cl) renderClef(painter, cl, x, state, xScale);
     KeySignature *ks = dynamic_cast<KeySignature*>(se);
     if (ks) renderKeySignature(painter, ks, x, state, xScale);
+    TimeSignature* ts = dynamic_cast<TimeSignature*>(se);
+    if (ts) renderTimeSignature(painter, ts, x, xScale);
 }
 
 
