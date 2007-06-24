@@ -42,7 +42,7 @@ extern "C"
      * Exported an loadable function as entry point to use
      * the \a KexiDBModule.
      */
-    QObject* krossmodule()
+    KDE_EXPORT QObject* krossmodule()
     {
         return new Scripting::KexiDBModule();
     }
