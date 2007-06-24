@@ -322,5 +322,5 @@ Number asinh (const Number &n) { return n.asinh(); }
 Number acosh (const Number &n) { return n.acosh(); }
 Number atgh (const Number &n) { return n.atgh(); }
 
-};  // nsmespace KSpread
+}  // nsmespace KSpread
 
