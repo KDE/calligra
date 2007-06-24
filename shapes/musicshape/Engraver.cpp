@@ -25,6 +25,7 @@
 #include "core/VoiceElement.h"
 #include "core/Clef.h"
 #include "core/Staff.h"
+#include "core/StaffSystem.h"
 
 #include <limits.h>
 
@@ -48,17 +49,33 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
         }
     }
 
-    QPointF p(0, 0);
+    int curSystem = 0;
+    QPointF p(0, sheet->staffSystem(curSystem)->top());
+    int lastStart = 0;
     for (int i = 0; i < sheet->barCount(); i++) {
-        if (p.x() + sheet->bar(i)->size() > size.width()) {
+        if (p.x() + sheet->bar(i)->desiredSize() > size.width()) {
+            // scale all sizes
+            double factor = size.width() / p.x();
+            QPointF sp = sheet->bar(lastStart)->position();
+            for (int j = lastStart; j < i; j++) {
+                sheet->bar(j)->setPosition(sp);
+                sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
+                sp.setX(sp.x() + sheet->bar(j)->size());
+            }
+
+            lastStart = i;
+
             p.setX(0);
-            Part* prt = sheet->part(sheet->partCount()-1);
-            p.setY(p.y() + prt->staff(prt->staffCount()-1)->top() + 50);
+            curSystem++;
+            p.setY(sheet->staffSystem(curSystem)->top());
+            sheet->staffSystem(curSystem)->setFirstBar(i);
         }
         sheet->bar(i)->setPosition(p);
+        sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
         p.setX(p.x() + sheet->bar(i)->size());
     }
 
+    sheet->setStaffSystemCount(curSystem+1);
     // now layout bars in staff systems
     // TODO
 }
@@ -153,5 +170,5 @@ void Engraver::engraveBar(Bar* bar)
         
         x = maxEnd;
     }
-    bar->setSize(x + 15);
+    bar->setDesiredSize(x + 15);
 }

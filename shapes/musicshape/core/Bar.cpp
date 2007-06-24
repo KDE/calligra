@@ -32,13 +32,14 @@ public:
     QHash<Voice*, VoiceBar*> voices;
     QPointF position;
     double size;
+    double desiredSize;
     QList<StaffElement*> staffElements;
 };
 
 Bar::Bar(Sheet* sheet) : d(new Private)
 {
     d->sheet = sheet;
-    d->size = 100;
+    setDesiredSize(100);
 }
 
 Bar::~Bar()
@@ -79,6 +80,22 @@ double Bar::size() const
 void Bar::setSize(double size)
 {
     d->size = size;
+}
+
+double Bar::desiredSize() const
+{
+    return d->desiredSize;
+}
+
+void Bar::setDesiredSize(double size)
+{
+    d->desiredSize = size;
+    setSize(size);
+}
+
+double Bar::scale() const
+{
+    return d->size / d->desiredSize;
 }
 
 int Bar::staffElementCount(Staff* staff) const

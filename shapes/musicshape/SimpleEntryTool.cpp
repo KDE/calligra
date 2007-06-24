@@ -46,6 +46,7 @@
 #include "core/Voice.h"
 #include "core/VoiceBar.h"
 #include "core/Clef.h"
+#include "core/StaffSystem.h"
 
 using namespace MusicCore;
 
@@ -170,28 +171,37 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 {
     QPointF p = m_musicshape->transformationMatrix(0).inverted().map(event->point);
     Sheet *sheet = m_musicshape->sheet();
+
+    // find closest staff system
+    StaffSystem* system = 0;
+    for (int i = 0; i < sheet->staffSystemCount(); i++) {
+        StaffSystem* ss = sheet->staffSystem(i);
+        if (ss->top() > p.y()) break;
+        system = ss;
+    }
     
     // find closest staff
     Staff* closestStaff = 0;
-    double dist = 1e9;
+    double dist = 1e99;
+    double yrel = p.y() - system->top();
     for (int prt = 0; prt < sheet->partCount(); prt++) {
         Part* part = sheet->part(prt);
         for (int st = 0; st < part->staffCount(); st++) {
             Staff* staff = part->staff(st);
             double top = staff->top();
             double bot = staff->top() + (staff->lineCount() - 1) * staff->lineSpacing();
-            if (fabs(top - p.y()) < dist) {
+            if (fabs(top - yrel) < dist) {
                 closestStaff = staff;
-                dist = fabs(top - p.y());
+                dist = fabs(top - yrel);
             }
-            if (fabs(bot - p.y()) < dist) {
+            if (fabs(bot - yrel) < dist) {
                 closestStaff = staff;
-                dist = fabs(bot - p.y());
+                dist = fabs(bot - yrel);
             }
         }
     }
 
-    int line = closestStaff->line(p.y() - closestStaff->top());
+    int line = closestStaff->line(yrel - closestStaff->top());
     kDebug() << "line: " << line << endl;
     
     Part* part = closestStaff->part();
@@ -203,7 +213,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     // find correct bar
     Bar* bar = 0;
     int barIdx = -1;
-    for (int b = 0; b < sheet->barCount(); b++) {
+    for (int b = system->firstBar(); b < sheet->barCount(); b++) {
         Bar* bb = sheet->bar(b);
         if (bb->position().x() <= p.x() && bb->position().x() + bb->size() >= p.x()) {
             bar = bb;
@@ -218,6 +228,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     
     Chord* c = new Chord(closestStaff, m_duration);
     if (clef) {
+        kDebug() << "clef: " << clef->shape() << endl;
         int pitch = clef->lineToPitch(line);
         kDebug() << "pitch: " << pitch << endl;
         c->addNote(closestStaff, pitch);

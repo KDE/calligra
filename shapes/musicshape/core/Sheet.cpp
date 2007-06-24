@@ -20,6 +20,9 @@
 #include "Part.h"
 #include "PartGroup.h"
 #include "Bar.h"
+#include "StaffSystem.h"
+#include "Staff.h"
+
 #include <QtCore/QList>
 
 namespace MusicCore {
@@ -30,6 +33,7 @@ public:
     QList<Part*> parts;
     QList<PartGroup*> partGroups;
     QList<Bar*> bars;
+    QList<StaffSystem*> staffSystems;
 };
 
 Sheet::Sheet() : d(new Private)
@@ -41,6 +45,7 @@ Sheet::~Sheet()
     Q_FOREACH(Part* p, d->parts) delete p;
     Q_FOREACH(PartGroup* ph, d->partGroups) delete ph;
     Q_FOREACH(Bar* b, d->bars) delete b;
+    Q_FOREACH(StaffSystem* ss, d->staffSystems) delete ss;
     delete d;
 }
 
@@ -189,6 +194,35 @@ void Sheet::removeBars(int index, int count, bool deleteBar)
             delete b;
         }
     }
+}
+
+StaffSystem* Sheet::staffSystem(int index)
+{
+    Q_ASSERT( index >= 0 );
+    int idx = d->staffSystems.size();
+    while (index >= d->staffSystems.size()) {
+        StaffSystem *ss = new StaffSystem(this);
+        if (idx > 0) {
+            Part* prt = part(partCount() - 1);
+            ss->setTop(d->staffSystems[idx-1]->top() + prt->staff(prt->staffCount() - 1)->bottom() + 30);
+        }
+        d->staffSystems.append(ss);
+        idx++;
+    }
+    return d->staffSystems[index];
+}
+
+void Sheet::setStaffSystemCount(int count)
+{
+    Q_ASSERT( count >= 0 );
+    while (count < d->staffSystems.size()) {
+        d->staffSystems.removeLast();
+    }
+}
+
+int Sheet::staffSystemCount()
+{
+    return d->staffSystems.size();
 }
 
 } // namespace MusicCore

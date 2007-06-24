@@ -21,6 +21,7 @@ set( musiccore_SRCS
     core/Clef.cpp
     core/KeySignature.cpp
     core/TimeSignature.cpp
+    core/StaffSystem.cpp
     
     core/MusicXmlWriter.cpp
 )

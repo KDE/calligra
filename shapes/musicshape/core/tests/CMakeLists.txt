@@ -14,6 +14,7 @@ set(SheetTest_test_SRCS
     ../VoiceBar.cpp
     ../StaffElement.cpp
     ../Clef.cpp
+    ../StaffSystem.cpp
 )
 
 kde4_automoc(${SheetTest_test_SRCS})
@@ -47,6 +48,7 @@ set(MusicXmlWriterTest_test_SRCS
     ../VoiceBar.cpp
     ../StaffElement.cpp
     ../Clef.cpp
+    ../StaffSystem.cpp
 )
 
 kde4_automoc(${MusicXmlWriterTest_test_SRCS})

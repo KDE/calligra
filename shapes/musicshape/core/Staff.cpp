@@ -76,6 +76,16 @@ double Staff::top()
     return 30;
 }
 
+double Staff::bottom()
+{
+    return top() + lineSpacing() * (lineCount() - 1);
+}
+
+double Staff::center()
+{
+    return top() + bottom() / 2;
+}
+
 int Staff::lineCount() const
 {
     return 5;

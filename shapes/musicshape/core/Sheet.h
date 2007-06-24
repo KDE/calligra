@@ -26,6 +26,7 @@ namespace MusicCore {
 class Part;
 class PartGroup;
 class Bar;
+class StaffSystem;
 
 /**
  * A sheet is the largest unit in a piece of music. A sheet consists of zero or more
@@ -223,6 +224,12 @@ public:
      * @param deleteBar should the bars also be deleted
      */
     void removeBars(int index, int count, bool deleteBar = true);
+
+    StaffSystem* staffSystem(int index);
+
+    void setStaffSystemCount(int count);
+    int staffSystemCount();
+    
 private:
     class Private;
     Private * const d;

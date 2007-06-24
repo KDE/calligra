@@ -88,6 +88,10 @@ public:
      */
     void setSize(double size);
 
+    double desiredSize() const;
+    void setDesiredSize(double size);
+    double scale() const;
+
     int staffElementCount(Staff* staff) const;
     StaffElement* staffElement(Staff* staff, int index);
     void addStaffElement(StaffElement* element);

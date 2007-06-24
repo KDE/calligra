@@ -75,6 +75,8 @@ public:
      * Returns the vertical position of this staff relative to the top of the staff system.
      */
     double top();
+    double center();
+    double bottom();
 
     /**
      * Returns the number of lines in this staff. Typical values are 5 for normal music, or 1 for a percussion part.
