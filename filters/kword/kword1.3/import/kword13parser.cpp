@@ -315,6 +315,7 @@ bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes
 
 bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
+    Q_UNUSED(name);
     const QString frameTypeStr( attributes.value( "frameType" ) );
     const QString frameInfoStr( attributes.value( "frameInfo" ) );
     
@@ -415,6 +416,7 @@ bool KWord13Parser::startElementDocumentAttributes( const QString& name, const Q
 
 bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& attributes, KWord13StackItem *stackItem )
 {
+    Q_UNUSED(name);
     const QString key( calculatePictureKey( attributes.value( "filename" ),
             attributes.value( "year" ), attributes.value( "month" ),  attributes.value( "day" ),
             attributes.value( "hour" ), attributes.value( "minute" ), attributes.value( "second" ),

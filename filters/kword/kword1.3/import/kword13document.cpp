@@ -59,7 +59,7 @@ void KWord13Document::xmldump( QIODevice* io )
         it != m_documentProperties.end();
         ++it)
     {
-        iostream << " <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.data() ) << "\"/>\n";
+        iostream << " <param key=\"" << it.key() << "\" data=\"" << EscapeXmlDump( it.value() ) << "\"/>\n";
     }
     
     iostream << " <documentinfo>\n";
@@ -67,7 +67,7 @@ void KWord13Document::xmldump( QIODevice* io )
         it11 != m_documentInfo.end();
         ++it11)
     {
-        iostream << "  <param key=\"" << it11.key() << "\" data=\"" << EscapeXmlDump( it11.data() ) << "\"/>\n";
+        iostream << "  <param key=\"" << it11.key() << "\" data=\"" << EscapeXmlDump( it11.value() ) << "\"/>\n";
     }
     iostream << " </documentinfo>\n";
     
@@ -158,7 +158,7 @@ QString KWord13Document::getDocumentInfo( const QString& name ) const
     }
     else
     {
-        return it.data();
+        return it.value();
     }
 }
 
@@ -187,7 +187,7 @@ QString KWord13Document::getPropertyInternal( const QString& name ) const
     }
     else
     {
-        return it.data();
+        return it.value();
     }
 }
 
