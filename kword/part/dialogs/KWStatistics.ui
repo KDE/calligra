@@ -28,7 +28,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -56,11 +56,7 @@
         </spacer>
        </item>
        <item row="0" column="2" >
-        <widget class="QLabel" name="pages" >
-         <property name="text" >
-          <string>TextLabel</string>
-         </property>
-        </widget>
+        <widget class="QLabel" name="pages" />
        </item>
        <item row="1" column="0" >
         <widget class="QLabel" name="label_3" >
@@ -83,11 +79,7 @@
         </spacer>
        </item>
        <item row="1" column="2" >
-        <widget class="QLabel" name="frames" >
-         <property name="text" >
-          <string>TextLabel</string>
-         </property>
-        </widget>
+        <widget class="QLabel" name="frames" />
        </item>
        <item row="2" column="0" >
         <widget class="QLabel" name="label_5" >
@@ -110,11 +102,7 @@
         </spacer>
        </item>
        <item row="2" column="2" >
-        <widget class="QLabel" name="pictures" >
-         <property name="text" >
-          <string>TextLabel</string>
-         </property>
-        </widget>
+        <widget class="QLabel" name="pictures" />
        </item>
        <item row="3" column="0" >
         <widget class="QLabel" name="label_7" >
@@ -137,11 +125,7 @@
         </spacer>
        </item>
        <item row="3" column="2" >
-        <widget class="QLabel" name="tables" >
-         <property name="text" >
-          <string>TextLabel</string>
-         </property>
-        </widget>
+        <widget class="QLabel" name="tables" />
        </item>
        <item row="4" column="0" colspan="3" >
         <spacer>
@@ -192,8 +176,8 @@
        </item>
        <item row="1" column="2" >
         <widget class="QLabel" name="words" >
-         <property name="text" >
-          <string>TextLabel</string>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -219,8 +203,8 @@
        </item>
        <item row="2" column="2" >
         <widget class="QLabel" name="sentences" >
-         <property name="text" >
-          <string>TextLabel</string>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -246,8 +230,8 @@
        </item>
        <item row="3" column="2" >
         <widget class="QLabel" name="syllables" >
-         <property name="text" >
-          <string>TextLabel</string>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -273,8 +257,8 @@
        </item>
        <item row="4" column="2" >
         <widget class="QLabel" name="lines" >
-         <property name="text" >
-          <string>TextLabel</string>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -300,8 +284,8 @@
        </item>
        <item row="5" column="2" >
         <widget class="QLabel" name="characters" >
-         <property name="text" >
-          <string>TextLabel</string>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -327,8 +311,8 @@
        </item>
        <item row="6" column="2" >
         <widget class="QLabel" name="characters2" >
-         <property name="text" >
-          <string>TextLabel</string>
+         <property name="alignment" >
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
@@ -341,9 +325,6 @@
        </item>
        <item row="7" column="1" colspan="2" >
         <widget class="QLabel" name="flesch" >
-         <property name="text" >
-          <string>TextLabel</string>
-         </property>
          <property name="alignment" >
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>

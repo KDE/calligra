@@ -95,12 +95,12 @@ void KWStatistics::updateDataUi() {
             KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentTableCount), 0 ) );
 
     // tab 2
-    widget.words->setText(KGlobal::locale()->formatNumber( m_words ));
-    widget.sentences->setText(KGlobal::locale()->formatNumber( m_sentences ));
-    widget.syllables->setText(KGlobal::locale()->formatNumber( m_syllables ));
-    widget.lines->setText(KGlobal::locale()->formatNumber( m_lines ));
-    widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace ));
-    widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithSpace ));
+    widget.words->setText(KGlobal::locale()->formatNumber( m_words, 0 ));
+    widget.sentences->setText(KGlobal::locale()->formatNumber( m_sentences, 0 ));
+    widget.syllables->setText(KGlobal::locale()->formatNumber( m_syllables, 0 ));
+    widget.lines->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
+    widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
+    widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
 
     // calculate Flesch reading ease score:
     float flesch_score = 0;
