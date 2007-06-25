@@ -70,6 +70,8 @@ bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCont
 
     updatePath( size() );
 
+    loadOdfAttributes( element, context, OdfTransformation );
+
     return true;
 }
 

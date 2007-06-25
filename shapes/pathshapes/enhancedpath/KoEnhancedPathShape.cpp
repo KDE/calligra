@@ -437,6 +437,8 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
 
     resize( size );
 
+    loadOdfAttributes( element, context, OdfTransformation );
+
     return true;
 }
 

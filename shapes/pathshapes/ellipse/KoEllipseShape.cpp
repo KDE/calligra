@@ -121,6 +121,8 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
     setStartAngle( element.attributeNS( KoXmlNS::draw, "start-angle", "0" ).toDouble() );
     setEndAngle( element.attributeNS( KoXmlNS::draw, "end-angle", "360" ).toDouble() );
 
+    loadOdfAttributes( element, context, OdfTransformation );
+
     return true;
 }
 
