@@ -111,6 +111,7 @@ private slots:
     void formatPage();
     void inlineFrame();
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
+    void showStatisticsDialog();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

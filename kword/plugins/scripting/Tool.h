@@ -108,7 +108,9 @@ namespace Scripting {
                 if( ! r ) return false;
                 QVariant variant;
                 variant.setValue( (QObject*) &textcursor->cursor() );
-                r->setResource(KWord::CurrentTextCursor, variant);
+// the above can't work;  storing a pointer to a value based object (QTextCursor).
+// I don't even think its possible to store a QTextCursor in any form in a QVarient. (TZ)
+                //r->setResource(KWord::CurrentTextCursor, variant);
                 return true;
             }
 

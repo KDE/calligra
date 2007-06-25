@@ -111,9 +111,13 @@ public:
     /// Specifies the KWord specific resources that you can put and get from the KoCanvasResourceProvider
     enum KWordCanvasResources {
         // lets try to put Current in front of everything for ease of reading.
-        CurrentTextCursor = KoCanvasResource::KWordStart + 1, ///< The text cursor with position and selection
         CurrentFrame,
-        CurrentFrameSet
+        CurrentFrameSet,
+        CurrentPage,
+        CurrentFrameSetCount,
+        CurrentPictureCount,
+        CurrentTableCount,
+        CurrentPageCount
     };
 };
 

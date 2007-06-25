@@ -3,7 +3,7 @@ project(kwordpart)
 add_subdirectory( frames/tests )
 add_subdirectory( tests )
 
-include_directories( ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} )
+include_directories( ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/ )
 
 ########### KWordPrivate library ###############
 
@@ -43,6 +43,8 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWPageLayout.cpp
     dialogs/KWStartupWidget.cpp
     dialogs/KWPageSettingsDialog.cpp
+    dialogs/KWStatistics.cpp
+    dialogs/KWStatisticsDialog.cpp
 
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
@@ -57,6 +59,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialogs/KWDocumentColumns.ui
     dialogs/KWPageLayout.ui
     dialogs/KWStartupWidget.ui
+    dialogs/KWStatistics.ui
 )
 
 kde4_automoc(${kwordprivate_LIB_SRCS})

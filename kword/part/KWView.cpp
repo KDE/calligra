@@ -30,6 +30,7 @@
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
+#include "dialogs/KWStatisticsDialog.h"
 
 // koffice libs includes
 #include <KoCopyController.h>
@@ -213,6 +214,12 @@ void KWView::setupActions() {
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
     new KoPasteController(kwcanvas(), action);
 
+    action  = new KAction(i18n("Statistics"), this);
+    actionCollection()->addAction("file_statistics", action );
+    action->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
+    action->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
+    connect(action, SIGNAL(triggered()), this, SLOT( showStatisticsDialog() ));
+
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
 This saves problems with finding out which we missed near the end.
@@ -224,10 +231,6 @@ This saves problems with finding out which we missed near the end.
     m_actionExtraCreateTemplate->setToolTip( i18n( "Save this document and use it later as a template" ) );
     m_actionExtraCreateTemplate->setWhatsThis( i18n( "You can save this document as a template.<br><br>You can use this new template as a starting point for another document." ) );
 
-    m_actionFileStatistics  = new KAction(i18n("Statistics"), this);
-    actionCollection()->addAction("file_statistics", m_actionFileStatistics );
-    m_actionFileStatistics->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
-    m_actionFileStatistics->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     // -------------- Edit actions
     m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
     m_actionEditCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( editCopy() ));
@@ -1045,6 +1048,12 @@ if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() << "spliting...
     handler->insertInlineObject(anchor);
 }
 
+void KWView::showStatisticsDialog() {
+    KWStatisticsDialog *dia = new KWStatisticsDialog(this);
+    dia->exec();
+    delete dia;
+}
+
 // end of actions
 
 void KWView::popupContextMenu(QPoint globalPosition, const QList<QAction*> &actions) {
@@ -1066,12 +1075,19 @@ void KWView::selectionChanged()
     m_actionFormatFrameSet->setEnabled( shape != 0 );
     if(shape) {
         m_currentPage = m_document->pageManager()->page(shape);
+        m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage->pageNumber());
         m_zoomController->setPageSize(m_currentPage->rect().size());
     }
     m_actionEditDelFrame->setEnabled(false);
+    bool first = true;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);
+        if(first) {
+            m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);
+            m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, frame->frameSet());
+            first = false;
+        }
         KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if(fs == 0 || fs->textFrameSetType() == KWord::OtherTextFrameSet) {
             m_actionEditDelFrame->setEnabled(true);

@@ -239,7 +239,7 @@ KoView* KWDocument::createViewInstance(QWidget* parent) {
             KoToolManager::instance()->switchToolRequested(
                     KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes()));
         }
-   }
+    }
 
     return view;
 }
@@ -296,6 +296,7 @@ void KWDocument::removeFrameSet( KWFrameSet *fs ) {
         foreach(KoView *view, views()) {
             KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
             canvas->shapeManager()->remove(frame->shape());
+            canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
         }
     }
     emit frameSetRemoved(fs);
@@ -342,6 +343,7 @@ void KWDocument::addFrame(KWFrame *frame) {
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->shapeManager()->add(frame->shape());
+        canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
     frame->shape()->repaint();
 }
