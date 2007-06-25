@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Formula Shape
 Name[de]=Formel-Form
 Name[ja]=数式シェイプ
+Name[sv]=Formelform
 Name[x-test]=xxFormula Shapexx
 ServiceTypes=KOffice/Flake
 Type=Service

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Name=Karbon Tools
 Name[de]=Karbon-Werkzeuge
 Name[ja]=Karbon ツール
+Name[sv]=Karbon-verktyg
 Name[uk]=Засоби Karbon
 Name[x-test]=xxKarbon Toolsxx
 ServiceTypes=KOffice/Tool

@@ -2,5 +2,6 @@
 Name=Blank Documents
 Name[de]=Leere Dokumente
 Name[ja]=空の文書
+Name[sv]=Tomma dokument
 X-KDE-DefaultTab=true
 X-KDE-SortingWeight=10
