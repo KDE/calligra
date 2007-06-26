@@ -25,45 +25,42 @@ class KexiImport:
         self.start()
 
     def start(self):
-        try:
-            writer = KSpread.writer()
+        writer = KSpread.writer()
 
-            connection = self.showImportDialog(writer)
-            if not connection:
+        connection = self.showImportDialog(writer)
+        if not connection:
+            return
+
+        try:
+            print "databaseNames = %s" % connection.databaseNames()
+            print "tableNames = %s" % connection.tableNames()
+            print "queryNames = %s" % connection.queryNames()
+
+            queryschema = self.showTableDialog(connection)
+            if not queryschema:
                 return
 
-            try:
-                print "databaseNames = %s" % connection.databaseNames()
-                print "tableNames = %s" % connection.tableNames()
-                print "queryNames = %s" % connection.queryNames()
+            print "queryschema.name() = %s" % queryschema.name()
+            print "queryschema.caption() = %s" % queryschema.caption()
+            print "queryschema.description() = %s" % queryschema.description()
 
-                queryschema = self.showTableDialog(connection)
-                if not queryschema:
-                    return
+            cursor = connection.executeQuerySchema(queryschema)
+            if not cursor:
+                raise "Failed to create cursor."
+            if not cursor.moveFirst():
+                raise "The cursor has no records to read from."
 
-                print "queryschema.name() = %s" % queryschema.name()
-                print "queryschema.caption() = %s" % queryschema.caption()
-                print "queryschema.description() = %s" % queryschema.description()
-
-                cursor = connection.executeQuerySchema(queryschema)
-                if not cursor:
-                    raise "Failed to create cursor."
-                if not cursor.moveFirst():
-                    raise "The cursor has no records to read from."
-
-                while not cursor.eof():
-                    record = []
-                    for i in range( cursor.fieldCount() ):
-                        record.append( cursor.value(i) )
-                    if writer.setValues(record):
-                        writer.next()
-                    else:
-                        print "Failed to set all of '%s' to cell '%s'" % (record,writer.cell())
-                    cursor.moveNext()
-            finally:
-                connection.disconnect()
-        except:
-            self.forms.showMessageBox("Error", "Error", "%s" % "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
+            while not cursor.eof():
+                record = []
+                for i in range( cursor.fieldCount() ):
+                    record.append( cursor.value(i) )
+                if writer.setValues(record):
+                    writer.next()
+                else:
+                    print "Failed to set all of '%s' to cell '%s'" % (record,writer.cell())
+                cursor.moveNext()
+        finally:
+            connection.disconnect()
 
     def createConnection(self, projectfile):
         kexidb = Kross.module("kexidb")

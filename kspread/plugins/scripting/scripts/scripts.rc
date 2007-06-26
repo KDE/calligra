@@ -3,13 +3,13 @@
     <collection name="import" text="Import" comment="Import content">
         <script
             name="pycsvimport"
-            text="CSV Import"
+            text="CSV File"
             comment="Import from a Comma-Separated-Value File"
             interpreter="python"
             file="extensions/csvimport.py" />
         <script
             name="pykexidbimport"
-            text="Kexi Import"
+            text="Kexi Database"
             comment="Import from a Kexi Project File"
             interpreter="python"
             file="extensions/kexidbimport.py" />
@@ -18,19 +18,25 @@
     <collection name="export" text="Export" comment="Export content">
         <script
             name="pycsvexport"
-            text="CSV Export"
+            text="CSV File"
             comment="Export to a Comma-Separated-Value File"
             interpreter="python"
             file="extensions/csvexport.py" />
         <script
+            name="pykexidbexport"
+            text="Kexi Database"
+            comment="Export to a Kexi Project File"
+            interpreter="python"
+            file="extensions/kexidbexport.py" />
+        <script
             name="pyhtmlexport"
-            text="HTML Export"
+            text="HTML File"
             comment="Export to a HTML File"
             interpreter="python"
             file="extensions/htmlexport.py" />
         <script
             name="odfpyexport"
-            text="OdfPy Export"
+            text="OdfPy File"
             comment="Export to an OpenDocument File"
             interpreter="python"
             file="extensions/odfpyexport.py" />
