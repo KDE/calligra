@@ -304,10 +304,10 @@ void KWTextDocumentLayout::layout() {
 
     if(! m_state->start())
         return;
-    double endPos = m_state->y() + 1000;
+    double endPos = 1E9;
     double bottomOfText = 0.0;
     bool newParagraph = true;
-    bool requestFrameResize = false;
+    bool requestFrameResize = false, firstParagraph = true;
     KoShape *currentShape = 0;
     while(m_state->shape) {
         class Line {
@@ -420,7 +420,12 @@ void KWTextDocumentLayout::layout() {
 
         Line line(m_state);
         if (!line.isValid()) { // end of parag
-            double posY = m_state->y();
+            const double posY = m_state->y();
+            if(firstParagraph) {
+                // start counting after the resumed paragraph
+                firstParagraph = false;
+                endPos = posY + m_state->shape->size().height() * 2;
+            }
             bool moreText = m_state->nextParag();
             if(m_state->shape && m_state->y() > posY)
                 m_state->shape->repaint(QRectF(0, posY,
