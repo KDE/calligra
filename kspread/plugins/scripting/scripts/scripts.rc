@@ -7,6 +7,12 @@
             comment="Import from a Comma-Separated-Value File"
             interpreter="python"
             file="extensions/csvimport.py" />
+        <script
+            name="pykexidbimport"
+            text="Kexi Import"
+            comment="Import from a Kexi Project File"
+            interpreter="python"
+            file="extensions/kexidbimport.py" />
     </collection>
 
     <collection name="export" text="Export" comment="Export content">
