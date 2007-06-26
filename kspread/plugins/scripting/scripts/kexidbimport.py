@@ -70,9 +70,13 @@ class KexiImport:
         if not kexidb:
             raise "Failed to load the KexiDB Scripting module. This script needs Kexi to run."
         connectiondata = kexidb.createConnectionDataByFile(projectfile)
+        if not connectiondata:
+            raise "Invalid Kexi Project File: %s" % projectfile
         connectiondata.setFileName(projectfile)
         connectiondata.setDatabaseName(projectfile)
         driver = kexidb.driver(connectiondata.driverName())
+        if not driver:
+            raise "No KexiDB driver for: %s" % connectiondata.driverName()
         connection = driver.createConnection(connectiondata)
         if not connection.connect():
             raise "Failed to connect: %s" % connection.lastError()
