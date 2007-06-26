@@ -69,10 +69,9 @@ class KexiImport:
         kexidb = Kross.module("kexidb")
         if not kexidb:
             raise "Failed to load the KexiDB Scripting module. This script needs Kexi to run."
-        file = "/home/kde4/New_database.kexi"
-        connectiondata = kexidb.createConnectionDataByFile(file)
-        connectiondata.setFileName(file)
-        connectiondata.setDatabaseName(file)
+        connectiondata = kexidb.createConnectionDataByFile(projectfile)
+        connectiondata.setFileName(projectfile)
+        connectiondata.setDatabaseName(projectfile)
         driver = kexidb.driver(connectiondata.driverName())
         connection = driver.createConnection(connectiondata)
         if not connection.connect():
