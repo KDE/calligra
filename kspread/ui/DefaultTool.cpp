@@ -194,7 +194,6 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
         return;
     }
 
-
     // TODO Stefan: adapt to non-cont. selection
     {
         // start drag ?
@@ -255,6 +254,20 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
     switch (event->button())
     {
         case Qt::LeftButton:
+            // Check, wether a filter button was hit.
+            {
+                QPointF p1(xpos, ypos);
+                p1 -= QPointF( d->canvas->xOffset(), d->canvas->yOffset() );
+                QSizeF s1(cell.width(), cell.height());
+                QRect cellRect = d->canvas->viewConverter()->documentToView(QRectF(p1, s1)).toRect();
+                if (d->canvas->view()->sheetView(sheet)->cellView(col, row).hitTestFilterButton(cellRect, event->pos()))
+                {
+                    kDebug() << "Filter button hit!" << endl;
+                    DatabaseRange database = cell.databaseRange();
+                    database.showPopup(d->canvas, cell, cellRect);
+                    break;
+                }
+            }
             if (!d->anchor.isEmpty())
             {
                 // Hyperlink pressed

@@ -86,6 +86,7 @@ public:
         , obscured( false )
         , fittingHeight( true )
         , fittingWidth( true )
+        , filterButton( false )
         , obscuredCellsX( 0 )
         , obscuredCellsY( 0 )
         , layoutDirection( Qt::LeftToRight ) {}
@@ -109,6 +110,7 @@ public:
     bool obscured       : 1;
     bool fittingHeight  : 1;
     bool fittingWidth   : 1;
+    bool filterButton   : 1;
     // NOTE Stefan: A cell is either obscured by an other one or obscures others itself.
     //              But never both at the same time, so we can share the memory for this.
     union
@@ -127,6 +129,9 @@ public:
     // as the user input, e.g. Cell::userInput()="1" and displayText="1.00".
     // Also holds the value, that we got from calculation.
     QString displayText;
+
+public:
+    void checkForFilterButton(const Cell&);
 };
 
 
@@ -170,6 +175,8 @@ CellView::CellView( SheetView* sheetView, int col, int row )
         d->width = cell.width();
     if ( cell.height() != sheetView->sheet()->rowFormat( 0 )->height() )
         d->height = cell.height();
+
+    d->checkForFilterButton(cell);
 
     // do not touch the other Private members, just return here.
     if ( cell.isDefault() ) return;
@@ -233,6 +240,22 @@ QString CellView::testAnchor( const Cell& cell, double x, double y ) const
   return QString();
 }
 
+bool CellView::hitTestFilterButton(const QRect& cellRect, const QPoint& position) const
+{
+    if (!d->filterButton)
+        return false;
+
+    QStyleOptionComboBox options;
+    options.direction = d->layoutDirection;
+    options.editable = true;
+//     options.fontMetrics = painter.fontMetrics();
+    options.frame = false;
+    options.rect = cellRect;
+//     options.subControls = QStyle::SC_ComboBoxEditField | QStyle::SC_ComboBoxArrow;
+
+    return QApplication::style()->hitTestComplexControl(QStyle::CC_ComboBox, &options, position) == QStyle::SC_ComboBoxArrow;
+}
+
 // ================================================================
 //                            Painting
 
@@ -271,8 +294,8 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 
 #if 1 // KSPREAD_FILTER_FEATURE
     // 0. Paint possible filter button
-    if ( !dynamic_cast<QPrinter*>( painter.device() ) )
-        paintFilterButton( painter, cellRect, cell, sheetView );
+    if (d->filterButton && !dynamic_cast<QPrinter*>(painter.device()))
+        paintFilterButton(painter, cellRect, cell, sheetView);
 #endif // KSPREAD_FILTER_FEATURE
 
     // 1. Paint possible comment indicator.
@@ -1617,20 +1640,7 @@ void CellView::paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect
 void CellView::paintFilterButton( QPainter& painter, const QRectF& cellRect,
                                   const Cell& cell, SheetView* sheetView )
 {
-    const DatabaseRange databaseRange = cell.databaseRange();
-    if ( databaseRange.isEmpty() )
-        return;
-    if ( databaseRange.horizontallyOriented() )
-    {
-        if ( databaseRange.range().firstRange().left() != cell.column() )
-            return;
-    }
-    else // if ( databaseRange.verticallyOriented() )
-    {
-        if ( databaseRange.range().firstRange().top() != cell.row() )
-            return;
-    }
-
+    Q_UNUSED(cell);
     QStyleOptionComboBox options;
     options.direction = d->layoutDirection;
     options.editable = true;
@@ -2414,4 +2424,19 @@ double CellView::cellWidth() const
 bool CellView::dimensionFits() const
 {
     return d->fittingHeight && d->fittingWidth;
+}
+
+
+void CellView::Private::checkForFilterButton(const Cell& cell)
+{
+    const DatabaseRange databaseRange = cell.databaseRange();
+    if (databaseRange.isEmpty() || !databaseRange.displayFilterButtons())
+    {
+        filterButton = false;
+        return;
+    }
+    if (databaseRange.orientation() == Qt::Horizontal)
+        filterButton = databaseRange.range().firstRange().left() == cell.column();
+    else // Qt::Vertical
+        filterButton = databaseRange.range().firstRange().top() == cell.row();
 }

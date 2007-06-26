@@ -22,6 +22,7 @@
 #include <QString>
 
 #include "DatabaseSource.h"
+#include "FilterPopup.h"
 #include "Region.h"
 
 using namespace KSpread;
@@ -38,11 +39,12 @@ public:
         , sort( 0 )
         , filter( 0 )
         , subtotalRules( 0 )
+        , popup( 0 )
         , isSelection( false )
         , onUpdateKeepStyles( false )
         , onUpdateKeepSize( true )
         , hasPersistentData( true )
-        , orientation( Row )
+        , orientation( Qt::Vertical )
         , containsHeader( true )
         , displayFilterButtons( false )
         , refreshDelay( 0 )
@@ -53,12 +55,13 @@ public:
     Sort* sort;
     Filter* filter;
     SubtotalRules* subtotalRules;
+    QWidget* popup;
     QString name;
     bool isSelection                    : 1;
     bool onUpdateKeepStyles             : 1;
     bool onUpdateKeepSize               : 1;
     bool hasPersistentData              : 1;
-    enum { Row, Column } orientation    : 1;
+    Qt::Orientation orientation         : 1;
     bool containsHeader                 : 1;
     bool displayFilterButtons           : 1;
     Region targetRangeAddress;
@@ -90,17 +93,22 @@ bool DatabaseRange::isEmpty() const
     return !d;
 }
 
-bool DatabaseRange::horizontallyOriented() const
+Qt::Orientation DatabaseRange::orientation() const
 {
-    return ( d->orientation == Private::Column );
+    return d->orientation;
 }
 
-bool DatabaseRange::verticallyOriented() const
+bool DatabaseRange::displayFilterButtons() const
 {
-    return ( d->orientation == Private::Row );
+    return d->displayFilterButtons;
 }
 
-const Region& DatabaseRange::range() const
+void DatabaseRange::setDisplayFilterButtons( bool enable )
+{
+    d->displayFilterButtons = enable;
+}
+
+const KSpread::Region& DatabaseRange::range() const
 {
     return d->targetRangeAddress;
 }
@@ -109,6 +117,16 @@ void DatabaseRange::setRange( const Region& region )
 {
     Q_ASSERT( region.isContiguous() );
     d->targetRangeAddress = region;
+}
+
+void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
+{
+    if (!d->popup)
+        d->popup = new FilterPopup(parent, *this);
+    const QPoint position((orientation() == Qt::Horizontal) ? cellRect.topRight() : cellRect.bottomLeft());
+    d->popup->move(parent->mapToGlobal(position));
+    d->popup->resize(100, 20);
+    d->popup->show();
 }
 
 void DatabaseRange::operator=( const DatabaseRange& other )

@@ -21,9 +21,14 @@
 #define KSPREAD_DATABASE_RANGE
 
 #include <QSharedDataPointer>
+#include <Qt>
+
+class QRect;
+class QWidget;
 
 namespace KSpread
 {
+class Cell;
 class Region;
 
 class DatabaseRange
@@ -56,8 +61,10 @@ public:
      */
     bool isEmpty() const;
 
-    bool horizontallyOriented() const;
-    bool verticallyOriented() const;
+    /**
+     * \return the database range's orientation
+     */
+    Qt::Orientation orientation() const;
 
     /**
      * \return \c true if filter buttons should be displayed
@@ -79,6 +86,11 @@ public:
      * \p region has to be contiguous.
      */
     void setRange( const Region& region );
+
+    /**
+     * Shows the associated popup menu.
+     */
+    void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect);
 
     void operator=( const DatabaseRange& other );
     bool operator==( const DatabaseRange& other ) const;

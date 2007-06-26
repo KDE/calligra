@@ -17,32 +17,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
-#include "DefaultToolFactory.h"
+#ifndef KSPREAD_FILTER_POPUP
+#define KSPREAD_FILTER_POPUP
 
-#include <klocale.h>
+#include <QWidget>
 
-#include "DefaultTool.h"
-
-using namespace KSpread;
-
-DefaultToolFactory::DefaultToolFactory( QObject* parent )
-    : KoToolFactory( parent, KSPREAD_DEFAULT_TOOL_ID, i18n( "Cell Tool" ) )
+namespace KSpread
 {
-    setToolTip( i18n( "Cell Tool" ) );
-    setIcon( "kspread" );
-    setToolType( mainToolType() );
-    setPriority( 0 );
-    setActivationShapeId( "flake/always" );
-}
+class DatabaseRange;
 
-DefaultToolFactory::~DefaultToolFactory()
+class FilterPopup : public QWidget
 {
-}
+public:
+    /**
+     * Constructor.
+     */
+    FilterPopup(QWidget* parent, const DatabaseRange& database);
 
-KoTool* DefaultToolFactory::createTool( KoCanvasBase* canvas )
-{
-    return new DefaultTool( canvas );
-}
+    /**
+     * Destructor.
+     */
+    virtual ~FilterPopup();
 
-#include "DefaultToolFactory.moc"
+private:
+    class Private;
+    Private * const d;
+};
+
+} // namespace KSpread
+
+#endif // KSPREAD_FILTER_POPUP

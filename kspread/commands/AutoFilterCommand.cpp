@@ -22,6 +22,8 @@
 #include <klocale.h>
 
 #include "CellStorage.h"
+#include "Damages.h"
+#include "Doc.h"
 #include "Sheet.h"
 
 #include "database/DatabaseRange.h"
@@ -40,10 +42,14 @@ AutoFilterCommand::~AutoFilterCommand()
 
 void AutoFilterCommand::redo()
 {
-    m_sheet->cellStorage()->setDatabaseRange( *this, DatabaseRange( "" ) );
+    DatabaseRange database(""); // default, unnamed auto-filter
+    database.setDisplayFilterButtons(true);
+    m_sheet->cellStorage()->setDatabaseRange(*this, database);
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void AutoFilterCommand::undo()
 {
     m_sheet->cellStorage()->setDatabaseRange( *this, DatabaseRange() );
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }

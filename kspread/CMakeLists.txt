@@ -58,12 +58,13 @@ SET (commands_DIR_SRCS
 	)
 
 SET (database_DIR_SRCS
-	database/Filter.cpp
 	database/DatabaseRange.cpp
 	database/DatabaseSource.cpp
 	database/DatabaseSourceQuery.cpp
 	database/DatabaseSourceSql.cpp
 	database/DatabaseSourceTable.cpp
+	database/Filter.cpp
+	database/FilterPopup.cpp
 	)
 
 SET (dialogs_DIR_SRCS

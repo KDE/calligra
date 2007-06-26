@@ -17,32 +17,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-// Local
-#include "DefaultToolFactory.h"
+#include "FilterPopup.h"
 
-#include <klocale.h>
-
-#include "DefaultTool.h"
+#include "DatabaseRange.h"
 
 using namespace KSpread;
 
-DefaultToolFactory::DefaultToolFactory( QObject* parent )
-    : KoToolFactory( parent, KSPREAD_DEFAULT_TOOL_ID, i18n( "Cell Tool" ) )
+class FilterPopup::Private
 {
-    setToolTip( i18n( "Cell Tool" ) );
-    setIcon( "kspread" );
-    setToolType( mainToolType() );
-    setPriority( 0 );
-    setActivationShapeId( "flake/always" );
+public:
+};
+
+FilterPopup::FilterPopup(QWidget* parent, const DatabaseRange& database)
+    : QWidget(parent)
+    , d(new Private)
+{
+    setBackgroundRole(QPalette::Base);
+    setWindowFlags(Qt::Popup);
+
+/*    const Sheet* sheet = database.range()->sheet();
+    // FIXME Stefan: Horizontal/vertical filtering
+    for (int row = database.range().top(); row <= database.range().bottom(); ++row)
+    {
+    }*/
 }
 
-DefaultToolFactory::~DefaultToolFactory()
+FilterPopup::~FilterPopup()
 {
+    delete d;
 }
-
-KoTool* DefaultToolFactory::createTool( KoCanvasBase* canvas )
-{
-    return new DefaultTool( canvas );
-}
-
-#include "DefaultToolFactory.moc"

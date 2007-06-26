@@ -153,6 +153,8 @@ public:
 
   QString testAnchor( const Cell& cell, double x, double y ) const;
 
+    bool hitTestFilterButton(const QRect& cellRect, const QPoint& position) const;
+
     /**
      * \return the size of the obscured cell range
      * \note Used by SheetView to destroy the obscured CellViews.
