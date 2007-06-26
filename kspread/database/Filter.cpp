@@ -17,10 +17,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "Filter.h"
+
 #include <QList>
 #include <QString>
-
-#include "Filter.h"
 
 using namespace KSpread;
 
