@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="33">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="34">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -157,9 +157,9 @@
   <Separator/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="showStatusBar" />
-  <Action name="showTabBar" />
-  <Action name="showFormulaBar"/>
+     <Action name="showStatusBar" group="settings_show" />
+  <Action name="showTabBar" group="settings_show" />
+  <Action name="showFormulaBar" group="settings_show" />
   <Separator group="settings_show"/>
   <Action name="preference" group="settings_configure"/>
  </Menu>
