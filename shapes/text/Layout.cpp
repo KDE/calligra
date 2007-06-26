@@ -149,6 +149,7 @@ bool Layout::addLine(QTextLine &line) {
         }
         if(m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition( m_data->position() );
+        m_data->wipe();
         nextShape();
         if(m_data)
             m_data->setPosition(m_block.position() + ignoreLine?0:line.textStart());
@@ -199,6 +200,7 @@ bool Layout::nextParag() {
             if(m_format.pageBreakPolicy() == QTextFormat::PageBreak_AlwaysAfter ||
                     m_format.boolProperty(KoParagraphStyle::BreakAfter)) {
                 m_data->setEndPosition(m_block.position()-1);
+                m_data->wipe();
                 nextShape();
                 if(m_data)
                     m_data->setPosition(m_block.position());
@@ -408,8 +410,11 @@ void Layout::resetPrivate() {
             // this shape needs to be recalculated.
             data->setPosition(lastPos+1);
             m_block = m_parent->document()->findBlock( lastPos+1 );
-            m_y = data->documentOffset();
             m_format = m_block.blockFormat();
+            if(data->documentOffset() > 0)
+                m_y = data->documentOffset();
+            else
+                data->setDocumentOffset(m_y);
 
             if(shapeNumber == 0) {
                 // no matter what the previous data says, just start from zero.
@@ -447,6 +452,7 @@ void Layout::resetPrivate() {
             }
             break;
         }
+        m_y = data->documentOffset() + shape->size().height() + 10;
         lastPos = data->endPosition();
         shapeNumber++;
     }
