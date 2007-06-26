@@ -149,7 +149,7 @@ void Solver::optimize()
   gsl_vector* x = gsl_vector_alloc( dimension );
   foreach (Cell cell, parameters->cells)
   {
-    gsl_vector_set( x, index++, cell.value().asFloat() );
+    gsl_vector_set( x, index++, numToDouble(cell.value().asFloat()) );
   }
 
   /* Initialize method and iterate */
@@ -218,7 +218,7 @@ double function(const gsl_vector* vector, void *params)
   }
 
   // TODO check for errors/correct type
-  return s_formula->eval().asFloat();
+  return numToDouble(s_formula->eval().asFloat());
 }
 
 #include "Solver.moc"

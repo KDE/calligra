@@ -40,8 +40,8 @@ static Value RoundNumber(const Value& v)
 {
   if ( v.isComplex() )
   {
-      const double imag = v.asComplex().imag();
-      QString complex = QString::number( v.asComplex().real(), 'g', 10);
+      const double imag = numToDouble(v.asComplex().imag());
+      QString complex = QString::number( numToDouble(v.asComplex().real()), 'g', 10);
       if ( imag >= 0.0 )
           complex += '+';
       complex += QString::number( imag, 'g', 10);
@@ -49,7 +49,7 @@ static Value RoundNumber(const Value& v)
       return Value( complex );
   }
   else if ( v.isNumber() )
-    return Value( QString::number(v.asFloat(), 'g', 10) );
+    return Value( QString::number(numToDouble(v.asFloat()), 'g', 10) );
   else
     return v;
 }

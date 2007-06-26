@@ -128,7 +128,7 @@ class KSPREAD_EXPORT Number {
 
 // conversion to double ... when we add the option to #define the Number class as double, this routine should be kept in place, and it should simply return its parameter
 // usage of this function should eventually be removed, because places that use it are not ready for high precision support
-double numToDouble (Number n);
+KSPREAD_EXPORT double numToDouble (Number n);
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that

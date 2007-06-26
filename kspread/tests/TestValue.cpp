@@ -86,7 +86,7 @@ void TestValue::testFloat()
   // floating-point value
   v1 = new Value( M_PI );
   QCOMPARE( v1->type(), Value::Float );
-  QCOMPARE( v1->asFloat(), M_PI );
+  QCOMPARE( numToDouble(v1->asFloat()), M_PI );
   *v1 = Value( false ); // dummy
   *v1 = Value( 14.03 );
   QCOMPARE( v1->type(), Value::Float );
@@ -94,7 +94,7 @@ void TestValue::testFloat()
   QCOMPARE( v1->isFloat(), true );
   QCOMPARE( v1->isString(), false );
   QCOMPARE( v1->isNumber(), true );
-  QCOMPARE( v1->asFloat(), 14.03 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.03 );
   delete v1;
 }
 
@@ -146,7 +146,7 @@ void TestValue::testDate()
     if( !dv1.isValid() ) continue;
     double serialNo = -dv1.daysTo( refDate ) + 1.0;
     *v1 = Value( Value( dv1, &doc ) );
-    QCOMPARE(v1->asFloat(),serialNo);
+    QCOMPARE(numToDouble(v1->asFloat()),serialNo);
     date_error = v1->asFloat() != serialNo;
   }
   delete v1;
@@ -241,7 +241,7 @@ void TestValue::testArray()
   delete v2;
   v2 = new Value( v1->element( 0, 0 ) );
   QCOMPARE( v2->type(), Value::Float );
-  QCOMPARE( v2->asFloat(), 14.3 );
+  QCOMPARE( numToDouble(v2->asFloat()), 14.3 );
   delete v2;
   delete v1;
 
@@ -278,7 +278,7 @@ void TestValue::testArray()
   delete v1;
   v1 = new Value( v2->element( 0, 0 ) );
   QCOMPARE( v1->type(), Value::Float );
-  QCOMPARE( v1->asFloat(), 14.3 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.3 );
   delete v1;
   delete v2;
 
@@ -306,8 +306,8 @@ void TestValue::testCopy()
   v2 = new Value( *v1 );
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v2->type(), Value::Float );
-  QCOMPARE( v1->asFloat(), 14.3 );
-  QCOMPARE( v2->asFloat(), 14.3 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.3 );
+  QCOMPARE( numToDouble(v2->asFloat()), 14.3 );
   delete v1;
   delete v2;
 }
@@ -323,8 +323,8 @@ void TestValue::testAssignment()
   *v2 = *v1;
   QCOMPARE( v1->type(), Value::Float );
   QCOMPARE( v2->type(), Value::Float );
-  QCOMPARE( v1->asFloat(), 14.3 );
-  QCOMPARE( v2->asFloat(), 14.3 );
+  QCOMPARE( numToDouble(v1->asFloat()), 14.3 );
+  QCOMPARE( numToDouble(v2->asFloat()), 14.3 );
   delete v1;
   delete v2;
 

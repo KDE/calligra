@@ -38,7 +38,7 @@ static Value RoundNumber(double f)
 static Value RoundNumber(const Value& v)
 {
   if(v.isNumber())
-    return Value( QString::number(v.asFloat(), 'g', 10) );
+    return Value( QString::number(numToDouble(v.asFloat()), 'g', 10) );
   else
     return v;
 }

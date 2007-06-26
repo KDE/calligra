@@ -39,7 +39,7 @@ static Value RoundNumber(const Value& v)
 {
   if(v.isNumber())
   {
-    double d = v.asFloat();
+    double d = numToDouble(v.asFloat());
     if(fabs(d) < DBL_EPSILON)
       d = 0.0;
     return Value( QString::number(d, 'g', 10) );

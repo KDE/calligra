@@ -46,7 +46,7 @@ static Value RoundNumber(double f)
 static Value RoundNumber(const Value& v)
 {
   if(v.isNumber())
-    return Value( QString::number(v.asFloat(), 'g', 15) );
+    return Value( QString::number(numToDouble(v.asFloat()), 'g', 15) );
   else
     return v;  
 }
@@ -76,7 +76,7 @@ namespace QTest
     QString message;
     QTextStream ts( &message, QIODevice::WriteOnly );
     if( value.isFloat() )
-      ts << QString::number(value.asFloat(), 'g', 20);
+      ts << QString::number(numToDouble(value.asFloat()), 'g', 20);
     else
       ts << value;
     return qstrdup(message.toLatin1());
