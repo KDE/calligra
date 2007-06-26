@@ -20,13 +20,13 @@
 #ifndef KSPREAD_FILTER_POPUP
 #define KSPREAD_FILTER_POPUP
 
-#include <QWidget>
+#include <QFrame>
 
 namespace KSpread
 {
 class DatabaseRange;
 
-class FilterPopup : public QWidget
+class FilterPopup : public QFrame
 {
 public:
     /**
