@@ -24,51 +24,98 @@
 
 using namespace KSpread;
 
-class Filter::And
+class AbstractCondition
 {
 public:
-    And( Condition*, Condition* )
-    {
-    }
-
-    And( Or*, Or* )
-    {
-    }
-
-    union OrOrCondition
-    {
-        Or* operation;
-        Condition* condition;
-    };
-    QList<OrOrCondition> list;
+    virtual ~AbstractCondition() {}
+    virtual void loadOdf() = 0;
+    virtual void saveOdf() = 0;
+    virtual bool evaluate() const = 0;
 };
 
-class Filter::Or
+/**
+ * OpenDocument, 8.7.2 Filter And
+ */
+class Filter::And : public AbstractCondition
 {
 public:
-    Or( Condition*, Condition* )
+    virtual void loadOdf() {}
+    virtual void saveOdf() {}
+    virtual bool evaluate() const
     {
+        for (int i = 0; i < list.count(); ++i)
+        {
+            // lazy evaluation, stop on first false
+            if (!list[i]->evaluate())
+                return false;
+        }
+        return true;
     }
 
-    Or( And*, And* )
-    {
-    }
-
-    union AndOrCondition
-    {
-        And* operation;
-        Condition* condition;
-    };
-    QList<AndOrCondition> list;
+public:
+    QList<AbstractCondition*> list; // allowed: Or or Condition
 };
 
-class Filter::Condition
+/**
+ * OpenDocument, 8.7.3 Filter Or
+ */
+class Filter::Or : public AbstractCondition
 {
+public:
+    virtual void loadOdf() {}
+    virtual void saveOdf() {}
+    virtual bool evaluate() const
+    {
+        for (int i = 0; i < list.count(); ++i)
+        {
+            // lazy evaluation, stop on first true
+            if (list[i]->evaluate())
+                return true;
+        }
+        return false;
+    }
+
+public:
+    QList<AbstractCondition*> list; // allowed: And or Condition
+};
+
+/**
+ * OpenDocument, 8.7.4 Filter Condition
+ */
+class Filter::Condition : public AbstractCondition
+{
+public:
+    Condition()
+        : fieldNumber(0)
+        , operation(Match)
+        , caseSensitive(Qt::CaseInsensitive)
+        , dataType(Text)
+    {
+    }
+
+    virtual void loadOdf() {}
+    virtual void saveOdf() {}
+    virtual bool evaluate(const QString& testString) const
+    {
+        switch (operation)
+        {
+            case Match:
+            {
+                if (QString::compare(value, testString, caseSensitive) == 0)
+                    return true;
+                break;
+            }
+            default:
+                break;
+        }
+        return false;
+    }
+
 public:
     uint fieldNumber;
     QString value; // Value?
     enum { Match, NotMatch, Equal, NotEqual, Less, Greater, LessOrEqual, GreaterOrEqual } operation;
-    bool caseSensitive;
+    Qt::CaseSensitivity caseSensitive;
     enum { Text, Number } dataType;
 };
 
@@ -77,15 +124,12 @@ class Filter::Private
 public:
     Private()
         : condition( 0 )
+        , conditionSource(Self)
+        , displayDuplicates(true)
     {
     }
 
-    union
-    {
-        And* andOperation;
-        Or* orOperation;
-        Condition* condition;
-    };
+    AbstractCondition* condition;
     QString targetRangeAddress; // Region?
     enum { Self, CellRange } conditionSource;
     QString conditionSourceRangeAddress; // Region?

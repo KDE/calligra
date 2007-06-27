@@ -23,6 +23,9 @@
 namespace KSpread
 {
 
+/**
+ * OpenDocument, 8.7.1 Table Filter
+ */
 class Filter
 {
 public:

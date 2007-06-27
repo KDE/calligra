@@ -39,12 +39,11 @@ public:
         , sort( 0 )
         , filter( 0 )
         , subtotalRules( 0 )
-        , popup( 0 )
         , isSelection( false )
         , onUpdateKeepStyles( false )
         , onUpdateKeepSize( true )
         , hasPersistentData( true )
-        , orientation( Qt::Vertical )
+        , orientation( Row )
         , containsHeader( true )
         , displayFilterButtons( false )
         , refreshDelay( 0 )
@@ -55,13 +54,12 @@ public:
     Sort* sort;
     Filter* filter;
     SubtotalRules* subtotalRules;
-    QWidget* popup;
     QString name;
     bool isSelection                    : 1;
     bool onUpdateKeepStyles             : 1;
     bool onUpdateKeepSize               : 1;
     bool hasPersistentData              : 1;
-    Qt::Orientation orientation         : 1;
+    enum { Row, Column } orientation    : 1;
     bool containsHeader                 : 1;
     bool displayFilterButtons           : 1;
     Region targetRangeAddress;
@@ -95,7 +93,7 @@ bool DatabaseRange::isEmpty() const
 
 Qt::Orientation DatabaseRange::orientation() const
 {
-    return d->orientation;
+    return d->orientation == Private::Row ? Qt::Vertical : Qt::Horizontal;
 }
 
 bool DatabaseRange::displayFilterButtons() const
@@ -121,12 +119,11 @@ void DatabaseRange::setRange( const Region& region )
 
 void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
 {
-    if (!d->popup)
-        d->popup = new FilterPopup(parent, *this);
+    QWidget* popup = new FilterPopup(parent, cell, *this);
     const QPoint position((orientation() == Qt::Horizontal) ? cellRect.topRight() : cellRect.bottomLeft());
-    d->popup->move(parent->mapToGlobal(position));
-    d->popup->resize(100, 20);
-    d->popup->show();
+    popup->move(parent->mapToGlobal(position));
+    popup->resize(100, 20);
+    popup->show();
 }
 
 void DatabaseRange::operator=( const DatabaseRange& other )

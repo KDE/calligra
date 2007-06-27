@@ -22,22 +22,29 @@
 
 #include <QFrame>
 
+class QAbstractButton;
+
 namespace KSpread
 {
+class Cell;
 class DatabaseRange;
 
 class FilterPopup : public QFrame
 {
+    Q_OBJECT
 public:
     /**
      * Constructor.
      */
-    FilterPopup(QWidget* parent, const DatabaseRange& database);
+    FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange& database);
 
     /**
      * Destructor.
      */
     virtual ~FilterPopup();
+
+private Q_SLOTS:
+    void buttonClicked(QAbstractButton* button);
 
 private:
     class Private;

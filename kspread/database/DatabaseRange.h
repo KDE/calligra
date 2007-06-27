@@ -26,6 +26,9 @@
 class QRect;
 class QWidget;
 
+/**
+ * OpenDocument, 8.6.1 Database Range
+ */
 namespace KSpread
 {
 class Cell;

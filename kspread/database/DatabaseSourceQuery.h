@@ -25,6 +25,9 @@
 namespace KSpread
 {
 
+/**
+ * OpenDocument, 8.6.4 Database Source Query
+ */
 class DatabaseSourceQuery : public DatabaseSource
 {
 public:

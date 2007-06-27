@@ -25,6 +25,9 @@
 namespace KSpread
 {
 
+/**
+ * OpenDocument, 8.6.2 Database Source SQL
+ */
 class DatabaseSourceSql : public DatabaseSource
 {
 public:
