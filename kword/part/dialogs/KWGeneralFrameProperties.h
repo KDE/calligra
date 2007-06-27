@@ -47,6 +47,9 @@ public:
     /// reimplemented
     KAction *createAction();
 
+private slots:
+    void newPageGroupUpdated(int which);
+
 private:
     Ui::KWGeneralFrameProperties widget;
     FrameConfigSharedState *m_state;

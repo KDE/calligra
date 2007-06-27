@@ -29,19 +29,15 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
     m_state->addUser();
     widget.setupUi(this);
     m_textGroup = new QButtonGroup(widget.textGroupBox);
-    m_textGroup->addButton(widget.createNewPage);
-    m_textGroup->setId(widget.createNewPage, KWord::AutoCreateNewFrameBehavior);
-    m_textGroup->addButton(widget.resizeLastFrame);
-    m_textGroup->setId(widget.resizeLastFrame, KWord::AutoExtendFrameBehavior);
-    m_textGroup->addButton(widget.noExtraText);
-    m_textGroup->setId(widget.noExtraText, KWord::IgnoreContentFrameBehavior);
+    m_textGroup->addButton(widget.createNewPage, KWord::AutoCreateNewFrameBehavior);
+    m_textGroup->addButton(widget.resizeLastFrame, KWord::AutoExtendFrameBehavior);
+    m_textGroup->addButton(widget.noExtraText, KWord::IgnoreContentFrameBehavior);
     m_newPageGroup = new QButtonGroup(widget.newPageGroupBox);
-    m_newPageGroup->addButton(widget.noFollowup);
-    m_newPageGroup->setId(widget.noFollowup, KWord::NoFollowupFrame);
-    m_newPageGroup->addButton(widget.reconnect);
-    m_newPageGroup->setId(widget.reconnect, KWord::ReconnectNewFrame);
-    m_newPageGroup->addButton(widget.placeCopy);
-    m_newPageGroup->setId(widget.placeCopy, KWord::CopyNewFrame);
+    m_newPageGroup->addButton(widget.noFollowup, KWord::NoFollowupFrame);
+    m_newPageGroup->addButton(widget.reconnect, KWord::ReconnectNewFrame);
+    m_newPageGroup->addButton(widget.placeCopy, KWord::CopyNewFrame);
+
+    connect(m_newPageGroup, SIGNAL(buttonClicked(int)), this, SLOT(newPageGroupUpdated(int)));
 }
 
 KWGeneralFrameProperties::~KWGeneralFrameProperties() {
@@ -167,6 +163,10 @@ void KWGeneralFrameProperties::save() {
 
 KAction *KWGeneralFrameProperties::createAction() {
     return 0;
+}
+
+void KWGeneralFrameProperties::newPageGroupUpdated(int which) {
+    widget.createNewPage->setEnabled(which == KWord::ReconnectNewFrame);
 }
 
 #include "KWGeneralFrameProperties.moc"
