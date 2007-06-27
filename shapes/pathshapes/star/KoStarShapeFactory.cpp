@@ -39,7 +39,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     t.id = KoPathShapeId;
     t.name = i18n("Star");
     t.toolTip = i18n("A star");
-    t.icon = "star-koffice";
+    t.icon = "star-shape";
     KoProperties *props = new KoProperties();
     props->setProperty( "corners", 5 );
     QVariant v;
@@ -51,7 +51,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     t.id = KoPathShapeId;
     t.name = i18n("Flower");
     t.toolTip = i18n("A flower");
-    t.icon = "flower-koffice";
+    t.icon = "flower-shape";
     props = new KoProperties();
     props->setProperty( "corners", 5 );
     props->setProperty( "baseRadius", 10.0 );
@@ -66,7 +66,7 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     t.id = KoPathShapeId;
     t.name = i18n("Polygon");
     t.toolTip = i18n("A polygon");
-    t.icon = "polygon-koffice";
+    t.icon = "polygon-shape";
     props = new KoProperties();
     props->setProperty( "corners", 5 );
     props->setProperty( "convex", true );
