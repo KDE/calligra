@@ -239,7 +239,7 @@ QString ValueFormatter::createNumberFormat ( Number value, int precision,
     double m[] = { 1, 10, 100, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9, 1e10 };
     double mm = (p > 10) ? ::pow(10.0,p) : m[p];
     bool neg = value < 0;
-    value = floor( numToDouble (fabs(value)*mm + 0.5) ) / mm;
+    value = floor( numToDouble (fabs(value))*mm + 0.5 ) / mm;
     if( neg ) value = -value;
   }
 
