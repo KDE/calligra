@@ -46,7 +46,8 @@ MusicShapeFactory::MusicShapeFactory( QObject* parent )
     : KoShapeFactory( parent, MusicShapeId, i18n( "Music Shape" ) )
 {
     setToolTip( i18n( "A shape which provides a music editor" ) );
-    setIcon( "musicflake" );
+    ///@todo setIcon( "musicflake" );
+    setIcon( "knotify" );
 
 }
 

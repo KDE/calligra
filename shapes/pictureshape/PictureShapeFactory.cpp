@@ -27,7 +27,8 @@ PictureShapeFactory::PictureShapeFactory( QObject* parent)
     : KoShapeFactory( parent, PICTURESHAPEID, i18n( "Picture Shape" ) )
 {
     setToolTip( i18n( "A shape which displays a picture" ) );
-    setIcon( "pictureshape" );
+    ///@todo setIcon( "pictureshape" );
+    setIcon( "image" );
 }
 
 KoShape* PictureShapeFactory::createDefaultShape() const
