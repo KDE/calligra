@@ -96,7 +96,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     m_zoomController->zoomAction()->setZoomModes(modes);
     connect(m_canvas, SIGNAL(documentSize(const QSizeF &)), m_zoomController, SLOT(setDocumentSize(const QSizeF&)));
     m_canvas->updateSize(); // to emit the doc size at least once
-    m_zoomController->setZoom(m_document->zoomMode(), m_document->zoom() / 100.);
+    m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)), this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
 }
 
@@ -195,13 +195,13 @@ void KWView::setupActions() {
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
-    // how do I port setWhatsThis ?
-    //action->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
+    action->setChecked(m_document->config().viewFrameBorders());
+    action->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
     action = new QAction(i18n("Page Layout..."), this);
     actionCollection()->addAction("format_page", action );
     action->setToolTip( i18n( "Change properties of entire page" ) );
-    //action->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
+    action->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
     connect(action, SIGNAL(triggered()), this, SLOT( formatPage() ));
 
     action = new QAction(i18n("Make inline"), this);
@@ -990,6 +990,7 @@ void KWView::adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType d
 void KWView::toggleViewFrameBorders(bool on) {
     kwcanvas()->resourceProvider()->setResource(KoText::ShowTextFrames, on);
     kwcanvas()->update();
+    m_document->config().setViewFrameBorders(on);
 }
 
 void KWView::formatPage() {
@@ -1065,8 +1066,8 @@ void KWView::popupContextMenu(QPoint globalPosition, const QList<QAction*> &acti
 }
 
 void KWView::zoomChanged (KoZoomMode::Mode mode, double zoom) {
-    m_document->setZoom(qRound(zoom * 100.0));
-    m_document->setZoomMode(mode);
+    m_document->config().setZoom(qRound(zoom * 100.0));
+    m_document->config().setZoomMode(mode);
 }
 
 void KWView::selectionChanged()

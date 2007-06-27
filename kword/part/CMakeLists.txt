@@ -9,6 +9,7 @@ include_directories( ${KOTEXT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDE_DI
 
 set(kwordprivate_LIB_SRCS
     KWFactory.cpp
+    KWApplicationConfig.cpp
     KWCanvas.cpp
     KWDocument.cpp
     KWGui.cpp

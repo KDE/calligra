@@ -63,14 +63,11 @@
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
       m_hasTOC(false),
-      m_defaultColumnSpacing(3.0),
-      m_zoom(100),
       m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
     m_frameLayout.setDocument(this);
     m_styleManager = new KoStyleManager(this);
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
-    m_zoomMode = KoZoomMode::ZOOM_WIDTH;
 
     setComponentData( KWFactory::componentData(), false );
     setTemplateType( "kword_template" );
@@ -82,7 +79,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     foreach(QString id, KoShapeRegistry::instance()->keys())
         KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
 
-    initConfig();
+    m_config.load(this);
     clear();
 }
 
@@ -433,7 +430,8 @@ void KWDocument::clear() {
     // document defaults
     m_pageSettings.clear();
     KoColumns columns = m_pageSettings.columns();
-    columns.columnSpacing = m_defaultColumnSpacing; // TODO load this value on demand
+    m_config.load(this); // re-load values 
+    columns.columnSpacing = m_config.defaultColumnSpacing();
     m_pageSettings.setColumns(columns);
     m_tabStop = MM_TO_POINT(15);
     m_hasTOC = false;
@@ -689,7 +687,7 @@ void KWDocument::printDebug() {
 QWidget* KWDocument::createCustomDocumentWidget(QWidget *parent) {
     KoColumns columns;
     columns.columns = 1;
-    columns.columnSpacing = m_defaultColumnSpacing;
+    columns.columnSpacing = m_config.defaultColumnSpacing();
     return new KWStartupWidget(parent, this, columns);
 }
 
@@ -715,86 +713,6 @@ void PageProcessingQueue::process() {
     deleteLater();
 }
 
-void KWDocument::initConfig()
-{
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup interface = config->group("Interface");
-    if(config->hasGroup("Interface" ) ) {
-        gridData().setGrid( qMax( interface.readEntry("GridX",MM_TO_POINT(5.0) ), 0.1),
-                qMax( interface.readEntry("GridY",MM_TO_POINT(5.0) ), 0.1) );
-//        setCursorInProtectedArea( interface.readEntry( "cursorInProtectArea", true ));
-        // Config-file value in mm, default 10 pt
-        double indent = interface.readEntry("Indent", MM_TO_POINT(10.0) ) ;
-//        setIndentValue(indent);
-//        setShowRuler(interface.readEntry("Rulers",true));
-        int defaultAutoSave = KoDocument::defaultAutoSave()/60; // in minutes
-        setAutoSave(interface.readEntry("AutoSave",defaultAutoSave)*60); // read key in minutes, call setAutoSave(seconds)
-        setBackupFile( interface.readEntry("BackupFile", true) );
-
-//        setNbPagePerRow(interface.readEntry("nbPagePerRow",4));
-//        m_maxRecentFiles = interface.readEntry( "NbRecentFile", 10 );
-
-//        m_viewFormattingChars = interface.readEntry( "ViewFormattingChars", false );
-//        m_viewFormattingBreak = interface.readEntry( "ViewFormattingBreaks", true );
-//        m_viewFormattingSpace = interface.readEntry( "ViewFormattingSpace", true );
-//        m_viewFormattingEndParag = interface.readEntry( "ViewFormattingEndParag", true );
-//        m_viewFormattingTabs = interface.readEntry( "ViewFormattingTabs", true );
-
-//        m_viewFrameBorders = interface.readEntry( "ViewFrameBorders", true );
-
-        m_zoom = interface.readEntry( "Zoom", 100 );
-        m_zoomMode = static_cast<KoZoomMode::Mode> (interface.readEntry( "ZoomMode", int(KoZoomMode::ZOOM_WIDTH)));
-
-//        m_bShowDocStruct = interface.readEntry( "showDocStruct", true );
-//        m_viewModeType = interface.readEntry( "viewmode", "ModeNormal" );
-//        setShowStatusBar( interface.readEntry( "ShowStatusBar" , true ) );
-//        setAllowAutoFormat( interface.readEntry( "AllowAutoFormat" , true ) );
-//        setShowScrollBar( interface.readEntry( "ShowScrollBar", true ) );
-//        if ( isEmbedded() )
-//            m_bShowDocStruct = false; // off by default for embedded docs, but still toggleable
-//        m_pgUpDownMovesCaret = interface.readEntry( "PgUpDownMovesCaret", true );
-//        m_bInsertDirectCursor= interface.readEntry( "InsertDirectCursor", false );
-//        m_globalLanguage=interface.readEntry("language", KGlobal::locale()->language());
-//        m_bGlobalHyphenation=interface.readEntry("hyphenation", false);
-
-//        setShowGrid( interface.readEntry( "ShowGrid" , false ));
-//        setSnapToGrid( interface.readEntry( "SnapToGrid", false ));
-    }
-
-    int undo=30;
-    KConfigGroup misc = config->group("Misc");
-    if(misc.exists())
-    {
-        undo=misc.readEntry("UndoRedo",-1);
-
-        //load default unit setting - this is only used for new files (from templates) or empty files
-        if ( misc.hasKey( "Units" ) )
-            setUnit( KoUnit::unit( misc.readEntry("Units") ) );
-        m_defaultColumnSpacing = misc.readEntry( "ColumnSpacing", 3.0 );
-    }
-
-//    if(undo!=-1)
-//        setUndoRedoLimit(undo);
-
-    //text mode view is not a good default for a readonly document...
-//    if ( !isReadWrite() && m_viewModeType =="ModeText" )
-//        m_viewModeType= "ModeNormal";
-
-//    m_layoutViewMode = KWViewMode::create( m_viewModeType, this, 0 /*no canvas*/);
-
-    KConfigGroup path = config->group("Kword Path");
-    if(path.exists())
-    {
-//        if ( path.hasKey( "expression path" ) )
-//            m_personalExpressionPath = path.readPathListEntry( "expression path" );
-        setBackupPath(path.readPathEntry( "backup path" ));
-    }
-
-    // Load personal dict
-    KConfigGroup spelling = KoGlobal::kofficeConfig()->group( "Spelling" );
-//    m_spellCheckPersonalDict = spelling.readListEntry( "PersonalDict" );
-}
-
 void KWDocument::saveConfig()
 {
     if ( !isReadWrite() )
@@ -804,26 +722,11 @@ void KWDocument::saveConfig()
 
     if (isEmbedded() )
         return;
-        // Only save the config that is manipulated by the UI directly.
-        // The config from the config dialog is saved by the dialog itself.
+    m_config.save();
     KSharedConfigPtr config = KGlobal::config();
     KConfigGroup interface = config->group( "Interface" );
-//    interface.writeEntry( "ViewFormattingChars", m_viewFormattingChars );
-//    interface.writeEntry( "ViewFormattingBreaks", m_viewFormattingBreak );
-//    interface.writeEntry( "ViewFormattingEndParag", m_viewFormattingEndParag );
-//    interface.writeEntry( "ViewFormattingTabs", m_viewFormattingTabs );
-//    interface.writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
-//    interface.writeEntry( "ViewFrameBorders", m_viewFrameBorders );
-    interface.writeEntry( "Zoom", m_zoom );
-    interface.writeEntry( "ZoomMode", (int)m_zoomMode );
-//    interface.writeEntry( "showDocStruct", m_bShowDocStruct );
-//    interface.writeEntry( "Rulers", m_bShowRuler );
-//    interface.writeEntry( "viewmode", m_viewModeType) ;
-//    interface.writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
-//    interface.writeEntry( "ShowGrid" , m_bShowGrid );
-//    interface.writeEntry( "SnapToGrid" , m_bSnapToGrid );
-//    interface.writeEntry( "ResolutionX", m_gridX );
-//    interface.writeEntry( "ResolutionY", m_gridY );
+    interface.writeEntry( "ResolutionX", gridData().gridX() );
+    interface.writeEntry( "ResolutionY", gridData().gridY() );
 }
 
 #include "KWDocument.moc"

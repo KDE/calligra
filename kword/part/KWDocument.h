@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
- * Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,12 +23,12 @@
 
 #include "KWPageSettings.h"
 #include "KWPageManager.h"
+#include "KWApplicationConfig.h"
 #include "frames/KWFrameLayout.h"
 
 #include <KoDocument.h>
 #include <KoImageCollection.h>
 #include <KoShapeControllerBase.h>
-#include <KoZoomMode.h>
 #include <KoInlineTextObjectManager.h>
 
 #include <QObject>
@@ -130,31 +130,6 @@ public:
      * @param fs the frameset that should be removed from the doc
      */
     void removeFrameSet( KWFrameSet *fs );
-
-    /**
-     * Set the zoom level for new views and for next startups of kword.
-     * Documents shown at 100% will show the page on screen at the same amount of
-     * metric units as the user set them to be. In other words; the paper and the
-     * screen versions should be exactly the same.
-     * @param percent the new zoom level to be persisted between sessions.
-     */
-    void setZoom(int percent) { m_zoom = percent; }
-    /**
-     * Return the percentage of zoom.
-     * @return the percentage of zoom.
-     * @see setZoom(int)
-     */
-    int zoom() const { return m_zoom; }
-    /**
-     * Set the mode of zooming for new views and to be persisted between sessions.
-     * @param mode the new mode
-     */
-    void setZoomMode(KoZoomMode::Mode mode) { m_zoomMode = mode; }
-    /**
-     * Return the zoomMode to be used for new views.
-     */
-    KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
-
     /**
      * returns the amount of pages in the document.
      * @see startPage() @see lastPage()
@@ -217,6 +192,9 @@ public:
     /// reimplemented from super
     QWidget* createCustomDocumentWidget(QWidget *parent);
 
+    KWApplicationConfig &config() { return m_config; }
+    const KWApplicationConfig &config() const { return m_config; }
+
 #ifndef NDEBUG
     /// Use a log of kDebug calls to print out the internal state of the document and its members
     void printDebug();
@@ -268,22 +246,19 @@ private:
     /// emits pageSetupChanged
     void firePageSetupChanged();
 
-    void initConfig();
     void saveConfig();
 
 private:
     bool m_hasTOC;
-    double m_defaultColumnSpacing;
     double m_tabStop;   ///< pt distance for auto-tabstops
 
-    int m_zoom; /// < zoom level in percent
-    KoZoomMode::Mode m_zoomMode;
     QList<KWFrameSet*> m_frameSets;
     QString m_viewMode;
 
     KWPageManager m_pageManager;
     KWPageSettings m_pageSettings;
     KWFrameLayout m_frameLayout;
+    KWApplicationConfig m_config;
 
     KoStyleManager *m_styleManager;
     KoImageCollection m_imageCollection;

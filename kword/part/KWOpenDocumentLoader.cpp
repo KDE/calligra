@@ -123,7 +123,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
 
     KoColumns columns;
     columns.columns = 1;
-    columns.columnSpacing = d->document->m_defaultColumnSpacing;
+    columns.columnSpacing = d->document->config().defaultColumnSpacing();
 
     // In theory the page format is the style:master-page-name of the first paragraph...
     // But, hmm, in a doc with only a table there was no reference to the master page at all...
