@@ -22,6 +22,7 @@
 #include <QString>
 
 #include "DatabaseSource.h"
+#include "Filter.h"
 #include "FilterPopup.h"
 #include "Region.h"
 
@@ -78,7 +79,8 @@ DatabaseRange::DatabaseRange( const QString& name )
 }
 
 DatabaseRange::DatabaseRange( const DatabaseRange& other )
-    : d( other.d )
+    : QObject()
+    , d(other.d)
 {
 }
 
@@ -120,6 +122,7 @@ void DatabaseRange::setRange( const Region& region )
 void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
 {
     QWidget* popup = new FilterPopup(parent, cell, *this);
+    connect(popup, SIGNAL(aboutToClose(FilterPopup*)), this, SLOT(updateSubFilter(FilterPopup*)));
     const QPoint position((orientation() == Qt::Horizontal) ? cellRect.topRight() : cellRect.bottomLeft());
     popup->move(parent->mapToGlobal(position));
     popup->resize(100, 20);
@@ -140,3 +143,13 @@ bool DatabaseRange::operator<( const DatabaseRange& other ) const
 {
     return (d && other.d) ? ( d->name < other.d->name ) : (d < other.d);
 }
+
+void DatabaseRange::updateSubFilter(FilterPopup* popup)
+{
+    if (!d->filter)
+        d->filter = new Filter();
+    popup->updateFilter(d->filter);
+    // TODO Stefan: Create and execute apply filter command.
+}
+
+#include "DatabaseRange.moc"

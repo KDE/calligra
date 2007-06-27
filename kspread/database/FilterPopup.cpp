@@ -30,6 +30,7 @@
 #include "CellStorage.h"
 #include "DatabaseRange.h"
 #include "Doc.h"
+#include "Filter.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "ValueConverter.h"
@@ -42,6 +43,7 @@ public:
     QAbstractButton* allCheckbox;
     QList<QCheckBox*> checkboxes;
     QHash<QString, int> items;
+    int fieldNumber;
 
 public:
     void createItemList(const Cell& cell, const DatabaseRange& database);
@@ -64,6 +66,7 @@ void FilterPopup::Private::createItemList(const Cell& cell, const DatabaseRange&
         items[sheet->doc()->converter()->asString(value).asString()]++;
     }
 }
+
 
 FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange& database)
     : QFrame(parent, Qt::Popup)
@@ -109,11 +112,49 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange&
         layout->addWidget(item);
         d->checkboxes.append(item);
     }
+
+    if (database.orientation() == Qt::Vertical)
+        d->fieldNumber = database.range().lastRange().left() - cell.column() + 1;
+    else // Qt::Horizontal
+        d->fieldNumber = database.range().lastRange().top() - cell.row() + 1;
 }
 
 FilterPopup::~FilterPopup()
 {
     delete d;
+}
+
+void FilterPopup::updateFilter(Filter* filter) const
+{
+    if (d->allCheckbox->isChecked())
+        filter->removeConditions(); // remove all conditions
+    else
+    {
+        filter->removeConditions(d->fieldNumber);
+        QList<QString> matchList;
+        QList<QString> notMatchList;
+        foreach (QCheckBox* checkbox, d->checkboxes)
+        {
+            if (checkbox->isChecked())
+                matchList.append(checkbox->text());
+            else
+                notMatchList.append(checkbox->text());
+        }
+        // be lazy; choose the comparison causing least effort
+        const Filter::Comparison comparison = (matchList.count() < notMatchList.count())
+                                            ? Filter::Match : Filter::NotMatch;
+        const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
+        for (int i = 0; i < values.count(); ++i)
+        {
+            filter->addCondition(Filter::AndComposition, d->fieldNumber, comparison, values[i]);
+        }
+    }
+}
+
+void FilterPopup::closeEvent(QCloseEvent* event)
+{
+    emit aboutToClose(this);
+    QFrame::closeEvent(event);
 }
 
 void FilterPopup::buttonClicked(QAbstractButton* button)

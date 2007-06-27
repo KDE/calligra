@@ -28,6 +28,7 @@ namespace KSpread
 {
 class Cell;
 class DatabaseRange;
+class Filter;
 
 class FilterPopup : public QFrame
 {
@@ -42,6 +43,14 @@ public:
      * Destructor.
      */
     virtual ~FilterPopup();
+
+    void updateFilter(Filter* filter) const;
+
+protected:
+    void closeEvent(QCloseEvent*);
+
+Q_SIGNALS:
+    void aboutToClose(FilterPopup* popup);
 
 private Q_SLOTS:
     void buttonClicked(QAbstractButton* button);

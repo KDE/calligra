@@ -20,8 +20,8 @@
 #ifndef KSPREAD_DATABASE_RANGE
 #define KSPREAD_DATABASE_RANGE
 
+#include <QObject>
 #include <QSharedDataPointer>
-#include <Qt>
 
 class QRect;
 class QWidget;
@@ -32,10 +32,12 @@ class QWidget;
 namespace KSpread
 {
 class Cell;
+class FilterPopup;
 class Region;
 
-class DatabaseRange
+class DatabaseRange : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Constructor.
@@ -98,6 +100,9 @@ public:
     void operator=( const DatabaseRange& other );
     bool operator==( const DatabaseRange& other ) const;
     bool operator<( const DatabaseRange& other ) const;
+
+private Q_SLOTS:
+    void updateSubFilter(FilterPopup* popup);
 
 private:
     class Private;

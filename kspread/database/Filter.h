@@ -20,6 +20,8 @@
 #ifndef KSPREAD_FILTER
 #define KSPREAD_FILTER
 
+#include <QString>
+
 namespace KSpread
 {
 
@@ -29,6 +31,30 @@ namespace KSpread
 class Filter
 {
 public:
+    enum Comparison
+    {
+        Match,
+        NotMatch,
+        Equal,
+        NotEqual,
+        Less,
+        Greater,
+        LessOrEqual,
+        GreaterOrEqual
+    };
+
+    enum Composition
+    {
+        AndComposition,
+        OrComposition
+    };
+
+    enum Mode
+    {
+        Text,
+        Number
+    };
+
     /**
      * Constructor.
      */
@@ -38,6 +64,12 @@ public:
      * Destructor.
      */
     virtual ~Filter();
+
+    void addCondition(Composition composition,
+                      int fieldNumber, Comparison comparison, const QString& value,
+                      Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive, Mode mode = Text );
+
+    void removeConditions(int fieldNumber = -1);
 
 private:
     class And;

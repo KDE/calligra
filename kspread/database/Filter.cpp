@@ -30,7 +30,9 @@ public:
     virtual ~AbstractCondition() {}
     virtual void loadOdf() = 0;
     virtual void saveOdf() = 0;
-    virtual bool evaluate() const = 0;
+    virtual bool evaluate(const QString& testString) const = 0;
+    virtual bool isEmpty() const = 0;
+    virtual void removeConditions(int fieldNumber) = 0;
 };
 
 /**
@@ -41,15 +43,28 @@ class Filter::And : public AbstractCondition
 public:
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate() const
+    virtual bool evaluate(const QString& testString) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
             // lazy evaluation, stop on first false
-            if (!list[i]->evaluate())
+            if (!list[i]->evaluate(testString))
                 return false;
         }
         return true;
+    }
+    virtual bool isEmpty() const { return list.isEmpty(); }
+    virtual void removeConditions(int fieldNumber)
+    {
+        for (int i = 0; i < list.count(); ++i)
+            list[i]->removeConditions(fieldNumber);
+        QList<AbstractCondition*> list;
+        for (int i = 0; i < list.count(); ++i)
+        {
+            if (!list[i]->isEmpty())
+                list.append(this->list[i]);
+        }
+        this->list = list;
     }
 
 public:
@@ -64,15 +79,28 @@ class Filter::Or : public AbstractCondition
 public:
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate() const
+    virtual bool evaluate(const QString& testString) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
             // lazy evaluation, stop on first true
-            if (list[i]->evaluate())
+            if (list[i]->evaluate(testString))
                 return true;
         }
         return false;
+    }
+    virtual bool isEmpty() const { return list.isEmpty(); }
+    virtual void removeConditions(int fieldNumber)
+    {
+        for (int i = 0; i < list.count(); ++i)
+            list[i]->removeConditions(fieldNumber);
+        QList<AbstractCondition*> list;
+        for (int i = 0; i < list.count(); ++i)
+        {
+            if (!list[i]->isEmpty())
+                list.append(this->list[i]);
+        }
+        this->list = list;
     }
 
 public:
@@ -85,11 +113,13 @@ public:
 class Filter::Condition : public AbstractCondition
 {
 public:
-    Condition()
-        : fieldNumber(0)
-        , operation(Match)
-        , caseSensitive(Qt::CaseInsensitive)
-        , dataType(Text)
+    Condition(int fieldNumber, Comparison comparison, const QString& value,
+              Qt::CaseSensitivity caseSensitivity, Mode mode)
+        : fieldNumber(fieldNumber)
+        , value(value)
+        , operation(comparison)
+        , caseSensitivity(caseSensitivity)
+        , dataType(mode)
     {
     }
 
@@ -101,7 +131,7 @@ public:
         {
             case Match:
             {
-                if (QString::compare(value, testString, caseSensitive) == 0)
+                if (QString::compare(value, testString, caseSensitivity) == 0)
                     return true;
                 break;
             }
@@ -110,14 +140,21 @@ public:
         }
         return false;
     }
+    virtual bool isEmpty() const { return fieldNumber == -1; }
+    virtual void removeConditions(int fieldNumber)
+    {
+        if (this->fieldNumber == fieldNumber)
+            this->fieldNumber = -1;
+    }
 
 public:
-    uint fieldNumber;
+    int fieldNumber;
     QString value; // Value?
-    enum { Match, NotMatch, Equal, NotEqual, Less, Greater, LessOrEqual, GreaterOrEqual } operation;
-    Qt::CaseSensitivity caseSensitive;
-    enum { Text, Number } dataType;
+    Comparison operation;
+    Qt::CaseSensitivity caseSensitivity;
+    Mode dataType;
 };
+
 
 class Filter::Private
 {
@@ -144,4 +181,45 @@ Filter::Filter()
 Filter::~Filter()
 {
     delete d;
+}
+
+void Filter::addCondition(Composition composition,
+                          int fieldNumber, Comparison comparison, const QString& value,
+                          Qt::CaseSensitivity caseSensitivity, Mode mode)
+{
+    Condition* condition = new Condition(fieldNumber, comparison, value, caseSensitivity, mode);
+    if (!d->condition)
+    {
+        d->condition = condition;
+    }
+    else if (composition == AndComposition)
+    {
+        And* andComposition = new And();
+        andComposition->list.append(d->condition);
+        andComposition->list.append(condition);
+        d->condition = andComposition;
+    }
+    else // composition == OrComposition
+    {
+        Or* orComposition = new Or();
+        orComposition->list.append(d->condition);
+        orComposition->list.append(condition);
+        d->condition = orComposition;
+    }
+}
+
+void Filter::removeConditions(int fieldNumber)
+{
+    if (fieldNumber == -1)
+    {
+        delete d->condition;
+        d->condition = 0;
+        return;
+    }
+    d->condition->removeConditions(fieldNumber);
+    if (d->condition->isEmpty())
+    {
+        delete d->condition;
+        d->condition = 0;
+    }
 }

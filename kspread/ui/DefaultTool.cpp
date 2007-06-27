@@ -262,7 +262,6 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
                 QRect cellRect = d->canvas->viewConverter()->documentToView(QRectF(p1, s1)).toRect();
                 if (d->canvas->view()->sheetView(sheet)->cellView(col, row).hitTestFilterButton(cellRect, event->pos()))
                 {
-                    kDebug() << "Filter button hit!" << endl;
                     DatabaseRange database = cell.databaseRange();
                     database.showPopup(d->canvas, cell, cellRect);
                     break;
