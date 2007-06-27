@@ -42,6 +42,7 @@ private:
     void addCallout();
     void addSmiley();
     void addCircularArrow();
+    void addGearhead();
 
     typedef QMap<QString, QVariant > ComplexType;
     typedef QList<QVariant> ListType;

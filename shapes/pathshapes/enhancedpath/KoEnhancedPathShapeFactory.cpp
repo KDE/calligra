@@ -30,6 +30,8 @@
 #include <QString>
 #include <QMap>
 
+#include <math.h>
+
 KoEnhancedPathShapeFactory::KoEnhancedPathShapeFactory( QObject *parent )
     : KoShapeFactory( parent, KoEnhancedPathShapeId, i18n( "An enhanced path shape" ) )
 {
@@ -43,6 +45,7 @@ KoEnhancedPathShapeFactory::KoEnhancedPathShapeFactory( QObject *parent )
     addCallout();
     addSmiley();
     addCircularArrow();
+    addGearhead();
 }
 
 KoShape * KoEnhancedPathShapeFactory::createDefaultShape() const
@@ -106,9 +109,10 @@ KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) c
         shape->setBackground( color.value<QColor>() );
 
     QSizeF size = shape->size();
-    double ratio = size.height() / size.width();
-
-    shape->resize( QSizeF( 100, 100*ratio ) );
+    if( size.width() > size.height() )
+        shape->resize( QSizeF( 100, 100 * size.height() / size.width() ) );
+    else
+        shape->resize( QSizeF( 100 * size.width() / size.height(), 100 ) );
 
     return shape;
 }
@@ -383,6 +387,50 @@ void KoEnhancedPathShapeFactory::addCircularArrow()
     t.icon = "circular-arrow-koffice";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
     t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
+    addTemplate(t);
+}
+
+void KoEnhancedPathShapeFactory::addGearhead()
+{
+    QStringList commands;
+    commands.append( "M 20 70" );
+    commands.append( "L 20 100 30 100 30 50 30 70 40 70 40 40 0 40 0 70 10 70 10 50 10 100 20 100" );
+    commands.append( "Z" );
+    commands.append( "N" );
+
+    uint toothCount = 10;
+    double toothAngle = 360.0 / double(toothCount);
+    kDebug() << "toothAngle = " << toothAngle << endl;
+    double outerRadius = 0.5 * 25.0;
+    double innerRadius = 0.5 * 17.0;
+    QPointF center( 20, 25 );
+    double radian = (270.0 - 0.35 * toothAngle) * M_PI / 180.0;
+    commands.append( QString( "M %1 %2" ).arg( center.x() + innerRadius*cos(radian) ).arg( center.y() + innerRadius*sin(radian) ) );
+    QString cmd( "L" );
+    for( uint i = 0; i < toothCount; ++i )
+    {
+        radian += 0.15 * toothAngle * M_PI / 180.0;
+        cmd += QString( " %1 %2" ).arg( center.x() + outerRadius*cos(radian) ).arg( center.y() + outerRadius*sin(radian) );
+        radian += 0.35 * toothAngle * M_PI / 180.0;
+        cmd += QString( " %1 %2" ).arg( center.x() + outerRadius*cos(radian) ).arg( center.y() + outerRadius*sin(radian) );
+        radian += 0.15 * toothAngle * M_PI / 180.0;
+        cmd += QString( " %1 %2" ).arg( center.x() + innerRadius*cos(radian) ).arg( center.y() + innerRadius*sin(radian) );
+        radian += 0.35 * toothAngle * M_PI / 180.0;
+        cmd += QString( " %1 %2" ).arg( center.x() + innerRadius*cos(radian) ).arg( center.y() + innerRadius*sin(radian) );
+    }
+    kDebug() << "gear command = " << cmd << endl;
+    commands.append( cmd );
+    commands.append( "Z" );
+    commands.append( "N" );
+
+    KoShapeTemplate t;
+    t.id = KoPathShapeId;
+    t.name = i18n("Enhanced Path");
+    t.toolTip = i18n("A gearhead");
+    t.icon = "gearhead-koffice";
+    t.properties = dataToProperties( QString(), commands, ListType(), ComplexType() );
+    t.properties->setProperty( "background", QVariant::fromValue<QColor>( QColor( Qt::blue ) ) );
+    t.properties->setProperty( "viewBox", QRectF( 0, 0, 40, 90 ) );
     addTemplate(t);
 }
 
