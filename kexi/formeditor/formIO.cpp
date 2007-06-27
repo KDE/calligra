@@ -859,7 +859,7 @@ FormIO::readPropertyValue(QDomNode node, QObject *obj, const QString &name)
 	}
 	else if(type == "cursor")
 	{
-		return QCursor(text.toInt());
+		return QCursor((Qt::CursorShape) text.toInt());
 	}
 	else if(type == "time")
 	{
