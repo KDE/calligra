@@ -24,6 +24,10 @@ KDE4: TODO:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2007-06-26
+- Kexi compiles under win32
+= KStaticDeleter replaced with K_GLOBAL_STATIC
+
 2007-06-22
 - msvc: added #warning substitute: #pragma WARNING(Your message)
 - win32 compilation started

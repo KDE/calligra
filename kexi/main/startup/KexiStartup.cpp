@@ -18,11 +18,11 @@
 */
 
 #include "KexiStartup.h"
-#ifdef Q_WS_WIN
-# include "KexiStartup_p_win.h"
-#else
-# include "KexiStartup_p.h"
-#endif
+//#ifdef Q_WS_WIN
+//# include "KexiStartup_p_win.h"
+//#else
+#include "KexiStartup_p.h"
+//#endif
 
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
@@ -45,7 +45,6 @@
 #include <kcmdlineargs.h>
 #include <kdeversion.h>
 #include <ktextedit.h>
-#include <kstaticdeleter.h>
 #include <kuser.h>
 #include <KProgressDialog>
 
@@ -55,14 +54,10 @@
 #include <qlayout.h>
 
 namespace Kexi {
-	static KStaticDeleter<KexiStartupHandler> Kexi_startupHandlerDeleter;
-	KexiStartupHandler* _startupHandler = 0;
+	K_GLOBAL_STATIC(KexiStartupHandler, _startupHandler)
 
-	KexiStartupHandler& startupHandler()
-	{
-		if (!_startupHandler)
-			Kexi_startupHandlerDeleter.setObject( _startupHandler, new KexiStartupHandler() );
-		return *_startupHandler; 
+	KexiStartupHandler& startupHandler() {
+		return *_startupHandler;
 	}
 }
 

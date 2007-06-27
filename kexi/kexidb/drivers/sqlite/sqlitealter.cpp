@@ -21,10 +21,8 @@
 
 #include "sqliteconnection.h"
 #include <kexidb/utils.h>
-
-#include <kstaticdeleter.h>
-
-#include <qmap.h>
+#include <QHash>
+#include <kglobal.h>
 
 using namespace KexiDB;
 
@@ -32,31 +30,35 @@ enum SQLiteTypeAffinity { //as defined here: 2.1 Determination Of Column Affinit
 	NoAffinity = 0, IntAffinity = 1, TextAffinity = 2, BLOBAffinity = 3
 };
 
-//! helper for affinityForType()
-static KStaticDeleter< QMap<int,int> > KexiDB_SQLite_affinityForType_deleter;
-QMap<int,int> *KexiDB_SQLite_affinityForType = 0;
+//! @internal
+struct SQLiteTypeAffinityInternal
+{
+	SQLiteTypeAffinityInternal()
+	{
+		affinity.insert(Field::Byte, IntAffinity);
+		affinity.insert(Field::ShortInteger, IntAffinity);
+		affinity.insert(Field::Integer, IntAffinity);
+		affinity.insert(Field::BigInteger, IntAffinity);
+		affinity.insert(Field::Boolean, IntAffinity);
+		affinity.insert(Field::Date, TextAffinity);
+		affinity.insert(Field::DateTime, TextAffinity);
+		affinity.insert(Field::Time, TextAffinity);
+		affinity.insert(Field::Float, IntAffinity);
+		affinity.insert(Field::Double, IntAffinity);
+		affinity.insert(Field::Text, TextAffinity);
+		affinity.insert(Field::LongText, TextAffinity);
+		affinity.insert(Field::BLOB, BLOBAffinity);
+	}
+	QHash<Field::Type, SQLiteTypeAffinity> affinity;
+};
+
+K_GLOBAL_STATIC(SQLiteTypeAffinityInternal, KexiDB_SQLite_affinityForType)
 
 //! \return SQLite type affinity for \a type
 //! See doc/dev/alter_table_type_conversions.ods, page 2 for more info
 static SQLiteTypeAffinity affinityForType(Field::Type type)
 {
-	if (!KexiDB_SQLite_affinityForType) {
-		KexiDB_SQLite_affinityForType_deleter.setObject( KexiDB_SQLite_affinityForType, new QMap<int,int>() );
-		KexiDB_SQLite_affinityForType->insert(Field::Byte, IntAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::ShortInteger, IntAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::Integer, IntAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::BigInteger, IntAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::Boolean, IntAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::Date, TextAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::DateTime, TextAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::Time, TextAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::Float, IntAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::Double, IntAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::Text, TextAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::LongText, TextAffinity);
-		KexiDB_SQLite_affinityForType->insert(Field::BLOB, BLOBAffinity);
-	}
-	return static_cast<SQLiteTypeAffinity>((*KexiDB_SQLite_affinityForType)[(int)type]);
+	return KexiDB_SQLite_affinityForType->affinity[type];
 }
 
 tristate SQLiteConnection::drv_changeFieldProperty(TableSchema &table, Field& field, 

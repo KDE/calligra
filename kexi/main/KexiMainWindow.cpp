@@ -116,11 +116,11 @@
 #include "printing/kexisimpleprintingpagesetup.h"
 
 //Extreme verbose debug
-#if defined(Q_WS_WIN)
-# include <krecentdirs.h>
-# include <win32_utils.h>
+//#if defined(Q_WS_WIN)
+//# include <krecentdirs.h>
+//# include <win32_utils.h>
 //# define KexiVDebug kDebug()
-#endif
+//#endif
 
 #if !defined(KexiVDebug)
 # define KexiVDebug if (0) kDebug()

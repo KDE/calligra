@@ -22,7 +22,8 @@
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
 
-#include <qmap.h>
+#include <QMap>
+#include <QHash>
 #include <qthread.h>
 #include <qdom.h>
 #include <qbuffer.h>
@@ -32,7 +33,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kstaticdeleter.h>
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -45,70 +45,58 @@ using namespace KexiDB;
 //! Cache
 struct TypeCache
 {
-	QMap< uint, TypeGroupList > tlist;
-	QMap< uint, QStringList > nlist;
-	QMap< uint, QStringList > slist;
-	QMap< uint, Field::Type > def_tlist;
-};
-
-static KStaticDeleter<TypeCache> KexiDB_typeCacheDeleter;
-TypeCache *KexiDB_typeCache = 0;
-
-static void initList()
-{
-	KexiDB_typeCacheDeleter.setObject( KexiDB_typeCache, new TypeCache() );
-
-	for (uint t=0; t<=KexiDB::Field::LastType; t++) {
-		const uint tg = KexiDB::Field::typeGroup( t );
-		TypeGroupList list;
-		QStringList name_list, str_list;
-		if (KexiDB_typeCache->tlist.find( tg )!=KexiDB_typeCache->tlist.end()) {
-			list = KexiDB_typeCache->tlist[ tg ];
-			name_list = KexiDB_typeCache->nlist[ tg ];
-			str_list = KexiDB_typeCache->slist[ tg ];
+	TypeCache() {
+		for (uint t=0; t <= Field::LastType; t++) {
+			const Field::TypeGroup tg = Field::typeGroup( t );
+			TypeGroupList list;
+			QStringList name_list, str_list;
+			if (tlist.contains( tg )) {
+				list = tlist[ tg ];
+				name_list = nlist[ tg ];
+				str_list = slist[ tg ];
+			}
+			list += t;
+			name_list += KexiDB::Field::typeName( t );
+			str_list += KexiDB::Field::typeString( t );
+			tlist[ tg ] = list;
+			nlist[ tg ] = name_list;
+			slist[ tg ] = str_list;
 		}
-		list+= t;
-		name_list += KexiDB::Field::typeName( t );
-		str_list += KexiDB::Field::typeString( t );
-		KexiDB_typeCache->tlist[ tg ] = list;
-		KexiDB_typeCache->nlist[ tg ] = name_list;
-		KexiDB_typeCache->slist[ tg ] = str_list;
+
+		def_tlist[ Field::InvalidGroup ] = Field::InvalidType;
+		def_tlist[ Field::TextGroup ] = Field::Text;
+		def_tlist[ Field::IntegerGroup ] = Field::Integer;
+		def_tlist[ Field::FloatGroup ] = Field::Double;
+		def_tlist[ Field::BooleanGroup ] = Field::Boolean;
+		def_tlist[ Field::DateTimeGroup ] = Field::Date;
+		def_tlist[ Field::BLOBGroup ] = Field::BLOB;
 	}
 
-	KexiDB_typeCache->def_tlist[ Field::InvalidGroup ] = Field::InvalidType;
-	KexiDB_typeCache->def_tlist[ Field::TextGroup ] = Field::Text;
-	KexiDB_typeCache->def_tlist[ Field::IntegerGroup ] = Field::Integer;
-	KexiDB_typeCache->def_tlist[ Field::FloatGroup ] = Field::Double;
-	KexiDB_typeCache->def_tlist[ Field::BooleanGroup ] = Field::Boolean;
-	KexiDB_typeCache->def_tlist[ Field::DateTimeGroup ] = Field::Date;
-	KexiDB_typeCache->def_tlist[ Field::BLOBGroup ] = Field::BLOB;
-}
+	QHash< Field::TypeGroup, TypeGroupList > tlist;
+	QHash< Field::TypeGroup, QStringList > nlist;
+	QHash< Field::TypeGroup, QStringList > slist;
+	QHash< Field::TypeGroup, Field::Type > def_tlist;
+};
+
+K_GLOBAL_STATIC(TypeCache, KexiDB_typeCache)
 
 const TypeGroupList KexiDB::typesForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	if (!KexiDB_typeCache)
-		initList();
 	return KexiDB_typeCache->tlist[ typeGroup ];
 }
 
 QStringList KexiDB::typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	if (!KexiDB_typeCache)
-		initList();
 	return KexiDB_typeCache->nlist[ typeGroup ];
 }
 
 QStringList KexiDB::typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	if (!KexiDB_typeCache)
-		initList();
 	return KexiDB_typeCache->slist[ typeGroup ];
 }
 
 KexiDB::Field::Type KexiDB::defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	if (!KexiDB_typeCache)
-		initList();
 	return (typeGroup <= Field::LastTypeGroup) ? KexiDB_typeCache->def_tlist[ typeGroup ] : Field::InvalidType;
 }
 
@@ -479,10 +467,10 @@ void ConnectionTestDialog::error(KexiDB::Object *obj)
 	}*/
 	QMutex mutex;
 	mutex.lock();
-#ifndef Q_OS_WIN
 #ifdef __GNUC__
 #warning QWaitCondition::wait() OK?
-#endif
+#else
+#pragma WARNING( QWaitCondition::wait() OK? )
 #endif
 	m_wait.wait(&mutex);
 	mutex.unlock();
@@ -656,16 +644,11 @@ static bool setIntToFieldType( Field& field, const QVariant& value )
 	return true;
 }
 
-//! for KexiDB::isBuiltinTableFieldProperty()
-static KStaticDeleter< QSet<QByteArray> > KexiDB_builtinFieldPropertiesDeleter;
-//! for KexiDB::isBuiltinTableFieldProperty()
-QSet<QByteArray>* KexiDB_builtinFieldProperties = 0;
-
-bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
+//! @internal for KexiDB::isBuiltinTableFieldProperty()
+struct KexiDB_BuiltinFieldProperties
 {
-	if (!KexiDB_builtinFieldProperties) {
-		KexiDB_builtinFieldPropertiesDeleter.setObject( KexiDB_builtinFieldProperties, new QSet<QByteArray>() );
-#define ADD(name) KexiDB_builtinFieldProperties->insert(name)
+	KexiDB_BuiltinFieldProperties() {
+#define ADD(name) set.insert(name)
 		ADD("type");
 		ADD("primaryKey");
 		ADD("indexed");
@@ -685,7 +668,16 @@ bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
 //! @todo always update this when new builtins appear!
 #undef ADD
 	}
-	return KexiDB_builtinFieldProperties->contains( propertyName );
+	QSet<QByteArray> set;
+};
+
+//! for KexiDB::isBuiltinTableFieldProperty()
+K_GLOBAL_STATIC(KexiDB_BuiltinFieldProperties, KexiDB_builtinFieldProperties)
+
+
+bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
+{
+	return KexiDB_builtinFieldProperties->set.contains( propertyName );
 }
 
 bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>& values )
@@ -757,15 +749,11 @@ bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>&
 #undef SET_BOOLEAN_FLAG
 }
 
-//! for isExtendedTableProperty()
-static KStaticDeleter< QSet<QByteArray> > KexiDB_extendedPropertiesDeleter;
-QSet<QByteArray>* KexiDB_extendedProperties = 0;
-
-bool KexiDB::isExtendedTableFieldProperty( const QByteArray& propertyName )
+//! @internal for isExtendedTableProperty()
+struct KexiDB_ExtendedProperties
 {
-	if (!KexiDB_extendedProperties) {
-		KexiDB_extendedPropertiesDeleter.setObject( KexiDB_extendedProperties, new QSet<QByteArray>() );
-#define ADD(name) KexiDB_extendedProperties->insert( name )
+	KexiDB_ExtendedProperties() {
+#define ADD(name) set.insert( name )
 		ADD("visibledecimalplaces");
 		ADD("rowsource");
 		ADD("rowsourcetype");
@@ -779,7 +767,15 @@ bool KexiDB::isExtendedTableFieldProperty( const QByteArray& propertyName )
 		ADD("displaywidget");
 #undef ADD
 	}
-	return KexiDB_extendedProperties->contains( QByteArray(propertyName).toLower() );
+	QSet<QByteArray> set;
+};
+
+//! for isExtendedTableProperty()
+K_GLOBAL_STATIC(KexiDB_ExtendedProperties, KexiDB_extendedProperties)
+
+bool KexiDB::isExtendedTableFieldProperty( const QByteArray& propertyName )
+{
+	return KexiDB_extendedProperties->set.contains( QByteArray(propertyName).toLower() );
 }
 
 bool KexiDB::setFieldProperty( Field& field, const QByteArray& propertyName, const QVariant& value )
@@ -976,16 +972,13 @@ QDomElement KexiDB::saveBooleanElementToDom(QDomDocument& doc, QDomElement& pare
 	return el;
 }
 
-//! Used in KexiDB::emptyValueForType()
-static KStaticDeleter< Q3ValueVector<QVariant> > KexiDB_emptyValueForTypeCacheDeleter;
-Q3ValueVector<QVariant> *KexiDB_emptyValueForTypeCache = 0;
-
-QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
+//! @internal Used in KexiDB::emptyValueForType()
+struct KexiDB_EmptyValueForTypeCache
 {
-	if (!KexiDB_emptyValueForTypeCache) {
-		KexiDB_emptyValueForTypeCacheDeleter.setObject( KexiDB_emptyValueForTypeCache, 
-			new Q3ValueVector<QVariant>(int(Field::LastType)+1) );
-#define ADD(t, value) (*KexiDB_emptyValueForTypeCache)[t]=value;
+	KexiDB_EmptyValueForTypeCache()
+	 : values( int(Field::LastType)+1 )
+	{
+#define ADD(t, value) values.insert(t, value);
 		ADD(Field::Byte, 0);
 		ADD(Field::ShortInteger, 0);
 		ADD(Field::Integer, 0);
@@ -999,7 +992,15 @@ QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 		ADD(Field::BLOB, QByteArray());
 #undef ADD
 	}
-	const QVariant val( KexiDB_emptyValueForTypeCache->at(
+	QVector<QVariant> values;
+};
+
+//! Used in KexiDB::emptyValueForType()
+K_GLOBAL_STATIC(KexiDB_EmptyValueForTypeCache, KexiDB_emptyValueForTypeCache)
+
+QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
+{
+	const QVariant val( KexiDB_emptyValueForTypeCache->values.at(
 		(type<=Field::LastType) ? type : Field::InvalidType) );
 	if (!val.isNull())
 		return val;
@@ -1016,16 +1017,13 @@ QVariant KexiDB::emptyValueForType( KexiDB::Field::Type type )
 	return QVariant();
 }
 
-//! Used in KexiDB::notEmptyValueForType()
-static KStaticDeleter< Q3ValueVector<QVariant> > KexiDB_notEmptyValueForTypeCacheDeleter;
-Q3ValueVector<QVariant> *KexiDB_notEmptyValueForTypeCache = 0;
-
-QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
+//! @internal Used in KexiDB::notEmptyValueForType()
+struct KexiDB_NotEmptyValueForTypeCache
 {
-	if (!KexiDB_notEmptyValueForTypeCache) {
-		KexiDB_notEmptyValueForTypeCacheDeleter.setObject( KexiDB_notEmptyValueForTypeCache, 
-			new Q3ValueVector<QVariant>(int(Field::LastType)+1) );
-#define ADD(t, value) (*KexiDB_notEmptyValueForTypeCache)[t]=value;
+	KexiDB_NotEmptyValueForTypeCache()
+	 : values(int(Field::LastType)+1)
+	{
+#define ADD(t, value) values.insert(t, value);
 		// copy most of the values
 		for (int i = int(Field::InvalidType) + 1; i<=Field::LastType; i++) {
 			if (i==Field::Date || i==Field::DateTime || i==Field::Time)
@@ -1048,7 +1046,14 @@ QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
 		}
 #undef ADD
 	}
-	const QVariant val( KexiDB_notEmptyValueForTypeCache->at(
+	QVector<QVariant> values;
+};
+//! Used in KexiDB::notEmptyValueForType()
+K_GLOBAL_STATIC(KexiDB_NotEmptyValueForTypeCache, KexiDB_notEmptyValueForTypeCache)
+
+QVariant KexiDB::notEmptyValueForType( KexiDB::Field::Type type )
+{
+	const QVariant val( KexiDB_notEmptyValueForTypeCache->values.at(
 		(type<=Field::LastType) ? type : Field::InvalidType) );
 	if (!val.isNull())
 		return val;

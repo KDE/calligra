@@ -25,13 +25,11 @@
 #include <qwidget.h>
 
 #include <klocale.h>
-#include <kstaticdeleter.h>
 
 // a color for displaying default values or autonumbers
 #define SPECIAL_TEXT_COLOR Qt::blue
 
-static KStaticDeleter<QPixmap> KexiDisplayUtils_autonum_deleter;
-QPixmap* KexiDisplayUtils_autonum = 0;
+K_GLOBAL_STATIC(QPixmap, KexiDisplayUtils_autonum)
 
 static const unsigned int  autonumber_png_len = 245;
 static const unsigned char autonumber_png_data[] = {
@@ -67,21 +65,10 @@ static struct Embed {
     { 0, 0, 0 }
 };
 
-QPixmap* getPix(int id)
-{
-//	QByteArray ba;
-//	ba.setRawData( (char*)embed_vec[id].data, embed_vec[id].size );
-	QPixmap *pix = new QPixmap();
-	pix->loadFromData( embed_vec[id].data, embed_vec[id].size );
-	return pix;
-}
-
 static void initDisplayUtilsImages()
 {
-	if (!KexiDisplayUtils_autonum) {
 /*! @warning not reentrant! */
-		KexiDisplayUtils_autonum_deleter.setObject( KexiDisplayUtils_autonum, getPix(0) );
-	}
+	KexiDisplayUtils_autonum->loadFromData( embed_vec[0].data, embed_vec[0].size );
 }
 
 //-----------------

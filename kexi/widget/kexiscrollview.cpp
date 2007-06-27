@@ -29,7 +29,6 @@
 #include <QMouseEvent>
 
 #include <kdebug.h>
-#include <kstaticdeleter.h>
 #include <klocale.h>
 
 #include <utils/kexirecordnavigator.h>
@@ -45,8 +44,7 @@ class KexiScrollViewData
 };
 
 // @todo warning: not reentrant!
-static KStaticDeleter<KexiScrollViewData> KexiScrollView_data_deleter;
-KexiScrollViewData* KexiScrollView_data = 0;
+K_GLOBAL_STATIC(KexiScrollViewData, KexiScrollView_data)
 
 KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
  : Q3ScrollView(parent, "kexiscrollview", Qt::WStaticContents)
@@ -157,10 +155,8 @@ KexiScrollView::refreshContentsSize()
 		// Ensure there is always space to resize Form
 		int w = contentsWidth(), h = contentsHeight();
 		bool change = false;
-		const int delta_x = qMax( (KexiScrollView_data ? 
-			KexiScrollView_data->verticalOuterAreaPixmapBuffer.width() : 0), 300);
-		const int delta_y = qMax( (KexiScrollView_data ? 
-			KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height() : 0), 300);
+		const int delta_x = qMax( KexiScrollView_data->verticalOuterAreaPixmapBuffer.width(), 300);
+		const int delta_y = qMax( KexiScrollView_data->horizontalOuterAreaPixmapBuffer.height(), 300);
 		if((m_widget->width() + delta_x * 2 / 3) > w) {
 			w = m_widget->width() + delta_x;
 			change = true;
@@ -353,9 +349,7 @@ KexiScrollView::drawContents( QPainter * p, int clipx, int clipy, int clipw, int
 		p->drawLine(wx, wy+m_widget->height(), wx+m_widget->width(), wy+m_widget->height());
 //kDebug() << "KexiScrollView::drawContents() " << wy+m_widget->height() << endl;
 
-		if (!KexiScrollView_data) {
-			KexiScrollView_data_deleter.setObject( KexiScrollView_data, new KexiScrollViewData() );
-
+		if (KexiScrollView_data->horizontalOuterAreaPixmapBuffer.isNull()) {
 			//create flicker-less buffer
 			setupPixmapBuffer( KexiScrollView_data->horizontalOuterAreaPixmapBuffer, i18n("Outer Area"), 1 );
 			setupPixmapBuffer( KexiScrollView_data->verticalOuterAreaPixmapBuffer, i18n("Outer\nArea"), 2 );

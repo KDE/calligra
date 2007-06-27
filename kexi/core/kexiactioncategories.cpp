@@ -19,7 +19,6 @@
 
 #include "kexiactioncategories.h"
 
-#include <kstaticdeleter.h>
 #include <kdebug.h>
 
 #include <qmap.h>
@@ -46,8 +45,7 @@ class ActionInternal
 		bool allObjectTypesAreSupported : 1;
 };
 
-static KStaticDeleter<ActionCategories> Kexi_actionCategoriesDeleter;
-ActionCategories* Kexi_actionCategories = 0;
+K_GLOBAL_STATIC(ActionCategories, Kexi_actionCategories)
 
 //! @internal
 class ActionCategories::Private
@@ -66,12 +64,10 @@ class ActionCategories::Private
 
 KEXICORE_EXPORT ActionCategories *actionCategories()
 {
-	if (!Kexi_actionCategories)
-		Kexi_actionCategoriesDeleter.setObject( Kexi_actionCategories, new ActionCategories() );
 	return Kexi_actionCategories;
 }
 
-}
+} // Kexi
 
 using namespace Kexi;
 

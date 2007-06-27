@@ -20,8 +20,7 @@
 #ifndef KEXIVIEW_H
 #define KEXIVIEW_H
 
-#include <qwidget.h>
-//Added by qt3to4:
+#include <QWidget>
 #include <QEvent>
 #include <QCloseEvent>
 

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,175 +22,92 @@
 
 #include <kexidb/kexidb_export.h>
 
-/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
-#if defined _WIN32 || defined _WIN64
-
-#ifdef MAKE_KEXICORE_LIB
-# define KEXICORE_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXICORE_EXPORT KDE_IMPORT
-#else
-# define KEXICORE_EXPORT 
-#endif
-
-#ifdef MAKE_KEXIMAIN_LIB
-# define KEXIMAIN_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIMAIN_EXPORT KDE_IMPORT
-#else
-# define KEXIMAIN_EXPORT 
-#endif
-
-#ifdef MAKE_KEXITABLEFILTERS_LIB
-# define KEXITABLEFILTERS_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXITABLEFILTERS_EXPORT  KDE_IMPORT
-#else
-# define KEXITABLEFILTERS_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIDATATABLE_LIB
-# define KEXIDATATABLE_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIDATATABLE_EXPORT  KDE_IMPORT
-#else
-# define KEXIDATATABLE_EXPORT //for apps
-#endif
-
-#ifndef KEXIEXTWIDGETS_EXPORT //tmp
-
-#ifdef MAKE_KEXIEXTWIDGETS_LIB
-# define KEXIEXTWIDGETS_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIEXTWIDGETS_EXPORT  KDE_IMPORT
-#else
-# define KEXIEXTWIDGETS_EXPORT //for apps
-#endif
-
-#endif
-
-#ifdef MAKE_KFORMEDITOR_LIB
-# define KFORMEDITOR_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KFORMEDITOR_EXPORT  KDE_IMPORT
-#else
-# define KFORMEDITOR_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIPRJWIZARD_LIB
-# define KEXIPRJWIZARD_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIPRJWIZARD_EXPORT  KDE_IMPORT
-#else
-# define KEXIPRJWIZARD_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIFILTER_LIB
-# define KEXIFILTER_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIFILTER_EXPORT  KDE_IMPORT
-#else
-# define KEXIFILTER_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIWIDGETS_LIB
-# define KEXIWIDGETS_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIWIDGETS_EXPORT  KDE_IMPORT
-#else
-# define KEXIWIDGETS_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIUUID_LIB
-# define KEXIUUID_EXPORT  KDE_EXPORT
-#else
-# define KEXIUUID_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIRELATIONSVIEW_LIB
-# define KEXIRELATIONSVIEW_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIRELATIONSVIEW_EXPORT  KDE_IMPORT
-#else
-# define KEXIRELATIONSVIEW_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIGUIUTILS_LIB
-# define KEXIGUIUTILS_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIGUIUTILS_EXPORT KDE_IMPORT
-#else
-# define KEXIGUIUTILS_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KROSS_MAIN_LIB
-# define KROSS_MAIN_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KROSS_MAIN_EXPORT KDE_IMPORT
-#else
-# define KROSS_MAIN_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIFORMUTILS_LIB
-# define KEXIFORMUTILS_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIFORMUTILS_EXPORT KDE_IMPORT
-#else
-# define KEXIFORMUTILS_EXPORT //for apps
-#endif
-
-#ifdef MAKE_KEXIREPORTUTILS_LIB
-# define KEXIREPORTUTILS_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIREPORTUTILS_EXPORT KDE_IMPORT
-#else
-# define KEXIREPORTUTILS_EXPORT //for apps
-#endif
-
-/* temporary */
-/*#ifndef KOPROPERTY_EXPORT
-# ifdef MAKE_KOPROPERTY_LIB
-#  define KOPROPERTY_EXPORT KDE_EXPORT
-# elif defined(KDE_MAKE_LIB)
-#  define KOPROPERTY_EXPORT KDE_IMPORT
+#ifndef KEXICORE_EXPORT
+# ifdef MAKE_KEXICORE_LIB
+#  define KEXICORE_EXPORT KDE_EXPORT
 # else
-#  define KOPROPERTY_EXPORT
+#  define KEXICORE_EXPORT KDE_IMPORT
 # endif
-#endif*/
+#endif
 
-/* temporary */
+#ifndef KEXIMAIN_EXPORT
+# ifdef MAKE_KEXIMAIN_LIB
+#  define KEXIMAIN_EXPORT KDE_EXPORT
+# else
+#  define KEXIMAIN_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KEXIDATATABLE_EXPORT
+# ifdef MAKE_KEXIDATATABLE_LIB
+#  define KEXIDATATABLE_EXPORT  KDE_EXPORT
+# else
+#  define KEXIDATATABLE_EXPORT  KDE_IMPORT
+# endif
+#endif
+
+#ifndef KEXIEXTWIDGETS_EXPORT
+# ifdef MAKE_KEXIEXTENDEDWIDGETS_LIB
+#  define KEXIEXTWIDGETS_EXPORT  KDE_EXPORT
+# else
+#  define KEXIEXTWIDGETS_EXPORT  KDE_IMPORT
+# endif
+#endif
+
+#ifndef KFORMEDITOR_EXPORT
+# ifdef MAKE_KFORMEDITOR_LIB
+#  define KFORMEDITOR_EXPORT  KDE_EXPORT
+# else
+#  define KFORMEDITOR_EXPORT  KDE_IMPORT
+# endif
+#endif
+
+#ifndef KEXIRELATIONSVIEW_EXPORT
+# ifdef MAKE_KEXIRELATIONSVIEW_LIB
+#  define KEXIRELATIONSVIEW_EXPORT  KDE_EXPORT
+# else
+#  define KEXIRELATIONSVIEW_EXPORT  KDE_IMPORT
+# endif
+#endif
+
+#ifndef KEXIGUIUTILS_EXPORT
+# ifdef MAKE_KEXIGUIUTILS_LIB
+#  define KEXIGUIUTILS_EXPORT KDE_EXPORT
+# else
+#  define KEXIGUIUTILS_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KROSS_MAIN_EXPORT
+# ifdef MAKE_KROSS_MAIN_LIB
+#  define KROSS_MAIN_EXPORT KDE_EXPORT
+# else
+#  define KROSS_MAIN_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KEXIFORMUTILS_EXPORT
+# ifdef MAKE_KEXIFORMUTILS_LIB
+#  define KEXIFORMUTILS_EXPORT KDE_EXPORT
+# else
+#  define KEXIFORMUTILS_EXPORT KDE_IMPORT
+# endif
+#endif
+
+#ifndef KEXIREPORTUTILS_EXPORT
+# ifdef MAKE_KEXIREPORTUTILS_LIB
+#  define KEXIREPORTUTILS_EXPORT KDE_EXPORT
+# else
+#  define KEXIREPORTUTILS_EXPORT KDE_IMPORT
+# endif
+#endif
+
 #ifndef KOMACRO_EXPORT
 # ifdef MAKE_KOMACRO_LIB
 #  define KOMACRO_EXPORT KDE_EXPORT
-# elif defined(KDE_MAKE_LIB)
-#  define KOMACRO_EXPORT KDE_IMPORT
 # else
-#  define KOMACRO_EXPORT
+#  define KOMACRO_EXPORT KDE_IMPORT
 # endif
-#endif
-
-#else /* UNIX */
-
-# define KEXICORE_EXPORT KDE_EXPORT
-# define KEXIMAIN_EXPORT KDE_EXPORT
-# define KEXITABLEFILTERS_EXPORT  KDE_EXPORT
-# define KEXIDATATABLE_EXPORT  KDE_EXPORT
-# define KEXIEXTWIDGETS_EXPORT  KDE_EXPORT
-# define KFORMEDITOR_EXPORT  KDE_EXPORT
-# define KEXIPRJWIZARD_EXPORT  KDE_EXPORT
-# define KEXIFILTER_EXPORT  KDE_EXPORT
-# define KEXIWIDGETS_EXPORT  KDE_EXPORT
-# define KEXIUUID_EXPORT  KDE_EXPORT
-# define KEXIRELATIONSVIEW_EXPORT  KDE_EXPORT
-# define KEXIGUIUTILS_EXPORT KDE_EXPORT
-# define KROSS_MAIN_EXPORT KDE_EXPORT
-# define KEXIFORMUTILS_EXPORT KDE_EXPORT
-# define KEXIREPORTUTILS_EXPORT KDE_EXPORT
-/* temporary */
-/* #define KOPROPERTY_EXPORT KDE_EXPORT*/
-/* temporary */
-# define KOMACRO_EXPORT KDE_EXPORT
-
 #endif
 
 /* additional default options */

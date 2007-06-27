@@ -86,13 +86,14 @@ KexiStartupFileWidget::KexiStartupFileWidget(
 			w->installEventFilter(this);
 	}	*/
 	
+/* Qt4
 #ifdef Q_WS_WIN
 	if (startDirOrVariable.startsWith(":"))
 		m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
-#else
+#else*/
 //	toggleSpeedbar(false);
 	setFocusProxy( locationEdit() );
-#endif
+//#endif
 	
 	connect(this,SIGNAL(fileHighlighted(const QString&)),
 		this,SLOT(slotExistingFileHighlighted(const QString&)));

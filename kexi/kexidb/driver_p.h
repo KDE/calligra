@@ -30,8 +30,8 @@
 #include <q3ptrdict.h>
 #include <q3asciidict.h>
 #include <q3valuevector.h>
-//Added by qt3to4:
 #include <Q3CString>
+#include <QSet>
 #include <kgenericfactory.h>
 
 #include "connection.h"
@@ -147,7 +147,7 @@ class DriverPrivate
 		DriverPrivate();
 		virtual ~DriverPrivate();
 
-		Q3PtrDict<Connection> connections;
+		QSet<Connection*> connections;
 
 //(js)now QObject::name() is reused:
 //		/*! The name equal to the service name (X-Kexi-DriverName) 

@@ -31,6 +31,7 @@
 #include "kexiformdataiteminterface.h"
 #include "kexidbtextwidgetinterface.h"
 #include "kexidbutils.h"
+#include <kexi_global.h>
 #ifdef __GNUC__
 #warning reenable when formatter is ported #include <widget/tableview/kexitextformatter.h>
 #else

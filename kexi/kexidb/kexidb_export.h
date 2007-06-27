@@ -22,37 +22,26 @@
 
 #include <kdemacros.h>
 
-/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
-#if defined _WIN32 || defined _WIN64
-
-#ifdef MAKE_KEXI_DB_LIB
-# define KEXI_DB_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXI_DB_EXPORT KDE_IMPORT
-#else
-# define KEXI_DB_EXPORT 
+#ifndef KEXI_DB_EXPORT
+# ifdef MAKE_KEXI_DB_LIB
+#  define KEXI_DB_EXPORT KDE_EXPORT
+# else
+#  define KEXI_DB_EXPORT KDE_IMPORT
+# endif
 #endif
 
-#ifdef MAKE_KEXIMIGR_LIB
-# define KEXIMIGR_EXPORT  KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIMIGR_EXPORT  KDE_IMPORT
-#else
-# define KEXIMIGR_EXPORT //for apps
-#endif
-
-#else /* UNIX */
-
-# define KEXI_DB_EXPORT KDE_EXPORT
-# define KEXIMIGR_EXPORT  KDE_EXPORT
-
+#ifndef KEXIMIGR_EXPORT
+# ifdef MAKE_KEXIMIGRATE_LIB
+#  define KEXIMIGR_EXPORT  KDE_EXPORT
+# else
+#  define KEXIMIGR_EXPORT  KDE_IMPORT
+# endif
 #endif
 
 /* -- compile-time settings -- */
 #if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
 /* defined in a .pro file or 'KEXI_OPTIONS' env. variable */
 #else
-
 #endif
 
 /* Might want to add GUI defines here if widgets are to be

@@ -38,18 +38,17 @@
 #include <kiconeffect.h>
 #include <ksharedptr.h>
 #include <kmimetype.h>
-#include <kstaticdeleter.h>
 #include <kglobalsettings.h>
 
 using namespace Kexi;
 
 //! used for speedup
 //! @internal
-class KexiInternal : public KShared
+class KexiInternal
 {
 	public:
-		KexiInternal() : KShared()
-		 , connset(0)
+		KexiInternal()
+		 : connset(0)
 		 , smallFont(0)
 		{
 		}
@@ -66,14 +65,10 @@ class KexiInternal : public KShared
 		QFont *smallFont;
 };
 
-static KStaticDeleter<KexiInternal> Kexi_intDeleter;
-KexiInternal* _int = 0;
-
-#define _INIT_SHARED { if (!_int) Kexi_intDeleter.setObject( _int, new KexiInternal() ); }
+K_GLOBAL_STATIC(KexiInternal, _int)
 
 KexiDBConnectionSet& Kexi::connset()
 {
-	_INIT_SHARED;
 	//delayed
 	if (!_int->connset) {
 		//load stored set data, OK?
@@ -83,20 +78,18 @@ KexiDBConnectionSet& Kexi::connset()
 	return *_int->connset;
 }
 
-KexiProjectSet& Kexi::recentProjects() { 
-	_INIT_SHARED;
+KexiProjectSet& Kexi::recentProjects()
+{
 	return _int->recentProjects;
 }
 
 KexiDB::DriverManager& Kexi::driverManager()
 {
-	_INIT_SHARED;
 	return _int->driverManager;
 }
 
 KexiPart::Manager& Kexi::partManager()
 {
-	_INIT_SHARED;
 	return _int->partManager;
 }
 
@@ -135,7 +128,6 @@ bool& Kexi::tempShowScripts() {
 
 QFont Kexi::smallFont(QWidget *init)
 {
-	_INIT_SHARED;
 	if (!_int->smallFont) {
 		_int->smallFont = new QFont( init->font() );
 		const int wdth = KGlobalSettings::desktopGeometry(init).width();

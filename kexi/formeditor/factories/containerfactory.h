@@ -58,7 +58,7 @@ class InsertPageCommand : public K3Command
 };
 
 //! Helper widget (used when using 'Lay out horizontally')
-class KFORMEDITOR_EXPORT HBox : public Q3Frame
+class HBox : public Q3Frame
 {
 	Q_OBJECT
 
@@ -73,7 +73,7 @@ class KFORMEDITOR_EXPORT HBox : public Q3Frame
 };
 
 //! Helper widget (used when using 'Lay out vertically')
-class KFORMEDITOR_EXPORT VBox : public Q3Frame
+class VBox : public Q3Frame
 {
 	Q_OBJECT
 
@@ -88,7 +88,7 @@ class KFORMEDITOR_EXPORT VBox : public Q3Frame
 };
 
 //! Helper widget (used when using 'Lay out in a grid')
-class KFORMEDITOR_EXPORT Grid : public Q3Frame
+class Grid : public Q3Frame
 {
 	Q_OBJECT
 
@@ -103,7 +103,7 @@ class KFORMEDITOR_EXPORT Grid : public Q3Frame
 };
 
 //! Helper widget (used when using 'Lay out with horizontal flow')
-class KFORMEDITOR_EXPORT HFlow : public Q3Frame
+class HFlow : public Q3Frame
 {
 	Q_OBJECT
 
@@ -118,7 +118,7 @@ class KFORMEDITOR_EXPORT HFlow : public Q3Frame
 };
 
 //! Helper widget (used when using 'Lay out with horizontal flow')
-class KFORMEDITOR_EXPORT VFlow : public Q3Frame
+class VFlow : public Q3Frame
 {
 	Q_OBJECT
 
@@ -134,7 +134,7 @@ class KFORMEDITOR_EXPORT VFlow : public Q3Frame
 };
 
 //! A simple container widget
-class KFORMEDITOR_EXPORT ContainerWidget : public QWidget
+class ContainerWidget : public QWidget
 {
 	Q_OBJECT
 
@@ -161,7 +161,7 @@ class KFORMEDITOR_EXPORT ContainerWidget : public QWidget
 };
 
 //! A tab widget
-class KFORMEDITOR_EXPORT KFDTabWidget : public KFormDesigner::TabWidget
+class KFDTabWidget : public KFormDesigner::TabWidget
 {
 	Q_OBJECT
 
@@ -186,7 +186,7 @@ class KFORMEDITOR_EXPORT KFDTabWidget : public KFormDesigner::TabWidget
 };
 
 //! A group box widget
-class KFORMEDITOR_EXPORT GroupBox : public Q3GroupBox
+class GroupBox : public Q3GroupBox
 {
 	Q_OBJECT
 
@@ -209,7 +209,7 @@ class KFORMEDITOR_EXPORT GroupBox : public Q3GroupBox
 };
 
 //! A form embedded as a widget inside other form
-class KFORMEDITOR_EXPORT SubForm : public Q3ScrollView
+class SubForm : public Q3ScrollView
 {
 	Q_OBJECT
 	Q_PROPERTY(QString formName READ formName WRITE setFormName DESIGNABLE true)

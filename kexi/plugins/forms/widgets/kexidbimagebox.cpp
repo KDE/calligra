@@ -38,7 +38,6 @@
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
-#include <kstaticdeleter.h>
 #include <kimageeffect.h>
 #include <kstdaccel.h>
 #include <kmessagebox.h>
@@ -53,18 +52,23 @@
 #include <formeditor/widgetlibrary.h>
 #include <kexi_global.h>
 
-#ifdef Q_WS_WIN
-#include <win32_utils.h>
-#include <krecentdirs.h>
-#endif
+//#ifdef Q_WS_WIN
+//#include <win32_utils.h>
+//#include <krecentdirs.h>
+//#endif
 
 #include "kexidbutils.h"
 #include "../kexiformpart.h"
 
-static KStaticDeleter<QPixmap> KexiDBImageBox_pmDeleter;
-static QPixmap* KexiDBImageBox_pm = 0;
-static KStaticDeleter<QPixmap> KexiDBImageBox_pmSmallDeleter;
-static QPixmap* KexiDBImageBox_pmSmall = 0;
+//! @internal
+struct KexiDBImageBox_Static
+{
+	KexiDBImageBox_Static() : pixmap(0), small(0) {}
+	QPixmap *pixmap;
+	QPixmap *small;
+};
+
+K_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
 
 KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent )
 	: KexiFrame( parent, Qt::WNoAutoErase )
@@ -657,11 +661,11 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 
 		updatePixmap();
 		QPixmap *imagBoxPm;
-		const bool tooLarge = (height()-margins.top-margins.bottom) <= KexiDBImageBox_pm->height();
-		if (tooLarge || (width()-margins.left-margins.right) <= KexiDBImageBox_pm->width())
-			imagBoxPm = KexiDBImageBox_pmSmall;
+		const bool tooLarge = (height()-margins.top-margins.bottom) <= KexiDBImageBox_static->pixmap->height();
+		if (tooLarge || (width()-margins.left-margins.right) <= KexiDBImageBox_static->pixmap->width())
+			imagBoxPm = KexiDBImageBox_static->small;
 		else
-			imagBoxPm = KexiDBImageBox_pm;
+			imagBoxPm = KexiDBImageBox_static->pixmap;
 		QImage img(imagBoxPm->toImage());
 		img = KImageEffect::flatten(img, bg.dark(150),
 			qGray( bg.rgb() ) <= 20 ? QColor(Qt::gray).dark(150) : bg.light(105));
@@ -723,19 +727,18 @@ void KexiDBImageBox::updatePixmap()
 	if (! (m_designMode && pixmap().isNull()) )
 		return;
 
-	if (!KexiDBImageBox_pm) {
+	if (!KexiDBImageBox_static->pixmap) {
 		QString fname( KStandardDirs::locate("data", QString("kexi/pics/imagebox.png")) );
-		KexiDBImageBox_pmDeleter.setObject( KexiDBImageBox_pm, new QPixmap(fname, "PNG") );
-		QImage img(KexiDBImageBox_pm->toImage());
-		KexiDBImageBox_pmSmallDeleter.setObject( KexiDBImageBox_pmSmall, 
-			new QPixmap( 
+		KexiDBImageBox_static->pixmap = new QPixmap(fname, "PNG");
+		QImage img(KexiDBImageBox_static->pixmap->toImage());
+		KexiDBImageBox_static->small
+		 = new QPixmap( 
 				QPixmap::fromImage(
 					img.scaled(
 						img.width()/2, img.height()/2, Qt::KeepAspectRatio,
 						Qt::SmoothTransformation)
 				)
-			)
-		);
+			);
 	}
 }
 

@@ -218,7 +218,7 @@ void Connection::destroy()
 {
 	disconnect();
 	//do not allow the driver to touch me: I will kill myself.
-	m_driver->d->connections.take( this );
+	m_driver->d->connections.remove( this );
 }
 
 Connection::~Connection()

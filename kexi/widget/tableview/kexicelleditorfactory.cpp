@@ -21,7 +21,7 @@
 
 #include <q3ptrdict.h>
 #include <q3intdict.h>
-#include <kstaticdeleter.h>
+#include <kglobal.h>
 
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
@@ -69,6 +69,29 @@ class KexiCellEditorFactoryPrivate
 		{
 			items.setAutoDelete( true );
 			items_by_type.setAutoDelete( false );
+
+			// Initialize standard editor cell editor factories
+			registerItem( *new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB );
+#ifdef __GNUC__
+#warning TODO reenable 	registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
+#else
+#pragma WARNING( TODO reenable 	registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date ); )
+#endif
+#ifdef __GNUC__
+	#warning TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
+#else
+	#pragma WARNING( TODO reenable registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time ); )
+#endif
+#ifdef __GNUC__
+#warning TODO reenable 	registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
+#else
+#pragma WARNING( TODO reenable 	registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime ); )
+#endif
+			registerItem( *new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum );
+			registerItem( *new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean );
+			registerItem( *new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon" );
+			//default type
+			registerItem( *new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType );
 		}
 		~KexiCellEditorFactoryPrivate() {}
 
@@ -104,8 +127,7 @@ class KexiCellEditorFactoryPrivate
 		Q3Dict<KexiCellEditorFactoryItem> items_by_type; //!< editor factory items accessed by a key
 };
 
-static KStaticDeleter<KexiCellEditorFactoryPrivate> KexiCellEditorFactory_deleter;
-static KexiCellEditorFactoryPrivate *KexiCellEditorFactory_static = 0;
+K_GLOBAL_STATIC(KexiCellEditorFactoryPrivate, KexiCellEditorFactory_static)
 
 //============= KexiCellEditorFactory ============
 
@@ -117,40 +139,8 @@ KexiCellEditorFactory::~KexiCellEditorFactory()
 {
 }
 
-
-// Initializes standard editor cell editor factories
-void KexiCellEditorFactory::init()
-{
-	if (KexiCellEditorFactory_static)
-		return;
-	KexiCellEditorFactory_deleter.setObject(KexiCellEditorFactory_static, new KexiCellEditorFactoryPrivate());
-
-	KexiCellEditorFactory_static->registerItem( *new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB );
-#ifdef __GNUC__
-#warning TODO reenable 	KexiCellEditorFactory_static->registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date );
-#else
-#pragma WARNING( TODO reenable 	KexiCellEditorFactory_static->registerItem( *new KexiDateEditorFactoryItem(), KexiDB::Field::Date ); )
-#endif
-#ifdef __GNUC__
-	#warning TODO reenable KexiCellEditorFactory_static->registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time );
-#else
-	#pragma WARNING( TODO reenable KexiCellEditorFactory_static->registerItem( *new KexiTimeEditorFactoryItem(), KexiDB::Field::Time ); )
-#endif
-#ifdef __GNUC__
-#warning TODO reenable 	KexiCellEditorFactory_static->registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime );
-#else
-#pragma WARNING( TODO reenable 	KexiCellEditorFactory_static->registerItem( *new KexiDateTimeEditorFactoryItem(), KexiDB::Field::DateTime ); )
-#endif
-	KexiCellEditorFactory_static->registerItem( *new KexiComboBoxEditorFactoryItem(), KexiDB::Field::Enum );
-	KexiCellEditorFactory_static->registerItem( *new KexiBoolEditorFactoryItem(), KexiDB::Field::Boolean );
-	KexiCellEditorFactory_static->registerItem( *new KexiKIconTableEditorFactoryItem(), KexiDB::Field::Text, "KIcon" );
-	//default type
-	KexiCellEditorFactory_static->registerItem( *new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType );
-}
-
 void KexiCellEditorFactory::registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType )
 {
-	init();
 	KexiCellEditorFactory_static->registerItem( item, type, subType );
 }
 
@@ -172,7 +162,6 @@ static bool hasEnumType( const KexiTableViewColumn &column )
 
 KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QWidget* parent)
 {
-	init();
 	KexiDB::Field *realField;
 	if (column.visibleLookupColumnInfo) {
 		realField = column.visibleLookupColumnInfo->field;
@@ -216,7 +205,6 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, 
 
 KexiCellEditorFactoryItem* KexiCellEditorFactory::item( uint type, const QString& subType )
 {
-	init();
 	return KexiCellEditorFactory_static->findItem(type, subType);
 }
 

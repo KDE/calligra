@@ -33,6 +33,7 @@
 #include "../kexiformdataiteminterface.h"
 #include "../kexidbtextwidgetinterface.h"
 #include <widget/utils/kexidisplayutils.h>
+#include <kexi_global.h>
 
 class QPainter;
 

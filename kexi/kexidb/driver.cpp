@@ -31,7 +31,6 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>
-#include <Q3PtrList>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -80,9 +79,6 @@ Driver::Driver( QObject *parent, const QStringList & )
 	, beh( new DriverBehaviour() )
 	, d( new DriverPrivate() )
 {
-	d->connections.setAutoDelete(false);
-	//TODO: reasonable size
-	d->connections.resize(101);
 	d->typeNames.resize(Field::LastType + 1);
 
 	d->initKexiKeywords();
@@ -93,11 +89,7 @@ Driver::~Driver()
 {
 	DriverManagerInternal::self()->aboutDelete( this );
 //	KexiDBDbg << "Driver::~Driver()" << endl;
-	Q3PtrDictIterator<Connection> it( d->connections );
-	Connection *conn;
-	while ( (conn = it.toFirst()) ) {
-		delete conn;
-	}
+	qDeleteAll( d->connections );
 	delete beh;
 	delete d;
 //	KexiDBDbg << "Driver::~Driver() ok" << endl;
@@ -129,13 +121,9 @@ bool Driver::isValid()
 	return true;
 }
 
-const Q3PtrList<Connection> Driver::connectionsList() const
+const QSet<Connection*> Driver::connections() const
 {
-	Q3PtrList<Connection> clist;
-	Q3PtrDictIterator<Connection> it( d->connections );
-	for( ; it.current(); ++it )
-		clist.append( &(*it) );
-	return clist;
+	return d->connections;
 }
 
 QString Driver::fileDBDriverMimeType() const
@@ -200,14 +188,16 @@ Connection *Driver::createConnection( ConnectionData &conn_data, int options )
 	conn->setReadOnly(options & ReadOnlyConnection);
 
 	conn_data.driverName = name();
-	d->connections.insert( conn, conn );
+	d->connections.insert( conn );
 	return conn;
 }
 
 Connection* Driver::removeConnection( Connection *conn )
 {
 	clearError();
-	return d->connections.take( conn );
+	if (d->connections.remove( conn ))
+		return conn;
+	return 0;
 }
 
 QString Driver::defaultSQLTypeName(int id_t)

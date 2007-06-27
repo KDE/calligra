@@ -21,7 +21,6 @@ set(kexisql3_LIB_SRCS
    legacy.c 
    main.c 
    opcodes.c 
-   os_unix.c 
    pager.c 
    parse.c 
    pragma.c 
@@ -42,6 +41,14 @@ set(kexisql3_LIB_SRCS
    vdbefifo.c
    vdbemem.c 
    where.c )
+
+IF(WIN32)
+   set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} ../sqlite3.def os_win.c)
+ELSEIF(APPLE)
+   set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} os_mac.c)
+ELSE() #unix
+   set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} os_unix.c)
+ENDIF()
 
 kde4_automoc(${kexisql3_LIB_SRCS})
 

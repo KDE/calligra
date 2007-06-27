@@ -20,7 +20,6 @@
 #ifndef KEXI_CSVWIDGETS_H
 #define KEXI_CSVWIDGETS_H
 
-#include <QVector>
 #include <KComboBox>
 
 class KLineEdit;
@@ -78,8 +77,9 @@ class KexiCSVDelimiterWidget : public QWidget
 
 	public:
 		KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget * parent = 0 );
+		~KexiCSVDelimiterWidget();
 
-		QString delimiter() const { return m_delimiter; }
+		QString delimiter() const;
 		void setDelimiter(const QString& delimiter);
 
 	signals:
@@ -93,10 +93,8 @@ class KexiCSVDelimiterWidget : public QWidget
 		void slotDelimiterLineEditReturnPressed();
 
 	protected:
-		QString m_delimiter;
-		QVector<QString> m_availableDelimiters;
-		KComboBox* m_combo;
-		KLineEdit* m_delimiterEdit;
+		class Private;
+		Private * const d;
 };
 
 //! @short A combo box widget providing a list of possible quote characters

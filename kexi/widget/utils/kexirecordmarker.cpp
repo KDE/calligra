@@ -31,28 +31,28 @@
 #include <QPaintEvent>
 #include <QStyle>
 #include <QStyleOptionHeader>
- 
+
 #include <kdebug.h>
-#include <kstaticdeleter.h>
 
 #include <kexiutils/utils.h>
+#include <kexi_global.h>
 
 #include "../../pics/tableview_pen.xpm"
 #include "../../pics/tableview_plus.xpm"
 
-static KStaticDeleter<QImage> KexiRecordMarker_pen_deleter, KexiRecordMarker_plus_deleter;
-QImage* KexiRecordMarker_pen = 0, *KexiRecordMarker_plus = 0;
-
-static void initRecordMarkerImages()
-{
-	if (!KexiRecordMarker_pen) {
+//! @internal
 /*! @warning not reentrant! */
-		KexiRecordMarker_pen_deleter.setObject( 
-			KexiRecordMarker_pen, new QImage(tableview_pen_xpm) );
-		KexiRecordMarker_plus_deleter.setObject(
-			KexiRecordMarker_plus, new QImage(tableview_plus_xpm) );
+struct KexiRecordMarkerStatic
+{
+	KexiRecordMarkerStatic()
+	 : pen( tableview_pen_xpm )
+	 , plus( tableview_plus_xpm )
+	{
 	}
-}
+	QImage pen, plus;
+};
+
+K_GLOBAL_STATIC(KexiRecordMarkerStatic, KexiRecordMarker_static)
 
 //----------------------------------------------------------------
 
@@ -87,7 +87,6 @@ KexiRecordMarker::KexiRecordMarker(QWidget *parent)
  : QWidget(parent)
  , d( new Private() )
 {
-	initRecordMarkerImages();
 }
 
 KexiRecordMarker::~KexiRecordMarker()
@@ -97,14 +96,12 @@ KexiRecordMarker::~KexiRecordMarker()
 
 QImage* KexiRecordMarker::penImage()
 {
-	initRecordMarkerImages();
-	return KexiRecordMarker_pen;
+	return &KexiRecordMarker_static->pen;
 }
 
 QImage* KexiRecordMarker::plusImage()
 {
-	initRecordMarkerImages();
-	return KexiRecordMarker_plus;
+	return &KexiRecordMarker_static->plus;
 }
 
 void KexiRecordMarker::addLabel(bool upd)
@@ -192,8 +189,8 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 		//show pen when editing
 		int ofs = d->rowHeight / 4;
 		int pos = ((d->rowHeight*(d->currentRow>=0?d->currentRow:0))-d->offset)-ofs/2+1;
-		p.drawImage((d->rowHeight-KexiRecordMarker_pen->width())/2,
-			(d->rowHeight-KexiRecordMarker_pen->height())/2+pos,*KexiRecordMarker_pen);
+		p.drawImage((d->rowHeight-KexiRecordMarker_static->pen.width())/2,
+			(d->rowHeight-KexiRecordMarker_static->pen.height())/2+pos, KexiRecordMarker_static->pen);
 	}
 	else if (d->currentRow >= first && d->currentRow <= last 
 		&& (!d->showInsertRow || (d->showInsertRow && d->currentRow < last)))/*don't display marker for 'insert' row*/ 
@@ -215,9 +212,9 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 	if (d->showInsertRow && d->editRow < last
 		&& last == (d->rows-1+(d->showInsertRow?1:0)) ) {
 		//show plus sign
-		int pos = ((d->rowHeight*last)-d->offset)+(d->rowHeight-KexiRecordMarker_plus->height())/2;
+		int pos = ((d->rowHeight*last)-d->offset)+(d->rowHeight-KexiRecordMarker_static->plus.height())/2;
 //		p.drawImage((width()-d->plusImg.width())/2-1, pos, d->plusImg);
-		p.drawImage((width()-KexiRecordMarker_plus->width())/2, pos, *KexiRecordMarker_plus);
+		p.drawImage((width()-KexiRecordMarker_static->plus.width())/2, pos, KexiRecordMarker_static->plus);
 	}
 }
 

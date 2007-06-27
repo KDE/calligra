@@ -26,6 +26,7 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3Frame>
+#include <QVector>
 
 #include <klocale.h>
 #include <klineedit.h>
@@ -36,53 +37,70 @@
 
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
 
+Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QVector<QString>;
+
+class KexiCSVDelimiterWidget::Private
+{
+	public:
+		Private() : availableDelimiters(KEXICSV_OTHER_DELIMITER_INDEX) {
+			availableDelimiters[0]=KEXICSV_DEFAULT_FILE_DELIMITER;
+			availableDelimiters[1]=";";
+			availableDelimiters[2]="\t";
+			availableDelimiters[3]=" ";
+		}
+		QString delimiter;
+		QVector<QString> availableDelimiters;
+		KComboBox* combo;
+		KLineEdit* delimiterEdit;
+};
+
 KexiCSVDelimiterWidget::KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget * parent )
  : QWidget(parent)
- , m_availableDelimiters(KEXICSV_OTHER_DELIMITER_INDEX)
+ , d( new Private() )
 {
 	Q3BoxLayout *lyr = 
 		lineEditOnBottom ? 
 		(Q3BoxLayout *)new Q3VBoxLayout( this, 0, KDialog::spacingHint() )
 		: (Q3BoxLayout *)new Q3HBoxLayout( this, 0, KDialog::spacingHint() );
 
-	m_availableDelimiters[0]=KEXICSV_DEFAULT_FILE_DELIMITER;
-	m_availableDelimiters[1]=";";
-	m_availableDelimiters[2]="\t";
-	m_availableDelimiters[3]=" ";
+	d->combo = new KComboBox(this);
+	d->combo->setObjectName("KexiCSVDelimiterComboBox");
+	d->combo->addItem( i18n( "Comma \",\"") ); //<-- KEXICSV_DEFAULT_FILE_DELIMITER
+	d->combo->addItem( i18n( "Semicolon \";\"" ) );
+	d->combo->addItem( i18n( "Tabulator" ) );
+	d->combo->addItem( i18n( "Space \" \"" ) );
+	d->combo->addItem( i18n( "Other" ) );
+	lyr->addWidget(d->combo);
+	setFocusProxy(d->combo);
 
-	m_combo = new KComboBox(this);
-	m_combo->setObjectName("KexiCSVDelimiterComboBox");
-	m_combo->addItem( i18n( "Comma \",\"") ); //<-- KEXICSV_DEFAULT_FILE_DELIMITER
-	m_combo->addItem( i18n( "Semicolon \";\"" ) );
-	m_combo->addItem( i18n( "Tabulator" ) );
-	m_combo->addItem( i18n( "Space \" \"" ) );
-	m_combo->addItem( i18n( "Other" ) );
-	lyr->addWidget(m_combo);
-	setFocusProxy(m_combo);
-
-	m_delimiterEdit = new KLineEdit(this);
-	m_delimiterEdit->setObjectName("m_delimiterEdit");
-//  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
-	m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
-	m_delimiterEdit->setMaxLength(1);
-	lyr->addWidget( m_delimiterEdit );
+	d->delimiterEdit = new KLineEdit(this);
+	d->delimiterEdit->setObjectName("d->delimiterEdit");
+//  d->delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, d->delimiterEdit->sizePolicy().hasHeightForWidth() ) );
+	d->delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
+	d->delimiterEdit->setMaxLength(1);
+	lyr->addWidget( d->delimiterEdit );
 	if (!lineEditOnBottom)
 		lyr->addStretch(2);
 
-	slotDelimiterChangedInternal(KEXICSV_DEFAULT_FILE_DELIMITER_INDEX); //this will init m_delimiter
-	connect(m_combo, SIGNAL(activated(int)),
+	slotDelimiterChangedInternal(KEXICSV_DEFAULT_FILE_DELIMITER_INDEX); //this will init d->delimiter
+	connect(d->combo, SIGNAL(activated(int)),
 	  this, SLOT(slotDelimiterChanged(int)));
-	connect(m_delimiterEdit, SIGNAL(returnPressed()),
+	connect(d->delimiterEdit, SIGNAL(returnPressed()),
 	  this, SLOT(slotDelimiterLineEditReturnPressed()));
-	connect(m_delimiterEdit, SIGNAL(textChanged( const QString & )),
+	connect(d->delimiterEdit, SIGNAL(textChanged( const QString & )),
 	  this, SLOT(slotDelimiterLineEditTextChanged( const QString & ) ));
+}
+
+KexiCSVDelimiterWidget::~KexiCSVDelimiterWidget()
+{
+	delete d;
 }
 
 void KexiCSVDelimiterWidget::slotDelimiterChanged(int index)
 {
 	slotDelimiterChangedInternal(index);
 	if (index==KEXICSV_OTHER_DELIMITER_INDEX)
-		m_delimiterEdit->setFocus();
+		d->delimiterEdit->setFocus();
 }
 
 void KexiCSVDelimiterWidget::slotDelimiterChangedInternal(int index)
@@ -91,21 +109,21 @@ void KexiCSVDelimiterWidget::slotDelimiterChangedInternal(int index)
 	if (index > KEXICSV_OTHER_DELIMITER_INDEX)
 		return;
 	else if (index == KEXICSV_OTHER_DELIMITER_INDEX) {
-		changed = m_delimiter != m_delimiterEdit->text();
-		m_delimiter = m_delimiterEdit->text();
+		changed = d->delimiter != d->delimiterEdit->text();
+		d->delimiter = d->delimiterEdit->text();
 	}
 	else {
-		changed = m_delimiter != m_availableDelimiters[index];
-		m_delimiter = m_availableDelimiters[index];
+		changed = d->delimiter != d->availableDelimiters[index];
+		d->delimiter = d->availableDelimiters[index];
 	}
-	m_delimiterEdit->setEnabled(index == KEXICSV_OTHER_DELIMITER_INDEX);
+	d->delimiterEdit->setEnabled(index == KEXICSV_OTHER_DELIMITER_INDEX);
 	if (changed)
-		emit delimiterChanged(m_delimiter);
+		emit delimiterChanged(d->delimiter);
 }
 
 void KexiCSVDelimiterWidget::slotDelimiterLineEditReturnPressed()
 {
-	if (m_combo->currentIndex() != KEXICSV_OTHER_DELIMITER_INDEX)
+	if (d->combo->currentIndex() != KEXICSV_OTHER_DELIMITER_INDEX)
 		return;
 	slotDelimiterChangedInternal(KEXICSV_OTHER_DELIMITER_INDEX);
 }
@@ -115,20 +133,25 @@ void KexiCSVDelimiterWidget::slotDelimiterLineEditTextChanged( const QString & )
 	slotDelimiterChangedInternal(KEXICSV_OTHER_DELIMITER_INDEX);
 }
 
+QString KexiCSVDelimiterWidget::delimiter() const
+{
+	return d->delimiter;
+}
+
 void KexiCSVDelimiterWidget::setDelimiter(const QString& delimiter)
 {
-	QVector<QString>::ConstIterator it = m_availableDelimiters.constBegin();
+	QVector<QString>::ConstIterator it = d->availableDelimiters.constBegin();
 	int index = 0;
-	for (; it != m_availableDelimiters.constEnd(); ++it, index++) {
+	for (; it != d->availableDelimiters.constEnd(); ++it, index++) {
 		if (*it == delimiter) {
-			m_combo->setCurrentIndex(index);
+			d->combo->setCurrentIndex(index);
 			slotDelimiterChangedInternal(index);
 			return;
 		}
 	}
 	//else: set other (custom) delimiter
-	m_delimiterEdit->setText(delimiter);
-	m_combo->setCurrentIndex(KEXICSV_OTHER_DELIMITER_INDEX);
+	d->delimiterEdit->setText(delimiter);
+	d->combo->setCurrentIndex(KEXICSV_OTHER_DELIMITER_INDEX);
 	slotDelimiterChangedInternal(KEXICSV_OTHER_DELIMITER_INDEX);
 }
 

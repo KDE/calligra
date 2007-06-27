@@ -28,13 +28,12 @@
 #include <QPixmap>
 
 #include <kdebug.h>
-#include <kstaticdeleter.h>
 #include <kimageio.h>
+#include <kglobal.h>
 
 #include <kexidb/connection.h>
 
-static KStaticDeleter<KexiBLOBBuffer> m_bufferDeleter;
-static KexiBLOBBuffer* m_buffer = 0;
+K_GLOBAL_STATIC(KexiBLOBBuffer, _buffer)
 
 //-----------------
 
@@ -180,7 +179,7 @@ KexiBLOBBuffer::KexiBLOBBuffer()
  : QObject()
  , d(new Private())
 {
-	Q_ASSERT(!m_buffer);
+//	Q_ASSERT(!_buffer);
 	d->inMemoryItems.setAutoDelete(true);
 	d->storedItems.setAutoDelete(true);
 }
@@ -373,10 +372,7 @@ void KexiBLOBBuffer::setConnection(KexiDB::Connection *conn)
 
 KexiBLOBBuffer* KexiBLOBBuffer::self()
 {
-	if(!m_buffer) {
-		m_bufferDeleter.setObject( m_buffer, new KexiBLOBBuffer() );
-	}
-	return m_buffer;
+	return _buffer;
 }
 
 #include "kexiblobbuffer.moc"

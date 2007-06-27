@@ -35,6 +35,10 @@ set(kexisql2_LIB_SRCS
    opcodes.c 
    main.c )
 
+IF(WIN32)
+   set(kexisql2_LIB_SRCS ${kexisql2_LIB_SRCS} ../kexisql.def )
+ENDIF(WIN32)
+
 kde4_automoc(${kexisql2_LIB_SRCS})
 
 kde4_add_library(kexisql2 SHARED ${kexisql2_LIB_SRCS})

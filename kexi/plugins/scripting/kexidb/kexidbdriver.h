@@ -24,6 +24,7 @@
 #include <qobject.h>
 
 #include <kexidb/driver.h>
+#include <kexi_global.h>
 
 namespace Scripting {
 
@@ -97,7 +98,13 @@ namespace Scripting {
             /** Returns the number of connections. */
             uint connectionCount();
             /** Return the \a KexiDBConnection specified by the index-number passed as an argument. */
-            QObject* connection(uint index);
+#ifdef __GNUC__
+#warning TODO QSet<Connection*> is available now
+#else
+#pragma WARNING( TODO QSet<Connection*> is available now )
+#endif
+/* TODO
+		QObject* connection(uint index);*/
 
         private:
             ::KexiDB::Driver* m_driver;

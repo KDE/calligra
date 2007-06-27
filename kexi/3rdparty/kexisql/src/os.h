@@ -128,7 +128,9 @@
     int locked;             /* 0: unlocked, <0: write lock, >0: read lock */
   };
 # if defined(_MSC_VER) || defined(__BORLANDC__)
+#  ifndef _OFF_T_DEFINED
     typedef __int64 off_t;
+#  endif
 # else
 #  if !defined(_CYGWIN_TYPES_H)
      typedef long long off_t;

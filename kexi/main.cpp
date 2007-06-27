@@ -24,7 +24,6 @@
 
 #include <QApplication>
 #include <main/KexiMainWindow.h>
-#include <KStaticDeleter>
 
 int main(int argc, char *argv[])
 {
@@ -33,7 +32,7 @@ int main(int argc, char *argv[])
 		return result;
 
 	result = qApp->exec();
-	KStaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
+//Qt4	KStaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
 	delete qApp->mainWidget();
 	delete qApp;
 	return result;

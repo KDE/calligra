@@ -20,11 +20,7 @@
 #include "alter.h"
 #include "utils.h"
 #include <kexiutils/utils.h>
-
 #include <qmap.h>
-
-#include <kstaticdeleter.h>
-
 #include <stdlib.h>
 
 namespace KexiDB {
@@ -110,22 +106,18 @@ AlterTableHandler::FieldActionBase::~FieldActionBase()
 
 //--------------------------------------------------------
 
-static KStaticDeleter< QMap<QByteArray,int> > KexiDB_alteringTypeForProperty_deleter;
-QMap<QByteArray,int> *KexiDB_alteringTypeForProperty = 0;
-
 //! @internal
-int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
+struct KexiDB_AlterTableHandlerStatic
 {
-	if (!KexiDB_alteringTypeForProperty) {
-		KexiDB_alteringTypeForProperty_deleter.setObject( KexiDB_alteringTypeForProperty, 
-			new QMap<QByteArray,int>() );
+	KexiDB_AlterTableHandlerStatic()
+	{
 #define I(name, type) \
-	KexiDB_alteringTypeForProperty->insert(QByteArray(name).toLower(), (int)AlterTableHandler::type)
+	types.insert(QByteArray(name).toLower(), (int)AlterTableHandler::type)
 #define I2(name, type1, type2) \
 	flag = (int)AlterTableHandler::type1|(int)AlterTableHandler::type2; \
 	if (flag & AlterTableHandler::PhysicalAlteringRequired) \
 		flag |= AlterTableHandler::MainSchemaAlteringRequired; \
-	KexiDB_alteringTypeForProperty->insert(QByteArray(name).toLower(), flag)
+	types.insert(QByteArray(name).toLower(), flag)
 
 	/* useful links: 
 		http://dev.mysql.com/doc/refman/5.0/en/create-table.html
@@ -177,7 +169,16 @@ int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
 #undef I
 #undef I2
 	}
-	const int res = (*KexiDB_alteringTypeForProperty)[propertyName.toLower()];
+
+	QHash<QByteArray,int> types;
+};
+
+K_GLOBAL_STATIC(KexiDB_AlterTableHandlerStatic, KexiDB_alteringTypeForProperty)
+
+//! @internal
+int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
+{
+	const int res = KexiDB_alteringTypeForProperty->types[propertyName.toLower()];
 	if (res == 0) {
 		if (KexiDB::isExtendedTableFieldProperty(propertyName))
 			return (int)ExtendedSchemaAlteringRequired;
@@ -186,7 +187,7 @@ int AlterTableHandler::alteringTypeForProperty(const QByteArray& propertyName)
 			.arg(QString(propertyName)) << endl;
 	}
 	return res;
-	return (*KexiDB_alteringTypeForProperty)[propertyName.toLower()]; 
+	return KexiDB_alteringTypeForProperty->types[propertyName.toLower()];
 }
 
 //---

@@ -32,7 +32,7 @@
 #include "widgetfactory.h"
 #include "container.h"
 
-class KFORMEDITOR_EXPORT KexiPictureLabel : public QLabel
+class KexiPictureLabel : public QLabel
 {
 	Q_OBJECT
 
@@ -43,7 +43,7 @@ class KFORMEDITOR_EXPORT KexiPictureLabel : public QLabel
 		virtual bool setProperty(const char *name, const QVariant &value);
 };
 
-class KFORMEDITOR_EXPORT Line : public Q3Frame
+class Line : public Q3Frame
 {
 	Q_OBJECT
 	Q_PROPERTY(Qt::Orientation orientation READ orientation WRITE setOrientation)

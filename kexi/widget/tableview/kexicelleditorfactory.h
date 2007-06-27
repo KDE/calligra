@@ -23,7 +23,7 @@
 #include <qvariant.h>
 #include <qwidget.h>
 
-#include <kexi_export.h>
+#include <kexi_global.h>
 #include <kexidb/field.h>
 
 class KexiCellEditorFactoryItem;

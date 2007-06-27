@@ -26,7 +26,6 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <Q3CString>
-#include <Q3PtrList>
 
 #include <kexidb/global.h>
 #include <kexidb/object.h>
@@ -128,8 +127,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 */
 		Connection *createConnection( ConnectionData &conn_data, int options = 0 );
 
-		/*! \return List of created connections. */
-		const Q3PtrList<Connection> connectionsList() const;
+		/*! \return Set of created connections. */
+		const QSet<Connection*> connections() const;
 
 		/*! \return a name ofthe driver, equal to the service name (X-Kexi-DriverName) 
 		 stored in given service .desktop file. */

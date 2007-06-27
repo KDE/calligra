@@ -162,7 +162,7 @@ void Part::createGUIClients()//KexiMainWindow *win)
 #ifdef __GNUC__
 #warning TODO		KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently
 #else
-#pragma WARNING( TODO		KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently )
+#pragma WARNING( TODO		KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); )
 #endif
 
 		//default actions for part instance's gui client:
@@ -522,7 +522,7 @@ GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix
 #ifdef __GNUC__
 #warning TODO , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient())
 #else
-#pragma WARNING( TODO , KXMLGUIClient(*KexiMainWindowIface::global()->guiClient()) )
+#pragma WARNING( TODO: KXMLGUIClient(*KexiMainWindowIface::global()->guiClient()) )
 #endif
 {
 	setObjectName(

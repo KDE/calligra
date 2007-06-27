@@ -76,6 +76,7 @@
 #include <koproperty/property.h>
 #include <koproperty/factory.h>
 #include <kexiutils/utils.h>
+#include <kexi_global.h>
 
 #include "formmanager.h"
 
@@ -114,8 +115,14 @@ class PropertyFactory : public KoProperty::CustomPropertyFactory
 
 using namespace KFormDesigner;
 
-static KStaticDeleter<FormManager> m_managerDeleter;
-FormManager* FormManager::_self = 0L;
+struct FormManagerInternal
+{
+	FormManagerInternal() : manager(0) {}
+	~FormManagerInternal() { delete manager; manager = 0; }
+	FormManager *manager;
+};
+
+K_GLOBAL_STATIC(FormManagerInternal, g_self)
 
 FormManager::FormManager(QObject *parent, int options, const char *name)
    : QObject(parent)
@@ -167,7 +174,12 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 
 FormManager::~FormManager()
 {
-	m_managerDeleter.setObject(_self, 0, false); //safe
+#ifdef __GNUC__
+#warning OK? destroy singleton
+#else
+#pragma WARNING( OK? destroy singleton )
+#endif
+	g_self.destroy();
 	delete m_popup;
 	delete m_connection;
 #ifdef KEXI_DEBUG_GUI
@@ -180,15 +192,17 @@ FormManager::~FormManager()
 
 FormManager* FormManager::self()
 {
-	return _self;
+	return g_self->manager;
 }
 
 WidgetLibrary*
 FormManager::createWidgetLibrary(FormManager* m, const QStringList& supportedFactoryGroups)
 {
-	if(!_self)
-		m_managerDeleter.setObject( _self, m );
-	return new WidgetLibrary(_self, supportedFactoryGroups);
+//	if(!_self)
+//		m_managerDeleter.setObject( _self, m );
+	if (!g_self->manager)
+		g_self->manager = m;
+	return new WidgetLibrary(m, supportedFactoryGroups);
 }
 
 void

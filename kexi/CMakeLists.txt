@@ -1,5 +1,7 @@
 project(kexi)
 
+SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
+
 IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 	INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
@@ -41,7 +43,7 @@ add_subdirectory( tests )
 
 set(kexi_SRCS main.cpp )
 kde4_automoc(${kexi_SRCS})
-kde4_add_executable(kexi ${kexi_SRCS})
+kde4_add_executable(kexi NOGUI ${kexi_SRCS})
 target_link_libraries(kexi 
 	${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KDEPRINT_LIBS} 
 	kexidb

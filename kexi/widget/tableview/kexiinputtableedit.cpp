@@ -389,9 +389,9 @@ bool KexiInputTableEdit::showToolTipIfNeeded(const QVariant& value, const QRect&
 #pragma WARNING( TODO reenable	QString text( value.type()==QVariant::String ? value.toString() )
 #endif
 #ifdef __GNUC__
-#warning TODO reenable		: m_textFormatter.valueToText(value, QString()) );
+#warning TODO reenable		: m_textFormatter.valueToText(value, QString());
 #else
-#pragma WARNING( TODO reenable		: m_textFormatter.valueToText(value, QString()) ); )
+#pragma WARNING( TODO reenable		: m_textFormatter.valueToText(value, QString()); )
 #endif
 	QRect internalRect(rect);
 	internalRect.setLeft(rect.x()+leftMargin());

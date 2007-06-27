@@ -20,7 +20,7 @@
 #ifndef KEXITABLEVIEWHEADER_H
 #define KEXITABLEVIEWHEADER_H
 
-#include <kexi_export.h>
+#include <kexi_global.h>
 #include <q3header.h>
 
 class QStyle;
