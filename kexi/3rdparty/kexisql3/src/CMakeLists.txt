@@ -44,9 +44,7 @@ set(kexisql3_LIB_SRCS
 
 IF(WIN32)
    set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} ../sqlite3.def os_win.c)
-ELSEIF(APPLE)
-   set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} os_mac.c)
-ELSE() #unix
+ELSE() #unix (including Mac OSX)
    set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} os_unix.c)
 ENDIF()
 
