@@ -35,8 +35,17 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     widget.italic->setDefaultAction(tool->action("format_italic"));
     widget.strikeOut->setDefaultAction(tool->action("format_strike"));
     widget.underline->setDefaultAction(tool->action("format_underline"));
-    widget.alignLeft->setDefaultAction(tool->action("format_alignleft"));
-    widget.alignRight->setDefaultAction(tool->action("format_alignright"));
+    // RTL layout will reverse the button order, but the align left/right then get mixed up.
+    // this makes sure that whatever happens the 'align left' is to the left of the 'align right'
+    if(QApplication::isRightToLeft()) {
+        widget.alignLeft->setDefaultAction(tool->action("format_alignright"));
+        widget.alignRight->setDefaultAction(tool->action("format_alignleft"));
+    }
+    else {
+        widget.alignLeft->setDefaultAction(tool->action("format_alignleft"));
+        widget.alignRight->setDefaultAction(tool->action("format_alignright"));
+    }
+
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));
     widget.alignBlock->setDefaultAction(tool->action("format_alignblock"));
     widget.superscript->setDefaultAction(tool->action("format_super"));
