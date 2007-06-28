@@ -23,6 +23,7 @@
 #include <KoViewConverter.h>
 
 #include <QPainter>
+#include <kdebug.h>
 
 PictureShape::PictureShape()
 {
@@ -48,6 +49,14 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
     //TODO
 }
 
-bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
+bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+{
+
+    // TODO
+
+    QDomNamedNodeMap attrs = element.attributes();
+    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++)
+        kDebug(32500) << "PictureShape::loadOdf Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
+
+    return false;
 }
