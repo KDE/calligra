@@ -1089,8 +1089,7 @@ void KWView::selectionChanged()
     bool first = true;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-        //Q_ASSERT(frame);
-        if( ! frame ) continue;
+        Q_ASSERT(frame);
         if(first) {
             m_canvas->resourceProvider()->setResource(KWord::CurrentFrame, frame);
             m_canvas->resourceProvider()->setResource(KWord::CurrentFrameSet, frame->frameSet());
