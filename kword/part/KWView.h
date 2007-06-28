@@ -113,6 +113,7 @@ private slots:
     void inlineFrame();
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
     void showStatisticsDialog();
+    void showRulers(bool visible);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

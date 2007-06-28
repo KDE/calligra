@@ -127,6 +127,8 @@ void KWGui::updateMousePos(const QPoint &point) {
 void KWGui::updateRulers() const {
     m_verticalRuler->update();
     m_horizontalRuler->update();
+    m_verticalRuler->setVisible( m_view->kwdocument()->config().viewRulers() );
+    m_horizontalRuler->setVisible( m_view->kwdocument()->config().viewRulers() );
 }
 
 void KWGui::shapeSelectionChanged() {

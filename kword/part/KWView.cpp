@@ -220,6 +220,17 @@ void KWView::setupActions() {
     action->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
     connect(action, SIGNAL(triggered()), this, SLOT( showStatisticsDialog() ));
 
+    action = new KAction( i18n( "Show Rulers" ), this);
+    action->setCheckable(true);
+    action->setToolTip( i18n( "Shows or hides rulers" ) );
+    action->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
+                "document. The rulers show the position and width of pages and of frames and can "
+                "be used to position tabulators among others.<p>Uncheck this to disable "
+                "the rulers from being displayed." ) );
+    action->setChecked(m_document->config().viewRulers());
+    actionCollection()->addAction("show_ruler", action );
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
+
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
 This saves problems with finding out which we missed near the end.
@@ -731,16 +742,6 @@ This saves problems with finding out which we missed near the end.
     m_actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar" ) );
     m_actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc." ) );
 
-    m_actionShowRuler = new KToggleAction( i18n( "Show Rulers" ), 0,
-            this, SLOT( showRuler() ),
-            actionCollection(), "show_ruler" );
-    m_actionShowRuler->setCheckedState(i18n("Hide Rulers"));
-    m_actionShowRuler->setToolTip( i18n( "Shows or hides rulers" ) );
-    m_actionShowRuler->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
-                "document. The rulers show the position and width of pages and of frames and can "
-                "be used to position tabulators among others.<p>Uncheck this to disable "
-                "the rulers from being displayed." ) );
-
     m_actionViewShowGrid = new KToggleAction( i18n( "Show Grid" ), 0,
             this, SLOT( viewGrid() ),
             actionCollection(), "view_grid" );
@@ -1053,6 +1054,11 @@ void KWView::showStatisticsDialog() {
     KWStatisticsDialog *dia = new KWStatisticsDialog(this);
     dia->exec();
     delete dia;
+}
+
+void KWView::showRulers(bool visible) {
+    m_document->config().setViewRulers(visible);
+    m_gui->updateRulers();
 }
 
 // end of actions

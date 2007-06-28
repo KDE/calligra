@@ -46,7 +46,6 @@ void KWApplicationConfig::load(KWDocument *document) {
     // Config-file value in mm, default 10 pt
     double indent = interface.readEntry("Indent", MM_TO_POINT(10.0) ) ;
 //    setIndentValue(indent);
-//    setShowRuler(interface.readEntry("Rulers",true));
     m_viewRulers = interface.readEntry("Rulers", m_viewRulers);
     m_autoSaveSeconds = interface.readEntry("AutoSave", qRound(m_autoSaveSeconds / 60.0)) * 60; // read key in minutes
     m_createBackupFile = interface.readEntry("BackupFile", m_createBackupFile);
@@ -128,7 +127,7 @@ void KWApplicationConfig::save() {
     interface.writeEntry( "Zoom", m_zoom );
     interface.writeEntry( "ZoomMode", (int)m_zoomMode );
 //    interface.writeEntry( "showDocStruct", m_bShowDocStruct );
-//    interface.writeEntry( "Rulers", m_bShowRuler );
+    interface.writeEntry( "Rulers", m_viewRulers );
 //    interface.writeEntry( "viewmode", m_viewModeType) ;
 //    interface.writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
 //    interface.writeEntry( "ShowGrid" , m_bShowGrid );

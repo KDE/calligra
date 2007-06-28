@@ -39,6 +39,9 @@ public:
     void setViewFrameBorders(bool on) { m_viewFrameBorders = on; }
     bool viewFrameBorders() const { return m_viewFrameBorders; }
 
+    void setViewRulers(bool on) { m_viewRulers = on; }
+    bool viewRulers() const {return m_viewRulers; }
+
     /**
      * Set the zoom level for new views and for next startups of kword.
      * Documents shown at 100% will show the page on screen at the same amount of
