@@ -157,7 +157,7 @@ void KoEnhancedPathShapeFactory::addCross()
     t.id = KoPathShapeId;
     t.name = i18n("Enhanced Path");
     t.toolTip = i18n("A cross");
-    t.icon = "cross-koffice";
+    t.icon = "cross-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
 
     addTemplate(t);
@@ -265,7 +265,7 @@ void KoEnhancedPathShapeFactory::addCallout()
     t.id = KoPathShapeId;
     t.name = i18n("Enhanced Path");
     t.toolTip = i18n("A callout");
-    t.icon = "callout-koffice";
+    t.icon = "callout-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
     t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
 
@@ -307,7 +307,7 @@ void KoEnhancedPathShapeFactory::addSmiley()
     t.id = KoPathShapeId;
     t.name = i18n("Enhanced Path");
     t.toolTip = i18n("A smiley");
-    t.icon = "smiley-koffice";
+    t.icon = "smiley-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
     t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
 
@@ -384,7 +384,7 @@ void KoEnhancedPathShapeFactory::addCircularArrow()
     t.id = KoPathShapeId;
     t.name = i18n("Enhanced Path");
     t.toolTip = i18n("A circular-arrow");
-    t.icon = "circular-arrow-koffice";
+    t.icon = "circular-arrow-shape";
     t.properties = dataToProperties( modifiers, commands, handles, formulae );
     t.properties->setProperty( "viewBox", QRectF( 0, 0, 21600, 21600 ) );
     addTemplate(t);
@@ -427,7 +427,7 @@ void KoEnhancedPathShapeFactory::addGearhead()
     t.id = KoPathShapeId;
     t.name = i18n("Enhanced Path");
     t.toolTip = i18n("A gearhead");
-    t.icon = "gearhead-koffice";
+    t.icon = "gearhead-shape";
     t.properties = dataToProperties( QString(), commands, ListType(), ComplexType() );
     t.properties->setProperty( "background", QVariant::fromValue<QColor>( QColor( Qt::blue ) ) );
     t.properties->setProperty( "viewBox", QRectF( 0, 0, 40, 90 ) );

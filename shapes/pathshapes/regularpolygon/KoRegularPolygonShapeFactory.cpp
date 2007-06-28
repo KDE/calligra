@@ -33,7 +33,7 @@ KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent)
 	KoShapeTemplate t;
 	t.name = i18n("Nice pentagon");
 	t.toolTip = i18n("A nice pentagon");
-	t.icon = "redSquare";
+	t.icon = "pentagon-shape";
 	KoProperties *props = new KoProperties();
 	props->setProperty("points", 5);
 	t.properties = props;
@@ -41,7 +41,7 @@ KoRegularPolygonShapeFactory::KoRegularPolygonShapeFactory(QObject *parent)
 
 	t.name = i18n("Nice hexagon");
 	t.toolTip = i18n("A nice hexagon");
-	t.icon = "redSquare";
+	t.icon = "hexagon-shape";
 	props = new KoProperties();
 	props->setProperty("points", 6);
 	t.properties = props;

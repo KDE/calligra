@@ -26,6 +26,7 @@ DivineProportionShapeFactory::DivineProportionShapeFactory(QObject *parent)
     : KoShapeFactory(parent, DivineProportionShape_SHAPEID, i18n("DivineProportion"))
 {
     setToolTip(i18n("A Shape That Shows DivineProportion"));
+    setIcon( "divine-shape" );
 }
 
 KoShape *DivineProportionShapeFactory::createDefaultShape() const {
