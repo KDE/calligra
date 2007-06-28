@@ -40,7 +40,7 @@ void RowElement::paint( QPainter& p, const AttributeManager* am)
 
 void RowElement::layout( AttributeManager* am )
 {
- kDebug() << "layout Row" << endl;
+ kDebug(39001) << "layout Row" << endl;
     Q_UNUSED( am )          // there are no attributes that can be processed here
 
     if( m_rowElements.isEmpty() )  // do not do anything if there are no children
@@ -52,7 +52,7 @@ void RowElement::layout( AttributeManager* am )
     double baselineToBottom = 0.0;
     foreach( BasicElement* child, m_rowElements  )  // iterate through the children
     {
-        kDebug() << "new origin:" << QPointF( width, 0.0 ) << endl;
+        kDebug(39001) << "new origin:" << QPointF( width, 0.0 ) << endl;
         child->setOrigin( QPointF( width, 0.0 ) );    // set their origin
         topToBaseline = qMax( topToBaseline, child->baseLine() );
         baselineToBottom = qMax( baselineToBottom, child->height()-child->baseLine() );
@@ -99,7 +99,7 @@ void RowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
 
 const QList<BasicElement*> RowElement::childElements()
 {
-    kWarning( DEBUGID) << "Returning" << m_rowElements.count() << " elements from RowElement" << endl;
+    kWarning( DEBUGID) << "Returning " << m_rowElements.count() << " elements from RowElement" << endl;
     return m_rowElements;
 }
 

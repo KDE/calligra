@@ -63,7 +63,7 @@ void BasicElement::removeChild( BasicElement* )
 
 const QList<BasicElement*> BasicElement::childElements()
 {
-    kWarning() << "Returning no elements from BasicElement" << endl;
+    kWarning( 39001) << "Returning no elements from BasicElement" << endl;
     return QList<BasicElement*>();
 }
 
