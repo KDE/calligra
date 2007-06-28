@@ -4,6 +4,7 @@ Icon=
 Name=Path Shapes
 Name[de]=Pfad-Form
 Name[ja]=パスシェイプ
+Name[sv]=Konturformer
 Name[x-test]=xxPath Shapesxx
 ServiceTypes=KOffice/Shape
 Type=Service

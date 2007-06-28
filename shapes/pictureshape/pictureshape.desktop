@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=Picture Shape
 Name[de]=Bild-Form
+Name[sv]=Bildform
 Name[x-test]=xxPicture Shapexx
 ServiceTypes=KOffice/Shape
 Type=Service

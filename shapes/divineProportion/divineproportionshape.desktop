@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=DivineProportion Shape
 Name[de]=Göttliche-Teilung-Form
+Name[sv]=Gudomlig proportionsform
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=divineproportionshape

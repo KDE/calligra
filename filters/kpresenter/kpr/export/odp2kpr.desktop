@@ -4,6 +4,7 @@ Type=Service
 Name=KPresenter Old File Format Filter
 Name[de]=KPresenter Filter für altes Dateiformat
 Name[ja]=KPresenter 旧ファイル形式フィルタ
+Name[sv]=Kpresenter gammalt filformatfilter
 Name[uk]=Фільтр старого формату файлів KPresenter
 Name[x-test]=xxKPresenter Old File Format Filterxx
 X-KDE-Export=application/x-kpresenter
