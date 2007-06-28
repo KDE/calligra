@@ -154,6 +154,10 @@ public:
      */
     virtual void copySettings(const KWFrame *frame);
 
+    /**
+     * Save the frame as ODF
+     * @param context the context for saving.
+     */
     void saveOdf(KoShapeSavingContext & context);
 
 protected:

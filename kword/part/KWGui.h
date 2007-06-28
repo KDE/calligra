@@ -77,6 +77,7 @@ public:
      */
     void updateRulers() const;
 
+    /// return the canvasController that wraps this view
     KoCanvasController *canvasController() const { return m_canvasController; }
 
 private slots:

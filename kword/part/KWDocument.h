@@ -98,7 +98,9 @@ public:
      */
     void setPageSettings(const KWPageSettings &newPageSettings);
 
+    /// @return the image collection for this document.
     KoImageCollection *imageCollection() { return &m_imageCollection; }
+    /// @return the image collection for this document.
     const KoImageCollection *imageCollection() const { return &m_imageCollection; }
 
     /**
