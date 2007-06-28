@@ -26,7 +26,6 @@ KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *s
     : m_state(state),
      m_shape(0)
 {
-    m_state->addUser();
     widget.setupUi(this);
 
     m_runAroundSide = new QButtonGroup();
@@ -45,10 +44,6 @@ KWFrameRunaroundProperties::KWFrameRunaroundProperties(FrameConfigSharedState *s
     m_runAround->setId(widget.noRunaround, KWord::NoRunAround);
 
     widget.distance->setUnit(state->document()->unit());
-}
-
-KWFrameRunaroundProperties::~KWFrameRunaroundProperties() {
-    m_state->removeUser();
 }
 
 void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames) {
@@ -85,6 +80,7 @@ void KWFrameRunaroundProperties::open(const QList<KWFrame*> &frames) {
 }
 
 void KWFrameRunaroundProperties::open(KoShape *shape) {
+    m_state->addUser();
     m_shape = shape;
     widget.runAround->setChecked(true);
     widget.longest->setChecked(true);
@@ -107,6 +103,7 @@ void KWFrameRunaroundProperties::save() {
             frame->setRunAroundSide( static_cast<KWord::RunAroundSide> (m_runAroundSide->checkedId()) );
         frame->setRunAroundDistance( widget.distance->value() );
     }
+    m_state->removeUser();
 }
 
 KAction *KWFrameRunaroundProperties::createAction() {

@@ -28,7 +28,6 @@ KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
     : m_state(state),
     m_frame(0)
 {
-    m_state->addUser();
     widget.setupUi(this);
 
     connect (widget.framesList, SIGNAL( itemClicked(QTreeWidgetItem*, int) ),
@@ -37,11 +36,8 @@ KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
             this, SLOT( nameChanged(const QString &)) );
 }
 
-KWFrameConnectSelector::~KWFrameConnectSelector() {
-    m_state->removeUser();
-}
-
 bool KWFrameConnectSelector::open(KWFrame *frame) {
+    m_state->addUser();
     m_frame = frame;
     KWTextFrame *textFrame = dynamic_cast<KWTextFrame*> (frame);
     if(textFrame == 0)
@@ -125,6 +121,7 @@ void KWFrameConnectSelector::save() {
         // TODO
     }
     m_state->markFrameUsed();
+    m_state->removeUser();
 }
 
 void KWFrameConnectSelector::open(KoShape *shape) {

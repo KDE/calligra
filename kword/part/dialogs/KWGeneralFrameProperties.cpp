@@ -26,7 +26,6 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
     : m_state(state),
     m_shape(0)
 {
-    m_state->addUser();
     widget.setupUi(this);
     m_textGroup = new QButtonGroup(widget.textGroupBox);
     m_textGroup->addButton(widget.createNewPage, KWord::AutoCreateNewFrameBehavior);
@@ -38,10 +37,6 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
     m_newPageGroup->addButton(widget.placeCopy, KWord::CopyNewFrame);
 
     connect(m_newPageGroup, SIGNAL(buttonClicked(int)), this, SLOT(newPageGroupUpdated(int)));
-}
-
-KWGeneralFrameProperties::~KWGeneralFrameProperties() {
-    m_state->removeUser();
 }
 
 void KWGeneralFrameProperties::open(KoShape *shape) {
@@ -62,6 +57,7 @@ void KWGeneralFrameProperties::open(KoShape *shape) {
 }
 
 void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
+    m_state->addUser();
     m_frames = frames;
     // checkboxes
     GuiHelper copyFrame, allFrames, protectContent, evenOdd;
@@ -159,6 +155,7 @@ void KWGeneralFrameProperties::save() {
             }
         }
     }
+    m_state->removeUser();
 }
 
 KAction *KWGeneralFrameProperties::createAction() {
