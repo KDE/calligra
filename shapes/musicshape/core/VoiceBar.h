@@ -60,7 +60,7 @@ public:
      * Adds an element to this bar. You should not add an element to more than one bar, because when the bar is deleted
      * all elements in the bar are also deleted.
      *
-     * @param elemnt the element to add to this bar
+     * @param element the element to add to this bar
      */
     void addElement(VoiceElement* element);
 

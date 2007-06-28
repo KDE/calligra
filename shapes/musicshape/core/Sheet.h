@@ -99,7 +99,7 @@ public:
      * a part to a sheet gives the sheet ownership of the sheet. When the sheet is deleted all parts in the sheet will
      * also be deleted.
      *
-     * @param index index of the part before which to insert the new part
+     * @param before index of the part before which to insert the new part
      * @param part the part to insert into the sheet
      */
     void insertPart(int before, Part* part);
