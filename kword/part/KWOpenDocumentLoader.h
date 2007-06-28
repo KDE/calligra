@@ -54,7 +54,7 @@ class KWOpenDocumentLoader : public KoTextLoader
 public:
     /**
      * Constructor
-     * @param parent the document this loader will work for.
+     * @param document the document this loader will work for.
      */
     explicit KWOpenDocumentLoader(KWDocument *document);
     virtual ~KWOpenDocumentLoader();
