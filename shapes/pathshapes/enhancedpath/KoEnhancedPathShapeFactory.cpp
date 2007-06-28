@@ -400,7 +400,7 @@ void KoEnhancedPathShapeFactory::addGearhead()
 
     uint toothCount = 10;
     double toothAngle = 360.0 / double(toothCount);
-    kDebug() << "toothAngle = " << toothAngle << endl;
+    //kDebug() << "toothAngle = " << toothAngle << endl;
     double outerRadius = 0.5 * 25.0;
     double innerRadius = 0.5 * 17.0;
     QPointF center( 20, 25 );
@@ -418,7 +418,7 @@ void KoEnhancedPathShapeFactory::addGearhead()
         radian += 0.35 * toothAngle * M_PI / 180.0;
         cmd += QString( " %1 %2" ).arg( center.x() + innerRadius*cos(radian) ).arg( center.y() + innerRadius*sin(radian) );
     }
-    kDebug() << "gear command = " << cmd << endl;
+    //kDebug() << "gear command = " << cmd << endl;
     commands.append( cmd );
     commands.append( "Z" );
     commands.append( "N" );
