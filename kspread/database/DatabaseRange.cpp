@@ -40,7 +40,7 @@ public:
     Private()
         : source( 0 )
         , sort( 0 )
-        , filter( 0 )
+        , filter( new Filter() )
         , subtotalRules( 0 )
         , isSelection( false )
         , onUpdateKeepStyles( false )
@@ -51,6 +51,11 @@ public:
         , displayFilterButtons( false )
         , refreshDelay( 0 )
     {
+    }
+
+    ~Private()
+    {
+        delete filter;
     }
 
     DatabaseSource* source;
@@ -70,14 +75,13 @@ public:
 };
 
 DatabaseRange::DatabaseRange()
-    : d( 0 )
+    : d( new Private )
 {
 }
 
 DatabaseRange::DatabaseRange( const QString& name )
     : d( new Private )
 {
-    d->filter = new Filter();
     d->name = name;
 }
 
