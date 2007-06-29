@@ -322,7 +322,7 @@ bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const Q
             const QString width = footnoteSep.attributeNS( KoXmlNS::style, "width", QString::null );
             if ( !width.isEmpty() ) m_footNoteSeparatorLineWidth = KoUnit::parseValue( width );
             QString pageWidth = footnoteSep.attributeNS( KoXmlNS::style, "rel-width", QString::null );
-            if ( pageWidth.endsWith( "%" ) ) {
+            if ( pageWidth.endsWith( '%' ) ) {
                 pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
                 m_iFootNoteSeparatorLineLength = qRound( pageWidth.toDouble() );
             }

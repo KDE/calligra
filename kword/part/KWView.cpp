@@ -1063,7 +1063,7 @@ void KWView::showRulers(bool visible) {
 
 // end of actions
 
-void KWView::popupContextMenu(QPoint globalPosition, const QList<QAction*> &actions) {
+void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions) {
     unplugActionList( "frameset_type_action" );
     plugActionList( "frameset_type_action", actions );
     QMenu *menu = dynamic_cast<QMenu*> (factory()->container("frame_popup", this));
