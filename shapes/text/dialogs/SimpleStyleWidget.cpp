@@ -57,9 +57,9 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
 
     if(QApplication::isRightToLeft())
-        widget.reversedText->setText("<-"); // replace by a nice picture.
+        widget.reversedText->setText("->"); // replace by a nice picture.
     else
-        widget.reversedText->setText("->");
+        widget.reversedText->setText("<-");
 
     fillListsCombobox();
 

@@ -306,6 +306,8 @@ bool Layout::nextParag() {
     options.setAlignment( QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, m_format.alignment()) );
     if(m_isRtl)
         options.setTextDirection(Qt::RightToLeft);
+    else
+        options.setTextDirection(Qt::LeftToRight);
     layout->setTextOption(options);
 
     layout->beginLayout();
