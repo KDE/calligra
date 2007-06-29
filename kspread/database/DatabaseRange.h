@@ -90,7 +90,7 @@ public:
      * Sets the actual database cell range.
      * \p region has to be contiguous.
      */
-    void setRange( const Region& region );
+    void setRange( const Region& region ) const;
 
     /**
      * Shows the associated popup menu.
