@@ -37,6 +37,7 @@
 #include "Localization.h"
 #include "Util.h"
 #include "View.h"
+#include "Cell.h"
 #include "Selection.h"
 
 using namespace KSpread;
@@ -61,6 +62,13 @@ GotoDialog::GotoDialog( View* parent, const char* name )
 
   m_nameCell = new KLineEdit( page );
   lay1->addWidget(m_nameCell);
+
+  const Sheet* sheet = parent->activeSheet();
+  Selection* selection = parent->selection();
+  if( sheet && selection ) {
+    Cell cell(sheet, selection->cursor());
+    m_nameCell->setText( cell.name() );
+  }
 
   m_nameCell->setFocus();
   enableButtonOk( false );
