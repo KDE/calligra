@@ -21,9 +21,11 @@
 #ifndef KSPREAD_DAMAGES
 #define KSPREAD_DAMAGES
 
-#include "QFlags"
+#include <QFlags>
 
 #include "kdebug.h"
+
+#include "kspread_export.h"
 
 namespace KSpread
 {
@@ -32,7 +34,7 @@ class Map;
 class Sheet;
 class Region;
 
-class Damage
+class KSPREAD_EXPORT Damage
 {
   public:
     virtual ~Damage() {}
@@ -51,7 +53,7 @@ class Damage
     virtual Type type() const { return Nothing; }
 };
 
-class CellDamage : public Damage
+class KSPREAD_EXPORT CellDamage : public Damage
 {
   public:
     enum Change
@@ -85,7 +87,7 @@ class CellDamage : public Damage
 Q_DECLARE_OPERATORS_FOR_FLAGS( CellDamage::Changes )
 
 
-class SheetDamage : public Damage
+class KSPREAD_EXPORT SheetDamage : public Damage
 {
   public:
 
@@ -147,7 +149,7 @@ class WorkbookDamage : public Damage
 Q_DECLARE_OPERATORS_FOR_FLAGS( WorkbookDamage::Changes )
 
 
-class SelectionDamage : public Damage
+class KSPREAD_EXPORT SelectionDamage : public Damage
 {
   public:
     SelectionDamage( const Region& region );
