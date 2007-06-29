@@ -25,6 +25,7 @@
 #include <KoImageData.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOasisLoadingContext.h>
+#include <KoStoreDevice.h>
 
 #include <QPainter>
 #include <kdebug.h>
@@ -67,7 +68,7 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     KoImageCollection* imagecollection = new KoImageCollection();
     //imagecollection->loadFromStore(store)
     KoImageData* imagedata = new KoImageData(imagecollection);
-    bool ok = imagedata->setKoStoreDevice(new KoStoreDevice(store));
+    bool ok = imagedata->loadFromStore(new KoStoreDevice(store));
     setUserData( imagedata );
 
     return ok;
