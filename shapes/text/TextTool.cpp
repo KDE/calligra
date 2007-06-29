@@ -492,6 +492,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
                 m_caret.deletePreviousChar();
             editingPluginEvents();
         }
+        ensureCursorVisible();
     }
     else if(event->key() == Qt::Key_Delete) {
         if(!m_caret.hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
@@ -663,6 +664,15 @@ void TextTool::ensureCursorVisible() {
     }
 
     QRectF cursorPos = textRect(m_caret.position(), m_caret.position());
+    if(! cursorPos.isValid()) { // paragraph is not yet layouted.
+        // The number one usecase for this is when the user pressed enter.
+        // So take bottom of last paragraph.
+        QTextBlock block = m_caret.block().previous();
+        if(block.isValid()) {
+            double y = block.layout()->boundingRect().bottom();
+            cursorPos = QRectF(0, y, 1, 10);
+        }
+    }
     cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
     m_canvas->ensureVisible(m_textShape->transformationMatrix(0).mapRect(cursorPos));
 }
