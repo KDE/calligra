@@ -117,9 +117,10 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange&
     }
 
     if (database.orientation() == Qt::Vertical)
-        d->fieldNumber = database.range().lastRange().left() - cell.column() + 1;
+        d->fieldNumber = database.range().lastRange().left() - cell.column();
     else // Qt::Horizontal
-        d->fieldNumber = database.range().lastRange().top() - cell.row() + 1;
+        d->fieldNumber = database.range().lastRange().top() - cell.row();
+    kDebug() << "FilterPopup::fieldNumber: " << d->fieldNumber << endl;
 }
 
 FilterPopup::~FilterPopup()

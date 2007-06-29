@@ -40,7 +40,7 @@ public:
     Private()
         : source( 0 )
         , sort( 0 )
-        , filter( new Filter() )
+        , filter( 0 )
         , subtotalRules( 0 )
         , isSelection( false )
         , onUpdateKeepStyles( false )
@@ -51,11 +51,6 @@ public:
         , displayFilterButtons( false )
         , refreshDelay( 0 )
     {
-    }
-
-    ~Private()
-    {
-        delete filter;
     }
 
     DatabaseSource* source;
@@ -77,11 +72,13 @@ public:
 DatabaseRange::DatabaseRange()
     : d( new Private )
 {
+    d->filter = new Filter();
 }
 
 DatabaseRange::DatabaseRange( const QString& name )
     : d( new Private )
 {
+    d->filter = new Filter();
     d->name = name;
 }
 
@@ -97,7 +94,7 @@ DatabaseRange::~DatabaseRange()
 
 bool DatabaseRange::isEmpty() const
 {
-    return !d;
+    return d->name.isNull(); // it may be empty though
 }
 
 Qt::Orientation DatabaseRange::orientation() const

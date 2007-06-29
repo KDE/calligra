@@ -53,6 +53,7 @@ public:
 class Filter::And : public AbstractCondition
 {
 public:
+    virtual ~And() { qDeleteAll(list); }
     virtual Type type() const { return AbstractCondition::And; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
@@ -90,6 +91,7 @@ public:
 class Filter::Or : public AbstractCondition
 {
 public:
+    virtual ~Or() { qDeleteAll(list); }
     virtual Type type() const { return AbstractCondition::Or; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
@@ -136,6 +138,7 @@ public:
         , dataType(mode)
     {
     }
+    virtual ~Condition() {}
 
     virtual Type type() const { return AbstractCondition::Condition; }
     virtual void loadOdf() {}
@@ -145,23 +148,23 @@ public:
         const Sheet* sheet = (*database.range().constBegin())->sheet();
         const QRect range = database.range().lastRange();
         const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
-//         kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
+        kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
         const Value value = database.orientation() == Qt::Vertical
-                            ? sheet->cellStorage()->value(start + fieldNumber - 1, index)
-                            : sheet->cellStorage()->value(index, start + fieldNumber - 1);
+                            ? sheet->cellStorage()->value(start + fieldNumber, index)
+                            : sheet->cellStorage()->value(index, start + fieldNumber);
         const QString testString = sheet->doc()->converter()->asString(value).asString();
         switch (operation)
         {
             case Match:
             {
-//                 kDebug() << "Match? " << this->value << " " << testString << endl;
+                kDebug() << "Match? " << this->value << " " << testString << endl;
                 if (QString::compare(this->value, testString, caseSensitivity) == 0)
                     return true;
                 break;
             }
             case NotMatch:
             {
-//                 kDebug() << "Not Match? " << this->value << " " << testString << endl;
+                kDebug() << "Not Match? " << this->value << " " << testString << endl;
                 if (QString::compare(this->value, testString, caseSensitivity) != 0)
                     return true;
                 break;
@@ -211,6 +214,7 @@ Filter::Filter()
 
 Filter::~Filter()
 {
+    delete d->condition;
     delete d;
 }
 
