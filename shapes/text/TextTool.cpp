@@ -847,6 +847,8 @@ QWidget *TextTool::createOptionWidget() {
             &m_selectionHandler, SLOT(setStyle(KoCharacterStyle*)));
 
     updateStyleManager();
+    if(m_textShape)
+        updateActions();
     return widget;
 }
 
