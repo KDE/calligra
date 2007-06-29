@@ -153,6 +153,7 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
 }
 
 void KWTextFrameSet::spaceLeft(double excessHeight) {
+kDebug() << "spaceLeft " << excessHeight << endl;
     Q_ASSERT(excessHeight >= 0);
     if(frameCount() == 0)
         return; // there is no way we can get more frames anyway.
@@ -163,8 +164,14 @@ void KWTextFrameSet::spaceLeft(double excessHeight) {
             lastFrame = tf;
     }
     Q_ASSERT(lastFrame);
-    if(lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior)
+    if(frameCount() > 1 && lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame &&
+            lastFrame->shape()->size().height() < excessHeight) { // remove last frame
+        delete lastFrame->shape();
+    }
+    else if(lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior) {
         lastFrame->autoShrink(lastFrame->shape()->size().height() - excessHeight);
+        lastFrame->allowToGrow();
+    }
 }
 
 void KWTextFrameSet::framesEmpty(int framesInUse) {
