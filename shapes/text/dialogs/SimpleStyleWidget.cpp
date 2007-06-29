@@ -25,6 +25,9 @@
 
 #include <KDebug>
 
+#include <QTextLayout>
+#include <QTextOption>
+
 SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     : QWidget(parent),
     m_blockSignals(false),
@@ -53,6 +56,11 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
 
+    if(QApplication::isRightToLeft())
+        widget.reversedText->setText("<-"); // replace by a nice picture.
+    else
+        widget.reversedText->setText("->");
+
     fillListsCombobox();
 
     connect(widget.listType, SIGNAL(currentIndexChanged(int)), this, SLOT(listStyleChanged(int)));
@@ -76,6 +84,14 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block) {
     };
     Finally finally(this);
 
+    QTextLayout *layout = block.layout();
+    if(layout) {
+        bool isReversed = layout->textOption().textDirection() ==
+            QApplication::isRightToLeft() ? Qt::LeftToRight : Qt::RightToLeft;
+        widget.reversedText->setVisible(isReversed);
+    }
+
+    //  rest of function is lists stuff. Don't add anything else down here.
     fillListsCombobox();
 
     QTextList *list = block.textList();
