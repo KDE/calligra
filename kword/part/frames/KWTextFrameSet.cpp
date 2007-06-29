@@ -153,7 +153,6 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
 }
 
 void KWTextFrameSet::spaceLeft(double excessHeight) {
-kDebug() << "spaceLeft " << excessHeight << endl;
     Q_ASSERT(excessHeight >= 0);
     if(frameCount() == 0)
         return; // there is no way we can get more frames anyway.
