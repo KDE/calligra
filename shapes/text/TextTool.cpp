@@ -768,7 +768,7 @@ void TextTool::repaintCaret() {
         if(tl.isValid()) {
             repaintRect = tl.rect();
             KoTextDocumentLayout::updateTabsForLine(block, tl.lineNumber());
-            repaintRect.setX(tl.cursorToX(m_caret.position() - block.position()));
+            repaintRect.setX(tl.cursorToX(m_caret.position() - block.position()) - 2);
             repaintRect.setWidth(6);
         }
         repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
