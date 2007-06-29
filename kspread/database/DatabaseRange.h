@@ -97,12 +97,13 @@ public:
      */
     void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect);
 
+    void applyFilter() const;
+
+    void updateSubFilter(FilterPopup* popup);
+
     void operator=( const DatabaseRange& other );
     bool operator==( const DatabaseRange& other ) const;
     bool operator<( const DatabaseRange& other ) const;
-
-private Q_SLOTS:
-    void updateSubFilter(FilterPopup* popup);
 
 private:
     class Private;

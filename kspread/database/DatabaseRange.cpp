@@ -26,6 +26,8 @@
 #include "FilterPopup.h"
 #include "Region.h"
 
+#include "commands/ApplyFilterCommand.h"
+
 using namespace KSpread;
 
 class Filter;
@@ -75,11 +77,12 @@ DatabaseRange::DatabaseRange()
 DatabaseRange::DatabaseRange( const QString& name )
     : d( new Private )
 {
+    d->filter = new Filter();
     d->name = name;
 }
 
-DatabaseRange::DatabaseRange( const DatabaseRange& other )
-    : QObject()
+DatabaseRange::DatabaseRange(const DatabaseRange& other)
+    : QObject(other.parent())
     , d(other.d)
 {
 }
@@ -121,12 +124,16 @@ void DatabaseRange::setRange( const Region& region )
 
 void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
 {
-    QWidget* popup = new FilterPopup(parent, cell, *this);
-    connect(popup, SIGNAL(aboutToClose(FilterPopup*)), this, SLOT(updateSubFilter(FilterPopup*)));
-    const QPoint position((orientation() == Qt::Horizontal) ? cellRect.topRight() : cellRect.bottomLeft());
+    FilterPopup* popup = new FilterPopup(parent, cell, *this);
+    const QPoint position(orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());
     popup->move(parent->mapToGlobal(position));
     popup->resize(100, 20);
     popup->show();
+}
+
+void DatabaseRange::applyFilter() const
+{
+    d->filter->apply(*this);
 }
 
 void DatabaseRange::operator=( const DatabaseRange& other )
@@ -146,10 +153,13 @@ bool DatabaseRange::operator<( const DatabaseRange& other ) const
 
 void DatabaseRange::updateSubFilter(FilterPopup* popup)
 {
-    if (!d->filter)
-        d->filter = new Filter();
     popup->updateFilter(d->filter);
     // TODO Stefan: Create and execute apply filter command.
+    ApplyFilterCommand* command = new ApplyFilterCommand();
+    command->setSheet((*d->targetRangeAddress.constBegin())->sheet());
+    command->add(d->targetRangeAddress);
+    command->setDatabase(*this); // FIXME Stefan: Really needed?
+    command->execute();
 }
 
 #include "DatabaseRange.moc"

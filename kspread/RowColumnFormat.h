@@ -92,6 +92,9 @@ public:
     void setHidden( bool _hide, bool repaint = true );
     bool hidden() const;
 
+    void setFiltered(bool filtered);
+    bool isFiltered() const;
+
     bool operator==( const RowFormat& other ) const;
     inline bool operator!=( const RowFormat& other ) const { return !operator==( other ); }
 
@@ -152,6 +155,9 @@ public:
 
     void setHidden( bool _hide );
     bool hidden() const;
+
+    void setFiltered(bool filtered);
+    bool isFiltered() const;
 
     bool operator==( const ColumnFormat& other ) const;
     inline bool operator!=( const ColumnFormat& other ) const { return !operator==( other ); }

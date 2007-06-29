@@ -44,6 +44,7 @@ public:
     QList<QCheckBox*> checkboxes;
     QHash<QString, int> items;
     int fieldNumber;
+    DatabaseRange database;
 
 public:
     void createItemList(const Cell& cell, const DatabaseRange& database);
@@ -75,6 +76,8 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange&
     setAttribute(Qt::WA_DeleteOnClose);
     setBackgroundRole(QPalette::Base);
     setFrameStyle(QFrame::Panel | QFrame::Raised);
+
+    d->database = database;
 
     QButtonGroup* buttonGroup = new QButtonGroup(this);
     buttonGroup->setExclusive(false);
@@ -153,7 +156,7 @@ void FilterPopup::updateFilter(Filter* filter) const
 
 void FilterPopup::closeEvent(QCloseEvent* event)
 {
-    emit aboutToClose(this);
+    d->database.updateSubFilter(this);
     QFrame::closeEvent(event);
 }
 

@@ -17,74 +17,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FILTER
-#define KSPREAD_FILTER
+#ifndef KSPREAD_APPLYFILTER_COMMAND
+#define KSPREAD_APPLYFILTER_COMMAND
 
-#include <QString>
+#include "AbstractRegionCommand.h"
+
+#include "database/DatabaseRange.h"
 
 namespace KSpread
 {
-class DatabaseRange;
 
-/**
- * OpenDocument, 8.7.1 Table Filter
- */
-class Filter
+class ApplyFilterCommand : public AbstractRegionCommand
 {
 public:
-    enum Comparison
-    {
-        Match,
-        NotMatch,
-        Equal,
-        NotEqual,
-        Less,
-        Greater,
-        LessOrEqual,
-        GreaterOrEqual
-    };
-
-    enum Composition
-    {
-        AndComposition,
-        OrComposition
-    };
-
-    enum Mode
-    {
-        Text,
-        Number
-    };
-
     /**
      * Constructor.
      */
-    Filter();
+    ApplyFilterCommand();
 
     /**
      * Destructor.
      */
-    virtual ~Filter();
+    virtual ~ApplyFilterCommand();
 
-    void addCondition(Composition composition,
-                      int fieldNumber, Comparison comparison, const QString& value,
-                      Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive, Mode mode = Text );
+    virtual void redo();
+    virtual void undo();
 
-    void removeConditions(int fieldNumber = -1);
-
-    bool isEmpty() const;
-
-    void apply(const DatabaseRange& database) const;
+    void setDatabase(const DatabaseRange& database);
 
 private:
-    class And;
-    class Or;
-    class Condition;
-
-    class Private;
-    Private * const d;
+    DatabaseRange m_database;
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_FILTER
+#endif // KSPREAD_APPLYFILTER_COMMAND

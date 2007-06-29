@@ -62,6 +62,7 @@ public:
     int         row;
     double      height;
     bool        hide;
+    bool        filtered;
     RowFormat*  next;
     RowFormat*  prev;
 };
@@ -73,6 +74,7 @@ RowFormat::RowFormat()
     d->row      = 0;
     d->height   = 0.0;
     d->hide     = false;
+    d->filtered = false;
     d->next     = 0;
     d->prev     = 0;
 }
@@ -123,7 +125,7 @@ void RowFormat::setHeight( double height )
 
 double RowFormat::height() const
 {
-    if( d->hide )
+    if( d->hide || d->filtered )
         return 0.0;
     return d->height;
 }
@@ -255,7 +257,17 @@ void RowFormat::setHidden( bool _hide, bool repaint )
 
 bool RowFormat::hidden() const
 {
-    return d->hide;
+    return d->hide || d->filtered; // FIXME
+}
+
+void RowFormat::setFiltered(bool filtered)
+{
+    d->filtered = filtered;
+}
+
+bool RowFormat::isFiltered() const
+{
+    return d->filtered;
 }
 
 bool RowFormat::isDefault() const
@@ -286,6 +298,7 @@ public:
     int             column;
     double          width;
     bool            hide;
+    bool            filtered;
     ColumnFormat*   next;
     ColumnFormat*   prev;
 };
@@ -297,6 +310,7 @@ ColumnFormat::ColumnFormat()
     d->column   = 0;
     d->width    = 0.0;
     d->hide     = false;
+    d->filtered = false;
     d->next     = 0;
     d->prev     = 0;
 }
@@ -347,7 +361,7 @@ void ColumnFormat::setWidth( double width )
 
 double ColumnFormat::width() const
 {
-    if ( d->hide )
+    if ( d->hide || d->filtered )
         return 0.0;
     return d->width;
 }
@@ -480,7 +494,17 @@ void ColumnFormat::setHidden( bool _hide )
 
 bool ColumnFormat::hidden() const
 {
-    return d->hide;
+    return d->hide || d->filtered; // FIXME
+}
+
+void ColumnFormat::setFiltered(bool filtered)
+{
+    d->filtered = filtered;
+}
+
+bool ColumnFormat::isFiltered() const
+{
+    return d->filtered;
 }
 
 bool ColumnFormat::isDefault() const

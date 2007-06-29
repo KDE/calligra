@@ -17,46 +17,39 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FILTER_POPUP
-#define KSPREAD_FILTER_POPUP
+#include "ApplyFilterCommand.h"
 
-#include <QFrame>
+#include <klocale.h>
 
-class QAbstractButton;
+#include "CellStorage.h"
+#include "Damages.h"
+#include "Doc.h"
+#include "Sheet.h"
 
-namespace KSpread
+#include "database/DatabaseRange.h"
+
+using namespace KSpread;
+
+ApplyFilterCommand::ApplyFilterCommand()
+    : AbstractRegionCommand()
 {
-class Cell;
-class DatabaseRange;
-class Filter;
+    setText(i18n("Apply Filter"));
+}
 
-class FilterPopup : public QFrame
+ApplyFilterCommand::~ApplyFilterCommand()
 {
-    Q_OBJECT
-public:
-    /**
-     * Constructor.
-     */
-    FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange& database);
+}
 
-    /**
-     * Destructor.
-     */
-    virtual ~FilterPopup();
+void ApplyFilterCommand::redo()
+{    m_database.applyFilter();
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+}
 
-    void updateFilter(Filter* filter) const;
+void ApplyFilterCommand::undo()
+{
+}
 
-protected:
-    void closeEvent(QCloseEvent*);
-
-private Q_SLOTS:
-    void buttonClicked(QAbstractButton* button);
-
-private:
-    class Private;
-    Private * const d;
-};
-
-} // namespace KSpread
-
-#endif // KSPREAD_FILTER_POPUP
+void ApplyFilterCommand::setDatabase(const DatabaseRange& database)
+{
+    m_database = database;
+}
