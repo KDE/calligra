@@ -209,7 +209,7 @@ bool Value::operator==( const Value& o ) const
     case Empty:   return true;
     case Boolean: return o.d->b == d->b;
     case Integer: return o.d->i == d->i;
-    case Float:   return compare( *(o.d->f), *(d->f) ) == 0;
+    case Float:   return ( !d->f && !o.d->f ) || ( ( d->f && o.d->f ) && ( *o.d->f == *d->f ) );
     case Complex: return ( !d->pc && !o.d->pc ) || ( ( d->pc && o.d->pc ) && ( *o.d->pc == *d->pc ) );
     case String:  return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
     case Array:   return ( !d->pa && !o.d->pa ) || ( ( d->pa && o.d->pa ) && ( *o.d->pa == *d->pa ) );
