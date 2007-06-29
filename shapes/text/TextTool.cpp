@@ -560,7 +560,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         else if(hit(item, KStandardShortcut::BackwardWord))
             moveOperation = QTextCursor::WordLeft;
         else if(hit(item, KStandardShortcut::ForwardWord))
-            moveOperation = QTextCursor::NextWord;
+            moveOperation = QTextCursor::WordRight;
 #ifndef NDEBUG
         else if(event->key() == Qt::Key_F12) {
             KoParagraphStyle style;
@@ -629,8 +629,17 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     else
         isRtl =  dir == KoParagraphStyle::RightLeftTopBottom;
 
- //kDebug() << "isRtl: " << isRtl << endl;
-        // TODO if RTL toggle direction of cursor movement.
+        if(isRtl) { // if RTL toggle direction of cursor movement.
+            switch(moveOperation) {
+            case QTextCursor::StartOfWord: moveOperation = QTextCursor::EndOfWord; break;
+            case QTextCursor::EndOfWord: moveOperation = QTextCursor::StartOfWord; break;
+            case QTextCursor::Left: moveOperation = QTextCursor::Right; break;
+            case QTextCursor::Right: moveOperation = QTextCursor::Left; break;
+            case QTextCursor::WordRight: moveOperation = QTextCursor::WordLeft; break;
+            case QTextCursor::WordLeft: moveOperation = QTextCursor::WordRight; break;
+            default: break;
+            }
+        }
         int prevPosition = m_caret.position();
         if(moveOperation != QTextCursor::NoMove)
             m_caret.movePosition(moveOperation,
@@ -1237,6 +1246,21 @@ void TextTool::editingPluginEvents() {
 
     QTextBlock block = m_caret.block();
     if(! block.contains(m_prevCursorPosition)) {
+        // if the direction is 'Perhaps' we commit to the currently set one here, so the user can't inadvertently
+        // change that anymore.
+        QTextCursor cursor(block.document()->findBlock(m_prevCursorPosition));
+        QTextBlockFormat format = cursor.blockFormat();
+        KoParagraphStyle::Direction dir = static_cast<KoParagraphStyle::Direction> (format.intProperty(
+                    KoParagraphStyle::TextProgressionDirection));
+        bool blockChanged = true;
+        if(dir == KoParagraphStyle::PerhapsLeftRightTopBottom)
+            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::LeftRightTopBottom);
+        else if(dir == KoParagraphStyle::PerhapsRightLeftTopBottom)
+            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::RightLeftTopBottom);
+        else blockChanged = false;
+        if(blockChanged)
+            cursor.setBlockFormat(format);
+
         finishedWord();
         finishedParagraph();
         m_prevCursorPosition = -1;
