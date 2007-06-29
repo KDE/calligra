@@ -90,7 +90,7 @@ public:
     enum { Row, Column } orientation    : 1;
     bool containsHeader                 : 1;
     bool displayFilterButtons           : 1;
-    mutable Region targetRangeAddress;
+    Region targetRangeAddress;
     int refreshDelay;
 
 private:
@@ -143,7 +143,7 @@ const KSpread::Region& DatabaseRange::range() const
     return d->targetRangeAddress;
 }
 
-void DatabaseRange::setRange( const Region& region ) const
+void DatabaseRange::setRange( const Region& region )
 {
     Q_ASSERT( region.isContiguous() );
     d->targetRangeAddress = region;
