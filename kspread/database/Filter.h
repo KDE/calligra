@@ -62,6 +62,11 @@ public:
     Filter();
 
     /**
+     * Constructor.
+     */
+    Filter(const Filter& other);
+
+    /**
      * Destructor.
      */
     virtual ~Filter();
@@ -80,6 +85,8 @@ private:
     class And;
     class Or;
     class Condition;
+
+    void operator=(const Filter&);
 
     class Private;
     Private * const d;

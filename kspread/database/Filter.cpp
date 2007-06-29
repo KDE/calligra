@@ -53,6 +53,8 @@ public:
 class Filter::And : public AbstractCondition
 {
 public:
+    And() {}
+    And(const And& other);
     virtual ~And() { qDeleteAll(list); }
     virtual Type type() const { return AbstractCondition::And; }
     virtual void loadOdf() {}
@@ -91,6 +93,8 @@ public:
 class Filter::Or : public AbstractCondition
 {
 public:
+    Or() {}
+    Or(const Or& other);
     virtual ~Or() { qDeleteAll(list); }
     virtual Type type() const { return AbstractCondition::Or; }
     virtual void loadOdf() {}
@@ -189,6 +193,38 @@ public:
     Mode dataType;
 };
 
+Filter::And::And(const And& other)
+    : AbstractCondition()
+{
+    for (int i = 0; i < other.list.count(); ++i)
+    {
+        if (!other.list[i])
+            continue;
+        else if (other.list[i]->type() == AbstractCondition::And)
+            continue;
+        else if (other.list[i]->type() == AbstractCondition::Or)
+            list.append(new Filter::Or(*static_cast<Filter::Or*>(other.list[i])));
+        else
+            list.append(new Filter::Condition(*static_cast<Filter::Condition*>(other.list[i])));
+    }
+}
+
+Filter::Or::Or(const Or& other)
+    : AbstractCondition()
+{
+    for (int i = 0; i < other.list.count(); ++i)
+    {
+        if (!other.list[i])
+            continue;
+        else if (other.list[i]->type() == AbstractCondition::And)
+            list.append(new Filter::And(*static_cast<Filter::And*>(other.list[i])));
+        else if (other.list[i]->type() == AbstractCondition::Or)
+            continue;
+        else
+            list.append(new Filter::Condition(*static_cast<Filter::Condition*>(other.list[i])));
+    }
+}
+
 
 class Filter::Private
 {
@@ -210,6 +246,23 @@ public:
 Filter::Filter()
     : d( new Private )
 {
+}
+
+Filter::Filter(const Filter& other)
+    : d( new Private)
+{
+    if (!other.d->condition)
+        d->condition = 0;
+    else if (other.d->condition->type() == AbstractCondition::And)
+        d->condition = new And(*static_cast<And*>(other.d->condition));
+    else if (other.d->condition->type() == AbstractCondition::Or )
+        d->condition = new Or(*static_cast<Or*>(other.d->condition));
+    else
+        d->condition = new Condition(*static_cast<Condition*>(other.d->condition));
+    d->targetRangeAddress = other.d->targetRangeAddress;
+    d->conditionSource = other.d->conditionSource;
+    d->conditionSourceRangeAddress = other.d->conditionSourceRangeAddress;
+    d->displayDuplicates = other.d->displayDuplicates;
 }
 
 Filter::~Filter()

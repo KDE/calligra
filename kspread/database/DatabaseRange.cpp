@@ -40,7 +40,7 @@ public:
     Private()
         : source( 0 )
         , sort( 0 )
-        , filter( 0 )
+        , filter(new Filter())
         , subtotalRules( 0 )
         , isSelection( false )
         , onUpdateKeepStyles( false )
@@ -51,6 +51,31 @@ public:
         , displayFilterButtons( false )
         , refreshDelay( 0 )
     {
+    }
+
+    Private(const Private& other)
+        : QSharedData(other)
+        , source(/*other.source ? new DatabaseSource(*source) : */0)
+        , sort(/*other.sort ? new Sort(*sort) : */0)
+        , filter(other.filter ? new Filter(*filter) : 0)
+        , subtotalRules(/*other.subtotalRules ? new SubtotalRules(*subtotalRules) : */0)
+        , isSelection(other.isSelection)
+        , onUpdateKeepStyles(other.onUpdateKeepStyles)
+        , onUpdateKeepSize(other.onUpdateKeepSize)
+        , hasPersistentData(other.hasPersistentData)
+        , orientation(other.orientation)
+        , containsHeader(other.containsHeader)
+        , displayFilterButtons(other.displayFilterButtons)
+        , refreshDelay(other.refreshDelay)
+    {
+    }
+
+    virtual ~Private()
+    {
+//         delete source;
+//         delete sort;
+        delete filter;
+//         delete subtotalRules;
     }
 
     DatabaseSource* source;
@@ -67,18 +92,19 @@ public:
     bool displayFilterButtons           : 1;
     Region targetRangeAddress;
     int refreshDelay;
+
+private:
+    void operator=(const Private&);
 };
 
 DatabaseRange::DatabaseRange()
     : d( new Private )
 {
-    d->filter = new Filter();
 }
 
 DatabaseRange::DatabaseRange( const QString& name )
     : d( new Private )
 {
-    d->filter = new Filter();
     d->name = name;
 }
 
