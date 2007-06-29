@@ -41,7 +41,8 @@ TableModel::TableModel( QObject* parent )
 }
 
 TableModel::TableModel( const TableModel& other )
-    : d( other.d )
+    : QAbstractTableModel(other.QObject::parent())
+    , d(other.d)
 {
 }
 
