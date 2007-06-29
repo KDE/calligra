@@ -21,6 +21,10 @@
 
 #include <KoImageData.h>
 #include <KoViewConverter.h>
+#include <KoImageCollection.h>
+#include <KoImageData.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOasisLoadingContext.h>
 
 #include <QPainter>
 #include <kdebug.h>
@@ -51,12 +55,20 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-
-    // TODO
-
     QDomNamedNodeMap attrs = element.attributes();
     for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++)
         kDebug(32500) << "PictureShape::loadOdf Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
+    //kDebug(32500) << "PictureShape::loadOdf xlink:href=" << element.attribute("href") << endl;
 
-    return false;
+    KoStore* store = context.koLoadingContext().store();
+    Q_ASSERT(store);
+
+    //TODO use e.g. KWDocument::imageCollection() here rather then creating a new one
+    KoImageCollection* imagecollection = new KoImageCollection();
+    //imagecollection->loadFromStore(store)
+    KoImageData* imagedata = new KoImageData(imagecollection);
+    bool ok = imagedata->setKoStoreDevice(new KoStoreDevice(store));
+    setUserData( imagedata );
+
+    return ok;
 }

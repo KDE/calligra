@@ -270,6 +270,15 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     return true;
 }
 
+void KWOpenDocumentLoader::addShape(KoShape* shape)
+{
+    //d->document->addShape(shape);
+    KWFrameSet* fs = new KWFrameSet();
+    KWFrame *frame = new KWFrame(shape, fs);
+    d->document->addFrameSet(fs);
+
+}
+
 void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const QDomDocument& settingsDoc)
 {
     Q_UNUSED(context);
