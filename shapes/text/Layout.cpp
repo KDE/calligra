@@ -251,7 +251,7 @@ bool Layout::nextParag() {
     if(dir == KoParagraphStyle::AutoDirection)
         m_isRtl = m_block.text().isRightToLeft();
     else
-        m_isRtl =  dir == KoParagraphStyle::RightLeftTopBottom;
+        m_isRtl =  dir == KoParagraphStyle::RightLeftTopBottom || dir == KoParagraphStyle::PerhapsRightLeftTopBottom;
 
     // initialize list item stuff for this parag.
     QTextList *textList = m_block.textList();

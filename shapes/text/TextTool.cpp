@@ -69,6 +69,31 @@ static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut s
     return false;
 }
 
+static bool isRightToLeft(const QString &text) {
+    int ltr = 0, rtl = 0;
+
+    QString::const_iterator iter = text.begin();
+    while(iter != text.end()) {
+        switch(QChar::direction((*iter).unicode()))
+        {
+        case QChar::DirL:
+        case QChar::DirLRO:
+        case QChar::DirLRE:
+            ltr++;
+            break;
+        case QChar::DirR:
+        case QChar::DirAL:
+        case QChar::DirRLO:
+        case QChar::DirRLE:
+            rtl++;
+        default:
+            break;
+        }
+        ++iter;
+    }
+    return ltr < rtl;
+}
+
 TextTool::TextTool(KoCanvasBase *canvas)
 : KoTool(canvas),
     m_textShape(0),
@@ -569,15 +594,18 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
-            const bool paragEmtpy = m_caret.atBlockStart();
+            const bool paragEmtpy = m_caret.atBlockStart(); // we just started a new paragraph
             m_caret.insertText(event->text());
-            if(paragEmtpy) { // we just started a new paragraph
+            QTextBlockFormat format = m_caret.blockFormat();
+            KoParagraphStyle::Direction dir = static_cast<KoParagraphStyle::Direction> (format.intProperty(
+                        KoParagraphStyle::TextProgressionDirection));
+            if(paragEmtpy || dir == KoParagraphStyle::PerhapsLeftRightTopBottom ||
+                        dir == KoParagraphStyle::PerhapsRightLeftTopBottom) {
                 QTextBlock block = m_caret.block();
-                QTextBlockFormat format = m_caret.blockFormat();
-                if(block.text().isRightToLeft())
-                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::RightLeftTopBottom);
+                if(isRightToLeft(m_caret.block().text()))
+                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::PerhapsRightLeftTopBottom);
                 else // remove previously set one if needed.
-                    format.clearProperty(KoParagraphStyle::TextProgressionDirection);
+                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::PerhapsLeftRightTopBottom);
                 m_caret.setBlockFormat(format);
             }
             editingPluginEvents();
