@@ -25,8 +25,10 @@
 #include <kdebug.h>
 
 #include <CellView.h>
+#include <Damages.h>
 #include <Doc.h>
 #include <Map.h>
+#include <Region.h>
 #include <RowColumnFormat.h>
 #include <Sheet.h>
 #include <SheetView.h>
@@ -93,7 +95,8 @@ TableShape::TableShape( int columns, int rows )
     setColumns( columns );
     setRows( rows );
 
-    Cell( sheet(), 1, 1 ).parseUserInput( "42" );
+    connect(d->doc, SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            this, SLOT(handleDamages(const QList<Damage*>&)));
 }
 
 TableShape::~TableShape()
@@ -170,3 +173,38 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
 bool TableShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
     return false; // TODO
 }
+
+void TableShape::handleDamages( const QList<Damage*>& damages )
+{
+    QList<Damage*>::ConstIterator end(damages.end());
+    for( QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it )
+    {
+        Damage* damage = *it;
+        if( !damage ) continue;
+
+        if( damage->type() == Damage::Cell )
+        {
+            CellDamage* cellDamage = static_cast<CellDamage*>( damage );
+            const Region region = cellDamage->region();
+
+            if ( cellDamage->changes() & CellDamage::Appearance )
+                d->sheetView->invalidateRegion( region );
+            continue;
+        }
+
+        if( damage->type() == Damage::Sheet )
+        {
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
+
+            if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
+                d->sheetView->invalidate();
+            continue;
+        }
+    }
+
+    repaint();
+    // FIXME Stefan: Where's the corresponding emitBeginOperation()?
+    d->doc->emitEndOperation();
+}
+
+#include "TableShape.moc"

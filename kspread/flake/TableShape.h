@@ -20,16 +20,21 @@
 #ifndef KSPREAD_TABLE_SHAPE
 #define KSPREAD_TABLE_SHAPE
 
+#include <QObject>
+
 #include <KoShape.h>
 
 #define TableShapeId "TableShape"
 
 namespace KSpread
 {
+class Damage;
 class Sheet;
 
-class TableShape : public KoShape
+class TableShape : public QObject, public KoShape
 {
+    Q_OBJECT
+
 public:
     explicit TableShape( int columns = 2, int rows = 8 );
     virtual ~TableShape();
@@ -48,11 +53,13 @@ public:
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
-protected:
     /**
      * \return the sheet containing the data for this shape
      */
     Sheet* sheet() const;
+
+private Q_SLOTS:
+    void handleDamages( const QList<Damage*>& damages );
 
 private:
     Q_DISABLE_COPY( TableShape )

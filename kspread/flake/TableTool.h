@@ -24,6 +24,7 @@
 
 namespace KSpread
 {
+class Region;
 
 class TableTool : public KoTool
 {
@@ -42,9 +43,15 @@ public:
     virtual void activate( bool temporary = false );
     virtual void deactivate();
 
+Q_SIGNALS:
+    void userInputChanged(const QString& content);
+
 private Q_SLOTS:
     void changeColumns( int num );
     void changeRows( int num );
+    void changeSelection(const Region& changedRegion);
+    void changeUserInput(const QString& content);
+    void applyUserInput();
 
 private:
     virtual QWidget* createOptionWidget();
