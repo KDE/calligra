@@ -48,7 +48,6 @@ X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template,appl
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;application/rtf;text/plain;application/x-mswrite
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
-GenericName[ar]=مُستندات نصيّة
 GenericName[bg]=Текстови документи
 GenericName[br]=Teulioù skrid
 GenericName[ca]=Documents de text

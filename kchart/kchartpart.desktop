@@ -54,7 +54,6 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.chart
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.chart,application/vnd.oasis.opendocument.chart-template
 GenericName=Chart
 GenericName[af]=Kaart
-GenericName[ar]=رسم بيانيّ
 GenericName[bg]=Редактор на графики
 GenericName[br]=Treser grafoù
 GenericName[ca]=Diagrames

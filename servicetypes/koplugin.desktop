@@ -4,7 +4,6 @@ Type=ServiceType
 X-KDE-ServiceType=KOfficePlugin
 Comment=KOffice Plugin
 Comment[af]=Koffice Inplak
-Comment[ar]=مُلْحَق KOffice
 Comment[bg]=Приставка за KOffice
 Comment[br]=Lugant KOffice
 Comment[ca]=Connector per a KOffice

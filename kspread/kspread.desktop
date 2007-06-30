@@ -9,7 +9,6 @@ Name[x-test]=xxKSpreadxx
 Exec=kspread %u
 GenericName=Spreadsheets
 GenericName[af]=Spreiblad
-GenericName[ar]=وريقات حساب
 GenericName[bg]=Електронна таблица
 GenericName[br]=Logerioù
 GenericName[ca]=Full de càlcul

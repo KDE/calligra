@@ -7,7 +7,6 @@ Name[x-test]=xxKarbon14xx
 Exec=karbon %u
 GenericName=Scalable Graphics
 GenericName[af]=Skaal veranderbare Grafieka
-GenericName[ar]=رسوم قابلة للتمدُّد
 GenericName[bg]=Векторна графика
 GenericName[ca]=Gràfics escalables
 GenericName[cs]=Škálovatelná grafika

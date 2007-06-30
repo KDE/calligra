@@ -10,7 +10,6 @@ Name[x-test]=xxKWordxx
 Exec=kword %u
 GenericName=Word Processing
 GenericName[af]=Woord Verwerking
-GenericName[ar]=مُعالجة الكلمات
 GenericName[bg]=Текстообработка
 GenericName[ca]=Processador de text
 GenericName[cs]=Zpracování textu

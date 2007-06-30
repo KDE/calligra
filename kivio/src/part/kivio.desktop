@@ -5,7 +5,6 @@ Name[ne]=किभियो
 Name[x-test]=xxKivioxx
 Exec=kivio %u
 GenericName=Flowchart & Diagram Editing
-GenericName[ar]=تحرير مَسابات ومِبْيَانَات
 GenericName[bg]=Диаграми и схеми
 GenericName[ca]=Editor de diagrames de fluxos
 GenericName[cs]=Editor nákresů a diagramů

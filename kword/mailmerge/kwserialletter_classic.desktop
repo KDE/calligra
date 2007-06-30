@@ -5,7 +5,6 @@ ServiceTypes=KWord/MailMergePlugin
 
 Name=Internal Storage
 Name[af]=Intern Stoorplek
-Name[ar]=تخزين داخليّ
 Name[bg]=Вътрешно съхранение
 Name[ca]=Emmagatzemament intern
 Name[cs]=Interní uložení
@@ -54,7 +53,6 @@ Name[x-test]=xxInternal Storagexx
 Name[xh]=Indawo yokugcina Yangaphakathi
 Name[zh_TW]=內部存儲器
 Comment=This datasource type stores the data directly in the KWord file
-Comment[ar]=هذا النّوع من المصادر البيانيّة يُخزِّن البيانات مباشرة في ملف KWord
 Comment[bg]=Този източник на данни запазва данните директно във файл на KWord
 Comment[ca]=Aquest tipus de font de dades guarda les dades directament en el fitxer KWord
 Comment[cs]=Tento typ zdroje dat ukládá údaje přímo do souboru ve formátu KWordu

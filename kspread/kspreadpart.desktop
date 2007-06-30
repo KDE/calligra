@@ -50,7 +50,6 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread
 GenericName=Spreadsheets
 GenericName[af]=Spreiblad
-GenericName[ar]=وريقات حساب
 GenericName[bg]=Електронна таблица
 GenericName[br]=Logerioù
 GenericName[ca]=Full de càlcul

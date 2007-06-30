@@ -51,7 +51,6 @@ X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.formula
 X-KDE-ExtraNativeMimeTypes=application/x-kformula,application/vnd.oasis.opendocument.formula-template,text/mathml
 GenericName=Formula Editor
 GenericName[af]=Formule Redigeerder
-GenericName[ar]=مُحَرِّر المعادَلات
 GenericName[bg]=Редактор на формули
 GenericName[br]=Un aozer formulennoù
 GenericName[ca]=Editor de fórmules
