@@ -98,6 +98,7 @@ signals:
 
 protected:
     friend class KWTextDocumentLayout;
+    friend class TestTextFrameSorting;
     void setupFrame(KWFrame *frame);
     /**
      * Call this to make it know that the text we want to layout needs more space to be shown fully.
@@ -125,6 +126,7 @@ private:
     const KWPageManager *m_pageManager;
     const KWDocument *m_kwordDocument;
 
+    // return true if frame1 is sorted before frame2
     static bool sortTextFrames(const KWFrame *frame1, const KWFrame *frame2);
 };
 

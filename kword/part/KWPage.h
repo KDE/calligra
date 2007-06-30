@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2005 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2005, 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,7 +21,9 @@
 
 #include "KWPageManager.h"
 #include "KoPageLayout.h"
-#include <kword_export.h>
+#include "kword_export.h"
+
+#include <KoText.h>
 #include <QRectF>
 class KoZoomHandler;
 
@@ -143,6 +145,9 @@ public:
      */
     KoPageFormat::Orientation orientationHint() const;
 
+    void setDirectionHint(KoText::Direction direction) { m_textDirectionHint = direction; }
+    KoText::Direction directionHint() const { return m_textDirectionHint; }
+
 private:
     /** private constructor, only for our friends
      * @param parent the KWPageManager that we belong to.
@@ -153,6 +158,7 @@ private:
     int m_pageNum;
     PageSide m_pageSide;
     KoPageLayout m_pageLayout;
+    KoText::Direction m_textDirectionHint;
 
     KWPageManager *m_parent;
 

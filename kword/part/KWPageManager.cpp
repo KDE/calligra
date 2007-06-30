@@ -45,9 +45,9 @@ int KWPageManager::pageNumber(const QPointF &point) const {
         if(startOfpage >= point.y())
             break;
         startOfpage += page->height();
-        pageNumber++;
+        pageNumber = page->pageNumber();
     }
-    return pageNumber-1;
+    return pageNumber;
 }
 
 int KWPageManager::pageNumber(const KoShape *shape) const {

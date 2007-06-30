@@ -21,6 +21,7 @@
 #include "KoZoomHandler.h"
 
 #include <QRect>
+#include <QApplication>
 
 KWPage::KWPage(KWPageManager *parent, int pageNum) {
     m_parent = parent;
@@ -35,6 +36,8 @@ KWPage::KWPage(KWPageManager *parent, int pageNum) {
     m_pageLayout.bindingSide = -1.0;
     m_pageLayout.orientation = parent->m_defaultPageLayout.orientation;
     m_pageSide = pageNum%2==0 ? Left : Right;
+
+    m_textDirectionHint = QApplication::isLeftToRight() ?  KoText::LeftRightTopBottom : KoText::RightLeftTopBottom;
 }
 
 double KWPage::width() const {
