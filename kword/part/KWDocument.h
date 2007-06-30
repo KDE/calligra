@@ -218,6 +218,7 @@ signals:
 private slots:
     /// Frame maintenance on already registered framesets
     void addFrame( KWFrame *frame );
+    void removeFrame( KWFrame *frame );
     void requestMoreSpace(KWTextFrameSet *fs);
 
     /// Called after the constructor figures out there is an install problem.

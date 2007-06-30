@@ -67,6 +67,7 @@ public:
     void setAllowLayout(bool allow);
 
     /**
+     * Returns if we are allowed to layout the text in this frame.
      * @return if we are allowed to layout the text in this frame.
      * @see setAllowLayout()
      */

@@ -165,6 +165,7 @@ void KWTextFrameSet::spaceLeft(double excessHeight) {
     Q_ASSERT(lastFrame);
     if(frameCount() > 1 && lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame &&
             lastFrame->shape()->size().height() < excessHeight) { // remove last frame
+        removeFrame(lastFrame);
         delete lastFrame->shape();
     }
     else if(lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior) {

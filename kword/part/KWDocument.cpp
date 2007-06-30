@@ -321,6 +321,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
+    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
     emit frameSetAdded(fs);
 }
 
@@ -343,6 +344,22 @@ void KWDocument::addFrame(KWFrame *frame) {
         canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
     frame->shape()->repaint();
+}
+
+void KWDocument::removeFrame(KWFrame *frame) {
+    if(frame->shape() == 0) return;
+    KWPage *page = pageManager()->page(frame->shape());
+    if(page == 0) return;
+    if(page->pageNumber() != pageManager()->lastPageNumber())
+        return; // can only delete last page.
+    foreach(KWFrameSet *fs, m_frameSets) {
+        foreach(KWFrame *f, fs->frames()) {
+            if(page == pageManager()->page(f->shape()))
+                return;
+        }
+    }
+
+    removePage(page->pageNumber());
 }
 
 void KWDocument::setPageSettings(const KWPageSettings &newPageSettings) {
