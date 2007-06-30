@@ -35,6 +35,7 @@
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
+#include "commands/KWPageRemoveCommand.h"
 
 // koffice libs includes
 #include <KoShapeManager.h>
@@ -253,15 +254,12 @@ KWPage* KWDocument::appendPage() {
 }
 
 void KWDocument::removePage(int pageNumber) {
-    // TODO make this undo-able.
     KWPage *page = m_pageManager.page(pageNumber);
     if(page == 0) {
         kWarning() << "remove page requested for a non exiting page!\n";
         return;
     }
-    emit pageSetupChanged();
-    m_pageManager.removePage(page);
-    m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
+    addCommand(new KWPageRemoveCommand(this, page));
 }
 
 void KWDocument::firePageSetupChanged() {

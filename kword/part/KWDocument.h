@@ -235,6 +235,7 @@ private:
     friend class KWStartupWidget;
     friend class KWPagePropertiesCommand;
     friend class KWPageInsertCommand;
+    friend class KWPageRemoveCommand;
     QString renameFrameSet( const QString& prefix , const QString& base );
     /// post process loading after either oasis or oldxml loading finished
     void endOfLoading();

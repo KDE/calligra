@@ -49,6 +49,7 @@ set(kwordprivate_LIB_SRCS
 
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
+    commands/KWPageRemoveCommand.cpp
     commands/KWFrameDeleteCommand.cpp
 )
 

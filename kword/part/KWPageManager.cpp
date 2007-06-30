@@ -192,7 +192,6 @@ void KWPageManager::removePage(KWPage *page) {
     }
 
     m_pageList.removeAll(page);
-    // TODO make the deletion of object page occur in a single shot
     delete page;
 }
 

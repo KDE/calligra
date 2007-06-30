@@ -27,7 +27,7 @@ class KoZoomHandler;
 
 /**
  * This class represents a printed page of the document.  Each page is either left, right or
- * a pageSpread. See the PageSideEnum for details.
+ * a pageSpread. See the PageSide for details.
  * The KWPage is created and maintained by the KWPageManager so you won't find a constructor
  * on this class.  Margins and sizes are inherited from the page managers default, setting the
  * size to the same size as the default will from then on update the size automatically.
@@ -35,7 +35,7 @@ class KoZoomHandler;
 class KWORD_EXPORT KWPage {
 public:
     /// An enum to define if this is a page that is printed to be a left or a right page
-    enum PageSideEnum {
+    enum PageSide {
         Left,       ///< A left page. Used for even-numbered pages
         Right,      ///< A right page. Used for odd numbered pages
         PageSpread  ///< A page spread which is one KWPage instance, but represents 2 pagenumbers
@@ -114,16 +114,18 @@ public:
      */
     double offsetInDocument() const;
 
-    /// Return the pageSide of this page, see the PageSideEnum
-    PageSideEnum pageSide() const { return m_pageSide; }
-    /// set the pageSide of this page, see the PageSideEnum
-    void setPageSide(PageSideEnum ps) { m_pageSide = ps; }
+    /// Return the pageSide of this page, see the PageSide
+    PageSide pageSide() const { return m_pageSide; }
+    /// set the pageSide of this page, see the PageSide
+    void setPageSide(PageSide ps) { m_pageSide = ps; }
 
     /// returns the number of this page as it will be shown to the user.
     int pageNumber() const { return m_pageNum; }
 
     /// return the effective pageLayout combining the default and the page specific ones
     const KoPageLayout pageLayout() const;
+
+    void setPageLayout(const KoPageLayout &layout);
 
     /**
      * Mark this page to be in landscape or portrait mode.
@@ -149,7 +151,7 @@ private:
     KWPage(KWPageManager *parent, int pageNum);
 
     int m_pageNum;
-    PageSideEnum m_pageSide;
+    PageSide m_pageSide;
     KoPageLayout m_pageLayout;
 
     KWPageManager *m_parent;

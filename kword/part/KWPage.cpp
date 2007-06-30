@@ -163,3 +163,13 @@ KoPageFormat::Orientation KWPage::orientationHint() const {
     return m_pageLayout.orientation;
 }
 
+void KWPage::setPageLayout(const KoPageLayout &layout) {
+    setHeight(layout.height);
+    setWidth(layout.width);
+    setTopMargin(layout.top);
+    setBottomMargin(layout.bottom);
+    setLeftMargin(layout.left);
+    setRightMargin(layout.right);
+    setMarginClosestBinding(layout.bindingSide);
+    setPageEdgeMargin(layout.pageEdge);
+}
