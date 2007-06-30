@@ -42,7 +42,7 @@ AutoFilterCommand::~AutoFilterCommand()
 
 void AutoFilterCommand::redo()
 {
-    DatabaseRange database(""); // default, unnamed auto-filter
+    DatabaseRange database("auto-filter-1");
     database.setDisplayFilterButtons(true);
     m_sheet->cellStorage()->setDatabaseRange(*this, database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));

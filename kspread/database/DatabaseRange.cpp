@@ -185,7 +185,6 @@ void DatabaseRange::updateSubFilter(FilterPopup* popup)
     popup->updateFilter(d->filter);
     // TODO Stefan: Create and execute apply filter command.
     ApplyFilterCommand* command = new ApplyFilterCommand();
-    kDebug() << "DatabaseRange::updateSubFilter: " << d->targetRangeAddress << endl;
     command->setSheet((*d->targetRangeAddress.constBegin())->sheet());
     command->add(d->targetRangeAddress);
     command->setDatabase(*this); // FIXME Stefan: Really needed?
