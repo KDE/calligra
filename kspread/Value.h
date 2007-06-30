@@ -124,10 +124,13 @@ class KSPREAD_EXPORT Value
      * Creates a floating-point value.
      */
     explicit Value( double f );
+
+#ifdef KSPREAD_HIGH_PRECISION_SUPPORT
     /**
      * Creates a floating-point value.
      */
     explicit Value( Number f );
+#endif // KSPREAD_HIGH_PRECISION_SUPPORT
 
     /**
      * Creates a complex number value.

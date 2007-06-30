@@ -19,6 +19,8 @@
 
 #include "Number.h"
 
+#ifdef KSPREAD_HIGH_PRECISION_SUPPORT
+
 #include <math.h>
 
 using namespace KSpread;
@@ -317,10 +319,11 @@ Number atg (const Number &n) { return n.atg(); }
 Number atan2 (const Number &y, const Number &x) { return Number::atan2(y, x); }
 Number sinh (const Number &n) { return n.sinh(); }
 Number cosh (const Number &n) { return n.cosh(); }
-Number tgh (const Number &n) { return n.tg(); }
+Number tgh (const Number &n) { return n.tgh(); }
 Number asinh (const Number &n) { return n.asinh(); }
 Number acosh (const Number &n) { return n.acosh(); }
 Number atgh (const Number &n) { return n.atgh(); }
 
 }  // nsmespace KSpread
 
+#endif // KSPREAD_HIGH_PRECISION_SUPPORT

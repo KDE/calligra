@@ -285,7 +285,7 @@ Value ValueCalc::pow (const Value &a, const Value &b)
   Number aa, bb;
   aa = converter->toFloat (a);
   bb = converter->toFloat (b);
-  Value res = Value (KSpread::pow (aa, bb));
+  Value res = Value (::pow (aa, bb));
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a, b));
@@ -302,7 +302,7 @@ Value ValueCalc::sqr (const Value &a)
 Value ValueCalc::sqrt (const Value &a)
 {
   if (a.isError()) return a;
-  Value res = Value (KSpread::pow (converter->toFloat(a), 0.5));
+  Value res = Value (::pow (converter->toFloat(a), 0.5));
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
 
@@ -360,7 +360,7 @@ Value ValueCalc::div (const Value &a, Number b)
 Value ValueCalc::pow (const Value &a, Number b)
 {
   if (a.isError()) return a;
-  Value res = Value (KSpread::pow (converter->toFloat(a), b));
+  Value res = Value (::pow (converter->toFloat(a), b));
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (a.format());
@@ -612,7 +612,7 @@ Value ValueCalc::log (const Value &number,
 
 Value ValueCalc::ln (const Value &number)
 {
-  Value res = Value (KSpread::ln (converter->toFloat (number)));
+  Value res = Value (::ln (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -638,7 +638,7 @@ Value ValueCalc::log (const Value &number, Number base)
 
 Value ValueCalc::exp (const Value &number)
 {
-  return Value (KSpread::exp (converter->toFloat (number)));
+  return Value (::exp (converter->toFloat (number)));
 }
 
 Value ValueCalc::pi ()
@@ -713,7 +713,7 @@ Value ValueCalc::combin (int n, int k)
 {
   if (n >= 15)
   {
-    Number result = KSpread::exp(Number (lgamma (n + 1) - lgamma (k + 1) - lgamma (n-k+1)));
+    Number result = ::exp(Number (lgamma (n + 1) - lgamma (k + 1) - lgamma (n-k+1)));
     return Value (floor(numToDouble (result + 0.5)));
   }
   else
@@ -802,7 +802,7 @@ Value ValueCalc::fromBase (const Value &val, int base)
 
 Value ValueCalc::sin (const Value &number)
 {
-  Value res = Value (KSpread::sin (converter->toFloat (number)));
+  Value res = Value (::sin (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -812,7 +812,7 @@ Value ValueCalc::sin (const Value &number)
 
 Value ValueCalc::cos (const Value &number)
 {
-  Value res = Value (KSpread::cos (converter->toFloat (number)));
+  Value res = Value (::cos (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -822,7 +822,7 @@ Value ValueCalc::cos (const Value &number)
 
 Value ValueCalc::tg (const Value &number)
 {
-  Value res = Value (KSpread::tg (converter->toFloat (number)));
+  Value res = Value (::tg (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -832,7 +832,7 @@ Value ValueCalc::tg (const Value &number)
 
 Value ValueCalc::cotg (const Value &number)
 {
-  Value res = div (1, Value (KSpread::tg (converter->toFloat (number))));
+  Value res = div (1, Value (::tg (converter->toFloat (number))));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -843,7 +843,7 @@ Value ValueCalc::cotg (const Value &number)
 Value ValueCalc::asin (const Value &number)
 {
   errno = 0;
-  Value res = Value (KSpread::asin (converter->toFloat (number)));
+  Value res = Value (::asin (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -856,7 +856,7 @@ Value ValueCalc::asin (const Value &number)
 Value ValueCalc::acos (const Value &number)
 {
   errno = 0;
-  Value res = Value (KSpread::acos (converter->toFloat (number)));
+  Value res = Value (::acos (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -869,7 +869,7 @@ Value ValueCalc::acos (const Value &number)
 Value ValueCalc::atg (const Value &number)
 {
   errno = 0;
-  Value res = Value (KSpread::atg (converter->toFloat (number)));
+  Value res = Value (::atg (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -883,12 +883,12 @@ Value ValueCalc::atan2 (const Value &y, const Value &x)
 {
   Number yy = converter->toFloat (y);
   Number xx = converter->toFloat (x);
-  return Value (KSpread::atan2 (yy, xx));
+  return Value (::atan2 (yy, xx));
 }
 
 Value ValueCalc::sinh (const Value &number)
 {
-  Value res = Value (KSpread::sinh (converter->toFloat (number)));
+  Value res = Value (::sinh (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -898,7 +898,7 @@ Value ValueCalc::sinh (const Value &number)
 
 Value ValueCalc::cosh (const Value &number)
 {
-  Value res = Value (KSpread::cosh (converter->toFloat (number)));
+  Value res = Value (::cosh (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -908,7 +908,7 @@ Value ValueCalc::cosh (const Value &number)
 
 Value ValueCalc::tgh (const Value &number)
 {
-  Value res = Value (KSpread::tgh (converter->toFloat (number)));
+  Value res = Value (::tgh (converter->toFloat (number)));
 
   if (number.isNumber() || number.isEmpty())
     res.setFormat (number.format());
@@ -919,7 +919,7 @@ Value ValueCalc::tgh (const Value &number)
 Value ValueCalc::asinh (const Value &number)
 {
   errno = 0;
-  Value res = Value (KSpread::asinh (converter->toFloat (number)));
+  Value res = Value (::asinh (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -932,7 +932,7 @@ Value ValueCalc::asinh (const Value &number)
 Value ValueCalc::acosh (const Value &number)
 {
   errno = 0;
-  Value res = Value (KSpread::acosh (converter->toFloat (number)));
+  Value res = Value (::acosh (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -945,7 +945,7 @@ Value ValueCalc::acosh (const Value &number)
 Value ValueCalc::atgh (const Value &number)
 {
   errno = 0;
-  Value res = Value (KSpread::atgh (converter->toFloat (number)));
+  Value res = Value (::atgh (converter->toFloat (number)));
   if (errno)
     return Value::errorVALUE();
 
@@ -1002,7 +1002,7 @@ Value ValueCalc::gauss (Value xx)
       0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
   double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
 
-  double xAbs = numToDouble (KSpread::abs(x));
+  double xAbs = numToDouble (::abs(x));
   uint xShort = static_cast<uint>(floor(xAbs));
   double nVal = 0.0;
   if (xShort == 0)

@@ -256,6 +256,7 @@ Value::Value( double f )
   d->format = fmt_Number;
 }
 
+#ifdef KSPREAD_HIGH_PRECISION_SUPPORT
 // create a floating-point value
 Value::Value( Number f )
     : d( Private::null() )
@@ -264,6 +265,7 @@ Value::Value( Number f )
     d->f = new Number (f);
     d->format = fmt_Number;
 }
+#endif // KSPREAD_HIGH_PRECISION_SUPPORT
 
 // create a complex number value
 Value::Value( const complex<Number>& c )

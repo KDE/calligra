@@ -20,6 +20,29 @@
 #ifndef KSPREAD_NUMBER_H
 #define KSPREAD_NUMBER_H
 
+// #define KSPREAD_HIGH_PRECISION_SUPPORT
+
+#ifndef KSPREAD_HIGH_PRECISION_SUPPORT
+
+#include <math.h>
+
+typedef double Number;
+
+inline double numToDouble (Number n) { return n; }
+
+namespace KSpread {
+
+inline Number log (const Number &n, Number base) { return ::log10(n) / ::log10(base); }
+inline Number ln (const Number &n) { return ::log(n); }
+inline Number tg (const Number &n) { return ::tan(n); }
+inline Number atg (const Number &n) { return ::atan(n); }
+inline Number tgh (const Number &n) { return ::tanh(n); }
+inline Number atgh (const Number &n) { return ::atanh(n); }
+
+} // namespace KSpread
+
+#else // KSPREAD_HIGH_PRECISION_SUPPORT
+
 #include <QSharedDataPointer>
 
 #include "kspread_export.h"
@@ -171,5 +194,7 @@ Number acosh (const Number &n);
 Number atgh (const Number &n);
 
 } // namespace KSpread
+
+#endif // KSPREAD_HIGH_PRECISION_SUPPORT
 
 #endif // KSPREAD_NUMBER_H
