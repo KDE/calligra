@@ -38,8 +38,6 @@ namespace KSpread
 class QDomDocument;
 class QDomElement;
 
-typedef enum T1 { Boolean, Date, Number, Percentage, Time } NumberType;
-
 class Style
 {
  public:
@@ -68,6 +66,8 @@ class NumberStyle
 {
  public:
   NumberStyle() {}
+
+  enum NumberType { Boolean, Date, Number, Percentage, Time };
 
   void copyData( NumberStyle const & ts ) { type = ts.type; }
   static bool isEqual( NumberStyle const * const t1, NumberStyle const & t2 );

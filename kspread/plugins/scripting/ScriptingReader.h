@@ -265,7 +265,7 @@ class ScriptingReader : public QObject
                         case KSpread::Value::Empty: break;
                         case KSpread::Value::Boolean: v = value.asBoolean(); break;
                         case KSpread::Value::Integer: v = value.asInteger(); break;
-                        case KSpread::Value::Float: v = value.asFloat().asFloat(); break;
+                        case KSpread::Value::Float: v = numToDouble(value.asFloat()); break;
                         case KSpread::Value::String: //fall through
                         default: v = value.asString(); break; 
                     }

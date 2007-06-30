@@ -1288,9 +1288,6 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
     QString orientation = "Portrait";
     QString format;
 
-    // Laurent : Why we stored layout information as Millimeter ?!!!!!
-    // kspread used point for all other attribute
-    // I don't understand :(
     if ( styleStack.hasProperty( ooNS::fo, "page-width" ) )
     {
         width = KoUnit::parseValue( styleStack.property( ooNS::fo, "page-width" ) );
@@ -1328,7 +1325,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
         kDebug(30518)<<" num-format :"<<styleStack.property( ooNS::style, "num-format" )<<endl;
         //todo fixme
     }
-        if ( styleStack.hasProperty( ooNS::fo, "background-color" ) )
+    if ( styleStack.hasProperty( ooNS::fo, "background-color" ) )
     {
         //todo
         kDebug(30518)<<" fo:background-color :"<<styleStack.property( ooNS::fo, "background-color" )<<endl;
