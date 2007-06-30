@@ -77,10 +77,11 @@ public:
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
+    void startTextEditingPlugin(const QString &pluginId);
+
+public slots:
     /// add a command to the undo stack, executing it as well.
     void addCommand(QUndoCommand *command);
-
-    void startTextEditingPlugin(const QString &pluginId);
 
 signals:
     /// emitted every time a different styleManager is set.
