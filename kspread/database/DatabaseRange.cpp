@@ -59,6 +59,7 @@ public:
         , sort(/*other.sort ? new Sort(*other.sort) : */0)
         , filter(other.filter ? new Filter(*other.filter) : 0)
         , subtotalRules(/*other.subtotalRules ? new SubtotalRules(*other.subtotalRules) : */0)
+        , name(other.name)
         , isSelection(other.isSelection)
         , onUpdateKeepStyles(other.onUpdateKeepStyles)
         , onUpdateKeepSize(other.onUpdateKeepSize)
@@ -66,6 +67,7 @@ public:
         , orientation(other.orientation)
         , containsHeader(other.containsHeader)
         , displayFilterButtons(other.displayFilterButtons)
+        , targetRangeAddress(other.targetRangeAddress)
         , refreshDelay(other.refreshDelay)
     {
     }
@@ -183,6 +185,7 @@ void DatabaseRange::updateSubFilter(FilterPopup* popup)
     popup->updateFilter(d->filter);
     // TODO Stefan: Create and execute apply filter command.
     ApplyFilterCommand* command = new ApplyFilterCommand();
+    kDebug() << "DatabaseRange::updateSubFilter: " << d->targetRangeAddress << endl;
     command->setSheet((*d->targetRangeAddress.constBegin())->sheet());
     command->add(d->targetRangeAddress);
     command->setDatabase(*this); // FIXME Stefan: Really needed?
