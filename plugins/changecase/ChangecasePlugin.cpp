@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,20 +16,21 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "PluginHelperAction.h"
 
-#include "TextTool.h"
+#include <KoTextEditingRegistry.h>
+#include <kgenericfactory.h>
 
-PluginHelperAction::PluginHelperAction(const QString &name, TextTool *tool, const QString &pluginId)
-    : QAction(name, tool),
-    m_tool(tool),
-    m_pluginId(pluginId)
+#include "ChangecasePlugin.h"
+#include "ChangecaseFactory.h"
+
+K_EXPORT_COMPONENT_FACTORY(changecase,
+        KGenericFactory<ChangecasePlugin>( "ChangecasePlugin" ) )
+
+ChangecasePlugin::ChangecasePlugin( QObject *parent, const QStringList& )
+    : QObject(parent)
 {
-    connect(this, SIGNAL(triggered()), this, SLOT(executed()));
+    KoTextEditingRegistry::instance()->add( new ChangecaseFactory( parent));
 }
 
-void PluginHelperAction::executed() {
-    m_tool->startTextEditingPlugin(m_pluginId);
-}
+#include "ChangecasePlugin.moc"
 
-#include <PluginHelperAction.moc>

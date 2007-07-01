@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,20 +16,19 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "PluginHelperAction.h"
 
-#include "TextTool.h"
+#ifndef CHANGECASEPLUGIN_H
+#define CHANGECASEPLUGIN_H
 
-PluginHelperAction::PluginHelperAction(const QString &name, TextTool *tool, const QString &pluginId)
-    : QAction(name, tool),
-    m_tool(tool),
-    m_pluginId(pluginId)
-{
-    connect(this, SIGNAL(triggered()), this, SLOT(executed()));
-}
+#include <QObject>
 
-void PluginHelperAction::executed() {
-    m_tool->startTextEditingPlugin(m_pluginId);
-}
+class ChangecasePlugin : public QObject {
+    Q_OBJECT
 
-#include <PluginHelperAction.moc>
+public:
+    ChangecasePlugin(QObject * parent,  const QStringList & );
+    ~ChangecasePlugin() {}
+};
+
+#endif
+
