@@ -40,7 +40,7 @@ public:
     virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape, const QColor& color = Qt::black);
     virtual void renderAccidental(QPainter& painter, double x, double y, int accidental, const QColor& color = Qt::black);
     virtual void renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, const QColor& color = Qt::black);
-    virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
+    virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, bool stemsUp, const QColor& color = Qt::black);
 private:
     QPen m_staffLinePen, m_stemPen;
     QFont m_font;

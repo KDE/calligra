@@ -33,7 +33,7 @@
 
 using namespace MusicCore;
 
-MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(true)
+MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(false)
 {
 }
 
@@ -195,6 +195,27 @@ void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, do
     m_style->renderTimeSignatureNumber( painter, x + ts->x() * xScale, s->top() + 2*hh, ts->width(), ts->beat());
 }
 
+static double stemLength(Chord::Duration duration)
+{
+    switch (duration) {
+        case Chord::Breve:
+        case Chord::Whole:
+            return 0;
+        case Chord::Half:
+        case Chord::Quarter:
+        case Chord::Eighth:
+            return 7;
+        case Chord::Sixteenth:
+            return 8;
+        case Chord::ThirtySecond:
+            return 9.5;
+        case Chord::SixtyFourth:
+            return 11;
+        case Chord::HundredTwentyEighth:
+            return 12.5;
+    }
+}
+
 void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, RenderState& state, double xScale, const QColor& color)
 {
     double x = chord->x() * xScale;
@@ -227,13 +248,15 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, Re
         }
     }
 
-    double stemLen = -7;
+    double stemLen = -stemLength(chord->duration()); // TODO: make this depend on the number of flags/length of the note
     double stemX = x + 6;
-    if (line < 4) { stemLen = 7; stemX = x; }
+    bool stemsUp = true;
+    if (line < 4) { stemLen = -stemLen; stemX = x; stemsUp = false; }
     painter.setPen(m_style->stemPen(color));
     painter.drawLine(ref + QPointF(stemX, chord->y() + s->top() + line * s->lineSpacing() / 2),
                      ref + QPointF(stemX, chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2));
     m_style->renderNoteHead( painter, ref.x() + x, ref.y() + chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
+    m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2, chord->duration(), stemsUp, color );
 }
 
 void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, const QColor& color)
@@ -245,7 +268,7 @@ void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration dur
         painter.drawLine(QPointF(x+6, y - stemLength), QPointF(x+6, y));
     }
     if (duration <= MusicCore::Chord::Eighth) {
-        m_style->renderNoteFlags(painter, x+6, y - stemLength, duration, color);
+        m_style->renderNoteFlags(painter, x+6, y - stemLength, duration, true, color);
     }
 }
 

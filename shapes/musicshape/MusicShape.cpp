@@ -64,6 +64,19 @@ MusicShape::MusicShape()
     Staff* staff = part->addStaff();
     Voice* voice = part->addVoice();
     b1->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
+    voice->bar(b1)->addElement(mkNote(Chord::Eighth, staff, 0));
+    voice->bar(b1)->addElement(mkNote(Chord::Eighth, staff, 1));
+    voice->bar(b1)->addElement(mkNote(Chord::Sixteenth, staff, 0));
+    voice->bar(b1)->addElement(mkNote(Chord::ThirtySecond, staff, 1));
+    voice->bar(b1)->addElement(mkNote(Chord::SixtyFourth, staff, 2));
+    voice->bar(b1)->addElement(mkNote(Chord::HundredTwentyEighth, staff, 3));
+    voice->bar(b2)->addElement(mkNote(Chord::Eighth, staff, 10));
+    voice->bar(b2)->addElement(mkNote(Chord::Sixteenth, staff, 11));
+    voice->bar(b2)->addElement(mkNote(Chord::ThirtySecond, staff, 12));
+    voice->bar(b2)->addElement(mkNote(Chord::SixtyFourth, staff, 13));
+    voice->bar(b2)->addElement(mkNote(Chord::HundredTwentyEighth, staff, 14));
+    voice->bar(b2)->addElement(mkNote(Chord::Whole, staff, 5));
+    voice->bar(b3)->addElement(mkNote(Chord::Breve, staff, 7));
     
     part = m_sheet->addPart("Piano");
     staff = part->addStaff();

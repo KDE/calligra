@@ -161,26 +161,28 @@ void MusicStyle::renderTimeSignatureNumber(QPainter& painter, double x, double y
     painter.drawText(QPointF(x + (w - m.width(txt))/2, y), txt);
 }
 
-void MusicStyle::renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color)
+void MusicStyle::renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, bool stemsUp, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
-    QPointF p(x, y);
+    QPointF p(x + 0.4, y);
     switch (duration) {
         case Chord::HundredTwentyEighth:
-            painter.drawText(p, QString(0xE18A)); // TODO: no 128 flag in emmentaler
+            // no 128 flag in emmentaler, so stack 16th and 32nd on top of each other...
+            painter.drawText(p, QString(stemsUp ? 0xE189 : 0xE18F));
+            painter.drawText(p + QPointF(0, stemsUp ? 13 : -13), QString(stemsUp ? 0xE188 : 0xE18E));
             break;
         case Chord::SixtyFourth:
-            painter.drawText(p, QString(0xE18A));
+            painter.drawText(p, QString(stemsUp ? 0xE18A : 0xE190));
             break;
         case Chord::ThirtySecond:
-            painter.drawText(p, QString(0xE189));
+            painter.drawText(p, QString(stemsUp ? 0xE189 : 0xE18F));
             break;
         case Chord::Sixteenth:
-            painter.drawText(p, QString(0xE188));
+            painter.drawText(p, QString(stemsUp ? 0xE188 : 0xE18E));
             break;
         case Chord::Eighth:
-            painter.drawText(p, QString(0xE187));
+            painter.drawText(p, QString(stemsUp ? 0xE187 : 0xE18B));
             break;
     }
 }
