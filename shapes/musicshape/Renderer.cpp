@@ -257,6 +257,14 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, Re
                      ref + QPointF(stemX, chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2));
     m_style->renderNoteHead( painter, ref.x() + x, ref.y() + chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
     m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2, chord->duration(), stemsUp, color );
+
+    // render dots of notes
+    double dotX = x + 11;
+    painter.setPen(m_style->noteDotPen());
+    for (int i = 0; i < chord->dots(); i++) {
+        painter.drawPoint(ref + QPointF(dotX, chord->y() + s->top() + line * s->lineSpacing() / 2));
+        dotX += 3;
+    }
 }
 
 void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, const QColor& color)

@@ -39,7 +39,7 @@ Chord::Chord(Duration duration, int dots) : VoiceElement(), d(new Private)
         baseLength += baseLength >> 1;
     }
     setLength(baseLength);
-    setWidth(7);
+    setWidth(7 + (3 * dots + (dots ? 2 : 0)));
 }
 
 Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
@@ -52,7 +52,7 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
     }
     setLength(baseLength);
     setStaff(staff);
-    setWidth(7);
+    setWidth(7 + (3 * dots + (dots ? 2 : 0)));
 }
 
 Chord::~Chord()

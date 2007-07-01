@@ -28,6 +28,9 @@ MusicStyle::MusicStyle() : m_font("Emmentaler")
     m_stemPen.setWidthF(0.7);
     m_stemPen.setCapStyle(Qt::RoundCap);
     m_stemPen.setColor(Qt::black);
+    m_noteDotPen.setWidthF(1.9);
+    m_noteDotPen.setCapStyle(Qt::RoundCap);
+    m_noteDotPen.setColor(Qt::black);
 }
 
 MusicStyle::~MusicStyle()
@@ -46,6 +49,11 @@ QPen MusicStyle::stemPen(const QColor& color)
     return m_stemPen;
 }
 
+QPen MusicStyle::noteDotPen(const QColor& color)
+{
+    m_noteDotPen.setColor(color);
+    return m_noteDotPen;
+}
 
 void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Duration duration, const QColor& color)
 {

@@ -43,9 +43,9 @@
 using namespace MusicCore;
 
 // helper method, used by the constructor to easily create a short piece of music
-static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch)
+static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch, int dots = 0)
 {
-    Chord* c = new Chord(duration);
+    Chord* c = new Chord(duration, dots);
     c->addNote(staff, pitch);
     return c;
 }
@@ -107,6 +107,7 @@ MusicShape::MusicShape()
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
     voice2->bar(b2)->addElement(new Chord(staff2, Chord::Half));
+    voice2->bar(b2)->addElement(mkNote(Chord::Quarter, staff2, -5, 3));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 1));
     voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 2));

@@ -35,6 +35,7 @@ public:
     virtual ~MusicStyle();
     virtual QPen staffLinePen(const QColor& color = Qt::black);
     virtual QPen stemPen(const QColor& color = Qt::black);
+    virtual QPen noteDotPen(const QColor& color = Qt::black);
     virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
     virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
     virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape, const QColor& color = Qt::black);
@@ -42,7 +43,7 @@ public:
     virtual void renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, const QColor& color = Qt::black);
     virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, bool stemsUp, const QColor& color = Qt::black);
 private:
-    QPen m_staffLinePen, m_stemPen;
+    QPen m_staffLinePen, m_stemPen, m_noteDotPen;
     QFont m_font;
 };
 
