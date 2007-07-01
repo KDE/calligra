@@ -36,89 +36,81 @@ MusicXmlWriter::~MusicXmlWriter()
 
 static void writePartGroup(KoXmlWriter& w, int id, PartGroup* group)
 {
-    w.startElement("part-group");
+    w.startElement("music:part-group");
     w.addAttribute("type", "start");
     w.addAttribute("number", id);
 
     if (!group->name().isNull()) {
-        w.startElement("group-name");
+        w.startElement("music:group-name");
         w.addTextNode(group->name());
-        w.endElement(); // group-name
+        w.endElement(); // music:group-name
     }
     if (!group->shortName(false).isNull()) {
-        w.startElement("group-abbreviation");
+        w.startElement("music:group-abbreviation");
         w.addTextNode(group->shortName());
-        w.endElement(); // group-abbreviation
+        w.endElement(); // music:group-abbreviation
     }
 
     if (group->symbol() != PartGroup::None) {
-        w.startElement("group-symbol");
+        w.startElement("music:group-symbol");
         switch (group->symbol()) {
             case PartGroup::None:       w.addTextNode("none");   break;
             case PartGroup::Brace:      w.addTextNode("brace");  break;
             case PartGroup::Line:       w.addTextNode("line");   break;
             case PartGroup::Bracket:    w.addTextNode("bracket"); break;
         }
-        w.endElement(); // group-symbol
+        w.endElement(); // music:group-symbol
     }
 
-    w.startElement("group-barline");
+    w.startElement("music:group-barline");
     w.addTextNode(group->commonBarLines() ? "yes" : "no");
-    w.endElement(); // group-barline
+    w.endElement(); // music:group-barline
 
-    w.endElement(); // part-group
+    w.endElement(); // music:part-group
 }
 
 static void writePartDesc(KoXmlWriter& w, int id, Part* part)
 {
-    w.startElement("score-part");
+    w.startElement("music:score-part");
     w.addAttribute("id", QString("P%1").arg(id));
 
-    w.startElement("part-name");
+    w.startElement("music:part-name");
     w.addTextNode(part->name());
-    w.endElement(); // part-name
+    w.endElement(); // music:part-name
 
     QString abbr = part->shortName(false);
     if (!abbr.isNull()) {
-        w.startElement("part-abbreviation");
+        w.startElement("music:part-abbreviation");
         w.addTextNode(abbr);
-        w.endElement(); // part-abbreviation
+        w.endElement(); // music:part-abbreviation
     }
 
-    w.endElement(); // score-part
+    w.endElement(); // music:score-part
 }
 
 static void writePart(KoXmlWriter& w, int id, Part* part)
 {
-    w.startElement("part");
+    w.startElement("music:part");
     w.addAttribute("id", QString("P%1").arg(id));
 
     for (int i = 0; i < part->sheet()->barCount(); i++) {
-        w.startElement("measure");
+        w.startElement("music:measure");
         w.addAttribute("number", i+1);
-        w.endElement(); // measure
+        w.endElement(); // music:measure
     }
 
-    w.endElement(); // part
+    w.endElement(); // music:part
 }
 
-void MusicXmlWriter::writeSheet(QIODevice* dev, Sheet* sheet)
+void MusicXmlWriter::writeSheet(KoXmlWriter& w, Sheet* sheet)
 {
-    KoXmlWriter w(dev);
-    w.startDocument("score-partwise", "-//Recordare//DTD MusicXML 1.1 Partwise//EN",
-        "http://www.musicxml.org/dtds/partwise.dtd");
-    w.startElement("score-partwise");
+//    w.startDocument("score-partwise", "-//Recordare//DTD MusicXML 1.1 Partwise//EN",
+//        "http://www.musicxml.org/dtds/partwise.dtd");
+    w.startElement("music:score-partwise");
+    w.addAttribute("xmlns:music", "http://www.koffice.org/music");
     w.addAttribute("version", "1.1");
 
-    w.startElement("identification");
-    w.startElement("encoding");
-    w.startElement("software");
-    w.addTextNode( QString("KOffice/%1").arg(KOFFICE_VERSION_STRING) );
-    w.endElement(); // software
-    w.endElement(); // encoding
-    w.endElement(); // identification
-
-    w.startElement("part-list");
+    w.startElement("music:part-list");
     for (int i = 0; i < sheet->partCount(); i++) {
         for (int pg = 0; pg < sheet->partGroupCount(); pg++) {
             if (sheet->partGroup(pg)->firstPart() == i) {
@@ -128,20 +120,20 @@ void MusicXmlWriter::writeSheet(QIODevice* dev, Sheet* sheet)
         writePartDesc(w, i, sheet->part(i));
         for (int pg = 0; pg < sheet->partGroupCount(); pg++) {
             if (sheet->partGroup(pg)->lastPart() == i) {
-                w.startElement("part-group");
+                w.startElement("music:part-group");
                 w.addAttribute("type", "stop");
                 w.addAttribute("number", pg+1);
-                w.endElement(); // part-group
+                w.endElement(); // music:part-group
             }
         }
     }
-    w.endElement(); // part-list
+    w.endElement(); // music:part-list
 
     for (int i = 0; i < sheet->partCount(); i++) {
         writePart(w, i, sheet->part(i));
     }
         
-    w.endElement(); // score-partwise
-    w.endDocument();
+    w.endElement(); // music:score-partwise
+//    w.endDocument();
 }
 

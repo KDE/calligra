@@ -23,6 +23,7 @@
 #include <KoXmlReaderForward.h>
 
 class QIODevice;
+class KoXmlWriter;
 
 namespace MusicCore {
     class MusicXmlWriter;
@@ -41,6 +42,7 @@ private slots:
 private:
     MusicCore::MusicXmlWriter* writer;
     QIODevice* dev;
+    KoXmlWriter* xmlWriter;
 
     bool compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path = QString());
     bool validateOutput(const char* fname);

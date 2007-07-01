@@ -20,6 +20,8 @@
 #include <QPainter>
 #include <kdebug.h>
 #include <KoViewConverter.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -32,6 +34,7 @@
 #include "core/Bar.h"
 #include "core/KeySignature.h"
 #include "core/TimeSignature.h"
+#include "core/MusicXmlWriter.h"
 
 #include "MusicStyle.h"
 #include "Engraver.h"
@@ -128,7 +131,18 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 
 void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
-    // TODO
+    KoXmlWriter& writer = context.xmlWriter();
+
+/*    const bool nestedInFrame = context.isSet(KoShapeSavingContext::FrameOpened);
+    if(!nestedInFrame) {
+        writer.startElement( "draw:frame" );
+        saveOdfFrameAttributes(context);
+    }
+    
+    MusicXmlWriter().writeSheet( writer, m_sheet );
+
+    if(!nestedInFrame)
+        writer.endElement(); // draw:frame*/
 }
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {

@@ -19,7 +19,7 @@
 #ifndef MUSICXMLWRITER_H
 #define MUSICXMLWRITER_H
 
-class QIODevice;
+class KoXmlWriter;
 
 namespace MusicCore {
     class Sheet;
@@ -29,7 +29,7 @@ class MusicXmlWriter {
         MusicXmlWriter();
         ~MusicXmlWriter();
 
-        void writeSheet(QIODevice* dev, MusicCore::Sheet* sheet);
+        void writeSheet(KoXmlWriter& writer, MusicCore::Sheet* sheet);
 };
 
 } // namespace MusicCore

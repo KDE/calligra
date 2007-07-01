@@ -22,6 +22,7 @@
 #include "PartGroup.h"
 #include "MusicXmlWriter.h"
 
+#include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
 #include <QtTest/QtTest>
@@ -35,10 +36,14 @@ void MusicXmlWriterTest::init()
     writer = new MusicXmlWriter();
     dev = new QBuffer();
     dev->open(QIODevice::ReadWrite);
+    xmlWriter = new KoXmlWriter(dev);
+    xmlWriter->startDocument("score-partwise", "-//Recordare//DTD MusicXML 1.1 Partwise//EN",
+                     "http://www.musicxml.org/dtds/partwise.dtd");
 }
 
 void MusicXmlWriterTest::cleanup()
 {
+    delete xmlWriter;
     delete writer;
     delete dev;
 }
@@ -46,11 +51,12 @@ void MusicXmlWriterTest::cleanup()
 void MusicXmlWriterTest::testEmptySheet()
 {
     Sheet* sheet = new Sheet();
-    writer->writeSheet(dev, sheet);
+    writer->writeSheet(*xmlWriter, sheet);
     delete sheet;
+    xmlWriter->endDocument();
 
     KoXmlDocument doc;
-    KoXml::setDocument(doc, dev, false);
+    KoXml::setDocument(doc, dev, true);
     KoXmlDocumentType docType = doc.doctype();
 
     QCOMPARE(docType.name(), QString("score-partwise"));
@@ -65,8 +71,9 @@ void MusicXmlWriterTest::testParts()
 
     sheet->addBar();
 
-    writer->writeSheet(dev, sheet);
+    writer->writeSheet(*xmlWriter, sheet);
     delete sheet;
+    xmlWriter->endDocument();
     
     validateOutput("parts.xml"); 
 }
@@ -92,8 +99,9 @@ void MusicXmlWriterTest::testPartGroups()
     pg->setSymbol(PartGroup::Bracket);
     pg->setCommonBarLines(false);
 
-    writer->writeSheet(dev, sheet);
+    writer->writeSheet(*xmlWriter, sheet);
     delete sheet;
+    xmlWriter->endDocument();
     
     validateOutput("partgroups.xml");
 }
@@ -114,8 +122,9 @@ void MusicXmlWriterTest::testNestedPartGroups()
     sheet->addPartGroup(4, 5)->setName("group 5");
     sheet->addPartGroup(4, 5)->setName("group 6");
 
-    writer->writeSheet(dev, sheet);
+    writer->writeSheet(*xmlWriter, sheet);
     delete sheet;
+    xmlWriter->endDocument();
     
     validateOutput("nestedpartgroups.xml");
 }
@@ -125,10 +134,14 @@ bool MusicXmlWriterTest::compareNodes(KoXmlNode& valid, KoXmlNode& result, QStri
 {
     path += '/' + valid.nodeName();
     
-    if (result.nodeName() != valid.nodeName()) {
+    if (result.localName() != valid.localName()) {
         FAIL(QString("nodeName does not match at %1; expected %2, received %3").arg(path, valid.nodeName(), result.nodeName()).toLocal8Bit().constData());
     }
-  
+
+    if (result.namespaceURI() != valid.namespaceURI()) {
+        FAIL(QString("namespace does not match at %1; expected %2, received %3").arg(path, valid.namespaceURI(), result.namespaceURI()).toLocal8Bit().constData());
+    }
+    
     if (result.nodeValue() != valid.nodeValue()) {
         FAIL(QString("nodeValue does not match at %1; expected %2, received %3").arg(path, valid.nodeValue(), result.nodeValue()).toLocal8Bit().constData());
     }
@@ -172,10 +185,10 @@ bool MusicXmlWriterTest::validateOutput(const char* fname)
     QFile validFile(QString(KDESRCDIR "/files/%1").arg(fname));
     validFile.open(QIODevice::ReadOnly);
     KoXmlDocument valid;
-    KoXml::setDocument(valid, &validFile, false);
+    KoXml::setDocument(valid, &validFile, true);
 
     KoXmlDocument result;
-    KoXml::setDocument(result, dev, false);
+    KoXml::setDocument(result, dev, true);
 
     bool res = compareNodes(valid, result);
     if (!res) {
