@@ -148,7 +148,7 @@ void MusicStyle::renderAccidental(QPainter& painter, double x, double y, int acc
             painter.drawText(p, QString(0xE10E));
             break;
         case 2:
-            painter.drawText(p, QString(0xE114));
+            painter.drawText(p, QString(0xE116));
             break;
         case -1:
             painter.drawText(p, QString(0xE112));

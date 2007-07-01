@@ -43,10 +43,10 @@
 using namespace MusicCore;
 
 // helper method, used by the constructor to easily create a short piece of music
-static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch, int dots = 0)
+static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch, int dots = 0, int accidentals = 0)
 {
     Chord* c = new Chord(duration, dots);
-    c->addNote(staff, pitch);
+    c->addNote(staff, pitch, accidentals);
     return c;
 }
 
@@ -59,6 +59,7 @@ MusicShape::MusicShape()
     Bar* b1 = m_sheet->addBar();
     Bar* b2 = m_sheet->addBar();
     Bar* b3 = m_sheet->addBar();
+    Bar* b4 = m_sheet->addBar();
     
     Part* part = m_sheet->addPart("Violin");
     Staff* staff = part->addStaff();
@@ -77,6 +78,11 @@ MusicShape::MusicShape()
     voice->bar(b2)->addElement(mkNote(Chord::HundredTwentyEighth, staff, 14));
     voice->bar(b2)->addElement(mkNote(Chord::Whole, staff, 5));
     voice->bar(b3)->addElement(mkNote(Chord::Breve, staff, 7));
+
+    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, 1));
+    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, 2));
+    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, -1));
+    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, -2));
     
     part = m_sheet->addPart("Piano");
     staff = part->addStaff();
