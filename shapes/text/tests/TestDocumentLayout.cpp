@@ -411,10 +411,10 @@ void TestDocumentLayout::testTextAlignments() {
 
     KoParagraphStyle startRTL;
     startRTL.setAlignment(Qt::AlignLeading);
-    startRTL.setTextProgressionDirection(KoParagraphStyle::RightLeftTopBottom);
+    startRTL.setTextProgressionDirection(KoText::RightLeftTopBottom);
     KoParagraphStyle endRTL;
     endRTL.setAlignment(Qt::AlignTrailing);
-    endRTL.setTextProgressionDirection(KoParagraphStyle::RightLeftTopBottom);
+    endRTL.setTextProgressionDirection(KoText::RightLeftTopBottom);
 
     QTextBlock block = doc->begin();
     start.applyStyle(block);

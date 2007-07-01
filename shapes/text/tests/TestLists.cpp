@@ -428,7 +428,7 @@ void TestDocumentLayout::testRightToLeftList() {
     initForNewTest("a\nb\nc");
 
     KoParagraphStyle h1;
-    h1.setTextProgressionDirection(KoParagraphStyle::RightLeftTopBottom);
+    h1.setTextProgressionDirection(KoText::RightLeftTopBottom);
     styleManager->add(&h1);
     KoListStyle listStyle;
     KoListLevelProperties llp = listStyle.level(1);

@@ -600,15 +600,15 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             const bool paragEmtpy = m_caret.atBlockStart(); // we just started a new paragraph
             m_caret.insertText(event->text());
             QTextBlockFormat format = m_caret.blockFormat();
-            KoParagraphStyle::Direction dir = static_cast<KoParagraphStyle::Direction> (format.intProperty(
+            KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
                         KoParagraphStyle::TextProgressionDirection));
-            if(paragEmtpy || dir == KoParagraphStyle::PerhapsLeftRightTopBottom ||
-                        dir == KoParagraphStyle::PerhapsRightLeftTopBottom) {
+            if(paragEmtpy || dir == KoText::PerhapsLeftRightTopBottom ||
+                        dir == KoText::PerhapsRightLeftTopBottom) {
                 QTextBlock block = m_caret.block();
                 if(isRightToLeft(m_caret.block().text()))
-                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::PerhapsRightLeftTopBottom);
+                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::PerhapsRightLeftTopBottom);
                 else // remove previously set one if needed.
-                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::PerhapsLeftRightTopBottom);
+                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::PerhapsLeftRightTopBottom);
                 m_caret.setBlockFormat(format);
             }
             editingPluginEvents();
@@ -625,12 +625,12 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         QTextBlockFormat format = m_caret.blockFormat();
 
 
-    KoParagraphStyle::Direction dir = static_cast<KoParagraphStyle::Direction> (format.intProperty(KoParagraphStyle::TextProgressionDirection));
+    KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(KoParagraphStyle::TextProgressionDirection));
     bool isRtl;
-    if(dir == KoParagraphStyle::AutoDirection)
+    if(dir == KoText::AutoDirection)
         isRtl = m_caret.block().text().isRightToLeft();
     else
-        isRtl =  dir == KoParagraphStyle::RightLeftTopBottom;
+        isRtl =  dir == KoText::RightLeftTopBottom;
 
         if(isRtl) { // if RTL toggle direction of cursor movement.
             switch(moveOperation) {
@@ -1253,13 +1253,13 @@ void TextTool::editingPluginEvents() {
         // change that anymore.
         QTextCursor cursor(block.document()->findBlock(m_prevCursorPosition));
         QTextBlockFormat format = cursor.blockFormat();
-        KoParagraphStyle::Direction dir = static_cast<KoParagraphStyle::Direction> (format.intProperty(
+        KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
                     KoParagraphStyle::TextProgressionDirection));
         bool blockChanged = true;
-        if(dir == KoParagraphStyle::PerhapsLeftRightTopBottom)
-            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::LeftRightTopBottom);
-        else if(dir == KoParagraphStyle::PerhapsRightLeftTopBottom)
-            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoParagraphStyle::RightLeftTopBottom);
+        if(dir == KoText::PerhapsLeftRightTopBottom)
+            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
+        else if(dir == KoText::PerhapsRightLeftTopBottom)
+            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
         else blockChanged = false;
         if(blockChanged)
             cursor.setBlockFormat(format);

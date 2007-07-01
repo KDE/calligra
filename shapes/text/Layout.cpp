@@ -247,11 +247,11 @@ bool Layout::nextParag() {
     }
     m_format = m_block.blockFormat();
     m_blockData = dynamic_cast<KoTextBlockData*> (m_block.userData());
-    KoParagraphStyle::Direction dir = static_cast<KoParagraphStyle::Direction> (m_format.intProperty(KoParagraphStyle::TextProgressionDirection));
-    if(dir == KoParagraphStyle::AutoDirection)
+    KoText::Direction dir = static_cast<KoText::Direction> (m_format.intProperty(KoParagraphStyle::TextProgressionDirection));
+    if(dir == KoText::AutoDirection)
         m_isRtl = m_block.text().isRightToLeft();
     else
-        m_isRtl =  dir == KoParagraphStyle::RightLeftTopBottom || dir == KoParagraphStyle::PerhapsRightLeftTopBottom;
+        m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
 
     // initialize list item stuff for this parag.
     QTextList *textList = m_block.textList();
