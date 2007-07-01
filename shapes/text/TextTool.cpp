@@ -983,12 +983,12 @@ void TextTool::lineBreak() {
 
 void TextTool::alignLeft() {
     if(! m_allowActions) return;
-    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignLeft);
+    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
 }
 
 void TextTool::alignRight() {
     if(! m_allowActions) return;
-    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignRight);
+    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignRight | Qt::AlignAbsolute);
 }
 
 void TextTool::alignCenter() {
