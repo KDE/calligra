@@ -25,6 +25,7 @@
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
+#include "frames/KWImageFrame.h"
 
 // koffice
 #include <KoTextLoadingContext.h>
@@ -34,6 +35,7 @@
 #include <KoDom.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
+#include <KoImageData.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -270,13 +272,22 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     return true;
 }
 
-void KWOpenDocumentLoader::addShape(KoShape* shape)
+KoShape* KWOpenDocumentLoader::loadImage(KoTextLoadingContext& context, const QString& href)
 {
-    //d->document->addShape(shape);
-    KWFrameSet* fs = new KWFrameSet();
-    KWFrame *frame = new KWFrame(shape, fs);
-    d->document->addFrameSet(fs);
+    Q_UNUSED(context);
 
+    KoImageData data( d->document->imageCollection() );
+    data.setStoreHref( href );
+
+    KWFrameSet* fs = new KWFrameSet();
+    Q_ASSERT(fs);
+    fs->setName(href);
+
+    KWImageFrame *imageFrame = new KWImageFrame(data, fs);
+    //imageFrame->shape()->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
+    d->document->addFrameSet(fs);
+    Q_ASSERT(imageFrame->shape());
+    return imageFrame->shape();
 }
 
 void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const QDomDocument& settingsDoc)

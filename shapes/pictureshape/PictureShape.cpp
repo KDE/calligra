@@ -26,6 +26,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOasisLoadingContext.h>
 #include <KoStoreDevice.h>
+#include <KoUnit.h>
 
 #include <QPainter>
 #include <kdebug.h>
@@ -56,20 +57,32 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    double x = KoUnit::parseValue( element.attribute("x") );
+    double y = KoUnit::parseValue( element.attribute("y") );
+    double width = KoUnit::parseValue( element.attribute("width") );
+    double height = KoUnit::parseValue( element.attribute("height") );
+    int zindex = qMax(0, QVariant( element.attribute("z-index") ).toInt() );
+
+    setPosition( QPointF(x,y) );
+    resize( QSizeF(width,height) );
+    setZIndex(zindex);
+
+/*
     QDomNamedNodeMap attrs = element.attributes();
     for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++)
         kDebug(32500) << "PictureShape::loadOdf Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
     //kDebug(32500) << "PictureShape::loadOdf xlink:href=" << element.attribute("href") << endl;
-
     KoStore* store = context.koLoadingContext().store();
     Q_ASSERT(store);
-
     //TODO use e.g. KWDocument::imageCollection() here rather then creating a new one
     KoImageCollection* imagecollection = new KoImageCollection();
     //imagecollection->loadFromStore(store)
     KoImageData* imagedata = new KoImageData(imagecollection);
     bool ok = imagedata->loadFromStore(new KoStoreDevice(store));
     setUserData( imagedata );
-
     return ok;
+*/
+
+    kDebug()<<"PictureShape::loadOdf x="<<x<<" y="<<y<<" width="<<width<<" height="<<height<<" zindex="<<zindex<<endl;
+    return true;
 }
