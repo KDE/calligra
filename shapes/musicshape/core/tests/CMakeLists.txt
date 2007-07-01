@@ -49,6 +49,9 @@ set(MusicXmlWriterTest_test_SRCS
     ../StaffElement.cpp
     ../Clef.cpp
     ../StaffSystem.cpp
+    ../VoiceElement.cpp
+    ../Chord.cpp
+    ../Note.cpp
 )
 
 kde4_automoc(${MusicXmlWriterTest_test_SRCS})

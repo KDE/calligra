@@ -20,6 +20,11 @@
 #include "Sheet.h"
 #include "Part.h"
 #include "PartGroup.h"
+#include "VoiceElement.h"
+#include "Chord.h"
+#include "VoiceBar.h"
+#include "Bar.h"
+#include "Note.h"
 
 #include <KoXmlWriter.h>
 #include <kofficeversion.h>
@@ -88,6 +93,30 @@ static void writePartDesc(KoXmlWriter& w, int id, Part* part)
     w.endElement(); // music:score-part
 }
 
+static void writeChord(KoXmlWriter& w, Chord* chord)
+{
+    w.startElement("music:note");
+    if (chord->noteCount()) {
+        w.startElement("music:pitch");
+        int pitch = chord->note(0)->pitch();
+        char note = 'A' + (pitch + 2) % 7;
+        w.addTextNode(QString(note));
+        w.endElement(); // music:pitch
+        w.startElement("music:octave");
+        w.addTextNode(QString::number(pitch / 7 + 4));
+        w.endElement(); // music:octave
+    }
+    w.startElement("music:duration");
+    w.addTextNode(QString::number(chord->length()));
+    w.endElement(); // music:duration
+
+    w.startElement("music:type");
+    w.addTextNode(Chord::durationToString(chord->duration()));
+    w.endElement(); // music:type
+    
+    w.endElement(); // music:note
+}
+
 static void writePart(KoXmlWriter& w, int id, Part* part)
 {
     w.startElement("music:part");
@@ -96,6 +125,35 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
     for (int i = 0; i < part->sheet()->barCount(); i++) {
         w.startElement("music:measure");
         w.addAttribute("number", i+1);
+
+        if (i == 0) {
+            w.startElement("music:attributes");
+            w.startElement("music:divisions");
+            w.addTextNode(QString::number(VoiceElement::QuarterLength));
+            w.endElement(); // music:divisions
+            w.endElement(); // music:attributes
+        }
+
+        int curTime = 0;
+        for (int voice = 0; voice < part->voiceCount(); voice++) {
+            if (curTime != 0) {
+                w.startElement("music:backup");
+                w.startElement("music:duration");
+                w.addTextNode(QString::number(curTime));
+                w.endElement(); // music:duration
+                w.endElement(); // music:backup
+            }
+
+            Voice* v = part->voice(voice);
+            VoiceBar* vb = part->sheet()->bar(i)->voice(v);
+            for (int e = 0; e < vb->elementCount(); e++) {
+                VoiceElement* ve = vb->element(e);
+                curTime += ve->length();
+
+                Chord* c =  dynamic_cast<Chord*>(ve);
+                if(c) writeChord(w, c);
+            }
+        }
         w.endElement(); // music:measure
     }
 

@@ -20,6 +20,7 @@
 #define MUSIC_CORE_CHORD_H
 
 #include "VoiceElement.h"
+#include <QtCore/QString>
 
 namespace MusicCore {
 
@@ -139,6 +140,7 @@ public:
      * This method converts a duration to a number of ticks.
      */
     static int durationToTicks(Duration duration);
+    static QString durationToString(Duration duration);
 private:
     class Private;
     Private * const d;

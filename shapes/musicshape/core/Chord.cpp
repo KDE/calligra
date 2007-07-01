@@ -131,4 +131,19 @@ int Chord::durationToTicks(Duration duration)
     return 0;
 }
 
+QString Chord::durationToString(Duration duration)
+{
+    switch (duration) {
+        case HundredTwentyEighth:   return "128th";
+        case SixtyFourth:           return "64th";
+        case ThirtySecond:          return "32nd";
+        case Sixteenth:             return "16th";
+        case Eighth:                return "eighth";
+        case Quarter:               return "quarter";
+        case Half:                  return "half";
+        case Whole:                 return "whole";
+        case Breve:                 return "breve";
+    }
+}
+
 } // namespace MusicCore

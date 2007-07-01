@@ -11,9 +11,17 @@
   </music:score-part>
  </music:part-list>
  <music:part id="P0">
-  <music:measure number="1"/>
+  <music:measure number="1">
+   <music:attributes>
+    <music:divisions>26880</music:divisions>
+   </music:attributes>
+  </music:measure>
  </music:part>
  <music:part id="P1">
-  <music:measure number="1"/>
+  <music:measure number="1">
+   <music:attributes>
+    <music:divisions>26880</music:divisions>
+   </music:attributes>
+  </music:measure>
  </music:part>
 </music:score-partwise>

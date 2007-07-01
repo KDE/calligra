@@ -147,7 +147,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
     KoXmlWriter& writer = context.xmlWriter();
 
-/*    const bool nestedInFrame = context.isSet(KoShapeSavingContext::FrameOpened);
+    const bool nestedInFrame = context.isSet(KoShapeSavingContext::FrameOpened);
     if(!nestedInFrame) {
         writer.startElement( "draw:frame" );
         saveOdfFrameAttributes(context);
@@ -156,7 +156,7 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     MusicXmlWriter().writeSheet( writer, m_sheet );
 
     if(!nestedInFrame)
-        writer.endElement(); // draw:frame*/
+        writer.endElement(); // draw:frame
 }
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
