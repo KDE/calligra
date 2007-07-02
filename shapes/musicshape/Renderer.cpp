@@ -75,7 +75,7 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff )
         }
         RenderState state;
         for (int e = 0; e < bar->staffElementCount(staff); e++) {
-            renderStaffElement(painter, bar->staffElement(staff, e), p.x(), p.y(), state, bar->scale());
+            renderStaffElement(painter, bar->staffElement(staff, e), p, state, bar->scale());
         }
     }
 }
@@ -92,42 +92,42 @@ void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, const QColor& c
             if (vb->element(e)->staff()) {
                 state.clef = vb->element(e)->staff()->lastClefChange(b, 0);
             }
-            renderElement(painter, vb->element(e), p.x(), p.y(), state, bar->scale(), color);
+            renderElement(painter, vb->element(e), p, state, bar->scale(), color);
         }
     }
 }
 
-void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, double x, double y, RenderState& state, double xScale, const QColor& color)
+void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, QPointF pos, RenderState& state, double xScale, const QColor& color)
 {
-    double top = y;
+    double top = 0;
     if (me->staff()) top += me->staff()->top();
     if (m_debug) {
         painter.setPen(QPen(Qt::blue));
-        painter.drawLine(QPointF(x + me->x() * xScale, top + me->y() - 20), QPointF(x + me->x() * xScale, top + me->y() + 20));
-        painter.drawLine(QPointF(x + me->x() * xScale + me->width(), top + me->y() - 20), QPointF(x + me->x() * xScale + me->width(), top + me->y() + 20));
+        painter.drawLine(pos + QPointF(me->x() * xScale, top + me->y() - 20), pos + QPointF(me->x() * xScale, top + me->y() + 20));
+        painter.drawLine(pos + QPointF(me->x() * xScale + me->width(), top + me->y() - 20), pos + QPointF(me->x() * xScale + me->width(), top + me->y() + 20));
     }
 
     // TODO: make this less hacky
     Chord *c = dynamic_cast<Chord*>(me);
-    if (c) renderChord(painter, c, QPointF(x, y), state, xScale, color);
+    if (c) renderChord(painter, c, pos, state, xScale, color);
 }
 
-void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, double x, double y, RenderState& state, double xScale)
+void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, QPointF pos, RenderState& state, double xScale)
 {
-    double top = y;
+    double top = 0;
     top += se->staff()->top();
     if (m_debug) {
         painter.setPen(QPen(Qt::blue));
-        painter.drawLine(QPointF(x + se->x() * xScale, top + se->y() - 20), QPointF(x + se->x() * xScale, top + se->y() + 20));
-        painter.drawLine(QPointF(x + se->x() * xScale + se->width(), top + se->y() - 20), QPointF(x + se->x() * xScale + se->width(), top + se->y() + 20));
+        painter.drawLine(pos + QPointF(se->x() * xScale, top + se->y() - 20), pos + QPointF(se->x() * xScale, top + se->y() + 20));
+        painter.drawLine(pos + QPointF(se->x() * xScale + se->width(), top + se->y() - 20), pos + QPointF(se->x() * xScale + se->width(), top + se->y() + 20));
     }
 
     Clef *cl = dynamic_cast<Clef*>(se);
-    if (cl) renderClef(painter, cl, x, state, xScale);
+    if (cl) renderClef(painter, cl, pos.x(), state, xScale);
     KeySignature *ks = dynamic_cast<KeySignature*>(se);
-    if (ks) renderKeySignature(painter, ks, x, state, xScale);
+    if (ks) renderKeySignature(painter, ks, pos.x(), state, xScale);
     TimeSignature* ts = dynamic_cast<TimeSignature*>(se);
-    if (ts) renderTimeSignature(painter, ts, x, xScale);
+    if (ts) renderTimeSignature(painter, ts, pos.x(), xScale);
 }
 
 
@@ -214,6 +214,7 @@ static double stemLength(Chord::Duration duration)
         case Chord::HundredTwentyEighth:
             return 12.5;
     }
+    return 0;
 }
 
 void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, RenderState& state, double xScale, const QColor& color)
@@ -252,9 +253,11 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, Re
     double stemX = x + 6;
     bool stemsUp = true;
     if (line < 4) { stemLen = -stemLen; stemX = x; stemsUp = false; }
-    painter.setPen(m_style->stemPen(color));
-    painter.drawLine(ref + QPointF(stemX, chord->y() + s->top() + line * s->lineSpacing() / 2),
+    if (stemLen != 0.0 && stemLen != -0.0) {
+        painter.setPen(m_style->stemPen(color));
+        painter.drawLine(ref + QPointF(stemX, chord->y() + s->top() + line * s->lineSpacing() / 2),
                      ref + QPointF(stemX, chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2));
+    }
     m_style->renderNoteHead( painter, ref.x() + x, ref.y() + chord->y() + s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
     m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + chord->y() + s->top() + (line + stemLen) * s->lineSpacing() / 2, chord->duration(), stemsUp, color );
 
@@ -272,16 +275,16 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, Re
     }
 }
 
-void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, double x, double y, double stemLength, const QColor& color)
+void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, QPointF pos, double stemLength, const QColor& color)
 {
-    m_style->renderNoteHead(painter, x, y, duration, color);
+    m_style->renderNoteHead(painter, pos.x(), pos.y(), duration, color);
 
     if (duration <= MusicCore::Chord::Half) {
         painter.setPen(m_style->stemPen(color));
-        painter.drawLine(QPointF(x+6, y - stemLength), QPointF(x+6, y));
+        painter.drawLine(pos + QPointF(6, -stemLength), pos + QPointF(6, 0));
     }
     if (duration <= MusicCore::Chord::Eighth) {
-        m_style->renderNoteFlags(painter, x+6, y - stemLength, duration, true, color);
+        m_style->renderNoteFlags(painter, pos.x()+6, pos.y() - stemLength, duration, true, color);
     }
 }
 

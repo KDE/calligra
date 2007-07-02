@@ -164,7 +164,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
     if (m_duration < MusicCore::Chord::Sixteenth) sl += 1;
     if (m_duration < MusicCore::Chord::ThirtySecond) sl += 1;
     
-    m_musicshape->renderer()->renderNote(painter, m_duration, m_point.x(), m_point.y(), sl * 5, Qt::gray);
+    m_musicshape->renderer()->renderNote(painter, m_duration, m_point, sl * 5, Qt::gray);
 }
 
 void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
