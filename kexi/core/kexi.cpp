@@ -312,7 +312,7 @@ void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
 # include "../custom_startup.h"
 #endif
 	KCmdLineArgs::init( argc, argv, about );
-	KCmdLineArgs::addCmdLineOptions( options );
+	KCmdLineArgs::addCmdLineOptions( kexi_options() );
 }
 
 void KEXI_UNFINISHED(const QString& feature_name, const QString& extra_text) 
