@@ -23,6 +23,7 @@
 #include <QCheckBox>
 #include <QHash>
 #include <QList>
+#include <QScrollArea>
 #include <QVBoxLayout>
 
 #include <klocale.h>
@@ -49,6 +50,7 @@ public:
     QList<QCheckBox*> checkboxes;
     int fieldNumber;
     DatabaseRange database;
+    bool dirty;
 
 public:
     void initGUI(FilterPopup* parent, const Cell& cell, const DatabaseRange* database);
@@ -103,21 +105,31 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
         else
             items[string] = !isFiltered;
     }
+
+    QWidget* scrollWidget = new QWidget(parent);
+    QVBoxLayout* scrollLayout = new QVBoxLayout(scrollWidget);
+    scrollLayout->setMargin(0);
+    scrollLayout->setSpacing(0);
+
     QList<QString> sortedItems = items.keys();
     qSort(sortedItems);
     bool isAll = true;
     QCheckBox* item;
     for (int i = 0; i < sortedItems.count(); ++i)
     {
-        item = new QCheckBox(sortedItems[i], parent);
+        item = new QCheckBox(sortedItems[i], scrollWidget);
         item->setChecked(items[sortedItems[i]]);
         buttonGroup->addButton(item);
-        layout->addWidget(item);
+        scrollLayout->addWidget(item);
         checkboxes.append(item);
         isAll = isAll && items[sortedItems[i]];
     }
     allCheckbox->setChecked(isAll && emptyCheckbox->isChecked());
     notEmptyCheckbox->setChecked(isAll);
+
+    QScrollArea* scrollArea = new QScrollArea(parent);
+    layout->addWidget(scrollArea);
+    scrollArea->setWidget(scrollWidget);
 }
 
 
@@ -130,6 +142,7 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, DatabaseRange* datab
     setFrameStyle(QFrame::Panel | QFrame::Raised);
 
     d->database = *database;
+    d->dirty = false;
 
     d->initGUI(this, cell, database);
 
@@ -183,17 +196,21 @@ void FilterPopup::updateFilter(Filter* filter) const
 
 void FilterPopup::closeEvent(QCloseEvent* event)
 {
-    updateFilter(d->database.filter());
-    ApplyFilterCommand* command = new ApplyFilterCommand();
-    command->setSheet((*d->database.range().constBegin())->sheet());
-    command->add(d->database.range());
-    command->setDatabase(d->database);
-    command->execute();
+    if (d->dirty)
+    {
+        updateFilter(d->database.filter());
+        ApplyFilterCommand* command = new ApplyFilterCommand();
+        command->setSheet((*d->database.range().constBegin())->sheet());
+        command->add(d->database.range());
+        command->setDatabase(d->database);
+        command->execute();
+    }
     QFrame::closeEvent(event);
 }
 
 void FilterPopup::buttonClicked(QAbstractButton* button)
 {
+    d->dirty = true;
     if (button == d->allCheckbox)
     {
         foreach (QCheckBox* checkbox, d->checkboxes)
