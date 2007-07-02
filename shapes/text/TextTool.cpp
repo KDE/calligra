@@ -29,10 +29,12 @@
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
 
+#include <KoAction.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoCanvasResourceProvider.h>
 
 #include <KoTextDocumentLayout.h>
 #include <KoParagraphStyle.h>
@@ -256,6 +258,13 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_selectall", action);
+
+    m_updateParagDirection.action = new KoAction(this);
+    connect(m_updateParagDirection.action, SIGNAL(triggered(const QVariant &)),
+            this, SLOT(updateParagraphDirection(const QVariant&)), Qt::DirectConnection);
+    connect(m_updateParagDirection.action, SIGNAL(updateUi(const QVariant &)),
+            this, SLOT(updateParagraphDirectionUi()));
+
 
     // setup the context list.
     QList<QAction*> list;
@@ -587,7 +596,26 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         else if(event->text().at(0) == '\r') {
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
+            QTextBlockFormat format = m_caret.blockFormat();
             m_selectionHandler.nextParagraph();
+
+            QVariant direction = format.property(KoParagraphStyle::TextProgressionDirection);
+            format = m_caret.blockFormat();
+            if(m_textShapeData->pageDirection() == KoText::AutoDirection) { // inherit from shape
+                KoText::Direction dir;
+                switch(m_textShapeData->pageDirection()) {
+                    case KoText::RightLeftTopBottom:
+                        dir = KoText::PerhapsRightLeftTopBottom;
+                        break;
+                    case KoText::LeftRightTopBottom:
+                    default:
+                        dir = KoText::PerhapsLeftRightTopBottom;
+                }
+                format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
+            }
+            else if(! direction.isNull()) // then we inherit from the previous paragraph.
+                format.setProperty(KoParagraphStyle::TextProgressionDirection, direction);
+            m_caret.setBlockFormat(format);
             updateActions();
             editingPluginEvents();
             ensureCursorVisible();
@@ -597,20 +625,9 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
             ensureCursorVisible();
-            const bool paragEmtpy = m_caret.atBlockStart(); // we just started a new paragraph
             m_caret.insertText(event->text());
-            QTextBlockFormat format = m_caret.blockFormat();
-            KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
-                        KoParagraphStyle::TextProgressionDirection));
-            if(paragEmtpy || dir == KoText::PerhapsLeftRightTopBottom ||
-                        dir == KoText::PerhapsRightLeftTopBottom) {
-                QTextBlock block = m_caret.block();
-                if(isRightToLeft(m_caret.block().text()))
-                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::PerhapsRightLeftTopBottom);
-                else // remove previously set one if needed.
-                    format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::PerhapsLeftRightTopBottom);
-                m_caret.setBlockFormat(format);
-            }
+            if(m_textShapeData->pageDirection() == KoText::AutoDirection)
+                m_updateParagDirection.action->execute(m_prevCursorPosition);
             editingPluginEvents();
             emit blockChanged(m_caret.block());
         }
@@ -625,12 +642,12 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         QTextBlockFormat format = m_caret.blockFormat();
 
 
-    KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(KoParagraphStyle::TextProgressionDirection));
-    bool isRtl;
-    if(dir == KoText::AutoDirection)
-        isRtl = m_caret.block().text().isRightToLeft();
-    else
-        isRtl =  dir == KoText::RightLeftTopBottom;
+        KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(KoParagraphStyle::TextProgressionDirection));
+        bool isRtl;
+        if(dir == KoText::AutoDirection)
+            isRtl = m_caret.block().text().isRightToLeft();
+        else
+            isRtl =  dir == KoText::RightLeftTopBottom;
 
         if(isRtl) { // if RTL toggle direction of cursor movement.
             switch(moveOperation) {
@@ -785,6 +802,11 @@ void TextTool::activate (bool temporary) {
     setShapeData(static_cast<KoTextShapeData*> (m_textShape->userData()));
     useCursor(Qt::IBeamCursor, true);
     m_textShape->repaint();
+
+    if(m_textShapeData->document()->isEmpty()) {
+        QTextBlock block = m_textShapeData->document()->begin();
+        
+    }
 
     updateSelectionHandler();
     updateActions();
@@ -1124,7 +1146,7 @@ void TextTool::deleteBookmark(const QString &name) {
             setShapeData(m_textShape->textShapeData());
             updateSelectionHandler();
         }
-        
+
         if (bookmark->hasSelection()) {
             KoBookmark *endBookmark = bookmark->endBookmark();
             endPosition = endBookmark->position() - 1;
@@ -1239,6 +1261,54 @@ void TextTool::startTextEditingPlugin(const QString &pluginId) {
         }
         else
             plugin->finishedWord(m_textShapeData->document(), m_caret.position());
+    }
+}
+
+bool TextTool::isBidiDocument() const {
+    if(m_canvas->resourceProvider())
+        return m_canvas->resourceProvider()->boolResource(KoText::BidiDocument);
+    return false;
+}
+
+void TextTool::updateParagraphDirection(const QVariant &variant) {
+    int position = variant.toInt();
+    KoTextShapeData *data = m_textShapeData;
+    if(data == 0) // tools is deactivated already
+        return;
+    m_updateParagDirection.block = data->document()->findBlock(position);
+    if(! m_updateParagDirection.block.isValid())
+        return;
+    QTextBlockFormat format = m_updateParagDirection.block.blockFormat();
+    KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
+                KoParagraphStyle::TextProgressionDirection));
+    if(dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom ||
+            dir == KoText::PerhapsRightLeftTopBottom) {
+        if(isRightToLeft(m_updateParagDirection.block.text()))
+            m_updateParagDirection.direction = KoText::PerhapsRightLeftTopBottom;
+        else // remove previously set one if needed.
+            m_updateParagDirection.direction = KoText::PerhapsLeftRightTopBottom;
+    }
+}
+
+void TextTool::updateParagraphDirectionUi() {
+    if(! m_updateParagDirection.block.isValid())
+        return;
+    QTextCursor cursor(m_updateParagDirection.block);
+    QTextBlockFormat format = cursor.blockFormat();
+    format.setProperty(KoParagraphStyle::TextProgressionDirection, m_updateParagDirection.direction);
+    cursor.setBlockFormat(format);
+
+    if(m_canvas->resourceProvider() && ! isBidiDocument()) {
+        if((QApplication::isLeftToRight() &&
+                (m_updateParagDirection.direction == KoText::RightLeftTopBottom ||
+                 m_updateParagDirection.direction == KoText::PerhapsRightLeftTopBottom)) ||
+                (QApplication::isRightToLeft() &&
+                 (m_updateParagDirection.direction == KoText::LeftRightTopBottom ||
+                  m_updateParagDirection.direction == KoText::PerhapsLeftRightTopBottom))) {
+            m_canvas->resourceProvider()->setResource(KoText::BidiDocument, true);
+
+            emit blockChanged(m_caret.block()); // make sure that the dialogs follow this change
+        }
     }
 }
 

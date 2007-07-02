@@ -38,6 +38,7 @@ public slots:
 
 private slots:
     void listStyleChanged(int row);
+    void directionChangeRequested();
 
 private:
     void fillListsCombobox();

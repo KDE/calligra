@@ -38,7 +38,6 @@ KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* docum
     m_document(document)
 {
     widget.setupUi(this);
-    m_action->setWeaver(ThreadWeaver::Weaver::instance());
     m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
 
     connect(m_resourceProvider, SIGNAL(sigResourceChanged(int, const QVariant &)), this, SLOT(updateResource(int)));

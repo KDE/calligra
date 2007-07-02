@@ -37,7 +37,7 @@ KWPage::KWPage(KWPageManager *parent, int pageNum) {
     m_pageLayout.orientation = parent->m_defaultPageLayout.orientation;
     m_pageSide = pageNum%2==0 ? Left : Right;
 
-    m_textDirectionHint = QApplication::isLeftToRight() ?  KoText::LeftRightTopBottom : KoText::RightLeftTopBottom;
+    m_textDirectionHint = KoText::AutoDirection;
 }
 
 double KWPage::width() const {

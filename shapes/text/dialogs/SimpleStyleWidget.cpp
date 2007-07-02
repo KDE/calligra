@@ -22,6 +22,7 @@
 #include "../commands/ChangeListCommand.h"
 
 #include <KoTextBlockData.h>
+#include <KoParagraphStyle.h>
 
 #include <KDebug>
 
@@ -56,14 +57,10 @@ SimpleStyleWidget::SimpleStyleWidget(TextTool *tool, QWidget *parent)
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
 
-    if(QApplication::isRightToLeft())
-        widget.reversedText->setText("<-"); // replace by a nice picture.
-    else
-        widget.reversedText->setText("<-");
-
     fillListsCombobox();
 
     connect(widget.listType, SIGNAL(currentIndexChanged(int)), this, SLOT(listStyleChanged(int)));
+    connect(widget.reversedText, SIGNAL(clicked()), this, SLOT(directionChangeRequested()));
 }
 
 void SimpleStyleWidget::fillListsCombobox() {
@@ -84,11 +81,13 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block) {
     };
     Finally finally(this);
 
+    widget.reversedText->setVisible(m_tool->isBidiDocument());
     QTextLayout *layout = block.layout();
     if(layout) {
-        bool isReversed = layout->textOption().textDirection() ==
-            QApplication::isRightToLeft() ? Qt::LeftToRight : Qt::RightToLeft;
-        widget.reversedText->setVisible(isReversed);
+        switch(layout->textOption().textDirection()) {
+        case Qt::LeftToRight: widget.reversedText->setText(i18n("LTR")); break;
+        case Qt::RightToLeft: widget.reversedText->setText(i18n("RTL")); break;
+        }
     }
 
     //  rest of function is lists stuff. Don't add anything else down here.
@@ -131,6 +130,38 @@ void SimpleStyleWidget::listStyleChanged(int row) {
 
     m_tool->addCommand( new ChangeListCommand (m_currentBlock,
                 static_cast<KoListStyle::Style> (widget.listType->itemData(row).toInt())));
+}
+
+void SimpleStyleWidget::directionChangeRequested() {
+    QTextCursor cursor(m_currentBlock);
+    QTextBlockFormat format = cursor.blockFormat();
+    KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
+                KoParagraphStyle::TextProgressionDirection));
+    QString buttonText;
+    switch(dir) {
+    case KoText::LeftRightTopBottom:
+        dir = KoText::RightLeftTopBottom;
+        buttonText = i18nc("Short for RightToLeft", "RTL");
+        break;
+    case KoText::AutoDirection: // fall though
+    case KoText::RightLeftTopBottom:
+        buttonText = i18nc("Short for LeftToRight", "LTR");
+        dir = KoText::LeftRightTopBottom;
+        break;
+    case KoText::PerhapsLeftRightTopBottom:
+        buttonText = i18nc("Short for RightToLeft", "RTL");
+        dir = KoText::PerhapsRightLeftTopBottom;
+        break;
+    case KoText::PerhapsRightLeftTopBottom:
+        buttonText = i18nc("Short for LeftToRight", "LTR");
+        dir = KoText::PerhapsLeftRightTopBottom;
+        break;
+    case KoText::TopBottomRightLeft: ;// Unhandled.
+    };
+    widget.reversedText->setText(buttonText);
+
+    format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
+    cursor.setBlockFormat(format);
 }
 
 #include <SimpleStyleWidget.moc>

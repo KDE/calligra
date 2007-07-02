@@ -28,7 +28,9 @@
 #include <QTextCursor>
 #include <QAction>
 #include <QHash>
+#include <QTextBlock>
 
+class KoAction;
 class KoStyleManager;
 class KoTextEditingPlugin;
 class KoBookmarkManager;
@@ -78,6 +80,8 @@ public:
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
 
     void startTextEditingPlugin(const QString &pluginId);
+
+    bool isBidiDocument() const;
 
 public slots:
     /// add a command to the undo stack, executing it as well.
@@ -143,9 +147,11 @@ private slots:
     /// signal for when a series of commands has ended that together should be 1 undo action.
     void stopMacro();
 
-private slots:
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
+
+    void updateParagraphDirection(const QVariant &variant);
+    void updateParagraphDirectionUi();
 
 private:
     void repaintCaret();
@@ -194,6 +200,14 @@ private:
 
     QUndoCommand *m_currentCommand;
     bool m_currentCommandHasChildren;
+
+    // update Parag direction will be multi-threaded.
+    struct UpdatePageDirection {
+        KoAction *action;
+        QTextBlock block;
+        KoText::Direction direction;
+    };
+    UpdatePageDirection m_updateParagDirection;
 };
 
 #endif

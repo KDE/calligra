@@ -2,7 +2,7 @@ project( textPlugin)
 
 add_subdirectory( tests )
 
-include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} )
+include_directories( ${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KDE4_INCLUDE_DIR}/threadweaver/)
 
 ########### Flake Plugin library ###############
 
