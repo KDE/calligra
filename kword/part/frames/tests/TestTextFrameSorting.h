@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-class KWFrame;
+class KWTextFrame;
 class KWTextFrameSet;
 
 class TestTextFrameSorting : public QObject {
@@ -17,9 +17,10 @@ private slots:
     void testSimpleSorting();
     void testSortingOnPagespread();
     void testRtlSorting();
+    void testSortingById();
 
 private:
-    KWFrame* createFrame(const QPointF &position, KWTextFrameSet &fs);
+    KWTextFrame* createFrame(const QPointF &position, KWTextFrameSet &fs);
 };
 
 #endif

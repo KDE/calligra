@@ -199,22 +199,25 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
     const KWTextFrame *f2 = dynamic_cast<const KWTextFrame*>(frame2);
 
     if(f1 && f2 && f1->sortingId() >= 0 && f2->sortingId() >= 0) { // copy frames don't have a sortingId
-        return f1->sortingId() > f2->sortingId();
+        return f1->sortingId() < f2->sortingId();
     }
     QPointF pos = frame1->shape()->absolutePosition();
     QRectF bounds = frame2->shape()->boundingRect();
 
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (frame1->frameSet());
+    bool rtl = false; // right-to-left
     if(tfs && tfs->pageManager()) { // check per page.
         KWPage *page1 = tfs->pageManager()->page(frame1->shape());
         KWPage *page2 = tfs->pageManager()->page(frame2->shape());
         if(page1 != page2 && page1 != 0 && page2 != 0)
             return page1->pageNumber() < page2->pageNumber();
+
+        // both on same page
+        rtl = page1->directionHint() == KoText::RightLeftTopBottom;
     }
 
-    // reverse the next 2 return values if the frameset is RTL
-    if(pos.x() > bounds.right()) return false;
-    if(pos.x() < bounds.left()) return true;
+    if(pos.x() > bounds.right()) return rtl;
+    if(pos.x() < bounds.left()) return !rtl;
 
     // check the Y position. Y is greater only when it is below the second frame.
     if(pos.y() > bounds.bottom()) return false;

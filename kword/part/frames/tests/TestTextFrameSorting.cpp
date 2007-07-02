@@ -64,7 +64,6 @@ void TestTextFrameSorting::testSortingOnPagespread() {
 }
 
 void TestTextFrameSorting::testRtlSorting() {
-    QEXPECT_FAIL("", "rest of functionality not implemented yet", Abort);
     KWTextFrameSet tfs(0);
     KWFrame * frame1 = createFrame(QPointF(10, 10), tfs);
     KWFrame * frame2 = createFrame(QPointF(120, 10), tfs);
@@ -72,7 +71,9 @@ void TestTextFrameSorting::testRtlSorting() {
     KWPageManager pm;
     KWPage *page = pm.appendPage();
     page->setDirectionHint(KoText::RightLeftTopBottom);
+    QCOMPARE(page->directionHint(), KoText::RightLeftTopBottom);
     page->setWidth(200);
+    tfs.setPageManager(&pm);
 
     qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
@@ -81,7 +82,24 @@ void TestTextFrameSorting::testRtlSorting() {
     QCOMPARE(tfs.m_frames[1], frame1);
 }
 
-KWFrame * TestTextFrameSorting::createFrame(const QPointF &position, KWTextFrameSet &fs) {
+void TestTextFrameSorting::testSortingById() {
+    KWTextFrameSet tfs(0);
+    KWTextFrame * frame1 = createFrame(QPointF(10, 200), tfs);
+    KWTextFrame * frame2 = createFrame(QPointF(120, 10), tfs);
+    KWTextFrame * frame3 = createFrame(QPointF(10, 10), tfs);
+
+    frame1->setSortingId(1);
+    frame2->setSortingId(2);
+    frame3->setSortingId(3);
+
+    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+
+    QCOMPARE(tfs.m_frames[0], frame1);
+    QCOMPARE(tfs.m_frames[1], frame2);
+    QCOMPARE(tfs.m_frames[2], frame3);
+}
+
+KWTextFrame * TestTextFrameSorting::createFrame(const QPointF &position, KWTextFrameSet &fs) {
     MockShape *shape = new MockShape();
     shape->setUserData(new KoTextShapeData());
     KWTextFrame *frame = new KWTextFrame(shape, &fs);
