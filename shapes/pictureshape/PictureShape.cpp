@@ -52,16 +52,19 @@ void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) 
 
 void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    Q_UNUSED(context);
     //TODO
 }
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    Q_UNUSED(context);
+
     double x = KoUnit::parseValue( element.attribute("x") );
     double y = KoUnit::parseValue( element.attribute("y") );
     double width = KoUnit::parseValue( element.attribute("width") );
     double height = KoUnit::parseValue( element.attribute("height") );
-    int zindex = qMax(0, QVariant( element.attribute("z-index") ).toInt() );
+    int zindex = qMax(0, QVariant( element.attribute("z-index") ).toInt() ) + 1;
 
     setPosition( QPointF(x,y) );
     resize( QSizeF(width,height) );
