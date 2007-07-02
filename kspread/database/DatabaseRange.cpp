@@ -26,11 +26,8 @@
 #include "FilterPopup.h"
 #include "Region.h"
 
-#include "commands/ApplyFilterCommand.h"
-
 using namespace KSpread;
 
-class Filter;
 class Sort;
 class SubtotalRules;
 
@@ -153,16 +150,18 @@ void DatabaseRange::setRange( const Region& region )
 
 void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
 {
-    FilterPopup* popup = new FilterPopup(parent, cell, *this);
+    kDebug() << k_funcinfo << endl;
+    dump();
+    FilterPopup* popup = new FilterPopup(parent, cell, this);
     const QPoint position(orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());
     popup->move(parent->mapToGlobal(position));
     popup->resize(100, 20);
     popup->show();
 }
 
-void DatabaseRange::applyFilter() const
+Filter* DatabaseRange::filter()
 {
-    d->filter->apply(*this);
+    return d->filter;
 }
 
 void DatabaseRange::operator=( const DatabaseRange& other )
@@ -180,15 +179,9 @@ bool DatabaseRange::operator<( const DatabaseRange& other ) const
     return (d && other.d) ? ( d->name < other.d->name ) : (d < other.d);
 }
 
-void DatabaseRange::updateSubFilter(FilterPopup* popup)
+void DatabaseRange::dump() const
 {
-    popup->updateFilter(d->filter);
-    // TODO Stefan: Create and execute apply filter command.
-    ApplyFilterCommand* command = new ApplyFilterCommand();
-    command->setSheet((*d->targetRangeAddress.constBegin())->sheet());
-    command->add(d->targetRangeAddress);
-    command->setDatabase(*this); // FIXME Stefan: Really needed?
-    command->execute();
+    if (d->filter) d->filter->dump();
 }
 
 #include "DatabaseRange.moc"

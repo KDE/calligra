@@ -35,6 +35,8 @@
 #include "Sheet.h"
 #include "ValueConverter.h"
 
+#include "commands/ApplyFilterCommand.h"
+
 using namespace KSpread;
 
 class FilterPopup::Private
@@ -47,19 +49,19 @@ public:
     DatabaseRange database;
 
 public:
-    void createItemList(const Cell& cell, const DatabaseRange& database);
+    void createItemList(const Cell& cell, const DatabaseRange* database);
 };
 
-void FilterPopup::Private::createItemList(const Cell& cell, const DatabaseRange& database)
+void FilterPopup::Private::createItemList(const Cell& cell, const DatabaseRange* database)
 {
     const Sheet* sheet = cell.sheet();
-    const QRect range = database.range().lastRange();
-    const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
-    const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
-    const int j = database.orientation() == Qt::Vertical ? cell.column() : cell.row();
+    const QRect range = database->range().lastRange();
+    const int start = database->orientation() == Qt::Vertical ? range.top() : range.left();
+    const int end = database->orientation() == Qt::Vertical ? range.bottom() : range.right();
+    const int j = database->orientation() == Qt::Vertical ? cell.column() : cell.row();
     for (int i = start; i <= end; ++i)
     {
-        const Value value = database.orientation() == Qt::Vertical
+        const Value value = database->orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(j, i)
                             : sheet->cellStorage()->value(i, j);
         if (value.isEmpty() || sheet->doc()->converter()->asString(value).asString().isEmpty())
@@ -69,7 +71,7 @@ void FilterPopup::Private::createItemList(const Cell& cell, const DatabaseRange&
 }
 
 
-FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange& database)
+FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, DatabaseRange* database)
     : QFrame(parent, Qt::Popup)
     , d(new Private)
 {
@@ -77,7 +79,7 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange&
     setBackgroundRole(QPalette::Base);
     setFrameStyle(QFrame::Panel | QFrame::Raised);
 
-    d->database = database;
+    d->database = *database;
 
     QButtonGroup* buttonGroup = new QButtonGroup(this);
     buttonGroup->setExclusive(false);
@@ -116,10 +118,10 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange&
         d->checkboxes.append(item);
     }
 
-    if (database.orientation() == Qt::Vertical)
-        d->fieldNumber = cell.column() - database.range().lastRange().left();
+    if (database->orientation() == Qt::Vertical)
+        d->fieldNumber = cell.column() - database->range().lastRange().left();
     else // Qt::Horizontal
-        d->fieldNumber = cell.row() - database.range().lastRange().top();
+        d->fieldNumber = cell.row() - database->range().lastRange().top();
     kDebug() << "FilterPopup::fieldNumber: " << d->fieldNumber << endl;
 }
 
@@ -150,6 +152,7 @@ void FilterPopup::updateFilter(Filter* filter) const
         const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
         for (int i = 0; i < values.count(); ++i)
         {
+            kDebug() << "adding condition for fieldNumber " << d->fieldNumber << endl;
             filter->addCondition(Filter::AndComposition, d->fieldNumber, comparison, values[i]);
         }
     }
@@ -157,7 +160,13 @@ void FilterPopup::updateFilter(Filter* filter) const
 
 void FilterPopup::closeEvent(QCloseEvent* event)
 {
-    d->database.updateSubFilter(this);
+    updateFilter(d->database.filter());
+    ApplyFilterCommand* command = new ApplyFilterCommand();
+    command->setSheet((*d->database.range().constBegin())->sheet());
+    command->add(d->database.range());
+d->database.dump();
+    command->setDatabase(&d->database); // FIXME Stefan: Really needed?
+    command->execute();
     QFrame::closeEvent(event);
 }
 

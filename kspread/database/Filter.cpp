@@ -42,9 +42,10 @@ public:
     virtual Type type() const = 0;
     virtual void loadOdf() = 0;
     virtual void saveOdf() = 0;
-    virtual bool evaluate(const DatabaseRange& database, int index) const = 0;
+    virtual bool evaluate(const DatabaseRange* database, int index) const = 0;
     virtual bool isEmpty() const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
+    virtual void dump() const = 0;
 };
 
 /**
@@ -59,7 +60,7 @@ public:
     virtual Type type() const { return AbstractCondition::And; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate(const DatabaseRange& database, int index) const
+    virtual bool evaluate(const DatabaseRange* database, int index) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
@@ -74,13 +75,22 @@ public:
     {
         for (int i = 0; i < list.count(); ++i)
             list[i]->removeConditions(fieldNumber);
-        QList<AbstractCondition*> list;
+        QList<AbstractCondition*> newList;
         for (int i = 0; i < list.count(); ++i)
         {
             if (!list[i]->isEmpty())
-                list.append(this->list[i]);
+                newList.append(list[i]);
         }
-        this->list = list;
+        list = newList;
+    }
+    virtual void dump() const
+    {
+        for (int i = 0; i < list.count(); ++i)
+        {
+            if (i)
+                kDebug() << "AND" << endl;
+            list[i]->dump();
+        }
     }
 
 public:
@@ -99,7 +109,7 @@ public:
     virtual Type type() const { return AbstractCondition::Or; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate(const DatabaseRange& database, int index) const
+    virtual bool evaluate(const DatabaseRange* database, int index) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
@@ -114,13 +124,22 @@ public:
     {
         for (int i = 0; i < list.count(); ++i)
             list[i]->removeConditions(fieldNumber);
-        QList<AbstractCondition*> list;
+        QList<AbstractCondition*> newList;
         for (int i = 0; i < list.count(); ++i)
         {
             if (!list[i]->isEmpty())
-                list.append(this->list[i]);
+                newList.append(list[i]);
         }
-        this->list = list;
+        list = newList;
+    }
+    virtual void dump() const
+    {
+        for (int i = 0; i < list.count(); ++i)
+        {
+            if (i)
+                kDebug() << "OR" << endl;
+            list[i]->dump();
+        }
     }
 
 public:
@@ -133,13 +152,22 @@ public:
 class Filter::Condition : public AbstractCondition
 {
 public:
-    Condition(int fieldNumber, Comparison comparison, const QString& value,
-              Qt::CaseSensitivity caseSensitivity, Mode mode)
-        : fieldNumber(fieldNumber)
-        , value(value)
-        , operation(comparison)
-        , caseSensitivity(caseSensitivity)
-        , dataType(mode)
+    Condition(int _fieldNumber, Comparison _comparison, const QString& _value,
+              Qt::CaseSensitivity _caseSensitivity, Mode _mode)
+        : fieldNumber(_fieldNumber)
+        , value(_value)
+        , operation(_comparison)
+        , caseSensitivity(_caseSensitivity)
+        , dataType(_mode)
+    {
+    }
+    Condition(const Condition& other)
+        : AbstractCondition()
+        , fieldNumber(other.fieldNumber)
+        , value(other.value)
+        , operation(other.operation)
+        , caseSensitivity(other.caseSensitivity)
+        , dataType(other.dataType)
     {
     }
     virtual ~Condition() {}
@@ -147,13 +175,13 @@ public:
     virtual Type type() const { return AbstractCondition::Condition; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate(const DatabaseRange& database, int index) const
+    virtual bool evaluate(const DatabaseRange* database, int index) const
     {
-        const Sheet* sheet = (*database.range().constBegin())->sheet();
-        const QRect range = database.range().lastRange();
-        const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
+        const Sheet* sheet = (*database->range().constBegin())->sheet();
+        const QRect range = database->range().lastRange();
+        const int start = database->orientation() == Qt::Vertical ? range.left() : range.top();
         kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
-        const Value value = database.orientation() == Qt::Vertical
+        const Value value = database->orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(start + fieldNumber, index)
                             : sheet->cellStorage()->value(index, start + fieldNumber);
         const QString testString = sheet->doc()->converter()->asString(value).asString();
@@ -182,7 +210,14 @@ public:
     virtual void removeConditions(int fieldNumber)
     {
         if (this->fieldNumber == fieldNumber)
+        {
+            kDebug() << "removing fieldNumber " << fieldNumber << endl;
             this->fieldNumber = -1;
+        }
+    }
+    virtual void dump() const
+    {
+        kDebug() << "Condition: fieldNumber: " << fieldNumber << " value: " << value << endl;
     }
 
 public:
@@ -244,18 +279,18 @@ public:
 };
 
 Filter::Filter()
-    : d( new Private )
+    : d(new Private)
 {
 }
 
 Filter::Filter(const Filter& other)
-    : d( new Private)
+    : d(new Private)
 {
     if (!other.d->condition)
         d->condition = 0;
     else if (other.d->condition->type() == AbstractCondition::And)
         d->condition = new And(*static_cast<And*>(other.d->condition));
-    else if (other.d->condition->type() == AbstractCondition::Or )
+    else if (other.d->condition->type() == AbstractCondition::Or)
         d->condition = new Or(*static_cast<Or*>(other.d->condition));
     else
         d->condition = new Condition(*static_cast<Condition*>(other.d->condition));
@@ -275,17 +310,19 @@ void Filter::addCondition(Composition composition,
                           int fieldNumber, Comparison comparison, const QString& value,
                           Qt::CaseSensitivity caseSensitivity, Mode mode)
 {
+    kDebug() << k_funcinfo << endl;
     Condition* condition = new Condition(fieldNumber, comparison, value, caseSensitivity, mode);
     if (!d->condition)
     {
+        kDebug() << "no condition yet" << endl;
         d->condition = condition;
     }
     else if (composition == AndComposition)
     {
+        kDebug() << "AndComposition" << endl;
         if (d->condition->type() == AbstractCondition::And)
         {
-            And* andComposition = static_cast<And*>(d->condition);
-            andComposition->list.append(condition);
+            static_cast<And*>(d->condition)->list.append(condition);
         }
         else
         {
@@ -299,8 +336,7 @@ void Filter::addCondition(Composition composition,
     {
         if (d->condition->type() == AbstractCondition::Or)
         {
-            Or* andComposition = static_cast<Or*>(d->condition);
-            andComposition->list.append(condition);
+            static_cast<Or*>(d->condition)->list.append(condition);
         }
         else
         {
@@ -316,12 +352,14 @@ void Filter::removeConditions(int fieldNumber)
 {
     if (fieldNumber == -1)
     {
+        kDebug() << "removing all conditions" << endl;
         delete d->condition;
         d->condition = 0;
         return;
     }
     if (!d->condition)
         return;
+    kDebug() << "removing condition for field " << fieldNumber << " from " << d->condition <<  endl;
     d->condition->removeConditions(fieldNumber);
     if (d->condition->isEmpty())
     {
@@ -335,30 +373,36 @@ bool Filter::isEmpty() const
     return d->condition ? d->condition->isEmpty() : true;
 }
 
-void Filter::apply(const DatabaseRange& database) const
+void Filter::apply(const DatabaseRange* database) const
 {
-    if (!d->condition)
-        return;
-    Sheet* const sheet = (*database.range().constBegin())->sheet();
-    const QRect range = database.range().lastRange();
-    const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
-    const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
+    Sheet* const sheet = (*database->range().constBegin())->sheet();
+    const QRect range = database->range().lastRange();
+    const int start = database->orientation() == Qt::Vertical ? range.top() : range.left();
+    const int end = database->orientation() == Qt::Vertical ? range.bottom() : range.right();
     for (int i = start + 1; i <= end; ++i)
     {
-//         kDebug() << "Checking column/row " << i << endl;
-        if (database.orientation() == Qt::Vertical)
+        kDebug() << endl << "Checking column/row " << i << endl;
+        if (database->orientation() == Qt::Vertical)
         {
-            sheet->nonDefaultRowFormat(i)->setFiltered(!d->condition->evaluate(database, i));
-            if (d->condition->evaluate(database, i))
+            sheet->nonDefaultRowFormat(i)->setFiltered(d->condition ? !d->condition->evaluate(database, i) : false);
+/*            if (d->condition->evaluate(database, i))
                 kDebug() << "showing row " << i << endl;
             else
-                kDebug() << "hiding row " << i << endl;
+                kDebug() << "hiding row " << i << endl;*/
             sheet->emitHideRow();
         }
-        else // database.orientation() == Qt::Horizontal
+        else // database->orientation() == Qt::Horizontal
         {
-            sheet->nonDefaultColumnFormat(i)->setFiltered(!d->condition->evaluate(database, i));
+            sheet->nonDefaultColumnFormat(i)->setFiltered(d->condition ? !d->condition->evaluate(database, i) : false);
             sheet->emitHideColumn();
         }
     }
+}
+
+void Filter::dump() const
+{
+    if (d->condition)
+        d->condition->dump();
+    else
+        kDebug() << "Condition: 0" << endl;
 }

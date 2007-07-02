@@ -79,7 +79,9 @@ public:
 
     bool isEmpty() const;
 
-    void apply(const DatabaseRange& database) const;
+    void apply(const DatabaseRange* database) const;
+
+    void dump() const;
 
 private:
     class And;

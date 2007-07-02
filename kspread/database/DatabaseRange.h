@@ -32,7 +32,7 @@ class QWidget;
 namespace KSpread
 {
 class Cell;
-class FilterPopup;
+class Filter;
 class Region;
 
 class DatabaseRange : public QObject
@@ -97,13 +97,13 @@ public:
      */
     void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect);
 
-    void applyFilter() const;
-
-    void updateSubFilter(FilterPopup* popup);
+    Filter* filter();
 
     void operator=( const DatabaseRange& other );
     bool operator==( const DatabaseRange& other ) const;
     bool operator<( const DatabaseRange& other ) const;
+
+    void dump() const;
 
 private:
     class Private;

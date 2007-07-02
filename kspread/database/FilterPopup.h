@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      */
-    FilterPopup(QWidget* parent, const Cell& cell, const DatabaseRange& database);
+    FilterPopup(QWidget* parent, const Cell& cell, DatabaseRange* database);
 
     /**
      * Destructor.

@@ -27,6 +27,7 @@
 #include "Sheet.h"
 
 #include "database/DatabaseRange.h"
+#include "database/Filter.h"
 
 using namespace KSpread;
 
@@ -41,7 +42,9 @@ ApplyFilterCommand::~ApplyFilterCommand()
 }
 
 void ApplyFilterCommand::redo()
-{    m_database.applyFilter();
+{
+    m_database->filter()->apply(m_database);
+    m_sheet->cellStorage()->setDatabaseRange(*this, *m_database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
@@ -49,7 +52,7 @@ void ApplyFilterCommand::undo()
 {
 }
 
-void ApplyFilterCommand::setDatabase(const DatabaseRange& database)
+void ApplyFilterCommand::setDatabase(DatabaseRange* database)
 {
     m_database = database;
 }
