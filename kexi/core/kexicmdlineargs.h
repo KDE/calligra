@@ -25,157 +25,150 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 
-static KCmdLineOptions options[] =
-{
-  { ":", I18N_NOOP("Options related to entire projects:"), 0 },
-  { "createdb", I18N_NOOP(
-	"Create a new, blank project using specified\n"
-	"database driver and database name\n"
-	"and exit immediately.\n"
-	"You will be asked for confirmation\n"
-	"if overwriting is needed."), 0 },
-  { "create-opendb", I18N_NOOP(
-	"Like --createdb, but also open newly\n"
-	"created database.\n"), 0 },
-  { "dropdb", I18N_NOOP(
-	"Drop (remove) a project using specified\n"
-	"database driver and database name.\n"
-	"You will be asked for confirmation."), 0 },
-  { "drv", 0, 0 },
-  { "dbdriver <name>", I18N_NOOP(
-	"Database driver to be used\n"
-	"for connecting to a database project\n"
-	"(SQLite by default).\n"
-	"Ignored if a shortcut filename\n"
-	"is provided."), 0 },
-  { "t", 0, 0 },
-  { "type <name>", I18N_NOOP(
-	"Specify the type of file provided as an argument.\n"
-	"This option is only useful if the filename does\n"
-	"not have a valid extension set and its type\n"
-	"cannot be determined unambiguously by examining\n"
-	"its contents.\n"
-	"This option is ignored if no file is specified as\n"
-	"an argument.\n"
-	"Available file types are:\n"
-	"- \"project\" for a project file (the default)\n"
-	"- \"shortcut\" for a shortcut file pointing to a\n"
-	"  project.\n"
-	"- \"connection\" for database connection data.\n"
-	), 0 },
-  { "conn", 0, 0 },
-  { "connection <shortcut_filename>", I18N_NOOP(
-	"\nSpecify a database connection shortcut .kexic\n"
-	"file containing connection data.\n"
-	"Can be used with --createdb or --create-opendb\n"
-	"for convenience instead of using options like \n"
-	"--user, --host or --port.\n"
-	"Note: Options like --user, --host have\n"
-	"precedence over settings defined in the shortcut\n"
-	"file." ), 0 },
-  { "readonly", I18N_NOOP(
-	"Specify that any database connections will\n"
-	"be performed without write support. This option\n"
-	"is ignored when \"createdb\" option is present,\n"
-	"otherwise the database could not be created."), 0 },
-  { "user-mode", I18N_NOOP(
-	"Start project in User Mode, regardless \n"
-	"of the project settings."), 0 },
-  { "design-mode", I18N_NOOP(
-	"Start project in Design Mode, regardless \n"
-	"of the project settings."), 0 },
-  { "show-navigator", I18N_NOOP(
-	"Show the Project Navigator side pane even\n"
-	"if Kexi runs in User Mode."), 0 },
-  { "skip-startup-dialog", I18N_NOOP(
-	"Skip displaying startup dialog window.\n"
-	"If there is no project name specified to open,\n"
-	"empty application window will appear."), 0 },
-
-  { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },
-  { "open [<object_type>:]<object_name>", I18N_NOOP(
-	"\nOpen object of type <object_type>\n"
-	"and name <object_name> from specified project\n"
-	"on application start.\n"
-	"<object_type>: is optional, if omitted - table\n"
-	"type is assumed.\n"
-	"Other object types can be query, report, form,\n"
-	"script (may be more or less, depending on your\n"
-	"plugins installed).\n"
-	"Use \"\" chars to specify names containing spaces.\n"
-	"Examples: --open MyTable,\n"
-	" --open query:\"My very big query\""), 0 },
-  { "design [<object_type>:]<object_name>", I18N_NOOP(
-	"\nLike --open, but the object will\n"
-	"be opened in Design Mode, if one is available."), 0 },
-  { "edittext [<object_type>:]<object_name>", I18N_NOOP(
-	"\nLike --open, but the object will\n"
-	"be opened in Text Mode, if one is available."), 0 },
-  { "exec", 0, 0 },
-  { "execute [<object_type>:]<object_name>", I18N_NOOP(
-	"\nStart execution of object of type <object_type>\n"
-	"and name <object_name> on application start.\n"
-	"<object_type>: is optional, if omitted - macro\n"
-	"type is assumed.\n"
-	"Other object types can be script (may be more\n"
-	"or less, depending on your plugins installed).\n"
-	"Use \"\" chars to specify names containing spaces."), 0 },
-  { "new <object_type>", I18N_NOOP(
-	"Start new object design of type <object_type>."), 0 },
-  { "print [<object_type>:]<object_name>", I18N_NOOP(
-	"\nOpen the Print dialog window for an object of type\n"
-	"<object_type> and name <object_name> in the specified\n"
-	"project when the application starts, for quick printing\n"
-	"of the object's data.\n"
-	"<object_type>: is optional; if omitted, table\n"
-	"type is assumed. Object type can also be query."), 0 },
-  { "print-preview [<object_type>:]<object_name>", I18N_NOOP(
-	"\nOpen Print Preview window for object\n"
-	"of type <object_type> and name <object_name>\n"
-	"from specified project on application start.\n"
-	"See --print for more details."), 0 },
-
-  { ":", I18N_NOOP("Options related to database servers:"), 0 },
-  { "u", 0, 0 },
-  { "user <name>", I18N_NOOP(
-	"User name to be used\n"
-	"for connecting to a database project.\n"
-	"Ignored if a shortcut filename\n"
-	"is provided."), 0 },
-/*  { "password <password>", I18N_NOOP(
-	"User password to be used\n"
-	"for connecting to a database project.\n"
-	"Ignored if a shortcut filename\n"
-	"is provided."), 0 },*/
-  { "h", 0, 0 },
-  { "host <name>", I18N_NOOP(
-	"Server (host) name to be used\n"
-	"for connecting to a database project.\n"
-	"Ignored if a shortcut filename\n"
-	"is provided."), 0 },
-  { "port <number>", I18N_NOOP(
-	"Server's port number to be used\n"
-	"for connecting to a database project.\n"
-	"Ignored if a shortcut filename\n"
-	"is provided."), 0 },
-  { "local-socket <filename>", I18N_NOOP(
-	"Server's local socket filename\n"
-	"to be used for connecting to a database\n"
-	"project. Ignored if a shortcut filename\n"
-	"is provided."), 0 },
-  { "skip-conn-dialog", I18N_NOOP(
-	"Skip displaying connection dialog window\n"
-	"and connect directly. Available when\n"
-	"opening .kexic or .kexis shortcut files."), 0 },
-
-  { "+[project-name]", I18N_NOOP(
-	"Kexi database project filename,\n"
-	"Kexi shortcut filename,\n"
-	"or name of a Kexi database\n"
-	"project on a server to open."), 0 },
-  // INSERT YOUR COMMANDLINE OPTIONS HERE
-  KCmdLineLastOption
-};
-
 #endif
-
+// 
+// KCmdLineOptions options;
+// options.add(":", ki18n("Options related to entire projects:"));
+// options.add("createdb", ki18n(
+// 	"Create a new, blank project using specified\n"
+// 	"database driver and database name\n"
+// 	"and exit immediately.\n"
+// 	"You will be asked for confirmation\n"
+// 	"if overwriting is needed."));
+// options.add("create-opendb", ki18n(
+// 	"Like --createdb, but also open newly\n"
+// 	"created database.\n"));
+// options.add("dropdb", ki18n(
+// 	"Drop (remove) a project using specified\n"
+// 	"database driver and database name.\n"
+// 	"You will be asked for confirmation."));
+// options.add("drv");
+// options.add("dbdriver <name>", ki18n(
+// 	"Database driver to be used\n"
+// 	"for connecting to a database project\n"
+// 	"(SQLite by default).\n"
+// 	"Ignored if a shortcut filename\n"
+// 	"is provided."));
+// options.add("t");
+// options.add("type <name>", ki18n(
+// 	"Specify the type of file provided as an argument.\n"
+// 	"This option is only useful if the filename does\n"
+// 	"not have a valid extension set and its type\n"
+// 	"cannot be determined unambiguously by examining\n"
+// 	"its contents.\n"
+// 	"This option is ignored if no file is specified as\n"
+// 	"an argument.\n"
+// 	"Available file types are:\n"
+// 	"- \"project\" for a project file (the default)\n"
+// 	"- \"shortcut\" for a shortcut file pointing to a\n"
+// 	"  project.\n"
+// 	"- \"connection\" for database connection data.\n"
+// 	));
+// options.add("conn");
+// options.add("connection <shortcut_filename>", ki18n(
+// 	"\nSpecify a database connection shortcut .kexic\n"
+// 	"file containing connection data.\n"
+// 	"Can be used with --createdb or --create-opendb\n"
+// 	"for convenience instead of using options like \n"
+// 	"--user, --host or --port.\n"
+// 	"Note: Options like --user, --host have\n"
+// 	"precedence over settings defined in the shortcut\n"
+// 	"file." ));
+// options.add("readonly", ki18n(
+// 	"Specify that any database connections will\n"
+// 	"be performed without write support. This option\n"
+// 	"is ignored when \"createdb\" option is present,\n"
+// 	"otherwise the database could not be created."));
+// options.add("user-mode", ki18n(
+// 	"Start project in User Mode, regardless \n"
+// 	"of the project settings."));
+// options.add("design-mode", ki18n(
+// 	"Start project in Design Mode, regardless \n"
+// 	"of the project settings."));
+// options.add("show-navigator", ki18n(
+// 	"Show the Project Navigator side pane even\n"
+// 	"if Kexi runs in User Mode."));
+// options.add("skip-startup-dialog", ki18n(
+// 	"Skip displaying startup dialog window.\n"
+// 	"If there is no project name specified to open,\n"
+// 	"empty application window will appear."));
+// options.add(":", ki18n("Options related to opening objects within a project:"));
+// options.add("open [<object_type>:]<object_name>", ki18n(
+// 	"\nOpen object of type <object_type>\n"
+// 	"and name <object_name> from specified project\n"
+// 	"on application start.\n"
+// 	"<object_type>: is optional, if omitted - table\n"
+// 	"type is assumed.\n"
+// 	"Other object types can be query, report, form,\n"
+// 	"script (may be more or less, depending on your\n"
+// 	"plugins installed).\n"
+// 	"Use \"\" chars to specify names containing spaces.\n"
+// 	"Examples: --open MyTable,\n"
+// 	" --open query:\"My very big query\""));
+// options.add("design [<object_type>:]<object_name>", ki18n(
+// 	"\nLike --open, but the object will\n"
+// 	"be opened in Design Mode, if one is available."));
+// options.add("edittext [<object_type>:]<object_name>", ki18n(
+// 	"\nLike --open, but the object will\n"
+// 	"be opened in Text Mode, if one is available."));
+// options.add("exec");
+// options.add("execute [<object_type>:]<object_name>", ki18n(
+// 	"\nStart execution of object of type <object_type>\n"
+// 	"and name <object_name> on application start.\n"
+// 	"<object_type>: is optional, if omitted - macro\n"
+// 	"type is assumed.\n"
+// 	"Other object types can be script (may be more\n"
+// 	"or less, depending on your plugins installed).\n"
+// 	"Use \"\" chars to specify names containing spaces."));
+// options.add("new <object_type>", ki18n(
+// 	"Start new object design of type <object_type>."));
+// options.add("print [<object_type>:]<object_name>", ki18n(
+// 	"\nOpen the Print dialog window for an object of type\n"
+// 	"<object_type> and name <object_name> in the specified\n"
+// 	"project when the application starts, for quick printing\n"
+// 	"of the object's data.\n"
+// 	"<object_type>: is optional; if omitted, table\n"
+// 	"type is assumed. Object type can also be query."));
+// options.add("print-preview [<object_type>:]<object_name>", ki18n(
+// 	"\nOpen Print Preview window for object\n"
+// 	"of type <object_type> and name <object_name>\n"
+// 	"from specified project on application start.\n"
+// 	"See --print for more details."));
+// options.add(":", ki18n("Options related to database servers:"));
+// options.add("u");
+// options.add("user <name>", ki18n(
+// 	"User name to be used\n"
+// 	"for connecting to a database project.\n"
+// 	"Ignored if a shortcut filename\n"
+// 	"is provided."));
+// /*  { "password <password>", I18N_NOOP(
+// "User password to be used\n"
+// "for connecting to a database project.\n"
+// "Ignored if a shortcut filename\n"
+// "is provided."), 0 },*/
+// options.add("h");
+// options.add("host <name>", ki18n(
+// 	"Server (host) name to be used\n"
+// 	"for connecting to a database project.\n"
+// 	"Ignored if a shortcut filename\n"
+// 	"is provided."));
+// options.add("port <number>", ki18n(
+// 	"Server's port number to be used\n"
+// 	"for connecting to a database project.\n"
+// 	"Ignored if a shortcut filename\n"
+// 	"is provided."));
+// options.add("local-socket <filename>", ki18n(
+// 	"Server's local socket filename\n"
+// 	"to be used for connecting to a database\n"
+// 	"project. Ignored if a shortcut filename\n"
+// 	"is provided."));
+// options.add("skip-conn-dialog", ki18n(
+// 	"Skip displaying connection dialog window\n"
+// 	"and connect directly. Available when\n"
+// 	"opening .kexic or .kexis shortcut files."));
+// options.add("+[project-name]", ki18n(
+// 	"Kexi database project filename,\n"
+// 	"Kexi shortcut filename,\n"
+// 	"or name of a Kexi database\n"
+// 	"project on a server to open."));
+// 

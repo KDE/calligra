@@ -32,15 +32,15 @@ static const char* KPLATO_VERSION="0.5.0";
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "kplato", I18N_NOOP("KPlato"),
-                                           KPLATO_VERSION, KPLATO_DESCRIPTION, KAboutData::License_GPL,
-                                           I18N_NOOP("(c) 1998-2007, The KPlato Team"), 0,
+    KAboutData * aboutData=new KAboutData( "kplato", 0, ki18n("KPlato"),
+                                           KPLATO_VERSION, ki18n(KPLATO_DESCRIPTION), KAboutData::License_GPL,
+                                           ki18n("(c) 1998-2007, The KPlato Team"), KLocalizedString(),
 					   "http://www.koffice.org/kplato/" );
-    aboutData->addAuthor("Thomas Zander", 0, 0 ); // please don't re-add, I don't like getting personal emails :)
-    aboutData->addAuthor("Bo Thorsen", 0, "bo@sonofthor.dk");
-    aboutData->addAuthor("Dag Andersen", 0, "danders@get2net.dk");
-    aboutData->addAuthor("Raphael Langerhorst",0,"raphael.langerhorst@kdemail.net");
-    aboutData->addCredit("Nuno Pinheiro and Danny Allen", I18N_NOOP("Application icon for kplato"), "danny@dannyallen.co.uk");
+    aboutData->addAuthor(ki18n("Thomas Zander")); // please don't re-add, I don't like getting personal emails :)
+    aboutData->addAuthor(ki18n("Bo Thorsen"), KLocalizedString(), "bo@sonofthor.dk");
+    aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
+    aboutData->addAuthor(ki18n("Raphael Langerhorst"),KLocalizedString(),"raphael.langerhorst@kdemail.net");
+    aboutData->addCredit(ki18n("Nuno Pinheiro and Danny Allen"), ki18n("Application icon for kplato"), "danny@dannyallen.co.uk");
     return aboutData;
 }
 

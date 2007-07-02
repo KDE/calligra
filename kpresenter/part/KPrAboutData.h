@@ -29,20 +29,20 @@ static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newKPresenterAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "kpresenter", I18N_NOOP("KPresenter"),
-                                           version, description, KAboutData::License_LGPL,
-                                           I18N_NOOP("(c) 1998-2007, The KPresenter Team"), 0,
+    KAboutData * aboutData=new KAboutData( "kpresenter", 0, ki18n("KPresenter"),
+                                           version, ki18n(description), KAboutData::License_LGPL,
+                                           ki18n("(c) 1998-2007, The KPresenter Team"), KLocalizedString(),
                                            "http://www.koffice.org/kpresenter/");
-    aboutData->addAuthor("Laurent Montel", I18N_NOOP("current maintainer"), "montel@kde.org");
-    aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
-    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
-    aboutData->addAuthor("Toshitaka Fujioka", 0, "fujioka@kde.org");
-    aboutData->addAuthor("Lukáš Tinkl", 0, "lukas@kde.org");
-    aboutData->addAuthor("Thorsten Zachmann", 0, "t.zachmann@zagge.de");
-    aboutData->addAuthor("Ariya Hidayat", 0, "ariya@kde.org");
-    aboutData->addAuthor("Percy Leonhardt", 0, "percy@eris23.de");
-    aboutData->addAuthor("Thomas Zander", 0, "");
-    aboutData->addAuthor("Reginald Stadlbauer",I18N_NOOP("original author"), "reggie@kde.org");
+    aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("current maintainer"), "montel@kde.org");
+    aboutData->addAuthor(ki18n("Werner Trobin"), KLocalizedString(), "trobin@kde.org");
+    aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
+    aboutData->addAuthor(ki18n("Toshitaka Fujioka"), KLocalizedString(), "fujioka@kde.org");
+    aboutData->addAuthor(ki18n("Lukáš Tinkl"), KLocalizedString(), "lukas@kde.org");
+    aboutData->addAuthor(ki18n("Thorsten Zachmann"), KLocalizedString(), "t.zachmann@zagge.de");
+    aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
+    aboutData->addAuthor(ki18n("Percy Leonhardt"), KLocalizedString(), "percy@eris23.de");
+    aboutData->addAuthor(ki18n("Thomas Zander"));
+    aboutData->addAuthor(ki18n("Reginald Stadlbauer"),ki18n("original author"), "reggie@kde.org");
     return aboutData;
 }
 

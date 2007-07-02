@@ -33,21 +33,19 @@ KAboutData * newKudesignerAboutData()
     // The first argument of the KAboutData constructor is the instance name.
     // It is very important, it's what's used for many things, like the subdir in share/apps, etc.
     // It must also match the name of the application's .desktop file.
-    KAboutData * aboutData = new KAboutData( "kudesigner", I18N_NOOP( "Kugar Report Designer" ),
-                             version, description, KAboutData::License_LGPL,
-                             "(c) 2002,2003, Alexander Dymo (and the Kugar Team)" );
-    aboutData->addAuthor( "Alexander Dymo",
-                          I18N_NOOP( "Maintainer, Report Designer, Kugar library enhancements" ),
+    KAboutData * aboutData = new KAboutData( "kudesigner", 0, ki18n( "Kugar Report Designer" ),
+                             version, ki18n(description), KAboutData::License_LGPL,
+                             ki18n("(c) 2002,2003, Alexander Dymo (and the Kugar Team)") );
+    aboutData->addAuthor( ki18n("Alexander Dymo"),
+                          ki18n( "Maintainer, Report Designer, Kugar library enhancements" ),
                           "cloudtemple@mksat.net",
                           "http://www.cloudtemple.mksat.net" );
-    aboutData->addAuthor( "Joseph Wenninger",
-                          I18N_NOOP( "Major bugfixes, additional features and Kexi integration" ),
-                          "jowenn@kde.org",
-                          "" );
-    aboutData->addCredit( "Per Winkvist",
-                          I18N_NOOP( "Fast property editing for report items" ),
-                          "per.winkvist@cellnetwork.com",
-                          "" );
+    aboutData->addAuthor( ki18n("Joseph Wenninger"),
+                          ki18n( "Major bugfixes, additional features and Kexi integration" ),
+                          "jowenn@kde.org");
+    aboutData->addCredit( ki18n("Per Winkvist"),
+                          ki18n( "Fast property editing for report items" ),
+                          "per.winkvist@cellnetwork.com");
     aboutData->setTranslator( ki18nc( "NAME OF TRANSLATORS", "Your names" ),
                               ki18nc( "EMAIL OF TRANSLATORS", "Your emails" ) );
     return aboutData;

@@ -34,31 +34,31 @@ static const char* KWORD_VERSION=KOFFICE_VERSION_STRING;
 
 KAboutData * newKWordAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "kword", I18N_NOOP("KWord"),
-                                           KWORD_VERSION, KWORD_DESCRIPTION, KAboutData::License_LGPL,
-                                           I18N_NOOP("(c) 1998-2006, The KWord Team"), 0,
+    KAboutData * aboutData=new KAboutData( "kword", 0, ki18n("KWord"),
+                                           KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
+                                           ki18n("(c) 1998-2006, The KWord Team"), KLocalizedString(),
                                            "http://www.koffice.org/kword/" );
-    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
-    aboutData->addAuthor("Reginald Stadlbauer", 0, "reggie@kde.org");
-    aboutData->addAuthor("Thomas Zander");
-    aboutData->addAuthor("Laurent Montel", 0, "montel@kde.org");
-    aboutData->addAuthor("Sven Lüppken", 0, "sven@kde.org");
-    aboutData->addAuthor("Frank Dekervel", 0, "Frank.dekervel@student.kuleuven.ac.Be");
-    aboutData->addAuthor("Krister Wicksell Eriksson", 0, "krister.wicksell@spray.se");
-    aboutData->addAuthor("Dag Andersen", 0, "danders@get2net.dk");
-    aboutData->addAuthor("Nash Hoogwater", 0, "nrhoogwater@wanadoo.nl");
-    aboutData->addAuthor("Ulrich Kuettler", I18N_NOOP("KFormula"), "ulrich.kuettler@mailbox.tu-dresden.de");
+    aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
+    aboutData->addAuthor(ki18n("Reginald Stadlbauer"), KLocalizedString(), "reggie@kde.org");
+    aboutData->addAuthor(ki18n("Thomas Zander"));
+    aboutData->addAuthor(ki18n("Laurent Montel"), KLocalizedString(), "montel@kde.org");
+    aboutData->addAuthor(ki18n("Sven Lüppken"), KLocalizedString(), "sven@kde.org");
+    aboutData->addAuthor(ki18n("Frank Dekervel"), KLocalizedString(), "Frank.dekervel@student.kuleuven.ac.Be");
+    aboutData->addAuthor(ki18n("Krister Wicksell Eriksson"), KLocalizedString(), "krister.wicksell@spray.se");
+    aboutData->addAuthor(ki18n("Dag Andersen"), KLocalizedString(), "danders@get2net.dk");
+    aboutData->addAuthor(ki18n("Nash Hoogwater"), KLocalizedString(), "nrhoogwater@wanadoo.nl");
+    aboutData->addAuthor(ki18n("Ulrich Kuettler"), ki18n("KFormula"), "ulrich.kuettler@mailbox.tu-dresden.de");
     // filter developers
-    aboutData->addAuthor("Shaheed Haque", 0, "srhaque@iee.org");
-    aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
-    aboutData->addAuthor("Nicolas Goutte", 0, "goutte@kde.org");
-    aboutData->addAuthor("Ariya Hidayat", 0, "ariya@kde.org");
-    aboutData->addAuthor("Clarence Dang", 0, "dang@kde.org");
-    aboutData->addAuthor("Robert Jacolin", 0, "rjacolin@ifrance.com");
-    aboutData->addAuthor("Enno Bartels", 0, "ebartels@nwn.de");
-    aboutData->addAuthor("Ewald Snel", 0, "ewald@rambo.its.tudelft.nl");
-    aboutData->addAuthor("Tomasz Grobelny", 0, "grotk@poczta.onet.pl");
-    aboutData->addAuthor("Michael Johnson");
+    aboutData->addAuthor(ki18n("Shaheed Haque"), KLocalizedString(), "srhaque@iee.org");
+    aboutData->addAuthor(ki18n("Werner Trobin"), KLocalizedString(), "trobin@kde.org");
+    aboutData->addAuthor(ki18n("Nicolas Goutte"), KLocalizedString(), "goutte@kde.org");
+    aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
+    aboutData->addAuthor(ki18n("Clarence Dang"), KLocalizedString(), "dang@kde.org");
+    aboutData->addAuthor(ki18n("Robert Jacolin"), KLocalizedString(), "rjacolin@ifrance.com");
+    aboutData->addAuthor(ki18n("Enno Bartels"), KLocalizedString(), "ebartels@nwn.de");
+    aboutData->addAuthor(ki18n("Ewald Snel"), KLocalizedString(), "ewald@rambo.its.tudelft.nl");
+    aboutData->addAuthor(ki18n("Tomasz Grobelny"), KLocalizedString(), "grotk@poczta.onet.pl");
+    aboutData->addAuthor(ki18n("Michael Johnson"));
     return aboutData;
 }
 

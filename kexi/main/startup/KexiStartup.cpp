@@ -203,9 +203,9 @@ KexiStartupHandler::~KexiStartupHandler()
 
 bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name)
 {
-	QByteArrayList list = args->getOptionList(action_name);
+	QStringList list = args->getOptionList(action_name);
 	bool atLeastOneFound = false;
-	foreach ( QByteArray option, list ) {
+	foreach ( QString option, list ) {
 		QString type_name, obj_name, item = option;
 		int idx;
 		bool name_required = true;
@@ -413,10 +413,10 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 		QString prjName;
 		QString fileName;
 		if (fileDriverSelected) {
-			fileName = QFile::decodeName(args->arg(0));
+			fileName = args->arg(0);
 		}
 		else {
-			prjName = QString::fromLocal8Bit(args->arg(0));
+			prjName = args->arg(0);
 		}
 		
 		if (fileDriverSelected) {

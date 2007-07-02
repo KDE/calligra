@@ -120,7 +120,7 @@ const KComponentData &KFDFactory::componentData()
 KAboutData*
 KFDFactory::aboutData()
 {
-	KAboutData *about = new KAboutData("kformdesigner_part", I18N_NOOP("Form Designer Part"), "0.3");
+	KAboutData *about = new KAboutData("kformdesigner_part", 0, ki18n("Form Designer Part"), "0.3");
 	return about;
 }
 

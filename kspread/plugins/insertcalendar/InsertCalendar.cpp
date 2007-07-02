@@ -84,15 +84,15 @@ PluginInsertCalendar::~PluginInsertCalendar()
 KAboutData* PluginInsertCalendar::createAboutData()
 {
   KAboutData * aboutData = new KAboutData(
-    "kspreadinsertcalendar",  //app name
-    I18N_NOOP("Insert Calendar"),  //program name
+    "kspreadinsertcalendar", 0,  //app name
+    ki18n("Insert Calendar"),  //program name
     KOFFICE_VERSION_STRING,  //version
-    I18N_NOOP("KSpread Insert Calendar Plugin"),  //short description
+    ki18n("KSpread Insert Calendar Plugin"),  //short description
     KAboutData::License_BSD,  //license type
-    I18N_NOOP("(c) 2005, The KSpread Team"),  //copyright
-    0,//I18N_NOOP("The Insert Calendar plugin can be used in spreadsheets"),  //text
+    ki18n("(c) 2005, The KSpread Team"),  ki18n(//copyright
+    0),//I18N_NOOP("The Insert Calendar plugin can be used in spreadsheets"),  //text
     "http://www.koffice.org/kspread/");
-  aboutData->addAuthor("Raphael Langerhorst", 0, "Raphael.Langerhorst@kdemail.net");
+  aboutData->addAuthor(ki18n("Raphael Langerhorst"), KLocalizedString(), "Raphael.Langerhorst@kdemail.net");
 
   return aboutData;
 }

@@ -34,37 +34,37 @@ static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newAboutData()
 {
-    KAboutData * aboutData = new KAboutData( "kspread", I18N_NOOP("KSpread"),
-                                             version, description, KAboutData::License_LGPL,
-                                             I18N_NOOP("(c) 1998-2007, The KSpread Team"), 0,
+    KAboutData * aboutData = new KAboutData( "kspread", 0, ki18n("KSpread"),
+                                             version, ki18n(description), KAboutData::License_LGPL,
+                                             ki18n("(c) 1998-2007, The KSpread Team"), KLocalizedString(),
                "http://www.koffice.org/kspread/");
-    aboutData->addAuthor("Torben Weis", "Original Author", "weis@kde.org");
-    aboutData->addAuthor("Laurent Montel", "Maintainer", "montel@kde.org");
-    aboutData->addAuthor("John Dailey", 0, "dailey@vt.edu");
-    aboutData->addAuthor("Philipp Müller", 0, "philipp.mueller@gmx.de");
-    aboutData->addAuthor("Ariya Hidayat", 0, "ariya@kde.org");
-    aboutData->addAuthor("Norbert Andres", 0, "nandres@web.de");
-    aboutData->addAuthor("Shaheed Haque", 0, "srhaque@iee.org");
-    aboutData->addAuthor("Werner Trobin", 0, "trobin@kde.org");
-    aboutData->addAuthor("Nikolas Zimmermann", 0, "wildfox@kde.org");
-    aboutData->addAuthor("David Faure", 0, "faure@kde.org");
-    aboutData->addAuthor("Helge Deller", 0, "deller@gmx.de");
-    aboutData->addAuthor("Percy Leonhart", 0, "percy@eris23.org");
-    aboutData->addAuthor("Eva Brucherseifer", 0, "eva@kde.org");
-    aboutData->addAuthor("Phillip Ezolt", 0, "phillipezolt@hotmail.com");
-    aboutData->addAuthor("Enno Bartels", 0, "ebartels@nwn.de");
-    aboutData->addAuthor("Graham Short", 0, "grahshrt@netscape.net");
-    aboutData->addAuthor("Lukáš Tinkl", 0, "lukas@kde.org");
-    aboutData->addAuthor("Tomas Mecir", 0, "mecirt@gmail.com");
-    aboutData->addAuthor("Raphael Langerhorst", 0, "raphael.langerhorst@kdemail.net");
-    aboutData->addAuthor("John Tapsell", 0, "john.tapsell@kdemail.net");
-    aboutData->addAuthor("Robert Knight", 0 , "robertknight@gmail.com");
-    aboutData->addAuthor("Stefan Nikolaus", 0, "stefan.nikolaus@kdemail.net");
+    aboutData->addAuthor(ki18n("Torben Weis"), ki18n("Original Author"), "weis@kde.org");
+    aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Maintainer"), "montel@kde.org");
+    aboutData->addAuthor(ki18n("John Dailey"), KLocalizedString(), "dailey@vt.edu");
+    aboutData->addAuthor(ki18n("Philipp Müller"), KLocalizedString(), "philipp.mueller@gmx.de");
+    aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
+    aboutData->addAuthor(ki18n("Norbert Andres"), KLocalizedString(), "nandres@web.de");
+    aboutData->addAuthor(ki18n("Shaheed Haque"), KLocalizedString(), "srhaque@iee.org");
+    aboutData->addAuthor(ki18n("Werner Trobin"), KLocalizedString(), "trobin@kde.org");
+    aboutData->addAuthor(ki18n("Nikolas Zimmermann"), KLocalizedString(), "wildfox@kde.org");
+    aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
+    aboutData->addAuthor(ki18n("Helge Deller"), KLocalizedString(), "deller@gmx.de");
+    aboutData->addAuthor(ki18n("Percy Leonhart"), KLocalizedString(), "percy@eris23.org");
+    aboutData->addAuthor(ki18n("Eva Brucherseifer"), KLocalizedString(), "eva@kde.org");
+    aboutData->addAuthor(ki18n("Phillip Ezolt"), KLocalizedString(), "phillipezolt@hotmail.com");
+    aboutData->addAuthor(ki18n("Enno Bartels"), KLocalizedString(), "ebartels@nwn.de");
+    aboutData->addAuthor(ki18n("Graham Short"), KLocalizedString(), "grahshrt@netscape.net");
+    aboutData->addAuthor(ki18n("Lukáš Tinkl"), KLocalizedString(), "lukas@kde.org");
+    aboutData->addAuthor(ki18n("Tomas Mecir"), KLocalizedString(), "mecirt@gmail.com");
+    aboutData->addAuthor(ki18n("Raphael Langerhorst"), KLocalizedString(), "raphael.langerhorst@kdemail.net");
+    aboutData->addAuthor(ki18n("John Tapsell"), KLocalizedString(), "john.tapsell@kdemail.net");
+    aboutData->addAuthor(ki18n("Robert Knight"), KLocalizedString() , "robertknight@gmail.com");
+    aboutData->addAuthor(ki18n("Stefan Nikolaus"), KLocalizedString(), "stefan.nikolaus@kdemail.net");
     // "Thanks to" section
-    aboutData->addCredit("Sascha Pfau",
-                         "Functions:\tDATE2UNIX, DATEDIF, IMLOG2, IMLOG10, NETWORKDAY,\n"
-                         "\tUNIX2DATE, WEEKNUM, WORKDAY, YEARFRAC", "mrpeacock@gmail.com");
-    aboutData->addCredit("Brad Hards", "Various functions reviewed for OpenFormula compliance",
+    aboutData->addCredit(ki18n("Sascha Pfau"),
+                         ki18n("Functions:\tDATE2UNIX, DATEDIF, IMLOG2, IMLOG10, NETWORKDAY,\n"
+                         "\tUNIX2DATE, WEEKNUM, WORKDAY, YEARFRAC"), "mrpeacock@gmail.com");
+    aboutData->addCredit(ki18n("Brad Hards"), ki18n("Various functions reviewed for OpenFormula compliance"),
                          "bradh@frogmouth.net");
     return aboutData;
 }

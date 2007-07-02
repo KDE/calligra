@@ -29,21 +29,18 @@ static const char *description =
 
 static const char *version = "0.3";
 
-static KCmdLineOptions options[] =
-{
-    { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
-    KCmdLineLastOption
-};
-
 int main(int argc, char **argv)
 {
-    KAboutData about("kformdesigner", I18N_NOOP("KFormDesigner"), version, description,
-                     KAboutData::License_LGPL, "(C) 2003-2005 Kexi Team", 0, 0);
-    about.addCredit( "Lucijan Busch", "Original author", 0, "lucijan@kde.org" );
-    about.addAuthor( "Cedric Pasteur", 0, "cedric.pasteur@free.fr");
-    about.addCredit( "Jarosław Staniek", "Win32 version, some icons, many fixes, ideas and bug reports", "js@iidea.pl", 0);
-    about.addCredit( "Kristof Borrey ", "Icons", 0, "kristof.borrey@skynet.be" );
+    KAboutData about("kformdesigner", 0, ki18n("KFormDesigner"), version, ki18n(description),
+                     KAboutData::License_LGPL, ki18n("(C) 2003-2005 Kexi Team"));
+    about.addCredit( ki18n("Lucijan Busch"), ki18n("Original author"), 0, "lucijan@kde.org" );
+    about.addAuthor( ki18n("Cedric Pasteur"), KLocalizedString(), "cedric.pasteur@free.fr");
+    about.addCredit( ki18n("Jarosław Staniek"), ki18n("Win32 version, some icons, many fixes, ideas and bug reports"), "js@iidea.pl");
+    about.addCredit( ki18n("Kristof Borrey "), ki18n("Icons"), 0, "kristof.borrey@skynet.be" );
     KCmdLineArgs::init(argc, argv, &about);
+
+    KCmdLineOptions options;
+    options.add("+[URL]", ki18n( "Document to open" ));
     KCmdLineArgs::addCmdLineOptions(options);
     KApplication app;
 

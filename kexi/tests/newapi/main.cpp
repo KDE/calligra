@@ -56,46 +56,6 @@ QPointer<KexiDB::Driver> driver;
 KApplication *app = 0;
 KComponentData *instance = 0;
 
-static KCmdLineOptions options[] =
-{
-	{ "test <test_name>",
-		"Available tests:\n"
-		"- cursors: test for cursors behaviour\n"
-		"- schema: test for db schema retrieving\n"
-		"- dbcreation: test for new db creation\n"
-		"- tables: test for tables creation and data\n"
-		"   inserting\n"
-#ifndef NO_GUI
-		"- tableview: test for KexiDataTableView data-aware\n"
-		"   widget\n"
-#endif
-		"- parser: test for parsing sql statements,\n"
-		"   returns debug string for a given\n"
-		"   sql statement or error message\n"
-		"- dr_prop: shows properties of selected driver"
-		, 0},
-	{ "buffered-cursors",
-		"Optional switch :turns cursors used in any tests\n"
-		" to be buffered", 0},
-	{ "query-params <params>", "Query parameters separated\n"
-		"by '|' character that will be passed to query\n"
-		"statement to replace [...] placeholders.", 0 },
-	{ "", " Notes:\n"
-		"1. 'dr_prop' requires <db_name> argument.\n"
-		"2. 'parser' test requires <db_name>,\n"
-		" <driver_name> and <sql_statement> arguments\n"
-		"3. All other tests require <db_name>\n"
-		" and <driver_name> arguments.\n"
-		"4. 'tables' test automatically runs 'dbcreation'\n"
-		" test. (<new_db_name> is removed if already exists.\n"
-		"5. <db_name> must be a valid kexi database\n"
-		" e.g. created with 'tables' test.", 0},
-	{ "+driver_name", "Driver name", 0},
-	{ "+[db_name]", "Database name", 0},
-	{ "+[sql_statement]", "Optional SQL statement (for parser test)", 0},
-	KCmdLineLastOption
-};
-
 #include "dbcreation_test.h"
 #include "cursors_test.h"
 #include "schema_test.h"
@@ -122,15 +82,49 @@ int main(int argc, char** argv)
 	prgname = info.baseName().toLatin1();
 	
 	KCmdLineArgs::init(argc, argv, 
-		new KAboutData( prgname, "KexiDBTest",
-			"0.1.2", "", KAboutData::License_GPL,
-			"(c) 2003-2006, Kexi Team\n"
-			"(c) 2003-2006, OpenOffice Polska Ltd.\n",
-			"",
+		new KAboutData( prgname, 0, ki18n("KexiDBTest"),
+			"0.1.2", KLocalizedString(), KAboutData::License_GPL,
+			ki18n("(c) 2003-2006, Kexi Team\n"
+			"(c) 2003-2006, OpenOffice Polska Ltd.\n"),
+			KLocalizedString(),
 			"http://www.koffice.org/kexi",
 			"submit@bugs.kde.org"
 		)
 	);
+
+	KCmdLineOptions options;
+	options.add("test <test_name>", ki18n("Available tests:\n"
+		"- cursors: test for cursors behaviour\n"
+		"- schema: test for db schema retrieving\n"
+		"- dbcreation: test for new db creation\n"
+		"- tables: test for tables creation and data\n"
+		"   inserting\n"
+#ifndef NO_GUI
+		"- tableview: test for KexiDataTableView data-aware\n"
+		"   widget\n"
+#endif
+		"- parser: test for parsing sql statements,\n"
+		"   returns debug string for a given\n"
+		"   sql statement or error message\n"
+		"- dr_prop: shows properties of selected driver"));
+	options.add("buffered-cursors", ki18n("Optional switch :turns cursors used in any tests\n"
+		" to be buffered"));
+	options.add("query-params <params>", ki18n("Query parameters separated\n"
+		"by '|' character that will be passed to query\n"
+		"statement to replace [...] placeholders."));
+	options.add("", ki18n(" Notes:\n"
+		"1. 'dr_prop' requires <db_name> argument.\n"
+		"2. 'parser' test requires <db_name>,\n"
+		" <driver_name> and <sql_statement> arguments\n"
+		"3. All other tests require <db_name>\n"
+		" and <driver_name> arguments.\n"
+		"4. 'tables' test automatically runs 'dbcreation'\n"
+		" test. (<new_db_name> is removed if already exists.\n"
+		"5. <db_name> must be a valid kexi database\n"
+		" e.g. created with 'tables' test."));
+	options.add("+driver_name", ki18n("Driver name"));
+	options.add("+[db_name]", ki18n("Database name"));
+	options.add("+[sql_statement]", ki18n("Optional SQL statement (for parser test)"));
 	KCmdLineArgs::addCmdLineOptions( options );
 	
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

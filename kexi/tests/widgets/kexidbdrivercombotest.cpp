@@ -47,7 +47,7 @@
 int main(int argc, char** argv)
 {
   // Initialise the program
-  KCmdLineArgs::init(argc, argv, "kexidbcomboboxtest", "", "", "", true);
+  KCmdLineArgs::init(argc, argv, "kexidbcomboboxtest", 0, KLocalizedString(), "", KLocalizedString(), true);
   KApplication* app = new KApplication(true, true);
 
   // Look for installed database drivers

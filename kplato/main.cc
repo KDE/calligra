@@ -26,18 +26,14 @@
 namespace KPlato
 {
 
-static const KCmdLineOptions options[]=
-{
-	{"+[file]", I18N_NOOP("File to open"),0},
-	KCmdLineLastOption
-};
-
 }  //KPlato namespace
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     KCmdLineArgs::init( argc, argv, KPlato::newAboutData());
-    KCmdLineArgs::addCmdLineOptions( KPlato::options );
+    KCmdLineOptions options;
+    options.add("+[file]", ki18n("File to open"));
+    KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;
 

@@ -28,20 +28,17 @@
 #include <kdemacros.h>
 #include <kcomponentdata.h>
 
-static KCmdLineOptions options[] =
-{
-	{ "+[term]",   I18N_NOOP("Term to search for when starting up"), 0 },
-	KCmdLineLastOption
-};
-
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
 
-	KAboutData aboutData("kthesaurus", I18N_NOOP("KThesaurus"), "1.0",
-		I18N_NOOP( "KThesaurus - List synonyms" ), KAboutData::License_GPL,
-		I18N_NOOP( "(c) 2001 Daniel Naber" ) );
+	KAboutData aboutData("kthesaurus", 0, ki18n("KThesaurus"), "1.0",
+		ki18n( "KThesaurus - List synonyms" ), KAboutData::License_GPL,
+		ki18n( "(c) 2001 Daniel Naber" ) );
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
+
+	KCmdLineOptions options;
+	options.add("+[term]", ki18n("Term to search for when starting up"));
 	KCmdLineArgs::addCmdLineOptions(options);
 	KApplication a; // KDataTool needs an instance
 

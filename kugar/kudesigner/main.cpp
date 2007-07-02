@@ -25,17 +25,13 @@
 #include "kudesigner_aboutdata.h"
 
 
-static const KCmdLineOptions options[] =
-    {
-        {"+[file]", I18N_NOOP( "File to open" ), 0
-        },
-        KCmdLineLastOption
-    };
-
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
     KLocale::setMainCatalog( "kugar" );
     KCmdLineArgs::init( argc, argv, newKudesignerAboutData() );
+
+    KCmdLineOptions options;
+    options.add("+[file]", ki18n( "File to open" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KoApplication app;
 

@@ -30,18 +30,18 @@ static const char* version = KOFFICE_VERSION_STRING;
 
 KAboutData * newKivioAboutData()
 {
-    KAboutData * aboutData=new KAboutData( "kivio", I18N_NOOP("Kivio"),
-                                           version, description, KAboutData::License_GPL,
-                                           I18N_NOOP("(C) 2000-2007, The Kivio Team"), 0,
+    KAboutData * aboutData=new KAboutData( "kivio", 0, ki18n("Kivio"),
+                                           version, ki18n(description), KAboutData::License_GPL,
+                                           ki18n("(C) 2000-2007, The Kivio Team"), KLocalizedString(),
                                            "http://www.koffice.org/kivio/");
-    aboutData->addAuthor("Peter Simonsson", I18N_NOOP("Maintainer"), "psn@linux.se");
-    aboutData->addAuthor("Ian Reinhart Geiser", I18N_NOOP("Development"), "geiseri@kde.org");
-    aboutData->addAuthor("Laurent Montel", I18N_NOOP("Development"), "montel@kde.org");
-    aboutData->addAuthor("Frauke Oster", I18N_NOOP("Development/Documentation"), "frauke@frsv.de");
-    aboutData->addAuthor("Kristof Borrey", I18N_NOOP("Artwork (stencils and icons)"), "borrey@kde.org");
-    aboutData->addAuthor("Joerg de la Haye", I18N_NOOP("Nassi Schneiderman stencils"), "haye@ritterstrasse.org");
-    aboutData->addAuthor("Dave Marotti", I18N_NOOP("Initial idea, development and basic stencil sets."),"lndshark@verticaladdiction.net");
-    aboutData->addAuthor("The Kompany.com - \"Where Open Source is at Home\"(TM)", I18N_NOOP("Development and additional stencil sets."), "info@thekompany.com");
+    aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Maintainer"), "psn@linux.se");
+    aboutData->addAuthor(ki18n("Ian Reinhart Geiser"), ki18n("Development"), "geiseri@kde.org");
+    aboutData->addAuthor(ki18n("Laurent Montel"), ki18n("Development"), "montel@kde.org");
+    aboutData->addAuthor(ki18n("Frauke Oster"), ki18n("Development/Documentation"), "frauke@frsv.de");
+    aboutData->addAuthor(ki18n("Kristof Borrey"), ki18n("Artwork (stencils and icons)"), "borrey@kde.org");
+    aboutData->addAuthor(ki18n("Joerg de la Haye"), ki18n("Nassi Schneiderman stencils"), "haye@ritterstrasse.org");
+    aboutData->addAuthor(ki18n("Dave Marotti"), ki18n("Initial idea, development and basic stencil sets."),"lndshark@verticaladdiction.net");
+    aboutData->addAuthor(ki18n("The Kompany.com - \"Where Open Source is at Home\"(TM)"), ki18n("Development and additional stencil sets."), "info@thekompany.com");
     return aboutData;
 }
 

@@ -20,17 +20,13 @@
 
 #include "kugar_about.h"
 
-static KCmdLineOptions options[] =
-    {
-        { "+[File]", I18N_NOOP( "File to open" ), 0 },
-        // INSERT YOUR COMMANDLINE OPTIONS HERE
-        KCmdLineLastOption
-    };
-
 extern "C" KDE_EXPORT int kdemain( int argc, char *argv[] )
 {
 
     KCmdLineArgs::init( argc, argv, newKugarAboutData() );
+
+    KCmdLineOptions options;
+    options.add("+[File]", ki18n( "File to open" ));
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
 
     KoApplication app;

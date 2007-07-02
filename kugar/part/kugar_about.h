@@ -25,24 +25,21 @@
 
 KAboutData *newKugarAboutData()
 {
-    KAboutData * aboutData = new KAboutData( "kugar", I18N_NOOP( "Kugar" ),
-                             KOFFICE_VERSION_STRING, I18N_NOOP( "Report viewer(generator)" ), KAboutData::License_GPL,
-                             I18N_NOOP( "(c) 1999-2007, The Kugar Team" ), 0, "http://www.koffice.org" );
+    KAboutData * aboutData = new KAboutData( "kugar", 0, ki18n( "Kugar" ),
+                             KOFFICE_VERSION_STRING, ki18n( "Report viewer(generator)" ), KAboutData::License_GPL,
+                             ki18n( "(c) 1999-2007, The Kugar Team" ), KLocalizedString(), "http://www.koffice.org" );
 
-    aboutData->addAuthor( "Alexander Dymo",
-                          I18N_NOOP( "Maintainer, Report Designer, Kugar library enhancements" ), "cloudtemple@mksat.net",
+    aboutData->addAuthor( ki18n("Alexander Dymo"),
+                          ki18n( "Maintainer, Report Designer, Kugar library enhancements" ), "cloudtemple@mksat.net",
                           "http://www.cloudtemple.mksat.net" );
-    aboutData->addAuthor( "Joseph Wenninger",
-                          I18N_NOOP( "Smaller fixes and Kexi integration" ), "jowenn@kde.org",
-                          "" );
-    aboutData->addAuthor( "Joris Marcillac",
-                          I18N_NOOP( "Direct database support" ), "joris@marcillac.org",
-                          "" );
-    aboutData->addAuthor( "Phil Thompson",
-                          I18N_NOOP( "Former maintainer" ), "phil@river-bank.demon.co.uk",
-                          "" );
-    aboutData->addAuthor( "Keith Davis (Mutiny Bay Software)",
-                          I18N_NOOP( "Original author of Metaphrast" ), "info@mutinybaysoftware.com",
+    aboutData->addAuthor( ki18n("Joseph Wenninger"),
+                          ki18n( "Smaller fixes and Kexi integration" ), "jowenn@kde.org");
+    aboutData->addAuthor( ki18n("Joris Marcillac"),
+                          ki18n( "Direct database support" ), "joris@marcillac.org");
+    aboutData->addAuthor( ki18n("Phil Thompson"),
+                          ki18n( "Former maintainer" ), "phil@river-bank.demon.co.uk");
+    aboutData->addAuthor( ki18n("Keith Davis (Mutiny Bay Software)"),
+                          ki18n( "Original author of Metaphrast" ), "info@mutinybaysoftware.com",
                           "http://www.mutinybaysoftware.com" );
     aboutData->setTranslator( ki18nc( "NAME OF TRANSLATORS", "Your names" ), ki18nc( "EMAIL OF TRANSLATORS", "Your emails" ) );
     return aboutData;

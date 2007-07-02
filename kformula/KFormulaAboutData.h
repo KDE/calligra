@@ -31,15 +31,15 @@ static const char* version=KOFFICE_VERSION_STRING;
 
 KAboutData * newKFormulaAboutData()
 {
-    KAboutData * aboutData = new KAboutData( "kformula", I18N_NOOP( "KFormula" ),
-                                             version, description, KAboutData::License_GPL,
-                                             "(c) 1998-2006, The KFormula Team", 0,
+    KAboutData * aboutData = new KAboutData( "kformula", 0, ki18n( "KFormula" ),
+                                             version, ki18n(description), KAboutData::License_GPL,
+                                             ki18n("(c) 1998-2006, The KFormula Team"), KLocalizedString(),
 					     "http://www.koffice.org/kformula/" );
-    aboutData->addAuthor( "Andrea Rizzi", I18N_NOOP( "original author" ), "rizzi@kde.org" );
-    aboutData->addAuthor( "Ulrich Kuettler", I18N_NOOP( "current maintainer" ), "ulrich.kuettler@gmx.de" );
-    aboutData->addAuthor( "Heinrich Kuettler", I18N_NOOP( "core developer" ), "heinrich.kuettler@gmx.de" );
-    aboutData->addCredit( "Claus O. Wilke", I18N_NOOP( "for your advice to look at TeX first" ) );
-    aboutData->addAuthor( "Martin Pfeiffer", I18N_NOOP( "core developer" ), "hubipete@gmx.net" );
+    aboutData->addAuthor( ki18n("Andrea Rizzi"), ki18n( "original author" ), "rizzi@kde.org" );
+    aboutData->addAuthor( ki18n("Ulrich Kuettler"), ki18n( "current maintainer" ), "ulrich.kuettler@gmx.de" );
+    aboutData->addAuthor( ki18n("Heinrich Kuettler"), ki18n( "core developer" ), "heinrich.kuettler@gmx.de" );
+    aboutData->addCredit( ki18n("Claus O. Wilke"), ki18n( "for your advice to look at TeX first" ) );
+    aboutData->addAuthor( ki18n("Martin Pfeiffer"), ki18n( "core developer" ), "hubipete@gmx.net" );
     return aboutData;
 }
 

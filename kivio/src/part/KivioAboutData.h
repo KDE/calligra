@@ -29,11 +29,11 @@ static const char* KIVIO_VERSION = KOFFICE_VERSION_STRING;
 
 KAboutData* newKivioAboutData()
 {
-  KAboutData* aboutData = new KAboutData("kivio", I18N_NOOP("Kivio"),
-                                KIVIO_VERSION, KIVIO_DESCRIPTION, KAboutData::License_LGPL,
-                                I18N_NOOP("(C) 2000-2007, The Kivio Team"), 0,
+  KAboutData* aboutData = new KAboutData("kivio", 0, ki18n("Kivio"),
+                                KIVIO_VERSION, ki18n(KIVIO_DESCRIPTION), KAboutData::License_LGPL,
+                                ki18n("(C) 2000-2007, The Kivio Team"), KLocalizedString(),
                                 "http://www.koffice.org/kivio/");
-  aboutData->addAuthor("Peter Simonsson", I18N_NOOP("Maintainer"), "peter.simonsson@gmail.com");
+  aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Maintainer"), "peter.simonsson@gmail.com");
 
   return aboutData;
 }

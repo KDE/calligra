@@ -155,10 +155,10 @@ KAboutData* KoUnavailFactory::aboutData()
     {
         static const char* description=I18N_NOOP("KoUnavail KOffice Program");
         static const char* version="0.1";
-        s_aboutData=new KAboutData( "kounavail", I18N_NOOP("KoUnavail"),
-                                    version, description, KAboutData::License_LGPL,
-                                    "(c) 2001, David Faure");
-        s_aboutData->addAuthor("David Faure",0, "faure@kde.org");
+        s_aboutData=new KAboutData( "kounavail", 0, ki18n("KoUnavail"),
+                                    version, ki18n(description), KAboutData::License_LGPL,
+                                    ki18n("(c) 2001, David Faure"));
+        s_aboutData->addAuthor(ki18n("David Faure"),KLocalizedString(), "faure@kde.org");
     }
     return s_aboutData;
 }

@@ -35,17 +35,6 @@
 #include "koconverter.h"
 
 
-static const KCmdLineOptions options[]=
-{
-	{"+in", I18N_NOOP("Input file"),0},
-	{"+out", I18N_NOOP("Output file"),0},
-    {"backup", I18N_NOOP("Make a backup of the destination file"),0},
-    {"batch", I18N_NOOP("Batch mode: do not show dialogs"),0},
-    {"interactive", I18N_NOOP("Interactive mode: show dialogs (default)"),0},
-	{"mimetype <mime>", I18N_NOOP("Mimetype of the output file"),0},
-	KCmdLineLastOption
-};
-
 bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uOut, const QString & outputFormat, const bool batch )
 {
     KoFilterManager* manager = new KoFilterManager( uIn.path() );
@@ -72,13 +61,21 @@ void ProgressObject::slotProgress(int /* progress */ )
 
 int main( int argc, char **argv )
 {
-    KAboutData aboutData( "koconverter", I18N_NOOP("KOConverter"), "1.4",
-                          I18N_NOOP("KOffice Document Converter"),
+    KAboutData aboutData( "koconverter", 0, ki18n("KOConverter"), "1.4",
+                          ki18n("KOffice Document Converter"),
                           KAboutData::License_GPL,
-                          I18N_NOOP("(c) 2001-2004 KOffice developers") );
-    aboutData.addAuthor("David Faure",0, "faure@kde.org");
-    aboutData.addAuthor("Nicolas Goutte",0, "goutte@kde.org");
+                          ki18n("(c) 2001-2004 KOffice developers") );
+    aboutData.addAuthor(ki18n("David Faure"),KLocalizedString(), "faure@kde.org");
+    aboutData.addAuthor(ki18n("Nicolas Goutte"),KLocalizedString(), "goutte@kde.org");
     KCmdLineArgs::init( argc, argv, &aboutData);
+
+    KCmdLineOptions options;
+    options.add("+in", ki18n("Input file"));
+    options.add("+out", ki18n("Output file"));
+    options.add("backup", ki18n("Make a backup of the destination file"));
+    options.add("batch", ki18n("Batch mode: do not show dialogs"));
+    options.add("interactive", ki18n("Interactive mode: show dialogs (default)"));
+    options.add("mimetype <mime>", ki18n("Mimetype of the output file"));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KApplication app;
@@ -123,7 +120,7 @@ int main( int argc, char **argv )
         KMimeType::Ptr outputMimetype;
         if ( args->isSet("mimetype") )
         {
-            QString mime = QString::fromLatin1( args->getOption("mimetype") );
+            QString mime = args->getOption("mimetype");
             outputMimetype = KMimeType::mimeType( mime );
             if ( ! outputMimetype )
             {
@@ -155,7 +152,7 @@ int main( int argc, char **argv )
         }
     }
 
-    KCmdLineArgs::usage(i18n("Two arguments required"));
+    KCmdLineArgs::usageError(i18n("Two arguments required"));
     return 3;
 }
 

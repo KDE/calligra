@@ -69,12 +69,12 @@ int KoShellApp::newInstance()
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
-  KAboutData * aboutData = new KAboutData( "koshell", I18N_NOOP("KOffice Workspace"),
-     version, description, KAboutData::License_GPL,
-       "(c) 1998-2006, Torben Weis\n(c) 2002-2005, David Faure\n(c) 2005, Sven Lüppken");
-  aboutData->addAuthor("Sven Lüppken", I18N_NOOP("Current Maintainer"), "sven@kde.org");
-  aboutData->addAuthor("Torben Weis", 0, "weis@kde.org");
-  aboutData->addAuthor("David Faure", 0, "faure@kde.org");
+  KAboutData * aboutData = new KAboutData( "koshell", 0, ki18n("KOffice Workspace"),
+     version, ki18n(description), KAboutData::License_GPL,
+       ki18n("(c) 1998-2006, Torben Weis\n(c) 2002-2005, David Faure\n(c) 2005, Sven Lüppken"));
+  aboutData->addAuthor(ki18n("Sven Lüppken"), ki18n("Current Maintainer"), "sven@kde.org");
+  aboutData->addAuthor(ki18n("Torben Weis"), KLocalizedString(), "weis@kde.org");
+  aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
   KCmdLineArgs::init( argc, argv, aboutData );
 
   if ( !KoShellApp::start() ) {

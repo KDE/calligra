@@ -25,17 +25,14 @@
 
 using namespace KSpread;
 
-static const KCmdLineOptions options[]=
-{
-    {"+[file]", I18N_NOOP("File to open"),0},
-    { "scriptfile <scriptfile>", I18N_NOOP("Execute the scriptfile after startup."), 0},
-    KCmdLineLastOption
-};
-
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
 
     KCmdLineArgs::init( argc, argv, newAboutData() );
+
+    KCmdLineOptions options;
+    options.add("+[file]", ki18n("File to open"));
+    options.add("scriptfile <scriptfile>", ki18n("Execute the scriptfile after startup."));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;

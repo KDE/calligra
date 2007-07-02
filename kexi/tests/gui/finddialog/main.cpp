@@ -26,7 +26,7 @@
 
 int main( int argc, char ** argv )
 {
-  KAboutData aboutData( "test", I18N_NOOP("KFind"), "0", "", KAboutData::License_LGPL );
+  KAboutData aboutData( "test", 0, ki18n("KFind"), "0", KLocalizedString(), KAboutData::License_LGPL );
   KCmdLineArgs::init( argc, argv, &aboutData );
   KApplication app;
 

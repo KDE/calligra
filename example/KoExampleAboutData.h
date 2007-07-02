@@ -32,10 +32,10 @@ KAboutData * newExampleAboutData()
     // The first argument of the KAboutData constructor is the instance name.
     // It is very important, it's what's used for many things, like the subdir in share/apps, etc.
     // It must also match the name of the application's .desktop file.
-    KAboutData * aboutData=new KAboutData( "example", I18N_NOOP("Example"),
-                                           version, description, KAboutData::License_GPL,
-                                           "(c) 1998-2000, Torben Weis");
-    aboutData->addAuthor("Torben Weis",0, "weis@kde.org");
+    KAboutData * aboutData=new KAboutData( "example", 0, ki18n("Example"),
+                                           version, ki18n(description), KAboutData::License_GPL,
+                                           ki18n("(c) 1998-2000, Torben Weis"));
+    aboutData->addAuthor(ki18n("Torben Weis"),KLocalizedString(), "weis@kde.org");
     return aboutData;
 }
 
