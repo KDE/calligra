@@ -53,7 +53,7 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
     QPointF p(0, sheet->staffSystem(curSystem)->top());
     int lastStart = 0;
     for (int i = 0; i < sheet->barCount(); i++) {
-        if (p.x() + sheet->bar(i)->desiredSize() > size.width()) {
+        if (i > 0 && p.x() + sheet->bar(i)->desiredSize() > size.width()) {
             // scale all sizes
             double factor = size.width() / p.x();
             QPointF sp = sheet->bar(lastStart)->position();
@@ -73,6 +73,16 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
         sheet->bar(i)->setPosition(p);
         sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
         p.setX(p.x() + sheet->bar(i)->size());
+    }
+    // potentially scale last staff system if it is too wide
+    if (p.x() > size.width()) {
+        double factor = size.width() / p.x();
+        QPointF sp = sheet->bar(lastStart)->position();
+        for (int j = lastStart; j < sheet->barCount(); j++) {
+            sheet->bar(j)->setPosition(sp);
+            sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
+            sp.setX(sp.x() + sheet->bar(j)->size());
+        }
     }
 
     sheet->setStaffSystemCount(curSystem+1);

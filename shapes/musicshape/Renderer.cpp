@@ -123,25 +123,25 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
     }
 
     Clef *cl = dynamic_cast<Clef*>(se);
-    if (cl) renderClef(painter, cl, pos.x(), state, xScale);
+    if (cl) renderClef(painter, cl, pos, state, xScale);
     KeySignature *ks = dynamic_cast<KeySignature*>(se);
-    if (ks) renderKeySignature(painter, ks, pos.x(), state, xScale);
+    if (ks) renderKeySignature(painter, ks, pos, state, xScale);
     TimeSignature* ts = dynamic_cast<TimeSignature*>(se);
-    if (ts) renderTimeSignature(painter, ts, pos.x(), xScale);
+    if (ts) renderTimeSignature(painter, ts, pos, xScale);
 }
 
 
-void MusicRenderer::renderClef(QPainter& painter, Clef *c, double x, RenderState& state, double xScale)
+void MusicRenderer::renderClef(QPainter& painter, Clef *c, QPointF pos, RenderState& state, double xScale)
 {
     state.clef = c;
     Staff* s = c->staff();
-    m_style->renderClef(painter, x + c->x() * xScale, s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
+    m_style->renderClef(painter, pos.x() + c->x() * xScale, pos.y() + s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }
 
-void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, double x, RenderState& state, double xScale)
+void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, QPointF pos, RenderState& state, double xScale)
 {
     Staff * s = ks->staff();
-    double curx = x + ks->x() * xScale;
+    double curx = pos.x() + ks->x() * xScale;
     // draw sharps
     int idx = 3;
     for (int i = 0; i < 7; i++) {
@@ -157,7 +157,7 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, doub
             while (line < 0) line += 7;
             while (line >= 6) line -= 7;
 
-            m_style->renderAccidental( painter, curx, s->top() + line * s->lineSpacing() / 2, 1 );
+            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 1 );
 
             curx += 6;
         }
@@ -179,7 +179,7 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, doub
             while (line < 0) line += 7;
             while (line >= 6) line -= 7;
 
-            m_style->renderAccidental( painter, curx, s->top() + line * s->lineSpacing() / 2, -1 );
+            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, -1 );
 
             curx += 6;
         }
@@ -187,12 +187,12 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, doub
     }
 }
 
-void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, double x, double xScale)
+void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, QPointF pos, double xScale)
 {
     Staff* s = ts->staff();
     double hh = 0.5 * (s->lineCount() - 1) * s->lineSpacing();
-    m_style->renderTimeSignatureNumber( painter, x + ts->x() * xScale, s->top() + hh, ts->width(), ts->beats());
-    m_style->renderTimeSignatureNumber( painter, x + ts->x() * xScale, s->top() + 2*hh, ts->width(), ts->beat());
+    m_style->renderTimeSignatureNumber( painter, pos.x() + ts->x() * xScale, pos.y() + s->top() + hh, ts->width(), ts->beats());
+    m_style->renderTimeSignatureNumber( painter, pos.x() + ts->x() * xScale, pos.y() + s->top() + 2*hh, ts->width(), ts->beat());
 }
 
 static double stemLength(Chord::Duration duration)
