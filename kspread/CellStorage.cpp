@@ -216,8 +216,6 @@ DatabaseRange CellStorage::databaseRange( int column, int row ) const
     if ( pair.second.isEmpty() )
         return DatabaseRange();
     // update the range, which might get changed
-    kDebug() << k_funcinfo << endl;
-    pair.second.dump();
     DatabaseRange databaseRange = pair.second;
     databaseRange.setRange( Region( pair.first.toRect(), d->sheet ) );
     return databaseRange;
@@ -229,8 +227,6 @@ void CellStorage::setDatabaseRange( const Region& region, const DatabaseRange& d
     if ( d->undoData )
         d->undoData->databases << d->databaseRangeStorage->undoData( region );
 
-    kDebug() << k_funcinfo << endl;
-    databaseRange.dump();
     d->databaseRangeStorage->insert( region, databaseRange );
 }
 

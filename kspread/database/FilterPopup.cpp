@@ -133,7 +133,7 @@ FilterPopup::~FilterPopup()
 void FilterPopup::updateFilter(Filter* filter) const
 {
     if (d->allCheckbox->isChecked())
-        filter->removeConditions(); // remove all conditions
+        filter->removeConditions(d->fieldNumber); // remove all conditions for this field
     else
     {
         filter->removeConditions(d->fieldNumber);

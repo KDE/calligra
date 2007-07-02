@@ -171,12 +171,12 @@ void DatabaseRange::operator=( const DatabaseRange& other )
 
 bool DatabaseRange::operator==( const DatabaseRange& other ) const
 {
-    return ( d && other.d ) ? ( d->name == other.d->name ) : ( d == other.d );
+    return (d == other.d);
 }
 
 bool DatabaseRange::operator<( const DatabaseRange& other ) const
 {
-    return (d && other.d) ? ( d->name < other.d->name ) : (d < other.d);
+    return (d < other.d);
 }
 
 void DatabaseRange::dump() const
