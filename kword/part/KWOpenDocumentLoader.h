@@ -73,7 +73,7 @@ protected:
     virtual void startBody(int total);
     virtual void processBody();
 
-    virtual KoShape* loadImage(KoTextLoadingContext& context, const QString& href);
+    virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
 
 private:
     void loadHeaderFooter(KoTextLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);

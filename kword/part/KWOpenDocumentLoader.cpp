@@ -36,6 +36,8 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoImageData.h>
+#include <KoTextAnchor.h>
+#include <KoShapeContainer.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -49,6 +51,8 @@ class KWOpenDocumentLoader::Private
         QPointer<KWDocument> document;
         /// Current master-page name (OASIS loading)
         QString currentMasterPage;
+        /// Current KWFrameSet name.
+        QString currentFramesetName;
 
         /// The progress value.
         int bodyProgressTotal;
@@ -241,6 +245,8 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     Q_ASSERT(factory);
     KoShape *shape = factory->createDefaultShape();
     KWTextFrame *frame = new KWTextFrame(shape, fs);
+    Q_UNUSED(frame);
+    d->currentFramesetName = fs->name();
     d->document->addFrameSet(fs);
 
     QTextCursor cursor( fs->document() );
@@ -272,22 +278,63 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     return true;
 }
 
-KoShape* KWOpenDocumentLoader::loadImage(KoTextLoadingContext& context, const QString& href)
+KoShape* KWOpenDocumentLoader::loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
 {
     Q_UNUSED(context);
+    Q_UNUSED(cursor);
+    const QString href = imageElem.attribute("href");
 
     KoImageData data( d->document->imageCollection() );
     data.setStoreHref( href );
 
     KWFrameSet* fs = new KWFrameSet();
-    Q_ASSERT(fs);
     fs->setName(href);
-
     KWImageFrame *imageFrame = new KWImageFrame(data, fs);
-    //imageFrame->shape()->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
     d->document->addFrameSet(fs);
-    Q_ASSERT(imageFrame->shape());
-    return imageFrame->shape();
+    KoShape* shape = imageFrame->shape();
+    if( ! shape )
+        return 0;
+
+    // Within text documents, the anchor type attribute text:anchor-type specifies how
+    // a frame is bound to the text document. The anchor position is the point at which
+    // a frame is bound to a text document. 
+    const QString anchortype = frameElem.attribute("anchor-type");
+    if( anchortype == "paragraph" ) {
+        // Anchor position is the paragraph that the current drawing shape element is contained in.
+        // The shape appears at the start of the paragraph element.
+
+        KWFrameSet *fs = d->document->frameSetByName( d->currentFramesetName );
+        if( ! fs ) {
+            kWarning(32001)<<"KWOpenDocumentLoader::loadImage No such frameset: "<<d->currentFramesetName<<endl;
+        }
+        else {
+            KoShape* datatextShape = fs->frames().first()->shape();
+            Q_ASSERT(datatextShape);
+            //KWTextFrameSet* kwfs = fs;
+            //QTextDocument *datadocument = kwfs->document();
+            //Q_ASSERT(datadocument);
+
+            KWFrame *frame = fs->frames().first();
+            Q_ASSERT(frame);
+            //frame->shape()->setPosition(QPointF(0,0));
+
+            //int cursorPosition = cursor.anchor();
+            KoShapeContainer* container = dynamic_cast<KoShapeContainer*> (datatextShape);
+            Q_ASSERT(container);
+            container->addChild(shape);
+
+            //TODO
+            //KoTextAnchor* anchor = new KoTextAnchor(shape);
+            //anchor->setOffset( QPointF(200.0,200.0) );
+
+            kDebug(32001)<<"KWOpenDocumentLoader::loadImage frameset.name="<<fs->name()<<endl;
+        }
+    }
+    //TODO else ...
+
+
+    //imageFrame->shape()->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
+    return shape;
 }
 
 void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const QDomDocument& settingsDoc)
@@ -503,6 +550,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
     Q_ASSERT(factory);
     KoShape *shape = factory->createDefaultShape();
     KWTextFrame *frame = new KWTextFrame(shape, fs);
+    d->currentFramesetName = fs->name();
     d->document->addFrameSet(fs);
 
     QTextCursor cursor( fs->document() );

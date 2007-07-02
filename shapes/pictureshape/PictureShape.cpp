@@ -60,6 +60,8 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
 {
     Q_UNUSED(context);
 
+    //QPointF pos = position();
+    //double x = KoUnit::parseValue( element.attribute("x") ) + pos.x();
     double x = KoUnit::parseValue( element.attribute("x") );
     double y = KoUnit::parseValue( element.attribute("y") );
     double width = KoUnit::parseValue( element.attribute("width") );
