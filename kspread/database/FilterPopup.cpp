@@ -31,6 +31,7 @@
 #include "DatabaseRange.h"
 #include "Doc.h"
 #include "Filter.h"
+#include "RowColumnFormat.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "ValueConverter.h"
@@ -46,30 +47,77 @@ public:
     QAbstractButton* emptyCheckbox;
     QAbstractButton* notEmptyCheckbox;
     QList<QCheckBox*> checkboxes;
-    QHash<QString, int> items;
     int fieldNumber;
     DatabaseRange database;
 
 public:
-    void createItemList(const Cell& cell, const DatabaseRange* database);
+    void initGUI(FilterPopup* parent, const Cell& cell, const DatabaseRange* database);
 };
 
-void FilterPopup::Private::createItemList(const Cell& cell, const DatabaseRange* database)
+void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const DatabaseRange* database)
 {
+    QButtonGroup* buttonGroup = new QButtonGroup(parent);
+    buttonGroup->setExclusive(false);
+    connect(buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
+            parent, SLOT(buttonClicked(QAbstractButton*)));
+
+    QVBoxLayout* layout = new QVBoxLayout(parent);
+    layout->setMargin(3);
+    layout->setSpacing(0);
+
+    allCheckbox = new QCheckBox(i18n("All"), parent);
+    buttonGroup->addButton(allCheckbox);
+    layout->addWidget(allCheckbox);
+    emptyCheckbox = new QCheckBox(i18n("Empty"), parent);
+    emptyCheckbox->setChecked(true);
+    buttonGroup->addButton(emptyCheckbox);
+    layout->addWidget(emptyCheckbox);
+    notEmptyCheckbox = new QCheckBox(i18n("Non-empty"), parent);
+    notEmptyCheckbox->setChecked(true);
+    buttonGroup->addButton(notEmptyCheckbox);
+    layout->addWidget(notEmptyCheckbox);
+    layout->addSpacing(3);
+
     const Sheet* sheet = cell.sheet();
     const QRect range = database->range().lastRange();
     const int start = database->orientation() == Qt::Vertical ? range.top() : range.left();
     const int end = database->orientation() == Qt::Vertical ? range.bottom() : range.right();
     const int j = database->orientation() == Qt::Vertical ? cell.column() : cell.row();
+    QHash<QString, bool> items;
     for (int i = start; i <= end; ++i)
     {
         const Value value = database->orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(j, i)
                             : sheet->cellStorage()->value(i, j);
-        if (value.isEmpty() || sheet->doc()->converter()->asString(value).asString().isEmpty())
+        const QString string = sheet->doc()->converter()->asString(value).asString();
+        const bool isFiltered = database->orientation() == Qt::Vertical
+                                ? sheet->rowFormat(i)->isFiltered()
+                                : sheet->columnFormat(i)->isFiltered();
+        if (string.isEmpty())
+        {
+            emptyCheckbox->setChecked(emptyCheckbox->isChecked() && !isFiltered);
             continue;
-        items[sheet->doc()->converter()->asString(value).asString()]++;
+        }
+        if (items.contains(string))
+            items[string] = items[string] && !isFiltered;
+        else
+            items[string] = !isFiltered;
     }
+    QList<QString> sortedItems = items.keys();
+    qSort(sortedItems);
+    bool isAll = true;
+    QCheckBox* item;
+    for (int i = 0; i < sortedItems.count(); ++i)
+    {
+        item = new QCheckBox(sortedItems[i], parent);
+        item->setChecked(items[sortedItems[i]]);
+        buttonGroup->addButton(item);
+        layout->addWidget(item);
+        checkboxes.append(item);
+        isAll = isAll && items[sortedItems[i]];
+    }
+    allCheckbox->setChecked(isAll && emptyCheckbox->isChecked());
+    notEmptyCheckbox->setChecked(isAll);
 }
 
 
@@ -83,41 +131,7 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, DatabaseRange* datab
 
     d->database = *database;
 
-    QButtonGroup* buttonGroup = new QButtonGroup(this);
-    buttonGroup->setExclusive(false);
-    connect(buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
-            this, SLOT(buttonClicked(QAbstractButton*)));
-
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setMargin(3);
-    layout->setSpacing(0);
-
-    d->allCheckbox = new QCheckBox(i18n("All"), this);
-    d->allCheckbox->setChecked(true);
-    buttonGroup->addButton(d->allCheckbox);
-    layout->addWidget(d->allCheckbox);
-    d->emptyCheckbox = new QCheckBox(i18n("Empty"), this);
-    d->emptyCheckbox->setChecked(true);
-    buttonGroup->addButton(d->emptyCheckbox);
-    layout->addWidget(d->emptyCheckbox);
-    d->notEmptyCheckbox = new QCheckBox(i18n("Non-empty"), this);
-    d->notEmptyCheckbox->setChecked(true);
-    buttonGroup->addButton(d->notEmptyCheckbox);
-    layout->addWidget(d->notEmptyCheckbox);
-    layout->addSpacing(3);
-
-    d->createItemList(cell, database);
-    QList<QString> items = d->items.keys();
-    qSort(items);
-    QCheckBox* item;
-    for (int i = 0; i < items.count(); ++i)
-    {
-        item = new QCheckBox(items[i], this);
-        item->setChecked(true);
-        buttonGroup->addButton(item);
-        layout->addWidget(item);
-        d->checkboxes.append(item);
-    }
+    d->initGUI(this, cell, database);
 
     if (database->orientation() == Qt::Vertical)
         d->fieldNumber = cell.column() - database->range().lastRange().left();
