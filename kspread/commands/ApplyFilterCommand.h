@@ -22,6 +22,8 @@
 
 #include "AbstractRegionCommand.h"
 
+#include "database/DatabaseRange.h"
+
 namespace KSpread
 {
 class DatabaseRange;
@@ -42,10 +44,10 @@ public:
     virtual void redo();
     virtual void undo();
 
-    void setDatabase(DatabaseRange* database);
+    void setDatabase(const DatabaseRange& database);
 
 private:
-    DatabaseRange* m_database;
+    DatabaseRange m_database;
 };
 
 } // namespace KSpread

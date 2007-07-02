@@ -40,6 +40,10 @@ public:
 
     virtual void redo();
     virtual void undo();
+
+private:
+    int m_id;
+    static int s_id;
 };
 
 } // namespace KSpread

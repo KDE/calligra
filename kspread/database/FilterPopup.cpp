@@ -43,6 +43,8 @@ class FilterPopup::Private
 {
 public:
     QAbstractButton* allCheckbox;
+    QAbstractButton* emptyCheckbox;
+    QAbstractButton* notEmptyCheckbox;
     QList<QCheckBox*> checkboxes;
     QHash<QString, int> items;
     int fieldNumber;
@@ -90,25 +92,24 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, DatabaseRange* datab
     layout->setMargin(3);
     layout->setSpacing(0);
 
-    QCheckBox* item;
     d->allCheckbox = new QCheckBox(i18n("All"), this);
     d->allCheckbox->setChecked(true);
     buttonGroup->addButton(d->allCheckbox);
     layout->addWidget(d->allCheckbox);
-//     item = new QCheckBox(i18n("Top 10"), this);
-//     buttonGroup->addButton(item);
-//     layout->addWidget(item);
-//     item = new QCheckBox(i18n("Empty"), this);
-//     buttonGroup->addButton(item);
-//     layout->addWidget(item);
-//     item = new QCheckBox(i18n("Non-empty"), this);
-//     buttonGroup->addButton(item);
-//     layout->addWidget(item);
+    d->emptyCheckbox = new QCheckBox(i18n("Empty"), this);
+    d->emptyCheckbox->setChecked(true);
+    buttonGroup->addButton(d->emptyCheckbox);
+    layout->addWidget(d->emptyCheckbox);
+    d->notEmptyCheckbox = new QCheckBox(i18n("Non-empty"), this);
+    d->notEmptyCheckbox->setChecked(true);
+    buttonGroup->addButton(d->notEmptyCheckbox);
+    layout->addWidget(d->notEmptyCheckbox);
     layout->addSpacing(3);
 
     d->createItemList(cell, database);
     QList<QString> items = d->items.keys();
     qSort(items);
+    QCheckBox* item;
     for (int i = 0; i < items.count(); ++i)
     {
         item = new QCheckBox(items[i], this);
@@ -134,11 +135,19 @@ void FilterPopup::updateFilter(Filter* filter) const
 {
     if (d->allCheckbox->isChecked())
         filter->removeConditions(d->fieldNumber); // remove all conditions for this field
+    else if (d->notEmptyCheckbox->isChecked())
+    {
+        // emptyCheckbox is not checked, because allCheckbox is not.
+        filter->removeConditions(d->fieldNumber);
+        filter->addCondition(Filter::AndComposition, d->fieldNumber, Filter::NotMatch, "");
+    }
     else
     {
         filter->removeConditions(d->fieldNumber);
         QList<QString> matchList;
         QList<QString> notMatchList;
+        if (d->emptyCheckbox->isChecked())
+            matchList.append("");
         foreach (QCheckBox* checkbox, d->checkboxes)
         {
             if (checkbox->isChecked())
@@ -164,8 +173,7 @@ void FilterPopup::closeEvent(QCloseEvent* event)
     ApplyFilterCommand* command = new ApplyFilterCommand();
     command->setSheet((*d->database.range().constBegin())->sheet());
     command->add(d->database.range());
-d->database.dump();
-    command->setDatabase(&d->database); // FIXME Stefan: Really needed?
+    command->setDatabase(d->database);
     command->execute();
     QFrame::closeEvent(event);
 }
@@ -176,19 +184,48 @@ void FilterPopup::buttonClicked(QAbstractButton* button)
     {
         foreach (QCheckBox* checkbox, d->checkboxes)
             checkbox->setChecked(button->isChecked());
+        d->emptyCheckbox->setChecked(button->isChecked());
+        d->notEmptyCheckbox->setChecked(button->isChecked());
+    }
+    else if (button == d->emptyCheckbox)
+    {
+        bool isAll = button->isChecked();
+        if (isAll)
+        {
+            foreach (QCheckBox* checkbox, d->checkboxes)
+            {
+                if (!checkbox->isChecked())
+                {
+                    isAll = false;
+                    break;
+                }
+            }
+            d->notEmptyCheckbox->setChecked(isAll);
+        }
+        d->allCheckbox->setChecked(isAll);
+    }
+    else if (button == d->notEmptyCheckbox)
+    {
+        foreach (QCheckBox* checkbox, d->checkboxes)
+            checkbox->setChecked(button->isChecked());
+        d->allCheckbox->setChecked(button->isChecked() && d->emptyCheckbox->isChecked());
     }
     else
     {
-        bool isAll = true;
-        foreach (QCheckBox* checkbox, d->checkboxes)
+        bool isAll = d->emptyCheckbox->isChecked();
+        if (isAll)
         {
-            if (!checkbox->isChecked())
+            foreach (QCheckBox* checkbox, d->checkboxes)
             {
-                isAll = false;
-                break;
+                if (!checkbox->isChecked())
+                {
+                    isAll = false;
+                    break;
+                }
             }
         }
         d->allCheckbox->setChecked(isAll);
+        d->notEmptyCheckbox->setChecked(isAll);
     }
 }
 

@@ -30,8 +30,11 @@
 
 using namespace KSpread;
 
+int AutoFilterCommand::s_id = 1; // FIXME Stefan: Problems with loaded filters. -> FilterManager
+
 AutoFilterCommand::AutoFilterCommand()
     : AbstractRegionCommand()
+    , m_id(s_id++)
 {
     setText( i18n( "Auto-Filter" ) );
 }
@@ -42,7 +45,7 @@ AutoFilterCommand::~AutoFilterCommand()
 
 void AutoFilterCommand::redo()
 {
-    DatabaseRange database("auto-filter-1");
+    DatabaseRange database("auto-filter-" + QString::number(m_id));
     database.setDisplayFilterButtons(true);
     m_sheet->cellStorage()->setDatabaseRange(*this, database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));

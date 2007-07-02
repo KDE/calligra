@@ -43,8 +43,8 @@ ApplyFilterCommand::~ApplyFilterCommand()
 
 void ApplyFilterCommand::redo()
 {
-    m_database->filter()->apply(m_database);
-    m_sheet->cellStorage()->setDatabaseRange(*this, *m_database);
+    m_database.filter()->apply(&m_database);
+    m_sheet->cellStorage()->setDatabaseRange(*this, m_database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
@@ -52,7 +52,7 @@ void ApplyFilterCommand::undo()
 {
 }
 
-void ApplyFilterCommand::setDatabase(DatabaseRange* database)
+void ApplyFilterCommand::setDatabase(const DatabaseRange& database)
 {
     m_database = database;
 }
