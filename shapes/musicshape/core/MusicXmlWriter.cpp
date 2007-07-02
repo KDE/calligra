@@ -93,27 +93,62 @@ static void writePartDesc(KoXmlWriter& w, int id, Part* part)
     w.endElement(); // music:score-part
 }
 
-static void writeChord(KoXmlWriter& w, Chord* chord)
+static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
 {
     w.startElement("music:note");
     if (chord->noteCount()) {
         w.startElement("music:pitch");
+        w.startElement("music:step");
         int pitch = chord->note(0)->pitch();
-        char note = 'A' + (pitch + 2) % 7;
+        char note = 'A' + ((((pitch + 2) % 7) + 7) % 7);
         w.addTextNode(QString(note));
-        w.endElement(); // music:pitch
+        w.endElement(); // music:step
         w.startElement("music:octave");
-        w.addTextNode(QString::number(pitch / 7 + 4));
+        w.addTextNode(QString::number((pitch + 4*7) / 7)); // first add, than divide to get proper rounding
         w.endElement(); // music:octave
+        if (chord->note(0)->accidentals()) {
+            w.startElement("music:alter");
+            w.addTextNode(QString::number(chord->note(0)->accidentals()));
+            w.endElement(); // music:alter
+        }
+        w.endElement(); // music:pitch
     }
     w.startElement("music:duration");
     w.addTextNode(QString::number(chord->length()));
     w.endElement(); // music:duration
 
+    w.startElement("music:voice");
+    w.addTextNode(QString::number(part->indexOfVoice(voice) + 1));
+    w.endElement(); // music:voice
+    
     w.startElement("music:type");
     w.addTextNode(Chord::durationToString(chord->duration()));
     w.endElement(); // music:type
+
+    for (int i = 0; i < chord->dots(); i++) {
+        w.startElement("music:dot");
+        w.endElement(); // music:dot
+    }
+
+    if (chord->note(0)->accidentals()) {
+        // TODO this should actually depend on key signature/previous accidentals
+        w.startElement("music:accidental");
+        switch (chord->note(0)->accidentals()) {
+            case -2: w.addTextNode("flat-flat"); break;
+            case -1: w.addTextNode("flat"); break;
+            case  0: w.addTextNode("natural"); break;
+            case  1: w.addTextNode("sharp"); break;
+            case  2: w.addTextNode("double-sharp"); break;
+        }
+        w.endElement(); // music:accidental
+    }
     
+    if (part->staffCount() > 1) {
+        // only write staff info when more than one staff exists
+        w.startElement("music:staff");
+        w.addTextNode(QString::number(part->indexOfStaff(chord->note(0)->staff()) + 1));
+        w.endElement();  //music:staff
+    }
     w.endElement(); // music:note
 }
 
@@ -151,7 +186,7 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
                 curTime += ve->length();
 
                 Chord* c =  dynamic_cast<Chord*>(ve);
-                if(c) writeChord(w, c);
+                if(c) writeChord(w, c, v, part);
             }
         }
         w.endElement(); // music:measure

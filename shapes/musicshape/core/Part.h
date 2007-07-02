@@ -107,6 +107,8 @@ public:
      */
     Staff* insertStaff(int before);
 
+    int indexOfStaff(Staff* staff);
+    
     /**
      * Returns the number of voices in this part. Normally the number of voices will be at least as high as the
      * number of staves, but this is in no way enforced.
@@ -124,6 +126,8 @@ public:
      * Adds a voice to this part. The created voice is returned.
      */
     Voice* addVoice();
+
+    int indexOfVoice(Voice* voice);
 private:
     class Private;
     Private * const d;

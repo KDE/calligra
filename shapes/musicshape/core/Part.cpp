@@ -106,6 +106,12 @@ Staff* Part::insertStaff(int before)
     return staff;
 }
 
+int Part::indexOfStaff(Staff* staff)
+{
+    Q_ASSERT(staff);
+    return d->staves.indexOf(staff);
+}
+
 int Part::voiceCount() const
 {
     return d->voices.size();
@@ -122,6 +128,12 @@ Voice* Part::addVoice()
     Voice* voice = new Voice(this);
     d->voices.append(voice);
     return voice;
+}
+
+int Part::indexOfVoice(Voice* voice)
+{
+    Q_ASSERT(voice);
+    return d->voices.indexOf(voice);
 }
 
 } // namespace

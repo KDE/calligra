@@ -21,7 +21,10 @@
 #include "Part.h"
 #include "PartGroup.h"
 #include "MusicXmlWriter.h"
-
+#include "VoiceBar.h"
+#include "Bar.h"
+#include "Chord.h"
+#include "Note.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
@@ -33,33 +36,10 @@ using namespace MusicCore;
 
 void MusicXmlWriterTest::init()
 {
-    writer = new MusicXmlWriter();
-    dev = new QBuffer();
-    dev->open(QIODevice::ReadWrite);
-    xmlWriter = new KoXmlWriter(dev);
-    xmlWriter->startDocument("score-partwise", "-//Recordare//DTD MusicXML 1.1 Partwise//EN",
-                     "http://www.musicxml.org/dtds/partwise.dtd");
 }
 
 void MusicXmlWriterTest::cleanup()
 {
-    delete xmlWriter;
-    delete writer;
-    delete dev;
-}
-
-void MusicXmlWriterTest::testEmptySheet()
-{
-    Sheet* sheet = new Sheet();
-    writer->writeSheet(*xmlWriter, sheet);
-    delete sheet;
-    xmlWriter->endDocument();
-
-    KoXmlDocument doc;
-    KoXml::setDocument(doc, dev, true);
-    KoXmlDocumentType docType = doc.doctype();
-
-    QCOMPARE(docType.name(), QString("score-partwise"));
 }
 
 void MusicXmlWriterTest::testParts()
@@ -71,11 +51,8 @@ void MusicXmlWriterTest::testParts()
 
     sheet->addBar();
 
-    writer->writeSheet(*xmlWriter, sheet);
+    validateOutput(sheet, "parts.xml");
     delete sheet;
-    xmlWriter->endDocument();
-    
-    validateOutput("parts.xml"); 
 }
 
 void MusicXmlWriterTest::testPartGroups()
@@ -99,11 +76,8 @@ void MusicXmlWriterTest::testPartGroups()
     pg->setSymbol(PartGroup::Bracket);
     pg->setCommonBarLines(false);
 
-    writer->writeSheet(*xmlWriter, sheet);
+    validateOutput(sheet, "partgroups.xml");
     delete sheet;
-    xmlWriter->endDocument();
-    
-    validateOutput("partgroups.xml");
 }
 
 void MusicXmlWriterTest::testNestedPartGroups()
@@ -122,11 +96,70 @@ void MusicXmlWriterTest::testNestedPartGroups()
     sheet->addPartGroup(4, 5)->setName("group 5");
     sheet->addPartGroup(4, 5)->setName("group 6");
 
-    writer->writeSheet(*xmlWriter, sheet);
+    validateOutput(sheet, "nestedpartgroups.xml");
     delete sheet;
-    xmlWriter->endDocument();
-    
-    validateOutput("nestedpartgroups.xml");
+}
+
+void MusicXmlWriterTest::testNoteDurations()
+{
+    Sheet* sheet = new Sheet();
+    Bar* bar = sheet->addBar();
+    Part* part = sheet->addPart("part");
+    Voice* voice = part->addVoice();
+    Staff* staff = part->addStaff();
+    VoiceBar* vb = bar->voice(voice);
+
+    for (Chord::Duration d = Chord::HundredTwentyEighth; d <= Chord::Breve; d = (Chord::Duration)(d + 1)) {
+        Chord* c = new Chord(d);
+        c->addNote(staff, 0);
+        vb->addElement(c);
+    }
+    for (int i = 1; i < 4; i++) {
+        Chord* c = new Chord(Chord::Quarter, i);
+        c->addNote(staff, 0);
+        vb->addElement(c);
+    }
+
+    validateOutput(sheet, "notedurations.xml");
+    delete sheet;
+}
+
+void MusicXmlWriterTest::testNotePitch()
+{
+    Sheet* sheet = new Sheet();
+    Bar* bar = sheet->addBar();
+    Part* part = sheet->addPart("part");
+    Voice* voice = part->addVoice();
+    Staff* staff = part->addStaff();
+    VoiceBar* vb = bar->voice(voice);
+
+    for (int p = -20; p <= 20; p++) {
+        Chord* c = new Chord(Chord::Quarter);
+        c->addNote(staff, p);
+        vb->addElement(c);
+    }
+
+    validateOutput(sheet, "notepitch.xml");
+    delete sheet;
+}
+
+void MusicXmlWriterTest::testNoteAccidentals()
+{
+    Sheet* sheet = new Sheet();
+    Bar* bar = sheet->addBar();
+    Part* part = sheet->addPart("part");
+    Voice* voice = part->addVoice();
+    Staff* staff = part->addStaff();
+    VoiceBar* vb = bar->voice(voice);
+
+    for (int a = -2; a <= 2; a++) {
+        Chord* c = new Chord(Chord::Quarter);
+        c->addNote(staff, 0, a);
+        vb->addElement(c);
+    }
+
+    validateOutput(sheet, "noteaccidentals.xml");
+    delete sheet;
 }
 
 #define FAIL(message) do { QTest::qFail(message, __FILE__, __LINE__); return false; } while (0)
@@ -180,8 +213,20 @@ bool MusicXmlWriterTest::compareNodes(KoXmlNode& valid, KoXmlNode& result, QStri
     return true;
 }
 
-bool MusicXmlWriterTest::validateOutput(const char* fname)
+bool MusicXmlWriterTest::validateOutput(Sheet* sheet, const char* fname)
 {
+    MusicCore::MusicXmlWriter writer;
+    QIODevice* dev = new QBuffer();
+    dev->open(QIODevice::ReadWrite);
+    KoXmlWriter xmlWriter(dev);
+
+    xmlWriter.startDocument("score-partwise", "-//Recordare//DTD MusicXML 1.1 Partwise//EN",
+                              "http://www.musicxml.org/dtds/partwise.dtd");
+                              
+    writer.writeSheet(xmlWriter, sheet);
+    xmlWriter.endDocument();
+    
+    
     QFile validFile(QString(KDESRCDIR "/files/%1").arg(fname));
     validFile.open(QIODevice::ReadOnly);
     KoXmlDocument valid;
@@ -197,6 +242,9 @@ bool MusicXmlWriterTest::validateOutput(const char* fname)
         f.write(((QBuffer*)dev)->data());
         f.close();
     }
+
+    delete dev;
+
     return res;
 }
 

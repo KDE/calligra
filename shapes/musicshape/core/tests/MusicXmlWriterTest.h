@@ -26,6 +26,7 @@ class QIODevice;
 class KoXmlWriter;
 
 namespace MusicCore {
+    class Sheet;
     class MusicXmlWriter;
 }
 
@@ -35,17 +36,16 @@ class MusicXmlWriterTest : public QObject
 private slots:
     void init();
     void cleanup();
-    void testEmptySheet();
     void testParts();
     void testPartGroups();
     void testNestedPartGroups();
-private:
-    MusicCore::MusicXmlWriter* writer;
-    QIODevice* dev;
-    KoXmlWriter* xmlWriter;
 
+    void testNoteDurations();
+    void testNotePitch();
+    void testNoteAccidentals();
+private:
     bool compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path = QString());
-    bool validateOutput(const char* fname);
+    bool validateOutput(MusicCore::Sheet* sheet, const char* fname);
 };
 
 #endif

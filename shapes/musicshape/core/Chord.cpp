@@ -35,10 +35,11 @@ Chord::Chord(Duration duration, int dots) : VoiceElement(), d(new Private)
     d->dots = dots;
 
     int baseLength = durationToTicks(duration);
+    int length = baseLength;
     for (int i = 0; i < dots; i++) {
-        baseLength += baseLength >> 1;
+        length += baseLength >> (i+1);
     }
-    setLength(baseLength);
+    setLength(length);
     setWidth(7 + (3 * dots + (dots ? 2 : 0)));
 }
 
@@ -47,10 +48,11 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
     d->duration = duration;
     d->dots = dots;
     int baseLength = durationToTicks(duration);
+    int length = baseLength;
     for (int i = 0; i < dots; i++) {
-        baseLength += baseLength >> 1;
+        length += baseLength >> (i+1);
     }
-    setLength(baseLength);
+    setLength(length);
     setStaff(staff);
     setWidth(7 + (3 * dots + (dots ? 2 : 0)));
 }
@@ -79,6 +81,12 @@ int Chord::dots() const
 void Chord::setDots(int dots)
 {
     d->dots = dots;
+    int baseLength = durationToTicks(d->duration);
+    int length = baseLength;
+    for (int i = 0; i < dots; i++) {
+        length += baseLength >> (i+1);
+    }
+    setLength(length);
 }
 
 int Chord::noteCount() const
@@ -144,6 +152,7 @@ QString Chord::durationToString(Duration duration)
         case Whole:                 return "whole";
         case Breve:                 return "breve";
     }
+    return "[unknown note length]";
 }
 
 } // namespace MusicCore
