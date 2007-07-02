@@ -55,7 +55,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
 	kDebug() << "Scripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-	foreach(QByteArray ba, args->getOptionList("scriptfile")) {
+	foreach(QString ba, args->getOptionList("scriptfile")) {
 		QUrl url(ba);
 		QFileInfo fi(url.path());
 		const QString file = fi.absoluteFilePath();
