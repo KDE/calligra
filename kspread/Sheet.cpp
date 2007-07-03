@@ -711,39 +711,20 @@ int Sheet::bottomRow( double _ypos ) const
 
 double Sheet::columnPosition( int _col ) const
 {
+    const int max = qMin(_col, KS_colMax);
     double x = 0.0;
-    for ( int col = 1; col < _col; col++ )
-    {
-        // Should never happen
-        if ( col > KS_colMax )
-        {
-            kDebug(36001) << "Sheet:columnPos: invalid column (col: " << col << ')' << endl;
-            return x;
-        }
-
-        x += columnFormat( col )->width();
-    }
-
+    for (int col = 1; col < max; ++col)
+        x += columnFormat(col)->width();
     return x;
 }
 
 
 double Sheet::rowPosition( int _row ) const
 {
+    const int max = qMin(_row, KS_rowMax);
     double y = 0.0;
-
-    for ( int row = 1 ; row < _row ; row++ )
-    {
-        // Should never happen
-        if ( row > KS_rowMax )
-        {
-            kDebug(36001) << "Sheet:rowPos: invalid row (row: " << row << ')' << endl;
-            return y;
-        }
-
-        y += rowFormat( row )->height();
-    }
-
+    for (int row = 1; row < max; ++row)
+        y += rowFormat(row)->height();
     return y;
 }
 
