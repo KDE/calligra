@@ -1349,7 +1349,7 @@ void TextTool::editingPluginEvents() {
         int to = m_caret.position();
         if(from > to)
             qSwap(from, to);
-        QString section = block.text().mid(from, to - from);
+        QString section = block.text().mid(from - block.position(), to - from);
         if(section.contains(' ')) {
             finishedWord();
             m_prevCursorPosition = -1;
