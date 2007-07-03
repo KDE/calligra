@@ -20,7 +20,7 @@
 #ifndef PARSER_TEST_H
 #define PARSER_TEST_H
 
-int parserTest(const QString &st, const QList<QStringList> &params)
+int parserTest(const QString &st, const QStringList &params)
 {
 	int r = 0;
 

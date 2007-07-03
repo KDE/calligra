@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 		r=tableViewTest();
 #endif
 	else if (test_name == "parser") {
-		QList<QStringList> params;
+		QStringList params;
 		if (args->isSet("query-params"))
 			params = args->getOption("query-params").split('|');
 		r=parserTest(QString(args->arg(2)), params);
