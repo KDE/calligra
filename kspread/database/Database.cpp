@@ -21,10 +21,14 @@
 
 #include <QString>
 
+#include <KoXmlNS.h>
+#include <KoXmlWriter.h>
+
 #include "DatabaseSource.h"
 #include "Filter.h"
 #include "FilterPopup.h"
 #include "Region.h"
+#include "Util.h"
 
 using namespace KSpread;
 
@@ -161,6 +165,48 @@ void Database::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRec
 Filter* Database::filter()
 {
     return d->filter;
+}
+
+bool Database::loadOdf(const KoXmlElement& element, Sheet* const sheet)
+{
+    // TODO
+    return true;
+}
+
+void Database::saveOdf(KoXmlWriter& xmlWriter) const
+{
+    if (d->targetRangeAddress.isEmpty())
+        return;
+    xmlWriter.startElement("table:database-range");
+    if (!d->name.isNull())
+        xmlWriter.addAttribute("table:name", d->name);
+    if (d->isSelection)
+        xmlWriter.addAttribute("table:is-selection", "true");
+    if (d->onUpdateKeepStyles)
+        xmlWriter.addAttribute("table:on-update-keep-styles", "true");
+    if (!d->onUpdateKeepSize)
+        xmlWriter.addAttribute("table:on-update-keep-size", "false");
+    if (!d->hasPersistentData)
+        xmlWriter.addAttribute("table:has-persistent-data", "false");
+    if (d->orientation == Private::Column)
+        xmlWriter.addAttribute("table:orientation", "column");
+    if (!d->containsHeader)
+        xmlWriter.addAttribute("table:contains-header", "false");
+    if (d->displayFilterButtons)
+        xmlWriter.addAttribute("table:display-filter-buttons", "true");
+    xmlWriter.addAttribute("table:target-range-address", Oasis::encodeFormula(d->targetRangeAddress.name()));
+    if (d->refreshDelay)
+        xmlWriter.addAttribute("table:display-filter-buttons", d->refreshDelay);
+    // TODO
+//     if (d->source)
+//         d->source->saveOdf(xmlWriter);
+//     if (d->sort)
+//         d->sort->saveOdf(xmlWriter);
+    if (d->filter)
+        d->filter->saveOdf(xmlWriter);
+//     if (d->subtotalRules)
+//         d->subtotalRules->saveOdf(xmlWriter);
+    xmlWriter.endElement();
 }
 
 void Database::operator=( const Database& other )

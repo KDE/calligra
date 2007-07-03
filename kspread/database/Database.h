@@ -23,14 +23,19 @@
 #include <QObject>
 #include <QSharedDataPointer>
 
+#include <KoXmlReader.h>
+
 class QRect;
 class QWidget;
+
+class KoXmlWriter;
 
 namespace KSpread
 {
 class Cell;
 class Filter;
 class Region;
+class Sheet;
 
 /**
  * OpenDocument, 8.6.1 Database Range
@@ -98,6 +103,9 @@ public:
     void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect);
 
     Filter* filter();
+
+    bool loadOdf(const KoXmlElement& element, Sheet* const sheet);
+    void saveOdf(KoXmlWriter& xmlWriter) const;
 
     void operator=( const Database& other );
     bool operator==( const Database& other ) const;

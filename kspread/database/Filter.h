@@ -92,7 +92,7 @@ public:
 
     void apply(const Database* database) const;
 
-    bool loadOdf(const KoXmlElement& sheetElement, Sheet* const sheet);
+    bool loadOdf(const KoXmlElement& element, Sheet* const sheet);
     void saveOdf(KoXmlWriter& xmlWriter) const;
 
     void dump() const;
