@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=
 Name=Krita JPEG Import Filter
+Name[fa]=پالایۀ واردات Krita JPEG
 Name[sv]=Krita JPEG-importfilter
 ServiceTypes=KOfficeFilter
 Type=Service

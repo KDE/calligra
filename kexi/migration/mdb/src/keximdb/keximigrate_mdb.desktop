@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Name=MS Access (MDB) Migration Driver for Kexi
 Name[de]=MS-Access-Migrationstreiber für Kexi
+Name[fa]=گردانندۀ جابه‌جایی MS Access (MDB) برای Kexi
 Name[ja]=Kexi MS Access (MDB) データ移行ドライバ
 Name[sv]=MS Access (MDB)-övergångsdrivrutin för Kexi
 X-KDE-Library=keximigrate_mdb
