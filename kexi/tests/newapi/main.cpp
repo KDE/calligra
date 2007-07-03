@@ -229,7 +229,7 @@ int main(int argc, char** argv)
 		QList<QStringList> params;
 		if (args->isSet("query-params"))
 			params = args->getOption("query-params").split('|');
-		r=parserTest(args->arg(2), params);
+		r=parserTest(QString(args->arg(2)), params);
 	}
 	else if (test_name == "dr_prop")
 		r=drPropTest();
