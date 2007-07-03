@@ -29,7 +29,7 @@
 #include <klocale.h>
 
 #include "CellStorage.h"
-#include "DatabaseRange.h"
+#include "Database.h"
 #include "Doc.h"
 #include "Filter.h"
 #include "RowColumnFormat.h"
@@ -49,14 +49,14 @@ public:
     QAbstractButton* notEmptyCheckbox;
     QList<QCheckBox*> checkboxes;
     int fieldNumber;
-    DatabaseRange database;
+    Database database;
     bool dirty;
 
 public:
-    void initGUI(FilterPopup* parent, const Cell& cell, const DatabaseRange* database);
+    void initGUI(FilterPopup* parent, const Cell& cell, const Database* database);
 };
 
-void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const DatabaseRange* database)
+void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const Database* database)
 {
     QButtonGroup* buttonGroup = new QButtonGroup(parent);
     buttonGroup->setExclusive(false);
@@ -133,7 +133,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
 }
 
 
-FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, DatabaseRange* database)
+FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, Database* database)
     : QFrame(parent, Qt::Popup)
     , d(new Private)
 {

@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "DatabaseRange.h"
+#include "Database.h"
 
 #include <QString>
 
@@ -31,7 +31,7 @@ using namespace KSpread;
 class Sort;
 class SubtotalRules;
 
-class DatabaseRange::Private : public QSharedData
+class Database::Private : public QSharedData
 {
 public:
     Private()
@@ -96,59 +96,59 @@ private:
     void operator=(const Private&);
 };
 
-DatabaseRange::DatabaseRange()
+Database::Database()
     : d( new Private )
 {
 }
 
-DatabaseRange::DatabaseRange( const QString& name )
+Database::Database( const QString& name )
     : d( new Private )
 {
     d->name = name;
 }
 
-DatabaseRange::DatabaseRange(const DatabaseRange& other)
+Database::Database(const Database& other)
     : QObject(other.parent())
     , d(other.d)
 {
 }
 
-DatabaseRange::~DatabaseRange()
+Database::~Database()
 {
 }
 
-bool DatabaseRange::isEmpty() const
+bool Database::isEmpty() const
 {
     return d->name.isNull(); // it may be empty though
 }
 
-Qt::Orientation DatabaseRange::orientation() const
+Qt::Orientation Database::orientation() const
 {
     return d->orientation == Private::Row ? Qt::Vertical : Qt::Horizontal;
 }
 
-bool DatabaseRange::displayFilterButtons() const
+bool Database::displayFilterButtons() const
 {
     return d->displayFilterButtons;
 }
 
-void DatabaseRange::setDisplayFilterButtons( bool enable )
+void Database::setDisplayFilterButtons( bool enable )
 {
     d->displayFilterButtons = enable;
 }
 
-const KSpread::Region& DatabaseRange::range() const
+const KSpread::Region& Database::range() const
 {
     return d->targetRangeAddress;
 }
 
-void DatabaseRange::setRange( const Region& region )
+void Database::setRange( const Region& region )
 {
     Q_ASSERT( region.isContiguous() );
     d->targetRangeAddress = region;
 }
 
-void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
+void Database::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
 {
     kDebug() << k_funcinfo << endl;
     dump();
@@ -158,29 +158,29 @@ void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& ce
     popup->show();
 }
 
-Filter* DatabaseRange::filter()
+Filter* Database::filter()
 {
     return d->filter;
 }
 
-void DatabaseRange::operator=( const DatabaseRange& other )
+void Database::operator=( const Database& other )
 {
     d = other.d;
 }
 
-bool DatabaseRange::operator==( const DatabaseRange& other ) const
+bool Database::operator==( const Database& other ) const
 {
     return (d == other.d);
 }
 
-bool DatabaseRange::operator<( const DatabaseRange& other ) const
+bool Database::operator<( const Database& other ) const
 {
     return (d < other.d);
 }
 
-void DatabaseRange::dump() const
+void Database::dump() const
 {
     if (d->filter) d->filter->dump();
 }
 
-#include "DatabaseRange.moc"
+#include "Database.moc"

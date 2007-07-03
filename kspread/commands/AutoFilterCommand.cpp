@@ -26,7 +26,7 @@
 #include "Doc.h"
 #include "Sheet.h"
 
-#include "database/DatabaseRange.h"
+#include "database/Database.h"
 
 using namespace KSpread;
 
@@ -45,14 +45,14 @@ AutoFilterCommand::~AutoFilterCommand()
 
 void AutoFilterCommand::redo()
 {
-    DatabaseRange database("auto-filter-" + QString::number(m_id));
+    Database database("auto-filter-" + QString::number(m_id));
     database.setDisplayFilterButtons(true);
-    m_sheet->cellStorage()->setDatabaseRange(*this, database);
+    m_sheet->cellStorage()->setDatabase(*this, database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void AutoFilterCommand::undo()
 {
-    m_sheet->cellStorage()->setDatabaseRange( *this, DatabaseRange() );
+    m_sheet->cellStorage()->setDatabase( *this, Database() );
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }

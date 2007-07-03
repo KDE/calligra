@@ -33,7 +33,7 @@
 #include "Validity.h"
 #include "Value.h"
 
-#include "database/DatabaseRange.h"
+#include "database/Database.h"
 
 namespace KSpread
 {
@@ -108,10 +108,10 @@ public:
     void setConditions( const Region& region, Conditions conditions );
 
     /**
-     * \return the database range associated with the Cell at \p column , \p row .
+     * \return the database associated with the Cell at \p column , \p row .
      */
-    DatabaseRange databaseRange( int column, int row ) const;
-    void setDatabaseRange( const Region& region, const DatabaseRange& databaseRange );
+    Database database( int column, int row ) const;
+    void setDatabase( const Region& region, const Database& database );
 
     /**
      * \return the formula associated with the Cell at \p column , \p row .

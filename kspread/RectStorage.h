@@ -33,7 +33,7 @@
 #include "chart/TableModel.h"
 #include "Validity.h"
 
-#include "database/DatabaseRange.h"
+#include "database/Database.h"
 
 static const int g_garbageCollectionTimeOut = 100;
 
@@ -455,15 +455,15 @@ protected Q_SLOTS:
 
 
 
-class DatabaseRangeStorage : public QObject, public RectStorage<DatabaseRange>
+class DatabaseStorage : public QObject, public RectStorage<Database>
 {
     Q_OBJECT
 public:
-    explicit DatabaseRangeStorage( Sheet* sheet ) : RectStorage<DatabaseRange>( sheet ) {}
+    explicit DatabaseStorage( Sheet* sheet ) : RectStorage<Database>( sheet ) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<DatabaseRange>::garbageCollection(); }
+    virtual void garbageCollection() { RectStorage<Database>::garbageCollection(); }
 };
 
 

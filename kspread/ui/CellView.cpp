@@ -2429,14 +2429,14 @@ bool CellView::dimensionFits() const
 
 void CellView::Private::checkForFilterButton(const Cell& cell)
 {
-    const DatabaseRange databaseRange = cell.databaseRange();
-    if (databaseRange.isEmpty() || !databaseRange.displayFilterButtons())
+    const Database database = cell.database();
+    if (database.isEmpty() || !database.displayFilterButtons())
     {
         filterButton = false;
         return;
     }
-    if (databaseRange.orientation() == Qt::Horizontal)
-        filterButton = databaseRange.range().firstRange().left() == cell.column();
+    if (database.orientation() == Qt::Horizontal)
+        filterButton = database.range().firstRange().left() == cell.column();
     else // Qt::Vertical
-        filterButton = databaseRange.range().firstRange().top() == cell.row();
+        filterButton = database.range().firstRange().top() == cell.row();
 }

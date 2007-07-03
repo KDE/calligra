@@ -24,7 +24,7 @@
 
 namespace KSpread
 {
-class DatabaseRange;
+class Database;
 
 /**
  * OpenDocument, 8.7.1 Table Filter
@@ -79,7 +79,7 @@ public:
 
     bool isEmpty() const;
 
-    void apply(const DatabaseRange* database) const;
+    void apply(const Database* database) const;
 
     void dump() const;
 

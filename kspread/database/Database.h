@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DATABASE_RANGE
-#define KSPREAD_DATABASE_RANGE
+#ifndef KSPREAD_DATABASE
+#define KSPREAD_DATABASE
 
 #include <QObject>
 #include <QSharedDataPointer>
@@ -26,48 +26,48 @@
 class QRect;
 class QWidget;
 
-/**
- * OpenDocument, 8.6.1 Database Range
- */
 namespace KSpread
 {
 class Cell;
 class Filter;
 class Region;
 
-class DatabaseRange : public QObject
+/**
+ * OpenDocument, 8.6.1 Database Range
+ */
+class Database : public QObject
 {
     Q_OBJECT
 public:
     /**
      * Constructor.
-     * Creates an empty database range.
+     * Creates an empty database.
      */
-    DatabaseRange();
+    Database();
 
     /**
      * Constructor.
-     * Creates a database range named \p name.
+     * Creates a database named \p name.
      */
-    DatabaseRange( const QString& name );
+    Database( const QString& name );
 
     /**
      * Copy Constructor.
      */
-    DatabaseRange( const DatabaseRange& other );
+    Database( const Database& other );
 
     /**
      * Destructor.
      */
-    virtual ~DatabaseRange();
+    virtual ~Database();
 
     /**
-     * \return \c true if this is the default/empty database range
+     * \return \c true if this is the default/empty database
      */
     bool isEmpty() const;
 
     /**
-     * \return the database range's orientation
+     * \return the database's orientation
      */
     Qt::Orientation orientation() const;
 
@@ -99,9 +99,9 @@ public:
 
     Filter* filter();
 
-    void operator=( const DatabaseRange& other );
-    bool operator==( const DatabaseRange& other ) const;
-    bool operator<( const DatabaseRange& other ) const;
+    void operator=( const Database& other );
+    bool operator==( const Database& other ) const;
+    bool operator<( const Database& other ) const;
 
     void dump() const;
 
@@ -112,4 +112,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DATABASE_RANGE
+#endif // KSPREAD_DATABASE

@@ -65,7 +65,7 @@ public:
     QList< QPair<QRectF,Binding> >          bindings;
     QList< QPair<QRectF,QString> >          comments;
     QList< QPair<QRectF,Conditions> >       conditions;
-    QList< QPair<QRectF,DatabaseRange> >    databases;
+    QList< QPair<QRectF,Database> >         databases;
     QVector< QPair<QPoint,Formula> >        formulas;
     QList< QPair<QRectF,bool> >             fusions;
     QVector< QPair<QPoint,QString> >        links;
@@ -84,7 +84,7 @@ public:
         , bindingStorage( new BindingStorage( sheet ) )
         , commentStorage( new CommentStorage( sheet ) )
         , conditionsStorage( new ConditionsStorage( sheet ) )
-        , databaseRangeStorage( new DatabaseRangeStorage( sheet ) )
+        , databaseStorage( new DatabaseStorage( sheet ) )
         , formulaStorage( new FormulaStorage() )
         , fusionStorage( new FusionStorage( sheet ) )
         , linkStorage( new LinkStorage() )
@@ -100,7 +100,7 @@ public:
         delete bindingStorage;
         delete commentStorage;
         delete conditionsStorage;
-        delete databaseRangeStorage;
+        delete databaseStorage;
         delete formulaStorage;
         delete fusionStorage;
         delete linkStorage;
@@ -115,7 +115,7 @@ public:
     BindingStorage*         bindingStorage;
     CommentStorage*         commentStorage;
     ConditionsStorage*      conditionsStorage;
-    DatabaseRangeStorage*   databaseRangeStorage;
+    DatabaseStorage*        databaseStorage;
     FormulaStorage*         formulaStorage;
     FusionStorage*          fusionStorage;
     LinkStorage*            linkStorage;
@@ -208,26 +208,26 @@ void CellStorage::setConditions( const Region& region, Conditions conditions )
     d->conditionsStorage->insert( region, conditions );
 }
 
-DatabaseRange CellStorage::databaseRange( int column, int row ) const
+Database CellStorage::database( int column, int row ) const
 {
-    QPair<QRectF, DatabaseRange> pair = d->databaseRangeStorage->containedPair( QPoint( column, row ) );
+    QPair<QRectF, Database> pair = d->databaseStorage->containedPair( QPoint( column, row ) );
     if ( pair.first.isEmpty() )
-        return DatabaseRange();
+        return Database();
     if ( pair.second.isEmpty() )
-        return DatabaseRange();
+        return Database();
     // update the range, which might get changed
-    DatabaseRange databaseRange = pair.second;
-    databaseRange.setRange( Region( pair.first.toRect(), d->sheet ) );
-    return databaseRange;
+    Database database = pair.second;
+    database.setRange( Region( pair.first.toRect(), d->sheet ) );
+    return database;
 }
 
-void CellStorage::setDatabaseRange( const Region& region, const DatabaseRange& databaseRange )
+void CellStorage::setDatabase( const Region& region, const Database& database )
 {
     // recording undo?
     if ( d->undoData )
-        d->undoData->databases << d->databaseRangeStorage->undoData( region );
+        d->undoData->databases << d->databaseStorage->undoData( region );
 
-    d->databaseRangeStorage->insert( region, databaseRange );
+    d->databaseStorage->insert( region, database );
 }
 
 Formula CellStorage::formula( int column, int row ) const
@@ -535,7 +535,7 @@ void CellStorage::insertColumns( int position, int number )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertColumns( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertColumns( position, number );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertColumns( position, number );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertColumns( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertColumns( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertColumns( position, number );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertColumns( position, number );
@@ -588,7 +588,7 @@ void CellStorage::removeColumns( int position, int number )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeColumns( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeColumns( position, number );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeColumns( position, number );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeColumns( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeColumns( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeColumns( position, number );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeColumns( position, number );
@@ -641,7 +641,7 @@ void CellStorage::insertRows( int position, int number )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertRows( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertRows( position, number );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertRows( position, number );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertRows( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertRows( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertRows( position, number );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertRows( position, number );
@@ -694,7 +694,7 @@ void CellStorage::removeRows( int position, int number )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeRows( position, number );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeRows( position, number );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeRows( position, number );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeRows( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeRows( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeRows( position, number );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeRows( position, number );
@@ -747,7 +747,7 @@ void CellStorage::removeShiftLeft( const QRect& rect )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeShiftLeft( rect );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeShiftLeft( rect );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeShiftLeft( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeShiftLeft( rect );
@@ -800,7 +800,7 @@ void CellStorage::insertShiftRight( const QRect& rect )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftRight( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftRight( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertShiftRight( rect );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertShiftRight( rect );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertShiftRight( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertShiftRight( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertShiftRight( rect );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertShiftRight( rect );
@@ -853,7 +853,7 @@ void CellStorage::removeShiftUp( const QRect& rect )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftUp( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftUp( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->removeShiftUp( rect );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->removeShiftUp( rect );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeShiftUp( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeShiftUp( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeShiftUp( rect );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeShiftUp( rect );
@@ -906,7 +906,7 @@ void CellStorage::insertShiftDown( const QRect& rect )
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftDown( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftDown( rect );
     QList< QPair<QRectF,Conditions> > conditions = d->conditionsStorage->insertShiftDown( rect );
-    QList< QPair<QRectF,DatabaseRange> > databases = d->databaseRangeStorage->insertShiftDown( rect );
+    QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertShiftDown( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertShiftDown( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertShiftDown( rect );
     QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertShiftDown( rect );
@@ -1180,7 +1180,7 @@ void CellStorage::undo( CellStorageUndoData* data )
     for ( int i = 0; i < data->conditions.count(); ++i )
         setConditions( Region(data->conditions[i].first.toRect()), data->conditions[i].second );
     for ( int i = 0; i < data->databases.count(); ++i )
-        setDatabaseRange( Region(data->databases[i].first.toRect()), data->databases[i].second );
+        setDatabase( Region(data->databases[i].first.toRect()), data->databases[i].second );
     for ( int i = 0; i < data->validities.count(); ++i )
         setValidity( Region(data->validities[i].first.toRect()), data->validities[i].second );
 }

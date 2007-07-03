@@ -22,11 +22,11 @@
 
 #include "AbstractRegionCommand.h"
 
-#include "database/DatabaseRange.h"
+#include "database/Database.h"
 
 namespace KSpread
 {
-class DatabaseRange;
+class Database;
 
 class ApplyFilterCommand : public AbstractRegionCommand
 {
@@ -44,10 +44,10 @@ public:
     virtual void redo();
     virtual void undo();
 
-    void setDatabase(const DatabaseRange& database);
+    void setDatabase(const Database& database);
 
 private:
-    DatabaseRange m_database;
+    Database m_database;
 };
 
 } // namespace KSpread

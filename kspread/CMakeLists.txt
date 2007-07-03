@@ -59,7 +59,7 @@ SET (commands_DIR_SRCS
 	)
 
 SET (database_DIR_SRCS
-	database/DatabaseRange.cpp
+	database/Database.cpp
 	database/DatabaseSource.cpp
 	database/DatabaseSourceQuery.cpp
 	database/DatabaseSourceSql.cpp

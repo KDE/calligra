@@ -24,7 +24,7 @@
 #include <QString>
 
 #include "CellStorage.h"
-#include "DatabaseRange.h"
+#include "Database.h"
 #include "Doc.h"
 #include "RowColumnFormat.h"
 #include "Region.h"
@@ -42,7 +42,7 @@ public:
     virtual Type type() const = 0;
     virtual void loadOdf() = 0;
     virtual void saveOdf() = 0;
-    virtual bool evaluate(const DatabaseRange* database, int index) const = 0;
+    virtual bool evaluate(const Database* database, int index) const = 0;
     virtual bool isEmpty() const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
     virtual void dump() const = 0;
@@ -60,7 +60,7 @@ public:
     virtual Type type() const { return AbstractCondition::And; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate(const DatabaseRange* database, int index) const
+    virtual bool evaluate(const Database* database, int index) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
@@ -109,7 +109,7 @@ public:
     virtual Type type() const { return AbstractCondition::Or; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate(const DatabaseRange* database, int index) const
+    virtual bool evaluate(const Database* database, int index) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
@@ -175,7 +175,7 @@ public:
     virtual Type type() const { return AbstractCondition::Condition; }
     virtual void loadOdf() {}
     virtual void saveOdf() {}
-    virtual bool evaluate(const DatabaseRange* database, int index) const
+    virtual bool evaluate(const Database* database, int index) const
     {
         const Sheet* sheet = (*database->range().constBegin())->sheet();
         const QRect range = database->range().lastRange();
@@ -373,7 +373,7 @@ bool Filter::isEmpty() const
     return d->condition ? d->condition->isEmpty() : true;
 }
 
-void Filter::apply(const DatabaseRange* database) const
+void Filter::apply(const Database* database) const
 {
     Sheet* const sheet = (*database->range().constBegin())->sheet();
     const QRect range = database->range().lastRange();

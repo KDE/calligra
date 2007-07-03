@@ -27,7 +27,7 @@ class QAbstractButton;
 namespace KSpread
 {
 class Cell;
-class DatabaseRange;
+class Database;
 class Filter;
 
 class FilterPopup : public QFrame
@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      */
-    FilterPopup(QWidget* parent, const Cell& cell, DatabaseRange* database);
+    FilterPopup(QWidget* parent, const Cell& cell, Database* database);
 
     /**
      * Destructor.
