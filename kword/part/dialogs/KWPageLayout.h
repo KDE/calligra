@@ -23,6 +23,7 @@
 
 #include <KoPageLayout.h>
 #include <KoUnit.h>
+#include <KoText.h>
 
 #include <QWidget>
 
@@ -38,6 +39,9 @@ public:
     void showUnitchooser(bool on);
     void forSinglePage(KWPage *page);
     void setStartPageNumber(int pageNumber);
+    void showTextDirection(bool on);
+    void setTextDirection(KoText::Direction direction);
+    KoText::Direction textDirection() const;
 
     int startPageNumber() const;
     bool marginsForDocument() const;

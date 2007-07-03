@@ -603,7 +603,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
 
             QVariant direction = format.property(KoParagraphStyle::TextProgressionDirection);
             format = m_caret.blockFormat();
-            if(m_textShapeData->pageDirection() == KoText::AutoDirection) { // inherit from shape
+            if(m_textShapeData->pageDirection() != KoText::AutoDirection) { // inherit from shape
                 KoText::Direction dir;
                 switch(m_textShapeData->pageDirection()) {
                     case KoText::RightLeftTopBottom:

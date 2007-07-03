@@ -33,6 +33,7 @@ class KWPageSettingsDialog : public KDialog {
     Q_OBJECT
 public:
     explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, KWPage *page);
+    void showTextDirection(bool on);
 
 private slots:
     void setPageLayout(const KoPageLayout &layout);

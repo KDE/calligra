@@ -51,6 +51,7 @@ private:
     KoPageLayout m_pageLayout;
     KoPageFormat::Orientation m_orientation;
     int m_pageNumber;
+    KoText::Direction m_direction;
 };
 
 #endif

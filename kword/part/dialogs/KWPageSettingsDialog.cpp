@@ -32,8 +32,8 @@
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
     : KDialog(parent),
     m_document(document),
-    m_page(page)
-,m_visited (false)
+    m_page(page),
+    m_visited (false)
 {
     Q_ASSERT(document);
     Q_ASSERT(page);
@@ -48,6 +48,7 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     m_pageLayoutWidget->showUnitchooser(false);
     m_pageLayoutWidget->forSinglePage(m_page);
     m_pageLayoutWidget->setStartPageNumber(m_document->startPage());
+    m_pageLayoutWidget->setTextDirection(m_page->directionHint());
     m_pageLayoutWidget->layout()->setMargin(0);
     lay->addWidget(m_pageLayoutWidget);
 
@@ -70,7 +71,8 @@ void KWPageSettingsDialog::accept() {
         // TODO
     }
     else {
-        KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, m_layout);
+        KoText::Direction newDir = m_pageLayoutWidget->textDirection();
+        KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, m_layout, newDir);
         m_document->addCommand(cmd);
     }
 
@@ -96,6 +98,10 @@ void KWPageSettingsDialog::visit() {
     KoLayoutVisitor visitor;
     visitor.visit(m_pageLayoutWidget);
     visitor.relayout();
+}
+
+void KWPageSettingsDialog::showTextDirection(bool on) {
+    m_pageLayoutWidget->showTextDirection(on);
 }
 
 #include <KWPageSettingsDialog.moc>

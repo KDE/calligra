@@ -36,6 +36,7 @@ KWPageRemoveCommand::KWPageRemoveCommand( KWDocument *document, KWPage *page, QU
     m_pageSide = page->pageSide();
     m_pageLayout = page->pageLayout();
     m_orientation = page->orientationHint();
+    m_direction = page->directionHint();
 }
 
 KWPageRemoveCommand::~KWPageRemoveCommand() {
@@ -60,6 +61,7 @@ void KWPageRemoveCommand::undo() {
     page->setPageSide(m_pageSide);
     page->setOrientationHint(m_orientation);
     page->setPageLayout(m_pageLayout);
+    page->setDirectionHint(m_direction);
     m_document->firePageSetupChanged();
 }
 

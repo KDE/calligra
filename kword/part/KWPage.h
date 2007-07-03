@@ -145,7 +145,19 @@ public:
      */
     KoPageFormat::Orientation orientationHint() const;
 
+    /**
+     * Set the text-direction that text on this page should be initialized with.
+     * New text that is written on this page can use this to set the text direction for
+     * the paragraph.
+     * @param direction the direction.
+     */
     void setDirectionHint(KoText::Direction direction) { m_textDirectionHint = direction; }
+
+    /**
+     * return the text-direction that text on this page should be initialized with.
+     * New text that is written on this page can use this to set the text direction for
+     * the paragraph.
+     */
     KoText::Direction directionHint() const { return m_textDirectionHint; }
 
 private:

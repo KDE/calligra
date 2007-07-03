@@ -30,12 +30,14 @@
 
 #include <KLocale>
 
-KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *page, const KoPageLayout &newLayout, QUndoCommand *parent)
+KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *page, const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent)
     : QUndoCommand(i18n("Page Properties"), parent),
     m_document(document),
     m_page(page),
     m_oldLayout( page->pageLayout() ),
-    m_newLayout(newLayout)
+    m_newLayout(newLayout),
+    m_oldDirection(page->directionHint()),
+    m_newDirection(direction)
 {
     // move
     QList<KoShape *> shapes;
@@ -82,14 +84,16 @@ KWPagePropertiesCommand::KWPagePropertiesCommand( KWDocument *document, KWPage *
 void KWPagePropertiesCommand::redo() {
     QUndoCommand::redo();
     setLayout(m_newLayout);
+    m_page->setDirectionHint(m_newDirection);
     m_document->m_frameLayout.createNewFramesForPage(m_page->pageNumber());
     m_document->firePageSetupChanged();
 }
 
 void KWPagePropertiesCommand::undo() {
     QUndoCommand::undo();
-    setLayout(m_newLayout);
+    //setLayout(m_newLayout);
     setLayout(m_oldLayout);
+    m_page->setDirectionHint(m_oldDirection);
     m_document->m_frameLayout.createNewFramesForPage(m_page->pageNumber());
     m_document->firePageSetupChanged();
 }

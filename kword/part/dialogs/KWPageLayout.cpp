@@ -65,6 +65,7 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
     setUnit(KoUnit(KoUnit::Millimeter));
     m_allowSignals = true;
     setPageLayout(layout);
+    //showTextDirection(false);
 }
 
 void KWPageLayout::sizeChanged(int row) {
@@ -251,6 +252,38 @@ int KWPageLayout::startPageNumber() const {
 
 bool KWPageLayout::marginsForDocument() const {
     return widget.wholeDocument->checkState() == Qt::Checked;
+}
+
+void KWPageLayout::showTextDirection(bool on) {
+    widget.directionLabel->setVisible(on);
+    widget.textDirection->setVisible(on);
+}
+
+void KWPageLayout::setTextDirection(KoText::Direction direction ) {
+    int index = 0;
+    switch(direction) {
+        case KoText::LeftRightTopBottom:
+        case KoText::PerhapsLeftRightTopBottom:
+            index = 1;
+            break;
+        case KoText::RightLeftTopBottom:
+        case KoText::PerhapsRightLeftTopBottom:
+            index = 2;
+            break;
+        case KoText::TopBottomRightLeft: // unused for now.
+        case KoText::AutoDirection:
+            index = 0;
+    }
+    widget.textDirection->setCurrentIndex(index);
+}
+
+KoText::Direction KWPageLayout::textDirection() const {
+    switch(widget.textDirection->currentIndex()) {
+        case 1: return KoText::LeftRightTopBottom;
+        case 2: return KoText::RightLeftTopBottom;
+        default:
+        case 0: return KoText::AutoDirection;
+    }
 }
 
 #include <KWPageLayout.moc>

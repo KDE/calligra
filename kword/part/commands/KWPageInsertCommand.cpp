@@ -45,7 +45,10 @@ KWPageInsertCommand::~KWPageInsertCommand() {
 void KWPageInsertCommand::redo() {
     QUndoCommand::redo();
     if(m_page == 0) {
+        KWPage *prevPage = m_document->m_pageManager.page(m_afterPageNum);
         m_page = m_document->m_pageManager.insertPage(m_afterPageNum+1);
+        if(prevPage)
+            m_page->setDirectionHint(prevPage->directionHint());
         if(m_page->pageNumber() % 2 == 0 && m_document->m_pageManager.preferPageSpread()) // should be a pageSpread
             m_page->setPageSide(KWPage::PageSpread);
         PageProcessingQueue *ppq = new PageProcessingQueue(m_document);
