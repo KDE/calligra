@@ -1129,6 +1129,7 @@ signals:
     void sig_SheetActivated( Sheet* );
     void sig_RefreshView( Sheet* );
     void documentSizeChanged( const QSizeF& );
+    void visibleSizeChanged();
 
 protected slots:
   /** react on modification (add/remove) of a named area */

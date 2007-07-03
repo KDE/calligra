@@ -2110,7 +2110,7 @@ SheetView* View::sheetView( const Sheet* sheet ) const
                  d->canvas, SLOT(setDocumentSize(const QSizeF&)) );
         connect( d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(const QSizeF&)),
                  d->zoomController, SLOT(setDocumentSize(const QSizeF&)) );
-        connect( sheet, SIGNAL(documentSizeChanged(const QSizeF&)),
+        connect( sheet, SIGNAL(visibleSizeChanged()),
                  d->sheetViews[ sheet ], SLOT(updateAccessedCellRange()));
     }
     return d->sheetViews[ sheet ];

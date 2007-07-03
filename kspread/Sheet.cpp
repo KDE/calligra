@@ -346,7 +346,8 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ),
     this, SLOT( slotAreaModified( const QString & ) ) );
 
-
+    // document size changes always trigger a visible size change
+    connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
 }
 
 QString Sheet::sheetName() const
@@ -1016,18 +1017,14 @@ void Sheet::removeRows( int row, int number )
 
 void Sheet::emitHideRow()
 {
-    // Actually only the visible size has changed,
-    // but the update routine is the same as for document size changes.
-    emit documentSizeChanged( d->documentSize );
+    emit visibleSizeChanged();
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
 
 void Sheet::emitHideColumn()
 {
-    // Actually only the visible size has changed,
-    // but the update routine is the same as for document size changes.
-    emit documentSizeChanged( d->documentSize );
+    emit visibleSizeChanged();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }
