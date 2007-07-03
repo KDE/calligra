@@ -238,8 +238,10 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
         m_textEditingPlugins.insert(factory->id(), factory->create());
     }
 
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
-        connect(plugin, SIGNAL(commandAvailable(QUndoCommand *)), this, SLOT(addCommand(QUndoCommand *)));
+    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins.values()) {
+        connect(plugin, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
+        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+    }
 
     action = new QAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
