@@ -44,7 +44,7 @@ public:
     virtual ~AbstractCondition() {}
     enum Type { And, Or, Condition };
     virtual Type type() const = 0;
-    virtual void loadOdf(const KoXmlElement& element) = 0;
+    virtual bool loadOdf(const KoXmlElement& element) = 0;
     virtual void saveOdf(KoXmlWriter& xmlWriter) = 0;
     virtual bool evaluate(const Database* database, int index) const = 0;
     virtual bool isEmpty() const = 0;
@@ -62,7 +62,7 @@ public:
     And(const And& other);
     virtual ~And() { qDeleteAll(list); }
     virtual Type type() const { return AbstractCondition::And; }
-    virtual void loadOdf(const KoXmlElement& parent);
+    virtual bool loadOdf(const KoXmlElement& parent);
     virtual void saveOdf(KoXmlWriter& xmlWriter)
     {
         if (!list.count())
@@ -119,7 +119,7 @@ public:
     Or(const Or& other);
     virtual ~Or() { qDeleteAll(list); }
     virtual Type type() const { return AbstractCondition::Or; }
-    virtual void loadOdf(const KoXmlElement& element);
+    virtual bool loadOdf(const KoXmlElement& element);
     virtual void saveOdf(KoXmlWriter& xmlWriter)
     {
         if (!list.count())
@@ -200,17 +200,14 @@ public:
     virtual ~Condition() {}
 
     virtual Type type() const { return AbstractCondition::Condition; }
-    virtual void loadOdf(const KoXmlElement& element)
+    virtual bool loadOdf(const KoXmlElement& element)
     {
         if (element.hasAttributeNS(KoXmlNS::table, "field-number"))
         {
             bool ok = false;
             fieldNumber = element.attributeNS(KoXmlNS::table, "field-number", QString()).toInt(&ok);
             if (!ok || fieldNumber < 0)
-            {
-                fieldNumber = -1;
-                return;
-            }
+                return false;
         }
         if (element.hasAttributeNS(KoXmlNS::table, "value"))
             value = element.attributeNS(KoXmlNS::table, "value", QString());
@@ -248,7 +245,7 @@ public:
             else
             {
                 kDebug() << "table:operator: unknown value" << endl;
-                return;
+                return false;
             }
         }
         if (element.hasAttributeNS(KoXmlNS::table, "case-sensitive"))
@@ -265,6 +262,7 @@ public:
             else
                 dataType = Text;
         }
+        return true;
     }
     virtual void saveOdf(KoXmlWriter& xmlWriter)
     {
@@ -393,7 +391,7 @@ Filter::And::And(const And& other)
     }
 }
 
-void Filter::And::loadOdf(const KoXmlElement& parent)
+bool Filter::And::loadOdf(const KoXmlElement& parent)
 {
     KoXmlElement element;
     AbstractCondition* condition;
@@ -407,8 +405,12 @@ void Filter::And::loadOdf(const KoXmlElement& parent)
             condition = new Filter::Condition();
         else
             continue;
-        condition->loadOdf(element);
+        if (condition->loadOdf(element))
+            list.append(condition);
+        else
+            delete condition;
     }
+    return !list.isEmpty();
 }
 
 Filter::Or::Or(const Or& other)
@@ -427,7 +429,7 @@ Filter::Or::Or(const Or& other)
     }
 }
 
-void Filter::Or::loadOdf(const KoXmlElement& parent)
+bool Filter::Or::loadOdf(const KoXmlElement& parent)
 {
     KoXmlElement element;
     AbstractCondition* condition;
@@ -441,8 +443,12 @@ void Filter::Or::loadOdf(const KoXmlElement& parent)
             condition = new Filter::Condition();
         else
             continue;
-        condition->loadOdf(element);
+        if (condition->loadOdf(element))
+            list.append(condition);
+        else
+            delete condition;
     }
+    return !list.isEmpty();
 }
 
 
@@ -584,7 +590,7 @@ void Filter::apply(const Database* database) const
     }
 }
 
-void Filter::loadOdf(const KoXmlElement& element, Sheet* const sheet)
+bool Filter::loadOdf(const KoXmlElement& element, Sheet* const sheet)
 {
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address"))
     {
@@ -612,14 +618,20 @@ void Filter::loadOdf(const KoXmlElement& element, Sheet* const sheet)
     }
     const KoXmlElement conditionElement = element.firstChild().toElement();
     if (conditionElement.isNull() || conditionElement.namespaceURI() != KoXmlNS::table)
-        return;
+        return false;
     if (conditionElement.localName() == "filter-and")
         d->condition = new And();
     else if (conditionElement.localName() == "filter-or")
         d->condition = new Or();
     else if (conditionElement.localName() == "filter-condition")
         d->condition = new Condition();
-    d->condition->loadOdf(conditionElement);
+    if (!d->condition->loadOdf(conditionElement))
+    {
+        delete d->condition;
+        d->condition = 0;
+        return false;
+    }
+    return true;
 }
 
 void Filter::saveOdf(KoXmlWriter& xmlWriter) const
