@@ -1290,6 +1290,8 @@ void TextTool::updateParagraphDirection(const QVariant &variant) {
         else // remove previously set one if needed.
             m_updateParagDirection.direction = KoText::PerhapsLeftRightTopBottom;
     }
+    else
+        m_updateParagDirection.block = QTextBlock();
 }
 
 void TextTool::updateParagraphDirectionUi() {

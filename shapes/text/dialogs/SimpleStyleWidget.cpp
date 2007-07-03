@@ -139,24 +139,19 @@ void SimpleStyleWidget::directionChangeRequested() {
                 KoParagraphStyle::TextProgressionDirection));
     QString buttonText;
     switch(dir) {
+    case KoText::PerhapsLeftRightTopBottom:
     case KoText::LeftRightTopBottom:
         dir = KoText::RightLeftTopBottom;
         buttonText = i18nc("Short for RightToLeft", "RTL");
         break;
-    case KoText::AutoDirection: // fall though
+    case KoText::AutoDirection:
+    case KoText::PerhapsRightLeftTopBottom:
     case KoText::RightLeftTopBottom:
         buttonText = i18nc("Short for LeftToRight", "LTR");
         dir = KoText::LeftRightTopBottom;
         break;
-    case KoText::PerhapsLeftRightTopBottom:
-        buttonText = i18nc("Short for RightToLeft", "RTL");
-        dir = KoText::PerhapsRightLeftTopBottom;
-        break;
-    case KoText::PerhapsRightLeftTopBottom:
-        buttonText = i18nc("Short for LeftToRight", "LTR");
-        dir = KoText::PerhapsLeftRightTopBottom;
-        break;
     case KoText::TopBottomRightLeft: ;// Unhandled.
+        break;
     };
     widget.reversedText->setText(buttonText);
 
