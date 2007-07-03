@@ -711,6 +711,7 @@ int Sheet::bottomRow( double _ypos ) const
 
 double Sheet::columnPosition( int _col ) const
 {
+    Q_ASSERT(_col >= 1 && _col <= KS_colMax);
     const int max = qMin(_col, KS_colMax);
     double x = 0.0;
     for (int col = 1; col < max; ++col)
@@ -721,6 +722,7 @@ double Sheet::columnPosition( int _col ) const
 
 double Sheet::rowPosition( int _row ) const
 {
+    Q_ASSERT(_row >= 1 && _row <= KS_rowMax);
     const int max = qMin(_row, KS_rowMax);
     double y = 0.0;
     for (int row = 1; row < max; ++row)
@@ -741,6 +743,7 @@ ColumnFormat* Sheet::firstCol() const
 
 ColumnFormat* Sheet::nonDefaultColumnFormat( int _column, bool force_creation )
 {
+    Q_ASSERT(_column >= 1 && _column <= KS_colMax);
     ColumnFormat *p = d->columns.lookup( _column );
     if ( p != 0 || !force_creation )
         return p;
@@ -756,6 +759,7 @@ ColumnFormat* Sheet::nonDefaultColumnFormat( int _column, bool force_creation )
 
 RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
 {
+    Q_ASSERT(_row >= 1 && _row <= KS_rowMax);
     RowFormat *p = d->rows.lookup( _row );
     if ( p != 0 || !force_creation )
         return p;
@@ -1012,12 +1016,18 @@ void Sheet::removeRows( int row, int number )
 
 void Sheet::emitHideRow()
 {
+    // Actually only the visible size has changed,
+    // but the update routine is the same as for document size changes.
+    emit documentSizeChanged( d->documentSize );
     emit sig_updateVBorder( this );
     emit sig_updateView( this );
 }
 
 void Sheet::emitHideColumn()
 {
+    // Actually only the visible size has changed,
+    // but the update routine is the same as for document size changes.
+    emit documentSizeChanged( d->documentSize );
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
 }

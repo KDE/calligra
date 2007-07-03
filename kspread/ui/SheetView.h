@@ -117,6 +117,7 @@ public:
     void paintCells( QPaintDevice* paintDevice, QPainter& painter, const QRectF& paintRect,
                      const QPointF& topLeft );
 
+public Q_SLOTS:
     void updateAccessedCellRange( const QPoint& location = QPoint() );
 
 Q_SIGNALS:

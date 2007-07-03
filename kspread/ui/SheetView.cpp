@@ -287,16 +287,15 @@ const CellView& SheetView::defaultCellView() const
 
 void SheetView::updateAccessedCellRange( const QPoint& location )
 {
-    const QSize cellRange = d->accessedCellRange.expandedTo( QSize( location.x(), location.y() ) );
-    if ( d->accessedCellRange != cellRange || location.isNull() )
+    const QSize cellRange = d->accessedCellRange.expandedTo(QSize(location.x(), location.y()));
+    if (d->accessedCellRange != cellRange || location.isNull())
     {
         d->accessedCellRange = cellRange;
-        const QPoint max( cellRange.width(), cellRange.height() );
-        const double xpos = sheet()->columnPosition( qMin( KS_colMax, max.x() + 10 ) )
-                          + sheet()->columnFormat( qMin( KS_colMax, max.x() + 10 ) )->width();
-        const double ypos = sheet()->rowPosition( qMin( KS_rowMax, max.y() + 10 ) );
-                          + sheet()->rowFormat( qMin( KS_rowMax, max.y() + 10 ) )->height();
-        emit visibleSizeChanged( QSizeF( xpos, ypos ) );
+        const int col = qMin(KS_colMax, cellRange.width() + 10);
+        const int row = qMin(KS_rowMax, cellRange.height() + 10);
+        const double width = sheet()->columnPosition(col) + sheet()->columnFormat(col)->width();
+        const double height = sheet()->rowPosition(row) + sheet()->rowFormat(row)->height();
+        emit visibleSizeChanged(QSizeF(width, height));
     }
 }
 
