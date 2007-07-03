@@ -203,8 +203,6 @@ public:
     void closeEditor();
 
     virtual QWidget *canvas() const;
-    virtual int canvasXOffset() const;
-    virtual int canvasYOffset() const;
 
     /**
      * @reimp

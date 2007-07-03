@@ -155,7 +155,6 @@ void DatabaseRange::showPopup(QWidget* parent, const Cell& cell, const QRect& ce
     FilterPopup* popup = new FilterPopup(parent, cell, this);
     const QPoint position(orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());
     popup->move(parent->mapToGlobal(position));
-    popup->resize(100, 20);
     popup->show();
 }
 

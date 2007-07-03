@@ -560,9 +560,6 @@ private:
 
   bool formatKeyPress( QKeyEvent * _ev );
 
-  void processClickSelectionHandle(QMouseEvent *event);
-  void processLeftClickAnchor();
-
 
   /** current cursor position, be it marker or choose marker */
   QPoint cursorPos();

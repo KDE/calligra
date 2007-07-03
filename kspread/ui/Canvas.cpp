@@ -204,7 +204,7 @@ Canvas::~Canvas()
     delete d;
 }
 
-KSpread::View* Canvas::view() const
+View* Canvas::view() const
 {
   return d->view;
 }

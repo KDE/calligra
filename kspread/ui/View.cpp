@@ -7036,29 +7036,10 @@ void View::deleteEditor( bool saveChanges )
     doc()->emitEndOperation();
 }
 
-QWidget * View::canvas() const
+QWidget* View::canvas() const
 {
-  return canvasWidget();
+    return d->canvas;
 }
-
-int View::canvasXOffset() const
-{
-  if (!d->activeSheet)
-    return 0;
-
-  double zoomedResX = zoomHandler()->zoomedResolutionX();
-  return int( canvasWidget()->xOffset() * zoomedResX );
-}
-
-int View::canvasYOffset() const
-{
-  if (!d->activeSheet)
-   return 0;
-
-  double zoomedResY = zoomHandler()->zoomedResolutionY();
-  return int( canvasWidget()->yOffset() * zoomedResY );
-}
-
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
