@@ -83,10 +83,10 @@ void SheetPropertiesDialog::setLayoutDirection( Qt::LayoutDirection dir )
   switch( dir )
   {
     case Qt::LeftToRight:
-      m_widget->directionComboBox->setItemText( m_widget->directionComboBox->currentIndex(), i18n( "Left to Right" ) );
+      m_widget->directionComboBox->setCurrentIndex(0);
       break;
     case Qt::RightToLeft:
-      m_widget->directionComboBox->setItemText( m_widget->directionComboBox->currentIndex(), i18n( "Right to Left" ) );
+      m_widget->directionComboBox->setCurrentIndex(1);
       break;
     default: break;
   };
