@@ -196,7 +196,7 @@ void Database::saveOdf(KoXmlWriter& xmlWriter) const
         xmlWriter.addAttribute("table:display-filter-buttons", "true");
     xmlWriter.addAttribute("table:target-range-address", Oasis::encodeFormula(d->targetRangeAddress.name()));
     if (d->refreshDelay)
-        xmlWriter.addAttribute("table:display-filter-buttons", d->refreshDelay);
+        xmlWriter.addAttribute("table:refresh-delay", d->refreshDelay);
     // TODO
 //     if (d->source)
 //         d->source->saveOdf(xmlWriter);
