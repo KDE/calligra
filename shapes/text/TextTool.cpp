@@ -757,12 +757,22 @@ void TextTool::updateActions() {
     m_actionFormatSub->setChecked(sub);
 
     QTextBlockFormat bf = m_caret.blockFormat();
-    switch(bf.alignment()) {
-        case Qt::AlignLeft: m_actionAlignLeft->setChecked(true); break;
-        case Qt::AlignRight: m_actionAlignRight->setChecked(true); break;
-        case Qt::AlignHCenter: m_actionAlignCenter->setChecked(true); break;
-        case Qt::AlignJustify: m_actionAlignBlock->setChecked(true); break;
+    if(bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
+        bool revert = (m_caret.block().layout()->textOption().textDirection() == Qt::LeftToRight) != QApplication::isLeftToRight();
+        if(bf.alignment() == Qt::AlignLeading ^ revert)
+            m_actionAlignLeft->setChecked(true);
+        else
+            m_actionAlignRight->setChecked(true);
     }
+    else if(bf.alignment() == Qt::AlignHCenter)
+        m_actionAlignCenter->setChecked(true);
+    if(bf.alignment() == Qt::AlignJustify)
+        m_actionAlignBlock->setChecked(true);
+    else if(bf.alignment() == (Qt::AlignLeft | Qt::AlignAbsolute))
+        m_actionAlignLeft->setChecked(true);
+    else if(bf.alignment() == (Qt::AlignRight | Qt::AlignAbsolute))
+        m_actionAlignRight->setChecked(true);
+
     m_actionFormatDecreaseIndent->setEnabled(m_caret.blockFormat().leftMargin() > 0.);
     m_allowActions = true;
 
@@ -1007,12 +1017,18 @@ void TextTool::lineBreak() {
 
 void TextTool::alignLeft() {
     if(! m_allowActions) return;
-    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignLeft | Qt::AlignAbsolute);
+    Qt::Alignment align = Qt::AlignLeading;
+    if(m_caret.block().layout()->textOption().textDirection() != Qt::LeftToRight)
+        align |= Qt::AlignTrailing;
+    m_selectionHandler.setHorizontalTextAlignment(align);
 }
 
 void TextTool::alignRight() {
     if(! m_allowActions) return;
-    m_selectionHandler.setHorizontalTextAlignment(Qt::AlignRight | Qt::AlignAbsolute);
+    Qt::Alignment align = Qt::AlignTrailing;
+    if(m_caret.block().layout()->textOption().textDirection() == Qt::RightToLeft)
+        align = Qt::AlignLeading;
+    m_selectionHandler.setHorizontalTextAlignment(align);
 }
 
 void TextTool::alignCenter() {
@@ -1314,6 +1330,7 @@ void TextTool::updateParagraphDirectionUi() {
             emit blockChanged(m_caret.block()); // make sure that the dialogs follow this change
         }
     }
+    updateActions();
 }
 
 // ---------- editing plugins methods.
@@ -1323,21 +1340,6 @@ void TextTool::editingPluginEvents() {
 
     QTextBlock block = m_caret.block();
     if(! block.contains(m_prevCursorPosition)) {
-        // if the direction is 'Perhaps' we commit to the currently set one here, so the user can't inadvertently
-        // change that anymore.
-        QTextCursor cursor(block.document()->findBlock(m_prevCursorPosition));
-        QTextBlockFormat format = cursor.blockFormat();
-        KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
-                    KoParagraphStyle::TextProgressionDirection));
-        bool blockChanged = true;
-        if(dir == KoText::PerhapsLeftRightTopBottom)
-            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
-        else if(dir == KoText::PerhapsRightLeftTopBottom)
-            format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
-        else blockChanged = false;
-        if(blockChanged)
-            cursor.setBlockFormat(format);
-
         finishedWord();
         finishedParagraph();
         m_prevCursorPosition = -1;
