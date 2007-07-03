@@ -28,6 +28,7 @@
 #include "Filter.h"
 #include "FilterPopup.h"
 #include "Region.h"
+#include "Sheet.h"
 #include "Util.h"
 
 using namespace KSpread;
@@ -169,7 +170,105 @@ Filter* Database::filter()
 
 bool Database::loadOdf(const KoXmlElement& element, Sheet* const sheet)
 {
-    // TODO
+    if (element.hasAttributeNS(KoXmlNS::table, "name"))
+        d->name = element.attributeNS(KoXmlNS::table, "name", QString());
+    if (element.hasAttributeNS(KoXmlNS::table, "is-selection"))
+    {
+        if (element.attributeNS(KoXmlNS::table, "is-selection", "false") == "true")
+            d->isSelection = true;
+        else
+            d->isSelection = false;
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "on-update-keep-styles"))
+    {
+        if (element.attributeNS(KoXmlNS::table, "on-update-keep-styles", "false") == "true")
+            d->onUpdateKeepStyles = true;
+        else
+            d->onUpdateKeepStyles = false;
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "on-update-keep-size"))
+    {
+        if (element.attributeNS(KoXmlNS::table, "on-update-keep-size", "true") == "false")
+            d->onUpdateKeepSize = false;
+        else
+            d->onUpdateKeepSize = true;
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "has-persistent-data"))
+    {
+        if (element.attributeNS(KoXmlNS::table, "has-persistent-data", "true") == "false")
+            d->hasPersistentData = false;
+        else
+            d->hasPersistentData = true;
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "orientation"))
+    {
+        if (element.attributeNS(KoXmlNS::table, "orientation", "row") == "column")
+            d->orientation = Private::Column;
+        else
+            d->orientation = Private::Row;
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "contains-header"))
+    {
+        if (element.attributeNS(KoXmlNS::table, "contains-header", "true") == "false")
+            d->containsHeader = false;
+        else
+            d->containsHeader = true;
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "display-filter-buttons"))
+    {
+        if (element.attributeNS(KoXmlNS::table, "display-filter-buttons", "false") == "true")
+            d->displayFilterButtons = true;
+        else
+            d->displayFilterButtons = false;
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "target-range-address"))
+    {
+        const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
+        d->targetRangeAddress = Region(sheet->map(), address, sheet);
+    }
+    if (element.hasAttributeNS(KoXmlNS::table, "refresh-delay"))
+    {
+        bool ok = false;
+        d->refreshDelay = element.attributeNS(KoXmlNS::table, "refresh-delay", QString()).toInt(&ok);
+        if (!ok || d->refreshDelay < 0)
+            return false;
+    }
+    KoXmlElement child;
+    forEachElement(child, element)
+    {
+        if (child.namespaceURI() != KoXmlNS::table)
+            continue;
+        if (child.localName() == "database-source-sql")
+        {
+            // TODO
+        }
+        else if (child.localName() == "database-source-table")
+        {
+            // TODO
+        }
+        else if (child.localName() == "database-source-query")
+        {
+            // TODO
+        }
+        else if (child.localName() == "sort")
+        {
+            // TODO
+        }
+        else if (child.localName() == "filter")
+        {
+            d->filter = new Filter();
+            if (!d->filter->loadOdf(child, sheet))
+            {
+                delete d->filter;
+                d->filter = 0;
+                return false;
+            }
+        }
+        else if (child.localName() == "subtotal-rules")
+        {
+            // TODO
+        }
+    }
     return true;
 }
 
