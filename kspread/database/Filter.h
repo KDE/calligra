@@ -22,9 +22,14 @@
 
 #include <QString>
 
+#include <KoXmlReader.h>
+
+class KoXmlWriter;
+
 namespace KSpread
 {
 class Database;
+class Sheet;
 
 /**
  * OpenDocument, 8.7.1 Table Filter
@@ -41,7 +46,13 @@ public:
         Less,
         Greater,
         LessOrEqual,
-        GreaterOrEqual
+        GreaterOrEqual,
+        Empty,
+        NotEmpty,
+        TopValues,
+        BottomValues,
+        TopPercent,
+        BottomPercent
     };
 
     enum Composition
@@ -80,6 +91,9 @@ public:
     bool isEmpty() const;
 
     void apply(const Database* database) const;
+
+    void loadOdf(const KoXmlElement& sheetElement, Sheet* const sheet);
+    void saveOdf(KoXmlWriter& xmlWriter) const;
 
     void dump() const;
 
