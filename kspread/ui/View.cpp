@@ -2018,6 +2018,11 @@ Canvas* View::canvasWidget() const
     return d->canvas;
 }
 
+KoCanvasController* View::canvasController() const
+{
+    return d->canvasController;
+}
+
 HBorder* View::hBorderWidget()const
 {
     return d->hBorderWidget;

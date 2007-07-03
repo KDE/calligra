@@ -67,7 +67,6 @@
 #include <QPaintEvent>
 #include <QPixmap>
 #include <QPoint>
-#include <QResizeEvent>
 #include <QScrollBar>
 #include <QTextStream>
 #include <QTimer>
@@ -85,6 +84,7 @@
 #include <kwordwrap.h>
 
 // KOffice
+#include <KoCanvasController.h>
 #include <KoDocumentChild.h>
 #include <KoOasisStore.h>
 #include <KoShapeManager.h>
@@ -546,86 +546,25 @@ void Canvas::validateSelection()
 
 void Canvas::scrollToCell(const QPoint& location) const
 {
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
-
-  if (d->view->isLoading())
-    return;
+    register Sheet * const sheet = activeSheet();
+    if (!sheet)
+        return;
+    if (d->view->isLoading())
+        return;
 
     // Adjust the maximum accessed column and row for the scrollbars.
-    view()->sheetView( sheet )->updateAccessedCellRange( location );
+    view()->sheetView(sheet)->updateAccessedCellRange(location);
 
-  double  unzoomedWidth  = d->view->zoomHandler()->viewToDocumentX( width() );
-  double  unzoomedHeight = d->view->zoomHandler()->viewToDocumentY( height() );
+    // The cell geometry expanded by the size of one column or five rows, resp., in each direction.
+    const Cell cell = Cell(sheet, location).masterCell();
+    const double xpos = sheet->columnPosition(cell.cellPosition().x());
+    const double ypos = sheet->rowPosition(cell.cellPosition().y());
+    const double width = sheet->doc()->defaultColumnFormat()->width();
+    const double height = sheet->doc()->defaultRowFormat()->height() * 5;
+    QRectF rect(xpos, ypos, cell.width(), cell.height());
+    rect.adjust(-width, -height, width, height);
 
-  // xpos is the position of the cell in the current window in unzoomed
-  // document coordinates.
-  double xpos = sheet->columnPosition( location.x() ) - xOffset();
-  double ypos = sheet->rowPosition( location.y() ) - yOffset();
-
-  double minY = 40.0;
-  double maxY = unzoomedHeight - 40.0;
-
-    // Left to right sheet.
-
-    double minX = 100.0; // less than that, we scroll
-    double maxX = unzoomedWidth - 100.0; // more than that, we scroll
-
-    // Do we need to scroll left?
-    if ( xpos < minX )
-    {
-        if ( sheet->layoutDirection() == Qt::LeftToRight )
-            horzScrollBar()->setValue( (int)d->view->zoomHandler()->documentToViewX( xOffset() + xpos - minX ) );
-        else
-            horzScrollBar()->setValue( ( horzScrollBar()->maximum() - (int)d->view->zoomHandler()->documentToViewX( xOffset() + xpos - minX ) ) );
-    }
-
-    // Do we need to scroll right?
-    else if ( xpos > maxX )
-    {
-      double horzScrollBarValue = xOffset() + xpos - maxX;
-      double horzScrollBarValueMax = sheet->documentSize().width() - unzoomedWidth;
-
-      //We don't want to display any area > KS_colMax widths
-      if ( horzScrollBarValue > horzScrollBarValueMax )
-        horzScrollBarValue = horzScrollBarValueMax;
-
-        if ( sheet->layoutDirection() == Qt::LeftToRight )
-            horzScrollBar()->setValue( (int)d->view->zoomHandler()->documentToViewX( horzScrollBarValue ) );
-        else
-            horzScrollBar()->setValue( horzScrollBar()->maximum() - (int)d->view->zoomHandler()->documentToViewX( horzScrollBarValue ) );
-    }
-
-#if 0
-  kDebug(36005) << "------------------------------------------------" << endl;
-  kDebug(36005) << "scrollToCell(): at location [" << location.x() << ","
-           << location.y() << "]" << endl;
-  kDebug(36005) << "Unzoomed view size: [" << unzoomedWidth << ","
-           << unzoomedHeight << "]" << endl;
-  kDebug(36005) << "Position: [" << xpos << "," << ypos << "]" << endl;
-  kDebug(36005) << "Canvas::scrollToCell : height=" << height() << endl;
-  kDebug(36005) << "Canvas::scrollToCell : width=" << width() << endl;
-  kDebug(36005) << "ltr: XPos: " << xpos << ", min: " << minX << ", maxX: " << maxX << endl;
-  kDebug(36005) << "ltr: YPos: " << ypos << ", min: " << minY << ", maxY: " << maxY << endl;
-#endif
-
-  // do we need to scroll up
-  if ( ypos < minY )
-    vertScrollBar()->setValue( (int)d->view->zoomHandler()->documentToViewY( yOffset() + ypos - minY ) );
-
-  // do we need to scroll down
-  else if ( ypos > maxY )
-  {
-    double vertScrollBarValue = yOffset() + ypos - maxY;
-    double vertScrollBarValueMax = sheet->documentSize().height() - unzoomedHeight;
-
-    //We don't want to display any area > KS_rowMax heights
-    if ( vertScrollBarValue > vertScrollBarValueMax )
-      vertScrollBarValue = vertScrollBarValueMax;
-
-    vertScrollBar()->setValue( (int) d->view->zoomHandler()->documentToViewY( vertScrollBarValue ) );
-  }
+    d->view->canvasController()->ensureVisible(rect, true);
 }
 
 void Canvas::setDocumentOffset( const QPoint& offset )
@@ -1133,61 +1072,6 @@ void Canvas::dropEvent( QDropEvent * _ev )
     _ev->setAccepted(true);
     return;
   }
-}
-
-void Canvas::resizeEvent( QResizeEvent* _ev )
-{
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
-
-    double ev_Width = d->view->zoomHandler()->unzoomItX( _ev->size().width() );
-    double ev_Height = d->view->zoomHandler()->unzoomItY( _ev->size().height() );
-
-    int dx = _ev->size().width() - _ev->oldSize().width();
-    scroll(-dx, 0);
-
-    // If we rise horizontally, then check if we are still within the valid area (KS_colMax)
-    if ( _ev->size().width() > _ev->oldSize().width() )
-    {
-        int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
-
-        if ( ( xOffset() + ev_Width ) > sheet->documentSize().width() )
-        {
-          horzScrollBar()->setRange( 0, (int) ( sheet->documentSize().width() - ev_Width ) );
-          if ( sheet->layoutDirection() == Qt::RightToLeft )
-            horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
-        }
-    }
-    // If we lower vertically, then check if the range should represent the maximum range
-    else if ( _ev->size().width() < _ev->oldSize().width() )
-    {
-        int oldValue = horzScrollBar()->maximum() - horzScrollBar()->value();
-
-        if ( horzScrollBar()->maximum() == int( sheet->documentSize().width() - ev_Width ) )
-        {
-          horzScrollBar()->setRange( 0, (int) (sheet->documentSize().width() - ev_Width ) );
-          if ( sheet->layoutDirection() == Qt::RightToLeft )
-            horzScrollBar()->setValue( horzScrollBar()->maximum() - oldValue );
-        }
-    }
-
-    // If we rise vertically, then check if we are still within the valid area (KS_rowMax)
-    if ( _ev->size().height() > _ev->oldSize().height() )
-    {
-        if ( ( yOffset() + ev_Height ) > sheet->documentSize().height() )
-        {
-            vertScrollBar()->setRange( 0, (int) (sheet->documentSize().height() - ev_Height ) );
-        }
-    }
-    // If we lower vertically, then check if the range should represent the maximum range
-    else if ( _ev->size().height() < _ev->oldSize().height() )
-    {
-        if ( vertScrollBar()->maximum() == int( sheet->documentSize().height() - ev_Height ) )
-        {
-            vertScrollBar()->setRange( 0, (int) ( sheet->documentSize().height() - ev_Height ) );
-        }
-    }
 }
 
 QPoint Canvas::cursorPos()

@@ -437,7 +437,6 @@ protected:
     virtual void wheelEvent( QWheelEvent* );
     virtual void focusInEvent( QFocusEvent* );
     virtual void focusOutEvent( QFocusEvent* );
-    virtual void resizeEvent( QResizeEvent * _ev );
     virtual void dragEnterEvent(QDragEnterEvent*);
     virtual void dragMoveEvent(QDragMoveEvent*);
     virtual void dragLeaveEvent(QDragLeaveEvent*);
