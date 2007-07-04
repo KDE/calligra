@@ -289,19 +289,21 @@ void KoEnhancedPathShape::addCommand( const QString &command )
     if( command.isEmpty() )
         return;
 
-    QStringList tokens = command.simplified().split( ' ' );
-    int tokenCount = tokens.count();
-    if( ! tokenCount )
+    QString commandStr = command.simplified();
+    if( commandStr.isEmpty() )
         return;
 
-    if( tokens[0].length() != 1 )
-        return;
+    // the first character is the command
+    KoEnhancedPathCommand * cmd = new KoEnhancedPathCommand( commandStr[0], this );
 
-    KoEnhancedPathCommand * cmd = new KoEnhancedPathCommand( tokens[0][0], this );
-
-    for( int i = 1; i < tokenCount; ++i )
-        cmd->addParameter( parameter( tokens[i] ) );
-
+    // now parse the command parameters
+    if( commandStr.length() > 1 )
+    {
+        QStringList tokens = commandStr.right( commandStr.length()-1 ).simplified().split( ' ' );
+        int tokenCount = tokens.count();
+        for( int i = 0; i < tokenCount; ++i )
+            cmd->addParameter( parameter( tokens[i] ) );
+    }
     m_commands.append( cmd );
 
     updatePath( size() );
@@ -481,13 +483,16 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
             case 'X':
             case 'Y':
             case 'Q':
-                if( ! cmdString.isEmpty() && lastChar == ' ' )
+                if( lastChar == ' ' )
                 {
-                    addCommand( cmdString );
-                    kDebug() << "added command: " << cmdString << endl;
+                    if( ! cmdString.isEmpty() )
+                        addCommand( cmdString );
+                    cmdString = *ptr;
                 }
-                kDebug() << "started new command: " << *ptr << endl;
-                cmdString = *ptr;
+                else
+                {
+                    cmdString += *ptr;
+                }
                 break;
             default:
                 cmdString += *ptr;
@@ -496,4 +501,6 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
         lastChar = *ptr;
         ptr++;
     }
+    if( ! cmdString.isEmpty() )
+        addCommand( cmdString );
 }
