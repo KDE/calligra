@@ -1548,7 +1548,7 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
   }
 #endif // KSPREAD_KOPART_EMBEDDING
 
-  d->view->clearTextSelection();
+  d->view->clearContents();
   d->editWidget->setText( "" );
 
   d->view->doc()->emitEndOperation();

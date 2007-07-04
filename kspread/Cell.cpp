@@ -52,7 +52,6 @@
 #include <QRegExp>
 
 #include "CellStorage.h"
-#include "Canvas.h"
 #include "Condition.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
@@ -73,7 +72,6 @@
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "ValueParser.h"
-#include "View.h"
 
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
@@ -84,8 +82,6 @@
 #include <kmessagebox.h>
 
 #include <kdebug.h>
-
-#include "CellView.h"
 
 using namespace KSpread;
 

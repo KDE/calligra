@@ -292,11 +292,12 @@ public Q_SLOTS:
     void transformPart();
     void copySelection();
     void cutSelection();
-    void deleteSelection();
-    void clearTextSelection();
-    void clearCommentSelection();
-    void clearValiditySelection();
-    void clearConditionalSelection();
+    void clearAll();
+    void clearContents();
+    void clearConditionalStyles();
+    void clearComment();
+    void clearHyperlink();
+    void clearValidity();
     void fillRight();
     void fillLeft();
     void fillUp();
@@ -332,7 +333,6 @@ public Q_SLOTS:
     void sort();
     void autoFilter();
     void insertHyperlink();
-    void removeHyperlink();
     void goalSeek();
     void multipleOperations();
     void subtotals();
@@ -417,7 +417,7 @@ public Q_SLOTS:
     void preference();
     void firstLetterUpper();
     void verticalText(bool );
-    void addModifyComment();
+    void comment();
     void setSelectionComment(const QString& comment);
     void changeAngle();
     void setSelectionAngle(int angle);

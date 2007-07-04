@@ -27,15 +27,15 @@
   <Action name="edit_find_last"/>
   <Action name="edit_replace"/>
   <Menu name="Clear"><text>Clear</text>
-        <Action name="cleartext"/>
-        <Action name="clearcomment"/>
-        <Action name="clearvalidity"/>
-        <Action name="clearconditional"/>
+        <Action name="clearAll"/>
+        <Separator/>
+        <Action name="clearContents"/>
+        <Action name="clearComment"/>
+        <Action name="clearConditional"/>
+        <Action name="clearHyperlink"/>
+        <Action name="clearValidity"/>
   </Menu>
-  <Action name="delete"/>
-  <Action name="removeHyperlink"/>
   <Separator/>
-  <Action name="validity"/>
   <Action name="editCell"/>
 <!--  <Separator/>
   <Action name="transform"/>-->
@@ -56,11 +56,7 @@
  <Menu name="Insert"><text>&amp;Insert</text>
   <Action name="menuInserteheet"/>
   <Separator/>
-  <Menu name="Comment"><text>Cell Commen&amp;t</text>
-    <Action name="addmodifycomment"/>
-    <Action name="showcomment"/>
-    <Action name="removecomment"/>
-  </Menu>
+  <Action name="comment"/>
   <Action name="insertMathExpr"/>
   <Action name="insertFormula"/>
   <Action name="series"/>
@@ -143,6 +139,7 @@
   <Action name="subtotals"/>
   <Action name="goalSeek"/>
   <Action name="consolidate"/>
+  <Action name="validity"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
   <Action name="spelling"/>

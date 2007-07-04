@@ -401,18 +401,17 @@ public:
     QAction * editCell;
     QAction * insertCell;
     QAction * removeCell;
-    QAction * deleteCell;
+    QAction * clearAll;
     KToolBarPopupAction* mergeCell;
     QAction * mergeCellHorizontal;
     QAction * mergeCellVertical;
     QAction * dissociateCell;
-    QAction * clearText;
+    QAction * clearContents;
     QAction * conditional;
     QAction * clearConditional;
     QAction * validity;
     QAction * clearValidity;
-    QAction * addModifyComment;
-    QAction * removeComment;
+    QAction * comment;
     QAction * clearComment;
 
     // column & row operations
@@ -489,7 +488,7 @@ public:
     QAction * autoSum;
     KSelectAction* formulaSelection;
     QAction * insertLink;
-    QAction * removeLink;
+    QAction * clearHyperlink;
     QAction * consolidate;
     QAction * goalSeek;
     QAction * subTotals;
@@ -800,10 +799,11 @@ void View::Private::initActions()
 
   actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet"));
 
-    actions->deleteCell = new KAction(KIcon("deletecell"), i18n("Delete"), view);
-    ac->addAction("delete", actions->deleteCell);
-    connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT( deleteSelection()));
-    actions->deleteCell->setToolTip(i18n("Delete all contents and formatting of the current cell"));
+    actions->clearAll = new KAction(KIcon("deletecell"), i18n("All"), view);
+    actions->clearAll->setIconText(i18n("Delete"));
+    actions->clearAll->setToolTip(i18n("Delete all contents and formatting of the current cell"));
+    ac->addAction("clearAll", actions->clearAll);
+    connect(actions->clearAll, SIGNAL(triggered(bool)), view, SLOT(clearAll()));
 
     actions->mergeCell = new KToolBarPopupAction(KIcon("mergecell"), i18n("Merge Cells"), view);
     ac->addAction("mergecell", actions->mergeCell);
@@ -831,52 +831,44 @@ void View::Private::initActions()
 
   actions->dissociateCell->setToolTip(i18n("Unmerge the selected region"));
 
-  actions->clearText  = new KAction(i18n("Text"), view);
-  ac->addAction("cleartext", actions->clearText );
-  connect(actions->clearText, SIGNAL(triggered(bool)),view, SLOT( clearTextSelection() ));
+    actions->clearContents = new KAction(i18n("Contents"), view);
+    actions->clearContents->setIconText(i18n("Clear Contents"));
+    actions->clearContents->setToolTip(i18n("Remove the contents of the current cell"));
+    ac->addAction("clearContents", actions->clearContents);
+    connect(actions->clearContents, SIGNAL(triggered(bool)), view, SLOT(clearContents()));
 
-  actions->clearText->setToolTip(i18n("Remove the contents of the current cell"));
+    actions->conditional = new KAction(i18n("Conditional Styles..."), view);
+    actions->conditional->setToolTip(i18n("Set cell style based on certain conditions"));
+    ac->addAction("conditional", actions->conditional );
+    connect(actions->conditional, SIGNAL(triggered(bool)), view, SLOT(conditional()));
 
-  actions->conditional  = new KAction(i18n("Conditional Styles..."), view);
-  ac->addAction("conditional", actions->conditional );
-  connect(actions->conditional, SIGNAL(triggered(bool)),view, SLOT( conditional() ));
+    actions->clearConditional = new KAction(i18n("Conditional Styles"), view);
+    actions->clearConditional->setIconText(i18n("Remove Conditional Styles"));
+    actions->clearConditional->setToolTip(i18n("Remove the conditional cell styles"));
+    ac->addAction("clearConditional", actions->clearConditional );
+    connect(actions->clearConditional, SIGNAL(triggered(bool)), view, SLOT(clearConditionalStyles()));
 
-  actions->conditional->setToolTip(i18n("Set cell format based on certain conditions"));
+    actions->validity = new KAction(i18n("Validity..."), view);
+    actions->validity->setToolTip(i18n("Set tests to confirm cell data is valid"));
+    ac->addAction("validity", actions->validity );
+    connect(actions->validity, SIGNAL(triggered(bool)), view, SLOT(validity()));
 
+    actions->clearValidity = new KAction(i18n("Validity"), view);
+    actions->clearValidity->setIconText(i18n("Remove Validity"));
+    actions->clearValidity->setToolTip(i18n("Remove the validity tests on this cell"));
+    ac->addAction("clearValidity", actions->clearValidity );
+    connect(actions->clearValidity, SIGNAL(triggered(bool)), view, SLOT( clearValidity()));
 
-  actions->clearConditional  = new KAction(i18n("Conditional Styles"), view);
-  ac->addAction("clearconditional", actions->clearConditional );
-  connect(actions->clearConditional, SIGNAL(triggered(bool)),view, SLOT( clearConditionalSelection() ));
+    actions->comment = new KAction(KIcon("comment"), i18n("Comment..."), view);
+    actions->comment->setToolTip(i18n("Edit a comment for this cell"));
+    ac->addAction("comment", actions->comment);
+    connect(actions->comment, SIGNAL(triggered(bool)), view, SLOT(comment()));
 
-  actions->clearConditional->setToolTip(i18n("Remove the conditional cell formatting"));
-
-  actions->validity  = new KAction(i18n("Validity..."), view);
-  ac->addAction("validity", actions->validity );
-  connect(actions->validity, SIGNAL(triggered(bool)),view, SLOT( validity() ));
-
-  actions->validity->setToolTip(i18n("Set tests to confirm cell data is valid"));
-
-  actions->clearValidity  = new KAction(i18n("Validity"), view);
-  ac->addAction("clearvalidity", actions->clearValidity );
-  connect(actions->clearValidity, SIGNAL(triggered(bool)),view, SLOT( clearValiditySelection() ));
-
-  actions->clearValidity->setToolTip(i18n("Remove the validity tests on this cell"));
-
-  actions->addModifyComment  = new KAction(KIcon("comment" ), i18n("&Add/Modify Comment..."), view);
-  ac->addAction("addmodifycomment", actions->addModifyComment );
-  connect(actions->addModifyComment, SIGNAL(triggered(bool)), view, SLOT( addModifyComment() ));
-
-  actions->addModifyComment->setToolTip(i18n("Edit a comment for this cell"));
-
-  actions->removeComment  = new KAction(KIcon("removecomment" ), i18n("&Remove Comment"), view);
-  ac->addAction("removecomment", actions->removeComment );
-  connect(actions->removeComment, SIGNAL(triggered(bool)),  view, SLOT( clearCommentSelection() ));
-  actions->removeComment->setToolTip(i18n("Remove this cell's comment"));
-
-  actions->clearComment  = new KAction(i18n("Comment"), view);
-  ac->addAction("clearcomment", actions->clearComment );
-  connect(actions->clearComment, SIGNAL(triggered(bool)),view, SLOT( clearCommentSelection() ));
-  actions->clearComment->setToolTip(i18n("Remove this cell's comment"));
+    actions->clearComment = new KAction(KIcon("removecomment"), i18n("Comment"), view);
+    actions->clearComment->setIconText(i18n("Remove Comment"));
+    actions->clearComment->setToolTip(i18n("Remove this cell's comment"));
+    ac->addAction("clearComment", actions->clearComment);
+    connect(actions->clearComment, SIGNAL(triggered(bool)),view, SLOT(clearComment()));
 
   // -- column & row actions --
 
@@ -1041,10 +1033,11 @@ void View::Private::initActions()
   connect(actions->insertLink, SIGNAL(triggered(bool)), view, SLOT( insertHyperlink() ));
   actions->insertLink->setToolTip(i18n("Insert an Internet hyperlink"));
 
-  actions->removeLink  = new KAction(i18n("&Remove Link"), view);
-  ac->addAction("removeHyperlink", actions->removeLink );
-  connect(actions->removeLink, SIGNAL(triggered(bool)),view, SLOT( removeHyperlink() ));
-  actions->removeLink->setToolTip(i18n("Remove a link"));
+    actions->clearHyperlink = new KAction(i18n("Link"), view);
+    actions->clearHyperlink->setIconText(i18n("Remove Link"));
+    actions->clearHyperlink->setToolTip(i18n("Remove a link"));
+    ac->addAction("clearHyperlink", actions->clearHyperlink);
+    connect(actions->clearHyperlink, SIGNAL(triggered(bool)), view, SLOT(clearHyperlink()));
 
   actions->insertSpecialChar  = new KAction(KIcon("char"), i18n("S&pecial Character..."), view);
   ac->addAction("insertSpecialChar", actions->insertSpecialChar );
@@ -1419,7 +1412,6 @@ void View::Private::adjustActions( bool mode )
   actions->insertLink->setEnabled( mode );
   actions->insertSpecialChar->setEnabled( mode );
   actions->insertFunction->setEnabled( mode );
-  actions->removeComment->setEnabled( mode );
   actions->decreaseIndent->setEnabled( mode );
   actions->bold->setEnabled( mode );
   actions->italic->setEnabled( mode );
@@ -1439,8 +1431,8 @@ void View::Private::adjustActions( bool mode )
   actions->cut->setEnabled( mode );
   actions->specialPaste->setEnabled( mode );
   actions->selectAll->setEnabled( mode );
-  actions->deleteCell->setEnabled( mode );
-  actions->clearText->setEnabled( mode );
+  actions->clearAll->setEnabled( mode );
+  actions->clearContents->setEnabled( mode );
   actions->clearComment->setEnabled( mode );
   actions->clearValidity->setEnabled( mode );
   actions->clearConditional->setEnabled( mode );
@@ -1501,8 +1493,7 @@ void View::Private::adjustActions( bool mode )
   actions->equalizeRow->setEnabled( mode );
   actions->equalizeColumn->setEnabled( mode );
   actions->verticalText->setEnabled( mode );
-  actions->addModifyComment->setEnabled( mode );
-  actions->removeComment->setEnabled( mode );
+  actions->comment->setEnabled( mode );
   actions->insertCell->setEnabled( mode );
   actions->removeCell->setEnabled( mode );
   actions->changeAngle->setEnabled( mode );
@@ -1598,7 +1589,7 @@ void View::Private::adjustActions( Cell cell )
   actions->money->setChecked( ft == Format::Money );
 
   if ( activeSheet && !activeSheet->isProtected() )
-    actions->removeComment->setEnabled( !cell.comment().isEmpty() );
+    actions->clearComment->setEnabled( !cell.comment().isEmpty() );
 
   if ( activeSheet && !activeSheet->isProtected() )
     actions->decreaseIndent->setEnabled( style.indentation() > 0.0 );
@@ -4720,7 +4711,7 @@ void View::autoFilter()
     command->execute();
 }
 
-void View::removeHyperlink()
+void View::clearHyperlink()
 {
     QPoint marker( d->selection->marker() );
     Cell cell( d->activeSheet, marker );
@@ -5201,7 +5192,7 @@ void View::preference()
   }
 }
 
-void View::addModifyComment()
+void View::comment()
 {
   if ( !d->activeSheet )
     return;
@@ -5786,7 +5777,7 @@ void View::openPopupMenu( const QPoint & _point )
     EmbeddedObject *obj;
     if ( d->canvas->isObjectSelected() && ( obj = d->canvas->getObject( d->canvas->mapFromGlobal( _point ), d->activeSheet ) ) && obj->isSelected() )
     {
-      d->popupMenu->addAction( d->actions->deleteCell );
+      d->popupMenu->addAction( d->actions->clearAll );
       d->popupMenu->addSeparator();
       d->popupMenu->addAction( d->actions->cut );
       d->popupMenu->addAction( d->actions->copy );
@@ -5819,7 +5810,7 @@ void View::openPopupMenu( const QPoint & _point )
       d->popupMenu->addAction( d->actions->specialPaste );
       d->popupMenu->addAction( d->actions->insertCellCopy );
       d->popupMenu->addSeparator();
-      d->popupMenu->addAction( d->actions->deleteCell );
+      d->popupMenu->addAction( d->actions->clearAll );
       d->popupMenu->addAction( d->actions->adjust );
       d->popupMenu->addAction( d->actions->defaultFormat );
 
@@ -5833,10 +5824,10 @@ void View::openPopupMenu( const QPoint & _point )
       }
 
       d->popupMenu->addSeparator();
-      d->popupMenu->addAction( d->actions->addModifyComment );
+      d->popupMenu->addAction( d->actions->comment );
       if ( !Cell( activeSheet(), d->selection->marker() ).comment().isEmpty() )
       {
-        d->popupMenu->addAction( d->actions->removeComment );
+        d->popupMenu->addAction( d->actions->clearComment );
       }
 
       if (activeSheet()->testListChoose(selection()))
@@ -5909,7 +5900,7 @@ void View::slotActivateTool( int _id )
     activeSheet()->setWordSpelling (selection(), text);
 }
 
-void View::deleteSelection()
+void View::clearAll()
 {
     DeleteCommand* command = new DeleteCommand();
     command->setSheet( activeSheet() );
@@ -5952,7 +5943,7 @@ void View::adjust()
   manipulator->execute();
 }
 
-void View::clearTextSelection()
+void View::clearContents()
 {
   // TODO Stefan: Actually this check belongs into the manipulator!
   if ( d->activeSheet->areaIsEmpty( *selection() ) )
@@ -5969,7 +5960,7 @@ void View::clearTextSelection()
   manipulator->execute();
 }
 
-void View::clearCommentSelection()
+void View::clearComment()
 {
     // TODO Stefan: Actually this check belongs into the manipulator!
     if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::Comment ) )
@@ -5983,7 +5974,7 @@ void View::clearCommentSelection()
     manipulator->execute();
 }
 
-void View::clearValiditySelection()
+void View::clearValidity()
 {
   // TODO Stefan: Actually this check belongs into the manipulator!
   if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::Validity ) )
@@ -5996,7 +5987,7 @@ void View::clearValiditySelection()
   manipulator->execute();
 }
 
-void View::clearConditionalSelection()
+void View::clearConditionalStyles()
 {
   // TODO Stefan: Actually this check belongs into the manipulator!
   if ( d->activeSheet->areaIsEmpty( *selection(), Sheet::ConditionalCellAttribute ) )

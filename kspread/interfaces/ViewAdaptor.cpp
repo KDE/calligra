@@ -240,22 +240,22 @@ void ViewAdaptor::equalizeRow()
 
 void ViewAdaptor::clearTextSelection()
 {
-    m_view->clearTextSelection();
+    m_view->clearContents();
 }
 
 void ViewAdaptor::clearCommentSelection()
 {
-    m_view->clearCommentSelection();
+    m_view->clearComment();
 }
 
 void ViewAdaptor::clearValiditySelection()
 {
-    m_view->clearValiditySelection();
+    m_view->clearValidity();
 }
 
 void ViewAdaptor::clearConditionalSelection()
 {
-    m_view->clearConditionalSelection();
+    m_view->clearConditionalStyles();
 }
 
 void ViewAdaptor::goalSeek()
@@ -365,7 +365,7 @@ void ViewAdaptor::setSelectionBorderColor( const QColor& bdColor )
 
 void ViewAdaptor::deleteSelection()
 {
-  m_view->clearTextSelection();
+    m_view->clearAll();
 }
 
 void ViewAdaptor::copySelection()
