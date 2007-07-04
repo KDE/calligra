@@ -25,9 +25,9 @@
 #include <QSet>
 #include <QTimer>
 
+#include "Doc.h"
 #include "Global.h"
 #include "RTree.h"
-#include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "RectStorage.h"
@@ -42,7 +42,7 @@ using namespace KSpread;
 class KDE_NO_EXPORT StyleStorage::Private
 {
 public:
-    Sheet* sheet;
+    Doc* doc;
     RTree<SharedSubStyle> tree;
     QSet<int> usedColumns;
     QSet<int> usedRows;
@@ -53,11 +53,11 @@ public:
     QRegion cachedArea;
 };
 
-StyleStorage::StyleStorage( Sheet* sheet )
-    : QObject( sheet )
+StyleStorage::StyleStorage(Doc* doc)
+    : QObject(doc)
     , d(new Private)
 {
-    d->sheet = sheet;
+    d->doc = doc;
     d->cache.setMaxCost( g_maximumCachedStyles );
 }
 
@@ -380,7 +380,7 @@ void StyleStorage::garbageCollection()
 
 void StyleStorage::regionChanged( const QRect& rect )
 {
-    if ( d->sheet->doc()->isLoading() )
+    if ( d->doc->isLoading() )
          return;
     // mark the possible garbage
     d->possibleGarbage += d->tree.intersectingPairs( rect );
@@ -464,7 +464,7 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
 
 StyleManager* StyleStorage::styleManager() const
 {
-    return d->sheet->doc()->styleManager();
+    return d->doc->styleManager();
 }
 
 #include "StyleStorage.moc"

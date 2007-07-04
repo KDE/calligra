@@ -20,14 +20,17 @@
 // Local
 #include "CellStorage.h"
 
+// KDE
 #include <klocale.h>
 
+// KSpread
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "Doc.h"
 #include "Map.h"
 #include "RecalcManager.h"
 #include "RectStorage.h"
+#include "Sheet.h"
 #include "StyleStorage.h"
 
 using namespace KSpread;
@@ -81,17 +84,17 @@ class CellStorage::Private
 public:
     Private( Sheet* sheet )
         : sheet( sheet )
-        , bindingStorage( new BindingStorage( sheet ) )
-        , commentStorage( new CommentStorage( sheet ) )
-        , conditionsStorage( new ConditionsStorage( sheet ) )
-        , databaseStorage( new DatabaseStorage( sheet ) )
+        , bindingStorage( new BindingStorage(sheet->doc()) )
+        , commentStorage( new CommentStorage(sheet->doc()) )
+        , conditionsStorage( new ConditionsStorage(sheet->doc()) )
+        , databaseStorage( new DatabaseStorage(sheet->doc()) )
         , formulaStorage( new FormulaStorage() )
-        , fusionStorage( new FusionStorage( sheet ) )
+        , fusionStorage( new FusionStorage(sheet->doc()) )
         , linkStorage( new LinkStorage() )
-        , matrixStorage( new MatrixStorage( sheet ) )
-        , styleStorage( new StyleStorage( sheet ) )
+        , matrixStorage( new MatrixStorage(sheet->doc()) )
+        , styleStorage( new StyleStorage(sheet->doc()) )
         , userInputStorage( new UserInputStorage() )
-        , validityStorage( new ValidityStorage( sheet ) )
+        , validityStorage( new ValidityStorage(sheet->doc()) )
         , valueStorage( new ValueStorage() )
         , undoData( 0 ) {}
 

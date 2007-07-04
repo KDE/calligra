@@ -29,7 +29,6 @@
 #include "Doc.h"
 #include "Region.h"
 #include "RTree.h"
-#include "Sheet.h"
 #include "chart/TableModel.h"
 #include "Validity.h"
 
@@ -44,7 +43,6 @@ inline uint qHash( const QPoint& point )
 
 namespace KSpread
 {
-class Sheet;
 
 typedef TableModel Binding;
 
@@ -65,7 +63,7 @@ template<typename T>
 class KSPREAD_EXPORT RectStorage
 {
 public:
-    explicit RectStorage( Sheet* sheet );
+    explicit RectStorage(Doc* doc);
     virtual ~RectStorage();
 
     /**
@@ -158,7 +156,7 @@ protected:
     void invalidateCache( const QRect& rect );
 
 private:
-    Sheet* m_sheet;
+    Doc* m_doc;
     RTree<T> m_tree;
     QRegion m_usedArea;
     QList< QPair<QRectF,T> > m_possibleGarbage;
@@ -168,8 +166,8 @@ private:
 };
 
 template<typename T>
-RectStorage<T>::RectStorage( Sheet* sheet )
-    : m_sheet( sheet )
+RectStorage<T>::RectStorage(Doc* doc)
+    : m_doc(doc)
 {
 }
 
@@ -386,7 +384,7 @@ void RectStorage<T>::garbageCollection()
 template<typename T>
 void RectStorage<T>::regionChanged( const QRect& rect )
 {
-    if ( m_sheet->doc()->isLoading() )
+    if (m_doc->isLoading())
          return;
     // mark the possible garbage
     m_possibleGarbage += m_tree.intersectingPairs( rect );
@@ -420,7 +418,7 @@ class BindingStorage : public QObject, public RectStorage<Binding>
 {
     Q_OBJECT
 public:
-    explicit BindingStorage( Sheet* sheet ) : RectStorage<Binding>( sheet ) {}
+    explicit BindingStorage(Doc* doc) : RectStorage<Binding>(doc) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -433,7 +431,7 @@ class CommentStorage : public QObject, public RectStorage<QString>
 {
     Q_OBJECT
 public:
-    explicit CommentStorage( Sheet* sheet ) : RectStorage<QString>( sheet ) {}
+    explicit CommentStorage(Doc* doc) : RectStorage<QString>(doc) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -446,7 +444,7 @@ class ConditionsStorage : public QObject, public RectStorage<Conditions>
 {
     Q_OBJECT
 public:
-    explicit ConditionsStorage( Sheet* sheet ) : RectStorage<Conditions>( sheet ) {}
+    explicit ConditionsStorage(Doc* doc) : RectStorage<Conditions>(doc) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -459,7 +457,7 @@ class DatabaseStorage : public QObject, public RectStorage<Database>
 {
     Q_OBJECT
 public:
-    explicit DatabaseStorage( Sheet* sheet ) : RectStorage<Database>( sheet ) {}
+    explicit DatabaseStorage(Doc* doc) : RectStorage<Database>(doc) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -472,7 +470,7 @@ class FusionStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit FusionStorage( Sheet* sheet ) : RectStorage<bool>( sheet ) {}
+    explicit FusionStorage(Doc* doc) : RectStorage<bool>(doc) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -485,7 +483,7 @@ class MatrixStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit MatrixStorage( Sheet* sheet ) : RectStorage<bool>( sheet ) {}
+    explicit MatrixStorage(Doc* doc) : RectStorage<bool>(doc) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -498,7 +496,7 @@ class ValidityStorage : public QObject, public RectStorage<Validity>
 {
     Q_OBJECT
 public:
-    explicit ValidityStorage( Sheet* sheet ) : RectStorage<Validity>( sheet ) {}
+    explicit ValidityStorage(Doc* doc) : RectStorage<Validity>(doc) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
