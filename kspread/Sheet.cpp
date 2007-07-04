@@ -712,7 +712,6 @@ int Sheet::bottomRow( double _ypos ) const
 
 double Sheet::columnPosition( int _col ) const
 {
-    Q_ASSERT(_col >= 1 && _col <= KS_colMax);
     const int max = qMin(_col, KS_colMax);
     double x = 0.0;
     for (int col = 1; col < max; ++col)
@@ -723,7 +722,6 @@ double Sheet::columnPosition( int _col ) const
 
 double Sheet::rowPosition( int _row ) const
 {
-    Q_ASSERT(_row >= 1 && _row <= KS_rowMax);
     const int max = qMin(_row, KS_rowMax);
     double y = 0.0;
     for (int row = 1; row < max; ++row)
