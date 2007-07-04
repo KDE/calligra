@@ -78,7 +78,7 @@ public:
    * @param strRegion a string representing the region (e.g. "A1:B3")
    * @param sheet the fallback sheet, if \p strRegion does not contain one
    */
-  Region(Map* map, const QString& strRegion, Sheet* sheet);
+  Region(const Map* map, const QString& strRegion, Sheet* sheet);
 
   /**
    * Copy Constructor.
@@ -292,12 +292,12 @@ public:
   /**
    * @return the map to which this region belongs.
    */
-  Map* map() const;
+  const Map* map() const;
 
   /**
    * Sets the map to which this region belongs.
    */
-  void setMap(Map*);
+  void setMap(const Map*);
 
 
   typedef QList<Element*>::Iterator      Iterator;

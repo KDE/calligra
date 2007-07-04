@@ -119,7 +119,7 @@ public:
    * @return a pointer to the searched sheet
    * @return @c 0 if nothing was found
    */
-  Sheet* findSheet( const QString& name );
+  Sheet* findSheet( const QString& name ) const;
 
   /**
    * @return a pointer to the next sheet to @p sheet

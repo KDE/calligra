@@ -43,7 +43,7 @@ public:
   {
   }
 
-  Map* map;
+  const Map* map;
   mutable QList<Element*> cells;
 };
 
@@ -57,7 +57,7 @@ Region::Region()
   d = new Private();
 }
 
-Region::Region(Map* map, const QString& string, Sheet* fallbackSheet)
+Region::Region(const Map* map, const QString& string, Sheet* fallbackSheet)
 {
   d = new Private();
   d->map = map;
@@ -214,13 +214,13 @@ Region::~Region()
     qDeleteAll( d->cells );
 }
 
-Map* Region::map() const
+const Map* Region::map() const
 {
   Q_ASSERT(d->map);
   return d->map;
 }
 
-void Region::setMap(Map* map)
+void Region::setMap(const Map* map)
 {
   d->map = map;
 }

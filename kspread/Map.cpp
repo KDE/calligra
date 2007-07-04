@@ -442,7 +442,7 @@ bool Map::loadXML( const KoXmlElement& mymap )
   return true;
 }
 
-Sheet* Map::findSheet( const QString & _name )
+Sheet* Map::findSheet( const QString & _name ) const
 {
   foreach ( Sheet* sheet, d->lstSheets )
   {
