@@ -90,6 +90,7 @@ bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state) {
 
 // TODO rewrite the below to account for rotation etc.
     QRectF boundingRect = m_anchor->shape()->boundingRect();
+    Q_ASSERT(m_anchor->shape()->parent());
     QRectF containerBoundingRect = m_anchor->shape()->parent()->boundingRect();
     QPointF newPosition;
     switch(m_anchor->horizontalAlignment()) {
