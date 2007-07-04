@@ -281,7 +281,7 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
 {
   Q_UNUSED(name)
   setButtons( KDialog::Ok|KDialog::Cancel );
-  setCaption( i18n( "Conditional Cell Attributes") );
+  setCaption( i18n( "Conditional Styles") );
 
   QStringList list( m_view->doc()->styleManager()->styleNames() );
 

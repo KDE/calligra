@@ -2384,7 +2384,7 @@ void UndoRemoveCellCol::redo()
 UndoConditional::UndoConditional( Doc *_doc, Sheet* sheet, const Region & _selection)
     : UndoAction( _doc )
 {
-    name=i18n("Conditional Cell Attribute");
+    name=i18n("Conditional Styles");
 
     m_sheetName = sheet->sheetName();
     m_region = _selection;

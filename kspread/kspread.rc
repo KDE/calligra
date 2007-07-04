@@ -35,7 +35,6 @@
   <Action name="delete"/>
   <Action name="removeHyperlink"/>
   <Separator/>
-  <Action name="conditional"/>
   <Action name="validity"/>
   <Action name="editCell"/>
 <!--  <Separator/>
@@ -112,6 +111,7 @@
   <Action name="styles"/>
   <Action name="stylemenu"/>
   <Action name="createStyle"/>
+  <Action name="conditional"/>
   <Separator/>
   <Action name="paperLayout"/>
   <Menu name="Comment"><text>&amp;Print Range</text>

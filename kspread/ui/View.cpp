@@ -837,14 +837,14 @@ void View::Private::initActions()
 
   actions->clearText->setToolTip(i18n("Remove the contents of the current cell"));
 
-  actions->conditional  = new KAction(i18n("Conditional Cell Attributes..."), view);
+  actions->conditional  = new KAction(i18n("Conditional Styles..."), view);
   ac->addAction("conditional", actions->conditional );
   connect(actions->conditional, SIGNAL(triggered(bool)),view, SLOT( conditional() ));
 
   actions->conditional->setToolTip(i18n("Set cell format based on certain conditions"));
 
 
-  actions->clearConditional  = new KAction(i18n("Conditional Cell Attributes"), view);
+  actions->clearConditional  = new KAction(i18n("Conditional Styles"), view);
   ac->addAction("clearconditional", actions->clearConditional );
   connect(actions->clearConditional, SIGNAL(triggered(bool)),view, SLOT( clearConditionalSelection() ));
 
