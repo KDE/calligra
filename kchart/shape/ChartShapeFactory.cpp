@@ -30,7 +30,7 @@
 #include <KoShapeRegistry.h>
 
 #include "ChartShape.h"
-#include "ChartDataConfigFactory.h"
+//#include "ChartDataConfigFactory.h"
 #include "ChartTypeConfigWidget.h"
 
 using namespace KChart;
