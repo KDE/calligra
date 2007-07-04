@@ -25,6 +25,7 @@
 #include <QPixmap>
 
 //class KDChartTableData;
+class QStandardItemModel;
 class KoXmlWriter;
 class KoGenStyles;
 
@@ -75,8 +76,8 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    OdfChartType       chartType() const       { return m_type;       }
-    TableModel        *data()                  { return m_currentData; }
+    OdfChartType         chartType() const       { return m_type;       }
+    QStandardItemModel  *data()                  { return m_currentData; }
 #if 0
     KChartParams      *params()    const       { return m_params;     }
 #else
@@ -159,7 +160,8 @@ private:
     KDChartTableData         m_currentData; // The data in the chart.
 #else
     KDChart::Chart          *m_chart;
-    TableModel              *m_currentData;
+    //TableModel              *m_currentData;
+    QStandardItemModel      *m_currentData;
 
     // Info about the data.
     DataDirection  m_dataDirection; // Rows or Columns

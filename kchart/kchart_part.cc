@@ -12,6 +12,8 @@
 using std::cout;
 using std::cerr;
 
+#include <QStandardItemModel>
+
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
@@ -101,7 +103,8 @@ KChartPart::KChartPart( QWidget *parentWidget,
         m_subtype = BarNormalSubtype;
 
         m_chart       = new KDChart::Chart();
-        // m_currentData = new TableModel();
+        m_currentData = new QStandardItemModel();
+        //FIXME: m_chart->diagram()->setModel( m_currentData );
 
 	// Handle data in columns by default
         m_dataDirection   = DataRowsDirection;
@@ -137,6 +140,7 @@ KChartPart::~KChartPart()
 void KChartPart::initEmpty()
 {
     initNullChart();
+    generateBarChartTemplate();
 
     resetURL();
     setEmpty();
@@ -160,10 +164,14 @@ void KChartPart::initNullChart()
 #else
     if ( m_currentData )
         delete m_currentData;
-    m_currentData = new TableModel();
+    m_currentData = new QStandardItemModel();
+    //m_chart->diagram()->setModel( m_currentData );
 
+#if 0
     m_currentData->setDataHasVerticalHeaders( false );
     m_currentData->setDataHasHorizontalHeaders( false );
+#endif
+
 #endif
     // Fill column and row labels.
     m_colLabels << QString("");
@@ -179,12 +187,14 @@ void KChartPart::initNullChart()
 
 void KChartPart::generateBarChartTemplate()
 {
+#if 1
     int  col;
     int  row;
 
-    kDebug()<<"KChartPart::initTestChart()\n";
+    kDebug()<<"KChartPart::generateBarChartTemplate()\n";
 
     // Fill cells with data if there is none.
+    kDebug() << "rowCount: " << m_currentData->rowCount() << endl;
     if ( m_currentData->rowCount() == 0 ) {
         //kDebug(35001) << "Initialize with some data!!!" << endl;
 #if 0
@@ -192,37 +202,48 @@ void KChartPart::generateBarChartTemplate()
         m_currentData.setUsedRows( 4 );
         m_currentData.setUsedCols( 4 );
 #endif
+
+#if 0
+        m_currentData->beginInsertRows( QModelIndex(), 0, 3 );
         for (row = 0; row < 4; row++) {
             m_currentData->insertRow( row );
+        }
+        m_currentData->endInsertRows();
+
+        m_currentData->beginInsertColumns( QModelIndex(), 0, 3 );
+        for (col = 0; col < 4; col++) {
+            m_currentData->insertColumn( col );
+        }
+        m_currentData->endInsertColumns();
+#endif
+        for (row = 0; row < 4; row++) {
+            kDebug() << "rowCount: " << m_currentData->rowCount() << endl;
 
             for (col = 0; col < 4; col++) {
-                // Only need to insert a column 
-                if ( row == 0 )
-                    m_currentData->insertColumn( col );
-
+                kDebug() << "row, col: " << row << "," << col << endl;
+#if 0
                 QModelIndex  index = m_currentData->index( row, col, QModelIndex() );
                 m_currentData->setData( index, static_cast <double>(row + col) ); 
+#else
+                m_currentData->setItem( row, col, 
+                                        new QStandardItem( QString::number( row + col ) ) );
+#endif
 
 		// Fill column label, but only on the first iteration.
 		if (row == 0) {
-#if 0
-		    m_colLabels << i18n("Column %1",col + 1);
-#else
                     m_currentData->setHeaderData( col, Qt::Horizontal,
                                                   i18n("Column %1", col + 1) );
-#endif
 		}
             }
 
 	    // Fill row label.
-#if 0
-	    m_rowLabels << i18n("Row %1",row + 1);
-#else
             m_currentData->setHeaderData( row, Qt::Vertical,
                                           i18n("Row %1", row + 1) );
-#endif
 	}
     }
+#else
+    m_currentData->loadFromCSV( "test.csv" );
+#endif
 
     setChartDefaults();
 
@@ -314,6 +335,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
     // suitable legends and axis labels.  Now start the real painting.
 
     // Make the chart use our model.
+    kDebug(35001) << "Painting!!" << endl;
     Q_ASSERT( m_chart->coordinatePlane() );
     m_chart->coordinatePlane()->replaceDiagram( new KDChart::BarDiagram() );
     Q_ASSERT( m_chart->coordinatePlane()->diagram() );
