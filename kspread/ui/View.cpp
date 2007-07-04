@@ -1168,24 +1168,21 @@ void View::Private::initActions()
 
   actions->replace = KStandardAction::replace( view, SLOT(replace()), ac );
 
-  actions->fillRight  = new KAction(KIcon( 0 ), i18n("&Right"), view);
-  ac->addAction("fillRight", actions->fillRight );
-  connect(actions->fillRight, SIGNAL(triggered(bool)), view, SLOT( fillRight() ));
+    actions->fillRight = new KAction(/*KIcon("arrow-right"), */i18n("&Right"), view);
+    ac->addAction("fillRight", actions->fillRight);
+    connect(actions->fillRight, SIGNAL(triggered(bool)), view, SLOT(fillRight()));
 
+    actions->fillLeft = new KAction(/*KIcon("arrow-left"), */i18n("&Left"), view);
+    ac->addAction("fillLeft", actions->fillLeft);
+    connect(actions->fillLeft, SIGNAL(triggered(bool)), view, SLOT(fillLeft()));
 
-  actions->fillLeft  = new KAction(KIcon( 0 ), i18n("&Left"), view);
-  ac->addAction("fillLeft", actions->fillLeft );
-  connect(actions->fillLeft, SIGNAL(triggered(bool)), view, SLOT( fillLeft() ));
+    actions->fillDown = new KAction(/*KIcon("arrow-down"), */i18n("&Down"), view);
+    ac->addAction("fillDown", actions->fillDown);
+    connect(actions->fillDown, SIGNAL(triggered(bool)), view, SLOT(fillDown()));
 
-
-  actions->fillDown  = new KAction(KIcon( 0 ), i18n("&Down"), view);
-  ac->addAction("fillDown", actions->fillDown );
-  connect(actions->fillDown, SIGNAL(triggered(bool)), view, SLOT( fillDown() ));
-
-
-  actions->fillUp  = new KAction(KIcon( 0 ), i18n("&Up"), view);
-  ac->addAction("fillUp", actions->fillUp );
-  connect(actions->fillUp, SIGNAL(triggered(bool)), view, SLOT( fillUp() ));
+    actions->fillUp  = new KAction(/*KIcon("arrow-up"), */i18n("&Up"), view);
+    ac->addAction("fillUp", actions->fillUp);
+    connect(actions->fillUp, SIGNAL(triggered(bool)), view, SLOT(fillUp()));
 
 
   // -- misc actions --
@@ -5503,7 +5500,7 @@ void View::popupColumnMenu( const QPoint & _point )
       }
 
       d->popupColumn->addAction( d->actions->resizeColumn );
-      d->popupColumn->addAction( i18n("Adjust Column"), this, SLOT( adjustColumn() ) );
+      d->popupColumn->addAction(KIcon("adjustcol"), i18n("Adjust Column"), this, SLOT(adjustColumn()));
       d->popupColumn->addSeparator();
       d->popupColumn->addAction(KIcon("insert_table_col"), i18n("Insert Columns"), this, SLOT(insertColumn()));
       d->popupColumn->addAction(KIcon("delete_table_col"), i18n("Remove Columns"), this, SLOT(deleteColumn()));
