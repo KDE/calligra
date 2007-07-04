@@ -108,6 +108,7 @@
 #include <KoPathSeparateCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
+#include <KoRulerController.h>
 
 // kde header
 #include <kaction.h>
@@ -199,7 +200,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_zoomController = new KoZoomController( m_canvasController, dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(m_canvas->viewConverter())), actionCollection(), false );
     m_zoomController->setPageSize( m_part->document().pageSize() );
     m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
-    m_zoomController->setFitMargin( 10 );
+    m_zoomController->setFitMargin( 25 );
     KoZoomAction * zoomAction = m_zoomController->zoomAction();
     zoomAction->setZoomModes( KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE );
     addStatusBarItem( zoomAction->createWidget( statusBar() ), 0 );
@@ -228,10 +229,13 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
 
-	// widgets:
+    // widgets:
     m_horizRuler = new KoRuler( this, Qt::Horizontal, m_canvas->viewConverter() );
     m_horizRuler->setShowMousePosition(true);
     m_horizRuler->setUnit(p->unit());
+    m_horizRuler->setRightToLeft(false);
+    new KoRulerController( m_horizRuler, m_canvas->resourceProvider() );
+
     layout->addWidget( m_horizRuler, 0, 1 );
     connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
 
@@ -491,8 +495,7 @@ KarbonView::editPaste()
 	selectionChanged();
 }
 
-void
-KarbonView::editSelectAll()
+void KarbonView::editSelectAll()
 {
     debugView("KarbonView::editSelectAll()");
 
@@ -512,51 +515,32 @@ KarbonView::editSelectAll()
     selectionChanged();
 }
 
-void
-KarbonView::editDeselectAll()
+void KarbonView::editDeselectAll()
 {
-	debugView("KarbonView::editDeselectAll()");
+    debugView("KarbonView::editDeselectAll()");
 
-	KoSelection* selection = m_canvas->shapeManager()->selection();
-	if( selection )
-		selection->deselectAll();
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( selection )
+        selection->deselectAll();
 
-	selectionChanged();
+    selectionChanged();
 }
 
-void
-KarbonView::editDeleteSelection()
+void KarbonView::editDeleteSelection()
 {
-	debugView("KarbonView::editDeleteSelection()");
+    debugView("KarbonView::editDeleteSelection()");
 
-	KoSelection* selection = m_canvas->shapeManager()->selection();
-	if( ! selection )
-		return;
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
 
-	QList<KoShape*> selectedShapes = selection->selectedShapes();
-	if( selectedShapes.count() < 1)
-		return;
-	selection->deselectAll();
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    if( selectedShapes.count() < 1)
+        return;
+    selection->deselectAll();
 
-	KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
-	part()->KoDocument::addCommand( cmd );
-}
-
-void
-KarbonView::editPurgeHistory()
-{
-	debugView("KarbonView::editPurgeHistory()");
-
-	// TODO: check for history size != 0
-    // TODO needs porting
-/*	if( KMessageBox::warningContinueCancel( this,
-			i18n( "This action cannot be undone later. Do you really want to continue?" ),
-			i18n( "Purge History" ),
-			KStandardGuiItem::del(),
-			"edit_purge_history" ) )
-	{
-		part()->commandHistory()->clear();
-	}*/
+    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
+    m_canvas->addCommand( cmd );
 }
 
 void
@@ -769,32 +753,29 @@ KarbonView::selectionSendToBack()
     part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::SendToBack ) );
 }
 
-void
-KarbonView::groupSelection()
+void KarbonView::groupSelection()
 {
-	debugView("KarbonView::groupSelection()");
+    debugView("KarbonView::groupSelection()");
 
-	KoSelection* selection = m_canvas->shapeManager()->selection();
-	if( ! selection )
-		return;
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
 
-	KoShapeGroup *group = new KoShapeGroup();
-	QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
-	QList<KoShape*> groupedShapes;
+    QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
+    QList<KoShape*> groupedShapes;
 
-	// only group shapes with an unselected parent
-	foreach( KoShape* shape, selectedShapes )
-	{
-		if( selectedShapes.contains( shape->parent() ) )
-			continue;
-		groupedShapes << shape;
-	}
-    // add group to parent of first shape to be grouped
-    group->setParent( groupedShapes.first()->parent() );
-	QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
-	new KoShapeCreateCommand( m_part, group, cmd );
-	new KoShapeGroupCommand( group, groupedShapes, cmd );
-	part()->KoDocument::addCommand( cmd );
+    // only group shapes with an unselected parent
+    foreach( KoShape* shape, selectedShapes )
+    {
+        if( selectedShapes.contains( shape->parent() ) )
+            continue;
+        groupedShapes << shape;
+    }
+    KoShapeGroup *group = new KoShapeGroup();
+    QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
+    new KoShapeCreateCommand( m_part, group, cmd );
+    new KoShapeGroupCommand( group, groupedShapes, cmd );
+    m_canvas->addCommand( cmd );
 }
 
 void
@@ -829,7 +810,7 @@ KarbonView::ungroupSelection()
             new KoShapeDeleteCommand( m_part, container, cmd );
         }
 	}
-	part()->KoDocument::addCommand( cmd );
+	m_canvas->addCommand( cmd );
 }
 
 void
@@ -959,7 +940,7 @@ void KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
     QRectF documentViewRect = m_canvas->documentViewRect();
     m_zoomController->setDocumentSize( documentViewRect.size() );
     m_canvas->adjustOrigin();
-    if( mode != KoZoomMode::ZOOM_CONSTANT && lastMode != mode )
+    if( mode != KoZoomMode::ZOOM_CONSTANT )
     {
         // center the page rect when change the zoom mode to ZOOM_PAGE or ZOOM_WIDTH
         QRectF pageRect( -documentViewRect.topLeft(), m_part->document().pageSize() );
@@ -1015,10 +996,6 @@ KarbonView::initActions()
     actionCollection()->addAction("edit_delete", m_deleteSelectionAction );
 	m_deleteSelectionAction->setShortcut(QKeySequence("Del"));
 	connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-
-    KAction *actionPurgeHistory  = new KAction(i18n("&History"), this);
-    actionCollection()->addAction("edit_purge_history", actionPurgeHistory );
-	connect(actionPurgeHistory, SIGNAL(triggered()), this, SLOT(editPurgeHistory()));
 	// edit <-----
 
 	// object ----->

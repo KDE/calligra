@@ -113,7 +113,6 @@ public slots:
 	void editSelectAll();
 	void editDeselectAll();
 	void editDeleteSelection();
-	void editPurgeHistory();
 
 	void selectionDuplicate();
 	void selectionBringToFront();

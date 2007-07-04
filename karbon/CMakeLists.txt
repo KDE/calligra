@@ -34,7 +34,8 @@ include_directories(
 		${CMAKE_SOURCE_DIR}/karbon/dialogs 
 		${CMAKE_BINARY_DIR}/karbon/dialogs
 		${FREETYPE_INCLUDE_DIR}
-		${LCMS_INCLUDE_DIR})
+		${LCMS_INCLUDE_DIR}
+        ${KOTEXT_INCLUDES})
 
 add_subdirectory( commands )
 add_subdirectory( visitors )

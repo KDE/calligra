@@ -15,11 +15,6 @@
 		<Action name="edit_select_all"/>
 		<Action name="edit_deselect_all"/>
 		<Action name="edit_delete"/>
-		<Separator/>
-		<Menu name="edit_purge">
-			<text>P&amp;urge</text>
-			<Action name="edit_purge_history"/>
-		</Menu>
 	</Menu>
 	<Menu name="view">
 		<text>&amp;View</text>
