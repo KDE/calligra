@@ -339,7 +339,7 @@ public Q_SLOTS:
     void textToColumns();
     void consolidate();
     void insertSheet();
-    void removeSheet();
+    void deleteSheet();
     void hideSheet();
     void showSheet();
     void helpUsing();
@@ -523,9 +523,9 @@ protected slots:
      * Popup menu
      */
     void slotActivateTool( int _id );
-    void slotInsert();
+    void insertCells();
     void slotInsertCellCopy();
-    void slotRemove();
+    void deleteCells();
     void slotRename();
 
     void slotShowColumnDialog();

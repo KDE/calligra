@@ -82,7 +82,6 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
-#include <ktoolbarpopupaction.h>
 #include <kparts/event.h>
 #include <k3listview.h>
 #include <kpushbutton.h>
@@ -400,9 +399,9 @@ public:
     // cell operations
     QAction * editCell;
     QAction * insertCell;
-    QAction * removeCell;
+    QAction * deleteCell;
     QAction * clearAll;
-    KToolBarPopupAction* mergeCell;
+    QAction * mergeCell;
     QAction * mergeCellHorizontal;
     QAction * mergeCellVertical;
     QAction * dissociateCell;
@@ -434,8 +433,7 @@ public:
     // sheet/workbook operations
     QAction * sheetProperties;
     QAction * insertSheet;
-    QAction * menuInsertSheet;
-    QAction * removeSheet;
+    QAction * deleteSheet;
     QAction * renameSheet;
     QAction * hideSheet;
     QAction * showSheet;
@@ -787,51 +785,45 @@ void View::Private::initActions()
 
   actions->editCell->setToolTip(i18n("Edit the highlighted cell"));
 
-  actions->insertCell = new KAction(KIcon( "insertcell" ), i18n("Insert Cells..."), view);
-  ac->addAction("insertCell", actions->insertCell );
-  connect(actions->insertCell, SIGNAL(triggered(bool)), view, SLOT( slotInsert() ));
+    actions->insertCell = new KAction(KIcon("insertcell"), i18n("Cells..."), view);
+    actions->insertCell->setIconText(i18n("Insert Cells..."));
+    actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet"));
+    ac->addAction("insertCell", actions->insertCell );
+    connect(actions->insertCell, SIGNAL(triggered(bool)), view, SLOT(insertCells()));
 
-  actions->insertCell->setToolTip(i18n("Insert a blank cell into the spreadsheet"));
-
-  actions->removeCell = new KAction(KIcon( "removecell" ), i18n("Remove Cells..."), view);
-  ac->addAction("removeCell", actions->removeCell );
-  connect(actions->removeCell, SIGNAL(triggered(bool)), view, SLOT( slotRemove() ));
-
-  actions->removeCell->setToolTip(i18n("Removes the current cell from the spreadsheet"));
+    actions->deleteCell = new KAction(KIcon("removecell"), i18n("Cells..."), view);
+    actions->deleteCell->setIconText(i18n("Remove Cells..."));
+    actions->deleteCell->setToolTip(i18n("Removes the cells from the spreadsheet"));
+    ac->addAction("deleteCell", actions->deleteCell);
+    connect(actions->deleteCell, SIGNAL(triggered(bool)), view, SLOT(deleteCells()));
 
     actions->clearAll = new KAction(KIcon("deletecell"), i18n("All"), view);
-    actions->clearAll->setIconText(i18n("Delete"));
-    actions->clearAll->setToolTip(i18n("Delete all contents and formatting of the current cell"));
+    actions->clearAll->setIconText(i18n("Clear All"));
+    actions->clearAll->setToolTip(i18n("Clear all contents and formatting of the current cell"));
     ac->addAction("clearAll", actions->clearAll);
     connect(actions->clearAll, SIGNAL(triggered(bool)), view, SLOT(clearAll()));
 
-    actions->mergeCell = new KToolBarPopupAction(KIcon("mergecell"), i18n("Merge Cells"), view);
+    actions->mergeCell = new KAction(KIcon("mergecell"), i18n("Merge Cells"), view);
     ac->addAction("mergecell", actions->mergeCell);
     connect(actions->mergeCell, SIGNAL(triggered(bool)), view, SLOT( mergeCell()));
     actions->mergeCell->setToolTip(i18n("Merge the selected region"));
-    actions->mergeCell->menu()->addAction( actions->mergeCell );
 
-  actions->mergeCellHorizontal  = new KAction(KIcon("mergecell-horizontal" ), i18n("Merge Cells Horizontally"), view);
-  ac->addAction("mergecellHorizontal", actions->mergeCellHorizontal );
-  connect(actions->mergeCellHorizontal, SIGNAL(triggered(bool)), view, SLOT( mergeCellHorizontal() ));
+    actions->mergeCellHorizontal = new KAction(KIcon("mergecell-horizontal"), i18n("Merge Cells Horizontally"), view);
+    actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected Region.horizontally"));
+    ac->addAction("mergecellHorizontal", actions->mergeCellHorizontal);
+    connect(actions->mergeCellHorizontal, SIGNAL(triggered(bool)), view, SLOT( mergeCellHorizontal()));
 
-  actions->mergeCellHorizontal->setToolTip(i18n("Merge the selected Region.horizontally"));
-  actions->mergeCell->menu()->addAction( actions->mergeCellHorizontal );
+    actions->mergeCellVertical = new KAction(KIcon("mergecell-vertical"), i18n("Merge Cells Vertically"), view);
+    actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically"));
+    ac->addAction("mergecellVertical", actions->mergeCellVertical);
+    connect(actions->mergeCellVertical, SIGNAL(triggered(bool)), view, SLOT(mergeCellVertical()));
 
-  actions->mergeCellVertical  = new KAction(KIcon("mergecell-vertical" ), i18n("Merge Cells Vertically"), view);
-  ac->addAction("mergecellVertical", actions->mergeCellVertical );
-  connect(actions->mergeCellVertical, SIGNAL(triggered(bool)), view, SLOT( mergeCellVertical() ));
+    actions->dissociateCell = new KAction(KIcon("dissociatecell"), i18n("Dissociate Cells"), view);
+    actions->dissociateCell->setToolTip(i18n("Unmerge the selected region"));
+    ac->addAction("dissociatecell", actions->dissociateCell);
+    connect(actions->dissociateCell, SIGNAL(triggered(bool)), view, SLOT(dissociateCell()));
 
-  actions->mergeCellVertical->setToolTip(i18n("Merge the selected region vertically"));
-  actions->mergeCell->menu()->addAction( actions->mergeCellVertical );
-
-  actions->dissociateCell = new KAction(KIcon("dissociatecell" ), i18n("Dissociate Cells"), view);
-  ac->addAction("dissociatecell", actions->dissociateCell );
-  connect(actions->dissociateCell, SIGNAL(triggered(bool)), view, SLOT( dissociateCell() ));
-
-  actions->dissociateCell->setToolTip(i18n("Unmerge the selected region"));
-
-    actions->clearContents = new KAction(i18n("Contents"), view);
+    actions->clearContents = new KAction(KIcon("edit-clear"), i18n("Contents"), view);
     actions->clearContents->setIconText(i18n("Clear Contents"));
     actions->clearContents->setToolTip(i18n("Remove the contents of the current cell"));
     ac->addAction("clearContents", actions->clearContents);
@@ -878,17 +870,18 @@ void View::Private::initActions()
 
   actions->resizeColumn->setToolTip(i18n("Change the width of a column"));
 
-  actions->insertColumn  = new KAction(KIcon( "insert_table_col" ), i18n("Insert Columns"), view);
-  ac->addAction("insertColumn", actions->insertColumn );
-  connect(actions->insertColumn, SIGNAL(triggered(bool)), view, SLOT( insertColumn() ));
+    actions->insertColumn = new KAction(KIcon("insert_table_col"), i18n("Columns"), view);
+    actions->insertColumn->setIconText(i18n("Insert Columns"));
+    actions->insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet"));
+    ac->addAction("insertColumn", actions->insertColumn);
+    connect(actions->insertColumn, SIGNAL(triggered(bool)), view, SLOT(insertColumn()));
 
-  actions->insertColumn->setToolTip(i18n("Inserts a new column into the spreadsheet"));
+    actions->deleteColumn = new KAction(KIcon("delete_table_col"), i18n("Columns"), view);
+    actions->deleteColumn->setIconText(i18n("Remove Columns"));
+    actions->deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet"));
+    ac->addAction("deleteColumn", actions->deleteColumn);
+    connect(actions->deleteColumn, SIGNAL(triggered(bool)), view, SLOT(deleteColumn()));
 
-  actions->deleteColumn  = new KAction(KIcon( "delete_table_col" ), i18n("Delete Columns"), view);
-  ac->addAction("deleteColumn", actions->deleteColumn );
-  connect(actions->deleteColumn, SIGNAL(triggered(bool)), view, SLOT( deleteColumn() ));
-
-  actions->deleteColumn->setToolTip(i18n("Removes a column from the spreadsheet"));
 
   actions->hideColumn  = new KAction(KIcon( "hide_table_column" ), i18n("Hide Columns"), view);
   ac->addAction("hideColumn", actions->hideColumn );
@@ -921,17 +914,17 @@ void View::Private::initActions()
 
   actions->resizeRow->setToolTip(i18n("Change the height of a row"));
 
-  actions->insertRow  = new KAction(KIcon( "insert_table_row" ), i18n("Insert Rows"), view);
-  ac->addAction("insertRow", actions->insertRow );
-  connect(actions->insertRow, SIGNAL(triggered(bool)), view, SLOT( insertRow() ));
+    actions->insertRow = new KAction(KIcon("insert_table_row"), i18n("Rows"), view);
+    actions->insertRow->setIconText(i18n("Insert Rows"));
+    actions->insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet"));
+    ac->addAction("insertRow", actions->insertRow);
+    connect(actions->insertRow, SIGNAL(triggered(bool)), view, SLOT(insertRow()));
 
-  actions->insertRow->setToolTip(i18n("Inserts a new row into the spreadsheet"));
-
-  actions->deleteRow  = new KAction(KIcon( "delete_table_row" ), i18n("Delete Rows"), view);
-  ac->addAction("deleteRow", actions->deleteRow );
-  connect(actions->deleteRow, SIGNAL(triggered(bool)), view, SLOT( deleteRow() ));
-
-  actions->deleteRow->setToolTip(i18n("Removes a row from the spreadsheet"));
+    actions->deleteRow = new KAction(KIcon("delete_table_row"), i18n("Rows"), view);
+    actions->deleteRow->setIconText(i18n("Remove Rows"));
+    actions->deleteRow->setToolTip(i18n("Removes a row from the spreadsheet"));
+    ac->addAction("deleteRow", actions->deleteRow);
+    connect(actions->deleteRow, SIGNAL(triggered(bool)), view, SLOT(deleteRow()));
 
   actions->hideRow  = new KAction(KIcon( "hide_table_row" ), i18n("Hide Rows"), view);
   ac->addAction("hideRow", actions->hideRow );
@@ -969,24 +962,17 @@ void View::Private::initActions()
 
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
 
-  actions->insertSheet  = new KAction(KIcon("inserttable" ), i18n("Insert Sheet"), view);
-  ac->addAction("insertSheet", actions->insertSheet );
-  connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
+    actions->insertSheet = new KAction(KIcon("inserttable"), i18n("Sheet"), view);
+    actions->insertSheet->setIconText(i18n("Insert Sheet"));
+    actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
+    ac->addAction("insertSheet", actions->insertSheet );
+    connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
 
-  actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
-
-  // same action as insertSheet, but without 'insert' in the caption
-  actions->menuInsertSheet  = new KAction(KIcon("inserttable" ), i18n("&Sheet"), view);
-  ac->addAction("menuInsertSheet", actions->menuInsertSheet );
-  connect(actions->menuInsertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
-
-  actions->menuInsertSheet->setToolTip(i18n("Insert a new sheet"));
-
-  actions->removeSheet  = new KAction(KIcon( "delete_table" ), i18n("Remove Sheet"), view);
-  ac->addAction("removeSheet", actions->removeSheet );
-  connect(actions->removeSheet, SIGNAL(triggered(bool)), view, SLOT( removeSheet() ));
-
-  actions->removeSheet->setToolTip(i18n("Remove the active sheet"));
+    actions->deleteSheet = new KAction(KIcon("delete_table"), i18n("Sheet"), view);
+    actions->deleteSheet->setIconText(i18n("Remove Sheet"));
+    actions->deleteSheet->setToolTip(i18n("Remove the active sheet"));
+    ac->addAction("deleteSheet", actions->deleteSheet);
+    connect(actions->deleteSheet, SIGNAL(triggered(bool)), view, SLOT(deleteSheet()));
 
   actions->renameSheet  = new KAction(i18n("Rename Sheet..."), view);
   ac->addAction("renameSheet", actions->renameSheet );
@@ -1099,12 +1085,10 @@ void View::Private::initActions()
   connect(actions->sortInc, SIGNAL(triggered(bool)), view, SLOT( sortInc() ));
   actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order"));
 
-#if 1 // KSPREAD_FILTER_FEATURE
-  actions->autoFilter = new KAction( i18n("&Auto-Filter"), view );
-  ac->addAction( "autoFilter", actions->autoFilter );
-  connect( actions->autoFilter, SIGNAL(triggered(bool)), view, SLOT(autoFilter()) );
-  actions->autoFilter->setToolTip( i18n( "Add an automatic filter to a cell range" ) );
-#endif // KSPREAD_FILTER_FEATURE
+    actions->autoFilter = new KAction(KIcon("search-filter"), i18n("&Auto-Filter"), view);
+    ac->addAction("autoFilter", actions->autoFilter);
+    connect(actions->autoFilter, SIGNAL(triggered(bool)), view, SLOT(autoFilter()));
+    actions->autoFilter->setToolTip(i18n("Add an automatic filter to a cell range"));
 
   actions->paperLayout  = new KAction(i18n("Page Layout..."), view);
   ac->addAction("paperLayout", actions->paperLayout );
@@ -1480,7 +1464,7 @@ void View::Private::adjustActions( bool mode )
   actions->borderOutline->setEnabled( mode );
   actions->borderRemove->setEnabled( mode );
   actions->borderColor->setEnabled( mode );
-  actions->removeSheet->setEnabled( mode );
+  actions->deleteSheet->setEnabled( mode );
   actions->autoSum->setEnabled( mode );
   actions->defaultFormat->setEnabled( mode );
   actions->areaName->setEnabled( mode );
@@ -1495,7 +1479,7 @@ void View::Private::adjustActions( bool mode )
   actions->verticalText->setEnabled( mode );
   actions->comment->setEnabled( mode );
   actions->insertCell->setEnabled( mode );
-  actions->removeCell->setEnabled( mode );
+  actions->deleteCell->setEnabled( mode );
   actions->changeAngle->setEnabled( mode );
   actions->dissociateCell->setEnabled( mode );
   actions->increaseIndent->setEnabled( mode );
@@ -1623,15 +1607,14 @@ void View::Private::adjustWorkbookActions( bool mode )
   actions->hideSheet->setEnabled( mode );
   actions->showSheet->setEnabled( mode );
   actions->insertSheet->setEnabled( mode );
-  actions->menuInsertSheet->setEnabled( mode );
-  actions->removeSheet->setEnabled( mode );
+  actions->deleteSheet->setEnabled( mode );
 
   if ( mode )
   {
     if ( activeSheet && !activeSheet->isProtected() )
     {
       bool state = ( view->doc()->map()->visibleSheets().count() > 1 );
-      actions->removeSheet->setEnabled( state );
+      actions->deleteSheet->setEnabled( state );
       actions->hideSheet->setEnabled( state );
     }
     actions->showSheet->setEnabled( view->doc()->map()->hiddenSheets().count() > 0 );
@@ -3938,7 +3921,7 @@ void View::insertSheet()
 
   if ( doc()->map()->visibleSheets().count() > 1 )
   {
-    d->actions->removeSheet->setEnabled( true );
+    d->actions->deleteSheet->setEnabled( true );
     d->actions->hideSheet->setEnabled( true );
   }
 
@@ -5522,8 +5505,8 @@ void View::popupColumnMenu( const QPoint & _point )
       d->popupColumn->addAction( d->actions->resizeColumn );
       d->popupColumn->addAction( i18n("Adjust Column"), this, SLOT( adjustColumn() ) );
       d->popupColumn->addSeparator();
-      d->popupColumn->addAction( d->actions->insertColumn );
-      d->popupColumn->addAction( d->actions->deleteColumn );
+      d->popupColumn->addAction(KIcon("insert_table_col"), i18n("Insert Columns"), this, SLOT(insertColumn()));
+      d->popupColumn->addAction(KIcon("delete_table_col"), i18n("Remove Columns"), this, SLOT(deleteColumn()));
       d->popupColumn->addAction( d->actions->hideColumn );
 
       d->actions->showSelColumns->setEnabled(false);
@@ -5608,10 +5591,10 @@ void View::popupRowMenu( const QPoint & _point )
       }
 
       d->popupRow->addAction( d->actions->resizeRow );
-      d->popupRow->addAction( i18n("Adjust Row"), this, SLOT( adjustRow() ) );
+      d->popupRow->addAction(KIcon("adjustrow"), i18n("Adjust Row"), this, SLOT(adjustRow()));
       d->popupRow->addSeparator();
-      d->popupRow->addAction( d->actions->insertRow );
-      d->popupRow->addAction( d->actions->deleteRow );
+      d->popupRow->addAction(KIcon("insert_table_row"), i18n("Insert Rows"), this, SLOT(insertRow()));
+      d->popupRow->addAction(KIcon("delete_table_row"), i18n("Remove Rows"), this, SLOT(deleteRow()));
       d->popupRow->addAction( d->actions->hideRow );
 
       d->actions->showSelColumns->setEnabled(false);
@@ -5810,7 +5793,7 @@ void View::openPopupMenu( const QPoint & _point )
       d->popupMenu->addAction( d->actions->specialPaste );
       d->popupMenu->addAction( d->actions->insertCellCopy );
       d->popupMenu->addSeparator();
-      d->popupMenu->addAction( d->actions->clearAll );
+      d->popupMenu->addAction(KIcon("deletecell"), i18n("Clear All"), this, SLOT(clearAll()));
       d->popupMenu->addAction( d->actions->adjust );
       d->popupMenu->addAction( d->actions->defaultFormat );
 
@@ -5819,8 +5802,8 @@ void View::openPopupMenu( const QPoint & _point )
       {
         d->popupMenu->addAction( d->actions->areaName );
         d->popupMenu->addSeparator();
-        d->popupMenu->addAction( d->actions->insertCell );
-        d->popupMenu->addAction( d->actions->removeCell );
+        d->popupMenu->addAction(KIcon("insertcell"), i18n("Insert Cells..."), this, SLOT(insertCells()));
+        d->popupMenu->addAction(KIcon("removecell"), i18n("Remove Cells..."), this, SLOT(deleteCells()));
       }
 
       d->popupMenu->addSeparator();
@@ -6057,14 +6040,14 @@ void View::setDefaultStyle()
     manipulator->execute();
 }
 
-void View::slotInsert()
+void View::insertCells()
 {
   QRect r( d->selection->lastRange() );
   InsertDialog dlg( this, "InsertDialog", r, InsertDialog::Insert );
   dlg.exec();
 }
 
-void View::slotRemove()
+void View::deleteCells()
 {
   QRect r( d->selection->lastRange() );
   InsertDialog dlg( this, "Remove", r, InsertDialog::Remove );
@@ -6560,7 +6543,7 @@ void View::zoomPlus()
 }
 */
 
-void View::removeSheet()
+void View::deleteSheet()
 {
   if ( doc()->map()->count() <= 1 || ( doc()->map()->visibleSheets().count() <= 1 ) )
   {
@@ -7064,33 +7047,47 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 void View::popupTabBarMenu( const QPoint & _point )
 {
-  if ( !koDocument()->isReadWrite() || !factory() )
-    return;
-  if ( d->tabBar )
-  {
-    bool state = ( doc()->map()->visibleSheets().count() > 1 );
-    if ( d->activeSheet && d->activeSheet->isProtected() )
+    if (!koDocument()->isReadWrite() || !factory())
+        return;
+    if (d->tabBar)
     {
-      d->actions->removeSheet->setEnabled( false );
-      d->actions->hideSheet->setEnabled( false );
-      d->actions->showSheet->setEnabled( false );
+        QMenu* const menu = static_cast<QMenu*>(factory()->container("menupage_popup", this));
+
+        QAction* insertSheet = new KAction(KIcon("inserttable"), i18n("Insert Sheet"), this);
+        insertSheet->setToolTip(i18n("Remove the active sheet"));
+        connect(insertSheet, SIGNAL(triggered(bool)), this, SLOT(insertSheet()));
+        menu->insertAction(d->actions->hideSheet, insertSheet);
+
+        QAction* deleteSheet = new KAction(KIcon("delete_table"), i18n("Remove Sheet"), this);
+        deleteSheet->setToolTip(i18n("Remove the active sheet"));
+        connect(deleteSheet, SIGNAL(triggered(bool)), this, SLOT(deleteSheet()));
+        menu->insertAction(d->actions->hideSheet, deleteSheet);
+
+        bool state = (doc()->map()->visibleSheets().count() > 1);
+        if (d->activeSheet && d->activeSheet->isProtected())
+        {
+            deleteSheet->setEnabled(false);
+            d->actions->hideSheet->setEnabled(false);
+            d->actions->showSheet->setEnabled(false);
+        }
+        else
+        {
+            deleteSheet->setEnabled(state);
+            d->actions->hideSheet->setEnabled(state);
+            d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
+        }
+        if (!doc() || !doc()->map() || doc()->map()->isProtected())
+        {
+            insertSheet->setEnabled(false);
+            deleteSheet->setEnabled(false);
+            d->actions->renameSheet->setEnabled(false);
+            d->actions->showSheet->setEnabled(false);
+            d->actions->hideSheet->setEnabled(false);
+        }
+        menu->exec(_point);
+        menu->removeAction(insertSheet);
+        menu->removeAction(deleteSheet);
     }
-    else
-    {
-      d->actions->removeSheet->setEnabled( state);
-      d->actions->hideSheet->setEnabled( state );
-      d->actions->showSheet->setEnabled( doc()->map()->hiddenSheets().count()>0 );
-    }
-    if ( !doc() || !doc()->map() || doc()->map()->isProtected() )
-    {
-      d->actions->insertSheet->setEnabled( false );
-      d->actions->renameSheet->setEnabled( false );
-      d->actions->showSheet->setEnabled( false );
-      d->actions->hideSheet->setEnabled( false );
-      d->actions->removeSheet->setEnabled( false );
-    }
-    static_cast<QMenu*>(factory()->container("menupage_popup",this))->popup(_point);
-  }
 }
 
 void View::updateBorderButton()
@@ -7109,7 +7106,7 @@ void View::removeSheet( Sheet *_t )
   setActiveSheet( doc()->map()->findSheet( doc()->map()->visibleSheets().first() ));
 
   bool state = doc()->map()->visibleSheets().count() > 1;
-  d->actions->removeSheet->setEnabled( state );
+  d->actions->deleteSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
   doc()->emitEndOperation();
 }
@@ -7124,7 +7121,7 @@ void View::insertSheet( Sheet* sheet )
   }
 
   bool state = ( doc()->map()->visibleSheets().count() > 1 );
-  d->actions->removeSheet->setEnabled( state );
+  d->actions->deleteSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
   doc()->emitEndOperation();
 }

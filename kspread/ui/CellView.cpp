@@ -292,11 +292,9 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     if ( !cellRect.intersects( paintRect ) )
         return;
 
-#if 1 // KSPREAD_FILTER_FEATURE
     // 0. Paint possible filter button
     if (d->filterButton && !dynamic_cast<QPrinter*>(painter.device()))
         paintFilterButton(painter, cellRect, cell, sheetView);
-#endif // KSPREAD_FILTER_FEATURE
 
     // 1. Paint possible comment indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())

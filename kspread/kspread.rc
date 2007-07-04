@@ -13,7 +13,7 @@
   <Action name="paste"/>
   <Action name="specialPaste"/>
   <Action name="insertCellCopy"/>
-  <Menu name="Fill"><text>Fi&amp;ll</text>
+  <Menu name="Fill" icon="fill"><text>Fi&amp;ll</text>
         <Action name="fillDown"/>
         <Action name="fillRight"/>
         <Action name="fillUp"/>
@@ -26,7 +26,7 @@
   <Action name="edit_find_next"/>
   <Action name="edit_find_last"/>
   <Action name="edit_replace"/>
-  <Menu name="Clear"><text>Clear</text>
+  <Menu name="Clear" icon ="edit-clear"><text>Clear</text>
         <Action name="clearAll"/>
         <Separator/>
         <Action name="clearContents"/>
@@ -34,6 +34,12 @@
         <Action name="clearConditional"/>
         <Action name="clearHyperlink"/>
         <Action name="clearValidity"/>
+  </Menu>
+  <Menu name="Delete" icon ="edit-delete"><text>Delete</text>
+        <Action name="deleteCell"/>
+        <Action name="deleteColumn"/>
+        <Action name="deleteRow"/>
+        <Action name="deleteSheet"/>
   </Menu>
   <Separator/>
   <Action name="editCell"/>
@@ -62,6 +68,11 @@
   <Action name="series"/>
   <Action name="insertHyperlink"/>
   <Action name="insertSpecialChar"/>
+  <Separator/>
+  <Action name="insertCell"/>
+  <Action name="insertColumn"/>
+  <Action name="insertRow"/>
+  <Action name="insertSheet"/>
   <Separator/>
   <Action name="insertPart"/>
   <Action name="insertChart"/>
@@ -96,7 +107,6 @@
     <Action name="showColumn"/>
   </Menu>
   <Menu name="Sheet"><text>&amp;Sheet</text>
-  <Action name="removeSheet"/>
   <Action name="hideSheet"/>
   <Action name="showSheet"/>
   <Separator/>
@@ -117,21 +127,17 @@
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
-  <Menu name="Filter"><text>Filter</text>
+  <Menu name="Filter" icon="search-filter"><text>Filter</text>
     <Action name="autoFilter"/>
     <Action name="customFilter"/>
   </Menu>
   <Action name="textToColumns"/>
   <Separator/>
-  <Action name="insertColumn"/>
-  <Action name="insertRow"/>
-  <Action name="deleteColumn"/>
-  <Action name="deleteRow"/>
-  <Separator/>
-  <Action name="insertCell"/>
-  <Action name="removeCell"/>
-  <Separator/>
-  <Action name="mergecell"/>
+  <Menu name="MergeCellMenu" icon="mergecell"><text>Merge Cells</text>
+    <Action name="mergecell"/>
+    <Action name="mergecellHorizontal"/>
+    <Action name="mergecellVertical"/>
+  </Menu>
   <Action name="dissociatecell"/>
   <Separator/>
   <Action name="showArea"/>
@@ -237,8 +243,8 @@
 </ToolBar>
 <Menu name="menupage_popup">
   <Action name="renameSheet"/>
-  <Action name="insertSheet"/>
-  <Action name="removeSheet"/>
+  <!--<Action name="insertSheet"/>-->
+  <!--<Action name="deleteSheet"/>-->
   <Action name="hideSheet"/>
   <Action name="showSheet"/>
   <Separator/>
