@@ -41,6 +41,13 @@ private slots:
     void directionChangeRequested();
 
 private:
+    enum DirectionButtonState {
+        LTR,
+        RTL,
+        Auto
+    };
+
+    void updateDirection(DirectionButtonState state);
     void fillListsCombobox();
 
     Ui::SimpleStyleWidget widget;
@@ -48,6 +55,7 @@ private:
     bool m_blockSignals;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
+    DirectionButtonState m_directionButtonState;
 };
 
 #endif

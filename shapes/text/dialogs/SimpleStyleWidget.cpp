@@ -85,8 +85,8 @@ void SimpleStyleWidget::setCurrentBlock(const QTextBlock &block) {
     QTextLayout *layout = block.layout();
     if(layout) {
         switch(layout->textOption().textDirection()) {
-        case Qt::LeftToRight: widget.reversedText->setText(i18n("LTR")); break;
-        case Qt::RightToLeft: widget.reversedText->setText(i18n("RTL")); break;
+        case Qt::LeftToRight: updateDirection(LTR); break;
+        case Qt::RightToLeft: updateDirection(RTL); break;
         }
     }
 
@@ -137,26 +137,44 @@ void SimpleStyleWidget::directionChangeRequested() {
     QTextBlockFormat format = cursor.blockFormat();
     KoText::Direction dir = static_cast<KoText::Direction> (format.intProperty(
                 KoParagraphStyle::TextProgressionDirection));
-    QString buttonText;
     switch(dir) {
     case KoText::PerhapsLeftRightTopBottom:
     case KoText::LeftRightTopBottom:
-        dir = KoText::RightLeftTopBottom;
-        buttonText = i18nc("Short for RightToLeft", "RTL");
+        format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::RightLeftTopBottom);
+        updateDirection(RTL);
         break;
     case KoText::AutoDirection:
+        updateDirection(LTR);
+        format.setProperty(KoParagraphStyle::TextProgressionDirection, KoText::LeftRightTopBottom);
+        break;
     case KoText::PerhapsRightLeftTopBottom:
     case KoText::RightLeftTopBottom:
-        buttonText = i18nc("Short for LeftToRight", "LTR");
-        dir = KoText::LeftRightTopBottom;
+        updateDirection(Auto);
+        format.clearProperty(KoParagraphStyle::TextProgressionDirection);
         break;
     case KoText::TopBottomRightLeft: ;// Unhandled.
         break;
     };
-    widget.reversedText->setText(buttonText);
-
-    format.setProperty(KoParagraphStyle::TextProgressionDirection, dir);
     cursor.setBlockFormat(format);
+}
+
+void SimpleStyleWidget::updateDirection(DirectionButtonState state) {
+    if(m_directionButtonState == state) return;
+    m_directionButtonState = state;
+    QString buttonText;
+    switch(state) {
+        case LTR:
+            buttonText = i18nc("Short for LeftToRight", "LTR");
+            break;
+        case RTL:
+            buttonText = i18nc("Short for RightToLeft", "RTL");
+            break;
+        default:
+        case Auto:
+            buttonText = i18nc("Automatic direction detection", "Auto");
+            break;
+    }
+    widget.reversedText->setText(buttonText);
 }
 
 #include <SimpleStyleWidget.moc>
