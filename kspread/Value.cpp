@@ -47,7 +47,7 @@ class Value::Private : public QSharedData
     {
       bool b;
       qint64 i;
-      Number *f;
+      Number f;
       complex<Number>* pc;
       QString* ps;
       ValueArray* pa;
@@ -74,7 +74,7 @@ class Value::Private : public QSharedData
                 i = o.i;
                 break;
             case Value::Float:
-                f = new Number (*o.f);
+                f = o.f;
                 break;
             case Value::Complex:
                 pc = new complex<Number>( *o.pc );
@@ -209,7 +209,7 @@ bool Value::operator==( const Value& o ) const
     case Empty:   return true;
     case Boolean: return o.d->b == d->b;
     case Integer: return o.d->i == d->i;
-    case Float:   return ( !d->f && !o.d->f ) || ( ( d->f && o.d->f ) && ( *o.d->f == *d->f ) );
+    case Float:   return compare( o.d->f, d->f ) == 0;
     case Complex: return ( !d->pc && !o.d->pc ) || ( ( d->pc && o.d->pc ) && ( *o.d->pc == *d->pc ) );
     case String:  return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
     case Array:   return ( !d->pa && !o.d->pa ) || ( ( d->pa && o.d->pa ) && ( *o.d->pa == *d->pa ) );
@@ -252,7 +252,7 @@ Value::Value( double f )
   : d( Private::null() )
 {
   d->type = Float;
-  d->f = new Number (f);
+  d->f = Number (f);
   d->format = fmt_Number;
 }
 
@@ -262,7 +262,7 @@ Value::Value( Number f )
     : d( Private::null() )
 {
     d->type = Float;
-    d->f = new Number (f);
+    d->f = f;
     d->format = fmt_Number;
 }
 #endif // KSPREAD_HIGH_PRECISION_SUPPORT
@@ -302,8 +302,8 @@ Value::Value( const QDateTime& dt, const Doc* doc )
     const QTime refTime( 0, 0 );  // reference time is midnight
 
     d->type = Float;
-    d->f = new Number (refDate.daysTo( dt.date() ));
-    *(d->f) += static_cast<double>( refTime.msecsTo( dt.time() ) ) / 86400000.0; // 24*60*60*1000
+    d->f = Number (refDate.daysTo( dt.date() ));
+    d->f += static_cast<double>( refTime.msecsTo( dt.time() ) ) / 86400000.0; // 24*60*60*1000
     d->format = fmt_DateTime;
 }
 
@@ -315,7 +315,7 @@ Value::Value( const QTime& time, const Doc* doc )
     const QTime refTime( 0, 0 );  // reference time is midnight
 
     d->type = Float;
-    d->f = new Number (static_cast<double>( refTime.msecsTo( time ) ) / 86400000.0); // 24*60*60*1000
+    d->f = Number (static_cast<double>( refTime.msecsTo( time ) ) / 86400000.0); // 24*60*60*1000
     d->format = fmt_Time;
 }
 
@@ -363,7 +363,7 @@ qint64 Value::asInteger() const
     if ( type() == Integer )
         result = d->i;
     else if ( type() == Float )
-        result = static_cast<qint64>(floor (numToDouble ( *(d->f) ) ) );
+        result = static_cast<qint64>(floor (numToDouble ( d->f ) ) );
     else if ( type() == Complex )
         result = static_cast<qint64>( floor (numToDouble ( d->pc->real() ) ) );
     return result;
@@ -374,7 +374,7 @@ Number Value::asFloat() const
 {
     Number result = 0.0;
     if ( type() == Float )
-        result = *(d->f);
+        result = d->f;
     else if ( type() == Integer )
         result = static_cast<int>(d->i);
     else if ( type() == Complex )
@@ -389,7 +389,7 @@ complex<Number> Value::asComplex() const
     if ( type() == Complex )
         result = *d->pc;
     else if ( type() == Float )
-        result = *(d->f);
+        result = d->f;
     else if ( type() == Integer )
         result = static_cast<int>(d->i);
     return result;
