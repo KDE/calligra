@@ -416,6 +416,12 @@ void TextTool::updateSelectionHandler() {
         if(clipboard->supportsSelection())
             clipboard->setText(m_caret.selectedText(), QClipboard::Selection);
     }
+    KoCanvasResourceProvider *p = m_canvas->resourceProvider();
+    p->setResource(KoText::CurrentTextPosition, m_caret.position());
+    p->setResource(KoText::CurrentTextAnchor, m_caret.anchor());
+    QVariant variant;
+    variant.setValue<void*>(m_textShapeData->document());
+    p->setResource(KoText::CurrentTextDocument, variant);
 }
 
 void TextTool::copy() const {

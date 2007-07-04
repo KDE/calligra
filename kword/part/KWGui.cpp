@@ -36,6 +36,11 @@
 #include <KoToolDockerFactory.h>
 
 #include <QGridLayout>
+#include <QVariant>
+#include <QTextDocument>
+#include <QTextBlock>
+#include <QTextBlockFormat>
+#include <QTextLayout>
 
 KWGui::KWGui( const QString& viewMode, KWView *parent )
   : QWidget( parent),
@@ -125,8 +130,6 @@ void KWGui::updateMousePos(const QPoint &point) {
 }
 
 void KWGui::updateRulers() const {
-    m_verticalRuler->update();
-    m_horizontalRuler->update();
     m_verticalRuler->setVisible( m_view->kwdocument()->config().viewRulers() );
     m_horizontalRuler->setVisible( m_view->kwdocument()->config().viewRulers() );
 }
@@ -151,5 +154,29 @@ void KWGui::shapeSelectionChanged() {
     m_horizontalRuler->setActiveRange(start.x(), end.x());
     m_verticalRuler->setActiveRange(start.y(), end.y());
 }
+
+void KWGui::canvasResourceChanged(int key) {
+    if(key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument)
+       return;
+
+    // TODO instead of returning; clear the data on the ruler.
+
+    QVariant docVar = m_canvas->resourceProvider()->resource(KoText::CurrentTextDocument);
+    if(docVar.isNull())
+        return;
+    QTextDocument *doc = static_cast<QTextDocument*> (docVar.value<void*>());
+    if(doc == 0)
+        return;
+    QTextBlock block = doc->findBlock(m_canvas->resourceProvider()->intResource(KoText::CurrentTextPosition));
+    if(! block.isValid())
+        return;
+
+    QTextBlockFormat format = block.blockFormat();
+    m_horizontalRuler->setParagraphIndent(format.leftMargin());
+    m_horizontalRuler->setFirstLineIndent(format.textIndent());
+    m_horizontalRuler->setEndIndent(format.rightMargin());
+    m_horizontalRuler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
+}
+
 
 #include "KWGui.moc"
