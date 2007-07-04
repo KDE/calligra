@@ -56,9 +56,6 @@ KWCanvas::KWCanvas(const QString& viewMode, KWDocument *document, KWView *view, 
     m_toolProxy = new KoToolProxy(this, this);
     setAttribute(Qt::WA_OpaquePaintEvent, true);
     setAttribute(Qt::WA_InputMethodEnabled, true);
-
-    connect(resourceProvider(), SIGNAL(sigResourceChanged(int, const QVariant &)),
-        parent, SLOT(canvasResourceChanged(int)));
 }
 
 KWCanvas::~KWCanvas()

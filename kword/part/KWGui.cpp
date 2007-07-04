@@ -89,6 +89,8 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
             m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    connect(m_canvas->resourceProvider(), SIGNAL(sigResourceChanged(int, const QVariant &)),
+        this, SLOT(canvasResourceChanged(int)));
 
     pageSetupChanged();
 }
@@ -159,7 +161,30 @@ void KWGui::canvasResourceChanged(int key) {
     if(key != KoText::CurrentTextPosition && key != KoText::CurrentTextDocument)
        return;
 
-    // TODO instead of returning; clear the data on the ruler.
+    class Setter {
+    public:
+        Setter(KoRuler *ruler) : m_ruler(ruler) {}
+        ~Setter() {
+            if(m_block.isValid()) {
+                QTextBlockFormat format = m_block.blockFormat();
+                m_ruler->setShowIndents(true);
+                m_ruler->setParagraphIndent(format.leftMargin());
+                m_ruler->setFirstLineIndent(format.textIndent());
+                m_ruler->setEndIndent(format.rightMargin());
+                m_ruler->setRightToLeft(m_block.layout()->textOption().textDirection() == Qt::RightToLeft);
+            }
+            else
+                m_ruler->setShowIndents(false);
+        }
+        void setBlock(const QTextBlock &block) {
+            m_block = block;
+        }
+
+    private:
+        QTextBlock m_block;
+        KoRuler *m_ruler;
+    };
+    Setter setter(m_horizontalRuler);
 
     QVariant docVar = m_canvas->resourceProvider()->resource(KoText::CurrentTextDocument);
     if(docVar.isNull())
@@ -167,15 +192,8 @@ void KWGui::canvasResourceChanged(int key) {
     QTextDocument *doc = static_cast<QTextDocument*> (docVar.value<void*>());
     if(doc == 0)
         return;
-    QTextBlock block = doc->findBlock(m_canvas->resourceProvider()->intResource(KoText::CurrentTextPosition));
-    if(! block.isValid())
-        return;
+    setter.setBlock(doc->findBlock(m_canvas->resourceProvider()->intResource(KoText::CurrentTextPosition)));
 
-    QTextBlockFormat format = block.blockFormat();
-    m_horizontalRuler->setParagraphIndent(format.leftMargin());
-    m_horizontalRuler->setFirstLineIndent(format.textIndent());
-    m_horizontalRuler->setEndIndent(format.rightMargin());
-    m_horizontalRuler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
 }
 
 
