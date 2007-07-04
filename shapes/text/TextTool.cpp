@@ -826,12 +826,18 @@ void TextTool::activate (bool temporary) {
     }
     setShapeData(static_cast<KoTextShapeData*> (m_textShape->userData()));
     useCursor(Qt::IBeamCursor, true);
-    m_textShape->repaint();
 
-    if(m_textShapeData->document()->isEmpty()) {
-        QTextBlock block = m_textShapeData->document()->begin();
-        
+    // restore the selection from a previous time we edited this document.
+    for(int i=0; i < m_previousSelections.count(); i++ ) {
+        TextSelection selection = m_previousSelections.at(i);
+        if(selection.document == m_textShapeData->document()) {
+            m_caret.setPosition(selection.anchor);
+            m_caret.setPosition(selection.position, QTextCursor::KeepAnchor);
+            m_previousSelections.removeAt(i);
+            break;
+        }
     }
+    m_textShape->repaint();
 
     updateSelectionHandler();
     updateActions();
@@ -840,11 +846,23 @@ void TextTool::activate (bool temporary) {
 
 void TextTool::deactivate() {
     m_textShape = 0;
-    if(m_textShapeData)
+    if(m_textShapeData) {
         m_textShapeData->document()->setUndoRedoEnabled(false); // erase undo history.
+        TextSelection selection;
+        selection.document = m_textShapeData->document();
+        selection.position = m_caret.position();
+        selection.anchor = m_caret.anchor();
+        m_previousSelections.append(selection);
+    }
     setShapeData(0);
+    if(m_previousSelections.count() > 20) // don't let it grow indefinitely
+        m_previousSelections.removeAt(0);
 
     updateSelectionHandler();
+}
+
+void TextTool::repaintDecorations() {
+    repaintSelection(m_caret.position(), m_caret.anchor());
 }
 
 void TextTool::repaintCaret() {

@@ -71,6 +71,8 @@ public:
     virtual void copy() const;
     /// reimplemented from superclass
     virtual bool paste();
+    /// reimplemented from superclass
+    virtual void repaintDecorations();
 
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
@@ -208,6 +210,14 @@ private:
         KoText::Direction direction;
     };
     UpdatePageDirection m_updateParagDirection;
+
+    /// structur that allows us to remember the text position and selection of previously edited documents.
+    struct TextSelection {
+        QTextDocument *document; // be warned that this may end up being a dangling pointer, so don't use.
+        int position;
+        int anchor;
+    };
+    QList<TextSelection> m_previousSelections;
 };
 
 #endif
