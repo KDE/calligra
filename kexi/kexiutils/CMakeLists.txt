@@ -11,7 +11,7 @@ kde4_automoc(${kexiutils_LIB_SRCS})
 add_definitions( -DMAKE_KEXIUTILS_LIB )
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 target_link_libraries(kexiutils  
-	${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
+	${KDE4_KIO_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
 
 add_custom_command(
 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp

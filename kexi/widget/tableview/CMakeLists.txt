@@ -34,7 +34,7 @@ kde4_automoc(${kexidatatable_LIB_SRCS})
 
 kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
-target_link_libraries(kexidatatable  ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
+target_link_libraries(kexidatatable  ${KDE4_KIO_LIBS}
  ${QT_QT3SUPPORT_LIBRARY}
  kexicore kexiutils kexiguiutils koproperty 
 )

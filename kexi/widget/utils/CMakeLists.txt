@@ -23,7 +23,7 @@ kde4_automoc(${kexiguiutils_LIB_SRCS})
 
 kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 
-target_link_libraries(kexiguiutils ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
+target_link_libraries(kexiguiutils
 	kexiutils ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY}
 )
 
