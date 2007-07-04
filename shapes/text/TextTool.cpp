@@ -507,9 +507,20 @@ void TextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
 
 void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
     useCursor(Qt::IBeamCursor);
-    if(event->buttons() == Qt::NoButton)
-        return;
     int position = pointToPosition(event->point);
+
+    if(event->buttons() == Qt::NoButton) {
+        QTextCursor cursor(m_caret);
+        cursor.setPosition(position);
+
+        if (cursor.charFormat().isAnchor())
+            useCursor(Qt::PointingHandCursor);
+        else
+            useCursor(Qt::IBeamCursor);
+
+        return;
+    }
+
     if(position == m_caret.position()) return;
     if(position >= 0) {
         repaintCaret();
