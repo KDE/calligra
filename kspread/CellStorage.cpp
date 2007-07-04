@@ -23,6 +23,9 @@
 // KDE
 #include <klocale.h>
 
+// KOffice
+#include <KoXmlWriter.h>
+
 // KSpread
 #include "Damages.h"
 #include "DependencyManager.h"
@@ -32,6 +35,9 @@
 #include "RectStorage.h"
 #include "Sheet.h"
 #include "StyleStorage.h"
+
+// database
+#include "database/DatabaseManager.h"
 
 using namespace KSpread;
 
@@ -1132,6 +1138,20 @@ const ValidityStorage* CellStorage::validityStorage() const
 const ValueStorage* CellStorage::valueStorage() const
 {
     return d->valueStorage;
+}
+
+void CellStorage::saveOdfDatabases(KoXmlWriter& xmlWriter) const
+{
+    const Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)));
+    const QList< QPair<QRectF, Database> > databases = d->databaseStorage->undoData(region);
+    for (int i = 0; i < databases.count(); ++i)
+    {
+        Database database = databases[i].second;
+        database.setRange(Region(databases[i].first.toRect(), d->sheet));
+        if (database.range().isEmpty() || !database.range().isValid())
+            continue;
+        database.saveOdf(xmlWriter);
+    }
 }
 
 void CellStorage::startUndoRecording()

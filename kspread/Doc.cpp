@@ -97,6 +97,9 @@
 // commands
 #include "commands/UndoWrapperCommand.h"
 
+// database
+#include "database/DatabaseManager.h"
+
 // chart shape
 #include "kchart/shape/ChartShape.h"
 #include "chart/ChartDialog.h"
@@ -116,6 +119,7 @@ public:
 
   Map *map;
   KLocale *locale;
+  DatabaseManager* databaseManager;
   DependencyManager* dependencyManager;
   RecalcManager* recalcManager;
   StyleManager *styleManager;
@@ -212,6 +216,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   d->map = new Map( this, "Map" );
   d->locale = new Localization;
+  d->databaseManager = new DatabaseManager(d->map);
   d->dependencyManager = new DependencyManager( d->map );
   d->recalcManager = new RecalcManager( d->map );
   d->styleManager = new StyleManager();
@@ -296,6 +301,7 @@ Doc::~Doc()
 
   delete d->locale;
   delete d->map;
+  delete d->databaseManager;
   delete d->dependencyManager;
   delete d->recalcManager;
   delete d->styleManager;
@@ -344,6 +350,11 @@ KLocale *Doc::locale () const
 Map *Doc::map () const
 {
   return d->map;
+}
+
+DatabaseManager* Doc::databaseManager() const
+{
+    return d->databaseManager;
 }
 
 DependencyManager* Doc::dependencyManager() const
@@ -662,6 +673,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
 
     saveOasisAreaName( contentTmpWriter );
+    d->databaseManager->saveOdf(contentTmpWriter);
     contentTmpWriter.endElement(); ////office:spreadsheet
   contentTmpWriter.endElement(); ////office:body
 
@@ -1042,6 +1054,8 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         return false;
     }
 
+    // Load databases. This needs the sheets to be loaded.
+    d->databaseManager->loadOdf(body); // table:database-ranges
 
     if ( !settings.isNull() )
     {

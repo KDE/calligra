@@ -62,6 +62,7 @@ namespace KSpread
 {
 class ColumnFormat;
 class Damage;
+class DatabaseManager;
 class DependencyManager;
 class ValueParser;
 class ValueConverter;
@@ -167,6 +168,11 @@ public:
    * @return the Map that belongs to this Document
    */
   Map *map () const;
+
+  /**
+   * \return a pointer to the database manager
+   */
+  DatabaseManager* databaseManager() const;
 
   /**
    * \return a pointer to the dependency manager

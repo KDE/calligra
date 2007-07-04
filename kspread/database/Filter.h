@@ -29,7 +29,7 @@ class KoXmlWriter;
 namespace KSpread
 {
 class Database;
-class Sheet;
+class Map;
 
 /**
  * OpenDocument, 8.7.1 Table Filter
@@ -92,7 +92,7 @@ public:
 
     void apply(const Database* database) const;
 
-    bool loadOdf(const KoXmlElement& element, Sheet* const sheet);
+    bool loadOdf(const KoXmlElement& element, const Map* map);
     void saveOdf(KoXmlWriter& xmlWriter) const;
 
     void dump() const;

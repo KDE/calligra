@@ -17,31 +17,56 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_AUTOFILTER_COMMAND
-#define KSPREAD_AUTOFILTER_COMMAND
+#ifndef KSPREAD_DATABASE_MANAGER
+#define KSPREAD_DATABASE_MANAGER
 
-#include "AbstractRegionCommand.h"
+#include <QObject>
+
+#include <KoXmlReader.h>
+
+class KoXmlWriter;
 
 namespace KSpread
 {
+class Map;
 
-class AutoFilterCommand : public AbstractRegionCommand
+class DatabaseManager : public QObject
 {
+    Q_OBJECT
+
 public:
     /**
      * Constructor.
      */
-    AutoFilterCommand();
+    DatabaseManager(const Map* map);
 
     /**
      * Destructor.
      */
-    virtual ~AutoFilterCommand();
+    virtual ~DatabaseManager();
 
-    virtual void redo();
-    virtual void undo();
+    /**
+     * Creates a unique database name.
+     */
+    QString createUniqueName() const;
+
+    /**
+     * Loads databases.
+     * \ingroup OpenDocument
+     */
+    bool loadOdf(const KoXmlElement& element);
+
+    /**
+     * Saves databases.
+     * \ingroup OpenDocument
+     */
+    void saveOdf(KoXmlWriter& xmlWriter) const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_AUTOFILTER_COMMAND
+#endif // KSPREAD_DATABASE_MANAGER

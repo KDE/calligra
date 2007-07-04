@@ -27,8 +27,8 @@
 #include "DatabaseSource.h"
 #include "Filter.h"
 #include "FilterPopup.h"
+#include "Map.h"
 #include "Region.h"
-#include "Sheet.h"
 #include "Util.h"
 
 using namespace KSpread;
@@ -127,6 +127,16 @@ bool Database::isEmpty() const
     return d->name.isNull(); // it may be empty though
 }
 
+const QString& Database::name() const
+{
+    return d->name;
+}
+
+void Database::setName(const QString& name)
+{
+    d->name = name;
+}
+
 Qt::Orientation Database::orientation() const
 {
     return d->orientation == Private::Row ? Qt::Vertical : Qt::Horizontal;
@@ -168,7 +178,7 @@ Filter* Database::filter()
     return d->filter;
 }
 
-bool Database::loadOdf(const KoXmlElement& element, Sheet* const sheet)
+bool Database::loadOdf(const KoXmlElement& element, const Map* map)
 {
     if (element.hasAttributeNS(KoXmlNS::table, "name"))
         d->name = element.attributeNS(KoXmlNS::table, "name", QString());
@@ -224,7 +234,10 @@ bool Database::loadOdf(const KoXmlElement& element, Sheet* const sheet)
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address"))
     {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
-        d->targetRangeAddress = Region(sheet->map(), address, sheet);
+        // only absolute addresses allowed; no fallback sheet needed
+        d->targetRangeAddress = Region(map, Oasis::decodeFormula(address), 0);
+        if (d->targetRangeAddress.isEmpty() || !d->targetRangeAddress.isValid())
+            return false;
     }
     if (element.hasAttributeNS(KoXmlNS::table, "refresh-delay"))
     {
@@ -257,7 +270,7 @@ bool Database::loadOdf(const KoXmlElement& element, Sheet* const sheet)
         else if (child.localName() == "filter")
         {
             d->filter = new Filter();
-            if (!d->filter->loadOdf(child, sheet))
+            if (!d->filter->loadOdf(child, map))
             {
                 delete d->filter;
                 d->filter = 0;

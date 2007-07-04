@@ -34,8 +34,8 @@ namespace KSpread
 {
 class Cell;
 class Filter;
+class Map;
 class Region;
-class Sheet;
 
 /**
  * OpenDocument, 8.6.1 Database Range
@@ -72,6 +72,16 @@ public:
     bool isEmpty() const;
 
     /**
+     * \return the database's name
+     */
+    const QString& name() const;
+
+    /**
+     * Sets the database's name.
+     */
+    void setName(const QString& name);
+
+    /**
      * \return the database's orientation
      */
     Qt::Orientation orientation() const;
@@ -104,7 +114,7 @@ public:
 
     Filter* filter();
 
-    bool loadOdf(const KoXmlElement& element, Sheet* const sheet);
+    bool loadOdf(const KoXmlElement& element, const Map* map);
     void saveOdf(KoXmlWriter& xmlWriter) const;
 
     void operator=( const Database& other );

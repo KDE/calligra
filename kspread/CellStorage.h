@@ -35,6 +35,8 @@
 
 #include "database/Database.h"
 
+class KoXmlWriter;
+
 namespace KSpread
 {
 class Cell;
@@ -305,6 +307,12 @@ public:
     StyleStorage* styleStorage() const;
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
+
+    /**
+     * Saves all stored databases.
+     * \ingroup OpenDocument
+     */
+    void saveOdfDatabases(KoXmlWriter& xmlWriter) const;
 
     /**
      * Start the undo recording.

@@ -590,12 +590,15 @@ void Filter::apply(const Database* database) const
     }
 }
 
-bool Filter::loadOdf(const KoXmlElement& element, Sheet* const sheet)
+bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
 {
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address"))
     {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
-        d->targetRangeAddress = Region(sheet->map(), address, sheet);
+        // only absolute addresses allowed; no fallback sheet needed
+        d->targetRangeAddress = Region(map, Oasis::decodeFormula(address), 0);
+        if (d->targetRangeAddress.isEmpty() || !d->targetRangeAddress.isValid())
+            return false;
     }
     if (element.hasAttributeNS(KoXmlNS::table, "condition-source"))
     {
@@ -607,7 +610,8 @@ bool Filter::loadOdf(const KoXmlElement& element, Sheet* const sheet)
     if (element.hasAttributeNS(KoXmlNS::table, "condition-source-range-address"))
     {
         const QString address = element.attributeNS(KoXmlNS::table, "condition-source-range-address", QString());
-        d->conditionSourceRangeAddress = Region(sheet->map(), address, sheet);
+        // only absolute addresses allowed; no fallback sheet needed
+        d->conditionSourceRangeAddress = Region(map, Oasis::decodeFormula(address), 0);
     }
     if (element.hasAttributeNS(KoXmlNS::table, "display-duplicates"))
     {

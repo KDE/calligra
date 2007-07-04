@@ -60,6 +60,7 @@ SET (commands_DIR_SRCS
 
 SET (database_DIR_SRCS
 	database/Database.cpp
+	database/DatabaseManager.cpp
 	database/DatabaseSource.cpp
 	database/DatabaseSourceQuery.cpp
 	database/DatabaseSourceSql.cpp
