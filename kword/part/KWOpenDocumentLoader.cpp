@@ -38,9 +38,11 @@
 #include <KoImageData.h>
 #include <KoTextAnchor.h>
 #include <KoShapeContainer.h>
+#include <KoTextDocumentLayout.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
+#include <QTextBlock>
 #include <klocale.h>
 
 /// \internal d-pointer class.
@@ -310,22 +312,16 @@ KoShape* KWOpenDocumentLoader::loadImageShape(KoTextLoadingContext& context, con
         else {
             KoShape* datatextShape = fs->frames().first()->shape();
             Q_ASSERT(datatextShape);
-            //KWTextFrameSet* kwfs = fs;
-            //QTextDocument *datadocument = kwfs->document();
-            //Q_ASSERT(datadocument);
-
-            KWFrame *frame = fs->frames().first();
-            Q_ASSERT(frame);
-            //frame->shape()->setPosition(QPointF(0,0));
-
-            //int cursorPosition = cursor.anchor();
             KoShapeContainer* container = dynamic_cast<KoShapeContainer*> (datatextShape);
             Q_ASSERT(container);
             container->addChild(shape);
 
-            //TODO
-            //KoTextAnchor* anchor = new KoTextAnchor(shape);
+            KoTextAnchor* anchor = new KoTextAnchor(shape);
             //anchor->setOffset( QPointF(200.0,200.0) );
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (cursor.block().document()->documentLayout());
+            Q_ASSERT(layout);
+            Q_ASSERT(layout->inlineObjectTextManager());
+            layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
 
             kDebug(32001)<<"KWOpenDocumentLoader::loadImage frameset.name="<<fs->name()<<endl;
         }
