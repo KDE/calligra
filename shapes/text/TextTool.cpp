@@ -1054,7 +1054,7 @@ void TextTool::softHyphen() {
 
 void TextTool::lineBreak() {
     if(! m_allowActions) return;
-    m_selectionHandler.insert(QString(QChar('\n')));
+    m_selectionHandler.insert(QString(QChar(0x2028)));
 }
 
 void TextTool::alignLeft() {
