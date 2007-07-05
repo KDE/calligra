@@ -1757,16 +1757,17 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 
 	if (m_scrollbarToolTipsEnabled) {
 //		const QRect r( verticalScrollBar()->sliderRect() );
+		QStyleOptionComplex styleOption;
+		styleOption.initFrom(verticalScrollBar());
 #ifdef __GNUC__
 #warning ported but not tested KexiDataAwareObjectInterface::vScrollBarValueChanged()
 #else
 #pragma WARNING( ported but not tested KexiDataAwareObjectInterface::vScrollBarValueChanged() )
 #endif
-		QStyleOptionComplex styleOption;
-		styleOption.initFrom(verticalScrollBar());
-		const QRect r( verticalScrollBar()->style()->subControlRect(
+		QRect r;
+/*TODO		const QRect r( verticalScrollBar()->style()->subControlRect(
 			QStyle::CC_ScrollBar, &styleOption, 
-			QStyle::SC_ScrollBarSlider, verticalScrollBar()) );
+			QStyle::SC_ScrollBarSlider, verticalScrollBar()) ); */
 		
 		const int row = lastVisibleRow()+1;
 		if (row<=0) {

@@ -49,7 +49,7 @@ KexiSimplePrintingPart::~KexiSimplePrintingPart()
 }
 
 KexiView* KexiSimplePrintingPart::createView(QWidget *parent, KexiWindow* window, 
-			KexiPart::Item &item, int viewMode, QMap<QString,QString>* args)
+			KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QString>* args)
 {
 	Q_UNUSED( item );
 	if (viewMode == Kexi::DesignViewMode) {

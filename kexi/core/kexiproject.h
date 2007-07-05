@@ -175,12 +175,13 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 
 		/*! Opens object pointed by \a item in a view \a viewMode.
 		 \a staticObjectArgs can be passed for static object 
-		 (only works when part for this item is of type KexiPart::StaticPart) */
-		KexiWindow* openObject(KexiPart::Item& item, 
+		 (only works when part for this item is of type KexiPart::StaticPart).
+		 The new widget will be a child of \a parent. */
+		KexiWindow* openObject(QWidget* parent, KexiPart::Item& item, 
 			Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
-		KexiWindow* openObject(const QString &mimeType, 
+		KexiWindow* openObject(QWidget* parent, const QString &mimeType, 
 			const QString& name, Kexi::ViewMode viewMode = Kexi::DataViewMode);
 
 		/*! Remove a part instance pointed by \a item.

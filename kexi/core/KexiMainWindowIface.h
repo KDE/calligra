@@ -197,8 +197,9 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		/*! Closes window \a window. If window's data (see KexiWindow::isDirty()) is unsaved,
 		 used will be asked if saving should be perforemed.
 		 \return true on successull closing or false on closing error.
-		 If closing was cancelled by user, cancelled is returned. */
-		virtual tristate closeWindow(KexiWindow *dlg) = 0;
+		 If closing was cancelled by user, cancelled is returned.
+		 If \a window is 0, the current one will be closed. */
+		virtual tristate closeWindow(KexiWindow *window) = 0;
 
 		/*! Displays a window for entering object's name and title.
 		 Used on new object saving.

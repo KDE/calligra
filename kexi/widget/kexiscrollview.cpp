@@ -82,7 +82,8 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 		refreshContentsSizeLater(true, true);
 //! @todo allow to hide navigator
 		updateScrollBars();
-		m_scrollViewNavPanel = new KexiRecordNavigator(this, leftMargin(), "nav");
+		m_scrollViewNavPanel = new KexiRecordNavigator(this, leftMargin());
+		m_scrollViewNavPanel->setObjectName("nav");
 		m_scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 	}
 }
@@ -101,10 +102,13 @@ KexiScrollView::setWidget(QWidget *w)
 void
 KexiScrollView::setRecordNavigatorVisible(bool visible)
 {
-	if(/*m_scrollViewNavPanel->isVisible() &&*/ !visible)
-		m_scrollViewNavPanel->hide();
+	if(/*m_scrollViewNavPanel->isVisible() &&*/ !visible) {
+		if (m_scrollViewNavPanel)
+			m_scrollViewNavPanel->hide();
+	}
 	else if(visible)  {
-		m_scrollViewNavPanel->show();
+		if (m_scrollViewNavPanel)
+			m_scrollViewNavPanel->hide();
 		updateNavPanelGeometry();
 	}
 }

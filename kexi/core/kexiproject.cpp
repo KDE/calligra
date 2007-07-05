@@ -633,13 +633,16 @@ KexiPart::Item*
 KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
 {
 	KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
-	if (!dict)
+	if (!dict) {
+		kexiwarn << "KexiProject::itemForMimeType() no mimetype="<<mimeType<<endl;
 		return 0;
+	}
 	const QString l_name = name.toLower();
 	for (KexiPart::ItemDictIterator it( *dict ); it.current(); ++it) {
 		if (it.current()->name().toLower()==l_name)
 			return it.current();
 	}
+	kexiwarn << "KexiProject::itemForMimeType() no name="<<name<<endl;
 	return 0;
 }
 
@@ -714,12 +717,14 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 	clearError();
 	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = Kexi::partManager().partForMimeType(item.mimeType());
-	if (!part)
+	if (!part) {
+		kexiwarn<<"KexiProject::findPartFor() !part: " << item.mimeType() <<endl;
 		setError(&Kexi::partManager());
+	}
 	return part;
 }
 
-KexiWindow* KexiProject::openObject(KexiPart::Item& item, 
+KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item& item, 
 	Kexi::ViewMode viewMode, QMap<QString,QString>* staticObjectArgs)
 {
 	clearError();
@@ -730,7 +735,7 @@ KexiWindow* KexiProject::openObject(KexiPart::Item& item,
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return 0;
-	KexiWindow *window  = part->openInstance(item, viewMode, staticObjectArgs);
+	KexiWindow *window  = part->openInstance(parent, item, viewMode, staticObjectArgs);
 	if (!window) {
 		if (part->lastOperationStatus().error())
 			setError(i18n("Opening object \"%1\" failed.", item.name())+"<br>"
@@ -741,11 +746,11 @@ KexiWindow* KexiProject::openObject(KexiPart::Item& item,
 	return window;
 }
 
-KexiWindow* KexiProject::openObject(const QString &mimeType, 
+KexiWindow* KexiProject::openObject(QWidget* parent, const QString &mimeType, 
 	const QString& name, Kexi::ViewMode viewMode)
 {
 	KexiPart::Item *it = itemForMimeType(mimeType, name);
-	return it ? openObject(*it, viewMode) : 0;
+	return it ? openObject(parent, *it, viewMode) : 0;
 }
 
 bool KexiProject::checkWritable()

@@ -116,7 +116,7 @@ void KexiComboBoxDropDownButton::styleChanged()
 		(style()->inherits("KStyle") && style()->objectName().toLower()!="qtcurve")
 		|| style()->objectName().toLower()=="platinum";
 	if (m_fixForHeight==0) {
-		setFixedWidth( style()->subControlRect( QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxArrow,
-			(const QWidget*)m_paintedCombo ).width() +1 );
+/*TODO		setFixedWidth( style()->subControlRect( QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxArrow,
+			(const QWidget*)m_paintedCombo ).width() +1 );*/
 	}
 }

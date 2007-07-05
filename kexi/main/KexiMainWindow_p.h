@@ -1,4 +1,4 @@
-/* This file is part of the KDE projec
+/* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
    Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
@@ -54,7 +54,7 @@ public:
 		closedWindowGUIClient=0;
 		closedWindowViewGUIClient=0;
 		nameDialog=0;
-		curWindow=0;
+//		curWindow=0;
 		m_findDialog=0;
 //2.0: unused		block_KMdiMainFrm_eventFilter=false;
 		focus_before_popup=0;
@@ -197,9 +197,9 @@ public:
 	/*! Toggles last checked view mode radio action, if available. */
 	void toggleLastCheckedMode()
 	{
-		if (curWindow.isNull())
+		if (!wnd->currentWindow())
 			return;
-		KToggleAction *ta = actions_for_view_modes.value( (int)curWindow->currentViewMode() );
+		KToggleAction *ta = actions_for_view_modes.value( (int)wnd->currentWindow()->currentViewMode() );
 		if (ta)
 			ta->setChecked(true);
 //		if (!last_checked_mode)
@@ -378,6 +378,8 @@ void updatePropEditorDockWidthInfo() {
 	/*! Updates the find/replace dialog depending on the active view.
 	 Nothing is performed if the dialog is not instantiated yet or is invisible. */
 	void updateFindDialogContents(bool createIfDoesNotExist = false) {
+		if (!wnd->currentWindow())
+			return;
 		if (!createIfDoesNotExist && (!m_findDialog || !m_findDialog->isVisible()))
 			return;
 		KexiSearchAndReplaceViewInterface* iface = currentViewSupportingSearchAndReplaceInterface();
@@ -389,7 +391,7 @@ void updatePropEditorDockWidthInfo() {
 			return;
 		}
 //! @todo use ->caption() here, depending on global settings related to displaying captions
-		findDialog()->setObjectNameForCaption(curWindow->partItem()->name());
+		findDialog()->setObjectNameForCaption(wnd->currentWindow()->partItem()->name());
 
 		QStringList columnNames;
 		QStringList columnCaptions;
@@ -419,9 +421,9 @@ void updatePropEditorDockWidthInfo() {
 	//! \return the current view if it supports \a actionName, otherwise returns 0.
 	KexiView *currentViewSupportingAction(const char* actionName) const
 	{
-		if (!curWindow)
+		if (!wnd->currentWindow())
 			return 0;
-		KexiView *view = curWindow->selectedView();
+		KexiView *view = wnd->currentWindow()->selectedView();
 		if (!view)
 			return 0;
 		QAction *action = view->sharedAction(actionName);
@@ -433,9 +435,9 @@ void updatePropEditorDockWidthInfo() {
 	//! \return the current view if it supports KexiSearchAndReplaceViewInterface.
 	KexiSearchAndReplaceViewInterface* currentViewSupportingSearchAndReplaceInterface() const
 	{
-		if (!curWindow)
+		if (!wnd->currentWindow())
 			return 0;
-		KexiView *view = curWindow->selectedView();
+		KexiView *view = wnd->currentWindow()->selectedView();
 		if (!view)
 			return 0;
 		return dynamic_cast<KexiSearchAndReplaceViewInterface*>(view);
@@ -466,7 +468,7 @@ void updatePropEditorDockWidthInfo() {
 
 		KXMLGUIClient *curWindowGUIClient, *curWindowViewGUIClient,
 			*closedWindowGUIClient, *closedWindowViewGUIClient;
-		QPointer<KexiWindow> curWindow;
+//unused		QPointer<KexiWindow> curWindow;
 
 		KexiNameDialog *nameDialog;
 

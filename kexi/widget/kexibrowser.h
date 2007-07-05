@@ -24,8 +24,7 @@
 #include <k3listview.h>
 #include <QHash>
 #include <QEvent>
-#include <Q3CString>
-#include <kexi_export.h>
+#include <kexi.h>
 
 class Q3ListViewItem;
 class KIcon;
@@ -88,7 +87,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void installEventFilter ( QObject * filterObj );
 		virtual bool eventFilter ( QObject *o, QEvent * e );
 
-		bool actionEnabled(const Q3CString& actionName) const;
+		bool actionEnabled(const QString& actionName) const;
 
 	public slots:
 		KexiBrowserItem* addGroup(KexiPart::Info& info);
@@ -107,13 +106,13 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		bool isReadOnly() const;
 
 	signals: 
-		void openItem( KexiPart::Item*, int viewMode );
+		void openItem( KexiPart::Item*, Kexi::ViewMode viewMode );
 
 		/*! this signal is emmited when user double clicked (or single -depending on settings)
 		 or pressed return ky on the part item.
 		 This signal differs from openItem() signal in that if the object is already opened
 		 in view mode other than \a viewMode, the mode is not changed. */
-		void openOrActivateItem( KexiPart::Item*, int viewMode );
+		void openOrActivateItem( KexiPart::Item*, Kexi::ViewMode viewMode );
 
 		void newItem( KexiPart::Info* );
 

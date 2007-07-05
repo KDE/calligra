@@ -35,12 +35,18 @@ KexiTableDesigner_DataView::KexiTableDesigner_DataView(QWidget *parent)
 
 KexiTableDesigner_DataView::~KexiTableDesigner_DataView()
 {
+#ifdef __GNUC__
+#warning TODO crash
+#else
+#pragma WARNING( TODO crash )
+#endif
+/*TODO
 	if (dynamic_cast<KexiDataTableView*>(tableView()) 
 		&& dynamic_cast<KexiDataTableView*>(tableView())->cursor())
 	{
 		KexiMainWindowIface::global()->project()->dbConnection()->deleteCursor( 
 			dynamic_cast<KexiDataTableView*>(tableView())->cursor() );
-	}
+	}*/
 }
 
 tristate KexiTableDesigner_DataView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)

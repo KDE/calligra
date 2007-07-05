@@ -39,6 +39,7 @@
 
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"
+#include <kexi_global.h>
 
 //! @internal
 class KexiRecordNavigatorPrivate
@@ -71,13 +72,13 @@ KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
 
 //--------------------------------------------------
 
-KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin, const char *name)
- : Q3Frame(parent, name)
+KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin)
+ : Q3Frame(parent)
  , m_view(0)
  , m_isInsertingEnabled(true)
  , d( new KexiRecordNavigatorPrivate() )
 {
-	if (parent->inherits("QScrollView"))
+	if (dynamic_cast<Q3ScrollView*>(parent))
 		setParentView( dynamic_cast<Q3ScrollView*>(parent) );
 	setFrameStyle(Q3Frame::NoFrame);
 	d->lyr = new Q3HBoxLayout(this,0,0,"nav_lyr");
@@ -340,6 +341,7 @@ void KexiRecordNavigator::setParentView(Q3ScrollView *view)
 void KexiRecordNavigator::updateGeometry(int leftMargin)
 {
 	Q3Frame::updateGeometry();
+	kexidbg <<"view "<<m_view<<endl;
 	if (m_view) {
 		int navWidth;
 		if (m_view->horizontalScrollBar()->isVisible()) {
@@ -349,6 +351,12 @@ void KexiRecordNavigator::updateGeometry(int leftMargin)
 			navWidth = leftMargin + m_view->clipper()->width();
 		}
 		
+		kexidbg << "setGeometry("<<QRect(
+			m_view->frameWidth(),
+			m_view->height() - m_view->horizontalScrollBar()->sizeHint().height()-m_view->frameWidth(),
+			navWidth,
+			m_view->horizontalScrollBar()->sizeHint().height())<<")"<<endl;
+
 		setGeometry(
 			m_view->frameWidth(),
 			m_view->height() - m_view->horizontalScrollBar()->sizeHint().height()-m_view->frameWidth(),

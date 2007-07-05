@@ -27,8 +27,10 @@
 #include <QApplication>
 #include <QKeyEvent>
 
-#if __GNUC__
+#ifdef __GNUC__
 #warning KexiDropDownButton ported but not tested
+#else
+#pragma WARNING( KexiDropDownButton ported but not tested )
 #endif
 
 KexiDropDownButton::KexiDropDownButton(QWidget *parent)
@@ -39,14 +41,23 @@ KexiDropDownButton::KexiDropDownButton(QWidget *parent)
 //	setFixedWidth(QMAX(18, qApp->globalStrut().width()));
 	int fixedWidth;
 	//hack
+#ifdef __GNUC__
+#warning TODO use subControlRect
+#else
+#pragma WARNING( TODO use subControlRect )
+#endif
+/*TODO
 	if (style()->objectName().toLower()=="thinkeramik")
 		fixedWidth = 18; //typical width as in "windows" style
 	else
 		fixedWidth = style()->subControlRect( QStyle::CC_ComboBox, 0, 
 			QStyle::SC_ComboBoxArrow ).width();
 	setFixedWidth( fixedWidth );
-#if __GNUC__
+	*/
+#ifdef __GNUC__
 #warning setPopupDelay(10/*ms*/);
+#else
+#pragma WARNING( setPopupDelay(10/*ms*/); )
 #endif
 }
 

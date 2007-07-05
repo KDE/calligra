@@ -3,7 +3,7 @@
    Copyright (C) 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003 Daniel Molkentin <molkentin@kde.org>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -368,7 +368,8 @@ void KexiTableView::setupNavigator()
 {
 	updateScrollBars();
 	
-	m_navPanel = new KexiRecordNavigator(this, leftMargin(), "navPanel");
+	m_navPanel = new KexiRecordNavigator(this, leftMargin());
+	m_navPanel->setObjectName("navPanel");
 	m_navPanel->setRecordHandler(this);
 	m_navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 }
@@ -470,7 +471,7 @@ void KexiTableView::clearColumnsInternal(bool /*repaint*/)
 
 void KexiTableView::slotUpdate()
 {
-//	kDebug(44021) << " KexiTableView::slotUpdate() -- " << endl;
+	kexidbg << " KexiTableView::slotUpdate() -- " <<m_navPanel<< endl;
 //	QSize s(tableSize());
 //	viewport()->setUpdatesEnabled(false);
 ///	resizeContents(s.width(), s.height());

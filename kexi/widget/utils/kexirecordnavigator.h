@@ -70,7 +70,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public Q3Frame
 	Q_OBJECT
 
 	public:
-		KexiRecordNavigator(QWidget *parent, int leftMargin = 0, const char *name=0);
+		KexiRecordNavigator(QWidget *parent, int leftMargin = 0);
 		virtual ~KexiRecordNavigator();
 
 		void setParentView(Q3ScrollView *view);

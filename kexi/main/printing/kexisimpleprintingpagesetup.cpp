@@ -21,7 +21,7 @@
 #include "kexisimpleprintingpagesetupbase.h"
 #include "kexisimpleprintpreviewwindow.h"
 
-#include <core/keximainwindow.h>
+#include <core/KexiMainWindowIface.h>
 #include <kexiutils/utils.h>
 #include <kexi_version.h>
 
@@ -489,7 +489,7 @@ void KexiSimplePrintingPageSetup::printPreview()
 void KexiSimplePrintingPageSetup::slotOpenData()
 {
 	bool openingCancelled;
-	m_mainWin->openObject(m_item, Kexi::DataViewMode, openingCancelled);
+	KexiMainWindowIface::global()->openObject(m_item, Kexi::DataViewMode, openingCancelled);
 }
 
 void KexiSimplePrintingPageSetup::slotTitleTextChanged(const QString&)

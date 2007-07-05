@@ -24,6 +24,9 @@ KDE4: TODO:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2007-07-05
+- Table View works, tables can be opened in the navigator
+
 2007-06-26
 - Kexi compiles under win32
 = KStaticDeleter replaced with K_GLOBAL_STATIC

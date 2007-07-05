@@ -54,7 +54,7 @@ StaticPart::~StaticPart()
 }
 
 KexiView* StaticPart::createView(QWidget *parent, KexiWindow* window, 
-	KexiPart::Item &item, int viewMode)
+	KexiPart::Item &item, Kexi::ViewMode viewMode)
 {
 	Q_UNUSED(parent);
 	Q_UNUSED(window);

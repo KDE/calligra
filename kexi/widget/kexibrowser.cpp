@@ -753,7 +753,7 @@ KexiPart::Item* KexiBrowser::selectedPartItem() const
 	return it ? it->partItem() : 0;
 }
 
-bool KexiBrowser::actionEnabled(const Q3CString& actionName) const
+bool KexiBrowser::actionEnabled(const QString& actionName) const
 {
 	if (actionName=="project_export_data_table" && (m_features & ContextMenus))
 		return m_exportActionMenu->isVisible();

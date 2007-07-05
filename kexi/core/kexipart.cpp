@@ -197,7 +197,7 @@ KAction* Part::createSharedAction(Kexi::ViewMode mode, const QString &text,
 {
 	GUIClient *instanceGuiClient = d->instanceGuiClients.value((int)mode);
 	if (!instanceGuiClient) {
-		kDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+		kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
 		return 0;
 	}
 	return KexiMainWindowIface::global()->createSharedAction(text, pix_name, cut, name, 
@@ -230,7 +230,7 @@ KAction* Part::createSharedPartToggleAction(const QString &text,
 {
 	GUIClient *instanceGuiClient = d->instanceGuiClients[mode];
 	if (!instanceGuiClient) {
-		kDebug() << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
+		kexidbg << "KexiPart::createSharedAction(): no gui client for mode " << mode << "!" << endl;
 		return 0;
 	}
 	return instanceGuiClient->actionCollection()->action(name, classname);
@@ -255,7 +255,7 @@ void Part::setActionAvailable(const char *action_name, bool avail)
 	KexiMainWindowIface::global()->setActionAvailable(action_name, avail);
 }
 
-KexiWindow* Part::openInstance(KexiPart::Item &item, Kexi::ViewMode viewMode,
+KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::ViewMode viewMode,
 	QMap<QString,QString>* staticObjectArgs)
 {
 	//now it's the time for creating instance actions
@@ -265,7 +265,7 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, Kexi::ViewMode viewMode,
 	}
 
 	d->status.clearStatus();
-	KexiWindow *window = new KexiWindow(KexiMainWindowIface::global()->thisWidget(),
+	KexiWindow *window = new KexiWindow(parent,
 		d->supportedViewModes, *this, item);
 
 	KexiDB::SchemaData sdata(d->info->projectPartID());
@@ -329,12 +329,14 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, Kexi::ViewMode viewMode,
 			window->close();
 			delete window;
 			//try in text mode
-			return openInstance(item, Kexi::TextViewMode, staticObjectArgs);
+			return openInstance(parent, item, Kexi::TextViewMode, staticObjectArgs);
 		}
 		else if (false == askForOpeningInTextModeRes) {
 			delete window->schemaData(); //old one
 			window->close();
 			delete window;
+			kexiwarn << "Part::openInstance() !window, cannot switch to a view mode " << 
+				Kexi::nameForViewMode(viewMode) << endl;
 			return 0;
 		}
 		//the window has an error info
@@ -347,6 +349,8 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, Kexi::ViewMode viewMode,
 		d->status = window->status();
 		window->close();
 		delete window;
+		kexiwarn << "Part::openInstance() !window, switching to view mode failed, " << 
+			Kexi::nameForViewMode(viewMode) << endl;
 		return 0;
 	}
 	window->registerWindow(); //ok?
@@ -367,6 +371,7 @@ KexiWindow* Part::openInstance(KexiPart::Item &item, Kexi::ViewMode viewMode,
 	if (window->selectedView())
 		window->selectedView()->setDirty( d->newObjectsAreDirty ? item.neverSaved() : false );
 	
+	kexidbg << "Part::openInstance() window returned."<<endl;
 	return window;
 }
 

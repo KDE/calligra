@@ -103,8 +103,9 @@ class KEXICORE_EXPORT Part : public QObject
 //! @todo make it protected, outside world should use KexiProject
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
 		 \a viewMode is one of Kexi::ViewMode enum. 
-		 \a staticObjectArgs can be passed for static Kexi Parts. */
-		KexiWindow* openInstance(KexiPart::Item &item, 
+		 \a staticObjectArgs can be passed for static Kexi Parts.
+		 The new widget will be a child of \a parent. */
+		KexiWindow* openInstance(QWidget* parent, KexiPart::Item &item, 
 			Kexi::ViewMode viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 //! @todo make it protected, outside world should use KexiProject
