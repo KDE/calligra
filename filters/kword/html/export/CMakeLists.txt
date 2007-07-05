@@ -21,7 +21,7 @@ kde4_add_plugin(htmlexport WITH_PREFIX ${htmlexport_PART_SRCS})
 
 
 
-target_link_libraries(htmlexport  ${KDE4_KDECORE_LIBS} kwordexportfilters ${KDE4_KDEUI_LIBS})
+target_link_libraries(htmlexport  kwordexportfilters ${KDE4_KDEUI_LIBS})
 
 install(TARGETS htmlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

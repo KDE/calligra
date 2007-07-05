@@ -15,7 +15,7 @@ kde4_add_plugin(kwmailmerge_qtsqldb ${kwmailmerge_qtsqldb_PART_SRCS})
 
 
 
-target_link_libraries(kwmailmerge_qtsqldb  ${KDE4_KDECORE_LIBS} mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kwmailmerge_qtsqldb  mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
 
 install(TARGETS kwmailmerge_qtsqldb  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -34,7 +34,7 @@ kde4_add_plugin(kwmailmerge_qtsqldb_power ${kwmailmerge_qtsqldb_power_PART_SRCS}
 
 
 
-target_link_libraries(kwmailmerge_qtsqldb_power  ${KDE4_KDECORE_LIBS} mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
+target_link_libraries(kwmailmerge_qtsqldb_power  mailmergesqlcommon kwmailmerge_interface ${KDE4_KDEUI_LIBS} )
 
 install(TARGETS kwmailmerge_qtsqldb_power  DESTINATION ${PLUGIN_INSTALL_DIR})
 
