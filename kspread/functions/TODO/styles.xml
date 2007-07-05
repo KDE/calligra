@@ -8,7 +8,7 @@
    <style:table-row-properties style:row-height="13pt"/>
   </style:default-style>
   <style:default-style style:family="table-cell">
-   <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="protected" style:vertical-align="middle"/>
+   <style:table-cell-properties fo:background-color="#ffffff" style:vertical-align="middle"/>
    <style:text-properties fo:color="#000000" fo:font-family="Bitstream Vera Sans" fo:font-size="10pt"/>
   </style:default-style>
   <style:style style:name="custom-style1" style:display-name="assigned" style:family="table-cell">
@@ -29,7 +29,7 @@
  </office:styles>
  <office:automatic-styles>
   <style:page-layout style:name="pm1">
-   <style:page-layout-properties fo:margin-bottom="56.6930116pt" fo:margin-left="56.6930116pt" fo:margin-right="56.6930116pt" fo:margin-top="56.6930116pt" fo:page-height="841.89122226pt" fo:page-width="595.2766218pt" style:print="objects charts drawings zero-values" style:print-orientation="portrait"/>
+   <style:page-layout-properties fo:margin-bottom="56.6930122375488pt" fo:margin-left="56.6930122375488pt" fo:margin-right="56.6930122375488pt" fo:margin-top="56.6930122375488pt" fo:page-height="841.890991210938pt" fo:page-width="595.276977539062pt" style:print="objects charts drawings zero-values" style:print-orientation="portrait"/>
   </style:page-layout>
  </office:automatic-styles>
  <office:master-styles>
