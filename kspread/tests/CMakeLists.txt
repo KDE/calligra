@@ -218,4 +218,16 @@ target_link_libraries(TestDatetimeFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 add_test(kspread-DatetimeFunctions TestDatetimeFunctions)
 
+########### next target ###############
+
+set(TestDatabaseFunctions_SRCS TestDatabaseFunctions.cpp)
+
+kde4_automoc(${TestDatabaseFunctions_SRCS})
+
+kde4_add_executable(TestDatabaseFunctions RUN_UNINSTALLED ${TestDatabaseFunctions_SRCS})
+
+target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(kspread-DatabaseFunctions TestDatabaseFunctions)
+
 endif(KDE4_BUILD_TESTS)
