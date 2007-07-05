@@ -873,7 +873,8 @@ void TextTool::deactivate() {
 }
 
 void TextTool::repaintDecorations() {
-    repaintSelection(m_caret.position(), m_caret.anchor());
+    if(m_textShapeData)
+        repaintSelection(m_caret.position(), m_caret.anchor());
 }
 
 void TextTool::repaintCaret() {
