@@ -32,6 +32,7 @@
 #include <kdebug.h>
 
 PictureShape::PictureShape()
+    : m_imageData(0)
 {
     setKeepAspectRatio(true);
 }
