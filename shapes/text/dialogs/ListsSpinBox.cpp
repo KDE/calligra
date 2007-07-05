@@ -22,7 +22,8 @@
 #include "ListItemsHelper.h"
 
 ListsSpinBox::ListsSpinBox( QWidget *parent)
-    : QSpinBox(parent)
+    : QSpinBox(parent),
+    m_type(KoListStyle::DecimalItem)
 {
 }
 
