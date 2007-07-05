@@ -461,9 +461,11 @@ void KWTextDocumentLayout::layout() {
                     Q_ASSERT( data );
                     double spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
                     lastFrame->allowToGrow();
-                    if(spaceLeft > 0)
-                        m_frameSet->spaceLeft(spaceLeft);
                     data->wipe();
+                    if(spaceLeft > 0) {
+                        // note that this may delete the data and lastFrame !!  Do not access them after this point.
+                        m_frameSet->spaceLeft(spaceLeft);
+                    }
                 }
 
                 return; // done!
