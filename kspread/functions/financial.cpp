@@ -522,50 +522,47 @@ Value func_received (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DOLLARDE
 Value func_dollarde (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value d = args[0];
-  Value f = args[1];
+  double dollarFrac = args[0].asFloat();
+  double frac = calc->conv()->asInteger (args[1]).asInteger();
+  //kDebug()<< " dollarFrac=" << dollarFrac << "    frac=" << frac << endl;
 
-  if (!calc->greater (f, Value(0)))
+  if (frac <= 0)
     return Value::errorVALUE();
-  
-  Value tmp = f;
-  int n = 0;
-  while (calc->greater (tmp.asInteger(), Value(0)))
-  {
-    //kDebug()<<"loop: n = " << n << " tmp = " << tmp << endl;
-    tmp = calc->div (tmp, Value(10));
-    ++n;
-  }
 
-  Value fl = calc->roundDown (d);
-  Value r = calc->sub (d, fl);
+  double fl;
+  double res = modf(dollarFrac, &fl);
+  //kDebug()<<"=modf()         res=" << res << endl;
+  res /= frac;
+  //kDebug()<<"/=frac    res=" << res << endl;
+  res *= pow (10.0, ceil( log10 ( frac ) ) );
+  //kDebug()<<"*=pow()    res=" << res << endl;
+  res += fl;
+  //kDebug()<<"+fl        res=" << res << endl;
 
-  // fl + (r * pow(10.0, n) / f)
-  return calc->add (fl, calc->div (calc->mul (r, pow (10.0, n)), f));
+  return Value(res);
 }
 
 // Function: DOLLARFR
 Value func_dollarfr (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value d = args[0];
-  Value f = args[1];
+  double dollarFrac = args[0].asFloat();
+  double frac = calc->conv()->asInteger (args[1]).asInteger();
+  //kDebug()<< " dollarFrac=" << dollarFrac << "    frac=" << frac << endl;
 
-  if (!calc->greater (f, Value(0)))
+  if (frac <= 0)
     return Value::errorVALUE();
 
-  Value tmp = f;
-  int n = 0;
-  while (calc->greater (tmp, Value(0)))
-  {
-    tmp = calc->div (tmp, 10);
-    ++n;
-  }
+  double fl;
+  double res = modf(dollarFrac, &fl);
+  //kDebug()<<"=modf()         res=" << res << endl;
+  res *= frac;
+  //kDebug()<<"*=frac    res=" << res << endl;
+  res *= pow (10.0, -ceil( log10 ( frac ) ) );
+  //kDebug()<<"*=pow()    res=" << res << endl;
+  res += fl;
+  //kDebug()<<"+fl        res=" << res << endl;
 
-  Value fl = calc->roundDown (d);
-  Value r = calc->sub (d, fl);
-
-  // fl + ((r * f) / pow (10.0, n));
-  return calc->add (fl, calc->div (calc->mul (r, f), Value(pow (10.0, n))));
+  return Value(res);
 }
 
 /// *** TODO continue here ***
