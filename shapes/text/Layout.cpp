@@ -37,7 +37,7 @@
 #include <QTextList>
 #include <QStyle>
 
-// #define DEBUG_TABS
+#define DEBUG_TABS
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
@@ -678,7 +678,7 @@ static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyl
 }
 
 void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd) {
-    // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs. :/
+    // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs, etc. :/
     QTextLayout *layout = block.layout();
     QList<KoTextBlockData::TabLineData> tabsData;
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
@@ -692,10 +692,13 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         foreach(QVariant tab, qvariant_cast<QList<QVariant> >(variant))
             tabFormat.append(tab.value<KoText::Tab>());
 
+    QTextBlockFormat bf = block.blockFormat();
 
     for(int i=0; i < layout->lineCount(); i++) {
+        const double xOffset = bf.leftMargin() + (i==0?bf.textIndent():0.);
         KoTextBlockData::TabLineData tabs;
         if(tabsData.count() > i) {
+            // set the tabs per every line again to emulate right-aligned-tabs
             tabs = tabsData[i];
             textOption.setTabArray(tabs.tabs);
             layout->setTextOption(textOption);
@@ -709,10 +712,13 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             painter->fillRect(rect, QBrush(QColor(255, 255, 0, 130))); // TODO use proper selection color
         }
 
+        painter->save();
         line.draw(painter, layout->position());
-        
+        painter->restore();
+
         QTextBlock::iterator it;
         int beginningPosition = -1;
+        // loop over text fragments in this paragraph and draw the underline and line through.
         for (it = block.begin(); !(it.atEnd()); ++it) {
             QTextFragment currentFragment = it.fragment();
             if (currentFragment.isValid()) {
@@ -722,28 +728,34 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                     double x1 = line.cursorToX(currentFragment.position() - beginningPosition);
                     double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - beginningPosition);
                     QTextCharFormat fmt = currentFragment.charFormat();
-                    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
-                    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::StrikeOutType);
-                    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) && (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
+                    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle)
+                        fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
+                    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType)
+                        fmt.intProperty(KoCharacterStyle::StrikeOutType);
+                    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) &&
+                            (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
                         double y = line.position().y() + line.height()/2;
                         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
-            
+
                         drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
                     }
-        
-                    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::UnderlineStyle);
-                    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::UnderlineType);
-                    if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) && (fontUnderLineType != KoCharacterStyle::NoLineType)) {
+
+                    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle)
+                        fmt.intProperty(KoCharacterStyle::UnderlineStyle);
+                    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType)
+                        fmt.intProperty(KoCharacterStyle::UnderlineType);
+                    if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
+                            (fontUnderLineType != KoCharacterStyle::NoLineType)) {
                         double y = line.position().y() + line.height() - painter->fontMetrics().underlinePos();
                         QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
-            
+
                         drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
                     }
                 }
             }
         }
-        
-        for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps
+
+        for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps for the current line
             const double tabStop = tabs.tabs[x];
             const double pos = tabStop - tabs.tabLength[x];
             QRectF tabArea(layout->position() + line.position() + QPointF(pos, 0),
@@ -751,8 +763,8 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
 
             KoText::Tab tab;
             // choose the one with a position just bigger (or equal) to tabstop.
-            for(int i = tabFormat.count()-1; i >= 0; i--) {
-                KoText::Tab t = tabFormat[i];
+            for(int counter = tabFormat.count()-1; counter >= 0; counter--) {
+                KoText::Tab t = tabFormat[counter];
                 if(tabStop > t.position)
                     break;
                 tab = t;
@@ -789,7 +801,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             }
             painter->setPen(pen);
             const int y = qRound(tabArea.bottom() - pen.widthF() / 2.0);
-            painter->drawLine(qRound(tabArea.left()), y, (int) tabArea.right(), y);
+            painter->drawLine(qRound(tabArea.left() - xOffset), y, qRound(tabArea.right() - xOffset), y);
             painter->restore();
         }
     }
