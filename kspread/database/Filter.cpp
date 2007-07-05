@@ -32,7 +32,6 @@
 #include "RowColumnFormat.h"
 #include "Region.h"
 #include "Sheet.h"
-#include "Util.h"
 #include "Value.h"
 #include "ValueConverter.h"
 
@@ -596,7 +595,7 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
     {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->targetRangeAddress = Region(map, Oasis::decodeFormula(address), 0);
+        d->targetRangeAddress = Region(map, Region::loadOdf(address));
         if (d->targetRangeAddress.isEmpty() || !d->targetRangeAddress.isValid())
             return false;
     }
@@ -611,7 +610,7 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
     {
         const QString address = element.attributeNS(KoXmlNS::table, "condition-source-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->conditionSourceRangeAddress = Region(map, Oasis::decodeFormula(address), 0);
+        d->conditionSourceRangeAddress = Region(map, Region::loadOdf(address));
     }
     if (element.hasAttributeNS(KoXmlNS::table, "display-duplicates"))
     {
@@ -644,17 +643,11 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
         return;
     xmlWriter.startElement("table:filter");
     if (!d->targetRangeAddress.isEmpty())
-    {
-        const QString address = Oasis::encodeFormula(d->targetRangeAddress.name());
-        xmlWriter.addAttribute("table:target-range-address", address);
-    }
+        xmlWriter.addAttribute("table:target-range-address", d->targetRangeAddress.saveOdf());
     if (d->conditionSource != Private::Self)
         xmlWriter.addAttribute("table:condition-source", "cell-range");
     if (!d->conditionSourceRangeAddress.isEmpty())
-    {
-        const QString address = Oasis::encodeFormula(d->conditionSourceRangeAddress.name());
-        xmlWriter.addAttribute("table:condition-source-range-address", address);
-    }
+        xmlWriter.addAttribute("table:condition-source-range-address", d->conditionSourceRangeAddress.saveOdf());
     if (!d->displayDuplicates)
         xmlWriter.addAttribute("table:display-duplicates", "false");
     d->condition->saveOdf(xmlWriter);

@@ -621,7 +621,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        {
            tokens.append (Token (Token::Identifier, tokenText, tokenStart));
            tokenStart = i;
-           tokenText = "";
+           tokenText.clear();
            state = Start;
        }
 
@@ -640,7 +640,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
              else
                  tokens.append (Token (Token::Identifier, tokenText, tokenStart));
              tokenStart = i;
-             tokenText = "";
+             tokenText.clear();
              state = Start;
          }
        }
@@ -670,7 +670,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
            // and not "Sheet2!A2"
            // thus, assume so far that it's a named area
            tokens.append( Token( Token::Range, tokenText, tokenStart ) );
-           tokenText = "";
+           tokenText.clear();
            state = Start;
          }
 
@@ -688,7 +688,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
            {
              // we're done with cell reference
              tokens.append( Token( Token::Cell, tokenText, tokenStart ) );
-             tokenText = "";
+             tokenText.clear();
              state = Start;
            }
          }
@@ -704,7 +704,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        else
        {
          tokens.append( Token( Token::Range, tokenText, tokenStart ) );
-         tokenText = "";
+         tokenText.clear();
          state = Start;
        }
        break;
@@ -731,7 +731,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
              else
                  tokens.append (Token (Token::Identifier, tokenText, tokenStart));
              tokenStart = i;
-             tokenText = "";
+             tokenText.clear();
              state = Start;
          }
        }
@@ -780,7 +780,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        else
        {
          tokens.append( Token( Token::Integer, tokenText, tokenStart ) );
-         tokenText = "";
+         tokenText.clear();
          state = Start;
        };
        break;
@@ -802,7 +802,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        else
        {
          tokens.append( Token( Token::Float, tokenText, tokenStart ) );
-         tokenText = "";
+         tokenText.clear();
          state = Start;
        };
        break;
@@ -829,7 +829,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        else
        {
          tokens.append( Token( Token::Float, tokenText, tokenStart ) );
-         tokenText = "";
+         tokenText.clear();
          state = Start;
        };
        break;
@@ -843,7 +843,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        {
          tokenText.append( ch ); i++;
          tokens.append( Token( Token::String, tokenText, tokenStart ) );
-         tokenText = "";
+         tokenText.clear();
          state = Start;
        }
        break;

@@ -231,7 +231,6 @@ void FilterPopup::buttonClicked(QAbstractButton* button)
                     break;
                 }
             }
-            d->notEmptyCheckbox->setChecked(isAll);
         }
         d->allCheckbox->setChecked(isAll);
     }

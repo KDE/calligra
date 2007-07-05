@@ -781,6 +781,155 @@ bool Region::isValid(const QRect& rect)
     return true;
 }
 
+// static
+QString Region::loadOdf(const QString& expression)
+{
+    QString result;
+    QString temp;
+    bool isRange = false;
+    enum { Start, InQuotes } state = Start;
+    int i = 0;
+    // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+    if (expression[i] == '$')
+        ++i;
+    while (i < expression.count())
+    {
+        switch (state)
+        {
+            case Start:
+            {
+                if (expression[i] == '\'') // quoted sheet name or named area
+                {
+                    temp.append(expression[i]);
+                    state = InQuotes;
+                }
+                else if (expression[i] == '.') // sheet name separator
+                {
+                    // was there already a sheet name?
+                    if (!temp.isEmpty() && !isRange)
+                    {
+                        result.append(temp);
+                        result.append('!');
+                    }
+                    temp.clear();
+                }
+                else if (expression[i] == ':') // cell separator
+                {
+                    isRange = true;
+                    result.append(temp);
+                    result.append(':');
+                    temp.clear();
+                    // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+                    if (i+2 < expression.count() && expression[i+1] == '$' && expression[i+2] != '.')
+                        ++i;
+                }
+                else if (expression[i] == ' ') // range separator
+                {
+                    result.append(temp);
+                    result.append(';');
+                    temp.clear();
+                }
+                else
+                    temp.append(expression[i]);
+                ++i;
+                break;
+            }
+            case InQuotes:
+            {
+                temp.append(expression[i]);
+                if (expression[i] == '\'')
+                {
+                    // an escaped apostrophe?
+                    if (i+1 < expression.count() && expression[i+1] == '\'')
+                        ++i; // eat it
+                    else // the end
+                        state = Start;
+                }
+                ++i;
+                break;
+            }
+        }
+    }
+    return result + temp;
+}
+
+// static
+QString Region::saveOdf(const QString& expression)
+{
+    QString result;
+    QString sheetName;
+    QString temp;
+    enum { Start, InQuotes } state = Start;
+    int i = 0;
+    while (i < expression.count())
+    {
+        switch (state)
+        {
+            case Start:
+            {
+                if (expression[i] == '\'')
+                {
+                    temp.append(expression[i]);
+                    state = InQuotes;
+                }
+                else if (expression[i] == '!') // sheet name separator
+                {
+                    // was there already a sheet name?
+                    if (!temp.isEmpty())
+                    {
+                        sheetName = temp;
+                        result.append(temp);
+                        result.append('.');
+                    }
+                    temp.clear();
+                }
+                else if (expression[i] == ':') // cell separator
+                {
+                    if (result.isEmpty())
+                        result = '.';
+                    result.append(temp);
+                    result.append(':');
+                    result.append(sheetName);
+                    result.append('.');
+                    temp.clear();
+                }
+                else if (expression[i] == ';') // range separator
+                {
+                    result.append(temp);
+                    result.append(' ');
+                    temp.clear();
+                }
+                else
+                    temp.append(expression[i]);
+                ++i;
+                break;
+            }
+            case InQuotes:
+            {
+                temp.append(expression[i]);
+                if (expression[i] == '\'')
+                {
+                    // an escaped apostrophe?
+                    if (i+1 < expression.count() && expression[i+1] == '\'')
+                        ++i; // eat it
+                    else // the end
+                        state = Start;
+                }
+                ++i;
+                break;
+            }
+        }
+    }
+    if (result.isEmpty())
+        result = '.';
+    return result + temp;
+}
+
+QString Region::saveOdf() const
+{
+    return saveOdf(Region::name());
+}
+
 QList<Region::Element*>& Region::cells() const
 {
   return d->cells;

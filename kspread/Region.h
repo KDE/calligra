@@ -78,7 +78,7 @@ public:
    * @param strRegion a string representing the region (e.g. "A1:B3")
    * @param sheet the fallback sheet, if \p strRegion does not contain one
    */
-  Region(const Map* map, const QString& strRegion, Sheet* sheet);
+  Region(const Map* map, const QString& strRegion, Sheet* sheet = 0);
 
   /**
    * Copy Constructor.
@@ -308,6 +308,11 @@ public:
 
   static bool isValid(const QPoint& point);
   static bool isValid(const QRect& rect);
+
+    static QString loadOdf(const QString& expression);
+    static QString saveOdf(const QString& expression);
+
+    QString saveOdf() const;
 
 protected:
   /**

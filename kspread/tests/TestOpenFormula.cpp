@@ -24,6 +24,7 @@
 #include "qtest_kde.h"
 
 #include <Formula.h>
+#include <Region.h>
 #include <Util.h>
 #include <Value.h>
 
@@ -169,16 +170,13 @@ void TestOpenFormula::testEvaluation()
 void TestOpenFormula::testFormulaConversion()
 {
   // cell references
-  CHECK_CONVERT( "A1", ".A1" );
-  CHECK_CONVERT( "A1:A4", ".A1:.A4" );
-  CHECK_CONVERT( "A$1:$A4", ".A$1:.$A4" );
-  CHECK_CONVERT( "Sheet2!A1", "Sheet2.A1" );
-  CHECK_CONVERT( "'Sheet 2'!A1", "'Sheet 2'.A1" );
   CHECK_CONVERT( "=A1", "=[.A1]" );
   CHECK_CONVERT( "=A1:A4", "=[.A1:.A4]" );
   CHECK_CONVERT( "=A$1:$A4", "=[.A$1:.$A4]" );
   CHECK_CONVERT( "=Sheet2!A1", "=[Sheet2.A1]" );
   CHECK_CONVERT( "='Sheet 2'!A1", "=['Sheet 2'.A1]" );
+  CHECK_CONVERT( "=Sheet2!A1:B4", "=[Sheet2.A1:Sheet2.B4]" );
+  CHECK_CONVERT( "='Sheet 2'!A1:B4", "=['Sheet 2'.A1:'Sheet 2'.B4]" );
 
   // equality
   CHECK_CONVERT( "=A1==A2", "=[.A1]=[.A2]" );
@@ -195,26 +193,30 @@ void TestOpenFormula::testFormulaConversion()
   CHECK_CONVERT( "=sum(A1;A2;A3;A4;A5)", "=sum([.A1];[.A2];[.A3];[.A4];[.A5])" );
 }
 
-
-
-#include <QtTest/QtTest>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", 0, ki18n("qttest"), "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
+void TestOpenFormula::testReferenceLoading()
+{
+    QCOMPARE(Region::loadOdf(".A1"),                         QString("A1"));
+    QCOMPARE(Region::loadOdf(".A1:.A4"),                     QString("A1:A4"));
+    QCOMPARE(Region::loadOdf(".A$1:.$A4"),                   QString("A$1:$A4"));
+    QCOMPARE(Region::loadOdf("Sheet2.A1"),                   QString("Sheet2!A1"));
+    QCOMPARE(Region::loadOdf("'Sheet 2'.A1"),                QString("'Sheet 2'!A1"));
+    QCOMPARE(Region::loadOdf("Sheet2.A1:Sheet2.B4"),         QString("Sheet2!A1:B4"));
+    QCOMPARE(Region::loadOdf("'Sheet 2'.A1:'Sheet 2'.B4"),   QString("'Sheet 2'!A1:B4"));
+    QCOMPARE(Region::loadOdf("$Sheet2.A1:$Sheet2.B4"),       QString("Sheet2!A1:B4"));
+    QCOMPARE(Region::loadOdf("$'Sheet 2'.A1:$'Sheet 2'.B4"), QString("'Sheet 2'!A1:B4"));
 }
 
-KSPREAD_TEST(TestOpenFormula)
-//QTEST_KDEMAIN(TestOpenFormula, GUI)
+void TestOpenFormula::testReferenceSaving()
+{
+    QCOMPARE(Region::saveOdf("A1"),              QString(".A1"));
+    QCOMPARE(Region::saveOdf("A1:A4"),           QString(".A1:.A4"));
+    QCOMPARE(Region::saveOdf("A$1:$A4"),         QString(".A$1:.$A4"));
+    QCOMPARE(Region::saveOdf("Sheet2!A1"),       QString("Sheet2.A1"));
+    QCOMPARE(Region::saveOdf("'Sheet 2'!A1"),    QString("'Sheet 2'.A1"));
+    QCOMPARE(Region::saveOdf("Sheet2!A1:B4"),    QString("Sheet2.A1:Sheet2.B4"));
+    QCOMPARE(Region::saveOdf("'Sheet 2'!A1:B4"), QString("'Sheet 2'.A1:'Sheet 2'.B4"));
+}
+
+QTEST_KDEMAIN(TestOpenFormula, GUI)
 
 #include "TestOpenFormula.moc"

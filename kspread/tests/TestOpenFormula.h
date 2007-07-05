@@ -35,6 +35,8 @@ class TestOpenFormula: public QObject
 private Q_SLOTS:
   void testEvaluation();
   void testFormulaConversion();
+  void testReferenceLoading();
+  void testReferenceSaving();
 
 private:
   Value evaluate(const QString&, Value&);

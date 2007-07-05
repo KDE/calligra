@@ -29,7 +29,6 @@
 #include "FilterPopup.h"
 #include "Map.h"
 #include "Region.h"
-#include "Util.h"
 
 using namespace KSpread;
 
@@ -235,7 +234,7 @@ bool Database::loadOdf(const KoXmlElement& element, const Map* map)
     {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->targetRangeAddress = Region(map, Oasis::decodeFormula(address), 0);
+        d->targetRangeAddress = Region(map, Region::loadOdf(address));
         if (d->targetRangeAddress.isEmpty() || !d->targetRangeAddress.isValid())
             return false;
     }
@@ -306,7 +305,7 @@ void Database::saveOdf(KoXmlWriter& xmlWriter) const
         xmlWriter.addAttribute("table:contains-header", "false");
     if (d->displayFilterButtons)
         xmlWriter.addAttribute("table:display-filter-buttons", "true");
-    xmlWriter.addAttribute("table:target-range-address", Oasis::encodeFormula(d->targetRangeAddress.name()));
+    xmlWriter.addAttribute("table:target-range-address", d->targetRangeAddress.saveOdf());
     if (d->refreshDelay)
         xmlWriter.addAttribute("table:refresh-delay", d->refreshDelay);
     // TODO

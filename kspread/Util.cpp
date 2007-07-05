@@ -881,215 +881,196 @@ bool KSpread::Util::localReferenceAnchor( const QString &_ref )
 }
 
 
-QString KSpread::Oasis::decodeFormula(const QString& expr, const KLocale* locale)
+QString KSpread::Oasis::decodeFormula(const QString& expression, const KLocale* locale)
 {
-  // parsing state
-  enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state;
+    // parsing state
+    enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
 
-  // use locale settings
-  QString decimal = locale ? locale->decimalSymbol() : ".";
+    // use locale settings
+    QString decimal = locale ? locale->decimalSymbol() : ".";
 
-  // initialize variables
-  state = Start;
-  int i = 0;
-  const QString ex = expr;
-  QString result;
+    QString result;
+    QString reference;
 
-  if ((!ex.isEmpty()) && (ex[0] == '='))
-  {
-    result='=';
-    ++i;
-  }
-
-  // main loop
-  while( i < ex.length() )
-  {
-    QChar ch = ex[i];
-
-    switch( state )
+    int i = 0;
+    if ((!expression.isEmpty()) && (expression[0] == '='))
     {
-    case Start:
+        result='=';
+        ++i;
+    }
+
+    // main loop
+    while ( i < expression.length() )
     {
-       // check for number
-       if( ch.isDigit() )
-       {
-         state = InNumber;
-       }
+        switch ( state )
+        {
+            case Start:
+            {
+                // check for number
+                if ( expression[i].isDigit() )
+                    state = InNumber;
 
-       // a string?
-       else if ( ch == '"' )
-       {
-         state = InString;
-         result.append( ex[i++] );
-       }
+                // a string?
+                else if ( expression[i] == '"' )
+                {
+                    state = InString;
+                    result.append( expression[i++] );
+                }
 
-       // beginning with alphanumeric ?
-       // could be identifier, cell, range, or function...
-       else if( isIdentifier( ch ) )
-       {
-         state = InIdentifier;
-       }
+                // beginning with alphanumeric ?
+                // could be identifier, cell, range, or function...
+                else if ( isIdentifier( expression[i] ) )
+                    state = InIdentifier;
 
-       // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
-       else if ( ch.unicode() == '[' )
-       {
-         ++i;
-         state = InReference;
-         // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
-         if ( ex[i] == '$' ) ++i;
-       }
+                // [ marks sheet name for 3-d cell, e.g ['Sales Q3'.A4]
+                else if ( expression[i].unicode() == '[' )
+                {
+                    ++i;
+                    state = InReference;
+                    // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
+                    if ( expression[i] == '$' ) ++i;
+                }
 
-       // decimal dot ?
-       else if ( ch == '.' )
-       {
-           if ( ex[i+1].isDigit() )
-               state = InNumber;
-           else
-               state = InReference;
-       }
+                // decimal dot ?
+                else if ( expression[i] == '.' )
+                    state = InNumber;
 
-       // look for operator match
-       else
-       {
-         int op;
-         QString s;
+                // look for operator match
+                else
+                {
+                    int op;
+                    QString s;
 
-         // check for two-chars operator, such as '<=', '>=', etc
-         s.append( ch );
-         if (i+1 < ex.length())
-           s.append( ex[i+1] );
-         op = matchOperator( s );
+                    // check for two-chars operator, such as '<=', '>=', etc
+                    s.append( expression[i] );
+                    if (i+1 < expression.length())
+                        s.append( expression[i+1] );
+                    op = matchOperator( s );
 
-         // check for one-char operator, such as '+', ';', etc
-         if( op == Token::InvalidOp )
-         {
-           s = QString( ch );
-           op = matchOperator( s );
-         }
+                    // check for one-char operator, such as '+', ';', etc
+                    if ( op == Token::InvalidOp )
+                    {
+                        s = QString( expression[i] );
+                        op = matchOperator( s );
+                    }
 
-         // any matched operator ?
-         if (  op == Token::Equal )
-         {
-           result.append( "==" );
-         }
-         else
-         {
-           result.append( s );
-         }
-         if( op != Token::InvalidOp )
-         {
-           int len = s.length();
-           i += len;
-         }
-         else
-         {
-           ++i;
-           state = Start;
-         }
+                    // any matched operator ?
+                    if (  op == Token::Equal )
+                        result.append( "==" );
+                    else
+                        result.append( s );
+                    if ( op != Token::InvalidOp )
+                    {
+                        int len = s.length();
+                        i += len;
+                    }
+                    else
+                    {
+                        ++i;
+                        state = Start;
+                    }
+                }
+                break;
+            }
+            case InReference:
+            {
+                if (expression[i] == ']')
+                {
+                    result.append(Region::loadOdf(reference));
+                    reference.clear();
+                    state = Start;
+                }
+                else if (expression[i] == '\'')
+                {
+                    reference.append('\'');
+                    state = InSheetName;
+                }
+                else
+                    reference.append(expression[i]);
+                ++i;
+                break;
+            }
+            case InSheetName:
+            {
+                reference.append(expression[i]);
+                if (expression[i] == '\'')
+                {
+                    // an escaped apostrophe?
+                    if (i+1 < expression.count() && expression[i+1] == '\'')
+                        ++i; // eat it
+                    else // the end
+                        state = InReference;
+                }
+                ++i;
+                break;
+            }
+            case InNumber:
+            {
+                // consume as long as it's digit
+                if ( expression[i].isDigit() )
+                    result.append( expression[i++] );
+                // convert '.' to decimal separator
+                else if ( expression[i] == '.' )
+                {
+                    result.append( decimal );
+                    ++i;
+                }
+                // exponent ?
+                else if ( expression[i].toUpper() == 'E' )
+                {
+                    result.append( 'E' );
+                    ++i;
+                }
+                // we're done with integer number
+                else
+                    state = Start;
+                break;
+            }
+            case InString:
+            {
+                // consume until "
+                if ( expression[i] != '"' )
+                    result.append( expression[i++] );
+                // we're done
+                else
+                {
+                    result.append( expression[i] );
+                    ++i;
+                    state = Start;
+                }
+                break;
+            }
+            case InIdentifier:
+            {
+                // handle problematic functions
+                if ( expression.mid(i ).startsWith( "ERROR.TYPE" ) ) {
+                    // replace it
+                    result.append( "ERRORTYPE" );
+                    i+=10; // number of characters in "ERROR.TYPE"
+                } else if ( expression.mid(i ).startsWith( "LEGACY.NORMSDIST" ) ) {
+                    // replace it
+                    result.append( "LEGACYNORMSDIST" );
+                    i+=16; // number of characters in "LEGACY.NORMSDIST"
+                } else if ( expression.mid(i ).startsWith( "LEGACY.NORMSINV" ) ) {
+                    // replace it
+                    result.append( "LEGACYNORMSINV" );
+                    i+=15; // number of characters in "LEGACY.NORMSINV"
+                }
+
+
+                // consume as long as alpha, dollar sign, underscore, or digit
+                if ( isIdentifier( expression[i] )  || expression[i].isDigit() )
+                    result.append( expression[i++] );
+                // we're done
+                else
+                    state = Start;
+                break;
+            }
+            default:
+                break;
         }
-       break;
     }
-    case InReference:
-    {
-       // consume as long as alpha, dollar sign, underscore, or digit, or colon
-       if( isIdentifier( ch )  || ch.isDigit() || ch == ':' )
-         result.append( ex[i] );
-       else if ( ch == '.' && (i > 0) && ex[i-1] != '[' && ex[i-1] != ':' )
-         result.append( '!' );
-       else if( ch == ']' )
-         state = Start;
-       else if ( ch == '\'' )
-       {
-         result.append( ex[i] );
-         state = InSheetName;
-         // NOTE Stefan: As long as KSpread does not support fixed sheets eat the dollar sign.
-         if ( ex[i] == '$' ) ++i;
-       }
-       else if ( ch != '.' )
-       {
-           state = Start;
-           break;
-       }
-       ++i;
-       break;
-    }
-    case InSheetName:
-    {
-      if ( ch == '\'' )
-        state = InReference;
-      result.append( ex[i] );
-      ++i;
-      break;
-    }
-    case InNumber:
-    {
-       // consume as long as it's digit
-       if( ch.isDigit() )
-         result.append( ex[i++] );
-       // convert '.' to decimal separator
-       else if ( ch == '.' )
-       {
-         result.append( decimal );
-         ++i;
-       }
-       // exponent ?
-       else if( ch.toUpper() == 'E' )
-       {
-         result.append( 'E' );
-         ++i;
-       }
-       // we're done with integer number
-       else
-         state = Start;
-       break;
-    }
-    case InString:
-    {
-       // consume until "
-       if( ch != '"' )
-       {
-         result.append( ex[i++] );
-       }
-       // we're done
-       else
-       {
-         result.append( ch );
-         ++i;
-         state = Start;
-       }
-       break;
-    }
-    case InIdentifier:
-    {
-      // handle problematic functions
-      if ( ex.mid(i ).startsWith( "ERROR.TYPE" ) ) {
-        // replace it
-        result.append( "ERRORTYPE" );
-        i+=10; // number of characters in "ERROR.TYPE"
-      } else if ( ex.mid(i ).startsWith( "LEGACY.NORMSDIST" ) ) {
-        // replace it
-        result.append( "LEGACYNORMSDIST" );
-        i+=16; // number of characters in "LEGACY.NORMSDIST"
-      } else if ( ex.mid(i ).startsWith( "LEGACY.NORMSINV" ) ) {
-        // replace it
-        result.append( "LEGACYNORMSINV" );
-        i+=15; // number of characters in "LEGACY.NORMSINV"
-      }
-
-
-      // consume as long as alpha, dollar sign, underscore, or digit
-      if( isIdentifier( ch )  || ch.isDigit() )
-        result.append( ex[i++] );
-       // we're done
-      else
-        state = Start;
-      break;
-    }
-    default:
-       break;
-    }
-  }
-  return result;
+    return result;
 }
 
 QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* locale )
@@ -1097,16 +1078,13 @@ QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* local
     // use locale settings
     const QString decimal = locale ? locale->decimalSymbol() : ".";
 
-    const bool isFormula = ( !expr.isEmpty() && expr[0] == '=' ) ? true : false;
-    QString result;
+    QString result('=');
 
     Formula formula;
-    Tokens tokens = formula.scan( ( isFormula ? "" : "=" ) + expr, locale );
+    Tokens tokens = formula.scan( expr, locale );
 
     if ( !tokens.valid() || tokens.count() == 0 )
         return expr; // no altering on error
-
-    if ( isFormula ) result.append( '=' );
 
     for ( int i = 0; i < tokens.count(); ++i )
     {
@@ -1118,37 +1096,14 @@ QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* local
         case Token::Cell:
         case Token::Range:
         {
-            if ( isFormula ) result.append( '[' );
-
-            const int sheetDelimiter = tokenText.lastIndexOf( '!' );
-            if ( sheetDelimiter > 0 )
-            {
-                QString sheetName = tokenText.left( sheetDelimiter );
-                if ( sheetName.contains( ' ' ) )
-                {
-                    // sheet names with spaces have to be surrounded by apostrophes
-                    sheetName.prepend( '\'' );
-                    sheetName.append( '\'' );
-                }
-                result.append( sheetName );
-            }
-
-            const int rangeDelimiter = tokenText.lastIndexOf( ':' );
-            if ( rangeDelimiter > sheetDelimiter )
-            {
-                result.append( '.' );
-                result.append( tokenText.mid( sheetDelimiter + 1, rangeDelimiter - sheetDelimiter - 1 ) );
-                result.append( ':' );
-                result.append( '.' );
-                result.append( tokenText.mid( rangeDelimiter + 1 ) );
-            }
+            result.append( '[' );
+            // FIXME Stefan: Hack to get the apostrophes right. Fix and remove!
+            const int pos = tokenText.lastIndexOf('!');
+            if (pos != -1 && tokenText.left(pos).contains(' '))
+                result.append(Region::saveOdf('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
             else
-            {
-                result.append( '.' );
-                result.append( tokenText.mid( sheetDelimiter + 1 ) );
-            }
-
-            if ( isFormula ) result.append( ']' );
+                result.append(Region::saveOdf(tokenText));
+            result.append( ']' );
             break;
         }
         case Token::Float:

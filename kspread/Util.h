@@ -312,20 +312,20 @@ namespace Oasis
 
     /**
      * \ingroup OpenDocument
-     * Converts an OpenDocument representation of a formula/cell reference to a
-     * localized formula/cell reference.
+     * Converts an OpenDocument representation of a formula to a localized formula.
      * @param expr The expression to convert from OpenDocument format.
      * @param locale The locale to which the expression should be converted.
+     * \note Use Region::loadOdf() for plain cell references.
      */
     // TODO check visibility
     KSPREAD_EXPORT QString decodeFormula(const QString& expr, const KLocale* locale = 0);
 
     /**
      * \ingroup OpenDocument
-     * Converts a localized formula/cell reference to an OpenDocument
-     * representation of a formula/cell reference.
+     * Converts a localized formula to an OpenDocument representation of a formula.
      * @param expr The expression to convert to OpenDocument format.
      * @param locale The locale from which the expression should be converted.
+     * \note Use Region::saveOdf() for plain cell references.
      */
     KSPREAD_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
 
