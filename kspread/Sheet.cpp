@@ -2933,7 +2933,6 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     // Cell style regions (column defaults)
     QHash<QString, QRegion> columnStyleRegions;
 
-    const int overallRowCount = map()->overallRowCount();
     int rowIndex = 1;
     int indexCol = 1;
     int maxColumn = 1;
@@ -2992,7 +2991,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
         }
 
         rowNode = rowNode.nextSibling();
-        doc()->emitProgress( 100 * rowIndex / overallRowCount );
+        map()->increaseLoadedRowsCounter();
     }
 
     // insert the styles into the storage (column defaults)

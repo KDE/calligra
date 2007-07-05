@@ -182,7 +182,7 @@ public:
   QStringList visibleSheets() const;
   QStringList hiddenSheets() const;
 
-  int overallRowCount() const;
+  void increaseLoadedRowsCounter(int i = 1);
 
   static bool respectCase;
 

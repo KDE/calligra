@@ -77,8 +77,9 @@ public:
   // used to give every Sheet a unique default name.
   int tableId;
 
-  // used to determine the laoding progress
+  // used to determine the loading progress
   int overallRowCount;
+  int loadedRowsCounter;
 };
 
 
@@ -97,6 +98,7 @@ Map::Map ( Doc* doc, const char* name)
   d->initialYOffset = 0.0;
   d->tableId = 1;
   d->overallRowCount = 0;
+  d->loadedRowsCounter = 0;
 
   new MapAdaptor(this);
   QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
@@ -597,9 +599,10 @@ int Map::count() const
   return d->lstSheets.count();
 }
 
-int Map::overallRowCount() const
+void Map::increaseLoadedRowsCounter(int number)
 {
-  return d->overallRowCount;
+    d->loadedRowsCounter += number;
+    d->doc->emitProgress(100 * d->loadedRowsCounter / d->overallRowCount);
 }
 
 #include "Map.moc"
