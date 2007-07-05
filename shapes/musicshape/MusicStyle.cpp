@@ -19,7 +19,12 @@
 #include "MusicStyle.h"
 using namespace MusicCore;
 
-MusicStyle::MusicStyle() : m_font("Emmentaler")
+MusicStyle::MusicStyle()
+#ifdef Q_WS_MAC
+    : m_font("Emmentaler 14")
+#else
+    : m_font("Emmentaler")
+#endif
 {
     m_font.setPixelSize(20);
     m_staffLinePen.setWidthF(0.5);
