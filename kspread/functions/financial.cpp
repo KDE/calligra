@@ -527,11 +527,12 @@ Value func_dollarde (valVector args, ValueCalc *calc, FuncExtra *)
 
   if (!calc->greater (f, Value(0)))
     return Value::errorVALUE();
-
+  
   Value tmp = f;
   int n = 0;
-  while (calc->greater (tmp, Value(0)))
+  while (calc->greater (tmp.asInteger(), Value(0)))
   {
+    //kDebug()<<"loop: n = " << n << " tmp = " << tmp << endl;
     tmp = calc->div (tmp, Value(10));
     ++n;
   }
