@@ -184,6 +184,7 @@ void TestFinancialFunctions::testDISC()
   //   2   |  Actual/360
   //   3   |  Actual/365
   //   4   |  European 30/360
+
 //   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 0)", Value (  0.010339 ) ); // NOK (0.010333)
 //   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 1)", Value (  0.010333 ) ); // NOK (0.010351)
   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 2)", Value (  0.010181 ) );
@@ -196,26 +197,26 @@ void TestFinancialFunctions::testDISC()
 // DOLLARDE
 void TestFinancialFunctions::testDOLLARDE()
 {
-  //
-  // 
-
   // http://publib.boulder.ibm.com/infocenter/iadthelp/v7r0/index.jsp?topic=/com.businessobjects.integration.eclipse.designer.doc/designer/Functions68.html
-  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 8)"   , Value ( 1.125    ) );  // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 2.13; 16)" , Value ( 2.8125   ) );  // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 2.45; 16)" , Value ( 4.8125   ) );  //  
-  CHECK_EVAL_SHORT( "DOLLARDE( 1.16; 8)"  , Value ( 1.2      ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1 ; 8)" , Value ( 1.125    ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   2.13;16)" , Value ( 2.8125   ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   2.45;16)" , Value ( 4.8125   ) ); //  
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.16; 8)" , Value ( 1.2      ) ); // 
 
   // http://www.bettersolutions.com/excel/EDH113/LR849116511.htm
-  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 2)"   , Value ( 1.5      ) );  // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 1.25; 5)"  , Value ( 1.5      ) );  // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 5.08; 4)"  , Value ( 5.2      ) );  // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 5.24; 4)"  , Value ( 5.6      ) );  // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 100.24; 4)", Value ( 100.6    ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1 ; 2)" , Value ( 1.5      ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.25; 5)" , Value ( 1.5      ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   5.08; 4)" , Value ( 5.2      ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   5.24; 4)" , Value ( 5.6      ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 100.24; 4)" , Value ( 100.6    ) ); // 
 //   CHECK_EVAL_SHORT( "DOLLARFR(DOLLARDE( 101.2; 4);4"  , Value ( 101.2    ) );  // TODO create test for DOLLARFR
 
   // ODF 
-  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 4)"   , Value ( 1.25     ) ); // 
-  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 3)"   , Value ( 1.333333 ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 4)"  , Value ( 1.25     ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 3)"  , Value ( 1.333333 ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE(  -1.1;10)"  , Value (-1.1      ) ); // NOK (7)
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.0; 5)"  , Value ( 1        ) ); //
+  CHECK_EVAL_SHORT( "DOLLARDE(   1.1; 0)"  , Value (   false  ) ); //   
 }
 
 // Euro conversion
