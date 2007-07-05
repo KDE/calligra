@@ -320,6 +320,12 @@ void KWTextDocumentLayout::layout() {
             }
             void tryFit() {
                 QRectF rect(m_state->x(), m_state->y(), m_state->width(), 1.);
+                line.setLineWidth(rect.width());
+                if(rect.width() <= 0. || line.textLength() == 0) { // margin so small that the text can't fit.
+                    line.setNumColumns(1);
+                    line.setPosition(QPointF(rect.x(), rect.y()));
+                    return;
+                }
                 rect = limit(rect);
 
                 while(true) {
