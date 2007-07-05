@@ -27,6 +27,7 @@
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
 #define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
+#define CHECK_EVAL_SHORT(x,y) QCOMPARE(evaluateShort(x),RoundNumberShort(y))
 
 // round to get at most 10-digits number
 static Value RoundNumber(double f)
@@ -39,6 +40,15 @@ static Value RoundNumber(const Value& v)
 {
   if(v.isNumber())
     return Value( QString::number(numToDouble(v.asFloat()), 'g', 10) );
+  else
+    return v;
+}
+
+// round to get at most 6-digits number
+static Value RoundNumberShort(const Value& v)
+{
+  if(v.isNumber())
+    return Value( QString::number(numToDouble(v.asFloat()), 'g', 5) );
   else
     return v;
 }
@@ -58,6 +68,18 @@ Value TestFinancialFunctions::evaluate(const QString& formula)
 #endif
 
   return RoundNumber(result);
+}
+
+Value TestFinancialFunctions::evaluateShort(const QString& formula)
+{
+  Formula f;
+  QString expr = formula;
+  if ( expr[0] != '=' )
+    expr.prepend( '=' );
+  f.setExpression( expr );
+  Value result = f.eval();
+
+  return RoundNumberShort(result);
 }
 
 // Fixed-declining balance depreciation
@@ -150,6 +172,50 @@ void TestFinancialFunctions::testDDB()
   // period is fraction
   CHECK_EVAL( "DDB(2400; 300; 10; 6.7; 2)", 134.5408487904432 );
   CHECK_EVAL( "DDB(2400; 300; 10; 7.7; 2)", 107.6326790323546 );
+}
+
+// DISC
+void TestFinancialFunctions::testDISC()
+{
+  // basis | day-count basis
+  //-------+-----------------------------------
+  //   0   |  US (NASD) 30/360
+  //   1   |  Actual/actual (Euro), also known as AFB
+  //   2   |  Actual/360
+  //   3   |  Actual/365
+  //   4   |  European 30/360
+//   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 0)", Value (  0.010339 ) ); // NOK (0.010333)
+//   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 1)", Value (  0.010333 ) ); // NOK (0.010351)
+  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 2)", Value (  0.010181 ) );
+  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 3)", Value (  0.010322 ) );
+  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 4)", Value (  0.010333 ) );
+  CHECK_EVAL_SHORT( "DISC( DATE(2006;01;01); date(2008;01;01);   200;    100; 3)", Value ( -0.500000 ) );
+  CHECK_EVAL_SHORT( "DISC( DATE(2006;01;01); date(2005;07;01); 95000; 100000; 4)", Value (    false  ) );
+}
+
+// DOLLARDE
+void TestFinancialFunctions::testDOLLARDE()
+{
+  //
+  // 
+
+  // http://publib.boulder.ibm.com/infocenter/iadthelp/v7r0/index.jsp?topic=/com.businessobjects.integration.eclipse.designer.doc/designer/Functions68.html
+  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 8)"   , Value ( 1.125    ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 2.13; 16)" , Value ( 2.8125   ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 2.45; 16)" , Value ( 4.8125   ) );  //  
+  CHECK_EVAL_SHORT( "DOLLARDE( 1.16; 8)"  , Value ( 1.2      ) );  // 
+
+  // http://www.bettersolutions.com/excel/EDH113/LR849116511.htm
+  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 2)"   , Value ( 1.5      ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 1.25; 5)"  , Value ( 1.5      ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 5.08; 4)"  , Value ( 5.2      ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 5.24; 4)"  , Value ( 5.6      ) );  // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 100.24; 4)", Value ( 100.6    ) );  // 
+//   CHECK_EVAL_SHORT( "DOLLARFR(DOLLARDE( 101.2; 4);4"  , Value ( 101.2    ) );  // TODO create test for DOLLARFR
+
+  // ODF 
+  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 4)"   , Value ( 1.25     ) ); // 
+  CHECK_EVAL_SHORT( "DOLLARDE( 1.1; 3)"   , Value ( 1.333333 ) ); // 
 }
 
 // Euro conversion

@@ -35,6 +35,8 @@ class TestFinancialFunctions: public QObject
 private slots:
   void testDB();
   void testDDB();
+  void testDISC();
+  void testDOLLARDE();
   void testEURO();
   void testEUROCONVERT();
   void testLEVELCOUPON();
@@ -46,6 +48,7 @@ private slots:
 
 private:
   Value evaluate(const QString&);
+  Value evaluateShort(const QString&);
 };
 
 } // namespace KSpread
