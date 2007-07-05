@@ -37,6 +37,7 @@ private slots:
   void testDDB();
   void testDISC();
   void testDOLLARDE();
+  void testDOLLARFR();
   void testEURO();
   void testEUROCONVERT();
   void testLEVELCOUPON();
