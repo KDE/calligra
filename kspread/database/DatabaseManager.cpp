@@ -40,7 +40,7 @@ public:
     static int s_id;
 };
 
-int DatabaseManager::Private::s_id = 0;
+int DatabaseManager::Private::s_id = 1;
 
 
 DatabaseManager::DatabaseManager(const Map* map)
@@ -78,8 +78,6 @@ bool DatabaseManager::loadOdf(const KoXmlElement& body)
             const Sheet* sheet = (*region.constBegin())->sheet();
             if (!sheet)
                 continue;
-            if (database.name().isEmpty())
-                database.setName(createUniqueName());
             sheet->cellStorage()->setDatabase(region, database);
         }
     }
