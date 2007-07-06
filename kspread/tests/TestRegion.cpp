@@ -37,6 +37,8 @@ void TestRegion::initTestCase()
     sheet->setSheetName("Sheet2");
     sheet = m_doc->map()->addNewSheet();
     sheet->setSheetName("Sheet3");
+    sheet = m_doc->map()->addNewSheet();
+    sheet->setSheetName("Sheet 4");
 }
 
 void TestRegion::testFixation()
@@ -80,6 +82,19 @@ void TestRegion::testSheet()
     region = Region(m_doc->map(), "Sheet2!A1", m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet2!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(1));
+    region = Region(m_doc->map(), "Sheet 4!A1", m_doc->map()->sheet(0));
+    QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
+    QCOMPARE(region.firstSheet(), m_doc->map()->sheet(3));
+    region = Region(m_doc->map(), "'Sheet 4'!A1", m_doc->map()->sheet(0));
+    QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
+    QCOMPARE(region.firstSheet(), m_doc->map()->sheet(3));
+    // invalid calls:
+    region = Region(m_doc->map(), "A1");
+    QVERIFY(region.isEmpty());
+    region = Region(m_doc->map(), "!A1", m_doc->map()->sheet(0));
+    QVERIFY(region.isEmpty());
+    region = Region(m_doc->map(), "Sheet99!A1", m_doc->map()->sheet(0));
+    QVERIFY(region.isEmpty());
 }
 
 void TestRegion::cleanupTestCase()

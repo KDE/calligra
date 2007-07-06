@@ -97,10 +97,14 @@ Region::Region(const Map* map, const QString& string, Sheet* fallbackSheet)
     }
 
     Sheet* sheet = filterSheetName(sRegion);
+    // Still has the sheet name separator?
+    if (sRegion.contains('!'))
+        return;
     if (!sheet)
-      sheet = fallbackSheet;
+        sheet = fallbackSheet;
     // We always need a valid sheet!
-    Q_ASSERT_X(sheet, "Region", "No sheet for " + sRegion.toLatin1());
+    if (!sheet)
+        return;
 
     int delimiterPos = sRegion.indexOf(':');
     if (delimiterPos > -1)
