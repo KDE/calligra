@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2006 Ariya Hidayat <ariya@kde.org>
+   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -233,12 +234,25 @@ void TestFinancialFunctions::testDOLLARFR()
   CHECK_EVAL_SHORT( "DOLLARFR(    1.5   ; 2)" , Value ( 1.1     ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.5   ; 8)" , Value ( 1.4     ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.5   ; 5)" , Value ( 1.25    ) ); //
+  
   // ODF 
   CHECK_EVAL_SHORT( "DOLLARFR(    1.1 ;10)" , Value ( 1.1       ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(    1.25; 4)" , Value ( 1.1       ) ); // 
   CHECK_EVAL_SHORT( "DOLLARFR(-1.33333; 3)" , Value ( -1.099999 ) ); // ODF specs error (1.1) must be -1.1
   CHECK_EVAL_SHORT( "DOLLARFR(     1.0; 5)" , Value ( 1         ) ); //
   CHECK_EVAL_SHORT( "DOLLARFR(     1.1; 0)" , Value::errorVALUE() ); // 
+}
+
+// DURATION
+void TestFinancialFunctions::testDURATION()
+{
+  CHECK_EVAL_SHORT( "DURATION( \"1998-01-01\";  \"2006-01-01\"; 0.08; 0.09; 2; 1 )" , Value( 5.994 ) ); // TODO check
+}
+
+// PDURATION
+void TestFinancialFunctions::testPDURATION()
+{
+  CHECK_EVAL_SHORT( "PDURATION( 0.1; 10; 100 )" , Value( 24.158858 ) ); //
 }
 
 // Euro conversion
@@ -484,6 +498,21 @@ void TestFinancialFunctions::testEUROCONVERT()
   CHECK_EVAL( "EUROCONVERT( 157; \"PTE\"; \"nlg\" )", 157*2.20371/200.482 );
 }
 
+// INTRATE
+void TestFinancialFunctions::testINTRATE()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "INTRATE( DATE(2002; 6;8); DATE(1995;10;5); 100000; 200000; 0 )" , Value::errorVALUE() ); // Settlement date must be before the maturity date.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(2002; 6;8); DATE(2002; 6;8); 100000; 200000; 0 )" , Value::errorVALUE() ); // Settlement date must be before the maturity date.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 50)" , Value::errorVALUE() ); // Unknown Basis returns Error.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )" , Value( 0.14981 ) );    // An example of INTRATE.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000    )" , Value( 0.14981 ) );    // Basis defaults to 0.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 1 )" , Value( 0.14971 ) );    //
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 2 )" , Value( 0.14766 ) );    //
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 3 )" , Value( 0.14971 ) );    //
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 4 )" , Value( 0.14981 ) );    //
+}
+
 // Level-coupon bond
 // LEVEL_COUPON(faceValue; couponRate; couponsPerYear; years; marketRate)
 void TestFinancialFunctions::testLEVELCOUPON()
@@ -529,6 +558,15 @@ void TestFinancialFunctions::testNPV()
     CHECK_EVAL( "NPV(10%; 100; 200)", 256.198347107438 );
 }
 
+// PMT
+void TestFinancialFunctions::testPMT()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "PMT(5%;12;1000)",       Value( -112.82541  ) ); // A trivial example of PMT.
+  CHECK_EVAL_SHORT( "PMT(5%;12;1000;100)",   Value( -119.107951 ) ); // A trivial example of PMT with non-zero FV.
+  CHECK_EVAL_SHORT( "PMT(5%;12;1000;100;1)", Value( -113.43614  ) ); // A trivial example of PMT with non-zero FV and PayType.
+  CHECK_EVAL_SHORT( "PMT(0;10;1000)",        Value( -100.00000  ) ); // Rate can be zero.
+}
 
 // Straight-line depreciation
 // SLN(cost, salvage, life)

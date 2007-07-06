@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2006 Ariya Hidayat <ariya@kde.org>
+   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,11 +39,15 @@ private slots:
   void testDISC();
   void testDOLLARDE();
   void testDOLLARFR();
+  void testDURATION();
+  void testPDURATION();
   void testEURO();
   void testEUROCONVERT();
+  void testINTRATE();
   void testLEVELCOUPON();
   void testNOMINAL();
   void testNPV();
+  void testPMT();
   void testSLN();
   void testSYD();
   void testZEROCOUPON();
