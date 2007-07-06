@@ -3,8 +3,8 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts)
 
 install(FILES
-    kexidbimport.py kexidbexport.py
     csvimport.py csvexport.py csvoptions.ui
+    kexidbimport.py kexidbexport.py
     htmlexport.py htmlexportinfos.ui
     odfpyexport.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/extensions)
@@ -12,4 +12,5 @@ install(FILES
 install(FILES
     functions.py
     yfinance.py yweather.py
+    pytime.py pyregexp.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/functions)

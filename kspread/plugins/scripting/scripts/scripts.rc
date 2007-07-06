@@ -55,6 +55,20 @@
             comment="Yahoo! Weather formula function"
             interpreter="python"
             file="functions/yweather.py" />
+        <script
+            name="pytime"
+            text="PyTime"
+            comment="Time formula function"
+            enabled="false"
+            interpreter="python"
+            file="functions/pytime.py" />
+        <script
+            name="pyregexp"
+            text="PyRegExp"
+            comment="Regular Expression formula function"
+            enabled="false"
+            interpreter="python"
+            file="functions/pyregexp.py" />
     </collection>
 
 </KrossScripting>

@@ -1,7 +1,7 @@
 /*
  * This file is part of KSpread
  *
- * Copyright (c) 2006 Sebastian Sauer <mail@dipe.org>
+ * Copyright (c) 2006, 2007 Sebastian Sauer <mail@dipe.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as published by
@@ -29,8 +29,26 @@
  * functionality to deal with formula functions that are written in
  * a scripting language like Python or Ruby.
  *
- * For an example how to use scripted formula functions see;
- * \see http://websvn.kde.org/trunk/koffice/kspread/plugins/scripting/scripts/functions.py?view=markup
+ * The following sample scripting formula function written in python
+ * displays the current datetime.
+ * \code
+ * import time, Kross, KSpread
+ * func = KSpread.function("PYTIME")
+ * func.minparam = 0
+ * func.maxparam = 1
+ * func.comment = "The PYTIME() function displays the current datetime."
+ * func.syntax = "PYTIME(string)"
+ * func.addParameter("String", "The datetime format string.")
+ * func.addExample("PYTIME()")
+ * func.addExample("PYTIME(\"%Y-%M-%d %H:%M.%S\")")
+ * def update(args):
+ *     try:
+ *         func.result = time.strftime(args[0] or "%H:%M.%S")
+ *     except:
+ *         func.error = "Invalid format"
+ * func.connect("called(QVariantList)", update)
+ * func.registerFunction()
+ * \endcode
  */
 class ScriptingFunction : public QObject
 {
@@ -48,27 +66,45 @@ class ScriptingFunction : public QObject
         explicit ScriptingFunction(QObject* parent);
         virtual ~ScriptingFunction();
 
+        /// \return the name the function has.
         QString name() const;
+        /// Set the name the function has.
         void setName(const QString& name);
+        /// \return the minimum number of parameters the function expects.
         int minParam() const;
+        /// Set the minimum number of parameters the function expects.
         void setMinParam(int minparam);
+        /// \return the maximum number of parameters the function expects.
         int maxParam() const;
+        /// Set the maximum number of parameters the function expects.
         void setMaxParam(int maxparam);
+        /// \return the comment that describes what the function does.
         QString comment() const;
+        /// Set the comment that describes what the function does.
         void setComment(const QString& comment);
+        /// \return the syntax string the function looks like.
         QString syntax() const;
+        /// Set the syntax string the function looks like.
         void setSyntax(const QString& syntax);
+        /// \return the error-message if there was an error.
         QString error() const;
+        /// Set the error-message.
         void setError(const QString& error = QString());
+        /// \return the result of the function call.
         QVariant result() const;
+        /// Set the result of the function call.
         void setResult(const QVariant& result);
 
     public slots:
+        /// An an example to demonstrate the usage of the function.
         void addExample(const QString& example);
+        /// An details about a parameter the function may expect.
         void addParameter(const QString& typeName, const QString& comment);
+        /// Register this function.
         bool registerFunction();
 
     signals:
+        /// This signal is emitted if the function got called.
         void called(QVariantList args);
 
     private:
