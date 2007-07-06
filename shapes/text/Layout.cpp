@@ -37,7 +37,7 @@
 #include <QTextList>
 #include <QStyle>
 
-#define DEBUG_TABS
+// #define DEBUG_TABS
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
