@@ -21,6 +21,7 @@
 // built-in reference functions
 
 #include "Cell.h"
+#include "Region.h"
 #include "Sheet.h"
 #include "Util.h"
 #include "Value.h"
@@ -363,12 +364,11 @@ Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
     ref = ref;
   }
 
-  Point p (ref, e->sheet->map(), e->sheet);
-
-  if ( !p.isValid() )
+  const KSpread::Region region(e->sheet->map(), ref, e->sheet);
+  if (!region.isValid() || !region.isSingular())
     return Value::errorVALUE();
 
-  Cell cell = p.cell();
+  const Cell cell(region.firstSheet(), region.firstRange().topLeft());
   if ( !cell.isNull() )
     return cell.value();
   return Value::errorVALUE();

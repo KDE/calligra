@@ -2889,13 +2889,9 @@ void View::autoSum()
         start = end = d->selection->marker().x()-1;
         for (start--; (start > 0) && Cell( activeSheet(),start, d->selection->marker().y()).value().isNumber(); start--) ;
 
-        Point startPoint, endPoint;
-        startPoint.setColumn(start+1);
-        startPoint.setRow(d->selection->marker().y());
-        endPoint.setColumn(end);
-        endPoint.setRow(d->selection->marker().y());
-
-        QString str = Range(startPoint, endPoint).toString();
+        const Region region(QRect(QPoint(start + 1, d->selection->marker().y()),
+                                  QPoint(end, d->selection->marker().y())), activeSheet());
+        const QString str = region.name(activeSheet());
 
         d->canvas->createEditor();
         d->canvas->editor()->setText("=SUM(" + str + ')');

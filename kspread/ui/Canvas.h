@@ -68,8 +68,6 @@ class HBorder;
 class VBorder;
 class Sheet;
 class Doc;
-class Point;
-class Range;
 class View;
 class Selection;
 class CellEditor;
