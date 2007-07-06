@@ -59,15 +59,15 @@ void DelayedCursorHandler::show() {
 	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 }
 
-DelayedCursorHandler _delayedCursorHandler;
+K_GLOBAL_STATIC(DelayedCursorHandler, _delayedCursorHandler)
 
 void KexiUtils::setWaitCursor(bool noDelay) {
 	if (qApp->type() != QApplication::Tty)
-		_delayedCursorHandler.start(noDelay);
+		_delayedCursorHandler->start(noDelay);
 }
 void KexiUtils::removeWaitCursor() {
 	if (qApp->type() != QApplication::Tty)
-		_delayedCursorHandler.stop();
+		_delayedCursorHandler->stop();
 }
 
 WaitCursor::WaitCursor(bool noDelay)
@@ -82,13 +82,13 @@ WaitCursor::~WaitCursor()
 
 WaitCursorRemover::WaitCursorRemover()
 {
-	m_reactivateCursor = _delayedCursorHandler.startedOrActive;
-	_delayedCursorHandler.stop();
+	m_reactivateCursor = _delayedCursorHandler->startedOrActive;
+	_delayedCursorHandler->stop();
 }
 
 WaitCursorRemover::~WaitCursorRemover()
 {
-	_delayedCursorHandler.start(true);
+	_delayedCursorHandler->start(true);
 }
 
 //--------------------------------------------------------------------------------

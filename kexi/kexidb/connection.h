@@ -244,7 +244,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 On successful commit, \a trans object will be destroyed.
 		 If this was default transaction, there is no default transaction for now.
 		*/
-		bool commitTransaction( Transaction trans = Transaction::null,
+		bool commitTransaction( Transaction trans = Transaction(),
 			bool ignore_inactive = false );
 		
 		/*! Rollbacks transaction \a trans.
@@ -258,7 +258,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 On successful rollback, \a trans object will be destroyed.
 		 If this was default transaction, there is no default transaction for now.
 		*/
-		bool rollbackTransaction( Transaction trans = Transaction::null,
+		bool rollbackTransaction( Transaction trans = Transaction(),
 			bool ignore_inactive = false );
 		
 		/*! \return handle for default transaction for this connection

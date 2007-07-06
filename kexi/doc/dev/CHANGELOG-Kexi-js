@@ -23,8 +23,12 @@ KDE4: TODO:
   http://api.kde.org/4.0-api/kdelibs-apidocs/kdeui/html/kmenu_8cpp-source.html#l00144
 
 ===================== Kexi 2.0 Alpha =====================
+2007-07-06
+Build
+= never use global static QObjects (problem on Windows), use K_GLOBAL_STATIC instead
 
 2007-07-05
+Table View, Main Window
 - Table View works, tables can be opened in the navigator
 
 2007-06-26

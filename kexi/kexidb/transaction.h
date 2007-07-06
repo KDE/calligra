@@ -82,7 +82,7 @@ class KEXI_DB_EXPORT Transaction : public QObject
 		bool isNull() const;
 		
 		/*! shortcut that offers uinitialised (null) transaction */
-		static const Transaction null;
+		//static const Transaction null;
 
 		//helper for debugging
 		static int globalCount();

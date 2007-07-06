@@ -948,7 +948,7 @@ KexiDB::Parser* KexiProject::sqlParser()
 	return d->sqlParser;
 }
 
-static const QString warningNoUndo = i18n("Warning: entire project's data will be removed.");
+const char* warningNoUndo = I18N_NOOP("Warning: entire project's data will be removed.");
 
 /*static*/
 KexiProject*
@@ -964,7 +964,7 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 		if (KMessageBox::Yes != KMessageBox::warningYesNo(0, "<qt>"+i18n(
 			"The project %1 already exists.\n"
 			"Do you want to replace it with a new, blank one?",
-				prj->data()->infoString())+"\n"+warningNoUndo+"</qt>",
+				prj->data()->infoString())+"\n"+i18n(warningNoUndo)+"</qt>",
 			QString(), KGuiItem(i18n("Replace")), KStandardGuiItem::cancel() ))
 //todo add serverInfoString() for server-based prj
 		{
@@ -990,7 +990,7 @@ tristate KexiProject::dropProject(KexiProjectData* data,
 {
 	if (!dontAsk && KMessageBox::Yes != KMessageBox::warningYesNo(0, 
 		i18n("Do you want to drop the project \"%1\"?", 
-			static_cast< KexiDB::SchemaData* >(data)->objectName())+"\n"+warningNoUndo ))
+			static_cast< KexiDB::SchemaData* >(data)->objectName())+"\n"+i18n(warningNoUndo) ))
 		return cancelled;
 
 	KexiProject prj( new KexiProjectData(*data), handler );

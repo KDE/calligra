@@ -72,10 +72,10 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 //--------------------------------------------------
 
 //! dummy host to avoid crashes
-KexiSharedActionHost KexiSharedActionHost_dummy = KexiSharedActionHost(0);
+K_GLOBAL_STATIC_WITH_ARGS( KexiSharedActionHost, KexiSharedActionHost_dummy, (0) )
 
 //! default host
-KexiSharedActionHost* KexiSharedActionHost_defaultHost = &KexiSharedActionHost_dummy;
+KexiSharedActionHost* KexiSharedActionHost_defaultHost = KexiSharedActionHost_dummy;
 
 KexiSharedActionHost& KexiSharedActionHost::defaultHost()
 {
@@ -99,7 +99,7 @@ KexiSharedActionHost::~KexiSharedActionHost()
 {
 	if (KexiSharedActionHost_defaultHost == this) {
 		//default host is destroyed! - restore dummy
-		KexiSharedActionHost_defaultHost = &KexiSharedActionHost_dummy;
+		KexiSharedActionHost_defaultHost = KexiSharedActionHost_dummy;
 	}
 	delete d;
 	d=0; //! to let takeActionProxyFor() know that we are almost dead :)

@@ -2030,7 +2030,7 @@ bool Connection::rollbackAutoCommitTransaction(const Transaction& trans)
 Transaction Connection::beginTransaction()
 {
 	if (!checkIsDatabaseUsed())
-		return Transaction::null;
+		return Transaction();
 	Transaction trans;
 	if (m_driver->d->features & Driver::IgnoreTransactions) {
 		//we're creating dummy transaction data here,
@@ -2042,11 +2042,11 @@ Transaction Connection::beginTransaction()
 	if (m_driver->d->features & Driver::SingleTransactions) {
 		if (d->default_trans.active()) {
 			setError(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
-			return Transaction::null;
+			return Transaction();
 		}
 		if (!(trans.m_data = drv_beginTransaction())) {
 			SET_BEGIN_TR_ERROR;
-			return Transaction::null;
+			return Transaction();
 		}
 		d->default_trans = trans;
 		d->transactions.append(trans);
@@ -2055,14 +2055,14 @@ Transaction Connection::beginTransaction()
 	if (m_driver->d->features & Driver::MultipleTransactions) {
 		if (!(trans.m_data = drv_beginTransaction())) {
 			SET_BEGIN_TR_ERROR;
-			return Transaction::null;
+			return Transaction();
 		}
 		d->transactions.append(trans);
 		return trans;
 	}
 
 	SET_ERR_TRANS_NOT_SUPP;
-	return Transaction::null;
+	return Transaction();
 }
 
 bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive)
@@ -2087,7 +2087,7 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 			return false;
 		}
 		t = d->default_trans;
-		d->default_trans = Transaction::null; //now: no default tr.
+		d->default_trans = Transaction(); //now: no default tr.
 	}
 	bool ret = true;
 	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
@@ -2123,7 +2123,7 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 			return false;
 		}
 		t = d->default_trans;
-		d->default_trans = Transaction::null; //now: no default tr.
+		d->default_trans = Transaction(); //now: no default tr.
 	}
 	bool ret = true;
 	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
