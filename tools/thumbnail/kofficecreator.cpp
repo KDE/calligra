@@ -16,7 +16,7 @@
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
+#include "kofficecreator.h"
 #include <time.h>
 
 #include <QPixmap>
@@ -30,7 +30,6 @@
 #include <kparts/part.h>
 #include <kparts/componentfactory.h>
 
-#include "kofficecreator.h"
 #include <KoStore.h>
 #include <KoDocument.h>
 #include <QAbstractEventDispatcher>

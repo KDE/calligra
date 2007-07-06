@@ -18,6 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "koconverter.h"
 #include <QFile>
 
 #include <kaboutdata.h>
@@ -32,7 +33,6 @@
 
 #include <KoFilterManager.h>
 
-#include "koconverter.h"
 
 
 bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uOut, const QString & outputFormat, const bool batch )

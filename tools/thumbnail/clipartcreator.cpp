@@ -18,15 +18,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "clipartcreator.h"
+#include <kdemacros.h>
+
 #include <QImage>
 #include <QPainter>
 #include <QFile>
 #include <QPixmap>
 
 #include <KoPicture.h>
-
-#include "clipartcreator.h"
-#include <kdemacros.h>
 
 extern "C"
 {
