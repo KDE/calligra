@@ -44,6 +44,7 @@
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
+#include <kspread/Region.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
@@ -478,8 +479,8 @@ void setObjectInfo(QDomNode * sheet, Sheet * table)
     {
       if (e.hasAttribute("ObjectBound"))
       {
-        Point point(e.attribute("ObjectBound"));
-        Cell cell = Cell( table, point.pos().x(), point.pos().y() );
+        const KSpread::Region region(e.attribute("ObjectBound"));
+        Cell cell = Cell( table, region.firstRange().topLeft() );
         cell.setComment(e.attribute("Text"));
       }
     }
@@ -939,9 +940,9 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
       QString repeate = repeateColumn.attribute( "value" );
       if ( !repeate.isEmpty() )
       {
-          Range range(repeate);
+          const KSpread::Region region(repeate);
           //kDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
-          table->print()->setPrintRepeatRows( qMakePair( range.startRow (),range.endRow ()) );
+          table->print()->setPrintRepeatRows( qMakePair( region.firstRange().top(), region.firstRange().bottom()) );
       }
   }
 
@@ -953,9 +954,9 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
       {
           //fix row too high
           repeate = repeate.replace( "65536", "32500" );
-          Range range(repeate);
+          const KSpread::Region region(repeate);
           //kDebug()<<" repeate :"<<repeate<<"range. ::start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
-          table->print()->setPrintRepeatColumns( qMakePair( range.startCol (),range.endCol ()) );
+          table->print()->setPrintRepeatColumns( qMakePair( region.firstRange().left(), region.firstRange().right()) );
       }
   }
 
@@ -2206,10 +2207,11 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         {
             QDomElement e = mergedRegion.toElement(); // try to convert the node to an element.
             QString cell_merge_area( e.text() );
-            Range range(cell_merge_area);
+            const KSpread::Region region(cell_merge_area);
             //kDebug()<<"text !!! :"<<cell_merge_area<< "range :start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
-            Cell cell = Cell( table, range.startCol (), range.startRow () );
-            cell.mergeCells( range.startCol (), range.startRow (), range.endCol ()-range.startCol (),  range.endRow ()-range.startRow ());
+            Cell cell = Cell( table, region.firstRange().left(), region.firstRange().top() );
+            cell.mergeCells( region.firstRange().left(), region.firstRange().top(),
+                             region.firstRange().width(), region.firstRange().height() );
             mergedRegion = mergedRegion.nextSibling();
         }
 	/* There is a memory leak here...

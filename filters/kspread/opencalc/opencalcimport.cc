@@ -57,7 +57,6 @@
 #include <kspread/SheetPrint.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
-#include <kspread/Util.h>
 #include <kspread/Validity.h>
 #include <kspread/Value.h>
 
@@ -122,20 +121,10 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
 
   translation = range;
 
-  if ( isRange )
-  {
-	  KSpread::Range newRange( range );
-    table    = newRange.sheetName();
-    topLeft  = newRange.range().topLeft();
-    botRight = newRange.range().bottomRight();
-  }
-  else
-  {
-    Point newPoint( range );
-    table    = newPoint.sheetName();
-    topLeft  = newPoint.pos();
-    botRight = newPoint.pos();
-  }
+    const KSpread::Region region(range);
+    table = region.firstSheet()->sheetName();
+    topLeft = region.firstRange().topLeft();
+    botRight = region.firstRange().bottomRight();
 }
 
 
@@ -1528,12 +1517,12 @@ bool OpenCalcImport::parseBody( int numOfTables )
       OpenCalcPoint point( range );
 
       kDebug(30518) << "Print range: " << point.translation << endl;
-      KSpread::Range p( point.translation );
+      const KSpread::Region region( point.translation );
 
-      kDebug(30518) << "Print table: " << p.sheetName() << endl;
+      kDebug(30518) << "Print table: " << region.firstSheet()->sheetName() << endl;
 
-      if ( table->sheetName() == p.sheetName() )
-        table->print()->setPrintRange( p.range() );
+      if ( table == region.firstSheet() )
+        table->print()->setPrintRange( region.firstRange() );
     }
 
     if ( !readColLayouts( t, table ) )
@@ -1626,23 +1615,10 @@ void OpenCalcImport::loadOasisAreaName( const KoXmlElement&body )
       OpenCalcPoint point( areaPoint );
       kDebug(30518) << "Area: " << point.translation << endl;
 
-      QString range( point.translation );
+      const KSpread::Region region( point.translation );
 
-      if ( point.translation.indexOf( ':' ) == -1 )
-      {
-        Point p( point.translation );
-
-        int n = range.indexOf( '!' );
-        if ( n > 0 )
-          range = range + ':' + range.right( range.length() - n - 1);
-
-        kDebug(30518) << "=> Area: " << range << endl;
-      }
-
-      KSpread::Range p( range );
-
-      m_doc->namedAreaManager()->insert(p.sheet(), p.range(), name);
-      kDebug(30518) << "Area range: " << p.sheetName() << endl;
+      m_doc->namedAreaManager()->insert(region.firstSheet(), region.firstRange(), name);
+      kDebug(30518) << "Area range: " << region.name() << endl;
     }
   }
 }
