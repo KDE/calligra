@@ -1955,7 +1955,7 @@ void KexiMainWindow::setupCentralWidget()
 	centralWidgetLyr->setContentsMargins( 0, KDialog::marginHint(), 0, 0 );
 	centralWidgetLyr->addWidget(d->tabWidget);
 	setCentralWidget( centralWidget );
-	connect( d->tabWidget, SIGNAL( closeTab() ), this, SLOT() );
+	connect( d->tabWidget, SIGNAL( closeTab() ), this, SLOT(closeCurrentWindow()) );
 //<tmp>
 /*	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 1");
 	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 2");
@@ -3588,6 +3588,8 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 	}
 
 	d->removeWindow(window_id); //don't remove -KMDI will do that
+	d->tabWidget->removeTab( d->tabWidget->indexOf( window ) );
+
 	//also remove from 'print setup dialogs' cache, if needed
 	int printedObjectID = 0;
 	if (d->pageSetupWindowItemID2dataItemID_map.contains(window_id))

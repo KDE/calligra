@@ -26,6 +26,8 @@ KDE4: TODO:
 2007-07-06
 Build
 = never use global static QObjects (problem on Windows), use K_GLOBAL_STATIC instead
+Main Window
+- tabs can now be closed
 
 2007-07-05
 Table View, Main Window
