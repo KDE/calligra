@@ -1496,7 +1496,7 @@ Value Formula::eval() const
           if (region.isValid() && region.isSingular())
           {
             const QPoint position = region.firstRange().topLeft();
-            val1 = Cell( d->sheet, position ).value();
+            val1 = Cell(region.firstSheet(), position).value();
             // store the reference, so we can use it within functions
             entry.col1 = entry.col2 = position.x();
             entry.row1 = entry.row2 = position.y();
