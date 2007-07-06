@@ -240,9 +240,9 @@ Things not in bugzilla
     - Split the damage processing: document and view related.		done
 
   + code cleanups						      3 ----
-    - Merge Cell::checkForNamedAreas() into Oasis::decodeFormula().	----
+    - Merge Cell::checkForNamedAreas() into Oasis::decodeFormula().	done
       Caution: also used by OpenCalc filter
-    - Check if all logic of Point and Range is materialized in Region.	----
+    - Check if all logic of Point and Range is materialized in Region.	done
       Replace all occurences of Point and Range by Region.
     - All util_foo() functions that act on Point/Ranges should become	done
       static members of Region.
