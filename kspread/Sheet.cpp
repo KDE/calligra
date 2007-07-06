@@ -3864,9 +3864,12 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     QRect _printRange = print()->printRange();
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
     {
-        QString range= Oasis::convertRangeToRef( sheetName(), _printRange );
-        kDebug(36003)<<" range : "<<range<<endl;
-        xmlWriter.addAttribute( "table:print-ranges", range );
+        const Region region(_printRange, this);
+        if (region.isValid())
+        {
+            kDebug(36003) << region << endl;
+            xmlWriter.addAttribute("table:print-ranges", region.saveOdf());
+        }
     }
 
     const QRect usedArea = this->usedArea();
