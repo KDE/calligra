@@ -62,6 +62,26 @@ void TestRegion::testFixation()
     QCOMPARE(region.name(), QString("Sheet1!A1:$B$4"));
 }
 
+void TestRegion::testSheet()
+{
+    Region region;
+    region = Region(QPoint(1, 1), m_doc->map()->sheet(0));
+    QCOMPARE(region.name(), QString("Sheet1!A1"));
+    QCOMPARE(region.firstSheet(), m_doc->map()->sheet(0));
+    region = Region(m_doc->map(), "A1", m_doc->map()->sheet(0));
+    QCOMPARE(region.name(), QString("Sheet1!A1"));
+    QCOMPARE(region.firstSheet(), m_doc->map()->sheet(0));
+    region = Region(m_doc->map(), "Sheet1!A1", m_doc->map()->sheet(1));
+    QCOMPARE(region.name(), QString("Sheet1!A1"));
+    QCOMPARE(region.firstSheet(), m_doc->map()->sheet(0));
+    region = Region(m_doc->map(), "Sheet2!A1");
+    QCOMPARE(region.name(), QString("Sheet2!A1"));
+    QCOMPARE(region.firstSheet(), m_doc->map()->sheet(1));
+    region = Region(m_doc->map(), "Sheet2!A1", m_doc->map()->sheet(0));
+    QCOMPARE(region.name(), QString("Sheet2!A1"));
+    QCOMPARE(region.firstSheet(), m_doc->map()->sheet(1));
+}
+
 void TestRegion::cleanupTestCase()
 {
     delete m_doc;
