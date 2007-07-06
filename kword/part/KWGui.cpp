@@ -68,6 +68,7 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     KoToolDocker *td =  dynamic_cast<KoToolDocker*>( m_view->createDockWidget( &toolDockerFactory ) );
     connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), td, SLOT(newOptionWidget(QWidget*)));
 
+    gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(m_horizontalRuler, 0, 1);
     gridLayout->addWidget(m_verticalRuler, 1, 0);
     gridLayout->addWidget( m_canvasController, 1, 1 );
