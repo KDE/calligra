@@ -45,6 +45,7 @@
 #include <kspread/Currency.h>
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
+#include <kspread/NamedAreaManager.h>
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
 #include <kspread/RowColumnFormat.h>
@@ -1057,20 +1058,24 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     </gmr:Name>
   </gmr:Names>
     */
-    if ( ksdoc->listArea().count()>0 )
+    const QList<QString> namedAreas = ksdoc->namedAreaManager()->areaNames();
+    if (namedAreas.count() > 0)
     {
+        Sheet* sheet = 0;
+        QRect range;
         QDomElement areaNames = gnumeric_doc.createElement("gmr:Names");
-        const Q3ValueList<Reference> &area = ksdoc->listArea(); // copying by value is slow!
-        Q3ValueList<Reference>::ConstIterator it = area.begin();
-        Q3ValueList<Reference>::ConstIterator end = area.end();
-        for ( ; it != end; ++it )
+        for (int i = 0; i < namedAreas.count(); ++i)
         {
+            sheet = ksdoc->namedAreaManager()->sheet(namedAreas[i]);
+            if (!sheet)
+                continue;
+            range = ksdoc->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
             QDomElement areaName = gnumeric_doc.createElement("gmr:Name");
             QDomElement areaNameElement = gnumeric_doc.createElement("gmr:name");
-            areaNameElement.appendChild(gnumeric_doc.createTextNode(( *it ).ref_name) );
+            areaNameElement.appendChild(gnumeric_doc.createTextNode(namedAreas[i]));
             areaName.appendChild( areaNameElement );
             QDomElement areaNameValue = gnumeric_doc.createElement("gmr:value");
-            areaNameValue.appendChild(gnumeric_doc.createTextNode( convertRefToRange( ( *it ).sheet_name, ( *it ).rect )  ) );
+            areaNameValue.appendChild(gnumeric_doc.createTextNode(convertRefToRange(sheet->sheetName(), range)));
             areaName.appendChild( areaNameValue );
             areaNames.appendChild( areaName );
             //TODO <gmr:position>A1</gmr:position> I don't know what is it.

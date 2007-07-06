@@ -47,6 +47,7 @@
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
+#include <kspread/NamedAreaManager.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
@@ -57,7 +58,7 @@
 
 using namespace KSpread;
 
-typedef Q3ValueList<Reference> AreaList;
+typedef QList<QString> AreaList;
 
 class OpenCalcExportFactory : public KGenericFactory<OpenCalcExport>
 {
@@ -401,25 +402,25 @@ bool OpenCalcExport::exportContent( KoStore * store, const Doc * ksdoc )
   return true;
 }
 
-void exportNamedExpr( QDomDocument & doc, QDomElement & parent,
+void exportNamedExpr( Doc* kspreadDoc, QDomDocument & doc, QDomElement & parent,
                       AreaList const & namedAreas )
 {
-  AreaList::const_iterator it  = namedAreas.begin();
-  AreaList::const_iterator end = namedAreas.end();
-
-  while ( it != end )
+  Sheet* sheet = 0;
+  QRect range;
+  for (int i = 0; i < namedAreas.count(); ++i)
   {
     QDomElement namedRange = doc.createElement( "table:named-range" );
 
-    Reference ref = *it;
+    sheet = kspreadDoc->namedAreaManager()->sheet(namedAreas[i]);
+    if (!sheet)
+        continue;
+    range = kspreadDoc->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
 
-    namedRange.setAttribute( "table:name", ref.ref_name );
-    namedRange.setAttribute( "table:base-cell-address", Oasis::convertRefToBase( ref.sheet_name, ref.rect ) );
-    namedRange.setAttribute( "table:cell-range-address", Oasis::convertRefToRange( ref.sheet_name, ref.rect ) );
+    namedRange.setAttribute("table:name", namedAreas[i]);
+    namedRange.setAttribute("table:base-cell-address", Oasis::convertRefToBase(sheet->sheetName(), range));
+    namedRange.setAttribute("table:cell-range-address", Oasis::convertRefToRange(sheet->sheetName(), range));
 
     parent.appendChild( namedRange );
-
-    ++it;
   }
 }
 
@@ -498,11 +499,11 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
   KoDocument * document   = m_chain->inputDocument();
   Doc * kspreadDoc = static_cast<Doc *>( document );
 
-  AreaList namedAreas = kspreadDoc->listArea();
+  AreaList namedAreas = kspreadDoc->namedAreaManager()->areaNames();
   if ( namedAreas.count() > 0 )
   {
     QDomElement namedExpr = doc.createElement( "table:named-expressions" );
-    exportNamedExpr( doc, namedExpr, namedAreas );
+    exportNamedExpr( kspreadDoc, doc, namedExpr, namedAreas );
 
     body.appendChild( namedExpr );
   }

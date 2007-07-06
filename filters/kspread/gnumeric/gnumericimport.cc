@@ -43,6 +43,7 @@
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
+#include <kspread/NamedAreaManager.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
@@ -234,7 +235,7 @@ void areaNames( Doc * ksdoc, const QString &_name, QString _zone )
             rect.setTop( top );
             rect.setBottom( top );
         }
-        ksdoc->addAreaName( rect, _name ,tableName);
+        ksdoc->namedAreaManager()->insert(ksdoc->map()->findSheet(tableName), rect, _name);
     }
 }
 

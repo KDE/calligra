@@ -50,6 +50,7 @@
 #include <kspread/Doc.h>
 #include <kspread/Global.h>
 #include <kspread/Map.h>
+#include <kspread/NamedAreaManager.h>
 #include <kspread/Region.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
@@ -1640,7 +1641,7 @@ void OpenCalcImport::loadOasisAreaName( const KoXmlElement&body )
 
       KSpread::Range p( range );
 
-      m_doc->addAreaName( p.range(), name, p.sheetName() );
+      m_doc->namedAreaManager()->insert(p.sheet(), p.range(), name);
       kDebug(30518) << "Area range: " << p.sheetName() << endl;
     }
   }
