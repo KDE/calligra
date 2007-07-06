@@ -1,6 +1,6 @@
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/visitors ${FREETYPE_INCLUDE_DIR} ${FreeType2_INCLUDE_DIR} ${FONTCONFIG_INCLUDE_DIR} )
 
-add_definitions(${FREETYPE_INCLUDE_DIR})
+#add_definitions(${FREETYPE_INCLUDE_DIR})
 
 set(karboncore_SRCS
     vcolor.cc 
