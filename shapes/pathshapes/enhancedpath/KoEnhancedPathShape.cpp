@@ -29,8 +29,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 
-#include <kdebug.h>
-
 KoEnhancedPathShape::KoEnhancedPathShape( const QRectF &viewBox )
 : m_viewBox( viewBox ), m_viewBoxOffset( 0.0, 0.0 )
 {
@@ -401,7 +399,6 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
                 {
                     QString name = grandChild.attributeNS( KoXmlNS::draw, "name" );
                     QString formula = grandChild.attributeNS( KoXmlNS::draw, "formula" );
-                    kDebug() << "adding formula: " << formula << endl;
                     addFormula( name, formula );
                 }
                 else if( grandChild.localName() == "handle" )
@@ -409,7 +406,6 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
                     KoEnhancedPathHandle * handle = new KoEnhancedPathHandle( this );
                     if( handle->loadOdf( grandChild ) )
                     {
-                        kDebug() << "adding handle: " << grandChild.text() << endl;
                         m_enhancedHandles.append( handle );
                         evaluateHandles();
                     }
@@ -458,8 +454,6 @@ void KoEnhancedPathShape::parsePathData( const QString & data )
     const char *end = buffer.constData() + buffer.length() + 1;
 
     char lastChar = ' ';
-
-    kDebug() << "parsing enhanced path data: " << data << endl;
 
     QString cmdString;
 
