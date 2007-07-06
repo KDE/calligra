@@ -1239,6 +1239,10 @@ protected:
     // helper function for areaIsEmpty
     bool cellIsEmpty( const Cell& cell, TestType _type );
 
+    QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
+                                    int NbCol, const QPoint& pos, bool isColumnFixed,
+                                    bool isRowFixed, bool& error);
+
     static Sheet* find( int _id );
     static int s_id;
     static QHash<int,Sheet*>* s_mapSheets;

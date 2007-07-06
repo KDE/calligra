@@ -855,7 +855,7 @@ void Sheet::insertShiftRight( const QRect& rect )
         for ( int i = rect.top(); i <= rect.bottom(); ++i )
         {
             sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                      Sheet::ColumnInsert, objectName(),
+                                      Sheet::ColumnInsert, sheetName(),
                                       rect.right() - rect.left() + 1 );
         }
     }
@@ -869,7 +869,7 @@ void Sheet::insertShiftDown( const QRect& rect )
         for ( int i = rect.left(); i <= rect.right(); ++i )
         {
             sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                      Sheet::RowInsert, objectName(),
+                                      Sheet::RowInsert, sheetName(),
                                       rect.bottom() - rect.top() + 1 );
         }
     }
@@ -883,7 +883,7 @@ void Sheet::removeShiftUp( const QRect& rect )
         for ( int i = rect.left(); i <= rect.right(); ++i )
         {
             sheet->changeNameCellRef( QPoint( i, rect.top() ), false,
-                                      Sheet::RowRemove, objectName(),
+                                      Sheet::RowRemove, sheetName(),
                                       rect.bottom() - rect.top() + 1 );
         }
     }
@@ -897,7 +897,7 @@ void Sheet::removeShiftLeft( const QRect& rect )
         for ( int i = rect.top(); i <= rect.bottom(); ++i )
         {
             sheet->changeNameCellRef( QPoint( rect.left(), i ), false,
-                                      Sheet::ColumnRemove, objectName(),
+                                      Sheet::ColumnRemove, sheetName(),
                                       rect.right() - rect.left() + 1 );
         }
     }
@@ -919,7 +919,7 @@ void Sheet::insertColumns( int col, int number )
     foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
-                                  Sheet::ColumnInsert, objectName(),
+                                  Sheet::ColumnInsert, sheetName(),
                                   number );
     }
     //update print settings
@@ -943,7 +943,7 @@ void Sheet::insertRows( int row, int number )
     foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( 1, row ), true,
-                                  Sheet::RowInsert, objectName(),
+                                  Sheet::RowInsert, sheetName(),
                                   number );
     }
     //update print settings
@@ -967,7 +967,7 @@ void Sheet::removeColumns( int col, int number )
     foreach ( Sheet* sheet, map()->sheetList() )
     {
         sheet->changeNameCellRef( QPoint( col, 1 ), true,
-                                  Sheet::ColumnRemove, objectName(),
+                                  Sheet::ColumnRemove, sheetName(),
                                   number );
     }
     //update print settings
@@ -991,7 +991,7 @@ void Sheet::removeRows( int row, int number )
     foreach ( Sheet* sheet, map()->sheetList() )
     {
       sheet->changeNameCellRef( QPoint( 1, row ), true,
-                                Sheet::RowRemove, objectName(),
+                                Sheet::RowRemove, sheetName(),
                                 number );
     }
 
@@ -1057,143 +1057,142 @@ void Sheet::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref
 
 }
 
-void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
-                                      ChangeRef ref, QString tabname, int nbCol,
-                                      UndoInsertRemoveAction * undo )
+QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
+                                       int nbCol, const QPoint& point, bool isColumnFixed,
+                                       bool isRowFixed, bool& error)
 {
-    bool correctDefaultSheetName = (tabname == objectName()); // for cells without sheet ref (eg "A1")
-
-    for ( int c = 0; c < formulaStorage()->count(); ++c )
+    QString newPoint;
+    int col = point.x();
+    int row = point.y();
+    // update column
+    if (isColumnFixed)
+        newPoint.append('$');
+    if (ref == ColumnInsert &&
+        col + nbCol <= KS_colMax &&
+        col >= pos.x() &&    // Column after the new one : +1
+        ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
     {
-      QString origText = formulaStorage()->data( c ).expression();
-      int i = 0;
-      bool error = false;
-      QString newText;
+        newPoint += Cell::columnName( col + nbCol );
+    }
+    else if (ref == ColumnRemove &&
+                col > pos.x() &&    // Column after the deleted one : -1
+                ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
+    {
+        newPoint += Cell::columnName( col - nbCol );
+    }
+    else
+        newPoint += Cell::columnName( col );
 
-      bool correctSheetName = correctDefaultSheetName;
-      //bool previousCorrectSheetName = false;
-      QChar origCh;
-      for ( ; i < origText.length(); ++i )
-      {
-        origCh = origText[i];
-        if ( origCh != ':' && origCh != '$' && !origCh.isLetter() )
+    // Update row
+    if (isRowFixed)
+        newPoint.append('$');
+    if (ref == RowInsert &&
+        row + nbCol <= KS_rowMax &&
+        row >= pos.y() &&   // Row after the new one : +1
+        ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
+    {
+        newPoint += QString::number( row + nbCol );
+    }
+    else if (ref == RowRemove &&
+             row > pos.y() &&   // Row after the deleted one : -1
+             ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
+    {
+        newPoint += QString::number( row - nbCol );
+    }
+    else
+        newPoint += QString::number( row );
+
+    if( ( ( ref == ColumnRemove
+            && col == pos.x() // Column is the deleted one : error
+            && ( fullRowOrColumn || row == pos.y() ) ) ||
+        ( ref == RowRemove
+            && row == pos.y() // Row is the deleted one : error
+            && ( fullRowOrColumn || col == pos.x() ) ) ||
+        ( ref == ColumnInsert
+            && col + nbCol > KS_colMax
+            && col >= pos.x()     // Column after the new one : +1
+            && ( fullRowOrColumn || row == pos.y() ) ) ||
+        ( ref == RowInsert
+            && row + nbCol > KS_rowMax
+            && row >= pos.y() // Row after the new one : +1
+            && ( fullRowOrColumn || col == pos.x() ) ) ) )
+    {
+        newPoint = '#' + i18n("Dependency") + '!';
+        error = true;
+    }
+    return newPoint;
+}
+
+void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
+                              QString tabname, int nbCol, UndoInsertRemoveAction* undo)
+{
+    for (int c = 0; c < formulaStorage()->count(); ++c)
+    {
+        QString newText('=');
+        bool error = false;
+        const Tokens tokens = formulaStorage()->data(c).tokens();
+        for (int t = 0; t < tokens.count(); ++t)
         {
-          newText += origCh;
-          // Reset the "correct table indicator"
-          correctSheetName = correctDefaultSheetName;
-        }
-        else // Letter or dollar : maybe start of cell name/range
-          // (or even ':', like in a range - note that correctSheet is kept in this case)
-        {
-          // Collect everything that forms a name (cell name or sheet name)
-          QString str;
-          bool sheetNameFound = false; //Sheet names need spaces
-          for( ; ( i < origText.length() ) &&  // until the end
-                 (  ( origText[i].isLetter() || origText[i].isDigit() || origText[i] == '$' ) ||  // all text and numbers are welcome
-                    ( sheetNameFound && origText[i].isSpace() ) ) //in case of a sheet name, we include spaces too
-               ; ++i )
-          {
-            str += origText[i];
-            if ( origText[i] == '!' )
-              sheetNameFound = true;
-          }
-          // Was it a sheet name ?
-          if ( origText[i] == '!' )
-          {
-            newText += str + '!'; // Copy it (and the '!')
-            // Look for the sheet name right before that '!'
-            correctSheetName = ( newText.right( tabname.length()+1 ) == tabname+'!' );
-          }
-          else // It must be a cell identifier
-          {
-            // Parse it
-            Point point( str );
-            if ( point.isValid() )
+            const Token token = tokens[t];
+            switch (token.type())
             {
-              int col = point.pos().x();
-              int row = point.pos().y();
-              QString newPoint;
-
-              // Update column
-              if ( point.columnFixed() )
-                newPoint = '$';
-
-              if( ref == ColumnInsert
-                  && correctSheetName
-                  && col + nbCol <= KS_colMax
-                  && col >= pos.x()     // Column after the new one : +1
-                  && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
-              {
-                newPoint += Cell::columnName( col + nbCol );
-              }
-              else if( ref == ColumnRemove
-                       && correctSheetName
-                       && col > pos.x() // Column after the deleted one : -1
-                       && ( fullRowOrColumn || row == pos.y() ) ) // All rows or just one
-              {
-                newPoint += Cell::columnName( col - nbCol );
-              }
-              else
-                newPoint += Cell::columnName( col );
-
-              // Update row
-              if ( point.rowFixed() )
-                newPoint += '$';
-
-              if( ref == RowInsert
-                  && correctSheetName
-                  && row + nbCol <= KS_rowMax
-                  && row >= pos.y() // Row after the new one : +1
-                  && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
-              {
-                newPoint += QString::number( row + nbCol );
-              }
-              else if( ref == RowRemove
-                       && correctSheetName
-                       && row > pos.y() // Row after the deleted one : -1
-                       && ( fullRowOrColumn || col == pos.x() ) ) // All columns or just one
-              {
-                newPoint += QString::number( row - nbCol );
-              }
-              else
-                newPoint += QString::number( row );
-
-              if( correctSheetName &&
-                  ( ( ref == ColumnRemove
-                      && col == pos.x() // Column is the deleted one : error
-                      && ( fullRowOrColumn || row == pos.y() ) ) ||
-                    ( ref == RowRemove
-                      && row == pos.y() // Row is the deleted one : error
-                      && ( fullRowOrColumn || col == pos.x() ) ) ||
-                    ( ref == ColumnInsert
-                      && col + nbCol > KS_colMax
-                      && col >= pos.x()     // Column after the new one : +1
-                      && ( fullRowOrColumn || row == pos.y() ) ) ||
-                    ( ref == RowInsert
-                      && row + nbCol > KS_rowMax
-                      && row >= pos.y() // Row after the new one : +1
-                      && ( fullRowOrColumn || col == pos.x() ) ) ) )
-              {
-                newPoint = '#' + i18n("Dependency") + '!';
-                error = true;
-              }
-
-              newText += newPoint;
+                case Token::Cell:
+                case Token::Range:
+                {
+                    const Region region(token.text(), map());
+                    if (!region.isValid() || !region.isContiguous())
+                    {
+                        newText.append(token.text());
+                        break;
+                    }
+                    if (!region.firstSheet() && tabname != sheetName())
+                    {
+                        // nothing to do here
+                        newText.append(token.text());
+                        break;
+                    }
+                    // actually only one element in here, but we need extended access to the element
+                    Region::ConstIterator end(region.constEnd());
+                    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
+                    {
+                        Region::Element* element = (*it);
+                        if (element->type() == Region::Element::Point)
+                        {
+                            if (element->sheet())
+                                newText.append(element->sheet()->sheetName() + '!');
+                            QString newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                                                                       nbCol,
+                                                                       element->rect().topLeft(),
+                                                                       element->isColumnFixed(),
+                                                                       element->isRowFixed(), error);
+                            newText.append(newPoint);
+                        }
+                        else // (element->type() == Region::Element::Range)
+                        {
+                            if (element->sheet())
+                                newText.append(element->sheet()->sheetName() + '!');
+                            QString newPoint;
+                            newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                                                               nbCol, element->rect().topLeft(),
+                                                               element->isColumnFixed(),
+                                                               element->isRowFixed(), error);
+                            newText.append(newPoint + ':');
+                            newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
+                                                               nbCol, element->rect().bottomRight(),
+                                                               element->isColumnFixed(),
+                                                               element->isRowFixed(), error);
+                            newText.append(newPoint);
+                        }
+                    }
+                    break;
+                }
+                default:
+                {
+                    newText.append(token.text());
+                    break;
+                }
             }
-            else // Not a cell ref
-            {
-              kDebug(36001) << "Copying (unchanged) : '" << str << '\'' << endl;
-              newText += str;
-            }
-            // Copy the char that got us to stop
-            if ( i < origText.length() ) {
-              newText += origText[i];
-              if( origText[i] != ':' )
-                correctSheetName = correctDefaultSheetName;
-            }
-          }
         }
-      }
 
       if ( error && undo != 0 ) //Save the original formula, as we cannot calculate the undo of broken formulas
       {
