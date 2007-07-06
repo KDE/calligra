@@ -23,7 +23,8 @@
 #include <KoParagraphStyle.h>
 
 ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+    m_fontMetricsChecked(false)
 {
     widget.setupUi(this);
 
@@ -36,6 +37,7 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     widget.lineSpacing->addItem( i18n( "Fixed") );
 
     connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
+    connect(widget.useFont, SIGNAL(toggled (bool)), this, SLOT(useFontMetrices(bool)));
     lineSpacingChanged(0);
 }
 
@@ -66,6 +68,7 @@ void ParagraphIndentSpacing::open(KoParagraphStyle *style) {
     widget.lineSpacing->setCurrentIndex(index);
     widget.minimumLineSpacing->changeValue(m_style->minimumLineHeight());
     widget.useFont->setChecked(m_style->lineSpacingFromFont());
+    m_fontMetricsChecked = m_style->lineSpacingFromFont();
 }
 
 void ParagraphIndentSpacing::lineSpacingChanged(int row) {
@@ -103,6 +106,8 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row) {
     }
 
     widget.minimumLineSpacing->setEnabled(row != 5);
+    widget.useFont->setEnabled(row != 5);
+    widget.useFont->setChecked( row == 5 ? false : m_fontMetricsChecked);
 }
 
 void ParagraphIndentSpacing::save() {
@@ -116,12 +121,17 @@ void ParagraphIndentSpacing::save() {
         case 1: m_style->setLineHeightPercent(180); break;
         case 2: m_style->setLineHeightPercent(240); break;
         case 3: m_style->setLineHeightPercent(widget.proportional->value()); break;
-        case 4: m_style->setLineSpacing(widget.custom->value()); break;
-        case 5: m_style->setLineHeightAbsolute(widget.custom->value()); break;
+        case 4: m_style->setLineHeightPercent(0);
+                m_style->setLineSpacing(widget.custom->value());
+                break;
+        case 5: m_style->setLineHeightPercent(0);
+                m_style->setLineSpacing(0);
+                m_style->setLineHeightAbsolute(widget.custom->value());
+                break;
     }
     if(widget.lineSpacing->currentIndex() != 5)
         m_style->setMinimumLineHeight(widget.minimumLineSpacing->value());
-    m_style->setLineSpacingFromFont(widget.useFont->isChecked());
+    m_style->setLineSpacingFromFont(widget.lineSpacing->currentIndex() != 5 && widget.useFont->isChecked());
 }
 
 void ParagraphIndentSpacing::setUnit(const KoUnit &unit) {
@@ -132,6 +142,11 @@ void ParagraphIndentSpacing::setUnit(const KoUnit &unit) {
     widget.after->setUnit(unit);
     widget.custom->setUnit(unit);
     widget.minimumLineSpacing->setUnit(unit);
+}
+
+void ParagraphIndentSpacing::useFontMetrices(bool on) {
+    if(widget.lineSpacing->currentIndex() != 5)
+        m_fontMetricsChecked = on;
 }
 
 #include "ParagraphIndentSpacing.moc"

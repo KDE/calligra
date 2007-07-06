@@ -39,11 +39,13 @@ public:
 
 private slots:
     void lineSpacingChanged(int);
+    void useFontMetrices(bool);
 
 private:
     Ui::ParagraphIndentSpacing widget;
 
     KoParagraphStyle *m_style;
+    bool m_fontMetricsChecked;
 };
 
 #endif
