@@ -22,6 +22,7 @@
 #include "CellStorage.h"
 #include "Doc.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
 #include "Sheet.h"
 
 #include "TestKspreadCommon.h"
@@ -67,7 +68,7 @@ void TestDatabaseFunctions::initTestCase()
     CellStorage* storage = sheet->cellStorage();
 
     // TESTDB = A18:I31
-    m_doc->addAreaName(QRect(QPoint(1, 18), QPoint(9, 31)), "TESTDB", "Sheet1");
+    m_doc->namedAreaManager()->insert(sheet, QRect(QPoint(1, 18), QPoint(9, 31)), "TESTDB");
     // A18:A31
     storage->setValue(1, 18, Value("TestID"));
     for (int row = 19; row <= 31; ++row)

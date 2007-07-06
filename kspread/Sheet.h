@@ -1131,10 +1131,6 @@ signals:
     void documentSizeChanged( const QSizeF& );
     void visibleSizeChanged();
 
-protected slots:
-  /** react on modification (add/remove) of a named area */
-  void slotAreaModified (const QString &name);
-
 protected:
     /**
      * Change the name of a sheet in all formulas.

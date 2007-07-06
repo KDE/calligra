@@ -323,7 +323,7 @@ public:
     }
     virtual bool evaluate(const Database* database, int index) const
     {
-        const Sheet* sheet = (*database->range().constBegin())->sheet();
+        const Sheet* sheet = database->range().lastSheet();
         const QRect range = database->range().lastRange();
         const int start = database->orientation() == Qt::Vertical ? range.left() : range.top();
         kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
@@ -565,7 +565,7 @@ bool Filter::isEmpty() const
 
 void Filter::apply(const Database* database) const
 {
-    Sheet* const sheet = (*database->range().constBegin())->sheet();
+    Sheet* const sheet = database->range().lastSheet();
     const QRect range = database->range().lastRange();
     const int start = database->orientation() == Qt::Vertical ? range.top() : range.left();
     const int end = database->orientation() == Qt::Vertical ? range.bottom() : range.right();
@@ -596,7 +596,7 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
         d->targetRangeAddress = Region(map, Region::loadOdf(address));
-        if (d->targetRangeAddress.isEmpty() || !d->targetRangeAddress.isValid())
+        if (!d->targetRangeAddress.isValid())
             return false;
     }
     if (element.hasAttributeNS(KoXmlNS::table, "condition-source"))

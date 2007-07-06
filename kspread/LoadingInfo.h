@@ -36,8 +36,6 @@ class LoadingInfo
 public:
     LoadingInfo() { m_loadTemplate = false;}
     ~LoadingInfo() {}
-    void addWordInAreaList( const QString & word) { m_areaNamed.append( word ); }
-    bool findWordInAreaList(const QString & word) const { return (m_areaNamed.indexOf( word ) != -1);}
     void appendValidation( const QString &name, const KoXmlElement &element){ m_validationList.insert( name, element);}
     KoXmlElement validation( const QString &name) { return m_validationList[name];}
 
@@ -69,7 +67,6 @@ public:
     }
 
 private:
-    QStringList m_areaNamed;
     QMap<QString,KoXmlElement> m_validationList;
     QMap<Sheet*, QPoint> m_cursorPositions;
     QMap<Sheet*, QPointF> m_scrollingOffsets;

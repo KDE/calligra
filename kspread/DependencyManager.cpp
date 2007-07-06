@@ -239,7 +239,7 @@ void DependencyManager::regionChanged(const Region& region)
 //     d->dump();
 }
 
-void DependencyManager::areaModified (const QString &name)
+void DependencyManager::namedAreaModified(const QString &name)
 {
     d->areaModified (name);
 }
@@ -672,3 +672,5 @@ void DependencyManager::Private::removeCircularDependencyFlags( const Region& re
         }
     }
 }
+
+#include "DependencyManager.moc"

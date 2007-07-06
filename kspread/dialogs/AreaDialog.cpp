@@ -33,6 +33,7 @@
 
 #include "Doc.h"
 #include "Localization.h"
+#include "NamedAreaManager.h"
 #include "Sheet.h"
 #include "View.h"
 #include "Selection.h"
@@ -83,18 +84,10 @@ void AreaDialog::slotOk()
     tmp = tmp.toLower();
 
     QRect rect( m_pView->selection()->lastRange() );
-    bool newName = true;
-    QList<Reference>::Iterator it;
-    QList<Reference> area = m_pView->doc()->listArea();
-    for ( it = area.begin(); it != area.end(); ++it )
-    {
-      if(tmp == (*it).ref_name)
-        newName = false;
-    }
-    if (newName)
+    if (!m_pView->doc()->namedAreaManager()->contains(tmp))
     {
       m_pView->doc()->emitBeginOperation( false );
-      m_pView->doc()->addAreaName(rect, tmp, m_pView->activeSheet()->sheetName());
+      m_pView->doc()->namedAreaManager()->insert(m_pView->activeSheet(), rect, tmp);
       m_pView->slotUpdateView( m_pView->activeSheet() );
       accept();
     }

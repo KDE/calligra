@@ -269,6 +269,8 @@ public:
 
   QRect firstRange() const;
   QRect lastRange() const;
+    Sheet* firstSheet() const;
+    Sheet* lastSheet() const;
 
   QRect boundingRect() const;
 

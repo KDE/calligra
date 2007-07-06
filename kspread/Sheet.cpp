@@ -339,13 +339,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->autoCalc=true;
   d->print = new SheetPrint( this );
 
-  // connect to named area slots
-  QObject::connect( doc(), SIGNAL( sig_addAreaName( const QString & ) ),
-    this, SLOT( slotAreaModified( const QString & ) ) );
-
-  QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ),
-    this, SLOT( slotAreaModified( const QString & ) ) );
-
     // document size changes always trigger a visible size change
     connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
 }
@@ -801,11 +794,6 @@ void Sheet::recalc( bool force )
 
   //  emitEndOperation();
   emit sig_updateView( this );
-}
-
-void Sheet::slotAreaModified (const QString &name)
-{
-  doc()->dependencyManager()->areaModified (name);
 }
 
 void Sheet::refreshRemoveAreaName(const QString & _areaName)
@@ -4924,7 +4912,6 @@ bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
       sheet->changeCellTabName( old_name, name );
     }
 
-    doc()->changeAreaSheetName( old_name, name );
     emit sig_nameChanged( this, old_name );
 
     setObjectName(name.toUtf8());
@@ -5008,7 +4995,7 @@ void Sheet::setRegionPaintDirty( const Region & region )
 {
     if ( isLoading() )
         return;
-    if ( region.isEmpty() || !region.isValid() )
+    if (!region.isValid())
         return;
 
 #if 0 // KSPREAD_KOPART_EMBEDDING

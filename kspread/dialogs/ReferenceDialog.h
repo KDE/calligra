@@ -1,11 +1,12 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2002 Ariya Hidayat <ariya@kde.org>
-             (C) 2002 Harri Porten <porten@kde.org>
-             (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 1999-2002 Laurent Montel <montel@kde.org>
-             (C) 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
-             (C) 1998-2000 Torben Weis <weis@kde.org>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2002 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002 Harri Porten <porten@kde.org>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 1999-2002 Laurent Montel <montel@kde.org>
+   Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+   Copyright 1998-2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,17 +24,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_reference__
-#define __kspread_dlg_reference__
+#ifndef KSPREAD_NAMED_AREA_DIALOG
+#define KSPREAD_NAMED_AREA_DIALOG
 
 #include <kdialog.h>
-//Added by qt3to4:
-#include <QLabel>
 
 class QComboBox;
 class QLabel;
 class QLineEdit;
-class QPushButton;
 class Q3ListBox;
 class Q3ListBoxItem;
 
@@ -41,11 +39,11 @@ namespace KSpread
 {
 class View;
 
-class reference: public QDialog
+class NamedAreaDialog : public KDialog
 {
   Q_OBJECT
 public:
-  reference( View* parent, const char* name );
+  NamedAreaDialog(View* parent);
 
 
 public slots:
@@ -59,10 +57,6 @@ protected:
   View * m_pView;
 
   Q3ListBox    * m_list;
-  QPushButton * m_pOk;
-  QPushButton * m_pCancel;
-  QPushButton * m_pEdit;
-  QPushButton * m_pRemove;
   QLabel      * m_rangeName;
 
 private:
@@ -91,4 +85,4 @@ private:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_NAMED_AREA_DIALOG

@@ -22,6 +22,7 @@
 #include "Canvas.h"
 #include "Cell.h"
 #include "Doc.h"
+#include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -1268,10 +1269,9 @@ ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
     setLineEdit( m_locationWidget );
     insertItem( 0,"" );
 
-    QList<Reference>::Iterator it;
-    QList<Reference> area = _view->doc()->listArea();
-    for ( it = area.begin(); it != area.end(); ++it )
-        slotAddAreaName( (*it).ref_name);
+    const QList<QString> areaNames = _view->doc()->namedAreaManager()->areaNames();
+    for (int i = 0; i < areaNames.count(); ++i)
+        slotAddAreaName(areaNames[i]);
     connect( this, SIGNAL( activated ( const QString & ) ), m_locationWidget, SLOT( slotActivateItem() ) );
 }
 
@@ -1334,19 +1334,12 @@ void LocationEditWidget::slotActivateItem()
 bool LocationEditWidget::activateItem()
 {
     QString ltext = text();
-    QString tmp = ltext.toLower();
-    QList<Reference>::Iterator it;
-    QList<Reference> area = m_pView->doc()->listArea();
-    for ( it = area.begin(); it != area.end(); ++it )
+    QString tmp = ltext;
+    const Region region = m_pView->doc()->namedAreaManager()->namedArea(tmp);
+    if (region.isValid())
     {
-        if ((*it).ref_name == tmp)
-        {
-            QString tmp = (*it).sheet_name;
-            tmp += '!';
-            tmp += Region((*it).rect).name();
-            m_pView->selection()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
-            return true;
-        }
+        m_pView->selection()->initialize( Region(m_pView->doc()->map(), tmp, m_pView->activeSheet()) );
+        return true;
     }
 
     // Set the cell component to uppercase:
@@ -1375,11 +1368,10 @@ bool LocationEditWidget::activateItem()
         }
         if ( !region.isValid() && validName)
         {
-            QRect rect( m_pView->selection()->lastRange() );
-            Sheet * t = m_pView->activeSheet();
+            QRect range( m_pView->selection()->lastRange() );
+            Sheet* sheet = m_pView->activeSheet();
             // set area name on current selection/cell
-
-            m_pView->doc()->addAreaName(rect, ltext.toLower(), t->sheetName());
+            m_pView->doc()->namedAreaManager()->insert(sheet, range, ltext);
         }
 
         if (!validName)

@@ -22,6 +22,7 @@
 #define KSPREAD_DEPENDENCY_MANAGER
 
 #include <QLinkedList>
+#include <QObject>
 
 #include "Region.h"
 
@@ -33,8 +34,9 @@ class Region;
  * Manages the dependencies between cells caused by references in formulas.
  * This dependency information is used for the recalculation of the cells.
  */
-class KSPREAD_EXPORT DependencyManager
+class KSPREAD_EXPORT DependencyManager : public QObject
 {
+    Q_OBJECT
     friend class RecalcManager;
 
 public:
@@ -48,9 +50,6 @@ public:
 
     /** handle the fact that cell's contents have changed */
     void regionChanged (const Region& region);
-
-    /** a named area was somehow modified */
-    void areaModified (const QString &name);
 
     /** Updates the whole map. */
     void updateAllDependencies(const Map* map);
@@ -80,6 +79,9 @@ public:
      * \param destination the new upper left corner of the region
      */
     void regionMoved( const Region& movedRegion, const Cell& destination );
+
+public Q_SLOTS:
+    void namedAreaModified(const QString&);
 
 protected:
     /**

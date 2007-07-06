@@ -200,7 +200,7 @@ void FilterPopup::closeEvent(QCloseEvent* event)
     {
         updateFilter(d->database.filter());
         ApplyFilterCommand* command = new ApplyFilterCommand();
-        command->setSheet((*d->database.range().constBegin())->sheet());
+        command->setSheet(d->database.range().lastSheet());
         command->add(d->database.range());
         command->setDatabase(d->database);
         command->execute();

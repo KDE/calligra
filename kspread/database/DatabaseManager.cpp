@@ -73,9 +73,9 @@ bool DatabaseManager::loadOdf(const KoXmlElement& body)
             if (!database.loadOdf(element, d->map))
                 return false;
             const Region region = database.range();
-            if (region.isEmpty() || !region.isValid())
+            if (!region.isValid())
                 continue;
-            const Sheet* sheet = (*region.constBegin())->sheet();
+            const Sheet* sheet = region.lastSheet();
             if (!sheet)
                 continue;
             sheet->cellStorage()->setDatabase(region, database);

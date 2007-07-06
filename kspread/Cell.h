@@ -639,12 +639,6 @@ private:
 
     /**
      * \ingroup OpenDocument
-     * \todo TODO Stefan: merge this into Oasis::decodeFormula
-     */
-    void checkForNamedAreas( QString & formula ) const;
-
-    /**
-     * \ingroup OpenDocument
      */
     void saveOasisValue (KoXmlWriter &xmlWriter);
 

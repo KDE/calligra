@@ -1,13 +1,14 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Ariya Hidayat <ariya@kde.org>
-             (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2000-2005 Laurent Montel <montel@kde.org>
-             (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 2002 Phillip Mueller <philipp.mueller@gmx.de>
-             (C) 2000 Werner Trobin <trobin@kde.org>
-             (C) 1999-2000 Simon Hausmann <hausmann@kde.org>
-             (C) 1999 David Faure <faure@kde.org>
-             (C) 1998-2000 Torben Weis <weis@kde.org>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2000-2005 Laurent Montel <montel@kde.org>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 2002 Phillip Mueller <philipp.mueller@gmx.de>
+   Copyright 2000 Werner Trobin <trobin@kde.org>
+   Copyright 1999-2000 Simon Hausmann <hausmann@kde.org>
+   Copyright 1999 David Faure <faure@kde.org>
+   Copyright 1998-2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -64,6 +65,7 @@ class ColumnFormat;
 class Damage;
 class DatabaseManager;
 class DependencyManager;
+class NamedAreaManager;
 class ValueParser;
 class ValueConverter;
 class ValueFormatter;
@@ -79,13 +81,6 @@ class StyleManager;
 class UndoAction;
 class LoadingInfo;
 class EmbeddedObject;
-
-struct Reference
-{
-    QString sheet_name;
-    QString ref_name;
-    QRect rect;
-};
 
 /**
  * This class holds the data that makes up a spreadsheet.
@@ -178,6 +173,11 @@ public:
    * \return a pointer to the dependency manager
    */
   DependencyManager* dependencyManager() const;
+
+  /**
+   * \return a pointer to the named area manager
+   */
+  NamedAreaManager* namedAreaManager() const;
 
   /**
    * \return a pointer to the recalculation manager
@@ -497,17 +497,6 @@ public:
    */
   virtual bool loadXML( QIODevice *, const KoXmlDocument& doc );
 
-  /**
-   * \ingroup NativeFormat
-   */
-  QDomElement saveAreaName( QDomDocument& doc ) ;
-
-  /**
-   * \ingroup NativeFormat
-   */
-  void loadAreaName( const KoXmlElement& element );
-
-
   bool savingWholeDocument();
 
 
@@ -547,16 +536,6 @@ public:
    */
   virtual bool loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles,
                           const KoXmlDocument& settings, KoStore* );
-
-  /**
-   * \ingroup OpenDocument
-   */
-  void saveOasisAreaName( KoXmlWriter & xmlWriter );
-
-  /**
-   * \ingroup OpenDocument
-   */
-  void loadOasisAreaName( const KoXmlElement& element );
 
   /**
    * \ingroup OpenDocument
@@ -617,44 +596,6 @@ public:
    * \ingroup Painting
    */
   void paintContent( QPainter & painter, const QRect & rect, Sheet * sheet, bool drawCursor = true );
-
-
-//   virtual DCOPObject* dcopObject();
-
-  /**
-   * Registers a named area.
-   * \note The name is valid for the whole document.
-   * \param rect the cell range to be named
-   * \param name the name of the new area
-   * \param sheetName the name of the sheet the area belongs to
-   */
-  void addAreaName( const QRect& rect, const QString& name, const QString& sheetName );
-
-  /**
-   * Returns the list of all registered named areas.
-   * \return the list of named areas
-   */
-  const QList<Reference>& listArea();
-
-  /**
-   * Removes a named area.
-   * \param name the name of the area to be removed
-   */
-  void removeArea( const QString& name );
-
-  /**
-   * Returns the cell range associated with the area named \p name .
-   * \param name the name of the area
-   * \return the cell range
-   */
-  QRect namedArea( const QString& name );
-
-  /**
-   * Changes the sheet name of all named areas.
-   * \param oldName the old sheet name
-   * \param newName the new sheet name
-   */
-  void changeAreaSheetName( const QString& oldName, const QString& newName );
 
   KCompletion& completion();
   void addStringCompletion(const QString & stringCompletion);
@@ -785,9 +726,6 @@ Q_SIGNALS:
    * Emitted if we update to locale system.
    */
   void sig_refreshLocale();
-
-  void sig_addAreaName( const QString & );
-  void sig_removeAreaName( const QString & );
 
   void damagesFlushed( const QList<Damage*>& damages );
 

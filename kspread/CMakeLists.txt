@@ -167,6 +167,7 @@ SET (kspreadcommon_LIB_SRCS
 # 	Handler.cpp
 	Localization.cpp
 	Map.cpp
+	NamedAreaManager.cpp
 	Number.cpp
 # 	Object.cpp
 # 	PropertyEditor.cpp

@@ -63,7 +63,7 @@ QVariant TableModel::headerData( int section, Qt::Orientation orientation, int r
     const QPoint offset = d->region.firstRange().topLeft();
     const int col = ( orientation == Qt::Vertical ) ? offset.x() : offset.x() + section;
     const int row = ( orientation == Qt::Vertical ) ? offset.y() + section : offset.y();
-    const Sheet* sheet = (*d->region.constBegin())->sheet();
+    const Sheet* sheet = d->region.firstSheet();
     const Value value = sheet->cellStorage()->value( col, row );
     return QVariant( value.asString() );
 }
@@ -86,7 +86,7 @@ QVariant TableModel::data( const QModelIndex& index, int role ) const
     if ( d->region.isEmpty() )
         return QVariant();
     const QPoint offset = d->region.firstRange().topLeft();
-    const Sheet* sheet = (*d->region.constBegin())->sheet();
+    const Sheet* sheet = d->region.firstSheet();
     const Value value = sheet->cellStorage()->value( offset.x() + index.column(),
                                                      offset.y() + index.row() );
     // KoChart::Value is either:

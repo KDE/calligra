@@ -32,6 +32,7 @@
 #include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -489,21 +490,14 @@ Range::Range(const QString & str, Map * map,
   _sheet = 0;
 
   //try to parse as named area
-  bool gotNamed = false;
   QString tmp = str.toLower();
-  QList<Reference>::Iterator it;
-  QList<Reference> area = map->doc()->listArea();
-  for (it = area.begin(); it != area.end(); ++it) {
-    if ((*it).ref_name.toLower() == tmp) {
+  Region region = map->doc()->namedAreaManager()->namedArea(tmp);
+  if (region.isValid())
+  {
       // success - such named area exists
-      _range = (*it).rect;
-      _sheet = map->findSheet((*it).sheet_name);
-      gotNamed = true;
+      _range = region.firstRange();
+      _sheet = region.firstSheet();
       _namedArea = tmp;
-      break;
-    }
-  }
-  if (gotNamed) {
     // we have a named area - no need to proceed further
     _leftFixed = false;
     _rightFixed = false;

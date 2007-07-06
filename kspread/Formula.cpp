@@ -24,6 +24,7 @@
 #include "CellStorage.h"
 #include "Sheet.h"
 #include "Doc.h"
+#include "NamedAreaManager.h"
 #include "Region.h"
 #include "Util.h"
 #include "Value.h"
@@ -1292,14 +1293,9 @@ bool Formula::isNamedArea( const QString& expr ) const
     QString tokenText( expr );
     // check for named areas ...
     if (d->sheet) {
-        const QList<Reference> areas = d->sheet->doc()->listArea();
-        QList<Reference>::const_iterator it;
-        for (it = areas.begin(); it != areas.end(); ++it) {
-            if ((*it).ref_name.toLower() == tokenText.toLower()) {
-                 // we got a named area
-                return true;
-            }
-        }
+        const Region region = d->sheet->doc()->namedAreaManager()->namedArea(tokenText);
+        if (region.isValid())
+            return true;
     }
     return false;
 }

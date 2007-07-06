@@ -1148,7 +1148,7 @@ void CellStorage::saveOdfDatabases(KoXmlWriter& xmlWriter) const
     {
         Database database = databases[i].second;
         database.setRange(Region(databases[i].first.toRect(), d->sheet));
-        if (database.range().isEmpty() || !database.range().isValid())
+        if (!database.range().isValid())
             continue;
         database.saveOdf(xmlWriter);
     }

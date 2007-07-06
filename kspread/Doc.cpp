@@ -1,14 +1,15 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
-             (C) 2004 Ariya Hidayat <ariya@kde.org>
-             (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2000-2002 Laurent Montel <montel@kde.org>
-             (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 2002 Phillip Mueller <philipp.mueller@gmx.de>
-             (C) 2000 Werner Trobin <trobin@kde.org>
-             (C) 1999-2000 Simon Hausmann <hausmann@kde.org>
-             (C) 1999 David Faure <faure@kde.org>
-             (C) 1998-2000 Torben Weis <weis@kde.org>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2005-2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright 2004 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2000-2002 Laurent Montel <montel@kde.org>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 2002 Phillip Mueller <philipp.mueller@gmx.de>
+   Copyright 2000 Werner Trobin <trobin@kde.org>
+   Copyright 1999-2000 Simon Hausmann <hausmann@kde.org>
+   Copyright 1999 David Faure <faure@kde.org>
+   Copyright 1998-2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,6 +78,7 @@
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
 #include "Object.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
@@ -121,6 +123,7 @@ public:
   KLocale *locale;
   DatabaseManager* databaseManager;
   DependencyManager* dependencyManager;
+  NamedAreaManager* namedAreaManager;
   RecalcManager* recalcManager;
   StyleManager *styleManager;
   ValueParser *parser;
@@ -151,7 +154,6 @@ public:
 
   QColor pageBorderColor;
 
-  QList<Reference> refs;
   KCompletion listCompletion;
 
   int numOperations;
@@ -218,6 +220,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->locale = new Localization;
   d->databaseManager = new DatabaseManager(d->map);
   d->dependencyManager = new DependencyManager( d->map );
+  d->namedAreaManager = new NamedAreaManager(this);
   d->recalcManager = new RecalcManager( d->map );
   d->styleManager = new StyleManager();
 
@@ -284,8 +287,12 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
             KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
     }
 
-    connect( this, SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
-             this, SLOT( handleDamages( const QList<Damage*>& ) ) );
+    connect(d->namedAreaManager, SIGNAL(namedAreaAdded(const QString&)),
+            d->dependencyManager, SLOT(namedAreaModified(const QString&)));
+    connect(d->namedAreaManager, SIGNAL(namedAreaRemoved(const QString&)),
+            d->dependencyManager, SLOT(namedAreaModified(const QString&)));
+    connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            this, SLOT(handleDamages(const QList<Damage*>&)));
 }
 
 Doc::~Doc()
@@ -303,6 +310,7 @@ Doc::~Doc()
   delete d->map;
   delete d->databaseManager;
   delete d->dependencyManager;
+  delete d->namedAreaManager;
   delete d->recalcManager;
   delete d->styleManager;
   delete d->parser;
@@ -360,6 +368,11 @@ DatabaseManager* Doc::databaseManager() const
 DependencyManager* Doc::dependencyManager() const
 {
     return d->dependencyManager;
+}
+
+NamedAreaManager* Doc::namedAreaManager() const
+{
+    return d->namedAreaManager;
 }
 
 RecalcManager* Doc::recalcManager() const
@@ -500,11 +513,6 @@ void Doc::changePageBorderColor( const QColor  & _color)
   d->pageBorderColor = _color;
 }
 
-const QList<Reference>  &Doc::listArea()
-{
-  return d->refs;
-}
-
 KCompletion& Doc::completion()
 {
   return d->listCompletion;
@@ -552,11 +560,8 @@ QDomDocument Doc::saveXML()
     QDomElement dlocale = ((Localization *)locale())->save( doc );
     spread.appendChild( dlocale );
 
-    if (d->refs.count() != 0 )
-    {
-        QDomElement areaname = saveAreaName( doc );
-        spread.appendChild( areaname );
-    }
+    QDomElement areaname = d->namedAreaManager->saveXML(doc);
+    spread.appendChild(areaname);
 
     if( !d->spellListIgnoreAll.isEmpty() )
     {
@@ -672,7 +677,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     // Saving the map.
     map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
 
-    saveOasisAreaName( contentTmpWriter );
+    d->namedAreaManager->saveOdf(contentTmpWriter);
     d->databaseManager->saveOdf(contentTmpWriter);
     contentTmpWriter.endElement(); ////office:spreadsheet
   contentTmpWriter.endElement(); ////office:body
@@ -970,8 +975,6 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     d->isLoading = true;
     d->spellListIgnoreAll.clear();
 
-    d->refs.clear();
-
     KoXmlElement content = doc.documentElement();
     KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
@@ -1042,7 +1045,6 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     }
 
     // TODO check versions and mimetypes etc.
-    loadOasisAreaName( body );
     loadOasisCellValidation( body ); // table:content-validations
     loadOasisCalculationSettings( body ); // table::calculation-settings
 
@@ -1056,6 +1058,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
 
     // Load databases. This needs the sheets to be loaded.
     d->databaseManager->loadOdf(body); // table:database-ranges
+    d->namedAreaManager->loadOdf(body); // table:named-expressions
 
     if ( !settings.isNull() )
     {
@@ -1126,12 +1129,6 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
     d->defaultColumnFormat->setWidth( dim );
   }
 
-  d->refs.clear();
-  //<areaname >
-  KoXmlElement areaname = spread.namedItem( "areaname" ).toElement();
-  if ( !areaname.isNull())
-    loadAreaName(areaname);
-
   KoXmlElement ignoreAll = spread.namedItem( "SPELLCHECKIGNORELIST").toElement();
   if ( !ignoreAll.isNull())
   {
@@ -1177,6 +1174,11 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
       d->isLoading = false;
       return false;
   }
+
+    // named areas
+    const KoXmlElement areaname = spread.namedItem( "areaname" ).toElement();
+    if (!areaname.isNull())
+        d->namedAreaManager->loadXML(areaname);
 
   //Backwards compatibility with older versions for paper layout
   if ( d->syntaxVersion < 1 )
@@ -1760,87 +1762,6 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
     sheetView.paintCells( view ? view->canvasWidget() : 0, painter, viewRegionF, topLeft );
 }
 
-
-// DCOPObject* Doc::dcopObject()
-// {
-//     if ( !d->dcop )
-//         d->dcop = new DocIface( this );
-//
-//     return d->dcop;
-// }
-
-void Doc::addAreaName( const QRect& rect, const QString& name, const QString& sheetName )
-{
-    setModified( true );
-    Reference ref;
-    ref.rect = rect;
-    ref.sheet_name = sheetName;
-    ref.ref_name = name;
-    d->refs.append( ref );
-    emit sig_addAreaName( name );
-}
-
-void Doc::removeArea( const QString& name )
-{
-    QList<Reference>::Iterator it;
-    for ( it = d->refs.begin(); it != d->refs.end(); ++it )
-    {
-        if ( (*it).ref_name == name )
-        {
-            d->refs.erase( it );
-            emit sig_removeAreaName( name );
-            return;
-        }
-    }
-}
-
-void Doc::changeAreaSheetName( const QString& oldName, const QString& newName )
-{
-    QList<Reference>::Iterator it;
-    for ( it = d->refs.begin(); it != d->refs.end(); ++it )
-    {
-        if ( (*it).sheet_name == oldName )
-            (*it).sheet_name = newName;
-    }
-}
-
-QRect Doc::namedArea( const QString& name )
-{
-    QList<Reference>::Iterator it;
-    for ( it = d->refs.begin(); it != d->refs.end(); ++it )
-    {
-        if ( (*it).ref_name == name )
-            return (*it).rect;
-    }
-    return QRect();
-}
-
-QDomElement Doc::saveAreaName( QDomDocument& doc )
-{
-   QDomElement element = doc.createElement( "areaname" );
-   QList<Reference>::Iterator it2;
-   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
-   {
-        QDomElement e = doc.createElement("reference");
-        QDomElement tabname = doc.createElement( "tabname" );
-        tabname.appendChild( doc.createTextNode( (*it2).sheet_name ) );
-        e.appendChild( tabname );
-
-        QDomElement refname = doc.createElement( "refname" );
-        refname.appendChild( doc.createTextNode( (*it2).ref_name ) );
-        e.appendChild( refname );
-
-        QDomElement rect = doc.createElement( "rect" );
-        rect.setAttribute( "left-rect", ((*it2).rect).left() );
-        rect.setAttribute( "right-rect",((*it2).rect).right() );
-        rect.setAttribute( "top-rect", ((*it2).rect).top() );
-        rect.setAttribute( "bottom-rect", ((*it2).rect).bottom() );
-        e.appendChild( rect );
-        element.appendChild(e);
-   }
-   return element;
-}
-
 void Doc::loadOasisCellValidation( const KoXmlElement&body )
 {
     KoXmlNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
@@ -1948,129 +1869,6 @@ void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
     }
 }
 
-void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
-{
-    if ( listArea().count()>0 )
-    {
-        xmlWriter.startElement( "table:named-expressions" );
-        QList<Reference>::Iterator it;
-        for ( it = d->refs.begin(); it != d->refs.end(); ++it )
-        {
-            xmlWriter.startElement( "table:named-range" );
-
-            xmlWriter.addAttribute( "table:name", ( *it ).ref_name );
-            xmlWriter.addAttribute( "table:base-cell-address", Oasis::convertRefToBase( ( *it ).sheet_name, ( *it ).rect ) );
-            xmlWriter.addAttribute( "table:cell-range-address", Oasis::convertRefToRange( ( *it ).sheet_name, ( *it ).rect ) );
-
-            xmlWriter.endElement();
-        }
-        xmlWriter.endElement();
-    }
-}
-
-void Doc::loadOasisAreaName( const KoXmlElement& body )
-{
-    kDebug(36003)<<"void Doc::loadOasisAreaName( const KoXmlElement& body ) \n";
-    KoXmlNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
-    if ( !namedAreas.isNull() )
-    {
-        kDebug(36003)<<" area name exist \n";
-        KoXmlNode area = namedAreas.firstChild();
-        while ( !area.isNull() )
-        {
-            KoXmlElement e = area.toElement();
-
-            if ( e.localName() == "named-range" )
-            {
-                if ( !e.hasAttributeNS( KoXmlNS::table, "name" ) || !e.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
-                {
-                    kDebug(36003) << "Reading in named area failed" << endl;
-                    area = area.nextSibling();
-                    continue;
-                }
-
-                // TODO: what is: sheet:base-cell-address
-                QString name  = e.attributeNS( KoXmlNS::table, "name", QString() );
-                QString range = e.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                d->loadingInfo->addWordInAreaList( name );
-                kDebug(36003) << "Reading in named area, name: " << name << ", area: " << range << endl;
-
-                range = Oasis::decodeFormula( range );
-
-                if ( range.indexOf( ':' ) == -1 )
-                {
-                    Point p( range );
-
-                    int n = range.indexOf( '!' );
-                    if ( n > 0 )
-                        range = range + ':' + range.right( range.length() - n - 1);
-
-                    kDebug(36003) << "=> Area: " << range << endl;
-                }
-
-                if ( range.contains( '!' ) && range[0] == '$' )
-                {
-                    // cut absolute sheet indicator
-                    range.remove( 0, 1 );
-                }
-
-                Range p( range );
-
-                addAreaName( p.range(), name, p.sheetName() );
-            }
-            else if ( e.localName() == "named-expression" )
-            {
-                kDebug(36003) << "Named expression found." << endl;
-                // TODO
-            }
-
-            area = area.nextSibling();
-        }
-    }
-}
-
-void Doc::loadAreaName( const KoXmlElement& element )
-{
-  KoXmlElement tmp=element.firstChild().toElement();
-  for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
-  {
-    if ( tmp.tagName() == "reference" )
-    {
-        QString tabname;
-        QString refname;
-        int left=0;
-        int right=0;
-        int top=0;
-        int bottom=0;
-        KoXmlElement sheetName = tmp.namedItem( "tabname" ).toElement();
-        if ( !sheetName.isNull() )
-        {
-          tabname=sheetName.text();
-        }
-        KoXmlElement referenceName = tmp.namedItem( "refname" ).toElement();
-        if ( !referenceName.isNull() )
-        {
-          refname=referenceName.text();
-        }
-        KoXmlElement rect =tmp.namedItem( "rect" ).toElement();
-        if (!rect.isNull())
-        {
-          bool ok;
-          if ( rect.hasAttribute( "left-rect" ) )
-            left=rect.attribute("left-rect").toInt( &ok );
-          if ( rect.hasAttribute( "right-rect" ) )
-            right=rect.attribute("right-rect").toInt( &ok );
-          if ( rect.hasAttribute( "top-rect" ) )
-            top=rect.attribute("top-rect").toInt( &ok );
-          if ( rect.hasAttribute( "bottom-rect" ) )
-            bottom=rect.attribute("bottom-rect").toInt( &ok );
-        }
-        QRect _rect;
-        _rect.setCoords(left,top,right,bottom);
-        addAreaName(_rect,refname,tabname);
-    }
-  }
-}
 
 void Doc::addStringCompletion(const QString &stringCompletion)
 {
@@ -2156,6 +1954,8 @@ void Doc::takeSheet( Sheet * sheet )
 {
   foreach ( KoView* view, views() )
     static_cast<View*>( view )->removeSheet( sheet );
+
+    d->namedAreaManager->remove(sheet);
 }
 
 void Doc::addIgnoreWordAll( const QString & word)

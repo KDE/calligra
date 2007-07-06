@@ -132,6 +132,7 @@
 // #include "Handler.h"
 #include "Localization.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
 #include "Object.h"
 #include "RecalcManager.h"
 #include "Selection.h"
@@ -1737,12 +1738,12 @@ View::View( QWidget *_parent, Doc *_doc )
 
     connect( doc(), SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
 
-    connect( doc(), SIGNAL( sig_addAreaName( const QString & ) ), d->posWidget, SLOT( slotAddAreaName( const QString & ) ) );
-
-    connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
-
-    connect( doc(), SIGNAL( damagesFlushed( const QList<Damage*>& ) ),
-        this, SLOT( handleDamages( const QList<Damage*>& ) ) );
+    connect(doc()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
+            d->posWidget, SLOT(slotAddAreaName(const QString&)));
+    connect(doc()->namedAreaManager(), SIGNAL(namedAreaRemoved(const QString&)),
+            d->posWidget, SLOT(slotRemoveAreaName(const QString&)));
+    connect(doc(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            this, SLOT(handleDamages(const QList<Damage*>&)));
 
     if (!doc()->isReadWrite())
     {
@@ -3672,35 +3673,17 @@ void View::addSheet( Sheet * _t )
   doc()->emitEndOperation();
 }
 
-void View::slotSheetRemoved( Sheet *_t )
+void View::slotSheetRemoved(Sheet* sheet)
 {
-  doc()->emitBeginOperation( false );
+    doc()->emitBeginOperation( false );
 
-  QString m_sheetName=_t->sheetName();
-  d->tabBar->removeTab( _t->sheetName() );
-  if (doc()->map()->findSheet( doc()->map()->visibleSheets().first()))
-    setActiveSheet( doc()->map()->findSheet( doc()->map()->visibleSheets().first() ));
-  else
-    d->activeSheet = 0;
+    d->tabBar->removeTab(sheet->sheetName());
+    if (doc()->map()->findSheet(doc()->map()->visibleSheets().first()))
+        setActiveSheet(doc()->map()->findSheet(doc()->map()->visibleSheets().first()));
+    else
+        d->activeSheet = 0;
 
-  QList<Reference>::Iterator it;
-  QList<Reference> area=doc()->listArea();
-  for ( it = area.begin(); it != area.end(); ++it )
-  {
-    //remove Area Name when sheet target is removed
-    if ( (*it).sheet_name == m_sheetName )
-    {
-      doc()->removeArea( (*it).ref_name );
-      //now area name is used in formula
-      //so you must recalc sheets when remove areaname
-      foreach ( Sheet* sheet, doc()->map()->sheetList() )
-      {
-        sheet->refreshRemoveAreaName((*it).ref_name);
-      }
-    }
-  }
-
-  doc()->emitEndOperation();
+    doc()->emitEndOperation();
 }
 
 void View::removeAllSheets()
@@ -4099,7 +4082,6 @@ void View::paste()
     d->doc->styleManager()->loadOasisStyleTemplate( oasisStyles );
 
 //     // TODO check versions and mimetypes etc.
-    d->doc->loadOasisAreaName( body );
     d->doc->loadOasisCellValidation( body );
 
     // all <sheet:sheet> goes to workbook
@@ -4108,6 +4090,7 @@ void View::paste()
     if (!result)
       return;
 
+    d->doc->namedAreaManager()->loadOdf(body);
   }
   else
   {
@@ -6086,8 +6069,8 @@ void View::setAreaName()
 
 void View::showAreaName()
 {
-  reference dlg( this, "Show Area" );
-  dlg.exec();
+    NamedAreaDialog dialog(this);
+    dialog.exec();
 }
 
 void View::resizeRow()

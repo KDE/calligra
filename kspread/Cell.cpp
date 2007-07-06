@@ -1457,8 +1457,6 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             oasisFormula= oasisFormula.mid( 5 );
         else if (oasisFormula.startsWith( "kspr:" ) )
             oasisFormula= oasisFormula.mid( 5 );
-        // TODO Stefan: merge this into Oasis::decodeFormula
-        checkForNamedAreas( oasisFormula );
         oasisFormula = Oasis::decodeFormula( oasisFormula, locale() );
         setUserInput( oasisFormula );
     }
@@ -2430,52 +2428,4 @@ QPoint Cell::cellPosition() const
 {
     Q_ASSERT( !isNull() );
     return QPoint( column(), row() );
-}
-
-void Cell::checkForNamedAreas( QString & formula ) const
-{
-
-  LoadingInfo* loadinginfo = doc()->loadingInfo();
-  if(! loadinginfo) {
-    kDebug(36003) << "Cell::checkForNamedAreas loadinginfo is NULL" << endl;
-    return;
-  }
-
-  int l = formula.length();
-  int i = 0;
-  QString word;
-  int start = 0;
-  while ( i < l )
-  {
-    if ( formula[i].isLetterOrNumber() )
-    {
-      word += formula[i];
-      ++i;
-      continue;
-    }
-    if ( !word.isEmpty() )
-    {
-      if ( loadinginfo->findWordInAreaList(word) )
-      {
-        formula = formula.replace( start, word.length(), '\'' + word + '\'' );
-        l = formula.length();
-        ++i;
-        kDebug(36003) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
-      }
-    }
-
-    ++i;
-    word = "";
-    start = i;
-  }
-  if ( !word.isEmpty() )
-  {
-    if ( loadinginfo->findWordInAreaList(word) )
-    {
-      formula = formula.replace( start, word.length(), '\'' + word + '\'' );
-      l = formula.length();
-      ++i;
-      kDebug(36003) << "Formula: " << formula << ", L: " << l << ", i: " << i + 1 <<endl;
-    }
-  }
 }
