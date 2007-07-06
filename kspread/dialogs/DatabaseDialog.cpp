@@ -560,8 +560,8 @@ void DatabaseDialog::accept()
   int height = -1;
   if ( m_startingRegion->isChecked() )
   {
-    Range range( m_region->text() );
-    if ( range.isSheetKnown() )
+    Region region(m_region->text(), sheet->map());
+    if (region.isValid() && region.firstSheet() != sheet)
     {
       KMessageBox::error( this, i18n("You cannot specify a table here.") );
       m_region->setFocus();
@@ -569,9 +569,7 @@ void DatabaseDialog::accept()
       return;
     }
 
-    range.setSheet(sheet);
-
-    if ( !range.isValid() )
+    if (!region.isValid())
     {
       KMessageBox::error( this, i18n("You have to specify a valid region.") );
       m_region->setFocus();
@@ -579,10 +577,10 @@ void DatabaseDialog::accept()
       return;
     }
 
-    top    = range.range().top();
-    left   = range.range().left();
-    width  = range.range().width();
-    height = range.range().height();
+    top    = region.firstRange().top();
+    left   = region.firstRange().left();
+    width  = region.firstRange().width();
+    height = region.firstRange().height();
   }
   else
   {

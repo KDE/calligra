@@ -1380,12 +1380,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
 
 QString Sheet::guessColumnTitle(QRect& area, int col)
 {
-  //Verify range
-  Range rg;
-  rg.setRange(area);
-  rg.setSheet(this);
-
-  if ( (!rg.isValid()) || (col < area.left()) || (col > area.right()))
+  if ( (!Region(area, this).isValid()) || (col < area.left()) || (col > area.right()))
     return QString();
 
   //The current guess logic is fairly simple - if the top row of the given area
@@ -1406,12 +1401,7 @@ QString Sheet::guessColumnTitle(QRect& area, int col)
 
 QString Sheet::guessRowTitle(QRect& area, int row)
 {
-  //Verify range
-  Range rg;
-  rg.setRange(area);
-  rg.setSheet(this);
-
-  if ( (!rg.isValid()) || (row < area.top()) || (row > area.bottom()) )
+  if ( (!Region(area, this).isValid()) || (row < area.top()) || (row > area.bottom()) )
     return QString();
 
   //The current guess logic is fairly simple - if the leftmost column of the given area
@@ -2996,10 +2986,9 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     {
         // e.g.: Sheet4.A1:Sheet4.E28
         QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString() );
-        range = Oasis::decodeFormula( range );
-        Range p( range );
-        if ( sheetName() == p.sheetName() )
-          print()->setPrintRange( p.range() );
+        Region region(Region::loadOdf(range));
+        if (sheetName() == region.firstSheet()->sheetName())
+          print()->setPrintRange(region.firstRange());
     }
 
 

@@ -1844,12 +1844,12 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     // Validation
     if ( row() < 1 || row() > KS_rowMax )
     {
-        kDebug(36001) << "Cell::load: Value out of Range Cell:row=" << d->row << endl;
+        kDebug(36001) << "Cell::load: Value out of range Cell:row=" << d->row << endl;
         return false;
     }
     if ( column() < 1 || column() > KS_colMax )
     {
-        kDebug(36001) << "Cell::load: Value out of Range Cell:column=" << d->column << endl;
+        kDebug(36001) << "Cell::load: Value out of range Cell:column=" << d->column << endl;
         return false;
     }
 

@@ -664,7 +664,7 @@ void ConsolidateDialog::slotReturnPressed()
 {
   QString txt = m_pRef->text();
 
-  Range r( txt, m_pView->doc()->map() );
+  const Region r( txt, m_pView->doc()->map() );
   if ( !r.isValid() )
   {
     KMessageBox::error( this, i18n("The range\n%1\n is malformed", txt ));

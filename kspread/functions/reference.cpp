@@ -176,18 +176,6 @@ Value func_address (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (result);
 }
 
-bool checkRef( QString const & ref )
-{
-  Range r( ref );
-  if ( !r.isValid() )
-  {
-    Point p( ref );
-    if ( !p.isValid() )
-      return false;
-  }
-  return true;
-}
-
 // Function: AREAS
 Value func_areas (valVector args, ValueCalc *calc, FuncExtra *e)
 {
@@ -210,7 +198,7 @@ Value func_areas (valVector args, ValueCalc *calc, FuncExtra *e)
   {
     if ( s[i] == ',' || s[i] == ')' )
     {
-      if ( !checkRef( ref ) )
+      if ( !KSpread::Region( ref ).isValid() )
         return Value::errorVALUE();
       else
       {

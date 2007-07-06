@@ -27,7 +27,6 @@
 #include "Sheet.h"
 #include "Style.h"
 #include "View.h"
-#include "Util.h"
 #include "Formula.h"
 #include "Functions.h"
 
@@ -130,7 +129,7 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
 
   d->rangeCount = 0;
   QList<QColor> colors = d->canvas->choice()->colors();
-  QList<Range> alreadyFoundRanges;
+  QList<QString> alreadyFoundRanges;
 
   for (int i = 0; i < d->tokens.count(); ++i)
   {
@@ -148,14 +147,14 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
                 d->rangeChanged = true;
             }
 
-            Range newRange( token.text() );
+            Region newRange( token.text() );
 
-            if (!alreadyFoundRanges.contains(newRange))
+            if (!alreadyFoundRanges.contains(newRange.name()))
             {
-                alreadyFoundRanges.append(newRange);
+                alreadyFoundRanges.append(newRange.name());
                 d->rangeCount++;
             }
-            setFormat(token.pos() + 1, token.text().length(), colors[ alreadyFoundRanges.indexOf(newRange) % colors.size()] );
+            setFormat(token.pos() + 1, token.text().length(), colors[ alreadyFoundRanges.indexOf(newRange.name()) % colors.size()] );
         }
         break;
       case Token::Boolean:     // True, False (also i18n-ized)

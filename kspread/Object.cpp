@@ -21,7 +21,6 @@
 #include "Doc.h"
 #include "Region.h"
 #include "Sheet.h"
-#include "Util.h"
 #include "View.h"
 
 #include <assert.h>
@@ -581,9 +580,9 @@ void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOasisLoadingContext
     if ( !str_range.isNull() )
     {
       str_range = Oasis::decodeFormula( str_range );
-      Range range( str_range );
-      if ( range.isValid() )
-        setDataArea( range.range() );
+      Region region(Region::loadOdf(str_range));
+      if (region.isValid())
+        setDataArea(region.firstRange());
     }
 
     KoChart::Part* chartPart = chart();
