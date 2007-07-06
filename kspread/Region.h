@@ -410,6 +410,13 @@ public:
   virtual QString name(Sheet* = 0) const { return QString(""); }
   virtual QRect rect() const { return QRect(); }
 
+  virtual bool isColumnFixed() const { return false; }
+  virtual bool isRowFixed() const { return false; }
+  virtual bool isTopFixed() const { return false; }
+  virtual bool isLeftFixed() const { return false; }
+  virtual bool isBottomFixed() const { return false; }
+  virtual bool isRightFixed() const { return false; }
+
   Sheet* sheet() const { return m_sheet; }
   void setSheet(Sheet* sheet) { m_sheet = sheet; }
 
@@ -458,6 +465,13 @@ public:
 
   virtual QRect rect() const { return QRect(m_point,m_point); }
 
+  virtual bool isColumnFixed() const { return m_fixedColumn; }
+  virtual bool isRowFixed() const { return m_fixedRow; }
+  virtual bool isTopFixed() const { return m_fixedRow; }
+  virtual bool isLeftFixed() const { return m_fixedColumn; }
+  virtual bool isBottomFixed() const { return m_fixedRow; }
+  virtual bool isRightFixed() const { return m_fixedColumn; }
+
   QPoint pos() const { return m_point; }
   Cell cell() const;
 
@@ -468,6 +482,8 @@ public:
 
 private:
   QPoint m_point;
+  bool m_fixedColumn;
+  bool m_fixedRow;
 };
 
 
@@ -505,11 +521,22 @@ public:
 
   virtual QRect rect() const { return m_range; }
 
+  virtual bool isColumnFixed() const { return m_fixedLeft && m_fixedRight; }
+  virtual bool isRowFixed() const { return m_fixedTop && m_fixedBottom; }
+  virtual bool isTopFixed() const { return m_fixedTop; }
+  virtual bool isLeftFixed() const { return m_fixedLeft; }
+  virtual bool isBottomFixed() const { return m_fixedBottom; }
+  virtual bool isRightFixed() const { return m_fixedRight; }
+
   int width() const;
   int height() const;
 
 private:
   QRect m_range;
+  bool m_fixedTop;
+  bool m_fixedLeft;
+  bool m_fixedBottom;
+  bool m_fixedRight;
 };
 
 } // namespace KSpread

@@ -1064,48 +1064,38 @@ Region::Element::~Element()
 ****************************************************************************/
 
 Region::Point::Point(const QPoint& point)
-  : Region::Element(),
-    m_point(point)
+    : Region::Element()
+    , m_point(point)
+    , m_fixedColumn(false)
+    , m_fixedRow(false)
 {
 }
 
-Region::Point::Point(const QString& sCell)
-  : Region::Element(),
-    m_point()
+Region::Point::Point(const QString& string)
+    : Region::Element()
+    , m_fixedColumn(false)
+    , m_fixedRow(false)
 {
-    uint length = sCell.length();
-
+    const uint length = string.length();
     if (length == 0)
-    {
-      kDebug(36001) << "Region::Point::init: length = 0" << endl;
-      return;
-    }
-
-    QString string = sCell;//Region::filterSheetName(sCell);
+        return;
 
     uint p = 0;
 
     // Fixed ?
     if (string[0] == '$')
     {
+        m_fixedColumn = true;
         p++;
     }
 
     // Malformed ?
     if (p == length)
-    {
-      kDebug(36001) << "Region::Point::init: no point after '$' (string: '" << string.mid(p) << "'" << endl;
         return;
-    }
 
-    if (string[p] < 'A' || string[p] > 'Z')
-    {
-        if (string[p] < 'a' || string[p] > 'z')
-        {
-          kDebug(36001) << "Region::Point::init: wrong first character in point (string: '" << string.mid(p) << "'" << endl;
-            return;
-        }
-    }
+    if ((string[p] < 'A' || string[p] > 'Z') && (string[p] < 'a' || string[p] > 'z'))
+        return;
+
     //default is error
     int x = -1;
     //search for the first character != text
@@ -1113,68 +1103,40 @@ Region::Point::Point(const QString& sCell)
 
     //get the colomn number for the character between actual position and the first non text charakter
     if ( result != -1 )
-    {
         x = Util::decodeColumnLabelText( string.mid( p, result - p ) ); // x is defined now
-    }
     else  // If there isn't any, then this is not a point -> return
-    {
-      kDebug(36001) << "Region::Point::init: no number in string (string: '" << string.mid( p, result ) << "')" << endl;
         return;
-    }
     p = result;
 
     //limit is KS_colMax
     if ( x > KS_colMax )
-    {
-      kDebug(36001) << "Region::Point::init: column value too high (col: " << x << ")" << endl;
         return;
-    }
 
     // Malformed ?
     if (p == length)
-    {
-        kDebug(36001) << "Region::Point::init: p==length after cols" << endl;
         return;
-    }
 
     if (string[p] == '$')
     {
+        m_fixedRow = true;
         p++;
-  // Malformed ?
-        if ( p == length )
-        {
-            kDebug(36001) << "Region::Point::init: p==length after $ of row" << endl;
-            return;
-        }
     }
+
+    // Malformed ?
+    if ( p == length )
+        return;
 
     uint p2 = p;
     while ( p < length )
     {
-        if (!QChar(string[p++]).isDigit())
-        {
-            kDebug(36001) << "Region::Point::init: no number" << endl;
+        if (!string[p++].isDigit())
             return;
-        }
     }
 
     bool ok;
     int y = string.mid( p2, p-p2 ).toInt( &ok );
-    if ( !ok )
-    {
-        kDebug(36001) << "Region::Point::init: Invalid number (string: '" << string.mid( p2, p-p2 ) << "'" << endl;
+    if ( !ok || y < 1 || y > KS_rowMax )
         return;
-    }
-    if ( y > KS_rowMax )
-    {
-        kDebug(36001) << "Region::Point::init: row value too high (row: " << y << ")" << endl;
-        return;
-    }
-    if ( y <= 0 )
-    {
-        kDebug(36001) << "Region::Point::init: y <= 0" << endl;
-        return;
-    }
 
     m_point = QPoint(x, y);
 }
@@ -1194,7 +1156,13 @@ QString Region::Point::name(Sheet* originSheet) const
             name = '\'' + name + '\'';
         name.append('!');
     }
-    return name + Cell::name(m_point.x(), m_point.y());
+    if (m_fixedColumn)
+        name.append('$');
+    name.append(Cell::columnName(m_point.x()));
+    if (m_fixedRow)
+        name.append('$');
+    name.append(QString::number(m_point.y()));
+    return name;
 }
 
 bool Region::Point::contains(const QPoint& point) const
@@ -1217,31 +1185,36 @@ Cell Region::Point::cell() const
 ****************************************************************************/
 
 Region::Range::Range(const QRect& rect)
-  : Region::Element(),
-      m_range(rect)
+    : Region::Element()
+    , m_range(rect)
+    , m_fixedTop(false)
+    , m_fixedLeft(false)
+    , m_fixedBottom(false)
+    , m_fixedRight(false)
 {
 }
 
 Region::Range::Range(const QString& sRange)
-  : Region::Element(),
-      m_range()
+    : Region::Element()
+    , m_fixedTop(false)
+    , m_fixedLeft(false)
+    , m_fixedBottom(false)
+    , m_fixedRight(false)
 {
     int delimiterPos = sRange.indexOf(':');
     if (delimiterPos == -1)
-    {
         return;
-    }
-
-    //Region::filterSheetName(sRange);
 
     Region::Point ul(sRange.left(delimiterPos));
     Region::Point lr(sRange.mid(delimiterPos + 1));
 
     if (!ul.isValid() || !lr.isValid())
-    {
-      return;
-    }
+        return;
     m_range = QRect(ul.pos(), lr.pos());
+    m_fixedTop    = ul.isRowFixed();
+    m_fixedLeft   = ul.isColumnFixed();
+    m_fixedBottom = lr.isRowFixed();
+    m_fixedRight  = lr.isColumnFixed();
 }
 
 Region::Range::~Range()
@@ -1284,8 +1257,20 @@ QString Region::Range::name(Sheet* originSheet) const
             name = '\'' + name + '\'';
         name.append('!');
     }
-    return name + Cell::name(m_range.left(), m_range.top()) + ':' +
-                  Cell::name(m_range.right(), m_range.bottom() );
+    if (m_fixedLeft)
+        name.append('$');
+    name.append(Cell::columnName(m_range.left()));
+    if (m_fixedTop)
+        name.append('$');
+    name.append(QString::number(m_range.top()));
+    name.append(':');
+    if (m_fixedRight)
+        name.append('$');
+    name.append(Cell::columnName(m_range.right()));
+    if (m_fixedBottom)
+        name.append('$');
+    name.append(QString::number(m_range.bottom()));
+    return name;
 }
 
 } // namespace KSpread

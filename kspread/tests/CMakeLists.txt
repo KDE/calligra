@@ -230,4 +230,16 @@ target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 add_test(kspread-DatabaseFunctions TestDatabaseFunctions)
 
+########### next target ###############
+
+set(TestRegion_SRCS TestRegion.cpp)
+
+kde4_automoc(${TestRegion_SRCS})
+
+kde4_add_executable(TestRegion RUN_UNINSTALLED ${TestRegion_SRCS})
+
+target_link_libraries(TestRegion kspreadcommon ${QT_QTTEST_LIBRARY})
+
+add_test(kspread-Region TestRegion)
+
 endif(KDE4_BUILD_TESTS)
