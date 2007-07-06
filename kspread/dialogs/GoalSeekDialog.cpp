@@ -231,8 +231,8 @@ void GoalSeekDialog::buttonOkClicked()
   {
     Sheet * sheet = m_pView->activeSheet();
 
-    Point source( m_selector3->textEdit()->toPlainText(), sheet->map(), sheet );
-    if (!source.isValid())
+    const Region source(sheet->map(), m_selector3->textEdit()->toPlainText(), sheet);
+    if (!source.isValid() || !source.isSingular())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
       m_selector3->textEdit()->selectAll();
@@ -242,8 +242,8 @@ void GoalSeekDialog::buttonOkClicked()
       return;
     }
 
-    Point target( m_selector1->textEdit()->toPlainText(), sheet->map(), sheet );
-    if (!target.isValid())
+    const Region target(sheet->map(), m_selector1->textEdit()->toPlainText(), sheet);
+    if (!target.isValid() || !source.isSingular())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
       m_selector1->textEdit()->selectAll();
@@ -265,8 +265,8 @@ void GoalSeekDialog::buttonOkClicked()
       return;
     }
 
-    m_sourceCell = source.cell();
-    m_targetCell = target.cell();
+    m_sourceCell = Cell(source.firstSheet(), source.firstRange().topLeft());
+    m_targetCell = Cell(target.firstSheet(), target.firstRange().topLeft());
 
     if ( !m_sourceCell.value().isNumber() )
     {

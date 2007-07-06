@@ -500,10 +500,8 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 	    }
 	    else
 	    {
-		Point p = Point( _text, m_pView->doc()->map() );
-		Range r = Range( _text, m_pView->doc()->map() );
-
-		if( !p.isValid() && !r.isValid() )
+                const Region region(m_pView->doc()->map(), _text);
+		if (!region.isValid())
 		{
 		    text = '"';
 

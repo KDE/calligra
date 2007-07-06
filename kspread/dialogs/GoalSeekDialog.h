@@ -49,7 +49,6 @@ class QVBoxLayout;
 
 namespace KSpread
 {
-class Point;
 class RegionSelector;
 class View;
 

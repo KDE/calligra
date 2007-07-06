@@ -586,25 +586,24 @@ void DatabaseDialog::accept()
   }
   else
   {
-    Point point( m_cell->text() );
-    if ( point.isSheetKnown() )
+    const Region region(sheet->map(), m_cell->text(), sheet);
+    if (region.isValid() && region.firstSheet() != sheet)
     {
       KMessageBox::error( this, i18n("You cannot specify a table here.") );
       m_cell->setFocus();
       m_cell->selectAll();
       return;
     }
-    point.setSheet(sheet);
     //    if ( point.pos.x() < 1 || point.pos.y() < 1 )
-    if ( !point.isValid() )
+    if (!region.isValid())
     {
       KMessageBox::error( this, i18n("You have to specify a valid cell.") );
       m_cell->setFocus();
       m_cell->selectAll();
       return;
     }
-    top  = point.pos().y();
-    left = point.pos().x();
+    top  = region.firstRange().topLeft().y();
+    left = region.firstRange().topLeft().x();
   }
 
   int i;
