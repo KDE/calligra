@@ -26,7 +26,6 @@
 #include "Doc.h"
 #include "NamedAreaManager.h"
 #include "Region.h"
-#include "Util.h"
 #include "Value.h"
 
 #include "ValueCalc.h"
@@ -1513,15 +1512,15 @@ Value Formula::eval() const
         entry.reset();
         if (d->sheet)
         {
-          Range range (c, d->sheet->map(), d->sheet);
-          if (range.isValid())
+          const Region region(d->sheet->map(), c, d->sheet);
+          if (region.isValid() && !region.isSingular())
           {
-            val1 = range.sheet()->cellStorage()->valueRegion( Region( range.range() ) );
+            val1 = region.firstSheet()->cellStorage()->valueRegion(region);
             // store the reference, so we can use it within functions
-            entry.col1 = range.startCol();
-            entry.row1 = range.startRow();
-            entry.col2 = range.endCol();
-            entry.row2 = range.endRow();
+            entry.col1 = region.firstRange().left();
+            entry.row1 = region.firstRange().top();
+            entry.col2 = region.firstRange().right();
+            entry.row2 = region.firstRange().bottom();
           }
         }
         entry.val = val1;

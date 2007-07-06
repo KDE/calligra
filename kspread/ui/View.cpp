@@ -2838,8 +2838,6 @@ void View::autoSum()
   //Get the selected range and remove the current cell from it (as that is
   //where the result of the autosum will be stored - perhaps change
   //this behaviour??)
-  Range rg;
-  //rg.sheet=activeSheet();
   QRect sel = d->selection->lastRange();
 
   if (sel.height() > 1)
@@ -2904,14 +2902,12 @@ void View::autoSum()
   if ( (sel.width() > 1) && (sel.height() > 1) )
     sel=QRect();
 
-  rg.setRange(sel);
-
   d->canvas->createEditor();
 
-
-  if ( (rg.range().isValid() ) && (!rg.range().isEmpty()) )
+  const Region region(sel, activeSheet());
+  if (region.isValid())
   {
-    d->canvas->editor()->setText( "=SUM("+rg.toString()+')' );
+    d->canvas->editor()->setText("=SUM(" + region.name(activeSheet()) + ')');
     d->canvas->deleteEditor(true);
   }
   else
