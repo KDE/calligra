@@ -740,7 +740,7 @@ void Thesaurus::wnExited(K3Process *)
             l = formatLine(l);
             // Table layout:
             result += "<tr>";
-            if( l.startsWith(" ") ) {
+            if( l.startsWith(' ') ) {
                 result += "\t<td width=\"15\"></td>";
                 l = l.trimmed();
                 result += "\t<td>" + l + "</td>";
