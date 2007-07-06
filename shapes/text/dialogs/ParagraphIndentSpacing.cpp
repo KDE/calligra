@@ -111,11 +111,15 @@ void ParagraphIndentSpacing::lineSpacingChanged(int row) {
 }
 
 void ParagraphIndentSpacing::save() {
+    // general note; we have to unset values by setting it to zero instead of removing the item
+    // since this dialog may be used on a copy style, which will be applied later. And removing
+    // items doesn't work for that.
     m_style->setTextIndent( widget.first->value() );
     m_style->setLeftMargin( widget.left->value() );
     m_style->setRightMargin( widget.right->value() );
     m_style->setTopMargin( widget.before->value() );
     m_style->setBottomMargin( widget.after->value() );
+    m_style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
     switch(widget.lineSpacing->currentIndex()) {
         case 0: m_style->setLineHeightPercent(120); break;
         case 1: m_style->setLineHeightPercent(180); break;
