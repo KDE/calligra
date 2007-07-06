@@ -513,6 +513,15 @@ void TestFinancialFunctions::testINTRATE()
   CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 4 )" , Value( 0.14981 ) );    //
 }
 
+// ISPMT
+void TestFinancialFunctions::testISPMT()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "ISPMT(5%/12;12;360;100000)", Value( -402.78 ) ); // A trivial example of ISPMT.  A 100000 unit investment with an
+                                                                      // annual interest rate of 5% and a 30 year term has an interest payment 
+                                                                      // of 402.78 units in month 12.
+}
+
 // Level-coupon bond
 // LEVEL_COUPON(faceValue; couponRate; couponsPerYear; years; marketRate)
 void TestFinancialFunctions::testLEVELCOUPON()
@@ -549,6 +558,16 @@ void TestFinancialFunctions::testNOMINAL()
   CHECK_EVAL( "NOMINAL(1%;2)",  0.00997512422417790 );
 }
 
+// NPER
+void TestFinancialFunctions::testNPER()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "NPER(5% ;-100;1000)",       Value( 14.2067     ) ); // A trivial example of NPER.
+  CHECK_EVAL_SHORT( "NPER(5% ;-100;1000;100)",   Value( 15.2067     ) ); // A trivial example of NPER with non-zero FV.
+  CHECK_EVAL_SHORT( "NPER(5% ;-100;1000;100;1)", Value( 14.2067     ) ); // A trivial example of NPER with non-zero FV and PayType.
+  CHECK_EVAL_SHORT( "NPER(0  ;-100;1000)",       Value( 10.0000     ) ); // TODO Rate can be zero.
+  CHECK_EVAL_SHORT( "NPER(-1%;-100;1000)",       Value( 9.483283066 ) ); // TODO Rate can be negative.
+}
 
 // Net present value
 // NPV(rate, values)
@@ -565,7 +584,7 @@ void TestFinancialFunctions::testPMT()
   CHECK_EVAL_SHORT( "PMT(5%;12;1000)",       Value( -112.82541  ) ); // A trivial example of PMT.
   CHECK_EVAL_SHORT( "PMT(5%;12;1000;100)",   Value( -119.107951 ) ); // A trivial example of PMT with non-zero FV.
   CHECK_EVAL_SHORT( "PMT(5%;12;1000;100;1)", Value( -113.43614  ) ); // A trivial example of PMT with non-zero FV and PayType.
-  CHECK_EVAL_SHORT( "PMT(0;10;1000)",        Value( -100.00000  ) ); // Rate can be zero.
+  CHECK_EVAL_SHORT( "PMT(0;10;1000)",        Value( -100.00000  ) ); // TODO Rate can be zero.
 }
 
 // Straight-line depreciation
