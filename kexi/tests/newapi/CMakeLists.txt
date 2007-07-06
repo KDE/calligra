@@ -12,7 +12,7 @@ set(kexidbtest_SRCS main.cpp )
 
 kde4_automoc(${kexidbtest_SRCS})
 
-kde4_add_executable(kexidbtest ${kexidbtest_SRCS})
+kde4_add_executable(kexidbtest NOGUI ${kexidbtest_SRCS})
 
 target_link_libraries(kexidbtest  ${KDE4_KDECORE_LIBS} kexidb ) #kexiextendedwidgets )
 
