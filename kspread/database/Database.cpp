@@ -234,7 +234,7 @@ bool Database::loadOdf(const KoXmlElement& element, const Map* map)
     {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        d->targetRangeAddress = Region(map, Region::loadOdf(address));
+        d->targetRangeAddress = Region(Region::loadOdf(address), map);
         if (!d->targetRangeAddress.isValid())
             return false;
     }

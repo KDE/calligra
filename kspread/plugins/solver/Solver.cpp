@@ -95,7 +95,7 @@ void Solver::optimize()
   if (d->dialog->parameters->textEdit()->toPlainText().isEmpty())
     return;
 
-  Region region( d->view->doc()->map(), d->dialog->function->textEdit()->toPlainText(), d->view->activeSheet() );
+  Region region(d->dialog->function->textEdit()->toPlainText(), d->view->doc()->map(), d->view->activeSheet());
   if (!region.isValid())
     return;
 
@@ -125,7 +125,7 @@ void Solver::optimize()
   // Determine the parameters
   int dimension = 0;
   Parameters* parameters = new Parameters;
-  region = Region( d->view->doc()->map(), d->dialog->parameters->textEdit()->toPlainText(), d->view->activeSheet() );
+  region = Region(d->dialog->parameters->textEdit()->toPlainText(), d->view->doc()->map(), d->view->activeSheet());
   Region::ConstIterator end( region.constEnd() );
   for ( Region::ConstIterator it( region.constBegin() ); it != end; ++it )
   {

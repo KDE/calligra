@@ -586,7 +586,7 @@ void DatabaseDialog::accept()
   }
   else
   {
-    const Region region(sheet->map(), m_cell->text(), sheet);
+    const Region region(m_cell->text(), sheet->map(), sheet);
     if (region.isValid() && region.firstSheet() != sheet)
     {
       KMessageBox::error( this, i18n("You cannot specify a table here.") );

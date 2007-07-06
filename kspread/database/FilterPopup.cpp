@@ -33,7 +33,6 @@
 #include "Doc.h"
 #include "Filter.h"
 #include "RowColumnFormat.h"
-#include "Region.h"
 #include "Sheet.h"
 #include "ValueConverter.h"
 

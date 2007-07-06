@@ -206,7 +206,7 @@ class ScriptingReader : public QObject
             KSpread::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
             if( ! sheet ) return;
             QVariantList ranges;
-            KSpread::Region region(m_module->kspreadDoc()->map(), range, sheet);
+            KSpread::Region region(range, m_module->kspreadDoc()->map(), sheet);
             if( ! region.isValid() ) return;
             for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                 const QRect rect = (*it)->rect();

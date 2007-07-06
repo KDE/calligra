@@ -152,7 +152,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                 kDebug(36003) << "Named area found, name: " << name << ", area: " << range << endl;
 
-                Region region(d->doc->map(), Region::loadOdf(range));
+                Region region(Region::loadOdf(range), d->doc->map());
                 if (!region.isValid())
                 {
                     kDebug(36003) << "invalid area" << endl;

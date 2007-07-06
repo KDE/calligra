@@ -1734,7 +1734,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
   KoXmlElement root = doc.documentElement(); // "spreadsheet-snippet"
   if ( root.hasAttribute( "cut" ) )
   {
-    const Region cutRegion( map(), root.attribute( "cut" ), this );
+    const Region cutRegion(root.attribute( "cut" ), map(), this);
     if ( cutRegion.isValid() )
     {
       Cell destination( this, pasteArea.topLeft() );

@@ -58,7 +58,7 @@ Region::Region()
   d = new Private();
 }
 
-Region::Region(const Map* map, const QString& string, Sheet* fallbackSheet)
+Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
 {
   d = new Private();
   d->map = map;
@@ -75,7 +75,7 @@ Region::Region(const Map* map, const QString& string, Sheet* fallbackSheet)
     QString sRegion = *it;
 
     // check for a named area first
-    const Region namedAreaRegion = map->doc()->namedAreaManager()->namedArea(sRegion);
+    const Region namedAreaRegion = map ? map->doc()->namedAreaManager()->namedArea(sRegion) : Region();
     if (namedAreaRegion.isValid())
     {
         ConstIterator end(namedAreaRegion.d->cells.constEnd());
@@ -96,15 +96,12 @@ Region::Region(const Map* map, const QString& string, Sheet* fallbackSheet)
         continue;
     }
 
-    Sheet* sheet = filterSheetName(sRegion);
+    Sheet* sheet = map ? filterSheetName(sRegion) : 0;
     // Still has the sheet name separator?
     if (sRegion.contains('!'))
         return;
     if (!sheet)
         sheet = fallbackSheet;
-    // We always need a valid sheet!
-    if (!sheet)
-        return;
 
     int delimiterPos = sRegion.indexOf(':');
     if (delimiterPos > -1)

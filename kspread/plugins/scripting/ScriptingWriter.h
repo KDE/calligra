@@ -98,7 +98,7 @@ class ScriptingWriter : public QObject
         */
         bool setCell(const QString& cellname) {
             if( ! m_sheet ) return false;
-            const KSpread::Region region(m_sheet->doc()->map(), cellname, m_sheet);
+            const KSpread::Region region(cellname, m_sheet->doc()->map(), m_sheet);
             if( region.firstRange().isNull() ) return false;
             QPoint point = region.firstRange().topLeft();
             m_column = point.x();

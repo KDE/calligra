@@ -364,7 +364,7 @@ Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
     ref = ref;
   }
 
-  const KSpread::Region region(e->sheet->map(), ref, e->sheet);
+  const KSpread::Region region(ref, e->sheet->map(), e->sheet);
   if (!region.isValid() || !region.isSingular())
     return Value::errorVALUE();
 

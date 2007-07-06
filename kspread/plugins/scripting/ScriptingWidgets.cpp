@@ -217,7 +217,7 @@ QVariantList ScriptingSheetsListView::sheets()
         QStandardItem* rangeitem = model->item(row,1);
         if( rangeitem ) {
             const QString range = rangeitem->text();
-            KSpread::Region region(m_module->kspreadDoc()->map(), range, sheet);
+            KSpread::Region region(range, m_module->kspreadDoc()->map(), sheet);
             for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                 const QRect rect = (*it)->rect();
                 if( ! rect.isNull() )

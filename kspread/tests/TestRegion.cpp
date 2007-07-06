@@ -44,23 +44,23 @@ void TestRegion::initTestCase()
 void TestRegion::testFixation()
 {
     Region region;
-    region = Region(m_doc->map(), "$A1", m_doc->map()->sheet(0));
+    region = Region("$A1", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A1"));
-    region = Region(m_doc->map(), "A$1", m_doc->map()->sheet(0));
+    region = Region("A$1", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A$1"));
-    region = Region(m_doc->map(), "$A$1", m_doc->map()->sheet(0));
+    region = Region("$A$1", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A$1"));
-    region = Region(m_doc->map(), "$A1:B4", m_doc->map()->sheet(0));
+    region = Region("$A1:B4", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A1:B4"));
-    region = Region(m_doc->map(), "A$1:B4", m_doc->map()->sheet(0));
+    region = Region("A$1:B4", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A$1:B4"));
-    region = Region(m_doc->map(), "$A$1:B4", m_doc->map()->sheet(0));
+    region = Region("$A$1:B4", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A$1:B4"));
-    region = Region(m_doc->map(), "A1:$B4", m_doc->map()->sheet(0));
+    region = Region("A1:$B4", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1:$B4"));
-    region = Region(m_doc->map(), "A1:B$4", m_doc->map()->sheet(0));
+    region = Region("A1:B$4", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1:B$4"));
-    region = Region(m_doc->map(), "A1:$B$4", m_doc->map()->sheet(0));
+    region = Region("A1:$B$4", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1:$B$4"));
 }
 
@@ -70,30 +70,31 @@ void TestRegion::testSheet()
     region = Region(QPoint(1, 1), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(0));
-    region = Region(m_doc->map(), "A1", m_doc->map()->sheet(0));
+    region = Region("A1");
+    QCOMPARE(region.name(), QString("A1"));
+    QCOMPARE(region.firstSheet(), (Sheet*)0);
+    region = Region("A1", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(0));
-    region = Region(m_doc->map(), "Sheet1!A1", m_doc->map()->sheet(1));
+    region = Region("Sheet1!A1", m_doc->map(), m_doc->map()->sheet(1));
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(0));
-    region = Region(m_doc->map(), "Sheet2!A1");
+    region = Region("Sheet2!A1", m_doc->map());
     QCOMPARE(region.name(), QString("Sheet2!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(1));
-    region = Region(m_doc->map(), "Sheet2!A1", m_doc->map()->sheet(0));
+    region = Region("Sheet2!A1", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("Sheet2!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(1));
-    region = Region(m_doc->map(), "Sheet 4!A1", m_doc->map()->sheet(0));
+    region = Region("Sheet 4!A1", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(3));
-    region = Region(m_doc->map(), "'Sheet 4'!A1", m_doc->map()->sheet(0));
+    region = Region("'Sheet 4'!A1", m_doc->map(), m_doc->map()->sheet(0));
     QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
     QCOMPARE(region.firstSheet(), m_doc->map()->sheet(3));
     // invalid calls:
-    region = Region(m_doc->map(), "A1");
+    region = Region("!A1", m_doc->map(), m_doc->map()->sheet(0));
     QVERIFY(region.isEmpty());
-    region = Region(m_doc->map(), "!A1", m_doc->map()->sheet(0));
-    QVERIFY(region.isEmpty());
-    region = Region(m_doc->map(), "Sheet99!A1", m_doc->map()->sheet(0));
+    region = Region("Sheet99!A1", m_doc->map(), m_doc->map()->sheet(0));
     QVERIFY(region.isEmpty());
 }
 

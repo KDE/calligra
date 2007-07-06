@@ -74,11 +74,11 @@ public:
   /**
    * Constructor.
    * Creates a region consisting of the region defined in @p strRegion .
+   * @param expression a string representing the region (e.g. "A1:B3")
    * @param map used to determine the sheet, if it's named in the string
-   * @param strRegion a string representing the region (e.g. "A1:B3")
    * @param sheet the fallback sheet, if \p strRegion does not contain one
    */
-  Region(const Map* map, const QString& strRegion, Sheet* sheet = 0);
+  explicit Region(const QString& expression, const Map* map = 0, Sheet* sheet = 0);
 
   /**
    * Copy Constructor.

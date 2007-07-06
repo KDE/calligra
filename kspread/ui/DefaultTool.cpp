@@ -702,7 +702,7 @@ void DefaultTool::Private::processLeftClickAnchor()
     }
     else
     {
-        canvas->selection()->initialize(Region(canvas->view()->doc()->map(), anchor, canvas->activeSheet()));
+        canvas->selection()->initialize(Region(anchor, canvas->view()->doc()->map(), canvas->activeSheet()));
     }
 }
 

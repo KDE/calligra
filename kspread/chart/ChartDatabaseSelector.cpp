@@ -66,7 +66,7 @@ void ChartDatabaseSelector::open(KoShape* shape)
 
 void ChartDatabaseSelector::save()
 {
-    const Region region( d->doc->map(), d->widget.m_cellRegion->text(), d->selection->activeSheet() );
+    const Region region(d->widget.m_cellRegion->text(), d->doc->map(), d->selection->activeSheet());
     if ( !region.isValid() )
         return;
     TableModel* tableModel = new TableModel();

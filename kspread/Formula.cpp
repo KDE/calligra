@@ -1492,7 +1492,7 @@ Value Formula::eval() const
         entry.reset();
         if (d->sheet)
         {
-          const Region region(d->sheet->map(), c, d->sheet);
+          const Region region(c, d->sheet->map(), d->sheet);
           if (region.isValid() && region.isSingular())
           {
             const QPoint position = region.firstRange().topLeft();
@@ -1512,7 +1512,7 @@ Value Formula::eval() const
         entry.reset();
         if (d->sheet)
         {
-          const Region region(d->sheet->map(), c, d->sheet);
+          const Region region(c, d->sheet->map(), d->sheet);
           if (region.isValid() && !region.isSingular())
           {
             val1 = region.firstSheet()->cellStorage()->valueRegion(region);

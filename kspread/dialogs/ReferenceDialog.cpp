@@ -293,7 +293,7 @@ EditAreaName::~EditAreaName()
 void EditAreaName::slotOk()
 {
     Sheet* sheet = m_pView->doc()->map()->sheet(m_sheets->currentIndex());
-    Region region(m_pView->doc()->map(), m_area->text(), sheet);
+    Region region(m_area->text(), m_pView->doc()->map(), sheet);
     if (!region.isValid())
         return;
 

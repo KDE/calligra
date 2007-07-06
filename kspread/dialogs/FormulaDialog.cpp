@@ -500,7 +500,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
 	    }
 	    else
 	    {
-                const Region region(m_pView->doc()->map(), _text);
+                const Region region(_text, m_pView->doc()->map());
 		if (!region.isValid())
 		{
 		    text = '"';

@@ -89,7 +89,7 @@ void GotoDialog::slotOk()
 
     QString tmp_upper;
     tmp_upper=m_nameCell->text().toUpper();
-    Region region(m_pView->doc()->map(), tmp_upper, m_pView->activeSheet());
+    Region region(tmp_upper, m_pView->doc()->map(), m_pView->activeSheet());
     if ( region.isValid() )
     {
       m_pView->selection()->initialize(region);
