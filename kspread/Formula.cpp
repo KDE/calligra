@@ -1493,13 +1493,14 @@ Value Formula::eval() const
         entry.reset();
         if (d->sheet)
         {
-          Point point(c, d->sheet->map(), d->sheet);
-          if (point.isValid())
+          const Region region(d->sheet->map(), c, d->sheet);
+          if (region.isValid() && region.isSingular())
           {
-            val1 = Cell( d->sheet, point.pos() ).value();
+            const QPoint position = region.firstRange().topLeft();
+            val1 = Cell( d->sheet, position ).value();
             // store the reference, so we can use it within functions
-            entry.col1 = entry.col2 = point.column();
-            entry.row1 = entry.row2 = point.row();
+            entry.col1 = entry.col2 = position.x();
+            entry.row1 = entry.row2 = position.y();
           }
         }
         entry.val = val1;

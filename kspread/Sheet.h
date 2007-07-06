@@ -72,7 +72,6 @@ class FusionStorage;
 class GenValidationStyles;
 class LinkStorage;
 class Map;
-class Point;
 class Region;
 class RowFormat;
 class Selection;
