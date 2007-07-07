@@ -41,6 +41,10 @@ int daysPerYear( QDate const & date, int basis );
  */
 int daysBetweenDates( QDate const & date1, QDate const & date2, int basis );
 
+
+// ODF
+int days360( const QDate& _date1, const QDate& _date2, bool european );
+double yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis );
 } //namespace KSpread
 
 #endif

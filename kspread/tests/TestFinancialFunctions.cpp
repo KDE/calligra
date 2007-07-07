@@ -83,20 +83,27 @@ Value TestFinancialFunctions::evaluateShort(const QString& formula)
   return RoundNumberShort(result);
 }
 
+// ACCRINT
+void TestFinancialFunctions::testACCRINT()
+{
+  // kspread
+  CHECK_EVAL_SHORT( "ACCRINT( \"02/28/2001\"; \"08/31/2001\"; \"05/01/2001\" ;  0.1; 1000; 2; 0 )", Value( 16.944 ) ); 
+}
+
 // Fixed-declining balance depreciation
 // DB(cost, salvage, life, period, month)
 void TestFinancialFunctions::testDB()
 {
   // Excel example: http://office.microsoft.com/en-us/excel/HP100623551033.aspx
-	CHECK_EVAL( "DB(1000000; 100000; 6; 1; 7)", 186083.3333333333 ) ;
-	CHECK_EVAL( "DB(1000000; 100000; 6; 2; 7)", 259639.4166666667 ) ;
-	CHECK_EVAL( "DB(1000000; 100000; 6; 3; 7)", 176814.4427500000 ) ;
-	CHECK_EVAL( "DB(1000000; 100000; 6; 4; 7)", 120410.6355127500 ) ;
-	CHECK_EVAL( "DB(1000000; 100000; 6; 5; 7)", 81999.64278418274 ) ;
-	CHECK_EVAL( "DB(1000000; 100000; 6; 6; 7)", 55841.75673602846 ) ;
-	CHECK_EVAL( "DB(1000000; 100000; 6; 7; 7)", 15845.09847384807 ) ;
+  CHECK_EVAL( "DB(1000000; 100000; 6; 1; 7)", 186083.3333333333 ) ;
+  CHECK_EVAL( "DB(1000000; 100000; 6; 2; 7)", 259639.4166666667 ) ;
+  CHECK_EVAL( "DB(1000000; 100000; 6; 3; 7)", 176814.4427500000 ) ;
+  CHECK_EVAL( "DB(1000000; 100000; 6; 4; 7)", 120410.6355127500 ) ;
+  CHECK_EVAL( "DB(1000000; 100000; 6; 5; 7)", 81999.64278418274 ) ;
+  CHECK_EVAL( "DB(1000000; 100000; 6; 6; 7)", 55841.75673602846 ) ;
+  CHECK_EVAL( "DB(1000000; 100000; 6; 7; 7)", 15845.09847384807 ) ;
 
-	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/dbEx1.html
+  // http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/dbEx1.html
   CHECK_EVAL( "DB(2500; 500; 3; 1; 6)",  518.750000000000 );
   CHECK_EVAL( "DB(2500; 500; 3; 2; 6)",  822.218750000000 );
   CHECK_EVAL( "DB(2500; 500; 3; 3; 6)",  480.997968750000 );
@@ -116,14 +123,14 @@ void TestFinancialFunctions::testDB()
 // DDB(cost, salvage, life, period, factor)
 void TestFinancialFunctions::testDDB()
 {
-	// Excel example: http://office.microsoft.com/en-us/excel/HP100623561033.aspx
-	CHECK_EVAL( "DDB(2400; 300; 10*365; 1; 2)", 1.31506849315065 ) ;
-	CHECK_EVAL( "DDB(2400; 300; 10*12; 1; 2)", 40.0 ) ;
-	CHECK_EVAL( "DDB(2400; 300; 10; 1; 2)", 480.0 ) ;
-	CHECK_EVAL( "DDB(2400; 300; 10; 2; 1.5)", 306 ) ;
-	CHECK_EVAL( "DDB(2400; 300; 10; 10; 2)", 22.1225472000002 ) ;
+  // Excel example: http://office.microsoft.com/en-us/excel/HP100623561033.aspx
+  CHECK_EVAL( "DDB(2400; 300; 10*365; 1; 2)", 1.31506849315065 ) ;
+  CHECK_EVAL( "DDB(2400; 300; 10*12; 1; 2)", 40.0 ) ;
+  CHECK_EVAL( "DDB(2400; 300; 10; 1; 2)", 480.0 ) ;
+  CHECK_EVAL( "DDB(2400; 300; 10; 2; 1.5)", 306 ) ;
+  CHECK_EVAL( "DDB(2400; 300; 10; 10; 2)", 22.1225472000002 ) ;
 
-	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/ddbEx1.html
+  // http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/ddbEx1.html
   CHECK_EVAL( "DDB(2500; 500; 24; 1; 2)",  208.333333333333 );
   CHECK_EVAL( "DDB(2500; 500; 24; 2; 2)",  190.972222222222 );
   CHECK_EVAL( "DDB(2500; 500; 24; 3; 2)",  175.057870370370 );
@@ -186,8 +193,8 @@ void TestFinancialFunctions::testDISC()
   //   3   |  Actual/365
   //   4   |  European 30/360
 
-//   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 0)", Value (  0.010339 ) ); // NOK (0.010333)
-//   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 1)", Value (  0.010333 ) ); // NOK (0.010351)
+  CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 0)", Value (  0.010339 ) ); 
+//    CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 1)", Value (  0.010333 ) ); // NOK (0.010332) 
   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 2)", Value (  0.010181 ) );
   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 3)", Value (  0.010322 ) );
   CHECK_EVAL_SHORT( "DISC( DATE(2004;02;29); date(2009;01;01); 95000; 100000; 4)", Value (  0.010333 ) );
@@ -246,7 +253,7 @@ void TestFinancialFunctions::testDOLLARFR()
 // DURATION
 void TestFinancialFunctions::testDURATION()
 {
-  CHECK_EVAL_SHORT( "DURATION( \"1998-01-01\";  \"2006-01-01\"; 0.08; 0.09; 2; 1 )" , Value( 5.994 ) ); // TODO check
+  CHECK_EVAL_SHORT( "DURATION( DATE(1998;01;01);  DATE(2006;01;01); 0.08; 0.09; 2; 1 )" , Value( 5.994 ) ); // TODO check
 }
 
 // PDURATION
@@ -587,39 +594,66 @@ void TestFinancialFunctions::testPMT()
   CHECK_EVAL_SHORT( "PMT(0;10;1000)",        Value( -100.00000  ) ); // TODO Rate can be zero.
 }
 
+// PRICEMAT
+void TestFinancialFunctions::testPRICEMAT()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%  )", Value( 103.819218241  ) ); // Without Basis parameter
+  CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;1)", Value( 103.824693325  ) ); // With Basis=1
+  CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;2)", Value( 103.858482159  ) ); // With Basis=2
+  CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;3)", Value( 103.824693325  ) ); // With Basis=3
+  CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;4)", Value( 103.817732653  ) ); // With Basis=4
+  CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1992;12;31);DATE(1990;1;1);3%;2%;0)", Value( 102.395007924  ) ); //
+}
+
 // Straight-line depreciation
 // SLN(cost, salvage, life)
 void TestFinancialFunctions::testSLN()
 {
-	// Excel example: http://office.microsoft.com/en-us/excel/HP100623811033.aspx
-	CHECK_EVAL( "SLN(30000; 7500; 10)", 2250.0 ) ;
+  // Excel example: http://office.microsoft.com/en-us/excel/HP100623811033.aspx
+  CHECK_EVAL( "SLN(30000; 7500; 10)", 2250.0 ) ;
 
-	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/slnEx1.html
-	CHECK_EVAL( "SLN(2500; 500; 24)", 83.3333333333333 ) ;
+  // http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/slnEx1.html
+  CHECK_EVAL( "SLN(2500; 500; 24)", 83.3333333333333 ) ;
 
-	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SLN.shtml
-	CHECK_EVAL( "SLN(10000; 700; 10)", 930 );
+  // http://www.gnome.org/projects/gnumeric/doc/gnumeric-SLN.shtml
+  CHECK_EVAL( "SLN(10000; 700; 10)", 930 );
 
-	// test cases in OpenFormula specification
-	CHECK_EVAL( "SLN(4000;500;4)", 875);
+  // test cases in OpenFormula specification
+  CHECK_EVAL( "SLN(4000;500;4)", 875);
 }
 
 // Sum-of-years' digits depreciation
 // SYD(cost, salvage, life, period)
 void TestFinancialFunctions::testSYD()
 {
-	// Excel example: http://office.microsoft.com/en-us/excel/HP100623821033.aspx
-	CHECK_EVAL( "SYD(30000; 7500; 10; 1)",  4090.909090909090 ) ;
-	CHECK_EVAL( "SYD(30000; 7500; 10; 10)", 409.0909090909090 ) ;
+  // Excel example: http://office.microsoft.com/en-us/excel/HP100623821033.aspx
+  CHECK_EVAL( "SYD(30000; 7500; 10; 1)",  4090.909090909090 ) ;
+  CHECK_EVAL( "SYD(30000; 7500; 10; 10)", 409.0909090909090 ) ;
 
-	// http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/sydEx1.html
-	CHECK_EVAL( "SYD(25000; 5000; 15; 14)", 333.3333333333333 ) ;
+  // http://www.vni.com/products/imsl/jmsl/v30/api/com/imsl/finance/sydEx1.html
+  CHECK_EVAL( "SYD(25000; 5000; 15; 14)", 333.3333333333333 ) ;
 
-	// http://www.gnome.org/projects/gnumeric/doc/gnumeric-SYD.shtml
-	CHECK_EVAL( "SYD(5000; 200; 5; 2)", 1280 );
+  // http://www.gnome.org/projects/gnumeric/doc/gnumeric-SYD.shtml
+  CHECK_EVAL( "SYD(5000; 200; 5; 2)", 1280 );
 
-	// test cases in OpenFormula specification
-	CHECK_EVAL( "SYD(4000;500;4;2)", 1050 );
+  // test cases in OpenFormula specification
+  CHECK_EVAL( "SYD(4000;500;4;2)", 1050 );
+}
+
+// TBILLPRICE
+void TestFinancialFunctions::testTBILLPRICE()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1996;1;1);DATE(1996;2;1);5%)" ,     Value( 99.56944444 ) ); //
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1995;12;31);DATE(1996;2;1);5%)" ,   Value( 99.55555556 ) ); //
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1995;12;31);DATE(1996;7;1);5%)" ,   Value( 97.47222222 ) ); // ODF specs 97.45833333 OOo-2.2.1 97.47222222 
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1995;12;31);DATE(1996;12;31);5%)" , Value( 94.98611111 ) ); // ODF specs 94.91666667 OOo-2.2.1 94.98611111
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1996;1;1);DATE(1996;6;30);5%)" ,    Value( 97.50000000 ) ); // ODF specs 97.48611111 OOo-2.2.1 97.50000000
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1996;1;1);DATE(1996;7;1);5%)" ,     Value( 97.48611111 ) ); // ODF specs 97.47222222 OOo-2.2.1 97.48611111
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1996;1;1);DATE(1996;12;31);5%)" ,   Value( Value::errorVALUE() ) ); // ODF specs 94.93055556 OOo-2.2.1 Err:502
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1996;1;1);DATE(1997;1;1);5%)" ,     Value( 94.98611111 ) ); // ODF specs 94.91666667 OOo-2.2.1 94.98611111
+  CHECK_EVAL_SHORT( "TBILLPRICE(DATE(1996;7;1);DATE(1997;7;1);5%)" ,     Value( 94.98611111 ) ); // ODF specs 94.93055556 OOo-2.2.1 94.98611111
 }
 
 // Zero-coupon (pure discount) bond

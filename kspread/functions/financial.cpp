@@ -29,6 +29,7 @@
 
 #include <math.h>
 
+#include "Doc.h"
 #include "Functions.h"
 #include "functions/helper.h"
 #include "ValueCalc.h"
@@ -67,6 +68,7 @@ Value func_nper (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_npv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ppmt (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_pricemat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv_annuity (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_received (valVector args, ValueCalc *calc, FuncExtra *);
@@ -167,6 +169,9 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("PPMT", func_ppmt);
   f->setParamCount (4, 6);
+  repo->add (f);
+  f = new Function ("PRICEMAT", func_pricemat);
+  f->setParamCount (5, 6);
   repo->add (f);
   f = new Function ("PV", func_pv);
   f->setParamCount (3);
@@ -414,6 +419,10 @@ Value func_disc (valVector args, ValueCalc *calc, FuncExtra *)
   QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
+  // check dates
+//   if ( settlement > maturity )
+//     return Value(false);
+
   Value par = args[2];
   Value redemp = args[3];
 
@@ -426,9 +435,12 @@ Value func_disc (valVector args, ValueCalc *calc, FuncExtra *)
 
   if ( y <= 0 || d <= 0 || basis < 0 || basis > 4 || calc->isZero (redemp) )
     return Value(false);
-
-  // (redemp - par) / redemp * (y / d)
-  return calc->mul (calc->div (calc->sub (redemp, par), redemp), y / d);
+  
+  // res=(1-(price/redemption)/yearfrac)
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+  
+  //return calc->div (calc->sub (1, calc->div ( par, redemp)), Value(yearFrac(date0,settlement,maturity,basis)) );
+  return Value( (1.0-par.asFloat()/redemp.asFloat())/yearFrac(date0,settlement,maturity,basis) );
 }
 
 
@@ -440,15 +452,22 @@ Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *)
 
   Value discount = args[2];
 
-  double days = settlement.daysTo( maturity );
-
-  if (settlement > maturity || calc->lower (discount, Value(0)) || days > 265)
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+  double fraction = yearFrac(date0, settlement, maturity.addDays(1), 0); // basis: USA 30/360
+  double dummy;
+  if( modf(fraction, &dummy) == 0.0 )
     return Value::errorVALUE();
 
+  double days = settlement.daysTo( maturity );
+
+//   if (settlement > maturity || calc->lower (discount, Value(0)) || days > 265)
+//     return Value::errorVALUE();
+
   // (discount * days) / 360.0
-  Value val = calc->div (calc->mul (discount, days), 360.0);
+//   Value val = calc->div (calc->mul (discount, days), 360.0);
   // 100 * (1.0 - val);
-  return calc->mul (calc->sub (Value(1.0), val), Value(100));
+//   return calc->mul (calc->sub (Value(1.0), val), Value(100));
+  return Value( 100.0*(1.0 - discount.asFloat()*fraction));
 }
 
 // Function: TBILLYIELD
@@ -623,6 +642,44 @@ Value func_pmt (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() == 5) type = args[4];
 
   return getPay (calc, rate, nper, pv, fv, type);
+}
+
+// PRICEMAT
+Value func_pricemat (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate issue = calc->conv()->asDate (args[2]).asDate( calc->doc() );
+  double rate = calc->conv()->asFloat (args[3]).asFloat();
+  double yield = calc->conv()->asFloat (args[4]).asFloat();
+
+  // opt. basis
+  int basis=0;
+  if (args.count() > 5) 
+    basis = calc->conv()->asInteger (args[5]).asInteger();
+
+  //kDebug()<<"PRICEMAT"<<endl;
+  //kDebug()<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" yield="<<yield<<" basis="<<basis<<endl;
+
+  if( rate < 0.0 || yield < 0.0 || settlement >= maturity )
+    return Value::errorVALUE();
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+
+  double issMat = yearFrac(date0, issue, maturity, basis);
+  //kDebug()<<"issMat ="<<issMat<<endl;
+  double issSet = yearFrac(date0, issue, settlement, basis);
+  //kDebug()<<"issSet ="<<issSet<<endl;
+  double setMat = yearFrac(date0, settlement, maturity, basis);
+  //kDebug()<<"setMat ="<<setMat<<endl;
+
+  double res = 1.0 + issMat * rate;
+  res /= 1.0 + setMat * yield;
+  res -= issSet * rate;
+  res *= 100.0;
+
+  //kDebug()<<"res ="<<res<<endl;
+  return Value(res);
 }
 
 // Function: NPER

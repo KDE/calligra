@@ -3,6 +3,27 @@
 
   <Group>
     <GroupName>Financial</GroupName>
+      <Function>
+      <Name>TBILLEQ</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Settlement</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Maturity</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Discount rate</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>PRICEMAT.</Text>
+        <Syntax>PRICEMAT(settlement; maturity; issue, rate, yield, basis)</Syntax>
+        <Example>PRICEMAT("2/28/2001"; "8/31/2001"; 0.1) returns 0.1068</Example>
+      </Help>
+    </Function>
 
     <Function>
       <Name>RECEIVED</Name>
