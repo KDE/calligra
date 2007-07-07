@@ -114,7 +114,7 @@ VObject::saveOasis( KoStore *, KoXmlWriter *docWriter, KoGenStyles &mainStyles, 
 	mat.scale( 1, -1 );
     mat.translate( 0, -document()->pageSize().height() );
 
-	KoGenStyle styleobjectauto( VDocument::STYLE_GRAPHICAUTO, "graphic" );
+	KoGenStyle styleobjectauto( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
 	saveOasisFill( mainStyles, styleobjectauto );
 	if( m_stroke )
 	{

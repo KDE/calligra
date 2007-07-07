@@ -2,7 +2,7 @@
    Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2001-2005 Rob Buis <buis@kde.org>
    Copyright (C) 2002,2004-2005 Laurent Montel <montel@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2004-2005,2007 David Faure <faure@kde.org>
    Copyright (C) 2004,2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2004-2005 Fredrik Edemar <f_edemar@linux.se>
@@ -107,7 +107,7 @@ protected:
 	virtual void removeView( KoView *view );
     void saveOasisSettings( KoStore * store );
     void saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyles );
-    void saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles );
+    void saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles, bool forStylesXml );
 	void loadOasisSettings( const QDomDocument&settingsDoc );
 
     void updateDocumentSize();

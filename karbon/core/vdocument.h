@@ -179,7 +179,7 @@ public:
 
 	QDomDocument saveXML() const;
 	void saveOasis( KoStore * store, KoXmlWriter & docWriter, KoSavingContext & context ) const;
-	enum { STYLE_GRAPHICAUTO = 20, STYLE_LINEAR_GRADIENT, STYLE_RADIAL_GRADIENT, STYLE_STROKE };
+	enum { STYLE_LINEAR_GRADIENT = 21, STYLE_RADIAL_GRADIENT };
 	bool loadXML( const QDomElement& doc );
 	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
 	virtual void save( QDomElement& element ) const;

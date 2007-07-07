@@ -5,7 +5,7 @@
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002-2006 David Faure <faure@kde.org>
    Copyright (C) 2002 Stephan Kulow <coolo@kde.org>
-   Copyright (C) 2002 Beno�t Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2003 Thomas Nagy <tnagyemail-mail@yahoo.fr>
    Copyright (C) 2003,2006 Dirk Mueller <mueller@kde.org>
    Copyright (C) 2004 Brad Hards <bradh@frogmouth.net>
@@ -17,7 +17,7 @@
    Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
    Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2005 Johannes Schaub <johannes.schaub@kdemail.net>
-   Copyright (C) 2006 G�bor Lehel <illissius@gmail.com>
+   Copyright (C) 2006 Gabor Lehel <illissius@gmail.com>
    Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright (C) 2006 Jaison Lee <lee.jaison@gmail.com>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
@@ -358,7 +358,7 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     contentTmpWriter.endElement(); // office:drawing
     contentTmpWriter.endElement(); // office:body
 
-    saveOasisAutomaticStyles( docWriter, mainStyles );
+    saveOasisAutomaticStyles( docWriter, mainStyles, false );
 
     // And now we can copy over the contents from the tempfile to the real one
     contentTmpFile.seek(0);
@@ -417,15 +417,7 @@ void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyl
 
     styleWriter->endElement(); // office:styles
 
-    styleWriter->startElement( "office:automatic-styles" );
-
-    Q3ValueList<KoGenStyles::NamedStyle> styleList = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
-    it = styleList.begin();
-
-    for( ; it != styleList.end(); ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
-
-    styleWriter->endElement(); // office:automatic-styles
+    saveOasisAutomaticStyles( styleWriter, mainStyles, true );
 
     styles = mainStyles.styles( KoGenStyle::STYLE_MASTER );
     it = styles.begin();
@@ -441,14 +433,20 @@ void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyl
     delete styleWriter;
 }
 
-void KarbonPart::saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles )
+void KarbonPart::saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles, bool forStylesXml )
 {
     contentWriter->startElement( "office:automatic-styles" );
 
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_GRAPHICAUTO );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, forStylesXml );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:graphic-properties" );
+
+    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT, forStylesXml );
+    it = styles.begin();
+
+    for( ; it != styles.end(); ++it )
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
 
     contentWriter->endElement(); // office:automatic-styles
 }
