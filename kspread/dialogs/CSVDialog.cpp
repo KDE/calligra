@@ -51,6 +51,16 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     m_targetRect( rect ),
     m_mode( mode )
 {
+    init();
+}
+
+CSVDialog::~CSVDialog()
+{
+  // no need to delete child widgets, Qt does it all for us
+}
+
+void CSVDialog::init()
+{
   // Limit the range
   int column = m_targetRect.left();
   Cell lastCell = m_pView->activeSheet()->cellStorage()->lastInColumn( column );
@@ -77,7 +87,7 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     }
     m_fileArray = QByteArray( mime->text().toUtf8() );
   }
-  else if ( mode == File )
+  else if ( m_mode == File )
   {
     setWindowTitle( i18n( "Inserting Text File" ) );
     QString file = KFileDialog::getOpenFileName(KUrl("kfiledialog:///"),
@@ -99,8 +109,7 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
       m_canceled = true;
       return;
     }
-    m_fileArray = QByteArray(/*in.size()*/);
-    in.read(m_fileArray.data(), in.size());
+    m_fileArray = in.readAll();
     in.close();
   }
   else
@@ -122,11 +131,6 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     }
   }
   fillTable();
-}
-
-CSVDialog::~CSVDialog()
-{
-  // no need to delete child widgets, Qt does it all for us
 }
 
 bool CSVDialog::canceled()

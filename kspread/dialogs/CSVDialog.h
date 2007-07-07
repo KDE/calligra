@@ -53,6 +53,7 @@ public:
   bool canceled();
 
 protected:
+  void init();
   void accept();
 
 private:
