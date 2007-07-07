@@ -165,9 +165,12 @@ void CellStorage::take( int col, int row )
     oldUserInput = d->userInputStorage->take( col, row );
     oldValue = d->valueStorage->take( col, row );
 
-    // Trigger a recalculation of the consuming cells.
-    CellDamage::Changes changes = CellDamage:: Binding | CellDamage::Formula | CellDamage::Value;
-    d->sheet->doc()->addDamage(new CellDamage(Cell(d->sheet, col, row), changes));
+    if (!d->sheet->doc()->isLoading())
+    {
+        // Trigger a recalculation of the consuming cells.
+        CellDamage::Changes changes = CellDamage:: Binding | CellDamage::Formula | CellDamage::Value;
+        d->sheet->doc()->addDamage(new CellDamage(Cell(d->sheet, col, row), changes));
+    }
 
     // recording undo?
     if ( d->undoData )
