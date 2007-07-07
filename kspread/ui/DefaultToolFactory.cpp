@@ -31,7 +31,7 @@ DefaultToolFactory::DefaultToolFactory( QObject* parent )
 {
     setToolTip( i18n( "Cell Tool" ) );
     setIcon( "kspread" );
-    setToolType( mainToolType() );
+    setToolType( "KSpread" );
     setPriority( 0 );
     setActivationShapeId( "flake/always" );
 }
