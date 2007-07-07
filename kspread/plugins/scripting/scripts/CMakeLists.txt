@@ -7,6 +7,7 @@ install(FILES
     kexidbimport.py kexidbexport.py
     htmlexport.py htmlexportinfos.ui
     odfpyexport.py
+    logger.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/extensions)
 
 install(FILES

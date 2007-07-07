@@ -131,6 +131,12 @@ class ScriptingModule : public KoScriptingModule
         QObject* function(const QString& name);
 
         /**
+        * Returns a \a ScriptingCellBinding object which provides us some kind of
+        * listener to changes in cells.
+        */
+        QObject* createListener(const QString& sheetname, const QString& range = QString());
+
+        /**
         * Set the document-content to the as argument passed XML string.
         */
         bool fromXML(const QString& xml);

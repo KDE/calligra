@@ -71,4 +71,13 @@
             file="functions/pyregexp.py" />
     </collection>
 
+    <collection name="tools" text="Tools" comment="Miscellaneous scripts">
+        <script
+           name="pylogger"
+           text="Logger"
+           comment="Log changes in cells to a file"
+           interpreter="python"
+           file="extensions/logger.py" />
+    </collection>
+
 </KrossScripting>

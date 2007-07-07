@@ -25,6 +25,7 @@
 #include "ScriptingWidgets.h"
 #include "ScriptingReader.h"
 #include "ScriptingWriter.h"
+#include "ScriptingListener.h"
 
 #include <QPointer>
 #include <QApplication>
@@ -141,6 +142,15 @@ QObject* ScriptingModule::function(const QString& name)
 	d->functions.insert(name, function);
 	d->functionnames.append(name);
 	return function;
+}
+
+QObject* ScriptingModule::createListener(const QString& sheetname, const QString& range)
+{
+    KSpread::Sheet* sheet = kspreadDoc()->map()->findSheet(sheetname);
+    if( ! sheet ) return 0;
+    KSpread::Region region(range, kspreadDoc()->map(), sheet);
+    QRect r = region.firstRange();
+    return new KSpread::ScriptingCellListener(sheet, r.isNull() ? sheet->usedArea() : r);
 }
 
 bool ScriptingModule::fromXML(const QString& xml)

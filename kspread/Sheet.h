@@ -98,7 +98,7 @@ class EmbeddedObject;
  * \ingroup Embedding
  * @short This is an abstract base class only.
  */
-class CellBinding : public QObject
+class KSPREAD_EXPORT CellBinding : public QObject
 {
     Q_OBJECT
 public:
