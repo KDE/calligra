@@ -79,7 +79,7 @@ QString PartGroup::name() const
     return d->name;
 }
 
-void PartGroup::setName(QString name)
+void PartGroup::setName(const QString &name)
 {
     d->name = name;
 }

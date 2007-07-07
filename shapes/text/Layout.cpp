@@ -615,7 +615,7 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
         lastBorder->paint(*painter);
 }
 
-static void drawDecorationLine (QPainter *painter, QColor color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double x1, const double x2, const double y) {
+static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharacterStyle::LineType type, KoCharacterStyle::LineStyle style, const double x1, const double x2, const double y) {
     QPen penBackup = painter->pen();
     QPen pen = painter->pen();
     pen.setColor(color);

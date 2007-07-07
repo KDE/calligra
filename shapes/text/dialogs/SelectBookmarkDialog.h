@@ -28,7 +28,7 @@
 class SelectBookmark : public QWidget {
     Q_OBJECT
 public:
-    SelectBookmark(QList<QString> nameList, QWidget *parent = 0);
+    explicit SelectBookmark(QList<QString> nameList, QWidget *parent = 0);
     QString bookmarkName();
 
 signals:
@@ -49,7 +49,7 @@ private:
 class SelectBookmarkDialog : public KDialog {
     Q_OBJECT
 public:
-    SelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);
+    explicit SelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);
     QString selectedBookmarkName();
 
 signals:

@@ -97,7 +97,7 @@ public:
      *
      * @param name the new name of this group.
      */
-    void setName(QString name);
+    void setName(const QString &name);
 
     /**
      * Returns the short name of this part group.
