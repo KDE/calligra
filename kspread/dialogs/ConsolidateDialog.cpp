@@ -81,11 +81,11 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
 
   QLabel* tmpQLabel;
   tmpQLabel = new QLabel( page );
-  grid1->addWidget(tmpQLabel,0,0);
+  grid1->addWidget(tmpQLabel, 0, 0);
   tmpQLabel->setText( i18n("&Function:") );
 
   m_pFunction = new QComboBox( page );
-  grid1->addWidget(m_pFunction,1,0);
+  grid1->addWidget(m_pFunction, 0, 1);
   tmpQLabel->setBuddy(m_pFunction);
 
   m_pFunction->insertItem( Sum, i18n("Sum") );
@@ -99,32 +99,31 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
 
   tmpQLabel = new QLabel( page );
   tmpQLabel->setText( i18n("Re&ference:") );
-  grid1->addWidget(tmpQLabel,2,0);
+  grid1->addWidget(tmpQLabel, 1, 0);
 
   m_pRef = new QLineEdit( page );
-  grid1->addWidget(m_pRef,3,0);
+  grid1->addWidget(m_pRef, 1, 1);
   tmpQLabel->setBuddy(m_pRef);
 
   tmpQLabel = new QLabel( page );
-  grid1->addWidget(tmpQLabel,4,0);
+  grid1->addWidget(tmpQLabel, 2, 0, Qt::AlignTop);
   tmpQLabel->setText( i18n("&Entered references:") );
 
   m_pRefs = new Q3ListBox( page );
-  grid1->addWidget( m_pRefs,5,0,4,1);
+  grid1->addWidget( m_pRefs, 2, 1);
   tmpQLabel->setBuddy(m_pRefs);
 
   m_pRow = new QCheckBox( i18n("&Description in row"), page );
-  grid1->addWidget( m_pRow,9,0);
+  grid1->addWidget( m_pRow, 3, 0, 1, 3);
   m_pCol = new QCheckBox( i18n("De&scription in column"), page );
-  grid1->addWidget(m_pCol,10,0);
+  grid1->addWidget(m_pCol, 4, 0, 1, 3);
   m_pCopy = new QCheckBox( i18n("Co&py data"), page );
-  grid1->addWidget(m_pCopy,11,0);
+  grid1->addWidget(m_pCopy, 5, 0, 1, 3);
 
   m_pAdd = new QPushButton( i18n("&Add"), page );
-  grid1->addWidget(m_pAdd,2,1);
+  grid1->addWidget(m_pAdd, 1, 2);
   m_pRemove = new QPushButton( i18n("&Remove"), page );
-  grid1->addWidget(m_pRemove,3,1);
-
+  grid1->addWidget(m_pRemove, 2, 2, Qt::AlignTop);
 
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
