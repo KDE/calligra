@@ -28,11 +28,12 @@
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
 #define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
+#define ROUND(x) (roundf(1e10 * x) / 1e10)
 
 // round to get at most 10-digits number
 static Value RoundNumber(double f)
 {
-  return Value( QString::number(f, 'g', 10) );
+  return Value( ROUND(f) );
 }
 
 // round to get at most 10-digits number
@@ -41,15 +42,15 @@ static Value RoundNumber(const Value& v)
   if ( v.isComplex() )
   {
       const double imag = numToDouble(v.asComplex().imag());
-      QString complex = QString::number( numToDouble(v.asComplex().real()), 'g', 10);
+      QString complex = QString::number( ROUND( numToDouble(v.asComplex().real()) ), 'g', 10);
       if ( imag >= 0.0 )
           complex += '+';
-      complex += QString::number( imag, 'g', 10);
+      complex += QString::number( ROUND(imag), 'g', 10);
       complex += 'i';
       return Value( complex );
   }
   else if ( v.isNumber() )
-    return Value( QString::number(numToDouble(v.asFloat()), 'g', 10) );
+    return Value( ROUND(numToDouble(v.asFloat())) );
   else
     return v;
 }

@@ -24,6 +24,7 @@
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
 
 #define CHECK_FAIL(x,y,txt) { Value z(RoundNumber(y)); QEXPECT_FAIL("", txt, Continue); QCOMPARE(evaluate(x,z), (z));}
+#define ROUND(x) (roundf(1e10 * x) / 1e10)
 
 // changelog
 /////////////////////////////////////
@@ -44,7 +45,7 @@
 // round to get at most 10-digits number
 static Value RoundNumber(double f)
 {
-  return Value( QString::number(f, 'g', 9) );
+  return Value( ROUND(f) );
 }
 
 // round to get at most 10-digits number
@@ -55,7 +56,7 @@ static Value RoundNumber(const Value& v)
     double d = numToDouble(v.asFloat());
     if(fabs(d) < DBL_EPSILON)
       d = 0.0;
-    return Value( QString::number(d, 'g', 9) );
+    return Value( ROUND(d) );
   }
   else
     return v;

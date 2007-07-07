@@ -27,11 +27,12 @@
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
 #define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
+#define ROUND(x) (roundf(1e15 * x) / 1e15)
 
 // round to get at most 15-digits number
 static Value RoundNumber(double f)
 {
-  return Value( QString::number(f, 'g', 15) );
+  return Value( ROUND(f) );
 }
 
 // round to get at most 15-digits number
@@ -42,7 +43,7 @@ static Value RoundNumber(const Value& v)
     double d = numToDouble(v.asFloat());
     if(fabs(d) < DBL_EPSILON)
       d = 0.0;
-    return Value( QString::number(d, 'g', 15) );
+    return Value( ROUND(d) );
   }
   else
     return v;

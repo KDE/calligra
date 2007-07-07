@@ -28,6 +28,7 @@
 #include "TestKspreadCommon.h"
 
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
+#define ROUND(x) (roundf(1e10 * x) / 1e10)
 
 // round to get at most 10-digits number
 static Value RoundNumber(const Value& v)
@@ -37,7 +38,7 @@ static Value RoundNumber(const Value& v)
     double d = numToDouble(v.asFloat());
     if(fabs(d) < DBL_EPSILON)
       d = 0.0;
-    return Value( QString::number(d, 'g', 9) );
+    return Value( ROUND(d) );
   }
   else
     return v;

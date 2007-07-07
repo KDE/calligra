@@ -35,18 +35,19 @@ using namespace KSpread;
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
 #define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
+#define ROUND(x) (roundf(1e15 * x) / 1e15)
 
 // round to get at most 15-digits number
 static Value RoundNumber(double f)
 {
-  return Value( QString::number(f, 'g', 15) );
+  return Value( ROUND(f) );
 }
 
 // round to get at most 15-digits number
 static Value RoundNumber(const Value& v)
 {
   if(v.isNumber())
-    return Value( QString::number(numToDouble(v.asFloat()), 'g', 15) );
+    return Value( ROUND(numToDouble(v.asFloat())) );
   else
     return v;  
 }
@@ -76,7 +77,7 @@ namespace QTest
     QString message;
     QTextStream ts( &message, QIODevice::WriteOnly );
     if( value.isFloat() )
-      ts << QString::number(numToDouble(value.asFloat()), 'g', 20);
+      ts << ROUND(numToDouble(value.asFloat()));
     else
       ts << value;
     return qstrdup(message.toLatin1());
