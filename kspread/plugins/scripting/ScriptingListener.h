@@ -38,7 +38,7 @@ namespace KSpread {
     * \code
     * import Kross, KSpread
     * listener = KSpread.createListener("Sheet1", "A1:F50")
-    * if not self.listener:
+    * if not listener:
     *     raise "Failed to create listener."
     * def changed(column, row):
     *     print "column=%i row=%i" % (column,row)
