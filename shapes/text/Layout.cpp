@@ -694,8 +694,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
 
     QTextBlockFormat bf = block.blockFormat();
     
-    if ((shape) && (layout->lineCount() > 0))
-        painter->fillRect(QRectF(layout->lineAt(0).position().x(), layout->lineAt(0).position().y(), width(), layout->lineAt(0).height() * layout->lineCount()), bf.background());
+    painter->fillRect(layout->boundingRect(), bf.background());
     
     for(int i=0; i < layout->lineCount(); i++) {
         const double xOffset = bf.leftMargin() + (i==0?bf.textIndent():0.);
