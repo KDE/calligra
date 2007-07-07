@@ -656,10 +656,15 @@ void DefaultTool::activate( bool temporary )
 
     m_canvas->shapeManager()->selection()->deselectAll();
     useCursor( Qt::ArrowCursor, true );
+
+    // paint the selection rectangle
+    d->canvas->update();
 }
 
 void DefaultTool::deactivate()
 {
+    // clear the selection rectangle
+    d->canvas->update();
 }
 
 void DefaultTool::Private::processClickSelectionHandle( KoPointerEvent* event )
