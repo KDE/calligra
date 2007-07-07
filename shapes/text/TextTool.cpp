@@ -36,6 +36,7 @@
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceProvider.h>
 
+#include <KoCharacterStyle.h>
 #include <KoTextDocumentLayout.h>
 #include <KoParagraphStyle.h>
 #include <KoTextEditingPlugin.h>
@@ -769,8 +770,8 @@ void TextTool::updateActions() {
     QTextCharFormat cf = m_caret.charFormat();
     m_actionFormatBold->setChecked(cf.fontWeight() > QFont::Normal);
     m_actionFormatItalic->setChecked(cf.fontItalic());
-    m_actionFormatUnderline->setChecked(cf.fontUnderline());
-    m_actionFormatStrikeOut->setChecked(cf.fontStrikeOut());
+    m_actionFormatUnderline->setChecked(cf.intProperty(KoCharacterStyle::UnderlineType) != KoCharacterStyle::NoLineType);
+    m_actionFormatStrikeOut->setChecked(cf.intProperty(KoCharacterStyle::StrikeOutType) != KoCharacterStyle::NoLineType);
     bool super=false, sub=false;
     switch(cf.verticalAlignment()) {
         case QTextCharFormat::AlignSuperScript: super = true; break;
