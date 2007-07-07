@@ -112,6 +112,7 @@ void SortManipulator::clearSortOrder ()
 Value SortManipulator::newValue (Element *element, int col, int row,
     bool *parse, Format::Type *)
 {
+  Q_UNUSED(parse);
   QRect range = element->rect();
   int colidx = col - range.left();
   int rowidx = row - range.top();

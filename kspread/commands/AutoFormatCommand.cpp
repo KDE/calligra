@@ -44,6 +44,7 @@ void AutoFormatCommand::setStyles( const QList<Style*>& styles )
 
 bool AutoFormatCommand::process( Element* element )
 {
+    Q_UNUSED(element);
     Region::ConstIterator end(constEnd());
     for ( Region::ConstIterator it(constBegin()); it != end; ++it )
     {
