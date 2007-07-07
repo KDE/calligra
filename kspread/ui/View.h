@@ -484,7 +484,7 @@ public Q_SLOTS:
 
     void sortList();
 
-    void statusBarClicked(int _id);
+    void statusBarClicked(const QPoint& pos);
     void menuCalc(bool);
 
     /**

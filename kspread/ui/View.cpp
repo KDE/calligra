@@ -1976,9 +1976,10 @@ void View::initView()
 
     KStatusBar * sb = statusBar();
     d->calcLabel = sb ? new QLabel( sb ) : 0;
+    d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);
     addStatusBarItem( d->calcLabel, 0 );
     if (d->calcLabel)
-        connect(d->calcLabel ,SIGNAL(itemPressed( int )),this,SLOT(statusBarClicked(int)));
+        connect(d->calcLabel ,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(statusBarClicked(QPoint)));
 
     // signal slot
 //     connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
@@ -6861,15 +6862,12 @@ void View::calcStatusBarOp()
     d->calcLabel->setText(QString(' ') + tmp + ' ');
 }
 
-void View::statusBarClicked(int _id)
+void View::statusBarClicked(const QPoint&)
 {
-  if ( !koDocument()->isReadWrite() || !factory() )
-    return;
-  if ( _id == 0 ) //menu calc
-  {
-    QPoint mousepos = QCursor::pos();
-    ((QMenu*)factory()->container( "calc_popup" , this ) )->popup( mousepos );
-  }
+  QPoint mousepos = QCursor::pos();
+  if ( koDocument()->isReadWrite() && factory() )
+    if( QMenu* menu = dynamic_cast<QMenu*>( factory()->container( "calc_popup" , this ) ) )
+      menu->popup( mousepos );
 }
 
 void View::menuCalc( bool )
