@@ -1976,10 +1976,11 @@ void View::initView()
 
     KStatusBar * sb = statusBar();
     d->calcLabel = sb ? new QLabel( sb ) : 0;
-    d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);
-    addStatusBarItem( d->calcLabel, 0 );
-    if (d->calcLabel)
+    if (d->calcLabel) {
+        d->calcLabel->setContextMenuPolicy(Qt::CustomContextMenu);
+        addStatusBarItem( d->calcLabel, 0 );
         connect(d->calcLabel ,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(statusBarClicked(QPoint)));
+    }
 
     // signal slot
 //     connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
