@@ -40,7 +40,7 @@ namespace KSpread {
     * listener = KSpread.createListener("Sheet1", "A1:F50")
     * if not self.listener:
     *     raise "Failed to create listener."
-    * def changed(self, column, row):
+    * def changed(column, row):
     *     print "column=%i row=%i" % (column,row)
     * listener.connect("changed(int,int)", changed)
     * \endcode
