@@ -177,25 +177,13 @@
  <Action name="menu_min"/>
  <Action name="menu_sum"/>
 </Menu>
-<ToolBar fullWidth="true" name="editAndColumnAndSortAndPartToolBar"><text>Edit</text>
+<ToolBar fullWidth="true" iconText="icontextbottom" name="editToolBar"><text>Edit</text>
  <Action name="edit_undo"/>
  <Action name="edit_redo"/>
  <Separator/>
  <Action name="cut"/>
  <Action name="copy"/>
  <Action name="paste"/>
- <Separator/>
- <Action name="insertHyperlink"/>
- <Action name="autoSum"/>
- <Action name="sortInc"/>
- <Action name="sortDec"/>
- <!--
- <Separator/>
- <Action name="insertChart"/>
- <Action name="insertPart"/>
- //-->
- <Separator/>
- <Action name="view_zoom"/>
 </ToolBar>
 <ToolBar fullWidth="true" hidden="true" name="navigationToolBar"><text>Navigation</text>
  <Action name="firstSheet"/>
@@ -203,7 +191,7 @@
  <Action name="nextSheet"/>
  <Action name="lastSheet"/>
 </ToolBar>
-<ToolBar fullWidth="true" name="fontPropertyToolBar"><text>Format</text>
+<ToolBar fullWidth="true" hidden="true" name="fontPropertyToolBar"><text>Format</text>
  <Action name="selectFont"/>
  <Action name="selectFontSize"/>
  <Separator/>
