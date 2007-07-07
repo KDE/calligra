@@ -693,9 +693,10 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             tabFormat.append(tab.value<KoText::Tab>());
 
     QTextBlockFormat bf = block.blockFormat();
-    
-    painter->fillRect(layout->boundingRect(), bf.background());
-    
+
+    if(bf.hasProperty(QTextFormat::BackgroundBrush))
+        painter->fillRect(layout->boundingRect(), bf.background());
+
     for(int i=0; i < layout->lineCount(); i++) {
         const double xOffset = bf.leftMargin() + (i==0?bf.textIndent():0.);
         KoTextBlockData::TabLineData tabs;
