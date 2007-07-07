@@ -713,6 +713,14 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         }
 
         painter->save();
+        KoTextBlockBorderData *border = 0;
+        KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
+        if (blockData) {
+            border = dynamic_cast<KoTextBlockBorderData*> (blockData->border());
+            if (border) {
+                painter->fillRect(border->rect(), bf.background());
+            }
+        }
         line.draw(painter, layout->position());
         painter->restore();
 
