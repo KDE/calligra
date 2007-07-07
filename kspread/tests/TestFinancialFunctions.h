@@ -95,7 +95,7 @@ private slots:
 //   void testXIRR();       // to be implemented
 //   void testXNPV();       // to be implemented
 //   void testYIELD();      // to be implemented
-//   void testYIELDDISC();  // to be implemented
+  void testYIELDDISC();  // to be implemented
 //   void testYIELDMAT();   // to be implemented
   void testZEROCOUPON();
 

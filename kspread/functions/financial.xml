@@ -15,13 +15,26 @@
         <Type>Date</Type>
       </Parameter>
       <Parameter>
+        <Comment>Issue</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Parameter>
         <Comment>Discount rate</Comment>
         <Type>Float</Type>
       </Parameter>
+      <Parameter>
+        <Comment>Yield</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Basis</Comment>
+        <Type>Int</Type>
+      </Parameter>
       <Help>
-        <Text>PRICEMAT.</Text>
+        <Text>PRICEMAT Calculate the price per 100 currency units of face value of the security that pays interest on the maturity date.</Text>
         <Syntax>PRICEMAT(settlement; maturity; issue, rate, yield, basis)</Syntax>
-        <Example>PRICEMAT("2/28/2001"; "8/31/2001"; 0.1) returns 0.1068</Example>
+        <Example>PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%) returns 103.819218241</Example>
+        <Related>PRICEDISC</Related>
       </Help>
     </Function>
 
@@ -1014,6 +1027,34 @@
             <Related>PV</Related>
         </Help>
     </Function>
-
+    <Function>
+      <Name>YIELDDISC</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Settlement</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Maturity</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Price</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Redemption</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Basis</Comment>
+        <Type>int</Type>
+      </Parameter>
+      <Help>
+        <Text>YIELDDISC calculates the yield of a discounted security per 100 currency units of face value.</Text>
+        <Syntax>YIELDDISC(settlement; maturity; price, redemp, basis)</Syntax>
+        <Example>YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns 0.106194684</Example>
+      </Help>
+    </Function>
   </Group>
 </KSpreadFunctions>

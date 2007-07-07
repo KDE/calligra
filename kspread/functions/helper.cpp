@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright (C) 2007 Sascha Pfau <MrPeacock@gmail.com>
    Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
 
    This library is free software; you can redistribute it and/or

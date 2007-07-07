@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-
+   Copyright (C) 2007 Sascha Pfau <MrPeacock@gmail.com>
    Copyright (C) 2002,2006 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
@@ -77,6 +77,7 @@ Value func_syd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all financial functions
@@ -196,6 +197,9 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("TBILLYIELD", func_tbillyield);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("YIELDDISC", func_yielddisc);
+  f->setParamCount (4,5);
   repo->add (f);
   f = new Function ("ZERO_COUPON", func_zero_coupon);
   f->setParamCount (3);
@@ -458,7 +462,7 @@ Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *)
   if( modf(fraction, &dummy) == 0.0 )
     return Value::errorVALUE();
 
-  double days = settlement.daysTo( maturity );
+//   double days = settlement.daysTo( maturity );
 
 //   if (settlement > maturity || calc->lower (discount, Value(0)) || days > 265)
 //     return Value::errorVALUE();
@@ -873,6 +877,34 @@ Value func_effective (valVector args, ValueCalc *calc, FuncExtra *)
   // result = pow (base, periods) - 1
   Value base = calc->add (calc->div (nominal, periods), 1);
   return calc->sub (calc->pow (base, periods), 1);
+}
+
+// YIELDDISC
+Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  double price = calc->conv()->asFloat (args[2]).asFloat();
+  double redemp = calc->conv()->asFloat (args[3]).asFloat();
+
+  // opt. basis
+  int basis=0;
+  if (args.count() > 4) 
+    basis = calc->conv()->asInteger (args[4]).asInteger();
+
+  kDebug()<<"YIELDDISC"<<endl;
+  kDebug()<<"settlement ="<<settlement<<" maturity="<<maturity<<" price="<<price<<" redemp="<<redemp<<" basis="<<basis<<endl;
+
+  if( price <= 0.0 || redemp <= 0.0 || settlement >= maturity )
+    return Value::errorVALUE();
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+
+  double res = ( redemp / price ) - 1.0;
+  res /= yearFrac(date0, settlement, maturity, basis);
+
+  kDebug()<<"res ="<<res<<endl;
+  return Value(res);
 }
 
 // Function: zero_coupon
