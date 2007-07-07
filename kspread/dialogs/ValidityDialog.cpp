@@ -1,9 +1,11 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
-             (C) 1999-2005 Laurent Montel <montel@kde.org>
-             (C) 1998-1999 Torben Weis <weis@kde.org>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+   Copyright 1999-2005 Laurent Montel <montel@kde.org>
+   Copyright 1998-1999 Torben Weis <weis@kde.org>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -30,8 +32,6 @@
 #include <QLabel>
 #include <QTextEdit>
 #include <QLayout>
-#include <q3buttongroup.h>
-#include <QVBoxLayout>
 #include <QGridLayout>
 #include <QFrame>
 
@@ -59,30 +59,25 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   setCaption( i18n("Validity") );
   setObjectName( name );
   setModal( true );
-  setButtons( User2|User1|Cancel );
-  setDefaultButton( User1 );
-  setButtonGuiItem( User1, KStandardGuiItem::ok() );
-  setButtonGuiItem( User2, KGuiItem( i18n("Clear &All") ) );
+  setButtons(Ok | Cancel | User1);
+  setButtonGuiItem(User1, KGuiItem(i18n("Clear &All")));
 
   m_pView=parent;
   marker=_marker;
+
   QFrame *page1 = new QFrame();
-  addPage(page1, i18n("&Values"));
-  QVBoxLayout *lay1 = new QVBoxLayout( page1 );
-  lay1->setMargin(KDialog::marginHint());
-  lay1->setSpacing(KDialog::spacingHint());
+  addPage(page1, i18n("&Criteria"));
 
-  QGroupBox* tmpQButtonGroup = new QGroupBox( i18n("Validity Criteria"), page1 );
-/*  tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
-  tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());*/
-  QGridLayout *grid1 = new QGridLayout(tmpQButtonGroup);
+  QGridLayout* tmpGridLayout = new QGridLayout(page1);
+  tmpGridLayout->setMargin(KDialog::marginHint());
+  tmpGridLayout->setSpacing(KDialog::spacingHint());
 
-  QLabel *tmpQLabel = new QLabel( tmpQButtonGroup );
+  QLabel *tmpQLabel = new QLabel(page1);
   tmpQLabel->setText(i18n("Allow:" ));
-  grid1->addWidget(tmpQLabel,0,0);
+  tmpGridLayout->addWidget(tmpQLabel, 0, 0);
 
-  chooseType=new QComboBox(tmpQButtonGroup);
-  grid1->addWidget(chooseType,0,1);
+  chooseType=new QComboBox(page1);
+  tmpGridLayout->addWidget(chooseType, 0, 1);
   QStringList listType;
   listType+=i18n("All");
   listType+=i18n("Number");
@@ -95,15 +90,15 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   chooseType->insertItems( 0,listType);
   chooseType->setCurrentIndex(0);
 
-  allowEmptyCell = new QCheckBox( i18n( "Allow blanks" ), tmpQButtonGroup );
-  grid1->addWidget(allowEmptyCell,1,0);
+  allowEmptyCell = new QCheckBox( i18n( "Allow blanks" ),page1);
+  tmpGridLayout->addWidget(allowEmptyCell, 1, 0, 1, 2);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup );
-  tmpQLabel->setText(i18n("Data:" ));
-  grid1->addWidget(tmpQLabel,2,0);
+  chooseLabel = new QLabel(page1);
+  chooseLabel->setText(i18n("Data:" ));
+  tmpGridLayout->addWidget(chooseLabel, 2, 0);
 
-  choose=new QComboBox(tmpQButtonGroup);
-  grid1->addWidget(choose,2,1);
+  choose=new QComboBox(page1);
+  tmpGridLayout->addWidget(choose, 2, 1);
   QStringList list;
   list+=i18n("equal to");
   list+=i18n("greater than");
@@ -116,130 +111,121 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   choose->insertItems( 0,list);
   choose->setCurrentIndex(0);
 
-  edit1 = new QLabel( tmpQButtonGroup );
+  edit1 = new QLabel(page1);
   edit1->setText(i18n("Minimum:" ));
-  grid1->addWidget(edit1,3,0);
+  tmpGridLayout->addWidget(edit1, 3, 0);
 
-  val_min=new QLineEdit(tmpQButtonGroup);
-  grid1->addWidget(val_min,3,1);
+  val_min=new QLineEdit(page1);
+  tmpGridLayout->addWidget(val_min, 3, 1);
   val_min->setValidator( new KFloatValidator( val_min ) );
 
-  edit2 = new QLabel( tmpQButtonGroup );
+  edit2 = new QLabel(page1);
   edit2->setText(i18n("Maximum:" ));
-  grid1->addWidget(edit2,4,0);
+  tmpGridLayout->addWidget(edit2, 4, 0);
 
-  val_max=new QLineEdit(tmpQButtonGroup);
-  grid1->addWidget(val_max,4,1);
+  val_max=new QLineEdit(page1);
+  tmpGridLayout->addWidget(val_max, 4, 1);
   val_max->setValidator( new KFloatValidator( val_max ) );
-  lay1->addWidget(tmpQButtonGroup);
 
   //Apply minimum width of column1 to avoid horizontal move when changing option
   //A bit ugly to apply text always, but I couldn't get a label->QFontMetrix.boundingRect("text").width()
   //to give mew the correct results - Philipp
   edit2->setText( i18n( "Date:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Date minimum:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Date maximum:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Time:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Time minimum:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Time maximum:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Minimum:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Maximum:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
   edit2->setText( i18n( "Number:" ) );
-  grid1->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
+  tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
 
-  validityList = new QTextEdit( tmpQButtonGroup );
-  grid1->addWidget(validityList,2, 4,1, 1);
+  validityList = new QTextEdit(page1);
+  tmpGridLayout->addWidget(validityList, 2, 1, 3, 1);
 
-  validityLabelList = new QLabel( tmpQButtonGroup );
+  validityLabelList = new QLabel(page1);
   validityLabelList->setText(i18n("Entries:" ));
-  grid1->addWidget(validityLabelList,2,0);
+  tmpGridLayout->addWidget(validityLabelList, 2, 0, Qt::AlignTop);
+
+  tmpGridLayout->setRowStretch(5, 1);
 
   QFrame *page2 = new QFrame();
   addPage(page2, i18n("&Error Alert"));
 
-  lay1 = new QVBoxLayout( page2 );
-  lay1->setMargin(KDialog::marginHint());
-  lay1->setSpacing(KDialog::spacingHint());
+  tmpGridLayout = new QGridLayout(page2);
+  tmpGridLayout->setMargin(KDialog::marginHint());
+  tmpGridLayout->setSpacing(KDialog::spacingHint());
 
-  tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page2, "ButtonGroup_2" );
-  tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
-  tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
-  QGridLayout *grid2 = new QGridLayout(tmpQButtonGroup);
-
-  displayMessage = new QCheckBox(i18n( "Show error message when invalid values are entered" ),tmpQButtonGroup );
+  displayMessage = new QCheckBox(i18n( "Show error message when invalid values are entered" ),page2 );
   displayMessage->setChecked( true );
-  grid2->addWidget(displayMessage,0, 0,0, 1);
+  tmpGridLayout->addWidget(displayMessage, 0, 0, 1, 2);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup );
+  tmpQLabel = new QLabel(page2);
   tmpQLabel->setText(i18n("Action:" ));
-  grid2->addWidget(tmpQLabel,1,0);
+  tmpGridLayout->addWidget(tmpQLabel, 1, 0);
 
-  chooseAction=new QComboBox(tmpQButtonGroup);
-  grid2->addWidget(chooseAction,1,1);
+  chooseAction=new QComboBox(page2);
+  tmpGridLayout->addWidget(chooseAction, 1, 1);
   QStringList list2;
   list2+=i18n("Stop");
   list2+=i18n("Warning");
   list2+=i18n("Information");
   chooseAction->insertItems( 0,list2);
   chooseAction->setCurrentIndex(0);
-  tmpQLabel = new QLabel( tmpQButtonGroup );
+
+  tmpQLabel = new QLabel(page2);
   tmpQLabel->setText(i18n("Title:" ));
-  grid2->addWidget(tmpQLabel,2,0);
+  tmpGridLayout->addWidget(tmpQLabel, 2, 0);
 
-  title=new QLineEdit(  tmpQButtonGroup);
-  grid2->addWidget(title,2,1);
+  title=new QLineEdit(  page2);
+  tmpGridLayout->addWidget(title, 2, 1);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup );
+  tmpQLabel = new QLabel(page2);
   tmpQLabel->setText(i18n("Message:" ));
-  grid2->addWidget(tmpQLabel,3,0);
+  tmpGridLayout->addWidget(tmpQLabel, 3, 0, Qt::AlignTop);
 
-  message =new QTextEdit( tmpQButtonGroup);
-  grid2->addWidget(message,3, 4,1, 1);
-  lay1->addWidget(tmpQButtonGroup);
+  message =new QTextEdit( page2);
+  tmpGridLayout->addWidget(message, 3, 1);
 
   QFrame *page3 = new QFrame();
   addPage(page3, i18n("Input Help"));
-  lay1 = new QVBoxLayout( page3 );
-  lay1->setMargin(KDialog::marginHint());
-  lay1->setSpacing(KDialog::spacingHint());
 
-  tmpQButtonGroup = new Q3ButtonGroup( 0, Qt::Vertical, i18n("Contents"), page3, "ButtonGroup_2" );
-  tmpQButtonGroup->layout()->setSpacing(KDialog::spacingHint());
-  tmpQButtonGroup->layout()->setMargin(KDialog::marginHint());
+  tmpGridLayout = new QGridLayout(page3);
+  tmpGridLayout->setMargin(KDialog::marginHint());
+  tmpGridLayout->setSpacing(KDialog::spacingHint());
 
-  QGridLayout *grid3 = new QGridLayout(tmpQButtonGroup);
-
-  displayHelp = new QCheckBox(i18n( "Show input help when cell is selected" ),tmpQButtonGroup );
+  displayHelp = new QCheckBox(i18n( "Show input help when cell is selected" ),page3 );
   displayMessage->setChecked( false );
-  grid3->addWidget(displayHelp,0, 0,0, 1);
+  tmpGridLayout->addWidget(displayHelp, 0, 0, 1, 2);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup );
+  tmpQLabel = new QLabel(page3);
   tmpQLabel->setText(i18n("Title:" ));
-  grid3->addWidget(tmpQLabel,2,0);
+  tmpGridLayout->addWidget(tmpQLabel, 1, 0);
 
-  titleHelp=new QLineEdit(  tmpQButtonGroup);
-  grid3->addWidget(titleHelp,2,1);
+  titleHelp=new QLineEdit(  page3);
+  tmpGridLayout->addWidget(titleHelp, 1, 1);
 
-  tmpQLabel = new QLabel( tmpQButtonGroup );
+  tmpQLabel = new QLabel(page3);
   tmpQLabel->setText(i18n("Message:" ));
-  grid3->addWidget(tmpQLabel,3,0);
+  tmpGridLayout->addWidget(tmpQLabel, 2, 0, Qt::AlignTop);
 
-  messageHelp =new QTextEdit( tmpQButtonGroup);
-  grid3->addWidget(messageHelp,3, 4,1, 1);
-  lay1->addWidget(tmpQButtonGroup);
+  messageHelp =new QTextEdit( page3);
+  tmpGridLayout->addWidget(messageHelp, 2, 1);
 
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));
   connect(chooseType,SIGNAL(activated(int )),this,SLOT(changeIndexType(int)));
-  connect( this, SIGNAL(user1Clicked()), SLOT(OkPressed()) );
-  connect( this, SIGNAL(user2Clicked()), SLOT(clearAllPressed()) );
+  connect(this, SIGNAL(okClicked()), SLOT(OkPressed()));
+  connect(this, SIGNAL(user1Clicked()), SLOT(clearAllPressed()));
+
   init();
 }
 
@@ -249,28 +235,36 @@ void DlgValidity::displayOrNotListOfValidity( bool _displayList)
     {
         validityList->show();
         validityLabelList->show();
+        chooseLabel->hide();
+        choose->hide();
         edit1->hide();
         val_min->hide();
         edit2->hide();
         val_max->hide();
+        static_cast<QGridLayout*>(validityList->parentWidget()->layout())->setRowStretch(5, 0);
     }
     else
     {
         validityList->hide();
         validityLabelList->hide();
+        chooseLabel->show();
+        choose->show();
         edit1->show();
         val_min->show();
         edit2->show();
         val_max->show();
+        static_cast<QGridLayout*>(validityList->parentWidget()->layout())->setRowStretch(5, 1);
     }
 }
 
 void DlgValidity::changeIndexType(int _index)
 {
     bool activate = ( _index!=0 );
+    allowEmptyCell->setEnabled(activate);
     message->setEnabled(activate);
     title->setEnabled(activate);
     chooseAction->setEnabled( activate );
+    displayMessage->setEnabled(activate);
     displayHelp->setEnabled(activate);
     messageHelp->setEnabled(activate);
     titleHelp->setEnabled(activate);
@@ -286,13 +280,10 @@ void DlgValidity::changeIndexType(int _index)
         edit2->setText("");
         val_max->setEnabled(false);
         val_min->setEnabled(false);
-        edit1->setEnabled(false);
-        edit2->setEnabled(false);
         choose->setEnabled(false);
         break;
     case 1:
         val_min->setEnabled(true);
-        edit1->setEnabled(true);
         choose->setEnabled(true);
         val_min->setValidator( new KFloatValidator( val_min ) );
         val_max->setValidator( new KFloatValidator( val_max ) );
@@ -300,21 +291,18 @@ void DlgValidity::changeIndexType(int _index)
         {
             edit1->setText(i18n("Number:"));
             edit2->setText("");
-            edit2->setEnabled(false);
             val_max->setEnabled(false);
         }
         else
         {
             edit1->setText(i18n("Minimum:" ));
             edit2->setText(i18n("Maximum:" ));
-            edit2->setEnabled(true);
             val_max->setEnabled(true);
         }
         break;
     case 2:
     case 6:
         val_min->setEnabled(true);
-        edit1->setEnabled(true);
         choose->setEnabled(true);
         val_min->setValidator( new KIntValidator( val_min ) );
         val_max->setValidator( new KIntValidator( val_max ) );
@@ -322,14 +310,12 @@ void DlgValidity::changeIndexType(int _index)
         {
             edit1->setText(i18n("Number:"));
             edit2->setText("");
-            edit2->setEnabled(false);
             val_max->setEnabled(false);
         }
         else
         {
             edit1->setText(i18n("Minimum:" ));
             edit2->setText(i18n("Maximum:" ));
-            edit2->setEnabled(true);
             val_max->setEnabled(true);
         }
         break;
@@ -340,14 +326,11 @@ void DlgValidity::changeIndexType(int _index)
         val_max->setEnabled(false);
         val_min->setEnabled(false);
         choose->setEnabled(false);
-        edit1->setEnabled(false);
-        edit2->setEnabled(false);
         break;
     case 4:
         edit1->setText(i18n("Date:"));
         edit2->setText("");
         val_min->setEnabled(true);
-        edit1->setEnabled(true);
         choose->setEnabled(true);
 
         val_min->setValidator(0);
@@ -356,20 +339,17 @@ void DlgValidity::changeIndexType(int _index)
         {
             edit1->setText(i18n("Date:"));
             edit2->setText("");
-            edit2->setEnabled(false);
             val_max->setEnabled(false);
         }
         else
         {
             edit1->setText(i18n("Date minimum:"));
             edit2->setText(i18n("Date maximum:"));
-            edit2->setEnabled(true);
             val_max->setEnabled(true);
         }
         break;
     case 5:
         val_min->setEnabled(true);
-        edit1->setEnabled(true);
         choose->setEnabled(true);
         val_min->setValidator(0);
         val_max->setValidator(0);
@@ -377,14 +357,12 @@ void DlgValidity::changeIndexType(int _index)
         {
             edit1->setText(i18n("Time:"));
             edit2->setText("");
-            edit2->setEnabled(false);
             val_max->setEnabled(false);
         }
         else
         {
             edit1->setText(i18n("Time minimum:"));
             edit2->setText(i18n("Time maximum:"));
-            edit2->setEnabled(true);
             val_max->setEnabled(true);
         }
         break;
@@ -413,13 +391,10 @@ void DlgValidity::changeIndexCond(int _index)
     else if( chooseType->currentIndex()==5)
       edit1->setText(i18n("Time:"));
     edit2->setText("");
-    edit2->setEnabled(false);
     break;
    case 5:
    case 6:
     val_max->setEnabled(true);
-    edit2->setEnabled(true);
-    edit1->setEnabled(true);
     if(chooseType->currentIndex()==1 || chooseType->currentIndex()==2
        || chooseType->currentIndex()==6)
     {

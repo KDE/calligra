@@ -61,6 +61,7 @@ protected:
     QLineEdit *val_min;
     QLabel *edit1;
     QLabel *edit2;
+    QLabel *chooseLabel;
     QComboBox *choose;
     QComboBox *chooseAction;
     QComboBox *chooseType;
