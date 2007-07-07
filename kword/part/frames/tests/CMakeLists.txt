@@ -12,25 +12,22 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${K
 
 set(TestBasicLayout_test_SRCS TestBasicLayout.cpp)
 kde4_automoc(${TestBasicLayout_test_SRCS})
-kde4_add_executable(TestBasicLayout RUN_UNINSTALLED ${TestBasicLayout_test_SRCS})
+kde4_add_unit_test(TestBasicLayout TESTNAME kword-part-frame-TestBasicLayout  ${TestBasicLayout_test_SRCS})
 target_link_libraries(TestBasicLayout kwordprivate ${QT_QTTEST_LIBRARY})
-add_test(kword-part-frame-TestBasicLayout ${EXECUTABLE_OUTPUT_PATH}/TestBasicLayout)
 
 ########### next target ###############
 
 set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
 kde4_automoc(${TestDocumentLayout_test_SRCS})
-kde4_add_executable(TestDocumentLayout RUN_UNINSTALLED ${TestDocumentLayout_test_SRCS})
+kde4_add_unit_test(TestDocumentLayout TESTNAME kword-part-frame-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
 target_link_libraries(TestDocumentLayout kwordprivate ${QT_QTTEST_LIBRARY})
-add_test(kword-part-frame-TestDocumentLayout ${EXECUTABLE_OUTPUT_PATH}/TestDocumentLayout)
 
 ########### next target ###############
 
 set(TestTextFrameSorting_test_SRCS TestTextFrameSorting.cpp)
 kde4_automoc(${TestTextFrameSorting_test_SRCS})
-kde4_add_executable(TestTextFrameSorting RUN_UNINSTALLED ${TestTextFrameSorting_test_SRCS})
+kde4_add_unit_test(TestTextFrameSorting TESTNAME kword-part-frame-TestTextFrameSorting  ${TestTextFrameSorting_test_SRCS})
 target_link_libraries(TestTextFrameSorting kwordprivate ${QT_QTTEST_LIBRARY})
-add_test(kword-part-frame-TestTextFrameSorting ${EXECUTABLE_OUTPUT_PATH}/TestTextFrameSorting)
 
 ########### next target ###############
 

@@ -1,4 +1,3 @@
-
 if(KDE4_BUILD_TESTS)
 
 add_definitions(-DCOMPILING_TESTS)
@@ -10,9 +9,8 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${K
 
 set(TestPageManager_test_SRCS TestPageManager.cpp)
 kde4_automoc(${TestPageManager_test_SRCS})
-kde4_add_executable(TestPageManager RUN_UNINSTALLED ${TestPageManager_test_SRCS})
+kde4_add_unit_test(TestPageManager TESTNAME kword-part-TestPageManager  ${TestPageManager_test_SRCS})
 target_link_libraries(TestPageManager kwordprivate ${QT_QTTEST_LIBRARY})
-add_test(kword-part-TestPageManager ${EXECUTABLE_OUTPUT_PATH}/TestPageManager)
 
 ########### next target ###############
 
