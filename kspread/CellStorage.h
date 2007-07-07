@@ -24,12 +24,12 @@
 #include <QRect>
 #include <QVector>
 
+#include "Binding.h"
 #include "Cell.h"
 #include "Condition.h"
 #include "Formula.h"
 #include "Global.h"
 #include "PointStorage.h"
-#include "chart/TableModel.h"
 #include "Validity.h"
 #include "Value.h"
 
@@ -39,6 +39,7 @@ class KoXmlWriter;
 
 namespace KSpread
 {
+class BindingStorage;
 class Cell;
 class CellStorageUndoData;
 class CommentStorage;
@@ -51,8 +52,6 @@ class Sheet;
 class StyleStorage;
 class ValidityStorage;
 class ValueStorage;
-
-typedef TableModel Binding;
 
 /**
  * The cell storage.
@@ -299,6 +298,7 @@ public:
      */
     CellStorage subStorage( const Region& region ) const;
 
+    const BindingStorage* bindingStorage() const;
     const CommentStorage* commentStorage() const;
     const ConditionsStorage* conditionsStorage() const;
     const FormulaStorage* formulaStorage() const;

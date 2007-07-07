@@ -22,8 +22,8 @@
 
 #include <klocale.h>
 
+#include <CellStorage.h>
 #include <Sheet.h>
-#include <Cell.h>
 
 using namespace KSpread;
 
@@ -32,7 +32,7 @@ namespace KSpread {
     class ScriptingCellListener::Private
     {
         public:
-            KSpread::CellBinding* cellbinding;
+            KSpread::Binding* cellbinding;
     };
 }
 
@@ -40,9 +40,9 @@ ScriptingCellListener::ScriptingCellListener(KSpread::Sheet *sheet, const QRect&
     : QObject()
     , d(new Private())
 {
-    d->cellbinding = new KSpread::CellBinding(sheet, area);
-    connect(d->cellbinding, SIGNAL(changed(Cell)), this, SLOT(slotChanged(Cell)));
-    sheet->addCellBinding(d->cellbinding);
+    d->cellbinding = new KSpread::Binding(Region(area, sheet));
+    connect(d->cellbinding->model(), SIGNAL(changed(const Region&)), this, SLOT(slotChanged(const Region&)));
+    sheet->cellStorage()->setBinding(Region(area, sheet), *d->cellbinding);
 }
 
 ScriptingCellListener::~ScriptingCellListener()
@@ -51,9 +51,17 @@ ScriptingCellListener::~ScriptingCellListener()
     delete d;
 }
 
-void ScriptingCellListener::slotChanged(const Cell& cell)
+void ScriptingCellListener::slotChanged(const Region& region)
 {
-    emit changed( cell.column(), cell.row() );
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
+    {
+        for (int row = (*it)->rect().top(); row <= (*it)->rect().bottom(); ++row)
+        {
+            for (int col = (*it)->rect().left(); col <= (*it)->rect().right(); ++col)
+                emit changed(col, row);
+        }
+    }
 }
 
 #include "ScriptingListener.moc"

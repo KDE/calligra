@@ -25,11 +25,11 @@
 
 #include "kspread_export.h"
 
+#include "Binding.h"
 #include "Condition.h"
 #include "Doc.h"
 #include "Region.h"
 #include "RTree.h"
-#include "chart/TableModel.h"
 #include "Validity.h"
 
 #include "database/Database.h"
@@ -43,8 +43,6 @@ inline uint qHash( const QPoint& point )
 
 namespace KSpread
 {
-
-typedef TableModel Binding;
 
 /**
  * A custom rectangular storage.

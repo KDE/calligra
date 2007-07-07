@@ -61,6 +61,7 @@ class KoXmlWriter;
 
 namespace KSpread
 {
+class BindingManager;
 class ColumnFormat;
 class Damage;
 class DatabaseManager;
@@ -163,6 +164,11 @@ public:
    * @return the Map that belongs to this Document
    */
   Map *map () const;
+
+  /**
+   * \return a pointer to the binding manager
+   */
+  BindingManager* bindingManager() const;
 
   /**
    * \return a pointer to the database manager

@@ -27,7 +27,6 @@ SET (chart_DIR_SRCS
 	chart/ChartDatabaseSelectorFactory.cpp
 	chart/ChartDatabaseSelector.cpp
 	chart/ChartDialog.cpp
-	chart/TableModel.cpp
 	)
 
 kde4_add_ui_files(chart_DIR_SRCS
@@ -149,6 +148,8 @@ SET (ui_DIR_SRCS
 	)
 
 SET (kspreadcommon_LIB_SRCS
+	Binding.cpp
+	BindingManager.cpp
 	Cell.cpp
 	CellStorage.cpp
 	Cluster.cpp

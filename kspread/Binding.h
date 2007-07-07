@@ -17,50 +17,51 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_TABLE_MODEL
-#define KSPREAD_TABLE_MODEL
+#ifndef KSPREAD_BINDING
+#define KSPREAD_BINDING
 
 #include <QAbstractTableModel>
 #include <QSharedDataPointer>
 #include <QVariant>
+
+#include "kspread_export.h"
 
 namespace KSpread
 {
 class Region;
 
 /**
- * Abstracts the access to the ValueStorage.
- * Useful for KChart (or other apps, that want to access KSpread's data).
+ * Abstracts read-only access to the ValueStorage.
+ * Useful for KChart (or other apps, that want read-only access to KSpread's data).
  */
-class TableModel : public QAbstractTableModel
+class KSPREAD_EXPORT Binding
 {
-    Q_OBJECT
-
 public:
-    explicit TableModel( QObject* parent = 0 );
-    TableModel( const TableModel& other );
-    ~TableModel();
+    Binding();
+    explicit Binding(const Region& region);
+    Binding( const Binding& other );
+    ~Binding();
 
     bool isEmpty() const;
 
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    QAbstractItemModel* model() const;
 
-    void setRegion( const Region& region );
+    const Region& region() const;
+    void setRegion(const Region& region);
 
-    void operator=( const TableModel& other );
-    bool operator==( const TableModel& other ) const;
-    bool operator<( const TableModel& other ) const;
+    void update(const Region& region);
+
+    void operator=( const Binding& other );
+    bool operator==( const Binding& other ) const;
+    bool operator<( const Binding& other ) const;
 
 private:
     class Private;
-    QSharedDataPointer<Private> d;
+    QExplicitlySharedDataPointer<Private> d;
 };
 
 } // namespace KSpread
 
-Q_DECLARE_TYPEINFO( KSpread::TableModel, Q_MOVABLE_TYPE );
+Q_DECLARE_TYPEINFO( KSpread::Binding, Q_MOVABLE_TYPE );
 
-#endif // KSPREAD_TABLE_MODEL
+#endif // KSPREAD_BINDING

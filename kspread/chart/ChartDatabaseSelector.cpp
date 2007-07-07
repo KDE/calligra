@@ -27,11 +27,13 @@
 
 #include "koChart.h"
 
+#include "Binding.h"
 #include "Canvas.h"
+#include "CellStorage.h"
 #include "Doc.h"
 #include "Region.h"
 #include "Selection.h"
-#include "TableModel.h"
+#include "Sheet.h"
 
 using namespace KSpread;
 
@@ -67,11 +69,11 @@ void ChartDatabaseSelector::open(KoShape* shape)
 void ChartDatabaseSelector::save()
 {
     const Region region(d->widget.m_cellRegion->text(), d->doc->map(), d->selection->activeSheet());
-    if ( !region.isValid() )
+    if (!region.isValid() || !region.isContiguous())
         return;
-    TableModel* tableModel = new TableModel();
-    tableModel->setRegion( region );
-    d->shape->setModel( tableModel );
+    Binding binding(region);
+    d->shape->setModel(binding.model());
+    region.firstSheet()->cellStorage()->setBinding(region, binding);
 }
 
 KAction* ChartDatabaseSelector::createAction()

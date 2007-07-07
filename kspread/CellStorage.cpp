@@ -165,6 +165,10 @@ void CellStorage::take( int col, int row )
     oldUserInput = d->userInputStorage->take( col, row );
     oldValue = d->valueStorage->take( col, row );
 
+    // Trigger a recalculation of the consuming cells.
+    CellDamage::Changes changes = CellDamage:: Binding | CellDamage::Formula | CellDamage::Value;
+    d->sheet->doc()->addDamage(new CellDamage(Cell(d->sheet, col, row), changes));
+
     // recording undo?
     if ( d->undoData )
     {
@@ -369,8 +373,8 @@ void CellStorage::setValue( int column, int row, const Value& value )
     {
         if ( !d->sheet->doc()->isLoading() )
         {
-            // Always trigger a repainting.
-            CellDamage::Changes changes = CellDamage::Appearance;
+            // Always trigger a repainting and a binding update.
+            CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Binding;
             // Trigger a recalculation of the consuming cells, only if we are not
             // already in a recalculation process.
             if ( !d->sheet->doc()->recalcManager()->isActive() )
@@ -540,6 +544,8 @@ void CellStorage::insertColumns( int position, int number )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertColumns( position, number );
@@ -593,6 +599,8 @@ void CellStorage::removeColumns( int position, int number )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeColumns( position, number );
@@ -646,6 +654,8 @@ void CellStorage::insertRows( int position, int number )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertRows( position, number );
@@ -699,6 +709,8 @@ void CellStorage::removeRows( int position, int number )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeRows( position, number );
@@ -752,6 +764,8 @@ void CellStorage::removeShiftLeft( const QRect& rect )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftLeft( rect );
@@ -805,6 +819,8 @@ void CellStorage::insertShiftRight( const QRect& rect )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftRight( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftRight( rect );
@@ -858,6 +874,8 @@ void CellStorage::removeShiftUp( const QRect& rect )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftUp( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftUp( rect );
@@ -911,6 +929,8 @@ void CellStorage::insertShiftDown( const QRect& rect )
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
+    // Trigger an update of the bindings.
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftDown( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftDown( rect );
@@ -1098,6 +1118,11 @@ CellStorage CellStorage::subStorage( const Region& region ) const
     *subStorage.d->linkStorage = d->linkStorage->subStorage( region );
     *subStorage.d->valueStorage = d->valueStorage->subStorage( region );
     return subStorage;
+}
+
+const BindingStorage* CellStorage::bindingStorage() const
+{
+    return d->bindingStorage;
 }
 
 const CommentStorage* CellStorage::commentStorage() const

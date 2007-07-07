@@ -181,9 +181,8 @@ kdbgstream operator<<( kdbgstream str, const KSpread::CellDamage& d )
 {
     str << "CellDamage: " << d.region().name( d.sheet() );
     if ( d.changes() & CellDamage::Appearance ) str << " Appearance";
+    if ( d.changes() & CellDamage::Binding )    str << " Binding";
     if ( d.changes() & CellDamage::Formula )    str << " Formula";
-    if ( d.changes() & CellDamage::Layout )     str << " Layout";
-    if ( d.changes() & CellDamage::TextFormat ) str << " TextFormat";
     if ( d.changes() & CellDamage::Value )      str << " Value";
     return str;
 }

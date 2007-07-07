@@ -131,7 +131,7 @@ class ScriptingModule : public KoScriptingModule
         QObject* function(const QString& name);
 
         /**
-        * Returns a \a ScriptingCellBinding object which provides us some kind of
+        * Returns a \a ScriptingCellListener object which provides us some kind of
         * listener to changes in cells.
         */
         QObject* createListener(const QString& sheetname, const QString& range = QString());

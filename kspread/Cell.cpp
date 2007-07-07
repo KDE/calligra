@@ -412,13 +412,6 @@ const Value Cell::value() const
 void Cell::setValue( const Value& value )
 {
     sheet()->cellStorage()->setValue( d->column, d->row, value );
-
-    // TODO Stefan: Use a Damage for this.
-    //              Not the same CellDamage change as for recalculation:
-    //              The updating of the chart should happen on each value change.
-    //              Either use CellDamage::Value for this and find a better name
-    //              for the change that triggers recalculation. Or vice versa.
-    updateChart( true );
 }
 
 // FIXME: Continue commenting and cleaning here (ingwa)
@@ -1031,28 +1024,6 @@ bool Cell::isLocked() const
 QRect Cell::lockedCells() const
 {
     return sheet()->cellStorage()->lockedCells( d->column, d->row );
-}
-
-
-bool Cell::updateChart(bool refresh)
-{
-    // Update a chart for example if it depends on this cell.
-    if ( d->row != 0 && d->column != 0 )
-    {
-        foreach ( CellBinding* binding, sheet()->cellBindings() )
-        {
-            if ( binding->contains( d->column, d->row ) )
-            {
-                if (!refresh)
-                    return true;
-
-                binding->cellChanged( *this );
-            }
-        }
-        return true;
-    }
-    return false;
-
 }
 
 

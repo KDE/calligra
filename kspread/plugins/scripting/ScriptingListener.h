@@ -27,7 +27,7 @@
 namespace KSpread {
 
     class Sheet;
-    class Cell;
+    class Region;
 
     /**
     * The ScriptingCellListener class implements a listener to changes
@@ -56,7 +56,7 @@ namespace KSpread {
             void changed(int column, int row);
 
         private Q_SLOTS:
-            void slotChanged(const Cell&);
+            void slotChanged(const Region&);
 
         private:
             Q_DISABLE_COPY( ScriptingCellListener )

@@ -431,14 +431,6 @@ public:
     /** returns true, if cell format is of time type or content is a time */
     bool isTime() const;
 
-    /**
-    * Refreshing chart
-    * @param refresh is default true
-    * when it's false it's just for test
-    * it's used when you paste cell
-    */
-    bool updateChart(bool refresh=true);
-
     //
     //END
     //

@@ -70,6 +70,7 @@
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 
+#include "BindingManager.h"
 #include "Canvas.h"
 #include "Damages.h"
 #include "DependencyManager.h"
@@ -121,6 +122,7 @@ public:
 
   Map *map;
   KLocale *locale;
+  BindingManager* bindingManager;
   DatabaseManager* databaseManager;
   DependencyManager* dependencyManager;
   NamedAreaManager* namedAreaManager;
@@ -218,6 +220,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   d->map = new Map( this, "Map" );
   d->locale = new Localization;
+  d->bindingManager = new BindingManager(d->map);
   d->databaseManager = new DatabaseManager(d->map);
   d->dependencyManager = new DependencyManager( d->map );
   d->namedAreaManager = new NamedAreaManager(this);
@@ -308,6 +311,7 @@ Doc::~Doc()
 
   delete d->locale;
   delete d->map;
+  delete d->bindingManager;
   delete d->databaseManager;
   delete d->dependencyManager;
   delete d->namedAreaManager;
@@ -358,6 +362,11 @@ KLocale *Doc::locale () const
 Map *Doc::map () const
 {
   return d->map;
+}
+
+BindingManager* Doc::bindingManager() const
+{
+    return d->bindingManager;
 }
 
 DatabaseManager* Doc::databaseManager() const
@@ -2020,6 +2029,7 @@ void Doc::flushDamages()
 
 void Doc::handleDamages( const QList<Damage*>& damages )
 {
+    Region bindingChangedRegion;
     Region formulaChangedRegion;
     Region valueChangedRegion;
     WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
@@ -2037,6 +2047,11 @@ void Doc::handleDamages( const QList<Damage*>& damages )
             Sheet* const damagedSheet = cellDamage->sheet();
             const Region region = cellDamage->region();
 
+            if ((cellDamage->changes() & CellDamage::Binding) &&
+                 !workbookChanges.testFlag(WorkbookDamage::Value))
+            {
+                bindingChangedRegion.add(region, damagedSheet);
+            }
             if ( ( cellDamage->changes() & CellDamage::Formula ) &&
                  !workbookChanges.testFlag( WorkbookDamage::Formula ) )
             {
@@ -2058,10 +2073,6 @@ void Doc::handleDamages( const QList<Damage*>& damages )
 
             if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
             {
-                foreach ( CellBinding* binding, damagedSheet->cellBindings() )
-                {
-                     binding->cellChanged( Cell() );
-                }
             }
             continue;
         }
@@ -2091,7 +2102,13 @@ void Doc::handleDamages( const QList<Damage*>& damages )
     if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
         dependencyManager()->updateAllDependencies( map() );
     if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
+    {
         recalcManager()->recalcMap();
+        bindingManager()->updateAllBindings();
+    }
+    // Update the bindings
+    if (!bindingChangedRegion.isEmpty())
+        bindingManager()->regionChanged(bindingChangedRegion);
 }
 
 void Doc::loadConfigFromFile()

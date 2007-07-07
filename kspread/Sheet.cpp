@@ -116,111 +116,6 @@ do { \
 
 namespace KSpread {
 
-/*****************************************************************************
- *
- * CellBinding
- *
- *****************************************************************************/
-
-CellBinding::CellBinding( Sheet *_sheet, const QRect& _area )
-{
-  m_rctDataArea = _area;
-
-  m_pSheet = _sheet;
-  m_pSheet->addCellBinding( this );
-
-  m_bIgnoreChanges = false;
-}
-
-CellBinding::~CellBinding()
-{
-  m_pSheet->removeCellBinding( this );
-}
-
-void CellBinding::cellChanged( const Cell& _cell )
-{
-  if ( m_bIgnoreChanges )
-    return;
-
-  emit changed( _cell );
-}
-
-bool CellBinding::contains( int _x, int _y )
-{
-  return m_rctDataArea.contains( QPoint( _x, _y ) );
-}
-
-/*****************************************************************************
- *
- * ChartBinding
- *
- *****************************************************************************/
-
-ChartBinding::ChartBinding( Sheet *_sheet, const QRect& _area, EmbeddedChart *_child )
-    : CellBinding( _sheet, _area )
-{
-  m_child = _child;
-}
-
-ChartBinding::~ChartBinding()
-{
-}
-
-void ChartBinding::cellChanged( const Cell& /*changedCell*/ )
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    if ( m_bIgnoreChanges )
-        return;
-
-  //Ensure display gets updated by marking all cells underneath the chart as
-  //dirty
-
-  const QRect chartGeometry = m_child->geometry().toRect();
-
-  double tmp;
-    int left = sheet()->leftColumn( chartGeometry.left() , tmp );
-    int top = sheet()->topRow( chartGeometry.top() , tmp );
-  int right = sheet()->rightColumn( chartGeometry.right() );
-  int bottom = sheet()->bottomRow( chartGeometry.bottom() );
-
-  sheet()->setRegionPaintDirty( Region( QRect(left,top,right-left,bottom-top) ) );
-
-    //kDebug(36001) << m_rctDataArea << endl;
-
-    // Get the chart and resize its data if necessary.
-    //
-    // FIXME: Only do this if he data actually changed size.
-    KoChart::Part  *chart = m_child->chart();
-    chart->resizeData( m_rctDataArea.height(), m_rctDataArea.width() );
-
-    // Reset all the data, i.e. retransfer them to the chart.
-    // This is definitely not the most efficient way to do this.
-    //
-    // FIXME: Find a way to do it with just the data that changed.
-    Cell cell;
-    for ( int row = 0; row < m_rctDataArea.height(); row++ ) {
-        for ( int col = 0; col < m_rctDataArea.width(); col++ ) {
-            cell = Cell( m_pSheet, m_rctDataArea.left() + col, m_rctDataArea.top() + row );
-            if ( !cell.isNull() && cell.value().isNumber() )
-                chart->setCellData( row, col, cell.value().asFloat() );
-            else if ( !cell.isNull() )
-                chart->setCellData( row, col, cell.value().asString() );
-            else
-                chart->setCellData( row, col, KoChart::Value() );
-        }
-    }
-    chart->analyzeHeaders( );
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
-
-
-/*****************************************************************************
- *
- * Sheet
- *
- *****************************************************************************/
-
 class Sheet::Private
 {
 public:
@@ -260,10 +155,6 @@ public:
 
   // cells that need painting
   Region paintDirtyList;
-
-  // List of all cell bindings. For example charts use bindings to get
-  // informed about changing cell contents.
-  QList<CellBinding*> cellBindings;
 
   // Indicates whether the sheet should paint the page breaks.
   // Doing so costs some time, so by default it should be turned off.
@@ -817,8 +708,11 @@ void Sheet::refreshChangeAreaName(const QString & _areaName)
         {
             Cell cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) );
             if ( cell.makeFormula() )
+            {
                 // recalculate cells
-                doc()->addDamage( new CellDamage( cell, CellDamage::Appearance | CellDamage::Value ) );
+                doc()->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
+                                                      CellDamage::Value));
+            }
         }
     }
 }
@@ -859,7 +753,6 @@ void Sheet::insertShiftRight( const QRect& rect )
                                       rect.right() - rect.left() + 1 );
         }
     }
-    refreshChart(QPoint(rect.left(),rect.top()), false, Sheet::ColumnInsert);
 }
 
 void Sheet::insertShiftDown( const QRect& rect )
@@ -873,7 +766,6 @@ void Sheet::insertShiftDown( const QRect& rect )
                                       rect.bottom() - rect.top() + 1 );
         }
     }
-    refreshChart(/*marker*/QPoint(rect.left(),rect.top()), false, Sheet::RowInsert);
 }
 
 void Sheet::removeShiftUp( const QRect& rect )
@@ -887,7 +779,6 @@ void Sheet::removeShiftUp( const QRect& rect )
                                       rect.bottom() - rect.top() + 1 );
         }
     }
-    refreshChart( QPoint(rect.left(),rect.top()), false, Sheet::RowRemove );
 }
 
 void Sheet::removeShiftLeft( const QRect& rect )
@@ -901,7 +792,6 @@ void Sheet::removeShiftLeft( const QRect& rect )
                                       rect.right() - rect.left() + 1 );
         }
     }
-    refreshChart(QPoint(rect.left(),rect.top()), false, Sheet::ColumnRemove );
 }
 
 void Sheet::insertColumns( int col, int number )
@@ -924,8 +814,6 @@ void Sheet::insertColumns( int col, int number )
     }
     //update print settings
     d->print->insertColumn( col, number );
-    // update charts
-    refreshChart( QPoint( col, 1 ), true, Sheet::ColumnInsert );
 }
 
 void Sheet::insertRows( int row, int number )
@@ -948,8 +836,6 @@ void Sheet::insertRows( int row, int number )
     }
     //update print settings
     d->print->insertRow( row, number );
-    // update charts
-    refreshChart( QPoint( 1, row ), true, Sheet::RowInsert );
 }
 
 void Sheet::removeColumns( int col, int number )
@@ -972,8 +858,6 @@ void Sheet::removeColumns( int col, int number )
     }
     //update print settings
     d->print->removeColumn( col, number );
-    // update charts
-    refreshChart( QPoint( col, 1 ), true, Sheet::ColumnRemove );
 }
 
 void Sheet::removeRows( int row, int number )
@@ -997,8 +881,6 @@ void Sheet::removeRows( int row, int number )
 
     //update print settings
     d->print->removeRow( row, number );
-    // update charts
-    refreshChart( QPoint( 1, row ), true, Sheet::RowRemove );
 }
 
 void Sheet::emitHideRow()
@@ -1013,48 +895,6 @@ void Sheet::emitHideColumn()
     emit visibleSizeChanged();
     emit sig_updateHBorder( this );
     emit sig_updateView( this );
-}
-
-void Sheet::refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref)
-{
-    for ( int c = 0; c < valueStorage()->count(); ++c )
-    {
-        if ( (ref == ColumnInsert || ref == ColumnRemove) && fullRowOrColumn
-              && valueStorage()->col( c ) >= (pos.x() - 1))
-        {
-            if ( Cell( this, valueStorage()->col( c ), valueStorage()->row( c ) ).updateChart() )
-                return;
-        }
-        else if ( (ref == ColumnInsert || ref == ColumnRemove )&& !fullRowOrColumn
-                   && valueStorage()->col( c ) >= (pos.x() - 1) && valueStorage()->row( c ) == pos.y() )
-        {
-            if ( Cell( this, valueStorage()->col( c ), valueStorage()->row( c ) ).updateChart() )
-                return;
-        }
-        else if ((ref == RowInsert || ref == RowRemove) && fullRowOrColumn
-                  && valueStorage()->row( c ) >= (pos.y() - 1))
-        {
-            if ( Cell( this, valueStorage()->col( c ), valueStorage()->row( c ) ).updateChart() )
-                return;
-        }
-        else if ( (ref == RowInsert || ref == RowRemove) && !fullRowOrColumn
-                   && valueStorage()->col( c ) == pos.x() && valueStorage()->row( c ) >= (pos.y() - 1) )
-        {
-            if (  Cell( this, valueStorage()->col( c ), valueStorage()->row( c ) ).updateChart()  )
-                return;
-        }
-    }
-
-    //refresh chart when there is a chart and you remove
-    //all cells
-    if ( valueStorage()->count() == 0 )
-    {
-        foreach ( CellBinding * binding, d->cellBindings )
-        {
-            binding->cellChanged( Cell() );
-        }
-    }
-
 }
 
 QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
@@ -1751,7 +1591,9 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
 //             << columnsInClpbrd << " columns in clipboard." << endl;
 //   kDebug(36005) << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
 
+#if 0
   Region recalcRegion;
+#endif
   KoXmlElement e = root.firstChild().toElement(); // "columns", "rows" or "cell"
   for (; !e.isNull(); e = e.nextSibling().toElement())
   {
@@ -1865,6 +1707,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
           {
             cell.copyAll(cellBackup);
           }
+#if 0
           else
           {
             if (cell.isFormula())
@@ -1872,29 +1715,16 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
               recalcRegion.add(QPoint(cell.column(), cell.row()), cell.sheet());
             }
           }
-
-          cell = Cell( this, col + coff, row + roff );
-          if( !refreshCell && cell.updateChart( false ) )
-          {
-            refreshCell = cell;
-          }
+#endif
         }
       }
     }
-
-    //refresh chart after that you paste all cells
-
-    /* I don't think this is gonna work....doesn't this only update
-       one chart -- the one which had a dependent cell update first? - John
-
-       I don't have time to check on this now....
-    */
-    if ( !refreshCell.isNull() )
-        refreshCell.updateChart();
   }
 
+#if 0
     // recalculate cells
     this->doc()->addDamage( new CellDamage( this, recalcRegion, CellDamage::Appearance | CellDamage::Value ) );
+#endif
 
     this->doc()->setModified( true );
 
@@ -2114,9 +1944,6 @@ void Sheet::deleteCells(const Region& region)
       Cell cell = cellStack.pop();
       d->cellStorage->take( cell.column(), cell.row() );
     }
-
-    // recalculate dependent cells
-    doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance | CellDamage::Value ) );
 
     doc()->setModified( true );
 }
@@ -4577,23 +4404,6 @@ void Sheet::setShowPageBorders( bool b )
 
     d->showPageBorders = b;
     emit sig_updateView( this );
-}
-
-void Sheet::addCellBinding( CellBinding* bind )
-{
-  d->cellBindings.append( bind );
-  doc()->setModified( true );
-}
-
-void Sheet::removeCellBinding( CellBinding* bind )
-{
-  d->cellBindings.removeAll( bind );
-  doc()->setModified( true );
-}
-
-const QList<CellBinding*>& Sheet::cellBindings() const
-{
-  return d->cellBindings;
 }
 
 Sheet* Sheet::findSheet( const QString & _name )

@@ -88,72 +88,6 @@ class View;
 class EmbeddedKOfficeObject;
 class EmbeddedObject;
 
-/********************************************************************
- *
- * CellBinding
- *
- ********************************************************************/
-
-/**
- * \ingroup Embedding
- * @short This is an abstract base class only.
- */
-class KSPREAD_EXPORT CellBinding : public QObject
-{
-    Q_OBJECT
-public:
-    CellBinding( Sheet *_sheet, const QRect& _area );
-    virtual ~CellBinding();
-
-    bool contains( int _x, int _y );
-    /**
-     * Call this function if one of the cells covered by this binding ( @see rect )
-     * has changed. This will in turn force for example a chart to update.
-     *
-     * @param _obj may by 0. In this case all cells may have changed.
-     */
-    virtual void cellChanged( const Cell& cell );
-
-    virtual void setIgnoreChanges( bool _ignore ) { m_bIgnoreChanges = _ignore; }
-
-    virtual QRect& dataArea() { return m_rctDataArea; }
-    virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
-
-    Sheet* sheet()const { return m_pSheet; }
-
-signals:
-    void changed( const Cell& _obj );
-
-protected:
-    QRect m_rctDataArea;
-    Sheet *m_pSheet;
-    bool m_bIgnoreChanges;
-};
-
-/**
- * \ingroup Embedding
- */
-class ChartBinding : public CellBinding
-{
-    Q_OBJECT
-public:
-
-    ChartBinding( Sheet *_sheet, const QRect& _area, EmbeddedChart *_child );
-    virtual ~ChartBinding();
-
-    virtual void cellChanged( const Cell& cell );
-
-private:
-    EmbeddedChart* m_child;
-};
-
-
-/********************************************************************
- *
- * Sheet
- *
- ********************************************************************/
-
 /**
  * A sheet contains several cells.
  */
@@ -935,33 +869,6 @@ public:
     void refreshRemoveAreaName(const QString &_areaName);
     void refreshChangeAreaName(const QString &_areaName);
 
-
-    /**
-     * \ingroup Embedding
-     * Update chart when you insert or remove row or column
-     *
-     * @param pos the point of insertion (only one coordinate may be used, depending
-     * on the other parameters).
-     * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
-     *                        if false, we inserted or removed a cell
-     * @param ref see ChangeRef
-     */
-    void refreshChart(const QPoint & pos, bool fullRowOrColumn, ChangeRef ref);
-
-    /**
-     * Adds the CellBinding @p bind to the sheet's list of bindings.
-     */
-    void addCellBinding( CellBinding* bind );
-
-    /**
-     * Removes the CellBinding @p bind to the sheet's list of bindings.
-     */
-    void removeCellBinding( CellBinding* bind );
-
-    /**
-     * @return the sheet's list of bindings
-     */
-    const QList<CellBinding*>& cellBindings() const;
 
     /**
      * Used by the 'chart' to get the sheet on which the chart is build.
