@@ -32,6 +32,18 @@ namespace KSpread {
     /**
     * The ScriptingCellListener class implements a listener to changes
     * within cells of a sheet.
+    *
+    * Python sample script that creates a listener for the range of cells
+    * A1:F50 within the sheet Sheet1.
+    * \code
+    * import Kross, KSpread
+    * listener = KSpread.createListener("Sheet1", "A1:F50")
+    * if not self.listener:
+    *     raise "Failed to create listener."
+    * def changed(self, column, row):
+    *     print "column=%i row=%i" % (column,row)
+    * listener.connect("changed(int,int)", changed)
+    * \endcode
     */
     class ScriptingCellListener : public QObject
     {
