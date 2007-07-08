@@ -37,6 +37,7 @@
 #include <KoPasteController.h>
 #include <KoShape.h>
 #include <KoText.h>
+#include <KoFind.h>
 #include <KoShapeContainer.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -87,7 +88,9 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
 
     setupActions();
 
-    connect( kwcanvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+    connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+
+    new KoFind(this, m_canvas->resourceProvider(), actionCollection());
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), true);
     KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
@@ -245,11 +248,6 @@ This saves problems with finding out which we missed near the end.
     // -------------- Edit actions
     m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
     m_actionEditCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( editCopy() ));
-    m_actionEditFind = actionCollection()->addAction(KStandardAction::Find,  "edit_find", this, SLOT( editFind() ));
-    m_actionEditFindNext = actionCollection()->addAction(KStandardAction::FindNext,  "edit_findnext", this, SLOT( editFindNext() ));
-    m_actionEditFindPrevious = actionCollection()->addAction(KStandardAction::FindPrev,  "edit_findprevious", this, SLOT( editFindPrevious() ));
-    m_actionEditReplace = actionCollection()->addAction(KStandardAction::Replace,  "edit_replace", this, SLOT( editReplace() ));
-    m_actionEditSelectAll = actionCollection()->addAction(KStandardAction::SelectAll,  "edit_selectall", this, SLOT( editSelectAll() ));
     new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
     m_actionEditSelectCurrentFrame = new KAction( i18n( "Select Frame" ), 0,
     0, this, SLOT( editSelectCurrentFrame() ),

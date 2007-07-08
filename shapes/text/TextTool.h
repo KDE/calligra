@@ -88,6 +88,8 @@ public:
 public slots:
     /// add a command to the undo stack, executing it as well.
     void addCommand(QUndoCommand *command);
+    /// reimplemented from KoTool
+    virtual void resourceChanged (int key, const QVariant &res);
 
 signals:
     /// emitted every time a different styleManager is set.
@@ -157,6 +159,7 @@ private slots:
 
 private:
     void repaintCaret();
+    void repaintSelection();
     void repaintSelection(int from, int to);
     void ensureCursorVisible();
     QRectF textRect(int startPosition, int endPosition) const;
@@ -183,6 +186,7 @@ private:
     bool m_allowActions;
     bool m_allowAddUndoCommand;
     bool m_trackChanges;
+    bool m_allowResourceProviderUpdates;
     int m_prevCursorPosition; /// used by editingPluginEvents
 
     QAction *m_actionFormatBold;
@@ -211,7 +215,7 @@ private:
     };
     UpdatePageDirection m_updateParagDirection;
 
-    /// structur that allows us to remember the text position and selection of previously edited documents.
+    /// structure that allows us to remember the text position and selection of previously edited documents.
     struct TextSelection {
         QTextDocument *document; // be warned that this may end up being a dangling pointer, so don't use.
         int position;

@@ -108,6 +108,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_allowActions(true),
     m_allowAddUndoCommand(true),
     m_trackChanges(false),
+    m_allowResourceProviderUpdates(true),
     m_prevCursorPosition(-1),
     m_currentCommand(0),
     m_currentCommandHasChildren(false)
@@ -357,7 +358,7 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
     if(canMoveCaret) {
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if(m_caret.hasSelection() && !shiftPressed)
-            repaintSelection(m_caret.position(), m_caret.anchor()); // will erase selection
+            repaintSelection(); // will erase selection
         else if(! m_caret.hasSelection())
             repaintCaret();
         int prevPosition = m_caret.position();
@@ -441,6 +442,7 @@ void TextTool::updateSelectionHandler() {
             clipboard->setText(m_caret.selectedText(), QClipboard::Selection);
     }
     KoCanvasResourceProvider *p = m_canvas->resourceProvider();
+    m_allowResourceProviderUpdates = false;
     if(m_textShapeData) {
         p->setResource(KoText::CurrentTextPosition, m_caret.position());
         p->setResource(KoText::CurrentTextAnchor, m_caret.anchor());
@@ -453,6 +455,7 @@ void TextTool::updateSelectionHandler() {
         p->clearResource(KoText::CurrentTextAnchor);
         p->clearResource(KoText::CurrentTextDocument);
     }
+    m_allowResourceProviderUpdates = true;
 }
 
 void TextTool::copy() const {
@@ -526,7 +529,7 @@ void TextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
     if(qAbs(pos - m_caret.position()) <= 1) // clicked between two words
         m_caret.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
 
-    repaintSelection(m_caret.anchor(), m_caret.position());
+    repaintSelection();
 }
 
 void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
@@ -686,7 +689,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
         useCursor(Qt::BlankCursor);
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
         if(m_caret.hasSelection() && !shiftPressed)
-            repaintSelection(m_caret.position(), m_caret.anchor()); // will erase selection
+            repaintSelection(); // will erase selection
         else if(! m_caret.hasSelection())
             repaintCaret();
         QTextBlockFormat format = m_caret.blockFormat();
@@ -898,7 +901,7 @@ void TextTool::deactivate() {
 
 void TextTool::repaintDecorations() {
     if(m_textShapeData)
-        repaintSelection(m_caret.position(), m_caret.anchor());
+        repaintSelection();
 }
 
 void TextTool::repaintCaret() {
@@ -916,6 +919,10 @@ void TextTool::repaintCaret() {
         repaintRect = m_textShape->transformationMatrix(0).mapRect(repaintRect);
         m_canvas->updateCanvas(repaintRect);
     }
+}
+
+void TextTool::repaintSelection() {
+    repaintSelection(m_caret.position(), m_caret.anchor());
 }
 
 void TextTool::repaintSelection(int startPosition, int endPosition) {
@@ -1398,6 +1405,25 @@ void TextTool::updateParagraphDirectionUi() {
         }
     }
     updateActions();
+}
+
+void TextTool::resourceChanged(int key, const QVariant &var) {
+    if(m_allowResourceProviderUpdates == false)
+        return;
+    if(key == KoText::CurrentTextPosition) {
+        repaintSelection();
+        m_caret.setPosition(var.toInt());
+        ensureCursorVisible();
+    }
+    else if(key == KoText::CurrentTextAnchor) {
+        repaintSelection();
+        int pos = m_caret.position();
+        m_caret.setPosition(var.toInt());
+        m_caret.setPosition(pos, QTextCursor::KeepAnchor);
+    }
+    else return;
+
+    repaintSelection();
 }
 
 // ---------- editing plugins methods.
