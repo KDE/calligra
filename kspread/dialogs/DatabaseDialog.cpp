@@ -274,31 +274,17 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   optionsFrameLayout->setMargin(KDialog::marginHint());
   optionsFrameLayout->setSpacing(KDialog::spacingHint());
 
-  m_columns_1 = new QComboBox( optionsFrame );
-  optionsFrameLayout->addWidget( m_columns_1, 2, 0 );
-
-  m_operatorValue_2 = new QLineEdit( optionsFrame );
-  optionsFrameLayout->addWidget( m_operatorValue_2, 3, 2 );
-
   m_andBox = new QRadioButton( optionsFrame );
   m_andBox->setText( i18n( "Match all of the following (AND)" ) );
   m_andBox->setChecked( true );
-
-  optionsFrameLayout->addWidget( m_andBox, 0, 0, 0, 2 );
+  optionsFrameLayout->addWidget( m_andBox, 0, 0, 1, 3);
 
   m_orBox = new QRadioButton( optionsFrame );
   m_orBox->setText( i18n( "Match any of the following (OR)" ) );
-  optionsFrameLayout->addWidget( m_orBox, 1, 1, 0, 2 );
+  optionsFrameLayout->addWidget( m_orBox, 1, 0, 1, 3 );
 
-  m_operatorValue_1 = new QLineEdit( optionsFrame );
-  optionsFrameLayout->addWidget( m_operatorValue_1, 2, 2 );
-
-  m_columns_2 = new QComboBox(optionsFrame);
-  m_columns_2->setEditable(false);
-  optionsFrameLayout->addWidget( m_columns_2, 3, 0 );
-
-  m_operatorValue_3 = new QLineEdit( optionsFrame );
-  optionsFrameLayout->addWidget( m_operatorValue_3, 4, 2 );
+  m_columns_1 = new QComboBox( optionsFrame );
+  optionsFrameLayout->addWidget( m_columns_1, 2, 0 );
 
   m_operator_1 = new QComboBox( optionsFrame );
   m_operator_1->insertItem( 0, i18n( "equals" ) );
@@ -310,8 +296,14 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operator_1->insertItem( 6, i18n( "lesser" ) );
   m_operator_1->insertItem( 7, i18n( "greater or equal" ) );
   m_operator_1->insertItem( 8, i18n( "less or equal" ) );
-
   optionsFrameLayout->addWidget( m_operator_1, 2, 1 );
+
+  m_operatorValue_1 = new QLineEdit( optionsFrame );
+  optionsFrameLayout->addWidget( m_operatorValue_1, 2, 2 );
+
+  m_columns_2 = new QComboBox(optionsFrame);
+  m_columns_2->setEditable(false);
+  optionsFrameLayout->addWidget( m_columns_2, 3, 0 );
 
   m_operator_2 = new QComboBox( optionsFrame );
   m_operator_2->insertItem( 0, i18n( "equals" ) );
@@ -321,8 +313,13 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operator_2->insertItem( 4, i18n( "like" ) );
   m_operator_2->insertItem( 5, i18n( "greater" ) );
   m_operator_2->insertItem( 6, i18n( "lesser" ) );
-
   optionsFrameLayout->addWidget( m_operator_2, 3, 1 );
+
+  m_operatorValue_2 = new QLineEdit( optionsFrame );
+  optionsFrameLayout->addWidget( m_operatorValue_2, 3, 2 );
+
+  m_columns_3 = new QComboBox( optionsFrame );
+  optionsFrameLayout->addWidget( m_columns_3, 4, 0 );
 
   m_operator_3 = new QComboBox( optionsFrame );
   m_operator_3->insertItem( 0, i18n( "equals" ) );
@@ -332,17 +329,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operator_3->insertItem( 4, i18n( "like" ) );
   m_operator_3->insertItem( 5, i18n( "greater" ) );
   m_operator_3->insertItem( 6, i18n( "lesser" ) );
-
   optionsFrameLayout->addWidget( m_operator_3, 4, 1 );
 
-  m_columns_3 = new QComboBox( optionsFrame );
-
-  optionsFrameLayout->addWidget( m_columns_3, 4, 0 );
-
-  m_distinct = new QCheckBox( optionsFrame );
-  m_distinct->setText( i18n( "Distinct" ) );
-
-  optionsFrameLayout->addWidget( m_distinct, 7, 2 );
+  m_operatorValue_3 = new QLineEdit( optionsFrame );
+  optionsFrameLayout->addWidget( m_operatorValue_3, 4, 2 );
 
   QLabel * TextLabel19 = new QLabel( optionsFrame );
   TextLabel19->setText( i18n( "Sorted by" ) );
@@ -366,12 +356,16 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_sortMode_2 = new QComboBox( optionsFrame );
   m_sortMode_2->insertItem( 0, i18n( "Ascending" ) );
   m_sortMode_2->insertItem( 1, i18n( "Descending" ) );
-
   optionsFrameLayout->addWidget( m_sortMode_2, 6, 2 );
+
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   optionsFrameLayout->addItem( spacer, 7, 1 );
   QSpacerItem* spacer_2 = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
   optionsFrameLayout->addItem( spacer_2, 7, 0 );
+
+  m_distinct = new QCheckBox( optionsFrame );
+  m_distinct->setText( i18n( "Distinct" ) );
+  optionsFrameLayout->addWidget( m_distinct, 7, 2 );
 
   m_optionsLayout->addWidget( optionsFrame, 0, 1 );
 
