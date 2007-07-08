@@ -29,10 +29,8 @@
 #include <float.h>
 
 // Qt
+#include <QGridLayout>
 #include <QLabel>
-#include <QLayout>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 
 // KDE
 #include <knuminput.h>
@@ -66,35 +64,24 @@ ResizeRow::ResizeRow( View* parent, const char* name )
     setButtons( Ok|Cancel|Default );
     m_pView = parent;
 
-    QWidget *page = new QWidget();
-    setMainWidget( page );
-
-    QVBoxLayout *vLay = new QVBoxLayout( page );
-    vLay->setMargin(KDialog::marginHint());
-    vLay->setSpacing(KDialog::spacingHint());
-    QHBoxLayout *hLay = new QHBoxLayout( vLay );
-
     QRect selection( m_pView->selection()->lastRange() );
     const RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
     rowHeight = rl->height();
 
+    QWidget *page = new QWidget();
+    setMainWidget( page );
+
+    QGridLayout* gridLayout = new QGridLayout( page );
+    gridLayout->setColumnStretch(1, 1);
+
     QLabel * label1 = new QLabel( page );
     label1->setText( i18n( "Height:" ) );
-    hLay->addWidget( label1 );
+    gridLayout->addWidget( label1, 0, 0 );
 
     m_pHeight = new KoUnitDoubleSpinBox( page );
     m_pHeight->setValue( rowHeight );
     m_pHeight->setUnit( m_pView->doc()->unit() );
-
-    hLay->addWidget( m_pHeight );
-
-    QWidget *hSpacer = new QWidget( page );
-    hSpacer->setMinimumSize( spacingHint(), spacingHint() );
-    hLay->addWidget( hSpacer );
-
-    QWidget *vSpacer = new QWidget( page );
-    vSpacer->setMinimumSize( spacingHint(), spacingHint() );
-    vLay->addWidget( vSpacer );
+    gridLayout->addWidget( m_pHeight, 0, 1 );
 
     m_pHeight->setFocus();
 
@@ -140,35 +127,24 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
     setButtons( Ok|Cancel|Default );
     m_pView = parent;
 
-    QWidget *page = new QWidget();
-    setMainWidget( page );
-
-    QVBoxLayout *vLay = new QVBoxLayout( page );
-    vLay->setMargin(KDialog::marginHint());
-    vLay->setSpacing(KDialog::spacingHint());
-    QHBoxLayout *hLay = new QHBoxLayout( vLay );
-
     QRect selection( m_pView->selection()->lastRange() );
     const ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
     columnWidth = cl->width();
 
+    QWidget *page = new QWidget();
+    setMainWidget( page );
+
+    QGridLayout* gridLayout = new QGridLayout( page );
+    gridLayout->setColumnStretch(1, 1);
+
     QLabel * label1 = new QLabel( page );
     label1->setText( i18n( "Width:" ) );
-    hLay->addWidget( label1 );
+    gridLayout->addWidget( label1, 0, 0 );
 
     m_pWidth = new KoUnitDoubleSpinBox( page );
     m_pWidth->setValue( columnWidth );
     m_pWidth->setUnit( m_pView->doc()->unit() );
-
-    hLay->addWidget( m_pWidth );
-
-    QWidget *hSpacer = new QWidget( page );
-    hSpacer->setMinimumSize( spacingHint(), spacingHint() );
-    hLay->addWidget( hSpacer );
-
-    QWidget *vSpacer = new QWidget( page );
-    vSpacer->setMinimumSize( spacingHint(), spacingHint() );
-    vLay->addWidget( vSpacer );
+    gridLayout->addWidget( m_pWidth, 0, 1 );
 
     m_pWidth->setFocus();
 
