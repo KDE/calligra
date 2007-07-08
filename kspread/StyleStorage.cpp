@@ -305,7 +305,7 @@ void StyleStorage::garbageCollection()
          !styleManager()->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
     {
         kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
-                        << " at " << currentPair.first
+                        << " at " << Region(currentPair.first.toRect()).name()
                         << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
         d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
@@ -324,7 +324,7 @@ void StyleStorage::garbageCollection()
          pairs[0].first == currentPair.first )
     {
         kDebug(36006) << "StyleStorage: removing default style"
-                        << " at " << currentPair.first
+                        << " at " << Region(currentPair.first.toRect()).name()
                         << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
         QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
@@ -354,7 +354,7 @@ void StyleStorage::garbageCollection()
              pair.first.contains( currentPair.first ) )
         {
             kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
-                          << " at " << currentPair.first
+                          << " at " << Region(currentPair.first.toRect()).name()
                           << ", used " << currentPair.second->ref << "times" << endl;
             d->tree.remove( currentPair.first, currentPair.second );
 #if 0

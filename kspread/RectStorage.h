@@ -346,7 +346,7 @@ void RectStorage<T>::garbageCollection()
     // check wether the default style is placed first
     if ( currentPair.second == T() && pairs[0].second == T() && pairs[0].first == currentPair.first )
     {
-        kDebug(36006) << "RectStorage: removing default data at " << currentPair.first << endl;
+        kDebug(36001) << "RectStorage: removing default data at " << Region(currentPair.first.toRect()).name() << endl;
         m_tree.remove( currentPair.first, currentPair.second );
         triggerGarbageCollection();
         return; // already done
@@ -371,7 +371,7 @@ void RectStorage<T>::garbageCollection()
         if ( ( pair.second == currentPair.second || pair.second == T() ) &&
              pair.first.contains( currentPair.first ) )
         {
-            kDebug(36006) << "RectStorage: removing data at " << currentPair.first << endl;
+            kDebug(36001) << "RectStorage: removing data at " << Region(currentPair.first.toRect()).name() << endl;
             m_tree.remove( currentPair.first, currentPair.second );
             break;
         }
@@ -394,7 +394,6 @@ void RectStorage<T>::regionChanged( const QRect& rect )
 template<typename T>
 void RectStorage<T>::invalidateCache( const QRect& invRect )
 {
-//     kDebug(36006) << "StyleStorage: Invalidating " << invRect << endl;
     const QVector<QRect> rects = m_cachedArea.intersected( invRect ).rects();
     m_cachedArea = m_cachedArea.subtracted( invRect );
     foreach ( const QRect& rect, rects )
@@ -402,10 +401,7 @@ void RectStorage<T>::invalidateCache( const QRect& invRect )
         for ( int col = rect.left(); col <= rect.right(); ++col )
         {
             for ( int row = rect.top(); row <= rect.bottom(); ++row )
-            {
-//                 kDebug(36006) << "StyleStorage: Removing cached style for " << Cell::name( col, row ) << endl;
                 m_cache.remove( QPoint( col, row ) ); // also deletes it
-            }
         }
     }
 }
