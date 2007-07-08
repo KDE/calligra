@@ -454,8 +454,8 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   connect( m_sheetView, SIGNAL( clicked( Q3ListViewItem * ) ), this, SLOT( sheetViewClicked( Q3ListViewItem * ) ) );
 
   QStringList str = QSqlDatabase::drivers();
-  m_driver->insertItem(0, "");
-  m_driver->insertItems( 1, str );
+  m_driver->insertItems( 0, QSqlDatabase::drivers() );
+  databaseDriverChanged(0);
 
 
   helpButton()->hide();
@@ -752,6 +752,7 @@ bool DatabaseDialog::databaseDoNext()
       if ( sheetList.isEmpty() )
       {
         KMessageBox::error( this, i18n("This database contains no tables") );
+        m_databaseStatus->setText( " " );
         return false;
       }
 
@@ -784,9 +785,9 @@ bool DatabaseDialog::databaseDoNext()
         errorMsg.append( error.databaseText() );
         errorMsg.append( '\n' );
       }
-      m_databaseStatus->setText( " " );
 
       KMessageBox::error( this, errorMsg );
+      m_databaseStatus->setText( " " );
       return false;
     }
   }
