@@ -39,6 +39,7 @@
 #include <KoTextAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoTextDocumentLayout.h>
+#include <KoShapeLoadingContext.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -294,43 +295,86 @@ KoShape* KWOpenDocumentLoader::loadImageShape(KoTextLoadingContext& context, con
     KWImageFrame *imageFrame = new KWImageFrame(data, fs);
     d->document->addFrameSet(fs);
     KoShape* shape = imageFrame->shape();
-    if( ! shape )
+    if( ! shape ) {
+        kWarning(32001)<<"KWOpenDocumentLoader::loadImage No image shape"<<endl;
         return 0;
+    }
+
+    KoShapeLoadingContext shapecontext(context);
+    shape->loadOdf(frameElem, shapecontext);
+    KoTextAnchor* anchor = loadShapeAnchor(context, frameElem, cursor, shape);
+    return shape;
+}
+
+KoTextAnchor* KWOpenDocumentLoader::loadShapeAnchor(KoTextLoadingContext& context, const KoXmlElement& anchorElem, QTextCursor& cursor, KoShape* shape)
+{
+    //shape->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
+
+    KWFrameSet *frameset = d->document->frameSetByName( d->currentFramesetName );
+    if( ! frameset ) {
+        kWarning(32001)<<"KWOpenDocumentLoader::loadImage No such frameset: "<<d->currentFramesetName<<endl;
+        return 0;
+    }
+
+    KoTextAnchor* anchor = new KoTextAnchor(shape);
+    //anchor->setOffset( QPointF(60.0,60.0) );
+    anchor->setOffset( shape->position() );
 
     // Within text documents, the anchor type attribute text:anchor-type specifies how
     // a frame is bound to the text document. The anchor position is the point at which
     // a frame is bound to a text document. 
-    const QString anchortype = frameElem.attribute("anchor-type");
+    const QString anchortype = anchorElem.attribute("anchor-type");
     if( anchortype == "paragraph" ) {
         // Anchor position is the paragraph that the current drawing shape element is contained in.
         // The shape appears at the start of the paragraph element.
 
-        KWFrameSet *fs = d->document->frameSetByName( d->currentFramesetName );
-        if( ! fs ) {
-            kWarning(32001)<<"KWOpenDocumentLoader::loadImage No such frameset: "<<d->currentFramesetName<<endl;
-        }
-        else {
-            KoShape* datatextShape = fs->frames().first()->shape();
-            Q_ASSERT(datatextShape);
-            KoShapeContainer* container = dynamic_cast<KoShapeContainer*> (datatextShape);
-            Q_ASSERT(container);
-            container->addChild(shape);
+        //KoShape* datatextShape = frameset->frames().first()->shape();
+        //Q_ASSERT(datatextShape);
+        //KoShapeContainer* container = dynamic_cast<KoShapeContainer*> (datatextShape);
+        //Q_ASSERT(container);
+        //container->addChild(shape);
 
-            KoTextAnchor* anchor = new KoTextAnchor(shape);
-            //anchor->setOffset( QPointF(200.0,200.0) );
-            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> (cursor.block().document()->documentLayout());
-            Q_ASSERT(layout);
-            Q_ASSERT(layout->inlineObjectTextManager());
-            layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
-
-            kDebug(32001)<<"KWOpenDocumentLoader::loadImage frameset.name="<<fs->name()<<endl;
-        }
+        //anchor->setAlignment( KoTextAnchor::TopOfParagraph );
     }
-    //TODO else ...
+    else if( anchortype == "char" ) {
+        // Anchor position is the character after the drawing shape element.
+        // The shape appears just before the character.
+        //TODO
+    }
+    else if( anchortype == "page" ) {
+        // Anchor position is the the page that has the same physical page number as the value of
+        // the text:anchor-page-number attribute that is attached to the drawing shape element.
+        // If no text:anchor-page-number attribute is given, the anchor position is the page at
+        // which the character behind the drawing object element appears.
+        // The shape appears either at the start of the document body, outside any paragraph or
+        // frame, or inside any paragraph element that is not contained in a header, footer,
+        // footnote, or text box.
+        /*TODO
+        int pagenum = QVariant( anchorElem.attribute("anchor-page-number") ).toInt();
+        if( pagenum < 1 ) // If no given, anchor position is the page at which the character behind the drawing object element appears.
+            pagenum = ;
+        */
+    }
+    else if( anchortype == "frame" ) {
+        // Anchor position is the parent text box that the current drawing shape element is
+        // contained in. The shape appears in the element representing the text box to which
+        // the drawing object is bound.
+        //TODO anchor->setAlignment( KoTextAnchor::TopOfFrame );
+    }
+    else if( anchortype == "as-char" ) {
+        // There is no anchor position. The drawing shape behaves like a character.
+        // The shape appears at the position where the character appears in the document.
+        //TODO
+    }
+    else
+        kWarning(32001)<<"KWOpenDocumentLoader::loadImage Unknown anchor-type: "<<anchortype<<endl;
 
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
+    Q_ASSERT(layout);
+    Q_ASSERT(layout->inlineObjectTextManager());
+    layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
 
-    //imageFrame->shape()->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
-    return shape;
+    return anchor;
 }
 
 void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const QDomDocument& settingsDoc)

@@ -29,17 +29,9 @@
 
 class KWDocument;
 class KWTextFrameSet;
-//class KWFrameSet;
-//class KWFrame;
-//class KWPageSettings;
-//class KWPageManager;
-//class KWTextFrameSet;
-
-//class KoParagraphStyle;
-//class KoCharacterStyle;
-//class KoStore;
 class KoOasisStyles;
 class KoTextLoadingContext;
+class KoTextAnchor;
 
 class QDomDocument;
 class QTextCursor;
@@ -74,6 +66,7 @@ protected:
     virtual void processBody();
 
     virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
+    virtual KoTextAnchor* loadShapeAnchor(KoTextLoadingContext& context, const KoXmlElement& anchorElem, QTextCursor& cursor, KoShape* shape);
 
 private:
     void loadHeaderFooter(KoTextLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
