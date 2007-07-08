@@ -1,7 +1,6 @@
 macro_optional_find_package(PNG)
 macro_optional_find_package(OpenEXR)
 macro_optional_find_package(TIFF)
-macro_optional_find_package(Exiv2)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(GraphicsMagick)
 macro_optional_find_package(PopplerQt4)
@@ -10,15 +9,12 @@ include_directories(${KRITA_INCLUDES})
 
 add_subdirectory( raw )
 
-if(EXIV2_FOUND)
-  add_subdirectory(libkisexiv2)
-endif(EXIV2_FOUND)
 
-if(JPEG_FOUND AND EXIV2_FOUND)
+if(JPEG_FOUND)
 	add_subdirectory(jpeg)
-else(JPEG_FOUND AND EXIV2_FOUND)
-  message(STATUS "Could not find the Jpeg and/or Exiv2 library. The Krita JPEG filter will not be built.")
-endif(JPEG_FOUND AND EXIV2_FOUND)
+else(JPEG_FOUND)
+  message(STATUS "Could not find the Jpeg library. The Krita JPEG filter will not be built.")
+endif(JPEG_FOUND)
 
 if(TIFF_FOUND )
 	add_subdirectory(tiff)
