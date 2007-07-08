@@ -25,40 +25,35 @@
 #include <QDialog>
 #include <QRect>
 //Added by qt3to4:
-#include <QGridLayout>
 #include <QFrame>
 #include <QLabel>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QtSql/QSqlDatabase>
 
-#include <k3wizard.h>
+#include <kassistantdialog.h>
 
 class QCheckBox;
 class QComboBox;
 class QFrame;
-class QGridLayout;
 class QLabel;
 class QLineEdit;
 class Q3ListViewItem;
-class QHBoxLayout;
 class QRadioButton;
 class QTextEdit;
-class QVBoxLayout;
-class QWidget;
 
 class K3ListView;
+class KPageWidgetItem;
 class KPushButton;
+
 namespace KSpread
 {
 class View;
 
-class DatabaseDialog : public K3Wizard
+class DatabaseDialog : public KAssistantDialog
 {
   Q_OBJECT
 
  public:
-  enum PageId { eDatabase = 0, eSheets = 1, eColumns = 2, eOptions = 3, eResult = 4 };
+  enum PageId { eDatabase = 0, eTables = 1, eColumns = 2, eOptions = 3, eResult = 4 };
 
   DatabaseDialog( View * parent, QRect const & rect, const char * name = 0, bool modal = false, Qt::WFlags fl = 0 );
   virtual ~DatabaseDialog();
@@ -72,19 +67,13 @@ class DatabaseDialog : public K3Wizard
   void databaseNameChanged( const QString & s );
   void databaseHostChanged( const QString & s );
   void databaseDriverChanged( int );
-  void popupSheetViewMenu( Q3ListViewItem *, const QPoint &, int );
-  void sheetViewClicked( Q3ListViewItem * );
+  void popupTableViewMenu( Q3ListViewItem *, const QPoint &, int );
+  void tableViewClicked( Q3ListViewItem * );
   void accept();
 
  protected:
   void next();
   void back();
-
-  QGridLayout  * m_databaseLayout;
-  QGridLayout  * m_sheetLayout;
-  QGridLayout  * m_columnsLayout;
-  QGridLayout  * m_optionsLayout;
-  QGridLayout  * m_resultLayout;
 
  private:
   int            m_currentPage;
@@ -92,7 +81,7 @@ class DatabaseDialog : public K3Wizard
   QRect          m_targetRect;
   QSqlDatabase   m_dbConnection;
 
-  QWidget      * m_database;
+  KPageWidgetItem * m_database;
   QLabel       * m_databaseStatus;
   QLineEdit    * m_username;
   QLineEdit    * m_port;
@@ -101,16 +90,16 @@ class DatabaseDialog : public K3Wizard
   QLineEdit    * m_password;
   QLineEdit    * m_host;
   QLabel       * m_Type;
-  QWidget      * m_sheet;
+  KPageWidgetItem * m_table;
   QComboBox    * m_databaseList;
   KPushButton  * m_connectButton;
-  QLabel       * m_sheetStatus;
-  QLabel       * m_SelectSheetLabel;
-  K3ListView    * m_sheetView;
-  QWidget      * m_columns;
+  QLabel       * m_tableStatus;
+  QLabel       * m_SelectTableLabel;
+  K3ListView    * m_tableView;
+  KPageWidgetItem * m_columns;
   K3ListView    * m_columnView;
   QLabel       * m_columnsStatus;
-  QWidget      * m_options;
+  KPageWidgetItem * m_options;
   QComboBox    * m_columns_1;
   QComboBox    * m_columns_2;
   QComboBox    * m_columns_3;
@@ -127,7 +116,7 @@ class DatabaseDialog : public K3Wizard
   QComboBox    * m_sortMode_1;
   QComboBox    * m_sortMode_2;
   QCheckBox    * m_distinct;
-  QWidget      * m_result;
+  KPageWidgetItem * m_result;
   QTextEdit    * m_sqlQuery;
   QRadioButton * m_startingRegion;
   QLineEdit    * m_cell;
@@ -136,7 +125,7 @@ class DatabaseDialog : public K3Wizard
 
   void switchPage( int id );
   bool databaseDoNext();
-  bool sheetsDoNext();
+  bool tablesDoNext();
   bool columnsDoNext();
   bool optionsDoNext();
 
