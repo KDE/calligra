@@ -389,8 +389,6 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
         if (m_caret.charFormat().isAnchor()) {
             QString anchor = m_caret.charFormat().anchorHref();
             bool isLocalLink = (anchor.indexOf("file:") == 0);
-            kDebug() << "HEY, You clicked an anchor !" << endl;
-            kDebug() << m_caret.charFormat().anchorHref() << endl;
             QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
 
             if ( KRun::isExecutableFile( anchor, type ) )
