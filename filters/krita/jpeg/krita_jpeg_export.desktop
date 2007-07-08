@@ -3,6 +3,7 @@ Encoding=UTF-8
 Icon=
 Name=Krita JPEG Export Filter
 Name[fa]=پالایۀ صادرات Krita JPEG
+Name[ga]=Scagaire Easpórtála JPEG Krita
 Name[sv]=Krita JPEG-exportfilter
 ServiceTypes=KOfficeFilter
 Type=Service
