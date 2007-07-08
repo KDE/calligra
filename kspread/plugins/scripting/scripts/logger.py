@@ -46,7 +46,7 @@ class Logger:
         if not self.listener:
             raise "Failed to create listener for sheetname '%s' and range '%s'" % (sheetname,cellrange)
         self.addLog( "Start logging sheet='%s' range='%s'" % (sheetname,cellrange) )
-        self.listener.connect("regionChanged(QStringList)", self.regionChanged)
+        self.listener.connect("regionChanged(QVariantList)", self.regionChanged)
         self.listener.connect("cellChanged(int,int)", self.cellChanged)
 
     def regionChanged(self, regions):

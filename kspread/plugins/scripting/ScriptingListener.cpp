@@ -55,10 +55,14 @@ ScriptingCellListener::~ScriptingCellListener()
 
 void ScriptingCellListener::slotChanged(const Region& region)
 {
-    emit regionChanged( region.name(d->sheet).split(";") );
     Region::ConstIterator end(region.constEnd());
+
+    QVariantList ranges;
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-    {
+        ranges << (*it)->rect();
+    emit regionChanged(ranges);
+
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         const QRect r( (*it)->rect() );
         for (int row = r.top(); row <= r.bottom(); ++row)
             for (int col = r.left(); col <= r.right(); ++col)

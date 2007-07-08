@@ -22,6 +22,7 @@
 #define SCRIPTINGLISTENER_H
 
 #include <QRect>
+#include <QVariant>
 #include <QObject>
 
 namespace KSpread {
@@ -44,7 +45,7 @@ namespace KSpread {
     *     print "regions=%s" % regions
     * def cellChanged(column, row):
     *     print "column=%i row=%i" % (column,row)
-    * listener.connect("regionChanged(QStringList)", regionChanged)
+    * listener.connect("regionChanged(QVariantList)", regionChanged)
     * listener.connect("cellChanged(int,int)", cellChanged)
     * \endcode
     */
@@ -56,7 +57,7 @@ namespace KSpread {
             virtual ~ScriptingCellListener();
 
         Q_SIGNALS:
-            void regionChanged(const QStringList& ranges);
+            void regionChanged(const QVariantList& ranges);
             void cellChanged(int column, int row);
 
         private Q_SLOTS:
