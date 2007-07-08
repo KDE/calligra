@@ -61,7 +61,7 @@ void MusicTool::activate (bool temporary)
     }
     if ( !m_musicshape )
     {
-        emit sigDone();
+        emit done();
         return;
     }
     emit shapeChanged(m_musicshape);

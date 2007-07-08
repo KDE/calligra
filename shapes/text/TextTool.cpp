@@ -434,7 +434,7 @@ void TextTool::updateSelectionHandler() {
     m_selectionHandler.setShape(m_textShape);
     m_selectionHandler.setShapeData(m_textShapeData);
     m_selectionHandler.setCaret(&m_caret);
-    emit sigSelectionChanged(m_caret.hasSelection());
+    emit selectionChanged(m_caret.hasSelection());
 
     if(m_caret.hasSelection()) {
         QClipboard *clipboard = QApplication::clipboard();
@@ -854,7 +854,7 @@ void TextTool::activate (bool temporary) {
             break;
     }
     if(m_textShape == 0) { // none found
-        emit sigDone();
+        emit done();
         return;
     }
     foreach(KoShape *shape, selection->selectedShapes()) {

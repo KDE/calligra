@@ -58,7 +58,7 @@ void VideoTool::activate (bool temporary)
     }
     if ( !m_videoshape )
     {
-        emit sigDone();
+        emit done();
         return;
     }
     useCursor( Qt::ArrowCursor, true );

@@ -84,7 +84,7 @@ void DivineProportionTool::activate (bool) {
             break;
     }
     if(m_currentShape == 0) { // none found
-        emit sigDone();
+        emit done();
         return;
     }
     //useCursor() // lets keep the forbidden cursor for now; as this tool doesn't really allow mouse interaction anyway

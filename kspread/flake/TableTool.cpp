@@ -194,7 +194,7 @@ void TableTool::activate( bool temporary )
     }
     if ( !d->tableShape )
     {
-        emit sigDone();
+        emit done();
         return;
     }
     d->selection->setActiveSheet(d->tableShape->sheet());

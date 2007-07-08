@@ -57,7 +57,7 @@ void KoFormulaTool::activate( bool temporary )
     }
     if( m_formulaShape == 0 )  // none found
     {
-        emit sigDone();
+        emit done();
         return;
     }
 

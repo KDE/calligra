@@ -177,7 +177,7 @@ void KarbonPatternTool::activate( bool temporary )
     Q_UNUSED(temporary);
     if( ! m_canvas->shapeManager()->selection()->count() )
     {
-        emit sigDone();
+        emit done();
         return;
     }
 

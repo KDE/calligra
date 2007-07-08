@@ -40,7 +40,7 @@ KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* docum
     widget.setupUi(this);
     m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
 
-    connect(m_resourceProvider, SIGNAL(sigResourceChanged(int, const QVariant &)), this, SLOT(updateResource(int)));
+    connect(m_resourceProvider, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(updateResource(int)));
     connect(m_action, SIGNAL(triggered(const QVariant&)), this, SLOT(updateData()), Qt::DirectConnection);
     connect(m_action, SIGNAL(updateUi(const QVariant&)), this, SLOT(updateDataUi()), Qt::DirectConnection);
     connect(widget.footEndNotes, SIGNAL(toggled(bool)), m_action, SLOT(execute()));

@@ -43,7 +43,7 @@ void PictureTool::activate (bool temporary)
     }
     if ( !m_pictureshape )
     {
-        emit sigDone();
+        emit done();
         return;
     }
     useCursor( Qt::ArrowCursor, true );
