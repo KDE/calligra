@@ -693,7 +693,6 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             tabFormat.append(tab.value<KoText::Tab>());
 
     QTextBlockFormat bf = block.blockFormat();
-    QTextCharFormat cf = block.charFormat();
 
     if(bf.hasProperty(QTextFormat::BackgroundBrush))
         painter->fillRect(layout->boundingRect(), bf.background());
@@ -741,7 +740,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                         double y = line.position().y() + line.height()/2;
                         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
                         if (!color.isValid())
-                            color = cf.foreground().color();
+                            color = fmt.foreground().color();
 
                         drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
                     }
@@ -755,8 +754,8 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                         double y = line.position().y() + painter->fontMetrics().lineSpacing() - painter->fontMetrics().underlinePos();
                         QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
                         if (!color.isValid())
-                            color = cf.foreground().color();
-
+                            color = fmt.foreground().color();
+                        
                         drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
                     }
                 }
