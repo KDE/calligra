@@ -49,6 +49,9 @@ using namespace KSpread;
 //
 /////////////////////////////////////////////////////////////////////////////
 
+namespace KSpread
+{
+
 static uint calculateValue( QPen const & pen )
 {
   uint n = pen.color().red() + pen.color().green() + pen.color().blue();
@@ -56,18 +59,6 @@ static uint calculateValue( QPen const & pen )
   n += 10000 * (uint) pen.style();
   return n;
 }
-
-template<Style::Key key, class Value1>
-class SubStyleOne : public SubStyle
-{
-public:
-    SubStyleOne( const Value1& v = Value1() ) : SubStyle(), value1( v ) {}
-    virtual Style::Key type() const { return key; }
-    virtual void dump() const { kDebug(36006) << debugData() << endl; }
-    virtual QString debugData( bool withName = true ) const
-    { QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out; }
-    Value1 value1;
-};
 
 // specialized debug method
 template<>
@@ -132,6 +123,8 @@ QString SubStyle::name( Style::Key key )
     }
     return name;
 }
+
+} // namespace KSpread
 
 /////////////////////////////////////////////////////////////////////////////
 //

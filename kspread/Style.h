@@ -461,6 +461,18 @@ public:
     QString name;
 };
 
+template<Style::Key key, class Value1>
+class SubStyleOne : public SubStyle
+{
+public:
+    SubStyleOne( const Value1& v = Value1() ) : SubStyle(), value1( v ) {}
+    virtual Style::Key type() const { return key; }
+    virtual void dump() const { kDebug(36006) << debugData() << endl; }
+    virtual QString debugData( bool withName = true ) const
+    { QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out; }
+    Value1 value1;
+};
+
 } // namespace KSpread
 
 Q_DECLARE_TYPEINFO( KSpread::Style, Q_MOVABLE_TYPE );

@@ -82,6 +82,11 @@ bool StyleManipulator::process(Element* element)
             m_style->setRightBorderPen( m_verticalPen );
         }
 
+        // special handling for indentation: reset the indentation first
+        Style indentationStyle;
+        indentationStyle.setIndentation( 0 );
+        m_sheet->cellStorage()->setStyle( Region(range), indentationStyle );
+
         // set the actual style
         m_sheet->cellStorage()->setStyle( Region(range), *m_style );
 
@@ -137,6 +142,11 @@ bool StyleManipulator::mainProcessing()
     }
     else
     {
+        // special handling for indentation: reset the indentation first
+        Style indentationStyle;
+        indentationStyle.setIndentation( 0 );
+        m_sheet->cellStorage()->setStyle( *this, indentationStyle );
+
         Style style;
         style.setDefault();
         m_sheet->cellStorage()->setStyle( *this, style );
@@ -166,42 +176,18 @@ IncreaseIndentManipulator::IncreaseIndentManipulator()
 
 bool IncreaseIndentManipulator::process( Element* element )
 {
-    QList< QPair<QRectF,SharedSubStyle> > indentationPairs = m_sheet->styleStorage()->undoData( Region(element->rect()) );
-    for ( int i = 0; i < indentationPairs.count(); ++i )
-    {
-        if ( indentationPairs[i].second->type() != Style::Indentation )
-            indentationPairs.removeAt( i-- );
-    }
-
     Style style;
     if ( !m_reverse )
     {
-        // increase the indentation set for the whole rectangle
-        style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() + m_sheet->doc()->indentValue()  );
-        m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
-        // increase the several indentations
-        for ( int i = 0; i < indentationPairs.count(); ++i )
-        {
-            style.clear();
-            style.insertSubStyle( indentationPairs[i].second );
-            style.setIndentation( style.indentation() + m_sheet->doc()->indentValue() );
-            m_sheet->cellStorage()->setStyle( Region(indentationPairs[i].first.toRect()), style );
-        }
+        // increase the indentation
+        style.setIndentation( m_sheet->doc()->indentValue() );
     }
     else // m_reverse
     {
-        // decrease the indentation set for the whole rectangle
-        style.setIndentation( m_sheet->styleStorage()->contains( element->rect() ).indentation() - m_sheet->doc()->indentValue()  );
-        m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
-        // decrease the several indentations
-        for ( int i = 0; i < indentationPairs.count(); ++i )
-        {
-            style.clear();
-            style.insertSubStyle( indentationPairs[i].second );
-            style.setIndentation( style.indentation() - m_sheet->doc()->indentValue() );
-            m_sheet->cellStorage()->setStyle( Region(indentationPairs[i].first.toRect()), style );
-        }
+        // decrease the indentation
+        style.setIndentation( -m_sheet->doc()->indentValue() );
     }
+    m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
     return true;
 }
 
