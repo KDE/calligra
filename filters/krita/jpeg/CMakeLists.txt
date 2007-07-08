@@ -18,7 +18,7 @@ kde4_add_plugin(kritajpegimport WITH_PREFIX ${kritajpegimport_PART_SRCS})
 
 
 
-target_link_libraries(kritajpegimport kritaui jpeg kisexiv2) # link against kisexiv2 to ensure the availability of reading/writing EXIF and IPTC tags
+target_link_libraries(kritajpegimport kritaui jpeg )
 
 install(TARGETS kritajpegimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -35,9 +35,7 @@ kde4_add_ui3_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 
 kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 
-
-
-target_link_libraries(kritajpegexport kritaui jpeg kisexiv2) # link against kisexiv2 to ensure the availability of reading/writing EXIF and IPTC tags
+target_link_libraries(kritajpegexport kritaui jpeg )
 
 install(TARGETS kritajpegexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
