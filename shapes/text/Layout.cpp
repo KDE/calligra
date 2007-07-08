@@ -693,6 +693,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             tabFormat.append(tab.value<KoText::Tab>());
 
     QTextBlockFormat bf = block.blockFormat();
+    QTextCharFormat cf = block.charFormat();
 
     if(bf.hasProperty(QTextFormat::BackgroundBrush))
         painter->fillRect(layout->boundingRect(), bf.background());
@@ -718,7 +719,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         painter->save();
         line.draw(painter, layout->position());
         painter->restore();
-
+        
         QTextBlock::iterator it;
         int beginningPosition = -1;
         // loop over text fragments in this paragraph and draw the underline and line through.
@@ -739,6 +740,8 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                             (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
                         double y = line.position().y() + line.height()/2;
                         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
+                        if (!color.isValid())
+                            color = cf.foreground().color();
 
                         drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
                     }
@@ -751,13 +754,15 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                             (fontUnderLineType != KoCharacterStyle::NoLineType)) {
                         double y = line.position().y() + painter->fontMetrics().lineSpacing() - painter->fontMetrics().underlinePos();
                         QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
+                        if (!color.isValid())
+                            color = cf.foreground().color();
 
                         drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
                     }
                 }
             }
         }
-
+        
         for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps for the current line
             const double tabStop = tabs.tabs[x];
             const double pos = tabStop - tabs.tabLength[x];
