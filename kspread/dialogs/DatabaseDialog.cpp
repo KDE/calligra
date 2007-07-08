@@ -449,8 +449,6 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
 
   QStringList str = QSqlDatabase::drivers();
   m_driver->insertItems( 0, QSqlDatabase::drivers() );
-  databaseDriverChanged(0);
-
 
   helpButton()->hide();
   setNextEnabled(m_database, false);
@@ -458,6 +456,8 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   setNextEnabled(m_columns, false);
   setNextEnabled(m_options, false);
   setNextEnabled(m_result, false);
+
+  databaseDriverChanged(0);
 }
 
 DatabaseDialog::~DatabaseDialog()
@@ -1171,7 +1171,7 @@ void DatabaseDialog::databaseHostChanged(const QString & s)
 
 void DatabaseDialog::databaseDriverChanged(int index)
 {
-  if ( index > 0 && !m_host->text().isEmpty()
+  if ( !m_host->text().isEmpty()
        && !m_databaseName->text().isEmpty() )
     setNextEnabled(m_database, true);
   else
