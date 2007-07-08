@@ -36,11 +36,7 @@ RenameSheetCommand::RenameSheetCommand( Sheet* s, const QString &name )
   sheet = s;
   if( s ) oldName = s->sheetName();
   newName = name;
-}
-
-QString RenameSheetCommand::name() const
-{
-  return i18n("Rename Sheet");
+  setText(i18n("Rename Sheet"));
 }
 
 void RenameSheetCommand::redo()
@@ -61,6 +57,9 @@ HideSheetCommand::HideSheetCommand( Sheet* sheet )
 {
   doc = sheet->doc();
   sheetName = sheet->sheetName();
+  QString n =  i18n("Hide Sheet %1", sheetName );
+  if( n.length() > 64 ) n = i18n("Hide Sheet");
+  setText(n);
 }
 
 void HideSheetCommand::redo()
@@ -79,19 +78,15 @@ void HideSheetCommand::undo()
   sheet->hideSheet( false );
 }
 
-QString HideSheetCommand::name() const
-{
-    QString n =  i18n("Hide Sheet %1", sheetName );
-    if( n.length() > 64 ) n = i18n("Hide Sheet");
-    return n;
-}
-
 // ----- ShowSheetCommand -----
 
 ShowSheetCommand::ShowSheetCommand( Sheet* sheet )
 {
   doc = sheet->doc();
   sheetName = sheet->sheetName();
+  QString n =  i18n("Show Sheet %1", sheetName );
+  if( n.length() > 64 ) n = i18n("Show Sheet");
+  setText(n);
 }
 
 void ShowSheetCommand::redo()
@@ -110,13 +105,6 @@ void ShowSheetCommand::undo()
   sheet->hideSheet( true );
 }
 
-QString ShowSheetCommand::name() const
-{
-    QString n =  i18n("Show Sheet %1", sheetName );
-    if( n.length() > 64 ) n = i18n("Show Sheet");
-    return n;
-}
-
 
 // ----- AddSheetCommand -----
 
@@ -125,6 +113,7 @@ AddSheetCommand::AddSheetCommand( Sheet* s )
     sheet = s;
     doc = sheet->doc();
     doc->map()->addSheet( s );
+    setText(i18n("Add Sheet"));
 }
 
 void AddSheetCommand::redo()
@@ -139,11 +128,6 @@ void AddSheetCommand::undo()
     doc->takeSheet( sheet );
 }
 
-QString AddSheetCommand::name() const
-{
-    return i18n("Add Sheet");
-}
-
 
 // ----- RemoveSheetCommand -----
 
@@ -151,6 +135,7 @@ RemoveSheetCommand::RemoveSheetCommand( Sheet* s )
 {
     sheet = s;
     doc = sheet->doc();
+    setText(i18n("Remove Sheet"));
 }
 
 void RemoveSheetCommand::redo()
@@ -163,11 +148,6 @@ void RemoveSheetCommand::undo()
 {
     sheet->map()->insertSheet( sheet );
     doc->insertSheet( sheet );
-}
-
-QString RemoveSheetCommand::name() const
-{
-    return i18n("Remove Sheet");
 }
 
 // ----- SheetPropertiesCommand -----
@@ -187,11 +167,7 @@ SheetPropertiesCommand::SheetPropertiesCommand( Doc* d, Sheet* s )
     oldColumnAsNumber = newColumnAsNumber = sheet->getShowColumnNumber();
     oldLcMode = newLcMode = sheet->getLcMode();
     oldCapitalizeFirstLetter = newCapitalizeFirstLetter = sheet->getFirstLetterUpper();
-}
-
-QString SheetPropertiesCommand::name() const
-{
-    return i18n("Change Sheet Properties");
+    setText(i18n("Change Sheet Properties"));
 }
 
 void SheetPropertiesCommand::setLayoutDirection( Qt::LayoutDirection dir )

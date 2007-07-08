@@ -40,7 +40,6 @@ public:
 
   virtual void redo();
   virtual void undo();
-  virtual QString name() const;
 
 protected:
   Cell cell;

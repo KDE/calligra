@@ -200,7 +200,6 @@ public:
 protected:
     bool process(Element*);
     bool postProcessing();
-    QString name() const;
 
 private:
     Direction m_direction;

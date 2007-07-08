@@ -46,7 +46,7 @@ protected:
 
   virtual bool postProcessing();
 
-  virtual QString name() const;
+  QString name() const;
 
   bool m_merge;
 private:

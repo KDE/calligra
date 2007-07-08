@@ -41,6 +41,7 @@ using namespace KSpread;
 
 ResizeColumnManipulator::ResizeColumnManipulator()
 {
+    setText(i18n("Resize Column"));
 }
 
 ResizeColumnManipulator::~ResizeColumnManipulator()
@@ -58,11 +59,6 @@ bool ResizeColumnManipulator::process(Element* element)
   return true;
 }
 
-QString ResizeColumnManipulator::name() const
-{
-    return i18n("Resize Column");
-}
-
 
 
 /***************************************************************************
@@ -71,6 +67,7 @@ QString ResizeColumnManipulator::name() const
 
 ResizeRowManipulator::ResizeRowManipulator()
 {
+    setText(i18n("Resize Row"));
 }
 
 ResizeRowManipulator::~ResizeRowManipulator()
@@ -86,11 +83,6 @@ bool ResizeRowManipulator::process(Element* element)
     rl->setHeight( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
-}
-
-QString ResizeRowManipulator::name() const
-{
-    return i18n("Resize Row");
 }
 
 
@@ -132,6 +124,8 @@ bool HideShowManipulator::process(Element* element)
 
 bool HideShowManipulator::preProcessing()
 {
+    if (m_firstrun)
+        setText(name());
   Region region;
   ConstIterator endOfList = cells().constEnd();
   for (ConstIterator it = cells().constBegin(); it != endOfList; ++it)
@@ -370,6 +364,8 @@ bool AdjustColumnRowManipulator::process(Element* element)
 
 bool AdjustColumnRowManipulator::preProcessing()
 {
+  if (m_firstrun)
+      setText(name());
   if (m_reverse)
   {
   }
@@ -639,12 +635,17 @@ InsertDeleteColumnManipulator::InsertDeleteColumnManipulator()
     : AbstractRegionCommand()
     , m_mode( Insert )
 {
+    setText( i18n( "Insert Columns" ) );
 }
 
 void InsertDeleteColumnManipulator::setReverse( bool reverse )
 {
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
+    if ( !m_reverse )
+        setText( i18n( "Insert Columns" ) );
+    else
+        setText( i18n( "Remove Columns" ) );
 }
 
 bool InsertDeleteColumnManipulator::process( Element* element )
@@ -687,14 +688,6 @@ bool InsertDeleteColumnManipulator::postProcessing()
     return true;
 }
 
-QString InsertDeleteColumnManipulator::name() const
-{
-    if ( !m_reverse )
-        return i18n( "Insert Columns" );
-    else
-        return i18n( "Remove Columns" );
-}
-
 /***************************************************************************
   class InsertDeleteRowManipulator
 ****************************************************************************/
@@ -703,12 +696,17 @@ InsertDeleteRowManipulator::InsertDeleteRowManipulator()
     : AbstractRegionCommand()
     , m_mode( Insert )
 {
+    setText( i18n( "Insert Rows" ) );
 }
 
 void InsertDeleteRowManipulator::setReverse( bool reverse )
 {
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
+    if ( !m_reverse )
+        setText( i18n( "Insert Rows" ) );
+    else
+        setText( i18n( "Remove Rows" ) );
 }
 
 bool InsertDeleteRowManipulator::process( Element* element )
@@ -749,12 +747,4 @@ bool InsertDeleteRowManipulator::postProcessing()
 {
     m_sheet->recalc();
     return true;
-}
-
-QString InsertDeleteRowManipulator::name() const
-{
-    if ( !m_reverse )
-        return i18n( "Insert Rows" );
-    else
-        return i18n( "Remove Rows" );
 }

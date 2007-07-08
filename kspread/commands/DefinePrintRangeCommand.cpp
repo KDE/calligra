@@ -37,6 +37,7 @@ DefinePrintRangeCommand::DefinePrintRangeCommand( Sheet *s )
   doc = s->doc();
   sheetName = s->sheetName();
   printRange = s->print()->printRange();
+  setText(i18n("Set Page Layout"));
 }
 
 void DefinePrintRangeCommand::redo()
@@ -53,9 +54,4 @@ void DefinePrintRangeCommand::undo()
     if( !sheet ) return;
     printRangeRedo = sheet->print()->printRange();
     sheet->print()->setPrintRange( printRange );
-}
-
-QString DefinePrintRangeCommand::name() const
-{
-    return i18n("Set Page Layout");
 }

@@ -415,12 +415,17 @@ ShiftManipulator::ShiftManipulator()
     , m_mode( Insert )
 {
     m_checkLock = true;
+    setText(i18n( "Insert Cells" ));
 }
 
 void ShiftManipulator::setReverse( bool reverse )
 {
     m_reverse = reverse;
     m_mode = reverse ? Delete : Insert;
+    if ( !m_reverse )
+        setText(i18n( "Insert Cells" ));
+    else
+        setText(i18n( "Remove Cells" ));
 }
 
 bool ShiftManipulator::process(Element* element)
@@ -478,12 +483,4 @@ bool ShiftManipulator::postProcessing()
 {
     m_sheet->recalc();
     return true;
-}
-
-QString ShiftManipulator::name() const
-{
-    if ( !m_reverse )
-        return i18n( "Insert Cells" );
-    else
-        return i18n( "Remove Cells" );
 }

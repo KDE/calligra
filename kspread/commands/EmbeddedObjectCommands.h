@@ -45,7 +45,6 @@ class ChangeObjectGeometryCommand : public QUndoCommand
 
     virtual void redo();
     virtual void undo();
-    virtual QString name() const;
 
   protected:
     QPointF m_diff;
@@ -62,7 +61,6 @@ class RemoveObjectCommand : public QUndoCommand
 
     virtual void redo();
     virtual void undo();
-    virtual QString name() const;
 
   protected:
     EmbeddedObject *obj;
@@ -81,7 +79,6 @@ class InsertObjectCommand : public QUndoCommand
 
     virtual void redo();
     virtual void undo();
-    virtual QString name() const;
 
   protected:
     QRectF geometry;

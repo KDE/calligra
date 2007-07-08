@@ -48,6 +48,7 @@ PaperLayoutCommand::PaperLayoutCommand( Sheet *s )
   zoom = s->print()->zoom();
   pageLimitX = s->print()->pageLimitX();
   pageLimitY = s->print()->pageLimitY();
+  setText(i18n("Set Page Layout"));
 }
 
 void PaperLayoutCommand::redo()
@@ -123,9 +124,4 @@ void PaperLayoutCommand::undo()
     pageLimitYRedo = print->pageLimitY();
     print->setPageLimitY( pageLimitY );
 
-}
-
-QString PaperLayoutCommand::name() const
-{
-    return i18n("Set Page Layout");
 }

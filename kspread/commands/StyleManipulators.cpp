@@ -114,6 +114,18 @@ bool StyleManipulator::process(Element* element)
     return true;
 }
 
+bool StyleManipulator::preProcessing()
+{
+    if (m_firstrun)
+    {
+        if ( m_style->isDefault() )
+            setText( i18n( "Reset Style" ) );
+        else
+            setText( i18n( "Change Style" ) );
+    }
+    return AbstractRegionCommand::preProcessing();
+}
+
 bool StyleManipulator::mainProcessing()
 {
     if ( !m_reverse )
@@ -141,14 +153,6 @@ bool StyleManipulator::postProcessing()
     return true;
 }
 
-QString StyleManipulator::name() const
-{
-    if ( m_style->isDefault() )
-        return i18n( "Reset Style" );
-    else
-        return i18n( "Change Style" );
-}
-
 
 /***************************************************************************
   class IncreaseIndentManipulator
@@ -157,6 +161,7 @@ QString StyleManipulator::name() const
 IncreaseIndentManipulator::IncreaseIndentManipulator()
   : AbstractRegionCommand()
 {
+    setText( i18n( "Increase Indentation" ) );
 }
 
 bool IncreaseIndentManipulator::process( Element* element )
@@ -205,16 +210,13 @@ bool IncreaseIndentManipulator::postProcessing()
     return true;
 }
 
-QString IncreaseIndentManipulator::name() const
+void IncreaseIndentManipulator::setReverse(bool reverse)
 {
+  AbstractRegionCommand::setReverse(reverse);
   if ( !m_reverse )
-  {
-    return i18n( "Increase Indentation" );
-  }
+    setText( i18n( "Increase Indentation" ) );
   else
-  {
-    return i18n( "Decrease Indentation" );
-  }
+    setText( i18n( "Decrease Indentation" ) );
 }
 
 
@@ -226,6 +228,7 @@ QString IncreaseIndentManipulator::name() const
 BorderColorManipulator::BorderColorManipulator()
   : AbstractRegionCommand()
 {
+    setText(i18n( "Change Border Color" ));
 }
 
 bool BorderColorManipulator::preProcessing()
@@ -321,11 +324,6 @@ bool BorderColorManipulator::postProcessing()
     return true;
 }
 
-QString BorderColorManipulator::name() const
-{
-    return i18n( "Change Border Color" );
-}
-
 
 /***************************************************************************
   class IncreasePrecisionManipulator
@@ -334,6 +332,7 @@ QString BorderColorManipulator::name() const
 IncreasePrecisionManipulator::IncreasePrecisionManipulator()
   : AbstractRegionCommand()
 {
+    setText( i18n( "Increase Precision" ) );
 }
 
 bool IncreasePrecisionManipulator::process( Element* element )
@@ -392,10 +391,11 @@ bool IncreasePrecisionManipulator::postProcessing()
     return true;
 }
 
-QString IncreasePrecisionManipulator::name() const
+void IncreasePrecisionManipulator::setReverse(bool reverse)
 {
+    AbstractRegionCommand::setReverse(reverse);
     if ( !m_reverse )
-        return i18n( "Increase Precision" );
+        setText( i18n( "Increase Precision" ) );
     else
-        return i18n( "Decrease Precision" );
+        setText( i18n( "Decrease Precision" ) );
 }

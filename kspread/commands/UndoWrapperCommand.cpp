@@ -30,6 +30,7 @@ using namespace KSpread;
 UndoWrapperCommand::UndoWrapperCommand( UndoAction* ua )
 {
   undoAction = ua;
+  setText(ua->getName());
 }
 
 void UndoWrapperCommand::redo()
@@ -42,9 +43,4 @@ void UndoWrapperCommand::redo()
 void UndoWrapperCommand::undo()
 {
   undoAction->undo();
-}
-
-QString UndoWrapperCommand::name() const
-{
-  return undoAction->getName();
 }

@@ -88,10 +88,9 @@ public:
     void setDefault() { m_style->setDefault(); }
 
 protected:
-    virtual QString name() const;
-
     virtual bool process(Element*);
 
+    virtual bool preProcessing();
     virtual bool mainProcessing();
     virtual bool postProcessing();
 
@@ -115,7 +114,6 @@ protected:
     virtual bool preProcessing();
     virtual bool mainProcessing();
     virtual bool postProcessing();
-    virtual QString name() const;
 
 private:
     QColor m_color;
@@ -129,10 +127,11 @@ class IncreaseIndentManipulator : public AbstractRegionCommand
 public:
     IncreaseIndentManipulator();
 
+    virtual void setReverse(bool reverse);
+
 protected:
     virtual bool process(Element*);
     virtual bool postProcessing();
-    virtual QString name() const;
 };
 
 
@@ -142,10 +141,11 @@ class IncreasePrecisionManipulator : public AbstractRegionCommand
 public:
     IncreasePrecisionManipulator();
 
+    virtual void setReverse(bool reverse);
+
 protected:
     virtual bool process(Element*);
     virtual bool postProcessing();
-    virtual QString name() const;
 };
 
 }  // namespace KSpread

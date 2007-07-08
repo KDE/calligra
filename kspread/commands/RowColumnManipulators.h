@@ -46,8 +46,6 @@ class CellStorageUndoData;
     protected:
       virtual bool process(Element*);
 
-      virtual QString name() const;
-
     private:
       double m_newSize;
       double m_oldSize;
@@ -70,8 +68,6 @@ class ResizeRowManipulator : public AbstractRegionCommand
 
   protected:
     virtual bool process(Element*);
-
-    virtual QString name() const;
 
   private:
     double m_newSize;
@@ -96,7 +92,7 @@ class AdjustColumnRowManipulator : public AbstractRegionCommand
     void setAdjustRow(bool state) { m_adjustRow = state; }
 
   protected:
-    virtual QString name() const;
+    QString name() const;
 
     QSizeF textSize( const QString& text, const Style& style ) const;
     double adjustColumnHelper( const Cell& cell );
@@ -131,7 +127,7 @@ class HideShowManipulator : public AbstractRegionCommand
     void setManipulateRows(bool state) { m_manipulateRows = state; }
 
   protected:
-    virtual QString name() const;
+    QString name() const;
 
   private:
     bool m_manipulateColumns : 1;
@@ -154,7 +150,6 @@ public:
 protected:
     virtual bool process(Element*);
     virtual bool postProcessing();
-    virtual QString name() const;
 
 private:
     CellStorageUndoData* m_undoData;
@@ -179,7 +174,6 @@ public:
 protected:
     virtual bool process(Element*);
     virtual bool postProcessing();
-    virtual QString name() const;
 
 private:
     CellStorageUndoData* m_undoData;

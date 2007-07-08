@@ -38,6 +38,7 @@ LinkCommand::LinkCommand( const Cell& c, const QString& text, const QString& lin
 
   Sheet* s = cell.sheet();
   if( s ) doc = s->doc();
+  setText(newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link"));
 }
 
 void LinkCommand::redo()
@@ -59,9 +60,4 @@ void LinkCommand::undo()
   cell.setLink( oldLink );
 
   doc->addDamage( new CellDamage( cell, CellDamage::Appearance ) );
-}
-
-QString LinkCommand::name() const
-{
-  return newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link");
 }
