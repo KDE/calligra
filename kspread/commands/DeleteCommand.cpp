@@ -101,7 +101,9 @@ bool DeleteCommand::process( Element* element )
         // row-wise processing
         for ( int row = range.top(); row <= range.bottom(); ++row )
         {
-            Cell cell = m_sheet->cellStorage()->nextInRow( range.left() - 1, row );
+            Cell cell = m_sheet->cellStorage()->firstInRow(row);
+            if (!cell.isNull() && cell.column() < range.left())
+                cell = m_sheet->cellStorage()->nextInRow( range.left() - 1, row );
             while ( !cell.isNull() )
             {
                 if ( cell.column() > range.right() )
