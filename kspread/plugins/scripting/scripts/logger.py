@@ -35,10 +35,11 @@ class Logger:
             except IOError, (errno, strerror):
                 raise "Failed to write Log File \"%s\":\n%s" % (filename,strerror)
 
-    def addLog(self, message):
+    def addLog(self, message, flush = True):
         date = time.strftime("%Y-%M-%d %H:%M.%S")
         self.file.write( "%s %s\n" % (date,message) )
-        self.file.flush()
+        if flush:
+            self.file.flush()
 
     def startLogging(self, sheetname, cellrange = ""):
         self.sheet = KSpread.sheetByName(sheetname)
@@ -50,12 +51,18 @@ class Logger:
         self.listener.connect("cellChanged(int,int)", self.cellChanged)
 
     def regionChanged(self, regions):
+        self.lastCount = len(regions)
         print "Logger: Region changed %s" % regions
         self.addLog( "regions=%s" % regions )
+
     def cellChanged(self, column, row):
         text = self.sheet.text(column, row)
+        if self.lastCount > 1:
+            flush = False
+            self.lastCount -= 1
+        else:
+            flush = True
         print "Logger: Cell changed column=%i row=%i text=%s" % (column,row,text)
-        self.addLog( "column=%i row=%i text=%s" % (column,row,text) )
-        self.lastRegionIdx += 1
+        self.addLog( "column=%i row=%i text=%s" % (column,row,text), flush )
 
 Logger( self )
