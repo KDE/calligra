@@ -46,11 +46,16 @@ class Logger:
         if not self.listener:
             raise "Failed to create listener for sheetname '%s' and range '%s'" % (sheetname,cellrange)
         self.addLog( "Start logging sheet='%s' range='%s'" % (sheetname,cellrange) )
-        self.listener.connect("changed(int,int)", self.changed)
+        self.listener.connect("regionChanged(QStringList)", self.regionChanged)
+        self.listener.connect("cellChanged(int,int)", self.cellChanged)
 
-    def changed(self, column, row):
+    def regionChanged(self, regions):
+        print "Logger: Region changed %s" % regions
+        self.addLog( "regions=%s" % regions )
+    def cellChanged(self, column, row):
         text = self.sheet.text(column, row)
         print "Logger: Cell changed column=%i row=%i text=%s" % (column,row,text)
-        self.addLog( "%i:%i %s" % (column,row,text) )
+        self.addLog( "column=%i row=%i text=%s" % (column,row,text) )
+        self.lastRegionIdx += 1
 
 Logger( self )

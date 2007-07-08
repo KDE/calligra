@@ -40,9 +40,12 @@ namespace KSpread {
     * listener = KSpread.createListener("Sheet1", "A1:F50")
     * if not listener:
     *     raise "Failed to create listener."
-    * def changed(column, row):
+    * def regionChanged(regions):
+    *     print "regions=%s" % regions
+    * def cellChanged(column, row):
     *     print "column=%i row=%i" % (column,row)
-    * listener.connect("changed(int,int)", changed)
+    * listener.connect("regionChanged(QStringList)", regionChanged)
+    * listener.connect("cellChanged(int,int)", cellChanged)
     * \endcode
     */
     class ScriptingCellListener : public QObject
@@ -53,7 +56,8 @@ namespace KSpread {
             virtual ~ScriptingCellListener();
 
         Q_SIGNALS:
-            void changed(int column, int row);
+            void regionChanged(const QStringList& ranges);
+            void cellChanged(int column, int row);
 
         private Q_SLOTS:
             void slotChanged(const Region&);
