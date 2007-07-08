@@ -87,16 +87,6 @@ public:
      */
     void setRegisterUndo( bool registerUndo ) { m_register = registerUndo; }
 
-    /**
-     * Sets the name to \p name . The name is used for the undo/redo functionality.
-     */
-    virtual void setName( const QString& name ) { m_name = name; }
-
-    /**
-     * \return the manipulator's name
-     */
-    virtual QString name() const { return m_name; }
-
 protected:
     /**
      * Processes \p element , a Region::Point or a Region::Range .
@@ -131,7 +121,6 @@ protected:
 
 protected:
     Sheet*  m_sheet;
-    QString m_name;
     bool    m_reverse   : 1;
     bool    m_firstrun  : 1;
     bool    m_register  : 1;

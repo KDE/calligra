@@ -166,7 +166,12 @@ void CSVDialog::accept()
       val.setElement (col, row, Value(getText (row, col)));
 
   DataManipulator *manipulator = new DataManipulator;
-  manipulator->setName (i18n ("Text to Columns"));
+  if ( m_mode == Clipboard )
+    manipulator->setText( i18n( "Inserting From Clipboard" ) );
+  else if ( m_mode == File )
+      manipulator->setText( i18n( "Inserting Text File" ) );
+  else
+    manipulator->setText( i18n( "Text to Columns" ) );
   manipulator->setSheet (sheet);
   manipulator->setParsing (true);
   manipulator->setFormat (Format::Generic);

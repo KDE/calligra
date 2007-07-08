@@ -157,7 +157,7 @@ DataManipulator::DataManipulator()
     , m_parsing( false )
     , m_expandMatrix( false )
 {
-  // default name for DataManipulator, can be changed using setName
+  // default name for DataManipulator, can be changed using setText
   setText( i18n ("Change Value") );
 }
 
@@ -249,7 +249,7 @@ Value DataManipulator::newValue( Element *element, int col, int row,
 
 SeriesManipulator::SeriesManipulator ()
 {
-  setName (i18n ("Insert Series"));
+  setText (i18n ("Insert Series"));
 
   m_type = Linear;
   m_last = -2;

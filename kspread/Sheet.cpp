@@ -1288,7 +1288,7 @@ QString Sheet::wordSpelling( Selection* selection )
 class SetWordSpellingManipulator : public AbstractDataManipulator {
  public:
   SetWordSpellingManipulator () : idx(0) {
-    setName (i18n ("Set Word Spelling"));  // TODO: is the name correct ?
+    setText (i18n ("Set Word Spelling"));  // TODO: is the name correct ?
   }
   void setString (QString str) {
     list = str.split ('\n');
@@ -1451,7 +1451,7 @@ void Sheet::cutSelection( Selection* selection )
     QApplication::clipboard()->setMimeData( mimeData );
 
     DeleteCommand* command = new DeleteCommand();
-    command->setName( i18n( "Cut" ) );
+    command->setText( i18n( "Cut" ) );
     command->setSheet( this );
     command->add( *selection );
     command->execute();
