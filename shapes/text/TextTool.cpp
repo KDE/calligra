@@ -52,6 +52,9 @@
 #include <KStandardShortcut>
 #include <KAction>
 #include <KStandardAction>
+#include <KMimeType>
+#include <KMessageBox>
+#include <KRun>
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
 #include <QBuffer>
@@ -380,6 +383,28 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
             ensureCursorVisible();
             editingPluginEvents();
             emit blockChanged(m_caret.block());
+        }
+    } else {
+        // Is there an anchor here ?
+        if (m_caret.charFormat().isAnchor()) {
+            QString anchor = m_caret.charFormat().anchorHref();
+            bool isLocalLink = (anchor.indexOf("file:") == 0);
+            kDebug() << "HEY, You clicked an anchor !" << endl;
+            kDebug() << m_caret.charFormat().anchorHref() << endl;
+            QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
+
+            if ( KRun::isExecutableFile( anchor, type ) )
+            {
+                QString question = i18n("This link points to the program or script '%1'.\n"
+                        "Malicious programs can harm your computer. "
+                        "Are you sure that you want to run this program?", anchor);
+                // this will also start local programs, so adding a "don't warn again"
+                // checkbox will probably be too dangerous
+                int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
+                if ( choice != KMessageBox::Yes )
+                    return;
+            }
+            new KRun(m_caret.charFormat().anchorHref(), 0);
         }
     }
 }
