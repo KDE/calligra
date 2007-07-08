@@ -206,6 +206,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
             if (image.isNull()) return KoFilter::CreationError;
+            image->lock();
 
             layer = dynamic_cast<KisPaintLayer*>( image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE, COMPOSITE_OVER, cs).data());
             if (layer.isNull()) return KoFilter::CreationError;
@@ -242,7 +243,8 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             if (cs == 0) return KoFilter::InternalError;
 
             image = new KisImage( doc->undoAdapter(), sz.width(), sz.height(), cs, filename);
-            if (image.isNull())return KoFilter::CreationError;
+            if (image.isNull()) return KoFilter::CreationError;
+            image->lock();
 
             layer = dynamic_cast<KisPaintLayer*> (image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE, COMPOSITE_OVER, cs).data());
             if (layer.isNull()) return KoFilter::CreationError;
@@ -296,6 +298,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         kDebug() << "everything ok\n";
 
         QApplication::restoreOverrideCursor();
+        image->unlock();
         return KoFilter::OK;
     }
 

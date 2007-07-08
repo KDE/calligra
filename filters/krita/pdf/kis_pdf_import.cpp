@@ -139,7 +139,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
     KisImageSP img = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
-
+    img->lock();
     // create a layer
     QList<int> pages = wdg->pages();
     for(QList<int>::const_iterator it = pages.begin(); it != pages.end(); ++it)
@@ -149,8 +149,8 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
         img->addLayer(layer, img->rootLayer(), 0);
     }
 
-    doc -> setCurrentImage( img);
-
+    doc->setCurrentImage( img);
+    img->unlock();
     KIO::NetAccess::removeTempFile(tmpFile);
 
     delete pdoc;

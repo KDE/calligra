@@ -464,6 +464,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         if( ! m_img) {
             m_img = new KisImage(m_doc->undoAdapter(), image -> columns, image -> rows, cs, "built image");
             Q_CHECK_PTR(m_img);
+            m_img->lock();
             // XXX I'm assuming separate layers won't have other profile things like EXIF
             setAnnotationsForImage(image, m_img);
         }
@@ -648,6 +649,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         DestroyImageList(images);
         DestroyImageInfo(ii);
         DestroyExceptionInfo(&ei);
+        m_img->unlock();
         return KisImageBuilder_RESULT_OK;
     }
 

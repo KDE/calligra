@@ -329,6 +329,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Creating the KisImageSP
     if( ! m_img ) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
+        m_img->lock();
         Q_CHECK_PTR(m_img);
         if(profile)
         {
@@ -576,6 +577,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     }
 
     m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
+    m_img->unlock();
     return KisImageBuilder_RESULT_OK;
 }
 
