@@ -41,6 +41,8 @@
 
 using namespace KSpread;
 
+typedef RectStorage<QString> NamedAreaStorage;
+
 class KSpread::CellStorageUndoData
 {
 public:
@@ -59,6 +61,8 @@ public:
         if ( !links.isEmpty() )
             return false;
         if ( !matrices.isEmpty() )
+            return false;
+        if ( !namedAreas.isEmpty() )
             return false;
         if ( !styles.isEmpty() )
             return false;
@@ -79,6 +83,7 @@ public:
     QList< QPair<QRectF,bool> >             fusions;
     QVector< QPair<QPoint,QString> >        links;
     QList< QPair<QRectF,bool> >             matrices;
+    QList< QPair<QRectF,QString> >          namedAreas;
     QList< QPair<QRectF,SharedSubStyle> >   styles;
     QVector< QPair<QPoint,QString> >        userInputs;
     QList< QPair<QRectF,Validity> >         validities;
@@ -98,6 +103,7 @@ public:
         , fusionStorage( new FusionStorage(sheet->doc()) )
         , linkStorage( new LinkStorage() )
         , matrixStorage( new MatrixStorage(sheet->doc()) )
+        , namedAreaStorage( new NamedAreaStorage(sheet->doc()) )
         , styleStorage( new StyleStorage(sheet->doc()) )
         , userInputStorage( new UserInputStorage() )
         , validityStorage( new ValidityStorage(sheet->doc()) )
@@ -114,6 +120,7 @@ public:
         delete fusionStorage;
         delete linkStorage;
         delete matrixStorage;
+        delete namedAreaStorage;
         delete styleStorage;
         delete userInputStorage;
         delete validityStorage;
@@ -129,6 +136,7 @@ public:
     FusionStorage*          fusionStorage;
     LinkStorage*            linkStorage;
     MatrixStorage*          matrixStorage;
+    NamedAreaStorage*       namedAreaStorage;
     StyleStorage*           styleStorage;
     UserInputStorage*       userInputStorage;
     ValidityStorage*        validityStorage;
@@ -296,6 +304,25 @@ void CellStorage::setLink( int column, int row, const QString& link )
     // recording undo?
     if ( d->undoData && link != old )
         d->undoData->links << qMakePair( QPoint( column, row ), old );
+}
+
+QString CellStorage::namedArea( int column, int row ) const
+{
+    QPair<QRectF, QString> pair = d->namedAreaStorage->containedPair( QPoint( column, row ) );
+    if ( pair.first.isEmpty() )
+        return QString();
+    if ( pair.second.isEmpty() )
+        return QString();
+    return pair.second;
+}
+
+void CellStorage::setNamedArea( const Region& region, const QString& namedArea )
+{
+    // recording undo?
+    if ( d->undoData )
+        d->undoData->namedAreas << d->namedAreaStorage->undoData( region );
+
+    d->namedAreaStorage->insert( region, namedArea );
 }
 
 Style CellStorage::style( int column, int row ) const
@@ -556,8 +583,9 @@ void CellStorage::insertColumns( int position, int number )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertColumns( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertColumns( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertColumns( position, number );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertColumns( position, number );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->insertColumns( position, number );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertColumns( position, number );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->insertColumns( position, number );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->insertColumns( position, number );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->insertColumns( position, number );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->insertColumns( position, number );
@@ -573,6 +601,7 @@ void CellStorage::insertColumns( int position, int number )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -611,8 +640,9 @@ void CellStorage::removeColumns( int position, int number )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeColumns( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeColumns( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeColumns( position, number );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeColumns( position, number );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->removeColumns( position, number );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeColumns( position, number );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->removeColumns( position, number );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->removeColumns( position, number );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->removeColumns( position, number );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->removeColumns( position, number );
@@ -628,6 +658,7 @@ void CellStorage::removeColumns( int position, int number )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -666,8 +697,9 @@ void CellStorage::insertRows( int position, int number )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertRows( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertRows( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertRows( position, number );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertRows( position, number );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->insertRows( position, number );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertRows( position, number );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->insertRows( position, number );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->insertRows( position, number );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->insertRows( position, number );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->insertRows( position, number );
@@ -683,6 +715,7 @@ void CellStorage::insertRows( int position, int number )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -721,8 +754,9 @@ void CellStorage::removeRows( int position, int number )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeRows( position, number );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeRows( position, number );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeRows( position, number );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeRows( position, number );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->removeRows( position, number );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeRows( position, number );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->removeRows( position, number );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->removeRows( position, number );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->removeRows( position, number );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->removeRows( position, number );
@@ -738,6 +772,7 @@ void CellStorage::removeRows( int position, int number )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -776,8 +811,9 @@ void CellStorage::removeShiftLeft( const QRect& rect )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeShiftLeft( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeShiftLeft( rect );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeShiftLeft( rect );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->removeShiftLeft( rect );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeShiftLeft( rect );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->removeShiftLeft( rect );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->removeShiftLeft( rect );
@@ -793,6 +829,7 @@ void CellStorage::removeShiftLeft( const QRect& rect )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -831,8 +868,9 @@ void CellStorage::insertShiftRight( const QRect& rect )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertShiftRight( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertShiftRight( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertShiftRight( rect );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertShiftRight( rect );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->insertShiftRight( rect );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertShiftRight( rect );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->insertShiftRight( rect );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->insertShiftRight( rect );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->insertShiftRight( rect );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->insertShiftRight( rect );
@@ -848,6 +886,7 @@ void CellStorage::insertShiftRight( const QRect& rect )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -886,8 +925,9 @@ void CellStorage::removeShiftUp( const QRect& rect )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->removeShiftUp( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->removeShiftUp( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->removeShiftUp( rect );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeShiftUp( rect );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->removeShiftUp( rect );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->removeShiftUp( rect );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->removeShiftUp( rect );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->removeShiftUp( rect );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->removeShiftUp( rect );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->removeShiftUp( rect );
@@ -903,6 +943,7 @@ void CellStorage::removeShiftUp( const QRect& rect )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -941,8 +982,9 @@ void CellStorage::insertShiftDown( const QRect& rect )
     QList< QPair<QRectF,Database> > databases = d->databaseStorage->insertShiftDown( rect );
     QVector< QPair<QPoint,Formula> > formulas = d->formulaStorage->insertShiftDown( rect );
     QList< QPair<QRectF,bool> > fusions = d->fusionStorage->insertShiftDown( rect );
-    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertShiftDown( rect );
     QVector< QPair<QPoint,QString> > links = d->linkStorage->insertShiftDown( rect );
+    QList< QPair<QRectF,bool> > matrices = d->matrixStorage->insertShiftDown( rect );
+    QList< QPair<QRectF,QString> > namedAreas = d->namedAreaStorage->insertShiftDown( rect );
     QList< QPair<QRectF,SharedSubStyle> > styles = d->styleStorage->insertShiftDown( rect );
     QVector< QPair<QPoint,QString> > userInputs = d->userInputStorage->insertShiftDown( rect );
     QList< QPair<QRectF,Validity> > validities = d->validityStorage->insertShiftDown( rect );
@@ -958,6 +1000,7 @@ void CellStorage::insertShiftDown( const QRect& rect )
         d->undoData->fusions    << fusions;
         d->undoData->links      << links;
         d->undoData->matrices   << matrices;
+        d->undoData->namedAreas << namedAreas;
         d->undoData->styles     << styles;
         d->undoData->userInputs << userInputs;
         d->undoData->validities << validities;
@@ -1222,6 +1265,8 @@ void CellStorage::undo( CellStorageUndoData* data )
         d->fusionStorage->insert( Region(data->fusions[i].first.toRect()), data->fusions[i].second );
     for ( int i = 0; i < data->matrices.count(); ++i )
         d->matrixStorage->insert( Region(data->matrices[i].first.toRect()), data->matrices[i].second );
+    for ( int i = 0; i < data->namedAreas.count(); ++i )
+        setNamedArea( Region(data->namedAreas[i].first.toRect()), data->namedAreas[i].second );
     for ( int i = 0; i < data->styles.count(); ++i )
         d->styleStorage->insert( data->styles[i].first.toRect(), data->styles[i].second );
     for ( int i = 0; i < data->bindings.count(); ++i )

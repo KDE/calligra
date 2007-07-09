@@ -127,6 +127,12 @@ public:
     void setLink( int column, int row, const QString& link );
 
     /**
+     * \return the named area's name associated with the Cell at \p column , \p row .
+     */
+    QString namedArea( int column, int row ) const;
+    void setNamedArea( const Region& region, const QString& namedArea );
+
+    /**
      * \return the Style associated with the Cell at \p column , \p row .
      */
     Style style( int column, int row ) const;
