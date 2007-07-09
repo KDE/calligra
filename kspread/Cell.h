@@ -87,13 +87,13 @@ public:
 
     /**
      * Constructor.
-     * Creates a cell in \p sheet at position \p col , \p row .
+     * Creates a Cell for accessing the data in \p sheet at position \p col , \p row .
      */
     Cell( const Sheet* sheet, int column, int row );
 
     /**
      * Constructor.
-     * Creates a cell in \p sheet at position \p pos .
+     * Creates a Cell for accessing the data in \p sheet at position \p pos .
      */
     Cell( const Sheet* sheet, const QPoint& pos );
 
