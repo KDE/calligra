@@ -719,49 +719,6 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         line.draw(painter, layout->position());
         painter->restore();
         
-        QTextBlock::iterator it;
-        int beginningPosition = -1;
-        // loop over text fragments in this paragraph and draw the underline and line through.
-        for (it = block.begin(); !(it.atEnd()); ++it) {
-            QTextFragment currentFragment = it.fragment();
-            if (currentFragment.isValid()) {
-                if (beginningPosition == -1)
-                    beginningPosition = currentFragment.position();
-                if (layout->isValidCursorPosition(currentFragment.position() - beginningPosition)) {
-                    double x1 = line.cursorToX(currentFragment.position() - beginningPosition);
-                    double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - beginningPosition);
-                    QTextCharFormat fmt = currentFragment.charFormat();
-                    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle)
-                        fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
-                    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType)
-                        fmt.intProperty(KoCharacterStyle::StrikeOutType);
-                    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) &&
-                            (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
-                        double y = line.position().y() + line.height()/2;
-                        QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
-                        if (!color.isValid())
-                            color = fmt.foreground().color();
-
-                        drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
-                    }
-
-                    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle)
-                        fmt.intProperty(KoCharacterStyle::UnderlineStyle);
-                    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType)
-                        fmt.intProperty(KoCharacterStyle::UnderlineType);
-                    if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
-                            (fontUnderLineType != KoCharacterStyle::NoLineType)) {
-                        double y = line.position().y() + painter->fontMetrics().lineSpacing() - painter->fontMetrics().underlinePos();
-                        QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
-                        if (!color.isValid())
-                            color = fmt.foreground().color();
-                        
-                        drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
-                    }
-                }
-            }
-        }
-        
         for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps for the current line
             const double tabStop = tabs.tabs[x];
             const double pos = tabStop - tabs.tabLength[x];
@@ -810,6 +767,56 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             const int y = qRound(tabArea.bottom() - pen.widthF() / 2.0);
             painter->drawLine(qRound(tabArea.left() - xOffset), y, qRound(tabArea.right() - xOffset), y);
             painter->restore();
+        }
+    }
+    
+            
+    QTextBlock::iterator it;
+    int offset = -1;
+    // loop over text fragments in this paragraph and draw the underline and line through.
+    for (it = block.begin(); !(it.atEnd()); ++it) {
+        QTextFragment currentFragment = it.fragment();
+        if (currentFragment.isValid()) {
+            if (offset == -1)
+                offset = currentFragment.position();
+            int firstLine = layout->lineForTextPosition(currentFragment.position() - offset).lineNumber();
+            int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - offset).lineNumber();
+            
+            for (int i = firstLine ; i <= lastLine ; i++) {
+                QTextLine line = layout->lineAt(i);
+                if (layout->isValidCursorPosition(currentFragment.position() - offset)) {
+                    double x1 = line.cursorToX(currentFragment.position() - offset);
+                    double x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - offset);
+                    QTextCharFormat fmt = currentFragment.charFormat();
+                    KoCharacterStyle::LineStyle fontStrikeOutStyle = (KoCharacterStyle::LineStyle)
+                    fmt.intProperty(KoCharacterStyle::StrikeOutStyle);
+                    KoCharacterStyle::LineType fontStrikeOutType = (KoCharacterStyle::LineType)
+                    fmt.intProperty(KoCharacterStyle::StrikeOutType);
+                    if ((fontStrikeOutStyle != KoCharacterStyle::NoLineStyle) &&
+                        (fontStrikeOutType != KoCharacterStyle::NoLineType)) {
+                        double y = line.position().y() + line.height()/2;
+                        QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
+                        if (!color.isValid())
+                            color = fmt.foreground().color();
+    
+                        drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
+                    }
+
+                    KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle)
+                    fmt.intProperty(KoCharacterStyle::UnderlineStyle);
+                    KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType)
+                    fmt.intProperty(KoCharacterStyle::UnderlineType);
+                    if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
+                        (fontUnderLineType != KoCharacterStyle::NoLineType)) {
+                        double y = line.position().y() + painter->fontMetrics().lineSpacing() - painter->fontMetrics().underlinePos();
+                        QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
+                        if (!color.isValid())
+                            color = fmt.foreground().color();
+                        
+                        drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
+                    }
+                }
+            }
         }
     }
 }
