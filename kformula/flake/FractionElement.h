@@ -23,6 +23,7 @@
 #define FRACTIONELEMENT_H
 
 #include "BasicElement.h"
+#include "RowElement.h"
 #include "kformula_export.h"
 #include <QLineF>
 
@@ -101,10 +102,10 @@ private:
     void layoutBevelledFraction( AttributeManager* am );
 
     /// The element representing the fraction's numerator
-    BasicElement* m_numerator;
+    RowElement* m_numerator;
 
     /// The element representing the fraction's denominator 
-    BasicElement* m_denominator;
+    RowElement* m_denominator;
 
     /// The line that separates the denominator and the numerator
     QLineF m_fractionLine;

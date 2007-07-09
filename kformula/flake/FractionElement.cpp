@@ -28,8 +28,8 @@
 
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_numerator = new BasicElement( this );
-    m_denominator = new BasicElement( this );
+    m_numerator = new RowElement( this );
+    m_denominator = new RowElement( this );
 }
 
 FractionElement::~FractionElement()
@@ -112,6 +112,7 @@ const QList<BasicElement*> FractionElement::childElements()
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
+    /*
     BasicElement* tmp = cursor->currentElement();
     if( tmp == m_numerator && m_numerator->elementType() == Basic )
         m_numerator = child;
@@ -119,10 +120,12 @@ void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         m_denominator = child;
 
     delete tmp;       // finally delete the old BasicElement
+    */
 }
    
 void FractionElement::removeChild( BasicElement* element )
 {
+    /*
     if( element == m_numerator )         
     {
         delete m_numerator;                      // delete the numerator and
@@ -133,6 +136,7 @@ void FractionElement::removeChild( BasicElement* element )
         delete m_denominator;
         m_denominator = new BasicElement( this );
     }
+    */
 }
 
 void FractionElement::moveUp( FormulaCursor* cursor, BasicElement* from )
@@ -153,18 +157,18 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 
 bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
+    int counter = 0;
     KoXmlElement tmp;
     forEachElement( tmp, parent ) {
-        if( m_numerator->elementType() == Basic ) {
-            m_numerator = ElementFactory::createElement( tmp.tagName(), this );
-            m_numerator->readMathML( tmp );
+        if ( counter == 0 ) {
+            if ( ! m_numerator->readMathMLChild( tmp ) ) return false;
         }
-        else if( m_denominator->elementType() == Basic ) {
-             m_denominator = ElementFactory::createElement( tmp.tagName(), this );
-             m_denominator->readMathML( tmp );
+        else if( counter == 1 ) {
+            if ( ! m_denominator->readMathMLChild( tmp ) ) return false;
         }
         else
             return false;
+        counter++;
     }
 
     return true;
