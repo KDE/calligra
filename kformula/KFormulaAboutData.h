@@ -36,10 +36,11 @@ KAboutData * newKFormulaAboutData()
                                              ki18n("(c) 1998-2006, The KFormula Team"), KLocalizedString(),
 					     "http://www.koffice.org/kformula/" );
     aboutData->addAuthor( ki18n("Andrea Rizzi"), ki18n( "original author" ), "rizzi@kde.org" );
-    aboutData->addAuthor( ki18n("Ulrich Kuettler"), ki18n( "current maintainer" ), "ulrich.kuettler@gmx.de" );
+    aboutData->addAuthor( ki18n("Ulrich Kuettler"), ki18n( "core developer" ), "ulrich.kuettler@gmx.de" );
     aboutData->addAuthor( ki18n("Heinrich Kuettler"), ki18n( "core developer" ), "heinrich.kuettler@gmx.de" );
     aboutData->addCredit( ki18n("Claus O. Wilke"), ki18n( "for your advice to look at TeX first" ) );
     aboutData->addAuthor( ki18n("Martin Pfeiffer"), ki18n( "core developer" ), "hubipete@gmx.net" );
+    aboutData->addAuthor( ki18n("Alfredo Beaumont"), ki18n( "current maintainer" ), "alfredo.beaumont@gmail.com" );
     return aboutData;
 }
 
