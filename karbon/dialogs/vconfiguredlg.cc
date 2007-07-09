@@ -25,7 +25,7 @@
 #include "karbon_factory.h"
 
 #include <KoGridData.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 #include <kiconloader.h>
 #include <kconfig.h>

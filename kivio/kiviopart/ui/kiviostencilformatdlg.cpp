@@ -28,7 +28,7 @@
 #include <kcolorbutton.h>
 #include <klocale.h>
 
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 #include "kivio_view.h"
 

@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include "KoUnitWidgets.h"
+#include "KoUnitDoubleSpinBox.h"
 
 #include "karbon_part.h"
 #include "vcolor.h"

@@ -70,7 +70,7 @@
 #include <KoPageLayoutDia.h>
 #include <KoRuler.h>
 #include <KoZoomHandler.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <KoApplication.h>
 #include <KoTabBar.h>
 #include <Kolinewidthaction.h>

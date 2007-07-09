@@ -30,7 +30,7 @@
 #include <karbon_part.h>
 #include <shapes/vsinus.h>
 #include "vsinustool.h"
-#include "KoUnitWidgets.h"
+#include "KoUnitDoubleSpinBox.h"
 
 #include <kactioncollection.h>
 

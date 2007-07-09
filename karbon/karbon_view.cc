@@ -82,7 +82,7 @@
 #include <KoCreateShapesTool.h>
 #include <KoFilterManager.h>
 #include <KoContextHelp.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 // #include <KoPageLayoutDia.h>
 #include <KoRuler.h>
 #include <KoToolBox.h>

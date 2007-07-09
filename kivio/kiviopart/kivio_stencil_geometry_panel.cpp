@@ -9,7 +9,7 @@
 #include <kdialog.h>
 
 #include <KoPageLayout.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
 : QWidget(parent,"KivioStencilGeometryPanel")

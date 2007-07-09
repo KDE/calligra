@@ -217,7 +217,7 @@
   <customwidget>
    <class>KoUnitDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>KoUnitWidgets.h</header>
+   <header>KoUnitDoubleSpinBox.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

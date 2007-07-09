@@ -28,7 +28,7 @@
 #include <knuminput.h>
 
 #include <KoGeneralPropertyUi.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 using namespace KSpread;
 

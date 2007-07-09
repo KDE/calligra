@@ -34,7 +34,7 @@
 #include <KoPageLayoutDia.h>
 #include <kurlrequester.h>
 #include <kcolorbutton.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <kglobal.h>
 #include <kdebug.h>
 #include <kfontdialog.h>

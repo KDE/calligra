@@ -33,7 +33,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoDockFactory.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <KoShapeManager.h>
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBorderModel.h>

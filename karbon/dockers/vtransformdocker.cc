@@ -33,7 +33,7 @@
 
 #include <KoMainWindow.h>
 #include <KoDockFactory.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoCanvasBase.h>

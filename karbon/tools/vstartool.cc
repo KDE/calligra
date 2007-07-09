@@ -29,7 +29,7 @@
 #include <karbon_part.h>
 #include <shapes/vstar.h>
 #include "vstartool.h"
-#include "KoUnitWidgets.h"
+#include "KoUnitDoubleSpinBox.h"
 
 #include <kactioncollection.h>
 

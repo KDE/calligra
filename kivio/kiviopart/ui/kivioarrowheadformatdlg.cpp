@@ -31,7 +31,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 #include "kivio_view.h"
 #include "kivioglobal.h"

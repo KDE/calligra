@@ -37,7 +37,7 @@
 
 // KOffice
 #include <KoUnit.h>
-#include <KoUnitWidgets.h>
+#include <KoUnitDoubleSpinBox.h>
 
 // KSpread
 #include <Canvas.h>
