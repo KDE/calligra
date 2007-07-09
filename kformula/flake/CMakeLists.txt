@@ -35,12 +35,9 @@ set( kformulalib_PART_SRCS
    TokenElement.cpp
    NumberElement.cpp
    StringElement.cpp
-   PhantomElement.cpp
-#   MatrixDialog.cc 
+   PhantomElement.cpp 
    contextstyle.cc 
-   symboltable.cc 
-#   kformulaconfigpage.cc 
-#   symbolaction.cc 
+   symboltable.cc  
    fontstyle.cc 
 )
 

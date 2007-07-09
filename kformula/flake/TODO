@@ -1,10 +1,14 @@
+- implement the inferred row and row element classes
+- introduce the FormulaToolOptions widget to have a nive gui to work with
+- implement the input infrastructure -> namely stuff in KoFormulaTool
+
 - fill the single element classes with functionality ( mostly painting )
 - get rid of the ContextStyle class
 - introduce a class that holds default setting values ( default font color and so on )
 - implement the rest of event methods in FormulaTool
 - reenable and rework all cursor methods of the single elements
-- clean up BasicElement class
-- finish the attribute system
+*done - clean up BasicElement class
+*done - finish the attribute system
 *done - factor out the old loading system and make it a filter
 *done - cleanup the FormulaCursor class
 *done - rework the kformulacommand class to use KoCommand and simplify and reduce the commands
