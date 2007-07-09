@@ -60,6 +60,7 @@ set( formulashape_PART_SRCS
    KoFormulaShapeFactory.cpp
    KoFormulaTool.cpp
    KoFormulaToolFactory.cpp
+   FormulaToolOptions.cpp
 )
 
 kde4_automoc(${formulashape_PART_SRCS})
