@@ -26,8 +26,6 @@ extern "C" {
 #include <iccjpeg.h>
 }
 
-#include <exiv2/jpgimage.hpp>
-
 #include <QFile>
 
 #include <kapplication.h>
