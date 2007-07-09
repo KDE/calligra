@@ -1,0 +1,519 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2001,2002,2003 Daniel Naber <daniel.naber@t-online.de>
+ * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the searchTerms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+/* Copyright (C) 2001,2002,2003 Daniel Naber <daniel.naber@t-online.de>
+ * This is a thesaurus based on a subset of WordNet. It also offers an
+ * almost complete WordNet 1.7 frontend (WordNet is a powerful lexical
+ * database/thesaurus)
+ */
+
+/*
+TODO:
+-Be more verbose if the result is empty
+-See the TODO's in the source below
+
+-If no match was found, use KSpell to offer alternative spellings?
+-Don't start WordNet before its tab is activated?
+-Maybe remove more uncommon words. However, the "polysemy/familiarity
+ count" is sometimes very low for quite common word, e.g. "sky".
+
+-Fix "no mimesource" warning of QTextBrowser? Seems really harmless.
+
+NOT TODO:
+-Add part of speech information -- I think this would blow up the
+ filesize too much
+*/
+
+#include "Thesaurus.h"
+
+#include <QToolButton>
+#include <QByteArray>
+#include <QTextCursor>
+#include <QTabWidget>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QGroupBox>
+#include <QComboBox>
+#include <QTextBrowser>
+
+#include <kglobal.h>
+#include <kprocess.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
+#include <kdialog.h>
+#include <kfiledialog.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <khistorycombobox.h>
+#include <kpushbutton.h>
+#include <klineedit.h>
+#include <kdebug.h>
+#include <krun.h>
+#include <kurl.h>
+
+Thesaurus::Thesaurus()
+{
+    m_standAlone = false;
+    m_thesProc = new KProcess;
+
+    m_dialog = new KDialog(0);
+    m_dialog->setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
+    m_dialog->setDefaultButton(KDialog::Ok);
+    m_dialog->setHelp(QString::null, "thesaurus");
+    m_dialog->resize(600, 400);
+
+    // m_config = new KConfig("kthesaurusrc");
+    // m_dataFile = m_config->readPathEntry("datafile");
+    if (m_dataFile.isEmpty())
+        m_dataFile = KGlobal::dirs()->findResource("data", "koffice/thesaurus/thesaurus.txt");
+    setCaption();
+
+    m_noMatch = i18n("(No match)");
+
+    m_historyPos = 1;
+    QWidget *page = new QWidget();
+    m_dialog->setMainWidget(page);
+    QVBoxLayout *topLayout = new QVBoxLayout(page);
+    topLayout->setMargin(KDialog::marginHint());
+    topLayout->setSpacing(KDialog::spacingHint());
+
+    QHBoxLayout *row1 = new QHBoxLayout;
+    topLayout->addLayout(row1);
+    m_edit = new KHistoryComboBox(page);
+    QLabel editLabel(i18n("&Search for:"), page);
+    editLabel.setBuddy(m_edit);
+
+    m_search = new KPushButton(i18n("S&earch"), page);
+    connect(m_search, SIGNAL(clicked()), this, SLOT(slotFindTerm()));
+    row1->addWidget(&editLabel, 0);
+    row1->addWidget(m_edit, 1);
+    row1->addWidget(m_search, 0);
+    m_back = new QToolButton(page);
+    m_back->setIcon(KIcon(QString::fromLatin1("go-previous")));
+    m_back->setToolTip(i18n("Back"));
+    row1->addWidget(m_back, 0);
+    m_forward = new QToolButton(page);
+    m_forward->setIcon(KIcon(QString::fromLatin1("go-next")));
+    m_forward->setToolTip(i18n("Forward"));
+    row1->addWidget(m_forward, 0);
+
+    KPushButton *lang = new KPushButton(i18n("Change Language..."), page);
+    connect(lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));
+    row1->addWidget(lang, 0);
+
+    connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
+    connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
+
+    m_tabWidget = new QTabWidget(page);
+    topLayout->addWidget(m_tabWidget);
+
+    //
+    // Thesaurus Tab
+    //
+    QWidget *thesWidget = new QWidget(m_tabWidget);
+    m_tabWidget->addTab(thesWidget, i18n("&Thesaurus"));
+    QHBoxLayout *thesLayout = new QHBoxLayout;
+    thesLayout->setSpacing(KDialog::spacingHint());
+    thesWidget->setLayout(thesLayout);
+
+    QGroupBox *synGroupBox = new QGroupBox(i18n("Synonyms"), thesWidget);
+    QHBoxLayout *synLayout = new QHBoxLayout();
+    synGroupBox->setLayout(synLayout);
+    m_synListWidget = new QListWidget(synGroupBox);
+    synLayout->addWidget(m_synListWidget);
+    thesLayout->addWidget(synGroupBox);
+
+    QGroupBox *hyperGroupBox = new QGroupBox(i18n("More General Words"), thesWidget);
+    QHBoxLayout *hyperLayout = new QHBoxLayout();
+    hyperGroupBox->setLayout(hyperLayout);
+    m_hyperListWidget = new QListWidget(hyperGroupBox);
+    hyperLayout->addWidget(m_hyperListWidget);
+    thesLayout->addWidget(hyperGroupBox);
+
+    QGroupBox *hypoGroupBox = new QGroupBox(i18n("More Specific Words"), thesWidget);
+    QHBoxLayout *hypoLayout = new QHBoxLayout();
+    hypoGroupBox->setLayout(hypoLayout);
+    m_hypoListWidget = new QListWidget(hypoGroupBox);
+    hypoLayout->addWidget(m_hypoListWidget);
+    thesLayout->addWidget(hypoGroupBox);
+
+    // single click -- keep display unambiguous by removing other selections:
+
+    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
+            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem *)));
+    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
+            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem *)));
+    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem *)),
+            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem *)));
+
+    // double click -- set the double clicked item as the new search term
+
+    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+            this, SLOT(slotFindTermFromList(QListWidgetItem *)));
+
+    //
+    // WordNet Tab
+    //
+
+    QWidget *wnWidget = new QWidget(m_tabWidget);
+    m_tabWidget->addTab(wnWidget, i18n("&Wordnet"));
+    QVBoxLayout *wnLayout = new QVBoxLayout;
+    wnLayout->setSpacing(KDialog::spacingHint());
+    wnLayout->setMargin(KDialog::marginHint());
+    wnWidget->setLayout(wnLayout);
+
+    m_wnComboBox = new QComboBox(wnWidget);
+    m_wnComboBox->setEditable(false);
+    wnLayout->addWidget(m_wnComboBox);
+    connect(m_wnComboBox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
+
+    m_resultTextBrowser = new QTextBrowser(wnWidget);
+    m_resultTextBrowser->setReadOnly(true);
+    // m_resultTextBrowser->setTextFormat(Qt::RichText);
+    // TODO?: m_resultbox->setMimeSourceFactory(...); to avoid warning
+    // connect(m_resultTextBrowser, SIGNAL(linkClicked(const QUrl &)), this, SLOT(slotFindTerm(const QString &)));
+    wnLayout->addWidget(m_resultTextBrowser);
+
+    // Connect for the history box
+    m_edit->setTrapReturnKey(true);        // Do not use Return as default key...
+    connect(m_edit, SIGNAL(returnPressed()), this, SLOT(slotFindTerm()));
+    connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotGotoHistory(int)));
+
+    QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
+    topLayout->addLayout(row2);
+    m_replaceLineEdit = new KLineEdit(page);
+    m_replaceLabel = new QLabel(i18n("&Replace with:"), page);
+    m_replaceLabel->setBuddy(m_replaceLineEdit);
+    row2->addWidget(m_replaceLabel, 0);
+    row2->addWidget(m_replaceLineEdit, 1);
+
+    // Set focus
+    m_edit->setFocus();
+    updateNavButtons();
+
+    connect(m_dialog, SIGNAL(accepted()), this, SLOT(process()));
+}
+
+Thesaurus::~Thesaurus()
+{
+    // m_config->writePathEntry("datafile", m_data_file);
+    // m_config->sync();
+    // delete m_config;
+    // FIXME?: this hopefully fixes the problem of a wrong cursor
+    // and a crash (when closing e.g. konqueror) when the thesaurus dialog
+    // gets close while it was still working and showing the wait cursor
+    // QApplication::restoreOverrideCursor();
+    delete m_thesProc;
+    // delete m_wnProc;
+    delete m_dialog;
+}
+
+void Thesaurus::finishedWord(QTextDocument *document, int cursorPosition)
+{
+    Q_UNUSED(document);
+    Q_UNUSED(cursorPosition);
+}
+
+void Thesaurus::finishedParagraph(QTextDocument *document, int cursorPosition)
+{
+    Q_UNUSED(document);
+    Q_UNUSED(cursorPosition);
+}
+
+void Thesaurus::checkSection(QTextDocument *document, int startPosition, int endPosition)
+{
+    if (endPosition == -1 && startPosition == -1) { // standalone
+        m_standAlone = true;
+        if (document)
+            m_word = document->toPlainText();
+        m_dialog->showButton(KDialog::Ok, false);
+        m_dialog->setButtonGuiItem(KDialog::Cancel,
+                KGuiItem(i18n("&Close"), QString::fromLatin1("dialog-cancel")));
+        m_replaceLineEdit->setEnabled(false);
+        m_replaceLabel->setEnabled(false);
+    }
+    else { // called from an application, e.g. KWord
+        QTextCursor cursor(document);
+        cursor.setPosition(startPosition);
+        cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+        m_word = cursor.selectedText();
+        m_document = document;
+        m_startPosition = startPosition;
+        m_dialog->setButtonGuiItem(KDialog::Ok,
+                KGuiItem(i18n("&Replace"), QString::fromLatin1("dialog-ok")));
+        slotFindTerm(m_word.trimmed());
+        m_replaceLineEdit->setText(m_word.trimmed());
+    }
+    m_dialog->show();
+}
+
+void Thesaurus::process()
+{
+    QString replacement = m_replaceLineEdit->text().trimmed();
+    if (replacement == m_word.trimmed()) return;
+
+    emit startMacro(i18n("Replace Word"));
+    QTextCursor cursor(m_document);
+    cursor.setPosition(m_startPosition);
+    cursor.setPosition(m_startPosition + m_word.trimmed().length(), QTextCursor::KeepAnchor);
+    cursor.insertText(replacement);
+    emit stopMacro();
+}
+
+
+void Thesaurus::slotChangeLanguage()
+{
+    QString filename = KFileDialog::getOpenFileName(
+            KGlobal::dirs()->findResource("data", "koffice/thesaurus/thesaurus.txt"));
+    if (!filename.isNull()) {
+        m_dataFile = filename;
+        setCaption();
+    }
+}
+
+void Thesaurus::setCaption()
+{
+    KUrl url = KUrl();
+    url.setPath(m_dataFile);
+    m_dialog->setCaption(i18n("Related Words - %1" , url.fileName() ) );
+}
+
+// Enable or disable back and forward button
+void Thesaurus::updateNavButtons()
+{
+    if (m_historyPos <= 1) // 1 = first position
+        m_back->setEnabled(false);
+    else
+        m_back->setEnabled(true);
+
+    if (m_historyPos >= m_edit->count())
+        m_forward->setEnabled(false);
+    else
+        m_forward->setEnabled(true);
+}
+
+// Go to an item from the editbale combo box.
+void Thesaurus::slotGotoHistory(int index)
+{
+    m_historyPos = m_edit->count() - index;
+    slotFindTerm(m_edit->itemText(index), false);
+}
+
+// Triggered when the back button is clicked.
+void Thesaurus::slotBack()
+{
+    m_historyPos--;
+    int pos = m_edit->count() - m_historyPos;
+    m_edit->setCurrentIndex(pos);
+    slotFindTerm(m_edit->itemText(pos), false);
+}
+
+// Triggered when the forward button is clicked.
+void Thesaurus::slotForward()
+{
+    m_historyPos++;
+    int pos = m_edit->count() - m_historyPos;
+    m_edit->setCurrentIndex(pos);
+    slotFindTerm(m_edit->itemText(pos), false);
+}
+
+// Triggered when a word is selected in the list box.
+void Thesaurus::slotSetReplaceTermSyn(QListWidgetItem *item)
+{
+    m_hyperListWidget->clearSelection();
+    m_hypoListWidget->clearSelection();
+    if (!item)
+        return;
+    m_replaceLineEdit->setText(item->text());
+}
+
+void Thesaurus::slotSetReplaceTermHyper(QListWidgetItem *item)
+{
+    m_synListWidget->clearSelection();
+    m_hypoListWidget->clearSelection();
+    if (!item)
+        return;
+    m_replaceLineEdit->setText(item->text());
+}
+
+void Thesaurus::slotSetReplaceTermHypo(QListWidgetItem *item)
+{
+    m_synListWidget->clearSelection();
+    m_hyperListWidget->clearSelection();
+    if (!item)
+        return;
+    m_replaceLineEdit->setText(item->text());
+}
+
+// Triggered when Return is pressed.
+void Thesaurus::slotFindTerm()
+{
+    findTerm(m_edit->currentText());
+}
+
+// Triggered when a list item is double-clicked.
+void Thesaurus::slotFindTermFromList(QListWidgetItem *item)
+{
+    slotFindTerm(item->text());
+}
+
+// Triggered when a word is clicked
+void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
+{
+    // slotSetReplaceTerm(term);
+    if (term.startsWith("http://")) {
+        (void) new KRun(KUrl(term),0L);
+    }
+    else {
+        if (addToHistory) {
+            m_edit->insertItem(0, term);
+            m_historyPos = m_edit->count();
+            m_edit->setCurrentIndex(0);
+        }
+        updateNavButtons();
+        findTerm(term);
+    }
+}
+
+void Thesaurus::findTerm(const QString &term)
+{
+    findTermThesaurus(term);
+    findTermWordnet(term);
+}
+
+//
+// Thesaurus
+//
+void Thesaurus::findTermThesaurus(const QString &searchTerm)
+{
+    if (!QFile::exists(m_dataFile)) {
+        KMessageBox::error(0, i18n("The thesaurus file '%1' was not found. "
+            "Please use 'Change Language...' to select a thesaurus file.").
+            arg(m_dataFile));
+        return;
+    }
+
+    // Find only whole words. Looks clumsy, but this way we don't have to rely on
+    // features that might only be in certain versions of grep:
+    QString searchTermTmp = ";" + searchTerm.trimmed() + ";";
+    m_thesProc->setOutputChannelMode(KProcess::SeparateChannels);
+    m_thesProc->clearProgram();
+    m_thesProc->setReadChannel(QProcess::StandardOutput);
+    *m_thesProc << "grep" << "-i" << searchTermTmp;
+    *m_thesProc << m_dataFile;
+
+    QStringList syn;
+    QStringList hyper;
+    QStringList hypo;
+
+    m_thesProc->start();
+    if (!m_thesProc->waitForReadyRead())
+        ;
+    QByteArray byteArray = m_thesProc->readAllStandardOutput();
+    QString stdoutString(byteArray);
+    QStringList lines = stdoutString.split(QChar('\n'));
+
+    for (QStringList::Iterator it = lines.begin(); it != lines.end(); ++it) {
+        QString line = (*it);
+        if (line.startsWith("  ")) {  // ignore license (two spaces)
+            continue;
+        }
+
+        int sep_pos = line.indexOf("#");
+        QString synPart = line.left(sep_pos);
+        QString hyperPart = line.right(line.length() - sep_pos - 1);
+        QStringList synTmp = synPart.split(QChar(';'));
+        QStringList hyperTmp = hyperPart.split(QChar(';'));
+
+        if (synTmp.filter(searchTerm, Qt::CaseInsensitive).size() > 0) {
+            // match on the left side of the '#' -- synonyms
+            for (QStringList::Iterator it2 = synTmp.begin(); it2 != synTmp.end(); ++it2) {
+                // add if it's not the searchTerm itself and if it's not yet in the list
+                QString term = (*it2);
+                if (term.toLower() != searchTerm.toLower() && syn.contains(term) == 0 && !term.isEmpty()) {
+                    syn.append(term);
+                }
+            }
+            for (QStringList::Iterator it2 = hyperTmp.begin(); it2 != hyperTmp.end(); ++it2) {
+                QString term = (*it2);
+                if (term.toLower() != searchTerm.toLower() && hyper.contains(term) == 0 && !term.isEmpty()) {
+                    hyper.append(term);
+                }
+            }
+        }
+        if (hyperTmp.filter(searchTerm, Qt::CaseInsensitive).size() > 0) {
+            // match on the right side of the '#' -- hypernyms
+            for (QStringList::Iterator it2 = synTmp.begin(); it2 != synTmp.end(); ++it2) {
+                QString term = (*it2);
+                if (term.toLower() != searchTerm && hypo.contains(term) == 0 && !term.isEmpty()) {
+                    hypo.append(term);
+                }
+            }
+        }
+    }
+
+    m_synListWidget->clear();
+    if (syn.size() > 0) {
+        syn.sort();
+        m_synListWidget->addItems(syn);
+        m_synListWidget->setEnabled(true);
+    }
+    else {
+        m_synListWidget->addItem(m_noMatch);
+        m_synListWidget->setEnabled(false);
+    }
+
+    m_hyperListWidget->clear();
+    if (hyper.size() > 0) {
+        hyper.sort();
+        m_hyperListWidget->addItems(hyper);
+        m_hyperListWidget->setEnabled(true);
+    }
+    else {
+        m_hyperListWidget->addItem(m_noMatch);
+        m_hyperListWidget->setEnabled(false);
+    }
+
+    m_hypoListWidget->clear();
+    if (hypo.size() > 0) {
+        hypo.sort();
+        m_hypoListWidget->addItems(hypo);
+        m_hypoListWidget->setEnabled(true);
+    }
+    else {
+        m_hypoListWidget->addItem(m_noMatch);
+        m_hypoListWidget->setEnabled(false);
+    }
+}
+
+//
+// WordNet
+//
+void Thesaurus::findTermWordnet(const QString &term)
+{
+}
+
+#include "Thesaurus.moc"

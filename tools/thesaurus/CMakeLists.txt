@@ -1,19 +1,21 @@
 
 
 
-include_directories( ${KDE4_INCLUDES} )
+include_directories( ${KDE4_INCLUDES} ${KOTEXT_INCLUDES} )
 
 ########### next target ###############
 
-set(thesaurustool_PART_SRCS main.cc )
+set(thesaurustool_SRCS
+    Thesaurus.cpp
+    ThesaurusPlugin.cpp
+    ThesaurusFactory.cpp
+)
 
-kde4_automoc(${thesaurustool_PART_SRCS})
+kde4_automoc(${thesaurustool_SRCS})
 
-kde4_add_plugin(thesaurustool WITH_PREFIX ${thesaurustool_PART_SRCS})
+kde4_add_plugin(thesaurustool ${thesaurustool_SRCS})
 
-
-
-target_link_libraries(thesaurustool  ${KDE4_KIO_LIBS} )
+target_link_libraries(thesaurustool kotext)
 
 install(TARGETS thesaurustool  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -21,5 +23,5 @@ install(TARGETS thesaurustool  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  thesaurustool.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  thesaurus.txt  DESTINATION ${DATA_INSTALL_DIR}/thesaurus)
+install( FILES  thesaurus.txt  DESTINATION ${DATA_INSTALL_DIR}/koffice/thesaurus)
 
