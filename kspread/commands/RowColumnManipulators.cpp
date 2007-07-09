@@ -28,7 +28,6 @@
 #include <klocale.h>
 
 #include "CellStorage.h"
-#include "CellView.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
