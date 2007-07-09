@@ -402,24 +402,6 @@ public:
      */
     bool needsPrinting() const;
 
-    /**
-     * Increases the precision of the
-     * value displayed. Precision means here the amount of
-     * digits behind the dot. If the current precision is the
-     * default of -1, then it is set to the number of digits
-     * behind the dot plus 1.
-     */
-    void incPrecision();
-
-    /**
-     * Decreases the precision of the
-     * value displayed. Precision means here the amount of
-     * digits behind the dot. If the current precision is the
-     * default of -1, then it is set to the number of digits
-     * behind the dot minus 1.
-     */
-    void decPrecision();
-
     //////////////////////
     //
     // Other stuff

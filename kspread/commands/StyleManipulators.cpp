@@ -90,6 +90,14 @@ bool StyleManipulator::process(Element* element)
             m_sheet->cellStorage()->setStyle( Region(range), style );
         }
 
+        // special handling for precision: reset the precision first
+        if ( m_style->hasAttribute( Style::Precision ) )
+        {
+            Style style;
+            style.setPrecision( 0 ); // insert storage default
+            m_sheet->cellStorage()->setStyle( Region(range), style );
+        }
+
         // set the actual style
         m_sheet->cellStorage()->setStyle( Region(range), *m_style );
 
@@ -130,6 +138,15 @@ bool StyleManipulator::preProcessing()
             setText( i18n( "Reset Style" ) );
         else
             setText( i18n( "Change Style" ) );
+
+        // special handling for precision
+        if ( m_style->hasAttribute( Style::Precision ) )
+        {
+            if ( m_style->precision() == -1 ) // Style default
+                m_style->setPrecision( 0 ); // storage default
+            else if ( m_style->precision() == 0 )
+                m_style->setPrecision( -1 ); // anything resulting in zero, but not storage default
+        }
     }
     return AbstractRegionCommand::preProcessing();
 }
@@ -143,12 +160,14 @@ bool StyleManipulator::mainProcessing()
             m_undoData.clear();
         }
     }
-    else
+    else // m_reverse
     {
         Style style;
         style.setDefault();
         // special handling for indentation
         style.setIndentation( 0 ); // reset to zero
+        // special handling for precision
+        style.setPrecision( 0 ); // reset to storage default
         m_sheet->cellStorage()->setStyle( *this, style );
         for ( int i = 0; i < m_undoData.count(); ++i )
         {
@@ -321,54 +340,20 @@ IncreasePrecisionManipulator::IncreasePrecisionManipulator()
     setText( i18n( "Increase Precision" ) );
 }
 
-bool IncreasePrecisionManipulator::process( Element* element )
+bool IncreasePrecisionManipulator::mainProcessing()
 {
-    QList< QPair<QRectF,SharedSubStyle> > precisionPairs = m_sheet->styleStorage()->undoData( Region(element->rect()) );
-    for ( int i = 0; i < precisionPairs.count(); ++i )
-    {
-        if ( precisionPairs[i].second->type() != Style::Precision )
-            precisionPairs.removeAt( i-- );
-    }
-
     Style style;
     if ( !m_reverse )
     {
-        // increase the precision set for the whole rectangle
-        Style style;
-        int precision = m_sheet->styleStorage()->contains( element->rect() ).precision() + 1;
-        style.setPrecision( precision );
-        if ( precision <= 10 )
-            m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
-        // increase the several precisions
-        for ( int i = 0; i < precisionPairs.count(); ++i )
-        {
-            style.clear();
-            style.insertSubStyle( precisionPairs[i].second );
-            precision = style.precision() + 1;
-            style.setPrecision( precision );
-            if ( precision <= 10 )
-                m_sheet->cellStorage()->setStyle( Region(precisionPairs[i].first.toRect()), style );
-        }
+        // increase the precision
+        style.setPrecision( 1 );
     }
     else // m_reverse
     {
-        // decrease the precision set for the whole rectangle
-        Style style;
-        int precision = m_sheet->styleStorage()->contains( element->rect() ).precision() - 1;
-        style.setPrecision( precision );
-        if ( precision >= 0 )
-            m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
-        // decrease the several precisions
-        for ( int i = 0; i < precisionPairs.count(); ++i )
-        {
-            style.clear();
-            style.insertSubStyle( precisionPairs[i].second );
-            precision = style.precision() - 1;
-            if ( precision >= 0 )
-                style.setPrecision( precision );
-            m_sheet->cellStorage()->setStyle( Region(precisionPairs[i].first.toRect()), style );
-        }
+        // decrease the precision
+        style.setPrecision( -1 );
     }
+    m_sheet->cellStorage()->setStyle( *this, style );
     return true;
 }
 

@@ -342,6 +342,18 @@ void StyleStorage::garbageCollection()
         return; // already done
     }
 
+    // special handling for precision:
+    // check wether the storage default precision is placed first
+    if ( currentPair.second->type() == Style::Precision &&
+         static_cast<const SubStyleOne<Style::Precision, int>*>(currentPair.second.data())->value1 == 0 &&
+         pairs[0].first == currentPair.first )
+    {
+        d->tree.remove( currentPair.first, currentPair.second );
+        QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
+        return; // already done
+    }
+
+    // check, if the current substyle is covered by others added after it
     bool found = false;
     foreach( const SharedSubStylePair& pair, pairs )
     {
@@ -368,6 +380,14 @@ void StyleStorage::garbageCollection()
             // only remove, if covered by default
             if ( pair.second->type() == Style::Indentation &&
                  static_cast<const SubStyleOne<Style::Indentation, int>*>(pair.second.data())->value1 != 0 )
+            {
+                continue;
+            }
+
+            // special handling for precision
+            // only remove, if covered by default
+            if ( pair.second->type() == Style::Precision &&
+                 static_cast<const SubStyleOne<Style::Precision, int>*>(pair.second.data())->value1 != 0 )
             {
                 continue;
             }
@@ -474,6 +494,23 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
                 style.clearAttribute( Style::Indentation ); // reset
             else
                 style.setIndentation( style.indentation() + indentation ); // increase/decrease
+        }
+        else if ( subStyles[i]->type() == Style::Precision )
+        {
+            const int precision = static_cast<const SubStyleOne<Style::Precision, int>*>(subStyles[i].data())->value1;
+            if ( precision == 0 ) // storage default
+                style.clearAttribute( Style::Precision ); // reset
+            else
+            {
+                if ( style.precision() == -1 ) // Style default
+                    style.setPrecision( qMax( 0, precision)  ); // positive initial value
+                else if ( style.precision() + precision <= 0 )
+                    style.setPrecision( 0 );
+                else if ( style.precision() + precision >= 10 )
+                    style.setPrecision( 10 );
+                else
+                    style.setPrecision( style.precision() + precision ); // increase/decrease
+            }
         }
         else
         {
