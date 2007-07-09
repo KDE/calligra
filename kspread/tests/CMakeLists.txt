@@ -26,7 +26,7 @@ set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
 
 kde4_automoc(${BenchmarkRTree_SRCS})
 
-kde4_add_unit_test(BenchmarkRTree TESTNAME kspread-BenchmarkRTree  ${BenchmarkRTree_SRCS})
+kde4_add_test_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
 
 target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS})
 
@@ -86,7 +86,7 @@ target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 # 
 # kde4_automoc(${BenchmarkCluster_SRCS})
 # 
-# kde4_add_unit_test(BenchmarkCluster TESTNAME kspread-BenchmarkCluster  ${BenchmarkCluster_SRCS})
+# kde4_add_test_executable(BenchmarkCluster ${BenchmarkCluster_SRCS})
 # 
 # target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
 
@@ -96,7 +96,7 @@ set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
 
 kde4_automoc(${BenchmarkPointStorage_SRCS})
 
-kde4_add_unit_test(BenchmarkPointStorage TESTNAME kspread-BenchmarkPointStorage  ${BenchmarkPointStorage_SRCS})
+kde4_add_test_executable(BenchmarkPointStorage ${BenchmarkPointStorage_SRCS})
 
 target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
 
