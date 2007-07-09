@@ -30,7 +30,6 @@
 #include "CellStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-#include "SheetView.h"
 
 using namespace KSpread;
 
