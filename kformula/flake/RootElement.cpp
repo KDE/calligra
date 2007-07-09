@@ -205,7 +205,7 @@ void RootElement::draw( QPainter& painter, const LuPixelRect& r,
 void RootElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_radicand->writeMathML( writer );
-    if( m_exponent->elementType() != Basic )
+    if ( m_exponent )
         m_exponent->writeMathML( writer );
 }
 
