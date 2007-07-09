@@ -83,9 +83,12 @@ bool StyleManipulator::process(Element* element)
         }
 
         // special handling for indentation: reset the indentation first
-        Style indentationStyle;
-        indentationStyle.setIndentation( 0 );
-        m_sheet->cellStorage()->setStyle( Region(range), indentationStyle );
+        if ( m_style->hasAttribute( Style::Indentation ) )
+        {
+            Style style;
+            style.setIndentation( 0 );
+            m_sheet->cellStorage()->setStyle( Region(range), style );
+        }
 
         // set the actual style
         m_sheet->cellStorage()->setStyle( Region(range), *m_style );
@@ -142,13 +145,10 @@ bool StyleManipulator::mainProcessing()
     }
     else
     {
-        // special handling for indentation: reset the indentation first
-        Style indentationStyle;
-        indentationStyle.setIndentation( 0 );
-        m_sheet->cellStorage()->setStyle( *this, indentationStyle );
-
         Style style;
         style.setDefault();
+        // special handling for indentation
+        style.setIndentation( 0 ); // reset to zero
         m_sheet->cellStorage()->setStyle( *this, style );
         for ( int i = 0; i < m_undoData.count(); ++i )
         {
@@ -174,7 +174,7 @@ IncreaseIndentManipulator::IncreaseIndentManipulator()
     setText( i18n( "Increase Indentation" ) );
 }
 
-bool IncreaseIndentManipulator::process( Element* element )
+bool IncreaseIndentManipulator::mainProcessing()
 {
     Style style;
     if ( !m_reverse )
@@ -187,7 +187,7 @@ bool IncreaseIndentManipulator::process( Element* element )
         // decrease the indentation
         style.setIndentation( -m_sheet->doc()->indentValue() );
     }
-    m_sheet->cellStorage()->setStyle( Region(element->rect()), style );
+    m_sheet->cellStorage()->setStyle( *this, style );
     return true;
 }
 

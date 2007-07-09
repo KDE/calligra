@@ -130,7 +130,7 @@ public:
     virtual void setReverse(bool reverse);
 
 protected:
-    virtual bool process(Element*);
+    virtual bool mainProcessing();
     virtual bool postProcessing();
 };
 

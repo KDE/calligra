@@ -300,17 +300,6 @@ void StyleStorage::garbageCollection()
 
     const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.takeFirst();
 
-    // special handling for indentation
-    if ( currentPair.second->type() == Style::Indentation )
-    {
-        // only check for removal of other indentation values, if default
-        if ( static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 != 0 )
-        {
-            QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
-            return; // already done
-        }
-    }
-
     // check wether the named style still exists
     if ( currentPair.second->type() == Style::NamedStyleKey &&
          !styleManager()->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
@@ -342,6 +331,17 @@ void StyleStorage::garbageCollection()
         return; // already done
     }
 
+    // special handling for indentation:
+    // check wether the default indentation is placed first
+    if ( currentPair.second->type() == Style::Indentation &&
+         static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 == 0 &&
+         pairs[0].first == currentPair.first )
+    {
+        d->tree.remove( currentPair.first, currentPair.second );
+        QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
+        return; // already done
+    }
+
     bool found = false;
     foreach( const SharedSubStylePair& pair, pairs )
     {
@@ -364,6 +364,14 @@ void StyleStorage::garbageCollection()
                pair.second->type() == Style::NamedStyleKey ) &&
              pair.first.contains( currentPair.first ) )
         {
+            // special handling for indentation
+            // only remove, if covered by default
+            if ( pair.second->type() == Style::Indentation &&
+                 static_cast<const SubStyleOne<Style::Indentation, int>*>(pair.second.data())->value1 != 0 )
+            {
+                continue;
+            }
+
             kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
                           << " at " << Region(currentPair.first.toRect()).name()
                           << ", used " << currentPair.second->ref << "times" << endl;
@@ -463,7 +471,7 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
         {
             const int indentation = static_cast<const SubStyleOne<Style::Indentation, int>*>(subStyles[i].data())->value1;
             if ( indentation == 0 || ( style.indentation() + indentation <= 0 ) )
-                 style.setIndentation( 0 ); // reset
+                style.clearAttribute( Style::Indentation ); // reset
             else
                 style.setIndentation( style.indentation() + indentation ); // increase/decrease
         }
