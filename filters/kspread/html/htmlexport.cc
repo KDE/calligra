@@ -258,7 +258,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
         for ( int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
         {
             Cell cell( sheet, currentcolumn, currentrow );
-            const Style style = cell.style();
+            const Style style = cell.effectiveStyle();
             colspan_cells=cell.mergedXCells();
             if (cell.needsPrinting())
                 nonempty_cells++;
@@ -305,7 +305,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
 
-            switch((Style::HAlign)cell.defineAlignX())
+            switch((Style::HAlign)cell.effectiveAlignX())
             {
             case Style::Left:
                 line+=" align=\"" + html_left +"\"";

@@ -1329,13 +1329,14 @@ static QString cellAsText( const Cell& cell, unsigned int max )
   if( !cell.isDefault() )
   {
     int l = max - cell.displayText().length();
-    if ( Cell( cell ).defineAlignX() == Style::Right )
+    const Style::HAlign alignX = (Style::HAlign)Cell( cell ).effectiveAlignX();
+    if ( alignX == Style::Right )
     {
         for ( int i = 0; i < l; ++i )
           result += ' ';
         result += cell.displayText();
     }
-    else if ( Cell( cell ).defineAlignX() == Style::Left )
+    else if ( alignX == Style::Left )
       {
           result += ' ';
           result += cell.displayText();

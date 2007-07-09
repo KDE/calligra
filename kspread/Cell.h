@@ -402,17 +402,6 @@ public:
      */
     bool needsPrinting() const;
 
-    //////////////////////
-    //
-    // Other stuff
-    //
-    //////////////////////
-
-    /** returns true, if cell format is of date type or content is a date */
-    bool isDate() const;
-    /** returns true, if cell format is of time type or content is a time */
-    bool isTime() const;
-
     //
     //END
     //
@@ -529,13 +518,23 @@ public:
      */
     bool makeFormula();
 
-    /**
-     * return align X when align is undefined
-     */
-    int defineAlignX();
+    //
+    //END
+    //
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Effective style attributes
+    //
+
+    /** returns horizontal alignment, depending on style and value type */
+    int effectiveAlignX();
+    /** returns true, if cell format is of date type or content is a date */
+    bool isDate() const;
+    /** returns true, if cell format is of time type or content is a time */
+    bool isTime() const;
 
     //
-    //END 
+    //END Effective style attributes
     //
     //////////////////////////////////////////////////////////////////////////
     //

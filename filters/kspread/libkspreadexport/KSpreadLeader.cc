@@ -281,7 +281,7 @@ KoFilter::ConversionStatus Leader::doSpreadCell(const Cell& spreadCell, int colu
 		docSpreadCellProperty["extraheight"] = QString::number(spreadCell->extraHeight());
 		docSpreadCellProperty["formula"] = (spreadCell->isFormula()==0?"false":"true");
 		docSpreadCellProperty["haserror"] = (spreadCell->hasError()==0?"false":"true");
-		docSpreadCellProperty["alignx"] = QString::number(spreadCell->defineAlignX());
+		docSpreadCellProperty["alignx"] = QString::number(spreadCell->effectiveAlignX());
 		docSpreadCellProperty["name"] = spreadCell->name();
 		docSpreadCellProperty["fullname"] = spreadCell->fullName();
 		docSpreadCellProperty["content"] = QString::number(spreadCell->content());
