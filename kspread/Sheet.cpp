@@ -85,7 +85,6 @@
 #include "Selection.h"
 #include "SheetPrint.h"
 #include "SheetShapeContainer.h"
-#include "SheetView.h"
 #include "RectStorage.h"
 #include "Style.h"
 #include "StyleManager.h"
