@@ -245,9 +245,9 @@ void PointStorageBenchmark::testShiftUpPerformance()
     }
     qDebug() << "start measuring...";
     Time::tval start = Time::stamp();
-    for ( int i = 1; i < 1000; ++i )
+    for ( int i = 1; i < 10; ++i )
         storage.removeShiftUp( QRect( 1, 42, 1, 3) );
-    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 1000 ) );
+    qDebug() << qPrintable( Time::printAverage( Time::elapsed( start ), 10 ) );
 }
 
 void PointStorageBenchmark::testShiftDownPerformance()
