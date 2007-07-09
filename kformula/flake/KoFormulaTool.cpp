@@ -20,6 +20,7 @@
 #include "KoFormulaTool.h"
 #include "KoFormulaShape.h"
 #include "FormulaCursor.h"
+#include "FormulaToolOptions.h"
 #include "BasicElement.h"
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -75,10 +76,7 @@ void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED( converter )
     // TODO do view conversions with converter
-	/* This is broken, fix it
-    if( m_formulaCursor )
-        m_formulaCursor->paint( painter );
-    */
+    m_formulaCursor->paint( painter );
 }
 
 void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
@@ -246,6 +244,10 @@ void KoFormulaTool::remove( bool backSpace )
 
 QWidget* KoFormulaTool::createOptionWidget()
 {
+    FormulaToolOptions* options = new FormulaToolOptions();
+ //   options->setTool();
+    return options;
+/*
     QWidget *optionWidget = new QWidget();
     QGridLayout *layout = new QGridLayout( optionWidget );
 
@@ -260,7 +262,7 @@ QWidget* KoFormulaTool::createOptionWidget()
     layout->addWidget( button, 0, 1 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotChangeUrl() ) );
 
-    return optionWidget;
+    return optionWidget; */
 }
 
 void KoFormulaTool::slotChangeUrl()

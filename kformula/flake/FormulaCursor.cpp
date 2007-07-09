@@ -22,6 +22,7 @@
 #include "FormulaCursor.h"
 #include "BasicElement.h"
 #include <QPainter>
+#include <QPen>
 
 FormulaCursor::FormulaCursor( BasicElement* element )
               : m_wordMovement( false ),
