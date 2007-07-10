@@ -130,7 +130,7 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
         w.endElement(); // music:dot
     }
 
-    if (chord->note(0)->accidentals()) {
+    if (chord->noteCount() && chord->note(0)->accidentals()) {
         // TODO this should actually depend on key signature/previous accidentals
         w.startElement("music:accidental");
         switch (chord->note(0)->accidentals()) {
@@ -145,8 +145,10 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
     
     if (part->staffCount() > 1) {
         // only write staff info when more than one staff exists
+        Staff* s = chord->staff();
+        if (chord->noteCount()) s = chord->note(0)->staff();
         w.startElement("music:staff");
-        w.addTextNode(QString::number(part->indexOfStaff(chord->note(0)->staff()) + 1));
+        w.addTextNode(QString::number(part->indexOfStaff(s) + 1));
         w.endElement();  //music:staff
     }
     w.endElement(); // music:note
