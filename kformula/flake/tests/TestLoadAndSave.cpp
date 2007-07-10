@@ -29,16 +29,33 @@
 #include "IdentifierElement.h"
 #include "NumberElement.h"
 #include "OperatorElement.h"
+#include "TextElement.h"
+#include "SpaceElement.h"
+#include "StringElement.h"
+#include "GlyphElement.h"
 #include "RowElement.h"
+#include "FractionElement.h"
 #include "RootElement.h"
+#include "StyleElement.h"
+#include "ErrorElement.h"
+#include "PaddedElement.h"
+#include "PhantomElement.h"
+#include "BracketElement.h"
+#include "EncloseElement.h"
+#include "MultiscriptElement.h"
+#include "UnderOverElement.h"
+#include "MatrixElement.h"
+#include "MatrixRowElement.h"
+#include "MatrixEntryElement.h"
+#include "ActionElement.h"
 
-static QString loadAndSave(BasicElement* element, const QString& input)
+static QString loadAndSave( BasicElement* element, const QString& input )
 {
     QDomDocument doc;
     doc.setContent( input );
-    element->readMathML(doc.documentElement());
+    element->readMathML( doc.documentElement() );
     QBuffer device;
-    device.open(QBuffer::ReadWrite);
+    device.open( QBuffer::ReadWrite );
     KoXmlWriter writer( &device );
     element->writeMathML( &writer );
     device.seek( 0 );
@@ -53,6 +70,15 @@ static void addRow( const QString& input )
 static void addRow( const QString& input, const QString& output )
 {
     QTest::newRow("Load and Save") << input << output;
+}
+
+void test( BasicElement* element )
+{
+    QFETCH( QString, input );
+    QFETCH( QString, output );
+
+    QCOMPARE( loadAndSave( element, input ), output );
+    delete element;
 }
 
 void TestLoadAndSave::identifierElement_data()
@@ -78,16 +104,6 @@ void TestLoadAndSave::identifierElement_data()
     addRow( "<mi>&DifferentialD;</mi>" );
 }
 
-void TestLoadAndSave::identifierElement()
-{
-    QFETCH(QString, input);
-    QFETCH(QString, output);
-
-    IdentifierElement* element = new IdentifierElement;
-    QCOMPARE(loadAndSave(element, input), output);
-    delete element;
-}
-
 void TestLoadAndSave::numberElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -103,16 +119,6 @@ void TestLoadAndSave::numberElement_data()
     // Entities
     addRow( "<mn>&ExponentialE;</mn>" );
     addRow( "<mn>&ImaginaryI;</mn>" );
-}
-
-void TestLoadAndSave::numberElement()
-{
-    QFETCH(QString, input);
-    QFETCH(QString, output);
-
-    NumberElement* element = new NumberElement;
-    QCOMPARE(loadAndSave(element, input), output);
-    delete element;
 }
 
 void TestLoadAndSave::operatorElement_data()
@@ -244,54 +250,40 @@ void TestLoadAndSave::operatorElement_data()
     addRow( "<mo>&ApplyFunction;</mo>" );
 }
 
-void TestLoadAndSave::operatorElement()
-{
-    QFETCH(QString, input);
-    QFETCH(QString, output);
-
-    OperatorElement* element = new OperatorElement;
-    QCOMPARE(loadAndSave(element, input), output);
-    delete element;
-}
-
 void TestLoadAndSave::textElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::textElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::spaceElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::spaceElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::stringElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::stringElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::glyphElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::glyphElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::mathVariant_data()
@@ -334,11 +326,6 @@ void TestLoadAndSave::mathVariant_data()
             "<mi mathvariant=\"bold\">x</mi>" );
     addRow( "<mi MathVariant=\"bold\">x</mi>",
             "<mi mathvariant=\"bold\">x</mi>" );
-}
-
-void TestLoadAndSave::mathVariant()
-{
-    identifierElement();
 }
 
 void TestLoadAndSave::mathSize_data()
@@ -384,11 +371,6 @@ void TestLoadAndSave::mathSize_data()
             "<mi mathsize=\"normal\">x</mi>" );
 }
 
-void TestLoadAndSave::mathSize()
-{
-    identifierElement();
-}
-
 void TestLoadAndSave::mathColor_data()
 {
     QTest::addColumn<QString>("input");
@@ -428,11 +410,6 @@ void TestLoadAndSave::mathColor_data()
             "<mi mathcolor=\"#abc\">x</mi>" );
 }
 
-void TestLoadAndSave::mathColor()
-{
-    identifierElement();
-}
-
 void TestLoadAndSave::mathBackground_data()
 {
     QTest::addColumn<QString>("input");
@@ -470,11 +447,6 @@ void TestLoadAndSave::mathBackground_data()
             "<mi mathbackground=\"black\">x</mi>" );
     addRow( "<mi MathBackground=\"#ABC\">x</mi>",
             "<mi mathbackground=\"#abc\">x</mi>" );
-}
-
-void TestLoadAndSave::mathBackground()
-{
-    identifierElement();
 }
 
 void TestLoadAndSave::fontSize_data()
@@ -517,11 +489,6 @@ void TestLoadAndSave::fontSize_data()
             "<mi fontsize=\"10em\">x</mi>" );
 }
 
-void TestLoadAndSave::fontSize()
-{
-    identifierElement();
-}
-
 void TestLoadAndSave::fontWeight_data()
 {
     QTest::addColumn<QString>("input");
@@ -554,11 +521,6 @@ void TestLoadAndSave::fontWeight_data()
             "<mi fontweight=\"bold\">x</mi>" );
 }
 
-void TestLoadAndSave::fontWeight()
-{
-    identifierElement();
-}
-
 void TestLoadAndSave::fontStyle_data()
 {
     QTest::addColumn<QString>("input");
@@ -589,11 +551,6 @@ void TestLoadAndSave::fontStyle_data()
             "<mi fontstyle=\"italic\">x</mi>" );
     addRow( "<mi FontStyle=\"italic\">x</mi>",
             "<mi fontstyle=\"italic\">x</mi>" );
-}
-
-void TestLoadAndSave::fontStyle()
-{
-    identifierElement();
 }
 
 void TestLoadAndSave::color_data()
@@ -635,11 +592,6 @@ void TestLoadAndSave::color_data()
             "<mi color=\"#abc\">x</mi>" );
 }
 
-void TestLoadAndSave::color()
-{
-    identifierElement();
-}
-
 void TestLoadAndSave::rowElement_data()
 {
     QTest::addColumn<QString>("input");
@@ -649,24 +601,10 @@ void TestLoadAndSave::rowElement_data()
     addRow( "<mrow>\n <mi>x</mi>\n</mrow>" );
 }
 
-void TestLoadAndSave::rowElement()
-{
-    QFETCH(QString, input);
-    QFETCH(QString, output);
-
-    RowElement* element = new RowElement;
-    QCOMPARE(loadAndSave(element, input), output);
-    delete element;
-}
-
 void TestLoadAndSave::fractionElement_data()
 {
     // TODO
-}
-
-void TestLoadAndSave::fractionElement()
-{
-    // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::rootElement_data()
@@ -679,194 +617,346 @@ void TestLoadAndSave::rootElement_data()
     addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>" );
 }
 
-void TestLoadAndSave::rootElement()
-{
-    QFETCH(QString, input);
-    QFETCH(QString, output);
-
-    RootElement* element = new RootElement;
-    QCOMPARE(loadAndSave(element, input), output);
-    delete element;
-}
-
 void TestLoadAndSave::styleElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::styleElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::errorElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::errorElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::paddedElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::paddedElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::phantomElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::phantomElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::fencedElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::fencedElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::encloseElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::encloseElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::subElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::subElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::supElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::supElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::subsupElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::subsupElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::underElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::underElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::overElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::overElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::underoverElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::underoverElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::multiscriptsElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::multiscriptsElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::tableElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::tableElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::trElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::trElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::labeledtrElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::labeledtrElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::tdElement_data()
 {
-    // TODO
-}
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
 
-void TestLoadAndSave::tdElement()
-{
     // TODO
+    addRow( "" );
 }
 
 void TestLoadAndSave::actionElement_data()
 {
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
     // TODO
+    addRow( "" );
+}
+
+void TestLoadAndSave::identifierElement()
+{
+    test( new IdentifierElement );
+}
+
+void TestLoadAndSave::numberElement()
+{
+    test( new IdentifierElement );
+}
+
+void TestLoadAndSave::operatorElement()
+{
+    test( new OperatorElement );
+}
+
+void TestLoadAndSave::textElement()
+{
+    test( new TextElement );
+}
+
+void TestLoadAndSave::spaceElement()
+{
+    test( new SpaceElement );
+}
+
+void TestLoadAndSave::stringElement()
+{
+    test( new StringElement );
+}
+
+void TestLoadAndSave::glyphElement()
+{
+    test( new GlyphElement );
+}
+
+void TestLoadAndSave::mathVariant()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::mathSize()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::mathColor()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::mathBackground()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::fontSize()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::fontWeight()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::fontStyle()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::color()
+{
+    identifierElement();
+}
+
+void TestLoadAndSave::rowElement()
+{
+    test( new RowElement );
+}
+
+void TestLoadAndSave::fractionElement()
+{
+    test( new FractionElement );
+}
+
+void TestLoadAndSave::rootElement()
+{
+    test( new RootElement );
+}
+
+void TestLoadAndSave::styleElement()
+{
+    test( new StyleElement );
+}
+
+void TestLoadAndSave::errorElement()
+{
+    test( new ErrorElement );
+}
+
+void TestLoadAndSave::paddedElement()
+{
+    test( new PaddedElement );
+}
+
+void TestLoadAndSave::phantomElement()
+{
+    test( new PhantomElement );
+}
+
+void TestLoadAndSave::fencedElement()
+{
+    test( new BracketElement );
+}
+
+void TestLoadAndSave::encloseElement()
+{
+    test( new EncloseElement );
+}
+
+void TestLoadAndSave::subElement()
+{
+    test( new MultiscriptElement );
+}
+
+void TestLoadAndSave::supElement()
+{
+    test( new MultiscriptElement );
+}
+
+void TestLoadAndSave::subsupElement()
+{
+    test( new MultiscriptElement );
+}
+
+void TestLoadAndSave::underElement()
+{
+    test( new UnderOverElement );
+}
+
+void TestLoadAndSave::overElement()
+{
+    test( new UnderOverElement );
+}
+
+void TestLoadAndSave::underoverElement()
+{
+    test( new UnderOverElement );
+}
+
+void TestLoadAndSave::multiscriptsElement()
+{
+    test( new MultiscriptElement );
+}
+
+void TestLoadAndSave::tableElement()
+{
+    test( new MatrixElement );
+}
+
+void TestLoadAndSave::trElement()
+{
+    test( new MatrixRowElement );
+}
+
+void TestLoadAndSave::labeledtrElement()
+{
+    test( new MatrixRowElement );
+}
+
+void TestLoadAndSave::tdElement()
+{
+    test( new MatrixEntryElement );
 }
 
 void TestLoadAndSave::actionElement()
 {
-    // TODO
+    test( new ActionElement );
 }
 
 QTEST_MAIN(TestLoadAndSave)
