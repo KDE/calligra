@@ -13,7 +13,6 @@ SET (tableshape_LIB_SRCS
 	TableToolFactory.cpp
 	)
 
-kde4_automoc(${tableshape_LIB_SRCS})
 kde4_add_plugin(tableshape ${tableshape_LIB_SRCS})
 
 target_link_libraries(tableshape kspreadcommon flake)
