@@ -13,7 +13,7 @@ kde4_add_plugin(keximigrate_txtmigrate ${keximigrate_txtmigrate_PART_SRCS})
 
 
 
-target_link_libraries(keximigrate_txtmigrate  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} keximigrate )
+target_link_libraries(keximigrate_txtmigrate  ${KDE4_KPARTS_LIBS} keximigrate )
 
 install(TARGETS keximigrate_txtmigrate  DESTINATION ${PLUGIN_INSTALL_DIR})
 

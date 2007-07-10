@@ -18,7 +18,7 @@ set(kudesignercore_LIB_SRCS ${libkudesignercommon_SRCS} kudesigner_view.cpp kude
 
 kde4_add_library(kudesignercore SHARED ${kudesignercore_LIB_SRCS})
 
-target_link_libraries(kudesignercore  koguiutils ${KDE4_KPARTS_LIBS} komain koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
+target_link_libraries(kudesignercore  koguiutils komain koproperty ${KDE4_KDEPRINT_LIBS} )
 
 set_target_properties(kudesignercore PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kudesignercore  DESTINATION ${LIB_INSTALL_DIR})

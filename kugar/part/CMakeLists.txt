@@ -13,7 +13,7 @@ kde4_add_plugin(kugarpart WITH_PREFIX ${kugarpart_PART_SRCS})
 
 
 
-target_link_libraries(kugarpart  ${KDE4_KIO_LIBS} kugarlib ${KDE4_KPARTS_LIBS} ${KDE4_KDEPRINT_LIBS} komain )
+target_link_libraries(kugarpart  kugarlib ${KDE4_KDEPRINT_LIBS} komain )
 
 install(TARGETS kugarpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 

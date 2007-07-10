@@ -23,7 +23,7 @@ kde4_add_plugin(kexidb_sqlite3driver ${kexidb_sqlite3driver_PART_SRCS})
 
 
 
-target_link_libraries(kexidb_sqlite3driver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexisql3 kexidb )
+target_link_libraries(kexidb_sqlite3driver  ${KDE4_KPARTS_LIBS} kexisql3 kexidb )
 
 install(TARGETS kexidb_sqlite3driver  DESTINATION ${PLUGIN_INSTALL_DIR})
 

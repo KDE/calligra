@@ -13,7 +13,7 @@ kde4_add_plugin(kexidb_odbcdriver ${kexidb_odbcdriver_PART_SRCS})
 
 
 
-target_link_libraries(kexidb_odbcdriver  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} odbc kexidb )
+target_link_libraries(kexidb_odbcdriver  ${KDE4_KPARTS_LIBS} odbc kexidb )
 
 install(TARGETS kexidb_odbcdriver  DESTINATION ${PLUGIN_INSTALL_DIR})
 
