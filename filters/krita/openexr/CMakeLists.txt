@@ -32,8 +32,6 @@ install(TARGETS krita_openexr_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(krita_openexr_export_PART_SRCS kis_openexr_export.cpp )
 
-kde4_automoc(${krita_openexr_export_PART_SRCS})
-
 kde4_add_plugin(krita_openexr_export WITH_PREFIX ${krita_openexr_export_PART_SRCS})
 
 

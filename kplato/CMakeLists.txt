@@ -134,8 +134,6 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
 )
 
 kde4_automoc(${kplatoprivate_LIB_SRCS})
-kde4_automoc(${libkdgantt_SRCS})
-
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS}) #${libkdgantt_SRCS})
 
 target_link_libraries(kplatoprivate koguiutils)
@@ -160,8 +158,6 @@ install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### KPlato executable ###############
 
 set(kplato_KDEINIT_SRCS main.cc )
-
-kde4_automoc(${kplato_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 

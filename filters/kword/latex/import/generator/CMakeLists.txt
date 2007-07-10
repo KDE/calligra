@@ -12,8 +12,6 @@ set(latexgenerator_PART_SRCS
    latex.cc 
    paragraph.cc )
 
-kde4_automoc(${latexgenerator_PART_SRCS})
-
 kde4_add_plugin(latexgenerator WITH_PREFIX ${latexgenerator_PART_SRCS})
 
 

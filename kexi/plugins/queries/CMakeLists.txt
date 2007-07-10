@@ -12,8 +12,6 @@ set(kexihandler_query_PART_SRCS
    kexiquerydesignerguieditor.cpp 
    kexiqueryview.cpp )
 
-kde4_automoc(${kexihandler_query_PART_SRCS})
-
 kde4_add_plugin(kexihandler_query ${kexihandler_query_PART_SRCS})
 
 

@@ -10,7 +10,6 @@ SET (pictureshape_LIB_SRCS
     Plugin.cpp
 )
 
-kde4_automoc(${pictureshape_LIB_SRCS})
 kde4_add_plugin(pictureshape ${pictureshape_LIB_SRCS})
 
 target_link_libraries(pictureshape flake koguiutils)

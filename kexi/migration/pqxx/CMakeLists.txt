@@ -6,8 +6,6 @@ ADD_DEFINITIONS( ${KDE4_ENABLE_EXCEPTIONS} )
 
 set(keximigrate_pqxx_PART_SRCS pqxxmigrate.cpp )
 
-kde4_automoc(${keximigrate_pqxx_PART_SRCS})
-
 kde4_add_plugin(keximigrate_pqxx ${keximigrate_pqxx_PART_SRCS})
 
 

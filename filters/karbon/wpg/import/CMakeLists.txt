@@ -30,8 +30,6 @@ FileOutputHandler.cxx
 GraphicsElement.cxx
 ${libwpg_SRCS})
 
-kde4_automoc(${wpgimport_PART_SRCS})
-
 kde4_add_plugin(wpgimport WITH_PREFIX ${wpgimport_PART_SRCS})
 
 

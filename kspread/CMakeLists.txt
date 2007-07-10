@@ -202,8 +202,6 @@ SET (kspreadcommon_LIB_SRCS
 	${ui_DIR_SRCS}
 	)
 
-kde4_automoc(${kspreadcommon_LIB_SRCS})
-
 kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
@@ -219,8 +217,6 @@ install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 SET (kspreadpart_PART_SRCS Factory_init.cpp )
 
-kde4_automoc(${kspreadpart_PART_SRCS})
-
 kde4_add_plugin(kspreadpart WITH_PREFIX ${kspreadpart_PART_SRCS})
 
 
@@ -233,8 +229,6 @@ install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 SET (kspread_KDEINIT_SRCS Main.cpp )
-
-kde4_automoc(${kspread_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 

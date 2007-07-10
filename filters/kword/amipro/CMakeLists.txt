@@ -22,8 +22,6 @@ install(TARGETS amiproimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(amiproexport_PART_SRCS amiproexport.cc )
 
-kde4_automoc(${amiproexport_PART_SRCS})
-
 kde4_add_plugin(amiproexport WITH_PREFIX ${amiproexport_PART_SRCS})
 
 

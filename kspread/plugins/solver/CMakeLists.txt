@@ -14,8 +14,6 @@ set( solver_PART_SRCS
 	SolverDialog.cpp
 )
 
-kde4_automoc(${solver_PART_SRCS})
-
 kde4_add_ui_files( solver_PART_SRCS
 	SolverDetailsWidget.ui
 	SolverMainWidget.ui

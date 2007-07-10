@@ -148,8 +148,7 @@ add_subdirectory( pics )
 #
 #set(kpresenterpart_PART_SRCS KPrFactoryInit.cpp )
 #
-#kde4_automoc(${kpresenterpart_PART_SRCS})
-#
+##
 #kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 #
 #
@@ -163,8 +162,7 @@ add_subdirectory( pics )
 #
 #set(kpresenter_KDEINIT_SRCS main.cpp )
 #
-#kde4_automoc(${kpresenter_KDEINIT_SRCS})
-#
+##
 #kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 #
 #target_link_libraries(kdeinit_kpresenter  ${KDE4_KDE3SUPPORT_LIBS} komain koguiutils )

@@ -32,8 +32,6 @@ install(TARGETS latexparser  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(texlauncher_SRCS texlauncher.cc )
 
-kde4_automoc(${texlauncher_SRCS})
-
 if(KDE4_BUILD_TESTS)
 
 kde4_add_executable(texlauncher ${texlauncher_SRCS})

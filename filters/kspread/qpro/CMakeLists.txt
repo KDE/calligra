@@ -14,8 +14,6 @@ set(qproimport_PART_SRCS
 	qproimport.cc
 	qproformula.cc )
 
-kde4_automoc(${qproimport_PART_SRCS})
-
 kde4_add_plugin(qproimport WITH_PREFIX ${qproimport_PART_SRCS})
 
 

@@ -22,8 +22,6 @@ install(TARGETS karbonxamlexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonxamlimport_PART_SRCS xamlimport.cc )
 
-kde4_automoc(${karbonxamlimport_PART_SRCS})
-
 kde4_add_plugin(karbonxamlimport WITH_PREFIX ${karbonxamlimport_PART_SRCS})
 
 

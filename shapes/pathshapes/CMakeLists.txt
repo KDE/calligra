@@ -22,8 +22,6 @@ set(pathshapes_PART_SRCS
     PathShapesPlugin.cpp
 )
 
-kde4_automoc(${pathshapes_PART_SRCS})
-
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 
 target_link_libraries(pathshapes flake koguiutils)

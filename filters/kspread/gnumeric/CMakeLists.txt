@@ -22,8 +22,6 @@ install(TARGETS gnumericexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(gnumericimport_PART_SRCS gnumericimport.cc )
 
-kde4_automoc(${gnumericimport_PART_SRCS})
-
 kde4_add_plugin(gnumericimport WITH_PREFIX ${gnumericimport_PART_SRCS})
 
 

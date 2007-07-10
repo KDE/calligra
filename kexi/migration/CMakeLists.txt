@@ -26,8 +26,6 @@ set(keximigrate_LIB_SRCS
    importwizard.cpp 
    importoptionsdlg.cpp )
 
-kde4_automoc(${keximigrate_LIB_SRCS})
-
 kde4_add_library(keximigrate SHARED ${keximigrate_LIB_SRCS})
 
 target_link_libraries(keximigrate  ${KDE4_KDECORE_LIBS} kexicore kexidb kexiextendedwidgets keximain )

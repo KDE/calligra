@@ -22,8 +22,6 @@ install(TARGETS opencalcimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(opencalcexport_PART_SRCS opencalcexport.cc opencalcstyleexport.cc ${liboofilter_SRCS})
 
-kde4_automoc(${opencalcexport_PART_SRCS})
-
 kde4_add_plugin(opencalcexport WITH_PREFIX ${opencalcexport_PART_SRCS})
 
 

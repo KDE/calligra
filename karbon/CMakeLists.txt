@@ -100,8 +100,6 @@ install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbon_KDEINIT_SRCS main.cc )
 
-kde4_automoc(${karbon_KDEINIT_SRCS})
-
 kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_karbon  ${KDE4_KDECORE_LIBS} karboncommon )

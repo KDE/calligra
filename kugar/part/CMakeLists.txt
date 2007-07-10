@@ -22,8 +22,6 @@ install(TARGETS kugarpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kugar_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(${kugar_KDEINIT_SRCS})
-
 kde4_add_kdeinit_executable( kugar ${kugar_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kugar  ${KDE4_KDECORE_LIBS} komain )

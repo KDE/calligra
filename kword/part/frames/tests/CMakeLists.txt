@@ -18,14 +18,12 @@ target_link_libraries(TestBasicLayout kwordprivate ${QT_QTTEST_LIBRARY})
 ########### next target ###############
 
 set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
-kde4_automoc(${TestDocumentLayout_test_SRCS})
 kde4_add_unit_test(TestDocumentLayout TESTNAME kword-part-frame-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
 target_link_libraries(TestDocumentLayout kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(TestTextFrameSorting_test_SRCS TestTextFrameSorting.cpp)
-kde4_automoc(${TestTextFrameSorting_test_SRCS})
 kde4_add_unit_test(TestTextFrameSorting TESTNAME kword-part-frame-TestTextFrameSorting  ${TestTextFrameSorting_test_SRCS})
 target_link_libraries(TestTextFrameSorting kwordprivate ${QT_QTTEST_LIBRARY})
 

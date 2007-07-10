@@ -22,8 +22,6 @@ install(TARGETS ooimpressimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(ooimpressexport_PART_SRCS ooimpressexport.cc stylefactory.cc ${liboofilter_SRCS})
 
-kde4_automoc(${ooimpressexport_PART_SRCS})
-
 kde4_add_plugin(ooimpressexport WITH_PREFIX ${ooimpressexport_PART_SRCS})
 
 

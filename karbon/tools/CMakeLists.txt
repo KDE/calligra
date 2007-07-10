@@ -12,8 +12,6 @@ set(karbon_defaulttools_PART_SRCS
    vtexttool.cc 
    vdefaulttools.cc )
 
-kde4_automoc(${karbon_defaulttools_PART_SRCS})
-
 kde4_add_plugin(karbon_defaulttools ${karbon_defaulttools_PART_SRCS})
 
 

@@ -64,8 +64,6 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialogs/KWStatistics.ui
 )
 
-kde4_automoc(${kwordprivate_LIB_SRCS})
-
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
 
 target_link_libraries(kwordprivate  ${KDE4_KDECORE_LIBS} flake koguiutils kotext)
@@ -96,8 +94,6 @@ install(TARGETS kwordpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### KWord exe ###############
 
 set(kword_KDEINIT_SRCS main.cpp )
-
-kde4_automoc(${kword_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kword ${kword_KDEINIT_SRCS})
 

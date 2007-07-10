@@ -16,8 +16,6 @@ add_subdirectory( templates )
 
 set(kudesignercore_LIB_SRCS ${libkudesignercommon_SRCS} kudesigner_view.cpp kudesigner_factory.cpp kudesigner_doc.cpp )
 
-kde4_automoc(${kudesignercore_LIB_SRCS})
-
 kde4_add_library(kudesignercore SHARED ${kudesignercore_LIB_SRCS})
 
 target_link_libraries(kudesignercore  koguiutils ${KDE4_KPARTS_LIBS} komain koproperty ${KDE4_KIO_LIBS} ${KDE4_KDEPRINT_LIBS} )
@@ -44,8 +42,6 @@ install(TARGETS kudesignerpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(kudesigner_KDEINIT_SRCS main.cpp )
-
-kde4_automoc(${kudesigner_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kudesigner ${kudesigner_KDEINIT_SRCS})
 

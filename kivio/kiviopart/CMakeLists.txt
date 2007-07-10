@@ -80,8 +80,6 @@ install(TARGETS kiviopart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kivio_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(${kivio_KDEINIT_SRCS})
-
 kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} komain )

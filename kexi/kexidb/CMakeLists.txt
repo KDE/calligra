@@ -72,8 +72,6 @@ set(kexidb_LIB_SRCS
    alter.cpp
 )
 
-kde4_automoc(${kexidb_LIB_SRCS})
-
 kde4_add_library(kexidb SHARED ${kexidb_LIB_SRCS})
 target_link_libraries(kexidb 
    ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kexiutils )

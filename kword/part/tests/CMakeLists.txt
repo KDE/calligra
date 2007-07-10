@@ -8,7 +8,6 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${K
 ########### next target ###############
 
 set(TestPageManager_test_SRCS TestPageManager.cpp)
-kde4_automoc(${TestPageManager_test_SRCS})
 kde4_add_unit_test(TestPageManager TESTNAME kword-part-TestPageManager  ${TestPageManager_test_SRCS})
 target_link_libraries(TestPageManager kwordprivate ${QT_QTTEST_LIBRARY})
 

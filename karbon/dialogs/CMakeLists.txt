@@ -6,8 +6,6 @@ set(karbondialogs_SRCS
     vcolortab.cc 
     )
 
-kde4_automoc(${karbondialogs_SRCS})
-
 kde4_add_library(karbondialogs ${karbondialogs_SRCS})
 
 

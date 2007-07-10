@@ -26,8 +26,6 @@ install(TARGETS abiwordimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(abiwordexport_PART_SRCS abiwordexport.cc )
 
-kde4_automoc(${abiwordexport_PART_SRCS})
-
 kde4_add_plugin(abiwordexport WITH_PREFIX ${abiwordexport_PART_SRCS})
 
 

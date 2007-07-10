@@ -22,7 +22,6 @@ qt4_wrap_cpp(krossmodulekword_PART_SRCS
 	Variable.h
 )
 
-kde4_automoc(${krossmodulekword_PART_SRCS})
 kde4_add_plugin(krossmodulekword ${krossmodulekword_PART_SRCS})
 target_link_libraries(krossmodulekword ${KDE4_KDECORE_LIBS} ${KDE4_KROSSUI_LIBS} ${KDE4_KPARTS_LIBS} kokross kwordprivate)
 install(TARGETS krossmodulekword DESTINATION ${PLUGIN_INSTALL_DIR})

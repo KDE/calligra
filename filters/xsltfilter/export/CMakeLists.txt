@@ -10,8 +10,6 @@ include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${CMAKE_CURREN
 
 set(xsltexport_PART_SRCS xsltexport.cc xsltexportdia.cc xsltproc.cc )
 
-kde4_automoc(${xsltexport_PART_SRCS})
-
 kde4_add_ui3_files(xsltexport_PART_SRCS xsltdialog.ui )
 
 kde4_add_plugin(xsltexport WITH_PREFIX ${xsltexport_PART_SRCS})

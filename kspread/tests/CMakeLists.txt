@@ -4,8 +4,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} )
 
 set(TestFormula_SRCS TestFormula.cpp)
 
-kde4_automoc(${TestFormula_SRCS})
-
 kde4_add_unit_test(TestFormula TESTNAME kspread-Formula  ${TestFormula_SRCS})
 
 target_link_libraries(TestFormula kspreadcommon ${QT_QTTEST_LIBRARY})
@@ -135,8 +133,6 @@ target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY
 
 set(TestEngineeringFunctions_SRCS TestEngineeringFunctions.cpp)
 
-kde4_automoc(${TestEngineeringFunctions_SRCS})
-
 kde4_add_unit_test(TestEngineeringFunctions TESTNAME kspread-EngineeringFunctions  ${TestEngineeringFunctions_SRCS})
 
 target_link_libraries(TestEngineeringFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
@@ -145,8 +141,6 @@ target_link_libraries(TestEngineeringFunctions kspreadcommon ${QT_QTTEST_LIBRARY
 ########### next target ###############
 
 set(TestLogicFunctions_SRCS TestLogicFunctions.cpp)
-
-kde4_automoc(${TestLogicFunctions_SRCS})
 
 kde4_add_unit_test(TestLogicFunctions TESTNAME kspread-LogicFunctions  ${TestLogicFunctions_SRCS})
 
@@ -157,8 +151,6 @@ target_link_libraries(TestLogicFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 set(TestStatisticalFunctions_SRCS TestStatisticalFunctions.cpp)
 
-kde4_automoc(${TestStatisticalFunctions_SRCS})
-
 kde4_add_unit_test(TestStatisticalFunctions TESTNAME kspread-StatisticalFunctions  ${TestStatisticalFunctions_SRCS})
 
 target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
@@ -167,8 +159,6 @@ target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QTTEST_LIBRARY
 ########### next target ###############
 
 set(TestTextFunctions_SRCS TestTextFunctions.cpp)
-
-kde4_automoc(${TestTextFunctions_SRCS})
 
 kde4_add_unit_test(TestTextFunctions TESTNAME kspread-TextFunctions  ${TestTextFunctions_SRCS})
 
@@ -179,8 +169,6 @@ target_link_libraries(TestTextFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 set(TestDatetimeFunctions_SRCS TestDatetimeFunctions.cpp)
 
-kde4_automoc(${TestDatetimeFunctions_SRCS})
-
 kde4_add_unit_test(TestDatetimeFunctions TESTNAME kspread-DatetimeFunctions  ${TestDatetimeFunctions_SRCS})
 
 target_link_libraries(TestDatetimeFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
@@ -190,8 +178,6 @@ target_link_libraries(TestDatetimeFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 set(TestDatabaseFunctions_SRCS TestDatabaseFunctions.cpp)
 
-kde4_automoc(${TestDatabaseFunctions_SRCS})
-
 kde4_add_unit_test(TestDatabaseFunctions TESTNAME kspread-DatabaseFunctions  ${TestDatabaseFunctions_SRCS})
 
 target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
@@ -200,8 +186,6 @@ target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 ########### next target ###############
 
 set(TestRegion_SRCS TestRegion.cpp)
-
-kde4_automoc(${TestRegion_SRCS})
 
 kde4_add_unit_test(TestRegion TESTNAME kspread-Region  ${TestRegion_SRCS})
 

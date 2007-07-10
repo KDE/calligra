@@ -20,7 +20,6 @@ set( kpresenterprivate_LIB_SRCS
      shapeanimations/KPrShapeAnimation.cpp
    )
 
-kde4_automoc(${kpresenterprivate_LIB_SRCS})
 #kde4_add_ui_files(kpresenterprivate_LIB_SRCS xxxx.ui)
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
@@ -33,8 +32,6 @@ install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})
 ### kpresenterpart ###
 set(kpresenterpart_PART_SRCS KPrFactoryInit.cpp )
 
-kde4_automoc(${kpresenterpart_PART_SRCS})
-
 kde4_add_plugin(kpresenterpart WITH_PREFIX ${kpresenterpart_PART_SRCS})
 
 
@@ -45,8 +42,6 @@ install(TARGETS kpresenterpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ### kdeinit kpresenter ###
 set(kpresenter_KDEINIT_SRCS main.cpp )
-
-kde4_automoc(${kpresenter_KDEINIT_SRCS})
 
 kde4_add_kdeinit_executable( kpresenter ${kpresenter_KDEINIT_SRCS})
 

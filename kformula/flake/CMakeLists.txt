@@ -60,8 +60,6 @@ set( formulashape_PART_SRCS
    FormulaToolOptions.cpp
 )
 
-kde4_automoc(${formulashape_PART_SRCS})
-
 kde4_add_plugin(formulashape ${formulashape_PART_SRCS})
 
 target_link_libraries(formulashape  ${KDE4_KDEUI_LIBS} koguiutils kformulaprivate)

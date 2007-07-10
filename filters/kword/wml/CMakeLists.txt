@@ -22,8 +22,6 @@ install(TARGETS wmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(wmlexport_PART_SRCS wmlexport.cc )
 
-kde4_automoc(${wmlexport_PART_SRCS})
-
 kde4_add_plugin(wmlexport WITH_PREFIX ${wmlexport_PART_SRCS})
 
 

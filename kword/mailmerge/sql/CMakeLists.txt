@@ -24,8 +24,6 @@ install(TARGETS kwmailmerge_qtsqldb  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kwmailmerge_qtsqldb_power_PART_SRCS KWQtSqlPowerSerialDataSource.cpp )
 
-kde4_automoc(${kwmailmerge_qtsqldb_power_PART_SRCS})
-
 kde4_add_ui3_files(kwmailmerge_qtsqldb_power_PART_SRCS kwqtsqlpower.ui )
 
 kde4_add_dcop_skels(kwmailmerge_qtsqldb_power_PART_SRCS KWQtSqlPowerSerialDataSource.h )

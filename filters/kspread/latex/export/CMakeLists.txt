@@ -22,8 +22,6 @@ set(kspreadlatexexport_PART_SRCS
    table.cc 
    xmlparser.cc )
 
-kde4_automoc(${kspreadlatexexport_PART_SRCS})
-
 kde4_add_ui3_files(kspreadlatexexport_PART_SRCS latexexportdia.ui )
 
 kde4_add_plugin(kspreadlatexexport WITH_PREFIX ${kspreadlatexexport_PART_SRCS})

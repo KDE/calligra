@@ -22,8 +22,6 @@ install(TARGETS kexihandler_report  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kexireportwidgets_PART_SRCS reportwidgets.cpp kexireportfactory.cpp )
 
-kde4_automoc(${kexireportwidgets_PART_SRCS})
-
 kde4_add_plugin(kexireportwidgets ${kexireportwidgets_PART_SRCS})
 
 

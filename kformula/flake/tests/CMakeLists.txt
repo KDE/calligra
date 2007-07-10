@@ -8,20 +8,17 @@
 ########### Load Test ###############
 
 set(TestLoad_SRCS TestLoad.cpp)
-kde4_automoc(${TestLoad_SRCS})
 kde4_add_unit_test(TestLoad TESTNAME kformula-Load  ${TestLoad_SRCS})
 target_link_libraries(TestLoad kformulalib ${QT_QTTEST_LIBRARY})
 
 ########### Load and Save Test ###############
 
 set(TestLoadAndSave_SRCS TestLoadAndSave.cpp)
-kde4_automoc(${TestLoadAndSave_SRCS})
 kde4_add_unit_test(TestLoadAndSave TESTNAME kformula-LoadAndSave  ${TestLoadAndSave_SRCS})
 target_link_libraries(TestLoadAndSave kformulalib ${QT_QTTEST_LIBRARY})
 
 ########### Layout Test ###############
 
 set(TestLayout_SRCS TestLayout.cpp)
-kde4_automoc(${TestLayout_SRCS})
 kde4_add_unit_test(TestLayout TESTNAME kformula-LoadAndSave  ${TestLayout_SRCS})
 target_link_libraries(TestLayout kformulalib ${QT_QTTEST_LIBRARY})

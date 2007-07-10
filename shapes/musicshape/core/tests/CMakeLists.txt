@@ -30,7 +30,6 @@ set(VoiceBarTest_test_SRCS
     ../VoiceElement.cpp
 )
 
-kde4_automoc(${VoiceBarTest_test_SRCS})
 kde4_add_unit_test(VoiceBarTest TESTNAME shapes-musicshape-VoiceBarTest ${VoiceBarTest_test_SRCS})
 target_link_libraries(VoiceBarTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 

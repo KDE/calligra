@@ -4,8 +4,6 @@ set(kritapngimport_PART_SRCS
     kis_png_import.cc
     )
 
-kde4_automoc(${kritapngimport_PART_SRCS})
-
 kde4_add_plugin(kritapngimport WITH_PREFIX ${kritapngimport_PART_SRCS})
 
 

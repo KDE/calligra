@@ -22,8 +22,6 @@ install(TARGETS kformdesigner_containers  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kformdesigner_stdwidgets_PART_SRCS stdwidgetfactory.cpp )
 
-kde4_automoc(${kformdesigner_stdwidgets_PART_SRCS})
-
 kde4_add_plugin(kformdesigner_stdwidgets ${kformdesigner_stdwidgets_PART_SRCS})
 
 

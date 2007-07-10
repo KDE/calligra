@@ -28,8 +28,6 @@ install(TARGETS csvimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(csvexport_PART_SRCS csvexport.cc csvexportdialog.cpp )
 
-kde4_automoc(${csvexport_PART_SRCS})
-
 kde4_add_ui_files(csvexport_PART_SRCS exportdialogui.ui )
 
 kde4_add_plugin(csvexport WITH_PREFIX ${csvexport_PART_SRCS})

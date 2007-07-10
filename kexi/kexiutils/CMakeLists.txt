@@ -6,8 +6,6 @@ include_directories(
 set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp debuggui.cpp 
 	styleproxy.cpp longlongvalidator.cpp ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp)
 
-kde4_automoc(${kexiutils_LIB_SRCS})
-
 add_definitions( -DMAKE_KEXIUTILS_LIB )
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
 target_link_libraries(kexiutils  

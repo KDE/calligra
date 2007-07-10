@@ -4,8 +4,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(krosskexiapp_PART_SRCS kexiapppart.cpp kexiappmainwindow.cpp )
 
-kde4_automoc(${krosskexiapp_PART_SRCS})
-
 kde4_add_plugin(krosskexiapp ${krosskexiapp_PART_SRCS})
 
 target_link_libraries(krosskexiapp  ${KDE4_KDECORE_LIBS} kexicore )

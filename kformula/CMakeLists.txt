@@ -22,8 +22,6 @@ set(kformulaprivate_LIB_SRCS
    KFormulaCanvas.cpp 
    KFormulaConfigDialog.cpp )
 	
-kde4_automoc(${kformulaprivate_LIB_SRCS})
-
 kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
 target_link_libraries(kformulaprivate ${KDE4_KDECORELIBS} koguiutils kformulalib)

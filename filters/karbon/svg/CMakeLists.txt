@@ -22,8 +22,6 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(karbonsvgimport_PART_SRCS svgimport.cc )
 
-kde4_automoc(${karbonsvgimport_PART_SRCS})
-
 kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
 
 

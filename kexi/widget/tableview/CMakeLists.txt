@@ -30,8 +30,6 @@ set(kexidatatable_LIB_SRCS
 #   kexidatetimetableedit.cpp 
 #   kexitextformatter.cpp
 
-kde4_automoc(${kexidatatable_LIB_SRCS})
-
 kde4_add_library(kexidatatable SHARED ${kexidatatable_LIB_SRCS})
 
 target_link_libraries(kexidatatable  ${KDE4_KIO_LIBS}

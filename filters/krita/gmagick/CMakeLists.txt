@@ -22,8 +22,6 @@ install(TARGETS kritagmagickimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kritagmagickexport_PART_SRCS magickexport.cpp kis_image_magick_converter.cc )
 
-kde4_automoc(${kritagmagickexport_PART_SRCS})
-
 kde4_add_plugin(kritagmagickexport WITH_PREFIX ${kritagmagickexport_PART_SRCS})
 
 

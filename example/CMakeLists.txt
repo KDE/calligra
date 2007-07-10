@@ -22,8 +22,6 @@ install(TARGETS koexamplepart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(koexample_KDEINIT_SRCS main.cpp )
 
-kde4_automoc(${koexample_KDEINIT_SRCS})
-
 kde4_add_kdeinit_executable( koexample ${koexample_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_koexample  ${KDE4_KDECORE_LIBS} komain )

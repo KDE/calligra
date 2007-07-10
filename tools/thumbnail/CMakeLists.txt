@@ -4,8 +4,6 @@ include_directories( ${KOMAIN_INCLUDES})
 
 set(clipartthumbnail_SRCS clipartcreator.cpp )
 
-kde4_automoc(${clipartthumbnail_SRCS})
-
 kde4_add_plugin(clipartthumbnail ${clipartthumbnail_SRCS})
 
 
@@ -18,8 +16,6 @@ install(TARGETS clipartthumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(kofficethumbnail_SRCS kofficecreator.cpp )
-
-kde4_automoc(${kofficethumbnail_SRCS})
 
 kde4_add_plugin(kofficethumbnail ${kofficethumbnail_SRCS})
 

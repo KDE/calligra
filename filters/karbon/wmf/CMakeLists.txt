@@ -22,8 +22,6 @@ install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(wmfexport_PART_SRCS wmfexport.cc )
 
-kde4_automoc(${wmfexport_PART_SRCS})
-
 kde4_add_plugin(wmfexport WITH_PREFIX ${wmfexport_PART_SRCS})
 
 

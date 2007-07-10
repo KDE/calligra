@@ -14,8 +14,6 @@ set(kexihandler_csv_importexport_PART_SRCS
    kexicsvexport.cpp
 )
 
-kde4_automoc(${kexihandler_csv_importexport_PART_SRCS})
-
 kde4_add_plugin(kexihandler_csv_importexport ${kexihandler_csv_importexport_PART_SRCS})
 
 

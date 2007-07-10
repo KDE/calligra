@@ -2,8 +2,6 @@
 
 set(kodp2odt_PART_SRCS odp2odt.cpp )
 
-kde4_automoc(${kodp2odt_PART_SRCS})
-
 kde4_add_plugin(kodp2odt WITH_PREFIX ${kodp2odt_PART_SRCS})
 
 

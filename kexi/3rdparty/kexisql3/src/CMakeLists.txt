@@ -48,8 +48,6 @@ ELSE() #unix (including Mac OSX)
    set(kexisql3_LIB_SRCS ${kexisql3_LIB_SRCS} os_unix.c)
 ENDIF()
 
-kde4_automoc(${kexisql3_LIB_SRCS})
-
 kde4_add_library(kexisql3 SHARED ${kexisql3_LIB_SRCS})
 
 target_link_libraries(kexisql3  ${KDE4_KDECORE_LIBS} )

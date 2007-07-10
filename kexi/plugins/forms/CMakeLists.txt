@@ -6,8 +6,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 set(kexihandler_form_PART_SRCS kexiforms.cpp )
 
-kde4_automoc(${kexihandler_form_PART_SRCS})
-
 kde4_add_plugin(kexihandler_form ${kexihandler_form_PART_SRCS})
 
 target_link_libraries(kexihandler_form  ${KDE4_KDECORE_LIBS} kexicore kexiguiutils kexidatatable kexiextendedwidgets kformdesigner koproperty kexiformutils )
@@ -18,8 +16,6 @@ install(TARGETS kexihandler_form  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 set(kformdesigner_kexidbwidgets_PART_SRCS kexidbfactory.cpp )
-
-kde4_automoc(${kformdesigner_kexidbwidgets_PART_SRCS})
 
 kde4_add_plugin(kformdesigner_kexidbwidgets ${kformdesigner_kexidbwidgets_PART_SRCS})
 

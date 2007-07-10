@@ -10,8 +10,6 @@ set(karbondockers_SRCS
     KarbonStylePreviewDocker.cpp
     )
 
-kde4_automoc(${karbondockers_SRCS})
-
 kde4_add_library(karbondockers ${karbondockers_SRCS})
 
 

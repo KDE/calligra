@@ -8,8 +8,6 @@ include_directories(
 
 set(oodrawimport_PART_SRCS oodrawimport.cc ${liboofilter_SRCS})
 
-kde4_automoc(${oodrawimport_PART_SRCS})
-
 kde4_add_plugin(oodrawimport WITH_PREFIX ${oodrawimport_PART_SRCS})
 
 
