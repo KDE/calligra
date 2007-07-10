@@ -454,12 +454,12 @@ Value func_decimal (valVector args, ValueCalc *calc, FuncExtra *)
         if ( text.startsWith( "0x", Qt::CaseInsensitive ) ) {
             text = text.mid( 2 );
         }
-        if ( text.endsWith( "h", Qt::CaseInsensitive ) ) {
+        if ( text.endsWith( 'h', Qt::CaseInsensitive ) ) {
             text = text.left( text.length() -1 ); // all but the last char
         }
     }
     if ( radix == 2 ) {
-        if ( text.endsWith( "b", Qt::CaseInsensitive ) ) {
+        if ( text.endsWith( 'b', Qt::CaseInsensitive ) ) {
             text = text.left( text.length() -1 ); // all but the last char
         }
     }
