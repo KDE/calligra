@@ -280,8 +280,8 @@ void KexiBrowser::setProject(KexiProject* prj, const QString& itemsMimeType,
 			KexiPart::ItemDict *item_dict = prj->items(info);
 			if (!item_dict)
 				continue;
-			for (KexiPart::ItemDictIterator item_it( *item_dict ); item_it.current(); ++item_it)
-				addItem(*item_it.current(), groupItem, info);
+			foreach (KexiPart::Item *item, *item_dict)
+				addItem(*item, groupItem, info);
 			if (!m_itemsMimeType.isEmpty())
 				break; //the only group added, so our work is completed
 		}

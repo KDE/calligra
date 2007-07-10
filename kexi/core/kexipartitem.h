@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,12 +21,8 @@
 #ifndef KEXIPROJECTPARTITEM_H
 #define KEXIPROJECTPARTITEM_H
 
-#include <qobject.h>
-#include <q3intdict.h>
-#include <q3ptrlist.h>
-
+#include <QHash>
 #include <kexi_global.h>
-
 
 namespace KexiPart
 {
@@ -44,7 +40,6 @@ class Info;
 class KEXICORE_EXPORT Item
 {
 	public:
-
 		Item();
 		~Item();
 
@@ -86,30 +81,37 @@ class KEXICORE_EXPORT Item
 		QString m_desc;
 		int m_id;
 		bool m_neverSaved : 1;
+
+		class Private;
+		Private * const d;
 };
 
-typedef Q3IntDict<KexiPart::Item> ItemDict;
-typedef Q3IntDictIterator<KexiPart::Item> ItemDictIterator;
-typedef Q3PtrListIterator<KexiPart::Item> ItemListIterator;
+//! Item dict which destroys KexiPart::Item items on destruction.
+class KEXICORE_EXPORT ItemDict : public QHash<int, KexiPart::Item*>
+{
+	public:
+		ItemDict();
+		~ItemDict();
+};
+
+//typedef QHash<int, KexiPart::Item*>::iterator ItemDictIterator;
+typedef QList<KexiPart::Item*>::iterator ItemListIterator;
 
 /*! 
- @short Part item list with reimplemented compareItems() method.
+ @short Part item list with special sorting method (by item name).
 
  Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
  so you can call sort() on the list to sort it by item name. 
 */
-class KEXICORE_EXPORT ItemList : public Q3PtrList<KexiPart::Item> {
+class KEXICORE_EXPORT ItemList : public QList<KexiPart::Item*>
+{
 	public:
-		ItemList() {}
-	protected:
-		virtual int compareItems( Q3PtrCollection::Item item1, Q3PtrCollection::Item item2 ) {
-			return QString::compare(
-				static_cast<KexiPart::Item*>(item1)->name(), 
-				static_cast<KexiPart::Item*>(item2)->name());
-		}
+		ItemList();
+		
+		//! Sorts the list by item names.
+		void sort();
 };
 
 }
 
 #endif
-

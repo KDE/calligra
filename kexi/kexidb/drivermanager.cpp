@@ -48,19 +48,17 @@ DriverManagerInternal* DriverManagerInternal::s_self = 0L;
 DriverManagerInternal::DriverManagerInternal() /* protected */
 	: QObject( 0 )
 	, Object()
-	, m_drivers(17, false)
 	, m_refCount(0)
 	, lookupDriversNeeded(true)
 {
 	setObjectName( "KexiDB::DriverManager" );
-	m_drivers.setAutoDelete(true);
 	m_serverResultNum=0;
 }
 
 DriverManagerInternal::~DriverManagerInternal()
 {
 	KexiDBDbg << "DriverManagerInternal::~DriverManagerInternal()" << endl;
-	m_drivers.clear();
+	qDeleteAll(m_drivers);
 	if ( s_self == this )
 		s_self = 0;
 	KexiDBDbg << "DriverManagerInternal::~DriverManagerInternal() ok" << endl;
@@ -74,7 +72,7 @@ void DriverManagerInternal::slotAppQuits()
 		return; //what a hack! - we give up when app is still there
 	}
 	KexiDBDbg << "DriverManagerInternal::slotAppQuits(): let's clear drivers..." << endl;
-	m_drivers.clear();
+	qDeleteAll(m_drivers);
 }
 
 DriverManagerInternal *DriverManagerInternal::self()
@@ -201,7 +199,9 @@ Driver* DriverManagerInternal::driver(const QString& name)
 	clearError();
 	KexiDBDbg << "DriverManagerInternal::driver(): loading " << name << endl;
 
-	Driver *drv = name.isEmpty() ? 0 : m_drivers.find( name.toLatin1() );
+	Driver *drv = 0;
+	if (!name.isEmpty())
+		drv = m_drivers.value( name.toLower() );
 	if (drv)
 		return drv; //cached
 
@@ -244,7 +244,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		delete drv;
 		return 0;
 	}
-	m_drivers.insert(name.toLatin1(), drv); //cache it
+	m_drivers.insert(name.lower(), drv); //cache it
 	return drv;
 }
 
@@ -267,7 +267,7 @@ void DriverManagerInternal::decRefCount()
 
 void DriverManagerInternal::aboutDelete( Driver* drv )
 {
-	m_drivers.take( drv->name() );
+	m_drivers.remove( drv->name() );
 }
 
 

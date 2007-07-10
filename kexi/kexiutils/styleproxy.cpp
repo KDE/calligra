@@ -19,6 +19,9 @@
 
 #include "styleproxy.h"
 
+#include <QStyleFactory>
+#include <QApplication>
+
 using namespace KexiUtils;
 
 StyleProxy::StyleProxy(QStyle* parentStyle) 
@@ -39,5 +42,5 @@ void StyleProxy::setParentStyle(QStyle* style)
 
 QStyle* StyleProxy::parentStyle() const
 {
-	return m_style;
+	return m_style ? m_style : QApplication::style();
 }

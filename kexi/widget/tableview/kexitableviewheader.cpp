@@ -75,7 +75,6 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent)
 	: Q3Header(parent)
 	, m_lastToolTipSection(-1)
 	, m_selectionBackgroundColor(qApp->palette().active().highlight())
-	, m_privateStyle(0)
 	, m_selectedSection(-1)
 	, m_styleChangeEnabled(true)
 {	
@@ -87,8 +86,10 @@ KexiTableViewHeader::KexiTableViewHeader(QWidget * parent)
 
 KexiTableViewHeader::~KexiTableViewHeader()
 {
-	setStyle( 0 );
-	delete m_privateStyle;
+	if (m_privateStyle) {
+		setStyle( 0 );
+		//delete (QObject*)m_privateStyle;
+	}
 }
 
 bool KexiTableViewHeader::event( QEvent *event )
@@ -103,8 +104,10 @@ void KexiTableViewHeader::styleChanged()
 	if (!m_styleChangeEnabled)
 		return;
 	m_styleChangeEnabled = false;
-	setStyle(0);
-	delete m_privateStyle;
+	if (m_privateStyle) {
+		setStyle(0);
+		//delete (QObject*)m_privateStyle;
+	}
 	setStyle( m_privateStyle = new KexiTableViewHeaderStyle(style(), this) );
 	m_styleChangeEnabled = true;
 }

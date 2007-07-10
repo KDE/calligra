@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,15 +20,58 @@
 
 #include "kexipartitem.h"
 
+namespace KexiPart {
+class Item::Private
+{
+	public:
+		Private()
+		{
+		}
+	// unused for now
+};
+}
+
+//-----------------------
+
 using namespace KexiPart;
 
 Item::Item()
  : m_id(0) //- null
  , m_neverSaved(false)
+ , d( new Private() )
 {
 }
 
 Item::~Item()
 {
+	delete d;
 }
 
+//-----------------------
+
+ItemDict::ItemDict()
+: QHash<int, KexiPart::Item*>()
+{
+}
+
+ItemDict::~ItemDict()
+{
+	qDeleteAll(*this);
+}
+
+//-----------------------
+
+ItemList::ItemList()
+ : QList<KexiPart::Item*>()
+{
+}
+
+bool lessThan( KexiPart::Item* item1, KexiPart::Item* item2 )
+{
+	return item1->name() < item2->name();
+}
+
+void ItemList::sort()
+{
+	qSort(begin(), end(), lessThan);
+}

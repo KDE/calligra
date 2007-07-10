@@ -15,7 +15,7 @@ IF (POSTGRESQL_FOUND AND PQXX_FOUND)
 	add_subdirectory( pqxx )
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 
-add_subdirectory( mdb )
+#todo add_subdirectory( mdb )
 
 ########### next target ###############
 

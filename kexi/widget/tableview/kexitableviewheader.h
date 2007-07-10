@@ -22,8 +22,8 @@
 
 #include <kexi_global.h>
 #include <q3header.h>
-
-class QStyle;
+#include <QPointer>
+#include <QStyle>
 
 //! @short A table view header with additional actions.
 /*! Displays field description (Field::description()) text as tool tip, if available.
@@ -70,7 +70,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
 
 		QStringList m_toolTips;
 		QColor m_selectionBackgroundColor;
-		QStyle* m_privateStyle;
+		QPointer<QStyle> m_privateStyle;
 		int m_selectedSection;
 		bool m_styleChangeEnabled : 1;
 };

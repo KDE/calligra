@@ -139,9 +139,10 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
 		prj->getSortedItems(list, partInfo);
 		list.sort();
 		d->tablesCount = 0;
-		for (KexiPart::ItemListIterator it(list); it.current(); ++it, d->tablesCount++) {
-			addItem(d->tableIcon, it.current()->name()); //or caption()? 
-			comp->addItem(it.current()->name());
+		foreach (KexiPart::Item *item, list) {
+			addItem(d->tableIcon, item->name()); //or caption()? 
+			comp->addItem(item->name());
+			d->tablesCount++;
 		}
 	}
 
@@ -153,9 +154,9 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj, bool showTables, bool 
 		KexiPart::ItemList list;
 		prj->getSortedItems(list, partInfo);
 		list.sort();
-		for (KexiPart::ItemListIterator it(list); it.current(); ++it) {
-			addItem(d->queryIcon, it.current()->name()); //or caption()? 
-			comp->addItem(it.current()->name());
+		foreach (KexiPart::Item *item, list) {
+			addItem(d->queryIcon, item->name()); //or caption()? 
+			comp->addItem(item->name());
 		}
 	}
 //	setCurrentText("");

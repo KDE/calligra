@@ -563,11 +563,9 @@ KexiProject::items(KexiPart::Info *i)
 	if(!cursor)
 		return 0;
 
-	dict = new KexiPart::ItemDict(1009);
-	dict->setAutoDelete(true);
+	dict = new KexiPart::ItemDict();
 
-	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
-	{
+	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext()) {
 		KexiPart::Item *it = new KexiPart::Item();
 		bool ok;
 		int ident = cursor->value(0).toInt(&ok);
@@ -605,8 +603,8 @@ KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
 	KexiPart::ItemDict* dict = items(i);
 	if (!dict)
 		return;
-	for (KexiPart::ItemDictIterator it(*dict); it.current(); ++it)
-		list.append(it.current());
+	for (KexiPart::ItemDict::const_iterator it(dict->constBegin()); it!=dict->constEnd(); ++it)
+		list.append(it.value());
 }
 
 void
@@ -638,9 +636,9 @@ KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
 		return 0;
 	}
 	const QString l_name = name.toLower();
-	for (KexiPart::ItemDictIterator it( *dict ); it.current(); ++it) {
-		if (it.current()->name().toLower()==l_name)
-			return it.current();
+	for (KexiPart::ItemDict::const_iterator it(dict->constBegin()); it!=dict->constEnd(); ++it) {
+		if (it.value()->name().toLower()==l_name)
+			return it.value();
 	}
 	kexiwarn << "KexiProject::itemForMimeType() no name="<<name<<endl;
 	return 0;
@@ -653,9 +651,9 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 	if (!dict)
 		return 0;
 	const QString l_name = name.toLower();
-	for (KexiPart::ItemDictIterator it( *dict ); it.current(); ++it) {
-		if (it.current()->name().toLower()==l_name)
-			return it.current();
+	for (KexiPart::ItemDict::const_iterator it( dict->constBegin() ); it!=dict->constEnd(); ++it) {
+		if (it.value()->name().toLower()==l_name)
+			return it.value();
 	}
 	return 0;
 }
@@ -664,7 +662,7 @@ KexiPart::Item*
 KexiProject::item(int identifier)
 {
 	foreach (KexiPart::ItemDict *dict, d->itemDictsCache) {
-		KexiPart::Item *item = dict->find(identifier);
+		KexiPart::Item *item = dict->value(identifier);
 		if (item)
 			return item;
 	}
@@ -884,16 +882,16 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 		base_name = KexiUtils::string2Identifier(suggestedCaption).toLower();
 	}
 	base_name = KexiUtils::string2Identifier(base_name).toLower();
-	KexiPart::ItemDictIterator it(*dict);
+	KexiPart::ItemDict::const_iterator it;
 	do {
 		new_name = base_name;
 		if (n>=1)
 			new_name += QString::number(n);
-		for (it.toFirst(); it.current(); ++it) {
-			if (it.current()->name().toLower()==new_name)
+		for (it = dict->constBegin(); it!=dict->constEnd(); ++it) {
+			if (it.value()->name().toLower() == new_name)
 				break;
 		}
-		if ( it.current() ) {
+		if ( it.value() ) {
 			n++;
 			continue; //stored exists!
 		}
