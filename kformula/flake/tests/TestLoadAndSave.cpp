@@ -603,6 +603,9 @@ void TestLoadAndSave::rowElement_data()
 
 void TestLoadAndSave::fractionElement_data()
 {
+    QTest::addColumn<QString>("input");
+    QTest::addColumn<QString>("output");
+
     // TODO
     addRow( "" );
 }
