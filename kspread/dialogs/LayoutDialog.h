@@ -27,8 +27,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_layout_h__
-#define __kspread_dlg_layout_h__
+#ifndef KSPREAD_CELL_FORMAT_DIALOG
+#define KSPREAD_CELL_FORMAT_DIALOG
 
 #include <QCheckBox>
 #include <QFrame>
@@ -635,4 +635,4 @@ protected:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_CELL_FORMAT_DIALOG

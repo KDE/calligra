@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_pasteinsert__
-#define __kspread_dlg_pasteinsert__
+#ifndef KSPREAD_PASTE_INSERT_DIALOG
+#define KSPREAD_PASTE_INSERT_DIALOG
 
 #include <kdialog.h>
 
@@ -48,4 +48,4 @@ private:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_PASTE_INSERT_DIALOG

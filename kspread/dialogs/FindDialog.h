@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_find__
-#define __kspread_dlg_find__
+#ifndef KSPREAD_FIND_OPTION_DIALOG
+#define KSPREAD_FIND_OPTION_DIALOG
 
 
 #include <kfinddialog.h>
@@ -103,4 +103,4 @@ class SearchDlg : public KReplaceDialog
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_FIND_OPTION_DIALOG

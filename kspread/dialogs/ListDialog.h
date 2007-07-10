@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_list__
-#define __kspread_dlg_list__
+#ifndef KSPREAD_LIST_DIALOG
+#define KSPREAD_LIST_DIALOG
 
 #include <kdialog.h>
 #include <kconfig.h>
@@ -67,4 +67,4 @@ protected:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_LIST_DIALOG

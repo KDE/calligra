@@ -21,8 +21,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_area__
-#define __kspread_dlg_area__
+#ifndef KSPREAD_AREA_DIALOG
+#define KSPREAD_AREA_DIALOG
 
 #include <kdialog.h>
 //Added by qt3to4:
@@ -53,4 +53,4 @@ protected:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_AREA_DIALOG

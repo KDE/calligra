@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_database__
-#define __kspread_dlg_database__
+#ifndef KSPREAD_DATABASE_DIALOG
+#define KSPREAD_DATABASE_DIALOG
 
 #include <QDialog>
 #include <QRect>
@@ -135,4 +135,4 @@ class DatabaseDialog : public KAssistantDialog
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_DATABASE_DIALOG

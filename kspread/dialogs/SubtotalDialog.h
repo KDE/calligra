@@ -20,8 +20,8 @@
 */
 
 
-#ifndef __kspread_dlg_subtotal__
-#define __kspread_dlg_subtotal__
+#ifndef KSPREAD_SUBTOTAL_DIALOG
+#define KSPREAD_SUBTOTAL_DIALOG
 
 #include <QPoint>
 #include <QRect>
@@ -66,5 +66,4 @@ class SubtotalDialog : public KDialog, public Ui::SubtotalWidget
 
 } // namespace KSpread
 
-#endif
-
+#endif // KSPREAD_SUBTOTAL_DIALOG

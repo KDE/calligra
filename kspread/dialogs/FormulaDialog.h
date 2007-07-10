@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_formula__
-#define __kspread_dlg_formula__
+#ifndef KSPREAD_FORMULA_DIALOG
+#define KSPREAD_FORMULA_DIALOG
 
 #include <QCloseEvent>
 #include <QLabel>
@@ -178,4 +178,4 @@ private:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_FORMULA_DIALOG

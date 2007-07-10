@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_styles__
-#define __kspread_dlg_styles__
+#ifndef KSPREAD_STYLE_MANAGER_DIALOG
+#define KSPREAD_STYLE_MANAGER_DIALOG
 
 #include <kdialog.h>
 #include <QWidget>
@@ -73,4 +73,4 @@ class StyleDialog : public KDialog
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_STYLE_MANAGER_DIALOG

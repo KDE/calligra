@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_series__
-#define __kspread_dlg_series__
+#ifndef KSPREAD_SERIES_DIALOG
+#define KSPREAD_SERIES_DIALOG
 
 #include <kdialog.h>
 
@@ -62,4 +62,4 @@ protected:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_SERIES_DIALOG

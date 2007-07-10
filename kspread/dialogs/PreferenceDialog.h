@@ -24,8 +24,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_preference__
-#define __kspread_dlg_preference__
+#ifndef KSPREAD_PREFERENCE_DIALOG
+#define KSPREAD_PREFERENCE_DIALOG
 
 #include <QGroupBox>
 #include <QLabel>
@@ -228,4 +228,4 @@ private :
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_PREFERENCE_DIALOG

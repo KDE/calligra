@@ -25,8 +25,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_sort__
-#define __kspread_dlg_sort__
+#ifndef KSPREAD_SORT_DIALOG
+#define KSPREAD_SORT_DIALOG
 
 
 #include <kdialog.h>
@@ -109,4 +109,4 @@ class SortDialog : public KDialog
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_SORT_DIALOG

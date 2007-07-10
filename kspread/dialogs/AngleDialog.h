@@ -21,8 +21,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_angle__
-#define __kspread_dlg_angle__
+#ifndef KSPREAD_ANGLE_DIALOG
+#define KSPREAD_ANGLE_DIALOG
 
 #include <kdialog.h>
 
@@ -49,4 +49,4 @@ protected:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_ANGLE_DIALOG

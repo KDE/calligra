@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_style_manager__
-#define __kspread_style_manager__
+#ifndef KSPREAD_STYLE_MANAGER
+#define KSPREAD_STYLE_MANAGER
 
 #include "kspread_export.h"
 #include <KoXmlReader.h>
@@ -116,4 +116,4 @@ class KSPREAD_EXPORT StyleManager
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_STYLE_MANAGER

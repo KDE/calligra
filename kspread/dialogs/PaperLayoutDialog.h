@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_paperlayout__
-#define __kspread_dlg_paperlayout__
+#ifndef KSPREAD_PAPER_LAYOUT_DIALOG
+#define KSPREAD_PAPER_LAYOUT_DIALOG
 
 #include <kdialog.h>
 #include <KoPageLayoutDia.h>
@@ -95,4 +95,4 @@ private:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_PAPER_LAYOUT_DIALOG

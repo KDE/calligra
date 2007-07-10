@@ -21,8 +21,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_validity__
-#define __kspread_dlg_validity__
+#ifndef KSPREAD_VALIDITY_DIALOG
+#define KSPREAD_VALIDITY_DIALOG
 
 #include <kpagedialog.h>
 
@@ -78,4 +78,4 @@ protected:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_VALIDITY_DIALOG

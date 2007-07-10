@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kspread_dlg_goalseek__
-#define __kspread_dlg_goalseek__
+#ifndef KSPREAD_GOALSEEK_DIALOG
+#define KSPREAD_GOALSEEK_DIALOG
 
 #include <QPoint>
 #include <QRect>
@@ -108,4 +108,4 @@ class GoalSeekDialog : public KDialog
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_GOALSEEK_DIALOG
