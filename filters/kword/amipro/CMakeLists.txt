@@ -7,7 +7,6 @@
 
 set(amiproimport_PART_SRCS amiproimport.cc amiproparser.cpp )
 
-kde4_automoc(${amiproimport_PART_SRCS})
 
 kde4_add_plugin(amiproimport WITH_PREFIX ${amiproimport_PART_SRCS})
 

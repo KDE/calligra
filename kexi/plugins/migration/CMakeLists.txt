@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 set(kexihandler_migration_PART_SRCS keximigrationpart.cpp )
 
-kde4_automoc(${kexihandler_migration_PART_SRCS})
 
 kde4_add_plugin(kexihandler_migration ${kexihandler_migration_PART_SRCS})
 

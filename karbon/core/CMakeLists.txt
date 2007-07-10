@@ -39,7 +39,6 @@ set(karboncore_SRCS
 #    vtext_iface.h
 #    )
 
-kde4_automoc(${karboncore_SRCS})
 
 kde4_add_library(karboncore ${karboncore_SRCS})
 

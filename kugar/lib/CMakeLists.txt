@@ -21,7 +21,6 @@ set(kugarlib_LIB_SRCS
    mutil.cpp 
    inputmask.cpp )
 
-kde4_automoc(${kugarlib_LIB_SRCS})
 
 kde4_add_library(kugarlib SHARED ${kugarlib_LIB_SRCS})
 

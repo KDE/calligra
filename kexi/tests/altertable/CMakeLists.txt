@@ -7,7 +7,6 @@ ADD_DEFINITIONS( -DNO_GUI=1 )
 
 set(kexialtertabletest_SRCS main.cpp )
 
-kde4_automoc(${kexialtertabletest_SRCS})
 
 kde4_add_executable(kexialtertabletest ${kexialtertabletest_SRCS})
 

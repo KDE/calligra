@@ -13,7 +13,6 @@ set(kwordexportfilters_LIB_SRCS
    KWEFKWordLeader.cc 
    KWEFBaseWorker.cc )
 
-kde4_automoc(${kwordexportfilters_LIB_SRCS})
 
 kde4_add_library(kwordexportfilters SHARED ${kwordexportfilters_LIB_SRCS})
 

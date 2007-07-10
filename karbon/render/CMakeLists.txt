@@ -5,7 +5,6 @@ set(vpainter_SRCS
     vqpainter.cc
     )
 
-kde4_automoc(${vpainter_SRCS})
 
 kde4_add_library(vpainter ${vpainter_SRCS})
 

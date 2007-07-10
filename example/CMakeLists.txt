@@ -7,7 +7,6 @@ include_directories( ${KOGUIUTILS_INCLUDES} )
 
 set(koexamplepart_PART_SRCS KoExamplePart.cpp KoExampleView.cpp KoExampleFactory.cpp )
 
-kde4_automoc(${koexamplepart_PART_SRCS})
 
 kde4_add_plugin(koexamplepart WITH_PREFIX ${koexamplepart_PART_SRCS})
 

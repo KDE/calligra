@@ -17,7 +17,6 @@ include_directories(
 
 set(krita_openexr_import_PART_SRCS kis_openexr_import.cpp )
 
-kde4_automoc(${krita_openexr_import_PART_SRCS})
 
 kde4_add_plugin(krita_openexr_import WITH_PREFIX ${krita_openexr_import_PART_SRCS})
 

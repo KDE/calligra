@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/formedito
 
 set(kformdesigner_SRCS main.cpp kfd_mainwindow.cpp )
 
-kde4_automoc(${kformdesigner_SRCS})
 
 kde4_add_executable(kformdesigner ${kformdesigner_SRCS})
 

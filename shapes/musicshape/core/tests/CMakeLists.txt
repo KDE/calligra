@@ -17,7 +17,6 @@ set(SheetTest_test_SRCS
     ../StaffSystem.cpp
 )
 
-kde4_automoc(${SheetTest_test_SRCS})
 kde4_add_unit_test(SheetTest TESTNAME shapes-musicshape-SheetTest ${SheetTest_test_SRCS})
 target_link_libraries(SheetTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
@@ -53,7 +52,6 @@ set(MusicXmlWriterTest_test_SRCS
     ../Note.cpp
 )
 
-kde4_automoc(${MusicXmlWriterTest_test_SRCS})
 kde4_add_unit_test(MusicXmlWriterTest TESTNAME shapes-musicshape-MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})
 target_link_libraries(MusicXmlWriterTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY} kstore)
 

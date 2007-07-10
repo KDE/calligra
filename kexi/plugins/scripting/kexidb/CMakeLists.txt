@@ -11,7 +11,6 @@ set(krossmodulekexidb_PART_SRCS
    kexidbconnection.cpp 
    kexidbdriver.cpp )
 
-kde4_automoc(${krossmodulekexidb_PART_SRCS})
 kde4_add_plugin(krossmodulekexidb ${krossmodulekexidb_PART_SRCS})
 
 ##target_link_libraries(krossmodulekexidb  ${KDE4_KDECORE_LIBS} kexidb kexidbparser )

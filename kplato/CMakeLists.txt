@@ -133,7 +133,6 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptresourceassignmentview.ui
 )
 
-kde4_automoc(${kplatoprivate_LIB_SRCS})
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS}) #${libkdgantt_SRCS})
 
 target_link_libraries(kplatoprivate koguiutils)
@@ -146,7 +145,6 @@ install(TARGETS kplatoprivate DESTINATION ${LIB_INSTALL_DIR})
 
 set(kplatopart_PART_SRCS kptfactoryinit.cc )
 
-kde4_automoc(${kplatopart_PART_SRCS})
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
 

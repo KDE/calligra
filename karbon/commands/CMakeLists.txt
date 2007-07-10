@@ -13,7 +13,6 @@ set(karboncommands_SRCS
     KarbonBooleanCommand.cpp
     )
 
-kde4_automoc(${karboncommands_SRCS})
 
 kde4_add_library(karboncommands ${karboncommands_SRCS})
 

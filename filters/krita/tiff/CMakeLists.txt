@@ -17,7 +17,6 @@ set(kritatiffimport_PART_SRCS
     kis_tiff_import.cc
     )
 
-kde4_automoc(${kritatiffimport_PART_SRCS})
 
 kde4_add_plugin(kritatiffimport WITH_PREFIX ${kritatiffimport_PART_SRCS})
 

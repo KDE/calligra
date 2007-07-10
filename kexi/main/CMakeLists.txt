@@ -33,7 +33,6 @@ startup/KexiStartupDialogTemplatesPage.cpp
 
 )
 
-kde4_automoc(${keximain_LIB_SRCS})
 
 kde4_add_ui_files(keximain_LIB_SRCS
 	kexifinddialog.ui

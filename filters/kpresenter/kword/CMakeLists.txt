@@ -16,7 +16,6 @@ install( FILES  kodp2odt.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 
 set(kprkword_PART_SRCS kprkword.cc )
 
-kde4_automoc(${kprkword_PART_SRCS})
 
 kde4_add_plugin(kprkword WITH_PREFIX ${kprkword_PART_SRCS})
 

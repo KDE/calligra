@@ -5,7 +5,6 @@ include_directories(${LIBXML2_INCLUDE_DIR} ${LIBXSLT_INCLUDE_DIR} ${CMAKE_CURREN
 
 set(xsltimport_PART_SRCS xsltimport.cc xsltimportdia.cc xsltproc.cc )
 
-kde4_automoc(${xsltimport_PART_SRCS})
 
 kde4_add_ui3_files(xsltimport_PART_SRCS xsltdialog.ui )
 

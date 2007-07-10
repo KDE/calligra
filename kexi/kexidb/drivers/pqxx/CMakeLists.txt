@@ -15,7 +15,6 @@ set(kexidb_pqxxsqldriver_PART_SRCS
    pqxxconnection_p.cpp 
    pqxxpreparedstatement.cpp )
 
-kde4_automoc(${kexidb_pqxxsqldriver_PART_SRCS})
 
 kde4_add_plugin(kexidb_pqxxsqldriver ${kexidb_pqxxsqldriver_PART_SRCS})
 

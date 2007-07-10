@@ -35,7 +35,6 @@ set(kformdesigner_LIB_SRCS
    widgetwithsubpropertiesinterface.cpp
 )
 
-kde4_automoc(${kformdesigner_LIB_SRCS})
 
 kde4_add_library(kformdesigner SHARED ${kformdesigner_LIB_SRCS})
 

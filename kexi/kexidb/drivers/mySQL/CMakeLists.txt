@@ -15,7 +15,6 @@ set(kexidb_mysqldriver_PART_SRCS
    mysqlkeywords.cpp 
    mysqlpreparedstatement.cpp )
 
-kde4_automoc(${kexidb_mysqldriver_PART_SRCS})
 
 kde4_add_plugin(kexidb_mysqldriver ${kexidb_mysqldriver_PART_SRCS})
 

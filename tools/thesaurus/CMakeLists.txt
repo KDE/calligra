@@ -11,7 +11,6 @@ set(thesaurustool_SRCS
     ThesaurusFactory.cpp
 )
 
-kde4_automoc(${thesaurustool_SRCS})
 
 kde4_add_plugin(thesaurustool ${thesaurustool_SRCS})
 

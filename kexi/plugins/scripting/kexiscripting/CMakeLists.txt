@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/kexi/core ${CMA
 
 set(kexihandler_script_PART_SRCS kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp )
 
-kde4_automoc(${kexihandler_script_PART_SRCS})
 
 kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
 

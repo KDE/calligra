@@ -9,7 +9,6 @@ SET (videoshape_LIB_SRCS
 	VideoToolFactory.cpp
 	)
 
-kde4_automoc(${videoshape_LIB_SRCS})
 kde4_add_plugin(videoshape ${videoshape_LIB_SRCS})
 
 target_link_libraries(videoshape flake koguiutils ${KDE4_PHONON_LIBS})

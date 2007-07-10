@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbonsvgexport_PART_SRCS svgexport.cc )
 
-kde4_automoc(${karbonsvgexport_PART_SRCS})
 
 kde4_add_plugin(karbonsvgexport WITH_PREFIX ${karbonsvgexport_PART_SRCS})
 

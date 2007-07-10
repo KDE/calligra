@@ -7,7 +7,6 @@
 
 set(kfosvgexport_PART_SRCS svgexport.cc )
 
-kde4_automoc(${kfosvgexport_PART_SRCS})
 
 kde4_add_plugin(kfosvgexport WITH_PREFIX ${kfosvgexport_PART_SRCS})
 

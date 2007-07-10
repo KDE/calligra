@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbonxamlexport_PART_SRCS xamlexport.cc )
 
-kde4_automoc(${karbonxamlexport_PART_SRCS})
 
 kde4_add_plugin(karbonxamlexport WITH_PREFIX ${karbonxamlexport_PART_SRCS})
 

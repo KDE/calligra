@@ -59,7 +59,6 @@ set(kdchart_LIB_SRCS
     KDTextDocument.cpp
 )
 
-kde4_automoc(${kdchart_LIB_SRCS})
 
 kde4_add_ui_files(kdchart_LIB_SRCS
     KDChartDatasetSelector.ui

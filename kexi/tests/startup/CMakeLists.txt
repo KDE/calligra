@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(kexistartuptest_SRCS main.cpp )
 
-kde4_automoc(${kexistartuptest_SRCS})
 
 kde4_add_executable(kexistartuptest ${kexistartuptest_SRCS})
 

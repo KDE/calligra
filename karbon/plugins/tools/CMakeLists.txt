@@ -15,7 +15,6 @@ set(karbon_tools_PART_SRCS
    KarbonPatternEditStrategy.cpp
 )
 
-kde4_automoc(${karbon_tools_PART_SRCS})
 
 kde4_add_plugin(karbontools ${karbon_tools_PART_SRCS})
 

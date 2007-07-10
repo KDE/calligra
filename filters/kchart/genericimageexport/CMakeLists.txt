@@ -13,7 +13,6 @@ include_directories(
 
 set(kchartgenericimageexport_PART_SRCS genericimageexport.cpp ${libdialogfilter_SRCS})
 
-kde4_automoc(${kchartgenericimageexport_PART_SRCS})
 
 kde4_add_plugin(kchartgenericimageexport WITH_PREFIX ${kchartgenericimageexport_PART_SRCS})
 

@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CM
 
 set(kexihandler_relation_PART_SRCS kexirelationpartimpl.cpp kexirelationmaindlg.cpp )
 
-kde4_automoc(${kexihandler_relation_PART_SRCS})
 
 kde4_add_plugin(kexihandler_relation ${kexihandler_relation_PART_SRCS})
 

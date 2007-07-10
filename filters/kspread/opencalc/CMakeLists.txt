@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${CMAKE_SOURCE_DIR}/filters/lib
 
 set(opencalcimport_PART_SRCS opencalcimport.cc ${liboofilter_SRCS} )
 
-kde4_automoc(${opencalcimport_PART_SRCS})
 
 kde4_add_plugin(opencalcimport WITH_PREFIX ${opencalcimport_PART_SRCS})
 

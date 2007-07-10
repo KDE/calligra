@@ -19,7 +19,6 @@ set(kexiguiutils_LIB_SRCS
 # todo: use new Qt4's QDateTimeEdit: kexidatetimeformatter.cpp
 # todo: use new Qt4's painting engine: kexigradientwidget.cpp 
 
-kde4_automoc(${kexiguiutils_LIB_SRCS})
 
 kde4_add_library(kexiguiutils SHARED ${kexiguiutils_LIB_SRCS})
 

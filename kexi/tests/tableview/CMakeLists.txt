@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(kexitableviewtest_SRCS main.cpp )
 
-kde4_automoc(${kexitableviewtest_SRCS})
 
 kde4_add_executable(kexitableviewtest ${kexitableviewtest_SRCS})
 

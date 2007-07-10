@@ -7,7 +7,6 @@ include_directories(  ${CMAKE_BINARY_DIR}/filters/)
 
 set(kritagmagickimport_PART_SRCS magickimport.cpp kis_image_magick_converter.cc )
 
-kde4_automoc(${kritagmagickimport_PART_SRCS})
 
 kde4_add_plugin(kritagmagickimport WITH_PREFIX ${kritagmagickimport_PART_SRCS})
 

@@ -43,7 +43,6 @@ set(kiviocommon_LIB_SRCS
    kiviostencilsetinstaller.cpp 
    addstenciltool.cpp )
 
-kde4_automoc(${kiviocommon_LIB_SRCS})
 
 kde4_add_dcop_skels(kiviocommon_LIB_SRCS 
    KIvioViewIface.h 
@@ -65,7 +64,6 @@ install(TARGETS kiviocommon  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kiviopart_PART_SRCS kivio_part_init.cc )
 
-kde4_automoc(${kiviopart_PART_SRCS})
 
 kde4_add_plugin(kiviopart WITH_PREFIX ${kiviopart_PART_SRCS})
 

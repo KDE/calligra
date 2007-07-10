@@ -17,7 +17,6 @@ set(kexidb_sqlite3driver_PART_SRCS
    sqlitealter.cpp
 )
 
-kde4_automoc(${kexidb_sqlite3driver_PART_SRCS})
 
 kde4_add_plugin(kexidb_sqlite3driver ${kexidb_sqlite3driver_PART_SRCS})
 

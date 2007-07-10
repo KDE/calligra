@@ -7,7 +7,6 @@
 
 set(applixspreadimport_PART_SRCS applixspreadimport.cc )
 
-kde4_automoc(${applixspreadimport_PART_SRCS})
 
 kde4_add_plugin(applixspreadimport WITH_PREFIX ${applixspreadimport_PART_SRCS})
 

@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(keximigrate_txtmigrate_PART_SRCS txtmigrate.cpp )
 
-kde4_automoc(${keximigrate_txtmigrate_PART_SRCS})
 
 kde4_add_plugin(keximigrate_txtmigrate ${keximigrate_txtmigrate_PART_SRCS})
 

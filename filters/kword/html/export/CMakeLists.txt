@@ -13,7 +13,6 @@ set(htmlexport_PART_SRCS
    ExportDocStruct.cc 
    ExportBasic.cc )
 
-kde4_automoc(${htmlexport_PART_SRCS})
 
 kde4_add_ui3_files(htmlexport_PART_SRCS ExportDialogUI.ui )
 

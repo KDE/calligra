@@ -80,7 +80,6 @@ install(TARGETS kwordprivate  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kwordpart_PART_SRCS KWFactoryInit.cpp )
 
-kde4_automoc(${kwordpart_PART_SRCS})
 
 kde4_add_plugin(kwordpart WITH_PREFIX ${kwordpart_PART_SRCS})
 

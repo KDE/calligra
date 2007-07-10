@@ -7,7 +7,6 @@
 
 set(palmdocimport_PART_SRCS palmdocimport.cc palmdb.cpp palmdoc.cpp )
 
-kde4_automoc(${palmdocimport_PART_SRCS})
 
 kde4_add_plugin(palmdocimport WITH_PREFIX ${palmdocimport_PART_SRCS})
 

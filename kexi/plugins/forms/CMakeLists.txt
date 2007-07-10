@@ -61,7 +61,6 @@ set(kexiformutils_LIB_SRCS
 #obsolete	widgets/kexidbtimeedit.cpp
 #obsolete	widgets/kexidbdateedit.cpp
 
-kde4_automoc(${kexiformutils_LIB_SRCS})
 
 kde4_add_library(kexiformutils SHARED ${kexiformutils_LIB_SRCS})
 

@@ -15,7 +15,6 @@ kde4_add_ui_files(divineProportionShape_SRCS
     Intro.ui
 )
 
-kde4_automoc(${divineProportionShape_SRCS})
 kde4_add_plugin(divineproportionshape ${divineProportionShape_SRCS})
 
 target_link_libraries(divineproportionshape flake)

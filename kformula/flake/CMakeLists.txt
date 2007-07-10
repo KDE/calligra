@@ -41,7 +41,6 @@ set( kformulalib_PART_SRCS
    fontstyle.cc 
 )
 
-kde4_automoc(${kformulalib_PART_SRCS})
 
 kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
 

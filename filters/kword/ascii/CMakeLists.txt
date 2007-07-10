@@ -7,7 +7,6 @@
 
 set(asciiimport_PART_SRCS asciiimport.cc ImportDialog.cc )
 
-kde4_automoc(${asciiimport_PART_SRCS})
 
 kde4_add_ui3_files(asciiimport_PART_SRCS ImportDialogUI.ui )
 

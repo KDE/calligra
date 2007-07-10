@@ -60,7 +60,6 @@ install(TARGETS kexisql3  DESTINATION ${LIB_INSTALL_DIR})
 
 set(ksqlite_SRCS shell.c )
 
-kde4_automoc(${ksqlite_SRCS})
 
 kde4_add_executable(ksqlite ${ksqlite_SRCS})
 

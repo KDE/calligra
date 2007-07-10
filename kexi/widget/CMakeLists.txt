@@ -31,7 +31,6 @@ set(kexiextendedwidgets_LIB_SRCS
    kexibrowseritem.cpp 
 )
 
-kde4_automoc(${kexiextendedwidgets_LIB_SRCS})
 
 kde4_add_ui_files(kexiextendedwidgets_LIB_SRCS
 	kexiprjtypeselector.ui

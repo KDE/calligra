@@ -7,7 +7,6 @@ include_directories(${CMAKE_SOURCE_DIR}/kugar/lib/)
 
 set(kugarpart_PART_SRCS kugar_part.cpp kugar_factory.cpp kugar_view.cpp )
 
-kde4_automoc(${kugarpart_PART_SRCS})
 
 kde4_add_plugin(kugarpart WITH_PREFIX ${kugarpart_PART_SRCS})
 

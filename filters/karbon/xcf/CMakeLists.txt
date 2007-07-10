@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 set(karbonxcfexport_PART_SRCS xcfexport.cc )
 
-kde4_automoc(${karbonxcfexport_PART_SRCS})
 
 kde4_add_plugin(karbonxcfexport WITH_PREFIX ${karbonxcfexport_PART_SRCS})
 

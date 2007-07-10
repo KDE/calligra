@@ -39,7 +39,6 @@ IF(WIN32)
    set(kexisql2_LIB_SRCS ${kexisql2_LIB_SRCS} ../kexisql.def )
 ENDIF(WIN32)
 
-kde4_automoc(${kexisql2_LIB_SRCS})
 
 kde4_add_library(kexisql2 SHARED ${kexisql2_LIB_SRCS})
 
@@ -53,7 +52,6 @@ install(TARGETS kexisql2  DESTINATION ${LIB_INSTALL_DIR})
 
 set(ksqlite2_SRCS shell.c )
 
-kde4_automoc(${ksqlite2_SRCS})
 
 kde4_add_executable(ksqlite2 ${ksqlite2_SRCS})
 

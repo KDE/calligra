@@ -38,7 +38,6 @@ install(TARGETS keximigrate  DESTINATION ${LIB_INSTALL_DIR})
 
 set(keximigratetest_SRCS keximigratetest.cpp )
 
-kde4_automoc(${keximigratetest_SRCS})
 
 kde4_add_executable(keximigratetest ${keximigratetest_SRCS})
 

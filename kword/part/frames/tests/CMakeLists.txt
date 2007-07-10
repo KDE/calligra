@@ -11,7 +11,6 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${K
 ########### next target ###############
 
 set(TestBasicLayout_test_SRCS TestBasicLayout.cpp)
-kde4_automoc(${TestBasicLayout_test_SRCS})
 kde4_add_unit_test(TestBasicLayout TESTNAME kword-part-frame-TestBasicLayout  ${TestBasicLayout_test_SRCS})
 target_link_libraries(TestBasicLayout kwordprivate ${QT_QTTEST_LIBRARY})
 

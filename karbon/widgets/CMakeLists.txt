@@ -11,7 +11,6 @@ set(karbonwidgets_SRCS
     vtypebuttonbox.cc
     )
 
-kde4_automoc(${karbonwidgets_SRCS})
 
 kde4_add_library(karbonwidgets ${karbonwidgets_SRCS})
 

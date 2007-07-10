@@ -1,7 +1,6 @@
 
 set(kpr2odp_PART_SRCS kpr2odp.cpp )
 
-kde4_automoc(${kpr2odp_PART_SRCS})
 
 kde4_add_plugin(kpr2odp WITH_PREFIX ${kpr2odp_PART_SRCS})
 

@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${KDE4_INCLUDES}  )
 
 set(kexidbparser_SRCS main.cpp )
 
-kde4_automoc(${kexidbparser_SRCS})
 
 kde4_add_executable(kexidbparser ${kexidbparser_SRCS})
 

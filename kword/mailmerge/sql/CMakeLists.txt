@@ -7,7 +7,6 @@
 
 set(kwmailmerge_qtsqldb_PART_SRCS KWQtSqlSerialDataSource.cpp KWQtSqlEasyFilter.cpp )
 
-kde4_automoc(${kwmailmerge_qtsqldb_PART_SRCS})
 
 kde4_add_ui3_files(kwmailmerge_qtsqldb_PART_SRCS qtsqldatasourceeditor.ui )
 

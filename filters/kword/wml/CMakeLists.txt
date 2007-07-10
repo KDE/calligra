@@ -7,7 +7,6 @@
 
 set(wmlimport_PART_SRCS wmlimport.cc wmlparser.cpp )
 
-kde4_automoc(${wmlimport_PART_SRCS})
 
 kde4_add_plugin(wmlimport WITH_PREFIX ${wmlimport_PART_SRCS})
 

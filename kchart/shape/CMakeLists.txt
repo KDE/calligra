@@ -11,7 +11,6 @@ SET (chartshape_LIB_SRCS
 	ChartTypeConfigWidget.cpp
 	)
 
-kde4_automoc(${chartshape_LIB_SRCS})
 kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})
 
 target_link_libraries(chartshape kdchart kochart flake)

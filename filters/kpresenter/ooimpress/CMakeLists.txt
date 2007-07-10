@@ -7,7 +7,6 @@ include_directories(${CMAKE_SOURCE_DIR}/filters/liboofilter/)
 
 set(ooimpressimport_PART_SRCS ooimpressimport.cc ${liboofilter_SRCS})
 
-kde4_automoc(${ooimpressimport_PART_SRCS})
 
 kde4_add_plugin(ooimpressimport WITH_PREFIX ${ooimpressimport_PART_SRCS})
 

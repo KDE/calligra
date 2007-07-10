@@ -28,7 +28,6 @@ install(TARGETS kudesignercore  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kudesignerpart_PART_SRCS kudesigner_part.cpp )
 
-kde4_automoc(${kudesignerpart_PART_SRCS})
 
 kde4_add_plugin(kudesignerpart WITH_PREFIX ${kudesignerpart_PART_SRCS})
 

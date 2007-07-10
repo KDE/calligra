@@ -7,7 +7,6 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi/formeditor ${CMAKE_SOURCE_DIR}/kex
 
 set(kformdesigner_kdev_part_PART_SRCS kfd_kdev_part.cpp )
 
-kde4_automoc(${kformdesigner_kdev_part_PART_SRCS})
 
 kde4_add_plugin(kformdesigner_kdev_part WITH_PREFIX ${kformdesigner_kdev_part_PART_SRCS})
 

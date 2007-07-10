@@ -53,7 +53,6 @@ set(kchartcommon_LIB_SRCS
    kdchart/examples/tools/TableModel.cpp
 )
 
-kde4_automoc(${kchartcommon_LIB_SRCS})
 
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
@@ -67,7 +66,6 @@ install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 set(kchartpart_PART_SRCS kchart_factory_init.cc )
 
-kde4_automoc(${kchartpart_PART_SRCS})
 
 kde4_add_plugin(kchartpart WITH_PREFIX ${kchartpart_PART_SRCS})
 
