@@ -42,5 +42,7 @@ void StyleProxy::setParentStyle(QStyle* style)
 
 QStyle* StyleProxy::parentStyle() const
 {
-	return m_style ? m_style : QApplication::style();
+	if (m_style)
+		return m_style;
+	return QApplication::style();
 }
