@@ -135,21 +135,20 @@ void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_baseElement->writeMathML( writer );        // Just save the children in
                                                  // the right order
-    if( m_underElement->elementType() != Basic )
+    if( m_underElement )
         m_underElement->writeMathML( writer );
     
-    if( m_overElement->elementType() != Basic )
+    if( m_overElement )
         m_overElement->writeMathML( writer );
 }
 
 ElementType UnderOverElement::elementType() const
 {
-    if( m_underElement->elementType() != Basic && m_overElement->elementType() != Basic )
+    if( m_underElement && m_overElement )
         return UnderOver;
-    else if( m_underElement->elementType() != Basic )
+    else if( m_underElement )
         return Under;
-    else {
-        assert( m_overElement->elementType() != Basic );
-        return Over;
-    }
+    if ( ! m_overElement )
+        kWarning( DEBUGID ) << "Invalid mover element\n";
+    return Over;
 }
