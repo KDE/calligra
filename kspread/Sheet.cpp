@@ -3789,24 +3789,19 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //                         << ", next styled column: " << nextStyleColumnIndex << endl;
 
           // no next or not the adjacent column?
-          if ( ( !nextColumn || nextColumn->column() != j ) && nextStyleColumnIndex != j )
+          if ( ( !nextColumn && !nextStyleColumnIndex ) ||
+               ( ( !nextColumn || nextColumn->column() != j ) && nextStyleColumnIndex != j ) )
           {
             if ( refColumnIsDefault )
             {
               // if the origin column was a default column,
               // we count the default columns
               if ( !nextColumn && !nextStyleColumnIndex )
-              {
                 repeated = maxCols - i + 1;
-              }
-              else if ( nextColumn )
-              {
-                repeated = qMin(nextColumn->column(), nextStyleColumnIndex) - j + 1;
-              }
+              else if ( nextColumn && ( !nextStyleColumnIndex || nextColumn->column() <= nextStyleColumnIndex ) )
+                repeated = nextColumn->column() - j + 1;
               else
-              {
                 repeated = nextStyleColumnIndex - j + 1;
-              }
             }
             // otherwise we just stop here to process the adjacent
             // column in the next iteration of the outer loop
