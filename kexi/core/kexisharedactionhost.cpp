@@ -77,7 +77,7 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 //! default host
 KexiSharedActionHost* KexiSharedActionHost_defaultHost = 0;//KexiSharedActionHost_dummy;
 
-KexiSharedActionHost& KexiSharedActionHost::defaultHost()
+KexiSharedActionHost KexiSharedActionHost::defaultHost()
 {
 	if (!KexiSharedActionHost_defaultHost)
 		return KexiSharedActionHost(0);
