@@ -99,6 +99,9 @@ public:
      */
     virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
 
+    /// @return The element's ElementType
+    virtual ElementType elementType() const;
+
     /**
      * Read the content of a MathML child. This is used for inferred mrows.
      * In such cases, the first element to read is not the parent, but a

@@ -108,6 +108,12 @@ BasicElement* RowElement::childAt( int i )
     return m_rowElements[ i ];
 }
 
+ElementType RowElement::elementType() const
+{
+    return Row;
+}
+
+
 bool RowElement::readMathMLContent( const KoXmlElement& parent )
 {
     BasicElement* tmpElement = 0;
