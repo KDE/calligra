@@ -60,6 +60,7 @@ KDE_FIND_PATH(Magick-config, MAGICK_CONFIG, [${prefix}/bin ${exec_prefix}/bin /u
   AC_MSG_WARN([Could not find ImageMagick anywhere, check http://www.imagemagick.org/ for ImageMagick >= 5.5.2.])
 ])
 
+HAVE_MAGICK61=false
 if test -n "$MAGICK_CONFIG"; then
   vers=`$MAGICK_CONFIG --version 2>/dev/null | $AWK 'BEGIN { FS = "."; } { printf "%d", ($1 * 1000 + $2) * 1000 + $3;}'`
   if test -n "$vers" && test "$vers" -ge 5005002 
@@ -71,6 +72,7 @@ if test -n "$MAGICK_CONFIG"; then
      if test "$vers" -ge 6001000
      then
         AC_DEFINE(HAVE_MAGICK61, 1, [ImageMagick Version 6.1])
+        HAVE_MAGICK61=true
      fi
      LIBMAGICK_LIBS="`$MAGICK_CONFIG --libs`"
      LIBMAGICK_LDFLAGS="`$MAGICK_CONFIG --ldflags`"
@@ -99,7 +101,7 @@ AC_SUBST(LIBMAGICK_LIBS)
 AC_SUBST(LIBMAGICK_LDFLAGS)
 AC_SUBST(LIBMAGICK_CPPFLAGS)
 AC_SUBST(LIBMAGICK_RPATH)
-AM_CONDITIONAL(include_imagemagick_filter, test "$have_imagemagick" = "yes" -a HAVE_MAGICK61 -a ! "$have_graphicsmagick" = "yes" -a ! HAVE_GMAGICK)
+AM_CONDITIONAL(include_imagemagick_filter, test "$have_imagemagick" = "yes" -a $HAVE_MAGICK61 -a ! "$have_graphicsmagick" = "yes")
 
 # End of ImageMagick check
 
