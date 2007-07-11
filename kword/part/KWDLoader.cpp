@@ -36,6 +36,7 @@
 #include <KoTextShapeData.h>
 #include <KoTextAnchor.h>
 #include <KoTextDocumentLayout.h>
+#include <KoInlineTextObjectManager.h>
 
 // KDE + Qt includes
 #include <QDomDocument>

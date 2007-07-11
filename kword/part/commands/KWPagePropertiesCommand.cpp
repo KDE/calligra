@@ -109,7 +109,8 @@ void KWPagePropertiesCommand::setLayout(const KoPageLayout &layout) {
     m_page->setRightMargin(layout.right);
     m_page->setOrientationHint(layout.orientation);
 
-    if(layout.pageEdge >= 0.0) // assumption based on the KWPageLayout widget.
+    if(layout.pageEdge >= 0.0 &&    // assumption based on the KWPageLayout widget.
+            m_page->pageNumber() % 2 == 0)
         m_page->setPageSide(KWPage::PageSpread);
     else
         m_page->setPageSide( m_page->pageNumber()%2==0 ? KWPage::Left : KWPage::Right);

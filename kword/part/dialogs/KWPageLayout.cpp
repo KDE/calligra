@@ -65,7 +65,7 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
     setUnit(KoUnit(KoUnit::Millimeter));
     m_allowSignals = true;
     setPageLayout(layout);
-    //showTextDirection(false);
+    showTextDirection(false);
 }
 
 void KWPageLayout::sizeChanged(int row) {
@@ -112,7 +112,6 @@ void KWPageLayout::setUnit(const KoUnit &unit) {
 
 void KWPageLayout::setPageLayout(const KoPageLayout &layout) {
     if(! m_allowSignals) return;
-    widget.sizes->setCurrentIndex(layout.format); // calls sizeChanged()
     m_allowSignals = false;
     m_pageLayout = layout;
 
@@ -136,6 +135,7 @@ void KWPageLayout::setPageLayout(const KoPageLayout &layout) {
     widget.topMargin->changeValue(layout.top);
     widget.bottomMargin->changeValue(layout.bottom);
     m_allowSignals = true;
+    widget.sizes->setCurrentIndex(layout.format); // calls sizeChanged()
 }
 
 void KWPageLayout::facingPagesChanged() {

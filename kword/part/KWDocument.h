@@ -27,9 +27,7 @@
 #include "frames/KWFrameLayout.h"
 
 #include <KoDocument.h>
-#include <KoImageCollection.h>
 #include <KoShapeControllerBase.h>
-#include <KoInlineTextObjectManager.h>
 
 #include <QObject>
 #include <QPainter>
@@ -42,6 +40,8 @@ class KWFrameSet;
 
 class KoOasisStyles;
 class KoStyleManager;
+class KoImageCollection;
+class KoInlineTextObjectManager;
 
 class KLocalizedString;
 class QDomDocument;
@@ -99,9 +99,9 @@ public:
     void setPageSettings(const KWPageSettings &newPageSettings);
 
     /// @return the image collection for this document.
-    KoImageCollection *imageCollection() { return &m_imageCollection; }
+    KoImageCollection *imageCollection() { return m_imageCollection; }
     /// @return the image collection for this document.
-    const KoImageCollection *imageCollection() const { return &m_imageCollection; }
+    const KoImageCollection *imageCollection() const { return m_imageCollection; }
 
     /**
      * Insert a new page after another,
@@ -265,7 +265,7 @@ private:
     KWApplicationConfig m_config;
 
     KoStyleManager *m_styleManager;
-    KoImageCollection m_imageCollection;
+    KoImageCollection *m_imageCollection;
 
     KoInlineTextObjectManager *m_inlineTextObjectManager;
 };

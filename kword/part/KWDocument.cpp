@@ -48,6 +48,8 @@
 #include <KoStoreDevice.h>
 #include <KoSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoImageCollection.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -64,7 +66,8 @@
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
       m_hasTOC(false),
-      m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
+      m_frameLayout(pageManager(), m_frameSets, &m_pageSettings),
+    m_imageCollection(new KoImageCollection())
 {
     m_frameLayout.setDocument(this);
     m_styleManager = new KoStyleManager(this);
@@ -88,6 +91,10 @@ KWDocument::~KWDocument() {
     saveConfig();
     delete m_styleManager;
     qDeleteAll(m_frameSets);
+    delete m_imageCollection;
+    m_imageCollection = 0;
+    delete m_inlineTextObjectManager;
+    m_inlineTextObjectManager = 0;
 }
 
 void KWDocument::addShape (KoShape *shape) {
@@ -443,6 +450,9 @@ QString KWDocument::renameFrameSet( const QString &prefix, const QString& base )
 // *** LOADING
 void KWDocument::clear() {
     // document defaults
+    foreach(KWPage *page, m_pageManager.pages())
+        m_pageManager.removePage(page);
+    m_pageManager.setStartPage(1);
     m_pageSettings.clear();
     KoColumns columns = m_pageSettings.columns();
     m_config.load(this); // re-load values 
@@ -604,7 +614,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 }
 
 bool KWDocument::completeLoading (KoStore *store) {
-    if(! m_imageCollection.loadFromStore(store))
+    if(! m_imageCollection->loadFromStore(store))
         return false;
     return true;
 }

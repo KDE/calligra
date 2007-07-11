@@ -20,6 +20,8 @@
 #ifndef KWPAGEPROPERTIESCOMMAND_H
 #define KWPAGEPROPERTIESCOMMAND_H
 
+#include "../kword_export.h"
+
 #include <KoPageLayout.h>
 #include <KoText.h>
 
@@ -32,7 +34,7 @@ class KWPage;
  * The undo / redo command for changing the properties of a KWPage
  * When altering the size of a page this command will also reposition all required frames to account for the changes.
  */
-class KWPagePropertiesCommand : public QUndoCommand
+class KWORD_TEST_EXPORT KWPagePropertiesCommand : public QUndoCommand
 {
 public:
     /**
@@ -40,6 +42,7 @@ public:
      * @param document the document the page belongs to.
      * @param page the unchanged page.
      * @param newLayout the new layout properties.
+     * @param direction the new page layout direction
      * @param parent the parent for macro command functionality
      */
     explicit KWPagePropertiesCommand( KWDocument *document, KWPage *page, const KoPageLayout &newLayout, KoText::Direction direction, QUndoCommand *parent = 0 );

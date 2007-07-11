@@ -54,6 +54,7 @@
 #include <KoTextAnchor.h>
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
+#include <KoInlineTextObjectManager.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>

@@ -108,7 +108,7 @@ protected:
     /// called by the KWTextDocumentLayout to mark that the frame is bigger then the text in it.
     void spaceLeft(double excessHeight);
     /// called by the KWTextDocumentLayout to mark that there are frames not in use because the text is too short.
-    void framesEmpty(int framesInUse);
+    void framesEmpty(int emptyFrames);
     /**
      * Schedules a followup schedule run.
      * This method is used to 'chunk' layout runs. It will followup where the last stopped.

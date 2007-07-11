@@ -40,6 +40,7 @@
 #include <KoShapeContainer.h>
 #include <KoTextDocumentLayout.h>
 #include <KoShapeLoadingContext.h>
+#include <KoInlineTextObjectManager.h>
 
 // KDE + Qt includes
 #include <QTextCursor>

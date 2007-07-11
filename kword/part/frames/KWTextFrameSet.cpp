@@ -154,28 +154,48 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
 
 void KWTextFrameSet::spaceLeft(double excessHeight) {
     Q_ASSERT(excessHeight >= 0);
-    if(frameCount() == 0)
-        return; // there is no way we can get more frames anyway.
-    KWTextFrame *lastFrame = 0;
-    foreach(KWFrame *frame, frames()) { // TODO use an iterator and iter--
-        KWTextFrame *tf = dynamic_cast<KWTextFrame*> (frame);
-        if(tf)
-            lastFrame = tf;
-    }
-    Q_ASSERT(lastFrame);
-    if(frameCount() > 1 && lastFrame->newFrameBehavior() == KWord::ReconnectNewFrame &&
-            lastFrame->shape()->size().height() < excessHeight) { // remove last frame
-        removeFrame(lastFrame);
-        delete lastFrame->shape();
-    }
-    else if(lastFrame->frameBehavior() == KWord::AutoExtendFrameBehavior) {
-        lastFrame->autoShrink(lastFrame->shape()->size().height() - excessHeight);
-        lastFrame->allowToGrow();
+    if(m_frames.count() == 0)
+        return;
+    QList<KWFrame*>::Iterator iter = --m_frames.end();
+    while(iter != m_frames.begin()) {
+        KWTextFrame *tf = dynamic_cast<KWTextFrame*> (*(iter));
+        if(tf) {
+            if(tf && tf->frameBehavior() == KWord::AutoExtendFrameBehavior) {
+                tf->autoShrink(tf->shape()->size().height() - excessHeight);
+                tf->allowToGrow();
+            }
+            return;
+        }
+        --iter;
     }
 }
 
-void KWTextFrameSet::framesEmpty(int framesInUse) {
-    kDebug() << "KWTextFrameSet::framesEmpty " << framesInUse << endl;
+void KWTextFrameSet::framesEmpty(int emptyFrames) {
+    //kDebug() << "KWTextFrameSet::framesEmpty " << emptyFrames << endl;
+    if(m_pageManager == 0) // be lazy; just refuse to delete frames if we don't know which are on which page
+        return;
+    QList<KWFrame*> myFrames = m_frames;
+    QList<KWFrame*>::Iterator iter = --myFrames.end();
+    KWPage *page = 0;
+    do {
+        KWTextFrame *tf = dynamic_cast<KWTextFrame*> (*(iter));
+        if(tf) {
+            KWPage *pageForFrame = m_pageManager->page(tf->shape());
+            if(page ==0)
+                page = pageForFrame;
+            else if(page != pageForFrame) { // all frames on the page (of this FS) are empty.
+                ++iter;
+                while(iter != myFrames.end()) { // remove all frames till end.
+                    removeFrame(*iter);
+                    delete (*iter)->shape();
+                    ++iter;
+                }
+                return;
+            }
+        }
+        if(--emptyFrames < 0)
+            return;
+    } while(iter-- != myFrames.begin());
 }
 
 void KWTextFrameSet::setAllowLayout(bool allow) {
