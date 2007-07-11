@@ -22,24 +22,12 @@
 // Local
 #include "Sheet.h"
 
-#include <assert.h>
-#include <ctype.h>
-#include <float.h>
-#include <math.h>
-#include <pwd.h>
-#include <stdlib.h>
-#include <unistd.h>
-
 #include <QApplication>
 #include <QBuffer>
 #include <QClipboard>
-#include <QLinkedList>
 #include <QList>
 #include <QMap>
 #include <QMimeData>
-#include <QPainter>
-#include <QPixmap>
-#include <QRegExp>
 #include <QStack>
 #include <QTextStream>
 
@@ -47,13 +35,11 @@
 #include <kcodecs.h>
 #include <kfind.h>
 #include <kfinddialog.h>
-#include <kmessagebox.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
 #include <kprinter.h>
 #include <kurl.h>
 
-#include <koChart.h>
 #include <KoDom.h>
 #include <KoDocumentInfo.h>
 #include <KoOasisLoadingContext.h>
@@ -104,14 +90,6 @@
 // D-Bus
 #include "interfaces/SheetAdaptor.h"
 #include <QtDBus/QtDBus>
-
-
-#include "Sheet.moc"
-
-#define NO_MODIFICATION_POSSIBLE \
-do { \
-  KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); return; \
-} while(0)
 
 namespace KSpread {
 
@@ -231,6 +209,30 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
     // document size changes always trigger a visible size change
     connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
+}
+
+Sheet::~Sheet()
+{
+    //Disable automatic recalculation of dependancies on this sheet to prevent crashes
+    //in certain situations:
+    //
+    //For example, suppose a cell in SheetB depends upon a cell in SheetA.  If the cell in SheetB is emptied
+    //after SheetA has already been deleted, the program would try to remove dependancies from the cell in SheetA
+    //causing a crash.
+    setAutoCalc(false);
+
+    s_mapSheets->remove(d->id);
+
+    //when you remove all sheet (close file)
+    //you must reinit s_id otherwise there is not
+    //the good name between map and sheet
+    if (s_mapSheets->count() == 0)
+        s_id = 0;
+
+    delete d->print;
+    delete d->cellStorage;
+    delete d->shapeContainer;
+    delete d;
 }
 
 QString Sheet::sheetName() const
@@ -4640,31 +4642,6 @@ bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenS
   return true;
 }
 
-Sheet::~Sheet()
-{
-    //Disable automatic recalculation of dependancies on this sheet to prevent crashes
-    //in certain situations:
-    //
-    //For example, suppose a cell in SheetB depends upon a cell in SheetA.  If the cell in SheetB is emptied
-    //after SheetA has already been deleted, the program would try to remove dependancies from the cell in SheetA
-    //causing a crash.
-    setAutoCalc(false);
-
-    s_mapSheets->remove( d->id );
-
-    //when you remove all sheet (close file)
-    //you must reinit s_id otherwise there is not
-    //the good name between map and sheet
-    if( s_mapSheets->count()==0)
-      s_id=0;
-
-    delete d->print;
-    delete d->cellStorage;
-    delete d->shapeContainer;
-
-    delete d;
-}
-
 void Sheet::hideSheet(bool _hide)
 {
     setHidden(_hide);
@@ -4846,3 +4823,5 @@ void Sheet::printDebug()
 #endif
 
 } // namespace KSpread
+
+#include "Sheet.moc"
