@@ -32,11 +32,18 @@ class QGridLayout;
  * @short A widget providing options for the FormulaTool
  */
 class FormulaToolOptions : public QWidget {
+Q_OBJECT
 public:
     /// Standart constructor
     FormulaToolOptions( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     ~FormulaToolOptions();
+
+    void setFormulaTool( KoFormulaTool* tool );
+
+private slots:
+    void slotLoadFormula();
+    void slotSaveFormula();
 
 private:
     KoFormulaTool* m_tool;

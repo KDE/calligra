@@ -18,7 +18,13 @@
 */
 
 #include "FormulaToolOptions.h"
-
+#include "KoFormulaTool.h"
+#include "KoFormulaShape.h"
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include <KoShapeSavingContext.h>
+#include <KFileDialog>
+#include <QFile>
 #include <QPushButton>
 #include <QComboBox>
 #include <QListWidget>
@@ -44,6 +50,9 @@ FormulaToolOptions::FormulaToolOptions( QWidget* parent, Qt::WindowFlags f )
     m_layout->addWidget( m_templateList, 1, 0, 1, 2 );
     m_layout->addWidget( m_loadFormula, 2, 0 );
     m_layout->addWidget( m_saveFormula, 2, 1 );
+
+    connect( m_loadFormula, SIGNAL( clicked() ), this, SLOT( slotLoadFormula() ) );
+    connect( m_saveFormula, SIGNAL( clicked() ), this, SLOT( slotSaveFormula() ) );
 }
 
 FormulaToolOptions::~FormulaToolOptions()
@@ -55,3 +64,35 @@ FormulaToolOptions::~FormulaToolOptions()
     delete m_saveFormula;
 }
 
+void FormulaToolOptions::slotLoadFormula()
+{
+    KUrl url = KFileDialog::getOpenUrl();
+    if( url.isEmpty() || !m_tool->shape() )
+        return;
+
+    QFile file( url.path() );
+    if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+        return;
+
+    KoXmlDocument tmpDocument;
+    tmpDocument.setContent( &file, false, 0, 0, 0 );
+//    m_tool->shape()->loadOdf( tmpDocument.documentElement() );
+}
+
+void FormulaToolOptions::slotSaveFormula()
+{
+    KUrl url = KFileDialog::getSaveUrl();
+    if( url.isEmpty() || !m_tool->shape() )
+        return;
+
+    QFile file( url.path() );
+    KoXmlWriter writer( &file );
+//    m_tool->shape()->saveOdf( );
+}
+
+void FormulaToolOptions::setFormulaTool( KoFormulaTool* tool )
+{
+    m_tool = tool;
+}
+
+#include "FormulaToolOptions.moc"

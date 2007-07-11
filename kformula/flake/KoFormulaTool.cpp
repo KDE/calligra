@@ -25,13 +25,9 @@
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
-#include <KFileDialog>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <QKeyEvent>
-#include <QGridLayout>
-#include <QToolButton>
-#include <QLabel>
 #include "KoFormulaTool.moc"
 
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
@@ -245,31 +241,12 @@ void KoFormulaTool::remove( bool backSpace )
 QWidget* KoFormulaTool::createOptionWidget()
 {
     FormulaToolOptions* options = new FormulaToolOptions();
- //   options->setTool();
+    options->setFormulaTool( this );
     return options;
-/*
-    QWidget *optionWidget = new QWidget();
-    QGridLayout *layout = new QGridLayout( optionWidget );
-
-    QToolButton *button = 0;
-
-    QLabel * lbl = new QLabel( i18n( "Import formula" ), optionWidget );
-    layout->addWidget( lbl, 0, 0 );
-
-    button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("open") );
-    button->setToolTip( i18n( "Open" ) );
-    layout->addWidget( button, 0, 1 );
-    connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotChangeUrl() ) );
-
-    return optionWidget; */
 }
 
-void KoFormulaTool::slotChangeUrl()
+KoFormulaShape* KoFormulaTool::shape()
 {
-    KUrl url = KFileDialog::getOpenUrl();
-    if(!url.isEmpty() && m_formulaShape)
-        m_formulaShape->importFormula(url);
+    return m_formulaShape;
 }
-
 

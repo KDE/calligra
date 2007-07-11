@@ -61,6 +61,8 @@ public:
 
     void remove( bool backSpace );
 
+    KoFormulaShape* shape();
+
 public slots:
     /// Called when this tool instance is activated and fills m_formulaShape
     void activate( bool temporary=false );
@@ -73,10 +75,6 @@ protected:
      * Create default option widget
      */
     virtual QWidget* createOptionWidget();
-
-protected slots:
-
-    void slotChangeUrl();
 	
 private:
     /// The FormulaShape the tool is manipulating
