@@ -34,35 +34,35 @@ class TestFinancialFunctions: public QObject
     Q_OBJECT
 
 private slots:
-   void testACCRINT();
-//   void testACCRINTM();
+  void testACCRINT();
+  void testACCRINTM();
 //   void testAMORDEGRC();  // to be implemented
 //   void testAMORLINC();   // to be implemented
-//   void testCOMPOUND();   // k
+  void testCOMPOUND();   // no ODF tests available
 //   void testCONTINUOUS(); // k
 //   void testCOUPDAYBS();  // to be implemented
 //   void testCOUPBAYS();   // to be implemented
 //   void testCOUPDAYSNC(); // to be implemented
 //   void testCOUPNCD();    // to be implemented
-//   void testCOUPNUM();    
+  void testCOUPNUM();    
 //   void testCOUPPCD();    // to be implemented
-//   void testCUMIPMT();    // to be implemented
-//   void testCUMPRINC();   
+  void testCUMIPMT();     
+  void testCUMPRINC();   
   void testDB();
   void testDDB();
   void testDISC();
   void testDOLLARDE();
   void testDOLLARFR();
   void testDURATION();
-//   void testEFFECT();
-//   void testEFFECTIVE(); // k -> CHECK may be EFFECT
+  void testEFFECT();
+//   void testEFFECTIVE(); // same as EFFECT
   void testEURO();
   void testEUROCONVERT();
 //   void testFV();
 //   void testFV_ANNUITY(); // k -> CHECK may be FVSCHEDULE
 //   void testFVSCHEDULE();
   void testINTRATE();
-//   void testIPMT();       
+  void testIPMT();       
 //   void testIRR();        // to be implemented
   void testISPMT();  
   void testLEVELCOUPON();
@@ -73,35 +73,35 @@ private slots:
   void testNPV();
 //   void testODDFPRICE();  // to be implemented
 //   void testODDFYIELD();  // to be implemented
-//   void testODDLPRICE();  // to be implemented
+  void testODDLPRICE();  // to be implemented
 //   void testODDLYIELD();  // to be implemented
   void testPDURATION();
   void testPMT();
-//   void testPPMT();
+  void testPPMT();
 //   void testPRICE();      // to be implemented
 //   void testPRICEDISC();  // to be implemented
-  void testPRICEMAT();   // to be implemented
-//   void testPV();
+  void testPRICEMAT();
+  void testPV();
 //   void testPV_ANNUITY(); // k
 //   void testRATE();       // to be implemented
 //   void testRECEIVED();
 //   void testRRI();        // to be implemented
   void testSLN();
   void testSYD();
-//   void testTBILLEQ();
+  void testTBILLEQ();
   void testTBILLPRICE();
-//   void testTBILLYIELD();
+  void testTBILLYIELD();
 //   void testVDB();        // to be implemented
 //   void testXIRR();       // to be implemented
 //   void testXNPV();       // to be implemented
 //   void testYIELD();      // to be implemented
-  void testYIELDDISC();  // to be implemented
-//   void testYIELDMAT();   // to be implemented
+  void testYIELDDISC();
+  void testYIELDMAT();   // to be implemented
   void testZEROCOUPON();
 
-private:
-  Value evaluate(const QString&);
-  Value evaluateShort(const QString&);
+// private:
+//   Value evaluate(const QString&);
+//   Value evaluateShort(const QString&);
 };
 
 } // namespace KSpread

@@ -785,6 +785,49 @@
     </Function>
 
     <Function>
+      <Name>ODDLPRICE</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Last</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>AnnualYield</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Redemption</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Frequency</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The ODDLPRICE function culculates the value of the security per 100 currency units of face value. The security has an irregular last interest date.</Text>
+	<Syntax>ODDLPRICE( Settlement; Maturity; Last; Rate; AnnualYield; Redemption; Frequency; Basis)</Syntax>
+	<Example>ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2) returns 90.991042345</Example>
+        <Related>ODDFPRICE</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>SLN</Name>
       <Type>Float</Type>
       <Parameter>
@@ -1056,5 +1099,43 @@
         <Example>YIELDDISC(DATE(1990;6;1);DATE(1990;12;31);941.66667;1000) returns 0.106194684</Example>
       </Help>
     </Function>
+    
+    <Function>
+      <Name>YIELDMAT</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Settlement</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Maturity</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Issue</Comment>
+	<Type>Date</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Discount rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Price</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Basis</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Help>
+	<Text>The YIELDMAT function calculates the yield of the security that pays interest on the maturity date.</Text>
+	<Syntax>YIELDMAT( Settlement; Maturity; Issue; Rate; Price; Basis )</Syntax>
+	<Example>YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990; 1; 1); 6%;103.819218241) returns 0.050000000</Example>
+        <Related>PRICE</Related>
+        <Related>YIELD</Related>
+        <Related>YIELDDISC</Related>
+      </Help>
+    </Function>
+
   </Group>
 </KSpreadFunctions>

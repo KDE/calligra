@@ -71,6 +71,7 @@ Value func_ppmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pricemat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv_annuity (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_received (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sln (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_syd (valVector args, ValueCalc *calc, FuncExtra *);
@@ -78,6 +79,7 @@ Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all financial functions
@@ -165,6 +167,9 @@ void RegisterFinancialFunctions()
   f->setParamCount (2, -1);
   f->setAcceptArray();
   repo->add (f);
+  f = new Function ("ODDLPRICE", func_oddlprice);
+  f->setParamCount (7,8);
+  repo->add (f);
   f = new Function ("PMT", func_pmt);
   f->setParamCount (3, 5);
   repo->add (f);
@@ -200,6 +205,9 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("YIELDDISC", func_yielddisc);
   f->setParamCount (4,5);
+  repo->add (f);
+  f = new Function ("YIELDMAT", func_yieldmat);
+  f->setParamCount (5,6);
   repo->add (f);
   f = new Function ("ZERO_COUPON", func_zero_coupon);
   f->setParamCount (3);
@@ -423,27 +431,30 @@ Value func_disc (valVector args, ValueCalc *calc, FuncExtra *)
   QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
-  // check dates
-//   if ( settlement > maturity )
+//   // check dates
+//   if ( settlement > maturity || )
 //     return Value(false);
 
   Value par = args[2];
   Value redemp = args[3];
 
+  // check parameters
+  if ( settlement > maturity || redemp.asFloat() <= 0.0 || par.asFloat() <= 0.0 )
+    return Value(false);
+
   int basis = 0;
   if (args.count() == 5)
     basis = calc->conv()->asInteger (args[4]).asInteger();
 
-  double y = daysPerYear (settlement, basis);
+/*  double y = daysPerYear (settlement, basis);
   double d = daysBetweenDates (settlement, maturity, basis);
 
   if ( y <= 0 || d <= 0 || basis < 0 || basis > 4 || calc->isZero (redemp) )
-    return Value(false);
+    return Value(false);*/
   
-  // res=(1-(price/redemption)/yearfrac)
   QDate date0 = calc->doc()->referenceDate(); // referenceDate
   
-  //return calc->div (calc->sub (1, calc->div ( par, redemp)), Value(yearFrac(date0,settlement,maturity,basis)) );
+  // res=(1-(price/redemption)/yearfrac)
   return Value( (1.0-par.asFloat()/redemp.asFloat())/yearFrac(date0,settlement,maturity,basis) );
 }
 
@@ -902,6 +913,78 @@ Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *)
 
   double res = ( redemp / price ) - 1.0;
   res /= yearFrac(date0, settlement, maturity, basis);
+
+  kDebug()<<"res ="<<res<<endl;
+  return Value(res);
+}
+
+// ODDLPRICE
+Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate last = calc->conv()->asDate (args[2]).asDate( calc->doc() );
+  double rate = calc->conv()->asFloat (args[3]).asFloat();
+  double yield = calc->conv()->asFloat (args[4]).asFloat();
+  double redemp = calc->conv()->asFloat (args[5]).asFloat();
+  double freq = calc->conv()->asFloat (args[6]).asFloat();
+
+  // opt. basis
+  int basis=0;
+  if (args.count() > 7)
+    basis = calc->conv()->asInteger (args[7]).asInteger();
+
+  kDebug()<<"ODDLPRICE"<<endl;
+  kDebug()<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis<<endl;
+
+  // TODO check frequency
+  if( yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last)
+    return Value::errorVALUE();
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+
+  double dci  = yearFrac(date0, last, maturity, basis)*freq;
+  double dsci = yearFrac(date0, settlement, maturity, basis)*freq;
+  double ai = yearFrac(date0, last, settlement, basis)*freq;
+ 
+  double res = redemp + dci * 100.0 * rate / freq;
+  res /= dsci * yield / freq + 1.0;
+  res -= ai * 100.0 * rate / freq;
+  
+  kDebug()<<"res ="<<res<<endl;
+  return Value(res);
+}
+
+// YIELDMAT
+Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate issue = calc->conv()->asDate (args[2]).asDate( calc->doc() );
+  double rate = calc->conv()->asFloat (args[3]).asFloat();
+  double price = calc->conv()->asFloat (args[4]).asFloat();
+  
+  // opt. basis
+  int basis=0;
+  if (args.count() > 5)
+    basis = calc->conv()->asInteger (args[5]).asInteger();
+
+  kDebug()<<"YIELDMAT"<<endl;
+  kDebug()<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" price="<<price<<" basis="<<basis<<endl;
+
+  if( price <= 0.0 || rate <= 0.0 || settlement >= maturity )
+    return Value::errorVALUE();
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+
+  double issMat = yearFrac(date0, issue, maturity, basis);
+  double issSet = yearFrac(date0, issue, settlement, basis);
+  double setMat = yearFrac(date0, settlement, maturity, basis);
+ 
+  double res = 1.0 + issMat * rate;
+  res /= price /100.0 + issSet *rate;
+  res--;
+  res /= setMat;
 
   kDebug()<<"res ="<<res<<endl;
   return Value(res);
