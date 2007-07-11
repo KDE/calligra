@@ -2400,6 +2400,16 @@ void Style::operator=( const Style& other )
     d = other.d;
 }
 
+Style Style::operator-(const Style& other) const
+{
+    Style style;
+    const QSet<Style::Key> keys = difference(other);
+    const QSet<Style::Key>::ConstIterator end = keys.constEnd();
+    for (QSet<Style::Key>::ConstIterator it = keys.constBegin(); it != end; ++it)
+        style.insertSubStyle(d->subStyles[*it]);
+    return style;
+}
+
 void Style::merge( const Style& style )
 {
     const QList<SharedSubStyle> subStyles( style.subStyles() );

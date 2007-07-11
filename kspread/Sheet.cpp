@@ -2727,9 +2727,6 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
         }
     }
 
-    //Maps from a column index to the name of the default cell style for that column
-    QMap<int,QString> defaultColumnCellStyles;
-
     // Cell style regions
     QHash<QString, QRegion> cellStyleRegions;
     // Cell style regions (row defaults)
@@ -3743,6 +3740,11 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     kDebug(36003) << "Sheet::saveOasisColRowCell: " << d->name << endl;
     kDebug(36003) << "\t Sheet dimension: " << maxCols << " x " << maxRows << endl;
 
+    // calculate the column/row default cell styles
+    QMap<int, Style> columnDefaultStyles;
+    QMap<int, Style> rowDefaultStyles;
+    styleStorage()->defaultStyles(columnDefaultStyles, rowDefaultStyles);
+
     // saving the columns
     //
     int i = 1;
@@ -3758,11 +3760,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
         //style default layout for column
-        KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-        const Style style = cellStorage()->style( QRect( i, 1, 1, KS_rowMax ) );
-        const QString currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle,
-                                                                     mainStyles,
-                                                                     doc()->styleManager() );
+        const Style style = columnDefaultStyles.value(i);
 
         bool hide = column->hidden();
         bool refColumnIsDefault = column->isDefault() && style.isDefault();
@@ -3771,8 +3769,11 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         while ( j <= maxCols )
         {
-          int nextStyleColumnIndex = styleStorage()->nextColumn( j );
-          ColumnFormat* nextColumn = d->columns.next( j++ );
+          const ColumnFormat* nextColumn = d->columns.next( j++ );
+          const int nextColumnIndex = nextColumn ? nextColumn->column() : 0;
+          const QMap<int, Style>::ConstIterator nextColumnDefaultStyle = columnDefaultStyles.upperBound(j);
+          const int nextStyleColumnIndex = nextColumnDefaultStyle == columnDefaultStyles.end()
+                                         ? 0 : nextColumnDefaultStyle.key();
 //           kDebug(36003) << "Sheet::saveOasisColRowCell: second col loop:"
 //                         << " j: " << j
 //                         << ", next column: " << (nextColumn ? nextColumn->column() : 0)
@@ -3780,7 +3781,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
           // no next or not the adjacent column?
           if ( ( !nextColumn && !nextStyleColumnIndex ) ||
-               ( ( !nextColumn || nextColumn->column() != j ) && nextStyleColumnIndex != j ) )
+               ( nextColumnIndex != j && nextStyleColumnIndex != j ) )
           {
             if ( refColumnIsDefault )
             {
@@ -3814,8 +3815,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 #endif
           if ( nextColumn && ( *column != *nextColumn ) )
               break;
-          const Style nextStyle = cellStorage()->style( QRect( j, 1, 1, KS_rowMax ) );
-          if ( style != nextStyle )
+          if ( style != columnDefaultStyles.value( j ) )
               break;
           ++repeated;
         }
@@ -3825,8 +3825,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
           xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
 
-          if ( !currentDefaultCellStyle.isDefaultStyle() )
-              xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
+          if ( !style.isDefault() )
+          {
+              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisStyle
+              const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
+                                                                doc()->styleManager());
+              xmlWriter.addAttribute("table:default-cell-style-name", name);
+          }
 
           if ( hide )
               xmlWriter.addAttribute( "table:visibility", "collapse" );
@@ -3927,7 +3932,12 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             if ( repeated > 1 )
                 xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
             if ( !currentDefaultCellStyle.isDefaultStyle() )
-              xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
+            {
+              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
+              const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
+                                                   doc()->styleManager());
+              xmlWriter.addAttribute("table:default-cell-style-name", name);
+            }
             if ( row->hidden() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
 
@@ -3963,7 +3973,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
             }
 
-            saveOasisCells( xmlWriter, mainStyles, i, maxCols, valStyle );
+            saveOasisCells(xmlWriter, mainStyles, i, maxCols, valStyle,
+                           columnDefaultStyles, rowDefaultStyles);
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
@@ -3972,7 +3983,9 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     }
 }
 
-void Sheet::saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, GenValidationStyles &valStyle )
+void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
+                           GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                           const QMap<int, Style>& rowDefaultStyles)
 {
     int i = 1;
     Cell cell( this, i, row );

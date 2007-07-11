@@ -121,6 +121,40 @@ QRect StyleStorage::usedArea() const
     return d->usedArea.boundingRect();
 }
 
+void StyleStorage::defaultStyles(QMap<int, Style>& columnDefaultStyles,
+                                 QMap<int, Style>& rowDefaultStyles) const
+{
+    const QRect sheetRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
+    const QRect usedArea = this->usedArea();
+    const QList< QPair<QRectF,SharedSubStyle> > pairs = d->tree.intersectingPairs(sheetRect);
+    for (int i = 0; i < pairs.count(); ++i)
+    {
+        const QRect rect = pairs[i].first.toRect();
+        // column default cell styles
+        if (rect.left() == 1 && rect.right() == usedArea.right())
+        {
+            for (int row = rect.top(); row <= rect.bottom(); ++row)
+            {
+                if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
+                    rowDefaultStyles.remove(row);
+                else
+                    rowDefaultStyles[row].insertSubStyle(pairs[i].second);
+            }
+        }
+        // row default cell styles
+        else if (rect.top() == 1 && rect.bottom() == usedArea.bottom())
+        {
+            for (int col = rect.left(); col <= rect.right(); ++col)
+            {
+                if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
+                    columnDefaultStyles.remove(col);
+                else
+                    columnDefaultStyles[col].insertSubStyle(pairs[i].second);
+            }
+        }
+    }
+}
+
 int StyleStorage::nextColumn( int column ) const
 {
     QList<int> list = d->usedColumns.toList();

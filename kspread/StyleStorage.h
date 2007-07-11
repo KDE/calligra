@@ -87,6 +87,9 @@ public:
      */
     QRect usedArea() const;
 
+    void defaultStyles(QMap<int, Style>& columnDefaultStyles,
+                       QMap<int, Style>& rowDefaultStyles) const;
+
     /**
      * Returns the index of the next column cell style after \p column or zero
      * if there's none.

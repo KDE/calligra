@@ -327,6 +327,7 @@ public:
     bool operator== (const Style& style) const;
     inline bool operator!=( const Style& other ) const { return !operator==( other ); }
     void operator=( const Style& style );
+    Style operator-(const Style& style) const;
     void merge( const Style& style );
     QSet<Key> difference(const Style& style) const;
 

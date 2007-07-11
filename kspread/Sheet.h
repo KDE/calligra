@@ -1104,8 +1104,9 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisCells( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                         int row, int maxCols, GenValidationStyles &valStyle );
+    void saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
+                        GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                        const QMap<int, Style>& rowDefaultStyles);
 
     /**
      * \ingroup OpenDocument
