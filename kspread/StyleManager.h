@@ -103,15 +103,18 @@ class KSPREAD_EXPORT StyleManager
    */
   void releaseUnusedAutoStyles( Styles autoStyles );
 
+  /// OpenDocument name to internal name (on loading) or vice versa (on saving)
+  QString openDocumentName(const QString&) const;
+
  private:
   void dump() const;
 
   CustomStyle * m_defaultStyle;
   CustomStyles  m_styles; // builtin and custom made styles
 
-  // Same styles as above, but with the internal OpenDocument name as key.
-  // NOTE: Temporary! Only valid while loading OpenDocument files.
-  CustomStyles  m_oasisStyles;
+  // OpenDocument name to internal name (on loading) or vice versa (on saving)
+  // NOTE: Temporary! Only valid while loading or saving OpenDocument files.
+  QHash<QString, QString>  m_oasisStyles;
 };
 
 } // namespace KSpread

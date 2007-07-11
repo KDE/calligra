@@ -3759,20 +3759,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         //style default layout for column
         KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-        QString currentDefaultCellStyleName;
         const Style style = cellStorage()->style( QRect( i, 1, 1, KS_rowMax ) );
-        if ( style.isDefault() )
-        {
-            const CustomStyle* customStyle = doc()->styleManager()->defaultStyle();
-            currentDefaultCellStyleName = customStyle->saveOasis( currentDefaultCellStyle, mainStyles );
-        }
-        else if ( style.hasAttribute( Style::NamedStyleKey ) )
-        {
-            const CustomStyle* customStyle = doc()->styleManager()->style( style.parentName() );
-            currentDefaultCellStyleName = customStyle->saveOasis( currentDefaultCellStyle, mainStyles );
-        }
-        else
-            currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle, mainStyles );
+        const QString currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle,
+                                                                     mainStyles,
+                                                                     doc()->styleManager() );
 
         bool hide = column->hidden();
         bool refColumnIsDefault = column->isDefault() && style.isDefault();
@@ -3863,20 +3853,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         // default cell style for row
         KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-        QString currentDefaultCellStyleName;
         const Style style = cellStorage()->style( QRect( 1, i, KS_colMax, 1 ) );
-        if ( style.isDefault() )
-        {
-            const CustomStyle* customStyle = doc()->styleManager()->defaultStyle();
-            currentDefaultCellStyleName = customStyle->saveOasis( currentDefaultCellStyle, mainStyles );
-        }
-        else if ( style.hasAttribute( Style::NamedStyleKey ) )
-        {
-            const CustomStyle* customStyle = doc()->styleManager()->style( style.parentName() );
-            currentDefaultCellStyleName = customStyle->saveOasis( currentDefaultCellStyle, mainStyles );
-        }
-        else
-            currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle, mainStyles );
+        const QString currentDefaultCellStyleName = style.saveOasis( currentDefaultCellStyle,
+                                                                     mainStyles,
+                                                                     doc()->styleManager() );
 
         xmlWriter.startElement( "table:table-row" );
 

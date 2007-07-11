@@ -1126,12 +1126,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
         currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
         conditions.saveOasisConditions( currentCellStyle );
     }
-    const Style style = this->style();
-    if ( style.isDefault() )
-        return doc()->styleManager()->defaultStyle()->saveOasis( currentCellStyle, mainStyles );
-    else if ( style.hasAttribute( Style::NamedStyleKey ) )
-        return doc()->styleManager()->style( style.parentName() )->saveOasis( currentCellStyle, mainStyles );
-    return style.saveOasis( currentCellStyle, mainStyles );
+    return style().saveOasis( currentCellStyle, mainStyles, d->sheet->doc()->styleManager() );
 }
 
 

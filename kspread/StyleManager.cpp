@@ -40,7 +40,6 @@ using namespace KSpread;
 StyleManager::StyleManager()
   : m_defaultStyle( new CustomStyle() )
 {
-    m_defaultStyle->setDefault();
 }
 
 StyleManager::~StyleManager()
@@ -53,14 +52,17 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
 {
     kDebug(36003) << "StyleManager: Saving default cell style" << endl;
     KoGenStyle defStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
-    defaultStyle()->saveOasis( defStyle, mainStyles );
+    defaultStyle()->saveOasis(defStyle, mainStyles, this);
+
+    m_oasisStyles.clear();
 
     CustomStyles::ConstIterator end = m_styles.end();
     for ( CustomStyles::ConstIterator it( m_styles.begin() ); it != end; ++it )
     {
         kDebug(36003) << "StyleManager: Saving common cell style " << it.key() <<endl;
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
-        (*it)->saveOasis( customStyle, mainStyles );
+        const QString oasisName = (*it)->saveOasis(customStyle, mainStyles, this);
+        m_oasisStyles[(*it)->name()] = oasisName;
     }
 }
 
@@ -131,7 +133,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
             // TODO Stefan: conditions
             insertStyle (style);
             // insert it into the the map sorted the OpenDocument name
-            m_oasisStyles[oasisName] = style;
+            m_oasisStyles[oasisName] = name;
             kDebug(36003) << "Style " << name << ": " << style << endl;
         }
     }
@@ -141,13 +143,13 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
         if ( !style->parentName().isNull() )
         {
             const QString parentOasisName = style->parentName();
-            const CustomStyle* parentStyle = m_oasisStyles.value( parentOasisName );
+            const CustomStyle* parentStyle = this->style(m_oasisStyles.value(parentOasisName));
             if ( !parentStyle )
             {
                 kWarning(36003) << parentOasisName << " not found." << endl;
                 continue;
             }
-            style->setParentName( m_oasisStyles.value( parentOasisName )->name() );
+            style->setParentName(m_oasisStyles.value(parentOasisName));
             kDebug(36003) << style->name() << " (" << style << ") gets " << style->parentName() << " (" << parentOasisName << ") as parent." << endl;
         }
         else
@@ -269,7 +271,7 @@ CustomStyle * StyleManager::style( QString const & name ) const
 //     if ( !m_oasisStyles.isEmpty() )
     {
         if ( m_oasisStyles.contains( name ) )
-            return m_oasisStyles[name];
+            return m_styles.value(m_oasisStyles[name]);
 //         return 0;
     }
     if ( m_styles.contains(name) )
@@ -413,7 +415,7 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QStr
             if ( element->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
             {
                 const QString parentOasisName = element->attributeNS( KoXmlNS::style, "parent-style-name", QString() );
-                const CustomStyle* parentStyle = m_oasisStyles.value( parentOasisName );
+                const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOasisName));
                 if ( !parentStyle )
                 {
                     kWarning(36003) << parentOasisName << " not found." << endl;
@@ -434,6 +436,11 @@ void StyleManager::releaseUnusedAutoStyles( Styles autoStyles )
 
     // Now, we can clear the map of styles sorted by OpenDocument name.
     m_oasisStyles.clear();
+}
+
+QString StyleManager::openDocumentName(const QString& name) const
+{
+    return m_oasisStyles.value(name);
 }
 
 void StyleManager::dump() const

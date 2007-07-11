@@ -172,9 +172,10 @@ public:
     /**
      * Saves an OASIS automatic style.
      * Reimplemented by CustomStyle for OASIS user styles.
-     * @return always QString()
+     * \return the OASIS style's name
      */
-    virtual QString saveOasis( KoGenStyle& style, KoGenStyles& mainStyles) const;
+    virtual QString saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
+                              const StyleManager* manager) const;
 
 
     void clearAttribute( Key key );
@@ -233,7 +234,8 @@ protected:
      * Helper function for saveOasis
      * Does the real work by determining the used attributes.
      */
-    void saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const;
+    void saveOasisStyle(const QSet<Key>& subStyles, KoGenStyle &style,
+                        KoGenStyles &mainStyles, const StyleManager* manager) const;
 
     void loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element );
     void loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
@@ -326,6 +328,7 @@ public:
     inline bool operator!=( const Style& other ) const { return !operator==( other ); }
     void operator=( const Style& style );
     void merge( const Style& style );
+    QSet<Key> difference(const Style& style) const;
 
     void dump() const;
 
@@ -392,7 +395,8 @@ public:
      * Stores an OASIS user style.
      * @return the OASIS style's name
      */
-    virtual QString saveOasis( KoGenStyle& style, KoGenStyles &mainStyles ) const;
+    virtual QString saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
+                              const StyleManager* manager) const;
 
 
     bool operator==( const CustomStyle& other ) const;

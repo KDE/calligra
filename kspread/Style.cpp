@@ -39,6 +39,7 @@
 #include "Condition.h"
 #include "Doc.h"
 #include "Global.h"
+#include "StyleManager.h"
 #include "Util.h"
 
 using namespace KSpread;
@@ -173,7 +174,6 @@ QString Style::parentName() const
 
 void Style::setParentName( const QString& name )
 {
-    d->subStyles.remove( NamedStyleKey );
     d->subStyles.insert( NamedStyleKey, SharedSubStyle( new NamedStyle( name ) ) );
 }
 
@@ -1072,18 +1072,53 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::T
     return KoOasisStyles::saveOasisFractionStyle( mainStyles, format, _prefix, _suffix );
 }
 
-QString Style::saveOasis( KoGenStyle& style, KoGenStyles& mainStyles ) const
+QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
+                         const StyleManager* manager) const
 {
+    // list of substyles to store
+    QSet<Key> keysToStore;
+
+    if (isDefault())
+    {
+        if (style.type() == 0)
+        {
+            style = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+            style.setDefaultStyle(true);
+            // don't i18n'ize "Default" in this case
+            return "Default"; // mainStyles.lookup( style, "Default", KoGenStyles::DontForceNumbering );
+        }
+        // no attributes to store here
+        return mainStyles.lookup( style, "ce" );
+    }
+    else if (hasAttribute(NamedStyleKey))
+    {
+        // it's not really the parent name in this case
+        CustomStyle* namedStyle = manager->style(parentName());
+        // remove substyles already present in named style
+        keysToStore = difference(*namedStyle);
+        // no differences and not an automatic style yet
+        if (style.type() == 0 &&
+            keysToStore.count() == 1 &&
+            keysToStore.toList().first() == NamedStyleKey)
+        {
+            return manager->openDocumentName(parentName());
+        }
+    }
+    else
+        keysToStore = QSet<Key>::fromList(d->subStyles.keys());
+
     // KSpread::Style is definitly an OASIS auto style,
     // but don't overwrite it, if it already exists
     if (style.type() == 0)
         style = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
+
     // doing the real work
-    saveOasisStyle( style, mainStyles );
+    saveOasisStyle(keysToStore, style, mainStyles, manager);
     return mainStyles.lookup( style, "ce" );
 }
 
-void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
+void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
+                           KoGenStyles &mainStyles, const StyleManager* manager) const
 {
 #ifndef NDEBUG
     //if (type() == BUILTIN )
@@ -1094,15 +1129,10 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
     //  kDebug(36006) << "AUTO" << endl;
 #endif
 
-    // don't store parent, if it's the default style
-#ifdef __GNUC__
-#warning FIXME Stefan: check for default style
-#endif
-//     if ( m_parent && (m_parent->type() != BUILTIN || m_parent->name() != "Default") )
-//         // FIXME this is not the OASIS parent style's name. it's its display name!
-//         style.addAttribute( "style:parent-style-name", m_parent->name() );
+    if (!isDefault() && hasAttribute(NamedStyleKey))
+        style.addAttribute("style:parent-style-name", manager->openDocumentName(parentName()));
 
-    if ( d->subStyles.contains( HorizontalAlignment ) )
+    if ( keysToStore.contains( HorizontalAlignment ) )
     {
         QString value;
         switch( halign() )
@@ -1126,7 +1156,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
         }
     }
 
-    if ( d->subStyles.contains( VerticalAlignment ) )
+    if ( keysToStore.contains( VerticalAlignment ) )
     {
         QString value;
         switch( valign() )
@@ -1148,41 +1178,41 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
             style.addProperty( "style:vertical-align", value );
     }
 
-    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor().isValid() )
+    if ( keysToStore.contains( BackgroundColor ) && backgroundColor().isValid() )
         style.addProperty( "fo:background-color", colorName(backgroundColor()) );
 
-    if ( d->subStyles.contains( MultiRow ) && d->subStyles.contains( MultiRow ) )
+    if ( keysToStore.contains( MultiRow ) && keysToStore.contains( MultiRow ) )
         style.addProperty( "fo:wrap-option", "wrap" );
 
-    if ( d->subStyles.contains( VerticalText ) && d->subStyles.contains( VerticalText ) )
+    if ( keysToStore.contains( VerticalText ) && keysToStore.contains( VerticalText ) )
     {
         style.addProperty( "style:direction", "ttb" );
         style.addProperty( "style:rotation-angle", "0" );
         style.addProperty( "style:rotation-align", "none" );
     }
 #if 0
-    if ( d->subStyles.contains( FloatFormat ) )
+    if ( keysToStore.contains( FloatFormat ) )
         format.setAttribute( "float", (int) floatFormat() );
 
-    if ( d->subStyles.contains( FloatColor ) )
+    if ( keysToStore.contains( FloatColor ) )
         format.setAttribute( "floatcolor", (int)floatColor() );
 
-    if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
+    if ( keysToStore.contains( CustomFormat ) && !customFormat().isEmpty() )
         format.setAttribute( "custom", customFormat() );
 
-    if ( d->subStyles.contains( Format::Type ) && formatType() == Money )
+    if ( keysToStore.contains( Format::Type ) && formatType() == Money )
     {
         format.setAttribute( "type", (int) currency().type );
         format.setAttribute( "symbol", currency().symbol );
     }
 #endif
-    if ( d->subStyles.contains( Angle ) && angle() != 0 )
+    if ( keysToStore.contains( Angle ) && angle() != 0 )
     {
         style.addProperty( "style:rotation-align", "none" );
         style.addProperty( "style:rotation-angle", QString::number( -1.0 * angle()  ) );
     }
 
-    if ( d->subStyles.contains( Indentation ) && indentation() != 0.0 )
+    if ( keysToStore.contains( Indentation ) && indentation() != 0.0 )
     {
         style.addPropertyPt("fo:margin-left", indentation(), KoGenStyle::ParagraphType );
         //FIXME
@@ -1190,7 +1220,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
         //currentCellStyle.addProperty("fo:text-align", "start" );
     }
 
-    if ( d->subStyles.contains( DontPrintText ) && d->subStyles.contains( DontPrintText ) )
+    if ( keysToStore.contains( DontPrintText ) && keysToStore.contains( DontPrintText ) )
         style.addProperty( "style:print-content", "false");
 
     // protection
@@ -1198,13 +1228,13 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
     bool hideFormula = false;
     bool isNotProtected = false;
 
-    if ( d->subStyles.contains( NotProtected ) )
+    if ( keysToStore.contains( NotProtected ) )
         isNotProtected = notProtected();
 
-    if ( d->subStyles.contains( HideAll ) )
+    if ( keysToStore.contains( HideAll ) )
         hideAll = this->hideAll();
 
-    if ( d->subStyles.contains( HideFormula ) )
+    if ( keysToStore.contains( HideFormula ) )
         hideFormula = this->hideFormula();
 
     if ( hideAll )
@@ -1217,7 +1247,7 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
             style.addProperty( "style:cell-protect", "Formula.hidden" );
         else if ( hideFormula )
             style.addProperty( "style:cell-protect", "protected Formula.hidden" );
-        else if ( d->subStyles.contains( NotProtected ) && !isNotProtected )
+        else if ( keysToStore.contains( NotProtected ) && !isNotProtected )
             // write out, only if it is explicitly set
             style.addProperty( "style:cell-protect", "protected" );
     }
@@ -1227,8 +1257,8 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
     //              A line width of zero indicates a cosmetic pen. This means
     //              that the pen width is always drawn one pixel wide,
     //              independent of the transformation set on the painter.
-    if ( d->subStyles.contains( LeftPen ) && d->subStyles.contains( RightPen ) &&
-        d->subStyles.contains( TopPen ) && d->subStyles.contains( BottomPen ) &&
+    if ( keysToStore.contains( LeftPen ) && keysToStore.contains( RightPen ) &&
+        keysToStore.contains( TopPen ) && keysToStore.contains( BottomPen ) &&
         ( leftBorderPen() == topBorderPen() ) &&
         ( leftBorderPen() == rightBorderPen() ) &&
         ( leftBorderPen() == bottomBorderPen() ) )
@@ -1238,44 +1268,44 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
     }
     else
     {
-        if ( d->subStyles.contains( LeftPen ) && ( leftBorderPen().style() != Qt::NoPen ) )
+        if ( keysToStore.contains( LeftPen ) && ( leftBorderPen().style() != Qt::NoPen ) )
             style.addProperty( "fo:border-left", Oasis::encodePen( leftBorderPen() ) );
 
-        if ( d->subStyles.contains( RightPen ) && ( rightBorderPen().style() != Qt::NoPen ) )
+        if ( keysToStore.contains( RightPen ) && ( rightBorderPen().style() != Qt::NoPen ) )
             style.addProperty( "fo:border-right", Oasis::encodePen( rightBorderPen() ) );
 
-        if ( d->subStyles.contains( TopPen ) && ( topBorderPen().style() != Qt::NoPen ) )
+        if ( keysToStore.contains( TopPen ) && ( topBorderPen().style() != Qt::NoPen ) )
             style.addProperty( "fo:border-top", Oasis::encodePen( topBorderPen() ) );
 
-        if ( d->subStyles.contains( BottomPen ) && ( bottomBorderPen().style() != Qt::NoPen ) )
+        if ( keysToStore.contains( BottomPen ) && ( bottomBorderPen().style() != Qt::NoPen ) )
             style.addProperty( "fo:border-bottom", Oasis::encodePen( bottomBorderPen() ) );
     }
-    if ( d->subStyles.contains( FallDiagonalPen ) && ( fallDiagonalPen().style() != Qt::NoPen ) )
+    if ( keysToStore.contains( FallDiagonalPen ) && ( fallDiagonalPen().style() != Qt::NoPen ) )
     {
         style.addProperty("style:diagonal-tl-br", Oasis::encodePen( fallDiagonalPen() ) );
     }
-    if ( d->subStyles.contains( GoUpDiagonalPen ) && ( goUpDiagonalPen().style() != Qt::NoPen ) )
+    if ( keysToStore.contains( GoUpDiagonalPen ) && ( goUpDiagonalPen().style() != Qt::NoPen ) )
     {
         style.addProperty("style:diagonal-bl-tr", Oasis::encodePen( goUpDiagonalPen() ) );
     }
 
     // font
-    if ( d->subStyles.contains( FontFamily ) ) // !fontFamily().isEmpty() == true
+    if ( keysToStore.contains( FontFamily ) ) // !fontFamily().isEmpty() == true
     {
         style.addProperty("fo:font-family", fontFamily(), KoGenStyle::TextType );
     }
-    if ( d->subStyles.contains( FontSize ) ) // fontSize() != 0
+    if ( keysToStore.contains( FontSize ) ) // fontSize() != 0
     {
         style.addPropertyPt("fo:font-size",fontSize(), KoGenStyle::TextType  );
     }
 
-    if ( d->subStyles.contains( FontBold ) && bold() )
+    if ( keysToStore.contains( FontBold ) && bold() )
         style.addProperty("fo:font-weight","bold", KoGenStyle::TextType );
 
-    if ( d->subStyles.contains( FontItalic ) && italic() )
+    if ( keysToStore.contains( FontItalic ) && italic() )
         style.addProperty("fo:font-style", "italic", KoGenStyle::TextType );
 
-    if ( d->subStyles.contains( FontUnderline ) && underline() )
+    if ( keysToStore.contains( FontUnderline ) && underline() )
     {
         //style:text-underline-style="solid" style:text-underline-width="auto"
         style.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
@@ -1284,17 +1314,17 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
         style.addProperty( "style:text-underline-color", "font-color", KoGenStyle::TextType );
     }
 
-    if ( d->subStyles.contains( FontStrike ) && strikeOut() )
+    if ( keysToStore.contains( FontStrike ) && strikeOut() )
         style.addProperty( "style:text-line-through-style", "solid", KoGenStyle::TextType );
 
-    if ( d->subStyles.contains( FontColor ) && fontColor().isValid() ) // always save
+    if ( keysToStore.contains( FontColor ) && fontColor().isValid() ) // always save
     {
         style.addProperty("fo:color", colorName( fontColor() ), KoGenStyle::TextType );
     }
 
     //I don't think there is a reason why the background brush should be saved if it is null,
     //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
-    if ( d->subStyles.contains( BackgroundBrush ) && (backgroundBrush().style() != Qt::NoBrush) )
+    if ( keysToStore.contains( BackgroundBrush ) && (backgroundBrush().style() != Qt::NoBrush) )
     {
         QString tmp = saveOasisBackgroundStyle( mainStyles, backgroundBrush() );
         if ( !tmp.isEmpty() )
@@ -1304,15 +1334,15 @@ void Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles ) const
     QString _prefix;
     QString _postfix;
     int _precision = -1;
-    if ( d->subStyles.contains( Prefix ) && !prefix().isEmpty() )
+    if ( keysToStore.contains( Prefix ) && !prefix().isEmpty() )
         _prefix = prefix();
-    if ( d->subStyles.contains( Postfix ) && !postfix().isEmpty() )
+    if ( keysToStore.contains( Postfix ) && !postfix().isEmpty() )
         _postfix = postfix();
-    if ( d->subStyles.contains( Precision ) && precision() != -1 )
+    if ( keysToStore.contains( Precision ) && precision() != -1 )
         _precision = precision();
 
     QString currencyCode;
-    if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Format::Money )
+    if ( keysToStore.contains( FormatTypeKey ) && formatType() == Format::Money )
     {
         currencyCode = currency().code();
     }
@@ -1338,9 +1368,14 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
 
     if ( d->subStyles.contains( NamedStyleKey ) )
     {
-        // just save the name and we are done.
-        format.setAttribute( "style-name", parentName() );
-        return;
+        // check, if it's an unmodified named style
+        const QSet<Key> keys = difference(*this);
+        if (keys.count() == 1 && keys.toList().first() == NamedStyleKey)
+        {
+            // just save the name and we are done.
+            format.setAttribute( "style-name", parentName() );
+            return;
+        }
     }
 
     if ( d->subStyles.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
@@ -2376,6 +2411,18 @@ void Style::merge( const Style& style )
     }
 }
 
+QSet<Style::Key> Style::difference(const Style& style) const
+{
+    QSet<Key> result;
+    const QList<SharedSubStyle> subStyles(style.subStyles());
+    for (int i = 0; i < subStyles.count(); ++i)
+    {
+        if (!compare(d->subStyles.value(subStyles[i].data()->type()).data(), subStyles[i].data()))
+            result.insert(subStyles[i]->type());
+    }
+    return result;
+}
+
 void Style::dump() const
 {
     for ( int i = 0; i < subStyles().count(); ++i )
@@ -2557,6 +2604,7 @@ CustomStyle::CustomStyle()
 {
     d->name = "Default";
     d->type = BUILTIN;
+    setDefault();
 }
 
 CustomStyle::CustomStyle( QString const & name, CustomStyle * parent )
@@ -2600,40 +2648,29 @@ bool CustomStyle::definesAll() const
     return false;
 }
 
-QString CustomStyle::saveOasis( KoGenStyle& style, KoGenStyles &mainStyles ) const
+QString CustomStyle::saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
+                               const StyleManager* manager) const
 {
-    // If the type is undefined, we were called from Cell
-    // and the OASIS style is not an automatic style.
-    // TODO: As the user styles are already created, look them up
-    //       in what way ever and return here.
-//     if ( style.type() == 0 && ( m_type == BUILTIN ) && ( m_name == "Default" ) )
-//       return "Default";
-    if ( style.type() == 0 )
-        style = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
-
-    if ( name().isEmpty() )
-        return QString(); // TODO fallback to Style::saveOasis() ???
-
+    Q_ASSERT(!name().isEmpty());
     // default style does not need display name
-    if( type() != BUILTIN || name() != "Default" )
+    if (!isDefault())
         style.addAttribute( "style:display-name", name() );
 
     // doing the real work
-    saveOasisStyle( style, mainStyles );
+    QSet<Key> keysToStore;
+    for (int i = 0; i < subStyles().count(); ++i)
+        keysToStore.insert(subStyles()[i].data()->type());
+    saveOasisStyle(keysToStore, style, mainStyles, manager);
 
-    // The lookup is done in the calling object (Cell).
-    if ( style.type() == Doc::STYLE_CELL_AUTO )
-        return QString();
-
-    if( ( type() == BUILTIN ) && ( name() == "Default" ) )
+    if (isDefault())
     {
         style.setDefaultStyle(true);
         // don't i18n'ize "Default" in this case
         return mainStyles.lookup( style, "Default", KoGenStyles::DontForceNumbering );
     }
-    else
-        // this is a custom style
-        return mainStyles.lookup( style, "custom-style" );
+
+    // this is a custom style
+    return mainStyles.lookup( style, "custom-style" );
 }
 
 void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& style,

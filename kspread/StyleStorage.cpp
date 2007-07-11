@@ -370,7 +370,7 @@ void StyleStorage::garbageCollection()
 
         // remove the current pair, if another substyle of the same type,
         // the default style or a named style follows and the rectangle
-        // is completely convered
+        // is completely covered
         if ( ( pair.second->type() == currentPair.second->type() ||
                pair.second->type() == Style::DefaultStyleKey ||
                pair.second->type() == Style::NamedStyleKey ) &&
@@ -519,8 +519,6 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
             style.insertSubStyle( subStyles[i] );
             // not the default anymore
             style.clearAttribute( Style::DefaultStyleKey );
-            // and not a named style anymore
-            style.clearAttribute( Style::NamedStyleKey);
         }
     }
     return style;
