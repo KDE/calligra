@@ -12,7 +12,7 @@ kde4_add_plugin(htmlimport WITH_PREFIX ${htmlimport_PART_SRCS})
 
 
 
-target_link_libraries(htmlimport  ${KDE4_KDECORE_LIBS} kotext ${KDE4_KHTML_LIBS} )
+target_link_libraries(htmlimport  kotext ${KDE4_KHTML_LIBS} )
 
 install(TARGETS htmlimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
