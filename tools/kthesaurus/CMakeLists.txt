@@ -1,7 +1,4 @@
-
-
-include_directories( ${KDE4_INCLUDES} )
-
+include_directories( ${KDE4_INCLUDES} ${KOTEXT_INCLUDES} ${KOMAIN_INCLUDES})
 
 ########### next target ###############
 
@@ -10,7 +7,7 @@ set(kthesaurus_KDEINIT_SRCS main.cc )
 
 kde4_add_kdeinit_executable( kthesaurus ${kthesaurus_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kthesaurus  ${KDE4_KIO_LIBS} )
+target_link_libraries(kdeinit_kthesaurus  kotext)
 
 install(TARGETS kdeinit_kthesaurus  DESTINATION ${LIB_INSTALL_DIR})
 
@@ -20,5 +17,4 @@ install(TARGETS kthesaurus  DESTINATION ${BIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  KThesaurus.desktop  DESTINATION ${XDG_APPS_DIR})
-
 

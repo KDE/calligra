@@ -17,20 +17,23 @@
  ***************************************************************************/
 
 #include <QString>
+#include <QTextDocument>
 
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
-#include <kdatatool.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdemacros.h>
 #include <kcomponentdata.h>
 
+#include <KoTextEditingPlugin.h>
+#include <KoTextEditingRegistry.h>
+#include <KoTextEditingFactory.h>
+
 extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 {
-
 	KAboutData aboutData("kthesaurus", 0, ki18n("KThesaurus"), "1.0",
 		ki18n( "KThesaurus - List synonyms" ), KAboutData::License_GPL,
 		ki18n( "(c) 2001 Daniel Naber" ) );
@@ -40,23 +43,21 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 	KCmdLineOptions options;
 	options.add("+[term]", ki18n("Term to search for when starting up"));
 	KCmdLineArgs::addCmdLineOptions(options);
-	KApplication a; // KDataTool needs an instance
+	KApplication a;
 
-	// TODO: take term from command line!
+    KoTextEditingPlugin *thesaurus;
 
-	KService::Ptr service = KService::serviceByDesktopName("thesaurustool");
-	if( ! service ) {
-		kWarning() << "Could not find Service/KDataTool 'thesaurustool'!" << endl;
-		return 1;
-	}
+    foreach(QString key, KoTextEditingRegistry::instance()->keys()) {
+        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
+        Q_ASSERT(factory);
+        if (factory->id() == "thesaurustool") {
+            kDebug() << "Thesaurus plugin found, creating..." << endl;
+            thesaurus = factory->create();
+        }
+    }
 
-	KDataToolInfo *info = new KDataToolInfo(service, KComponentData());
-	KDataTool *tool = info->createTool();
-	if ( !tool ) {
-		kWarning() << "Could not create tool 'thesaurustool'!" << endl;
-                delete info;
-		return 2;
-	}
+    if (!thesaurus) // No thesaurus plugin found
+        return 1;
 
 /* TODO: get selection(), not only clipboard!
 	QClipboard *cb = QApplication::clipboard();
@@ -72,16 +73,11 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
 		text = args->arg(0);
 	}
 
-	QString command = "thesaurus_standalone";	// 'standalone' will give us different buttons
-	QString mimetype = "text/plain";
-	QString datatype = "QString";
+    // pas -1 to startPosition and endPosition to set as standalone and will give us different buttons
+    thesaurus->checkSection(new QTextDocument(text), -1, -1);
 
 	//kDebug() << "KThesaurus command=" << command
 	//		<< " dataType=" << info->dataType() << endl;
 
-	tool->run(command, &text, datatype, mimetype);
-
-	delete tool;
-
-	return 0;
+	return a.exec();
 }
