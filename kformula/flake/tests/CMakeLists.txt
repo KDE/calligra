@@ -1,7 +1,6 @@
 ########### AttributeManager Test ###############
 
  set( TestAttributeManager_SRCS TestAttributeManager.cpp )
- kde4_automoc( ${TestAttributeManager_SRCS} )
  kde4_add_unit_test( TestAttributeManager TESTNAME kformula-AttributeManager  ${TestAttributeManager_SRCS} )
  target_link_libraries( TestAttributeManager kformulalib ${QT_QTTEST_LIBRARY} )
 
