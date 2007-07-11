@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon's MS Office Drawing Import Filter
+Name[be]=Фільтр імпарту малюнкаў MS Office у Karbon
 Name[bg]=Филтър за импортиране на MS Office Drawing в Karbon
 Name[br]=Sil enporzh MS Office Drawing evit Karbon's
 Name[ca]=Filtre d'importació MS Office Drawing per a Karbon
