@@ -23,11 +23,12 @@
 
 #include <KoTextEditingPlugin.h>
 
+#include <QUrl>
+
 class KLineEdit;
 class KPushButton;
 class KHistoryComboBox;
 class KProcess;
-class KConfig;
 class KDialog;
 
 class QToolButton;
@@ -54,12 +55,14 @@ public:
 
 private slots:
     void process();
+    void dialogClosed();
 
     void slotChangeLanguage();
 
     void slotFindTerm();
     void slotFindTerm(const QString &term, bool add_to_history = true);
     void slotFindTermFromList(QListWidgetItem *item);
+    void slotFindTermFromUrl(const QUrl &url);
 
     void slotGotoHistory(int index);
 
@@ -74,16 +77,20 @@ private:
     void findTerm(const QString &term);
     void findTermThesaurus(const QString &term);
     void findTermWordnet(const QString &term);
+    QString formatLine(const QString &line) const;
 
     void setCaption();
     void updateNavButtons();
 
+    enum Mode {grep, other};
+
     bool m_standAlone;
     int m_historyPos;
     int m_startPosition;
+    Mode m_mode;
 
     KProcess *m_thesProc;
-    KConfig *m_config;
+    KProcess *m_wnProc;
     KDialog *m_dialog;
     KHistoryComboBox *m_edit;
     KPushButton *m_search;

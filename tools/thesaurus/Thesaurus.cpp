@@ -62,7 +62,6 @@ NOT TODO:
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <kconfig.h>
 #include <khistorycombobox.h>
 #include <kpushbutton.h>
 #include <klineedit.h>
@@ -74,6 +73,7 @@ Thesaurus::Thesaurus()
 {
     m_standAlone = false;
     m_thesProc = new KProcess;
+    m_wnProc = new KProcess;
 
     m_dialog = new KDialog(0);
     m_dialog->setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
@@ -81,8 +81,8 @@ Thesaurus::Thesaurus()
     m_dialog->setHelp(QString::null, "thesaurus");
     m_dialog->resize(600, 400);
 
-    // m_config = new KConfig("kthesaurusrc");
-    // m_dataFile = m_config->readPathEntry("datafile");
+    KConfigGroup cfg = KGlobal::config()->group("");
+    m_dataFile = cfg.readEntry("datafile");
     if (m_dataFile.isEmpty())
         m_dataFile = KGlobal::dirs()->findResource("data", "koffice/thesaurus/thesaurus.txt");
     setCaption();
@@ -194,7 +194,7 @@ Thesaurus::Thesaurus()
     m_resultTextBrowser->setReadOnly(true);
     // m_resultTextBrowser->setTextFormat(Qt::RichText);
     // TODO?: m_resultbox->setMimeSourceFactory(...); to avoid warning
-    // connect(m_resultTextBrowser, SIGNAL(linkClicked(const QUrl &)), this, SLOT(slotFindTerm(const QString &)));
+    connect(m_resultTextBrowser, SIGNAL(linkClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QString &)));
     wnLayout->addWidget(m_resultTextBrowser);
 
     // Connect for the history box
@@ -215,19 +215,19 @@ Thesaurus::Thesaurus()
     updateNavButtons();
 
     connect(m_dialog, SIGNAL(accepted()), this, SLOT(process()));
+    connect(m_dialog, SIGNAL(rejected()), this, SLOT(dialogClosed()));
 }
 
 Thesaurus::~Thesaurus()
 {
-    // m_config->writePathEntry("datafile", m_data_file);
-    // m_config->sync();
-    // delete m_config;
+    KConfigGroup cfg = KGlobal::config()->group("");
+    cfg.writeEntry("datafile", m_dataFile);
     // FIXME?: this hopefully fixes the problem of a wrong cursor
     // and a crash (when closing e.g. konqueror) when the thesaurus dialog
     // gets close while it was still working and showing the wait cursor
     // QApplication::restoreOverrideCursor();
     delete m_thesProc;
-    // delete m_wnProc;
+    delete m_wnProc;
     delete m_dialog;
 }
 
@@ -283,6 +283,12 @@ void Thesaurus::process()
     emit stopMacro();
 }
 
+void Thesaurus::dialogClosed()
+{
+    if (!m_standAlone) return;
+    KConfigGroup cfg = KGlobal::config()->group("");
+    cfg.writeEntry("datafile", m_dataFile);
+}
 
 void Thesaurus::slotChangeLanguage()
 {
@@ -380,6 +386,12 @@ void Thesaurus::slotFindTermFromList(QListWidgetItem *item)
     slotFindTerm(item->text());
 }
 
+// Triggered when a url is clicked
+void Thesaurus::slotFindTermFromUrl(const QUrl &url)
+{
+    slotFindTerm(url.toString());
+}
+
 // Triggered when a word is clicked
 void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
 {
@@ -430,6 +442,12 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
     QStringList hypo;
 
     m_thesProc->start();
+    if (!m_thesProc->waitForFinished()) {
+        KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep. "
+                    "Output:<br>%1", QString(m_thesProc->readAllStandardError())));
+        return;
+    }
+
     if (!m_thesProc->waitForReadyRead())
         ;
     QByteArray byteArray = m_thesProc->readAllStandardOutput();
@@ -514,6 +532,257 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
 //
 void Thesaurus::findTermWordnet(const QString &term)
 {
+    m_wnProc->setOutputChannelMode(KProcess::SeparateChannels);
+    m_wnProc->clearProgram();
+    *m_wnProc << "wn";
+    *m_wnProc << term;
+
+    // get all results: nouns, verbs, adjectives, adverbs (see below for order):
+    if (m_wnComboBox->currentIndex() == 0) {
+        *m_wnProc << "-synsn" << "-synsv" << "-synsa" << "-synsr";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 1) {
+        *m_wnProc << "-simsv";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 2) {
+        *m_wnProc << "-antsn" << "-antsv" << "-antsa" << "-antsr";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 3) {
+        *m_wnProc << "-hypon" << "-hypov";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 4) {
+        *m_wnProc << "-meron";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 5) {
+        *m_wnProc << "-holon";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 6) {
+        // e.g. "size -> large/small"
+        *m_wnProc << "-attrn" << "-attra";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 7) {
+        // e.g. "kill -> die"
+        *m_wnProc << "-causv";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 8) {
+        // e.g. "walk -> step"
+        *m_wnProc << "-entav";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 9) {
+        *m_wnProc << "-famln" << "-famlv" << "-famla" << "-famlr";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 10) {
+        *m_wnProc << "-framv";
+        m_mode = other;
+    }
+    else if (m_wnComboBox->currentIndex() == 11) {
+        *m_wnProc << "-grepn" << "-grepv" << "-grepa" << "-grepr";
+        m_mode = grep;
+    }
+    else if (m_wnComboBox->currentIndex() == 12) {
+        *m_wnProc << "-over";
+        m_mode = other;
+    }
+    *m_wnProc << "-g";    // "Display gloss"
+
+    int current = m_wnComboBox->currentIndex();    // remember current position
+    m_wnComboBox->clear();
+
+    // warning: order matters!
+    // 0:
+    m_wnComboBox->insertItem(-1, i18n("Synonyms/Hypernyms - Ordered by Frequency"));
+    m_wnComboBox->insertItem(-1, i18n("Synonyms - Ordered by Similarity of Meaning (verbs only)"));
+    m_wnComboBox->insertItem(-1, i18n("Antonyms - Words with Opposite Meanings"));
+    m_wnComboBox->insertItem(-1, i18n("Hyponyms - ... is a (kind of) %1", m_edit->currentText()));
+    m_wnComboBox->insertItem(-1, i18n("Meronyms - %1 has a ...", m_edit->currentText()));
+    // 5:
+    m_wnComboBox->insertItem(-1, i18n("Holonyms - ... has a %1", m_edit->currentText()));
+    m_wnComboBox->insertItem(-1, i18n("Attributes"));
+    m_wnComboBox->insertItem(-1, i18n("Cause To (for some verbs only)"));
+    m_wnComboBox->insertItem(-1, i18n("Verb Entailment (for some verbs only)"));
+    m_wnComboBox->insertItem(-1, i18n("Familiarity & Polysemy Count"));
+    // 10:
+    m_wnComboBox->insertItem(-1, i18n("Verb Frames (examples of use)"));
+    m_wnComboBox->insertItem(-1, i18n("List of Compound Words"));
+    m_wnComboBox->insertItem(-1, i18n("Overview of Senses"));
+
+    /** NOT todo:
+      * -Hypernym tree: layout is difficult, you can get the same information
+      *  by following links
+      * -Coordinate terms (sisters): just go to synset and then use hyponyms
+      * -Has Part Meronyms, Has Substance Meronyms, Has Member Meronyms,
+      *  Member of Holonyms, Substance of Holonyms, Part of Holonyms:
+      *  these are just subsets of Meronyms/Holonyms
+      * -hmern, hholn: these are just compact versions, you can get the
+      *  same information by following some links
+      */
+
+    /** TODO?:
+      * -pert (e.g. nuclear -> nuclues, but "=>" are nested, difficult to display)
+      * -nomn(n|v), e.g. deny -> denial, but this doesn't seem to work?
+      */
+
+    m_wnComboBox->setCurrentIndex(current);    // reset previous position
+
+    if (m_wnProc->state() == QProcess::Running) {
+        // should never happen
+        kDebug(31000) << "Warning: findTerm(): process is already running?!" << endl;
+        return;
+    }
+
+    m_wnProc->start();
+    if (!m_wnProc->waitForFinished()) {
+        m_resultTextBrowser->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
+                    "WordNet has to be installed on your computer if you want to use it, "
+                    "and 'wn' has to be in your PATH. "
+                    "You can get WordNet at <a href=\"http://www.cogsci.princeton.edu/~wn/\">"
+                    "http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet only supports "
+                    "the English language."));
+        m_wnComboBox->setEnabled(false);
+        return;
+    }
+
+    QString stderrString = m_wnProc->readAllStandardError();
+    if (!stderrString.isEmpty()) {
+        m_resultTextBrowser->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
+                    "Output:<br>%1", stderrString));
+        return;
+    }
+
+    QString stdoutString = m_wnProc->readAllStandardOutput();
+    if (stdoutString.isEmpty()) {
+        m_resultTextBrowser->setHtml(i18n("No match for '%1'.", m_edit->currentText()));
+    }
+    else {
+        // render in a table, each line one row:
+        QStringList lines = stdoutString.split(QChar('\n'), QString::SkipEmptyParts);
+        QString result = "<qt><table>\n";
+        // TODO in Qt > 3.01: try without the following line (it's necessary to ensure the
+        // first column is really always quite small):
+        result += "<tr><td width=\"10%\"></td><td width=\"90%\"></td></tr>\n";
+        uint ct = 0;
+        for (QStringList::Iterator it = lines.begin(); it != lines.end(); ++it) {
+            QString l = (*it);
+            // Remove some lines:
+            QRegExp re("^\\d+( of \\d+)? senses? of \\w+");
+            if (re.indexIn(l) != -1) {
+                continue;
+            }
+            // Escape XML:
+            l = l.replace('&', "&amp;");
+            l = l.replace('<', "&lt;");
+            l = l.replace('>', "&gt;");
+            // TODO?:
+            // move "=>" in own column?
+            l = formatLine(l);
+            // Table layout:
+            result += "<tr>";
+            if (l.startsWith(' ')) {
+                result += "\t<td width=\"15\"></td>";
+                l = l.trimmed();
+                result += "\t<td>" + l + "</td>";
+            }
+            else {
+                l = l.trimmed();
+                result += "<td colspan=\"2\">" + l + "</td>";
+            }
+            result += "</tr>\n";
+            ct++;
+        }
+        result += "\n</table></qt>\n";
+        m_resultTextBrowser->setHtml(result);
+//         m_resultbox->setContentsPos(0,0);
+        //kDebug() << result << endl;
+    }
+}
+
+//
+// Tools
+//
+
+// Format lines using Qt's simple richtext.
+QString Thesaurus::formatLine(const QString &line) const
+{
+    QString l = line;
+    if (l == "--------------")
+        return QString("<hr>");
+
+    QRegExp re;
+
+    re.setPattern("^(\\d+\\.)(.*)$");
+    if (re.indexIn(l) != -1) {
+        l = "<b>" +re.cap(1)+ "</b>" +re.cap(2);
+        return l;
+    }
+
+    re.setPattern("^.* of (noun|verb|adj|adv) .*");
+    if (re.indexIn(l) != -1) {
+        l = "<font size=\"5\">" +re.cap()+ "</font>\n\n";
+        return l;
+    }
+
+    if (m_mode == grep) {
+        l = l.trimmed();
+        return QString("<a href=\"" +l+ "\">" +l+ "</a>");
+    }
+
+    re.setPattern("^(Sense \\d+)");
+    if (re.indexIn(l) != -1) {
+        l = "<b>" +re.cap()+ "</b>\n";
+        return l;
+    }
+
+    re.setPattern("(.*)(Also See-&gt;)(.*)");
+    // Example: first sense of verb "keep"
+    if (re.indexIn(l) != -1) {
+        l = re.cap(1);
+        l += re.cap(2);
+        QStringList links = re.cap(3).split(QChar(';'), QString::SkipEmptyParts);
+        for (QStringList::Iterator it = links.begin(); it != links.end(); ++it) {
+            QString link = (*it);
+            if (it != links.begin()) {
+                l += ", ";
+            }
+            link = link.trimmed();
+            link = link.remove(QRegExp("#\\d+"));
+            l += "<a href=\"" + link + "\">" + link + "</a>";
+        }
+        l.prepend (' ');        // indent in table
+    }
+
+    re.setPattern("(.*)(=&gt;|HAS \\w+:|PART OF:)(.*) --");
+    re.setMinimal(true);    // non-greedy
+    if (re.indexIn(l) != -1) {
+        int dash_pos = l.indexOf("--");
+        QString line_end = l.mid(dash_pos+2, l.length()-dash_pos);
+        l = re.cap(1);
+        l += re.cap(2) + ' ';
+        QStringList links = re.cap(3).split(QChar(','), QString::SkipEmptyParts);
+        for (QStringList::Iterator it = links.begin(); it != links.end(); ++it) {
+            QString link = (*it);
+            if (it != links.begin()) {
+                l += ", ";
+            }
+            link = link.trimmed();
+            l += "<a href=\"" +link+ "\">" +link+ "</a>";
+        }
+        l += "<font color=\"#777777\">" +line_end+ "</font>";
+        l.prepend(' ');        // indent in table
+        return l;
+    }
+    re.setMinimal(false);    // greedy again
+
+    return l;
 }
 
 #include "Thesaurus.moc"
