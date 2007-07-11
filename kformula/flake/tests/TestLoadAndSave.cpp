@@ -607,7 +607,15 @@ void TestLoadAndSave::fractionElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<mfrac><mi>x</mi><mi>y</mi></mfrac>",
+            "<mfrac>\n"
+            " <mrow>\n"
+            "  <mi>x</mi>\n"
+            " </mrow>\n"
+            " <mrow>\n"
+            "  <mi>y</mi>\n"
+            " </mrow>\n"
+            "</mfrac>");
 }
 
 void TestLoadAndSave::rootElement_data()
