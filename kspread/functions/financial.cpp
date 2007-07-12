@@ -490,17 +490,36 @@ Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  double price = calc->conv()->asFloat (args[2]).asFloat();
 
-  Value rate = args[2];
+  double days = days360( settlement, maturity, false); // false -> US
+  days++;
 
-  double days = settlement.daysTo( maturity );
-
-  if (settlement > maturity || calc->isZero (rate) || calc->lower (rate, Value(0))
-      || days > 265)
+  if ( settlement >= maturity || days > 360 || price <= 0.0 )
     return Value::errorVALUE();
 
-  // (100.0 - rate) / rate * (360.0 / days);
-  return calc->mul (calc->div (calc->sub (Value(100.0), rate), rate), 360.0 / days);
+//   kDebug()<<"TBILLYIELD settle = " << settlement << " mat = " << maturity << " price = " << price << " days360 = " << days << endl;
+  double res = 100.0;
+  res /= price;
+  res--;
+  res /= days;
+  res *= 360.0;
+
+  return Value(res);
+
+//   QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+//   QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+// 
+//   Value rate = args[2];
+// 
+//   double days = settlement.daysTo( maturity );
+// 
+//   if (settlement > maturity || calc->isZero (rate) || calc->lower (rate, Value(0))
+//       || days > 265)
+//     return Value::errorVALUE();
+// 
+//   // (100.0 - rate) / rate * (360.0 / days);
+//   return calc->mul (calc->div (calc->sub (Value(100.0), rate), rate), 360.0 / days);
 }
 
 // Function: TBILLEQ
