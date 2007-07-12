@@ -719,6 +719,11 @@ void Canvas::keyPressEvent ( QKeyEvent* event )
 {
     // flake
     d->toolProxy->keyPressEvent( event );
+    if ( event->isAccepted() )
+        return;
+    // Dont eat accelerators
+    if ( !( event->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) ) )
+        event->accept();
 }
 
 bool Canvas::highlightRangeSizeGripAt(double x, double y)

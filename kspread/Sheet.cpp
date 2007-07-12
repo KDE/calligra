@@ -78,6 +78,7 @@
 #include "Undo.h"
 #include "Util.h"
 #include "Validity.h"
+#include "ValueConverter.h"
 #include "View.h"
 
 // commands
@@ -4795,26 +4796,27 @@ void Sheet::printDebug()
     int iMaxColumn = d->cellStorage->columns();
     int iMaxRow = d->cellStorage->rows();
 
-    kDebug(36001) << "Cell | Content  | DataT | Text" << endl;
+    kDebug(36001) << "Cell | Content | Value  [UserInput]" << endl;
     Cell cell;
-    for ( int currentrow = 1 ; currentrow < iMaxRow ; ++currentrow )
+    for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow )
     {
-        for ( int currentcolumn = 1 ; currentcolumn < iMaxColumn ; currentcolumn++ )
+        for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
         {
             cell = Cell( this, currentcolumn, currentrow );
             if ( !cell.isEmpty() )
             {
-                QString cellDescr = Cell::name( currentcolumn, currentrow );
-                cellDescr = cellDescr.rightJustified( 4,' ' );
+                QString cellDescr = Cell::name( currentcolumn, currentrow ).rightJustified( 4 );
                 //QString cellDescr = "Cell ";
                 //cellDescr += QString::number(currentrow).rightJustified(3,'0') + ',';
                 //cellDescr += QString::number(currentcolumn).rightJustified(3,'0') + ' ';
                 cellDescr += " | ";
-                cellDescr += cell.value().type();
+                QString valueType;
+                QTextStream stream(&valueType);
+                stream << cell.value().type();
+                cellDescr += valueType.rightJustified( 7 );
                 cellDescr += " | ";
-                cellDescr += cell.userInput();
-                if ( cell.isFormula() )
-                    cellDescr += QString("  [result: %1]").arg( cell.value().asString() );
+                cellDescr += doc()->converter()->asString( cell.value() ).asString().rightJustified( 5 );
+                cellDescr += QString("  [%1]").arg( cell.userInput() );
                 kDebug(36001) << cellDescr << endl;
             }
         }
