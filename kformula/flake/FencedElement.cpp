@@ -20,80 +20,41 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "BracketElement.h"
-#include <KoXmlWriter.h>
-
+#include "FencedElement.h"
 #include <QPainter>
-#include <QPen>
 
-#include <kdebug.h>
-#include <klocale.h>
+FencedElement::FencedElement( BasicElement* parent ) : RowElement( parent )
+{}
 
-#include "fontstyle.h"
-#include "FormulaCursor.h"
-#include "FormulaElement.h"
-#include "RowElement.h"
-
-BracketElement::BracketElement( BasicElement* parent ) : BasicElement( parent ),
-                                                         left( 0 ),
-                                                         right( 0 ),
-                                                         leftType( EmptyBracket ),
-                                                         rightType( EmptyBracket ),
-                                                         m_operator( false ),
-                                                         m_customLeft( false ),
-                                                         m_customRight( false )
+void FencedElement::paint( QPainter& painter, const AttributeManager* am )
 {
+    painter.drawPath( m_buffer );
 }
 
-
-BracketElement::~BracketElement()
+void FencedElement::layout( const AttributeManager* am )
 {
-    delete left;
-    delete right;
-}
+/*    m_buffer = QPainterPath();
+    QStringList separators = am->stringListOf( "separators" );
+    m_buffer.addText( am->stringOf( "open" ) );
 
+    foreach( BasicElement* tmp, childElements() )
+        if( tmp != childElements().last() )
+        {
+            m_buffer.addText( separators[ ] );
+        }
 
-const QList<BasicElement*> BracketElement::childElements()
-{
-    return QList<BasicElement*>();
-}
+    m_buffer.addText( am->stringOf( "close" ) );
 
-void BracketElement::paint( QPainter& painter, const AttributeManager* am )
-{
-}
-
-void BracketElement::layout( const AttributeManager* am )
-{
+    setWidth( m_buffer.boundingRect().width() );
+    setHeight( m_buffer.boundingRect().height() );*/
 }
     
-ElementType BracketElement::elementType() const
+ElementType FencedElement::elementType() const
 {
-    if ( m_operator ) {
-        return Operator;
-    }
-    else {
-        return Fenced;
-    }
+    return Fenced;
 }
-
-bool BracketElement::readMathMLContent( const KoXmlElement& element )
-{
-    if ( element.tagName() == "mo" ) {
-        m_operator = true;
-        // TODO
-    }
-    else {
-        m_operator = false;
-        // TODO
-    }
-    return false;
-}
-    
-void BracketElement::writeMathMLContent( KoXmlWriter* writer) const
-{
-}
-
-bool BracketElement::operatorType( QDomNode& node, bool open )
+/*
+bool FencedElement::operatorType( QDomNode& node, bool open )
 {
     SymbolType* type = open ? &leftType : &rightType;
     if ( node.isElement() ) {
@@ -111,25 +72,25 @@ bool BracketElement::operatorType( QDomNode& node, bool open )
         // CloseCurlyDoubleQuote 0x201D
         // CloseCurlyQoute       0x2019
         // LeftCeiling           0x2308
-        // LeftDoubleBracket     0x301A
+        // LeftDoubleFenced     0x301A
         // LeftFloor             0x230A
         // OpenCurlyDoubleQuote  0x201C
         // OpenCurlyQuote        0x2018
         // RightCeiling          0x2309
-        // RightDoubleBracket    0x301B
+        // RightDoubleFenced    0x301B
         // RightFloor            0x230B
-        if ( name == "LeftAngleBracket" ) {
-            *type = LeftCornerBracket;
+        if ( name == "LeftAngleFenced" ) {
+            *type = LeftCornerFenced;
         }
-        else if ( name == "RightAngleBracket" ) {
-            *type = RightCornerBracket; 
+        else if ( name == "RightAngleFenced" ) {
+            *type = RightCornerFenced; 
         }
         else {
             if ( open ) {
-                *type = LeftRoundBracket;
+                *type = LeftRoundFenced;
             }
             else
-                *type = RightRoundBracket;
+                *type = RightRoundFenced;
         }
         node = node.nextSibling();
     }
@@ -139,7 +100,7 @@ bool BracketElement::operatorType( QDomNode& node, bool open )
     return true;
 }
 
-int BracketElement::searchOperator( const QDomNode& node )
+int FencedElement::searchOperator( const QDomNode& node )
 {
     QDomNode n = node;
     for ( int i = 0; ! n.isNull(); n = n.nextSibling(), i++ ) {
@@ -181,9 +142,9 @@ int BracketElement::searchOperator( const QDomNode& node )
                      || name == "}"
                      || name == "CloseCurlyDoubleQuote"
                      || name == "CloseCurlyQuote"
-                     || name == "RightAngleBracket"
+                     || name == "RightAngleFenced"
                      || name == "RightCeiling"
-                     || name == "RightDoubleBracket"
+                     || name == "RightDoubleFenced"
                      || name == "RightFloor" ) {
                     if ( f.isNull() || f == "postfix" )
                         return i;
@@ -191,9 +152,9 @@ int BracketElement::searchOperator( const QDomNode& node )
                 if ( name == "("
                      || name == "["
                      || name == "{"
-                     || name == "LeftAngleBracket"
+                     || name == "LeftAngleFenced"
                      || name == "LeftCeiling"
-                     || name == "LeftDoubleBracket"
+                     || name == "LeftDoubleFenced"
                      || name == "LeftFloor"
                      || name == "OpenCurlyQuote" ) {
                     if ( ! f.isNull() && f == "postfix" )
@@ -203,4 +164,5 @@ int BracketElement::searchOperator( const QDomNode& node )
         }
     }
     return -1;
-}
+}*/
+
