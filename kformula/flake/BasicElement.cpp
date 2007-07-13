@@ -33,8 +33,8 @@ BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
     m_baseLine = 0.0;
     m_boundingRect.setTopLeft( QPointF( 0.0, 0.0 ) );
-    m_boundingRect.setWidth( 100.0 );       // standard values
-    m_boundingRect.setHeight( 100.0 );
+    m_boundingRect.setWidth( 10.0 );       // standard values
+    m_boundingRect.setHeight( 20.0 );
 }
 
 BasicElement::~BasicElement()
@@ -43,7 +43,7 @@ BasicElement::~BasicElement()
 }
 
 void BasicElement::paint( QPainter& painter, AttributeManager* )
-{
+{ 
     // draw a blue rectangle
     painter.setPen( QPen( Qt::blue ) );
     painter.drawRect( m_boundingRect );

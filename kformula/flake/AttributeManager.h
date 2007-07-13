@@ -133,10 +133,10 @@ public:
     /// @return The current font style - just a dummy atm
     QFont font( BasicElement* element );
 
-    /// Obtain the @r current scriptlevel
+    /// @return Obtain the current scriptlevel
     int scriptLevel( BasicElement* element );
  
-    /// Obtain the @r current displaystyle
+    /// @return Obtain the current displaystyle
     bool displayStyle( BasicElement* element );
 
     /**
@@ -161,7 +161,7 @@ public:
     QList< Qt::PenStyle > lineListOf( const QString attribute,
                                       const BasicElement* element );
 */
-    /// Obtain the @r value 
+    /// @return Obtain the value 
     double mathSpaceValue( const QString& value );
 
     /// Set the KoViewConverter to use
