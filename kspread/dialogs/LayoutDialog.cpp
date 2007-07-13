@@ -2090,7 +2090,12 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     else if ( dlg->alignX == Style::HAlignUndefined )
         standard->setChecked( true );
 
-    connect(horizontalGroup,  SIGNAL(clicked(int)), this, SLOT(slotStateChanged(int)));
+    QButtonGroup* horizontalGroup = new QButtonGroup(this);
+    horizontalGroup->addButton(left);
+    horizontalGroup->addButton(center);
+    horizontalGroup->addButton(right);
+    horizontalGroup->addButton(standard);
+    connect(horizontalGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotStateChanged(int)));
 
     if ( dlg->alignY ==Style::Top )
         top->setChecked( true );
@@ -2118,7 +2123,12 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     grid2->setMargin(KDialog::marginHint());
     grid2->setSpacing(KDialog::spacingHint());
     grid2->addItem(new QSpacerItem( 0, indentGroup->fontMetrics().height()/8 ), 0, 0 ); // groupbox title
-    m_indent = new KoUnitDoubleSpinBox( indentGroup, 0.0,  400.0, 10.0,dlg->indent,dlg->getDoc()->unit() );
+    m_indent = new KoUnitDoubleSpinBox(indentGroup);
+    m_indent->setMinimum(0.0);
+    m_indent->setMaximum(400.0);
+    m_indent->setLineStepPt(10.0);
+    m_indent->setUnit(dlg->getDoc()->unit());
+    m_indent->changeValue(dlg->indent);
     grid2->addWidget(m_indent, 0, 0);
 
     width = new KoUnitDoubleSpinBox( m_widthPanel );
@@ -2543,7 +2553,9 @@ void CellFormatPageBorder::InitializeGrids()
 
   area=new Border(tmpQGroupBox,"area",dlg->oneCol,dlg->oneRow);
   grid2->addWidget(area,2,1,3,3);
-  area->setBackgroundColor( palette().base().color() );
+  QPalette palette = area->palette();
+  palette.setColor(area->backgroundRole(), this->palette().base().color());
+  area->setPalette(palette);
 
   /* initailize the buttons that are in this box */
   for (int i=BorderType_Top; i < BorderType_END; i++)
@@ -2601,10 +2613,6 @@ void CellFormatPageBorder::InitializeGrids()
 
   /* now set up the group box with the pattern selector */
   tmpQGroupBox = new QGroupBox( this );
-#ifdef __GNUC__
-#warning "kde4 port it"
-#endif
-  //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
   tmpQGroupBox->setTitle( i18n("Pattern") );
   tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
@@ -2667,7 +2675,9 @@ void CellFormatPageBorder::InitializeGrids()
   style->insertItem(2,paintFormatPixmap(Qt::DashDotLine), "");
   style->insertItem(3,paintFormatPixmap(Qt::DashDotDotLine), "");
   style->insertItem(4,paintFormatPixmap(Qt::SolidLine), "");
-  style->setBackgroundColor( palette().window().color() );
+  palette = style->palette();
+  palette.setColor(style->backgroundRole(), this->palette().window().color());
+  style->setPalette(palette);
 
   grid2->addItem(grid3,6,0,1,2);
   grid->addWidget(tmpQGroupBox,0,1,4,1);
@@ -3544,10 +3554,6 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 
     tmpQGroupBox = new QGroupBox( this );
     tmpQGroupBox->setTitle( i18n("Preview") );
-#ifdef __GNUC__
-#warning "kde4: port it"
-#endif
-    //tmpQGroupBox->setFrameStyle( QFrame::Box | QFrame::Sunken );
     tmpQGroupBox->setAlignment( Qt::AlignLeft );
 
     grid2 = new QGridLayout(tmpQGroupBox);
@@ -3612,7 +3618,9 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     current->slotSelect();
     selectedBrush=current;
     color->setColor(dlg->brushColor);
-    current->setBackgroundColor( bgColor );
+    QPalette palette = current->palette();
+    palette.setColor(current->backgroundRole(), bgColor);
+    current->setPalette(palette);
 
     connect( color, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetColorButton( const QColor & ) ) );
@@ -3626,13 +3634,17 @@ void CellFormatPagePattern::slotNotAnyColor()
 {
   b_notAnyColor = true;
   bgColorButton->setColor( palette().base().color() );
-  current->setBackgroundColor( palette().base().color() );
+  QPalette palette = current->palette();
+  palette.setColor(current->backgroundRole(), this->palette().base().color());
+  current->setPalette(palette);
 }
 
 void CellFormatPagePattern::slotSetBackgroundColor( const QColor &_color )
 {
   bgColor =_color;
-  current->setBackgroundColor( bgColor );
+  QPalette palette = current->palette();
+  palette.setColor(current->backgroundRole(), bgColor);
+  current->setPalette(palette);
   bBgColorUndefined = false;
   b_notAnyColor = false;
 }
