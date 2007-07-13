@@ -20,11 +20,14 @@
 #ifndef ERRORELEMENT_H
 #define ERRORELEMENT_H
 
-#include "InferredRowElement.h"
+#include "RowElement.h"
 
-class KOFORMULA_EXPORT ErrorElement : public InferredRowElement {
-    typedef RowElement inherited;
+/**
+ * @short Implementation of the MathML merror element
+ */
+class KOFORMULA_EXPORT ErrorElement : public RowElement {
 public:
+    /// The standart constructor
     ErrorElement( BasicElement* parent = 0 );
 
     /**
@@ -32,7 +35,10 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, const AttributeManager* am );
+    void paint( QPainter& painter, const AttributeManager* am );
+
+    /// @return The element's ElementType
+    ElementType elementType() const;
 };
 
 #endif // ERRORELEMENT_H
