@@ -21,15 +21,17 @@
 */
 
 #include "RootElement.h"
-#include "RowElement.h"
+#include "AttributeManager.h"
 #include "FormulaCursor.h"
-
+#include "ElementFactory.h"
+#include <QPainter>
+#include <QPen>
 #include <kdebug.h>
 
 RootElement::RootElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_radicand = new RowElement( this );
-    m_exponent = 0;
+    m_radicand = new BasicElement( this );
+    m_exponent = new BasicElement( this );
 }
 
 RootElement::~RootElement()
@@ -41,12 +43,11 @@ RootElement::~RootElement()
 const QList<BasicElement*> RootElement::childElements()
 {
     QList<BasicElement*> tmp;
-    if( m_exponent )
-	tmp << m_exponent;
-    return tmp << m_radicand;
+    tmp << m_radicand << m_exponent;
+    return tmp;
 }
 
-/* FIXME
+/*
 void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
     BasicElement* tmp = cursor->currentElement();
@@ -57,8 +58,11 @@ void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         delete tmp;
     }
     else if( tmp == m_radicand && m_radicant->elementType != Basic )
+        m_radicand = m_cursor->enqueueElement( child );
     {
-        m_radicand = new SequenceElement;
+        BasicElement* tmp = m_radicand;
+        m_radicand = new RowElement( this );
+        m_radicand->insertElement( tmp );
     }
     else if( tmp == m_exponent && m_exponent->elementType == Basic )
     {
@@ -67,32 +71,38 @@ void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         delete tmp;
     }
 }
- */
+*/
 
-void RootElement::removeChild( BasicElement* element )
+void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
+    QPen pen( painter.pen() );
+    pen.setWidthF( am->doubleOf( "linethickness", this ) );
+
+    painter.drawPath( m_rootSymbol );
 }
 
-void RootElement::paint( QPainter& painter, const AttributeManager* am )
+void RootElement::layout( AttributeManager* am )
 {
-}
-
-void RootElement::layout( const AttributeManager* am )
-{
-    double indexWidth = 0.0;
+    m_rootSymbol = QPainterPath();
+/*    double indexWidth = 0.0;
     double indexHeight = 0.0;
     if ( m_exponent) {
         indexWidth = m_exponent->width();
         indexHeight = m_exponent->height();
     }
 
+    setHeight( m_radicand->height() * 5 / 3 );
+    setWidth();
+
+    m_rootSymbol->moveTo( );
+*/
     /* FIXME
     double factor = style.sizeFactor();
     luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
     luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
     luPixel unit = (m_radicand->getHeight() + distY)/ 3;
     */
-    double distX = 0.0;
+/*    double distX = 0.0;
     double distY = 0.0;
     double unit = m_radicand->height() / 3;
 
@@ -118,7 +128,7 @@ void RootElement::layout( const AttributeManager* am )
     setHeight( m_radicand->height() + distY*2 + m_rootOffset.y() );
 
     m_radicand->setOrigin( QPointF( m_rootOffset.x() + unit + unit/3, m_rootOffset.y() + distY ) );
-    setBaseLine(m_radicand->baseLine() + m_radicand->origin().y());
+    setBaseLine(m_radicand->baseLine() + m_radicand->origin().y());*/
 }
 
 void RootElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
@@ -211,45 +221,15 @@ void RootElement::writeMathMLContent( KoXmlWriter* writer ) const
 
 bool RootElement::readMathMLContent( const KoXmlElement& element )
 {
-    // TODO: msqrt
-    if ( element.tagName() == "mroot" ) {
-        KoXmlElement child = element.firstChildElement();
-        if ( child.isNull() ) {
-            kWarning( DEBUGID ) << "Empty content in RootElement." << endl;
-            return false;
-        }
-        if ( ! m_radicand->readMathMLChild( child ) )
-            return false;
-        child = child.nextSiblingElement();
-        if ( child.isNull() ) {
-            kWarning( DEBUGID ) << "Empty index in RootElement." << endl;
-            return false;
-        }
-        m_exponent = new RowElement( this );
-        if ( !  m_exponent->readMathMLChild( child ) ) {
-            delete m_exponent;
-            return false;
-        }
-    }
-    else {
-        KoXmlElement child = element.firstChildElement();
-        if ( m_radicand ) {
+    KoXmlElement tmp;
+    forEachElement( tmp, element ) {
+        if( m_radicand->elementType() == Basic ) {
             delete m_radicand;
+            m_radicand = ElementFactory::createElement( tmp.tagName(), this );
         }
-        if ( m_exponent ) {
+        else if( m_exponent->elementType() == Basic ) {
             delete m_exponent;
-            m_exponent = 0;
-        }
-        m_radicand = new RowElement( this );
-        if ( ! child.isNull() && child.tagName().toLower() == "mrow" ) {
-            // Inferred mrow
-            child = child.firstChildElement();
-        }
-        if ( ! child.isNull() ) {
-            if ( ! m_radicand->readMathMLChild( child ) ) {
-                delete m_radicand;
-                return false;
-            }
+            m_exponent = ElementFactory::createElement( tmp.tagName(), this );
         }
     }
     return true;
