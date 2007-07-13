@@ -14,29 +14,25 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef PHANTOMELEMENT_H
 #define PHANTOMELEMENT_H
 
-#include "InferredRowElement.h"
+#include "RowElement.h"
 #include "kformula_export.h"
 
-class KOFORMULA_EXPORT PhantomElement : public InferredRowElement {
+/**
+ * @short Implementation of the MathML mphantom element
+ */
+class KOFORMULA_EXPORT PhantomElement : public RowElement {
 public:
+    /// The standart constructor
     PhantomElement( BasicElement* parent = 0 );
 
-    /**
-     * Render the element to the given QPainter
-     * @param painter The QPainter to paint the element to
-     * @param am AttributeManager containing style info
-     */
-    virtual void paint( QPainter& painter, AttributeManager* am );
-
-private:
-    virtual ElementType elementType() const;
-
+    /// @return The element's ElementType
+    ElementType elementType() const;
 };
 
 #endif // PHANTOMELEMENT_H

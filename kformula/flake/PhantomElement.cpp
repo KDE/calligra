@@ -18,17 +18,9 @@
 */
 
 #include "PhantomElement.h"
-#include "ElementFactory.h"
 
-PhantomElement::PhantomElement( BasicElement* parent ) : InferredRowElement( parent ) 
-{
-}
-
-void PhantomElement::paint( QPainter& painter, AttributeManager* am )
-{
-    Q_UNUSED( painter );
-    Q_UNUSED( am );
-}
+PhantomElement::PhantomElement( BasicElement* parent ) : RowElement( parent ) 
+{}
 
 ElementType PhantomElement::elementType() const
 {
