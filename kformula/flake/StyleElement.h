@@ -20,7 +20,7 @@
 #ifndef STYLEELEMENT_H
 #define STYLEELEMENT_H
 
-#include "InferredRowElement.h"
+#include "RowElement.h"
 #include "kformula_export.h"
 
 /**
@@ -30,11 +30,12 @@
  * Basically it holds children like a row but it is able to apply almost any style on
  * them.
  */
-class KOFORMULA_EXPORT StyleElement : public InferredRowElement {
+class KOFORMULA_EXPORT StyleElement : public RowElement {
 public:
     /// The standart constructor
     StyleElement( BasicElement* parent = 0 );
 
+    /// @return The element's ElementType
     ElementType elementType() const;
 };
 
