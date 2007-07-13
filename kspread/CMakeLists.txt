@@ -85,10 +85,10 @@ SET (dialogs_DIR_SRCS
 	dialogs/LayoutDialog.cpp
 	dialogs/LinkDialog.cpp
 	dialogs/ListDialog.cpp
+	dialogs/NamedAreaDialog.cpp
 	#dialogs/PaperLayoutDialog.cpp
 	dialogs/PasteInsertDialog.cpp
 	dialogs/PreferenceDialog.cpp
-	dialogs/ReferenceDialog.cpp
 	dialogs/Resize2Dialog.cpp
 	dialogs/SeriesDialog.cpp
 	dialogs/SheetPropertiesDialog.cpp

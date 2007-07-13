@@ -25,7 +25,7 @@
 */
 
 // Local
-#include "ReferenceDialog.h"
+#include "NamedAreaDialog.h"
 
 // Qt
 #include <QComboBox>
@@ -332,4 +332,4 @@ void EditNamedAreaDialog::slotAreaNameModified(const QString& name)
     enableButtonOk(!name.isEmpty());
 }
 
-#include "ReferenceDialog.moc"
+#include "NamedAreaDialog.moc"
