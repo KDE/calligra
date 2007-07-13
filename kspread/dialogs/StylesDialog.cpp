@@ -95,13 +95,13 @@ StyleDialog::StyleDialog( View * parent, StyleManager * manager )
   connect( this, SIGNAL( okClicked() ),
            this, SLOT( slotOk() ) );
   connect( this, SIGNAL( user1Clicked() ),
-           this, SLOT( slotUser1() ) );
+           this, SLOT( slotNew() ) );
   connect( this, SIGNAL( user2Clicked() ),
-           this, SLOT( slotUser2() ) );
+           this, SLOT( slotEdit() ) );
   connect( this, SIGNAL( user3Clicked() ),
-           this, SLOT( slotUser3() ) );
+           this, SLOT( slotRemove() ) );
   connect( m_dlg, SIGNAL( modifyStyle() ),
-           this, SLOT( slotUser2()));
+           this, SLOT( slotEdit()));
 }
 
 StyleDialog::~StyleDialog()
@@ -208,7 +208,7 @@ void StyleDialog::slotOk()
   accept();
 }
 
-void StyleDialog::slotUser1()
+void StyleDialog::slotNew()
 {
   CustomStyle * s = 0;
 
@@ -250,7 +250,7 @@ void StyleDialog::slotUser1()
   slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
-void StyleDialog::slotUser2()
+void StyleDialog::slotEdit()
 {
   K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
@@ -272,7 +272,7 @@ void StyleDialog::slotUser2()
   slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
 }
 
-void StyleDialog::slotUser3()
+void StyleDialog::slotRemove()
 {
   K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
 
@@ -293,7 +293,6 @@ void StyleDialog::slotUser3()
   if ( s->type() != Style::CUSTOM )
     return;
 
-  s->setType( Style::AUTO );
   m_styleManager->takeStyle( s );
 
   slotDisplayMode( m_dlg->m_displayBox->currentIndex() );

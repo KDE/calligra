@@ -57,9 +57,9 @@ class StyleDialog : public KDialog
 
  protected slots:
   void slotOk();
-  void slotUser1();
-  void slotUser2();
-  void slotUser3();
+  void slotNew();
+  void slotEdit();
+  void slotRemove();
   void slotDisplayMode( int mode );
   void slotSelectionChanged( Q3ListViewItem * );
 
