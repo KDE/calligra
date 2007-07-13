@@ -73,10 +73,12 @@
   <Action name="insertColumn"/>
   <Action name="insertRow"/>
   <Action name="insertSheet"/>
+<!--
   <Separator/>
   <Action name="insertPart"/>
   <Action name="insertChart"/>
   <Action name="insertPicture"/>
+-->
   <Separator/>
   <Menu name="ExternalData"><text>&amp;External Data</text>
     <Action name="insertFromDatabase"/>
@@ -86,12 +88,18 @@
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
   <Action name="cellLayout"/>
-  <Action name="extra_properties"/>
-  <Action name="changeangle"/>
-  <Action name="decreaseindent"/>
-  <Action name="increaseindent"/>
-  <Action name="precplus"/>
-  <Action name="precminus"/>
+  <Action name="styles"/>
+  <Action name="stylemenu"/>
+  <Action name="createStyle"/>
+  <Action name="conditional"/>
+  <Action name="sheetFormat"/>
+  <Separator/>
+  <Menu name="MergeCellMenu" icon="mergecell"><text>Merge Cells</text>
+    <Action name="mergecell"/>
+    <Action name="mergecellHorizontal"/>
+    <Action name="mergecellVertical"/>
+  </Menu>
+  <Action name="dissociatecell"/>
   <Separator/>
   <Action name="adjust"/>
   <Menu name="Row"><text>&amp;Row</text>
@@ -113,12 +121,6 @@
   <Action name="sheetProperties" />
   </Menu>
   <Separator/>
-  <Action name="sheetFormat"/>
-  <Action name="styles"/>
-  <Action name="stylemenu"/>
-  <Action name="createStyle"/>
-  <Action name="conditional"/>
-  <Separator/>
   <Action name="paperLayout"/>
   <Menu name="Comment"><text>&amp;Print Range</text>
     <Action name="definePrintRange"/>
@@ -133,19 +135,13 @@
   </Menu>
   <Action name="textToColumns"/>
   <Separator/>
-  <Menu name="MergeCellMenu" icon="mergecell"><text>Merge Cells</text>
-    <Action name="mergecell"/>
-    <Action name="mergecellHorizontal"/>
-    <Action name="mergecellVertical"/>
-  </Menu>
-  <Action name="dissociatecell"/>
-  <Separator/>
   <Action name="showArea"/>
   <Separator/>
-  <Action name="subtotals"/>
-  <Action name="goalSeek"/>
   <Action name="consolidate"/>
+  <Action name="subtotals"/>
   <Action name="validity"/>
+  <Separator/>
+  <Action name="goalSeek"/>
  </Menu>
  <Menu name="tools"><text>&amp;Tools</text>
   <Action name="spelling"/>

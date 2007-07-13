@@ -1106,12 +1106,11 @@ void View::Private::initActions()
   connect(actions->resetPrintRange, SIGNAL(triggered(bool)),view, SLOT( resetPrintRange() ));
   actions->definePrintRange->setToolTip(i18n("Define the print range in the current sheet"));
 
-  actions->showPageBorders  = new KToggleAction(i18n("Show Page Borders"), view);
-  ac->addAction("showPageBorders", actions->showPageBorders );
-  actions->showPageBorders->setCheckedState(KGuiItem(i18n("Hide Page Borders")));
-  connect( actions->showPageBorders, SIGNAL( toggled( bool ) ),
-                    view, SLOT( togglePageBorders( bool ) ) );
-  actions->showPageBorders->setToolTip( i18n( "Show on the spreadsheet where the page borders will be" ) );
+    actions->showPageBorders = new KToggleAction(i18n("Page Borders"), view);
+    actions->showPageBorders->setToolTip(i18n("Show on the spreadsheet where the page borders will be"));
+    ac->addAction("showPageBorders", actions->showPageBorders);
+    connect(actions->showPageBorders, SIGNAL(toggled(bool)),
+            view, SLOT(togglePageBorders(bool)));
 
   actions->recalcWorksheet  = new KAction(i18n("Recalculate Sheet"), view);
   ac->addAction("RecalcWorkSheet", actions->recalcWorksheet );
@@ -1296,26 +1295,23 @@ void View::Private::initActions()
 
   // -- settings actions --
 
-  actions->showStatusBar  = new KToggleAction(i18n("Show Status Bar"), view);
-  ac->addAction("showStatusBar", actions->showStatusBar );
-  actions->showStatusBar->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
-  connect( actions->showStatusBar, SIGNAL( toggled( bool ) ),
-      view, SLOT( showStatusBar( bool ) ) );
-  actions->showStatusBar->setToolTip(i18n("Show the status bar"));
+    actions->showStatusBar = new KToggleAction(i18n("Status Bar"), view);
+    actions->showStatusBar->setToolTip(i18n("Show the status bar"));
+    ac->addAction("showStatusBar", actions->showStatusBar);
+    connect(actions->showStatusBar, SIGNAL(toggled(bool)),
+            view, SLOT(showStatusBar(bool)));
 
-  actions->showTabBar  = new KToggleAction(i18n("Show Tab Bar"), view);
-  ac->addAction("showTabBar", actions->showTabBar );
-  actions->showTabBar->setCheckedState(KGuiItem(i18n("Hide Tab Bar")));
-  connect( actions->showTabBar, SIGNAL( toggled( bool ) ),
-      view, SLOT( showTabBar( bool ) ) );
-  actions->showTabBar->setToolTip(i18n("Show the tab bar"));
+    actions->showTabBar = new KToggleAction(i18n("Tab Bar"), view);
+    actions->showTabBar->setToolTip(i18n("Show the tab bar"));
+    ac->addAction("showTabBar", actions->showTabBar);
+    connect(actions->showTabBar, SIGNAL(toggled(bool)),
+            view, SLOT(showTabBar(bool)));
 
-  actions->showFormulaBar  = new KToggleAction(i18n("Show Formula Bar"), view);
-  ac->addAction("showFormulaBar", actions->showFormulaBar );
-  actions->showFormulaBar->setCheckedState(KGuiItem(i18n("Hide Formula Bar")));
-  connect( actions->showFormulaBar, SIGNAL( toggled( bool ) ),
-      view, SLOT( showFormulaBar( bool ) ) );
-  actions->showFormulaBar->setToolTip(i18n("Show the formula bar"));
+    actions->showFormulaBar = new KToggleAction(i18n("Formula Bar"), view);
+    actions->showFormulaBar->setToolTip(i18n("Show the formula bar"));
+    ac->addAction("showFormulaBar", actions->showFormulaBar);
+    connect(actions->showFormulaBar, SIGNAL(toggled(bool)),
+            view, SLOT(showFormulaBar(bool)));
 
   actions->preference  = new KAction(KIcon("configure" ), i18n("Configure KSpread..."), view);
   ac->addAction("preference", actions->preference );
