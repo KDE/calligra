@@ -20,18 +20,14 @@
 
 #include "UnderOverElement.h"
 #include "ElementFactory.h"
-#include "RowElement.h"
-#include "kformuladefs.h"
 #include <kdebug.h>
 #include <KoXmlWriter.h>
 
-#include <assert.h>
-
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_baseElement = new RowElement( this );
-    m_underElement = 0;
-    m_overElement = 0;
+    m_baseElement = new BasicElement( this );
+    m_underElement = new BasicElement( this );
+    m_overElement = new BasicElement( this );
 }
 
 UnderOverElement::~UnderOverElement()
@@ -44,16 +40,7 @@ UnderOverElement::~UnderOverElement()
 const QList<BasicElement*> UnderOverElement::childElements()
 {
     QList<BasicElement*> tmp;
-    if ( m_baseElement ) {
-        tmp << m_baseElement;
-    }
-    if ( m_underElement ) {
-        tmp << m_underElement;
-    }
-    if ( m_overElement ) {
-        tmp << m_overElement;
-    }
-    return tmp;
+    return tmp << m_baseElement << m_underElement << m_overElement;
 }
 
 void UnderOverElement::paint( QPainter& painter, const AttributeManager* am )
@@ -82,51 +69,33 @@ void UnderOverElement::moveDown( FormulaCursor* cursor, BasicElement* from )
 
 bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 {
-    BasicElement* tmpElement = 0;
     KoXmlElement child = parent.firstChildElement();
     QString name = parent.tagName().toLower();
     
     if ( child.isNull() ) {
-        kWarning( DEBUGID ) << "Empty content in " << name << " element\n";
+        kWarning( 39001 ) << "Empty content in " << name << " element\n";
         return false;
     }
     delete m_baseElement;
-    m_baseElement = new RowElement( this );
-    if ( child.tagName().toLower() == "mrow" ) { // Inferred mrow ?
-        if ( ! m_baseElement->readMathMLContent( child ) ) return false;
-    }
-    else {
-        if ( ! m_baseElement->readMathMLChild( child ) ) return false;
-    }
-    if ( name.contains( "under" ) ) {
+    m_baseElement = ElementFactory::createElement( child.tagName(), this );
+
+    if( name.contains( "under" ) ) {
         child = child.nextSiblingElement();
         if ( child.isNull() ) {
-            kWarning( DEBUGID ) << "Empty underscript in " << name << " element\n";
+            kWarning( 39001 ) << "Empty underscript in " << name << " element\n";
             return false;
         }
         delete m_underElement;
-        m_underElement = new RowElement( this );
-        if ( child.tagName().toLower() == "mrow" ) { // Inferred mrow ?
-            if ( ! m_underElement->readMathMLContent( child ) ) return false;
-        }
-        else {
-            if ( ! m_underElement->readMathMLChild( child ) ) return false;
-        }
+        m_underElement = ElementFactory::createElement( child.tagName(), this );
     }
     if ( name.contains( "over" ) ) {
         child = child.nextSiblingElement();
         if ( child.isNull() ) {
-            kWarning( DEBUGID ) << "Empty overscript in " << name << " element\n";
+            kWarning( 39001 ) << "Empty overscript in " << name << " element\n";
             return false;
         }
         delete m_overElement;
-        m_overElement = new RowElement( this );
-        if ( child.tagName().toLower() == "mrow" ) { // Inferred mrow ?
-            if ( ! m_overElement->readMathMLContent( child ) ) return false;
-        }
-        else {
-            if ( ! m_overElement->readMathMLChild( child ) ) return false;
-        }
+        m_overElement = ElementFactory::createElement( child.tagName(), this );
     }
     return true;
 }
@@ -135,20 +104,21 @@ void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_baseElement->writeMathML( writer );        // Just save the children in
                                                  // the right order
-    if( m_underElement )
+    if( m_underElement->elementType() != Basic )
         m_underElement->writeMathML( writer );
     
-    if( m_overElement )
+    if( m_overElement->elementType() != Basic )
         m_overElement->writeMathML( writer );
 }
 
 ElementType UnderOverElement::elementType() const
 {
-    if( m_underElement && m_overElement )
+    if( m_underElement->elementType() != Basic && m_overElement->elementType() != Basic )
         return UnderOver;
-    else if( m_underElement )
+    else if( m_underElement->elementType() != Basic )
         return Under;
-    if ( ! m_overElement )
-        kWarning( DEBUGID ) << "Invalid mover element\n";
-    return Over;
+    else if( m_overElement->elementType() != Basic )
+        return Over;
+    else
+        return UnderOver;
 }

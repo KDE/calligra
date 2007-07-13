@@ -24,8 +24,6 @@
 #include "BasicElement.h"
 #include "kformula_export.h"
 
-class RowElement;
-
 /**
  * @short Implementation of the MathML mover, munder and moverunder elements
  *
@@ -96,11 +94,11 @@ protected:
     void writeMathMLContent( KoXmlWriter* writer ) const;   
  
 private:
-    RowElement* m_baseElement;
+    BasicElement* m_baseElement;
 
-    RowElement* m_underElement;
+    BasicElement* m_underElement;
 
-    RowElement* m_overElement;
+    BasicElement* m_overElement;
 };
 
 #endif // UNDEROVERELEMENT_H
