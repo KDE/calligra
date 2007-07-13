@@ -28,8 +28,8 @@
 
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_numerator = new RowElement( this );
-    m_denominator = new RowElement( this );
+    m_numerator = new BasicElement( this );
+    m_denominator = new BasicElement( this );
 }
 
 FractionElement::~FractionElement()
@@ -157,18 +157,12 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
 
 bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
-    int counter = 0;
     KoXmlElement tmp;
     forEachElement( tmp, parent ) {
-        if ( counter == 0 ) {
-            if ( ! m_numerator->readMathMLChild( tmp ) ) return false;
-        }
-        else if( counter == 1 ) {
-            if ( ! m_denominator->readMathMLChild( tmp ) ) return false;
-        }
+        if( m_numerator->elementType() == Basic )
+            m_numerator->readMathML( tmp );
         else
-            return false;
-        counter++;
+           m_denominator->readMathML( tmp );
     }
 
     return true;
