@@ -40,6 +40,38 @@ RootElement::~RootElement()
     delete m_exponent;
 }
 
+void RootElement::paint( QPainter& painter, AttributeManager* am )
+{
+    QPen pen( painter.pen() );
+    pen.setWidthF( am->doubleOf( "linethickness", this ) );
+
+    painter.drawPath( m_rootSymbol );
+}
+
+void RootElement::layout( AttributeManager* am )
+{
+    QPointF tmp;
+    double distY = am->mathSpaceValue( "thinmathspace" );
+    setHeight( 2*distY + m_radicand->height() );
+
+    m_rootSymbol = QPainterPath();
+    tmp += QPointF( 0.0, 2/3 * height() );
+    m_rootSymbol.moveTo( tmp );
+    tmp += QPointF( m_exponent->width(), 2/3 * height() );
+    m_rootSymbol.moveTo( tmp );
+    tmp += QPointF( 1/6 * height(), 1/3 * height() );
+    m_rootSymbol.moveTo( tmp );
+    tmp = QPointF( tmp.x() + 1/6 * height(), 0.0 );
+    m_rootSymbol.moveTo( tmp );
+    m_radicand->setOrigin( tmp + QPointF( 0.0, distY ) );
+    tmp += QPointF( m_radicand->width(), 0.0 );
+    m_rootSymbol.moveTo( tmp );
+    
+    m_exponent->setOrigin( QPointF( 0.0, distY ) );
+    setWidth( m_rootSymbol.boundingRect().width() );
+    setBaseLine( m_radicand->baseLine() + m_radicand->origin().y() ); 
+}
+
 const QList<BasicElement*> RootElement::childElements()
 {
     QList<BasicElement*> tmp;
@@ -72,64 +104,6 @@ void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
     }
 }
 */
-
-void RootElement::paint( QPainter& painter, AttributeManager* am )
-{
-    QPen pen( painter.pen() );
-    pen.setWidthF( am->doubleOf( "linethickness", this ) );
-
-    painter.drawPath( m_rootSymbol );
-}
-
-void RootElement::layout( AttributeManager* am )
-{
-    m_rootSymbol = QPainterPath();
-/*    double indexWidth = 0.0;
-    double indexHeight = 0.0;
-    if ( m_exponent) {
-        indexWidth = m_exponent->width();
-        indexHeight = m_exponent->height();
-    }
-
-    setHeight( m_radicand->height() * 5 / 3 );
-    setWidth();
-
-    m_rootSymbol->moveTo( );
-*/
-    /* FIXME
-    double factor = style.sizeFactor();
-    luPixel distX = context.ptToPixelX( context.getThinSpace( tstyle, factor ) );
-    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
-    luPixel unit = (m_radicand->getHeight() + distY)/ 3;
-    */
-/*    double distX = 0.0;
-    double distY = 0.0;
-    double unit = m_radicand->height() / 3;
-
-    QPointF exponentOrigin(0, 0);
-    m_rootOffset = QPointF(0, 0);
-    if (m_exponent) {
-        if (indexWidth > unit) {
-            m_rootOffset.setX( indexWidth - unit );
-        }
-        else {
-            exponentOrigin.setX( ( unit - indexWidth )/2 );
-        }
-        if (indexHeight > unit) {
-            m_rootOffset.setY( indexHeight - unit );
-        }
-        else {
-            exponentOrigin.setY( unit - indexHeight );
-        }
-        m_exponent->setOrigin( exponentOrigin );
-    }
-
-    setWidth( m_radicand->width() + unit + unit/3 + m_rootOffset.x() + distX/2 );
-    setHeight( m_radicand->height() + distY*2 + m_rootOffset.y() );
-
-    m_radicand->setOrigin( QPointF( m_rootOffset.x() + unit + unit/3, m_rootOffset.y() + distY ) );
-    setBaseLine(m_radicand->baseLine() + m_radicand->origin().y());*/
-}
 
 void RootElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
 {
