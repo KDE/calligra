@@ -20,14 +20,28 @@
 #ifndef PADDEDELEMENT_H
 #define PADDEDELEMENT_H
 
-#include "InferredRowElement.h"
+#include "RowElement.h"
 #include "kformula_export.h"
 
-class KOFORMULA_EXPORT PaddedElement : public InferredRowElement {
-    typedef InferredRowElement inherited;
+/**
+ * @short Implementation of the MathML mpadded element
+ *
+ * The mpadded element adjusts the space around a sequence of elements.
+ * Therefore it just implements the layout() method.
+ */
+class KOFORMULA_EXPORT PaddedElement : public RowElement {
 public:
+    /// The standart constructor
     PaddedElement( BasicElement* parent = 0 );
 
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    void layout( AttributeManager* am );
+
+    /// @return The element's ElementType
+    ElementType elementType() const;   
 };
 
 #endif // PADDEDELEMENT_H

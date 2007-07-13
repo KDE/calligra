@@ -19,8 +19,16 @@
 
 #include "PaddedElement.h"
 
-PaddedElement::PaddedElement( BasicElement* parent ) : InferredRowElement( parent )
+PaddedElement::PaddedElement( BasicElement* parent ) : RowElement( parent )
+{}
+
+void PaddedElement::layout( AttributeManager* am )
 {
+}
+
+ElementType PaddedElement::elementType() const
+{
+    return Padded;
 }
 
 /**
