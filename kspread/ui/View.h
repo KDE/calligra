@@ -308,7 +308,7 @@ public Q_SLOTS:
     void specialPaste();
     void editCell();
     void setAreaName();
-    void showAreaName();
+    void namedAreaDialog();
     void adjust();
     void paperLayoutDlg();
     void styleDialog();

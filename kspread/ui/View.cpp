@@ -1000,10 +1000,10 @@ void View::Private::initActions()
   connect(actions->areaName, SIGNAL(triggered(bool)),view, SLOT( setAreaName() ));
   actions->areaName->setToolTip(i18n("Set a name for a region of the spreadsheet"));
 
-  actions->showArea  = new KAction(i18n("Show Area..."), view);
-  ac->addAction("showArea", actions->showArea );
-  connect(actions->showArea, SIGNAL(triggered(bool)),view, SLOT( showAreaName() ));
-  actions->showArea->setToolTip(i18n("Display a named area"));
+    actions->showArea = new KAction(i18n("Named Areas..."), view);
+    actions->showArea->setToolTip(i18n("Edit or select named areas"));
+    ac->addAction("showArea", actions->showArea);
+    connect(actions->showArea, SIGNAL(triggered(bool)),view, SLOT(namedAreaDialog()));
 
   actions->insertFunction  = new KAction(KIcon( "funct" ), i18n("&Function..."), view);
   ac->addAction("insertMathExpr", actions->insertFunction );
@@ -6053,7 +6053,7 @@ void View::setAreaName()
   dlg.exec();
 }
 
-void View::showAreaName()
+void View::namedAreaDialog()
 {
     NamedAreaDialog dialog(this);
     dialog.exec();

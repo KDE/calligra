@@ -32,55 +32,58 @@
 class QComboBox;
 class QLabel;
 class QLineEdit;
-class Q3ListBox;
-class Q3ListBoxItem;
+class QListWidget;
+class QListWidgetItem;
 
 namespace KSpread
 {
+class Region;
 class View;
 
 class NamedAreaDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
+
 public:
-  NamedAreaDialog(View* parent);
+    NamedAreaDialog(View* parent);
 
-
-public slots:
-  void slotOk();
-  void slotCancel();
-  void slotDoubleClicked(Q3ListBoxItem *);
-  void slotRemove();
-  void slotEdit();
-  void slotHighlighted(Q3ListBoxItem *);
-protected:
-  View * m_pView;
-
-  Q3ListBox    * m_list;
-  QLabel      * m_rangeName;
+public Q_SLOTS:
+    void slotOk();
+    void slotClose();
+    void slotNew();
+    void slotEdit();
+    void slotRemove();
+    void displayAreaValues(const QString& name);
 
 private:
-  void displayAreaValues(QString const & areaName);
+    View*           m_pView;
+    QListWidget*    m_list;
+    QLabel*         m_rangeName;
 };
 
-class EditAreaName : public KDialog
+
+class EditNamedAreaDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    EditAreaName( View * parent, const char * name,
-                         QString const & areaname );
-    ~EditAreaName();
+    EditNamedAreaDialog(View* parent);
+    ~EditNamedAreaDialog();
 
-public slots:
-  virtual void slotOk();
+    QString areaName() const;
+    void setAreaName(const QString& areaname);
+    void setRegion(const Region& region);
+
+public Q_SLOTS:
+    void slotOk();
+    void slotAreaNameModified(const QString&);
 
 private:
-    View * m_pView;
-
-    QLineEdit   * m_area;
-    QComboBox   * m_sheets;
-    QLabel      * m_areaName;
+    View*       m_pView;
+    QLineEdit*  m_areaNameEdit;
+    QComboBox*  m_sheets;
+    QLineEdit*  m_cellRange;
+    QString     m_initialAreaName;
 };
 
 } // namespace KSpread

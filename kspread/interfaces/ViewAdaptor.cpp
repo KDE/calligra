@@ -160,7 +160,7 @@ void ViewAdaptor::setAreaName()
 
 void ViewAdaptor::showAreaName()
 {
-    m_view->showAreaName();
+    m_view->namedAreaDialog();
 }
 
 void ViewAdaptor::mergeCell()

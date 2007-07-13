@@ -35,11 +35,10 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <QList>
+#include <QListWidget>
 #include <QPushButton>
 #include <QVariant>
 #include <QVBoxLayout>
-//Added by qt3to4:
-#include <Q3ListBox>
 
 // KDE
 #include <kdebug.h>
@@ -60,253 +59,277 @@
 using namespace KSpread;
 
 NamedAreaDialog::NamedAreaDialog(View* parent)
-  : KDialog( parent )
+    : KDialog(parent)
+    , m_pView(parent)
 {
-  setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1 | KDialog::User2);
-  setButtonsOrientation(Qt::Vertical);
-  setButtonText(KDialog::User1, i18n("&Remove"));
-  setButtonText(KDialog::User2, i18n("&Edit..."));
-  setModal(true);
-  setWindowTitle(i18n("Area Name"));
+    setButtons(KDialog::Ok | KDialog::Close | KDialog::User1 | KDialog::User2 | KDialog::User3);
+    setButtonsOrientation(Qt::Vertical);
+    setButtonText(KDialog::Ok, i18n("&Select"));
+    setButtonText(KDialog::User1, i18n("&Remove"));
+    setButtonText(KDialog::User2, i18n("&Edit..."));
+    setButtonText(KDialog::User3, i18n("&New..."));
+    setCaption(i18n("Named Areas"));
+    setModal(true);
+    setObjectName("NamedAreaDialog");
 
-  m_pView = parent;
+    QWidget* widget = new QWidget(this);
+    setMainWidget(widget);
 
-  QWidget* widget = new QWidget(this);
-  setMainWidget(widget);
+    QVBoxLayout *vboxLayout = new QVBoxLayout(widget);
+    vboxLayout->setMargin(0);
+    vboxLayout->setSpacing(KDialog::spacingHint());
 
-  QVBoxLayout *vboxLayout = new QVBoxLayout(widget);
-  vboxLayout->setMargin(0);
-  vboxLayout->setSpacing(KDialog::spacingHint());
+    m_list = new QListWidget(this);
+    m_list->setSortingEnabled(true);
+    vboxLayout->addWidget(m_list);
 
-  m_list = new Q3ListBox(this);
-  vboxLayout->addWidget( m_list );
+    m_rangeName = new QLabel(this);
+    m_rangeName->setText(i18n("Area: %1", QString()));
+    vboxLayout->addWidget(m_rangeName);
 
-  m_rangeName = new QLabel(this);
-  vboxLayout->addWidget(m_rangeName);
+    const QList<QString> namedAreas = m_pView->doc()->namedAreaManager()->areaNames();
+    for (int i = 0; i < namedAreas.count(); ++i)
+        m_list->addItem(namedAreas[i]);
 
-  QString text;
-  QStringList sheetName;
-  foreach ( Sheet* sheet, m_pView->doc()->map()->sheetList() )
-  {
-    sheetName.append( sheet->sheetName());
-  }
+    if (m_list->count() == 0)
+    {
+        enableButtonOk(false);
+        enableButton(KDialog::User1, false);
+        enableButton(KDialog::User2, false);
+        m_list->setCurrentRow(0);
+    }
 
-  const QList<QString> namedAreas = m_pView->doc()->namedAreaManager()->areaNames();
-  for (int i = 0; i < namedAreas.count(); ++i)
-    m_list->insertItem(namedAreas[i]);
-
-  if ( !m_list->count() )
-  {
-    enableButtonOk(false);
-    enableButton(KDialog::User1, false);
-    enableButton(KDialog::User2, false);
-  }
-
-  connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-  connect(this, SIGNAL(cancelClicked()), this, SLOT(slotCancel()));
-  connect(this, SIGNAL(user1Clicked()), this, SLOT(slotRemove()));
-  connect(this, SIGNAL(user2Clicked()), this, SLOT(slotEdit()));
-  connect( m_list, SIGNAL(doubleClicked(Q3ListBoxItem *)), this,
-           SLOT(slotDoubleClicked(Q3ListBoxItem *)));
-  connect( m_list, SIGNAL(highlighted ( Q3ListBoxItem * ) ), this,
-           SLOT(slotHighlighted(Q3ListBoxItem * )));
-  m_rangeName->setText(i18n("Area: %1",QString("")));
-
-  resize( 250, 200 );
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, SIGNAL(cancelClicked()), this, SLOT(slotClose()));
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(slotRemove()));
+    connect(this, SIGNAL(user2Clicked()), this, SLOT(slotEdit()));
+    connect(this, SIGNAL(user3Clicked()), this, SLOT(slotNew()));
+    connect(m_list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotOk()));
+    connect(m_list, SIGNAL(currentTextChanged(const QString&)),
+            this, SLOT(displayAreaValues(const QString&)));
 }
 
 void NamedAreaDialog::displayAreaValues(QString const & areaName)
 {
-  QString tmpName = m_pView->doc()->namedAreaManager()->namedArea(areaName).name();
-  tmpName = i18n("Area: %1", tmpName);
-  m_rangeName->setText(tmpName);
-}
-
-void NamedAreaDialog::slotHighlighted(Q3ListBoxItem * )
-{
-  QString tmp = m_list->text(m_list->currentItem());
-  displayAreaValues(tmp);
-}
-
-void NamedAreaDialog::slotDoubleClicked(Q3ListBoxItem *)
-{
-  slotOk();
-}
-
-void NamedAreaDialog::slotRemove()
-{
-  if (m_list->currentItem() == -1)
-    return;
-
-  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this area name?"),i18n("Remove Area"),KStandardGuiItem::del());
-  if (ret == KMessageBox::Cancel)
-    return;
-
-  QString textRemove;
-  if ( m_list->currentItem() != -1)
-  {
-    m_pView->doc()->emitBeginOperation( false );
-
-    QString textRemove = m_list->text(m_list->currentItem());
-    m_pView->doc()->namedAreaManager()->remove(textRemove);
-    m_pView->doc()->setModified(true);
-    /*
-      m_list->clear();
-      QString text;
-      QList<Reference>::Iterator it;
-      QList<Reference> area=m_pView->doc()->listArea();
-      for ( it = area.begin(); it != area.end(); ++it )
-      {
-      text=(*it).ref_name;
-      m_list->insertItem(text);
-      }
-    */
-
-    m_list->removeItem(m_list->currentItem());
-
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-  }
-
-  if ( !m_list->count() )
-  {
-    enableButtonOk(false);
-    enableButton(KDialog::User1, false);
-    enableButton(KDialog::User2, false);
-  }
-}
-
-void NamedAreaDialog::slotEdit()
-{
-  QString name(m_list->text(m_list->currentItem()));
-  if ( name.isEmpty() )
-    return;
-  EditAreaName editDlg( m_pView, "EditArea", name );
-  editDlg.exec();
-
-  m_rangeName->setText(i18n("Area: %1",QString("")));
-  QString tmp = m_list->text(m_list->currentItem());
-  if (!tmp.isEmpty())
-    displayAreaValues( tmp );
+    const QString regionName = m_pView->doc()->namedAreaManager()->namedArea(areaName).name();
+    m_rangeName->setText(i18n("Area: %1", regionName));
 }
 
 void NamedAreaDialog::slotOk()
 {
-  m_pView->doc()->emitBeginOperation( false );
+    m_pView->doc()->emitBeginOperation(false);
 
-  QString text;
-  if (m_list->currentItem() != -1)
-  {
-    int index = m_list->currentItem();
-    text = m_list->text(index);
-    const QList<QString> areas = m_pView->doc()->namedAreaManager()->areaNames();
-    Region region = m_pView->doc()->namedAreaManager()->namedArea(areas[index]);
-    Sheet* sheet = m_pView->doc()->namedAreaManager()->sheet(areas[index]);
-
-    if (m_pView->activeSheet() != sheet)
+    if (m_list->count() > 0)
     {
-      if (sheet)
-        m_pView->setActiveSheet(sheet);
+        QListWidgetItem* item = m_list->currentItem();
+        Region region = m_pView->doc()->namedAreaManager()->namedArea(item->text());
+        Sheet* sheet = m_pView->doc()->namedAreaManager()->sheet(item->text());
+        if (!sheet || !region.isValid())
+        {
+            m_pView->doc()->emitEndOperation();
+            return;
+        }
+
+        if (sheet && sheet != m_pView->activeSheet())
+            m_pView->setActiveSheet(sheet);
+        m_pView->selection()->initialize(region);
     }
-    m_pView->selection()->initialize(region);
-  }
-
-  m_pView->slotUpdateView( m_pView->activeSheet() );
-  accept();
-}
-
-void NamedAreaDialog::slotCancel()
-{
-  reject();
-}
-
-
-
-EditAreaName::EditAreaName( View * parent,
-                                          const char * name,
-                                          QString const & areaname )
-  : KDialog( parent )
-{
-  setCaption( i18n("Edit Area") );
-  setObjectName( name );
-  setModal( true );
-  setButtons( Ok|Cancel );
-
-  m_pView = parent;
-
-  resize( 350, 142 );
-  setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5,
-                              (QSizePolicy::SizeType)4 ) );
-
-  QWidget *page = new QWidget();
-  setMainWidget( page );
-
-  QGridLayout * gridLayout = new QGridLayout( page);
-  gridLayout->setMargin(KDialog::marginHint());
-  gridLayout->setSpacing(KDialog::spacingHint());
-
-  QLabel * textLabel4 = new QLabel( page );
-  textLabel4->setText( i18n( "Cells:" ) );
-  gridLayout->addWidget( textLabel4, 2, 0 );
-
-  m_area = new QLineEdit( page );
-  gridLayout->addWidget( m_area, 2, 1 );
-
-  QLabel * textLabel1 = new QLabel( page );
-  textLabel1->setText( i18n( "Sheet:" ) );
-  gridLayout->addWidget( textLabel1, 1, 0 );
-
-  m_sheets = new QComboBox( page );
-  gridLayout->addWidget( m_sheets, 1, 1 );
-
-  QLabel * textLabel2 = new QLabel( page );
-  textLabel2->setText( i18n( "Area name:" ) );
-  gridLayout->addWidget( textLabel2, 0, 0 );
-
-  m_areaName = new QLabel( page );
-  m_areaName->setText( areaname );
-  gridLayout->addWidget( m_areaName, 0, 1 );
-
-  Sheet* sheet = m_pView->doc()->namedAreaManager()->sheet(areaname);
-  const QString tmpName = m_pView->doc()->namedAreaManager()->namedArea(areaname).name(sheet);
-
-  int currentIndex = 0;
-  QList<Sheet*> sheetList = m_pView->doc()->map()->sheetList();
-  for (int c = 0; c < sheetList.count(); ++c)
-  {
-    Sheet * t = sheetList.at(c);
-    if (!t)
-      continue;
-    if (t == sheet)
-        currentIndex = c;
-    m_sheets->insertItem( c, t->sheetName() );
-  }
-
-  m_sheets->setCurrentIndex(currentIndex);
-  m_area->setText( tmpName );
-  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-}
-
-EditAreaName::~EditAreaName()
-{
-}
-
-void EditAreaName::slotOk()
-{
-    Sheet* sheet = m_pView->doc()->map()->sheet(m_sheets->currentIndex());
-    Region region(m_area->text(), m_pView->doc()->map(), sheet);
-    if (!region.isValid())
-        return;
-
-    m_pView->doc()->emitBeginOperation( false );
-
-    m_pView->doc()->namedAreaManager()->remove(m_areaName->text());
-    m_pView->doc()->namedAreaManager()->insert(sheet, region.firstRange(), m_areaName->text());
-
-    foreach (Sheet* sheet, m_pView->doc()->map()->sheetList())
-        sheet->refreshChangeAreaName(m_areaName->text());
 
     m_pView->slotUpdateView(m_pView->activeSheet());
     accept();
+}
+
+void NamedAreaDialog::slotClose()
+{
+    reject();
+}
+
+void NamedAreaDialog::slotNew()
+{
+    EditNamedAreaDialog dialog(m_pView);
+    dialog.setCaption(i18n("New Named Area"));
+    dialog.setRegion(*m_pView->selection());
+    dialog.exec();
+    if (dialog.result() == Rejected)
+        return;
+    if (dialog.areaName().isEmpty())
+        return;
+
+    m_list->addItem(dialog.areaName());
+    QList<QListWidgetItem*> items = m_list->findItems(dialog.areaName(),
+                                                      Qt::MatchExactly | Qt::MatchCaseSensitive);
+    m_list->setCurrentItem(items.first());
+    displayAreaValues(dialog.areaName());
+
+    enableButtonOk(true);
+    enableButton(KDialog::User1, true);
+    enableButton(KDialog::User2, true);
+}
+
+void NamedAreaDialog::slotEdit()
+{
+    QListWidgetItem* item = m_list->currentItem();
+    if (item->text().isEmpty())
+        return;
+
+    EditNamedAreaDialog dialog(m_pView);
+    dialog.setCaption(i18n("Edit Named Area"));
+    dialog.setAreaName(item->text());
+    dialog.exec();
+    if (dialog.result() == Rejected)
+        return;
+
+    item->setText(dialog.areaName());
+    displayAreaValues(dialog.areaName());
+}
+
+void NamedAreaDialog::slotRemove()
+{
+    const QString question = i18n("Do you really want to remove this named area?");
+    int result = KMessageBox::warningContinueCancel(this, question, i18n("Remove Named Area"),
+                                                    KStandardGuiItem::del());
+    if (result == KMessageBox::Cancel)
+        return;
+
+    m_pView->doc()->emitBeginOperation(false);
+
+    QListWidgetItem* item = m_list->currentItem();
+    m_pView->doc()->namedAreaManager()->remove(item->text());
+    m_pView->doc()->setModified(true);
+    m_list->takeItem(m_list->row(item));
+
+    m_pView->slotUpdateView(m_pView->activeSheet());
+
+    if (m_list->count() == 0)
+    {
+        enableButtonOk(false);
+        enableButton(KDialog::User1, false);
+        enableButton(KDialog::User2, false);
+        displayAreaValues(QString());
+    }
+    else
+        displayAreaValues(m_list->currentItem()->text());
+}
+
+
+
+EditNamedAreaDialog::EditNamedAreaDialog(View* parent)
+    : KDialog(parent)
+    , m_pView(parent)
+{
+    setButtons(Ok | Cancel);
+    setModal(true);
+    setObjectName("EditNamedAreaDialog");
+    enableButtonOk(false);
+
+    QWidget *page = new QWidget();
+    setMainWidget(page);
+
+    QGridLayout * gridLayout = new QGridLayout(page);
+    gridLayout->setMargin(KDialog::marginHint());
+    gridLayout->setSpacing(KDialog::spacingHint());
+
+    QLabel * textLabel4 = new QLabel(page);
+    textLabel4->setText(i18n("Cells:"));
+    gridLayout->addWidget(textLabel4, 2, 0);
+
+    m_cellRange = new QLineEdit(page);
+    gridLayout->addWidget(m_cellRange, 2, 1);
+
+    QLabel * textLabel1 = new QLabel(page);
+    textLabel1->setText(i18n("Sheet:"));
+    gridLayout->addWidget(textLabel1, 1, 0);
+
+    m_sheets = new QComboBox(page);
+    gridLayout->addWidget(m_sheets, 1, 1);
+
+    QLabel * textLabel2 = new QLabel(page);
+    textLabel2->setText(i18n("Area name:"));
+    gridLayout->addWidget(textLabel2, 0, 0);
+
+    m_areaNameEdit = new QLineEdit(page);
+    gridLayout->addWidget(m_areaNameEdit, 0, 1);
+
+    const QList<Sheet*> sheetList = m_pView->doc()->map()->sheetList();
+    for (int i = 0; i < sheetList.count(); ++i)
+    {
+        Sheet* sheet = sheetList.at(i);
+        if (!sheet)
+            continue;
+        m_sheets->insertItem(i, sheet->sheetName());
+    }
+
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(m_areaNameEdit, SIGNAL(textChanged(const QString&)),
+            this, SLOT(slotAreaNameModified(const QString&)));
+}
+
+EditNamedAreaDialog::~EditNamedAreaDialog()
+{
+}
+
+QString EditNamedAreaDialog::areaName() const
+{
+    return m_areaNameEdit->text();
+}
+
+void EditNamedAreaDialog::setAreaName(const QString& name)
+{
+    m_initialAreaName = name;
+    m_areaNameEdit->setText(name);
+    Sheet* sheet = m_pView->doc()->namedAreaManager()->sheet(name);
+    const QString tmpName = m_pView->doc()->namedAreaManager()->namedArea(name).name(sheet);
+    m_cellRange->setText(tmpName);
+}
+
+void EditNamedAreaDialog::setRegion(const Region& region)
+{
+    Sheet* sheet = region.firstSheet();
+    m_sheets->setCurrentIndex(m_sheets->findText(sheet->sheetName()));
+    m_cellRange->setText(region.name(sheet));
+}
+
+void EditNamedAreaDialog::slotOk()
+{
+    if (m_areaNameEdit->text().isEmpty())
+        return;
+    Sheet* sheet = m_pView->doc()->map()->sheet(m_sheets->currentIndex());
+    Region region(m_cellRange->text(), m_pView->doc()->map(), sheet);
+    if (!region.isValid())
+        return;
+
+    if (m_initialAreaName != m_areaNameEdit->text() &&
+        !m_pView->doc()->namedAreaManager()->namedArea(m_areaNameEdit->text()).isEmpty())
+    {
+        const QString question = i18n("Do you really want to replace this named area?");
+        int result = KMessageBox::warningContinueCancel(this, question, i18n("Replace Named Area"),
+                                                        KStandardGuiItem::overwrite());
+        if (result == KMessageBox::Cancel)
+            return;
+    }
+
+    m_pView->doc()->emitBeginOperation(false);
+
+    // remove the old named area
+    m_pView->doc()->namedAreaManager()->remove(m_initialAreaName);
+    // insert the new named area
+    m_pView->doc()->namedAreaManager()->insert(sheet, region.firstRange(), m_areaNameEdit->text());
+
+    // update formulas containing either the new or the old name
+    foreach (Sheet* sheet, m_pView->doc()->map()->sheetList())
+    {
+        if (m_initialAreaName != m_areaNameEdit->text())
+            sheet->refreshChangeAreaName(m_initialAreaName);
+        sheet->refreshChangeAreaName(m_areaNameEdit->text());
+    }
+
+    m_pView->slotUpdateView(m_pView->activeSheet());
+    accept();
+}
+
+void EditNamedAreaDialog::slotAreaNameModified(const QString& name)
+{
+    enableButtonOk(!name.isEmpty());
 }
 
 #include "ReferenceDialog.moc"
