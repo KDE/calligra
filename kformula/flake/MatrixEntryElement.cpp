@@ -21,128 +21,14 @@
 #include "MatrixEntryElement.h"
 #include <KoXmlWriter.h>
 
-#include "FormulaCursor.h"
-
-MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : BasicElement( parent )
-{
-}
+MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : RowElement( parent )
+{}
 
 void MatrixEntryElement::layout( AttributeManager* am )
 {}
 
-void MatrixEntryElement::registerTab( BasicElement* tab )
+ElementType MatrixEntryElement::elementType() const
 {
-    //tabs.append( tab );
+    return MatrixEntry;
 }
 
-/*
-KCommand* MatrixEntryElement::buildCommand( Container* container, Request* request )
-{
-    FormulaCursor* cursor = container->activeCursor();
-    if ( cursor->isReadOnly() )
-        return 0;
-
-    switch ( *request )
-    {
-        case req_remove: {
-        // Remove this line if its empty.
-        // Remove the formula if this line was the only one.
-        break;
-        }
-    case req_addNewline: {
-        FormulaCursor* cursor = container->activeCursor();
-        return new KFCNewLine( i18n( "Add Newline" ), container, this, cursor->getPos() );
-    }
-    case req_addTabMark: {
-        KFCReplace* command = new KFCReplace( i18n("Add Tabmark"), container );
-        SpaceElement* element = new SpaceElement( THIN, true );
-        command->addElement( element );
-        return command;
-    }
-    default:
-        break;
-    }
-    return SequenceElement::buildCommand( container, request );
-}
-
-
-
-
-KCommand* MatrixEntryElement::input( Container* container, QKeyEvent* event )
-{
-    int action = event->key();
-    //int state = event->state();
-    //MoveFlag flag = movementFlag(state);
-
-    switch ( action ) {
-    case Qt::Key_Enter:
-    case Qt::Key_Return: {
-        Request newline( req_addNewline );
-        return buildCommand( container, &newline );
-    }
-    case Qt::Key_Tab: {
-        Request r( req_addTabMark );
-        return buildCommand( container, &r );
-    }
-    }
-    return SequenceElement::input( container, event );
-}
-
-
-KCommand* MatrixEntryElement::input( Container* container, QChar ch )
-{
-    int latin1 = ch.toLatin1();
-    switch (latin1) {
-    case '&': {
-        Request r( req_addTabMark );
-        return buildCommand( container, &r );
-    }
-    }
-    return SequenceElement::input( container, ch );
-}
-*/
-
-void MatrixEntryElement::moveTabTo( int i, QPointF pos )
-{
-/*    BasicElement* marker = tab( i );
-    luPixel diff = pos - marker->getX();
-    marker->setWidth( marker->getWidth() + diff );
-
-    for ( int p = childPos( marker )+1; p < countChildren(); ++p ) {
-        BasicElement* child = childAt( p );
-        child->setX( child->getX() + diff );
-    }
-
-    setWidth( getWidth()+diff );*/
-}
-
-
-int MatrixEntryElement::tabBefore( int pos )
-{
-    /*
-    if ( tabs.isEmpty() ) {
-        return -1;
-    }
-    int tabNum = 0;
-    for ( int i=0; i<pos; ++i ) {
-        BasicElement* child = childAt( i );
-        if ( tabs.at( tabNum ) == child ) {
-            if ( tabNum+1 == tabs.count() ) {
-                return tabNum;
-            }
-            ++tabNum;
-        }
-    }
-    return static_cast<int>( tabNum )-1;
-    */
-    return -1;
-}
-
-int MatrixEntryElement::tabPos( int i )
-{
-/*    if ( i < tabs.count() ) {
-        return childPos( tabs.at( i ) );
-    }
-    */
-    return -1;
-}

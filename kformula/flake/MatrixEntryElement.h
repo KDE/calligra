@@ -22,46 +22,28 @@
 #ifndef MATRIXENTRYELEMENT_H
 #define MATRIXENTRYELEMENT_H
 
-#include "BasicElement.h"
+#include "RowElement.h"
 #include "kformula_export.h"
 
 /**
- * @short The class representing an entry in a matrix
+ * @short Implementation of the MathML mtd element
  * 
  * The lines behaviour is (a little) different from that
  * of ordinary sequences. Its MathML tag is \<mtd\>.
  */
-class KOFORMULA_EXPORT MatrixEntryElement : public BasicElement {
+class KOFORMULA_EXPORT MatrixEntryElement : public RowElement {
 public:
     /// The standard constructor
     MatrixEntryElement( BasicElement* parent = 0 );
-
-    virtual void registerTab( BasicElement* tab );
-
-    /*
-    int tabCount() const { return tabs.count(); }
-    BasicElement* tab( int i ) { return tabs.at( i ); }
-    */
-
-    /// Change the width of tab i and move all elements after it.
-    void moveTabTo( int i, QPointF pos );
-
-    /// Return the greatest tab number less than pos.
-    int tabBefore( int pos );
-	 
-    /// Return the position of tab i.
-    int tabPos( int i );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( AttributeManager* am );
+    void layout( AttributeManager* am );
 
-private:
-    /// The list of all child elements
-    QList<BasicElement*> m_childElements;
-
+    /// @return The element's ElementType
+    ElementType elementType() const;   
 };
 
-#endif
+#endif // MATRIXENTRYELEMENT_H
