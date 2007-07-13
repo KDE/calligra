@@ -22,7 +22,12 @@
 #include "KoFormulaShape.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
+
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOasisLoadingContext.h>
+#include <KoOasisStyles.h>
+
 #include <KFileDialog>
 #include <QFile>
 #include <QPushButton>
@@ -74,9 +79,13 @@ void FormulaToolOptions::slotLoadFormula()
     if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
         return;
 
+    KoOasisStyles styles;
+    KoOasisLoadingContext oasisContext( 0, styles, 0 );
+    KoShapeLoadingContext shapeContext( oasisContext );
+
     KoXmlDocument tmpDocument;
     tmpDocument.setContent( &file, false, 0, 0, 0 );
-//    m_tool->shape()->loadOdf( tmpDocument.documentElement() );
+    m_tool->shape()->loadOdf( tmpDocument.documentElement(), shapeContext );
 }
 
 void FormulaToolOptions::slotSaveFormula()
