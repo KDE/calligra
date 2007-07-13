@@ -65,11 +65,12 @@ BasicElement* KoFormulaShape::formulaElement() const
     return m_formulaElement;
 }
 
-void KoFormulaShape::loadMathML( const QDomDocument &doc, bool )
+bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
     delete m_formulaElement;                                // delete the old formula
     m_formulaElement = new FormulaElement();                // create a new root element
-    m_formulaElement->readMathML( doc.documentElement() );  // and load the new formula
+    m_formulaElement->readMathML( element );  // and load the new formula
+    return true;
 }
 
 void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
@@ -109,7 +110,4 @@ void KoFormulaShape::saveOdf( KoShapeSavingContext & context ) const {
     // TODO
 }
 
-bool KoFormulaShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
-}
 
