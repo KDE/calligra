@@ -49,8 +49,8 @@ void ChartView::setProject( Project *project )
     if ( project ) {
         connect( m_project, SIGNAL(currentViewScheduleIdChanged( long ) ), this, SLOT( slotCurrentViewScheduleIdChanged( long ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        m_panel->draw( *project );
     }
-    m_panel->draw( *project );
 }
 
 void ChartView::slotCurrentViewScheduleIdChanged( long id )
