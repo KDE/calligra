@@ -179,7 +179,11 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
         if (ss->top() > p.y()) break;
         system = ss;
     }
-    
+
+    Q_ASSERT(system);
+    if(system == 0)
+        return;
+
     // find closest staff
     Staff* closestStaff = 0;
     double dist = 1e99;
