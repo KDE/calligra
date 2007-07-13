@@ -445,7 +445,7 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
 
   if ( tmp.styleName )
   {
-    sb->setItemText( sb->currentIndex(), *tmp.styleName );
+    sb->setCurrentIndex(sb->findText(*tmp.styleName));
     sb->setEnabled( true );
   }
 

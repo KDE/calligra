@@ -77,17 +77,19 @@ Qt::LayoutDirection SheetPropertiesDialog::layoutDirection() const
   return Qt::LeftToRight;
 }
 
-void SheetPropertiesDialog::setLayoutDirection( Qt::LayoutDirection dir )
+void SheetPropertiesDialog::setLayoutDirection(Qt::LayoutDirection direction)
 {
-  switch( dir )
-  {
+    QComboBox* comboBox = m_widget->directionComboBox;
+    switch(direction)
+    {
     case Qt::LeftToRight:
-      m_widget->directionComboBox->setItemText( m_widget->directionComboBox->currentIndex(), i18n( "Left to Right" ) );
-      break;
+        comboBox->setCurrentIndex(comboBox->findText(i18n("Left to Right")));
+        break;
     case Qt::RightToLeft:
-      m_widget->directionComboBox->setItemText( m_widget->directionComboBox->currentIndex(), i18n( "Right to Left" ) );
-      break;
-    default: break;
+        comboBox->setCurrentIndex(comboBox->findText(i18n("Right to Left")));
+        break;
+    default:
+        break;
   };
 }
 

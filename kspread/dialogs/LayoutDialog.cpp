@@ -197,10 +197,10 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   m_parentBox->insertItems( 1, tmp );
 
   if ( !m_dlg->getStyle()->parentName().isNull() )
-    m_parentBox->setItemText( m_parentBox->currentIndex(), m_dlg->getStyle()->parentName() );
+    m_parentBox->setCurrentIndex(m_parentBox->findText(m_dlg->getStyle()->parentName()));
   else
   {
-    m_parentBox->setItemText( m_parentBox->currentIndex(), i18n( "<None>" ) );
+    m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("<None>")));
 
     if ( m_dlg->getStyle()->definesAll() )
       m_parentBox->setEnabled( false );
@@ -1160,7 +1160,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
                     if ( !ok )
                       tmp = dlg->m_currency.symbol();
                   }
-                  currency->setItemText( 0, tmp );
+                  currency->setCurrentIndex(currency->findText(tmp));
                 }
         }
         else if ( cellFormatType == Format::Scientific )

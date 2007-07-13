@@ -720,7 +720,7 @@ void FormulaDialog::slotShowFunction( const QString& function )
 
     // select the category
     QString category = desc->group();
-    typeFunction->setItemText( typeFunction->currentIndex(), category );
+    typeFunction->setCurrentIndex(typeFunction->findText(category));
     slotActivated( category );
 
     // select the function
