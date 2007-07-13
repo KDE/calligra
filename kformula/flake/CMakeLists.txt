@@ -8,7 +8,6 @@ set( kformulalib_PART_SRCS
    FormulaCursor.cpp 
    BasicElement.cpp 
    RowElement.cpp
-   InferredRowElement.cpp
    FormulaElement.cpp 
    TextElement.cpp
    FractionElement.cpp
@@ -21,7 +20,7 @@ set( kformulalib_PART_SRCS
    ElementFactory.cpp 
    MultiscriptElement.cpp
    UnderOverElement.cpp
-   BracketElement.cpp 
+   FencedElement.cpp 
    MatrixElement.cpp
    MatrixRowElement.cpp
    MatrixEntryElement.cpp
