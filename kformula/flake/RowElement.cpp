@@ -32,25 +32,23 @@ RowElement::RowElement( BasicElement* parent ) : BasicElement( parent )
 
 RowElement::~RowElement()
 {
-    qDeleteAll( m_rowElements );     // Delete all children
+    qDeleteAll( m_childElements );
 }
-
-void RowElement::paint( QPainter& p, const AttributeManager* am)
-{ /* There is nothing to paint but BasicElement::paint should not be called */ }
 
 void RowElement::layout( AttributeManager* am )
 {
- kDebug(39001) << "layout Row" << endl;
+    kDebug(39001) << "layout Row" << endl;
+
     Q_UNUSED( am )          // there are no attributes that can be processed here
 
-    if( m_rowElements.isEmpty() )  // do not do anything if there are no children
+    if( m_childElements.isEmpty() )  // do not do anything if there are no children
         return;
 
     QPointF origin;
     double width = 0.0;
     double topToBaseline = 0.0;
     double baselineToBottom = 0.0;
-    foreach( BasicElement* child, m_rowElements  )  // iterate through the children
+    foreach( BasicElement* child, m_childElements  )  // iterate through the children
     {
         kDebug(39001) << "new origin:" << QPointF( width, 0.0 ) << endl;
         child->setOrigin( QPointF( width, 0.0 ) );    // set their origin
@@ -66,25 +64,20 @@ void RowElement::layout( AttributeManager* am )
 
 void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
-    Q_ASSERT( cursor->position() > m_rowElements.count() );
-    m_rowElements.insert( cursor->position(), child );
 }
 
 void RowElement::removeChild( BasicElement* element )
 {
-    int i = m_rowElements.indexOf( element );
-    Q_ASSERT( i == -1 );
-    delete m_rowElements.takeAt( i );
 }
 
 void RowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
 {
     if( from == parentElement() )  // parent element enters the seqeunce from the left
-        cursor->moveCursorTo( this, m_rowElements.count() );
+        cursor->moveCursorTo( this, m_childElements.count() );
     else if( from == this )        // moveLeft was invoked in this element
-        m_rowElements[ cursor->position()-1 ]->moveLeft( cursor, this );
+        m_childElements[ cursor->position()-1 ]->moveLeft( cursor, this );
     else                           // the cursor comes from a child element
-        cursor->moveCursorTo( this, m_rowElements.indexOf( from ) );
+        cursor->moveCursorTo( this, m_childElements.indexOf( from ) );
 }
 
 void RowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
@@ -92,20 +85,9 @@ void RowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
     if( from == parentElement() )  // parent element enters the seqeunce from the right
         cursor->moveCursorTo( this, 0 );
     else if( from == this )        // moveRight was invoked in this element
-        m_rowElements[ cursor->position() ]->moveRight( cursor, this );
+        m_childElements[ cursor->position() ]->moveRight( cursor, this );
     else                           // the cursor comes from a child element
-        cursor->moveCursorTo( this, m_rowElements.indexOf( from )+1 );
-}
-
-const QList<BasicElement*> RowElement::childElements()
-{
-    kWarning( DEBUGID) << "Returning " << m_rowElements.count() << " elements from RowElement" << endl;
-    return m_rowElements;
-}
-
-BasicElement* RowElement::childAt( int i )
-{
-    return m_rowElements[ i ];
+        cursor->moveCursorTo( this, m_childElements.indexOf( from )+1 );
 }
 
 ElementType RowElement::elementType() const
@@ -121,26 +103,22 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
     forEachElement( tmp, parent )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-        m_rowElements << tmpElement;
+        m_childElements << tmpElement;
         tmpElement->readMathML( tmp );
     }
 
-	kWarning( DEBUGID ) << "Loaded " << m_rowElements.count() << " inside Row element" << endl;
-    return true;
-}
-
-bool RowElement::readMathMLChild( const KoXmlElement& element )
-{
-    BasicElement* tmpElement = ElementFactory::createElement( element.tagName(), this );
-    if ( ! tmpElement ) return false;
-    m_rowElements << tmpElement;
-    tmpElement->readMathML( element );
+    kWarning( DEBUGID ) << "Loaded " << m_childElements.count() << " inside Row element" << endl;
     return true;
 }
 
 void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    foreach( BasicElement* tmpChild, m_rowElements )       // just write all
-        tmpChild->writeMathML( writer );                   // children elements
+    foreach( BasicElement* tmp, m_childElements )
+        tmp->writeMathML( writer );
+}
+
+const QList<BasicElement*> RowElement::childElements()
+{
+    return m_childElements;
 }
 

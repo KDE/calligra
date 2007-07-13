@@ -48,81 +48,58 @@ public:
     ~RowElement();
 
     /**
-     * Render the element to the given QPainter
-     * @param painter The QPainter to paint the element to
-     */
-    virtual void paint( QPainter& painter, const AttributeManager* am );
-
-    /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
     virtual void layout( AttributeManager* am );
 
     /**
-     * Insert a new child at the cursor position - reimplemented from BasicElement
-     * @param cursor The cursor holding the position where to inser
-     * @param child A BasicElement to insert
-     */
-    virtual void insertChild( FormulaCursor* cursor, BasicElement* child );
-
-    /**
-     * Remove a child element
-     * @param element The BasicElement to remove
-     */
-    virtual void removeChild( BasicElement* element );
-
-    /**
-     * Obtain a list of all child elements of this element
-     * reimplementated from @see BasicElement
-     * @return a QList with pointers to all child elements
-     */
-    virtual const QList<BasicElement*> childElements();
-
-    /// @return The child element at the position @p index - 0 if the row is empty
-    BasicElement* childAt( int index );
-
-    /// @return The index of the @p element in the row - -1 if not in row
-    int indexOfElement( const BasicElement* element ) const;
-
-    /**
      * Move the FormulaCursor left - reimplemented from BasicElement
      * @param cursor The FormulaCursor to be moved
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
-    virtual void moveLeft( FormulaCursor* cursor, BasicElement* from );
+    void moveLeft( FormulaCursor* cursor, BasicElement* from );
 
     /**
      * Move the FormulaCursor right - reimplemented from BasicElement
      * @param cursor The FormulaCursor to be moved
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
-    virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /// @return The element's ElementType
-    virtual ElementType elementType() const;
+    void moveRight( FormulaCursor* cursor, BasicElement* from );
 
     /**
-     * Read the content of a MathML child. This is used for inferred mrows.
-     * In such cases, the first element to read is not the parent, but a
-     * valid child.
+     * Obtain a list of all child elements of this element
+     * @return a QList with pointers to all child elements
      */
-    bool readMathMLChild( const KoXmlElement& element );
+    const QList<BasicElement*> childElements();
 
-    /// Read the element contents from MathML
-    virtual bool readMathMLContent( const KoXmlElement& parent );
+    /**
+     * Insert a new child at the cursor position - reimplemented from BasicElement
+     * @param cursor The cursor holding the position where to inser
+     * @param child A BasicElement to insert
+     */
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
+
+    /**
+     * Remove a child element
+     * @param element The BasicElement to remove
+     */
+    void removeChild( BasicElement* element );
+
+    /// @return The element's ElementType
+    ElementType elementType() const;
+
 protected:
+    QRectF childBoundingRect();
 
-    /// Save the element contents to MathML
-    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
+    /// Read contents of the token element. Content should be unicode text strings or mglyphs
+    bool readMathMLContent( const KoXmlElement& parent );
 
-    void appendChild( BasicElement* child ) { m_rowElements << child; }
+    /// Write all content to the KoXmlWriter - reimplemented by the child elements
+    void writeMathMLContent( KoXmlWriter* writer ) const;
 
-    QList<BasicElement*> children() { return m_rowElements; }
-
-private:
-    /// The sorted list of all elements in this row
-    QList<BasicElement*> m_rowElements;
+    /// A list of the child elements
+    QList<BasicElement*> m_childElements;
 };
 
 #endif // ROWELEMENT_H
