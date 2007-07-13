@@ -20,14 +20,14 @@
 #ifndef ENCLOSEELEMENT_H
 #define ENCLOSEELEMENT_H
 
-#include "InferredRowElement.h"
+#include "RowElement.h"
 #include "kformula_export.h"
 #include <QPainterPath>
 
 /**
  * @short Implementation of the MathML menclose element
  */
-class KOFORMULA_EXPORT EncloseElement : public InferredRowElement {
+class KOFORMULA_EXPORT EncloseElement : public RowElement {
 public:
     /// The standart constructor
     EncloseElement( BasicElement* parent = 0 );
@@ -37,19 +37,20 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, const AttributeManager* am );
+    void paint( QPainter& painter, const AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
-    
+    void layout( const AttributeManager* am );
+
+    /// @return The element's ElementType
+    ElementType elementType() const;   
 
 private:
     /// The QPainterPath holding what the enclose element has to paint
     QPainterPath m_enclosePath;
-
 };
 
 #endif // ENCLOSEELEMENT_H

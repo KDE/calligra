@@ -20,7 +20,7 @@
 #include "EncloseElement.h"
 #include <QPainter>
 
-EncloseElement::EncloseElement( BasicElement* parent ) : InferredRowElement( parent )
+EncloseElement::EncloseElement( BasicElement* parent ) : RowElement( parent )
 {
 }
 
@@ -89,3 +89,9 @@ void EncloseElement::layout( const AttributeManager* am )
     m_enclosePath.
     */
 }
+
+ElementType EncloseElement::elementType() const
+{
+    return Enclose;
+}
+
