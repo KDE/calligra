@@ -24,7 +24,7 @@
 #include <kdebug.h>
 
 #include "ActionElement.h"
-#include "BracketElement.h"
+#include "FencedElement.h"
 #include "EncloseElement.h"
 #include "ErrorElement.h"
 #include "FractionElement.h"
@@ -79,7 +79,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if ( tagName == "mphantom" )
           return new PhantomElement( parent );
     else if ( tagName == "mfenced" )
-          return new BracketElement( parent );
+          return new FencedElement( parent );
     else if ( tagName == "menclose" )
           return new EncloseElement( parent );
     else if ( tagName == "msub" || tagName == "msup" || tagName == "msubsup" )
@@ -96,64 +96,66 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
 QString ElementFactory::elementName( ElementType type )
 {
     switch ( type ) {
-    case Identifier:
-        return "mi";
-    case Operator:
-        return "mo";
-    case Number:
-        return "mn";
-    case Text:
-        return "mtext";
-    case Glyph:
-        return "mglyph";
-    case String:
-        return "ms";
-    case Space:
-        return "mspace";
-    case Row:
-        return "mrow";
-    case Fraction:
-        return "mfrac";
-    case Phantom:
-        return "mphantom";
-    case Style:
-        return "mstyle";
-    case Padded:
-        return "mpadded";
-    case Error:
-        return "merror";
-    case Fenced:
-        return "mfenced";
-    case Enclose:
-        return "menclose";
-    case UnderOver:
-        return "munderover";
-    case Under:
-        return "munder";
-    case Over:
-        return "mover";
-    case SubScript:
-        return "msub";
-    case SupScript:
-        return "msup";
-    case SubSupScript:
-        return "msubsup";
-    case MultiScript:
-        return "mmultiscripts";
-    case Root:
-        return "mroot";
-    case SquareRoot:
-        return "msqrt";
-    case Matrix:
-        return "mtable";
-    case MatrixRow:
-        return "mtr"; // TODO: Check for mlabeledtr
-    case MatrixEntry:
-        return "mtd";
-    case Action:
-        return "maction";
-    default:
-        kWarning( DEBUGID ) << "Invalid elemnet type\n";
+        case Identifier:
+            return "mi";
+        case Operator:
+            return "mo";
+        case Number:
+            return "mn";
+        case Text:
+            return "mtext";
+        case Glyph:
+            return "mglyph";
+        case String:
+            return "ms";
+        case Space:
+            return "mspace";
+        case Row:
+            return "mrow";
+        case Fraction:
+            return "mfrac";
+        case Phantom:
+            return "mphantom";
+        case Style:
+            return "mstyle";
+        case Padded:
+            return "mpadded";
+        case Error:
+            return "merror";
+        case Fenced:
+            return "mfenced";
+        case Enclose:
+            return "menclose";
+        case UnderOver:
+            return "munderover";
+        case Under:
+            return "munder";
+        case Over:
+            return "mover";
+        case SubScript:
+            return "msub";
+        case SupScript:
+            return "msup";
+        case SubSupScript:
+            return "msubsup";
+        case MultiScript:
+            return "mmultiscripts";
+        case Root:
+            return "mroot";
+        case SquareRoot:
+            return "msqrt";
+        case Matrix:
+            return "mtable";
+        case MatrixRow:
+            return "mtr"; // TODO: Check for mlabeledtr
+        case MatrixEntry:
+            return "mtd";
+        case Action:
+            return "maction";
+        case Basic:
+            return "mrow";
+        default:
+            kWarning( DEBUGID ) << "Invalid elemnet type\n";
     }
 
     return QString();
