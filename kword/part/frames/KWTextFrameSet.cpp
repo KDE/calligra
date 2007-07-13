@@ -233,7 +233,8 @@ bool KWTextFrameSet::sortTextFrames(const KWFrame *frame1, const KWFrame *frame2
             return page1->pageNumber() < page2->pageNumber();
 
         // both on same page
-        rtl = page1->directionHint() == KoText::RightLeftTopBottom;
+        if(page1)
+            rtl = page1->directionHint() == KoText::RightLeftTopBottom;
     }
 
     if(pos.x() > bounds.right()) return rtl;
