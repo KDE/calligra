@@ -40,7 +40,7 @@ void MatrixElement::paint( QPainter& painter ) const
     // eventually paint the frame
 }
 
-void MatrixElement::layout( AttributeManager* am )
+void MatrixElement::layout( const AttributeManager* am )
 {
     // TODO implement rowspacing
     double tmpHeight = 0.0;

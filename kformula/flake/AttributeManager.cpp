@@ -34,7 +34,7 @@ AttributeManager::AttributeManager()
 AttributeManager::~AttributeManager()
 {}
 
-QString AttributeManager::findValue( const QString& attribute, BasicElement* element )
+QString AttributeManager::findValue( const QString& attribute, const BasicElement* element ) const
 {
     m_currentElement = element;
 
@@ -113,12 +113,12 @@ MathVariant AttributeManager::mathVariant( BasicElement* element )
         return InvalidMathVariant;   // Invalid
 }
 
-QFont AttributeManager::font( BasicElement* element )
+QFont AttributeManager::font( const BasicElement* element ) const
 {
     return QFont();
 }
 
-bool AttributeManager::displayStyle( BasicElement* element )
+bool AttributeManager::displayStyle( BasicElement* element ) const
 {
     return true;   // TODO replace this dummy
 }
@@ -147,18 +147,18 @@ int AttributeManager::scriptLevel( BasicElement* element )
     return m_cachedScriptLevel;
 }
 
-QString AttributeManager::stringOf( const QString& attribute, BasicElement* element )
+QString AttributeManager::stringOf( const QString& attribute, BasicElement* element ) const
 {
     return findValue( attribute, element );
 }
 
-Align AttributeManager::alignOf( const QString& attribute, BasicElement* element )
+Align AttributeManager::alignOf( const QString& attribute, BasicElement* element ) const
 {
     return parseAlign( findValue( attribute, element ) );
 }
 
 QList<Align> AttributeManager::alignListOf( const QString& attribute,
-                                            BasicElement* element )
+                                            BasicElement* element ) const
 {
     QList<Align> alignList;
     QStringList tmpList = findValue( attribute, element ).split( " " );
@@ -169,12 +169,12 @@ QList<Align> AttributeManager::alignListOf( const QString& attribute,
     return alignList;
 }
 
-bool AttributeManager::boolOf( const QString& attribute, BasicElement* element )
+bool AttributeManager::boolOf( const QString& attribute, const BasicElement* element ) const
 {
     return findValue( attribute, element ) == "true";
 }
 
-double AttributeManager::doubleOf( const QString& attribute, BasicElement* element )
+double AttributeManager::doubleOf( const QString& attribute, BasicElement* element ) const
 {
     QString tmpValue = findValue( attribute, element );
     QString unit = tmpValue.right( 2 );
@@ -198,7 +198,7 @@ double AttributeManager::doubleOf( const QString& attribute, BasicElement* eleme
         return 0.0;   // actually a value should never be 0.0
 }
 
-int AttributeManager::intOf( const QString& attribute, BasicElement* element )
+int AttributeManager::intOf( const QString& attribute, BasicElement* element ) const
 {
     return findValue( attribute, element ).toInt();
 }
@@ -264,7 +264,7 @@ void AttributeManager::parseScriptLevel( BasicElement* element )
         m_cachedScriptLevel += 2;     // only for roots index
 }
 
-double AttributeManager::mathSpaceValue( const QString& value ) 
+double AttributeManager::mathSpaceValue( const QString& value )  const
 {
     if( value == "negativeveryverythinmathspace" )
         return -1*calculateEmExUnits( 0.055556, true );
@@ -298,7 +298,7 @@ double AttributeManager::mathSpaceValue( const QString& value )
         return -1.0;
 }
 
-double AttributeManager::calculateEmExUnits( double value, bool isEm )
+double AttributeManager::calculateEmExUnits( double value, bool isEm ) const
 {
     // use a postscript paint device so that font metrics returns postscript points
     KoPostscriptPaintDevice paintDevice;

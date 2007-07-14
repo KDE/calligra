@@ -49,7 +49,7 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
     painter.restore();
 }
 
-void FractionElement::layout( AttributeManager* am )
+void FractionElement::layout( const AttributeManager* am )
 {
     if( am->boolOf( "bevelled", this ) )
     {
@@ -86,7 +86,7 @@ void FractionElement::layout( AttributeManager* am )
                              QPointF( width(), baseLine() ) );
 }
 
-void FractionElement::layoutBevelledFraction( AttributeManager* am )
+void FractionElement::layoutBevelledFraction( const AttributeManager* am )
 {
     // the shown line should have a width that has 1/3 of the height
     // the line is heigher as the content by 2*thinmathspace = 2*borderY

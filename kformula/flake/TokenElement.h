@@ -59,7 +59,7 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( AttributeManager* am );
+    virtual void layout( const AttributeManager* am );
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs

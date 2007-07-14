@@ -39,7 +39,7 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( AttributeManager* am );
+    void layout( const AttributeManager* am );
 
     /// @return The element's ElementType
     ElementType elementType() const;

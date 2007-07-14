@@ -24,7 +24,7 @@
 MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : RowElement( parent )
 {}
 
-void MatrixEntryElement::layout( AttributeManager* am )
+void MatrixEntryElement::layout( const AttributeManager* am )
 {}
 
 ElementType MatrixEntryElement::elementType() const

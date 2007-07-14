@@ -48,7 +48,7 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
     painter.drawPath( m_rootSymbol );
 }
 
-void RootElement::layout( AttributeManager* am )
+void RootElement::layout( const AttributeManager* am )
 {
     QPointF tmp;
     double distY = am->mathSpaceValue( "thinmathspace" );

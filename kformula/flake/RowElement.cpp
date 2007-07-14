@@ -35,7 +35,7 @@ RowElement::~RowElement()
     qDeleteAll( m_childElements );
 }
 
-void RowElement::layout( AttributeManager* am )
+void RowElement::layout( const AttributeManager* am )
 {
     kDebug(39001) << "layout Row" << endl;
 

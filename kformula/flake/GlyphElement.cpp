@@ -31,7 +31,7 @@ void GlyphElement::paint( QPainter& painter, AttributeManager* )
     painter.drawPath( m_glyphPath );
 }
 
-void GlyphElement::layout( AttributeManager* am )
+void GlyphElement::layout( const AttributeManager* am )
 {
     QString fontFamily = am->stringOf( "fontfamily", this );
     QFontDatabase db;

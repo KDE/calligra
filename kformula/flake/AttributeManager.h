@@ -131,30 +131,30 @@ public:
     double mathSize( BasicElement* element );
 
     /// @return The current font style - just a dummy atm
-    QFont font( BasicElement* element );
+    QFont font( const BasicElement* element ) const;
 
     /// @return Obtain the current scriptlevel
     int scriptLevel( BasicElement* element );
  
     /// @return Obtain the current displaystyle
-    bool displayStyle( BasicElement* element );
+    bool displayStyle( BasicElement* element ) const;
 
     /**
      * Obtain a value for attribute
      * @param attribute A string with the attribute to look up
      * @return QVariant with the value
      */
-    QString stringOf( const QString& attribute, BasicElement* element );
+    QString stringOf( const QString& attribute, BasicElement* element ) const;
 
-    Align alignOf( const QString& attribute, BasicElement* element );
+    Align alignOf( const QString& attribute, BasicElement* element ) const;
 
-    QList<Align> alignListOf( const QString& attribute, BasicElement* element );
+    QList<Align> alignListOf( const QString& attribute, BasicElement* element ) const;
 
-    bool boolOf( const QString& attribute, BasicElement* element );
+    bool boolOf( const QString& attribute, const BasicElement* element ) const;
 
-    double doubleOf( const QString& attribute, BasicElement* element );
+    double doubleOf( const QString& attribute, BasicElement* element ) const;
 
-    int intOf( const QString& attribute, BasicElement* element );
+    int intOf( const QString& attribute, BasicElement* element ) const;
 /*
     Qt::PenStyle lineOf( const QString& attribute, const BasicElement* element );
 
@@ -162,14 +162,14 @@ public:
                                       const BasicElement* element );
 */
     /// @return Obtain the value 
-    double mathSpaceValue( const QString& value );
+    double mathSpaceValue( const QString& value ) const;
 
     /// Set the KoViewConverter to use
     void setViewConverter( KoViewConverter* converter );
 
 protected:
     /// Find a value for @p attribute that applies to @p element
-    QString findValue( const QString& attribute, BasicElement* element );
+    QString findValue( const QString& attribute, const BasicElement* element ) const;
 
     /// @return The Form value that was passed as QString @p value
     Form parseForm( const QString& value ) const;
@@ -186,11 +186,11 @@ protected:
      * @param isEm Indicates whether to calculate an ex or em value
      * @return The calculated pt value
      */
-    double calculateEmExUnits( double value, bool isEm );
+    double calculateEmExUnits( double value, bool isEm ) const;
 
 private:
     /// The current BasicElement that asks for a value
-    BasicElement* m_currentElement;
+    mutable BasicElement const* m_currentElement;
 
     /// The last calculated scriptLevel
     int m_cachedScriptLevel;

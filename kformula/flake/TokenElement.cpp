@@ -47,7 +47,7 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
              tmp->paint( painter, am );
 }
 
-void TokenElement::layout( AttributeManager* am )
+void TokenElement::layout( const AttributeManager* am )
 {
     m_contentPath = QPainterPath();
     int rawCounter = 0;

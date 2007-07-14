@@ -22,7 +22,7 @@
 PaddedElement::PaddedElement( BasicElement* parent ) : RowElement( parent )
 {}
 
-void PaddedElement::layout( AttributeManager* am )
+void PaddedElement::layout( const AttributeManager* am )
 {
 }
 

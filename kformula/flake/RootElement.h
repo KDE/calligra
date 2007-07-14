@@ -69,8 +69,8 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( AttributeManager* am );
-    
+    void layout( const AttributeManager* am );
+
     /**
      * Move the FormulaCursor left
      * @param cursor The FormulaCursor to be moved

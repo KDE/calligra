@@ -54,8 +54,8 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( AttributeManager* am );
-    
+    virtual void layout( const AttributeManager* am );
+
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements

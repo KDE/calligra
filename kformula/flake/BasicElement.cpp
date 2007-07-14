@@ -49,7 +49,7 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
     painter.drawRect( m_boundingRect );
 }
 
-void BasicElement::layout( AttributeManager* )
+void BasicElement::layout( const AttributeManager* )
 { /* do nothing */ }
 
 void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
