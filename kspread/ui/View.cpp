@@ -6168,7 +6168,7 @@ void View::propertiesOk()
 
 void View::styleDialog()
 {
-    StyleDialog dialog( this, doc()->styleManager() );
+    StyleManagerDialog dialog( this, doc()->styleManager() );
     dialog.exec();
 
     d->actions->selectStyle->setItems( doc()->styleManager()->styleNames() );

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Laurent Montel <montel@kde.org>
-             (C) 2003 Norbert Andres <nandres@web.de>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2003 Laurent Montel <montel@kde.org>
+   Copyright 2003 Norbert Andres <nandres@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,53 +23,41 @@
 #define KSPREAD_STYLE_MANAGER_DIALOG
 
 #include <kdialog.h>
-#include <QWidget>
+
+class QTreeWidget;
+class QTreeWidgetItem;
 
 class KComboBox;
-class K3ListView;
-
-class Q3ListViewItem;
 
 namespace KSpread
 {
 class StyleManager;
 class View;
 
-class StyleWidget : public QWidget
+class StyleManagerDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  explicit StyleWidget( QWidget* parent = 0, Qt::WFlags fl = 0 );
-  ~StyleWidget();
+public:
+    StyleManagerDialog(View* parent, StyleManager* manager);
+    ~StyleManagerDialog();
 
-  K3ListView * m_styleList;
-  KComboBox * m_displayBox;
-signals:
-    void modifyStyle();
-};
+protected Q_SLOTS:
+    void slotOk();
+    void slotNew();
+    void slotEdit();
+    void slotRemove();
+    void slotDisplayMode(int mode);
+    void selectionChanged(QTreeWidgetItem*);
 
-class StyleDialog : public KDialog
-{
-  Q_OBJECT
- public:
-  StyleDialog( View * parent, StyleManager * manager );
-  ~StyleDialog();
+private:
+    void fillComboBox();
 
- protected slots:
-  void slotOk();
-  void slotNew();
-  void slotEdit();
-  void slotRemove();
-  void slotDisplayMode( int mode );
-  void slotSelectionChanged( Q3ListViewItem * );
-
- private:
-  View         * m_view;
-  StyleManager * m_styleManager;
-  StyleWidget         * m_dlg;
-
-  void fillComboBox();
+private:
+    View*           m_view;
+    StyleManager*   m_styleManager;
+    QTreeWidget*    m_styleList;
+    KComboBox*      m_displayBox;
 };
 
 } // namespace KSpread

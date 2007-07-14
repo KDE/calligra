@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Laurent Montel <montel@kde.org>
-             (C) 2003 Norbert Andres <nandres@web.de>
+   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2003 Laurent Montel <montel@kde.org>
+   Copyright 2003 Norbert Andres <nandres@web.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,14 +21,12 @@
 
 #include "StylesDialog.h"
 
-#include <q3header.h>
-
 #include <QMap>
+#include <QTreeWidget>
 #include <QVBoxLayout>
 
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <k3listview.h>
 #include <klocale.h>
 
 #include "Canvas.h"
@@ -40,287 +39,258 @@
 
 using namespace KSpread;
 
-StyleWidget::StyleWidget( QWidget * parent, Qt::WFlags fl )
-  : QWidget( parent, fl )
+StyleManagerDialog::StyleManagerDialog(View* parent, StyleManager* manager)
+    : KDialog(parent)
+    , m_view(parent)
+    , m_styleManager(manager)
 {
-  QVBoxLayout * layout = new QVBoxLayout( this );
+    setButtons(Ok | User1 | User2 | User3 | Close);
+    setButtonText(User1, i18n("&New..."));
+    setButtonText(User2, i18n("&Modify..."));
+    setButtonText(User3, i18n("&Delete..."));
+    setButtonsOrientation(Qt::Vertical);
+    setCaption(i18n("Style Manager"));
 
-  m_styleList = new K3ListView( this);
-  m_styleList->addColumn( i18n( "Styles" ) );
-  m_styleList->setResizeMode( K3ListView::AllColumns );
-  layout->addWidget( m_styleList );
+    QWidget* widget = new QWidget(this);
+    setMainWidget(widget);
 
-  m_displayBox = new KComboBox( false, this );
-  layout->addWidget( m_displayBox );
+    QVBoxLayout* layout = new QVBoxLayout(widget);
 
-  m_styleList->header()->setLabel( 0, i18n( "Styles" ) );
-  m_displayBox->clear();
-  m_displayBox->insertItem(0, i18n( "All Styles" ) );
-  m_displayBox->insertItem(1, i18n( "Applied Styles" ) );
-  m_displayBox->insertItem(2, i18n( "Custom Styles" ) );
-  m_displayBox->insertItem(3, i18n( "Hierarchical" ) );
-  connect( m_styleList, SIGNAL(doubleClicked ( Q3ListViewItem *)),this, SIGNAL( modifyStyle()));
-  resize( QSize(446, 384).expandedTo(minimumSizeHint()) );
+    m_styleList = new QTreeWidget(this);
+    m_styleList->setHeaderLabel(i18n("Style"));
+    layout->addWidget(m_styleList);
+
+    m_displayBox = new KComboBox(false, this);
+    m_displayBox->insertItem(0, i18n("All Styles"));
+    m_displayBox->insertItem(1, i18n("Custom Styles"));
+    m_displayBox->insertItem(2, i18n("Hierarchical"));
+    layout->addWidget(m_displayBox);
+
+    slotDisplayMode(0);
+    enableButton(KDialog::User1, true);
+    enableButton(KDialog::User2, true);
+    enableButton(KDialog::User3, false);
+
+    connect(m_displayBox, SIGNAL(activated(int)),
+            this, SLOT(slotDisplayMode(int)));
+    connect(this, SIGNAL(okClicked()),
+            this, SLOT(slotOk()));
+    connect(this, SIGNAL(user1Clicked()),
+            this, SLOT(slotNew()));
+    connect(this, SIGNAL(user2Clicked()),
+            this, SLOT(slotEdit()));
+    connect(this, SIGNAL(user3Clicked()),
+            this, SLOT(slotRemove()));
+    connect(m_styleList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+            this, SLOT(slotEdit()));
+    connect(m_styleList, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+            this, SLOT(selectionChanged(QTreeWidgetItem*)));
 }
 
-StyleWidget::~StyleWidget()
-{
-}
-
-
-
-StyleDialog::StyleDialog( View * parent, StyleManager * manager )
-  : KDialog( parent ),
-    m_view( parent ),
-    m_styleManager( manager ),
-    m_dlg( new StyleWidget( this ) )
-{
-  setCaption( i18n( "Style Manager" ) );
-  setButtons( Ok|User1|User2|User3|Close );
-  setButtonGuiItem( User1, KGuiItem( i18n( "&New..." ) ) );
-  setButtonGuiItem( User2, KGuiItem( i18n( "&Modify..." ) ) );
-  setButtonGuiItem( User3, KGuiItem( i18n( "&Delete..." ) ) );
-  setButtonsOrientation( Qt::Vertical );
-  setMainWidget( m_dlg );
-
-  slotDisplayMode( 0 );
-  enableButton( KDialog::User1, true );
-  enableButton( KDialog::User2, true );
-  enableButton( KDialog::User3, false );
-
-  connect( m_dlg->m_styleList, SIGNAL( selectionChanged( Q3ListViewItem * ) ),
-           this, SLOT( slotSelectionChanged( Q3ListViewItem * ) ) );
-  connect( m_dlg->m_displayBox, SIGNAL( activated( int ) ),
-           this, SLOT( slotDisplayMode( int ) ) );
-  connect( this, SIGNAL( okClicked() ),
-           this, SLOT( slotOk() ) );
-  connect( this, SIGNAL( user1Clicked() ),
-           this, SLOT( slotNew() ) );
-  connect( this, SIGNAL( user2Clicked() ),
-           this, SLOT( slotEdit() ) );
-  connect( this, SIGNAL( user3Clicked() ),
-           this, SLOT( slotRemove() ) );
-  connect( m_dlg, SIGNAL( modifyStyle() ),
-           this, SLOT( slotEdit()));
-}
-
-StyleDialog::~StyleDialog()
+StyleManagerDialog::~StyleManagerDialog()
 {
 }
 
-void StyleDialog::fillComboBox()
+void StyleManagerDialog::fillComboBox()
 {
-    typedef QMap<CustomStyle*, K3ListViewItem*> Map;
+    typedef QMap<CustomStyle*, QTreeWidgetItem*> Map;
     Map entries;
 
     entries.clear();
-    entries[m_styleManager->defaultStyle()] = new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
+    entries[m_styleManager->defaultStyle()] = new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
 
     CustomStyles::const_iterator iter = m_styleManager->m_styles.begin();
     CustomStyles::const_iterator end  = m_styleManager->m_styles.end();
 
-    while ( entries.count() != m_styleManager->m_styles.count() + 1 )
+    while (entries.count() != m_styleManager->m_styles.count() + 1)
     {
-        if ( entries.find( iter.value() ) == entries.end() )
+        if (entries.find(iter.value()) == entries.end())
         {
-            if ( iter.value()->parentName().isNull() )
-                entries[iter.value()] = new K3ListViewItem( m_dlg->m_styleList, iter.value()->name() );
+            if (iter.value()->parentName().isNull())
+                entries[iter.value()] = new QTreeWidgetItem(m_styleList, QStringList(iter.value()->name()));
             else
             {
-                CustomStyle* parentStyle = m_styleManager->style( iter.value()->parentName() );
-                if ( parentStyle )
+                CustomStyle* parentStyle = m_styleManager->style(iter.value()->parentName());
+                if (parentStyle)
                 {
-                    Map::const_iterator i = entries.find( parentStyle );
-                    if ( i != entries.end() )
-                        entries[iter.value()] = new K3ListViewItem( i.value(), iter.value()->name() );
+                    Map::const_iterator i = entries.find(parentStyle);
+                    if (i != entries.end())
+                        entries[iter.value()] = new QTreeWidgetItem(i.value(), QStringList(iter.value()->name()));
                 }
             }
         }
 
         ++iter;
-        if ( iter == end )
+        if (iter == end)
             iter = m_styleManager->m_styles.begin();
     }
     entries.clear();
 }
 
-void StyleDialog::slotDisplayMode( int mode )
+void StyleManagerDialog::slotDisplayMode(int mode)
 {
-  m_dlg->m_styleList->clear();
+    m_styleList->clear();
 
-  if ( mode != 3 )
-    m_dlg->m_styleList->setRootIsDecorated( false );
-  else
-  {
-    m_dlg->m_styleList->setRootIsDecorated( true );
-    fillComboBox();
-    return;
-  }
-
-  if ( mode != 2 )
-    new K3ListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
-
-  CustomStyles::iterator iter = m_styleManager->m_styles.begin();
-  CustomStyles::iterator end  = m_styleManager->m_styles.end();
-
-  while ( iter != end )
-  {
-    CustomStyle * styleData = iter.value();
-    if ( !styleData || styleData->name().isEmpty() )
-    {
-      ++iter;
-      continue;
-    }
-
-    if ( mode == 2 )
-    {
-      if ( styleData->type() == Style::CUSTOM )
-        new K3ListViewItem( m_dlg->m_styleList, styleData->name() );
-    }
-    else if ( mode == 1 )
-    {
-      if ( styleData->usage() > 0 )
-        new K3ListViewItem( m_dlg->m_styleList, styleData->name() );
-    }
+    if (mode != 2)
+        m_styleList->setRootIsDecorated(false);
     else
-      new K3ListViewItem( m_dlg->m_styleList, styleData->name() );
+    {
+        m_styleList->setRootIsDecorated(true);
+        fillComboBox();
+        return;
+    }
 
-    ++iter;
-  }
+    if (mode != 1)
+        new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
+
+    CustomStyles::iterator iter = m_styleManager->m_styles.begin();
+    CustomStyles::iterator end  = m_styleManager->m_styles.end();
+
+    while (iter != end)
+    {
+        CustomStyle* styleData = iter.value();
+        if (!styleData || styleData->name().isEmpty())
+        {
+            ++iter;
+            continue;
+        }
+
+        if (mode == 1)
+        {
+            if (styleData->type() == Style::CUSTOM)
+                new QTreeWidgetItem(m_styleList, QStringList(styleData->name()));
+        }
+        else
+            new QTreeWidgetItem(m_styleList, QStringList(styleData->name()));
+
+        ++iter;
+    }
 }
 
-void StyleDialog::slotOk()
+void StyleManagerDialog::slotOk()
 {
     kDebug() << k_funcinfo << endl;
-  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
+    QTreeWidgetItem* item = m_styleList->currentItem();
 
-  if ( !item )
-  {
-    accept();
-    return;
-  }
+    if (!item)
+    {
+        accept();
+        return;
+    }
 
-  QString name( item->text( 0 ) );
-  if ( name == i18n( "Default" ) )
-    m_view->setDefaultStyle();
-  else
-    m_view->setStyle( name );
-  accept();
-}
-
-void StyleDialog::slotNew()
-{
-  CustomStyle * s = 0;
-
-  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
-
-  if ( item )
-  {
-    QString name( item->text( 0 ) );
-    if ( name == i18n( "Default" ) )
-      s = m_styleManager->defaultStyle();
+    QString name(item->text(0));
+    if (name == i18n("Default"))
+        m_view->setDefaultStyle();
     else
-      s = m_styleManager->style( name );
-  }
-  else
-    s = m_styleManager->defaultStyle();
-
-  int i = 1;
-  QString newName( i18n( "style%1" , m_styleManager->count() + i ) );
-  while ( m_styleManager->style( newName ) != 0 )
-  {
-    ++i;
-    newName = i18n( "style%1" , m_styleManager->count() + i );
-  }
-
-  CustomStyle * style = new CustomStyle( newName, s );
-  style->setType( Style::TENTATIVE );
-
-  CellFormatDialog dlg( m_view, style, m_styleManager, m_view->doc() );
-  dlg.exec();
-
-  if ( style->type() == Style::TENTATIVE )
-  {
-    delete style;
-    return;
-  }
-
-  m_styleManager->m_styles[ style->name() ] = style;
-
-  slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
+        m_view->setStyle(name);
+    accept();
 }
 
-void StyleDialog::slotEdit()
+void StyleManagerDialog::slotNew()
 {
-  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
+    CustomStyle* parentStyle = 0;
+    QTreeWidgetItem* item = m_styleList->currentItem();
+    if (item)
+    {
+        const QString name = item->text(0);
+        if (name == i18n("Default"))
+            parentStyle = m_styleManager->defaultStyle();
+        else
+            parentStyle = m_styleManager->style(name);
+    }
+    else
+        parentStyle = m_styleManager->defaultStyle();
 
-  if ( !item )
-    return;
+    int i = 1;
+    QString newName(i18n("style%1" , m_styleManager->count() + i));
+    while (m_styleManager->style(newName) != 0)
+    {
+        ++i;
+        newName = i18n("style%1" , m_styleManager->count() + i);
+    }
 
-  CustomStyle * s = 0;
+    CustomStyle* style = new CustomStyle(newName, parentStyle);
+    style->setType(Style::TENTATIVE);
 
-  QString name( item->text( 0 ) );
-  if ( name == i18n( "Default" ) )
-    s = m_styleManager->defaultStyle();
-  else
-    s = m_styleManager->style( name );
+    CellFormatDialog dlg(m_view, style, m_styleManager, m_view->doc());
+    dlg.exec();
 
-  if ( !s )
-    return;
+    if (style->type() == Style::TENTATIVE)
+    {
+        delete style;
+        return;
+    }
 
-  CellFormatDialog dlg( m_view, s, m_styleManager, m_view->doc() );
-  slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
+    m_styleManager->m_styles[ style->name() ] = style;
+
+    slotDisplayMode(m_displayBox->currentIndex());
 }
 
-void StyleDialog::slotRemove()
+void StyleManagerDialog::slotEdit()
 {
-  K3ListViewItem * item = (K3ListViewItem *) m_dlg->m_styleList->currentItem();
+    QTreeWidgetItem* item = m_styleList->currentItem();
 
-  if ( !item )
-    return;
+    if (!item)
+        return;
 
-  CustomStyle * s = 0;
+    CustomStyle* style = 0;
 
-  QString name( item->text( 0 ) );
-  if ( name == i18n( "Default" ) )
-    s = m_styleManager->defaultStyle();
-  else
-    s = m_styleManager->style( name );
+    QString name(item->text(0));
+    if (name == i18n("Default"))
+        style = m_styleManager->defaultStyle();
+    else
+        style = m_styleManager->style(name);
 
-  if ( !s )
-    return;
+    if (!style)
+        return;
 
-  if ( s->type() != Style::CUSTOM )
-    return;
-
-  m_styleManager->takeStyle( s );
-
-  slotDisplayMode( m_dlg->m_displayBox->currentIndex() );
+    CellFormatDialog dlg(m_view, style, m_styleManager, m_view->doc());
+    slotDisplayMode(m_displayBox->currentIndex());
 }
 
-void StyleDialog::slotSelectionChanged( Q3ListViewItem * item )
+void StyleManagerDialog::slotRemove()
 {
-  if ( !item )
-    return;
+    QTreeWidgetItem* item = m_styleList->currentItem();
+    if (!item)
+        return;
 
-  CustomStyle* style = 0;
-  QString name( item->text( 0 ) );
-  if ( name == i18n( "Default" ) )
-    style = m_styleManager->defaultStyle();
-  else
-    style = m_styleManager->style( name );
-  if ( !style )
-  {
-    enableButton( KDialog::User3, false );
-    return;
-  }
+    const QString name = item->text(0);
+    CustomStyle* style = 0;
+    if (name == i18n("Default"))
+        style = m_styleManager->defaultStyle();
+    else
+        style = m_styleManager->style(name);
 
-  if ( style->type() == Style::BUILTIN )
-    enableButton( KDialog::User3, false );
-  else
-    enableButton( KDialog::User3, true );
+    if (!style)
+        return;
+
+    if (style->type() != Style::CUSTOM)
+        return;
+
+    m_styleManager->takeStyle(style);
+    slotDisplayMode(m_displayBox->currentIndex());
 }
 
+void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
+{
+    if (!item)
+        return;
+    const QString name = item->text(0);
+    CustomStyle* style = 0;
+    if (name == i18n("Default"))
+        style = m_styleManager->defaultStyle();
+    else
+        style = m_styleManager->style(name);
+    if (!style)
+    {
+        enableButton(KDialog::User3, false);
+        return;
+    }
+
+    if (style->type() == Style::BUILTIN)
+        enableButton(KDialog::User3, false);
+    else
+        enableButton(KDialog::User3, true);
+}
 
 #include "StylesDialog.moc"
-

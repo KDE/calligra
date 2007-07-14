@@ -46,8 +46,9 @@ class StyleDialog;
  */
 class KSPREAD_EXPORT StyleManager
 {
-    friend class StyleDialog;
- public:
+    friend class StyleManagerDialog;
+
+public:
   StyleManager();
   ~StyleManager();
 
