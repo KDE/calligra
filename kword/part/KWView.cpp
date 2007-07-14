@@ -94,6 +94,8 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     new KoFind(this, m_canvas->resourceProvider(), actionCollection());
 
     m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), true);
+    if(m_currentPage)
+        m_zoomController->setPageSize(m_currentPage->rect().size());
     KoZoomMode::Modes modes = KoZoomMode::ZOOM_WIDTH;
     if ( m_canvas->viewMode()->hasPages() )
         modes |= KoZoomMode::ZOOM_PAGE;
