@@ -186,7 +186,7 @@
 #include "dialogs/ShowColRowDialog.h"
 #include "dialogs/SortDialog.h"
 #include "dialogs/SpecialDialog.h"
-#include "dialogs/StylesDialog.h"
+#include "dialogs/StyleManagerDialog.h"
 #include "dialogs/SubtotalDialog.h"
 #include "dialogs/ValidityDialog.h"
 #include "dialogs/FindDialog.h"
