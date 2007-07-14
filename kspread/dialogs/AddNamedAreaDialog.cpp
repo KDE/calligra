@@ -89,7 +89,7 @@ void AddNamedAreaDialog::slotOk()
     if (m_pView->doc()->namedAreaManager()->contains(name))
     {
         const QString question = i18n("The named area '%1' already exists.\n"
-                                      "Do you want to replace it?").arg(name);
+                                      "Do you want to replace it?", name);
         int result = KMessageBox::warningContinueCancel(this, question, i18n("Replace Named Area"),
                                                         KStandardGuiItem::overwrite());
         if (result == KMessageBox::Cancel)
