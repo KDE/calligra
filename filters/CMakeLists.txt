@@ -1,3 +1,4 @@
+include(CheckIncludeFiles)
 
 find_package(GraphicsMagick)
 macro_optional_find_package(LibXml2)
