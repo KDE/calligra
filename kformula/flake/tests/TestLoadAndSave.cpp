@@ -40,7 +40,7 @@
 #include "ErrorElement.h"
 #include "PaddedElement.h"
 #include "PhantomElement.h"
-#include "BracketElement.h"
+#include "FencedElement.h"
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
 #include "UnderOverElement.h"
@@ -902,7 +902,7 @@ void TestLoadAndSave::phantomElement()
 
 void TestLoadAndSave::fencedElement()
 {
-    test( new BracketElement );
+    test( new FencedElement );
 }
 
 void TestLoadAndSave::encloseElement()

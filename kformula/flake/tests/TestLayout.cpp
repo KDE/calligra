@@ -27,7 +27,7 @@
 
 #include "AttributeManager.h"
 #include "IdentifierElement.h"
-#include "BracketElement.h"
+#include "FencedElement.h"
 
 static QRectF layout(BasicElement* element, const QString& input)
 {
@@ -105,7 +105,7 @@ void TestLayout::fencedElement()
     QFETCH(QString, input);
     QFETCH(QRectF, output);
 
-    BracketElement* element = new BracketElement;
+    FencedElement* element = new FencedElement;
     QCOMPARE(layout(element, input), output);
     delete element;
 }
