@@ -37,6 +37,7 @@
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Region.h"
+#include "ValueConverter.h"
 
 // commands
 #include "commands/DataManipulators.h"
@@ -121,7 +122,7 @@ bool SheetAdaptor::setText( const QString& cellname, const QString& text, bool p
     return setText(location.x(), location.y(), text, parse);
 }
 
-QVariant valueToVariant(const KSpread::Value& value)
+QVariant valueToVariant(const KSpread::Value& value, Sheet* sheet)
 {
 	//Should we use following value-format enums here?
 	//fmt_None, fmt_Boolean, fmt_Number, fmt_Percent, fmt_Money, fmt_DateTime, fmt_Date, fmt_Time, fmt_String
@@ -134,6 +135,8 @@ QVariant valueToVariant(const KSpread::Value& value)
 			return static_cast<qint64>(value.asInteger());
 		case KSpread::Value::Float:
 			return numToDouble (value.asFloat());
+		case KSpread::Value::Complex:
+			return sheet->doc()->converter()->asString(value).asString();
 		case KSpread::Value::String:
 			return value.asString();
 		case KSpread::Value::Array: {
@@ -142,7 +145,7 @@ QVariant valueToVariant(const KSpread::Value& value)
 				QVariantList rowarray;
 				for( uint i = 0; i < value.columns(); i++) {
 					KSpread::Value v = value.element(i,j);
-					rowarray.append( valueToVariant(v) );
+					rowarray.append( valueToVariant(v, sheet) );
 				}
 				colarray.append(rowarray);
 			}
@@ -160,7 +163,7 @@ QVariant valueToVariant(const KSpread::Value& value)
 QVariant SheetAdaptor::value( int x, int y )
 {
     Cell cell = Cell( m_sheet, x, y);
-    return valueToVariant( cell.value() );
+    return valueToVariant( cell.value(), m_sheet );
 }
 
 QVariant SheetAdaptor::value( const QString& cellname )
