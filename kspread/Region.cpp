@@ -963,18 +963,20 @@ QList<Region::Element*>& Region::cells() const
 
 bool Region::operator==(const Region& other) const
 {
-  ConstIterator endOfList(d->cells.constEnd());
-  ConstIterator endOfOtherList(other.d->cells.constEnd());
-  ConstIterator it = d->cells.constBegin();
-  ConstIterator it2 = other.d->cells.constBegin();
-  while (it != endOfList && it2 != endOfOtherList)
-  {
-    if ((*it++)->rect() != (*it2++)->rect())
+    if (d->cells.count() != other.d->cells.count())
+        return false;
+    ConstIterator endOfList(d->cells.constEnd());
+    ConstIterator endOfOtherList(other.d->cells.constEnd());
+    ConstIterator it = d->cells.constBegin();
+    ConstIterator it2 = other.d->cells.constBegin();
+    while (it != endOfList && it2 != endOfOtherList)
     {
-      return false;
+        if ((*it)->sheet() != (*it2)->sheet())
+            return false;
+        if ((*it++)->rect() != (*it2++)->rect())
+            return false;
     }
-  }
-  return true;
+    return true;
 }
 
 void Region::operator=(const Region& other)

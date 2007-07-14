@@ -41,6 +41,25 @@ void TestRegion::initTestCase()
     sheet->setSheetName("Sheet 4");
 }
 
+void TestRegion::testComparison()
+{
+    Region region1;
+    Region region2;
+    region1 = Region("A1");
+    region2 = Region("A1");
+    QVERIFY(region1 == region2);
+    region1 = Region("A1:A5");
+    region2 = Region("A1:A5");
+    QVERIFY(region1 == region2);
+    region1 = Region("A1:A5;B4");
+    region2 = Region("A1:A5;B4");
+    QVERIFY(region1 == region2);
+    region2 = Region("A1");
+    QVERIFY(region1 != region2);
+    region2 = Region("A1:A5");
+    QVERIFY(region1 != region2);
+}
+
 void TestRegion::testFixation()
 {
     Region region;

@@ -33,6 +33,7 @@ class TestRegion : public QObject
 
 private Q_SLOTS:
     void initTestCase();
+    void testComparison();
     void testFixation();
     void testSheet();
     void cleanupTestCase();
