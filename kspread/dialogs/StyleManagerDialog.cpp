@@ -19,7 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "StylesDialog.h"
+#include "StyleManagerDialog.h"
 
 #include <QMap>
 #include <QTreeWidget>
@@ -293,4 +293,4 @@ void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
         enableButton(KDialog::User3, true);
 }
 
-#include "StylesDialog.moc"
+#include "StyleManagerDialog.moc"
