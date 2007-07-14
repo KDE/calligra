@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 David Faure <faure@kde.org>
+    Copyright (C) 2007 David Faure <faure@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -23,9 +23,6 @@
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
-#if defined _WIN32 || defined _WIN64
-
 #ifndef KSPREAD_EXPORT
 # if defined(MAKE_KSPREADCOMMON_LIB)
    /* We are building this library */ 
@@ -36,10 +33,8 @@
 # endif
 #endif
 
-#else /* UNIX */
-
-#define KSPREAD_EXPORT KDE_EXPORT
-
-#endif
+# ifndef KSPREAD_EXPORT_DEPRECATED
+#  define KSPREAD_EXPORT_DEPRECATED KDE_DEPRECATED KSPREAD_EXPORT
+# endif
 
 #endif

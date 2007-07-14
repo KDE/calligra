@@ -24,11 +24,9 @@
 
 #include <KoShapeFactory.h>
 
-#include <kspread_export.h>
-
 class KoShape;
 
-class KSPREAD_EXPORT TableShapePlugin : public QObject
+class TableShapePlugin : public QObject
 {
     Q_OBJECT
 public:
@@ -37,7 +35,7 @@ public:
     ~TableShapePlugin() {}
 };
 
-class KSPREAD_EXPORT TableShapeFactory : public KoShapeFactory
+class TableShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
