@@ -163,7 +163,7 @@
 
 // dialogs
 #include "dialogs/AngleDialog.h"
-#include "dialogs/AreaDialog.h"
+#include "dialogs/AddNamedAreaDialog.h"
 #include "dialogs/CommentDialog.h"
 #include "dialogs/ConditionalDialog.h"
 #include "dialogs/ConsolidateDialog.h"
@@ -6048,8 +6048,8 @@ void View::slotInsertCellCopy()
 
 void View::setAreaName()
 {
-  AreaDialog dlg( this, "Area Name",QPoint(selection()->marker().x(), selection()->marker().y()) );
-  dlg.exec();
+    AddNamedAreaDialog dialog(this);
+    dialog.exec();
 }
 
 void View::namedAreaDialog()

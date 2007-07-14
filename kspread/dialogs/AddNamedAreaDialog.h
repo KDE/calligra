@@ -1,9 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Norbert Andres <nandres@web.de>
-             (C) 2002 Philipp Mueller <philipp.mueller@gmx.de>
-             (C) 2002 John Dailey <dailey@vt.edu>
-             (C) 1999-2001 Laurent Montel <montel@kde.org>
-             (C) 1998-1999 Torben Weis <weis@kde.org>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2002 Philipp Mueller <philipp.mueller@gmx.de>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 1999-2001 Laurent Montel <montel@kde.org>
+   Copyright 1998-1999 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,36 +21,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_AREA_DIALOG
-#define KSPREAD_AREA_DIALOG
+#ifndef KSPREAD_ADD_NAMED_AREA_DIALOG
+#define KSPREAD_ADD_NAMED_AREA_DIALOG
 
 #include <kdialog.h>
-//Added by qt3to4:
-#include <QLabel>
 
 class QLineEdit;
-class QLabel;
 
 namespace KSpread
 {
 class View;
 
-class AreaDialog : public KDialog
+class AddNamedAreaDialog : public KDialog
 {
-  Q_OBJECT
+    Q_OBJECT
+
 public:
-  AreaDialog( View * parent, const char * name, const QPoint & _marker );
+    AddNamedAreaDialog(View* parent);
 
 public slots:
-  void slotOk();
-  void slotAreaNamechanged( const QString & text);
+    void slotOk();
+    void slotAreaNameChanged(const QString& name);
 
 protected:
-  View * m_pView;
-  QLineEdit   * m_areaName;
-  QPoint        m_marker;
+    View*       m_pView;
+    QLineEdit*  m_areaName;
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_AREA_DIALOG
+#endif // KSPREAD_ADD_NAMED_AREA_DIALOG

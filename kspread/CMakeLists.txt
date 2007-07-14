@@ -69,8 +69,8 @@ SET (database_DIR_SRCS
 	)
 
 SET (dialogs_DIR_SRCS
+	dialogs/AddNamedAreaDialog.cpp
 	dialogs/AngleDialog.cpp
-	dialogs/AreaDialog.cpp
 	dialogs/CommentDialog.cpp
 	dialogs/ConditionalDialog.cpp
 	dialogs/ConsolidateDialog.cpp
