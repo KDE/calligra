@@ -32,8 +32,8 @@
 class QComboBox;
 class QLabel;
 class QLineEdit;
-class QListWidget;
-class QListWidgetItem;
+
+class KListWidget;
 
 namespace KSpread
 {
@@ -57,7 +57,7 @@ public Q_SLOTS:
 
 private:
     View*           m_pView;
-    QListWidget*    m_list;
+    KListWidget*    m_list;
     QLabel*         m_rangeName;
 };
 

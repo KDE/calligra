@@ -35,13 +35,13 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <QList>
-#include <QListWidget>
 #include <QPushButton>
 #include <QVariant>
 #include <QVBoxLayout>
 
 // KDE
 #include <kdebug.h>
+#include <klistwidget.h>
 #include <kmessagebox.h>
 #include <KStandardGuiItem>
 
@@ -79,7 +79,7 @@ NamedAreaDialog::NamedAreaDialog(View* parent)
     vboxLayout->setMargin(0);
     vboxLayout->setSpacing(KDialog::spacingHint());
 
-    m_list = new QListWidget(this);
+    m_list = new KListWidget(this);
     m_list->setSortingEnabled(true);
     vboxLayout->addWidget(m_list);
 
