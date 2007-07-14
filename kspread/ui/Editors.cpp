@@ -38,6 +38,7 @@
 #include <kdialog.h>
 #include <kicon.h>
 #include <k3listbox.h>
+#include <kmessagebox.h>
 #include <ktextedit.h>
 #include <klocale.h>
 
@@ -61,6 +62,7 @@
 //Added by qt3to4:
 #include <q3listbox.h>
 
+#include "commands/NamedAreaCommand.h"
 
 using namespace KSpread;
 
@@ -1332,55 +1334,48 @@ void LocationEditWidget::slotActivateItem()
 
 bool LocationEditWidget::activateItem()
 {
-    QString ltext = text();
-    QString tmp = ltext;
-    const Region region = m_pView->doc()->namedAreaManager()->namedArea(tmp);
+    // Set the focus back on the canvas.
+    m_pView->canvasWidget()->setFocus();
+
+    const QString text = this->text();
+    // check wether an already existing named area was entered
+    Region region = m_pView->doc()->namedAreaManager()->namedArea(text);
     if (region.isValid())
     {
-        m_pView->selection()->initialize( Region(tmp, m_pView->doc()->map(), m_pView->activeSheet()) );
+        m_pView->selection()->initialize(Region(text, m_pView->doc()->map(), m_pView->activeSheet()));
         return true;
     }
 
-    // Set the cell component to uppercase:
-    // Sheet1!a1 -> Sheet1!A2
-    int pos = ltext.indexOf('!');
-    if ( pos !=- 1 )
-        tmp = ltext.left(pos)+ltext.mid(pos).toUpper();
-    else
-        tmp = ltext.toUpper();
-
-    // Selection entered in location widget
-    if ( ltext.contains( ':' ) )
-      m_pView->selection()->initialize( Region(tmp, m_pView->doc()->map(), m_pView->activeSheet()) );
-    // Location entered in location widget
-    else
+    // check wether a valid cell region was entered
+    region = Region(text, m_pView->doc()->map(), m_pView->activeSheet());
+    if (region.isValid())
     {
-      Region region(tmp, m_pView->doc()->map(), m_pView->activeSheet());
-        bool validName = true;
-        for (int i = 0; i < ltext.length(); ++i)
-        {
-            if (!ltext[i].isLetter())
-            {
-                validName = false;
-                break;
-            }
-        }
-        if ( !region.isValid() && validName)
-        {
-            QRect range( m_pView->selection()->lastRange() );
-            Sheet* sheet = m_pView->activeSheet();
-            // set area name on current selection/cell
-            m_pView->doc()->namedAreaManager()->insert(sheet, range, ltext);
-        }
-
-        if (!validName)
-        {
-          m_pView->selection()->initialize(region);
-        }
+        m_pView->selection()->initialize(region);
+        return true;
     }
 
-    // Set the focus back on the canvas.
-    m_pView->canvasWidget()->setFocus();
+    // A name for an area entered?
+    // FIXME Stefan: allow all characters
+    bool validName = true;
+    for (int i = 0; i < text.length(); ++i)
+    {
+        if (!text[i].isLetter())
+        {
+            validName = false;
+            break;
+        }
+    }
+    if (validName)
+    {
+        NamedAreaCommand* command = new NamedAreaCommand();
+        command->setSheet(m_pView->activeSheet());
+        command->setAreaName(text);
+        command->add(Region(m_pView->selection()->lastRange(), m_pView->activeSheet()));
+        if (command->execute())
+            return true;
+        else
+            delete command;
+    }
     return false;
 }
 

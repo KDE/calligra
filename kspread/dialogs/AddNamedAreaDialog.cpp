@@ -37,6 +37,8 @@
 #include "View.h"
 #include "Selection.h"
 
+#include "commands/NamedAreaCommand.h"
+
 using namespace KSpread;
 
 AddNamedAreaDialog::AddNamedAreaDialog(View* parent)
@@ -75,22 +77,33 @@ void AddNamedAreaDialog::slotAreaNameChanged(const QString& name)
 
 void AddNamedAreaDialog::slotOk()
 {
+    if (m_areaName->text().isEmpty())
+        return;
+
     const QString name = m_areaName->text();
-    if (!name.isEmpty())
+    const Region region(m_pView->selection()->lastRange(), m_pView->selection()->lastSheet());
+    if (m_pView->doc()->namedAreaManager()->namedArea(name) == region)
+        return; // nothing to do
+
+    NamedAreaCommand* command = 0;
+    if (m_pView->doc()->namedAreaManager()->contains(name))
     {
-        const QRect rect = m_pView->selection()->lastRange();
-        if (!m_pView->doc()->namedAreaManager()->contains(name))
-        {
-            m_pView->doc()->emitBeginOperation(false);
-            m_pView->doc()->namedAreaManager()->insert(m_pView->activeSheet(), rect, name);
-            m_pView->slotUpdateView(m_pView->activeSheet());
-            accept();
-        }
-        else
-            KMessageBox::error(this, i18n("This name is already used."));
+        const QString question = i18n("The named area '%1' already exists.\n"
+                                      "Do you want to replace it?").arg(name);
+        int result = KMessageBox::warningContinueCancel(this, question, i18n("Replace Named Area"),
+                                                        KStandardGuiItem::overwrite());
+        if (result == KMessageBox::Cancel)
+            return;
+
+        command = new NamedAreaCommand();
+        command->setText(i18n("Replace Named Area"));
     }
     else
-        KMessageBox::error(this, i18n("Area name is empty."));
+        command = new NamedAreaCommand();
+    command->setSheet(m_pView->activeSheet());
+    command->setAreaName(name);
+    command->add(region);
+    command->execute();
 }
 
 #include "AddNamedAreaDialog.moc"

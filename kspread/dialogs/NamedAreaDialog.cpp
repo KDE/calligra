@@ -56,6 +56,8 @@
 #include "Util.h"
 #include "View.h"
 
+#include "commands/NamedAreaCommand.h"
+
 using namespace KSpread;
 
 NamedAreaDialog::NamedAreaDialog(View* parent)
@@ -191,14 +193,18 @@ void NamedAreaDialog::slotRemove()
     if (result == KMessageBox::Cancel)
         return;
 
-    m_pView->doc()->emitBeginOperation(false);
-
     QListWidgetItem* item = m_list->currentItem();
-    m_pView->doc()->namedAreaManager()->remove(item->text());
-    m_pView->doc()->setModified(true);
-    m_list->takeItem(m_list->row(item));
 
-    m_pView->slotUpdateView(m_pView->activeSheet());
+    NamedAreaCommand* command = new NamedAreaCommand();
+    command->setAreaName(item->text());
+    command->setReverse(true);
+    command->setSheet(m_pView->activeSheet());
+    if (!command->execute())
+    {
+        delete command;
+        return;
+    }
+    m_list->takeItem(m_list->row(item));
 
     if (m_list->count() == 0)
     {
@@ -298,32 +304,28 @@ void EditNamedAreaDialog::slotOk()
     if (!region.isValid())
         return;
 
-    if (m_initialAreaName != m_areaNameEdit->text() &&
-        !m_pView->doc()->namedAreaManager()->namedArea(m_areaNameEdit->text()).isEmpty())
+    if (!m_initialAreaName.isEmpty() && m_initialAreaName != m_areaNameEdit->text())
     {
-        const QString question = i18n("Do you really want to replace this named area?");
-        int result = KMessageBox::warningContinueCancel(this, question, i18n("Replace Named Area"),
-                                                        KStandardGuiItem::overwrite());
-        if (result == KMessageBox::Cancel)
-            return;
+        m_pView->doc()->beginMacro(i18n("Replace Named Area"));
+        // remove the old named area
+        NamedAreaCommand* command = new NamedAreaCommand();
+        command->setAreaName(m_initialAreaName);
+        command->setReverse(true);
+        command->setSheet(sheet);
+        command->add(region);
+        command->execute();
     }
 
-    m_pView->doc()->emitBeginOperation(false);
-
-    // remove the old named area
-    m_pView->doc()->namedAreaManager()->remove(m_initialAreaName);
     // insert the new named area
-    m_pView->doc()->namedAreaManager()->insert(sheet, region.firstRange(), m_areaNameEdit->text());
+    NamedAreaCommand* command = new NamedAreaCommand();
+    command->setAreaName(m_areaNameEdit->text());
+    command->setSheet(sheet);
+    command->add(region);
+    command->execute();
 
-    // update formulas containing either the new or the old name
-    foreach (Sheet* sheet, m_pView->doc()->map()->sheetList())
-    {
-        if (m_initialAreaName != m_areaNameEdit->text())
-            sheet->refreshChangeAreaName(m_initialAreaName);
-        sheet->refreshChangeAreaName(m_areaNameEdit->text());
-    }
+    if (m_initialAreaName != m_areaNameEdit->text())
+        m_pView->doc()->endMacro();
 
-    m_pView->slotUpdateView(m_pView->activeSheet());
     accept();
 }
 
