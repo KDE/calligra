@@ -44,7 +44,7 @@ class FormulaElement;
  * The actual data KFormulaPartDocument is maintaining is a list of FormulaShape.
  * 
  */
-class KOFORMULA_EXPORT KFormulaPartDocument : public KoDocument, public KoShapeControllerBase {
+class KFORMULAPRIVATE_EXPORT KFormulaPartDocument : public KoDocument, public KoShapeControllerBase {
 Q_OBJECT
 public:
     /// The basic constructor

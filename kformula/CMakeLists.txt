@@ -26,6 +26,9 @@ kde4_add_library(kformulaprivate SHARED ${kformulaprivate_LIB_SRCS})
 
 target_link_libraries(kformulaprivate ${KDE4_KDECORELIBS} koguiutils kformulalib)
 
+set_target_properties(kformulaprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+
+
 install(TARGETS kformulaprivate DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############

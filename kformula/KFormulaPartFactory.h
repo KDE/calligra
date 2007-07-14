@@ -36,7 +36,7 @@ class KAboutData;
  * Use createPartObject() to obtain a pointer to a new instance of the KFormulaPart.
  * With global you can access the current @ref KComponentData of KFormula
  */
-class KOFORMULA_EXPORT KFormulaPartFactory : public KoFactory
+class KFORMULAPRIVATE_EXPORT KFormulaPartFactory : public KoFactory
 {
     Q_OBJECT
 public:

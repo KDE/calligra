@@ -45,6 +45,8 @@ kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
 
 target_link_libraries(kformulalib  ${KDE4_KDEUI_LIBS} koguiutils)
 
+set_target_properties(kformulalib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+
 install(TARGETS kformulalib DESTINATION ${LIB_INSTALL_DIR})
 
 ########### FormulaShape Plugin ###############

@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2006 David Faure <faure@kde.org>
+    Copyright (C) 2007 David Faure <faure@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -17,17 +17,14 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOFORMULA_EXPORT_H
-#define KOFORMULA_EXPORT_H
+#ifndef KFORMULA_EXPORT_H
+#define KFORMULA_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-/* We use _WIN32/_WIN64 instead of Q_OS_WIN so that this header can be used from C files too */
-#if defined _WIN32 || defined _WIN64
-
 #ifndef KOFORMULA_EXPORT
-# if defined(MAKE_KOFORMULA_LIB)
+# if defined(MAKE_KFORMULALIB_LIB)
    /* We are building this library */ 
 #  define KOFORMULA_EXPORT KDE_EXPORT
 # else
@@ -36,27 +33,23 @@
 # endif
 #endif
 
-#else /* UNIX */
-
-#define KOFORMULA_EXPORT KDE_EXPORT
-
-#endif
-
-/* Now the same for KOFORMULA_TEST_EXPORT, if compiling with unit tests enabled */
-
-#ifdef COMPILING_TESTS
-#if defined _WIN32 || defined _WIN64
-# if defined( MAKE_KOFORMULA_LIB )
-#       define KOFORMULA_TEST_EXPORT KDE_EXPORT
-#   else
-#       define KOFORMULA_TEST_EXPORT KDE_IMPORT
-#   endif
-# else /* not windows */
-#   define KOFORMULA_TEST_EXPORT KDE_EXPORT
+#ifndef KFORMULAPRIVATE_EXPORT
+# if defined(MAKE_KFORMULAPRIVATE_LIB)
+   /* We are building this library */
+#  define KFORMULAPRIVATE_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define KFORMULAPRIVATE_EXPORT KDE_IMPORT
 # endif
-#else /* not compiling tests */
-#   define KOFORMULA_TEST_EXPORT
 #endif
+
+# ifndef KOFORMULA_EXPORT_DEPRECATED
+#  define KOFORMULA_EXPORT_DEPRECATED KDE_DEPRECATED KOFORMULA_EXPORT
+# endif
+
+# ifndef KFORMULAPRIVATE_EXPORT_DEPRECATED
+#  define KFORMULAPRIVATE_EXPORT_DEPRECATED KDE_DEPRECATED KFORMULAPRIVATE_EXPORT
+# endif
 
 
 #endif
