@@ -145,10 +145,11 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
     }
 
     if(m_demoText) return;
+    if(m_textShapeData->endPosition() < 0) return;
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
     if(showTextFrames && lay) {
         QList< KoShape * > shapes = lay->shapes();
-        // this shape is the last in the set.  Now get the bottom of the text.
+        // Get the bottom of the text.
         bool moreText = false;
         double max = m_textShapeData->documentOffset()+size().height();
         double bottom = 0.0;
