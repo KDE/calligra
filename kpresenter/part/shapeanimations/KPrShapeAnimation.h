@@ -30,7 +30,12 @@ class KoCanvasBase;
 class KPrShapeAnimation
 {
 public:
-	KPrShapeAnimation( KoShape * shape, KoCanvasBase * canvas );
+    enum Type 
+    {
+        Appear,
+        Disappear
+    };
+
     virtual ~KPrShapeAnimation();
 
     /**
@@ -55,13 +60,16 @@ public:
      * @brief Trigger an update of the canvas needed for the given time
      *
      * @param currentTime
+     * @param canvas The canvas on which the animation is shown
      */
-    virtual void next( int currentTime ) = 0;
+    virtual void next( int currentTime, KoCanvasBase * canvas ) = 0;
 
     /**
      * @brief Finish the shape animation
+     *
+     * @param canvas The canvas on which the animation is shown
      */
-    virtual void finish() = 0;
+    virtual void finish( KoCanvasBase * canvas ) = 0;
 
     /**
      * Get the duration of the shape animation
@@ -70,13 +78,42 @@ public:
      */
     int duration();
 
+    /**
+     * @brief Get the step on which the animation is shown.
+     */
+    int step();
+
+    /**
+     * @brief Set the step on which the animation is shown.
+     */
+    void setStep( int step );
+
+    /**
+     * @brief Get the shape the animation is for
+     */
+    KoShape * shape();
+
+    /**
+     * @brief Get the type of the animation
+     */
+    Type type() const;
+
 protected:
+    /**
+     * Constructor
+     *
+     * Only to be called form derived classes
+     */
+	KPrShapeAnimation( KoShape * shape, int step, Type type );
+
     // the shape for which is aminated
     KoShape * m_shape;
-    // the canvas on which the animation takes place
-    KoCanvasBase * m_canvas;
     // the timeline used for calculating the animation position
     QTimeLine m_timeLine;
+    // the step ( click ) on which the animation is done
+    int m_step;
+    // The type of animation
+    Type m_type;
 };
 
 #endif // KPRSHAPEANIMATION_H

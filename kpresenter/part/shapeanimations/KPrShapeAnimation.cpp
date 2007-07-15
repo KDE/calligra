@@ -19,11 +19,12 @@
 
 #include "KPrShapeAnimation.h"
 
-KPrShapeAnimation::KPrShapeAnimation( KoShape * shape, KoCanvasBase * canvas )
+KPrShapeAnimation::KPrShapeAnimation( KoShape * shape, int step, Type type )
 : m_shape( shape )
-, m_canvas( canvas )
+, m_step( step )
+, m_type( type )
 {
-    // TODO get from shape
+    // TODO make setable
     m_timeLine.setDuration( 5000 );
     m_timeLine.setCurveShape( QTimeLine::LinearCurve );
 }
@@ -35,4 +36,19 @@ KPrShapeAnimation::~KPrShapeAnimation()
 int KPrShapeAnimation::duration()
 {
     return m_timeLine.duration();
+}
+
+int KPrShapeAnimation::step()
+{
+    return m_step;
+}
+
+void KPrShapeAnimation::setStep( int step )
+{
+    m_step = step;
+}
+
+KPrShapeAnimation::Type KPrShapeAnimation::type() const
+{
+    return m_type;
 }
