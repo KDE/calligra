@@ -38,7 +38,50 @@
 #include "kis_jpeg_converter.h"
 #include "kis_wdg_options_jpeg.h"
 
+#include "kis_meta_data_store.h"
+
 class KisExternalLayer;
+
+class KisExifInfoVisitor : public KisLayerVisitor
+{
+    public:
+        KisExifInfoVisitor() :
+            m_exifInfo(0),
+            m_countPaintLayer(0)
+        { }
+    public:
+
+        virtual bool visit(KisExternalLayer*)
+        {
+            return true;
+        }
+
+        virtual bool visit(KisPaintLayer* layer) {
+            m_countPaintLayer++;
+            if(not layer->metaData()->empty())
+            {
+                m_exifInfo = layer->metaData();
+            }
+            return true;
+        }
+        virtual bool visit(KisGroupLayer* layer)
+        {
+            kDebug(41008) << "Visiting on grouplayer " << layer->name() << "\n";
+            KisLayerSP child = layer->firstChild();
+            while (child) {
+                child->accept(*this);
+                child = child->nextSibling();
+            }
+            return true;
+        }
+        virtual bool visit(KisAdjustmentLayer* ) {  return true; }
+    public:
+        inline uint countPaintLayer() { return m_countPaintLayer; }
+        inline KisMetaData::Store* exifInfo() {return m_exifInfo; }
+    private:
+        KisMetaData::Store* m_exifInfo;
+        uint m_countPaintLayer;
+};
 
 
 typedef KGenericFactory<KisJPEGExport> KisJPEGExportFactory;
@@ -102,9 +145,14 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
 
+    KisExifInfoVisitor eIV;
+    eIV.visit( img->rootLayer().data() );
 
+    KisMetaData::Store* eI = 0;
+    if(eIV.countPaintLayer() == 1)
+        eI = eIV.exifInfo();
 
-    if ( (res = kpc.buildFile(url, l, beginIt, endIt, options)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         kDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }

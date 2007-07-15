@@ -26,6 +26,8 @@ extern "C" {
 #include <iccjpeg.h>
 }
 
+#include <exiv2/jpgimage.hpp>
+
 #include <QFile>
 
 #include <kapplication.h>
@@ -43,6 +45,11 @@ extern "C" {
 #include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
+#include <kis_meta_registry.h>
+#include <kis_meta_data_entry.h>
+#include <kis_meta_data_value.h>
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_io_backend.h>
 
 #include <colorprofiles/KoIccColorProfile.h>
 
@@ -250,6 +257,109 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer(), KisLayerSP(0));
+
+    // Read exif information
+
+    kDebug(41008) << "Looking for exif information" << endl;
+
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+        kDebug(41008) << "Marker is " << marker->marker << endl;
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) ||
+            marker->data_length < 14)
+            continue; /* Exif data is in an APP1 marker of at least 14 octets */
+
+        if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
+            GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||
+            GETJOCTET (marker->data[2]) != (JOCTET) 0x69 ||
+            GETJOCTET (marker->data[3]) != (JOCTET) 0x66 ||
+            GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
+            GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
+            continue; /* no Exif header */
+        kDebug(41008) << "Found exif information of length : "<< marker->data_length << endl;
+        KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+        Q_ASSERT(exifIO);
+        QByteArray byteArray( (const char*)marker->data + 6, marker->data_length - 6);
+        exifIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
+        // Interpret orientation tag
+        if( layer->metaData()->containsEntry("http://ns.adobe.com/tiff/1.0/", "Orientation"))
+        {
+            KisMetaData::Entry& entry = layer->metaData()->getEntry("http://ns.adobe.com/tiff/1.0/", "Orientation");
+            if(entry.value().type() == KisMetaData::Value::Variant)
+            {
+                switch(entry.value().asVariant().toInt() )
+                {
+                    case 2:
+                        layer->paintDevice()->mirrorY();
+                        break;
+                    case 3:
+                        image()->rotate(M_PI, 0);
+                        break;
+                    case 4:
+                        layer->paintDevice()->mirrorX();
+                        break;
+                    case 5:
+                        image()->rotate(M_PI/2, 0);
+                        layer->paintDevice()->mirrorY();
+                        break;
+                    case 6:
+                        image()->rotate(M_PI/2, 0);
+                        break;
+                    case 7:
+                        image()->rotate(M_PI/2, 0);
+                        layer->paintDevice()->mirrorX();
+                        break;
+                    case 8:
+                        image()->rotate(-M_PI/2+M_PI*2, 0);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            entry.value().setVariant(1);
+        }
+        break;
+    }
+
+    kDebug(41008) << "Looking for IPTC information" << endl;
+    
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+        kDebug(41008) << "Marker is " << marker->marker << endl;
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 13) ||
+            marker->data_length < 14)
+            continue; /* IPTC data is in an APP13 marker of at least 16 octets */
+
+        if( memcmp(marker->data, photoshopMarker, 14) != 0 )
+        {
+            for(int i = 0; i < 14; i++)
+            {
+                kDebug() << (int)(*(marker->data+i)) << " " << (int)(photoshopMarker[i]) << endl;
+            }
+            kDebug(41008) << "No photoshop marker" << endl;
+            break; /* No IPTC Header */
+        }
+        
+        kDebug(41008) << "Found Photoshop information of length : "<< marker->data_length << endl;
+        KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+        Q_ASSERT(iptcIO);
+        const Exiv2::byte *record = 0;
+        uint32_t sizeIptc = 0;
+        uint32_t sizeHdr = 0;
+        // Find actual Iptc data within the APP13 segment
+        if (!Exiv2::Photoshop::locateIptcIrb((Exiv2::byte*)(marker->data + 14),
+                                marker->data_length - 14, &record, &sizeHdr, &sizeIptc ) )
+        {
+            if (sizeIptc) {
+                // Decode the IPTC data
+                QByteArray byteArray( (const char*)(record + sizeHdr), sizeIptc );
+                iptcIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
+            } else {
+                kDebug() << "IPTC Not found in Photoshop marker" << endl;
+            }
+        }
+        break;
+    }
+    // Dump loaded metadata
+    layer->metaData()->debugDump();
     
     // Finish decompression
     jpeg_finish_decompress(&cinfo);
@@ -291,7 +401,7 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -348,6 +458,71 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     jpeg_start_compress(&cinfo, true);
     // Save exif and iptc information if any available
     
+    if(metaData and not metaData->empty())
+    {
+        // Save EXIF
+        {
+            kDebug(41008) << "Trying to save exif information" << endl;
+            
+            KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
+            Q_ASSERT(exifIO);
+    
+            QBuffer buffer;
+            exifIO->saveTo( metaData, &buffer);
+            
+            kDebug(41008) << "Exif information size is " << buffer.data().size() << endl;
+            QByteArray header(6,0);
+            header[0] = 0x45;
+            header[1] = 0x78;
+            header[2] = 0x69;
+            header[3] = 0x66;
+            header[4] = 0x00;
+            header[5] = 0x00;
+            
+            QByteArray data = buffer.data();
+            data.prepend(header);
+            if (data.size() < MAX_DATA_BYTES_IN_MARKER)
+            {
+                jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
+            } else {
+                kDebug(41008) << "EXIF information couldn't be saved." << endl; // TODO: warn the user ?
+            }
+        }
+        // Save IPTC
+        {
+            kDebug(41008) << "Trying to save exif information" << endl;
+            KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
+            Q_ASSERT(iptcIO);
+    
+            QBuffer buffer;
+            iptcIO->saveTo( metaData, &buffer);
+            
+            QByteArray header;
+            header.append( photoshopMarker );
+            header.append( QByteArray(1, 0) ); // Null terminated string
+            header.append( photoshopBimId_ );
+            header.append( photoshopIptc_ );
+            header.append( QByteArray(2, 0) );
+            qint32 size = buffer.size();
+            QByteArray sizeArray(4,0);
+            sizeArray[0] = (char)((size & 0xff000000) >> 24);
+            sizeArray[1] = (char)((size & 0x00ff0000) >> 16);
+            sizeArray[2] = (char)((size & 0x0000ff00) >> 8);
+            sizeArray[3] =  (char)(size & 0x000000ff);
+            header.append( sizeArray);
+            
+            kDebug(41008) << "IPTC information size is " << buffer.data().size() << " and header is of size = " << header.size() << endl;
+            QByteArray data = buffer.data();
+            data.prepend(header);
+            if (data.size() < MAX_DATA_BYTES_IN_MARKER)
+            {
+                jpeg_write_marker(&cinfo, JPEG_APP0 + 13, (const JOCTET*)data.data(), data.size());
+            } else {
+                kDebug(41008) << "IPTC information couldn't be saved." << endl; // TODO: warn the user ?
+            }
+        }
+    }
+
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {

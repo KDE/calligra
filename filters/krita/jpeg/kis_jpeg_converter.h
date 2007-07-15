@@ -74,7 +74,7 @@ class KisJPEGConverter : public KisProgressSubject {
         virtual ~KisJPEGConverter();
     public:
         KisImageBuilder_Result buildImage(const KUrl& uri);
-        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options);
+        KisImageBuilder_Result buildFile(const KUrl& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options, KisMetaData::Store* metaData);
         /** Retrieve the constructed image
         */
         KisImageSP image();
