@@ -28,23 +28,20 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
 {
     m_state->addUser();
     widget.setupUi(this);
-    KoUnit unit = m_state->document()->unit();
-    widget.left->setUnit(unit);
+    setUnit(m_state->document()->unit());
     widget.left->setMinimum(0.0);
-    widget.top->setUnit(unit);
     widget.top->setMinimum(0.0);
-    widget.width->setUnit(unit);
     widget.width->setMinimum(0.0);
-    widget.height->setUnit(unit);
     widget.height->setMinimum(0.0);
-    widget.leftMargin->setUnit(unit);
     widget.leftMargin->setMinimum(0.0);
-    widget.rightMargin->setUnit(unit);
     widget.rightMargin->setMinimum(0.0);
-    widget.bottomMargin->setUnit(unit);
     widget.bottomMargin->setMinimum(0.0);
-    widget.topMargin->setUnit(unit);
     widget.topMargin->setMinimum(0.0);
+
+    connect(widget.leftMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
+    connect(widget.rightMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
+    connect(widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
+    connect(widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
 }
 
 KWFrameGeometry::~KWFrameGeometry() {
@@ -72,14 +69,10 @@ void KWFrameGeometry::open(KoShape *shape) {
         widget.protectSize->setCheckState(Qt::Checked);
     }
 
-    connect(widget.left, SIGNAL(valueChanged(double)), 
-            this, SLOT(updateShape()));
-    connect(widget.top, SIGNAL(valueChanged(double)), 
-            this, SLOT(updateShape()));
-    connect(widget.width, SIGNAL(valueChanged(double)), 
-            this, SLOT(updateShape()));
-    connect(widget.height, SIGNAL(valueChanged(double)), 
-            this, SLOT(updateShape()));
+    connect(widget.left, SIGNAL(valueChanged(double)), this, SLOT(updateShape()));
+    connect(widget.top, SIGNAL(valueChanged(double)), this, SLOT(updateShape()));
+    connect(widget.width, SIGNAL(valueChanged(double)), this, SLOT(updateShape()));
+    connect(widget.height, SIGNAL(valueChanged(double)), this, SLOT(updateShape()));
 }
 
 void KWFrameGeometry::updateShape() {
@@ -104,13 +97,23 @@ void KWFrameGeometry::protectSizeChanged(int protectSizeState)
         frame = m_state->frame();
         m_state->markFrameUsed();
     }
-    Q_ASSERT(frame);   
+    Q_ASSERT(frame);
     bool lock = (protectSizeState == Qt::Checked);
     frame->shape()->setLocked(lock);
     widget.left->setDisabled(lock);
     widget.top->setDisabled(lock);
     widget.width->setDisabled(lock);
     widget.height->setDisabled(lock);
+}
+
+void KWFrameGeometry::syncMargins(double value) {
+    if(! widget.synchronize->isChecked())
+        return;
+
+    widget.leftMargin->changeValue(value);
+    widget.topMargin->changeValue(value);
+    widget.rightMargin->changeValue(value);
+    widget.bottomMargin->changeValue(value);
 }
 
 void KWFrameGeometry::save() {
@@ -132,5 +135,15 @@ KAction *KWFrameGeometry::createAction() {
     return 0; // TODO
 }
 
+void KWFrameGeometry::setUnit(KoUnit unit) {
+    widget.left->setUnit(unit);
+    widget.top->setUnit(unit);
+    widget.width->setUnit(unit);
+    widget.height->setUnit(unit);
+    widget.leftMargin->setUnit(unit);
+    widget.topMargin->setUnit(unit);
+    widget.rightMargin->setUnit(unit);
+    widget.bottomMargin->setUnit(unit);
+}
 
 #include "KWFrameGeometry.moc"

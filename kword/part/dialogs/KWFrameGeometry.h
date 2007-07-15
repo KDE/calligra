@@ -43,9 +43,12 @@ public:
     void cancel();
     KAction *createAction();
 
+    virtual void setUnit(KoUnit unit);
+
 private slots:
     void updateShape();
     void protectSizeChanged(int protectSizeState);
+    void syncMargins(double value);
 
 private:
     Ui::KWFrameGeometry widget;
