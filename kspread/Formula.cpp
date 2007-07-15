@@ -1289,14 +1289,7 @@ void Formula::compile( const Tokens& tokens ) const
 
 bool Formula::isNamedArea( const QString& expr ) const
 {
-    QString tokenText( expr );
-    // check for named areas ...
-    if (d->sheet) {
-        const Region region = d->sheet->doc()->namedAreaManager()->namedArea(tokenText);
-        if (region.isValid())
-            return true;
-    }
-    return false;
+    return d->sheet ? d->sheet->doc()->namedAreaManager()->contains(expr) : false;
 }
 
 

@@ -59,12 +59,13 @@ class KSPREAD_EXPORT CellDamage : public Damage
     enum Change
     {
       Appearance = 0x01, ///< triggers a layout update and then a repaint
-      Formula    = 0x02, ///< triggers a dependency update
-      Binding    = 0x04, ///< on value changes; always triggered; for binding updates
+      Binding    = 0x02, ///< on value changes; always triggered; for binding updates
+      Formula    = 0x04, ///< triggers a dependency update
+      NamedArea  = 0x10, ///< triggers a named area update
       /// This indicates a value change. It is not triggered while a recalculation is in progress.
       /// RecalcManager takes over in this case. Otherwise, circular dependencies would cause
       /// infinite loops and the cells would be recalculated in arbitrary order.
-      Value      = 0x10
+      Value      = 0x20
     };
     Q_DECLARE_FLAGS( Changes, Change )
 

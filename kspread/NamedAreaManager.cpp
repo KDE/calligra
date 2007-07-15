@@ -39,6 +39,7 @@
 #include <KoXmlWriter.h>
 
 // KSpread
+#include "CellStorage.h"
 #include "Doc.h"
 #include "LoadingInfo.h"
 #include "Map.h"
@@ -66,6 +67,10 @@ NamedAreaManager::NamedAreaManager(const Doc* doc)
     : d(new Private)
 {
     d->doc = doc;
+    connect(this, SIGNAL(namedAreaAdded(const QString&)),
+            this, SIGNAL(namedAreaModified(const QString&)));
+    connect(this, SIGNAL(namedAreaRemoved(const QString&)),
+            this, SIGNAL(namedAreaModified(const QString&)));
 }
 
 NamedAreaManager::~NamedAreaManager()
@@ -79,6 +84,7 @@ void NamedAreaManager::insert(Sheet* sheet, const QRect& range, const QString& n
     namedArea.range = range;
     namedArea.sheet = sheet;
     namedArea.name = name;
+    sheet->cellStorage()->setNamedArea(Region(range, sheet), name);
     d->namedAreas[name] = namedArea;
     emit namedAreaAdded(name);
 }
@@ -87,10 +93,12 @@ void NamedAreaManager::remove(const QString& name)
 {
     if (!d->namedAreas.contains(name))
         return;
-    const Map* map = d->namedAreas.value(name).sheet->map();
+    NamedArea namedArea = d->namedAreas.value(name);
+    namedArea.sheet->cellStorage()->setNamedArea(Region(namedArea.range, namedArea.sheet), QString());
     d->namedAreas.remove(name);
     emit namedAreaRemoved(name);
-    foreach (Sheet* sheet, map->sheetList())
+    const QList<Sheet*> sheets = namedArea.sheet->map()->sheetList();
+    foreach (Sheet* sheet, sheets)
         sheet->refreshRemoveAreaName(name);
 }
 
@@ -127,6 +135,55 @@ bool NamedAreaManager::contains(const QString& name) const
 QList<QString> NamedAreaManager::areaNames() const
 {
     return d->namedAreas.keys();
+}
+
+void NamedAreaManager::regionChanged(const Region& region)
+{
+    Sheet* sheet;
+    QList< QPair<QRectF, QString> > namedAreas;
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
+    {
+        sheet = (*it)->sheet();
+        namedAreas = sheet->cellStorage()->namedAreas(Region((*it)->rect(), sheet));
+        for (int j = 0; j < namedAreas.count(); ++j)
+        {
+            if (namedAreas[j].first.toRect().isEmpty())
+            {
+                d->namedAreas.remove(namedAreas[j].second);
+                emit namedAreaRemoved(namedAreas[j].second);
+            }
+            else
+            {
+                d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
+                emit namedAreaModified(namedAreas[j].second);
+            }
+        }
+    }
+}
+
+void NamedAreaManager::updateAllNamedAreas()
+{
+    QList< QPair<QRectF, QString> > namedAreas;
+    const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
+    const QList<Sheet*> sheets = d->doc->map()->sheetList();
+    for (int i = 0; i < sheets.count(); ++i)
+    {
+        namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
+        for (int j = 0; j < namedAreas.count(); ++j)
+        {
+            if (namedAreas[j].first.toRect().isEmpty())
+            {
+                d->namedAreas.remove(namedAreas[j].second);
+                emit namedAreaRemoved(namedAreas[j].second);
+            }
+            else
+            {
+                d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
+                emit namedAreaModified(namedAreas[j].second);
+            }
+        }
+    }
 }
 
 void NamedAreaManager::loadOdf(const KoXmlElement& body)

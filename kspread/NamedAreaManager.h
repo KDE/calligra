@@ -37,6 +37,7 @@ class KoXmlWriter;
 namespace KSpread
 {
 class Doc;
+class Region;
 
 class KSPREAD_EXPORT NamedAreaManager : public QObject
 {
@@ -74,6 +75,9 @@ public:
      */
     QList<QString> areaNames() const;
 
+    void regionChanged(const Region& region);
+    void updateAllNamedAreas();
+
     /// \ingroup OpenDocument
     void loadOdf(const KoXmlElement& body);
     /// \ingroup OpenDocument
@@ -87,6 +91,7 @@ public:
 Q_SIGNALS:
     void namedAreaAdded(const QString&);
     void namedAreaRemoved(const QString&);
+    void namedAreaModified(const QString&);
 
 private:
     class Private;

@@ -290,9 +290,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
             KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
     }
 
-    connect(d->namedAreaManager, SIGNAL(namedAreaAdded(const QString&)),
-            d->dependencyManager, SLOT(namedAreaModified(const QString&)));
-    connect(d->namedAreaManager, SIGNAL(namedAreaRemoved(const QString&)),
+    connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
             d->dependencyManager, SLOT(namedAreaModified(const QString&)));
     connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
@@ -2031,6 +2029,7 @@ void Doc::handleDamages( const QList<Damage*>& damages )
 {
     Region bindingChangedRegion;
     Region formulaChangedRegion;
+    Region namedAreaChangedRegion;
     Region valueChangedRegion;
     WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
 
@@ -2057,6 +2056,11 @@ void Doc::handleDamages( const QList<Damage*>& damages )
             {
                 formulaChangedRegion.add( region, damagedSheet );
             }
+            if ( ( cellDamage->changes() & CellDamage::NamedArea ) &&
+                 !workbookChanges.testFlag( WorkbookDamage::Formula ) )
+            {
+                namedAreaChangedRegion.add( region, damagedSheet );
+            }
             if ( ( cellDamage->changes() & CellDamage::Value ) &&
                  !workbookChanges.testFlag( WorkbookDamage::Value ) )
             {
@@ -2069,7 +2073,7 @@ void Doc::handleDamages( const QList<Damage*>& damages )
         {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
             kDebug(36007) << "Processing\t " << *sheetDamage << endl;
-            Sheet* damagedSheet = sheetDamage->sheet();
+//             Sheet* damagedSheet = sheetDamage->sheet();
 
             if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
             {
@@ -2093,6 +2097,9 @@ void Doc::handleDamages( const QList<Damage*>& damages )
         kDebug(36007) << "Unhandled\t " << *damage << endl;
     }
 
+    // Update the named areas.
+    if (!namedAreaChangedRegion.isEmpty())
+        namedAreaManager()->regionChanged(namedAreaChangedRegion);
     // First, update the dependencies.
     if ( !formulaChangedRegion.isEmpty() )
         dependencyManager()->regionChanged( formulaChangedRegion );
@@ -2100,7 +2107,10 @@ void Doc::handleDamages( const QList<Damage*>& damages )
     if ( !valueChangedRegion.isEmpty() )
         recalcManager()->regionChanged( valueChangedRegion );
     if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
+    {
+        namedAreaManager()->updateAllNamedAreas();
         dependencyManager()->updateAllDependencies( map() );
+    }
     if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
     {
         recalcManager()->recalcMap();

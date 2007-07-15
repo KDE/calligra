@@ -65,6 +65,7 @@
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
 #include "Object.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
@@ -981,6 +982,11 @@ void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef
                 case Token::Cell:
                 case Token::Range:
                 {
+                    if (doc()->namedAreaManager()->contains(token.text()))
+                    {
+                        newText.append(token.text()); // simply keep the area name
+                        break;
+                    }
                     const Region region(token.text(), map());
                     if (!region.isValid() || !region.isContiguous())
                     {

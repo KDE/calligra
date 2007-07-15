@@ -26,8 +26,10 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
+#include "Doc.h"
 #include "Formula.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
 #include "Region.h"
 #include "RTree.h"
 #include "Sheet.h"
@@ -50,7 +52,6 @@ public:
      * providing region to the data structures.
      * \see removeDependencies
      * \see computeDependencies
-     * \see addDependencies
      */
     void generateDependencies(const Cell& cell, const Formula& formula);
 
@@ -87,12 +88,7 @@ public:
      */
     Region consumingRegion(const Cell& cell) const;
 
-    void areaModified (const QString &name);
-
-    /**
-     * Updates structures: \p cell depends on cells in \p region and vice versa.
-     */
-    void addDependencies(const Cell& cell, const Region& region);
+    void namedAreaModified(const QString& name);
 
     /**
      * Removes all dependencies of \p cell .
@@ -100,9 +96,9 @@ public:
     void removeDependencies(const Cell& cell);
 
     /**
-     * \return a list of cells that \p cell depends on
+     * Computes and stores the dependencies.
      */
-    Region computeDependencies(const Cell& cell, const Formula& formula) const;
+    void computeDependencies(const Cell& cell, const Formula& formula);
 
     enum Direction { Forward, Backward };
     /**
@@ -120,8 +116,8 @@ public:
     QHash<Cell, Region> providers;
     // stores consuming cell locations ordered by their providing regions
     QHash<Sheet*, RTree<Cell>*> consumers;
-    // list of cells referencing a given named area
-    QHash<QString, QHash<Cell, bool> > areaDeps;
+    // stores consuming cell locations ordered by their providing named area
+    QHash<QString, QList<Cell> > namedAreaConsumers;
     /*
      * Stores cells with its reference depth.
      * Depth means the maximum depth of all cells this cell depends on plus one,
@@ -241,7 +237,7 @@ void DependencyManager::regionChanged(const Region& region)
 
 void DependencyManager::namedAreaModified(const QString &name)
 {
-    d->areaModified (name);
+    d->namedAreaModified(name);
 }
 
 void DependencyManager::updateAllDependencies(const Map* map)
@@ -346,8 +342,7 @@ void DependencyManager::updateFormula( const Cell& cell, const Region::Element* 
 
     QString expression = "=";
     Sheet* sheet = cell.sheet();
-    Region region;
-    for( int i = 0; i < tokens.count(); i++ )
+    for( int i = 0; i < tokens.count(); ++i )
     {
         Token token = tokens[i];
         Token::Type tokenType = token.type();
@@ -355,15 +350,16 @@ void DependencyManager::updateFormula( const Cell& cell, const Region::Element* 
         //parse each cell/range and put it to our expression
         if (tokenType == Token::Cell || tokenType == Token::Range)
         {
+            // FIXME Stefan: Special handling for named areas
             const Region region(token.text(), sheet->map(), sheet);
-            const Region::Element* element = *region.constBegin();
 
             kDebug(36002) << region.name() << endl;
             // the offset contains a sheet, only if it was an intersheet move.
-            if ( ( oldLocation->sheet() == element->sheet() ) &&
-                   ( oldLocation->rect().contains( element->rect() ) ) )
+            if ( ( oldLocation->sheet() == region.firstSheet() ) &&
+                   ( oldLocation->rect().contains( region.firstRange() ) ) )
             {
-                const Region yetAnotherRegion( element->rect().translated( offset.pos() ), offset.sheet() ? offset.sheet() : sheet );
+                const Region yetAnotherRegion( region.firstRange().translated( offset.pos() ),
+                                               offset.sheet() ? offset.sheet() : sheet );
                 expression.append( yetAnotherRegion.name( sheet ) );
             }
             else
@@ -401,42 +397,23 @@ KSpread::Region DependencyManager::Private::consumingRegion(const Cell& cell) co
     return region;
 }
 
-void DependencyManager::Private::areaModified (const QString &name)
+void DependencyManager::Private::namedAreaModified(const QString& name)
 {
     // since area names are something like aliases, modifying an area name
     // basically means that all cells referencing this area should be treated
     // as modified - that will retrieve updated area ranges and also update
     // everything as necessary ...
-    if (!areaDeps.contains (name))
+    if (!namedAreaConsumers.contains(name))
         return;
 
-    QHash<Cell, bool>::iterator it;
-    for (it = areaDeps[name].begin(); it != areaDeps[name].end(); ++it)
+    Region region;
+    const QList<Cell> namedAreaConsumers = this->namedAreaConsumers[name];
+    for (int i = 0; i < namedAreaConsumers.count(); ++i)
     {
-        Cell cell = it.key();
-        // this forces the cell to regenerate everything - new range dependencies
-        // and so on
-        cell.setValue (cell.value ());
+        generateDependencies(namedAreaConsumers[i], namedAreaConsumers[i].formula());
+        region.add(namedAreaConsumers[i].cellPosition(), namedAreaConsumers[i].sheet());
     }
-}
-
-void DependencyManager::Private::addDependencies(const Cell& cell, const Region& region)
-{
-    // NOTE Stefan: Also store cells without dependencies to avoid an
-    //              iteration over all cells in a map/sheet on recalculation.
-
-    // empty region will be created automatically, if necessary
-    providers[cell].add(region);
-
-    Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
-    {
-        Sheet* sheet = (*it)->sheet();
-        QRectF range = QRectF((*it)->rect()).adjusted(0, 0, -0.1, -0.1);
-
-        if ( !consumers.contains( sheet ) ) consumers.insert( sheet, new RTree<Cell>() );
-        consumers[sheet]->insert( range, cell );
-    }
+    generateDepths(region);
 }
 
 void DependencyManager::Private::removeDependencies(const Cell& cell)
@@ -445,7 +422,7 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     if ( !providers.contains( cell ) )
         return;  //it doesn't - nothing more to do
 
-    // first this cell is no longer a provider for all providers
+    // first this cell is no longer a provider for all consumers
     Region region = providers[cell];
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
@@ -460,17 +437,19 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     }
 
     // remove information about named area dependencies
-    QHash<QString, QHash<Cell, bool> >::iterator itr;
-    for (itr = areaDeps.begin(); itr != areaDeps.end(); ++itr) {
-        if ( itr.value().contains( cell ) )
-            itr.value().remove( cell );
+    const QList<QString> namedAreas = namedAreaConsumers.keys();
+    for (int i = 0; i < namedAreas.count(); ++i)
+    {
+        namedAreaConsumers[namedAreas[i]].removeAll(cell);
+        if (namedAreaConsumers[namedAreas[i]].isEmpty())
+            namedAreaConsumers.remove(namedAreas[i]);
     }
 
     // clear the circular dependency flags
     removeCircularDependencyFlags( providers.value( cell ), Backward );
     removeCircularDependencyFlags( consumingRegion( cell ), Forward );
 
-    // finally, remove the entry about this cell
+    // finally, remove the providers for this cell
     providers.remove( cell );
 }
 
@@ -485,12 +464,8 @@ void DependencyManager::Private::generateDependencies(const Cell& cell, const Fo
     //get rid of old dependencies first
     removeDependencies(cell);
 
-    //now we need to generate dependencies
-    Region region = computeDependencies(cell, formula);
-
-    //now that we have the new dependencies, we put them into our data structures
-    //and we're done
-    addDependencies(cell, region);
+    //now we need to generate the providing region
+    computeDependencies(cell, formula);
 }
 
 void DependencyManager::Private::generateDepths(const Region& region)
@@ -609,34 +584,57 @@ int DependencyManager::Private::computeDepth(Cell cell) const
     return depth;
 }
 
-KSpread::Region DependencyManager::Private::computeDependencies( const Cell& cell, const Formula& formula ) const
+void DependencyManager::Private::computeDependencies( const Cell& cell, const Formula& formula )
 {
     // Broken formula -> meaningless dependencies
     if ( !formula.isValid() )
-        return Region();
+        return;
 
-    Tokens tokens = formula.tokens();
+    const Tokens tokens = formula.tokens();
 
     //return empty list if the tokens aren't valid
     if (!tokens.valid())
-        return Region();
+        return;
 
     Sheet* sheet = cell.sheet();
-    Region region;
+    Region providingRegion;
     for( int i = 0; i < tokens.count(); i++ )
     {
-        Token token = tokens[i];
-        Token::Type tokenType = token.type();
+        const Token token = tokens[i];
 
         //parse each cell/range and put it to our Region
-        if (tokenType == Token::Cell || tokenType == Token::Range)
+        if (token.type() == Token::Cell || token.type() == Token::Range)
         {
-            Region subRegion(token.text(), sheet->map(), sheet);
-            if (subRegion.isValid())
-                region.add(subRegion);
+            // check for named area
+            if (sheet->doc()->namedAreaManager()->contains(token.text()))
+            {
+                // add cell as consumer of the named area
+                namedAreaConsumers[token.text()].append(cell);
+            }
+
+            // check if valid cell/range
+            const Region region(token.text(), sheet->map(), sheet);
+            if (region.isValid())
+            {
+                // add it to the providers
+                providingRegion.add(region);
+
+                Sheet* sheet = region.firstSheet();
+                QRectF range = QRectF(region.firstRange()).adjusted(0, 0, -0.1, -0.1);
+
+                // create consumer tree, if not existing yet
+                if ( !consumers.contains( sheet ) ) consumers.insert( sheet, new RTree<Cell>() );
+                // add cell as consumer of the range
+                consumers[sheet]->insert( range, cell );
+            }
         }
     }
-    return region;
+
+    // store the providing region
+    // NOTE Stefan: Also store cells without dependencies to avoid an
+    //              iteration over all cells in a map/sheet on recalculation.
+    // empty region will be created automatically, if necessary
+    providers[cell].add(providingRegion);
 }
 
 void DependencyManager::Private::removeCircularDependencyFlags( const Region& region, Direction direction )
