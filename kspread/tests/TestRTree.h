@@ -11,10 +11,14 @@ class TestRTree: public QObject
     Q_OBJECT
 private Q_SLOTS:
     void testIntersectingPairs();
-    void testShiftColumns();
-    void testShiftRows();
-    void testUnshiftColumns();
-    void testUnshiftRows();
+    void testInsertShiftRight();
+    void testInsertShiftDown();
+    void testRemoveShiftLeft();
+    void testRemoveShiftUp();
+    void testInsertColumns();
+    void testInsertRows();
+    void testRemoveColumns();
+    void testRemoveRows();
     void testPrimitive();
 };
 
