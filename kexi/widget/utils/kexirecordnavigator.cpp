@@ -341,7 +341,7 @@ void KexiRecordNavigator::setParentView(Q3ScrollView *view)
 void KexiRecordNavigator::updateGeometry(int leftMargin)
 {
 	Q3Frame::updateGeometry();
-	kexidbg <<"view "<<m_view<<endl;
+//	kexidbg <<"view "<<m_view<<endl;
 	if (m_view) {
 		int navWidth;
 		if (m_view->horizontalScrollBar()->isVisible()) {
@@ -351,11 +351,11 @@ void KexiRecordNavigator::updateGeometry(int leftMargin)
 			navWidth = leftMargin + m_view->clipper()->width();
 		}
 		
-		kexidbg << "setGeometry("<<QRect(
+/*		kexidbg << "setGeometry("<<QRect(
 			m_view->frameWidth(),
 			m_view->height() - m_view->horizontalScrollBar()->sizeHint().height()-m_view->frameWidth(),
 			navWidth,
-			m_view->horizontalScrollBar()->sizeHint().height())<<")"<<endl;
+			m_view->horizontalScrollBar()->sizeHint().height())<<")"<<endl;*/
 
 		setGeometry(
 			m_view->frameWidth(),

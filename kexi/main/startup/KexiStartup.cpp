@@ -758,7 +758,7 @@ tristate KexiStartupHandler::detectActionForFile(
 	if ((options & ThisIsAProjectFile) || !thisIsShortcut) {
 		//try this detection if "project file" mode is forced or no type is forced:
 		ptr = KMimeType::findByFileContent(dbFileName);
-		mimename = ptr.data()->name();
+		mimename = ptr.data() ? ptr.data()->name() : QString();
 		kDebug() << "KexiStartupHandler::detectActionForFile(): found mime is: " 
 			<< mimename << endl;
 		if (mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain") {

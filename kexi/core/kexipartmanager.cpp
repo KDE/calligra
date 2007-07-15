@@ -47,6 +47,7 @@ Manager::Manager(QObject *parent)
 Manager::~Manager()
 {
 	qDeleteAll(m_partlist);
+	m_partlist.clear();
 }
 
 bool Manager::lookup()

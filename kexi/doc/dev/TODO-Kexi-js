@@ -1100,3 +1100,6 @@ Find/Replace REPLACE
 
 TODO
 - compare KexiUtils' tristate class with http://boost.org/doc/html/tribool.html
+
+TODO
+- implement more mimetypes for blob fields

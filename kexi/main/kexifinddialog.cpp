@@ -47,6 +47,7 @@ class KexiFindDialog::Private
 		~Private()
 		{
 			qDeleteAll(shortcuts);
+			shortcuts.clear();
 		}
 		//! Connects action \a action with appropriate signal \a member
 		//! and optionally adds shortcut that will receive shortcut for \a action 

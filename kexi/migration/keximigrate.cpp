@@ -58,6 +58,7 @@ void KexiMigrate::setData(KexiMigration::Data* migrateData)
 KexiMigrate::~KexiMigrate()
 {
 	qDeleteAll( m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport );
+	m_kexiDBCompatibleTableSchemasToRemoveFromMemoryAfterImport.clear();
 	delete m_destPrj;
 }
 

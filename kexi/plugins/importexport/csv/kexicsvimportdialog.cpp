@@ -500,6 +500,7 @@ void KexiCSVImportDialog::fillTable()
 	m_detectedTypes.clear();
 	m_detectedTypes.resize(1024, _NO_TYPE_YET);//_TEXT_TYPE);
 	qDeleteAll(m_uniquenessTest);
+	m_uniquenessTest.clear();
 	m_uniquenessTest.resize(1024);
 	m_1stRowForFieldNamesDetected = true;
 

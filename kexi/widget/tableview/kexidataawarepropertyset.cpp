@@ -54,6 +54,7 @@ KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiView *view,
 KexiDataAwarePropertySet::~KexiDataAwarePropertySet()
 {
 	qDeleteAll(m_sets);
+	m_sets.clear();
 }
 
 void KexiDataAwarePropertySet::slotDataSet( KexiTableViewData *data )

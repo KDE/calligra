@@ -106,6 +106,7 @@ KexiFlowLayout::KexiFlowLayout(int spacing)
 KexiFlowLayout::~KexiFlowLayout()
 {
 	qDeleteAll(m_list);
+	m_list.clear();
 }
 
 void

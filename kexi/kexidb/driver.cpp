@@ -90,6 +90,7 @@ Driver::~Driver()
 	DriverManagerInternal::self()->aboutDelete( this );
 //	KexiDBDbg << "Driver::~Driver()" << endl;
 	qDeleteAll( d->connections );
+	d->connections.clear();
 	delete beh;
 	delete d;
 //	KexiDBDbg << "Driver::~Driver() ok" << endl;

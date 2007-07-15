@@ -52,6 +52,7 @@ KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent)
 KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
 {
 	qDeleteAll(*m_history);
+	m_history->clear();
 }
 
 void KexiQueryDesignerSQLHistory::drawContents(QPainter *p, int cx, int cy, int cw, int ch)

@@ -59,6 +59,7 @@ DriverManagerInternal::~DriverManagerInternal()
 {
 	KexiDBDbg << "DriverManagerInternal::~DriverManagerInternal()" << endl;
 	qDeleteAll(m_drivers);
+	m_drivers.clear();
 	if ( s_self == this )
 		s_self = 0;
 	KexiDBDbg << "DriverManagerInternal::~DriverManagerInternal() ok" << endl;
@@ -73,6 +74,7 @@ void DriverManagerInternal::slotAppQuits()
 	}
 	KexiDBDbg << "DriverManagerInternal::slotAppQuits(): let's clear drivers..." << endl;
 	qDeleteAll(m_drivers);
+	m_drivers.clear();
 }
 
 DriverManagerInternal *DriverManagerInternal::self()

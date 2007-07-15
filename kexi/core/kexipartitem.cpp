@@ -27,6 +27,7 @@ class Item::Private
 		Private()
 		{
 		}
+		int dummy;
 	// unused for now
 };
 }
@@ -56,7 +57,6 @@ ItemDict::ItemDict()
 
 ItemDict::~ItemDict()
 {
-	qDeleteAll(*this);
 }
 
 //-----------------------

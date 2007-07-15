@@ -57,6 +57,7 @@ class ActionCategories::Private
 		~Private()
 		{
 			qDeleteAll(actions);
+			actions.clear();
 		}
 
 	QMap<QByteArray, ActionInternal*> actions;

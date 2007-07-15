@@ -80,7 +80,7 @@ void KexiSharedActionConnector::plugSharedActionsToExternalGUI(
 //=======================
 
 KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
- : m_host( host ? host : &KexiSharedActionHost::defaultHost() )
+ : m_host( host ? host : KexiSharedActionHost::defaultHost() )
  , m_receiver(receiver)
  , m_actionProxyParent(0)
  , m_signal_parent( 0 )
@@ -96,6 +96,7 @@ KexiActionProxy::KexiActionProxy(QObject *receiver, KexiSharedActionHost *host)
 KexiActionProxy::~KexiActionProxy()
 {
 	qDeleteAll(m_signals);
+	m_signals.clear();
 	//detach myself from every child
 	foreach (KexiActionProxy *proxy, m_sharedActionChildren)
 		proxy->setActionProxyParent_internal( 0 );

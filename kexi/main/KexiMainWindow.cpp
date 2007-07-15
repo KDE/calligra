@@ -2724,6 +2724,7 @@ KexiMainWindow::activateWindow(KexiWindow *window)
 		return false;
 
 	d->focus_before_popup = window;
+	d->tabWidget->setCurrentWidget(window);
 	window->activate();
 	return true;
 }
@@ -3907,7 +3908,6 @@ KexiWindow *
 KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &openingCancelled,
 	QMap<QString,QString>* staticObjectArgs, QString* errorMessage)
 {
-	kDebug()<<"????"<<endl;
 	if (!openingAllowed(item, viewMode)) {
 		if (errorMessage)
 			*errorMessage = i18nc(

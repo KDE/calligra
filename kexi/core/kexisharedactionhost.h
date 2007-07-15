@@ -86,7 +86,7 @@ class KEXICORE_EXPORT KexiSharedActionHost
 		/*! \return default shared actions host, used when no host 
 		 is explicitly specified for shared actions.
 		 There can be exactly one deault shared actions host. */
-		static KexiSharedActionHost defaultHost();
+		static KexiSharedActionHost* defaultHost();
 
 		/*! \return shared actions list. */
 		QList<KAction*> sharedActions() const;

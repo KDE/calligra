@@ -23,7 +23,7 @@
 #endif
 
 //! @internal safer dictionary
-typedef QMap< int, QPointer<KexiWindow> > KexiWindowDict;
+typedef QMap< int, KexiWindow* > KexiWindowDict;
 
 //! @internal
 class KexiMainWindow::Private
@@ -122,7 +122,7 @@ public:
 		if (pendingType == WindowOpeningJob) {
 			return 0;
 		}
-		return (KexiWindow*)windows[ identifier ];
+		return windows.contains( identifier ) ? (KexiWindow*)windows.value( identifier ) : 0;
 	}
 #else
 	KexiWindow *openedWindowFor( const KexiPart::Item* item )
@@ -133,13 +133,13 @@ public:
 	KexiWindow *openedWindowFor( int identifier )
 	{
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		return (KexiWindow*)windows[ identifier ];
+		return windows.contains( identifier ) ? (KexiWindow*)windows.value( identifier ) : 0;
 	}
 #endif
 
 	void insertWindow(KexiWindow *window) {
 //todo(threads)		QMutexLocker dialogsLocker( &dialogsMutex );
-		windows.insert(window->id(), QPointer<KexiWindow>(window));
+		windows.insert(window->id(), window);
 #ifndef KEXI_NO_PENDING_DIALOGS
 		pendingWindows.remove(window->id());
 #endif
@@ -165,7 +165,7 @@ public:
 #ifndef KEXI_NO_PENDING_DIALOGS
 		pendingWindows.remove(oldItemID);
 #endif
-		windows.insert(window->id(), QPointer<KexiWindow>(window));
+		windows.insert(window->id(), window);
 	}
 
 	void removeWindow(int identifier) {

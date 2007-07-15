@@ -68,8 +68,12 @@ class KexiProject::Private
 			delete data;
 			data=0;
 			delete sqlParser;
-			qDeleteAll(itemDictsCache);
+			foreach (KexiPart::ItemDict* dict, itemDictsCache) {
+				qDeleteAll(*dict);
+				dict->clear();
+			}
 			qDeleteAll(unstoredItems);
+			unstoredItems.clear();
 		}
 
 		QPointer<KexiDB::Connection> connection;
