@@ -54,15 +54,6 @@ public:
      */
     virtual ~NamedAreaManager();
 
-    /**
-     * Registers a named area.
-     * \note The name is valid for the whole document.
-     * \param rect the cell range to be named
-     * \param name the name of the new area
-     * \param sheetName the name of the sheet the area belongs to
-     */
-    void insert(Sheet* sheet, const QRect& range, const QString& name);
-    void remove(const QString& name);
     void remove(Sheet* sheet);
 
     Region namedArea(const QString& name) const;
@@ -87,6 +78,17 @@ public:
     void loadXML(const KoXmlElement& element);
     /// \ingroup NativeFormat
     QDomElement saveXML(QDomDocument& doc) const;
+
+public Q_SLOTS:
+    /**
+     * Adds a named area.
+     * \note The name is valid for the whole document.
+     * \param region the cell range to be named
+     * \param name the name of the new area
+     */
+    void insert(const Region& region, const QString& name);
+
+    void remove(const QString& name);
 
 Q_SIGNALS:
     void namedAreaAdded(const QString&);

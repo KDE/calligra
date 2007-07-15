@@ -1245,6 +1245,8 @@ CellStorageUndoData* CellStorage::stopUndoRecording()
     Q_ASSERT( d->undoData != 0 );
     CellStorageUndoData* undoData = d->undoData;
     d->undoData = 0;
+    for (int i = 0; i < undoData->namedAreas.count(); ++i)
+        emit namedAreaRemoved(undoData->namedAreas[i].second);
     // do not store an object unnecessarily
     if ( undoData->isEmpty() )
     {
@@ -1271,7 +1273,7 @@ void CellStorage::undo( CellStorageUndoData* data )
     for ( int i = 0; i < data->matrices.count(); ++i )
         d->matrixStorage->insert( Region(data->matrices[i].first.toRect()), data->matrices[i].second );
     for ( int i = 0; i < data->namedAreas.count(); ++i )
-        setNamedArea( Region(data->namedAreas[i].first.toRect()), data->namedAreas[i].second );
+        emit insertNamedArea(Region(data->namedAreas[i].first.toRect(), d->sheet), data->namedAreas[i].second);
     for ( int i = 0; i < data->styles.count(); ++i )
         d->styleStorage->insert( data->styles[i].first.toRect(), data->styles[i].second );
     for ( int i = 0; i < data->bindings.count(); ++i )

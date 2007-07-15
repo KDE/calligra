@@ -211,6 +211,11 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
     // document size changes always trigger a visible size change
     connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
+    // CellStorage connections
+    connect(d->cellStorage, SIGNAL(insertNamedArea(const Region&, const QString&)),
+            doc()->namedAreaManager(), SLOT(insert(const Region&, const QString&)));
+    connect(d->cellStorage, SIGNAL(namedAreaRemoved(const QString&)),
+            doc()->namedAreaManager(), SLOT(remove(const QString&)));
 }
 
 Sheet::~Sheet()

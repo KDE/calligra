@@ -78,13 +78,14 @@ NamedAreaManager::~NamedAreaManager()
     delete d;
 }
 
-void NamedAreaManager::insert(Sheet* sheet, const QRect& range, const QString& name)
+void NamedAreaManager::insert(const Region& region, const QString& name)
 {
+    // NOTE Stefan: Only contiguous regions are supported (OpenDocument compatibility).
     NamedArea namedArea;
-    namedArea.range = range;
-    namedArea.sheet = sheet;
+    namedArea.range = region.lastRange();
+    namedArea.sheet = region.lastSheet();
     namedArea.name = name;
-    sheet->cellStorage()->setNamedArea(Region(range, sheet), name);
+    namedArea.sheet->cellStorage()->setNamedArea(Region(region.lastRange(), region.lastSheet()), name);
     d->namedAreas[name] = namedArea;
     emit namedAreaAdded(name);
 }
@@ -148,16 +149,8 @@ void NamedAreaManager::regionChanged(const Region& region)
         namedAreas = sheet->cellStorage()->namedAreas(Region((*it)->rect(), sheet));
         for (int j = 0; j < namedAreas.count(); ++j)
         {
-            if (namedAreas[j].first.toRect().isEmpty())
-            {
-                d->namedAreas.remove(namedAreas[j].second);
-                emit namedAreaRemoved(namedAreas[j].second);
-            }
-            else
-            {
-                d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
-                emit namedAreaModified(namedAreas[j].second);
-            }
+            d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
+            emit namedAreaModified(namedAreas[j].second);
         }
     }
 }
@@ -172,16 +165,8 @@ void NamedAreaManager::updateAllNamedAreas()
         namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
         for (int j = 0; j < namedAreas.count(); ++j)
         {
-            if (namedAreas[j].first.toRect().isEmpty())
-            {
-                d->namedAreas.remove(namedAreas[j].second);
-                emit namedAreaRemoved(namedAreas[j].second);
-            }
-            else
-            {
-                d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
-                emit namedAreaModified(namedAreas[j].second);
-            }
+            d->namedAreas[namedAreas[j].second].range = namedAreas[j].first.toRect();
+            emit namedAreaModified(namedAreas[j].second);
         }
     }
 }
@@ -216,7 +201,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                     continue;
                 }
 
-                insert(region.firstSheet(), region.firstRange(), name);
+                insert(region, name);
             }
             else if (element.localName() == "named-expression")
             {
@@ -282,7 +267,7 @@ void NamedAreaManager::loadXML(const KoXmlElement& parent)
                 if (rect.hasAttribute("bottom-rect"))
                     bottom = rect.attribute("bottom-rect").toInt(&ok);
             }
-            insert(sheet, QRect(QPoint(left, top), QPoint(right, bottom)), refname);
+            insert(Region(QRect(QPoint(left, top), QPoint(right, bottom)), sheet), refname);
         }
     }
 }

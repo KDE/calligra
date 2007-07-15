@@ -346,6 +346,10 @@ public:
      */
     void undo( CellStorageUndoData* undoData );
 
+Q_SIGNALS:
+    void insertNamedArea(const Region&, const QString&);
+    void namedAreaRemoved(const QString&);
+
 private:
     // do not allow assignment
     CellStorage& operator=( const CellStorage& );

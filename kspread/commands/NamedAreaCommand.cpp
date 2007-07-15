@@ -76,14 +76,13 @@ bool NamedAreaCommand::mainProcessing()
     {
         if (!m_oldArea.isEmpty())
             m_sheet->doc()->namedAreaManager()->remove(m_areaName);
-        m_sheet->doc()->namedAreaManager()->insert(m_sheet, firstRange(), m_areaName);
+        m_sheet->doc()->namedAreaManager()->insert(*this, m_areaName);
     }
     else
     {
         m_sheet->doc()->namedAreaManager()->remove(m_areaName);
         if (!m_oldArea.isEmpty())
-            m_sheet->doc()->namedAreaManager()->insert(m_oldArea.firstSheet(),
-                                                       m_oldArea.firstRange(), m_areaName);
+            m_sheet->doc()->namedAreaManager()->insert(m_oldArea, m_areaName);
     }
     return true;
 }
