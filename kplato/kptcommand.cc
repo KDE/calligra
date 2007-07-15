@@ -248,7 +248,7 @@ void CalendarModifyParentCmd::unexecute()
     setCommandType( 1 );
 }
 
-CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Part *part, Calendar *cal, const KTimeZone *value, const QString& name )
+CalendarModifyTimeZoneCmd::CalendarModifyTimeZoneCmd( Part *part, Calendar *cal, const KTimeZone &value, const QString& name )
         : NamedCommand( part, name ),
         m_cal( cal ),
         m_newvalue( value ),

@@ -398,8 +398,8 @@ public:
     void insertId(const QString &id);
 
     const KDateTime::Spec &timeSpec() const { return m_spec; }
-    const KTimeZone *timeZone() const { return m_spec.timeZone(); }
-    void setTimeZone( const KTimeZone *tz );
+    KTimeZone timeZone() const { return m_spec.timeZone(); }
+    void setTimeZone( const KTimeZone &tz );
     
     void setDefault( bool on ) { m_default = on; }
     bool isDefault() const { return m_default; }

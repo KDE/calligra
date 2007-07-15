@@ -635,8 +635,8 @@ const Calendar &Calendar::copy( const Calendar &calendar ) {
 void Calendar::init() {
     m_weekdays = new CalendarWeekdays();
     m_spec = KDateTime::Spec::LocalZone();
-    if ( m_spec.timeZone() == 0 ) {
-        m_spec.setType( new KTimeZone() );
+    if ( !m_spec.timeZone().isValid() ) {
+        m_spec.setType( KTimeZone() );
     }
 }
 
@@ -675,7 +675,7 @@ void Calendar::setProject(Project *project) {
     m_project = project;
 }
 
-void Calendar::setTimeZone( const KTimeZone *tz )
+void Calendar::setTimeZone( const KTimeZone &tz )
 {
     //kDebug()<<k_funcinfo<<tz->name()<<endl;
     m_spec = KDateTime::Spec( tz );
@@ -715,8 +715,8 @@ bool Calendar::load( KoXmlElement &element, XMLLoaderObject &status ) {
     setId(element.attribute("id"));
     m_parentId = element.attribute("parent");
     m_name = element.attribute("name","");
-    const KTimeZone *tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
-    if ( tz ) {
+    KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
+    if ( tz.isValid() ) {
         setTimeZone( tz );
     } else kWarning()<<k_funcinfo<<"No timezone specified, use default (local)"<<endl;
     bool m_default = (bool)element.attribute("default","0").toInt();
@@ -770,7 +770,7 @@ void Calendar::save(QDomElement &element) const {
     if ( m_default ) {
         me.setAttribute("default", m_default);
     }
-    me.setAttribute("timezone", m_spec.timeZone()->name() );
+    me.setAttribute("timezone", m_spec.timeZone().name() );
     m_weekdays->save(me);
     foreach (CalendarDay *d, m_days) {
         QDomElement e = me.ownerDocument().createElement("day");

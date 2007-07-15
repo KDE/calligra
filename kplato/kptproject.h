@@ -36,8 +36,7 @@
 #include <QHash>
 
 #include <klocale.h>
-
-class KTimeZone;
+#include <ktimezone.h>
 
 /// The main namespace.
 namespace KPlato
@@ -396,9 +395,9 @@ public:
     /// Return the time spec used in this project
     const KDateTime::Spec &timeSpec() const { return m_spec; }
     /// Return the time zone used in this project
-    const KTimeZone *timeZone() const { return m_spec.timeZone(); }
+    KTimeZone timeZone() const { return m_spec.timeZone(); }
     /// Set the time zone to be used in this project
-    void setTimeZone( const KTimeZone *tz ) { m_spec = KDateTime::Spec( tz ); }
+    void setTimeZone( const KTimeZone &tz ) { m_spec = KDateTime::Spec( tz ); }
     
     /**
      * Add a relation between the nodes specified in the relation rel.

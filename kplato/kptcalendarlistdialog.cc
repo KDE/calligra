@@ -70,7 +70,7 @@ public:
         if ( hasParent() ) {
             return base->timeZone();
         }
-        return calendar->timeZone()->name();
+        return calendar->timeZone().name();
     }
     Calendar *baseCalendar() const {
         if (state & Deleted) return 0;

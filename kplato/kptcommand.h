@@ -143,15 +143,15 @@ private:
 class KPLATO_TEST_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand
 {
 public:
-    CalendarModifyTimeZoneCmd( Part *part, Calendar *cal, const KTimeZone *value, const QString& name = QString() );
+    CalendarModifyTimeZoneCmd( Part *part, Calendar *cal, const KTimeZone &value, const QString& name = QString() );
     ~CalendarModifyTimeZoneCmd();
     void execute();
     void unexecute();
 
 private:
     Calendar *m_cal;
-    const KTimeZone *m_newvalue;
-    const KTimeZone *m_oldvalue;
+    KTimeZone m_newvalue;
+    KTimeZone m_oldvalue;
     K3MacroCommand *m_cmd;
 };
 

@@ -76,16 +76,16 @@ void CalendarEdit::slotTimeZoneChanged( int )
     //kDebug()<<k_funcinfo<<endl;
     QStringList lst;
     QString name = timezone->currentText();
-    const KTimeZone *tz = 0;
+    KTimeZone tz;
     foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
         if ( name == i18n( s.toUtf8() ) ) {
-            if ( s != m_calendar->timeZone()->name() ) {
+            if ( s != m_calendar->timeZone().name() ) {
                 tz = KSystemTimeZones::zone( s );
             }
             break;
         }
     }
-    if ( tz ) {
+    if ( tz.isValid() ) {
         m_calendar->setTimeZone( tz );
         m_changed = true;
         emit timeZoneChanged();
@@ -336,7 +336,7 @@ CalendarEditDialog::CalendarEditDialog(Project &p, Calendar *cal, QWidget *paren
     showButtonSeparator( true );
     //kDebug()<<k_funcinfo<<&p<<endl;
     dia = new CalendarEdit( this );
-    dia->setCalendar( calendar, cal->timeZone()->name(), (bool)cal->parentCal() );
+    dia->setCalendar( calendar, cal->timeZone().name(), (bool)cal->parentCal() );
     setMainWidget(dia);
     enableButtonOk(false);
 

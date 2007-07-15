@@ -324,7 +324,7 @@ QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return i18n( a->timeZone()->name().toUtf8() );
+            return i18n( a->timeZone().name().toUtf8() );
         case Role::EnumList: {
             QStringList lst;
             foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
@@ -335,7 +335,7 @@ QVariant CalendarItemModel::timeZone( const Calendar *a, int role ) const
         }
         case Role::EnumListValue: {
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
-            return lst.indexOf( i18n ( a->timeZone()->name().toUtf8() ) );
+            return lst.indexOf( i18n ( a->timeZone().name().toUtf8() ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -350,14 +350,14 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
         case Qt::EditRole: {
             QStringList lst = timeZone( a, Role::EnumList ).toStringList();
             QString name = lst.value( value.toInt() );
-            const KTimeZone *tz = 0;
+            KTimeZone tz;
             foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
                 if ( name == i18n( s.toUtf8() ) ) {
                     tz = KSystemTimeZones::zone( s );
                     break;
                 }
             }
-            if ( tz == 0 ) {
+            if ( !tz.isValid() ) {
                 return false;
             }
             m_part->addCommand( new CalendarModifyTimeZoneCmd( m_part, a, tz, "Modify Calendar Timezone" ) );

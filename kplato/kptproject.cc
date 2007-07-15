@@ -63,8 +63,8 @@ void Project::init()
 {
     m_currentViewScheduleId = -1;
     m_spec = KDateTime::Spec::LocalZone();
-    if ( m_spec.timeZone() == 0 ) {
-        m_spec.setType( new KTimeZone() );
+    if ( !m_spec.timeZone().isValid() ) {
+        m_spec.setType( KTimeZone() );
     }
     //kDebug()<<k_funcinfo<<m_spec.timeZone()<<endl;
     if ( m_parent == 0 ) {
@@ -407,8 +407,8 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     m_name = element.attribute( "name" );
     m_leader = element.attribute( "leader" );
     m_description = element.attribute( "description" );
-    const KTimeZone *tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
-    if ( tz ) {
+    KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
+    if ( tz.isValid() ) {
         m_spec = KDateTime::Spec( tz );
     } else kWarning()<<k_funcinfo<<"No timezone specified, using default (local)"<<endl;
     status.setProjectSpec( m_spec );
@@ -629,7 +629,7 @@ void Project::save( QDomElement &element ) const
     me.setAttribute( "leader", m_leader );
     me.setAttribute( "id", m_id );
     me.setAttribute( "description", m_description );
-    me.setAttribute( "timezone", m_spec.timeZone()->name() );
+    me.setAttribute( "timezone", m_spec.timeZone().name() );
     
     me.setAttribute( "scheduling", constraintToString() );
     me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
