@@ -94,6 +94,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
 
     // update the GUI
     copyFrame.updateCheckBox(widget.isCopyOfPrevious, false);
+    widget.isCopyOfPrevious->setEnabled(false);
     allFrames.updateCheckBox(widget.allFrames, true);
     protectContent.updateCheckBox(widget.protectContent, true);
     evenOdd.updateCheckBox(widget.evenOdd, false);
@@ -139,12 +140,6 @@ void KWGeneralFrameProperties::save() {
                 KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *> (frame->frameSet());
                 if(textFs)
                     textFs->setProtectContent(widget.protectContent->checkState() == Qt::Checked);
-            }
-            if(widget.isCopyOfPrevious->checkState() != Qt::PartiallyChecked) {
-                bool isCopy = widget.isCopyOfPrevious->checkState() == Qt::Checked;
-                if(frame->frameSet()->frames().indexOf(frame) == 0)
-                    isCopy = false;
-                frame->setCopy(isCopy);
             }
             if(widget.allFrames->isEnabled() && widget.allFrames->checkState() == Qt::Checked) {
                 foreach(KWFrame *otherFrame, frame->frameSet()->frames()) {

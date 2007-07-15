@@ -677,7 +677,7 @@ KWFrame* KWFrameLayout::createCopyFrame(KWFrameSet *fs, KWPage *page) {
     KWCopyShape *shape = new KWCopyShape(lastFrame->shape());
     shape->setPosition(QPointF(0, page->offsetInDocument()));
     KWFrame *frame = new KWFrame(shape, fs);
-    frame->setCopy(true);
+    frame->makeCopyFrame();
     return frame;
 }
 

@@ -27,6 +27,7 @@
 #include "KWViewMode.h"
 #include "KWFactory.h"
 #include "frames/KWFrame.h"
+#include "frames/KWCopyShape.h"
 #include "frames/KWTextFrameSet.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
@@ -237,6 +238,13 @@ void KWView::setupActions() {
     actionCollection()->addAction("show_ruler", action );
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
 
+    // -------------- Frame menu
+    action  = new KAction(i18n("Create Linked Copy"), this);
+    actionCollection()->addAction("create_linked_frame", action );
+    action->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
+    action->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
+    connect(action, SIGNAL(triggered()), this, SLOT( createLinkedFrame() ));
+
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
 This saves problems with finding out which we missed near the end.
@@ -250,7 +258,6 @@ This saves problems with finding out which we missed near the end.
 
     // -------------- Edit actions
     m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
-    m_actionEditCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( editCopy() ));
     new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
     m_actionEditSelectCurrentFrame = new KAction( i18n( "Select Frame" ), 0,
     0, this, SLOT( editSelectCurrentFrame() ),
@@ -271,13 +278,6 @@ This saves problems with finding out which we missed near the end.
     connect( mailMergeLabelAction, SIGNAL( triggered(bool) ), this, SLOT(editMailMergeDataBase()) );
 
     //    (void) new KWMailMergeComboAction::KWMailMergeComboAction(i18n("Insert Mailmerge Var"),0,this,SLOT(JWJWJW()),actionCollection(),"mailmerge_varchooser");
-
-    // -------------- Frame menu
-    m_actionCreateLinkedFrame  = new KAction(i18n("Create Linked Copy"), this);
-    actionCollection()->addAction("create_linked_frame", m_actionCreateLinkedFrame );
-    m_actionCreateLinkedFrame->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
-    m_actionCreateLinkedFrame->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
-
 
     // -------------- View menu
 
@@ -1063,6 +1063,18 @@ void KWView::showRulers(bool visible) {
     m_gui->updateRulers();
 }
 
+void KWView::createLinkedFrame() {
+    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        Q_ASSERT(frame);
+        KWCopyShape *copy = new KWCopyShape(frame->shape());
+        copy->setPosition(QPointF(40, 40) + frame->shape()->position());
+        // TODO clip shape to doc
+        KWFrame *newFrame = new KWFrame(copy, frame->frameSet());
+    }
+}
+
+
 // end of actions
 
 void KWView::popupContextMenu(const QPoint &globalPosition, const QList<QAction*> &actions) {
@@ -1087,6 +1099,9 @@ void KWView::selectionChanged()
         m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage->pageNumber());
         m_zoomController->setPageSize(m_currentPage->rect().size());
     }
+    // actions need at least one shape selected
+    actionCollection()->action("create_linked_frame")->setEnabled(shape);
+
     m_actionEditDelFrame->setEnabled(false);
     bool first = true;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {

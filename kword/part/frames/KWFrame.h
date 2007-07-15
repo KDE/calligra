@@ -139,14 +139,13 @@ public:
      * previous frame in this frameset.
      * @return true if this is a copy
      */
-    bool isCopy() const { return m_isCopy; }
+    bool isCopy() const;
+
     /**
      * Sets if this frame is a copy of the previous one.
-     * If this frame is a copy, then this frame is drawn with the same content as the
-     * previous frame in this frameset.
-     * @param on if true, the frame is now a copy
+     * After this call this frame is drawn with the same content as the previous frame in this frameset.
      */
-    void setCopy(bool on) { m_isCopy = on; }
+    void makeCopyFrame();
 
     /**
      * Copy all the settings from the parameter frame and apply them to this frame.
@@ -172,7 +171,6 @@ private:
     KWord::RunAroundSide m_runAroundSide;
     KWord::TextRunAround m_runAround;
     double m_runAroundDistance;
-    bool m_isCopy;
 
     KWFrameSet *m_frameSet;
 };

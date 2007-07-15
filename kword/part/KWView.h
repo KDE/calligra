@@ -114,6 +114,7 @@ private slots:
     void zoomChanged (KoZoomMode::Mode mode, double zoom);
     void showStatisticsDialog();
     void showRulers(bool visible);
+    void createLinkedFrame();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

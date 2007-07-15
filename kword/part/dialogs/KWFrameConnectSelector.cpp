@@ -44,6 +44,9 @@ bool KWFrameConnectSelector::open(KWFrame *frame) {
         return false;
     widget.framesList->clear();
 
+    if(widget.frameSetName->text().isEmpty())
+        widget.frameSetName->setText(m_state->document()->uniqueFrameSetName(i18n("frameset")));
+
     foreach(KWFrameSet *fs, m_state->document()->frameSets()) {
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet*> (fs);
         if(textFs == 0 || textFs->textFrameSetType() != KWord::OtherTextFrameSet)
@@ -78,8 +81,6 @@ bool KWFrameConnectSelector::open(KWFrame *frame) {
     else {
         widget.newRadio->setChecked(true);
     }
-    if(widget.frameSetName->text().isEmpty())
-        widget.frameSetName->setText(m_state->document()->uniqueFrameSetName(i18n("frameset")));
     return true;
 }
 

@@ -21,10 +21,12 @@
 
 #include <QPainter>
 #include <QPainterPath>
+#include <KDebug>
 
 KWCopyShape::KWCopyShape(KoShape *original)
     : m_original(original)
 {
+    resize(m_original->size());
 }
 
 KWCopyShape::~KWCopyShape() {
@@ -49,3 +51,4 @@ void KWCopyShape::saveOdf( KoShapeSavingContext & context ) const {
 bool KWCopyShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
     return false; // TODO
 }
+

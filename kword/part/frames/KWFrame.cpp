@@ -20,6 +20,7 @@
 
 #include "KWFrame.h"
 #include "KWFrameSet.h"
+#include "KWCopyShape.h"
 
 #include <KoXmlWriter.h>
 
@@ -34,7 +35,6 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
     m_runAroundSide( KWord::BiggestRunAroundSide ),
     m_runAround( KWord::RunAround ),
     m_runAroundDistance( 1.0 ),
-    m_isCopy(false),
     m_frameSet( parent )
 {
     Q_ASSERT(shape);
@@ -71,8 +71,8 @@ void KWFrame::copySettings(const KWFrame *frame) {
     setRunAroundDistance(frame->runAroundDistance());
     setRunAroundSide(frame->runAroundSide());
     setTextRunAround(frame->textRunAround());
-    setCopy(frame->isCopy());
     shape()->copySettings(frame->shape());
+    // TODO copy-shape
 }
 
 void KWFrame::saveOdf(KoShapeSavingContext & context) {
@@ -99,3 +99,23 @@ void KWFrame::setShape(KoShape *shape) {
     delete m_shape;
     m_shape = shape;
 }
+
+bool KWFrame::isCopy() const {
+    return dynamic_cast<KWCopyShape*> (shape());
+}
+
+void KWFrame::makeCopyFrame() {
+    if(isCopy())
+        return;
+    KWFrame *prev = 0;
+    foreach(KWFrame* frame, m_frameSet->frames()) {
+        if(frame == this)
+            break;
+        prev = frame;
+    }
+    if(prev == 0)
+        return;
+    KWCopyShape *copyShape = new KWCopyShape(prev->shape());
+    setShape(copyShape);
+}
+

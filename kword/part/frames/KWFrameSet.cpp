@@ -43,6 +43,8 @@ void KWFrameSet::addFrame(KWFrame *frame) {
 
 void KWFrameSet::removeFrame(KWFrame *frame) {
     Q_ASSERT(frame);
+    // TODO loop over all frames to see if there is a copy frame that references the removed frame; if it
+    // does, then mark it as 'unused'.
     if(m_frames.removeAll(frame)) {
         frame->setFrameSet(0);
         emit frameRemoved(frame);
