@@ -65,7 +65,7 @@ Cursor::Cursor(Connection* conn, QuerySchema& query, uint options )
 void Cursor::init()
 {
 	assert(m_conn);
-	m_conn->m_cursors.insert(this,this);
+	m_conn->addCursor(*this);
 	m_opened = false;
 //	, m_atFirst(false)
 //	, m_atLast(false)
@@ -119,7 +119,7 @@ Cursor::~Cursor()
 
 	//take me if delete was 
 	if (!m_conn->m_destructor_started)
-		m_conn->m_cursors.take(this);
+		m_conn->takeCursor(*this);
 	else {
 		KexiDBDbg << "Cursor::~Cursor() can be destroyed with Conenction::deleteCursor(), not with delete operator !"<< endl;
 		exit(1);

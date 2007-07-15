@@ -112,6 +112,7 @@ class ConnectionPrivate
 		}
 		~ConnectionPrivate()
 		{
+			qDeleteAll(cursors);
 			delete m_parser;
 		}
 
@@ -157,6 +158,9 @@ class ConnectionPrivate
 
 		//! used just for removing system TableSchema objects on db close.
 		Q3PtrDict<TableSchema> kexiDBSystemTables;
+
+		//! cursors created for this connection
+		QSet<KexiDB::Cursor*> cursors;
 
 		//! Database properties
 		DatabaseProperties* dbProperties;
@@ -206,10 +210,9 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	,m_destructor_started(false)
 {
 	d->dbProperties = new DatabaseProperties(this);
-	m_cursors.setAutoDelete(true);
+//Qt3	m_cursors.setAutoDelete(true);
 //	d->transactions.setAutoDelete(true);
 	//reasonable sizes: TODO
-	m_cursors.resize(101);
 //	d->transactions.resize(101);//woohoo! so many transactions?
 	m_sql.reserve(0x4000);
 }
@@ -652,7 +655,7 @@ bool Connection::closeDatabase()
 	}
 
 	//delete own cursors:
-	m_cursors.clear();
+	qDeleteAll(d->cursors);
 	//delete own schemas
 	d->tables.clear();
 	d->kexiDBSystemTables.clear();
@@ -3557,6 +3560,16 @@ void Connection::setReadOnly(bool set)
 bool Connection::isReadOnly() const
 {
 	return d->readOnly;
+}
+
+void Connection::addCursor(KexiDB::Cursor& cursor)
+{
+	d->cursors.insert(&cursor);
+}
+
+void Connection::takeCursor(KexiDB::Cursor& cursor)
+{
+	d->cursors.remove(&cursor);
 }
 
 #include "connection.moc"

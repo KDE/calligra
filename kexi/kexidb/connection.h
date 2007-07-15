@@ -1179,8 +1179,11 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			Q_UNUSED(table); Q_UNUSED(field); Q_UNUSED(propertyName); Q_UNUSED(value);
 			return cancelled; }
 
-		//! cursors created for this connection
-		Q3PtrDict<KexiDB::Cursor> m_cursors;
+		//! Used by Cursor class
+		void addCursor(KexiDB::Cursor& cursor);
+
+		//! Used by Cursor class
+		void takeCursor(KexiDB::Cursor& cursor);
 
 	private:
 		ConnectionPrivate* d; //!< @internal d-pointer class.
