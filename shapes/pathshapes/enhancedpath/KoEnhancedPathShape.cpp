@@ -263,9 +263,6 @@ void KoEnhancedPathShape::addHandle( const QMap<QString,QVariant> &handle )
             newHandle->setRangeY( parameter( minY.toString() ), parameter( maxY.toString() ) );
     }
 
-    if( ! newHandle )
-        return;
-
     m_enhancedHandles.append( newHandle );
 
     evaluateHandles();
