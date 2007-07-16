@@ -492,15 +492,14 @@ void KexiMigrate::updateProgress(qulonglong step) {
 // Prompt the user to choose a field type
 KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 {
-	KInputDialog *dlg;
 	const QStringList typeNames( KexiDB::Field::typeNames() );
-	
-	const QString res( dlg->getItem( i18n("Field Type"),
+	bool ok;
+	const QString res( KInputDialog::getItem( i18n("Field Type"),
 		i18n("The data type for %1 could not be determined. "
 			"Please select one of the following data types", fname),
-		typeNames, 0, false/*!editable*/) );
+		typeNames, 0, false/*!editable*/, &ok) );
 	
-	if (res.isEmpty())
+	if (!ok || res.isEmpty())
 //! @todo OK?
 		return KexiDB::Field::Text;
 
