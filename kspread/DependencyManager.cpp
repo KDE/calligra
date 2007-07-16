@@ -498,6 +498,8 @@ void DependencyManager::Private::generateDepths(const Region& region)
                     depths.insert(cell, 0);
                     // clear the compute reference depth flag
                     processedCells.remove( cell );
+                    // Don't get stuck here. Go to the next cell.
+                    formula = sheet->formulaStorage()->nextInRow( col, row, &col );
                     continue;
                 }
 
@@ -509,9 +511,9 @@ void DependencyManager::Private::generateDepths(const Region& region)
 
                 // Recursion. We need the whole dependency tree of the changed region.
                 // An infinite loop is prevented by the check above.
-                Region dependentRegion = consumingRegion(cell);
-                if (!dependentRegion.contains(QPoint(col, row), cell.sheet()))
-                    generateDepths(dependentRegion);
+                const Region consumers = consumingRegion(cell);
+                if (!consumers.isEmpty() && !consumers.contains(QPoint(col, row), cell.sheet()))
+                    generateDepths(consumers);
 
                 // clear the compute reference depth flag
                 processedCells.remove( cell );
