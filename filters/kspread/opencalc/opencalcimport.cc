@@ -1617,7 +1617,7 @@ void OpenCalcImport::loadOasisAreaName( const KoXmlElement&body )
 
       const KSpread::Region region( point.translation );
 
-      m_doc->namedAreaManager()->insert(region.firstSheet(), region.firstRange(), name);
+      m_doc->namedAreaManager()->insert(region, name);
       kDebug(30518) << "Area range: " << region.name() << endl;
     }
   }
