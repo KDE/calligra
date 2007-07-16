@@ -36,11 +36,6 @@
 
 static const int g_garbageCollectionTimeOut = 100;
 
-inline uint qHash( const QPoint& point )
-{
-    return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() );
-}
-
 namespace KSpread
 {
 
@@ -73,6 +68,8 @@ public:
      * \return the stored rect/value pair at the position \p point .
      */
     QPair<QRectF, T> containedPair(const QPoint& point) const;
+
+    QList< QPair<QRectF, T> > intersectingPairs(const Region& region) const;
 
     QList< QPair<QRectF, T> > undoData(const Region& region) const;
 
@@ -196,6 +193,16 @@ QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint& point) const
 {
     const QList< QPair<QRectF,T> > results = m_tree.intersectingPairs( QRect(point,point) );
     return results.isEmpty() ? qMakePair(QRectF(),T()) : results.last();
+}
+
+template<typename T>
+QList< QPair<QRectF, T> > RectStorage<T>::intersectingPairs(const Region& region) const
+{
+    QList< QPair<QRectF,T> > result;
+    Region::ConstIterator end = region.constEnd();
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
+        result += m_tree.intersectingPairs((*it)->rect());
+    return result;
 }
 
 template<typename T>

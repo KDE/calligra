@@ -29,7 +29,6 @@
 #include "Canvas.h"
 #include "CellView.h"
 #include "Region.h"
-#include "RectStorage.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 

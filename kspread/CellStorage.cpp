@@ -318,7 +318,7 @@ QString CellStorage::namedArea( int column, int row ) const
 
 QList< QPair<QRectF, QString> > CellStorage::namedAreas(const Region& region) const
 {
-    return d->namedAreaStorage->undoData(region);
+    return d->namedAreaStorage->intersectingPairs(region);
 }
 
 void CellStorage::setNamedArea( const Region& region, const QString& namedArea )
@@ -1219,7 +1219,7 @@ const ValueStorage* CellStorage::valueStorage() const
 void CellStorage::saveOdfDatabases(KoXmlWriter& xmlWriter) const
 {
     const Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)));
-    const QList< QPair<QRectF, Database> > databases = d->databaseStorage->undoData(region);
+    const QList< QPair<QRectF, Database> > databases = d->databaseStorage->intersectingPairs(region);
     for (int i = 0; i < databases.count(); ++i)
     {
         Database database = databases[i].second;

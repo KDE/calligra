@@ -30,6 +30,11 @@
 
 #include "kspread_export.h"
 
+inline uint qHash( const QPoint& point )
+{
+    return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() );
+}
+
 namespace KSpread
 {
 class Cell;

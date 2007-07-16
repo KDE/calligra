@@ -53,7 +53,7 @@ void BindingManager::regionChanged(const Region& region)
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
     {
         sheet = (*it)->sheet();
-        bindings = sheet->cellStorage()->bindingStorage()->undoData(Region((*it)->rect(), sheet));
+        bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(Region((*it)->rect(), sheet));
         for (int j = 0; j < bindings.count(); ++j)
             bindings[j].second.update(region);
     }
@@ -66,7 +66,7 @@ void BindingManager::updateAllBindings()
     const QList<Sheet*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i)
     {
-        bindings = sheets[i]->cellStorage()->bindingStorage()->undoData(Region(rect, sheets[i]));
+        bindings = sheets[i]->cellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheets[i]));
         for (int j = 0; j < bindings.count(); ++j)
             bindings[j].second.update(Region(bindings[j].first.toRect(), sheets[i]));
     }
