@@ -28,6 +28,8 @@
 #include <klocale.h>
 
 #include "CellStorage.h"
+#include "Damages.h"
+#include "Doc.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 
@@ -682,6 +684,8 @@ bool InsertDeleteColumnManipulator::process( Element* element )
 
 bool InsertDeleteColumnManipulator::postProcessing()
 {
+    const QRect rect(QPoint(boundingRect().left(), 1), QPoint(KS_colMax, KS_rowMax));
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));
     return true;
 }
 
@@ -742,5 +746,7 @@ bool InsertDeleteRowManipulator::process( Element* element )
 
 bool InsertDeleteRowManipulator::postProcessing()
 {
+    const QRect rect(QPoint(1, boundingRect().top()), QPoint(KS_colMax, KS_rowMax));
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));
     return true;
 }

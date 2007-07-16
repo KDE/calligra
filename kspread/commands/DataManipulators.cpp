@@ -24,6 +24,7 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
+#include "Damages.h"
 #include "Doc.h"
 #include "Sheet.h"
 #include "ValueCalc.h"
@@ -481,5 +482,6 @@ bool ShiftManipulator::process(Element* element)
 
 bool ShiftManipulator::postProcessing()
 {
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
     return true;
 }

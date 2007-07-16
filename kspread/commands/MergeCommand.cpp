@@ -24,6 +24,8 @@
 #include <kmessagebox.h>
 
 #include "Cell.h"
+#include "Damages.h"
+#include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
 
@@ -252,5 +254,6 @@ bool MergeCommand::postProcessing()
       }
     }
   }
-  return true;
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    return true;
 }
