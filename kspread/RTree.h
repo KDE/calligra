@@ -228,8 +228,8 @@ public:
   virtual void remove( const QRectF& rect, const T& data ) = 0;
   virtual void contains( const QRectF& rect, QMap<int,T>& result ) const = 0;
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const = 0;
-  virtual QList< QPair<QRectF,T> > insertRows(int position, int number) = 0;
-  virtual QList< QPair<QRectF,T> > insertColumns(int position, int number) = 0;
+  virtual QMap< int, QPair<QRectF,T> > insertRows(int position, int number, InsertMode mode) = 0;
+  virtual QMap< int, QPair<QRectF,T> > insertColumns(int position, int number, InsertMode mode) = 0;
   virtual QMap< int, QPair<QRectF,T> > removeRows(int position, int number) = 0;
   virtual QMap< int, QPair<QRectF,T> > removeColumns(int position, int number) = 0;
 };
@@ -250,8 +250,8 @@ public:
   virtual void remove( const QRectF& rect, const T& data );
   virtual void contains( const QRectF& rect, QMap<int,T>& result ) const;
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
-  virtual QList< QPair<QRectF,T> > insertRows(int position, int number);
-  virtual QList< QPair<QRectF,T> > insertColumns(int position, int number);
+  virtual QMap< int, QPair<QRectF,T> > insertRows(int position, int number, InsertMode mode);
+  virtual QMap< int, QPair<QRectF,T> > insertColumns(int position, int number, InsertMode mode);
   virtual QMap< int, QPair<QRectF,T> > removeRows(int position, int number);
   virtual QMap< int, QPair<QRectF,T> > removeColumns(int position, int number);
 };
@@ -272,8 +272,8 @@ public:
   virtual void remove( const QRectF& rect, const T& data );
   virtual void contains( const QRectF& rect, QMap<int,T>& result ) const;
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
-  virtual QList< QPair<QRectF,T> > insertRows(int position, int number);
-  virtual QList< QPair<QRectF,T> > insertColumns(int position, int number);
+  virtual QMap< int, QPair<QRectF,T> > insertRows(int position, int number, InsertMode mode);
+  virtual QMap< int, QPair<QRectF,T> > insertColumns(int position, int number, InsertMode mode);
   virtual QMap< int, QPair<QRectF,T> > removeRows(int position, int number);
   virtual QMap< int, QPair<QRectF,T> > removeColumns(int position, int number);
 };
@@ -342,8 +342,7 @@ QList< QPair<QRectF,T> > RTree<T>::insertRows(int position, int number, InsertMo
     Q_ASSERT(position <= KS_rowMax);
     if (position < 1 || position > KS_rowMax)
         return QList< QPair<QRectF,T> >();
-    const int pos = position - (mode == CopyPrevious) ? 1 : 0;
-    return dynamic_cast<Node*>(this->m_root)->insertRows(pos, number);
+    return dynamic_cast<Node*>(this->m_root)->insertRows(position, number, mode).values();
 }
 
 template<typename T>
@@ -353,8 +352,7 @@ QList< QPair<QRectF,T> > RTree<T>::insertColumns(int position, int number, Inser
     Q_ASSERT(position <= KS_colMax);
     if (position < 1 || position > KS_colMax)
         return QList< QPair<QRectF,T> >();
-    const int pos = position - (mode == CopyPrevious) ? 1 : 0;
-    return dynamic_cast<Node*>(this->m_root)->insertColumns(pos, number);
+    return dynamic_cast<Node*>(this->m_root)->insertColumns(position, number, mode).values();
 }
 
 template<typename T>
@@ -532,39 +530,61 @@ void RTree<T>::LeafNode::intersectingPairs( const QRectF& rect, QMap<int,QPair<Q
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::LeafNode::insertRows(int position, int number)
+QMap< int, QPair<QRectF,T> > RTree<T>::LeafNode::insertRows(int position, int number, InsertMode mode)
 {
-  if (position > this->m_boundingBox.bottom())
-  {
-    return QList< QPair<QRectF,T> >();
-  }
+    if (position - (mode == CopyPrevious ? 1 : 0) > this->m_boundingBox.bottom())
+        return QMap< int, QPair<QRectF,T> >();
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[i].adjust(0, (position < this->m_childBoundingBox[i].top()) ? number : 0, 0, number);
-  }
+    QMap< int, QPair<QRectF,T> > result;
 
-  // position < m_rect.top() ? shift : extend
-  this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? number : 0, 0, number);
-    return QList< QPair<QRectF,T> >(); // FIXME
+    int shift = 0;
+    if (mode == CopyNone)
+        shift = 0;
+    else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.top())
+        shift = number;
+    this->m_boundingBox.adjust(0, shift, 0, number);
+
+    for (int i = 0; i < this->childCount(); ++i)
+    {
+        if (mode == CopyNone)
+            shift = 0;
+        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].top())
+            shift = number;
+        else
+            shift = 0;
+        this->m_childBoundingBox[i].adjust(0, shift, 0, number);
+    }
+
+    return QMap< int, QPair<QRectF,T> >(); // FIXME
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::LeafNode::insertColumns(int position, int number)
+QMap< int, QPair<QRectF,T> > RTree<T>::LeafNode::insertColumns(int position, int number, InsertMode mode)
 {
-  if (position > this->m_boundingBox.right())
-  {
-    return QList< QPair<QRectF,T> >();
-  }
+    if (position - (mode == CopyPrevious ? 1 : 0) > this->m_boundingBox.right())
+        return QMap< int, QPair<QRectF,T> >();
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[i].adjust((position < this->m_childBoundingBox[i].left()) ? number : 0, 0, number, 0);
-  }
+    QMap< int, QPair<QRectF,T> > result;
 
-  // position < m_rect.left() ? shift : extend
-  this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? number : 0, 0, number, 0);
-    return QList< QPair<QRectF,T> >(); // FIXME
+    int shift = 0;
+    if (mode == CopyNone)
+        shift = 0;
+    else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.left())
+        shift = number;
+    this->m_boundingBox.adjust(shift, 0, number, 0);
+
+    for ( int i = 0; i < this->childCount(); ++i )
+    {
+        if (mode == CopyNone)
+            shift = 0;
+        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].left())
+            shift = number;
+        else
+            shift = 0;
+        this->m_childBoundingBox[i].adjust(shift, 0, number, 0);
+    }
+
+    return QMap< int, QPair<QRectF,T> >(); // FIXME
 }
 
 template<typename T>
@@ -704,39 +724,41 @@ void RTree<T>::NoneLeafNode::intersectingPairs( const QRectF& rect, QMap<int,QPa
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::insertRows(int position, int number)
+QMap< int, QPair<QRectF,T> > RTree<T>::NoneLeafNode::insertRows(int position, int number, InsertMode mode)
 {
-  if (position > this->m_boundingBox.bottom())
-    return QList< QPair<QRectF,T> >();
+    if (position - (mode == CopyPrevious ? 1 : 0) > this->m_boundingBox.bottom())
+        return QMap< int, QPair<QRectF,T> >();
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[i].adjust(0, (position < this->m_childBoundingBox[i].top()) ? number : 0, 0, number);
-    dynamic_cast<Node*>(this->m_childs[i])->insertRows(position, number);
-  }
+    QMap< int, QPair<QRectF,T> > result;
 
-  // position < m_rect.top() ? shift : extend
-  this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? number : 0, 0, number);
-    return QList< QPair<QRectF,T> >(); // FIXME
+    for (int i = 0; i < this->childCount(); ++i)
+    {
+        this->m_childBoundingBox[i].adjust(0, (position < this->m_childBoundingBox[i].top()) ? number : 0, 0, number);
+        result.unite(dynamic_cast<Node*>(this->m_childs[i])->insertRows(position, number, mode));
+    }
+
+    // position < m_rect.top() ? shift : extend
+    this->m_boundingBox.adjust(0, (position < this->m_boundingBox.top()) ? number : 0, 0, number);
+    return QMap< int, QPair<QRectF,T> >(); // FIXME
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::NoneLeafNode::insertColumns(int position, int number)
+QMap< int, QPair<QRectF,T> > RTree<T>::NoneLeafNode::insertColumns(int position, int number, InsertMode mode)
 {
-  if (position > this->m_boundingBox.right())
-  {
-    return QList< QPair<QRectF,T> >();
-  }
+    if (position - (mode == CopyPrevious ? 1 : 0) > this->m_boundingBox.right())
+        return QMap< int, QPair<QRectF,T> >();
 
-  for ( int i = 0; i < this->childCount(); ++i )
-  {
-    this->m_childBoundingBox[i].adjust((position < this->m_childBoundingBox[i].left()) ? number : 0, 0, number, 0);
-    dynamic_cast<Node*>(this->m_childs[i])->insertColumns(position, number);
-  }
+    QMap< int, QPair<QRectF,T> > result;
 
-  // position < m_rect.left() ? shift : extend
-  this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? number : 0, 0, number, 0);
-    return QList< QPair<QRectF,T> >(); // FIXME
+    for (int i = 0; i < this->childCount(); ++i)
+    {
+        this->m_childBoundingBox[i].adjust((position < this->m_childBoundingBox[i].left()) ? number : 0, 0, number, 0);
+        result.unite(dynamic_cast<Node*>(this->m_childs[i])->insertColumns(position, number, mode));
+    }
+
+    // position < m_rect.left() ? shift : extend
+    this->m_boundingBox.adjust((position < this->m_boundingBox.left()) ? number : 0, 0, number, 0);
+    return QMap< int, QPair<QRectF,T> >(); // FIXME
 }
 
 template<typename T>
