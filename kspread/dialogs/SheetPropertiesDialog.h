@@ -53,7 +53,7 @@ public:
 
     bool autoCalc() const;
 
-    void setAutoCalc( bool b );
+    void setAutoCalculationEnabled( bool b );
 
     bool showGrid() const;
 

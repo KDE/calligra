@@ -226,7 +226,7 @@ Sheet::~Sheet()
     //For example, suppose a cell in SheetB depends upon a cell in SheetA.  If the cell in SheetB is emptied
     //after SheetA has already been deleted, the program would try to remove dependancies from the cell in SheetA
     //causing a crash.
-    setAutoCalc(false);
+    setAutoCalculationEnabled(false);
 
     s_mapSheets->remove(d->id);
 
@@ -332,24 +332,25 @@ void Sheet::setLcMode( bool _lcMode )
     d->lcMode=_lcMode;
 }
 
-bool Sheet::getAutoCalc() const
+bool Sheet::isAutoCalculationEnabled() const
 {
     return d->autoCalc;
 }
 
-void Sheet::setAutoCalc( bool _AutoCalc )
+void Sheet::setAutoCalculationEnabled(bool enable)
 {
     //Avoid possible recalculation of dependancies if the auto calc setting hasn't changed
-    if (d->autoCalc == _AutoCalc)
+    if (d->autoCalc == enable)
         return;
 
+    d->autoCalc = enable;
     //If enabling automatic calculation, make sure that the dependencies are up-to-date
-    if (_AutoCalc == true)
+    if (enable == true)
     {
-        recalc();
+        const Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), this);
+        doc()->dependencyManager()->regionChanged(region);
+        doc()->recalcManager()->recalcSheet(this);
     }
-
-    d->autoCalc=_AutoCalc;
 }
 
 bool Sheet::getShowColumnNumber() const
@@ -676,23 +677,6 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
   //refresh anchor
   if ((!_text.isEmpty()) && (_text.at(0)=='!'))
     emit sig_updateView( this, Region( _column, _row, this ) );
-}
-
-void Sheet::recalc( bool force )
-{
-  ElapsedTime et( "Recalculating " + d->name, ElapsedTime::PrintOnlyTime );
-  //  emitBeginOperation(true);
-
-  //If automatic calculation is disabled, don't recalculate unless the force flag has been
-  //set.
-  if ( !getAutoCalc() && !force )
-        return;
-
-  // Recalculate cells
-  doc()->recalcManager()->recalcSheet(this);
-
-  //  emitEndOperation();
-  emit sig_updateView( this );
 }
 
 void Sheet::refreshRemoveAreaName(const QString & _areaName)
@@ -1150,9 +1134,6 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
 
 void Sheet::refreshPreference()
 {
-  if ( getAutoCalc() )
-    recalc();
-
   emit sig_updateHBorder( this );
   emit sig_updateView( this );
 }
@@ -2197,7 +2178,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     sheet.setAttribute( "showFormulaIndicator", (int)getShowFormulaIndicator());
     sheet.setAttribute( "showCommentIndicator", (int)getShowCommentIndicator());
     sheet.setAttribute( "lcmode", (int)getLcMode());
-    sheet.setAttribute( "autoCalc", (int)getAutoCalc());
+    sheet.setAttribute( "autoCalc", (int)isAutoCalculationEnabled());
     sheet.setAttribute( "borders1.2", 1);
     QByteArray pwd;
     password (pwd);
@@ -3654,7 +3635,7 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
     setShowCommentIndicator (items.parseConfigItemBool( "ShowCommentIndicator" ));
     setShowPageBorders (items.parseConfigItemBool( "ShowPageBorders" ));
     setLcMode (items.parseConfigItemBool( "lcmode" ));
-    setAutoCalc (items.parseConfigItemBool( "autoCalc" ));
+    setAutoCalculationEnabled (items.parseConfigItemBool( "autoCalc" ));
     setShowColumnNumber (items.parseConfigItemBool( "ShowColumnNumber" ));
 }
 
@@ -3669,7 +3650,7 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
   settingsWriter.addConfigItem( "ShowCommentIndicator", getShowCommentIndicator() );
   settingsWriter.addConfigItem( "ShowPageBorders", isShowPageBorders() );
   settingsWriter.addConfigItem( "lcmode", getLcMode() );
-  settingsWriter.addConfigItem( "autoCalc", getAutoCalc() );
+  settingsWriter.addConfigItem( "autoCalc", isAutoCalculationEnabled() );
   settingsWriter.addConfigItem( "ShowColumnNumber", getShowColumnNumber() );
 }
 
@@ -4162,7 +4143,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
     }
     if ( sheet.hasAttribute( "autoCalc" ) )
     {
-        setAutoCalc (( bool )sheet.attribute( "autoCalc" ).toInt( &ok ));
+        setAutoCalculationEnabled (( bool )sheet.attribute( "autoCalc" ).toInt( &ok ));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "columnnumber" ) )

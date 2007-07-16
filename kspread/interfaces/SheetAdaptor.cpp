@@ -324,7 +324,7 @@ bool SheetAdaptor::lcMode() const
 
 bool SheetAdaptor::autoCalc() const
 {
-    return m_sheet->getAutoCalc();
+    return m_sheet->isAutoCalculationEnabled();
 }
 
 bool SheetAdaptor::showColumnNumber() const

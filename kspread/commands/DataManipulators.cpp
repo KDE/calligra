@@ -481,6 +481,5 @@ bool ShiftManipulator::process(Element* element)
 
 bool ShiftManipulator::postProcessing()
 {
-    m_sheet->recalc();
     return true;
 }

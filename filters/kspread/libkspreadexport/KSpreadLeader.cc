@@ -225,7 +225,7 @@ KoFilter::ConversionStatus Leader::doSpreadSheet(KSpreadSheet *spreadSheet) {
 	docSpreadSheetProperty["showformula"] = (spreadSheet->getShowFormula()==0?"false":"true");
 	docSpreadSheetProperty["showformulaindicator"] = (spreadSheet->getShowFormulaIndicator()==0?"false":"true");
 	docSpreadSheetProperty["lcmode"] = (spreadSheet->getLcMode()==0?"false":"true");
-	docSpreadSheetProperty["autocalc"] = (spreadSheet->getAutoCalc()==0?"false":"true");
+	docSpreadSheetProperty["autocalc"] = (spreadSheet->isAutomaticCalculationEnabled()==0?"false":"true");
 	docSpreadSheetProperty["showcolumnnumber"] = (spreadSheet->getShowColumnNumber()==0?"false":"true");
 	docSpreadSheetProperty["hidezero"] = (spreadSheet->getHideZero()==0?"false":"true");
 	docSpreadSheetProperty["firstletterupper"] = (spreadSheet->getFirstLetterUpper()==0?"false":"true");

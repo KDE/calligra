@@ -253,7 +253,6 @@ void UndoRemoveColumn::undo()
 
     QPoint pastePoint( m_iColumn, 1 );
     sheet->paste( m_data, QRect( pastePoint, pastePoint ) );
-    if(sheet->getAutoCalc()) sheet->recalc();
 
     sheet->print()->setPrintRange( m_printRange );
     sheet->print()->setPrintRepeatColumns( m_printRepeatColumns );
@@ -371,8 +370,6 @@ void UndoRemoveRow::undo()
 
     sheet->print()->setPrintRange( m_printRange );
     sheet->print()->setPrintRepeatRows( m_printRepeatRows );
-
-    if(sheet->getAutoCalc()) sheet->recalc();
 
     doc()->setUndoLocked( false );
 
@@ -1481,8 +1478,6 @@ void UndoDelete::undo()
     sheet->paste( m_data, m_region.boundingRect() );
     sheet->updateView( );
 
-    if(sheet->getAutoCalc()) sheet->recalc();
-
     doc()->setUndoLocked( false );
 }
 
@@ -1593,9 +1588,6 @@ void UndoDragDrop::undo()
 
     sheet->updateView();
 
-    if ( sheet->getAutoCalc() )
-      sheet->recalc();
-
     doc()->setUndoLocked( false );
 }
 
@@ -1625,8 +1617,6 @@ void UndoDragDrop::redo()
     sheet->paste( m_dataRedoSource, m_selectionSource.boundingRect() );
 
     sheet->updateView();
-    if ( sheet->getAutoCalc() )
-          sheet->recalc();
 
     doc()->setUndoLocked( false );
 }
@@ -2163,7 +2153,6 @@ void UndoAutofill::undo()
 
     sheet->deleteCells( Region(m_selection) );
     sheet->paste( m_data, m_selection );
-    //if(sheet->getAutoCalc()) sheet->recalc();
 
     doc()->emitEndOperation();
     //sheet->updateView();
@@ -2184,8 +2173,6 @@ void UndoAutofill::redo()
     sheet->deleteCells( Region(m_selection) );
     doc()->setUndoLocked( true );
     sheet->paste( m_dataRedo, m_selection );
-    if ( sheet->getAutoCalc() )
-      sheet->recalc();
     sheet->updateView();
     doc()->setUndoLocked( false );
 }
@@ -2415,10 +2402,6 @@ void UndoConditional::undo()
 
     doc()->setUndoLocked( true );
     sheet->paste(m_data, m_region.boundingRect());
-    if (sheet->getAutoCalc())
-    {
-      sheet->recalc();
-    }
 
     doc()->setUndoLocked( false );
 }
@@ -2433,10 +2416,6 @@ void UndoConditional::redo()
 
     doc()->setUndoLocked( true );
     sheet->paste(m_dataRedo, m_region.boundingRect());
-    if (sheet->getAutoCalc())
-    {
-      sheet->recalc();
-    }
 
     doc()->setUndoLocked( false );
 }
@@ -2650,10 +2629,6 @@ void UndoCellPaste::undo()
     sheet->paste(m_data, m_region.boundingRect());
   }
 
-  if (sheet->getAutoCalc())
-  {
-      sheet->recalc();
-  }
   sheet->updateView();
   doc()->setUndoLocked( false );
 }
@@ -2768,11 +2743,6 @@ void UndoCellPaste::redo()
   } // for (Region::...
 
   sheet->paste( m_dataRedo, m_region.boundingRect() );
-
-  if (sheet->getAutoCalc())
-  {
-    sheet->recalc();
-  }
 
   sheet->updateView();
   doc()->setUndoLocked( false );

@@ -116,7 +116,7 @@ class SheetPropertiesCommand : public QUndoCommand
 public:
   SheetPropertiesCommand( Doc* doc, Sheet* sheet );
   void setLayoutDirection( Qt::LayoutDirection direction );
-  void setAutoCalc( bool b );
+  void setAutoCalculationEnabled( bool b );
   void setShowGrid( bool b );
   void setShowPageBorders( bool b );
   void setShowFormula( bool b );

@@ -95,7 +95,7 @@ class KSPREAD_EXPORT Sheet : public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString sheetName READ sheetName )
-    Q_PROPERTY( bool autoCalc READ getAutoCalc WRITE setAutoCalc )
+    Q_PROPERTY( bool autoCalc READ isAutoCalculationEnabled WRITE setAutoCalculationEnabled )
     Q_PROPERTY( bool showGrid READ getShowGrid WRITE setShowGrid )
 
 public:
@@ -217,9 +217,9 @@ public:
 
     void setLcMode(bool _lcMode);
 
-    bool getAutoCalc() const;
+    bool isAutoCalculationEnabled() const;
 
-    void setAutoCalc(bool _AutoCalc);
+    void setAutoCalculationEnabled(bool enable);
 
     bool getShowColumnNumber() const;
 
@@ -646,17 +646,6 @@ public:
      * Used in resizing of rows.
      */
     void adjustDocumentHeight( double deltaHeight );
-
-    /**
-     * Recalculates the current sheet.
-     *
-     * Recalc will do nothing, if automatic calculation is disabled (via Sheet::setAutoCalc)
-     * unless the force flag is set to true.  Automatic recalculation is enabled by default.
-     *
-     * @param force If false, the sheet will be recalculated if automatic calculation is enabled.
-     * If true, the sheet will be recalculated regardless of the automatic calculation setting.
-     */
-    void recalc( bool force = false );
 
     /**
      * Attempts to guess the title (or 'header') of a column, within a given area of the sheet

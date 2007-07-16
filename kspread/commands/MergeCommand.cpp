@@ -252,13 +252,5 @@ bool MergeCommand::postProcessing()
       }
     }
   }
-
-  if (!m_reverse)
-  {
-    if (m_sheet->getAutoCalc())
-    {
-      m_sheet->recalc();
-    }
-  }
   return true;
 }

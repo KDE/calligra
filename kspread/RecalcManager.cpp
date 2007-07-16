@@ -95,7 +95,10 @@ void RecalcManager::Private::cellsToCalculate( const Region& region )
     cellsToCalculate(region, cells);
     const QSet<Cell>::ConstIterator end( cells.end() );
     for ( QSet<Cell>::ConstIterator it( cells.begin() ); it != end; ++it )
-        this->cells.insertMulti( depths[*it], *it );
+    {
+        if ((*it).sheet()->isAutoCalculationEnabled())
+            this->cells.insertMulti( depths[*it], *it );
+    }
 }
 
 void RecalcManager::Private::cellsToCalculate( Sheet* sheet )

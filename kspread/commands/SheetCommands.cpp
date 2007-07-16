@@ -157,7 +157,7 @@ SheetPropertiesCommand::SheetPropertiesCommand( Doc* d, Sheet* s )
     sheet = s;
     doc = d;
     oldDirection = newDirection = sheet->layoutDirection();
-    oldAutoCalc = newAutoCalc = sheet->getAutoCalc();
+    oldAutoCalc = newAutoCalc = sheet->isAutoCalculationEnabled();
     oldShowGrid = newShowGrid = sheet->getShowGrid();
     oldShowPageBorders = newShowPageBorders = sheet->isShowPageBorders();
     oldShowFormula = newShowFormula = sheet->getShowFormula();
@@ -175,7 +175,7 @@ void SheetPropertiesCommand::setLayoutDirection( Qt::LayoutDirection dir )
     newDirection = dir;
 }
 
-void SheetPropertiesCommand::setAutoCalc( bool b )
+void SheetPropertiesCommand::setAutoCalculationEnabled( bool b )
 {
     newAutoCalc = b;
 }
@@ -228,7 +228,7 @@ void SheetPropertiesCommand::setCapitalizeFirstLetter( bool b )
 void SheetPropertiesCommand::redo()
 {
     sheet->setLayoutDirection( newDirection );
-    sheet->setAutoCalc( newAutoCalc );
+    sheet->setAutoCalculationEnabled( newAutoCalc );
     sheet->setShowGrid( newShowGrid );
     sheet->setShowPageBorders( newShowPageBorders );
     sheet->setShowFormula( newShowFormula );
@@ -244,7 +244,7 @@ void SheetPropertiesCommand::redo()
 void SheetPropertiesCommand::undo()
 {
     sheet->setLayoutDirection( oldDirection );
-    sheet->setAutoCalc( oldAutoCalc );
+    sheet->setAutoCalculationEnabled( oldAutoCalc );
     sheet->setShowGrid( oldShowGrid );
     sheet->setShowPageBorders( oldShowPageBorders );
     sheet->setShowFormula( oldShowFormula );

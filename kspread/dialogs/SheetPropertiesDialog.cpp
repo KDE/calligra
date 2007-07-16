@@ -54,7 +54,7 @@ SheetPropertiesDialog::~SheetPropertiesDialog()
 void SheetPropertiesDialog::slotDefault()
 {
   setLayoutDirection( Qt::LeftToRight );
-  setAutoCalc( true );
+  setAutoCalculationEnabled( true );
   setShowGrid( true );
   setShowFormula( false );
   setHideZero( false );
@@ -97,7 +97,7 @@ bool SheetPropertiesDialog::autoCalc() const
   return m_widget->autoCalcCheckBox->isChecked();
 }
 
-void SheetPropertiesDialog::setAutoCalc( bool b )
+void SheetPropertiesDialog::setAutoCalculationEnabled( bool b )
 {
   m_widget->autoCalcCheckBox->setChecked( b );
 }

@@ -3825,7 +3825,7 @@ void View::sheetProperties()
 
     SheetPropertiesDialog* dlg = new SheetPropertiesDialog( this );
     dlg->setLayoutDirection( d->activeSheet->layoutDirection() );
-    dlg->setAutoCalc( d->activeSheet->getAutoCalc() );
+    dlg->setAutoCalculationEnabled( d->activeSheet->isAutoCalculationEnabled() );
     dlg->setShowGrid( d->activeSheet->getShowGrid() );
     dlg->setShowPageBorders( d->activeSheet->isShowPageBorders() );
     dlg->setShowFormula( d->activeSheet->getShowFormula() );
@@ -3844,7 +3844,7 @@ void View::sheetProperties()
             directionChanged = true;
 
         command->setLayoutDirection( dlg->layoutDirection() );
-        command->setAutoCalc( dlg->autoCalc() );
+        command->setAutoCalculationEnabled( dlg->autoCalc() );
         command->setShowGrid( dlg->showGrid() );
         command->setShowPageBorders( dlg->showPageBorders() );
         command->setShowFormula( dlg->showFormula() );
@@ -4114,12 +4114,6 @@ void View::specialPaste()
   SpecialPasteDialog dlg( this );
   if ( dlg.exec() )
   {
-    if ( d->activeSheet->getAutoCalc() )
-    {
-      doc()->emitBeginOperation( false );
-      d->activeSheet->recalc();
-      doc()->emitEndOperation();
-    }
     calcStatusBarOp();
     updateEditWidget();
   }
@@ -6035,13 +6029,6 @@ void View::slotInsertCellCopy()
   {
     PasteInsertDialog dlg( this, "Remove", d->selection->lastRange() );
     dlg.exec();
-  }
-
-  if ( d->activeSheet->getAutoCalc() )
-  {
-    doc()->emitBeginOperation( false );
-    d->activeSheet->recalc();
-    doc()->emitEndOperation();
   }
   updateEditWidget();
 }
