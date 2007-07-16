@@ -1095,7 +1095,8 @@ QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
         // it's not really the parent name in this case
         CustomStyle* namedStyle = manager->style(parentName());
         // remove substyles already present in named style
-        keysToStore = difference(*namedStyle);
+        if (namedStyle)
+            keysToStore = difference(*namedStyle);
         // no differences and not an automatic style yet
         if (style.type() == 0 &&
             keysToStore.count() == 1 &&
