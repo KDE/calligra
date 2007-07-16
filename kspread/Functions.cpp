@@ -499,7 +499,7 @@ QString FunctionDescription::toQML() const
 
   if( !m_help.isEmpty() )
   {
-    text += i18n("<p>");
+    text += "<p>";
     QStringList::ConstIterator it = m_help.begin();
     for( ; it != m_help.end(); ++it )
     {
@@ -509,13 +509,13 @@ QString FunctionDescription::toQML() const
     text += "</p>";
   }
 
-  text += i18n("<p><b>Return type: </b>");
+  text += "<p><b>" + i18n("Return type: ") + "</b>";
   text += toString( type() );
   text += "</p>";
 
   if ( !m_syntax.isEmpty() )
   {
-    text += i18n("<h2>Syntax</h2><ul>");
+    text += "<h2>" + i18n("Syntax") + "</h2><ul>";
     QStringList::ConstIterator it = m_syntax.begin();
     for( ; it != m_syntax.end(); ++it )
     {
@@ -527,13 +527,13 @@ QString FunctionDescription::toQML() const
 
   if ( !m_params.isEmpty() )
   {
-    text += i18n("<h2>Parameters</h2><ul>");
+    text += "<h2>" + i18n("Parameters") + "</h2><ul>";
     QList<FunctionParameter>::ConstIterator it = m_params.begin();
     for( ; it != m_params.end(); ++it )
     {
-      text += i18n("<li><b>Comment:</b> ");
+      text += "<li><b>" + i18n("Comment:") + "</b>";
       text += (*it).helpText();
-      text += i18n("<br><b>Type:</b> ");
+      text += "<br><b>" + i18n("Type:") + "</b>";
       text += toString( (*it).type(), (*it).hasRange() );
     }
     text += "</ul>";
@@ -541,7 +541,7 @@ QString FunctionDescription::toQML() const
 
   if ( !m_examples.isEmpty() )
   {
-    text += i18n("<h2>Examples</h2><ul>");
+    text += "<h2>" + i18n("Examples") + "</h2><ul>";
     QStringList::ConstIterator it = m_examples.begin();
     for( ; it != m_examples.end(); ++it )
     {
@@ -553,7 +553,7 @@ QString FunctionDescription::toQML() const
 
   if ( !m_related.isEmpty() )
   {
-    text += i18n("<h2>Related Functions</h2><ul>");
+    text += "<h2>" + i18n("Related Functions") + "</h2><ul>";
     QStringList::ConstIterator it = m_related.begin();
     for( ; it != m_related.end(); ++it )
     {

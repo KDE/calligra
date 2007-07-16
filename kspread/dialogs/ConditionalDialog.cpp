@@ -158,7 +158,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   resize( QSize(702, 380).expandedTo( minimumSizeHint() ) );
 
   QStringList list;
-  list += i18n( "<none>" );
+  list += i18n( "<none>" ); // krazy:exclude=i18ncheckarg
   list += i18n( "equal to" );
   list += i18n( "greater than" );
   list += i18n( "less than" );
@@ -196,7 +196,7 @@ ConditionalWidget::~ConditionalWidget()
 
 void ConditionalWidget::slotTextChanged1( const QString & text )
 {
-  if ( text == i18n( "<none>" ) )
+  if ( text == i18n( "<none>" ) ) // krazy:exclude=i18ncheckarg
   {
     m_firstValue_1->setEnabled( false );
     m_secondValue_1->setEnabled( false );
@@ -221,7 +221,7 @@ void ConditionalWidget::slotTextChanged1( const QString & text )
 
 void ConditionalWidget::slotTextChanged2( const QString & text )
 {
-  if ( text == i18n( "<none>" ) )
+  if ( text == i18n( "<none>" ) ) // krazy:exclude=i18ncheckarg
   {
     m_firstValue_2->setEnabled( false );
     m_secondValue_2->setEnabled( false );
@@ -246,7 +246,7 @@ void ConditionalWidget::slotTextChanged2( const QString & text )
 
 void ConditionalWidget::slotTextChanged3( const QString & text )
 {
-  if ( text == i18n( "<none>" ) )
+  if ( text == i18n( "<none>" ) ) // krazy:exclude=i18ncheckarg
   {
     m_firstValue_3->setEnabled( false );
     m_secondValue_3->setEnabled( false );

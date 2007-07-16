@@ -191,7 +191,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
 
   m_parentBox = new KComboBox( false, groupBox );
   m_parentBox->clear();
-  m_parentBox->insertItem( 0,i18n( "<None>" ) );
+  m_parentBox->insertItem( 0,i18n( "<none>" ) ); // krazy:exclude=i18ncheckarg
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
   tmp.removeAll( m_dlg->styleName );
   m_parentBox->insertItems( 1, tmp );
@@ -200,7 +200,7 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
     m_parentBox->setCurrentIndex(m_parentBox->findText(m_dlg->getStyle()->parentName()));
   else
   {
-    m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("<None>")));
+    m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("<none>"))); // krazy:exclude=i18ncheckarg
 
     if ( m_dlg->getStyle()->definesAll() )
       m_parentBox->setEnabled( false );
@@ -240,7 +240,7 @@ void GeneralTab::slotNewParent( const QString & parentName )
   if ( !checkParent( parentName ) )
     return;
 
-  if ( parentName.isEmpty() || parentName == i18n( "<None>" ) )
+  if ( parentName.isEmpty() || parentName == i18n( "<none>" ) ) // krazy:exclude=i18ncheckarg
     m_dlg->getStyle()->clearAttribute( Style::NamedStyleKey );
   else
     m_dlg->getStyle()->setParentName( parentName );
@@ -266,7 +266,7 @@ bool GeneralTab::checkName()
 bool GeneralTab::checkParent( const QString & parentName )
 {
   if ( m_dlg->getStyle()->parentName() != parentName
-       && m_parentBox->isEnabled() && parentName != i18n( "<None>" ) && !parentName.isEmpty() )
+       && m_parentBox->isEnabled() && parentName != i18n( "<none>" ) && !parentName.isEmpty() ) // krazy:exclude=i18ncheckarg
   {
     if ( m_nameEdit->text() == parentName )
     {
