@@ -284,6 +284,7 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
 		KToggleAction* action = new KToggleAction(KIcon(pix_name), text, col);
 		action->setObjectName(name);
 		action->setShortcut(cut);
+		col->addAction(name, action);
 		return createSharedActionInternal(action);
 	}
 	else if (qstricmp(subclassName,"KActionMenu")==0) {

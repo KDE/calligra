@@ -112,7 +112,7 @@ KexiActionProxy::~KexiActionProxy()
 
 void KexiActionProxy::plugSharedAction(const QString& action_name, QObject* receiver, const char *slot)
 {
-	if (action_name.isNull())// || !receiver || !slot)
+	if (action_name.isEmpty())// || !receiver || !slot)
 		return;
 	QPair<Q3Signal*,bool> *p = m_signals.contains(action_name) ? m_signals[action_name] : 0;
 	if( ! p ) {
