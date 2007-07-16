@@ -1,6 +1,6 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} )
 
-########### next target ###############
+########### Core Functionality ###############
 
 set(TestFormula_SRCS TestFormula.cpp)
 kde4_add_unit_test(TestFormula TESTNAME kspread-Formula  ${TestFormula_SRCS})
@@ -14,9 +14,15 @@ target_link_libraries(TestOpenFormula kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
-kde4_add_test_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
-target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS})
+set(TestPointStorage_SRCS TestPointStorage.cpp)
+kde4_add_unit_test(TestPointStorage TESTNAME kspread-PointStorage  ${TestPointStorage_SRCS})
+target_link_libraries(TestPointStorage kspreadcommon ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestRegion_SRCS TestRegion.cpp)
+kde4_add_unit_test(TestRegion TESTNAME kspread-Region  ${TestRegion_SRCS})
+target_link_libraries(TestRegion kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -30,43 +36,9 @@ set(TestValue_SRCS TestValue.cpp)
 kde4_add_unit_test(TestValue TESTNAME kspread-Value  ${TestValue_SRCS})
 target_link_libraries(TestValue kspreadcommon ${QT_QTTEST_LIBRARY})
 
-########### next target ###############
 
-set(TestMathFunctions_SRCS TestMathFunctions.cpp)
-kde4_add_unit_test(TestMathFunctions TESTNAME kspread-MathFunctions  ${TestMathFunctions_SRCS})
-target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-########### next target ###############
-
-set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp)
-kde4_add_unit_test(TestFinancialFunctions TESTNAME kspread-FinancialFunctions  ${TestFinancialFunctions_SRCS})
-target_link_libraries(TestFinancialFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(TestTrigFunctions_SRCS TestTrigFunctions.cpp)
-kde4_add_unit_test(TestTrigFunctions TESTNAME kspread-TrigFunctions  ${TestTrigFunctions_SRCS})
-target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-# set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
-# kde4_add_test_executable(BenchmarkCluster ${BenchmarkCluster_SRCS})
-# target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-
-set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
-kde4_add_test_executable(BenchmarkPointStorage ${BenchmarkPointStorage_SRCS})
-target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
-
-########### next target ###############
-
-set(TestPointStorage_SRCS TestPointStorage.cpp)
-kde4_add_unit_test(TestPointStorage TESTNAME kspread-PointStorage  ${TestPointStorage_SRCS})
-target_link_libraries(TestPointStorage kspreadcommon ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
+########### Function tests ###############
 
 set(TestBitopsFunctions_SRCS TestBitopsFunctions.cpp)
 kde4_add_unit_test(TestBitopsFunctions TESTNAME kspread-BitopsFunctions  ${TestBitopsFunctions_SRCS})
@@ -74,9 +46,15 @@ target_link_libraries(TestBitopsFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestInformationFunctions_SRCS TestInformationFunctions.cpp)
-kde4_add_unit_test(TestInformationFunctions TESTNAME kspread-InformationFunctions  ${TestInformationFunctions_SRCS})
-target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+set(TestDatabaseFunctions_SRCS TestDatabaseFunctions.cpp)
+kde4_add_unit_test(TestDatabaseFunctions TESTNAME kspread-DatabaseFunctions  ${TestDatabaseFunctions_SRCS})
+target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+########### target TestDatetimeFunctions ###############
+
+set(TestDatetimeFunctions_SRCS TestDatetimeFunctions.cpp)
+kde4_add_unit_test(TestDatetimeFunctions TESTNAME kspread-DatetimeFunctions  ${TestDatetimeFunctions_SRCS})
+target_link_libraries(TestDatetimeFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -86,9 +64,27 @@ target_link_libraries(TestEngineeringFunctions kspreadcommon ${QT_QTTEST_LIBRARY
 
 ########### next target ###############
 
+set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp)
+kde4_add_unit_test(TestFinancialFunctions TESTNAME kspread-FinancialFunctions  ${TestFinancialFunctions_SRCS})
+target_link_libraries(TestFinancialFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestInformationFunctions_SRCS TestInformationFunctions.cpp)
+kde4_add_unit_test(TestInformationFunctions TESTNAME kspread-InformationFunctions  ${TestInformationFunctions_SRCS})
+target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestLogicFunctions_SRCS TestLogicFunctions.cpp)
 kde4_add_unit_test(TestLogicFunctions TESTNAME kspread-LogicFunctions  ${TestLogicFunctions_SRCS})
 target_link_libraries(TestLogicFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestMathFunctions_SRCS TestMathFunctions.cpp)
+kde4_add_unit_test(TestMathFunctions TESTNAME kspread-MathFunctions  ${TestMathFunctions_SRCS})
+target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -102,20 +98,28 @@ set(TestTextFunctions_SRCS TestTextFunctions.cpp)
 kde4_add_unit_test(TestTextFunctions TESTNAME kspread-TextFunctions  ${TestTextFunctions_SRCS})
 target_link_libraries(TestTextFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
-########### target TestDatetimeFunctions ###############
+########### next target ###############
 
-set(TestDatetimeFunctions_SRCS TestDatetimeFunctions.cpp)
-kde4_add_unit_test(TestDatetimeFunctions TESTNAME kspread-DatetimeFunctions  ${TestDatetimeFunctions_SRCS})
-target_link_libraries(TestDatetimeFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+set(TestTrigFunctions_SRCS TestTrigFunctions.cpp)
+kde4_add_unit_test(TestTrigFunctions TESTNAME kspread-TrigFunctions  ${TestTrigFunctions_SRCS})
+target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+
+
+
+########### Benchmarks ###############
+
+# set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
+# kde4_add_test_executable(BenchmarkCluster ${BenchmarkCluster_SRCS})
+# target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestDatabaseFunctions_SRCS TestDatabaseFunctions.cpp)
-kde4_add_unit_test(TestDatabaseFunctions TESTNAME kspread-DatabaseFunctions  ${TestDatabaseFunctions_SRCS})
-target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
+set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
+kde4_add_test_executable(BenchmarkPointStorage ${BenchmarkPointStorage_SRCS})
+target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 ########### next target ###############
 
-set(TestRegion_SRCS TestRegion.cpp)
-kde4_add_unit_test(TestRegion TESTNAME kspread-Region  ${TestRegion_SRCS})
-target_link_libraries(TestRegion kspreadcommon ${QT_QTTEST_LIBRARY})
+set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
+kde4_add_test_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
+target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS})
