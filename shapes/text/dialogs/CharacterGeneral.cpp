@@ -33,7 +33,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
 {
     widget.setupUi(this);
 
-    m_styleOptions = new CharacterStyleOptions (this);
+    m_styleOptions = new CharacterStyleOptions (true, this);
     m_characterDecorations = new CharacterDecorations (this);
     m_characterHighlighting = new CharacterHighlighting (this);
 

@@ -33,7 +33,7 @@ class KFontChooser;
 class CharacterGeneral : public QWidget {
     Q_OBJECT
 public:
-    CharacterGeneral(QWidget *parent = 0);
+    explicit CharacterGeneral(QWidget *parent = 0);
 
     void setStyle(KoCharacterStyle *style);
 
