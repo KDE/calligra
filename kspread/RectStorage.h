@@ -91,25 +91,25 @@ public:
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > insertRows(int position, int number = 1);
+    QList< QPair<QRectF,T> > insertRows(int position, int number);
 
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > insertColumns(int position, int number = 1);
+    QList< QPair<QRectF,T> > insertColumns(int position, int number);
 
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > removeRows(int position, int number = 1);
+    QList< QPair<QRectF,T> > removeRows(int position, int number);
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF,T> > removeColumns(int position, int number = 1);
+    QList< QPair<QRectF,T> > removeColumns(int position, int number);
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .

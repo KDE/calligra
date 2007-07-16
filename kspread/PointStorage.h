@@ -205,7 +205,7 @@ public:
      * Insert \p number columns at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,T> > insertColumns( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > insertColumns( int position, int number )
     {
         Q_ASSERT( 1 <= position && position <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
@@ -237,7 +237,7 @@ public:
      * Removes \p number columns at \p position .
      * \return the removed data
      */
-    QVector< QPair<QPoint,T> > removeColumns( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > removeColumns( int position, int number )
     {
         Q_ASSERT( 1 <= position && position <= KS_colMax );
         QVector< QPair<QPoint,T> > oldData;
@@ -271,7 +271,7 @@ public:
      * Insert \p number rows at \p position .
      * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint,T> > insertRows( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > insertRows( int position, int number )
     {
         Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
@@ -310,7 +310,7 @@ public:
      * Removes \p number rows at \p position .
      * \return the removed data
      */
-    QVector< QPair<QPoint,T> > removeRows( int position, int number = 1 )
+    QVector< QPair<QPoint,T> > removeRows( int position, int number )
     {
         Q_ASSERT( 1 <= position && position <= KS_rowMax );
         // row's missing?
