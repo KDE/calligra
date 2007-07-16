@@ -972,7 +972,7 @@ QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, 
 }
 
 void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                              QString tabname, int nbCol, UndoInsertRemoveAction* undo)
+                              const QString& tabname, int nbCol, UndoInsertRemoveAction* undo)
 {
     for (int c = 0; c < formulaStorage()->count(); ++c)
     {
@@ -1303,7 +1303,7 @@ class SetWordSpellingManipulator : public AbstractDataManipulator {
   SetWordSpellingManipulator () : idx(0) {
     setText (i18n ("Set Word Spelling"));  // TODO: is the name correct ?
   }
-  void setString (QString str) {
+  void setString (const QString& str) {
     list = str.split ('\n');
     idx = 0;
   }
@@ -1327,7 +1327,7 @@ class SetWordSpellingManipulator : public AbstractDataManipulator {
   }
 };
 
-void Sheet::setWordSpelling(Selection* selection, const QString _listWord )
+void Sheet::setWordSpelling(Selection* selection, const QString& _listWord )
 {
   SetWordSpellingManipulator *manipulator = new SetWordSpellingManipulator;
   manipulator->setSheet (this);
@@ -1506,7 +1506,7 @@ void Sheet::paste( const QRect& pasteArea, bool makeUndo,
     // doc()->emitEndOperation();
 }
 
-void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
+void Sheet::pasteTextPlain(const QString& _text, const QRect& pasteArea)
 {
 //  QString tmp;
 //  tmp= QString::fromLocal8Bit(_mime->encodedData( "text/plain" ));

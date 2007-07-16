@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   
    Copyright 2006 Robert Knight <robertknight@gmail.com>
    Copyright 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
@@ -501,7 +500,7 @@ void VBorder::paintSizeIndicator( int mouseY )
     double hh = m_pView->zoomHandler()->unzoomItY( m_iResizePos - y );
     double hu = m_pView->doc()->unit().toUserValue( hh );
     if ( hu > 0.01 )
-        tmpSize = i18n("Height: %1 %2", KGlobal::locale()->formatNumber( hu ) , m_pView->doc()->unitName() );
+        tmpSize = i18n("Height: %1 %2", hu, m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Row" );
 
@@ -1232,7 +1231,7 @@ void HBorder::paintSizeIndicator( int mouseX )
     double ww = (sheet->layoutDirection() == Qt::RightToLeft) ? x - m_iResizePos : m_iResizePos - x;
     double wu = m_pView->doc()->unit().toUserValue( ww );
     if ( wu > 0.01 )
-        tmpSize = i18n("Width: %1 %2", KGlobal::locale()->formatNumber( wu ), m_pView->doc()->unitName() );
+        tmpSize = i18n("Width: %1 %2", wu, m_pView->doc()->unitName() );
     else
         tmpSize = i18n( "Hide Column" );
 

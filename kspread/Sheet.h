@@ -694,7 +694,7 @@ public:
      */
     void cutSelection( Selection* selection );
 
-    void setWordSpelling(Selection* selection,const QString _listWord );
+    void setWordSpelling(Selection* selection, const QString& wordList);
 
     /**
      * @param selection the selection of cells to work on
@@ -758,7 +758,7 @@ public:
     /**
      * A function which allows to paste a text plain from the clipboard
      */
-    void pasteTextPlain( QString &_text, QRect pasteArea);
+    void pasteTextPlain(const QString& _text, const QRect& pasteArea);
 
     //
     //END Methods related to cut & paste
@@ -862,7 +862,7 @@ public:
      * @param undo is the handler of the undo class in case of lost cell references
      */
     void changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
-                            ChangeRef ref, QString tabname, int NbCol = 1,
+                            ChangeRef ref, const QString& tabname, int NbCol = 1,
                             UndoInsertRemoveAction * undo = 0 );
 
 
