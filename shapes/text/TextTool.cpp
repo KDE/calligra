@@ -704,8 +704,6 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
 
         if(isRtl) { // if RTL toggle direction of cursor movement.
             switch(moveOperation) {
-            case QTextCursor::StartOfWord: moveOperation = QTextCursor::EndOfWord; break;
-            case QTextCursor::EndOfWord: moveOperation = QTextCursor::StartOfWord; break;
             case QTextCursor::Left: moveOperation = QTextCursor::Right; break;
             case QTextCursor::Right: moveOperation = QTextCursor::Left; break;
             case QTextCursor::WordRight: moveOperation = QTextCursor::WordLeft; break;
