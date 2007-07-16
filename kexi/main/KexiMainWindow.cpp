@@ -177,6 +177,14 @@ KexiMainWindowTabWidget::~KexiMainWindowTabWidget()
 {
 }
 
+void KexiMainWindowTabWidget::paintEvent( QPaintEvent * event )
+{
+	if (count()>0)
+		KTabWidget::paintEvent(event);
+	else
+		QWidget::paintEvent(event);
+}
+
 //-------------------------------------------------
 
 //static
@@ -3934,13 +3942,16 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 	openingCancelled = false;
 
 	bool needsUpdateViewGUIClient = true;
+	bool alreadyOpened = false;
 	if (window) {
-		window->activate();
+		activateWindow(window);
+		//window->activate();
 		if (viewMode!=window->currentViewMode()) {
 			if (!switchToViewMode(viewMode))
 				return 0;
 		}
 		needsUpdateViewGUIClient = false;
+		alreadyOpened = true;
 	}
 	else {
 		d->updatePropEditorVisibility(viewMode);
@@ -3986,7 +3997,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 		d->executeActionWhenPendingJobsAreFinished();
 	}
 #endif
-	if (window) {
+	if (window && !alreadyOpened) {
 //		window->setParent(d->tabWidget);
 		d->tabWidget->addTab(window, window->windowIcon(), window->windowTitle());
 		d->tabWidget->setCurrentWidget(window);
@@ -4504,8 +4515,10 @@ void KexiMainWindow::slotToolsCompactDatabase()
 		data = new KexiProjectData(*d->prj->data()); // a copy
 		drv = d->prj->dbConnection()->driver();
 		const tristate res = closeProject();
-		if (~res || !res)
+		if (~res || !res) {
+			delete data;
 			return;
+		}
 	}
 
 	if (!drv->adminTools().vacuum(*data->connectionData(), data->databaseName())) {
@@ -4513,10 +4526,9 @@ void KexiMainWindow::slotToolsCompactDatabase()
 		showErrorMessage( &drv->adminTools() );
 	}
 
-	if (data && projectWasOpened) {
+	if (data && projectWasOpened)
 		openProject(*data);
-		delete data;
-	}
+	delete data;
 }
 
 tristate KexiMainWindow::showProjectMigrationWizard(

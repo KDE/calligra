@@ -22,10 +22,17 @@ KDE4: TODO:
 - fix KMenu::addTitle():
   http://api.kde.org/4.0-api/kdelibs-apidocs/kdeui/html/kmenu_8cpp-source.html#l00144
 
+
+TODO: check reports at scan.coverity.com
+
 ===================== Kexi 2.0 Alpha =====================
 2007-07-16
-Core
+Core, Main
 = fixed creating shared actions
+= fixed switching between view modes and tabs
+= fixed possible crash in compacting function (CID 3905)
+KexiDB
+= fixed possible double deletion of cursors
 
 2007-07-13
 General

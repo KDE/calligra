@@ -36,7 +36,7 @@ FieldValidator::FieldValidator( const Field &field, QWidget * parent )
 	if (field.isIntegerType()) {
 		QValidator *validator = 0;
 		const bool u = field.isUnsigned();
-		int bottom, top;
+		int bottom = 0, top = 0;
 		if (t==Field::Byte) {
 			bottom = u ? 0 : -0x80;
 			top = u ? 0xff : 0x7f;

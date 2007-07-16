@@ -208,6 +208,7 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	,d(new ConnectionPrivate(this, conn_data))
 	,m_driver(driver)
 	,m_destructor_started(false)
+	,m_insideCloseDatabase(false)
 {
 	d->dbProperties = new DatabaseProperties(this);
 //Qt3	m_cursors.setAutoDelete(true);
@@ -654,12 +655,17 @@ bool Connection::closeDatabase()
 		d->transactions.clear(); //free trans. data
 	}
 
+	m_insideCloseDatabase = true;
+
 	//delete own cursors:
 	qDeleteAll(d->cursors);
+	d->cursors.clear();
 	//delete own schemas
 	d->tables.clear();
 	d->kexiDBSystemTables.clear();
 	d->queries.clear();
+
+	m_insideCloseDatabase = false;
 
 	if (!drv_closeDatabase())
 		return false;

@@ -118,7 +118,7 @@ Cursor::~Cursor()
 		KexiDBDbg << "Cursor::~Cursor() " << endl;*/
 
 	//take me if delete was 
-	if (!m_conn->m_destructor_started)
+	if (!m_conn->m_destructor_started && !m_conn->m_insideCloseDatabase)
 		m_conn->takeCursor(*this);
 	else {
 		KexiDBDbg << "Cursor::~Cursor() can be destroyed with Conenction::deleteCursor(), not with delete operator !"<< endl;

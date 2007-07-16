@@ -32,6 +32,7 @@
 #include <Q3PopupMenu>
 #include <Q3CString>
 
+class QPaintEvent;
 class KexiProjectData;
 class KexiSimplePrintingSettings;
 
@@ -58,6 +59,9 @@ class KexiMainWindowTabWidget : public KTabWidget
 		virtual ~KexiMainWindowTabWidget();
 	signals:
 		void closeTab();
+	protected:
+		//! Reimplemented to hide frame when no tabs are displayed
+		virtual void paintEvent( QPaintEvent * event );
 };
 
 /**

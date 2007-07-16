@@ -61,10 +61,11 @@ class KexiWindow::Private
 			item = 0;
 		}
 		
-		inline int indexForView( int mode ) const
-			{ return indicesForViews.value(mode); }
+		inline int indexForView( int mode ) const {
+			return indicesForViews.contains(mode) ? indicesForViews.value(mode) : -1;
+		}
 		inline void setIndexForView( Kexi::ViewMode mode, int idx )
-			{ indicesForViews.insert((int)mode, idx); }
+		{ indicesForViews.insert((int)mode, idx); }
 		
 		Kexi::ViewModes supportedViewModes;
 		Kexi::ViewModes openedViewModes;
@@ -523,7 +524,7 @@ tristate KexiWindow::switchToViewMode(
 	if (view)
 		takeActionProxyChild( view ); //take current proxy child
 	addActionProxyChild( newView ); //new proxy child
-	setCurrentIndex( d->indexForView(newViewMode) );
+	setCurrentWidget( newView ); //d->indexForView(newViewMode) );
 	newView->propertySetSwitched();
 	KexiMainWindowIface::global()->invalidateSharedActions( newView );
 	QTimer::singleShot(10, newView, SLOT(setFocus())); //newView->setFocus(); //js ok?

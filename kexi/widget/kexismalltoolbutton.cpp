@@ -62,7 +62,7 @@ KexiSmallToolButton::KexiSmallToolButton(KAction* action, QWidget* parent)
 		setToolTip(m_action->toolTip());
 	}
 	init();
-//	connect(this, SIGNAL(clicked()), action, SLOT(activate()));
+	connect(this, SIGNAL(clicked()), action, SLOT(trigger()));
 //	connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)));
 	updateAction();
 }
