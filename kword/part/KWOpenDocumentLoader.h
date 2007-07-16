@@ -51,6 +51,10 @@ public:
     explicit KWOpenDocumentLoader(KWDocument *document);
     virtual ~KWOpenDocumentLoader();
 
+    KWDocument* document() const;
+    QString currentMasterPage() const;
+    QString currentFramesetName() const;
+
     /**
      *  @brief Loads an OASIS OpenDocument from a store.
      *  This implements the KoDocument::loadOasis method.
@@ -62,21 +66,10 @@ protected:
     virtual bool loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName);
     virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
 
-    virtual void startBody(int total);
-    virtual void processBody();
-
-    virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor);
-    virtual KoTextAnchor* loadShapeAnchor(KoTextLoadingContext& context, const KoXmlElement& anchorElem, QTextCursor& cursor, KoShape* shape);
+    virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
 private:
     void loadHeaderFooter(KoTextLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
-
-Q_SIGNALS:
-    /**
-    * This signal is emitted during loading with a percentage within 1-100 range
-    * \param percent the progress as a percentage
-    */
-    void sigProgress(int percent);
 
 private:
     /// \internal d-pointer class.
