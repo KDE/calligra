@@ -77,7 +77,7 @@ class KexiQueryDesignerGuiEditor::Private
 {
 public:
 	Private()
-		: fieldColumnIdentifiers(101, false/*case insens.*/)
+		: fieldColumnIdentifiers(1009, false/*case insens.*/)
 	{
 		droppedNewItem = 0;
 		slotTableAdded_enabled = true;
@@ -809,7 +809,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	//2. Collect information about criterias
 	// --this must be top level chain of AND's
 	// --this will also show joins as: [table1.]field1 = [table2.]field2
-	QDict<KexiDB::BaseExpr> criterias(101, false);
+	QDict<KexiDB::BaseExpr> criterias(1009, false);
 	KexiDB::BaseExpr* e = query->whereExpression();
 	KexiDB::BaseExpr* eItem = 0;
 	while (e) {
@@ -877,7 +877,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	//3. show fields (including * and table.*)
 	uint row_num = 0;
 	KexiDB::Field *field;
-	QPtrDict<char> usedCriterias(101); // <-- used criterias will be saved here
+	QPtrDict<char> usedCriterias(1009); // <-- used criterias will be saved here
 	                                   //     so in step 4. we will be able to add
 	                                   //     remaining invisible columns with criterias
 	for (KexiDB::Field::ListIterator it(*query->fields());
@@ -1270,7 +1270,7 @@ QCString KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 	const QCString expStr
 		= i18n("short for 'expression' word (only latin letters, please)", "expr").latin1();
 //TODO: optimization: cache it?
-	QAsciiDict<char> aliases(101);
+	QAsciiDict<char> aliases(1009);
 	for (int r = 0; r<(int)d->sets->size(); r++) {
 		KoProperty::Set *set = d->sets->at(r);
 		if (set) {

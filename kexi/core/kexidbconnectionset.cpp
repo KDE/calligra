@@ -30,7 +30,7 @@ class KexiDBConnectionSetPrivate
 {
 public:
 	KexiDBConnectionSetPrivate()
-	 : dataForFilenames(101)
+	 : dataForFilenames(1009)
 	{
 		list.setAutoDelete(true);
 		maxid=-1;

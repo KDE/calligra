@@ -1439,7 +1439,7 @@ void QuerySchema::computeFieldsExpanded()
 	}
 
 	//remove duplicates for lookup fields
-	QDict<uint> lookup_dict(101); //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue()
+	QDict<uint> lookup_dict(1009); //used to fight duplicates and to update QueryColumnInfo::indexForVisibleLookupValue()
 	                         // (a mapping from table.name string to uint* lookupFieldIndex
 	lookup_dict.setAutoDelete(true);
 	i=0;

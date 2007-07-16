@@ -83,10 +83,10 @@ class ConnectionPrivate
 		ConnectionPrivate(Connection* const conn, ConnectionData &conn_data)
 		 : conn(conn)
 		 , conn_data(&conn_data)
-		 , tableSchemaChangeListeners(101)
+		 , tableSchemaChangeListeners(1009)
 		 , m_parser(0)
-		 , tables_byname(101, false)
-		 , queries_byname(101, false)
+		 , tables_byname(1009, false)
+		 , queries_byname(1009, false)
 		 , kexiDBSystemTables(101)
 		 , dont_remove_transactions(false)
 		 , skip_databaseExists_check_in_useDatabase(false)
@@ -104,8 +104,8 @@ class ConnectionPrivate
 			queries_byname.setAutoDelete(false);//queries is owner, not me
 
 			//reasonable sizes: TODO
-			tables.resize(101);
-			queries.resize(101);
+			tables.resize(1009);
+			queries.resize(1009);
 		}
 		~ConnectionPrivate()
 		{

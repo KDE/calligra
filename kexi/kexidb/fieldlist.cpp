@@ -28,7 +28,7 @@ using namespace KexiDB;
 
 FieldList::FieldList(bool owner)
  //reasonable sizes: TODO
- : m_fields_by_name(101, false)
+ : m_fields_by_name(1009, false)
 {
 	m_fields.setAutoDelete( owner );
 	m_fields_by_name.setAutoDelete( false );

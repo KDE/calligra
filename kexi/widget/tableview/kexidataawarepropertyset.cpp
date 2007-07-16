@@ -24,7 +24,7 @@
 #include <koproperty/property.h>
 #include <kexiviewbase.h>
 
-#define MAX_FIELDS 101 //nice prime number (default prop. set vector size)
+#define MAX_FIELDS 1009 //nice prime number (default prop. set vector size)
 
 KexiDataAwarePropertySet::KexiDataAwarePropertySet(KexiViewBase *view,
 	KexiDataAwareObjectInterface* dataObject)

@@ -491,7 +491,6 @@ void KexiMigrate::updateProgress(Q_ULLONG step) {
 // Prompt the user to choose a field type
 KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 {
-	KInputDialog *dlg;
 	QStringList  types;
 	QString res;
 
@@ -509,7 +508,7 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 	types << "Long Text";
 	types << "Binary Large Object";
 
-	res = dlg->getItem( i18n("Field Type"),
+	res = KInputDialog::getItem( i18n("Field Type"),
 	                    i18n("The data type for %1 could not be determined. "
 				 "Please select one of the following data "
 				 "types").arg(fname),

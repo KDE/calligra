@@ -153,7 +153,7 @@ void KexiFormDataProvider::fillDuplicatedDataItems(
 				count = it_dup.data();
 			tmpDuplicatedItems.insert( it.current()->columnInfo()->field, ++count );
 		}
-		m_duplicatedItems = new QPtrDict<char>(101);
+		m_duplicatedItems = new QPtrDict<char>(1009);
 		for (it_dup = tmpDuplicatedItems.begin(); it_dup!=tmpDuplicatedItems.end(); ++it_dup) {
 			if (it_dup.data() > 1) {
 				m_duplicatedItems->insert( it_dup.key(), (char*)1 );
@@ -260,7 +260,7 @@ void KexiFormDataProvider::invalidateDataSources( const QDict<char>& invalidSour
 //	m_fieldNumbersForDataItems = newFieldNumbersForDataItems;
 
 	//update data sources set (some of them may be removed)
-	QDict<char> tmpUsedDataSources(1013);
+	QDict<char> tmpUsedDataSources(1009);
 
 	if (query)
 		query->debug();

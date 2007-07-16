@@ -55,7 +55,7 @@ class WidgetLibraryPrivate
 {
 	public:
 		WidgetLibraryPrivate()
-		 : widgets(101)
+		 : widgets(1009)
 //		 , alternateWidgets(101)
 		 , services(101, false)
 		 , supportedFactoryGroups(17, false)

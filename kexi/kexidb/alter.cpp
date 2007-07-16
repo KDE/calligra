@@ -223,7 +223,7 @@ QString AlterTableHandler::ChangeFieldPropertyAction::debugString(const DebugOpt
 static AlterTableHandler::ActionDict* createActionDict( 
 	AlterTableHandler::ActionDictDict &fieldActions, int forFieldUID )
 {
-	AlterTableHandler::ActionDict* dict = new AlterTableHandler::ActionDict(101, false);
+	AlterTableHandler::ActionDict* dict = new AlterTableHandler::ActionDict(1009, false);
 	dict->setAutoDelete(true);
 	fieldActions.insert( forFieldUID, dict );
 	return dict;

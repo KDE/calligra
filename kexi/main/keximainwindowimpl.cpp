@@ -4203,8 +4203,10 @@ void KexiMainWindowImpl::slotToolsCompactDatabase()
 		data = new KexiProjectData(*d->prj->data()); // a copy
 		drv = d->prj->dbConnection()->driver();
 		const tristate res = closeProject();
-		if (~res || !res)
+		if (~res || !res) {
+			delete data;
 			return;
+		}
 	}
 
 	if (!drv->adminTools().vacuum(*data->connectionData(), data->databaseName())) {
@@ -4212,10 +4214,9 @@ void KexiMainWindowImpl::slotToolsCompactDatabase()
 		showErrorMessage( &drv->adminTools() );
 	}
 
-	if (data && projectWasOpened) {
+	if (projectWasOpened)
 		openProject(*data);
-		delete data;
-	}
+	delete data;
 }
 
 tristate KexiMainWindowImpl::showProjectMigrationWizard(

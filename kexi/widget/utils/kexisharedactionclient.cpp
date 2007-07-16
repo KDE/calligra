@@ -22,7 +22,7 @@
 #include <kaction.h>
 
 KexiSharedActionClient::KexiSharedActionClient()
- : m_sharedActions(101, false)
+ : m_sharedActions(1009, false)
 {
 }
 

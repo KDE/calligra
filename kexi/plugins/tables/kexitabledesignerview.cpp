@@ -1262,7 +1262,7 @@ tristate KexiTableDesignerView::buildSchema(KexiDB::TableSchema &schema, bool be
 	KoProperty::Set *b = 0;
 	bool no_fields = true;
 	int i;
-	QDict<char> names(101, false);
+	QDict<char> names(1009, false);
 	char dummy;
 	for (i=0;i<(int)d->sets->size();i++) {
 		b = d->sets->at(i);
