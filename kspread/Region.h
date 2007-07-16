@@ -32,7 +32,7 @@
 
 inline uint qHash( const QPoint& point )
 {
-    return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() << 16 >> 16 );
+    return ( static_cast<uint>( point.x() ) << 16 ) + static_cast<uint>( point.y() );
 }
 
 namespace KSpread
