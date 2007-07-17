@@ -34,9 +34,10 @@ KWFrameSet::~KWFrameSet() {
 
 void KWFrameSet::addFrame(KWFrame *frame) {
     Q_ASSERT(frame);
-    Q_ASSERT(! m_frames.contains(frame));
+    if(m_frames.contains(frame))
+        return;
+    m_frames.append(frame); // this one first, so we don't enter the addFrame twice.
     frame->setFrameSet(this);
-    m_frames.append(frame);
     setupFrame(frame);
     emit frameAdded(frame);
 }
@@ -54,10 +55,10 @@ void KWFrameSet::removeFrame(KWFrame *frame) {
 #ifndef NDEBUG
 void KWFrameSet::printDebug() {
     //kDebug(32001) << " |  Visible: " << isVisible() << endl;
-    int i=0;
+    int i=1;
     foreach(KWFrame *frame, frames()) {
-        kDebug(32001) << " +-- Frame " << i++ << " of "<< frameCount() << "    (" << frame << ")  " /*<<
-        (frame->isCopy() ? "[copy]" : "") */<< endl;
+        kDebug(32001) << " +-- Frame " << i++ << " of "<< frameCount() << "    (" << frame << ")  " <<
+        (frame->isCopy() ? "[copy]" : "") << endl;
         printDebug(frame);
     }
 }

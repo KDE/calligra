@@ -32,6 +32,7 @@
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
 #include "dialogs/KWStatisticsDialog.h"
+#include "commands/KWFrameCreateCommand.h"
 
 // koffice libs includes
 #include <KoCopyController.h>
@@ -1064,14 +1065,27 @@ void KWView::showRulers(bool visible) {
 }
 
 void KWView::createLinkedFrame() {
-    foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
+    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    QList<KoShape*> oldSelection = selection->selectedShapes(KoFlake::TopLevelSelection);
+    if(oldSelection.count() == 0)
+        return;
+    selection->deselectAll();
+
+    QUndoCommand *cmd = new QUndoCommand(i18n("Create Linked Copy"));
+    foreach(KoShape *shape, oldSelection) {
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
         Q_ASSERT(frame);
         KWCopyShape *copy = new KWCopyShape(frame->shape());
-        copy->setPosition(QPointF(40, 40) + frame->shape()->position());
-        // TODO clip shape to doc
+        copy->setPosition(frame->shape()->position());
+        QPointF offset(40, 40);
+        kwcanvas()->clipToDocument(copy, offset);
+        copy->setPosition(frame->shape()->position() + offset);
+        copy->setZIndex(frame->shape()->zIndex() +1);
         KWFrame *newFrame = new KWFrame(copy, frame->frameSet());
+        new KWFrameCreateCommand (m_document, newFrame, cmd);
+        selection->select(copy);
     }
+    m_document->addCommand(cmd);
 }
 
 

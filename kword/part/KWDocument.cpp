@@ -99,7 +99,7 @@ KWDocument::~KWDocument() {
 
 void KWDocument::addShape (KoShape *shape) {
     // KWord adds a couple of dialogs (like KWFrameDialog) which will not call addShape(), but
-    // will call addFrameSet.  Which will itself cal addFrame()
+    // will call addFrameSet.  Which will itself call addFrame()
     // any call coming in here is due to the undo/redo framework or for nested frames
 
     KWFrame *frame = dynamic_cast<KWFrame*> (shape->applicationData());

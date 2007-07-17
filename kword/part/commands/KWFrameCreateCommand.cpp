@@ -17,35 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWFRAMEDELETECOMMAND_H
-#define KWFRAMEDELETECOMMAND_H
+#include "KWFrameCreateCommand.h"
+#include "frames/KWFrame.h"
+#include "frames/KWFrameSet.h"
 
-#include <QUndoCommand>
+#include <KoShapeCreateCommand.h>
 
-class KWFrame;
-class KWFrameSet;
-class KoShapeControllerBase;
+#include <KLocale>
 
-/// The undo / redo command for deleting frames
-class KWFrameDeleteCommand : public QUndoCommand
+KWFrameCreateCommand::KWFrameCreateCommand(KoShapeControllerBase *shapeController, KWFrame *frame, QUndoCommand *parent)
+    :QUndoCommand(i18n("Create Frame"), parent),
+    m_frame(frame),
+    m_frameSet(frame->frameSet())
 {
-public:
-    /**
-     * Constructor for a command to delete a frame.
-     * @param shapeController the shape controller to remove / add the shapes from/to.
-     * @param frame the frame to delete.
-     * @param parent the parent for macro command functionality
-     */
-    explicit KWFrameDeleteCommand(KoShapeControllerBase *shapeController, KWFrame *frame, QUndoCommand *parent = 0 );
+    new KoShapeCreateCommand(shapeController, frame->shape(), this);
+}
 
-    /// redo the command
-    virtual void redo();
-    /// revert the actions done in redo
-    virtual void undo();
+void KWFrameCreateCommand::redo() {
+    m_frameSet->addFrame(m_frame);
+    QUndoCommand::redo();
+}
 
-private:
-    KWFrame *m_frame;
-    KWFrameSet *m_frameSet;
-};
+void KWFrameCreateCommand::undo() {
+    QUndoCommand::undo();
+    m_frameSet->removeFrame(m_frame);
+}
 
-#endif
