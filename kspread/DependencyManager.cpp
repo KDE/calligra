@@ -484,9 +484,7 @@ void DependencyManager::Private::generateDepths(const Region& region)
             Formula formula = sheet->formulaStorage()->firstInRow( row, &col );
             if ( col > 0 && col < range.left() )
                 formula = sheet->formulaStorage()->nextInRow( col, row, &col );
-            else if ( col > range.right() )
-                col = 0;
-            while ( col != 0 )
+            while ( col != 0 && col <= range.right() )
             {
                 Cell cell( sheet,col, row);
 
@@ -496,8 +494,10 @@ void DependencyManager::Private::generateDepths(const Region& region)
                     kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
                     cell.setValue( Value::errorCIRCLE() );
                     depths.insert(cell, 0);
+#if 0 // FIXME Stefan: Leave it in, as it should be removed where it was inserted first. Verify!
                     // clear the compute reference depth flag
                     processedCells.remove( cell );
+#endif
                     // Don't get stuck here. Go to the next cell.
                     formula = sheet->formulaStorage()->nextInRow( col, row, &col );
                     continue;
@@ -534,8 +534,10 @@ int DependencyManager::Private::computeDepth(Cell cell) const
     {
         kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
         cell.setValue( Value::errorCIRCLE() );
+#if 0 // FIXME Stefan: Leave it in, as it should be removed where it was inserted first. Verify!
         //clear the compute reference depth flag
         processedCells.remove( cell );
+#endif
         return 0;
     }
 
