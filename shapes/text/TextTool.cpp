@@ -38,6 +38,7 @@
 
 #include <KoCharacterStyle.h>
 #include <KoTextDocumentLayout.h>
+#include <KoInlineNote.h>
 #include <KoParagraphStyle.h>
 #include <KoTextEditingPlugin.h>
 #include <KoTextEditingRegistry.h>
@@ -628,18 +629,11 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             moveOperation = QTextCursor::WordRight;
 #ifndef NDEBUG
         else if(event->key() == Qt::Key_F12) {
-            KoParagraphStyle style;
-            QList<KoText::Tab> tabs;
-            KoText::Tab tab;
-            tab.position = 474;
-            tab.type = KoText::RightTab;
-            tab.leaderStyle = QTextCharFormat::SingleUnderline;
-            tab.leaderColor = QColor(Qt::red);
-            tabs.append(tab);
-            style.setTabPositions(tabs);
-            QTextBlock block = m_caret.block();
-            style.applyStyle(block);
-            m_caret.insertText(QString::fromUtf8("Foo\tLorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy fslkfj slfjsddf\tBarBaz\tText\tEnd"));
+            KoInlineNote *fn = new KoInlineNote(KoInlineNote::Footnote);
+            fn->setText("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy");
+            fn->setLabel("1");
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+           lay->inlineObjectTextManager()->insertInlineObject(m_caret, fn);
         }
 #endif
         else if((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {

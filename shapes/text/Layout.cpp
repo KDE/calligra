@@ -29,6 +29,8 @@
 #include <KoStyleManager.h>
 #include <KoTextBlockData.h>
 #include <KoTextBlockBorderData.h>
+#include <KoInlineNote.h>
+#include <KoInlineTextObjectManager.h>
 #include <KoShape.h>
 #include <KoUnit.h>
 
@@ -182,6 +184,9 @@ bool Layout::addLine(QTextLine &line) {
         m_y = line.y() + height; // The line got a pos <> from y(), follow that lead.
     m_newShape = false;
     m_newParag = false;
+
+    findFootnote(line);
+
     return false;
 }
 
@@ -333,6 +338,7 @@ double Layout::documentOffsetInShape() {
 }
 
 void Layout::nextShape() {
+kDebug() << "nextShape" << endl;
     m_newShape = true;
 
     if(m_data) {
@@ -358,6 +364,10 @@ void Layout::nextShape() {
         return;
     m_data->setDocumentOffset(m_y);
     m_data->faul(); // make dirty since this one needs relayout at this point.
+    TextShape *textShape = dynamic_cast<TextShape*>(shape);
+    Q_ASSERT(textShape);
+    if(textShape->hasFootnoteDocument())
+        textShape->footnoteDocument()->clear();
     m_shapeBorder = shape->borderInsets();
     m_y += m_shapeBorder.top;
 }
@@ -463,7 +473,12 @@ void Layout::resetPrivate() {
         return;
     Q_ASSERT(shapeNumber < shapes.count());
     shape = shapes[shapeNumber];
-    m_demoText = (static_cast<TextShape*> (shape))->demoText();
+
+    TextShape *textShape = dynamic_cast<TextShape*>(shape);
+    Q_ASSERT(textShape);
+    if(textShape->hasFootnoteDocument())
+        textShape->footnoteDocument()->clear();
+    m_demoText = textShape->demoText();
     m_data = dynamic_cast<KoTextShapeData*> (shape->userData());
     m_shapeBorder = shape->borderInsets();
     if(m_y == 0)
@@ -1242,5 +1257,33 @@ double Layout::inlineCharHeight(const QTextFragment &fragment) {
     if(m_inlineObjectHeights.contains(fragment.position()))
         return m_inlineObjectHeights[fragment.position()];
     return 0.0;
+}
+
+void Layout::findFootnote(const QTextLine &line) {
+    if(m_parent->inlineObjectTextManager() == 0)
+        return;
+    QString text = m_block.text();
+    int pos = text.indexOf(QChar(0xFFFC), line.textStart());
+    while(pos > 0 && pos < line.textLength()) {
+        QTextCursor cursor(m_block);
+        cursor.setPosition(m_block.position() + pos);
+        cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+        KoInlineNote *note = dynamic_cast<KoInlineNote*> (m_parent->inlineObjectTextManager()->inlineTextObject(cursor));
+        if(note) {
+            TextShape *textShape = static_cast<TextShape*>(shape);
+            QTextCursor cursor(textShape->footnoteDocument()->end());
+            if(! textShape->footnoteDocument()->isEmpty())
+                cursor.insertText("\n");
+            QTextCharFormat cf;
+            cf.setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+            cursor.mergeCharFormat(cf);
+            cursor.insertText(note->label() +' ');
+            cf.setVerticalAlignment(QTextCharFormat::AlignNormal);
+            cursor.mergeCharFormat(cf);
+            cursor.insertText(note->text());
+
+        }
+        pos = text.indexOf(QChar(0xFFFC), pos+1);
+    }
 }
 

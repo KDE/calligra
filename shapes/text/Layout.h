@@ -85,6 +85,7 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
     void drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd);
     double inlineCharHeight(const QTextFragment &fragment);
+    void findFootnote(const QTextLine &line);
 
     void resetPrivate();
 

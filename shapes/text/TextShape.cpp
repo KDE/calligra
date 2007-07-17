@@ -46,6 +46,7 @@
 
 TextShape::TextShape()
     : KoShapeContainer(new KoTextShapeContainerModel()),
+    m_footnotes(0),
     m_demoText(false)
 {
     setShapeId(TextShape_SHAPEID);
@@ -63,6 +64,7 @@ TextShape::TextShape()
 }
 
 TextShape::~TextShape() {
+    delete m_footnotes;
 }
 
 void TextShape::setDemoText(bool on) {
@@ -99,8 +101,15 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     QTextDocument *doc = m_textShapeData->document();
     painter.setClipRect(QRectF(QPointF(0, 0), size()), Qt::IntersectClip);
+    painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
     doc->documentLayout()->draw( &painter, pc);
+    painter.restore();
+
+    if(m_footnotes) {
+        painter.translate(0, size().height() - m_footnotes->size().height());
+        m_footnotes->documentLayout()->draw( &painter, pc);
+    }
 }
 
 QPointF TextShape::convertScreenPos(const QPointF &point) {
@@ -219,3 +228,14 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const {
 bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
     return false; // TODO
 }
+
+QTextDocument *TextShape::footnoteDocument() {
+    if(m_footnotes == 0) {
+        m_footnotes = new QTextDocument();
+        m_footnotes->setUseDesignMetrics(true);
+        m_footnotes->setPageSize(size());
+        // TODO check for font DPI-ness
+    }
+    return m_footnotes;
+}
+

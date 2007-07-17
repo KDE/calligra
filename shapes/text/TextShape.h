@@ -47,7 +47,14 @@ public:
     /// helper method.
     QPointF convertScreenPos(const QPointF &point);
 
+    /**
+     * Set the shape's text to be demot text or not.
+     * If true, replace the content with an lorem ipsum demo text and don't complain
+     *   when there is not enough space at the end
+     * If false; remove the demo text again.
+     */
     void setDemoText(bool on);
+    /// return if the content of this shape is demo text.
     bool demoText() const { return m_demoText; }
 
     // reimplemented
@@ -57,10 +64,14 @@ public:
 
     KoTextShapeData *textShapeData() { return m_textShapeData; }
 
+    bool hasFootnoteDocument() { return m_footnotes != 0; }
+    QTextDocument *footnoteDocument();
+
 private:
     void shapeChanged(ChangeType type);
 
     KoTextShapeData *m_textShapeData;
+    QTextDocument *m_footnotes;
 
     bool m_demoText;
 };

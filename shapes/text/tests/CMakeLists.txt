@@ -6,6 +6,7 @@ set(TestDocumentLayout_test_SRCS
     TestDocumentLayout.cpp
     TestLists.cpp
     ../Layout.cpp
+    ../TextShape.cpp
     ../ListItemsHelper.cpp
 )
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
