@@ -145,6 +145,7 @@ SET (ui_DIR_SRCS
 	ui/DefaultToolFactory.cpp
 	ui/Editors.cpp
 	ui/SheetView.cpp
+	ui/TextEdit.cpp
 	ui/View.cpp
 	)
 

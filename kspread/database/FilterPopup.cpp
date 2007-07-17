@@ -165,7 +165,7 @@ void FilterPopup::updateFilter(Filter* filter) const
     {
         // emptyCheckbox is not checked, because allCheckbox is not.
         filter->removeConditions(d->fieldNumber);
-        filter->addCondition(Filter::AndComposition, d->fieldNumber, Filter::NotMatch, "");
+        filter->addCondition(Filter::OrComposition, d->fieldNumber, Filter::NotMatch, "");
     }
     else
     {
@@ -188,7 +188,7 @@ void FilterPopup::updateFilter(Filter* filter) const
         for (int i = 0; i < values.count(); ++i)
         {
             kDebug() << "adding condition for fieldNumber " << d->fieldNumber << endl;
-            filter->addCondition(Filter::AndComposition, d->fieldNumber, comparison, values[i]);
+            filter->addCondition(Filter::OrComposition, d->fieldNumber, comparison, values[i]);
         }
     }
 }
