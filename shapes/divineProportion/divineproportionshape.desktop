@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Name=DivineProportion Shape
 Name[de]=Göttliche-Teilung-Form
+Name[pt]=Forma de Proporção Divina
+Name[pt_BR]=Forma de Proporção Divina
 Name[sv]=Gudomlig proportionsform
 ServiceTypes=KOffice/Flake
 Type=Service

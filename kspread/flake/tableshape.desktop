@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Name=Table Shape
 Name[de]=Tabellen-Form
+Name[pt]=Forma de Tabela
+Name[pt_BR]=Forma de Tabela
 Name[sv]=Tabellform
 Name[x-test]=xxTable Shapexx
 ServiceTypes=KOffice/Shape
