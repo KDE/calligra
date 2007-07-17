@@ -31,6 +31,7 @@
 class KoStyleManager;
 class KoTextBlockData;
 class KoTextShapeData;
+class TextShape;
 
 /**
  * The document layouter for KoText style docs.
@@ -85,7 +86,7 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
     void drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd);
     double inlineCharHeight(const QTextFragment &fragment);
-    void findFootnote(const QTextLine &line);
+    double findFootnote(const QTextLine &line);
 
     void resetPrivate();
 
@@ -106,6 +107,7 @@ private:
     QList<double> m_lotsOfTabs;
     QList<KoTextBlockData::TabLineData> m_currentParagTabsData;
     QHash<int, double> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
+    TextShape *m_textShape;
 
     // demoText feature
     bool m_demoText, m_endOfDemoText;
