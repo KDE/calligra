@@ -52,7 +52,6 @@ class Cell;
 class CellEditor;
 class LocationEditWidget;
 class Region;
-class TextEdit;
 class Tokens;
 class View;
 
@@ -229,7 +228,7 @@ private slots:
 protected:
     void resizeEvent( QResizeEvent* );
     /**
-     * Steals some key events from the KLineEdit and sends
+     * Steals some key events from the QLineEdit and sends
      * it to the KSpread::Canvas ( its parent ) instead.
      */
     bool eventFilter( QObject* o, QEvent* e );
@@ -297,7 +296,7 @@ private:
  * The widget that appears above the sheet and allows to
  * edit the cells content.
  */
-class EditWidget : public KLineEdit
+class EditWidget : public QLineEdit
 {
     Q_OBJECT
 public:
@@ -310,7 +309,6 @@ public:
     void setEditMode( bool mode );
 
     void showEditWidget(bool _show);
-
 public slots:
     void slotAbortEdit();
     void slotDoneEdit();
