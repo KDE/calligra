@@ -637,7 +637,8 @@ void CellStorage::removeColumns( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    const Region region(QRect(QPoint(position - 1, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeColumns( position, number );
@@ -751,7 +752,8 @@ void CellStorage::removeRows( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    const Region region(QRect(QPoint(1, position - 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeRows( position, number );
@@ -808,7 +810,8 @@ void CellStorage::removeShiftLeft( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    const Region region(QRect(rect.topLeft() - QPoint(1, 0), QPoint(KS_colMax, rect.bottom())), d->sheet);
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftLeft( rect );
@@ -922,7 +925,8 @@ void CellStorage::removeShiftUp( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    const Region region(QRect(rect.topLeft() - QPoint(0, 1), QPoint(rect.right(), KS_rowMax)), d->sheet);
+    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftUp( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftUp( rect );
