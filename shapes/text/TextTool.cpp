@@ -30,6 +30,7 @@
 #include "commands/ChangeListCommand.h"
 
 #include <KoAction.h>
+#include <KoExecutePolicy.h>
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -268,6 +269,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     addAction("edit_selectall", action);
 
     m_updateParagDirection.action = new KoAction(this);
+    m_updateParagDirection.action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
     connect(m_updateParagDirection.action, SIGNAL(triggered(const QVariant &)),
             this, SLOT(updateParagraphDirection(const QVariant&)), Qt::DirectConnection);
     connect(m_updateParagDirection.action, SIGNAL(updateUi(const QVariant &)),
