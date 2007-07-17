@@ -25,6 +25,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextShapeContainerModel.h>
 #include <KoViewConverter.h>
+#include <KoPostscriptPaintDevice.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoShapeManager.h>
@@ -233,8 +234,9 @@ QTextDocument *TextShape::footnoteDocument() {
     if(m_footnotes == 0) {
         m_footnotes = new QTextDocument();
         m_footnotes->setUseDesignMetrics(true);
+        m_footnotes->documentLayout()->setPaintDevice( new KoPostscriptPaintDevice() );
+        m_footnotes->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
         m_footnotes->setPageSize(size());
-        // TODO check for font DPI-ness
     }
     return m_footnotes;
 }
