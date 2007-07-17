@@ -17,18 +17,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-// KSpread
 #include "Editors.h"
+
+// KSpread
 #include "Canvas.h"
 #include "Cell.h"
 #include "Doc.h"
+#include "Formula.h"
+#include "Functions.h"
 #include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "View.h"
-#include "Formula.h"
-#include "Functions.h"
 
 // KOffice
 #include <KoZoomHandler.h>
@@ -548,12 +549,11 @@ CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEv
   else
     d->textEdit->setWordWrapMode( QTextOption::WordWrap );
 
-  //TODO - Custom KTextEdit class which supports text completion
-/*
-  d->textEdit->setFrame( false );
-  d->textEdit->setCompletionMode((KGlobalSettings::Completion)canvas()->view()->doc()->completionMode()  );
-  d->textEdit->setCompletionObject( &canvas()->view()->doc()->completion(),true );
-*/
+#if 0 // FIXME Implement a completion aware KTextEdit.
+  d->textEdit->setCompletionMode(canvas()->view()->doc()->completionMode());
+  d->textEdit->setCompletionObject(&canvas()->view()->doc()->completion(), true);
+#endif
+
   setFocusProxy( d->textEdit );
 
   connect( d->textEdit, SIGNAL( cursorPositionChanged() ), this, SLOT (slotCursorPositionChanged()));
@@ -1383,10 +1383,10 @@ bool LocationEditWidget::activateItem()
 void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 {
     // Do not handle special keys and accelerators. This is
-    // done by QLineEdit.
+    // done by KLineEdit.
     if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) )
     {
-        QLineEdit::keyPressEvent( _ev );
+        KLineEdit::keyPressEvent( _ev );
         // Never allow that keys are passed on to the parent.
         _ev->accept();
 
@@ -1420,7 +1420,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
         _ev->accept();
         break;
     default:
-        QLineEdit::keyPressEvent( _ev );
+        KLineEdit::keyPressEvent( _ev );
         // Never allow that keys are passed on to the parent.
         _ev->accept();
     }
@@ -1438,7 +1438,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 
 EditWidget::EditWidget( QWidget *_parent, Canvas *_canvas,
                         QAbstractButton *cancelButton, QAbstractButton *okButton )
-  : QLineEdit( _parent )
+    : KLineEdit(_parent)
 {
   m_pCanvas = _canvas;
   Q_ASSERT(m_pCanvas != 0);
@@ -1459,6 +1459,9 @@ EditWidget::EditWidget( QWidget *_parent, Canvas *_canvas,
                     this, SLOT( slotDoneEdit() ) );
 
   setEditMode( false ); // disable buttons
+
+    setCompletionMode(m_pCanvas->doc()->completionMode());
+    setCompletionObject(&m_pCanvas->doc()->completion(), true);
 }
 
 void EditWidget::showEditWidget(bool _show)
@@ -1499,7 +1502,7 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
          || ( _ev->key() == Qt::Key_Control ) )
       && (_ev->key() != Qt::Key_Return) && (_ev->key() != Qt::Key_Enter))
     {
-        QLineEdit::keyPressEvent( _ev );
+        KLineEdit::keyPressEvent( _ev );
         _ev->accept();
         return;
     }
@@ -1539,7 +1542,7 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
       break;
     default:
 
-      QLineEdit::keyPressEvent( _ev );
+      KLineEdit::keyPressEvent( _ev );
 
       setFocus();
       cellEditor->setCheckChoice( false );
@@ -1561,7 +1564,7 @@ void EditWidget::focusOutEvent( QFocusEvent* ev )
   // See comment about setLastEditorWithFocus
   m_pCanvas->setLastEditorWithFocus( Canvas::EditWidget );
 
-  QLineEdit::focusOutEvent( ev );
+  KLineEdit::focusOutEvent( ev );
 }
 
 void EditWidget::setText( const QString& t )
@@ -1569,7 +1572,7 @@ void EditWidget::setText( const QString& t )
   if ( t == text() ) // Why this? (David)
     return;
 
-  QLineEdit::setText( t );
+  KLineEdit::setText( t );
 }
 
 
