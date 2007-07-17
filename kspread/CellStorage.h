@@ -112,6 +112,7 @@ public:
      * \return the database associated with the Cell at \p column , \p row .
      */
     Database database( int column, int row ) const;
+    QList< QPair<QRectF, Database> > databases(const Region& region) const;
     void setDatabase( const Region& region, const Database& database );
 
     /**
@@ -314,12 +315,6 @@ public:
     StyleStorage* styleStorage() const;
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
-
-    /**
-     * Saves all stored databases.
-     * \ingroup OpenDocument
-     */
-    void saveOdfDatabases(KoXmlWriter& xmlWriter) const;
 
     /**
      * Start the undo recording.
