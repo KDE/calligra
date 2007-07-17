@@ -43,13 +43,11 @@ class AbiwordThroughAnalyzer : public StreamThroughAnalyzer {
         bool isReadyWithStream() { return true; }
     public:
         AbiwordThroughAnalyzer( const AbiwordThroughAnalyzerFactory* f ) : factory( f ) {}
+        virtual const char* name() const;
 };
 
 class AbiwordThroughAnalyzerFactory : public StreamThroughAnalyzerFactory {
 private:
-    const char* name() const {
-        return "AbiwordThroughAnalyzer";
-    }
     StreamThroughAnalyzer* newInstance() const {
         return new AbiwordThroughAnalyzer(this);
     }
@@ -59,6 +57,9 @@ private:
     static const std::string titleFieldName;
     static const std::string abstractFieldName;
 public:
+    const char* name() const {
+        return "AbiwordThroughAnalyzer";
+    }
     const RegisteredField* authorField;
     const RegisteredField* titleField;
     const RegisteredField* abstractField;
@@ -183,5 +184,9 @@ public:
         return af;
     }
 };
+
+const char* AbiwordThroughAnalyzer::name() const {
+    return factory->name();
+}
 
 STRIGI_ANALYZER_FACTORY(Factory) 

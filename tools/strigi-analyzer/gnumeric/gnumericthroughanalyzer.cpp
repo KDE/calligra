@@ -41,13 +41,11 @@ class GnumericThroughAnalyzer : public StreamThroughAnalyzer {
         bool isReadyWithStream() { return true; }
     public:
         GnumericThroughAnalyzer( const GnumericThroughAnalyzerFactory* f ) : factory( f ) {}
+        virtual const char* name() const;
 };
 
 class GnumericThroughAnalyzerFactory : public StreamThroughAnalyzerFactory {
 private:
-    const char* name() const {
-        return "GnumericThroughAnalyzer";
-    }
     StreamThroughAnalyzer* newInstance() const {
         return new GnumericThroughAnalyzer(this);
     }
@@ -57,6 +55,9 @@ private:
     static const std::string titleFieldName;
     static const std::string abstractFieldName;
 public:
+    virtual const char* name() const {
+        return "GnumericThroughAnalyzer";
+    }
     const RegisteredField* authorField;
     const RegisteredField* titleField;
     const RegisteredField* abstractField;
@@ -151,5 +152,9 @@ public:
         return af;
     }
 };
+
+const char* GnumericThroughAnalyzer::name() const {
+    return factory->name();
+}
 
 STRIGI_ANALYZER_FACTORY(Factory) 

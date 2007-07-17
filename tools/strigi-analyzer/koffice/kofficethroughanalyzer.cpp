@@ -41,13 +41,11 @@ class KOfficeThroughAnalyzer : public StreamThroughAnalyzer {
         bool isReadyWithStream() { return true; }
     public:
         KOfficeThroughAnalyzer( const KOfficeThroughAnalyzerFactory* f ) : factory( f ) {}
+        const char* name() const;
 };
 
 class KOfficeThroughAnalyzerFactory : public StreamThroughAnalyzerFactory {
 private:
-    const char* name() const {
-        return "KOfficeThroughAnalyzer";
-    }
     StreamThroughAnalyzer* newInstance() const {
         return new KOfficeThroughAnalyzer(this);
     }
@@ -59,6 +57,9 @@ private:
     static const std::string abstractFieldName;
     static const std::string editingCyclesFieldName;
 public:
+    virtual const char* name() const {
+        return "KOfficeThroughAnalyzer";
+    }
     const RegisteredField* authorField;
     const RegisteredField* titleField;
     const RegisteredField* keywordsField;
@@ -142,5 +143,9 @@ public:
         return af;
     }
 };
+
+const char* KOfficeThroughAnalyzer::name() const {
+    return factory->name();
+}
 
 STRIGI_ANALYZER_FACTORY(Factory) 
