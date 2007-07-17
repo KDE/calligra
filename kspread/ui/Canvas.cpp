@@ -1127,7 +1127,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Bottom:
       offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = sheet->rowFormat( cursor.y() + offset );
-      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->hidden())
+      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHiddenOrFiltered())
       {
         offset++;
         rl = sheet->rowFormat( cursor.y() + offset );
@@ -1138,7 +1138,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Top:
       offset = (cellCorner.y() - cursor.y()) - 1;
       rl = sheet->rowFormat( cursor.y() + offset );
-      while ( ((cursor.y() + offset) >= 1) && rl->hidden())
+      while ( ((cursor.y() + offset) >= 1) && rl->isHiddenOrFiltered())
       {
         offset--;
         rl = sheet->rowFormat( cursor.y() + offset );
@@ -1148,7 +1148,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Left:
       offset = (cellCorner.x() - cursor.x()) - 1;
       cl = sheet->columnFormat( cursor.x() + offset );
-      while ( ((cursor.x() + offset) >= 1) && cl->hidden())
+      while ( ((cursor.x() + offset) >= 1) && cl->isHiddenOrFiltered())
       {
         offset--;
         cl = sheet->columnFormat( cursor.x() + offset );
@@ -1158,7 +1158,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case Right:
       offset = cell.mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
       cl = sheet->columnFormat( cursor.x() + offset );
-      while ( ((cursor.x() + offset) <= KS_colMax) && cl->hidden())
+      while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHiddenOrFiltered())
       {
         offset++;
         cl = sheet->columnFormat( cursor.x() + offset );
@@ -1168,7 +1168,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
     case BottomFirst:
       offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = sheet->rowFormat( cursor.y() + offset );
-      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->hidden())
+      while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHiddenOrFiltered())
       {
         ++offset;
         rl = sheet->rowFormat( cursor.y() + offset );
@@ -1642,7 +1642,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = Cell( sheet,cell.column(), row);
       while ((!cell.isNull()) && (row > 0) && (!cell.isEmpty()) )
       {
-        if (!(sheet->rowFormat(cell.row())->hidden()))
+        if (!sheet->rowFormat(cell.row())->isHiddenOrFiltered())
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -1658,7 +1658,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellStorage()->prevInColumn(marker.x(), marker.y());
 
       while ((!cell.isNull()) &&
-            (cell.isEmpty() || (sheet->rowFormat(cell.row())->hidden())))
+            (cell.isEmpty() || (sheet->rowFormat(cell.row())->isHiddenOrFiltered())))
       {
         cell = sheet->cellStorage()->prevInColumn(cell.column(), cell.row());
       }
@@ -1669,7 +1669,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       row = cell.row();
 
-    while ( sheet->rowFormat(row)->hidden() )
+    while ( sheet->rowFormat(row)->isHiddenOrFiltered() )
     {
       row++;
     }
@@ -1689,7 +1689,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = Cell( sheet,cell.column(), row);
       while ((!cell.isNull()) && (row < KS_rowMax) && (!cell.isEmpty()) )
       {
-        if (!(sheet->rowFormat(cell.row())->hidden()))
+        if (!(sheet->rowFormat(cell.row())->isHiddenOrFiltered()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -1704,7 +1704,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellStorage()->nextInColumn(marker.x(), marker.y());
 
       while ((!cell.isNull()) &&
-            (cell.isEmpty() || (sheet->rowFormat(cell.row())->hidden())))
+            (cell.isEmpty() || (sheet->rowFormat(cell.row())->isHiddenOrFiltered())))
       {
         cell = sheet->cellStorage()->nextInColumn(cell.column(), cell.row());
       }
@@ -1715,7 +1715,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       row = cell.row();
 
-    while ( sheet->rowFormat(row)->hidden() )
+    while ( sheet->rowFormat(row)->isHiddenOrFiltered() )
     {
       row--;
     }
@@ -1737,7 +1737,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = Cell( sheet,col, cell.row());
       while ((!cell.isNull()) && (col < KS_colMax) && (!cell.isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell.column())->hidden()))
+        if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -1752,7 +1752,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y());
 
       while ((!cell.isNull()) &&
-            (cell.isEmpty() || (sheet->columnFormat(cell.column())->hidden())))
+            (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
         cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row());
       }
@@ -1763,7 +1763,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell.column();
 
-    while ( sheet->columnFormat(col)->hidden() )
+    while ( sheet->columnFormat(col)->isHiddenOrFiltered() )
     {
       col--;
     }
@@ -1781,7 +1781,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = Cell( sheet,col, cell.row());
       while ((!cell.isNull()) && (col > 0) && (!cell.isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell.column())->hidden()))
+        if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -1797,7 +1797,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y());
 
       while ((!cell.isNull()) &&
-            (cell.isEmpty() || (sheet->columnFormat(cell.column())->hidden())))
+            (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
         cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row());
       }
@@ -1808,7 +1808,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell.column();
 
-    while ( sheet->columnFormat(col)->hidden() )
+    while ( sheet->columnFormat(col)->isHiddenOrFiltered() )
     {
       col++;
     }
@@ -1831,7 +1831,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = Cell( sheet,col, cell.row());
       while ((!cell.isNull()) && (col > 0) && (!cell.isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell.column())->hidden()))
+        if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -1847,7 +1847,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y());
 
       while ((!cell.isNull()) &&
-            (cell.isEmpty() || (sheet->columnFormat(cell.column())->hidden())))
+            (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
         cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row());
       }
@@ -1858,7 +1858,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell.column();
 
-    while ( sheet->columnFormat(col)->hidden() )
+    while ( sheet->columnFormat(col)->isHiddenOrFiltered() )
     {
       col++;
     }
@@ -1876,7 +1876,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = Cell( sheet,col, cell.row());
       while ((!cell.isNull()) && (col < KS_colMax) && (!cell.isEmpty()) )
       {
-        if (!(sheet->columnFormat(cell.column())->hidden()))
+        if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered()))
         {
           lastCell = cell;
           searchThroughEmpty = false;
@@ -1891,7 +1891,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y());
 
       while ((!cell.isNull()) &&
-            (cell.isEmpty() || (sheet->columnFormat(cell.column())->hidden())))
+            (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
         cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row());
       }
@@ -1902,7 +1902,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     else
       col = cell.column();
 
-    while ( sheet->columnFormat(col)->hidden() )
+    while ( sheet->columnFormat(col)->isHiddenOrFiltered() )
     {
       col--;
     }

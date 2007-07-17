@@ -462,7 +462,7 @@ RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         {
         rl= tab->nonDefaultRowFormat( i );
-        if(!rl->hidden())
+        if(!rl->isHiddenOrFiltered())
                 list.append(rl->row());
         }
 }
@@ -519,7 +519,7 @@ ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
   {
     cl= tab->nonDefaultColumnFormat( i );
-    if(!cl->hidden())
+    if(!cl->isHiddenOrFiltered())
       list.append(cl->column());
   }
 }
@@ -576,7 +576,7 @@ RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         {
         rl= tab->nonDefaultRowFormat( i );
-        if(rl->hidden())
+        if(rl->isHiddenOrFiltered())
                 list.append(rl->row());
         }
 }
@@ -633,7 +633,7 @@ ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
   {
     cl= tab->nonDefaultColumnFormat( i );
-    if(cl->hidden())
+    if(cl->isHiddenOrFiltered())
       list.append(cl->column());
   }
 
@@ -1653,7 +1653,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
            const ColumnFormat *cl=sheet->columnFormat(y);
-	   if(!cl->hidden())
+	   if(!cl->isHiddenOrFiltered())
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
@@ -1667,7 +1667,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
            const RowFormat *rw=sheet->rowFormat(y);
-	   if(!rw->hidden())
+	   if(!rw->isHiddenOrFiltered())
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;
@@ -1681,7 +1681,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.left(); y <= m_rctRect.right(); y++ )
         {
            const ColumnFormat *cl=sheet->columnFormat(y);
-	   if(!cl->hidden())
+	   if(!cl->isHiddenOrFiltered())
 	     {
 	       columnSize tmpSize;
 	       tmpSize.columnNumber=y;
@@ -1692,7 +1692,7 @@ void UndoResizeColRow::createList( QLinkedList<columnSize> &listCol,QLinkedList<
     for( int y = m_rctRect.top(); y <= m_rctRect.bottom(); y++ )
         {
            const RowFormat *rw=sheet->rowFormat(y);
-	   if(!rw->hidden())
+	   if(!rw->isHiddenOrFiltered())
 	     {
 	       rowSize tmpSize;
 	       tmpSize.rowNumber=y;

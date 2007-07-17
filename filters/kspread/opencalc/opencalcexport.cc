@@ -530,7 +530,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
     ColumnStyle cs;
     cs.breakB = ::Style::automatic;
     cs.size   = POINT_TO_MM( column->width() ) / 10;
-    bool hide = column->hidden();
+    bool hide = column->isHidden();
 
     int j        = i + 1;
     int repeated = 1;
@@ -541,7 +541,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
       cs1.breakB = ::Style::automatic;
       cs1.size   = POINT_TO_MM( c->width() ) / 10;
 
-      if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->hidden() ) )
+      if ( ColumnStyle::isEqual( &cs, cs1 ) && ( hide == c->isHidden() ) )
         ++repeated;
       else
         break;
@@ -570,7 +570,7 @@ void OpenCalcExport::exportSheet( QDomDocument & doc, QDomElement & tabElem,
 
     QDomElement rowElem = doc.createElement( "table:table-row" );
     rowElem.setAttribute( "table:style-name", m_styles.rowStyle( rs ) );
-    if ( row->hidden() )
+    if ( row->isHidden() )
       rowElem.setAttribute( "table:visibility", "collapse" );
 
     exportCells( doc, rowElem, sheet, i, maxCols );

@@ -1293,7 +1293,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
             QDomElement colinfo = gnumeric_doc.createElement("gmr:ColInfo");
             cols.appendChild(colinfo);
             colinfo.setAttribute("No", QString::number(cl->column()-1));
-            colinfo.setAttribute("Hidden", QString::number(cl->hidden()));
+            colinfo.setAttribute("Hidden", QString::number(cl->isHidden()));
             colinfo.setAttribute("Unit", QString::number(cl->width()));
 
             cl=cl->next();
@@ -1311,7 +1311,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
             QDomElement rowinfo = gnumeric_doc.createElement("gmr:RowInfo");
             rows.appendChild(rowinfo);
             rowinfo.setAttribute("No", QString::number(rl->row()-1));
-            rowinfo.setAttribute("Hidden", QString::number(rl->hidden()));
+            rowinfo.setAttribute("Hidden", QString::number(rl->isHidden()));
             rowinfo.setAttribute("Unit", QString::number(rl->height()));
 
             rl=rl->next();

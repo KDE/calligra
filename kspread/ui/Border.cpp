@@ -149,7 +149,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
       row = KS_rowMax;
     if ( ( ev_PosY >= y + h - 2 ) &&
          ( ev_PosY <= y + h + 1 ) &&
-         !( sheet->rowFormat( row )->hidden() && row == 1 ) )
+         !( sheet->rowFormat( row )->isHiddenOrFiltered() && row == 1 ) )
       m_bResize = true;
     y += h;
   }
@@ -158,7 +158,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   //you mustn't resize it.
   double tmp2;
   int tmpRow = sheet->topRow( ev_PosY - 1, tmp2 );
-  if ( sheet->rowFormat( tmpRow )->hidden() && tmpRow == 1 )
+  if ( sheet->rowFormat( tmpRow )->isHiddenOrFiltered() && tmpRow == 1 )
       m_bResize = false;
 
   // So he clicked between two rows ?
@@ -278,7 +278,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             RowFormat *rl = sheet->nonDefaultRowFormat( i );
             if ( height != 0.0 )
             {
-              if ( !rl->hidden() )
+              if ( !rl->isHiddenOrFiltered() )
                 rl->setHeight( height );
             }
             else
@@ -307,7 +307,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             for ( i = rect.top(); i <= rect.bottom(); ++i )
             {
-                if ( sheet->rowFormat( i )->hidden() )
+                if ( sheet->rowFormat( i )->isHidden() )
                 {
                     hiddenRows.append(i);
                 }
@@ -416,7 +416,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
       //you mustn't resize it.
       if ( ev_PosY >= y + h - 2 * unzoomedPixel &&
            ev_PosY <= y + h + unzoomedPixel &&
-           !( sheet->rowFormat( tmpRow )->hidden() && tmpRow == 1 ) )
+           !( sheet->rowFormat( tmpRow )->isHiddenOrFiltered() && tmpRow == 1 ) )
       {
         setCursor( Qt::SplitVCursor );
         return;
@@ -613,7 +613,7 @@ void VBorder::paintEvent( QPaintEvent* event )
       painter.setFont( boldFont );
 
     double len = painter.fontMetrics().width( rowText );
-    if (!rowFormat->hidden())
+    if (!rowFormat->isHiddenOrFiltered())
         drawText( painter,
                   normalFont,
                   QPointF( ( width - len ) / 2,
@@ -744,7 +744,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 
       if ( ev_PosX >= x + w - unzoomedPixel &&
            ev_PosX <= x + w + unzoomedPixel &&
-           !( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 1 ) )
+           !( sheet->columnFormat( tmpCol )->isHiddenOrFiltered() && tmpCol == 1 ) )
       {
         m_bResize = true;
       }
@@ -755,9 +755,9 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     //you mustn't resize it.
     double tmp2;
     tmpCol = sheet->leftColumn( dWidth - ev_PosX + 1, tmp2 );
-    if ( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 0 )
+    if ( sheet->columnFormat( tmpCol )->isHiddenOrFiltered() && tmpCol == 0 )
     {
-      kDebug() << "No resize: " << tmpCol << ", " << sheet->columnFormat( tmpCol )->hidden() << endl;
+      kDebug() << "No resize: " << tmpCol << ", " << sheet->columnFormat( tmpCol )->isHiddenOrFiltered() << endl;
       m_bResize = false;
     }
 
@@ -776,7 +776,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
         col = KS_colMax;
       if ( ( ev_PosX >= x + w - unzoomedPixel ) &&
          ( ev_PosX <= x + w + unzoomedPixel ) &&
-           !( sheet->columnFormat( col )->hidden() && col == 1 ) )
+           !( sheet->columnFormat( col )->isHiddenOrFiltered() && col == 1 ) )
         m_bResize = true;
       x += w;
     }
@@ -785,7 +785,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     //you mustn't resize it.
     double tmp2;
     int tmpCol = sheet->leftColumn( ev_PosX - 1, tmp2 );
-    if ( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 1 )
+    if ( sheet->columnFormat( tmpCol )->isHiddenOrFiltered() && tmpCol == 1 )
       m_bResize = false;
   }
 
@@ -929,7 +929,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             ColumnFormat *cl = sheet->nonDefaultColumnFormat( i );
             if ( width != 0.0 )
             {
-                if ( !cl->hidden() )
+                if ( !cl->isHiddenOrFiltered() )
                     cl->setWidth( width );
             }
             else
@@ -958,7 +958,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
             for ( i = rect.left(); i <= rect.right(); ++i )
             {
-                if ( sheet->columnFormat( i )->hidden() )
+                if ( sheet->columnFormat( i )->isHidden() )
                 {
                     hiddenCols.append(i);
                 }
@@ -1092,7 +1092,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         //you mustn't resize it.
         if ( ev_PosX >= x + w - unzoomedPixel &&
              ev_PosX <= x + w + unzoomedPixel &&
-             !( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 0 ) )
+             !( sheet->columnFormat( tmpCol )->isHiddenOrFiltered() && tmpCol == 0 ) )
         {
           setCursor( Qt::SplitHCursor );
           return;
@@ -1112,7 +1112,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
         //you mustn't resize it.
         if ( ev_PosX >= x + w - unzoomedPixel &&
              ev_PosX <= x + w + unzoomedPixel &&
-             !( sheet->columnFormat( tmpCol )->hidden() && tmpCol == 1 ) )
+             !( sheet->columnFormat( tmpCol )->isHiddenOrFiltered() && tmpCol == 1 ) )
         {
           setCursor( Qt::SplitHCursor );
           return;
@@ -1363,7 +1363,7 @@ void HBorder::paintEvent( QPaintEvent* event )
 
         QString colText = sheet->getShowColumnNumber() ? QString::number( x ) : Cell::columnName( x );
         double len = painter.fontMetrics().width( colText );
-        if ( !col_lay->hidden() )
+        if ( !col_lay->isHiddenOrFiltered() )
           drawText( painter,
                     normalFont,
                     QPointF( xPos + ( width - len ) / 2,
@@ -1413,7 +1413,7 @@ void HBorder::paintEvent( QPaintEvent* event )
 
         QString colText = sheet->getShowColumnNumber() ? QString::number( x ) : Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
-        if (!col_lay->hidden())
+        if (!col_lay->isHiddenOrFiltered())
           drawText( painter,
                     normalFont,
                     QPointF( xPos + ( width - len ) / 2,

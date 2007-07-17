@@ -5481,7 +5481,7 @@ void View::popupColumnMenu( const QPoint & _point )
         {
           format = activeSheet()->columnFormat(col);
 
-          if ( format->hidden() )
+          if ( format->isHidden() )
           {
             d->actions->showSelColumns->setEnabled( true );
             d->popupColumn->addAction( d->actions->showSelColumns );
@@ -5495,7 +5495,7 @@ void View::popupColumnMenu( const QPoint & _point )
           {
             format = activeSheet()->columnFormat(col);
 
-            allHidden &= format->hidden();
+            allHidden &= format->isHidden();
           }
           if (allHidden)
           {
@@ -5568,7 +5568,7 @@ void View::popupRowMenu( const QPoint & _point )
         {
           format = activeSheet()->rowFormat(row);
 
-          if ( format->hidden() )
+          if ( format->isHidden() )
           {
             d->actions->showSelRows->setEnabled( true );
             d->popupRow->addAction( d->actions->showSelRows );
@@ -5582,7 +5582,7 @@ void View::popupRowMenu( const QPoint & _point )
           {
             format = activeSheet()->rowFormat(row);
 
-            allHidden &= format->hidden();
+            allHidden &= format->isHidden();
           }
           if (allHidden)
           {

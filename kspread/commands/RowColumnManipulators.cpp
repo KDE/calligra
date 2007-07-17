@@ -140,7 +140,7 @@ bool HideShowManipulator::preProcessing()
           int col;
           for (col = 1; col < range.left(); ++col)
           {
-            if ( !m_sheet->columnFormat( col )->hidden() )
+            if ( !m_sheet->columnFormat( col )->isHidden() )
               break;
           }
           if (col == range.left())
@@ -150,7 +150,7 @@ bool HideShowManipulator::preProcessing()
         }
         for (int col = range.left(); col <= range.right(); ++col)
         {
-          if ( m_sheet->columnFormat( col )->hidden() )
+          if ( m_sheet->columnFormat( col )->isHidden() )
           {
             region.add(QRect(col, 1, 1, KS_rowMax));
           }
@@ -164,7 +164,7 @@ bool HideShowManipulator::preProcessing()
           for (row = 1; row < range.top(); ++row)
           {
             const RowFormat* format = m_sheet->rowFormat(row);
-            if (!format->hidden())
+            if (!format->isHidden())
             {
               break;
             }
@@ -177,7 +177,7 @@ bool HideShowManipulator::preProcessing()
         for (int row = range.top(); row <= range.bottom(); ++row)
         {
           const RowFormat* format = m_sheet->rowFormat(row);
-          if (format->hidden())
+          if (format->isHidden())
           {
             region.add(QRect(1, row, KS_colMax, 1));
           }

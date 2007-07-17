@@ -90,10 +90,12 @@ public:
      * Sets the hide flag
      */
     void setHidden( bool _hide, bool repaint = true );
-    bool hidden() const;
+    bool isHidden() const;
 
     void setFiltered(bool filtered);
     bool isFiltered() const;
+
+    bool isHiddenOrFiltered() const;
 
     bool operator==( const RowFormat& other ) const;
     inline bool operator!=( const RowFormat& other ) const { return !operator==( other ); }
@@ -154,10 +156,12 @@ public:
     void setPrevious( ColumnFormat* c );
 
     void setHidden( bool _hide );
-    bool hidden() const;
+    bool isHidden() const;
 
     void setFiltered(bool filtered);
     bool isFiltered() const;
+
+    bool isHiddenOrFiltered() const;
 
     bool operator==( const ColumnFormat& other ) const;
     inline bool operator!=( const ColumnFormat& other ) const { return !operator==( other ); }

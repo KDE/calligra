@@ -112,7 +112,7 @@ void RowFormat::setHeight( double height )
     }
 
     // Raise document height by new height and lower it by old height.
-    if ( !hidden() )
+    if ( !isHidden() && !isFiltered() )
         d->sheet->adjustDocumentHeight( height - d->height );
 
     d->height = height;
@@ -255,9 +255,9 @@ void RowFormat::setHidden( bool _hide, bool repaint )
     }
 }
 
-bool RowFormat::hidden() const
+bool RowFormat::isHidden() const
 {
-    return d->hide || d->filtered; // FIXME
+    return d->hide;
 }
 
 void RowFormat::setFiltered(bool filtered)
@@ -268,6 +268,11 @@ void RowFormat::setFiltered(bool filtered)
 bool RowFormat::isFiltered() const
 {
     return d->filtered;
+}
+
+bool RowFormat::isHiddenOrFiltered() const
+{
+    return d->hide || d->filtered;
 }
 
 bool RowFormat::isDefault() const
@@ -281,6 +286,8 @@ bool RowFormat::operator==( const RowFormat& other ) const
     if ( d->height != other.d->height )
         return false;
     if ( d->hide != other.d->hide )
+        return false;
+    if ( d->filtered != other.d->filtered )
         return false;
     return true;
 }
@@ -348,7 +355,7 @@ void ColumnFormat::setWidth( double width )
     }
 
     // Raise document width by new width and lower it by old width.
-    if ( !hidden() )
+    if ( !isHidden() && !isFiltered() )
         d->sheet->adjustDocumentWidth( width - d->width );
 
     d->width = width;
@@ -492,9 +499,9 @@ void ColumnFormat::setHidden( bool _hide )
     }
 }
 
-bool ColumnFormat::hidden() const
+bool ColumnFormat::isHidden() const
 {
-    return d->hide || d->filtered; // FIXME
+    return d->hide;
 }
 
 void ColumnFormat::setFiltered(bool filtered)
@@ -505,6 +512,11 @@ void ColumnFormat::setFiltered(bool filtered)
 bool ColumnFormat::isFiltered() const
 {
     return d->filtered;
+}
+
+bool ColumnFormat::isHiddenOrFiltered() const
+{
+    return d->hide || d->filtered;
 }
 
 bool ColumnFormat::isDefault() const
@@ -518,6 +530,8 @@ bool ColumnFormat::operator==( const ColumnFormat& other ) const
     if ( d->width != other.d->width )
         return false;
     if ( d->hide != other.d->hide )
+        return false;
+    if ( d->filtered != other.d->filtered )
         return false;
     return true;
 }

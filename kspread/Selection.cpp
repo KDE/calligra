@@ -980,7 +980,7 @@ void Selection::emitChanged(const Region& region)
       {
         right++;
         col = sheet->columnFormat( right );
-      } while ( col->hidden() && right != KS_colMax );
+      } while ( col->isHiddenOrFiltered() && right != KS_colMax );
     }
     if ( left > 1 )
     {
@@ -988,7 +988,7 @@ void Selection::emitChanged(const Region& region)
       {
         left--;
         col = sheet->columnFormat( left );
-      } while ( col->hidden() && left != 1);
+      } while ( col->isHiddenOrFiltered() && left != 1);
     }
 
     if ( bottom < KS_rowMax )
@@ -997,7 +997,7 @@ void Selection::emitChanged(const Region& region)
       {
         bottom++;
         rl = sheet->rowFormat( bottom );
-      } while ( rl->hidden() && bottom != KS_rowMax );
+      } while ( rl->isHiddenOrFiltered() && bottom != KS_rowMax );
     }
 
     if ( top > 1 )
@@ -1006,7 +1006,7 @@ void Selection::emitChanged(const Region& region)
       {
         top--;
         rl = sheet->rowFormat( top );
-      } while ( rl->hidden() && top != 1);
+      } while ( rl->isHiddenOrFiltered() && top != 1);
     }
 
     area.setLeft(left);

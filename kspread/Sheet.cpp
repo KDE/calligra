@@ -3040,16 +3040,14 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
       }
     }
 
-    bool collapsed = false;
+    enum { Visible, Collapsed, Filtered } visibility = Visible;
     if ( column.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
-      const QString visibility = column.attributeNS( KoXmlNS::table, "visibility", QString() );
-      if ( visibility == "visible" )
-        collapsed = false;
-      else if ( visibility == "collapse" )
-        collapsed = true;
-      else if ( visibility == "filter" )
-        collapsed = false; // TODO Stefan: Set to true, if filters are supported.
+      const QString string = column.attributeNS( KoXmlNS::table, "visibility", "visible" );
+      if ( string == "collapse" )
+        visibility = Collapsed;
+      else if ( string == "filter" )
+        visibility = Filtered;
       isNonDefaultColumn = true;
     }
 
@@ -3089,7 +3087,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
 
     for ( int i = 0; i < number; ++i )
     {
-        kDebug(36003)<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ? "<<collapsed<<endl;
+        kDebug(36003)<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ? "<<visibility<<endl;
 
         const ColumnFormat* columnFormat;
         if ( isNonDefaultColumn )
@@ -3101,8 +3099,10 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
             cf->setWidth( width );
         // if ( insertPageBreak )
         //   columnFormat->setPageBreak( true )
-          if ( collapsed )
+          if ( visibility == Collapsed )
             cf->setHidden( true );
+          else if (visibility == Filtered)
+              cf->setFiltered(true);
         }
         else
         {
@@ -3207,16 +3207,14 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
         isNonDefaultRow = true;
     }
 
-    bool collapse = false;
+    enum { Visible, Collapsed, Filtered } visibility = Visible;
     if ( row.hasAttributeNS( KoXmlNS::table, "visibility" ) )
     {
-      const QString visibility = row.attributeNS( KoXmlNS::table, "visibility", QString() );
-      if ( visibility == "visible" )
-        collapse = false;
-      else if ( visibility == "collapse" )
-        collapse = true;
-      else if ( visibility == "filter" )
-        collapse = false; // TODO Stefan: Set to true, if filters are supported.
+      const QString string = row.attributeNS( KoXmlNS::table, "visibility", "visible" );
+      if ( string == "collapse" )
+        visibility = Collapsed;
+      else if ( string == "filter" )
+        visibility = Filtered;
       isNonDefaultRow = true;
     }
 
@@ -3246,8 +3244,10 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
 
         if ( height != -1.0 )
           rf->setHeight( height );
-        if ( collapse )
+        if ( visibility == Collapsed )
           rf->setHidden( true );
+        else if (visibility == Filtered)
+            rf->setFiltered(true);
       }
       else
       {
@@ -3757,7 +3757,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         //style default layout for column
         const Style style = columnDefaultStyles.value(i);
 
-        bool hide = column->hidden();
+//         bool hide = column->isHidden();
         bool refColumnIsDefault = column->isDefault() && style.isDefault();
         int j = i;
         int repeated = 1;
@@ -3801,7 +3801,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
           QString nextDefaultCellStyleName = nextColumn->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
 
-          if ( hide != nextColumn->hidden() ||
+          if ( hide != nextColumn->isHidden() ||
                nextDefaultCellStyleName != currentDefaultCellStyleName ||
                !( nextColumnStyle == currentColumnStyle ) )
           {
@@ -3828,8 +3828,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               xmlWriter.addAttribute("table:default-cell-style-name", name);
           }
 
-          if ( hide )
+          if ( column->isHidden() )
               xmlWriter.addAttribute( "table:visibility", "collapse" );
+          else if (column->isFiltered())
+              xmlWriter.addAttribute("table:visibility", "filter");
         }
         if ( repeated > 1 )
             xmlWriter.addAttribute( "table:number-columns-repeated", repeated  );
@@ -3871,7 +3873,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //             kDebug(36003) << "Sheet::saveOasisColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row() << endl;
-            //bool isHidden = row->hidden();
+            //bool isHidden = row->isHidden();
             bool isDefault = row->isDefault() && style.isDefault();
             int j = i + 1;
 
@@ -3907,7 +3909,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               QString nextDefaultCellStyleName = nextRow->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
 
               // if the formats differ, stop here
-              if ( isHidden != nextRow->hidden() ||
+              if ( isHidden != nextRow->isHidden() ||
                    nextDefaultCellStyleName != currentDefaultCellStyleName ||
                    !(nextRowStyle == currentRowStyle) )
               {
@@ -3933,8 +3935,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                                                    doc()->styleManager());
               xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
-            if ( row->hidden() ) // never true for the default row
+            if ( row->isHidden() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
+            else if (row->isFiltered()) // never true for the default row
+                xmlWriter.addAttribute( "table:visibility", "filter" );
 
             // NOTE Stefan: Even if paragraph 8.1 states, that rows may be empty, the
             //              RelaxNG schema does not allow that.
@@ -3951,8 +3955,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
             if ( !currentDefaultCellStyle.isDefaultStyle() )
               xmlWriter.addAttribute( "table:default-cell-style-name", currentDefaultCellStyleName );
-            if ( row->hidden() ) // never true for the default row
+            if ( row->isHidden() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
+            else if (row->isFiltered()) // never true for the default row
+                xmlWriter.addAttribute("table:visibility", "collapse");
 
             int j = i + 1;
             while ( compareRows( i, j, maxCols ) && j <= maxRows )
