@@ -6,5 +6,6 @@
 		<Action name="executescriptfile"/>
 		<Action name="scripts"/>
 		<Action name="scriptmanager"/>
+		<Separator/>
 	</Menu>
 </MenuBar>

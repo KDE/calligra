@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_RESIZE_DIALOG
-#define KSPREAD_RESIZE_DIALOG
+#ifndef KSPREAD_RESIZE2_DIALOG
+#define KSPREAD_RESIZE2_DIALOG
 
 #include <kdialog.h>
 
@@ -70,4 +70,4 @@ protected:
 
 } // namespace KSpread
 
-#endif // KSPREAD_RESIZE_DIALOG
+#endif // KSPREAD_RESIZE2_DIALOG

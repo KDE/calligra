@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_STORAGE
-#define KSPREAD_STORAGE
+#ifndef KSPREAD_RECT_STORAGE
+#define KSPREAD_RECT_STORAGE
 
 #include <QCache>
 #include <QTimer>
@@ -506,4 +506,4 @@ protected Q_SLOTS:
 
 } // namespace KSpread
 
-#endif // KSPREAD_STORAGE
+#endif // KSPREAD_RECT_STORAGE

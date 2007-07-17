@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MANIPULATOR_SORT
-#define KSPREAD_MANIPULATOR_SORT
+#ifndef KSPREAD_SORT_MANIPULATOR
+#define KSPREAD_SORT_MANIPULATOR
 
 #include "CellStorage.h"
 #include "DataManipulators.h"
@@ -80,4 +80,4 @@ class KSPREAD_EXPORT SortManipulator : public AbstractDFManipulator {
 
 } // namespace KSpread
 
-#endif  // KSPREAD_MANIPULATOR_SORT
+#endif  // KSPREAD_SORT_MANIPULATOR

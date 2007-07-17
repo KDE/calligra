@@ -18,8 +18,8 @@
 */
 
 
-#ifndef KSPREAD_MANIPULATOR_DATA
-#define KSPREAD_MANIPULATOR_DATA
+#ifndef KSPREAD_DATA_MANIPULATORS
+#define KSPREAD_DATA_MANIPULATORS
 
 #include "AbstractRegionCommand.h"
 #include "Global.h"
@@ -211,4 +211,4 @@ private:
 
 } // namespace KSpread
 
-#endif  // KSPREAD_MANIPULATOR_DATA
+#endif  // KSPREAD_DATA_MANIPULATORS

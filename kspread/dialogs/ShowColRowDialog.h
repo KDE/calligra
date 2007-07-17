@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SHOW_COLUMN_ROW_DIALOG
-#define KSPREAD_SHOW_COLUMN_ROW_DIALOG
+#ifndef KSPREAD_SHOW_COL_ROW_DIALOG
+#define KSPREAD_SHOW_COL_ROW_DIALOG
 
 #include <QList>
 
@@ -54,4 +54,4 @@ protected:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SHOW_COLUMN_ROW_DIALOG
+#endif // KSPREAD_SHOW_COL_ROW_DIALOG

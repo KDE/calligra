@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_CONDITIONAL_STYLE_DIALOG
-#define KSPREAD_CONDITIONAL_STYLE_DIALOG
+#ifndef KSPREAD_CONDITIONAL_DIALOG
+#define KSPREAD_CONDITIONAL_DIALOG
 
 #include <kdialog.h>
 #include <QWidget>
@@ -99,4 +99,4 @@ class ConditionalDialog : public KDialog
 
 } // namespace KSpread
 
-#endif // KSPREAD_CONDITIONAL_STYLE_DIALOG
+#endif // KSPREAD_CONDITIONAL_DIALOG

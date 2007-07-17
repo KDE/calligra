@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_ROWLAYOUT_IFACE_H
-#define KSPREAD_ROWLAYOUT_IFACE_H
+#ifndef KSPREAD_ROW_IFACE_H
+#define KSPREAD_ROW_IFACE_H
 
 #include "KSpreadLayoutIface.h"
 

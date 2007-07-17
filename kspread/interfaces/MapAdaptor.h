@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_MAP_IFACE_H
-#define KSPREAD_MAP_IFACE_H
+#ifndef KSPREAD_MAP_ADAPTOR
+#define KSPREAD_MAP_ADAPTOR
 
 #include <QList>
 #include <QStringList>

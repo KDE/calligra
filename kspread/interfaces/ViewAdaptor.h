@@ -23,8 +23,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_VIEW_IFACE_H
-#define KSPREAD_VIEW_IFACE_H
+#ifndef KSPREAD_VIEW_ADAPTOR
+#define KSPREAD_VIEW_ADAPTOR
 
 #include <QColor>
 #include <QRect>
@@ -147,4 +147,4 @@ private:
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_VIEW_ADAPTOR

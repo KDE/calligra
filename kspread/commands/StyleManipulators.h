@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_STYLE_MANIPULATOR
-#define KSPREAD_STYLE_MANIPULATOR
+#ifndef KSPREAD_STYLE_MANIPULATORS
+#define KSPREAD_STYLE_MANIPULATORS
 
 #include <QPair>
 #include <QPen>
@@ -150,4 +150,4 @@ protected:
 
 }  // namespace KSpread
 
-#endif // KSPREAD_STYLE_MANIPULATOR
+#endif // KSPREAD_STYLE_MANIPULATORS
