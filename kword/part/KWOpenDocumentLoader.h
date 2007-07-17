@@ -70,6 +70,7 @@ protected:
 
 private:
     void loadHeaderFooter(KoTextLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
+    void loadFinished(KoTextLoadingContext& context, QTextCursor& cursor);
 
 private:
     /// \internal d-pointer class.
