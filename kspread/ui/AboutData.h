@@ -62,9 +62,10 @@ KAboutData * newAboutData()
     aboutData->addAuthor(ki18n("Stefan Nikolaus"), KLocalizedString(), "stefan.nikolaus@kdemail.net");
     // "Thanks to" section
     aboutData->addCredit(ki18n("Sascha Pfau"),
-                         ki18n("Functions:\tDATE2UNIX, DATEDIF, IMLOG2, IMLOG10, NETWORKDAY,\n"
-                         "\tUNIX2DATE, WEEKNUM, WORKDAY, YEARFRAC"), "mrpeacock@gmail.com");
-    aboutData->addCredit(ki18n("Brad Hards"), ki18n("Various functions reviewed for OpenFormula compliance"),
+                         ki18n("Implemented, reviewed and tested various functions"),
+                         "mrpeacock@gmail.com");
+    aboutData->addCredit(ki18n("Brad Hards"),
+                         ki18n("Implemented, reviewed and tested various functions"),
                          "bradh@frogmouth.net");
     return aboutData;
 }
