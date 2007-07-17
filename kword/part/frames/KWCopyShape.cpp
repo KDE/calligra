@@ -19,9 +19,12 @@
 
 #include "KWCopyShape.h"
 
+#include <KoShapeBorderModel.h>
+#include <KoViewConverter.h>
+
 #include <QPainter>
 #include <QPainterPath>
-#include <KDebug>
+// #include <KDebug>
 
 KWCopyShape::KWCopyShape(KoShape *original)
     : m_original(original)
@@ -33,7 +36,14 @@ KWCopyShape::~KWCopyShape() {
 }
 
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter) {
+    painter.setClipRect(QRectF(QPointF(0, 0), converter.documentToView(size()))
+            .adjusted(-2, -2, 2, 2), // adjust for anti aliassing.
+            Qt::IntersectClip);
+    painter.save();
     m_original->paint(painter, converter);
+    painter.restore();
+    if(m_original->border())
+        m_original->border()->paintBorder(m_original, painter, converter);
 }
 
 void KWCopyShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
