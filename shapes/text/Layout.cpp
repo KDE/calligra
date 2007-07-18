@@ -1285,7 +1285,7 @@ double Layout::findFootnote(const QTextLine &line) {
         c1.setPosition(m_block.position() + pos);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*> (m_parent->inlineObjectTextManager()->inlineTextObject(c1));
-        if(note) {
+        if(note && note->type() == KoInlineNote::Footnote) {
             QTextBlock last = m_textShape->footnoteDocument()->end().previous();
             QTextCursor cursor(last);
             cursor.setPosition(last.position() + last.length()-1);
