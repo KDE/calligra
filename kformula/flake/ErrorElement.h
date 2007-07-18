@@ -35,7 +35,7 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, const AttributeManager* am );
+    virtual void paint( QPainter& painter, AttributeManager* am );
 
     /// @return The element's ElementType
     ElementType elementType() const;

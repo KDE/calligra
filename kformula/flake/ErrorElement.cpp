@@ -23,7 +23,7 @@
 ErrorElement::ErrorElement( BasicElement* parent ) : RowElement( parent )
 {}
 
-void ErrorElement::paint( QPainter& painter, const AttributeManager* am )
+void ErrorElement::paint( QPainter& painter, AttributeManager* am )
 {
     // just paint a red rectangle
     QRectF tmp( 0.0, 0.0, width(), height() );

@@ -24,7 +24,7 @@ EncloseElement::EncloseElement( BasicElement* parent ) : RowElement( parent )
 {
 }
 
-void EncloseElement::paint( QPainter& painter, const AttributeManager* )
+void EncloseElement::paint( QPainter& painter, AttributeManager* )
 {
     painter.drawPath( m_enclosePath );
 }

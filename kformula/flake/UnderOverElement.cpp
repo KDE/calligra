@@ -43,7 +43,7 @@ const QList<BasicElement*> UnderOverElement::childElements()
     return tmp << m_baseElement << m_underElement << m_overElement;
 }
 
-void UnderOverElement::paint( QPainter& painter, const AttributeManager* am )
+void UnderOverElement::paint( QPainter& painter, AttributeManager* am )
 {
 }
 
