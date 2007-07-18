@@ -26,7 +26,7 @@
 FencedElement::FencedElement( BasicElement* parent ) : RowElement( parent )
 {}
 
-void FencedElement::paint( QPainter& painter, const AttributeManager* am )
+void FencedElement::paint( QPainter& painter, AttributeManager* am )
 {
     painter.drawPath( m_buffer );
 }
