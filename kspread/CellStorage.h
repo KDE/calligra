@@ -68,6 +68,12 @@ class KSPREAD_EXPORT CellStorage : public QObject
 {
     Q_OBJECT
 public:
+    enum Visiting
+    {
+        VisitAll,       ///< visit all: cell contents, styles, comments, ...
+        VisitContent    ///< just visit the cell contents: values, formulas
+    };
+
     /**
      * Constructor.
      * Creates an empty storage.
@@ -237,56 +243,56 @@ public:
      * Can be used in conjunction with nextInColumn() to loop through a column.
      * \return the first used data in \p col or the default data, if the column is empty.
      */
-    Cell firstInColumn( int col ) const;
+    Cell firstInColumn(int col, Visiting visiting = VisitAll) const;
 
     /**
      * Retrieve the first used data in \p row .
      * Can be used in conjunction with nextInRow() to loop through a row.
      * \return the first used data in \p row or the default data, if the row is empty.
      */
-    Cell firstInRow( int row ) const;
+    Cell firstInRow(int row, Visiting visiting = VisitAll) const;
 
     /**
      * Retrieve the last used data in \p col .
      * Can be used in conjunction with prevInColumn() to loop through a column.
      * \return the last used data in \p col or the default data, if the column is empty.
      */
-    Cell lastInColumn( int col ) const;
+    Cell lastInColumn(int col, Visiting visiting = VisitAll) const;
 
     /**
      * Retrieve the last used data in \p row .
      * Can be used in conjunction with prevInRow() to loop through a row.
      * \return the last used data in \p row or the default data, if the row is empty.
      */
-    Cell lastInRow( int row ) const;
+    Cell lastInRow(int row, Visiting visiting = VisitAll) const;
 
     /**
      * Retrieve the next used data in \p col after \p row .
      * Can be used in conjunction with firstInColumn() to loop through a column.
      * \return the next used data in \p col or the default data, there is no further data.
      */
-    Cell nextInColumn( int col, int row ) const;
+    Cell nextInColumn(int col, int row, Visiting visiting = VisitAll) const;
 
     /**
      * Retrieve the next used data in \p row after \p col .
      * Can be used in conjunction with firstInRow() to loop through a row.
      * \return the next used data in \p row or the default data, if there is no further data.
      */
-    Cell nextInRow( int col, int row ) const;
+    Cell nextInRow(int col, int row, Visiting visiting = VisitAll) const;
 
     /**
      * Retrieve the previous used data in \p col after \p row .
      * Can be used in conjunction with lastInColumn() to loop through a column.
      * \return the previous used data in \p col or the default data, there is no further data.
      */
-    Cell prevInColumn( int col, int row ) const;
+    Cell prevInColumn(int col, int row, Visiting visiting = VisitAll) const;
 
     /**
      * Retrieve the previous used data in \p row after \p col .
      * Can be used in conjunction with lastInRow() to loop through a row.
      * \return the previous used data in \p row or the default data, if there is no further data.
      */
-    Cell prevInRow( int col, int row ) const;
+    Cell prevInRow(int col, int row, Visiting visiting = VisitAll) const;
 
     /**
      * The maximum occupied column, i.e. the horizontal storage dimension.

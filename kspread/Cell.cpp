@@ -162,7 +162,14 @@ bool Cell::isDefault() const
         return false;
     if ( doesMergeCells() == true )
         return false;
-    // FIXME Stefan: Check for style, comment, validity, etc. after iteration reversal.
+    if (!style().isDefault())
+        return false;
+    if (!comment().isEmpty())
+        return false;
+    if (!conditions().isEmpty())
+        return false;
+    if (!validity().isEmpty())
+        return false;
     return true;
 }
 

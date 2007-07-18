@@ -1033,7 +1033,7 @@ void CellStorage::insertShiftDown( const QRect& rect )
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
-Cell CellStorage::firstInColumn( int col ) const
+Cell CellStorage::firstInColumn(int col, Visiting visiting) const
 {
     int newRow = 0;
     int tmpRow = 0;
@@ -1047,7 +1047,7 @@ Cell CellStorage::firstInColumn( int col ) const
     return Cell( d->sheet, col, newRow );
 }
 
-Cell CellStorage::firstInRow( int row ) const
+Cell CellStorage::firstInRow(int row, Visiting visiting) const
 {
     int newCol = 0;
     int tmpCol = 0;
@@ -1056,12 +1056,18 @@ Cell CellStorage::firstInRow( int row ) const
     d->valueStorage->firstInRow( row, &tmpCol );
     if ( tmpCol )
         newCol = newCol ? qMin( newCol, tmpCol ) : tmpCol;
+    if (visiting == VisitAll)
+    {
+        tmpCol = d->styleStorage->firstColumnIndexInRow(row);
+        if (tmpCol)
+            newCol = newCol ? qMin(newCol, tmpCol) : tmpCol;
+    }
     if ( !newCol )
         return Cell();
     return Cell( d->sheet, newCol, row );
 }
 
-Cell CellStorage::lastInColumn( int col ) const
+Cell CellStorage::lastInColumn(int col, Visiting visiting) const
 {
     int newRow = 0;
     int tmpRow = 0;
@@ -1074,7 +1080,7 @@ Cell CellStorage::lastInColumn( int col ) const
     return Cell( d->sheet, col, newRow );
 }
 
-Cell CellStorage::lastInRow( int row ) const
+Cell CellStorage::lastInRow(int row, Visiting visiting) const
 {
     int newCol = 0;
     int tmpCol = 0;
@@ -1087,7 +1093,7 @@ Cell CellStorage::lastInRow( int row ) const
     return Cell( d->sheet, newCol, row );
 }
 
-Cell CellStorage::nextInColumn( int col, int row ) const
+Cell CellStorage::nextInColumn(int col, int row, Visiting visiting) const
 {
     int newRow = 0;
     int tmpRow = 0;
@@ -1101,7 +1107,7 @@ Cell CellStorage::nextInColumn( int col, int row ) const
     return Cell( d->sheet, col, newRow );
 }
 
-Cell CellStorage::nextInRow( int col, int row ) const
+Cell CellStorage::nextInRow(int col, int row, Visiting visiting) const
 {
     int newCol = 0;
     int tmpCol = 0;
@@ -1110,12 +1116,18 @@ Cell CellStorage::nextInRow( int col, int row ) const
     d->valueStorage->nextInRow( col, row, &tmpCol );
     if ( tmpCol )
         newCol = newCol ? qMin( newCol, tmpCol ) : tmpCol;
+    if (visiting == VisitAll)
+    {
+        tmpCol = d->styleStorage->nextColumnIndexInRow(col, row);
+        if (tmpCol)
+            newCol = newCol ? qMin(newCol, tmpCol) : tmpCol;
+    }
     if ( !newCol )
         return Cell();
     return Cell( d->sheet, newCol, row );
 }
 
-Cell CellStorage::prevInColumn( int col, int row ) const
+Cell CellStorage::prevInColumn(int col, int row, Visiting visiting) const
 {
     int newRow = 0;
     int tmpRow = 0;
@@ -1128,7 +1140,7 @@ Cell CellStorage::prevInColumn( int col, int row ) const
     return Cell( d->sheet, col, newRow );
 }
 
-Cell CellStorage::prevInRow( int col, int row ) const
+Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
 {
     int newCol = 0;
     int tmpCol = 0;

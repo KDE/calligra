@@ -87,29 +87,40 @@ public:
      */
     QRect usedArea() const;
 
-    void defaultStyles(QMap<int, Style>& columnDefaultStyles,
-                       QMap<int, Style>& rowDefaultStyles) const;
+    /**
+     * \return the OpenDocument column/row default cell styles
+     * \ingroup OpenDocument
+     */
+    void saveOdfCreateDefaultStyles(QMap<int, Style>& columnDefaultStyles,
+                                    QMap<int, Style>& rowDefaultStyles) const;
 
     /**
-     * Returns the index of the next column cell style after \p column or zero
+     * Returns the index of the next column-wide cell style after \p column or zero
      * if there's none.
      * \return the index of the next styled column
      */
-    int nextColumn( int column ) const;
+    int nextColumnStyleIndex(int column) const;
 
     /**
-     * Returns the index of the next row cell style after \p row or zero
+     * Returns the index of the next row-wide cell style after \p row or zero
      * if there's none.
      * \return the index of the next styled row
      */
-    int nextRow( int row ) const;
+    int nextRowStyleIndex(int row) const;
+
+    /**
+     * Returns the index of the first cell style in \p row or zero
+     * if there's none.
+     * \return the index of the next styled column
+     */
+    int firstColumnIndexInRow(int row) const;
 
     /**
      * Returns the index of the next cell style in \p row after \p column or zero
      * if there's none.
      * \return the index of the next styled column
      */
-    int nextStyleRight( int column, int row ) const;
+    int nextColumnIndexInRow(int column, int row) const;
 
     /**
      * Assigns \p subStyle to the area \p rect .

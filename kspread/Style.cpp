@@ -1131,7 +1131,11 @@ void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
 #endif
 
     if (!isDefault() && hasAttribute(NamedStyleKey))
-        style.addAttribute("style:parent-style-name", manager->openDocumentName(parentName()));
+    {
+        const QString parentName = manager->openDocumentName(this->parentName());
+        if (!parentName.isEmpty())
+            style.addAttribute("style:parent-style-name", parentName);
+    }
 
     if ( keysToStore.contains( HorizontalAlignment ) )
     {

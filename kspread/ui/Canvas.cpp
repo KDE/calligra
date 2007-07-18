@@ -1402,10 +1402,10 @@ bool Canvas::processHomeKey(QKeyEvent* event)
     {
       QPoint marker = d->chooseCell ? choice()->marker() : selection()->marker();
 
-      Cell cell = sheet->cellStorage()->firstInRow(marker.y());
+      Cell cell = sheet->cellStorage()->firstInRow(marker.y(), CellStorage::VisitContent);
       while (!cell.isNull() && cell.column() < marker.x() && cell.isEmpty())
       {
-        cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row());
+        cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
       }
 
       int col = ( !cell.isNull() ? cell.column() : 1 );
@@ -1454,10 +1454,10 @@ bool Canvas::processEndKey( QKeyEvent *event )
   {
     int col = 1;
 
-    cell = sheet->cellStorage()->lastInRow(marker.y());
+    cell = sheet->cellStorage()->lastInRow(marker.y(), CellStorage::VisitContent);
     while (!cell.isNull() && cell.column() > selection()->marker().x() && cell.isEmpty())
     {
-      cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row());
+      cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
     }
 
     col = (cell.isNull()) ? KS_colMax : cell.column();
@@ -1655,12 +1655,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     }
     if (searchThroughEmpty)
     {
-      cell = sheet->cellStorage()->prevInColumn(marker.x(), marker.y());
+      cell = sheet->cellStorage()->prevInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
 
       while ((!cell.isNull()) &&
             (cell.isEmpty() || (sheet->rowFormat(cell.row())->isHiddenOrFiltered())))
       {
-        cell = sheet->cellStorage()->prevInColumn(cell.column(), cell.row());
+        cell = sheet->cellStorage()->prevInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
       }
     }
 
@@ -1701,12 +1701,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     }
     if (searchThroughEmpty)
     {
-      cell = sheet->cellStorage()->nextInColumn(marker.x(), marker.y());
+      cell = sheet->cellStorage()->nextInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
 
       while ((!cell.isNull()) &&
             (cell.isEmpty() || (sheet->rowFormat(cell.row())->isHiddenOrFiltered())))
       {
-        cell = sheet->cellStorage()->nextInColumn(cell.column(), cell.row());
+        cell = sheet->cellStorage()->nextInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
       }
     }
 
@@ -1749,12 +1749,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     }
     if (searchThroughEmpty)
     {
-      cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y());
+      cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
       while ((!cell.isNull()) &&
             (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
-        cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row());
+        cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
       }
     }
 
@@ -1794,12 +1794,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     }
     if (searchThroughEmpty)
     {
-      cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y());
+      cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
       while ((!cell.isNull()) &&
             (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
-        cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row());
+        cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row()), CellStorage::VisitContent;
       }
     }
 
@@ -1844,12 +1844,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     }
     if (searchThroughEmpty)
     {
-      cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y());
+      cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
       while ((!cell.isNull()) &&
             (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
-        cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row());
+        cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
       }
     }
 
@@ -1888,12 +1888,12 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     }
     if (searchThroughEmpty)
     {
-      cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y());
+      cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
       while ((!cell.isNull()) &&
             (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
-        cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row());
+        cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
       }
     }
 

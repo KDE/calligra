@@ -538,14 +538,22 @@ QMap< int, QPair<QRectF,T> > RTree<T>::LeafNode::insertRows(int position, int nu
     QMap< int, QPair<QRectF,T> > result;
 
     int shift = 0;
-    if (mode == CopyNone)
-        shift = 0;
-    else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.top())
-        shift = number;
-    this->m_boundingBox.adjust(0, shift, 0, number);
+    // Don't process complete columns.
+    if (this->m_boundingBox.top() != 1 || this->m_boundingBox.bottom() != KS_rowMax)
+    {
+        if (mode == CopyNone)
+            shift = 0;
+        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.top())
+            shift = number;
+        this->m_boundingBox.adjust(0, shift, 0, number);
+    }
 
     for (int i = 0; i < this->childCount(); ++i)
     {
+        // Don't process complete columns.
+        if (this->m_childBoundingBox[i].top() == 1 && this->m_childBoundingBox[i].bottom() == KS_rowMax)
+            continue;
+
         if (mode == CopyNone)
             shift = 0;
         else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].top())
@@ -567,14 +575,22 @@ QMap< int, QPair<QRectF,T> > RTree<T>::LeafNode::insertColumns(int position, int
     QMap< int, QPair<QRectF,T> > result;
 
     int shift = 0;
-    if (mode == CopyNone)
-        shift = 0;
-    else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.left())
-        shift = number;
-    this->m_boundingBox.adjust(shift, 0, number, 0);
+    // Don't process complete rows.
+    if (this->m_boundingBox.left() != 1 || this->m_boundingBox.right() != KS_colMax)
+    {
+        if (mode == CopyNone)
+            shift = 0;
+        else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_boundingBox.left())
+            shift = number;
+        this->m_boundingBox.adjust(shift, 0, number, 0);
+    }
 
     for ( int i = 0; i < this->childCount(); ++i )
     {
+        // Don't process complete rows.
+        if (this->m_childBoundingBox[i].left() == 1 && this->m_childBoundingBox[i].right() == KS_rowMax)
+            continue;
+
         if (mode == CopyNone)
             shift = 0;
         else if (position - (mode == CopyPrevious ? 1 : 0) < this->m_childBoundingBox[i].left())
@@ -598,20 +614,28 @@ QMap< int, QPair<QRectF,T> > RTree<T>::LeafNode::removeRows(int position, int nu
     QRect rect = this->m_boundingBox.toRect();
     int shift = 0;
     int cut = 0;
-    if (position < rect.top())
+    // Don't process complete columns.
+    if (this->m_boundingBox.top() != 1 || this->m_boundingBox.bottom() != KS_rowMax)
     {
-        shift = qMin(rect.top() - position, number);
-        cut = qMax(0, position + number - rect.top());
+        if (position < rect.top())
+        {
+            shift = qMin(rect.top() - position, number);
+            cut = qMax(0, position + number - rect.top());
+        }
+        else
+        {
+            shift = 0;
+            cut = qMin(number, rect.bottom() - position + 1);
+        }
+        this->m_boundingBox.adjust(0, -shift, 0, -shift-cut);
     }
-    else
-    {
-        shift = 0;
-        cut = qMin(number, rect.bottom() - position + 1);
-    }
-    this->m_boundingBox.adjust(0, -shift, 0, -shift-cut);
 
     for ( int i = 0; i < this->childCount(); ++i )
     {
+        // Don't process complete columns.
+        if (this->m_childBoundingBox[i].top() == 1 && this->m_childBoundingBox[i].bottom() == KS_rowMax)
+            continue;
+
         const QRectF oldRect( this->m_childBoundingBox[ i ] );
         rect = this->m_childBoundingBox[i].toRect();
         if (position < rect.top())
@@ -646,20 +670,28 @@ QMap< int, QPair<QRectF,T> > RTree<T>::LeafNode::removeColumns(int position, int
     QRect rect = this->m_boundingBox.toRect();
     int shift = 0;
     int cut = 0;
-    if (position < rect.left())
+    // Don't process complete rows.
+    if (this->m_boundingBox.left() != 1 || this->m_boundingBox.right() != KS_colMax)
     {
-        shift = qMin(rect.left() - position, number);
-        cut = qMax(0, position + number - rect.left());
+        if (position < rect.left())
+        {
+            shift = qMin(rect.left() - position, number);
+            cut = qMax(0, position + number - rect.left());
+        }
+        else
+        {
+            shift = 0;
+            cut = qMin(number, rect.right() - position + 1);
+        }
+        this->m_boundingBox.adjust(-shift, 0, -shift-cut, 0);
     }
-    else
-    {
-        shift = 0;
-        cut = qMin(number, rect.right() - position + 1);
-    }
-    this->m_boundingBox.adjust(-shift, 0, -shift-cut, 0);
 
     for ( int i = 0; i < this->childCount(); ++i )
     {
+        // Don't process complete rows.
+        if (this->m_childBoundingBox[i].left() == 1 && this->m_childBoundingBox[i].right() == KS_rowMax)
+            continue;
+
         const QRectF oldRect( this->m_childBoundingBox[ i ] );
         rect = this->m_childBoundingBox[i].toRect();
         if (position < rect.left())

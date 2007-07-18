@@ -44,8 +44,8 @@ class KDE_NO_EXPORT StyleStorage::Private
 public:
     Doc* doc;
     RTree<SharedSubStyle> tree;
-    QSet<int> usedColumns;
-    QSet<int> usedRows;
+    QMap<int, bool> usedColumns; // FIXME Stefan: Use QList and qUpperBound() for insertion.
+    QMap<int, bool> usedRows;
     QRegion usedArea;
     QHash<Style::Key, QList<SharedSubStyle> > subStyles;
     QList< QPair<QRectF,SharedSubStyle> > possibleGarbage;
@@ -118,31 +118,44 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::undoData(const Region& regio
 
 QRect StyleStorage::usedArea() const
 {
-    return d->usedArea.boundingRect();
+    if (d->usedArea.isEmpty())
+        return QRect(1, 1, 0, 0);
+    return QRect(QPoint(1, 1), d->usedArea.boundingRect().bottomRight());
 }
 
-void StyleStorage::defaultStyles(QMap<int, Style>& columnDefaultStyles,
-                                 QMap<int, Style>& rowDefaultStyles) const
+void StyleStorage::saveOdfCreateDefaultStyles(QMap<int, Style>& columnDefaultStyles,
+                                              QMap<int, Style>& rowDefaultStyles) const
 {
+#if 0 // TODO
+    // If we have both, column and row styles, we can take the short route.
+    if (!d->usedColumns.isEmpty() && !d->usedRows.isEmpty())
+    {
+        for (int i = 0; i < d->usedColumns.count(); ++i)
+        {
+            const int col = d->usedColumns[i];
+            columnDefaultStyles[col].insertSubStyle(contains(QRect(col, 1, 1, KS_rowMax)));
+        }
+        for (int i = 0; i < d->usedColumns.count(); ++i)
+        {
+            const int row = d->usedRow[i];
+            rowDefaultStyles[row].insertSubStyle(contains(QRect(1, row, KS_colMax, 1)));
+        }
+        return;
+    }
+#endif
     const QRect sheetRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QRect usedArea = this->usedArea();
+    int maxCols = qMax(1, usedArea().right());
+    int maxRows = qMax(1, usedArea().bottom());
+    if (d->usedColumns.count() != 0)
+        maxRows = KS_rowMax;
+    if (d->usedRows.count() != 0)
+        maxCols = KS_colMax;
     const QList< QPair<QRectF,SharedSubStyle> > pairs = d->tree.intersectingPairs(sheetRect);
     for (int i = 0; i < pairs.count(); ++i)
     {
         const QRect rect = pairs[i].first.toRect();
         // column default cell styles
-        if (rect.left() == 1 && rect.right() == usedArea.right())
-        {
-            for (int row = rect.top(); row <= rect.bottom(); ++row)
-            {
-                if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
-                    rowDefaultStyles.remove(row);
-                else
-                    rowDefaultStyles[row].insertSubStyle(pairs[i].second);
-            }
-        }
-        // row default cell styles
-        else if (rect.top() == 1 && rect.bottom() == usedArea.bottom())
+        if (rect.top() == 1 && rect.bottom() == maxRows)
         {
             for (int col = rect.left(); col <= rect.right(); ++col)
             {
@@ -152,49 +165,77 @@ void StyleStorage::defaultStyles(QMap<int, Style>& columnDefaultStyles,
                     columnDefaultStyles[col].insertSubStyle(pairs[i].second);
             }
         }
-    }
-}
-
-int StyleStorage::nextColumn( int column ) const
-{
-    QList<int> list = d->usedColumns.toList();
-    qSort(list);
-    QList<int>::Iterator it(list.begin());
-    while ( it != list.end() && *it <= column )
-        ++it;
-    return ( it != list.end() ) ? *it : 0;
-}
-
-int StyleStorage::nextRow( int row ) const
-{
-    QList<int> list = d->usedRows.toList();
-    qSort(list);
-    QList<int>::Iterator it(list.begin());
-    while ( it != list.end() && *it <= row )
-        ++it;
-    return ( it != list.end() ) ? *it : 0;
-}
-
-int StyleStorage::nextStyleRight( int column, int row ) const
-{
-    QRegion region = d->usedArea & QRect( column + 1, row, KS_colMax, 1 );
-    QList<int> usedColumns;
-    foreach ( const QRect& rect, region.rects() )
-    {
-        for ( int col = rect.left(); col <= rect.right(); ++col )
+        // row default cell styles
+        else if (rect.left() == 1 && rect.right() == maxCols)
         {
-            usedColumns.append( col );
+            for (int row = rect.top(); row <= rect.bottom(); ++row)
+            {
+                if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
+                    rowDefaultStyles.remove(row);
+                else
+                    rowDefaultStyles[row].insertSubStyle(pairs[i].second);
+            }
         }
     }
-    if ( usedColumns.isEmpty() )
-        return 0;
-    qSort(usedColumns);
-    return usedColumns.first();
+}
+
+int StyleStorage::nextColumnStyleIndex( int column ) const
+{
+    const QMap<int, bool>::ConstIterator it = d->usedColumns.upperBound(column + 1);
+    return (it == d->usedColumns.constEnd()) ? 0 : it.key();
+}
+
+int StyleStorage::nextRowStyleIndex(int row) const
+{
+    const QMap<int, bool>::ConstIterator it = d->usedRows.upperBound(row + 1);
+    return (it == d->usedRows.constEnd()) ? 0 : it.key();
+}
+
+int StyleStorage::firstColumnIndexInRow(int row) const
+{
+    const QRect rect = (d->usedArea & QRect(QPoint(1, row), QPoint(KS_colMax, row))).boundingRect();
+    return rect.isNull() ? 0 : rect.left();
+}
+
+int StyleStorage::nextColumnIndexInRow(int column, int row) const
+{
+    const QRect rect = (d->usedArea & QRect(QPoint(column + 1, row), QPoint(KS_colMax, row))).boundingRect();
+    return rect.isNull() ? 0 : rect.left();
 }
 
 void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 {
 //     kDebug(36006) << "StyleStorage: inserting " << subStyle->type() << " into " << rect << endl;
+    // keep track of the used area
+    const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
+    if (rect.top() == 1 && rect.bottom() == KS_colMax)
+    {
+        for (int i = rect.left(); i <= rect.right(); ++i)
+        {
+            if (isDefault)
+                d->usedColumns.remove(i);
+            else
+                d->usedColumns.insert(i, true);
+        }
+    }
+    else if (rect.left() == 1 && rect.right() == KS_rowMax)
+    {
+        for (int i = rect.top(); i <= rect.bottom(); ++i)
+        {
+            if (isDefault)
+                d->usedRows.remove(i);
+            else
+                d->usedRows.insert(i, true);
+        }
+    }
+    else
+    {
+        if (isDefault)
+            d->usedArea -= rect;
+        else
+            d->usedArea += rect;
+    }
+
     // lookup already used substyles
     typedef const QList< SharedSubStyle> StoredSubStyleList;
     StoredSubStyleList& storedSubStyles( d->subStyles.value(subStyle->type()) );
@@ -221,36 +262,9 @@ void StyleStorage::insert(const Region& region, const Style& style)
         return;
     foreach ( const SharedSubStyle& subStyle, style.subStyles() )
     {
-        const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
         Region::ConstIterator end(region.constEnd());
         for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
         {
-            // keep track of the used area
-            if ( (*it)->isColumn() )
-            {
-                for ( int i = (*it)->rect().left(); i <= (*it)->rect().right(); ++i )
-                {
-                    if ( isDefault )
-                        d->usedColumns.remove( i );
-                    else
-                        d->usedColumns.insert( i );
-                }
-            }
-            else if ( (*it)->isRow() )
-            {
-                for ( int i = (*it)->rect().top(); i <= (*it)->rect().bottom(); ++i )
-                {
-                    if ( isDefault )
-                        d->usedRows.remove( i );
-                    else
-                        d->usedRows.insert( i );
-                }
-            }
-            if ( isDefault )
-                d->usedArea -= (*it)->rect();
-            else
-                d->usedArea += (*it)->rect();
-
             // insert substyle
             insert((*it)->rect(), subStyle);
             regionChanged( (*it)->rect() );
