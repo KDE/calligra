@@ -28,6 +28,7 @@
 #include <KoTextLoader.h>
 
 class KWDocument;
+class KWPageManager;
 class KWTextFrameSet;
 class KoOasisStyles;
 class KoTextLoadingContext;
@@ -52,6 +53,7 @@ public:
     virtual ~KWOpenDocumentLoader();
 
     KWDocument* document() const;
+    KWPageManager* pageManager();
     QString currentMasterPage() const;
     QString currentFramesetName() const;
 
