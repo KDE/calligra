@@ -69,6 +69,7 @@ class QMimeSource;
 #include "KPrGradientCollection.h"
 #include <KoTextZoomHandler.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
+#include <KoGenStyle.h>
 
 class KoDocumentEntry;
 class KPrTextObject;
@@ -143,7 +144,7 @@ class KPrDocument : public KoDocument
     enum SaveFlag { SaveAll, SaveSelected, SavePage };
     void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles,
                                   KoTextSavingContext & savingContext, SaveFlag saveFlag = SaveAll ) const;
-    enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER, STYLE_PICTURE, STYLE_PRESENTATIONSTICKYOBJECT };
+    enum { STYLE_BACKGROUNDPAGE = KoGenStyle::StyleFirstCustom, STYLE_BACKGROUNDPAGEAUTO, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER, STYLE_PICTURE, STYLE_PRESENTATIONSTICKYOBJECT };
 
     // load
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument&, KoStore* store );

@@ -193,7 +193,7 @@ void KivioPage::saveOasis(KoStore* /*store*/, KoXmlWriter* docWriter, KoGenStyle
     KoGenStyle pageLayout = m_pPageLayout.saveOasis();
     QString layoutName = styles->lookup(pageLayout, "PL");
 
-    KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
+    KoGenStyle masterPage(KoGenStyle::StyleMaster);
     masterPage.addAttribute("style:page-layout-name", layoutName);
     QString masterName = styles->lookup(masterPage, "MP");
 

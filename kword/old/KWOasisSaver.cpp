@@ -106,7 +106,7 @@ bool KWOasisSaver::finish()
 
 void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, bool stylesDotXml )
 {
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto, stylesDotXml );
     QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -142,12 +142,12 @@ void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-cell-properties"  );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE, stylesDotXml );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericDate, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME, stylesDotXml );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericTime, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );

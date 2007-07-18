@@ -23,17 +23,17 @@
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 #include <KoSize.h>
+#include <KoGenStyle.h>
 
 class QDomElement;
 class QPixmap;
 class QString;
-class KoGenStyle;
 class KivioStencil;
 
 namespace Kivio
 {
   enum {
-    STYLE_PAGE = 20
+    STYLE_PAGE = KoGenStyle::StyleFirstCustom
   };
 
   /**

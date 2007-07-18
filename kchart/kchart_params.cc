@@ -878,7 +878,7 @@ void KChartParams::saveOasisPlotArea( KoXmlWriter* bodyWriter, KoGenStyles& main
     bodyWriter->addAttribute( "chart:data-source-has-labels", dataSourceHasLabels );
 
     // Prepare the style for the plot area
-    KoGenStyle plotAreaStyle( KoGenStyle::STYLE_AUTO, "chart" );
+    KoGenStyle plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
 
     switch ( m_chartType ) {
     case NoType:
@@ -983,7 +983,7 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter,
     bodyWriter->addAttribute( "chart:dimension", axisName );
     bodyWriter->addAttribute( "chart:name", QByteArray( "primary-" ) + axisName );
 
-    KoGenStyle axisStyle( KoGenStyle::STYLE_AUTO, "chart" );
+    KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
 
     // TODO: Save axis style properties, like
     axisStyle.addProperty( "chart:display-label", "true" ); // ###
@@ -1019,7 +1019,7 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter,
 QString KChartParams::saveOasisFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color ) const
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
-    KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "chart", 0 );
+    KoGenStyle autoStyle( KoGenStyle::StyleAuto, "chart", 0 );
     autoStyle.addProperty( "fo:font-family", font.family(), tt );
     autoStyle.addPropertyPt( "fo:font-size", font.pointSize(), tt );
     autoStyle.addProperty( "fo:color", color.isValid() ? color.name() : "#000000", tt );

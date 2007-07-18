@@ -1017,7 +1017,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoTextSavingContext savingContext( mainStyles, 0, false, KoTextSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
-    m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
+    m_styleColl->saveOasis( mainStyles, KoGenStyle::StyleUser, savingContext );
 
     KTemporaryFile contentTmpFile;
     contentTmpFile.open();
@@ -1046,7 +1046,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter, pageNames );
 
         // Now mark all autostyles as "for styles.xml" since headers/footers need them
-        QList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::STYLE_AUTO );
+        QList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::StyleAuto );
         for ( QList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
                 it != autoStyles.end(); ++it ) {
             kDebug() << "marking for styles.xml:" << (  *it ).name << endl;
@@ -1205,7 +1205,7 @@ void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles&
     {
         contentWriter.startElement( "office:automatic-styles" );
     }
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO, stylesDotXml );
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto, stylesDotXml );
     QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -1223,18 +1223,18 @@ void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles&
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:drawing-page-properties" );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, stylesDotXml );
+    styles = mainStyles.styles( KoGenStyle::StyleGraphicAuto, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE, stylesDotXml );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericDate, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:date-style", (*it).name, 0 /*TODO ????*/  );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME, stylesDotXml );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericTime, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "number:time-style", (*it).name, 0 /*TODO ????*/  );
@@ -1478,17 +1478,17 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleUser );
     QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    styles = mainStyles.styles( KoGenStyle::StyleList );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_HATCH );
+    styles = mainStyles.styles( KoGenStyle::StyleHatch );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "draw:hatch", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
@@ -1534,7 +1534,7 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
         }
 
         // if there's more than one pagemaster we need to rethink all this
-        styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+        styles = mainStyles.styles( KoGenStyle::StylePageLayout );
         Q_ASSERT( styles.count() == 1 );
         it = styles.begin();
         for ( ; it != styles.end() ; ++it ) {

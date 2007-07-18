@@ -2763,7 +2763,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     KoTextSavingContext savingContext( mainStyles, m_varColl->variableSetting(), m_pageColumns.columns > 1, KoTextSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
-    m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
+    m_styleColl->saveOasis( mainStyles, KoGenStyle::StyleUser, savingContext );
 
     QByteArray headerFooterContent;
     if ( saveFlag == SaveAll )
@@ -2814,7 +2814,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
         headerFooterContent[headerFooterContent.size()-1] = '\0';
 
         // Now mark all autostyles as "for styles.xml" since headers/footers need them
-        Q3ValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+        Q3ValueList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles( KoGenStyle::StyleAuto );
         for ( Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
               it != autoStyles.end(); ++it ) {
             mainStyles.markStyleForStylesXml( (*it).name );
@@ -3080,7 +3080,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         stylesWriter->endElement(); // default-style
     }
 
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleUser );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -3095,7 +3095,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:table-cell-properties"  );
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
+    styles = mainStyles.styles( KoGenStyle::StyleList );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "text:list-style", (*it).name, 0 );

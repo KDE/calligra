@@ -387,7 +387,7 @@ QString KPrObject::getStyle( KPOasisSaveContext &sc ) const
     }
     else
     {
-        styleObjectAuto = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+        styleObjectAuto = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
     }
     fillStyle( styleObjectAuto, mainStyles );
     if ( sc.onMaster )

@@ -70,7 +70,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
             if ( data )
             {
                 // Inspired from KoTextParag::saveOasis, macro WRITESPAN
-                KoGenStyle gs( KoGenStyle::STYLE_AUTO, "text", (*it).m_layout.m_autoStyleName );
+                KoGenStyle gs( KoGenStyle::StyleAuto, "text", (*it).m_layout.m_autoStyleName );
                 fillGenStyleWithFormatOne( *data , gs, false );
                 data->m_autoStyleName = m_oasisGenStyles.lookup( gs, "T" );
                 kDebug(30520) << "Format: Parent " << (*it).m_layout.m_autoStyleName << " => " << data->m_autoStyleName << endl;
@@ -82,7 +82,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
 void KWord13OasisGenerator::preparePageLayout( void )
 {
     // Inspired by KoPageLayout::saveOasis
-    KoGenStyle style(KoGenStyle::STYLE_PAGELAYOUT);
+    KoGenStyle style(KoGenStyle::StylePageLayout);
     style.addPropertyPt("fo:page-width", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPER:width", "PAPER:ptWidth" ) ) );
     style.addPropertyPt("fo:page-height", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPER:height", "PAPER:ptHeight" ) ) );
     style.addPropertyPt("fo:margin-left", positiveNumberOrNull ( m_kwordDocument->getProperty( "PAPERBORDERS:left", "PAPERBORDERS:ptLeft" ) ) );
@@ -182,7 +182,7 @@ double KWord13OasisGenerator::positiveNumberOrNull( const QString& str ) const
 // Inspired by KoParagStyle::saveStyle
 void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
 {
-    KoGenStyle gs( KoGenStyle::STYLE_AUTO, "paragraph", layout.m_name );
+    KoGenStyle gs( KoGenStyle::StyleAuto, "paragraph", layout.m_name );
 
     // ### TODO: any display name? gs.addAttribute( "style:display-name", layout.m_name );
 #if 0
@@ -206,7 +206,7 @@ void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
 // Inspired by KoParagStyle::saveStyle
 void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
 {
-    KoGenStyle gs( KoGenStyle::STYLE_USER, "paragraph", QString::null );
+    KoGenStyle gs( KoGenStyle::StyleUser, "paragraph", QString::null );
 
     gs.addAttribute( "style:display-name", layout.m_name );
 #if 0
@@ -595,7 +595,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
     KoXmlWriter *stylesWriter = KoDocument::createOasisXmlWriter( &io, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    Q3ValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_USER );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::StyleUser );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -612,7 +612,7 @@ void KWord13OasisGenerator::writeStylesXml( void )
 #endif
 
     QString pageLayoutName;
-    styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+    styles = m_oasisGenStyles.styles( KoGenStyle::StylePageLayout );
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
@@ -666,12 +666,12 @@ void KWord13OasisGenerator::writeContentXml(void)
 
     // Automatic styles
     writer->startElement( "office:automatic-styles" );
-    Q3ValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_AUTO );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = m_oasisGenStyles.styles( KoGenStyle::StyleAuto );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it;
     for ( it = styles.begin(); it != styles.end() ; ++it ) {
         (*it).style->writeStyle( writer, m_oasisGenStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
-    styles = m_oasisGenStyles.styles( KoGenStyle::STYLE_LIST );
+    styles = m_oasisGenStyles.styles( KoGenStyle::StyleList );
     for ( it = styles.begin(); it != styles.end() ; ++it ) {
         (*it).style->writeStyle( writer, m_oasisGenStyles, "text:list-style", (*it).name, 0 );
     }

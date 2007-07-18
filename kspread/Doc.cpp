@@ -692,7 +692,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     contentWriter->startElement( "office:automatic-styles" );
 
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_AUTO );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -722,43 +722,43 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_NUMBER );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericNumber );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
       (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_DATE );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericDate );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_TIME );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericTime );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_FRACTION );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericFraction );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_PERCENTAGE );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericPercentage );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_CURRENCY );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericCurrency );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_NUMERIC_SCIENTIFIC );
+    styles = mainStyles.styles( KoGenStyle::StyleNumericScientific );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
@@ -889,7 +889,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_USER );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleUser );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
@@ -931,12 +931,12 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
         }
     }
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_HATCH );
+    styles = mainStyles.styles( KoGenStyle::StyleHatch );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "draw:hatch", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
     }
-    styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO );
+    styles = mainStyles.styles( KoGenStyle::StyleGraphicAuto );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
@@ -945,7 +945,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     stylesWriter->endElement(); // office:styles
 
     stylesWriter->startElement( "office:automatic-styles" );
-    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
+    styles = mainStyles.styles( KoGenStyle::StylePageLayout );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );

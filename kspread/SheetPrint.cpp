@@ -150,7 +150,7 @@ SheetPrint::~SheetPrint()
 
 QString SheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
 {
-    KoGenStyle pageLayout( KoGenStyle::STYLE_PAGELAYOUT );
+    KoGenStyle pageLayout( KoGenStyle::StylePageLayout );
     //pageLayout.addAttribute( "style:page-usage", "all" ); FIXME
     pageLayout.addPropertyPt( "fo:page-width", paperWidth() );
     pageLayout.addPropertyPt( "fo:page-height", paperHeight() );

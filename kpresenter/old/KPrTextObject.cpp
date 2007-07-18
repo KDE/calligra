@@ -2402,7 +2402,7 @@ Q3DragObject * KPrTextView::newDrag( QWidget * parent )
     KoGenStyles mainStyles;
     KoTextSavingContext savingContext( mainStyles, 0, false, KoTextSavingContext::Store );
 
-    doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
+    doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::StyleUser, savingContext );
 
     KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
     bodyWriter->startElement( "office:body" );

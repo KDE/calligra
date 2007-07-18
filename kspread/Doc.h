@@ -39,6 +39,7 @@
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
 #include <KoXmlReader.h>
+#include <KoGenStyle.h>
 
 #include "Global.h"
 
@@ -122,7 +123,7 @@ public:
    */
   enum
   {
-    STYLE_PAGE = 20,      /**< table styles */
+    STYLE_PAGE = KoGenStyle::StyleFirstCustom,      /**< table styles */
     STYLE_COLUMN_USER,    /**< commmon column styles */
     STYLE_COLUMN_AUTO,    /**< auto column styles */
     STYLE_ROW_USER,       /**< common row styles */

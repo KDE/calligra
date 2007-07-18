@@ -151,7 +151,7 @@ public:
      * STYLE_TABLE_CELL_USER: for table-cell styles (family="table-cell") defined by the user, saved into styles.xml
      * ...
      */
-    enum {  STYLE_FRAME_AUTO = 20, STYLE_FRAME_USER,
+    enum {  STYLE_FRAME_AUTO = KoGenStyle::StyleFirstCustom, STYLE_FRAME_USER,
             STYLE_TABLE_CELL_AUTO, STYLE_TABLE_CELL_USER,
             STYLE_TABLE, STYLE_TABLE_COLUMN, STYLE_TABLE_ROW };
 

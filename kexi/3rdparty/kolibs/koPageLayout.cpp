@@ -49,7 +49,7 @@
 #ifndef SIMPLE_KOLIBS
 KoGenStyle KoPageLayout::saveOasis() const
 {
-    KoGenStyle style(KoGenStyle::STYLE_PAGELAYOUT);
+    KoGenStyle style(KoGenStyle::StylePageLayout);
     style.addPropertyPt("fo:page-width", ptWidth);
     style.addPropertyPt("fo:page-height", ptHeight);
     style.addPropertyPt("fo:margin-left", ptLeft);

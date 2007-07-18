@@ -1361,7 +1361,7 @@ void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
 
 QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
 {
-    KoGenStyle styleobjectauto = KoGenStyle( KoGenStyle::STYLE_GRAPHICAUTO, "graphic" );
+    KoGenStyle styleobjectauto = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
     KoOasisStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }

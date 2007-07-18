@@ -342,7 +342,7 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 
     KoGenStyle pageLayout = m_pageLayout.saveOasis();
     QString layoutName = mainStyles.lookup( pageLayout, "PL" );
-    KoGenStyle masterPage( KoGenStyle::STYLE_MASTER );
+    KoGenStyle masterPage( KoGenStyle::StyleMaster );
     masterPage.addAttribute( "style:page-layout-name", layoutName );
     mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
 
@@ -415,7 +415,7 @@ void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyl
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( styleWriter, mainStyles, "svg:radialGradient", (*it).name, 0, true, true /*add draw:name*/);
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_STROKE_DASH );
+    styles = mainStyles.styles( KoGenStyle::StyleStrokeDash );
     it = styles.begin();
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( styleWriter, mainStyles, "draw:stroke-dash", (*it).name, 0, true, true /*add draw:name*/);
@@ -424,7 +424,7 @@ void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyl
 
     saveOasisAutomaticStyles( styleWriter, mainStyles, true );
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_MASTER );
+    styles = mainStyles.styles( KoGenStyle::StyleMaster );
     it = styles.begin();
     styleWriter->startElement("office:master-styles");
 
@@ -442,12 +442,12 @@ void KarbonPart::saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenSty
 {
     contentWriter->startElement( "office:automatic-styles" );
 
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::STYLE_GRAPHICAUTO, forStylesXml );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGraphicAuto, forStylesXml );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:graphic-properties" );
 
-    styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT, forStylesXml );
+    styles = mainStyles.styles( KoGenStyle::StylePageLayout, forStylesXml );
     it = styles.begin();
 
     for( ; it != styles.end(); ++it )

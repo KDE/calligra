@@ -251,7 +251,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 
     KoGenStyle pageLayout = Kivio::Config::defaultPageLayout().saveOasis();
     QString layoutName = styles.lookup(pageLayout, "PL");
-    KoGenStyle masterPage(KoGenStyle::STYLE_MASTER);
+    KoGenStyle masterPage(KoGenStyle::StyleMaster);
     masterPage.addAttribute("style:page-layout-name", layoutName);
     styles.lookup(masterPage, "Standard", false);
 
@@ -286,7 +286,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 
     styleWriter->startElement("office:automatic-styles");
 
-    QValueList<KoGenStyles::NamedStyle> styleList = styles.styles(KoGenStyle::STYLE_PAGELAYOUT);
+    QValueList<KoGenStyles::NamedStyle> styleList = styles.styles(KoGenStyle::StylePageLayout);
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styleList.begin();
 
     for ( ; it != styleList.end(); ++it) {
@@ -302,7 +302,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
 
     styleWriter->endElement(); // office:automatic-styles
 
-    styleList = styles.styles(KoGenStyle::STYLE_MASTER);
+    styleList = styles.styles(KoGenStyle::StyleMaster);
     it = styleList.begin();
     styleWriter->startElement("office:master-styles");
 
