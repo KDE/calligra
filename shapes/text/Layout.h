@@ -63,7 +63,7 @@ public:
     virtual void registerInlineObject(const QTextInlineObject &inlineObject);
 
     /// paint the document
-    virtual void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context, const KoViewConverter *c);
+    virtual void draw(QPainter *painter, const KoTextDocumentLayout::PaintContext & context);
 
     virtual void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
     virtual KoStyleManager *styleManager() const { return m_styleManager; }

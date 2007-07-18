@@ -98,12 +98,14 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     }
     applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;
-    pc.cursorPosition = -1;
+    KoTextDocumentLayout::PaintContext context;
+    context.textContext = pc;
+    context.viewConverter = &converter;
 
     painter.setClipRect(QRectF(QPointF(0, 0), size()), Qt::IntersectClip);
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
-    lay->draw( &painter, pc, &converter);
+    lay->draw( &painter, context);
     painter.restore();
 
     if(m_footnotes) {

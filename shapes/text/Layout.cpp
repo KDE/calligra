@@ -338,7 +338,6 @@ double Layout::documentOffsetInShape() {
 }
 
 void Layout::nextShape() {
-kDebug() << "nextShape" << endl;
     m_newShape = true;
 
     if(m_data) {
@@ -564,15 +563,15 @@ double Layout::topMargin() {
     return 0.0;
 }
 
-void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context, const KoViewConverter *converter) {
-    painter->setPen(context.palette.color(QPalette::Text)); // for text that has no color.
+void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context) {
+    painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
     QTextBlock block = m_parent->document()->begin();
     KoTextBlockBorderData *lastBorder = 0;
     bool started=false;
     int selectionStart = -1, selectionEnd = -1;
-    if(context.selections.count()) {
-        QTextCursor cursor = context.selections[0].cursor;
+    if(context.textContext.selections.count()) {
+        QTextCursor cursor = context.textContext.selections[0].cursor;
         selectionStart = cursor.position();
         selectionEnd = cursor.anchor();
         if(selectionStart > selectionEnd)
@@ -591,7 +590,7 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
 #if 0       // code for drawing using the normal QTextLayout::draw().  Can't use it due to tabs.
 
             QVector<QTextLayout::FormatRange> selections;
-            foreach(QAbstractTextDocumentLayout::Selection selection, context.selections) {
+            foreach(QAbstractTextDocumentLayout::Selection selection, context.textContext.selections) {
                 QTextCursor cursor = selection.cursor;
                 int begin = cursor.position();
                 int end = cursor.anchor();
@@ -608,7 +607,7 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
             }
             layout->draw(painter, QPointF(0,0), selections);
 #endif
-            drawParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), converter);
+            drawParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
 
             KoTextBlockBorderData *border = 0;
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
@@ -732,15 +731,18 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         if(converter) {
             QRectF pixelRect = converter->documentToView(line.naturalTextRect());
             if(pixelRect.height() < 7) {
-                if(pixelRect.height() < 5) {
+                painter->save();
+                if(pixelRect.height() < 4) {
                     painter->setPen(Qt::gray);
                     painter->drawLine(line.position(), line.position() + QPointF(line.naturalTextWidth(),0));
                 }
                 else {
-                    // TODO nice pattern.
-                    painter->fillRect(QRectF(line.position(), QSizeF(line.naturalTextWidth(), line.ascent())),
-                            QBrush(Qt::gray));
+                    double zoomX, zoomY;
+                    converter->zoom(&zoomX, &zoomY);
+                    painter->scale(1/zoomX, 1/zoomY);
+                    painter->fillRect(pixelRect, QBrush(Qt::gray, Qt::Dense4Pattern));
                 }
+                painter->restore();
                 continue;
             }
         }
