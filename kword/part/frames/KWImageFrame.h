@@ -33,10 +33,11 @@ class KWORD_EXPORT KWImageFrame : public KWFrame {
 public:
      /// the rendering-quality of the image
     enum ImageQuality {
-        LowQuality,
-        MediumQuality,
-        HighQuality,
-        EditableQuality
+        /* Remember to keep the ordering of this enum the same as the ordering in the KoImageData class! */
+        LowQuality,     ///< see KoImageData::LowQuality
+        MediumQuality,  ///< see KoImageData::MediumQuality
+        HighQuality,    ///< see KoImageData::HighQuality
+        EditableQuality 
     };
 
     KWImageFrame(const KoImageData &imageData, KWFrameSet *parent);

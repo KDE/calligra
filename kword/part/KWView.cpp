@@ -29,6 +29,7 @@
 #include "frames/KWFrame.h"
 #include "frames/KWCopyShape.h"
 #include "frames/KWTextFrameSet.h"
+#include "frames/KWImageFrame.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWPageSettingsDialog.h"
 #include "dialogs/KWStatisticsDialog.h"
@@ -874,7 +875,7 @@ const bool clipToPage=false; // should become a setting in the GUI
 
     QPrinter printer;
     printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setCreator("KWord 2.0alpha");
+    printer.setCreator("KWord 2.0alpha2");
     printer.setDocName ("Demo canvas");
     printer.setOutputFileName("output.pdf");
     int resolution = 600;
@@ -889,10 +890,25 @@ const bool clipToPage=false; // should become a setting in the GUI
     const int bleedOffset = (int) (clipToPage?0:POINT_TO_INCH(-bleed.left * resolution));
     const int bleedWidth = (int) (clipToPage?0:POINT_TO_INCH((bleed.left + bleed.right) * resolution));
     const int bleedHeigt = (int) (clipToPage?0:POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
+    QMap<KWImageFrame*, KWImageFrame::ImageQuality> originalImages;
     for(int pageNum=m_document->startPage(); pageNum <= lastPage; pageNum++) {
         KWPage *page = m_document->pageManager()->page(pageNum);
+        const double offsetInDocument = page->offsetInDocument();
+        // find images
+        foreach(KWFrameSet *fs, m_document->frameSets()) {
+            if(fs->frameCount() == 0) continue;
+            KWImageFrame *image = dynamic_cast<KWImageFrame*> (fs->frames().at(0));
+            if(image == 0) continue;
+            if(originalImages.contains(image)) continue;
+            QRectF bound = image->shape()->boundingRect();
+            if(offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
+                continue;
+            originalImages.insert(image, image->imageQuality());
+            image->setImageQuality(KWImageFrame::EditableQuality);
+        }
+
         // Note that Qt does not at this time allow us to alter the page size to an arbitairy size
-        const int pageOffset = qRound(POINT_TO_INCH( resolution * page->offsetInDocument()));
+        const int pageOffset = qRound(POINT_TO_INCH( resolution * offsetInDocument));
         painter.save();
 
         painter.translate(0, -pageOffset);
@@ -920,6 +936,9 @@ const bool clipToPage=false; // should become a setting in the GUI
     }
 
     painter.end();
+
+    foreach(KWImageFrame *image, originalImages.keys())
+        image->setImageQuality(originalImages[image]);
 }
 
 void KWView::insertFrameBreak() {

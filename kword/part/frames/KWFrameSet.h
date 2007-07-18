@@ -95,6 +95,7 @@ signals:
     void frameRemoved(KWFrame *frame);
 
 protected:
+    friend class KWFrame;
     /**
      * Called from addFrame.
      * Overwrite in inheriting classes to do something with the frame on add.

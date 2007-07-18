@@ -27,7 +27,6 @@
 KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
       // Initialize member vars here. This ensures they are all initialized, since it's
       // easier to compare this list with the member vars list (compiler ensures order).
-
     : m_shape(shape),
     m_frameBehavior( KWord::AutoExtendFrameBehavior ),
     m_copyToEverySheet( true ),
@@ -95,9 +94,12 @@ void KWFrame::saveOdf(KoShapeSavingContext & context) {
 
 void KWFrame::setShape(KoShape *shape) {
     if(m_shape == shape) return;
+    shape->copySettings(m_shape);
     m_shape->setApplicationData(0);
     delete m_shape;
     m_shape = shape;
+    m_shape->setApplicationData(this);
+    emit m_frameSet->frameAdded(this);
 }
 
 bool KWFrame::isCopy() const {
