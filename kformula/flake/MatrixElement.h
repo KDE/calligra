@@ -54,7 +54,7 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am );
 
     /**
      * Obtain a list of all child elements of this element
@@ -90,6 +90,9 @@ public:
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
 
+    /// @return The default value of the attribute for this element
+    QString attributesDefaultValue( const QString& attribute ) const;
+
     /// Return the number of the rows of this matrix
 /*    int rows() const;
 
@@ -99,15 +102,6 @@ public:
     /// Obtain a pointer to the element at @p row and @p col in the matrix
     MatrixEntryElement* matrixEntryAt( int row, int col );
   */  
-    /**
-     * Sets the cursor inside this element to its start position.
-     * For most elements that is the main child.
-     */
-    virtual void goInside(FormulaCursor* cursor);
-
-    /// Sets the cursor to select the child. The mark is palced after this element.
-    virtual void selectChild( FormulaCursor*, BasicElement* );
-
 
 protected:
     /// Read all content from the node - reimplemented by child elements

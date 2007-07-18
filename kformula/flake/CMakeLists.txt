@@ -29,7 +29,6 @@ set( kformulalib_PART_SRCS
    ActionElement.cpp
    PaddedElement.cpp
    ErrorElement.cpp
-   TokenStyleElement.cpp
    StyleElement.cpp
    TokenElement.cpp
    NumberElement.cpp

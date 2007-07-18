@@ -102,14 +102,6 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
-    /*
-    /// @return The value of the attribute if it is inherited
-    QString inheritsAttribute( const QString& attribute ) const;
-
-    /// @return The default value of the attribute for this element
-    QVariant attributesDefaultValue( const QString& attribute ) const;
-    */
-
 protected:
     /// Read root contents - reimplemented from BasicElement
     virtual bool readMathMLContent( const KoXmlElement& element );

@@ -48,6 +48,9 @@ public:
      * @param am The AttributeManager providing information about attributes values
      */
     void layout( const AttributeManager* am );
+
+    /// @return The default value of the attribute for this element
+    QString attributesDefaultValue( const QString& attribute ) const;
     
     /// @return The element's ElementType
     ElementType elementType() const;

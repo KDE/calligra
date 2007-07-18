@@ -131,6 +131,41 @@ void MatrixElement::moveUp( FormulaCursor* cursor, BasicElement* from )
     */
 }
 
+QString MatrixElement::attributesDefaultValue( const QString& attribute ) const
+{
+/*    if( attribute == "align" )
+        return "axis";
+    else if( attribute == "rowalign" )
+        return "baseline";
+    else if( attribute == "columnalign" )
+        return "center";
+    else if( attribute == "groupalign" )
+        return "{left}";
+    else if( attribute == "alignmentscope" )
+        return "true";
+    else if( attribute == "columnwidth" ) 
+        return "auto";
+    else if( attribute == "width" ) 
+        return "auto";
+    else if( attribute == "rowspacing" ) 
+        return "1.0ex";
+    else if( attribute == "columnspacing" ) 
+        return "0.8em";
+    else if( attribute == "rowlines" || attribute == "columnlines" ||
+             attribute == "frame" ) 
+        return "none";
+    else if( attribute == "framespacing" ) 
+        return "0.4em 0.5ex";
+    else if( attribute == "equalrows" || attribute == "equalcolumns" ||
+             attribute == "displaystyle" )
+        return "false";
+    else if( attribute == "side" )
+        return "right";
+    else if( attribute == "minlabelspacing" )
+        return "0.8em";*/
+    return QString();
+}
+
 bool MatrixElement::readMathMLContent( const KoXmlElement& element )
 {  
     MatrixRowElement* tmpElement = 0;
@@ -174,36 +209,4 @@ MatrixEntryElement* MatrixElement::matrixEntryAt( int row, int col )
     return m_matrixRowElements[ row ]->entryAtPosition( col );
 }
 */
-/**
- * Sets the cursor inside this element to its start position.
- * For most elements that is the main child.
- */
-void MatrixElement::goInside(FormulaCursor* cursor)
-{
-    //matrixEntryAt(0, 0)->goInside(cursor);
-}
 
-void MatrixElement::selectChild(FormulaCursor* cursor, BasicElement* child)
-{
-/*    for (int r = 0; r < rows(); r++) {
-        for (int c = 0; c < cols(); c++) {
-            if (child == matrixEntryAt(r, c))
-                cursor->setTo(this, r*cols()+c);
-        }
-    }*/
-}
-/*
-bool MatrixElement::searchElement(BasicElement* element, int& row, int& column)
-{
-    for (int r = 0; r < rows(); r++) {
-        for (int c = 0; c < cols(); c++) {
-            if (element == matrixEntryAt(r, c)) {
-                row = r;
-                column = c;
-                return true;
-            }
-        }
-    }
-    return false;
-}
-*/

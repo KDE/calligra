@@ -22,6 +22,11 @@
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
+QString OperatorElement::stringToRender( const QString& rawString ) const
+{
+   
+}
+
 ElementType OperatorElement::elementType() const
 {
     return Operator;

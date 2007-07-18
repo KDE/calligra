@@ -23,12 +23,21 @@
 #include "TokenElement.h"
 #include "kformula_export.h"
 
+/**
+ * @short Implementation of the MathML mo element
+ *
+ * 
+ */
 class KOFORMULA_EXPORT OperatorElement : public TokenElement {
 public:
     /// The standart constructor
     OperatorElement( BasicElement* parent = 0 );
-    ElementType elementType() const;
 
+    /// @return The string to be painted - probably a parsed rawString
+    QString stringToRender( const QString& rawString ) const;
+
+    /// @return The element's ElementType
+    ElementType elementType() const;
 };
 
 #endif // OPERATORELEMENT_H

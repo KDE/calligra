@@ -52,6 +52,14 @@ MatrixEntryElement* MatrixRowElement::entryAt( int pos )
     return m_matrixEntryElements[ pos ];
 }
 
+void MatrixRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+{
+}
+
+void MatrixRowElement::removeChild( BasicElement* element )
+{
+}
+
 const QList<BasicElement*> MatrixRowElement::childElements()
 {
     QList<BasicElement*> tmp;
@@ -105,14 +113,6 @@ void MatrixRowElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     foreach( MatrixEntryElement* tmpEntry, m_matrixEntryElements )
         tmpEntry->writeMathML( writer );
-}
-
-
-
-
-void MatrixRowElement::goInside( FormulaCursor* cursor )
-{
-//    m_matrixEntryElements.at( 0 )->goInside( cursor );
 }
 
 
@@ -214,78 +214,5 @@ void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
 }
 #endif
 
-void MatrixRowElement::insert( FormulaCursor* cursor,
-                               QList<BasicElement*>& newChildren,
-                               Direction direction )
-{
-/*    MatrixEntryElement* e = static_cast<MatrixEntryElement*>(newChildren.takeAt(0));
-    e->setParent(this);
-    m_matrixEntryElements.insert( cursor->getPos(), e );
 
-    if (direction == beforeCursor) {
-        e->moveLeft(cursor, this);
-    }
-    else {
-        e->moveRight(cursor, this);
-    }
-    cursor->setSelecting(false);*/
-    //formula()->changed();
-}
 
-void MatrixRowElement::remove( FormulaCursor* cursor,
-                               QList<BasicElement*>& removedChildren,
-                               Direction direction )
-{
-/*    if ( m_matrixEntryElements.count() == 1 ) { //&& ( cursor->getPos() == 0 ) ) {
-        getParent()->selectChild(cursor, this);
-        getParent()->remove(cursor, removedChildren, direction);
-    }
-    else {
-        MatrixEntryElement* e = m_matrixEntryElements.takeAt( cursor->getPos() );
-        removedChildren.append( e );
-        //formula()->elementRemoval( e );
-        //cursor->setTo( this, denominatorPos );
-        //formula()->changed();
-    }*/
-}
-/*
-void MatrixRowElement::normalize( FormulaCursor* cursor, Direction direction )
-{
-    int pos = cursor->getPos();
-    if ( ( cursor->getElement() == this ) &&
-         ( pos > -1 ) && ( pos <= m_matrixEntryElements.count() ) ) {
-        switch ( direction ) {
-        case beforeCursor:
-            if ( pos > 0 ) {
-                m_matrixEntryElements.at( pos-1 )->moveLeft( cursor, this );
-                break;
-            }
-            // no break! intended!
-        case afterCursor:
-            if ( pos < m_matrixEntryElements.count() ) {
-                m_matrixEntryElements.at( pos )->moveRight( cursor, this );
-            }
-            else {
-                m_matrixEntryElements.at( pos-1 )->moveLeft( cursor, this );
-            }
-            break;
-        }
-    }
-    else {
-        BasicElement::normalize( cursor, direction );
-    }
-}*/
-/*
-SequenceElement* MatrixRowElement::getMainChild()
-{
-    return m_matrixEntryElements.at( 0 );
-}
-*/
-void MatrixRowElement::selectChild(FormulaCursor* cursor, BasicElement* child)
-{
-/*    int pos = m_matrixEntryElements.indexOf( dynamic_cast<MatrixEntryElement*>( child ) );
-    if ( pos > -1 ) {
-        cursor->setTo( this, pos );
-        //content.at( pos )->moveRight( cursor, this );
-    }*/
-}

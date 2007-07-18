@@ -155,6 +155,16 @@ void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
         parentElement()->moveDown( cursor, this );
 }
 
+QString FractionElement::attributesDefaultValue( const QString& attribute ) const
+{
+    if( attribute == "linethickness" )
+        return "1";
+    else if( attribute == "numalign" || attribute == "denomalign" )
+        return "center";
+    else if( attribute == "bevelled" )
+        return "false";
+}
+
 bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
     KoXmlElement tmp;

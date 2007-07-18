@@ -18,6 +18,7 @@
 */
 
 #include "EncloseElement.h"
+#include "AttributeManager.h"
 #include <QPainter>
 
 EncloseElement::EncloseElement( BasicElement* parent ) : RowElement( parent )
@@ -26,68 +27,65 @@ EncloseElement::EncloseElement( BasicElement* parent ) : RowElement( parent )
 
 void EncloseElement::paint( QPainter& painter, AttributeManager* )
 {
+    QPen pen( painter.pen() );
+    pen.setWidth( 1 );
+
+    painter.save();
+    painter.setPen( pen );
     painter.drawPath( m_enclosePath );
+    painter.restore();
 }
 
 void EncloseElement::layout( const AttributeManager* am )
 {
-    /*
-    qreal width = m_enclosedRow.width();      
-    qreal height = m_enclosedRow.height();
-    */
-
-
     // TODO: actuarial (how does it look?) - radical - circle (how to determine extends )
+    m_enclosePath = QPainterPath();
+    QString tmp = am->stringOf( "notation", this );
+    QRectF tmpRect = childBoundingRect();
 
-    /*
-    // longdiv
-        m_enclosePath.moveTo();
+/*    if( tmp.contains( "longdiv" ) ) {
+        m_enclosePath.moveTo( 0, 0 );
         m_enclosePath.lineTo();
-
-    // left
+    }*/
+    if( tmp.contains( "left" ) ) {
         m_enclosePath.moveTo( 0, 0 );
-        m_enclosePath.lineTo( 0, m_enclosedRow.height() );
-
-    // right
-        m_enclosePath.moveTo( m_enclosedRow.width(), 0 );
-        m_enclosePath.lineTo( m_enclosedRow.width(), m_enclosedPath.height() );
-
-    // top
+        m_enclosePath.lineTo( 0, tmpRect.height() );
+    }
+    if( tmp.contains( "right" ) ) {
+        m_enclosePath.moveTo( tmpRect.width(), 0 );
+        m_enclosePath.lineTo( tmpRect.width(), tmpRect.height() );
+    }
+    if( tmp.contains( "top" ) ) {
         m_enclosePath.moveTo( 0, 0 );
-        m_enclosePath.lineTo( m_enclosedRow.width(), 0 );
-
-    // bottom
-        m_enclosePath.moveTo( m_enclosedRow.height(), 0 );
-        m_enclosePath.lineTo( m_enclosedRow.height(), m_enclosedRow.width() );
-
-    // box - TODO spacing is missing - might look odd
-        m_enclosePath.addRect( 0, 0, m_enclosedRow.width(), m_enclosedRow.height() );
-
-    // roundedbox - TODO spacing is missing - might look odd
-        m_enclosePath.addRoundedRect( 0, 0, m_enclosedRow.width(),
-                                            m_enclosedRow.height(), 25 );
-
-    // updiagonalstrike
-        m_enclosePath.moveTo( 0, m_enclosedRow.height() );
-        m_enclosePath.lineTo( m_enclosedRow.width(), 0 );
-
-    // downdiagonalstrike
+        m_enclosePath.lineTo( tmpRect.width(), 0 );
+    }
+    if( tmp.contains( "bottom" ) ) {
+        m_enclosePath.moveTo( tmpRect.height(), 0 );
+        m_enclosePath.lineTo( tmpRect.height(), tmpRect.width() );
+    }
+    if( tmp.contains( "box" ) )        // TODO spacing is missing - might look odd
+        m_enclosePath.addRect( 0, 0, tmpRect.width(), tmpRect.height() );
+    if( tmp.contains( "roundedbox" ) ) // TODO spacing is missing - might look odd
+        m_enclosePath.addRoundRect( 0, 0, tmpRect.width(), tmpRect.height(), 25 );
+    if( tmp.contains( "updiagonalstrike" ) ) {
+        m_enclosePath.moveTo( 0, tmpRect.height() );
+        m_enclosePath.lineTo( tmpRect.width(), 0 );
+    }
+    if( tmp.contains( "downdiagonalstrike" ) ) {
         m_enclosePath.moveTo( 0, 0 );
-        m_enclosePath.lineTo( m_enclosedRow.width(), m_enclosedRow.height() );
+        m_enclosePath.lineTo( tmpRect.width(), tmpRect.height() );
+    }
+    if( tmp.contains( "verticalstrike" ) ) {
+        m_enclosePath.moveTo( tmpRect.width()/2, 0 );
+        m_enclosePath.lineTo( tmpRect.width()/2, tmpRect.height() );
+    }
+    if( tmp.contains( "horizontalstrike" ) ) {
+        m_enclosePath.moveTo( 0, tmpRect.height()/2 );
+        m_enclosePath.lineTo( tmpRect.width(), tmpRect.height()/2 );
+    }
 
-    // verticalstrike
-        m_enclosePath.moveTo( m_enclosedRow.width()/2, 0 );
-        m_enclosePath.lineTo( m_enclosedRow.width()/2, m_enclosedRow.height() );
-
-    // horizontalstrike
-        m_enclosePath.moveTo( 0, m_encloseRow.height()/2 );
-        m_enclosePath.lineTo( m_encloseRow.width(), m_encloseRow.height()/2 );
-
-    setWidth( width );
-    setHeight( height );
-    m_enclosedRow.
-    m_enclosePath.
-    */
+    setWidth( tmpRect.width() );
+    setHeight( tmpRect.height() );
 }
 
 ElementType EncloseElement::elementType() const

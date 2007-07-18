@@ -90,6 +90,11 @@ void RowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
         cursor->moveCursorTo( this, m_childElements.indexOf( from )+1 );
 }
 
+QRectF RowElement::childBoundingRect()
+{
+    return QRectF();
+}
+
 ElementType RowElement::elementType() const
 {
     return Row;

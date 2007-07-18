@@ -85,6 +85,9 @@ public:
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
+
+    /// @return The default value of the attribute for this element
+    QString attributesDefaultValue( const QString& attribute ) const;
     
     /// @return The element's ElementType
     ElementType elementType() const;

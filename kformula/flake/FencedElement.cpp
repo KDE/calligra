@@ -48,11 +48,24 @@ void FencedElement::layout( const AttributeManager* am )
     setWidth( m_buffer.boundingRect().width() );
     setHeight( m_buffer.boundingRect().height() );*/
 }
+
+QString FencedElement::attributesDefaultValue( const QString& attribute ) const
+{
+    if( attribute == "open" )
+        return "(";
+    else if( attribute == "close" )
+        return ")";
+    else if( attribute == "separators" )
+        return ",";
+    else
+        return QString();
+}
     
 ElementType FencedElement::elementType() const
 {
     return Fenced;
 }
+
 /*
 bool FencedElement::operatorType( QDomNode& node, bool open )
 {

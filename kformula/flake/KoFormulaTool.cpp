@@ -57,7 +57,8 @@ void KoFormulaTool::activate( bool temporary )
         emit done();
         return;
     }
-
+    
+    useCursor( Qt::IBeamCursor, true );
     m_formulaCursor = new FormulaCursor( m_formulaShape->formulaElement() );
 }
 
@@ -70,8 +71,12 @@ void KoFormulaTool::deactivate()
 
 void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    Q_UNUSED( converter )
-    // TODO do view conversions with converter
+    painter.setMatrix( painter.matrix() *
+                       m_formulaShape->transformationMatrix( &converter ) );
+    double zoomX, zoomY;              // apply view conversions for painting
+    converter.zoom(&zoomX, &zoomY);
+    painter.scale(zoomX, zoomY);
+    
     m_formulaCursor->paint( painter );
 }
 

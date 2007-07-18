@@ -24,6 +24,8 @@
 #include <QPainter>
 #include <QPen>
 
+#include <kdebug.h>
+
 FormulaCursor::FormulaCursor( BasicElement* element )
               : m_wordMovement( false ),
                 m_selecting( false )
@@ -35,8 +37,8 @@ FormulaCursor::FormulaCursor( BasicElement* element )
 void FormulaCursor::paint( QPainter& painter ) const
 {
     QPointF top = m_currentElement->boundingRect().topLeft();
-    
-    if( m_currentElement->elementType() == Basic )  // set the cursor in the middle
+     
+    if( m_currentElement->childElements().isEmpty() )  // set the cursor in the middle
         top += QPointF( m_currentElement->width()/2, 0 );
     else
     { 
@@ -46,6 +48,9 @@ void FormulaCursor::paint( QPainter& painter ) const
     }
     
     QPointF bottom = top + QPointF( 0, m_currentElement->height() );
+    QPen pen;
+    pen.setWidth( 1 );
+    painter.setPen( pen );
     painter.drawLine( top, bottom );
 }
 

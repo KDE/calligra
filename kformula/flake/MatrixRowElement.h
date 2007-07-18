@@ -26,9 +26,6 @@
 #include "BasicElement.h"
 #include "kformula_export.h"
 
-
-#include "contextstyle.h"
-
 class MatrixEntryElement;
 
 /**
@@ -48,6 +45,19 @@ public:
      */
     const QList<BasicElement*> childElements();
  
+    /**
+     * Insert a new child at the cursor position
+     * @param cursor The cursor holding the position where to inser
+     * @param child A BasicElement to insert
+     */
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
+   
+    /**
+     * Remove a child element
+     * @param element The BasicElement to remove
+     */ 
+    void removeChild( BasicElement* element );
+
     /// @return The position of the given @p entry   
     int positionOfEntry( BasicElement* entry ) const;
 
@@ -81,23 +91,6 @@ public:
      * @param from The BasicElement which was the last owner of the FormulaCursor
      */
     void moveDown( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Sets the cursor inside this element to its start position.
-     * For most elements that is the main child.
-     */
-    virtual void goInside(FormulaCursor* cursor);
-
-
-    virtual void insert(FormulaCursor*, QList<BasicElement*>&, Direction);
-    virtual void remove(FormulaCursor*, QList<BasicElement*>&, Direction);
-
-    /**
-     * Sets the cursor to select the child. The mark is placed before,
-     * the position behind it.
-     */
-    virtual void selectChild(FormulaCursor* cursor, BasicElement* child);
-
 
 protected:
     /// Read all content from the node - reimplemented by child elements

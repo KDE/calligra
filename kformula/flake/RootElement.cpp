@@ -42,9 +42,6 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
-    QPen pen( painter.pen() );
-    pen.setWidthF( am->doubleOf( "linethickness", this ) );
-
     painter.drawPath( m_rootSymbol );
 }
 
@@ -134,65 +131,6 @@ ElementType RootElement::elementType() const
     return Root;
 }
 
-/*
-void RootElement::draw( QPainter& painter, const LuPixelRect& r,
-                        const ContextStyle& context,
-                        ContextStyle::TextStyle tstyle,
-                        ContextStyle::IndexStyle istyle,
-                        StyleAttributes& style,
-                        const LuPixelPoint& parentOrigin )
-{
-    LuPixelPoint myPos( parentOrigin.x()+getX(), parentOrigin.y()+getY() );
-    //if ( !LuPixelRect( myPos.x(), myPos.y(), getWidth(), getHeight() ).intersects( r ) )
-    //    return;
-
-    m_radicand->draw( painter, r, context, tstyle,
-                      context.convertIndexStyleLower( istyle ), style, myPos);
-    if ( m_exponent ) {
-        m_exponent->draw( painter, r, context,
-                          context.convertTextStyleIndex(tstyle),
-                          context.convertIndexStyleUpper(istyle), style, myPos);
-    }
-
-    luPixel x = myPos.x() + m_rootOffset.x();
-    luPixel y = myPos.y() + m_rootOffset.y();
-    //int distX = style.getDistanceX(tstyle);
-    double factor = style.sizeFactor();
-    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
-    luPixel unit = (m_radicand->getHeight() + distY)/ 3;
-
-    painter.setPen( QPen( style.color(),
-                          context.layoutUnitToPixelX( 2*context.getLineWidth( factor ) ) ) );
-    painter.drawLine( context.layoutUnitToPixelX( x+unit/3 ),
-                      context.layoutUnitToPixelY( y+unit+distY/3 ),
-                      context.layoutUnitToPixelX( x+unit/2+unit/3 ),
-                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-
-    painter.setPen( QPen( style.color(),
-                          context.layoutUnitToPixelY( context.getLineWidth( factor ) ) ) );
-
-    painter.drawLine( context.layoutUnitToPixelX( x+unit+unit/3 ),
-                      context.layoutUnitToPixelY( y+distY/3 ),
-                      context.layoutUnitToPixelX( x+unit/2+unit/3 ),
-                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-    painter.drawLine( context.layoutUnitToPixelX( x+unit+unit/3 ),
-                      context.layoutUnitToPixelY( y+distY/3 ),
-                      context.layoutUnitToPixelX( x+unit+unit/3+m_radicand->getWidth() ),
-                      context.layoutUnitToPixelY( y+distY/3 ) );
-    painter.drawLine( context.layoutUnitToPixelX( x+unit/3 ),
-                      context.layoutUnitToPixelY( y+unit+distY/2 ),
-                      context.layoutUnitToPixelX( x ),
-                      context.layoutUnitToPixelY( y+unit+unit/2 ) );
-}
-*/
-
-void RootElement::writeMathMLContent( KoXmlWriter* writer ) const
-{
-    m_radicand->writeMathML( writer );
-    if ( m_exponent )
-        m_exponent->writeMathML( writer );
-}
-
 bool RootElement::readMathMLContent( const KoXmlElement& element )
 {
     KoXmlElement tmp;
@@ -208,3 +146,11 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
     }
     return true;
 }
+
+void RootElement::writeMathMLContent( KoXmlWriter* writer ) const
+{
+    m_radicand->writeMathML( writer );
+    if ( m_exponent )
+        m_exponent->writeMathML( writer );
+}
+
