@@ -72,6 +72,7 @@
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
+#include <kstatusbar.h>
 
 KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     : KoView( document, parent )
@@ -247,6 +248,13 @@ void KWView::setupActions() {
     action->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
     action->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
     connect(action, SIGNAL(triggered()), this, SLOT( createLinkedFrame() ));
+
+    //------------------------ Settings menu
+    action = new KToggleAction(i18n("Status Bar"), this);
+    action->setToolTip(i18n("Show the status bar"));
+    actionCollection()->addAction("showStatusBar", action);
+    //action->setChecked(statusBar()->isVisible());
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
@@ -1055,6 +1063,9 @@ void KWView::createLinkedFrame() {
     m_document->addCommand(cmd);
 }
 
+void KWView::showStatusBar(bool toggled) {
+    statusBar()->setVisible(toggled);
+}
 
 // end of actions
 

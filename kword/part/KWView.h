@@ -115,6 +115,7 @@ private slots:
     void showStatisticsDialog();
     void showRulers(bool visible);
     void createLinkedFrame();
+    void showStatusBar(bool);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods

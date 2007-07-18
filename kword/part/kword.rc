@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="109">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="110">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -186,6 +186,7 @@
  <Menu name="settings"><text>&amp;Settings</text>
   <Separator group="settings_show"/>
   <Action name="direct_cursor" group="settings_show"/>
+  <Action name="showStatusBar" group="settings_show" />
   <Separator group="settings_show"/>
   <Action name="configure_autocorrection" group="settings_show"/>
   <Action name="configure_completion" group="settings_show"/>
