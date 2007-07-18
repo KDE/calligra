@@ -87,9 +87,9 @@ void TextShape::setDemoText(bool on) {
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter) {
     painter.fillRect(converter.documentToView(QRectF(QPointF(0.0,0.0), size())), background());
+    QTextDocument *doc = m_textShapeData->document();
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());
     if(m_textShapeData->endPosition() < 0) { // not layouted yet.
-        QTextDocument *doc = m_textShapeData->document();
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());
         if(lay == 0)
             kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work\n";
         else if(! lay->hasLayouter())
@@ -100,11 +100,10 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     QAbstractTextDocumentLayout::PaintContext pc;
     pc.cursorPosition = -1;
 
-    QTextDocument *doc = m_textShapeData->document();
     painter.setClipRect(QRectF(QPointF(0, 0), size()), Qt::IntersectClip);
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
-    doc->documentLayout()->draw( &painter, pc);
+    lay->draw( &painter, pc, &converter);
     painter.restore();
 
     if(m_footnotes) {

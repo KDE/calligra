@@ -63,7 +63,7 @@ public:
     virtual void registerInlineObject(const QTextInlineObject &inlineObject);
 
     /// paint the document
-    virtual void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context);
+    virtual void draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext & context, const KoViewConverter *c);
 
     virtual void setStyleManager(KoStyleManager *sm) { m_styleManager = sm; }
     virtual KoStyleManager *styleManager() const { return m_styleManager; }
@@ -84,7 +84,7 @@ private:
     void cleanupShape(KoShape *daShape);
     void nextShape();
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
-    void drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd);
+    void drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     double inlineCharHeight(const QTextFragment &fragment);
     double findFootnote(const QTextLine &line);
 

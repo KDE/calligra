@@ -564,7 +564,7 @@ double Layout::topMargin() {
     return 0.0;
 }
 
-void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context) {
+void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context, const KoViewConverter *converter) {
     painter->setPen(context.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
     QTextBlock block = m_parent->document()->begin();
@@ -608,8 +608,7 @@ void Layout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintCon
             }
             layout->draw(painter, QPointF(0,0), selections);
 #endif
-            //drawParagraph(painter, layout, blockData, selectionStart - block.position(), selectionEnd - block.position());
-            drawParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position());
+            drawParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), converter);
 
             KoTextBlockBorderData *border = 0;
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
@@ -692,7 +691,7 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
     painter->setPen(penBackup);
 }
 
-void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd) {
+void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
     // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs, etc. :/
     QTextLayout *layout = block.layout();
     QList<KoTextBlockData::TabLineData> tabsData;
@@ -722,6 +721,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             layout->setTextOption(textOption);
         }
         QTextLine line = layout->lineAt(i);
+        if(line.textLength() == 0) continue;
         if(line.textStart() < selectionEnd && line.textStart() + line.textLength() > selectionStart) {
             // paint selection!
             const double x1 = line.cursorToX(qMax(selectionStart, line.textStart()));
@@ -729,11 +729,26 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             QRectF rect(line.position().x() + x1, line.position().y(), x2 - x1, line.height());
             painter->fillRect(rect, QBrush(QColor(255, 255, 0, 130))); // TODO use proper selection color
         }
+        if(converter) {
+            QRectF pixelRect = converter->documentToView(line.naturalTextRect());
+            if(pixelRect.height() < 7) {
+                if(pixelRect.height() < 5) {
+                    painter->setPen(Qt::gray);
+                    painter->drawLine(line.position(), line.position() + QPointF(line.naturalTextWidth(),0));
+                }
+                else {
+                    // TODO nice pattern.
+                    painter->fillRect(QRectF(line.position(), QSizeF(line.naturalTextWidth(), line.ascent())),
+                            QBrush(Qt::gray));
+                }
+                continue;
+            }
+        }
 
         painter->save();
         line.draw(painter, layout->position());
         painter->restore();
-        
+
         for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps for the current line
             const double tabStop = tabs.tabs[x];
             const double pos = tabStop - tabs.tabLength[x];
@@ -784,8 +799,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
             painter->restore();
         }
     }
-    
-            
+
     QTextBlock::iterator it;
     int offset = -1;
     // loop over text fragments in this paragraph and draw the underline and line through.
