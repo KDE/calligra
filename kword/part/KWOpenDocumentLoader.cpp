@@ -140,7 +140,7 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
                 //QTextDocument* doc = m_loader->document()->mainFrameSet()->document();
                 KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
                 Q_ASSERT(layout && layout->inlineObjectTextManager());
-                layout->inlineObjectTextManager()->insertInlineObject(c, anchor);
+                layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
             }
             else if( anchortype == "frame" ) {
                 // Anchor position is the parent text box that the current drawing shape element is
