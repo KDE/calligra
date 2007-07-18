@@ -46,6 +46,7 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWPageSettingsDialog.cpp
     dialogs/KWStatistics.cpp
     dialogs/KWStatisticsDialog.cpp
+    dialogs/KWPrintingDialog.cpp
 
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
