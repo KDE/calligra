@@ -242,3 +242,18 @@ QTextDocument *TextShape::footnoteDocument() {
     return m_footnotes;
 }
 
+void TextShape::markLayoutDone() {
+    m_mutex.lock();
+    m_waiter.wakeAll();
+    m_mutex.unlock();
+}
+
+void TextShape::waitUntilReady() const {
+    m_mutex.lock();
+    if(m_textShapeData->isDirty()) {
+        m_textShapeData->fireResizeEvent(); // triggers a relayout
+        m_waiter.wait(&m_mutex);
+    }
+    m_mutex.unlock();
+}
+

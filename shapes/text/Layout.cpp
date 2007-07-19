@@ -154,6 +154,7 @@ bool Layout::addLine(QTextLine &line) {
         if(m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition( m_data->position() );
         m_data->wipe();
+        m_textShape->markLayoutDone();
         nextShape();
         if(m_data)
             m_data->setPosition(m_block.position() + ignoreLine?0:line.textStart());
@@ -247,6 +248,7 @@ bool Layout::nextParag() {
         const double offsetInShape = m_y - m_data->documentOffset();
         shape->repaint(QRectF(0.0, offsetInShape, shape->size().width(), shape->size().width() - offsetInShape));
         // cleanup and repaint rest of shapes.
+        m_textShape->markLayoutDone();
         cleanupShapes();
         return false;
     }
@@ -380,6 +382,9 @@ void Layout::cleanupShapes() {
 }
 
 void Layout::cleanupShape(KoShape *daShape) {
+    TextShape *ts = dynamic_cast<TextShape*>(daShape);
+    if(ts)
+        ts->markLayoutDone();
     KoTextShapeData *textData = dynamic_cast<KoTextShapeData*> (daShape->userData());
     if(textData == 0)
         return;

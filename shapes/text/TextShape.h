@@ -26,6 +26,8 @@
 
 #include <QTextDocument>
 #include <QPainter>
+#include <QMutex>
+#include <QWaitCondition>
 
 #define TextShape_SHAPEID "TextShapeID"
 
@@ -43,6 +45,8 @@ public:
     void paintComponent(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented
     void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
+    /// reimplemented
+    virtual void waitUntilReady() const;
 
     /// helper method.
     QPointF convertScreenPos(const QPointF &point);
@@ -67,6 +71,8 @@ public:
     bool hasFootnoteDocument() { return m_footnotes != 0; }
     QTextDocument *footnoteDocument();
 
+    void markLayoutDone();
+
 private:
     void shapeChanged(ChangeType type);
 
@@ -74,6 +80,8 @@ private:
     QTextDocument *m_footnotes;
 
     bool m_demoText;
+    mutable QMutex m_mutex;
+    mutable QWaitCondition m_waiter;
 };
 
 #endif
