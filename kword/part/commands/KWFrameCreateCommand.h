@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWFRAMECREATEOMMAND_H
-#define KWFRAMECREATEOMMAND_H
+#ifndef KWFRAMECREATECOMMAND_H
+#define KWFRAMECREATECOMMAND_H
 
 #include <QUndoCommand>
 

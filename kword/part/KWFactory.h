@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_FACTORY_H
-#define KWORD_FACTORY_H
+#ifndef KWFACTORY_H
+#define KWFACTORY_H
 
 #include <KoFactory.h>
 #include "kword_export.h"

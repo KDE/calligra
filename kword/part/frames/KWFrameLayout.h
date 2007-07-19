@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWBASICFRAMELAYOUT_H
-#define KWBASICFRAMELAYOUT_H
+#ifndef KWFRAMELAYOUT_H
+#define KWFRAMELAYOUT_H
 
 #include "KWord.h"
 

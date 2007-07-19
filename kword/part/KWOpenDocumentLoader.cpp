@@ -42,7 +42,6 @@
 #include <KoShapeLoadingContext.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextFrameLoader.h>
-#include <KoTextFrameLoader.h>
 #include <KWPage.h>
 
 // KDE + Qt includes

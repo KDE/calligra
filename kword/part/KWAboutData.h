@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KWORD_ABOUTDATA
-#define KWORD_ABOUTDATA
+#ifndef KWABOUTDATA_H
+#define KWABOUTDATA_H
 
 #include <kaboutdata.h>
 #include <klocale.h>

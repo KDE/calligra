@@ -154,14 +154,14 @@ void KWView::setupActions() {
     actionCollection()->addAction("format_header", m_actionViewHeader );
     m_actionViewHeader->setCheckedState(KGuiItem(i18n("Disable Document Headers")));
     m_actionViewHeader->setToolTip( i18n( "Shows and hides header display" ) );
-    m_actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br><br>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
+    m_actionViewHeader->setWhatsThis( i18n( "Selecting this option toggles the display of headers in KWord.<br/><br/>Headers are special frames at the top of each page which can contain page numbers or other information." ) );
     connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT( toggleHeader() ));
 
     m_actionViewFooter  = new KToggleAction(i18n("Enable Document Footers"), this);
     actionCollection()->addAction("format_footer", m_actionViewFooter );
     m_actionViewFooter->setCheckedState(KGuiItem(i18n("Disable Document Footers")));
     m_actionViewFooter->setToolTip( i18n( "Shows and hides footer display" ) );
-    m_actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br><br>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
+    m_actionViewFooter->setWhatsThis( i18n( "Selecting this option toggles the display of footers in KWord. <br/><br/>Footers are special frames at the bottom of each page which can contain page numbers or other information." ) );
     connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT( toggleFooter() ));
 
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
@@ -207,12 +207,12 @@ void KWView::setupActions() {
     actionCollection()->addAction("view_frameborders", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
     action->setChecked(m_document->config().viewFrameBorders());
-    action->setWhatsThis( i18n( "Turns the border display on and off.<br><br>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
+    action->setWhatsThis( i18n( "Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page." ) );
 
     action = new QAction(i18n("Page Layout..."), this);
     actionCollection()->addAction("format_page", action );
     action->setToolTip( i18n( "Change properties of entire page" ) );
-    action->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings." ) );
+    action->setWhatsThis( i18n( "Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>" ) );
     connect(action, SIGNAL(triggered()), this, SLOT( formatPage() ));
 
     action = new QAction(i18n("Make inline"), this);
@@ -228,7 +228,7 @@ void KWView::setupActions() {
     action  = new KAction(i18n("Statistics"), this);
     actionCollection()->addAction("file_statistics", action );
     action->setToolTip( i18n( "Sentence, word and letter counts for this document" ) );
-    action->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score." ) );
+    action->setWhatsThis( i18n( "Information on the number of letters, words, syllables and sentences for this document.<p>Evaluates readability using the Flesch reading score.</p>" ) );
     connect(action, SIGNAL(triggered()), this, SLOT( showStatisticsDialog() ));
 
     action = new KAction( i18n( "Show Rulers" ), this);
@@ -237,7 +237,7 @@ void KWView::setupActions() {
     action->setWhatsThis( i18n("The rulers are the white measuring spaces top and left of the "
                 "document. The rulers show the position and width of pages and of frames and can "
                 "be used to position tabulators among others.<p>Uncheck this to disable "
-                "the rulers from being displayed." ) );
+                "the rulers from being displayed.</p>" ) );
     action->setChecked(m_document->config().viewRulers());
     actionCollection()->addAction("show_ruler", action );
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
