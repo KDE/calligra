@@ -63,6 +63,7 @@ void KWPrintingDialog::preparePage(int pageNumber) {
             continue;
         m_originalImages.insert(image, image->imageQuality());
         image->setImageQuality(KWImageFrame::EditableQuality);
+        shapeManager()->add(image->shape()); // just in case the image change internally create a new shape
     }
 
     const int pageOffset = qRound(POINT_TO_INCH( resolution * offsetInDocument));

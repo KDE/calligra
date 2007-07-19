@@ -96,7 +96,7 @@ void KWFrame::setShape(KoShape *shape) {
     if(m_shape == shape) return;
     shape->copySettings(m_shape);
     m_shape->setApplicationData(0);
-    delete m_shape;
+    m_shape->deleteLater();
     m_shape = shape;
     m_shape->setApplicationData(this);
     emit m_frameSet->frameAdded(this);
