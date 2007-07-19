@@ -20,7 +20,6 @@
 #ifndef KSPREAD_DATABASE
 #define KSPREAD_DATABASE
 
-#include <QObject>
 #include <QSharedDataPointer>
 
 #include <KoXmlReader.h>
@@ -40,9 +39,8 @@ class Region;
 /**
  * OpenDocument, 8.6.1 Database Range
  */
-class Database : public QObject
+class Database
 {
-    Q_OBJECT
 public:
     /**
      * Constructor.
@@ -64,7 +62,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~Database();
+    ~Database();
 
     /**
      * \return \c true if this is the default/empty database
@@ -129,5 +127,7 @@ private:
 };
 
 } // namespace KSpread
+
+Q_DECLARE_TYPEINFO(KSpread::Database, Q_MOVABLE_TYPE);
 
 #endif // KSPREAD_DATABASE

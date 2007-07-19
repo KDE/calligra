@@ -112,8 +112,7 @@ Database::Database( const QString& name )
 }
 
 Database::Database(const Database& other)
-    : QObject(other.parent())
-    , d(other.d)
+    : d(other.d)
 {
 }
 
@@ -339,5 +338,3 @@ void Database::dump() const
 {
     if (d->filter) d->filter->dump();
 }
-
-#include "Database.moc"
