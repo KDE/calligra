@@ -3155,9 +3155,9 @@ QRectF Canvas::cellCoordinatesToDocument( const QRect& cellRange ) const
 
     QRectF rect;
     rect.setLeft  ( sheet->columnPosition( cellRange.left() ) );
-    rect.setRight ( sheet->columnPosition( cellRange.right() + 1 ) );
+    rect.setRight ( sheet->columnPosition(cellRange.right()) + sheet->columnFormat(cellRange.right())->width());
     rect.setTop   ( sheet->rowPosition( cellRange.top() ) );
-    rect.setBottom( sheet->rowPosition( cellRange.bottom() + 1 ) );
+    rect.setBottom( sheet->rowPosition(cellRange.bottom()) + sheet->rowFormat(cellRange.bottom())->height());
     return rect;
 }
 

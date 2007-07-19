@@ -524,82 +524,44 @@ int Sheet::numberSelectedObjects() const
 int Sheet::leftColumn( double _xpos, double &_left ) const
 {
     _left = 0.0;
-
     int col = 1;
-    double x = columnFormat( col )->width();
-    while ( x < _xpos )
+    double x = columnFormat(col)->width();
+    while (x < _xpos && col < KS_colMax)
     {
-        // Should never happen
-        if ( col >= KS_colMax )
-        {
-            kDebug(36001) << "Sheet:leftColumn: invalid column (col: " << col + 1 << ')' << endl;
-            return KS_colMax + 1; //Return out of range value, so other code can react on this
-        }
-        _left += columnFormat( col )->width();
-        col++;
-        x += columnFormat( col )->width();
+        _left += columnFormat(col)->width();
+        x += columnFormat(++col)->width();
     }
-
     return col;
 }
 
 int Sheet::rightColumn( double _xpos ) const
 {
     int col = 1;
-    double x = columnFormat( col )->width();
-    while ( x <= _xpos )
-    {
-        // Should never happen
-        if ( col > KS_colMax )
-        {
-            kDebug(36001) << "Sheet:rightColumn: invalid column (col: " << col << ')' << endl;
-                  return KS_colMax + 1; //Return out of range value, so other code can react on this
-        }
-        col++;
-        x += columnFormat( col )->width();
-    }
-
+    double x = columnFormat(col)->width();
+    while (x <= _xpos && col < KS_colMax)
+        x += columnFormat(++col)->width();
     return col;
 }
 
 int Sheet::topRow( double _ypos, double & _top ) const
 {
     _top = 0.0;
-
     int row = 1;
-    double y = rowFormat( row )->height();
-    while ( y < _ypos )
+    double y = rowFormat(row)->height();
+    while (y < _ypos && row < KS_rowMax)
     {
-        // Should never happen
-        if ( row >= KS_rowMax )
-        {
-            kDebug(36001) << "Sheet:topRow: invalid row (row: " << row + 1 << ')' << endl;
-            return KS_rowMax + 1; //Return out of range value, so other code can react on this
-        }
-        _top += rowFormat( row )->height();
-        row++;
-        y += rowFormat( row )->height();
+        _top += rowFormat(row)->height();
+        y += rowFormat(++row)->height();
     }
-
     return row;
 }
 
 int Sheet::bottomRow( double _ypos ) const
 {
     int row = 1;
-    double y = rowFormat( row )->height();
-    while ( y <= _ypos )
-    {
-        // Should never happen
-        if ( row > KS_rowMax )
-        {
-            kDebug(36001) << "Sheet:bottomRow: invalid row (row: " << row << ')' << endl;
-                  return KS_rowMax + 1; //Return out of range value, so other code can react on this
-        }
-        row++;
-        y += rowFormat( row )->height();
-    }
-
+    double y = rowFormat(row)->height();
+    while (y <= _ypos && row < KS_rowMax)
+        y += rowFormat(++row)->height();
     return row;
 }
 

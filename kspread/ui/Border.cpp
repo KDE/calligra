@@ -141,7 +141,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   int row = sheet->topRow( m_pCanvas->yOffset(), y );
 
   // Did the user click between two rows?
-  while ( y < ( dHeight + m_pCanvas->yOffset() ) && ( !m_bResize ) )
+  while ( y < ( dHeight + m_pCanvas->yOffset() ) && ( !m_bResize ) && row <= KS_rowMax )
   {
     double h = sheet->rowFormat( row )->height();
     row++;
@@ -409,7 +409,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     double y;
     int tmpRow = sheet->topRow( m_pCanvas->yOffset(), y );
 
-    while ( y < dHeight + m_pCanvas->yOffset() )
+    while ( y < dHeight + m_pCanvas->yOffset() && tmpRow <= KS_rowMax )
     {
       double h = sheet->rowFormat( tmpRow )->height();
       //if col is hide and it's the first column
@@ -581,7 +581,7 @@ void VBorder::paintEvent( QPaintEvent* event )
   const QSet<int> selectedRows = m_pView->selection()->rowsSelected();
   const QSet<int> affectedRows = m_pView->selection()->rowsAffected();
   // Loop through the rows, until we are out of range
-  while ( yPos <= paintRect.bottom() )
+  while ( yPos <= paintRect.bottom() && y <= KS_rowMax )
   {
     const bool selected = (selectedRows.contains(y));
     const bool highlighted = (!selected && affectedRows.contains(y));
@@ -730,7 +730,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
     kDebug() << "evPos: " << ev_PosX << ", x: " << x << ", COL: " << tmpCol << endl;
-    while ( ev_PosX > x && ( !m_bResize ) )
+    while ( ev_PosX > x && ( !m_bResize ) && tmpCol <= KS_colMax )
     {
       double w = sheet->columnFormat( tmpCol )->width();
 
@@ -768,7 +768,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     int col = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
     // Did the user click between two columns?
-    while ( x < ( dWidth + m_pCanvas->xOffset() ) && ( !m_bResize ) )
+    while ( x < ( dWidth + m_pCanvas->xOffset() ) && ( !m_bResize ) && col <= KS_colMax )
     {
       double w = sheet->columnFormat( col )->width();
       col++;
@@ -1083,7 +1083,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
-      while ( ev_PosX > x )
+      while ( ev_PosX > x && tmpCol <= KS_colMax )
       {
         double w = sheet->columnFormat( tmpCol )->width();
         ++tmpCol;
@@ -1105,7 +1105,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
     {
       int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
-      while ( x < m_pView->zoomHandler()->unzoomItY( width() ) + m_pCanvas->xOffset() )
+      while ( x < m_pView->zoomHandler()->unzoomItY( width() ) + m_pCanvas->xOffset() && tmpCol <= KS_colMax )
       {
         double w = sheet->columnFormat( tmpCol )->width();
         //if col is hide and it's the first column
@@ -1332,7 +1332,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
     const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
     //Loop through the columns, until we are out of range
-    while ( xPos <= paintRect.right() )
+    while ( xPos <= paintRect.right() && x <= KS_colMax )
     {
       bool selected = (selectedColumns.contains(x));
       bool highlighted = (!selected && affectedColumns.contains(x));
@@ -1380,7 +1380,7 @@ void HBorder::paintEvent( QPaintEvent* event )
     const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
     const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
     //Loop through the columns, until we are out of range
-    while ( xPos <= paintRect.right() )
+    while ( xPos <= paintRect.right() && x <= KS_colMax )
     {
       bool selected = (selectedColumns.contains(x));
       bool highlighted = (!selected && affectedColumns.contains(x));

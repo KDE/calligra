@@ -171,9 +171,9 @@ CellView::CellView( SheetView* sheetView, int col, int row )
             d->style.merge( *style );
     }
 
-    if ( cell.width() != sheetView->sheet()->columnFormat( 0 )->width() )
+    if ( cell.width() != sheetView->sheet()->doc()->defaultColumnFormat()->width() )
         d->width = cell.width();
-    if ( cell.height() != sheetView->sheet()->rowFormat( 0 )->height() )
+    if ( cell.height() != sheetView->sheet()->doc()->defaultRowFormat()->height() )
         d->height = cell.height();
 
     d->checkForFilterButton(cell);
