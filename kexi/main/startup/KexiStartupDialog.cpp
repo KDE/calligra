@@ -209,6 +209,7 @@ KexiStartupDialog::KexiStartupDialog(
 	}
 	connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
 	setCurrentPage(firstPage);
+	updateDialogOKButton(firstPage);
 	adjustSize();
 }
 
