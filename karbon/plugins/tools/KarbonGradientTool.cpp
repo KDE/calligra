@@ -206,6 +206,7 @@ void KarbonGradientTool::deactivate()
     m_gradient = 0;
 
     qDeleteAll( m_gradients );
+    m_gradients.clear();
 }
 
 void KarbonGradientTool::resourceChanged( int key, const QVariant & res )
