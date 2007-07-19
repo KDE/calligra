@@ -555,14 +555,17 @@ void Canvas::scrollToCell(const QPoint& location) const
     // Adjust the maximum accessed column and row for the scrollbars.
     view()->sheetView(sheet)->updateAccessedCellRange(location);
 
-    // The cell geometry expanded by the size of one column or five rows, resp., in each direction.
+    // The cell geometry expanded by the size of one column or one row, resp., in each direction.
     const Cell cell = Cell(sheet, location).masterCell();
+    const int columns = cell.column() == KS_colMax ? 0 : 1;
+    const int rows = cell.row() == KS_rowMax ? 0 : 1;
     const double xpos = sheet->columnPosition(cell.cellPosition().x());
     const double ypos = sheet->rowPosition(cell.cellPosition().y());
-    const double width = sheet->doc()->defaultColumnFormat()->width();
-    const double height = sheet->doc()->defaultRowFormat()->height() * 5;
+    const double width = sheet->doc()->defaultColumnFormat()->width() * columns;
+    const double height = sheet->doc()->defaultRowFormat()->height() * rows;
     QRectF rect(xpos, ypos, cell.width(), cell.height());
     rect.adjust(-width, -height, width, height);
+    rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
 
     d->view->canvasController()->ensureVisible(rect, true);
 }
@@ -1674,8 +1677,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       row++;
     }
 
-    destination.setX(marker.x());
-    destination.setY(row);
+    destination.setX(qBound(1, marker.x(), KS_colMax));
+    destination.setY(qBound(1, row, KS_rowMax));
     break;
 
     //Ctrl+Qt::Key_Down
@@ -1720,8 +1723,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       row--;
     }
 
-    destination.setX(marker.x());
-    destination.setY(row);
+    destination.setX(qBound(1, marker.x(), KS_colMax));
+    destination.setY(qBound(1, row, KS_rowMax));
     break;
 
   //Ctrl+Qt::Key_Left
@@ -1768,8 +1771,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       col--;
     }
 
-    destination.setX(col);
-    destination.setY(marker.y());
+    destination.setX(qBound(1, col, KS_colMax));
+    destination.setY(qBound(1, marker.y(), KS_rowMax));
   }
   else
   {
@@ -1799,7 +1802,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       while ((!cell.isNull()) &&
             (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered())))
       {
-        cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row()), CellStorage::VisitContent;
+        cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
       }
     }
 
@@ -1813,8 +1816,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       col++;
     }
 
-    destination.setX(col);
-    destination.setY(marker.y());
+    destination.setX(qBound(1, col, KS_colMax));
+    destination.setY(qBound(1, marker.y(), KS_rowMax));
   }
     break;
 
@@ -1863,8 +1866,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       col++;
     }
 
-    destination.setX(col);
-    destination.setY(marker.y());
+    destination.setX(qBound(1, col, KS_colMax));
+    destination.setY(qBound(1, marker.y(), KS_rowMax));
   }
   else
   {
@@ -1907,8 +1910,8 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
       col--;
     }
 
-    destination.setX(col);
-    destination.setY(marker.y());
+    destination.setX(qBound(1, col, KS_colMax));
+    destination.setY(qBound(1, marker.y(), KS_rowMax));
   }
     break;
 

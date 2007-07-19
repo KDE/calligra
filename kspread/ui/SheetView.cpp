@@ -109,7 +109,7 @@ const CellView& SheetView::cellView( int col, int row )
 
 void SheetView::setPaintCellRange( const QRect& rect )
 {
-    d->visibleRect = rect;
+    d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
     d->cache.setMaxCost( 2 * rect.width() * rect.height() );
 }
 
@@ -163,7 +163,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
 // kDebug() << "offset: " << offset << endl;
-        int bottom = d->visibleRect.bottom();
+        const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
@@ -182,7 +182,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     {
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
-        int bottom = d->visibleRect.bottom();
+        const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
@@ -202,7 +202,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     {
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
-        int bottom = d->visibleRect.bottom();
+        const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             Cell cell = Cell( sheet(), col, row );
@@ -226,7 +226,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     {
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
-        int bottom = d->visibleRect.bottom();
+        const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
