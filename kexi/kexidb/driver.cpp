@@ -89,7 +89,9 @@ Driver::~Driver()
 {
 	DriverManagerInternal::self()->aboutDelete( this );
 //	KexiDBDbg << "Driver::~Driver()" << endl;
-	qDeleteAll( d->connections );
+	// make a copy because d->connections will be touched by ~Connection
+	QSet<Connection*> connections(d->connections); 
+	qDeleteAll( connections );
 	d->connections.clear();
 	delete beh;
 	delete d;
