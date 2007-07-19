@@ -2322,7 +2322,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
         else if ( styleIndex )
         {
-            RowFormat rowFormat;
+            RowFormat rowFormat(*doc()->defaultRowFormat());
             rowFormat.setSheet( this );
             rowFormat.setRow( styleIndex );
             QDomElement e = rowFormat.save( dd );
@@ -2350,7 +2350,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
         else if ( styleIndex )
         {
-            ColumnFormat columnFormat;
+            ColumnFormat columnFormat(*doc()->defaultColumnFormat());
             columnFormat.setSheet( this );
             columnFormat.setColumn( styleIndex );
             QDomElement e = columnFormat.save( dd );
@@ -4396,25 +4396,29 @@ Sheet* Sheet::findSheet( const QString & _name )
 void Sheet::insertColumnFormat( ColumnFormat *l )
 {
     d->columns.insertElement( l, l->column() );
-    doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
+    if (!doc()->isLoading())
+        doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
 }
 
 void Sheet::insertRowFormat( RowFormat *l )
 {
     d->rows.insertElement( l, l->row() );
-    doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
+    if (!doc()->isLoading())
+        doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
 }
 
 void Sheet::deleteColumnFormat( int column )
 {
     d->columns.removeElement( column );
-    doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
+    if (!doc()->isLoading())
+        doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
 }
 
 void Sheet::deleteRowFormat( int row )
 {
     d->rows.removeElement( row );
-    doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
+    if (!doc()->isLoading())
+        doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
 }
 
 void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )

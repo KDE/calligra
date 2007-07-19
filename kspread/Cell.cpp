@@ -1333,7 +1333,7 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
 
 bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext )
 {
-    kDebug(36003) << "*** Loading cell properties ***** at " << column() << ", " << row () << endl;
+    kDebug(36003) << "*** Loading cell properties ***** at " << name() << endl;
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
     loadOasisCellText( element );

@@ -217,6 +217,8 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
             else
                 d->usedColumns.insert(i, true);
         }
+        if (isDefault)
+            d->usedArea -= rect;
     }
     else if (rect.left() == 1 && rect.right() == KS_rowMax)
     {
@@ -227,6 +229,8 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
             else
                 d->usedRows.insert(i, true);
         }
+        if (isDefault)
+            d->usedArea -= rect;
     }
     else
     {
