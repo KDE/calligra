@@ -539,7 +539,7 @@ Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
     tmpDate = tmpDate.addMonths(m-1);
     tmpDate = tmpDate.addDays(d-1);
 
-    //kDebug() << "func_date:: date = " << tmpDate << endl;
+    //kDebug(36002) << "func_date:: date = " << tmpDate << endl;
     return Value( tmpDate, calc->doc() );
   }
 }

@@ -38,6 +38,8 @@
 // - added WEEKINYEAR unittests
 // - added ISLEAPYEAR unittests
 // - added DAYSINMONTH unittests
+// 15.07.07
+// - modified YEARFRAC basis=1
 
 // TODO
 // - WEEKNUM fill in missing values
@@ -93,21 +95,22 @@ void TestDatetimeFunctions::testYEARFRAC()
   CHECK_EVAL( "YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 0)", Value( 6.5138888889 ) );
   
   // basis 1 Actual/actual
+  // other values are taken from OOo-2.2.1
   CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-06-30\" ; 1)", Value( 0.4931506849 ) ); 
   CHECK_EVAL( "YEARFRAC( \"1999-01-01\" ; \"1999-07-01\" ; 1)", Value( 0.4958904110 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-01-01\" ; \"2000-06-30\" ; 1)", Value( 0.4945355191 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-01-15\" ; \"2000-09-17\" ; 1)", Value( 0.6721311475 ) );
   CHECK_EVAL( "YEARFRAC( \"2000-01-01\" ; \"2001-01-01\" ; 1)", Value( 1.0000000000 ) );
   CHECK_EVAL( "YEARFRAC( \"2001-12-05\" ; \"2001-12-30\" ; 1)", Value( 0.0684931507 ) );
-  CHECK_EVAL( "YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 1)", Value( 6.5099726242 ) );
-  CHECK_EVAL( "YEARFRAC( \"2003-12-06\" ; \"2004-03-05\" ; 1)", Value( 0.2459016393 ) );
-  CHECK_EVAL( "YEARFRAC( \"2003-12-31\" ; \"2004-03-31\" ; 1)", Value( 0.2486338798 ) );
-  CHECK_EVAL( "YEARFRAC( \"2004-10-01\" ; \"2005-01-11\" ; 1)", Value( 0.2794520548 ) );
-  CHECK_EVAL( "YEARFRAC( \"2004-10-26\" ; \"2005-02-06\" ; 1)", Value( 0.2821917808 ) );
-  CHECK_EVAL( "YEARFRAC( \"2004-11-20\" ; \"2005-03-04\" ; 1)", Value( 0.2849315068 ) );
-  CHECK_EVAL( "YEARFRAC( \"2004-12-15\" ; \"2005-03-30\" ; 1)", Value( 0.2876712329 ) );
-  CHECK_EVAL( "YEARFRAC( \"2000-12-01\" ; \"2001-01-16\" ; 1)", Value( 0.1260273973 ) );
-  CHECK_EVAL( "YEARFRAC( \"2000-12-26\" ; \"2001-02-11\" ; 1)", Value( 0.1287671233 ) );
+  CHECK_EVAL( "YEARFRAC( \"2000-02-05\" ; \"2006-08-10\" ; 1)", Value( 6.5081967213 ) ); // specs 6.5099726242
+  CHECK_EVAL( "YEARFRAC( \"2003-12-06\" ; \"2004-03-05\" ; 1)", Value( 0.2465753425 ) ); // specs 0.2459016393
+  CHECK_EVAL( "YEARFRAC( \"2003-12-31\" ; \"2004-03-31\" ; 1)", Value( 0.2493150685 ) ); // specs 0.2486338798 
+  CHECK_EVAL( "YEARFRAC( \"2004-10-01\" ; \"2005-01-11\" ; 1)", Value( 0.2786885246 ) ); // specs 0.2794520548
+  CHECK_EVAL( "YEARFRAC( \"2004-10-26\" ; \"2005-02-06\" ; 1)", Value( 0.2814207650 ) ); // specs 0.2821917808
+  CHECK_EVAL( "YEARFRAC( \"2004-11-20\" ; \"2005-03-04\" ; 1)", Value( 0.2841530055 ) ); // specs 0.2849315068
+  CHECK_EVAL( "YEARFRAC( \"2004-12-15\" ; \"2005-03-30\" ; 1)", Value( 0.2868852459 ) ); // specs 0.2876712329
+  CHECK_EVAL( "YEARFRAC( \"2000-12-01\" ; \"2001-01-16\" ; 1)", Value( 0.1256830601 ) ); // specs 0.1260273973
+  CHECK_EVAL( "YEARFRAC( \"2000-12-26\" ; \"2001-02-11\" ; 1)", Value( 0.1284153005 ) ); // specs 0.1287671233
   
   // basis 2 Actual/360
   CHECK_EVAL( "YEARFRAC( \"2000-01-01\" ; \"2000-06-30\" ; 2)", Value( 0.5027777778 ) );
@@ -314,7 +317,7 @@ void TestDatetimeFunctions::testDAYS360()
   // with many different options.  Without the optional parameter, it defaults to a 30/360 basis, not calendar days; thus, in Lotus 1-2-3v9.8,
   // DAYS(DATE(1993;4;16);  DATE(1993;9;25)) computes -159, not -162. 
 
-  //CHECK_EVAL( "DAYS360(DATE(1993;4;16);DATE(1993;9;25); FALSE)", Value( -162 ) ); 
+  CHECK_EVAL( "DAYS360(DATE(1993;4;16);DATE(1993;9;25); FALSE)", Value( -162 ) ); 
 
   CHECK_EVAL( "DAYS360(\"2002-02-22\"; \"2002-04-21\"; FALSE)", Value( 59 ) );  // ref. docs
 }

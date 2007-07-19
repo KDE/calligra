@@ -44,10 +44,10 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
 
   bool res = fabs(v2.asFloat()-result.asFloat())<epsilon;
 
-//   if (!res)
-//     kDebug()<<"check failed --> " <<"Epsilon = " << epsilon << "  " << v2.asFloat() << " to " << result.asFloat() << "  diff = " << v2.asFloat()-result.asFloat() << endl;
-//   else
-//     kDebug()<<"check --> " << "  diff = " << v2.asFloat()-result.asFloat() << endl;
+  if (!res)
+    kDebug(36002)<<"check failed --> " <<"Epsilon = " << epsilon << "  " << v2.asFloat() << " to " << result.asFloat() << "  diff = " << v2.asFloat()-result.asFloat() << endl;
+  else
+    kDebug(36002)<<"check --> " << "  diff = " << v2.asFloat()-result.asFloat() << endl;
   if (res)
     return v2;
   else 
@@ -78,6 +78,13 @@ void TestFinancialFunctions::testCOMPOUND()
 {
   // kspread
   CHECK_EVAL_SHORT( "COMPOUND(5000;0.12;4;5)", Value( 9030.56 ) ); 
+}
+
+// CONTINUOUS
+void TestFinancialFunctions::testCONTINUOUS()
+{
+  // kspread
+  CHECK_EVAL_SHORT( "CONTINUOUS(1000;0.1;1)", Value( 1105.17091808 ) ); 
 }
 
 // COUPNUM
@@ -579,6 +586,20 @@ void TestFinancialFunctions::testLEVELCOUPON()
   CHECK_EVAL( "LEVEL_COUPON(1000; .20; 1; 10; .25)", Value(  821.4748364800000 ) );
 }
 
+// MIRR
+void TestFinancialFunctions::testMIRR()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "MIRR({100;200;-50;300;-200}; 5%; 6%)", Value( 0.342823387842 ) ); 
+
+  // bettersolutions.com
+  CHECK_EVAL_SHORT( "MIRR({-10;30;20;10;20};0.1;0.12)",         Value( 0.7712844619 ) );
+  CHECK_EVAL_SHORT( "MIRR({-100;30;30;30;30};0.1;1)",           Value( 0.4564753151 ) );
+  CHECK_EVAL_SHORT( "MIRR({-50;20;40;70};10/100;12/100)",       Value( 0.4090837902 ) );
+  CHECK_EVAL_SHORT( "MIRR({-5;1;2;3;4};10/100;0.12)",           Value( 0.2253901556 ) );
+  CHECK_EVAL_SHORT( "MIRR({1000;1100;1200;1500;1600};10%;12%)", Value( Value::errorDIV0() ) );
+}
+
 // Yearly nominal interest rate
 // NOMINAL(effectiveRate, periods)
 void TestFinancialFunctions::testNOMINAL()
@@ -632,9 +653,9 @@ void TestFinancialFunctions::testODDLPRICE()
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;1;0)",    Value( 90.9975570033  ) ); // f=1, b=0
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;2;0)",    Value( 90.9975570033  ) ); // f=2, b=0
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;5%;100;4;0)",    Value( 90.9975570033  ) ); // f=4, b=0
-//   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;1)",  Value( 102.5120875338 ) ); // f=1, b=1
-//   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;1)",  Value( 102.5120875338 ) ); // f=2, b=1
-//   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;1)",  Value( 102.509884509  ) ); // f=4, b=1
+  CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;1)",  Value( 102.5120875338 ) ); // f=1, b=1
+  CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;1)",  Value( 102.5120875338 ) ); // f=2, b=1
+  CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;1)",  Value( 102.5120875338 ) ); // f=4, b=1
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;1;2)",  Value( 102.5444975699 ) ); // f=1, b=2 specs 102.512087534
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;2;2)",  Value( 102.5444975699 ) ); // f=2, b=2
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;100;4;2)",  Value( 102.5444975699 ) ); // f=4, b=2
@@ -644,6 +665,13 @@ void TestFinancialFunctions::testODDLPRICE()
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;1;4)", Value( 932.992137337  ) ); // f=1, b=4
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;2;4)", Value( 932.992137337  ) ); // f=2, b=4
   CHECK_EVAL( "ODDLPRICE(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;1.5%;1000;4;4)", Value( 932.992137337  ) ); // f=4, b=4
+}
+
+// ODDLYIELD
+void TestFinancialFunctions::testODDLYIELD()
+{
+  // ODF tests
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100;2)",      Value( 4.997775351/100.0 ) ); // 
 }
 
 // PDURATION
@@ -677,9 +705,9 @@ void TestFinancialFunctions::testPPMT()
 // PRICEMAT
 void TestFinancialFunctions::testPRICEMAT()
 {
-  // ODF
+  // ODF - TODO expand to 10 signif.
   CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%  )", Value( 103.819218241 ) ); // Without Basis parameter
-  CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;1)", Value( 103.824693325 ) ); // With Basis=1
+  CHECK_EVAL      ( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;1)", Value( 103.8232269384 ) ); // With Basis=1 specs 103.824693325
   CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;2)", Value( 103.858482159 ) ); // With Basis=2
   CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;3)", Value( 103.824693325 ) ); // With Basis=3
   CHECK_EVAL_SHORT( "PRICEMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);6%;5%;4)", Value( 103.817732653 ) ); // With Basis=4
@@ -698,6 +726,13 @@ void TestFinancialFunctions::testPV()
   CHECK_EVAL_SHORT( "PV(1166.4;0.08;2)", Value( 1000.0  ) ); // A trivial example of PV.
   // ODF
   CHECK_EVAL_SHORT( "PV(10%;12;-100;100)", Value( 649.51  ) ); // A trivial example of PV.
+}
+
+// PV_ANNUITY
+void TestFinancialFunctions::testPV_ANNUITY()
+{
+  // kspread
+  CHECK_EVAL_SHORT( "PV_ANNUITY(1000;0.05;5)", Value( 4329.47667063 ) ); 
 }
 
 // Straight-line depreciation
@@ -741,15 +776,15 @@ void TestFinancialFunctions::testTBILLEQ()
   // TODO check function, check OOo-2.2.1
 
   // ODF
-  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;02;01);5%)", Value( 0.050913656  ) ); // NOK diff = 0.00125541
-  CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;02;01);5%)", Value( 0.050920759  ) ); // NOK diff = 0.00125558
-  CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;07;01);5%)", Value( 0.052016531  ) ); // NOK diff = 0.0012826
-  CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;12;31);5%)", Value( 0.053409423  ) ); // NOK Error(#VALUE!)
-  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;06;30);5%)", Value( 0.052001710  ) ); // NOK diff = 0.00128223
-  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;07;01);5%)", Value( 0.052009119  ) ); // NOK Error(#VALUE!)
-  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;12;31);5%)", Value( 0.053401609  ) ); // NOK Error(#VALUE!)
-  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1997;01;01);5%)", Value( 0.053409423  ) ); // NOK Error(#VALUE!)
-  CHECK_EVAL( "TBILLEQ(DATE(1996;07;01);DATE(1997;07;01);5%)", Value( 0.053401609  ) ); // NOK Error(#VALUE!)
+  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;02;01);5%)", Value( 0.0509136560        ) ); // 
+  CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;02;01);5%)", Value( 0.0509207589        ) ); // specs 0.050920759
+  CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;07;01);5%)", Value( 0.0520091194        ) ); // specs 0.052016531
+  CHECK_EVAL( "TBILLEQ(DATE(1995;12;31);DATE(1996;12;31);5%)", Value( Value::errorVALUE() ) ); // specs 0.053409423 OOo-2.2.1 Error(#VALUE!) 361 days
+  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;06;30);5%)", Value( 0.0519943020        ) ); // specs 0.052001710
+  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;07;01);5%)", Value( 0.0520017096        ) ); // specs 0.052009119
+  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1996;12;31);5%)", Value( 0.0533625731        ) ); // specs 0.053401609
+  CHECK_EVAL( "TBILLEQ(DATE(1996;01;01);DATE(1997;01;01);5%)", Value( Value::errorVALUE() ) ); // specs 0.053409423 OOo-2.2.1 Error(#VALUE!) days 361
+  CHECK_EVAL( "TBILLEQ(DATE(1996;07;01);DATE(1997;07;01);5%)", Value( Value::errorVALUE() ) ); // specs 0.053401609 OOo-2.2.1 Error(#VALUE!) days 361
 }
 
 // TBILLPRICE
@@ -802,7 +837,7 @@ void TestFinancialFunctions::testYIELDMAT()
 {
   // ODF
   CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1); 6%;103.819218241  )", Value( 0.050000000  ) ); // Without Basis parameter
-//   CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1); 6%;103.824693325;1)", Value( 0.050000000  ) ); // With Basis=1
+  CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1); 6%;103.824693325;1)", Value( 0.050000000  ) ); // With Basis=1
 //   CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1); 6%;103.858482159;2)", Value( 0.050000000  ) ); // With Basis=2
   CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1); 6%;103.824693325;3)", Value( 0.050000000  ) ); // With Basis=3
 //   CHECK_EVAL_SHORT( "YIELDMAT(DATE(1990;6;1);DATE(1992;12;31);DATE(1990;1;1); 6%;103.817732653;4)", Value( 0.050000000  ) ); // With Basis=4 NOK diff = 0.0074805

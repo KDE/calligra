@@ -39,7 +39,7 @@ private slots:
 //   void testAMORDEGRC();  // to be implemented
 //   void testAMORLINC();   // to be implemented
   void testCOMPOUND();   // no ODF tests available
-//   void testCONTINUOUS(); // k
+  void testCONTINUOUS(); // no ODF tests available
 //   void testCOUPDAYBS();  // to be implemented
 //   void testCOUPBAYS();   // to be implemented
 //   void testCOUPDAYSNC(); // to be implemented
@@ -67,14 +67,14 @@ private slots:
   void testISPMT();  
   void testLEVELCOUPON();
 //   void testMDURATION();  // to be implemented
-//   void testMIRR();       // to be implemented
+  void testMIRR();
   void testNOMINAL();
   void testNPER();
   void testNPV();
 //   void testODDFPRICE();  // to be implemented
 //   void testODDFYIELD();  // to be implemented
-  void testODDLPRICE();  // to be implemented
-//   void testODDLYIELD();  // to be implemented
+  void testODDLPRICE();
+  void testODDLYIELD();
   void testPDURATION();
   void testPMT();
   void testPPMT();
@@ -82,7 +82,7 @@ private slots:
 //   void testPRICEDISC();  // to be implemented
   void testPRICEMAT();
   void testPV();
-//   void testPV_ANNUITY(); // k
+  void testPV_ANNUITY(); // no ODF test available
 //   void testRATE();       // to be implemented
 //   void testRECEIVED();
 //   void testRRI();        // to be implemented
@@ -96,7 +96,7 @@ private slots:
 //   void testXNPV();       // to be implemented
 //   void testYIELD();      // to be implemented
   void testYIELDDISC();
-  void testYIELDMAT();   // to be implemented
+  void testYIELDMAT();
   void testZEROCOUPON();
 
 // private:
