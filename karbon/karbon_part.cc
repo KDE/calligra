@@ -404,13 +404,13 @@ void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyl
 
     styleWriter->startElement( "office:styles" );
 
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( VDocument::STYLE_LINEAR_GRADIENT );
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGradientLinear );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
 
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true, true /*add draw:name*/);
 
-    styles = mainStyles.styles( VDocument::STYLE_RADIAL_GRADIENT );
+    styles = mainStyles.styles( KoGenStyle::StyleGradientRadial );
     it = styles.begin();
     for( ; it != styles.end() ; ++it )
         (*it).style->writeStyle( styleWriter, mainStyles, "svg:radialGradient", (*it).name, 0, true, true /*add draw:name*/);
