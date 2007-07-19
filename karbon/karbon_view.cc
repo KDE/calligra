@@ -56,7 +56,6 @@
 #include "vcolordocker.h"
 #include "vstrokedocker.h"
 #include "vdocumentdocker.h"
-#include "vstrokedocker.h"
 #include "vstyledocker.h"
 #include "vtransformdocker.h"
 #include "vlayerdocker.h"
