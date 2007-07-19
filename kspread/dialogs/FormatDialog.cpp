@@ -176,6 +176,7 @@ void FormatDialog::slotOk()
 bool FormatDialog::parseXML( const KoXmlDocument& doc )
 {
     qDeleteAll( m_styles );
+    m_styles.clear();
 
     KoXmlElement e = doc.documentElement().firstChild().toElement();
     for( ; !e.isNull(); e = e.nextSibling().toElement() )

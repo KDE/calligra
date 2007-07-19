@@ -2023,6 +2023,7 @@ void Doc::flushDamages()
     d->damages.clear();
     emit damagesFlushed( damages );
     qDeleteAll( damages );
+    damages.clear();
 }
 
 void Doc::handleDamages( const QList<Damage*>& damages )
