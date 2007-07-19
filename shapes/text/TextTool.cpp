@@ -1362,6 +1362,7 @@ void TextTool::updateParagraphDirection(const QVariant &variant) {
     if(data == 0) // tools is deactivated already
         return;
     m_updateParagDirection.block = data->document()->findBlock(position);
+    m_updateParagDirection.direction = KoText::AutoDirection;
     if(! m_updateParagDirection.block.isValid())
         return;
     QTextBlockFormat format = m_updateParagDirection.block.blockFormat();
@@ -1369,9 +1370,10 @@ void TextTool::updateParagraphDirection(const QVariant &variant) {
                 KoParagraphStyle::TextProgressionDirection));
     if(dir == KoText::AutoDirection || dir == KoText::PerhapsLeftRightTopBottom ||
             dir == KoText::PerhapsRightLeftTopBottom) {
-        if(isRightToLeft(m_updateParagDirection.block.text()))
+        bool rtl = isRightToLeft(m_updateParagDirection.block.text());
+        if(rtl && (dir != KoText::AutoDirection || QApplication::isLeftToRight()))
             m_updateParagDirection.direction = KoText::PerhapsRightLeftTopBottom;
-        else // remove previously set one if needed.
+        else if(!rtl && (dir != KoText::AutoDirection || QApplication::isRightToLeft())) // remove previously set one if needed.
             m_updateParagDirection.direction = KoText::PerhapsLeftRightTopBottom;
     }
     else
@@ -1383,8 +1385,10 @@ void TextTool::updateParagraphDirectionUi() {
         return;
     QTextCursor cursor(m_updateParagDirection.block);
     QTextBlockFormat format = cursor.blockFormat();
-    format.setProperty(KoParagraphStyle::TextProgressionDirection, m_updateParagDirection.direction);
-    cursor.setBlockFormat(format);
+    if(format.property(KoParagraphStyle::TextProgressionDirection).toInt() != m_updateParagDirection.direction) {
+        format.setProperty(KoParagraphStyle::TextProgressionDirection, m_updateParagDirection.direction);
+        cursor.setBlockFormat(format); // note that setting this causes a re-layout.
+    }
 
     if(m_canvas->resourceProvider() && ! isBidiDocument()) {
         if((QApplication::isLeftToRight() &&
