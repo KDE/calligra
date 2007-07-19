@@ -557,12 +557,10 @@ void Canvas::scrollToCell(const QPoint& location) const
 
     // The cell geometry expanded by the size of one column or one row, resp., in each direction.
     const Cell cell = Cell(sheet, location).masterCell();
-    const int columns = cell.column() == KS_colMax ? 0 : 1;
-    const int rows = cell.row() == KS_rowMax ? 0 : 1;
     const double xpos = sheet->columnPosition(cell.cellPosition().x());
     const double ypos = sheet->rowPosition(cell.cellPosition().y());
-    const double width = sheet->doc()->defaultColumnFormat()->width() * columns;
-    const double height = sheet->doc()->defaultRowFormat()->height() * rows;
+    const double width = sheet->doc()->defaultColumnFormat()->width();
+    const double height = sheet->doc()->defaultRowFormat()->height();
     QRectF rect(xpos, ypos, cell.width(), cell.height());
     rect.adjust(-width, -height, width, height);
     rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
