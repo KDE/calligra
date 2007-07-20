@@ -27,7 +27,7 @@ void TestDocumentLayout::initTestCase() {
 void TestDocumentLayout::initForNewTest(const QString &initText) {
     // this leaks memory like mad, but who cares ;)
     shape1 = new MockTextShape();
-    shape1->resize(QSizeF(200, 1000));
+    shape1->setSize(QSizeF(200, 1000));
 
     // this leaks memory like mad, but who cares ;)
     doc = shape1->layout->document();
@@ -64,9 +64,9 @@ void TestDocumentLayout::testLineBreaking() {
 
 void TestDocumentLayout::testMultiFrameLineBreaking() {
     initForNewTest(loremIpsum);
-    shape1->resize(QSizeF(200, 47)); // fits 3 lines.
+    shape1->setSize(QSizeF(200, 47)); // fits 3 lines.
     KoShape *shape2 = new MockTextShape();
-    shape2->resize(QSizeF(120, 1000));
+    shape2->setSize(QSizeF(120, 1000));
     layout->addShape(shape2);
 
     layout->layout();
@@ -318,9 +318,9 @@ void TestDocumentLayout::testMultipageMargins() {
     block = block.next();
     h1.applyStyle(block);
 
-    shape1->resize(QSizeF(200, 14.4 + 100 + 20 + 12 + 5)); // 5 for fun..
+    shape1->setSize(QSizeF(200, 14.4 + 100 + 20 + 12 + 5)); // 5 for fun..
     KoShape *shape2 = new MockTextShape();
-    shape2->resize(QSizeF(120, 1000));
+    shape2->setSize(QSizeF(120, 1000));
     layout->addShape(shape2);
 
     layout->layout();
@@ -472,13 +472,13 @@ void TestDocumentLayout::testPageBreak() {
     style.setBreakAfter(true);
     style.applyStyle(block);
 
-    shape1->resize(QSizeF(200, 40));
+    shape1->setSize(QSizeF(200, 40));
     KoShape *shape2 = new MockTextShape();
-    shape2->resize(QSizeF(200, 100));
+    shape2->setSize(QSizeF(200, 100));
     layout->addShape(shape2);
 
     KoShape *shape3 = new MockTextShape();
-    shape3->resize(QSizeF(200, 100));
+    shape3->setSize(QSizeF(200, 100));
     layout->addShape(shape3);
 
     layout->layout();
@@ -517,12 +517,12 @@ void TestDocumentLayout::testPageBreak2() {
     bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
     cursor.setBlockFormat(bf);
 
-    shape1->resize(QSizeF(200, 40));
+    shape1->setSize(QSizeF(200, 40));
     KoShape *shape2 = new MockTextShape();
-    shape2->resize(QSizeF(200, 100));
+    shape2->setSize(QSizeF(200, 100));
     layout->addShape(shape2);
     KoShape *shape3 = new MockTextShape();
-    shape3->resize(QSizeF(200, 100));
+    shape3->setSize(QSizeF(200, 100));
     layout->addShape(shape3);
 
     layout->layout();
@@ -569,9 +569,9 @@ void TestDocumentLayout::testParagOffset() {
     block = block.next();
     h1.applyStyle(block);
 
-    shape1->resize(QSizeF(200, 100));
+    shape1->setSize(QSizeF(200, 100));
     KoShape *shape2 = new MockTextShape();
-    shape2->resize(QSizeF(200, 100));
+    shape2->setSize(QSizeF(200, 100));
     layout->addShape(shape2);
 
     // 1)
@@ -816,9 +816,9 @@ void TestDocumentLayout::testNonBreakableLines() {
     format.setNonBreakableLines(true);
     cursor.setBlockFormat(format);
 
-    shape1->resize(QSizeF(200, 100));
+    shape1->setSize(QSizeF(200, 100));
     KoShape *shape2 = new MockTextShape();
-    shape2->resize(QSizeF(120, 1000));
+    shape2->setSize(QSizeF(120, 1000));
     layout->addShape(shape2);
 
     layout->layout();
@@ -837,7 +837,7 @@ void TestDocumentLayout::testNonBreakableLines() {
 void TestDocumentLayout::testDefaultTabs() {
     initForNewTest("Foo\tBar\ta slightly longer text\tend.");
     // test the indents to be based on the default tab positions
-    shape1->resize(QSizeF(400, 1000));
+    shape1->setSize(QSizeF(400, 1000));
     m_textLayout->setTabSpacing(80.0);
     layout->layout();
 

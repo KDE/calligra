@@ -28,7 +28,7 @@
 /**
  * This class adds support for arc, pie, chord, circle and ellipse
  * shapes. The ellipse/circle radii are defined by the actual size
- * of the ellipse shape which can be changed with the resize
+ * of the ellipse shape which can be changed with the setSize
  * method.
  */
 class KoEllipseShape : public KoParameterShape
@@ -45,7 +45,7 @@ public:
     KoEllipseShape();
     ~KoEllipseShape();
 
-    void resize( const QSizeF &newSize );
+    void setSize( const QSizeF &newSize );
     virtual QPointF normalize();
 
     /**

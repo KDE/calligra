@@ -343,7 +343,7 @@ VTransformDocker::rotate()
 		newAngles << shape->rotation() + relativeAngle;
 		newPositions << shape->position();
 	}
-	selection->rotate( selection->rotation() + relativeAngle );
+	selection->rotate( relativeAngle );
 	QUndoCommand *cmd = new QUndoCommand("Rotate");
 	new KoShapeMoveCommand( selectedShapes, oldPositions, newPositions, cmd );
 	new KoShapeRotateCommand( selectedShapes, oldAngles, newAngles, cmd );

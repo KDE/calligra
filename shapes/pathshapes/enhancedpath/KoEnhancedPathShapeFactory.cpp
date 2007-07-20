@@ -70,7 +70,7 @@ KoShape * KoEnhancedPathShapeFactory::createDefaultShape() const
     handle["draw:handle-range-x-minimum"] = "0";
     handle["draw:handle-range-x-maximum"] = "?Half";
     shape->addHandle( handle );
-    shape->resize( QSize(100, 100) );
+    shape->setSize( QSize(100, 100) );
 
     return shape;
 }
@@ -110,9 +110,9 @@ KoShape * KoEnhancedPathShapeFactory::createShape(const KoProperties * params) c
 
     QSizeF size = shape->size();
     if( size.width() > size.height() )
-        shape->resize( QSizeF( 100, 100 * size.height() / size.width() ) );
+        shape->setSize( QSizeF( 100, 100 * size.height() / size.width() ) );
     else
-        shape->resize( QSizeF( 100 * size.width() / size.height(), 100 ) );
+        shape->setSize( QSizeF( 100 * size.width() / size.height(), 100 ) );
 
     return shape;
 }

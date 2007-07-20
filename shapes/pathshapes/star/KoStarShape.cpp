@@ -218,7 +218,7 @@ void KoStarShape::createPath()
         m_handles.push_back( m_points.at(base)->point() );
 }
 
-void KoStarShape::resize( const QSizeF &newSize )
+void KoStarShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
     // apply the new aspect ratio
@@ -226,7 +226,7 @@ void KoStarShape::resize( const QSizeF &newSize )
     m_zoomY *= newSize.height() / oldSize.height();
 
     // this transforms the handles
-    KoParameterShape::resize( newSize );
+    KoParameterShape::setSize( newSize );
 
     m_center = computeCenter();
 }
@@ -271,7 +271,7 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
     }
 
     createPath();
-    resize( size() );
+    setSize( size() );
 
     return true;
 }

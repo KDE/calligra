@@ -29,7 +29,7 @@
 KWCopyShape::KWCopyShape(KoShape *original)
     : m_original(original)
 {
-    resize(m_original->size());
+    setSize(m_original->size());
 }
 
 KWCopyShape::~KWCopyShape() {

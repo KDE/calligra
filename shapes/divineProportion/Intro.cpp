@@ -36,13 +36,13 @@ void Intro::save() {
     if(m_resourceProvider->hasResource(KoCanvasResource::PageSize)) {
         QSizeF size = m_resourceProvider->sizeResource(KoCanvasResource::PageSize);
         if(size.height() > size.width()) {
-            m_shape->resize(QSizeF(size.height(), size.width()));
+            m_shape->setSize(QSizeF(size.height(), size.width()));
             m_shape->rotate(-90);
             m_shape->setAbsolutePosition(QPointF(size.width() / 2, size.height() / 2));
         }
         else {
             m_shape->setPosition(QPointF(0, 0));
-            m_shape->resize(size);
+            m_shape->setSize(size);
         }
     }
 

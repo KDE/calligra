@@ -111,11 +111,7 @@ for i in range( KWord.frameSetCount() ):
         html += "<li>frame nr=%i" % k
         html += " shapeId=%s" % frame.shapeId()
         html += " visible=%s" % frame.isVisible()
-        #html += " scaleX=%s" % frame.scaleX()
-        #html += " scaleY=%s" % frame.scaleY()
         #html += " rotation=%s" % frame.rotation()
-        #html += " shearX=%s" % frame.shearX()
-        #html += " shearY=%s" % frame.shearY()
         #html += " width=%s" % frame.width()
         #html += " height=%s" % frame.height()
         #html += " positionX=%s" % frame.positionX()

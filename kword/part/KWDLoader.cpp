@@ -983,7 +983,7 @@ void KWDLoader::fill(KWFrame *frame, const QDomElement &frameElem) {
     origin.setY(origin.y() + offset);
 
     frame->shape()->setPosition(origin);
-    frame->shape()->resize(size);
+    frame->shape()->setSize(size);
 
     QColor background (frameElem.attribute("bkRed", "255").toInt(),
                   frameElem.attribute("bkGreen", "255").toInt(),

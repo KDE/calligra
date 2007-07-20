@@ -70,7 +70,7 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     int zindex = qMax(0, QVariant( element.attribute("z-index") ).toInt() ) + 1;
 
     setPosition( QPointF(x,y) );
-    resize( QSizeF(width,height) );
+    setSize( QSizeF(width,height) );
     setZIndex(zindex);
 
 /*

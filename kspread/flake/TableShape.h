@@ -47,7 +47,7 @@ public:
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
     /// reimplemented
-    virtual void resize( const QSizeF &size );
+    virtual void setSize( const QSizeF &size );
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented

@@ -32,7 +32,7 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
     // this leaks memory like mad, but who cares ;)
     frameSet = new KWTextFrameSet(0);
     shape1 = new MockTextShape();
-    shape1->resize(QSizeF(200, 1000));
+    shape1->setSize(QSizeF(200, 1000));
     new KWTextFrame(shape1, frameSet);
     doc = frameSet->document();
     Q_ASSERT(doc);

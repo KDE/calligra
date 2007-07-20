@@ -96,7 +96,7 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
         double r = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r" ) );
         size = QSizeF( 2*r, 2*r );
     }
-    resize( size );
+    setSize( size );
 
     QPointF pos;
     pos.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
@@ -126,13 +126,13 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
     return true;
 }
 
-void KoEllipseShape::resize( const QSizeF &newSize )
+void KoEllipseShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
     QMatrix matrix( newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0 );
     m_center = matrix.map( m_center );
     m_radii = matrix.map( m_radii );
-    KoParameterShape::resize( newSize );
+    KoParameterShape::setSize( newSize );
 }
 
 QPointF KoEllipseShape::normalize()

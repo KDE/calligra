@@ -344,7 +344,7 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
             main[i]->setNewFrameBehavior(KWord::ReconnectNewFrame);
             KoShape *shape = main[i]->shape();
             shape->setPosition(points[i]);
-            shape->resize( QSizeF(columnWidth -
+            shape->setSize( QSizeF(columnWidth -
                         (first?0:m_pageSettings->columns().columnSpacing),
                         resultingPositions[4] - resultingPositions[3]));
             first = false;
@@ -357,22 +357,22 @@ void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
     if(footnote) {
         footnote->shape()->setPosition(
                 QPointF(left + layout.left, resultingPositions[7]));
-        footnote->shape()->resize(QSizeF(textWidth, resultingPositions[8] - resultingPositions[7]));
+        footnote->shape()->setSize(QSizeF(textWidth, resultingPositions[8] - resultingPositions[7]));
     }
     if(endnote) {
         endnote->shape()->setPosition(
                 QPointF(left + layout.left, resultingPositions[5]));
-        endnote->shape()->resize( QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
+        endnote->shape()->setSize( QSizeF(textWidth, resultingPositions[6] - resultingPositions[5]));
     }
     if(header) {
         header->shape()->setPosition(
                 QPointF(left + layout.left, resultingPositions[1]));
-        header->shape()->resize( QSizeF(textWidth, resultingPositions[2] - resultingPositions[1]));
+        header->shape()->setSize( QSizeF(textWidth, resultingPositions[2] - resultingPositions[1]));
     }
     if(footer) {
         footer->shape()->setPosition(
                 QPointF(left + layout.left, resultingPositions[9]));
-        footer->shape()->resize( QSizeF(textWidth, resultingPositions[10] - resultingPositions[9]));
+        footer->shape()->setSize( QSizeF(textWidth, resultingPositions[10] - resultingPositions[9]));
     }
     delete [] main;
 // TODO footnotes, endnotes

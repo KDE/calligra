@@ -148,7 +148,7 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
     d->sheetView->paintCells( 0 /*paintDevice*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
 }
 
-void TableShape::resize( const QSizeF& newSize )
+void TableShape::setSize( const QSizeF& newSize )
 {
     if ( size() == newSize )
         return;
@@ -158,7 +158,7 @@ void TableShape::resize( const QSizeF& newSize )
     d->adjustRowDimensions( newSize.height() / size().height() );
     d->sheetView->invalidate();
 
-    KoShape::resize( newSize );
+    KoShape::setSize( newSize );
 }
 
 Sheet* TableShape::sheet() const

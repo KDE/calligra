@@ -86,7 +86,7 @@ void KWFrameGeometry::updateShape() {
     QPointF pos(widget.left->value(), widget.top->value());
     frame->shape()->setAbsolutePosition(pos);
     QSizeF size(widget.width->value(), widget.height->value());
-    frame->shape()->resize(size);
+    frame->shape()->setSize(size);
     frame->shape()->repaint();
 }
 
@@ -128,7 +128,7 @@ void KWFrameGeometry::cancel() {
     }
     Q_ASSERT(frame);
     frame->shape()->setAbsolutePosition(mOriginalPosition);
-    frame->shape()->resize(mOriginalSize);
+    frame->shape()->setSize(mOriginalSize);
 }
 
 KAction *KWFrameGeometry::createAction() {

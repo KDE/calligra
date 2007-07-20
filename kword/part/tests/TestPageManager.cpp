@@ -96,17 +96,17 @@ void TestPageManager::getAddPages2() {
 
     MockShape shape1;
     shape1.setPosition(QPointF(0,0));
-    shape1.resize(QSizeF(2,2));
+    shape1.setSize(QSizeF(2,2));
     QCOMPARE(pageManager->pageNumber(&shape1), 1);
 
     MockShape shape2;
     shape2.setPosition(QPointF(90,90));
-    shape2.resize(QSizeF(2,2));
+    shape2.setSize(QSizeF(2,2));
     QCOMPARE(pageManager->pageNumber(&shape2), 1);
 
     MockShape shape3;
     shape3.setPosition(QPointF(190,190));
-    shape3.resize(QSizeF(9,9));
+    shape3.setSize(QSizeF(9,9));
     QCOMPARE(pageManager->pageNumber(&shape3), 1);
 
     page = pageManager->appendPage();

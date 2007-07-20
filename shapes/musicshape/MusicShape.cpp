@@ -129,10 +129,10 @@ MusicShape::~MusicShape()
     delete m_renderer;
 }
 
-void MusicShape::resize( const QSizeF &newSize )
+void MusicShape::setSize( const QSizeF &newSize )
 {
-//  kDebug()<<" MusicShape::resize( const QSizeF &newSize ) " << newSize << endl;
-    KoShape::resize(newSize);
+//  kDebug()<<" MusicShape::setSize( const QSizeF &newSize ) " << newSize << endl;
+    KoShape::setSize(newSize);
 
     m_engraver->engraveSheet(m_sheet, newSize, false);
 }

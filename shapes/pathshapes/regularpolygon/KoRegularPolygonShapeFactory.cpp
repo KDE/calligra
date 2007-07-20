@@ -52,7 +52,7 @@ KoShape *KoRegularPolygonShapeFactory::createDefaultShape() const
 {
     KoRegularPolygonShape *s = new KoRegularPolygonShape();
     s->setPoints(5);
-    s->resize(QSizeF(100,100));
+    s->setSize(QSizeF(100,100));
     s->setBackground(QBrush(Qt::red));
     return s;
 }
@@ -61,7 +61,7 @@ KoShape *KoRegularPolygonShapeFactory::createShape(const KoProperties* props) co
 {
     KoRegularPolygonShape *s = new KoRegularPolygonShape();
     s->setPoints(props->intProperty("points", 5));
-    s->resize(QSizeF(100,100));
+    s->setSize(QSizeF(100,100));
     s->setBackground(QBrush(Qt::red));
     return s;
 }

@@ -67,7 +67,7 @@ public:
     void modifyReference( const QString &reference, double value );
 
     // from KoShape
-    virtual void resize( const QSizeF &newSize );
+    virtual void setSize( const QSizeF &newSize );
     // from KoParameterShape
     virtual QPointF normalize();
 

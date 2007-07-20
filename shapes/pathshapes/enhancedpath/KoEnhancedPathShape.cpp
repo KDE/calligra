@@ -77,11 +77,11 @@ void KoEnhancedPathShape::updatePath( const QSizeF & )
     normalize();
 }
 
-void KoEnhancedPathShape::resize( const QSizeF &newSize )
+void KoEnhancedPathShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
 
-    KoParameterShape::resize( newSize );
+    KoParameterShape::setSize( newSize );
 
     double scaleX = newSize.width() / oldSize.width();
     double scaleY = newSize.height() / oldSize.height();
@@ -430,7 +430,7 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
     size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
 
-    resize( size );
+    setSize( size );
 
     loadOdfAttributes( element, context, OdfTransformation );
 

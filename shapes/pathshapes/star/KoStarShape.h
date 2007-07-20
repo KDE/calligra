@@ -99,7 +99,7 @@ public:
     bool convex() const;
 
     /// reimplemented
-    virtual void resize( const QSizeF &newSize );
+    virtual void setSize( const QSizeF &newSize );
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
 
