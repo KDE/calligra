@@ -185,6 +185,8 @@ void FilterPopup::updateFilter(Filter* filter) const
         // be lazy; choose the comparison causing least effort
         const Filter::Comparison comparison = (matchList.count() < notMatchList.count())
                                             ? Filter::Match : Filter::NotMatch;
+        const Filter::Composition composition = (comparison == Filter::Match)
+                                             ? Filter::OrComposition : Filter::AndComposition;
         const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
         // We have to append the conditions for this field with an and-composition.
         if (!values.isEmpty())
@@ -192,8 +194,8 @@ void FilterPopup::updateFilter(Filter* filter) const
         for (int i = 1; i < values.count(); ++i)
         {
             kDebug() << "adding condition for fieldNumber " << d->fieldNumber << endl;
-            // go on with or-composition
-            filter->addCondition(Filter::OrComposition, d->fieldNumber, comparison, values[i]);
+            // go on with the proper composition
+            filter->addCondition(composition, d->fieldNumber, comparison, values[i]);
         }
     }
 }
