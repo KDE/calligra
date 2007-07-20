@@ -364,7 +364,9 @@ void KWDocument::removeFrame(KWFrame *frame) {
         }
     }
 
-    removePage(page->pageNumber());
+    KWPageRemoveCommand *cmd = new KWPageRemoveCommand(this, page);
+    cmd->redo();
+    delete cmd;
 }
 
 void KWDocument::setPageSettings(const KWPageSettings &newPageSettings) {

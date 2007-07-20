@@ -181,7 +181,7 @@ void KWTextFrameSet::framesEmpty(int emptyFrames) {
         KWTextFrame *tf = dynamic_cast<KWTextFrame*> (*(iter));
         if(tf) {
             KWPage *pageForFrame = m_pageManager->page(tf->shape());
-            if(page ==0)
+            if(page ==0) // first loop
                 page = pageForFrame;
             else if(page != pageForFrame) { // all frames on the page (of this FS) are empty.
                 ++iter;

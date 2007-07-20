@@ -50,7 +50,8 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     const int bleedHeigt = (int) (m_clipToPage?0:POINT_TO_INCH((bleed.top + bleed.bottom) * resolution));
 
     KWPage *page = m_document->pageManager()->page(pageNumber);
-    Q_ASSERT(page);
+    if(! page)
+        return;
     const double offsetInDocument = page->offsetInDocument();
     // find images
     foreach(KWFrameSet *fs, m_document->frameSets()) {
