@@ -26,7 +26,7 @@
 #include <KLocale>
 
 KWPageRemoveCommand::KWPageRemoveCommand( KWDocument *document, KWPage *page, QUndoCommand *parent)
-    : QUndoCommand(i18n("Insert Page"), parent),
+    : QUndoCommand(i18n("Remove Page"), parent),
     m_document(document)
 {
     Q_ASSERT(page);
