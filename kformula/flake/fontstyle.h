@@ -105,8 +105,9 @@ public:
 
     Artwork(SymbolType type = EmptyBracket);
     virtual ~Artwork() {}
-
+#ifdef __GNUC__
 #warning "Port!"	
+#endif
 #if 0
     virtual void calcSizes( const ContextStyle& style,
                             ContextStyle::TextStyle tstyle,

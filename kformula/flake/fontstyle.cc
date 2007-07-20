@@ -352,7 +352,9 @@ Artwork::Artwork(SymbolType t)
 {
 }
 
+#ifdef __GNUC__
 #warning "port port port"
+#endif
 #if 0
 void Artwork::calcSizes( const ContextStyle& style,
                            ContextStyle::TextStyle tstyle,

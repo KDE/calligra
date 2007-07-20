@@ -35,7 +35,7 @@ class FormulaToolOptions : public QWidget {
 Q_OBJECT
 public:
     /// Standart constructor
-    FormulaToolOptions( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    explicit FormulaToolOptions( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     ~FormulaToolOptions();
 

@@ -181,7 +181,7 @@ double AttributeManager::doubleOf( const QString& attribute, BasicElement* eleme
 
     if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )
         return KoUnit::parseValue( tmpValue );
-    else if( tmpValue.endsWith( "%" ) )
+    else if( tmpValue.endsWith( '%' ) )
     {
    /*     tmpValue.chop( 1 );
         return defaultValueOf( m_attribute ) * (tmpValue.toDouble()/100);  */
@@ -241,9 +241,9 @@ void AttributeManager::parseScriptLevel( BasicElement* element )
     QString value = element->attribute( "scriptlevel" );
     if( !value.isEmpty() )
     {
-        if( value.startsWith( "+" ) )
+        if( value.startsWith( '+' ) )
             m_cachedScriptLevel += value.remove( 0, 1 ).toInt();
-        else if( value.startsWith( "-" ) )
+        else if( value.startsWith( '-' ) )
             m_cachedScriptLevel -= value.remove( 0, 1 ).toInt();
         else
             m_cachedScriptLevel = value.toInt();
