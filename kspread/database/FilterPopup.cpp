@@ -86,7 +86,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     const int end = database->orientation() == Qt::Vertical ? range.bottom() : range.right();
     const int j = database->orientation() == Qt::Vertical ? cell.column() : cell.row();
     QHash<QString, bool> items;
-    for (int i = start; i <= end; ++i)
+    for (int i = start + (database->containsHeader() ? 1 : 0); i <= end; ++i)
     {
         const Value value = database->orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(j, i)

@@ -85,6 +85,16 @@ public:
     Qt::Orientation orientation() const;
 
     /**
+     * \return \c true if the range contains a header column/row
+     */
+    bool containsHeader() const;
+
+    /**
+     * Sets wether the range contains a header column/row
+     */
+    void setContainsHeader( bool enable );
+
+    /**
      * \return \c true if filter buttons should be displayed
      */
     bool displayFilterButtons() const;

@@ -140,6 +140,16 @@ Qt::Orientation Database::orientation() const
     return d->orientation == Private::Row ? Qt::Vertical : Qt::Horizontal;
 }
 
+bool Database::containsHeader() const
+{
+    return d->containsHeader;
+}
+
+void Database::setContainsHeader(bool enable)
+{
+    d->containsHeader = enable;
+}
+
 bool Database::displayFilterButtons() const
 {
     return d->displayFilterButtons;

@@ -317,7 +317,7 @@ public:
         }
         if (caseSensitivity == Qt::CaseSensitive)
             xmlWriter.addAttribute("table:case-sensitive", true);
-        if (dataType == Text)
+        if (dataType == Number)
             xmlWriter.addAttribute("table:data-type", "number");
         xmlWriter.endElement();
     }
