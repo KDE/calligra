@@ -90,7 +90,7 @@ public:
 
     bool isEmpty() const;
 
-    void apply(const Database* database) const;
+    bool evaluate(const Database& database, int index) const;
 
     bool loadOdf(const KoXmlElement& element, const Map* map);
     void saveOdf(KoXmlWriter& xmlWriter) const;

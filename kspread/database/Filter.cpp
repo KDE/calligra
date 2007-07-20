@@ -29,7 +29,6 @@
 #include "CellStorage.h"
 #include "Database.h"
 #include "Doc.h"
-#include "RowColumnFormat.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "Value.h"
@@ -45,10 +44,10 @@ public:
     virtual Type type() const = 0;
     virtual bool loadOdf(const KoXmlElement& element) = 0;
     virtual void saveOdf(KoXmlWriter& xmlWriter) = 0;
-    virtual bool evaluate(const Database* database, int index) const = 0;
+    virtual bool evaluate(const Database& database, int index) const = 0;
     virtual bool isEmpty() const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
-    virtual void dump() const = 0;
+    virtual QString dump() const = 0;
 };
 
 /**
@@ -71,7 +70,7 @@ public:
             list[i]->saveOdf(xmlWriter);
         xmlWriter.endElement();
     }
-    virtual bool evaluate(const Database* database, int index) const
+    virtual bool evaluate(const Database& database, int index) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
@@ -84,24 +83,27 @@ public:
     virtual bool isEmpty() const { return list.isEmpty(); }
     virtual void removeConditions(int fieldNumber)
     {
-        for (int i = 0; i < list.count(); ++i)
-            list[i]->removeConditions(fieldNumber);
         QList<AbstractCondition*> newList;
         for (int i = 0; i < list.count(); ++i)
         {
+            list[i]->removeConditions(fieldNumber);
             if (!list[i]->isEmpty())
                 newList.append(list[i]);
+            else
+                delete list[i];
         }
         list = newList;
     }
-    virtual void dump() const
+    virtual QString dump() const
     {
+        QString result = "\t";
         for (int i = 0; i < list.count(); ++i)
         {
             if (i)
-                kDebug() << "AND" << endl;
-            list[i]->dump();
+                result += "AND\t";
+            result += list[i]->dump();
         }
+        return result;
     }
 
 public:
@@ -128,7 +130,7 @@ public:
             list[i]->saveOdf(xmlWriter);
         xmlWriter.endElement();
     }
-    virtual bool evaluate(const Database* database, int index) const
+    virtual bool evaluate(const Database& database, int index) const
     {
         for (int i = 0; i < list.count(); ++i)
         {
@@ -141,24 +143,27 @@ public:
     virtual bool isEmpty() const { return list.isEmpty(); }
     virtual void removeConditions(int fieldNumber)
     {
-        for (int i = 0; i < list.count(); ++i)
-            list[i]->removeConditions(fieldNumber);
         QList<AbstractCondition*> newList;
         for (int i = 0; i < list.count(); ++i)
         {
+            list[i]->removeConditions(fieldNumber);
             if (!list[i]->isEmpty())
                 newList.append(list[i]);
+            else
+                delete list[i];
         }
         list = newList;
     }
-    virtual void dump() const
+    virtual QString dump() const
     {
+        QString result = "\t";
         for (int i = 0; i < list.count(); ++i)
         {
             if (i)
-                kDebug() << "OR" << endl;
-            list[i]->dump();
+                result += "OR\t";
+            result += list[i]->dump();
         }
+        return result;
     }
 
 public:
@@ -321,13 +326,13 @@ public:
             xmlWriter.addAttribute("table:data-type", "number");
         xmlWriter.endElement();
     }
-    virtual bool evaluate(const Database* database, int index) const
+    virtual bool evaluate(const Database& database, int index) const
     {
-        const Sheet* sheet = database->range().lastSheet();
-        const QRect range = database->range().lastRange();
-        const int start = database->orientation() == Qt::Vertical ? range.left() : range.top();
+        const Sheet* sheet = database.range().lastSheet();
+        const QRect range = database.range().lastRange();
+        const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
         kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
-        const Value value = database->orientation() == Qt::Vertical
+        const Value value = database.orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(start + fieldNumber, index)
                             : sheet->cellStorage()->value(index, start + fieldNumber);
         const QString testString = sheet->doc()->converter()->asString(value).asString();
@@ -335,15 +340,17 @@ public:
         {
             case Match:
             {
-                kDebug() << "Match? " << this->value << " " << testString << endl;
-                if (QString::compare(this->value, testString, caseSensitivity) == 0)
+                const bool result = QString::compare(this->value, testString, caseSensitivity) == 0;
+                kDebug() << "Match " << this->value << "? " << testString << " " << result << endl;
+                if (result)
                     return true;
                 break;
             }
             case NotMatch:
             {
-                kDebug() << "Not Match? " << this->value << " " << testString << endl;
-                if (QString::compare(this->value, testString, caseSensitivity) != 0)
+                const bool result = QString::compare(this->value, testString, caseSensitivity) != 0;
+                kDebug() << "Not Match " << this->value << "? " << testString << " " << result << endl;
+                if (result)
                     return true;
                 break;
             }
@@ -357,13 +364,20 @@ public:
     {
         if (this->fieldNumber == fieldNumber)
         {
-            kDebug() << "removing fieldNumber " << fieldNumber << endl;
+            kDebug() << "removing condition for fieldNumber " << fieldNumber << endl;
             this->fieldNumber = -1;
         }
     }
-    virtual void dump() const
+    virtual QString dump() const
     {
-        kDebug() << "Condition: fieldNumber: " << fieldNumber << " value: " << value << endl;
+        QString result = QString("fieldNumber: %1 ").arg(fieldNumber);
+        switch (operation)
+        {
+            case Match:     result += "Match"; break;
+            case NotMatch:  result += "Not Match"; break;
+            default:        break;
+        }
+        return result + " value: " + value + "\n";
     }
 
 public:
@@ -549,7 +563,6 @@ void Filter::removeConditions(int fieldNumber)
     }
     if (!d->condition)
         return;
-    kDebug() << "removing condition for field " << fieldNumber << " from " << d->condition <<  endl;
     d->condition->removeConditions(fieldNumber);
     if (d->condition->isEmpty())
     {
@@ -563,30 +576,9 @@ bool Filter::isEmpty() const
     return d->condition ? d->condition->isEmpty() : true;
 }
 
-void Filter::apply(const Database* database) const
+bool Filter::evaluate(const Database& database, int index) const
 {
-    Sheet* const sheet = database->range().lastSheet();
-    const QRect range = database->range().lastRange();
-    const int start = database->orientation() == Qt::Vertical ? range.top() : range.left();
-    const int end = database->orientation() == Qt::Vertical ? range.bottom() : range.right();
-    for (int i = start + 1; i <= end; ++i)
-    {
-        kDebug() << endl << "Checking column/row " << i << endl;
-        if (database->orientation() == Qt::Vertical)
-        {
-            sheet->nonDefaultRowFormat(i)->setFiltered(d->condition ? !d->condition->evaluate(database, i) : false);
-/*            if (d->condition->evaluate(database, i))
-                kDebug() << "showing row " << i << endl;
-            else
-                kDebug() << "hiding row " << i << endl;*/
-            sheet->emitHideRow();
-        }
-        else // database->orientation() == Qt::Horizontal
-        {
-            sheet->nonDefaultColumnFormat(i)->setFiltered(d->condition ? !d->condition->evaluate(database, i) : false);
-            sheet->emitHideColumn();
-        }
-    }
+    return d->condition ? d->condition->evaluate(database, index) : false;
 }
 
 bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
@@ -657,7 +649,7 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
 void Filter::dump() const
 {
     if (d->condition)
-        d->condition->dump();
+        kDebug() << "Condition:\n" + d->condition->dump() << endl;
     else
         kDebug() << "Condition: 0" << endl;
 }

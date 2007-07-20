@@ -26,7 +26,6 @@
 
 namespace KSpread
 {
-class Database;
 
 class ApplyFilterCommand : public AbstractRegionCommand
 {
@@ -48,6 +47,7 @@ public:
 
 private:
     Database m_database;
+    QHash<int, bool> m_undoData;
 };
 
 } // namespace KSpread

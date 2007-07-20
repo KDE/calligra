@@ -25,6 +25,7 @@
 #include "Damages.h"
 #include "Doc.h"
 #include "Sheet.h"
+#include "RowColumnFormat.h"
 
 #include "database/Database.h"
 #include "database/Filter.h"
@@ -43,13 +44,56 @@ ApplyFilterCommand::~ApplyFilterCommand()
 
 void ApplyFilterCommand::redo()
 {
-    m_database.filter()->apply(&m_database);
+    m_undoData.clear();
+    Sheet* const sheet = m_database.range().lastSheet();
+    const QRect range = m_database.range().lastRange();
+    const int start = m_database.orientation() == Qt::Vertical ? range.top() : range.left();
+    const int end = m_database.orientation() == Qt::Vertical ? range.bottom() : range.right();
+    for (int i = start + 1; i <= end; ++i)
+    {
+        const bool isFiltered = !m_database.filter()->evaluate(m_database, i);
+        kDebug() << "Filtering column/row " << i << "? " << isFiltered << endl << endl;
+        if (m_database.orientation() == Qt::Vertical)
+        {
+            m_undoData[i] = sheet->rowFormat(i)->isFiltered();
+            sheet->nonDefaultRowFormat(i)->setFiltered(isFiltered);
+        }
+        else // m_database.orientation() == Qt::Horizontal
+        {
+            m_undoData[i] = sheet->columnFormat(i)->isFiltered();
+            sheet->nonDefaultColumnFormat(i)->setFiltered(isFiltered);
+        }
+    }
+    if (m_database.orientation() == Qt::Vertical)
+        sheet->emitHideRow();
+    else // m_database.orientation() == Qt::Horizontal
+        sheet->emitHideColumn();
+
     m_sheet->cellStorage()->setDatabase(*this, m_database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void ApplyFilterCommand::undo()
 {
+    Sheet* const sheet = m_database.range().lastSheet();
+    const QRect range = m_database.range().lastRange();
+    const int start = m_database.orientation() == Qt::Vertical ? range.top() : range.left();
+    const int end = m_database.orientation() == Qt::Vertical ? range.bottom() : range.right();
+    for (int i = start + 1; i <= end; ++i)
+    {
+        if (m_database.orientation() == Qt::Vertical)
+            sheet->nonDefaultRowFormat(i)->setFiltered(m_undoData[i]);
+        else // m_database.orientation() == Qt::Horizontal
+            sheet->nonDefaultColumnFormat(i)->setFiltered(m_undoData[i]);
+    }
+    if (m_database.orientation() == Qt::Vertical)
+        sheet->emitHideRow();
+    else // m_database.orientation() == Qt::Horizontal
+        sheet->emitHideColumn();
+
+// FIXME Stefan: Restore the old filter
+//     m_sheet->cellStorage()->setDatabase(*this, m_oldDatabase);
+//     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void ApplyFilterCommand::setDatabase(const Database& database)

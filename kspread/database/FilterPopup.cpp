@@ -166,7 +166,7 @@ void FilterPopup::updateFilter(Filter* filter) const
     {
         // emptyCheckbox is not checked, because allCheckbox is not.
         filter->removeConditions(d->fieldNumber);
-        filter->addCondition(Filter::OrComposition, d->fieldNumber, Filter::NotMatch, "");
+        filter->addCondition(Filter::AndComposition, d->fieldNumber, Filter::NotMatch, "");
     }
     else
     {
@@ -186,9 +186,13 @@ void FilterPopup::updateFilter(Filter* filter) const
         const Filter::Comparison comparison = (matchList.count() < notMatchList.count())
                                             ? Filter::Match : Filter::NotMatch;
         const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
-        for (int i = 0; i < values.count(); ++i)
+        // We have to append the conditions for this field with an and-composition.
+        if (!values.isEmpty())
+            filter->addCondition(Filter::AndComposition, d->fieldNumber, comparison, values[0]);
+        for (int i = 1; i < values.count(); ++i)
         {
             kDebug() << "adding condition for fieldNumber " << d->fieldNumber << endl;
+            // go on with or-composition
             filter->addCondition(Filter::OrComposition, d->fieldNumber, comparison, values[i]);
         }
     }
