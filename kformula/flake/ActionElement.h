@@ -30,11 +30,11 @@
  */
 class KOFORMULA_EXPORT ActionElement : public RowElement {
 public:
+    /// The standard constructor
     ActionElement( BasicElement* parent = 0 );
 
-private:
     /// @return The element's ElementType
-    virtual ElementType elementType() const;
+    ElementType elementType() const;
 };
 
 #endif // ACTIONELEMENT_H
