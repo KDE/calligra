@@ -331,7 +331,7 @@ public:
         const Sheet* sheet = database.range().lastSheet();
         const QRect range = database.range().lastRange();
         const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
-        kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
+//         kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
         const Value value = database.orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(start + fieldNumber, index)
                             : sheet->cellStorage()->value(index, start + fieldNumber);
@@ -341,7 +341,7 @@ public:
             case Match:
             {
                 const bool result = QString::compare(this->value, testString, caseSensitivity) == 0;
-                kDebug() << "Match " << this->value << "? " << testString << " " << result << endl;
+//                 kDebug() << "Match " << this->value << "? " << testString << " " << result << endl;
                 if (result)
                     return true;
                 break;
@@ -349,7 +349,7 @@ public:
             case NotMatch:
             {
                 const bool result = QString::compare(this->value, testString, caseSensitivity) != 0;
-                kDebug() << "Not Match " << this->value << "? " << testString << " " << result << endl;
+//                 kDebug() << "Not Match " << this->value << "? " << testString << " " << result << endl;
                 if (result)
                     return true;
                 break;
@@ -364,7 +364,7 @@ public:
     {
         if (this->fieldNumber == fieldNumber)
         {
-            kDebug() << "removing condition for fieldNumber " << fieldNumber << endl;
+//             kDebug() << "removing condition for fieldNumber " << fieldNumber << endl;
             this->fieldNumber = -1;
         }
     }
@@ -514,16 +514,13 @@ void Filter::addCondition(Composition composition,
                           int fieldNumber, Comparison comparison, const QString& value,
                           Qt::CaseSensitivity caseSensitivity, Mode mode)
 {
-    kDebug() << k_funcinfo << endl;
     Condition* condition = new Condition(fieldNumber, comparison, value, caseSensitivity, mode);
     if (!d->condition)
     {
-        kDebug() << "no condition yet" << endl;
         d->condition = condition;
     }
     else if (composition == AndComposition)
     {
-        kDebug() << "AndComposition" << endl;
         if (d->condition->type() == AbstractCondition::And)
         {
             static_cast<And*>(d->condition)->list.append(condition);
@@ -556,7 +553,7 @@ void Filter::removeConditions(int fieldNumber)
 {
     if (fieldNumber == -1)
     {
-        kDebug() << "removing all conditions" << endl;
+//         kDebug() << "removing all conditions" << endl;
         delete d->condition;
         d->condition = 0;
         return;
@@ -578,7 +575,7 @@ bool Filter::isEmpty() const
 
 bool Filter::evaluate(const Database& database, int index) const
 {
-    return d->condition ? d->condition->evaluate(database, index) : false;
+    return d->condition ? d->condition->evaluate(database, index) : true;
 }
 
 bool Filter::loadOdf(const KoXmlElement& element, const Map* map)

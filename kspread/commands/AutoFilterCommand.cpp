@@ -45,6 +45,7 @@ void AutoFilterCommand::redo()
 {
     Database database(m_sheet->doc()->databaseManager()->createUniqueName());
     database.setDisplayFilterButtons(true);
+    database.setRange(*this);
     m_sheet->cellStorage()->setDatabase(*this, database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }

@@ -173,8 +173,6 @@ void Database::setRange( const Region& region )
 
 void Database::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect)
 {
-    kDebug() << k_funcinfo << endl;
-    dump();
     FilterPopup* popup = new FilterPopup(parent, cell, this);
     const QPoint position(orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());
     popup->move(parent->mapToGlobal(position));

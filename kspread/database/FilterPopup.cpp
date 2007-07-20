@@ -150,7 +150,7 @@ FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, Database* database)
         d->fieldNumber = cell.column() - database->range().lastRange().left();
     else // Qt::Horizontal
         d->fieldNumber = cell.row() - database->range().lastRange().top();
-    kDebug() << "FilterPopup::fieldNumber: " << d->fieldNumber << endl;
+    kDebug() << "FilterPopup for fieldNumber " << d->fieldNumber << endl;
 }
 
 FilterPopup::~FilterPopup()
@@ -188,12 +188,12 @@ void FilterPopup::updateFilter(Filter* filter) const
         const Filter::Composition composition = (comparison == Filter::Match)
                                              ? Filter::OrComposition : Filter::AndComposition;
         const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
+        kDebug() << "adding conditions for fieldNumber " << d->fieldNumber << endl;
         // We have to append the conditions for this field with an and-composition.
         if (!values.isEmpty())
             filter->addCondition(Filter::AndComposition, d->fieldNumber, comparison, values[0]);
         for (int i = 1; i < values.count(); ++i)
         {
-            kDebug() << "adding condition for fieldNumber " << d->fieldNumber << endl;
             // go on with the proper composition
             filter->addCondition(composition, d->fieldNumber, comparison, values[i]);
         }
@@ -205,6 +205,7 @@ void FilterPopup::closeEvent(QCloseEvent* event)
     if (d->dirty)
     {
         updateFilter(d->database.filter());
+        d->database.dump();
         ApplyFilterCommand* command = new ApplyFilterCommand();
         command->setSheet(d->database.range().lastSheet());
         command->add(d->database.range());
