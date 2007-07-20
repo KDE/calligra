@@ -33,10 +33,7 @@ set( kformulalib_PART_SRCS
    TokenElement.cpp
    NumberElement.cpp
    StringElement.cpp
-   PhantomElement.cpp 
-   contextstyle.cc 
-   symboltable.cc  
-   fontstyle.cc 
+   PhantomElement.cpp
 )
 
 
