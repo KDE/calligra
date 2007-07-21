@@ -1964,7 +1964,7 @@ void CellFormatPageFont::size_chosen_slot(const QString & size)
 {
   QString size_string = size;
 
-  selFont.setPointSize(size_string.toInt());
+  if (size_string.toInt()>0) selFont.setPointSize(size_string.toInt());
   emit fontSelected(selFont);
 }
 
