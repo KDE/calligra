@@ -26,7 +26,7 @@
 #include <kgenericfactory.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( pictureshape, KGenericFactory<Plugin>( "Plugin" ) )
+K_EXPORT_COMPONENT_FACTORY( pictureshape, KGenericFactory<Plugin>( "PictureShape" ) )
 
 Plugin::Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
