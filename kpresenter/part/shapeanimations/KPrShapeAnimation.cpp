@@ -33,12 +33,12 @@ KPrShapeAnimation::~KPrShapeAnimation()
 {
 }
 
-int KPrShapeAnimation::duration()
+int KPrShapeAnimation::duration() const
 {
     return m_timeLine.duration();
 }
 
-int KPrShapeAnimation::step()
+int KPrShapeAnimation::step() const
 {
     return m_step;
 }

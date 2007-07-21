@@ -76,12 +76,12 @@ public:
      *
      * @return The duration of the shape animation
      */
-    int duration();
+    int duration() const;
 
     /**
      * @brief Get the step on which the animation is shown.
      */
-    int step();
+    int step() const;
 
     /**
      * @brief Set the step on which the animation is shown.
