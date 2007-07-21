@@ -88,8 +88,7 @@ public:
         , fittingWidth( true )
         , filterButton( false )
         , obscuredCellsX( 0 )
-        , obscuredCellsY( 0 )
-        , layoutDirection( Qt::LeftToRight ) {}
+        , obscuredCellsY( 0 ) {}
     ~Private()
     {
     }
@@ -123,7 +122,6 @@ public:
         int obscuringCellY : 16; // KS_rowMax
         int obscuredCellsY : 16; // KS_rowMax
     };
-    Qt::LayoutDirection layoutDirection : 1;
 
     // This is the text we want to display. Not necessarily the same
     // as the user input, e.g. Cell::userInput()="1" and displayText="1.00".
@@ -178,6 +176,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
 
     if (sheet->columnFormat(col)->isHiddenOrFiltered() ||
         sheet->rowFormat(row)->isHiddenOrFiltered() ||
+        (sheet->columnFormat(col)->width() <= sheetView->viewConverter()->viewToDocumentY(2)) ||
         (sheet->rowFormat(row)->height() <= sheetView->viewConverter()->viewToDocumentY(2)))
     {
         d->hidden = true;
@@ -189,8 +188,6 @@ CellView::CellView( SheetView* sheetView, int col, int row )
 
     // do not touch the other Private members, just return here.
     if ( cell.isDefault() ) return;
-
-    d->layoutDirection = sheet->layoutDirection();
 
     // horizontal align
     if ( d->style.halign() == Style::HAlignUndefined )
@@ -246,13 +243,13 @@ QString CellView::testAnchor( const Cell& cell, double x, double y ) const
   return QString();
 }
 
-bool CellView::hitTestFilterButton(const QRect& cellRect, const QPoint& position) const
+bool CellView::hitTestFilterButton(const Cell& cell, const QRect& cellRect, const QPoint& position) const
 {
     if (!d->filterButton)
         return false;
 
     QStyleOptionComboBox options;
-    options.direction = d->layoutDirection;
+    options.direction = cell.sheet()->layoutDirection();
     options.editable = true;
 //     options.fontMetrics = painter.fontMetrics();
     options.frame = false;
@@ -845,7 +842,7 @@ void CellView::paintCommentIndicator( QPainter& painter,
         // Get the triangle.
         QPolygonF polygon( 3 );
         polygon.clear();
-        if ( d->layoutDirection == Qt::RightToLeft ) {
+        if ( cell.sheet()->layoutDirection() == Qt::RightToLeft ) {
             polygon << QPointF( cellRect.x() + 6.0, cellRect.y() );
             polygon << QPointF( cellRect.x(), cellRect.y() );
             polygon << QPointF( cellRect.x(), cellRect.y() + 6.0 );
@@ -887,7 +884,7 @@ void CellView::paintFormulaIndicator( QPainter& painter,
     // Get the triangle...
     QPolygonF polygon( 3 );
     polygon.clear();
-    if ( d->layoutDirection == Qt::RightToLeft ) {
+    if ( cell.sheet()->layoutDirection() == Qt::RightToLeft ) {
       polygon << QPointF( cellRect.right() - 6.0, cellRect.bottom() );
       polygon << QPointF( cellRect.right(), cellRect.bottom() );
       polygon << QPointF( cellRect.right(), cellRect.bottom() - 6.0 );
@@ -929,7 +926,7 @@ void CellView::paintMatrixElementIndicator( QPainter& painter,
     // Get the triangle...
     QPolygonF polygon( 3 );
     polygon.clear();
-    if ( d->layoutDirection == Qt::RightToLeft ) {
+    if ( cell.sheet()->layoutDirection() == Qt::RightToLeft ) {
       polygon << QPointF( cellRect.right() - 6.0, cellRect.top() );
       polygon << QPointF( cellRect.right(), cellRect.top() );
       polygon << QPointF( cellRect.right(), cellRect.top() + 6.0 );
@@ -1208,7 +1205,7 @@ void CellView::paintPageBorders(QPainter& painter, const QRectF &cellRect,
     {
       painter.setPen( cell.doc()->pageBorderColor() );
 
-      if ( d->layoutDirection == Qt::RightToLeft )
+      if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
         line = QLineF( cellRect.right(), cellRect.top(),
                           cellRect.right(), cellRect.bottom() );
       else
@@ -1231,7 +1228,7 @@ void CellView::paintPageBorders(QPainter& painter, const QRectF &cellRect,
            && cell.row() <= print->printRange().bottom() ) {
         painter.setPen( cell.doc()->pageBorderColor() );
 
-        if ( d->layoutDirection == Qt::RightToLeft )
+        if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
           line = QLineF( cellRect.left(), cellRect.top(),
                             cellRect.left(), cellRect.bottom() );
         else
@@ -1428,7 +1425,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            if ( d->layoutDirection == Qt::RightToLeft )
+            if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                 painter.drawLine( qMax( rect.left(), cellRect.right() ),
                                   qMax( rect.top(), cellRect.top() ),
                                   qMin( rect.right(), cellRect.right() ),
@@ -1440,7 +1437,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                                   qMin( rect.bottom(), cellRect.top() + bottom ) );
         }
         else {
-            if ( d->layoutDirection == Qt::RightToLeft )
+            if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                 painter.drawLine( cellRect.right(), cellRect.top(),
                                   cellRect.right(), cellRect.top() + bottom );
             else
@@ -1478,7 +1475,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
         //If we are on paper printout, we limit the length of the lines
         //On paper, we always have full cells, on screen not
         if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-            if ( d->layoutDirection == Qt::RightToLeft )
+            if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                 painter.drawLine( qMax( rect.left(), cellRect.left() ),
                                   qMax( rect.top(), cellRect.top() ),
                                   qMin( rect.right(), cellRect.left() ),
@@ -1490,7 +1487,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                                   qMin( rect.bottom(), cellRect.top() + bottom ) );
         }
         else {
-            if ( d->layoutDirection == Qt::RightToLeft )
+            if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                 painter.drawLine( cellRect.left(), cellRect.top(),
                                   cellRect.left(), cellRect.top() + bottom );
             else
@@ -1531,7 +1528,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
             // If we are on paper printout, we limit the length of the lines.
             // On paper, we always have full cells, on screen not.
             if ( dynamic_cast<QPrinter*>(painter.device()) ) {
-                if ( d->layoutDirection == Qt::RightToLeft )
+                if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                     painter.drawLine( qMax( rect.left(), cellRect.right() ),
                                       qMax( rect.top(), cellRect.bottom() - bottom ),
                                       qMin( rect.right(), cellRect.right() ),
@@ -1543,7 +1540,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                                       qMin( rect.bottom(), cellRect.bottom() ) );
             }
             else {
-                if ( d->layoutDirection == Qt::RightToLeft )
+                if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                     painter.drawLine( cellRect.right(), cellRect.bottom() - bottom,
                                       cellRect.right(), cellRect.bottom() );
                 else
@@ -1581,7 +1578,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
             // If we are on paper printout, we limit the length of the lines.
             // On paper, we always have full cells, on screen not.
             if ( dynamic_cast<QPrinter*>(painter.device()) )      {
-                if ( d->layoutDirection == Qt::RightToLeft )
+                if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                     painter.drawLine( qMax( rect.left(), cellRect.left() ),
                                       qMax( rect.top(), cellRect.bottom() - bottom ),
                                       qMin( rect.right(), cellRect.left() ),
@@ -1593,7 +1590,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
                                       qMin( rect.bottom(), cellRect.bottom() ) );
             }
             else {
-                if ( d->layoutDirection == Qt::RightToLeft )
+                if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
                     painter.drawLine( cellRect.left(), cellRect.bottom() - bottom,
                                       cellRect.left(), cellRect.bottom() );
                 else
@@ -1632,7 +1629,7 @@ void CellView::paintFilterButton( QPainter& painter, const QRectF& cellRect,
 {
     Q_UNUSED(cell);
     QStyleOptionComboBox options;
-    options.direction = d->layoutDirection;
+    options.direction = cell.sheet()->layoutDirection();
     options.editable = true;
     options.fontMetrics = painter.fontMetrics();
     options.frame = false;

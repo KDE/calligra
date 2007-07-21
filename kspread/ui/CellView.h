@@ -148,7 +148,7 @@ public:
 
   QString testAnchor( const Cell& cell, double x, double y ) const;
 
-    bool hitTestFilterButton(const QRect& cellRect, const QPoint& position) const;
+    bool hitTestFilterButton(const Cell& cell, const QRect& cellRect, const QPoint& position) const;
 
     /**
      * \return the size of the obscured cell range

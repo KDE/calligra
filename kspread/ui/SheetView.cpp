@@ -109,7 +109,6 @@ const CellView& SheetView::cellView( int col, int row )
 
 void SheetView::setPaintCellRange( const QRect& rect )
 {
-    kDebug() << rect << endl;
     d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
     d->cache.setMaxCost( 2 * rect.width() * rect.height() );
 }
