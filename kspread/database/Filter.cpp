@@ -21,7 +21,6 @@
 
 #include <QList>
 #include <QRect>
-#include <QString>
 
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -46,6 +45,7 @@ public:
     virtual void saveOdf(KoXmlWriter& xmlWriter) = 0;
     virtual bool evaluate(const Database& database, int index) const = 0;
     virtual bool isEmpty() const = 0;
+    virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
     virtual QString dump() const = 0;
 };
@@ -81,6 +81,13 @@ public:
         return true;
     }
     virtual bool isEmpty() const { return list.isEmpty(); }
+    virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const
+    {
+        QHash<QString, Filter::Comparison> result;
+        for (int i = 0; i < list.count(); ++i)
+            result.unite(list[i]->conditions(fieldNumber));
+        return result;
+    }
     virtual void removeConditions(int fieldNumber)
     {
         QList<AbstractCondition*> newList;
@@ -141,6 +148,13 @@ public:
         return false;
     }
     virtual bool isEmpty() const { return list.isEmpty(); }
+    virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const
+    {
+        QHash<QString, Filter::Comparison> result;
+        for (int i = 0; i < list.count(); ++i)
+            result.unite(list[i]->conditions(fieldNumber));
+        return result;
+    }
     virtual void removeConditions(int fieldNumber)
     {
         QList<AbstractCondition*> newList;
@@ -360,6 +374,13 @@ public:
         return false;
     }
     virtual bool isEmpty() const { return fieldNumber == -1; }
+    virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const
+    {
+        QHash<QString, Filter::Comparison> result;
+        if (this->fieldNumber == fieldNumber)
+            result.insert(value, operation);
+        return result;
+    }
     virtual void removeConditions(int fieldNumber)
     {
         if (this->fieldNumber == fieldNumber)
@@ -547,6 +568,11 @@ void Filter::addCondition(Composition composition,
             d->condition = orComposition;
         }
     }
+}
+
+QHash<QString, Filter::Comparison> Filter::conditions(int fieldNumber) const
+{
+    return d->condition ? d->condition->conditions(fieldNumber) : QHash<QString, Comparison>();
 }
 
 void Filter::removeConditions(int fieldNumber)

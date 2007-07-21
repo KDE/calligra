@@ -179,7 +179,7 @@ void Database::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRec
     popup->show();
 }
 
-Filter* Database::filter()
+Filter* Database::filter() const
 {
     return d->filter;
 }

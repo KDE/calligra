@@ -82,28 +82,17 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     // TODO Stefan: Don't check the columns/rows. Use the Filter conditions instead.
     const Sheet* sheet = cell.sheet();
     const QRect range = database->range().lastRange();
-    const int start = database->orientation() == Qt::Vertical ? range.top() : range.left();
-    const int end = database->orientation() == Qt::Vertical ? range.bottom() : range.right();
-    const int j = database->orientation() == Qt::Vertical ? cell.column() : cell.row();
-    QHash<QString, bool> items;
+    const bool isRowFilter = database->orientation() == Qt::Vertical;
+    const int start = isRowFilter ? range.top() : range.left();
+    const int end = isRowFilter ? range.bottom() : range.right();
+    const int j = isRowFilter ? cell.column() : cell.row();
+    QSet<QString> items;
     for (int i = start + (database->containsHeader() ? 1 : 0); i <= end; ++i)
     {
-        const Value value = database->orientation() == Qt::Vertical
-                            ? sheet->cellStorage()->value(j, i)
-                            : sheet->cellStorage()->value(i, j);
+        const Value value = isRowFilter ? sheet->cellStorage()->value(j, i)
+                                        : sheet->cellStorage()->value(i, j);
         const QString string = sheet->doc()->converter()->asString(value).asString();
-        const bool isFiltered = database->orientation() == Qt::Vertical
-                                ? sheet->rowFormat(i)->isFiltered()
-                                : sheet->columnFormat(i)->isFiltered();
-        if (string.isEmpty())
-        {
-            emptyCheckbox->setChecked(emptyCheckbox->isChecked() && !isFiltered);
-            continue;
-        }
-        if (items.contains(string))
-            items[string] = items[string] && !isFiltered;
-        else
-            items[string] = !isFiltered;
+        items.insert(string);
     }
 
     QWidget* scrollWidget = new QWidget(parent);
@@ -111,19 +100,26 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     scrollLayout->setMargin(0);
     scrollLayout->setSpacing(0);
 
-    QList<QString> sortedItems = items.keys();
+    const int fieldNumber = j - (isRowFilter ? range.left() : range.top());
+    const QHash<QString, Filter::Comparison> conditions = database->filter()->conditions(fieldNumber);
+    const bool defaultCheckState = conditions.isEmpty() ? true
+                                        : !(conditions[conditions.keys()[0]] == Filter::Match ||
+                                            conditions[conditions.keys()[0]] == Filter::Empty);
+    QList<QString> sortedItems = items.toList();
     qSort(sortedItems);
     bool isAll = true;
     QCheckBox* item;
     for (int i = 0; i < sortedItems.count(); ++i)
     {
-        item = new QCheckBox(sortedItems[i], scrollWidget);
-        item->setChecked(items[sortedItems[i]]);
+        const QString value = sortedItems[i];
+        item = new QCheckBox(value, scrollWidget);
+        item->setChecked(conditions.contains(value) ? !defaultCheckState : defaultCheckState);
         buttonGroup->addButton(item);
         scrollLayout->addWidget(item);
         checkboxes.append(item);
-        isAll = isAll && items[sortedItems[i]];
+        isAll = isAll && item->isChecked();
     }
+    emptyCheckbox->setChecked(conditions.contains("") ? !defaultCheckState : defaultCheckState);
     allCheckbox->setChecked(isAll && emptyCheckbox->isChecked());
     notEmptyCheckbox->setChecked(isAll);
 
@@ -175,6 +171,8 @@ void FilterPopup::updateFilter(Filter* filter) const
         QList<QString> notMatchList;
         if (d->emptyCheckbox->isChecked())
             matchList.append("");
+        else
+            notMatchList.append("");
         foreach (QCheckBox* checkbox, d->checkboxes)
         {
             if (checkbox->isChecked())
