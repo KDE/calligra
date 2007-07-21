@@ -97,15 +97,12 @@ public:
    * \param painter the used painter
    * \param paintDevice the paintDevice of this data.  Used for:
    *        \li layout direction (should become obsolete),
-   *        \li painting obscured cells (should become obsolete)
    *        \li (was used for selection painting, which is now in QPaintDevice)
    * \param paintCoordinate the top left coordinate (scroll offset dependent)
-   * \param cellCoordinate the cell position (should be removed!)
-   * \param cell the Cell (should be removed!)
+   * \param cell the Cell
    */
   void paintCellContents( const QRectF& paintRegion, QPainter& painter,
                           QPaintDevice* paintDevice, const QPointF& paintCoordinate,
-                          const QPoint & cellCoordinate,
                           const Cell& cell, SheetView* sheetView );
 
   /**
@@ -114,14 +111,13 @@ public:
    * \param paintRegion the portion of the canvas that is actually in view
    * \param painter the used painter
    * \param paintCoordinate the top left coordinate (scroll offset dependent)
-   * \param cellCoordinate the cell position (should be removed!)
-   * \param cellRange the cell range, that is painted (should be removed!)
-   * \param cell the Cell (should be removed!)
-   * \param sheetView the SheetView (should be removed!)
+   * \param cellRange the cell range, that is painted
+   * \param cell the Cell
+   * \param sheetView the SheetView
    */
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                          const QPointF& paintCoordinate,
-                         const QPoint& cellCoordinate, const QRect& cellRange,
+                         const QRect& cellRange,
                          const Cell& cell, SheetView* sheetView );
 
   /**
@@ -130,14 +126,13 @@ public:
    * \param painter the used painter
    * \param paintRegion the portion of the canvas that is actually in view
    * \param cellRegion the cell's dimension (should be replaced with paintCoordinate!)
-   * \param cellCoordinate the cell position (should be removed!)
    * \param paintBorder the borders, that should be painted (should be removed???)
-   * \param cellRange the cell range, that is painted (should be removed!)
-   * \param cell the Cell (should be removed!)
-   * \param sheetView the SheetView (should be removed!)
+   * \param cellRange the cell range, that is painted
+   * \param cell the Cell
+   * \param sheetView the SheetView
    */
   void paintDefaultBorders( QPainter& painter, const QRectF &paintRegion,
-                            const QRectF &cellRegion, const QPoint &cellCoordinate,
+                            const QRectF &cellRegion,
                             Borders paintBorder, const QRect& cellRange,
                             const Cell& cell, SheetView* sheetView );
 
@@ -294,7 +289,7 @@ private:
    * @internal
    */
   void paintCustomBorders( QPainter& painter, const QRectF &paintRegion,
-                           const QRectF &cellRegion, const QPoint& cellCoordinate,
+                           const QRectF &cellRegion,
                            Borders paintBorder );
 
   /**
@@ -304,7 +299,7 @@ private:
    * @internal
    */
   void paintPageBorders( QPainter& painter, const QRectF &cellRect,
-                         const QPoint &cellRef, Borders paintBorder, const Cell& cell );
+                         Borders paintBorder, const Cell& cell );
 
   /**
    * \ingroup Painting
@@ -313,7 +308,7 @@ private:
    * @internal
    */
   void paintText( QPainter& painter, const QRectF &cellRect,
-                  const QPoint &cellRef, QPaintDevice* paintDevice, const Cell& cell );
+                  QPaintDevice* paintDevice, const Cell& cell );
 
   /**
    * \ingroup Painting

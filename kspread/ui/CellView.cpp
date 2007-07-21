@@ -276,7 +276,6 @@ bool CellView::hitTestFilterButton(const QRect& cellRect, const QPoint& position
 //
 void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
                                   QPaintDevice* paintDevice, const QPointF& coordinate,
-                                  const QPoint& cellRef,
                                   const Cell& cell, SheetView* sheetView )
 {
     if ( d->hidden )
@@ -285,9 +284,6 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
         return;
     if ( d->obscured )
         return;
-
-    // The parameter cellref should be *this
-    Q_ASSERT( (cellRef.x() == cell.column()) && (cellRef.y() == cell.row()) );
 
     // ----------------  Start the actual painting.  ----------------
 
@@ -335,20 +331,17 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
             && !( cell.sheet()->isProtected()
             && style().hideAll() ) )
     {
-        paintText( painter, cellRect, cellRef, paintDevice, cell );
+        paintText( painter, cellRect, paintDevice, cell );
     }
 }
 
 void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  const QPointF& paintCoordinate,
-                                 const QPoint& cellCoordinate, const QRect& cellRegion,
+                                 const QRect& cellRegion,
                                  const Cell& cell, SheetView* sheetView )
 {
-    // The parameter cellCoordinate should be *this
-    Q_ASSERT( ( (cellCoordinate.x() == cell.column()) && (cellCoordinate.y() == cell.row())) );
-
-    const int col = cellCoordinate.x();
-    const int row = cellCoordinate.y();
+    const int col = cell.column();
+    const int row = cell.row();
 
     CellView::Borders paintBorder = CellView::NoBorder;
 
@@ -408,7 +401,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     //    and the checkbox to do this is checked.
     if ( painter.device()->devType() != QInternal::Printer ||
          sheet->print()->printGrid())
-        paintDefaultBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder, cell );
+        paintDefaultBorders( painter, paintRegion, cellRect, paintBorder, cell );
 #endif
 
     // 2. Paint the borders of the cell if no other cell is forcing this
@@ -423,7 +416,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     // Paint the borders if this cell is not part of another merged cell.
     if ( !d->merged )
     {
-        paintCustomBorders( painter, paintRegion, cellRect, cellCoordinate, paintBorder );
+        paintCustomBorders( painter, paintRegion, cellRect, paintBorder );
     }
 
     // Turn clipping back on.
@@ -432,7 +425,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
 
     // 3. Paint diagonal lines and page borders.
     paintCellDiagonalLines( painter, cellRect );
-    paintPageBorders( painter, cellRect, cellCoordinate, paintBorder, cell );
+    paintPageBorders( painter, cellRect, paintBorder, cell );
 }
 
 
@@ -563,12 +556,10 @@ void CellView::paintCellBackground( QPainter& painter, const QPointF& paintCoord
 // Paint the standard light grey borders that are always visible.
 //
 void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
-                                    const QRectF &cellRect, const QPoint &cellRef,
+                                    const QRectF &cellRect,
                                     Borders paintBorder, const QRect& cellRegion,
                                     const Cell& cell, SheetView* sheetView )
 {
-    Q_UNUSED(cellRef);
-
     // disable antialiasing
     painter.setRenderHint( QPainter::Antialiasing, false );
 
@@ -592,8 +583,8 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF &paintRect,
     */
     const bool paintingToExternalDevice = dynamic_cast<QPrinter*>(painter.device());
 
-    const int col = cellRef.x();
-    const int row = cellRef.y();
+    const int col = cell.column();
+    const int row = cell.row();
 
     paintBorder = CellView::NoBorder;
 
@@ -1003,10 +994,8 @@ void CellView::paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect
 //
 void CellView::paintText( QPainter& painter,
                           const QRectF &cellRect,
-                          const QPoint &cellRef, QPaintDevice* paintDevice, const Cell& cell )
+                          QPaintDevice* paintDevice, const Cell& cell )
 {
-  Q_UNUSED( cellRef );
-
   QColor textColorPrint = d->style.fontColor();
 
   // Resolve the text color if invalid (=default).
@@ -1194,8 +1183,8 @@ void CellView::paintText( QPainter& painter,
 
 // Paint page borders on the page.  Only do this on the screen.
 //
-void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
-                                 const QPoint &cellRef, Borders paintBorder, const Cell& cell )
+void CellView::paintPageBorders(QPainter& painter, const QRectF &cellRect,
+                                Borders paintBorder, const Cell& cell)
 {
   // Not screen?  Return immediately.
   if ( dynamic_cast<QPrinter*>(painter.device()) )
@@ -1209,13 +1198,13 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
   // Draw page borders
   QLineF line;
 
-  if ( cellRef.x() >= print->printRange().left()
-       && cellRef.x() <= print->printRange().right() + 1
-       && cellRef.y() >= print->printRange().top()
-       && cellRef.y() <= print->printRange().bottom() + 1 )
+  if ( cell.column() >= print->printRange().left()
+       && cell.column() <= print->printRange().right() + 1
+       && cell.row() >= print->printRange().top()
+       && cell.row() <= print->printRange().bottom() + 1 )
   {
-    if ( print->isColumnOnNewPage( cellRef.x() )
-         && cellRef.y() <= print->printRange().bottom() )
+    if ( print->isColumnOnNewPage( cell.column() )
+         && cell.row() <= print->printRange().bottom() )
     {
       painter.setPen( cell.doc()->pageBorderColor() );
 
@@ -1228,8 +1217,8 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
       painter.drawLine( line );
     }
 
-    if ( print->isRowOnNewPage( cellRef.y() ) &&
-         ( cellRef.x() <= print->printRange().right() ) )
+    if ( print->isRowOnNewPage( cell.row() ) &&
+         ( cell.column() <= print->printRange().right() ) )
     {
       painter.setPen( cell.doc()->pageBorderColor() );
       line = QLineF( cellRect.left(),  cellRect.top(),
@@ -1238,8 +1227,8 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     }
 
     if ( paintBorder & RightBorder ) {
-      if ( print->isColumnOnNewPage( cellRef.x() + 1 )
-           && cellRef.y() <= print->printRange().bottom() ) {
+      if ( print->isColumnOnNewPage( cell.column() + 1 )
+           && cell.row() <= print->printRange().bottom() ) {
         painter.setPen( cell.doc()->pageBorderColor() );
 
         if ( d->layoutDirection == Qt::RightToLeft )
@@ -1253,8 +1242,8 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
     }
 
     if ( paintBorder & BottomBorder ) {
-      if ( print->isRowOnNewPage( cellRef.y() + 1 )
-           && cellRef.x() <= print->printRange().right() ) {
+      if ( print->isRowOnNewPage( cell.row() + 1 )
+           && cell.column() <= print->printRange().right() ) {
         painter.setPen( cell.doc()->pageBorderColor() );
         line = QLineF( cellRect.left(),  cellRect.bottom(),
                           cellRect.right(), cellRect.bottom() );
@@ -1268,11 +1257,8 @@ void CellView::paintPageBorders( QPainter& painter, const QRectF &cellRect,
 // Paint the cell borders.
 //
 void CellView::paintCustomBorders(QPainter& painter, const QRectF &paintRect,
-                                  const QRectF &cellRect, const QPoint &cellRef,
-                                  Borders paintBorder )
+                                  const QRectF &cellRect, Borders paintBorder )
 {
-    Q_UNUSED( cellRef );
-
     //Sanity check: If we are not painting any of the borders then the function
     //really shouldn't be called at all.
     if ( paintBorder == NoBorder )
@@ -2093,6 +2079,8 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
     case Style::Center:
       d->textX = 0.5 * ( w - s_borderSpace - d->textWidth -
           0.5 * d->style.rightBorderPen().width() );
+      break;
+    default:
       break;
   }
 }

@@ -187,7 +187,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellContents( paintRect, painter, paintDevice, offset, QPoint( col, row ),
+            cellView.paintCellContents( paintRect, painter, paintDevice, offset,
                                         Cell( sheet(), col, row ), this );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
         }
@@ -209,7 +209,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             Cell cell = Cell( sheet(), col, row );
             const QRectF cellRect = QRectF( offset.x(), offset.y(), cell.width(), cell.height() );
             CellView cellView = this->cellView( col, row );
-            cellView.paintDefaultBorders( painter, paintRect, cellRect, QPoint( col, row ),
+            cellView.paintDefaultBorders( painter, paintRect, cellRect,
                                           CellView::LeftBorder | CellView::RightBorder |
                                           CellView::TopBorder | CellView::BottomBorder,
                                           d->visibleRect, cell, this );
@@ -232,7 +232,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         {
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBorders( paintRect, painter, offset,
-                                       QPoint( col, row ), d->visibleRect,
+                                       d->visibleRect,
                                        Cell( sheet(), col, row ), this );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
         }
