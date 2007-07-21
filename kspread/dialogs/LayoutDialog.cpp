@@ -654,8 +654,8 @@ void CellFormatDialog::initMembers()
   m_currency      = Currency(); // locale default
 
   Sheet* sheet = m_pView->activeSheet();
-  defaultWidthSize  = sheet ? sheet->columnFormat(0)->width() : 0;
-  defaultHeightSize = sheet ? sheet->rowFormat(0)->height() : 0;
+  defaultWidthSize  = sheet ? sheet->doc()->defaultColumnFormat()->width() : 0;
+  defaultHeightSize = sheet ? sheet->doc()->defaultRowFormat()->height() : 0;
 }
 
 bool CellFormatDialog::checkCircle( QString const & name, QString const & parent )

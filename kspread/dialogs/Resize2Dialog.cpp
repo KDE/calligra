@@ -114,7 +114,7 @@ void ResizeRow::slotDefault()
   Sheet* sheet = m_pView->activeSheet();
   if (!sheet)
     return;
-  double points = sheet->rowFormat(0)->height();
+  double points = sheet->doc()->defaultRowFormat()->height();
   m_pHeight->setValue(m_pView->doc()->unit().toUserValue(points));
 }
 
@@ -178,7 +178,7 @@ void ResizeColumn::slotDefault()
   Sheet* sheet = m_pView->activeSheet();
   if (!sheet)
     return;
-  double points = sheet->columnFormat(0)->width();
+  double points = sheet->doc()->defaultColumnFormat()->width();
   m_pWidth->setValue(m_pView->doc()->unit().toUserValue(points));
 }
 
