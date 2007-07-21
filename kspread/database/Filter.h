@@ -86,6 +86,7 @@ public:
     void addCondition(Composition composition,
                       int fieldNumber, Comparison comparison, const QString& value,
                       Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive, Mode mode = Text );
+    void addSubFilter(Composition composition, const Filter& filter);
 
     QHash<QString, Comparison> conditions(int fieldNumber) const;
     void removeConditions(int fieldNumber = -1);

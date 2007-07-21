@@ -570,6 +570,69 @@ void Filter::addCondition(Composition composition,
     }
 }
 
+void Filter::addSubFilter(Composition composition, const Filter& filter)
+{
+    if (!d->condition)
+    {
+        if (!filter.d->condition)
+            d->condition = 0;
+        else if (filter.d->condition->type() == AbstractCondition::And)
+            d->condition = new And(*static_cast<And*>(filter.d->condition));
+        else if (filter.d->condition->type() == AbstractCondition::Or)
+            d->condition = new Or(*static_cast<Or*>(filter.d->condition));
+        else // if (filter.d->condition->type() == AbstractCondition::Condition)
+            d->condition = new Condition(*static_cast<Condition*>(filter.d->condition));
+    }
+    else if (composition == AndComposition)
+    {
+        if (filter.d->condition && d->condition->type() == AbstractCondition::And)
+        {
+            if (filter.d->condition->type() == AbstractCondition::And)
+                static_cast<And*>(d->condition)->list += static_cast<And*>(filter.d->condition)->list;
+            else if (filter.d->condition->type() == AbstractCondition::Or)
+                static_cast<And*>(d->condition)->list.append(new Or(*static_cast<Or*>(filter.d->condition)));
+            else // if (filter.d->condition->type() == AbstractCondition::Condition)
+                static_cast<And*>(d->condition)->list.append(new Condition(*static_cast<Condition*>(filter.d->condition)));
+        }
+        else if (filter.d->condition)
+        {
+            And* andComposition = new And();
+            andComposition->list.append(d->condition);
+            if (filter.d->condition->type() == AbstractCondition::And)
+                andComposition->list += static_cast<And*>(filter.d->condition)->list;
+            else if (filter.d->condition->type() == AbstractCondition::Or)
+                andComposition->list.append(new Or(*static_cast<Or*>(filter.d->condition)));
+            else // if (filter.d->condition->type() == AbstractCondition::Condition)
+                andComposition->list.append(new Condition(*static_cast<Condition*>(filter.d->condition)));
+            d->condition = andComposition;
+        }
+    }
+    else // composition == OrComposition
+    {
+        if (filter.d->condition && d->condition->type() == AbstractCondition::Or)
+        {
+            if (filter.d->condition->type() == AbstractCondition::And)
+                static_cast<Or*>(d->condition)->list.append(new And(*static_cast<And*>(filter.d->condition)));
+            else if (filter.d->condition->type() == AbstractCondition::Or)
+                static_cast<Or*>(d->condition)->list += static_cast<Or*>(filter.d->condition)->list;
+            else // if (filter.d->condition->type() == AbstractCondition::Condition)
+                static_cast<Or*>(d->condition)->list.append(new Condition(*static_cast<Condition*>(filter.d->condition)));
+        }
+        else if (filter.d->condition)
+        {
+            Or* orComposition = new Or();
+            orComposition->list.append(d->condition);
+            if (filter.d->condition->type() == AbstractCondition::And)
+                orComposition->list.append(new And(*static_cast<And*>(filter.d->condition)));
+            else if (filter.d->condition->type() == AbstractCondition::Or)
+                orComposition->list += static_cast<Or*>(filter.d->condition)->list;
+            else // if (filter.d->condition->type() == AbstractCondition::Condition)
+                orComposition->list.append(new Condition(*static_cast<Condition*>(filter.d->condition)));
+            d->condition = orComposition;
+        }
+    }
+}
+
 QHash<QString, Filter::Comparison> Filter::conditions(int fieldNumber) const
 {
     return d->condition ? d->condition->conditions(fieldNumber) : QHash<QString, Comparison>();

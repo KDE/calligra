@@ -188,14 +188,10 @@ void FilterPopup::updateFilter(Filter* filter) const
                                              ? Filter::OrComposition : Filter::AndComposition;
         const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
         kDebug() << "adding conditions for fieldNumber " << d->fieldNumber << endl;
-        // We have to append the conditions for this field with an and-composition.
-        if (!values.isEmpty())
-            filter->addCondition(Filter::AndComposition, d->fieldNumber, comparison, values[0]);
-        for (int i = 1; i < values.count(); ++i)
-        {
-            // go on with the proper composition
-            filter->addCondition(composition, d->fieldNumber, comparison, values[i]);
-        }
+        Filter subFilter;
+        for (int i = 0; i < values.count(); ++i)
+            subFilter.addCondition(composition, d->fieldNumber, comparison, values[i]);
+        filter->addSubFilter(Filter::AndComposition, subFilter);
     }
 }
 
