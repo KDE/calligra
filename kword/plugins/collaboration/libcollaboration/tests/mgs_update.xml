@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<Messages>
+    <Session>
+        <SessionId>124124</SessionId>
+	<Update>
+	    <ObjectName>textField2</ObjectName>
+	    <Timestamp>234324234</Timestamp>
+	    <CommandName>newValue</CommandName><!-- build-in command name to get full value of object, i.e. for first time-->
+	    <Data>
+		Something command specific here.
+	    </Data>
+	</Update>
+	<Update>
+	    <ObjectName>textField1</ObjectName>
+	    <Timestamp>234324235</Timestamp>
+	    <CommandName>appendText</CommandName>
+	    <Data>
+		Something command specific here.
+	    </Data>
+	</Update>
+	<Update>
+	    <ObjectName>shape1</ObjectName>
+	    <Timestamp>234324236</Timestamp>
+	    <CommandName>Deleted</CommandName>
+	</Update>
+    </Session>
+</Messages>
