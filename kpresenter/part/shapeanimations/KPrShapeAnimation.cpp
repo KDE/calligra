@@ -48,6 +48,11 @@ void KPrShapeAnimation::setStep( int step )
     m_step = step;
 }
 
+KoShape * KPrShapeAnimation::shape() const
+{
+    return m_shape;
+}
+
 KPrShapeAnimation::Type KPrShapeAnimation::type() const
 {
     return m_type;

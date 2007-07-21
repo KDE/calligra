@@ -91,7 +91,7 @@ public:
     /**
      * @brief Get the shape the animation is for
      */
-    KoShape * shape();
+    KoShape * shape() const;
 
     /**
      * @brief Get the type of the animation
