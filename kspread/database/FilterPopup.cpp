@@ -92,7 +92,8 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
         const Value value = isRowFilter ? sheet->cellStorage()->value(j, i)
                                         : sheet->cellStorage()->value(i, j);
         const QString string = sheet->doc()->converter()->asString(value).asString();
-        items.insert(string);
+        if (!string.isEmpty)
+            items.insert(string);
     }
 
     QWidget* scrollWidget = new QWidget(parent);
