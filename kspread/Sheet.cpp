@@ -3914,7 +3914,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             if ( row->isHidden() ) // never true for the default row
               xmlWriter.addAttribute( "table:visibility", "collapse" );
             else if (row->isFiltered()) // never true for the default row
-                xmlWriter.addAttribute("table:visibility", "collapse");
+                xmlWriter.addAttribute("table:visibility", "filter");
 
             int j = i + 1;
             while ( compareRows( i, j, maxCols ) && j <= maxRows )
