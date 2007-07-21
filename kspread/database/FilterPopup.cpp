@@ -102,7 +102,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     scrollLayout->setSpacing(0);
 
     const int fieldNumber = j - (isRowFilter ? range.left() : range.top());
-    const QHash<QString, Filter::Comparison> conditions = database->filter()->conditions(fieldNumber);
+    const QHash<QString, Filter::Comparison> conditions = database->filter().conditions(fieldNumber);
     const bool defaultCheckState = conditions.isEmpty() ? true
                                         : !(conditions[conditions.keys()[0]] == Filter::Match ||
                                             conditions[conditions.keys()[0]] == Filter::Empty);
@@ -199,13 +199,19 @@ void FilterPopup::closeEvent(QCloseEvent* event)
 {
     if (d->dirty)
     {
-        updateFilter(d->database.filter());
-        d->database.dump();
-        ApplyFilterCommand* command = new ApplyFilterCommand();
-        command->setSheet(d->database.range().lastSheet());
-        command->add(d->database.range());
-        command->setDatabase(d->database);
-        command->execute();
+        Filter filter = d->database.filter();
+        updateFilter(&filter);
+        // any real change?
+        if (d->database.filter() != filter)
+        {
+            d->database.setFilter(filter);
+            d->database.dump();
+            ApplyFilterCommand* command = new ApplyFilterCommand();
+            command->setSheet(d->database.range().lastSheet());
+            command->add(d->database.range());
+            command->setDatabase(d->database);
+            command->execute();
+        }
     }
     QFrame::closeEvent(event);
 }

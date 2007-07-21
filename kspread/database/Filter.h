@@ -102,6 +102,9 @@ public:
     bool loadOdf(const KoXmlElement& element, const Map* map);
     void saveOdf(KoXmlWriter& xmlWriter) const;
 
+    bool operator==(const Filter& other) const;
+    inline bool operator!=(const Filter& other) const { return !operator==(other); }
+
     void dump() const;
 
 private:

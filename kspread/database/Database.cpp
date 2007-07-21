@@ -179,9 +179,17 @@ void Database::showPopup(QWidget* parent, const Cell& cell, const QRect& cellRec
     popup->show();
 }
 
-Filter* Database::filter() const
+const Filter& Database::filter() const
 {
-    return d->filter;
+    return *d->filter;
+}
+
+void Database::setFilter(const Filter& filter)
+{
+    if (*d->filter == filter)
+        return;
+    delete d->filter;
+    d->filter = new Filter(filter);
 }
 
 bool Database::loadOdf(const KoXmlElement& element, const Map* map)
@@ -334,7 +342,34 @@ void Database::operator=( const Database& other )
 
 bool Database::operator==( const Database& other ) const
 {
-    return (d == other.d);
+    // NOTE Stefan: Don't compare targetRangeAddress.
+    if (d->name != other.d->name)
+        return false;
+    if (d->isSelection != other.d->isSelection)
+        return false;
+    if (d->onUpdateKeepStyles != other.d->onUpdateKeepStyles)
+        return false;
+    if (d->onUpdateKeepSize != other.d->onUpdateKeepSize)
+        return false;
+    if (d->hasPersistentData != other.d->hasPersistentData)
+        return false;
+    if (d->orientation != other.d->orientation)
+        return false;
+    if (d->containsHeader != other.d->containsHeader)
+        return false;
+    if (d->displayFilterButtons != other.d->displayFilterButtons)
+        return false;
+    if (d->refreshDelay != other.d->refreshDelay)
+        return false;
+//     if (*d->source != *other.d->source)
+//         return false;
+//     if (*d->sort != *other.d->sort)
+//         return false;
+    if (*d->filter != *other.d->filter)
+        return false;
+//     if (*d->subtotalRules != *other.d->subtotalRules)
+//         return false;
+    return true;
 }
 
 bool Database::operator<( const Database& other ) const

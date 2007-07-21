@@ -51,7 +51,7 @@ void ApplyFilterCommand::redo()
     const int end = m_database.orientation() == Qt::Vertical ? range.bottom() : range.right();
     for (int i = start + 1; i <= end; ++i)
     {
-        const bool isFiltered = !m_database.filter()->evaluate(m_database, i);
+        const bool isFiltered = !m_database.filter().evaluate(m_database, i);
 //         kDebug() << "Filtering column/row " << i << "? " << isFiltered << endl << endl;
         if (m_database.orientation() == Qt::Vertical)
         {
@@ -69,6 +69,7 @@ void ApplyFilterCommand::redo()
     else // m_database.orientation() == Qt::Horizontal
         sheet->emitHideColumn();
 
+    m_sheet->cellStorage()->setDatabase(*this, Database());
     m_sheet->cellStorage()->setDatabase(*this, m_database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
@@ -92,6 +93,7 @@ void ApplyFilterCommand::undo()
         sheet->emitHideColumn();
 
 // FIXME Stefan: Restore the old filter
+//     m_sheet->cellStorage()->setDatabase(*this, Database());
 //     m_sheet->cellStorage()->setDatabase(*this, m_oldDatabase);
 //     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }

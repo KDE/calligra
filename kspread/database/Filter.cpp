@@ -101,6 +101,10 @@ public:
         }
         list = newList;
     }
+    bool operator!=(const And& other) const
+    {
+        return list != other.list;
+    }
     virtual QString dump() const
     {
         QString result = "\t";
@@ -167,6 +171,10 @@ public:
                 delete list[i];
         }
         list = newList;
+    }
+    bool operator!=(const Or& other) const
+    {
+        return list != other.list;
     }
     virtual QString dump() const
     {
@@ -388,6 +396,20 @@ public:
 //             kDebug() << "removing condition for fieldNumber " << fieldNumber << endl;
             this->fieldNumber = -1;
         }
+    }
+    bool operator!=(const Condition& other) const
+    {
+        if (fieldNumber == other.fieldNumber)
+            return false;
+        if (value == other.value)
+            return false;
+        if (operation == other.operation)
+            return false;
+        if (caseSensitivity == other.caseSensitivity)
+            return false;
+        if (dataType == other.dataType)
+            return false;
+        return true;
     }
     virtual QString dump() const
     {
@@ -697,16 +719,28 @@ bool Filter::loadOdf(const KoXmlElement& element, const Map* map)
         else
             d->displayDuplicates = true;
     }
-    const KoXmlElement conditionElement = element.firstChild().toElement();
-    if (conditionElement.isNull() || conditionElement.namespaceURI() != KoXmlNS::table)
+    KoXmlElement conditionElement;
+    forEachElement(conditionElement, element)
+    {
+        if (conditionElement.localName() == "filter-and")
+        {
+            d->condition = new And();
+            break;
+        }
+        else if (conditionElement.localName() == "filter-or")
+        {
+            d->condition = new Or();
+            break;
+        }
+        else if (conditionElement.localName() == "filter-condition")
+        {
+            d->condition = new Condition();
+            break;
+        }
+    }
+    if (!d->condition)
         return false;
-    if (conditionElement.localName() == "filter-and")
-        d->condition = new And();
-    else if (conditionElement.localName() == "filter-or")
-        d->condition = new Or();
-    else if (conditionElement.localName() == "filter-condition")
-        d->condition = new Condition();
-    if (!d->condition->loadOdf(conditionElement))
+    if (!d->condition->loadOdf(conditionElement.toElement()))
     {
         delete d->condition;
         d->condition = 0;
@@ -730,6 +764,32 @@ void Filter::saveOdf(KoXmlWriter& xmlWriter) const
         xmlWriter.addAttribute("table:display-duplicates", "false");
     d->condition->saveOdf(xmlWriter);
     xmlWriter.endElement();
+}
+
+bool Filter::operator==(const Filter& other) const
+{
+    if (d->targetRangeAddress != d->targetRangeAddress)
+        return false;
+    if (d->conditionSource != other.d->conditionSource)
+        return false;
+    if (d->conditionSourceRangeAddress != other.d->conditionSourceRangeAddress)
+        return false;
+    if (d->displayDuplicates != other.d->displayDuplicates)
+        return false;
+    if (!d->condition || !other.d->condition)
+        return d->condition == other.d->condition;
+    if (d->condition->type() != other.d->condition->type())
+        return false;
+    if (d->condition->type() == AbstractCondition::And &&
+        *static_cast<And*>(d->condition) != *static_cast<And*>(other.d->condition))
+        return false;
+    if (d->condition->type() == AbstractCondition::Or &&
+        *static_cast<Or*>(d->condition) != *static_cast<Or*>(other.d->condition))
+        return false;
+    if (d->condition->type() == AbstractCondition::Condition &&
+        *static_cast<Condition*>(d->condition) != *static_cast<Condition*>(other.d->condition))
+        return false;
+    return true;
 }
 
 void Filter::dump() const

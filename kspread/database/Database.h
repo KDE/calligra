@@ -120,7 +120,8 @@ public:
      */
     void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect);
 
-    Filter* filter() const;
+    const Filter& filter() const;
+    void setFilter(const Filter& filter);
 
     bool loadOdf(const KoXmlElement& element, const Map* map);
     void saveOdf(KoXmlWriter& xmlWriter) const;
