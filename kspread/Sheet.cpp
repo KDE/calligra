@@ -2754,7 +2754,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
         // e.g.: Sheet4.A1:Sheet4.E28
         QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString() );
         Region region(Region::loadOdf(range));
-        if (sheetName() == region.firstSheet()->sheetName())
+        if (!region.firstSheet() || sheetName() == region.firstSheet()->sheetName())
           print()->setPrintRange(region.firstRange());
     }
 
