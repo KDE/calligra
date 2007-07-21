@@ -86,23 +86,21 @@ public:
      * \ingroup Painting
      * Paints the cell's background.
      * \param painter the used painter
-     * \param paintCoordinate the top left coordinate (scroll offset dependent)
+     * \param coordinate the top left coordinate (scroll offset dependent)
      */
-    void paintCellBackground( QPainter& painter, const QPointF& paintCoordinate );
+    void paintCellBackground( QPainter& painter, const QPointF& coordinate );
 
   /**
    * \ingroup Painting
    * Paints the cell.
    * \param paintRegion the portion of the canvas that is actually in view
    * \param painter the used painter
-   * \param paintDevice the paintDevice of this data.  Used for:
-   *        \li layout direction (should become obsolete),
-   *        \li (was used for selection painting, which is now in QPaintDevice)
-   * \param paintCoordinate the top left coordinate (scroll offset dependent)
+   * \param paintDevice the paintDevice of this data.
+   * \param coordinate the top left coordinate (scroll offset dependent)
    * \param cell the Cell
    */
   void paintCellContents( const QRectF& paintRegion, QPainter& painter,
-                          QPaintDevice* paintDevice, const QPointF& paintCoordinate,
+                          QPaintDevice* paintDevice, const QPointF& coordinate,
                           const Cell& cell, SheetView* sheetView );
 
   /**
@@ -110,13 +108,13 @@ public:
    * Paints the cell custom borders, the page borders, diagonal lines.
    * \param paintRegion the portion of the canvas that is actually in view
    * \param painter the used painter
-   * \param paintCoordinate the top left coordinate (scroll offset dependent)
+   * \param coordinate the top left coordinate (scroll offset dependent)
    * \param cellRange the cell range, that is painted
    * \param cell the Cell
    * \param sheetView the SheetView
    */
   void paintCellBorders( const QRectF& paintRegion, QPainter& painter,
-                         const QPointF& paintCoordinate,
+                         const QPointF& coordinate,
                          const QRect& cellRange,
                          const Cell& cell, SheetView* sheetView );
 
@@ -125,14 +123,14 @@ public:
    * Paints the default cell borders.
    * \param painter the used painter
    * \param paintRegion the portion of the canvas that is actually in view
-   * \param cellRegion the cell's dimension (should be replaced with paintCoordinate!)
+   * \param coordinate the painting coordinate
    * \param paintBorder the borders, that should be painted (should be removed???)
    * \param cellRange the cell range, that is painted
    * \param cell the Cell
    * \param sheetView the SheetView
    */
   void paintDefaultBorders( QPainter& painter, const QRectF &paintRegion,
-                            const QRectF &cellRegion,
+                            const QPointF& coordinate,
                             Borders paintBorder, const QRect& cellRange,
                             const Cell& cell, SheetView* sheetView );
 
@@ -289,8 +287,7 @@ private:
    * @internal
    */
   void paintCustomBorders( QPainter& painter, const QRectF &paintRegion,
-                           const QRectF &cellRegion,
-                           Borders paintBorder );
+                           const QPointF& coordinate, Borders paintBorder );
 
   /**
    * \ingroup Painting
@@ -298,7 +295,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintPageBorders( QPainter& painter, const QRectF &cellRect,
+  void paintPageBorders( QPainter& painter, const QPointF &coordinate,
                          Borders paintBorder, const Cell& cell );
 
   /**
@@ -307,7 +304,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintText( QPainter& painter, const QRectF &cellRect,
+  void paintText( QPainter& painter, const QPointF& coordinate,
                   QPaintDevice* paintDevice, const Cell& cell );
 
   /**
@@ -316,7 +313,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintMoreTextIndicator( QPainter& painter, const QRectF &cellRect );
+  void paintMoreTextIndicator( QPainter& painter, const QPointF& coordinate );
 
   /**
    * \ingroup Painting
@@ -324,7 +321,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCommentIndicator( QPainter& painter, const QRectF &cellRect,
+  void paintCommentIndicator( QPainter& painter, const QPointF& coordinate,
                               const Cell& cell );
 
   /**
@@ -333,7 +330,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintFormulaIndicator( QPainter& painter, const QRectF &cellRect, const Cell& cell );
+  void paintFormulaIndicator( QPainter& painter, const QPointF& coordinate, const Cell& cell );
 
   /**
    * \ingroup Painting
@@ -341,7 +338,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintMatrixElementIndicator( QPainter& painter, const QRectF &cellRect, const Cell& cell );
+  void paintMatrixElementIndicator( QPainter& painter, const QPointF& coordinate, const Cell& cell );
 
   /**
    * \ingroup Painting
@@ -349,7 +346,7 @@ private:
    * @see paintCell()
    * @internal
    */
-  void paintCellDiagonalLines( QPainter& painter, const QRectF &cellRect );
+  void paintCellDiagonalLines( QPainter& painter, const QPointF& coordinate );
 
     /**
      * \ingroup Painting
@@ -357,7 +354,7 @@ private:
      * @see paintCell()
      * @internal
      */
-    void paintFilterButton( QPainter& painter, const QRectF& cellRect,
+    void paintFilterButton( QPainter& painter, const QPointF& coordinate,
                             const Cell& cell, SheetView* sheetView );
 
     /**

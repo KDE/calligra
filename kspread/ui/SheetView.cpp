@@ -206,9 +206,8 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             Cell cell = Cell( sheet(), col, row );
-            const QRectF cellRect = QRectF( offset.x(), offset.y(), cell.width(), cell.height() );
             CellView cellView = this->cellView( col, row );
-            cellView.paintDefaultBorders( painter, paintRect, cellRect,
+            cellView.paintDefaultBorders( painter, paintRect, offset,
                                           CellView::LeftBorder | CellView::RightBorder |
                                           CellView::TopBorder | CellView::BottomBorder,
                                           d->visibleRect, cell, this );
