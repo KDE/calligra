@@ -57,10 +57,15 @@ public:
     bool loadOasis( const KoXmlElement& row, KoXmlElement * rowStyle );
 
     /**
-     * @return the height in zoomed pixels as double value.
-     * Use this function, if you want to work with height without having rounding problems.
+     * \return the row's height
      */
     double height() const;
+
+    /**
+     * The visible row height, respecting hiding and filtering attributes.
+     * \return the visible row height
+     */
+    double visibleHeight() const;
 
     /**
      * Sets the height to _h zoomed pixels.
@@ -124,11 +129,15 @@ public:
     bool load( const KoXmlElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
 
     /**
-     * @return the width in zoomed pixels as double.
-     * Use this function, if you want to use the width and later restore it back,
-     * so you don't get rounding problems
+     * \return the column's width
      */
     double width() const;
+
+    /**
+     * The visible column height, respecting hiding and filtering attributes.
+     * \return the visible column width
+     */
+    double visibleWidth() const;
 
     /**
      * Sets the width to _w zoomed pixels as double value.

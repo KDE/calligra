@@ -525,11 +525,11 @@ int Sheet::leftColumn( double _xpos, double &_left ) const
 {
     _left = 0.0;
     int col = 1;
-    double x = columnFormat(col)->width();
+    double x = columnFormat(col)->visibleWidth();
     while (x < _xpos && col < KS_colMax)
     {
-        _left += columnFormat(col)->width();
-        x += columnFormat(++col)->width();
+        _left += columnFormat(col)->visibleWidth();
+        x += columnFormat(++col)->visibleWidth();
     }
     return col;
 }
@@ -537,9 +537,9 @@ int Sheet::leftColumn( double _xpos, double &_left ) const
 int Sheet::rightColumn( double _xpos ) const
 {
     int col = 1;
-    double x = columnFormat(col)->width();
+    double x = columnFormat(col)->visibleWidth();
     while (x <= _xpos && col < KS_colMax)
-        x += columnFormat(++col)->width();
+        x += columnFormat(++col)->visibleWidth();
     return col;
 }
 
@@ -547,11 +547,11 @@ int Sheet::topRow( double _ypos, double & _top ) const
 {
     _top = 0.0;
     int row = 1;
-    double y = rowFormat(row)->height();
+    double y = rowFormat(row)->visibleHeight();
     while (y < _ypos && row < KS_rowMax)
     {
-        _top += rowFormat(row)->height();
-        y += rowFormat(++row)->height();
+        _top += rowFormat(row)->visibleHeight();
+        y += rowFormat(++row)->visibleHeight();
     }
     return row;
 }
@@ -559,9 +559,9 @@ int Sheet::topRow( double _ypos, double & _top ) const
 int Sheet::bottomRow( double _ypos ) const
 {
     int row = 1;
-    double y = rowFormat(row)->height();
+    double y = rowFormat(row)->visibleHeight();
     while (y <= _ypos && row < KS_rowMax)
-        y += rowFormat(++row)->height();
+        y += rowFormat(++row)->visibleHeight();
     return row;
 }
 
@@ -570,7 +570,7 @@ double Sheet::columnPosition( int _col ) const
     const int max = qMin(_col, KS_colMax);
     double x = 0.0;
     for (int col = 1; col < max; ++col)
-        x += columnFormat(col)->width();
+        x += columnFormat(col)->visibleWidth();
     return x;
 }
 
@@ -580,7 +580,7 @@ double Sheet::rowPosition( int _row ) const
     const int max = qMin(_row, KS_rowMax);
     double y = 0.0;
     for (int row = 1; row < max; ++row)
-        y += rowFormat(row)->height();
+        y += rowFormat(row)->visibleHeight();
     return y;
 }
 

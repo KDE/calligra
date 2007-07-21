@@ -176,15 +176,21 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     if ( cell.height() != sheetView->sheet()->doc()->defaultRowFormat()->height() )
         d->height = cell.height();
 
+    if (sheet->columnFormat(col)->isHiddenOrFiltered() ||
+        sheet->rowFormat(row)->isHiddenOrFiltered() ||
+        (sheet->rowFormat(row)->height() <= sheetView->viewConverter()->viewToDocumentY(2)))
+    {
+        d->hidden = true;
+        d->height = 0.0;
+        d->width = 0.0;
+    }
+
     d->checkForFilterButton(cell);
 
     // do not touch the other Private members, just return here.
     if ( cell.isDefault() ) return;
 
     d->layoutDirection = sheet->layoutDirection();
-
-    d->hidden = sheet->columnFormat(col)->isHiddenOrFiltered() ||
-                ( sheet->rowFormat( row )->height() <= sheetView->viewConverter()->viewToDocumentY( 2 ) );
 
     // horizontal align
     if ( d->style.halign() == Style::HAlignUndefined )

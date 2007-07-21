@@ -125,6 +125,11 @@ void RowFormat::setHeight( double height )
 
 double RowFormat::height() const
 {
+    return d->height;
+}
+
+double RowFormat::visibleHeight() const
+{
     if( d->hide || d->filtered )
         return 0.0;
     return d->height;
@@ -367,6 +372,11 @@ void ColumnFormat::setWidth( double width )
 }
 
 double ColumnFormat::width() const
+{
+    return d->width;
+}
+
+double ColumnFormat::visibleWidth() const
 {
     if ( d->hide || d->filtered )
         return 0.0;

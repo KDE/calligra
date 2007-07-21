@@ -587,6 +587,11 @@ void VBorder::paintEvent( QPaintEvent* event )
     const bool highlighted = (!selected && affectedRows.contains(y));
 
     const RowFormat* rowFormat = sheet->rowFormat( y );
+    if (rowFormat->isHiddenOrFiltered())
+    {
+        ++y;
+        continue;
+    }
     const double height = rowFormat->height();
 
     if ( selected || highlighted )
@@ -1337,8 +1342,13 @@ void HBorder::paintEvent( QPaintEvent* event )
       bool selected = (selectedColumns.contains(x));
       bool highlighted = (!selected && affectedColumns.contains(x));
 
-      const ColumnFormat * col_lay = sheet->columnFormat( x );
-      double width = xPos + col_lay->width() - xPos;
+      const ColumnFormat* columnFormat = sheet->columnFormat(x);
+      if (columnFormat->isHiddenOrFiltered())
+      {
+          ++x;
+          continue;
+      }
+      double width = xPos + columnFormat->width() - xPos;
 
       if ( selected || highlighted )
       {
@@ -1363,7 +1373,7 @@ void HBorder::paintEvent( QPaintEvent* event )
 
         QString colText = sheet->getShowColumnNumber() ? QString::number( x ) : Cell::columnName( x );
         double len = painter.fontMetrics().width( colText );
-        if ( !col_lay->isHiddenOrFiltered() )
+        if ( !columnFormat->isHiddenOrFiltered() )
           drawText( painter,
                     normalFont,
                     QPointF( xPos + ( width - len ) / 2,
@@ -1371,7 +1381,7 @@ void HBorder::paintEvent( QPaintEvent* event )
                     colText,
                     width );
 
-      xPos += col_lay->width();
+      xPos += columnFormat->width();
       --x;
     }
   }
@@ -1385,8 +1395,8 @@ void HBorder::paintEvent( QPaintEvent* event )
       bool selected = (selectedColumns.contains(x));
       bool highlighted = (!selected && affectedColumns.contains(x));
 
-      const ColumnFormat *col_lay = sheet->columnFormat( x );
-      double width = col_lay->width();
+      const ColumnFormat *columnFormat = sheet->columnFormat( x );
+      double width = columnFormat->width();
 
       QColor backgroundColor = palette().window().color();
 
@@ -1413,7 +1423,7 @@ void HBorder::paintEvent( QPaintEvent* event )
 
         QString colText = sheet->getShowColumnNumber() ? QString::number( x ) : Cell::columnName( x );
         int len = painter.fontMetrics().width( colText );
-        if (!col_lay->isHiddenOrFiltered())
+        if (!columnFormat->isHiddenOrFiltered())
           drawText( painter,
                     normalFont,
                     QPointF( xPos + ( width - len ) / 2,
@@ -1421,7 +1431,7 @@ void HBorder::paintEvent( QPaintEvent* event )
                     colText,
                     width );
 
-      xPos += col_lay->width();
+      xPos += columnFormat->width();
       ++x;
     }
   }

@@ -109,6 +109,7 @@ const CellView& SheetView::cellView( int col, int row )
 
 void SheetView::setPaintCellRange( const QRect& rect )
 {
+    kDebug() << rect << endl;
     d->visibleRect = rect & QRect(1, 1, KS_colMax, KS_rowMax);
     d->cache.setMaxCost( 2 * rect.width() * rect.height() );
 }
@@ -161,18 +162,18 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
 // kDebug() << "offset: " << offset << endl;
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBackground( painter, offset );
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
         }
         offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
@@ -181,18 +182,18 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
             CellView cellView = this->cellView( col, row );
             cellView.paintCellContents( paintRect, painter, paintDevice, offset, QPoint( col, row ),
                                         Cell( sheet(), col, row ), this );
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
         }
         offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
     }
 
     // 3. Paint the default borders
@@ -201,7 +202,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
@@ -212,11 +213,11 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
                                           CellView::LeftBorder | CellView::RightBorder |
                                           CellView::TopBorder | CellView::BottomBorder,
                                           d->visibleRect, cell, this );
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
         }
         offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
     }
 
     // 4. Paint the custom borders, diagonal lines and page borders
@@ -225,7 +226,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
@@ -233,11 +234,11 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             cellView.paintCellBorders( paintRect, painter, offset,
                                        QPoint( col, row ), d->visibleRect,
                                        Cell( sheet(), col, row ), this );
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->height() );
+            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
         }
         offset.setY( topLeft.y() );
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->width() );
+            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
     }
 }
 
