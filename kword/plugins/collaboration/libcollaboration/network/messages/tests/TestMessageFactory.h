@@ -15,25 +15,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "Generic.h"
-#include <QDomDocument>
-#include <QDomElement>
-using namespace kcollaborate::Message;
+#ifndef KCOLLABORATE_TESTMESSAGEFACTORY_H
+#define KCOLLABORATE_TESTMESSAGEFACTORY_H
 
-Generic::Generic( QObject *parent )
-        : QObject( parent )
-{}
+#include <QtTest/QtTest>
 
-Generic::~Generic()
-{}
-
-const QString Generic::toString() const
+namespace kcollaborate
 {
-    QDomDocument document;
-    QDomElement element = document.createElement( tagName() );
-    document.appendChild(element);
-    toXML( document, element );
-    return document.toString();
-}
+namespace Message
+{
 
-#include "Generic.moc"
+class TestMessageFactory: public QObject
+{
+        Q_OBJECT
+
+    private Q_SLOTS:
+        void testProcessRawMessage_data();
+        void testProcessRawMessage();
+};
+
+};
+};
+
+#endif

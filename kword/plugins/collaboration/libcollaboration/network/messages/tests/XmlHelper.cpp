@@ -15,25 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "Generic.h"
-#include <QDomDocument>
-#include <QDomElement>
-using namespace kcollaborate::Message;
+#include "XmlHelper.h"
+#include <QDebug>
 
-Generic::Generic( QObject *parent )
-        : QObject( parent )
-{}
-
-Generic::~Generic()
-{}
-
-const QString Generic::toString() const
+QDomElement kcollaborate::Message::XmlHelper::parse( const QString &string )
 {
-    QDomDocument document;
-    QDomElement element = document.createElement( tagName() );
-    document.appendChild(element);
-    toXML( document, element );
-    return document.toString();
-}
+    QDomDocument domDocument;
+    QString errorStr;
+    int errorLine;
+    int errorColumn;
+    if ( !domDocument.setContent( string, true, &errorStr, &errorLine,
+                                  &errorColumn ) ) {
+        qWarning() << "Parse error in the recieved message at line "
+        << errorLine << ", column " << errorColumn << ": " << errorStr;
+        //return NULL;//TODO: make this better
+    }
 
-#include "Generic.moc"
+    return domDocument.documentElement();
+}

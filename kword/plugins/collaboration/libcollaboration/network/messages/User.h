@@ -15,49 +15,49 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KCOLLABORATE_MESSAGE_HELLO_H
-#define KCOLLABORATE_MESSAGE_HELLO_H
+#ifndef KCOLLABORATE_MESSAGE_USER_H
+#define KCOLLABORATE_MESSAGE_USER_H
+
+#include <QObject>
+#include <QString>
+#include <QMap>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <libcollaboration/network/messages/Generic.h>
-#include <QMetaType>
 
 namespace kcollaborate
 {
 namespace Message
 {
-class User;
 
-class KCOLLABORATE_EXPORT Hello : public Generic
+class KCOLLABORATE_EXPORT User : public Generic
 {
         Q_OBJECT
     public:
-        Hello();
-        Hello(const Hello& hello);
-        Hello( QDomElement elt, QObject *parent = 0 );
-        Hello( const QString &id, const QString &protocolVersion, const QString &invitationNumber,
-               const User *user, QObject *parent = 0 );
-        virtual ~Hello();
+        User();
+        User(const User& user);
+        User( QDomElement elt, QObject *parent = 0 );
+        User( const QString &name, const QString &pictureUrl, QObject *parent = 0 );
+        virtual ~User();
 
-        const QString & id() const;
-        const QString & protocolVersion() const;
-        const QString & invitationNumber() const;
-        const User * user() const;
+        void addIm( const QString &imType, const QString &account );
+
+        const QString & name() const;
+        const QString & pictureUrl() const;
+        const QMap<QString, QString> & im() const;
+        const QString im( const QString &imType ) const;
 
         virtual QString tagName() const;
         virtual void toXML( QDomDocument &doc, QDomElement &elt ) const;
         virtual void fromXML( QDomElement &elt );
     private:
-        QString m_id;
-        QString m_protocolVersion;
-        QString m_invitationNumber;
-        const User *m_user;
-
-        void setUser( const User *user );
+        QString m_name;
+        QString m_pictureUrl;
+        QMap<QString, QString> m_im;
 };
 
 };
 };
-
-Q_DECLARE_METATYPE(kcollaborate::Message::Hello)
 
 #endif

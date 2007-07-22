@@ -19,65 +19,122 @@
 using namespace kcollaborate;
 using namespace kcollaborate::Message;
 
-HelloAnswer::HelloAnswer( int id, HelloAnswerStatus status, const QString &sessionId, bool isReadOnly,
+HelloAnswer::HelloAnswer():
+    Generic()
+{
+    qRegisterMetaType<kcollaborate::Message::HelloAnswer>("kcollaborate::Message::HelloAnswer");
+}
+
+HelloAnswer::HelloAnswer( const HelloAnswer& helloAnswer ):
+    Generic()
+{
+    qRegisterMetaType<kcollaborate::Message::HelloAnswer>("kcollaborate::Message::HelloAnswer");
+
+    m_id = helloAnswer.id();
+    m_status = helloAnswer.status();
+    m_sessionId = helloAnswer.sessionId();
+    m_isReadOnly = helloAnswer.isReadOnly();
+    m_text = helloAnswer.text();
+}
+
+HelloAnswer::HelloAnswer( QDomElement elt, QObject *parent ):
+        Generic( parent )
+{
+    qRegisterMetaType<kcollaborate::Message::HelloAnswer>("kcollaborate::Message::HelloAnswer");
+
+    fromXML( elt );
+}
+
+HelloAnswer::HelloAnswer( const QString &id, HelloAnswerStatus status, const QString &sessionId, bool isReadOnly,
                           const QString &text, QObject *parent ):
         Generic( parent ), m_id( id ), m_status( status ), m_sessionId( sessionId ), m_isReadOnly( isReadOnly ),
         m_text( text )
-{}
+{
+    qRegisterMetaType<kcollaborate::Message::HelloAnswer>("kcollaborate::Message::HelloAnswer");
+}
 
 HelloAnswer::~HelloAnswer()
 {}
 
-int HelloAnswer::id() const { return m_id; }
+const QString & HelloAnswer::id() const { return m_id; }
 HelloAnswer::HelloAnswerStatus HelloAnswer::status() const { return m_status; }
-const QString& HelloAnswer::sessionId() const { return m_sessionId; }
+const QString & HelloAnswer::sessionId() const { return m_sessionId; }
 bool HelloAnswer::isReadOnly() const { return m_isReadOnly; }
-const QString& HelloAnswer::text() const { return m_text; }
+const QString & HelloAnswer::text() const { return m_text; }
 
-const QString HelloAnswer::toMsg() const
+QString HelloAnswer::tagName() const
 {
-    QString out;
-    out.reserve( 1024 );
-    out.append( "<HelloAnswer>\n" );
-    out.append( "<Id>" ).append( id() ).append( "</Id>\n" );
+    return "HelloAnswer";
+}
 
-    switch ( status() ) {
+void HelloAnswer::toXML( QDomDocument &doc, QDomElement &elt ) const
+{
+    elt.setAttribute( "id", id() );
+
+    QDomElement element = doc.createElement( status2string( status() ) );
+    if ( status() == HelloAnswer::Accepted ) {
+        element.setAttribute( "sessionId", sessionId() );
+        if ( isReadOnly() ) {
+            QDomElement readOnlyElement = doc.createElement( "ReadOnly" );
+            element.appendChild( readOnlyElement );
+        }
+    } else {
+        if ( !text().isEmpty() ) {
+            QDomCDATASection dataSection = doc.createCDATASection( text() );
+            element.appendChild( dataSection );
+        }
+    }
+    elt.appendChild( element );
+}
+
+void HelloAnswer::fromXML( QDomElement &elt )
+{
+    m_id = elt.attribute( "id", "" );
+    if ( elt.hasChildNodes() ) {
+        QDomElement element = elt.firstChild().toElement();
+        if ( !element.isNull() ) {
+            m_status = string2status( element.tagName() );
+            if ( m_status == HelloAnswer::Accepted ) {
+                m_sessionId = element.attribute( "sessionId", "" );
+                QDomElement readOnlyElement = element.firstChildElement( "ReadOnly" );
+                m_isReadOnly = !readOnlyElement.isNull();
+            } else {
+                QDomCDATASection dataSection = element.firstChild().toCDATASection();
+                m_text = dataSection.data();
+            }
+        }
+    }
+}
+
+QString HelloAnswer::status2string( HelloAnswer::HelloAnswerStatus status )
+{
+    switch ( status ) {
     case HelloAnswer::Rejected:
-        if ( text().isEmpty() ) {
-            out.append( "<Rejected />\n" );
-        } else {
-            out.append( "<Rejected>" ).append( text() ).append( "</Rejected>\n" );
-        }
-        break;
-
-    case HelloAnswer::Unsupported:
-        if ( text().isEmpty() ) {
-            out.append( "<Unsupported />\n" );
-        } else {
-            out.append( "<Unsupported>" ).append( text() ).append( "</Unsupported>\n" );
-        }
-        break;
+        return "Rejected";
 
     case HelloAnswer::Accepted:
-        out.append( "<Accepted><Session>\n" );
-        out.append( "<SessionId>" ).append( sessionId() ).append( "</SessionId>\n" );
-        if ( isReadOnly() ) {
-            out.append( "<ReadOnly />\n" );
-        }
-        out.append( "</Session></Accepted>\n" );
-        break;
+        return "Accepted";
 
     case HelloAnswer::Timeout:
-        if ( text().isEmpty() ) {
-            out.append( "<Timeout />\n" );
-        } else {
-            out.append( "<Timeout>" ).append( text() ).append( "</Timeout>\n" );
-        }
-        break;
-    }
+        return "Timeout";
 
-    out.append( "</HelloAnswer>" );
-    return out;
+    default:
+        //case HelloAnswer::Unsupported:
+        return "Unsupported";
+    }
+}
+
+HelloAnswer::HelloAnswerStatus HelloAnswer::string2status( const QString &string )
+{
+    if ( "Rejected" == string ) {
+        return HelloAnswer::Rejected;
+    } else if ( "Accepted" == string ) {
+        return HelloAnswer::Accepted;
+    } else if ( "Timeout" == string ) {
+        return HelloAnswer::Timeout;
+    } else {// "Unsupported"
+        return HelloAnswer::Unsupported;
+    }
 }
 
 #include "HelloAnswer.moc"

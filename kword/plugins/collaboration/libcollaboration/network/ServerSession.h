@@ -25,7 +25,6 @@ namespace kcollaborate
 class Url;
 class MessageTcpServer;
 class MessageTcpSocket;
-class MessageFactory;
 class ServerConnection;
 
 class KCOLLABORATE_EXPORT ServerSession : public Session
@@ -43,7 +42,6 @@ class KCOLLABORATE_EXPORT ServerSession : public Session
 
     private:
         MessageTcpServer *server;
-        MessageFactory *messageFactory;
         QMap<QString, ServerConnection*> serverConnections;
 
         void closeConnectionById( const QString &sessionId );

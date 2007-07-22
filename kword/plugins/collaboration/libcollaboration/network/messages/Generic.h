@@ -20,6 +20,8 @@
 
 #include <QObject>
 #include <QString>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include <libcollaboration/kcollaborate_export.h>
 
@@ -35,13 +37,11 @@ class KCOLLABORATE_EXPORT Generic : public QObject
         Generic( QObject *parent = 0 );
         virtual ~Generic();
 
-        virtual const QString toMsg() const = 0;
-//         virtual void toXML(QDomDocument& doc, QDomElement elt);
-//         virtual void fromXML(QDomElement elt);
-};
-
-enum UpdateAnswerStatus {
-    Rejected = 0, Unsupported = 1, Accepted = 2, Timeout = 3
+        virtual QString tagName() const = 0;
+        virtual void toXML( QDomDocument &doc, QDomElement &elt ) const = 0;
+        virtual void fromXML( QDomElement &elt ) = 0;
+        ///mostly for tests and debug
+        virtual const QString toString() const;
 };
 
 };

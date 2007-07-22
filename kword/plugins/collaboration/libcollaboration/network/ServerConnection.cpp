@@ -29,15 +29,15 @@ ServerConnection::ServerConnection( MessageTcpSocket *aSocket, ServerSession *pa
     Q_ASSERT( parent );
     id_ = QUuid::createUuid().toString();
 
-    messageFactory = new MessageFactory( this );
+    messageFactory = new Message::MessageFactory( this );
     connect( messageFactory, SIGNAL( messageReceivedHello( const Message::Hello & ) ),
              this, SLOT( messageReceivedHello( const Message::Hello & ) ) );
     connect( messageFactory, SIGNAL( messageReceivedHelloAnswer( const Message::HelloAnswer & ) ),
              this, SLOT( messageReceivedHelloAnswer( const Message::HelloAnswer & ) ) );
     connect( messageFactory, SIGNAL( messageReceivedUpdate( const Message::Update & ) ),
              this, SLOT( messageReceivedUpdate( const Message::Update & ) ) );
-    connect( messageFactory, SIGNAL( messageReceivedUpdateAnswer( const QString &sessionId, const Message::UpdateAnswerStatus & ) ),
-             this, SLOT( messageReceivedUpdateAnswer( const QString &sessionId, const Message::UpdateAnswerStatus & ) ) );
+    connect( messageFactory, SIGNAL( messageReceivedUpdateAnswer( const Message::UpdateAnswer & ) ),
+             this, SLOT( messageReceivedUpdateAnswer( const Message::UpdateAnswer & ) ) );
     connect( messageFactory, SIGNAL( messageReceivedSessionClosed( const QString & ) ),
              this, SLOT( messageReceivedSessionClosed( const QString & ) ) );
 
@@ -52,29 +52,29 @@ void ServerConnection::messageReceivedHello( const Message::Hello & msg )
 {
     qDebug() << "[ServerConnection::messageReceivedHello] invitationNumber:" << msg.invitationNumber();
     ServerSession *session = qobject_cast<ServerSession*>( parent() );
-    if ( session->id() == QString::number(msg.invitationNumber()) ) {
+    if ( session->id() == msg.invitationNumber() ) {
         Message::HelloAnswer answer( msg.id(), Message::HelloAnswer::Accepted, id(), false, "" ); //TODO: read-only UI
-        socket->sendMsg( answer.toMsg() );
+        socket->sendMsg( answer.toString() );
     } else {
         //TODO: allow message to UI to ask reject or not user
         Message::HelloAnswer answer( msg.id(), Message::HelloAnswer::Rejected, "", false, "Incorrect invitation number" );
-        socket->sendMsg( answer.toMsg() );
+        socket->sendMsg( answer.toString() );
     }
 }
 
 void ServerConnection::messageReceivedHelloAnswer( const Message::HelloAnswer & msg )
 {
-    qDebug() << "[ServerConnection::messageReceivedHello] Unexpected message:" << msg.toMsg();
+    qDebug() << "[ServerConnection::messageReceivedHello] Unexpected message:" << msg.toString();
 }
 
 void ServerConnection::messageReceivedUpdate( const Message::Update & msg )
 {
-    qDebug() << "[ServerConnection::messageReceivedUpdate] stub:" << msg.toMsg();
+    qDebug() << "[ServerConnection::messageReceivedUpdate] stub:" << msg.toString();
 }
 
-void ServerConnection::messageReceivedUpdateAnswer( const QString & sessionId, const Message::UpdateAnswerStatus & status )
+void ServerConnection::messageReceivedUpdateAnswer( const Message::UpdateAnswer & msg )
 {
-    qDebug() << "[ServerConnection::messageReceivedUpdateAnswer] stub:" << status;
+    qDebug() << "[ServerConnection::messageReceivedUpdateAnswer] stub:" << msg.toString();
 }
 
 void ServerConnection::messageReceivedSessionClosed( const QString & sessionId )

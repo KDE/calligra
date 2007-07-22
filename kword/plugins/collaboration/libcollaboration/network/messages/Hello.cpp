@@ -16,52 +16,90 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "Hello.h"
+#include "User.h"
 using namespace kcollaborate;
 using namespace kcollaborate::Message;
 
-Hello::Hello( int id, int protocolVersion, int invitationNumber, const User *user,
-              bool isRecoverSession, const QString &sessionId, const QString &lastTimestamp,
-              QObject *parent ):
+Hello::Hello():
+        Generic(), m_user( NULL )
+{
+    qRegisterMetaType<kcollaborate::Message::Hello>("kcollaborate::Message::Hello");
+}
+
+Hello::Hello( const Hello& hello ):
+        Generic(), m_user( NULL )
+{
+    qRegisterMetaType<kcollaborate::Message::Hello>("kcollaborate::Message::Hello");
+
+    m_id = hello.id();
+    m_protocolVersion = hello.protocolVersion();
+    m_invitationNumber = hello.invitationNumber();
+    if ( hello.user() != NULL ) {
+        m_user = new User( *hello.user() );
+    }
+}
+
+Hello::Hello( QDomElement elt, QObject *parent ):
+        Generic( parent ), m_user( NULL )
+{
+    qRegisterMetaType<kcollaborate::Message::Hello>("kcollaborate::Message::Hello");
+
+    fromXML( elt );
+}
+
+Hello::Hello( const QString &id, const QString &protocolVersion, const QString &invitationNumber,
+              const User *user, QObject *parent ):
         Generic( parent ), m_id( id ), m_protocolVersion( protocolVersion ), m_invitationNumber( invitationNumber ),
-        m_user( user ), m_isRecoverSession( isRecoverSession ), m_sessionId( sessionId ), m_lastTimestamp( lastTimestamp )
-{}
+        m_user( user )
+{
+    qRegisterMetaType<kcollaborate::Message::Hello>("kcollaborate::Message::Hello");
+}
 
 Hello::~Hello()
 {
     delete m_user;
 }
 
-int Hello::id() const { return m_id; }
-int Hello::protocolVersion() const { return m_protocolVersion; }
-int Hello::invitationNumber() const { return m_invitationNumber; }
-const User& Hello::user() const { return *m_user; }
+const QString & Hello::id() const { return m_id; }
+const QString & Hello::protocolVersion() const { return m_protocolVersion; }
+const QString & Hello::invitationNumber() const { return m_invitationNumber; }
+const User * Hello::user() const { return m_user; }
 
-//session related
-bool Hello::isRecoverSession() const { return m_isRecoverSession; }
-const QString& Hello::sessionId() const { return m_sessionId; }
-const QString& Hello::lastTimestamp() const { return m_lastTimestamp; }
-
-//TODO: make this better?
-const QString Hello::toMsg() const
+void Hello::setUser( const User *user )
 {
-    QString out;
-    out.reserve( 1024 );
-    out.append( "<Hello>\n" );
-    out.append( "<Id>" ).append( id() ).append( "</Id>\n" );
-    out.append( "<ProtocolVersion>" ).append( protocolVersion() ).append( "</ProtocolVersion>\n" );
-    out.append( "<InvitationNumber>" ).append( invitationNumber() ).append( "</InvitationNumber>\n" );
-    out.append( user().toMsgPart() );
-    if ( isRecoverSession() ) {
-        out.append( "<Session>\n" );
-        out.append( "<Recover />\n" );
-        out.append( "<SessionId>" ).append( sessionId() ).append( "</SessionId>\n" );
-        out.append( "<LastTimestamp>" ).append( lastTimestamp() ).append( "</LastTimestamp>\n" );
-        out.append( "</Session>\n" );
-    } else {
-        out.append( "<Session><New /></Session>\n" );
+    delete m_user;
+    m_user = NULL;
+    m_user = user;
+}
+
+QString Hello::tagName() const
+{
+    return "Hello";
+}
+
+void kcollaborate::Message::Hello::toXML( QDomDocument & doc, QDomElement & elt ) const
+{
+    elt.setAttribute( "id", id() );
+    elt.setAttribute( "protocolVersion", protocolVersion() );
+    elt.setAttribute( "invitationNumber", invitationNumber() );
+    if ( m_user ) {
+        QDomElement userElement = doc.createElement( m_user->tagName() );
+        m_user->toXML( doc, userElement );
+        elt.appendChild( userElement );
     }
-    out.append( "</Hello>" );
-    return out;
+}
+
+void kcollaborate::Message::Hello::fromXML( QDomElement & elt )
+{
+    m_id = elt.attribute( "id", "" );
+    m_protocolVersion = elt.attribute( "protocolVersion", "" );
+    m_invitationNumber = elt.attribute( "invitationNumber", "" );
+
+    m_user = NULL;
+    QDomElement userElement = elt.firstChildElement( "User" );//TODO: make tagName static?
+    if ( !userElement.isNull() ) {
+        setUser( new User( userElement ) );
+    }
 }
 
 #include "Hello.moc"

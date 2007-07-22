@@ -23,8 +23,11 @@
 #include <libcollaboration/network/messages/Hello.h>
 #include <libcollaboration/network/messages/HelloAnswer.h>
 #include <libcollaboration/network/messages/Update.h>
+#include <libcollaboration/network/messages/UpdateAnswer.h>
 
 namespace kcollaborate
+{
+namespace Message
 {
 class MessageTcpSocket;
 class KCOLLABORATE_EXPORT MessageFactory : public QObject
@@ -36,16 +39,17 @@ class KCOLLABORATE_EXPORT MessageFactory : public QObject
         virtual ~MessageFactory();
 
     signals:
-        void messageReceivedHello( const Message::Hello &msg );
-        void messageReceivedHelloAnswer( const Message::HelloAnswer &msg );
-        void messageReceivedUpdate( const Message::Update &msg );
-        void messageReceivedUpdateAnswer( const QString &sessionId, const Message::UpdateAnswerStatus &status );
+        void messageReceivedHello( const kcollaborate::Message::Hello &msg );
+        void messageReceivedHelloAnswer( const kcollaborate::Message::HelloAnswer &msg );
+        void messageReceivedUpdate( const kcollaborate::Message::Update &msg );
+        void messageReceivedUpdateAnswer( const kcollaborate::Message::UpdateAnswer &msg );
         void messageReceivedSessionClosed( const QString &sessionId );
 
     public slots:
-        void processRawMessage( const QString &msg );
+        bool processRawMessage( const QString &msg );
 };
 
+};
 };
 
 #endif

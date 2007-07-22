@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<Messages>
-    <HelloAnswer>
-	<To>1</To>
-	<Rejected>I don't know you ;).</Rejected>
-    </HelloAnswer>
-</Messages>

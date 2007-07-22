@@ -1,3 +1,7 @@
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
+
+add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/network/messages/tests )
+
 set(kcollaborate_SRCS
 	CollaborationManager.cpp
     UndoCommand.cpp
@@ -9,13 +13,15 @@ set(kcollaborate_SRCS
     network/ServerSession.cpp
     network/ServerConnection.cpp
     network/Url.cpp
-    network/User.cpp
+#    network/User.cpp
     network/sockets/MessageTcpSocket.cpp
     network/sockets/MessageTcpServer.cpp
 	network/messages/Generic.cpp
 	network/messages/Hello.cpp
 	network/messages/HelloAnswer.cpp
 	network/messages/Update.cpp
+    network/messages/UpdateAnswer.cpp
+    network/messages/User.cpp
     network/messages/MessageFactory.cpp
 )
 
@@ -23,8 +29,6 @@ set(kcollaborate_UIS
 	dialogs/ShareDialog.ui
 	dialogs/ConnectDialog.ui
 )
-
-include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
 add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wall)
 
@@ -52,7 +56,7 @@ install(FILES
 	network/ServerSession.h
     network/ServerConnection.h
     network/Url.h
-    network/User.h
+#    network/User.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/libcollaboration/network)
 install(FILES
     network/sockets/MessageTcpSocket.h
@@ -64,5 +68,7 @@ install(FILES
 	network/messages/HelloAnswer.h
 	network/messages/Update.h
     network/messages/MessageFactory.h
+    network/messages/UpdateAnswer.h
+    network/messages/User.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/libcollaboration/network/messages)
 install(TARGETS collaboration DESTINATION ${LIB_INSTALL_DIR})

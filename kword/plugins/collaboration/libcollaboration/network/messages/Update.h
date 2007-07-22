@@ -19,6 +19,7 @@
 #define KCOLLABORATE_MESSAGE_UPDATE_H
 
 #include <libcollaboration/network/messages/Generic.h>
+#include <QMetaType>
 
 namespace kcollaborate
 {
@@ -29,20 +30,27 @@ class KCOLLABORATE_EXPORT Update : public Generic
 {
         Q_OBJECT
     public:
-        Update( const QString &sessionId, long timestamp, const QString &objectName, const QString &commandName,
-                const QString &data, QObject *parent = 0 );
+        Update();
+        Update( const Update& update );
+        Update( const QString &sessionId, QDomElement elt, QObject *parent = 0 );
+        Update( const QString &sessionId, const QString & id, const QString &timestamp, const QString &objectName,
+                const QString &commandName, const QString &data, QObject *parent = 0 );
         virtual ~Update();
 
-        const QString& sessionId() const;
-        int timestamp() const;
-        const QString& objectName() const;
-        const QString& commandName() const;
-        const QString& data() const;
+        const QString & sessionId() const;
+        const QString & id() const;
+        const QString & timestamp() const;
+        const QString & objectName() const;
+        const QString & commandName() const;
+        const QString & data() const;
 
-        const QString toMsg() const;
+        virtual QString tagName() const;
+        virtual void toXML( QDomDocument &doc, QDomElement &elt ) const;
+        virtual void fromXML( QDomElement &elt );
     private:
         QString m_sessionId;
-        long m_timestamp;
+        QString m_id;
+        QString m_timestamp;
         QString m_objectName;
         QString m_commandName;
         QString m_data;
@@ -50,5 +58,7 @@ class KCOLLABORATE_EXPORT Update : public Generic
 
 };
 };
+
+Q_DECLARE_METATYPE(kcollaborate::Message::Update)
 
 #endif

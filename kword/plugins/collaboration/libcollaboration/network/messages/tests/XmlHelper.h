@@ -15,25 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "Generic.h"
-#include <QDomDocument>
+#ifndef KCOLLABORATE_XMLHELPER_H
+#define KCOLLABORATE_XMLHELPER_H
+
 #include <QDomElement>
-using namespace kcollaborate::Message;
+#include <QString>
 
-Generic::Generic( QObject *parent )
-        : QObject( parent )
-{}
-
-Generic::~Generic()
-{}
-
-const QString Generic::toString() const
+namespace kcollaborate
 {
-    QDomDocument document;
-    QDomElement element = document.createElement( tagName() );
-    document.appendChild(element);
-    toXML( document, element );
-    return document.toString();
-}
+namespace Message
+{
 
-#include "Generic.moc"
+class XmlHelper
+{
+    public:
+        static QDomElement parse( const QString &string );
+};
+
+};
+};
+
+#endif

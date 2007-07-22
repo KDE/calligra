@@ -23,12 +23,17 @@
 #include <libcollaboration/network/messages/Hello.h>
 #include <libcollaboration/network/messages/HelloAnswer.h>
 #include <libcollaboration/network/messages/Update.h>
+#include <libcollaboration/network/messages/UpdateAnswer.h>
 
 namespace kcollaborate
 {
 class MessageTcpSocket;
 class ServerSession;
+
+namespace Message
+{
 class MessageFactory;
+};
 
 /*
     This class stores info about connected user and his status.
@@ -48,13 +53,13 @@ class KCOLLABORATE_EXPORT ServerConnection : public QObject
         void messageReceivedHello( const Message::Hello &msg );
         void messageReceivedHelloAnswer( const Message::HelloAnswer &msg );
         void messageReceivedUpdate( const Message::Update &msg );
-        void messageReceivedUpdateAnswer( const QString &sessionId, const Message::UpdateAnswerStatus &status );
+        void messageReceivedUpdateAnswer( const Message::UpdateAnswer &msg );
         void messageReceivedSessionClosed( const QString &sessionId );
 
     private:
         QString id_;
         MessageTcpSocket *socket;
-        MessageFactory *messageFactory;
+        Message::MessageFactory *messageFactory;
 };
 
 };

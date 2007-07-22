@@ -20,17 +20,14 @@
 #include "Url.h"
 #include "ServerConnection.h"
 #include "sockets/MessageTcpServer.h"
-#include "messages/MessageFactory.h"
 using namespace kcollaborate;
 
 ServerSession::ServerSession( const Url &url, QObject *parent ):
-        Session( url, parent ), server( NULL ), messageFactory( NULL )
+        Session( url, parent ), server( NULL )
 {
     server = new MessageTcpServer( this );
     connect( server, SIGNAL( incomingConnection( MessageTcpSocket * ) ),
              this, SLOT( newConnection( MessageTcpSocket * ) ) );
-
-    messageFactory = new MessageFactory( this );
 
     setConnected();
 }

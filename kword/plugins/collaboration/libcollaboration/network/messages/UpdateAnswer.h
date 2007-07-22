@@ -15,8 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KCOLLABORATE_MESSAGE_HELLO_H
-#define KCOLLABORATE_MESSAGE_HELLO_H
+#ifndef KCOLLABORATE_MESSAGE_UPDATEANSWER_H
+#define KCOLLABORATE_MESSAGE_UPDATEANSWER_H
 
 #include <libcollaboration/network/messages/Generic.h>
 #include <QMetaType>
@@ -25,39 +25,41 @@ namespace kcollaborate
 {
 namespace Message
 {
-class User;
 
-class KCOLLABORATE_EXPORT Hello : public Generic
+class KCOLLABORATE_EXPORT UpdateAnswer : public Generic
 {
         Q_OBJECT
+        Q_ENUMS( UpdateAnswerStatus )
     public:
-        Hello();
-        Hello(const Hello& hello);
-        Hello( QDomElement elt, QObject *parent = 0 );
-        Hello( const QString &id, const QString &protocolVersion, const QString &invitationNumber,
-               const User *user, QObject *parent = 0 );
-        virtual ~Hello();
+        enum UpdateAnswerStatus {
+            Rejected = 0, Unsupported = 1, Accepted = 2, Timeout = 3
+    };
+
+        UpdateAnswer();
+        UpdateAnswer( const UpdateAnswer &updateAnswer );
+        UpdateAnswer( const QString &sessionId, QDomElement elt, QObject *parent = 0 );
+        UpdateAnswer( const QString &id, UpdateAnswerStatus status, const QString &sessionId, QObject *parent = 0 );
+        virtual ~UpdateAnswer();
 
         const QString & id() const;
-        const QString & protocolVersion() const;
-        const QString & invitationNumber() const;
-        const User * user() const;
+        UpdateAnswerStatus status() const;
+        const QString & sessionId() const;
 
         virtual QString tagName() const;
         virtual void toXML( QDomDocument &doc, QDomElement &elt ) const;
         virtual void fromXML( QDomElement &elt );
+
+        static QString status2string( UpdateAnswerStatus status );
+        static UpdateAnswerStatus string2status( const QString &string );
     private:
         QString m_id;
-        QString m_protocolVersion;
-        QString m_invitationNumber;
-        const User *m_user;
-
-        void setUser( const User *user );
+        UpdateAnswerStatus m_status;
+        QString m_sessionId;
 };
 
 };
 };
 
-Q_DECLARE_METATYPE(kcollaborate::Message::Hello)
+Q_DECLARE_METATYPE(kcollaborate::Message::UpdateAnswer)
 
 #endif

@@ -19,6 +19,7 @@
 #define KCOLLABORATE_MESSAGE_HELLOANSWER_H
 
 #include <libcollaboration/network/messages/Generic.h>
+#include <QMetaType>
 
 namespace kcollaborate
 {
@@ -34,21 +35,29 @@ class KCOLLABORATE_EXPORT HelloAnswer : public Generic
             Rejected = 0, Unsupported = 1, Accepted = 2, Timeout = 3
     };
 
-        HelloAnswer( int id, HelloAnswerStatus status, const QString &sessionId, bool isReadOnly,
+        HelloAnswer( const HelloAnswer& helloAnswer );
+        HelloAnswer();
+        HelloAnswer( QDomElement elt, QObject *parent = 0 );
+        HelloAnswer( const QString &id, HelloAnswerStatus status, const QString &sessionId, bool isReadOnly,
                      const QString &text, QObject *parent = 0 );
         virtual ~HelloAnswer();
 
-        int id() const;
+        const QString & id() const;
         HelloAnswerStatus status() const;
         //for Accepted
-        const QString& sessionId() const;
+        const QString & sessionId() const;
         bool isReadOnly() const;
         //for other
-        const QString& text() const;
+        const QString & text() const;
 
-        const QString toMsg() const;
+        virtual QString tagName() const;
+        virtual void toXML( QDomDocument &doc, QDomElement &elt ) const;
+        virtual void fromXML( QDomElement &elt );
+
+        static QString status2string( HelloAnswerStatus status );
+        static HelloAnswerStatus string2status( const QString &string );
     private:
-        int m_id;
+        QString m_id;
         HelloAnswerStatus m_status;
         //for Accepted
         QString m_sessionId;
@@ -59,5 +68,7 @@ class KCOLLABORATE_EXPORT HelloAnswer : public Generic
 
 };
 };
+
+Q_DECLARE_METATYPE(kcollaborate::Message::HelloAnswer)
 
 #endif

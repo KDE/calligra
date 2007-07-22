@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<Messages>
-    <HelloAnswer>
-	<To>2</To>
-	<Rejected>
-	    <Error>Unsupported version</Error>
-	</Rejected>
-    </HelloAnswer>
-</Messages>
