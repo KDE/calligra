@@ -411,7 +411,7 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
 
     while ( y < dHeight + m_pCanvas->yOffset() && tmpRow <= KS_rowMax )
     {
-      double h = sheet->rowFormat( tmpRow )->height();
+      double h = sheet->rowFormat( tmpRow )->visibleHeight();
       //if col is hide and it's the first column
       //you mustn't resize it.
       if ( ev_PosY >= y + h - 2 * unzoomedPixel &&
@@ -1090,7 +1090,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 
       while ( ev_PosX > x && tmpCol <= KS_colMax )
       {
-        double w = sheet->columnFormat( tmpCol )->width();
+        double w = sheet->columnFormat( tmpCol )->visibleWidth();
         ++tmpCol;
 
         //if col is hide and it's the first column
@@ -1112,7 +1112,7 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 
       while ( x < m_pView->zoomHandler()->unzoomItY( width() ) + m_pCanvas->xOffset() && tmpCol <= KS_colMax )
       {
-        double w = sheet->columnFormat( tmpCol )->width();
+        double w = sheet->columnFormat( tmpCol )->visibleWidth();
         //if col is hide and it's the first column
         //you mustn't resize it.
         if ( ev_PosX >= x + w - unzoomedPixel &&
@@ -1396,6 +1396,11 @@ void HBorder::paintEvent( QPaintEvent* event )
       bool highlighted = (!selected && affectedColumns.contains(x));
 
       const ColumnFormat *columnFormat = sheet->columnFormat( x );
+      if (columnFormat->isHiddenOrFiltered())
+      {
+          ++x;
+          continue;
+      }
       double width = columnFormat->width();
 
       QColor backgroundColor = palette().window().color();

@@ -1,4 +1,4 @@
-/*   
+/* This file is part of the KDE project
    Copyright 2006 - Robert Knight <robertknight@gmail.com>
 
    This library is free software; you can redistribute it and/or
