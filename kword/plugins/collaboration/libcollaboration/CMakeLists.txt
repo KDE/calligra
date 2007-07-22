@@ -13,7 +13,6 @@ set(kcollaborate_SRCS
     network/ServerSession.cpp
     network/ServerConnection.cpp
     network/Url.cpp
-#    network/User.cpp
     network/sockets/MessageTcpSocket.cpp
     network/sockets/MessageTcpServer.cpp
 	network/messages/Generic.cpp
@@ -56,7 +55,6 @@ install(FILES
 	network/ServerSession.h
     network/ServerConnection.h
     network/Url.h
-#    network/User.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/libcollaboration/network)
 install(FILES
     network/sockets/MessageTcpSocket.h
