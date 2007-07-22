@@ -22,12 +22,14 @@
 
 #include <QTimeLine>
 
+#include "kpresenter_export.h"
+
 class QPainter;
 class QRectF;
 class KoShape;
 class KoCanvasBase;
 
-class KPrShapeAnimation
+class KPRESENTER_TEST_EXPORT KPrShapeAnimation
 {
 public:
     enum Type 

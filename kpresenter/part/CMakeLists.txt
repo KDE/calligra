@@ -7,6 +7,9 @@ if(KDE4_BUILD_TESTS)
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
+
+add_subdirectory(tests)
+
 ### kpresenterprivate ###
 set( kpresenterprivate_LIB_SRCS
      KPrFactory.cpp
@@ -15,6 +18,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrViewModePresentation.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp
+     KPrShapeAnimations.cpp
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrCoverDownEffect.cpp
      shapeanimations/KPrShapeAnimation.cpp
