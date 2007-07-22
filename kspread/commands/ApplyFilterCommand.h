@@ -26,6 +26,7 @@
 
 namespace KSpread
 {
+class Filter;
 
 class ApplyFilterCommand : public AbstractRegionCommand
 {
@@ -44,9 +45,11 @@ public:
     virtual void undo();
 
     void setDatabase(const Database& database);
+    void setOldFilter(const Filter& filter);
 
 private:
     Database m_database;
+    Filter* m_oldFilter;
     QHash<int, bool> m_undoData;
 };
 

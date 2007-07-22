@@ -45,60 +45,69 @@ ApplyFilterCommand::~ApplyFilterCommand()
 void ApplyFilterCommand::redo()
 {
     m_undoData.clear();
-    Sheet* const sheet = m_database.range().lastSheet();
-    const QRect range = m_database.range().lastRange();
-    const int start = m_database.orientation() == Qt::Vertical ? range.top() : range.left();
-    const int end = m_database.orientation() == Qt::Vertical ? range.bottom() : range.right();
+    Database database = m_database;
+
+    Sheet* const sheet = database.range().lastSheet();
+    const QRect range = database.range().lastRange();
+    const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
+    const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
     for (int i = start + 1; i <= end; ++i)
     {
-        const bool isFiltered = !m_database.filter().evaluate(m_database, i);
+        const bool isFiltered = !database.filter().evaluate(database, i);
 //         kDebug() << "Filtering column/row " << i << "? " << isFiltered << endl << endl;
-        if (m_database.orientation() == Qt::Vertical)
+        if (database.orientation() == Qt::Vertical)
         {
             m_undoData[i] = sheet->rowFormat(i)->isFiltered();
             sheet->nonDefaultRowFormat(i)->setFiltered(isFiltered);
         }
-        else // m_database.orientation() == Qt::Horizontal
+        else // database.orientation() == Qt::Horizontal
         {
             m_undoData[i] = sheet->columnFormat(i)->isFiltered();
             sheet->nonDefaultColumnFormat(i)->setFiltered(isFiltered);
         }
     }
-    if (m_database.orientation() == Qt::Vertical)
+    if (database.orientation() == Qt::Vertical)
         sheet->emitHideRow();
-    else // m_database.orientation() == Qt::Horizontal
+    else // database.orientation() == Qt::Horizontal
         sheet->emitHideColumn();
 
     m_sheet->cellStorage()->setDatabase(*this, Database());
-    m_sheet->cellStorage()->setDatabase(*this, m_database);
+    m_sheet->cellStorage()->setDatabase(*this, database);
     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void ApplyFilterCommand::undo()
 {
-    Sheet* const sheet = m_database.range().lastSheet();
-    const QRect range = m_database.range().lastRange();
-    const int start = m_database.orientation() == Qt::Vertical ? range.top() : range.left();
-    const int end = m_database.orientation() == Qt::Vertical ? range.bottom() : range.right();
+    Database database = m_database;
+    database.setFilter(*m_oldFilter);
+
+    Sheet* const sheet = database.range().lastSheet();
+    const QRect range = database.range().lastRange();
+    const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
+    const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
     for (int i = start + 1; i <= end; ++i)
     {
-        if (m_database.orientation() == Qt::Vertical)
+        if (database.orientation() == Qt::Vertical)
             sheet->nonDefaultRowFormat(i)->setFiltered(m_undoData[i]);
-        else // m_database.orientation() == Qt::Horizontal
+        else // database.orientation() == Qt::Horizontal
             sheet->nonDefaultColumnFormat(i)->setFiltered(m_undoData[i]);
     }
-    if (m_database.orientation() == Qt::Vertical)
+    if (database.orientation() == Qt::Vertical)
         sheet->emitHideRow();
-    else // m_database.orientation() == Qt::Horizontal
+    else // database.orientation() == Qt::Horizontal
         sheet->emitHideColumn();
 
-// FIXME Stefan: Restore the old filter
-//     m_sheet->cellStorage()->setDatabase(*this, Database());
-//     m_sheet->cellStorage()->setDatabase(*this, m_oldDatabase);
-//     m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    m_sheet->cellStorage()->setDatabase(*this, Database());
+    m_sheet->cellStorage()->setDatabase(*this, database);
+    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void ApplyFilterCommand::setDatabase(const Database& database)
 {
     m_database = database;
+}
+
+void ApplyFilterCommand::setOldFilter(const Filter& filter)
+{
+    m_oldFilter = new Filter(filter);
 }

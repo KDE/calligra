@@ -204,11 +204,12 @@ void FilterPopup::closeEvent(QCloseEvent* event)
         // any real change?
         if (d->database.filter() != filter)
         {
-            d->database.setFilter(filter);
-            d->database.dump();
             ApplyFilterCommand* command = new ApplyFilterCommand();
             command->setSheet(d->database.range().lastSheet());
             command->add(d->database.range());
+            command->setOldFilter(d->database.filter());
+            d->database.setFilter(filter);
+            d->database.dump();
             command->setDatabase(d->database);
             command->execute();
         }
