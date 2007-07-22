@@ -73,6 +73,20 @@ void TestFinancialFunctions::testACCRINTM()
   CHECK_EVAL_SHORT( "ACCRINTM( \"2004-02-01\"; \"2004-05-01\"; 0.1; 1000; 4 )", Value( 25.0       ) ); // leap year, European 30/360
 }
 
+// AMORDEGRC
+void TestFinancialFunctions::testAMORDEGRC()
+{
+   CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )" , Value( 228 ) ); // the first period (10 years life time)
+   CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 0 )" , Value( 229 ) ); // leap year, US (NASD) 30/360
+}
+
+// AMORLINC
+void TestFinancialFunctions::testAMORLINC()
+{
+  CHECK_EVAL_SHORT( "AMORLINC( 1000; \"2004-02-01\"; \"2004-12-31\"; 10; 0; 0.1; 1 )" , Value( 91.2568306011 ) ); // the first period (10 years life time)
+  CHECK_EVAL_SHORT( "AMORLINC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )" , Value( 91.2328767123 ) ); // leap year, actual/365
+}
+
 // COMPOUND
 void TestFinancialFunctions::testCOMPOUND()
 {

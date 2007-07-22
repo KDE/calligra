@@ -36,8 +36,8 @@ class TestFinancialFunctions: public QObject
 private slots:
   void testACCRINT();
   void testACCRINTM();
-//   void testAMORDEGRC();  // to be implemented
-//   void testAMORLINC();   // to be implemented
+  void testAMORDEGRC();  
+  void testAMORLINC();   
   void testCOMPOUND();   // no ODF tests available
   void testCONTINUOUS(); // no ODF tests available
 //   void testCOUPDAYBS();  // to be implemented
@@ -84,7 +84,7 @@ private slots:
   void testPV_ANNUITY(); // no ODF test available
 //   void testRATE();       // to be implemented
   void testRECEIVED();
-  void testRRI();        // to be implemented
+  void testRRI();        
   void testSLN();
   void testSYD();
   void testTBILLEQ();

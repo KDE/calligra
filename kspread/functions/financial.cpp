@@ -43,6 +43,8 @@ using namespace KSpread;
 // prototypes (sorted)
 Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_amordegrc (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_amorlinc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_compound (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_continuous (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_coupnum (valVector args, ValueCalc *calc, FuncExtra *);
@@ -96,6 +98,12 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("ACCRINTM", func_accrintm);
   f->setParamCount (3, 5);
+  repo->add (f);
+  f = new Function ("AMORDEGRC", func_amordegrc);
+  f->setParamCount (6, 7);
+  repo->add (f);
+  f = new Function ("AMORLINC", func_amorlinc);
+  f->setParamCount (6, 7);
   repo->add (f);
   f = new Function ("COMPOUND", func_compound);
   f->setParamCount (4);
@@ -385,6 +393,113 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->mul (calc->mul (par, rate), d / y);
 }
 
+
+//
+// Function: AMORDEGRC
+//
+// AMORLINC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; basis)
+//
+Value func_amordegrc (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  double cost = calc->conv()->asFloat (args[0]).asFloat();
+  QDate purchaseDate = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate firstPeriodEndDate = calc->conv()->asDate (args[2]).asDate( calc->doc() );
+  double salvage = calc->conv()->asFloat (args[3]).asFloat();
+  int period = calc->conv()->asInteger (args[4]).asInteger();
+  double rate = calc->conv()->asFloat (args[5]).asFloat();
+
+  int basis = 0;
+  if (args.count() > 6)
+    basis = calc->conv()->asInteger (args[6]).asInteger();
+
+  int n;
+  double amorCoeff, nRate, rest, usePer;
+
+#define ROUND(x,y) (floor ((x) + 0.5))
+
+  usePer = 1.0 / rate;
+
+  if ( usePer < 3.0 )
+    amorCoeff = 1.0;
+  else if ( usePer < 5.0 )
+    amorCoeff = 1.5;
+  else if ( usePer <= 6.0)
+    amorCoeff = 2.0;
+  else
+    amorCoeff = 2.5;
+
+  kDebug(36002)<<" usePer = "<<usePer<<" amorCoeff = "<<amorCoeff<<endl;
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDat
+
+  rate *= amorCoeff;
+  nRate = ROUND ( yearFrac ( date0, purchaseDate, firstPeriodEndDate, basis) * rate * cost, 0 );
+  cost -= nRate;
+  rest = cost - salvage;
+
+  for ( n = 0 ; n < period ; n++ )
+  {
+    nRate = ROUND ( rate * cost, 0);
+    rest -= nRate;
+
+    if ( rest < 0.0 )
+    {
+      switch ( period - n )
+      {
+         case 0:
+         case 1:
+           return Value ( ROUND ( cost * 0.5, 0 ) );
+         default:
+           return Value ( 0.0 );
+      }
+    }
+    
+    cost -= nRate;
+  }
+
+  return Value( nRate );
+#undef ROUND
+}
+
+//
+// Function: AMORLINC
+//
+// AMORLINC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; basis)
+//
+Value func_amorlinc (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  double cost = calc->conv()->asFloat (args[0]).asFloat();
+  QDate purchaseDate = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate firstPeriodEndDate = calc->conv()->asDate (args[2]).asDate( calc->doc() );
+  double salvage = calc->conv()->asFloat (args[3]).asFloat();
+  int period = calc->conv()->asInteger (args[4]).asInteger();
+  double rate = calc->conv()->asFloat (args[5]).asFloat();
+
+  int basis = 0;
+  if (args.count() > 6)
+    basis = calc->conv()->asInteger (args[6]).asInteger();
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDat
+
+  double oneRate = cost * rate;
+  double costDelta = cost - salvage;
+  double nullRate = yearFrac ( date0, purchaseDate, firstPeriodEndDate, basis ) * rate * cost;
+  int numOfFullPeriods = ( cost - salvage - nullRate ) / oneRate;
+
+  double res ;
+
+  if ( period == 0 )
+    res = nullRate;
+  else if ( period <= numOfFullPeriods )
+    res = oneRate;
+  else if ( period == numOfFullPeriods + 1 )
+    res = costDelta - oneRate * numOfFullPeriods - nullRate;
+  else
+    res = 0.0;
+
+  return Value( res );
+#undef ROUND
+}
 
 //
 // Function: compound

@@ -3,6 +3,59 @@
 
   <Group>
     <GroupName>Financial</GroupName>
+
+      <Function>
+        <Name>AMORDEGRC</Name>
+        <Type>Float</Type>
+        <Parameter>
+          <Comment>Cost</Comment>
+          <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+          <Comment>Pv</Comment>
+          <Type>Float</Type>
+        </Parameter>
+        <Parameter>
+          <Comment>Fv</Comment>
+          <Type>Float</Type>
+        </Parameter>
+        <Help>
+          <Text>The AMORDEGRC function Calculates the amortization value for the French accounting system using degressive depreciation.</Text>
+          <Syntax>AMORDEGRC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; basis)</Syntax>
+          <Example>AMORDEGRC( 1000; би2006-02-01би; би2006-12-31би; 10; 0; 0.1; 1 ) returns 228</Example>
+          <Related>AMORLINC</Related>
+          <Related>DB</Related>
+          <Related>DDB</Related>
+          <Related>YEARFRAC</Related>
+        </Help>
+      </Function>
+
+      <Function>
+        <Name>AMORLINC</Name>
+        <Type>Float</Type>
+        <Parameter>
+          <Comment>P</Comment>
+          <Type>Int</Type>
+        </Parameter>
+      <Parameter>
+        <Comment>Pv</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Fv</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The AMORLINC function calculates the amortization value for the French accounting system using linear depreciation.</Text>
+        <Syntax>AMORLINC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; basis)</Syntax>
+        <Example>AMORLINC( 1000; "2004-02-01"; "2004-12-31"; 10; 0; 0.1; 1 ) returns 91.256831</Example>
+        <Related>AMORDEGRC</Related>
+        <Related>DB</Related>
+        <Related>DDB</Related>
+        <Related>YEARFRAC</Related>
+      </Help>
+      </Function>
+
       <Function>
       <Name>TBILLEQ</Name>
       <Type>Float</Type>
