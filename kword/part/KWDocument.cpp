@@ -50,6 +50,7 @@
 #include <KoXmlWriter.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoImageCollection.h>
+#include <KoDocumentInfo.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -72,7 +73,9 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     m_frameLayout.setDocument(this);
     m_styleManager = new KoStyleManager(this);
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
-
+    
+    connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
+            inlineTextObjectManager(), SLOT(documentInformationUpdated (const QString &, const QString &)));
     setComponentData( KWFactory::componentData(), false );
     setTemplateType( "kword_template" );
 
