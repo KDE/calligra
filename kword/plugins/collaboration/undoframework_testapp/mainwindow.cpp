@@ -41,8 +41,8 @@ MainWindow::MainWindow()
     connectDialog = new kcollaborate::ConnectDialog(this);
     shareDialog = new kcollaborate::ShareDialog(this);
 
-    connect(connectDialog, SIGNAL(connect(const Url&)),
-            collaborationManager, SLOT(connect(const Url&)));
+    connect(connectDialog, SIGNAL(connectUrl(const Url&)),
+            collaborationManager, SLOT(connectUrl(const Url&)));
     connect(shareDialog, SIGNAL(share(const Url&)),
             collaborationManager, SLOT(share(const Url&)));
 

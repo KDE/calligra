@@ -15,45 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KCOLLABORATE_CONNECTDIALOG_H
-#define KCOLLABORATE_CONNECTDIALOG_H
+#ifndef KCOLLABORATE_REMOTESERVICELISTWIDGETITEM_H
+#define KCOLLABORATE_REMOTESERVICELISTWIDGETITEM_H
 
-#include <QDialog>
-#include <DNSSD/ServiceBrowser>
+#include <QListWidgetItem>
 #include <DNSSD/RemoteService>
 
-#include <libcollaboration/kcollaborate_export.h>
-#include <libcollaboration/network/Url.h>
-
-
-namespace Ui
-{
-class ConnectDialog;
-};
+class QListWidget;
 
 namespace kcollaborate
 {
 
-class KCOLLABORATE_EXPORT ConnectDialog: public QDialog
+class RemoteServiceListWidgetItem: public QListWidgetItem
 {
-        Q_OBJECT
-
     public:
-        ConnectDialog( bool defaultUi = true, QWidget *parent = 0, Qt::WindowFlags f = 0 );
-        ~ConnectDialog();
+        RemoteServiceListWidgetItem( const DNSSD::RemoteService::Ptr &service, QListWidget *parent = 0 );
+        ~RemoteServiceListWidgetItem();
 
-        ///emits connect signal if accepted
-        int exec();
+        const DNSSD::RemoteService::Ptr& service() const { return service_; };
 
-    signals:
-        void connectUrl( const Url& url );
-
-    private slots:
-        void serviceAdded( DNSSD::RemoteService::Ptr remoteService );
-        void serviceRemoved( DNSSD::RemoteService::Ptr remoteService );
     private:
-        Ui::ConnectDialog *ui;
-        DNSSD::ServiceBrowser browser;
+        const DNSSD::RemoteService::Ptr service_;
 };
 
 };

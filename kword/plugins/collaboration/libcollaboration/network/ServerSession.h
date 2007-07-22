@@ -19,6 +19,7 @@
 #define KCOLLABORATE_SERVERSESSION_H
 
 #include <libcollaboration/network/Session.h>
+#include <DNSSD/PublicService>
 
 namespace kcollaborate
 {
@@ -31,7 +32,7 @@ class KCOLLABORATE_EXPORT ServerSession : public Session
 {
         Q_OBJECT
     public:
-        ServerSession( const Url &url, QObject *parent = 0 );
+        ServerSession( const Url &url, bool publishUsingZeroconf = true, QObject *parent = 0 );
         virtual ~ServerSession();
 
         void closeConnection( ServerConnection *serverConnection );
@@ -42,6 +43,8 @@ class KCOLLABORATE_EXPORT ServerSession : public Session
 
     private:
         MessageTcpServer *server;
+        DNSSD::PublicService publicService;
+        bool publishUsingZeroconf;
         QMap<QString, ServerConnection*> serverConnections;
 
         void closeConnectionById( const QString &sessionId );

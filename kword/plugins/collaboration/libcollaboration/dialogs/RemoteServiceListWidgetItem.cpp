@@ -15,38 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KCOLLABORATE_COLLABORATIONMANAGER_H
-#define KCOLLABORATE_COLLABORATIONMANAGER_H
+#include "RemoteServiceListWidgetItem.h"
+#include <QListWidget>
+#include <QDebug>
+using namespace kcollaborate;
 
-#include <QObject>
-#include <QString>
-#include <QMap>
+RemoteServiceListWidgetItem::RemoteServiceListWidgetItem( const DNSSD::RemoteService::Ptr &service,  QListWidget *parent )
+        : QListWidgetItem( service->serviceName(), parent, QListWidgetItem::UserType ), service_( service )
+{}
 
-#include <libcollaboration/kcollaborate_export.h>
-#include <libcollaboration/network/Url.h>
+RemoteServiceListWidgetItem::~RemoteServiceListWidgetItem()
+{}
 
-namespace kcollaborate
-{
-
-class Session;
-
-//TODO: remove this class?
-class KCOLLABORATE_EXPORT CollaborationManager : public QObject
-{
-        Q_OBJECT
-
-    public:
-        CollaborationManager( QObject *parent = 0 );
-        virtual ~CollaborationManager();
-
-    private slots:
-        void connectUrl( const Url &url );
-        void share( const Url &url );
-
-    private:
-        Session *mainSession;
-};
-
-};
-
-#endif
+#include "RemoteServiceListWidgetItem.moc"

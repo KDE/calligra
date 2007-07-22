@@ -22,8 +22,9 @@
 #include "sockets/MessageTcpServer.h"
 using namespace kcollaborate;
 
-ServerSession::ServerSession( const Url &url, QObject *parent ):
-        Session( url, parent ), server( NULL )
+ServerSession::ServerSession( const Url &url, bool aPublishUsingZeroconf, QObject *parent ):
+        Session( url, parent ), server( NULL ),
+        publicService( QString(), "_kcollaboration._tcp", url.port() ), publishUsingZeroconf( aPublishUsingZeroconf )
 {
     server = new MessageTcpServer( this );
     connect( server, SIGNAL( incomingConnection( MessageTcpSocket * ) ),
@@ -38,13 +39,18 @@ ServerSession::~ServerSession()
 void ServerSession::setConnected()
 {
     server->listen( url().hostAddress(), url().port() );
-    qDebug() << "[ServerSession::setConnected] listen on "<< url().hostAddress().toString() << ":" << url().port();
+    if ( publishUsingZeroconf ) {
+        publicService.publishAsync();
+    }
+    qDebug() << "[ServerSession::setConnected] listen on " << url().hostAddress().toString() << ":" << url().port();
+
     emit connected();
 }
 
 void ServerSession::setDisconnected()
 {
     server->close();
+    publicService.stop();
     emit disconnected();
 }
 

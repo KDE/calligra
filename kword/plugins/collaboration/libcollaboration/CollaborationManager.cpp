@@ -17,6 +17,7 @@
  */
 #include "CollaborationManager.h"
 #include <QtDebug>
+#include <DNSSD/PublicService>
 #include "network/ClientSession.h"
 #include "network/ServerSession.h"
 using namespace kcollaborate;
@@ -28,7 +29,7 @@ CollaborationManager::CollaborationManager( QObject *parent ):
 CollaborationManager::~CollaborationManager()
 {}
 
-void CollaborationManager::connect( const Url &url )
+void CollaborationManager::connectUrl( const Url &url )
 {
     qDebug() << "connect to " << url;
     delete mainSession;//TODO: something better
