@@ -717,15 +717,8 @@ void TestFinancialFunctions::testPRICEMAT()
 // PV
 void TestFinancialFunctions::testPV()
 {
-  // TODO adapt parameter
-
-  // kspread -> PV(future value;rate;periods)
-  // ODF     -> PV( Number Rate ; Number Nper ; Number Payment [ ; Number Fv = 0 [ ; Number PayType = 0 ] ] )
-
-  // kspread
-  CHECK_EVAL_SHORT( "PV(1166.4;0.08;2)", Value( 1000.0  ) ); // A trivial example of PV.
   // ODF
-  CHECK_EVAL_SHORT( "PV(10%;12;-100;100)", Value( 649.51  ) ); // A trivial example of PV.
+  CHECK_EVAL_SHORT( "PV(10%;12;-100;100)", Value( 649.5061005186  ) ); // A trivial example of PV.
 }
 
 // PV_ANNUITY
