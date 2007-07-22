@@ -79,7 +79,6 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     layout->addWidget(notEmptyCheckbox);
     layout->addSpacing(3);
 
-    // TODO Stefan: Don't check the columns/rows. Use the Filter conditions instead.
     const Sheet* sheet = cell.sheet();
     const QRect range = database->range().lastRange();
     const bool isRowFilter = database->orientation() == Qt::Vertical;
