@@ -5,7 +5,7 @@
    Copyright (C) 2005 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
-   Copyright (C) 2005-2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
@@ -60,11 +60,11 @@ private slots:
     void translate();
     void scale();
     void enableSignals( bool enable );
-    void shearX();
-    void shearY();
+    void shear();
     void rotate();
 
 private:
+    QRectF selectionRect();
     KoUnitDoubleSpinBox *m_x;
     KoUnitDoubleSpinBox *m_y;
     KoUnitDoubleSpinBox *m_width;
