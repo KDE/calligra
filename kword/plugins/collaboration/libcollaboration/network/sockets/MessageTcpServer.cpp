@@ -20,7 +20,7 @@
 using namespace kcollaborate;
 
 MessageTcpServer::MessageTcpServer( bool keepalive, QObject *parent ):
-        QTcpServer( parent ), keepalive_(keepalive)
+        QTcpServer( parent ), keepalive_( keepalive )
 {}
 
 MessageTcpServer::~MessageTcpServer()
