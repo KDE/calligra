@@ -22,18 +22,30 @@ using namespace kcollaborate;
 
 static const int KEEPALIVE_INTERVAL = 5 * 1000;
 
+MessageTcpSocket::MessageTcpSocket( bool aKeepalive, QObject *parent ):
+        QTcpSocket( parent ), keepalive( aKeepalive ), blockSize( 0 )
+{
+    QObject::connect( this, SIGNAL( readyRead() ), this, SLOT( dataRecieved() ) );
+
+    if ( keepalive ) {
+        QObject::connect( this, SIGNAL( disconnected() ), &keepaliveTimer, SLOT( stop() ) );
+        QObject::connect( &keepaliveTimer, SIGNAL( timeout() ), this, SLOT( sendKeepalive() ) );
+        keepaliveTimer.setInterval( KEEPALIVE_INTERVAL );
+    }
+}
+
 MessageTcpSocket::MessageTcpSocket( int socketDescriptor, bool aKeepalive, QObject *parent ):
-        QTcpSocket( parent ), keepalive( aKeepalive ), blockSize(0)
+        QTcpSocket( parent ), keepalive( aKeepalive ), blockSize( 0 )
 {
     setSocketDescriptor( socketDescriptor );
 
     QObject::connect( this, SIGNAL( readyRead() ), this, SLOT( dataRecieved() ) );
 
-	if (keepalive) {
-    QObject::connect( this, SIGNAL( disconnected() ), &keepaliveTimer, SLOT( stop() ) );
-    QObject::connect( &keepaliveTimer, SIGNAL( timeout() ), this, SLOT( sendPing() ) );
-    keepaliveTimer.setInterval( KEEPALIVE_INTERVAL );
-	}
+    if ( keepalive ) {
+        QObject::connect( this, SIGNAL( disconnected() ), &keepaliveTimer, SLOT( stop() ) );
+        QObject::connect( &keepaliveTimer, SIGNAL( timeout() ), this, SLOT( sendKeepalive() ) );
+        keepaliveTimer.setInterval( KEEPALIVE_INTERVAL );
+    }
 }
 
 MessageTcpSocket::~MessageTcpSocket()

@@ -22,12 +22,15 @@
 #include <QString>
 #include <libcollaboration/kcollaborate_export.h>
 #include <libcollaboration/network/Url.h>
+#include <libcollaboration/network/messages/Update.h>
+#include <libcollaboration/network/messages/UpdateAnswer.h>
 
 namespace kcollaborate
 {
 class Url;
 
-namespace Message {
+namespace Message
+{
 class User;
 };
 
@@ -38,21 +41,21 @@ class KCOLLABORATE_EXPORT Session : public QObject
         Session( const Url &url, QObject *parent = 0 );
         virtual ~Session();
 
-//         virtual void disconnect() = 0;
         const QString& id() const { return id_; };
+        Url& url() { return url_; }
 
     signals:
         void connected();
         void disconnected();
 
-        void userAdded( Message::User *user );
-        void userRemoved( Message::User *user );
+        void messageUpdate( const kcollaborate::Message::Update &msg );
+        void messageUpdateAnswer( const kcollaborate::Message::UpdateAnswer &msg );
 
-        void newRawCommand(const QString &command);
+//         void userAdded( const kcollaborate::Message::Update &user );
+//         void userRemoved( const kcollaborate::Message::Update &user );
 
     protected:
         void setId( const QString &id ) { id_ = id; };
-        Url& url() { return url_; }
 
     private:
         QString id_;

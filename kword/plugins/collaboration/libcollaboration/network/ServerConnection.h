@@ -49,17 +49,26 @@ class KCOLLABORATE_EXPORT ServerConnection : public QObject
         const QString& id() const { return id_; };
         void close();
 
+    signals:
+        void connected();
+        void disconnected();
+
+        void messageUpdate( const kcollaborate::Message::Update &msg );
+        void messageUpdateAnswer( const kcollaborate::Message::UpdateAnswer &msg );
+
     private slots:
-        void messageReceivedHello( const Message::Hello &msg );
-        void messageReceivedHelloAnswer( const Message::HelloAnswer &msg );
-        void messageReceivedUpdate( const Message::Update &msg );
-        void messageReceivedUpdateAnswer( const Message::UpdateAnswer &msg );
+        void messageReceivedHello( const kcollaborate::Message::Hello &msg );
+        void messageReceivedHelloAnswer( const kcollaborate::Message::HelloAnswer &msg );
+        void messageReceivedUpdate( const kcollaborate::Message::Update &msg );
+        void messageReceivedUpdateAnswer( const kcollaborate::Message::UpdateAnswer &msg );
         void messageReceivedSessionClosed( const QString &sessionId );
 
     private:
         QString id_;
         MessageTcpSocket *socket;
         Message::MessageFactory *messageFactory;
+
+        void sendMsg( const QString& msg );
 };
 
 };

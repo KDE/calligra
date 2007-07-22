@@ -27,12 +27,14 @@ namespace kcollaborate
 /**
  * Collaboration url sample:
  *
- * collaborate://localhost:2131/text/My%20document
+ * collaborate://localhost:2131/text/3234235235/My%20document
  *
- * where 'text' is subprotocol name
- * and 'My%20document' is document name
+ * where
+ * 'text' is subprotocol name,
+ * '3234235235' is invitation number (simple auth),
+ * and 'My%20document' is document name.
  *
- * This class adds subprotocol() and documentName() accesors.
+ * This class adds subprotocol(), invitationNumber(), and documentName() accesors.
  *
  */
 class Url : public KUrl
@@ -44,6 +46,7 @@ class Url : public KUrl
         bool broken();
 
         const QString& subprotocol();
+        const QString& invitationNumber();
         const QString& documentName();
 
         const QHostAddress& hostAddress();
@@ -55,12 +58,13 @@ class Url : public KUrl
 
         bool parsed;
         QString subprotocol_;
+        QString invitationNumber_;
         QString documentName_;
 
         bool hostConverted;
         QHostAddress hostAddress_;
 
-        ///lazy parse function for subprotocol_ and documentName_
+        ///lazy parse function for subprotocol_, documentName_, and invitationNumber_
         void parse();
         ///lazy convert function for hostAddress_
         void hostConvert();

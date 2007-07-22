@@ -30,11 +30,12 @@ class KCOLLABORATE_EXPORT MessageTcpSocket : public QTcpSocket
 {
         Q_OBJECT
     public:
+        MessageTcpSocket( bool keepalive, QObject *parent );
         MessageTcpSocket( int socketDescriptor, bool keepalive, QObject *parent );
         virtual ~MessageTcpSocket();
 
     public slots:
-		///msg=="" will be not sent
+        ///msg=="" will be not sent
         ///msg==" " will be not recieved (internal message)
         bool sendMsg( const QString &msg );
 

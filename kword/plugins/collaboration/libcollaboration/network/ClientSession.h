@@ -19,10 +19,21 @@
 #define KCOLLABORATE_CLIENTSESSION_H
 
 #include <libcollaboration/network/Session.h>
+#include <libcollaboration/network/Url.h>
+
+#include <libcollaboration/network/messages/Hello.h>
+#include <libcollaboration/network/messages/HelloAnswer.h>
+#include <libcollaboration/network/messages/Update.h>
+#include <libcollaboration/network/messages/UpdateAnswer.h>
 
 namespace kcollaborate
 {
-class Url;
+class MessageTcpSocket;
+
+namespace Message
+{
+class MessageFactory;
+};
 
 class KCOLLABORATE_EXPORT ClientSession : public Session
 {
@@ -32,13 +43,26 @@ class KCOLLABORATE_EXPORT ClientSession : public Session
         ClientSession( const Url &url, QObject *parent = 0 );
         virtual ~ClientSession();
 
-        void reconnect();
-        virtual void disconnect();
+        void close();
 
         bool readOnly() const { return readOnly_; };
 
+    private slots:
+        void connected();
+        void messageReceivedHello( const kcollaborate::Message::Hello &msg );
+        void messageReceivedHelloAnswer( const kcollaborate::Message::HelloAnswer &msg );
+        void messageReceivedUpdate( const kcollaborate::Message::Update &msg );
+        void messageReceivedUpdateAnswer( const kcollaborate::Message::UpdateAnswer &msg );
+        void messageReceivedSessionClosed( const QString &sessionId );
+
     private:
+        QString id_;
+        MessageTcpSocket *socket;
+        Message::MessageFactory *messageFactory;
+
         bool readOnly_;
+
+        void sendMsg( const QString& msg );
 };
 
 };

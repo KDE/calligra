@@ -26,30 +26,38 @@ Url::Url( const QString &url ):
 Url::~Url()
 {}
 
-const QString & Url::documentName()
-{
-    if ( !parsed ) parse();
-    return documentName_;
-}
-
 const QString & Url::subprotocol()
 {
     if ( !parsed ) parse();
     return subprotocol_;
 }
 
+const QString & Url::invitationNumber()
+{
+    if ( !parsed ) parse();
+    return invitationNumber_;
+}
+
+const QString & Url::documentName()
+{
+    if ( !parsed ) parse();
+    return documentName_;
+}
+
 void Url::parse()
 {
     QString path = KUrl::path();
     QStringList parts = path.split( '/', QString::SkipEmptyParts );
-    if ( "collaborate" != protocol() || parts.size() != 2 ) { //broken url
+    if ( "collaborate" != protocol() || parts.size() != 3 ) { //broken url
         broken_ = true;
         subprotocol_ = "";
+        invitationNumber_ = "";
         documentName_ = "";
     } else {
         broken_ = false;
         subprotocol_ = parts.at( 0 );
-        documentName_ = parts.at( 1 );
+        invitationNumber_ = parts.at( 1 );
+        documentName_ = parts.at( 2 );
     }
     parsed = true;
 }

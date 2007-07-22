@@ -31,6 +31,11 @@ MessageFactory::~MessageFactory()
 
 bool MessageFactory::processRawMessage( const QString &msg )
 {
+    if ( msg.isEmpty() ) {
+        qDebug() << "[MessageFactory::processRawMessage] Empty message";
+        return false;
+    }
+
     QDomDocument domDocument;
     QString errorStr;
     int errorLine;
@@ -39,6 +44,7 @@ bool MessageFactory::processRawMessage( const QString &msg )
                                   &errorColumn ) ) {
         qWarning() << "Parse error in the recieved message at line "
         << errorLine << ", column " << errorColumn << ": " << errorStr;
+        qDebug() << "Message dump: " << msg;
         return false;
     }
 

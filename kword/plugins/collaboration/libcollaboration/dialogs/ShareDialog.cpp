@@ -18,6 +18,7 @@
 #include "ShareDialog.h"
 #include "ui_ShareDialog.h"
 #include <QMessageBox>
+#include <QUuid>
 using namespace kcollaborate;
 
 ShareDialog::ShareDialog( bool defaultUi, QWidget *parent, Qt::WindowFlags f )
@@ -28,7 +29,9 @@ ShareDialog::ShareDialog( bool defaultUi, QWidget *parent, Qt::WindowFlags f )
         ui->setupUi( this );
     }
 
-    baseUrl = "collaborate://localhost:2131/text/";
+    baseUrl = "collaborate://127.0.0.1:2131/text/";
+    QUuid uuid = QUuid::createUuid();
+    baseUrl.append( QString::number( uuid.data1 ) ).append( QString::number( uuid.data2 ) ).append( '/' );
 }
 
 ShareDialog::~ShareDialog()
