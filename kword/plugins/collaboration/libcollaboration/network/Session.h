@@ -26,7 +26,10 @@
 namespace kcollaborate
 {
 class Url;
+
+namespace Message {
 class User;
+};
 
 class KCOLLABORATE_EXPORT Session : public QObject
 {
@@ -42,8 +45,8 @@ class KCOLLABORATE_EXPORT Session : public QObject
         void connected();
         void disconnected();
 
-        void userAdded( User *user );
-        void userRemoved( User *user );
+        void userAdded( Message::User *user );
+        void userRemoved( Message::User *user );
 
         void newRawCommand(const QString &command);
 
