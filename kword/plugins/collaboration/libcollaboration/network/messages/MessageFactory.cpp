@@ -44,7 +44,7 @@ bool MessageFactory::processRawMessage( const QString &msg )
 
     QDomElement root = domDocument.documentElement();
     if ( root.tagName() != "Messages" ) {
-        qWarning() << "Unknown XML format";
+        qWarning() << "Unknown XML format. XML: " << msg;
         return false;
     } else if ( root.hasAttribute( "version" )
                 && root.attribute( "version" ) != "0.1" ) {
