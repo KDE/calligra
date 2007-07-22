@@ -1,9 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Collaboration plugin
-Name[ru]=Модуль поддержки совместной работы
 Comment=Allow multiple users to work on document in real-time
-Comment[ru]=Возможность нескольким пользователям одновременно работать на документом в режиме реального времени
 Type=Service
 X-KDE-Library=collaborationmodulekword
 X-KDE-Version=1
