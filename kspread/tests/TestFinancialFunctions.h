@@ -55,12 +55,11 @@ private slots:
   void testDOLLARFR();
   void testDURATION();
   void testEFFECT();
-//   void testEFFECTIVE(); // same as EFFECT
   void testEURO();
   void testEUROCONVERT();
-//   void testFV();
-//   void testFV_ANNUITY(); // k -> CHECK may be FVSCHEDULE
-//   void testFVSCHEDULE();
+  void testFV();
+//   void testFV_ANNUITY(); // k 
+  void testFVSCHEDULE();
   void testINTRATE();
   void testIPMT();       
 //   void testIRR();        // to be implemented
@@ -84,8 +83,8 @@ private slots:
   void testPV();
   void testPV_ANNUITY(); // no ODF test available
 //   void testRATE();       // to be implemented
-//   void testRECEIVED();
-//   void testRRI();        // to be implemented
+  void testRECEIVED();
+  void testRRI();        // to be implemented
   void testSLN();
   void testSYD();
   void testTBILLEQ();

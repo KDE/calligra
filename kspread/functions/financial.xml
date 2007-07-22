@@ -69,6 +69,33 @@
     </Function>
 
     <Function>
+      <Name>RRI</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>P</Comment>
+	<Type>Int</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Pv</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+	<Comment>Fv</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+	<Text>The RRI function culculates the interest rate resulting from the profit (return) of an investment.</Text>
+	<Syntax>RRI( P; Pv; Fv)</Syntax>
+	<Example>RRI(1;100;200) returns 1</Example>
+        <Related>FV</Related>
+        <Related>NPER</Related>
+        <Related>PMT</Related>
+        <Related>PV</Related>
+        <Related>RATE</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>TBILLEQ</Name>
       <Type>Float</Type>
       <Parameter>

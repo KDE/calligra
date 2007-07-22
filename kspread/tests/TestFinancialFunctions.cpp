@@ -539,6 +539,20 @@ void TestFinancialFunctions::testEUROCONVERT()
   CHECK_EVAL( "EUROCONVERT( 157; \"PTE\"; \"nlg\" )", Value( 157*2.20371/200.482  ));
 }
 
+// FV
+void TestFinancialFunctions::testFV()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "FV(10%;12;-100;100)" , Value( 1824.59 ) ); // A trivial example of FV.
+}
+
+// FVSCHEDULE
+void TestFinancialFunctions::testFVSCHEDULE()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "FVSCHEDULE(1000000; {0.03; 0.04; 0.05})" , Value( 112476 ) ); // A trivial example of FVSCHEDULE.
+}
+
 // INTRATE
 void TestFinancialFunctions::testINTRATE()
 {
@@ -717,6 +731,7 @@ void TestFinancialFunctions::testPRICEMAT()
 // PV
 void TestFinancialFunctions::testPV()
 {
+  // TODO check type > 1, check div0
   // ODF
   CHECK_EVAL_SHORT( "PV(10%;12;-100;100)", Value( 649.5061005186  ) ); // A trivial example of PV.
 }
@@ -726,6 +741,22 @@ void TestFinancialFunctions::testPV_ANNUITY()
 {
   // kspread
   CHECK_EVAL_SHORT( "PV_ANNUITY(1000;0.05;5)", Value( 4329.47667063 ) ); 
+}
+
+// RECEIVED
+void TestFinancialFunctions::testRECEIVED()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "RECEIVED(DATE(1990;6;1);DATE(1990;12;31);10000;5%)" , Value( 10300.4291845494 ) ); // Without Basis parameter
+}
+
+// RRI
+void TestFinancialFunctions::testRRI()
+{
+  CHECK_EVAL_SHORT( "RRI(1;100;200)" ,     Value(  1                  ) ); // A trivial example of RRI.
+  CHECK_EVAL_SHORT( "RRI(12;5000;10000)" , Value(  0.05946309436      ) ); // RRI, practical example
+  CHECK_EVAL_SHORT( "RRI(12;10000;5000)" , Value( -0.056125687        ) ); // If future value is less than present value, resultant rate is negative
+  CHECK_EVAL_SHORT( "RRI(0;100;200)" ,     Value( Value::errorVALUE() ) ); // N must be greater than 0.
 }
 
 // Straight-line depreciation

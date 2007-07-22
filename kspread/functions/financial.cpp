@@ -75,6 +75,7 @@ Value func_pv_annuity (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oddlyield (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_received (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rri (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sln (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_syd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *);
@@ -196,6 +197,9 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("RECEIVED", func_received);
   f->setParamCount (4, 5);
+  repo->add (f);
+  f = new Function ("RRI", func_rri);
+  f->setParamCount (3);
   repo->add (f);
   f = new Function ("SLN", func_sln);
   f->setParamCount (3);
@@ -1260,7 +1264,6 @@ Value func_pv_annuity (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_received (valVector args, ValueCalc *calc, FuncExtra *)
 {
-
   QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
   QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
 
@@ -1283,6 +1286,24 @@ Value func_received (valVector args, ValueCalc *calc, FuncExtra *)
   if (calc->isZero (x))
     return Value::errorVALUE();
   return calc->div (investment, x);
+}
+
+
+//
+// Function: RRI
+//
+Value func_rri (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  double p = calc->conv()->asFloat (args[0]).asFloat();
+  double pv = calc->conv()->asFloat (args[1]).asFloat();
+  double fv = calc->conv()->asFloat (args[2]).asFloat();
+
+  // constraints N>0
+  if ( p < 1 )
+   return Value::errorVALUE();
+
+  double res = pow( ( fv / pv ), 1/p ) - 1;
+  return Value( res );
 }
 
 
