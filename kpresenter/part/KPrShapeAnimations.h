@@ -20,6 +20,7 @@
 #ifndef KPRSHAPEANIMATIONS_H
 #define KPRSHAPEANIMATIONS_H
 
+#define BOOST_MULTI_INDEX_DISABLE_SERIALIZATION
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/composite_key.hpp>
 #include <boost/multi_index/mem_fun.hpp>
