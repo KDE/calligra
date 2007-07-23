@@ -202,12 +202,7 @@ void KoStrokeDocker::applyChanges()
     if( ! selection || ! selection->count() )
         return;
 
-    KoLineBorder * newBorder = new KoLineBorder();
-    newBorder->setLineWidth( d->border.lineWidth() );
-    newBorder->setCapStyle( d->border.capStyle() );
-    newBorder->setJoinStyle( d->border.joinStyle() );
-    newBorder->setMiterLimit( d->border.miterLimit() );
-    newBorder->setLineStyle( d->border.lineStyle(), d->border.lineDashes() );
+    KoLineBorder * newBorder = new KoLineBorder(d->border);
     KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
     if( oldBorder )
         newBorder->setColor( oldBorder->color() );
