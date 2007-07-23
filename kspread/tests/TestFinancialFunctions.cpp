@@ -76,8 +76,16 @@ void TestFinancialFunctions::testACCRINTM()
 // AMORDEGRC
 void TestFinancialFunctions::testAMORDEGRC()
 {
-   CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )" , Value( 228 ) ); // the first period (10 years life time)
-   CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 0 )" , Value( 229 ) ); // leap year, US (NASD) 30/360
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value( 228 ) ); // the first period (10 years life time)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 8; 0.1; 1 )"  , Value(  52 ) ); // the period before last (10 years)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 9; 0.1; 1 )"  , Value(  52 ) ); // the last period (10 years life time)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 10; 0.1; 1 )" , Value(   0 ) ); // beyond life time (10 years life time)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.25; 1 )" , Value( 342 ) ); // the first period (4 years life time)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 0 )"  , Value( 229 ) ); // leap year, US (NASD) 30/360
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value( 228 ) ); // leap year, actual/actual
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 2 )"  , Value( 232 ) ); // leap year, actual/360
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )"  , Value( 229 ) ); // leap year, actual/365
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 4 )"  , Value( 228 ) ); // leap year, European 30/360
 }
 
 // AMORLINC
@@ -300,7 +308,14 @@ void TestFinancialFunctions::testDOLLARFR()
 // DURATION
 void TestFinancialFunctions::testDURATION()
 {
-  CHECK_EVAL_SHORT( "DURATION( DATE(1998;01;01);  DATE(2006;01;01); 0.08; 0.09; 2; 1 )" , Value( 5.994 ) ); // TODO check
+  // kspread
+  CHECK_EVAL( "DURATION( 0.1; 1000; 2000 )" , Value( 7.2725408973 ) ); // 
+}
+
+// DURATION_ADD
+void TestFinancialFunctions::testDURATION_ADD()
+{
+  CHECK_EVAL( "DURATION_ADD( \"1998-01-01\";  \"2006-01-01\"; 0.08; 0.09; 2; 1 )" , Value( 5.9937749555 ) ); //
 }
 
 // EFFECT
@@ -612,6 +627,15 @@ void TestFinancialFunctions::testLEVELCOUPON()
   CHECK_EVAL( "LEVEL_COUPON(1000; .10; 1; 10; .25)", Value(  464.4245094400000 ) );
   CHECK_EVAL( "LEVEL_COUPON(1000; .12; 1; 10; .25)", Value(  535.8345748480000 ) );
   CHECK_EVAL( "LEVEL_COUPON(1000; .20; 1; 10; .25)", Value(  821.4748364800000 ) );
+}
+
+// MDURATION
+void TestFinancialFunctions::testMDURATION()
+{
+  CHECK_EVAL( "MDURATION(\"2004-02-01\"; \"2004-05-31\"; 0.08; 0.09; 2; 0)" , Value( 0.3189792663 ) ); // These tests go over a leap year day,
+                                                                                                       // and intentionally end on May 31, which
+                                                                                                       // illustrates the differences between 
+                                                                                                       // many bases
 }
 
 // MIRR

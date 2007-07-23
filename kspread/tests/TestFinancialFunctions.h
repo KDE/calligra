@@ -54,6 +54,7 @@ private slots:
   void testDOLLARDE();
   void testDOLLARFR();
   void testDURATION();
+  void testDURATION_ADD(); // excel
   void testEFFECT();
   void testEURO();
   void testEUROCONVERT();
@@ -65,7 +66,7 @@ private slots:
 //   void testIRR();        // to be implemented
   void testISPMT();  
   void testLEVELCOUPON();
-//   void testMDURATION();  // to be implemented
+  void testMDURATION();
   void testMIRR();
   void testNOMINAL();
   void testNPER();

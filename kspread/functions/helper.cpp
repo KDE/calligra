@@ -370,3 +370,42 @@ double KSpread::pow1p ( const double& x, const double& y)
   else
     return exp(y * log1p (x));
 }
+
+double KSpread::duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, 
+const double& coup_, const double& yield_, const int& freq, const int& basis, const double& numOfCoups)
+{
+  double yield = yield_;
+  double coup = coup_;
+
+  kDebug(36002)<<"DURATION_HELPER"<<endl;
+  kDebug(36002)<<"sett = "<<settlement<<" mat = "<<maturity<<" coup = "<<coup<<" yield = "<<yield<<" freq = "<<freq<<" basis = "<<basis<<endl;
+
+
+  double yearfrac = yearFrac( refDate, settlement, maturity, basis);
+  double res = 0.0;
+  const double f100 = 100.0;
+  coup *= f100 / double ( freq );
+  
+  yield /= freq;
+  yield += 1.0;
+
+  double diff = yearfrac * freq - numOfCoups;  
+  
+  double t;
+  
+  for( t = 1.0 ; t < numOfCoups ; t++ )
+    res += ( t + diff ) * ( coup ) / pow ( yield, t + diff );
+
+  res += ( numOfCoups + diff ) * ( coup + f100 ) / pow( yield, numOfCoups + diff );
+
+  double p = 0.0;
+  for( t = 1.0 ; t < numOfCoups ; t++ )
+    p += coup / pow( yield, t + diff );
+
+  p += ( coup + f100 ) / pow( yield, numOfCoups + diff );
+
+  res /= p;
+  res /= double( freq );
+
+  return( res );
+}

@@ -56,6 +56,7 @@ Value func_disc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dollarde (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dollarfr (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_duration (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_duration_add (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_effective (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_euro (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_euroconvert (valVector args, ValueCalc *calc, FuncExtra *);
@@ -65,6 +66,7 @@ Value func_intrate (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ipmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ispmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_level_coupon (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_mduration (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mirr (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nominal (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nper (valVector args, ValueCalc *calc, FuncExtra *);
@@ -138,6 +140,9 @@ void RegisterFinancialFunctions()
   f = new Function ("DURATION", func_duration);
   f->setParamCount (3);
   repo->add (f);
+  f = new Function ("DURATION_ADD", func_duration_add);
+  f->setParamCount (5, 6);
+  repo->add (f);
   f = new Function ("EFFECT", func_effective);
   f->setParamCount (2);
   repo->add (f);
@@ -167,6 +172,9 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("LEVEL_COUPON", func_level_coupon);
   f->setParamCount (5);
+  repo->add (f);
+  f = new Function ("MDURATION", func_mduration);
+  f->setParamCount (5, 6);
   repo->add (f);
   f = new Function ("MIRR", func_mirr);
   f->setParamCount (3);
@@ -397,7 +405,7 @@ Value func_accrintm (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: AMORDEGRC
 //
-// AMORLINC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; basis)
+// AMORDEGRC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; basis)
 //
 Value func_amordegrc (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -428,7 +436,7 @@ Value func_amordegrc (valVector args, ValueCalc *calc, FuncExtra *)
   else
     amorCoeff = 2.5;
 
-  kDebug(36002)<<" usePer = "<<usePer<<" amorCoeff = "<<amorCoeff<<endl;
+//   kDebug(36002)<<" usePer = "<<usePer<<" amorCoeff = "<<amorCoeff<<endl;
 
   QDate date0 = calc->doc()->referenceDate(); // referenceDat
 
@@ -479,7 +487,7 @@ Value func_amorlinc (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() > 6)
     basis = calc->conv()->asInteger (args[6]).asInteger();
 
-  QDate date0 = calc->doc()->referenceDate(); // referenceDat
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
 
   double oneRate = cost * rate;
   double costDelta = cost - salvage;
@@ -540,6 +548,9 @@ Value func_continuous (valVector args, ValueCalc *calc, FuncExtra *)
 
 //
 // Function: COUPNUM - taken from GNUMERIC
+//
+//
+// COUPNUM ( settlement, maturity, freq, [ basis = 0 ], [ eom ] )
 //
 Value func_coupnum (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -836,6 +847,9 @@ Value func_dollarfr (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: DURATION
 //
+//
+// duration( rate, pv, fv )
+//
 Value func_duration (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value rate = args[0];
@@ -853,6 +867,47 @@ Value func_duration (valVector args, ValueCalc *calc, FuncExtra *)
   // log(fv / pv) / log(1.0 + rate)
   return calc->div (calc->ln (calc->div (fv, pv)),
       calc->ln (calc->add (rate, Value(1.0))));
+}
+
+
+//
+// Function: DURATION
+//
+//
+// duration( settlement, maturity, coup, yield, freq, [basis = 0] )
+//
+Value func_duration_add (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+
+  double coup = numToDouble (calc->conv()->toFloat (args[2]));
+  double yield = numToDouble (calc->conv()->toFloat (args[3]));
+  int freq = calc->conv()->asInteger (args[4]).asInteger();
+  
+  int basis = 0;
+  if (args.count() > 5)
+    basis = calc->conv()->asInteger (args[3]).asInteger();
+
+  // TODO add chk_freq
+  if ( coup < 0.0 || yield < 0.0 ) 
+    return Value::errorVALUE();
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+
+  valVector param;
+  param.append(args[0]);
+  param.append(args[1]);
+  param.append(args[4]);
+  param.append(Value( basis ));
+ 
+  int numOfCoups = Value( func_coupnum(param, calc,0) ).asInteger();
+
+  kDebug(36002)<<"DURATION"<<endl;
+  kDebug(36002)<<"numOfCoup = "<<numOfCoups<<endl;
+
+
+  return Value (duration( date0, settlement, maturity, coup, yield, freq, basis, numOfCoups ));
 }
 
 
@@ -1008,6 +1063,46 @@ Value func_ispmt (valVector args, ValueCalc *calc, FuncExtra *)
 
   // d - (d / nper * per)
   return calc->sub (d, calc->mul (calc->div (d, nper), per));
+}
+
+
+//
+// Function: MDURATION
+//
+//
+// duration( settlement, maturity, coup, yield, freq, [basis = 0] )
+//
+Value func_mduration (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  QDate settlement = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate maturity = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+
+  double coup = numToDouble (calc->conv()->toFloat (args[2]));
+  double yield = numToDouble (calc->conv()->toFloat (args[3]));
+  int freq = calc->conv()->asInteger (args[4]).asInteger();
+  
+  int basis = 0;
+  if (args.count() > 5)
+    basis = calc->conv()->asInteger (args[3]).asInteger();
+
+  // TODO add chk_freq
+  if ( coup < 0.0 || yield < 0.0 ) 
+    return Value::errorVALUE();
+
+  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+
+  valVector param;
+  param.append(args[0]);
+  param.append(args[1]);
+  param.append(args[4]);
+  param.append(Value( basis ));
+ 
+  int numOfCoups = Value( func_coupnum(param, calc,0) ).asInteger();
+
+  double res = duration( date0, settlement, maturity, coup, yield, freq, basis, numOfCoups );
+  res /= 1.0 + ( yield / double( freq ) );
+
+  return Value ( res );
 }
 
 
@@ -1351,7 +1446,7 @@ Value func_pv (valVector args, ValueCalc *calc, FuncExtra *)
   if ( pvif == 0 )  
     return Value::errorDIV0();
 
-  double res = (-fv - pmt * (1.0 + rate *type) * fvifa) / pvif; 
+  double res = (-fv - pmt * (1.0 + rate * type) * fvifa) / pvif; 
 
   return Value(res);
 }

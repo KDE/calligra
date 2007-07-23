@@ -46,7 +46,7 @@ int daysBetweenDates( QDate const & date1, QDate const & date2, int basis );
 int days360( const QDate& _date1, const QDate& _date2, bool european );
 int days360( int day1, int month1, int year1, bool leapYear1, int  day2, int month2, int year2, bool usa );
 double yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis );
-
+double duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, const double& coup_, const double& yield_, const int& freq, const int& basis, const double& numOfCoups );
 double pow1p ( const double& x, const double& y);
 } //namespace KSpread
 
