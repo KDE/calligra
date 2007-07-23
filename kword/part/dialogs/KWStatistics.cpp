@@ -62,6 +62,21 @@ void KWStatistics::updateData() {
     m_lines = 0;
     m_syllables = 0;
     m_paragraphs = 0;
+
+    // parts of words for better counting of syllables:
+    // (only use reg exp if necessary -> speed up)
+
+    QStringList subs_syl;
+    subs_syl << "cial" << "tia" << "cius" << "cious" << "giu" << "ion" << "iou";
+    QStringList subs_syl_regexp;
+    subs_syl_regexp << "sia$" << "ely$";
+
+    QStringList add_syl;
+    add_syl << "ia" << "riet" << "dien" << "iu" << "io" << "ii";
+    QStringList add_syl_regexp;
+    add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
+        << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
+    
     foreach(KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         if(tfs == 0) continue;
@@ -72,12 +87,84 @@ void KWStatistics::updateData() {
         QTextBlock block = doc->begin();
         while(block.isValid()) {
             m_paragraphs += 1;
-            m_charsWithSpace += block.length();
-            m_charsWithoutSpace += block.length() - block.text().count(QRegExp("\\s"));
+            m_charsWithSpace += block.text().length();
+            m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
             if(block.layout())
                 m_lines += block.layout()->lineCount();
-            // TODO dig code out of the old text framework that counted words, sentences and syllables
+
+            QString s = block.text();
+
+            // Syllable and Word count
+            // Algorithm mostly taken from Greg Fast's Lingua::EN::Syllable module for Perl.
+            // This guesses correct for 70-90% of English words, but the overall value
+            // is quite good, as some words get a number that's too high and others get
+            // one that's too low.
+            // IMPORTANT: please test any changes against demos/statistics.kwd
+            QRegExp re("\\s+");
+            QStringList wordlist = s.split(re, QString::SkipEmptyParts);
+            m_words += wordlist.count();
+            re.setCaseSensitivity(Qt::CaseInsensitive);
+            for(QStringList::Iterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
+                QString word1 = *it1;
+                QString word = *it1;
+                re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
+                word.remove(re);
+                if(word.length() <= 3) {  // extension to the original algorithm
+                    m_syllables++;
+                    continue;
+                }
+                re.setPattern("e$");
+                word.remove(re);
+                re.setPattern("[^aeiouy]+");
+                QStringList syls = word.split(re, QString::SkipEmptyParts);
+                int word_syllables = 0;
+                for(QStringList::Iterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
+                    if(word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
+                        word_syllables--;
+                }
+                for(QStringList::Iterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
+                    re.setPattern(*it);
+                    if(word.indexOf(re) != -1)
+                        word_syllables--;
+                }
+                for(QStringList::Iterator it = add_syl.begin(); it != add_syl.end(); ++it) {
+                    if(word.indexOf(*it, 0, Qt::CaseInsensitive) != -1)
+                        word_syllables++;
+                }
+                for(QStringList::Iterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
+                    re.setPattern(*it);
+                    if(word.indexOf(re) != -1)
+                        word_syllables++;
+                }
+                word_syllables += syls.count();
+                if(word_syllables == 0)
+                    word_syllables = 1;
+                m_syllables += word_syllables;
+            }
+            re.setCaseSensitivity(Qt::CaseSensitive);
+
             block = block.next();
+
+            // Sentence count
+            // Clean up for better result, destroys the original text but we only want to count
+            s = s.trimmed();
+            if(s.isEmpty())
+                continue;
+            QChar lastchar = s.at(s.length() - 1);
+            if(! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
+                s = s + ".";
+            }
+            re.setPattern("[.?!]+");         // count "..." as only one "."
+            s.replace(re, ".");
+            re.setPattern("\\d\\.\\d");      // don't count floating point numbers as sentences
+            s.replace(re, "0,0");
+            re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
+            s.replace(re, "*");
+            for(int i = 0 ; i < s.length(); ++i) {
+                QChar ch = s[i];
+                if(ch == QChar('.') || ch == QChar('?') || ch == QChar('!'))
+                    ++m_sentences;
+            }
         }
     }
 }
@@ -98,8 +185,8 @@ void KWStatistics::updateDataUi() {
     widget.sentences->setText(KGlobal::locale()->formatNumber( m_sentences, 0 ));
     widget.syllables->setText(KGlobal::locale()->formatNumber( m_syllables, 0 ));
     widget.lines->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
-    widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
-    widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
+    widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
+    widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
 
     // calculate Flesch reading ease score:
     float flesch_score = 0;
