@@ -39,29 +39,6 @@ public:
         NoFollowupFrame,    ///< On new page don't create a new page
         CopyNewFrame        ///< On new page create a copy-frame and show that.
     };
-    enum AnchorType {
-        //TODO
-// regarding anchoring of footnotes:
-//14:06 < elvstone> in the best of worlds i would like 3 alternatives; 1) To anchor at bottom of page. 2) To anchor at bottom of last frame in frameset. 3) To anchor at bottom of frame.
-    /* ideally the following properties could be given to any floating frame:
-       Position: (y)
-        Top of frame
-        Top of paragraph
-        Above current line
-        At insertion point
-        Below current line
-        Bottom of paragraph
-        Bottom of frame
-        Absolute
-       Alignment: (x)
-        Left
-        Right
-        Center
-        Closest to binding
-        Further from binding
-        Absolute */
-
-    };
 
     /// The behavior other frames' text has when this property is set on a frame.
     enum RunAroundSide {
