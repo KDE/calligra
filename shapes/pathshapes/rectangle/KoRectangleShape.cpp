@@ -69,6 +69,7 @@ bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCont
     }
 
     updatePath( size() );
+    updateHandles();
 
     loadOdfAttributes( element, context, OdfTransformation );
 
@@ -129,8 +130,13 @@ void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt
     if ( 100 - m_cornerRadiusY < 1e-10 )
         m_cornerRadiusY = 100;
 
-    m_handles[0] = QPointF( size().width() - m_cornerRadiusX/100.0 * width2, 0.0 );
-    m_handles[1] = QPointF( size().width(), m_cornerRadiusY/100.0 * height2 );
+    updateHandles();
+}
+
+void KoRectangleShape::updateHandles()
+{
+    m_handles[0] = QPointF( size().width() - m_cornerRadiusX/100.0 * 0.5 * size().width(), 0.0 );
+    m_handles[1] = QPointF( size().width(), m_cornerRadiusY/100.0 * 0.5 * size().height() );
 }
 
 void KoRectangleShape::updatePath( const QSizeF &size )

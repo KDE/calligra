@@ -72,6 +72,7 @@ protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
     void updatePath( const QSizeF &size );
     void createPath( const QSizeF &size );
+    void updateHandles();
 
 private:
     double m_cornerRadiusX; ///< in percent of half of the rectangle width (a number between 0 and 100)
