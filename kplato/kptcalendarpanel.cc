@@ -214,7 +214,8 @@ CalendarPanel::dateChangedSlot(const QDate& date)
     //kDebug() << "CalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
     line->setText(KGlobal::locale()->formatDate(date, KLocale::ShortDate));
     d->selectWeek->setText(i18n("Week %1", weekOfYear(date)));
-    selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(), false));
+    selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(),
+                                                                  KCalendarSystem::LongName));
     selectYear->setText(date.toString("yyyy"));
     emit(dateChanged(date));
 }
@@ -247,7 +248,8 @@ CalendarPanel::setDate(const QDate& date)
 	// -----
 	table->setDate(date);
 	d->selectWeek->setText(i18n("Week %1", weekOfYear(date)));
-	selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(), false));
+	selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(),
+                                                                      KCalendarSystem::LongName));
 	temp.setNum(date.year());
 	selectYear->setText(temp);
 	line->setText(KGlobal::locale()->formatDate(date, KLocale::ShortDate));
@@ -478,7 +480,7 @@ CalendarPanel::setFontSize(int s)
   QFontMetrics metrics(selectMonth->fontMetrics());
   for(int i=1; i <= 12; ++i)
     { // maxMonthRect is used by sizeHint()
-      r=metrics.boundingRect(KGlobal::locale()->calendar()->monthName(i, false));
+      r=metrics.boundingRect(KGlobal::locale()->calendar()->monthName(i, KCalendarSystem::LongName));
       maxMonthRect.setWidth(qMax(r.width(), maxMonthRect.width()));
       maxMonthRect.setHeight(qMax(r.height(),  maxMonthRect.height()));
     }

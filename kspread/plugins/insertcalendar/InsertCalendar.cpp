@@ -230,7 +230,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
     if (yearheader)
     {
       kDebug() << "inserting year " + QString::number(current.year()) << endl;
-      sheet->setText(row,colstart+6,cs->yearString(current,false));
+      sheet->setText(row,colstart+6,cs->yearString(current,KCalendarSystem::LongFormat));
 
       row+=2;
       yearheader=false;
@@ -238,7 +238,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
     if (monthheader)
     {
       kDebug() << "inserting month " + QString::number(current.month()) << endl;
-      sheet->setText(row,colstart+6,cs->monthName(current,false));
+      sheet->setText(row,colstart+6,cs->monthName(current,KCalendarSystem::LongName));
       row+=2;
       //we always have the week number in the first column
       sheet->setText(row,colstart,i18n("week"));

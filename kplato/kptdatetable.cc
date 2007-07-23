@@ -156,7 +156,8 @@ void DateTable::paintWeekday(QPainter *painter, int col) {
         painter->drawRect(2, 2, w-4, h-4);
         painter->setPen(penSelectColor);
     }
-    painter->drawText(0, 0, w, h-1, Qt::AlignCenter, KGlobal::locale()->calendar()->weekDayName(day, true), -1, &rect);
+    painter->drawText(0, 0, w, h-1, Qt::AlignCenter,
+      KGlobal::locale()->calendar()->weekDayName(day, KCalendarSystem::ShortDayName), -1, &rect);
     painter->setPen(colorLine);
     painter->drawLine(0, h-1, w-1, h-1);
 
@@ -351,7 +352,8 @@ void DateTable::setFontSize(int size) {
   maxCell.setHeight(0);
   for(count=0; count<7; ++count)
     {
-      rect=metrics.boundingRect(KGlobal::locale()->calendar()->weekDayName(count+1, true));
+      rect=metrics.boundingRect(
+        KGlobal::locale()->calendar()->weekDayName(count+1, KCalendarSystem::ShortDayName));
       maxCell.setWidth(qMax(maxCell.width(), rect.width()));
       maxCell.setHeight(qMax(maxCell.height(), rect.height()));
     }
@@ -796,7 +798,7 @@ DateInternalMonthPicker::DateInternalMonthPicker
   QFontMetrics metrics(font);
   for(int i=1; i <= 12; ++i)
     {
-      rect=metrics.boundingRect(KGlobal::locale()->calendar()->monthName(i, false));
+      rect=metrics.boundingRect(KGlobal::locale()->calendar()->monthName(i, KCalendarSystem::LongName));
       if(max.width()<rect.width()) max.setWidth(rect.width());
       if(max.height()<rect.height()) max.setHeight(rect.height());
     }
@@ -836,7 +838,7 @@ DateInternalMonthPicker::paintCell(QPainter* painter, int row, int col)
   QString text;
   // ----- find the number of the cell:
   index=3*row+col+1;
-  text=KGlobal::locale()->calendar()->monthName(index, false);
+  text=KGlobal::locale()->calendar()->monthName(index, KCalendarSystem::LongName);
   painter->drawText(0, 0, cellWidth(), cellHeight(), Qt::AlignCenter, text);
   if ( activeCol == col && activeRow == row )
       painter->drawRect( 0, 0, cellWidth(), cellHeight() );

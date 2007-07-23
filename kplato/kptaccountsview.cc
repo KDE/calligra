@@ -337,7 +337,7 @@ void AccountsView::slotUpdate()
         int c = 0;
         for ( ; pend <= end; ++c ) {
             //kDebug()<<k_funcinfo<<c<<": "<<dt<<"-"<<pend<<" : "<<end<<endl;
-            m << cal->monthName( dt, true ) + QString( " %1" ).arg( dt.year() );
+            m << cal->monthName( dt, KCalendarSystem::ShortName ) + QString( " %1" ).arg( dt.year() );
             dt = pend.addDays( 1 ); // 1. next month
             pend = cal->addDays( pend, dt.daysInMonth() );
             if ( ( pend.year() == end.year() ) && ( pend.month() == end.month() ) ) {

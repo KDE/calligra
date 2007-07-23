@@ -255,44 +255,44 @@ void resetGlobals()
 
 void initGlobals( KLocale const * const locale )
 {
-  g_Monday    = locale->calendar()->weekDayName( 1, false );
-  g_Tuesday   = locale->calendar()->weekDayName( 2, false );
-  g_Wednesday = locale->calendar()->weekDayName( 3, false );
-  g_Thursday  = locale->calendar()->weekDayName( 4, false );
-  g_Friday    = locale->calendar()->weekDayName( 5, false );
-  g_Saturday  = locale->calendar()->weekDayName( 6, false );
-  g_Sunday    = locale->calendar()->weekDayName( 7, false );
-  g_Mon       = locale->calendar()->weekDayName( 1, true );
-  g_Tue       = locale->calendar()->weekDayName( 2, true );
-  g_Wed       = locale->calendar()->weekDayName( 3, true );
-  g_Thu       = locale->calendar()->weekDayName( 4, true );
-  g_Fri       = locale->calendar()->weekDayName( 5, true );
-  g_Sat       = locale->calendar()->weekDayName( 6, true );
-  g_Sun       = locale->calendar()->weekDayName( 7, true );
-  g_January   = locale->calendar()->monthName(  1, 2005, false );
-  g_February  = locale->calendar()->monthName(  2, 2005, false );
-  g_March     = locale->calendar()->monthName(  3, 2005, false );
-  g_April     = locale->calendar()->monthName(  4, 2005, false );
-  g_MayL      = locale->calendar()->monthName(  5, 2005, false );
-  g_June      = locale->calendar()->monthName(  6, 2005, false );
-  g_July      = locale->calendar()->monthName(  7, 2005, false );
-  g_August    = locale->calendar()->monthName(  8, 2005, false );
-  g_September = locale->calendar()->monthName(  9, 2005, false );
-  g_October   = locale->calendar()->monthName( 10, 2005, false );
-  g_November  = locale->calendar()->monthName( 11, 2005, false );
-  g_December  = locale->calendar()->monthName( 12, 2005, false );
-  g_Jan       = locale->calendar()->monthName(  1, 2005, true );
-  g_Feb       = locale->calendar()->monthName(  2, 2005, true );
-  g_Mar       = locale->calendar()->monthName(  3, 2005, true );
-  g_Apr       = locale->calendar()->monthName(  4, 2005, true );
-  g_May       = locale->calendar()->monthName(  5, 2005, true );
-  g_Jun       = locale->calendar()->monthName(  6, 2005, true );
-  g_Jul       = locale->calendar()->monthName(  7, 2005, true );
-  g_Aug       = locale->calendar()->monthName(  8, 2005, true );
-  g_Sep       = locale->calendar()->monthName(  9, 2005, true );
-  g_Oct       = locale->calendar()->monthName( 10, 2005, true );
-  g_Nov       = locale->calendar()->monthName( 11, 2005, true );
-  g_Dec       = locale->calendar()->monthName( 12, 2005, true );
+  g_Monday    = locale->calendar()->weekDayName( 1, KCalendarSystem::LongDayName );
+  g_Tuesday   = locale->calendar()->weekDayName( 2, KCalendarSystem::LongDayName );
+  g_Wednesday = locale->calendar()->weekDayName( 3, KCalendarSystem::LongDayName );
+  g_Thursday  = locale->calendar()->weekDayName( 4, KCalendarSystem::LongDayName );
+  g_Friday    = locale->calendar()->weekDayName( 5, KCalendarSystem::LongDayName );
+  g_Saturday  = locale->calendar()->weekDayName( 6, KCalendarSystem::LongDayName );
+  g_Sunday    = locale->calendar()->weekDayName( 7, KCalendarSystem::LongDayName );
+  g_Mon       = locale->calendar()->weekDayName( 1, KCalendarSystem::ShortDayName );
+  g_Tue       = locale->calendar()->weekDayName( 2, KCalendarSystem::ShortDayName );
+  g_Wed       = locale->calendar()->weekDayName( 3, KCalendarSystem::ShortDayName );
+  g_Thu       = locale->calendar()->weekDayName( 4, KCalendarSystem::ShortDayName );
+  g_Fri       = locale->calendar()->weekDayName( 5, KCalendarSystem::ShortDayName );
+  g_Sat       = locale->calendar()->weekDayName( 6, KCalendarSystem::ShortDayName );
+  g_Sun       = locale->calendar()->weekDayName( 7, KCalendarSystem::ShortDayName );
+  g_January   = locale->calendar()->monthName(  1, 2005, KCalendarSystem::LongName );
+  g_February  = locale->calendar()->monthName(  2, 2005, KCalendarSystem::LongName );
+  g_March     = locale->calendar()->monthName(  3, 2005, KCalendarSystem::LongName );
+  g_April     = locale->calendar()->monthName(  4, 2005, KCalendarSystem::LongName );
+  g_MayL      = locale->calendar()->monthName(  5, 2005, KCalendarSystem::LongName );
+  g_June      = locale->calendar()->monthName(  6, 2005, KCalendarSystem::LongName );
+  g_July      = locale->calendar()->monthName(  7, 2005, KCalendarSystem::LongName );
+  g_August    = locale->calendar()->monthName(  8, 2005, KCalendarSystem::LongName );
+  g_September = locale->calendar()->monthName(  9, 2005, KCalendarSystem::LongName );
+  g_October   = locale->calendar()->monthName( 10, 2005, KCalendarSystem::LongName );
+  g_November  = locale->calendar()->monthName( 11, 2005, KCalendarSystem::LongName );
+  g_December  = locale->calendar()->monthName( 12, 2005, KCalendarSystem::LongName );
+  g_Jan       = locale->calendar()->monthName(  1, 2005, KCalendarSystem::ShortName );
+  g_Feb       = locale->calendar()->monthName(  2, 2005, KCalendarSystem::ShortName );
+  g_Mar       = locale->calendar()->monthName(  3, 2005, KCalendarSystem::ShortName );
+  g_Apr       = locale->calendar()->monthName(  4, 2005, KCalendarSystem::ShortName );
+  g_May       = locale->calendar()->monthName(  5, 2005, KCalendarSystem::ShortName );
+  g_Jun       = locale->calendar()->monthName(  6, 2005, KCalendarSystem::ShortName );
+  g_Jul       = locale->calendar()->monthName(  7, 2005, KCalendarSystem::ShortName );
+  g_Aug       = locale->calendar()->monthName(  8, 2005, KCalendarSystem::ShortName );
+  g_Sep       = locale->calendar()->monthName(  9, 2005, KCalendarSystem::ShortName );
+  g_Oct       = locale->calendar()->monthName( 10, 2005, KCalendarSystem::ShortName );
+  g_Nov       = locale->calendar()->monthName( 11, 2005, KCalendarSystem::ShortName );
+  g_Dec       = locale->calendar()->monthName( 12, 2005, KCalendarSystem::ShortName );
 
   g_dcSymbol  = locale->decimalSymbol()[0];
   g_thSymbol  = locale->thousandsSeparator()[0];
@@ -543,10 +543,10 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
       }
       break;
 
-     case '¤':
+     case 'ï¿½':
      case '$':
-     case '¥':
-     case '£':
+     case 'ï¿½':
+     case 'ï¿½':
      case '%':
       if ( type == Number )
         endFixed = true;
