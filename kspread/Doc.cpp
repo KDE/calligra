@@ -54,6 +54,7 @@
 #include <k3sconfig.h>
 #include <ktemporaryfile.h>
 
+#include <KoGlobal.h>
 #include <KoApplication.h>
 #include <KoDocumentInfo.h>
 #include <KoDom.h>

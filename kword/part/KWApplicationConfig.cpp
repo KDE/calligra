@@ -21,6 +21,7 @@
 #include "KWDocument.h"
 
 #include <KoUnit.h>
+#include <KoGlobal.h>
 #include <KConfigGroup>
 
 KWApplicationConfig::KWApplicationConfig()

@@ -82,6 +82,7 @@
 #include <kstandardaction.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
+#include <KToggleAction>
 #include <kparts/event.h>
 #include <k3listview.h>
 #include <kpushbutton.h>
@@ -90,6 +91,7 @@
 
 // KOffice includes
 #include <kdatatool.h>
+#include <KoGlobal.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoCharSelectDia.h>

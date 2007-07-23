@@ -69,6 +69,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <KToggleAction>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
