@@ -61,6 +61,6 @@ install(TARGETS kformula  DESTINATION ${BIN_INSTALL_DIR})
 install( FILES  tips  DESTINATION ${DATA_INSTALL_DIR}/kformula)
 install( FILES  kformulapart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kformula.rc kformula_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kformula)
-install( FILES  kformula.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  kformula.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 

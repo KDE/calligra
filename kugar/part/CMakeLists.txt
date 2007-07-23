@@ -32,7 +32,7 @@ install(TARGETS kugar  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kugar.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  kugar.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kugarpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kugarpart.rc  DESTINATION ${DATA_INSTALL_DIR}/kugar)
 install( FILES  kugartemplate.dtd  DESTINATION ${DATA_INSTALL_DIR}/kugar/dtd)

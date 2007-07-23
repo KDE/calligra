@@ -62,12 +62,12 @@ install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-# the old KDE3-way was to install the desktop-file here while the new KDE4 way is to install to ${XDG_APPS_DIR}
+# the old KDE3-way was to install the desktop-file here while the new KDE4 way is to install to ${XDG_APPS_INSTALL_DIR}
 #install( FILES  kexi.desktop  DESTINATION ${APPLNK_INSTALL_DIR}/Office)
 
 #install(FILES kexi.rc kexi_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kexi)
 #install(FILES kexipart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES kexi.desktop DESTINATION ${XDG_APPS_DIR})
+install(FILES kexi.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 #install(FILES kexi.kcfg DESTINATION  ${KCFG_INSTALL_DIR} )
 
 #kde4_create_doxygen_docs( EXCLUDE 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc  )

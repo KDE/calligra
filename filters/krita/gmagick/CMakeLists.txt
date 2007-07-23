@@ -33,7 +33,7 @@ install(TARGETS kritagmagickexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita_magick_import.desktop krita_magick_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita_magick.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  krita_magick.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 SET_TARGET_PROPERTIES( kritagmagickexport kritagmagickimport PROPERTIES COMPILE_FLAGS ${GRAPHICSMAGICK_COMPILE_FLAGS})
 

@@ -53,7 +53,7 @@ install(TARGETS kudesigner  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kudesigner.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  kudesigner.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kudesignerui.rc kudesigner_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kudesigner)
 
 

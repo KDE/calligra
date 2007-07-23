@@ -60,7 +60,7 @@ install(TARGETS kpresenter DESTINATION ${BIN_INSTALL_DIR})
 
 ### desktop files ###
 install( FILES kpresenterpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES kpresenter.desktop DESTINATION ${XDG_APPS_DIR})
+install( FILES kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES kpresenter.rc kpresenter_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kpresenter)

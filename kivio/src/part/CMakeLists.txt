@@ -44,7 +44,7 @@ install(TARGETS kivio DESTINATION ${BIN_INSTALL_DIR})
 
 ### desktop files ###
 install( FILES kiviopart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES kivio.desktop DESTINATION ${XDG_APPS_DIR})
+install( FILES kivio.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
 install( FILES kivio.rc DESTINATION ${DATA_INSTALL_DIR}/kivio)

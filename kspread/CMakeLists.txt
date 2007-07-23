@@ -244,5 +244,5 @@ install(TARGETS kspread  DESTINATION ${BIN_INSTALL_DIR})
 
 install( FILES  kspread.rc kspread_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread)
 install( FILES  kspreadpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kspread.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )

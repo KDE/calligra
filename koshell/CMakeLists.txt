@@ -21,7 +21,7 @@ install(TARGETS koshell  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  koshell.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  koshell.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  koshell.kcfg  DESTINATION ${KCFG_INSTALL_DIR})
 install( FILES  koshellui.rc  DESTINATION ${DATA_INSTALL_DIR}/koshell)
 

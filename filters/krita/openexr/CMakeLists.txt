@@ -43,5 +43,5 @@ install(TARGETS krita_openexr_export  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita_openexr_import.desktop krita_openexr_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita_openexr.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES  krita_openexr.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
