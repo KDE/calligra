@@ -65,7 +65,6 @@
 #include <QTextDocument>
 #include <QTimer>
 #include <QMenu>
-#include <QPrinter>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
@@ -883,7 +882,6 @@ void KWView::print() {
 //   duplex
 // const bool clipToPage=false; // should become a setting in the GUI
 
-    QPrinter printer;
     KWPrintingDialog *dia = new KWPrintingDialog(this);
     dia->printer().setOutputFormat(QPrinter::PdfFormat);
     dia->printer().setCreator("KWord 2.0alpha2");
