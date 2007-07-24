@@ -63,6 +63,7 @@ void KWImageFrame::setImageQuality(KWImageFrame::ImageQuality quality) {
             KoShape *shape = factory->createDefaultShape();
             shape->setUserData(new KoImageData(m_imageData));
             setShape(shape);
+            m_imageData.setImageQuality(KoImageData::NoPreviewImage); // flush pixmap from imageData object.
         }
         else {
             kWarning() << "Krita not installed; keeping preview resolution\n";
