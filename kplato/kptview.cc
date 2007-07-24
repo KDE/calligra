@@ -64,6 +64,7 @@
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <k3command.h>
+#include <ktoggleaction.h>
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
