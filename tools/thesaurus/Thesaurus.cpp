@@ -194,7 +194,7 @@ Thesaurus::Thesaurus()
     m_resultTextBrowser->setReadOnly(true);
     // m_resultTextBrowser->setTextFormat(Qt::RichText);
     // TODO?: m_resultbox->setMimeSourceFactory(...); to avoid warning
-    connect(m_resultTextBrowser, SIGNAL(linkClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QString &)));
+    connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
     wnLayout->addWidget(m_resultTextBrowser);
 
     // Connect for the history box
