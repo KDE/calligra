@@ -45,6 +45,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <KoMainWindow.h>
 
