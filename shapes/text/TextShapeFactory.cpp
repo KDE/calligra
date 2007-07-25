@@ -22,9 +22,7 @@
 #include <klocale.h>
 
 #include <KoProperties.h>
-#include <KoShapeGeometry.h>
 #include <KoShape.h>
-
 #include <KoTextShapeData.h>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
@@ -57,13 +55,5 @@ shape->addConnectionPoint(QPointF(0, 200));
 shape->addConnectionPoint(QPointF(300, 200));
     return shape;
 }
-
-#if 0
-QList<KoShapeConfigWidgetBase*> TextShapeFactory::createShapeOptionPanels() {
-    QList<KoShapeConfigWidgetBase*> answer;
-    answer.append(new KoShapeGeometry());
-    return answer;
-}
-#endif
 
 #include "TextShapeFactory.moc"
