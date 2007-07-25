@@ -1248,6 +1248,29 @@
     </Function>
     
     <Function>
+      <Name>XNPV</Name>
+      <Type>Float</Type>
+      <Parameter>
+	<Comment>Rate</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Values</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Dates</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Help>
+        <Text>The XNPV function calculates the net present value of a series of cash flows.</Text>
+        <Syntax>XNPV( Rate; Values; Dates )</Syntax>
+        <Example>XNPV(5%;B1:B4;C1:C4) suppose B1:B4 contains -20000, 4000, 12000, 8000 while C1:C4 contains ¡§=DATE(2000;1;1)¡¨, ¡§=DATE(2000;6;1)¡¨, ¡§=DATE(2000;12;30)¡¨, ¡§=DATE(2001;3;1)¡¨ returns 2907.83187</Example>
+        <Related>NPV</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>YIELDMAT</Name>
       <Type>Float</Type>
       <Parameter>

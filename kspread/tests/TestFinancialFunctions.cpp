@@ -642,14 +642,14 @@ void TestFinancialFunctions::testMDURATION()
 void TestFinancialFunctions::testMIRR()
 {
   // ODF
-  CHECK_EVAL_SHORT( "MIRR({100;200;-50;300;-200}; 5%; 6%)", Value( 0.342823387842 ) ); 
+  CHECK_EVAL( "MIRR({100;200;-50;300;-200}; 5%; 6%)",     Value( 0.342823387842     ) ); 
 
   // bettersolutions.com
-  CHECK_EVAL_SHORT( "MIRR({-10;30;20;10;20};0.1;0.12)",         Value( 0.7712844619 ) );
-  CHECK_EVAL_SHORT( "MIRR({-100;30;30;30;30};0.1;1)",           Value( 0.4564753151 ) );
-  CHECK_EVAL_SHORT( "MIRR({-50;20;40;70};10/100;12/100)",       Value( 0.4090837902 ) );
-  CHECK_EVAL_SHORT( "MIRR({-5;1;2;3;4};10/100;0.12)",           Value( 0.2253901556 ) );
-  CHECK_EVAL_SHORT( "MIRR({1000;1100;1200;1500;1600};10%;12%)", Value( Value::errorDIV0() ) );
+  CHECK_EVAL( "MIRR({-10;30;20;10;20};0.1;0.12)",         Value( 0.7712844619       ) );
+  CHECK_EVAL( "MIRR({-100;30;30;30;30};0.1;1)",           Value( 0.4564753151       ) );
+  CHECK_EVAL( "MIRR({-50;20;40;70};10/100;12/100)",       Value( 0.4090837902       ) );
+  CHECK_EVAL( "MIRR({-5;1;2;3;4};10/100;0.12)",           Value( 0.2253901556       ) );
+  CHECK_EVAL( "MIRR({1000;1100;1200;1500;1600};10%;12%)", Value( Value::errorDIV0() ) );
 }
 
 // Yearly nominal interest rate
@@ -879,6 +879,23 @@ void TestFinancialFunctions::testTBILLYIELD()
   CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1996;12;31);94.93)", Value( Value::errorVALUE() ) ); // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
   CHECK_EVAL( "TBILLYIELD(DATE(1996;01;01);DATE(1997;01;01);94.92)", Value( Value::errorVALUE() ) ); // specs 0.0526414 OOo-2.2.1 Error(#VALUE!)
   CHECK_EVAL( "TBILLYIELD(DATE(1996;07;01);DATE(1997;07;01);94.93)", Value( Value::errorVALUE() ) ); // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
+}
+
+// XNPV
+void TestFinancialFunctions::testXNPV()
+{
+  // bettersolution.com
+  CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {date(2005;01;01); date(2005;01;10); date(2005;01;15)})" , Value( 3984.3581140636     ) ); //
+  
+  // with dates {date(2005;01;01); date(2005;03;01); date(2005;10;30); date(2006;02;15)}
+  CHECK_EVAL( "XNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})", Value(  -380.3891178530  ) ); //
+  CHECK_EVAL( "XNPV(30;   {-10000;2750;4250;3250}; {38353;38412;38655;38763})", Value( -8104.7862519770  ) ); //
+  CHECK_EVAL( "XNPV(-30;  {-10000;2750;4250;3250}; {38353;38412;38655;38763})", Value( Value::errorNUM() ) ); //
+  CHECK_EVAL( "XNPV(0.09; {-10000;2750};           {date(2005;01;01); date(2005;01;10); date(2005;01;15)})", Value( Value::errorNUM()   ) ); //
+  CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {\"fail\"; date(2005;01;10); date(2005;01;15)})",         Value( Value::errorVALUE() ) ); //
+  
+  // ODF
+
 }
 
 // YIELDDISC

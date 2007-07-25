@@ -47,7 +47,12 @@ Value func_amordegrc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_amorlinc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_compound (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_continuous (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_coupdaybs (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_coupdays (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_coupdaysnc (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_coupncd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_coupnum (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_couppcd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cumipmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cumprinc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_db (valVector args, ValueCalc *calc, FuncExtra *);
@@ -64,6 +69,7 @@ Value func_fv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv_annuity (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_intrate (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ipmt (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_irr (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ispmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_level_coupon (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_mduration (valVector args, ValueCalc *calc, FuncExtra *);
@@ -71,13 +77,18 @@ Value func_mirr (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nominal (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_nper (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_npv (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_oddfprice (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_oddfyield (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_oddlyield (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pmt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ppmt (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_price (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_pricedisc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pricemat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pv_annuity (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_oddlyield (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_rate (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_received (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rri (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sln (valVector args, ValueCalc *calc, FuncExtra *);
@@ -85,6 +96,10 @@ Value func_syd (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_vdb (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_xirr (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_xnpv (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_yield (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon (valVector args, ValueCalc *calc, FuncExtra *);
@@ -113,9 +128,24 @@ void RegisterFinancialFunctions()
   f = new Function ("CONTINUOUS", func_continuous);
   f->setParamCount (3);
   repo->add (f);
+//   f = new Function ("COUPDAYBS", func_coupdaybs);
+//   f->setParamCount (3, 4);
+//   repo->add (f);
+//   f = new Function ("COUPDAYS", func_coupdays);
+//   f->setParamCount (3, 4);
+//   repo->add (f);
+//   f = new Function ("COUPDAYSNC", func_coupdaysnc);
+//   f->setParamCount (3, 4);
+//   repo->add (f);
+//   f = new Function ("COUPNCD", func_coupncd);
+//   f->setParamCount (3, 4);
+//   repo->add (f);
   f = new Function ("COUPNUM", func_coupnum);
   f->setParamCount (3, 5);
   repo->add (f);
+//   f = new Function ("COUPPCD", func_couppcd);
+//   f->setParamCount (3, 4);
+//   repo->add (f);
   f = new Function ("CUMIPMT", func_cumipmt);
   f->setParamCount (6);
   repo->add (f);
@@ -167,6 +197,9 @@ void RegisterFinancialFunctions()
   f = new Function ("IPMT", func_ipmt);
   f->setParamCount (4, 6);
   repo->add (f);
+//   f = new Function ("IRR", func_irr);
+//   f->setParamCount (1, 2);
+//   repo->add (f);
   f = new Function ("ISPMT", func_ispmt);
   f->setParamCount (4);
   repo->add (f);
@@ -190,6 +223,12 @@ void RegisterFinancialFunctions()
   f->setParamCount (2, -1);
   f->setAcceptArray();
   repo->add (f);
+//   f = new Function ("ODDFPRICE", func_oddfprice);
+//   f->setParamCount (8, 9);
+//   repo->add (f);
+//   f = new Function ("ODDFYIELD", func_oddfyield);
+//   f->setParamCount (8, 9);
+//   repo->add (f);
   f = new Function ("ODDLPRICE", func_oddlprice);
   f->setParamCount (7,8);
   repo->add (f);
@@ -202,6 +241,12 @@ void RegisterFinancialFunctions()
   f = new Function ("PPMT", func_ppmt);
   f->setParamCount (4, 6);
   repo->add (f);
+//   f = new Function ("PRICE", func_price);
+//   f->setParamCount (6, 7);
+//   repo->add (f);
+//   f = new Function ("PRICEDISC", func_pricedisc);
+//   f->setParamCount (4, 5);
+//   repo->add (f);
   f = new Function ("PRICEMAT", func_pricemat);
   f->setParamCount (5, 6);
   repo->add (f);
@@ -211,6 +256,9 @@ void RegisterFinancialFunctions()
   f = new Function ("PV_ANNUITY", func_pv_annuity);
   f->setParamCount (3);
   repo->add (f);
+//   f = new Function ("RATE", func_rate);
+//   f->setParamCount (3, 6);
+//   repo->add (f);
   f = new Function ("RECEIVED", func_received);
   f->setParamCount (4, 5);
   repo->add (f);
@@ -232,6 +280,20 @@ void RegisterFinancialFunctions()
   f = new Function ("TBILLYIELD", func_tbillyield);
   f->setParamCount (3);
   repo->add (f);
+//   f = new Function ("VDB", func_vdb);
+//   f->setParamCount (5, 7);
+//   repo->add (f);
+//   f = new Function ("XIRR", func_xirr);
+//   f->setParamCount (2, 3);
+//   f->setAcceptArray();
+//   repo->add (f);
+  f = new Function ("XNPV", func_xnpv);
+  f->setParamCount (3);
+  f->setAcceptArray();
+  repo->add (f);
+//   f = new Function ("YIELD", func_yield);
+//   f->setParamCount (6, 7);
+//   repo->add (f);
   f = new Function ("YIELDDISC", func_yielddisc);
   f->setParamCount (4,5);
   repo->add (f);
@@ -1635,6 +1697,64 @@ Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *)
   res *= 360.0;
 
   return Value(res);
+}
+
+
+//
+// Function: xnpv
+//
+// Compute the net present value of a series of cash flows.
+//
+// XNPV ( Rate; Values; Dates )
+// 
+Value func_xnpv (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  double rate = calc->conv()->asFloat (args[0]).asFloat();
+  rate++;
+
+  int numValues = args[1].count();
+  int numDates  = args[2].count();
+
+  double res = 0;
+
+  // check pairs
+  if ( numValues != numDates || numValues < 2 )
+    return Value::errorVALUE();
+  // check rate
+  if ( rate < -1.0 )
+    return Value::errorNUM();
+
+  kDebug(36002)<<"XNPV"<<endl;
+  kDebug(36002)<<"rate = "<<rate<<" numValues = "<<numValues<<" numDates = "<<numDates<<endl;
+
+  QDate date0 = calc->conv()->asDate (args[2].element( 0 )).asDate( calc->doc() );
+  double val;
+  QDate date;
+
+  kDebug(36002)<<"date0 ="<<date0<<endl; 
+
+  for ( int i = 0; i < numValues; ++i )
+  {
+    val  = calc->conv()->asFloat (args[1].element( i )).asFloat();
+    Value tmpDate( calc->conv()->asDate (args[2].element( i )) );
+
+    if (tmpDate.isError()) return tmpDate;
+    date = tmpDate.asDate( calc->doc() );
+    
+    // check if date is valid
+    if ( !date.isValid() )
+      return Value::errorNUM();
+
+    // debug
+    kDebug(36002)<<"val = "<<val<<" date ="<<date<<endl; 
+
+    int days = date0.daysTo( date );
+    kDebug(36002)<<"days = "<<days<<endl;
+
+    res += val / pow( rate, days / 365.0 );
+  }
+
+  return Value( res );
 }
 
 

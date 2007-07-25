@@ -41,7 +41,7 @@ private slots:
   void testCOMPOUND();   // no ODF tests available
   void testCONTINUOUS(); // no ODF tests available
 //   void testCOUPDAYBS();  // to be implemented
-//   void testCOUPBAYS();   // to be implemented
+//   void testCOUPDAYS();   // to be implemented
 //   void testCOUPDAYSNC(); // to be implemented
 //   void testCOUPNCD();    // to be implemented
   void testCOUPNUM();    
@@ -93,7 +93,7 @@ private slots:
   void testTBILLYIELD();
 //   void testVDB();        // to be implemented
 //   void testXIRR();       // to be implemented
-//   void testXNPV();       // to be implemented
+  void testXNPV();       // to be implemented
 //   void testYIELD();      // to be implemented
   void testYIELDDISC();
   void testYIELDMAT();
