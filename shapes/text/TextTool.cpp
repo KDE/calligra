@@ -26,6 +26,7 @@
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/CreateNewBookmarkDialog.h"
 #include "dialogs/SelectBookmarkDialog.h"
+#include "dialogs/InsertCharacter.h"
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
 
@@ -60,14 +61,14 @@
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
 #include <QBuffer>
-#include <QTextBlock>
-#include <QTabWidget>
-#include <QTextLayout>
-#include <QKeyEvent>
-#include <QUndoCommand>
-#include <QPointer>
-#include <QMenu>
 #include <QClipboard>
+#include <QKeyEvent>
+#include <QMenu>
+#include <QPointer>
+#include <QTabWidget>
+#include <QTextBlock>
+#include <QTextLayout>
+#include <QUndoCommand>
 
 static bool hit(const QKeySequence &input, KStandardShortcut::StandardShortcut shortcut) {
     foreach(QKeySequence ks, KStandardShortcut::shortcut(shortcut).toList()) {
@@ -113,7 +114,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_allowResourceProviderUpdates(true),
     m_prevCursorPosition(-1),
     m_currentCommand(0),
-    m_currentCommandHasChildren(false)
+    m_currentCommandHasChildren(false),
+    m_specialCharacterDocker(0)
 {
     m_actionFormatBold  = new QAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold );
@@ -267,6 +269,13 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_selectall", action);
+
+    action = new QAction(i18n( "Special Character..." ), this);
+    action->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
+    addAction("insert_specialchar", action);
+    action->setToolTip( i18n( "Insert one or more symbols or characters not found on the keyboard" ) );
+    action->setWhatsThis( i18n( "Insert one or more symbols or characters not found on the keyboard." ) );
+    connect(action, SIGNAL(triggered()), this, SLOT( insertSpecialCharacter() ));
 
     m_updateParagDirection.action = new KoAction(this);
     m_updateParagDirection.action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
@@ -891,6 +900,8 @@ void TextTool::deactivate() {
         m_previousSelections.removeAt(0);
 
     updateSelectionHandler();
+    if(m_specialCharacterDocker)
+        m_specialCharacterDocker->setVisible(false);
 }
 
 void TextTool::repaintDecorations() {
@@ -1422,6 +1433,16 @@ void TextTool::resourceChanged(int key, const QVariant &var) {
     else return;
 
     repaintSelection();
+}
+
+void TextTool::insertSpecialCharacter() {
+    if(m_specialCharacterDocker == 0) {
+        m_specialCharacterDocker = new InsertCharacter(m_canvas->canvasWidget());
+        connect(m_specialCharacterDocker, SIGNAL(insertCharacter(const QString&)),
+                &m_selectionHandler, SLOT(insert(const QString&)));
+    }
+
+    m_specialCharacterDocker->show();
 }
 
 // ---------- editing plugins methods.

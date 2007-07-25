@@ -37,6 +37,7 @@ SET ( textshape_SRCS
     dialogs/CharacterStyleOptions.cpp
     dialogs/CreateNewBookmarkDialog.cpp
     dialogs/SelectBookmarkDialog.cpp
+    dialogs/InsertCharacter.cpp
 
     commands/ChangeListCommand.cpp
     commands/TextCommandBase.cpp

@@ -37,6 +37,7 @@ class KoBookmarkManager;
 class UndoTextCommand;
 class ChangeTracker;
 class QUndoCommand;
+class InsertCharacter;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -154,7 +155,12 @@ private slots:
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
     void deleteBookmark(const QString &name);
 
+    /// show the insert special character docker.
+    void insertSpecialCharacter();
+
+    /// method that will be called in an alternative thread for updating the paragraph direction at a character pos
     void updateParagraphDirection(const QVariant &variant);
+    /// method that will be called in the UI thread directly after the one above
     void updateParagraphDirectionUi();
 
 private:
@@ -222,6 +228,8 @@ private:
         int anchor;
     };
     QList<TextSelection> m_previousSelections;
+
+    InsertCharacter *m_specialCharacterDocker;
 };
 
 #endif
