@@ -79,8 +79,6 @@ void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    loadOdfAttributes( element, context, OdfMandatories );
-
     QSizeF size;
     size.setWidth( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) ) );
     size.setHeight( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
@@ -121,7 +119,7 @@ bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContex
     setStartAngle( element.attributeNS( KoXmlNS::draw, "start-angle", "0" ).toDouble() );
     setEndAngle( element.attributeNS( KoXmlNS::draw, "end-angle", "360" ).toDouble() );
 
-    loadOdfAttributes( element, context, OdfTransformation );
+    loadOdfAttributes( element, context, OdfMandatories|OdfTransformation );
 
     return true;
 }

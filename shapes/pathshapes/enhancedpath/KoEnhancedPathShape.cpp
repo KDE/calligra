@@ -368,8 +368,6 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
 {
     reset();
 
-    loadOdfAttributes( element, context, OdfMandatories );
-
     KoXmlElement child;
     forEachElement( child, element )
     {
@@ -432,7 +430,7 @@ bool KoEnhancedPathShape::loadOdf( const KoXmlElement & element, KoShapeLoadingC
 
     setSize( size );
 
-    loadOdfAttributes( element, context, OdfTransformation );
+    loadOdfAttributes( element, context, OdfMandatories | OdfTransformation );
 
     return true;
 }
