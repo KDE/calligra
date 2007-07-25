@@ -131,9 +131,4 @@ void KWFrameConnectSelector::open(KoShape *shape) {
     open(frame);
 }
 
-KAction *KWFrameConnectSelector::createAction() {
-    // TODO
-    return 0;
-}
-
 #include "KWFrameConnectSelector.moc"

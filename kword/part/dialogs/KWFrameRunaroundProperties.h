@@ -44,8 +44,6 @@ public:
     void open(KoShape *shape);
     /// reimplemented
     void save();
-    /// reimplemented
-    KAction *createAction();
 
 private:
     Ui::KWFrameRunaroundProperties widget;

@@ -131,10 +131,6 @@ void KWFrameGeometry::cancel() {
     frame->shape()->setSize(mOriginalSize);
 }
 
-KAction *KWFrameGeometry::createAction() {
-    return 0; // TODO
-}
-
 void KWFrameGeometry::setUnit(KoUnit unit) {
     widget.left->setUnit(unit);
     widget.top->setUnit(unit);

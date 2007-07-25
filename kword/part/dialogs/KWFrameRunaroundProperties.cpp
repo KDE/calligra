@@ -106,8 +106,4 @@ void KWFrameRunaroundProperties::save() {
     m_state->removeUser();
 }
 
-KAction *KWFrameRunaroundProperties::createAction() {
-    return 0;
-}
-
 #include "KWFrameRunaroundProperties.moc"

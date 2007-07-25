@@ -43,8 +43,6 @@ public:
     void open(KoShape *shape);
     /// reimplemented
     void save();
-    /// reimplemented
-    KAction *createAction();
 
 private slots:
     void newPageGroupUpdated(int which);

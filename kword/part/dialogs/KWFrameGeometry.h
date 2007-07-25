@@ -37,12 +37,15 @@ public:
     explicit KWFrameGeometry(FrameConfigSharedState *state);
     ~KWFrameGeometry();
 
+    /// reimplemented
     void open(KWFrame* frame);
+    /// reimplemented
     void open(KoShape *shape);
+    /// reimplemented
     void save();
     void cancel();
-    KAction *createAction();
 
+    /// reimplemented
     virtual void setUnit(KoUnit unit);
 
 private slots:

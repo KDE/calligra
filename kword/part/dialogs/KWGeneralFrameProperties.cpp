@@ -153,10 +153,6 @@ void KWGeneralFrameProperties::save() {
     m_state->removeUser();
 }
 
-KAction *KWGeneralFrameProperties::createAction() {
-    return 0;
-}
-
 void KWGeneralFrameProperties::newPageGroupUpdated(int which) {
     widget.createNewPage->setEnabled(which == KWord::ReconnectNewFrame);
 }
