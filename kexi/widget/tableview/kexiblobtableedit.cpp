@@ -565,7 +565,7 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVa
 	if (!key.isEmpty() && !(pix = d->pixmapCache[ key ])) {
 		//cache pixmap
 		QPixmap pm = KIconLoader::global()->loadIcon( key, K3Icon::Small, 
-			0, K3Icon::DefaultState, 0L, true/*canReturnNull*/ );
+			0, K3Icon::DefaultState , QStringList() , 0L, true/*canReturnNull*/ );
 		if (!pm.isNull()) {
 			pix = new QPixmap(pm);
 			d->pixmapCache.insert(key, pix);
