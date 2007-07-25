@@ -174,7 +174,8 @@ void KWTextFrameSet::framesEmpty(int emptyFrames) {
     //kDebug() << "KWTextFrameSet::framesEmpty " << emptyFrames << endl;
     if(m_pageManager == 0) // be lazy; just refuse to delete frames if we don't know which are on which page
         return;
-    QList<KWFrame*> myFrames = m_frames;
+    QList<KWFrame*> myFrames = m_frames; // make a copy so we can do a removeFrame without worries
+    QList<KWFrame*>::Iterator deleteFrom = myFrames.end();
     QList<KWFrame*>::Iterator iter = --myFrames.end();
     KWPage *page = 0;
     do {
@@ -184,18 +185,19 @@ void KWTextFrameSet::framesEmpty(int emptyFrames) {
             if(page ==0) // first loop
                 page = pageForFrame;
             else if(page != pageForFrame) { // all frames on the page (of this FS) are empty.
-                ++iter;
-                while(iter != myFrames.end()) { // remove all frames till end.
-                    removeFrame(*iter);
-                    delete (*iter)->shape();
-                    ++iter;
-                }
-                return;
+                deleteFrom = iter;
+                ++deleteFrom;
             }
         }
         if(--emptyFrames < 0)
-            return;
+            break;
     } while(iter-- != myFrames.begin());
+
+    while(deleteFrom != myFrames.end()) { // remove all frames till end.
+        removeFrame(*deleteFrom);
+        delete (*deleteFrom)->shape();
+        ++deleteFrom;
+    }
 }
 
 void KWTextFrameSet::setAllowLayout(bool allow) {
