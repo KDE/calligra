@@ -34,6 +34,7 @@
 #include "dialogs/KWPageSettingsDialog.h"
 #include "dialogs/KWStatisticsDialog.h"
 #include "dialogs/KWPrintingDialog.h"
+#include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 
 // koffice libs includes
@@ -109,6 +110,10 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)), this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
+
+    KWStatisticsDockerFactory statisticsFactory(this);
+    KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
+    if (docker->view() != this) docker->setView(this);
 }
 
 KWView::~KWView() {

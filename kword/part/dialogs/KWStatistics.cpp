@@ -26,26 +26,39 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoExecutePolicy.h>
 #include <KoAction.h>
+#include <KoSelection.h>
 
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextLayout>
 
-KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, QWidget *parent)
+KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
     : QWidget(parent),
     m_resourceProvider(provider),
     m_action(new KoAction(this)),
+    m_selection(selection),
     m_document(document)
 {
-    widget.setupUi(this);
-    m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
+    if (m_selection) {
+        m_showInDocker = true;
+        widgetDocker.setupUi(this);
+        widgetDocker.refresh->setIcon(KIcon("view-refresh"));
+        widgetDocker.autoRefresh->setEnabled(false);
 
-    connect(m_resourceProvider, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(updateResource(int)));
-    connect(m_action, SIGNAL(triggered(const QVariant&)), this, SLOT(updateData()), Qt::DirectConnection);
-    connect(m_action, SIGNAL(updateUi(const QVariant&)), this, SLOT(updateDataUi()), Qt::DirectConnection);
-    connect(widget.footEndNotes, SIGNAL(toggled(bool)), m_action, SLOT(execute()));
+        connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
+    }
+    else {
+        m_showInDocker = false;
+        widget.setupUi(this);
+        m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
 
-    m_action->execute();
+        connect(m_resourceProvider, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(updateResource(int)));
+        connect(m_action, SIGNAL(triggered(const QVariant&)), this, SLOT(updateData()), Qt::DirectConnection);
+        connect(m_action, SIGNAL(updateUi(const QVariant&)), this, SLOT(updateDataUi()), Qt::DirectConnection);
+        connect(widget.footEndNotes, SIGNAL(toggled(bool)), m_action, SLOT(execute()));
+
+        m_action->execute();
+    }
 }
 
 void KWStatistics::updateResource(int which) {
@@ -77,10 +90,16 @@ void KWStatistics::updateData() {
     add_syl_regexp << "[aeiouym]bl$" << "[aeiou]{3}" << "^mc" << "ism$"
         << "[^l]lien" << "^coa[dglx]." << "[^gq]ua[^auieo]" << "dnt$";
     
+    bool footEnd = m_showInDocker ? widgetDocker.footEndNotes->isChecked() : widget.footEndNotes->isChecked();
+
     foreach(KWFrameSet *fs, m_document->frameSets()) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         if(tfs == 0) continue;
-        if(! (widget.footEndNotes->isChecked() || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
+        if (m_showInDocker && (!(footEnd ||
+                    (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
+                     tfs->textFrameSetType() == KWord::OtherTextFrameSet))))
+            continue;
+        else if(! (footEnd || (tfs->textFrameSetType() == KWord::MainTextFrameSet ||
                     tfs->textFrameSetType() == KWord::OtherTextFrameSet)))
             continue;
         QTextDocument *doc = tfs->document();
@@ -167,35 +186,57 @@ void KWStatistics::updateData() {
             }
         }
     }
+
+    if (m_showInDocker)
+        updateDataUi();
 }
 
 void KWStatistics::updateDataUi() {
-    // tab 1
-    widget.pages->setText(
-            KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentPageCount), 0 ) );
-    widget.frames->setText(
-            KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentFrameSetCount), 0 ) );
-    widget.pictures->setText(
-            KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentPictureCount), 0 ) );
-    widget.tables->setText(
-            KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentTableCount), 0 ) );
-
-    // tab 2
-    widget.words->setText(KGlobal::locale()->formatNumber( m_words, 0 ));
-    widget.sentences->setText(KGlobal::locale()->formatNumber( m_sentences, 0 ));
-    widget.syllables->setText(KGlobal::locale()->formatNumber( m_syllables, 0 ));
-    widget.lines->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
-    widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
-    widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
-
     // calculate Flesch reading ease score:
     float flesch_score = 0;
     if( m_words > 0 && m_sentences > 0 )
         flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
     QString flesch = KGlobal::locale()->formatNumber( flesch_score );
-    if( m_words < 200 ) // a kind of warning if too few words:
-        flesch = i18n("approximately %1", flesch );
-    widget.flesch->setText(flesch);
+
+    if (m_showInDocker) {
+        int currentIndex = widgetDocker.statistics->currentIndex();
+        if (currentIndex == 0)
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_words, 0 ));
+        else if (currentIndex == 1)
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_sentences, 0 ));
+        else if (currentIndex == 2)
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_syllables, 0 ));
+        else if (currentIndex == 3)
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
+        else if (currentIndex == 4)
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
+        else if (currentIndex == 5)
+            widgetDocker.count->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
+        else if (currentIndex == 6)
+            widgetDocker.count->setText(flesch);
+    }
+    else {
+        // tab 1
+        widget.pages->setText(
+                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentPageCount), 0 ) );
+        widget.frames->setText(
+                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentFrameSetCount), 0 ) );
+        widget.pictures->setText(
+                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentPictureCount), 0 ) );
+        widget.tables->setText(
+                KGlobal::locale()->formatNumber( m_resourceProvider->intResource(KWord::CurrentTableCount), 0 ) );
+
+        // tab 2
+        widget.words->setText(KGlobal::locale()->formatNumber( m_words, 0 ));
+        widget.sentences->setText(KGlobal::locale()->formatNumber( m_sentences, 0 ));
+        widget.syllables->setText(KGlobal::locale()->formatNumber( m_syllables, 0 ));
+        widget.lines->setText(KGlobal::locale()->formatNumber( m_lines, 0 ));
+        widget.characters->setText(KGlobal::locale()->formatNumber( m_charsWithSpace, 0 ));
+        widget.characters2->setText(KGlobal::locale()->formatNumber( m_charsWithoutSpace, 0 ));
+        if( m_words < 200 ) // a kind of warning if too few words:
+            flesch = i18n("approximately %1", flesch );
+        widget.flesch->setText(flesch);
+    }
 }
 
 #include <KWStatistics.moc>

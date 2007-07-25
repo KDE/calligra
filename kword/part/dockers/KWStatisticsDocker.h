@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +17,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWStatisticsDialog.h"
-#include "KWStatistics.h"
-#include "KWView.h"
-#include "KWCanvas.h"
+#ifndef KWSTATISTICSDOCKER_H
+#define KWSTATISTICSDOCKER_H
 
-KWStatisticsDialog::KWStatisticsDialog (KWView *parent)
-    : KDialog(parent)
+#include <QDockWidget>
+#include <KoDockFactory.h>
+
+class KWView;
+
+class KWStatisticsDocker : public QDockWidget
 {
-    setCaption( i18n("Statistics") );
-    setButtons( KDialog::Close );
-    setDefaultButton( KDialog::Close );
-    setMainWidget( new KWStatistics(parent->kwcanvas()->resourceProvider(), parent->kwdocument(), 0, this) );
-}
+    Q_OBJECT
 
-KWStatisticsDialog::~KWStatisticsDialog() {
-}
+public:
+    explicit KWStatisticsDocker(KWView *view);
+    ~KWStatisticsDocker();
+    KWView *view();
+    void setView(KWView *view);
 
-#include "KWStatisticsDialog.moc"
+private:
+    KWView *m_view;
+};
+
+class KWStatisticsDockerFactory : public KoDockFactory
+{
+public:
+    KWStatisticsDockerFactory(KWView *view);
+
+    virtual QString id() const;
+    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+    virtual QDockWidget* createDockWidget();
+
+private:
+    KWView *m_view;
+};
+
+#endif

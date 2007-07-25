@@ -21,17 +21,20 @@
 #define KWSTATISTICS_H
 
 #include <ui_KWStatistics.h>
+#include <ui_KWStatisticsDocker.h>
 
 #include <QWidget>
 
 class KoCanvasResourceProvider;
 class KoAction;
+class KoSelection;
 class KWDocument;
 
 class KWStatistics : public QWidget {
     Q_OBJECT
 public:
-    KWStatistics(KoCanvasResourceProvider *provider, KWDocument *m_document, QWidget *parent = 0);
+    KWStatistics(KoCanvasResourceProvider *provider, KWDocument *m_document,
+            KoSelection *selection = 0, QWidget *parent = 0);
 
 private slots:
     void updateResource(int which);
@@ -40,8 +43,10 @@ private slots:
 
 private:
     Ui::KWStatistics widget;
+    Ui::KWStatisticsDocker widgetDocker;
     KoCanvasResourceProvider *m_resourceProvider;
     KoAction *m_action;
+    KoSelection *m_selection;
     KWDocument *m_document;
 
     long m_charsWithSpace;
@@ -51,6 +56,8 @@ private:
     long m_lines;
     long m_syllables;
     long m_paragraphs;
+
+    bool m_showInDocker;
 };
 
 #endif

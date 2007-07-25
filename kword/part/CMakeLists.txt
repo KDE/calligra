@@ -48,6 +48,8 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
 
+    dockers/KWStatisticsDocker.cpp
+
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
     commands/KWPageRemoveCommand.cpp
@@ -64,6 +66,7 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialogs/KWPageLayout.ui
     dialogs/KWStartupWidget.ui
     dialogs/KWStatistics.ui
+    dockers/KWStatisticsDocker.ui
 )
 
 kde4_add_library(kwordprivate SHARED ${kwordprivate_LIB_SRCS})
