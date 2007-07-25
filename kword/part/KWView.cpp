@@ -36,6 +36,7 @@
 #include "dialogs/KWPrintingDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
+#include "commands/KWPageRemoveCommand.h"
 
 // koffice libs includes
 #include <KoCopyController.h>
@@ -247,6 +248,18 @@ void KWView::setupActions() {
     actionCollection()->addAction("show_ruler", action );
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
 
+    action = new QAction( i18n( "Delete Page" ), this);
+    actionCollection()->addAction("delete_page", action);
+    connect(action, SIGNAL(triggered()), this, SLOT( deletePage() ));
+
+    action = new QAction( i18n( "Formatting Characters" ), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_formattingchars", action );
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
+    action->setToolTip( i18n( "Toggle the display of non-printing characters" ) );
+    action->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br/><br/>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
+
+
     // -------------- Frame menu
     action  = new KAction(i18n("Create Linked Copy"), this);
     actionCollection()->addAction("create_linked_frame", action );
@@ -261,6 +274,7 @@ void KWView::setupActions() {
     //action->setChecked(statusBar()->isVisible());
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
 
+    // -------------- Insert menu
 /* ********** From old kwview ****
 We probably want to have each of these again, so just move them when you want to implement it
 This saves problems with finding out which we missed near the end.
@@ -275,14 +289,7 @@ This saves problems with finding out which we missed near the end.
     // -------------- Edit actions
     m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
     new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
-    m_actionEditSelectCurrentFrame = new KAction( i18n( "Select Frame" ), 0,
-    0, this, SLOT( editSelectCurrentFrame() ),
-    actionCollection(), "edit_selectcurrentframe" );
     m_actionSpellCheck = actionCollection()->addAction(KStandardAction::Spelling,  "extra_spellcheck", this, SLOT( slotSpellCheck() ));
-    m_actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
-    this, SLOT( deletePage() ),
-    actionCollection(), "delete_page" );
-    kDebug(32003) <<  m_doc->pageCount() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
 
     (void) new KAction( i18n( "Configure Mail Merge..." ), "configure",0,
     this, SLOT( editMailMergeDataBase() ),
@@ -331,19 +338,7 @@ This saves problems with finding out which we missed near the end.
         m_actionViewPreviewMode = 0;
     }
 
-    m_actionViewFormattingChars = new KToggleAction( i18n( "Formatting Characters" ), 0,
-            this, SLOT( slotViewFormattingChars() ),
-            actionCollection(), "view_formattingchars" );
-    m_actionViewFormattingChars->setToolTip( i18n( "Toggle the display of non-printing characters" ) );
-    m_actionViewFormattingChars->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br><br>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
-
     // -------------- Insert menu
-    m_actionInsertSpecialChar = new KAction( i18n( "Special Character..." ), "char",
-            Qt::ALT + Qt::SHIFT + Qt::Key_C,
-            this, SLOT( insertSpecialChar() ),
-            actionCollection(), "insert_specialchar" );
-    m_actionInsertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard" ) );
-    m_actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
 
     new KAction( m_doc->processingType() == KWDocument::WP ? i18n( "Page" ) : i18n( "Page..." ), "page", 0,
             this, SLOT( insertPage() ),
@@ -1070,6 +1065,22 @@ void KWView::createLinkedFrame() {
 void KWView::showStatusBar(bool toggled) {
     statusBar()->setVisible(toggled);
 }
+
+void KWView::deletePage() {
+    if(m_currentPage == 0)
+        return;
+    KWPageRemoveCommand *cmd = new KWPageRemoveCommand(m_document, m_currentPage);
+    m_document->addCommand(cmd);
+}
+
+void KWView::setShowFormattingChars(bool on) {
+    KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
+    provider->setResource(KoText::ShowSpaces, true);
+    provider->setResource(KoText::ShowTabs, true);
+    provider->setResource(KoText::ShowEnters, true);
+    provider->setResource(KoText::ShowSpecialCharacters, true);
+}
+
 
 // end of actions
 
