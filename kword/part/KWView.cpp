@@ -1075,10 +1075,12 @@ void KWView::deletePage() {
 
 void KWView::setShowFormattingChars(bool on) {
     KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
+    /*FIXME
     provider->setResource(KoText::ShowSpaces, true);
     provider->setResource(KoText::ShowTabs, true);
     provider->setResource(KoText::ShowEnters, true);
     provider->setResource(KoText::ShowSpecialCharacters, true);
+    */
 }
 
 
