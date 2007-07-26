@@ -21,6 +21,7 @@
 
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 #include <QPainter>
