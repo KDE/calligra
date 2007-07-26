@@ -290,6 +290,9 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
     const QRectF cellRect( coordinate, QSizeF( d->width, d->height ) );
     if ( !cellRect.intersects( paintRect ) )
         return;
+    // Does the cell intersect the clipped painting region?
+    if (!painter.clipRegion().intersects(cellRect.toRect()))
+        return;
 
     // 0. Paint possible filter button
     if (d->filterButton && !dynamic_cast<QPrinter*>(painter.device()))
@@ -337,6 +340,16 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
                                  const QRect& cellRegion,
                                  const Cell& cell, SheetView* sheetView )
 {
+    // If the rect of this cell doesn't intersect the rect that should
+    // be painted, we can skip the rest and return. (Note that we need
+    // to calculate `left' first before we can do this.)
+    const QRectF  cellRect( coordinate.x(), coordinate.y(), d->width, d->height );
+    if ( !cellRect.intersects( paintRegion ) )
+        return;
+    // Does the cell intersect the clipped painting region?
+    if (!painter.clipRegion().intersects(cellRect.toRect()))
+        return;
+
     const int col = cell.column();
     const int row = cell.row();
 
@@ -385,13 +398,6 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
         paintBorder |= CellView::TopBorder;
 
     // ----------------  Start the actual painting.  ----------------
-
-    // If the rect of this cell doesn't intersect the rect that should
-    // be painted, we can skip the rest and return. (Note that we need
-    // to calculate `left' first before we can do this.)
-    const QRectF  cellRect( coordinate.x(), coordinate.y(), d->width, d->height );
-    if ( !cellRect.intersects( paintRegion ) )
-        return;
 
 #if 0
     // 1. Paint the default borders if we are on screen or if we are printing
@@ -528,6 +534,9 @@ void CellView::paintCellBackground( QPainter& painter, const QPointF& coordinate
         return;
 
     const QRectF cellRect = QRectF( coordinate, QSizeF( d->width, d->height ) );
+    // Does the cell intersect the clipped painting region?
+    if (!painter.clipRegion().intersects(cellRect.toRect()))
+        return;
 
     // disable antialiasing
     painter.setRenderHint( QPainter::Antialiasing, false );
@@ -557,6 +566,10 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
                                     Borders paintBorder, const QRect& cellRegion,
                                     const Cell& cell, SheetView* sheetView )
 {
+    // Does the cell intersect the clipped painting region?
+    if (!painter.clipRegion().intersects(QRectF(coordinate, QSizeF(d->width, d->height)).toRect()))
+        return;
+
     // disable antialiasing
     painter.setRenderHint( QPainter::Antialiasing, false );
 
