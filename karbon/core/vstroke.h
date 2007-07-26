@@ -29,7 +29,8 @@
 #include "vpattern.h"
 #include <karbon_export.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
+
 class VObject;
 class KoGenStyle;
 class KoStyleStack;
@@ -110,7 +111,7 @@ public:
 
 	void save( QDomElement& element ) const;
 	void saveOasis( KoGenStyle &style ) const;
-	void load( const QDomElement& element );
+	void load( const KoXmlElement& element );
 	void loadOasis( const KoStyleStack &stack );
 
 

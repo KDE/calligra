@@ -26,7 +26,8 @@
 #include "vpattern.h"
 #include <karbon_export.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
+
 class KoGenStyle;
 class KoGenStyles;
 class KoOasisLoadingContext;
@@ -71,8 +72,8 @@ public:
 
 	void save( QDomElement& element ) const;
 	void saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const;
-	void load( const QDomElement& element );
-	void loadOasis( const QDomElement &object, KoOasisLoadingContext &context, VObject* parent = 0L );
+	void load( const KoXmlElement& element );
+	void loadOasis( const KoXmlElement &object, KoOasisLoadingContext &context, VObject* parent = 0L );
 
 	VFill& operator=( const VFill& fill );
 

@@ -26,7 +26,7 @@
 #include <qpixmap.h>
 #include <karbon_export.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
 
 
 class KARBONBASE_EXPORT VPattern : public QTableWidgetItem
@@ -48,7 +48,7 @@ public:
 	void load( const QString &tilename );
 
 	void save( QDomElement& element ) const;
-	void load( const QDomElement& element );
+	void load( const KoXmlElement& element );
 
 	void transform( const QMatrix& m );
 

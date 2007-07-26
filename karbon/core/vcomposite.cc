@@ -417,7 +417,7 @@ VPath::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) co
 }
 
 void
-VPath::transformByViewbox( const QDomElement &element, QString viewbox )
+VPath::transformByViewbox( const KoXmlElement &element, QString viewbox )
 {
 	if( ! viewbox.isEmpty() )
 	{
@@ -438,7 +438,7 @@ VPath::transformByViewbox( const QDomElement &element, QString viewbox )
 }
 
 bool
-VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+VPath::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 
@@ -458,12 +458,9 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 	}
 	else if( element.localName() == "custom-shape" )
 	{
-		QDomNodeList list = element.childNodes();
-		for( int i = 0; i < list.count(); ++i )
+		KoXmlElement e;
+		forEachElement(e, element)
 		{
-			if( list.item( i ).isElement() )
-			{
-				QDomElement e = list.item( i ).toElement();
 				if( e.namespaceURI() != KoXmlNS::draw )
 					continue;
 				
@@ -475,7 +472,6 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 
 					viewbox = e.attributeNS( KoXmlNS::svg, "viewBox", QString::null );
 				}
-			}
 		}
 	}
 
@@ -489,7 +485,7 @@ VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 }
 
 void
-VPath::load( const QDomElement& element )
+VPath::load( const KoXmlElement& element )
 {
 	setState( normal );
 
@@ -501,13 +497,9 @@ VPath::load( const QDomElement& element )
 		loadSvgPath( data );
 	}
 	m_fillRule = element.attribute( "fillRule" ) == 0 ? evenOdd : winding;
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
+	KoXmlElement child;
+	forEachElement(child, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement child = list.item( i ).toElement();
-
 			if( child.tagName() == "PATH" )
 			{
 				VSubpath path( this );
@@ -519,7 +511,6 @@ VPath::load( const QDomElement& element )
 			{
 				VObject::load( child );
 			}
-		}
 	}
 
 	QString trafo = element.attribute( "transform" );

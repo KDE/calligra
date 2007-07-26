@@ -35,7 +35,7 @@ public:
 	virtual QString name() const;
 
 	virtual void save( QDomElement& element ) const;
-	virtual void load( const QDomElement& element );
+	virtual void load( const KoXmlElement& element );
 
 	virtual VPath* clone() const;
 

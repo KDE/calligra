@@ -318,7 +318,7 @@ VColor::save( QDomElement& element ) const
 }
 
 void
-VColor::load( const QDomElement& element )
+VColor::load( const KoXmlElement& element )
 {
 	switch( element.attribute( "colorSpace" ).toUShort() )
 	{

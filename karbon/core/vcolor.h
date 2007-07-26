@@ -25,7 +25,8 @@
 #include <QColor>
 #include <QString>
 #include <karbon_export.h>
-class QDomElement;
+
+#include <KoXmlReader.h>
 
 
 /**
@@ -166,7 +167,7 @@ public:
 	 *
 	 * @param element the DOM element from which the attributes are read
 	 */
-	void load( const QDomElement& element );
+	void load( const KoXmlElement& element );
 
 private:
 	void convertToColorSpace( const VColorSpace colorSpace );

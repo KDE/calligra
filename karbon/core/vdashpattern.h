@@ -23,7 +23,7 @@
 #include <q3valuelist.h>
 #include <karbon_export.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
 
 
 /**
@@ -51,7 +51,7 @@ public:
 	void setOffset( float offset ) { m_offset = offset; }
 
 	void save( QDomElement& element ) const;
-	void load( const QDomElement& element );
+	void load( const KoXmlElement& element );
 
 private:
 	Q3ValueList<float> m_array;

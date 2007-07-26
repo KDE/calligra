@@ -123,14 +123,13 @@ VPolyline::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainS
 }
 
 void
-VPolyline::load( const QDomElement& element )
+VPolyline::load( const KoXmlElement& element )
 {
 	setState( normal );
 
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
-		if( list.item( i ).isElement() )
-			VObject::load( list.item( i ).toElement() );
+	KoXmlElement e;
+	forEachElement(e, element)
+		VObject::load( e );
 
 	m_points = element.attribute( "points" );
 
@@ -142,7 +141,7 @@ VPolyline::load( const QDomElement& element )
 }
 
 bool
-VPolyline::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+VPolyline::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 

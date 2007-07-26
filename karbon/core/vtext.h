@@ -93,7 +93,7 @@ public:
 	virtual const QRectF& boundingBox() const;
 
 	virtual void save( QDomElement& element ) const;
-	virtual void load( const QDomElement& element );
+	virtual void load( const KoXmlElement& element );
 
 	virtual VText* clone() const;
 	virtual VGroup* toVGroup() const;

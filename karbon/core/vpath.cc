@@ -747,23 +747,17 @@ VSubpath::saveSvgPath( QString &d ) const
 
 // TODO: remove this backward compatibility function after koffice 1.3.x
 void
-VSubpath::load( const QDomElement& element )
+VSubpath::load( const KoXmlElement& element )
 {
 	// We might have a "begin" segment.
 	clear();
 
-	QDomNodeList list = element.childNodes();
-
-	for( int i = 0; i < list.count(); ++i )
+	KoXmlElement segment;
+	forEachElement(segment, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement segment = list.item( i ).toElement();
-
 			VSegment* s = new VSegment();
 			s->load( segment );
 			append( s );
-		}
 	}
 
 	if( element.attribute( "isClosed" ) == 0 ? false : true )

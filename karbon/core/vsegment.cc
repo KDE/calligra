@@ -1064,7 +1064,7 @@ VSegment::next() const
 
 // TODO: remove this backward compatibility function after koffice 1.3.x
 void
-VSegment::load( const QDomElement& element )
+VSegment::load( const KoXmlElement& element )
 {
 	if( element.tagName() == "CURVE" )
 	{

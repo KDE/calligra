@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoï¿½ Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2003 Anders Lund <anders@alweb.dk>
    Copyright (C) 2003,2006 Laurent Montel <montel@kde.org>
@@ -436,13 +436,13 @@ KarbonResourceServer::loadClipart( const QString& filename )
 
 	if( f.open( QIODevice::ReadOnly ) )
 	{
-		QDomDocument doc;
+		KoXmlDocument doc;
 
 		if( !( doc.setContent( &f ) ) )
 			f.close();
 		else
 		{
-			QDomElement de = doc.documentElement();
+			KoXmlElement de = doc.documentElement();
 
 			if( !de.isNull() && de.tagName() == "PREDEFCLIPART" )
 			{
@@ -450,11 +450,11 @@ KarbonResourceServer::loadClipart( const QString& filename )
 				double width = de.attribute( "width", "100.0" ).toFloat();
 				double height = de.attribute( "height", "100.0" ).toFloat();
 
-				QDomNode n = de.firstChild();
+				KoXmlNode n = de.firstChild();
 
 				if( !n.isNull() )
 				{
-					QDomElement e;
+					KoXmlElement e;
 					e = n.toElement();
 
 					if( !e.isNull() )

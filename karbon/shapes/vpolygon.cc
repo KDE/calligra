@@ -132,14 +132,13 @@ VPolygon::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 }
 
 void
-VPolygon::load( const QDomElement& element )
+VPolygon::load( const KoXmlElement& element )
 {
 	setState( normal );
 
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
-		if( list.item( i ).isElement() )
-			VObject::load( list.item( i ).toElement() );
+	KoXmlElement e;
+	forEachElement(e, element)
+		VObject::load( e );
 
 	m_points = element.attribute( "points" );
 
@@ -157,7 +156,7 @@ VPolygon::load( const QDomElement& element )
 }
 
 bool
-VPolygon::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+VPolygon::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 

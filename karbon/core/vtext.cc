@@ -334,7 +334,7 @@ VText::save( QDomElement& element ) const
 }
 
 void
-VText::load( const QDomElement& element )
+VText::load( const KoXmlElement& element )
 {
 	m_glyphs.clear();
 
@@ -354,8 +354,7 @@ VText::load( const QDomElement& element )
 
 	VObject::load( element );
 
-	QDomNodeList list = element.childNodes();
-	QDomElement e = list.item( 0 ).toElement();
+	KoXmlElement e = element.firstChild().toElement();
 	
 	// element to start with reading glyph paths and stroke, fill, etc.
 	uint startElement = 0;
@@ -369,11 +368,8 @@ VText::load( const QDomElement& element )
 	}
 
 	// load text glyphs:
-	for( int i = startElement; i < list.count(); ++i )
+	forEachElement(e, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			e = list.item( i ).toElement();
 			if( e.tagName() == "PATH" )
 			{
 				VPath *composite = new VPath( this );
@@ -384,7 +380,6 @@ VText::load( const QDomElement& element )
 				m_stroke->load( e );
 			if( e.tagName() == "FILL" )
 				m_fill->load( e );
-		}
 	}
 	// if no glyphs yet, trace them
 #ifdef HAVE_KARBONTEXT

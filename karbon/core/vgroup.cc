@@ -184,7 +184,7 @@ VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyl
 }
 
 bool
-VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+VGroup::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 {
 #if 0
 	m_objects.setAutoDelete( true );
@@ -252,7 +252,7 @@ VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 }
 
 void
-VGroup::load( const QDomElement& element )
+VGroup::load( const KoXmlElement& element )
 {
 #if 0
 	m_objects.setAutoDelete( true );

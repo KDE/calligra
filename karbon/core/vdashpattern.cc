@@ -50,18 +50,15 @@ VDashPattern::save( QDomElement& element ) const
 }
 
 void
-VDashPattern::load( const QDomElement& element )
+VDashPattern::load( const KoXmlElement& element )
 {
 	m_offset = element.attribute( "offset", "0.0" ).toDouble();
 
 	float value;
 
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
+	KoXmlElement e;
+	forEachElement(e, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
 			if( e.tagName() == "DASH" )
 			{
 				value = e.attribute( "l", "0.0" ).toFloat();
@@ -70,7 +67,6 @@ VDashPattern::load( const QDomElement& element )
 
 				m_array.append( value );
 			}
-		}
 	}
 }
 

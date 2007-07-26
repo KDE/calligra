@@ -40,9 +40,8 @@
 #include <KoUnit.h>
 #include <KoShapeControllerBase.h>
 #include <KoGenStyle.h>
+#include <KoXmlReader.h>
 
-class QDomDocument;
-class QDomElement;
 class VSelection;
 class KoShape;
 class KoSavingContext;
@@ -181,11 +180,11 @@ public:
 	QDomDocument saveXML() const;
 	void saveOasis( KoStore * store, KoXmlWriter & docWriter, KoSavingContext & context ) const;
 	enum { STYLE_LINEAR_GRADIENT = KoGenStyle::StyleFirstCustom, STYLE_RADIAL_GRADIENT };
-	bool loadXML( const QDomElement& doc );
-	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
+	bool loadXML( const KoXmlElement& doc );
+	virtual bool loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context );
 	virtual void save( QDomElement& element ) const;
-	virtual void load( const QDomElement& element );
-	void loadDocumentContent( const QDomElement& doc );
+	virtual void load( const KoXmlElement& element );
+	void loadDocumentContent( const KoXmlElement& doc );
 
 	virtual VDocument* clone() const;
 

@@ -31,7 +31,8 @@
 #include "vfillrule.h"
 #include <karbon_export.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
+
 class VPainter;
 class VSegment;
 class VVisitor;
@@ -190,8 +191,8 @@ public:
 
 	virtual void save( QDomElement& element ) const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles, int &index ) const;
-	virtual void load( const QDomElement& element );
-	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
+	virtual void load( const KoXmlElement& element );
+	virtual bool loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context );
 
 	virtual VPath* clone() const;
 
@@ -217,7 +218,7 @@ protected:
 	QString buildOasisTransform() const;
 	QString buildOasisTransform( const QMatrix &mat ) const;
 
-	void transformByViewbox( const QDomElement &element, QString viewbox );
+	void transformByViewbox( const KoXmlElement &element, QString viewbox );
 
 	/// For svg path data parsing.
 	virtual void svgMoveTo( double x1, double y1, bool abs = true );

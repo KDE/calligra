@@ -174,14 +174,13 @@ VSinus::save( QDomElement& element ) const
 }
 
 void
-VSinus::load( const QDomElement& element )
+VSinus::load( const KoXmlElement& element )
 {
 	setState( normal );
 
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
-		if( list.item( i ).isElement() )
-			VObject::load( list.item( i ).toElement() );
+	KoXmlElement e;
+	forEachElement(e, element)
+		VObject::load( e );
 
 	m_width  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
 	m_height = KoUnit::parseValue( element.attribute( "height" ), 10.0 );

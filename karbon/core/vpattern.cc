@@ -109,7 +109,7 @@ VPattern::save( QDomElement& element ) const
 }
 
 void
-VPattern::load( const QDomElement& element )
+VPattern::load( const KoXmlElement& element )
 {
 	m_origin.setX( element.attribute( "originX", "0.0" ).toDouble() );
 	m_origin.setY( element.attribute( "originY", "0.0" ).toDouble() );

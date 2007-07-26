@@ -100,7 +100,7 @@ VFill::saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const
 }
 
 void
-VFill::loadOasis( const QDomElement &/*object*/, KoOasisLoadingContext &context, VObject* parent )
+VFill::loadOasis( const KoXmlElement &/*object*/, KoOasisLoadingContext &context, VObject* parent )
 {
 	KoStyleStack &stack = context.styleStack();
 	if( stack.hasProperty( KoXmlNS::draw, "fill" ) )
@@ -115,7 +115,7 @@ VFill::loadOasis( const QDomElement &/*object*/, KoOasisLoadingContext &context,
 			setType( VFill::grad );
 			QString style = stack.property( KoXmlNS::draw, "fill-gradient-name" );
 			kDebug()<<" style gradient name :"<<style<<endl;
-			QDomElement *grad = context.oasisStyles().drawStyles()[ style ];
+			KoXmlElement *grad = context.oasisStyles().drawStyles()[ style ];
 			kDebug()<<" style gradient name :"<< grad <<endl;
 			if( grad )
 				m_gradient.loadOasis( *grad, stack, parent );
@@ -126,17 +126,14 @@ VFill::loadOasis( const QDomElement &/*object*/, KoOasisLoadingContext &context,
 }
 
 void
-VFill::load( const QDomElement& element )
+VFill::load( const KoXmlElement& element )
 {
 	m_type = none;
 
 	// load color:
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
+	KoXmlElement e;
+	forEachElement(e, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
 			if( e.tagName() == "COLOR" )
 			{
 				m_type = solid;
@@ -152,7 +149,6 @@ VFill::load( const QDomElement& element )
 				m_type = patt;
 				m_pattern.load( e );
 			}
-		}
 	}
 }
 

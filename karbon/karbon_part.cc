@@ -141,7 +141,7 @@ KarbonPart::removeView( KoView *view )
 	KoDocument::removeView( view );
 }
 
-double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
+double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue)
 {
     QString value = element.attribute( attributeName );
     if( ! value.isEmpty() )
@@ -150,7 +150,7 @@ double getAttribute(QDomElement &element, const char *attributeName, double defa
         return defaultValue;
 }
 
-int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
+int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue)
 {
     QString value = element.attribute( attributeName );
     if( ! value.isEmpty() )
@@ -160,11 +160,11 @@ int getAttribute(QDomElement &element, const char *attributeName, int defaultVal
 }
 
 bool
-KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
+KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
 {
 	bool success = false;
 
-	QDomElement doc = document.documentElement();
+	KoXmlElement doc = document.documentElement();
 
 	if( m_merge )
 	{
@@ -177,7 +177,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 	//m_pageLayout = KoPageLayout::standardLayout();
 
 	// <PAPER>
-	QDomElement paper = doc.namedItem( "PAPER" ).toElement();
+	KoXmlElement paper = doc.namedItem( "PAPER" ).toElement();
 	if ( !paper.isNull() )
 	{
         m_pageLayout.format = static_cast<KoPageFormat::Format>( getAttribute( paper, "format", 0 ) );
@@ -202,7 +202,7 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 
     kDebug() << " width=" << m_pageLayout.width << endl;
     kDebug() << " height=" << m_pageLayout.height << endl;
-        QDomElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
+        KoXmlElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if( !borders.isNull() )
     {
         if( borders.hasAttribute( "left" ) )
@@ -246,14 +246,14 @@ KarbonPart::saveXML()
 bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
                        const KoXmlDocument & settings, KoStore* store )
 {
-    kDebug(38000) << "Start loading OASIS document..." << doc.toString() << endl;
+    kDebug(38000) << "Start loading OASIS document..." /*<< doc.toString()*/ << endl;
 
-    QDomElement contents = doc.documentElement();
+    KoXmlElement contents = doc.documentElement();
     kDebug(38000) << "Start loading OASIS document..." << contents.text() << endl;
     kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
     kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
     kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
-    QDomElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
+    KoXmlElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
     kDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
     if( body.isNull() )
     {
@@ -270,7 +270,7 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
         return false;
     }
 
-    QDomElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
+    KoXmlElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
     if(page.isNull())
     {
         kDebug(38000) << "No office:drawing found!" << endl;
@@ -279,14 +279,14 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
     }
 
     QString masterPageName = "Standard"; // use default layout as fallback
-    QDomElement *master = oasisStyles.masterPages()[ masterPageName ];
+    KoXmlElement *master = oasisStyles.masterPages()[ masterPageName ];
     if ( !master ) //last test...
         master = oasisStyles.masterPages()[ "Default" ];
     Q_ASSERT( master );
 
     if( master )
     {
-        const QDomElement *style = oasisStyles.findStyle( 
+        const KoXmlElement *style = oasisStyles.findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
         m_pageLayout.loadOasis( *style );
         m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
@@ -309,7 +309,7 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
 }
 
 void
-KarbonPart::loadOasisSettings( const QDomDocument&settingsDoc )
+KarbonPart::loadOasisSettings( const KoXmlDocument&settingsDoc )
 {
     if ( settingsDoc.isNull() )
         return ; // not an error if some file doesn't have settings.xml

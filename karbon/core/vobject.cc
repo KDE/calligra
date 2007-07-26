@@ -146,7 +146,7 @@ VObject::saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesobjectauto ) 
 }
 
 void
-VObject::load( const QDomElement& element )
+VObject::load( const KoXmlElement& element )
 {
 	if( !m_stroke )
 		m_stroke = new VStroke( this );
@@ -172,7 +172,7 @@ VObject::load( const QDomElement& element )
 }
 
 bool
-VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
+VObject::loadOasis( const KoXmlElement &object, KoOasisLoadingContext &context )
 {
 	if( !m_stroke )
 		m_stroke = new VStroke( this );
@@ -195,7 +195,7 @@ VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 }
 
 void
-VObject::addStyles( const QDomElement* style, KoOasisLoadingContext & context )
+VObject::addStyles( const KoXmlElement* style, KoOasisLoadingContext & context )
 {
 	if(style)
 	{

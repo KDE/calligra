@@ -311,14 +311,13 @@ VStar::save( QDomElement& element ) const
 }
 
 void
-VStar::load( const QDomElement& element )
+VStar::load( const KoXmlElement& element )
 {
 	setState( normal );
 
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
-		if( list.item( i ).isElement() )
-			VObject::load( list.item( i ).toElement() );
+	KoXmlElement e;
+	forEachElement(e, element)
+		VObject::load( e );
 
 	m_center.setX( KoUnit::parseValue( element.attribute( "cx" ) ) );
 	m_center.setY( KoUnit::parseValue( element.attribute( "cy" ) ) );

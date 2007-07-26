@@ -225,7 +225,7 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 }
 
 void
-VGradient::loadOasis( const QDomElement &object, KoStyleStack &/*stack*/, VObject* parent )
+VGradient::loadOasis( const KoXmlElement &object, KoStyleStack &/*stack*/, VObject* parent )
 {
 	kDebug(38000) << "namespaceURI: " << object.namespaceURI() << endl;
 	kDebug(38000) << "localName: " << object.localName() << endl;
@@ -313,27 +313,22 @@ VGradient::loadOasis( const QDomElement &object, KoStyleStack &/*stack*/, VObjec
 		m_colorStops.clear();
 	
 		// load stops
-		QDomNodeList list = object.childNodes();
-		for( int i = 0; i < list.count(); ++i )
+		KoXmlElement colorstop;
+		forEachElement(colorstop, object)
 		{
-			if( list.item( i ).isElement() )
-			{
-				QDomElement colorstop = list.item( i ).toElement();
-	
 				if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
 				{
 					VColor color( QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString::null ) ) );
 					color.setOpacity( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
 					addStop( color, colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble(), 0.5 );
 				}
-			}
 		}
 		m_colorStops.sort();
 	}
 }
 
 void
-VGradient::load( const QDomElement& element )
+VGradient::load( const KoXmlElement& element )
 {
 	m_origin.setX( element.attribute( "originX", "0.0" ).toDouble() );
 	m_origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
@@ -347,20 +342,15 @@ VGradient::load( const QDomElement& element )
 	m_colorStops.clear();
 
 	// load stops
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
+	KoXmlElement colorstop;
+	forEachElement(colorstop, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement colorstop = list.item( i ).toElement();
-
 			if( colorstop.tagName() == "COLORSTOP" )
 			{
 				VColor color;
 				color.load( colorstop.firstChild().toElement() );
 				addStop( color, colorstop.attribute( "ramppoint", "0.0" ).toDouble(), colorstop.attribute( "midpoint", "0.5" ).toDouble() );
 			}
-		}
 	}
 	m_colorStops.sort();
 }

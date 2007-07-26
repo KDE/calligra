@@ -198,7 +198,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 }
 
 bool
-VEllipse::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+VEllipse::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 
@@ -258,14 +258,13 @@ VEllipse::loadOasis( const QDomElement &element, KoOasisLoadingContext &context 
 }
 
 void
-VEllipse::load( const QDomElement& element )
+VEllipse::load( const KoXmlElement& element )
 {
 	setState( normal );
 
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
-		if( list.item( i ).isElement() )
-			VObject::load( list.item( i ).toElement() );
+	KoXmlElement e;
+	forEachElement(e, element)
+		VObject::load( e );
 
 	m_rx = KoUnit::parseValue( element.attribute( "rx" ) );
 	m_ry = KoUnit::parseValue( element.attribute( "ry" ) );

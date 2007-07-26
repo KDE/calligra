@@ -25,7 +25,8 @@
 #include <QRectF>
 #include <karbon_export.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
+
 class VDocument;
 class VFill;
 class VPainter;
@@ -203,7 +204,7 @@ public:
 	 *
 	 * @param element the DOM element from which the attributes are read
 	 */
-	virtual void load( const QDomElement& element );
+	virtual void load( const KoXmlElement& element );
 
 	/**
 	 * Load this object's state from OpenDocument and initialize
@@ -212,7 +213,7 @@ public:
 	 * @param element the DOM element to read attributes from
 	 * @param context FIXME
 	 */
-	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
+	virtual bool loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context );
 
 	/**
 	 * Create an exact copy of this object.
@@ -268,7 +269,7 @@ protected:
 	 * @param style FIXME
 	 * @param context FIXME
 	 */
-	void addStyles( const QDomElement* style, KoOasisLoadingContext & context );
+	void addStyles( const KoXmlElement* style, KoOasisLoadingContext & context );
 
 	virtual void saveOasisFill( KoGenStyles &mainStyles, KoGenStyle &stylesojectauto ) const;
 

@@ -26,7 +26,8 @@
 #include "vobject.h"
 #include <karbon_export.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
+
 class VSubpathIteratorList;
 class VSegment;
 class VVisitor;
@@ -109,7 +110,7 @@ public:
 		{ }	// VSubpaths cant be saved.
 
 	// TODO: remove this backward compatibility function after koffice 1.3.x
-	virtual void load( const QDomElement& element );
+	virtual void load( const KoXmlElement& element );
 
 	void saveSvgPath( QString & ) const;
 

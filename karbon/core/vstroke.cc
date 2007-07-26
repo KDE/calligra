@@ -162,7 +162,7 @@ VStroke::loadOasis( const KoStyleStack &stack )
 }
 
 void
-VStroke::load( const QDomElement& element )
+VStroke::load( const KoXmlElement& element )
 {
 	m_type = none;
 	// load stroke parameters:
@@ -196,12 +196,9 @@ VStroke::load( const QDomElement& element )
 
 
 	// load color:
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
+	KoXmlElement e;
+	forEachElement(e, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
 			if( e.tagName() == "COLOR" )
 			{
 				m_color.load( e );
@@ -221,7 +218,6 @@ VStroke::load( const QDomElement& element )
 				m_type = patt;
 				m_pattern.load( e );
 			}
-		}
 	}
 }
 

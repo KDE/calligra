@@ -62,7 +62,7 @@ public:
 	virtual void paintContent( QPainter& painter, const QRect& rect);
 
 	/// file-> open calls this method
-	virtual bool loadXML( QIODevice*, const QDomDocument& document );
+	virtual bool loadXML( QIODevice*, const KoXmlDocument& document );
     virtual bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
                             const KoXmlDocument & settings, KoStore* store );
 
@@ -108,7 +108,7 @@ protected:
     void saveOasisSettings( KoStore * store );
     void saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyles );
     void saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles, bool forStylesXml );
-	void loadOasisSettings( const QDomDocument&settingsDoc );
+	void loadOasisSettings( const KoXmlDocument&settingsDoc );
 
     void updateDocumentSize();
 private:

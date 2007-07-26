@@ -84,19 +84,15 @@ void VClipGroup::save( QDomElement& element ) const
 		itr.current()->save( me );
 }
 
-void VClipGroup::load( const QDomElement& element )
+void VClipGroup::load( const KoXmlElement& element )
 {
 	m_objects.setAutoDelete( true );
 	m_objects.clear();
 	m_objects.setAutoDelete( false );
 
-	QDomNodeList list = element.childNodes();
-	for( int i = 0; i < list.count(); ++i )
+	KoXmlElement e;
+	forEachElement(e, element)
 	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
 			if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" ) // TODO : remove COMPOSITE later
 			{
 				VPath* composite = new VPath( this );
@@ -123,7 +119,6 @@ void VClipGroup::load( const QDomElement& element )
 				append( text );
 #endif
 			}
-		}
 	}
 }
 

@@ -209,12 +209,12 @@ VDocument::clone() const
 }
 
 void
-VDocument::load( const QDomElement& doc )
+VDocument::load( const KoXmlElement& doc )
 {
 	loadXML( doc );
 }
 
-bool VDocument::loadXML( const QDomElement& doc )
+bool VDocument::loadXML( const KoXmlElement& doc )
 {
     if( doc.attribute( "mime" ) != "application/x-karbon" ||
 		doc.attribute( "syntaxVersion" ) != "0.1" )
@@ -239,27 +239,22 @@ bool VDocument::loadXML( const QDomElement& doc )
 }
 
 void
-VDocument::loadDocumentContent( const QDomElement& doc )
+VDocument::loadDocumentContent( const KoXmlElement& doc )
 {
-	QDomNodeList list = doc.childNodes();
-	for( int i = 0; i < list.count(); ++i )
-	{
-		if( list.item( i ).isElement() )
-		{
-			QDomElement e = list.item( i ).toElement();
-
-			if( e.tagName() == "LAYER" )
-			{
-				KoShapeLayer* layer = new KoShapeLayer();
-                // TODO implement layer loading
-				//layer->load( e );
-				insertLayer( layer );
-			}
-		}
-	}
+    KoXmlElement e;
+    forEachElement(e, doc)
+    {
+        if( e.tagName() == "LAYER" )
+        {
+            KoShapeLayer* layer = new KoShapeLayer();
+            // TODO implement layer loading
+            //layer->load( e );
+            insertLayer( layer );
+        }
+    }
 }
 
-bool VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
+bool VDocument::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 {
     qDeleteAll( d->layers );
     d->layers.clear();

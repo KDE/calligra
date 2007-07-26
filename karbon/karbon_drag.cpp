@@ -86,10 +86,10 @@ KarbonDrag::decode( const QMimeData* e, VObjectList& sl, VDocument& vdoc )
 {
 	if( e->hasFormat( m_decodeFormats[0] ) )
 	{
-		QDomDocument doc( "clip" );
+		KoXmlDocument doc/*( "clip" )*/;
 		QByteArray data = e->data( m_decodeFormats[0] );
 		doc.setContent( Q3CString( data, data.size()+1 ) );
-		QDomElement clip = doc.documentElement();
+		KoXmlElement clip = doc.documentElement();
 		// Try to parse the clipboard data
 		if( clip.tagName() == "clip" )
 		{
