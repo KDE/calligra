@@ -29,6 +29,7 @@
 #include <QByteArray>
 #include <Q3MemArray>
 #include <KoStyleStack.h>
+#include <KoXmlReader.h>
 #include <liststylestack.h>
 
 class KZip;
@@ -46,13 +47,13 @@ private:
     void prepareDocument( QDomDocument& mainDocument, QDomElement& framesetsElem );
     void finishDocumentContent( QDomDocument& mainDocument );
     void writePageLayout( QDomDocument& mainDocument, const QString& masterPageName );
-    void parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement );
+    void parseList( QDomDocument& doc, const KoXmlElement& list, QDomElement& currentFramesetElement );
     bool pushListLevelStyle( const QString& listStyleName, int level );
-    bool pushListLevelStyle( const QString& listStyleName, QDomElement& fullListStyle, int level );
-    void applyListStyle( QDomDocument& doc, QDomElement& layoutElement, const QDomElement& paragraph );
+    bool pushListLevelStyle( const QString& listStyleName, KoXmlElement& fullListStyle, int level );
+    void applyListStyle( QDomDocument& doc, QDomElement& layoutElement, const KoXmlElement& paragraph );
     void writeCounter( QDomDocument& doc, QDomElement& layoutElement, bool heading, int level, bool ordered );
-    QDomElement parseParagraph( QDomDocument& doc, const QDomElement& paragraph );
-    void parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
+    QDomElement parseParagraph( QDomDocument& doc, const KoXmlElement& paragraph );
+    void parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& parent, QDomElement& kwordParagraph, QDomElement& kwordFormats, QString& paragraphText, uint& pos);
     // Reads from m_styleStack, writes the text properties to parentElement
     void writeFormat( QDomDocument& doc, QDomElement& parentElement, int id, int pos, int length );
     // Reads from m_styleStack, writes the paragraph properties to layoutElement
@@ -62,46 +63,46 @@ private:
     void createStyles( QDomDocument &doc );
     void createDocumentInfo( QDomDocument &docinfo );
     void createDocumentContent( QDomDocument &doccontent, QDomElement& mainFramesetElement );
-    void parseBodyOrSimilar( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
-    KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
+    void parseBodyOrSimilar( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement );
+    KoFilter::ConversionStatus loadAndParse(const QString& filename, KoXmlDocument& doc);
     KoFilter::ConversionStatus openFile();
-    bool createStyleMap( const QDomDocument & styles, QDomDocument& doc );
-    void insertStyles( const QDomElement& element, QDomDocument& doc );
-    void importDateTimeStyle( const QDomElement& parent );
-    void fillStyleStack( const QDomElement& object, const char* nsURI, const QString& attrName );
-    void addStyles( const QDomElement* style );
-    void importFootnotesConfiguration( QDomDocument& doc, const QDomElement& elem, bool endnote );
-    void importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& tagName );
-    QString appendPicture( QDomDocument& doc, const QDomElement& object );
-    QString appendTextBox( QDomDocument& doc, const QDomElement& object );
-    void appendTOC( QDomDocument& doc, const QDomElement& toc );
-    void importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText );
+    bool createStyleMap( const KoXmlDocument & styles, QDomDocument& doc );
+    void insertStyles( const KoXmlElement& element, QDomDocument& doc );
+    void importDateTimeStyle( const KoXmlElement& parent );
+    void fillStyleStack( const KoXmlElement& object, const char* nsURI, const QString& attrName );
+    void addStyles( const KoXmlElement* style );
+    void importFootnotesConfiguration( QDomDocument& doc, const KoXmlElement& elem, bool endnote );
+    void importFootnote( QDomDocument& doc, const KoXmlElement& object, QDomElement& formats, uint pos, const QString& tagName );
+    QString appendPicture( QDomDocument& doc, const KoXmlElement& object );
+    QString appendTextBox( QDomDocument& doc, const KoXmlElement& object );
+    void appendTOC( QDomDocument& doc, const KoXmlElement& toc );
+    void importFrame( QDomElement& frameElementOut, const KoXmlElement& object, bool isText );
     void importCommonFrameProperties( QDomElement& frameElementOut );
-    void importHeaderFooter( QDomDocument& doc, const QDomElement& headerFooter, bool isHeader, QDomElement& style );
+    void importHeaderFooter( QDomDocument& doc, const KoXmlElement& headerFooter, bool isHeader, KoXmlElement& style );
     void anchorFrameset( QDomDocument& doc, QDomElement& formats, uint pos, const QString& frameName );
-    void appendField(QDomDocument& doc, QDomElement& outputFormats, QDomElement& object, uint pos);
-    void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
+    void appendField(QDomDocument& doc, QDomElement& outputFormats, const KoXmlElement& object, uint pos);
+    void appendKWordVariable(QDomDocument& doc, QDomElement& formats, const KoXmlElement& object, uint pos,
         const QString& key, int type, QDomElement& child);
     void appendBookmark( QDomDocument& doc, int paragId, int pos, const QString& name );
     void appendBookmark( QDomDocument& doc, int paragId, int pos, int endParagId, int endPos, const QString& name );
-    void parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement );
-    void parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
+    void parseTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement );
+    void parseInsideOfTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement,
         const QString& tableName, const Q3MemArray<double> & columnLefts, uint& row, uint& column );
     static QString kWordStyleName(  const QString& ooStyleName );
 
-    QDomDocument    m_content;
-    QDomDocument    m_meta;
-    QDomDocument    m_settings;
-    QDomDocument    m_stylesDoc;
+    KoXmlDocument   m_content;
+    KoXmlDocument   m_meta;
+    KoXmlDocument   m_settings;
+    KoXmlDocument   m_stylesDoc;
 
-    Q3Dict<QDomElement>   m_styles;
-    Q3Dict<QDomElement>   m_masterPages;
-    Q3Dict<QDomElement>   m_listStyles;
+    Q3Dict<KoXmlElement>   m_styles;
+    Q3Dict<KoXmlElement>   m_masterPages;
+    Q3Dict<KoXmlElement>   m_listStyles;
 
     KoStyleStack m_styleStack;
-    QDomElement m_defaultStyle;
+    KoXmlElement m_defaultStyle;
     ListStyleStack m_listStyleStack;
-    QDomElement m_outlineStyle;
+    KoXmlElement m_outlineStyle;
     bool m_insideOrderedList;
     bool m_nextItemIsListItem; // only the first elem inside list-item is numbered
     bool m_hasTOC;

@@ -195,9 +195,9 @@ void OoWriterImport::createStyles( QDomDocument& doc )
     QDomElement stylesElem = doc.createElement( "STYLES" );
     doc.documentElement().appendChild( stylesElem );
 
-    QDomNode fixedStyles = KoDom::namedItemNS( m_stylesDoc.documentElement(), ooNS::office, "styles" );
+    KoXmlNode fixedStyles = KoDom::namedItemNS( m_stylesDoc.documentElement(), ooNS::office, "styles" );
     Q_ASSERT( !fixedStyles.isNull() );
-    QDomElement e;
+    KoXmlElement e;
     forEachElement( e, fixedStyles )
     {
         if ( !e.hasAttributeNS( ooNS::style, "name" ) )
@@ -254,7 +254,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
             }
         }
         if ( listOK ) {
-            const QDomElement listStyle = m_listStyleStack.currentListStyle();
+            const KoXmlElement listStyle = m_listStyleStack.currentListStyle();
             // The tag is either text:list-level-style-number or text:list-level-style-bullet
             bool ordered = listStyle.localName() == "list-level-style-number";
             writeCounter( doc, styleElem, outline, level, ordered );
@@ -265,12 +265,12 @@ void OoWriterImport::createStyles( QDomDocument& doc )
     }
 }
 
-void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement )
+void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement )
 {
     QDomElement oldCurrentFrameset = m_currentFrameset;
     m_currentFrameset = currentFramesetElement;
     Q_ASSERT( !m_currentFrameset.isNull() );
-    QDomElement t;
+    KoXmlElement t;
     forEachElement( t, parent )
     {
         m_styleStack.save();
@@ -356,9 +356,9 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const QDomElement& p
 
 void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& mainFramesetElement )
 {
-    QDomElement content = m_content.documentElement();
+    KoXmlElement content = m_content.documentElement();
 
-    QDomElement body ( KoDom::namedItemNS( content, ooNS::office, "body" ) );
+    KoXmlElement body ( KoDom::namedItemNS( content, ooNS::office, "body" ) );
     if ( body.isNull() )
     {
         kError(30518) << "No office:body found!" << endl;
@@ -381,14 +381,14 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     bool hasEvenOddHeader = false;
     bool hasEvenOddFooter = false;
 
-    QDomElement* masterPage = m_masterPages[ masterPageName ];
+    KoXmlElement* masterPage = m_masterPages[ masterPageName ];
     Q_ASSERT( masterPage );
     kDebug(30518) << "page-master-name: " << masterPage->attributeNS( ooNS::style, "page-master-name", QString::null ) << endl;
-    QDomElement *style = masterPage ? m_styles[masterPage->attributeNS( ooNS::style, "page-master-name", QString::null )] : 0;
+    KoXmlElement *style = masterPage ? m_styles[masterPage->attributeNS( ooNS::style, "page-master-name", QString::null )] : 0;
     Q_ASSERT( style );
     if ( style )
     {
-        QDomElement properties( KoDom::namedItemNS( *style, ooNS::style, "properties" ) );
+        KoXmlElement properties( KoDom::namedItemNS( *style, ooNS::style, "properties" ) );
         Q_ASSERT( !properties.isNull() );
         orientation = ( (properties.attributeNS( ooNS::style, "print-orientation", QString::null) != "portrait") ? KoPageFormat::Landscape : KoPageFormat::Portrait );
         width = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString::null));
@@ -405,7 +405,7 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         marginRight = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-right", QString::null));
         marginBottom = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-bottom", QString::null));
 
-        QDomElement footnoteSep = KoDom::namedItemNS( properties, ooNS::style, "footnote-sep" );
+        KoXmlElement footnoteSep = KoDom::namedItemNS( properties, ooNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
@@ -424,25 +424,25 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
 
 
         // Header/Footer
-        QDomElement headerStyle = KoDom::namedItemNS( *style, ooNS::style, "header-style" );
-        QDomElement footerStyle = KoDom::namedItemNS( *style, ooNS::style, "footer-style" );
-        QDomElement headerLeftElem = KoDom::namedItemNS( *masterPage, ooNS::style, "header-left" );
+        KoXmlElement headerStyle = KoDom::namedItemNS( *style, ooNS::style, "header-style" );
+        KoXmlElement footerStyle = KoDom::namedItemNS( *style, ooNS::style, "footer-style" );
+        KoXmlElement headerLeftElem = KoDom::namedItemNS( *masterPage, ooNS::style, "header-left" );
         if ( !headerLeftElem.isNull() ) {
             kDebug(30518) << "Found header-left" << endl;
             hasEvenOddHeader = true;
             importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader, headerStyle );
         }
-        QDomElement headerElem = KoDom::namedItemNS( *masterPage, ooNS::style, "header" );
+        KoXmlElement headerElem = KoDom::namedItemNS( *masterPage, ooNS::style, "header" );
         if ( !headerElem.isNull() ) {
             kDebug(30518) << "Found header" << endl;
             importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader, headerStyle );
         }
-        QDomElement footerLeftElem = KoDom::namedItemNS( *masterPage, ooNS::style, "footer-left" );
+        KoXmlElement footerLeftElem = KoDom::namedItemNS( *masterPage, ooNS::style, "footer-left" );
         if ( !footerLeftElem.isNull() ) {
             kDebug(30518) << "Found footer-left" << endl;
             importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter, footerStyle );
         }
-        QDomElement footerElem = KoDom::namedItemNS( *masterPage, ooNS::style, "footer" );
+        KoXmlElement footerElem = KoDom::namedItemNS( *masterPage, ooNS::style, "footer" );
         if ( !footerElem.isNull() ) {
             kDebug(30518) << "Found footer" << endl;
             importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
@@ -499,10 +499,10 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     // Now create VARIABLESETTINGS, mostly from meta.xml
     QDomElement varSettings = mainDocument.createElement( "VARIABLESETTINGS" );
     docElement.appendChild( varSettings );
-    QDomNode meta   = KoDom::namedItemNS( m_meta, ooNS::office, "document-meta" );
-    QDomNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
+    KoXmlNode meta   = KoDom::namedItemNS( m_meta, ooNS::office, "document-meta" );
+    KoXmlNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
     if ( !office.isNull() ) {
-        QDomElement date = KoDom::namedItemNS( office, ooNS::dc, "date" );
+        KoXmlElement date = KoDom::namedItemNS( office, ooNS::dc, "date" );
         if ( !date.isNull() && !date.text().isEmpty() ) {
             // Both use ISO-8601, no conversion needed.
             varSettings.setAttribute( "modificationDate", date.text() );
@@ -534,7 +534,7 @@ QDomElement OoWriterImport::createInitialFrame( QDomElement& parentFramesetElem,
     return frameElementOut;
 }
 
-KoFilter::ConversionStatus OoWriterImport::loadAndParse(const QString& filename, QDomDocument& doc)
+KoFilter::ConversionStatus OoWriterImport::loadAndParse(const QString& filename, KoXmlDocument& doc)
 {
     return OoUtils::loadAndParse( filename, doc, m_zip);
 }
@@ -579,10 +579,10 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 
 // This mainly fills member variables with the styles.
 // The 'doc' argument is only for footnotes-configuration.
-bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& doc )
+bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument& doc )
 {
-  QDomElement docElement  = styles.documentElement();
-  QDomNode docStyles   = KoDom::namedItemNS( docElement, ooNS::office, "document-styles" );
+  KoXmlElement docElement  = styles.documentElement();
+  KoXmlNode docStyles   = KoDom::namedItemNS( docElement, ooNS::office, "document-styles" );
 
   if ( docElement.hasAttributeNS( ooNS::office, "version" ) )
   {
@@ -602,7 +602,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& 
     }
   }
 
-  QDomNode fontStyles = KoDom::namedItemNS( docElement, ooNS::office, "font-decls" );
+  KoXmlNode fontStyles = KoDom::namedItemNS( docElement, ooNS::office, "font-decls" );
 
   if ( !fontStyles.isNull() )
   {
@@ -615,7 +615,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& 
 
   kDebug(30518) << "Starting reading in office:automatic-styles" << endl;
 
-  QDomNode autoStyles = KoDom::namedItemNS( docElement, ooNS::office, "automatic-styles" );
+  KoXmlNode autoStyles = KoDom::namedItemNS( docElement, ooNS::office, "automatic-styles" );
   if ( !autoStyles.isNull() )
   {
       insertStyles( autoStyles.toElement(), doc );
@@ -626,19 +626,19 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& 
 
   kDebug(30518) << "Reading in master styles" << endl;
 
-  QDomNode masterStyles = KoDom::namedItemNS( docElement, ooNS::office, "master-styles" );
+  KoXmlNode masterStyles = KoDom::namedItemNS( docElement, ooNS::office, "master-styles" );
 
   if ( !masterStyles.isNull() )
   {
 
-      QDomElement master;
+      KoXmlElement master;
       forEachElement( master, masterStyles )
       {
           if ( master.localName() ==  "master-page" && master.namespaceURI() == ooNS::style )
           {
               QString name = master.attributeNS( ooNS::style, "name", QString::null );
               kDebug(30518) << "Master style: '" << name << "' loaded " << endl;
-              m_masterPages.insert( name, new QDomElement( master ) );
+              m_masterPages.insert( name, new KoXmlElement( master ) );
           } else
               kWarning(30518) << "Unknown tag " << master.tagName() << " in office:master-styles" << endl;
       }
@@ -647,7 +647,7 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& 
 
   kDebug(30518) << "Starting reading in office:styles" << endl;
 
-  QDomNode fixedStyles = KoDom::namedItemNS( docElement, ooNS::office, "styles" );
+  KoXmlNode fixedStyles = KoDom::namedItemNS( docElement, ooNS::office, "styles" );
 
   if ( !fixedStyles.isNull() )
     insertStyles( fixedStyles.toElement(), doc );
@@ -658,10 +658,10 @@ bool OoWriterImport::createStyleMap( const QDomDocument & styles, QDomDocument& 
 }
 
 // started as a copy of OoImpressImport::insertStyles
-void OoWriterImport::insertStyles( const QDomElement& styles, QDomDocument& doc )
+void OoWriterImport::insertStyles( const KoXmlElement& styles, QDomDocument& doc )
 {
     //kDebug(30518) << "Inserting styles from " << styles.tagName() << endl;
-    QDomElement e;
+    KoXmlElement e;
     forEachElement( e, styles )
     {
         const QString localName = e.localName();
@@ -673,13 +673,13 @@ void OoWriterImport::insertStyles( const QDomElement& styles, QDomDocument& doc 
              || localName == "page-master"
              || localName == "font-decl" ) )
         {
-            QDomElement* ep = new QDomElement( e );
+            KoXmlElement* ep = new KoXmlElement( e );
             m_styles.insert( name, ep );
             kDebug(30518) << "Style: '" << name << "' loaded " << endl;
         } else if ( localName == "default-style" && ns == ooNS::style ) {
             m_defaultStyle = e;
         } else if ( localName == "list-style" && ns == ooNS::text ) {
-            QDomElement* ep = new QDomElement( e );
+            KoXmlElement* ep = new KoXmlElement( e );
             m_listStyles.insert( name, ep );
             kDebug(30518) << "List style: '" << name << "' loaded " << endl;
         } else if ( localName == "outline-style" && ns == ooNS::text ) {
@@ -705,10 +705,10 @@ void OoWriterImport::insertStyles( const QDomElement& styles, QDomDocument& doc 
 // OO spec 2.5.4. p68. Conversion to Qt format: see qdate.html
 // OpenCalcImport::loadFormat has similar code, but slower, intermixed with other stuff,
 // lacking long-textual forms.
-void OoWriterImport::importDateTimeStyle( const QDomElement& parent )
+void OoWriterImport::importDateTimeStyle( const KoXmlElement& parent )
 {
     QString format;
-    QDomElement e;
+    KoXmlElement e;
     forEachElement( e, parent )
     {
         const QString ns = e.namespaceURI();
@@ -752,7 +752,7 @@ void OoWriterImport::importDateTimeStyle( const QDomElement& parent )
     // Update: we don't need to parse the date back.
 
     QString kdeFormat;
-    QDomElement e;
+    KoXmlElement e;
     forEachElement( e, parent )
     {
         const QString ns = e.namespaceURI();
@@ -795,13 +795,13 @@ void OoWriterImport::importDateTimeStyle( const QDomElement& parent )
     m_dateTimeFormats.insert( styleName, format );
 }
 
-void OoWriterImport::fillStyleStack( const QDomElement& object, const char* nsURI, const QString& attrName )
+void OoWriterImport::fillStyleStack( const KoXmlElement& object, const char* nsURI, const QString& attrName )
 {
     // find all styles associated with an object and push them on the stack
     // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
     if ( object.hasAttributeNS( nsURI, attrName ) ) {
         const QString styleName = object.attributeNS( nsURI, attrName, QString::null );
-        const QDomElement* style = m_styles[styleName];
+        const KoXmlElement* style = m_styles[styleName];
         if ( style )
             addStyles( style );
         else
@@ -809,14 +809,14 @@ void OoWriterImport::fillStyleStack( const QDomElement& object, const char* nsUR
     }
 }
 
-void OoWriterImport::addStyles( const QDomElement* style )
+void OoWriterImport::addStyles( const KoXmlElement* style )
 {
     Q_ASSERT( style );
     if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( ooNS::style, "parent-style-name" ) ) {
         const QString parentStyleName = style->attributeNS( ooNS::style, "parent-style-name", QString::null );
-        QDomElement* parentStyle = m_styles[ parentStyleName ];
+        KoXmlElement* parentStyle = m_styles[ parentStyleName ];
         if ( parentStyle )
             addStyles( parentStyle );
         else
@@ -829,7 +829,7 @@ void OoWriterImport::addStyles( const QDomElement* style )
     m_styleStack.push( *style );
 }
 
-void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutElement, const QDomElement& paragraph )
+void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutElement, const KoXmlElement& paragraph )
 {
     // Spec: see 3.3.5 p137
     if ( m_listStyleStack.hasListStyle() && m_nextItemIsListItem ) {
@@ -842,7 +842,7 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
 
 void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement, bool heading, int level, bool ordered )
 {
-    const QDomElement listStyle = m_listStyleStack.currentListStyle();
+    const KoXmlElement listStyle = m_listStyleStack.currentListStyle();
     //const QDomElement listStyleProperties = m_listStyleStack.currentListStyleProperties();
     QDomElement counter = doc.createElement( "COUNTER" );
     counter.setAttribute( "numberingtype", heading ? 1 : 0 );
@@ -916,20 +916,20 @@ void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement
     layoutElement.appendChild(counter);
 }
 
-static QDomElement findListLevelStyle( QDomElement& fullListStyle, int level )
+static KoXmlElement findListLevelStyle( const KoXmlElement& fullListStyle, int level )
 {
-    QDomElement listLevelItem;
+    KoXmlElement listLevelItem;
     forEachElement( listLevelItem, fullListStyle )
     {
        if ( listLevelItem.attributeNS( ooNS::text, "level", QString::null ).toInt() == level )
            return listLevelItem;
     }
-    return QDomElement();
+    return KoXmlElement();
 }
 
 bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, int level )
 {
-    QDomElement* fullListStyle = m_listStyles[listStyleName];
+    KoXmlElement* fullListStyle = m_listStyles[listStyleName];
     if ( !fullListStyle ) {
         kWarning(30518) << "List style " << listStyleName << " not found!" << endl;
         return false;
@@ -939,11 +939,11 @@ bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, int level
 }
 
 bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, // for debug only
-                                         QDomElement& fullListStyle, int level )
+                                         KoXmlElement& fullListStyle, int level )
 {
     // Find applicable list-level-style for level
     int i = level;
-    QDomElement listLevelStyle;
+    KoXmlElement listLevelStyle;
     while ( i > 0 && listLevelStyle.isNull() ) {
         listLevelStyle = findListLevelStyle( fullListStyle, i );
         --i;
@@ -957,7 +957,7 @@ bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, // for de
     return true;
 }
 
-void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDomElement& currentFramesetElement )
+void OoWriterImport::parseList( QDomDocument& doc, const KoXmlElement& list, QDomElement& currentFramesetElement )
 {
     //kDebug(30518) << k_funcinfo << "parseList"<< endl;
 
@@ -972,7 +972,7 @@ void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDom
         listOK = pushListLevelStyle( m_currentListStyleName, level );
 
     // Iterate over list items
-    QDomElement listItem;
+    KoXmlElement listItem;
     forEachElement( listItem, list )
     {
         // It's either list-header (normal text on top of list) or list-item
@@ -991,29 +991,28 @@ void OoWriterImport::parseList( QDomDocument& doc, const QDomElement& list, QDom
 
 static int numberOfParagraphs( const QDomElement& frameset )
 {
-    const QDomNodeList children = frameset.childNodes();
     const QString paragStr = "PARAGRAPH";
     int paragCount = 0;
-    for ( unsigned int i = 0 ; i < children.length() ; ++i ) {
-        if ( children.item( i ).toElement().tagName() == paragStr )
+    for (QDomElement e = frameset.firstChild().toElement(); !e.isNull(); e = e.nextSibling().toElement()) {
+        if ( e.tagName() == paragStr )
             ++paragCount;
     }
     return paragCount;
 }
 
-void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& parent,
+void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& parent,
     QDomElement& outputParagraph, QDomElement& outputFormats, QString& paragraphText, uint& pos)
 {
     // Parse every child node of the parent
     // Can't use forEachElement here since we also care about text nodes
-    for( QDomNode node ( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
+    for( KoXmlNode node ( parent.firstChild() ); !node.isNull(); node = node.nextSibling() )
     {
-        QDomElement ts ( node.toElement() );
+        KoXmlElement ts ( node.toElement() );
         QString textData;
         const QString localName( ts.localName() );
         const QString ns = ts.namespaceURI();
         const bool isTextNS = ns == ooNS::text;
-        QDomText t ( node.toText() );
+        KoXmlText t ( node.toText() );
 
         bool shouldWriteFormat=false; // By default no <FORMAT> element should be written
 
@@ -1169,7 +1168,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& p
     }
 }
 
-QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement& paragraph )
+QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const KoXmlElement& paragraph )
 {
     QDomElement p = doc.createElement( "PARAGRAPH" );
 
@@ -1205,7 +1204,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const QDomElement
 
     applyListStyle( doc, layoutElement, paragraph );
 
-    QDomElement* paragraphStyle = m_styles[paragraph.attributeNS( ooNS::text, "style-name", QString::null )];
+    KoXmlElement* paragraphStyle = m_styles[paragraph.attributeNS( ooNS::text, "style-name", QString::null )];
     QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( ooNS::style, "master-page-name", QString::null ) : QString::null;
     if ( masterPageName.isEmpty() )
         masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
@@ -1570,7 +1569,7 @@ void OoWriterImport::writeLayout( QDomDocument& doc, QDomElement& layoutElement 
 
 }
 
-void OoWriterImport::importFrame( QDomElement& frameElementOut, const QDomElement& object, bool isText )
+void OoWriterImport::importFrame( QDomElement& frameElementOut, const KoXmlElement& object, bool isText )
 {
     double width = 100;
     if ( object.hasAttributeNS( ooNS::svg, "width" ) ) { // fixed width
@@ -1727,7 +1726,7 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
     // TODO more refined border spec for double borders (3.11.28)
 }
 
-QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& object)
+QString OoWriterImport::appendTextBox(QDomDocument& doc, const KoXmlElement& object)
 {
     const QString frameName ( object.attributeNS( ooNS::draw, "name", QString::null) ); // ### TODO: what if empty, i.e. non-unique
     kDebug(30518) << "appendTextBox " << frameName << endl;
@@ -1762,10 +1761,10 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const QDomElement& obje
 }
 
 // OOo SPEC: 3.6.3 p149
-void OoWriterImport::importFootnote( QDomDocument& doc, const QDomElement& object, QDomElement& formats, uint pos, const QString& localName )
+void OoWriterImport::importFootnote( QDomDocument& doc, const KoXmlElement& object, QDomElement& formats, uint pos, const QString& localName )
 {
     const QString frameName( object.attributeNS( ooNS::text, "id", QString::null) );
-    QDomElement citationElem = KoDom::namedItemNS( object, ooNS::text, (localName+"-citation").latin1() ).toElement();
+    KoXmlElement citationElem = KoDom::namedItemNS( object, ooNS::text, (localName+"-citation").latin1() ).toElement();
 
     bool endnote = localName == "endnote";
 
@@ -1795,11 +1794,11 @@ void OoWriterImport::importFootnote( QDomDocument& doc, const QDomElement& objec
     // TODO importCommonFrameProperties ?
 
     // The text inside the frameset
-    QDomElement bodyElem = KoDom::namedItemNS( object, ooNS::text, (localName+"-body").latin1() ).toElement();
+    KoXmlElement bodyElem = KoDom::namedItemNS( object, ooNS::text, (localName+"-body").latin1() ).toElement();
     parseBodyOrSimilar( doc, bodyElem, framesetElement );
 }
 
-QString OoWriterImport::appendPicture(QDomDocument& doc, const QDomElement& object)
+QString OoWriterImport::appendPicture(QDomDocument& doc, const KoXmlElement& object)
 {
     const QString frameName ( object.attributeNS( ooNS::draw, "name", QString::null) ); // ### TODO: what if empty, i.e. non-unique
     const QString href ( object.attributeNS( ooNS::xlink, "href", QString::null) );
@@ -1941,7 +1940,7 @@ void OoWriterImport::anchorFrameset( QDomDocument& doc, QDomElement& formats, ui
     formatElementOut.appendChild(anchor);
 }
 
-void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, QDomElement& object, uint pos)
+void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, const KoXmlElement& object, uint pos)
 // Note: QDomElement& outputFormats replaces the parameter QDomElement& e in OoImpressImport::appendField
 //  (otherwise it should be the same parameters.)
 {
@@ -2165,7 +2164,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
 // TODO localName == "page-variable-get", "initial-creator" and many more
 }
 
-void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const QDomElement& object, uint pos,
+void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats, const KoXmlElement& object, uint pos,
     const QString& key, int type, QDomElement& child)
 {
     QDomElement variableElement ( doc.createElement("VARIABLE") );
@@ -2188,7 +2187,7 @@ void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats
     formats.appendChild(formatElement);
 }
 
-void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement )
+void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement )
 {
     QString tableName ( parent.attributeNS( ooNS::table, "name", QString::null) ); // TODO: what if empty (non-unique?)
     kDebug(30518) << "Found table " << tableName << endl;
@@ -2224,7 +2223,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
 
     uint col=0;
     columnLefts[0]=0.0; // Initialize left of first cell
-    QDomElement elem;
+    KoXmlElement elem;
     forEachElement( elem, parent )
     {
         if ( elem.localName() == "table-column" && elem.namespaceURI() == ooNS::table )
@@ -2234,11 +2233,11 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
                 repeat=1; // At least one column defined!
             const QString styleName ( elem.attributeNS( ooNS::table, "style-name", QString::null) );
             kDebug(30518) << "Column " << col << " style " << styleName << endl;
-            const QDomElement* style=m_styles.find(styleName);
+            const KoXmlElement* style=m_styles.find(styleName);
             double width=0.0;
             if (style)
             {
-                const QDomElement elemProps( KoDom::namedItemNS( *style, ooNS::style, "properties") );
+                const KoXmlElement elemProps( KoDom::namedItemNS( *style, ooNS::style, "properties") );
                 if (elemProps.isNull())
                 {
                     kWarning(30518) << "Could not find table column style properties!" << endl;
@@ -2278,7 +2277,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const QDomElement& parent, Q
     parseInsideOfTable(doc, parent, currentFramesetElement, tableName, columnLefts, row, column);
 }
 
-void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& parent, QDomElement& currentFramesetElement,
+void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement,
     const QString& tableName, const Q3MemArray<double> & columnLefts, uint& row, uint& column )
 {
     kDebug(30518) << "parseInsideOfTable: columnLefts.size()=" << columnLefts.size() << endl;
@@ -2289,7 +2288,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const QDomElement& p
         return;
     }
 
-    QDomElement e;
+    KoXmlElement e;
     forEachElement( e, parent )
     {
         m_styleStack.save();
@@ -2393,7 +2392,7 @@ void OoWriterImport::appendBookmark( QDomDocument& doc, int paragId, int pos, in
 }
 
 // OOo SPEC: 3.6.1 p146
-void OoWriterImport::importFootnotesConfiguration( QDomDocument& doc, const QDomElement& elem, bool endnote )
+void OoWriterImport::importFootnotesConfiguration( QDomDocument& doc, const KoXmlElement& elem, bool endnote )
 {
     QDomElement docElement( doc.documentElement() );
     // can we really be called more than once?
@@ -2416,7 +2415,7 @@ void OoWriterImport::importFootnotesConfiguration( QDomDocument& doc, const QDom
     settings.setAttribute( "righttext", elem.attributeNS( ooNS::style, "num-suffix", QString::null ) );
 }
 
-void OoWriterImport::appendTOC( QDomDocument& doc, const QDomElement& toc )
+void OoWriterImport::appendTOC( QDomDocument& doc, const KoXmlElement& toc )
 {
     // table-of-content OOo SPEC 7.5 p452
     //fillStyleStack( toc, ooNS::text, "style-name" ); that's the section style
@@ -2427,8 +2426,8 @@ void OoWriterImport::appendTOC( QDomDocument& doc, const QDomElement& toc )
     //{
     //}
 
-    QDomElement tocIndexBody = KoDom::namedItemNS( toc, ooNS::text, "index-body" );
-    QDomElement t;
+    KoXmlElement tocIndexBody = KoDom::namedItemNS( toc, ooNS::text, "index-body" );
+    KoXmlElement t;
     forEachElement( t, tocIndexBody )
     {
         m_styleStack.save();
@@ -2487,7 +2486,7 @@ QString OoWriterImport::kWordStyleName( const QString& ooStyleName )
 }
 
 // OOo SPEC: 2.3.3 p59
-void OoWriterImport::importHeaderFooter( QDomDocument& doc, const QDomElement& headerFooter, bool hasEvenOdd, QDomElement& style )
+void OoWriterImport::importHeaderFooter( QDomDocument& doc, const KoXmlElement& headerFooter, bool hasEvenOdd, KoXmlElement& style )
 {
     const QString localName = headerFooter.localName();
     QDomElement framesetElement = doc.createElement("FRAMESET");

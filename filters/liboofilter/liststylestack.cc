@@ -37,7 +37,7 @@ void ListStyleStack::pop()
     m_stack.pop();
 }
 
-void ListStyleStack::push( const QDomElement& style )
+void ListStyleStack::push( const KoXmlElement& style )
 {
     m_stack.push( style );
 }
@@ -48,15 +48,15 @@ void ListStyleStack::setInitialLevel( int initialLevel )
     m_initialLevel = initialLevel;
 }
 
-QDomElement ListStyleStack::currentListStyle() const
+KoXmlElement ListStyleStack::currentListStyle() const
 {
     Q_ASSERT( !m_stack.isEmpty() );
     return m_stack.top();
 }
 
-QDomElement _namedItemNS( const QDomElement& e, const QString& nsURI, const QString& name )
+KoXmlElement _namedItemNS( const KoXmlElement& e, const QString& nsURI, const QString& name )
 {
-  QDomNode node = e.firstChild();
+  KoXmlNode node = e.firstChild();
   while ( !node.isNull() ) 
   {
     if( node.prefix().isNull() )
@@ -67,11 +67,11 @@ QDomElement _namedItemNS( const QDomElement& e, const QString& nsURI, const QStr
   }
 
   // not found
-  return QDomElement();
+  return KoXmlElement();
 }
 
-QDomElement ListStyleStack::currentListStyleProperties() const
+KoXmlElement ListStyleStack::currentListStyleProperties() const
 {
-    QDomElement style = currentListStyle();
+    KoXmlElement style = currentListStyle();
     return _namedItemNS( style, ooNS::style, "properties" );
 }

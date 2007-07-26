@@ -20,7 +20,7 @@
 #ifndef LISTSTYLESTACK_H
 #define LISTSTYLESTACK_H
 
-#include <qdom.h>
+#include <KoXmlReader.h>
 #include <q3valuestack.h>
 
 /**
@@ -43,14 +43,14 @@ public:
     /**
      * Pushes the new list-style onto the stack.
      */
-    void push( const QDomElement& style );
+    void push( const KoXmlElement& style );
 
     /// @return true if we're inside a list (i.e. the stack isn't empty)
     bool hasListStyle() const { return !m_stack.isEmpty(); }
 
     /// @return currently applicable list style, i.e. the one on top of the stack
     /// Most list-level properties are the attributes of that element.
-    QDomElement currentListStyle() const;
+    KoXmlElement currentListStyle() const;
 
     /**
      * @return the style:properties for the currently applicable list style.
@@ -58,7 +58,7 @@ public:
      * like text:min-label-width, text:space-before, and style:font-name
      * are the attributes of that element.
      */
-    QDomElement currentListStyleProperties() const;
+    KoXmlElement currentListStyleProperties() const;
 
     /**
      * Set the initial level of the list, i.e. of item at the bottom of the stack.
@@ -75,7 +75,7 @@ public:
 
 
 private:
-    Q3ValueStack<QDomElement> m_stack;
+    Q3ValueStack<KoXmlElement> m_stack;
     int m_initialLevel;
 
 };

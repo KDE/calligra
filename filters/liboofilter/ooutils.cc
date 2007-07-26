@@ -47,7 +47,7 @@ const char* const ooNS::dc="http://purl.org/dc/elements/1.1/";
 const char* const ooNS::meta="http://openoffice.org/2000/meta";
 const char* const ooNS::config="http://openoffice.org/2001/config";
 
-QString OoUtils::expandWhitespace(const QDomElement& tag)
+QString OoUtils::expandWhitespace(const KoXmlElement& tag)
 {
     //tags like <text:s text:c="4">
 
