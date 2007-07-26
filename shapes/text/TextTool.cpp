@@ -883,6 +883,8 @@ void TextTool::activate (bool temporary) {
     updateSelectionHandler();
     updateActions();
     updateStyleManager();
+    if(m_specialCharacterDocker)
+        m_specialCharacterDocker->setEnabled(true);
 }
 
 void TextTool::deactivate() {
@@ -900,8 +902,10 @@ void TextTool::deactivate() {
         m_previousSelections.removeAt(0);
 
     updateSelectionHandler();
-    if(m_specialCharacterDocker)
+    if(m_specialCharacterDocker) {
+        m_specialCharacterDocker->setEnabled(false);
         m_specialCharacterDocker->setVisible(false);
+    }
 }
 
 void TextTool::repaintDecorations() {
