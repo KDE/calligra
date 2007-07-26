@@ -85,8 +85,8 @@ bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWrite
     return true;
 }
 
-bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
-                                      const QDomDocument&, KoStore* )
+bool KFormulaPartDocument::loadOasis( const KoXmlDocument& doc, KoOasisStyles&,
+                                      const KoXmlDocument&, KoStore* )
 {
     m_formulaElement->readMathML( doc.documentElement() );
 /*    if ( document->loadOasis( doc ) )
@@ -99,7 +99,7 @@ bool KFormulaPartDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&,
     return true;
 }
 
-bool KFormulaPartDocument::loadXML(QIODevice *, const QDomDocument& doc)
+bool KFormulaPartDocument::loadXML(QIODevice *, const KoXmlDocument& doc)
 {
     // TODO: Check whether it's really MathML or old KFO format
     m_formulaElement->readMathML( doc.documentElement() );

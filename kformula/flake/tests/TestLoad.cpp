@@ -51,7 +51,7 @@
 
 static void load(BasicElement* element, const QString& input)
 {
-    QDomDocument doc;
+    KoXmlDocument doc;
     doc.setContent( input );
     element->readMathML(doc.documentElement());
 }

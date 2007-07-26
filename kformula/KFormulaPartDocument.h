@@ -30,7 +30,6 @@
 #include "kformula_export.h"
 
 class QIODevice;
-class QDomDocument;
 class KoXmlWriter;
 
 class FormulaElement;

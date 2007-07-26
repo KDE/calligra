@@ -69,7 +69,7 @@ void UnderOverElement::moveDown( FormulaCursor* cursor, BasicElement* from )
 
 bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 {
-    KoXmlElement child = parent.firstChildElement();
+    KoXmlElement child = parent.firstChild().toElement();
     QString name = parent.tagName().toLower();
     
     if ( child.isNull() ) {
@@ -80,7 +80,7 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
     m_baseElement = ElementFactory::createElement( child.tagName(), this );
 
     if( name.contains( "under" ) ) {
-        child = child.nextSiblingElement();
+        child = child.nextSibling().toElement();
         if ( child.isNull() ) {
             kWarning( 39001 ) << "Empty underscript in " << name << " element\n";
             return false;
@@ -89,7 +89,7 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
         m_underElement = ElementFactory::createElement( child.tagName(), this );
     }
     if ( name.contains( "over" ) ) {
-        child = child.nextSiblingElement();
+        child = child.nextSibling().toElement();
         if ( child.isNull() ) {
             kWarning( 39001 ) << "Empty overscript in " << name << " element\n";
             return false;
