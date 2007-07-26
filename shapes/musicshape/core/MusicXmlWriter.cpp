@@ -197,12 +197,14 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
     w.endElement(); // music:part
 }
 
-void MusicXmlWriter::writeSheet(KoXmlWriter& w, Sheet* sheet)
+void MusicXmlWriter::writeSheet(KoXmlWriter& w, Sheet* sheet, bool writeNamespaceDef)
 {
 //    w.startDocument("score-partwise", "-//Recordare//DTD MusicXML 1.1 Partwise//EN",
 //        "http://www.musicxml.org/dtds/partwise.dtd");
     w.startElement("music:score-partwise");
-    w.addAttribute("xmlns:music", "http://www.koffice.org/music");
+    if (writeNamespaceDef) {
+        w.addAttribute("xmlns:music", "http://www.koffice.org/music");
+    } 
     w.addAttribute("version", "1.1");
 
     w.startElement("music:part-list");

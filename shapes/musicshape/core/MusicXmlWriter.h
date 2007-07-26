@@ -29,7 +29,7 @@ class MusicXmlWriter {
         MusicXmlWriter();
         ~MusicXmlWriter();
 
-        void writeSheet(KoXmlWriter& writer, MusicCore::Sheet* sheet);
+        void writeSheet(KoXmlWriter& writer, MusicCore::Sheet* sheet, bool writeNamespaceDef = true);
 };
 
 } // namespace MusicCore

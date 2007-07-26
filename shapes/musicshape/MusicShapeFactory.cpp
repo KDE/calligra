@@ -48,7 +48,8 @@ MusicShapeFactory::MusicShapeFactory( QObject* parent )
     setToolTip( i18n( "A shape which provides a music editor" ) );
     ///@todo setIcon( "musicflake" );
     setIcon( "music-note-16th" );
-
+    setOdfElementNames( "http://www.koffice.org/music", QStringList("shape") );
+    setLoadingPriority( 1 );
 }
 
 KoShape* MusicShapeFactory::createDefaultShape() const
@@ -68,6 +69,11 @@ KoShape* MusicShapeFactory::createShape( const KoProperties* params ) const
     }
     MusicShape* shape = new MusicShape();
     return shape;
+}
+
+bool MusicShapeFactory::supports(const KoXmlElement & e) const
+{
+    return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.koffice.org/music" );
 }
 
 #include "MusicShapeFactory.moc"

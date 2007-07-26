@@ -44,6 +44,7 @@ public:
 
     KoShape* createDefaultShape() const;
     KoShape* createShape( const KoProperties* params ) const;
+    virtual bool supports(const KoXmlElement & e) const;
 };
 
 #endif 

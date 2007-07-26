@@ -50,7 +50,7 @@ static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch, int dots
     return c;
 }
 
-MusicShape::MusicShape() 
+MusicShape::MusicShape()
     : m_style(new MusicStyle),
     m_engraver(new Engraver()),
     m_renderer(new MusicRenderer(m_style))
@@ -60,7 +60,7 @@ MusicShape::MusicShape()
     Bar* b2 = m_sheet->addBar();
     Bar* b3 = m_sheet->addBar();
     Bar* b4 = m_sheet->addBar();
-    
+
     Part* part = m_sheet->addPart("Violin");
     Staff* staff = part->addStaff();
     Voice* voice = part->addVoice();
@@ -83,7 +83,7 @@ MusicShape::MusicShape()
     voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, 2));
     voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, -1));
     voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, -2));
-    
+
     part = m_sheet->addPart("Piano");
     staff = part->addStaff();
     Staff* staff2 = part->addStaff();
@@ -152,21 +152,19 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
     KoXmlWriter& writer = context.xmlWriter();
+    writer.startElement("music:shape");
+    writer.addAttribute("xmlns:music", "http://www.koffice.org/music");
+    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
 
-    const bool nestedInFrame = context.isSet(KoShapeSavingContext::FrameOpened);
-    if(!nestedInFrame) {
-        writer.startElement( "draw:frame" );
-        saveOdfFrameAttributes(context);
-    }
-    
-    MusicXmlWriter().writeSheet( writer, m_sheet );
+    MusicXmlWriter().writeSheet( writer, m_sheet, false );
 
-    if(!nestedInFrame)
-        writer.endElement(); // draw:frame
+    writer.endElement();
+    saveOdfConnections(context);
 }
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
+    loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation );
+    return true;
 }
 
 Sheet* MusicShape::sheet()
