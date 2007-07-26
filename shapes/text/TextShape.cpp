@@ -218,6 +218,7 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const {
         writer->startElement( "draw:frame" );
         saveOdfFrameAttributes(context);
     }
+    saveOdfAttributes(context, 0); // required to clear the 'frameOpened' attribute on KoShape
     writer->startElement( "draw:text-box" );
 
     m_textShapeData->saveOdf(writer);
