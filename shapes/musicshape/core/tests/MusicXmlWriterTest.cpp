@@ -174,9 +174,23 @@ bool MusicXmlWriterTest::compareNodes(KoXmlNode& valid, KoXmlNode& result, QStri
     if (result.namespaceURI() != valid.namespaceURI()) {
         FAIL(QString("namespace does not match at %1; expected %2, received %3").arg(path, valid.namespaceURI(), result.namespaceURI()).toLocal8Bit().constData());
     }
-    
-    if (result.nodeValue() != valid.nodeValue()) {
-        FAIL(QString("nodeValue does not match at %1; expected %2, received %3").arg(path, valid.nodeValue(), result.nodeValue()).toLocal8Bit().constData());
+
+    if (result.isCDATASection()) {
+        if (valid.isCDATASection()) {
+            FAIL(QString("node value types differ").toLocal8Bit().constData());
+        } else {
+            if (result.toCDATASection().data() != valid.toCDATASection().data()) {
+                FAIL(QString("node value does not match at %1; expected %2, received %3").arg(path, valid.toCDATASection().data(), result.toCDATASection().data()).toLocal8Bit().constData());
+            }
+        }
+    } else if (result.isText()) {
+        if (valid.isText()) {
+            FAIL(QString("node value types differ").toLocal8Bit().constData());
+        } else {
+            if (result.toText().data() != valid.toText().data()) {
+                FAIL(QString("node value does not match at %1; expected %2, received %3").arg(path, valid.toText().data(), result.toText().data()).toLocal8Bit().constData());
+            }
+        }
     }
 
     // if comparing identification nodes, simply return as the contents is not really relevant
