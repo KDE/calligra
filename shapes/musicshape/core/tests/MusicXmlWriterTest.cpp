@@ -176,7 +176,7 @@ bool MusicXmlWriterTest::compareNodes(KoXmlNode& valid, KoXmlNode& result, QStri
     }
 
     if (result.isCDATASection()) {
-        if (valid.isCDATASection()) {
+        if (!valid.isCDATASection()) {
             FAIL(QString("node value types differ").toLocal8Bit().constData());
         } else {
             if (result.toCDATASection().data() != valid.toCDATASection().data()) {
@@ -184,7 +184,7 @@ bool MusicXmlWriterTest::compareNodes(KoXmlNode& valid, KoXmlNode& result, QStri
             }
         }
     } else if (result.isText()) {
-        if (valid.isText()) {
+        if (!valid.isText()) {
             FAIL(QString("node value types differ").toLocal8Bit().constData());
         } else {
             if (result.toText().data() != valid.toText().data()) {
