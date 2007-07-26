@@ -42,16 +42,16 @@ KoView* KoUnavailPart::createViewInstance( QWidget* parent)
     return new KoUnavailView( this, parent );
 }
 
-bool KoUnavailPart::loadOasis( const QDomDocument& doc, KoOasisStyles&, const QDomDocument&, KoStore* )
+bool KoUnavailPart::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDocument&, KoStore* )
 {
-    m_doc = doc;
+    m_doc = KoXml::asQDomDocument( QDomDocument(), doc );
     return true;
 }
 
-bool KoUnavailPart::loadXML( QIODevice *, const QDomDocument &doc )
+bool KoUnavailPart::loadXML( QIODevice *, const KoXmlDocument &doc )
 {
     // Simply keep a copy of the whole document ;)
-    m_doc = doc;
+    m_doc = KoXml::asQDomDocument( QDomDocument(), doc );
     return true;
 }
 

@@ -34,10 +34,10 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
-    virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
+    virtual bool loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const KoXmlDocument& settings, KoStore* );
     virtual bool saveOasis(KoStore*, KoXmlWriter*);
 
-    virtual bool loadXML( QIODevice *, const QDomDocument & );
+    virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     virtual bool saveFile();
     virtual QDomDocument saveXML();
     virtual bool saveChildren( KoStore* /*_store*/ ) { return true; }
