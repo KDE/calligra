@@ -583,7 +583,6 @@ QDomDocument Doc::saveXML()
         }
     }
 
-#ifdef KOXML_USE_QDOM
     SavedDocParts::const_iterator iter = d->savedDocParts.begin();
     SavedDocParts::const_iterator end  = d->savedDocParts.end();
     while ( iter != end )
@@ -592,12 +591,6 @@ QDomDocument Doc::saveXML()
       spread.appendChild( iter.value() );
       ++iter;
     }
-#else
-#ifdef __GNUC__
-#warning Problem with KoXmlReader conversion!
-#endif
-    kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
 
     QDomElement defaults = doc.createElement( "defaults" );
     defaults.setAttribute( "row-height", d->defaultRowFormat->height() );
@@ -1210,14 +1203,7 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
          && tagName != "paper" )
     {
       // belongs to a plugin, load it and save it for later use
-#ifdef KOXML_USE_QDOM
-      d->savedDocParts[ tagName ] = element;
-#else
-#ifdef __GNUC__
-#warning Problem with KoXmlReader conversion!
-#endif
-      kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
+      d->savedDocParts[ tagName ] = KoXml::asQDomElement(QDomDocument(), element);
     }
 
     element = element.nextSibling().toElement();
@@ -1323,19 +1309,11 @@ bool Doc::completeLoading( KoStore* /* _store */ )
 
 bool Doc::docData( QString const & xmlTag, QDomElement & data )
 {
-#ifdef KOXML_USE_QDOM
   SavedDocParts::iterator iter = d->savedDocParts.find( xmlTag );
   if ( iter == d->savedDocParts.end() )
     return false;
   data = iter.value();
   d->savedDocParts.erase( iter );
-#else
-#ifdef __GNUC__
-#warning Problem with KoXmlReader conversion!
-#endif
-  kWarning() << "Problem with KoXmlReader conversion!" << endl;
-#endif
-
   return true;
 }
 
