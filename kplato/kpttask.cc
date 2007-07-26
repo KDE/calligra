@@ -2190,10 +2190,8 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
             addEntry( date, entry );
         }
     } else {
-        QDomNodeList list = element.childNodes();
-        for ( int i=0; i<list.count(); ++i) {
-            if (list.item(i).isElement()) {
-                QDomElement e = list.item(i).toElement();
+        KoXmlElement e;
+        forEachElement(e, element) {
                 if (e.tagName() == "completion-entry") {
                     QDate date;
                     s = e.attribute("date");
@@ -2207,10 +2205,8 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                     Entry *entry = new Entry( e.attribute("percent-finished", "0").toInt(), Duration::fromString(e.attribute("remaining-effort")),  Duration::fromString(e.attribute("performed-effort")) );
                     addEntry( date, entry );
                 } else if (e.tagName() == "used-effort") {
-                    QDomNodeList list = e.childNodes();
-                    for (int n=0; n<list.count(); ++n) {
-                        if (list.item(n).isElement()) {
-                            QDomElement el = list.item(n).toElement();
+                    KoXmlElement el;
+                    forEachElement(el, e) {
                             if (el.tagName() == "resource") {
                                 QString id = el.attribute( "id" );
                                 Resource *r = status.project().resource( id );
@@ -2222,10 +2218,8 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                                 addUsedEffort( r, ue );
                                 ue->loadXML( el, status );
                             }
-                        }
                     }
                 }
-            }
         }
     }
     return true;
@@ -2309,10 +2303,8 @@ bool Completion::UsedEffort::operator==( const Completion::UsedEffort &e ) const
 bool Completion::UsedEffort::loadXML(KoXmlElement &element, XMLLoaderObject & )
 {
     //kDebug()<<k_funcinfo<<endl;
-    QDomNodeList list = element.childNodes();
-    for (int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
+    KoXmlElement e;
+    forEachElement(e, element) {
             if (e.tagName() == "actual-effort") {
                 QDate date = QDate::fromString( e.attribute("date"), Qt::ISODate );
                 if ( date.isValid() ) {
@@ -2322,7 +2314,6 @@ bool Completion::UsedEffort::loadXML(KoXmlElement &element, XMLLoaderObject & )
                     setEffort( date, a );
                 }
             }
-        }
     }
     return true;
 }

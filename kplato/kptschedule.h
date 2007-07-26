@@ -92,7 +92,7 @@ public:
     bool isCritical() const { return positiveFloat == Duration::zeroDuration; }
 
     virtual bool loadXML( const KoXmlElement &element );
-    virtual void saveXML( KoXmlElement &element ) const;
+    virtual void saveXML( QDomElement &element ) const;
     void saveCommonXML( QDomElement &element ) const;
     void saveAppointments( QDomElement &element ) const;
 

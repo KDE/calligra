@@ -1276,7 +1276,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     return true;
 }
 
-MainSchedule *ScheduleManager::loadMainSchedule( QDomElement &element, XMLLoaderObject &status ) {
+MainSchedule *ScheduleManager::loadMainSchedule( KoXmlElement &element, XMLLoaderObject &status ) {
     MainSchedule *sch = new MainSchedule();
     if ( sch->loadXML( element, status ) ) {
         status.project().addSchedule( sch );

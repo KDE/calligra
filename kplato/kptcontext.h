@@ -25,7 +25,7 @@
 #include <QString>
 #include <qstringlist.h>
 
-class QDomElement;
+#include <KoXmlReader.h>
 
 namespace KPlato
 {
@@ -35,7 +35,7 @@ public:
     Context();
     virtual ~Context();
     
-    virtual bool load(QDomElement &element);
+    virtual bool load(KoXmlElement &element);
     virtual void save(QDomElement &element) const;
     
 

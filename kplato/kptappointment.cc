@@ -283,10 +283,8 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
         return false;
     }
     //kDebug()<<k_funcinfo<<"res="<<m_resource<<" node="<<m_node<<endl;
-    QDomNodeList list = element.childNodes();
-    for (int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
+    KoXmlElement e;
+    forEachElement(e, element) {
             if (e.tagName() == "interval") {
             AppointmentInterval *a = new AppointmentInterval();
                 if (a->loadXML(e, status)) {
@@ -296,7 +294,6 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
                     delete a;
                 }
             }
-        }
     }
     if (isEmpty()) {
         return false;

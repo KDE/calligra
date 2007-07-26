@@ -34,7 +34,7 @@ Context::Context()
 Context::~Context() {
 }
 
-bool Context::load(QDomElement &element) {
+bool Context::load(KoXmlElement &element) {
     currentView = element.attribute("current-view");
     currentEstimateType = element.attribute("estimate-type").toInt();
     currentSchedule = element.attribute("current-schedule").toLong();
@@ -42,10 +42,8 @@ bool Context::load(QDomElement &element) {
     actionViewOptimistic = element.attribute("view-optimistic").toInt();
     actionViewPessimistic = element.attribute("view-pessimistic").toInt();
 
-    QDomNodeList list = element.childNodes();
-    for (int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
+    KoXmlElement e;
+    forEachElement(e, element) {
             if (e.tagName() == "gantt-view") {
                 ganttview.ganttviewsize = e.attribute("ganttview-size").toInt();
                 ganttview.taskviewsize = e.attribute("taskview-size").toInt();
@@ -59,22 +57,16 @@ bool Context::load(QDomElement &element) {
                 ganttview.showCriticalPath = e.attribute("show-criticalpath").toInt();
                 ganttview.showNoInformation = e.attribute("show-noinformation").toInt();
 
-                QDomNodeList list = e.childNodes();
-                for (int i=0; i<list.count(); ++i) {
-                    if (list.item(i).isElement()) {
-                        QDomElement g = list.item(i).toElement();
+                KoXmlElement g;
+                forEachElement(g, e) {
                         if (g.tagName() == "closed-nodes") {
-                            QDomNodeList list = g.childNodes();
-                            for (int i=0; i<list.count(); ++i) {
-                                if (list.item(i).isElement()) {
-                                    QDomElement ei = list.item(i).toElement();
+                            KoXmlElement ei;
+                            forEachElement(ei,g) {
                                     if (ei.tagName() == "node") {
                                         ganttview.closedNodes.append(ei.attribute("id"));
                                     }
-                                }
                             }
                         }
-                    }
                 }
             } else if (e.tagName() == "accounts-view") {
                 accountsview.accountsviewsize = e.attribute("accountsview-size").toInt();
@@ -83,27 +75,20 @@ bool Context::load(QDomElement &element) {
                 accountsview.period = e.attribute("period").toInt();
                 accountsview.cumulative = e.attribute("cumulative").toInt();
 
-                QDomNodeList list = e.childNodes();
-                for (int i=0; i<list.count(); ++i) {
-                    if (list.item(i).isElement()) {
-                        QDomElement g = list.item(i).toElement();
+                KoXmlElement g;
+                forEachElement(g, e) {
                         if (g.tagName() == "closed-items") {
-                            QDomNodeList list = g.childNodes();
-                            for (int i=0; i<list.count(); ++i) {
-                                if (list.item(i).isElement()) {
-                                    QDomElement ei = list.item(i).toElement();
+                            KoXmlElement ei;
+                            forEachElement(ei, g) {
                                     if (ei.tagName() == "account") {
                                         accountsview.closedItems.append(ei.attribute("name"));
                                     }
-                                }
                             }
                         }
-                    }
                 }
             } else {
                 kError()<<k_funcinfo<<"Unknown tag: "<<e.tagName()<<endl;
             }
-        }
     }
 
     return true;

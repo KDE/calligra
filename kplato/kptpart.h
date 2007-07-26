@@ -70,7 +70,7 @@ public:
     virtual QDomDocument saveXML();
 
     bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
-    bool loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const QDomDocument&, KoStore * );
+    bool loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * );
 
     void addCommand( K3Command * cmd, bool execute = true );
 
