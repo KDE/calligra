@@ -137,6 +137,7 @@ void KWView::setupActions() {
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet );
     m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
     m_actionFormatFrameSet->setEnabled( false );
+    m_actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
     QAction *print  = new KAction("MyPrint", this);
@@ -222,6 +223,8 @@ void KWView::setupActions() {
     connect(action, SIGNAL(triggered()), this, SLOT( formatPage() ));
 
     action = new QAction(i18n("Make inline"), this);
+    action->setToolTip( i18n( "Convert current frame to an inline frame" ) );
+    action->setWhatsThis( i18n( "Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position." ) );
     actionCollection()->addAction("inline_frame", action);
     connect(action, SIGNAL(triggered()), this, SLOT( inlineFrame() ));
 
@@ -259,6 +262,15 @@ void KWView::setupActions() {
     action->setToolTip( i18n( "Toggle the display of non-printing characters" ) );
     action->setWhatsThis( i18n( "Toggle the display of non-printing characters.<br/><br/>When this is enabled, KWord shows you tabs, spaces, carriage returns and other non-printing characters." ) );
 
+    action = new QAction( i18n( "Select All Frames" ), this);
+
+    actionCollection()->addAction("edit_selectallframes", action );
+    connect(action, SIGNAL(triggered()), this, SLOT( editSelectAllFrames() ));
+
+    action = new QAction( i18n( "Show Grid" ), this);
+    action->setCheckable(true);
+    actionCollection()->addAction("view_grid", action );
+    connect(action, SIGNAL(toggled(bool)), this, SLOT(viewGrid(bool)));
 
     // -------------- Frame menu
     action  = new KAction(i18n("Create Linked Copy"), this);
@@ -288,7 +300,6 @@ This saves problems with finding out which we missed near the end.
 
     // -------------- Edit actions
     m_actionEditCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( editCut() ));
-    new KAction( i18n( "Select All Frames" ), 0, this, SLOT( editSelectAllFrames() ), actionCollection(), "edit_selectallframes" );
     m_actionSpellCheck = actionCollection()->addAction(KStandardAction::Spelling,  "extra_spellcheck", this, SLOT( slotSpellCheck() ));
 
     (void) new KAction( i18n( "Configure Mail Merge..." ), "configure",0,
@@ -421,108 +432,11 @@ This saves problems with finding out which we missed near the end.
 
 
     // ------------------------- Format menu
-    m_actionFormatParag = new KAction( i18n( "Paragraph..." ), Qt::ALT + Qt::CTRL + Qt::Key_P,
-            this, SLOT( formatParagraph() ),
-            actionCollection(), "format_paragraph" );
-    m_actionFormatParag->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc." ) );
-    m_actionFormatParag->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed." ) );
-
-    m_actionFormatFrameSet = new KAction( i18n( "Frame/Frameset Properties" ), 0,
-            this, SLOT( formatFrameSet() ),
-            actionCollection(), "format_frameset" );
-    m_actionFormatFrameSet->setToolTip( i18n( "Alter frameset properties" ) );
-    m_actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
-
-
     m_actionFormatFrameStylist = new KAction( i18n( "Frame Style Manager" ), 0,
             this, SLOT( extraFrameStylist() ),
             actionCollection(), "frame_stylist" );
     m_actionFormatFrameStylist->setToolTip( i18n( "Change attributes of framestyles" ) );
     m_actionFormatFrameStylist->setWhatsThis( i18n( "Change background and borders of framestyles.<p>Multiple framestyles can be changed using the dialog box." ) );
-
-
-    m_actionFormatStylist = new KAction( i18n( "Style Manager" ), Qt::ALT + Qt::CTRL + Qt::Key_S,
-            this, SLOT( extraStylist() ),
-            actionCollection(), "format_stylist" );
-    m_actionFormatStylist->setToolTip( i18n( "Change attributes of styles" ) );
-    m_actionFormatStylist->setWhatsThis( i18n( "Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box." ) );
-
-    m_actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), actionCollection(), "format_fontsize" );
-    connect( m_actionFormatFontSize, SIGNAL( fontSizeChanged( int ) ),
-            this, SLOT( textSizeSelected( int ) ) );
-
-    m_actionFontSizeIncrease  = new KAction(i18n("Increase Font Size"), "fontsizeup"), this);
-    actionCollection()->addAction("increase_fontsize", m_actionFontSizeIncrease );
-    m_actionFontSizeDecrease  = new KAction(i18n("Decrease Font Size"), "fontsizedown"), this);
-    actionCollection()->addAction("decrease_fontsize", m_actionFontSizeDecrease );
-
-    m_actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
-            //i18n( "Font Family" ),
-            actionCollection(), "format_fontfamily" );
-    connect( m_actionFormatFontFamily, SIGNAL( triggered( const QString & ) ),
-            this, SLOT( textFontSelected( const QString & ) ) );
-
-    m_actionFormatStyleMenu  = new KActionMenu(i18n("Style"), this);
-    actionCollection()->addAction("format_stylemenu", m_actionFormatStyleMenu );
-    m_actionFormatStyle  = new KSelectAction(i18n("Style"), this);
-    actionCollection()->addAction("format_style", m_actionFormatStyle );
-    // In fact, binding a key to this action will simply re-apply the current style. Why not.
-    //m_actionFormatStyle->setShortcutConfigurable( false );
-    connect( m_actionFormatStyle, SIGNAL( activated( int ) ),
-            this, SLOT( textStyleSelected( int ) ) );
-    updateStyleList();
-
-    // ----------------------- More format actions, for the toolbar only
-
-    QActionGroup* spacingActionGroup = new QActionGroup( this );
-    spacingActionGroup->setExclusive( true );
-    m_actionFormatSpacingSingle = new KToggleAction( i18n( "Line Spacing 1" ), "spacesimple", Qt::CTRL + Qt::Key_1,
-            this, SLOT( textSpacingSingle() ),
-            actionCollection(), "format_spacingsingle" );
-    m_actionFormatSpacingSingle->setActionGroup( spacingActionGroup );
-    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "spacedouble", Qt::CTRL + Qt::Key_5,
-            this, SLOT( textSpacingOneAndHalf() ),
-            actionCollection(), "format_spacing15" );
-    m_actionFormatSpacingOneAndHalf->setActionGroup( spacingActionGroup );
-    m_actionFormatSpacingDouble = new KToggleAction( i18n( "Line Spacing 2" ), "spacetriple", Qt::CTRL + Qt::Key_2,
-            this, SLOT( textSpacingDouble() ),
-            actionCollection(), "format_spacingdouble" );
-    m_actionFormatSpacingDouble->setActionGroup( spacingActionGroup );
-
-    m_actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
-            this, SLOT( textColor() ),
-            actionCollection(), "format_color", true );
-    m_actionFormatColor->setDefaultColor(QColor());
-
-
-    m_actionFormatNumber  = new KActionMenu(KIcon( "enumList" ), i18n("Number"), this);
-    actionCollection()->addAction("format_number", m_actionFormatNumber );
-    m_actionFormatNumber->setDelayed( false );
-    m_actionFormatBullet  = new KActionMenu(KIcon( "unsortedList" ), i18n("Bullet"), this);
-    actionCollection()->addAction("format_bullet", m_actionFormatBullet );
-    m_actionFormatBullet->setDelayed( false );
-    QActionGroup* counterStyleActionGroup = new QActionGroup( this );
-    counterStyleActionGroup->setExclusive( true );
-    Q3PtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
-    KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
-    Q3PtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
-    for ( ; styleIt.current() ; ++styleIt ) {
-        // Dynamically create toggle-actions for each list style.
-        // This approach allows to edit toolbars and extract separate actions from this menu
-        KToggleAction* act = new KToggleAction( styleIt.current()->name(), // TODO icon
-                actionCollection(),
-                QString("counterstyle_%1").arg( styleIt.current()->style() ) );
-        connect( act, SIGNAL( triggered(bool) ), this, SLOT( slotCounterStyleSelected() ) );
-        act->setActionGroup( counterStyleActionGroup );
-        // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
-        if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
-            m_actionFormatBullet->insert( act );
-            m_actionFormatNumber->insert( act );
-        } else if ( styleIt.current()->isBullet() )
-            m_actionFormatBullet->insert( act );
-        else
-            m_actionFormatNumber->insert( act );
-    }
 
     // ---------------------------- frame toolbar actions
 
@@ -570,13 +484,6 @@ This saves problems with finding out which we missed near the end.
     m_actionBorderColor = new TKSelectColorAction( i18n("Border Color"), TKSelectColorAction::LineColor, actionCollection(), "border_color", true );
     m_actionBorderColor->setDefaultColor(QColor());
 
-
-    m_actionBackgroundColor = new TKSelectColorAction( i18n( "Text Background Color..." ), TKSelectColorAction::FillColor, actionCollection(),"border_backgroundcolor", true);
-    m_actionBackgroundColor->setToolTip( i18n( "Change background color for currently selected text" ) );
-    m_actionBackgroundColor->setWhatsThis( i18n( "Change background color for currently selected text." ) );
-
-    connect(m_actionBackgroundColor,SIGNAL(activated()),SLOT(backgroundColor() ));
-    m_actionBackgroundColor->setDefaultColor(QColor());
 
     // ---------------------- Table menu
     m_actionTablePropertiesMenu = new KAction( i18n( "Properties" ), 0,
@@ -717,12 +624,6 @@ This saves problems with finding out which we missed near the end.
     m_actionConfigureHeaderFooter->setToolTip( i18n( "Configure the currently selected header or footer" ) );
     m_actionConfigureHeaderFooter->setWhatsThis( i18n( "Configure the currently selected header or footer." ) );
 
-    m_actionInlineFrame = new KToggleAction( i18n( "Inline Frame" ), 0,
-            this, SLOT( inlineFrame() ),
-            actionCollection(), "inline_frame" );
-    m_actionInlineFrame->setToolTip( i18n( "Convert current frame to an inline frame" ) );
-    m_actionInlineFrame->setWhatsThis( i18n( "Convert the current frame to an inline frame.<br><br>Place the inline frame within the text at the point nearest to the frames current position." ) );
-
     m_actionOpenLink = new KAction( i18n( "Open Link" ), 0,
             this, SLOT( openLink() ),
             actionCollection(), "open_link" );
@@ -753,11 +654,6 @@ This saves problems with finding out which we missed near the end.
     m_actionShowDocStruct->setCheckedState(i18n("Hide Doc Structure"));
     m_actionShowDocStruct->setToolTip( i18n( "Open document structure sidebar" ) );
     m_actionShowDocStruct->setWhatsThis( i18n( "Open document structure sidebar.<p>This sidebar helps you organize your document and quickly find pictures, tables etc." ) );
-
-    m_actionViewShowGrid = new KToggleAction( i18n( "Show Grid" ), 0,
-            this, SLOT( viewGrid() ),
-            actionCollection(), "view_grid" );
-    m_actionViewShowGrid->setCheckedState(i18n("Hide Grid"));
 
     m_actionConfigureCompletion = new KAction( i18n( "Configure Completion..." ), 0,
             this, SLOT( configureCompletion() ),
@@ -1075,10 +971,24 @@ void KWView::deletePage() {
 
 void KWView::setShowFormattingChars(bool on) {
     KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
-    provider->setResource(KoText::ShowSpaces, true);
-    provider->setResource(KoText::ShowTabs, true);
-    provider->setResource(KoText::ShowEnters, true);
-    provider->setResource(KoText::ShowSpecialCharacters, true);
+    provider->setResource(KoText::ShowSpaces, on);
+    provider->setResource(KoText::ShowTabs, on);
+    provider->setResource(KoText::ShowEnters, on);
+    provider->setResource(KoText::ShowSpecialCharacters, on);
+}
+
+void KWView::editSelectAllFrames() {
+    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    foreach(KWFrameSet* fs, m_document->frameSets()) {
+        foreach(KWFrame *frame, fs->frames()) {
+            if(frame->shape()->isVisible())
+                selection->select(frame->shape());
+        }
+    }
+}
+
+void KWView::viewGrid(bool on) {
+    m_document->gridData().setShowGrid(on);
 }
 
 

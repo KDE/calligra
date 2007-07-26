@@ -118,6 +118,8 @@ private slots:
     void showStatusBar(bool);
     void deletePage();
     void setShowFormattingChars(bool on);
+    void editSelectAllFrames();
+    void viewGrid(bool);
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
