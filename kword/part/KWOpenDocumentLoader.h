@@ -34,7 +34,6 @@ class KoOasisStyles;
 class KoTextLoadingContext;
 class KoTextAnchor;
 
-class QDomDocument;
 class QTextCursor;
 //class QColor;
 
@@ -61,17 +60,17 @@ public:
      *  @brief Loads an OASIS OpenDocument from a store.
      *  This implements the KoDocument::loadOasis method.
      */
-    bool load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store);
+    bool load(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store);
 
 protected:
-    virtual void loadSettings(KoTextLoadingContext& context, const QDomDocument& settings);
+    virtual void loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settings);
     virtual bool loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName);
     virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
 
     virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
 private:
-    void loadHeaderFooter(KoTextLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader);
+    void loadHeaderFooter(KoTextLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
     void loadFinished(KoTextLoadingContext& context, QTextCursor& cursor);
 
 private:

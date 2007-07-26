@@ -39,7 +39,6 @@
 #include <KoInlineTextObjectManager.h>
 
 // KDE + Qt includes
-#include <QDomDocument>
 #include <QTextBlock>
 #include <klocale.h>
 
@@ -55,7 +54,7 @@ KWDLoader::KWDLoader(KWDocument *parent)
 KWDLoader::~KWDLoader() {
 }
 
-bool KWDLoader::load(QDomElement &root) {
+bool KWDLoader::load(KoXmlElement &root) {
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
@@ -78,7 +77,7 @@ bool KWDLoader::load(QDomElement &root) {
 
     KoPageLayout pgLayout = KoPageLayout::standardLayout();
     // <PAPER>
-    QDomElement paper = root.firstChildElement("PAPER");
+    KoXmlElement paper = root.namedItem("PAPER").toElement();
     if ( !paper.isNull() )
     {
         pgLayout.format = static_cast<KoPageFormat::Format>( paper.attribute("format").toInt() );
@@ -177,7 +176,7 @@ bool KWDLoader::load(QDomElement &root) {
         m_pageSettings->setColumns(columns);
 
         // <PAPERBORDERS>
-        QDomElement paperborders = paper.namedItem( "PAPERBORDERS" ).toElement();
+        KoXmlElement paperborders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if ( !paperborders.isNull() )
         {
             pgLayout.left = paperborders.attribute("left").toDouble();
@@ -204,7 +203,7 @@ bool KWDLoader::load(QDomElement &root) {
     m_pageManager->setDefaultPage(pgLayout);
 
     // <ATTRIBUTES>
-    QDomElement attributes = root.firstChildElement("ATTRIBUTES");
+    KoXmlElement attributes = root.namedItem("ATTRIBUTES").toElement();
     if ( !attributes.isNull() )
     {
         if(attributes.attribute("processing", "0") == "1") {
@@ -242,8 +241,8 @@ bool KWDLoader::load(QDomElement &root) {
 
     emit sigProgress(10);
 
-    QDomElement mailmerge = root.namedItem( "MAILMERGE" ).toElement();
-    if (mailmerge!=QDomElement())
+    KoXmlElement mailmerge = root.namedItem( "MAILMERGE" ).toElement();
+    if (mailmerge!=KoXmlElement())
     {
         m_slDataBase->load(mailmerge);
     }
@@ -252,14 +251,14 @@ bool KWDLoader::load(QDomElement &root) {
     emit sigProgress(15);
 
     // Load all styles before the corresponding paragraphs try to use them!
-    QDomElement stylesElem = root.namedItem( "STYLES" ).toElement();
+    KoXmlElement stylesElem = root.namedItem( "STYLES" ).toElement();
     if ( !stylesElem.isNull() )
         loadStyleTemplates( stylesElem );
 
     emit sigProgress(17);
 #if 0
 
-    QDomElement frameStylesElem = root.namedItem( "FRAMESTYLES" ).toElement();
+    KoXmlElement frameStylesElem = root.namedItem( "FRAMESTYLES" ).toElement();
     if ( !frameStylesElem.isNull() )
         loadFrameStyleTemplates( frameStylesElem );
     else // load default styles
@@ -267,7 +266,7 @@ bool KWDLoader::load(QDomElement &root) {
 
     emit sigProgress(18);
 
-    QDomElement tableStylesElem = root.namedItem( "TABLESTYLES" ).toElement();
+    KoXmlElement tableStylesElem = root.namedItem( "TABLESTYLES" ).toElement();
     if ( !tableStylesElem.isNull() )
         loadTableStyleTemplates( tableStylesElem );
     else // load default styles
@@ -279,11 +278,11 @@ bool KWDLoader::load(QDomElement &root) {
 
     emit sigProgress(20);
 
-    QDomElement bookmark = root.namedItem( "BOOKMARKS" ).toElement();
+    KoXmlElement bookmark = root.namedItem( "BOOKMARKS" ).toElement();
     if( !bookmark.isNull() )
     {
-        QDomElement bookmarkitem = root.namedItem("BOOKMARKS").toElement();
-        bookmarkitem = bookmarkitem.firstChildElement();
+        KoXmlElement bookmarkitem = root.namedItem("BOOKMARKS").toElement();
+        bookmarkitem = bookmarkitem.firstChild().toElement();
 
         while ( !bookmarkitem.isNull() )
         {
@@ -304,11 +303,11 @@ bool KWDLoader::load(QDomElement &root) {
     }
 
     QStringList lst;
-    QDomElement spellCheckIgnore = root.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
+    KoXmlElement spellCheckIgnore = root.namedItem( "SPELLCHECKIGNORELIST" ).toElement();
     if( !spellCheckIgnore.isNull() )
     {
-        QDomElement spellWord=root.namedItem("SPELLCHECKIGNORELIST").toElement();
-        spellWord=spellWord.firstChildElement();
+        KoXmlElement spellWord=root.namedItem("SPELLCHECKIGNORELIST").toElement();
+        spellWord=spellWord.firstChild().toElement();
         while ( !spellWord.isNull() )
         {
             if ( spellWord.tagName()=="SPELLCHECKIGNOREWORD" )
@@ -318,13 +317,12 @@ bool KWDLoader::load(QDomElement &root) {
     }
     setSpellCheckIgnoreList( lst );
 #endif
-    QDomElement pixmaps = root.firstChildElement("PIXMAPS");
+    KoXmlElement pixmaps = root.namedItem("PIXMAPS").toElement();
     if(pixmaps.isNull())
-        pixmaps = root.firstChildElement("PICTURES");
+        pixmaps = root.namedItem("PICTURES").toElement();
     if(! pixmaps.isNull()) {
-        QDomNodeList children = pixmaps.childNodes();
-        for(int i=0; i < children.count(); i++) {
-            QDomElement key = children.at(i).toElement();
+        KoXmlElement key;
+        forEachElement(key, pixmaps) {
             if(! key.isNull() && key.nodeName() != "KEY")
                 continue;
             ImageKey ik;
@@ -337,7 +335,7 @@ bool KWDLoader::load(QDomElement &root) {
     emit sigProgress(25);
 
 
-    QDomElement framesets = root.namedItem( "FRAMESETS" ).toElement();
+    KoXmlElement framesets = root.namedItem( "FRAMESETS" ).toElement();
     if ( !framesets.isNull() )
         loadFrameSets( framesets );
 
@@ -361,29 +359,28 @@ bool KWDLoader::load(QDomElement &root) {
     return true;
 }
 
-void KWDLoader::loadFrameSets( const QDomElement &framesets ) {
+void KWDLoader::loadFrameSets( const KoXmlElement &framesets ) {
     // <FRAMESET>
     // First prepare progress info
     m_nrItemsToLoad = 0; // total count of items (mostly paragraph and frames)
-    QDomElement framesetElem = framesets.firstChildElement();
-    // Workaround the slowness of QDom's elementsByTagName
-    QList<QDomElement> frameSetsList;
-    for ( ; !framesetElem.isNull() ; framesetElem = framesetElem.nextSibling().toElement() )
-    {
+    KoXmlElement framesetElem;
+    // Workaround the slowness of KoXml's elementsByTagName
+    QList<KoXmlElement> frameSetsList;
+    forEachElement(framesetElem, framesets) {
         if ( framesetElem.tagName() == "FRAMESET" )
         {
             frameSetsList.append( framesetElem );
-            m_nrItemsToLoad += framesetElem.childNodes().count();
+            m_nrItemsToLoad += KoXml::childNodesCount( framesetElem );
         }
     }
 
     m_itemsLoaded = 0;
-    foreach(QDomElement elem, frameSetsList) {
+    foreach(KoXmlElement elem, frameSetsList) {
         loadFrameSet(elem);
     }
 }
 
-KWFrameSet *KWDLoader::loadFrameSet( const QDomElement &framesetElem, bool loadFrames, bool loadFootnote) {
+KWFrameSet *KWDLoader::loadFrameSet( const KoXmlElement &framesetElem, bool loadFrames, bool loadFootnote) {
     QString fsname = framesetElem.attribute("name");
 
     switch(framesetElem.attribute("frameType").toInt()) {
@@ -478,15 +475,15 @@ KWFrameSet *KWDLoader::loadFrameSet( const QDomElement &framesetElem, bool loadF
     }
     case 2: // FT_PICTURE
     {
-        QDomElement frame = framesetElem.firstChildElement("FRAME");
+        KoXmlElement frame = framesetElem.namedItem("FRAME").toElement();
         if(frame.isNull())
             return 0;
-        QDomElement image = framesetElem.firstChildElement("IMAGE");
+        KoXmlElement image = framesetElem.namedItem("IMAGE").toElement();
         if(image.isNull())
-            image = framesetElem.firstChildElement("PICTURE");
+            image = framesetElem.namedItem("PICTURE").toElement();
         if(image.isNull())
             return 0;
-        QDomElement key = image.firstChildElement("KEY");
+        KoXmlElement key = image.namedItem("KEY").toElement();
         if(key.isNull())
             return 0;
 
@@ -536,17 +533,17 @@ KWFrameSet *KWDLoader::loadFrameSet( const QDomElement &framesetElem, bool loadF
     }
 }
 
-void KWDLoader::fill(KWFrameSet *fs, const QDomElement &framesetElem) {
+void KWDLoader::fill(KWFrameSet *fs, const KoXmlElement &framesetElem) {
     //m_visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) ); // TODO
     //m_protectSize=static_cast<bool>( KWDocument::getAttribute( framesetElem, "protectSize", false ) ); TODO
 
 }
 
-void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
+void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem) {
     fill(static_cast<KWFrameSet*>(fs), framesetElem);
     // <FRAME>
-    QDomElement frameElem = framesetElem.firstChildElement();
-    for ( ; !frameElem.isNull() ; frameElem = frameElem.nextSibling().toElement() )
+    KoXmlElement frameElem;
+    forEachElement(frameElem, framesetElem)
     {
         if ( frameElem.tagName() == "FRAME" )
         {
@@ -573,8 +570,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
     QTextCursor cursor(fs->document());
     // <PARAGRAPH>
     bool firstParag = true;
-    QDomElement paragraph = framesetElem.firstChildElement();
-    for ( ; !paragraph.isNull() ; paragraph = paragraph.nextSibling().toElement() )
+    KoXmlElement paragraph;
+    forEachElement(paragraph, framesetElem)
     {
         if ( paragraph.tagName() == "PARAGRAPH" ) {
             if(! firstParag) {
@@ -583,9 +580,9 @@ void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
                 cursor.insertBlock(emptyTbf, emptyCf);
             }
             firstParag = false;
-            QDomElement layout = paragraph.firstChildElement("LAYOUT");
+            KoXmlElement layout = paragraph.namedItem("LAYOUT").toElement();
             if(!layout.isNull()) {
-                QString styleName = layout.firstChildElement("NAME").attribute("value");
+                QString styleName = layout.namedItem("NAME").toElement().attribute("value");
                 KoParagraphStyle *style = m_document->styleManager()->paragraphStyle(styleName);
                 if(!style)
                     style = m_document->styleManager()->defaultParagraphStyle();
@@ -623,7 +620,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
                     }
                 }
             }
-            cursor.insertText( paragraph.firstChildElement("TEXT").text().replace('\n', QChar(0x2028)));
+            cursor.insertText( paragraph.namedItem("TEXT").toElement().text().replace('\n', QChar(0x2028)));
 
             // re-apply char format after we added the text
             KoCharacterStyle *style = m_document->styleManager()->characterStyle(
@@ -633,15 +630,17 @@ void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
                 style->applyStyle(block);
             }
 
-            QDomElement formats = paragraph.firstChildElement("FORMATS");
+            KoXmlElement formats = paragraph.namedItem("FORMATS").toElement();
             if(!formats.isNull()) {
                 KoCharacterStyle defaultStyle;
                 if(style == 0) // parag is not based on any style, just text.
                     style = &defaultStyle;
 
                 QTextBlock block = cursor.block();
-                QDomElement format = formats.firstChildElement("FORMAT");
-                while(! format.isNull()) {
+                KoXmlElement format;
+                forEachElement(format, formats) {
+                    if (format.tagName() != "FORMAT")
+                        continue;
                     QString id = format.attribute("id", "0");
                     QTextCursor formatCursor(block) ;
                     int pos = format.attribute("pos", "-1").toInt();
@@ -670,7 +669,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
                     } else if(id == "5") {
                         kWarning("File to old, footnote can not be recovered\n");
                     } else if(id == "6") { // anchor for floating frame.
-                        QDomElement anchor = format.firstChildElement("ANCHOR");
+                        KoXmlElement anchor = format.namedItem("ANCHOR").toElement();
                         if(anchor.isNull()) {
                             kWarning() << "Missing ANCHOR tag\n";
                             continue;
@@ -690,7 +689,6 @@ void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
                         } else
                             ;// TODO
                     }
-                    format = format.nextSiblingElement("FORMAT");
                 }
             }
             //m_doc->progressItemLoaded();
@@ -698,8 +696,8 @@ void KWDLoader::fill(KWTextFrameSet *fs, const QDomElement &framesetElem) {
     }
 }
 
-void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
-    QString align = layout.firstChildElement("FLOW").attribute("align", "auto");
+void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout) {
+    QString align = layout.namedItem("FLOW").toElement().attribute("align", "auto");
     if(align == "left") {
         style->setAlignment( Qt::AlignLeft | Qt::AlignAbsolute );
     } else if(align == "right") {
@@ -712,18 +710,18 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
         style->setAlignment( Qt::AlignLeft );
     }
 
-    QDomElement element = layout.firstChildElement( "INDENTS" );
+    KoXmlElement element = layout.namedItem( "INDENTS" ).toElement();
     if ( !element.isNull() ) {
         style->setTextIndent(element.attribute("first").toDouble());
         style->setLeftMargin(element.attribute("left").toDouble());
         style->setRightMargin(element.attribute("right").toDouble());
     }
-    element = layout.firstChildElement( "OFFSETS" );
+    element = layout.namedItem( "OFFSETS" ).toElement();
     if ( !element.isNull() ) {
         style->setTopMargin(element.attribute("before").toDouble());
         style->setBottomMargin(element.attribute("after").toDouble());
     }
-    element = layout.firstChildElement( "LINESPACING" );
+    element = layout.namedItem( "LINESPACING" ).toElement();
     if ( !element.isNull() ) {
         QString type = element.attribute("type", "fixed");
         double spacing = element.attribute("spacingValue").toDouble();
@@ -750,7 +748,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
             style->setLineHeightAbsolute(spacing);
     }
 
-    element = layout.firstChildElement( "PAGEBREAKING" );
+    element = layout.namedItem( "PAGEBREAKING" ).toElement();
     if ( !element.isNull() ) {
         if ( element.attribute( "linesTogether" ) == "true" )
             style->setNonBreakableLines(true);
@@ -759,10 +757,10 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
         if ( element.attribute( "hardFrameBreakAfter" ) == "true" )
             style->setBreakAfter(true);
     }
-    element = layout.firstChildElement( "HARDBRK" ); // KWord-0.8
+    element = layout.namedItem( "HARDBRK" ).toElement(); // KWord-0.8
     if ( !element.isNull() )
         style->setBreakBefore(true);
-    element = layout.firstChildElement( "COUNTER" );
+    element = layout.namedItem( "COUNTER" ).toElement();
     if ( !element.isNull() ) {
         KoListStyle orig = style->listStyle();
         KoListStyle *lstyle;
@@ -821,7 +819,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
 
     class BorderConverter {
       public:
-        BorderConverter(const QDomElement &element) {
+        BorderConverter(const KoXmlElement &element) {
             width = element.attribute("width").toInt(),
             innerWidth = 0.0;
             spacing = 0.0;
@@ -841,7 +839,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
         double width, innerWidth, spacing;
         KoParagraphStyle::BorderStyle borderStyle;
     };
-    element = layout.firstChildElement( "LEFTBORDER" );
+    element = layout.namedItem( "LEFTBORDER" ).toElement();
     if ( !element.isNull() ) {
         style->setLeftBorderColor(colorFrom(element));
         BorderConverter bc(element);
@@ -852,7 +850,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
             style->setLeftBorderSpacing(bc.spacing);
         }
     }
-    element = layout.firstChildElement( "RIGHTBORDER" );
+    element = layout.namedItem( "RIGHTBORDER" ).toElement();
     if ( !element.isNull() ) {
         style->setRightBorderColor(colorFrom(element));
         BorderConverter bc(element);
@@ -863,7 +861,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
             style->setRightBorderSpacing(bc.spacing);
         }
     }
-    element = layout.firstChildElement( "TOPBORDER" );
+    element = layout.namedItem( "TOPBORDER" ).toElement();
     if ( !element.isNull() ) {
         style->setTopBorderColor(colorFrom(element));
         BorderConverter bc(element);
@@ -874,7 +872,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
             style->setTopBorderSpacing(bc.spacing);
         }
     }
-    element = layout.firstChildElement( "BOTTOMBORDER" );
+    element = layout.namedItem( "BOTTOMBORDER" ).toElement();
     if ( !element.isNull() ) {
         style->setBottomBorderColor(colorFrom(element));
         BorderConverter bc(element);
@@ -893,40 +891,40 @@ void KWDLoader::fill(KoParagraphStyle *style, const QDomElement &layout) {
     // OHEAD, OFOOT, IFIRST, ILEFT
 }
 
-QColor KWDLoader::colorFrom(const QDomElement &element) {
+QColor KWDLoader::colorFrom(const KoXmlElement &element) {
     QColor color(element.attribute("red").toInt(),
             element.attribute("green").toInt(),
             element.attribute("blue").toInt());
     return color;
 }
 
-void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
-    QDomElement element = formatElem.firstChildElement( "COLOR" );
+void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem) {
+    KoXmlElement element = formatElem.namedItem( "COLOR" ).toElement();
     if( !element.isNull() ) {
         QBrush fg = style->foreground();
         fg.setColor(colorFrom(element));
         style->setForeground(fg);
     }
-    element = formatElem.firstChildElement( "FONT" );
+    element = formatElem.namedItem( "FONT" ).toElement();
     if( !element.isNull() )
         style->setFontFamily(element.attribute("name", "Serif"));
-    element = formatElem.firstChildElement( "SIZE" );
+    element = formatElem.namedItem( "SIZE" ).toElement();
     if( !element.isNull() )
         style->setFontPointSize(element.attribute("value", "12").toDouble());
-    element = formatElem.firstChildElement( "WEIGHT" );
+    element = formatElem.namedItem( "WEIGHT" ).toElement();
     if( !element.isNull() )
         style->setFontWeight(element.attribute("value", "80").toInt());
-    element = formatElem.firstChildElement( "ITALIC" );
+    element = formatElem.namedItem( "ITALIC" ).toElement();
     if( !element.isNull() )
         style->setFontItalic(element.attribute("value", "0") == "1");
-    element = formatElem.firstChildElement( "STRIKEOUT" );
+    element = formatElem.namedItem( "STRIKEOUT" ).toElement();
     if( !element.isNull() ) {
         QString value = element.attribute("value", "0");
         // TODO store other properties
         if (value != "0")
             style->setStrikeOutStyle(KoCharacterStyle::SolidLine);
     }
-    element = formatElem.firstChildElement( "UNDERLINE" );
+    element = formatElem.namedItem( "UNDERLINE" ).toElement();
     if( !element.isNull() ) {
         KoCharacterStyle::LineStyle underline = KoCharacterStyle::NoLineStyle;
         QString value = element.attribute("value", "0"); // "0" is NoUnderline
@@ -956,7 +954,7 @@ void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
         //style->setFontUnderline(underline != QTextCharFormat::NoUnderline);
         style->setUnderlineStyle((KoCharacterStyle::LineStyle) underline);
     }
-    element = formatElem.firstChildElement( "TEXTBACKGROUNDCOLOR" );
+    element = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
     if( !element.isNull() ) {
         style->setBackground(QBrush(colorFrom(element)));
     }
@@ -968,7 +966,7 @@ void KWDLoader::fill(KoCharacterStyle *style, const QDomElement &formatElem) {
        //OFFSETFROMBASELINE
 }
 
-void KWDLoader::fill(KWFrame *frame, const QDomElement &frameElem) {
+void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
     Q_ASSERT(frame);
     Q_ASSERT(frame->shape());
     QPointF origin( frameElem.attribute("left").toDouble(),
@@ -1025,7 +1023,7 @@ void KWDLoader::fill(KWFrame *frame, const QDomElement &frameElem) {
     }
 }
 
-void KWDLoader::fill(ImageKey *key, const QDomElement &keyElement) {
+void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement) {
     key->year = keyElement.attribute("year");
     key->month = keyElement.attribute("month");
     key->day = keyElement.attribute("day");
@@ -1050,12 +1048,14 @@ void KWDLoader::fill(ImageKey *key, const QDomElement &keyElement) {
     }
 }
 
-void KWDLoader::loadStyleTemplates( const QDomElement &stylesElem ) {
+void KWDLoader::loadStyleTemplates( const KoXmlElement &stylesElem ) {
     KoStyleManager *manager = m_document->styleManager();
 
-    QDomElement style = stylesElem.firstChildElement("STYLE");
-    while (! style.isNull() ) {
-        QString styleName = style.firstChildElement("NAME").attribute("value");
+    KoXmlElement style;
+    forEachElement(style, stylesElem) {
+        if (style.tagName() != "STYLE")
+            continue;
+        QString styleName = style.namedItem("NAME").toElement().attribute("value");
         KoParagraphStyle *paragStyle = manager->paragraphStyle(styleName);
         if(!paragStyle) {
             paragStyle = new KoParagraphStyle();
@@ -1072,24 +1072,22 @@ void KWDLoader::loadStyleTemplates( const QDomElement &stylesElem ) {
                 sty->setOutline( true );
         }
 #endif
-        QDomElement format = style.firstChildElement("FORMAT");
+        KoXmlElement format = style.namedItem("FORMAT").toElement();
         if(! format.isNull())
             fill(paragStyle->characterStyle(), format);
-        style = style.nextSiblingElement("STYLE");
     }
 
     // second pass, to set the 'following'
-    style = stylesElem.firstChildElement("STYLE");
-    while (! style.isNull() ) {
-        QString styleName = style.firstChildElement("NAME").attribute("value");
+    forEachElement(style, stylesElem) {
+        if (style.tagName() != "STYLE")
+            continue;
+        QString styleName = style.namedItem("NAME").toElement().attribute("value");
         KoParagraphStyle *paragStyle = manager->paragraphStyle(styleName);
         Q_ASSERT(paragStyle);
         QString following = style.namedItem("FOLLOWING").toElement().attribute("name");
         KoParagraphStyle *next = manager->paragraphStyle(following);
         if(next)
             paragStyle->setNextStyle(next->styleId());
-
-        style = style.nextSiblingElement("STYLE");
     }
 }
 

@@ -22,7 +22,8 @@
 
 #include <QObject>
 #include <QTextCursor>
-#include <QDomElement>
+
+#include <KoXmlReader.h>
 
 class KWDocument;
 class KWFrameSet;
@@ -32,7 +33,6 @@ class KWPageManager;
 class KWTextFrameSet;
 class KoParagraphStyle;
 class KoCharacterStyle;
-class QDomElement;
 class QColor;
 class KoShape;
 
@@ -53,7 +53,7 @@ public:
      * @param root the root node from an xml document of the kword file format upto 1.4
      * @return return true on success, false on failure
      */
-    bool load(QDomElement &root);
+    bool load(KoXmlElement &root);
 
 signals:
     /**
@@ -71,26 +71,26 @@ private:
 
 
     /// find and load all framesets
-    void loadFrameSets( const QDomElement &framesets );
+    void loadFrameSets( const KoXmlElement &framesets );
     /// load one frameset
-    KWFrameSet *loadFrameSet( const QDomElement &framesetElem, bool loadFrames = true , bool loadFootnote = true);
+    KWFrameSet *loadFrameSet( const KoXmlElement &framesetElem, bool loadFrames = true , bool loadFootnote = true);
     /// fill the data of fs with the info from the element
-    void fill(KWFrameSet *fs, const QDomElement &element);
+    void fill(KWFrameSet *fs, const KoXmlElement &element);
     /// fill the data of fs with the info from the element
-    void fill(KWTextFrameSet *fs, const QDomElement &framesetElem);
+    void fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem);
     /// fill the data of style with the info from the element
-    void fill(KoParagraphStyle *style, const QDomElement &layoutElem);
-    void fill(KoCharacterStyle *style, const QDomElement &formatElem);
-    void fill(KWFrame *frame, const QDomElement &frameElem);
-    void fill(ImageKey *key, const QDomElement &keyElement);
+    void fill(KoParagraphStyle *style, const KoXmlElement &layoutElem);
+    void fill(KoCharacterStyle *style, const KoXmlElement &formatElem);
+    void fill(KWFrame *frame, const KoXmlElement &frameElem);
+    void fill(ImageKey *key, const KoXmlElement &keyElement);
 
     void insertAnchors();
 
     // load the document wide styles
-    void loadStyleTemplates( const QDomElement &styles );
+    void loadStyleTemplates( const KoXmlElement &styles );
 
     // helper method. Gets the color from an element assuming there are 'red','green', 'blue' attributes on it.
-    QColor colorFrom(const QDomElement &element);
+    QColor colorFrom(const KoXmlElement &element);
 
 private:
     KWDocument *m_document;

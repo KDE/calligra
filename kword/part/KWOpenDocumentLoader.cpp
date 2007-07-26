@@ -205,23 +205,23 @@ QString KWOpenDocumentLoader::currentMasterPage() const { return d->currentMaste
 QString KWOpenDocumentLoader::currentFramesetName() const { return d->currentFramesetName; }
 
 //1.6: KWDocument::loadOasis
-bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store)
+bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store)
 {
     emit sigProgress( 0 );
     kDebug(32001) << "========================> KWOpenDocumentLoader::load START" << endl;
 
-    QDomElement content = doc.documentElement();
-    QDomElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement content = doc.documentElement();
+    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() ) {
         kError(32001) << "No office:body found!" << endl;
         d->document->setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
         return false;
     }
 
-    QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "text" );
+    KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "text" );
     if ( body.isNull() ) {
         kError(32001) << "No office:text found!" << endl;
-        QDomElement childElem;
+        KoXmlElement childElem;
         QString localName;
         forEachElement( childElem, realBody )
             localName = childElem.localName();
@@ -257,7 +257,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     m_processingType = ( !KoDom::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() ) ? DTP : WP;
     m_hasTOC = false;
     m_tabStop = MM_TO_POINT(15);
-    const QDomElement* defaultParagStyle = styles.defaultStyle( "paragraph" );
+    const KoXmlElement* defaultParagStyle = styles.defaultStyle( "paragraph" );
     if ( defaultParagStyle ) {
         KoStyleStack stack;
         stack.push( *defaultParagStyle );
@@ -314,8 +314,8 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         frame->setNewFrameBehavior( KWFrame::Reconnect );
         fs->addFrame( frame );
         // load padding, background and borders for the main frame
-        const QDomElement* masterPage = context.styles().masterPages()[ d->currentMasterPage ];
-        const QDomElement *masterPageStyle = masterPage ? context.styles().findStyle(masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
+        const KoXmlElement* masterPage = context.styles().masterPages()[ d->currentMasterPage ];
+        const KoXmlElement *masterPageStyle = masterPage ? context.styles().findStyle(masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
         if ( masterPageStyle ) {
           KoStyleStack styleStack;
           styleStack.push(  *masterPageStyle );
@@ -324,7 +324,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
         }
         fs->renumberFootNotes( false /*no repaint*/ );
     } else { // DTP mode: the items in the body are page-sequence and then frames
-        QDomElement tag;
+        KoXmlElement tag;
         forEachElement( tag, body ) {
             context.styleStack().save();
             const QString localName = tag.localName();
@@ -332,7 +332,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
                 // We don't have support for changing the page layout yet, so just take the
                 // number of pages
                 int pages=1;
-                QDomElement page;
+                KoXmlElement page;
                 forEachElement( page, tag ) ++pages;
                 kDebug() << "DTP mode: found " << pages << "pages" << endl;
                 //setPageCount ( pages );
@@ -387,7 +387,7 @@ bool KWOpenDocumentLoader::load(const QDomDocument& doc, KoOasisStyles& styles, 
     return true;
 }
 
-void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const QDomDocument& settingsDoc)
+void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settingsDoc)
 {
     Q_UNUSED(context);
     if ( settingsDoc.isNull() )
@@ -413,16 +413,16 @@ bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const Q
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
-    const QDomElement* masterPage = styles.masterPages()[ masterPageName ];
-    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
+    const KoXmlElement* masterPage = styles.masterPages()[ masterPageName ];
+    const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
     if ( masterPageStyle ) {
         KoPageLayout pageLayout = KoPageLayout::standardLayout();
         pageLayout.loadOasis( *masterPageStyle );
         //d->document->m_pageManager.setDefaultPage(pageLayout);
         d->document->setDefaultPageLayout(pageLayout);
 #if 0 //1.6:
-        const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
-        const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
+        const KoXmlElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        const KoXmlElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
@@ -447,7 +447,7 @@ bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const Q
             else if ( pos == "right") m_footNoteSeparatorLinePos = SLP_RIGHT;
             else // if ( pos == "left" ) m_footNoteSeparatorLinePos = SLP_LEFT;
         }
-        const QDomElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
+        const KoXmlElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
         if ( !columnsElem.isNull() ) {
             columns.columns = columnsElem.attributeNS( KoXmlNS::fo, "column-count", QString::null ).toInt();
             if ( columns.columns == 0 ) columns.columns = 1;
@@ -484,14 +484,14 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(KoTextLoadingContext& context, co
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName<<endl;
     const KoOasisStyles& styles = context.oasisStyles();
-    const QDomElement *masterPage = styles.masterPages()[ masterPageName ];
-    const QDomElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
+    const KoXmlElement *masterPage = styles.masterPages()[ masterPageName ];
+    const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
 #if 0 //1.6:
     // This check is done here and not in loadOasisPageLayout in case the Standard master-page
     // has no page information but the first paragraph points to a master-page that does (#129585)
     if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 ) {
         // Loading page layout failed, try to see why.
-        QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        KoXmlElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
         //if ( properties.isNull() )
         //    setErrorMessage( i18n( "Invalid document. No page layout properties were found. The application which produced this document isn't OASIS-compliant." ) );
         //else if ( properties.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
@@ -512,12 +512,12 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(KoTextLoadingContext& context, co
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const QDomElement& masterPage, const QDomElement& masterPageStyle, bool isHeader)
+void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
 {
     // Not OpenDocument compliant element to define the first header/footer.
-    QDomElement firstElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
+    KoXmlElement firstElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
     // The actual content of the header/footer.
-    QDomElement elem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
+    KoXmlElement elem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
 
     const bool hasFirst = !firstElem.isNull();
     if ( !hasFirst && elem.isNull() )
@@ -527,11 +527,11 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
     kDebug()<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst<<endl;
 
     // Formatting properties for headers and footers on a page.
-    QDomElement styleElem = KoDom::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
+    KoXmlElement styleElem = KoDom::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
 
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
-    QDomElement leftElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
+    KoXmlElement leftElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
 
     // Determinate the type of the frameset used for the header/footer.
     QString fsTypeName;

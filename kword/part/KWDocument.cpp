@@ -61,7 +61,6 @@
 #include <QIODevice>
 #include <QTimer>
 #include <QThread>
-#include <QDomDocument>
 #include <QCoreApplication>
 
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
@@ -482,7 +481,7 @@ void KWDocument::clear() {
     m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
-bool KWDocument::loadOasis(const QDomDocument& doc, KoOasisStyles& styles, const QDomDocument& settings, KoStore* store) {
+bool KWDocument::loadOasis(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store) {
     clear();
     KWOpenDocumentLoader loader(this);
     bool rc = loader.load(doc, styles, settings, store);
@@ -491,8 +490,8 @@ bool KWDocument::loadOasis(const QDomDocument& doc, KoOasisStyles& styles, const
     return rc;
 }
 
-bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc ) {
-    QDomElement root = doc.documentElement();
+bool KWDocument::loadXML( QIODevice *, const KoXmlDocument & doc ) {
+    KoXmlElement root = doc.documentElement();
     clear();
     KWDLoader loader(this);
     bool rc = loader.load(root);

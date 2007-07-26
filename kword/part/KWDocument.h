@@ -28,6 +28,7 @@
 
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
+#include <KoXmlReader.h>
 
 #include <QObject>
 #include <QPainter>
@@ -44,7 +45,6 @@ class KoImageCollection;
 class KoInlineTextObjectManager;
 
 class KLocalizedString;
-class QDomDocument;
 class QIODevice;
 
 /**
@@ -71,9 +71,9 @@ public:
     /// reimplemented from KoDocument
     virtual void paintContent(QPainter&, const QRect&);
     /// reimplemented from KoDocument
-    virtual bool loadXML(QIODevice*, const QDomDocument&);
+    virtual bool loadXML(QIODevice*, const KoXmlDocument&);
     /// reimplemented from KoDocument
-    virtual bool loadOasis(const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore*);
+    virtual bool loadOasis(const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore*);
     /// reimplemented from KoDocument
     virtual bool saveOasis(KoStore*, KoXmlWriter*);
     /// reimplemented from KoDocument
