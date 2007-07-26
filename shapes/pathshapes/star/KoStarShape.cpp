@@ -21,8 +21,10 @@
 
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
+#include <KoXmlWriter.h>
 
 #include <QPainter>
 #include <math.h>
@@ -247,7 +249,7 @@ QPointF KoStarShape::computeCenter() const
 
 bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context )
 {
-    loadOdfAttributes( element, context, OdfMandatories | OdfSize );
+    loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfTransformation );
 
     QString corners = element.attributeNS( KoXmlNS::draw, "corners", "" );
     if( ! corners.isEmpty() )
@@ -263,6 +265,9 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
     }
     else
     {
+        // sharpness is radius of ellipse on which inner polygon points are located
+        // 0% means all polygon points are on a single ellipse
+        // 100% means inner points are located at polygon center point
         QString sharpness = element.attributeNS( KoXmlNS::draw, "sharpness", "" );
         if( ! sharpness.isEmpty() && sharpness.right( 1 ) == "%" )
         {
@@ -276,4 +281,26 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
 
     return true;
 }
+
+void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
+{
+    context.xmlWriter().startElement("draw:regular-polygon");
+    saveOdfAttributes(context, OdfMandatories | OdfTransformation );
+    context.xmlWriter().addAttributePt( "svg:width", 2*m_radius[tip] );
+    context.xmlWriter().addAttributePt( "svg:height", 2*m_radius[tip] );
+    context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
+    context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
+    if( ! m_convex )
+    {
+        // sharpness is radius of ellipse on which inner polygon points are located
+        // 0% means all polygon points are on a single ellipse
+        // 100% means inner points are located at polygon center point
+        double percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
+        context.xmlWriter().addAttribute( "draw:sharpness", QString("%1\%" ).arg( percent ) );
+    }
+    context.xmlWriter().endElement();
+    saveOdfConnections(context);
+}
+
+
 

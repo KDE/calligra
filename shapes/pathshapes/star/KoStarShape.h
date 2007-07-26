@@ -102,6 +102,8 @@ public:
     virtual void setSize( const QSizeF &newSize );
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
 
 protected:
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );
