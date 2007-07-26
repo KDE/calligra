@@ -59,6 +59,7 @@
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
 #include <KoSavingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
@@ -353,7 +354,8 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:drawing" );
 
-    m_doc.saveOasis( store, contentTmpWriter, savingContext ); // Save contents
+    KoShapeSavingContext shapeContext( contentTmpWriter, savingContext );
+    m_doc.saveOasis( shapeContext ); // Save contents
 
     contentTmpWriter.endElement(); // office:drawing
     contentTmpWriter.endElement(); // office:body
@@ -376,7 +378,7 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     if( !store->open( "styles.xml" ) )
         return false;
 
-    saveOasisDocumentStyles( store, mainStyles );
+    saveOasisDocumentStyles( store, shapeContext );
 
     if( !store->close() )
         return false;
@@ -397,10 +399,11 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     return true;
 }
 
-void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyles )
+void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoShapeSavingContext & context )
 {
     KoStoreDevice stylesDev( store );
     KoXmlWriter* styleWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
+    KoGenStyles & mainStyles = context.mainStyles();
 
     styleWriter->startElement( "office:styles" );
 
@@ -430,6 +433,8 @@ void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoGenStyles& mainStyl
 
     for( ; it != styles.end(); ++it)
         (*it).style->writeStyle( styleWriter, mainStyles, "style:master-page", (*it).name, "");
+
+    context.saveLayerSet( styleWriter );
 
     styleWriter->endElement();  // office:master-styles
     styleWriter->endElement();  // office:styles

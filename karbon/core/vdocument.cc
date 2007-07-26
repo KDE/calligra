@@ -37,7 +37,6 @@
 #include <KoPageLayout.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-#include <KoSavingContext.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 #include <KoShapeSavingContext.h>
@@ -165,19 +164,17 @@ VDocument::saveXML() const
 	return doc;
  }
 
-void VDocument::saveOasis( KoStore * store, KoXmlWriter & docWriter, KoSavingContext & context ) const
+void VDocument::saveOasis( KoShapeSavingContext & context ) const
 {
-    docWriter.startElement( "draw:page" );
-    docWriter.addAttribute( "draw:name", name());
-    docWriter.addAttribute( "draw:id", "page1");
-    docWriter.addAttribute( "draw:master-page-name", "Default");
-
-    KoShapeSavingContext shapeContext( docWriter, context );
+    context.xmlWriter().startElement( "draw:page" );
+    context.xmlWriter().addAttribute( "draw:name", name());
+    context.xmlWriter().addAttribute( "draw:id", "page1");
+    context.xmlWriter().addAttribute( "draw:master-page-name", "Default");
 
     foreach( KoShapeLayer * layer, d->layers )
-        layer->saveOdf( shapeContext );
+        layer->saveOdf( context );
 
-    docWriter.endElement(); // draw:page
+    context.xmlWriter().endElement(); // draw:page
 }
 
 void
@@ -261,23 +258,12 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &c
 
     KoShapeLoadingContext shapeContext( context );
 
-    KoXmlElement layer;
-    forEachElement( layer, context.oasisStyles().layerSet() )
+    KoXmlElement layerElement;
+    forEachElement( layerElement, context.oasisStyles().layerSet() )
     {
-        QString name = layer.attributeNS( KoXmlNS::draw, "name" );
-        QString title = layer.attributeNS( KoXmlNS::svg, "title" );
-
-        kDebug(38000) << "creating layer" << endl;
-        kDebug(38000) << "name: " << layer.attributeNS( KoXmlNS::draw, "name" ) << endl;
-        kDebug(38000) << "title: " << layer.attributeNS( KoXmlNS::svg, "title" ) << endl;
-        kDebug(38000) << "desc: " << layer.attributeNS( KoXmlNS::svg, "desc" ) << endl;
-
         KoShapeLayer * l = new KoShapeLayer();
-        // set layer title, fall back to layer name
-        l->setName( title.isEmpty() ? name : title );
-        insertLayer( l );
-        // add layer by name into shape context
-        shapeContext.addLayer( l, name );
+        if( l->loadOdf( layerElement, shapeContext ) )
+            insertLayer( l );
     }
 
     // check if we have to insert a default layer
