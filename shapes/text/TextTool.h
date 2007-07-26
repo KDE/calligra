@@ -35,9 +35,11 @@ class KoStyleManager;
 class KoTextEditingPlugin;
 class KoBookmarkManager;
 class UndoTextCommand;
-class ChangeTracker;
-class QUndoCommand;
 class InsertCharacter;
+class ChangeTracker;
+
+class QUndoCommand;
+class KFontSizeAction;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -207,6 +209,7 @@ private:
     QAction *m_actionFormatSub;
     QAction *m_actionFormatIncreaseIndent;
     QAction *m_actionFormatDecreaseIndent;
+    KFontSizeAction *m_actionFormatFontSize;
 
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
 

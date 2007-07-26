@@ -53,6 +53,7 @@
 
 #include <kdebug.h>
 #include <KStandardShortcut>
+#include <KFontSizeAction>
 #include <KAction>
 #include <KStandardAction>
 #include <KMimeType>
@@ -191,6 +192,83 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent );
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
+/*
+    m_actionFontSizeIncrease  = new KAction(i18n("Increase Font Size"), "fontsizeup"), this);
+    actionCollection()->addAction("increase_fontsize", m_actionFontSizeIncrease );
+    m_actionFontSizeDecrease  = new KAction(i18n("Decrease Font Size"), "fontsizedown"), this);
+    actionCollection()->addAction("decrease_fontsize", m_actionFontSizeDecrease );
+
+    m_actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
+            //i18n( "Font Family" ),
+            actionCollection(), "format_fontfamily" );
+    connect( m_actionFormatFontFamily, SIGNAL( triggered( const QString & ) ),
+            this, SLOT( textFontSelected( const QString & ) ) );
+
+    m_actionFormatStyleMenu  = new KActionMenu(i18n("Style"), this);
+    actionCollection()->addAction("format_stylemenu", m_actionFormatStyleMenu );
+    m_actionFormatStyle  = new KSelectAction(i18n("Style"), this);
+    actionCollection()->addAction("format_style", m_actionFormatStyle );
+    // In fact, binding a key to this action will simply re-apply the current style. Why not.
+    //m_actionFormatStyle->setShortcutConfigurable( false );
+    connect( m_actionFormatStyle, SIGNAL( activated( int ) ),
+            this, SLOT( textStyleSelected( int ) ) );
+    updateStyleList();
+
+
+    // ----------------------- More format actions, for the toolbar only
+    QActionGroup* spacingActionGroup = new QActionGroup( this );
+    spacingActionGroup->setExclusive( true );
+    m_actionFormatSpacingSingle = new KToggleAction( i18n( "Line Spacing 1" ), "spacesimple", Qt::CTRL + Qt::Key_1,
+            this, SLOT( textSpacingSingle() ),
+            actionCollection(), "format_spacingsingle" );
+    m_actionFormatSpacingSingle->setActionGroup( spacingActionGroup );
+    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "spacedouble", Qt::CTRL + Qt::Key_5,
+            this, SLOT( textSpacingOneAndHalf() ),
+            actionCollection(), "format_spacing15" );
+    m_actionFormatSpacingOneAndHalf->setActionGroup( spacingActionGroup );
+    m_actionFormatSpacingDouble = new KToggleAction( i18n( "Line Spacing 2" ), "spacetriple", Qt::CTRL + Qt::Key_2,
+            this, SLOT( textSpacingDouble() ),
+            actionCollection(), "format_spacingdouble" );
+    m_actionFormatSpacingDouble->setActionGroup( spacingActionGroup );
+
+    m_actionFormatColor = new TKSelectColorAction( i18n( "Text Color..." ), TKSelectColorAction::TextColor,
+            this, SLOT( textColor() ),
+            actionCollection(), "format_color", true );
+    m_actionFormatColor->setDefaultColor(QColor());
+
+
+    m_actionFormatNumber  = new KActionMenu(KIcon( "enumList" ), i18n("Number"), this);
+    actionCollection()->addAction("format_number", m_actionFormatNumber );
+    m_actionFormatNumber->setDelayed( false );
+    m_actionFormatBullet  = new KActionMenu(KIcon( "unsortedList" ), i18n("Bullet"), this);
+    actionCollection()->addAction("format_bullet", m_actionFormatBullet );
+    m_actionFormatBullet->setDelayed( false );
+    QActionGroup* counterStyleActionGroup = new QActionGroup( this );
+    counterStyleActionGroup->setExclusive( true );
+    Q3PtrList<KoCounterStyleWidget::StyleRepresenter> stylesList;
+    KoCounterStyleWidget::makeCounterRepresenterList( stylesList );
+    Q3PtrListIterator<KoCounterStyleWidget::StyleRepresenter> styleIt( stylesList );
+    for ( ; styleIt.current() ; ++styleIt ) {
+        // Dynamically create toggle-actions for each list style.
+        // This approach allows to edit toolbars and extract separate actions from this menu
+        KToggleAction* act = new KToggleAction( styleIt.current()->name(), // TODO icon
+                actionCollection(),
+                QString("counterstyle_%1").arg( styleIt.current()->style() ) );
+        connect( act, SIGNAL( triggered(bool) ), this, SLOT( slotCounterStyleSelected() ) );
+        act->setActionGroup( counterStyleActionGroup );
+        // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
+        if ( styleIt.current()->style() == KoParagCounter::STYLE_NONE ) {
+            m_actionFormatBullet->insert( act );
+            m_actionFormatNumber->insert( act );
+        } else if ( styleIt.current()->isBullet() )
+            m_actionFormatBullet->insert( act );
+        else
+            m_actionFormatNumber->insert( act );
+    }
+
+*/
+
+
     // ------------------- Actions with a key binding and no GUI item
     QAction *action  = new QAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action );
@@ -232,6 +310,10 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
     connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( selectFont() ));
 
+    m_actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), this);
+    addAction("format_fontsize", m_actionFormatFontSize );
+    connect( m_actionFormatFontSize, SIGNAL(fontSizeChanged( int )), &m_selectionHandler, SLOT(setFontSize(int)) );
+
     action = new QAction(i18n("Default Format"), this);
     addAction("text_default", action);
     action->setToolTip( i18n( "Change font and paragraph attributes to their default values" ) );
@@ -255,6 +337,8 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action = new QAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
+    action->setToolTip( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc." ) );
+    action->setWhatsThis( i18n( "Change paragraph margins, text flow, borders, bullets, numbering etc.<p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.<p>If no text is selected, the paragraph where the cursor is located will be changed.</p>" ) );
     connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
 
     action = new QAction(i18n("Record"), this);
@@ -264,6 +348,8 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     action = new QAction(i18n("Style Manager"), this);
     action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_S);
+    action->setToolTip( i18n( "Change attributes of styles" ) );
+    action->setWhatsThis( i18n( "Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box." ) );
     addAction("format_stylist", action);
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
@@ -809,6 +895,7 @@ void TextTool::updateActions() {
     }
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
+    m_actionFormatFontSize->setFontSize(cf.fontPointSize());
 
     QTextBlockFormat bf = m_caret.blockFormat();
     if(bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
