@@ -44,8 +44,8 @@ KugarPart::~KugarPart()
     //  closeUrl();
 }
 
-bool KugarPart::loadOasis( const QDomDocument&, KoOasisStyles&,
-                           const QDomDocument&, KoStore* )
+bool KugarPart::loadOasis( const KoXmlDocument&, KoOasisStyles&,
+                           const KoXmlDocument&, KoStore* )
 {
     return false;
 }
@@ -55,7 +55,7 @@ bool KugarPart::saveOasis( KoStore*, KoXmlWriter* )
     return false;
 }
 
-bool KugarPart::loadXML( QIODevice *file, const QDomDocument & /*doc*/ )
+bool KugarPart::loadXML( QIODevice *file, const KoXmlDocument & /*doc*/ )
 {
     m_docURL = url();
     bool ok = true;

@@ -22,11 +22,11 @@ public:
     KugarPart( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
     virtual ~KugarPart();
 
-    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&,
-                            const QDomDocument&, KoStore* );
+    virtual bool loadOasis( const KoXmlDocument&, KoOasisStyles&,
+                            const KoXmlDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
 
-    virtual bool loadXML( QIODevice *, const QDomDocument & );
+    virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     //  virtual QDomDocument saveXML();
 
     virtual void paintContent( QPainter&, const QRect&) { }
