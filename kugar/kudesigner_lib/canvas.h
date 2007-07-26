@@ -22,9 +22,10 @@
 #include <q3canvas.h>
 #include <q3valuelist.h>
 
+#include <KoXmlReader.h>
+
 #include "box.h"
 
-class QDomNode;
 class QIODevice;
 class KuDesignerPlugin;
 
@@ -61,7 +62,7 @@ public:
     void setStructureModified() { emit structureModified(); }
     //    void deleteSelected();
 
-    virtual bool loadXML( const QDomNode &report );
+    virtual bool loadXML( const KoXmlElement& report );
 
 public slots:
     void changed();
@@ -73,15 +74,15 @@ signals:
 protected:
     virtual void drawForeground( QPainter &painter, const QRect &clip );
 
-    void setReportItemAttributes( QDomNode *node, ReportItem *item );
-    void addReportItems( QDomNode *node, Band *section );
-    void setReportHeaderAttributes( QDomNode *node );
-    void setReportFooterAttributes( QDomNode *node );
-    void setPageHeaderAttributes( QDomNode *node );
-    void setPageFooterAttributes( QDomNode *node );
-    void setDetailHeaderAttributes( QDomNode *node );
-    void setDetailAttributes( QDomNode *node );
-    void setDetailFooterAttributes( QDomNode *node );
+    void setReportItemAttributes( const KoXmlElement& element, ReportItem *item );
+    void addReportItems( const KoXmlElement& element, Band *section );
+    void setReportHeaderAttributes( const KoXmlElement& element );
+    void setReportFooterAttributes( const KoXmlElement& element );
+    void setPageHeaderAttributes( const KoXmlElement& element );
+    void setPageFooterAttributes( const KoXmlElement& element );
+    void setDetailHeaderAttributes( const KoXmlElement& element );
+    void setDetailAttributes( const KoXmlElement& element );
+    void setDetailFooterAttributes( const KoXmlElement& element );
 
 private:
     //    KudesignerDoc *m_doc;

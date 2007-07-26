@@ -23,10 +23,10 @@
 #include <k3command.h>
 #include "plugin.h"
 
+#include <KoXmlReader.h>
+
 class Q3Canvas;
-class QDomNode;
 class QIODevice;
-class QDomDocument;
 
 namespace Kudesigner
 {
@@ -43,10 +43,10 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
-    virtual bool loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* );
+    virtual bool loadOasis( const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
 
-    virtual bool loadXML( QIODevice *, const QDomDocument & );
+    virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     virtual QDomDocument saveXML();
 
     virtual int supportedSpecialFormats() const;

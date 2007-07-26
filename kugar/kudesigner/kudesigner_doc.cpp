@@ -80,7 +80,7 @@ KoView* KudesignerDoc::createViewInstance( QWidget* parent)
     return new KudesignerView( this, parent);
 }
 
-bool KudesignerDoc::loadOasis( const QDomDocument&, KoOasisStyles&, const QDomDocument&, KoStore* )
+bool KudesignerDoc::loadOasis( const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore* )
 {
     return false;
 }
@@ -184,25 +184,22 @@ bool KudesignerDoc::modified( ) const
     return m_modified;
 }
 
-bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument &rt )
+bool KudesignerDoc::loadXML( QIODevice *, const KoXmlDocument &rt )
 {
-    QDomNode report, rep;
-    for ( QDomNode report = rt.firstChild(); !report.isNull(); report = report.nextSibling() )
+    KoXmlElement report;
+    forEachElement(report, rt)
     {
         if ( report.nodeName() == "KugarTemplate" )
         {
-            rep = report;
             break;
         }
     }
-    report = rep;
 
-    QDomNamedNodeMap attributes = report.attributes();
     //getting the page width and height
     int height = 297;
     int width = 210;
 
-    if ( attributes.namedItem( "PageOrientation" ).nodeValue().toInt() )
+    if ( report.attribute( "PageOrientation" ).toInt() )
     {
         int temp = height;
         height = width;
@@ -215,8 +212,8 @@ bool KudesignerDoc::loadXML( QIODevice *, const QDomDocument &rt )
     // Set the page size
     printer = new QPrinter();
     printer->setFullPage( true );
-    printer->setPageSize( ( QPrinter::PageSize ) attributes.namedItem( "PageSize" ).nodeValue().toInt() );
-    printer->setOrientation( ( QPrinter::Orientation ) attributes.namedItem( "PageOrientation" ).nodeValue().toInt() );
+    printer->setPageSize( ( QPrinter::PageSize ) report.attribute( "PageSize" ).toInt() );
+    printer->setOrientation( ( QPrinter::Orientation ) report.attribute( "PageOrientation" ).toInt() );
 
     // Get the page metrics and set appropriate wigth and height
     width = printer->width();
