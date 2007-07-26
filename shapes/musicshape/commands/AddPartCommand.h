@@ -16,32 +16,26 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "PartDetailsDialog.h"
-#include "../core/Part.h"
-using namespace MusicCore;
+#ifndef ADDPARTCOMMAND_H
+#define ADDPARTCOMMAND_H
 
-PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
-    : KDialog(parent),
-    m_part(part)
-{
-    setCaption(i18n("Part details"));
-    setButtons( Close );
-    setDefaultButton( Close );
-    QWidget* w = new QWidget(this);
-    widget.setupUi(w);
-    setMainWidget(w);
-    
-    widget.addStaff->setIcon(KIcon("edit-add"));
-    widget.removeStaff->setIcon(KIcon("edit-delete"));
-    widget.editStaff->setIcon(KIcon("edit"));        
+#include <QUndoCommand>
 
-    widget.nameEdit->setText(part->name());
-    widget.shortNameEdit->setText(part->shortName());
-
-    for (int i = 0; i < part->staffCount(); i++) {
-        widget.staffList->addItem(QString("Staff %1").arg(i+1));
-    }
+namespace MusicCore {
+    class Sheet;
+    class Part;
 }
+class MusicShape;
 
+class AddPartCommand : public QUndoCommand {
+public:
+    AddPartCommand(MusicShape* shape);
+    virtual void redo();
+    virtual void undo();
+private:
+    MusicCore::Sheet* m_sheet;
+    MusicCore::Part* m_part;
+    MusicShape* m_shape;
+};
 
-#include "PartDetailsDialog.moc"
+#endif // ADDPARTCOMMAND_H

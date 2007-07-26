@@ -37,11 +37,15 @@ RemovePartCommand::RemovePartCommand(MusicShape* shape, Part* part)
 void RemovePartCommand::redo()
 {
     m_sheet->removePart(m_part, false);
+    m_sheet->setStaffSystemCount(0);
+    m_shape->engrave();
     m_shape->repaint();
 }
 
 void RemovePartCommand::undo()
 {
     m_sheet->insertPart(m_partIndex, m_part);
+    m_sheet->setStaffSystemCount(0);
+    m_shape->engrave();
     m_shape->repaint();
 }

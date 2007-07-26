@@ -16,32 +16,36 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "PartDetailsDialog.h"
+#include "AddPartCommand.h"
+#include "../core/Sheet.h"
 #include "../core/Part.h"
+#include "../MusicShape.h"
+
+#include "klocale.h"
+
 using namespace MusicCore;
 
-PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
-    : KDialog(parent),
-    m_part(part)
+AddPartCommand::AddPartCommand(MusicShape* shape)
+    : m_sheet(shape->sheet()),
+    m_shape(shape)
 {
-    setCaption(i18n("Part details"));
-    setButtons( Close );
-    setDefaultButton( Close );
-    QWidget* w = new QWidget(this);
-    widget.setupUi(w);
-    setMainWidget(w);
-    
-    widget.addStaff->setIcon(KIcon("edit-add"));
-    widget.removeStaff->setIcon(KIcon("edit-delete"));
-    widget.editStaff->setIcon(KIcon("edit"));        
-
-    widget.nameEdit->setText(part->name());
-    widget.shortNameEdit->setText(part->shortName());
-
-    for (int i = 0; i < part->staffCount(); i++) {
-        widget.staffList->addItem(QString("Staff %1").arg(i+1));
-    }
+    setText(i18n("Add part"));
+    m_part = new Part(m_sheet, QString("Part %1").arg(m_sheet->partCount() + 1));
+    m_part->addStaff();
 }
 
+void AddPartCommand::redo()
+{
+    m_sheet->addPart(m_part);
+    m_sheet->setStaffSystemCount(0);
+    m_shape->engrave();
+    m_shape->repaint();
+}
 
-#include "PartDetailsDialog.moc"
+void AddPartCommand::undo()
+{
+    m_sheet->removePart(m_part, false);
+    m_sheet->setStaffSystemCount(0);
+    m_shape->engrave();
+    m_shape->repaint();
+}

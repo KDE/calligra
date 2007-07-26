@@ -26,6 +26,7 @@
 #include "../core/Part.h"
 
 #include "../commands/RemovePartCommand.h"
+#include "../commands/AddPartCommand.h"
 
 #include <KIcon>
 
@@ -74,7 +75,7 @@ void PartsWidget::selectionChanged(QListWidgetItem* current, QListWidgetItem* pr
 
 void PartsWidget::addPart()
 {
-    kDebug() << "add part" << endl;
+    m_tool->addCommand(new AddPartCommand(m_shape));
 }
 
 void PartsWidget::removePart()

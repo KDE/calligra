@@ -41,6 +41,7 @@ SET (musicshape_LIB_SRCS
     dialogs/PartDetailsDialog.cpp
     dialogs/SimpleEntryWidget.cpp
     
+    commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp
 
     ${musiccore_SRCS}
