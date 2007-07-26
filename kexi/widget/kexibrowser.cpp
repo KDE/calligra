@@ -44,6 +44,7 @@
 #include <kglobal.h>
 #include <KActionCollection>
 #include <KActionMenu>
+#include <KDialog>
 
 #include <kexi.h>
 #include <kexipart.h>
@@ -83,10 +84,15 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
  , m_readOnly(false)
 // , m_enableExecuteArea(true)
 {
+	setObjectName("KexiBrowser");
 	setWindowTitle(i18n("Project Navigator"));
 	setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());
 
 	Q3VBoxLayout *lyr = new Q3VBoxLayout(this);
+	lyr->setContentsMargins(
+		KDialog::marginHint()/2,KDialog::marginHint()/2,KDialog::marginHint()/2,KDialog::marginHint()/2);
+	lyr->setSpacing(KDialog::marginHint()/2);
+
 	KexiFlowLayout *buttons_flyr = new KexiFlowLayout(lyr);
 
 	m_list = new KexiBrowserListView(this);
@@ -141,8 +147,8 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 		m_renameAction = 0;
 		m_designAction = 0;
 		m_editTextAction = 0;
-		m_newObjectAction = 0;
-		m_newObjectMenu = 0;
+//(new action removed)		m_newObjectAction = 0;
+//(new action removed)		m_newObjectMenu = 0;
 	}
 	else {
 		m_deleteAction = addAction("edit_delete", KIcon("edit-delete"), i18n("&Delete"),
@@ -171,25 +177,23 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 			i18n("Open object in text view"), i18n("Opens selected object in the list in text view"),
 			SLOT(slotEditTextObject()));
 
-		m_newObjectAction = addAction("new_object", KIcon("document-new"), QString(),
+/*(new action removed)		m_newObjectAction = addAction("new_object", KIcon("document-new"), QString(),
 			QString(), QString(),
 			SLOT(slotNewObject()));
-			
+			*/
 		if (m_features & Toolbar) {
-			m_newObjectToolButton = new KexiSmallToolButton(this);
+/*(new action removed)			m_newObjectToolButton = new KexiSmallToolButton(this);
 			m_newObjectMenu = new KMenu(this);
 			m_newObjectMenu->setObjectName("newObjectMenu");
 			connect(m_newObjectMenu, SIGNAL(aboutToShow()),
 				this, SLOT(slotNewObjectMenuAboutToShow()));
-		//	KexiPart::Part* part = Kexi::partManager().part("kexi/table");
-		//	m_newObjectMenu->insertItem( KIcon(part->info()->createItemIcon()), part->instanceName() );
 			m_newObjectToolButton->setMenu(m_newObjectMenu);
 //			m_newObjectToolButton->setPopupDelay(QApplication::startDragTime());
 			connect(m_newObjectToolButton, SIGNAL(clicked()), this, SLOT(slotNewObject()));
-			buttons_flyr->add(m_newObjectToolButton);
+			buttons_flyr->add(m_newObjectToolButton);*/
 
 			m_deleteObjectToolButton = new KexiSmallToolButton(m_deleteAction, this);
-			m_deleteObjectToolButton->setText(QString());
+			//m_deleteObjectToolButton->setText(QString());
 			buttons_flyr->add(m_deleteObjectToolButton);
 		}
 	}
@@ -390,8 +394,8 @@ KexiBrowser::slotContextMenu(K3ListView* /*list*/, Q3ListViewItem *item, const Q
 	}
 	else if (m_partMenu) {
 		pm = m_partMenu;
-		m_newObjectAction->setIcon( KIcon(bit->partInfo()->itemIcon()) );
-		m_partMenu->update(bit->partInfo());
+//(new action removed)		m_newObjectAction->setIcon( KIcon(bit->partInfo()->itemIcon()) );
+//(new action removed)		m_partMenu->update(bit->partInfo());
 		m_list->setCurrentItem(item);
 		m_list->repaintItem(item);
 	}
@@ -473,6 +477,7 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
+/*(new action removed)
 		if (part) {
 			if (m_newObjectAction) {
 				m_newObjectAction->setText(
@@ -497,7 +502,7 @@ KexiBrowser::slotSelectionChanged(Q3ListViewItem* i)
 					m_newObjectToolButton->setWhatsThis(i18n("Creates a new object"));
 				}
 			}
-		}
+		}*/
 	}
 	emit selectionChanged(it ? it->partItem() : 0);
 }
@@ -574,7 +579,7 @@ void KexiBrowser::slotRemove()
 
 void KexiBrowser::slotNewObject()
 {
-	if (!m_newObjectAction || !(m_features & Writable))
+	if (/*(new action removed) !m_newObjectAction ||*/ !(m_features & Writable))
 		return;
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	if (!it || !it->partInfo())
@@ -708,6 +713,7 @@ void KexiBrowser::clearSelection()
 	}
 }
 
+/*(new action removed)
 void KexiBrowser::slotNewObjectMenuAboutToShow()
 {
 //	kexidbg << "KexiBrowser::slotNewObjectMenuAboutToShow()" << endl;
@@ -727,7 +733,7 @@ void KexiBrowser::slotNewObjectMenuAboutToShow()
 			}
 		}
 	}
-}
+}*/
 
 void KexiBrowser::slotExecuteObject()
 {
@@ -787,13 +793,14 @@ void KexiBrowser::setReadOnly(bool set)
 		m_deleteAction->setEnabled(!m_readOnly);
 	if (m_renameAction)
 		m_renameAction->setEnabled(!m_readOnly);
+/*(new action removed)
 	if (m_newObjectAction) {
 		m_newObjectAction->setEnabled(!m_readOnly);
 		if (m_features & Toolbar) {
 			m_newObjectMenu->setEnabled(!m_readOnly);
 			m_newObjectToolButton->setEnabled(!m_readOnly);
 		}
-	}
+	}*/
 }
 
 bool KexiBrowser::isReadOnly() const
@@ -940,6 +947,7 @@ KexiGroupMenu::~KexiGroupMenu()
 {
 }
 
+#if 0 //unused
 void KexiGroupMenu::update(KexiPart::Info* partInfo)
 {
 	clear();
@@ -950,6 +958,7 @@ void KexiGroupMenu::update(KexiPart::Info* partInfo)
 //	qobject_cast<KexiBrowser*>(parent())->plugSharedAction("edit_paste", this);
 #endif
 }
+#endif
 
 #include "kexibrowser.moc"
 #include "kexibrowser_p.moc"

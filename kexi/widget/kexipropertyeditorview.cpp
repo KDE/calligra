@@ -110,6 +110,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
 	: QWidget(parent)
 	, d(new Private())
 {
+	setObjectName("KexiPropertyEditorView");
 	setWindowTitle(i18n("Properties"));
 	//TODO: set a nice icon
 	setWindowIcon(KexiMainWindowIface::global()->thisWidget()->windowIcon());

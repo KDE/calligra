@@ -316,7 +316,16 @@ bool KexiStartupFileWidget::checkSelectedFile()
 //	KUrl url = currentURL();
 //	QString path = url.path().trimmed();
 //	QString path = selectedFile().trimmed();
+
+	if (d->highlightedUrl.isEmpty() && !locationEdit()->urls().isEmpty()) {
+		kDebug() << locationEdit()->urls() <<endl;
+		kDebug() << baseUrl() <<endl;
+		
+		d->highlightedUrl = baseUrl();
+		d->highlightedUrl.addPath( locationEdit()->urls().first() );
+	}
 	
+	kDebug() << "d->highlightedUrl: " << d->highlightedUrl << endl;
 //	if (url.fileName().trimmed().isEmpty()) {
 	if (d->highlightedUrl.isEmpty()) {
 		KMessageBox::error( this, i18n( "Enter a filename." ));

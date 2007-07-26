@@ -25,6 +25,7 @@
 #include <QStyle>
 #include <QPainter>
 #include <QEvent>
+#include <kexi_global.h>
 
 #ifdef __GNUC__
 #warning KexiComboBoxDropDownButton ported to Qt4 but not tested
@@ -83,10 +84,14 @@ void KexiComboBoxDropDownButton::paintEvent(QPaintEvent *pe)
 #pragma WARNING( TODO compare to Qt code for QStyles )
 #endif
 		r.setWidth(r.width()+2);
-		QStyleOption option;
+//		QStyleOption option;
+		QStyleOptionComboBox option;
 		option.initFrom(this);
 		option.rect = r;
-		p.drawPixmap( r, style()->standardPixmap(QStyle::SP_ArrowDown, &option) );
+		option.subControls = QStyle::SC_ComboBoxArrow;
+//		style()->drawComplexControl(QStyle::CC_ComboBox, &option, &p, this);
+//		p.drawPixmap( r, style()->standardPixmap(QStyle::SP_ArrowDown, &option) );
+
 		//style().drawPrimitive( QStyle::PE_ArrowDown, p, r, colorGroup(), flags);
 	}
 }
@@ -112,9 +117,10 @@ void KexiComboBoxDropDownButton::styleChanged()
 	else
 		m_fixForHeight = 0;
 	//</hack>
-	m_drawComplexControl =
+	m_drawComplexControl = false;
+/*	m_drawComplexControl =
 		(style()->inherits("KStyle") && style()->objectName().toLower()!="qtcurve")
-		|| style()->objectName().toLower()=="platinum";
+		|| style()->objectName().toLower()=="platinum";*/
 	if (m_fixForHeight==0) {
 /*TODO		setFixedWidth( style()->subControlRect( QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxArrow,
 			(const QWidget*)m_paintedCombo ).width() +1 );*/

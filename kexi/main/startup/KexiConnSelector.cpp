@@ -103,6 +103,7 @@ public:
 	QWidget* openExistingWidget;
 	KexiPrjTypeSelector* prjTypeSelector;
 	QString startDirOrVariable;
+	KAbstractFileWidget::OperationMode fileAccessType;
 	QStackedWidget *stack;
 	QPointer<KexiDBConnectionSet> conn_set;
 	KexiDB::DriverManager manager;
@@ -114,12 +115,13 @@ public:
 /*================================================================*/
 
 KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
-	const QString& startDirOrVariable, QWidget* parent )
+	const QString& startDirOrVariable, KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent )
 	: QWidget(parent)
 	,d(new Private())
 {
 	d->conn_set = &conn_set;
 	d->startDirOrVariable = startDirOrVariable;
+	d->fileAccessType = fileAccessType;
 	QString iconname = KMimeType::mimeType( 
 		KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName();
 	//const QPixmap icon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop, 48 );
@@ -239,9 +241,12 @@ void KexiConnSelectorWidget::showSimpleConn()
 	if (!d->file_sel_shown) {
 		d->file_sel_shown = true;
 		fileWidget = new KexiStartupFileWidget( 
-			KUrl(d->startDirOrVariable), KexiStartupFileWidget::Opening, d->stack );
-		fileWidget->setOperationMode( KAbstractFileWidget::Opening );
-		fileWidget->setObjectName("openExistingFileWidget");
+			KUrl(d->startDirOrVariable), 
+				d->fileAccessType==KAbstractFileWidget::Opening
+					? KexiStartupFileWidget::Opening : KexiStartupFileWidget::SavingFileBasedDB,
+				d->stack );
+		fileWidget->setOperationMode( d->fileAccessType );
+		fileWidget->setObjectName("openFileWidget");
 		fileWidget->setConfirmOverwrites( d->confirmOverwrites );
 		d->stack->addWidget(fileWidget);
 
@@ -291,7 +296,7 @@ QString KexiConnSelectorWidget::selectedFileName()
 {
 	if (selectedConnectionType()!=KexiConnSelectorWidget::FileBased)
 		return QString();
-	return fileWidget->selectedFile();
+	return fileWidget->highlightedFile(); //ok? fileWidget->selectedFile();
 }
 
 void KexiConnSelectorWidget::setSelectedFileName(const QString& fileName)

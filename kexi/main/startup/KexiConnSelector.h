@@ -25,6 +25,7 @@
 #include "ui_KexiConnSelector.h"
 
 #include <KDialog>
+#include <kabstractfilewidget.h>
 #include <k3listview.h>
 
 #include <QPointer>
@@ -53,7 +54,8 @@ class ConnectionDataLVItem : public Q3ListViewItem
 		KexiDB::ConnectionData *m_data;
 };
 
-/*! Widget that allows to select a database connection (without choosing database itself)
+//! @short Widget that allows to select a database connection (file- or server-based)
+/*! The widget allows to select database connection without choosing database itself.
 */
 class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 {
@@ -62,17 +64,18 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 	public:
 		//! Defines connection type
 		enum ConnType {
-			FileBased=1, //!< the widget displays file-based connection
-			ServerBased=2 //!< the widget displays server-based connection
+			FileBased = 1, //!< the widget displays file-based connection
+			ServerBased = 2 //!< the widget displays server-based connection
 		};
 
-		/*! Constructs a KexiConnSelector which contain \a conn_set as connection set. 
+		/*! Constructs a KexiConnSelector which contains \a conn_set as connection set. 
 		 \a conn_set can be altered, because Add/Edit/Remove buttons are available 
 		 to users. \a startDirOrVariable can be provided to specify a start dir for file browser
 		 (it can also contain a configuration variable name with "kfiledialog:///" prefix 
 		 as described in KRecentDirs documentation). */
 		KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
-			const QString& startDirOrVariable, QWidget* parent = 0 );
+			const QString& startDirOrVariable,
+			KAbstractFileWidget::OperationMode fileAccessType, QWidget* parent = 0 );
 
 		virtual ~KexiConnSelectorWidget();
 		

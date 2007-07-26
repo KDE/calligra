@@ -213,7 +213,8 @@ void ImportWizard::setupSrcConn()
 	Q3VBoxLayout *vbox = new Q3VBoxLayout(m_srcConnPage, KDialog::marginHint());
 
 	m_srcConn = new KexiConnSelectorWidget(Kexi::connset(), 
-		"kfiledialog:///ProjectMigrationSourceDir", m_srcConnPage);
+		"kfiledialog:///ProjectMigrationSourceDir", 
+		KAbstractFileWidget::Opening, m_srcConnPage);
 
 	m_srcConn->hideConnectonIcon();
 	m_srcConn->showSimpleConn();
@@ -294,7 +295,8 @@ void ImportWizard::setupDst()
 	Q3VBoxLayout *vbox = new Q3VBoxLayout(m_dstPage, KDialog::marginHint());
 
 	m_dstConn = new KexiConnSelectorWidget(Kexi::connset(), 
-		"kfiledialog:///ProjectMigrationDestinationDir", m_dstPage);
+		"kfiledialog:///ProjectMigrationDestinationDir", 
+		KAbstractFileWidget::Saving, m_dstPage);
 	m_dstConn->hideHelpers();
 	//me: Can't connect m_dstConn->m_fileDlg here, it doesn't exist yet
 	//connect(this, SLOT(next()), m_dstConn->m_fileDlg, SIGNAL(accepted()));

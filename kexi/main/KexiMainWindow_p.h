@@ -18,9 +18,254 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#ifndef KEXIMAINWINDOW_P_H
+#define KEXIMAINWINDOW_P_H
+
 #ifdef KEXI_NO_PROCESS_EVENTS
 # define KEXI_NO_PENDING_DIALOGS
 #endif
+
+#include <KToolBar>
+#include <QGroupBox>
+
+class KexiTabbedToolBar : public KTabWidget
+{
+	Q_OBJECT
+	public:
+		KexiTabbedToolBar(QWidget *parent)
+		 : KTabWidget(parent)
+		{
+			KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
+
+			KToolBar *tbar;
+			QAction* a;
+			tbar = new KToolBar(this);
+			addTab( tbar, i18n("Project") );
+			a = ac->action("project_new");
+			tbar->addAction( a );
+			a = ac->action("project_open");
+			tbar->addAction( a );
+			a = ac->action("project_print");
+			tbar->addAction( a );
+			a = ac->action("project_print_preview");
+			tbar->addAction( a );
+			a = ac->action("project_print_setup");
+			tbar->addAction( a );
+			//no "project_save" here...
+			a = ac->action("project_saveas");
+			if (a)
+				tbar->addSeparator();
+			tbar->addAction( a );
+			a = ac->action("project_properties");
+			if (a)
+				tbar->addSeparator();
+			tbar->addAction( a );
+			a = ac->action("project_close");
+			tbar->addAction( a );
+			a = ac->action("quit");
+			tbar->addAction( a );
+
+			tbar = new KToolBar(this);
+			addTab( tbar, i18n("Data") );
+			a = ac->action("edit_copy");
+			tbar->addAction( a );
+			a = ac->action("edit_copy_special_data_table");
+			tbar->addAction( a );
+			a = ac->action("edit_paste");
+			tbar->addAction( a );
+			a = ac->action("edit_paste_special_data_table");
+			tbar->addAction( a );
+			tbar->addSeparator();
+// todo move undo/redo to quickbar:
+			a = ac->action("edit_undo");
+			tbar->addAction( a );
+			a = ac->action("edit_redo");
+			tbar->addAction( a );
+			tbar->addSeparator();
+			a = ac->action("edit_find");
+			tbar->addAction( a );
+
+			m_createWidget = new KToolBar(this);
+			m_createId = addTab( m_createWidget, i18n("Create") );
+
+			tbar = new KToolBar(this);
+			addTab( tbar, i18n("External Data") );
+
+/*			QGroupBox *gbox = new QGroupBox( i18n("Import"), tbar );
+			gbox->setFlat(true);
+			gbox->setFont(Kexi::smallFont(this));
+			tbar->addWidget( gbox );
+			QVBoxLayout *gbox_lyr = new QVBoxLayout(gbox);
+			gbox_lyr->setContentsMargins(0,0,0,0);
+			gbox_lyr->setSpacing(2); //ok?
+			QToolBar *sub_tbar = new KToolBar(gbox);
+			gbox_lyr->addWidget(sub_tbar);
+*/
+			a = ac->action("project_import_data_table");
+			tbar->addAction( a );
+
+/*			gbox = new QGroupBox( i18n("Export"), tbar );
+			gbox->setFlat(true);
+			gbox->setFont(Kexi::smallFont(this));
+			tbar->addWidget( gbox );
+			gbox_lyr = new QVBoxLayout(gbox);
+			gbox_lyr->setContentsMargins(0,0,0,0);
+			gbox_lyr->setSpacing(2); //ok?
+			sub_tbar = new KToolBar(gbox);
+			gbox_lyr->addWidget(sub_tbar);
+*/
+			a = ac->action("project_export_data_table");
+			tbar->addAction( a );
+
+			tbar = new KToolBar(this);
+			addTab( tbar, i18n("Tools") );
+			a = ac->action("tools_import_project");
+			tbar->addAction( a );
+
+			a = ac->action("tools_compact_database");
+			tbar->addAction( a );
+
+			tbar = new KToolBar(this);
+			addTab( tbar, i18n("Settings") );
+			a = KStandardAction::keyBindings(0,0,this);
+			tbar->addAction( a );
+
+			tbar = new KToolBar(this);
+			addTab( tbar, i18n("Help") );
+			a = KStandardAction::help(0,0,this);
+			tbar->addAction( a );
+			a = KStandardAction::whatsThis(0,0,this);
+			tbar->addAction( a );
+			a = KStandardAction::reportBug(0,0,this);
+			tbar->addAction( a );
+			a = KStandardAction::aboutApp(0,0,this);
+			tbar->addAction( a );
+			a = KStandardAction::aboutKDE(0,0,this);
+			tbar->addAction( a );
+
+			connect(this, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)));
+		}
+		~KexiTabbedToolBar()
+		{
+		}
+	protected slots:
+		void slotCurrentChanged(int index) {
+			if (index == m_createId) {
+				if (m_createWidget->actions().isEmpty()) {
+		//! @todo separate core object types from custom....
+					KexiPart::PartInfoList *plist = Kexi::partManager().partInfoList(); //this list is properly sorted
+					KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
+					foreach (KexiPart::Info *info, *plist) {
+						QAction* a = ac->action( 
+							KexiPart::nameForCreateAction(*info) );
+						if (a) {
+							m_createWidget->addAction(a->icon(), a->text());
+						}
+						else {
+							//! @todo err
+						}
+					}
+				}
+			}
+		}
+	private:
+		int m_createId;
+		KToolBar *m_createWidget;
+};
+
+/*
+class KexiTopDockWidget : public QDockWidget
+{
+	public:
+		KexiTopDockWidget(QWidget *parent)
+		 : QDockWidget(parent)
+		{
+			setFeatures(QDockWidget::NoDockWidgetFeatures);
+			QWidget *topSpacer = new QWidget(this);
+			topSpacer->setFixedHeight( 10 );//KDialog::marginHint() );
+			setTitleBarWidget(topSpacer);
+			m_widget = new KTabWidget(this);
+			setWidget( m_widget );
+//			QMenuBar *menu = new QMenuBar(m_widget);
+//			menu->addAction( i18n("Open..") );
+//			m_widget->addTab( menu, i18n("Project") );
+
+			KToolBar *tbar = new KToolBar(m_widget);
+			m_widget->addTab( tbar, i18n("Project") );
+
+			tbar->addAction( KIcon("document-new"), i18n("&New...") );
+			KAction* a = KStandardAction::open(0, 0, this);
+			tbar->addAction( a->icon(), a->text() );
+			a = KStandardAction::close(0, 0, this);
+			tbar->addAction( a->icon(), a->text() );
+
+			m_widget->addTab( new QWidget(m_widget), i18n("Create") );
+			m_widget->addTab( new QWidget(m_widget), i18n("External Data") );
+			m_widget->addTab( new QWidget(m_widget), i18n("Tools") );
+			m_widget->addTab( new QWidget(m_widget), i18n("Help") );
+		}
+		~KexiTopDockWidget()
+		{
+		}
+	private:
+		KTabWidget *m_widget;
+};
+*/
+
+//! @short A widget being main part of KexiMainWindow
+class KexiMainWidget : public KMainWindow
+{
+	public:
+		KexiMainWidget(KexiMainWindow *parent);
+		virtual ~KexiMainWidget();
+	
+		KexiMainWindowTabWidget* tabWidget() const { return m_tabWidget; }
+	protected:
+		virtual bool queryClose();
+		virtual bool queryExit();
+	private:
+		void setupCentralWidget();
+
+		KexiMainWindowTabWidget* m_tabWidget;
+		KexiMainWindow *m_mainWindow;
+
+	friend class KexiMainWindow;
+};
+
+KexiMainWidget::KexiMainWidget(KexiMainWindow *parent)
+ : KMainWindow(parent, Qt::Widget)
+ , m_mainWindow(parent)
+{
+	setupCentralWidget();
+}
+
+KexiMainWidget::~KexiMainWidget()
+{
+}
+
+void KexiMainWidget::setupCentralWidget()
+{
+	QWidget *centralWidget = new QWidget(this);
+	QVBoxLayout *centralWidgetLyr = new QVBoxLayout(centralWidget);
+	m_tabWidget = new KexiMainWindowTabWidget(centralWidget);
+	centralWidgetLyr->setContentsMargins(0,0,0,0);
+	//centralWidgetLyr->setContentsMargins( 0, KDialog::marginHint()/2, 0, 0 );
+	centralWidgetLyr->addWidget(m_tabWidget);
+	setCentralWidget( centralWidget );
+	connect( m_tabWidget, SIGNAL( closeTab() ), m_mainWindow, SLOT(closeCurrentWindow()) );
+}
+
+bool KexiMainWidget::queryClose()
+{
+	return m_mainWindow ? m_mainWindow->queryClose() : true;
+}
+
+bool KexiMainWidget::queryExit()
+{
+	return m_mainWindow ? m_mainWindow->queryExit() : true;
+}
+
+//------------------------------------------
 
 //! @internal safer dictionary
 typedef QMap< int, KexiWindow* > KexiWindowDict;
@@ -447,7 +692,8 @@ void updatePropEditorDockWidthInfo() {
 		KXMLGUIFactory* dummy_KXMLGUIFactory;
 
 		KexiMainWindow *wnd;
-		KexiMainWindowTabWidget *tabWidget;
+		KexiMainWidget *mainWidget;
+//		KexiMainWindowTabWidget *tabWidget;
 		KActionCollection *actionCollection;
 		KexiStatusBar *statusBar;
 		KexiProject *prj;
@@ -456,9 +702,10 @@ void updatePropEditorDockWidthInfo() {
 		KexiContextHelp *ctxHelp;
 #endif
 		KexiBrowser *nav;
-		QDockWidget *navDockWidget;
+		KexiTabbedToolBar *tabbedToolBar;
+		KexiDockWidget *navDockWidget;
 		KTabWidget *propEditorTabWidget;
-		QDockWidget *propEditorDockWidget;
+		KexiDockWidget *propEditorDockWidget;
 		//! poits to kexi part which has been previously used to setup proppanel's tabs using 
 		//! KexiPart::setupCustomPropertyPanelTabs(), in updateCustomPropertyPanelTabs().
 		QPointer<KexiPart::Part> partForPreviouslySetupPropertyPanelTabs;
@@ -639,3 +886,5 @@ void updatePropEditorDockWidthInfo() {
 #endif
 		KexiFindDialog *m_findDialog;
 };
+
+#endif

@@ -45,6 +45,7 @@
 #include <Q3ValueList>
 #include <QHash>
 #include <QDockWidget>
+#include <QMenuBar>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -155,7 +156,27 @@
 #include <ktoolinvocation.h>
 #endif
 
+//-------------------------------------------------
+
+//! @internal
+class KexiDockWidget : public QDockWidget
+{
+	public:
+		KexiDockWidget(const QString & title, QWidget *parent)
+			: QDockWidget(title, parent)
+		{
+		}
+		void setSizeHint(const QSize& hint) { m_hint = hint; }
+		QSize sizeHint() const { return m_hint.isValid() ? m_hint : QDockWidget::sizeHint(); }
+	private:
+		QSize m_hint;
+};
+
+
+//-------------------------------------------------
+
 #include "KexiMainWindow_p.h"
+#include "KexiMainWindow_p.moc"
 
 //-------------------------------------------------
 
@@ -276,13 +297,12 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 //-------------------------------------------------
 
 KexiMainWindow::KexiMainWindow(QWidget *parent)
- : KMainWindow(parent)
+ : KexiMainWindowSuper(parent)
  , KexiMainWindowIface()
  , KexiGUIMessageHandler(this)
  , d(new KexiMainWindow::Private(this) )
 {
 	setObjectName("KexiMainWindow");
-	setupCentralWidget();
 	
 //kde4: removed 	KImageIO::registerFormats();
 
@@ -335,12 +355,17 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 //2.0: moved to createGUI()		setXMLFile("kexiui.rc");
 		setAcceptDrops(true);
 		setupActions();
+		setupMainWidget();
 //2.0: unused		createShellGUI(true);
 	//}
 
-	d->statusBar = new KexiStatusBar(this);
+	d->statusBar = new KexiStatusBar(d->mainWidget);
 
 	d->origAppCaption = windowTitle();
+
+	// Setup menu
+//	d->topDockWidget = new KexiTopDockWidget(this);
+//	addDockWidget(Qt::TopDockWidgetArea, d->topDockWidget, Qt::Horizontal);
 
 	restoreSettings();
 	(void)Kexi::smallFont(this/*init*/);
@@ -452,7 +477,7 @@ KexiMainWindow::KexiMainWindow(QWidget *parent)
 # include "KexiMainWindow_ctor.h"
 #endif
 	
-	setAutoSaveSettings(QLatin1String("MainWindow"), /*saveWindowSize*/true);
+//	setAutoSaveSettings(QLatin1String("MainWindow"), /*saveWindowSize*/true);
 }
 
 KexiMainWindow::~KexiMainWindow()
@@ -612,7 +637,7 @@ KActionCollection *KexiMainWindow::actionCollection() const
 
 KexiWindow* KexiMainWindow::currentWindow() const
 {
-	return d->tabWidget ? qobject_cast<KexiWindow*>(d->tabWidget->currentWidget()) : 0;
+	return d->mainWidget->tabWidget() ? qobject_cast<KexiWindow*>(d->mainWidget->tabWidget()->currentWidget()) : 0;
 }
 
 void KexiMainWindow::setupActions()
@@ -733,7 +758,9 @@ void KexiMainWindow::setupActions()
 
 	ac->addAction( "tools_compact_database",
 		d->action_tools_compact_database = new KAction(
-		i18n("&Compact Database..."), this) );
+//! @todo icon
+			KIcon("kexi"), 
+			i18n("&Compact Database..."), this) );
 	d->action_tools_compact_database->setToolTip(i18n("Compact the current database project"));
 	d->action_tools_compact_database->setWhatsThis(
 		i18n("Compacts the current database project, so it will take less space and work faster."));
@@ -784,6 +811,8 @@ void KexiMainWindow::setupActions()
 
 	ac->addAction( "project_print_setup",
 		d->action_project_print_setup = new KAction(
+//! @todo icon
+			KIcon("document"), 
 			i18n("Page Set&up..."), this) );
 	d->action_project_print_setup->setToolTip(
 		i18n("Show page setup for printing the active table or query"));
@@ -1943,7 +1972,7 @@ tristate KexiMainWindow::closeProject()
 
 void KexiMainWindow::setupContextHelp() {
 #ifndef KEXI_NO_CTXT_HELP
-	d->ctxHelp=new KexiContextHelp(this,this);
+	d->ctxHelp=new KexiContextHelp(d->mainWidget,this);
 /*todo
 	d->ctxHelp->setContextHelp(i18n("Welcome"),i18n("The <B>KEXI team</B> wishes you a lot of productive work, "
 		"with this product. <BR><HR><BR>If you have found a <B>bug</B> or have a <B>feature</B> request, please don't "
@@ -1955,20 +1984,25 @@ void KexiMainWindow::setupContextHelp() {
 #endif
 }
 
-void KexiMainWindow::setupCentralWidget()
+void KexiMainWindow::setupMainWidget()
 {
-	QWidget *centralWidget = new QWidget(this);
-	QVBoxLayout *centralWidgetLyr = new QVBoxLayout(centralWidget);
-	d->tabWidget = new KexiMainWindowTabWidget(centralWidget);
-	centralWidgetLyr->setContentsMargins( 0, KDialog::marginHint(), 0, 0 );
-	centralWidgetLyr->addWidget(d->tabWidget);
-	setCentralWidget( centralWidget );
-	connect( d->tabWidget, SIGNAL( closeTab() ), this, SLOT(closeCurrentWindow()) );
-//<tmp>
-/*	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 1");
-	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 2");
-	d->tabWidget->addTab(new QWidget(d->tabWidget), "Kexi Window 3");*/
-//</tmp>
+	QVBoxLayout *vlyr = new QVBoxLayout(this);
+	vlyr->setContentsMargins(0, 0, 0, 0);
+	vlyr->setSpacing(0);
+
+	QWidget *tabbedToolBarContainer = new QWidget(this);
+	vlyr->addWidget(tabbedToolBarContainer);
+	QVBoxLayout *tabbedToolBarContainerLyr = new QVBoxLayout(tabbedToolBarContainer);
+	tabbedToolBarContainerLyr->setSpacing(0);
+	tabbedToolBarContainerLyr->setContentsMargins(
+		KDialog::marginHint()/2, KDialog::marginHint()/2, KDialog::marginHint()/2, KDialog::marginHint()/2);
+	
+	d->tabbedToolBar = new KexiTabbedToolBar(tabbedToolBarContainer);
+	tabbedToolBarContainerLyr->addWidget(d->tabbedToolBar);
+
+	d->mainWidget = new KexiMainWidget(0);
+	vlyr->addWidget(d->mainWidget, 1);
+	d->mainWidget->setParent(this);
 }
 
 void KexiMainWindow::setupProjectNavigator()
@@ -1977,14 +2011,29 @@ void KexiMainWindow::setupProjectNavigator()
 		return;
 
 	if (!d->nav) {
-		d->navDockWidget = new QDockWidget(this);
+		d->navDockWidget = new KexiDockWidget(QString(), d->mainWidget);
 		d->navDockWidget->setObjectName("ProjectNavigatorDockWidget");
-		addDockWidget( Qt::LeftDockWidgetArea, d->navDockWidget, Qt::Vertical );
-		d->nav = new KexiBrowser(this);
+		d->navDockWidget->setMinimumWidth(300);
+		KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
+		Qt::DockWidgetArea area = Qt::LeftDockWidgetArea;
+		const QString areaName = mainWindowGroup.readEntry("PropertyEditorArea").toLower();
+		if (areaName == "right")
+			area = Qt::RightDockWidgetArea;
+		else if (areaName == "top")
+			area = Qt::TopDockWidgetArea;
+		else if (areaName == "bottom")
+			area = Qt::BottomDockWidgetArea;
+
+		d->mainWidget->addDockWidget(
+			area, d->navDockWidget,
+			static_cast<Qt::Orientation>(mainWindowGroup.readEntry<int>("PropertyEditorOrientation", (int)Qt::Vertical))
+		);
+
+		d->nav = new KexiBrowser(d->navDockWidget);
 		d->nav->installEventFilter(this);
 		d->navDockWidget->setWindowTitle(d->nav->windowTitle());
 		d->navDockWidget->setWidget( d->nav );
-		
+
 #ifdef __GNUC__
 #warning TODO	d->navToolWindow = addToolWindow(d->nav, KDockWidget::DockLeft, getMainDockWidget(), 20/*, lv, 35, "2"*/);
 #else
@@ -2071,9 +2120,9 @@ void KexiMainWindow::setupPropertyEditor()
 	if (!d->propEditor) {
 //TODO: FIX LAYOUT PROBLEMS
 		
-		d->propEditorDockWidget = new QDockWidget(i18n("Property Editor"), this);
+		d->propEditorDockWidget = new KexiDockWidget(i18n("Property Editor"), d->mainWidget);
 		d->propEditorDockWidget->setObjectName("PropertyEditorDockWidget");
-		addDockWidget( Qt::RightDockWidgetArea, d->propEditorDockWidget, Qt::Vertical );
+		d->mainWidget->addDockWidget( Qt::RightDockWidgetArea, d->propEditorDockWidget, Qt::Vertical );
 		d->propEditorTabWidget = new KTabWidget(d->propEditorDockWidget);
 //		d->propEditorTabWidget->hide();
 		d->propEditor = new KexiPropertyEditorView(d->propEditorTabWidget);
@@ -2227,8 +2276,7 @@ void KexiMainWindow::slotChildViewIsDetachedNow(QWidget*)
 	slotCaptionForCurrentMDIChild(false);
 }
 
-bool
-KexiMainWindow::queryClose()
+bool KexiMainWindow::queryClose()
 {
 #ifndef KEXI_NO_PENDING_DIALOGS
 	if (d->pendingWindowsExist()) {
@@ -2248,19 +2296,34 @@ KexiMainWindow::queryClose()
 	return ! ~res;
 }
 
-bool
-KexiMainWindow::queryExit()
+bool KexiMainWindow::queryExit()
 {
-//	storeSettings();
+	//storeSettings();
 	return true;
+}
+
+void KexiMainWindow::closeEvent(QCloseEvent *ev)
+{
+	d->mainWidget->closeEvent(ev);
+	if (queryClose()) {
+		ev->accept();
+	}
 }
 
 void
 KexiMainWindow::restoreSettings()
 {
-	return;
-
 	KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
+//	restoreWindowSize( mainWindowGroup );
+//	d->mainWidget->applyMainWindowSettings( mainWindowGroup );
+//	saveState()
+	const bool maximize = mainWindowGroup.readEntry("Maximized", false);
+	const QRect geometry( mainWindowGroup.readEntry("Geometry", QRect()) );
+	if (geometry.isValid())
+		setGeometry(geometry);
+	else if (maximize)
+		setWindowState(windowState() | Qt::WindowMaximized);
+	return;
 
 	// Saved settings
 #ifdef __GNUC__
@@ -2269,7 +2332,7 @@ KexiMainWindow::restoreSettings()
 #pragma WARNING( TODO applyMainWindowSettings() )
 #endif
 #if 0//TODO ?
-	applyMainWindowSettings( d->config, "MainWindow" );
+//	applyMainWindowSettings( d->config, "MainWindow" );
 
 	//small hack - set the default -- bottom
 //	d->config->setGroup(QString(name()) + " KMdiTaskBar Toolbar style");
@@ -2320,8 +2383,37 @@ KexiMainWindow::restoreSettings()
 void
 KexiMainWindow::storeSettings()
 {
-	return;
 	kDebug() << "KexiMainWindow::storeSettings()" << endl;
+	KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
+	//saveWindowSize( mainWindowGroup );
+
+	if (isMaximized()) {
+		mainWindowGroup.writeEntry("Maximized", true);
+		mainWindowGroup.deleteEntry("Geometry");
+	}
+	else {
+		mainWindowGroup.deleteEntry("Maximized");
+		mainWindowGroup.writeEntry("Geometry", geometry());
+	}
+
+	QString areaName;
+	switch (d->mainWidget->dockWidgetArea(d->navDockWidget)) {
+	case Qt::RightDockWidgetArea: areaName = "right"; break;
+	case Qt::TopDockWidgetArea: areaName = "top"; break;
+	case Qt::BottomDockWidgetArea: areaName = "bottom"; break;
+	//left is the default: case Qt::LeftDockWidgetArea: areaName	= "left"; break;
+	}
+	if (areaName.isEmpty())
+		mainWindowGroup.deleteEntry("PropertyEditorArea");
+	else
+		mainWindowGroup.writeEntry("PropertyEditorArea", areaName);
+
+//	mainWindowGroup.writeEntry("PropertyEditor", mb->isHidden() ? "Disabled" : "Enabled");
+//	d->mainWidget->saveMainWindowSettings( mainWindowGroup );
+//	d->mainWidget->saveState();
+	KGlobal::config()->sync();
+	return;
+
 
 //	saveWindowSize( d->config ); //componentData().config() );
 #ifdef __GNUC__
@@ -2329,7 +2421,7 @@ KexiMainWindow::storeSettings()
 #else
 #pragma WARNING( TODO	saveMainWindowSettings( d->config, "MainWindow" ); )
 #endif
-	KConfigGroup mainWindowGroup( d->config->group("MainWindow") );
+
 /*2.0:	KMdi::MdiMode modeToSave = mdiMode();
 	if (d->mdiModeToSwitchAfterRestart!=(KMdi::MdiMode)0)
 		modeToSave = d->mdiModeToSwitchAfterRestart;
@@ -2387,6 +2479,7 @@ KexiMainWindow::storeSettings()
 	}
 }
 
+/*
 void
 KexiMainWindow::restoreWindowConfiguration(KConfig *config)
 {
@@ -2455,7 +2548,7 @@ void
 KexiMainWindow::saveGlobalProperties( KConfig* sessionConfig )
 {
 	storeWindowConfiguration(sessionConfig);
-}
+}*/
 
 void
 KexiMainWindow::registerChild(KexiWindow *window)
@@ -2732,7 +2825,7 @@ KexiMainWindow::activateWindow(KexiWindow *window)
 		return false;
 
 	d->focus_before_popup = window;
-	d->tabWidget->setCurrentWidget(window);
+	d->mainWidget->tabWidget()->setCurrentWidget(window);
 	window->activate();
 	return true;
 }
@@ -3597,7 +3690,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 	}
 
 	d->removeWindow(window_id); //don't remove -KMDI will do that
-	d->tabWidget->removeTab( d->tabWidget->indexOf( window ) );
+	d->mainWidget->tabWidget()->removeTab( d->mainWidget->tabWidget()->indexOf( window ) );
 
 	//also remove from 'print setup dialogs' cache, if needed
 	int printedObjectID = 0;
@@ -3890,7 +3983,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 	}
 //2.0: unused	if (d->block_KMdiMainFrm_eventFilter)//we don't want KMDI to eat our event!
 //2.0: unused		return false;
-	return KMainWindow::eventFilter(obj,e);//let KMDI do its work
+	return KexiMainWindowSuper::eventFilter(obj,e);//let KMDI do its work
 }
 
 bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode)
@@ -3964,7 +4057,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 #ifndef KEXI_NO_PENDING_DIALOGS
 		d->addItemToPendingWindows(item, Private::WindowOpeningJob);
 #endif
-		window = d->prj->openObject(d->tabWidget, *item, viewMode, staticObjectArgs);
+		window = d->prj->openObject(d->mainWidget->tabWidget(), *item, viewMode, staticObjectArgs);
 	}
 
 	if (!window || !activateWindow(window)) {
@@ -3999,8 +4092,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 #endif
 	if (window && !alreadyOpened) {
 //		window->setParent(d->tabWidget);
-		d->tabWidget->addTab(window, window->windowIcon(), window->windowTitle());
-		d->tabWidget->setCurrentWidget(window);
+		d->mainWidget->tabWidget()->addTab(window, window->windowIcon(), window->windowTitle());
+		d->mainWidget->tabWidget()->setCurrentWidget(window);
 	}
 	return window;
 }

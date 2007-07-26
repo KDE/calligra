@@ -26,6 +26,14 @@ KDE4: TODO:
 TODO: check reports at scan.coverity.com
 
 ===================== Kexi 2.0 Alpha =====================
+2007-07-26
+Main Window
+- prototype tabbed toolbar
+
+2007-07-19
+KexiDB
+= removed possible crash on application quit
+
 2007-07-16
 Core, Main
 = fixed creating shared actions

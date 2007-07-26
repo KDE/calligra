@@ -64,11 +64,13 @@ class KexiMainWindowTabWidget : public KTabWidget
 		virtual void paintEvent( QPaintEvent * event );
 };
 
+#define KexiMainWindowSuper QWidget //KMainWindow
+
 /**
  * @short Kexi's main window implementation
  */
 class KEXIMAIN_EXPORT KexiMainWindow 
-	: public KMainWindow, public KexiMainWindowIface, public KexiGUIMessageHandler
+	: public QWidget /*KMainWindow*/, public KexiMainWindowIface, public KexiGUIMessageHandler
 {
 	Q_OBJECT
 
@@ -84,7 +86,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 #else
 #pragma WARNING( TODO virtual QWidget* focusWidget() const; )
 #endif
-		virtual QWidget* focusWidget() const { return QMainWindow::focusWidget(); }
+		virtual QWidget* focusWidget() const { return KexiMainWindowSuper::focusWidget(); }
 
 #ifdef __GNUC__
 #warning TODO 	virtual void plugActionList(const QString& name,
@@ -163,9 +165,9 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		virtual KexiWindow* currentWindow() const;
 
 		/*! Reimplemented */
-		virtual void readProperties(KConfig *config);
-		virtual void saveProperties(KConfig *config);
-		virtual void saveGlobalProperties( KConfig* sessionConfig );
+//		virtual void readProperties(KConfig *config);
+//		virtual void saveProperties(KConfig *config);
+//		virtual void saveGlobalProperties( KConfig* sessionConfig );
 
 	public slots:
 		/*! Inherited from KMdiMainFrm: we need to do some tasks before child is closed.
@@ -310,8 +312,8 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void projectOpened();
 
 	protected:
-		/*! Setups central widget with tabs. */
-		void setupCentralWidget();
+		/*! Setups main widget */
+		void setupMainWidget();
 		
 		/*! Setups the User Mode: constructs window according to kexi__final database
 		 and loads the specified part.
@@ -326,9 +328,6 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		void setupContextHelp();
 
 		void setupPropertyEditor();
-
-		//! reimplementation of events
-//		virtual void	closeEvent(QCloseEvent *);
 
 		/*! Creates standard actions like new, open, save ... */
 		void setupActions();
@@ -394,11 +393,16 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		/*! Updates application's caption - also shows project's name. */
 		void updateAppCaption();
 
-		void restoreWindowConfiguration(KConfig *config);
-		void storeWindowConfiguration(KConfig *config);
+//		void restoreWindowConfiguration(KConfig *config);
+//		void storeWindowConfiguration(KConfig *config);
 
-		virtual bool queryClose();
-		virtual bool queryExit();
+		virtual void closeEvent(QCloseEvent *ev);
+
+		//! Called by KexiMainWidget::queryClose()
+		bool queryClose();
+
+		//! Called by KexiMainWidget::queryExit()
+		bool queryExit();
 
 		/*! Helper: switches to view \a mode. */
 		bool switchToViewMode(Kexi::ViewMode viewMode);
@@ -647,6 +651,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		Private * const d;
 
 	friend class KexiWindow;
+	friend class KexiMainWidget;
 };
 
 #endif

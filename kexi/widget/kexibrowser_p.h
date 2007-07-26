@@ -76,7 +76,7 @@ class KexiGroupMenu : public KexiMenuBase
 		~KexiGroupMenu();
 	
 		//! Rebuilds the menu entirely using infromation obtained from \a partInfo.
-		void update(KexiPart::Info* partInfo);
+//unused		void update(KexiPart::Info* partInfo);
 };
 
 #endif

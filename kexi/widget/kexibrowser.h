@@ -135,7 +135,7 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		void slotExecuteItem(Q3ListViewItem *item);
 		void slotSelectionChanged(Q3ListViewItem* i);
 		void slotSettingsChanged(int);
-		void slotNewObjectMenuAboutToShow();
+/*(new action removed) void slotNewObjectMenuAboutToShow(); */
 
 		void slotNewObject();
 		void slotOpenObject();
@@ -166,18 +166,18 @@ class KEXIEXTWIDGETS_EXPORT KexiBrowser : public QWidget
 		KexiItemMenu *m_itemMenu;
 		KexiGroupMenu *m_partMenu;
 		KAction *m_deleteAction, *m_renameAction, 
-			*m_newObjectAction, // *m_newObjectToolbarAction,
+//			*m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
 			*m_executeAction,
 			*m_dataExportAction, *m_printAction, *m_pageSetupAction;
 		KActionMenu* m_exportActionMenu;
-		KMenu* m_newObjectMenu;
+//		KMenu* m_newObjectMenu;
 		QAction *m_itemMenuTitle, *m_partMenuTitle,
 			*m_exportActionMenu_sep, *m_pageSetupAction_sep;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;
-		KexiSmallToolButton *m_newObjectToolButton, *m_deleteObjectToolButton;
+		KexiSmallToolButton /* *m_newObjectToolButton,*/ *m_deleteObjectToolButton;
 		QString m_itemsMimeType;
 		bool m_singleClick : 1;
 		bool m_readOnly : 1;

@@ -610,7 +610,8 @@ KFileWidget::getStartUrl( KUrl("kfiledialog:///OpenExistingOrCreateNewProject"),
 kexidbg << recentDirClass << endl;
 
 	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, 
-		"kfiledialog:///OpenExistingOrCreateNewProject", pageOpenExistingWidget);
+		"kfiledialog:///OpenExistingOrCreateNewProject", KAbstractFileWidget::Opening,
+		pageOpenExistingWidget);
 	d->openExistingConnWidget->setObjectName("KexiConnSelectorWidget");
 	d->openExistingConnWidget->hideConnectonIcon();
 	lyr->addWidget( d->openExistingConnWidget );

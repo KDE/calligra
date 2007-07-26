@@ -159,6 +159,7 @@ void Part::createGUIClients()//KexiMainWindow *win)
 		);
 		act->setObjectName(KexiPart::nameForCreateAction(*info()));
 		connect(act, SIGNAL(triggered()), this, SLOT(slotCreate()));
+		KexiMainWindowIface::global()->actionCollection()->addAction( act->objectName(), act );
 #ifdef __GNUC__
 #warning TODO		KexiMainWindowIface::global()->guiFactory()->addClient(d->guiClient); //this client is added permanently
 #else

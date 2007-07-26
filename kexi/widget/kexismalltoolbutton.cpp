@@ -107,7 +107,9 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
 		setToolButtonStyle(Qt::ToolButtonIconOnly);
 	}
 	else {
-		width += QFontMetrics(font()).width(text+" ");
+		QFont f(KGlobalSettings::toolBarFont());
+		f.setPixelSize(Kexi::smallFont().pixelSize());
+		width += QFontMetrics(f).width(text+" ");
 		setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 		QToolButton::setText(text);
 		if (tipToo)

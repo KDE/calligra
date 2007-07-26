@@ -228,7 +228,7 @@ KexiProject::create(bool forceOverwrite)
 {
 	KexiDB::MessageTitle et(this, 
 		i18n("Could not create project \"%1\".", d->data->databaseName()));
-		
+
 	if (!createConnection())
 		return false;
 	if (!checkWritable())
@@ -250,8 +250,7 @@ KexiProject::create(bool forceOverwrite)
 	}
 	kDebug() << "--- DB '" << d->data->databaseName() << "' created ---"<< endl;
 	// and now: open
-	if (!d->connection->useDatabase(d->data->databaseName()))
-	{
+	if (!d->connection->useDatabase(d->data->databaseName())) {
 		kDebug() << "--- DB '" << d->data->databaseName() << "' USE ERROR ---"<< endl;
 		setError(d->connection);
 		closeConnection();
@@ -295,6 +294,10 @@ KexiProject::create(bool forceOverwrite)
 		return false;
 	//</add some data>
 
+	if (!Kexi::partManager().lookup()) {
+		setError( &Kexi::partManager() );
+		return cancelled;
+	}
 	return initProject();
 }
 
