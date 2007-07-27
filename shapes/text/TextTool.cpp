@@ -54,6 +54,8 @@
 #include <kdebug.h>
 #include <KStandardShortcut>
 #include <KFontSizeAction>
+#include <KFontChooser>
+#include <KFontAction>
 #include <KAction>
 #include <KStandardAction>
 #include <KMimeType>
@@ -180,11 +182,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
 
-    m_actionFormatIncreaseIndent = new QAction(
+    QAction *action = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"),
             i18n("Increase Indent"), this);
-    addAction("format_increaseindent", m_actionFormatIncreaseIndent );
-    connect(m_actionFormatIncreaseIndent, SIGNAL(triggered()), this, SLOT(increaseIndent()));
+    addAction("format_increaseindent", action );
+    connect(action, SIGNAL(triggered()), this, SLOT(increaseIndent()));
 
     m_actionFormatDecreaseIndent = new QAction(
             KIcon(QApplication::isRightToLeft() ? "format-indent-more" :"format-indent-less"),
@@ -192,28 +194,29 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent );
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
 
-/*
-    m_actionFontSizeIncrease  = new KAction(i18n("Increase Font Size"), "fontsizeup"), this);
-    actionCollection()->addAction("increase_fontsize", m_actionFontSizeIncrease );
-    m_actionFontSizeDecrease  = new KAction(i18n("Decrease Font Size"), "fontsizedown"), this);
-    actionCollection()->addAction("decrease_fontsize", m_actionFontSizeDecrease );
+    action = new QAction(i18n("Increase Font Size"), this);
+    action->setShortcut(Qt::CTRL + Qt::Key_Greater);
+    addAction("fontsizeup", action);
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT(increaseFontSize()));
 
-    m_actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts,
-            //i18n( "Font Family" ),
-            actionCollection(), "format_fontfamily" );
+    action = new QAction(i18n("Decrease Font Size"), this);
+    action->setShortcut(Qt::CTRL + Qt::Key_Less);
+    addAction("fontsizedown", action);
+    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT(decreaseFontSize()));
+
+    m_actionFormatFontFamily = new KFontAction( KFontChooser::SmoothScalableFonts, this);
+    addAction( "format_fontfamily", m_actionFormatFontFamily );
     connect( m_actionFormatFontFamily, SIGNAL( triggered( const QString & ) ),
-            this, SLOT( textFontSelected( const QString & ) ) );
+            &m_selectionHandler, SLOT( setFontFamily( const QString & ) ) );
 
+/*
     m_actionFormatStyleMenu  = new KActionMenu(i18n("Style"), this);
-    actionCollection()->addAction("format_stylemenu", m_actionFormatStyleMenu );
+    addAction("format_stylemenu", m_actionFormatStyleMenu );
     m_actionFormatStyle  = new KSelectAction(i18n("Style"), this);
-    actionCollection()->addAction("format_style", m_actionFormatStyle );
-    // In fact, binding a key to this action will simply re-apply the current style. Why not.
-    //m_actionFormatStyle->setShortcutConfigurable( false );
+    addAction("format_style", m_actionFormatStyle );
     connect( m_actionFormatStyle, SIGNAL( activated( int ) ),
             this, SLOT( textStyleSelected( int ) ) );
     updateStyleList();
-
 
     // ----------------------- More format actions, for the toolbar only
     QActionGroup* spacingActionGroup = new QActionGroup( this );
@@ -238,10 +241,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 
     m_actionFormatNumber  = new KActionMenu(KIcon( "enumList" ), i18n("Number"), this);
-    actionCollection()->addAction("format_number", m_actionFormatNumber );
+    addAction("format_number", m_actionFormatNumber );
     m_actionFormatNumber->setDelayed( false );
     m_actionFormatBullet  = new KActionMenu(KIcon( "unsortedList" ), i18n("Bullet"), this);
-    actionCollection()->addAction("format_bullet", m_actionFormatBullet );
+    addAction("format_bullet", m_actionFormatBullet );
     m_actionFormatBullet->setDelayed( false );
     QActionGroup* counterStyleActionGroup = new QActionGroup( this );
     counterStyleActionGroup->setExclusive( true );
@@ -265,12 +268,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
         else
             m_actionFormatNumber->insert( act );
     }
-
 */
 
 
     // ------------------- Actions with a key binding and no GUI item
-    QAction *action  = new QAction(i18n("Insert Non-Breaking Space"), this);
+    action  = new QAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action );
     action->setShortcut( Qt::CTRL+Qt::Key_Space);
     connect(action, SIGNAL(triggered()), this, SLOT( nonbreakingSpace() ));
@@ -895,7 +897,7 @@ void TextTool::updateActions() {
     }
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
-    m_actionFormatFontSize->setFontSize(cf.fontPointSize());
+    m_actionFormatFontSize->setFontSize(qRound(cf.fontPointSize()));
 
     QTextBlockFormat bf = m_caret.blockFormat();
     if(bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {

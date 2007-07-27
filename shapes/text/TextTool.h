@@ -40,6 +40,7 @@ class ChangeTracker;
 
 class QUndoCommand;
 class KFontSizeAction;
+class KFontAction;
 
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
@@ -210,6 +211,7 @@ private:
     QAction *m_actionFormatIncreaseIndent;
     QAction *m_actionFormatDecreaseIndent;
     KFontSizeAction *m_actionFormatFontSize;
+    KFontAction *m_actionFormatFontFamily;
 
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
 

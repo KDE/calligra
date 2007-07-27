@@ -17,8 +17,20 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 #include "TextShape.h"
+
+#define synchronized(T) QMutex T; \
+ for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
+
+struct Finalizer {
+    Finalizer(QMutex &lock) : l(&lock), b(1) { l->lock(); }
+    ~Finalizer() { l->unlock(); }
+    QMutex *l;
+    short b;
+    short loop() { return b; }
+    void inc() { --b; }
+};
+
 #include "Layout.h"
 
 #include <KoTextDocumentLayout.h>
@@ -244,17 +256,17 @@ QTextDocument *TextShape::footnoteDocument() {
 }
 
 void TextShape::markLayoutDone() {
-    m_mutex.lock();
-    m_waiter.wakeAll();
-    m_mutex.unlock();
+    synchronized(m_mutex) {
+        m_waiter.wakeAll();
+    }
 }
 
 void TextShape::waitUntilReady() const {
-    m_mutex.lock();
-    if(m_textShapeData->isDirty()) {
-        m_textShapeData->fireResizeEvent(); // triggers a relayout
-        m_waiter.wait(&m_mutex);
+    synchronized(m_mutex) {
+        if(m_textShapeData->isDirty()) {
+            m_textShapeData->fireResizeEvent(); // triggers a relayout
+            m_waiter.wait(&m_mutex);
+        }
     }
-    m_mutex.unlock();
 }
 
