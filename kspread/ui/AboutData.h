@@ -44,16 +44,34 @@ KAboutData * newAboutData()
     aboutData->addAuthor(ki18n("Philipp Müller"), KLocalizedString(), "philipp.mueller@gmx.de");
     aboutData->addAuthor(ki18n("Ariya Hidayat"), KLocalizedString(), "ariya@kde.org");
     aboutData->addAuthor(ki18n("Norbert Andres"), KLocalizedString(), "nandres@web.de");
-    aboutData->addAuthor(ki18n("Shaheed Haque"), KLocalizedString(), "srhaque@iee.org");
-    aboutData->addAuthor(ki18n("Werner Trobin"), KLocalizedString(), "trobin@kde.org");
-    aboutData->addAuthor(ki18n("Nikolas Zimmermann"), KLocalizedString(), "wildfox@kde.org");
+    aboutData->addAuthor(ki18n("Shaheed Haque"),
+                         ki18n("Import/export filter developer"),
+                         "srhaque@iee.org");
+    aboutData->addAuthor(ki18n("Werner Trobin"),
+                         ki18n("Import/export filter developer"),
+                         "trobin@kde.org");
+    aboutData->addAuthor(ki18n("Nikolas Zimmermann"),
+                         ki18n("Import/export filter developer"),
+                         "wildfox@kde.org");
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    aboutData->addAuthor(ki18n("Helge Deller"), KLocalizedString(), "deller@gmx.de");
-    aboutData->addAuthor(ki18n("Percy Leonhart"), KLocalizedString(), "percy@eris23.org");
-    aboutData->addAuthor(ki18n("Eva Brucherseifer"), KLocalizedString(), "eva@kde.org");
-    aboutData->addAuthor(ki18n("Phillip Ezolt"), KLocalizedString(), "phillipezolt@hotmail.com");
-    aboutData->addAuthor(ki18n("Enno Bartels"), KLocalizedString(), "ebartels@nwn.de");
-    aboutData->addAuthor(ki18n("Graham Short"), KLocalizedString(), "grahshrt@netscape.net");
+    aboutData->addAuthor(ki18n("Helge Deller"),
+                         ki18n("Import/export filter developer"),
+                         "deller@gmx.de");
+    aboutData->addAuthor(ki18n("Percy Leonhart"),
+                         ki18n("Import/export filter developer"),
+                         "percy@eris23.org");
+    aboutData->addAuthor(ki18n("Eva Brucherseifer"),
+                         ki18n("Import/export filter developer"),
+                         "eva@kde.org");
+    aboutData->addAuthor(ki18n("Phillip Ezolt"),
+                         ki18n("Import/export filter developer"),
+                         "phillipezolt@hotmail.com");
+    aboutData->addAuthor(ki18n("Enno Bartels"),
+                         ki18n("Import/export filter developer"),
+                         "ebartels@nwn.de");
+    aboutData->addAuthor(ki18n("Graham Short"),
+                         ki18n("Import/export filter developer"),
+                         "grahshrt@netscape.net");
     aboutData->addAuthor(ki18n("Lukáš Tinkl"), KLocalizedString(), "lukas@kde.org");
     aboutData->addAuthor(ki18n("Tomas Mecir"), KLocalizedString(), "mecirt@gmail.com");
     aboutData->addAuthor(ki18n("Raphael Langerhorst"), KLocalizedString(), "raphael.langerhorst@kdemail.net");
