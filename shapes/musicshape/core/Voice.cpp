@@ -57,3 +57,5 @@ VoiceBar* Voice::bar(Bar* bar)
 }*/
 
 } // namespace MusicCore
+
+#include "Voice.moc"

@@ -19,6 +19,7 @@
 #ifndef MUSIC_CORE_VOICEBAR_H
 #define MUSIC_CORE_VOICEBAR_H
 
+#include <QtCore/QObject>
 #include <QtCore/QRectF>
 
 namespace MusicCore {
@@ -31,8 +32,9 @@ class VoiceElement;
  * A VoiceBar contains the music elements in a specific voice in a specific bar. A VoiceBar is in many ways
  * simply a wrapper around a QList containging the actual music elements.
  */
-class VoiceBar
+class VoiceBar : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates a new empty voice bar.

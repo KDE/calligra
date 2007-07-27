@@ -55,3 +55,5 @@ int Note::accidentals() const
 }
 
 } // namespace MusicCore
+
+#include "Note.moc"

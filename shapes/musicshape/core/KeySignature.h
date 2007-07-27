@@ -29,6 +29,7 @@ class Staff;
  * This class represents a key signature.
  */
 class KeySignature : public StaffElement {
+    Q_OBJECT
 public:
     /**
      * Create a new key signature instance that should be placed on a specific staff.

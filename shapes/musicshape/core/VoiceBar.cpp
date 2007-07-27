@@ -89,3 +89,5 @@ void VoiceBar::removeElement(VoiceElement* element, bool deleteElement)
 }
 
 } // namespace MusicCore
+
+#include "VoiceBar.moc"

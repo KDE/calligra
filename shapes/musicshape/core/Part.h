@@ -19,6 +19,7 @@
 #ifndef MUSIC_CORE_PART_H
 #define MUSIC_CORE_PART_H
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 
 namespace MusicCore {
@@ -33,7 +34,8 @@ class Sheet;
  * or more voices. Musical elements can be added to a voice+staff combination, where the voice decides where
  * in a bar a musical element should be placed, and the staff controls on what staff to draw the element.
  */
-class Part {
+class Part : public QObject {
+    Q_OBJECT
 public:
     /**
      * Creates a new part in the given sheet with the given name. The part is not added to the sheet, to do that

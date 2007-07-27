@@ -79,3 +79,4 @@ void TimeSignature::setType(TimeSignatureType type)
 
 } // namespace MusicCore
 
+#include "TimeSignature.moc"

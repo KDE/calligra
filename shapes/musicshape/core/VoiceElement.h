@@ -19,6 +19,8 @@
 #ifndef MUSIC_CORE_VOICEELEMENT_H
 #define MUSIC_CORE_VOICEELEMENT_H
 
+#include <QtCore/QObject>
+
 namespace MusicCore {
 
 class Staff;
@@ -26,8 +28,9 @@ class Staff;
 /**
  * This is the base class for all musical elements that can be added to a voice.
  */
-class VoiceElement
+class VoiceElement : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates a new VoiceElement.

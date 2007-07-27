@@ -85,3 +85,4 @@ int Clef::lineToPitch(int line) const
 
 } // namespace MusicCore
 
+#include "Clef.moc"

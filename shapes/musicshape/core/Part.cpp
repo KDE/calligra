@@ -137,3 +137,5 @@ int Part::indexOfVoice(Voice* voice)
 }
 
 } // namespace
+
+#include "Part.moc"

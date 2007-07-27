@@ -122,3 +122,5 @@ Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
 }
 
 } // namespace MusicCore
+
+#include "Staff.moc"

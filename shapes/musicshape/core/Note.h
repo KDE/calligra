@@ -19,6 +19,8 @@
 #ifndef MUSIC_CORE_NOTE_H
 #define MUSIC_CORE_NOTE_H
 
+#include <QtCore/QObject>
+
 namespace MusicCore {
 
 class Staff;
@@ -27,7 +29,9 @@ class Staff;
  * This class represents one note in a chord. You should not add the same note instance to more than one chord, nor
  * should you add a note to a chord in a different part than the part in which staff this note belongs to is in. 
  */
-class Note {
+class Note : public QObject 
+{
+    Q_OBJECT
 public:
     /**
      * Creates a new note instance, displayed on the given staff.

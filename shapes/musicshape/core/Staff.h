@@ -19,6 +19,7 @@
 #ifndef MUSIC_CORE_STAFF_H
 #define MUSIC_CORE_STAFF_H
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 
 namespace MusicCore {
@@ -30,8 +31,9 @@ class Clef;
  * A Staff is purely used for displaying/formatting. The staff class is used to indicate on what staff
  * music elements should be printed, but does only contain information regarding the formatting.
  */
-class Staff
+class Staff : QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates a new staff in the given part. This does not actually add the staff to the part, to do that call the

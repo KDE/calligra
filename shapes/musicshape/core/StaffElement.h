@@ -19,6 +19,8 @@
 #ifndef MUSIC_CORE_STAFFELEMENT_H
 #define MUSIC_CORE_STAFFELEMENT_H
 
+#include <QtCore/QObject>
+
 namespace MusicCore {
 
 class Staff;
@@ -26,8 +28,9 @@ class Staff;
 /**
  * This is the base class for all musical elements that can be added to a staff.
  */
-class StaffElement
+class StaffElement : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates a new StaffElement.

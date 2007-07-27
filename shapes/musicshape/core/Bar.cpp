@@ -142,3 +142,5 @@ void Bar::removeStaffElement(StaffElement* element, bool deleteElement)
 }
 
 } // namespace MusicCore
+
+#include "Bar.moc"

@@ -226,3 +226,5 @@ int Sheet::staffSystemCount()
 }
 
 } // namespace MusicCore
+
+#include "Sheet.moc"

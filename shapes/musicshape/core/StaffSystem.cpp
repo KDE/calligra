@@ -62,3 +62,5 @@ void StaffSystem::setFirstBar(int bar)
 }
 
 } // namespace MusicCore
+
+#include "StaffSystem.moc"

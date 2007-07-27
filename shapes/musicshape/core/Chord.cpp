@@ -156,3 +156,5 @@ QString Chord::durationToString(Duration duration)
 }
 
 } // namespace MusicCore
+
+#include "Chord.moc"

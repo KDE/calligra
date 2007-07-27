@@ -19,6 +19,7 @@
 #ifndef MUSIC_CORE_VOICE_H
 #define MUSIC_CORE_VOICE_H
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 
 namespace MusicCore {
@@ -30,8 +31,9 @@ class Bar;
 /**
  * A voice contains the actual musical elements in a piece of music.
  */
-class Voice
+class Voice : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates a new voice for the given part. This does not actually add the voice to the part, for that call the

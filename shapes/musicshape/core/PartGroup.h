@@ -19,6 +19,7 @@
 #ifndef MUSIC_CORE_PARTGROUP_H
 #define MUSIC_CORE_PARTGROUP_H
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 
 namespace MusicCore {
@@ -29,8 +30,9 @@ class Sheet;
  * A PartGroup can be used to group a consequetive number of parts together. This can for example be useful
  * to group all the string instruments. A group is defined by the indices of the first and last parts in the group.
  */
-class PartGroup
+class PartGroup : public QObject
 {
+    Q_OBJECT
 public:
     /// Used to identify the symbol shown for the group
     enum GroupSymbol {

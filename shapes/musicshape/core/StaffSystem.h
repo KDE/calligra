@@ -19,12 +19,15 @@
 #ifndef MUSIC_CORE_STAFFSYSTEM_H
 #define MUSIC_CORE_STAFFSYSTEM_H
 
+#include <QtCore/QObject>
+
 namespace MusicCore {
 
 class Sheet;
 
-class StaffSystem
+class StaffSystem : public QObject
 {
+    Q_OBJECT
 public:
     StaffSystem(Sheet* sheet);
     ~StaffSystem();

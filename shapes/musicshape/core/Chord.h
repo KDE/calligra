@@ -34,6 +34,7 @@ class Note;
  */
 class Chord : public VoiceElement
 {
+    Q_OBJECT
 public:
     /**
      * This enum represents the various supported durations for chords/rests.

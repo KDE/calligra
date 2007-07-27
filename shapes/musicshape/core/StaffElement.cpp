@@ -102,3 +102,5 @@ void StaffElement::setStartTime(int startTime)
 }
 
 } // namespace MusicCore
+
+#include "StaffElement.moc"

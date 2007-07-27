@@ -19,6 +19,7 @@
 #ifndef MUSIC_CORE_BAR_H
 #define MUSIC_CORE_BAR_H
 
+#include <QtCore/QObject>
 #include <QtCore/QPointF>
 
 namespace MusicCore {
@@ -33,8 +34,9 @@ class StaffElement;
  * A bar (in the US also known as a measure) is a part of a piece of music. A piece of music is a two-dimensional
  * thing, with multiple staffs that are played concurrently and multiple bars that are played sequentially.
  */
-class Bar
+class Bar : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Creates a new bar in the given sheet of music. The bar is not actually added to the sheet, to do that call

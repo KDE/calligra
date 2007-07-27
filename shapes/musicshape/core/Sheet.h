@@ -19,6 +19,7 @@
 #ifndef MUSIC_CORE_SHEET_H
 #define MUSIC_CORE_SHEET_H
 
+#include <QtCore/QObject>
 #include <QtCore/QString>
 
 namespace MusicCore {
@@ -36,8 +37,9 @@ class StaffSystem;
  * A sheet also contains bars. Musical elements are always inserted in a specific bar/part combination (where the
  * part is further divided in a staff and a voice).
  */
-class Sheet
+class Sheet : public QObject
 {
+    Q_OBJECT
 public:
     /**
      * Constructor, this will create a sheet containing no parts.

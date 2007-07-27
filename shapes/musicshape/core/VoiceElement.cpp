@@ -107,3 +107,5 @@ void VoiceElement::setLength(int length)
 }
 
 } // namespace MusicCore
+
+#include "VoiceElement.moc"

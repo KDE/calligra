@@ -30,6 +30,7 @@ class Staff;
  * mid-bar clef changes.
  */
 class Clef : public StaffElement {
+    Q_OBJECT
 public:
     /**
      * The various supported shapes for a clef. Currently ownly G, F and C clefs are supported.

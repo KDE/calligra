@@ -28,7 +28,9 @@ class Staff;
 /**
  * This class represents a time signature.
  */
-class TimeSignature : public StaffElement {
+class TimeSignature : public StaffElement
+{
+    Q_OBJECT
 public:
     enum TimeSignatureType {
         Classical,

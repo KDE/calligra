@@ -76,3 +76,4 @@ int KeySignature::accidentals(int pitch) const
 
 } // namespace MusicCore
 
+#include "KeySignature.moc"
