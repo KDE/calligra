@@ -81,23 +81,9 @@ public:
     Duration duration() const;
 
     /**
-     * Changes the duration of the chord.
-     *
-     * @param duration the new duration
-     */
-    void setDuration(Duration duration);
-
-    /**
      * Returns the number of dots of this chord. Each dot multiplies the duration by a factor 1.5.
      */
     int dots() const;
-
-    /**
-     * Changes the number of dots of the chord.
-     *
-     * @param dots the new number of dots
-     */
-    void setDots(int dots);
 
     /**
      * Returns the number of notes in this chord.
@@ -142,6 +128,23 @@ public:
      */
     static int durationToTicks(Duration duration);
     static QString durationToString(Duration duration);
+public slots:
+    /**
+     * Changes the duration of the chord.
+     *
+     * @param duration the new duration
+     */
+    void setDuration(Duration duration);
+
+    /**
+     * Changes the number of dots of the chord.
+     *
+     * @param dots the new number of dots
+     */
+    void setDots(int dots);
+signals:
+    void durationChanged(Duration duration);
+    void dotsChanged(int dots);
 private:
     class Private;
     Private * const d;

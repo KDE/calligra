@@ -58,7 +58,9 @@ double StaffElement::x() const
 
 void StaffElement::setX(double x)
 {
+    if (d->x == x) return;
     d->x = x;
+    emit xChanged(x);
 }
 
 double StaffElement::y() const
@@ -68,7 +70,9 @@ double StaffElement::y() const
 
 void StaffElement::setY(double y)
 {
+    if (d->y == y) return;
     d->y = y;
+    emit yChanged(y);
 }
 
 double StaffElement::width() const
@@ -78,7 +82,9 @@ double StaffElement::width() const
 
 void StaffElement::setWidth(double width)
 {
+    if (d->width == width) return;
     d->width = width;
+    emit widthChanged(width);
 }
 
 double StaffElement::height() const
@@ -88,7 +94,9 @@ double StaffElement::height() const
 
 void StaffElement::setHeight(double height)
 {
+    if (d->height == height) return;
     d->height = height;
+    emit heightChanged(height);
 }
 
 int StaffElement::startTime() const
@@ -98,7 +106,9 @@ int StaffElement::startTime() const
 
 void StaffElement::setStartTime(int startTime)
 {
+    if (d->startTime == startTime) return;
     d->startTime = startTime;
+    emit startTimeChanged(startTime);
 }
 
 } // namespace MusicCore

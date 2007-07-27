@@ -74,30 +74,35 @@ public:
     QPointF position() const;
 
     /**
-     * Sets the top-left corner of the bounding box of this bar.
-     */
-    void setPosition(QPointF position);
-    
-    /**
      * Returns the size of the bar.
      */
     double size() const;
 
-    /**
-     * Sets the size of the bar.
-     *
-     * @param size the new size of the bar
-     */
-    void setSize(double size);
-
     double desiredSize() const;
-    void setDesiredSize(double size);
     double scale() const;
 
     int staffElementCount(Staff* staff) const;
     StaffElement* staffElement(Staff* staff, int index);
     void addStaffElement(StaffElement* element);
     void removeStaffElement(StaffElement* element, bool deleteElement = true);
+public slots:
+    /**
+     * Sets the top-left corner of the bounding box of this bar.
+     */
+    void setPosition(const QPointF& position);
+    
+    /**
+     * Sets the size of the bar.
+     *
+     * @param size the new size of the bar
+     */
+    void setSize(double size);
+    
+    void setDesiredSize(double size);
+signals:
+    void positionChanged(const QPointF& position);
+    void sizeChanged(double size);
+    void desiredSizeChanged(double size);
 private:
     class Private;
     Private * const d;

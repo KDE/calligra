@@ -33,9 +33,13 @@ public:
     ~StaffSystem();
 
     double top() const;
-    void setTop(double top);
     int firstBar() const;
+public slots:
+    void setTop(double top);
     void setFirstBar(int bar);
+signals:
+    void topChanged(double top);
+    void firstBarChanged(int bar);
 private:
     class Private;
     Private * const d;

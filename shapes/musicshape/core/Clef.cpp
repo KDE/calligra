@@ -47,7 +47,9 @@ Clef::ClefShape Clef::shape() const
 
 void Clef::setShape(ClefShape shape)
 {
+    if (d->shape == shape) return;
     d->shape = shape;
+    emit shapeChanged(shape);
 }
 
 int Clef::line() const
@@ -57,7 +59,9 @@ int Clef::line() const
 
 void Clef::setLine(int line)
 {
+    if (d->line == line) return;
     d->line = line;
+    emit lineChanged(line);
 }
 
 int Clef::octaveChange() const
@@ -65,9 +69,11 @@ int Clef::octaveChange() const
     return d->octaveChange;
 }
 
-void Clef::setOctaveChange(int octaveChange) const
+void Clef::setOctaveChange(int octaveChange)
 {
+    if (d->octaveChange == octaveChange) return;
     d->octaveChange = octaveChange;
+    emit octaveChangeChanged(octaveChange);
 }
 
 int Clef::lineToPitch(int line) const

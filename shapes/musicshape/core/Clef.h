@@ -67,17 +67,27 @@ public:
     ClefShape shape() const;
     
     /**
+     * Returns the line the clef is displayed on.
+     */
+    int line() const;
+    
+    /**
+     * Returns the octave change of this clef.
+     */
+    int octaveChange() const;
+    
+    /**
+     * Returns the pitch for a given line.
+     */
+    int lineToPitch(int line) const;
+public slots:
+    /**
      * Changes the shape of the clef.
      *
      * @param shape the new shape of the clef
      */
     void setShape(ClefShape shape);
-    
-    /**
-     * Returns the line the clef is displayed on.
-     */
-    int line() const;
-    
+
     /**
      * Changes the line the clef is displayed on. The bottom line is 1, each higher line +1.
      *
@@ -86,21 +96,15 @@ public:
     void setLine(int line);
     
     /**
-     * Returns the octave change of this clef.
-     */
-    int octaveChange() const;
-    
-    /**
      * Changes the octave change of this clef.
      *
      * @param octaveChange the new octave change for this clef
      */
-    void setOctaveChange(int octaveChange) const;
-
-    /**
-     * Returns the pitch for a given line.
-     */
-    int lineToPitch(int line) const;
+    void setOctaveChange(int octaveChange);
+signals:
+    void shapeChanged(ClefShape shape);
+    void lineChanged(int line);
+    void octaveChangeChanged(int octaveChange);
 private:
     class Private;
     Private * const d;

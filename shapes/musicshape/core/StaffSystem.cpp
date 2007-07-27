@@ -48,7 +48,9 @@ double StaffSystem::top() const
 
 void StaffSystem::setTop(double top)
 {
+    if (d->top == top) return;
     d->top = top;
+    emit topChanged(top);
 }
 
 int StaffSystem::firstBar() const
@@ -58,7 +60,9 @@ int StaffSystem::firstBar() const
 
 void StaffSystem::setFirstBar(int bar)
 {
+    if (d->firstBar == bar) return;
     d->firstBar = bar;
+    emit firstBarChanged(bar);
 }
 
 } // namespace MusicCore

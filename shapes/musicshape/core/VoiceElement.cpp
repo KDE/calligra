@@ -63,7 +63,9 @@ double VoiceElement::x() const
 
 void VoiceElement::setX(double x)
 {
+    if (d->x == x) return;
     d->x = x;
+    emit xChanged(x);
 }
 
 double VoiceElement::y() const
@@ -73,7 +75,9 @@ double VoiceElement::y() const
 
 void VoiceElement::setY(double y)
 {
+    if (d->y == y) return;
     d->y = y;
+    emit yChanged(y);
 }
 
 double VoiceElement::width() const
@@ -83,7 +87,9 @@ double VoiceElement::width() const
 
 void VoiceElement::setWidth(double width)
 {
+    if (d->width == width) return;
     d->width = width;
+    emit widthChanged(width);
 }
 
 double VoiceElement::height() const
@@ -93,7 +99,9 @@ double VoiceElement::height() const
 
 void VoiceElement::setHeight(double height)
 {
+    if (d->height == height) return;
     d->height = height;
+    emit heightChanged(height);
 }
 
 int VoiceElement::length() const
@@ -103,7 +111,9 @@ int VoiceElement::length() const
 
 void VoiceElement::setLength(int length)
 {
+    if (d->length == length) return;
     d->length = length;
+    emit lengthChanged(length);
 }
 
 } // namespace MusicCore

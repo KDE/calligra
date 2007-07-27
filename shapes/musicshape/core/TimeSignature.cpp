@@ -48,10 +48,12 @@ int TimeSignature::beats() const
 
 void TimeSignature::setBeats(int beats)
 {
+    if (d->beats == beats) return;
     d->beats = beats;
     int beatsLen = QString::number(d->beats).length();
     int beatLen = QString::number(d->beat).length();
     setWidth(8 * qMax(beatsLen, beatLen));
+    emit beatsChanged(beats);
 }
 
 int TimeSignature::beat() const
@@ -61,10 +63,12 @@ int TimeSignature::beat() const
 
 void TimeSignature::setBeat(int beat)
 {
+    if (d->beat == beat) return;
     d->beat = beat;
     int beatsLen = QString::number(d->beats).length();
     int beatLen = QString::number(d->beat).length();
     setWidth(8 * qMax(beatsLen, beatLen));
+    emit beatChanged(beat);
 }
 
 TimeSignature::TimeSignatureType TimeSignature::type() const
@@ -74,7 +78,9 @@ TimeSignature::TimeSignatureType TimeSignature::type() const
 
 void TimeSignature::setType(TimeSignatureType type)
 {
+    if (d->type == type) return;
     d->type = type;
+    emit typeChanged(type);
 }
 
 } // namespace MusicCore

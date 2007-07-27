@@ -63,7 +63,10 @@ QString Part::name() const
 
 void Part::setName(const QString& name)
 {
+    if (d->name == name) return;
     d->name = name;
+    emit nameChanged(name);
+    if (d->shortName.isNull()) emit shortNameChanged(name);
 }
 
 QString Part::shortName(bool useFull) const
@@ -77,7 +80,9 @@ QString Part::shortName(bool useFull) const
 
 void Part::setShortName(const QString& name)
 {
+    if (d->shortName == name) return;
     d->shortName = name;
+    emit shortNameChanged(name);
 }
 
 int Part::staffCount() const

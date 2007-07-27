@@ -70,7 +70,9 @@ Chord::Duration Chord::duration() const
 
 void Chord::setDuration(Duration duration)
 {
+    if (d->duration == duration) return;
     d->duration = duration;
+    emit durationChanged(duration);
 }
 
 int Chord::dots() const
@@ -80,6 +82,7 @@ int Chord::dots() const
 
 void Chord::setDots(int dots)
 {
+    if (d->dots == dots) return;
     d->dots = dots;
     int baseLength = durationToTicks(d->duration);
     int length = baseLength;
@@ -87,6 +90,7 @@ void Chord::setDots(int dots)
         length += baseLength >> (i+1);
     }
     setLength(length);
+    emit dotsChanged(dots);
 }
 
 int Chord::noteCount() const

@@ -62,21 +62,11 @@ public:
     double x() const;
 
     /**
-     * Sets the x position of this musical element.
-     */
-    void setX(double x);
-
-    /**
      * Returns the y position of this musical element. The y position of an element is measure relative to the center
      * of the staff it is in, although some musical elements that have a notion of pitch such as notes/rests/clefs or
      * key signatures might have a different reference point.
      */
     double y() const;
-
-    /**
-     * Sets the y position of this musical element.
-     */
-    void setY(double y);
 
     /**
      * Returns the width of this musical element.
@@ -109,7 +99,17 @@ public:
         WholeLength = HalfLength * 2,
         DoubleWholeLength = WholeLength * 2
     };
-protected:
+public slots:
+    /**
+     * Sets the x position of this musical element.
+     */
+    void setX(double x);
+
+    /**
+     * Sets the y position of this musical element.
+     */
+    void setY(double y);
+protected slots:
     /**
      * Changes the duration of this musical element.
      *
@@ -130,6 +130,12 @@ protected:
      * @param height the new height of this musical element
      */
     void setHeight(double height);
+signals:
+    void xChanged(double x);
+    void yChanged(double y);
+    void lengthChanged(int length);
+    void widthChanged(double width);
+    void heightChanged(double height);
 private:
     class Private;
     Private * const d;

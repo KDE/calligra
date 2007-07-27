@@ -23,11 +23,13 @@ namespace MusicCore {
 
 class KeySignature::Private {
 public:
+    int accidentalCount;
     int accidentals[7];
 };
 
 KeySignature::KeySignature(Staff* staff, int startTime, int accidentals) : StaffElement(staff, startTime), d(new Private)
 {
+    d->accidentalCount = -1;
     setAccidentals(accidentals);
 }
 
@@ -47,6 +49,10 @@ int KeySignature::accidentals() const
 
 void KeySignature::setAccidentals(int accidentals)
 {
+    if (d->accidentalCount == accidentals) return;
+
+    d->accidentalCount = accidentals;
+
     // first zero the accidentals array
     for (int i = 0; i < 7; i++) {
         d->accidentals[i] = 0;
@@ -67,6 +73,8 @@ void KeySignature::setAccidentals(int accidentals)
     }
 
     setWidth(6 * std::abs(accidentals));
+
+    emit accidentalsChanged(accidentals);
 }
 
 int KeySignature::accidentals(int pitch) const

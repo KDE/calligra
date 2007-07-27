@@ -53,16 +53,21 @@ public:
     int beats() const;
 
     /**
+     * Returns the beat type of the time signature.
+     */
+    int beat() const;
+
+    /**
+     * Returns the type of the time signature.
+     */
+    TimeSignatureType type() const;
+public slots:
+    /**
      * Changes the number of beats in this time signature.
      *
      * @param beats the new number of beats in the time signature
      */
     void setBeats(int beats);
-
-    /**
-     * Returns the beat type of the time signature.
-     */
-    int beat() const;
 
     /**
      * Changes the beat type of the time signature.
@@ -72,14 +77,13 @@ public:
     void setBeat(int beat);
 
     /**
-     * Returns the type of the time signature.
-     */
-    TimeSignatureType type() const;
-
-    /**
      * Changes the type of the time signature.
      */
     void setType(TimeSignatureType type);
+signals:
+    void beatsChanged(int beats);
+    void beatChanged(int beat);
+    void typeChanged(TimeSignatureType type);
 private:
     class Private;
     Private * const d;

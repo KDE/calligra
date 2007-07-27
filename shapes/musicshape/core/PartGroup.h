@@ -71,16 +71,38 @@ public:
     int firstPart() const;
 
     /**
+     * Returns the index of the last part in this group.
+     */
+    int lastPart() const;
+
+    /**
+     * Returns the name of this group.
+     */
+    QString name() const;
+
+    /**
+     * Returns the short name of this part group.
+     */
+    QString shortName(bool useFull = true) const;
+
+    /**
+     * Returns the grouping symbol of this group.
+     */
+    GroupSymbol symbol() const;
+
+    /**
+     * Returns true if the group should have common bar-lines.
+     *
+     * XXX MusicXML has Mensurstrich as third option... perhaps nice to add later, and do I want that? :)
+     */
+    bool commonBarLines() const;
+public slots:
+    /**
      * Sets the index of the first part in this group. The index should be >= 0 and < sheet().partCount().
      *
      * @param index the index at which this group should start.
      */
     void setFirstPart(int index);
-
-    /**
-     * Returns the index of the last part in this group.
-     */
-    int lastPart() const;
 
     /**
      * Sets the index of the last part in this group. The index should be >= 0 and < sheet().partCount().
@@ -90,11 +112,6 @@ public:
     void setLastPart(int index);
 
     /**
-     * Returns the name of this group.
-     */
-    QString name() const;
-
-    /**
      * Changes the name of this group.
      *
      * @param name the new name of this group.
@@ -102,20 +119,10 @@ public:
     void setName(const QString &name);
 
     /**
-     * Returns the short name of this part group.
-     */
-    QString shortName(bool useFull = true) const;
-
-    /**
      * Changes the short name of this part group.
      */
     void setShortName(const QString& shortName);
     
-    /**
-     * Returns the grouping symbol of this group.
-     */
-    GroupSymbol symbol() const;
-
     /**
      * Changes the grouping symbol of this group.
      *
@@ -124,18 +131,18 @@ public:
     void setSymbol(GroupSymbol symbol);
 
     /**
-     * Returns true if the group should have common bar-lines.
-     *
-     * XXX MusicXML has Mensurstrich as third option... perhaps nice to add later, and do I want that? :)
-     */
-    bool commonBarLines() const;
-
-    /**
      * Set wether the group should have common bar-lines.
      *
      * @param commonBarLines true if the group should have common bar-lines
      */
     void setCommonBarLines(bool commonBarLines);
+signals:
+    void firstPartChanged(int index);
+    void lastPartChanged(int index);
+    void nameChanged(const QString& name);
+    void shortNameChanged(const QString& shortName);
+    void symbolChanged(GroupSymbol symbol);
+    void commonBarLinesChanged(bool commonBarLines);
 private:
     class Private;
     Private * const d;

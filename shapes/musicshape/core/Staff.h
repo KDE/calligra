@@ -67,13 +67,6 @@ public:
     double spacing() const;
 
     /**
-     * Set the spacing between this staff and the staff above it.
-     *
-     * @param spacing the new spacing.
-     */
-    void setSpacing(double spacing);
-
-    /**
      * Returns the vertical position of this staff relative to the top of the staff system.
      */
     double top();
@@ -87,23 +80,9 @@ public:
     int lineCount() const;
 
     /**
-     * Sets the number of lines of this staff.
-     *
-     * @param lineCount the new number of lines in this staff.
-     */
-    void setLineCount(int lineCount);
-
-    /**
      * Returns the distance in points between two lines of this staff.
      */
     double lineSpacing() const;
-
-    /**
-     * Sets the distance in points between two lines of this staff.
-     *
-     * @param lineSpacing the new distance between two lines.
-     */
-    void setLineSpacing(double lineSpacing);
 
     /**
      * Returns the closest line corresponding to the given y coordinate, where the coordinate should be relative
@@ -119,6 +98,31 @@ public:
      * older clef changes.
      */
     Clef* lastClefChange(int bar, int time, Clef* oldClef = 0);
+public slots:
+    /**
+     * Set the spacing between this staff and the staff above it.
+     *
+     * @param spacing the new spacing.
+     */
+    void setSpacing(double spacing);
+
+    /**
+     * Sets the number of lines of this staff.
+     *
+     * @param lineCount the new number of lines in this staff.
+     */
+    void setLineCount(int lineCount);
+
+    /**
+     * Sets the distance in points between two lines of this staff.
+     *
+     * @param lineSpacing the new distance between two lines.
+     */
+    void setLineSpacing(double lineSpacing);
+signals:
+    void spacingChanged(double spacing);
+    void lineCountChanged(int lineCount);
+    void lineSpacingChanged(double lineSpacing);
 private:
     class Private;
     Private * const d;

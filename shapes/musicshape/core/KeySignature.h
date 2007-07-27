@@ -51,19 +51,21 @@ public:
     int accidentals() const;
 
     /**
+     * Returns the accidentals for a note with the given pitch.
+     *
+     * @param pitch the pitch of the note for which to return the accidentals
+     */
+    int accidentals(int pitch) const;
+public slots:
+    /**
      * Sets the number of accidentals in this key signature. Use positive values for sharps and negative values for
      * flats.
      *
      * @param accidentals the new accidentals for this key signature
      */
     void setAccidentals(int accidentals);
-
-    /**
-     * Returns the accidentals for a note with the given pitch.
-     *
-     * @param pitch the pitch of the note for which to return the accidentals
-     */
-    int accidentals(int pitch) const;
+signals:
+    void accidentalsChanged(int accidentals);
 private:
     class Private;
     Private * const d;

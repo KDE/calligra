@@ -67,9 +67,11 @@ QPointF Bar::position() const
     return d->position;
 }
 
-void Bar::setPosition(QPointF position)
+void Bar::setPosition(const QPointF& position)
 {
+    if (d->position == position) return;
     d->position = position;
+    emit positionChanged(position);
 }
 
 double Bar::size() const
@@ -79,7 +81,9 @@ double Bar::size() const
 
 void Bar::setSize(double size)
 {
+    if (d->size == size) return;
     d->size = size;
+    emit sizeChanged(size);
 }
 
 double Bar::desiredSize() const
@@ -89,8 +93,10 @@ double Bar::desiredSize() const
 
 void Bar::setDesiredSize(double size)
 {
+    if (d->desiredSize == size && d->size == size) return;
     d->desiredSize = size;
     setSize(size);
+    emit desiredSizeChanged(size);
 }
 
 double Bar::scale() const

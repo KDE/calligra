@@ -33,12 +33,16 @@ class Staff::Private
 public:
     Part* part;
     double spacing;
+    int lineCount;
+    double lineSpacing;
 };
 
 Staff::Staff(Part* part) : d(new Private)
 {
     d->part = part;
     d->spacing = 60;
+    d->lineCount = 5;
+    d->lineSpacing = 5.0;
 }
 
 Staff::~Staff()
@@ -58,7 +62,9 @@ double Staff::spacing() const
 
 void Staff::setSpacing(double spacing)
 {
+    if (d->spacing == spacing) return;
     d->spacing = spacing;
+    emit spacingChanged(spacing);
 }
 
 double Staff::top()
@@ -88,12 +94,26 @@ double Staff::center()
 
 int Staff::lineCount() const
 {
-    return 5;
+    return d->lineCount;
+}
+
+void Staff::setLineCount(int lineCount)
+{
+    if (d->lineCount == lineCount) return;
+    d->lineCount = lineCount;
+    emit lineCountChanged(lineCount);
 }
 
 double Staff::lineSpacing() const
 {
-    return 5;
+    return d->lineSpacing;
+}
+
+void Staff::setLineSpacing(double lineSpacing)
+{
+    if (d->lineSpacing == lineSpacing) return;
+    d->lineSpacing = lineSpacing;
+    emit lineSpacingChanged(lineSpacing);
 }
 
 int Staff::line(double y) const

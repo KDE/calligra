@@ -56,21 +56,11 @@ public:
     double x() const;
 
     /**
-     * Sets the x position of this musical element.
-     */
-    void setX(double x);
-
-    /**
      * Returns the y position of this musical element. The y position of an element is measure relative to the center
      * of the staff it is in, although some musical elements that have a notion of pitch such as notes/rests/clefs or
      * key signatures might have a different reference point.
      */
     double y() const;
-
-    /**
-     * Sets the y position of this musical element.
-     */
-    void setY(double y);
 
     /**
      * Returns the width of this musical element.
@@ -86,12 +76,22 @@ public:
      * Returns the start time of this musical elements in ticks.
      */
     int startTime() const;
+public slots:
+    /**
+     * Sets the x position of this musical element.
+     */
+    void setX(double x);
+
+    /**
+     * Sets the y position of this musical element.
+     */
+    void setY(double y);
 
     /**
      * Sets the start time of this musical element.
      */
     void setStartTime(int startTime);
-protected:
+protected slots:
     /**
      * Sets the width of this musical element.
      *
@@ -105,6 +105,12 @@ protected:
      * @param height the new height of this musical element
      */
     void setHeight(double height);
+signals:
+    void xChanged(double x);
+    void yChanged(double y);
+    void startTimeChanged(int startTime);
+    void widthChanged(double width);
+    void heightChanged(double height);
 private:
     class Private;
     Private * const d;

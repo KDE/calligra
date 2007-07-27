@@ -65,25 +65,11 @@ public:
     QString name() const;
 
     /**
-     * Change the name of this part.
-     *
-     * @param name the new name of the part
-     */
-    void setName(const QString& name);
-
-    /**
      * Returns the short name of this part. In typical music the long name of a part is printed before the first
      * staff system, and the short name will be printed in front of the other staff systems. If no short name has been
      * specified, the normal name will be returned if useFull is true, otherwise a null string will be returned.
      */
     QString shortName(bool useFull = true) const;
-
-    /**
-     * Change the short name of this part.
-     *
-     * @param shortName the new short name of the part
-     */
-    void setShortName(const QString& shortName);
 
     /**
      * Returns the number of staves in this part.
@@ -130,6 +116,23 @@ public:
     Voice* addVoice();
 
     int indexOfVoice(Voice* voice);
+public slots:
+    /**
+     * Change the name of this part.
+     *
+     * @param name the new name of the part
+     */
+    void setName(const QString& name);
+
+    /**
+     * Change the short name of this part.
+     *
+     * @param shortName the new short name of the part
+     */
+    void setShortName(const QString& shortName);
+signals:
+    void nameChanged(const QString& name);
+    void shortNameChanged(const QString& shortName);
 private:
     class Private;
     Private * const d;
