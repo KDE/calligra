@@ -44,7 +44,7 @@ KoView* KivioDocument::createViewInstance(QWidget* parent)
 
 const char * KivioDocument::odfTagName()
 {
-    return "office:drawing";
+    return "drawing";
 }
 
 

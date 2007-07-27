@@ -50,7 +50,7 @@ KoView * KPrDocument::createViewInstance( QWidget *parent )
 
 const char * KPrDocument::odfTagName()
 {
-    return "office:presentation";
+    return "presentation";
 }
 
 #include "KPrDocument.moc"
