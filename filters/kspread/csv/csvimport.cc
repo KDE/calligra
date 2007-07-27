@@ -139,8 +139,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     Cell cell( sheet, 1, 1 );
     QFontMetrics fm( cell.style().font() );
 
-    Style * s = ksdoc->styleManager()->defaultStyle();
-
     for ( int row = 0; row < numRows; ++row )
     {
         for (int col = 0; col < numCols; ++col)
@@ -164,12 +162,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
 
                cell = Cell( sheet, col + 1, row + 1 );
-               cell.setStyle( *s );
                cell.parseUserInput( text );
-
-               Style style;
-               style.setFormatType (Format::Generic);
-               cell.setStyle(style);
 
                /* old code
               cell = Cell( sheet, col + 1, row + 1, s );
@@ -188,19 +181,14 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     if ( !ok )
                     {
                         cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setStyle( *s );
                         cell.setValue( Value( text ) );
                     }
                     else
                     {
                         cell = Cell( sheet,  col + 1, row + 1 );
-                        cell.setStyle( *s );
                         cell.setValue(Value(d));
                     }
                     cell.setUserInput(text);
-                    Style style;
-                    style.setPrecision( 2 );
-                    cell.setStyle(style);
                     break;
                 }
              case CSVDialog::COMMANUMBER:
@@ -214,19 +202,14 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     if ( !ok )
                     {
                         cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setStyle( *s );
                         cell.setValue( Value( text ) );
                     }
                     else
                     {
                         cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setStyle( *s );
                         cell.setValue(Value(d));
                     }
                     cell.setUserInput(tmp);
-                    Style style;
-                    style.setPrecision( 2 );
-                    cell.setStyle(style);
                     break;
                 }
              case CSVDialog::POINTNUMBER:
@@ -240,25 +223,19 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     if ( !ok )
                     {
                         cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setStyle( *s );
                         cell.setValue( Value( text ) );
                     }
                     else
                     {
                         cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setStyle( *s );
                         cell.setValue(Value(d));
                     }
                     cell.setUserInput(tmp);
-                    Style style;
-                    style.setPrecision( 2 );
-                    cell.setStyle(style);
                     break;
                 }
              case CSVDialog::DATE:
              {
               cell = Cell( sheet, col + 1, row + 1 );
-              cell.setStyle( *s );
               cell.setUserInput(text);
               cell.setValue(ksdoc->converter()->asDate(Value(text)));
               Style style;
@@ -269,7 +246,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
              case CSVDialog::CURRENCY:
              {
               cell = Cell( sheet, col + 1, row + 1 );
-              cell.setStyle( *s );
               cell.setUserInput(text);
               cell.setValue( Value( text ) );
               Style style;
