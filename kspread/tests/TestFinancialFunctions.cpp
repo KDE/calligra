@@ -881,18 +881,27 @@ void TestFinancialFunctions::testTBILLYIELD()
   CHECK_EVAL( "TBILLYIELD(DATE(1996;07;01);DATE(1997;07;01);94.93)", Value( Value::errorVALUE() ) ); // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
 }
 
+// XIRR
+void TestFinancialFunctions::testXIRR()
+{
+  // ODF
+  CHECK_EVAL_SHORT( "XIRR( {-20000;4000;12000;8000}; {date(2000;01;01); date(2000;06;01); date(2000;12;30); date(2001;03;01)} )", Value( 0.2115964 ) ); //
+  CHECK_EVAL_SHORT( "XIRR( {-20000;25000};           {date(2000;01;01); date(2001;01;01)} )",                                     Value( 0.2492381 ) ); //
+  CHECK_EVAL_SHORT( "XIRR( {-10000;4000;12000};      {date(2000;01;01); date(2002;06;01); date(2004;01;01)} )",                   Value( 0.1405418 ) ); //
+}
+
 // XNPV
 void TestFinancialFunctions::testXNPV()
 {
   // bettersolution.com
-  CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {date(2005;01;01); date(2005;01;10); date(2005;01;15)})" , Value( 3984.3581140636     ) ); //
+  CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {date(2005;01;01); date(2005;01;10); date(2005;01;15)})" , Value(   3984.3581140636   ) ); //
   
   // with dates {date(2005;01;01); date(2005;03;01); date(2005;10;30); date(2006;02;15)}
-  CHECK_EVAL( "XNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})", Value(  -380.3891178530  ) ); //
-  CHECK_EVAL( "XNPV(30;   {-10000;2750;4250;3250}; {38353;38412;38655;38763})", Value( -8104.7862519770  ) ); //
-  CHECK_EVAL( "XNPV(-30;  {-10000;2750;4250;3250}; {38353;38412;38655;38763})", Value( Value::errorNUM() ) ); //
-  CHECK_EVAL( "XNPV(0.09; {-10000;2750};           {date(2005;01;01); date(2005;01;10); date(2005;01;15)})", Value( Value::errorNUM()   ) ); //
-  CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {\"fail\"; date(2005;01;10); date(2005;01;15)})",         Value( Value::errorVALUE() ) ); //
+  CHECK_EVAL( "XNPV(0.09; {-10000;2750;4250;3250}; {38353;38412;38655;38763})",                               Value(   -380.3891178530   ) ); //
+  CHECK_EVAL( "XNPV(30;   {-10000;2750;4250;3250}; {38353;38412;38655;38763})",                               Value(  -8104.7862519770   ) ); //
+  CHECK_EVAL( "XNPV(-30;  {-10000;2750;4250;3250}; {38353;38412;38655;38763})",                               Value( Value::errorNUM()   ) ); //
+  CHECK_EVAL( "XNPV(0.09; {-10000;2750};           {date(2005;01;01); date(2005;01;10); date(2005;01;15)})",  Value( Value::errorNUM()   ) ); //
+  CHECK_EVAL( "XNPV(0.1;  {-1000;2000;3000};       {\"fail\"; date(2005;01;10); date(2005;01;15)})",          Value( Value::errorVALUE() ) ); //
   
   // ODF
 

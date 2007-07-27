@@ -97,7 +97,7 @@ Value func_tbilleq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillprice (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *);
 // Value func_vdb (valVector args, ValueCalc *calc, FuncExtra *);
-// Value func_xirr (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_xirr (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xnpv (valVector args, ValueCalc *calc, FuncExtra *);
 // Value func_yield (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *);
@@ -283,10 +283,10 @@ void RegisterFinancialFunctions()
 //   f = new Function ("VDB", func_vdb);
 //   f->setParamCount (5, 7);
 //   repo->add (f);
-//   f = new Function ("XIRR", func_xirr);
-//   f->setParamCount (2, 3);
-//   f->setAcceptArray();
-//   repo->add (f);
+  f = new Function ("XIRR", func_xirr);
+  f->setParamCount (2, 3);
+  f->setAcceptArray();
+  repo->add (f);
   f = new Function ("XNPV", func_xnpv);
   f->setParamCount (3);
   f->setAcceptArray();
@@ -391,6 +391,64 @@ static Value helper_ipmt( ValueCalc* calc, Value rate, Value per, Value nper, Va
     const Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, Value(1)));
     // -ineg * rate
     return calc->mul (calc->mul (ineg, Value(-1)), rate);
+}
+
+
+//
+// helper: xirrResult
+//
+// args[0] = values
+// args[1] = dates
+//
+static double xirrResult( valVector& args, ValueCalc *calc, double& rate)
+{
+  QDate date;
+
+  QDate date0 = calc->conv()->asDate (args[1].element( 0 )).asDate( calc->doc() );
+
+  double r = rate + 1.0;
+  double res = calc->conv()->asFloat (args[0].element( 0 )).asFloat();
+
+  for( int i = 1, count = args[0].count(); i < count; ++i )
+  {
+    date = calc->conv()->asDate (args[1].element( i )).asDate( calc->doc() );
+    double e_i = (date0.daysTo( date )) / 365.0;
+    double val = calc->conv()->asFloat (args[0].element( i )).asFloat();
+
+    res += val / pow( r, e_i );
+  }
+
+//   kDebug(36002)<<"xirrResult = "<<res<<endl;
+  return res;
+}
+
+
+//
+// helper: xirrResultDerive
+//
+// args[0] = values
+// args[1] = dates#
+//
+static double xirrResultDerive( valVector& args, ValueCalc *calc, double& rate)
+{
+  QDate date;
+
+  QDate date0 = calc->conv()->asDate (args[1].element( 0 )).asDate( calc->doc() );
+
+  double r = rate + 1.0;
+  double res = 0.0;
+
+  for( int i = 1, count = args[0].count(); i < count; ++i )
+  {
+    date = calc->conv()->asDate (args[1].element( i )).asDate( calc->doc() );
+    double e_i = (date0.daysTo( date )) / 365.0;
+    double val = calc->conv()->asFloat (args[0].element( i )).asFloat();
+
+    res -= e_i * val / pow( r, e_i + 1.0 );
+  }
+
+//   kDebug(36002)<<"xirrResultDerive = "<<res<<endl;
+  return res;
 }
 
 
@@ -1699,6 +1757,50 @@ Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *)
   return Value(res);
 }
 
+
+//
+// Function: XIRR
+//
+// Compute the internal rate of return for a non-periodic series of cash flows.
+//
+// XIRR ( Values; Dates; [ Guess = 0.1 ] )
+// 
+Value func_xirr (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  double resultRate = 0.1;
+  if (args.count() > 2) 
+    resultRate = calc->conv()->asFloat (args[2]).asFloat();
+
+  // check pairs and count >= 2 and guess > -1.0
+  if ( args[0].count() != args[1].count() || args[1].count() < 2 || resultRate <= -1.0 )
+    return Value::errorVALUE();
+
+  // define max epsilon
+  static const double maxEpsilon = 1e-10;
+
+  // max number of iterations
+  static const int maxIter = 50;
+
+  // Newton's method - try to find a res, with a accuracy of maxEpsilon
+  double newRate, rateEpsilon, resultValue;
+  int i = 0;
+  bool contLoop;
+
+  do
+  {
+     resultValue = xirrResult( args, calc, resultRate );
+     newRate =  resultRate - resultValue / xirrResultDerive( args, calc, resultRate );
+     rateEpsilon = fabs( newRate - resultRate );
+     resultRate = newRate;
+     contLoop = (rateEpsilon > maxEpsilon) && (fabs( resultValue ) > maxEpsilon);
+  }
+  while( contLoop && (++i < maxIter) );
+
+  if ( contLoop )
+    return Value::errorVALUE();
+
+  return Value( resultRate );
+}
 
 //
 // Function: xnpv
