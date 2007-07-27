@@ -33,14 +33,14 @@
 
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
+
+#include <kspread/Cell.h>
 #include <kspread/Doc.h>
 #include <kspread/Global.h>
 #include <kspread/Map.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Sheet.h>
 #include <kspread/Style.h>
-#include <kspread/StyleManager.h>
-#include <kspread/Cell.h>
 #include <kspread/Value.h>
 #include <kspread/ValueConverter.h>
 
@@ -71,8 +71,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     if ( !document )
         return KoFilter::StupidError;
 
-    kDebug(30501) << "here we go... " << document->metaObject()->className() << endl;
-
     if ( !qobject_cast<const KSpread::Doc *>( document ) )
     {
       kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
@@ -83,8 +81,6 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
         kWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
         return KoFilter::NotImplemented;
     }
-
-    kDebug(30501) << "...still here..." << endl;
 
     Doc *ksdoc = static_cast<Doc *>( document ); // type checked above
 
@@ -238,20 +234,15 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
               cell = Cell( sheet, col + 1, row + 1 );
               cell.setUserInput(text);
               cell.setValue(ksdoc->converter()->asDate(Value(text)));
-              Style style;
-              style.setFormatType( Format::ShortDate );
-              cell.setStyle(style);
               break;
              }
              case CSVDialog::CURRENCY:
              {
               cell = Cell( sheet, col + 1, row + 1 );
               cell.setUserInput(text);
-              cell.setValue( Value( text ) );
-              Style style;
-              style.setFormatType( Format::Money );
-              style.setPrecision( 2 );
-              cell.setStyle(style);
+              Value value(text);
+              value.setFormat(Value::fmt_Money);
+              cell.setValue(value);
               break;
              }
             }
