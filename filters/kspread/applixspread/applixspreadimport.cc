@@ -54,7 +54,7 @@ QString APPLIXSPREADImport::nextLine( QTextStream & stream )
 KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, const QByteArray& to )
 {
 
-    if (to != "application/x-kspread" || from != "application/x-applixspread")
+    if (to != "application/x-kspread" || from != "application/x-applix-spreadsheet")
         return KoFilter::NotImplemented;
 
     QFile in (m_chain->inputFile());

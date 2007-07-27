@@ -95,7 +95,7 @@ ExcelImport::~ExcelImport()
 
 KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const QByteArray& to )
 {
-  if ( from != "application/msexcel" )
+  if ( from != "application/vnd.ms-excel" )
     return KoFilter::NotImplemented;
 
   if ( to != "application/vnd.oasis.opendocument.spreadsheet" )

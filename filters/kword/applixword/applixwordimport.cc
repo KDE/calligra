@@ -84,7 +84,7 @@ APPLIXWORDImport::nextLine (QTextStream & stream)
 KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, const QByteArray& to )
 {
 
-    if (to!="application/x-kword" || from!="application/x-applixword")
+    if (to!="application/x-kword" || from!="application/x-applix-word")
         return KoFilter::NotImplemented;
 
     QFile in(m_chain->inputFile());

@@ -132,7 +132,7 @@ KoFilter::ConversionStatus APPLIXGRAPHICImport::convert( const QByteArray& from,
 {
 
     // Check MIME Types
-    if (to!="application/x-karbon" || from!="application/x-applixgraphic")
+    if (to!="application/x-karbon" || from!="application/x-applix-graphics")
         return KoFilter::NotImplemented;
 
     // Open Inputfile

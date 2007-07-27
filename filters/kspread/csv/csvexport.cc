@@ -125,7 +125,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
     kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
     return KoFilter::NotImplemented;
   }
-  if ( ( to != "text/x-csv" && to != "text/plain" ) || from != "application/x-kspread" )
+  if ( ( to != "text/csv" && to != "text/plain" ) || from != "application/x-kspread" )
   {
     kWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
     return KoFilter::NotImplemented;

@@ -44,7 +44,7 @@ DBaseImport::DBaseImport ( QObject* parent, const QStringList& )
 
 KoFilter::ConversionStatus DBaseImport::convert( const QByteArray& from, const QByteArray& to )
 {
-  if (to != "application/x-kspread" || from != "application/x-dbase")
+  if (to != "application/x-kspread" || from != "application/x-dbf")
     return KoFilter::NotImplemented;
 
   QString inputFile = m_chain->inputFile();
