@@ -160,12 +160,16 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     int right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
+        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
+            continue;
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
 // kDebug() << "offset: " << offset << endl;
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
+            if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
+                continue;
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBackground( painter, offset );
             offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
@@ -180,11 +184,15 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
+        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
+            continue;
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
+            if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
+                continue;
             CellView cellView = this->cellView( col, row );
             cellView.paintCellContents( paintRect, painter, paintDevice, offset,
                                         Cell( sheet(), col, row ), this );
@@ -200,11 +208,15 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
+        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
+            continue;
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
+            if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
+                continue;
             Cell cell = Cell( sheet(), col, row );
             CellView cellView = this->cellView( col, row );
             cellView.paintDefaultBorders( painter, paintRect, offset,
@@ -223,11 +235,15 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     right = d->visibleRect.right();
     for ( int col = d->visibleRect.left(); col <= right; ++col )
     {
+        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
+            continue;
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {
+            if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
+                continue;
             CellView cellView = this->cellView( col, row );
             cellView.paintCellBorders( paintRect, painter, offset,
                                        d->visibleRect,
