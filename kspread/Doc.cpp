@@ -508,7 +508,8 @@ int Doc::syntaxVersion() const
 
 bool Doc::isLoading() const
 {
-  return d->isLoading;
+    // The KoDocument state is necessary to avoid damages while importing a file (through a filter).
+    return d->isLoading || KoDocument::isLoading();
 }
 
 QColor Doc::pageBorderColor() const
