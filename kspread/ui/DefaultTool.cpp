@@ -566,7 +566,6 @@ void DefaultTool::keyPressEvent( QKeyEvent* event )
     // passed to the parent.
     event->setAccepted(true);
 
-    d->canvas->view()->doc()->emitBeginOperation(false);
     if ( event->key() == KGlobalSettings::contextMenuKey() ) {
         int row = d->canvas->selection()->marker().y();
         int col = d->canvas->selection()->marker().x();
@@ -643,11 +642,6 @@ void DefaultTool::keyPressEvent( QKeyEvent* event )
             return;
             break;
     }
-
-    //most process*Key methods call emitEndOperation, this only gets called in some situations
-    // (after some move operations)
-    d->canvas->view()->doc()->emitEndOperation();
-    return;
 }
 
 void DefaultTool::activate( bool temporary )

@@ -402,8 +402,8 @@ void Canvas::endChoose()
     // cell references will stay highlighted.
     if ( !choice()->isEmpty() )
     {
+        d->view->markSelectionAsDirty();
         choice()->clear();
-        update();
     }
 
     if ( !d->chooseCell )
@@ -1236,7 +1236,6 @@ void Canvas::processEnterKey(QKeyEvent* event)
      direction, not extends the selection
   */
   QRect r( moveDirection( direction, false ) );
-  d->view->doc()->emitEndOperation();
 }
 
 void Canvas::processArrowKey( QKeyEvent *event)
@@ -1291,7 +1290,6 @@ void Canvas::processArrowKey( QKeyEvent *event)
   }
 
   QRect r( moveDirection( direction, makingSelection ) );
-  d->view->doc()->emitEndOperation();
 }
 
 void Canvas::processEscapeKey(QKeyEvent * event)
@@ -1314,8 +1312,6 @@ void Canvas::processEscapeKey(QKeyEvent * event)
 
   event->setAccepted(true); // ?
   QPoint cursor = cursorPos();
-
-  d->view->doc()->emitEndOperation();
 
 #if 0 // KSPREAD_KOPART_EMBEDDING
   if ( d->mousePressed /*&& toolEditMode == TEM_MOUSE */)
@@ -1416,10 +1412,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
     }
 
     if ( selection()->marker() == destination )
-    {
-      d->view->doc()->emitEndOperation();
       return false;
-    }
 
     if (makingSelection)
     {
@@ -1448,7 +1441,6 @@ bool Canvas::processEndKey( QKeyEvent *event )
   if ( d->cellEditor )
   {
     QApplication::sendEvent( d->editWidget, event );
-    d->view->doc()->emitEndOperation();
     return false;
   }
   else
@@ -1465,10 +1457,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
 
     QPoint destination( col, marker.y() );
     if ( destination == marker )
-    {
-      d->view->doc()->emitEndOperation();
       return false;
-    }
 
     if (makingSelection)
     {
@@ -1494,10 +1483,7 @@ bool Canvas::processPriorKey(QKeyEvent *event)
 
   QPoint destination(marker.x(), qMax(1, marker.y() - 10));
   if ( destination == marker )
-  {
-    d->view->doc()->emitEndOperation();
     return false;
-  }
 
   if (makingSelection)
   {
@@ -1523,10 +1509,7 @@ bool Canvas::processNextKey(QKeyEvent *event)
   QPoint destination(marker.x(), qMax(1, marker.y() + 10));
 
   if ( marker == destination )
-  {
-    d->view->doc()->emitEndOperation();
     return false;
-  }
 
   if (makingSelection)
   {
@@ -1548,7 +1531,6 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
 #if 0 // KSPREAD_KOPART_EMBEDDING
   if ( isObjectSelected() )
   {
-    d->view->doc()->emitEndOperation();
     d->view->deleteSelectedObjects();
     return;
   }
@@ -1556,9 +1538,6 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
 
   d->view->clearContents();
   d->editWidget->setText( "" );
-
-  d->view->doc()->emitEndOperation();
-  return;
 }
 
 void Canvas::processF2Key(QKeyEvent* /* event */)
@@ -1567,9 +1546,6 @@ void Canvas::processF2Key(QKeyEvent* /* event */)
   if ( d->cellEditor )
     d->editWidget->setCursorPosition( d->cellEditor->cursorPosition() - 1 );
   d->editWidget->cursorForward( false );
-
-  d->view->doc()->emitEndOperation();
-  return;
 }
 
 void Canvas::processF4Key(QKeyEvent* event)
@@ -1582,9 +1558,6 @@ void Canvas::processF4Key(QKeyEvent* event)
 //    d->editWidget->setFocus();
     d->editWidget->setCursorPosition( d->cellEditor->cursorPosition() );
   }
-
-  d->view->doc()->emitEndOperation();
-  return;
 }
 
 void Canvas::processOtherKey(QKeyEvent *event)
@@ -1608,7 +1581,6 @@ void Canvas::processOtherKey(QKeyEvent *event)
         else if ( d->cellEditor )
             d->cellEditor->handleKeyPressEvent( event );
     }
-    d->view->doc()->emitEndOperation();
 }
 
 bool Canvas::processControlArrowKey( QKeyEvent *event )
@@ -1916,10 +1888,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   }
 
   if ( marker == destination )
-  {
-    d->view->doc()->emitEndOperation();
     return false;
-  }
 
   if (makingSelection)
   {
@@ -1935,7 +1904,6 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
 #if 0
 void Canvas::processIMEvent( QIMEvent * event )
 {
-  d->view->doc()->emitBeginOperation( false );
   if ( !d->cellEditor && !d->chooseCell )
   {
     // Switch to editing mode
@@ -1954,8 +1922,6 @@ void Canvas::processIMEvent( QIMEvent * event )
   }
   else
     cursor = selection()->cursor();
-
-  d->view->doc()->emitEndOperation();
 }
 #endif
 
@@ -2590,7 +2556,7 @@ bool Canvas::createEditor( bool clear,  bool focus )
             color = palette().text().color();
         editorPalette.setColor( QPalette::Text, color );
 
-        color = Cell( sheet, selection()->marker() ).style().backgroundColor(); // FIXME effective!
+        color = Cell( sheet, selection()->marker() ).effectiveStyle().backgroundColor();
         if ( !color.isValid() )
             color = editorPalette.base().color();
         editorPalette.setColor( QPalette::Background, color );
@@ -2624,7 +2590,6 @@ bool Canvas::createEditor( bool clear,  bool focus )
             d->cellEditor->setFocus();
 
         d->view->markSelectionAsDirty();
-        repaint();
     }
 
     if ( !clear && !cell.isNull() )

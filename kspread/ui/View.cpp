@@ -7094,13 +7094,10 @@ void View::updateShowSheetMenu()
 
 void View::closeEditor()
 {
-  if ( d->activeSheet ) { // #45822
-    doc()->emitBeginOperation( false );
+    if (!d->activeSheet) // #45822
+        return;
     d->canvas->closeEditor();
-
     markSelectionAsDirty();
-    doc()->emitEndOperation();
-  }
 }
 
 void View::markSelectionAsDirty()
