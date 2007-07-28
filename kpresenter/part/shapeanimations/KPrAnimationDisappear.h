@@ -17,44 +17,28 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef KPRANIMATIONDISAPPEAR_H
+#define KPRANIMATIONDISAPPEAR_H
+
 #include "KPrShapeAnimation.h"
 
-KPrShapeAnimation::KPrShapeAnimation( KoShape * shape, int step, Type type )
-: m_shape( shape )
-, m_step( step )
-, m_type( type )
-, m_finished( false )                
-{
-    // TODO make setable
-    m_timeLine.setDuration( 5000 );
-    m_timeLine.setCurveShape( QTimeLine::LinearCurve );
-}
+#include <QPointF>
+#include <QRectF>
 
-KPrShapeAnimation::~KPrShapeAnimation()
+class KPrAnimationDisappear : public KPrShapeAnimation
 {
-}
+public:
+    KPrAnimationDisappear( KoShape * shape, int step );
+    virtual ~KPrAnimationDisappear();
 
-int KPrShapeAnimation::duration() const
-{
-    return m_timeLine.duration();
-}
+    virtual bool animate( QPainter &painter );
+    virtual QRectF animateRect( const QRectF & rect );
+    virtual void next( int currentTime, KoCanvasBase * canvas );
+    virtual void finish( KoCanvasBase * canvas );
 
-int KPrShapeAnimation::step() const
-{
-    return m_step;
-}
+private:
+    QPointF m_translate;
+    QRectF m_shapeRect;
+};
 
-void KPrShapeAnimation::setStep( int step )
-{
-    m_step = step;
-}
-
-KoShape * KPrShapeAnimation::shape() const
-{
-    return m_shape;
-}
-
-KPrShapeAnimation::Type KPrShapeAnimation::type() const
-{
-    return m_type;
-}
+#endif /* KPRANIMATIONDISAPPEAR_H */

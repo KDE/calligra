@@ -24,6 +24,8 @@ set( kpresenterprivate_LIB_SRCS
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrCoverDownEffect.cpp
      shapeanimations/KPrShapeAnimation.cpp
+     shapeanimations/KPrAnimationMoveAppear.cpp
+     shapeanimations/KPrAnimationDisappear.cpp
    )
 
 #kde4_add_ui_files(kpresenterprivate_LIB_SRCS xxxx.ui)

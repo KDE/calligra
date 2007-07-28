@@ -46,8 +46,10 @@ public:
      * This is done by maniplating the painter used for painting the shape.
      *
      * @param painter The painter used for painting the shape
+     *
+     * @return true when the animations is finished
      */
-    virtual void animate( QPainter &painter ) = 0;
+    virtual bool animate( QPainter &painter ) = 0;
 
     /**
      * @brief Get the bounding rect of the shape in the animation
@@ -116,6 +118,8 @@ protected:
     int m_step;
     // The type of animation
     Type m_type;
+    // Indicates that the animation is finished
+    bool m_finished;
 };
 
 #endif // KPRSHAPEANIMATION_H
