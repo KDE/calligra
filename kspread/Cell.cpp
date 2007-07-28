@@ -91,8 +91,8 @@ public:
     Private() : sheet( 0 ), column( 0 ), row( 0 ) {}
 
     Sheet*  sheet;
-    int     column  : 16; // KS_colMax
-    int     row     : 16; // KS_rowMax
+    uint    column  : 16; // KS_colMax
+    uint    row     : 16; // KS_rowMax
 };
 
 
@@ -1730,24 +1730,22 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     // First of all determine in which row and column this
     // cell belongs.
     //
-    const int row = cell.attribute( "row" ).toInt( &ok ) + _yshift;
+    d->row = cell.attribute( "row" ).toInt( &ok ) + _yshift;
     if ( !ok ) return false;
-    const int column = cell.attribute( "column" ).toInt( &ok ) + _xshift;
+    d->column = cell.attribute( "column" ).toInt( &ok ) + _xshift;
     if ( !ok ) return false;
 
     // Validation
-    if ( row < 1 || row > KS_rowMax )
+    if ( d->row < 1 || d->row > KS_rowMax )
     {
         kDebug(36001) << "Cell::load: Value out of range Cell:row=" << d->row << endl;
         return false;
     }
-    if ( column < 1 || column > KS_colMax )
+    if ( d->column < 1 || d->column > KS_colMax )
     {
         kDebug(36001) << "Cell::load: Value out of range Cell:column=" << d->column << endl;
         return false;
     }
-    d->row = row;
-    d->column = column;
 
     //
     // Load formatting information.
