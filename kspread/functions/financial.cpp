@@ -1764,7 +1764,9 @@ Value func_tbillyield (valVector args, ValueCalc *calc, FuncExtra *)
 // Compute the internal rate of return for a non-periodic series of cash flows.
 //
 // XIRR ( Values; Dates; [ Guess = 0.1 ] )
-// 
+//
+
+// TODO sascha check dates
 Value func_xirr (valVector args, ValueCalc *calc, FuncExtra *)
 {
   double resultRate = 0.1;
