@@ -41,6 +41,7 @@ StyleManipulator::StyleManipulator()
 
 StyleManipulator::~StyleManipulator()
 {
+    delete m_style;
 }
 
 bool StyleManipulator::process(Element* element)
@@ -155,10 +156,6 @@ bool StyleManipulator::mainProcessing()
 {
     if ( !m_reverse )
     {
-        if ( m_firstrun )
-        {
-            m_undoData.clear();
-        }
     }
     else // m_reverse
     {
