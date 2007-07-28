@@ -209,19 +209,22 @@ void TestDocumentLayout::testAdvancedLineSpacing() {
 
     block = block.next();
     QVERIFY(block.isValid()); // line4
+    style.remove(KoParagraphStyle::FixedLineHeight);
     style.setMinimumLineHeight(5.0);
     style.applyStyle(block);
 
     block = block.next();
     QVERIFY(block.isValid()); // line5
     style.setMinimumLineHeight(0.0);
-    style.setLineSpacing(8.0); // implicitly will ignore the other two
+    style.setLineSpacing(8.0);
+    style.remove(KoParagraphStyle::PercentLineHeight);
     style.applyStyle(block);
 
     block = block.next();
     QVERIFY(block.isValid()); // line6
     style.setLineSpacingFromFont(true);
     style.setLineHeightPercent(100);
+    style.remove(KoParagraphStyle::LineSpacing);
     style.applyStyle(block);
 
     layout->layout();
@@ -244,8 +247,8 @@ void TestDocumentLayout::testAdvancedLineSpacing() {
     block = block.next(); // line5
     QVERIFY(block.isValid());
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(12 * 1.2, 5.0))) < ROUNDING);
+    // qDebug() << blockLayout->lineAt(0).y();
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(12 * 1.2, 5.0))) < ROUNDING); // 92
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
