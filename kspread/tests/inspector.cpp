@@ -123,6 +123,8 @@ void Inspector::Private::handleStyle() // direct style access
   styleView->clear();
   const Style style = cell.style();
 
+  new Q3ListViewItem( styleView, "Style Name", style.parentName() );
+
   new Q3ListViewItem( styleView, "Angle", QString::number( style.angle() ) );
   new Q3ListViewItem( styleView, "Multirow", boolAsString( style.wrapText() ) );
   new Q3ListViewItem( styleView, "Protected", boolAsString( !style.notProtected() ) );
