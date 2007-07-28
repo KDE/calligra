@@ -51,31 +51,35 @@ KoEllipseShape::~KoEllipseShape()
 
 void KoEllipseShape::saveOdf( KoShapeSavingContext & context ) const
 {
-    context.xmlWriter().startElement("draw:ellipse");
-    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
-
-    char * kind = "full";
-    switch ( m_type )
+    if( isParametricShape() )
     {
-        case Arc:
-            if ( sweepAngle() != 360 )
-            {
-                kind = "arc";
-            }
-            break;
-        case Pie:
-            kind = "section";
-            break;
-        case Chord:
-            kind = "cut";
-            break;
-    }
-    context.xmlWriter().addAttribute( "draw:kind", kind );
+        context.xmlWriter().startElement("draw:ellipse");
+        saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
 
-    context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
-    context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
-    context.xmlWriter().endElement();
-    saveOdfConnections(context);
+        char * kind = "full";
+        switch ( m_type )
+        {
+            case Arc:
+                if ( sweepAngle() != 360 )
+                {
+                    kind = "arc";
+                }
+                break;
+            case Pie:
+                kind = "section";
+                break;
+            case Chord:
+                kind = "cut";
+                break;
+        }
+        context.xmlWriter().addAttribute( "draw:kind", kind );
+        context.xmlWriter().addAttribute( "draw:start-angle", m_startAngle );
+        context.xmlWriter().addAttribute( "draw:end-angle", m_endAngle );
+        context.xmlWriter().endElement();
+        saveOdfConnections(context);
+    }
+    else
+        KoPathShape::saveOdf( context );
 }
 
 bool KoEllipseShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )

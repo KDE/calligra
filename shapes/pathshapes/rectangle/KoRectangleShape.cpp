@@ -79,12 +79,17 @@ bool KoRectangleShape::loadOdf( const KoXmlElement & element, KoShapeLoadingCont
 
 void KoRectangleShape::saveOdf( KoShapeSavingContext & context ) const
 {
-    context.xmlWriter().startElement("draw:rect");
-    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
-    context.xmlWriter().addAttribute( "svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0 );
-    context.xmlWriter().addAttribute( "svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0 );
-    context.xmlWriter().endElement();
-    saveOdfConnections(context);
+    if( isParametricShape() )
+    {
+        context.xmlWriter().startElement("draw:rect");
+        saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
+        context.xmlWriter().addAttribute( "svg:rx", m_cornerRadiusX * (0.5*size().width()) / 100.0 );
+        context.xmlWriter().addAttribute( "svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0 );
+        context.xmlWriter().endElement();
+        saveOdfConnections(context);
+    }
+    else
+        KoPathShape::saveOdf( context );
 }
 
 void KoRectangleShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
