@@ -313,21 +313,13 @@ public:
      * \ingroup NativeFormat
      * Save this cell.
      * @param doc document to save cell in
-     * @param _x_offset x offset
-     * @param _y_offset y offset
-     * @param force if set to true, all the properties of the format are stored (used for "Copy"),
-     *              otherwise only the non-default properties will be stored.
-     *              Set this to false if you want smaller files.
-     * @param copy if set to true, all cell formats will be copied instead of referencing the format (style name),
-     *             thus resulting in larger output (files).
-     *             Set this to false if you want smaller files.
+     * @param xOffset x offset
+     * @param yOffset y offset
      * @param era set this to true if you want to encode relative references as absolutely (they will be switched
      *            back to relative references during decoding) - is used for cutting to clipboard
      *            Usually this is false, to only store the properties explicitly set.
      */
-    QDomElement save( QDomDocument& doc,
-                      int _x_offset = 0, int _y_offset = 0,
-                      bool force = false, bool copy = false, bool era = false );
+    QDomElement save(QDomDocument& doc, int xOffset = 0, int yOffset = 0, bool era = false);
 
     /**
      * \ingroup NativeFormat

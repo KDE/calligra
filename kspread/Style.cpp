@@ -1099,8 +1099,8 @@ QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
             keysToStore = difference(*namedStyle);
         // no differences and not an automatic style yet
         if (style.type() == 0 &&
-            keysToStore.count() == 1 &&
-            keysToStore.toList().first() == NamedStyleKey)
+            (keysToStore.count() == 0 ||
+            (keysToStore.count() == 1 && keysToStore.toList().first() == NamedStyleKey)))
         {
             return manager->openDocumentName(parentName());
         }
@@ -1366,111 +1366,118 @@ QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
-void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool copy ) const
+void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const
 {
-    Q_UNUSED( force );
-    Q_UNUSED( copy );
+    // list of substyles to store
+    QSet<Key> keysToStore;
 
-    if (type() == AUTO)
+    if (d->subStyles.contains(NamedStyleKey))
     {
-        if ( d->subStyles.contains( NamedStyleKey ) )
+        const CustomStyle* namedStyle = styleManager->style(parentName());
+        // check, if it's an unmodified named style
+        keysToStore = difference(*namedStyle);
+        if (type() == AUTO)
         {
-            // check, if it's an unmodified named style
-            const QSet<Key> keys = difference(*this);
-            if (keys.count() == 1 && keys.toList().first() == NamedStyleKey)
+            const QList<Key> keys = keysToStore.toList();
+            if ((keysToStore.count() == 0) ||
+                (keysToStore.count() == 1 && keysToStore.toList().first() == NamedStyleKey))
             {
                 // just save the name and we are done.
                 format.setAttribute( "style-name", parentName() );
                 return;
             }
+            else
+                format.setAttribute("parent", parentName());
+        }
+        else // custom style
+        {
+            if (d->subStyles.contains(NamedStyleKey))
+                format.setAttribute("parent", parentName());
         }
     }
-    else // custom style
-    {
-        if (d->subStyles.contains(NamedStyleKey))
-            format.setAttribute("parent", parentName());
-    }
+    else
+        keysToStore = QSet<Key>::fromList(d->subStyles.keys());
 
-    if ( d->subStyles.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
+    if ( keysToStore.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
         format.setAttribute(type() == AUTO ? "align" : "alignX", (int) halign() );
 
-    if ( d->subStyles.contains( VerticalAlignment ) && valign() != Middle )
+    if ( keysToStore.contains( VerticalAlignment ) && valign() != Middle )
         format.setAttribute( "alignY", (int) valign() );
 
-    if ( d->subStyles.contains( BackgroundColor ) && backgroundColor().isValid() )
+    if ( keysToStore.contains( BackgroundColor ) && backgroundColor().isValid() )
         format.setAttribute( "bgcolor", backgroundColor().name() );
 
-    if ( d->subStyles.contains( MultiRow ) && d->subStyles.contains( MultiRow ) )
+    if ( keysToStore.contains( MultiRow ) && wrapText() )
         format.setAttribute( "multirow", "yes" );
 
-    if ( d->subStyles.contains( VerticalText ) && d->subStyles.contains( VerticalText ) )
+    if ( keysToStore.contains( VerticalText ) && verticalText() )
         format.setAttribute( "verticaltext", "yes" );
 
-    if ( d->subStyles.contains( Precision ) )
+    if ( keysToStore.contains( Precision ) )
         format.setAttribute( "precision", precision() );
 
-    if ( d->subStyles.contains( Prefix ) && !prefix().isEmpty() )
+    if ( keysToStore.contains( Prefix ) && !prefix().isEmpty() )
         format.setAttribute( "prefix", prefix() );
 
-    if ( d->subStyles.contains( Postfix ) && !postfix().isEmpty() )
+    if ( keysToStore.contains( Postfix ) && !postfix().isEmpty() )
         format.setAttribute( "postfix", postfix() );
 
-    if ( d->subStyles.contains( FloatFormatKey ) )
+    if ( keysToStore.contains( FloatFormatKey ) )
         format.setAttribute( "float", (int) floatFormat() );
 
-    if ( d->subStyles.contains( FloatColorKey ) )
+    if ( keysToStore.contains( FloatColorKey ) )
         format.setAttribute( "floatcolor", (int)floatColor() );
 
-    if ( d->subStyles.contains( FormatTypeKey ) )
+    if ( keysToStore.contains( FormatTypeKey ) )
         format.setAttribute( "format",(int) formatType() );
 
-    if ( d->subStyles.contains( CustomFormat ) && !customFormat().isEmpty() )
+    if ( keysToStore.contains( CustomFormat ) && !customFormat().isEmpty() )
         format.setAttribute( "custom", customFormat() );
 
-    if ( d->subStyles.contains( FormatTypeKey ) && formatType() == Format::Money )
+    if ( keysToStore.contains( FormatTypeKey ) && formatType() == Format::Money )
     {
         format.setAttribute( "type", (int) currency().index() );
         format.setAttribute( "symbol", currency().symbol() );
     }
 
-    if ( d->subStyles.contains( Angle ) )
+    if ( keysToStore.contains( Angle ) )
         format.setAttribute( "angle", angle() );
 
-    if ( d->subStyles.contains( Indentation ) )
+    if ( keysToStore.contains( Indentation ) )
         format.setAttribute( "indent", indentation() );
 
-    if ( d->subStyles.contains( DontPrintText ) )
+    if ( keysToStore.contains( DontPrintText ) )
         format.setAttribute( "dontprinttext", printText() ? "no" : "yes" );
 
-    if ( d->subStyles.contains( NotProtected ) )
+    if ( keysToStore.contains( NotProtected ) )
         format.setAttribute( "noprotection", notProtected() ? "yes" : "no" );
 
-    if ( d->subStyles.contains( HideAll ) )
+    if ( keysToStore.contains( HideAll ) )
         format.setAttribute( "hideall", hideAll() ? "yes" : "no" );
 
-    if ( d->subStyles.contains( HideFormula ) )
+    if ( keysToStore.contains( HideFormula ) )
         format.setAttribute( "hideformula", hideFormula() ? "yes" : "no" );
 
     if (type() == AUTO)
     {
-        if (d->subStyles.contains(FontFamily) ||
-            d->subStyles.contains(FontSize) ||
-            d->subStyles.contains(FontBold) ||
-            d->subStyles.contains(FontItalic) ||
-            d->subStyles.contains(FontStrike) ||
-            d->subStyles.contains(FontUnderline))
+        if (keysToStore.contains(FontFamily) ||
+            keysToStore.contains(FontSize) ||
+            keysToStore.contains(FontBold) ||
+            keysToStore.contains(FontItalic) ||
+            keysToStore.contains(FontStrike) ||
+            keysToStore.contains(FontUnderline))
         {
             format.appendChild(NativeFormat::createElement("font", font(), doc));
         }
     }
     else // custom style
     {
-        if ( d->subStyles.contains( FontFamily ) )
+        if ( keysToStore.contains( FontFamily ) )
             format.setAttribute( "font-family", fontFamily() );
-        if ( d->subStyles.contains( FontSize ) )
+        if ( keysToStore.contains( FontSize ) )
             format.setAttribute( "font-size", fontSize() );
-        if ( d->subStyles.contains( FontBold ) || d->subStyles.contains( FontItalic ) ||
-            d->subStyles.contains( FontUnderline ) || d->subStyles.contains( FontStrike ) )
+        if ( keysToStore.contains( FontBold ) || keysToStore.contains( FontItalic ) ||
+            keysToStore.contains( FontUnderline ) || keysToStore.contains( FontStrike ) )
         {
             enum FontFlags
             {
@@ -1488,51 +1495,51 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
         }
     }
 
-    if ( d->subStyles.contains( FontColor ) && fontColor().isValid() )
+    if ( keysToStore.contains( FontColor ) && fontColor().isValid() )
         format.appendChild( NativeFormat::createElement( "pen", fontColor(), doc ) );
 
-    if ( d->subStyles.contains( BackgroundBrush ) )
+    if ( keysToStore.contains( BackgroundBrush ) )
     {
         format.setAttribute( "brushcolor", backgroundBrush().color().name() );
         format.setAttribute( "brushstyle", (int) backgroundBrush().style() );
     }
 
-    if ( d->subStyles.contains( LeftPen ) )
+    if ( keysToStore.contains( LeftPen ) )
     {
         QDomElement left = doc.createElement( "left-border" );
         left.appendChild( NativeFormat::createElement( "pen", leftBorderPen(), doc ) );
         format.appendChild( left );
     }
 
-    if ( d->subStyles.contains( TopPen ) )
+    if ( keysToStore.contains( TopPen ) )
     {
         QDomElement top = doc.createElement( "top-border" );
         top.appendChild( NativeFormat::createElement( "pen", topBorderPen(), doc ) );
         format.appendChild( top );
     }
 
-    if ( d->subStyles.contains( RightPen ) )
+    if ( keysToStore.contains( RightPen ) )
     {
         QDomElement right = doc.createElement( "right-border" );
         right.appendChild( NativeFormat::createElement( "pen", rightBorderPen(), doc ) );
         format.appendChild( right );
     }
 
-    if ( d->subStyles.contains( BottomPen ) )
+    if ( keysToStore.contains( BottomPen ) )
     {
         QDomElement bottom = doc.createElement( "bottom-border" );
         bottom.appendChild( NativeFormat::createElement( "pen", bottomBorderPen(), doc ) );
         format.appendChild( bottom );
     }
 
-    if ( d->subStyles.contains( FallDiagonalPen ) )
+    if ( keysToStore.contains( FallDiagonalPen ) )
     {
         QDomElement fallDiagonal  = doc.createElement( "fall-diagonal" );
         fallDiagonal.appendChild( NativeFormat::createElement( "pen", fallDiagonalPen(), doc ) );
         format.appendChild( fallDiagonal );
     }
 
-    if ( d->subStyles.contains( GoUpDiagonalPen ) )
+    if ( keysToStore.contains( GoUpDiagonalPen ) )
     {
         QDomElement goUpDiagonal = doc.createElement( "up-diagonal" );
         goUpDiagonal.appendChild( NativeFormat::createElement( "pen", goUpDiagonalPen(), doc ) );
@@ -2418,9 +2425,9 @@ void Style::operator=( const Style& other )
 Style Style::operator-(const Style& other) const
 {
     Style style;
-    const QSet<Style::Key> keys = difference(other);
-    const QSet<Style::Key>::ConstIterator end = keys.constEnd();
-    for (QSet<Style::Key>::ConstIterator it = keys.constBegin(); it != end; ++it)
+    const QSet<Key> keys = difference(other);
+    const QSet<Key>::ConstIterator end = keys.constEnd();
+    for (QSet<Key>::ConstIterator it = keys.constBegin(); it != end; ++it)
         style.insertSubStyle(d->subStyles[*it]);
     return style;
 }
@@ -2436,14 +2443,20 @@ void Style::merge( const Style& style )
     }
 }
 
-QSet<Style::Key> Style::difference(const Style& style) const
+QSet<Style::Key> Style::difference(const Style& other) const
 {
     QSet<Key> result;
-    const QList<SharedSubStyle> subStyles(style.subStyles());
-    for (int i = 0; i < subStyles.count(); ++i)
+    const QSet<Key> keys = QSet<Key>::fromList(d->subStyles.keys() + other.d->subStyles.keys());
+    const QSet<Key>::ConstIterator end = keys.constEnd();
+    for (QSet<Key>::ConstIterator it = keys.constBegin(); it != end; ++it)
     {
-        if (!compare(d->subStyles.value(subStyles[i].data()->type()).data(), subStyles[i].data()))
-            result.insert(subStyles[i]->type());
+        if (!other.d->subStyles.contains(*it))
+            result.insert(*it);
+        else if (d->subStyles.contains(*it)) // both contain this key
+        {
+            if (!compare(d->subStyles.value(*it).data(), other.d->subStyles.value(*it).data()))
+                result.insert(*it);
+        }
     }
     return result;
 }
@@ -2711,7 +2724,7 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& sty
     Style::loadOasisStyle( oasisStyles, style, conditions, styleManager );
 }
 
-void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
+void CustomStyle::save(QDomDocument& doc, QDomElement& styles, const StyleManager* styleManager)
 {
     if ( name().isEmpty() )
         return;
@@ -2723,7 +2736,7 @@ void CustomStyle::save( QDomDocument & doc, QDomElement & styles )
     style.setAttribute( "name", name() );
 
     QDomElement format( doc.createElement( "format" ) );
-    saveXML( doc, format );
+    saveXML(doc, format, styleManager);
     style.appendChild( format );
 
     styles.appendChild( style );

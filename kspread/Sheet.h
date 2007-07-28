@@ -896,7 +896,7 @@ public:
      *            absolutely (they will be switched back to relative
      *            references during decoding) - used for cut to clipboard
      */
-    QDomDocument saveCellRegion(const Region&, bool copy = false, bool era = false);
+    QDomDocument saveCellRegion(const Region&, bool era = false);
 
     /**
      * insertTo defined if you insert to the bottom or right

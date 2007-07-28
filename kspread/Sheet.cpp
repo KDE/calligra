@@ -1371,7 +1371,7 @@ QString Sheet::copyAsText( Selection* selection )
 
 void Sheet::copySelection( Selection* selection )
 {
-    QDomDocument doc = saveCellRegion( *selection, true );
+    QDomDocument doc = saveCellRegion(*selection);
 
     // Save to buffer
     QBuffer buffer;
@@ -1390,7 +1390,7 @@ void Sheet::copySelection( Selection* selection )
 
 void Sheet::cutSelection( Selection* selection )
 {
-    QDomDocument doc = saveCellRegion(*selection, true, true);
+    QDomDocument doc = saveCellRegion(*selection, true);
     doc.documentElement().setAttribute( "cut", selection->Region::name() );
 
     // Save to buffer
@@ -2007,7 +2007,7 @@ bool Sheet::testListChoose(Selection* selection)
 
 
 // era: absolute references
-QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
+QDomDocument Sheet::saveCellRegion(const Region& region, bool era)
 {
   QDomDocument dd( "spreadsheet-snippet" );
   dd.appendChild( dd.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
@@ -2045,7 +2045,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
           for ( ; !cell.isNull(); cell = d->cellStorage->nextInRow( cell.column(), cell.row() ) )
           {
               if ( !cell.isPartOfMerged() )
-                  root.appendChild( cell.save( dd, 0, top - 1, copy, copy, era) );
+                  root.appendChild(cell.save(dd, 0, top - 1, era));
           }
       }
 
@@ -2057,7 +2057,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
         format = rowFormat( row );
         if (format && !format->isDefault())
         {
-          QDomElement e = format->save(dd, top - 1, copy);
+          QDomElement e = format->save(dd, top - 1);
           if (!e.isNull())
           {
             rows.appendChild( e );
@@ -2084,7 +2084,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
           for ( ; !cell.isNull(); cell = d->cellStorage->nextInRow( cell.column(), cell.row() ) )
           {
               if ( !cell.isPartOfMerged() )
-                  root.appendChild( cell.save( dd, left - 1, 0, copy, copy, era) );
+                  root.appendChild(cell.save(dd, left - 1, 0, era));
           }
       }
 
@@ -2096,7 +2096,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
         format = columnFormat(col);
         if (format && !format->isDefault())
         {
-          QDomElement e = format->save(dd, left - 1, copy);
+          QDomElement e = format->save(dd, left - 1);
           if (!e.isNull())
           {
             columns.appendChild(e);
@@ -2113,7 +2113,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         cell = Cell( this, col, row );
-        root.appendChild(cell.save(dd, left - 1, top - 1, true, copy, era));
+        root.appendChild(cell.save(dd, left - 1, top - 1, era));
       }
     }
   }

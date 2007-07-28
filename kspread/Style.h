@@ -166,7 +166,7 @@ public:
 
 
     bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
-    void saveXML( QDomDocument& doc, QDomElement& format, bool force = false, bool copy = false ) const;
+    void saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const;
     void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element,
                          Conditions& conditions, const StyleManager* styleManager );
     /**
@@ -329,7 +329,13 @@ public:
     void operator=( const Style& style );
     Style operator-(const Style& style) const;
     void merge( const Style& style );
-    QSet<Key> difference(const Style& style) const;
+
+    /**
+     * The keys, that are contained in this style, but not in \p other and
+     * the keys, that are contained in both but differ in value.
+     * \return a set of keys, in which this style and \p other differ.
+     */
+    QSet<Key> difference(const Style& other) const;
 
     void dump() const;
 
@@ -378,7 +384,7 @@ public:
     bool definesAll() const;
 
     bool loadXML( KoXmlElement const & style, QString const & name );
-    void save( QDomDocument & doc, QDomElement & styles );
+    void save(QDomDocument & doc, QDomElement & styles, const StyleManager* styleManager);
 
     /**
      * Loads the style properties from @p style .

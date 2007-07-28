@@ -52,7 +52,7 @@ public:
 
     void setSheet( Sheet* sheet );
 
-    QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
+    QDomElement save(QDomDocument&, int yshift = 0) const;
     bool load(const KoXmlElement& row, int yshift = 0, Paste::Mode mode = Paste::Normal);
     bool loadOasis( const KoXmlElement& row, KoXmlElement * rowStyle );
 
@@ -125,7 +125,7 @@ public:
 
     void setSheet( Sheet* sheet );
 
-    QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
+    QDomElement save(QDomDocument&, int xshift = 0) const;
     bool load(const KoXmlElement& row, int xshift = 0, Paste::Mode mode = Paste::Normal);
 
     /**

@@ -135,7 +135,7 @@ double RowFormat::visibleHeight() const
     return d->height;
 }
 
-QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
+QDomElement RowFormat::save(QDomDocument& doc, int yshift) const
 {
     Q_ASSERT( d->sheet );
     QDomElement row = doc.createElement( "row" );
@@ -149,7 +149,7 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
     {
         kDebug(36003) << "saving cell style of row " << d->row << endl;
         QDomElement format;
-        style.saveXML( doc, format, false, copy );
+        style.saveXML(doc, format, d->sheet->doc()->styleManager());
         row.appendChild( format );
     }
 
@@ -383,7 +383,7 @@ double ColumnFormat::visibleWidth() const
     return d->width;
 }
 
-QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
+QDomElement ColumnFormat::save(QDomDocument& doc, int xshift) const
 {
     Q_ASSERT( d->sheet );
     QDomElement col( doc.createElement( "column" ) );
@@ -398,7 +398,7 @@ QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
     {
         kDebug(36003) << "saving cell style of column " << d->column << endl;
         QDomElement format( doc.createElement( "format" ) );;
-        style.saveXML( doc, format, false, copy );
+        style.saveXML(doc, format, d->sheet->doc()->styleManager());
         col.appendChild( format );
     }
 

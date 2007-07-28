@@ -959,20 +959,18 @@ QRect Cell::lockedCells() const
 //                       Saving and loading
 
 
-QDomElement Cell::save( QDomDocument& doc,
-             int _x_offset, int _y_offset,
-             bool force, bool copy, bool era )
+QDomElement Cell::save(QDomDocument& doc, int xOffset, int yOffset, bool era)
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement( "cell" );
-    cell.setAttribute( "row", row() - _y_offset );
-    cell.setAttribute( "column", column() - _x_offset );
+    cell.setAttribute( "row", row() - yOffset );
+    cell.setAttribute( "column", column() - xOffset );
 
     //
     // Save the formatting information
     //
     QDomElement formatElement( doc.createElement( "format" ) );
-    style().saveXML( doc, formatElement, force, copy );
+    style().saveXML(doc, formatElement, sheet()->doc()->styleManager());
     if ( formatElement.hasChildNodes() || formatElement.attributes().length() ) // don't save empty tags
         cell.appendChild( formatElement );
 

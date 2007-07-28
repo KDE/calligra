@@ -163,7 +163,7 @@ QDomElement StyleManager::save( QDomDocument & doc )
 {
   QDomElement styles = doc.createElement( "styles" );
 
-  m_defaultStyle->save( doc, styles );
+  m_defaultStyle->save(doc, styles, this);
 
   CustomStyles::iterator iter = m_styles.begin();
   CustomStyles::iterator end  = m_styles.end();
@@ -172,7 +172,7 @@ QDomElement StyleManager::save( QDomDocument & doc )
   {
     CustomStyle * styleData = iter.value();
 
-    styleData->save( doc, styles );
+    styleData->save(doc, styles, this);
 
     ++iter;
   }
