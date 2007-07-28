@@ -26,16 +26,21 @@
 
 class ListsSpinBox : public QSpinBox
 {
+    Q_OBJECT
 public:
     ListsSpinBox( QWidget *parent = 0 );
 
     void setCounterType(KoListStyle::Style type);
+
+public slots:
+    void setLetterSynchronization(bool on) { m_letterSynchronization = on; }
 
 private:
     virtual int valueFromText(const QString &text) const;
     virtual QString textFromValue(int value) const;
 
     KoListStyle::Style m_type;
+    bool m_letterSynchronization;
 };
 
 #endif

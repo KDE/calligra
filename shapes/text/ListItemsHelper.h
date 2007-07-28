@@ -39,7 +39,7 @@ namespace Lists {
     };
 
     QString intToRoman( int n );
-    QString intToAlpha( int n, Capitalisation caps );
+    QString intToAlpha( int n, Capitalisation caps, bool letterSynchronization );
     QString intToScript(int n, KoListStyle::Style type);
     QString intToScriptList(int n, KoListStyle::Style type);
 

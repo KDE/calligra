@@ -45,14 +45,24 @@ QString Lists::intToRoman( int n ) {
                                 RNTens[ ( n / 10 ) % 10 ] + RNUnits[ ( n ) % 10 ] );
 }
 
-QString Lists::intToAlpha( int n, Capitalisation caps ) {
+QString Lists::intToAlpha( int n, Capitalisation caps, bool letterSynchronization) {
     const char offset = caps == Uppercase?'A':'a';
     QString answer;
-    char bottomDigit;
-    while ( n > 26 ) {
-        bottomDigit = (n-1) % 26;
-        n = (n-1) / 26;
-        answer.prepend( QChar( offset + bottomDigit  ) );
+    if(letterSynchronization) {
+        int digits = 1;
+        for(; n > 26; n-=26)
+            digits +=1;
+        for(int i=0; i < digits; i++)
+            answer.prepend( QChar( offset + n -1  ) );
+        return answer;
+    }
+    else {
+        char bottomDigit;
+        while ( n > 26 ) {
+            bottomDigit = (n-1) % 26;
+            n = (n-1) / 26;
+            answer.prepend( QChar( offset + bottomDigit  ) );
+        }
     }
     answer.prepend( QChar( offset + n -1 ) );
     return answer;
@@ -292,10 +302,12 @@ Q_ASSERT(otherData);
                 partialCounterText = QString::number(index);
                 break;
             case KoListStyle::AlphaLowerItem:
-                partialCounterText = intToAlpha(index, Lowercase);
+                partialCounterText = intToAlpha(index, Lowercase,
+                        m_textList->format().boolProperty(KoListStyle::LetterSynchronization));
                 break;
             case KoListStyle::UpperAlphaItem:
-                partialCounterText = intToAlpha(index, Uppercase);
+                partialCounterText = intToAlpha(index, Uppercase,
+                        m_textList->format().boolProperty(KoListStyle::LetterSynchronization));
                 break;
             case KoListStyle::RomanLowerItem:
                 partialCounterText = intToRoman(index);

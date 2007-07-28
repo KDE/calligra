@@ -463,7 +463,7 @@ void TestDocumentLayout::testLetterSynchronization() {
     styleManager->add(&h1);
     KoListStyle listStyle;
     KoListLevelProperties llp = listStyle.level(1);
-    llp.setStyle(KoListStyle::DecimalItem);
+    llp.setStyle(KoListStyle::AlphaLowerItem);
     llp.setLetterSynchronization(true);
     llp.setStartValue(25);
     listStyle.setLevel(llp);
@@ -483,6 +483,7 @@ void TestDocumentLayout::testLetterSynchronization() {
     while(block.isValid()) {
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
         QVERIFY(data);
+        // qDebug() << "-> " << data->counterText() << endl;
         QCOMPARE(data->counterText(), QString(values[i++]));
 
         block = block.next();

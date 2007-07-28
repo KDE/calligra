@@ -23,7 +23,8 @@
 
 ListsSpinBox::ListsSpinBox( QWidget *parent)
     : QSpinBox(parent),
-    m_type(KoListStyle::DecimalItem)
+    m_type(KoListStyle::DecimalItem),
+    m_letterSynchronization(false)
 {
 }
 
@@ -41,9 +42,9 @@ QString ListsSpinBox::textFromValue(int value) const {
         case KoListStyle::DecimalItem:
             return QString::number(value);
         case KoListStyle::AlphaLowerItem:
-            return Lists::intToAlpha(value, Lists::Lowercase);
+            return Lists::intToAlpha(value, Lists::Lowercase, m_letterSynchronization);
         case KoListStyle::UpperAlphaItem:
-            return Lists::intToAlpha(value, Lists::Uppercase);
+            return Lists::intToAlpha(value, Lists::Uppercase, m_letterSynchronization);
         case KoListStyle::RomanLowerItem:
             return Lists::intToRoman(value);
         case KoListStyle::UpperRomanItem:
@@ -67,3 +68,5 @@ QString ListsSpinBox::textFromValue(int value) const {
             return "X";
     }
 }
+
+#include <ListsSpinBox.moc>
