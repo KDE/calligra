@@ -1195,7 +1195,7 @@ QString OpenCalcExport::convertFormula( QString const & formula ) const
     if ( n == i )
     {
       int ml = exp.matchedLength();
-      if ( formula[ i + ml ] == '!' )
+      if ( ml > -1 && (i + ml) < formula.count() && formula[ i + ml ] == '!' )
       {
         kDebug(30518) << "No cell ref but sheet name" << endl;
         s += formula[i];
