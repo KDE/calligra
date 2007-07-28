@@ -4,7 +4,8 @@
 #include <QObject>
 #include <qtest_kde.h>
 
-#include "Layout.h"
+#include "../Layout.h"
+#include "../TextShape.h"
 
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
@@ -69,6 +70,7 @@ private slots:
     void testUpperAlphaNumbering();
     void testRestartNumbering();
     void testRightToLeftList();
+    void testLetterSynchronization();
 
 
 // relativeBulletSize
@@ -92,15 +94,10 @@ private:
     Layout *m_textLayout;
 };
 
-class MockTextShape : public KoShape {
+class MockTextShape : public TextShape {
   public:
     MockTextShape() {
-        KoTextShapeData *textShapeData = new KoTextShapeData();
-        setUserData(textShapeData);
-        layout = new KoTextDocumentLayout(textShapeData->document());
-        layout->setLayout(new Layout(layout));
-        layout->addShape(this);
-        textShapeData->document()->setDocumentLayout(layout);
+        layout = dynamic_cast<KoTextDocumentLayout*> (textShapeData()->document()->documentLayout());
     }
     void paint(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);

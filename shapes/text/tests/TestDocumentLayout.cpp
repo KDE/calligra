@@ -30,10 +30,10 @@ void TestDocumentLayout::initForNewTest(const QString &initText) {
     shape1->setSize(QSizeF(200, 1000));
 
     // this leaks memory like mad, but who cares ;)
-    doc = shape1->layout->document();
-    Q_ASSERT(doc);
-    layout = dynamic_cast<KoTextDocumentLayout*> (doc->documentLayout());
+    layout = shape1->layout;
     Q_ASSERT(layout);
+    doc = layout->document();
+    Q_ASSERT(doc);
     m_textLayout = new Layout(layout);
     layout->setLayout(m_textLayout);
     styleManager = new KoStyleManager();

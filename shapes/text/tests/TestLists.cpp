@@ -454,3 +454,37 @@ void TestDocumentLayout::testRightToLeftList() {
         block = block.next();
     }
 }
+
+void TestDocumentLayout::testLetterSynchronization() {
+    // make numbering be  'y, z, aa, bb, cc'
+    initForNewTest("a\nb\na\nb\nc");
+
+    KoParagraphStyle h1;
+    styleManager->add(&h1);
+    KoListStyle listStyle;
+    KoListLevelProperties llp = listStyle.level(1);
+    llp.setStyle(KoListStyle::DecimalItem);
+    llp.setLetterSynchronization(true);
+    llp.setStartValue(25);
+    listStyle.setLevel(llp);
+    h1.setListStyle(listStyle);
+
+    QTextBlock block = doc->begin();
+    while(block.isValid()) {
+        h1.applyStyle(block);
+        block = block.next();
+    }
+
+    layout->layout();
+
+    static const char *values[] = { "y", "z", "aa", "bb", "cc" };
+    block = doc->begin();
+    int i=0;
+    while(block.isValid()) {
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
+        QVERIFY(data);
+        QCOMPARE(data->counterText(), QString(values[i++]));
+
+        block = block.next();
+    }
+}
