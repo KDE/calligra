@@ -1451,30 +1451,42 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     if ( d->subStyles.contains( HideFormula ) )
         format.setAttribute( "hideformula", hideFormula() ? "yes" : "no" );
 
-    if ( d->subStyles.contains( FontFamily ) )
-        format.setAttribute( "font-family", fontFamily() );
-    if ( d->subStyles.contains( FontSize ) )
-        format.setAttribute( "font-size", fontSize() );
-    if ( d->subStyles.contains( FontBold ) || d->subStyles.contains( FontItalic ) ||
-         d->subStyles.contains( FontUnderline ) || d->subStyles.contains( FontStrike ) )
+    if (type() == AUTO)
     {
-        enum FontFlags
+        if (d->subStyles.contains(FontFamily) ||
+            d->subStyles.contains(FontSize) ||
+            d->subStyles.contains(FontBold) ||
+            d->subStyles.contains(FontItalic) ||
+            d->subStyles.contains(FontStrike) ||
+            d->subStyles.contains(FontUnderline))
         {
-            FBold      = 0x01,
-            FUnderline = 0x02,
-            FItalic    = 0x04,
-            FStrike    = 0x08
-        };
-        int fontFlags = 0;
-        fontFlags |= bold()      ? FBold      : 0;
-        fontFlags |= italic()    ? FItalic    : 0;
-        fontFlags |= underline() ? FUnderline : 0;
-        fontFlags |= strikeOut() ? FStrike    : 0;
-        format.setAttribute( "font-flags", fontFlags );
+            format.appendChild(NativeFormat::createElement("font", font(), doc));
+        }
     }
-
-  //  if ( d->subStyles.contains( Font ) )
-  //    format.appendChild( NativeFormat::createElement( "font", m_textFont, doc ) );
+    else // custom style
+    {
+        if ( d->subStyles.contains( FontFamily ) )
+            format.setAttribute( "font-family", fontFamily() );
+        if ( d->subStyles.contains( FontSize ) )
+            format.setAttribute( "font-size", fontSize() );
+        if ( d->subStyles.contains( FontBold ) || d->subStyles.contains( FontItalic ) ||
+            d->subStyles.contains( FontUnderline ) || d->subStyles.contains( FontStrike ) )
+        {
+            enum FontFlags
+            {
+                FBold      = 0x01,
+                FUnderline = 0x02,
+                FItalic    = 0x04,
+                FStrike    = 0x08
+            };
+            int fontFlags = 0;
+            fontFlags |= bold()      ? FBold      : 0;
+            fontFlags |= italic()    ? FItalic    : 0;
+            fontFlags |= underline() ? FUnderline : 0;
+            fontFlags |= strikeOut() ? FStrike    : 0;
+            format.setAttribute( "font-flags", fontFlags );
+        }
+    }
 
     if ( d->subStyles.contains( FontColor ) && fontColor().isValid() )
         format.appendChild( NativeFormat::createElement( "pen", fontColor(), doc ) );
@@ -1671,52 +1683,53 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         setHideFormula( true );
     }
 
-    // TODO: remove that...
-    KoXmlElement font = format.namedItem( "font" ).toElement();
-    if ( !font.isNull() )
+    if (type() == AUTO)
     {
-        QFont f( NativeFormat::toFont( font ) );
-        setFontFamily( f.family() );
-        setFontSize( f.pointSize() );
-        if ( f.italic() )
-            setFontItalic( true );
-        if ( f.bold() )
-            setFontBold( true );
-        if ( f.underline() )
-            setFontUnderline( true );
-        if ( f.strikeOut() )
-            setFontStrikeOut( true );
-
-    }
-
-    if ( format.hasAttribute( "font-family" ) )
-    {
-        setFontFamily( format.attribute( "font-family" ) );
-    }
-    if ( format.hasAttribute( "font-size" ) )
-    {
-        setFontSize( format.attribute( "font-size" ).toInt( &ok ) );
-        if ( !ok )
-            return false;
-    }
-
-    if ( format.hasAttribute( "font-flags" ) )
-    {
-        int fontFlags = format.attribute( "font-flags" ).toInt( &ok );
-        if ( !ok )
-            return false;
-
-        enum FontFlags
+        KoXmlElement font = format.namedItem("font").toElement();
+        if (!font.isNull())
         {
-            FBold      = 0x01,
-            FUnderline = 0x02,
-            FItalic    = 0x04,
-            FStrike    = 0x08
-        };
-        setFontBold     ( fontFlags & FBold );
-        setFontItalic   ( fontFlags & FItalic );
-        setFontUnderline( fontFlags & FUnderline );
-        setFontStrikeOut( fontFlags & FStrike );
+            QFont f(NativeFormat::toFont(font));
+            setFontFamily(f.family());
+            setFontSize(f.pointSize());
+            if (f.italic())
+                setFontItalic(true);
+            if (f.bold())
+                setFontBold(true);
+            if (f.underline())
+                setFontUnderline(true);
+            if (f.strikeOut())
+                setFontStrikeOut(true);
+
+        }
+    }
+    else // custom style
+    {
+        if (format.hasAttribute("font-family"))
+            setFontFamily(format.attribute("font-family"));
+        if (format.hasAttribute("font-size"))
+        {
+            setFontSize(format.attribute("font-size").toInt(&ok));
+            if (!ok)
+                return false;
+        }
+        if (format.hasAttribute("font-flags"))
+        {
+            int fontFlags = format.attribute("font-flags").toInt(&ok);
+            if (!ok)
+                return false;
+
+            enum FontFlags
+            {
+                FBold      = 0x01,
+                FUnderline = 0x02,
+                FItalic    = 0x04,
+                FStrike    = 0x08
+            };
+            setFontBold     (fontFlags & FBold);
+            setFontItalic   (fontFlags & FItalic);
+            setFontUnderline(fontFlags & FUnderline);
+            setFontStrikeOut(fontFlags & FStrike);
+        }
     }
 
     if ( format.hasAttribute( "brushcolor" ) )
