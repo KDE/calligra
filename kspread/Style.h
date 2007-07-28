@@ -165,7 +165,7 @@ public:
     void setParentName( const QString& name );
 
 
-    bool loadXML( KoXmlElement& format, Paste::Mode pm = Paste::Normal, bool paste = false );
+    bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
     void saveXML( QDomDocument& doc, QDomElement& format, bool force = false, bool copy = false ) const;
     void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element,
                          Conditions& conditions, const StyleManager* styleManager );

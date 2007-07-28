@@ -1586,7 +1586,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
             {
                 ColumnFormat *cl = new ColumnFormat();
                 cl->setSheet( this );
-                if ( cl->load( c, _xshift, mode, pasteFC ) )
+                if (cl->load(c, _xshift, mode))
                     insertColumnFormat( cl );
                 else
                     delete cl;
@@ -1626,7 +1626,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
             {
                 RowFormat *cl = new RowFormat();
                 cl->setSheet( this );
-                if ( cl->load( c, _yshift, mode, pasteFC ) )
+                if (cl->load(c, _yshift, mode))
                     insertRowFormat( cl );
                 else
                     delete cl;

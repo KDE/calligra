@@ -1540,16 +1540,16 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     }
 }
 
-bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
+bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
 {
-    Q_UNUSED( paste );
-
-    if ( format.hasAttribute( "style-name" ) )
+    if (format.hasAttribute("style-name"))
     {
         // Simply set the style name and we are done.
-        insertSubStyle( NamedStyleKey, format.attribute( "style-name" ) );
+        insertSubStyle(NamedStyleKey, format.attribute("style-name"));
         return true;
     }
+    else if (format.hasAttribute("parent"))
+        insertSubStyle(NamedStyleKey, format.attribute("parent"));
 
     bool ok;
     if ( format.hasAttribute(type() == AUTO ? "align" : "alignX") )
@@ -1684,21 +1684,20 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
 
     if (type() == AUTO)
     {
-        KoXmlElement font = format.namedItem("font").toElement();
-        if (!font.isNull())
+        KoXmlElement fontElement = format.namedItem("font").toElement();
+        if (!fontElement.isNull())
         {
-            QFont f(NativeFormat::toFont(font));
-            setFontFamily(f.family());
-            setFontSize(f.pointSize());
-            if (f.italic())
+            QFont font(NativeFormat::toFont(fontElement));
+            setFontFamily(font.family());
+            setFontSize(font.pointSize());
+            if (font.italic())
                 setFontItalic(true);
-            if (f.bold())
+            if (font.bold())
                 setFontBold(true);
-            if (f.underline())
+            if (font.underline())
                 setFontUnderline(true);
-            if (f.strikeOut())
+            if (font.strikeOut())
                 setFontStrikeOut(true);
-
         }
     }
     else // custom style
@@ -1757,7 +1756,7 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         setFontColor( NativeFormat::toPen( pen ).color() );
     }
 
-    if ((mode != Paste::NoBorder) && (mode != Paste::Text) && (mode != Paste::Comment))
+    if (mode != Paste::NoBorder)
     {
         KoXmlElement left = format.namedItem("left-border").toElement();
         if (!left.isNull())

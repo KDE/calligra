@@ -156,7 +156,7 @@ QDomElement RowFormat::save( QDomDocument& doc, int yshift, bool copy ) const
     return row;
 }
 
-bool RowFormat::load( const KoXmlElement & row, int yshift, Paste::Mode sp, bool paste )
+bool RowFormat::load(const KoXmlElement & row, int yshift, Paste::Mode mode)
 {
     Q_ASSERT( d->sheet );
     bool ok;
@@ -196,10 +196,10 @@ bool RowFormat::load( const KoXmlElement & row, int yshift, Paste::Mode sp, bool
 
     KoXmlElement f( row.namedItem( "format" ).toElement() );
 
-    if ( !f.isNull() && ( sp == Paste::Normal || sp == Paste::Format || sp == Paste::NoBorder ) )
+    if (!f.isNull() && (mode == Paste::Normal || mode == Paste::Format || mode == Paste::NoBorder))
     {
         Style style;
-        if ( !style.loadXML( f, sp, paste ) )
+        if (!style.loadXML(f, mode))
             return false;
         d->sheet->cellStorage()->setStyle( Region(QRect( 1, d->row, KS_colMax, 1 )), style );
         return true;
@@ -405,7 +405,7 @@ QDomElement ColumnFormat::save( QDomDocument& doc, int xshift, bool copy ) const
     return col;
 }
 
-bool ColumnFormat::load( const KoXmlElement & col, int xshift, Paste::Mode sp, bool paste )
+bool ColumnFormat::load(const KoXmlElement & col, int xshift, Paste::Mode mode)
 {
     Q_ASSERT( d->sheet );
     bool ok;
@@ -445,10 +445,10 @@ bool ColumnFormat::load( const KoXmlElement & col, int xshift, Paste::Mode sp, b
 
     KoXmlElement f( col.namedItem( "format" ).toElement() );
 
-    if ( !f.isNull() && ( sp == Paste::Normal || sp == Paste::Format || sp == Paste::NoBorder ))
+    if (!f.isNull() && (mode == Paste::Normal || mode == Paste::Format || mode == Paste::NoBorder))
     {
         Style style;
-        if ( !style.loadXML( f, sp, paste ) )
+        if (!style.loadXML(f, mode))
             return false;
         d->sheet->cellStorage()->setStyle( Region(QRect( d->column, 1, 1, KS_rowMax )), style );
         return true;

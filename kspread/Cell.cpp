@@ -1722,7 +1722,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
 
 
 bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
-                 Paste::Mode pm, Paste::Operation op, bool paste )
+                 Paste::Mode mode, Paste::Operation op, bool paste )
 {
     bool ok;
 
@@ -1751,11 +1751,9 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     // Load formatting information.
     //
     KoXmlElement formatElement = cell.namedItem( "format" ).toElement();
-    if ( !formatElement.isNull()
-          && ( (pm == Paste::Normal) || (pm == Paste::Format) || (pm == Paste::NoBorder) ) )
+    if (!formatElement.isNull() &&
+        ((mode == Paste::Normal) || (mode == Paste::Format) || (mode == Paste::NoBorder)))
     {
-        // send pm parameter. Didn't load Borders if pm==NoBorder
-
         int mergedXCells = 0;
         int mergedYCells = 0;
         if ( formatElement.hasAttribute( "colspan" ) )
@@ -1790,7 +1788,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             mergeCells( d->column, d->row, mergedXCells, mergedYCells );
 
         Style style;
-        if ( !style.loadXML( formatElement, pm, paste ) )
+        if (!style.loadXML( formatElement, mode))
             return false;
         setStyle( style );
     }
@@ -1806,7 +1804,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         if ( !conditions.isEmpty() )
             setConditions( conditions );
     }
-    else if ((pm == Paste::Normal) || (pm == Paste::NoBorder))
+    else if (paste && (mode == Paste::Normal) || (mode == Paste::NoBorder))
     {
       //clear the conditional formatting
       setConditions( Conditions() );
@@ -1819,7 +1817,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         if ( validity.loadXML( this, validityElement ) )
             setValidity( validity );
     }
-    else if ((pm == Paste::Normal) || (pm == Paste::NoBorder))
+    else if (paste && (mode == Paste::Normal) || (mode == Paste::NoBorder))
     {
       // clear the validity
       setValidity( Validity() );
@@ -1829,7 +1827,8 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     // Load the comment
     //
     KoXmlElement comment = cell.namedItem( "comment" ).toElement();
-    if ( !comment.isNull() && ( pm == Paste::Normal || pm == Paste::Comment || pm == Paste::NoBorder ))
+    if (!comment.isNull() &&
+        (mode == Paste::Normal || mode == Paste::Comment || mode == Paste::NoBorder))
     {
         QString t = comment.text();
         //t = t.trimmed();
@@ -1844,8 +1843,8 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     // also here. Not good.
     KoXmlElement text = cell.namedItem( "text" ).toElement();
 
-    if ( !text.isNull() &&
-          ( pm == Paste::Normal || pm == Paste::Text || pm == Paste::NoBorder || pm == Paste::Result ) )
+    if (!text.isNull() &&
+        (mode == Paste::Normal || mode == Paste::Text || mode == Paste::NoBorder || mode == Paste::Result))
     {
       /* older versions mistakenly put the datatype attribute on the cell
          instead of the text.  Just move it over in case we're parsing
@@ -1862,7 +1861,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
 
       KoXmlElement result = cell.namedItem( "result" ).toElement();
       QString txt = text.text();
-      if ((pm == Paste::Result) && (txt[0] == '='))
+      if ((mode == Paste::Result) && (txt[0] == '='))
         // paste text of the element, if we want to paste result
         // and the source cell contains a formula
           setUserInput( result.text() );
