@@ -45,9 +45,9 @@ StyleManagerDialog::StyleManagerDialog(View* parent, StyleManager* manager)
     , m_styleManager(manager)
 {
     setButtons(Ok | User1 | User2 | User3 | Close);
-    setButtonText(User1, i18n("&New..."));
+    setButtonText(User3, i18n("&New..."));
     setButtonText(User2, i18n("&Modify..."));
-    setButtonText(User3, i18n("&Delete..."));
+    setButtonText(User1, i18n("&Delete..."));
     setButtonsOrientation(Qt::Vertical);
     setCaption(i18n("Style Manager"));
 
@@ -67,19 +67,19 @@ StyleManagerDialog::StyleManagerDialog(View* parent, StyleManager* manager)
     layout->addWidget(m_displayBox);
 
     slotDisplayMode(0);
-    enableButton(KDialog::User1, true);
+    enableButton(KDialog::User3, true);
     enableButton(KDialog::User2, true);
-    enableButton(KDialog::User3, false);
+    enableButton(KDialog::User1, false);
 
     connect(m_displayBox, SIGNAL(activated(int)),
             this, SLOT(slotDisplayMode(int)));
     connect(this, SIGNAL(okClicked()),
             this, SLOT(slotOk()));
-    connect(this, SIGNAL(user1Clicked()),
+    connect(this, SIGNAL(user3Clicked()),
             this, SLOT(slotNew()));
     connect(this, SIGNAL(user2Clicked()),
             this, SLOT(slotEdit()));
-    connect(this, SIGNAL(user3Clicked()),
+    connect(this, SIGNAL(user1Clicked()),
             this, SLOT(slotRemove()));
     connect(m_styleList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotEdit()));
@@ -283,14 +283,14 @@ void StyleManagerDialog::selectionChanged(QTreeWidgetItem* item)
         style = m_styleManager->style(name);
     if (!style)
     {
-        enableButton(KDialog::User3, false);
+        enableButton(KDialog::User1, false);
         return;
     }
 
     if (style->type() == Style::BUILTIN)
-        enableButton(KDialog::User3, false);
+        enableButton(KDialog::User1, false);
     else
-        enableButton(KDialog::User3, true);
+        enableButton(KDialog::User1, true);
 }
 
 #include "StyleManagerDialog.moc"
