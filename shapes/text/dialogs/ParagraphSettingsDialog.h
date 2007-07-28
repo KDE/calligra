@@ -24,6 +24,7 @@
 #include <KPageDialog>
 #include <QTextCursor>
 
+class TextTool;
 class ParagraphBulletsNumbers;
 class ParagraphIndentSpacing;
 class ParagraphLayout;
@@ -34,7 +35,7 @@ class KoParagraphStyle;
 class ParagraphSettingsDialog : public KPageDialog {
     Q_OBJECT
 public:
-    explicit ParagraphSettingsDialog(QWidget *parent);
+    explicit ParagraphSettingsDialog(QWidget *parent, TextTool *tool);
     ~ParagraphSettingsDialog();
 
     void setUnit(const KoUnit &unit);
@@ -60,6 +61,7 @@ private:
     ParagraphLayout *m_paragraphLayout;
     ParagraphBulletsNumbers *m_paragraphBulletsNumbers;
 
+    TextTool *m_tool;
     QTextCursor m_cursor;
     KoParagraphStyle *m_style;
     bool m_ownStyle;

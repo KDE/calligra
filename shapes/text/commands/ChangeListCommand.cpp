@@ -82,13 +82,14 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle style,
 : TextCommandBase( parent ),
     m_block(block)
 {
+    Q_ASSERT(block.isValid());
+    Q_ASSERT(style.isValid());
     storeOldProperties();
     if(! exact) {
         // search for similar ones in the next / prev parags.
         // TODO
     }
-    if(m_listStyle == 0)
-        m_listStyle = new KoListStyle(style);
+    m_listStyle = new KoListStyle(style);
     setText( i18n("Change List") );
 }
 

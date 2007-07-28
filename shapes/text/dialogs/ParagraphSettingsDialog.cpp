@@ -22,6 +22,8 @@
 #include "ParagraphIndentSpacing.h"
 #include "ParagraphLayout.h"
 #include "ParagraphBulletsNumbers.h"
+#include "../commands/ChangeListCommand.h"
+#include "../TextTool.h"
 
 #include <KoParagraphStyle.h>
 #include <KoLayoutVisitor.h>
@@ -30,8 +32,9 @@
 #include <QTimer>
 
 
-ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent)
+ParagraphSettingsDialog::ParagraphSettingsDialog(QWidget *parent, TextTool *tool)
     : KPageDialog(parent),
+    m_tool(tool),
     m_style(0),
     m_ownStyle(false),
     m_visited(false)
@@ -61,6 +64,17 @@ void ParagraphSettingsDialog::accept() {
         QTextBlockFormat format;
         m_style->applyStyle(format);
         m_cursor.mergeBlockFormat(format);
+        if(m_style->listStyle().isValid()) {
+            ChangeListCommand *cmd = new ChangeListCommand(m_cursor.block(), m_style->listStyle());
+            m_tool->addCommand(cmd);
+        }
+        else {
+            QTextList *list = m_cursor.block().textList();
+            if(list) { // then remove it.
+                list->remove(m_cursor.block());
+            }
+        }
+
         emit stopMacro();
     }
 

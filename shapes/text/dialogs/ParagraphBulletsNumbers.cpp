@@ -44,6 +44,7 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
 
     connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
     connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
+    connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
 }
 
 void ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi) {
@@ -65,6 +66,7 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
     m_previousLevel = llp.level();
     widget.prefix->setText(llp.listItemPrefix());
     widget.suffix->setText(llp.listItemSuffix());
+    widget.letterSynchronization->setChecked(llp.letterSynchronization());
     KoListStyle::Style s = llp.style();
     foreach(int row, m_mapping.keys()) {
         if(m_mapping[row] == s) {
@@ -96,6 +98,7 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
 }
 
 void ParagraphBulletsNumbers::save() {
+kDebug() << "ParagraphBulletsNumbers::save\n";
     Q_ASSERT(m_paragStyle);
     KoListStyle::Style style = m_mapping[widget.listTypes->currentRow()];
     if(style == KoListStyle::NoItem) {
@@ -114,6 +117,7 @@ void ParagraphBulletsNumbers::save() {
     llp.setStartValue(widget.startValue->value());
     llp.setListItemPrefix(widget.prefix->text());
     llp.setListItemSuffix(widget.suffix->text());
+    llp.setLetterSynchronization(widget.letterSynchronization->isVisible() && widget.letterSynchronization->isChecked());
 
     Qt::Alignment align;
     switch(widget.alignment->currentIndex()) {
@@ -134,6 +138,7 @@ void ParagraphBulletsNumbers::save() {
 void ParagraphBulletsNumbers::styleChanged(int index) {
 //kDebug() << "ParagraphBulletsNumbers::styleChanged\n";
     KoListStyle::Style style = m_mapping[index];
+    bool showLetterSynchronization = false;
     switch( style ) {
         case KoListStyle::SquareItem:
         case KoListStyle::DiscItem:
@@ -145,6 +150,10 @@ void ParagraphBulletsNumbers::styleChanged(int index) {
             widget.startValue->setValue(1);
             widget.startValue->setEnabled(false);
             break;
+        case KoListStyle::AlphaLowerItem:
+        case KoListStyle::UpperAlphaItem:
+            showLetterSynchronization = true;
+            // fall through
         default:
             widget.startValue->setEnabled(true);
             widget.startValue->setCounterType(style);
@@ -152,6 +161,7 @@ void ParagraphBulletsNumbers::styleChanged(int index) {
             widget.startValue->setValue(value +1);
             widget.startValue->setValue(value); // surely to trigger a change event.
     }
+    widget.letterSynchronization->setVisible(showLetterSynchronization);
     widget.listPropertiesPane->setEnabled(style != KoListStyle::NoItem);
 }
 
