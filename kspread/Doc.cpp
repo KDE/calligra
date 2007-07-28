@@ -295,6 +295,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
             d->dependencyManager, SLOT(namedAreaModified(const QString&)));
     connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
+    connect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
 }
 
 Doc::~Doc()
@@ -1289,6 +1290,12 @@ void Doc::loadPaper( KoXmlElement const & paper )
   }
 }
 
+void Doc::finishLoading()
+{
+    // update all dependencies and recalc all cells
+    addDamage(new WorkbookDamage(map(), WorkbookDamage::Formula | WorkbookDamage::Value));
+}
+
 bool Doc::completeLoading( KoStore* /* _store */ )
 {
   kDebug(36001) << "------------------------ COMPLETING --------------------" << endl;
@@ -1297,9 +1304,6 @@ bool Doc::completeLoading( KoStore* /* _store */ )
 
   foreach ( KoView* view, views() )
     static_cast<View *>( view )->initialPosition();
-
-    // update all dependencies and recalc all cells
-    addDamage( new WorkbookDamage( map(), WorkbookDamage::Formula | WorkbookDamage::Value ) );
 
   kDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 

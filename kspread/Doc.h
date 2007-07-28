@@ -736,8 +736,9 @@ Q_SIGNALS:
 
   void damagesFlushed( const QList<Damage*>& damages );
 
-protected slots:
+protected Q_SLOTS:
   virtual void openTemplate( const KUrl& url );
+    void finishLoading();
 
 protected:
   KoView* createViewInstance( QWidget* parent );

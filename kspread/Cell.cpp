@@ -865,7 +865,6 @@ void Cell::parseUserInput( const QString& text )
         }
     }
     // set the new value
-    setFormula( Formula() );
     setUserInput( text );
     setValue( value );
 
