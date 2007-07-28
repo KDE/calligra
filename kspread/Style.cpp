@@ -1542,7 +1542,6 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
 
 bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
 {
-    Q_UNUSED( mode );
     Q_UNUSED( paste );
 
     if ( format.hasAttribute( "style-name" ) )
@@ -1758,63 +1757,54 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
         setFontColor( NativeFormat::toPen( pen ).color() );
     }
 
-    KoXmlElement left = format.namedItem( "left-border" ).toElement();
-    if ( !left.isNull() )
+    if ((mode != Paste::NoBorder) && (mode != Paste::Text) && (mode != Paste::Comment))
     {
-        KoXmlElement pen = left.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
+        KoXmlElement left = format.namedItem("left-border").toElement();
+        if (!left.isNull())
         {
-            setLeftBorderPen( NativeFormat::toPen( pen ) );
+            KoXmlElement pen = left.namedItem("pen").toElement();
+            if (!pen.isNull())
+                setLeftBorderPen(NativeFormat::toPen(pen));
         }
-    }
 
-    KoXmlElement top = format.namedItem( "top-border" ).toElement();
-    if ( !top.isNull() )
-    {
-        KoXmlElement pen = top.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
+        KoXmlElement top = format.namedItem("top-border").toElement();
+        if (!top.isNull())
         {
-            setTopBorderPen( NativeFormat::toPen( pen ) );
+            KoXmlElement pen = top.namedItem("pen").toElement();
+            if (!pen.isNull())
+                setTopBorderPen(NativeFormat::toPen(pen));
         }
-    }
 
-    KoXmlElement right = format.namedItem( "right-border" ).toElement();
-    if ( !right.isNull() )
-    {
-        KoXmlElement pen = right.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
+        KoXmlElement right = format.namedItem("right-border").toElement();
+        if (!right.isNull())
         {
-            setRightBorderPen( NativeFormat::toPen( pen ) );
+            KoXmlElement pen = right.namedItem("pen").toElement();
+            if (!pen.isNull())
+                setRightBorderPen(NativeFormat::toPen(pen));
         }
-    }
 
-    KoXmlElement bottom = format.namedItem( "bottom-border" ).toElement();
-    if ( !bottom.isNull() )
-    {
-        KoXmlElement pen = bottom.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
+        KoXmlElement bottom = format.namedItem("bottom-border").toElement();
+        if (!bottom.isNull())
         {
-            setBottomBorderPen( NativeFormat::toPen( pen ) );
+            KoXmlElement pen = bottom.namedItem("pen").toElement();
+            if (!pen.isNull())
+                setBottomBorderPen(NativeFormat::toPen(pen));
         }
-    }
 
-    KoXmlElement fallDiagonal = format.namedItem( "fall-diagonal" ).toElement();
-    if ( !fallDiagonal.isNull() )
-    {
-        KoXmlElement pen = fallDiagonal.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
+        KoXmlElement fallDiagonal = format.namedItem("fall-diagonal").toElement();
+        if (!fallDiagonal.isNull())
         {
-            setFallDiagonalPen( NativeFormat::toPen( pen ) );
+            KoXmlElement pen = fallDiagonal.namedItem("pen").toElement();
+            if (!pen.isNull())
+                setFallDiagonalPen(NativeFormat::toPen(pen));
         }
-    }
 
-    KoXmlElement goUpDiagonal = format.namedItem( "up-diagonal" ).toElement();
-    if ( !goUpDiagonal.isNull() )
-    {
-        KoXmlElement pen = goUpDiagonal.namedItem( "pen" ).toElement();
-        if ( !pen.isNull() )
+        KoXmlElement goUpDiagonal = format.namedItem("up-diagonal").toElement();
+        if (!goUpDiagonal.isNull())
         {
-            setGoUpDiagonalPen( NativeFormat::toPen( pen ) );
+            KoXmlElement pen = goUpDiagonal.namedItem("pen").toElement();
+            if (!pen.isNull())
+                setGoUpDiagonalPen(NativeFormat::toPen(pen));
         }
     }
 
