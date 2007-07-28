@@ -471,7 +471,7 @@ class CellFormatPageProtection : public QWidget, public Ui::ProtectionWidget
 /**
  * Dialog for the "Cell Format..." action
  */
-class CellFormatDialog : public QObject
+class CellFormatDialog : public KPageDialog
 {
     Q_OBJECT
 public:
@@ -495,10 +495,6 @@ public:
     void checkBorderBottom(const Style& obj);
     void checkBorderVertical(const Style& obj);
     void checkBorderHorizontal(const Style& obj);
-    /**
-     * Run the dialogs event loop and return when closed.
-     */
-    int exec();
 
     Doc * getDoc() const { return m_doc; }
     Sheet * getSheet() const { return m_sheet; }
@@ -622,7 +618,6 @@ protected:
     CellFormatPagePosition *positionPage;
     CellFormatPagePattern *patternPage;
     CellFormatPageProtection *protectPage;
-    KPageDialog* dialog; 
 
     Doc   * m_doc;
     Sheet * m_sheet;

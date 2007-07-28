@@ -6124,10 +6124,10 @@ void View::equalizeColumn()
 
 void View::layoutDlg()
 {
-  if (!activeSheet())
-    return;
-
-  CellFormatDialog dlg( this, d->activeSheet );
+    if (!activeSheet())
+        return;
+    CellFormatDialog dialog(this, d->activeSheet);
+    dialog.exec();
 }
 
 void View::extraProperties()

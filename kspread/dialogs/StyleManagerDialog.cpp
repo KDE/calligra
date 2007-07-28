@@ -244,7 +244,8 @@ void StyleManagerDialog::slotEdit()
     if (!style)
         return;
 
-    CellFormatDialog dlg(m_view, style, m_styleManager, m_view->doc());
+    CellFormatDialog dialog(m_view, style, m_styleManager, m_view->doc());
+    dialog.exec();
     slotDisplayMode(m_displayBox->currentIndex());
 }
 

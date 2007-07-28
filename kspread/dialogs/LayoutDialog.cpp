@@ -56,7 +56,6 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 #include <kdebug.h>
-#include <kdialog.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
@@ -333,7 +332,7 @@ bool GeneralTab::apply( CustomStyle * style )
  ***************************************************************************/
 
 CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
-  : QObject(),
+  : KPageDialog(_view),
     m_doc( _sheet->doc() ),
     m_sheet( _sheet ),
     m_pView( _view ),
@@ -523,7 +522,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
 
 CellFormatDialog::CellFormatDialog( View * _view, CustomStyle * _style,
                               StyleManager * _manager, Doc * doc )
-  : QObject(),
+  : KPageDialog(_view),
     m_doc( doc ),
     m_sheet( 0 ),
     m_pView( _view ),
@@ -786,49 +785,45 @@ void CellFormatDialog::init()
     formatRedAlwaysSignedPixmap  = paintFormatPixmap( "+123.456", Qt::black, "-123.456", Qt::red );
   }
 
-  dialog = new KPageDialog( (QWidget*)m_pView );
-  dialog->setCaption( i18n( "Cell Format" ) );
-  dialog->setButtons( KDialog::Ok | KDialog::Cancel );
-  dialog->setFaceType( KPageDialog::Tabbed );
-  dialog->setMinimumWidth(600);
-  dialog->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
+  setCaption( i18n( "Cell Format" ) );
+  setButtons( KDialog::Ok | KDialog::Cancel );
+  setFaceType( KPageDialog::Tabbed );
+  setMinimumWidth(600);
+  setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding) );
 
   if ( m_style )
   {
-    generalPage = new GeneralTab( dialog, this );
+    generalPage = new GeneralTab( this, this );
 
-    KPageWidgetItem* item = dialog->addPage( generalPage, i18n( "&General" ) );
+    KPageWidgetItem* item = addPage( generalPage, i18n( "&General" ) );
     //item->setHeader( i18n( "&General" ) );
     Q_UNUSED(item);
   }
 
-  floatPage = new CellFormatPageFloat( dialog, this );
-  dialog->addPage( floatPage, i18n("&Data Format") );
+  floatPage = new CellFormatPageFloat( this, this );
+  addPage( floatPage, i18n("&Data Format") );
 
-  fontPage = new CellFormatPageFont( dialog, this );
-  dialog->addPage( fontPage, i18n("&Font") );
+  fontPage = new CellFormatPageFont( this, this );
+  addPage( fontPage, i18n("&Font") );
 
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
 
-  positionPage = new CellFormatPagePosition( dialog, this);
-  dialog->addPage( positionPage, i18n("&Position") );
+  positionPage = new CellFormatPagePosition( this, this);
+  addPage( positionPage, i18n("&Position") );
 
-  borderPage = new CellFormatPageBorder( dialog, this );
-  dialog->addPage( borderPage, i18n("&Border") );
+  borderPage = new CellFormatPageBorder( this, this );
+  addPage( borderPage, i18n("&Border") );
 
-  patternPage=new CellFormatPagePattern(dialog,this);
-  dialog->addPage( patternPage,i18n("Back&ground") );
+  patternPage=new CellFormatPagePattern(this,this);
+  addPage( patternPage,i18n("Back&ground") );
 
-  protectPage = new CellFormatPageProtection( dialog, this );
-  dialog->addPage( protectPage, i18n("&Cell Protection") );
+  protectPage = new CellFormatPageProtection( this, this );
+  addPage( protectPage, i18n("&Cell Protection") );
 
   //tab->adjustSize();
   //connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
-  connect( dialog, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
-
-  dialog->exec();
-  //tab->exec();
+  connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
 
 QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QColor & _color1,
@@ -855,11 +850,6 @@ QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QCol
   pixmap->setMask( bm );
 
   return pixmap;
-}
-
-int CellFormatDialog::exec()
-{
-  return ( dialog->exec() );
 }
 
 void CellFormatDialog::applyStyle()
@@ -968,8 +958,6 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     dlg( _dlg )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->setMargin(6);
-    layout->setSpacing(10);
 
     QGroupBox *grp = new QGroupBox( i18n("Format"),this);
     QGridLayout *grid = new QGridLayout(grp);
@@ -3809,4 +3797,3 @@ void CellFormatPagePattern::apply(StyleManipulator *_obj)
 }
 
 #include "LayoutDialog.moc"
-
