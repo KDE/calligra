@@ -1371,20 +1371,28 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     Q_UNUSED( force );
     Q_UNUSED( copy );
 
-    if ( d->subStyles.contains( NamedStyleKey ) )
+    if (type() == AUTO)
     {
-        // check, if it's an unmodified named style
-        const QSet<Key> keys = difference(*this);
-        if (keys.count() == 1 && keys.toList().first() == NamedStyleKey)
+        if ( d->subStyles.contains( NamedStyleKey ) )
         {
-            // just save the name and we are done.
-            format.setAttribute( "style-name", parentName() );
-            return;
+            // check, if it's an unmodified named style
+            const QSet<Key> keys = difference(*this);
+            if (keys.count() == 1 && keys.toList().first() == NamedStyleKey)
+            {
+                // just save the name and we are done.
+                format.setAttribute( "style-name", parentName() );
+                return;
+            }
         }
+    }
+    else // custom style
+    {
+        if (d->subStyles.contains(NamedStyleKey))
+            format.setAttribute("parent", parentName());
     }
 
     if ( d->subStyles.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
-        format.setAttribute( "align", (int) halign() );
+        format.setAttribute(type() == AUTO ? "align" : "alignX", (int) halign() );
 
     if ( d->subStyles.contains( VerticalAlignment ) && valign() != Middle )
         format.setAttribute( "alignY", (int) valign() );
@@ -1533,9 +1541,9 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
     }
 
     bool ok;
-    if ( format.hasAttribute( "align" ) )
+    if ( format.hasAttribute(type() == AUTO ? "align" : "alignX") )
     {
-        HAlign a = (HAlign) format.attribute( "align" ).toInt( &ok );
+        HAlign a = (HAlign) format.attribute(type() == AUTO ? "align" : "alignX").toInt( &ok );
         if ( !ok )
             return false;
         if ( (unsigned int) a >= 1 || (unsigned int) a <= 4 )
