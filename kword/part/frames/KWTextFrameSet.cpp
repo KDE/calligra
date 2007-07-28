@@ -153,11 +153,12 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
 }
 
 void KWTextFrameSet::spaceLeft(double excessHeight) {
+//kDebug() << "KWTextFrameSet::spaceLeft " << excessHeight << endl;
     Q_ASSERT(excessHeight >= 0);
     if(m_frames.count() == 0)
         return;
     QList<KWFrame*>::Iterator iter = --m_frames.end();
-    while(iter != m_frames.begin()) {
+    do {
         KWTextFrame *tf = dynamic_cast<KWTextFrame*> (*(iter));
         if(tf) {
             if(tf && tf->frameBehavior() == KWord::AutoExtendFrameBehavior) {
@@ -167,7 +168,7 @@ void KWTextFrameSet::spaceLeft(double excessHeight) {
             return;
         }
         --iter;
-    }
+    } while(iter != m_frames.begin());
 }
 
 void KWTextFrameSet::framesEmpty(int emptyFrames) {

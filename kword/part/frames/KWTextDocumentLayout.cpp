@@ -460,11 +460,10 @@ void KWTextDocumentLayout::layout() {
                     KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (lastFrame->shape()->userData());
                     Q_ASSERT( data );
                     double spaceLeft = lastFrame->shape()->size().height() - bottomOfText + data->documentOffset();
-                    lastFrame->allowToGrow();
                     data->wipe();
-                    if(spaceLeft > 0) {
+                    if(spaceLeft > 3) {
                         // note that this may delete the data and lastFrame !!  Do not access them after this point.
-                        m_frameSet->spaceLeft(spaceLeft);
+                        m_frameSet->spaceLeft(spaceLeft -3);
                     }
                 }
 
