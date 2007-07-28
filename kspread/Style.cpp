@@ -1384,7 +1384,7 @@ void Style::saveXML( QDomDocument& doc, QDomElement& format, bool force, bool co
     }
 
     if ( d->subStyles.contains( HorizontalAlignment ) && halign() != HAlignUndefined )
-        format.setAttribute( "alignX", (int) halign() );
+        format.setAttribute( "align", (int) halign() );
 
     if ( d->subStyles.contains( VerticalAlignment ) && valign() != Middle )
         format.setAttribute( "alignY", (int) valign() );
@@ -1533,9 +1533,9 @@ bool Style::loadXML( KoXmlElement& format, Paste::Mode mode, bool paste )
     }
 
     bool ok;
-    if ( format.hasAttribute( "alignX" ) )
+    if ( format.hasAttribute( "align" ) )
     {
-        HAlign a = (HAlign) format.attribute( "alignX" ).toInt( &ok );
+        HAlign a = (HAlign) format.attribute( "align" ).toInt( &ok );
         if ( !ok )
             return false;
         if ( (unsigned int) a >= 1 || (unsigned int) a <= 4 )
