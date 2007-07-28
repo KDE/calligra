@@ -39,6 +39,11 @@ public:
 protected:
     KoView * createViewInstance( QWidget *parent );
     const char *odfTagName();
+
+    /// reimplemented
+    virtual KoPAPage * newPage();
+    /// reimplemented
+    virtual KoPAMasterPage * newMasterPage();
 };
 
 #endif /* KPRDOCUMENT_H */

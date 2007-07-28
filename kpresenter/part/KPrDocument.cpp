@@ -21,6 +21,8 @@
 
 
 #include "KPrView.h"
+#include "KPrPage.h"
+#include "KPrMasterPage.h"
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
@@ -51,6 +53,16 @@ KoView * KPrDocument::createViewInstance( QWidget *parent )
 const char * KPrDocument::odfTagName()
 {
     return "presentation";
+}
+
+KoPAPage * KPrDocument::newPage()
+{
+    return new KPrPage( 0 );
+}
+
+KoPAMasterPage * KPrDocument::newMasterPage()
+{
+    return new KPrMasterPage();
 }
 
 #include "KPrDocument.moc"
