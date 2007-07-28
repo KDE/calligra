@@ -1730,22 +1730,24 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     // First of all determine in which row and column this
     // cell belongs.
     //
-    d->row = cell.attribute( "row" ).toInt( &ok ) + _yshift;
+    const int row = cell.attribute( "row" ).toInt( &ok ) + _yshift;
     if ( !ok ) return false;
-    d->column = cell.attribute( "column" ).toInt( &ok ) + _xshift;
+    const int column = cell.attribute( "column" ).toInt( &ok ) + _xshift;
     if ( !ok ) return false;
 
     // Validation
-    if ( row() < 1 || row() > KS_rowMax )
+    if ( row < 1 || row > KS_rowMax )
     {
         kDebug(36001) << "Cell::load: Value out of range Cell:row=" << d->row << endl;
         return false;
     }
-    if ( column() < 1 || column() > KS_colMax )
+    if ( column < 1 || column > KS_colMax )
     {
         kDebug(36001) << "Cell::load: Value out of range Cell:column=" << d->column << endl;
         return false;
     }
+    d->row = row;
+    d->column = column;
 
     //
     // Load formatting information.
@@ -1755,11 +1757,6 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
           && ( (pm == Paste::Normal) || (pm == Paste::Format) || (pm == Paste::NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
-
-        Style style;
-        if ( !style.loadXML( formatElement, pm, paste ) )
-            return false;
-        setStyle( style );
 
         int mergedXCells = 0;
         int mergedYCells = 0;
@@ -1793,6 +1790,11 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
 
         if ( mergedXCells != 0 || mergedYCells != 0 )
             mergeCells( d->column, d->row, mergedXCells, mergedYCells );
+
+        Style style;
+        if ( !style.loadXML( formatElement, pm, paste ) )
+            return false;
+        setStyle( style );
     }
 
     //
