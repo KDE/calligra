@@ -16,31 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PARTDETAILSDIALOG_H
-#define PARTDETAILSDIALOG_H
+#ifndef CHANGEPARTABBREVIATIONCOMMAND_H
+#define CHANGEPARTABBREVIATIONCOMMAND_H
 
-#include "ui_PartDetailsDialog.h"
+#include <QUndoCommand>
 
-#include <KDialog>
-
-class MusicTool;
 namespace MusicCore {
+    class Sheet;
     class Part;
 }
+class MusicShape;
 
-class PartDetailsDialog : public KDialog {
-    Q_OBJECT
+class ChangePartAbbreviationCommand : public QUndoCommand {
 public:
-    PartDetailsDialog(MusicTool *tool, MusicCore::Part* part, QWidget *parent = 0);
-
-private slots:
-    void nameChanged(const QString& text);
-    void shortNameChanged(const QString& text);
-    void staffCountChanged(int count);
+    ChangePartAbbreviationCommand(MusicShape* shape, MusicCore::Part* part, const QString& name);
+    virtual void redo();
+    virtual void undo();
 private:
-    Ui::PartDetailsDialog widget;
-    MusicTool *m_tool;
-    MusicCore::Part *m_part;
+    MusicCore::Sheet* m_sheet;
+    MusicCore::Part* m_part;
+    MusicShape* m_shape;
+    QString m_name, m_oldName;
 };
 
-#endif // PARTDETAILSDIALOG_H
+#endif // CHANGEPARTABBREVIATIONCOMMAND_H

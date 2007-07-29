@@ -16,31 +16,31 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PARTDETAILSDIALOG_H
-#define PARTDETAILSDIALOG_H
+#include "ChangePartAbbreviationCommand.h"
+#include "../core/Sheet.h"
+#include "../core/Part.h"
+#include "../MusicShape.h"
 
-#include "ui_PartDetailsDialog.h"
+#include "klocale.h"
 
-#include <KDialog>
+using namespace MusicCore;
 
-class MusicTool;
-namespace MusicCore {
-    class Part;
+ChangePartAbbreviationCommand::ChangePartAbbreviationCommand(MusicShape* shape, Part* part, const QString& name)
+    : m_sheet(shape->sheet()),
+    m_part(part),
+    m_shape(shape),
+    m_name(name),
+    m_oldName(part->shortName(false))
+{
+    setText(i18n("Change part short name"));
 }
 
-class PartDetailsDialog : public KDialog {
-    Q_OBJECT
-public:
-    PartDetailsDialog(MusicTool *tool, MusicCore::Part* part, QWidget *parent = 0);
+void ChangePartAbbreviationCommand::redo()
+{
+    m_part->setShortName(m_name);
+}
 
-private slots:
-    void nameChanged(const QString& text);
-    void shortNameChanged(const QString& text);
-    void staffCountChanged(int count);
-private:
-    Ui::PartDetailsDialog widget;
-    MusicTool *m_tool;
-    MusicCore::Part *m_part;
-};
-
-#endif // PARTDETAILSDIALOG_H
+void ChangePartAbbreviationCommand::undo()
+{
+    m_part->setShortName(m_oldName);
+}

@@ -40,6 +40,7 @@ public:
   void deactivate();
 
   void addCommand(QUndoCommand* command);
+    MusicShape* shape();
 protected:
   /*
    * Create default option widget

@@ -63,7 +63,7 @@ void PartsWidget::setShape(MusicShape* shape)
 void PartsWidget::partDoubleClicked(QListWidgetItem* item)
 {
     int row = widget.partsList->row(item);
-    PartDetailsDialog *dlg = new PartDetailsDialog(m_sheet->part(row), this);
+    PartDetailsDialog *dlg = new PartDetailsDialog(m_tool, m_sheet->part(row), this);
     dlg->show();
 }
 
@@ -87,7 +87,7 @@ void PartsWidget::removePart()
 
 void PartsWidget::editPart()
 {
-    PartDetailsDialog *dlg = new PartDetailsDialog(m_sheet->part(widget.partsList->currentRow()));
+    PartDetailsDialog *dlg = new PartDetailsDialog(m_tool, m_sheet->part(widget.partsList->currentRow()));
     dlg->show();
 }
 

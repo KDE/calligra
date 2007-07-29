@@ -112,3 +112,8 @@ QWidget * MusicTool::createOptionWidget()
 
 }
 
+MusicShape* MusicTool::shape()
+{
+    return m_musicshape;
+}
+    

@@ -17,11 +17,19 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "PartDetailsDialog.h"
+
+#include "../MusicTool.h"
+
 #include "../core/Part.h"
+
+#include "../commands/ChangePartNameCommand.h"
+#include "../commands/ChangePartAbbreviationCommand.h"
+
 using namespace MusicCore;
 
-PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
+PartDetailsDialog::PartDetailsDialog(MusicTool* tool, Part* part, QWidget* parent)
     : KDialog(parent),
+    m_tool(tool),
     m_part(part)
 {
     setCaption(i18n("Part details"));
@@ -31,17 +39,29 @@ PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
     widget.setupUi(w);
     setMainWidget(w);
     
-    widget.addStaff->setIcon(KIcon("edit-add"));
-    widget.removeStaff->setIcon(KIcon("edit-delete"));
-    widget.editStaff->setIcon(KIcon("edit"));        
-
     widget.nameEdit->setText(part->name());
     widget.shortNameEdit->setText(part->shortName());
+    widget.staffCount->setValue(part->staffCount());
 
-    for (int i = 0; i < part->staffCount(); i++) {
-        widget.staffList->addItem(QString("Staff %1").arg(i+1));
-    }
+    connect(part, SIGNAL(nameChanged(const QString&)), widget.nameEdit, SLOT(setText(const QString&)));
+    connect(part, SIGNAL(shortNameChanged(const QString&)), widget.shortNameEdit, SLOT(setText(const QString&)));
+    
+    connect(widget.nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(nameChanged(const QString&)));
+    connect(widget.shortNameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(shortNameChanged(const QString&)));
 }
 
+void PartDetailsDialog::nameChanged(const QString& text)
+{
+    m_tool->addCommand(new ChangePartNameCommand(m_tool->shape(), m_part, text));     
+}
+
+void PartDetailsDialog::shortNameChanged(const QString& text)
+{
+    m_tool->addCommand(new ChangePartAbbreviationCommand(m_tool->shape(), m_part, text));
+}
+
+void PartDetailsDialog::staffCountChanged(int count)
+{
+}
 
 #include "PartDetailsDialog.moc"
