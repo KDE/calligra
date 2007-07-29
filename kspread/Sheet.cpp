@@ -2697,7 +2697,19 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
             kDebug(36003)<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName()<<endl;
             if ( rowElement.namespaceURI() == KoXmlNS::table )
             {
-                if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
+                if ( rowElement.localName() == "table-header-columns" )
+                {
+                  KoXmlNode headerColumnNode = rowElement.firstChild();
+                  while ( !headerColumnNode.isNull() )
+                  {
+                    // NOTE Handle header cols as ordinary ones
+                    //      as long as they're not supported.
+                    loadColumnFormat( headerColumnNode.toElement(), oasisContext.oasisStyles(),
+                                      indexCol, columnStyleRegions );
+                    headerColumnNode = headerColumnNode.nextSibling();
+                  }
+                }
+                else if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
                 {
                     kDebug(36003)<<" table-column found : index column before "<< indexCol<<endl;
                     loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol, columnStyleRegions );
