@@ -118,7 +118,9 @@ bool DeleteCommand::process( Element* element )
     // the rect storages
     m_sheet->cellStorage()->setComment( Region( range, element->sheet() ), QString() );
     m_sheet->cellStorage()->setConditions( Region( range, element->sheet() ), Conditions() );
-    m_sheet->cellStorage()->setStyle( Region( range, element->sheet() ), Style() );
+    Style style;
+    style.setDefault();
+    m_sheet->cellStorage()->setStyle( Region( range, element->sheet() ), style );
     m_sheet->cellStorage()->setValidity( Region( range, element->sheet() ), Validity() );
     return true;
 }
