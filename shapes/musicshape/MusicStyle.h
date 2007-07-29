@@ -27,7 +27,7 @@
 
 /**
  * This class contains various methods that define how music is rendered. Currently all hardcoded
- * implementations, but in the future this class would become pure virtual, with verious implementations.
+ * implementations, but in the future this class would become pure virtual, with various implementations.
  */
 class MusicStyle {
 public:
