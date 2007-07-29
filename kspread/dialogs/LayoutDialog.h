@@ -145,13 +145,15 @@ class GeneralTab : public QWidget
   bool apply( CustomStyle * style );
 
  protected slots:
-  void slotNewParent( const QString & parentName );
-  void slotNameChanged();
+  void parentChanged(const QString&);
+  void styleNameChanged(const QString&);
 
  private:
   CellFormatDialog * m_dlg;
   KComboBox     * m_parentBox;
   KLineEdit     * m_nameEdit;
+  QLabel        * m_nameStatus;
+  QLabel        * m_parentStatus;
 
   QString m_name;
   QString m_parent;

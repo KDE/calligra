@@ -44,7 +44,7 @@ StyleManagerDialog::StyleManagerDialog(View* parent, StyleManager* manager)
     , m_view(parent)
     , m_styleManager(manager)
 {
-    setButtons(Ok | User1 | User2 | User3 | Close);
+    setButtons(Apply | User1 | User2 | User3 | Close);
     setButtonText(User3, i18n("&New..."));
     setButtonText(User2, i18n("&Modify..."));
     setButtonText(User1, i18n("&Delete..."));
@@ -73,7 +73,7 @@ StyleManagerDialog::StyleManagerDialog(View* parent, StyleManager* manager)
 
     connect(m_displayBox, SIGNAL(activated(int)),
             this, SLOT(slotDisplayMode(int)));
-    connect(this, SIGNAL(okClicked()),
+    connect(this, SIGNAL(applyClicked()),
             this, SLOT(slotOk()));
     connect(this, SIGNAL(user3Clicked()),
             this, SLOT(slotNew()));
@@ -107,7 +107,8 @@ void StyleManagerDialog::fillComboBox()
         if (entries.find(iter.value()) == entries.end())
         {
             if (iter.value()->parentName().isNull())
-                entries[iter.value()] = new QTreeWidgetItem(m_styleList, QStringList(iter.value()->name()));
+                entries[iter.value()] = new QTreeWidgetItem(entries[m_styleManager->defaultStyle()],
+                                                            QStringList(iter.value()->name()));
             else
             {
                 CustomStyle* parentStyle = m_styleManager->style(iter.value()->parentName());
@@ -131,16 +132,16 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 {
     m_styleList->clear();
 
-    if (mode != 2)
+    if (mode != 2) // NOT "Hierarchical"
         m_styleList->setRootIsDecorated(false);
-    else
+    else // "Hierarchical"
     {
         m_styleList->setRootIsDecorated(true);
         fillComboBox();
         return;
     }
 
-    if (mode != 1)
+    if (mode != 1) // NOT "Custom Styles"
         new QTreeWidgetItem(m_styleList, QStringList(i18n("Default")));
 
     CustomStyles::iterator iter = m_styleManager->m_styles.begin();
@@ -155,7 +156,7 @@ void StyleManagerDialog::slotDisplayMode(int mode)
             continue;
         }
 
-        if (mode == 1)
+        if (mode == 1) // "Custom Styles"
         {
             if (styleData->type() == Style::CUSTOM)
                 new QTreeWidgetItem(m_styleList, QStringList(styleData->name()));
@@ -246,6 +247,10 @@ void StyleManagerDialog::slotEdit()
 
     CellFormatDialog dialog(m_view, style, m_styleManager, m_view->doc());
     dialog.exec();
+
+    if (dialog.result() == Accepted && name == i18n("Default"))
+        m_view->refreshSheetViews();
+
     slotDisplayMode(m_displayBox->currentIndex());
 }
 

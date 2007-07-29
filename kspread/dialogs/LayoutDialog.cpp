@@ -184,31 +184,38 @@ GeneralTab::GeneralTab( QWidget* parent, CellFormatDialog * dlg )
   m_nameEdit->setText( m_dlg->styleName );
   groupBoxLayout->addWidget( m_nameEdit, 0, 1 );
 
+  m_nameStatus = new QLabel(groupBox);
+  m_nameStatus->hide();
+  groupBoxLayout->addWidget(m_nameStatus, 1, 1);
+
   QLabel * label2 = new QLabel( groupBox );
   label2->setText( i18n( "Inherit style:" ) );
-  groupBoxLayout->addWidget( label2, 1, 0 );
+  groupBoxLayout->addWidget( label2, 2, 0 );
 
   m_parentBox = new KComboBox( false, groupBox );
   m_parentBox->clear();
-  m_parentBox->insertItem( 0,i18n( "<none>" ) ); // krazy:exclude=i18ncheckarg
   QStringList tmp = m_dlg->getStyleManager()->styleNames();
   tmp.removeAll( m_dlg->styleName );
-  m_parentBox->insertItems( 1, tmp );
+  // place the default style first
+  tmp.removeAll(i18n("Default"));
+  m_parentBox->insertItem(0, i18n("Default"));
+  m_parentBox->insertItems(1, tmp);
 
   if ( !m_dlg->getStyle()->parentName().isNull() )
     m_parentBox->setCurrentIndex(m_parentBox->findText(m_dlg->getStyle()->parentName()));
   else
-  {
-    m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("<none>"))); // krazy:exclude=i18ncheckarg
+    m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("Default")));
 
-    if ( m_dlg->getStyle()->definesAll() )
-      m_parentBox->setEnabled( false );
-  }
+  connect(m_parentBox, SIGNAL(activated(const QString&)),
+          this, SLOT(parentChanged(const QString&)));
+  connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
+          this, SLOT(styleNameChanged(const QString&)));
 
-  connect( m_parentBox, SIGNAL( textChanged( const QString & ) ), this, SLOT( slotNewParent( const QString & ) ) );
-  connect( m_nameEdit, SIGNAL( lostFocus() ), this, SLOT( slotNameChanged() ) );
+  groupBoxLayout->addWidget( m_parentBox, 2, 1 );
 
-  groupBoxLayout->addWidget( m_parentBox, 1, 1 );
+  m_parentStatus = new QLabel(groupBox);
+  m_parentStatus->hide();
+  groupBoxLayout->addWidget(m_parentStatus, 3, 1);
 
   QSpacerItem * spacer = new QSpacerItem( 20, 260, QSizePolicy::Minimum, QSizePolicy::Expanding );
 
@@ -228,78 +235,59 @@ GeneralTab::~GeneralTab()
 {
 }
 
-void GeneralTab::slotNameChanged()
+void GeneralTab::styleNameChanged(const QString& name)
 {
-  checkName();
+    if (!m_dlg->getStyleManager()->validateStyleName(name, m_dlg->getStyle()))
+    {
+        m_nameStatus->setText(i18n("A style with this name already exists."));
+        m_nameStatus->show();
+        m_dlg->enableButtonOk(false);
+    }
+    else if (name.isEmpty())
+    {
+        m_nameStatus->setText(i18n("The style name can not be empty."));
+        m_nameStatus->show();
+        m_dlg->enableButtonOk(false);
+    }
+    else
+    {
+        m_nameStatus->hide();
+        m_dlg->enableButtonOk(true);
+    }
 }
 
-void GeneralTab::slotNewParent( const QString & parentName )
+void GeneralTab::parentChanged(const QString& parentName)
 {
-  kDebug() << "New Parent" << endl;
-  if ( !checkParent( parentName ) )
-    return;
+    if (m_nameEdit->text() == parentName)
+    {
+        m_parentStatus->setText(i18n("A style cannot inherit from itself."));
+        m_parentStatus->show();
+        m_dlg->enableButtonOk(false);
+    }
+    else if (!m_dlg->checkCircle(m_nameEdit->text(), parentName))
+    {
+        m_parentStatus->setText(i18n("The style cannot inherit from '%1' because of recursive references.",
+                                    m_parentBox->currentText()));
+        m_parentStatus->show();
+        m_dlg->enableButtonOk(false);
+    }
+    else
+    {
+        m_parentStatus->hide();
+        m_dlg->enableButtonOk(true);
+    }
 
-  if ( parentName.isEmpty() || parentName == i18n( "<none>" ) ) // krazy:exclude=i18ncheckarg
-    m_dlg->getStyle()->clearAttribute( Style::NamedStyleKey );
-  else
-    m_dlg->getStyle()->setParentName( parentName );
+    if (parentName.isEmpty() || parentName == i18n("Default"))
+        m_dlg->getStyle()->clearAttribute( Style::NamedStyleKey );
+    else
+        m_dlg->getStyle()->setParentName( parentName );
 
   // Set difference to new parent, set GUI to parent values, add changes made before
   //  m_dlg->initGUI();
 }
 
-bool GeneralTab::checkName()
-{
-  if ( m_nameEdit->isEnabled() )
-  {
-    if ( !m_dlg->getStyleManager()->validateStyleName( m_nameEdit->text(), m_dlg->getStyle() ) )
-    {
-      KMessageBox::sorry( this, i18n( "A style with this name already exists." ) );
-      return false;
-    }
-  }
-
-  return true;
-}
-
-bool GeneralTab::checkParent( const QString & parentName )
-{
-  if ( m_dlg->getStyle()->parentName() != parentName
-       && m_parentBox->isEnabled() && parentName != i18n( "<none>" ) && !parentName.isEmpty() ) // krazy:exclude=i18ncheckarg
-  {
-    if ( m_nameEdit->text() == parentName )
-    {
-      KMessageBox::sorry( this, i18n( "A style cannot inherit from itself." ) );
-      return false;
-    }
-    if ( !m_dlg->checkCircle( m_nameEdit->text(), parentName ) )
-    {
-      KMessageBox::sorry( this,
-                          i18n( "The style cannot inherit from '%1' because of recursive references.",
-                          m_parentBox->currentText() ) );
-      return false;
-    }
-
-    CustomStyle * p = m_dlg->getStyleManager()->style( parentName );
-
-    if ( !p )
-    {
-      KMessageBox::sorry( this, i18n( "The parent style does not exist." ) );
-      return false;
-    }
-  }
-
-  return true;
-}
-
 bool GeneralTab::apply( CustomStyle * style )
 {
-  if ( !checkParent( m_parentBox->currentText() ) )
-    return false;
-
-  if ( !checkName() )
-    return false;
-
   if ( m_nameEdit->isEnabled() )
   {
     if ( style->type() != Style::BUILTIN )
@@ -308,7 +296,7 @@ bool GeneralTab::apply( CustomStyle * style )
       style->setName( m_nameEdit->text() );
       if ( m_parentBox->isEnabled() )
       {
-        if ( m_parentBox->currentText() == i18n( "None" ) || m_parentBox->currentText().isEmpty() )
+        if (m_parentBox->currentText() == i18n("Default") || m_parentBox->currentText().isEmpty())
           style->clearAttribute( Style::NamedStyleKey );
         else
           style->setParentName( m_parentBox->currentText() );
@@ -821,8 +809,6 @@ void CellFormatDialog::init()
   protectPage = new CellFormatPageProtection( this, this );
   addPage( protectPage, i18n("&Cell Protection") );
 
-  //tab->adjustSize();
-  //connect( tab, SIGNAL( applyButtonPressed() ), this, SLOT( slotApply() ) );
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
 

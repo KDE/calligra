@@ -381,8 +381,6 @@ public:
     void setName( QString const & name );
     QString const & name() const;
 
-    bool definesAll() const;
-
     bool loadXML( KoXmlElement const & style, QString const & name );
     void save(QDomDocument & doc, QDomElement & styles, const StyleManager* styleManager);
 

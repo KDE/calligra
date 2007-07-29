@@ -2092,6 +2092,12 @@ SheetView* View::sheetView( const Sheet* sheet ) const
     return d->sheetViews[ sheet ];
 }
 
+void View::refreshSheetViews()
+{
+    qDeleteAll(d->sheetViews);
+    d->sheetViews.clear();
+}
+
 void View::initConfig()
 {
     KSharedConfigPtr config = Factory::global().config();

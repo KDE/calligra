@@ -150,6 +150,8 @@ public:
      */
     SheetView* sheetView( const Sheet* sheet ) const;
 
+    void refreshSheetViews();
+
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;
     void popupColumnMenu( const QPoint & _point);

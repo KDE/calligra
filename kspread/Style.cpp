@@ -2680,12 +2680,6 @@ void CustomStyle::setName( QString const & name )
     d->name = name;
 }
 
-bool CustomStyle::definesAll() const
-{
-    // TODO
-    return false;
-}
-
 QString CustomStyle::saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
                                const StyleManager* manager) const
 {
