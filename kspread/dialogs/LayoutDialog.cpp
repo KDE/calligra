@@ -816,24 +816,15 @@ QPixmap * CellFormatDialog::paintFormatPixmap( const char * _string1, const QCol
                                             const char *_string2, const QColor & _color2 )
 {
   QPixmap * pixmap = new QPixmap( 150, 14 );
+  pixmap->fill(Qt::transparent);
 
   QPainter painter;
   painter.begin( pixmap );
-  painter.fillRect( 0, 0, 150, 14, QApplication::palette().base().color() );
   painter.setPen( _color1 );
   painter.drawText( 2, 11, _string1 );
   painter.setPen( _color2 );
   painter.drawText( 75, 11, _string2 );
   painter.end();
-
-  QBitmap bm( pixmap->size() );
-  bm.fill( Qt::color0 );
-  painter.begin( &bm );
-  painter.setPen( Qt::color1 );
-  painter.drawText( 2, 11, _string1 );
-  painter.drawText( 75, 11, _string2 );
-  painter.end();
-  pixmap->setMask( bm );
 
   return pixmap;
 }
@@ -1057,6 +1048,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
 
     prefix->setText( dlg->prefix );
 
+    format->setIconSize(QSize(150, 14));
     format->insertItem(0, *_dlg->formatOnlyNegSignedPixmap, "" );
     format->insertItem(1, *_dlg->formatRedOnlyNegSignedPixmap, "" );
     format->insertItem(2, *_dlg->formatRedNeverSignedPixmap, "" );
@@ -2644,6 +2636,7 @@ void CellFormatPageBorder::InitializeGrids()
 
   style=new QComboBox(tmpQGroupBox);
   grid3->addWidget(style,1,0);
+  style->setIconSize(QSize(100, 14));
   style->insertItem(0,paintFormatPixmap(Qt::DotLine), "");
   style->insertItem(1,paintFormatPixmap(Qt::DashLine), "");
   style->insertItem(2,paintFormatPixmap(Qt::DashDotLine), "");
@@ -2815,14 +2808,12 @@ void CellFormatPageBorder::slotChangeStyle(int)
 
 QPixmap CellFormatPageBorder::paintFormatPixmap(Qt::PenStyle _style)
 {
-  QPixmap pixmap( style->width(), 14 );
+  QPixmap pixmap( 100, 14 );
+  pixmap.fill(Qt::transparent);
   QPainter painter;
-  QPen pen;
-  pen=QPen( palette().text().color(), 1, _style );
   painter.begin( &pixmap );
-  painter.fillRect( 0, 0, style->width(), 14, palette().window().color() );
-  painter.setPen( pen );
-  painter.drawLine( 0, 7, style->width(), 7 );
+  painter.setPen( QPen( palette().text().color(), 5, _style ) );
+  painter.drawLine( 0, 7, 100, 7 );
   painter.end();
   return pixmap;
 }
