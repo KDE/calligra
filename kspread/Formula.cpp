@@ -1506,7 +1506,7 @@ Value Formula::eval() const
         if (d->sheet)
         {
           const Region region(c, d->sheet->map(), d->sheet);
-          if (region.isValid() && !region.isSingular())
+          if (region.isValid())
           {
             val1 = region.firstSheet()->cellStorage()->valueRegion(region);
             // store the reference, so we can use it within functions
