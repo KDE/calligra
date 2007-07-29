@@ -2597,7 +2597,7 @@ void CellFormatPageBorder::InitializeGrids()
     name[8] = '0' + (i+1) % 10;
     pattern[i] = new PatternSelect( tmpQGroupBox, name );
     pattern[i]->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    grid2->addWidget(pattern[i], i % 5 + 1, i / 5);
+    grid2->addWidget(pattern[i], i % 5, i / 5);
     /* this puts them in the pattern:
        1  6
        2  7
@@ -2608,23 +2608,20 @@ void CellFormatPageBorder::InitializeGrids()
   }
 
   color = new KColorButton ( tmpQGroupBox );
-  grid2->addWidget(color,7,1);
+  grid2->addWidget(color,8,1);
 
   QLabel *tmpQLabel = new QLabel( tmpQGroupBox );
   tmpQLabel->setText( i18n("Color:") );
-  grid2->addWidget(tmpQLabel,7,0);
+  grid2->addWidget(tmpQLabel,8,0);
 
   /* tack on the 'customize' border pattern selector */
-  QGridLayout *grid3 = new QGridLayout( this );
-  grid3->setMargin(KDialog::marginHint());
-  grid3->setSpacing(KDialog::spacingHint());
   customize  = new QCheckBox(i18n("Customize"),tmpQGroupBox);
-  grid3->addWidget(customize,0,0);
+  grid2->addWidget(customize,6,0);
   connect( customize, SIGNAL( clicked()), SLOT(cutomize_chosen_slot()) );
 
   size=new QComboBox(tmpQGroupBox);
   size->setEditable(true);
-  grid3->addWidget(size,1,1);
+  grid2->addWidget(size,7,1);
   size->setValidator(new KIntValidator( size ));
   QString tmp;
   for ( int i=0;i<10;i++)
@@ -2635,7 +2632,7 @@ void CellFormatPageBorder::InitializeGrids()
   size->setCurrentIndex(1);
 
   style=new QComboBox(tmpQGroupBox);
-  grid3->addWidget(style,1,0);
+  grid2->addWidget(style,7,0);
   style->setIconSize(QSize(100, 14));
   style->insertItem(0,paintFormatPixmap(Qt::DotLine), "");
   style->insertItem(1,paintFormatPixmap(Qt::DashLine), "");
@@ -2646,7 +2643,6 @@ void CellFormatPageBorder::InitializeGrids()
   palette.setColor(style->backgroundRole(), this->palette().window().color());
   style->setPalette(palette);
 
-  grid2->addItem(grid3,6,0,1,2);
   grid->addWidget(tmpQGroupBox,0,1,4,1);
 
   /* Now the preview box is put together */
