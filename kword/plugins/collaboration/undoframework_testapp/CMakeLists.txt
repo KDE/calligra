@@ -30,6 +30,6 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wall)
 qt4_add_resources(undoframework_testapp_RCCS_SRCS ${undoframework_testapp_RCCS})
 
 kde4_add_executable(undoframework_testapp ${undoframework_testapp_SRCS} ${undoframework_testapp_HDRS} ${undoframework_testapp_RCCS_SRCS})
-target_link_libraries(undoframework_testapp ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} collaboration )
+target_link_libraries(undoframework_testapp ${KDE4_KPARTS_LIBS} collaboration )
 
 install(TARGETS undoframework_testapp DESTINATION ${BIN_INSTALL_DIR})

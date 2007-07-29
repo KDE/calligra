@@ -37,7 +37,7 @@ kde4_add_ui_files(kcollaborate_SRCS ${kcollaborate_UIS} )
 add_definitions(${KDE4_ENABLE_EXCEPTIONS} -Wall)
 
 kde4_add_library(collaboration SHARED ${kcollaborate_SRCS} )
-target_link_libraries(collaboration ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} kdnssd)
+target_link_libraries(collaboration ${KDE4_KPARTS_LIBS} kdnssd)
 set_target_properties(collaboration PROPERTIES VERSION 0.0.1 SOVERSION 0 )
 
 install(FILES
