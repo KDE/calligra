@@ -881,6 +881,23 @@ void TestFinancialFunctions::testTBILLYIELD()
   CHECK_EVAL( "TBILLYIELD(DATE(1996;07;01);DATE(1997;07;01);94.93)", Value( Value::errorVALUE() ) ); // specs 0.0526762 OOo-2.2.1 Error(#VALUE!)
 }
 
+// VDB
+void TestFinancialFunctions::testVDB()
+{
+  // ODF
+  CHECK_EVAL( "VDB(10000;600;10;0    ;0.875;1.5)", Value( 1312.50         ) );
+  CHECK_EVAL( "VDB(10000;600;10;0.875;1.875;1.5)", Value( 1303.125        ) );
+  CHECK_EVAL( "VDB(10000;600;10;1.875;2.875;1.5)", Value( 1107.65625      ) );
+  CHECK_EVAL( "VDB(10000;600;10;2.875;3.875;1.5)", Value(  941.5078125    ) );
+  CHECK_EVAL( "VDB(10000;600;10;3.875;4.875;1.5)", Value(  800.2816406250 ) );
+  CHECK_EVAL( "VDB(10000;600;10;4.875;5.875;1.5)", Value(  767.7910823171 ) );
+  CHECK_EVAL( "VDB(10000;600;10;5.875;6.875;1.5)", Value(  767.410625     ) );
+  CHECK_EVAL( "VDB(10000;600;10;6.875;7.875;1.5)", Value(  767.410625     ) );
+  CHECK_EVAL( "VDB(10000;600;10;7.875;8.875;1.5)", Value(  767.410625     ) );
+  CHECK_EVAL( "VDB(10000;600;10;8.875;9.875;1.5)", Value(  767.410625     ) );
+  CHECK_EVAL( "VDB(10000;600;10;9.875;10   ;1.5)", Value(   95.9263281250 ) );
+}
+
 // XIRR
 void TestFinancialFunctions::testXIRR()
 {

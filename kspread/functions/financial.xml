@@ -1271,6 +1271,36 @@
     </Function>
 
     <Function>
+      <Name>VDB</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Settlement</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Maturity</Comment>
+        <Type>Date</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Price</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Redemption</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Basis</Comment>
+        <Type>int</Type>
+      </Parameter>
+      <Help>
+        <Text>VDB calculates the depreciation allowance of an asset with an initial value, an expected useful life, and a final value of salvage for a period specified, using the variable-rate declining balance method.</Text>
+        <Syntax>VDB(cost; salvage; life; start-period; end-period; [; depreciation-factor = 2 [; switch = false ]] )</Syntax>
+        <Example>VDB(10000;600;10;0;0.875;1.5) returns 1312.5</Example>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>XIRR</Name>
       <Type>Float</Type>
       <Parameter>

@@ -91,7 +91,7 @@ private slots:
   void testTBILLEQ();
   void testTBILLPRICE();
   void testTBILLYIELD();
-//   void testVDB();        // to be implemented
+  void testVDB();
   void testXIRR();
   void testXNPV();
 //   void testYIELD();      // to be implemented
