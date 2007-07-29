@@ -519,7 +519,7 @@ public:
     //
 
     /** returns horizontal alignment, depending on style and value type */
-    int effectiveAlignX();
+    int effectiveAlignX() const;
     /** returns true, if cell format is of date type or content is a date */
     bool isDate() const;
     /** returns true, if cell format is of time type or content is a time */

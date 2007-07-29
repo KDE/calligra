@@ -1285,7 +1285,7 @@ static QString cellAsText( const Cell& cell, unsigned int max )
   if( !cell.isDefault() )
   {
     int l = max - cell.displayText().length();
-    const Style::HAlign alignX = (Style::HAlign)Cell( cell ).effectiveAlignX();
+    const Style::HAlign alignX = (Style::HAlign)cell.effectiveAlignX();
     if ( alignX == Style::Right )
     {
         for ( int i = 0; i < l; ++i )

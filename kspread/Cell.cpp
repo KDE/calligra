@@ -761,7 +761,7 @@ bool Cell::makeFormula()
     return true;
 }
 
-int Cell::effectiveAlignX()
+int Cell::effectiveAlignX() const
 {
     const Style style = effectiveStyle();
     int align = style.halign();
