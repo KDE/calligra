@@ -205,7 +205,7 @@ int StyleStorage::nextColumnIndexInRow(int column, int row) const
 
 void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 {
-//     kDebug(36006) << "StyleStorage: inserting " << subStyle->type() << " into " << rect << endl;
+//     kDebug(36006) << "StyleStorage: inserting " << SubStyle::name(subStyle->type()) << " into " << rect << endl;
     // keep track of the used area
     const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
     if (rect.top() == 1 && rect.bottom() == KS_colMax)

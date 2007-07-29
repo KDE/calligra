@@ -102,30 +102,40 @@ bool StyleManipulator::process(Element* element)
         // set the actual style
         m_sheet->cellStorage()->setStyle( Region(range), *m_style );
 
+        // prepare to restore pens
+        m_style->clearAttribute( Style::LeftPen );
+        m_style->clearAttribute( Style::RightPen );
+        m_style->clearAttribute( Style::TopPen );
+        m_style->clearAttribute( Style::BottomPen );
+
         // set the outer border styles
         Style style;
         if ( leftPen.style() != Qt::NoPen )
         {
             style.setLeftBorderPen( leftPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), 1, range.height())), style );
+            m_style->setLeftBorderPen(leftPen); // restore pen
         }
         if ( rightPen.style() != Qt::NoPen )
         {
             style.clear();
             style.setRightBorderPen( rightPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.right(), range.top(), 1, range.height())), style );
+            m_style->setRightBorderPen(rightPen); // restore pen
         }
         if ( topPen.style() != Qt::NoPen )
         {
             style.clear();
             style.setTopBorderPen( topPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), range.width(), 1)), style );
+            m_style->setTopBorderPen(topPen);
         }
         if ( bottomPen.style() != Qt::NoPen )
         {
             style.clear();
             style.setBottomBorderPen( bottomPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.bottom(), range.width(), 1)), style );
+            m_style->setBottomBorderPen(bottomPen);
         }
     }
     return true;

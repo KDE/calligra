@@ -50,7 +50,7 @@ Regressions
 * Autofill							      1 DONE
   Fix it. Works, if you comment out the undo creation. Probably since
   the KCommand to QUndoCommand.
-* Border (l,r,t,b & outline)					      1 ----
+* Border (l,r,t,b & outline)					      1 DONE
   Redo does not work.
 
 General bugs
