@@ -128,14 +128,14 @@ bool StyleManipulator::process(Element* element)
             style.clear();
             style.setTopBorderPen( topPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), range.width(), 1)), style );
-            m_style->setTopBorderPen(topPen);
+            m_style->setTopBorderPen(topPen); // restore pen
         }
         if ( bottomPen.style() != Qt::NoPen )
         {
             style.clear();
             style.setBottomBorderPen( bottomPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.bottom(), range.width(), 1)), style );
-            m_style->setBottomBorderPen(bottomPen);
+            m_style->setBottomBorderPen(bottomPen); // restore pen
         }
     }
     return true;

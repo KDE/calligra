@@ -96,9 +96,6 @@ protected:
 
     /**
      * Preprocessing of the region.
-     * Checks the protection of each cell in the region.
-     * \return \c true if the sheet is not protected or all cells are not protected
-     * \return \c false if any of the cells is protected
      */
     virtual bool preProcessing() { return true; }
 

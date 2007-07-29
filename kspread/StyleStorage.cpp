@@ -389,6 +389,9 @@ void StyleStorage::garbageCollection()
          static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 == 0 &&
          pairs[0].first == currentPair.first )
     {
+        kDebug(36006) << "StyleStorage: removing default indentation"
+                      << " at " << Region(currentPair.first.toRect()).name()
+                      << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
         QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
@@ -400,6 +403,9 @@ void StyleStorage::garbageCollection()
          static_cast<const SubStyleOne<Style::Precision, int>*>(currentPair.second.data())->value1 == 0 &&
          pairs[0].first == currentPair.first )
     {
+        kDebug(36006) << "StyleStorage: removing default precision"
+                      << " at " << Region(currentPair.first.toRect()).name()
+                      << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
         QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
