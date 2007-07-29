@@ -762,7 +762,7 @@ void Canvas::startTheDrag()
   // right area for start dragging
   setCursor( Qt::PointingHandCursor );
 
-  QDomDocument doc = sheet->saveCellRegion(*selection());
+  QDomDocument doc = sheet->saveCellRegion(*selection(), true);
 
   // Save to buffer
   QBuffer buffer;

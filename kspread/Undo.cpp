@@ -2530,9 +2530,12 @@ void UndoCellPaste::undo()
   uint numCols = 0;
   uint numRows = 0;
 
-  Region::ConstIterator endOfList = m_region.constEnd();
-  for (Region::ConstIterator it = --m_region.constEnd(); it != endOfList; --it)
+  if (!m_region.isEmpty())
   {
+  Region::ConstIterator it = m_region.constEnd();
+  do
+  {
+    --it;
     QRect range = (*it)->rect();
 
     if ((*it)->isColumn())
@@ -2572,7 +2575,8 @@ void UndoCellPaste::undo()
     {
       sheet->deleteCells(Region(range));
     }
-  } // for (Region::...
+  } while (it != m_region.constBegin());
+  }
 
   if (b_insert) // with insertion
   {
