@@ -56,6 +56,7 @@ set(kwordprivate_LIB_SRCS
     commands/KWPageRemoveCommand.cpp
     commands/KWFrameDeleteCommand.cpp
     commands/KWFrameCreateCommand.cpp
+    commands/KWCreateOutlineCommand.cpp
 )
 
 kde4_add_ui_files(kwordprivate_LIB_SRCS

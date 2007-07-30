@@ -30,6 +30,7 @@
 
 class KWDocument;
 class KWCanvas;
+class KWFrame;
 class KWGui;
 class KWPage;
 
@@ -120,10 +121,15 @@ private slots:
     void setShowFormattingChars(bool on);
     void editSelectAllFrames();
     void viewGrid(bool);
+    /// create a KWOutlineShape for the selected frame(s).
+    void createCustomOutline();
 
 private:
     /// helper method for the raiseFrame/lowerFrame/bringToFront/sendToBack methods
     void adjustZOrderOfSelectedFrames(KoShapeReorderCommand::MoveShapeType direction);
+
+    /// loops over the selected shapes and returns the frames that go with them.
+    QList<KWFrame*> selectedFrames() const;
 
 private:
     KWGui *m_gui;

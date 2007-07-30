@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="110">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="111">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -120,6 +120,7 @@
   <Action name="send_toback_frame"/>
   <Separator/>
   <Action name="create_linked_frame"/>
+  <Action name="create_custom_outline"/>
   <Action name="convert_to_text_box"/>
   <Separator/>
   <Action name="frame_stylist"/>

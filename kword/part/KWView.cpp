@@ -37,6 +37,7 @@
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWPageRemoveCommand.h"
+#include "commands/KWCreateOutlineCommand.h"
 
 // koffice libs includes
 #include <KoCopyController.h>
@@ -277,6 +278,13 @@ void KWView::setupActions() {
     action->setToolTip( i18n( "Create a copy of the current frame, always showing the same contents" ) );
     action->setWhatsThis( i18n("Create a copy of the current frame, that remains linked to it. This means they always show the same contents: modifying the contents in such a frame will update all its linked copies.") );
     connect(action, SIGNAL(triggered()), this, SLOT( createLinkedFrame() ));
+
+    action = new KAction(i18n("Create custom outline"),this);
+    actionCollection()->addAction("create_custom_outline", action);
+    action->setToolTip( i18n("Create a custom vector outline that text will run around"));
+    action->setWhatsThis( i18n("Text normally runs around the content of a shape, when you want a custom outline that is independent of the content you can create one and alter it with the vector tools") );
+    connect(action, SIGNAL(triggered()), this, SLOT( createCustomOutline() ));
+
 
     //------------------------ Settings menu
     action = new KToggleAction(i18n("Status Bar"), this);
@@ -753,8 +761,7 @@ This saves problems with finding out which we missed near the end.
 */
 }
 
-// -------------------- Actions -----------------------
-void KWView::editFrameProperties() {
+QList<KWFrame*> KWView::selectedFrames() const {
     QList<KWFrame*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes()) {
         KoShape *parent = shape;
@@ -764,7 +771,12 @@ void KWView::editFrameProperties() {
         Q_ASSERT(frame);
         frames.append(frame);
     }
-    KWFrameDialog *frameDialog = new KWFrameDialog(frames, m_document, this);
+    return frames;
+}
+
+// -------------------- Actions -----------------------
+void KWView::editFrameProperties() {
+    KWFrameDialog *frameDialog = new KWFrameDialog(selectedFrames(), m_document, this);
     frameDialog->exec();
     delete frameDialog;
 }
@@ -988,6 +1000,21 @@ void KWView::editSelectAllFrames() {
 
 void KWView::viewGrid(bool on) {
     m_document->gridData().setShowGrid(on);
+}
+
+void KWView::createCustomOutline() {
+    QList<KWFrame *> frames = selectedFrames();
+kDebug() << " createCustomOutline " << frames.count() << endl;
+    if(frames.count() == 0)
+        return;
+    if(frames.count() == 1) {
+        m_document->addCommand(new KWCreateOutlineCommand(m_document, frames.at(0)));
+        return;
+    }
+    QUndoCommand *cmd = new QUndoCommand(i18n("Create outlines"));
+    foreach(KWFrame *frame, frames)
+        new KWCreateOutlineCommand(m_document, frame, cmd);
+    m_document->addCommand(cmd);
 }
 
 

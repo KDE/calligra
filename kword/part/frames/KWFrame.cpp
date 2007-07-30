@@ -125,6 +125,5 @@ void KWFrame::makeCopyFrame() {
 }
 
 void KWFrame::setOutlineShape(KWOutlineShape *outline) {
-    delete m_outline;
     m_outline = outline;
 }

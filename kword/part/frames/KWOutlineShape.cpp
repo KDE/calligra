@@ -36,7 +36,13 @@ KWOutlineShape::KWOutlineShape(KWFrame *frame)
     setShapeId(KoPathShapeId);
     setApplicationData(frame);
 
-    KoShapeGroup *group = new KoShapeGroup();
+    class MyGroup : public KoShapeGroup {
+    public:
+        ~MyGroup() {
+            setApplicationData(0); // make sure deleting this will not delete the parent frame.
+        }
+    };
+    KoShapeGroup *group = new MyGroup();
     group->setApplicationData(frame);
 
     KoShape *child = frame->shape();
@@ -59,7 +65,6 @@ KWOutlineShape::KWOutlineShape(KWFrame *frame)
 
 KWOutlineShape::~KWOutlineShape()
 {
-    setApplicationData(0); // make sure deleting this will not delete the parent frame.
 }
 
 void KWOutlineShape::paintDecorations (QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
