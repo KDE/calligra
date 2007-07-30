@@ -75,12 +75,17 @@ public:
     /**
      * Used in the recalculation events for changed regions.
      * Determines the reference depth for each position in \p region .
-     * Calls itself recursively for the regions, that depend on cells
-     * in \p region .
      *
      * \see computeDepth
+     * \see generateDepths(Cell cell)
      */
     void generateDepths(const Region& region);
+
+    /**
+     * Generates the depth of cell and all of its consumers.
+     * Calls itself recursively for the cell's consuming cells.
+     */
+    void generateDepths(Cell cell);
 
     /**
      * Returns the region, that consumes the value of \p cell.
@@ -94,6 +99,11 @@ public:
      * Removes all dependencies of \p cell .
      */
     void removeDependencies(const Cell& cell);
+
+    /**
+     * Removes the depths of \p cell and all its consumers.
+     */
+    void removeDepths(const Cell& cell);
 
     /**
      * Computes and stores the dependencies.
@@ -214,8 +224,8 @@ void DependencyManager::regionChanged(const Region& region)
                 const Cell cell( sheet, col, row );
                 const Formula formula = cell.formula();
 
-                // remove it from the reference depth list
-                d->depths.remove( cell );
+                // remove it and all its consumers from the reference depth list
+                d->removeDepths(cell);
 
                 // cell without a formula? remove it
                 if ( formula.expression().isEmpty() )
@@ -244,7 +254,11 @@ void DependencyManager::updateAllDependencies(const Map* map)
 {
     ElapsedTime et( "Generating dependencies", ElapsedTime::PrintOnlyTime );
 
-    // clear the reference depth list
+    // clear everything
+    d->providers.clear();
+    qDeleteAll(d->consumers);
+    d->consumers.clear();
+    d->namedAreaConsumers.clear();
     d->depths.clear();
 
     Cell cell;
@@ -253,13 +267,6 @@ void DependencyManager::updateAllDependencies(const Map* map)
         for ( int c = 0; c < sheet->formulaStorage()->count(); ++c )
         {
             cell = Cell( sheet, sheet->formulaStorage()->col( c ), sheet->formulaStorage()->row( c ) );
-
-            // empty or default cell or cell without a formula? remove it
-            if ( sheet->formulaStorage()->data( c ).expression().isEmpty() )
-            {
-                d->removeDependencies( cell );
-                continue;
-            }
 
             d->generateDependencies( cell, sheet->formulaStorage()->data( c ) );
             if (!d->depths.contains( cell ))
@@ -353,7 +360,7 @@ void DependencyManager::updateFormula( const Cell& cell, const Region::Element* 
             // FIXME Stefan: Special handling for named areas
             const Region region(token.text(), sheet->map(), sheet);
 
-            kDebug(36002) << region.name() << endl;
+//             kDebug(36002) << region.name() << endl;
             // the offset contains a sheet, only if it was an intersheet move.
             if ( ( oldLocation->sheet() == region.firstSheet() ) &&
                    ( oldLocation->rect().contains( region.firstRange() ) ) )
@@ -389,11 +396,11 @@ KSpread::Region DependencyManager::Private::consumingRegion(const Cell& cell) co
         return Region();
     }
 
-    const QList<Cell> providers = consumers.value(cell.sheet())->contains(cell.cellPosition());
+    const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
 
     Region region;
-    foreach ( const Cell& cell, providers )
-        region.add( cell.cellPosition(), cell.sheet() );
+    for (int i = 0; i < consumers.count(); ++i)
+        region.add(consumers[i].cellPosition(), consumers[i].sheet());
     return region;
 }
 
@@ -453,6 +460,16 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     providers.remove( cell );
 }
 
+void DependencyManager::Private::removeDepths(const Cell& cell)
+{
+    if (!depths.contains(cell) || !consumers.contains(cell.sheet()))
+        return;
+    depths.remove(cell);
+    const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
+    for (int i = 0; i < consumers.count(); ++i)
+        removeDepths(consumers[i]);
+}
+
 void DependencyManager::Private::generateDependencies(const Cell& cell, const Formula& formula)
 {
     //new dependencies only need to be generated if the cell contains a formula
@@ -470,8 +487,6 @@ void DependencyManager::Private::generateDependencies(const Cell& cell, const Fo
 
 void DependencyManager::Private::generateDepths(const Region& region)
 {
-    static QSet<Cell> processedCells;
-
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it)
     {
@@ -486,42 +501,59 @@ void DependencyManager::Private::generateDepths(const Region& region)
                 formula = sheet->formulaStorage()->nextInRow( col, row, &col );
             while ( col != 0 && col <= range.right() )
             {
-                Cell cell( sheet,col, row);
+                Cell cell(sheet, col, row);
 
-                //prevent infinite recursion (circular dependencies)
-                if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
-                {
-                    kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
-                    cell.setValue( Value::errorCIRCLE() );
-                    depths.insert(cell, 0);
-#if 0 // FIXME Stefan: Leave it in, as it should be removed where it was inserted first. Verify!
-                    // clear the compute reference depth flag
-                    processedCells.remove( cell );
-#endif
-                    // Don't get stuck here. Go to the next cell.
-                    formula = sheet->formulaStorage()->nextInRow( col, row, &col );
-                    continue;
-                }
-
-                // set the compute reference depth flag
-                processedCells.insert( cell );
-
+                // compute the cell depth and automatically the depths of its providers
                 int depth = computeDepth(cell);
                 depths.insert(cell, depth);
 
-                // Recursion. We need the whole dependency tree of the changed region.
-                // An infinite loop is prevented by the check above.
-                const Region consumers = consumingRegion(cell);
-                if (!consumers.isEmpty() && !consumers.contains(QPoint(col, row), cell.sheet()))
-                    generateDepths(consumers);
-
-                // clear the compute reference depth flag
-                processedCells.remove( cell );
+                // compute the consumers' depths
+                if (!consumers.contains(cell.sheet()))
+                {
+                    formula = sheet->formulaStorage()->nextInRow( col, row, &col );
+                }
+                const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
+                for (int i = 0; i < consumers.count(); ++i)
+                {
+                    if (!region.contains(consumers[i].cellPosition(), consumers[i].sheet()))
+                        generateDepths(consumers[i]);
+                }
 
                 formula = sheet->formulaStorage()->nextInRow( col, row, &col );
             }
         }
     }
+}
+
+void DependencyManager::Private::generateDepths(Cell cell)
+{
+    static QSet<Cell> processedCells;
+
+    //prevent infinite recursion (circular dependencies)
+    if ( processedCells.contains( cell ) || cell.value() == Value::errorCIRCLE() )
+    {
+        kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
+        cell.setValue( Value::errorCIRCLE() );
+        depths.insert(cell, 0);
+        return;
+    }
+
+    // set the compute reference depth flag
+    processedCells.insert( cell );
+
+    int depth = computeDepth(cell);
+    depths.insert(cell, depth);
+
+    // Recursion. We need the whole dependency tree of the changed region.
+    // An infinite loop is prevented by the check above.
+    if (!consumers.contains(cell.sheet()))
+        return;
+    const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
+    for (int i = 0; i < consumers.count(); ++i)
+        generateDepths(consumers[i]);
+
+    // clear the compute reference depth flag
+    processedCells.remove( cell );
 }
 
 int DependencyManager::Private::computeDepth(Cell cell) const
@@ -534,10 +566,6 @@ int DependencyManager::Private::computeDepth(Cell cell) const
     {
         kDebug(36002) << "Circular dependency at " << cell.fullName() << endl;
         cell.setValue( Value::errorCIRCLE() );
-#if 0 // FIXME Stefan: Leave it in, as it should be removed where it was inserted first. Verify!
-        //clear the compute reference depth flag
-        processedCells.remove( cell );
-#endif
         return 0;
     }
 
