@@ -295,7 +295,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
             d->dependencyManager, SLOT(namedAreaModified(const QString&)));
     connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
-    connect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
 }
 
 Doc::~Doc()
@@ -976,6 +975,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
 
     emit sigProgress( 0 );
     d->isLoading = true;
+    connect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
     d->spellListIgnoreAll.clear();
 
     KoXmlElement content = doc.documentElement();
@@ -1082,6 +1082,7 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
 
   emit sigProgress( 0 );
   d->isLoading = true;
+  connect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
   d->spellListIgnoreAll.clear();
   // <spreadsheet>
   KoXmlElement spread = doc.documentElement();
@@ -1294,6 +1295,7 @@ void Doc::finishLoading()
 {
     // update all dependencies and recalc all cells
     addDamage(new WorkbookDamage(map(), WorkbookDamage::Formula | WorkbookDamage::Value));
+    disconnect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
 }
 
 bool Doc::completeLoading( KoStore* /* _store */ )
