@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,7 +64,7 @@ public:
     /// reimplemented method from superclass
     bool showForShapeId(const QString &id) const;
     /// reimplemented method from superclass
-    int sortingOrder() const { return 1; }
+    int sortingOrder() const { return 15; }
 
 private:
     FrameConfigSharedState *m_state;
@@ -83,6 +83,8 @@ public:
     QString name() const;
     /// reimplemented method from superclass
     int sortingOrder() const { return 0; }
+    /// reimplemented method from superclass
+    bool showForShapeId(const QString &id) const;
 
 private:
     FrameConfigSharedState *m_state;
@@ -99,6 +101,8 @@ public:
     KoShapeConfigWidgetBase *createConfigWidget(KoShape *shape);
     /// reimplemented method from superclass
     QString name() const;
+    /// reimplemented method from superclass
+    bool showForShapeId(const QString &id) const;
 
     /// reimplemented method from superclass
     int sortingOrder() const { return 5; }
@@ -120,6 +124,8 @@ public:
     QString name() const;
     /// reimplemented method from superclass
     int sortingOrder() const { return 10; }
+    /// reimplemented method from superclass
+    bool showForShapeId(const QString &id) const;
 
 private:
     FrameConfigSharedState *m_state;

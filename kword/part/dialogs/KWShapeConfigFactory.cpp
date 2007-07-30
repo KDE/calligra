@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -53,6 +53,10 @@ QString KWFrameGeometryFactory::name() const {
     return i18n("Geometry");
 }
 
+bool KWFrameGeometryFactory::showForShapeId(const QString &id) const {
+    return id == TextShape_SHAPEID;
+}
+
 
 KoShapeConfigWidgetBase *KWFrameRunaroundPropertiesFactory::createConfigWidget(KoShape *shape) {
     KWFrameRunaroundProperties *widget = new KWFrameRunaroundProperties(m_state);
@@ -64,6 +68,10 @@ QString KWFrameRunaroundPropertiesFactory::name() const {
     return i18n("Text Run Around");
 }
 
+bool KWFrameRunaroundPropertiesFactory::showForShapeId(const QString &id) const {
+    return id == TextShape_SHAPEID;
+}
+
 
 KoShapeConfigWidgetBase *KWGeneralFramePropertiesFactory::createConfigWidget(KoShape *shape) {
     KWGeneralFrameProperties *panel = new KWGeneralFrameProperties(m_state);
@@ -73,6 +81,10 @@ KoShapeConfigWidgetBase *KWGeneralFramePropertiesFactory::createConfigWidget(KoS
 
 QString KWGeneralFramePropertiesFactory::name() const {
     return i18n("Options");
+}
+
+bool KWGeneralFramePropertiesFactory::showForShapeId(const QString &id) const {
+    return id == TextShape_SHAPEID;
 }
 
 

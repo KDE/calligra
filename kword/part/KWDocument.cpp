@@ -107,8 +107,12 @@ void KWDocument::addShape (KoShape *shape) {
     // any call coming in here is due to the undo/redo framework or for nested frames
 
     KWFrame *frame = dynamic_cast<KWFrame*> (shape->applicationData());
-    if( frame )
-        addFrameSet(frame->frameSet());
+    if( frame == 0 ) {
+        KWFrameSet *fs = new KWFrameSet();
+        fs->setName(shape->shapeId());
+        frame = new KWFrame(shape, fs);
+    }
+    addFrameSet(frame->frameSet());
 
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
