@@ -205,6 +205,7 @@ void KarbonGradientTool::deactivate()
     delete m_gradient;
     m_gradient = 0;
 
+    m_currentStrategy = 0;
     qDeleteAll( m_gradients );
     m_gradients.clear();
 }
