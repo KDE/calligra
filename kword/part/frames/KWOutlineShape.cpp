@@ -20,8 +20,10 @@
 #include "KWFrame.h"
 
 #include <KoCanvasBase.h>
-#include <KoShapeGroup.h>
 #include <KoColor.h>
+#include <KoSelection.h>
+#include <KoShapeGroup.h>
+#include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
 #include <KDebug>
@@ -61,6 +63,9 @@ KWOutlineShape::~KWOutlineShape()
 }
 
 void KWOutlineShape::paintDecorations (QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+    if(! canvas->shapeManager()->selection()->isSelected(this))
+        return;
+
     applyConversion( painter, converter );
 
     QPen pen = QPen(canvas->resourceProvider()->koColorResource(KWord::FrameOutlineColor).toQColor());
