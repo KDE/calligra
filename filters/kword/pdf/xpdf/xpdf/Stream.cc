@@ -413,13 +413,11 @@ StreamPredictor::StreamPredictor(Stream *strA, int predictorA,
   predLine = NULL;
   ok = gFalse;
 
-  if (width <= 0 || nComps <= 0 || nBits <= 0 ||
-     nComps >= INT_MAX / nBits ||
-      width >= INT_MAX / nComps / nBits)
-    return;
-
   nVals = width * nComps;
-  if (nVals * nBits + 7 <= 0)
+  if (width <= 0 || nComps <= 0 || nBits <= 0 ||
+     nComps >= 4 || nBits > 16 ||
+      width >= INT_MAX / nComps ||
+      nVals >= (INT_MAX - 7) / nBits)
     return;
 
   pixBytes = (nComps * nBits + 7) >> 3;
