@@ -69,6 +69,7 @@
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
+#include <KoShapeStyleWriter.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -395,6 +396,9 @@ KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
+    if( ! shapeContext.saveImages( store, manifestWriter ) )
+        return false;
+
     setModified( false );
     return true;
 }
@@ -407,28 +411,16 @@ void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoShapeSavingContext 
 
     styleWriter->startElement( "office:styles" );
 
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGradientLinear );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "svg:linearGradient", (*it).name, 0, true, true /*add draw:name*/);
-
-    styles = mainStyles.styles( KoGenStyle::StyleGradientRadial );
-    it = styles.begin();
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "svg:radialGradient", (*it).name, 0, true, true /*add draw:name*/);
-
-    styles = mainStyles.styles( KoGenStyle::StyleStrokeDash );
-    it = styles.begin();
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( styleWriter, mainStyles, "draw:stroke-dash", (*it).name, 0, true, true /*add draw:name*/);
+    KoShapeStyleWriter styleHandler( context );
+    styleHandler.writeOfficeStyles( styleWriter );
 
     styleWriter->endElement(); // office:styles
 
     saveOasisAutomaticStyles( styleWriter, mainStyles, true );
 
-    styles = mainStyles.styles( KoGenStyle::StyleMaster );
-    it = styles.begin();
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleMaster );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+
     styleWriter->startElement("office:master-styles");
 
     for( ; it != styles.end(); ++it)
