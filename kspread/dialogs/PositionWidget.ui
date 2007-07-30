@@ -60,7 +60,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
             <item row="0" column="1" >
                   <widget class="QRadioButton" name="left" >
                     <property name="text" >
-                      <string>left</string>
+                      <string>Left</string>
                     </property>
                   </widget>
                 </item>
@@ -74,7 +74,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
             <item row="2" column="1">
               <widget class="QRadioButton" name="right" >
                 <property name="text" >
-                  <string>right</string>
+                  <string>Right</string>
                 </property>
               </widget>
             </item>

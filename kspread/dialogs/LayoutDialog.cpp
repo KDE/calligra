@@ -1802,7 +1802,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
    if ( dlg->bTextFontFamily )
    {
         selFont.setFamily( dlg->fontFamily );
-        kDebug(36001) << "Family = " << dlg->fontFamily << endl;
+//         kDebug(36001) << "Family = " << dlg->fontFamily << endl;
 
         // NOTE Stefan: the code below crashes, so assert, that we have a family
         Q_ASSERT( family_combo->findItem( dlg->fontFamily ) );
@@ -1986,7 +1986,7 @@ void CellFormatPageFont::setCombos()
  combo = size_combo;
  if ( dlg->bTextFontSize )
  {
-     kDebug(36001) << "SIZE=" << dlg->fontSize << endl;
+//      kDebug(36001) << "SIZE=" << dlg->fontSize << endl;
      selFont.setPointSize( dlg->fontSize );
      number_of_entries = size_combo->count();
      string.setNum( dlg->fontSize );
@@ -2400,6 +2400,8 @@ void BorderButton::unselect()
 Border::Border( QWidget *parent, const char * /*_name*/, bool _oneCol, bool _oneRow )
     : QFrame( parent )
 {
+    setAutoFillBackground(true);
+
   oneCol=_oneCol;
   oneRow=_oneRow;
 }
