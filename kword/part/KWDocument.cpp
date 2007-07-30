@@ -32,6 +32,7 @@
 #include "frames/KWFrame.h"
 #include "frames/KWFrameLayout.h"
 #include "frames/KWTextDocumentLayout.h"
+#include "frames/KWOutlineShape.h"
 #include "dialogs/KWFrameDialog.h"
 #include "dialogs/KWStartupWidget.h"
 #include "commands/KWPageInsertCommand.h"
@@ -39,6 +40,7 @@
 
 // koffice libs includes
 #include <KoShapeManager.h>
+#include <KoShapeContainer.h>
 #include <KoOasisStyles.h>
 #include <KoToolManager.h>
 #include <KoShapeRegistry.h>
@@ -347,7 +349,10 @@ int KWDocument::lastPage() const {
 void KWDocument::addFrame(KWFrame *frame) {
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
-        canvas->shapeManager()->add(frame->shape());
+        if(frame->outlineShape())
+            canvas->shapeManager()->add(frame->outlineShape()->parent());
+        else
+            canvas->shapeManager()->add(frame->shape());
         canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
     frame->shape()->repaint();

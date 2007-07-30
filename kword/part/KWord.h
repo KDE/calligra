@@ -94,7 +94,8 @@ public:
         CurrentFrameSetCount,
         CurrentPictureCount,
         CurrentTableCount,
-        CurrentPageCount
+        CurrentPageCount,
+        FrameOutlineColor
     };
 };
 

@@ -1,0 +1,71 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+#include "KWOutlineShape.h"
+#include "KWFrame.h"
+
+#include <KoCanvasBase.h>
+#include <KoShapeGroup.h>
+#include <KoColor.h>
+#include <KoViewConverter.h>
+
+#include <KDebug>
+#include <QPen>
+#include <QPainter>
+
+KWOutlineShape::KWOutlineShape(KWFrame *frame)
+    : m_paintOutline (false)
+{
+    setShapeId(KoPathShapeId);
+    setApplicationData(frame);
+
+    KoShapeGroup *group = new KoShapeGroup();
+    group->setApplicationData(frame);
+
+    KoShape *child = frame->shape();
+    group->setTransformation(child->transformationMatrix(0));
+    QMatrix matrix;
+    child->setTransformation(matrix);
+
+    const QSizeF s = child->size();
+    // init with a simple rect as the outline of the original.
+    moveTo(QPointF(0,0));
+    lineTo(QPointF(s.width(), 0));
+    lineTo(QPointF(s.width(), s.height()));
+    lineTo(QPointF(0, s.height()));
+    close();
+    setZIndex(child->zIndex() + 1);
+
+    group->addChild(this);
+    group->addChild(child);
+}
+
+KWOutlineShape::~KWOutlineShape()
+{
+    setApplicationData(0); // make sure deleting this will not delete the parent frame.
+}
+
+void KWOutlineShape::paintDecorations (QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas) {
+    applyConversion( painter, converter );
+
+    QPen pen = QPen(canvas->resourceProvider()->koColorResource(KWord::FrameOutlineColor).toQColor());
+    QPointF onePixel = converter.viewToDocument(QPointF(1,1));
+    pen.setWidthF(onePixel.x());
+    painter.strokePath( outline(), pen );
+}
+

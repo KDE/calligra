@@ -21,6 +21,7 @@
 #include "KWFrame.h"
 #include "KWFrameSet.h"
 #include "KWCopyShape.h"
+#include "KWOutlineShape.h"
 
 #include <KoXmlWriter.h>
 
@@ -34,7 +35,8 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
     m_runAroundSide( KWord::BiggestRunAroundSide ),
     m_runAround( KWord::RunAround ),
     m_runAroundDistance( 1.0 ),
-    m_frameSet( parent )
+    m_frameSet( parent ),
+    m_outline(0)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -51,6 +53,7 @@ KWFrame::~KWFrame() {
             delete m_frameSet;
         m_frameSet = 0;
     }
+    delete m_outline;
 }
 
 void KWFrame::setFrameSet(KWFrameSet *fs) {
@@ -121,3 +124,7 @@ void KWFrame::makeCopyFrame() {
     setShape(copyShape);
 }
 
+void KWFrame::setOutlineShape(KWOutlineShape *outline) {
+    delete m_outline;
+    m_outline = outline;
+}

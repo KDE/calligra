@@ -23,6 +23,7 @@
 #include "KWDocument.h"
 #include "KWPage.h"
 #include "frames/KWAnchorStrategy.h"
+#include "frames/KWOutlineShape.h"
 
 #include <KoTextShapeData.h>
 #include <KoShapeContainer.h>
@@ -95,7 +96,7 @@ public:
         if(frame->textRunAround() == KWord::NoRunAround)
             m_side = Empty;
         else {
-            init(matrix, frame->shape(), frame->runAroundDistance());
+            init(matrix, frame->outlineShape() ? frame->outlineShape() : frame->shape(), frame->runAroundDistance());
 
             if(frame->runAroundSide() == KWord::LeftRunAroundSide)
                 m_side = Right;
@@ -372,7 +373,11 @@ void KWTextDocumentLayout::layout() {
                             continue;
                         if(frame->textRunAround() == KWord::RunThrough)
                             continue;
-                        if(frame->shape()->zIndex() <= currentShape->zIndex())
+                        if(frame->outlineShape()) {
+                            if(frame->outlineShape()->zIndex() <= currentShape->zIndex())
+                                continue;
+                        }
+                        else if(frame->shape()->zIndex() <= currentShape->zIndex())
                             continue;
                         if(! bounds.intersects( frame->shape()->boundingRect()))
                             continue;
@@ -385,7 +390,7 @@ void KWTextDocumentLayout::layout() {
                         }
                         if(isChild)
                             continue;
-                        QMatrix matrix = frame->shape()->transformationMatrix(0);
+                        QMatrix matrix = (frame->outlineShape() ? frame->outlineShape() : frame->shape())->transformationMatrix(0);
                         matrix = matrix * currentShape->transformationMatrix(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
                         outlines.append(new Outline(frame, matrix));

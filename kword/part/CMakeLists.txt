@@ -32,6 +32,7 @@ set(kwordprivate_LIB_SRCS
     frames/KWCopyShape.cpp
     frames/KWAnchorStrategy.cpp
     frames/KWImageFrame.cpp
+    frames/KWOutlineShape.cpp
 
     dialogs/KWFrameConnectSelector.cpp
     dialogs/KWFrameGeometry.cpp

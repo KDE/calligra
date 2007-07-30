@@ -29,6 +29,7 @@
 
 class KWFrameSet;
 class KoViewConverter;
+class KWOutlineShape;
 
 /**
  * This class represents a single frame.
@@ -159,6 +160,9 @@ public:
      */
     void saveOdf(KoShapeSavingContext & context);
 
+    KWOutlineShape *outlineShape() const { return m_outline; }
+    void setOutlineShape(KWOutlineShape *outline);
+
 protected:
     /// replace the current set shape with the argument one.
     void setShape(KoShape *shape);
@@ -173,6 +177,7 @@ private:
     double m_runAroundDistance;
 
     KWFrameSet *m_frameSet;
+    KWOutlineShape *m_outline;
 };
 
 #endif
