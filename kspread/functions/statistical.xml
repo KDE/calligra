@@ -486,7 +486,12 @@
     </Function>
 
     <Function>
-      <Name>SUM2XMY</Name>
+      <Name>SUM2XMY</Name> <!-- deprecated -->
+      <Help><Related>SUMXMY2</Related></Help>
+    </Function>
+
+    <Function>
+      <Name>SUMXMY2</Name>
       <Type>Float</Type>
       <Parameter>
 	<Comment>Value (array)</Comment>
@@ -497,9 +502,9 @@
 	<Type>Double</Type>
       </Parameter>
       <Help>
-	<Text>The SUM2XMY() function (SUM((X-Y)^2)) returns the square of the differences of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
-	<Syntax>SUM2XMY(array1;array2)</Syntax>
-	<Example>SUM2XMY(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 1</Example>
+	<Text>The SUMXMY2() function (SUM((X-Y)^2)) returns the square of the differences of these values. The number of values in the two arrays should be equal. Otherwise this function returns Err.</Text>
+	<Syntax>SUMXMY2(array1;array2)</Syntax>
+	<Example>SUMXMY2(A1:A2;B1:B2) with A1=2, A2=5, B1=3 and B2=5, returns 1</Example>
       </Help>
     </Function>
 

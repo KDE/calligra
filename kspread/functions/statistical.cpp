@@ -282,7 +282,11 @@ void RegisterStatisticalFunctions()
   f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("SUM2XMY", func_sumxmy2);
+  f = new Function ("SUM2XMY", func_sumxmy2); // deprecated, use SUMXMY2
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SUMXMY2", func_sumxmy2);
   f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
@@ -974,7 +978,7 @@ Value func_frequency( valVector args, ValueCalc*, FuncExtra* )
 
     // create a data vector
     QVector<double> data;
-    for ( int v = 0; v < args[0].count(); ++v )
+    for ( uint v = 0; v < args[0].count(); ++v )
     {
         if ( args[0].element( v ).isNumber() )
             data.append( numToDouble (args[0].element( v ).asFloat()) );
@@ -990,7 +994,7 @@ Value func_frequency( valVector args, ValueCalc*, FuncExtra* )
     Value result( Value::Array );
     QVector<double>::ConstIterator begin = data.constBegin();
     QVector<double>::ConstIterator it = data.constBegin();
-    for ( int v = 0; v < bins.count(); ++v )
+    for ( uint v = 0; v < bins.count(); ++v )
     {
         if ( !bins.element( v ).isNumber() )
             continue;
@@ -1326,7 +1330,7 @@ Value func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *)
   return result;
 }
 
-// Function: sum2xmy
+// Function: SUMXMY2
 Value func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result;

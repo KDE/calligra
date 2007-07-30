@@ -297,7 +297,7 @@
    <text:p>Large</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce6"/>
-  <table:table-cell office:value-type="string" office:string-value="SUM2XMY" table:style-name="ce8">
+  <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>SUM2XMY</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
