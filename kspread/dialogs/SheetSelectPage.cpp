@@ -98,7 +98,7 @@ void SheetSelectPage::setOptions( const QMap<QString,QString>& opts )
   QStringList::iterator it;
   for (it = sheetlist.begin(); it != sheetlist.end(); ++it)
   {
-    kDebug() << " adding sheet to list of printed sheets: " << *it << endl;
+    kDebug() <<" adding sheet to list of printed sheets:" << *it;
     this->prependSelectedSheet(*it);
   }
 }
@@ -228,7 +228,7 @@ void SheetSelectPage::moveTop()
   QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = 0;
-//   kDebug() << "Filling new list with selected items first" << endl;
+//   kDebug() <<"Filling new list with selected items first";
   while (item)
   {
     nextitem = item->nextSibling();
@@ -239,11 +239,11 @@ void SheetSelectPage::moveTop()
     }
     item = nextitem;
   }
-//   kDebug() << "Appending the rest" << endl;
+//   kDebug() <<"Appending the rest";
   item = gui->ListViewSelected->firstChild();
   while (item)
   {
-//     kDebug() << " processing item " << item->text(0) << endl;
+//     kDebug() <<" processing item" << item->text(0);
     nextitem = item->nextSibling();
     if (!item->isSelected())
     {
@@ -253,12 +253,12 @@ void SheetSelectPage::moveTop()
     item = nextitem;
   }
 
-//   kDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kDebug() <<"Refill the view with the correctly ordered list";
   //the view is empty now, refill in correct order (reversed!!)
   QList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-//     kDebug() << " adding " << (*it)->text(0) << endl;
+//     kDebug() <<" adding" << (*it)->text(0);
     gui->ListViewSelected->insertItem(*it);
   }
 }
@@ -290,12 +290,12 @@ void SheetSelectPage::moveUp()
     item = nextitem;
   }
 
-//   kDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kDebug() <<"Refill the view with the correctly ordered list";
   //the view is empty now, refill in correct order (reversed!!)
   QList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-//     kDebug() << " adding " << (*it)->text(0) << endl;
+//     kDebug() <<" adding" << (*it)->text(0);
     gui->ListViewSelected->insertItem(*it);
   }
 }
@@ -333,10 +333,10 @@ void SheetSelectPage::moveBottom()
   QList<Q3ListViewItem*> newlist;
   Q3ListViewItem* item = gui->ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = 0;
-//   kDebug() << "Filling new list with unselected items first" << endl;
+//   kDebug() <<"Filling new list with unselected items first";
   while (item)
   {
-//     kDebug() << " processing item " << item->text(0) << endl;
+//     kDebug() <<" processing item" << item->text(0);
     nextitem = item->nextSibling();
     if (!item->isSelected())
     {
@@ -345,7 +345,7 @@ void SheetSelectPage::moveBottom()
     }
     item = nextitem;
   }
-//   kDebug() << "Appending the rest" << endl;
+//   kDebug() <<"Appending the rest";
   item = gui->ListViewSelected->firstChild();
   while (item)
   {
@@ -358,12 +358,12 @@ void SheetSelectPage::moveBottom()
     item = nextitem;
   }
 
-//   kDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kDebug() <<"Refill the view with the correctly ordered list";
   //the view is empty now, refill in correct order (reversed!!)
   QList<Q3ListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-//     kDebug() << " adding " << (*it)->text(0) << endl;
+//     kDebug() <<" adding" << (*it)->text(0);
     gui->ListViewSelected->insertItem(*it);
   }
 }

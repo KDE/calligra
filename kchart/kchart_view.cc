@@ -208,7 +208,7 @@ void KChartView::editData()
     KChartParams      *params = ((KChartPart*)koDocument())->params();
     KDChartTableData  *dat    = ((KChartPart*)koDocument())->data();
 
-    kDebug(35001) << "***Before calling editor: cols =" << dat->cols()
+    kDebug(35001) <<"***Before calling editor: cols =" << dat->cols()
 		   << " , rows = "     << dat->rows()
 		   << " , usedCols = " << dat->usedCols()
 		   << "  usedRows = "  << dat->usedRows() << endl;
@@ -234,7 +234,7 @@ void KChartView::editData()
     ed.getColLabels(((KChartPart*)koDocument())->colLabelTexts());
     ((KChartPart*)koDocument())->setModified(true);
 
-    kDebug(35001) << "***After calling editor: cols =" << dat->cols()
+    kDebug(35001) <<"***After calling editor: cols =" << dat->cols()
 		   << " , rows = "     << dat->rows()
 		   << " , usedCols = " << dat->usedCols()
 		   << "  usedRows = "  << dat->usedRows() << endl;
@@ -265,15 +265,15 @@ void KChartView::applyEdit(kchartDataEditor *ed)
 void KChartView::wizard()
 {
 #if 0
-    kDebug(35001) << "Wizard called" << endl;
+    kDebug(35001) <<"Wizard called";
     KCWizard *wiz = new KCWizard((KChartPart*)koDocument(), this,
 				 "KChart Wizard", true);
-    kDebug(35001) << "Executed. Now, display it" << endl;
+    kDebug(35001) <<"Executed. Now, display it";
     if (wiz->exec()) {
 	((KChartPart*)koDocument())->setModified(true);
         update();
         updateGuiTypeOfChart();
-        kDebug(35001) << "Ok, executed..." << endl;
+        kDebug(35001) <<"Ok, executed...";
     }
 #endif
 }
@@ -357,14 +357,14 @@ void KChartView::slotRepaint()
 
 void KChartView::saveConfig()
 {
-    kDebug(35001) << "Save config..." << endl;
+    kDebug(35001) <<"Save config...";
     ((KChartPart*)koDocument())->saveConfig( KGlobal::config().data() );
 }
 
 
 void KChartView::loadConfig()
 {
-    kDebug(35001) << "Load config..." << endl;
+    kDebug(35001) <<"Load config...";
 
     KGlobal::config()->reparseConfiguration();
     ((KChartPart*)koDocument())->loadConfig( KGlobal::config().data() );
@@ -689,7 +689,7 @@ void KChartView::importData()
 						    QString(),// filter
 						    0,
 						    i18n("Import Data"));
-    kDebug(35001) << "Filename = <" << filename << ">" << endl;
+    kDebug(35001) <<"Filename = <" << filename <<">";
     if (filename.isEmpty())
       return;
 
@@ -709,17 +709,17 @@ void KChartView::importData()
     dialog->setData(inData);
 
     if ( !dialog->exec() ) {
-	// kDebug(35001) << "Cancel was pressed" << endl;
+	// kDebug(35001) <<"Cancel was pressed";
 	return;
     }
 
-    //kDebug(35001) << "OK was pressed" << endl;
+    //kDebug(35001) <<"OK was pressed";
 
 #if 0
     uint  rows = dialog->rows();
     uint  cols = dialog->cols();
 
-    //kDebug(35001) << "Rows: " << rows << "  Cols: " << cols << endl;
+    //kDebug(35001) <<"Rows:" << rows <<"  Cols:" << cols;
 
     bool  hasRowHeaders = ( rows > 1 && dialog->firstRowContainHeaders() );
     bool  hasColHeaders = ( cols > 1 && dialog->firstColContainHeaders() );
@@ -737,7 +737,7 @@ void KChartView::importData()
 	    tmp = dialog->text( row, col );
 	    if ( ( row == 0 && hasRowHeaders )
 		 || ( col == 0 && hasColHeaders ) ) {
-		kDebug(35001) << "Setting header (" << row << "," << col
+		kDebug(35001) <<"Setting header (" << row <<"," << col
 			       << ") to value " << tmp << endl;
 		data.setCell( row, col, tmp );
 	    }
@@ -746,7 +746,7 @@ void KChartView::importData()
 		if (!ok)
 		    val = 0.0;
 
-		kDebug(35001) << "Setting (" << row << "," << col
+		kDebug(35001) <<"Setting (" << row <<"," << col
 			       << ") to value " << val << endl;
 
 		// and do the actual setting.

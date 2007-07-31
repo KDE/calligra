@@ -323,7 +323,7 @@ void KPrPageAdaptor::setPageEffect(const QString &effect )
     else if(effect=="RANDOM")
         m_page->setPageEffect(PEF_RANDOM);
     else
-        kDebug(33001) << "Error in setPageEffect" << endl;
+        kDebug(33001) <<"Error in setPageEffect";
 }
 
 QString KPrPageAdaptor::pageEffectString( )const
@@ -451,7 +451,7 @@ QString KPrPageAdaptor::pageEffectString( )const
         return QString("RANDOM");
         break;
     default:
-        kDebug(33001) << "Page effect not defined!" << endl;
+        kDebug(33001) <<"Page effect not defined!";
         break;
     }
     return QString("");
@@ -594,7 +594,7 @@ void KPrPageAdaptor::setBackGroundColorType(const QString &type)
         bctype=BCT_GPYRAMID;
     else
     {
-        kDebug(33001)<<"Error KPrPageAdaptor::setBackGroundColorType" << endl;
+        kDebug(33001)<<"Error KPrPageAdaptor::setBackGroundColorType";
         return;
     }
 

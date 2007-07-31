@@ -297,10 +297,10 @@ QRect KPrThumbBar::tip(const QPoint &pos, QString &title)
 
 void KPrThumbBar::rebuildItems()
 {
-    kDebug()<<" void KPrThumbBar::rebuildItems() beofre \n";
+    kDebug()<<" void KPrThumbBar::rebuildItems() beofre";
     if( !isVisible())
         return;
-    kDebug(33001) << "KPrThumbBar::rebuildItems" << endl;
+    kDebug(33001) <<"KPrThumbBar::rebuildItems";
 
     QApplication::setOverrideCursor( Qt::WaitCursor );
 
@@ -372,7 +372,7 @@ void KPrThumbBar::refreshItems(bool offset)
     Q3IconViewItem *it = findFirstVisibleItem( vRect );
     while ( it )
     {
-        kDebug(33001) << "visible page = " << it->text().toInt() << endl;
+        kDebug(33001) <<"visible page =" << it->text().toInt();
         if ( ! dynamic_cast<ThumbItem *>(it)->isUptodate( ) ){
             //todo refresh picture
             it->setPixmap( getSlideThumb( it->text().toInt() - 1 ) );
@@ -435,7 +435,7 @@ void KPrThumbBar::updateItem( int pagenr /* 0-based */, bool sticky )
 // add a thumb item without recreating all thumbs
 void KPrThumbBar::addItem( int pos )
 {
-    kDebug(33001)<< "KPrThumbBar::addItem" << endl;
+    kDebug(33001)<<"KPrThumbBar::addItem";
     int page = 0;
     for ( Q3IconViewItem *it = firstItem(); it; it = it->nextItem() ) {
         // find page which should move
@@ -462,7 +462,7 @@ void KPrThumbBar::addItem( int pos )
 // moves a item without recreating all pages
 void KPrThumbBar::moveItem( int oldPos, int newPos )
 {
-    kDebug(33001)<< "KPrThumbBar::moveItem " << oldPos << " to " << newPos << endl;
+    kDebug(33001)<<"KPrThumbBar::moveItem" << oldPos <<" to" << newPos;
     Q_ASSERT(oldPos != newPos);
     int page = 0;
     Q3IconViewItem *after = 0;
@@ -514,7 +514,7 @@ void KPrThumbBar::moveItem( int oldPos, int newPos )
 
 void KPrThumbBar::removeItem( int pos )
 {
-    kDebug(33001)<< "KPrThumbBar::removeItem" << endl;
+    kDebug(33001)<<"KPrThumbBar::removeItem";
     int page = 0;
     bool change = false;
     Q3IconViewItem *itemToDelete = 0;
@@ -535,7 +535,7 @@ void KPrThumbBar::removeItem( int pos )
 
 QPixmap KPrThumbBar::getSlideThumb(int slideNr) const
 {
-    //kDebug(33001) << "KPrThumbBar::getSlideThumb: " << slideNr << endl;
+    //kDebug(33001) <<"KPrThumbBar::getSlideThumb:" << slideNr;
     QPixmap pix( 10, 10 );
 
     m_view->getCanvas()->drawPageInPix( pix, slideNr, 60 );
@@ -578,7 +578,7 @@ void KPrThumbBar::slotContentsMoving(int x, int y)
 {
     m_offsetX = x;
     m_offsetY = y;
-    kDebug(33001) << "offset x,y = " << x << ", " << y << endl;
+    kDebug(33001) <<"offset x,y =" << x <<"," << y;
     refreshItems( true );
 }
 
@@ -849,7 +849,7 @@ void KPrOutline::updateItem( int pagenr /* 0-based */, bool sticky )
 
 void KPrOutline::addItem( int pos )
 {
-    kDebug(33001)<< "KPrOutline::addItem" << endl;
+    kDebug(33001)<<"KPrOutline::addItem";
 
     KPrPage *page=m_doc->pageList().at( pos );
     OutlineSlideItem *item;
@@ -870,7 +870,7 @@ void KPrOutline::addItem( int pos )
 // move an KPrOutline Item so that not the hole list has to be recreated
 void KPrOutline::moveItem( int oldPos, int newPos )
 {
-    kDebug(33001)<< "KPrOutline::moveItem " << oldPos << " to " << newPos << endl;
+    kDebug(33001)<<"KPrOutline::moveItem" << oldPos <<" to" << newPos;
 
     int lowPage = oldPos > newPos ? newPos : oldPos;
     int highPage = oldPos < newPos ? newPos : oldPos;
@@ -900,7 +900,7 @@ void KPrOutline::moveItem( int oldPos, int newPos )
 
 void KPrOutline::removeItem( int pos )
 {
-    kDebug(33001)<< "KPrOutline::removeItem" << endl;
+    kDebug(33001)<<"KPrOutline::removeItem";
 
     OutlineSlideItem* item = slideItem( pos );
     if( !item ) return;
@@ -960,7 +960,7 @@ void KPrOutline::itemClicked( Q3ListViewItem *item )
  */
 void KPrOutline::slotDropped( QDropEvent * /* e */, Q3ListViewItem *parent, Q3ListViewItem *target )
 {
-    kDebug(33001) << "slotDropped" << endl;
+    kDebug(33001) <<"slotDropped";
     /* slide doesn't have parent (always 0)
      * Only slides can move at the moment, objects can't. */
     if ( parent )

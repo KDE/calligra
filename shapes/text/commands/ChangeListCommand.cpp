@@ -29,7 +29,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
     m_block(block),
     m_listStyle(0)
 {
-// kDebug() << "ChangeListCommand " << style << endl;
+// kDebug() <<"ChangeListCommand" << style;
     Q_ASSERT(block.isValid());
     storeOldProperties();
 
@@ -38,7 +38,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
         if(prev.isValid() && prev.textList()) {
             QTextListFormat format = prev.textList()->format();
             if(format.intProperty(QTextListFormat::ListStyle) == static_cast<int> (style))
-{ //kDebug() << " merge with prev\n";
+{ //kDebug() <<" merge with prev";
                 m_listStyle = KoListStyle::fromTextList(prev.textList());
 }
         }
@@ -46,7 +46,7 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
         if(m_listStyle == 0 && next.isValid() && next.textList()) {
             QTextListFormat format = next.textList()->format();
             if(format.intProperty(QTextListFormat::ListStyle) == static_cast<int> (style))
-{ //kDebug() << " merge with next\n";
+{ //kDebug() <<" merge with next";
                 m_listStyle = KoListStyle::fromTextList(next.textList());
 }
         }
@@ -56,10 +56,10 @@ ChangeListCommand::ChangeListCommand(const QTextBlock &block, KoListStyle::Style
             if(block.textList()) // find out current list-level / etc
 {
                 llp = KoListLevelProperties::fromTextList(block.textList());
- //kDebug() << " reuse current (level: " << llp.level() << ")\n";
+ //kDebug() <<" reuse current (level:" << llp.level() <<")";
 }
             else
-{ //kDebug() << " create new level 1\n";
+{ //kDebug() <<" create new level 1";
                  llp = m_listStyle->level(1);
 }
             llp.setStyle(style);

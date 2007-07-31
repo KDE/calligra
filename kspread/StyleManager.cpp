@@ -50,7 +50,7 @@ StyleManager::~StyleManager()
 
 void StyleManager::saveOasis( KoGenStyles &mainStyles )
 {
-    kDebug(36003) << "StyleManager: Saving default cell style" << endl;
+    kDebug(36003) <<"StyleManager: Saving default cell style";
     KoGenStyle defStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
     defaultStyle()->saveOasis(defStyle, mainStyles, this);
 
@@ -59,7 +59,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     CustomStyles::ConstIterator end = m_styles.end();
     for ( CustomStyles::ConstIterator it( m_styles.begin() ); it != end; ++it )
     {
-        kDebug(36003) << "StyleManager: Saving common cell style " << it.key() <<endl;
+        kDebug(36003) <<"StyleManager: Saving common cell style" << it.key();
         KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
         const QString oasisName = (*it)->saveOasis(customStyle, mainStyles, this);
         m_oasisStyles[(*it)->name()] = oasisName;
@@ -75,7 +75,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
     const KoXmlElement* defStyle = oasisStyles.defaultStyle( "table-cell" );
     if ( defStyle )
     {
-      kDebug(36003) << "StyleManager: Loading default cell style" << endl;
+      kDebug(36003) <<"StyleManager: Loading default cell style";
       Conditions conditions;
       defaultStyle()->loadOasis( oasisStyles, *defStyle, "Default", conditions, this );
       defaultStyle()->setType( Style::BUILTIN );
@@ -97,7 +97,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
                         const int precision = n.toElement().attributeNS( KoXmlNS::style, "decimal-places" ).toInt( &ok );
                         if ( ok && precision > -1 )
                         {
-                            kDebug(36003) << "Default decimal precision: " << precision << endl;
+                            kDebug(36003) <<"Default decimal precision:" << precision;
                             doc->setDefaultDecimalPrecision( precision );
                         }
                     }
@@ -120,7 +120,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
 
         // then replace by user-visible one (if any)
         const QString name = styleElem->attributeNS( KoXmlNS::style, "display-name", oasisName );
-        kDebug(36003) << " StyleManager: Loading common cell style: " << oasisName << " (display name: " << name << ")" << endl;
+        kDebug(36003) <<" StyleManager: Loading common cell style:" << oasisName <<" (display name:" << name <<")";
 
         if ( !name.isEmpty() )
         {
@@ -134,7 +134,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
             insertStyle (style);
             // insert it into the the map sorted the OpenDocument name
             m_oasisStyles[oasisName] = name;
-            kDebug(36003) << "Style " << name << ": " << style << endl;
+            kDebug(36003) <<"Style" << name <<":" << style;
         }
     }
 
@@ -150,12 +150,12 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
                 continue;
             }
             style->setParentName(m_oasisStyles.value(parentOasisName));
-            kDebug(36003) << style->name() << " (" << style << ") gets " << style->parentName() << " (" << parentOasisName << ") as parent." << endl;
+            kDebug(36003) << style->name() <<" (" << style <<") gets" << style->parentName() <<" (" << parentOasisName <<") as parent.";
         }
         else
         {
             style->setParentName( "Default" );
-            kDebug(36003) << style->name() << " (" << style << ") has " << style->parentName() << " as parent." << endl;
+            kDebug(36003) << style->name() <<" (" << style <<") has" << style->parentName() <<" as parent.";
         }
 }
 
@@ -216,7 +216,7 @@ bool StyleManager::loadXML( KoXmlElement const & styles )
             if ( style->type() == Style::AUTO )
                 style->setType( Style::CUSTOM );
             insertStyle (style);
-            kDebug(36003) << "Style " << name << ": " << style << endl;
+            kDebug(36003) <<"Style" << name <<":" << style;
         }
 
         e = e.nextSibling().toElement();
@@ -300,7 +300,7 @@ void StyleManager::takeStyle( CustomStyle * style )
 
   if ( i != m_styles.end() )
   {
-    kDebug(36003) << "Erasing style entry for " << style->name() << endl;
+    kDebug(36003) <<"Erasing style entry for" << style->name();
     m_styles.erase( i );
   }
 }
@@ -402,13 +402,13 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QStr
         if ( element->hasAttributeNS( KoXmlNS::style , "name" ) )
         {
             QString name = element->attributeNS( KoXmlNS::style , "name" , QString() );
-            kDebug(36003) << "StyleManager: Preloading automatic cell style: " << name << endl;
+            kDebug(36003) <<"StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove( name );
             Conditions conditions;
             autoStyles[name].loadOasisStyle( oasisStyles, *(element), conditions, this );
             if ( !conditions.isEmpty() )
             {
-                kDebug() << "\t\tCONDITIONS" << endl;
+                kDebug() <<"\t\tCONDITIONS";
                 conditionalStyles[name] = conditions;
             }
 
@@ -422,7 +422,7 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QStr
                     continue;
                 }
                 autoStyles[name].setParentName( parentStyle->name() );
-                kDebug(36003) << "\t parent-style-name:" << autoStyles[name].parentName() << endl;
+                kDebug(36003) <<"\t parent-style-name:" << autoStyles[name].parentName();
             }
         }
     }
@@ -445,7 +445,7 @@ QString StyleManager::openDocumentName(const QString& name) const
 
 void StyleManager::dump() const
 {
-    kDebug(36006) << "Custom styles:" << endl;
+    kDebug(36006) <<"Custom styles:";
     foreach ( QString name, m_styles.keys() )
-        kDebug(36006) << name << endl;
+        kDebug(36006) << name;
 }

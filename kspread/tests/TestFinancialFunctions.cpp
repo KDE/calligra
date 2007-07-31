@@ -45,9 +45,9 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
   bool res = fabs(v2.asFloat()-result.asFloat())<epsilon;
 
   if (!res)
-    kDebug(36002)<<"check failed --> " <<"Epsilon = " << epsilon << "  " << v2.asFloat() << " to " << result.asFloat() << "  diff = " << v2.asFloat()-result.asFloat() << endl;
+    kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << v2.asFloat() <<" to" << result.asFloat() <<"  diff =" << v2.asFloat()-result.asFloat();
   else
-    kDebug(36002)<<"check --> " << "  diff = " << v2.asFloat()-result.asFloat() << endl;
+    kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
   if (res)
     return v2;
   else 

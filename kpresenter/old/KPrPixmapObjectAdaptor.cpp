@@ -95,7 +95,7 @@ void KPrPixmapObjectAdaptor::setPictureMirrorType(const QString & _mirror)
     else if ( _mirror.toLower()=="horizontalandvertical")
         obj->setPictureMirrorType( PM_HORIZONTALANDVERTICAL );
     else
-        kDebug(33001)<<" Error in setPictureMirrorType :"<<_mirror<<endl;
+        kDebug(33001)<<" Error in setPictureMirrorType :"<<_mirror;
 }
 
 #include <KPrPixmapObjectAdaptor.moc>

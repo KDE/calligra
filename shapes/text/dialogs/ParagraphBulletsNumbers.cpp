@@ -98,7 +98,7 @@ void ParagraphBulletsNumbers::open(KoParagraphStyle *style) {
 }
 
 void ParagraphBulletsNumbers::save() {
-kDebug() << "ParagraphBulletsNumbers::save\n";
+kDebug() <<"ParagraphBulletsNumbers::save";
     Q_ASSERT(m_paragStyle);
     KoListStyle::Style style = m_mapping[widget.listTypes->currentRow()];
     if(style == KoListStyle::NoItem) {
@@ -136,7 +136,7 @@ kDebug() << "ParagraphBulletsNumbers::save\n";
 }
 
 void ParagraphBulletsNumbers::styleChanged(int index) {
-//kDebug() << "ParagraphBulletsNumbers::styleChanged\n";
+//kDebug() <<"ParagraphBulletsNumbers::styleChanged";
     KoListStyle::Style style = m_mapping[index];
     bool showLetterSynchronization = false;
     switch( style ) {

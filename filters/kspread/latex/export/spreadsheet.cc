@@ -41,7 +41,7 @@ Spreadsheet::Spreadsheet()
 /*******************************************/
 Spreadsheet::~Spreadsheet()
 {
-	kDebug(30522) << "Corps Destructor" << endl;
+	kDebug(30522) <<"Corps Destructor";
 }
 
 /*******************************************/
@@ -49,14 +49,14 @@ Spreadsheet::~Spreadsheet()
 /*******************************************/
 void Spreadsheet::analyze(const QDomNode node)
 {
-	kDebug(30522) << getChildName(node, 0) << endl;
+	kDebug(30522) << getChildName(node, 0);
 	analyze_attr(node);
 	//_paper.analyze(getChild(node, "paper"));
 	_map.analyze(getChild(node, "map"));
 	//_locale.analyze(getChild(node, "locale"));
 	//_areaname.analyze(getChild(node, "areaname"));
 
-	kDebug(30522) << "SPREADSHEET END" << endl;
+	kDebug(30522) <<"SPREADSHEET END";
 }
 
 /*******************************************/
@@ -72,11 +72,11 @@ void Spreadsheet::analyze_attr(const QDomNode node)
 /*******************************************/
 void Spreadsheet::generate(QTextStream &out, bool hasPreamble)
 {
-	kDebug(30522) << "DOC. GENERATION." << endl;
+	kDebug(30522) <<"DOC. GENERATION.";
 
 	if(!Config::instance()->isEmbeded())
 		generatePreamble(out);
-	kDebug(30522) << "preamble : " << hasPreamble << endl;
+	kDebug(30522) <<"preamble :" << hasPreamble;
 
 	/* Body */
 	if(hasPreamble)
@@ -103,7 +103,7 @@ void Spreadsheet::generatePreamble(QTextStream &out)
 	/* For each header */
 	//if(getFileHeader()->hasHeader())
 	//{
-	//	kDebug(30522) << "header : " << _headers.count() << endl;
+	//	kDebug(30522) <<"header :" << _headers.count();
 
 		/* default : no rule */
 	//	out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
@@ -116,7 +116,7 @@ void Spreadsheet::generatePreamble(QTextStream &out)
 	/* For each footer */
 	/*if(getFileHeader()->hasFooter())
 	{
-		kDebug(30522) << "footer : " << _footers.count() << endl;
+		kDebug(30522) <<"footer :" << _footers.count();
 */
 		/* default : no rule */
 	/*	out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
@@ -139,7 +139,7 @@ void Spreadsheet::generatePreamble(QTextStream &out)
 /*******************************************/
 void Spreadsheet::generateTypeHeader(QTextStream &out)
 {
-	/*kDebug(30522) << "generate header" << endl;
+	/*kDebug(30522) <<"generate header";
 	if((_fileHeader->getHeadType() == TH_ALL ||
 		_fileHeader->getHeadType() == TH_FIRST) && header->getInfo() == SI_EVEN)
 	{

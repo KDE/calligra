@@ -27,13 +27,13 @@ void PertEditor::draw( Project &project)
     m_tasktree->clear();
     
     foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
-	kDebug() << currentNode->type() << endl;
+	kDebug() << currentNode->type();
         if (currentNode->type()!=4){
             QTreeWidgetItem * item = new QTreeWidgetItem( m_tasktree );
             item->setText( 0, currentNode->name());
             drawSubTasksName(item,currentNode);
         }
-        //kDebug() << "[void KPlato::PertEditor::draw( Project &project )] TASK FOUNDED" << endl;
+        //kDebug() <<"[void KPlato::PertEditor::draw( Project &project )] TASK FOUNDED";
     }
     
 
@@ -48,7 +48,7 @@ void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
                 item->setText( 0, currentChild->name());
                 drawSubTasksName( item, currentChild);
             }
-            //kDebug() << "[void KPlato::PertEditor::draw( Project &project )] SUBTASK FOUNDED" << endl;
+            //kDebug() <<"[void KPlato::PertEditor::draw( Project &project )] SUBTASK FOUNDED";
         }
     }
 }
@@ -57,7 +57,7 @@ void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
 //-----------------------------------
 PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
 {
-    kDebug() << " ---------------- KPlato: Creating PertEditor ----------------" << endl;
+    kDebug() <<" ---------------- KPlato: Creating PertEditor ----------------";
     widget.setupUi(this);
     widget.assignList->setSelectedLabel(i18n("Required Tasks :"));
     widget.assignList->setAvailableLabel(i18n("Available Tasks :"));

@@ -245,7 +245,7 @@ double AutoFillSequenceItem::delta( AutoFillSequenceItem *seq, bool *ok ) const
             return -1.0;
         else
         {
-            kDebug() << m_String << " i: " << i << " j: " << j << " k: " << k << " delta: " << k-i << endl;
+            kDebug() << m_String <<" i:" << i <<" j:" << j <<" k:" << k <<" delta:" << k-i;
             return static_cast<double>( k - i );
         }
     }
@@ -468,7 +468,7 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
 
     QList<double> deltaSequence;
 
-    kDebug() << "Sequence length: " << _seqList.count() << endl;
+    kDebug() <<"Sequence length:" << _seqList.count();
 
     // How big is the interval. It is in the range from [1...n].
     //
@@ -476,7 +476,7 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
     int intervalLength = 1;
     for ( intervalLength = 1; intervalLength < _seqList.count(); ++intervalLength )
     {
-        kDebug() << "Checking interval of length: " << intervalLength << endl;
+        kDebug() <<"Checking interval of length:" << intervalLength;
 
         // Create the delta list.
         deltaSequence = _seqList.createDeltaSequence( intervalLength );
@@ -484,7 +484,7 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
         QString str( "Deltas: [ " );
         foreach ( double d, deltaSequence )
             str += QString::number( d ) + ' ';
-        kDebug() << str << ']' << endl;
+        kDebug() << str << ']';
 
         // Verify the delta by looking at cells intervalLength.._seqList.count().
         // We only looked at the cells 0..2*intervalLength-1.
@@ -494,11 +494,11 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
         for ( int i = 1; (i+1) * intervalLength < _seqList.count(); ++i )
         {
             AutoFillSequence tail = _seqList.mid( i * intervalLength );
-//             kDebug() << "Verifying for sequence after " << i * intervalLength << ", length: " << tail.count() << endl;
+//             kDebug() <<"Verifying for sequence after" << i * intervalLength <<", length:" << tail.count();
             QList<double> otherDeltaSequence = tail.createDeltaSequence( intervalLength );
             if ( deltaSequence != otherDeltaSequence )
             {
-                kDebug() << "Interval does not match." << endl;
+                kDebug() <<"Interval does not match.";
                 deltaSequence.clear();
                 break;
             }
@@ -518,7 +518,7 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
         QString str( "Deltas: [ " );
         foreach ( double d, deltaSequence )
             str += QString::number( d ) + ' ';
-        kDebug() << str << ']' << endl;
+        kDebug() << str << ']';
     }
 
     return deltaSequence;
@@ -535,7 +535,7 @@ static void fillSequence( const QList<Cell>& _srcList,
     int s = _srcList.count() % intervalLength;
     // Amount of intervals (blocks)
     int block = _srcList.count() / intervalLength;
-    kDebug() << "Valid interval, number of intervals: " << block << endl;
+    kDebug() <<"Valid interval, number of intervals:" << block;
 
     // Start iterating with the first cell
     Cell cell;
@@ -571,7 +571,7 @@ static void fillSequence( const QList<Cell>& _srcList,
             }
         }
 
-        kDebug() << "Cell: " << cell.name() << ", position: " << s << ", block: " << block << endl;
+        kDebug() <<"Cell:" << cell.name() <<", position:" << s <<", block:" << block;
 
         // Calculate the new value of 'cell' by adding 'block' times the delta to the
         // value of cell 's'.

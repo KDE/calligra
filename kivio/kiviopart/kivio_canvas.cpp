@@ -556,7 +556,7 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
   // do so now.
   if( m_pDragStencil )
   {
-    kDebug(43000) << "KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!" << endl;
+    kDebug(43000) <<"KivioCanvas::startSpawnerDragDraw() - m_pDragStencil still exists.  BUG!";
     delete m_pDragStencil;
     m_pDragStencil = 0L;
   }

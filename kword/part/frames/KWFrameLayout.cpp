@@ -49,7 +49,7 @@ KWFrameLayout::KWFrameLayout(const KWPageManager *pageManager, const QList<KWFra
 
 // pageNumber is a real page number, not a zero-based index
 void KWFrameLayout::createNewFramesForPage(int pageNumber) {
-//kDebug() << "createNewFramesForPage " << pageNumber << endl;
+//kDebug() <<"createNewFramesForPage" << pageNumber;
     m_setup=false; // force reindexing of types
     KWPage *page = m_pageManager->page(pageNumber);
 
@@ -201,7 +201,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
 }
 
 void KWFrameLayout::layoutFramesOnPage(int pageNumber) {
-//kDebug() << "KWFrameLayout::layoutFramesOnPage" << endl;
+//kDebug() <<"KWFrameLayout::layoutFramesOnPage";
 /* assumes all frames are there and will do layouting of all the frames
     - headers/footers/main FS are positioned
     - normal frames are clipped to page */
@@ -620,7 +620,7 @@ void KWFrameLayout::cleanFrameSet(KWTextFrameSet *fs) {
 }
 
 void KWFrameLayout::createNewFrameForPage(KWTextFrameSet *fs, int pageNumber) {
-// kDebug() << "KWFrameLayout::createNewFrameForPage " << pageNumber << endl;
+// kDebug() <<"KWFrameLayout::createNewFrameForPage" << pageNumber;
     if(fs->frameCount() == 0)
         return;
     if(pageNumber == m_pageManager->startPage())

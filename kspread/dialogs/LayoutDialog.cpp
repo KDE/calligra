@@ -1802,7 +1802,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
    if ( dlg->bTextFontFamily )
    {
         selFont.setFamily( dlg->fontFamily );
-//         kDebug(36001) << "Family = " << dlg->fontFamily << endl;
+//         kDebug(36001) <<"Family =" << dlg->fontFamily;
 
         // NOTE Stefan: the code below crashes, so assert, that we have a family
         Q_ASSERT( family_combo->findItem( dlg->fontFamily ) );
@@ -1986,7 +1986,7 @@ void CellFormatPageFont::setCombos()
  combo = size_combo;
  if ( dlg->bTextFontSize )
  {
-//      kDebug(36001) << "SIZE=" << dlg->fontSize << endl;
+//      kDebug(36001) <<"SIZE=" << dlg->fontSize;
      selFont.setPointSize( dlg->fontSize );
      number_of_entries = size_combo->count();
      string.setNum( dlg->fontSize );
@@ -1996,7 +1996,7 @@ void CellFormatPageFont::setCombos()
          if ( string == (QString) combo->itemText(i)){
              combo->setCurrentIndex(i);
              found = true;
-             // kDebug(36001) << "Found Size " << string.data() << " setting to item " i << endl;
+             // kDebug(36001) <<"Found Size" << string.data() <<" setting to item" i;
              break;
          }
      }
@@ -2797,7 +2797,7 @@ void CellFormatPageBorder::slotChangeStyle(int)
       preview->setPattern( preview->getColor(), penSize, Qt::SolidLine );
       break;
     default:
-      kDebug(36001)<<"Error in combobox\n";
+      kDebug(36001)<<"Error in combobox";
       break;
     }
   }
@@ -3675,7 +3675,7 @@ void CellFormatPagePattern::init()
     brush15->slotSelect();
   }
   else
-    kDebug(36001) << "Error in brushStyle" << endl;
+    kDebug(36001) <<"Error in brushStyle";
 }
 
 void CellFormatPagePattern::slotSetColorButton( const QColor &_color )

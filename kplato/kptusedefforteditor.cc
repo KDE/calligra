@@ -71,7 +71,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
         case Qt::DisplayRole: {
             if ( index.column() == 0 ) {
                 const Resource *r = resource( index );
-                //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<" "<<r<<endl;
+                //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<""<<r;
                 if ( r == 0 ) {
                     return QVariant();
                 }
@@ -79,7 +79,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
             }
             if ( index.column() == 8 ) {
                 // Total
-                //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<" total"<<endl;
+                //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<" total";
                 return QVariant();
             }
             Completion::UsedEffort *ue = usedEffort( index );

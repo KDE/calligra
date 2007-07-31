@@ -200,7 +200,7 @@ QDateTime KWord13Document::lastPrintingDate( void ) const
     if ( strDate.isEmpty() )
     {
         // The printing date only exists in syntax 3, so we have no fallback.
-        kDebug(30520) << "No syntax 3 printing date!" << endl;
+        kDebug(30520) <<"No syntax 3 printing date!";
     }
     else
     {
@@ -217,7 +217,7 @@ QDateTime KWord13Document::creationDate( void ) const
     
     if ( strDate.isEmpty() )
     {
-        kDebug(30520) << "No syntax 3 creation date!" << endl;
+        kDebug(30520) <<"No syntax 3 creation date!";
         const int year = getPropertyInternal( "VARIABLESETTINGS:createFileYear" ).toInt();
         const int month = getPropertyInternal( "VARIABLESETTINGS:createFileMonth" ).toInt();
         const int day = getPropertyInternal( "VARIABLESETTINGS:createFileDay" ).toInt();
@@ -228,7 +228,7 @@ QDateTime KWord13Document::creationDate( void ) const
         }
         else
         {
-            kDebug(30520) << "No syntax 2 creation date!" << endl;
+            kDebug(30520) <<"No syntax 2 creation date!";
         }
     }
     else
@@ -246,7 +246,7 @@ QDateTime KWord13Document::modificationDate( void ) const
     
     if ( strDate.isEmpty() )
     {
-        kDebug(30520) << "No syntax 3 modification date!" << endl;
+        kDebug(30520) <<"No syntax 3 modification date!";
         const int year = getPropertyInternal( "VARIABLESETTINGS:modifyFileYear" ).toInt();
         const int month = getPropertyInternal( "VARIABLESETTINGS:modifyFileMonth" ).toInt();
         const int day = getPropertyInternal( "VARIABLESETTINGS:modifyFileDay" ).toInt();
@@ -256,7 +256,7 @@ QDateTime KWord13Document::modificationDate( void ) const
         }
         else
         {
-            kDebug(30520) << "No syntax 2 modification date!" << endl;
+            kDebug(30520) <<"No syntax 2 modification date!";
         }
     }
     else

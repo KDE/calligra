@@ -128,7 +128,7 @@ KoShellWindow::KoShellWindow()
 
 KoShellWindow::~KoShellWindow()
 {
-  //kDebug() << "KoShellWindow::~KoShellWindow()" << endl;
+  //kDebug() <<"KoShellWindow::~KoShellWindow()";
 
   // Set the active part to 0 (as we do in ~KoMainWindow, but this is too
   // late for KoShell, it gets activePartChanged signals delivered to a dead
@@ -245,7 +245,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
 
 void KoShellWindow::slotSidebarItemClicked( Q3IconViewItem *item )
 {
-  //kDebug() << "slotSidebarItemClicked called!" << endl;
+  //kDebug() <<"slotSidebarItemClicked called!";
   if( item != 0 )
   {
     int index = item->index();
@@ -315,7 +315,7 @@ void KoShellWindow::saveAll()
 
 void KoShellWindow::setRootDocument( KoDocument * doc )
 {
-  kDebug() << "KoShellWindow::setRootDocument this=" << this << " doc=" << doc << endl;
+  kDebug() <<"KoShellWindow::setRootDocument this=" << this <<" doc=" << doc;
   // We do things quite differently from KoMainWindow::setRootDocument
   // This one is called with doc != 0 when a new doc is created
   // and with 0L after they have all been removed.
@@ -363,7 +363,7 @@ void KoShellWindow::slotNewDocumentName()
 
 void KoShellWindow::updateCaption()
 {
-    //kDebug() << "KoShellWindow::updateCaption() rootDoc=" << rootDocument() << endl;
+    //kDebug() <<"KoShellWindow::updateCaption() rootDoc=" << rootDocument();
     KoMainWindow::updateCaption();
     // Let's take this opportunity for setting a correct name for the icon
     // in koolbar
@@ -372,7 +372,7 @@ void KoShellWindow::updateCaption()
     {
       if ( (*it).m_pDoc == rootDocument() )
       {
-        //kDebug() << "updateCaption called for " << rootDocument() << endl;
+        //kDebug() <<"updateCaption called for" << rootDocument();
         // Get caption from document info (title(), in about page)
         QString name;
         if ( rootDocument()->documentInfo() )
@@ -402,11 +402,11 @@ void KoShellWindow::updateCaption()
 
 void KoShellWindow::slotSidebar_Part(int _item)
 {
-  //kDebug() << "Component part chosen:" << _item << endl;
+  //kDebug() <<"Component part chosen:" << _item;
   qApp->setOverrideCursor( QCursor(Qt::WaitCursor) );
   m_documentEntry = m_mapComponents[ _item ];
-  kDebug() << m_documentEntry.service() << endl;
-  kDebug() << m_documentEntry.name() << endl;
+  kDebug() << m_documentEntry.service();
+  kDebug() << m_documentEntry.name();
   KoDocument *doc = m_documentEntry.createDoc();
   qApp->restoreOverrideCursor();
   if (doc)
@@ -475,7 +475,7 @@ void KoShellWindow::switchToPage( Q3ValueList<Page>::Iterator it )
   m_activePage = it;
   KoView *v = (*m_activePage).m_pView;
 
-  kDebug() << " setting active part to " << (*m_activePage).m_pDoc << endl;
+  kDebug() <<" setting active part to" << (*m_activePage).m_pDoc;
   // Make it active (GUI etc.)
   partManager()->setActivePart( (*m_activePage).m_pDoc, v );
   // Change current document
@@ -563,10 +563,10 @@ void KoShellWindow::closeDocument()
   assert( rootDocument() == (*m_activePage).m_pDoc );
 
   // First do the standard queryClose
-  kDebug() << "KoShellWindow::closeDocument calling standard queryClose" << endl;
+  kDebug() <<"KoShellWindow::closeDocument calling standard queryClose";
   if ( KoMainWindow::queryClose() )
   {
-    kDebug() << "Ok for closing document" << endl;
+    kDebug() <<"Ok for closing document";
     m_pSidebar->removeItem(m_grpDocuments, (*m_activePage).m_id ); //remove the document from the sidebar
     (*m_activePage).m_pDoc->removeShell(this);
     Page oldPage = (*m_activePage); // make a copy of the struct
@@ -574,15 +574,15 @@ void KoShellWindow::closeDocument()
     m_activePage = m_lstPages.end(); // no active page right now
     m_pSidebar->group(m_grpDocuments)->setSelected((*m_activePage).m_id, true); //select the new document in the sidebar
 
-    kDebug() << "m_lstPages has " << m_lstPages.count() << " documents" << endl;
+    kDebug() <<"m_lstPages has" << m_lstPages.count() <<" documents";
     if ( m_lstPages.count() > 0 )
     {
-      kDebug() << "Activate the document behind" << endl;
+      kDebug() <<"Activate the document behind";
       switchToPage( m_lstPages.fromLast() );
     }
     else
     {
-      kDebug() << "Revert to initial state (no docs)" << endl;
+      kDebug() <<"Revert to initial state (no docs)";
       setRootDocument( 0L );
       partManager()->setActivePart( 0L, 0L );
       mnuSaveAll->setEnabled(false);
@@ -598,7 +598,7 @@ void KoShellWindow::closeDocument()
       delete oldPage.m_pDoc;
 
   }
-  kDebug() << "m_lstPages has " << m_lstPages.count() << " documents" << endl;
+  kDebug() <<"m_lstPages has" << m_lstPages.count() <<" documents";
 }
 
 bool KoShellWindow::queryClose()

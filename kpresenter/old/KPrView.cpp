@@ -248,10 +248,10 @@ static void enableDPMS(bool enable)
     bool hasDPMS = DPMSQueryExtension(display, &dummy, &dummy);
     if (hasDPMS && DPMSCapable(display)) {
         if (enable) {
-            kDebug() << "Enabling DPMS" << endl;
+            kDebug() <<"Enabling DPMS";
             DPMSEnable(display);
         } else {
-            kDebug() << "Disabling DPMS" << endl;
+            kDebug() <<"Disabling DPMS";
             DPMSDisable(display);
         }
     } else
@@ -579,7 +579,7 @@ void KPrView::print( KPrinter &prt )
     double zoom = qMin( double( prt.width() ) / double( rect.width() ),
                         double( prt.height() ) / double( rect.height() ) );
     double newZoom = zoom * m_pKPresenterDoc->zoomHandler()->zoomInPercent();
-    kDebug(33001) << "KPrView::print newZoom = " << newZoom << endl;
+    kDebug(33001) <<"KPrView::print newZoom =" << newZoom;
     setZoom( int( newZoom ), false );
     QRect paintingRect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
 
@@ -594,7 +594,7 @@ void KPrView::print( KPrinter &prt )
     }
 
     m_canvas->repaint();
-    kDebug(33001) << "KPrView::print zoom&res reset" << endl;
+    kDebug(33001) <<"KPrView::print zoom&res reset";
     m_pKPresenterDoc->getVariableCollection()->variableSetting()->setLastPrintingDate(QDateTime::currentDateTime());
     m_pKPresenterDoc->recalcVariables( VT_DATE );
 }
@@ -818,7 +818,7 @@ void KPrView::savePicture( const QString& oldName, KoPicture& picture)
         oldFile = url.fileName();
 
     QString mimetype=picture.getMimeType();
-    kDebug(33001) << "Picture has mime type: " << mimetype << endl;
+    kDebug(33001) <<"Picture has mime type:" << mimetype;
     QStringList mimetypes;
     mimetypes << mimetype;
 
@@ -1531,7 +1531,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
             proc << xdgScreenSaver;
             proc << "suspend";
             proc << QString::number( topLevelWidget()->winId() );
-            kDebug() << k_funcinfo << proc.args() << endl;
+            kDebug() << k_funcinfo << proc.args();
             proc.start( KProcess::DontCare );
         } else {
 
@@ -1550,14 +1550,14 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
                     if (!reply.isValid() || !reply.value())
                         kWarning(33001) << "Couldn't disable screensaver (using dbus to kdesktop)!" << endl;
                     else
-                        kDebug(33001) << "Screensaver successfully disabled" << endl;
+                        kDebug(33001) <<"Screensaver successfully disabled";
                 }
             } else {
                 kWarning(33001) << "Couldn't check screensaver (using dcop to kdesktop)!" << endl;
             }
             // is DPMS enabled?
             m_dpmsWasEnabled = isDPMSEnabled();
-            kDebug() << "DPMS was enabled:" << m_dpmsWasEnabled << endl;
+            kDebug() <<"DPMS was enabled:" << m_dpmsWasEnabled;
             if ( m_dpmsWasEnabled ) {
                 enableDPMS( false );
             }
@@ -1567,13 +1567,13 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
         presStarted = true;
         m_autoPresRestart = false;
         QRect desk = KGlobalSettings::desktopGeometry(this);
-        kDebug(33001) << "KPrView::startScreenPres desk=" << desk << endl;
+        kDebug(33001) <<"KPrView::startScreenPres desk=" << desk;
         QRect pgRect = kPresenterDoc()->pageList().at(0)->getZoomPageRect();
-        kDebug(33001) << "KPrView::startScreenPres pgRect=" << pgRect << endl;
+        kDebug(33001) <<"KPrView::startScreenPres pgRect=" << pgRect;
 
         double zoomX = static_cast<double>( desk.width() ) / (double)pgRect.width();
         double zoomY = static_cast<double>( desk.height() ) / (double)pgRect.height();
-        kDebug(33001) << "KPrView::startScreenPres zoomX=" << zoomX << " zoomY=" << zoomY << endl;
+        kDebug(33001) <<"KPrView::startScreenPres zoomX=" << zoomX <<" zoomY=" << zoomY;
 
         xOffsetSaved = canvasXOffset();
         yOffsetSaved = canvasYOffset();
@@ -1652,7 +1652,7 @@ void KPrView::screenStop()
             proc << xdgScreenSaver;
             proc << "resume";
             proc << QString::number( topLevelWidget()->winId() );
-            kDebug() << k_funcinfo << proc.args() << endl;
+            kDebug() << k_funcinfo << proc.args();
             proc.start( KProcess::DontCare );
         } else {
         if ( m_screenSaverWasEnabled )
@@ -1669,7 +1669,7 @@ void KPrView::screenStop()
         if ( m_dpmsWasEnabled )
         {
             // re-enable DPMS
-            kDebug(33001) << "Re-enabling DPMS" << endl;
+            kDebug(33001) <<"Re-enabling DPMS";
             enableDPMS( true );
         }
         }
@@ -1892,7 +1892,7 @@ void KPrView::slotCounterStyleSelected()
     if ( actionName.startsWith( "counterstyle_" ) )
     {
         QString styleStr = actionName.mid(13);
-        //kDebug(33001) << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
+        //kDebug(33001) <<"KWView::slotCounterStyleSelected styleStr=" << styleStr;
         KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
         KoParagCounter c;
         if ( style == KoParagCounter::STYLE_NONE )
@@ -3297,7 +3297,7 @@ void KPrView::recalcCurrentPageNum()
     }
     else
     {
-        kDebug(33001) << "KPrView::recalcCurrentPageNum: activePage not found" << endl;
+        kDebug(33001) <<"KPrView::recalcCurrentPageNum: activePage not found";
         currPg = 0;
     }
 
@@ -3959,7 +3959,7 @@ void KPrView::nextPage()
     if ( currPg >= (int)m_pKPresenterDoc->getPageNums() - 1 )
         return;
 
-    //kDebug(33001)<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums()<<endl;
+    //kDebug(33001)<<"currPg :"<<currPg<<"m_pKPresenterDoc->getPageNums() :"<<m_pKPresenterDoc->getPageNums();
     skipToPage( currPg+1 );
 }
 
@@ -4536,7 +4536,7 @@ void KPrView::startKSpell()
 
 void KPrView::spellCheckerCancel()
 {
-    kDebug()<<"void KPrView::spellCheckerCancel() \n";
+    kDebug()<<"void KPrView::spellCheckerCancel()";
     spellCheckerRemoveHighlight();
     clearSpellChecker(true);
 }
@@ -4558,7 +4558,7 @@ void KPrView::spellCheckerRemoveHighlight()
 
 void KPrView::clearSpellChecker(bool cancelSpellCheck)
 {
-    kDebug() << "KPrView::clearSpellChecker()" << endl;
+    kDebug() <<"KPrView::clearSpellChecker()";
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
 
@@ -4587,7 +4587,7 @@ void KPrView::clearSpellChecker(bool cancelSpellCheck)
 
 void KPrView::spellCheckerMisspelling( const QString &old, int pos )
 {
-    //kDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    //kDebug(32001) <<"KWView::spellCheckerMisspelling old=" << old <<" pos=" << pos;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
@@ -4598,16 +4598,16 @@ void KPrView::spellCheckerMisspelling( const QString &old, int pos )
     if ( !textdoc ) return;
     pos += m_spell.kospell->currentStartIndex();
 
-    kDebug() << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    kDebug() <<"KWView::spellCheckerMisspelling parag=" << parag->paragId() <<" pos=" << pos <<" length=" << old.length();
 
     textdoc->textObject()->highlightPortion( parag, pos, old.length(), m_canvas,true/*repaint*/ );
 }
 
 void KPrView::spellCheckerCorrected( const QString &old, int pos, const QString &corr )
 {
-    //kDebug(33001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    //kDebug(33001) <<"KWView::spellCheckerCorrected old=" << old <<" corr=" << corr <<" pos=" << pos;
 
-    //kDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    //kDebug(32001) <<"KWView::spellCheckerCorrected old=" << old <<" corr=" << corr <<" pos=" << pos;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
@@ -4632,7 +4632,7 @@ void KPrView::spellCheckerCorrected( const QString &old, int pos, const QString 
 void KPrView::spellCheckerDone( const QString & )
 {
     /* See also KWView::spellCheckerDone from KWord */
-    kDebug() << "KPrView::spellCheckerDone" << endl;
+    kDebug() <<"KPrView::spellCheckerDone";
     KPrTextDocument *textdoc=static_cast<KPrTextDocument *>( m_spell.kospell->textDocument() );
     Q_ASSERT( textdoc );
     if ( textdoc )
@@ -4645,7 +4645,7 @@ void KPrView::showCounter( KoParagCounter &c )
 {
     QString styleStr("counterstyle_");
     styleStr += QString::number( c.style() );
-    //kDebug(33001) << "KWView::showCounter styleStr=" << styleStr << endl;
+    //kDebug(33001) <<"KWView::showCounter styleStr=" << styleStr;
     KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr ) );
     Q_ASSERT( act );
     if ( act )
@@ -4701,7 +4701,7 @@ void KPrView::slotApplyParag()
     KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
     KoParagLayout newLayout = m_paragDlg->paragLayout();
     int flags = m_paragDlg->changedFlags();
-    kDebug() << k_funcinfo << "flags=" << flags << endl;
+    kDebug() << k_funcinfo <<"flags=" << flags;
     if ( !flags )
         return;
     for ( ; it.current() ; ++it )
@@ -5307,7 +5307,7 @@ void KPrView::setPageDuration( int _pgNum )
 {
     if ( kPresenterDoc()->presentationDuration() )
     {
-        // kDebug(33001) << "KPrView::setPageDuration( " << _pgNum << " )" << endl;
+        // kDebug(33001) <<"KPrView::setPageDuration(" << _pgNum <<" )";
         //*m_presentationDurationList.at( _pgNum ) += m_duration.elapsed(); //KDE3
         m_presentationDurationList[ _pgNum ] += m_duration.elapsed();
         m_duration.restart();
@@ -5466,7 +5466,7 @@ void KPrView::extraStylist()
 void KPrView::slotStyleSelected()
 {
     QString actionName = QString::fromUtf8(sender()->name());
-    kDebug(33001) << "KPrView::slotStyleSelected " << actionName << endl;
+    kDebug(33001) <<"KPrView::slotStyleSelected" << actionName;
     textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyle( actionName ) );
 }
 

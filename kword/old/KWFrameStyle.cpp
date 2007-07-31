@@ -61,7 +61,7 @@ int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 
         if ( !defaultStyleDeleted ) {
             KWFrameStyle *s = findStyle( defaultStyleName() );
-            //kDebug() << "KWFrameStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
+            //kDebug() <<"KWFrameStyleCollection::loadOasisStyles looking for" << defaultStyleName() <<", to delete it. Found" << s;
             if(s) // delete the standard style.
                 removeStyle(s);
             defaultStyleDeleted = true;
@@ -73,7 +73,7 @@ int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
         // Style created, now let's try to add it
         sty = static_cast<KWFrameStyle *>( addStyle( sty ) );
 
-        kDebug() << " Loaded frame style " << sty->name() << " - now " << count() << " styles" << endl;
+        kDebug() <<" Loaded frame style" << sty->name() <<" - now" << count() <<" styles";
         ++stylesLoaded;
     }
     return stylesLoaded;

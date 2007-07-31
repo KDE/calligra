@@ -68,7 +68,7 @@ ScheduleItemModel::~ScheduleItemModel()
 
 void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *parent, int row )
 {
-    kDebug()<<k_funcinfo<<parent<<endl;
+    kDebug()<<k_funcinfo<<parent;
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(parent);
     beginInsertRows( index( parent ), row, row );
@@ -76,7 +76,7 @@ void ScheduleItemModel::slotScheduleManagerToBeInserted( const ScheduleManager *
 
 void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *manager )
 {
-    kDebug()<<k_funcinfo<<manager->name()<<endl;
+    kDebug()<<k_funcinfo<<manager->name();
     Q_ASSERT( manager->parentManager() == m_manager );
     endInsertRows();
     m_manager = 0;
@@ -84,7 +84,7 @@ void ScheduleItemModel::slotScheduleManagerInserted( const ScheduleManager *mana
 
 void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *manager )
 {
-    kDebug()<<k_funcinfo<<manager->name()<<endl;
+    kDebug()<<k_funcinfo<<manager->name();
     Q_ASSERT( m_manager == 0 );
     m_manager = const_cast<ScheduleManager*>(manager);
     QModelIndex i = index( manager );
@@ -94,7 +94,7 @@ void ScheduleItemModel::slotScheduleManagerToBeRemoved( const ScheduleManager *m
 
 void ScheduleItemModel::slotScheduleManagerRemoved( const ScheduleManager *manager )
 {
-    kDebug()<<k_funcinfo<<manager->name()<<endl;
+    kDebug()<<k_funcinfo<<manager->name();
     Q_ASSERT( manager == m_manager );
     endRemoveRows();
     m_manager = 0;
@@ -166,7 +166,7 @@ void ScheduleItemModel::setProject( Project *project )
 void ScheduleItemModel::slotManagerChanged( ScheduleManager *sch )
 {
     int r = m_project->indexOf( sch );
-    //kDebug()<<k_funcinfo<<sch<<": "<<r<<endl;
+    //kDebug()<<k_funcinfo<<sch<<":"<<r;
     emit dataChanged( createIndex( r, 0, sch ), createIndex( r, columnCount(), sch ) );
 }
 
@@ -203,7 +203,7 @@ QModelIndex ScheduleItemModel::parent( const QModelIndex &inx ) const
     if ( !inx.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug()<<k_funcinfo<<inx.internalPointer()<<": "<<inx.row()<<", "<<inx.column()<<endl;
+    //kDebug()<<k_funcinfo<<inx.internalPointer()<<":"<<inx.row()<<","<<inx.column();
     ScheduleManager *sm = manager( inx );
     if ( sm == 0 ) {
         return QModelIndex();
@@ -213,15 +213,15 @@ QModelIndex ScheduleItemModel::parent( const QModelIndex &inx ) const
 
 bool ScheduleItemModel::hasChildren( const QModelIndex &parent ) const
 {
-    //kDebug()<<k_funcinfo<<parent.internalPointer()<<": "<<parent.row()<<", "<<parent.column()<<endl;
+    //kDebug()<<k_funcinfo<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
     return rowCount( parent ) > 0;
 }
 
 QModelIndex ScheduleItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    //kDebug()<<k_funcinfo<<m_project<<": "<<row<<", "<<column<<endl;
+    //kDebug()<<k_funcinfo<<m_project<<":"<<row<<","<<column;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 || row >= rowCount( parent ) ) {
-        //kDebug()<<k_funcinfo<<row<<", "<<column<<" out of bounce"<<endl;
+        //kDebug()<<k_funcinfo<<row<<","<<column<<" out of bounce";
         return QModelIndex();
     }
     if ( parent.isValid() ) {
@@ -256,7 +256,7 @@ int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
     }
     ScheduleManager *sm = manager( parent );
     if ( sm ) {
-        //kDebug()<<k_funcinfo<<sm->name()<<", "<<sm->children().count()<<endl;
+        //kDebug()<<k_funcinfo<<sm->name()<<","<<sm->children().count();
         return sm->children().count();
     }
     return 0;
@@ -497,7 +497,7 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
 
 QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
-    //kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<endl;
+    //kDebug()<<k_funcinfo<<index.row()<<","<<index.column();
     QVariant result;
     switch ( index.column() ) {
         case 0: result = name( index, role ); break;
@@ -508,7 +508,7 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
         case 5: result = projectStart(  index, role ); break;
         case 6: result = projectEnd( index, role ); break;
         default:
-            kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
+            kDebug()<<k_funcinfo<<"data: invalid display value column"<<index.column();;
             return QVariant();
     }
     if ( result.isValid() ) {
@@ -635,19 +635,19 @@ ScheduleTreeView::ScheduleTreeView( Part *part, QWidget *parent )
 
 void ScheduleTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<k_funcinfo<<index.column()<<endl;
+    kDebug()<<k_funcinfo<<index.column();
 }
 
 void ScheduleTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
+    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    //kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
+    //kDebug()<<k_funcinfo<<sel.indexes().count();
     foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
-        //kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
+        //kDebug()<<k_funcinfo<<i.row()<<","<<i.column();
     }
     QTreeView::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
@@ -655,7 +655,7 @@ void ScheduleTreeView::selectionChanged( const QItemSelection &sel, const QItemS
 
 void ScheduleTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    //kDebug()<<k_funcinfo<<current.row()<<", "<<current.column()<<endl;
+    //kDebug()<<k_funcinfo<<current.row()<<","<<current.column();
     QTreeView::currentChanged( current, previous );
     emit currentChanged( current );
     selectionModel()->select( current, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
@@ -697,7 +697,7 @@ void ScheduleEditor::draw()
 
 void ScheduleEditor::setGuiActive( bool activate )
 {
-    //kDebug()<<k_funcinfo<<activate<<endl;
+    //kDebug()<<k_funcinfo<<activate;
     ViewBase::setGuiActive( activate );
     if ( activate && !m_editor->currentIndex().isValid() ) {
         m_editor->selectionModel()->setCurrentIndex(m_editor->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
@@ -706,7 +706,7 @@ void ScheduleEditor::setGuiActive( bool activate )
 
 void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
+    kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<":"<<pos;
 /*    QString name;
     if ( index.isValid() ) {
         QObject *obj = m_editor->itemModel()->object( index );
@@ -720,18 +720,18 @@ void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
             }
         }
     }
-    kDebug()<<k_funcinfo<<name<<endl;
+    kDebug()<<k_funcinfo<<name;
     emit requestPopupMenu( name, pos );*/
 }
 
 void ScheduleEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
+    //kDebug()<<k_funcinfo<<curr.row()<<","<<curr.column();
 }
 
 void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
 {
-    //kDebug()<<k_funcinfo<<list.count()<<endl;
+    //kDebug()<<k_funcinfo<<list.count();
     // The list has one entry per column, and we only select one row at a time, so...
     ScheduleManager *sm = 0;
     if ( ! list.isEmpty() ) {
@@ -778,7 +778,7 @@ void ScheduleEditor::setupGui()
 
 void ScheduleEditor::slotCalculateSchedule()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     ScheduleManager *sm = m_editor->currentManager();
     if ( sm == 0 ) {
         return;
@@ -789,7 +789,7 @@ void ScheduleEditor::slotCalculateSchedule()
 
 void ScheduleEditor::slotAddSchedule()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     ScheduleManager *sm = m_editor->currentManager();
     if ( sm && sm->parentManager() ) {
         sm = sm->parentManager();
@@ -802,7 +802,7 @@ void ScheduleEditor::slotAddSchedule()
 
 void ScheduleEditor::slotAddSubSchedule()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     ScheduleManager *sm = m_editor->currentManager();
     if ( sm ) {
         ScheduleManager *m = m_editor->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
@@ -815,7 +815,7 @@ void ScheduleEditor::slotAddSubSchedule()
 
 void ScheduleEditor::slotDeleteSelection()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     ScheduleManager *sm = m_editor->currentManager();
     if ( sm ) {
         emit deleteScheduleManager( m_editor->project(), sm );

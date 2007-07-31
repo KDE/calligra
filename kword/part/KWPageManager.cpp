@@ -207,7 +207,7 @@ void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
         m_defaultPageLayout.left = qMax(m_defaultPageLayout.left, 0.0);
         m_defaultPageLayout.right = qMax(m_defaultPageLayout.right, 0.0);
     }
-    //kDebug(32001) << "setDefaultPage l:" << m_defaultPageLayout.left << ", r: " << m_defaultPageLayout.right << ", a: " << m_defaultPageLayout.pageEdge << ", b: " << m_defaultPageLayout.bindingSide << endl;
+    //kDebug(32001) <<"setDefaultPage l:" << m_defaultPageLayout.left <<", r:" << m_defaultPageLayout.right <<", a:" << m_defaultPageLayout.pageEdge <<", b:" << m_defaultPageLayout.bindingSide;
 }
 
 QPointF KWPageManager::clipToDocument(const QPointF &point) {

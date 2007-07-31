@@ -65,7 +65,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList& args)
 {
     setComponentData(KWScriptingPart::componentData());
     setXMLFile(KStandardDirs::locate("data","kword/kpartplugins/scripting.rc"), true);
-    kDebug(32010) << "KWScripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
+    kDebug(32010) <<"KWScripting plugin. Class:" << metaObject()->className() <<", Parent:" << parent->metaObject()->className();
 
     /*
     // Add variables
@@ -75,7 +75,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList& args)
             Q_ASSERT(action);
             Scripting::VariableFactory* factory = Scripting::VariableFactory::create(action);
             if( ! factory ) continue;
-            kDebug(32010) << "Adding scripting variable with id=" << factory->id() << endl;
+            kDebug(32010) <<"Adding scripting variable with id=" << factory->id();
         }
     }
     */
@@ -83,7 +83,7 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList& args)
 
 KWScriptingPart::~KWScriptingPart()
 {
-    kDebug(32010) << "KWScriptingPart::~KWScriptingPart()" << endl;
+    kDebug(32010) <<"KWScriptingPart::~KWScriptingPart()";
     delete d;
 }
 

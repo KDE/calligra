@@ -252,7 +252,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      QDomElement e=fetchTableCell(tableno,currow,curcol);
 	      if (e.isNull()) {
 	              // a missing cell !
-	              kDebug(30503) << QString("creating %1 %2").arg(currow).arg(curcol).latin1() << endl;
+	              kDebug(30503) << QString("creating %1 %2").arg(currow).arg(curcol).latin1();
 	              createTableCell(tableno,currow,curcol,1,
 		      			QRect(x+step_x*curcol,y+step_y*currow,step_x,step_y)
 				);
@@ -264,7 +264,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 	      QDomElement ee=e.firstChild().toElement(); // the frame in the frameset
 	          int cs=e.attribute("cols").toInt();
 	          int rs=e.attribute("rows").toInt();
-	          kDebug(30503) << "resizing" << endl;
+	          kDebug(30503) <<"resizing";
 	          addRect(ee,QRect(x+step_x*curcol,0,step_x*cs,step_y*rs));
 	      }
 	      if (curcol==0) currow_inc=e.attribute("rows").toInt();
@@ -425,7 +425,7 @@ void KWDWriter::addText(QDomElement paragraph, const QString& _text, int format_
 
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
-	if (temp.isNull()) { kDebug(30503) << "no text" << endl; return; }
+	if (temp.isNull()) { kDebug(30503) <<"no text"; return; }
 	QString oldtext=currentText.data();
 	int oldLength=oldtext.length();
 	if (keep_formatting) {

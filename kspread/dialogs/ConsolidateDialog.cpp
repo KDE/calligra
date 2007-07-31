@@ -137,7 +137,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
 
 ConsolidateDialog::~ConsolidateDialog()
 {
-    kDebug(36001)<<"Consolidate::~Consolidate()\n";
+    kDebug(36001)<<"Consolidate::~Consolidate()";
 }
 
 enum Description { D_ROW, D_COL, D_NONE, D_BOTH };
@@ -304,7 +304,7 @@ void ConsolidateDialog::slotOk()
     {
       Sheet *t = (*it).firstSheet();
       assert( t );
-//      kDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
+//      kDebug(36001) <<"FROM" << (*it).range.left() <<" to" << (*it).range.right();
       for( int x = (*it).firstRange().left(); x <= (*it).firstRange().right() ; ++x )
       {
 	Cell cell = Cell( t, x, (*it).firstRange().top() );

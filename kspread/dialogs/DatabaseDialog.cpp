@@ -1107,7 +1107,7 @@ void DatabaseDialog::tableViewClicked( Q3ListViewItem * )
 //     QCheckListItem * i = (QCheckListItem *) item;
 //     i->setChecked( !i->isChecked() );
 //   }
-//   kDebug() << "clicked" << endl;
+//   kDebug() <<"clicked";
 }
 
 

@@ -209,7 +209,7 @@ void WmfExport::visitVSubpath( VSubpath& path ) {
     else {
         delete pa;
         // TODO: check why we have empty path
-        kDebug() << "WmfExport::visitVSubpath : Empty path ?" << endl;
+        kDebug() <<"WmfExport::visitVSubpath : Empty path ?";
     }
 }
 

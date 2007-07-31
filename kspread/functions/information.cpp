@@ -145,7 +145,7 @@ Value func_errortype (valVector args, ValueCalc *, FuncExtra *)
     return Value( 103 );
   } else {
       // something I didn't think of...
-    kDebug() << "Unexpected error type" << endl;
+    kDebug() <<"Unexpected error type";
     return Value( 0 );
   }
 }

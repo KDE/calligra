@@ -49,7 +49,7 @@ void KWFrameLayout::HeaderFooterFrameset::debug()
 {
 #ifdef DEBUG_FRAMELAYOUT
     HeaderFooterFrameset* hff = this;
-    kDebug(32002) << " * " << hff->m_frameset->name()
+    kDebug(32002) <<" *" << hff->m_frameset->name()
                    << " pages:" << hff->m_startAtPage << "-" << (hff->m_endAtPage==-1?QString("(all)"):QString::number(hff->m_endAtPage))
                    << " page-selection:" << (hff->m_oddEvenAll==HeaderFooterFrameset::Odd ? "Odd" :
                                              hff->m_oddEvenAll==HeaderFooterFrameset::Even ? "Even" : "All")
@@ -63,7 +63,7 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
 {
     int lastFrame = lastFrameNumber( lastPage );
 #ifdef DEBUG_FRAMELAYOUT
-    //kDebug(32002) << " Final cleanup: frameset " << m_frameset->name() << ": lastFrame=" << lastFrame << endl;
+    //kDebug(32002) <<" Final cleanup: frameset" << m_frameset->name() <<": lastFrame=" << lastFrame;
 #endif
 
     KWTextFrameSet* fs = m_frameset;
@@ -78,7 +78,7 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
     bool deleted = false;
     while ( (int)fs->frameCount() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
-        kDebug(32002) << "  Final cleanup: deleting frame " << fs->frameCount() - 1 << " of " << fs->name() << endl;
+        kDebug(32002) <<"  Final cleanup: deleting frame" << fs->frameCount() - 1 <<" of" << fs->name();
 #endif
         fs->deleteFrame( fs->frameCount() - 1 );
         deleted = true;
@@ -135,10 +135,10 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                             int fromPage, int toPage, uint flags )
 {
 #if 0
-    //kDebug(32002) << "KWFrameLayout::layout " << kBacktrace() << endl;
+    //kDebug(32002) <<"KWFrameLayout::layout" << kBacktrace();
     // Just debug stuff
 #ifdef DEBUG_FRAMELAYOUT
-    kDebug(32002) << "KWFrameLayout::layout " << fromPage << " to " << toPage << endl;
+    kDebug(32002) <<"KWFrameLayout::layout" << fromPage <<" to" << toPage;
     Q_ASSERT( toPage >= fromPage );
     Q3PtrListIterator<HeaderFooterFrameset> itdbg( m_headersFooters );
     for ( ; itdbg.current() ; ++itdbg )
@@ -163,7 +163,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             QRect rect = lastParag->rect();
             int bottom = rect.top() + rect.height() + 2; // cf kwtextframeset
 #ifdef DEBUG_FRAMELAYOUT
-            kDebug(32002) << "bottom LU=" << bottom << endl;
+            kDebug(32002) <<"bottom LU=" << bottom;
 #endif
 
             if ( static_cast<KWTextFrameSet *>(mainTextFrameSet)->internalToDocument( QPoint(rect.left(), bottom), textBottomPoint ) )
@@ -171,7 +171,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         }
     }
 #ifdef DEBUG_FRAMELAYOUT
-    kDebug(32002) << "textBottom = " << textBottom << "pt" << endl;
+    kDebug(32002) <<"textBottom =" << textBottom <<"pt";
 #endif
 #endif
     m_framesetsToUpdate.clear();
@@ -193,7 +193,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         Q_ASSERT( left < right );
         KoRect oldColumnRect = firstColumnRect( mainTextFrameSet, pageNum, numColumns );
 #ifdef DEBUG_FRAMELAYOUT
-        kDebug(32002) << " Page " << pageNum << endl;
+        kDebug(32002) <<" Page" << pageNum;
 #endif
 
         // For each header/footer....
@@ -205,7 +205,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 it.current()->m_positioned = true;
                 KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << " Page " << pageNum << ": adding frame " << frameNum << " from " << fs->name() << endl;
+                kDebug(32002) <<" Page" << pageNum <<": adding frame" << frameNum <<" from" << fs->name();
 #endif
                 KoRect rect;
                 if ( fs->isAHeader() ) // add on top
@@ -222,7 +222,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 Q_ASSERT( bottom > 0 );
                 Q_ASSERT( top < bottom );
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << "     rect:" << rect << "   - new_top:" << top << " new_bottom:" << bottom << endl;
+                kDebug(32002) <<"     rect:" << rect <<"   - new_top:" << top <<" new_bottom:" << bottom;
 #endif
                 resizeOrCreateHeaderFooter( fs, frameNum, rect );
             }
@@ -261,7 +261,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 totalFootNotesHeight -= it.current()->m_height; // as discussed above
                 KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << " Page " << pageNum << ": adding footnote frame " << frameNum << " from " << fs->name() << endl;
+                kDebug(32002) <<" Page" << pageNum <<": adding footnote frame" << frameNum <<" from" << fs->name();
 #endif
                 KoRect rect;
 
@@ -283,7 +283,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
                 double minY = it.current()->m_minY + totalFootNotesHeight;
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << "   footnote: frameHeight=" << frameHeight << " frameTop (" << frameTop << ") <? minY (" << minY << ")" << endl;
+                kDebug(32002) <<"   footnote: frameHeight=" << frameHeight <<" frameTop (" << frameTop <<") <? minY (" << minY <<")";
 #endif
                 if ( frameTop < minY )
                 {
@@ -296,7 +296,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     frameTop = minY;
                     frameHeight = bottom - frameTop;
 #ifdef DEBUG_FRAMELAYOUT
-                    kDebug(32002) << "   footnote: new top=" << frameTop << " new height=" << frameHeight << " remaining height=" << it.current()->m_height - frameHeight << endl;
+                    kDebug(32002) <<"   footnote: new top=" << frameTop <<" new height=" << frameHeight <<" remaining height=" << it.current()->m_height - frameHeight;
 #endif
                     Q_ASSERT( frameHeight < it.current()->m_height );
                     it.current()->m_height -= frameHeight; // calculate what remains to be done in the next frame
@@ -305,7 +305,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     // Make sure there'll actually be a next page
                     if ( pageNum == m_doc->pageCount()-1 ) {
 #ifdef DEBUG_FRAMELAYOUT
-                        kDebug(32002) << "Adding a page for the footnote overflow." << endl;
+                        kDebug(32002) <<"Adding a page for the footnote overflow.";
 #endif
                         m_doc->appendPage();
                         m_doc->updateAllFrames();
@@ -318,14 +318,14 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 Q_ASSERT( bottom > 0 );
                 Q_ASSERT( top < bottom );
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << "     footnote rect:" << rect << "   - new_top:" << top << " new_bottom:" << bottom << endl;
+                kDebug(32002) <<"     footnote rect:" << rect <<"   - new_top:" << top <<" new_bottom:" << bottom;
 #endif
                 resizeOrCreateHeaderFooter( fs, frameNum, rect );
                 firstFootNote = false;
 
                 // We added a footnote, update main text frame size
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << "   Laid out a footnote -> call resizeMainTextFrame/checkFootNotes again" << endl;
+                kDebug(32002) <<"   Laid out a footnote -> call resizeMainTextFrame/checkFootNotes again";
 #endif
                 resizeMainTextFrame( mainTextFrameSet, pageNum, numColumns, ptColumnWidth, m_doc->ptColumnSpacing(), left, top, bottom, WithFootNotes );
                 checkFootNotes();
@@ -342,7 +342,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             // Leave some space on top of the endnotes, for the horizontal line
             double endNoteTop = textBottom + m_doc->ptFootnoteBodySpacing();
 #ifdef DEBUG_FRAMELAYOUT
-            kDebug(32002) << "  Endnotes: textBottom=" << textBottom << "pt, endNoteTop=" << endNoteTop << "pt, bottom=" << bottom << "pt" << endl;
+            kDebug(32002) <<"  Endnotes: textBottom=" << textBottom <<"pt, endNoteTop=" << endNoteTop <<"pt, bottom=" << bottom <<"pt";
 #endif
             bool firstEndNote = true;
             for ( Q3PtrListIterator<HeaderFooterFrameset> it( m_endnotes ); it.current() ; ++it )
@@ -351,7 +351,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                 {
                     KWTextFrameSet* fs = it.current()->m_frameset;
 #ifdef DEBUG_FRAMELAYOUT
-                    kDebug(32002) << " Page " << pageNum << ": adding endnote frame from " << fs->name() << endl;
+                    kDebug(32002) <<" Page" << pageNum <<": adding endnote frame from" << fs->name();
 #endif
                     double frameHeight = it.current()->m_height;
                     if ( it.current()->m_startAtPage < 0 ) // not set yet
@@ -366,7 +366,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                         if ( frameHeight > 1E-10 ) // means, if frameHeight > 0
                         {
 #ifdef DEBUG_FRAMELAYOUT
-                            kDebug(32002) << "   endnote: new height=" << frameHeight << " remaining height=" << it.current()->m_height - frameHeight << endl;
+                            kDebug(32002) <<"   endnote: new height=" << frameHeight <<" remaining height=" << it.current()->m_height - frameHeight;
 #endif
                             Q_ASSERT( frameHeight < it.current()->m_height );
                             it.current()->m_height -= frameHeight; // calculate what remains to be done in the next frame
@@ -378,7 +378,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                         // Make sure there'll actually be a next page
                         if ( pageNum == m_doc->pageCount()-1 ) {
 #ifdef DEBUG_FRAMELAYOUT
-                            kDebug(32002) << "Adding a page for the endnote overflow." << endl;
+                            kDebug(32002) <<"Adding a page for the endnote overflow.";
 #endif
                             m_doc->appendPage();
                             m_doc->updateAllFrames();
@@ -393,7 +393,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     endNoteTop += frameHeight + 1; // not + it.current()->m_spacing;
                     Q_ASSERT( bottom > 0 );
 #ifdef DEBUG_FRAMELAYOUT
-                    kDebug(32002) << "     rect:" << rect << "   - new_top:" << endNoteTop << " new_bottom:" << bottom << endl;
+                    kDebug(32002) <<"     rect:" << rect <<"   - new_top:" << endNoteTop <<" new_bottom:" << bottom;
 #endif
                     int frameNum = pageNum - it.current()->m_startAtPage;
                     resizeOrCreateHeaderFooter( fs, frameNum, rect );
@@ -403,7 +403,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                     {
                         // We positionned the first endnote, update main text frame size
 #ifdef DEBUG_FRAMELAYOUT
-                        kDebug(32002) << "   Laid out an endnote and the page has a maintextframe too -> call resizeMainTextFrame/checkFootNotes again top=" << top << " textBottom=" << textBottom << endl;
+                        kDebug(32002) <<"   Laid out an endnote and the page has a maintextframe too -> call resizeMainTextFrame/checkFootNotes again top=" << top <<" textBottom=" << textBottom;
 #endif
                         resizeMainTextFrame( mainTextFrameSet, pageNum, numColumns, ptColumnWidth, m_doc->ptColumnSpacing(), left, top, textBottom, NoChange );
                     }
@@ -417,12 +417,12 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             // Test if the main text frame for this page was really resized or not.
             KoRect newColumnRect = firstColumnRect( mainTextFrameSet, pageNum, numColumns );
 #ifdef DEBUG_FRAMELAYOUT
-            kDebug(32002) << "  Comparing old=" << oldColumnRect << " and new=" << newColumnRect << endl;
+            kDebug(32002) <<"  Comparing old=" << oldColumnRect <<" and new=" << newColumnRect;
 #endif
             if ( oldColumnRect != newColumnRect ) {
                 mainTextFrameResized = pageNum;
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << "  changed -> mainTextFrameResized=" << mainTextFrameResized << endl;
+                kDebug(32002) <<"  changed -> mainTextFrameResized=" << mainTextFrameResized;
 #endif
             }
         }
@@ -430,7 +430,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     } // for all pages
     m_lastMainFramePage = lastMainFrame->pageNumber();
 #ifdef DEBUG_FRAMELAYOUT
-    kDebug(32002) << "m_lastMainFramePage = " << m_lastMainFramePage << " lastMainFrameBottom=" << lastMainFrameBottom << endl;
+    kDebug(32002) <<"m_lastMainFramePage =" << m_lastMainFramePage <<" lastMainFrameBottom=" << lastMainFrameBottom;
 #endif
 
     if ( ! ( flags & DontRemovePages ) )
@@ -456,12 +456,12 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // there's no frame on the "end notes only" page(s).
         int lastFrame = m_lastMainFramePage * numColumns + (numColumns-1);
 #ifdef DEBUG_FRAMELAYOUT
-        kDebug(32002) << "lastFrame: " << lastFrame << " due to " << m_lastMainFramePage << endl;
+        kDebug(32002) <<"lastFrame:" << lastFrame <<" due to" << m_lastMainFramePage;
 #endif
         bool deleted = false;
         while ( (int)mainTextFrameSet->frameCount() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT
-            kDebug(32002) << "  Final cleanup: deleting frame " << mainTextFrameSet->frameCount() - 1 << " of main textframeset (lastFrame=" << lastFrame << ")" << endl;
+            kDebug(32002) <<"  Final cleanup: deleting frame" << mainTextFrameSet->frameCount() - 1 <<" of main textframeset (lastFrame=" << lastFrame <<")";
 #endif
             mainTextFrameSet->deleteFrame( mainTextFrameSet->frameCount() - 1, true, false /*do not updateFrames!*/ );
             deleted = true;
@@ -490,7 +490,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
 
     if ( mainTextFrameResized != -1 && mainTextFrameSet->type() == FT_TEXT ) {
 #ifdef DEBUG_FRAMELAYOUT
-        kDebug(32002) << " Done. First maintextframe resized: " << mainTextFrameResized << endl;
+        kDebug(32002) <<" Done. First maintextframe resized:" << mainTextFrameResized;
 #endif
         KWTextFrameSet* fs = static_cast<KWTextFrameSet *>(mainTextFrameSet);
 
@@ -510,7 +510,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
             KoTextParag* parag = fs->paragAtLUPos( topLU );
             if ( parag ) {
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << " Invalidating from parag " << parag->paragId() << endl;
+                kDebug(32002) <<" Invalidating from parag" << parag->paragId();
 #endif
                 fs->textObject()->setLastFormattedParag( parag );
                 fs->textObject()->formatMore( 2 );
@@ -529,13 +529,13 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
             return;
         frame->setRect( rect );
 #ifdef DEBUG_FRAMELAYOUT
-        kDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNumber() << endl;
+        kDebug(32002) <<"KWFrameLayout::resizeOrCreateHeaderFooter frame" << headerFooter->name() <<"" << frame <<" resized to" << rect <<" pagenum=" << frame->pageNumber();
 #endif
     }
     else
     {
 #ifdef DEBUG_FRAMELAYOUT
-        kDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter creating frame for " << headerFooter->name() << endl;
+        kDebug(32002) <<"KWFrameLayout::resizeOrCreateHeaderFooter creating frame for" << headerFooter->name();
 #endif
         KWFrame* frame = new KWFrame( headerFooter, rect.x(), rect.y(), rect.width(), rect.height() );
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
@@ -592,7 +592,7 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
             bool resized = (rect != *frame);
             if ( resized ) {
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << " Page " << pageNum << ": resizing main text frame " << frameNum << "(" << frame << ") to " << rect << endl;
+                kDebug(32002) <<" Page" << pageNum <<": resizing main text frame" << frameNum <<"(" << frame <<") to" << rect;
 #endif
                 frame->setRect( rect );
                 frame->updateRulerHandles();
@@ -603,7 +603,7 @@ bool KWFrameLayout::resizeMainTextFrame( KWFrameSet* mainTextFrameSet, int pageN
             // Create new frame
             frame = new KWFrame( mainTextFrameSet, rect.x(), rect.y(), rect.width(), rect.height() );
 #ifdef DEBUG_FRAMELAYOUT
-            kDebug(32002) << " Page " << pageNum << ": creating new main text frame " << frameNum << "(" << frame << ") to " << rect << endl;
+            kDebug(32002) <<" Page" << pageNum <<": creating new main text frame" << frameNum <<"(" << frame <<") to" << rect;
 #endif
             mainTextFrameSet->addFrame( frame );
             Q_ASSERT( frameNum == mainTextFrameSet->frameCount()-1 );
@@ -650,7 +650,7 @@ void KWFrameLayout::checkFootNotes()
             int pageNum = m_doc->pageManager()->pageNumber(varY);
             if ( pageNum != hff->m_startAtPage ) {
 #ifdef DEBUG_FRAMELAYOUT
-                kDebug(32002) << " checkFootNotes: found minY=" << hff->m_minY << " start/end=" << pageNum << " for footnote " << fnvar->text() << endl;
+                kDebug(32002) <<" checkFootNotes: found minY=" << hff->m_minY <<" start/end=" << pageNum <<" for footnote" << fnvar->text();
 #endif
                 hff->m_startAtPage = pageNum;
                 hff->m_endAtPage = pageNum;

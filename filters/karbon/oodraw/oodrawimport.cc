@@ -67,7 +67,7 @@ OoDrawImport::~OoDrawImport()
 
 KoFilter::ConversionStatus OoDrawImport::convert( QByteArray const & from, QByteArray const & to )
 {
-    kDebug() << "Entering Oodraw Import filter: " << from << " - " << to << endl;
+    kDebug() <<"Entering Oodraw Import filter:" << from <<" -" << to;
 
     if( from != "application/vnd.sun.xml.draw" || to != "application/x-karbon" )
     {
@@ -100,7 +100,7 @@ KoStoreDevice* out = m_chain->storageFile( "documentinfo.xml", KoStore::Write );
 if( out )
 {
 QCString info = docinfo.toCString();
-//kDebug() << " info :" << info << endl;
+//kDebug() <<" info :" << info;
 // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
 out->write( info , info.length() );
 }*/
@@ -111,7 +111,7 @@ out->write( info , info.length() );
     if( out )
     {
         QByteArray info = docinfo.toByteArray();
-        //kDebug(30518) << " info :" << info << endl;
+        //kDebug(30518) <<" info :" << info;
         // WARNING: we cannot use KoStore::write(const QByteArray&) because it gives an extra NULL character at the end.
         out->write( info , info.length() );
     }
@@ -130,13 +130,13 @@ out->write( info , info.length() );
     if( out )
     {
         QByteArray content = outdoc.toByteArray();
-        kDebug() << " content :" << content << endl;
+        kDebug() <<" content :" << content;
         out->write( content , content.length() );
     }
     m_zip->close();
     delete m_zip;
 
-    kDebug() << "######################## OoDrawImport::convert done ####################" << endl;
+    kDebug() <<"######################## OoDrawImport::convert done ####################";
 
     return KoFilter::OK;
 }
@@ -147,7 +147,7 @@ void OoDrawImport::createDocumentInfo( QDomDocument &docinfo )
     docinfo = KoDocument::createDomDocument( "document-info" /*DTD name*/, "document-info" /*tag name*/, "1.1" );
 
     OoUtils::createDocumentInfo(m_meta, docinfo);
-    //kDebug(30518) << " meta-info :" << m_meta.toCString() << endl;
+    //kDebug(30518) <<" meta-info :" << m_meta.toCString();
 }
 
 
@@ -353,7 +353,7 @@ appendImage( doc, e, pictureElement, o );
 }*/
 		else
 		{
-			kDebug() << "Unsupported object '" << name << "'" << endl;
+			kDebug() <<"Unsupported object '" << name <<"'";
 			continue;
 		}
 		if( parent && obj )
@@ -473,7 +473,7 @@ OoDrawImport::appendBrush( VObject &obj )
 					KoRect rect = obj.boundingBox();
 					KoPoint origin, vector;
 					// nearAngle should now be one of: 0, 45, 90, 135, 180...
-					kDebug() << "nearAngle: " << nearAngle << endl;
+					kDebug() <<"nearAngle:" << nearAngle;
 					if( nearAngle == 0 || nearAngle == 180 )
 					{
 						origin.setX( rect.x() + rect.width() );
@@ -615,7 +615,7 @@ OoDrawImport::insertStyles( const QDomElement& styles )
 
 		QString name = e.attributeNS( ooNS::style, "name", QString::null );
 		m_styles.insert( name, new QDomElement( e ) );
-		//kDebug() << "Style: '" << name << "' loaded " << endl;
+		//kDebug() <<"Style: '" << name <<"' loaded";
 	}
 }
 

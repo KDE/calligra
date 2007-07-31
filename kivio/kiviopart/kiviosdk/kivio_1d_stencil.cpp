@@ -916,7 +916,7 @@ void Kivio1DStencil::setCustomIDPoint(int customID, const KoPoint& point, KivioP
 
   if( !p )
   {
-    kDebug(43000) << "Kivio1DStencil::customDrag() - KivioConnectorPoint customID: " << (customID - (kctCustom+1)) << "  not found\n" << endl;
+    kDebug(43000) <<"Kivio1DStencil::customDrag() - KivioConnectorPoint customID:" << (customID - (kctCustom+1)) <<"  not found";
     return;
   }
 

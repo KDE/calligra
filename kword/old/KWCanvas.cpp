@@ -200,10 +200,10 @@ KWCanvas::~KWCanvas()
 
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
 {
-kDebug() << "KWCanvas::repaintChanged" << endl;
+kDebug() <<"KWCanvas::repaintChanged";
 #if 0
     assert(fs); // the new code can't support fs being 0L here. Mail me if it happens (DF)
-    //kDebug(32002) << "KWCanvas::repaintChanged this=" << this << " fs=" << fs << endl;
+    //kDebug(32002) <<"KWCanvas::repaintChanged this=" << this <<" fs=" << fs;
     QPainter p( viewport() );
     p.translate( -contentsX(), -contentsY() );
     p.setBrushOrigin( -contentsX(), -contentsY() );
@@ -257,7 +257,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
         painter->save();
         int pgNum = (*it);
         int yOffset = m_doc->zoomItYOld( m_doc->pageManager()->topOfPage( pgNum ) );
-        kDebug(32001) << "printing page " << pgNum << " yOffset=" << yOffset << endl;
+        kDebug(32001) <<"printing page" << pgNum <<" yOffset=" << yOffset;
         QRect pageRect = m_doc->pageManager()->page(pgNum)->zoomedRect(m_doc);
         painter->fillRect( pageRect, Qt::white );
 
@@ -292,7 +292,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode )
 {
-    //kDebug(32002) << "KWCanvas::drawDocument crect: " << crect << endl;
+    //kDebug(32002) <<"KWCanvas::drawDocument crect:" << crect;
 
     // Draw the outside of the pages (shadow, gray area)
     // and the empty area first (in case of transparent frames)
@@ -468,7 +468,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         // See if we clicked on a frame's border
         m_mouseMeaning = m_frameViewManager->mouseMeaning( docPoint, e->state());
 
-        //kDebug(32001) << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
+        //kDebug(32001) <<"contentsMousePressEvent meaning=" << m_mouseMeaning;
         switch ( m_mouseMeaning )  {
         case MEANING_MOUSE_INSIDE:
         case MEANING_MOUSE_OVER_LINK:
@@ -540,7 +540,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
                         m_previousTableSize = table->rowSize( m_rowColResized );
                     }
                     m_currentTable = table;
-                    kDebug(32002) << "resizing row/col edge. m_rowColResized=" << m_rowColResized << endl;
+                    kDebug(32002) <<"resizing row/col edge. m_rowColResized=" << m_rowColResized;
                 }
             }
             break;
@@ -719,7 +719,7 @@ void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
 
         // docRect is the part of the document that needs to be painted.. Coordinates in pt
         const KoRect docRect = m_doc->unzoomRectOld( m_viewMode->viewToNormal( crect ) );
-        // kDebug() << "drawGrid page " << pgNum << " pageRect=" << pageRect << " crect=" << crect << " docRect=" << docRect << endl;
+        // kDebug() <<"drawGrid page" << pgNum <<" pageRect=" << pageRect <<" crect=" << crect <<" docRect=" << docRect;
 
         // the following is effectively a docRect.y() modulo offsetY
         const double firstOffsetY = pageTopLeft.y() - offsetY * static_cast<int>( docRect.y() / offsetY );
@@ -748,7 +748,7 @@ void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
         height = width / ratio;
     insRect.setRight( insRect.left() + width );
     insRect.setBottom( insRect.top() + height );
-    //kDebug() << "KWCanvas::applyAspectRatio: width=" << width << " height=" << height << " insRect=" << DEBUGRECT(insRect) << endl;
+    //kDebug() <<"KWCanvas::applyAspectRatio: width=" << width <<" height=" << height <<" insRect=" << DEBUGRECT(insRect);
 }
 
 void KWCanvas::mmCreate( const QPoint& normalPoint, bool noGrid ) // Mouse move when creating a frame
@@ -929,7 +929,7 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
 
 void KWCanvas::mrEditFrame() {
 #if 0
-    //kDebug() << "KWCanvas::mrEditFrame" << endl;
+    //kDebug() <<"KWCanvas::mrEditFrame";
     if(m_interactionPolicy) {
         m_interactionPolicy->finishInteraction();
         KCommand *cmd = m_interactionPolicy->createCommand();
@@ -990,7 +990,7 @@ void KWCanvas::mrCreateText()
 void KWCanvas::mrCreatePixmap()
 {
 #if 0
-    // kDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
+    // kDebug() <<"KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect);
     Q_ASSERT(m_insRect.width() > 0 && m_insRect.height() > 0);
     // Make sure the pic is completely in document.
     double ratio = m_insRect.width() / m_insRect.height();
@@ -1562,7 +1562,7 @@ void KWCanvas::contentsDragMoveEvent( QDragMoveEvent *e )
         bool emitChanged = false;
         if ( fs )
         {
-            //kDebug()<<"table :"<<table<<endl;
+            //kDebug()<<"table :"<<table;
             emitChanged = checkCurrentEdit( fs, true );
         }
         if ( m_currentFrameSetEdit )
@@ -1689,8 +1689,8 @@ void KWCanvas::slotContentsMoving( int cx, int cy )
 #if 0
     //QPoint nPointTop = m_viewMode->viewToNormal( QPoint( cx, cy ) );
     QPoint nPointBottom = m_viewMode->viewToNormal( QPoint( cx + visibleWidth(), cy + visibleHeight() ) );
-    //kDebug() << "KWCanvas::slotContentsMoving cx=" << cx << " cy=" << cy << endl;
-    //kDebug() << " visibleWidth()=" << visibleWidth() << " visibleHeight()=" << visibleHeight() << endl;
+    //kDebug() <<"KWCanvas::slotContentsMoving cx=" << cx <<" cy=" << cy;
+    //kDebug() <<" visibleWidth()=" << visibleWidth() <<" visibleHeight()=" << visibleHeight();
     // Update our "formatted paragraphs needs" in all the text framesets
     Q3PtrList<KWTextFrameSet> textFrameSets = m_doc->allTextFramesets( false );
     Q3PtrListIterator<KWTextFrameSet> fit( textFrameSets );
@@ -1728,7 +1728,7 @@ void KWCanvas::slotNewContentsSize()
     QSize size = m_viewMode->contentsSize();
     if ( size != QSize( contentsWidth(), contentsHeight() ) )
     {
-        //kDebug() << "KWCanvas::slotNewContentsSize " << size.width() << "x" << size.height() << endl;
+        //kDebug() <<"KWCanvas::slotNewContentsSize" << size.width() <<"x" << size.height();
         resizeContents( size.width(), size.height() );
     }
 #endif
@@ -1744,7 +1744,7 @@ void KWCanvas::resizeEvent( QResizeEvent *e )
 
 void KWCanvas::scrollToOffset( const KoPoint & d )
 {
-    //kDebug() << "KWCanvas::scrollToOffset " << d.x() << "," << d.y() << endl;
+    //kDebug() <<"KWCanvas::scrollToOffset" << d.x() <<"," << d.y();
 #if 0
     QPoint nPoint = m_doc->zoomPointOld( d );
     QPoint cPoint = m_viewMode->normalToView( nPoint );
@@ -1763,7 +1763,7 @@ void KWCanvas::updateRulerOffsets( int cx, int cy )
     // The offset is usually just the scrollview offset
     // But we also need to offset to the current page, for the graduations
     QPoint pc = m_viewMode->pageCorner();
-    //kDebug() << "KWCanvas::updateRulerOffsets contentsX=" << cx << ", contentsY=" << cy << endl;
+    //kDebug() <<"KWCanvas::updateRulerOffsets contentsX=" << cx <<", contentsY=" << cy;
     m_gui->getHorzRuler()->setOffset( cx - pc.x(), 0 );
     m_gui->getVertRuler()->setOffset( 0, cy - pc.y() );
 
@@ -1783,12 +1783,12 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
 
         switch ( e->type() ) {
             case QEvent::FocusIn:
-                //  kDebug() << "KWCanvas::eventFilter QEvent::FocusIn" << endl;
+                //  kDebug() <<"KWCanvas::eventFilter QEvent::FocusIn";
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusInEvent();
                 break;
             case QEvent::FocusOut:
-                //  kDebug() << "KWCanvas::eventFilter QEvent::FocusOut" << endl;
+                //  kDebug() <<"KWCanvas::eventFilter QEvent::FocusOut";
                 if ( m_currentFrameSetEdit && !m_printing )
                     m_currentFrameSetEdit->focusOutEvent();
                 if ( m_scrollTimer->isActive() )
@@ -1797,8 +1797,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 break;
             case QEvent::ShortcutOverride: // was part of KeyPress - changed due to kdelibs BUG!
             {
-                //  kDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
-                //  kDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+                //  kDebug() <<" KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit <<" isRW="<<m_doc->isReadWrite();
+                //  kDebug() <<" m_printing=" << m_printing <<" mousemode=" << m_mouseMode <<" (MM_EDIT=" << MM_EDIT<<")";
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
 #ifndef NDEBUG
                 // Debug keys
@@ -1815,7 +1815,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             break;
                         case Qt::Key_F: // 'F' -> frames debug
                             m_doc->printDebug();
-                            kDebug(32002) << "Current framesetedit: " << m_currentFrameSetEdit << " " <<
+                            kDebug(32002) <<"Current framesetedit:" << m_currentFrameSetEdit <<"" <<
                                 ( m_currentFrameSetEdit ? m_currentFrameSetEdit->frameSet()->className() : "" ) << endl;
                             keyev->accept();
                             break;
@@ -1826,7 +1826,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         case Qt::Key_M: // 'M' -> mark debug output
                             {
                                 const QDateTime dtMark ( QDateTime::currentDateTime() );
-                                kDebug(32002) << "Developer mark: " << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz") << endl;
+                                kDebug(32002) <<"Developer mark:" << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz");
                                 keyev->accept();
                                 break;
                             }
@@ -1840,8 +1840,8 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                 break;
             case QEvent::KeyPress:
             {
-                //  kDebug() << " KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit << " isRW="<<m_doc->isReadWrite() << endl;
-                //  kDebug() << " m_printing=" << m_printing << " mousemode=" << m_mouseMode << " (MM_EDIT=" << MM_EDIT<<")"<<endl;
+                //  kDebug() <<" KeyPress m_currentFrameSetEdit=" << m_currentFrameSetEdit <<" isRW="<<m_doc->isReadWrite();
+                //  kDebug() <<" m_printing=" << m_printing <<" mousemode=" << m_mouseMode <<" (MM_EDIT=" << MM_EDIT<<")";
                 QKeyEvent * keyev = static_cast<QKeyEvent *>(e);
                 // By default PgUp and PgDown move the scrollbars and not the caret anymore - this is done here
                 if ( !m_doc->pgUpDownMovesCaret() && ( (keyev->state() & Qt::ShiftModifier) == 0 )
@@ -1921,7 +1921,7 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                         edit->setOverwriteMode( m_overwriteMode );
                         emit overwriteModeChanged( m_overwriteMode );
                     }
-                    kDebug()<<"Insert is pressed, overwrite mode: "<< m_overwriteMode << endl;
+                    kDebug()<<"Insert is pressed, overwrite mode:"<< m_overwriteMode;
                 }
                 else // normal key processing
                     if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )

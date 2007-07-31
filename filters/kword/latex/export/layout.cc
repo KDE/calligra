@@ -56,49 +56,49 @@ void Layout::analyzeLayout(const QDomNode node)
 	/* Markup: <FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* No parameters for this markup */
-	kDebug(30522) << "ANALYSIS OF THE BEGINNING OF A LAYOUT" << endl;
+	kDebug(30522) <<"ANALYSIS OF THE BEGINNING OF A LAYOUT";
 	
 	/* Analyze child markups */
 	for(int index= 0; index < getNbChild(node); index++)
 	{
 		if(getChildName(node, index).compare("NAME")== 0)
 		{
-			kDebug(30522) << "NAME: " << endl;
+			kDebug(30522) <<"NAME:";
 			analyzeName(getChild(node, index));
 		}
 		else if(getChildName(node, index).compare("FOLLOWING")== 0)
 		{
-			kDebug(30522) << "FOLLOWING: " << endl;
+			kDebug(30522) <<"FOLLOWING:";
 			analyzeFollowing(getChild(node, index));
 		}
 		else if(getChildName(node, index).compare("FLOW")== 0)
 		{
-			kDebug(30522) << "FLOW: " << endl;
+			kDebug(30522) <<"FLOW:";
 			analyzeEnv(getChild(node, index));
 		}
 		else if(getChildName(node, index).compare("PAGEBREAKING")== 0)
 		{
-			kDebug(30522) << "PAGEBREAKING: " << endl;
+			kDebug(30522) <<"PAGEBREAKING:";
 			analyzeBreakLine(getChild(node, index));
 		}
 		else if(getChildName(node, index).compare("COUNTER")== 0)
 		{
-			kDebug(30522) << "COUNTER: " << endl;
+			kDebug(30522) <<"COUNTER:";
 			analyzeCounter(getChild(node, index));
 		}
 		else if(getChildName(node, index).compare("FORMAT")== 0)
 		{
-			kDebug(30522) << "FORMAT: " << endl;
+			kDebug(30522) <<"FORMAT:";
 			analyzeFormat(getChild(node, index));
 		}
 	}
-	kDebug(30522) << "END OF THE BEGINNING OF A LAYOUT" << endl;
+	kDebug(30522) <<"END OF THE BEGINNING OF A LAYOUT";
 }
 
 void Layout::analyzeName(const QDomNode node)
 {
 	/* <NAME value="times"> */
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	setName(getAttr(node, "value"));
 }
 
@@ -110,7 +110,7 @@ void Layout::analyzeName(const QDomNode node)
 void Layout::analyzeFollowing(const QDomNode node)
 {
 	/* <FOLLOWING name="times"> */
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	setFollowing(getAttr(node, "name"));
 }
 
@@ -123,7 +123,7 @@ void Layout::analyzeEnv(const QDomNode node)
 {
 	/* <FLOW align="0"> */
 	// ERROR: Enter first in flow ????
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	if(getAttr(node,"align").compare("justify")== 0)
 		setEnv(ENV_JUSTIFY);
 	else if(getAttr(node, "align").compare("left")== 0)
@@ -137,7 +137,7 @@ void Layout::analyzeEnv(const QDomNode node)
 void Layout::analyzeBreakLine(const QDomNode node)
 {
 	/* <NAME hardFrameBreakAfter="true"> */
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	if(getAttr(node, "linesTogether") != 0)
 		keepLinesTogether();
 	else if(getAttr(node, "hardFrameBreak") != 0)
@@ -156,11 +156,11 @@ void Layout::analyzeBreakLine(const QDomNode node)
 void Layout::analyzeCounter(const QDomNode node)
 {
 	/* <COUNTER type="1"> */
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	setCounterType(getAttr(node, "type").toInt());
 	if(getCounterType() > TL_ARABIC && getCounterType() < TL_DISC_BULLET)
 	{
-		kDebug(30522) <<  getCounterType() << endl;
+		kDebug(30522) <<  getCounterType();
 		FileHeader::instance()->useEnumerate();
 	}
 	setCounterDepth(getAttr(node, "depth").toInt());

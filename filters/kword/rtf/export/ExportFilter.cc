@@ -162,7 +162,7 @@ QString RTFWorker::makeTable(const FrameAnchor& anchor)
             firstCellInRow=false;
         }
 
-        kDebug(30515) << "Cell: " << debugRowCurrent << "," << debugCellCurrent
+        kDebug(30515) <<"Cell:" << debugRowCurrent <<"," << debugCellCurrent
             << " left: " << frame.left << " right: " << frame.right << " top: " << frame.top << " bottom " << frame.bottom << endl;
         textCellHeader += writeBorder('t',qRound(PT_TO_TWIP(frame.tWidth)),frame.tColor);
         textCellHeader += writeBorder('l',qRound(PT_TO_TWIP(frame.lWidth)),frame.lColor);
@@ -201,7 +201,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     QString strExt;
     QByteArray image;
 
-    kDebug(30515) << "RTFWorker::makeImage" << endl << anchor.picture.koStoreName << endl;
+    kDebug(30515) <<"RTFWorker::makeImage" << endl << anchor.picture.koStoreName;
 
     const int pos=strImageName.findRev('.');
     if(pos!=-1) strExt = strImageName.mid(pos+1).lower();
@@ -221,7 +221,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     {
         // either without extension or format is unknown
         // let's try to convert it to PNG format
-        kDebug(30515) << "Converting image " << anchor.picture.koStoreName << endl;
+        kDebug(30515) <<"Converting image" << anchor.picture.koStoreName;
 
         strTag="\\pngblip";
         if( !loadAndConvertToImage(anchor.picture.koStoreName,strExt,"PNG",image) )
@@ -586,7 +586,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                     else
                         content += "TIME ";
                     QString key((*paraFormatDataIt).variable.m_key.mid(4));
-                    kDebug(30515) << "Time format: " << key << endl;
+                    kDebug(30515) <<"Time format:" << key;
                     if (key.startsWith("locale"))
                     {
                         if (key == "locale" )
@@ -611,7 +611,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                             key += KGlobal::locale()->timeFormat();
                         }
 
-                        kDebug(30515) << "Locale date in KLocale format:  " << key << endl;
+                        kDebug(30515) <<"Locale date in KLocale format:" << key;
 
                         // KLocale's key differ from KWord
 
@@ -637,7 +637,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         key.replace( "%M", "mm" );      // minute 2 digits (KLocale knows it with 2 digits)
                         key.replace( "%S", "ss" );      // second 2 digits (KLocale knows it with 2 digits)
 
-                        kDebug(30515) << "Locale date in RTF format:  " << key << endl;
+                        kDebug(30515) <<"Locale date in RTF format:" << key;
                     }
                     else if (!key.isEmpty())
                     {
@@ -657,7 +657,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
                         key.replace("PPP","MMM");
                         key.replace("PPPP","MMMM");
                         key.replace("zzz","000"); // replace microseconds by 000
-                        kDebug(30515) << "New format:  " << key << endl;
+                        kDebug(30515) <<"New format:" << key;
                         content += "\\@ \"";
                         content += key;
                         content += "\" ";
@@ -755,7 +755,7 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
             }
             else if (6==(*paraFormatDataIt).id)
             {
-                kDebug(30515) << "Found an anchor of type: " << (*paraFormatDataIt).frameAnchor.type << endl;
+                kDebug(30515) <<"Found an anchor of type:" << (*paraFormatDataIt).frameAnchor.type;
                 // We have an image, a clipart or a table
 
 		if (6==(*paraFormatDataIt).frameAnchor.type)
@@ -817,10 +817,10 @@ QString RTFWorker::ProcessParagraphData ( const QString &paraText,
 bool RTFWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-    kDebug(30515) << "Entering RTFWorker::doFullParagraph" << endl << paraText << endl;
+    kDebug(30515) <<"Entering RTFWorker::doFullParagraph" << endl << paraText;
     QString par = ProcessParagraphData( paraText, layout, paraFormatDataList);
     m_textBody += par;
-    kDebug(30515) << "Quiting RTFWorker::doFullParagraph" << endl;
+    kDebug(30515) <<"Quiting RTFWorker::doFullParagraph";
     return true;
 }
 
@@ -922,7 +922,7 @@ bool RTFWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
 bool RTFWorker::doCloseFile(void)
 {
-    kDebug(30515) << __FILE__ << ":" << __LINE__ << endl;
+    kDebug(30515) << __FILE__ <<":" << __LINE__;
     delete m_streamOut;
     m_streamOut=NULL;
     if (m_ioDevice)
@@ -951,7 +951,7 @@ bool RTFWorker::doOpenDocument(void)
 
 void RTFWorker::writeFontData(void)
 {
-    kDebug(30515) << "Fonts:" << m_fontList << endl;
+    kDebug(30515) <<"Fonts:" << m_fontList;
     *m_streamOut << "{\\fonttbl";
     uint count;
     QFontDatabase fontDatabase;
@@ -1241,7 +1241,7 @@ QString RTFWorker::escapeRtfText ( const QString& text ) const
             // (Of course this only works with Latin letters.)
             // WARNING: QChar::decomposition is not re-entrant in Qt 3.x
             QChar replacement ( QCh.decomposition().at(0) );
-            kDebug(30515) << "Proposed replacement character: " << QString(replacement) << endl;
+            kDebug(30515) <<"Proposed replacement character:" << QString(replacement);
 
             if (replacement.isNull() || replacement<=' ' || replacement>=char(127)
                 || replacement=='{' || replacement=='}' || replacement=='\\')
@@ -1296,7 +1296,7 @@ static QString writeDate(const QString keyword, const QDateTime& now)
     QString str;
     if (now.isValid())
     {
-        kDebug(30515) << "Date " << keyword << " " << now.toString() << endl;
+        kDebug(30515) <<"Date" << keyword <<"" << now.toString();
         str += '{';
         str += keyword;
         const QDate nowDate(now.date());
@@ -1642,7 +1642,7 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
     if (cookedFontName.isEmpty())
         cookedFontName=fontName;
 
-    kDebug(30515) << "RTFWorker::lookupFont " << fontName << " cooked: " << cookedFontName << endl;
+    kDebug(30515) <<"RTFWorker::lookupFont" << fontName <<" cooked:" << cookedFontName;
 
     uint counter=0;  // counts position in font table (starts at 0)
     QString strFont(markup); // markup for font selection
@@ -1654,12 +1654,12 @@ QString RTFWorker::lookupFont(const QString& markup, const QString& fontName)
         if((*it) == cookedFontName)  // check for match
         {
             strFont += QString::number(counter);
-            kDebug(30515) << strFont << endl;
+            kDebug(30515) << strFont;
             return strFont;
         }
     }  // end for()
 
-    kDebug(30515) << "New font: " << cookedFontName << " count: " << counter << endl;
+    kDebug(30515) <<"New font:" << cookedFontName <<" count:" << counter;
     m_fontList << cookedFontName;
 
     strFont += QString::number(counter);
@@ -1686,7 +1686,7 @@ QString RTFWorker::lookupColor(const QString& markup, const QColor& color)
         }
     }
 
-    kDebug(30515) << "New color: " << color.name() << " count: " << counter << endl;
+    kDebug(30515) <<"New color:" << color.name() <<" count:" << counter;
     m_colorList << color;
 
     strColor += QString::number(counter);
@@ -1715,7 +1715,7 @@ QString RTFWorker::lookupStyle(const QString& styleName, LayoutData& returnLayou
         }
     }
 
-    kDebug(30515) << "New style: " << styleName << " count: " << counter << endl;
+    kDebug(30515) <<"New style:" << styleName <<" count:" << counter;
     LayoutData layout;
     m_styleList << layout;
     returnLayout=layout;

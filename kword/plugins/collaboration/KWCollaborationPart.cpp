@@ -66,8 +66,8 @@ KWCollaborationPart::KWCollaborationPart( QObject *parent, const QStringList & )
 {
     setComponentData( KWCollaborationPart::componentData() );//TODO?
     setXMLFile( KStandardDirs::locate( "data", "kword/kpartplugins/collaboration.rc" ), true );
-    kDebug( 10101 ) << "KWCollaboration plugin. Class: " << metaObject()->className() << endl;
-    //kDebug( 10101 ) << "parent: " << parent->metaObject()->className() << endl;
+    kDebug( 10101 ) <<"KWCollaboration plugin. Class:" << metaObject()->className();
+    //kDebug( 10101 ) <<"parent:" << parent->metaObject()->className();
 
     KAction *connectToAction  = new KAction( i18n( "Connect to..." ), this );
     actionCollection()->addAction( "connect_to", connectToAction );
@@ -132,7 +132,7 @@ KWCollaborationPart::KWCollaborationPart( QObject *parent, const QStringList & )
 
 KWCollaborationPart::~KWCollaborationPart()
 {
-    kDebug( 10101 ) << "KWCollaborationPart::~KWCollaborationPart()" << endl;
+    kDebug( 10101 ) <<"KWCollaborationPart::~KWCollaborationPart()";
     delete d;
 }
 

@@ -122,7 +122,7 @@ void KPrRectObject::loadOasis(const QDomElement &element, KoOasisContext&context
                     ) * 200.0 / ext.width() );
         yRnd = xRnd;
     }
-    kDebug(33001) << " KPrRectObject : radius xRnd :" << xRnd << " yRnd :" << yRnd <<endl;
+    kDebug(33001) <<" KPrRectObject : radius xRnd :" << xRnd <<" yRnd :" << yRnd;
 }
 
 double KPrRectObject::load(const QDomElement &element)

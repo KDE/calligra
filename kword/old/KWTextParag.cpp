@@ -75,7 +75,7 @@ void KWTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         painter.save();
         QPen pen( KGlobalSettings::linkColor() ); // #101820
         painter.setPen( pen );
-        //kDebug() << "KWTextParag::drawFormattingChars start=" << start << " len=" << len << " length=" << length() << endl;
+        //kDebug() <<"KWTextParag::drawFormattingChars start=" << start <<" len=" << len <<" length=" << length();
             // keep in sync with KWTextFrameSet::formatVertically
             QString str = i18n( "--- Frame Break ---" );
             int width = 0;
@@ -125,7 +125,7 @@ KWTextDocument * KWTextParag::kwTextDocument() const
 //static
 QDomElement KWTextParag::saveFormat( QDomDocument & doc, KoTextFormat * curFormat, KoTextFormat * refFormat, int pos, int len )
 {
-    //kDebug() << "KWTextParag::saveFormat refFormat=" << (  refFormat ? refFormat->key() : "none" )
+    //kDebug() <<"KWTextParag::saveFormat refFormat=" << (  refFormat ? refFormat->key() :"none" )
     //          << " curFormat=" << curFormat->key()
     //          << " pos=" << pos << " len=" << len << endl;
     QDomElement formatElem = doc.createElement( "FORMAT" );
@@ -345,7 +345,7 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
                     // Save inline framesets at the toplevel. Necessary when copying a textframeset that
                     // itself includes an inline frameset - we want all frameset tags at the toplevel.
                     QDomElement elem = doc.documentElement();
-                    kDebug() << " saving into " << elem.tagName() << endl;
+                    kDebug() <<" saving into" << elem.tagName();
                     inlineFs->toXML( elem );
                 }
             }
@@ -549,7 +549,7 @@ KoTextFormat KWTextParag::loadFormat( QDomElement &formatElem, KoTextFormat * re
     else if ( !refFormat )// No reference format and no LANGUAGE tag -> use default font
         format.setLanguage( defaultLanguage );
 
-    //kDebug() << "KWTextParag::loadFormat format=" << format.key() << endl;
+    //kDebug() <<"KWTextParag::loadFormat format=" << format.key();
     return format;
 }
 
@@ -592,7 +592,7 @@ void KWTextParag::load( QDomElement &attributes )
     QDomElement element = attributes.namedItem( "TEXT" ).toElement();
     if ( !element.isNull() )
     {
-        //kDebug() << "KWTextParag::load '" << element.text() << "'" << endl;
+        //kDebug() <<"KWTextParag::load '" << element.text() <<"'";
         append( element.text() );
         // Apply default format - this should be automatic !!
         setFormat( 0, string()->length(), paragFormat(), true );
@@ -630,7 +630,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                 case 1: // Normal text
                 {
                     KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphenation() );
-                    //kDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+                    //kDebug(32002) <<"KWTextParag::loadFormatting applying formatting from" << index <<" to" << index+len;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
                 }
@@ -644,12 +644,12 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                     KoTextStringChar& ch = string()->at(index);
                     if (ch.c.unicode()==1)
                     {
-                        kDebug() << "Replacing QChar(1) (in KWTextParag::loadFormatting)" << endl;
+                        kDebug() <<"Replacing QChar(1) (in KWTextParag::loadFormatting)";
                         ch.c='#';
                     }
 
                     KWTextImage * custom = new KWTextImage( kwTextDocument(), QString::null );
-                    kDebug() << "KWTextParag::loadFormatting insertCustomItem" << endl;
+                    kDebug() <<"KWTextParag::loadFormatting insertCustomItem";
                     paragFormat()->addRef();
                     setCustomItem( index, custom, paragFormat() );
                     custom->load( formatElem );
@@ -665,7 +665,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
 
                     // I assume that we need the same treatment as for id == 1
                     KoTextFormat f = loadFormat( formatElem, paragraphFormat(), doc->defaultFont(),doc->globalLanguage(), doc->globalHyphenation() );
-                    //kDebug(32002) << "KWTextParag::loadFormatting applying formatting from " << index << " to " << index+len << endl;
+                    //kDebug(32002) <<"KWTextParag::loadFormatting applying formatting from" << index <<" to" << index+len;
                     setFormat( index, len, document()->formatCollection()->format( &f ) );
                     break;
                 }
@@ -689,7 +689,7 @@ void KWTextParag::loadFormatting( QDomElement &attributes, int offset, bool load
                     {
                         int type = typeElem.attribute( "type" ).toInt();
                         QString key = typeElem.attribute( "key" );
-                        kDebug() << "KWTextParag::loadFormatting variable type=" << type << " key=" << key << endl;
+                        kDebug() <<"KWTextParag::loadFormatting variable type=" << type <<" key=" << key;
                         KoVariableFormat * varFormat = key.isEmpty() ? 0 : doc->variableFormatCollection()->format( key.latin1() );
                         // If varFormat is 0 (no key specified), the default format will be used.
                         int correct = 0;
@@ -774,7 +774,7 @@ KoParagLayout KWTextParag::loadParagLayout( QDomElement & parentElem, KWDocument
                 kError(32001) << "Cannot find style \"" << styleName << "\" specified in paragraph LAYOUT - using Standard" << endl;
                 style = doc->styleCollection()->findStyle( "Standard" );
             }
-            //else kDebug() << "KoParagLayout::KoParagLayout setting style to " << style << " " << style->name() << endl;
+            //else kDebug() <<"KoParagLayout::KoParagLayout setting style to" << style <<"" << style->name();
         }
         else
         {
@@ -832,7 +832,7 @@ void KWTextParag::loadOasis( const QDomElement& paragElement, KoOasisContext& co
             {
                 // Detected a change in the master page -> this means we have to use a new page layout
                 // and insert a frame break if not on the first paragraph.
-                kDebug(32001) << "KWTextParag::loadOasis: change of master page detected: from " << currentMasterPageRef << " to " << masterPageName << " -> inserting page break" << endl;
+                kDebug(32001) <<"KWTextParag::loadOasis: change of master page detected: from" << currentMasterPageRef <<" to" << masterPageName <<" -> inserting page break";
                 currentMasterPageRef = masterPageName;
                 // [see also KoParagLayout for the 'normal' way to insert page breaks]
                 m_layout.pageBreaking |= KoParagLayout::HardFrameBreakBefore;

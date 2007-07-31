@@ -128,18 +128,18 @@ namespace Scripting {
             bool addVariable(QObject* cursor, const QString& variablename) {
                 TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
                 if( ! textcursor ) {
-                    kDebug()<<"No cursor"<<endl;
+                    kDebug()<<"No cursor";
                     return false;
                 }
                 KoInlineTextObjectManager* objmanager = inlineTextObjectManager();
                 if( ! objmanager ) {
-                    kDebug()<<"No textobjectmanager"<<endl;
+                    kDebug()<<"No textobjectmanager";
                     return false;
                 }
                 KoVariableManager* varmanager = variableManager();
                 KoVariable* variable = varmanager ? varmanager->createVariable(variablename) : 0;
                 if( ! variable ) {
-                    kDebug()<<(varmanager ? "No variable" : "No variablemanager")<<endl;
+                    kDebug()<<(varmanager ?"No variable" :"No variablemanager");
                     return false;
                 }
                 objmanager->insertInlineObject(textcursor->cursor(), variable);

@@ -197,7 +197,7 @@ void ZoomTool::setActivated(bool a)
     m_pCurrent = m_pPlus;
     emit activated(this);
   } else {
-    kDebug(43000) << "ZoomTool DeActivate" << endl;
+    kDebug(43000) <<"ZoomTool DeActivate";
   
     m_pCurrent = 0L;
   
@@ -324,7 +324,7 @@ void ZoomTool::showPopupMenu(const QPoint& p )
   if(m_pMenu) {
     m_pMenu->popup(p);
   } else {
-    kDebug(43000) << "What no popup! *ARGH*!" << endl;
+    kDebug(43000) <<"What no popup! *ARGH*!";
   }
 }
 

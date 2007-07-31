@@ -176,7 +176,7 @@ VCreateShadowCmd::redo()
 			VShadowDecorator *shadow = dynamic_cast<VShadowDecorator *>( itr.current() );
 			if( shadow )
 			{
-				//kDebug() <<  "Its a decorator!!!" << endl;
+				//kDebug() <<"Its a decorator!!!";
 				shadow->setShadow( m_distance, m_angle, m_opacity );
 				newObject = 0L;
 			}

@@ -86,7 +86,7 @@ bool HtmlExportDialog::isXHtml(void) const
 QTextCodec* HtmlExportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30503) << "Encoding: " << strCodec << endl;
+    kDebug(30503) <<"Encoding:" << strCodec;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );

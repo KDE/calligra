@@ -58,7 +58,7 @@
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
     : KWFrameSet( doc ), m_changed( false ), m_edit( 0 )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     // The newly created formula is not yet part of the formula
     // document. It will be added when a frame is created.
@@ -95,13 +95,13 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     delete formula;
 }
 
 void KWFormulaFrameSet::addFrame( KWFrame *frame, bool recalc )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     if ( formula ) {
         frame->setWidth( formula->width() );
         frame->setHeight( formula->height() );
@@ -114,7 +114,7 @@ void KWFormulaFrameSet::addFrame( KWFrame *frame, bool recalc )
 
 void KWFormulaFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     assert( num == 0 );
     KWFrameSet::deleteFrame( num, remove, recalc );
     formula->unregisterFormula();
@@ -265,7 +265,7 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
 
 void KWFormulaFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     KWFrameSet::moveFloatingFrame( frameNum, position );
     if ( !m_frames.isEmpty() ) {
         formula->setDocumentPosition( position.x(), position.y()+formula->baseline() );
@@ -347,7 +347,7 @@ KFormula::View* KWFormulaFrameSetEdit::getFormulaView() { return formulaView; }
 
 void KWFormulaFrameSetEdit::keyPressEvent( QKeyEvent* event )
 {
-    //kDebug(32001) << "KWFormulaFrameSetEdit::keyPressEvent" << endl;
+    //kDebug(32001) <<"KWFormulaFrameSetEdit::keyPressEvent";
     formulaView->keyPressEvent( event );
 }
 
@@ -393,7 +393,7 @@ void KWFormulaFrameSetEdit::mouseReleaseEvent( QMouseEvent* event,
 
 void KWFormulaFrameSetEdit::focusInEvent()
 {
-    //kDebug(32001) << "KWFormulaFrameSetEdit::focusInEvent" << endl;
+    //kDebug(32001) <<"KWFormulaFrameSetEdit::focusInEvent";
     if ( formulaView != 0 ) {
         formulaView->focusInEvent(0);
     }
@@ -401,7 +401,7 @@ void KWFormulaFrameSetEdit::focusInEvent()
 
 void KWFormulaFrameSetEdit::focusOutEvent()
 {
-    //kDebug(32001) << "KWFormulaFrameSetEdit::focusOutEvent" <<
+    //kDebug(32001) <<"KWFormulaFrameSetEdit::focusOutEvent" <<
     //endl;
     if ( formulaView != 0 ) {
         formulaView->focusOutEvent(0);
@@ -477,7 +477,7 @@ void KWFormulaFrameSetEdit::slotLeaveFormula( KFormula::Container*,
                                               KFormula::FormulaCursor* cursor,
                                               int cmd )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     if ( cursor == formulaView->getCursor() ) {
         switch ( cmd ) {

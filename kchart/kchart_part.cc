@@ -75,7 +75,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
     m_rowLabels(), m_colLabels(),
     m_parentWidget( parentWidget )
 {
-    kDebug(35001) << "Constructor started!" << endl;
+    kDebug(35001) <<"Constructor started!";
 
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
@@ -127,7 +127,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
 
 KChartPart::~KChartPart()
 {
-    //kDebug(35001) << "Part is going to be destroyed now!!!" << endl;
+    //kDebug(35001) <<"Part is going to be destroyed now!!!";
 #if 0
     delete m_params;
 #else
@@ -153,7 +153,7 @@ void KChartPart::initEmpty()
 void KChartPart::initNullChart()
 {
     // Fill cells with data if there is none.
-    //kDebug(35001) << "Initialize null chart." << endl;
+    //kDebug(35001) <<"Initialize null chart.";
 
     // Empty data.  Note, we don't use (0,0) or (1,1) for the size
     // here, because otherwise KDChart won't draw anything
@@ -191,12 +191,12 @@ void KChartPart::generateBarChartTemplate()
     int  col;
     int  row;
 
-    kDebug()<<"KChartPart::generateBarChartTemplate()\n";
+    kDebug()<<"KChartPart::generateBarChartTemplate()";
 
     // Fill cells with data if there is none.
-    kDebug() << "rowCount: " << m_currentData->rowCount() << endl;
+    kDebug() <<"rowCount:" << m_currentData->rowCount();
     if ( m_currentData->rowCount() == 0 ) {
-        //kDebug(35001) << "Initialize with some data!!!" << endl;
+        //kDebug(35001) <<"Initialize with some data!!!";
 #if 0
         m_currentData.expand( 4, 4 );
         m_currentData.setUsedRows( 4 );
@@ -217,10 +217,10 @@ void KChartPart::generateBarChartTemplate()
         m_currentData->endInsertColumns();
 #endif
         for (row = 0; row < 4; row++) {
-            kDebug() << "rowCount: " << m_currentData->rowCount() << endl;
+            kDebug() <<"rowCount:" << m_currentData->rowCount();
 
             for (col = 0; col < 4; col++) {
-                kDebug() << "row, col: " << row << "," << col << endl;
+                kDebug() <<"row, col:" << row <<"," << col;
 #if 0
                 QModelIndex  index = m_currentData->index( row, col, QModelIndex() );
                 m_currentData->setData( index, static_cast <double>(row + col) ); 
@@ -335,7 +335,7 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
     // suitable legends and axis labels.  Now start the real painting.
 
     // Make the chart use our model.
-    kDebug(35001) << "Painting!!" << endl;
+    kDebug(35001) <<"Painting!!";
     Q_ASSERT( m_chart->coordinatePlane() );
     m_chart->coordinatePlane()->replaceDiagram( new KDChart::BarDiagram() );
     Q_ASSERT( m_chart->coordinatePlane()->diagram() );
@@ -1023,7 +1023,7 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,
     Q_UNUSED( oasisStyles );
     Q_UNUSED( store );
 #if 0
-    kDebug(35001) << "kchart loadOasis called" << endl;
+    kDebug(35001) <<"kchart loadOasis called";
 
     // Set some sensible defaults.
     setChartDefaults();
@@ -1074,7 +1074,7 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
 
     const QString fillColor = styleStack.property( KoXmlNS::draw, "fill-color" );
-    kDebug() << "fillColor=" << fillColor << endl;
+    kDebug() <<"fillColor=" << fillColor;
 
     styleStack.restore();
 #endif
@@ -1177,7 +1177,7 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
         }
     }
 
-    kDebug(35001) << "numberHeaderColumns=" << numberHeaderColumns
+    kDebug(35001) <<"numberHeaderColumns=" << numberHeaderColumns
 		   << " numberDataColumns=" << numberDataColumns
                    << " numberDataRows=" << numberDataRows << endl;
 
@@ -1378,7 +1378,7 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
 		valStr  = ""; /* like in saveXML, but why? */
 		break;
             default: {
-                kDebug(35001) << "ERROR: cell " << row << "," << col
+                kDebug(35001) <<"ERROR: cell" << row <<"," << col
                                << " has unknown type." << endl;
                 }
             }
@@ -1427,7 +1427,7 @@ QDomDocument KChartPart::saveXML()
 #if 0
     QDomElement  tmpElem;
 
-    //kDebug(35001) << "kchart saveXML called" << endl;
+    //kDebug(35001) <<"kchart saveXML called";
 
     // The biggest part of the saving is done by KDChart itself, so we
     // don't have to do it.
@@ -1470,7 +1470,7 @@ QDomDocument KChartPart::saveXML()
              : m_currentData.rows();
     data.setAttribute( "cols", cols );
     data.setAttribute( "rows", rows );
-    kDebug(35001) << "      writing  " << cols << "," << rows << "  (cols,rows)." << endl;
+    kDebug(35001) <<"      writing" << cols <<"," << rows <<"  (cols,rows).";
 
     for (int i=0; i!=rows; ++i) {
         for (int j=0; j!=cols; ++j) {
@@ -1485,13 +1485,13 @@ QDomDocument KChartPart::saveXML()
                 case QVariant::DateTime: valType = "DateTime";  break;
                 default: {
                     valType = "(unknown)";
-                    kDebug(35001) << "ERROR: cell " << i << "," << j
+                    kDebug(35001) <<"ERROR: cell" << i <<"," << j
 				   << " has unknown type." << endl;
                 }
             }
 
             e.setAttribute( "valType", valType );
-            //kDebug(35001) << "      cell " << i << "," << j
+            //kDebug(35001) <<"      cell" << i <<"," << j
 	    //	   << " saved with type '" << valType << "'." << endl;
             switch ( value.type() ) {
                 case QVariant::String:  e.setAttribute( "value", value.toString() );
@@ -1503,7 +1503,7 @@ QDomDocument KChartPart::saveXML()
                 default: {
                     e.setAttribute( "value", "" );
                     if( QVariant::Invalid != value.type() )
-                        kDebug(35001) << "ERROR: cell " << i << "," << j
+                        kDebug(35001) <<"ERROR: cell" << i <<"," << j
 				       << " has unknown type." << endl;
                 }
             }
@@ -1521,7 +1521,7 @@ bool KChartPart::loadXML( QIODevice*, const KoXmlDocument& doc )
     Q_UNUSED( doc );
 
 #if 0
-    kDebug(35001) << "kchart loadXML called" << endl;
+    kDebug(35001) <<"kchart loadXML called";
 
     // First try to load the KDChart parameters.
     bool  result = m_params->loadXML( doc );
@@ -1604,11 +1604,11 @@ bool KChartPart::loadAuxiliary( const KoXmlDocument& doc )
 		if ( !ok )
 		    dir = (int) KChartParams::DataColumns;
 
-		//kDebug(35001) << "Got aux value \"direction\": " << dir << endl;
+		//kDebug(35001) <<"Got aux value \"direction\":" << dir;
 		m_params->setDataDirection( (KChartParams::DataDirection) dir );
 	    }
 	    else {
-		kDebug(35001) << "Error in direction tag." << endl;
+		kDebug(35001) <<"Error in direction tag.";
 	    }
 	}
 
@@ -1625,7 +1625,7 @@ bool KChartPart::loadAuxiliary( const KoXmlDocument& doc )
 		    m_params->setFirstRowAsLabel( false );
 	    }
 	    else {
-		kDebug(35001) << "Error in barnumlines tag." << endl;
+		kDebug(35001) <<"Error in barnumlines tag.";
 		m_params->setFirstRowAsLabel( false );
 	    }
 
@@ -1638,7 +1638,7 @@ bool KChartPart::loadAuxiliary( const KoXmlDocument& doc )
 		    m_params->setFirstColAsLabel( false );
 	    }
 	    else {
-		kDebug(35001) << "Error in barnumlines tag." << endl;
+		kDebug(35001) <<"Error in barnumlines tag.";
 		m_params->setFirstColAsLabel( false );
 	    }
 	}
@@ -1653,12 +1653,12 @@ bool KChartPart::loadAuxiliary( const KoXmlDocument& doc )
 		if ( !ok )
 		    barNumLines = 0;
 
-		//kDebug(35001) << "Got aux value \"barnumlines\": "
+		//kDebug(35001) <<"Got aux value \"barnumlines\":"
 		//	       << barNumLines << endl;
 		m_params->setBarNumLines( barNumLines );
 	    }
 	    else {
-		kDebug(35001) << "Error in barnumlines tag." << endl;
+		kDebug(35001) <<"Error in barnumlines tag.";
 	    }
 	}
 #if 0
@@ -1679,13 +1679,13 @@ bool KChartPart::loadAuxiliary( const KoXmlDocument& doc )
 #if 0
 bool KChartPart::loadData( const KoXmlDocument& doc )
 {
-    kDebug(35001) << "kchart loadData called" << endl;
+    kDebug(35001) <<"kchart loadData called";
 
     KoXmlElement chart = doc.documentElement();
     KoXmlElement data = chart.namedItem("data").toElement();
     bool ok;
     int cols = data.attribute("cols").toInt(&ok);
-    kDebug(35001) << "cols readed as:" << cols << endl;
+    kDebug(35001) <<"cols readed as:" << cols;
     if ( !ok ){
          return false;
     }
@@ -1695,18 +1695,18 @@ bool KChartPart::loadData( const KoXmlDocument& doc )
          return false;
     }
 
-    kDebug(35001) << rows << " x " << cols << endl;
+    kDebug(35001) << rows <<" x" << cols;
     m_currentData.expand(rows, cols);
     m_currentData.setUsedCols( cols );
     m_currentData.setUsedRows( rows );
-    kDebug(35001) << "Expanded!" << endl;
+    kDebug(35001) <<"Expanded!";
     KoXmlNode n = data.firstChild();
     //QArray<int> tmpExp(rows*cols);
     //QArray<bool> tmpMissing(rows*cols);
     for (int i=0; i!=rows; i++) {
         for (int j=0; j!=cols; j++) {
             if (n.isNull()) {
-                kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
+                kDebug(35001) <<"Some problems, there is less data than it should be!";
                 break;
             }
             KoXmlElement e = n.toElement();
@@ -1731,7 +1731,7 @@ bool KChartPart::loadData( const KoXmlDocument& doc )
                     } else {
                         t.clear();
                         if ( "novalue" != valueType )
-                            kDebug(35001) << "ERROR: cell " << i << "," << j << " has unknown type '" << valueType << "'." << endl;
+                            kDebug(35001) <<"ERROR: cell" << i <<"," << j <<" has unknown type '" << valueType <<"'.";
                     }
                 } else
                     t.clear();
@@ -1776,29 +1776,29 @@ bool KChartPart::loadData( const KoXmlDocument& doc )
 #if 0
 bool KChartPart::loadOldXML( const KoXmlDocument& doc )
 {
-    kDebug(35001) << "kchart loadOldXML called" << endl;
+    kDebug(35001) <<"kchart loadOldXML called";
     if ( doc.doctype().name() != "chart" )
         return false;
 
-    kDebug(35001) << "Ok, it is a chart" << endl;
+    kDebug(35001) <<"Ok, it is a chart";
 
     KoXmlElement chart = doc.documentElement();
     if ( chart.attribute( "mime" ) != "application/x-kchart" && chart.attribute( "mime" ) != "application/vnd.kde.kchart" )
         return false;
 
-    kDebug(35001) << "Mimetype ok" << endl;
+    kDebug(35001) <<"Mimetype ok";
 
 #if 0
     KoXmlElement data = chart.namedItem("data").toElement();
     bool ok;
     int cols = data.attribute("cols").toInt(&ok);
-    kDebug(35001) << "cols readed as:" << cols << endl;
+    kDebug(35001) <<"cols readed as:" << cols;
     if (!ok)  { return false; }
     int rows = data.attribute("rows").toInt(&ok);
     if (!ok)  { return false; }
-    kDebug(35001) << rows << " x " << cols << endl;
+    kDebug(35001) << rows <<" x" << cols;
     m_currentData.expand(rows, cols);
-    kDebug(35001) << "Expanded!" << endl;
+    kDebug(35001) <<"Expanded!";
     KoXmlNode n = data.firstChild();
     QArray<int> tmpExp(rows*cols);
     QArray<bool> tmpMissing(rows*cols);
@@ -1806,7 +1806,7 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
     for (int i=0; i!=rows; i++) {
         for (int j=0; j!=cols; j++) {
             if (n.isNull()) {
-                kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
+                kDebug(35001) <<"Some problems, there is less data than it should be!";
                 break;
             }
 
@@ -1815,9 +1815,9 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
                 // add the cell to the corresponding place...
                 double val = e.attribute("value").toDouble(&ok);
                 if (!ok)  {  return false; }
-                kDebug(35001) << i << " " << j << "=" << val << endl;
+                kDebug(35001) << i <<"" << j <<"=" << val;
                 KoChart::Value t( val );
-                // kDebug(35001) << "Set cell for " << row << "," << col << endl;
+                // kDebug(35001) <<"Set cell for" << row <<"," << col;
                 m_currentData.setCell(i,j,t);
                 if ( e.hasAttribute( "hide" ) ) {
                     tmpMissing[cols*j+i] = (bool)e.attribute("hide").toInt( &ok );
@@ -2279,7 +2279,7 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
         m_params->legend.clear();
         for(int i=0; i<number; i++) {
             if (name.isNull()) {
-                kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
+                kDebug(35001) <<"Some problems, there is less data than it should be!";
                 break;
             }
             KoXmlElement element = name.toElement();
@@ -2299,7 +2299,7 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
         m_params->xlbl.clear();
         for (int i=0; i<number; i++) {
             if (label.isNull()) {
-                kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
+                kDebug(35001) <<"Some problems, there is less data than it should be!";
                 break;
             }
             KoXmlElement element = label.toElement();
@@ -2345,7 +2345,7 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
 
         for (unsigned int i=0; i<number; i++) {
             if (color.isNull()) {
-                kDebug(35001) << "Some problems, there is less data than it should be!" << endl;
+                kDebug(35001) <<"Some problems, there is less data than it should be!";
                 break;
             }
             KoXmlElement element = color.toElement();
@@ -2371,7 +2371,7 @@ bool KChartPart::loadOldXML( const KoXmlDocument& doc )
 
 void  KChartPart::slotModified()
 {
-    kDebug(35001) << "slotModified called!" << endl;
+    kDebug(35001) <<"slotModified called!";
 
     setModified(true);
 }

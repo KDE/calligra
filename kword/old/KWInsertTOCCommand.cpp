@@ -77,14 +77,14 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
         p = static_cast<KWTextParag *>(p->next());
     }
     // Set a hard frame break after the last TOC parag
-    kDebug() << "KWInsertTOCCommand::execute setPageBreaking on " << prevTOCParag << " " << prevTOCParag->paragId() << endl;
+    kDebug() <<"KWInsertTOCCommand::execute setPageBreaking on" << prevTOCParag <<"" << prevTOCParag->paragId();
     prevTOCParag->setPageBreaking( prevTOCParag->pageBreaking() | KWParagLayout::HardFrameBreakAfter );
 
     // Format paragraphs, to take this page break into account and update page numbers
     fs->layout();
     fs->updateFrames();
 
-    //kDebug() << "KWInsertTOCCommand::execute layouting done, setting page numbers" << endl;
+    //kDebug() <<"KWInsertTOCCommand::execute layouting done, setting page numbers";
 
     // Now add the page numbers, and apply the style
     QMap<KWTextParag *, KWTextParag *>::Iterator mapIt = paragMap.begin();
@@ -141,7 +141,7 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
         KWTextParag * parag = static_cast<KWTextParag *>(p);
         if ( parag->partOfTableOfContents() )
         {
-            kDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
+            kDebug() <<"KWContents::createContents Deleting paragraph" << p <<"" << p->paragId();
             // This paragraph is part of the TOC -> remove
 
             /* This method aims to provide an "undo" that restores the previous version of the TOC.
@@ -167,10 +167,10 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
             if ( cursor->parag() == p )
                 cursor->setParag( next ? next : prev );
             delete p;
-            kDebug() << "KWInsertTOCCommand::removeTOC " << p << " deleted" << endl;
+            kDebug() <<"KWInsertTOCCommand::removeTOC" << p <<" deleted";
             p = next;
             posOfToc = p;
-            kDebug() << "KWInsertTOCCommand::removeTOC prev=" << prev << " p=" << p << endl;
+            kDebug() <<"KWInsertTOCCommand::removeTOC prev=" << prev <<" p=" << p;
             // Fix parag chain
             if ( prev )
             {

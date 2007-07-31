@@ -100,7 +100,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
     // data
     KoPageLayout page;
     DRect rect = _doc.paperSize(page.format);
-    kDebug(30516) << "paper size: " << rect.toString() << endl;
+    kDebug(30516) <<"paper size:" << rect.toString();
     page.orientation = _doc.paperOrientation();
     Data data(m_chain, rect, page, _options);
     _doc.initDevice(data);
@@ -119,7 +119,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
             pd.setLabel( s.arg(it.current()) );
             qApp->processEvents();
             if (pd.wasCancelled()) return KoFilter::UserCancelled;
-            kDebug(30516) << "-- " << "pass #" << k
+            kDebug(30516) <<"--" <<"pass #" << k
                            << "  treat page: " << it.current()
                            << "----------------" << endl;
             if (first) _doc.treatPage( it.current() );
@@ -129,7 +129,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
         }
     }
     data.endDump();
-    kDebug(30516) << "treatement elapsed=" << time.elapsed() << endl;
+    kDebug(30516) <<"treatement elapsed=" << time.elapsed();
 
     // output
     KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
@@ -137,7 +137,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
         kError(30516) << "Unable to open output file!" << endl;
         return KoFilter::StorageCreationError;
     }
-//    kDebug(30516) << data.document().toByteArray() << endl;
+//    kDebug(30516) << data.document().toByteArray();
     QByteArray cstr = data.document().toByteArray();
     out->write(cstr);
     out->close();

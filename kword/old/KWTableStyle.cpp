@@ -60,7 +60,7 @@ int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoSt
 
         if ( !defaultStyleDeleted ) {
             KWTableStyle *s = findStyle( defaultStyleName() );
-            //kDebug() << "KWTableStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
+            //kDebug() <<"KWTableStyleCollection::loadOasisStyles looking for" << defaultStyleName() <<", to delete it. Found" << s;
             if(s) // delete the standard style.
                 removeStyle(s);
             defaultStyleDeleted = true;
@@ -72,7 +72,7 @@ int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoSt
         // Style created, now let's try to add it
         sty = static_cast<KWTableStyle *>( addStyle( sty ) );
 
-        kDebug() << " Loaded table cell style " << sty->name() << " - now " << count() << " styles" << endl;
+        kDebug() <<" Loaded table cell style" << sty->name() <<" - now" << count() <<" styles";
         ++stylesLoaded;
     }
     return stylesLoaded;
@@ -197,7 +197,7 @@ void KWTableStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context, 
     m_displayName = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
     if ( m_displayName.isEmpty() )
         m_displayName = m_name;
-    kDebug() << k_funcinfo << m_name << " " << m_displayName << endl;
+    kDebug() << k_funcinfo << m_name <<"" << m_displayName;
 
     KoStyleStack& styleStack = context.styleStack();
     styleStack.setTypeProperties( "table-cell" );

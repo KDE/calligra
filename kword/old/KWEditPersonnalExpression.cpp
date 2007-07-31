@@ -206,7 +206,7 @@ void KWEditPersonnalExpression::init(const QString& filename )
     if ( !file.open( QIODevice::ReadOnly ) )
         return;
 
-    kDebug() << "KWEditPersonnalExpression::init parsing " << filename << endl;
+    kDebug() <<"KWEditPersonnalExpression::init parsing" << filename;
     QDomDocument doc;
     doc.setContent( &file );
     file.close();
@@ -368,7 +368,7 @@ void KWEditPersonnalExpression::saveFile()
     QFile file( locateLocal("data","kword/expression/perso.xml") );
     if ( !file.open( QIODevice::WriteOnly ) )
     {
-        kDebug()<<"Error \n";
+        kDebug()<<"Error";
         return;
     }
     file.write(s,s.length());

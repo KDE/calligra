@@ -38,7 +38,7 @@ KWFrameList::KWFrameList(KWDocument *doc, KWFrame *theFrame) {
 
 QList<KWFrame *> KWFrameList::framesBelow() const {
     QList<KWFrame *> frames;
-//kDebug() << "framesBelow " << endl;
+//kDebug() <<"framesBelow";
 
     // Copy until we find m_frame
     for ( Q3ValueVector<KWFrame*>::const_iterator it = m_frames.begin(), end = m_frames.end(); it != end && *it != m_frame; ++it) {
@@ -49,7 +49,7 @@ QList<KWFrame *> KWFrameList::framesBelow() const {
 }
 
 QList<KWFrame *> KWFrameList::framesOnTop() const {
-//kDebug() << "framesOnTop " << endl;
+//kDebug() <<"framesOnTop";
     QList<KWFrame *> frames;
 
     // Copy from m_frame to the end
@@ -69,7 +69,7 @@ QList<KWFrame *> KWFrameList::framesOnTop() const {
 
 void KWFrameList::setFrames(const Q3PtrList<KWFrame> &frames) {
 #if 0
-    // kDebug(31001) << "KWFrameList::setFrames for " << m_frame->frameSet()->name() << endl;
+    // kDebug(31001) <<"KWFrameList::setFrames for" << m_frame->frameSet()->name();
     m_frames.clear();
     if ( m_doc->layoutViewMode() && !m_doc->layoutViewMode()->hasFrames() )
         return;
@@ -87,7 +87,7 @@ void KWFrameList::setFrames(const Q3PtrList<KWFrame> &frames) {
     for ( ; it.current() ; ++it )
     {
         KWFrame* daFrame = it.current();
-        // kDebug(32001) << "frame: " << daFrame->frameSet()->name() << endl;
+        // kDebug(32001) <<"frame:" << daFrame->frameSet()->name();
         if ( m_frame == daFrame ) {
             m_frames.append( daFrame );
             continue;
@@ -132,7 +132,7 @@ void KWFrameList::update() {
 
 void KWFrameList::updateZOrderFor(const Q3PtrList<KWFrame> &frames) {
 #ifdef DEBUG_SPEED
-    kDebug(32001) << "KWFrameList::updateZOrderFor " << frames.count() << " frames"<< endl;
+    kDebug(32001) <<"KWFrameList::updateZOrderFor" << frames.count() <<" frames";
     QTime dt;
     dt.start();
     int numberAdded = 0;
@@ -151,7 +151,7 @@ void KWFrameList::updateZOrderFor(const Q3PtrList<KWFrame> &frames) {
     }
 
 #ifdef DEBUG_SPEED
-    kDebug(32001) << "  updateZOrderFor took " << (float)(dt.elapsed()) / 1000 << " seconds, added " << numberAdded << " frames" << endl;
+    kDebug(32001) <<"  updateZOrderFor took" << (float)(dt.elapsed()) / 1000 <<" seconds, added" << numberAdded <<" frames";
 #endif
 }
 

@@ -495,7 +495,7 @@ QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,const Cell& 
 {
     QDomElement font_style;
     const Style style = cell.style();
-    kDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow<<endl;
+    kDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow;
     font_style = gnumeric_doc.createElement("gmr:Font");
     font_style.appendChild(gnumeric_doc.createTextNode(style.fontFamily()));
 
@@ -955,7 +955,7 @@ void GNUMERICExport::addSummaryItem(QDomDocument gnumeric_doc, QDomElement summa
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, const QByteArray& to )
 {
-    kDebug(30521) << "Exporting GNUmeric" << endl;
+    kDebug(30521) <<"Exporting GNUmeric";
 
     QDomDocument gnumeric_doc=QDomDocument();
 
@@ -1407,7 +1407,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
                             domNode = domNode.firstChild();
                         }
 
-                        //kDebug(30521) << "---> link, text = " << text << endl;
+                        //kDebug(30521) <<"---> link, text =" << text;
 
                         linkUrl = domRoot.attribute("href");
                         linkText = text;

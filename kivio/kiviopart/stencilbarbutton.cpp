@@ -104,7 +104,7 @@ DragBarButton::~DragBarButton()
   delete m_pClosePix;
   delete m_pIcon;
 
-  kDebug(43000) << "DragBarButton - AHHHHHH I'M DYING!" << endl;
+  kDebug(43000) <<"DragBarButton - AHHHHHH I'M DYING!";
 }
 
 void DragBarButton::drawButton( QPainter* paint )
@@ -254,7 +254,7 @@ void DragBarButton::mouseReleaseEvent( QMouseEvent* ev )
 
     if ( closeRect.contains(ev->pos()))
     {
-       kDebug(43000) << "DragBarButton::mouseReleaseEvent() - Emitting closeRequest" << endl;
+       kDebug(43000) <<"DragBarButton::mouseReleaseEvent() - Emitting closeRequest";
         emit closeRequired(this);
     }
     return;

@@ -198,7 +198,7 @@ void KprKword::convert()
     }
 
     int curPage = -1;
-    //kDebug() << "found " << objList.count() << " objects" << endl;
+    //kDebug() <<"found" << objList.count() <<" objects";
 
     for ( Q3PtrListIterator<KprObject> it(objList); it.current(); ++it )
     {
@@ -206,7 +206,7 @@ void KprKword::convert()
         // Detect the first object of each page
         int page = int( it.current()->y / ptPageHeight );
         bool isTitle = ( page > curPage );
-        //kDebug() << "KprKword::convert y=" << it.current()->y << " ptPageHeight=" << ptPageHeight
+        //kDebug() <<"KprKword::convert y=" << it.current()->y <<" ptPageHeight=" << ptPageHeight
         //          << " isTitle=" << isTitle << endl;
         curPage = page;
 
@@ -245,7 +245,7 @@ void KprKword::convert()
             {
                 int oldLen = text.length();
                 text += textElem.text();
-                //kDebug() << "KprKword::convert text now " << text << endl;
+                //kDebug() <<"KprKword::convert text now" << text;
                 QDomElement outFormatElem = outdoc.createElement( "FORMAT" );
 
                 if ( textElem.attribute( "italic" ).toInt() )

@@ -314,7 +314,7 @@ class ScriptingReader : public QObject
             if( ! m_currentSheet ) return;
             emit changedSheet(sheetname);
             if( m_state != Running ) return;
-            //kDebug()<<"ScriptingReader::readSheet sheetname="<<sheetname<<endl;
+            //kDebug()<<"ScriptingReader::readSheet sheetname="<<sheetname;
             QVariantList range = m_ranges[sheetname];
             if( range.count() > 0 ) {
                 foreach(QVariant r, range) {
@@ -322,7 +322,7 @@ class ScriptingReader : public QObject
                     if( l.count() < 4 ) continue;
                     QRect rect(l[0].toInt(),l[1].toInt(),l[2].toInt(),l[3].toInt());
                     if( rect.isNull() || (rect.x()==0 && rect.y()==0 && rect.width()==0 && rect.height()==0) ) continue;
-                    //kDebug()<<"  string="<<r.toString()<<" rect="<<rect<<endl;
+                    //kDebug()<<"  string="<<r.toString()<<" rect="<<rect;
                     KSpread::Region region(rect, m_currentSheet);
                     readRegion(region);
                     if( m_state != Running ) break;
@@ -338,11 +338,11 @@ class ScriptingReader : public QObject
 
         void readRegion(const KSpread::Region& region) {
             if( ! m_currentSheet || ! region.isValid() ) return;
-            //kDebug()<<"ScriptingReader::readRegion name="<<region.name(m_currentSheet)<<endl;
+            //kDebug()<<"ScriptingReader::readRegion name="<<region.name(m_currentSheet);
             for(KSpread::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                 QRect range = (*it)->rect();
                 if( range.isNull() ) continue;
-                //kDebug() << "  name=" << (*it)->name(m_currentSheet) << " range=" << range << endl;
+                //kDebug() <<"  name=" << (*it)->name(m_currentSheet) <<" range=" << range;
                 const int bottom = range.bottom();
                 m_currentLeft = range.left();
                 m_currentRight = range.right();

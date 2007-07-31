@@ -375,7 +375,7 @@ void kchartDataEditor::setData( KChartPart *part, TableModel *dat )
 				     QString("%1").arg(t.toDouble()));
 		}
                 else if ( t.type() == QVariant::String )
-                    kDebug(35001) << "I cannot handle strings in the table yet"
+                    kDebug(35001) <<"I cannot handle strings in the table yet"
                                    << endl;
                 else {
                     // nothing on purpose
@@ -638,7 +638,7 @@ static int askUserForConfirmation(QWidget *parent)
 //
 void kchartDataEditor::setRows(int rows)
 {
-    kDebug(35001) << "setRows called: rows = " << rows << endl;;
+    kDebug(35001) <<"setRows called: rows =" << rows;;
 
     // Sanity check.  This should never happen since the spinbox has a
     // minvalue of 1, but just to be sure...
@@ -693,7 +693,7 @@ void kchartDataEditor::setRows(int rows)
 //
 void kchartDataEditor::setCols(int cols)
 {
-    kDebug(35001) << "setCols called: cols = " << cols << endl;;
+    kDebug(35001) <<"setCols called: cols =" << cols;;
 
     // Sanity check.  This should never happen since the spinbox has a
     // minvalue of 1, but just to be sure...

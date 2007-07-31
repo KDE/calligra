@@ -99,28 +99,28 @@ void Format::analyze(const QDomNode node)
 		analyzePen(getChild(node, "pen"));
 	if(isChild(node, "bottom-border"))
 	{
-		kDebug(30522) << "bottom-border" << endl;
+		kDebug(30522) <<"bottom-border";
 		_isValidFormat = true;
 		_bottomBorder = new Pen();
 		_bottomBorder->analyze(getChild(getChild(node, "bottom-border"), "pen"));
 	}
 	if(isChild(node, "top-border"))
 	{
-		kDebug(30522) << "top-border" << endl;
+		kDebug(30522) <<"top-border";
 		_isValidFormat = true;
 		_topBorder = new Pen();
 		_topBorder->analyze(getChild(getChild(node, "top-border"), "pen"));
 	}
 	if(isChild(node, "left-border"))
 	{
-		kDebug(30522) << "left-border" << endl;
+		kDebug(30522) <<"left-border";
 		_isValidFormat = true;
 		_leftBorder = new Pen();
 		_leftBorder->analyze(getChild(getChild(node, "left-border"), "pen"));
 	}
 	if(isChild(node, "right-border"))
 	{
-		kDebug(30522) << "right-border" << endl;
+		kDebug(30522) <<"right-border";
 		_isValidFormat = true;
 		_rightBorder = new Pen();
 		_rightBorder->analyze(getChild(getChild(node, "right-border"), "pen"));

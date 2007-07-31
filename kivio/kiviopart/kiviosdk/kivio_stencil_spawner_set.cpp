@@ -47,7 +47,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
 {
   delete m_pSpawners;
   m_pSpawners = NULL;
-  kDebug(43000) << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - " <<  m_name << endl;
+  kDebug(43000) <<"KivioStencilSpawnerSet::~KivioStencilSpawnerSet() -" <<  m_name;
 }
 
 
@@ -165,7 +165,7 @@ QString KivioStencilSpawnerSet::readTitle( const QString &dir )
 
   if( f.open( QIODevice::ReadOnly )==false )
   {
-    kDebug(43000) << "KivioStencilSpawnerSet::readTitle() - Error opening stencil set title: " <<
+    kDebug(43000) <<"KivioStencilSpawnerSet::readTitle() - Error opening stencil set title:" <<
         dir << "/desc" << endl;
     return dir.right(dir.length() - dir.findRev('/')-1);
   }
@@ -212,7 +212,7 @@ QString KivioStencilSpawnerSet::readId( const QString &dir )
 
   if( f.open( QIODevice::ReadOnly )==false )
   {
-    kDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+    kDebug(43000) <<"KivioStencilSpawnerSet::readId() - Error opening stencil set description:" <<
         dir << "/desc" << endl;
     return "";
   }
@@ -235,7 +235,7 @@ QString KivioStencilSpawnerSet::readId( const QString &dir )
     node = node.nextSibling();
   }
 
-  kDebug(43000) << "KivioStencilSpawnerSet::readId() - No id found in "
+  kDebug(43000) <<"KivioStencilSpawnerSet::readId() - No id found in"
   << dir << "/desc" << endl;
 
   return "";
@@ -251,7 +251,7 @@ QString KivioStencilSpawnerSet::readDescription(const QString& dir)
 
   if( f.open( QIODevice::ReadOnly )==false )
   {
-    kDebug(43000) << "KivioStencilSpawnerSet::readId() - Error opening stencil set description: " <<
+    kDebug(43000) <<"KivioStencilSpawnerSet::readId() - Error opening stencil set description:" <<
       dir << "/desc" << endl;
     return "";
   }

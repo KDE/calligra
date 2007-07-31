@@ -69,7 +69,7 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 	while(i < 10)
 	{
 		/*value = _config->readPathEntry( QString("Recent%1").arg(i) );
-		kDebug(30522) << "recent : " << value << endl;
+		kDebug(30522) <<"recent :" << value;
 		if(!value.isEmpty())
 		{
 			_recentList.append( value );
@@ -161,7 +161,7 @@ KSpreadLatexExportDiaImpl::~KSpreadLatexExportDiaImpl()
  */
 void KSpreadLatexExportDiaImpl::reject()
 {
-	kDebug(30522) << "Export cancelled" << endl;
+	kDebug(30522) <<"Export cancelled";
 	QDialog::reject();
 }
 
@@ -172,7 +172,7 @@ void KSpreadLatexExportDiaImpl::reject()
 void KSpreadLatexExportDiaImpl::accept()
 {
 	hide();
-	kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> BEGIN" << endl;
+	kDebug(30522) <<"KSPREAD LATEX EXPORT FILTER --> BEGIN";
 	Config* config = Config::instance();
 
 	/* Document tab */
@@ -202,7 +202,7 @@ void KSpreadLatexExportDiaImpl::accept()
 	config->setEncoding(encodingComboBox->currentText());
 	for(unsigned int index = 0; index < langUsedList->count(); index++)
 	{
-		kDebug(30522) << "lang. : " << langUsedList->item(index)->text() << endl;
+		kDebug(30522) <<"lang. :" << langUsedList->item(index)->text();
 		config->addLanguage(langUsedList->item(index)->text());
 	}
 
@@ -211,21 +211,21 @@ void KSpreadLatexExportDiaImpl::accept()
 		config->setDefaultLanguage(langUsedList->item(0)->text());
 	if( !(langUsedList->currentText().isEmpty()) )
 	{
-		kDebug(30522) << "default lang. : " << langUsedList->currentText() << endl;
+		kDebug(30522) <<"default lang. :" << langUsedList->currentText();
 		config->setDefaultLanguage(langUsedList->currentText());
 	}
 
 	Document doc(_in, _fileOut);
-	kDebug(30522) << "---------- analyze file -------------" << endl;
+	kDebug(30522) <<"---------- analyze file -------------";
 	doc.analyze();
-	kDebug(30522) << "---------- generate file -------------" << endl;
+	kDebug(30522) <<"---------- generate file -------------";
 	doc.generate();
-	kDebug(30522) << "KSPREAD LATEX EXPORT FILTER --> END" << endl;
+	kDebug(30522) <<"KSPREAD LATEX EXPORT FILTER --> END";
 }
 
 void KSpreadLatexExportDiaImpl::addLanguage()
 {
-	kDebug(30522) << "add a new supported language" << languagesList->currentText() << endl;
+	kDebug(30522) <<"add a new supported language" << languagesList->currentText();
 	QString text = languagesList->currentText();
 	languagesList->removeItem(languagesList->currentItem());
 	langUsedList->insertItem(text);
@@ -233,7 +233,7 @@ void KSpreadLatexExportDiaImpl::addLanguage()
 
 void KSpreadLatexExportDiaImpl::removeLanguage()
 {
-	kDebug(30522) << "remove a language" << langUsedList->currentText() << endl;
+	kDebug(30522) <<"remove a language" << langUsedList->currentText();
 	QString text = langUsedList->currentText();
 	langUsedList->removeItem(langUsedList->currentItem());
 	languagesList->insertItem(text);

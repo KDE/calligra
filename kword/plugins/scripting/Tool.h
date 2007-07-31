@@ -99,7 +99,7 @@ namespace Scripting {
 
             /** Set the active/current \a TextCursor object. */
             bool setCursor(QObject* cursor) {
-                kDebug() << "Scripting::Selection::setCursor" << endl;
+                kDebug() <<"Scripting::Selection::setCursor";
                 TextCursor* textcursor = dynamic_cast< TextCursor* >(cursor);
                 if( ! textcursor ) return false;
                 KWView* v = dynamic_cast< KWView* >( m_module->view() );

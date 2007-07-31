@@ -205,7 +205,7 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
     if ( !styleStack.hasChildNode( ooNS::style, "tab-stops" ) ) // 3.11.10
         return;
     KoXmlElement tabStops = styleStack.childNode( ooNS::style, "tab-stops" );
-    //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() << " tab stops in layout." << endl;
+    //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() <<" tab stops in layout.";
     for ( KoXmlNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
         KoXmlElement tabStop = it.toElement();
@@ -497,7 +497,7 @@ void OoUtils::createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo)
 
 KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlDocument& doc, KoStore *m_store )
 {
-    kDebug(30518) << "loadAndParse: Trying to open " << fileName << endl;
+    kDebug(30518) <<"loadAndParse: Trying to open" << fileName;
 
     if (!m_store->open(fileName))
     {
@@ -528,7 +528,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& d
         return KoFilter::ParsingError;
     }
 
-    kDebug(30519) << "File " << fileName << " loaded and parsed!" << endl;
+    kDebug(30519) <<"File" << fileName <<" loaded and parsed!";
 
     return KoFilter::OK;
 
@@ -536,7 +536,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& d
 
 KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlDocument& doc, KZip * m_zip)
 {
-    kDebug(30519) << "Trying to open " << filename << endl;
+    kDebug(30519) <<"Trying to open" << filename;
 
     if (!m_zip)
     {
@@ -556,7 +556,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
-    kDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
+    kDebug(30519) <<"Entry" << filename <<" has size" << f->size();
     QIODevice* io = f->createDevice();
     KoFilter::ConversionStatus convertStatus = loadAndParse( io,doc, filename );
     delete io;
@@ -566,7 +566,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
 KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_zip )
 {
     const QString filename( "Thumbnails/thumbnail.png" );
-    kDebug(30519) << "Trying to open thumbnail " << filename << endl;
+    kDebug(30519) <<"Trying to open thumbnail" << filename;
 
     if (!m_zip)
     {
@@ -587,7 +587,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
     QIODevice* io = f->createDevice();
-    kDebug(30519) << "Entry " << filename << " has size " << f->size() << endl;
+    kDebug(30519) <<"Entry" << filename <<" has size" << f->size();
 
     if ( ! io->open( QIODevice::ReadOnly ) )
     {
@@ -614,7 +614,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
 
     delete io;
 
-    kDebug(30519) << "File " << filename << " loaded!" << endl;
+    kDebug(30519) <<"File" << filename <<" loaded!";
 
     return KoFilter::OK;
 }

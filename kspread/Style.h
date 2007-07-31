@@ -435,7 +435,7 @@ public:
     SubStyle() {}
     virtual ~SubStyle() {}
     virtual Style::Key type() const { return Style::DefaultStyleKey; }
-    virtual void dump() const { kDebug() << debugData() << endl; }
+    virtual void dump() const { kDebug() << debugData(); }
     virtual QString debugData( bool withName = true ) const { QString out; if (withName) out = name(Style::DefaultStyleKey); return out; }
     static QString name( Style::Key key );
 };
@@ -465,7 +465,7 @@ class NamedStyle : public SubStyle
 public:
     NamedStyle( const QString& n ) : SubStyle(), name( n ) {}
     virtual Style::Key type() const { return Style::NamedStyleKey; }
-    virtual void dump() const { kDebug() << debugData() << endl; }
+    virtual void dump() const { kDebug() << debugData(); }
     virtual QString debugData( bool withName = true ) const { QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out; }
     QString name;
 };
@@ -476,7 +476,7 @@ class SubStyleOne : public SubStyle
 public:
     SubStyleOne( const Value1& v = Value1() ) : SubStyle(), value1( v ) {}
     virtual Style::Key type() const { return key; }
-    virtual void dump() const { kDebug(36006) << debugData() << endl; }
+    virtual void dump() const { kDebug(36006) << debugData(); }
     virtual QString debugData( bool withName = true ) const
     { QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out; }
     Value1 value1;

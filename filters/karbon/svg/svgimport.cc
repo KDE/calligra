@@ -78,7 +78,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
 	else
 		strMime="text/plain";
 
-	/*kDebug(30514) << "File extension: -" << strExt << "- Compression: " << strMime << endl;*/
+	/*kDebug(30514) <<"File extension: -" << strExt <<"- Compression:" << strMime;*/
 
 	QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
@@ -690,10 +690,10 @@ void SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &co
 				{
 					// adjust to bbox
 					KoRect bbox = obj->boundingBox();
-					//kDebug() << "bbox x : " << bbox.x() << endl;
-					//kDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
-					//kDebug() << gc->fill.gradient().origin().x() << endl;
-					//kDebug() << gc->fill.gradient().vector().x() << endl;
+					//kDebug() <<"bbox x :" << bbox.x();
+					//kDebug() <<"!!!!!!bbox y :" << bbox.y();
+					//kDebug() << gc->fill.gradient().origin().x();
+					//kDebug() << gc->fill.gradient().vector().x();
 					double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
 					double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
 					gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
@@ -706,11 +706,11 @@ void SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &co
 					offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
 					offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
 					gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-					//kDebug() << offsety << endl;
-					//kDebug() << gc->fill.gradient().origin().x() << endl;
-					//kDebug() << gc->fill.gradient().origin().y() << endl;
-					//kDebug() << gc->fill.gradient().vector().x() << endl;
-					//kDebug() << gc->fill.gradient().vector().y() << endl;
+					//kDebug() << offsety;
+					//kDebug() << gc->fill.gradient().origin().x();
+					//kDebug() << gc->fill.gradient().origin().y();
+					//kDebug() << gc->fill.gradient().vector().x();
+					//kDebug() << gc->fill.gradient().vector().y();
 				}
 				gc->fill.gradient().transform( gradHelper->gradientTransform );
 

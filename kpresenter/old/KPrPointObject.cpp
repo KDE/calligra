@@ -66,11 +66,11 @@ QPointF KPrPointObject::getRealOrig() const
 
 void KPrPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo* info )
 {
-    kDebug(33001) << "KPrPointObject::loadOasis" << endl;
+    kDebug(33001) <<"KPrPointObject::loadOasis";
 
     KPrShadowObject::loadOasis( element, context, info );
     QString d = element.attributeNS( KoXmlNS::svg, "d", QString::null);
-    kDebug(33001) << "path d: " << d << endl;
+    kDebug(33001) <<"path d:" << d;
 
     KPrSVGPathParser parser;
     points = parser.getPoints( d, getType() == OT_FREEHAND );

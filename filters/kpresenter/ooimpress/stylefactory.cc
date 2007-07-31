@@ -727,7 +727,7 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
         int tmp=0;
         if(pageEffect.hasAttribute("value"))
             tmp=pageEffect.attribute("value").toInt();
-        kDebug(30518)<<" tmp :"<<tmp<<endl;
+        kDebug(30518)<<" tmp :"<<tmp;
         switch( tmp )
         {
         case -1:
@@ -755,7 +755,7 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
         case 8:
         case 9:
         case 10:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 11:
             m_page_effect = "spiralin-left";
@@ -767,13 +767,13 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
         case 16:
         case 17:
         case 18:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 19:
             m_page_effect = "fade-from-top";
             break;
         case 20:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 21:
             m_page_effect = "fade-from-bottom";
@@ -782,40 +782,40 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
             m_page_effect = "roll-from-bottom";
             break;
         case 23:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 24:
             m_page_effect = "roll-from-right";
             break;
         case 25:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 26:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 27:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 28:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 29:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 30:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 31:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 32:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 33:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 34:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         case 35:
             m_page_effect = "dissolve";
@@ -833,10 +833,10 @@ PageStyle::PageStyle( StyleFactory * styleFactory, QDomElement & e, const uint i
             m_page_effect = "fade-from-upperleft";
             break;
         case 40:
-            kDebug(30518)<<" this style is not defined :"<<tmp<<endl;
+            kDebug(30518)<<" this style is not defined :"<<tmp;
             break;
         default:
-            kDebug(30518)<<" style page effect not define : "<<tmp<<endl;
+            kDebug(30518)<<" style page effect not define :"<<tmp;
             break;
         }
     }
@@ -1033,7 +1033,7 @@ GraphicStyle::GraphicStyle( StyleFactory * styleFactory, QDomElement & e, const 
         }
 
     }
-    kDebug(30518)<<" alignment :"<<m_textAlignment<<endl;
+    kDebug(30518)<<" alignment :"<<m_textAlignment;
 
     m_name = QString( "gr%1" ).arg( index );
     if ( !pen.isNull() )

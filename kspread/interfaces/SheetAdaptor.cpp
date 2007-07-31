@@ -239,7 +239,7 @@ int SheetAdaptor::lastRow() const
 // bool SheetAdaptor::processDynamic( const DCOPCString& fun, const QByteArray&/*data*/,
 //                                         DCOPCString& replyType, QByteArray &replyData )
 // {
-//     kDebug(36001) << "Calling '" << fun.data() << '\'' << endl;
+//     kDebug(36001) <<"Calling '" << fun.data() << '\'';
 //     // Does the name follow the pattern "foobar()" ?
 //     uint len = fun.length();
 //     if ( len < 3 )

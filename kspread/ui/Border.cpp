@@ -300,7 +300,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
         bool m_frozen = false;
         if ( m_frozen )
         {
-            kDebug(36001) << "selected: T " << rect.top() << " B " << rect.bottom() << endl;
+            kDebug(36001) <<"selected: T" << rect.top() <<" B" << rect.bottom();
 
             int i;
             QList<int> hiddenRows;
@@ -436,7 +436,7 @@ void VBorder::slotAutoScroll(const QPoint& scrollDistance)
   //              initiated in this header.
   if (!m_bMousePressed)
     return;
-//   kDebug() << "VBorder::slotAutoScroll(" << scrollDistance << " " << endl;
+//   kDebug() <<"VBorder::slotAutoScroll(" << scrollDistance <<"";
   if (scrollDistance.y() > 0 || scrollDistance.y() < -height())
   {
     m_pView->vertScrollBar()->setValue( m_pView->vertScrollBar()->value() + scrollDistance.y() );
@@ -545,7 +545,7 @@ void VBorder::paintEvent( QPaintEvent* event )
 //     ElapsedTime et( "Painting vertical header", ElapsedTime::PrintOnlyTime );
 
   // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
-  // kDebug(36004) << event->rect() << endl;
+  // kDebug(36004) << event->rect();
 
   // painting rectangle
   const QRectF paintRect = m_pView->zoomHandler()->viewToDocument( event->rect() );
@@ -734,12 +734,12 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
   {
     int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
-    kDebug() << "evPos: " << ev_PosX << ", x: " << x << ", COL: " << tmpCol << endl;
+    kDebug() <<"evPos:" << ev_PosX <<", x:" << x <<", COL:" << tmpCol;
     while ( ev_PosX > x && ( !m_bResize ) && tmpCol <= KS_colMax )
     {
       double w = sheet->columnFormat( tmpCol )->width();
 
-      kDebug() << "evPos: " << ev_PosX << ", x: " << x << ", w: " << w << ", COL: " << tmpCol << endl;
+      kDebug() <<"evPos:" << ev_PosX <<", x:" << x <<", w:" << w <<", COL:" << tmpCol;
 
       ++tmpCol;
       if ( tmpCol > KS_colMax )
@@ -762,11 +762,11 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     tmpCol = sheet->leftColumn( dWidth - ev_PosX + 1, tmp2 );
     if ( sheet->columnFormat( tmpCol )->isHiddenOrFiltered() && tmpCol == 0 )
     {
-      kDebug() << "No resize: " << tmpCol << ", " << sheet->columnFormat( tmpCol )->isHiddenOrFiltered() << endl;
+      kDebug() <<"No resize:" << tmpCol <<"," << sheet->columnFormat( tmpCol )->isHiddenOrFiltered();
       m_bResize = false;
     }
 
-    kDebug() << "Resize: " << m_bResize << endl;
+    kDebug() <<"Resize:" << m_bResize;
   }
   else
   {
@@ -802,7 +802,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
     if ( sheet->layoutDirection() == Qt::RightToLeft )
     {
       m_iResizedColumn = sheet->leftColumn( ev_PosX - 1, tmp );
-      // kDebug() << "RColumn: " << m_iResizedColumn << ", PosX: " << ev_PosX << endl;
+      // kDebug() <<"RColumn:" << m_iResizedColumn <<", PosX:" << ev_PosX;
 
       if ( !sheet->isProtected() )
         paintSizeIndicator( _ev->pos().x() );
@@ -815,7 +815,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
         paintSizeIndicator( _ev->pos().x() );
     }
 
-    // kDebug() << "Column: " << m_iResizedColumn << endl;
+    // kDebug() <<"Column:" << m_iResizedColumn;
   }
   else
   {
@@ -956,7 +956,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         bool m_frozen = false;
         if ( m_frozen )
         {
-            kDebug(36001) << "selected: L " << rect.left() << " R " << rect.right() << endl;
+            kDebug(36001) <<"selected: L" << rect.left() <<" R" << rect.right();
 
             int i;
             QList<int> hiddenCols;
@@ -1138,7 +1138,7 @@ void HBorder::slotAutoScroll(const QPoint& scrollDistance)
   //              initiated in this header.
   if (!m_bMousePressed)
     return;
-//   kDebug() << "HBorder::slotAutoScroll(" << scrollDistance << " " << endl;
+//   kDebug() <<"HBorder::slotAutoScroll(" << scrollDistance <<"";
   if (scrollDistance.x() > 0 || scrollDistance.x() < -width())
   {
     m_pView->horzScrollBar()->setValue( m_pView->horzScrollBar()->value() + scrollDistance.x() );
@@ -1281,7 +1281,7 @@ void HBorder::paintEvent( QPaintEvent* event )
 //     ElapsedTime et( "Painting horizontal header", ElapsedTime::PrintOnlyTime );
 
   // FIXME Stefan: Make use of clipping. Find the repaint call after the scrolling.
-  // kDebug(36004) << event->rect() << endl;
+  // kDebug(36004) << event->rect();
 
   // painting rectangle
   const QRectF paintRect = m_pView->zoomHandler()->viewToDocument( event->rect() );
@@ -1447,7 +1447,7 @@ void HBorder::focusOutEvent( QFocusEvent* )
 {
 //     if ( m_scrollTimer->isActive() )
 //         m_scrollTimer->stop();
-    kDebug() << "HBorder::focusOutEvent(" << endl;
+    kDebug() <<"HBorder::focusOutEvent(";
     m_pView->disableAutoScroll();
     m_bMousePressed = false;
 }

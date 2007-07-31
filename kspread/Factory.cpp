@@ -39,7 +39,7 @@ KAboutData* Factory::s_aboutData = 0;
 Factory::Factory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
-  //kDebug(36001) << "Factory::Factory()" << endl;
+  //kDebug(36001) <<"Factory::Factory()";
   // Create our instance, so that it becomes KGlobal::instance if the
   // main app is KSpread.
   (void)global();
@@ -48,7 +48,7 @@ Factory::Factory( QObject* parent, const char* name )
 
 Factory::~Factory()
 {
-  //kDebug(36001) << "Factory::~Factory()" << endl;
+  //kDebug(36001) <<"Factory::~Factory()";
   delete s_aboutData;
   s_aboutData=0;
   delete s_global;

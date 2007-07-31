@@ -48,7 +48,7 @@ QString CheckAndEscapeXmlText(const QString& strText)
             // - could be a bug in the RTF file
             // - could be not supported encoding.
             // In any case, we must replace this character.
-            kDebug(30515) << "Control character in XML stream: " << test << endl;
+            kDebug(30515) <<"Control character in XML stream:" << test;
             strReturn.replace(i, 1, '?'); // Replacement character
         }
     }

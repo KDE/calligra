@@ -139,7 +139,7 @@ KarbonPart::createViewInstance( QWidget* parent )
 void
 KarbonPart::removeView( KoView *view )
 {
-	kDebug(38000) << "KarbonPart::removeView" << endl;
+	kDebug(38000) <<"KarbonPart::removeView";
 	KoDocument::removeView( view );
 }
 
@@ -202,8 +202,8 @@ KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
         m_pageLayout.height = getAttribute( doc, "height", 841.891 );
 	}
 
-    kDebug() << " width=" << m_pageLayout.width << endl;
-    kDebug() << " height=" << m_pageLayout.height << endl;
+    kDebug() <<" width=" << m_pageLayout.width;
+    kDebug() <<" height=" << m_pageLayout.height;
         KoXmlElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
         if( !borders.isNull() )
     {
@@ -248,18 +248,18 @@ KarbonPart::saveXML()
 bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
                        const KoXmlDocument & settings, KoStore* store )
 {
-    kDebug(38000) << "Start loading OASIS document..." /*<< doc.toString()*/ << endl;
+    kDebug(38000) <<"Start loading OASIS document..." /*<< doc.toString()*/;
 
     KoXmlElement contents = doc.documentElement();
-    kDebug(38000) << "Start loading OASIS document..." << contents.text() << endl;
-    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
-    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
-    kDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
+    kDebug(38000) <<"Start loading OASIS document..." << contents.text();
+    kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().localName();
+    kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
+    kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().isElement();
     KoXmlElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
-    kDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
+    kDebug(38000) <<"Start loading OASIS document..." << body.text();
     if( body.isNull() )
     {
-        kDebug(38000) << "No office:body found!" << endl;
+        kDebug(38000) <<"No office:body found!";
         setErrorMessage( i18n( "Invalid OASIS document. No office:body tag found." ) );
         return false;
     }
@@ -267,7 +267,7 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
     body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
     if(body.isNull())
     {
-        kDebug(38000) << "No office:drawing found!" << endl;
+        kDebug(38000) <<"No office:drawing found!";
         setErrorMessage( i18n( "Invalid OASIS document. No office:drawing tag found." ) );
         return false;
     }
@@ -275,7 +275,7 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
     KoXmlElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
     if(page.isNull())
     {
-        kDebug(38000) << "No office:drawing found!" << endl;
+        kDebug(38000) <<"No office:drawing found!";
         setErrorMessage( i18n( "Invalid OASIS document. No draw:page tag found." ) );
         return false;
     }
@@ -475,7 +475,7 @@ void KarbonPart::saveOasisSettings( KoStore * store )
 void
 KarbonPart::addCommand( VCommand* cmd, bool repaint )
 {
-	kDebug(38000) << "KarbonPart::addCommand: please port to new command handling" << endl;
+	kDebug(38000) <<"KarbonPart::addCommand: please port to new command handling";
         delete cmd;
 }
 
@@ -497,7 +497,7 @@ KarbonPart::repaintAllViews( bool /*repaint*/ )
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect)
 {
-	kDebug(38000) << "**** part->paintContent()" << endl;
+	kDebug(38000) <<"**** part->paintContent()";
 
 	QRectF r = rect;
 	double zoomFactorX = double( r.width() ) / double( document().pageSize().width() );
@@ -512,12 +512,12 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect)
 	//VPainter *p = new VQPainter( painter.device() );
 	p->begin();
 	p->setZoomFactor( zoomFactor );
-	kDebug(38000) << "painter.worldMatrix().dx() : " << painter.matrix().dx() << endl;
-	kDebug(38000) << "painter.worldMatrix().dy() : " << painter.matrix().dy() << endl;
-	kDebug(38000) << "rect.x() : "<< rect.x() << endl;
-	kDebug(38000) << "rect.y() : "<< rect.y() << endl;
-	kDebug(38000) << "rect.width() : "<< rect.width() << endl;
-	kDebug(38000) << "rect.height() : "<< rect.height() << endl;
+	kDebug(38000) <<"painter.worldMatrix().dx() :" << painter.matrix().dx();
+	kDebug(38000) <<"painter.worldMatrix().dy() :" << painter.matrix().dy();
+	kDebug(38000) <<"rect.x() :"<< rect.x();
+	kDebug(38000) <<"rect.y() :"<< rect.y();
+	kDebug(38000) <<"rect.width() :"<< rect.width();
+	kDebug(38000) <<"rect.height() :"<< rect.height();
 	r = document().boundingBox();
 	QMatrix mat = painter.matrix();
 	mat.scale( 1, -1 );
@@ -623,7 +623,7 @@ KarbonPart::addShape( KoShape* shape )
         // only add shape to active layer if it has no parent yet
         if( ! shape->parent() )
         {
-            kDebug(38000) << "shape has no parent, adding to the active layer!" << endl;
+            kDebug(38000) <<"shape has no parent, adding to the active layer!";
             KoShapeLayer *activeLayer = canvasController->canvas()->shapeManager()->selection()->activeLayer();
             if( activeLayer )
                 activeLayer->addChild( shape );

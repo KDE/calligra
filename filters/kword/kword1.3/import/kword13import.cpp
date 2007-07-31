@@ -47,7 +47,7 @@ KWord13Import::KWord13Import(QObject* parent, const QStringList &)
 
 bool KWord13Import::parseInfo( QIODevice* io, KWord13Document& kwordDocument )
 {
-    kDebug(30520) << "Starting KWord13Import::parseInfo" << endl;
+    kDebug(30520) <<"Starting KWord13Import::parseInfo";
     QDomDocument doc;
     // Error variables for QDomDocument::setContent
     QString errorMsg;
@@ -64,13 +64,13 @@ bool KWord13Import::parseInfo( QIODevice* io, KWord13Document& kwordDocument )
     // In documentinfo.xml, the text data is in the grand-children of the document element
     for ( QDomNode node = docElement.firstChild(); !node.isNull(); node = node.nextSibling() )
     {
-        kDebug(30520) << "Child " << node.nodeName() << endl;
+        kDebug(30520) <<"Child" << node.nodeName();
         if ( !node.isElement() )
             continue; // Comment, PI...
         const QString nodeName( node.nodeName() );
         for ( QDomNode node2 = node.firstChild(); !node2.isNull(); node2 = node2.nextSibling() )
         {
-            kDebug(30520) << "Grand-child " << node2.nodeName() << endl;
+            kDebug(30520) <<"Grand-child" << node2.nodeName();
             if ( !node2.isElement() )
                 continue;
             const QString nodeName2 ( nodeName + ':' + node2.nodeName() );
@@ -78,7 +78,7 @@ bool KWord13Import::parseInfo( QIODevice* io, KWord13Document& kwordDocument )
             kwordDocument.m_documentInfo[ nodeName2 ] = element.text();
         }
     }
-    kDebug(30520) << "Quitting KWord13Import::parseInfo" << endl;
+    kDebug(30520) <<"Quitting KWord13Import::parseInfo";
     return true;
 }
 
@@ -129,13 +129,13 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
     KoStore* store = KoStore::createStore( fileName, KoStore::Read );
     if ( store && store->hasFile( "maindoc.xml" ) )
     {
-        kDebug(30520) << "Maindoc.xml found in KoStore!" << endl;
+        kDebug(30520) <<"Maindoc.xml found in KoStore!";
 
         // We do not really care about errors while reading/parsing documentinfo
         store->open( "documentinfo.xml" );
         KoStoreDevice ioInfo( store );
         ioInfo.open( QIODevice::ReadOnly );
-        kDebug (30520) << "Processing document info... " <<  endl;
+        kDebug (30520) <<"Processing document info...";
         if ( ! parseInfo ( &ioInfo, kwordDocument ) )
         {
             kWarning(30520) << "Parsing documentinfo.xml has failed. Ignoring!" << endl;
@@ -152,7 +152,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         }
         KoStoreDevice ioMain( store );
         ioMain.open( QIODevice::ReadOnly );
-        kDebug (30520) << "Processing root... " <<  endl;
+        kDebug (30520) <<"Processing root...";
         if ( ! parseRoot ( &ioMain, kwordDocument ) )
         {
             kWarning(30520) << "Parsing maindoc.xml has failed! Aborting!" << endl;
@@ -165,7 +165,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         if ( store->open( "preview.png" ) )
         {
 
-            kDebug(30520) << "Preview found!" << endl;
+            kDebug(30520) <<"Preview found!";
             KoStoreDevice ioPreview( store );
             ioPreview.open( QIODevice::ReadOnly );
             const QByteArray image ( ioPreview.readAll() );
@@ -187,7 +187,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         }
         else
         {
-            kDebug(30520) << "No preview found!" << endl;
+            kDebug(30520) <<"No preview found!";
         }
     }
     else
@@ -215,14 +215,14 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
     }
 
     // We have finished with the input store/file, so close the store (already done for a raw XML file)
-    kDebug(30520) << "Deleting input store..." << endl;
+    kDebug(30520) <<"Deleting input store...";
     delete store;
     store = 0;
-    kDebug(30520) << "Input store deleted!" << endl;
+    kDebug(30520) <<"Input store deleted!";
 
     KWord13OasisGenerator generator;
 
-    kDebug(30520) << __FILE__ << ":" << __LINE__ << endl;
+    kDebug(30520) << __FILE__ <<":" << __LINE__;
 
     if ( ! generator.prepare( kwordDocument ) )
     {
@@ -244,7 +244,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         return KoFilter::StupidError;
     }
 
-    kDebug(30520) << "Filter has finished!" << endl;
+    kDebug(30520) <<"Filter has finished!";
 
     return KoFilter::OK;
 }

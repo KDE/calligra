@@ -81,7 +81,7 @@ void VariableFormat::analyzeFormat(const QDomNode node)
 	
 	/* Parameter analysis */
 	analyzeParam(node);
-	kDebug(30522) << "ANALYZE A FORMAT" << endl;
+	kDebug(30522) <<"ANALYZE A FORMAT";
 	
 	/* Child markup analysis */
 	if(isChild(node, "FONT"))
@@ -108,7 +108,7 @@ void VariableFormat::analyzeFormat(const QDomNode node)
 		analyzeNote(getChild(node, "NOTE"));
 	if(isChild(node, "TYPE"))
 		analyzeType(getChild(node, "TYPE"));
-	kDebug(30522) << "END OF A FORMAT" << endl;
+	kDebug(30522) <<"END OF A FORMAT";
 }
 
 /*******************************************/

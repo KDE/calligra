@@ -43,10 +43,10 @@ KWTextImage::KWTextImage( KWTextDocument *textdoc, const QString & filename )
 
 void KWTextImage::setImage( const KoPictureCollection & collection )
 {
-    kDebug(32001) << "Loading text image " << m_image.getKey().toString() << " (in KWTextImage::setImage)" << endl;
+    kDebug(32001) <<"Loading text image" << m_image.getKey().toString() <<" (in KWTextImage::setImage)";
     m_image=collection.findPicture( m_image.getKey() );
     Q_ASSERT( !m_image.isNull() );
-    kDebug(32001) << "size: " << m_image.getOriginalSize().width() << "x" << m_image.getOriginalSize().height() << endl;
+    kDebug(32001) <<"size:" << m_image.getOriginalSize().width() <<"x" << m_image.getOriginalSize().height();
     resize();
 }
 
@@ -61,7 +61,7 @@ void KWTextImage::resize()
         width = KoTextZoomHandler::ptToLayoutUnitPt( width );
         height = m_image.getOriginalSize().height();
         height = KoTextZoomHandler::ptToLayoutUnitPt( height );
-        kDebug() << "KWTextImage::resize: " << width << ", " << height << endl;
+        kDebug() <<"KWTextImage::resize:" << width <<"," << height;
         // no! m_image.setSize( QSize( width, height ) );
     }
 }
@@ -75,7 +75,7 @@ void KWTextImage::drawCustomItem( QPainter* p, int x, int y, int wpix, int hpix,
     // (wpix,hpix) is the size of the inline item (in pixels)
     // (cx,cy,cw,ch) is the rectangle to be painted, in pixels too
     if ( m_image.isNull() ) {
-        kDebug() << "KWTextImage::draw null image!" << endl;
+        kDebug() <<"KWTextImage::draw null image!";
         p->fillRect( x, y, 50, 50, cg.dark() );
         return;
     }

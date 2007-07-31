@@ -291,7 +291,7 @@ void Msod::drawShape(
     operands >> data.spid;
     operands >> data.grfPersistent.info;
     bytes -= 8;
-	kDebug(s_area) << "shape-id: " << data.spid << " type: " << funcTab[shapeType] << " (" << shapeType << ")" <<
+	kDebug(s_area) <<"shape-id:" << data.spid <<" type:" << funcTab[shapeType] <<" (" << shapeType <<")" <<
         (data.grfPersistent.fields.fGroup ? " group" : "") <<
         (data.grfPersistent.fields.fChild ? " child" : "") <<
         (data.grfPersistent.fields.fPatriarch ? " patriarch" : "") <<
@@ -441,7 +441,7 @@ void Msod::invokeHandler(
     }
     else
     {
-        kDebug(s_area) << "invokeHandler: opcode: " << funcTab[i].name <<
+        kDebug(s_area) <<"invokeHandler: opcode:" << funcTab[i].name <<
             " operands: " << bytes << endl;
 
         // We don't invoke the handler directly on the incoming operands, but
@@ -785,7 +785,7 @@ void Msod::opClientanchor(Header &, quint32, QDataStream &operands)
     } data;
 
     operands >> data.unknown;
-    kDebug(s_area) << "client anchor: " << data.unknown << endl;
+    kDebug(s_area) <<"client anchor:" << data.unknown;
 }
 
 void Msod::opClientdata(Header &, quint32, QDataStream &operands)
@@ -796,7 +796,7 @@ void Msod::opClientdata(Header &, quint32, QDataStream &operands)
     } data;
 
     operands >> data.unknown;
-    kDebug(s_area) << "client data: " << data.unknown << endl;
+    kDebug(s_area) <<"client data:" << data.unknown;
 }
 
 void Msod::opClientrule(
@@ -817,7 +817,7 @@ void Msod::opClienttextbox(
     } data;
 
     operands >> data.unknown;
-    kDebug(s_area) << "client textbox: 0x" << QString::number(data.unknown,16) << endl;
+    kDebug(s_area) <<"client textbox: 0x" << QString::number(data.unknown,16);
 }
 
 void Msod::opClsid(
@@ -859,11 +859,11 @@ void Msod::opDg(Header &, quint32, QDataStream &operands)
     } data;
 
     operands >> data.csp >> data.spidCur;
-    kDebug(s_area) << "drawing id: " << data.spidCur << endl;
+    kDebug(s_area) <<"drawing id:" << data.spidCur;
     m_isRequiredDrawing = (m_requestedShapeId == data.spidCur);
     if (m_isRequiredDrawing)
     {
-        kDebug(s_area) << "found requested drawing" << endl;
+        kDebug(s_area) <<"found requested drawing";
     }
 }
 
@@ -896,7 +896,7 @@ void Msod::opDgg(Header &, quint32, QDataStream &operands)
     unsigned i;
 
     operands >> data.spidMax >> data.cidcl >> data.cspSaved >> data.cdgSaved;
-    kDebug(s_area) << data.cspSaved << " shapes in " <<
+    kDebug(s_area) << data.cspSaved <<" shapes in" <<
         data.cidcl - 1 << " clusters in " <<
         data.cdgSaved << " drawings" << endl;
     for (i = 0; i < data.cidcl - 1; i++)
@@ -1020,7 +1020,7 @@ void Msod::skip(quint32 bytes, QDataStream &operands)
         quint32 i;
         quint8 discard;
 
-        kDebug(s_area) << "skip: " << bytes << endl;
+        kDebug(s_area) <<"skip:" << bytes;
         for (i = 0; i < bytes; i++)
         {
             operands >> discard;
@@ -1172,7 +1172,7 @@ void Msod::Options::walk(quint32 bytes, QDataStream &operands)
             break;
         case 128:
             m_lTxid = op.value;
-    kDebug(s_area) << "textbox: 0x" << QString::number(op.value,16) << endl;
+    kDebug(s_area) <<"textbox: 0x" << QString::number(op.value,16);
             break;
         case 260:
             if (op.opcode.fields.fBid)
@@ -1286,7 +1286,7 @@ void Msod::Options::walk(quint32 bytes, QDataStream &operands)
             break;
         }
         if (!unsupported)
-            kDebug(s_area) << "simple option: " <<
+            kDebug(s_area) <<"simple option:" <<
                 op.opcode.fields.pid << endl;
     }
 
@@ -1333,7 +1333,7 @@ void Msod::Options::walk(quint32 bytes, QDataStream &operands)
             break;
         }
         if (!unsupported)
-            kDebug(s_area) << "complex option: " <<
+            kDebug(s_area) <<"complex option:" <<
                 op.opcode.fields.pid << " operands: " << op.value  << endl;
         complexLength -= op.value;
     }

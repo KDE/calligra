@@ -636,7 +636,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     if (m_wnProc->state() == QProcess::Running) {
         // should never happen
-        kDebug(31000) << "Warning: findTerm(): process is already running?!" << endl;
+        kDebug(31000) <<"Warning: findTerm(): process is already running?!";
         return;
     }
 
@@ -702,7 +702,7 @@ void Thesaurus::findTermWordnet(const QString &term)
         result += "\n</table></qt>\n";
         m_resultTextBrowser->setHtml(result);
 //         m_resultbox->setContentsPos(0,0);
-        //kDebug() << result << endl;
+        //kDebug() << result;
     }
 }
 

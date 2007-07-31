@@ -198,9 +198,9 @@ VGroup::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 		{
 			QDomElement e = list.item( i ).toElement();
 
-			kDebug(38000) << "VGroup::loadOasis: e.tagName() = " << e.tagName() << endl;
-			kDebug(38000) << "VGroup::loadOasis: e.namespaceURI() = " << e.namespaceURI() << endl;
-			kDebug(38000) << "VGroup::loadOasis: e.localName() = " << e.localName() << endl;
+			kDebug(38000) <<"VGroup::loadOasis: e.tagName() =" << e.tagName();
+			kDebug(38000) <<"VGroup::loadOasis: e.namespaceURI() =" << e.namespaceURI();
+			kDebug(38000) <<"VGroup::loadOasis: e.localName() =" << e.localName();
 
 			if( e.namespaceURI() != KoXmlNS::draw )
 				continue;

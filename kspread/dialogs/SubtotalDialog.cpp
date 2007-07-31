@@ -114,7 +114,7 @@ void SubtotalDialog::slotOk()
   if ( !m_summaryOnly->isChecked() )
   {
     int y = top + 1;
-    kDebug() << "Starting in row " << y << endl;
+    kDebug() <<"Starting in row" << y;
     while ( y <= bottom )
     {
       addRow = true;
@@ -123,7 +123,7 @@ void SubtotalDialog::slotOk()
       if ( ignoreEmptyCells && (newText.length() == 0) )
       {
         ++y;
-        kDebug() << "Still the same -> " << y << endl;
+        kDebug() <<"Still the same ->" << y;
         continue;
       }
 
@@ -132,7 +132,7 @@ void SubtotalDialog::slotOk()
         int saveY = y;
         for (int x = 0; x < numOfCols; ++x)
         {
-          kDebug() << "Column: " << x << ", " << columns[x] << endl;
+          kDebug() <<"Column:" << x <<"," << columns[x];
           if (columns[x] != -1)
           {
             if (!addSubtotal( mainCol, columns[x], y - 1, lastChangedRow, addRow, oldText + result))
@@ -200,7 +200,7 @@ void SubtotalDialog::slotUser1()
 
 void SubtotalDialog::removeSubtotalLines()
 {
-  kDebug() << "Removing subtotal lines" << endl;
+  kDebug() <<"Removing subtotal lines";
 
   int r = m_selection.right();
   int l = m_selection.left();
@@ -211,7 +211,7 @@ void SubtotalDialog::removeSubtotalLines()
 
   for ( int y = m_selection.bottom(); y >= t; --y )
   {
-    kDebug() << "Checking row: " << y << endl;
+    kDebug() <<"Checking row:" << y;
     bool containsSubtotal = false;
     for (int x = l; x <= r; ++x )
     {
@@ -229,7 +229,7 @@ void SubtotalDialog::removeSubtotalLines()
 
     if ( containsSubtotal )
     {
-      kDebug() << "Line " << y << " contains a subtotal " << endl;
+      kDebug() <<"Line" << y <<" contains a subtotal";
       QRect rect( l, y, m_selection.width(), 1 );
 
         ShiftManipulator* manipulator = new ShiftManipulator();
@@ -241,7 +241,7 @@ void SubtotalDialog::removeSubtotalLines()
         m_selection.setHeight( m_selection.height() - 1 );
     }
   }
-  kDebug() << "Done removing subtotals" << endl;
+  kDebug() <<"Done removing subtotals";
 }
 
 void SubtotalDialog::fillColumnBoxes()
@@ -295,7 +295,7 @@ void SubtotalDialog::fillFunctionBox()
 bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
                                   bool addRow, QString const & text )
 {
-    kDebug() << "Adding subtotal: " << mainCol << ", " << column << ", Rows: " << row << ", " << topRow
+    kDebug() <<"Adding subtotal:" << mainCol <<"," << column <<", Rows:" << row <<"," << topRow
             << ": addRow: " << addRow << ", Text: " << text << endl;
     if ( addRow )
     {

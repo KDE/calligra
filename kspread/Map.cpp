@@ -176,7 +176,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     KoOasisSettings::Items firstView = viewMap.entry( 0 );
 
     KoOasisSettings::NamedMap sheetsMap = firstView.namedMap( "Tables" );
-    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist : "<< !sheetsMap.isNull() <<endl;
+    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist :"<< !sheetsMap.isNull();
     if ( !sheetsMap.isNull() )
     {
       foreach ( Sheet* sheet, d->lstSheets )
@@ -186,7 +186,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     }
 
     QString activeSheet = firstView.parseConfigItemString( "ActiveTable" );
-    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet<<endl;
+    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet;
 
     if (!activeSheet.isEmpty())
     {
@@ -332,8 +332,8 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
         KoXmlElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
-            //kDebug()<<"  Map::loadOasis tableElement is not null \n";
-            //kDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName()<<endl;
+            //kDebug()<<"  Map::loadOasis tableElement is not null";
+            //kDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName();
 
             // make it slightly faster
             KoXml::load(sheetElement);
@@ -368,7 +368,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
             // make it slightly faster
             KoXml::load(sheetElement);
 
-            //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName()<<endl;
+            //kDebug()<<"tableElement.nodeName() bis :"<<sheetElement.nodeName();
             if( sheetElement.nodeName() == "table:table" )
             {
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString() ).isEmpty() )

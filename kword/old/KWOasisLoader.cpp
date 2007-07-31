@@ -119,7 +119,7 @@ QList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* c
         {
             context.styleStack().save();
             const QString bodyTagLocalName = tag.localName();
-            kDebug() << k_funcinfo << bodyTagLocalName << endl;
+            kDebug() << k_funcinfo << bodyTagLocalName;
             if ( bodyTagLocalName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
             {
                 KWFrame * frame = loadFrame( tag, context, KoPoint( 10, 10 ) /*offset pasted object*/ );
@@ -135,7 +135,7 @@ QList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* c
         }
     }
 
-    //kDebug() << "KWOasisLoader::execute calling doc->completePasting" << endl;
+    //kDebug() <<"KWOasisLoader::execute calling doc->completePasting";
     m_doc->completeOasisPasting();
     m_doc->deleteLoadingInfo();
     return frames;
@@ -233,7 +233,7 @@ void KWOasisLoader::loadOasisIgnoreList( const KoOasisSettings& settings )
     if ( !configurationSettings.isNull() )
     {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        kDebug()<<" ignorelist :"<<ignorelist<<endl;
+        kDebug()<<" ignorelist :"<<ignorelist;
         m_doc->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
     }
 }
@@ -249,7 +249,7 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
         const QString localName = elem.localName();
         if ( localName == "text-box" )
         {
-            //kDebug()<<" append text-box\n";
+            //kDebug()<<" append text-box";
             frame = loadOasisTextBox( frameTag, elem, context );
             break;
         }
@@ -300,22 +300,22 @@ KWFrame* KWOasisLoader::loadOasisTextBox( const QDomElement& frameTag, const QDo
     QString frameName = frameTag.attributeNS( KoXmlNS::draw, "name", QString::null );
     QString chainNextName = tag.attributeNS( KoXmlNS::draw, "chain-next-name", QString::null );
     if ( !chainNextName.isEmpty() && loadingInfo ) { // 'B' in the above example
-        kDebug(32001) << "Loading " << frameName << " : next-in-chain=" << chainNextName << endl;
+        kDebug(32001) <<"Loading" << frameName <<" : next-in-chain=" << chainNextName;
         // Check if we already loaded that frame (then we need to go 'before' it)
         KWFrame* nextFrame = loadingInfo->frameByName( chainNextName );
         if ( nextFrame ) {
             fs = dynamic_cast<KWTextFrameSet *>( nextFrame->frameSet() );
             chainNextName.clear(); // already found, no need to store it
-            kDebug(32001) << "  found " << nextFrame << " -> frameset " << ( fs ? fs->name() : QString::null ) << endl;
+            kDebug(32001) <<"  found" << nextFrame <<" -> frameset" << ( fs ? fs->name() : QString::null );
         }
     }
     KWFrame* prevFrame = loadingInfo->chainPrevFrame( frameName );
-    //kDebug(32001) << "Loading " << frameName << " : chainPrevFrame=" << prevFrame << endl;
+    //kDebug(32001) <<"Loading" << frameName <<" : chainPrevFrame=" << prevFrame;
     if ( prevFrame ) {
         if ( fs ) // we are between prevFrame and nextFrame. They'd better be for the same fs!!
             Q_ASSERT( fs == prevFrame->frameSet() );
         fs = dynamic_cast<KWTextFrameSet *>( prevFrame->frameSet() );
-        //kDebug(32001) << "  found " << prevFrame << " -> frameset " << fs->name() << endl;
+        //kDebug(32001) <<"  found" << prevFrame <<" -> frameset" << fs->name();
     }
     KWFrame* frame = 0;
     if ( !fs ) {

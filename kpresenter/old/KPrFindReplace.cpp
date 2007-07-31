@@ -47,7 +47,7 @@ KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDi
 
 KPrFindReplace::~KPrFindReplace()
 {
-    //kDebug(33001)() << "KPrFindReplace::~KPrFindReplace m_destroying=" << m_destroying << endl;
+    //kDebug(33001)() <<"KPrFindReplace::~KPrFindReplace m_destroying=" << m_destroying;
 }
 
 void KPrFindReplace::emitNewCommand(KCommand *cmd)

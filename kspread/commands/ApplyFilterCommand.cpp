@@ -54,7 +54,7 @@ void ApplyFilterCommand::redo()
     for (int i = start + 1; i <= end; ++i)
     {
         const bool isFiltered = !database.filter().evaluate(database, i);
-//         kDebug() << "Filtering column/row " << i << "? " << isFiltered << endl << endl;
+//         kDebug() <<"Filtering column/row" << i <<"?" << isFiltered << endl;
         if (database.orientation() == Qt::Vertical)
         {
             m_undoData[i] = sheet->rowFormat(i)->isFiltered();

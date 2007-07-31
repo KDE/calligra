@@ -37,7 +37,7 @@ RowElement::~RowElement()
 
 void RowElement::layout( const AttributeManager* am )
 {
-    kDebug(39001) << "layout Row" << endl;
+    kDebug(39001) <<"layout Row";
 
     Q_UNUSED( am )          // there are no attributes that can be processed here
 
@@ -50,7 +50,7 @@ void RowElement::layout( const AttributeManager* am )
     double baselineToBottom = 0.0;
     foreach( BasicElement* child, m_childElements  )  // iterate through the children
     {
-        kDebug(39001) << "new origin:" << QPointF( width, 0.0 ) << endl;
+        kDebug(39001) <<"new origin:" << QPointF( width, 0.0 );
         child->setOrigin( QPointF( width, 0.0 ) );    // set their origin
         topToBaseline = qMax( topToBaseline, child->baseLine() );
         baselineToBottom = qMax( baselineToBottom, child->height()-child->baseLine() );

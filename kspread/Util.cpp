@@ -55,7 +55,7 @@ int KSpread::Util::decodeColumnLabelText( const QString &_col )
         else if( _col[i] >= 'a' && _col[i] <= 'z' )
             col += counterColumn * ( _col[i].toLatin1() - 'A' - offset + 1 );
         else
-            kDebug(36001) << "Util::decodeColumnLabelText: Wrong characters in label text for col:'" << _col << '\'' << endl;
+            kDebug(36001) <<"Util::decodeColumnLabelText: Wrong characters in label text for col:'" << _col << '\'';
     }
     return col;
 }
@@ -268,7 +268,7 @@ QString KSpread::Oasis::convertRangeToRef( const QString & sheetName, const QRec
 
 QString KSpread::Oasis::encodePen( const QPen & pen )
 {
-//     kDebug()<<"encodePen( const QPen & pen ) :"<<pen<<endl;
+//     kDebug()<<"encodePen( const QPen & pen ) :"<<pen;
     // NOTE Stefan: QPen api docs:
     //              A line width of zero indicates a cosmetic pen. This means
     //              that the pen width is always drawn one pixel wide,
@@ -295,7 +295,7 @@ QString KSpread::Oasis::encodePen( const QPen & pen )
         break;
     default: break;
     }
-    kDebug()<<" encodePen :"<<s<<endl;
+    kDebug()<<" encodePen :"<<s;
     if ( pen.color().isValid() )
     {
         s+=' ';
@@ -334,7 +334,7 @@ QPen KSpread::Oasis::decodePen( const QString &border )
     else if ( _style =="dot-dot-dash" )
         pen.setStyle( Qt::DashDotDotLine );
     else
-        kDebug()<<" style undefined : "<<_style<<endl;
+        kDebug()<<" style undefined :"<<_style;
 
     if ( _color.isEmpty() )
         pen.setColor( QColor() );

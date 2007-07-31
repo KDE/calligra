@@ -868,7 +868,7 @@ void KoEnhancedPathFormula::debugTokens( const TokenList &tokens )
 {
 #ifndef NDEBUG
     for( int i = 0; i < tokens.count(); i++ )
-        kDebug() << tokens[i].text() << endl;
+        kDebug() << tokens[i].text();
 #endif
 }
 
@@ -890,7 +890,7 @@ void KoEnhancedPathFormula::debugOpcodes()
             case Opcode::Neg:      ctext = "Neg"; break;
             default: ctext = "Unknown"; break;
         }
-        kDebug() << ctext << endl;
+        kDebug() << ctext;
     }
 #endif
 }

@@ -81,7 +81,7 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
 
 void NodeTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<k_funcinfo<<index.column()<<endl;
+    kDebug()<<k_funcinfo<<index.column();
 }
 
 //-----------------------------------
@@ -122,7 +122,7 @@ void TaskEditor::draw()
 
 void TaskEditor::setGuiActive( bool activate )
 {
-    kDebug()<<k_funcinfo<<activate<<endl;
+    kDebug()<<k_funcinfo<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -132,13 +132,13 @@ void TaskEditor::setGuiActive( bool activate )
 
 void TaskEditor::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
-    kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
+    kDebug()<<k_funcinfo<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
 void TaskEditor::slotSelectionChanged( const QModelIndexList list)
 {
-    kDebug()<<k_funcinfo<<list.count()<<endl;
+    kDebug()<<k_funcinfo<<list.count();
     slotEnableActions();
 }
 
@@ -186,7 +186,7 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     if ( node == 0 ) {
         return;
     }
-    kDebug()<<k_funcinfo<<node->name()<<" : "<<pos<<endl;
+    kDebug()<<k_funcinfo<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -199,13 +199,13 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
         default:
             name = "node_popup";
     }
-    kDebug()<<k_funcinfo<<name<<endl;
+    kDebug()<<k_funcinfo<<name;
     emit requestPopupMenu( name, pos );
 }
 
 void TaskEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -292,19 +292,19 @@ void TaskEditor::setupGui()
 
 void TaskEditor::slotOptions()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     ItemViewSettupDialog dlg( m_view->slaveView() );
     dlg.exec();
 }
 
 void TaskEditor::slotAddTask()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
         Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
         edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
-	kDebug()<<"test"<<t->type()<<endl;
+	kDebug()<<"test"<<t->type();
         return;
     }
     Node *sib = selectedNode();
@@ -317,7 +317,7 @@ void TaskEditor::slotAddTask()
 
 void TaskEditor::slotAddMilestone()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
         Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
@@ -336,7 +336,7 @@ void TaskEditor::slotAddMilestone()
 
 void TaskEditor::slotAddSubtask()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     Node *parent = selectedNode();
     if ( parent == 0 ) {
         return;
@@ -357,7 +357,7 @@ void TaskEditor::edit( QModelIndex i )
 
 void TaskEditor::slotDeleteTask()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QList<Node*> lst = selectedNodes();
     while ( true ) {
         // remove children of selected tasks, as parents delete their children
@@ -378,31 +378,31 @@ void TaskEditor::slotDeleteTask()
         }
         lst.removeAt( lst.indexOf( ch ) );
     }
-    //foreach ( Node* n, lst ) { kDebug()<<k_funcinfo<<n->name()<<endl; }
+    //foreach ( Node* n, lst ) { kDebug()<<k_funcinfo<<n->name(); }
     emit deleteTaskList( lst );
 }
 
 void TaskEditor::slotIndentTask()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     emit indentTask();
 }
 
 void TaskEditor::slotUnindentTask()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     emit unindentTask();
 }
 
 void TaskEditor::slotMoveTaskUp()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     emit moveTaskUp();
 }
 
 void TaskEditor::slotMoveTaskDown()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     emit moveTaskDown();
 }
 

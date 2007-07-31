@@ -872,7 +872,7 @@ void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
     if ( !configurationSettings.isNull() )
     {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        //kDebug()<<" ignorelist :"<<ignorelist<<endl;
+        //kDebug()<<" ignorelist :"<<ignorelist;
         d->spellListIgnoreAll = ignorelist.split( ',', QString::SkipEmptyParts );
     }
 }
@@ -1013,7 +1013,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     const KoXmlElement* defaultColumnStyle = oasisStyles.defaultStyle( "table-column" );
     if ( defaultColumnStyle )
     {
-//       kDebug() << "style:default-style style:family=\"table-column\"" << endl;
+//       kDebug() <<"style:default-style style:family=\"table-column\"";
       KoStyleStack styleStack;
       styleStack.push( *defaultColumnStyle );
       styleStack.setTypeProperties( "table-column" );
@@ -1022,7 +1022,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         const double width = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "column-width" ), -1.0 );
         if ( width != -1.0 )
         {
-//           kDebug() << "\tstyle:column-width: " << width << endl;
+//           kDebug() <<"\tstyle:column-width:" << width;
           d->defaultColumnFormat->setWidth( width );
         }
       }
@@ -1032,7 +1032,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     const KoXmlElement* defaultRowStyle = oasisStyles.defaultStyle( "table-row" );
     if ( defaultRowStyle )
     {
-//       kDebug() << "style:default-style style:family=\"table-row\"" << endl;
+//       kDebug() <<"style:default-style style:family=\"table-row\"";
       KoStyleStack styleStack;
       styleStack.push( *defaultRowStyle );
       styleStack.setTypeProperties( "table-row" );
@@ -1041,7 +1041,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         const double height = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "row-height" ), -1.0 );
         if ( height != -1.0 )
         {
-//           kDebug() << "\tstyle:row-height: " << height << endl;
+//           kDebug() <<"\tstyle:row-height:" << height;
           d->defaultRowFormat->setHeight( height );
         }
       }
@@ -1071,7 +1071,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     emit sigProgress(-1);
 
     //display loading time
-    kDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+    kDebug(36001) <<"Loading took" << (float)(dt.elapsed()) / 1000.0 <<" seconds";
     return true;
 }
 
@@ -1216,7 +1216,7 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
   initConfig();
   emit sigProgress(-1);
 
-   kDebug(36001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+   kDebug(36001) <<"Loading took" << (float)(dt.elapsed()) / 1000.0 <<" seconds";
 
   emit sig_refreshView();
 
@@ -1300,14 +1300,14 @@ void Doc::finishLoading()
 
 bool Doc::completeLoading( KoStore* /* _store */ )
 {
-  kDebug(36001) << "------------------------ COMPLETING --------------------" << endl;
+  kDebug(36001) <<"------------------------ COMPLETING --------------------";
 
   d->isLoading = false;
 
   foreach ( KoView* view, views() )
     static_cast<View *>( view )->initialPosition();
 
-  kDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
+  kDebug(36001) <<"------------------------ COMPLETION DONE --------------------";
 
   setModified( false );
   return true;
@@ -1595,7 +1595,7 @@ void Doc::enableRedo( bool _b )
 void Doc::paintContent( QPainter& painter, const QRect& rect)
 {
 #ifdef KSPREAD_DOC_ZOOM
-//     kDebug(36001) << "paintContent() called on " << rect << endl;
+//     kDebug(36001) <<"paintContent() called on" << rect;
 
 //     ElapsedTime et( "Doc::paintContent1" );
 
@@ -1624,7 +1624,7 @@ void Doc::paintContent( QPainter& painter, const QRect& rect)
     prect.setHeight( (int) (prect.height() * painter.matrix().m22()) );
 
     // paint the content, now zoom is correctly set
-    kDebug(36001)<<"paintContent-------------------------------------\n";
+    kDebug(36001)<<"paintContent-------------------------------------";
     painter.save();
     painter.setMatrix( matrix );
     paintContent( painter, prect, sheet, false );
@@ -1758,8 +1758,8 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
 void Doc::loadOasisCellValidation( const KoXmlElement&body )
 {
     KoXmlNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
-    kDebug()<<"void Doc::loadOasisCellValidation( const KoXmlElement&body ) \n";
-    kDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
+    kDebug()<<"void Doc::loadOasisCellValidation( const KoXmlElement&body )";
+    kDebug()<<"validation.isNull ?"<<validation.isNull();
     if ( !validation.isNull() )
     {
         KoXmlNode n = validation.firstChild();
@@ -1768,13 +1768,13 @@ void Doc::loadOasisCellValidation( const KoXmlElement&body )
             if ( n.isElement() )
             {
                 KoXmlElement element = n.toElement();
-                //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName()<<endl;
+                //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName();
                 if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
                     d->loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString() ), element );
-                    kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table, "name", QString() )<<endl;
+                    kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table,"name", QString() );
                 }
                 else {
-                    kDebug()<<" Tag not recognize :"<<element.tagName()<<endl;
+                    kDebug()<<" Tag not recognize :"<<element.tagName();
                 }
             }
         }
@@ -1784,7 +1784,7 @@ void Doc::loadOasisCellValidation( const KoXmlElement&body )
 void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
 {
     KoXmlNode settings = KoDom::namedItemNS( body, KoXmlNS::table, "calculation-settings" );
-    kDebug() << "Calculation settings found? "<< !settings.isNull() << endl;
+    kDebug() <<"Calculation settings found?"<< !settings.isNull();
     if ( !settings.isNull() )
     {
         KoXmlElement element = settings.toElement();
@@ -1848,7 +1848,7 @@ void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
                 }
                 else
                 {
-                    kDebug() << "Doc: Error on loading null date. "
+                    kDebug() <<"Doc: Error on loading null date."
                              << "Value type """ << valueType << """ not handled"
                              << ", falling back to default." << endl;
                     // NOTE Stefan: I don't know why different types are possible here!
@@ -1988,13 +1988,13 @@ void Doc::addDamage( Damage* damage )
     Q_CHECK_PTR( damage );
 
     if ( damage->type() == Damage::Cell )
-        kDebug(36007) << "Adding\t " << *static_cast<CellDamage*>(damage) << endl;
+        kDebug(36007) <<"Adding\t" << *static_cast<CellDamage*>(damage);
     else if ( damage->type() == Damage::Sheet )
-        kDebug(36007) << "Adding\t " << *static_cast<SheetDamage*>(damage) << endl;
+        kDebug(36007) <<"Adding\t" << *static_cast<SheetDamage*>(damage);
     else if ( damage->type() == Damage::Selection )
-        kDebug(36007) << "Adding\t " << *static_cast<SelectionDamage*>(damage) << endl;
+        kDebug(36007) <<"Adding\t" << *static_cast<SelectionDamage*>(damage);
     else
-        kDebug(36007) << "Adding\t " << *damage << endl;
+        kDebug(36007) <<"Adding\t" << *damage;
 
     d->damages.append( damage );
 
@@ -2029,7 +2029,7 @@ void Doc::handleDamages( const QList<Damage*>& damages )
         if( damage->type() == Damage::Cell )
         {
             CellDamage* cellDamage = static_cast<CellDamage*>( damage );
-            kDebug(36007) << "Processing\t " << *cellDamage << endl;
+            kDebug(36007) <<"Processing\t" << *cellDamage;
             Sheet* const damagedSheet = cellDamage->sheet();
             const Region region = cellDamage->region();
 
@@ -2059,7 +2059,7 @@ void Doc::handleDamages( const QList<Damage*>& damages )
         if( damage->type() == Damage::Sheet )
         {
             SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
-            kDebug(36007) << "Processing\t " << *sheetDamage << endl;
+            kDebug(36007) <<"Processing\t" << *sheetDamage;
 //             Sheet* damagedSheet = sheetDamage->sheet();
 
             if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
@@ -2071,7 +2071,7 @@ void Doc::handleDamages( const QList<Damage*>& damages )
         if( damage->type() == Damage::Workbook )
         {
             WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>( damage );
-            kDebug(36007) << "Processing\t " << *damage << endl;
+            kDebug(36007) <<"Processing\t" << *damage;
 
             workbookChanges |= workbookDamage->changes();
             if ( workbookDamage->changes() & WorkbookDamage::Formula )
@@ -2081,7 +2081,7 @@ void Doc::handleDamages( const QList<Damage*>& damages )
             continue;
         }
 
-        kDebug(36007) << "Unhandled\t " << *damage << endl;
+        kDebug(36007) <<"Unhandled\t" << *damage;
     }
 
     // Update the named areas.

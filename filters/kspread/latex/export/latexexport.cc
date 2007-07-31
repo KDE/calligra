@@ -50,7 +50,7 @@ KoFilter::ConversionStatus LATEXExport::convert( const QByteArray& from, const Q
         delete in;
         return KoFilter::FileNotFound;
     }
-		kDebug(30522) << "In the kspread latex export filter..." << endl;
+		kDebug(30522) <<"In the kspread latex export filter...";
     /* input file Reading */
     in->close();
 

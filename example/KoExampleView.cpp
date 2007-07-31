@@ -68,12 +68,12 @@ void ExampleView::updateReadWrite( bool /*readwrite*/ )
 
 void ExampleView::copy()
 {
-    kDebug(31000) << "ExampleView::copy(): COPY called" << endl;
+    kDebug(31000) <<"ExampleView::copy(): COPY called";
 }
 
 void ExampleView::cut()
 {
-    kDebug(31000) << "ExampleView::cut(): CUT called" << endl;
+    kDebug(31000) <<"ExampleView::cut(): CUT called";
 }
 
 #include "KoExampleView.moc"

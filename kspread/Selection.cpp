@@ -495,7 +495,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
     d->activeElement--;
   }
 
-  kDebug() << k_funcinfo << endl;
+  kDebug() << k_funcinfo;
 
   if (!sheet)
   {
@@ -757,7 +757,7 @@ void Selection::setActiveElement(int pos)
 {
   if (pos >= cells().count() || pos < 0 )
   {
-    kDebug() << "Selection::setActiveElement: position exceeds list" << endl;
+    kDebug() <<"Selection::setActiveElement: position exceeds list";
     d->activeElement = 0;
     return;
   }
@@ -800,14 +800,14 @@ void Selection::fixSubRegionDimension()
 {
   if (d->activeSubRegionStart > cells().count())
   {
-    kDebug() << "Selection::fixSubRegionDimension: start position exceeds list" << endl;
+    kDebug() <<"Selection::fixSubRegionDimension: start position exceeds list";
     d->activeSubRegionStart = 0;
     d->activeSubRegionLength = cells().count();
     return;
   }
   if (d->activeSubRegionStart + d->activeSubRegionLength > cells().count())
   {
-    kDebug() << "Selection::fixSubRegionDimension: length exceeds list" << endl;
+    kDebug() <<"Selection::fixSubRegionDimension: length exceeds list";
     d->activeSubRegionLength = cells().count() - d->activeSubRegionStart;
     return;
   }
@@ -815,7 +815,7 @@ void Selection::fixSubRegionDimension()
 
 void Selection::setActiveSubRegion(uint start, uint length)
 {
-//   kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo;
   d->activeElement = start;
   d->activeSubRegionStart = start;
   d->activeSubRegionLength = length;
@@ -1022,10 +1022,10 @@ void Selection::emitChanged(const Region& region)
 
 void Selection::dump() const
 {
-  kDebug() << *this << endl;
-  kDebug() << "d->activeElement: " << d->activeElement << endl;
-  kDebug() << "d->activeSubRegionStart: " << d->activeSubRegionStart << endl;
-  kDebug() << "d->activeSubRegionLength: " << d->activeSubRegionLength << endl;
+  kDebug() << *this;
+  kDebug() <<"d->activeElement:" << d->activeElement;
+  kDebug() <<"d->activeSubRegionStart:" << d->activeSubRegionStart;
+  kDebug() <<"d->activeSubRegionLength:" << d->activeSubRegionLength;
 }
 
 /***************************************************************************

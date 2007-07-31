@@ -164,7 +164,7 @@ static const unsigned int numOasisChartTypes
     loadingContext.fillStyleStack( chartElem, KoXmlNS::chart, "style-name" );
 
     const QString fillColor = styleStack.property( KoXmlNS::draw, "fill-color" );
-    kDebug() << "fillColor=" << fillColor << endl;
+    kDebug() <<"fillColor=" << fillColor;
 
     styleStack.restore();
 #endif
@@ -200,7 +200,7 @@ void KChartParams::loadOasisFont( KoOasisLoadingContext& context, QFont& font, Q
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) { // 3.10.14
         double pointSize = styleStack.fontSize();
         font.setPointSizeF( pointSize );
-        kDebug(35001) << "font size: " << pointSize << endl;
+        kDebug(35001) <<"font size:" << pointSize;
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "font-weight" ) ) { // 3.10.24
         QString fontWeight = styleStack.property( KoXmlNS::fo, "font-weight" );
@@ -235,7 +235,7 @@ bool KChartParams::loadOasis( const KoXmlElement     &chartElem,
     // Find out what KChart charttype the OASIS charttype corresponds to.
     for ( unsigned int i = 0 ; i < numOasisChartTypes ; ++i ) {
         if ( chartClass == oasisChartTypes[i].oasisClass ) {
-            kDebug(35001) << "found chart of type " << chartClass << endl;
+            kDebug(35001) <<"found chart of type" << chartClass;
 	    //cerr << "found chart of type " << chartClass.latin1() << "\n";
 
             setChartType( oasisChartTypes[i].chartType );
@@ -247,7 +247,7 @@ bool KChartParams::loadOasis( const KoXmlElement     &chartElem,
     // If we can't find out what charttype it is, we might as well end here.
     if ( !knownType ) {
         errorMessage = i18n( "Unknown chart type %1" ,chartClass );
-        kDebug(35001) << errorMessage << endl;
+        kDebug(35001) << errorMessage;
         return false;
     }
 
@@ -457,7 +457,7 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 
     tmp = plotareaElem.attributeNS( KoXmlNS::chart, "style-name",
 				    QString() );
-    //kDebug(35001) << "Style name for the plot area: " << tmp << endl;
+    //kDebug(35001) <<"Style name for the plot area:" << tmp;
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
     loadingContext.fillStyleStack( plotareaElem, KoXmlNS::chart, "style-name", "chart" );
@@ -483,7 +483,7 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 	// FIXME: Vertical is ignored. At least store it so we can
 	//        save it again even if we don't support it.
 
-	//kDebug(35001) << "  ======>  Vertical: " << tmp << "  <======" << endl;
+	//kDebug(35001) <<"  ======>  Vertical:" << tmp <<"  <======";
 	// Set the bar chart subtype.
 	if ( styleStack.property( KoXmlNS::chart, "stacked" ) == "true" )
 	    setBarChartSubType( BarStacked );
@@ -595,7 +595,7 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 
 	tmp = axisElem.attributeNS( KoXmlNS::chart, "name",
 				    QString());
-	//kDebug(35001) << "Got axis " << tmp << endl;
+	//kDebug(35001) <<"Got axis" << tmp;
 	//cerr << "Got axis " << tmp.latin1() << "\n";
 	if ( tmp == "primary-x" )
 	    xAxisElem = axisElem;
@@ -621,7 +621,7 @@ bool KChartParams::loadOasisPlotarea( const KoXmlElement     &plotareaElem,
 #if 0
     const QString fillColor = styleStack.property( KoXmlNS::draw,
 						      "fill-color" );
-    kDebug() << "fillColor=" << fillColor << endl;
+    kDebug() <<"fillColor=" << fillColor;
 #endif
 
     //cerr << "<<< ==========================================================\n";
@@ -660,7 +660,7 @@ bool KChartParams::loadOasisAxis( const KoXmlElement      &axisElem,
     //	 << "\n";
 
     tmp = axisElem.attributeNS( KoXmlNS::chart, "style-name", QString() );
-    //kDebug(35001) << "Style name for the axis: " << tmp << endl;
+    //kDebug(35001) <<"Style name for the axis:" << tmp;
     //cerr << "Style name for the axis: " << tmp.latin1() << "\n";
     styleStack.save();
     styleStack.setTypeProperties( "chart" ); // load chart properties
@@ -737,7 +737,7 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     QString subTitle( header2Text() );
     if ( !subTitle.isEmpty() ) {
 
-        kDebug(32001) << "header rect: " << headerFooterRect( KDChartParams::HdFtPosHeader2 ) << endl;
+        kDebug(32001) <<"header rect:" << headerFooterRect( KDChartParams::HdFtPosHeader2 );
         QRect rect( headerFooterRect( KDChartParams::HdFtPosHeader2 ) );
         bodyWriter->startElement( "chart:subtitle" );
         bodyWriter->addAttributePt( "svg:x", rect.x() );

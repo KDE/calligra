@@ -30,14 +30,14 @@ namespace KPlato
 
 ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidget(parent,name)
 {
-    kDebug() << "------------> ChartWidget :: Constructor"<<endl;
+    kDebug() <<"------------> ChartWidget :: Constructor";
     is_bcwp_draw=false;
     is_bcws_draw=true;
     is_acwp_draw=false;
 
     draw( p );
     
-    kDebug() << "ChartWidget :: Constructor Ended"<<endl;
+    kDebug() <<"ChartWidget :: Constructor Ended";
 
 }
  
@@ -74,7 +74,7 @@ void ChartWidget::draw( Project &p )
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
-   kDebug()<<k_funcinfo<<size()<<endl;
+   kDebug()<<k_funcinfo<<size();
     //this->updateGeometry();
     QPainter painter(this);
 
@@ -85,16 +85,16 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
         painter.setPen(QColor(Qt::black));
         chartEngine.api(bcwpPoints, bcwpPoints_display, size() );
         painter.drawPolyline(QPolygonF(bcwpPoints_display));
-        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display)<<endl;
+        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
         is_bcwp_draw=true;
     }
 
     if(is_bcws_draw==true){
         painter.setPen(QColor(Qt::red));
-        kDebug()<<" Height : "<<size().height()<<" Width : "<<size().width()<<endl;
+        kDebug()<<" Height :"<<size().height()<<" Width :"<<size().width();
         chartEngine.api( bcwsPoints, bcwsPoints_display, size() );
         painter.drawPolyline(QPolygonF(bcwsPoints_display));
-        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display)<<endl;
+        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
         is_bcws_draw=true;
     }
 
@@ -103,7 +103,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
         painter.setPen(QColor(Qt::green));
         chartEngine.api( acwpPoints, acwpPoints_display, size() );
         painter.drawPolyline(QPolygonF(acwpPoints_display));
-        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display)<<endl;
+        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
         is_acwp_draw=true;
     }
 
@@ -131,7 +131,7 @@ void ChartWidget::drawBasicChart(QPainter & painter)
 
     //Y
     painter.drawLine(QLine(LEFTMARGIN,TOPMARGIN,LEFTMARGIN,size().height()-BOTTOMMARGIN));
-    kDebug()<<"maxYpercent: "<<maxYPercent<<endl;
+    kDebug()<<"maxYpercent:"<<maxYPercent;
     float MarginY_base =(size().height()-(TOPMARGIN+BOTTOMMARGIN))/(maxYPercent/10);// Number of division : 10% to 10%
     float MarginY=0;
     while(Ypercent<=maxYPercent)

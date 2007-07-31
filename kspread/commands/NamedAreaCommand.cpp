@@ -71,7 +71,7 @@ bool NamedAreaCommand::preProcessing()
 
 bool NamedAreaCommand::mainProcessing()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     if (!m_reverse)
     {
         if (!m_oldArea.isEmpty())

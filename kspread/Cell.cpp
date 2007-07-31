@@ -496,7 +496,7 @@ bool Cell::needsPrinting() const
     }
 
     if ( style.hasAttribute( Style::BackgroundColor ) ) {
-        kDebug(36004) << "needsPrinting: Has background color" << endl;
+        kDebug(36004) <<"needsPrinting: Has background color";
         QColor backgroundColor = style.backgroundColor();
 
         // We don't need to print anything, if the background is white opaque or fully transparent.
@@ -716,7 +716,7 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
             ++pos;
             if ( row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax )
             {
-                kDebug(36003) << "Cell::decodeFormula: row or column out of range (col: " << col << " | row: " << row << ')' << endl;
+                kDebug(36003) <<"Cell::decodeFormula: row or column out of range (col:" << col <<" | row:" << row << ')';
                 erg = "=\"#### " + i18n("REFERENCE TO COLUMN OR ROW IS OUT OF RANGE") + '"';
                 return erg;
             }
@@ -742,7 +742,7 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
 
 bool Cell::makeFormula()
 {
-//   kDebug(36002) << k_funcinfo << endl;
+//   kDebug(36002) << k_funcinfo;
 
     // sanity check
     if ( !isFormula() )
@@ -804,7 +804,7 @@ double Cell::height() const
 // parses the text
 void Cell::parseUserInput( const QString& text )
 {
-//   kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo;
 
     // empty string?
     if ( text.isEmpty() )
@@ -874,7 +874,7 @@ void Cell::parseUserInput( const QString& text )
         Validity validity = this->validity();
         if ( !validity.testValidity( this ) )
         {
-            kDebug() << "Validation failed" << endl;
+            kDebug() <<"Validation failed";
             //reapply old value if action == stop
             setFormula( oldFormula );
             setUserInput( oldUserInput );
@@ -1205,7 +1205,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         // get the next cell and set the index to the adjacent cell
         nextCell = sheet()->cellStorage()->nextInRow( j++, row );
       }
-      kDebug(36003) << "Cell::saveOasis: empty cell in column " << column << " "
+      kDebug(36003) <<"Cell::saveOasis: empty cell in column" << column <<""
                     << "repeated " << repeated << " time(s)" << endl;
 
       if ( repeated > 1 )
@@ -1220,13 +1220,13 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     }
     if ( isFormula() )
     {
-      //kDebug(36003) << "Formula found" << endl;
+      //kDebug(36003) <<"Formula found";
       QString formula = Oasis::encodeFormula( userInput(), locale() );
       xmlwriter.addAttribute( "table:formula", formula );
     }
     else if ( !link().isEmpty() )
     {
-        //kDebug(36003)<<"Link found \n";
+        //kDebug(36003)<<"Link found";
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
         //Reference cell is started by '#'
@@ -1330,7 +1330,7 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
 
 bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext )
 {
-    kDebug(36003) << "*** Loading cell properties ***** at " << name() << endl;
+    kDebug(36003) <<"*** Loading cell properties ***** at" << name();
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
     loadOasisCellText( element );
@@ -1341,7 +1341,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     bool isFormula = false;
     if ( element.hasAttributeNS( KoXmlNS::table, "formula" ) )
     {
-        kDebug(36003)<<" formula :"<<element.attributeNS( KoXmlNS::table, "formula", QString() )<<endl;
+        kDebug(36003)<<" formula :"<<element.attributeNS( KoXmlNS::table,"formula", QString() );
         isFormula = true;
         QString oasisFormula( element.attributeNS( KoXmlNS::table, "formula", QString() ) );
         //necessary to remove it to load formula from oocalc2.0 (use namespace)
@@ -1360,7 +1360,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     //
     if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kDebug(36003)<<" validation-name: "<<element.attributeNS( KoXmlNS::table, "validation-name", QString() )<<endl;
+        kDebug(36003)<<" validation-name:"<<element.attributeNS( KoXmlNS::table,"validation-name", QString() );
         Validity validity;
         validity.loadOasisValidation( this, element.attributeNS( KoXmlNS::table, "validation-name", QString() ) );
         if ( !validity.isEmpty() )
@@ -1373,7 +1373,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
     if( element.hasAttributeNS( KoXmlNS::office, "value-type" ) )
     {
         const QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString() );
-        kDebug(36003)<<"  value-type: " << valuetype << endl;
+        kDebug(36003)<<"  value-type:" << valuetype;
         if( valuetype == "boolean" )
         {
             const QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString() ).toLower();
@@ -1433,7 +1433,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         else if ( valuetype == "date" )
         {
             QString value = element.attributeNS( KoXmlNS::office, "date-value", QString() );
-            kDebug(36003) << "Type: date, value: " << value << endl;
+            kDebug(36003) <<"Type: date, value:" << value;
 
             // "1980-10-15"
             int year = 0, month = 0, day = 0;
@@ -1443,19 +1443,19 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
             if ( p1 > 0 )
                 year  = value.left( p1 ).toInt( &ok );
 
-            kDebug(36003) << "year: " << value.left( p1 ) << endl;
+            kDebug(36003) <<"year:" << value.left( p1 );
 
             int p2 = value.indexOf( '-', ++p1 );
 
             if ( ok )
                 month = value.mid( p1, p2 - p1  ).toInt( &ok );
 
-            kDebug(36003) << "month: " << value.mid( p1, p2 - p1 ) << endl;
+            kDebug(36003) <<"month:" << value.mid( p1, p2 - p1 );
 
             if ( ok )
                 day = value.right( value.length() - p2 - 1 ).toInt( &ok );
 
-            kDebug(36003) << "day: " << value.right( value.length() - p2 ) << endl;
+            kDebug(36003) <<"day:" << value.right( value.length() - p2 );
 
             if ( ok )
             {
@@ -1466,14 +1466,14 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                 style.setFormatType( Format::ShortDate );
                 setStyle( style );
 #endif
-                kDebug(36003) << "Set QDate: " << year << " - " << month << " - " << day << endl;
+                kDebug(36003) <<"Set QDate:" << year <<" -" << month <<" -" << day;
             }
 
         }
         else if ( valuetype == "time" )
         {
             QString value = element.attributeNS( KoXmlNS::office, "time-value", QString() );
-            kDebug(36003) << "Type: time: " << value << endl;
+            kDebug(36003) <<"Type: time:" << value;
             // "PT15H10M12S"
             int hours = 0, minutes = 0, seconds = 0;
             int l = value.length();
@@ -1495,13 +1495,13 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
                 else
                     continue;
 
-                kDebug(36003) << "Num: " << num << endl;
+                kDebug(36003) <<"Num:" << num;
 
                 num = "";
                 if ( !ok )
                     break;
             }
-            kDebug(36003) << "Hours: " << hours << ", " << minutes << ", " << seconds << endl;
+            kDebug(36003) <<"Hours:" << hours <<"," << minutes <<"," << seconds;
 
             if ( ok )
             {
@@ -1537,14 +1537,14 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
         }
         else
         {
-            kDebug(36003) << "  Unknown type. Parsing user input." << endl;
+            kDebug(36003) <<"  Unknown type. Parsing user input.";
             // Set the value by parsing the user input.
             parseUserInput(userInput());
         }
     }
     else // no value-type attribute
     {
-        kDebug(36003) << "  No value type specified. Parsing user input." << endl;
+        kDebug(36003) <<"  No value type specified. Parsing user input.";
         // Set the value by parsing the user input.
         parseUserInput(userInput());
     }
@@ -1676,7 +1676,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( sheet(), doc()->pictureCollection() );
             else
-              kDebug(36003) << "Object type wasn't loaded!" << endl;
+              kDebug(36003) <<"Object type wasn't loaded!";
           }
 
           if ( obj )
@@ -1736,12 +1736,12 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     // Validation
     if ( d->row < 1 || d->row > KS_rowMax )
     {
-        kDebug(36001) << "Cell::load: Value out of range Cell:row=" << d->row << endl;
+        kDebug(36001) <<"Cell::load: Value out of range Cell:row=" << d->row;
         return false;
     }
     if ( d->column < 1 || d->column > KS_colMax )
     {
-        kDebug(36001) << "Cell::load: Value out of range Cell:column=" << d->column << endl;
+        kDebug(36001) <<"Cell::load: Value out of range Cell:column=" << d->column;
         return false;
     }
 
@@ -1761,7 +1761,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             // Validation
             if ( i < 0 || i > KS_spanMax )
             {
-                kDebug(36001) << "Value out of range Cell::colspan=" << i << endl;
+                kDebug(36001) <<"Value out of range Cell::colspan=" << i;
                 return false;
             }
             if ( i )
@@ -1775,7 +1775,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             // Validation
             if ( i < 0 || i > KS_spanMax )
             {
-                kDebug(36001) << "Value out of range Cell::rowspan=" << i << endl;
+                kDebug(36001) <<"Value out of range Cell::rowspan=" << i;
                 return false;
             }
             if ( i )

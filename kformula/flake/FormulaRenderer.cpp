@@ -42,7 +42,7 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
     
     p.save();
     p.translate( element->origin() );
-    kDebug(39001) << element->origin() << endl;
+    kDebug(39001) << element->origin();
     element->paint( p, m_attributeManager );
 
     if( element->childElements().isEmpty() || element->elementType() == Phantom )
@@ -62,7 +62,7 @@ void FormulaRenderer::layoutElement( BasicElement* element )
     foreach( BasicElement* tmp, element->childElements() )
         layoutElement( tmp );              // first layout all children
 
-    kDebug(39001) << "layoutElement" << endl;
+    kDebug(39001) <<"layoutElement";
     element->layout( m_attributeManager );      // actually layout the element
 }
 

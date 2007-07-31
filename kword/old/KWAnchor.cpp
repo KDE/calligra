@@ -38,7 +38,7 @@ KWAnchor::KWAnchor( KoTextDocument *textDocument, KWFrameSet * frameset, int fra
 
 KWAnchor::~KWAnchor()
 {
-    kDebug(32001) << "KWAnchor::~KWAnchor" << endl;
+    kDebug(32001) <<"KWAnchor::~KWAnchor";
 }
 
 void KWAnchor::setFormat( KoTextFormat* format )
@@ -54,19 +54,19 @@ void KWAnchor::finalize()
 
     int paragx = paragraph()->rect().x();
     int paragy = paragraph()->rect().y();
-    kDebug(32001) << this << " KWAnchor::finalize " << x() << "," << y() << " paragx=" << paragx << " paragy=" << paragy << endl;
+    kDebug(32001) << this <<" KWAnchor::finalize" << x() <<"," << y() <<" paragx=" << paragx <<" paragy=" << paragy;
 
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     KoPoint dPoint;
     if ( fs->internalToDocument( QPoint( x()+paragx, y()+paragy ), dPoint ) )
     {
-        //kDebug(32001) << "KWAnchor::finalize moving frame to " << dPoint.x() << "," << dPoint.y() << endl;
+        //kDebug(32001) <<"KWAnchor::finalize moving frame to" << dPoint.x() <<"," << dPoint.y();
         // Move the frame to position dPoint.
         m_frameset->moveFloatingFrame( m_frameNum, dPoint );
     } else
     {
         // This can happen if the page hasn't been created yet
-        kDebug(32001) << "KWAnchor::move internalToDocument returned 0L for " << x()+paragx << ", " << y()+paragy << endl;
+        kDebug(32001) <<"KWAnchor::move internalToDocument returned 0L for" << x()+paragx <<"," << y()+paragy;
     }
 #endif
 }
@@ -83,7 +83,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     Q_ASSERT( x == xpos );
     Q_ASSERT( y == ypos );
     if ( x != xpos || y != ypos )
-        kDebug() << "Warning: x=" << x << " y=" << y << " xpos=" << xpos << " ypos=" << ypos << endl;
+        kDebug() <<"Warning: x=" << x <<" y=" << y <<" xpos=" << xpos <<" ypos=" << ypos;
 
     // The containing text-frameset.
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
@@ -93,20 +93,20 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     int paragy = paragraph()->rect().y();
     QRect inlineFrameLU( paragx+xpos, paragy+ypos, width, height );
 #ifdef DEBUG_DRAWING
-    kDebug(32001) << "KWAnchor::draw x:" << x << ", y:" << y << " paragx=" << paragx << " paragy=" << paragy << endl;
-    kDebug(32001) << "               inline frame in LU coordinates: " << inlineFrameLU << endl;
+    kDebug(32001) <<"KWAnchor::draw x:" << x <<", y:" << y <<" paragx=" << paragx <<" paragy=" << paragy;
+    kDebug(32001) <<"               inline frame in LU coordinates:" << inlineFrameLU;
 #endif
 
     QRect crectLU = QRect( (cx > 0 ? cx : 0)+paragx, cy+paragy, cw, ch );
 #ifdef DEBUG_DRAWING
-    kDebug(32001) << "               crect in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
+    kDebug(32001) <<"               crect in LU coordinates:" << DEBUGRECT( crectLU );
 #endif
 
     crectLU = crectLU.intersect ( inlineFrameLU ); // KoTextParag::paintDefault could even do this
 
 
 #ifdef DEBUG_DRAWING
-    kDebug(32001) << "               crect&frame in LU coordinates: " << DEBUGRECT( crectLU ) << endl;
+    kDebug(32001) <<"               crect&frame in LU coordinates:" << DEBUGRECT( crectLU );
 #endif
 
     // Convert crect to document coordinates, first topleft then bottomright
@@ -132,7 +132,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     crect.rBottom() += 2; // HACK: 1 doesn't do it, it leaves a white line along window borders
     crect.rRight() += 1;
 #ifdef DEBUG_DRAWING
-    kDebug() << "               crect in view coordinates (pixel) : " << DEBUGRECT( crect ) << endl;
+    kDebug() <<"               crect in view coordinates (pixel) :" << DEBUGRECT( crect );
 #endif
 
     // Ok, we finally have our crect in view coordinates!
@@ -151,7 +151,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         while ( !frameIt.atFirst() && frameIt.current()->isCopy() ) // go back to last non-copy
             --frameIt;
         containingFrame = frameIt.current();
-        //kDebug() << "KWAnchor::draw frame=" << containingFrame << endl;
+        //kDebug() <<"KWAnchor::draw frame=" << containingFrame;
     }
 
     // Same calculation as in internalToDocument, but we know the frame already
@@ -172,7 +172,7 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     p->save();
     p->translate( -topLeftParag.x(), -topLeftParag.y() );
 #ifdef DEBUG_DRAWING
-    kDebug() << "               translating by " << -topLeftParag.x() << "," << -topLeftParag.y() << endl;
+    kDebug() <<"               translating by" << -topLeftParag.x() <<"," << -topLeftParag.y();
 #endif
 
     QColorGroup cg2( cg );
@@ -192,14 +192,14 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
         // To draw the inline frame as selected, we need to look at the inline frame's own size.
         QRect frameRect = crect;
 #ifdef DEBUG_DRAWING
-        kDebug() << "KWAnchor::draw selected frame. frameRect=" << frameRect << endl;
+        kDebug() <<"KWAnchor::draw selected frame. frameRect=" << frameRect;
 #endif
         p->fillRect( frameRect, QBrush( cg.highlight(), Qt::Dense4Pattern) );
     }
     p->restore();
 
 #ifdef DEBUG_DRAWING
-    kDebug() << "KWAnchor::draw done" << endl;
+    kDebug() <<"KWAnchor::draw done";
 #endif
 #endif
 }
@@ -207,11 +207,11 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 QSize KWAnchor::size() const
 {
     KoSize kosz = m_frameset->floatingFrameSize( m_frameNum );
-    //kDebug() << "KWAnchor::size in pt: " << kosz.width() << "x" << kosz.height() << endl;
+    //kDebug() <<"KWAnchor::size in pt:" << kosz.width() <<"x" << kosz.height();
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     QSize sz( zh->ptToLayoutUnitPixX( kosz.width() ), zh->ptToLayoutUnitPixY( kosz.height() ) );
-    //kDebug() << "KWAnchor::size in LU: " << sz.width() << "x" << sz.height() << endl;
-    //kDebug() << "          size in pixels: " << zh->layoutUnitToPixelX( sz.width() ) << "x"
+    //kDebug() <<"KWAnchor::size in LU:" << sz.width() <<"x" << sz.height();
+    //kDebug() <<"          size in pixels:" << zh->layoutUnitToPixelX( sz.width() ) <<"x"
     //          << zh->layoutUnitToPixelY( sz.height() ) << endl;
     if ( sz.isNull() ) // for some reason, we don't know the size yet
         sz = QSize( width, height ); // LU
@@ -222,7 +222,7 @@ int KWAnchor::ascent() const
 {
     int baseline = m_frameset->floatingFrameBaseline( m_frameNum );
     int ret = ( baseline == -1 ) ? height : baseline;
-    //kDebug() << "KWAnchor::ascent " << ret << endl;
+    //kDebug() <<"KWAnchor::ascent" << ret;
     return ret;
 }
 
@@ -235,11 +235,11 @@ void KWAnchor::resize()
     {
         width = s.width();
         height = s.height();
-        kDebug(32001) << "KWAnchor::resize " << width << "x" << height << endl;
+        kDebug(32001) <<"KWAnchor::resize" << width <<"x" << height;
         KoTextParag * parag = paragraph();
         if ( parag )
         {
-            kDebug(32001) << "KWAnchor::resize invalidating parag " << parag->paragId() << endl;
+            kDebug(32001) <<"KWAnchor::resize invalidating parag" << parag->paragId();
             parag->invalidate( 0 );
         }
     }
@@ -247,13 +247,13 @@ void KWAnchor::resize()
 
 KCommand * KWAnchor::createCommand()
 {
-    kDebug(32001) << "KWAnchor::addCreateCommand" << endl;
+    kDebug(32001) <<"KWAnchor::addCreateCommand";
     return m_frameset->anchoredObjectCreateCommand( m_frameNum );
 }
 
 KCommand * KWAnchor::deleteCommand()
 {
-    kDebug(32001) << "KWAnchor::addDeleteCommand" << endl;
+    kDebug(32001) <<"KWAnchor::addDeleteCommand";
     return m_frameset->anchoredObjectDeleteCommand( m_frameNum );
 }
 
@@ -262,7 +262,7 @@ void KWAnchor::setDeleted( bool b )
     // Do this first, because setAnchored->updateAllFrames->isDeleted, so it must have the right value already
     KoTextCustomItem::setDeleted( b );
 
-    kDebug() << "KWAnchor::setDeleted " << b << endl;
+    kDebug() <<"KWAnchor::setDeleted" << b;
     if ( b )
         m_frameset->setAnchored( 0L );
     else

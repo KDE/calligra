@@ -79,7 +79,7 @@ KoFilter::ConversionStatus XAMLImport::convert(const QByteArray& from, const QBy
         else
                 strMime="text/plain";
 
-        kDebug(30514) << "File extension: -" << strExt << "- Compression: " << strMime << endl;
+        kDebug(30514) <<"File extension: -" << strExt <<"- Compression:" << strMime;
 
         QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
@@ -394,7 +394,7 @@ XAMLImport::parseGradient( const QDomElement &e )
 	QString href = e.attribute( "xlink:href" ).mid( 1 );
 	if( !href.isEmpty() )
 	{
-		//kDebug() << "Indexing with href : " << href.latin1() << endl;
+		//kDebug() <<"Indexing with href :" << href.latin1();
 		gradhelper.gradient = m_gradients[ href ].gradient;
 	}
 
@@ -465,10 +465,10 @@ XAMLImport::parsePA( VObject *obj, XAMLGraphicsContext *gc, const QString &comma
 			{
 				// adjust to bbox
 				KoRect bbox = obj->boundingBox();
-				//kDebug() << "bbox x : " << bbox.x() << endl;
-				//kDebug() << "!!!!!!bbox y : " << bbox.y() << endl;
-				//kDebug() << gc->fill.gradient().origin().x() << endl;
-				//kDebug() << gc->fill.gradient().vector().x() << endl;
+				//kDebug() <<"bbox x :" << bbox.x();
+				//kDebug() <<"!!!!!!bbox y :" << bbox.y();
+				//kDebug() << gc->fill.gradient().origin().x();
+				//kDebug() << gc->fill.gradient().vector().x();
 				double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
 				double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
 				gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
@@ -478,11 +478,11 @@ XAMLImport::parsePA( VObject *obj, XAMLGraphicsContext *gc, const QString &comma
 				offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
 				offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
 				gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-				//kDebug() << offsety << endl;
-				//kDebug() << gc->fill.gradient().origin().x() << endl;
-				//kDebug() << gc->fill.gradient().origin().y() << endl;
-				//kDebug() << gc->fill.gradient().vector().x() << endl;
-				//kDebug() << gc->fill.gradient().vector().y() << endl;
+				//kDebug() << offsety;
+				//kDebug() << gc->fill.gradient().origin().x();
+				//kDebug() << gc->fill.gradient().origin().y();
+				//kDebug() << gc->fill.gradient().vector().x();
+				//kDebug() << gc->fill.gradient().vector().y();
 			}
 			gc->fill.gradient().transform( m_gradients[ key ].gradientTransform );
 			if( !m_gradients[ key ].bbox )

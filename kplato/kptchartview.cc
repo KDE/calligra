@@ -56,7 +56,7 @@ void ChartView::setProject( Project *project )
 void ChartView::slotCurrentViewScheduleIdChanged( long id )
 {
     if ( m_project ) {
-        kDebug()<<k_funcinfo<<id<<endl;
+        kDebug()<<k_funcinfo<<id;
         m_panel->draw( *m_project );
     }
 }
@@ -64,7 +64,7 @@ void ChartView::slotCurrentViewScheduleIdChanged( long id )
 void ChartView::slotNodeChanged( Node* )
 {
     if ( m_project ) {
-        kDebug()<<k_funcinfo<<endl;
+        kDebug()<<k_funcinfo;
         m_panel->draw( *m_project );
     }
 }

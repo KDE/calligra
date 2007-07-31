@@ -437,7 +437,7 @@ FormulaStringParser::~FormulaStringParser()
 {
     delete head;
     if ( ParserNode::debugCount != 0 ) {
-        kDebug( KFormula::DEBUGID ) << "ParserNode::debugCount = " << ParserNode::debugCount << endl;
+        kDebug( KFormula::DEBUGID ) <<"ParserNode::debugCount =" << ParserNode::debugCount;
     }
 }
 
@@ -458,7 +458,7 @@ QDomDocument FormulaStringParser::parse()
     head->buildXML( doc, de );
     root.appendChild(de);
 
-    kDebug( 39001 ) << doc.toString() << endl;
+    kDebug( 39001 ) << doc.toString();
     return doc;
 }
 
@@ -824,6 +824,6 @@ void FormulaStringParser::readDigits()
 
 void FormulaStringParser::error( QString err )
 {
-    kDebug( KFormula::DEBUGID ) << err << " (" << currentType << "; " << current << ")" << endl;
+    kDebug( KFormula::DEBUGID ) << err <<" (" << currentType <<";" << current <<")";
     m_errorList.push_back( err );
 }

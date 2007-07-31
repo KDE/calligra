@@ -113,7 +113,7 @@ void TextFormat::analyzeFormat(const QDomNode node)
 	
 	/* Parameters analysis */
 	analyzeParam(node);
-	kDebug(30522) << "ANALYZE A FORMAT" << endl;
+	kDebug(30522) <<"ANALYZE A FORMAT";
 	
 	/* Child markup analysis */
 	if(isChild(node, "FONT"))
@@ -135,7 +135,7 @@ void TextFormat::analyzeFormat(const QDomNode node)
 	if(isChild(node, "TEXTBACKGROUNDCOLOR"))
 		analyzeBackgroundColor(getChild(node, "TEXTBACKGROUNDCOLOR"));
 
-	kDebug(30522) << "END OF A FORMAT" << endl;
+	kDebug(30522) <<"END OF A FORMAT";
 }
 
 void TextFormat::analyzeBackgroundColor(const QDomNode node)
@@ -151,7 +151,7 @@ void TextFormat::analyzeBackgroundColor(const QDomNode node)
 
 	if(!(red == 255 && green == 255 && blue == 255))
 	{
-		kDebug(30522) << "bk color = " << red << "," << green << "," << blue << endl;
+		kDebug(30522) <<"bk color =" << red <<"," << green <<"," << blue;
 		/* white color is default value */
 		setBkColor(red, green, blue);
 		FileHeader::instance()->useColor();
@@ -207,7 +207,7 @@ void TextFormat::analyzeUnderlined(const QDomNode node)
 	setUnderlined(getAttr(node, "value"));
 	if(isUnderlined())
 		FileHeader::instance()->useUnderline();
-	kDebug(30522) << "Underlined? " << isUnderlined() << endl;
+	kDebug(30522) <<"Underlined?" << isUnderlined();
 }
 
 /*******************************************/
@@ -221,7 +221,7 @@ void TextFormat::analyzeStrikeout(const QDomNode node)
 	setStrikeout(getAttr(node, "value").toInt());
 	if(isStrikeout())
 		FileHeader::instance()->useUnderline();
-	kDebug(30522) << "Strikeout? " << isUnderlined() << endl;
+	kDebug(30522) <<"Strikeout?" << isUnderlined();
 }
 
 /*******************************************/
@@ -233,7 +233,7 @@ void TextFormat::analyzeWeight(const QDomNode node)
 {
 	/* <WEIGHT value="75" /> */
 	setWeight(getAttr(node, "value").toInt());
-	kDebug(30522) << "Weight = " << getWeight() << endl;
+	kDebug(30522) <<"Weight =" << getWeight();
 }
 
 /*******************************************/
@@ -267,7 +267,7 @@ void TextFormat::analyzeColor(const QDomNode node)
 	if(!(red == 0 && green == 0 && blue == 0))
 	{
 		/* black color is default value */
-		kDebug(30522) << "color = " << red << "," << green << "," << blue << endl;
+		kDebug(30522) <<"color =" << red <<"," << green <<"," << blue;
 		setColor(red, green, blue);
 		FileHeader::instance()->useColor();
 	}
@@ -282,5 +282,5 @@ void TextFormat::analyzeSize(const QDomNode node)
 {
 	/* <SIZE value="11"> */
 	setSize(getAttr(node, "value").toInt());
-	kDebug(30522) << "font size : " << getSize() << endl;
+	kDebug(30522) <<"font size :" << getSize();
 }

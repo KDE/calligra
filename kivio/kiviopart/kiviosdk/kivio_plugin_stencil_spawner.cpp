@@ -55,7 +55,7 @@ bool KivioPluginStencilSpawner::load( const QString &f )
 
   if( !fac)
   {
-    kDebug(43000) << "Failed to load: " << m_fileName << endl;
+    kDebug(43000) <<"Failed to load:" << m_fileName;
     return false;
   }
 

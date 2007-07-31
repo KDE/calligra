@@ -277,7 +277,7 @@ void KPrClosedLineObject::flip( bool horizontal )
 
 void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info )
 {
-    kDebug()<<"void KPrClosedLineObject::loadOasis( const QDomElement &element )***********\n";
+    kDebug()<<"void KPrClosedLineObject::loadOasis( const QDomElement &element )***********";
     KPr2DObject::loadOasis( element,context, info );
     QString tag( element.tagName() );
     if ( tag == "polygon" )
@@ -287,7 +287,7 @@ void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext 
     else if ( tag == "path" ) // this is used to load closed draw:path objects
     {
         QString d = element.attributeNS( KoXmlNS::svg, "d", QString::null);
-        kDebug(33001) << "path d: " << d << endl;
+        kDebug(33001) <<"path d:" << d;
 
         KPrSVGPathParser parser;
         points = parser.getPoints( d, true );
@@ -304,7 +304,7 @@ void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext 
             if ( rx.search( d ) != -1 )
             {
                 d = rx.cap( 1 );
-                kDebug(33001) << "enhanced-path d: " << d << endl;
+                kDebug(33001) <<"enhanced-path d:" << d;
 
                 KPrSVGPathParser parser;
                 points = parser.getPoints( d, true );
@@ -314,7 +314,7 @@ void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext 
     }
     else
     {
-        kDebug(33001) << "KPrClosedLineObject::loadOasis unsupported tag" << endl;
+        kDebug(33001) <<"KPrClosedLineObject::loadOasis unsupported tag";
     }
 }
 

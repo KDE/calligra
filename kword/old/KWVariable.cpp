@@ -127,7 +127,7 @@ KoVariable* KWVariableCollection::loadOasisField( KoTextDocument* textdoc, const
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
     if ( isTextNS )
     {
-        //kDebug()<<" localName :"<<localName<<endl;
+        //kDebug()<<" localName :"<<localName;
         if ( localName ==  "note" )
         {
             QString key = "STRING";
@@ -313,13 +313,13 @@ void KWFootNoteVariable::loadOasis( const QDomElement& footNoteTag, KoOasisConte
             m_numberingType = Auto;
         if ( m_numberingType == Auto )
         {
-            //kDebug()<<" automatic \n";
+            //kDebug()<<" automatic";
             m_numDisplay = element.text().toInt();
             formatedNote();
         }
         else
         {
-           // kDebug()<<" manual \n";
+           // kDebug()<<" manual";
             m_varValue = QVariant( element.text() );
         }
       } else if ( localName == "note-body" ) {
@@ -523,7 +523,7 @@ void KWFootNoteVariable::finalize()
     if ( m_frameset->isDeleted() )
         return;
 
-    //kDebug(32001) << "KWFootNoteVariable::finalize" << endl;
+    //kDebug(32001) <<"KWFootNoteVariable::finalize";
 
     int pageNum = this->pageNum();
     if ( pageNum == -1 )
@@ -533,7 +533,7 @@ void KWFootNoteVariable::finalize()
     int framePage = footNoteFrame->pageNumber();
     if ( framePage != pageNum )
     {
-        //kDebug(32001) << "Footnote var '" << text() << "' at page " << pageNum << ", footnote frame at page " << framePage << " -> abortFormatting() and recalcFrames()" << endl;
+        //kDebug(32001) <<"Footnote var '" << text() <<"' at page" << pageNum <<", footnote frame at page" << framePage <<" -> abortFormatting() and recalcFrames()";
         KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
         fs->textObject()->abortFormatting();
 
@@ -565,13 +565,13 @@ void KWFootNoteVariable::resize()
     width = qRound( KoTextZoomHandler::ptToLayoutUnitPt( width ) );
     height = fmt->height();
     m_ascent = fmt->ascent();
-    //kDebug() << "KWFootNoteVariable::resize text=" << txt << " width=" << width << " height=" << height << endl;
+    //kDebug() <<"KWFootNoteVariable::resize text=" << txt <<" width=" << width <<" height=" << height;
 }
 
 void KWFootNoteVariable::setDeleted( bool del )
 {
 #if 0
-    kDebug() << "KWFootNoteVariable::setDeleted " << del << endl;
+    kDebug() <<"KWFootNoteVariable::setDeleted" << del;
     if ( del )
     {
         Q_ASSERT( m_frameset );
@@ -584,7 +584,7 @@ void KWFootNoteVariable::setDeleted( bool del )
     {
         Q_ASSERT( m_frameset );
         if ( m_frameset ) {
-            kDebug() << "Making frameset " << m_frameset << " visible" << endl;
+            kDebug() <<"Making frameset" << m_frameset <<" visible";
             m_frameset->setVisible( true );
             if ( m_frameset->isDeleted() )
                 m_frameset->createInitialFrame( 0 ); // Page number shouldn't matter (see recalcFrames below).
@@ -626,29 +626,29 @@ double KWFootNoteVariable::varY() const
     KWTextFrameSet * fs = static_cast<KWTextDocument *>(textDocument())->textFrameSet();
     if ( !fs->hasFramesInPageArray() ) // we need it for internalToDocument
     {
-        kDebug(32001) << "KWFootNoteVariable::varY too early, no updateFrames yet" << endl;
+        kDebug(32001) <<"KWFootNoteVariable::varY too early, no updateFrames yet";
         return 0; // this happens on loading - frame layout is done before text layout
     }
     // What we need is "has never been formatted". Not "has just been invalidated"...
     //if ( !paragraph()->isValid() )
     //{
-    //    kDebug(32001) << "KWFootNoteVariable::varY called but paragraph " << paragraph()->paragId() << " not valid" << endl;
+    //    kDebug(32001) <<"KWFootNoteVariable::varY called but paragraph" << paragraph()->paragId() <<" not valid";
     //    return 0;
     //}
     KoPoint dPoint;
-    //kDebug(32001) << "KWFootNoteVariable::pageNum position of variable (LU): " << QPoint( x(), paragy + y() + height ) << endl;
+    //kDebug(32001) <<"KWFootNoteVariable::pageNum position of variable (LU):" << QPoint( x(), paragy + y() + height );
     KWFrame* containingFrame = fs->internalToDocument( QPoint( x(), paragy + y() + height ), dPoint );
     if ( containingFrame )
     {
         // Ok, the (bottom of the) footnote variable is at dPoint.
         double varY = dPoint.y();
-        //kDebug(32001) << " found containingFrame " << containingFrame << " page:" << containingFrame->pageNumber() << "  varY=" << varY << endl;
+        //kDebug(32001) <<" found containingFrame" << containingFrame <<" page:" << containingFrame->pageNumber() <<"  varY=" << varY;
         //int pageNum = containingFrame->pageNumber(); // and at page pageNum
         return varY;
     } else
     {
         // This can happen if the page hasn't been created yet
-        //kDebug(32001) << "KWFootNoteVariable::pageNum internalToDocument returned 0L for " << x << ", " << y+paragy << endl;
+        //kDebug(32001) <<"KWFootNoteVariable::pageNum internalToDocument returned 0L for" << x <<"," << y+paragy;
         return 0;
     }
 #endif

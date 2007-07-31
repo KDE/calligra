@@ -54,7 +54,7 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
       m_completion( m_original ),
       m_dayLength(24)
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     started->setChecked(m_completion.isStarted());
     finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime().dateTime());
@@ -68,7 +68,7 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     percentFinished->setValue(m_completion.percentFinished());
     
     if (workTime) {
-        kDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
+        kDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours();
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }
@@ -100,7 +100,7 @@ TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWi
     }
     date = QDate( m_year, 12, 31 );
     wn = date.weekNumber( &year );
-    kDebug()<<k_funcinfo<<date<<", "<<wn<<", "<<year<<endl;
+    kDebug()<<k_funcinfo<<date<<","<<wn<<","<<year;
     if ( wn == 53 ) {
         weekNumber->addItem( i18nc( "Week number", "Week %1", wn ) );
     } else if ( wn == 1 ) {
@@ -199,7 +199,7 @@ void TaskProgressPanel::setEstimateScales( int day )
 
 void TaskProgressPanel::slotWeekNumberChanged( int index )
 {
-    kDebug()<<k_funcinfo<<index<<", "<<m_weekOffset<<endl;
+    kDebug()<<k_funcinfo<<index<<","<<m_weekOffset;
     QDate date = QDate( m_year, 1, 1 ).addDays( Qt::Monday - QDate( m_year, 1, 1 ).dayOfWeek() );
     date = date.addDays( index * 7 );
     resourceTable->setCurrentMonday( date );
@@ -207,7 +207,7 @@ void TaskProgressPanel::slotWeekNumberChanged( int index )
 
 void TaskProgressPanel::slotAddResource()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
 }
 
 //-------------------------------------
@@ -290,7 +290,7 @@ void TaskProgressPanelImpl::slotCalculateEffort()
 
 void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     int i = weekNumber->currentIndex();
     if ( i > 0 && i < weekNumber->count() - 1 ) {
         weekNumber->setCurrentIndex( i - 1 );
@@ -299,7 +299,7 @@ void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 
 void TaskProgressPanelImpl::slotNextWeekBtnClicked()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     int i = weekNumber->currentIndex();
     if ( i > 0 && i < weekNumber->count() - 1 ) {
         weekNumber->setCurrentIndex( i + 1 );

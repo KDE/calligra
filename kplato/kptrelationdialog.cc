@@ -92,17 +92,17 @@ void AddRelationDialog::slotOk() {
     accept();
 }
 void AddRelationDialog::slotFinishStartToggled(bool ch) {
-    //kDebug()<<k_funcinfo<<ch<<endl;
+    //kDebug()<<k_funcinfo<<ch;
     if (ch && m_relation->type() != Relation::FinishStart)
         enableButtonOk(true);
 }
 void AddRelationDialog::slotFinishFinishToggled(bool ch) {
-    //kDebug()<<k_funcinfo<<ch<<endl;
+    //kDebug()<<k_funcinfo<<ch;
     if (ch && m_relation->type() != Relation::FinishFinish)
         enableButtonOk(true);
 }
 void AddRelationDialog::slotStartStartToggled(bool ch) {
-    //kDebug()<<k_funcinfo<<ch<<endl;
+    //kDebug()<<k_funcinfo<<ch;
     if (ch && m_relation->type() != Relation::StartStart)
         enableButtonOk(true);
 }
@@ -150,7 +150,7 @@ K3Command *ModifyRelationDialog::buildCommand(Part *part) {
             cmd = new K3MacroCommand(i18n("Modify Relation"));
         cmd->addCommand(new ModifyRelationTypeCmd(part, m_relation, (Relation::Type)(selectedRelationType())));
         
-        //kDebug()<<k_funcinfo<<m_panel->relationType->selectedId()<<endl;
+        //kDebug()<<k_funcinfo<<m_panel->relationType->selectedId();
     }
     if (m_relation->lag() != m_panel->lag->value()) {
         if (cmd == 0)

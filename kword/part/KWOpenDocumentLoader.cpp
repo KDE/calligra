@@ -208,7 +208,7 @@ QString KWOpenDocumentLoader::currentFramesetName() const { return d->currentFra
 bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store)
 {
     emit sigProgress( 0 );
-    kDebug(32001) << "========================> KWOpenDocumentLoader::load START" << endl;
+    kDebug(32001) <<"========================> KWOpenDocumentLoader::load START";
 
     KoXmlElement content = doc.documentElement();
     KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
@@ -334,7 +334,7 @@ bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles,
                 int pages=1;
                 KoXmlElement page;
                 forEachElement( page, tag ) ++pages;
-                kDebug() << "DTP mode: found " << pages << "pages" << endl;
+                kDebug() <<"DTP mode: found" << pages <<"pages";
                 //setPageCount ( pages );
             }
             else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
@@ -382,7 +382,7 @@ bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles,
     delete d->frameLoader;
     d->frameLoader = 0;
 
-    kDebug(32001) << "========================> KWOpenDocumentLoader::load END" << endl;
+    kDebug(32001) <<"========================> KWOpenDocumentLoader::load END";
     emit sigProgress(100);
     return true;
 }
@@ -393,7 +393,7 @@ void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const KoX
     if ( settingsDoc.isNull() )
         return;
 
-    kDebug(32001)<<"KWOpenDocumentLoader::loadSettings"<<endl;
+    kDebug(32001)<<"KWOpenDocumentLoader::loadSettings";
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() )
@@ -403,7 +403,7 @@ void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const KoX
     KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
     if ( !configurationSettings.isNull() ) {
         const QString ignorelist = configurationSettings.parseConfigItemString( "SpellCheckerIgnoreList" );
-        kDebug(32001) << "Ignorelist: " << ignorelist << endl;
+        kDebug(32001) <<"Ignorelist:" << ignorelist;
         //1.6: d->document->setSpellCheckIgnoreList( QStringList::split( ',', ignorelist ) );
     }
     //1.6: d->document->variableCollection()->variableSetting()->loadOasis( settings );
@@ -411,7 +411,7 @@ void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const KoX
 
 bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName)
 {
-    kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName<<endl;
+    kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName;
     const KoOasisStyles& styles = context.oasisStyles();
     const KoXmlElement* masterPage = styles.masterPages()[ masterPageName ];
     const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
@@ -482,7 +482,7 @@ bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const Q
 
 bool KWOpenDocumentLoader::loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName)
 {
-    kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName<<endl;
+    kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName;
     const KoOasisStyles& styles = context.oasisStyles();
     const KoXmlElement *masterPage = styles.masterPages()[ masterPageName ];
     const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
@@ -524,7 +524,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
         return; // no header/footer
 
     const QString localName = elem.localName();
-    kDebug()<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst<<endl;
+    kDebug()<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
 
     // Formatting properties for headers and footers on a page.
     KoXmlElement styleElem = KoDom::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );

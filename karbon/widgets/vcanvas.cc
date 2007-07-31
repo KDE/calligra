@@ -270,7 +270,7 @@ bool KarbonCanvas::snapToGrid() const {
 
 void KarbonCanvas::addCommand(QUndoCommand *command) {
 
-    kDebug() << "KarbonCanvas::addCommand" << endl;
+    kDebug() <<"KarbonCanvas::addCommand";
     d->part->KoDocument::addCommand(command);
     adjustOrigin();
 }
@@ -284,7 +284,7 @@ void KarbonCanvas::updateCanvas(const QRectF& rc) {
 
 void KarbonCanvas::adjustOrigin()
 {
-    kDebug() << "KarbonCanvas::adjustOrigin" << endl;
+    kDebug() <<"KarbonCanvas::adjustOrigin";
 
     // calculate the zoomed document bounding rect
     QRect documentRect = d->zoomHandler.documentToView( documentViewRect() ).toRect();
@@ -356,7 +356,7 @@ int KarbonCanvas::documentViewMargin() const
 
 QRectF KarbonCanvas::documentViewRect()
 {
-    kDebug(38000) << "KarbonCanvas::documentViewRect" << endl;
+    kDebug(38000) <<"KarbonCanvas::documentViewRect";
 
     // save the old content rect for comparing
     QRectF oldContentRect = d->contentRect;

@@ -35,20 +35,20 @@ KWordPictureHandler::KWordPictureHandler( Document* doc ) : QObject(), m_doc(doc
 
 void KWordPictureHandler::bitmapData( OLEImageReader& reader, SharedPtr<const Word97::PICF> /*picf*/ )
 {
-    kDebug(30513) << "Bitmap data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
+    kDebug(30513) <<"Bitmap data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size();
 
 }
 
 void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word97::PICF> picf )
 {
-    kDebug(30513) << "wmf data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size() << endl;
+    kDebug(30513) <<"wmf data found ->>>>>>>>>>>>>>>>>>>>>>>>>>>>> size=" << reader.size();
 
     // We have two things to do here
     // 1 - Create the frameset and its frame
     // 2 - Store the picture in the store
     // We combine those two things into one call to the document
     KoSize size( (double)picf->dxaGoal / 20.0, (double)picf->dyaGoal / 20.0 );
-    kDebug(30513) << "size=" << size << endl;
+    kDebug(30513) <<"size=" << size;
     KoStoreDevice* dev = m_doc->createPictureFrameSet( size );
     Q_ASSERT(dev);
     if ( !dev )

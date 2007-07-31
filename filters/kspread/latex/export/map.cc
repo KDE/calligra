@@ -37,7 +37,7 @@ Map::Map()
 /*******************************************/
 Map::~Map()
 {
-	kDebug(30522) << "Destruction of a map." << endl;
+	kDebug(30522) <<"Destruction of a map.";
 }
 
 /*******************************************/
@@ -46,7 +46,7 @@ Map::~Map()
 void Map::analyze(const QDomNode node)
 {
 	/* Analysis of the parameters */
-	kDebug(30522) << "ANALYZE A MAP" << endl;
+	kDebug(30522) <<"ANALYZE A MAP";
 
 	/* Analysis of the child markups */
 	for(int index = 0; index < getNbChild(node); index++)
@@ -56,7 +56,7 @@ void Map::analyze(const QDomNode node)
 		table->analyze(getChild(node, index));
 		_tables.append(table);
 	}
-	kDebug(30522) << "END OF MAP" << endl;
+	kDebug(30522) <<"END OF MAP";
 }
 
 /*******************************************/
@@ -68,7 +68,7 @@ void Map::analyze(const QDomNode node)
 void Map::generate(QTextStream &out)
 {
 	Table *table = NULL;
-	kDebug(30522) << "  MAP GENERATION" << endl;
+	kDebug(30522) <<"  MAP GENERATION";
 	Q3PtrListIterator<Table> it(_tables);
 	while ( (table = it.current()) != 0 )
 	{
@@ -76,6 +76,6 @@ void Map::generate(QTextStream &out)
 		table->generate(out);
 	}
 
-	kDebug(30522) << "MAP GENERATED" << endl;
+	kDebug(30522) <<"MAP GENERATED";
 }
 

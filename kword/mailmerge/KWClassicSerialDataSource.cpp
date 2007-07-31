@@ -111,7 +111,7 @@ void KWClassicSerialDataSource::removeRecord( int i )
     if ( (i < 0) || (i > (int)db.count() - 1) )
         return;
 
-	kDebug()<<QString("Removing record %1").arg(i)<<endl;
+	kDebug()<<QString("Removing record %1").arg(i);
 
     Db::Iterator it = db.at( i);
     db.remove( it );

@@ -49,16 +49,16 @@ class ScriptingFunctionImpl : public KSpread::Function
             Q_ASSERT(extra && extra->function);
             ScriptingFunctionImpl* funcimpl = static_cast< ScriptingFunctionImpl* >( extra->function );
 
-            kDebug() << "ScriptingFunctionImpl::callback" << endl;
+            kDebug() <<"ScriptingFunctionImpl::callback";
 
             if( ! funcimpl->m_function) {
-                kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.") << endl;
+                kDebug() << QString("ScriptingFunctionImpl::callback ScriptingFunction instance is NULL.");
                 KSpread::Value err = KSpread::Value::errorNA();
                 err.setError( '#' + i18n("No such script.") );
                 return err;
             }
 
-            kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count()) << endl;
+            kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
 
             QVariantList list;
             int size = args.size();
@@ -90,7 +90,7 @@ class ScriptingFunctionImpl : public KSpread::Function
                 return err;
             }
 
-            kDebug() << "result=" << result.toString() << endl;
+            kDebug() <<"result=" << result.toString();
             return KSpread::Value( result.toString() );
             //return KSpread::Value( result );
         }
@@ -147,14 +147,14 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
     : QObject(parent)
     , d(new Private())
 {
-    kDebug() << "ScriptingFunction::ScriptingFunction" << endl;
+    kDebug() <<"ScriptingFunction::ScriptingFunction";
     d->funcElement = d->document.createElement("Function");
     d->helpElement = d->document.createElement("Help");
 }
 
 ScriptingFunction::~ScriptingFunction()
 {
-    kDebug() << "ScriptingFunction::~ScriptingFunction" << endl;
+    kDebug() <<"ScriptingFunction::~ScriptingFunction";
     delete d;
 }
 
@@ -194,7 +194,7 @@ void ScriptingFunction::addParameter(const QString& typeName, const QString& com
 
 bool ScriptingFunction::registerFunction()
 {
-    kDebug() << "ScriptingFunction::registerFunction" << endl;
+    kDebug() <<"ScriptingFunction::registerFunction";
 
     if( d->name.isEmpty() ) {
         kWarning() << "ScriptingFunction::registerFunction() name is empty!" << endl;

@@ -213,7 +213,7 @@ ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
 }
 
 void ListItemsHelper::recalculate() {
-    //kDebug() << "ListItemsHelper::recalculate" << endl;
+    //kDebug() <<"ListItemsHelper::recalculate";
     double width = 0.0;
     QTextListFormat format = m_textList->format();
     const KoListStyle::Style listStyle = static_cast<KoListStyle::Style> (m_textList->format().style());
@@ -229,7 +229,7 @@ void ListItemsHelper::recalculate() {
 
     for(int i=0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);
-        //kDebug() << " * " << tb.text() << endl;
+        //kDebug() <<" *" << tb.text();
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
         if(!data) {
             data = new KoTextBlockData();
@@ -375,10 +375,10 @@ Q_ASSERT(otherData);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
         data->setCounterWidth(width);
         data->setCounterSpacing(counterSpacing);
-        //kDebug() << data->counterText() << " " << tb.text() << endl;
-        //kDebug() << "    setCounterWidth: " << width << endl;
+        //kDebug() << data->counterText() <<"" << tb.text();
+        //kDebug() <<"    setCounterWidth:" << width;
     }
-    //kDebug() << endl;
+    //kDebug();
 }
 
 // static

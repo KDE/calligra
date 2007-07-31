@@ -83,7 +83,7 @@ void KarbonAIParserBase::parsingFinished(){
   // handle bounding box
   if (m_document)
   {
-    kDebug() << "bbox 1 is " << m_bbox << endl;
+    kDebug() <<"bbox 1 is" << m_bbox;
 
     if (m_bbox.width() > 0. )
       m_document->setWidth (m_bbox.width());

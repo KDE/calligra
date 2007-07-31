@@ -65,7 +65,7 @@ KUrl VideoShape::currentUrl() const
 
 void VideoShape::resize( const QSizeF &newSize )
 {
-  kDebug()<<" VideoShape::resize( const QSizeF &newSize )\n";
+  kDebug()<<" VideoShape::resize( const QSizeF &newSize )";
   QSize tmpSize(newSize.toSize());
   m_widget->resize(tmpSize);
   KoShape::resize(newSize);
@@ -73,51 +73,51 @@ void VideoShape::resize( const QSizeF &newSize )
 
 void VideoShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
-  kDebug()<<" VideoShape::paint( QPainter& painter, const KoViewConverter& converter )\n";
+  kDebug()<<" VideoShape::paint( QPainter& painter, const KoViewConverter& converter )";
   m_widget->repaint();
   m_videowidget->repaint();
 }
 
 void VideoShape::play()
 {
-  kDebug()<<" VideoShape::play\n";
+  kDebug()<<" VideoShape::play";
   m_mediaobject->play();
 }
 
 void VideoShape::start()
 { 
-  kDebug()<<"VideoShape::start\n";
+  kDebug()<<"VideoShape::start";
   m_mediaobject->play();
 }
 
 void VideoShape::stop()
 { 
-  kDebug()<<"VideoShape::stop \n";
+  kDebug()<<"VideoShape::stop";
   m_mediaobject->stop();
 }
 
 void VideoShape::changeUrl()
 {
-  kDebug()<<"VideoShape::changeUrl \n";
+  kDebug()<<"VideoShape::changeUrl";
   //TODO
 
 }
 
 void VideoShape::next()
 {
-  kDebug()<<"VideoShape::next\n";
+  kDebug()<<"VideoShape::next";
   //TODO
 }
 
 void VideoShape::previous()
 {
-  kDebug()<<"VideoShape::previous \n";
+  kDebug()<<"VideoShape::previous";
   //TODO
 }
 
 void VideoShape::pause()
 {
- kDebug()<<" VideoShape::pause \n";
+ kDebug()<<" VideoShape::pause";
  m_mediaobject->pause();
 }
 

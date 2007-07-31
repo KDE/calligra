@@ -88,7 +88,7 @@ MReportEngine::~MReportEngine()
 {
     // Clear the grand total data
     grandTotal.clear();
-    kDebug( 31000 ) << k_funcinfo << endl;
+    kDebug( 31000 ) << k_funcinfo;
 }
 
 void MReportEngine::addRef()
@@ -134,7 +134,7 @@ bool MReportEngine::setReportData( const QString &data )
 
     if ( !rd.setContent( data ) )
     {
-        kDebug() << "Unable to parse report data" << endl;
+        kDebug() <<"Unable to parse report data";
         return false;
     }
     initData();
@@ -149,7 +149,7 @@ bool MReportEngine::setReportData( QIODevice *dev )
 {
     if ( !rd.setContent( dev ) )
     {
-        kDebug() << "Unable to parse report data" << endl;
+        kDebug() <<"Unable to parse report data";
         return false;
     }
     initData();
@@ -195,7 +195,7 @@ bool MReportEngine::setReportTemplate( const QString &tpl )
 
     if ( !rt.setContent( tpl ) )
     {
-        kDebug() << "Unable to parse report template" << endl;
+        kDebug() <<"Unable to parse report template";
         return false;
     }
 
@@ -214,7 +214,7 @@ bool MReportEngine::setReportTemplate( QIODevice *dev )
 
     if ( !rt.setContent( dev ) )
     {
-        kDebug() << "Unable to parse report template" << endl;
+        kDebug() <<"Unable to parse report template";
         return false;
     }
 
@@ -767,7 +767,7 @@ void MReportEngine::setReportAttributes( QDomNode* report )
     widthDelta = ( float ) pageWidth / templateWidth;
     heightDelta = ( float ) pageHeight / templateheight;
 
-    kDebug( 30001 ) << "pagewidth: " << pageWidth
+    kDebug( 30001 ) <<"pagewidth:" << pageWidth
     << " pageheight: " << pageHeight << "\n"
     << "templateWidth: " << templateWidth
     << " templateheight: " << templateheight << "\n"

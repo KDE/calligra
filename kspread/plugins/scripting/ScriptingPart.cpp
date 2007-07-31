@@ -52,7 +52,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
 {
 	setComponentData(ScriptingPart::componentData());
 	setXMLFile(KStandardDirs::locate("data","kspread/kpartplugins/scripting.rc"), true);
-	kDebug() << "Scripting plugin. Class: " << metaObject()->className() << ", Parent: " << parent->metaObject()->className() << endl;
+	kDebug() <<"Scripting plugin. Class:" << metaObject()->className() <<", Parent:" << parent->metaObject()->className();
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	foreach(QString ba, args->getOptionList("scriptfile")) {
@@ -90,7 +90,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
 
 ScriptingPart::~ScriptingPart()
 {
-    kDebug() << "ScriptingPart::~ScriptingPart()" << endl;
+    kDebug() <<"ScriptingPart::~ScriptingPart()";
     delete d;
 }
 

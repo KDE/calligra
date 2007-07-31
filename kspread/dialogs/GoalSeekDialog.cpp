@@ -206,7 +206,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
 GoalSeekDialog::~GoalSeekDialog()
 {
-  kDebug() << "~GoalSeekDialog" << endl;
+  kDebug() <<"~GoalSeekDialog";
 
   chooseCleanup();
   if ( !m_restored )
@@ -380,14 +380,14 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 
     m_sourceCell.setValue(Value(startA));
     resultA = numToDouble (m_targetCell.value().asFloat()) - _goal;
-    //    kDebug() << "Target A: " << m_targetCell.value().asFloat() << ", " << m_targetCell.userInput() << " Calc: " << resultA << endl;
+    //    kDebug() <<"Target A:" << m_targetCell.value().asFloat() <<"," << m_targetCell.userInput() <<" Calc:" << resultA;
 
     m_sourceCell.setValue(Value(startB));
     resultB = numToDouble (m_targetCell.value().asFloat()) - _goal;
     /*
-      kDebug() << "Target B: " << m_targetCell.value().asFloat() << ", " << m_targetCell.userInput() << " Calc: " << resultB << endl;
+      kDebug() <<"Target B:" << m_targetCell.value().asFloat() <<"," << m_targetCell.userInput() <<" Calc:" << resultB;
 
-      kDebug() << "Iteration: " << m_maxIter << ", StartA: " << startA
+      kDebug() <<"Iteration:" << m_maxIter <<", StartA:" << startA
               << ", ResultA: " << resultA << " (eps: " << eps << "), StartB: "
               << startB << ", ResultB: " << resultB << endl;
     */
@@ -398,7 +398,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     // => can't get zero.
     if ( resultB == resultA )
     {
-      //      kDebug() << " resultA == resultB" << endl;
+      //      kDebug() <<" resultA == resultB";
       if ( fabs( resultA ) < eps )
       {
         ok = true;
@@ -414,12 +414,12 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 
     if ( fabs(x) > 100000000 )
     {
-      //      kDebug() << "fabs(x) > 100000000: " << x << endl;
+      //      kDebug() <<"fabs(x) > 100000000:" << x;
       ok = false;
       break;
     }
 
-    //    kDebug() << "X: " << x << ", fabs (resultA): " << fabs(resultA) << ", Real start: " << startA << ", Real result: " << resultA << ", Iteration: " << m_maxIter << endl;
+    //    kDebug() <<"X:" << x <<", fabs (resultA):" << fabs(resultA) <<", Real start:" << startA <<", Real result:" << resultA <<", Iteration:" << m_maxIter;
 
     --m_maxIter;
     if ( m_maxIter % 20 == 0 )

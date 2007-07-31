@@ -57,7 +57,7 @@ bool KoUnavailPart::loadXML( QIODevice *, const KoXmlDocument &doc )
 
 bool KoUnavailPart::saveFile()
 {
-    kDebug() << "KoUnavailPart::saveFile m_url=" << url().prettyUrl() << endl;
+    kDebug() <<"KoUnavailPart::saveFile m_url=" << url().prettyUrl();
     // This is called if the part points to an external file
     // In that case we have nothing to save, the file was unavailable !
     return true;
@@ -65,7 +65,7 @@ bool KoUnavailPart::saveFile()
 
 QDomDocument KoUnavailPart::saveXML()
 {
-    kDebug() << "KoUnavailPart::saveXML" << endl;
+    kDebug() <<"KoUnavailPart::saveXML";
     return m_doc;
 }
 
@@ -78,7 +78,7 @@ bool KoUnavailPart::saveOasis(KoStore*, KoXmlWriter*)
 
 void KoUnavailPart::setMimeType( const QByteArray& mime )
 {
-    kDebug() << "KoUnavailPart::setMimeType " << mime << endl;
+    kDebug() <<"KoUnavailPart::setMimeType" << mime;
     m_mimetype = mime;
 }
 

@@ -104,7 +104,7 @@ void Solver::optimize()
   if (!formulaCell.isFormula())
     return;
 
-  kDebug() << formulaCell.userInput() << endl;
+  kDebug() << formulaCell.userInput();
   s_formula = new Formula( sheet );
   if (d->dialog->minimizeButton->isChecked())
   {
@@ -181,7 +181,7 @@ void Solver::optimize()
 
     if ( status == GSL_SUCCESS )
     {
-      kDebug() << "converged to minimum after " << iteration << " iteration(s) at" << endl;
+      kDebug() <<"converged to minimum after" << iteration <<" iteration(s) at";
     }
 
     for ( int i = 0; i < dimension; ++i )

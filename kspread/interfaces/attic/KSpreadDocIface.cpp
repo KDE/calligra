@@ -188,7 +188,7 @@ void DocIface::setTypeOfCalc( const QString & calc )
     else if ( calc.toLower()=="none")
         doc->setTypeOfCalc(NoneCalc );
     else
-        kDebug()<<"Error in setTypeOfCalc( const QString & calc ) :"<<calc<<endl;
+        kDebug()<<"Error in setTypeOfCalc( const QString & calc ) :"<<calc;
     doc->refreshInterface();
 }
 

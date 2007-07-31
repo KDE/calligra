@@ -65,13 +65,13 @@ int KWPageManager::pageNumber(const KoRect &frame) const {
             frame.top() > pages.current()->height() + startOfpage) {
 #ifdef DEBUG_PAGES
     if(!pages.current())
-        kDebug(31001) << "  KWPageManager::pageNumber of "<< frame << " is too high, no page there\n";
+        kDebug(31001) <<"  KWPageManager::pageNumber of"<< frame <<" is too high, no page there";
     else if(frame.right() > pages.current()->width())
-        kDebug(31001) << "  KWPageManager::pageNumber right of "<< frame << " is out of bounds\n";
+        kDebug(31001) <<"  KWPageManager::pageNumber right of"<< frame <<" is out of bounds";
     else if(frame.top() > pages.current()->height() + startOfpage)
-        kDebug(31001) << "  KWPageManager::pageNumber "<< frame << " spans multiple pages\n";
+        kDebug(31001) <<"  KWPageManager::pageNumber"<< frame <<" spans multiple pages";
 
-kDebug(31001) << kBacktrace() << endl;
+kDebug(31001) << kBacktrace();
 #endif
         return -1; // not inside the page...
     }
@@ -227,7 +227,7 @@ void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
         m_defaultPageLayout.ptLeft = qMax(m_defaultPageLayout.ptLeft, 0.0);
         m_defaultPageLayout.ptRight = qMax(m_defaultPageLayout.ptRight, 0.0);
     }
-    //kDebug() << "setDefaultPage l:" << m_defaultPageLayout.ptLeft << ", r: " << m_defaultPageLayout.ptRight << ", a: " << m_defaultPageLayout.ptPageEdge << ", b: " << m_defaultPageLayout.ptBindingSide << endl;
+    //kDebug() <<"setDefaultPage l:" << m_defaultPageLayout.ptLeft <<", r:" << m_defaultPageLayout.ptRight <<", a:" << m_defaultPageLayout.ptPageEdge <<", b:" << m_defaultPageLayout.ptBindingSide;
 }
 
 KoPoint KWPageManager::clipToDocument(const KoPoint &kpoint) {

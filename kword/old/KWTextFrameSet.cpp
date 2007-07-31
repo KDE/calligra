@@ -118,7 +118,7 @@ private:
 KWTextFrameSet::KWTextFrameSet( KWDocument *_doc, const QString & name )
     : KWFrameSet( _doc )
 {
-    //kDebug() << "KWTextFrameSet::KWTextFrameSet " << this << endl;
+    //kDebug() <<"KWTextFrameSet::KWTextFrameSet" << this;
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Text Frameset %1" ) );
     else
@@ -224,14 +224,14 @@ KWTextDocument * KWTextFrameSet::kwTextDocument() const
 void KWTextFrameSet::slotAvailableHeightNeeded()
 {
     Q_ASSERT( isVisible() );
-    kDebug() << "KWTextFrameSet::slotAvailableHeightNeeded " << name() << endl;
+    kDebug() <<"KWTextFrameSet::slotAvailableHeightNeeded" << name();
     updateFrames( 0 ); // only do the available-height determination
 }
 
 KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPoint ) const
 {
 #ifdef DEBUG_DTI
-    kDebug() << "KWTextFrameSet::documentToInternal dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
+    kDebug() <<"KWTextFrameSet::documentToInternal dPoint:" << dPoint.x() <<"," << dPoint.y();
 #endif
     if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
         iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
@@ -249,7 +249,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
             iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->innerRect().x() ) );
             iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->innerRect().y() + theFrame->internalY() ) );
 #ifdef DEBUG_DTI
-            kDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
+            kDebug() <<"documentToInternal: returning" << iPoint.x() <<"," << iPoint.y()
                       << " internalY=" << theFrame->internalY() << " because frame=" << theFrame
                       << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
@@ -257,7 +257,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
         }
 #ifdef DEBUG_DTI
         //else
-        //  kDebug() << "DTI: " << frameRect
+        //  kDebug() <<"DTI:" << frameRect
         //            << " doesn't contain nPoint:" << nPoint.x() << "," << nPoint.y() << endl;
 #endif
     }
@@ -269,7 +269,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
 KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoint, QPoint &iPoint, RelativePosition& relPos, KWViewMode *viewMode ) const
 {
 #ifdef DEBUG_DTI
-    kDebug() << "KWTextFrameSet::documentToInternalMouseSelection dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
+    kDebug() <<"KWTextFrameSet::documentToInternalMouseSelection dPoint:" << dPoint.x() <<"," << dPoint.y();
 #endif
     if ( !viewMode->hasFrames() ) { // text viewmode
         relPos = InsideFrame;
@@ -289,7 +289,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
             iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->innerRect().x() ) );
             iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->innerRect().y() + theFrame->internalY() ) );
 #ifdef DEBUG_DTI
-            kDebug() << "documentToInternal: returning InsideFrame " << iPoint.x() << "," << iPoint.y()
+            kDebug() <<"documentToInternal: returning InsideFrame" << iPoint.x() <<"," << iPoint.y()
                       << " internalY=" << theFrame->internalY() << " because frame=" << theFrame
                       << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
@@ -304,7 +304,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         KoRect openLeftRect( theFrame->innerRect() );
         openLeftRect.setLeft( theFrame->paddingLeft() );
 #ifdef DEBUG_DTI
-        kDebug() << "documentToInternal: openLeftRect=" << openLeftRect << endl;
+        kDebug() <<"documentToInternal: openLeftRect=" << openLeftRect;
 #endif
         if ( openLeftRect.contains( dPoint ) )
         {
@@ -312,7 +312,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
             iPoint.setX( m_doc->ptToLayoutUnitPixX(theFrame->innerRect().left() ));
             iPoint.setY( m_doc->ptToLayoutUnitPixY( dPoint.y() - theFrame->top() + theFrame->internalY() ) );
 #ifdef DEBUG_DTI
-            kDebug() << "documentToInternal: returning LeftOfFrame " << iPoint.x() << "," << iPoint.y()
+            kDebug() <<"documentToInternal: returning LeftOfFrame" << iPoint.x() <<"," << iPoint.y()
                       << " internalY=" << theFrame->internalY() << " because openLeftRect=" << openLeftRect
                       << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
@@ -321,7 +321,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         }
         KoRect openTopRect( KoPoint( 0, 0 ), theFrame->innerRect().bottomRight() );
 #ifdef DEBUG_DTI
-        kDebug() << "documentToInternal: openTopRect=" << openTopRect << endl;
+        kDebug() <<"documentToInternal: openTopRect=" << openTopRect;
 #endif
         if ( openTopRect.contains( dPoint ) )
         {
@@ -329,7 +329,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
             iPoint.setX( m_doc->ptToLayoutUnitPixX( dPoint.x() - theFrame->innerRect().left() ) );
             iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
 #ifdef DEBUG_DTI
-            kDebug() << "documentToInternal: returning " << iPoint.x() << "," << iPoint.y()
+            kDebug() <<"documentToInternal: returning" << iPoint.x() <<"," << iPoint.y()
                       << " internalY=" << theFrame->internalY() << " because openTopRect=" << openTopRect
                       << " contains dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
@@ -346,7 +346,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
         iPoint.setX( m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() ) );
         iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() ) );
 #ifdef DEBUG_DTI
-        kDebug() << "documentToInternal: returning AtEnd " << iPoint.x() << "," << iPoint.y()
+        kDebug() <<"documentToInternal: returning AtEnd" << iPoint.x() <<"," << iPoint.y()
                   << " because we are under all frames of the last page" << endl;
 #endif
         relPos = AtEnd;
@@ -367,7 +367,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
                 iPoint.setX( 0 ); // We are, hmm, on the left or right of the frames
             iPoint.setY( m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) );
 #ifdef DEBUG_DTI
-            kDebug() << "documentToInternal: returning TopOfFrame " << iPoint.x() << "," << iPoint.y()
+            kDebug() <<"documentToInternal: returning TopOfFrame" << iPoint.x() <<"," << iPoint.y()
                       << " because we are under all frames of page " << pageNum << endl;
 #endif
             relPos = TopOfFrame;
@@ -378,7 +378,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
 
     iPoint = m_doc->ptToLayoutUnitPix( dPoint ); // bah
 #ifdef DEBUG_DTI
-    kDebug() << "documentToInternal: returning not found for " << iPoint.x() << "," << iPoint.y() << endl;
+    kDebug() <<"documentToInternal: returning not found for" << iPoint.x() <<"," << iPoint.y();
 #endif
     return 0;
 }
@@ -386,7 +386,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
 KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPoint &dPoint, const KoPoint &hintDPoint ) const
 {
 #ifdef DEBUG_ITD
-    kDebug() << "KWTextFrameSet::internalToDocumentWithHint hintDPoint: " << hintDPoint.x() << "," << hintDPoint.y() << endl;
+    kDebug() <<"KWTextFrameSet::internalToDocumentWithHint hintDPoint:" << hintDPoint.x() <<"," << hintDPoint.y();
 #endif
     if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
         dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) );
@@ -399,14 +399,14 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
         KWFrame *theFrame = frameIt.current();
         QRect r( 0, m_doc->ptToLayoutUnitPixY( theFrame->internalY() ), m_doc->ptToLayoutUnitPixX( theFrame->innerWidth() )+1, m_doc->ptToLayoutUnitPixY( theFrame->innerHeight() )+1 );
 #ifdef DEBUG_ITD
-        kDebug() << "ITD: r=" << r << " iPoint=" << iPoint.x() << "," << iPoint.y() << endl;
+        kDebug() <<"ITD: r=" << r <<" iPoint=" << iPoint.x() <<"," << iPoint.y();
 #endif
         // r is the frame in qrt coords
         if ( r.contains( iPoint ) ) // both r and p are in layout units (aka internal)
         {
             dPoint = internalToDocumentKnowingFrame( iPoint, theFrame );
 #ifdef DEBUG_ITD
-            kDebug() << "copy: " << theFrame->isCopy() << " hintDPoint.y()=" << hintDPoint.y() << " dPoint.y()=" << dPoint.y() << endl;
+            kDebug() <<"copy:" << theFrame->isCopy() <<" hintDPoint.y()=" << hintDPoint.y() <<" dPoint.y()=" << dPoint.y();
 #endif
             // First test: No "hintDPoint" specified, go for the first match
             // Second test: hintDPoint specified, check if we are far enough
@@ -424,7 +424,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
     // This happens when the parag is on a not-yet-created page (formatMore will notice afterwards)
     // So it doesn't matter much what happens here, we'll redo it anyway.
 #ifdef DEBUG_ITD
-    kDebug(32002) << "KWTextFrameSet::internalToDocumentWithHint " << iPoint.x() << "," << iPoint.y()
+    kDebug(32002) <<"KWTextFrameSet::internalToDocumentWithHint" << iPoint.x() <<"," << iPoint.y()
                    << " not in any frame of " << (void*)this << endl;
 #endif
     dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) ); // bah
@@ -454,17 +454,17 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
 {
     if ( !isVisible() || m_frames.isEmpty() )
         return QPoint();
-    //kDebug() << "KWTextFrameSet::moveToPage currentPgNum=" << currentPgNum << " direction=" << direction << endl;
+    //kDebug() <<"KWTextFrameSet::moveToPage currentPgNum=" << currentPgNum <<" direction=" << direction;
     int num = currentPgNum + direction;
     int pages = m_doc->pageCount();
     for ( ; num >= 0 && num < pages ; num += direction )
     {
-        //kDebug() << "KWTextFrameSet::moveToPage num=" << num << " pages=" << pages << endl;
+        //kDebug() <<"KWTextFrameSet::moveToPage num=" << num <<" pages=" << pages;
         // Find the first frame on page num
         if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage )
             continue; // No frame on that page
 
-        //kDebug() << "KWTextFrameSet::moveToPage ok for first frame in page " << num << endl;
+        //kDebug() <<"KWTextFrameSet::moveToPage ok for first frame in page" << num;
         Q3PtrListIterator<KWFrame> frameIt( framesInPage( num ) );
         return QPoint( 0, m_doc->ptToLayoutUnitPixY( frameIt.current()->internalY() ) + 2 ); // found, ok.
     }
@@ -510,7 +510,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
                 if ( frameNum < frameCount() ) // not true on the "endnotes-only" page
                 {
                     KWFrame* frame = this->frame( frameNum ); // ## or use framesInPage ?
-                    //kDebug() << " Footnote line: page " << pageNum << " found frame " << frameNum << " drawFootNoteLine=" << frame->drawFootNoteLine() << endl;
+                    //kDebug() <<" Footnote line: page" << pageNum <<" found frame" << frameNum <<" drawFootNoteLine=" << frame->drawFootNoteLine();
                     if ( frame->drawFootNoteLine() )
                     {
                         double y = frame->bottomLeft().y() + m_doc->headerFooterInfo().ptFootNoteBodySpacing / 2;
@@ -528,7 +528,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
                         }
 
                         QRect flatRect = viewMode->normalToView( m_doc->zoomRectOld( rect ) );
-                        //kDebug() << " KWTextFrameSet::drawContents rect=" << rect << " zoomed:" << flatRect << endl;
+                        //kDebug() <<" KWTextFrameSet::drawContents rect=" << rect <<" zoomed:" << flatRect;
                         flatRect.setBottom( flatRect.top() + 1 ); // #!@!@!& QRect....
                         if ( flatRect.intersects( crect ) ) {
                             p->save();
@@ -554,7 +554,7 @@ void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColo
                             }
                             p->setPen( pen );
                             p->drawLine( flatRect.left(), flatRect.top(), flatRect.right(), flatRect.top() );
-                            //kDebug() << "  drawLine( " << flatRect.left() << ", " << flatRect.top() << ", " << flatRect.right() << ", " << flatRect.top() << endl;
+                            //kDebug() <<"  drawLine(" << flatRect.left() <<"," << flatRect.top() <<"," << flatRect.right() <<"," << flatRect.top();
                             p->restore();
                         }
                     }
@@ -586,7 +586,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     // In this method the painter is translated to the frame's coordinate system
     // (in the first frame (0,0) will be its topleft, in the second frame it will be (0,internalY) etc.
 
-    //kDebug(32001) << "KWTextFrameSet::drawFrameContents " << name() << "(frame " << frameFromPtr( theFrame ) << ") crect(r)=" << r << " onlyChanged=" << onlyChanged << endl;
+    //kDebug(32001) <<"KWTextFrameSet::drawFrameContents" << name() <<"(frame" << frameFromPtr( theFrame ) <<") crect(r)=" << r <<" onlyChanged=" << onlyChanged;
     m_currentDrawnFrame = theFrame;
     if ( theFrame ) // 0L in the text viewmode
     {
@@ -603,7 +603,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
                 switch ( var->subType() )
                 {
                 case KWPgNumVariable::VST_PGNUM_CURRENT:
-                    //kDebug() << "KWTextFrameSet::drawFrame updating pgnum variable to " << theFrame->pageNumber()
+                    //kDebug() <<"KWTextFrameSet::drawFrame updating pgnum variable to" << theFrame->pageNumber()
                     //          << " and invalidating parag " << var->paragraph() << endl;
                     var->setPgNum( theFrame->pageNumber() + pageNumberOffset );
                     break;
@@ -638,7 +638,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     if ( m_doc->viewFormattingChars() )
         drawingFlags |= KoTextDocument::DrawFormattingChars;
 
-    //kDebug(32001) << "KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << cg.brush( QColorGroup::Base) << endl;
+    //kDebug(32001) <<"KWTextFrameSet::drawFrame calling drawWYSIWYG. cg base color:" << cg.brush( QColorGroup::Base);
     KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(),
@@ -655,10 +655,10 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
         if ( lastFormatted == textDocument()->lastParag() && ( !lastDrawn || m_doc->layoutUnitToPixelY( lastDrawn->rect().bottom() ) < r.bottom() ) )
             lastDrawn = lastFormatted;
 
-        //kDebug(32002) << "KWTextFrameSet::drawFrame drawn. onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged << " lastDrawn=" << lastDrawn->paragId() << " lastDrawn's bottom:" << lastDrawn->rect().bottom() << " r.bottom=" << r.bottom() << endl;
+        //kDebug(32002) <<"KWTextFrameSet::drawFrame drawn. onlyChanged=" << onlyChanged <<" resetChanged=" << resetChanged <<" lastDrawn=" << lastDrawn->paragId() <<" lastDrawn's bottom:" << lastDrawn->rect().bottom() <<" r.bottom=" << r.bottom();
         if ( lastDrawn && m_doc->layoutUnitToPixelY( lastDrawn->rect().bottom() ) > r.bottom() )
         {
-            //kDebug(32002) << "KWTextFrameSet::drawFrame setting lastDrawn " << lastDrawn->paragId() << " to changed" << endl;
+            //kDebug(32002) <<"KWTextFrameSet::drawFrame setting lastDrawn" << lastDrawn->paragId() <<" to changed";
             lastDrawn->setChanged( true );
         }
     }
@@ -676,7 +676,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;
         QSize availSize = viewMode->availableSizeForText( this );
         QRect blank( 0, docHeight, availSize.width(), availSize.height() - docHeight );
-        //kDebug(32002) << this << " Blank area: " << blank << endl;
+        //kDebug(32002) << this <<" Blank area:" << blank;
         painter->fillRect( blank, cg.brush( QColorGroup::Base ) );
         // for debugging :)
         //painter->setPen( QPen(Qt::blue, 1, DashLine) );  painter->drawRect( blank );
@@ -706,9 +706,9 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                    topLeft.y() + lineY );
 
 #ifdef DEBUG_CURSOR
-    kDebug() << "KWTextFrameSet::drawCursor topLeft=" << topLeft.x() << "," << topLeft.y()
+    kDebug() <<"KWTextFrameSet::drawCursor topLeft=" << topLeft.x() <<"," << topLeft.y()
               << " x=" << cursor->x() << " y=" << lineY << endl;
-    kDebug() << "KWTextFrameSet::drawCursor iPoint=" << iPoint.x() << "," << iPoint.y()
+    kDebug() <<"KWTextFrameSet::drawCursor iPoint=" << iPoint.x() <<"," << iPoint.y()
               << "   cursorHeight=" << cursorHeight << endl;
 #endif
     KoPoint dPoint;
@@ -716,19 +716,19 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
     if ( internalToDocumentWithHint( iPoint, dPoint, hintDPoint ) )
     {
 #ifdef DEBUG_CURSOR
-        kDebug() << " dPoint(doc, pts)=" << dPoint.x() << "," << dPoint.y() << endl;
+        kDebug() <<" dPoint(doc, pts)=" << dPoint.x() <<"," << dPoint.y();
         QPoint debugPt = m_doc->zoomPointOld( dPoint );
-        kDebug() << " zoomed dPoint(doc, pixels)=" << debugPt.x() << "," << debugPt.y() << endl;
+        kDebug() <<" zoomed dPoint(doc, pixels)=" << debugPt.x() <<"," << debugPt.y();
 #endif
         QPoint vPoint = m_currentViewMode->normalToView( m_doc->zoomPointOld( dPoint ) ); // from doc to view contents
 #ifdef DEBUG_CURSOR
-        kDebug() << " vPoint(view, pixels)=" << vPoint.x() << "," << vPoint.y() << endl;
+        kDebug() <<" vPoint(view, pixels)=" << vPoint.x() <<"," << vPoint.y();
 #endif
         // from now on, iPoint will be in pixels
         iPoint = m_doc->layoutUnitToPixel( iPoint );
         //int xadj = parag->at( cursor->index() )->pixelxadj;
 #ifdef DEBUG_CURSOR
-        //kDebug() << "     iPoint in pixels : " << iPoint.x() << "," << iPoint.y() << "     will add xadj=" << xadj << endl;
+        //kDebug() <<"     iPoint in pixels :" << iPoint.x() <<"," << iPoint.y() <<"     will add xadj=" << xadj;
 #endif
         //iPoint.rx() += xadj;
         //vPoint.rx() += xadj;
@@ -736,13 +736,13 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
         QRect clip( vPoint.x() - 5, vPoint.y(), 10, cursorHeight );
 
 #ifdef DEBUG_CURSOR
-        kDebug() << " clip(view, before intersect)=" << clip << endl;
+        kDebug() <<" clip(view, before intersect)=" << clip;
 #endif
 
         QRect viewFrameRect = m_currentViewMode->normalToView( normalFrameRect );
         clip &= viewFrameRect; // clip to frame
 #ifdef DEBUG_CURSOR
-        kDebug() << "KWTextFrameSet::drawCursor normalFrameRect=" << normalFrameRect
+        kDebug() <<"KWTextFrameSet::drawCursor normalFrameRect=" << normalFrameRect
                   << " clip(view, after intersect)=" << clip << endl;
 #endif
 
@@ -771,7 +771,7 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                 int translationX = viewFrameRect.left();
                 int translationY = viewFrameRect.top() - m_doc->zoomItYOld( theFrame->internalY() );
 #ifdef DEBUG_CURSOR
-                kDebug() << "        translating Y by viewFrameRect.top()-internalY in pixelY= " << viewFrameRect.top() << "-" << m_doc->zoomItYOld( theFrame->internalY() ) << "=" << viewFrameRect.top() - m_doc->zoomItYOld( theFrame->internalY() ) << endl;
+                kDebug() <<"        translating Y by viewFrameRect.top()-internalY in pixelY=" << viewFrameRect.top() <<"-" << m_doc->zoomItYOld( theFrame->internalY() ) <<"=" << viewFrameRect.top() - m_doc->zoomItYOld( theFrame->internalY() );
 #endif
                 p->translate( translationX, translationY );
                 p->setBrushOrigin( p->brushOrigin().x() + translationX, p->brushOrigin().y() + translationY );
@@ -837,7 +837,7 @@ void KWTextFrameSet::layout()
 
 void KWTextFrameSet::invalidate()
 {
-    //kDebug() << "KWTextFrameSet::invalidate " << name() << endl;
+    //kDebug() <<"KWTextFrameSet::invalidate" << name();
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
     textDocument()->invalidate(); // lazy layout, real update follows upon next repaint
 }
@@ -934,7 +934,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
     if (textFrames.isEmpty())
     {
 #ifdef DEBUG_MARGINS
-        kDebug(32002) << "  getMargins: internalToDocument returned no text frames for y1=" << yp << " y2=" << yp + h << " ->aborting with 0 margins" << endl;
+        kDebug(32002) <<"  getMargins: internalToDocument returned no text frames for y1=" << yp <<" y2=" << yp + h <<" ->aborting with 0 margins";
 #endif
         // frame == 0 happens when the parag is under the last frame.
         // On an auto-resizable frame, we know the frame will grow so we can go ahead
@@ -1087,7 +1087,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
         if ( marginRight )
         {
 #ifdef DEBUG_MARGINS
-            kDebug(32002) << "    getMargins " << name()
+            kDebug(32002) <<"    getMargins" << name()
                            << " page width=" << *pageWidth
                            << " to=" << to << endl;
 #endif
@@ -1122,7 +1122,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag
         if ( !parag || linesTogether ) // Paragraph-level breaking
         {
 #ifdef DEBUG_FORMATVERTICALLY
-            kDebug(32002) << "checkVerticalBreak ADJUSTING yp=" << yp << " hp=" << hp
+            kDebug(32002) <<"checkVerticalBreak ADJUSTING yp=" << yp <<" hp=" << hp
                            << " breakEnd+2 [new value for yp]=" << breakEnd+2 << endl;
 #endif
             yp = breakEnd + 1;
@@ -1132,7 +1132,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag
         {
             QMap<int, KoTextParagLineStart*>& lineStarts = parag->lineStartList();
 #ifdef DEBUG_FORMATVERTICALLY
-            kDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+            kDebug(32002) <<"checkVerticalBreak parag" << parag->paragId()
                            << ". lineStarts has " << lineStarts.count()
                            << " items" << endl;
 #endif
@@ -1145,7 +1145,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag
                 Q_ASSERT( ls );
                 int y = parag->rect().y() + ls->y;
 #ifdef DEBUG_FORMATVERTICALLY
-                kDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                kDebug(32002) <<"checkVerticalBreak parag" << parag->paragId()
                                << " line " << line << " ls->y=" << ls->y
                                << " ls->h=" << ls->h << " y=" << y
                                << " breakBegin=" << breakBegin
@@ -1158,7 +1158,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag
                         if ( line == 0 ) // First line ? It's like a paragraph breaking then
                         {
 #ifdef DEBUG_FORMATVERTICALLY
-                            kDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                            kDebug(32002) <<"checkVerticalBreak parag" << parag->paragId()
                                            << " BREAKING first line -> parag break" << endl;
 #endif
                             yp = breakEnd + 1;
@@ -1167,7 +1167,7 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag
                         dy = breakEnd + 1 - y;
                         ls->y = breakEnd + 1 - parag->rect().y();
 #ifdef DEBUG_FORMATVERTICALLY
-                        kDebug(32002) << "checkVerticalBreak parag " << parag->paragId()
+                        kDebug(32002) <<"checkVerticalBreak parag" << parag->paragId()
                                        << " BREAKING at line " << line << " dy=" << dy << "  Setting ls->y to " << ls->y << ", y=" << breakEnd << endl;
 #endif
                     }
@@ -1177,14 +1177,14 @@ bool KWTextFrameSet::checkVerticalBreak( int & yp, int & hp, KoTextParag * parag
                     ls->y += dy;
 #ifdef DEBUG_FORMATVERTICALLY
                     if ( dy )
-                        kDebug(32002) << "                   moving down to position ls->y=" << ls->y << endl;
+                        kDebug(32002) <<"                   moving down to position ls->y=" << ls->y;
 #endif
                 }
             }
             parag->setMovedDown( true );
             parag->setHeight( hp + dy );
 #ifdef DEBUG_FORMATVERTICALLY
-            kDebug(32002) << "Paragraph height set to " << hp+dy << endl;
+            kDebug(32002) <<"Paragraph height set to" << hp+dy;
 #endif
             hp += dy;
             return true;
@@ -1263,14 +1263,14 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
                 // (formatVertically is called twice for each paragraph, if a break was done)
                 yp = bottom /*+ 2*/;
 #ifdef DEBUG_FORMATVERTICALLY
-                kDebug(32002) << "KWTextFrameSet::formatVertically -> HARD FRAME BREAK" << endl;
-                kDebug(32002) << "KWTextFrameSet::formatVertically yp now " << yp << endl;
+                kDebug(32002) <<"KWTextFrameSet::formatVertically -> HARD FRAME BREAK";
+                kDebug(32002) <<"KWTextFrameSet::formatVertically yp now" << yp;
 #endif
                 break;
             }
 
 #ifdef DEBUG_FORMATVERTICALLY
-            kDebug(32002) << " formatVertically: frameHeight=" << frameHeight << " bottom=" << bottom << endl;
+            kDebug(32002) <<" formatVertically: frameHeight=" << frameHeight <<" bottom=" << bottom;
 #endif
             // don't move down parags that have only one line and are bigger than the page (e.g. floating tables)
             if ( hp < frameHeight || ( parag && parag->lineStartList().count() > 1 ) )
@@ -1287,7 +1287,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     }
 
 #ifdef DEBUG_FORMATVERTICALLY
-    kDebug(32002) << " formatVertically: now looking at RA_SKIP" << endl;
+    kDebug(32002) <<" formatVertically: now looking at RA_SKIP";
 #endif
 
 
@@ -1310,7 +1310,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
                      checkVerticalBreak( yp, hp, parag, linesTogether,
                                          iTop.y(), iBottom.y() ) )
                 {
-                    kDebug(32002) << "KWTextFrameSet::formatVertically breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp << endl;
+                    kDebug(32002) <<"KWTextFrameSet::formatVertically breaking around RA_SKIP frame yp="<<yp<<" hp=" << hp;
                     // We don't "break;" here because there could be another such frame below the first one
                     // We assume that the frames on top are in order ( top to bottom ), btw.
                     // They should be, since updateFrames reorders before updating frames-on-top
@@ -1327,11 +1327,11 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
     getMargins( yp, hp, reqMinWidth, 0L, 0L, 0L, 0L, &breakBegin, &breakEnd, parag );
     if ( breakEnd )
     {
-        kDebug(32002) << "KWTextFrameSet("<<name()<<")::formatVertically no-space case. breakBegin=" << breakBegin
+        kDebug(32002) <<"KWTextFrameSet("<<name()<<")::formatVertically no-space case. breakBegin=" << breakBegin
                        << " breakEnd=" << breakEnd << " hp=" << hp << endl;
         Q_ASSERT( breakBegin <= breakEnd );
         if ( checkVerticalBreak( yp, hp, parag, linesTogether, breakBegin, breakEnd ) )
-            ; //kDebug(32002) << "checkVerticalBreak ok." << endl;
+            ; //kDebug(32002) <<"checkVerticalBreak ok.";
         else // shouldn't happen
             kWarning(32002) << "checkVerticalBreak didn't find it" << endl;
     }
@@ -1350,7 +1350,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
         }
     }
 #ifdef DEBUG_FORMATVERTICALLY
-    kDebug() << "KWTextFrameSet::formatVertically returning " << ( yp + hp ) - ( oldY + oldHeight ) << endl;
+    kDebug() <<"KWTextFrameSet::formatVertically returning" << ( yp + hp ) - ( oldY + oldHeight );
 #endif
     return ( yp + hp ) - ( oldY + oldHeight );
 }
@@ -1385,7 +1385,7 @@ void KWTextFrameSet::fixParagWidth( KWTextParag* parag )
 KWTextFrameSet::~KWTextFrameSet()
 {
     textDocument()->takeFlow();
-    //kDebug(32001) << "KWTextFrameSet::~KWTextFrameSet" << endl;
+    //kDebug(32001) <<"KWTextFrameSet::~KWTextFrameSet";
     m_doc = 0L;
     delete m_textobj;
 }
@@ -1442,13 +1442,13 @@ void KWTextFrameSet::updateFrames( int flags )
 {
     // Not visible ? Don't bother then.
     if ( !isVisible() ) {
-        //kDebug(32002) << "KWTextFrameSet::updateFrames " << name() << " not visible" << endl;
+        //kDebug(32002) <<"KWTextFrameSet::updateFrames" << name() <<" not visible";
         m_textobj->setVisible(false);
         return;
     }
     m_textobj->setVisible(true);
 
-    //kDebug(32002) << "KWTextFrameSet::updateFrames " << name() << " frame-count=" << m_frames.count() << endl;
+    //kDebug(32002) <<"KWTextFrameSet::updateFrames" << name() <<" frame-count=" << m_frames.count();
 
     // Sort frames of this frameset on (y coord, x coord)
     // Adjustment on 20-Jun-2002 which does not change the itent of this but moves the
@@ -1461,7 +1461,7 @@ void KWTextFrameSet::updateFrames( int flags )
     for ( ; frameIter.current(); ++frameIter )
     {
         // Calculate max width while we're at it
-        //kDebug(32002) << "KWTextFrameSet::updateFrames frame " << *frameIter.current() << " innerWidth=" << frameIter.current()->innerWidth() << "pt" << endl;
+        //kDebug(32002) <<"KWTextFrameSet::updateFrames frame" << *frameIter.current() <<" innerWidth=" << frameIter.current()->innerWidth() <<"pt";
         width = qMax( width, m_doc->ptToLayoutUnitPixX( frameIter.current()->innerWidth()));
         if ( flags & SortFrames )
         {
@@ -1472,10 +1472,10 @@ void KWTextFrameSet::updateFrames( int flags )
     }
     if ( width != textDocument()->width() )
     {
-        //kDebug(32002) << "KWTextFrameSet::updateFrames setWidth " << width << " LU pixels." << endl;
+        //kDebug(32002) <<"KWTextFrameSet::updateFrames setWidth" << width <<" LU pixels.";
         //textDocument()->setMinimumWidth( -1, 0 );
         textDocument()->setWidth( width + 1 ); // QRect semantics problem (#32866)
-    } //else kDebug(32002) << "KWTextFrameSet::updateFrames width already " << width << " LU pixels." << endl;
+    } //else kDebug(32002) <<"KWTextFrameSet::updateFrames width already" << width <<" LU pixels.";
 
     if ( flags & SortFrames )
     {
@@ -1515,7 +1515,7 @@ void KWTextFrameSet::updateFrames( int flags )
     }
 
     m_textobj->setAvailableHeight( m_doc->ptToLayoutUnitPixY( availHeight ) );
-    //kDebug(32002) << this << " (" << name() << ") KWTextFrameSet::updateFrames availHeight=" << availHeight
+    //kDebug(32002) << this <<" (" << name() <<") KWTextFrameSet::updateFrames availHeight=" << availHeight
     //               << " (LU: " << m_doc->ptToLayoutUnitPixY( availHeight ) << ")" << endl;
     m_frames.setAutoDelete( true );
 
@@ -1530,7 +1530,7 @@ int KWTextFrameSet::availableHeight() const
 KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &dPoint ) const
 {
 #ifdef DEBUG_ITD
-    kDebug() << name() << " ITD called for relPoint=" << relPoint.x() << "," << relPoint.y() << endl;
+    kDebug() << name() <<" ITD called for relPoint=" << relPoint.x() <<"," << relPoint.y();
 #endif
     if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
         dPoint = relPoint;
@@ -1549,7 +1549,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         double res;
         mid = (n1 + n2)/2;
 #ifdef DEBUG_ITD
-        kDebug() << "ITD: begin. mid=" << mid << endl;
+        kDebug() <<"ITD: begin. mid=" << mid;
 #endif
         Q_ASSERT( m_framesInPage[mid] ); // We have no null items
         if ( m_framesInPage[mid]->isEmpty() )
@@ -1559,11 +1559,11 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
             KWFrame * theFrame = m_framesInPage[mid]->first();
             internalY = theFrame->internalY();
 #ifdef DEBUG_ITD
-            kDebug() << "ITD: relPoint.y=" << relPoint.y() << " internalY=" << internalY << endl;
+            kDebug() <<"ITD: relPoint.y=" << relPoint.y() <<" internalY=" << internalY;
 #endif
             res = relPoint.y() - internalY;
 #ifdef DEBUG_ITD
-            kDebug() << "ITD: res=" << res << endl;
+            kDebug() <<"ITD: res=" << res;
 #endif
             // Anything between this internalY (top) and internalY+height (bottom) is fine
             // (Using the next page's first frame's internalY only works if there is a frame on the next page)
@@ -1571,12 +1571,12 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
             {
                 double height = theFrame->innerHeight();
 #ifdef DEBUG_ITD
-                kDebug() << "ITD: height=" << height << " -> the bottom is at " << internalY+height << endl;
+                kDebug() <<"ITD: height=" << height <<" -> the bottom is at" << internalY+height;
 #endif
                 if ( relPoint.y() < internalY + height )
                 {
 #ifdef DEBUG_ITD
-                    kDebug() << "ITD: found a match " << mid << endl;
+                    kDebug() <<"ITD: found a match" << mid;
 #endif
                     found = true;
                     break;
@@ -1590,7 +1590,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         else // if ( res >= 0 )
             n1 = mid + 1;
 #ifdef DEBUG_ITD
-        kDebug() << "ITD: End of loop. n1=" << n1 << " n2=" << n2 << endl;
+        kDebug() <<"ITD: End of loop. n1=" << n1 <<" n2=" << n2;
 #endif
     }
     if ( !found )
@@ -1600,12 +1600,12 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         // (and we only looked at the first one).
         mid = n2;
 #ifdef DEBUG_ITD
-        kDebug() << "ITD: Setting mid to n2=" << mid << endl;
+        kDebug() <<"ITD: Setting mid to n2=" << mid;
 #endif
         if ( mid < 0 )
         {
 #ifdef DEBUG_ITD
-            kDebug(32002) << "KWTextFrameSet::internalToDocument " << relPoint.x() << "," << relPoint.y()
+            kDebug(32002) <<"KWTextFrameSet::internalToDocument" << relPoint.x() <<"," << relPoint.y()
                            << " before any frame of " << (void*)this << endl;
 #endif
             dPoint = relPoint; // "bah", I said above :)
@@ -1622,7 +1622,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         {
             KWFrame * theFrame = m_framesInPage[mid]->first();
 #ifdef DEBUG_ITD
-            kDebug() << "KWTextFrameSet::internalToDocument going back to page " << mid << " - frame: " << theFrame->internalY() << endl;
+            kDebug() <<"KWTextFrameSet::internalToDocument going back to page" << mid <<" - frame:" << theFrame->internalY();
 #endif
             if ( theFrame->internalY() == internalY ) // same internalY as the frame we found before
                 result = mid;
@@ -1638,7 +1638,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         KWFrame *theFrame = frameIt.current();
         KoRect relRect( 0, theFrame->internalY(), theFrame->innerWidth(), theFrame->innerHeight() );
 #ifdef DEBUG_ITD
-        kDebug() << "KWTextFrameSet::internalToDocument frame's relative rect:" << relRect << endl;
+        kDebug() <<"KWTextFrameSet::internalToDocument frame's relative rect:" << relRect;
 #endif
         if ( relRect.contains( relPoint ) ) // both relRect and relPoint are in "relative coordinates"
         {
@@ -1647,7 +1647,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
         }
     }
 #ifdef DEBUG_ITD
-    kDebug(32002) << "KWTextFrameSet::internalToDocument " << relPoint.x() << "," << relPoint.y()
+    kDebug(32002) <<"KWTextFrameSet::internalToDocument" << relPoint.x() <<"," << relPoint.y()
                    << " not in any frame of " << (void*)this << " (looked on page " << result << ")" << endl;
 #endif
     dPoint = relPoint; // bah again
@@ -1667,7 +1667,7 @@ void KWTextFrameSet::printDebug()
     KWFrameSet::printDebug();
     if ( !isDeleted() )
     {
-        kDebug() << "KoTextDocument width = " << textDocument()->width() << " height = " << textDocument()->height() << endl;
+        kDebug() <<"KoTextDocument width =" << textDocument()->width() <<" height =" << textDocument()->height();
     }
 
     Q3PtrListIterator<KoTextCustomItem> cit( textDocument()->allCustomItems() );
@@ -1675,7 +1675,7 @@ void KWTextFrameSet::printDebug()
     {
       KWAnchor *anc = dynamic_cast<KWAnchor *>( cit.current() );
       if (anc)
-          kDebug() << "Inline framesets: " << anc->frameSet()->name() << endl;
+          kDebug() <<"Inline framesets:" << anc->frameSet()->name();
     }
 }
 #endif
@@ -1911,7 +1911,7 @@ void KWTextFrameSet::load( QDomElement &attributes, bool loadFrames )
         textDocument()->setLastParag( lastParagraph );
 
     m_textobj->setLastFormattedParag( textDocument()->firstParag() );
-    //kDebug(32001) << "KWTextFrameSet::load done" << endl;
+    //kDebug(32001) <<"KWTextFrameSet::load done";
 }
 
 void KWTextFrameSet::finalize()
@@ -1964,11 +1964,11 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
     int availHeight = availableHeight();
 #ifdef DEBUG_FORMAT_MORE
     if(lastFormatted)
-        kDebug(32002) << "slotAfterFormatting We need more space in " << name()
+        kDebug(32002) <<"slotAfterFormatting We need more space in" << name()
                        << " bottom=" << bottom + lastFormatted->rect().height()
                        << " availHeight=" << availHeight << endl;
     else
-        kDebug(32002) << "slotAfterFormatting We need more space in " << name()
+        kDebug(32002) <<"slotAfterFormatting We need more space in" << name()
                        << " bottom2=" << bottom << " availHeight=" << availHeight << endl;
 #endif
     if ( m_frames.isEmpty() )
@@ -1990,12 +1990,12 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
 
     int difference = ( bottom + 2 ) - availHeight; // in layout unit pixels
 #ifdef DEBUG_FORMAT_MORE
-    kDebug(32002) << "AutoExtendFrame bottom=" << bottom << " availHeight=" << availHeight
+    kDebug(32002) <<"AutoExtendFrame bottom=" << bottom <<" availHeight=" << availHeight
                    << " => difference = " << difference << endl;
 #endif
     if( lastFormatted && bottom + lastFormatted->rect().height() > availHeight ) {
 #ifdef DEBUG_FORMAT_MORE
-        kDebug(32002) << " next will be off -> adding " << lastFormatted->rect().height() << endl;
+        kDebug(32002) <<" next will be off -> adding" << lastFormatted->rect().height();
 #endif
         difference += lastFormatted->rect().height();
     }
@@ -2017,7 +2017,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 double diffPt = m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
                 wantedPosition = theFrame->top() - diffPt;
 #ifdef DEBUG_FORMAT_MORE
-                kDebug() << "  diffPt=" << diffPt << " -> wantedPosition=" << wantedPosition << endl;
+                kDebug() <<"  diffPt=" << diffPt <<" -> wantedPosition=" << wantedPosition;
 #endif
                 if ( wantedPosition < 0 )
                 {
@@ -2031,13 +2031,13 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 {
                     theFrame->setTop( wantedPosition );
 #ifdef DEBUG_FORMAT_MORE
-                    kDebug() << "  ok: frame=" << *theFrame << " bottom=" << theFrame->bottom() << " height=" << theFrame->height() << endl;
+                    kDebug() <<"  ok: frame=" << *theFrame <<" bottom=" << theFrame->bottom() <<" height=" << theFrame->height();
 #endif
                     frameResized( theFrame, true );
                     // We only got room for the next paragraph, we still have to keep the formatting going...
                     return false; // keep going
                 }
-                kDebug() << "slotAfterFormatting didn't manage to get more space for footer/footnote, aborting" << endl;
+                kDebug() <<"slotAfterFormatting didn't manage to get more space for footer/footnote, aborting";
                 return true; // abort
             }
             // Other frames are resized by the bottom
@@ -2050,7 +2050,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             else
                 pageBottom = theFrame->bottom();
             double newPosition = qMin( wantedPosition, pageBottom );
-            kDebug(32002) << "wantedPosition=" << wantedPosition << " pageBottom=" << pageBottom
+            kDebug(32002) <<"wantedPosition=" << wantedPosition <<" pageBottom=" << pageBottom
                            << " -> newPosition=" << newPosition << endl;
 
             if ( theFrame->frameSet()->isAHeader() )
@@ -2060,13 +2060,13 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             }
 
             newPosition = qMax( newPosition, theFrame->top() ); // avoid negative heights
-            kDebug(32002) << "newPosition=" << newPosition << endl;
+            kDebug(32002) <<"newPosition=" << newPosition;
 
             bool resized = false;
             if(theFrame->frameSet()->groupmanager()) {
                 KWTableFrameSet *table = theFrame->frameSet()->groupmanager();
 #ifdef DEBUG_FORMAT_MORE
-                kDebug(32002) << "is table cell; just setting new minFrameHeight, to " << newPosition - theFrame->top() << endl;
+                kDebug(32002) <<"is table cell; just setting new minFrameHeight, to" << newPosition - theFrame->top();
 #endif
                 double newMinFrameHeight = newPosition - theFrame->top();
                 resized = QABS( newMinFrameHeight - theFrame->minimumFrameHeight() ) > 1E-10;
@@ -2114,13 +2114,13 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             } else {
                 resized = QABS( theFrame->bottom() - newPosition ) > 1E-10;
 #ifdef DEBUG_FORMAT_MORE
-                kDebug() << "  bottom=" << theFrame->bottom() << " new position:" << newPosition << " wantedPosition=" << wantedPosition << "  resized=" << resized << endl;
+                kDebug() <<"  bottom=" << theFrame->bottom() <<" new position:" << newPosition <<" wantedPosition=" << wantedPosition <<"  resized=" << resized;
 #endif
 
                 if ( resized )
                 {
 #ifdef DEBUG_FORMAT_MORE
-                    kDebug(32002) << "slotAfterFormatting changing bottom from " << theFrame->bottom() << " to " << newPosition << endl;
+                    kDebug(32002) <<"slotAfterFormatting changing bottom from" << theFrame->bottom() <<" to" << newPosition;
 #endif
                     theFrame->setBottom(newPosition);
                     frameResized( theFrame, false );
@@ -2133,8 +2133,8 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
             {
                 wantedPosition = wantedPosition - newPosition + theFrame->top() + page->height();
 #ifdef DEBUG_FORMAT_MORE
-                kDebug(32002) << "Not enough room in this page -> creating new one, with a reconnect frame" << endl;
-                kDebug(32002) << "new wantedPosition=" << wantedPosition << endl;
+                kDebug(32002) <<"Not enough room in this page -> creating new one, with a reconnect frame";
+                kDebug(32002) <<"new wantedPosition=" << wantedPosition;
 #endif
 
                 // fall through to AutoCreateNewFrame
@@ -2161,7 +2161,7 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
 
     case KWFrame::Ignore:
 #ifdef DEBUG_FORMAT_MORE
-        kDebug(32002) << "slotAfterFormatting frame behaviour is Ignore" << endl;
+        kDebug(32002) <<"slotAfterFormatting frame behaviour is Ignore";
 #endif
         m_textobj->setLastFormattedParag( 0 );
         return true; // abort
@@ -2178,12 +2178,12 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
     // the "break at end of frame" case in formatVertically (!!).
     int difference = availHeight - ( bottom + 2 );
 #ifdef DEBUG_FORMAT_MORE
-    kDebug(32002) << "slotAfterFormatting less text than space (AutoExtendFrame). Frameset " << name() << " availHeight=" << availHeight << " bottom=" << bottom << " ->difference=" << difference << endl;
+    kDebug(32002) <<"slotAfterFormatting less text than space (AutoExtendFrame). Frameset" << name() <<" availHeight=" << availHeight <<" bottom=" << bottom <<" ->difference=" << difference;
 #endif
     // There's no point in resizing a copy, so go back to the last non-copy frame
     KWFrame *theFrame = settingsFrame( m_frames.last() );
 #ifdef DEBUG_FORMAT_MORE
-    kDebug(32002) << "   frame is " << *theFrame << " footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() ) << endl;
+    kDebug(32002) <<"   frame is" << *theFrame <<" footer:" << ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() );
 #endif
     if ( theFrame->frameSet()->isAFooter() || theFrame->frameSet()->isFootEndNote() )
     {
@@ -2192,11 +2192,11 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
         if ( wantedPosition != theFrame->top() )
         {
 #ifdef DEBUG_FORMAT_MORE
-            kDebug() << "   top= " << theFrame->top() << " setTop " << wantedPosition << endl;
+            kDebug() <<"   top=" << theFrame->top() <<" setTop" << wantedPosition;
 #endif
             theFrame->setTop( wantedPosition );
 #ifdef DEBUG_FORMAT_MORE
-            kDebug() << "    -> the frame is now " << *theFrame << endl;
+            kDebug() <<"    -> the frame is now" << *theFrame;
 #endif
             frameResized( theFrame, true );
         }
@@ -2205,7 +2205,7 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
     {
         double wantedPosition = theFrame->bottom() - m_doc->layoutUnitPtToPt( m_doc->pixelYToPt( difference ) );
 #ifdef DEBUG_FORMAT_MORE
-        kDebug() << "slotAfterFormatting wantedPosition=" << wantedPosition << " top+minheight=" << theFrame->top() + s_minFrameHeight << endl;
+        kDebug() <<"slotAfterFormatting wantedPosition=" << wantedPosition <<" top+minheight=" << theFrame->top() + s_minFrameHeight;
 #endif
         wantedPosition = qMax( wantedPosition, theFrame->top() + s_minFrameHeight );
         if( theFrame->frameSet()->groupmanager() ) {
@@ -2218,7 +2218,7 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
                 if(wantedPosition != theFrame->top() + theFrame->minimumFrameHeight()) {
                     theFrame->setMinimumFrameHeight(wantedPosition - theFrame->top());
 #ifdef DEBUG_FORMAT_MORE
-                    kDebug(32002) << "is table cell; only setting new minFrameHeight to " << theFrame->minimumFrameHeight() << ", recalcrows will do the rest" << endl;
+                    kDebug(32002) <<"is table cell; only setting new minFrameHeight to" << theFrame->minimumFrameHeight() <<", recalcrows will do the rest";
 #endif
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstColumn(), cell->firstRow());
@@ -2251,12 +2251,12 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
             wantedPosition = qMax( wantedPosition, theFrame->top() + theFrame->minimumFrameHeight() );
             if ( wantedPosition != theFrame->bottom()) {
 #ifdef DEBUG_FORMAT_MORE
-                kDebug() << "    the frame was " << *theFrame << endl;
-                kDebug() << "setBottom " << wantedPosition << endl;
+                kDebug() <<"    the frame was" << *theFrame;
+                kDebug() <<"setBottom" << wantedPosition;
 #endif
                 theFrame->setBottom( wantedPosition );
 #ifdef DEBUG_FORMAT_MORE
-                kDebug() << "    -> the frame is now " << *theFrame << endl;
+                kDebug() <<"    -> the frame is now" << *theFrame;
 #endif
                 frameResized( theFrame, true );
             }
@@ -2278,7 +2278,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
               && bottom < availHeight - m_doc->ptToLayoutUnitPixY( m_frames.last()->innerHeight() ) )
     {
 #ifdef DEBUG_FORMAT_MORE
-        kDebug(32002) << "slotAfterFormatting too much space (bottom=" << bottom << ", availHeight=" << availHeight << ") , trying to remove last frame" << endl;
+        kDebug(32002) <<"slotAfterFormatting too much space (bottom=" << bottom <<", availHeight=" << availHeight <<") , trying to remove last frame";
 #endif
         // Remove the empty last frame, if it's an auto-created one (e.g. a
         // continuation on the next page). Not when the user just created it!
@@ -2322,17 +2322,17 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     KWFrame* lastFrame = m_frames.last();
     // This is only going to help us if the new frame is reconnected. Otherwise bail out.
     if ( !lastFrame || lastFrame->newFrameBehavior() != KWFrame::Reconnect )  {
-        kDebug(32002) << name() << " : frame is AutoCreateNewFrame but not Reconnect !?!? Aborting." << endl;
+        kDebug(32002) << name() <<" : frame is AutoCreateNewFrame but not Reconnect !?!? Aborting.";
         m_textobj->setLastFormattedParag( 0 );
         return true; // abort
     }
 
 //#ifdef DEBUG_FORMAT_MORE
-    kDebug(32002) << "createNewPageAndNewFrame creating new frame in frameset " << name() << endl;
+    kDebug(32002) <<"createNewPageAndNewFrame creating new frame in frameset" << name();
 //#endif
     uint oldCount = m_frames.count();
     int lastPageNumber = m_doc->pageManager()->lastPageNumber();
-    kDebug(32002) << " last frame=" << lastFrame << " pagenum=" << lastFrame->pageNumber() << " lastPageNumber=" << lastPageNumber << "   m_frames count=" << oldCount << endl;
+    kDebug(32002) <<" last frame=" << lastFrame <<" pagenum=" << lastFrame->pageNumber() <<" lastPageNumber=" << lastPageNumber <<"   m_frames count=" << oldCount;
 
     // First create a new page for it if necessary
     if ( lastFrame->pageNumber() == lastPageNumber )
@@ -2362,10 +2362,10 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
         // for the highest character that remains to be positioned.
         // Testcase: many big inline pictures in one paragraph.
         int paragHeight = parag->rect().height();
-        kDebug(32002) << "height we will get in the new page:" << heightWeWillGet << " parag " << parag << " height:" << paragHeight << endl;
+        kDebug(32002) <<"height we will get in the new page:" << heightWeWillGet <<" parag" << parag <<" height:" << paragHeight;
         if ( heightWeWillGet < paragHeight && !m_groupmanager )
         {
-            kDebug(32002) << "not enough height on the new page, not worth it" << endl;
+            kDebug(32002) <<"not enough height on the new page, not worth it";
             m_textobj->setLastFormattedParag( 0 );
             return true; // abort
         }
@@ -2373,7 +2373,7 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
         KWPage *page = m_doc->appendPage();
         if (  !m_doc->isLoading() )
             m_doc->afterInsertPage( page->pageNumber() );
-        kDebug(32002) << "now frames count=" << m_frames.count() << endl;
+        kDebug(32002) <<"now frames count=" << m_frames.count();
     }
 
     // Maybe creating the new page created the frame in this frameset, then we're done
@@ -2382,7 +2382,7 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     {
         Q_ASSERT( !isMainFrameset() ); // ouch, should have gone to the appendPage case above...
         // Otherwise, create a new frame on next page
-        kDebug(32002) << "createNewPageAndNewFrame creating frame on page " << lastFrame->pageNumber()+1 << endl;
+        kDebug(32002) <<"createNewPageAndNewFrame creating frame on page" << lastFrame->pageNumber()+1;
         KWFrame *frm = lastFrame->getCopy();
         frm->moveBy( 0, m_doc->pageManager()->page(frm)->height() );
         addFrame( frm );
@@ -2465,7 +2465,7 @@ double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 
 void KWTextFrameSet::frameResized( KWFrame *theFrame, bool invalidateLayout )
 {
-    kDebug(32002) << "KWTextFrameSet::frameResized " << theFrame << " " << *theFrame << " invalidateLayout=" << invalidateLayout << endl;
+    kDebug(32002) <<"KWTextFrameSet::frameResized" << theFrame <<"" << *theFrame <<" invalidateLayout=" << invalidateLayout;
     if ( theFrame->height() < 0 )
         return; // safety!
 
@@ -2510,23 +2510,23 @@ bool KWTextFrameSet::isFrameEmpty( KWFrame * theFrame )
 
     if ( theFrame->frameSet() == this ) // safety check
     {
-        //kDebug() << "KWTextFrameSet::isFrameEmpty text bottom=(LU) " << bottom << " theFrame=" << theFrame << " " << *theFrame << " its internalY(LU)=" << m_doc->ptToLayoutUnitPixY( theFrame->internalY() ) << endl;
+        //kDebug() <<"KWTextFrameSet::isFrameEmpty text bottom=(LU)" << bottom <<" theFrame=" << theFrame <<"" << *theFrame <<" its internalY(LU)=" << m_doc->ptToLayoutUnitPixY( theFrame->internalY() );
         return bottom < m_doc->ptToLayoutUnitPixY( theFrame->internalY() );
     }
 
     kWarning() << "KWTextFrameSet::isFrameEmpty called for frame " << theFrame << " which isn't a child of ours!" << endl;
     if ( theFrame->frameSet()!=0L && theFrame->frameSet()->name()!=0L)
-        kDebug() << "(this is " << name() << " and the frame belongs to " << theFrame->frameSet()->name() << ")" << endl;
+        kDebug() <<"(this is" << name() <<" and the frame belongs to" << theFrame->frameSet()->name() <<")";
     return false;
 }
 
 bool KWTextFrameSet::canRemovePage( int num )
 {
-    //kDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage " << num << endl;
+    //kDebug() <<"KWTextFrameSet(" << name() <<")::canRemovePage" << num;
 
     // No frame on that page ? ok for us then
     if ( num < m_firstPage || num >= (int)m_framesInPage.size() + m_firstPage ) {
-        //kDebug() << "No frame on that page. Number of frames: " << frameCount() << endl;
+        //kDebug() <<"No frame on that page. Number of frames:" << frameCount();
         return true;
     }
 
@@ -2534,11 +2534,11 @@ bool KWTextFrameSet::canRemovePage( int num )
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame * theFrame = frameIt.current();
-        //kDebug() << "canRemovePage: looking at " << theFrame << " pageNum=" << theFrame->pageNumber() << endl;
+        //kDebug() <<"canRemovePage: looking at" << theFrame <<" pageNum=" << theFrame->pageNumber();
         Q_ASSERT( theFrame->pageNumber() == num );
         Q_ASSERT( theFrame->frameSet() == this );
         bool isEmpty = isFrameEmpty( theFrame );
-        //kDebug() << "KWTextFrameSet(" << name() << ")::canRemovePage"
+        //kDebug() <<"KWTextFrameSet(" << name() <<")::canRemovePage"
         //          << " found a frame on page " << num << " empty:" << isEmpty << endl;
         // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame OR it's empty
         bool isCopy = theFrame->isCopy() && frameIt.current() != m_frames.first();
@@ -2551,7 +2551,7 @@ bool KWTextFrameSet::canRemovePage( int num )
 void KWTextFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
     KWFrame *frm = m_frames.at( num );
-    kDebug() << "KWTextFrameSet(" << name() << ")::deleteFrame " << frm << " (" << num << ")" << endl;
+    kDebug() <<"KWTextFrameSet(" << name() <<")::deleteFrame" << frm <<" (" << num <<")";
     if ( frm )
         emit frameDeleted( frm );
     KWFrameSet::deleteFrame( num, remove, recalc );
@@ -2563,7 +2563,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
         return;
     int ah = availableHeight(); // make sure that it's not -1
 #ifdef DEBUG_VIEWAREA
-    kDebug(32002) << "KWTextFrameSet::updateViewArea " << (void*)w << " " << w->name()
+    kDebug(32002) <<"KWTextFrameSet::updateViewArea" << (void*)w <<"" << w->name()
                      << " nPointBottom=" << nPointBottom.x() << "," << nPointBottom.y()
                      << " availHeight=" << ah << " textDocument()->height()=" << textDocument()->height() << endl;
 #endif
@@ -2583,7 +2583,7 @@ void KWTextFrameSet::updateViewArea( QWidget * w, KWViewMode* viewMode, const QP
         }
     }
 #ifdef DEBUG_VIEWAREA
-    kDebug(32002) << "KWTextFrameSet (" << name() << ")::updateViewArea maxY now " << maxY << endl;
+    kDebug(32002) <<"KWTextFrameSet (" << name() <<")::updateViewArea maxY now" << maxY;
 #endif
     m_textobj->setViewArea( w, maxY );
     m_textobj->formatMore( 2 );
@@ -2635,7 +2635,7 @@ KCommand * KWTextFrameSet::pasteOasis( KoTextCursor * cursor, const QByteArray &
     if (protectContent() )
         return 0;
 
-    kDebug(32001) << "KWTextFrameSet::pasteOasis data:" << data.size() << " bytes" << endl;
+    kDebug(32001) <<"KWTextFrameSet::pasteOasis data:" << data.size() <<" bytes";
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Paste") );
     if ( removeSelected && textDocument()->hasSelection( KoTextDocument::Standard ) )
         macroCmd->addCommand( m_textobj->removeSelectedTextCommand( cursor, KoTextDocument::Standard ) );
@@ -2793,7 +2793,7 @@ KoTextParag* KWTextFrameSet::paragAtLUPos( int yLU ) const
 
 KCommand * KWTextFrameSet::deleteAnchoredFrame( KWAnchor * anchor )
 {
-    kDebug() << "KWTextFrameSet::deleteAnchoredFrame anchor->index=" << anchor->index() << endl;
+    kDebug() <<"KWTextFrameSet::deleteAnchoredFrame anchor->index=" << anchor->index();
     Q_ASSERT( anchor );
     KoTextCursor c( textDocument() );
     c.setParag( anchor->paragraph() );
@@ -2827,7 +2827,7 @@ void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int lengt
 {
     Q_ASSERT( isVisible() );
     Q_ASSERT( m_textobj->isVisible() );
-    //kDebug() << "highlighting in " << name() << " parag=" << parag->paragId() << " index=" << index << " repaint=" << repaint << endl;
+    //kDebug() <<"highlighting in" << name() <<" parag=" << parag->paragId() <<" index=" << index <<" repaint=" << repaint;
     m_textobj->highlightPortion( parag, index, length, repaint );
     if ( repaint ) {
         // Position the cursor
@@ -2839,7 +2839,7 @@ void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int lengt
                                (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
                                (expose.bottom()-expose.top()) / 2); */
         if ( dialog ) {
-            //kDebug() << k_funcinfo << " dialog=" << dialog << " avoiding rect=" << expose << endl;
+            //kDebug() << k_funcinfo <<" dialog=" << dialog <<" avoiding rect=" << expose;
             QRect globalRect( expose );
             globalRect.moveTopLeft( canvas->mapToGlobal( globalRect.topLeft() ) );
             KDialog::avoidArea( dialog, globalRect );
@@ -3055,7 +3055,7 @@ QByteArray KWTextFrameSet::sortText(SortType type) const
 // so don't add any 'repaint' or 'recalc' code here
 KWFootNoteFrameSet * KWTextFrameSet::insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering numType, const QString &manualString )
 {
-     kDebug() << "KWTextFrameSetEdit::insertFootNote " << endl;
+     kDebug() <<"KWTextFrameSetEdit::insertFootNote";
      KWDocument * doc = m_doc;
      KWFootNoteVariable * var = new KWFootNoteVariable( textDocument(), doc->variableFormatCollection()->format( "NUMBER" ), doc->variableCollection(), doc );
      var->setNoteType( noteType );
@@ -3101,7 +3101,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
     : KoTextView( fs->textObject() ), KWFrameSetEdit( fs, canvas ), m_rtl( false )
 {
     setBackSpeller( fs->kWordDocument()->backSpeller() );
-    //kDebug(32001) << "KWTextFrameSetEdit::KWTextFrameSetEdit " << fs->name() << endl;
+    //kDebug(32001) <<"KWTextFrameSetEdit::KWTextFrameSetEdit" << fs->name();
     KoTextView::setReadWrite( fs->kWordDocument()->isReadWrite() );
     KoTextObject* textobj = fs->textObject();
     connect( textobj, SIGNAL( selectionChanged(bool) ), canvas, SIGNAL( selectionChanged(bool) ) );
@@ -3124,7 +3124,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
 {
-    //kDebug(32001) << "KWTextFrameSetEdit::~KWTextFrameSetEdit" << endl;
+    //kDebug(32001) <<"KWTextFrameSetEdit::~KWTextFrameSetEdit";
     //m_canvas->gui()->getHorzRuler()->changeFlags(0);
 }
 
@@ -3279,7 +3279,7 @@ void KWTextFrameSetEdit::removeToolTipCompletion()
 
 void KWTextFrameSetEdit::textIncreaseIndent()
 {
-    kDebug(32001) << "Increasing list" << endl;
+    kDebug(32001) <<"Increasing list";
     m_canvas->gui()->getView()->textIncreaseIndent();
 }
 
@@ -3287,7 +3287,7 @@ bool KWTextFrameSetEdit::textDecreaseIndent()
 {
     if (currentLeftMargin()>0)
     {
-        kDebug(32001) << "Decreasing list" << endl;
+        kDebug(32001) <<"Decreasing list";
         m_canvas->gui()->getView()->textDecreaseIndent();
         return true;
     }
@@ -3328,18 +3328,18 @@ Q3DragObject * KWTextFrameSetEdit::newDrag( QWidget * parent )
 
 void KWTextFrameSetEdit::ensureCursorVisible()
 {
-    //kDebug() << "KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() << " cursor->index()=" << cursor()->index() << endl;
+    //kDebug() <<"KWTextFrameSetEdit::ensureCursorVisible paragId=" << cursor()->parag()->paragId() <<" cursor->index()=" << cursor()->index();
     KoTextParag * parag = cursor()->parag();
     int idx = cursor()->index();
     textFrameSet()->ensureFormatted( parag );
     KoTextStringChar *chr = parag->at( idx );
     int cursorHeight = parag->lineHeightOfChar( idx );
     int x = parag->rect().x() + cursor()->x(); // this includes +charwidth for an RTL char
-    //kDebug() << "parag->rect().x()=" << parag->rect().x() << " x=" << cursor()->x() << endl;
+    //kDebug() <<"parag->rect().x()=" << parag->rect().x() <<" x=" << cursor()->x();
     int y = 0; int dummy;
     parag->lineHeightOfChar( idx, &dummy, &y );
     y += parag->rect().y();
-    //kDebug() << "KWTextFrameSetEdit::ensureCursorVisible y=" << y << endl;
+    //kDebug() <<"KWTextFrameSetEdit::ensureCursorVisible y=" << y;
     // make sure one char is visible before, and one after
     KoTextStringChar *chrLeft = idx > 0 ? chr-1 : chr;
     // which char is on the left and which one is on the right depends on chr->rightToLeft
@@ -3350,7 +3350,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     if ( m_currentFrame )
         hintDPoint = m_currentFrame->topLeft();
     KWFrame * theFrame = textFrameSet()->internalToDocumentWithHint( QPoint(x, y), pt, hintDPoint );
-    //kDebug() << "KWTextFrameSetEdit::ensureCursorVisible frame=" << theFrame << " m_currentFrame=" << m_currentFrame << endl;
+    //kDebug() <<"KWTextFrameSetEdit::ensureCursorVisible frame=" << theFrame <<" m_currentFrame=" << m_currentFrame;
     if ( theFrame && m_currentFrame != theFrame )
     {
         m_currentFrame = theFrame;
@@ -3361,7 +3361,7 @@ void KWTextFrameSetEdit::ensureCursorVisible()
     areaLeft = textFrameSet()->kWordDocument()->layoutUnitToPixelX( areaLeft ) + 1;
     areaRight = textFrameSet()->kWordDocument()->layoutUnitToPixelX( areaRight ) + 1;
     cursorHeight = textFrameSet()->kWordDocument()->layoutUnitToPixelY( cursorHeight );
-    //kDebug() << "KWTextFrameSetEdit::ensureCursorVisible pt=" << pt << " cursorPos=" << cursorPos
+    //kDebug() <<"KWTextFrameSetEdit::ensureCursorVisible pt=" << pt <<" cursorPos=" << cursorPos
     //          << " areaLeft=" << areaLeft << " areaRight=" << areaRight << " y=" << y << endl;
     //m_canvas->ensureVisible( cursorPos.x() - areaLeft, cursorPos.y() + cursorHeight / 2, areaLeft + areaRight, cursorHeight / 2 + 2 );
 }
@@ -3625,7 +3625,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
             return; // Don't know where to paste
 
         dropCursor.place( dropPoint, textDocument()->firstParag() );
-        kDebug(32001) << "KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() << " index=" << dropCursor.index() << endl;
+        kDebug(32001) <<"KWTextFrameSetEdit::dropEvent dropCursor at parag=" << dropCursor.parag()->paragId() <<" index=" << dropCursor.index();
 
         if ( e->source() == m_canvas &&
                e->action() == QDropEvent::Move &&
@@ -3677,7 +3677,7 @@ void KWTextFrameSetEdit::selectAll()
 void KWTextFrameSetEdit::drawCursor( bool visible )
 {
 #ifdef DEBUG_CURSOR
-    kDebug() << "KWTextFrameSetEdit::drawCursor " << visible << endl;
+    kDebug() <<"KWTextFrameSetEdit::drawCursor" << visible;
 #endif
     KoTextView::drawCursor( visible );
     if ( !cursor()->parag() )
@@ -3815,7 +3815,7 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
         KWAnchor * anchor = fs->createAnchor( textFrameSet()->textDocument(), frameNumber );
         if ( frameNumber == 0 && anchor->ownLine() && cursor()->index() > 0 ) // enforce start of line - currently unused
         {
-            kDebug() << "ownline -> prepending \\n" << endl;
+            kDebug() <<"ownline -> prepending \";
             placeHolders += QChar('\n');
             index++;
             insertFlags |= KoTextObject::CheckNewLine;
@@ -3879,7 +3879,7 @@ void KWTextFrameSetEdit::insertFootNote( NoteType noteType, KWFootNoteVariable::
 
 void KWTextFrameSetEdit::insertVariable( int type, int subtype )
 {
-    kDebug() << "KWTextFrameSetEdit::insertVariable " << type << endl;
+    kDebug() <<"KWTextFrameSetEdit::insertVariable" << type;
     KWDocument * doc = frameSet()->kWordDocument();
 
     KoVariable * var = 0L;
@@ -3917,9 +3917,9 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         customItemsMap.insert( 0, var );
         if (!format)
             format = currentFormat();
-        kDebug() << "KWTextFrameSetEdit::insertVariable inserting into paragraph" << endl;
+        kDebug() <<"KWTextFrameSetEdit::insertVariable inserting into paragraph";
 #ifdef DEBUG_FORMATS
-        kDebug() << "KWTextFrameSetEdit::insertVariable format=" << format << endl;
+        kDebug() <<"KWTextFrameSetEdit::insertVariable format=" << format;
 #endif
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
                               i18n("Insert Variable"),

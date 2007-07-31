@@ -898,7 +898,7 @@ void KWView::inlineFrame() {
     }
     if(targetShape == 0) {
         // message:  "Please select at least one non locked shape and try again"
-        kDebug() << "Please select at least one non locked shape and try again\n";
+        kDebug() <<"Please select at least one non locked shape and try again";
         return;
     }
 
@@ -919,7 +919,7 @@ void KWView::inlineFrame() {
             // TODO check distance between frames or something.
         }
     }
-if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() << "spliting...\n"; return; }
+if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() <<"spliting..."; return; }
     selection->select(frameForAnchor->shape());
 
     QPointF absPos = targetShape->absolutePosition();
@@ -1004,7 +1004,7 @@ void KWView::viewGrid(bool on) {
 
 void KWView::createCustomOutline() {
     QList<KWFrame *> frames = selectedFrames();
-kDebug() << " createCustomOutline " << frames.count() << endl;
+kDebug() <<" createCustomOutline" << frames.count();
     if(frames.count() == 0)
         return;
     if(frames.count() == 1) {

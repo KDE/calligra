@@ -76,8 +76,8 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
 /*
     QDomNamedNodeMap attrs = element.attributes();
     for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++)
-        kDebug(32500) << "PictureShape::loadOdf Attribute " << iAttr << " : " << attrs.item(iAttr).nodeName() << "\t" << attrs.item(iAttr).nodeValue() << endl;
-    //kDebug(32500) << "PictureShape::loadOdf xlink:href=" << element.attribute("href") << endl;
+        kDebug(32500) <<"PictureShape::loadOdf Attribute" << iAttr <<" :" << attrs.item(iAttr).nodeName() <<"\t" << attrs.item(iAttr).nodeValue();
+    //kDebug(32500) <<"PictureShape::loadOdf xlink:href=" << element.attribute("href");
     KoStore* store = context.koLoadingContext().store();
     Q_ASSERT(store);
     //TODO use e.g. KWDocument::imageCollection() here rather then creating a new one
@@ -89,6 +89,6 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     return ok;
 */
 
-    kDebug()<<"PictureShape::loadOdf x="<<x<<" y="<<y<<" width="<<width<<" height="<<height<<" zindex="<<zindex<<endl;
+    kDebug()<<"PictureShape::loadOdf x="<<x<<" y="<<y<<" width="<<width<<" height="<<height<<" zindex="<<zindex;
     return true;
 }

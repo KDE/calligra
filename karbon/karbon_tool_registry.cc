@@ -31,7 +31,7 @@ KarbonToolRegistry* KarbonToolRegistry::m_singleton = 0;
 
 KarbonToolRegistry::KarbonToolRegistry()
 {
-	kDebug() << " creating a KarbonToolRegistry" << endl;
+	kDebug() <<" creating a KarbonToolRegistry";
 }
 
 KarbonToolRegistry::~KarbonToolRegistry()

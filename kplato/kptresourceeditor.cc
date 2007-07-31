@@ -77,7 +77,7 @@ ResourceItemModel::~ResourceItemModel()
 
 void ResourceItemModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<", "<<row<<endl;
+    //kDebug()<<k_funcinfo<<group->name()<<","<<row;
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( index( group ), row, row );
@@ -85,7 +85,7 @@ void ResourceItemModel::slotResourceToBeInserted( const ResourceGroup *group, in
 
 void ResourceItemModel::slotResourceInserted( const Resource *resource )
 {
-    //kDebug()<<k_funcinfo<<resource->name()<<endl;
+    //kDebug()<<k_funcinfo<<resource->name();
     Q_ASSERT( resource->parentGroup() == m_group );
     endInsertRows();
     m_group = 0;
@@ -93,7 +93,7 @@ void ResourceItemModel::slotResourceInserted( const Resource *resource )
 
 void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 {
-    //kDebug()<<k_funcinfo<<resource->name()<<endl;
+    //kDebug()<<k_funcinfo<<resource->name();
     Q_ASSERT( m_resource == 0 );
     m_resource = const_cast<Resource*>(resource);
     int row = index( resource ).row();
@@ -102,7 +102,7 @@ void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
 
 void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 {
-    //kDebug()<<k_funcinfo<<resource->name()<<endl;
+    //kDebug()<<k_funcinfo<<resource->name();
     Q_ASSERT( resource == m_resource );
     endRemoveRows();
     m_resource = 0;
@@ -110,7 +110,7 @@ void ResourceItemModel::slotResourceRemoved( const Resource *resource )
 
 void ResourceItemModel::slotResourceGroupToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<k_funcinfo<<group->name();
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( QModelIndex(), row, row );
@@ -118,7 +118,7 @@ void ResourceItemModel::slotResourceGroupToBeInserted( const ResourceGroup *grou
 
 void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<k_funcinfo<<group->name();
     Q_ASSERT( group == m_group );
     endInsertRows();
     m_group = 0;
@@ -126,7 +126,7 @@ void ResourceItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 
 void ResourceItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<k_funcinfo<<group->name();
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     int row = index( group ).row();
@@ -135,7 +135,7 @@ void ResourceItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group
 
 void ResourceItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<k_funcinfo<<group->name();
     Q_ASSERT( group == m_group );
     endRemoveRows();
     m_group = 0;
@@ -226,7 +226,7 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() || m_project == 0 ) {
         return QModelIndex();
     }
-    //kDebug()<<k_funcinfo<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
+    //kDebug()<<k_funcinfo<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
 
     Resource *r = qobject_cast<Resource*>( object( index ) );
     if ( r && r->parentGroup() ) {
@@ -240,7 +240,7 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
 
 bool ResourceItemModel::hasChildren( const QModelIndex &parent ) const
 {
-    //kDebug()<<k_funcinfo<<parent.internalPointer()<<": "<<parent.row()<<", "<<parent.column()<<endl;
+    //kDebug()<<k_funcinfo<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
     if ( m_project == 0 ) {
         return false;
     }
@@ -325,7 +325,7 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
 
 QVariant ResourceItemModel::name( const Resource *res, int role ) const
 {
-    //kDebug()<<k_funcinfo<<res->name()<<", "<<role<<endl;
+    //kDebug()<<k_funcinfo<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -341,7 +341,7 @@ QVariant ResourceItemModel::name( const Resource *res, int role ) const
 
 QVariant ResourceItemModel::name( const  ResourceGroup *res, int role ) const
 {
-    //kDebug()<<k_funcinfo<<res->name()<<", "<<role<<endl;
+    //kDebug()<<k_funcinfo<<res->name()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -760,7 +760,7 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
             case 8: result = normalRate( r, role ); break;
             case 9: result = overtimeRate( r, role ); break;
             default:
-                kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
+                kDebug()<<k_funcinfo<<"data: invalid display value column"<<index.column();;
                 return QVariant();
         }
         if ( result.isValid() ) {
@@ -780,7 +780,7 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
                     if ( index.column() < columnCount() ) {
                         result = notUsed( g, role );
                     } else {
-                        kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
+                        kDebug()<<k_funcinfo<<"data: invalid display value column"<<index.column();;
                         return QVariant();
                     }
             }
@@ -937,14 +937,14 @@ QStringList ResourceItemModel::mimeTypes() const
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
-    kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
+    kDebug()<<k_funcinfo<<row<<" p:"<<parent.row();
     if (action == Qt::IgnoreAction)
         return true;
 
     if (column > 0) {
         return false;
     }
-    //kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
+    //kDebug()<<k_funcinfo<<row<<" p:"<<parent.row();
     ResourceGroup *g = 0;
     if ( parent.isValid() ) {
         g = qobject_cast<ResourceGroup*>( object( parent ) );
@@ -954,7 +954,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
     if ( g == 0 ) {
         return false;
     }
-    //kDebug()<<data->formats()<<endl;
+    //kDebug()<<data->formats();
     K3MacroCommand *m = 0;
     if ( data->hasFormat( "text/x-vcard" ) ) {
         QByteArray vcard = data->data( "text/x-vcard" );
@@ -976,7 +976,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
 
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_part->addCommand( new AddResourceGroupCmd( m_part, m_project, g, i18n( "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
@@ -987,7 +987,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource */*after*/ )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_part->addCommand( new AddResourceCmd( m_part, g, r, i18n( "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
@@ -1020,7 +1020,7 @@ ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
 
 void ResourceTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<k_funcinfo<<index.column()<<endl;
+    kDebug()<<k_funcinfo<<index.column();
 }
 
 QObject *ResourceTreeView::currentObject() const
@@ -1095,7 +1095,7 @@ void ResourceEditor::draw()
 
 void ResourceEditor::setGuiActive( bool activate )
 {
-    kDebug()<<k_funcinfo<<activate<<endl;
+    kDebug()<<k_funcinfo<<activate;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -1105,7 +1105,7 @@ void ResourceEditor::setGuiActive( bool activate )
 
 void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    //kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
+    //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
         QObject *obj = m_view->itemModel()->object( index );
@@ -1124,7 +1124,7 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
 
 void ResourceEditor::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -1143,13 +1143,13 @@ ResourceGroup *ResourceEditor::currentResourceGroup() const
 
 void ResourceEditor::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
+    //kDebug()<<k_funcinfo<<curr.row()<<","<<curr.column();
 //    slotEnableActions();
 }
 
 void ResourceEditor::slotSelectionChanged( const QModelIndexList )
 {
-    //kDebug()<<k_funcinfo<<list.count()<<endl;
+    //kDebug()<<k_funcinfo<<list.count();
     updateActionsEnabled();
 }
 
@@ -1205,7 +1205,7 @@ void ResourceEditor::setupGui()
 
 void ResourceEditor::slotOptions()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     ItemViewSettupDialog dlg( m_view->slaveView() );
     dlg.exec();
 }
@@ -1213,7 +1213,7 @@ void ResourceEditor::slotOptions()
 
 void ResourceEditor::slotAddResource()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -1242,7 +1242,7 @@ void ResourceEditor::slotAddResource()
 
 void ResourceEditor::slotAddGroup()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->itemModel()->insertGroup( g );
     if ( i.isValid() ) {
@@ -1254,7 +1254,7 @@ void ResourceEditor::slotAddGroup()
 void ResourceEditor::slotDeleteSelection()
 {
     QObjectList lst = m_view->selectedObjects();
-    //kDebug()<<k_funcinfo<<lst.count()<<" objects"<<endl;
+    //kDebug()<<k_funcinfo<<lst.count()<<" objects";
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
     }

@@ -55,7 +55,7 @@ Account::Account(const QString& name, const QString& description)
 }
 
 Account::~Account() {
-    //kDebug()<<k_funcinfo<<m_name<<endl;
+    //kDebug()<<k_funcinfo<<m_name;
     if (findAccount() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
@@ -122,7 +122,7 @@ void Account::take(Account *account) {
     } else {
         m_list->take(account);
     }
-    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    //kDebug()<<k_funcinfo<<account->name();
 }
 
 bool Account::isChildOf( const Account *account) const
@@ -283,7 +283,7 @@ bool Account::insertId(Account *account) {
 }
 
 void Account::deleteCostPlace(CostPlace *cp) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     int i = m_costPlaces.indexOf(cp);
     if (i != -1)
         m_costPlaces.removeAt(i);
@@ -337,7 +337,7 @@ void Account::CostPlace::setShutdown(bool on ) {
 }
 
 bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_nodeId = element.attribute("node-id");
     if (m_nodeId.isEmpty()) {
         kError()<<k_funcinfo<<"No node id"<<endl;
@@ -355,7 +355,7 @@ bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
 }
 
 void Account::CostPlace::save(QDomElement &element) const {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QDomElement me = element.ownerDocument().createElement("costplace");
     element.appendChild(me);
     me.setAttribute("node-id", m_nodeId);
@@ -375,7 +375,7 @@ Accounts::Accounts(Project &project)
 }
 
 Accounts::~Accounts() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
     }
@@ -388,7 +388,7 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
         if (n == 0) {
             continue;
         }
-        //kDebug()<<k_funcinfo<<"n="<<n->name()<<endl;
+        //kDebug()<<k_funcinfo<<"n="<<n->name();
         if (cp->running()) {
             ec += n->plannedEffortCostPrDay(start, end, id);
         }
@@ -439,7 +439,7 @@ void Accounts::insert(Account *account, Account *parent, int index) {
         emit accountToBeAdded( parent, i );
         parent->insert( account, i );
     }
-    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    //kDebug()<<k_funcinfo<<account->name();
     emit accountAdded( account );
 }
 
@@ -452,7 +452,7 @@ void Accounts::take(Account *account){
         emit accountToBeRemoved( account );
         account->parent()->take(account);
         emit accountRemoved( account );
-        //kDebug()<<k_funcinfo<<account->name()<<endl;
+        //kDebug()<<k_funcinfo<<account->name();
         return;
     }
     int i = m_accountList.indexOf(account);
@@ -461,7 +461,7 @@ void Accounts::take(Account *account){
         m_accountList.removeAt(i);
         emit accountRemoved( account );
     }
-    //kDebug()<<k_funcinfo<<account->name()<<endl;
+    //kDebug()<<k_funcinfo<<account->name();
 }
     
 bool Accounts::load(KoXmlElement &element, Project &project) {
@@ -548,12 +548,12 @@ bool Accounts::insertId(Account *account) {
     Q_ASSERT(account);
     Account *a = findAccount(account->name());
     if (a == 0) {
-        //kDebug()<<k_funcinfo<<"'"<<account->name()<<"' inserted"<<endl;
+        //kDebug()<<k_funcinfo<<"'"<<account->name()<<"' inserted";
         m_idDict.insert(account->name(), account);
         return true;
     }
     if (a == account) {
-        kDebug()<<k_funcinfo<<"'"<<a->name()<<"' already exists"<<endl;
+        kDebug()<<k_funcinfo<<"'"<<a->name()<<"' already exists";
         return true;
     }
     //TODO: Create unique id?
@@ -564,7 +564,7 @@ bool Accounts::insertId(Account *account) {
 
 bool Accounts::removeId(const QString &id) {
     bool res = m_idDict.remove(id);
-    //kDebug()<<k_funcinfo<<id<<": removed="<<res<<endl;
+    //kDebug()<<k_funcinfo<<id<<": removed="<<res;
     return res;
 }
 
@@ -576,7 +576,7 @@ QString Accounts::uniqueId( const QString &seed ) const
     while (  findAccount( n ) ) {
         n = s.arg( ++i );
     }
-    kDebug()<<k_funcinfo<<n<<endl;
+    kDebug()<<k_funcinfo<<n;
     return n;
 }
 
@@ -587,13 +587,13 @@ void Accounts::accountChanged( Account *account )
 
 #ifndef NDEBUG
 void Accounts::printDebug(const QString& indent) {
-    kDebug()<<indent<<"Accounts:    "<<m_accountList.count()<<" children"<<endl;
+    kDebug()<<indent<<"Accounts:"<<m_accountList.count()<<" children";
     foreach( Account *a, m_accountList ) {
         a->printDebug( indent + "    !" );
     }
 }
 void Account::printDebug(const QString& indent) {
-    kDebug()<<indent<<"--- Account:    "<<m_name<<": "<<m_accountList.count()<<" children"<<endl;
+    kDebug()<<indent<<"--- Account:"<<m_name<<":"<<m_accountList.count()<<" children";
     foreach( Account *a, m_accountList ) {
         a->printDebug( indent + "    !" );
     }

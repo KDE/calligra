@@ -71,7 +71,7 @@ QStringList KWMailMergeDataBase::availablePlugins()
     for (KService::List::ConstIterator it=pluginOffers.begin();*it;++it)
     {
         tmp.append((*it)->property("X-KDE-InternalName").toString());
-        kDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
+        kDebug()<<"Found mail merge plugin:"<< (*it)->name();
     }
     return tmp;
 }
@@ -85,7 +85,7 @@ bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
 {
     if (rejectdcopcall)return false;
     QString constrain=QString("[X-KDE-InternalName] =='"+name+'\'');
-    kDebug()<<constrain<<endl;
+    kDebug()<<constrain;
 	KService::List pluginOffers=KServiceTypeTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
     KService::Ptr it=pluginOffers.first();
 
@@ -97,7 +97,7 @@ bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
         KWMailMergeDataSource *tmp=loadPlugin(it->library());
         if (!tmp)
         {
-            kDebug()<<"Couldn't load plugin"<<endl;
+            kDebug()<<"Couldn't load plugin";
             return false; //Plugin couldn't be loaded
         }
         //Plugin found and loaded
@@ -114,7 +114,7 @@ bool KWMailMergeDataBase::loadPlugin(const QString &name,const QString &command)
     }
     else
     {
-        kDebug()<<"No plugin found"<<endl;
+        kDebug()<<"No plugin found";
         return false; //No plugin with specified name found
     }
 }
@@ -124,19 +124,19 @@ KWMailMergeDataSource *KWMailMergeDataBase::openPluginFor(int type,int &version)
     version=0;
     KWMailMergeDataSource *ret=0;
     QString constrain=QString("'%1' in [X-KDE-Capabilities]").arg(((type==KWSLCreate)?KWSLCreate_text:KWSLOpen_text));
-    kDebug()<<constrain<<endl;
+    kDebug()<<constrain;
 	KService::List pluginOffers=KServiceTypeTrader::self()->query(QString::fromLatin1("KWord/MailMergePlugin"),constrain);
 
     //Only for debugging
     for (KService::List::ConstIterator it=pluginOffers.begin();*it;++it)
     {
-        kDebug()<<"Found mail merge plugin: "<< (*it)->name()<<endl;
+        kDebug()<<"Found mail merge plugin:"<< (*it)->name();
     }
 
     if (!pluginOffers.count())
     {
         //Sorry no suitable plugins found
-        kDebug()<<"No plugins found"<<endl;
+        kDebug()<<"No plugins found";
         KMessageBox::sorry(0,i18n("No plugins supporting the requested action were found."));
     }
     else
@@ -290,11 +290,11 @@ bool KWMailMergeDataBase::askUserForConfirmationAndConfig(KWMailMergeDataSource 
 
 QDomElement KWMailMergeDataBase::save(QDomDocument &doc) const
 {
-    kDebug()<<"KWMailMergeDataBase::save()"<<endl;
+    kDebug()<<"KWMailMergeDataBase::save()";
     QDomElement parentElem=doc.createElement("MAILMERGE");
     if (plugin)
     {
-        kDebug()<<"KWMailMergeDataBase::save() There is really something to save"<<endl;
+        kDebug()<<"KWMailMergeDataBase::save() There is really something to save";
         QDomElement el=doc.createElement(QString::fromLatin1("PLUGIN"));
 
         QDataStream ds( &plugin->info,QIODevice::ReadOnly);
@@ -303,13 +303,13 @@ QDomElement KWMailMergeDataBase::save(QDomDocument &doc) const
         ds>>libname;
         el.setAttribute("library",libname);
         parentElem.appendChild(el);
-        kDebug()<<"KWMailMergeDataBase::save() Calling datasource save()"<<endl;
+        kDebug()<<"KWMailMergeDataBase::save() Calling datasource save()";
         QDomElement el2=doc.createElement(QString::fromLatin1("DATASOURCE"));
         plugin->save(doc,el2);
         parentElem.appendChild(el2);
 
     }
-    kDebug()<<"KWMailMergeDataBase::save() leaving now"<<endl;
+    kDebug()<<"KWMailMergeDataBase::save() leaving now";
     return parentElem;
     // if (plugin) plugin->save(parentElem); // Not completely sure, perhaps the database itself has to save something too (JoWenn)
 }
@@ -329,7 +329,7 @@ void KWMailMergeDataBase::load( const QDomElement& parentElem )
 
 
 int KWMailMergeDataBase::version() {
-    kDebug()<<"KWMailMergeDataBase::version:"<<m_version<<endl;
+    kDebug()<<"KWMailMergeDataBase::version:"<<m_version;
     return m_version;
 }
 

@@ -86,7 +86,7 @@ VCommandHistory::addCommand( VCommand* command, bool redo )
 	}
 
 	m_commands.append( command );
-	kDebug(38000) << "History: new command: " << m_commands.findRef( command ) << endl;
+	kDebug(38000) <<"History: new command:" << m_commands.findRef( command );
 
 	if( redo )
 	{

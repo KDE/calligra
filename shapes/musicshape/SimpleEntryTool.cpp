@@ -124,7 +124,7 @@ SimpleEntryTool::~SimpleEntryTool()
 void SimpleEntryTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
@@ -143,7 +143,7 @@ void SimpleEntryTool::activate (bool temporary)
 
 void SimpleEntryTool::deactivate()
 {
-    kDebug()<<"SimpleEntryTool::deactivate\n";
+    kDebug()<<"SimpleEntryTool::deactivate";
     m_musicshape = 0;
 }
 
@@ -206,7 +206,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
     int line = closestStaff->line(yrel - closestStaff->top());
-    kDebug() << "line: " << line << endl;
+    kDebug() <<"line:" << line;
     
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {
@@ -232,9 +232,9 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     
     Chord* c = new Chord(closestStaff, m_duration);
     if (clef) {
-        kDebug() << "clef: " << clef->shape() << endl;
+        kDebug() <<"clef:" << clef->shape();
         int pitch = clef->lineToPitch(line);
-        kDebug() << "pitch: " << pitch << endl;
+        kDebug() <<"pitch:" << pitch;
         c->addNote(closestStaff, pitch);
     }
     voice->bar(bar)->addElement(c);

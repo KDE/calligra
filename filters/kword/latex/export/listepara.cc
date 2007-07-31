@@ -25,7 +25,7 @@
 
 ListPara::ListPara()
 {
-	kDebug(30522) << "Create liste para empty" << endl;
+	kDebug(30522) <<"Create liste para empty";
 	_start  = 0;
 	_end    = 0;
 	_size   = 0;
@@ -33,14 +33,14 @@ ListPara::ListPara()
 
 ListPara::~ListPara()
 {
-	kDebug(30522) << "Destruction of a list of parag" << endl;
+	kDebug(30522) <<"Destruction of a list of parag";
 	vider();
-	kDebug(30522) << "ok" << endl;
+	kDebug(30522) <<"ok";
 }
 
 void ListPara::initialiser(Para *elt)
 {
-	kDebug(30522) << "initialise a list of parag at " << elt << endl;
+	kDebug(30522) <<"initialise a list of parag at" << elt;
 	_end = _start = elt;
 }
 
@@ -53,7 +53,7 @@ void ListPara::add(Para *elt)
 	}
 	else
 	{
-		kDebug(30522) << "add a parag." << endl;
+		kDebug(30522) <<"add a parag.";
 		_end->setNext(elt);
 		elt->setPrevious(_end);
 		_end  = elt;

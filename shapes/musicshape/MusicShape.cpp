@@ -131,7 +131,7 @@ MusicShape::~MusicShape()
 
 void MusicShape::setSize( const QSizeF &newSize )
 {
-//  kDebug()<<" MusicShape::setSize( const QSizeF &newSize ) " << newSize << endl;
+//  kDebug()<<" MusicShape::setSize( const QSizeF &newSize )" << newSize;
     KoShape::setSize(newSize);
 
     m_engraver->engraveSheet(m_sheet, newSize, false);
@@ -139,7 +139,7 @@ void MusicShape::setSize( const QSizeF &newSize )
 
 void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
-//  kDebug()<<" MusicShape::paint( QPainter& painter, const KoViewConverter& converter )\n";
+//  kDebug()<<" MusicShape::paint( QPainter& painter, const KoViewConverter& converter )";
 
     applyConversion( painter, converter );
 

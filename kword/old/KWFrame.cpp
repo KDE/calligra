@@ -61,7 +61,7 @@ int ZOrderedFrameList::compareItems(Q3PtrCollection::Item a, Q3PtrCollection::It
 KWFrame::KWFrame(KWFrame * frame)
 {
     m_runAround = RA_NO;
-    //kDebug(32001) << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
+    //kDebug(32001) <<"KWFrame::KWFrame this=" << this <<" frame=" << frame;
     copySettings( frame );
     m_minFrameHeight=0;
     m_frameStack = 0; // lazy initialisation.
@@ -91,7 +91,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_zOrder( 0 ),
       m_frameSet( fs )
 {
-    //kDebug(32001) << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
+    //kDebug(32001) <<"KWFrame::KWFrame" << this <<" left=" << left <<" top=" << top;
     m_frameStack = 0; // lazy initialisation.
     setPosition(QPointF(left, top));
     resize(QSizeF(width, height));
@@ -100,7 +100,7 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
 
 KWFrame::~KWFrame()
 {
-    //kDebug(32001) << "KWFrame::~KWFrame " << this << endl;
+    //kDebug(32001) <<"KWFrame::~KWFrame" << this;
     delete m_frameStack;
     m_frameStack = 0;
 }
@@ -110,7 +110,7 @@ int KWFrame::pageNumber() const
 {
     Q_ASSERT( m_frameSet );
     if( !m_frameSet ) {
-        kDebug() << k_funcinfo << this << " has no frameset!" << endl;
+        kDebug() << k_funcinfo << this <<" has no frameset!";
         return 0;
     }
     if( !m_frameSet->pageManager() ) {

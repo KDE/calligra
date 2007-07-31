@@ -193,7 +193,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     QString tmp ( text );
                     tmp.remove ( QRegExp( "[^0-9,Ee+-]" ) ); // Keep only 0 to 9, comma, E, e, plus, minus
                     tmp.replace ( ',', '.' );
-                    kDebug(30501) << "Comma: " << text << " => " << tmp << endl;
+                    kDebug(30501) <<"Comma:" << text <<" =>" << tmp;
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {
@@ -214,7 +214,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     QString tmp ( text );
                     tmp.remove ( QRegExp( "[^0-9\\.EeD+-]" ) ); // Keep only 0 to 9, dot, E, e, D, plus, minus
                     tmp.replace ( 'D', 'E' ); // double from FORTRAN use D instead of E
-                    kDebug(30501) << "Point: " << text << " => " << tmp << endl;
+                    kDebug(30501) <<"Point:" << text <<" =>" << tmp;
                     const double d = tmp.toDouble( &ok );
                     if ( !ok )
                     {

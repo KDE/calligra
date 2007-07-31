@@ -157,7 +157,7 @@ InputStream* AbiwordThroughAnalyzer::connectInputStream( InputStream* input ) {
 	}
         else
 	{
-            kDebug()<<" Other key :"<<key<<endl;
+            kDebug()<<" Other key :"<<key;
 	}
         m_item = m_item.nextSibling();
     }

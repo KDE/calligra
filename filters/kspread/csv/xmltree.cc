@@ -70,7 +70,7 @@ XMLTree::~XMLTree()
 
 //  QTime tmr;
 //  tmr.start();
-//  kDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  kDebug(30501) <<"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 //  root.save(t);  // Why does this take sooooo long (approx. 8s on my Athlon 500 with a
                  // quite small file :( )
@@ -81,8 +81,8 @@ XMLTree::~XMLTree()
 //
 // And this looks related to the UTF 8 encoding ...
 
-//  kDebug(30501) << (const char*)QString::number((int)tmr.elapsed()) << endl;
-//  kDebug(30501) << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+//  kDebug(30501) << (const char*)QString::number((int)tmr.elapsed());
+//  kDebug(30501) <<"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
 //  t << '\0';
 

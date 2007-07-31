@@ -128,7 +128,7 @@ void KWTextFrameSet::updateTextLayout() {
 }
 
 void KWTextFrameSet::requestMoreFrames(double textHeight) {
-//kDebug() << "KWTextFrameSet::requestMoreFrames " << textHeight << endl;
+//kDebug() <<"KWTextFrameSet::requestMoreFrames" << textHeight;
     if(frameCount() == 0)
         return; // there is no way we can get more frames anyway.
     KWTextFrame *lastFrame = static_cast<KWTextFrame*> (frames()[frameCount()-1]);
@@ -153,7 +153,7 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
 }
 
 void KWTextFrameSet::spaceLeft(double excessHeight) {
-//kDebug() << "KWTextFrameSet::spaceLeft " << excessHeight << endl;
+//kDebug() <<"KWTextFrameSet::spaceLeft" << excessHeight;
     Q_ASSERT(excessHeight >= 0);
     if(m_frames.count() == 0)
         return;
@@ -172,7 +172,7 @@ void KWTextFrameSet::spaceLeft(double excessHeight) {
 }
 
 void KWTextFrameSet::framesEmpty(int emptyFrames) {
-    //kDebug() << "KWTextFrameSet::framesEmpty " << emptyFrames << endl;
+    //kDebug() <<"KWTextFrameSet::framesEmpty" << emptyFrames;
     if(m_pageManager == 0) // be lazy; just refuse to delete frames if we don't know which are on which page
         return;
     QList<KWFrame*> myFrames = m_frames; // make a copy so we can do a removeFrame without worries
@@ -257,14 +257,14 @@ void KWTextFrameSet::printDebug(KWFrame *frame) {
     KWFrameSet::printDebug(frame);
     KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
     if(textShapeData == 0) return;
-    kDebug() << "     Text position: " << textShapeData->position() << ", end: " << textShapeData->endPosition() << endl;
-    kDebug() << "     Offset in text-document; " << textShapeData->documentOffset() << endl;
+    kDebug() <<"     Text position:" << textShapeData->position() <<", end:" << textShapeData->endPosition();
+    kDebug() <<"     Offset in text-document;" << textShapeData->documentOffset();
 }
 
 void KWTextFrameSet::printDebug() {
     static const char * type[] = { "FirstPageHeader", "OddPagesHeader", "EvenPagesHeader", "FirstPageFooter", "OddPagesFooter", "EvenPagesFooter", "Main", "FootNote", "Other", "ERROR" };
-    kDebug() << " | Is a KWTextFrameSet" << endl;
-    kDebug() << " | FS Type: " << type[m_textFrameSetType] << endl;
+    kDebug() <<" | Is a KWTextFrameSet";
+    kDebug() <<" | FS Type:" << type[m_textFrameSetType];
     KWFrameSet::printDebug();
 }
 #endif

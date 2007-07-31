@@ -222,7 +222,7 @@ void KPrObjectAdaptor::setEffect(const QString & effect)
     else if(effect=="WIPE_BOTTOM")
         obj->setEffect(EF_WIPE_BOTTOM);
     else
-        kDebug(33001)<<"Error : setEffect()\n";
+        kDebug(33001)<<"Error : setEffect()";
 }
 
 void KPrObjectAdaptor::setEffect3(const QString & effect)

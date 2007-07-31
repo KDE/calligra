@@ -147,7 +147,7 @@ QDomElement RowFormat::save(QDomDocument& doc, int yshift) const
     const Style style = d->sheet->cellStorage()->style( QRect( 1, d->row, KS_colMax, 1 ) );
     if ( !style.isEmpty() )
     {
-        kDebug(36003) << "saving cell style of row " << d->row << endl;
+        kDebug(36003) <<"saving cell style of row" << d->row;
         QDomElement format;
         style.saveXML(doc, format, d->sheet->doc()->styleManager());
         row.appendChild( format );
@@ -178,12 +178,12 @@ bool RowFormat::load(const KoXmlElement & row, int yshift, Paste::Mode mode)
     // Validation
     if ( d->height < 0 )
     {
-        kDebug(36001) << "Value height=" << d->height << " out of range" << endl;
+        kDebug(36001) <<"Value height=" << d->height <<" out of range";
         return false;
     }
     if ( d->row < 1 || d->row > KS_rowMax )
     {
-        kDebug(36001) << "Value row=" << d->row << " out of range" << endl;
+        kDebug(36001) <<"Value row=" << d->row <<" out of range";
         return false;
     }
 
@@ -396,7 +396,7 @@ QDomElement ColumnFormat::save(QDomDocument& doc, int xshift) const
     const Style style = d->sheet->cellStorage()->style( QRect( d->column, 1, 1, KS_rowMax ) );
     if ( !style.isEmpty() )
     {
-        kDebug(36003) << "saving cell style of column " << d->column << endl;
+        kDebug(36003) <<"saving cell style of column" << d->column;
         QDomElement format( doc.createElement( "format" ) );;
         style.saveXML(doc, format, d->sheet->doc()->styleManager());
         col.appendChild( format );
@@ -428,12 +428,12 @@ bool ColumnFormat::load(const KoXmlElement & col, int xshift, Paste::Mode mode)
     // Validation
     if ( d->width < 0 )
     {
-        kDebug(36001) << "Value width=" << d->width << " out of range" << endl;
+        kDebug(36001) <<"Value width=" << d->width <<" out of range";
         return false;
     }
     if ( d->column < 1 || d->column > KS_colMax )
     {
-        kDebug(36001) << "Value col=" << d->column << " out of range" << endl;
+        kDebug(36001) <<"Value col=" << d->column <<" out of range";
         return false;
     }
     if ( col.hasAttribute( "hide" ) )

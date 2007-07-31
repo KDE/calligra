@@ -65,7 +65,7 @@ KParts::Part* KudesignerFactory::createPartObject( QWidget *parentWidget, QObjec
             else if ( ( *it ).startsWith( "forcePropertyEditorPosition=" ) )
             {
                 QString tmp = ( *it ).right( ( *it ).length() - 28 ).upper();
-                kDebug() << "forced property editor position: " << tmp << endl;
+                kDebug() <<"forced property editor position:" << tmp;
                 part->setForcedPropertyEditorPosition( tmp == "LEFT" ? Qt::LeftDockWidgetArea : Qt::RightDockWidgetArea );
             }
         }

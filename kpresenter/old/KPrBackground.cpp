@@ -242,12 +242,12 @@ QString KPrBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
 void KPrBackGround::loadOasis(KoOasisContext & context )
 {
     KoStyleStack& styleStack = context.styleStack();
-    kDebug()<<"KPrBackGround::loadOasis()\n";
+    kDebug()<<"KPrBackGround::loadOasis()";
     styleStack.setTypeProperties( "drawing-page" );
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
     {
         const QString fill = styleStack.property( KoXmlNS::draw, "fill" );
-        kDebug(33001) <<"fill page type :" << fill << endl;
+        kDebug(33001) <<"fill page type :" << fill;
         if ( fill == "solid" || fill == "gradient" )
         {
             KPrBrush brush;
@@ -274,7 +274,7 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
             QDomElement* draw =context.oasisStyles().drawStyles()[style];
 
             const QString href( draw->attributeNS( KoXmlNS::xlink, "href", QString::null) );
-            kDebug()<<" href: "<<href<<endl;
+            kDebug()<<" href:"<<href;
             if ( !href.isEmpty() )
             {
                 QString strExtension;
@@ -501,7 +501,7 @@ void KPrBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const Q
 {
     if ( (backType == BT_COLOR && bcType == BCT_PLAIN) || backColor1 == backColor2 ) //plain color
     {
-        //kDebug(33001) << "KPrBackGround::drawBackColor (filling " << DEBUGRECT(crect) << ")" << endl;
+        //kDebug(33001) <<"KPrBackGround::drawBackColor (filling" << DEBUGRECT(crect) <<")";
         _painter->fillRect( crect, QBrush( getBackColor1() ) );
     }
     else if (backType == BT_COLOR && bcType != BCT_PLAIN) { //gradient
@@ -516,8 +516,8 @@ void KPrBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const Q
 
 void KPrBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
 {
-    /*kDebug(33001) << "KPrBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
-      kDebug(33001) << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
+    /*kDebug(33001) <<"KPrBackGround::drawBackPix ext=" << ext.width() <<"," << ext.height();
+      kDebug(33001) <<"mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
       << " crect=" << DEBUGRECT(crect) << endl;*/
     if ( !backPicture.isNull() )
     {

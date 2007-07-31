@@ -80,7 +80,7 @@ AiImport::convert( const QByteArray& from, const QByteArray& to )
         }
 	QString result = doc.toString();
 
-        kDebug() << result << endl;
+        kDebug() << result;
 	KoStoreDevice* storeOut = m_chain->storageFile( "root", KoStore::Write );
 	if( !storeOut )
 	{

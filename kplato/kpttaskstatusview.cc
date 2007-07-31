@@ -86,37 +86,37 @@ TaskStatusItemModel::~TaskStatusItemModel()
     
 void TaskStatusItemModel::slotAboutToBeReset()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     clear();
 }
 
 void TaskStatusItemModel::slotReset()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     refresh();
 }
 
 void TaskStatusItemModel::slotNodeToBeInserted( Node *, int )
 {
-    //kDebug()<<k_funcinfo<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<node->name();
     clear();
 }
 
 void TaskStatusItemModel::slotNodeInserted( Node */*node*/ )
 {
-    //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name();
     refresh();
 }
 
 void TaskStatusItemModel::slotNodeToBeRemoved( Node */*node*/ )
 {
-    //kDebug()<<k_funcinfo<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<node->name();
     clear();
 }
 
 void TaskStatusItemModel::slotNodeRemoved( Node */*node*/ )
 {
-    //kDebug()<<k_funcinfo<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<node->name();
     refresh();
 }
 
@@ -220,7 +220,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() ) {
         return QModelIndex();
     }
-    //kDebug()<<k_funcinfo<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
+    //kDebug()<<k_funcinfo<<index.internalPointer()<<":"<<index.row()<<","<<index.column();
     int row = m_top.indexOf( static_cast<NodeList*>( index.internalPointer() ) );
     if ( row != -1 ) {
         return QModelIndex(); // top level has no parent
@@ -516,7 +516,7 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
             case 8: result = endTime( t, role ); break;
             case 9: result = note( t, role ); break;
             default:
-                kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
+                kDebug()<<k_funcinfo<<"data: invalid display value column"<<index.column();;
                 return QVariant();
         }
     }
@@ -589,15 +589,15 @@ int TaskStatusItemModel::columnCount( const QModelIndex & ) const
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //kDebug()<<k_funcinfo<<"top="<<m_top.count()<<endl;
+        //kDebug()<<k_funcinfo<<"top="<<m_top.count();
         return m_top.count();
     }
     NodeList *l = list( parent );
     if ( l ) {
-        //kDebug()<<k_funcinfo<<"list "<<parent.row()<<": "<<l->count()<<endl;
+        //kDebug()<<k_funcinfo<<"list"<<parent.row()<<":"<<l->count();
         return l->count();
     }
-    //kDebug()<<k_funcinfo<<"node "<<parent.row()<<endl;
+    //kDebug()<<k_funcinfo<<"node"<<parent.row();
     return 0; // nodes don't have children
 }
 
@@ -620,7 +620,7 @@ QMimeData *TaskStatusItemModel::mimeData( const QModelIndexList & indexes ) cons
     QList<int> rows;
     foreach (QModelIndex index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            kDebug()<<k_funcinfo<<index.row()<<endl;
+            kDebug()<<k_funcinfo<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();
@@ -668,7 +668,7 @@ Node *TaskStatusItemModel::node( const QModelIndex &index ) const
 
 void TaskStatusItemModel::slotNodeChanged( Node *)
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     refresh();
 /*    if ( node == 0 || node->type() == Node::Type_Project ) {
         return;
@@ -694,19 +694,19 @@ TaskStatusTreeView::TaskStatusTreeView( Part *part, QWidget *parent )
 
 void TaskStatusTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<k_funcinfo<<index.column()<<endl;
+    kDebug()<<k_funcinfo<<index.column();
 }
 
 void TaskStatusTreeView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at "<<pos<<endl;
+    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void TaskStatusTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
 {
-    kDebug()<<k_funcinfo<<sel.indexes().count()<<endl;
+    kDebug()<<k_funcinfo<<sel.indexes().count();
     foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
-        kDebug()<<k_funcinfo<<i.row()<<", "<<i.column()<<endl;
+        kDebug()<<k_funcinfo<<i.row()<<","<<i.column();
     }
     TreeViewBase::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
@@ -714,7 +714,7 @@ void TaskStatusTreeView::selectionChanged( const QItemSelection &sel, const QIte
 
 void TaskStatusTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     TreeViewBase::currentChanged( current, previous );
     emit currentChanged( current );
 }
@@ -722,7 +722,7 @@ void TaskStatusTreeView::currentChanged( const QModelIndex & current, const QMod
 
 void TaskStatusTreeView::contextMenuEvent ( QContextMenuEvent * event )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     QModelIndex i = indexAt( event->pos() );
     if ( ! i.isValid() ) {
         return;
@@ -797,7 +797,7 @@ TaskStatusView::TaskStatusView( Part *part, QWidget *parent )
 
 void TaskStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -829,14 +829,14 @@ void TaskStatusView::draw()
 
 void TaskStatusView::setGuiActive( bool activate )
 {
-    kDebug()<<k_funcinfo<<activate<<endl;
+    kDebug()<<k_funcinfo<<activate;
 //    updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
 }
 
 void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 {
-    kDebug()<<k_funcinfo<<node->name()<<" : "<<pos<<endl;
+    kDebug()<<k_funcinfo<<node->name()<<" :"<<pos;
     QString name;
     switch ( node->type() ) {
         case Node::Type_Task:
@@ -849,7 +849,7 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
         default:
             break;
     }
-    kDebug()<<k_funcinfo<<name<<endl;
+    kDebug()<<k_funcinfo<<name;
     if ( name.isEmpty() ) {
         return;
     }
@@ -872,7 +872,7 @@ void TaskStatusView::setupGui()
 
 void TaskStatusView::slotOptions()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     ItemViewSettupDialog dlg( m_view, true/*includeColumn0*/ );
     dlg.exec();
 }
@@ -880,7 +880,7 @@ void TaskStatusView::slotOptions()
 
 void TaskStatusView::slotAddTask()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
 }
 
 

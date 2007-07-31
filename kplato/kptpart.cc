@@ -105,7 +105,7 @@ KoView *Part::createViewInstance( QWidget *parent )
     // use the m_view as parent. If the dialog will be needed again,
     // it will be made at that point
     if ( m_projectDialog != 0 ) {
-        kDebug() << "Deleting m_projectDialog because of new ViewInstance\n";
+        kDebug() <<"Deleting m_projectDialog because of new ViewInstance";
         delete m_projectDialog;
         m_projectDialog = 0;
     }
@@ -136,13 +136,13 @@ void Part::editProject()
 
 bool Part::loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     return loadXML( 0, doc ); // We have only one format, so try to load that!
 }
 
 bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
@@ -182,8 +182,8 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
 #endif
     if ( numNodes > 3 ) {
         //TODO: Make a proper bitching about this
-        kDebug() << "*** Error *** " << endl;
-        kDebug() << "  Children count should be maximum 3, but is " << numNodes << endl;
+        kDebug() <<"*** Error ***";
+        kDebug() <<"  Children count should be maximum 3, but is" << numNodes;
         return false;
     }
     m_xmlLoader.startLoad();
@@ -212,14 +212,14 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
                 //TODO add some ui here
             }
         } else if ( e.tagName() == "objects" ) {
-            kDebug()<<k_funcinfo<<"loadObjects"<<endl;
+            kDebug()<<k_funcinfo<<"loadObjects";
             loadObjects( e );
         }
     }
     m_xmlLoader.stopLoad();
     emit sigProgress( 100 ); // the rest is only processing, not loading
 
-    kDebug() << "Loading took " << ( float ) ( dt.elapsed() ) / 1000 << " seconds" << endl;
+    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
 
     // do some sanity checking on document.
     emit sigProgress( -1 );
@@ -234,7 +234,7 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
 
 QDomDocument Part::saveXML()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     QDomDocument document( "kplato" );
 
     document.appendChild( document.createProcessingInstruction(
@@ -280,14 +280,14 @@ QDomDocument Part::saveXML()
 
 void Part::slotDocumentRestored()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     setModified( false );
 }
 
 
 void Part::paintContent( QPainter &, const QRect &)
 {
-//    kDebug() << "----------- KPlato: Part::paintContent ------------" << endl;
+//    kDebug() <<"----------- KPlato: Part::paintContent ------------";
 /*    if ( isEmbedded() && m_embeddedGanttView && m_project ) {
         if ( m_embeddedContext ) {
             int ganttsize = m_embeddedContext->ganttview.ganttviewsize;
@@ -331,9 +331,9 @@ void Part::addCommand( K3Command * cmd, bool execute )
 
 void Part::slotCommandExecuted( K3Command * )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     setModified( true );
-    kDebug() << "------- KPlato, is embedded: " << isEmbedded() << endl;
+    kDebug() <<"------- KPlato, is embedded:" << isEmbedded();
     if ( m_view == NULL )
         return ;
 
@@ -346,15 +346,15 @@ void Part::slotCommandExecuted( K3Command * )
 void Part::slotCopyContextFromView()
 {
     if ( m_view && m_embeddedContext ) {
-        //         kDebug() << "Updating embedded context from view context." << endl;
+        //         kDebug() <<"Updating embedded context from view context.";
         this->m_view->getContext( *m_embeddedContext );
         this->m_embeddedContextInitialized = true;
     }
     //     else
     //     {
-    //         kDebug() << "Not updating the context." << endl;
+    //         kDebug() <<"Not updating the context.";
     //         if (m_context)
-    //           kDebug() << "Current View: " << m_context->currentView << endl;
+    //           kDebug() <<"Current View:" << m_context->currentView;
     //     }
 }
 
@@ -365,7 +365,7 @@ void Part::slotViewDestroyed()
 
 void Part::setCommandType( int type )
 {
-    //kDebug()<<k_funcinfo<<"type="<<type<<endl;
+    //kDebug()<<k_funcinfo<<"type="<<type;
     if ( type == 0 )
         m_update = true;
     else if ( type == 1 )
@@ -392,7 +392,7 @@ DocumentChild *Part::createChild( KoDocument *doc, const QRect& geometry )
 
 void Part::loadObjects( const KoXmlElement &element )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -402,10 +402,10 @@ void Part::loadObjects( const KoXmlElement &element )
         if ( e.tagName() == "object" ) {
             DocumentChild *ch = new DocumentChild( this );
             if ( ch->load( e ) ) {
-                kDebug()<<k_funcinfo<<"loaded"<<endl;
+                kDebug()<<k_funcinfo<<"loaded";
                 insertChild( ch );
             } else {
-                kDebug()<<k_funcinfo<<"Failed to load object"<<endl;
+                kDebug()<<k_funcinfo<<"Failed to load object";
                 delete ch;
             }
         }
@@ -414,7 +414,7 @@ void Part::loadObjects( const KoXmlElement &element )
 
 bool Part::loadChildren( KoStore* store )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     foreach ( KoDocumentChild *ch, children() ) {
         ch->loadDocument( store );
     }
@@ -461,7 +461,7 @@ QDomElement DocumentChild::save( QDomDocument &doc, bool uppercase )
         return QDomElement();
     }
     QDomElement e = KoDocumentChild::save( doc, uppercase );
-    kDebug()<<k_funcinfo<<m_title<<endl;
+    kDebug()<<k_funcinfo<<m_title;
     e.setAttribute( "title", m_title );
     e.setAttribute( "icon", m_icon );
     return e;
@@ -472,7 +472,7 @@ bool DocumentChild::load( const KoXmlElement& element, bool uppercase )
     if ( KoDocumentChild::load( element, uppercase ) ) {
         m_icon = element.attribute( "icon", QString() );
         m_title = element.attribute( "title", QString() );
-        kDebug()<<k_funcinfo<<m_title<<endl;
+        kDebug()<<k_funcinfo<<m_title;
         return true;
     }
     return false;

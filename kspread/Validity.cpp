@@ -260,7 +260,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString() );
-        kDebug(36003)<<" element.attribute( table:condition ) "<<valExpression<<endl;
+        kDebug(36003)<<" element.attribute( table:condition )"<<valExpression;
         //Condition ::= ExtendedTrueCondition | TrueFunction 'and' TrueCondition
         //TrueFunction ::= cell-content-is-whole-number() | cell-content-is-decimal-number() | cell-content-is-date() | cell-content-is-time()
         //ExtendedTrueCondition ::= ExtendedGetFunction | cell-content-text-length() Operator Value
@@ -278,7 +278,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
         {
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("oooc:cell-content-text-length()" );
-            kDebug(36003)<<" valExpression = :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression = :"<<valExpression;
             setRestriction( Validity::TextLength );
 
             loadOasisValidationCondition( valExpression );
@@ -293,7 +293,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
             setRestriction( Validity::TextLength );
             setCondition( Conditional::Between );
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
-            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression;
             valExpression = valExpression.remove( ')' );
             QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
@@ -303,9 +303,9 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
             setRestriction( Validity::TextLength );
             setCondition( Conditional::Different );
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
-            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression;
             valExpression = valExpression.remove( ')' );
-            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression;
             QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
             loadOasisValidationValue( listVal );
         }
@@ -313,7 +313,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
         {
             setRestriction( Validity::List );
             valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
-            kDebug(36003)<<" valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<" valExpression :"<<valExpression;
             valExpression = valExpression.remove( ')' );
             setValidityList( valExpression.split( ';',  QString::SkipEmptyParts ) );
 
@@ -341,7 +341,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
                 setRestriction( Validity::Time );
                 valExpression = valExpression.remove( "oooc:cell-content-is-time() and " );
             }
-            kDebug(36003)<<"valExpression :"<<valExpression<<endl;
+            kDebug(36003)<<"valExpression :"<<valExpression;
 
             if ( valExpression.contains( "cell-content()" ) )
             {
@@ -370,7 +370,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" ) )
     {
-        kDebug(36003)<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table, "allow-empty-cell" )<<endl;
+        kDebug(36003)<<" element.hasAttribute( table:allow-empty-cell ) :"<<element.hasAttributeNS( KoXmlNS::table,"allow-empty-cell" );
         setAllowEmptyCell( ( ( element.attributeNS( KoXmlNS::table, "allow-empty-cell", QString() )=="true" ) ? true : false ) );
     }
     if ( element.hasAttributeNS( KoXmlNS::table, "base-cell-address" ) )
@@ -383,18 +383,18 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
     {
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
         {
-            kDebug(36003)<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table, "title", QString() )<<endl;
+            kDebug(36003)<<"help.attribute( table:title ) :"<<help.attributeNS( KoXmlNS::table,"title", QString() );
             setTitleInfo( help.attributeNS( KoXmlNS::table, "title", QString() ) );
         }
         if ( help.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kDebug(36003)<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table, "display", QString() )<<endl;
+            kDebug(36003)<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table,"display", QString() );
             setDisplayValidationInformation( ( ( help.attributeNS( KoXmlNS::table, "display", QString() )=="true" ) ? true : false ) );
         }
         KoXmlElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
         {
-            kDebug(36003)<<"help text :"<<attrText.text()<<endl;
+            kDebug(36003)<<"help text :"<<attrText.text();
             setMessageInfo( attrText.text() );
         }
     }
@@ -414,12 +414,12 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
             else if ( str == "stop" )
               setAction( Validity::Stop );
             else
-                kDebug(36003)<<"validation : message type unknown  :"<<str<<endl;
+                kDebug(36003)<<"validation : message type unknown  :"<<str;
         }
 
         if ( error.hasAttributeNS( KoXmlNS::table, "display" ) )
         {
-            kDebug(36003)<<" display message :"<<error.attributeNS( KoXmlNS::table, "display", QString() )<<endl;
+            kDebug(36003)<<" display message :"<<error.attributeNS( KoXmlNS::table,"display", QString() );
             setDisplayMessage( (error.attributeNS( KoXmlNS::table, "display", QString() )=="true") );
         }
         KoXmlElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
@@ -432,7 +432,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
 void Validity::loadOasisValidationValue( const QStringList &listVal )
 {
     bool ok = false;
-    kDebug(36003)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
+    kDebug(36003)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1];
 
     if ( restriction() == Validity::Date )
     {
@@ -451,7 +451,7 @@ void Validity::loadOasisValidationValue( const QStringList &listVal )
         {
             setMinimumValue( listVal[0].toInt(&ok) );
             if ( !ok )
-                kDebug(36003)<<" Try to parse this value :"<<listVal[0]<<endl;
+                kDebug(36003)<<" Try to parse this value :"<<listVal[0];
 
 #if 0
             if ( !ok )
@@ -464,7 +464,7 @@ void Validity::loadOasisValidationValue( const QStringList &listVal )
         {
             setMaximumValue( listVal[1].toInt(&ok) );
             if ( !ok )
-                kDebug(36003)<<" Try to parse this value :"<<listVal[1]<<endl;
+                kDebug(36003)<<" Try to parse this value :"<<listVal[1];
 
 #if 0
             if ( !ok )
@@ -510,7 +510,7 @@ void Validity::loadOasisValidationCondition( QString &valExpression )
         setCondition( Conditional::Equal );
     }
     else
-        kDebug(36003)<<" I don't know how to parse it :"<<valExpression<<endl;
+        kDebug(36003)<<" I don't know how to parse it :"<<valExpression;
     if ( restriction() == Validity::Date )
     {
         setMinimumDate( QDate::fromString( value ) );
@@ -527,7 +527,7 @@ void Validity::loadOasisValidationCondition( QString &valExpression )
         {
             setMinimumValue( value.toInt(&ok) );
             if ( !ok )
-                kDebug(36003)<<" Try to parse this value :"<<value<<endl;
+                kDebug(36003)<<" Try to parse this value :"<<value;
 
 #if 0
             if ( !ok )

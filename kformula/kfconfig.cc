@@ -38,7 +38,7 @@ KFConfig::KFConfig( KFormulaPartView* parent )
     setCaption( i18n( "Configure KFormula") );
     setButtons( Ok | Apply | Cancel | Default );
     setDefaultButton( Ok );
-    //kDebug( 40000 ) << "KFConfig::KFConfig" << endl;
+    //kDebug( 40000 ) <<"KFConfig::KFConfig";
     KVBox* page1 = new KVBox();
     p1 = addPage( page1, i18n( "Formula" ) );
     p1->setHeader(  i18n( "Formula Settings" ) );

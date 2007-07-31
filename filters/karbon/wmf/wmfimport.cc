@@ -66,7 +66,7 @@ KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QBy
     }
     QDomDocument outdoc = document.saveXML();
     QByteArray content = outdoc.toByteArray();
-    // kDebug() << " content : " << content << endl;
+    // kDebug() <<" content :" << content;
     out->write( content , content.length() );
 
     return KoFilter::OK;

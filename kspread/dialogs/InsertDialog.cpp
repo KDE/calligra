@@ -87,7 +87,7 @@ InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mo
     setWindowTitle( i18n("Remove Cells") );
   }
   else
-    kDebug(36001) << "Error in kspread_dlg_InsertDialog" << endl;
+    kDebug(36001) <<"Error in kspread_dlg_InsertDialog";
 
   rb1->setChecked(true);
 
@@ -176,7 +176,7 @@ void InsertDialog::slotOk()
     }
     else
     {
-        kDebug(36001) << "Error in kspread_dlg_InsertDialog" << endl;
+        kDebug(36001) <<"Error in kspread_dlg_InsertDialog";
     }
 
     m_pView->updateEditWidget();

@@ -73,7 +73,7 @@ CalendarEdit::CalendarEdit (QWidget *parent)
 
 void CalendarEdit::slotTimeZoneChanged( int )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QStringList lst;
     QString name = timezone->currentText();
     KTimeZone tz;
@@ -94,7 +94,7 @@ void CalendarEdit::slotTimeZoneChanged( int )
 }
 
 void CalendarEdit::slotStateActivated(int id) {
-    //kDebug()<<k_funcinfo<<"id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<"id="<<id;
     if (id == 0) { // undefined
         startTime->setEnabled(false);
         endTime->setEnabled(false);
@@ -120,23 +120,23 @@ void CalendarEdit::slotStateActivated(int id) {
 }
 
 void CalendarEdit::slotClearClicked() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     intervalList->clear();
     bApply->setEnabled(false);
 }
 void CalendarEdit::slotAddIntervalClicked() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     intervalList->addTopLevelItem(new IntervalItem(intervalList, startTime->time(), endTime->time()));
     bApply->setEnabled(true);
 }
 
 //NOTE: enum CalendarDay::State must match combobox state!
 void CalendarEdit::slotApplyClicked() {
-    //kDebug()<<k_funcinfo<<"("<<m_calendar<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<m_calendar<<")";
     DateMap dates = calendarPanel->selectedDates();
     for(DateMap::iterator it = dates.begin(); it != dates.end(); ++it) {
         QDate date = QDate::fromString(it.key(), Qt::ISODate);
-        //kDebug()<<k_funcinfo<<"Date: "<<date<<endl;
+        //kDebug()<<k_funcinfo<<"Date:"<<date;
         CalendarDay *calDay = m_calendar->findDay(date);
         if (!calDay) {
             calDay = new CalendarDay(date);
@@ -147,7 +147,7 @@ void CalendarEdit::slotApplyClicked() {
         if (calDay->state() == CalendarDay::Working) {
             int cnt = intervalList->topLevelItemCount();
             for (int i = 0; i < cnt; ++i) {
-                //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
+                //kDebug()<<k_funcinfo<<"Adding interval:"<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString();
                 calDay->addInterval(static_cast<IntervalItem *>(intervalList->topLevelItem(i))->interval());
             }
         }
@@ -155,14 +155,14 @@ void CalendarEdit::slotApplyClicked() {
 
     IntMap weekdays = calendarPanel->selectedWeekdays();
     for(IntMap::iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
-        //kDebug()<<k_funcinfo<<"weekday="<<it.key()<<endl;
+        //kDebug()<<k_funcinfo<<"weekday="<<it.key();
         CalendarDay *weekday = m_calendar->weekday(it.key());
         weekday->setState(state->currentIndex());//NOTE!!
         weekday->clearIntervals();
         if (weekday->state() == CalendarDay::Working) {
             int cnt = intervalList->topLevelItemCount();
             for (int i = 0; i < cnt; ++i) {
-                //kDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
+                //kDebug()<<k_funcinfo<<"Adding interval:"<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString();
                 weekday->addInterval(static_cast<IntervalItem *>(intervalList->topLevelItem(i))->interval());
             }
         }
@@ -175,7 +175,7 @@ void CalendarEdit::slotApplyClicked() {
 }
 
 void CalendarEdit::slotCheckAllFieldsFilled() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( calendarPanel->selectedDates().isEmpty() && calendarPanel->selectedWeekdays().isEmpty() ) {
         emit obligatedFieldsFilled(m_changed);
         return;
@@ -238,7 +238,7 @@ void CalendarEdit::clearEditPart() {
 void CalendarEdit::slotDateSelected(const QDate& date) {
     if (m_calendar == 0)
         return;
-    //kDebug()<<k_funcinfo<<"("<<date.toString()<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<date.toString()<<")";
     clearEditPart();
     state->clear();
     state->addItem(i18n("Undefined"));
@@ -253,17 +253,17 @@ void CalendarEdit::slotDateSelected(const QDate& date) {
             intervalList->addTopLevelItem(item);
         }
         if (calDay->state() == CalendarDay::Working) {
-            //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is workday"<<endl;
+            //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is workday";
             state->setCurrentIndex(2);
             slotStateActivated(2);
             bApply->setEnabled(calDay->workingIntervals().count() > 0);
         } else if (calDay->state() == CalendarDay::NonWorking){
-            //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is holiday"<<endl;
+            //kDebug()<<k_funcinfo<<"("<<date.toString()<<") is holiday";
             state->setCurrentIndex(1);
             slotStateActivated(1);
             bApply->setEnabled(true);
         } else  {
-            //kDebug()<<k_funcinfo<<"("<<date.toString()<<")=none"<<endl;
+            //kDebug()<<k_funcinfo<<"("<<date.toString()<<")=none";
             state->setCurrentIndex(0);
             slotStateActivated(0);
             bApply->setEnabled(true);
@@ -281,7 +281,7 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
         kError()<<k_funcinfo<<"No calendar or weekday ("<<day_<<") not defined!"<<endl;
         return;
     }
-    //kDebug()<<k_funcinfo<<"("<<day_<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<day_<<")";
     clearEditPart();
     CalendarDay *calDay = m_calendar->weekday(day_);
     if (!calDay) {
@@ -298,17 +298,17 @@ void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     }
     state->setEnabled(true);
     if (calDay->state() == CalendarDay::Working) {
-        //kDebug()<<k_funcinfo<<"("<<day_<<")=workday"<<endl;
+        //kDebug()<<k_funcinfo<<"("<<day_<<")=workday";
         state->setCurrentIndex(2);
         slotStateActivated(2);
         bApply->setEnabled(calDay->workingIntervals().count() > 0);
     } else if (calDay->state() == CalendarDay::NonWorking) {
-        //kDebug()<<k_funcinfo<<"("<<day_<<")=Holiday"<<endl;
+        //kDebug()<<k_funcinfo<<"("<<day_<<")=Holiday";
         state->setCurrentIndex(1);
         slotStateActivated(1);
         bApply->setEnabled(true);
     } else {
-        //kDebug()<<k_funcinfo<<"("<<day_<<")=none"<<endl;
+        //kDebug()<<k_funcinfo<<"("<<day_<<")=none";
         state->setCurrentIndex(0);
         slotStateActivated(0);
         bApply->setEnabled(true);
@@ -334,7 +334,7 @@ CalendarEditDialog::CalendarEditDialog(Project &p, Calendar *cal, QWidget *paren
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug()<<k_funcinfo<<&p<<endl;
+    //kDebug()<<k_funcinfo<<&p;
     dia = new CalendarEdit( this );
     dia->setCalendar( calendar, cal->timeZone().name(), (bool)cal->parentCal() );
     setMainWidget(dia);
@@ -350,36 +350,36 @@ CalendarEditDialog::~CalendarEditDialog()
 }
 
 K3Command *CalendarEditDialog::buildCommand(Part *part) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     K3MacroCommand *macro=0;
     if (original->name() != calendar->name()) {
         if (macro == 0) macro = new K3MacroCommand("");
         macro->addCommand(new CalendarModifyNameCmd(part, original, calendar->name()));
     }
-    //kDebug()<<k_funcinfo<<"Check for days deleted: "<<calendar->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Check for days deleted:"<<calendar->name();
     foreach (CalendarDay *day, original->days()) {
         if (calendar->findDay(day->date()) == 0) {
             if (macro == 0) macro = new K3MacroCommand("");
             macro->addCommand(new CalendarRemoveDayCmd(part, original, day->date()));
-            //kDebug()<<k_funcinfo<<"Removed day "<<day->date()<<endl;
+            //kDebug()<<k_funcinfo<<"Removed day"<<day->date();
         }
     }
-    //kDebug()<<k_funcinfo<<"Check for days added or modified: "<<calendar->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Check for days added or modified:"<<calendar->name();
     foreach (CalendarDay *c, calendar->days()) {
         CalendarDay *day = original->findDay(c->date());
         if (day == 0) {
             if (macro == 0) macro = new K3MacroCommand("");
             // added
-            //kDebug()<<k_funcinfo<<"Added day "<<c->date()<<endl;
+            //kDebug()<<k_funcinfo<<"Added day"<<c->date();
             macro->addCommand(new CalendarAddDayCmd(part, original, new CalendarDay(c)));
         } else if (*day != c) {
             if (macro == 0) macro = new K3MacroCommand("");
             // modified
-            //kDebug()<<k_funcinfo<<"Modified day "<<c->date()<<endl;
+            //kDebug()<<k_funcinfo<<"Modified day"<<c->date();
             macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(c)));
         }
     }
-    //kDebug()<<k_funcinfo<<"Check for weekdays modified: "<<calendar->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Check for weekdays modified:"<<calendar->name();
     CalendarDay *day = 0, *org = 0;
     for (int i=1; i <= 7; ++i) {
         day = calendar->weekdays()->weekday(i);
@@ -387,7 +387,7 @@ K3Command *CalendarEditDialog::buildCommand(Part *part) {
         if (day && org) {
             if (*org != *day) {
                 if (macro == 0) macro = new K3MacroCommand("");
-                //kDebug()<<k_funcinfo<<"Weekday["<<i<<"] modified"<<endl;
+                //kDebug()<<k_funcinfo<<"Weekday["<<i<<"] modified";
                 macro->addCommand(new CalendarModifyWeekdayCmd(part, original, i, new CalendarDay(day)));
             }
         } else if (day) {

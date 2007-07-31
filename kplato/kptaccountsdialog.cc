@@ -46,7 +46,7 @@ K3Command *AccountsDialog::buildCommand(Part *part) {
 }
 
 void AccountsDialog::slotOk() {
-    kDebug()<< "Dialog : slotok : appel panel";
+    kDebug()<<"Dialog : slotok : appel panel";
     m_panel->slotOk();
     accept();
 }

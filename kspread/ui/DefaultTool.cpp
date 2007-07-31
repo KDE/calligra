@@ -166,7 +166,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
     // you cannot move marker when col > KS_colMax or row > KS_rowMax
     if ( col > KS_colMax || row > KS_rowMax )
     {
-        kDebug(36005) << "Canvas::mousePressEvent: col or row is out of range: "
+        kDebug(36005) <<"Canvas::mousePressEvent: col or row is out of range:"
                 << "col: " << col << " row: " << row << endl;
         return;
     }
@@ -230,7 +230,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
         }
     }
 
-//    kDebug(36005) << "Clicked in cell " << col << ", " << row << endl;
+//    kDebug(36005) <<"Clicked in cell" << col <<"," << row;
 
     // Extending an existing selection with the shift button ?
     if ((event->modifiers() & Qt::ShiftModifier) &&
@@ -421,7 +421,7 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     // you cannot move marker when col > KS_colMax or row > KS_rowMax
     if ( col > KS_colMax || row > KS_rowMax )
     {
-        kDebug(36005) << "Canvas::mouseMoveEvent: col or row is out of range: "
+        kDebug(36005) <<"Canvas::mouseMoveEvent: col or row is out of range:"
                 << "col: " << col << " row: " << row << endl;
         return;
     }

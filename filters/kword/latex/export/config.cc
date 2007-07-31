@@ -60,7 +60,7 @@ Config::~Config()
 
 void Config::indent()
 {
-	kDebug(30522) << "Indent tab = " << (_tabulation + getTabSize()) << endl;
+	kDebug(30522) <<"Indent tab =" << (_tabulation + getTabSize());
 	_tabulation = _tabulation + getTabSize();
 }
 
@@ -68,12 +68,12 @@ void Config::desindent()
 {
 	if ((_tabulation - getTabSize()) > 0)
 	{
-		kDebug(30522) << "Desindent tab = " << (_tabulation - getTabSize()) << endl;
+		kDebug(30522) <<"Desindent tab =" << (_tabulation - getTabSize());
 		_tabulation = _tabulation - getTabSize();
 	}
 	else
 	{
-		kDebug(30522) << "Desindent tab = 0" << endl;
+		kDebug(30522) <<"Desindent tab = 0";
 		_tabulation = 0;
 	}
 }

@@ -1300,7 +1300,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     {
         painter.setPen( leftPen );
 
-        //kDebug(36004) << "    painting left border of cell " << name() << endl;
+        //kDebug(36004) <<"    painting left border of cell" << name();
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1322,7 +1322,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     {
         painter.setPen( rightPen );
 
-        //kDebug(36004) << "    painting right border of cell " << name() << endl;
+        //kDebug(36004) <<"    painting right border of cell" << name();
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1345,7 +1345,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     {
         painter.setPen( topPen );
 
-        //kDebug(36004) << "    painting top border of cell " << name()
+        //kDebug(36004) <<"    painting top border of cell" << name()
         //       << " [" << coordinate.x() << "," << coordinate.x() + d->width
         //       << ": " << coordinate.x() + d->width - coordinate.x() << "]" << endl;
 
@@ -1369,7 +1369,7 @@ void CellView::paintCustomBorders(QPainter& painter, const QRectF& paintRect,
     {
         painter.setPen( bottomPen );
 
-        //kDebug(36004) << "    painting bottom border of cell " << name()
+        //kDebug(36004) <<"    painting bottom border of cell" << name()
         //       << " [" << coordinate.x() << "," << coordinate.x() + d->width
         //       << ": " << coordinate.x() + d->width - coordinate.x() << "]" << endl;
 
@@ -2180,7 +2180,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
         breakpos = outText.indexOf( ' ', breakpos );
         int linefeed = outText.indexOf( '\n', pos1 );
 
-//         kDebug(36004) << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
+//         kDebug(36004) <<"start:" << start <<"; breakpos:" << breakpos <<"; pos1:" << pos1 <<"; linefeed:" << linefeed;
 
         //don't miss LF as a position to calculate current lineWidth
         int work_breakpos = breakpos;
@@ -2193,7 +2193,7 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
         //linefeed could be -1 when no linefeed is found!
         if (breakpos > linefeed && linefeed > 0)
         {
-//           kDebug(36004) << "applying linefeed to start;" << endl;
+//           kDebug(36004) <<"applying linefeed to start;";
           start = linefeed;
         }
 

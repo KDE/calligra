@@ -87,15 +87,15 @@ bool HtmlWorker::makeTable(const FrameAnchor& anchor)
 
 QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
 {
-    kDebug(30503) << "HtmlWorker::getAdditionalFileName " << additionalName << endl;
+    kDebug(30503) <<"HtmlWorker::getAdditionalFileName" << additionalName;
 
     QDir dir(m_strFileDir);
-    kDebug(30503) << "Base directory: " << m_strFileDir << endl;
+    kDebug(30503) <<"Base directory:" << m_strFileDir;
 
     if (!dir.exists(m_strSubDirectoryName))
     {
         // Make the directory, as it does not exist yet!
-        kDebug(30503) << "Creating directory: " << m_strSubDirectoryName << endl;
+        kDebug(30503) <<"Creating directory:" << m_strSubDirectoryName;
         dir.mkdir(m_strSubDirectoryName);
     }
 
@@ -115,10 +115,10 @@ QString HtmlWorker::getAdditionalFileName(const QString& additionalName)
 
     QString strBackupName(strFileName);
     strBackupName+='~';
-    kDebug(30503) << "Remove backup file: " << strBackupName << endl;
+    kDebug(30503) <<"Remove backup file:" << strBackupName;
     // We need to remove the backup file, as not all filesystems or ports can do it themselves on a rename.
     dir.remove(strBackupName);
-    kDebug(30503) << "Moving file: " << additionalName << " => " << strBackupName << endl;
+    kDebug(30503) <<"Moving file:" << additionalName <<" =>" << strBackupName;
     dir.rename(strFileName,strBackupName);
 
     return strFileName;
@@ -134,7 +134,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
 
     QByteArray image;
 
-    kDebug(30503) << "Image " << anchor.picture.koStoreName << " will be written in " << strImageName << endl;
+    kDebug(30503) <<"Image" << anchor.picture.koStoreName <<" will be written in" << strImageName;
 
     if (loadSubFile(anchor.picture.koStoreName,image))
     {
@@ -189,7 +189,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
                 *m_streamOut << "</object>"; // <object> is *not* an empty element in HTML!
                 // TODO: other props for image
 
-                kDebug(30506) << "Trying to save clipart to " << strImageName << endl;
+                kDebug(30506) <<"Trying to save clipart to" << strImageName;
                 if (!picture.save(strImagePath,"svg"))
                 {
                     kError(30506) << "Could not save clipart: "  << anchor.picture.koStoreName
@@ -381,7 +381,7 @@ void HtmlWorker::ProcessParagraphData (const QString& strTag, const QString &par
 bool HtmlWorker::doFullParagraph(const QString& paraText,
     const LayoutData& layout, const ValueListFormatData& paraFormatDataList)
 {
-    kDebug(30503) << "Entering HtmlWorker::doFullParagraph" << endl << paraText << endl;
+    kDebug(30503) <<"Entering HtmlWorker::doFullParagraph" << endl << paraText;
     QString strParaText=paraText;
     QString strTag; // Tag that will be written.
 
@@ -469,7 +469,7 @@ bool HtmlWorker::doFullParagraph(const QString& paraText,
 
     ProcessParagraphData(strTag, strParaText, layout, paraFormatDataList);
 
-    kDebug(30503) << "Quiting HtmlWorker::doFullParagraph" << endl;
+    kDebug(30503) <<"Quiting HtmlWorker::doFullParagraph";
     return true;
 }
 
@@ -497,7 +497,7 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
         return false;
     }
 
-    kDebug(30503) << "Charset used: " << getCodec()->name() << endl;
+    kDebug(30503) <<"Charset used:" << getCodec()->name();
 
     m_streamOut->setCodec( getCodec() );
 
@@ -513,7 +513,7 @@ bool HtmlWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
 
 bool HtmlWorker::doCloseFile(void)
 {
-    kDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    kDebug(30503) << __FILE__ <<":" << __LINE__;
     delete m_streamOut;
     m_streamOut=NULL;
     if (m_ioDevice)
@@ -561,7 +561,7 @@ bool HtmlWorker::doOpenDocument(void)
 
 bool HtmlWorker::doCloseDocument(void)
 {
-    kDebug(30503) << __FILE__ << ":" << __LINE__ << endl;
+    kDebug(30503) << __FILE__ <<":" << __LINE__;
     *m_streamOut << "</html>\n";
     return true;
 }
@@ -572,7 +572,7 @@ bool HtmlWorker::doFullDocumentInfo(const KWEFDocumentInfo& docInfo)
     if (!strText.isEmpty())
     {
         m_strTitle=strText; // Set title only if it is not empty!
-        kDebug(30503) << "Found new title " << m_strTitle << endl;
+        kDebug(30503) <<"Found new title" << m_strTitle;
     }
     return true;
 }

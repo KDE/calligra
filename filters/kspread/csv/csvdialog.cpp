@@ -134,7 +134,7 @@ void CSVDialog::fillTable( )
     int maxColumn = 1;
     row = column = 1;
     QTextStream inputStream(m_fileArray, QIODevice::ReadOnly);
-    kDebug(30501) << "Encoding: " << m_codec->name() << endl;
+    kDebug(30501) <<"Encoding:" << m_codec->name();
     inputStream.setCodec( m_codec );
 
     bool lastCharWasCr = false; // Last character was a Carriage Return
@@ -462,7 +462,7 @@ void CSVDialog::textChanged ( const QString & )
 
 void CSVDialog::formatChanged( const QString& newValue )
 {
-    //kDebug(30501) << "CSVDialog::formatChanged:" << newValue << endl;
+    //kDebug(30501) <<"CSVDialog::formatChanged:" << newValue;
     for ( int i = 0; i < m_dialog->m_sheet->numSelections(); ++i )
     {
         Q3TableSelection select ( m_dialog->m_sheet->selection( i ) );
@@ -552,7 +552,7 @@ void CSVDialog::ignoreDuplicatesChanged(int)
 QTextCodec* CSVDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30502) << "Encoding: " << strCodec << endl;
+    kDebug(30502) <<"Encoding:" << strCodec;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );

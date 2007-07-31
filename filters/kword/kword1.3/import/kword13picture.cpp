@@ -40,7 +40,7 @@ KWord13Picture::~KWord13Picture( void )
 
 bool KWord13Picture::loadPicture( KoStore* store )
 {
-    kDebug(30520) << "Loading picture: " << m_storeName << endl;
+    kDebug(30520) <<"Loading picture:" << m_storeName;
  
     m_tempFile = new KTemporaryFile();
     m_tempFile->setSuffix(".bin");

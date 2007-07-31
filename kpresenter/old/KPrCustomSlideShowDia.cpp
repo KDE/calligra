@@ -98,7 +98,7 @@ KPrCustomSlideShowDia::KPrCustomSlideShowDia( KPrView* _view, KPrDocument *_doc,
 
 KPrCustomSlideShowDia::~KPrCustomSlideShowDia()
 {
-    kDebug()<<"KPrCustomSlideShowDia::~KPrCustomSlideShowDia()********************\n";
+    kDebug()<<"KPrCustomSlideShowDia::~KPrCustomSlideShowDia()********************";
 }
 
 void KPrCustomSlideShowDia::init()
@@ -132,7 +132,7 @@ void KPrCustomSlideShowDia::slotDoubleClicked(Q3ListBoxItem *)
 
 void KPrCustomSlideShowDia::slotPresentationFinished()
 {
-    kDebug()<<"void KPrCustomSlideShowDia::slotPresentationFinished()*************************\n";
+    kDebug()<<"void KPrCustomSlideShowDia::slotPresentationFinished()*************************";
     show();
 }
 

@@ -115,7 +115,7 @@ void VStyleDocker::slotItemSelected( QTableWidgetItem *item )
 {
 	VPattern *pattern = (VPattern *)item;
 	if( !pattern ) return;
-	kDebug(38000) << "loading pattern : " << pattern->tilename().toLatin1() << endl;
+	kDebug(38000) <<"loading pattern :" << pattern->tilename().toLatin1();
 	if( m_part && m_part->document().selection() )
 	{
 		VFill fill;

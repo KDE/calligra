@@ -41,7 +41,7 @@ KWTableTemplateCollection::KWTableTemplateCollection()
 
 KWTableTemplateCollection::~KWTableTemplateCollection()
 {
-    //kDebug() << "KWTableTemplateCollection::destructor" << endl;
+    //kDebug() <<"KWTableTemplateCollection::destructor";
     clear();
 }
 

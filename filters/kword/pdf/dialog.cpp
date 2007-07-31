@@ -73,7 +73,7 @@ SelectionRange::SelectionRange(const QString &s)
         else {
             _ranges.push_back(r[i]);
             tmp = r[i];
-            kDebug(30516) << "selection range: (" << tmp.first << ","
+            kDebug(30516) <<"selection range: (" << tmp.first <<","
                            << tmp.second << ") " << endl;
         }
 }

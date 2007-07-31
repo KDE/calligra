@@ -502,14 +502,14 @@ static void SubProcessFormatOneTag(QDomNode myNode,
         // It can happen in a child of <STYLE>, just put secure values
         formatPos=0;
         formatLen=0;
-        kDebug (30508) << "Missing formatting! Style? "
+        kDebug (30508) <<"Missing formatting! Style?"
                         << myNode.nodeName()
                         << " = " << myNode.nodeValue()
                         << endl;
 
         // In the old syntax (KWord 0.8), the comment would be displayed for each paragraph, so do not show it.
         if ( ! leader->m_oldSyntax )
-            kDebug (30508) << "Missing formatting for <FORMAT> (style or syntax version 1 ?)" << endl;
+            kDebug (30508) <<"Missing formatting for <FORMAT> (style or syntax version 1 ?)";
     }
 
     FormatData formatData(1, formatPos, formatLen);
@@ -546,12 +546,12 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
 
     if ( !fileName.isEmpty() )
     {
-        kDebug(30508) << "KWord 0.8 text image: " << fileName << endl;
+        kDebug(30508) <<"KWord 0.8 text image:" << fileName;
         key = KoPictureKey( fileName );
     }
     else
     {
-        kDebug(30508) << "KWord 1.2/1.3 text image: " << key.toString() << endl;
+        kDebug(30508) <<"KWord 1.2/1.3 text image:" << key.toString();
     }
 
     formatData.frameAnchor.key = key;
@@ -614,7 +614,7 @@ static void SubProcessFormatSixTag(QDomNode myNode,
                             << TagProcessing ( "ANCHOR", ProcessAnchorTag, &instance );
         ProcessSubtags (myNode, tagProcessingList, leader);
 #if 0
-        kDebug (30508) << "DEBUG: Adding frame anchor " << instance << endl;
+        kDebug (30508) <<"DEBUG: Adding frame anchor" << instance;
 #endif
 
         (*formatDataList) << FormatData ( formatPos, formatLen, FrameAnchor (KoPictureKey(instance)) );
@@ -964,7 +964,7 @@ static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *le
                 layout->alignment = flows[ align ];
             }
         }
-        kDebug(30508) << "KWord 0.8 flow: " << oldAlign << " corrected: " << layout->alignment << endl;
+        kDebug(30508) <<"KWord 0.8 flow:" << oldAlign <<" corrected:" << layout->alignment;
     }
     else
     {

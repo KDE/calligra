@@ -128,14 +128,14 @@ void KWMailMergeKABC::clear()
 
 int KWMailMergeKABC::getNumRecords() const
 {
-    kDebug() << "KWMailMergeKABC::getNumRecords(): " << _exclusiveUIDs.count() << endl;
+    kDebug() <<"KWMailMergeKABC::getNumRecords():" << _exclusiveUIDs.count();
     return _exclusiveUIDs.count();
 }
 
 
 QString KWMailMergeKABC::getValue( const QString &name, int record ) const
 {
-    kDebug() << "KWMailMergeKABC::getValue(" << name << ", " << record << ")" << endl;
+    kDebug() <<"KWMailMergeKABC::getValue(" << name <<"," << record <<")";
     if ( record < 0 )
         return name;
 
@@ -423,7 +423,7 @@ void KWMailMergeKABC::load( QDomElement& parentElem )
             }
         }
         else
-            kDebug() << "rec.nodeName(): " << rec.nodeName() << endl;
+            kDebug() <<"rec.nodeName():" << rec.nodeName();
     }
 }
 
@@ -432,7 +432,7 @@ void KWMailMergeKABC::makeUIDsExclusive()
 {
     _exclusiveUIDs = _individualUIDs + _listUIDs;
     _exclusiveUIDs.sort();
-    kDebug() << "KWMailMergeKABC::makeUIDsExclusive(): before: " << _exclusiveUIDs.join(",")
+    kDebug() <<"KWMailMergeKABC::makeUIDsExclusive(): before:" << _exclusiveUIDs.join(",")
     << endl;
     QString uid;
     for( QStringList::Iterator it=_exclusiveUIDs.begin();
@@ -444,7 +444,7 @@ void KWMailMergeKABC::makeUIDsExclusive()
         }
         uid = *it;
     }
-    kDebug() << "KWMailMergeKABC::makeUIDsExclusive(): after: " << _exclusiveUIDs.join(",")
+    kDebug() <<"KWMailMergeKABC::makeUIDsExclusive(): after:" << _exclusiveUIDs.join(",")
     << endl;
 }
 
@@ -454,7 +454,7 @@ void KWMailMergeKABC::parseList( const QString& listName )
     if( listName.isEmpty() )
         return;
 
-    kDebug() << "KWMailMergeKABC::parseList: " << listName << endl;
+    kDebug() <<"KWMailMergeKABC::parseList:" << listName;
     KABC::DistributionListManager dlm ( _addressBook );
     dlm.load();
 
@@ -466,7 +466,7 @@ void KWMailMergeKABC::parseList( const QString& listName )
     KABC::DistributionList::Entry::List::Iterator itemIt;
     for ( itemIt = entries.begin(); itemIt != entries.end(); ++itemIt )
     {
-        kDebug() << "WMailMergeKABC::parseList: Listentry UID: " <<
+        kDebug() <<"WMailMergeKABC::parseList: Listentry UID:" <<
         (*itemIt).addressee.uid() << endl;
         _listUIDs.append( (*itemIt).addressee.uid() );
     }
@@ -475,7 +475,7 @@ void KWMailMergeKABC::parseList( const QString& listName )
 
 void KWMailMergeKABC::refresh( bool )
 {
-    kDebug() << "KWMailMergeKABC::refresh()" << endl;
+    kDebug() <<"KWMailMergeKABC::refresh()";
     _iterator = _addressBook->begin();
     _UIDIterator = _individualUIDs.begin();
 
@@ -521,7 +521,7 @@ bool KWMailMergeKABC::showConfigDialog( QWidget* par, int action )
         KWMailMergeKABCConfig *dia=new KWMailMergeKABCConfig( par, this );
 
         ret=( dia->exec() == QDialog::Accepted );
-        kDebug() << "KWMailMergeKABCConfig::Accepted " << ret << endl;
+        kDebug() <<"KWMailMergeKABCConfig::Accepted" << ret;
         delete dia;
     }
     refresh(false);

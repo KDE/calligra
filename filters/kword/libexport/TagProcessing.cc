@@ -48,7 +48,7 @@ void ProcessSubtags ( const QDomNode             &parentNode,
                       Q3ValueList<TagProcessing>  &tagProcessingList,
                       KWEFKWordLeader            *leader)
 {
-    //kDebug(30508) << "Starting ProcessSubtags for node: " << parentNode.nodeName() << endl;
+    //kDebug(30508) <<"Starting ProcessSubtags for node:" << parentNode.nodeName();
 
     QDomNode childNode;
 
@@ -75,7 +75,7 @@ void ProcessSubtags ( const QDomNode             &parentNode,
 #ifdef DEBUG_KWORD_IGNORED_TAGS
                     else
                     {
-                        kDebug(30508) << "Ignoring " << childNode.nodeName ()
+                        kDebug(30508) <<"Ignoring" << childNode.nodeName ()
                             << " tag in " << parentNode.nodeName () << endl;
                     }
 #endif
@@ -85,12 +85,12 @@ void ProcessSubtags ( const QDomNode             &parentNode,
 
             if ( !found )
             {
-                kDebug(30508) << "Unexpected tag " << childNode.nodeName ()
+                kDebug(30508) <<"Unexpected tag" << childNode.nodeName ()
                     << " in " << parentNode.nodeName () << "!" << endl;
             }
         }
     }
-    //kDebug(30508) << "Ending ProcessSubtags for node: " << parentNode.nodeName() << endl;
+    //kDebug(30508) <<"Ending ProcessSubtags for node:" << parentNode.nodeName();
 }
 
 void AllowNoSubtags ( const QDomNode& myNode, KWEFKWordLeader *leader )
@@ -128,10 +128,10 @@ AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
 void ProcessAttributes ( const QDomNode              &myNode,
                          Q3ValueList<AttrProcessing>  &attrProcessingList )
 {
-    //kDebug(30508) << "Starting ProcessAttributes for node: " << myNode.nodeName() << endl;
+    //kDebug(30508) <<"Starting ProcessAttributes for node:" << myNode.nodeName();
 
     QDomNamedNodeMap myAttribs ( myNode.attributes () );
-    //kDebug(30508) << "Attributes = " << myAttribs.length () <<endl;
+    //kDebug(30508) <<"Attributes =" << myAttribs.length ();
     for ( uint i = 0; i <  myAttribs.length (); i++ )
     {
         QDomAttr myAttrib ( myAttribs.item (i).toAttr () );
@@ -146,7 +146,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
                   attrProcessingIt != attrProcessingList.end ();
                   attrProcessingIt++ )
             {
-              //kDebug(30508) << "NAME: " << myAttrib.name () << " == " << (*attrProcessingIt).name <<endl;
+              //kDebug(30508) <<"NAME:" << myAttrib.name () <<" ==" << (*attrProcessingIt).name;
                 if ( myAttrib.name () == (*attrProcessingIt).name )
                 {
                     found = true;
@@ -196,7 +196,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
                             break;
                         default:
                             {
-                                kDebug(30508) << "Unexpected data type " << int( (*attrProcessingIt).type )
+                                kDebug(30508) <<"Unexpected data type" << int( (*attrProcessingIt).type )
                                     << " in " << myNode.nodeName ()
                                     << " attribute " << (*attrProcessingIt).name
                                     << endl;
@@ -207,7 +207,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
 #ifdef DEBUG_KWORD_IGNORED_TAGS
                     else
                     {
-                        kDebug(30508) << "Ignoring " << myNode.nodeName()
+                        kDebug(30508) <<"Ignoring" << myNode.nodeName()
                             << " attribute " << (*attrProcessingIt).name
                             << endl;
                     }
@@ -223,7 +223,7 @@ void ProcessAttributes ( const QDomNode              &myNode,
             }
         }
     }
-    //kDebug(30508) << "Ending ProcessAttributes for node: " << myNode.nodeName() << endl;
+    //kDebug(30508) <<"Ending ProcessAttributes for node:" << myNode.nodeName();
 }
 
 void AllowNoAttributes ( const QDomNode & myNode )

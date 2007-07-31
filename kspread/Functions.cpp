@@ -191,7 +191,7 @@ FunctionRepository* FunctionRepository::self()
 {
   if( !s_self )
   {
-    kDebug() << "Creating function repository ..." << endl;
+    kDebug() <<"Creating function repository ...";
 
     fr_sd.setObject( s_self, new FunctionRepository() );
 
@@ -210,7 +210,7 @@ FunctionRepository* FunctionRepository::self()
     RegisterTextFunctions();
     RegisterTrigFunctions();
 
-    kDebug() << s_self->d->functions.count() << " functions registered." << endl;
+    kDebug() << s_self->d->functions.count() <<" functions registered.";
 
     // find all XML description files
     QStringList files = Factory::global().dirs()->findAllResources
@@ -232,13 +232,13 @@ FunctionRepository* FunctionRepository::self()
         }
         if ( missingDescriptions.count() > 0 )
         {
-            kDebug() << "No function descriptions found for:" << endl;
+            kDebug() <<"No function descriptions found for:";
             foreach( const QString& missingDescription, missingDescriptions )
-                kDebug() << "\t" << missingDescription << endl;
+                kDebug() <<"\t" << missingDescription;
         }
 #endif
-        kDebug() << s_self->d->descriptions.count() << " descriptions loaded." << endl;
-        kDebug() << "Function repository ready." << endl;
+        kDebug() << s_self->d->descriptions.count() <<" descriptions loaded.";
+        kDebug() <<"Function repository ready.";
     }
     return s_self;
 }
@@ -342,7 +342,7 @@ void FunctionRepository::loadFile (const QString& filename)
             d->descriptions.insert (desc->name(), desc);
           else
           {
-            kDebug() << "Description for unknown function " << desc->name() << " found." << endl;
+            kDebug() <<"Description for unknown function" << desc->name() <<" found.";
             delete desc;
           }
         }

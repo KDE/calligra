@@ -148,7 +148,7 @@ void KWQtSqlSerialDataSource::refresh(bool force)
                 myquery->setMode(Q3SqlCursor::ReadOnly);
 		myquery->select(filter);
         }
-        kDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
+        kDebug()<<QString("There were %1 rows in the query").arg(myquery->size());
 
 }
 

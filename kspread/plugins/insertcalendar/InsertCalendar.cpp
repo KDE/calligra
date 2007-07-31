@@ -99,7 +99,7 @@ KAboutData* PluginInsertCalendar::createAboutData()
 
 void PluginInsertCalendar::slotShowDialog()
 {
-  kDebug() << "slotShowDialog..." << endl;
+  kDebug() <<"slotShowDialog...";
 
   if (this->m_dialog == 0)
   {
@@ -120,7 +120,7 @@ void PluginInsertCalendar::slotShowDialog()
 void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &end)
 {
   //@todo implement
-  kDebug() << "slotInsert... still to be implemented" << endl;
+  kDebug() <<"slotInsert... still to be implemented";
 
   Doc* document = m_kspreadView->doc();
 
@@ -229,7 +229,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
     if (yearheader)
     {
-      kDebug() << "inserting year " + QString::number(current.year()) << endl;
+      kDebug() <<"inserting year" + QString::number(current.year());
       sheet->setText(row,colstart+6,cs->yearString(current,KCalendarSystem::LongFormat));
 
       row+=2;
@@ -237,7 +237,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
     }
     if (monthheader)
     {
-      kDebug() << "inserting month " + QString::number(current.month()) << endl;
+      kDebug() <<"inserting month" + QString::number(current.month());
       sheet->setText(row,colstart+6,cs->monthName(current,KCalendarSystem::LongName));
       row+=2;
       //we always have the week number in the first column
@@ -273,7 +273,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   document->emitEndOperation();
 
-  kDebug() << "inserting calendar completed" << endl;
+  kDebug() <<"inserting calendar completed";
 }
 
 }

@@ -84,7 +84,7 @@ bool InsertCalendarDialog::buildDatePickerFrame()
 
 void InsertCalendarDialog::datePickerDeleted()
 {
-  kDebug() << "date picker deleted" << endl;
+  kDebug() <<"date picker deleted";
   m_datePicker = 0;
 }
 
@@ -92,7 +92,7 @@ void InsertCalendarDialog::accept()
 {
   if (m_datePicker)
     m_datePicker->deleteLater();
-  kDebug() << "insert calendar dialog accepted (insert button clicked)" << endl;
+  kDebug() <<"insert calendar dialog accepted (insert button clicked)";
   done(QDialog::Accepted);
   emit insertCalendar(startDate(),endDate());
 }
@@ -101,7 +101,7 @@ void InsertCalendarDialog::reject()
 {
   if (m_datePicker)
     m_datePicker->deleteLater();
-  kDebug() << "insert calendar dialog rejected (cancel button clicked)" << endl;
+  kDebug() <<"insert calendar dialog rejected (cancel button clicked)";
   done(QDialog::Rejected);
 }
 

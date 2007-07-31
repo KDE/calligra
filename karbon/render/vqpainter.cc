@@ -36,7 +36,7 @@
 // #define KARBON_DEBUG_PAINTER
 
 #ifdef KARBON_DEBUG_PAINTER
-#define DEBUG_PAINTER(text) kDebug() << "KARBON_DEBUG_PAINTER: " << text << endl
+#define DEBUG_PAINTER(text) kDebug() <<"KARBON_DEBUG_PAINTER:" << text << endl
 #else
 #define DEBUG_PAINTER(text)
 #endif

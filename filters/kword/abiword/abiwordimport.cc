@@ -393,7 +393,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
     if (stackCurrent->elementType==ElementTypeParagraph)
     {
         QString strType=attributes.value("type").trimmed();
-        kDebug(30506)<<"<field> type:"<<strType<<endl;
+        kDebug(30506)<<"<field> type:"<<strType;
 
         AbiPropsMap abiPropsMap;
         PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
@@ -476,7 +476,7 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
             level=strLevel.toInt();
         QString strBasedOn=attributes.value("basedon").simplified();
         styleDataMap.defineNewStyleFromOld(strStyleName,strBasedOn,level,attributes.value("props"));
-        kDebug(30506) << " Style name: " << strStyleName << endl
+        kDebug(30506) <<" Style name:" << strStyleName << endl
             << " Based on: " << strBasedOn  << endl
             << " Level: " << level << endl
             << " Props: " << attributes.value("props") << endl;
@@ -506,7 +506,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     double height=ValueWithLengthUnit(abiPropsMap["height"].getValue());
     double width =ValueWithLengthUnit(abiPropsMap["width" ].getValue());
 
-    kDebug(30506) << "Image: " << strDataId << " height: " << height << " width: " << width << endl;
+    kDebug(30506) <<"Image:" << strDataId <<" height:" << height <<" width:" << width;
 
     // TODO: image properties
 
@@ -516,7 +516,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
     }
     else
     {
-        kDebug(30506) << "Image: " << strDataId << endl;
+        kDebug(30506) <<"Image:" << strDataId;
     }
 
     QString strPictureFrameName(i18nc("Frameset name","Picture %1",++m_pictureFrameNumber));
@@ -587,7 +587,7 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
     stackItem->elementType=ElementTypeRealData;
 
     QString strName=attributes.value("name").trimmed();
-    kDebug(30506) << "Data: " << strName << endl;
+    kDebug(30506) <<"Data:" << strName;
 
     QString strBase64=attributes.value("base64").trimmed();
     QString strMime=attributes.value("mime").trimmed();
@@ -686,7 +686,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
 
     if (stackItem->bold) // Is it base64-coded?
     {
-        kDebug(30506) << "Decode and write base64 stream: " << stackItem->fontName << endl;
+        kDebug(30506) <<"Decode and write base64 stream:" << stackItem->fontName;
         // We need to decode the base64 stream
         // However KCodecs has no QString to QByteArray decoder!
         QByteArray base64Stream=stackItem->strTemp2.toUtf8(); // Use utf8 to avoid corruption of data
@@ -697,7 +697,7 @@ bool StructureParser::EndElementD (StackItem* stackItem)
     else
     {
         // Unknown text format!
-        kDebug(30506) << "Write character stream: " << stackItem->fontName << endl;
+        kDebug(30506) <<"Write character stream:" << stackItem->fontName;
         // We strip the white space in front to avoid white space before a XML declaration
         QByteArray strOut=stackItem->strTemp2.trimmed().toUtf8();
         out->write(strOut,strOut.length());
@@ -714,7 +714,7 @@ static bool StartElementM(StackItem* stackItem, StackItem* /*stackCurrent*/,
     stackItem->elementType=ElementTypeRealMetaData;
 
     QString strKey=attributes.value("key").trimmed();
-    kDebug(30506) << "Metadata key: " << strKey << endl;
+    kDebug(30506) <<"Metadata key:" << strKey;
 
     if (strKey.isEmpty())
     {
@@ -892,14 +892,14 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
 
     if (kwordFormat==KoPageFormat::CustomSize)
     {
-        kDebug(30506) << "Custom or other page format found: " << strPageType << endl;
+        kDebug(30506) <<"Custom or other page format found:" << strPageType;
 
         double height = attributes.value("height").toDouble();
         double width  = attributes.value("width" ).toDouble();
 
         QString strUnits = attributes.value("units").trimmed();
 
-        kDebug(30506) << "Explicit page size: "
+        kDebug(30506) <<"Explicit page size:"
          << height << " " << strUnits << " x " << width << " " << strUnits
          << endl;
 
@@ -1005,7 +1005,7 @@ bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* /*sta
 
     AbiPropsMap abiPropsMap;
     // Treat the props attributes in the two available flavors: lower case and upper case.
-    kDebug(30506)<< "========== props=\"" << attributes.value("props") << "\"" << endl;
+    kDebug(30506)<<"========== props=\"" << attributes.value("props") <<"\"";
     abiPropsMap.splitAndAddAbiProps(attributes.value("props"));
     abiPropsMap.splitAndAddAbiProps(attributes.value("PROPS")); // PROPS is deprecated
 
@@ -1062,7 +1062,7 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
     stackItem->elementType=ElementTypeFoot;
 
     const QString id(attributes.value("endnote-id").trimmed());
-    kDebug(30506) << "Foot note id: " << id << endl;
+    kDebug(30506) <<"Foot note id:" << id;
 
     if (id.isEmpty())
     {
@@ -1113,7 +1113,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
     uint i;
     for ( i=0, it=widthList.begin(); i<columns; ++i, ++it )
     {
-        kDebug(30506) << "Column width: " << (*it) << " cooked " << ValueWithLengthUnit(*it) << endl;
+        kDebug(30506) <<"Column width:" << (*it) <<" cooked" << ValueWithLengthUnit(*it);
         stackItem->m_doubleArray[i+1] = ValueWithLengthUnit(*it) + stackItem->m_doubleArray[i];
     }
     // ### TODO: in case of automatic column widths, we have not any width given by AbiWord
@@ -1178,7 +1178,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     stackItem->elementType=ElementTypeCell;
 
     const QString tableName(stackCurrent->strTemp1);
-    kDebug(30506) << "Table name: " << tableName << endl;
+    kDebug(30506) <<"Table name:" << tableName;
 
     if (tableName.isEmpty())
     {
@@ -1244,7 +1244,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
 bool StructureParser :: startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes)
 {
     //Warning: be careful that some element names can be lower case or upper case (not very XML)
-    kDebug(30506) << indent << " <" << name << ">" << endl; //DEBUG
+    kDebug(30506) << indent <<" <" << name <<">"; //DEBUG
     indent += '*'; //DEBUG
 
     if (structureStack.isEmpty())
@@ -1397,7 +1397,7 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
 bool StructureParser :: endElement( const QString&, const QString& , const QString& name)
 {
     indent.remove( 0, 1 ); // DEBUG
-    kDebug(30506) << indent << " </" << name << ">" << endl;
+    kDebug(30506) << indent <<" </" << name <<">";
 
     if (structureStack.isEmpty())
     {
@@ -1460,15 +1460,15 @@ bool StructureParser :: characters ( const QString & ch )
     // DEBUG start
     if (ch=="\n")
     {
-        kDebug(30506) << indent << " (LINEFEED)" << endl;
+        kDebug(30506) << indent <<" (LINEFEED)";
     }
     else if (ch.length()> 40)
     {   // 40 characters are enough (especially for image data)
-        kDebug(30506) << indent << " :" << ch.left(40) << "..." << endl;
+        kDebug(30506) << indent <<" :" << ch.left(40) <<"...";
     }
     else
     {
-        kDebug(30506) << indent << " :" << ch << ":" << endl;
+        kDebug(30506) << indent <<" :" << ch <<":";
     }
     // DEBUG end
     if (structureStack.isEmpty())
@@ -1574,14 +1574,14 @@ bool StructureParser::endDocument(void)
     // insert before <PICTURES>, as <PICTURES> must remain last.
     mainDocument.documentElement().insertBefore(stylesPluralElement,m_picturesElement);
 
-    kDebug(30506) << "###### Start Style List ######" << endl;
+    kDebug(30506) <<"###### Start Style List ######";
     StyleDataMap::ConstIterator it;
 
     // At first, we put the Normal style
     it=styleDataMap.find("Normal");
     if (it!=styleDataMap.end())
     {
-        kDebug(30506) << "\"" << it.key() << "\" => " << it.value().m_props << endl;
+        kDebug(30506) <<"\"" << it.key() <<"\" =>" << it.value().m_props;
         QDomElement styleElement=mainDocument.createElement("STYLE");
         stylesPluralElement.appendChild(styleElement);
         AddStyle(styleElement, it.key(),it.value(),mainDocument);
@@ -1594,14 +1594,14 @@ bool StructureParser::endDocument(void)
         if (it.key()=="Normal")
             continue;
 
-        kDebug(30506) << "\"" << it.key() << "\" => " << it.value().m_props << endl;
+        kDebug(30506) <<"\"" << it.key() <<"\" =>" << it.value().m_props;
 
         QDomElement styleElement=mainDocument.createElement("STYLE");
         stylesPluralElement.appendChild(styleElement);
 
         AddStyle(styleElement, it.key(),it.value(),mainDocument);
     }
-    kDebug(30506) << "######  End Style List  ######" << endl;
+    kDebug(30506) <<"######  End Style List  ######";
 
     createDocInfo();
 
@@ -1751,7 +1751,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     if ((to != "application/x-kword") || (from != "application/x-abiword"))
         return KoFilter::NotImplemented;
 
-    kDebug(30506)<<"AbiWord to KWord Import filter"<<endl;
+    kDebug(30506)<<"AbiWord to KWord Import filter";
 
     StructureParser handler(m_chain);
 
@@ -1769,7 +1769,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
         strExt=fileIn.mid(result);
     }
 
-    kDebug(30506) << "File extension: -" << strExt << "-" << endl;
+    kDebug(30506) <<"File extension: -" << strExt <<"-";
 
     QString strMime; // Mime type of the compressor (default: unknown)
 
@@ -1778,14 +1778,14 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     {
         // Compressed with gzip
         strMime="application/x-gzip";
-        kDebug(30506) << "Compression: gzip" << endl;
+        kDebug(30506) <<"Compression: gzip";
     }
     else if ((strExt==".bz2")||(strExt==".BZ2") //in case of .abw.bz2 (logical extension)
         ||(strExt==".bzabw")||(strExt==".BZABW")) //in case of .bzabw (extension used prioritary with AbiWord)
     {
         // Compressed with bzip2
         strMime="application/x-bzip2";
-        kDebug(30506) << "Compression: bzip2" << endl;
+        kDebug(30506) <<"Compression: bzip2";
     }
 
     QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
@@ -1824,7 +1824,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     QByteArray strOut;
     KoStoreDevice* out;
 
-    kDebug(30506) << "Creating documentinfo.xml" << endl;
+    kDebug(30506) <<"Creating documentinfo.xml";
     out=m_chain->storageFile( "documentinfo.xml", KoStore::Write );
     if(!out)
     {
@@ -1838,7 +1838,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     // WARNING: we cannot use KoStore::write(const QByteArray&) because it writes an extra NULL character at the end. (### TODO: check for Qt4)
     out->write(strOut,strOut.length());
 
-    kDebug(30506) << "Creating maindoc.xml" << endl;
+    kDebug(30506) <<"Creating maindoc.xml";
     out=m_chain->storageFile( "root", KoStore::Write );
     if(!out)
     {
@@ -1856,7 +1856,7 @@ KoFilter::ConversionStatus ABIWORDImport::convert( const QByteArray& from, const
     kDebug(30506) << documentOut.toString();
 #endif
 
-    kDebug(30506) << "Now importing to KWord!" << endl;
+    kDebug(30506) <<"Now importing to KWord!";
 
     return KoFilter::OK;
 }

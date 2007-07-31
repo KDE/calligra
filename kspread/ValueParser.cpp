@@ -164,7 +164,7 @@ Value ValueParser::readNumber( const QString& _str, bool *ok ) const
       major = QString( "%1" ).arg( major.toInt() + ( int )wholePart );
     }
     minor = QString::number( minorVal, 'f' ).mid( 2 ); // chop off the "0." part
-    // kDebug() << "fraction:" << major << "." << minor << endl;
+    // kDebug() <<"fraction:" << major <<"." << minor;
   }
   else
   {
@@ -256,7 +256,7 @@ Value ValueParser::tryParseNumber( const QString& str, bool *ok ) const
         const Number val = readNumber( str.left( str.length()-1 ).trimmed(), ok ).asFloat();
         if ( *ok )
         {
-            //kDebug(36001) << "ValueParser::tryParseNumber '" << str <<
+            //kDebug(36001) <<"ValueParser::tryParseNumber '" << str <<
             //    "' successfully parsed as percentage: " << val << '%' << endl;
             value = Value( val / 100.0 );
             value.setFormat (Value::fmt_Percent);
@@ -327,7 +327,7 @@ Value ValueParser::tryParseDate( const QString& str, bool *ok ) const
         for ( ; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos )
           fmt.remove( yearPos, 1 );
       }
-      //kDebug(36001) << "Cell::tryParseDate short format w/o date: " << fmt << endl;
+      //kDebug(36001) <<"Cell::tryParseDate short format w/o date:" << fmt;
       tmpDate = m_doc->locale()->readDate( str, fmt, &valid );
     }
   }

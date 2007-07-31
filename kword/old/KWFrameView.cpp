@@ -79,7 +79,7 @@ bool KWFrameView::contains(const KoPoint &point, bool fuzzy) const {
 
 bool KWFrameView::hit(const KoPoint &point, bool fuzzy , bool borderOnly) const {
 #if 0
-    //kDebug() << "hit " << point << " " << fuzzy << ", " << borderOnly << endl;
+    //kDebug() <<"hit" << point <<"" << fuzzy <<"," << borderOnly;
     double hs = 0, vs =0;
     if(fuzzy) {
         hs = HORIZONTAL_SNAP;
@@ -323,7 +323,7 @@ void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
         }
     }
     else if( selectPolicy == MEANING_SELECT_RANGE ) {
-kDebug() << "not yet implemented; select table range\n"; // TODO
+kDebug() <<"not yet implemented; select table range"; // TODO
     }
 #endif
 }
@@ -442,7 +442,7 @@ QMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
         return view->popupMenu("variable_popup");
     }
 
-    //kDebug() << "TextFramePolicy::createPopup: plugging actionlist with " << actionList.count() << " actions" << endl;
+    //kDebug() <<"TextFramePolicy::createPopup: plugging actionlist with" << actionList.count() <<" actions";
     KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
     if ( linkVar ) {
         view->plugActionList( "datatools_link", actionList );

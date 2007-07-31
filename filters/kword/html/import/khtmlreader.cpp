@@ -45,7 +45,7 @@ void qt_leave_modal( QWidget *widget );
 
 
 bool KHTMLReader::filter(const KUrl& url) {
-	kDebug(30503) << "KHTMLReader::filter" << endl;
+	kDebug(30503) <<"KHTMLReader::filter";
 	QObject::connect(_html,SIGNAL(completed()),this,SLOT(completed()));
 
 	_state.clear();
@@ -136,7 +136,7 @@ void KHTMLReader::startNewLayout(bool startNewFormat, QDomElement layout) {
 
 
 void KHTMLReader::completed() {
-	kDebug(30503) << "KHTMLReader::completed" << endl;
+	kDebug(30503) <<"KHTMLReader::completed";
         qApp->exit_loop();
 	DOM::Document doc=_html->document(); // FIXME parse <HEAD> too
 	DOM::NodeList list=doc.getElementsByTagName("body");
@@ -328,8 +328,8 @@ KHTMLReader::~KHTMLReader(){
 
 
 bool KHTMLReader::parse_CommonAttributes(DOM::Element e) {
-        kDebug(30503) << "entering KHTMLReader::parse_CommonAttributes" << endl;
-        kDebug(30503) << "tagName is " << e.tagName().string() << endl;
+        kDebug(30503) <<"entering KHTMLReader::parse_CommonAttributes";
+        kDebug(30503) <<"tagName is" << e.tagName().string();
         QString s=e.getAttribute("align").string();
         if (!s.isEmpty()) 
         {
@@ -439,12 +439,12 @@ static const QColor parsecolor(const QString& colorstring) {
 void KHTMLReader::parseStyle(DOM::Element e) {
   // styles are broken broken broken broken broken broken.
   // FIXME: use getComputedStyle - note: it only returns 0, but works nevertheless
-  kDebug(30503) << "entering parseStyle" << endl;
+  kDebug(30503) <<"entering parseStyle";
   DOM::CSSStyleDeclaration s1=e.style();
   DOM::Document doc=_html->document();
   DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
 
-  kDebug(30503) << "font-weight=" << s1.getPropertyValue("font-weight").string() << endl;
+  kDebug(30503) <<"font-weight=" << s1.getPropertyValue("font-weight").string();
   if ( s1.getPropertyValue("font-weight").string() == "bolder" )
   {
     _writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
@@ -486,13 +486,13 @@ void KHTMLReader::parseStyle(DOM::Element e) {
      */
 /*
      // debugging code.
-     kDebug(30503) << "e.style()" << endl;
+     kDebug(30503) <<"e.style()";
      for (unsigned int i=0;i<s1.length();i++) {
-        kDebug(30503) << QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string()) << endl;
+        kDebug(30503) << QString("%1: %2").arg(s1.item(i).string()).arg(s1.getPropertyValue(s1.item(i)).string());
      }
-     kDebug(30503) << "override style" << endl;
+     kDebug(30503) <<"override style";
      for (unsigned int i=0;i<s2.length();i++) {
-        kDebug(30503) << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()) << endl;
+        kDebug(30503) << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string());
      }
 */
 }

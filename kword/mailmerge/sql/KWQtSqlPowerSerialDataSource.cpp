@@ -70,7 +70,7 @@ void KWQtSqlPowerSerialDataSource::refresh(bool force)
 		myquery=new KWMySqlCursor(query,true,database);
 		myquery->setMode(Q3SqlCursor::ReadOnly);
 	}
-	kDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
+	kDebug()<<QString("There were %1 rows in the query").arg(myquery->size());
 }
 
 QString KWQtSqlPowerSerialDataSource::getValue( const QString &name, int record ) const
@@ -205,7 +205,7 @@ void KWQtSqlPowerMailMergeEditor::slotExecute()
 	cur->setMode(Q3SqlCursor::ReadOnly);
 
 	db->clearSampleRecord();
-	kDebug()<<QString("Fieldname count %1").arg(cur->count())<<endl;
+	kDebug()<<QString("Fieldname count %1").arg(cur->count());
 	for (uint i=0;i<cur->count();i++)
 		db->addSampleRecordEntry(cur->fieldName(i));
 

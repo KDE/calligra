@@ -77,7 +77,7 @@ void ScriptingSheetsListView::initialize()
     if( m_initialized )
         finalize();
 
-    kDebug()<<"ScriptingSheetsListView::initialize()"<<endl;
+    kDebug()<<"ScriptingSheetsListView::initialize()";
 
     QStringList headers;
     headers << i18n("Sheet");
@@ -155,7 +155,7 @@ void ScriptingSheetsListView::initialize()
 void ScriptingSheetsListView::finalize()
 {
     if( m_initialized ) {
-        kDebug()<<"ScriptingSheetsListView::finalize()"<<endl;
+        kDebug()<<"ScriptingSheetsListView::finalize()";
 
         m_prevlist = sheets();
         QStandardItemModel* model = static_cast< QStandardItemModel* >(m_view->model());

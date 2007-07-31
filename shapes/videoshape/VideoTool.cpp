@@ -47,7 +47,7 @@ VideoTool::~VideoTool()
 void VideoTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
 
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
@@ -66,7 +66,7 @@ void VideoTool::activate (bool temporary)
 
 void VideoTool::deactivate()
 {
-  kDebug()<<"VideoTool::deactivate\n";
+  kDebug()<<"VideoTool::deactivate";
   m_videoshape = 0;
 }
 
@@ -138,35 +138,35 @@ QWidget * VideoTool::createOptionWidget()
 
 void VideoTool::slotPrevious()
 {
-  kDebug()<<"VideoTool::slotPrevious\n";
+  kDebug()<<"VideoTool::slotPrevious";
   if(m_videoshape)
     m_videoshape->previous();
 }
 
 void VideoTool::slotPlay()
 {
-  kDebug()<<"VideoTool::slotPlay\n";
+  kDebug()<<"VideoTool::slotPlay";
   if(m_videoshape) 
     m_videoshape->play();
 }
 
 void VideoTool::slotStart()
 {
-  kDebug()<<" VideoTool::slotStart \n";
+  kDebug()<<" VideoTool::slotStart";
   if(m_videoshape)
     m_videoshape->start();
 }
 
 void VideoTool::slotStop()
 {
-  kDebug()<<" VideoTool::slotStop \n";
+  kDebug()<<" VideoTool::slotStop";
   if(m_videoshape)
     m_videoshape->stop();
 }
 
 void VideoTool::slotChangeUrl()
 {
-  kDebug()<<" VideoTool::slotChangeUrl \n";
+  kDebug()<<" VideoTool::slotChangeUrl";
   KUrl url = KFileDialog::getOpenUrl();
   if(!url.isEmpty() && m_videoshape)
     m_videoshape->setCurrentUrl(url);
@@ -174,14 +174,14 @@ void VideoTool::slotChangeUrl()
 
 void VideoTool::slotNext()
 {
-  kDebug()<<" VideoTool::slotNext \n";
+  kDebug()<<" VideoTool::slotNext";
   if(m_videoshape)
     m_videoshape->next();
 }
 
 void VideoTool::slotPause()
 {
-  kDebug()<<" VideoTool::slotPause \n";
+  kDebug()<<" VideoTool::slotPause";
   if(m_videoshape)
     m_videoshape->pause();
 }

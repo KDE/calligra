@@ -106,22 +106,22 @@ void KPrNoteBar::slotTextChanged()
 
 void KPrNoteBar::slotSelectionChanged()
 {
-    kDebug(33001) << "slotSelectionChanged(): " << textEdit->hasSelectedText() << endl;
+    kDebug(33001) <<"slotSelectionChanged():" << textEdit->hasSelectedText();
 }
 
 void KPrNoteBar::slotCopyAvailable( bool yes )
 {
-    kDebug(33001) << "slotCopyAvailable( " << yes << " )" << endl;
+    kDebug(33001) <<"slotCopyAvailable(" << yes <<" )";
 }
 
 void KPrNoteBar::slotUndoAvailable( bool /*yes*/ )
 {
-    //kDebug(33001) << "slotUndoAvailable( " << yes << " )" << endl;
+    //kDebug(33001) <<"slotUndoAvailable(" << yes <<" )";
 }
 
 void KPrNoteBar::slotRedoAvailable( bool /*yes*/ )
 {
-    //kDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
+    //kDebug(33001) <<"slotRedoAvailable(" << yes <<" )";
 }
 
 void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QList<int> _list )

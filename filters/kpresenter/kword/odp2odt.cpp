@@ -97,7 +97,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
         return KoFilter::StorageCreationError;
     }
     const QByteArray cstring = doc.toByteArray(); // utf-8 already
-    //kDebug() << k_funcinfo << QString::fromUtf8( cstring ) << endl;
+    //kDebug() << k_funcinfo << QString::fromUtf8( cstring );
     const int len = cstring.length();
     const int written = out->write( cstring.constData(), len );
     if ( written != len )
@@ -217,7 +217,7 @@ void Odp2Odt::adjustStyles()
         return;
     }
 
-    kDebug() << QString::fromUtf8( stylesDoc.toByteArray() ) << endl;
+    kDebug() << QString::fromUtf8( stylesDoc.toByteArray() );
 
     QDomElement docElem = stylesDoc.documentElement();
     Q_ASSERT( !docElem.isNull() );
@@ -232,7 +232,7 @@ void Odp2Odt::adjustStyles()
     }
 
     const QByteArray cstring = stylesDoc.toByteArray(); // utf-8 already
-    //kDebug() << k_funcinfo << QString::fromUtf8( cstring ) << endl;
+    //kDebug() << k_funcinfo << QString::fromUtf8( cstring );
     const int len = cstring.length();
     const int written = out->write( cstring.constData(), len );
     if ( written != len )
@@ -250,7 +250,7 @@ void Odp2Odt::fixPageLayout( QDomElement& docElem )
     QDomElement automaticStyles = docElem.namedItem( "office:automatic-styles" ).toElement();
 #endif
     if ( automaticStyles.isNull() ) {
-        kDebug() << "automatic-styles not found" << endl;
+        kDebug() <<"automatic-styles not found";
         return;
     }
     // # what if there's more than one?

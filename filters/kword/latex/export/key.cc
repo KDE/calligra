@@ -38,7 +38,7 @@ Key::Key(eKeyType type): _type(type)
 /*******************************************/
 Key::~Key()
 {
-	kDebug(30522) << "Destruction of a key." << endl;
+	kDebug(30522) <<"Destruction of a key.";
 }
 
 /*******************************************/
@@ -48,8 +48,8 @@ void Key::analyze(const QDomNode node)
 {
 	/* Markup type: Paragraph */
 
-	kDebug(30522) << "**** KEY ****" << endl;
-	kDebug(30522) << getAttr(node, "name") << endl;
+	kDebug(30522) <<"**** KEY ****";
+	kDebug(30522) << getAttr(node,"name");
 	setName(getAttr(node, "name"));
 	setFilename(getAttr(node, "filename"));
 	setHour(getAttr(node, "hour").toInt());
@@ -59,7 +59,7 @@ void Key::analyze(const QDomNode node)
 	setSecond(getAttr(node, "second").toInt());
 	setMonth(getAttr(node, "month").toInt());
 	setYear(getAttr(node, "year").toInt());
-	kDebug(30522) << "**** END KEY ****" << endl;
+	kDebug(30522) <<"**** END KEY ****";
 }
 
 /*******************************************/
@@ -71,7 +71,7 @@ void Key::analyze(const QDomNode node)
 void Key::generate(QTextStream &out)
 {
 
-	kDebug(30522) << "  GENERATION KEY" << endl;
+	kDebug(30522) <<"  GENERATION KEY";
 
-	kDebug(30522) << "PARA KEY" << endl;
+	kDebug(30522) <<"PARA KEY";
 }

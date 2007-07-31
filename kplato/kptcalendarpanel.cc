@@ -211,7 +211,7 @@ CalendarPanel::resizeEvent(QResizeEvent*)
 void
 CalendarPanel::dateChangedSlot(const QDate& date)
 {
-    //kDebug() << "CalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
+    //kDebug() <<"CalendarPanel::dateChangedSlot: date changed (" << date.year() <<"/" << date.month() <<"/" << date.day() <<").";
     line->setText(KGlobal::locale()->formatDate(date, KLocale::ShortDate));
     d->selectWeek->setText(i18n("Week %1", weekOfYear(date)));
     selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(),
@@ -223,7 +223,7 @@ CalendarPanel::dateChangedSlot(const QDate& date)
 void
 CalendarPanel::tableClickedSlot()
 {
-  //kDebug() << "CalendarPanel::tableClickedSlot: table clicked." << endl;
+  //kDebug() <<"CalendarPanel::tableClickedSlot: table clicked.";
   emit(dateSelected(table->getDate()));
   emit(tableClicked());
 }
@@ -255,7 +255,7 @@ CalendarPanel::setDate(const QDate& date)
 	line->setText(KGlobal::locale()->formatDate(date, KLocale::ShortDate));
 	return true;
     } else {
-	kDebug() << "CalendarPanel::setDate: refusing to set invalid date." << endl;
+	kDebug() <<"CalendarPanel::setDate: refusing to set invalid date.";
 	return false;
     }
 }
@@ -405,12 +405,12 @@ CalendarPanel::lineEnterPressed()
   // -----
   if(val->date(line->text(), temp)==QValidator::Acceptable)
     {
-        //kDebug() << "CalendarPanel::lineEnterPressed: valid date entered." << endl;
+        //kDebug() <<"CalendarPanel::lineEnterPressed: valid date entered.";
         emit(dateEntered(temp));
         setDate(temp);
     } else {
       KNotification::beep();
-      //kDebug() << "CalendarPanel::lineEnterPressed: invalid date entered." << endl;
+      //kDebug() <<"CalendarPanel::lineEnterPressed: invalid date entered.";
     }
 }
 
@@ -547,25 +547,25 @@ int CalendarPanel::weekOfYear(const QDate& date)
 }
 
 void CalendarPanel::slotWeekdaySelected(int day) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     emit weekdaySelected(day);
 }
 
 void CalendarPanel::slotWeekSelected(int week, int year) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     emit weekSelected(week, year);
 }
 
 void CalendarPanel::setCalendar(Calendar *cal) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     table->clear();
     if (cal) {
         table->setMarkedWeekdays(cal->weekdayStateMap());
-        //kDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
+        //kDebug()<<k_funcinfo<<"Days="<<it.count();
         foreach (CalendarDay *d, cal->days()) {
             if (d->state() != CalendarDay::None) {
                 table->addMarkedDate(d->date(), d->state());
-                //kDebug()<<k_funcinfo<<"Added day: "<<d->date()<<"="<<d->state()<<endl;
+                //kDebug()<<k_funcinfo<<"Added day:"<<d->date()<<"="<<d->state();
             }
         }
         setEnabled(true);

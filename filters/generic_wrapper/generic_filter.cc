@@ -54,7 +54,7 @@ KoFilter::ConversionStatus GenericFilter::convert( const QByteArray &from, const
 	KService::List::ConstIterator it;
     for (it=offers.begin(); it!=offers.end(); ++it)
     {
-        kDebug() << "Got a filter script, exec: " << (*it)->exec() <<
+        kDebug() <<"Got a filter script, exec:" << (*it)->exec() <<
             ", imports: " << (*it)->property("X-KDE-Wrapper-Import").toString() <<
             ", exports: " << (*it)->property("X-KDE-Wrapper-Export").toString() << endl;
         if ((*it)->property("X-KDE-Wrapper-Import").toString()==from
@@ -100,7 +100,7 @@ KoFilter::ConversionStatus GenericFilter::doImport()
                        + KShell::quoteArg(m_chain->outputFile());
         system(QFile::encodeName(exec));
 
-        kDebug() << "Executing: " << exec << endl;
+        kDebug() <<"Executing:" << exec;
 
         QFile outFile(m_chain->outputFile());
         outFile.open(QIODevice::ReadOnly);

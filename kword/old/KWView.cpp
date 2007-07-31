@@ -503,7 +503,7 @@ void KWView::setupActions()
     m_actionDeletePage = new KAction( i18n( "Delete Page" ), "delslide", 0,
                                     this, SLOT( deletePage() ),
                                     actionCollection(), "delete_page" );
-    kDebug() <<  m_doc->pageCount() <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
+    kDebug() <<  m_doc->pageCount() <<"" << (m_doc->processingType() == KWDocument::DTP);
 
     (void) new KAction( i18n( "Configure Mai&l Merge..." ), "configure",0,
                         this, SLOT( editMailMergeDataBase() ),
@@ -1566,7 +1566,7 @@ void KWView::updatePageInfo()
             if(view)
                 m_currentPage = m_doc->pageManager()->page(view->frame());
         }
-        /*kDebug() << (void*)this << " KWView::updatePageInfo "
+        /*kDebug() << (void*)this <<" KWView::updatePageInfo"
                   << " edit: " << edit << " " << ( edit?edit->frameSet()->name():QString::null)
                   << " currentFrame: " << (edit?edit->currentFrame():0L)
                   << " m_currentPage=" << currentPage() << " m_sbPageLabel=" << m_sbPageLabel
@@ -1593,7 +1593,7 @@ void KWView::numPagesChanged()
      docStructChanged(TextFrames);
      updatePageInfo();
      int pages = m_doc->pageCount();
-     kDebug() <<  pages <<  " " << (m_doc->processingType() == KWDocument::DTP) << endl;
+     kDebug() <<  pages <<"" << (m_doc->processingType() == KWDocument::DTP);
      refreshDeletePageAction();
 }
 
@@ -1667,7 +1667,7 @@ int KWView::checkClipboard( const QMimeData *data )
     QString returnedTypeMime = KoTextObject::providesOasis( data );
     if ( !returnedTypeMime.isEmpty() )
         provides |= ProvidesOasis;
-    //kDebug(32001) << "KWView::checkClipboard provides=" << provides << endl;
+    //kDebug(32001) <<"KWView::checkClipboard provides=" << provides;
     return provides;
 }
 
@@ -1727,8 +1727,8 @@ void KWView::print( KPrinter &prt )
     ///////// Changing the dpiX/dpiY is very wrong nowadays. This has no effect on the font size
     ///////// that we give Qt, anymore, so it leads to minuscule fonts in the printout => doZoom==false.
     m_zoomHandler.setZoomAndResolution( 100, dpiX, dpiY );
-    //kDebug() << "KWView::print metrics: " << metrics.logicalDpiX() << "," << metrics.logicalDpiY() << endl;
-    //kDebug() << "x11AppDPI: " << KoGlobal::dpiX() << "," << KoGlobal::dpiY() << endl;
+    //kDebug() <<"KWView::print metrics:" << metrics.logicalDpiX() <<"," << metrics.logicalDpiY();
+    //kDebug() <<"x11AppDPI:" << KoGlobal::dpiX() <<"," << KoGlobal::dpiY();
 
     bool serialLetter = false;
 
@@ -1769,7 +1769,7 @@ void KWView::print( KPrinter &prt )
     QPainter painter;
     painter.begin( &prt );
 
-    kDebug(32001) << "KWView::print scaling by " << (double)prt.logicalDpiX() / (double)dpiX
+    kDebug(32001) <<"KWView::print scaling by" << (double)prt.logicalDpiX() / (double)dpiX
                    << "," << (double)prt.logicalDpiY() / (double)dpiY << endl;
     painter.scale( (double)prt.logicalDpiX() / (double)dpiX,
                    (double)prt.logicalDpiY() / (double)dpiY );
@@ -1783,7 +1783,7 @@ void KWView::print( KPrinter &prt )
     for ( ; fit.current() ; ++fit )
         if ( fit.current()->isVisible() )
             paragraphs += fit.current()->paragraphs();
-    kDebug() << "KWView::print total paragraphs: " << paragraphs << endl;
+    kDebug() <<"KWView::print total paragraphs:" << paragraphs;
 
     // This can take a lot of time (reformatting everything), so a progress dialog is needed
     Q3ProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ), paragraphs, this );
@@ -1799,7 +1799,7 @@ void KWView::print( KPrinter &prt )
                 break;
             }
 
-            kDebug() << "KWView::print preparePrinting " << fit.current()->name() << endl;
+            kDebug() <<"KWView::print preparePrinting" << fit.current()->name();
             fit.current()->preparePrinting( &painter, &progress, processedParags );
         }
 #endif
@@ -1832,7 +1832,7 @@ void KWView::print( KPrinter &prt )
 #endif
 
     m_zoomHandler.setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
-    kDebug() << "KWView::print zoom&res reset" << endl;
+    kDebug() <<"KWView::print zoom&res reset";
 
     m_gui->canvasWidget()->setUpdatesEnabled(true);
     m_doc->repaintAllViews();
@@ -1853,7 +1853,7 @@ void KWView::print( KPrinter &prt )
 void KWView::showFormat( const KoTextFormat &currentFormat )
 {
     // update the gui with the current format.
-    //kDebug() << "KWView::setFormat font family=" << currentFormat.font().family() << endl;
+    //kDebug() <<"KWView::setFormat font family=" << currentFormat.font().family();
     if (m_actionFormatFontFamily->font() != currentFormat.font().family())
         m_actionFormatFontFamily->setFont( currentFormat.font().family() );
     if (m_actionFormatFontSize->fontSize() != currentFormat.pointSize())
@@ -1948,7 +1948,7 @@ void KWView::showCounter( KoParagCounter &c )
 {
     QString styleStr("counterstyle_");
     styleStr += QString::number( c.style() );
-    //kDebug() << "KWView::showCounter styleStr=" << styleStr << endl;
+    //kDebug() <<"KWView::showCounter styleStr=" << styleStr;
     KToggleAction* act = static_cast<KToggleAction *>( actionCollection()->action( styleStr ) );
     Q_ASSERT( act );
     if ( act )
@@ -2151,7 +2151,7 @@ void KWView::slotStyleSelected()
     const QString prefix = PARAGSTYLE_ACTION_PREFIX;
     if ( actionName.startsWith( prefix ) ) {
         actionName = actionName.mid( prefix.length() );
-        kDebug(32001) << "KWView::slotStyleSelected " << actionName << endl;
+        kDebug(32001) <<"KWView::slotStyleSelected" << actionName;
         textStyleSelected( m_doc->styleCollection()->findStyle( actionName ) );
     }
 }
@@ -3198,7 +3198,7 @@ void KWView::setZoom( int zoom )
         m_sbZoomLabel->setText( ' ' + QString::number( zoom ) + "% " );
 
     // Also set the zoom in KoView (for embedded views)
-    kDebug() << "KWView::setZoom " << zoom << " setting koview zoom to " << m_doc->zoomedResolutionY() << endl;
+    kDebug() <<"KWView::setZoom" << zoom <<" setting koview zoom to" << m_doc->zoomedResolutionY();
     m_gui->canvasWidget()->updateSize();
 
     update(); // schedule repaint
@@ -3932,7 +3932,7 @@ void KWView::slotSpellCheck()
         objects = m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(viewMode());
     }
     m_spell.textIterator = new KoTextIterator( objects, edit, options );
-    kDebug()<<"Created iterator with "<< objects.count() <<endl;
+    kDebug()<<"Created iterator with"<< objects.count();
     startKSpell();
 #endif
 }
@@ -4706,7 +4706,7 @@ Q3PtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
         {
             // simply return the current textEdit
             lst.append( currentTextEdit() );
-            //kDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
+            //kDebug() <<"text frame name:" << currentTextEdit()->textFrameSet()->name();
             KWCollectFramesetsVisitor visitor;
             currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all framesets in the selection
             const Q3ValueList<KWFrameSet *>& frameset = visitor.frameSets();
@@ -4715,7 +4715,7 @@ Q3PtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
                 if ( (*it)->type() == FT_TABLE )
                 {
                     KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( *it );
-                    //kDebug() << "table found: " << kwtableframeset->frameCount() << endl;
+                    //kDebug() <<"table found:" << kwtableframeset->frameCount();
                     int const rows  = kwtableframeset->getRows();
                     int const cols = kwtableframeset->getColumns();
                     //finding all cells and add them to the interface list
@@ -4726,7 +4726,7 @@ Q3PtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
                             KWTableFrameSet::Cell *cell = kwtableframeset->cell(r,c);
                             if (cell)
                             {
-                                kDebug() << "adding (" << r << "," << c << ")" << endl;
+                                kDebug() <<"adding (" << r <<"," << c <<")";
                                 lst.append(cell);
                             }
                         }
@@ -5004,7 +5004,7 @@ void KWView::slotCounterStyleSelected()
 #if 0
     QString actionName = sender()->objectName();
     QString styleStr = actionName.mid(13);
-    //kDebug() << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
+    //kDebug() <<"KWView::slotCounterStyleSelected styleStr=" << styleStr;
     KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
     KoParagCounter c;
     if ( style == KoParagCounter::STYLE_NONE )
@@ -5576,7 +5576,7 @@ void KWView::startKSpell()
 void KWView::spellCheckerMisspelling( const QString &old, int pos )
 {
 #if 0
-    //kDebug(32001) << "KWView::spellCheckerMisspelling old=" << old << " pos=" << pos << endl;
+    //kDebug(32001) <<"KWView::spellCheckerMisspelling old=" << old <<" pos=" << pos;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
@@ -5586,7 +5586,7 @@ void KWView::spellCheckerMisspelling( const QString &old, int pos )
     Q_ASSERT( textdoc );
     if ( !textdoc ) return;
     pos += m_spell.kospell->currentStartIndex();
-    kDebug(32001) << "KWView::spellCheckerMisspelling parag=" << parag->paragId() << " pos=" << pos << " length=" << old.length() << endl;
+    kDebug(32001) <<"KWView::spellCheckerMisspelling parag=" << parag->paragId() <<" pos=" << pos <<" length=" << old.length();
     textdoc->textFrameSet()->highlightPortion( parag, pos, old.length(), m_gui->canvasWidget() );
 #endif
 }
@@ -5594,7 +5594,7 @@ void KWView::spellCheckerMisspelling( const QString &old, int pos )
 void KWView::spellCheckerCorrected( const QString &old, int pos , const QString &corr )
 {
 #if 0
-    //kDebug(32001) << "KWView::spellCheckerCorrected old=" << old << " corr=" << corr << " pos=" << pos << endl;
+    //kDebug(32001) <<"KWView::spellCheckerCorrected old=" << old <<" corr=" << corr <<" pos=" << pos;
     KoTextObject* textobj = m_spell.kospell->currentTextObject();
     KoTextParag* parag = m_spell.kospell->currentParag();
     Q_ASSERT( textobj );
@@ -5619,7 +5619,7 @@ void KWView::spellCheckerCorrected( const QString &old, int pos , const QString 
 void KWView::spellCheckerDone( const QString & )
 {
 #if 0
-    //kDebug(32001) << "KWView::spellCheckerDone" << endl;
+    //kDebug(32001) <<"KWView::spellCheckerDone";
     KWTextDocument *textdoc=static_cast<KWTextDocument *>( m_spell.kospell->textDocument() );
     Q_ASSERT( textdoc );
     if ( textdoc )
@@ -5631,7 +5631,7 @@ void KWView::spellCheckerDone( const QString & )
 
 void KWView::clearSpellChecker(bool cancelSpellCheck)
 {
-    kDebug(32001) << "KWView::clearSpellChecker" << endl;
+    kDebug(32001) <<"KWView::clearSpellChecker";
 
     delete m_spell.textIterator;
     m_spell.textIterator = 0L;
@@ -5656,7 +5656,7 @@ void KWView::clearSpellChecker(bool cancelSpellCheck)
 
 void KWView::spellCheckerCancel()
 {
-    kDebug()<<"void KWView::spellCheckerCancel() \n";
+    kDebug()<<"void KWView::spellCheckerCancel()";
     spellCheckerRemoveHighlight();
     //we add command :( => don't add command and reverte changes
     clearSpellChecker(true);
@@ -6092,7 +6092,7 @@ void KWView::changePicture()
         m_doc->addCommand(cmd);
     }
     else
-        kDebug() << "KWView::changePicture cancelled" << endl;
+        kDebug() <<"KWView::changePicture cancelled";
 }
 
 void KWView::savePicture()
@@ -6110,7 +6110,7 @@ void KWView::savePicture()
 
         KoPicture picture( frameset->picture() );
         QString mimetype = picture.getMimeType();
-        kDebug() << "Picture has mime type: " << mimetype << endl;
+        kDebug() <<"Picture has mime type:" << mimetype;
         QStringList mimetypes;
         mimetypes << mimetype;
         KFileDialog fd( oldFile, QString::null, this, 0 );
@@ -6860,7 +6860,7 @@ void KWView::insertFile(const KUrl& url)
                                                 if ( name == iName )
                                                 {
                                                     paragList.append( fsElem );
-                                                    //kDebug()<<k_funcinfo<<" Inline frameset: "<<name<<" added"<<endl;
+                                                    //kDebug()<<k_funcinfo<<" Inline frameset:"<<name<<" added";
                                                 }
                                                 else if ( grpMgr == iName )
                                                 {   // Table so we need to create table frameset if it is new
@@ -6874,17 +6874,17 @@ void KWView::insertFile(const KUrl& url)
                                                         table.setAttribute("name", tableName);
                                                         table.setAttribute("visible", fsElem.attribute("visible","1"));
                                                         paragList.append( table ); // same level as paragraphs, so it goes into the paragList
-                                                        //kDebug()<<k_funcinfo<<" paragList Added new table: "<<grpMgr<<endl;
+                                                        //kDebug()<<k_funcinfo<<" paragList Added new table:"<<grpMgr;
                                                     }
 
                                                     table.appendChild( fsElem.cloneNode() ); // add the cell as child to the table frameset
-                                                    //kDebug()<<k_funcinfo<<" Inline table: "<<grpMgr<<" Added new cell: "<<name<<endl;
+                                                    //kDebug()<<k_funcinfo<<" Inline table:"<<grpMgr<<" Added new cell:"<<name;
                                                 }
-                                                //else kDebug()<<k_funcinfo<<" Fixed frameset: "<<name<<endl;
+                                                //else kDebug()<<k_funcinfo<<" Fixed frameset:"<<name;
                                             }
-                                            //else kDebug()<<k_funcinfo<<" Not frameset: "<<fsElem.tagName()<<endl;
+                                            //else kDebug()<<k_funcinfo<<" Not frameset:"<<fsElem.tagName();
                                         }
-                                        //kDebug()<<k_funcinfo<<" Treated "<<i<<" frameset elements"<<endl;
+                                        //kDebug()<<k_funcinfo<<" Treated"<<i<<" frameset elements";
                                     }
                                 }
                             }
@@ -6897,10 +6897,10 @@ void KWView::insertFile(const KUrl& url)
                 Q3ValueList<QDomElement>::Iterator end = paragList.end();
                 for ( ; it!= end ; ++it )
                 {
-                    //kDebug()<<k_funcinfo<<" paragList tag: "<<(*it).tagName()<<" name: "<<(*it).attribute( "name" )<<" grpMgr: "<<(*it).attribute( "grpMgr" )<<endl;
+                    //kDebug()<<k_funcinfo<<" paragList tag:"<<(*it).tagName()<<" name:"<<(*it).attribute("name" )<<" grpMgr:"<<(*it).attribute("grpMgr" );
                     paragsElem.appendChild( *it );
                 }
-                //kDebug() << k_funcinfo << "Paragraphs:\n" << domDoc.toCString() << endl;
+                //kDebug() << k_funcinfo <<"Paragraphs:" << domDoc.toCString();
 
                 // The fixed framesets
                 // doctype SELECTION is used for fixed framesets
@@ -6945,20 +6945,20 @@ void KWView::insertFile(const KUrl& url)
                                     table.setAttribute("name", tableName);
                                     table.setAttribute("visible", framesetElem.attribute("visible","1"));
                                     framesetsList.append( table );
-                                    //kDebug()<<k_funcinfo<<" framesetsList Added new table: "<<grpMgr<<endl;
+                                    //kDebug()<<k_funcinfo<<" framesetsList Added new table:"<<grpMgr;
                                 }
                                 table.appendChild( framesetElem.cloneNode() ); // add the cell as child to the table frameset
-                                //kDebug()<<k_funcinfo<<" Fixed table '"<<grpMgr<<"': Added new cell: '"<<name<<"'"<<endl;
+                                //kDebug()<<k_funcinfo<<" Fixed table '"<<grpMgr<<"': Added new cell: '"<<name<<"'";
                             }
                             else // other frameset type
                             {
                                 framesetsList.append( framesetElem );
-                                //kDebug()<<k_funcinfo<<" Fixed frameset: '"<<name<<"' added"<<endl;
+                                //kDebug()<<k_funcinfo<<" Fixed frameset: '"<<name<<"' added";
                             }
                         }
-                        //else kDebug()<<k_funcinfo<<" Inline frameset, skipped: "<<name<<endl;
+                        //else kDebug()<<k_funcinfo<<" Inline frameset, skipped:"<<name;
                     }
-                    //else kDebug()<<k_funcinfo<<" Not frameset element, skipped: "<<framesetElem.tagName()<<endl;
+                    //else kDebug()<<k_funcinfo<<" Not frameset element, skipped:"<<framesetElem.tagName();
                 }
                 it = framesetsList.begin();
                 end = framesetsList.end();
@@ -7016,12 +7016,12 @@ void KWView::insertFile(const KUrl& url)
                 if ( hasFixedFramesets )
                 {
                     // insert fixed framesets
-                    //kDebug() << k_funcinfo << domDocFrames.toCString() << endl;
+                    //kDebug() << k_funcinfo << domDocFrames.toCString();
                     m_doc->pasteFrames( topElem, macroCmd, false, false, false /* don't select frames */ );
                 }
                 if ( hasEmbedded )
                 {
-                    //kDebug()<<k_funcinfo<<" Embedded: \n"<<embeddedDoc.toCString()<<endl;
+                    //kDebug()<<k_funcinfo<<" Embedded:"<<embeddedDoc.toCString();
                     if ( !macroCmd )
                         macroCmd = new KMacroCommand( i18n("Insert File") );
                     m_doc->insertEmbedded( store, selElem, macroCmd, 0 );
@@ -7048,7 +7048,7 @@ void KWView::insertFile(const KUrl& url)
 
 Q3ValueList<QString> KWView::getInlineFramesets( const QDomNode &framesetElem)
 {
-    //kDebug()<<k_funcinfo<<" Frameset: "<<framesetElem.toElement().attribute("name")<<endl;
+    //kDebug()<<k_funcinfo<<" Frameset:"<<framesetElem.toElement().attribute("name");
     Q3ValueList<QString> list;
     QDomNode n = framesetElem.firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling() )
@@ -7071,7 +7071,7 @@ Q3ValueList<QString> KWView::getInlineFramesets( const QDomNode &framesetElem)
                         {
                             QString iName = anchorElem.attribute( "instance" );
                             list.append( iName );
-                            //kDebug()<<k_funcinfo<<" added: "<<iName<<endl;
+                            //kDebug()<<k_funcinfo<<" added:"<<iName;
                         }
                     }
                 }
@@ -7393,7 +7393,7 @@ void KWView::addPersonalExpression()
 
     if ( !file.open( QIODevice::WriteOnly ) )
     {
-        kDebug() << "Error in addPersonalExpression(), couldn't open " << tmp << " for writing" << endl;;
+        kDebug() <<"Error in addPersonalExpression(), couldn't open" << tmp <<" for writing";;
         return;
     }
     file.write( s );
@@ -7415,7 +7415,7 @@ void KWView::addWordToDictionary()
 
 void KWView::embeddedStoreInternal()
 {
-    kDebug(31001)<<k_funcinfo<<endl;
+    kDebug(31001)<<k_funcinfo;
     KWFrameView *view = frameViewManager()->selectedFrame();
     KWFrame *frame = view == 0 ? 0 : view->frame();
     if( !frame)
@@ -7487,7 +7487,7 @@ void KWView::slotChildActivated( bool a )
     return;
   KWDocumentChild* kwchild = static_cast<KWDocumentChild *>( ch->documentChild() );
   KWPartFrameSet* fs = kwchild->partFrameSet();
-  //kDebug() << "KWView::slotChildActivated fs=" << fs << endl;
+  //kDebug() <<"KWView::slotChildActivated fs=" << fs;
   Q_ASSERT( fs );
   if ( fs ) {
       if ( a )

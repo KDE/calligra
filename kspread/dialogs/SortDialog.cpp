@@ -513,7 +513,7 @@ void SortDialog::slotOrientationChanged(int id)
     break;
 
    default :
-    kDebug(36001) << "Error in signal : pressed(int id)" << endl;
+    kDebug(36001) <<"Error in signal : pressed(int id)";
     break;
   }
 }

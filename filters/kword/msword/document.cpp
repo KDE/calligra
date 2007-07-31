@@ -121,7 +121,7 @@ void Document::finishDocument()
     Q_ASSERT ( !paperElement.isNull() ); // slotFirstSectionFound should have been called!
     if ( !paperElement.isNull() )
     {
-        kDebug(30513) << k_funcinfo << "m_headerFooters=" << m_headerFooters << endl;
+        kDebug(30513) << k_funcinfo <<"m_headerFooters=" << m_headerFooters;
         paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
         paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
     }
@@ -178,12 +178,12 @@ void Document::processStyles()
     m_textHandler->setFrameSetElement( stylesElem ); /// ### naming!
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
-    //kDebug(30513) << k_funcinfo << "styles count=" << count << endl;
+    //kDebug(30513) << k_funcinfo <<"styles count=" << count;
     for ( unsigned int i = 0; i < count ; ++i )
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        //kDebug(30513) << k_funcinfo << "style " << i << " " << style << endl;
+        //kDebug(30513) << k_funcinfo <<"style" << i <<"" << style;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -194,7 +194,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            kDebug(30513) << k_funcinfo << "Style " << i << ": " << name.string() << endl;
+            kDebug(30513) << k_funcinfo <<"Style" << i <<":" << name.string();
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -225,7 +225,7 @@ bool Document::parse()
 
 void Document::bodyStart()
 {
-    kDebug(30513) << k_funcinfo << endl;
+    kDebug(30513) << k_funcinfo;
 
     QDomElement mainFramesetElement = m_mainDocument.createElement("FRAMESET");
     mainFramesetElement.setAttribute("frameType",1);
@@ -244,7 +244,7 @@ void Document::bodyStart()
 
 void Document::bodyEnd()
 {
-    kDebug(30513) << k_funcinfo << endl;
+    kDebug(30513) << k_funcinfo;
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
 }
@@ -252,7 +252,7 @@ void Document::bodyEnd()
 
 void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
-    kDebug(30513) << k_funcinfo << endl;
+    kDebug(30513) << k_funcinfo;
     QDomElement elementDoc = m_mainDocument.documentElement();
 
     QDomElement elementPaper = m_mainDocument.createElement("PAPER");
@@ -289,7 +289,7 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
 
 void Document::headerStart( wvWare::HeaderData::Type type )
 {
-    kDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")" << endl;
+    kDebug(30513) <<"startHeader type=" << type <<" (" << Conversion::headerTypeToFramesetName( type ) <<")";
     // Werner says the headers are always emitted in the order of the Type enum.
 
     QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
@@ -342,7 +342,7 @@ void Document::footnoteStart()
 
 void Document::footnoteEnd()
 {
-    kDebug(30513) << k_funcinfo << endl;
+    kDebug(30513) << k_funcinfo;
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 
@@ -408,7 +408,7 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
         // (and icoBack is usually white; it's the other color of the pattern,
         // something that we can't set in Qt apparently).
         int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-        kDebug(30513) << "generateFrameBorder: " << " icoFore=" << shd.icoFore << " icoBack=" << shd.icoBack << " ipat=" << shd.ipat << " -> bkColor=" << bkColor << endl;
+        kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
 
         // Reverse-engineer MSWord's own hackery: it models various gray levels
         // using dithering. But this looks crappy with Qt. So we go back to a QColor.
@@ -512,7 +512,7 @@ KoStoreDevice* Document::createPictureFrameSet( const QSizeF& size )
     keyElem.setAttribute( "filename", subdoc.extraName );
     m_pictureList.append( subdoc.extraName );
 
-    kDebug(30513) << "Preparing to write picture for '" << subdoc.name << "' into " << subdoc.extraName << endl;
+    kDebug(30513) <<"Preparing to write picture for '" << subdoc.name <<"' into" << subdoc.extraName;
     return m_chain->storageFile( subdoc.extraName, KoStore::Write );
 }
 

@@ -124,7 +124,7 @@ Font::Font()
 
 Font::Font(const GfxState *state, double size)
 {
-    if ( size<1 ) kDebug(30516) << "very small font size=" << size << endl;
+    if ( size<1 ) kDebug(30516) <<"very small font size=" << size;
     _pointSize = qRound(size);
 
     GfxRGB rgb;
@@ -134,7 +134,7 @@ Font::Font(const GfxState *state, double size)
     GfxFont *font = state->getFont();
     GString *gname = (font ? font->getName() : 0);
     QString name = (gname ? gname->getCString() : 0);
-//    kDebug(30516) << "font: " << name << endl;
+//    kDebug(30516) <<"font:" << name;
     name = name.section('+', 1, 1).lower();
     if ( name.isEmpty() ) name = "##dummy"; // dummy name
     init(name);
@@ -179,7 +179,7 @@ void Font::init(const QString &n)
     // check if font already parsed
     _data = _dict->find(n);
     if ( _data==0 ) {
-//        kDebug(30516) << "font " << n << endl;
+//        kDebug(30516) <<"font" << n;
         QString name = n;
         name.replace("oblique", "italic");
 
@@ -188,7 +188,7 @@ void Font::init(const QString &n)
         uint i = 0;
         while ( KNOWN_DATA[i].name!=0 ) {
             if ( name.find(KNOWN_DATA[i].name)!=-1 ) {
-//                kDebug(30516) << "found " << KNOWN_DATA[i].name
+//                kDebug(30516) <<"found" << KNOWN_DATA[i].name
 //                               << " " << isBold(KNOWN_DATA[i].style) << endl;
                 _data->family = FAMILY_DATA[KNOWN_DATA[i].family];
                 _data->style = KNOWN_DATA[i].style;
@@ -200,7 +200,7 @@ void Font::init(const QString &n)
 
         if ( _data->family.isEmpty() ) { // let's try harder
             // simple heuristic
-            kDebug(30516) << "unknown font : " << n << endl;
+            kDebug(30516) <<"unknown font :" << n;
             if ( name.find("times")!=-1 )
             _data->family = FAMILY_DATA[Times];
             else if ( name.find("helvetica")!=-1 )
@@ -215,10 +215,10 @@ void Font::init(const QString &n)
                 list = list.grep(name, false);
                 if ( !list.isEmpty() ) {
                     _data->family = list[0];
-                    kDebug(30516) << "in Qt database as " << list[0] << endl;
+                    kDebug(30516) <<"in Qt database as" << list[0];
                 }
                 else {
-                    kDebug(30516) << "really unknown font !" << endl;
+                    kDebug(30516) <<"really unknown font !";
                     _data->family = name;
                 }
             }
@@ -358,7 +358,7 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
         }
 
         _href = QString("bkm://") + pageLinkName(page);
-//        kDebug(30516) << "link to page " << page << endl;
+//        kDebug(30516) <<"link to page" << page;
         break;
     }
 
@@ -374,7 +374,7 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
             delete dest;
         }
 
-        kDebug(30516) << "link to filename \"" << _href << "\" (page "
+        kDebug(30516) <<"link to filename \"" << _href <<"\" (page"
                        << page << ")" <<endl;
         break;
     }
@@ -385,7 +385,7 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
         if ( llaunch.getFileName() )
             _href += llaunch.getFileName()->getCString();
 
-        kDebug(30516) << "link to launch/open \"" << _href << "\"" << endl;
+        kDebug(30516) <<"link to launch/open \"" << _href <<"\"";
         break;
     }
 
@@ -393,14 +393,14 @@ Link::Link(const DRect &rect, LinkAction &action, Catalog &catalog)
         LinkURI &luri = static_cast<LinkURI &>(action);
         if ( luri.getURI() ) _href = luri.getURI()->getCString();
 
-        kDebug(30516) << "link to URI \"" << _href << "\"" << endl;
+        kDebug(30516) <<"link to URI \"" << _href <<"\"";
         break;
     }
 
     case actionMovie:
     case actionNamed:
     case actionUnknown:
-        kDebug(30516) << "unsupported link=" << action.getKind() << endl;
+        kDebug(30516) <<"unsupported link=" << action.getKind();
         break;
     }
 }

@@ -51,7 +51,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         Q_ASSERT(factory);
         if (factory->id() == "thesaurustool") {
-            kDebug() << "Thesaurus plugin found, creating..." << endl;
+            kDebug() <<"Thesaurus plugin found, creating...";
             thesaurus = factory->create();
         }
     }
@@ -76,7 +76,7 @@ extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
     // pas -1 to startPosition and endPosition to set as standalone and will give us different buttons
     thesaurus->checkSection(new QTextDocument(text), -1, -1);
 
-	//kDebug() << "KThesaurus command=" << command
+	//kDebug() <<"KThesaurus command=" << command
 	//		<< " dataType=" << info->dataType() << endl;
 
 	return a.exec();

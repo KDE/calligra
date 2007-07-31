@@ -213,7 +213,7 @@ void KWFrameViewManager::fireEvents() {
 void KWFrameViewManager::recalculateFrameCache() {
     // TODO :) design and implement a cache...
     // list of frames sorted on y-coord, with an additional list containing a jump-index
-    kDebug(31001) << "recalculateFrameCache " << m_frames.count() << " frames are currently registered" << endl;
+    kDebug(31001) <<"recalculateFrameCache" << m_frames.count() <<" frames are currently registered";
 }
 
 KWFrameView *KWFrameViewManager::view(const KoPoint &point, SelectionType selected, bool borderOnly) const {
@@ -348,7 +348,7 @@ MouseMeaning KWFrameViewManager::mouseMeaning( const KoPoint &point, int keyStat
     while(sortedFrames != framesThatAreHit.end()) {
         MouseMeaning answer = (*sortedFrames)->mouseMeaning(point, keyState);
         if(answer != MEANING_NONE) {
-            //kDebug() << "mouseMeaning at " << point << " is " << answer << endl;
+            //kDebug() <<"mouseMeaning at" << point <<" is" << answer;
             return answer;
         }
         ++sortedFrames;
@@ -404,7 +404,7 @@ void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool l
     if(leftClick && multiSelect)
         se = nextUnselected;
     KWFrameView *toBeSelected = view(point, se, !multiSelect);
-    //kDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
+    //kDebug() <<"KWFrameViewManager::selectFrames" << point <<" got:" << toBeSelected;
     if(toBeSelected == 0 || (keyState & Qt::ControlModifier) == 0 || ( keyState & Qt::ShiftModifier ) &&
         !(leftClick && (mm == MEANING_TOPLEFT || mm == MEANING_TOPRIGHT || mm == MEANING_TOP ||
         mm == MEANING_LEFT || mm == MEANING_RIGHT || mm == MEANING_MOUSE_MOVE ||

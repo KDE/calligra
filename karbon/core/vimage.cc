@@ -107,7 +107,7 @@ VImage::transform( const QMatrix& m )
 	//QMatrix m2 = m;
 	//m_matrix *= m2.scale( 1.0, -1.0 );
 	m_matrix *= m;
-	kDebug(38000) << "dx : " << m.dx() << ", dy : " << m.dy() << endl;
+	kDebug(38000) <<"dx :" << m.dx() <<", dy :" << m.dy();
 	// TODO: QRectF doesn't contain a transform function: m_boundingBox = m_boundingBox.transform( m );
 }
 
@@ -146,7 +146,7 @@ VImage::load( const QDomElement& element )
 						element.attribute( "m22", "1.0" ).toDouble(),
 						element.attribute( "dx", "0.0" ).toDouble(),
 						element.attribute( "dy", "0.0" ).toDouble() );
-	kDebug(38000) << "VImage::load : " << m_fname.toLatin1() << endl;
+	kDebug(38000) <<"VImage::load :" << m_fname.toLatin1();
 	delete m_image;
 	m_image = new QImage( m_fname );
 	if( m_image->depth() != 32 )

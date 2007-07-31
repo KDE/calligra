@@ -69,7 +69,7 @@ DCOPObject* KivioLayer::dcopObject()
 
 KivioLayer::~KivioLayer()
 {
-    kDebug(43000)<<"KivioLayer::~KivioLayer()***************:"<<this<<endl;
+    kDebug(43000)<<"KivioLayer::~KivioLayer()***************:"<<this;
     if( m_pStencilList )
     {
         delete m_pStencilList;
@@ -128,7 +128,7 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
 {
     QString setId, _id;
 
-    kDebug(43000) << "KivioLayer::loadSMLStencil() " << setId << " " << _id << endl;
+    kDebug(43000) <<"KivioLayer::loadSMLStencil()" << setId <<"" << _id;
 
     setId = XmlReadString( stencilE, "setId", "" );
     _id = XmlReadString( stencilE, "id", "" );
@@ -168,7 +168,7 @@ KivioStencil *KivioLayer::loadSMLStencil( const QDomElement &stencilE )
  */
 KivioStencil *KivioLayer::loadGroupStencil( const QDomElement &stencilE )
 {
-   kDebug(43000) << "KivioLayer::loadGroupStencil()" << endl;
+   kDebug(43000) <<"KivioLayer::loadGroupStencil()";
 
     KivioGroupStencil *pStencil = new KivioGroupStencil();
 
@@ -185,7 +185,7 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
 {
     QString setId, _id;
 
-    kDebug(43000) << "KivioLayer::loadPluginStencil() " << setId.ascii() << " / " << _id << endl;
+    kDebug(43000) <<"KivioLayer::loadPluginStencil()" << setId.ascii() <<" /" << _id;
 
 
     setId = XmlReadString( stencilE, "setId", "" );
@@ -213,7 +213,7 @@ KivioStencil *KivioLayer::loadPluginStencil( const QDomElement &stencilE )
 bool KivioLayer::loadXML( const QDomElement &layerE )
 {
     m_flags = XmlReadInt( layerE, "flags", 1 );
-    kDebug(43000) << "Flags: " << m_flags << endl;
+    kDebug(43000) <<"Flags:" << m_flags;
     m_name = XmlReadString( layerE, "name", "layerX" );
 
     QDomNode node;

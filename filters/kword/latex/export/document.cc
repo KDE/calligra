@@ -47,7 +47,7 @@ Document::Document()
 /*******************************************/
 Document::~Document()
 {
-	kDebug(30522) << "Document destructor" << endl;
+	kDebug(30522) <<"Document destructor";
 }
 
 /*******************************************/
@@ -55,30 +55,30 @@ Document::~Document()
 /*******************************************/
 void Document::analyze(const QDomNode node)
 {
-	kDebug(30522) << getChildName(node, 0) << endl;
+	kDebug(30522) << getChildName(node, 0);
 	for(int index= 0; index < getNbChild(node); index++)
 	{
 		Element *elt = 0;
-		kDebug(30522) << "--------------------------------------------------" << endl;
+		kDebug(30522) <<"--------------------------------------------------";
 
-		kDebug(30522) << getChildName(node, index) << endl;
+		kDebug(30522) << getChildName(node, index);
 		switch(getTypeFrameset(getChild(node, index)))
 		{
 			case ST_NONE:
-				kDebug(30522) << "NONE" << endl;
+				kDebug(30522) <<"NONE";
 				break;
 			case ST_TEXT:
-				kDebug(30522) << "TEXT" << endl;
+				kDebug(30522) <<"TEXT";
 				elt = new TextFrame;
 				elt->analyze(getChild(node, index));
 				break;
 			case ST_PICTURE:
-				kDebug(30522) << "PICTURE" << endl;
+				kDebug(30522) <<"PICTURE";
 				elt = new PixmapFrame();
 				elt->analyze(getChild(node, index));
 				break;
 			case ST_PART:
-				kDebug(30522) << "PART" << endl;
+				kDebug(30522) <<"PART";
 				//elt = new Part;
 				//elt->analyze(getChild(node, index));
 				break;
@@ -88,27 +88,27 @@ void Document::analyze(const QDomNode node)
 				 * save in output
 				 * generate: write the output
 				 */
-				kDebug(30522) << "FORMULA" << endl;
+				kDebug(30522) <<"FORMULA";
 				elt = new Formula;
 				elt->analyze(getChild(node, index));
 				break;
 			case ST_HLINE:
-				kDebug(30522) << "HLINE" << endl;
+				kDebug(30522) <<"HLINE";
 				break;
 			default:
-				kDebug(30522) << "error " << elt->getType() << " " << ST_TEXT << endl;
+				kDebug(30522) <<"error" << elt->getType() <<"" << ST_TEXT;
 		}
 
 		/* 3. Add the Element in one of the lists */
 		if(elt != 0)
 		{
-			kDebug(30522) << "INFO : " << elt->getSection() << endl;
+			kDebug(30522) <<"INFO :" << elt->getSection();
 			switch(elt->getSection())
 			{
-				case SS_FOOTERS: kDebug(30522) << " FOOTER" <<endl;
+				case SS_FOOTERS: kDebug(30522) <<" FOOTER";
 					       _footers.append(elt);
 					       break;
-				case SS_HEADERS: kDebug(30522) << " HEADER" << endl;
+				case SS_HEADERS: kDebug(30522) <<" HEADER";
 						_headers.append(elt);
 					break;
 				case SS_BODY:
@@ -118,18 +118,18 @@ void Document::analyze(const QDomNode node)
 						{
 							case ST_TEXT:
 									_corps.append(elt);
-									kDebug(30522) << " BODY" << endl;
+									kDebug(30522) <<" BODY";
 								break;
 							case ST_PART:
-									kDebug(30522) << " PART" <<endl;
+									kDebug(30522) <<" PART";
 									//_parts.append(elt);
 								break;
 							case ST_FORMULA:
-									kDebug(30522) << " FORMULA" <<endl;
+									kDebug(30522) <<" FORMULA";
 									_formulas.append(elt);
 								break;
 							case ST_PICTURE:
-									kDebug(30522) << " PIXMAP" <<endl;
+									kDebug(30522) <<" PIXMAP";
 									_pixmaps.append(elt);
 								break;
 							default:
@@ -138,7 +138,7 @@ void Document::analyze(const QDomNode node)
 					}
 					break;
 				case SS_TABLE:
-					kDebug(30522) << " TABLE" <<endl;
+					kDebug(30522) <<" TABLE";
 					/* Don't add simplely the cell */
 					/* heriter ListTable de ListElement et surcharger
 					 * la methode add. Une cellule est un element.
@@ -149,11 +149,11 @@ void Document::analyze(const QDomNode node)
 				case SS_FOOTNOTES: /* Just for the new kwd file version */
 						_footnotes.append(elt);
 				break;
-				default: kDebug(30522) << "UNKNOWN" << endl;
+				default: kDebug(30522) <<"UNKNOWN";
 					break;
 			}
 		}
-		kDebug(30522) << "END OF ANALYSIS OF A FRAMESET" << endl;
+		kDebug(30522) <<"END OF ANALYSIS OF A FRAMESET";
 	}
 }
 
@@ -165,7 +165,7 @@ void Document::analyzePixmaps(const QDomNode node)
 	for(int index= 0; index < getNbChild(node); index++)
 	{
 		Key *key = 0;
-		kDebug(30522) << "NEW PIXMAP" << endl;
+		kDebug(30522) <<"NEW PIXMAP";
 
 		key = new Key(Key::PIXMAP);
 		key->analyze(getChild(node, "KEY"));
@@ -188,14 +188,14 @@ SType Document::getTypeFrameset(const QDomNode node)
 /*******************************************/
 void Document::generate(QTextStream &out, bool hasPreamble)
 {
-	kDebug(30522) << "DOC. GENERATION." << endl;
+	kDebug(30522) <<"DOC. GENERATION.";
 
 	if(hasPreamble)
 		generatePreamble(out);
-	kDebug(30522) << "preamble : " << hasPreamble << endl;
+	kDebug(30522) <<"preamble :" << hasPreamble;
 
 	/* Body */
-	kDebug(30522) << endl << "body : " << _corps.count() << endl;
+	kDebug(30522) << endl <<"body :" << _corps.count();
 
 	if(hasPreamble)
 	{
@@ -236,7 +236,7 @@ void Document::generatePreamble(QTextStream &out)
 	/* For each header */
 	if(FileHeader::instance()->hasHeader())
 	{
-		kDebug(30522) << "header : " << _headers.count() << endl;
+		kDebug(30522) <<"header :" << _headers.count();
 
 		/* default : no rule */
 		out << "\\renewcommand{\\headrulewidth}{0pt}" << endl;
@@ -249,7 +249,7 @@ void Document::generatePreamble(QTextStream &out)
 	/* For each footer */
 	if(FileHeader::instance()->hasFooter())
 	{
-		kDebug(30522) << "footer : " << _footers.count() << endl;
+		kDebug(30522) <<"footer :" << _footers.count();
 
 		/* default : no rule */
 		out << "\\renewcommand{\\footrulewidth}{0pt}" << endl;
@@ -272,7 +272,7 @@ void Document::generatePreamble(QTextStream &out)
 /*******************************************/
 void Document::generateTypeHeader(QTextStream &out, Element *header)
 {
-	kDebug(30522) << "generate header" << endl;
+	kDebug(30522) <<"generate header";
 	if((FileHeader::instance()->getHeadType() == FileHeader::TH_ALL ||
 		FileHeader::instance()->getHeadType() == FileHeader::TH_FIRST) && header->getInfo() == SI_EVEN)
 	{
@@ -361,12 +361,12 @@ Element* Document::searchAnchor(const QString& anchor)
 	Element *elt = _tables.first();
 	while(elt != 0)
 	{
-		kDebug(30522) << elt->getGrpMgr() << endl;
+		kDebug(30522) << elt->getGrpMgr();
 		if(elt->getGrpMgr() == anchor)
 			return elt;
 		elt = _tables.next();
 	}
-	kDebug(30522) << "Not in table, search in formula list." << endl;
+	kDebug(30522) <<"Not in table, search in formula list.";
 	elt = _formulas.first();
 	while(elt != 0)
 	{
@@ -374,7 +374,7 @@ Element* Document::searchAnchor(const QString& anchor)
 			return elt;
 		elt = _formulas.next();
 	}
-	kDebug(30522) << "Not in table and formula list, search in pictures." << endl;
+	kDebug(30522) <<"Not in table and formula list, search in pictures.";
 	elt = _pixmaps.first();
 	while(elt != 0)
 	{
@@ -404,7 +404,7 @@ Key* Document::searchKey(const QString& keyName)
 	Key* key = _keys.first();
 	while(key != 0)
 	{
-		kDebug(30522) << "key " << key->getFilename() << endl;
+		kDebug(30522) <<"key" << key->getFilename();
 		if(key->getFilename() == keyName)
 			return key;
 		key = _keys.next();
@@ -416,7 +416,7 @@ Key* Document::searchKey(const QString& keyName)
 QString Document::extractData(const QString& key)
 {
 	QString data = searchKey(key)->getName();
-	kDebug(30522) << "Opening " << data << endl;
+	kDebug(30522) <<"Opening" << data;
 	if(!getStorage()->isOpen())
 	{
 		if(!getStorage()->open(data))
@@ -446,6 +446,6 @@ QString Document::extractData(const QString& key)
 		kError(30522) << "Unable to close " << data << endl;
 		return QString("");
 	}
-	kDebug(30522) << "temp filename : " << tempFile.fileName() << endl;
+	kDebug(30522) <<"temp filename :" << tempFile.fileName();
 	return tempFile.fileName();
 }

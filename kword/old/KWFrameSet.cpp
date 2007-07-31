@@ -74,7 +74,7 @@ void KWFrameSet::addFrame( KWFrame *frame, bool recalc )
     if ( m_frames.findRef( frame ) != -1 )
         return;
 
-    //kDebug(32001) << k_funcinfo << name() << " adding frame" <<  frame << " recalc=" << recalc << endl;
+    //kDebug(32001) << k_funcinfo << name() <<" adding frame" <<  frame <<" recalc=" << recalc;
     if(m_doc)
         KWFrameList::createFrameList(frame, m_doc);
     frame->setFrameSet(this);
@@ -87,7 +87,7 @@ void KWFrameSet::addFrame( KWFrame *frame, bool recalc )
 
 void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
-    //kDebug(32001) << k_funcinfo << name() << " deleting frame" <<  num << " remove=" << remove << " recalc=" << recalc << endl; //kBacktrace();
+    //kDebug(32001) << k_funcinfo << name() <<" deleting frame" <<  num <<" remove=" << remove <<" recalc=" << recalc; //kBacktrace();
     KWFrame *frm = m_frames.at( num );
     Q_ASSERT( frm );
     m_frames.take( num );
@@ -112,7 +112,7 @@ void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
         // ###### should something similar be done when just removing a frame from the list?
         frameDeleted( frm, recalc ); // inform kwtableframeset if necessary
         delete frm;
-        //kDebug(32001) << k_funcinfo << frm << " deleted. Now I have " << m_frames.count() << " m_frames" << endl;
+        //kDebug(32001) << k_funcinfo << frm <<" deleted. Now I have" << m_frames.count() <<" m_frames";
     }
 
     if ( recalc )
@@ -121,7 +121,7 @@ void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 
 void KWFrameSet::deleteFrame( KWFrame *frm, bool remove, bool recalc )
 {
-    //kDebug(32001) << "KWFrameSet::deleteFrame " << frm << " remove=" << remove << endl;
+    //kDebug(32001) <<"KWFrameSet::deleteFrame" << frm <<" remove=" << remove;
     int num = m_frames.findRef( frm );
     Q_ASSERT( num != -1 );
     if ( num == -1 )
@@ -161,18 +161,18 @@ void KWFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, 
         return;
     }
     double paperHeight = page->height();
-    //kDebug(32001) << "KWFrameSet::createEmptyRegion " << name() << endl;
+    //kDebug(32001) <<"KWFrameSet::createEmptyRegion" << name();
     for (Q3PtrListIterator<KWFrame> frameIt = frameIterator(); frameIt.current(); ++frameIt )
     {
         if ( !frameIt.current()->isTransparent() )
         {
             QRect outerRect( viewMode->normalToView( frameIt.current()->outerRect(viewMode) ) );
-            //kDebug(32001) << "KWFrameSet::createEmptyRegion outerRect=" << outerRect << " crect=" << crect << endl;
+            //kDebug(32001) <<"KWFrameSet::createEmptyRegion outerRect=" << outerRect <<" crect=" << crect;
             outerRect &= crect; // This is important, to avoid calling subtract with a Y difference > 65536
             if ( !outerRect.isEmpty() )
             {
                 emptyRegion = emptyRegion.subtract( outerRect );
-                //kDebug(32001) << "KWFrameSet::createEmptyRegion emptyRegion now: " << endl; DEBUGREGION( emptyRegion );
+                //kDebug(32001) <<"KWFrameSet::createEmptyRegion emptyRegion now:"; DEBUGREGION( emptyRegion );
             }
             if ( crect.bottom() + paperHeight < outerRect.top() )
                 return; // Ok, we're far below the crect, abort.
@@ -185,14 +185,14 @@ void KWFrameSet::drawPadding( KWFrame *frame, QPainter *p, const QRect &crect, c
 {
 #if 0
     QRect outerRect( viewMode->normalToView( frame->outerRect(viewMode) ) );
-    //kDebug(32001) << "KWFrameSet::drawPadding frame: " << frameFromPtr( frame )
+    //kDebug(32001) <<"KWFrameSet::drawPadding frame:" << frameFromPtr( frame )
     //               << " outerRect: " << outerRect
     //               << " crect: " << crect << endl;
 
     if ( !crect.intersects( outerRect ) )
     {
 #ifdef DEBUG_DRAW
-        kDebug(32001) << "KWFrameSet::drawPadding no intersection with " << crect << endl;
+        kDebug(32001) <<"KWFrameSet::drawPadding no intersection with" << crect;
 #endif
         return;
     }
@@ -205,7 +205,7 @@ void KWFrameSet::drawPadding( KWFrame *frame, QPainter *p, const QRect &crect, c
     int topMargin = m_doc->zoomItYOld(frame->paddingTop());
     int rightMargin = m_doc->zoomItXOld(frame->paddingRight());
     int bottomMargin = m_doc->zoomItYOld(frame->paddingBottom());
-    //kDebug(32001) << "KWFrameSet::drawPadding leftMargin=" << leftMargin << " topMargin=" << topMargin << " rightMargin=" << rightMargin << " bottomMargin=" << bottomMargin << endl;
+    //kDebug(32001) <<"KWFrameSet::drawPadding leftMargin=" << leftMargin <<" topMargin=" << topMargin <<" rightMargin=" << rightMargin <<" bottomMargin=" << bottomMargin;
 
     if ( topMargin != 0 )
     {
@@ -237,12 +237,12 @@ void KWFrameSet::drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *se
 {
 #if 0
     QRect outerRect( viewMode->normalToView( frame->outerRect( viewMode ) ) );
-    //kDebug(32001) << "KWFrameSet::drawFrameBorder frame: " << frameFromPtr( frame )
+    //kDebug(32001) <<"KWFrameSet::drawFrameBorder frame:" << frameFromPtr( frame )
     //               << " outerRect: " << outerRect << endl;
 
     if ( !crect.intersects( outerRect ) )
     {
-        //kDebug(32001) << "KWFrameSet::drawFrameBorder no intersection with " << crect << endl;
+        //kDebug(32001) <<"KWFrameSet::drawFrameBorder no intersection with" << crect;
         return;
     }
 
@@ -290,7 +290,7 @@ void KWFrameSet::setFloating()
         KoTextParag* parag = 0L;
         int index = 0;
         KoPoint dPoint( m_frames.first()->topLeft() );
-        kDebug(32001) << "KWFrameSet::setFloating looking for pos at " << dPoint.x() << " " << dPoint.y() << endl;
+        kDebug(32001) <<"KWFrameSet::setFloating looking for pos at" << dPoint.x() <<"" << dPoint.y();
         frameSet->findPosition( dPoint, parag, index );
         // Create anchor. TODO: refcount the anchors!
         setAnchored( frameSet, parag, index );
@@ -318,7 +318,7 @@ void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bo
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, KoTextParag* parag, int index, bool placeHolderExists /* = false */, bool repaint )
 {
-    kDebug(32001) << "KWFrameSet::setAnchored " << textfs << " " << parag->paragId() << " " << index << " " << placeHolderExists << endl;
+    kDebug(32001) <<"KWFrameSet::setAnchored" << textfs <<"" << parag->paragId() <<"" << index <<"" << placeHolderExists;
     Q_ASSERT( textfs );
     Q_ASSERT( parag );
     if ( isFloating() )
@@ -367,7 +367,7 @@ KWAnchor * KWFrameSet::findAnchor( int frameNum )
 
 void KWFrameSet::setFixed()
 {
-    kDebug(32001) << "KWFrameSet::setFixed" << endl;
+    kDebug(32001) <<"KWFrameSet::setFixed";
     if ( isFloating() )
         deleteAnchors();
     m_anchorTextFs = 0L;
@@ -391,7 +391,7 @@ void KWFrameSet::createAnchors( KoTextParag * parag, int index, bool placeHolder
                                 bool repaint )
 {
 #if 0
-    kDebug(32001) << "KWFrameSet::createAnchors" << endl;
+    kDebug(32001) <<"KWFrameSet::createAnchors";
     Q_ASSERT( m_anchorTextFs );
     Q3PtrListIterator<KWFrame> frameIt = frameIterator();
     for ( ; frameIt.current(); ++frameIt, ++index )
@@ -430,7 +430,7 @@ void KWFrameSet::deleteAnchor( KWAnchor * anchor )
 
 void KWFrameSet::deleteAnchors()
 {
-    kDebug(32002) << "KWFrameSet::deleteAnchors" << endl;
+    kDebug(32002) <<"KWFrameSet::deleteAnchors";
     KWTextFrameSet * textfs = m_anchorTextFs;
     Q_ASSERT( textfs );
     if ( !textfs )
@@ -464,7 +464,7 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
     pos.ry() += frame->topBorder().width();
     if ( frame->topLeft() != pos )
     {
-        kDebug(32002) << "KWFrameSet::moveFloatingFrame " << pos.x() << "," << pos.y() << endl;
+        kDebug(32002) <<"KWFrameSet::moveFloatingFrame" << pos.x() <<"," << pos.y();
         int oldPageNum = frame->pageNumber();
         frame->moveTopLeft( pos );
 
@@ -567,7 +567,7 @@ void KWFrameSet::updateFrames( int flags )
     if ( !isVisible() )
         return;
 
-    //kDebug(32001) << "KWFrameSet::updateFrames " << this << " " << name() << endl;
+    //kDebug(32001) <<"KWFrameSet::updateFrames" << this <<"" << name();
 
     if ( flags & UpdateFramesInPage ) {
         // For each of our frames, clear old list of frames on top, and grab min/max page nums
@@ -579,7 +579,7 @@ void KWFrameSet::updateFrames( int flags )
             m_firstPage = qMin( m_firstPage, pg );
             lastPage = qMax( lastPage, pg );
         }
-        //kDebug(32001) << "firstPage=" << m_firstPage << " lastPage=" << lastPage << endl;
+        //kDebug(32001) <<"firstPage=" << m_firstPage <<" lastPage=" << lastPage;
 
         // Prepare the m_framesInPage structure
         int oldSize = m_framesInPage.size();
@@ -603,14 +603,14 @@ void KWFrameSet::updateFrames( int flags )
 
     if ( isFloating() )
     {
-        //kDebug(32001) << "KWFrameSet::updateFrames " << name() << " is floating" << endl;
+        //kDebug(32001) <<"KWFrameSet::updateFrames" << name() <<" is floating";
         Q3PtrListIterator<KWFrame> frameIt = frameIterator();
         int frameNum = 0;
         // At the moment there's only one anchor per frameset
         //for ( ; frameIt.current(); ++frameIt, ++frameNum )
         {
             KWAnchor * anchor = findAnchor( frameNum );
-            //kDebug(32001) << "KWFrameSet::updateFrames anchor=" << anchor << endl;
+            //kDebug(32001) <<"KWFrameSet::updateFrames anchor=" << anchor;
             if ( anchor )
                 anchor->resize();
         }
@@ -656,7 +656,7 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
                                KWFrameViewManager *frameViewManager )
 {
 #ifdef DEBUG_DRAW
-    kDebug(32001) << "\nKWFrameSet::drawContents " << this << " " << name()
+    kDebug(32001) <<"\nKWFrameSet::drawContents" << this <<"" << name()
                    << " onlyChanged=" << onlyChanged << " resetChanged=" << resetChanged
                    << " crect= " << crect
                    << endl;
@@ -706,7 +706,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 #if 0
     if ( !frame->isValid() )
     {
-        kDebug(32002) << "KWFrameSet::drawFrameAndBorders " << name() << " frame " << frameFromPtr( frame ) << " " << frame << " isn't valid" << endl;
+        kDebug(32002) <<"KWFrameSet::drawFrameAndBorders" << name() <<" frame" << frameFromPtr( frame ) <<"" << frame <<" isn't valid";
         return;
     }
 
@@ -714,9 +714,9 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
     QRect outerFrameRect( viewMode->normalToView( normalOuterFrameRect ) );
     QRect outerCRect = crect.intersect( outerFrameRect );
 #ifdef DEBUG_DRAW
-    kDebug(32001) << "KWFrameSet::drawFrameAndBorders " << name() << " frame " << frameFromPtr( frame ) << " " << *frame << endl;
-    kDebug(32001) << "                    (outer) normalFrameRect=" << normalOuterFrameRect << " frameRect=" << outerFrameRect << endl;
-    kDebug(32001) << "                    crect=" << crect << " intersec=" << outerCRect << " todraw=" << !outerCRect.isEmpty() << endl;
+    kDebug(32001) <<"KWFrameSet::drawFrameAndBorders" << name() <<" frame" << frameFromPtr( frame ) <<"" << *frame;
+    kDebug(32001) <<"                    (outer) normalFrameRect=" << normalOuterFrameRect <<" frameRect=" << outerFrameRect;
+    kDebug(32001) <<"                    crect=" << crect <<" intersec=" << outerCRect <<" todraw=" << !outerCRect.isEmpty();
 #endif
     if ( !outerCRect.isEmpty() )
     {
@@ -738,8 +738,8 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
         {
             QRect fcrect = viewMode->viewToNormal( innerCRect );
 #ifdef DEBUG_DRAW
-            kDebug(32001) << "                    (inner) normalFrameRect=" << normalInnerFrameRect << " frameRect=" << innerFrameRect << endl;
-            //kDebug(32001) << "                    crect after view-to-normal:" << fcrect << "." << " Will move by (" << -offsetX << ", -(" << normalInnerFrameRect.top() << "-" << m_doc->zoomItYOld(frame->internalY()) << ") == " << -offsetY << ")." << endl;
+            kDebug(32001) <<"                    (inner) normalFrameRect=" << normalInnerFrameRect <<" frameRect=" << innerFrameRect;
+            //kDebug(32001) <<"                    crect after view-to-normal:" << fcrect <<"." <<" Will move by (" << -offsetX <<", -(" << normalInnerFrameRect.top() <<"-" << m_doc->zoomItYOld(frame->internalY()) <<") ==" << -offsetY <<").";
 #endif
             fcrect.moveBy( -offsetX, -offsetY );
             Q_ASSERT( fcrect.x() >= 0 );
@@ -748,7 +748,7 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
             // fcrect is now the portion of the frame to be drawn,
             // in the frame's coordinates and in pixels
 #ifdef DEBUG_DRAW
-            kDebug(32001) << "KWFrameSet::drawFrameAndBorders in frame coords:" << fcrect << ". Will translate painter by intersec-fcrect: " << innerCRect.x()-fcrect.x() << "," << innerCRect.y()-fcrect.y() << "." << endl;
+            kDebug(32001) <<"KWFrameSet::drawFrameAndBorders in frame coords:" << fcrect <<". Will translate painter by intersec-fcrect:" << innerCRect.x()-fcrect.x() <<"," << innerCRect.y()-fcrect.y() <<".";
 #endif
             QRegion reg;
             if ( drawUnderlyingFrames )
@@ -784,7 +784,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
     if ( outerCRect.isEmpty() )
         return;
 #ifdef DEBUG_DRAW
-    kDebug(32001) << "\nKWFrameSet::drawFrame " << name() << " outerCRect=" << outerCRect << " frameCrect=" << fcrect << " drawUnderlyingFrames=" << drawUnderlyingFrames << endl;
+    kDebug(32001) <<"\nKWFrameSet::drawFrame" << name() <<" outerCRect=" << outerCRect <<" frameCrect=" << fcrect <<" drawUnderlyingFrames=" << drawUnderlyingFrames;
 #endif
     Q_ASSERT( fcrect.isValid() );
 
@@ -816,26 +816,26 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
                 // translate the double-buffer painter; drawFrameAndBorders will draw using view coordinates.
                 doubleBufPainter->translate( -outerCRect.x(), -outerCRect.y() );
 #ifdef DEBUG_DRAW
-    //            kDebug(32001) << "  ... using double buffering. Portion covered: " << outerCRect << endl;
+    //            kDebug(32001) <<"  ... using double buffering. Portion covered:" << outerCRect;
 #endif
             }
 
             // Transparency handling
 #ifdef DEBUG_DRAW
-            kDebug(32001) << "  below: " << below.count() << endl;
+            kDebug(32001) <<"  below:" << below.count();
 #endif
             for (Q3ValueListIterator<KWFrame*> it = below.begin(); it != below.end(); ++it )
             {
                 KWFrame* f = (*it);
 
 #ifdef DEBUG_DRAW
-                kDebug(32001) << "  looking at frame below us: " << f->frameSet()->name() << " frame " << frameFromPtr( frame ) << endl;
+                kDebug(32001) <<"  looking at frame below us:" << f->frameSet()->name() <<" frame" << frameFromPtr( frame );
 #endif
                 QRect viewFrameCRect = outerCRect.intersect( viewMode->normalToView( f->outerRect( viewMode ) ) );
                 if ( !viewFrameCRect.isEmpty() )
                 {
 #ifdef DEBUG_DRAW
-                    kDebug(32001) << "  viewFrameRect=" << viewFrameCRect << " calling drawFrameAndBorders." << endl;
+                    kDebug(32001) <<"  viewFrameRect=" << viewFrameCRect <<" calling drawFrameAndBorders.";
 #endif
                     f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewFrameCRect, cg,
                             false, resetChanged, edit, viewMode, 0L, false );
@@ -846,7 +846,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
                 drawPadding( frame, doubleBufPainter, outerCRect, cg, viewMode );
             doubleBufPainter->save();
 #ifdef DEBUG_DRAW
-            kDebug(32001) << "  translating by " << translationOffset.x() << ", " << translationOffset.y() << " before drawFrameContents" << endl;
+            kDebug(32001) <<"  translating by" << translationOffset.x() <<"," << translationOffset.y() <<" before drawFrameContents";
 #endif
             doubleBufPainter->translate( translationOffset.x(), translationOffset.y() ); // This assume that viewToNormal() is only a translation
             // We can't "repaint changed parags only" if we just drew the underlying frames, hence the "false"
@@ -857,7 +857,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
             {
                 doubleBufPainter->end();
 #ifdef DEBUG_DRAW
-                kDebug(32001) << "  painting double-buf pixmap at position " << outerCRect.topLeft() << " (real painter pos:" << painter->transformed( outerCRect.topLeft() ) << ")" << endl;
+                kDebug(32001) <<"  painting double-buf pixmap at position" << outerCRect.topLeft() <<" (real painter pos:" << painter->transformed( outerCRect.topLeft() ) <<")";
 #endif
                 painter->drawPixmap( outerCRect.topLeft(), *pix );
                 delete doubleBufPainter;
@@ -972,7 +972,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
         // TODO handle percentage (of enclosing table/frame/page)
         height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "height", QString::null ) );
     }
-    //kDebug(32001) << k_funcinfo << "width=" << width << " height=" << height << " pt" << endl;
+    //kDebug(32001) << k_funcinfo <<"width=" << width <<" height=" << height <<" pt";
 
     KWFrame * frame = new KWFrame(this,
                                   KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "x", QString::null ) ),
@@ -1095,7 +1095,7 @@ const char* KWFrameSet::headerFooterTag() const
 
 void KWFrameSet::finalize()
 {
-    //kDebug(32001) << "KWFrameSet::finalize ( calls updateFrames + zoom ) " << this << endl;
+    //kDebug(32001) <<"KWFrameSet::finalize ( calls updateFrames + zoom )" << this;
     updateFrames();
 }
 
@@ -1106,7 +1106,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 //    KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
 #ifdef DEBUG_DRAW
-    //kDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
+    //kDebug(32002) <<"KWFrameSet::frameClipRegion rc initially" << rc;
 #endif
 
     Q_ASSERT( frame );
@@ -1115,7 +1115,7 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
     {
         rc &= painter->transformed( viewMode->normalToView( doc->zoomRect( (*frame) ) ) ); // intersect
 #ifdef DEBUG_DRAW
-        kDebug(32002) << "KWFrameSet::frameClipRegion frame=" << *frame
+        kDebug(32002) <<"KWFrameSet::frameClipRegion frame=" << *frame
                        << " clip region rect=" << rc
                        << " rc.isEmpty()=" << rc.isEmpty() << endl;
 #endif
@@ -1137,12 +1137,12 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
             Q_ASSERT( frameOnTop->frameSet() );
             QRect r = painter->xForm( viewMode->normalToView( frameOnTop->outerRect( viewMode ) ) );
 #ifdef DEBUG_DRAW
-            //kDebug(32002) << "frameClipRegion subtract rect "<< r << endl;
+            //kDebug(32002) <<"frameClipRegion subtract rect"<< r;
 #endif
             reg -= r; // subtract
         }
 #ifdef DEBUG_DRAW
-        //kDebug(32002) << "KWFrameSet::frameClipRegion result:" << reg << endl;
+        //kDebug(32002) <<"KWFrameSet::frameClipRegion result:" << reg;
 #endif
         return reg;
     }
@@ -1161,7 +1161,7 @@ bool KWFrameSet::canRemovePage( int num )
             // Ok, so we have a frame on that page -> we can't remove it unless it's a copied frame
             if ( ! ( frame->isCopy() && frameIt.current() != m_frames.first() ) )
             {
-                //kDebug(32001) << "KWFrameSet::canRemovePage " << name() << " frame on page " << num << " -> false" << endl;
+                //kDebug(32001) <<"KWFrameSet::canRemovePage" << name() <<" frame on page" << num <<" -> false";
                 return false;
             }
         }
@@ -1206,7 +1206,7 @@ bool KWFrameSet::isFrameAtPos( const KWFrame* frame, const QPoint& point, bool b
 
 void KWFrameSet::setZOrder()
 {
-    //kDebug(32001) << "KWFrameSet::setZOrder (to max) " << name() << endl;
+    //kDebug(32001) <<"KWFrameSet::setZOrder (to max)" << name();
     Q3PtrListIterator<KWFrame> fit = frameIterator();
     for ( ; fit.current() ; ++fit )
         fit.current()->setZOrder( m_doc->maxZOrder( fit.current()->pageNumber(m_doc) ) + 1 );
@@ -1242,17 +1242,17 @@ void KWFrameSet::printDebug()
             fvm = view->frameViewManager();
     }
 
-    kDebug() << " |  Visible: " << isVisible() << endl;
-    kDebug() << " |  Type: " << typeFrameset[ type() ] << endl;
-    kDebug() << " |  Info: " << infoFrameset[ frameSetInfo() ] << endl;
-    kDebug() << " |  Floating: " << isFloating() << endl;
-    kDebug() << " |  Frames in page array: " << endl;
+    kDebug() <<" |  Visible:" << isVisible();
+    kDebug() <<" |  Type:" << typeFrameset[ type() ];
+    kDebug() <<" |  Info:" << infoFrameset[ frameSetInfo() ];
+    kDebug() <<" |  Floating:" << isFloating();
+    kDebug() <<" |  Frames in page array:";
     for ( uint i = 0 ; i < m_framesInPage.size() ; ++i )
     {
         Q3PtrListIterator<KWFrame> it( *m_framesInPage[i] );
         int pgNum = i + m_firstPage;
         for ( ; it.current() ; ++it )
-            kDebug() << " |     " << pgNum << ": " << it.current() << "   " << *it.current()
+            kDebug() <<" |" << pgNum <<":" << it.current() <<"" << *it.current()
                       << " internalY=" << it.current()->internalY() << "pt "
                       << " (in LU pix:" << m_doc->ptToLayoutUnitPixY( it.current()->internalY() ) << ")"
                       << " innerHeight=" << it.current()->innerHeight()
@@ -1264,35 +1264,35 @@ void KWFrameSet::printDebug()
     for ( unsigned int j = 0; frameIt.current(); ++frameIt, ++j ) {
         KWFrame * frame = frameIt.current();
         QByteArray copy = frame->isCopy() ? "[copy]" : "";
-        kDebug() << " +-- Frame " << j << " of "<< frameCount() << "    (" << frame << ")  " << copy << endl;
+        kDebug() <<" +-- Frame" << j <<" of"<< frameCount() <<"    (" << frame <<")" << copy;
         printDebug( frame );
-        kDebug() << "     Rectangle : " << frame->x() << "," << frame->y() << " " << frame->width() << "x" << frame->height() << endl;
-        kDebug() << "     RunAround: "<< runaround[ frame->runAround() ] << " side:" << runaroundSide[ frame->runAroundSide() ]<< endl;
-        kDebug() << "     FrameBehavior: "<< frameBh[ frame->frameBehavior() ] << endl;
-        kDebug() << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
+        kDebug() <<"     Rectangle :" << frame->x() <<"," << frame->y() <<"" << frame->width() <<"x" << frame->height();
+        kDebug() <<"     RunAround:"<< runaround[ frame->runAround() ] <<" side:" << runaroundSide[ frame->runAroundSide() ];
+        kDebug() <<"     FrameBehavior:"<< frameBh[ frame->frameBehavior() ];
+        kDebug() <<"     NewFrameBehavior:"<< newFrameBh[ frame->newFrameBehavior() ];
         QColor col = frame->backgroundColor().color();
-        kDebug() << "     BackgroundColor: "<< ( col.isValid() ? col.name() : QString("(default)") ) << endl;
-        kDebug() << "     SheetSide "<< frame->sheetSide() << endl;
-        kDebug() << "     Z Order: " << frame->zOrder() << endl;
+        kDebug() <<"     BackgroundColor:"<< ( col.isValid() ? col.name() : QString("(default)") );
+        kDebug() <<"     SheetSide"<< frame->sheetSide();
+        kDebug() <<"     Z Order:" << frame->zOrder();
 
         if( frame->frameStack() ) {
             Q3ValueList<KWFrame*> onTop = frame->frameStack()->framesOnTop();
             Q3ValueList<KWFrame*> below = frame->frameStack()->framesBelow();
 
-            kDebug() << "     Frames below: " << below.count()
+            kDebug() <<"     Frames below:" << below.count()
                       << ", frames on top: " << onTop.count() << endl;
         }
         else
-            kDebug() << "     no frameStack set." << endl;
-        kDebug() << "     minFrameHeight "<< frame->minimumFrameHeight() << endl;
+            kDebug() <<"     no frameStack set.";
+        kDebug() <<"     minFrameHeight"<< frame->minimumFrameHeight();
         QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
 
         KWFrameView *fv = 0;
         if(fvm) fv = fvm->view(frame);
         if(fv && fv->selected())
-            kDebug() << " *   Page "<< page << endl;
+            kDebug() <<" *   Page"<< page;
         else
-            kDebug() << "     Page "<< page << endl;
+            kDebug() <<"     Page"<< page;
     }
 #endif
 }

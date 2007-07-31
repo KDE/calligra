@@ -90,14 +90,14 @@ public:
             tv->hideColumn( 17 );
             tv->hideColumn( 18 );
             tv->hideColumn( 19 );
-        } else kDebug()<<k_funcinfo<<"No treeview !!!"<<endl;
+        } else kDebug()<<k_funcinfo<<"No treeview !!!";
     }
     NodeItemModel *itemModel() const { return m_model; }
     void setProject( Project *project ) { m_model->setProject( project ); }
     void update()
 {
-    kDebug()<<k_funcinfo<<endl;
-    kDebug()<<"POULOU"<<endl;
+    kDebug()<<k_funcinfo;
+    kDebug()<<"POULOU";
 }
 protected:
     NodeItemModel *m_model;
@@ -110,7 +110,7 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
         m_project( 0 ),
         m_id( -1 )
 {
-    kDebug() << " ---------------- KPlato: Creating GanttView ----------------" << endl;
+    kDebug() <<" ---------------- KPlato: Creating GanttView ----------------";
 
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -138,12 +138,12 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
 
     setReadWriteMode( readWrite );
     //connect( m_gantt->constraintModel(), SIGNAL( constraintAdded( const Constraint& )), this, SLOT( update() ) );
-    kDebug() <<m_gantt->constraintModel()<< endl;
+    kDebug() <<m_gantt->constraintModel();
 }
 
 void GanttView::setZoom( double )
 {
-    //kDebug() << "setting gantt zoom: " << zoom << endl;
+    //kDebug() <<"setting gantt zoom:" << zoom;
     //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else
     //m_taskView->setZoom( zoom );
 }
@@ -172,7 +172,7 @@ void GanttView::setProject( Project *project )
 
 void GanttView::slotScheduleIdChanged( long id )
 {
-    //kDebug()<<k_funcinfo<<id<<endl;
+    //kDebug()<<k_funcinfo<<id;
     m_id = id;
 }
 
@@ -196,7 +196,7 @@ Node *GanttView::currentNode() const
 
 bool GanttView::setContext( const Context &c )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     const Context::Ganttview &context = c.ganttview;
     
     Q3ValueList<int> list = m_splitter->sizes();
@@ -230,10 +230,10 @@ void GanttView::getContext( Context &c ) const
 {
     Context::Ganttview &context = c.ganttview;
 
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     context.ganttviewsize = m_splitter->sizes() [ 0 ];
     context.taskviewsize = m_splitter->sizes() [ 1 ];
-    //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
+    //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1];
     if ( currentNode() ) {
         context.currentNode = currentNode() ->id();
     }
@@ -254,8 +254,8 @@ void GanttView::setReadWriteMode( bool on )
 
 void GanttView::update()
 {
-    kDebug()<<k_funcinfo<<endl;
-    kDebug()<<"POULOU"<<endl;
+    kDebug()<<k_funcinfo;
+    kDebug()<<"POULOU";
 }
 
 }  //KPlato namespace

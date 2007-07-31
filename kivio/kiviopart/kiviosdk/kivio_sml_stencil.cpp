@@ -368,7 +368,7 @@ void KivioSMLStencil::paintOutline( KivioIntraStencilData *pData )
 
             case KivioShapeData::kstNone:
             default:
-                kDebug(43000) << "*** KivioShape::Paint AHHHHH!!! NO SHAPE!" << endl;
+                kDebug(43000) <<"*** KivioShape::Paint AHHHHH!!! NO SHAPE!";
                 break;
         }
 
@@ -1557,7 +1557,7 @@ KivioConnectorTarget *KivioSMLStencil::connectToTarget( KivioConnectorPoint *p, 
  */
 void KivioSMLStencil::updateGeometry()
 {
-  //kDebug(43000) << "m_x = " << m_x << " m_y = " << m_y << endl;
+  //kDebug(43000) <<"m_x =" << m_x <<" m_y =" << m_y;
 
   QMatrix m;
   m.translate(m_x, m_y);

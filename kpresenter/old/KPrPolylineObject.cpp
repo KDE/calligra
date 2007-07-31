@@ -83,7 +83,7 @@ const char * KPrPolylineObject::getOasisElementName() const
 
 void KPrPolylineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    kDebug()<<"void KPrPolylineObject::loadOasis(const QDomElement &element)************\n";
+    kDebug()<<"void KPrPolylineObject::loadOasis(const QDomElement &element)************";
     KPrShadowObject::loadOasis( element, context, info );
     KPrShadowObject::loadOasisDrawPoints( points, element, context, info );
     loadOasisMarker( context );

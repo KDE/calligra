@@ -105,7 +105,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
     if ( !document )
         return KoFilter::StupidError;
 
-    kDebug(30523) << "here we go... " << document->metaObject()->className() << endl;
+    kDebug(30523) <<"here we go..." << document->metaObject()->className();
 
     if( !::qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
@@ -118,7 +118,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
         return KoFilter::NotImplemented;
     }
 
-    kDebug(30523) << "...still here..." << endl;
+    kDebug(30523) <<"...still here...";
 
     // No need for a dynamic cast here, since we use Qt's moc magic
     Doc *ksdoc=(Doc*)document;

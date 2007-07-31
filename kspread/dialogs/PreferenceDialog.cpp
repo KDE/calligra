@@ -593,7 +593,7 @@ void miscParameters::slotDefault()
 
 void miscParameters::apply()
 {
-    kDebug() << "Applying misc preferences" << endl;
+    kDebug() <<"Applying misc preferences";
 
 #if 0 // UNDOREDOLIMIT
     int const newUndo=m_undoRedoLimit->value();

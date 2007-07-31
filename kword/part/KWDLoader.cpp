@@ -58,7 +58,7 @@ bool KWDLoader::load(KoXmlElement &root) {
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
-    kDebug(32001) << "KWDocument::loadXML" << endl;
+    kDebug(32001) <<"KWDocument::loadXML";
 
     QString mime = root.attribute("mime");
     if ( mime.isEmpty() ) {
@@ -84,15 +84,15 @@ bool KWDLoader::load(KoXmlElement &root) {
         pgLayout.orientation = static_cast<KoPageFormat::Orientation>( paper.attribute("orientation").toInt() );
         pgLayout.width = paper.attribute("width").toDouble();
         pgLayout.height = paper.attribute("height").toDouble();
-        kDebug(32001) << " width=" << pgLayout.width << endl;
-        kDebug(32001) << " height=" << pgLayout.height << endl;
+        kDebug(32001) <<" width=" << pgLayout.width;
+        kDebug(32001) <<" height=" << pgLayout.height;
         if ( pgLayout.width <= 0 || pgLayout.height <= 0 )
         {
             // Old document?
             pgLayout.width = paper.attribute("width").toDouble();
             pgLayout.height = paper.attribute("height").toDouble();
-            kDebug(32001) << " width2=" << pgLayout.width << endl;
-            kDebug(32001) << " height2=" << pgLayout.height << endl;
+            kDebug(32001) <<" width2=" << pgLayout.width;
+            kDebug(32001) <<" height2=" << pgLayout.height;
 
             // Still wrong?
             if ( pgLayout.width <= 0 || pgLayout.height <= 0 )
@@ -354,7 +354,7 @@ bool KWDLoader::load(KoXmlElement &root) {
 #endif
     emit sigProgress(100); // the rest is only processing, not loading
 
-    kDebug(32001) << "Loading took " << (float)(dt.elapsed()) / 1000 << " seconds" << endl;
+    kDebug(32001) <<"Loading took" << (float)(dt.elapsed()) / 1000 <<" seconds";
 
     return true;
 }

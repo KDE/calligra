@@ -40,10 +40,10 @@ public:
     EffortCost(const Duration &effort, const double cost)
         : m_effort(effort),
           m_cost(cost) {
-        //kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo;
     }
     ~EffortCost() {
-        //kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo;
     }
     Duration effort() const { return m_effort; }
     double cost() const { return m_cost; }
@@ -66,10 +66,10 @@ class EffortCostMap
 public:
     EffortCostMap()
         : m_days() {
-        //kDebug()<<k_funcinfo<<endl; 
+        //kDebug()<<k_funcinfo; 
     }
     ~EffortCostMap() {
-        //kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo;
         m_days.clear();
     }
     
@@ -107,7 +107,7 @@ public:
             kError()<<k_funcinfo<<"Date not valid"<<endl;
             return zero();
         }
-        //kDebug()<<k_funcinfo<<date.toString()<<endl;
+        //kDebug()<<k_funcinfo<<date.toString();
         return m_days[date] += ec;
     }
     
@@ -118,7 +118,7 @@ public:
     EffortCostDayMap days() const { return m_days; }
     
     EffortCostMap &operator+=(const EffortCostMap &ec) {
-        //kDebug()<<k_funcinfo<<"me="<<m_days.count()<<" ec="<<ec.days().count()<<endl;
+        //kDebug()<<k_funcinfo<<"me="<<m_days.count()<<" ec="<<ec.days().count();
         if (ec.isEmpty()) {
             return *this;
         }

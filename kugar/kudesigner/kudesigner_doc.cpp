@@ -135,13 +135,13 @@ bool KudesignerDoc::saveToStream( QIODevice * dev )
 
 void KudesignerDoc::loadPlugin( const QString &name )
 {
-    kDebug() << "Trying to load plugin: " << name << endl;
+    kDebug() <<"Trying to load plugin:" << name;
     KuDesignerPlugin *plug = KLibLoader::createInstance<KuDesignerPlugin>( name.toUtf8(), this );
     m_plugin = plug;
     if ( m_plugin )
-        kDebug() << "plugin has been loaded" << endl;
+        kDebug() <<"plugin has been loaded";
     else
-        kDebug() << "plugin couldn't be loaded :(" << endl;
+        kDebug() <<"plugin couldn't be loaded :(";
 }
 
 bool KudesignerDoc::completeSaving( KoStore* store )

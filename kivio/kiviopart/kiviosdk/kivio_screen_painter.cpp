@@ -29,7 +29,7 @@
 
 #include <kdebug.h>
 
-#define PAINTER_CHECK() { if(!m_pPainter) { kDebug(43000) << "KivioScreenPainter::PAINTER_CHECK() - no QPainter exists." << endl; } }
+#define PAINTER_CHECK() { if(!m_pPainter) { kDebug(43000) <<"KivioScreenPainter::PAINTER_CHECK() - no QPainter exists."; } }
 
 
 KivioScreenPainter::KivioScreenPainter()
@@ -52,7 +52,7 @@ KivioScreenPainter::~KivioScreenPainter()
 {
     if( m_pPainter )
     {
-       kDebug(43000) << "KivioScreenPainter::~KivioScreenPainter - A QPainter slipped through the cracks" << endl;
+       kDebug(43000) <<"KivioScreenPainter::~KivioScreenPainter - A QPainter slipped through the cracks";
         delete m_pPainter;
         m_pPainter = NULL;
     }
@@ -72,7 +72,7 @@ bool KivioScreenPainter::start( QPaintDevice *dev )
     // Bomb out if one exists already
     if( m_pPainter )
     {
-       kDebug(43000) << "KivioScreenPainter::start() - A QPainter already exists" << endl;
+       kDebug(43000) <<"KivioScreenPainter::start() - A QPainter already exists";
         return false;
     }
 
@@ -95,7 +95,7 @@ bool KivioScreenPainter::stop()
     // called @ref start().
     if( !m_pPainter )
     {
-       kDebug(43000) <<"KivioScreenPainter::stop() called without previous call to start" << endl;
+       kDebug(43000) <<"KivioScreenPainter::stop() called without previous call to start";
         return false;
     }
 
@@ -636,7 +636,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 || !pPoint4 )
             {
-                kDebug(43000) << "drawClosedPath() - incorrect # of bezier points" << endl;
+                kDebug(43000) <<"drawClosedPath() - incorrect # of bezier points";
                 return;
             }
 
@@ -644,7 +644,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
                 pPoint3->pointType() != KivioPoint::kptBezier ||
                 pPoint4->pointType() != KivioPoint::kptBezier )
             {
-                kDebug(43000) << "drawClosedPath() - bezier curves must have 4 points" << endl;
+                kDebug(43000) <<"drawClosedPath() - bezier curves must have 4 points";
                 return;
             }
 
@@ -668,13 +668,13 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 )
             {
-                kDebug(43000) << "drawClosedPath() - incorrect # of arc points" << endl;
+                kDebug(43000) <<"drawClosedPath() - incorrect # of arc points";
                 return;
             }
             if( pPoint2->pointType() != KivioPoint::kptArc ||
                 pPoint3->pointType() != KivioPoint::kptArc )
             {
-                kDebug(43000) << "drawClosedPath() - Arc points must come in triplets" << endl;
+                kDebug(43000) <<"drawClosedPath() - Arc points must come in triplets";
                 return;
             }
 
@@ -689,7 +689,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
         } // end pointtype==arc
         else
         {
-          kDebug(43000) << "drawClosedPath() - Unknown point type discovered. WOOO!!!" << endl;
+          kDebug(43000) <<"drawClosedPath() - Unknown point type discovered. WOOO!!!";
         }
 
         pPoint = pPointList->next();
@@ -711,7 +711,7 @@ void KivioScreenPainter::drawClosedPath( QPtrList<KivioPoint> *pPoints )
         }
 
         default:
-            kDebug(43000) << "drawClosedPath() - Unknown colors style" << endl;
+            kDebug(43000) <<"drawClosedPath() - Unknown colors style";
             break;
     }
 }
@@ -743,7 +743,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 || !pPoint4 )
             {
-                kDebug(43000) << "drawOpenPath() - incorrect # of bezier points" << endl;
+                kDebug(43000) <<"drawOpenPath() - incorrect # of bezier points";
                 return;
             }
 
@@ -751,7 +751,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
                 pPoint3->pointType() != KivioPoint::kptBezier ||
                 pPoint4->pointType() != KivioPoint::kptBezier )
             {
-                kDebug(43000) << "drawOpenPath() - bezier curves must have 4 points" << endl;
+                kDebug(43000) <<"drawOpenPath() - bezier curves must have 4 points";
                 return;
             }
 
@@ -775,13 +775,13 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
 
             if( !pPoint2 || !pPoint3 )
             {
-                kDebug(43000) << "drawOpenPath() - incorrect # of arc points" << endl;
+                kDebug(43000) <<"drawOpenPath() - incorrect # of arc points";
                 return;
             }
             if( pPoint2->pointType() != KivioPoint::kptArc ||
                 pPoint3->pointType() != KivioPoint::kptArc )
             {
-                kDebug(43000) << "drawOpenPath() - Arc points must come in triplets" << endl;
+                kDebug(43000) <<"drawOpenPath() - Arc points must come in triplets";
                 return;
             }
 
@@ -796,7 +796,7 @@ void KivioScreenPainter::drawOpenPath( QPtrList<KivioPoint> *pPoints )
         } // end pointtype==arc
         else
         {
-            kDebug(43000) << "drawOpenPath() - Unknown point type discovered. WOOO!!!" << endl;
+            kDebug(43000) <<"drawOpenPath() - Unknown point type discovered. WOOO!!!";
         }
 
         pPoint = pPointList->next();

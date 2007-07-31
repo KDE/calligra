@@ -56,7 +56,7 @@ void Table::setMaxRow(int row)
 
 void Table::analyze(const QDomNode node)
 {
-	kDebug(30522) << "New table" << endl;
+	kDebug(30522) <<"New table";
 	if(getAttr(node, "columnnumber") == "1")
 		setColumnNumber();
 	if(getAttr(node, "borders") == "1")
@@ -91,7 +91,7 @@ void Table::analyze(const QDomNode node)
 		QString name = getChildName(node, index);		
 		if(name == "cell")
 		{
-			kDebug(30522) << "----- cell -----" << endl;
+			kDebug(30522) <<"----- cell -----";
 			Cell* cell = new Cell();
 			cell->analyze(getChild(node, index));
 			_cells.append(cell);
@@ -100,20 +100,20 @@ void Table::analyze(const QDomNode node)
 		}
 		else if(name == "column")
 		{
-			kDebug(30522) << "----- column -----" << endl;
+			kDebug(30522) <<"----- column -----";
 			Column* column = new Column();
 			column->analyze(getChild(node, index));
 			_columns.append(column);
 		}
 		else if(name == "row")
 		{
-			kDebug(30522) << "----- row -----" << endl;
+			kDebug(30522) <<"----- row -----";
 			Row* row = new Row();
 			row->analyze(getChild(node, index));
 			_rows.append(row);
 		}
 		else
-			kDebug(30522) << "name : " << name << endl;
+			kDebug(30522) <<"name :" << name;
 	}
 }
 
@@ -134,12 +134,12 @@ Cell* Table::searchCell(int col, int row)
 {
 	Q3PtrListIterator<Cell> it(_cells);
 
-	kDebug(30522) << "search in list of " << _cells.count() << " cells" << endl;
+	kDebug(30522) <<"search in list of" << _cells.count() <<" cells";
 	Cell *cell = 0;
 	while ( (cell = it.current()) != 0 )
 	{
 		++it;
-		kDebug(30522) << "cell: " << cell->getRow() << "-" << cell->getCol() << endl;
+		kDebug(30522) <<"cell:" << cell->getRow() <<"-" << cell->getCol();
 		if(cell->getCol() == col && cell->getRow() == row)
 			return cell;
 	}
@@ -179,7 +179,7 @@ Row* Table::searchRow(int rowNumber)
 /*******************************************/
 void Table::generate(QTextStream& out)
 {
-	kDebug(30522) << "GENERATION OF A TABLE " << getMaxRow() << " - " << getMaxColumn()
+	kDebug(30522) <<"GENERATION OF A TABLE" << getMaxRow() <<" -" << getMaxColumn()
 		<< endl;
 	out << endl << "%% " << getName() << endl;
 	if(getOrientation() == "Portrait")
@@ -224,7 +224,7 @@ void Table::generate(QTextStream& out)
 		unindent();
 	}
 	/*Element* elt = 0;
-	kDebug(30522) << "GENERATION OF A TABLE " << count() << endl;
+	kDebug(30522) <<"GENERATION OF A TABLE" << count();
 	out << endl << "\\begin{tabular}";
 	generateTableHeader(out);
 	out << endl;
@@ -262,7 +262,7 @@ void Table::generate(QTextStream& out)
 	generateBottomLineBorder(out, row - 1);
 	out << "\\end{tabular}" << endl << endl;
 	unindent();*/
-	kDebug(30522) << "END OF GENERATION OF A TABLE" << endl;
+	kDebug(30522) <<"END OF GENERATION OF A TABLE";
 }
 
 /*******************************************/
@@ -277,7 +277,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 	for(int index = 1; index <= getMaxColumn(); index++)
 	{
 		/* Search the cell in the list */
-		kDebug(30522) << "search " << row << ", " << index << endl;
+		kDebug(30522) <<"search" << row <<"," << index;
 		cell = searchCell(index, row);
 
 		if(cell == NULL)
@@ -384,17 +384,17 @@ void Table::generateBottomLineBorder(QTextStream& out, int row)
 /*******************************************/
 void Table::generateCell(QTextStream& out, int row, int col)
 {
-	kDebug(30522) << "GENERATE CELL : " << row << "," << col << endl;
+	kDebug(30522) <<"GENERATE CELL :" << row <<"," << col;
 
 	/* Search the cell in the list */
 	Cell *cell = searchCell(col, row);
 	if(cell != NULL)
 	{	
-		kDebug(30522) << "generate cell with text: " << cell->getText() << endl;
+		kDebug(30522) <<"generate cell with text:" << cell->getText();
 		cell->generate(out, this);
 	}
 
-	kDebug(30522) << "END OF A CELL" << endl;
+	kDebug(30522) <<"END OF A CELL";
 }
 
 /*******************************************/

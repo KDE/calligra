@@ -72,7 +72,7 @@ void Duration::add(const Duration &delta) {
 void Duration::add(qint64 delta) {
     qint64 tmp = m_ms + delta;
     if (tmp < 0) {
-        kDebug()<<k_funcinfo<<"Underflow"<<(long int)delta<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<(long int)delta<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -81,7 +81,7 @@ void Duration::add(qint64 delta) {
 
 void Duration::subtract(const Duration &delta) {
     if (m_ms < delta.m_ms) {
-        kDebug()<<k_funcinfo<<"Underflow"<<delta.toString()<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<delta.toString()<<" from"<<this->toString();
         m_ms = 0;
         return;
     }
@@ -91,7 +91,7 @@ void Duration::subtract(const Duration &delta) {
 Duration Duration::operator*(int unit) const {
     Duration dur(*this);
     if (unit < 0) {
-        kDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<unit<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms * unit; //FIXME
@@ -102,7 +102,7 @@ Duration Duration::operator*(int unit) const {
 Duration Duration::operator/(int unit) const {
     Duration dur(*this);
     if (unit <= 0) {
-        kDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Underflow"<<unit<<" from"<<this->toString();
     }
     else {
         dur.m_ms = m_ms / unit; //FIXME
@@ -118,7 +118,7 @@ Duration Duration::operator*(const double value) const {
 
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
-        kDebug()<<k_funcinfo<<"Devide by zero: "<<this->toString()<<endl;
+        kDebug()<<k_funcinfo<<"Devide by zero:"<<this->toString();
         return 0.0;
     }
     return (double)(m_ms) / (double)(d.m_ms);

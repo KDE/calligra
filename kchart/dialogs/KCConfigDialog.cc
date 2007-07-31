@@ -273,7 +273,7 @@ void KCConfigDialog::init()
 
 void KCConfigDialog::apply()
 {
-    kDebug(35001) << "***KChartConfig::apply()\n";
+    kDebug(35001) <<"***KChartConfig::apply()";
     // Copy application data from dialog into parameter structure that is also
     // being used by the application.
 

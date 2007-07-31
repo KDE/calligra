@@ -121,7 +121,7 @@ public:
             grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
 
             path =  grow.map(shape->outline());
-            // kDebug() << "Grow " << distance << ", Before: " << m_bounds << ", after: " << path.boundingRect() << endl;
+            // kDebug() <<"Grow" << distance <<", Before:" << m_bounds <<", after:" << path.boundingRect();
             m_bounds = path.boundingRect();
         }
 
@@ -291,7 +291,7 @@ void KWTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 }
 
 void KWTextDocumentLayout::layout() {
-//kDebug() << "KWTextDocumentLayout::layout" << endl;
+//kDebug() <<"KWTextDocumentLayout::layout";
     QList<Outline*> outlines;
     class End {
     public:

@@ -41,7 +41,7 @@ Node::Node(Node *parent)
       m_nodes(), m_dependChildNodes(), m_dependParentNodes(),
       m_estimate( 0 )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")";
     m_parent = parent;
     init();
     m_id = QString(); // Not mapped
@@ -52,7 +52,7 @@ Node::Node(Node &node, Node *parent)
       m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")";
     m_parent = parent;
     init();
     m_name = node.name();
@@ -72,7 +72,7 @@ Node::Node(Node &node, Node *parent)
 }
 
 Node::~Node() {
-    //kDebug()<<k_funcinfo<<"("<<this<<") "<<m_name<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<m_name;
     delete m_estimate;
     while (!m_nodes.isEmpty())
         delete m_nodes.takeFirst();
@@ -157,7 +157,7 @@ Node *Node::projectNode() {
 }
 
 void Node::takeChildNode( Node *node) {
-    //kDebug()<<k_funcinfo<<"find="<<m_nodes.indexOf(node)<<endl;
+    //kDebug()<<k_funcinfo<<"find="<<m_nodes.indexOf(node);
     int t = type();
     int i = m_nodes.indexOf(node);
     if ( i != -1 ) {
@@ -173,7 +173,7 @@ void Node::takeChildNode( int number ) {
     int t = type();
     if (number >= 0 && number < m_nodes.size()) {
         Node *n = m_nodes.takeAt(number);
-        //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" : "<<(n?n->name():"")<<endl;
+        //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" :"<<(n?n->name():"");
         if (n) {
             n->setParentNode( 0 );
         }
@@ -232,7 +232,7 @@ bool Node::isChildOf( Node* node )
 
 Node* Node::childNode(int number)
 {
-    //kDebug()<<k_funcinfo<<number<<endl;
+    //kDebug()<<k_funcinfo<<number;
     return m_nodes.value( number );
 }
 
@@ -287,7 +287,7 @@ bool Node::addDependChildNode( Relation *relation) {
 void Node::takeDependChildNode( Relation *rel ) {
     int i = m_dependChildNodes.indexOf(rel);
     if ( i != -1 ) {
-        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")"<<endl;
+        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")";
         m_dependChildNodes.removeAt(i);
     }
 }
@@ -322,7 +322,7 @@ bool Node::addDependParentNode( Relation *relation) {
 void Node::takeDependParentNode( Relation *rel ) {
     int i = m_dependParentNodes.indexOf(rel);
     if ( i != -1 ) {
-        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")"<<endl;
+        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")";
         m_dependParentNodes.removeAt(i);
     }
 }
@@ -365,7 +365,7 @@ Relation *Node::findRelation(Node *node) {
 }
 
 bool Node::isDependChildOf(Node *node) {
-    //kDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'"<<endl;
+    //kDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'";
     for (int i=0; i<numDependParentNodes(); i++) {
         Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
@@ -398,7 +398,7 @@ bool Node::canMoveTo( Node *newParent )
         return false;
     }
     if ( isDependChildOf( newParent ) || newParent->isDependChildOf( this ) ) {
-        kDebug()<<k_funcinfo<<"Can't move, node is dependent on new parent"<<endl;
+        kDebug()<<k_funcinfo<<"Can't move, node is dependent on new parent";
         return false;
     }
     foreach ( Node *n, m_nodes ) {
@@ -678,7 +678,7 @@ void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->earlyStart = time;
-    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earlyStart.toString()<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<":"<<m_currentSchedule->earlyStart.toString();
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateEarliestStart(time);
@@ -689,7 +689,7 @@ void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->lateFinish = time;
-    //kDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->lateFinish<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<":"<<m_currentSchedule->lateFinish;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateLatestFinish(time);
@@ -735,14 +735,14 @@ void Node::resetVisited() {
 }
 
 Node *Node::siblingBefore() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if (parentNode())
         return parentNode()->childBefore(this);
     return 0;
 }
 
 Node *Node::childBefore(Node *node) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     int index = m_nodes.indexOf(node);
     if (index > 0){
         return m_nodes.at(index-1);
@@ -751,7 +751,7 @@ Node *Node::childBefore(Node *node) {
 }
 
 Node *Node::siblingAfter() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if (parentNode())
         return parentNode()->childAfter(this);
     return 0;
@@ -759,7 +759,7 @@ Node *Node::siblingAfter() {
 
 Node *Node::childAfter(Node *node)
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     int index = m_nodes.indexOf(node);
     if (index < m_nodes.count()-1) {
         return m_nodes.at(index+1);
@@ -811,7 +811,7 @@ bool Node::isStartNode() const {
 }
 
 bool Node::setId(const QString& id) {
-    //kDebug()<<k_funcinfo<<id<<endl;
+    //kDebug()<<k_funcinfo<<id;
     if (id.isEmpty()) {
         kError()<<k_funcinfo<<"id is empty"<<endl;
         m_id = id;
@@ -820,7 +820,7 @@ bool Node::setId(const QString& id) {
     if (!m_id.isEmpty()) {
         Node *n = findNode();
         if (n == this) {
-            //kDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
+            //kDebug()<<k_funcinfo<<"My id found, remove it";
             removeId();
         } else if (n) {
             //Hmmm, shouldn't happen
@@ -834,7 +834,7 @@ bool Node::setId(const QString& id) {
     }
     m_id = id;
     insertId(id);
-    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id;
     return true;
 }
 
@@ -857,7 +857,7 @@ void Node::setEndTime(DateTime endTime, long id ) {
 }
 
 void Node::saveAppointments(QDomElement &element, long id) const {
-    //kDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" id="<<id;
     QListIterator<Node*> it(m_nodes);
     while (it.hasNext()) {
         it.next()->saveAppointments(element, id);
@@ -893,7 +893,7 @@ bool Node::addAppointment(Appointment *appointment, Schedule &main) {
         s = createSchedule(&main);
     }
     appointment->setNode(s);
-    //kDebug()<<k_funcinfo<<this<<": "<<appointment<<", "<<s<<", "<<s->id()<<", "<<main.id()<<endl;
+    //kDebug()<<k_funcinfo<<this<<":"<<appointment<<","<<s<<","<<s->id()<<","<<main.id();
     return s->add(appointment);
 }
 
@@ -921,14 +921,14 @@ void Node::addSchedule(Schedule *schedule) {
 }
 
 Schedule *Node::createSchedule(const QString& name, Schedule::Type type, long id) {
-    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
+    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id;
     NodeSchedule *sch = new NodeSchedule(this, name, type, id);
     addSchedule(sch);
     return sch;
 }
 
 Schedule *Node::createSchedule(Schedule *parent) {
-    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
+    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id;
     NodeSchedule *sch = new NodeSchedule(parent, this);
     addSchedule(sch);
     return sch;
@@ -960,7 +960,7 @@ Schedule *Node::findSchedule(const QString name) {
 
 
 Schedule *Node::findSchedule(const Schedule::Type type) {
-    //kDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count()<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count();
     QHash<long, Schedule*> hash;
     foreach (Schedule *sch, hash) {
         if (!sch->isDeleted() && sch->type() == type) {
@@ -993,7 +993,7 @@ void Node::setParentSchedule(Schedule *sch) {
 bool Node::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;
-    //kDebug()<<k_funcinfo<<m_name<<endl;
+    //kDebug()<<k_funcinfo<<m_name;
     if (!isCritical()) {
         return false;
     }
@@ -1028,7 +1028,7 @@ int Node::level() {
 
 void Node::generateWBS(int count, WBSDefinition &def, const QString& wbs) {
     m_wbs = wbs + def.code(count, level());
-    //kDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" wbs:"<<m_wbs;
     QString w = wbs + def.wbs(count, level());
     QListIterator<Node*> it = m_nodes;
     int i=0;
@@ -1043,7 +1043,7 @@ void Node::setCurrentSchedule(long id) {
     while (it.hasNext()) {
         it.next()->setCurrentSchedule(id);
     }
-    //kDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" id:"<<id<<"="<<m_currentSchedule;
 }
 
 void Node::setStartupCost(double cost)
@@ -1054,7 +1054,7 @@ void Node::setStartupCost(double cost)
 
 void Node::setStartupAccount(Account *acc)
 {
-    //kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"="<<acc;
     m_startupAccount = acc;
     changed();
 }
@@ -1067,14 +1067,14 @@ void Node::setShutdownCost(double cost)
 
 void Node::setShutdownAccount(Account *acc)
 {
-    //kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"="<<acc;
     m_shutdownAccount = acc;
     changed();
 }
 
 void Node::setRunningAccount(Account *acc)
 {
-    //kDebug()<<k_funcinfo<<m_name<<"="<<acc<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"="<<acc;
     m_runningAccount = acc;
     changed();
 }
@@ -1114,7 +1114,7 @@ void Estimate::set( Duration e, Duration p, Duration o ) {
     m_expectedEstimate = e;
     m_pessimisticEstimate = (p == Duration::zeroDuration) ? e :  p;
     m_optimisticEstimate = (o == Duration::zeroDuration) ? e :  o;
-    //kDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEstimate.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"   Expected:"<<m_expectedEstimate.toString();
     changed();
 }
 
@@ -1122,18 +1122,18 @@ void Estimate::set( int e, int p, int o ) {
     m_expectedEstimate = Duration((qint64)(e)*1000);
     m_pessimisticEstimate = (p < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(p)*1000);
     m_optimisticEstimate = (o < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(o)*1000);
-    //kDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEstimate.toString()<<endl;
-    //kDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEstimate.toString()<<endl;
-    //kDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEstimate.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"   Expected:"<<m_expectedEstimate.toString();
+    //kDebug()<<k_funcinfo<<"   Optimistic:"<<m_optimisticEstimate.toString();
+    //kDebug()<<k_funcinfo<<"   Pessimistic:"<<m_pessimisticEstimate.toString();
 
-    //kDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEstimate.duration()<<" manseconds"<<endl;
+    //kDebug()<<k_funcinfo<<"   Expected:"<<m_expectedEstimate.duration()<<" manseconds";
     changed();
 }
 
 void Estimate::set(unsigned days, unsigned hours, unsigned minutes) {
     Duration dur(days, hours, minutes);
     set(dur);
-    //kDebug()<<k_funcinfo<<"estimate="<<dur.toString()<<endl;
+    //kDebug()<<k_funcinfo<<"estimate="<<dur.toString();
     changed();
 }
 
@@ -1287,7 +1287,7 @@ double Estimate::scale( const Duration &value, Duration::Unit unit, QList<double
     v /= lst[1];
     if (unit == Duration::Unit_h) return v;
     v /= lst[0];
-    //kDebug()<<k_funcinfo<<value.toString()<<", "<<unit<<"="<<v<<endl;
+    //kDebug()<<k_funcinfo<<value.toString()<<","<<unit<<"="<<v;
     return v;
 }
 
@@ -1319,7 +1319,7 @@ Duration Estimate::scale( double value, Duration::Unit unit, const QList<double>
         case Duration::Unit_ms:
             break; // nothing
     }
-    //kDebug()<<k_funcinfo<<value<<", "<<unit<<"="<<v<<endl;
+    //kDebug()<<k_funcinfo<<value<<","<<unit<<"="<<v;
     return Duration( v, Duration::Unit_ms );
 }
 
@@ -1328,38 +1328,38 @@ Duration Estimate::scale( double value, Duration::Unit unit, const QList<double>
 #ifndef NDEBUG
 void Node::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
-    kDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
+    kDebug()<<indent<<"  Unique node identity="<<m_id;
     m_estimate->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
     if (m_constraint == MustStartOn || m_constraint == StartNotEarlier || m_constraint == FixedInterval)
-        kDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")"<<endl;
+        kDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")";
     if (m_constraint == MustFinishOn || m_constraint == FinishNotLater || m_constraint == FixedInterval)
-        kDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")"<<endl;
+        kDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")";
     Schedule *cs = m_currentSchedule; 
     if (cs) {
-        kDebug()<<indent<<"  Current schedule: "<<"id="<<cs->id()<<" '"<<cs->name()<<"' type: "<<cs->type()<<endl;
+        kDebug()<<indent<<"  Current schedule:"<<"id="<<cs->id()<<" '"<<cs->name()<<"' type:"<<cs->type();
     } else {
-        kDebug()<<indent<<"  Current schedule: None"<<endl;
+        kDebug()<<indent<<"  Current schedule: None";
     }
     foreach (Schedule *sch, m_schedules.values()) {
         sch->printDebug(indent+"  ");
     }
-    kDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
-    kDebug()<<indent<<"  Level: "<<level()<<endl;
-    kDebug()<<indent<<"  No of predecessors: "<<m_dependParentNodes.count()<<endl;
+    kDebug()<<indent<<"  Parent:"<<(m_parent ? m_parent->name() : QString("None"));
+    kDebug()<<indent<<"  Level:"<<level();
+    kDebug()<<indent<<"  No of predecessors:"<<m_dependParentNodes.count();
     QListIterator<Relation*> pit(m_dependParentNodes);
-    //kDebug()<<indent<<"  Dependent parents="<<pit.count()<<endl;
+    //kDebug()<<indent<<"  Dependent parents="<<pit.count();
     while (pit.hasNext()) {
         pit.next()->printDebug(indent);
     }
-    kDebug()<<indent<<"  No of successors: "<<m_dependChildNodes.count()<<endl;
+    kDebug()<<indent<<"  No of successors:"<<m_dependChildNodes.count();
     QListIterator<Relation*> cit(m_dependChildNodes);
-    //kDebug()<<indent<<"  Dependent children="<<cit.count()<<endl;
+    //kDebug()<<indent<<"  Dependent children="<<cit.count();
     while (cit.hasNext()) {
         cit.next()->printDebug(indent);
     }
 
-    //kDebug()<<indent<<endl;
+    //kDebug()<<indent;
     indent += "  ";
     if (children) {
         QListIterator<Node*> it(m_nodes);
@@ -1375,17 +1375,17 @@ void Node::printDebug(bool children, const QByteArray& _indent) {
 #ifndef NDEBUG
 void Estimate::printDebug(const QByteArray& _indent) {
     QByteArray indent = _indent;
-    kDebug()<<indent<<"  Estimate:"<<endl;
+    kDebug()<<indent<<"  Estimate:";
     indent += "  ";
-    kDebug()<<indent<<"  Expected:    "<<m_expectedEstimate.toString()<<endl;
-    kDebug()<<indent<<"  Optimistic:  "<<m_optimisticEstimate.toString()<<endl;
-    kDebug()<<indent<<"  Pessimistic: "<<m_pessimisticEstimate.toString()<<endl;
+    kDebug()<<indent<<"  Expected:"<<m_expectedEstimate.toString();
+    kDebug()<<indent<<"  Optimistic:"<<m_optimisticEstimate.toString();
+    kDebug()<<indent<<"  Pessimistic:"<<m_pessimisticEstimate.toString();
     
-    kDebug()<<indent<<"  Risk: "<<risktypeToString()<<endl;
-    kDebug()<<indent<<"  Pert expected:    "<<pertExpected().toString()<<endl;
-    kDebug()<<indent<<"  Pert optimistic:  "<<pertOptimistic().toString()<<endl;
-    kDebug()<<indent<<"  Pert pessimistic: "<<pertPessimistic().toString()<<endl;
-    kDebug()<<indent<<"  Pert variance:    "<<variance().toString()<<endl;
+    kDebug()<<indent<<"  Risk:"<<risktypeToString();
+    kDebug()<<indent<<"  Pert expected:"<<pertExpected().toString();
+    kDebug()<<indent<<"  Pert optimistic:"<<pertOptimistic().toString();
+    kDebug()<<indent<<"  Pert pessimistic:"<<pertPessimistic().toString();
+    kDebug()<<indent<<"  Pert variance:"<<variance().toString();
 }
 #endif
 

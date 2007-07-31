@@ -151,7 +151,7 @@ qint64 DurationWidget::setValueHours(qint64 mins)
     unsigned sc = (unsigned)m_fields[1].rightScale;
     qint64 hours = (qint64)(mins / sc);
     qint64 m = mins - (qint64)(hours * sc);
-    //kDebug()<<k_funcinfo<<"mins="<<mins<<" -> hours="<<hours<<" rem="<<m<<endl;
+    //kDebug()<<k_funcinfo<<"mins="<<mins<<" -> hours="<<hours<<" rem="<<m;
     QString tmp;
     tmp.sprintf(m_fields[1].format, hours);
     m_fields[1].current->setText(tmp);
@@ -166,7 +166,7 @@ qint64 DurationWidget::setValueDays(qint64 mins)
     double sc = m_fields[1].rightScale * m_fields[0].rightScale;
     qint64 days = (qint64)(mins / sc);
     qint64 m = mins - (qint64)(days * sc);
-    //kDebug()<<k_funcinfo<<"mins="<<mins<<" -> days="<<days<<" rem="<<m<<endl;
+    //kDebug()<<k_funcinfo<<"mins="<<mins<<" -> days="<<days<<" rem="<<m;
     QString tmp;
     tmp.sprintf(m_fields[0].format, days);
     m_fields[0].current->setText(tmp);
@@ -176,7 +176,7 @@ qint64 DurationWidget::setValueDays(qint64 mins)
 void DurationWidget::setValue(const KPlato::Duration &newDuration)
 {
     qint64 value = newDuration.milliseconds();
-    //kDebug()<<k_funcinfo<<f<<": value="<<value<<endl;
+    //kDebug()<<k_funcinfo<<f<<": value="<<value;
     value = setValueMilliseconds(value); // returns seconds
     value = setValueSeconds(value); // returns minutes
     // Now call days first to allow for fractional scales
@@ -288,10 +288,10 @@ void DurationWidget::handleLostFocus(
     double v = KGlobal::locale()->readNumber(newValue);
     unsigned currentValue = 0;
     QString tmp;
-    //kDebug()<<k_funcinfo<<field<<": value="<<v<<" v="<<v<<endl;
+    //kDebug()<<k_funcinfo<<field<<": value="<<v<<" v="<<v;
     if (left && v >= leftScale)
     {
-        //kDebug()<<k_funcinfo<<field<<": value="<<v<<" leftScale="<<leftScale<<endl;
+        //kDebug()<<k_funcinfo<<field<<": value="<<v<<" leftScale="<<leftScale;
         // Carry overflow, recurse as required.
         tmp.sprintf(leftFormat, (unsigned)(v / leftScale));
         left->setText(tmp);
@@ -309,11 +309,11 @@ void DurationWidget::handleLostFocus(
         double frac = fraction(newValue, &p);
         if (right && frac > 0.0)
         {
-            //kDebug()<<k_funcinfo<<field<<": value="<<newValue<<" rightScale="<<rightScale<<" frac="<<frac<<" ("<<newValue.mid(point)<<")"<<endl;
+            //kDebug()<<k_funcinfo<<field<<": value="<<newValue<<" rightScale="<<rightScale<<" frac="<<frac<<" ("<<newValue.mid(point)<<")";
             // Propagate fraction
             v = rightScale * (frac*power(10.0, -p));
             frac = fraction(KGlobal::locale()->formatNumber(v, 19), 0);
-            //kDebug()<<k_funcinfo<<field<<": v="<<v<<" ("<<(unsigned)v<<") rest="<<frac<<endl;
+            //kDebug()<<k_funcinfo<<field<<": v="<<v<<" ("<<(unsigned)v<<") rest="<<frac;
             if (frac > 0.0)
             {
                 tmp = KGlobal::locale()->formatNumber(v, 19);

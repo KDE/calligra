@@ -63,7 +63,7 @@ class ElapsedTime
   {
     m_time.start();
     if ( mode != PrintOnlyTime )
-      kDebug() << "*** (" << name << ")... Starting measuring... " << endl;
+      kDebug() <<"*** (" << name <<")... Starting measuring...";
   }
 
   ~ElapsedTime()
@@ -75,9 +75,9 @@ class ElapsedTime
     milliSec -= sec * 1000;
 
     if ( m_name.isNull() )
-      kDebug() << "*** Elapsed time: " << min << " min, " << sec << " sec, " << milliSec << " msec" << endl;
+      kDebug() <<"*** Elapsed time:" << min <<" min," << sec <<" sec," << milliSec <<" msec";
     else
-      kDebug() << "*** (" << m_name << ") Elapsed time " << min << " min, " << sec << " sec, " << milliSec << " msec" << endl;
+      kDebug() <<"*** (" << m_name <<") Elapsed time" << min <<" min," << sec <<" sec," << milliSec <<" msec";
   }
 
  private:

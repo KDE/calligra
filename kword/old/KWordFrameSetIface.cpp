@@ -245,7 +245,7 @@ void KWordFrameSetIface::setFrameSetInfo( const QString & _type)
     }
     else
     {
-        kDebug()<<" Error in setFrameSetInfo() :"<<_type<<endl;
+        kDebug()<<" Error in setFrameSetInfo() :"<<_type;
     }
 }
 

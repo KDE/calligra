@@ -674,7 +674,7 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
   
   if( !pData )
   {
-      kDebug(43000) << "SelectTool::continueResizing() - Original geometry not found" << endl;
+      kDebug(43000) <<"SelectTool::continueResizing() - Original geometry not found";
       return;
   }
 
@@ -801,7 +801,7 @@ void SelectTool::continueResizing(const QPoint &pos, bool ignoreGridGuides)
         break;
   
       default:
-        kDebug(43000) << "SelectTool::continueResizing() - unknown resize handle: " <<  m_resizeHandle << endl;
+        kDebug(43000) <<"SelectTool::continueResizing() - unknown resize handle:" <<  m_resizeHandle;
         break;
     }
   
@@ -1126,7 +1126,7 @@ void SelectTool::showPopupMenu( const QPoint &pos )
     m_lastPoint = view()->canvasWidget()->mapFromScreen(pos);
     menu->popup(pos);
   } else {
-    kDebug(43000) << "What no popup! *ARGH*!" << endl;
+    kDebug(43000) <<"What no popup! *ARGH*!";
   }
 }
 
@@ -1156,7 +1156,7 @@ void SelectTool::leftDoubleClick(const QPoint& pos)
     
     if( !p )
     {
-      kDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+      kDebug(43000) <<"SelectTool::leftDoubleClick() - unable to locate Text Tool";
       return;
     }
     
@@ -1170,7 +1170,7 @@ void SelectTool::editText(QPtrList<KivioStencil>* stencils)
   Kivio::Plugin *p = view()->pluginManager()->findPlugin("Text Mouse Tool");
   if( !p )
   {
-    kDebug(43000) << "SelectTool::leftDoubleClick() - unable to locate Text Tool" << endl;
+    kDebug(43000) <<"SelectTool::leftDoubleClick() - unable to locate Text Tool";
     return;
   }
   

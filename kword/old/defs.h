@@ -32,7 +32,7 @@
 
 #define DEBUGRECT(rc) (rc).x() << "," << (rc).y() << " " << (rc).width() << "x" << (rc).height()
 #define DEBUGREGION(reg) { Q3MemArray<QRect>rs=reg.rects(); for (int i=0;i<rs.size();++i) \
-                           kDebug()<<"  "<<DEBUGRECT(rs[i] )<<endl; }
+                           kDebug()<<""<<DEBUGRECT(rs[i] ); }
 
 const unsigned int s_minFrameWidth=4;
 const unsigned int s_minFrameHeight=11;

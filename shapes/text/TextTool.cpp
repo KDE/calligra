@@ -576,14 +576,14 @@ void TextTool::copy() const {
     QMimeData *data = new QMimeData();
     data->setData("application/vnd.oasis.opendocument.text", bytes);
     QApplication::clipboard()->setMimeData(data);
-kDebug() << "output: " << QString::fromUtf8(bytes) << endl;
+kDebug() <<"output:" << QString::fromUtf8(bytes);
 }
 
 bool TextTool::paste() {
     const QMimeData *data = QApplication::clipboard()->mimeData();
 
     if(data->hasFormat("application/vnd.oasi.opendocument.text")) {
-        kDebug() << "TODO load ODF style text!\n";
+        kDebug() <<"TODO load ODF style text!";
         // TODO create a KoTextShapeData::loadOdf() method and call it here.
     }
     else if(data->hasHtml()) {
@@ -1241,7 +1241,7 @@ void TextTool::decreaseIndent() {
 
 void TextTool::textDefaultFormat() {
     // TODO
-    kDebug() << "TextTool::textDefaultFormat\n";
+    kDebug() <<"TextTool::textDefaultFormat";
 }
 
 void TextTool::insertIndexMarker() {

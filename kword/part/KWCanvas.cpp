@@ -185,7 +185,7 @@ void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
         }
         if(e->key() == Qt::Key_M) {
             //const QDateTime dtMark ( QDateTime::currentDateTime() );
-            //kDebug(32002) << "Developer mark: " << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz") << endl;
+            //kDebug(32002) <<"Developer mark:" << dtMark.toString("yyyy-MM-dd hh:mm:ss,zzz");
             e->accept();
             return;
         }

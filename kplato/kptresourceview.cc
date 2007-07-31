@@ -82,15 +82,15 @@ void ResListView::paintToPrinter( QPainter *p, int x, int y, int w, int h )
         if ( offset != 0 ) {
             sr = QRect( sr.x() - offset, sr.y(), sr.width(), sr.height() );
         }
-        //kDebug()<<s<<": "<<head->label(s)<<" "<<sr<<endl;
+        //kDebug()<<s<<":"<<head->label(s)<<""<<sr;
         if ( sr.x() + sr.width() <= x || sr.x() >= x + w ) {
-            //kDebug()<<s<<": "<<h->label(s)<<" "<<sr<<": continue"<<endl;
+            //kDebug()<<s<<":"<<h->label(s)<<""<<sr<<": continue";
             continue;
         }
         QRect tr = sr;
         if ( sr.x() < x ) {
             tr.setX( x );
-            //kDebug()<<s<<": "<<head->label(s)<<" "<<tr<<endl;
+            //kDebug()<<s<<":"<<head->label(s)<<""<<tr;
         }
         p->eraseRect( tr );
         p->drawText( tr, columnAlignment( s ) | Qt::AlignVCenter, head->label( s ), -1 );
@@ -119,7 +119,7 @@ int ResListView::calculateY( int ymin, int ymax ) const
             y = item->y + item->i->height();
         }
     }
-    //kDebug()<<k_funcinfo<<y<<" ("<<ymin<<", "<<ymax<<")"<<endl;
+    //kDebug()<<k_funcinfo<<y<<" ("<<ymin<<","<<ymax<<")";
     while ( !drawables.isEmpty() ) {
         delete drawables.takeFirst();
     }
@@ -139,7 +139,7 @@ int ResListView::buildDrawables( QList<ResListView::DrawableItem*> &lst, int lev
     if ( y >= ymin && y + ih < ymax ) { // exclude partial item at bottom
         ResListView::DrawableItem * dr = new ResListView::DrawableItem( level, y, item );
         lst.append( dr );
-        //kDebug()<<k_funcinfo<<level<<", "<<y<<" : "<<item->text(0)<<endl;
+        //kDebug()<<k_funcinfo<<level<<","<<y<<" :"<<item->text(0);
     }
     y += ih;
     if ( item->isOpen() ) {
@@ -161,7 +161,7 @@ void ResListView::drawAllContents( QPainter * p, int cx, int cy, int cw, int ch 
         paintEmptyArea( p, QRect( cx, cy, cw, ch ) );
         return ;
     }
-    //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch)<<endl;
+    //kDebug()<<k_funcinfo<<QRect(cx, cy, cw, ch);
     QList<ResListView::DrawableItem*> drawables;
     QTreeWidgetItem *child = firstChild();
     int level = 0;
@@ -183,7 +183,7 @@ void ResListView::drawAllContents( QPainter * p, int cx, int cy, int cw, int ch 
 
         // need to paint current?
         if ( ih > 0 && current->y < cy + ch && current->y + ih > cy ) {
-            //kDebug()<<k_funcinfo<<"Paint: "<<current->i->text(0)<<" y="<<current->y<<endl;
+            //kDebug()<<k_funcinfo<<"Paint:"<<current->i->text(0)<<" y="<<current->y;
             if ( fx < 0 ) {
                 // find first interesting column, once
                 x = 0;
@@ -274,7 +274,7 @@ void ResListView::drawAllContents( QPainter * p, int cx, int cy, int cw, int ch 
             if ( r.isValid() ) {
                 p->save();
                 p->translate( rleft, crtop );
-                //kDebug()<<k_funcinfo<<"paintBranches: "<<current->i->text(0)<<endl;
+                //kDebug()<<k_funcinfo<<"paintBranches:"<<current->i->text(0);
 
                     current->i->paintBranches( p, colorGroup(), treeStepSize(),
                                             rtop - crtop, r.height() );
@@ -290,7 +290,7 @@ void ResListView::drawAllContents( QPainter * p, int cx, int cy, int cw, int ch 
 
 void ResListView::slotContextMenuRequested( const QPoint &p )
 {
-    kDebug() << k_funcinfo << p << endl;
+    kDebug() << k_funcinfo << p;
     emit contextMenuRequested( itemAt( p ), mapToGlobal( p ), 0 );
 }
 
@@ -361,7 +361,7 @@ public:
 
     virtual void paintCell ( QPainter * p, const QColorGroup & cg, int column, int width, int align )
     {
-        //kDebug()<<k_funcinfo<<"c="<<column<<" prio="<<(columnPrio.contains(column)?columnPrio[column]:0)<<endl;
+        //kDebug()<<k_funcinfo<<"c="<<column<<" prio="<<(columnPrio.contains(column)?columnPrio[column]:0);
         QColorGroup g = cg;
         if ( columnPrio.contains( column ) ) {
             g.setColor( QColorGroup::Base, prioColors[ columnPrio[ column ] ] );
@@ -472,7 +472,7 @@ Resource *ResourceView::currentResource() const
 
 void ResourceView::draw( Project &project )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_resListView->clear();
     m_appview->clear();
     m_selectedItem = 0;
@@ -493,7 +493,7 @@ void ResourceView::draw( Project &project )
 
 void ResourceView::drawResources( const Project &proj, QTreeWidgetItem *parent, ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<"group: "<<group->name()<<" ("<<group<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"group:"<<group->name()<<" ("<<group<<")";
     foreach ( Resource * r, group->resources() ) {
         ResourceItemPrivate * item = new ResourceItemPrivate( r, parent );
         // set column colors
@@ -551,7 +551,7 @@ void ResourceView::drawResources( const Project &proj, QTreeWidgetItem *parent, 
 
 void ResourceView::resSelectionChanged()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QTreeWidgetItem * i = 0;
     QList<QTreeWidgetItem*> sl = m_resListView->selectedItems();
     if ( !sl.isEmpty() )
@@ -561,7 +561,7 @@ void ResourceView::resSelectionChanged()
 
 void ResourceView::resSelectionChanged( QTreeWidgetItem *item )
 {
-    //kDebug()<<k_funcinfo<<item<<endl;
+    //kDebug()<<k_funcinfo<<item;
     ResourceItemPrivate * ritem = dynamic_cast<ResourceItemPrivate *>( item );
     if ( ritem ) {
         m_selectedItem = ritem;
@@ -585,7 +585,7 @@ void ResourceView::slotItemActivated( QTreeWidgetItem* )
 
 void ResourceView::popupMenuRequested( QTreeWidgetItem *item, const QPoint & pos, int )
 {
-    kDebug()<<k_funcinfo<<pos<<endl;
+    kDebug()<<k_funcinfo<<pos;
     ResourceItemPrivate * ritem = dynamic_cast<ResourceItemPrivate *>( item );
     if ( ritem ) {
         if ( ritem != m_selectedItem ) {
@@ -604,11 +604,11 @@ QList<int> ResourceView::listOffsets( int pageHeight ) const
     int ph = pageHeight - hh;
     int lh = m_resListView->contentsHeight() - hh; // list height ex header.
     int ly = 0;
-    kDebug() << k_funcinfo << ly << ", " << lh << endl;
+    kDebug() << k_funcinfo << ly <<"," << lh;
     while ( ly < lh ) {
         lst << ly;
         ly = m_resListView->calculateY( ly + 1, ly + ph ); // offset into the list, ex header
-        //kDebug()<<k_funcinfo<<ly<<", "<<lh<<endl;
+        //kDebug()<<k_funcinfo<<ly<<","<<lh;
     }
 #endif
     return lst;
@@ -617,28 +617,28 @@ QList<int> ResourceView::listOffsets( int pageHeight ) const
 void ResourceView::print( KPrinter &printer )
 {
 #if 0
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     uint top, left, bottom, right;
     printer.margins( &top, &left, &bottom, &right );
-    //kDebug()<<m.width()<<"x"<<m.height()<<" : "<<top<<", "<<left<<", "<<bottom<<", "<<right<<" : "<<size()<<endl;
+    //kDebug()<<m.width()<<"x"<<m.height()<<" :"<<top<<","<<left<<","<<bottom<<","<<right<<" :"<<size();
     QPainter p;
     p.begin( &printer );
     p.setViewport( left, top, printer.width() - left - right, printer.height() - top - bottom );
     p.setClipRect( left, top, printer.width() - left - right, printer.height() - top - bottom );
     QRect preg = p.clipRegion().boundingRect();
-    //kDebug()<<"p="<<preg<<endl;
+    //kDebug()<<"p="<<preg;
     //p.drawRect(preg.x(), preg.y(), preg.width()-1, preg.height()-1);
     int ch = m_resListView->contentsHeight();
     int cw = m_resListView->contentsWidth();
     double scale = ( double ) preg.width() / ( double ) ( cw );
-    //kDebug()<<"scale="<<scale<<endl;
+    //kDebug()<<"scale="<<scale;
     if ( scale < 1.0 ) {
         p.scale( scale, scale );
     }
     int ph = preg.height() - m_resListView->headerHeight();
     Q3ValueList<int> lst = listOffsets( preg.height() );
     for ( int i = 0; i < lst.count(); ++i ) {
-        //kDebug()<<"Page "<<i+1<<": "<<"scale="<<scale<<" "<<lst[i]<<" : "<<cw<<"x"<<ch<<endl;
+        //kDebug()<<"Page"<<i+1<<":"<<"scale="<<scale<<""<<lst[i]<<" :"<<cw<<"x"<<ch;
         if ( i > 0 ) {
             printer.newPage();
         }
@@ -651,14 +651,14 @@ void ResourceView::print( KPrinter &printer )
 
 bool ResourceView::setContext( const Context &/*context*/ )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     //const Context::Resourceview &context = c.resourceview;
     return true;
 }
 
 void ResourceView::getContext( Context & /*context*/ ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 

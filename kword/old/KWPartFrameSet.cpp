@@ -41,7 +41,7 @@ KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWDocumentChild *_child, const
     if ( _child )
         setChild( _child );
 
-    kDebug(32001) << "KWPartFrameSet::KWPartFrameSet" << endl;
+    kDebug(32001) <<"KWPartFrameSet::KWPartFrameSet";
     if ( name.isEmpty() )
         m_name = _doc->generateFramesetName( i18n( "Object %1" ) );
     else
@@ -96,7 +96,7 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
     {
         if ( !m_child || !m_child->document() )
         {
-            kDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " aborting. child=" << m_child
+            kDebug(32001) <<"KWPartFrameSet::drawFrameContents" << this <<" aborting. child=" << m_child
                 << " child->document()=" << (m_child?m_child->document():0) << endl;
             return;
         }
@@ -109,13 +109,13 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
         QRect rframe( 0, 0,
                       zh->zoomItXOld( frame->innerWidth() ),
                       zh->zoomItYOld( frame->innerHeight() ) );
-        //kDebug(32001) << "rframe=" << rframe << endl;
+        //kDebug(32001) <<"rframe=" << rframe;
 
         double zoomX = static_cast<double>( zh->zoom() ) / 100;
         double zoomY = static_cast<double>( zh->zoom() ) / 100;
         m_child->document()->paintEverything( *painter, rframe, true, 0L, zoomX, zoomY );
 
-    } //else kDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " onlychanged=true!" << endl;
+    } //else kDebug(32001) <<"KWPartFrameSet::drawFrameContents" << this <<" onlychanged=true!";
 }
 
 void KWPartFrameSet::updateChildGeometry()
@@ -137,7 +137,7 @@ void KWPartFrameSet::slotChildChanged()
     {
         frame->setRect( KoRect::fromQRect( getChild()->geometry() ) );
 
-        //kDebug(32001) << "KWPartFrameSet::slotChildChanged child's geometry " << getChild()->geometry()
+        //kDebug(32001) <<"KWPartFrameSet::slotChildChanged child's geometry" << getChild()->geometry()
         //               << " frame set to " << *frame << endl;
         m_doc->frameChanged( frame );
         //there is just a frame
@@ -145,7 +145,7 @@ void KWPartFrameSet::slotChildChanged()
             m_cmdMoveChild->listFrameMoved().newRect = frame->normalize();
     }
     else
-        kDebug(32001) << "Frame not found!" << endl;
+        kDebug(32001) <<"Frame not found!";
 #endif
 }
 
@@ -187,7 +187,7 @@ void KWPartFrameSet::startEditing()
     // Content is protected -> can't edit. Maybe we should open part in readonly mode?
     if ( m_protectContent )
         return;
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     //create undo/redo move command
     KWFrame* frame = m_frames.first();
     if (!frame)
@@ -202,7 +202,7 @@ void KWPartFrameSet::startEditing()
 
 void KWPartFrameSet::endEditing()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     if( m_cmdMoveChild && m_cmdMoveChild->frameMoved() )
         m_doc->addCommand(m_cmdMoveChild);
     else
@@ -214,7 +214,7 @@ void KWPartFrameSet::endEditing()
 void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
 #if 0
-    //kDebug()<<k_funcinfo<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y()<<endl;
+    //kDebug()<<k_funcinfo<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y();
     KWFrame * frame = m_frames.at( frameNum );
     if ( frame )
     {
@@ -233,14 +233,14 @@ KWFrameSetEdit * KWPartFrameSet::createFrameSetEdit( KWCanvas * /*canvas*/ )
 void KWPartFrameSet::printDebug()
 {
     KWFrameSet::printDebug();
-    kDebug() << " +-- Object Document: " << endl;
+    kDebug() <<" +-- Object Document:";
     if ( getChild() )
     {
         if ( getChild()->document() )
-            kDebug() << "     Url : " << getChild()->document()->url().url()<<endl;
+            kDebug() <<"     Url :" << getChild()->document()->url().url();
         else
             kWarning() << "NO DOCUMENT" << endl;
-        kDebug() << "     Rectangle : " << getChild()->geometry().x() << "," << getChild()->geometry().y() << " " << getChild()->geometry().width() << "x" << getChild()->geometry().height() << endl;
+        kDebug() <<"     Rectangle :" << getChild()->geometry().x() <<"," << getChild()->geometry().y() <<"" << getChild()->geometry().width() <<"x" << getChild()->geometry().height();
     } else
         kWarning() << "NO CHILD" << endl;
 }
@@ -271,7 +271,7 @@ void KWPartFrameSet::KWPartFrameSet::createEmptyRegion( const QRect &crect, QReg
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )
 {
-    kDebug(32001) << "KWPartFrameSetEdit::KWPartFrameSetEdit " << endl;
+    kDebug(32001) <<"KWPartFrameSetEdit::KWPartFrameSetEdit";
     m_dcop=0L;
     fs->startEditing();
     QObject::connect( m_canvas->gui()->getView(), SIGNAL( activated( bool ) ),
@@ -280,7 +280,7 @@ KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
 
 KWPartFrameSetEdit::~KWPartFrameSetEdit()
 {
-    kDebug(32001) << "KWPartFrameSetEdit::~KWPartFrameSetEdit" << endl;
+    kDebug(32001) <<"KWPartFrameSetEdit::~KWPartFrameSetEdit";
     delete m_dcop;
 }
 
@@ -293,7 +293,7 @@ DCOPObject* KWPartFrameSetEdit::dcopObject()
 
 void KWPartFrameSetEdit::slotChildActivated(bool b)
 {
-    kDebug() << "KWPartFrameSetEdit::slotChildActivated " << b << endl;
+    kDebug() <<"KWPartFrameSetEdit::slotChildActivated" << b;
     //we store command when we deactivate the child.
     if( !b )
         partFrameSet()->endEditing();
@@ -316,7 +316,7 @@ void KWPartFrameSet::storeInternal()
         getChild()->document()->setStoreInternal(true);
     }
 
-    kDebug()<<k_funcinfo<<"url: "<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal()<<endl;
+    kDebug()<<k_funcinfo<<"url:"<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal();
 }
 
 

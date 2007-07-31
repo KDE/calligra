@@ -69,7 +69,7 @@ QColor Conversion::color(int number, int defaultcolor, bool defaultWhite)
 	    return Qt::lightGray;
 
 	default:
-            kDebug(30513) << "Conversion::color: unknown color: " << number << endl;
+            kDebug(30513) <<"Conversion::color: unknown color:" << number;
 	    if(defaultcolor == -1)
 		return QColor("black");
 	    else
@@ -408,7 +408,7 @@ int Conversion::headerMaskToHType( unsigned char mask )
     bool hasFirst = ( mask & wvWare::HeaderData::HeaderFirst );
     // Odd is always there. We have even!=odd only if Even is there too.
     bool hasEvenOdd = ( mask & wvWare::HeaderData::HeaderEven );
-    //kDebug(30513) << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
+    //kDebug(30513) << k_funcinfo <<" hasEvenOdd=" << hasEvenOdd;
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
@@ -419,7 +419,7 @@ int Conversion::headerMaskToFType( unsigned char mask )
     bool hasFirst = ( mask & wvWare::HeaderData::FooterFirst );
     bool hasEvenOdd = ( mask & wvWare::HeaderData::FooterEven );
     // Odd is always there. We have even!=odd only if Even is there too.
-    kDebug(30513) << k_funcinfo << " hasEvenOdd=" << hasEvenOdd << endl;
+    kDebug(30513) << k_funcinfo <<" hasEvenOdd=" << hasEvenOdd;
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
@@ -452,7 +452,7 @@ int Conversion::fldToFieldType( const wvWare::FLD* fld )
     }
 
     if( m_fieldType < 0 )
-        kDebug(30513) << "unhandled field: fld.ftl: " << (int)fld->flt << endl;
+        kDebug(30513) <<"unhandled field: fld.ftl:" << (int)fld->flt;
 
     return m_fieldType;
 }

@@ -41,14 +41,14 @@ ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QTreeWidget *parent, bool 
       node(t) {
       
       setFormat(0, 'f', 1);
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 ResourceAppointmentsView::NodeItem::NodeItem(Node *t, QTreeWidgetItem *p, bool highlight)
     : DoubleListViewBase::MasterListItem(p, t->name(), highlight),
       node(t) {
       
       setFormat(0, 'f', 1);
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 ResourceAppointmentsView::NodeItem::NodeItem(const QString& text, QTreeWidgetItem *parent, bool highlight)
@@ -56,7 +56,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(const QString& text, QTreeWidgetIte
       node(0) {
       
       setFormat(0, 'f', 1);
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 ResourceAppointmentsView::NodeItem::NodeItem(const QString& text, QTreeWidget *parent, bool highlight)
@@ -64,7 +64,7 @@ ResourceAppointmentsView::NodeItem::NodeItem(const QString& text, QTreeWidget *p
       node(0) {
       
       setFormat(0, 'f', 1);
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 //-------------------------------------------
@@ -97,7 +97,7 @@ void ResourceAppointmentsView::draw(Resource *resource, const QDate &start, cons
 }
 
 void ResourceAppointmentsView::draw() {
-    //kDebug()<<k_funcinfo<<m_resource->name()<<": "<<m_start<< " - "<<m_end<<endl;
+    //kDebug()<<k_funcinfo<<m_resource->name()<<":"<<m_start<<" -"<<m_end;
     clear();
     if (!m_resource)
         return;
@@ -107,9 +107,9 @@ void ResourceAppointmentsView::draw() {
 //    m_totalItem->setOpen(true);
     m_availItem = new ResourceAppointmentsView::NodeItem(i18n("Available"), masterListView());
     QList<Appointment*> lst = m_resource->appointments();
-    //kDebug()<<k_funcinfo<<lst.count()<<endl;
+    //kDebug()<<k_funcinfo<<lst.count();
     foreach (Appointment* a, lst) {
-        //kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo;
         Node *n = a->node()->node();
         ResourceAppointmentsView::NodeItem *item = new ResourceAppointmentsView::NodeItem(n, m_totalItem);
         
@@ -119,7 +119,7 @@ void ResourceAppointmentsView::draw() {
 }
 
 void ResourceAppointmentsView::slotUpdate() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if (!m_resource)
         return;
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -130,7 +130,7 @@ void ResourceAppointmentsView::slotUpdate() {
     const DateTime availFrom = m_resource->availableFrom();
     const DateTime availUntil = m_resource->availableUntil();
     // Add columns for selected period/periods
-    //kDebug()<<k_funcinfo<<start<<" - "<<end<<endl;
+    //kDebug()<<k_funcinfo<<start<<" -"<<end;
     QStringList df;
     for (QDate dt = m_start; dt <= m_end; dt = cal->addDays(dt, 1)) {
         df << locale->formatDate(dt, KLocale::ShortDate);
@@ -178,7 +178,7 @@ void ResourceAppointmentsView::slotUpdate() {
     }
     if (m_totalItem && m_availItem) {
         m_totalItem->setLimit(m_availItem->value());
-        //kDebug()<<k_funcinfo<<"avail="<<m_availItem->value()<<endl;
+        //kDebug()<<k_funcinfo<<"avail="<<m_availItem->value();
     }
     calculate();
     QApplication::restoreOverrideCursor();
@@ -186,11 +186,11 @@ void ResourceAppointmentsView::slotUpdate() {
 
 
 void ResourceAppointmentsView::print(KPrinter &/*printer*/) {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
 }
 
 // bool ResourceAppointmentsView::setContext(const Context &context) {
-//     //kDebug()<<k_funcinfo<<endl;
+//     //kDebug()<<k_funcinfo;
 //     const Context::ResourceAppointmentsView &context = c.resourceAppointmentsView;
 //     QValueList<int> list;
 //     list << context.accountsviewsize << context.periodviewsize;
@@ -205,7 +205,7 @@ void ResourceAppointmentsView::print(KPrinter &/*printer*/) {
 // }
 // 
 // void ResourceAppointmentsView::getContext(Context &c) const {
-//     //kDebug()<<k_funcinfo<<endl;
+//     //kDebug()<<k_funcinfo;
 //     Context::ResourceAppointmentsView &context = c.resourceAppointmentsView;
 //
 //     context.accountsviewsize = m_dlv->sizes()[0];
@@ -213,7 +213,7 @@ void ResourceAppointmentsView::print(KPrinter &/*printer*/) {
 //     context.date = m_date;
 //     context.period = m_period;
 //     context.cumulative = m_cumulative;
-//     //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
+//     //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1];
 // }
 
 void ResourceAppointmentsView::clear() {

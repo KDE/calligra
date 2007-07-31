@@ -57,7 +57,7 @@ OoImpressExport::~OoImpressExport()
 KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
                                                      const QByteArray & to )
 {
-    kDebug(30518) << "Entering Ooimpress Export filter: " << from << " - " << to << endl;
+    kDebug(30518) <<"Entering Ooimpress Export filter:" << from <<" -" << to;
 
     if ( ( to != "application/vnd.sun.xml.impress") || (from != "application/x-kpresenter" ) )
     {
@@ -94,7 +94,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     }
 
     QByteArray metaString = meta.toByteArray();
-    //kDebug(30518) << "meta :" << metaString << endl;
+    //kDebug(30518) <<"meta :" << metaString;
     m_storeout->write( metaString , metaString.length() );
     m_storeout->close();
 
@@ -115,7 +115,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     }
 
     QByteArray contentString = content.toByteArray();
-    //kDebug(30518) << "content :" << contentString << endl;
+    //kDebug(30518) <<"content :" << contentString;
     m_storeout->write( contentString , contentString.length() );
     m_storeout->close();
 
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     }
 
     QByteArray settingsString = settings.toByteArray();
-    //kDebug(30518) << "content :" << settingsString << endl;
+    //kDebug(30518) <<"content :" << settingsString;
     m_storeout->write( settingsString , settingsString.length() );
     m_storeout->close();
 
@@ -152,7 +152,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     }
 
     QByteArray stylesString = styles.toByteArray();
-    //kDebug(30518) << "styles :" << stylesString << endl;
+    //kDebug(30518) <<"styles :" << stylesString;
     m_storeout->write( stylesString , stylesString.length() );
     m_storeout->close();
 
@@ -171,7 +171,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     }
 
     QByteArray manifestString = manifest.toByteArray();
-    //kDebug(30518) << "manifest :" << manifestString << endl;
+    //kDebug(30518) <<"manifest :" << manifestString;
     m_storeout->write( manifestString , manifestString.length() );
     m_storeout->close();
 
@@ -512,11 +512,11 @@ void OoImpressExport::createPictureList( QDomNode &pictures )
             QDomElement element = pictures.toElement();
             if ( element.tagName() ==  "KEY" )
             {
-                //kDebug(30518)<<"element.attribute( name ) :"<<element.attribute( "name" )<<endl;
+                //kDebug(30518)<<"element.attribute( name ) :"<<element.attribute("name" );
                 m_kpresenterPictureLst.insert( pictureKey( element ), element.attribute( "name" ) );
             }
             else
-                kDebug(30518)<<" Tag not recognize :"<<element.tagName()<<endl;
+                kDebug(30518)<<" Tag not recognize :"<<element.tagName();
         }
     }
 }
@@ -562,7 +562,7 @@ void OoImpressExport::createHelpLine( QDomNode &helpline )
             }
         }
     }
-    //kDebug(30518)<<"m_helpLine :"<<m_helpLine<<endl;
+    //kDebug(30518)<<"m_helpLine :"<<m_helpLine;
 }
 
 
@@ -705,22 +705,22 @@ void OoImpressExport::appendObjects(QDomDocument & doccontent, QDomNode &objects
             appendTextbox( doccontent, o, drawPage );
             break;
         case 5:
-            kDebug(30518)<<" autoform not implemented\n";
+            kDebug(30518)<<" autoform not implemented";
             break;
         case 6:
-            kDebug(30518)<<" clipart not implemented\n";
+            kDebug(30518)<<" clipart not implemented";
             break;
         case 8: // pie, chord, arc
             appendEllipse( doccontent, o, drawPage, true );
             break;
         case 9: //part
-            kDebug(30518)<<" part object not implemented \n";
+            kDebug(30518)<<" part object not implemented";
             break;
         case 10:
             appendGroupObject( doccontent, o, drawPage );
             break;
         case 11:
-            kDebug(30518)<<" free hand not implemented\n";
+            kDebug(30518)<<" free hand not implemented";
             break;
         case 12: // polyline
             appendPolyline( doccontent, o, drawPage );
@@ -751,7 +751,7 @@ void OoImpressExport::appendGroupObject( QDomDocument & doc, QDomElement & sourc
 void OoImpressExport::appendNote( QDomDocument & doc, QDomElement & source, QDomElement & target )
 {
     QString noteText = source.attribute("note");
-    //kDebug(30518)<<"noteText :"<<noteText<<endl;
+    //kDebug(30518)<<"noteText :"<<noteText;
     if ( noteText.isEmpty() )
         return;
     QDomElement noteElement = doc.createElement( "presentation:notes" );
@@ -1022,7 +1022,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
                 target.setAttribute( "draw:kind", "cut");
                 break;
             default:
-                kDebug(30518)<<" type unknown : "<<typePie<<endl;
+                kDebug(30518)<<" type unknown :"<<typePie;
                 break;
             }
         }

@@ -207,7 +207,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QByteArray& from, const Q
 	}
 	if (!dialog->exec())
 	{
-	  kDebug(30502) << "Dialog was aborted! Aborting filter!" << endl; // this isn't an error!
+	  kDebug(30502) <<"Dialog was aborted! Aborting filter!"; // this isn't an error!
 	  return KoFilter::UserCancelled;
 	}
     }
@@ -249,7 +249,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QByteArray& from, const Q
         return KoFilter::StupidError;
     }
 
-    kDebug(30502) << "Charset used: " << codec->name() << endl;
+    kDebug(30502) <<"Charset used:" << codec->name();
 
     stream.setCodec(codec);
 
@@ -262,7 +262,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QByteArray& from, const Q
 
 
 #if 0
-    kDebug(30502) << mainDocument.toString() << endl;
+    kDebug(30502) << mainDocument.toString();
 #endif
 
     KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );
@@ -281,7 +281,7 @@ KoFilter::ConversionStatus ASCIIImport::convert( const QByteArray& from, const Q
 void ASCIIImport::oldWayConvert(QTextStream& stream, QDomDocument& mainDocument,
     QDomElement& mainFramesetElement)
 {
-    kDebug(30502) << "Entering: ASCIIImport::oldWayConvert" << endl;
+    kDebug(30502) <<"Entering: ASCIIImport::oldWayConvert";
     QStringList paragraph;  // lines of the paragraph
     int linecount = 0;  // line counter used to position tables
     //int table_no = 0;  // used for table identifiers
@@ -350,7 +350,7 @@ void ASCIIImport::asIsConvert(QTextStream& stream, QDomDocument& mainDocument,
     QDomElement& mainFramesetElement)
 // Paragraph strategy: one line, one paragraph
 {
-    kDebug(30502) << "Entering: ASCIIImport::asIsConvert" << endl;
+    kDebug(30502) <<"Entering: ASCIIImport::asIsConvert";
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
     QString strLine;
     while(!stream.atEnd())
@@ -370,7 +370,7 @@ void ASCIIImport::sentenceConvert(QTextStream& stream, QDomDocument& mainDocumen
 // - an empty line also ends the paragraph
 // TODO/FIXME: we have a little problem with empty lines. Perhaps we should not allow empty paragraphs!
 {
-    kDebug(30502) << "Entering: ASCIIImport::sentenceConvert" << endl;
+    kDebug(30502) <<"Entering: ASCIIImport::sentenceConvert";
     QStringList paragraph;  // lines of the paragraph
     bool lastCharWasCr=false; // Was the previous character a Carriage Return?
     QString strLine;
@@ -788,11 +788,11 @@ int ASCIIImport::MultSpaces(const QString& text, const int index) const
     QChar c;
     QChar lastchar = 'c'; // previous character - initialize non blank
     bool found = false;
-    // kDebug(30502) << "length = "  << text.length() << endl;
+    // kDebug(30502) <<"length ="  << text.length();
     for (int i = index; i < text.length(); i++)
     {
         c = text.at(i);
-    // kDebug(30502) << "i = " << i << " found = " << found << " c = " << c << " lastchar = " << lastchar << endl;
+    // kDebug(30502) <<"i =" << i <<" found =" << found <<" c =" << c <<" lastchar =" << lastchar;
         if ( (c != ' ') && found)
             return i;
         else if (c == ' ' && lastchar == ' ')

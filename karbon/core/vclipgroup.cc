@@ -53,7 +53,7 @@ void VClipGroup::draw( VPainter* painter, const QRectF* rect ) const
 	painter->save();
 
 	PathRenderer renderer( painter );
-	kDebug(38000) << "calling painter setClipPath" << endl;
+	kDebug(38000) <<"calling painter setClipPath";
 	painter->setClipPath();
 
 	VObject *obj = itr.current();
@@ -148,19 +148,19 @@ void PathRenderer::visitVSubpath( VSubpath& path )
 			if (segment->isBegin()) {
 			    p1 = segment->point( 0 );
 
-			    //kDebug(38000) << "calling painter.moveTo with " << p1 << endl;
+			    //kDebug(38000) <<"calling painter.moveTo with" << p1;
 			    m_painter->moveTo( p1 );
 			} else if (segment->isCurve()) {
 			    p1 = segment->point( 0 );
 			    p2 = segment->point( 1 );
 			    p3 = segment->point( 2 );
 
-			    //kDebug(38000) << "calling painter.curveTo with " << p1 << " " << p2 << " " << p3 << endl;
+			    //kDebug(38000) <<"calling painter.curveTo with" << p1 <<"" << p2 <<"" << p3;
 			    m_painter->curveTo( p1, p2, p3 );
 
 			} else if (segment->isLine()) {
 			    p1 = segment->point( 0 );
-			    //kDebug(38000) << "calling painter.lineTo with " << p1 << endl;
+			    //kDebug(38000) <<"calling painter.lineTo with" << p1;
 			    m_painter->lineTo( p1 );
 			}
 		}

@@ -64,7 +64,7 @@ public:
     KWDeleteCustomItemVisitor() : KoParagVisitor() { }
     virtual bool visit( KoTextParag *parag, int start, int end )
     {
-        kDebug(32001) << "KWPasteTextCommand::execute " << parag->paragId() << " " << start << " " << end << endl;
+        kDebug(32001) <<"KWPasteTextCommand::execute" << parag->paragId() <<"" << start <<"" << end;
         for ( int i = start ; i < end ; ++i )
         {
             KoTextStringChar * ch = parag->at( i );
@@ -95,7 +95,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
     }
-    //kDebug() << "KWPasteTextCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //kDebug() <<"KWPasteTextCommand::execute m_parag=" << m_parag <<" m_idx=" << m_idx
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
@@ -118,7 +118,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
         if ( paragraph.tagName() == "PARAGRAPH" )
         {
             QString s = paragraph.namedItem( "TEXT" ).toElement().text();
-            //kDebug() << "KWPasteTextCommand::execute Inserting text: '" << s << "'" << endl;
+            //kDebug() <<"KWPasteTextCommand::execute Inserting text: '" << s <<"'";
             c->insert( s, false /*newline=linebreak, not new parag*/ );
 
             if ( !paragraph.nextSibling().isNull() ) // Not for last parag
@@ -137,7 +137,7 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
     // shifted it down (side effect of splitAndInsertEmptyParag)
     firstParag = doc->paragAt( m_parag );
     KWTextParag * parag = static_cast<KWTextParag *>(firstParag);
-    //kDebug() << "KWPasteTextCommand::execute starting at parag " << parag << " " << parag->paragId() << endl;
+    //kDebug() <<"KWPasteTextCommand::execute starting at parag" << parag <<"" << parag->paragId();
     uint count = listParagraphs.count();
     Q3ValueList<QDomElement>::Iterator it = listParagraphs.begin();
     Q3ValueList<QDomElement>::Iterator end = listParagraphs.end();
@@ -186,14 +186,14 @@ KoTextCursor * KWPasteTextCommand::execute( KoTextCursor *c )
         parag->invalidate(0); // the formatting will be done by caller (either KWTextFrameSet::pasteOasis or KoTextObject::undo/redo)
         parag->setChanged( true );
         parag = static_cast<KWTextParag *>(parag->next());
-        //kDebug() << "KWPasteTextCommand::execute going to next parag: " << parag << endl;
+        //kDebug() <<"KWPasteTextCommand::execute going to next parag:" << parag;
     }
     textFs->textObject()->setNeedSpellCheck( true );
     // In case loadFormatting queued any image request
     KWDocument * doc = textFs->kWordDocument();
     doc->processPictureRequests();
 
-    //kDebug() << "KWPasteTextCommand::execute calling doc->pasteFrames" << endl;
+    //kDebug() <<"KWPasteTextCommand::execute calling doc->pasteFrames";
     // In case of any inline frameset
     doc->pasteFrames( elem, 0,
                       true /*don't change footnote attribute*/ ,
@@ -225,7 +225,7 @@ KoTextCursor * KWPasteTextCommand::unexecute( KoTextCursor *c )
     Q_ASSERT( lastParag->document() );
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
 
-    //kDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
+    //kDebug() <<"Undoing paste: deleting from (" << firstParag->paragId() <<"," << m_idx <<")"
     //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
 
     cursor.setParag( lastParag );
@@ -262,7 +262,7 @@ KoTextCursor * KWOasisPasteCommand::execute( KoTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return c;
     }
-    //kDebug() << "KWOasisPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //kDebug() <<"KWOasisPasteCommand::execute m_parag=" << m_parag <<" m_idx=" << m_idx
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
@@ -306,7 +306,7 @@ KoTextCursor * KWOasisPasteCommand::unexecute( KoTextCursor *c )
     // Get hold of the document before deleting the parag
     KWTextDocument * textdoc = static_cast<KWTextDocument *>(doc);
 
-    //kDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
+    //kDebug() <<"Undoing paste: deleting from (" << firstParag->paragId() <<"," << m_idx <<")"
     //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
 
     cursor.setParag( lastParag );
@@ -350,13 +350,13 @@ void KWTextDeleteCommand::createBookmarkList()
 
     // Now restore the parag layouts (i.e. libkotext specific stuff)
     Q3ValueList<KoParagLayout>::Iterator lit = m_oldParagLayouts.begin();
-    kDebug(32500) << "KWTextDeleteCommand::createBookmarkList " << m_oldParagLayouts.count() << " parag layouts. First parag=" << s->paragId() << endl;
+    kDebug(32500) <<"KWTextDeleteCommand::createBookmarkList" << m_oldParagLayouts.count() <<" parag layouts. First parag=" << s->paragId();
     Q_ASSERT( id == s->paragId() );
     KoTextParag *p = s;
     while ( p ) {
         if ( lit != m_oldParagLayouts.end() )
         {
-            kDebug(32500) << "KWTextDeleteCommand::unexecute find bookmark in parag " << p->paragId() << endl;
+            kDebug(32500) <<"KWTextDeleteCommand::unexecute find bookmark in parag" << p->paragId();
             //p->setParagLayout( *lit );
         }
         else
@@ -1007,7 +1007,7 @@ KWFramePropertiesCommand::~KWFramePropertiesCommand()
 
 void KWFramePropertiesCommand::execute()
 {
-    kDebug(32001) << "KWFrameChangeParamCommand::execute" << endl;
+    kDebug(32001) <<"KWFrameChangeParamCommand::execute";
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
     Q_ASSERT( frameSet );
 
@@ -1029,7 +1029,7 @@ void KWFramePropertiesCommand::execute()
 
 void KWFramePropertiesCommand::unexecute()
 {
-    kDebug(32001) << "KWFrameChangeParamCommand::unexecute" << endl;
+    kDebug(32001) <<"KWFrameChangeParamCommand::unexecute";
     KWFrameSet *frameSet = m_frameIndex.m_pFrameSet;
     Q_ASSERT( frameSet );
 
@@ -1059,7 +1059,7 @@ KWFrameSetInlineCommand::KWFrameSetInlineCommand( const QString &name, KWFrameSe
 
 void KWFrameSetInlineCommand::setValue( bool value )
 {
-    kDebug(32001) << "KWFrameSetInlineCommand::execute" << endl;
+    kDebug(32001) <<"KWFrameSetInlineCommand::execute";
     if ( value )
     {
         // Make frame(set) floating
@@ -1134,7 +1134,7 @@ void KWDeleteFrameCommand::execute()
     KWFrame *frame = frameSet->frame( m_frameIndex.m_iFrameIndex );
     Q_ASSERT( frame );
 
-kDebug() << "delete frame " << m_frameIndex.m_iFrameIndex << " of " << frameSet->name() << endl;
+kDebug() <<"delete frame" << m_frameIndex.m_iFrameIndex <<" of" << frameSet->name();
     KWDocument* doc = frameSet->kWordDocument();
     doc->terminateEditing( frameSet );
     doc->frameChanged( frame );
@@ -1255,7 +1255,7 @@ KWDeleteTableCommand::KWDeleteTableCommand( const QString &name, KWTableFrameSet
 
 void KWDeleteTableCommand::execute()
 {
-    kDebug(32001) << "KWDeleteTableCommand::execute" << endl;
+    kDebug(32001) <<"KWDeleteTableCommand::execute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->removeFrameSet(m_pTable);
     m_pTable->setVisible( false );
@@ -1270,7 +1270,7 @@ void KWDeleteTableCommand::execute()
 
 void KWDeleteTableCommand::unexecute()
 {
-    kDebug(32001) << "KWDeleteTableCommand::unexecute" << endl;
+    kDebug(32001) <<"KWDeleteTableCommand::unexecute";
     KWDocument * doc = m_pTable->kWordDocument();
     m_pTable->setVisible( true );
     doc->addFrameSet(m_pTable);
@@ -1303,7 +1303,7 @@ KWInsertColumnCommand::~KWInsertColumnCommand()
 void KWInsertColumnCommand::execute()
 {
 #if 0
-    kDebug(32001) << "KWInsertColumnCommand::execute" << endl;
+    kDebug(32001) <<"KWInsertColumnCommand::execute";
     KWDocument * doc = m_pTable->kWordDocument();
     // a insert column = KWTableFrameSet::m_sDefaultColWidth, see kwtableframeset.cc
     if (m_pTable->boundingRect().right() + KWTableFrameSet::m_sDefaultColWidth >= static_cast<int>(m_maxRight))
@@ -1331,7 +1331,7 @@ void KWInsertColumnCommand::execute()
 void KWInsertColumnCommand::unexecute()
 {
 #if 0
-    kDebug(32001) << "KWInsertColumnCommand::unexecute" << endl;
+    kDebug(32001) <<"KWInsertColumnCommand::unexecute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     m_pTable->deleteColumn(m_colPos, *m_rc);
@@ -1365,7 +1365,7 @@ KWInsertRowCommand::~KWInsertRowCommand()
 void KWInsertRowCommand::execute()
 {
 #if 0
-    kDebug(32001) << "KWInsertRowCommand::execute" << endl;
+    kDebug(32001) <<"KWInsertRowCommand::execute";
     KWDocument * doc = m_pTable->kWordDocument();
     if(m_inserted)
         m_pTable->reInsertRow(*m_rr);
@@ -1382,7 +1382,7 @@ void KWInsertRowCommand::execute()
 void KWInsertRowCommand::unexecute()
 {
 #if 0
-    kDebug(32001) << "KWInsertRowCommand::unexecute" << endl;
+    kDebug(32001) <<"KWInsertRowCommand::unexecute";
     KWDocument * doc = m_pTable->kWordDocument();
 
     doc->terminateEditing(m_pTable);
@@ -1410,7 +1410,7 @@ KWRemoveRowCommand::~KWRemoveRowCommand()
 void KWRemoveRowCommand::execute()
 {
 #if 0
-    kDebug(32001) << "KWRemoveRowCommand::execute" << endl;
+    kDebug(32001) <<"KWRemoveRowCommand::execute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
@@ -1424,7 +1424,7 @@ void KWRemoveRowCommand::execute()
 void KWRemoveRowCommand::unexecute()
 {
 #if 0
-    kDebug(32001) << "KWRemoveRowCommand::unexecute" << endl;
+    kDebug(32001) <<"KWRemoveRowCommand::unexecute";
     KWDocument * doc = m_pTable->kWordDocument();
     m_pTable->reInsertRow(*m_rr);
     doc->updateAllFrames();
@@ -1449,7 +1449,7 @@ KWRemoveColumnCommand::~KWRemoveColumnCommand()
 void KWRemoveColumnCommand::execute()
 {
 #if 0
-    kDebug(32001) << "KWRemoveColumnCommand::execute" << endl;
+    kDebug(32001) <<"KWRemoveColumnCommand::execute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
@@ -1462,7 +1462,7 @@ void KWRemoveColumnCommand::execute()
 void KWRemoveColumnCommand::unexecute()
 {
 #if 0
-    kDebug(32001) << "KWRemoveColumnCommand::unexecute" << endl;
+    kDebug(32001) <<"KWRemoveColumnCommand::unexecute";
     KWDocument * doc = m_pTable->kWordDocument();
     m_pTable->reInsertColumn(*m_rc);
     doc->updateAllFrames();
@@ -1487,10 +1487,10 @@ KWSplitCellCommand::KWSplitCellCommand( const QString &name, KWTableFrameSet * _
 void KWSplitCellCommand::execute()
 {
 #if 0
-    kDebug(32001) << "KWSplitCellCommand::execute" << endl;
+    kDebug(32001) <<"KWSplitCellCommand::execute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
-    //kDebug()<<"split Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colEnd<<" m_rowBegin :"<<m_rowBegin<<" m_colEnd :"<<m_colEnd<<endl;
+    //kDebug()<<"split Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colEnd<<" m_rowBegin :"<<m_rowBegin<<" m_colEnd :"<<m_colEnd;
     m_pTable->splitCell(m_rowEnd, m_colEnd,m_colBegin,m_rowBegin,m_ListFrameSet);
     doc->updateAllFrames();
     doc->layout();
@@ -1500,11 +1500,11 @@ void KWSplitCellCommand::execute()
 void KWSplitCellCommand::unexecute()
 {
 #if 0
-    kDebug(32001) << "KWSplitCellCommand::unexecute" << endl;
+    kDebug(32001) <<"KWSplitCellCommand::unexecute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
-    //kDebug()<<"Join Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colBegin+m_colEnd-1<<" m_rowBegin :"<<m_rowBegin<<" m_rowEnd :"<<m_rowBegin+m_rowEnd-1<<endl;
+    //kDebug()<<"Join Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colBegin+m_colEnd-1<<" m_rowBegin :"<<m_rowBegin<<" m_rowEnd :"<<m_rowBegin+m_rowEnd-1;
 
     if(m_ListFrameSet.isEmpty())
     {
@@ -1518,7 +1518,7 @@ void KWSplitCellCommand::unexecute()
                     //don't store first cell
                     if( !(j==m_rowBegin && i==m_colBegin))
                     {
-                        kDebug(32001)<<"store cell row :"<<j<<" col :"<<i<<endl;
+                        kDebug(32001)<<"store cell row :"<<j<<" col :"<<i;
                         KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->cell( j,i ));
                         m_ListFrameSet.append(cell);
                     }
@@ -1558,7 +1558,7 @@ KWJoinCellCommand::~KWJoinCellCommand()
 void KWJoinCellCommand::execute()
 {
 #if 0
-    kDebug(32001) << "KWJoinCellCommand::execute" << endl;
+    kDebug(32001) <<"KWJoinCellCommand::execute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd,m_rowEnd);
@@ -1570,7 +1570,7 @@ void KWJoinCellCommand::execute()
 void KWJoinCellCommand::unexecute()
 {
 #if 0
-    kDebug(32001) << "KWJoinCellCommand::unexecute" << endl;
+    kDebug(32001) <<"KWJoinCellCommand::unexecute";
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     m_pTable->splitCell(m_rowEnd-m_rowBegin+1, m_colEnd-m_colBegin+1,m_colBegin,m_rowBegin,m_ListFrameSet,m_copyFrame);

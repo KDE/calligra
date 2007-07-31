@@ -227,8 +227,8 @@ VGradient::saveOasis( KoGenStyles &mainStyles ) const
 void
 VGradient::loadOasis( const KoXmlElement &object, KoStyleStack &/*stack*/, VObject* parent )
 {
-	kDebug(38000) << "namespaceURI: " << object.namespaceURI() << endl;
-	kDebug(38000) << "localName: " << object.localName() << endl;
+	kDebug(38000) <<"namespaceURI:" << object.namespaceURI();
+	kDebug(38000) <<"localName:" << object.localName();
 
 	QRectF bb;
 	

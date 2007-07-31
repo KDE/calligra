@@ -143,7 +143,7 @@ void KWInsertPicDia::slotChooseImage()
         m_picture = tmppicture;
     if ( m_picture.isNull() && m_bFirst)
     {
-        kDebug() << "KWInsertPicDia::slotChooseImage cancelled by user." << endl;
+        kDebug() <<"KWInsertPicDia::slotChooseImage cancelled by user.";
         // Close, but delayed, otherwise it won't work (we only return from the ctor)
         QTimer::singleShot( 0, this, SLOT( cancel() ) );
         return;
@@ -180,7 +180,7 @@ KoPicture KWInsertPicDia::selectPicture( KFileDialog & fd, QWidget *parent )
 
 KoPicture KWInsertPicDia::picture ( void ) const
 {
-    kDebug() << m_picture.getKey().toString() << " selected in KWInsertPicDia" << endl;
+    kDebug() << m_picture.getKey().toString() <<" selected in KWInsertPicDia";
     return m_picture;
 }
 

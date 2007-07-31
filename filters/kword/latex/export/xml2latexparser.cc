@@ -28,8 +28,8 @@
 Xml2LatexParser::Xml2LatexParser(const KoStore* in, const QString& fileOut, Config* config):
 		XmlParser(config, in), _file(fileOut), _in( in )
 {
-	//kDebug(30522) << fileIn.latin1() << endl;
-	kDebug(30522) << fileOut.latin1() << endl;
+	//kDebug(30522) << fileIn.latin1();
+	kDebug(30522) << fileOut.latin1();
 	_filename = fileOut;
 	//setFileHeader(_fileHeader);
 	setRoot(&_document);
@@ -40,26 +40,26 @@ void Xml2LatexParser::analyze()
 	QDomNode node;
 	node = init();
 	//node = getChild(node, "DOC");
-	kDebug(30522) <<"HEADER -> PAPER" << endl;
+	kDebug(30522) <<"HEADER -> PAPER";
 	FileHeader::instance()->analyzePaper(getChild(node, "PAPER"));
-	kDebug(30522) <<"HEADER -> ATTRIBUTES" << endl;
+	kDebug(30522) <<"HEADER -> ATTRIBUTES";
 	FileHeader::instance()->analyzeAttributes(getChild(node, "ATTRIBUTES"));
-	kDebug(30522) <<"HEADER -> FRAMESETS" << endl;
+	kDebug(30522) <<"HEADER -> FRAMESETS";
 	_document.analyze(getChild(node, "FRAMESETS"));
-	kDebug(30522) <<"HEADER -> END FRAMESETS" << endl;
-	//kDebug(30522) <<"HEADER -> STYLES" << endl;
+	kDebug(30522) <<"HEADER -> END FRAMESETS";
+	//kDebug(30522) <<"HEADER -> STYLES";
 	//
-	kDebug(30522) <<"HEADER -> PICTURES" << endl;
+	kDebug(30522) <<"HEADER -> PICTURES";
 	_document.analyzePixmaps(getChild(node, "PICTURES"));
-	//kDebug(30522) <<"HEADER -> SERIALL" << endl;
-	kDebug(30522) << "END ANALYZE" << endl;
+	//kDebug(30522) <<"HEADER -> SERIALL";
+	kDebug(30522) <<"END ANALYZE";
 }
 
 void Xml2LatexParser::generate()
 {
 	if(_file.open(QIODevice::WriteOnly))
 	{
-		kDebug(30522) << "GENERATION" << endl;
+		kDebug(30522) <<"GENERATION";
 		_out.setDevice(&_file);
 		if(!Config::instance()->isEmbeded())
 			FileHeader::instance()->generate(_out);
@@ -68,5 +68,5 @@ void Xml2LatexParser::generate()
 		_file.close();
 	}
 	else
-		kDebug(30522) << "Can't use the file ..." << endl;
+		kDebug(30522) <<"Can't use the file ...";
 }

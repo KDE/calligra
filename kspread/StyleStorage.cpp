@@ -71,7 +71,7 @@ Style StyleStorage::contains(const QPoint& point) const
     // first, lookup point in the cache
     if ( d->cache.contains( point ) )
     {
-//         kDebug(36006) << "StyleStorage: Using cached style for " << cellName << endl;
+//         kDebug(36006) <<"StyleStorage: Using cached style for" << cellName;
         return *d->cache.object( point );
     }
     // not found, lookup in the tree
@@ -205,7 +205,7 @@ int StyleStorage::nextColumnIndexInRow(int column, int row) const
 
 void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
 {
-//     kDebug(36006) << "StyleStorage: inserting " << SubStyle::name(subStyle->type()) << " into " << rect << endl;
+//     kDebug(36006) <<"StyleStorage: inserting" << SubStyle::name(subStyle->type()) <<" into" << rect;
     // keep track of the used area
     const bool isDefault = subStyle->type() == Style::DefaultStyleKey;
     if (rect.top() == 1 && rect.bottom() == KS_colMax)
@@ -248,7 +248,7 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle)
     {
         if ( Style::compare( subStyle.data(), (*it).data() ) )
         {
-//             kDebug(36006) << "[REUSING EXISTING SUBSTYLE]" << endl;
+//             kDebug(36006) <<"[REUSING EXISTING SUBSTYLE]";
             d->tree.insert(rect, *it);
             regionChanged( rect );
             return;
@@ -356,7 +356,7 @@ void StyleStorage::garbageCollection()
     if ( currentPair.second->type() == Style::NamedStyleKey &&
          !styleManager()->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
     {
-        kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
+        kDebug(36006) <<"StyleStorage: removing" << currentPair.second->debugData()
                         << " at " << Region(currentPair.first.toRect()).name()
                         << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
@@ -375,7 +375,7 @@ void StyleStorage::garbageCollection()
          pairs[0].second->type() == Style::DefaultStyleKey &&
          pairs[0].first == currentPair.first )
     {
-        kDebug(36006) << "StyleStorage: removing default style"
+        kDebug(36006) <<"StyleStorage: removing default style"
                         << " at " << Region(currentPair.first.toRect()).name()
                         << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
@@ -389,7 +389,7 @@ void StyleStorage::garbageCollection()
          static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 == 0 &&
          pairs[0].first == currentPair.first )
     {
-        kDebug(36006) << "StyleStorage: removing default indentation"
+        kDebug(36006) <<"StyleStorage: removing default indentation"
                       << " at " << Region(currentPair.first.toRect()).name()
                       << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
@@ -403,7 +403,7 @@ void StyleStorage::garbageCollection()
          static_cast<const SubStyleOne<Style::Precision, int>*>(currentPair.second.data())->value1 == 0 &&
          pairs[0].first == currentPair.first )
     {
-        kDebug(36006) << "StyleStorage: removing default precision"
+        kDebug(36006) <<"StyleStorage: removing default precision"
                       << " at " << Region(currentPair.first.toRect()).name()
                       << ", used " << currentPair.second->ref << " times" << endl;
         d->tree.remove( currentPair.first, currentPair.second );
@@ -450,12 +450,12 @@ void StyleStorage::garbageCollection()
                 continue;
             }
 
-            kDebug(36006) << "StyleStorage: removing " << currentPair.second->debugData()
+            kDebug(36006) <<"StyleStorage: removing" << currentPair.second->debugData()
                           << " at " << Region(currentPair.first.toRect()).name()
                           << ", used " << currentPair.second->ref << "times" << endl;
             d->tree.remove( currentPair.first, currentPair.second );
 #if 0
-            kDebug(36006) << "StyleStorage: usage of " << currentPair.second->debugData() << " is " << currentPair.second->ref << endl;
+            kDebug(36006) <<"StyleStorage: usage of" << currentPair.second->debugData() <<" is" << currentPair.second->ref;
             // FIXME Stefan: The usage of substyles used once should be
             //               two (?) here, not more. Why is this not the case?
             //               The shared pointers are used by:
@@ -465,7 +465,7 @@ void StyleStorage::garbageCollection()
             //               d) the undo data of operations (!)
             if ( currentPair.second->ref == 2 )
             {
-                kDebug(36006) << "StyleStorage: removing " << currentPair.second << " from the used subStyles" << endl;
+                kDebug(36006) <<"StyleStorage: removing" << currentPair.second <<" from the used subStyles";
                 d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
             }
 #endif
@@ -488,7 +488,7 @@ void StyleStorage::regionChanged( const QRect& rect )
 
 void StyleStorage::invalidateCache( const QRect& rect )
 {
-//     kDebug(36006) << "StyleStorage: Invalidating " << rect << endl;
+//     kDebug(36006) <<"StyleStorage: Invalidating" << rect;
     const QRegion region = d->cachedArea.intersected( rect );
     d->cachedArea = d->cachedArea.subtracted( rect );
     foreach ( const QRect& rect, region.rects() )
@@ -497,7 +497,7 @@ void StyleStorage::invalidateCache( const QRect& rect )
         {
             for ( int row = rect.top(); row <= rect.bottom(); ++row )
             {
-//                 kDebug(36006) << "StyleStorage: Removing cached style for " << Cell::name( col, row ) << endl;
+//                 kDebug(36006) <<"StyleStorage: Removing cached style for" << Cell::name( col, row );
                 d->cache.remove( QPoint( col, row ) ); // also deletes it
             }
         }
@@ -523,26 +523,26 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
                 // first, load the attributes of the parent style(s)
                 QList<CustomStyle*> parentStyles;
                 CustomStyle* parentStyle = styleManager()->style( namedStyle->parentName() );
-//                 kDebug(36006) << "StyleStorage: " << namedStyle->name() << "'s parent = " << namedStyle->parentName() << endl;
+//                 kDebug(36006) <<"StyleStorage:" << namedStyle->name() <<"'s parent =" << namedStyle->parentName();
                 while ( parentStyle )
                 {
-//                     kDebug(36006) << "StyleStorage: " << parentStyle->name() << "'s parent = " << parentStyle->parentName() << endl;
+//                     kDebug(36006) <<"StyleStorage:" << parentStyle->name() <<"'s parent =" << parentStyle->parentName();
                     parentStyles.prepend( parentStyle );
                     parentStyle = styleManager()->style( parentStyle->parentName() );
                 }
                 for ( int i = 0; i < parentStyles.count(); ++i )
                 {
-//                     kDebug(36006) << "StyleStorage: merging " << parentStyles[i]->name() << " in." << endl;
+//                     kDebug(36006) <<"StyleStorage: merging" << parentStyles[i]->name() <<" in.";
                     style.merge( *parentStyles[i] );
                 }
                 // second, merge the other attributes in
-//                 kDebug(36006) << "StyleStorage: merging " << namedStyle->name() << " in." << endl;
+//                 kDebug(36006) <<"StyleStorage: merging" << namedStyle->name() <<" in.";
                 style.merge( *namedStyle );
                 // not the default anymore
                 style.clearAttribute( Style::DefaultStyleKey );
                 // reset the parent name
                 style.setParentName( namedStyle->name() );
-//                 kDebug(36006) << "StyleStorage: merging done" << endl;
+//                 kDebug(36006) <<"StyleStorage: merging done";
             }
         }
         else if ( subStyles[i]->type() == Style::Indentation )
@@ -573,7 +573,7 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
         else
         {
             // insert the substyle
-//             kDebug(36006) << "StyleStorage: inserting " << subStyles[i]->debugData() << endl;
+//             kDebug(36006) <<"StyleStorage: inserting" << subStyles[i]->debugData();
             style.insertSubStyle( subStyles[i] );
             // not the default anymore
             style.clearAttribute( Style::DefaultStyleKey );

@@ -66,7 +66,7 @@ KWordLatexExportDia::KWordLatexExportDia(KoStore* in, QWidget* parent,
 	while(i < 10)
 	{
 		/*value = _config->readPathEntry( QString("Recent%1").arg(i) );
-		kDebug(30522) << "recent : " << value << endl;
+		kDebug(30522) <<"recent :" << value;
 		if(!value.isEmpty())
 		{
 			_recentList.append( value );
@@ -158,7 +158,7 @@ KWordLatexExportDia::~KWordLatexExportDia()
  */
 void KWordLatexExportDia::reject()
 {
-	kDebug(30522) << "Export cancelled" << endl;
+	kDebug(30522) <<"Export cancelled";
 	QDialog::reject();
 }
 
@@ -169,7 +169,7 @@ void KWordLatexExportDia::reject()
 void KWordLatexExportDia::accept()
 {
 	hide();
-	kDebug(30522) << "KWORD LATEX EXPORT FILTER --> BEGIN" << endl;
+	kDebug(30522) <<"KWORD LATEX EXPORT FILTER --> BEGIN";
 	Config* config = Config::instance();
 	
 	/* Document tab */
@@ -200,27 +200,27 @@ void KWordLatexExportDia::accept()
 	config->setEncoding(encodingComboBox->currentText());
 	for(unsigned int index = 0; index < langUsedList->count(); index++)
 	{
-		kDebug(30522) << "lang. : " << langUsedList->item(index)->text() << endl;
+		kDebug(30522) <<"lang. :" << langUsedList->item(index)->text();
 		config->addLanguage(langUsedList->item(index)->text());
 	}
 	
 	/* The default language is the first language in the list */
 	if(langUsedList->item(0) != NULL)
 		config->setDefaultLanguage(langUsedList->item(0)->text());
-	kDebug(30522) << "default lang. : " << langUsedList->currentText() << endl;
+	kDebug(30522) <<"default lang. :" << langUsedList->currentText();
 	config->setDefaultLanguage(langUsedList->currentText());
 
 	Xml2LatexParser LATEXParser(_in, _fileOut, config);
-	kDebug(30522) << "---------- analyze input file -------------" << endl;
+	kDebug(30522) <<"---------- analyze input file -------------";
 	LATEXParser.analyze();
-	kDebug(30522) << "---------- generate output file -------------" << endl;
+	kDebug(30522) <<"---------- generate output file -------------";
 	LATEXParser.generate();
-	kDebug(30522) << "KWORD LATEX EXPORT FILTER --> END" << endl;
+	kDebug(30522) <<"KWORD LATEX EXPORT FILTER --> END";
 }
 
 void KWordLatexExportDia::addLanguage()
 {
-	kDebug(30522) << "add a new supported language" << languagesList->currentText() << endl;
+	kDebug(30522) <<"add a new supported language" << languagesList->currentText();
 	QString text = languagesList->currentText();
 	languagesList->removeItem(languagesList->currentItem());
 	langUsedList->insertItem(text);
@@ -228,7 +228,7 @@ void KWordLatexExportDia::addLanguage()
 
 void KWordLatexExportDia::removeLanguage()
 {
-	kDebug(30522) << "remove the language" << langUsedList->currentText() << endl;
+	kDebug(30522) <<"remove the language" << langUsedList->currentText();
 	QString text = langUsedList->currentText();
 	langUsedList->removeItem(langUsedList->currentItem());
 	languagesList->insertItem(text);

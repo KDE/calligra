@@ -170,7 +170,7 @@ void StyleManagerDialog::slotDisplayMode(int mode)
 
 void StyleManagerDialog::slotOk()
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     QTreeWidgetItem* item = m_styleList->currentItem();
 
     if (!item)

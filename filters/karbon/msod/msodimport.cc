@@ -57,16 +57,16 @@ KoFilter::ConversionStatus MSODImport::convert( const QByteArray& from, const QB
     emit commSignalShapeID( shapeId );
     const char *delayStream = 0L;
     emit commSignalDelayStream( delayStream );
-    kDebug( s_area ) << "##################################################################" << endl;
-    kDebug( s_area ) << "shape id: " << shapeId << endl;
-    kDebug( s_area ) << "delay stream: " << delayStream << endl;
-    kDebug( s_area ) << "##################################################################" << endl;
+    kDebug( s_area ) <<"##################################################################";
+    kDebug( s_area ) <<"shape id:" << shapeId;
+    kDebug( s_area ) <<"delay stream:" << delayStream;
+    kDebug( s_area ) <<"##################################################################";
 /*
     QString config = ""; // ###### FIXME: We aren't able to pass config data right now
     QStringList args = QStringList::split(";", config);
     unsigned i;
 
-    kDebug(s_area) << "MSODImport::filter: config: " << config << endl;
+    kDebug(s_area) <<"MSODImport::filter: config:" << config;
     for (i = 0; i < args.count(); i++)
     {
         if (args[i].startsWith("shape-id="))
@@ -158,8 +158,8 @@ void MSODImport::gotPicture(
 {
 // ### TODO
 #if 0
-    kDebug() << "##########################################MSODImport::gotPicture" << endl;
-    kDebug() << "MSODImport::gotPicture -- " << extension << endl;
+    kDebug() <<"##########################################MSODImport::gotPicture";
+    kDebug() <<"MSODImport::gotPicture --" << extension;
     if ((extension == "wmf") ||
         (extension == "emf") ||
         (extension == "pict"))
@@ -215,9 +215,9 @@ void MSODImport::gotPolygon(
     const DrawContext &dc,
     const QPolygon &points)
 {
-    kDebug(s_area) << "MSODImport::gotPolygon" << endl;
-    kDebug(s_area) << QString::number(dc.m_penWidth, 16) << endl;
-    kDebug(s_area) << dc.m_penStyle << endl;
+    kDebug(s_area) <<"MSODImport::gotPolygon";
+    kDebug(s_area) << QString::number(dc.m_penWidth, 16);
+    kDebug(s_area) << dc.m_penStyle;
     m_text += "<COMPOSITE>\n";
     if( dc.m_penWidth > 0 )
     {
@@ -246,7 +246,7 @@ void MSODImport::gotPolyline(
     const DrawContext &dc,
     const QPolygon &points)
 {
-	kDebug(s_area) << "MSODImport::gotPolyline" << endl;
+	kDebug(s_area) <<"MSODImport::gotPolyline";
 	return; // ### TODO
     m_text += "<COMPOSITE>\n";
     m_text += "<STROKE lineWidth=\"" + QString::number(dc.m_penWidth) + "\">\n";
@@ -298,7 +298,7 @@ void MSODImport::pointArray(
     m_text += "<MOVE x=\"" + QString::number(points.point(0).x()) +
                 "\" y=\"" + QString::number(points.point(0).y()) +
                 "\" />\n";
-    kDebug(s_area) << "\n<MOVE x=\"" + QString::number(points.point(0).x()) +
+    kDebug(s_area) <<"\n<MOVE x=\"" + QString::number(points.point(0).x()) +
                             "\" y=\"" + QString::number(points.point(0).y()) +
                                         "\" />" << endl;
     for (unsigned int i = 1; i < points.count(); i++)
@@ -306,7 +306,7 @@ void MSODImport::pointArray(
         m_text += "<LINE x=\"" + QString::number(points.point(i).x()) +
                     "\" y=\"" + QString::number(points.point(i).y()) +
                     "\" />\n";
-        kDebug(s_area) << "<LINE x=\"" + QString::number(points.point(i).x()) +
+        kDebug(s_area) <<"<LINE x=\"" + QString::number(points.point(i).x()) +
                             "\" y=\"" + QString::number(points.point(i).y()) +
                                             "\" />" << endl;
     }

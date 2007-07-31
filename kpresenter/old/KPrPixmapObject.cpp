@@ -361,7 +361,7 @@ void KPrPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & con
     loadOasisPictureEffect( context );
     QDomNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString::null) );
-    kDebug()<<" href: "<<href<<endl;
+    kDebug()<<" href:"<<href;
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
     {
         QString strExtension;
@@ -558,7 +558,7 @@ QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     const double penw = _zoomHandler->zoomItXOld( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSizeOld( ext ) );
-    //kDebug(33001) << "KPrPixmapObject::generatePixmap size= " << size << endl;
+    //kDebug(33001) <<"KPrPixmapObject::generatePixmap size=" << size;
     QPixmap pixmap(size);
     QPainter paint;
 
@@ -670,7 +670,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 #endif
             )
         {
-            //kDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) <<"Drawing cached pixmap" << (void*) this <<"" << k_funcinfo;
         }
         else
         {
@@ -688,7 +688,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
             m_cachedPar1 = m_ie_par1;
             m_cachedPar2 = m_ie_par2;
             m_cachedPar3 = m_ie_par3;
-            //kDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) <<"Drawing non-cached pixmap" << (void*) this <<"" << k_funcinfo;
         }
         _painter->drawPixmap( rect, m_cachedPixmap);
     }
@@ -721,7 +721,7 @@ void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 QPixmap KPrPixmapObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
-    kDebug(33001) << "KPrPixmapObject::getOriginalPixmap size= " << _pixSize << endl;
+    kDebug(33001) <<"KPrPixmapObject::getOriginalPixmap size=" << _pixSize;
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
     image.clearCache(); // Release the memoy of the picture cache
 

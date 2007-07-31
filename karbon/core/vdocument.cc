@@ -275,7 +275,7 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &c
     KoXmlElement child;
     forEachElement( child, element )
     {
-        kDebug(38000) << "loading shape " << child.localName() << endl;
+        kDebug(38000) <<"loading shape" << child.localName();
 
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, shapeContext );
         if( shape )

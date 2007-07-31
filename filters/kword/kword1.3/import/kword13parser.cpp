@@ -69,7 +69,7 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
             attrName += ':';
             attrName += attributes.qName( i );
             m_currentLayout->m_format.m_properties[ attrName ] = attributes.value( i );
-            kDebug(30520) << "Format Property (for LAYOUT): " << attrName << " = " << attributes.value( i ) << endl;
+            kDebug(30520) <<"Format Property (for LAYOUT):" << attrName <<" =" << attributes.value( i );
         }
         stackItem->elementType = KWord13TypeEmpty;
         return true;
@@ -95,7 +95,7 @@ bool KWord13Parser::startElementFormatOneProperty( const QString& name, const QX
             attrName += ':';
             attrName += attributes.qName( i );
             data->m_properties[ attrName ] = attributes.value( i );
-            kDebug(30520) << "Format Property (for FORMATS): " << attrName << " = " << attributes.value( i ) << endl;
+            kDebug(30520) <<"Format Property (for FORMATS):" << attrName <<" =" << attributes.value( i );
         }
         stackItem->elementType = KWord13TypeEmpty;
         return true;
@@ -126,7 +126,7 @@ bool KWord13Parser::startElementLayoutProperty( const QString& name, const QXmlA
             attrName += ':';
             attrName += attributes.qName( i );
             m_currentLayout->m_layoutProperties[ attrName ] = attributes.value( i );
-            kDebug(30520) << "Layout Property: " << attrName << " = " << attributes.value( i ) << endl;
+            kDebug(30520) <<"Layout Property:" << attrName <<" =" << attributes.value( i );
         }
         stackItem->elementType = KWord13TypeEmpty;
         return true;
@@ -223,7 +223,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
         return false; // Assume parse error!
     }
     
-    kDebug(30520) << "<FORMAT id=\"" << id << "\" pos=\"" << pos << "\" len=\"" << attributes.value( "len" ) << "\">" << endl;
+    kDebug(30520) <<"<FORMAT id=\"" << id <<"\" pos=\"" << pos <<"\" len=\"" << attributes.value("len" ) <<"\">";
         
     return true;    
 }
@@ -295,7 +295,7 @@ bool KWord13Parser::startElementFrame( const QString& name, const QXmlAttributes
                 attrName += ':';
                 attrName += attributes.qName( i );
                 stackItem->m_currentFrameset->m_frameData[ attrName ] = attributes.value( i );
-                kDebug(30520) << "FrameData: " << attrName << " = " << attributes.value( i ) << endl;
+                kDebug(30520) <<"FrameData:" << attrName <<" =" << attributes.value( i );
             }
             
         }
@@ -403,7 +403,7 @@ bool KWord13Parser::startElementDocumentAttributes( const QString& name, const Q
             attrName += ':';
             attrName += attributes.qName( i );
             m_kwordDocument->m_documentProperties[ attrName ] = attributes.value( i );
-            kDebug(30520) << "DocAttr: " <<  attrName << " = " << attributes.value( i ) << endl;
+            kDebug(30520) <<"DocAttr:" <<  attrName <<" =" << attributes.value( i );
         }
         return true;
     }
@@ -421,7 +421,7 @@ bool KWord13Parser::startElementKey( const QString& name, const QXmlAttributes& 
             attributes.value( "year" ), attributes.value( "month" ),  attributes.value( "day" ),
             attributes.value( "hour" ), attributes.value( "minute" ), attributes.value( "second" ),
             attributes.value( "msec" ) ) );
-    kDebug(30520) << "Picture key: " << key << endl;
+    kDebug(30520) <<"Picture key:" << key;
             
     if ( stackItem->elementType == KWord13TypePicturesPlural )
     {
@@ -493,7 +493,7 @@ bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttribute
 
 bool KWord13Parser::startElement( const QString&, const QString&, const QString& name, const QXmlAttributes& attributes )
 {
-    kDebug(30520) << indent << "<" << name << ">" << endl; // DEBUG
+    kDebug(30520) << indent <<"<" << name <<">"; // DEBUG
     indent += '*'; //DEBUG
     if (parserStack.isEmpty())
     {
@@ -659,7 +659,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
 bool KWord13Parser :: endElement( const QString&, const QString& , const QString& name)
 {
     indent.remove( 0, 1 ); // DEBUG
-    //kDebug(30520) << indent << "</" << name << ">" << endl; // DEBUG
+    //kDebug(30520) << indent <<"</" << name <<">"; // DEBUG
     if (parserStack.isEmpty())
     {
         kError(30520) << "Stack is empty!! Aborting! (in StructureParser::endElement)" << endl;
@@ -695,7 +695,7 @@ bool KWord13Parser :: endElement( const QString&, const QString& , const QString
             if ( m_currentParagraph )
             {
                 m_currentParagraph->m_formats.append( m_currentFormat );
-                kDebug(30520) << "Adding to <FORMATS>: " << ((void*) m_currentFormat) << endl;
+                kDebug(30520) <<"Adding to <FORMATS>:" << ((void*) m_currentFormat);
                 m_currentFormat = 0;
             }
             else
@@ -765,15 +765,15 @@ bool KWord13Parser :: characters ( const QString & ch )
     // DEBUG start
     if (ch=="\n")
     {
-        kDebug(30520) << indent << " (LINEFEED)" << endl;
+        kDebug(30520) << indent <<" (LINEFEED)";
     }
     else if (ch.length()> 40)
     {   // 40 characters are enough (especially for image data)
-        kDebug(30520) << indent << " :" << ch.left(40) << "..." << endl;
+        kDebug(30520) << indent <<" :" << ch.left(40) <<"...";
     }
     else
     {
-        kDebug(30520) << indent << " :" << ch << ":" << endl;
+        kDebug(30520) << indent <<" :" << ch <<":";
     }
     // DEBUG end
 #endif

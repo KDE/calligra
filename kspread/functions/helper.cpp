@@ -263,7 +263,7 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
 
   int days = date0.daysTo(date2) - date0.daysTo(date1);
 
-  kDebug(36002) << "date1 = " << date1 << "    date2 = " << date2 << "    days = " << days << "    basis = " << basis << endl;
+  kDebug(36002) <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
 
   double res=0;
   double peryear=0;
@@ -281,19 +281,19 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
       
       if ( nYears )
       {
-        kDebug()<<" tmp("<<date2.year()<<", "<<date1.month()<<", "<<date1.day()<<endl;
+        kDebug()<<" tmp("<<date2.year()<<","<<date1.month()<<","<<date1.day();
         QDate tmp(date2.year(), date1.month(), 1);
         tmp.addDays(date1.day()-1);
-        kDebug()<<" jul1 ="<<date2.toJulianDay()<<"  - jul2 ="<<tmp.toJulianDay()<<endl;
+        kDebug()<<" jul1 ="<<date2.toJulianDay()<<"  - jul2 ="<<tmp.toJulianDay();
         days = date2.toJulianDay() - tmp.toJulianDay();
-        kDebug()<<" days ="<<date2.daysTo(tmp)<<endl;      
+        kDebug()<<" days ="<<date2.daysTo(tmp);      
       }
       else
         days = date2.toJulianDay() - date1.toJulianDay();
       if ( days < 0 )
         days += peryear;
 
-      kDebug(36002) << "nYears = " << nYears << "    peryear = " << peryear << "    days = " << days << endl;
+      kDebug(36002) <<"nYears =" << nYears <<"    peryear =" << peryear <<"    days =" << days;
       break;
 
       // old code
@@ -303,7 +303,7 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
 //       if (days < (365 + QDate::isLeapYear(date1.year()) + 1))
 //       {
 //         // less than 1 year
-//         kDebug(36002) << "less than 1 year ..." << endl;
+//         kDebug(36002) <<"less than 1 year ...";
 // 
 //         // bool 1 = 29.2. is in between dates
 //         k = (QDate::isLeapYear(date1.year()) && date1.month()<3) || (QDate::isLeapYear(date2.year()) && date2.month()*100+date2.day() >= 2*100+29);
@@ -312,13 +312,13 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
 //       else
 //       {
 //         // more than 1 year
-//         kDebug(36002) << "more than 1 year ..." << endl;
+//         kDebug(36002) <<"more than 1 year ...";
 //         years = date2.year()-date1.year()+1;
 //         leaps = QDate(date2.year()+1, 1, 1).toJulianDay() - QDate(date1.year(), 1, 1).toJulianDay() - 365*years;
 //         k = (double)leaps/years;
 //       }
 // 
-//       kDebug(36002) << "leaps = " << leaps << "    years = " << years << "    leaps per year = " << (double)leaps/years << endl;
+//       kDebug(36002) <<"leaps =" << leaps <<"    years =" << years <<"    leaps per year =" << (double)leaps/years;
 //       peryear = 365 + k;
 
 
@@ -358,7 +358,7 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
   }
 
   res = double(nYears) + (double)days / peryear;
-  kDebug()<<"getYearFrac res="<<res<<endl;
+  kDebug()<<"getYearFrac res="<<res;
   return res;
 }
 
@@ -377,8 +377,8 @@ const double& coup_, const double& yield_, const int& freq, const int& basis, co
   double yield = yield_;
   double coup = coup_;
 
-  kDebug(36002)<<"DURATION_HELPER"<<endl;
-  kDebug(36002)<<"sett = "<<settlement<<" mat = "<<maturity<<" coup = "<<coup<<" yield = "<<yield<<" freq = "<<freq<<" basis = "<<basis<<endl;
+  kDebug(36002)<<"DURATION_HELPER";
+  kDebug(36002)<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
 
 
   double yearfrac = yearFrac( refDate, settlement, maturity, basis);

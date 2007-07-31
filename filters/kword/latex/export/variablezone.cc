@@ -63,7 +63,7 @@ VariableZone::VariableZone(const QString& text, Para* para): VariableFormat(para
 /*******************************************/
 VariableZone::~VariableZone()
 {
-	kDebug(30522) << "Destruction of an area" << endl;
+	kDebug(30522) <<"Destruction of an area";
 }
 
 /*******************************************/
@@ -74,7 +74,7 @@ VariableZone::~VariableZone()
 /*******************************************/
 void VariableZone::analyze(const QDomNode node)
 {
-	kDebug(30522) << "FORMAT" << endl;
+	kDebug(30522) <<"FORMAT";
 	/* Get header information (size, position)
 	 * Get infos. to format the text
 	 */
@@ -84,9 +84,9 @@ void VariableZone::analyze(const QDomNode node)
 	/* Format the text */
 	setText(getText().mid(getPos(), getLength()));
 	
-	kDebug(30522) << getText().length() << endl;
-	kDebug(30522) << getText().latin1() << endl;
-	kDebug(30522) << "END FORMAT" << endl;
+	kDebug(30522) << getText().length();
+	kDebug(30522) << getText().latin1();
+	kDebug(30522) <<"END FORMAT";
 }
 
 /*******************************************/
@@ -101,7 +101,7 @@ void VariableZone::generate(QTextStream &out)
 		generate_format_begin(out);
 
 	/* Display the text */
-	kDebug(30522) << "type : " << getType() << endl;
+	kDebug(30522) <<"type :" << getType();
 	if((getType() == VAR_DATE) && !isFix())
 		out << "\\today" << endl;
 	else if(getType() == VAR_FOOTNOTE)

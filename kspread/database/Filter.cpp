@@ -270,7 +270,7 @@ public:
                 operation = BottomPercent;
             else
             {
-                kDebug() << "table:operator: unknown value" << endl;
+                kDebug() <<"table:operator: unknown value";
                 return false;
             }
         }
@@ -353,7 +353,7 @@ public:
         const Sheet* sheet = database.range().lastSheet();
         const QRect range = database.range().lastRange();
         const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
-//         kDebug() << "index: " << index << " start: " << start << " fieldNumber: " << fieldNumber << endl;
+//         kDebug() <<"index:" << index <<" start:" << start <<" fieldNumber:" << fieldNumber;
         const Value value = database.orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(start + fieldNumber, index)
                             : sheet->cellStorage()->value(index, start + fieldNumber);
@@ -363,7 +363,7 @@ public:
             case Match:
             {
                 const bool result = QString::compare(this->value, testString, caseSensitivity) == 0;
-//                 kDebug() << "Match " << this->value << "? " << testString << " " << result << endl;
+//                 kDebug() <<"Match" << this->value <<"?" << testString <<"" << result;
                 if (result)
                     return true;
                 break;
@@ -371,7 +371,7 @@ public:
             case NotMatch:
             {
                 const bool result = QString::compare(this->value, testString, caseSensitivity) != 0;
-//                 kDebug() << "Not Match " << this->value << "? " << testString << " " << result << endl;
+//                 kDebug() <<"Not Match" << this->value <<"?" << testString <<"" << result;
                 if (result)
                     return true;
                 break;
@@ -393,7 +393,7 @@ public:
     {
         if (this->fieldNumber == fieldNumber)
         {
-//             kDebug() << "removing condition for fieldNumber " << fieldNumber << endl;
+//             kDebug() <<"removing condition for fieldNumber" << fieldNumber;
             this->fieldNumber = -1;
         }
     }
@@ -664,7 +664,7 @@ void Filter::removeConditions(int fieldNumber)
 {
     if (fieldNumber == -1)
     {
-//         kDebug() << "removing all conditions" << endl;
+//         kDebug() <<"removing all conditions";
         delete d->condition;
         d->condition = 0;
         return;
@@ -795,7 +795,7 @@ bool Filter::operator==(const Filter& other) const
 void Filter::dump() const
 {
     if (d->condition)
-        kDebug() << "Condition:\n" + d->condition->dump() << endl;
+        kDebug() <<"Condition:" + d->condition->dump();
     else
-        kDebug() << "Condition: 0" << endl;
+        kDebug() <<"Condition: 0";
 }

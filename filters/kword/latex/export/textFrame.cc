@@ -53,7 +53,7 @@ TextFrame::TextFrame()
 	for(Para* current = _footnotes.first(); current!= 0; current = _footnotes.next())
 	{
 		QString* string = current->getName();
-		kDebug(30522) << *string << endl;
+		kDebug(30522) << *string;
 		if(*string == name)
 			return current;
 		//iter.next();
@@ -71,7 +71,7 @@ void TextFrame::analyze(const QDomNode node)
 	/* Parameter analysis */
 	Element::analyze(node);
 
-	kDebug(30522) << "FRAME ANALYSIS (TextFrame)" << endl;
+	kDebug(30522) <<"FRAME ANALYSIS (TextFrame)";
 
 	/* Child markup analysis */
 	analyzeParamFrame(getChild(node, "FRAME"));
@@ -96,11 +96,11 @@ void TextFrame::analyze(const QDomNode node)
 				// 3. add this parag. in the text list
 				_parags.append(prg);
 			}
-			kDebug(30522) << "PARA ADDED" << endl;
+			kDebug(30522) <<"PARA ADDED";
 		}
 
 	}
-	kDebug(30522) << "END OF A FRAME ANALYSIS" << endl;
+	kDebug(30522) <<"END OF A FRAME ANALYSIS";
 }
 
 /*******************************************/
@@ -176,8 +176,8 @@ void TextFrame::generate(QTextStream &out)
 {
 	Para * lastPara = 0;
 
-	kDebug(30522) << "TEXT GENERATION" << endl;
-	kDebug(30522) << "NB PARA " << _parags.count() << endl;
+	kDebug(30522) <<"TEXT GENERATION";
+	kDebug(30522) <<"NB PARA" << _parags.count();
 
 	if(getSection() == SS_TABLE || getSection() == SS_HEADERS ||
 	   getSection() == SS_FOOTERS)
@@ -265,8 +265,8 @@ bool TextFrame::isBeginEnum(Para* previous, Para* next)
 	/* - go in a new list */
 	/* - change depth (a list in a list) */
 	/* - or two lists nearby (but with the same depth) */
-	kDebug(30522) << "---------------------------------" << endl;
-	kDebug(30522) << getSection() << " = " << SS_HEADERS << endl;
+	kDebug(30522) <<"---------------------------------";
+	kDebug(30522) << getSection() <<" =" << SS_HEADERS;
 	if(next->isList() && getSection() != SS_FOOTNOTES &&
 		getSection() != SS_HEADERS && getSection() != SS_FOOTERS)
 	{

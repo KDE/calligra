@@ -111,7 +111,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame)
     m_frame = frame;
     m_mainFrame = 0;
     if(m_frame==0) {
-        kDebug() << "ERROR: KWFrameDia::constructor no frame.."<<endl;
+        kDebug() <<"ERROR: KWFrameDia::constructor no frame..";
         return;
     }
     setCaption( i18n( "Frame Properties for %1" , m_frame->frameSet()->name() ) );
@@ -146,7 +146,7 @@ KWFrameDia::KWFrameDia( QWidget* parent, KWFrame *frame, KWDocument *doc, FrameS
     m_mainFrameSetIncluded = false;
     m_defaultFrameSetIncluded = false;
     if(m_frame==0) {
-        kDebug() << "ERROR: KWFrameDia::constructor no m_frame.."<<endl;
+        kDebug() <<"ERROR: KWFrameDia::constructor no m_frame..";
         return;
     }
     m_mainFrame = 0;
@@ -166,7 +166,7 @@ KWFrameDia::KWFrameDia( QWidget *parent, Q3PtrList<KWFrame> listOfFrames)
 
     KWFrame *f=listOfFrames.first();
     if(f==0) {
-        kDebug() << "ERROR: KWFrameDia::constructor no frames.."<<endl;
+        kDebug() <<"ERROR: KWFrameDia::constructor no frames..";
         return;
     }
     if ( listOfFrames.count() == 1 )
@@ -239,7 +239,7 @@ void KWFrameDia::init() {
     }
     if(!m_doc)
     {
-        kDebug() << "ERROR: KWFrameDia::init frame has no reference to m_doc.."<<endl;
+        kDebug() <<"ERROR: KWFrameDia::init frame has no reference to m_doc..";
         return;
     }
     if( fs && fs->isMainFrameset() )
@@ -309,7 +309,7 @@ void KWFrameDia::init() {
 
 void KWFrameDia::setupTab1(){ // TAB Frame Options
 #if 0
-    //kDebug() << "setup tab 1 Frame options"<<endl;
+    //kDebug() <<"setup tab 1 Frame options";
     m_tab1 = addPage( i18n("Options") );
     int columns = 0;
     if(m_frameType == FT_FORMULA || m_frameType == FT_PICTURE)
@@ -819,7 +819,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
      * framebehaviour will be copied from the frameset
      * then the new connection should be made.
      */
-    //kDebug() << "setup tab 3 frameSet"<<endl;
+    //kDebug() <<"setup tab 3 frameSet";
     m_tab3 = new QWidget();
     addPage(m_tab3, i18n( "Connect Text Frames" ) );
 
@@ -1159,11 +1159,11 @@ void KWFrameDia::initGeometrySettings()
             }
 
             if ( qAbs( f->width() - commonWidth ) > 1E-6 ) {
-                kDebug() << k_funcinfo << "width differs:" << f->width() << " " << commonWidth << endl;
+                kDebug() << k_funcinfo <<"width differs:" << f->width() <<"" << commonWidth;
                 m_sw->setEnabled( false );
             }
             if ( qAbs( f->height() - commonHeight ) > 1E-6 ) {
-                kDebug() << k_funcinfo << "height differs:" << f->height() << " " << commonHeight << endl;
+                kDebug() << k_funcinfo <<"height differs:" << f->height() <<"" << commonHeight;
                 m_sh->setEnabled( false );
             }
 
@@ -1688,7 +1688,7 @@ void KWFrameDia::setFrameBehaviorInputOn() {
         }
         m_rResizeFrame->setEnabled(true);
         // Can't have "create a new page" if "no followup", that wouldn't work
-        kDebug() << "setFrameBehaviorInputOn: m_reconnect->isChecked()==" << m_reconnect->isChecked() << endl;
+        kDebug() <<"setFrameBehaviorInputOn: m_reconnect->isChecked()==" << m_reconnect->isChecked();
         m_rAppendFrame->setEnabled( m_reconnect->isChecked() );
         m_rNoShow->setEnabled(true);
     }
@@ -1806,7 +1806,7 @@ void KWFrameDia::enableRunAround()
 bool KWFrameDia::applyChanges()
 {
 #if 0
-    kDebug() << "KWFrameDia::applyChanges"<<endl;
+    kDebug() <<"KWFrameDia::applyChanges";
     KWFrame *frameCopy = 0L;
     bool isNewFrame=false;
     if(m_frame) { // only do undo/redo when we have 1 frame to change for now..
@@ -2132,9 +2132,9 @@ bool KWFrameDia::applyChanges()
     }
     KoRect rect( px, py, pw, ph );
 
-    //kDebug() << "New geom: " << m_sx->text().toDouble() << ", " << m_sy->text().toDouble()
+    //kDebug() <<"New geom:" << m_sx->text().toDouble() <<"," << m_sy->text().toDouble()
     //<< " " << m_sw->text().toDouble() << "x" << m_sh->text().toDouble() << endl;
-    //kDebug()<<" rect :"<<px <<" py :"<<py<<" pw :"<<pw <<" ph "<<ph<<endl;
+    //kDebug()<<" rect :"<<px <<" py :"<<py<<" pw :"<<pw <<" ph"<<ph;
     // Undo/redo for frame properties
     if(m_frame) { // only do undo/redo when we edit 1 frame for now..
 
@@ -2237,8 +2237,8 @@ bool KWFrameDia::applyChanges()
             if ( !fs->isMainFrameset() &&
                 ( ( m_oldX != m_sx->value() && m_sx->isEnabled() )|| ( m_oldY != m_sy->value() && m_sy->isEnabled() ) || ( m_oldW != m_sw->value() && m_sw->isEnabled() ) || ( m_oldH != m_sh->value() && m_sh->isEnabled() ) ) )
             {
-                //kDebug() << "Old geom: " << m_oldX << ", " << m_oldY<< " " << m_oldW << "x" << m_oldH << endl;
-                //kDebug() << "New geom: " << m_sx->text().toDouble() << ", " << m_sy->text().toDouble()
+                //kDebug() <<"Old geom:" << m_oldX <<"," << m_oldY<<"" << m_oldW <<"x" << m_oldH;
+                //kDebug() <<"New geom:" << m_sx->text().toDouble() <<"," << m_sy->text().toDouble()
                   //        << " " << m_sw->text().toDouble() << "x" << m_sh->text().toDouble() << endl;
 
                 if( m_doc->pageManager()->page(f)->rect().contains(rect) )
@@ -2293,7 +2293,7 @@ bool KWFrameDia::applyChanges()
             // TODO can't this become shorter??
             if ( f->leftBorder() != m_leftBorder )
             {
-                kDebug() << "Changing borders!" << endl;
+                kDebug() <<"Changing borders!";
                 Q3PtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
                 Q3PtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );

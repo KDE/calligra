@@ -51,7 +51,7 @@ FileHeader::FileHeader()
 /*******************************************/
 FileHeader::~FileHeader()
 {
-	kDebug(30522) << "FileHeader Destructor" << endl;
+	kDebug(30522) <<"FileHeader Destructor";
 }
 
 /*******************************************/
@@ -105,7 +105,7 @@ void FileHeader::analyzeAttributes(const QDomNode node)
 /*******************************************/
 void FileHeader::generate(QTextStream &out)
 {
-	kDebug(30522) << "GENERATION OF THE FILE HEADER" << endl;
+	kDebug(30522) <<"GENERATION OF THE FILE HEADER";
 	if(Config::instance()->mustUseLatin1())
 		generateLatinPreamble(out);
 	else if(Config::instance()->mustUseUnicode())
@@ -125,7 +125,7 @@ void FileHeader::generatePaper(QTextStream &out)
 	QString unit;
 
 	out << "% Format of paper" << endl;
-	kDebug(30522) << "Generate custom size paper" << endl;
+	kDebug(30522) <<"Generate custom size paper";
 	/* paper size */
 	out << "\\setlength{\\paperwidth}{"  << _width  << "pt}" << endl;
 	out << "\\setlength{\\paperheight}{" << _height << "pt}" << endl;

@@ -523,7 +523,7 @@ VPath::loadSvgPath( const QString &d )
 {
 	//QTime s;s.start();
     parseSvg( d, true );
-	//kDebug(38000) << "Parsing time : " << s.elapsed() << endl;
+	//kDebug(38000) <<"Parsing time :" << s.elapsed();
 }
 
 void

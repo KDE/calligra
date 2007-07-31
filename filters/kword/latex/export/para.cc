@@ -58,7 +58,7 @@ Para::Para(TextFrame* textFrame)
 /*******************************************/
 Para::~Para()
 {
-	kDebug(30522) << "Destruction of a parag." << endl;
+	kDebug(30522) <<"Destruction of a parag.";
 	if(_lines != 0)
 		delete _lines;
 }
@@ -99,7 +99,7 @@ int Para::getNbCharPara() const
 
 	if(_lines != 0)
 	{
-		kDebug(30522) << "  NB ZONE : " << _lines->count() << endl;
+		kDebug(30522) <<"  NB ZONE :" << _lines->count();
 
 		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
@@ -133,7 +133,7 @@ void Para::analyze(const QDomNode node)
 {
 	/* markup type: paragraph */
 
-	kDebug(30522) << "**** PARAGRAPH ****" << endl;
+	kDebug(30522) <<"**** PARAGRAPH ****";
 
 	/* Analysis of the child markups */
 	for(int index = 0; index < getNbChild(node); index++)
@@ -141,7 +141,7 @@ void Para::analyze(const QDomNode node)
 		if(getChildName(node, index).compare("TEXT")== 0)
 		{
 			_text =  getData(node, index);
-			kDebug(30522) << "TEXT : " << _text << endl;
+			kDebug(30522) <<"TEXT :" << _text;
 		}
 		else if(getChildName(node, index).compare("NAME")== 0)
 		{
@@ -158,17 +158,17 @@ void Para::analyze(const QDomNode node)
 		else if(getChildName(node, index).compare("FORMATS")== 0)
 		{
 			// IMPORTANT ==> font and style
-			kDebug(30522) << "FORMATS" << endl;
+			kDebug(30522) <<"FORMATS";
 			analyzeFormats(getChild(node, index));
 
 		}
 		else if(getChildName(node, index).compare("LAYOUT")== 0)
 		{
-			kDebug(30522) << "LAYOUT" << endl;
+			kDebug(30522) <<"LAYOUT";
 			analyzeLayoutPara(getChild(node, index));
 		}
 	}
-	kDebug(30522) << " **** END PARAGRAPH ****" << endl;
+	kDebug(30522) <<" **** END PARAGRAPH ****";
 }
 
 /*******************************************/
@@ -244,7 +244,7 @@ void Para::analyzeLayoutPara(const QDomNode node)
 			}
 		}
 		/*else
-			kDebug(30522) << " FORMAT FIELD UNKNOWN" << endl;*/
+			kDebug(30522) <<" FORMAT FIELD UNKNOWN";*/
 	}
 }
 
@@ -261,11 +261,11 @@ void Para::analyzeFormats(const QDomNode node)
 	{
 		if(getChildName(node, index).compare("FORMAT")== 0)
 		{
-			kDebug(30522) << "A FORMAT !!!" << endl;
+			kDebug(30522) <<"A FORMAT !!!";
 			analyzeFormat(getChild(node, index));
 		}
 		else
-			kDebug(30522) << " FORMAT UNUSEFULL HERE" << endl;
+			kDebug(30522) <<" FORMAT UNUSEFULL HERE";
 	}
 }
 
@@ -281,10 +281,10 @@ void Para::analyzeFormat(const QDomNode node)
 	Format *zone      = 0;
 	Format *zoneFirst = 0;
 
-	kDebug(30522) << "ANALYZE FORMAT BODY" << endl;
+	kDebug(30522) <<"ANALYZE FORMAT BODY";
 	switch(getTypeFormat(node))
 	{
-		case EF_ERROR: kDebug(30522) << "Id format error" << endl;
+		case EF_ERROR: kDebug(30522) <<"Id format error";
 			break;
 		case EF_TEXTZONE: /* It's a text line (1) */
 				zone = new TextZone(_text, this);
@@ -324,7 +324,7 @@ void Para::analyzeFormat(const QDomNode node)
 				zone->analyze(node);
 			break;
 		default: /* Unknown */
-				kDebug(30522) << "Format not yet supported" << endl;
+				kDebug(30522) <<"Format not yet supported";
 	}
 
 	if(zone->getPos() != _currentPos)
@@ -336,7 +336,7 @@ void Para::analyzeFormat(const QDomNode node)
 		zoneFirst->setPos(_currentPos);
 		zoneFirst->setLength(zone->getPos() - _currentPos);
 		((TextZone*) zoneFirst)->analyze();
-		kDebug(30522) << "current position: " << _currentPos << endl;
+		kDebug(30522) <<"current position:" << _currentPos;
 		/* Add the text without format */
 		_lines->append(zoneFirst);
 		_currentPos = _currentPos + zoneFirst->getLength();
@@ -362,7 +362,7 @@ void Para::analyzeFormat(const QDomNode node)
 void Para::generate(QTextStream &out)
 {
 
-	kDebug(30522) << "  GENERATION PARA" << endl;
+	kDebug(30522) <<"  GENERATION PARA";
 
 	if(getInfo() != EP_FOOTNOTE && getFrameType() != SS_HEADERS &&
 	   getFrameType() != SS_FOOTERS)
@@ -382,7 +382,7 @@ void Para::generate(QTextStream &out)
 	else if(_lines != 0)
 	{
 		Format* zone = 0;
-		kDebug(30522) << "  NB ZONE : " << _lines->count() << endl;
+		kDebug(30522) <<"  NB ZONE :" << _lines->count();
 
 		for(zone = _lines->first(); zone != 0; zone = _lines->next())
 		{
@@ -401,7 +401,7 @@ void Para::generate(QTextStream &out)
 		if(isHardBreakAfter())
 			out << "\\newpage" << endl;
 	}
-	kDebug(30522) << "PARA GENERATED" << endl;
+	kDebug(30522) <<"PARA GENERATED";
 }
 
 /*******************************************/
@@ -422,10 +422,10 @@ void Para::generateDebut(QTextStream &out)
 		 * It can be 20 char. / 5 cm  = 4 char / cm so */
 		/* nbLines = nb_char_para / (4 * cell size) + 1 */
 		//sizeCell = (_element->getRight() - _element->getLeft()) / 27;
-		//kDebug(30522) << "SIZE OF CELL : " << sizeCell << endl;
+		//kDebug(30522) <<"SIZE OF CELL :" << sizeCell;
 		// TODO : arrondir au superieur avec tgmath.h ??
 		//_nbLines = ((_element->getBottom() - _element->getTop()) / 27) + 1;
-		//kDebug(30522) << "NB OF LINES : " << _nbLines << endl;
+		//kDebug(30522) <<"NB OF LINES :" << _nbLines;
 		/* 2 at least, 1 for the line, 1 for the space line */
 		/*if(_nbLines < 2)
 			_nbLines = 2;
@@ -449,7 +449,7 @@ void Para::generateDebut(QTextStream &out)
 
 void Para::generateBeginEnv(QTextStream &out)
 {
-	kDebug(30522) << "Begin new Env : " << getEnv() << endl;
+	kDebug(30522) <<"Begin new Env :" << getEnv();
 
 	Config::instance()->writeIndent(out);
 
@@ -524,7 +524,7 @@ void Para::openList(QTextStream &out)
 
 	/* Keep the list type */
 	type_temp = new EType(getCounterType());
-	kDebug(30522) << " type list to open : " << *type_temp << endl;
+	kDebug(30522) <<" type list to open :" << *type_temp;
 	_historicList.push(type_temp);
 }
 
@@ -547,7 +547,7 @@ void Para::generateFin(QTextStream &out)
 /*******************************************/
 void Para::generateEndEnv(QTextStream &out)
 {
-	kDebug(30522) << "end of an environment : " << getEnv() << endl;
+	kDebug(30522) <<"end of an environment :" << getEnv();
 	
 	Config::instance()->desindent();
 	
@@ -593,7 +593,7 @@ void Para::closeList(QTextStream &out, Para* next)
 		/* We must close all the lists since
 		 * after this paragraph it's a normal paragraph.
 		 */
-		kDebug(30522) << "lists to close" << endl;
+		kDebug(30522) <<"lists to close";
 		while(!_historicList.isEmpty())
 		{
 			EType *type_temp = 0;
@@ -614,7 +614,7 @@ void Para::closeList(QTextStream &out, Para* next)
 void Para::closeList(EType type, QTextStream &out)
 {
 	//out << endl;
-	kDebug(30522) << " type list to close : " << type << endl;
+	kDebug(30522) <<" type list to close :" << type;
 
 	/* Because of a new markup, we need a new line. */
 	out << endl;
@@ -651,7 +651,7 @@ void Para::closeList(EType type, QTextStream &out)
 
 	/* Pop the list which has been closed */
 	_historicList.remove();
-	kDebug(30522) << "removed" << endl;
+	kDebug(30522) <<"removed";
 }
 
 /*******************************************/

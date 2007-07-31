@@ -420,10 +420,10 @@ void PaperLayout::slotOk()
 
       if ( m_rScalingZoom->isChecked() )
       {
-        kDebug() << "Zoom is selected" << endl;
+        kDebug() <<"Zoom is selected";
         if( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) != m_cZoom->currentText() )
         {
-          kDebug() << "New zoom is different than original: " << m_cZoom->currentText() << endl;
+          kDebug() <<"New zoom is different than original:" << m_cZoom->currentText();
           QString zoomtext = m_cZoom->currentText();
           zoomtext.replace( '%', "" );
           bool convertok = false;
@@ -437,20 +437,20 @@ void PaperLayout::slotOk()
             //reset page limits
             print->setPageLimitX(0);
             print->setPageLimitY(0);
-            kDebug() << "Setting print zoom: " << zoomvalue*0.01 << endl;
+            kDebug() <<"Setting print zoom:" << zoomvalue*0.01;
             print->setZoom( 0.01 * zoomvalue );
-            kDebug() << "New print zoom: " << print->zoom() << endl;
+            kDebug() <<"New print zoom:" << print->zoom();
           }
           else
-            kDebug() << "Did not set print zoom" << endl;
+            kDebug() <<"Did not set print zoom";
         }
         else
-          kDebug() << "new zoom is same as original: " << m_cZoom->currentText() << endl;
+          kDebug() <<"new zoom is same as original:" << m_cZoom->currentText();
       }
       else if (m_rScalingLimitPages->isChecked())
       {
-        kDebug() << "Limit pages is selected" << endl;
-        kDebug() << "Current zoom: " << print->zoom() << endl;
+        kDebug() <<"Limit pages is selected";
+        kDebug() <<"Current zoom:" << print->zoom();
 
         //reset first, otherwise setting the first limit
         //would still check against the second limit and
@@ -462,9 +462,9 @@ void PaperLayout::slotOk()
 
         if (print->zoom() < 1.0)
         {
-          kDebug() << "Resetting zoom to 1.0" << endl;
+          kDebug() <<"Resetting zoom to 1.0";
           print->setZoom(1.0,false); //don't check page limits here
-          kDebug() << "Zoom is now: " << print->zoom() << endl;
+          kDebug() <<"Zoom is now:" << print->zoom();
         }
 
         bool convertok = false;
@@ -478,12 +478,12 @@ void PaperLayout::slotOk()
         if (!convertok)  //THIS IS THE CASE WITH "No Limit"
           limitY=0;  //0 means no limit
 
-        kDebug() << "Zoom before setting limits: " << print->zoom() << endl;
-        kDebug() << "Chosen Limits: x: " << limitX << "; y: " << limitY << endl;
+        kDebug() <<"Zoom before setting limits:" << print->zoom();
+        kDebug() <<"Chosen Limits: x:" << limitX <<"; y:" << limitY;
         print->setPageLimitX( limitX );
-        kDebug() << "Zoom after setting x limit: " << print->zoom() << endl;
+        kDebug() <<"Zoom after setting x limit:" << print->zoom();
         print->setPageLimitY( limitY );
-        kDebug() << "Zoom after setting y limit: " << print->zoom() << endl;
+        kDebug() <<"Zoom after setting y limit:" << print->zoom();
       }
       else
         kWarning() << "ERROR: unknown zoom option selected" << endl;

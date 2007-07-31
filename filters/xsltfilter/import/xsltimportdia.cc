@@ -62,7 +62,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 	while(i < 10)
 	{
 		value = _config->readPathEntry( QString("Recent%1").arg(i) );
-		kDebug() << "recent : " << value << endl;
+		kDebug() <<"recent :" << value;
 		if(!value.isEmpty())
 		{
 			_recentList.append( value );
@@ -75,12 +75,12 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 
 	/* Common xslt files box */
 	QString appName = KGlobal::mainComponent().componentName();
-	kDebug() << "app name = " << appName << endl;
+	kDebug() <<"app name =" << appName;
 	
 	QString filenames = QString("xsltfilter") + QDir::separator() + QString("import") +
 			QDir::separator() + appName + QDir::separator() + "*/*.xsl";
 	QStringList commonFilesList = KGlobal::dirs()->findAllResources("data", filenames, KStandardDirs::Recursive);
-	kDebug() << "There are " << commonFilesList.size() << " entries like  " << filenames << endl;
+	kDebug() <<"There are" << commonFilesList.size() <<" entries like" << filenames;
 	
 	QStringList tempList;
 	QString name;
@@ -93,13 +93,13 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 		tempList.pop_back();
 		name = tempList.last();
 		tempList.pop_back();
-		kDebug() << name << " " << file << endl;
+		kDebug() << name <<"" << file;
 		if(!_namesList.contains(name) && file == "main.xsl")
 		{
 			_filesList.append(file);
 			_namesList.append(name);
 			_dirsList.append(tempList.join("/"));
-			kDebug() << file << " get" << endl;
+			kDebug() << file <<" get";
 		}
 	}
 	
@@ -122,7 +122,7 @@ XSLTImportDia::~XSLTImportDia()
  */
 void XSLTImportDia::cancelSlot()
 {
-	kDebug() << "import cancelled" << endl;
+	kDebug() <<"import cancelled";
 	reject();
 }
 
@@ -180,7 +180,7 @@ void XSLTImportDia::chooseSlot()
  */
 void XSLTImportDia::chooseRecentSlot()
 {
-	kDebug() << "recent slot : " << recentBox->currentText() << endl;
+	kDebug() <<"recent slot :" << recentBox->currentText();
 	_currentFile = recentBox->currentText();
 }
 
@@ -193,7 +193,7 @@ void XSLTImportDia::chooseCommonSlot()
 	int num = xsltList->currentItem();
 	_currentFile = QDir::separator() + _dirsList[num] + QDir::separator() +
 			xsltList->currentText() + QDir::separator() + _filesList[num];
-	kDebug() << "common slot : " << _currentFile.url() << endl;
+	kDebug() <<"common slot :" << _currentFile.url();
 }
 
 /**
@@ -206,14 +206,14 @@ void XSLTImportDia::okSlot()
 	hide();
 	if(_currentFile.url().isEmpty())
 		return;
-	kDebug() << "XSLT FILTER --> BEGIN" << endl;
+	kDebug() <<"XSLT FILTER --> BEGIN";
 	_out->open("root");
 	QString stylesheet = _currentFile.directory() + '/' + _currentFile.fileName();
 
 	/* Add the current file in the recent list if is not and save the list. */
 	if(_recentList.contains(stylesheet) == 0)
 	{
-		kDebug() << "Style sheet add to recent list" << endl;
+		kDebug() <<"Style sheet add to recent list";
 		/* Remove the older stylesheet used */
 		if(_recentList.size() >= 10)
 			_recentList.pop_back();
@@ -222,11 +222,11 @@ void XSLTImportDia::okSlot()
 		_recentList.prepend(stylesheet);
 
 		/* Save the new list */
-		kDebug() << "Recent list save " << _recentList.size() << " entrie(s)" << endl;
+		kDebug() <<"Recent list save" << _recentList.size() <<" entrie(s)";
 		int i = 0;
 		while(_recentList.size() > 0)
 		{
-			kDebug() << "save : " << _recentList.first() << endl;
+			kDebug() <<"save :" << _recentList.first();
 			_config->writePathEntry( QString("Recent%1").arg(i), _recentList.first());
 			_recentList.pop_front();
 			i = i + 1;
@@ -253,7 +253,7 @@ void XSLTImportDia::okSlot()
 
 	_out->close();
 
-	kDebug() << "XSLT FILTER --> END" << endl;
+	kDebug() <<"XSLT FILTER --> END";
 	reject();
 }
 

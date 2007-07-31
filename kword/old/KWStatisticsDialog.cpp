@@ -162,7 +162,7 @@ bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool u
     // safety check result labels
     for (int i=0; i < 7; ++i) {
         if ( !resultLabel[i] ) {
-            kDebug() << "Warning: KWStatisticsDiaolog::calcStats result table not initialized." << endl;
+            kDebug() <<"Warning: KWStatisticsDiaolog::calcStats result table not initialized.";
             return false;
         }
     }

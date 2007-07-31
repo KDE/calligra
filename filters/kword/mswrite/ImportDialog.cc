@@ -66,18 +66,18 @@ QTextCodec* MSWriteImportDialog::getCodec(void) const
 
     if (m_dialog->radioEncodingDefault==m_dialog->buttonGroupEncoding->selected())
     {
-        kDebug(30509) << "Encoding: CP 1252" << endl;
+        kDebug(30509) <<"Encoding: CP 1252";
         codec=QTextCodec::codecForName("CP 1252");
     }
     /*else if (m_dialog->radioEncodingLocal==m_dialog->buttonGroupEncoding->selected())
     {
-        kDebug(30503) << "Encoding: Locale" << endl;
+        kDebug(30503) <<"Encoding: Locale";
         codec=QTextCodec::codecForLocale();
     }*/
     else if (m_dialog->radioEncodingOther==m_dialog->buttonGroupEncoding->selected())
     {
         QString strCodec=m_dialog->comboBoxEncoding->currentText();
-        kDebug(30509) << "Encoding: " << strCodec << endl;
+        kDebug(30509) <<"Encoding:" << strCodec;
         if (strCodec.isEmpty())
         {
             codec=QTextCodec::codecForLocale();

@@ -66,7 +66,7 @@ AsciiExportDialog :: ~AsciiExportDialog(void)
 QTextCodec* AsciiExportDialog::getCodec(void) const
 {
     const QString strCodec( KGlobal::charsets()->encodingForName( m_dialog->comboBoxEncoding->currentText() ) );
-    kDebug(30502) << "Encoding: " << strCodec << endl;
+    kDebug(30502) <<"Encoding:" << strCodec;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );

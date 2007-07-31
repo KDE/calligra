@@ -1926,9 +1926,9 @@ void UndoChangeAreaTextCell::undo()
     doc()->setUndoLocked( true );
     doc()->emitBeginOperation();
 
-    kDebug() << "creating redo list..." << endl;
+    kDebug() <<"creating redo list...";
     createList( m_lstRedoTextCell, sheet );
-    kDebug() << "created redo list..." << endl;
+    kDebug() <<"created redo list...";
 
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)

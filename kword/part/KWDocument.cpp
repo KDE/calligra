@@ -521,7 +521,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
     double docHeight = last?(last->offsetInDocument() + last->height()):0.0;
     PageProcessingQueue *ppq = new PageProcessingQueue(this);
     while(docHeight <= maxBottom) {
-        kDebug(32001) << "KWDocument::endOfLoading appends a page\n";
+        kDebug(32001) <<"KWDocument::endOfLoading appends a page";
         last = m_pageManager.insertPage(m_pageManager.lastPageNumber());
         ppq->addPage(last);
         docHeight += last->height();
@@ -568,7 +568,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
                 KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->topMargin(),
                         page->width() - page->leftMargin() - page->rightMargin(),
                         page->height() - page->topMargin() - page->bottomMargin());
-                //kDebug(32001) << "KWDocument::loadXML main-KWFrame created " << *frame << endl;
+                //kDebug(32001) <<"KWDocument::loadXML main-KWFrame created" << *frame;
                 fs->addFrame( frame );
             }
         } else if(fs->frameCount() == 0) {
@@ -608,7 +608,7 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 
     emit sigProgress(-1);
 
-    kDebug(32001) << "KWDocument::endOfLoading done" << endl;
+    kDebug(32001) <<"KWDocument::endOfLoading done";
 
 #if 0
     // Connect to notifications from main text-frameset
@@ -634,7 +634,7 @@ bool KWDocument::completeLoading (KoStore *store) {
 
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
-//kDebug(32002) << "KWDocument::requestMoreSpace\n";
+//kDebug(32002) <<"KWDocument::requestMoreSpace";
     Q_ASSERT(fs);
     Q_ASSERT(fs->frameCount() > 0);
     Q_ASSERT(QThread::currentThread() == thread());
@@ -684,24 +684,24 @@ void KWDocument::printDebug() {
         }
     };
 
-    kDebug(32001) << "----------------------------------------"<<endl;
-    kDebug(32001) << "                 Debug info"<<endl;
-    kDebug(32001) << "Document:" << this <<endl;
-    kDebug(32001) << "Type of document: " << (m_pageSettings.hasMainTextFrame()?"WP":"DTP") << endl;
-    kDebug(32001) << "First Header: " << Helper::HFToString(m_pageSettings.firstHeader()) << endl;
-    kDebug(32001) << "First Footer: " << Helper::HFToString(m_pageSettings.firstFooter()) << endl;
-    kDebug(32001) << "Other Headers: " << Helper::HFToString(m_pageSettings.headers()) << endl;
-    kDebug(32001) << "Other Footers: " << Helper::HFToString(m_pageSettings.footers()) << endl;
-    kDebug(32001) << "Units: " << KoUnit::unitName( unit() ) <<endl;
-    kDebug(32001) << "# Framesets: " << frameSetCount() <<endl;
+    kDebug(32001) <<"----------------------------------------";
+    kDebug(32001) <<"                 Debug info";
+    kDebug(32001) <<"Document:" << this;
+    kDebug(32001) <<"Type of document:" << (m_pageSettings.hasMainTextFrame()?"WP":"DTP");
+    kDebug(32001) <<"First Header:" << Helper::HFToString(m_pageSettings.firstHeader());
+    kDebug(32001) <<"First Footer:" << Helper::HFToString(m_pageSettings.firstFooter());
+    kDebug(32001) <<"Other Headers:" << Helper::HFToString(m_pageSettings.headers());
+    kDebug(32001) <<"Other Footers:" << Helper::HFToString(m_pageSettings.footers());
+    kDebug(32001) <<"Units:" << KoUnit::unitName( unit() );
+    kDebug(32001) <<"# Framesets:" << frameSetCount();
     int i=0;
     foreach(KWFrameSet *fs, m_frameSets) {
-        kDebug(32001) << "Frameset " << i++ << ": '" <<
+        kDebug(32001) <<"Frameset" << i++ <<": '" <<
             fs->name() << "' (" << fs << ")" << /*(fs->isDeleted()?" Deleted":"")<<*/endl;
         fs->printDebug();
     }
 
-    kDebug(32001) << "PageManager holds "<< pageCount() << " pages in the range: " << startPage() <<
+    kDebug(32001) <<"PageManager holds"<< pageCount() <<" pages in the range:" << startPage() <<
         "-" << lastPage() << endl;
     for (int pgnum = startPage() ; pgnum <= lastPage() ; pgnum++) {
         KWPage *page = pageManager()->page(pgnum);
@@ -715,9 +715,9 @@ void KWDocument::printDebug() {
             pgnum++;
             num += '-' + QString::number(pgnum);
         }
-        kDebug(32001) << "Page " << num << side << " width=" << page->width() << " height=" << page->height() << endl;
+        kDebug(32001) <<"Page" << num << side <<" width=" << page->width() <<" height=" << page->height();
     }
-    kDebug(32001) << "  The height of the doc (in pt) is: " << pageManager()->
+    kDebug(32001) <<"  The height of the doc (in pt) is:" << pageManager()->
         bottomOfPage(lastPage()) << endl;
 }
 #endif

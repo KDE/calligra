@@ -135,7 +135,7 @@ void Device::endPage()
     if ( !_currentImage.image.isNull() ) addImage();
     current()->endPage();
     clear();
-    kDebug(30516) << "-- end page --------------------------" << endl;
+    kDebug(30516) <<"-- end page --------------------------";
 }
 
 void Device::updateFont(GfxState *state)
@@ -176,9 +176,9 @@ void Device::drawLink(::Link* link, Catalog *cat)
 
 void Device::addImage()
 {
-//    kDebug(30516) << "-> add image" << endl;
+//    kDebug(30516) <<"-> add image";
     if ( _currentImage.image.width()==0 || _currentImage.image.height()==0 ) {
-        kDebug(30516) << "image has null width or height !" << endl;
+        kDebug(30516) <<"image has null width or height !";
         _currentImage = Image();
         return;
     }
@@ -189,7 +189,7 @@ void Device::addImage()
     for (it=_images.begin(); it!=_images.end(); ++it) {
         if ( (*it).rect==_currentImage.rect
              && (*it).image==_currentImage.image ) {
-            kDebug(30516) << "image already there !\n";
+            kDebug(30516) <<"image already there !";
             _currentImage = Image();
             return;
         }
@@ -257,12 +257,12 @@ uint Device::initImage(GfxState *state, int width, int height,
     computeGeometry(state, image);
 
     // check if new image
-//    kDebug(30516) << "current image " << _currentImage.image.width()
+//    kDebug(30516) <<"current image" << _currentImage.image.width()
 //                   << " " << _currentImage.rect.left()
 //                   << " " << _currentImage.rect.right()
 //                   << " " << _currentImage.rect.bottom()
 //                   << " " << _currentImage.mask << endl;
-//    kDebug(30516) << "new image " << width
+//    kDebug(30516) <<"new image" << width
 //                   << " " << image.rect.left() << " " << image.rect.right()
 //                   << " " << image.rect.top()
 //                   << " " << image.mask << endl;
@@ -279,7 +279,7 @@ uint Device::initImage(GfxState *state, int width, int height,
     image.image = QImage(width, offset + height, 32);
     image.image.setAlphaBuffer(withMask);
     if ( !_currentImage.image.isNull() ) { // copy previous
-//        kDebug(30516) << "image continued..." << endl;
+//        kDebug(30516) <<"image continued...";
         for (int j=0; j<_currentImage.image.height(); j++) {
             QRgb *pix = (QRgb *)_currentImage.image.scanLine(j);
             QRgb *newPix = (QRgb *)image.image.scanLine(j);
@@ -295,7 +295,7 @@ void Device::drawImage(GfxState *state, Object *, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
                              int *maskColors, GBool inlineImg)
 {
-    kDebug(30516) << "image kind=" << str->getKind()
+    kDebug(30516) <<"image kind=" << str->getKind()
                    << " inline=" << inlineImg
                    << " maskColors=" << (maskColors!=0) << endl;
     if ( !_data.options().importImages ) return;
@@ -333,7 +333,7 @@ void Device::drawImageMask(GfxState *state, Object *, Stream *str,
                                  int width, int height, GBool invert,
                                  GBool inlineImg)
 {
-    kDebug(30516) << "image mask ! kind=" << str->getKind()
+    kDebug(30516) <<"image mask ! kind=" << str->getKind()
                    << "inline=" << inlineImg << endl;
     if ( !_data.options().importImages ) return;
 
@@ -382,11 +382,11 @@ void Device::updateStrokeColor(GfxState *state)
 
 void Device::stroke(GfxState */*state*/)
 {
-//    kDebug(30516) << "stroke" << endl;
+//    kDebug(30516) <<"stroke";
 //    DPathVector path = convertPath(state);
 //    for (uint i=0; i<path.size(); i++) {
 //        if ( path[i].isHorizontalSegment() ) {
-//            kDebug(30516) << "  horizontal segment" << endl;
+//            kDebug(30516) <<"  horizontal segment";
             // #### FIXME correctly draw the line
 //            if ( !_currentImage.image.isNull() ) addImage();
 //            _currentImage.rect = path[i].boundingRect();
@@ -397,20 +397,20 @@ void Device::stroke(GfxState */*state*/)
 //            _currentImage.image.fill(_fillColor.pixel());
 //            addImage();
 //        } else if ( path[i].isVerticalSegment() ) {
-//            kDebug(30516) << "  vertical segment" << endl;
+//            kDebug(30516) <<"  vertical segment";
 //        }
 //    }
 }
 
 void Device::fill(GfxState */*state*/)
 {
-//    kDebug(30516) << "fill" << endl;
+//    kDebug(30516) <<"fill";
 //    doFill(state);
 }
 
 void Device::eoFill(GfxState */*state*/)
 {
-//    kDebug(30516) << "eoFill" << endl;
+//    kDebug(30516) <<"eoFill";
 //    convertPath(state);
 //    doFill(state);
 }
@@ -420,7 +420,7 @@ void Device::doFill(const DPathVector &path)
     for (uint i=0; i<path.size(); i++) {
         if ( path[i].isSegment() ) continue;
         if ( path[i].isRectangle() ) {
-            kDebug(30516) << "fill rectangle" << endl;
+            kDebug(30516) <<"fill rectangle";
             if ( !_currentImage.image.isNull() ) addImage();
             _currentImage.rect = path[i].boundingRect();
             _currentImage.image =
@@ -443,7 +443,7 @@ DPathVector Device::convertPath(GfxState *state)
         DPath dpath;
         for (uint k=0; k<nbPoints; k++) {
             if ( k>=1 && spath->getCurve(k) ) {
-                kDebug(30516) << "    bezier curve : ignore !" << endl;
+                kDebug(30516) <<"    bezier curve : ignore !";
                 dpath = DPath();
                 break;
             } else {

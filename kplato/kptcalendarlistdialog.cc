@@ -84,12 +84,12 @@ public:
         K3MacroCommand *macro=0;
         if (state & New) {
             if (macro == 0) macro = new K3MacroCommand("");
-            //kDebug()<<k_funcinfo<<"add: "<<calendar->name()<<" p="<<&p<<endl;
+            //kDebug()<<k_funcinfo<<"add:"<<calendar->name()<<" p="<<&p;
             Calendar *par = base ? base->baseCalendar() : 0;
             macro->addCommand(new CalendarAddCmd(part, &p, calendar, par));
             calendar = 0;
         } else if (state & Modified) {
-            //kDebug()<<k_funcinfo<<"modified: "<<calendar->name()<<endl;
+            //kDebug()<<k_funcinfo<<"modified:"<<calendar->name();
             if (original->name() != calendar->name()) {
                 if (macro == 0) macro = new K3MacroCommand("");
                 macro->addCommand(new CalendarModifyNameCmd(part, original, calendar->name()));
@@ -98,33 +98,33 @@ public:
             if (c != original->parentCal()) {
                 if (macro == 0) macro = new K3MacroCommand("");
                 macro->addCommand(new CalendarModifyParentCmd(part, original->project(), original, c));
-                //kDebug()<<k_funcinfo<<"Base modified: "<<c->name()<<endl;
+                //kDebug()<<k_funcinfo<<"Base modified:"<<c->name();
             }
 
-            //kDebug()<<k_funcinfo<<"Check for days deleted: "<<calendar->name()<<endl;
+            //kDebug()<<k_funcinfo<<"Check for days deleted:"<<calendar->name();
             foreach (CalendarDay *day, original->days()) {
                 if (calendar->findDay(day->date()) == 0) {
                     if (macro == 0) macro = new K3MacroCommand("");
                     macro->addCommand(new CalendarRemoveDayCmd(part, original, day->date()));
-                    //kDebug()<<k_funcinfo<<"Removed day "<<day->date()<<endl;
+                    //kDebug()<<k_funcinfo<<"Removed day"<<day->date();
                 }
             }
-            //kDebug()<<k_funcinfo<<"Check for days added or modified: "<<calendar->name()<<endl;
+            //kDebug()<<k_funcinfo<<"Check for days added or modified:"<<calendar->name();
             foreach (CalendarDay *c, calendar->days()) {
                 CalendarDay *day = original->findDay(c->date());
                 if (day == 0) {
                     if (macro == 0) macro = new K3MacroCommand("");
                     // added
-                    //kDebug()<<k_funcinfo<<"Added day "<<c->date()<<endl;
+                    //kDebug()<<k_funcinfo<<"Added day"<<c->date();
                     macro->addCommand(new CalendarAddDayCmd(part, original, new CalendarDay(c)));
                 } else if (*day != c) {
                     if (macro == 0) macro = new K3MacroCommand("");
                     // modified
-                    //kDebug()<<k_funcinfo<<"Modified day "<<c->date()<<endl;
+                    //kDebug()<<k_funcinfo<<"Modified day"<<c->date();
                     macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(c)));
                 }
             }
-            //kDebug()<<k_funcinfo<<"Check for weekdays modified: "<<calendar->name()<<endl;
+            //kDebug()<<k_funcinfo<<"Check for weekdays modified:"<<calendar->name();
             CalendarDay *day = 0, *org = 0;
             for (int i=1; i <= 7; ++i) {
                 day = calendar->weekdays()->weekday(i);
@@ -132,7 +132,7 @@ public:
                 if (day && org) {
                     if (*org != *day) {
                         if (macro == 0) macro = new K3MacroCommand("");
-                        //kDebug()<<k_funcinfo<<"Weekday["<<i<<"] modified"<<endl;
+                        //kDebug()<<k_funcinfo<<"Weekday["<<i<<"] modified";
                         macro->addCommand(new CalendarModifyWeekdayCmd(part, original, i, new CalendarDay(day)));
                     }
                 } else if (day) {
@@ -159,7 +159,7 @@ public:
 
 protected:
 /*    virtual void cancelRename(int col) {
-        //kDebug()<<k_funcinfo<<endl;
+        //kDebug()<<k_funcinfo;
         if (col == 0 && oldText.isEmpty()) {
             return;
         }
@@ -180,7 +180,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent)
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug()<<k_funcinfo<<&p<<endl;
+    //kDebug()<<k_funcinfo<<&p;
     dia = new CalendarListDialogImpl(p, this);
     QList<Calendar*> list = p.allCalendars();
     foreach (Calendar *org, list) {
@@ -195,7 +195,7 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent)
     if (f) {
         f->setSelected(true);
     }
-    //kDebug()<<"size="<<size().width()<<"x"<<size().height()<<" hint="<<sizeHint().width()<<"x"<<sizeHint().height()<<endl;
+    //kDebug()<<"size="<<size().width()<<"x"<<size().height()<<" hint="<<sizeHint().width()<<"x"<<sizeHint().height();
     resize(QSize(725, 450).expandedTo(minimumSizeHint()));
 
     setMainWidget(dia);
@@ -208,12 +208,12 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent)
 }
 
 K3Command *CalendarListDialog::buildCommand(Part *part) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     K3MacroCommand *cmd = 0;
     int c = dia->calendarList->topLevelItemCount();
     for (int i=0; i < c; ++i) {
         CalendarListViewItem *item = static_cast<CalendarListViewItem *>(dia->calendarList->topLevelItem(i));
-        //kDebug()<<k_funcinfo<<item->text(0)<<endl;
+        //kDebug()<<k_funcinfo<<item->text(0);
         K3MacroCommand *c = item->buildCommand(part, project);
         if (c != 0) {
             if (cmd == 0) cmd = new K3MacroCommand("");
@@ -221,7 +221,7 @@ K3Command *CalendarListDialog::buildCommand(Part *part) {
         }
     }
     foreach (CalendarListViewItem *item, dia->deletedItems()) {
-        //kDebug()<<k_funcinfo<<"deleted: "<<item->calendar->name()<<endl;
+        //kDebug()<<k_funcinfo<<"deleted:"<<item->calendar->name();
         if (item->original) {
             if (cmd == 0) cmd = new K3MacroCommand("");
             cmd->addCommand(new CalendarRemoveCmd(part, &(part->getProject()), item->original));
@@ -285,7 +285,7 @@ void CalendarListDialogImpl::setBaseCalendars() {
 void CalendarListDialogImpl::slotItemChanged(QTreeWidgetItem *ci, int) {
     if (ci == 0)
         return;
-    //kDebug()<<k_funcinfo<<ci->text(0)<<", "<<col<<endl;
+    //kDebug()<<k_funcinfo<<ci->text(0)<<","<<col;
     CalendarListViewItem *item = static_cast<CalendarListViewItem*>(ci);
     item->calendar->setName(item->text(0));
     item->setState(CalendarListViewItem::Modified);
@@ -297,7 +297,7 @@ void CalendarListDialogImpl::slotEnableButtonOk(bool on) {
 }
 
 void CalendarListDialogImpl::slotBaseCalendarActivated(int id) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QList<QTreeWidgetItem*> lst = calendarList->selectedItems();
     if (lst.count() == 1) {
         CalendarListViewItem *item = static_cast<CalendarListViewItem*>(lst[0]);
@@ -310,7 +310,7 @@ void CalendarListDialogImpl::slotBaseCalendarActivated(int id) {
 }
 
 void CalendarListDialogImpl::slotSelectionChanged() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QList<QTreeWidgetItem *> lst = calendarList->selectedItems();
     bDelete->setEnabled(lst.count() > 0);
     bAdd->setEnabled(true);
@@ -321,7 +321,7 @@ void CalendarListDialogImpl::slotSelectionChanged() {
 }
 
 void CalendarListDialogImpl::slotSelectionChanged(QTreeWidgetItem *listItem) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     baseCalendarList.clear();
     baseCalendar->clear();
     baseCalendar->setEnabled(false);
@@ -340,7 +340,7 @@ void CalendarListDialogImpl::slotSelectionChanged(QTreeWidgetItem *listItem) {
                 i++;
                 if (item == cal->base) {
                     me = i;
-                    //kDebug()<<k_funcinfo<<"item="<<item<<": cal="<<cal->calendar->name()<<" has parent "<<cal->base->calendar->name()<<endl;
+                    //kDebug()<<k_funcinfo<<"item="<<item<<": cal="<<cal->calendar->name()<<" has parent"<<cal->base->calendar->name();
                 }
             }
         }
@@ -362,7 +362,7 @@ void CalendarListDialogImpl::slotCalendarModified() {
     }
     CalendarListViewItem *item = static_cast<CalendarListViewItem*>(lst[0]);
     item->setState(CalendarListViewItem::Modified);
-    //kDebug()<<k_funcinfo<<"("<<item->calendar<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<item->calendar<<")";
     
     emit calendarModified();
 }
@@ -404,7 +404,7 @@ CalendarListViewItem *CalendarListDialogImpl::findItem(Calendar *cal) {
     for (int i=0; i < c; ++i) {
         CalendarListViewItem *item = static_cast<CalendarListViewItem *>(calendarList->topLevelItem(i));
         if (cal == item->original || cal == item->calendar) {
-            //kDebug()<<k_funcinfo<<"Found: "<<cal->name()<<endl;
+            //kDebug()<<k_funcinfo<<"Found:"<<cal->name();
             return item;
         }
     }
@@ -416,7 +416,7 @@ void CalendarListDialogImpl::slotListDoubleClicked(const QModelIndex &index) {
 }
 
 void CalendarListDialogImpl::slotListDoubleClicked(QTreeWidgetItem *item, int col) {
-    //kDebug()<<k_funcinfo<<(item?item->text(0):"")<<endl;
+    //kDebug()<<k_funcinfo<<(item?item->text(0):"");
 }
 
 }  //KPlato namespace

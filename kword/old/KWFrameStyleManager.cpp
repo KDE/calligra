@@ -273,7 +273,7 @@ void KWFrameStyleManager::addGeneralTab()
 
 void KWFrameStyleManager::switchStyle()
 {
-    kDebug() << "KWFrameStyleManager::switchStyle noSignals=" << noSignals << endl;
+    kDebug() <<"KWFrameStyleManager::switchStyle noSignals=" << noSignals;
     if(noSignals) return;
     noSignals=true;
 
@@ -283,7 +283,7 @@ void KWFrameStyleManager::switchStyle()
     m_currentFrameStyle = 0L;
     int num = frameStyleIndex( m_stylesList->currentItem() );
 
-    kDebug() << "KWFrameStyleManager::switchStyle switching to " << num << endl;
+    kDebug() <<"KWFrameStyleManager::switchStyle switching to" << num;
     if( m_frameStyles.at(num)->origFrameStyle() == m_frameStyles.at(num)->changedFrameStyle() )
         m_frameStyles.at(num)->switchStyle();
     else
@@ -322,7 +322,7 @@ int KWFrameStyleManager::frameStyleIndex( int pos ) {
 
 void KWFrameStyleManager::updateGUI()
 {
-    kDebug() << "KWFrameStyleManager::updateGUI m_currentFrameStyle=" << m_currentFrameStyle << " " << m_currentFrameStyle->name() << endl;
+    kDebug() <<"KWFrameStyleManager::updateGUI m_currentFrameStyle=" << m_currentFrameStyle <<"" << m_currentFrameStyle->name();
     Q3PtrListIterator<KWFrameStyleManagerTab> it( m_tabsList );
     for ( ; it.current() ; ++it )
     {
@@ -508,21 +508,21 @@ void KWFrameStyleManager::apply()
     for (unsigned int i =0 ; i < m_frameStyles.count() ; i++) {
         if(m_frameStyles.at(i)->origFrameStyle() == 0) {           // newly added style
 
-            kDebug() << "adding new " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
+            kDebug() <<"adding new" << m_frameStyles.at(i)->changedFrameStyle()->name() <<" (" << i <<")";
 
             KWFrameStyle* style = m_doc->frameStyleCollection()->addStyle(m_frameStyles.take(i)->changedFrameStyle());
             m_frameStyles.insert( i, new KWFrameStyleListItem(0, style) );
 
         } else if(m_frameStyles.at(i)->changedFrameStyle() == 0) { // deleted style
 
-            kDebug() << "deleting orig " << m_frameStyles.at(i)->origFrameStyle()->name() << " (" << i << ")" << endl;
+            kDebug() <<"deleting orig" << m_frameStyles.at(i)->origFrameStyle()->name() <<" (" << i <<")";
 
             KWFrameStyle *orig = m_frameStyles.at(i)->origFrameStyle();
             m_doc->frameStyleCollection()->removeStyle( orig );
 
         } else {
 
-            kDebug() << "update style " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
+            kDebug() <<"update style" << m_frameStyles.at(i)->changedFrameStyle()->name() <<" (" << i <<")";
             // TODO check if modified, so that we can do m_doc->setModified(true) only if a style was changed
             m_frameStyles.at(i)->apply();
         }
@@ -538,7 +538,7 @@ void KWFrameStyleManager::renameStyle(const QString &theText) {
     noSignals=true;
 
     int index = m_stylesList->currentItem();
-    kDebug() << "KWFrameStyleManager::renameStyle " << index << " to " << theText << endl;
+    kDebug() <<"KWFrameStyleManager::renameStyle" << index <<" to" << theText;
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
     m_stylesList->changeItem( theText, index );

@@ -578,13 +578,13 @@ VSegment::nearestPointParam( const QPointF& p ) const
 	delete[]( products );
 	delete[]( z );
 
-kDebug(38000) << "results" << endl;
+kDebug(38000) <<"results";
 for( int i = 0; i <= 2 * degree() - 1; ++i )
 {
-kDebug(38000) << newCurve.getLast()->p( i ).x() << " "
+kDebug(38000) << newCurve.getLast()->p( i ).x() <<""
 << newCurve.getLast()->p( i ).y() << endl;
 }
-kDebug(38000) << endl;
+kDebug(38000);
 
 	// Find roots.
 	Q3ValueList<double> params;
@@ -650,7 +650,7 @@ VSegment::rootParams( Q3ValueList<double>& params ) const
 				// Calculate intersection of chord with x-axis.
 				QPointF chord = knot() - prev()->knot();
 
-kDebug(38000) << prev()->knot().x()  << " " << prev()->knot().y()
+kDebug(38000) << prev()->knot().x()  <<"" << prev()->knot().y()
 << knot().x() << " " << knot().y() << " ---> "
 << ( chord.x() * prev()->knot().y() - chord.y() * prev()->knot().x() ) / - chord.y() << endl;
 				params.append(

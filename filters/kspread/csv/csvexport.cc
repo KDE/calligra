@@ -114,7 +114,7 @@ QString CSVExport::exportCSVCell( const KSpread::Doc* doc, Sheet const * const s
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QByteArray & to )
 {
-  kDebug(30501) << "CSVExport::convert" << endl;
+  kDebug(30501) <<"CSVExport::convert";
   KoDocument* document = m_chain->inputDocument();
 
   if ( !document )
@@ -192,7 +192,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
 
   if ( expDialog && expDialog->exportSelectionOnly() )
   {
-    kDebug(30501) << "Export as selection mode" << endl;
+    kDebug(30501) <<"Export as selection mode";
     View const * const view = ksdoc->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->views().first());
 
     if ( !view ) // no view if embedded document
@@ -249,7 +249,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
   }
   else
   {
-    kDebug(30501) << "Export as full mode" << endl;
+    kDebug(30501) <<"Export as full mode";
     foreach( Sheet const * const sheet, ksdoc->map()->sheetList() )
     {
       if (expDialog && !expDialog->exportSheet( sheet->sheetName() ) )
@@ -284,7 +284,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
       if ( CSVMaxRow + CSVMaxCol == 0)
         continue;
 
-      kDebug(30501) << "Max row x column: " << CSVMaxRow << " x " << CSVMaxCol << endl;
+      kDebug(30501) <<"Max row x column:" << CSVMaxRow <<" x" << CSVMaxCol;
 
       // Print sheet separators, except for the first sheet
       if ( !first || ( expDialog && expDialog->printAlwaysSheetDelimiter() ) )

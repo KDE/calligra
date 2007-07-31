@@ -49,7 +49,7 @@ KoFilter::ConversionStatus XSLTExport::convert( const QByteArray& from, const QB
        from != "application/x-kivio" && from != "application/x-kchart" &&
        from != "application/x-kpresenter")
         return KoFilter::NotImplemented;
-    kDebug() << "In the xslt filter" << endl;
+    kDebug() <<"In the xslt filter";
 
     KoStoreDevice* in = m_chain->storageFile("root", KoStore::Read);
 

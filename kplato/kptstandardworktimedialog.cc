@@ -96,7 +96,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    //kDebug()<<k_funcinfo<<&p<<endl;
+    //kDebug()<<k_funcinfo<<&p;
     m_original = p.standardWorktime();
     dia = new StandardWorktimeDialogImpl(m_original, this);
 
@@ -109,7 +109,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
 }
 
 K3MacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QString n = i18n("Modify Standard Worktime");
     K3MacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
@@ -150,7 +150,7 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_week = m_std->week();
     m_day = m_std->day();
 
-    kDebug()<<k_funcinfo<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day<<endl;
+    kDebug()<<k_funcinfo<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day;
     year->setRange(1.0, 8784.0, 0.1, 1);
     year->setValue(m_year);
     month->setRange(1.0, 744.0, 0.1, 1);
@@ -177,7 +177,7 @@ void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
 }
 
 void StandardWorktimeDialogImpl::slotYearChanged(double value) {
-    //kDebug()<<k_funcinfo<<value<<endl;
+    //kDebug()<<k_funcinfo<<value;
     m_year = value;
     if (month->value() > value)
         month->setValue(value);

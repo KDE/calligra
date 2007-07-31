@@ -73,7 +73,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
                 KoGenStyle gs( KoGenStyle::StyleAuto, "text", (*it).m_layout.m_autoStyleName );
                 fillGenStyleWithFormatOne( *data , gs, false );
                 data->m_autoStyleName = m_oasisGenStyles.lookup( gs, "T" );
-                kDebug(30520) << "Format: Parent " << (*it).m_layout.m_autoStyleName << " => " << data->m_autoStyleName << endl;
+                kDebug(30520) <<"Format: Parent" << (*it).m_layout.m_autoStyleName <<" =>" << data->m_autoStyleName;
             }
         }
     }
@@ -129,7 +129,7 @@ void KWord13OasisGenerator::preparePageLayout( void )
         style.addChildElement( "style:columns", strElement );
     }
     const QString automaticPageStyle ( m_oasisGenStyles.lookup( style, "pm" ) );
-    kDebug(30520) << "Automatic page style: " << automaticPageStyle << endl;
+    kDebug(30520) <<"Automatic page style:" << automaticPageStyle;
 }
 
 
@@ -199,7 +199,7 @@ void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
 
     layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, "P", true );
 
-    kDebug(30520) << "Layout: Parent " << layout.m_name << " => " << layout.m_autoStyleName << endl;
+    kDebug(30520) <<"Layout: Parent" << layout.m_name <<" =>" << layout.m_autoStyleName;
 }
 
 
@@ -223,7 +223,7 @@ void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
 
     layout.m_autoStyleName = m_oasisGenStyles.lookup( gs, layout.m_name, false );
 
-    kDebug(30520) << "Style: " << layout.m_name << " => " << layout.m_autoStyleName << endl;
+    kDebug(30520) <<"Style:" << layout.m_name <<" =>" << layout.m_autoStyleName;
 }
 
 
@@ -873,12 +873,12 @@ void KWord13OasisGenerator::writePictures( void )
     {
         if ( !it.current()->m_valid || !it.current()->m_tempFile )
         {
-            kDebug(30520) << "No data for picture: " << it.currentKey() << endl;
+            kDebug(30520) <<"No data for picture:" << it.currentKey();
             continue;
         }
         const QString fileName( it.current()->m_tempFile->name() );
         const QString oasisName( it.current()->getOasisPictureName() );
-        kDebug(30520) << "Copying... " << it.currentKey() << endl << " => " << oasisName << endl;
+        kDebug(30520) <<"Copying..." << it.currentKey() << endl <<" =>" << oasisName;
         QFile file( fileName );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
@@ -963,7 +963,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
     }
     else
     {
-        kDebug(30520) << "No preview file available to make an OASIS thumbnail!" << endl;
+        kDebug(30520) <<"No preview file available to make an OASIS thumbnail!";
     }
 
 

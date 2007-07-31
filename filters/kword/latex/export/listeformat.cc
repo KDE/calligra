@@ -38,7 +38,7 @@
 /* Destructors             */
 FormatElt::~FormatElt()
 {
-	kDebug(30522) << "Destruction d'un elementT" << endl;
+	kDebug(30522) <<"Destruction d'un elementT";
 	remFormat();
 }
 
@@ -78,7 +78,7 @@ FormatElt& FormatElt::operator = (const FormatElt & elt)
 //////////////////////////////////////////////////////////
 ListeFormat::ListeFormat()
 {
-	kDebug(30522) << "Create format list" << endl;
+	kDebug(30522) <<"Create format list";
 	_first  = 0;
 	_end    = 0;
 	_size   = 0;
@@ -86,9 +86,9 @@ ListeFormat::ListeFormat()
 
 ListeFormat::~ListeFormat()
 {
-	kDebug(30522) << "Destruction of a list of format" << endl;
+	kDebug(30522) <<"Destruction of a list of format";
 	vider();
-	kDebug(30522) << "ok" << endl;
+	kDebug(30522) <<"ok";
 }
 
 void ListeFormat::addLast(Format *elt)

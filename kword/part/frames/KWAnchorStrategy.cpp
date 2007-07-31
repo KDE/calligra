@@ -79,7 +79,7 @@ KWAnchorStrategy::~KWAnchorStrategy() {
 }
 
 bool KWAnchorStrategy::checkState(KoTextDocumentLayout::LayoutState *state) {
-//kDebug() << "KWAnchorStrategy::checkState [" << m_pass << "] pos: " << state->cursorPosition() << "/" << m_knowledgePoint << (m_finished?" Already finished!\n":"\n");
+//kDebug() <<"KWAnchorStrategy::checkState [" << m_pass <<"] pos:" << state->cursorPosition() <<"/" << m_knowledgePoint << (m_finished?" Already finished!":"");
     if(m_finished || m_knowledgePoint > state->cursorPosition())
         return false;
 

@@ -176,7 +176,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
     KoXmlNode namedAreas = KoDom::namedItemNS(body, KoXmlNS::table, "named-expressions");
     if (!namedAreas.isNull())
     {
-        kDebug(36003) << "Loading named areas..." << endl;
+        kDebug(36003) <<"Loading named areas...";
         KoXmlElement element;
         forEachElement (element, namedAreas)
         {
@@ -192,12 +192,12 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 // TODO: what is: sheet:base-cell-address
                 const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
                 const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
-                kDebug(36003) << "Named area found, name: " << name << ", area: " << range << endl;
+                kDebug(36003) <<"Named area found, name:" << name <<", area:" << range;
 
                 Region region(Region::loadOdf(range), d->doc->map());
                 if (!region.isValid())
                 {
-                    kDebug(36003) << "invalid area" << endl;
+                    kDebug(36003) <<"invalid area";
                     continue;
                 }
 
@@ -205,7 +205,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
             }
             else if (element.localName() == "named-expression")
             {
-                kDebug(36003) << "Named expression found." << endl;
+                kDebug(36003) <<"Named expression found.";
                 // TODO
             }
         }

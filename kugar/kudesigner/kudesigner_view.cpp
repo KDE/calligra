@@ -120,7 +120,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent)
         //                 connect( m_propertyEditor, SIGNAL(createPluggedInEditor(QWidget*&, Editor *, Property*, Box *)),
         //                          m_doc->plugin(), SLOT(createPluggedInEditor(QWidget*&, Editor *, Property*, Box *)));
 
-        kDebug() << "*************Property and plugin have been connected" << endl;
+        kDebug() <<"*************Property and plugin have been connected";
     }
 
     shell() ->addDockWidget( m_doc->propertyPosition(),dw1 );
@@ -279,12 +279,12 @@ void KudesignerView::populateProperties( Buffer *buf )
 
 void KudesignerView::cut()
 {
-    //    kDebug(31000) << "KudesignerView::cut(): CUT called" << endl;
+    //    kDebug(31000) <<"KudesignerView::cut(): CUT called";
 }
 
 void KudesignerView::copy()
 {
-    //    kDebug(31000) << "KudesignerView::copy(): COPY called" << endl;
+    //    kDebug(31000) <<"KudesignerView::copy(): COPY called";
 }
 
 void KudesignerView::paste( )

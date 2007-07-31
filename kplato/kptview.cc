@@ -252,7 +252,7 @@ void ViewListTreeWidget::drawRow( QPainter *painter, const QStyleOptionViewItem 
 
 void ViewListTreeWidget::handleMousePress( QTreeWidgetItem *item )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( item == 0 )
         return ;
 
@@ -308,19 +308,19 @@ ViewListWidget::~ViewListWidget()
 
 void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( item && item->type() == ViewListItem::ItemType_ChildDocument && col == 0 ) {
         DocumentChild *ch = static_cast<ViewListItem*>(item)->documentChild();
         if ( ch ) {
             ch->setTitle( item->text( 0 ) );
-            //kDebug()<<k_funcinfo<<ch->title()<<endl;
+            //kDebug()<<k_funcinfo<<ch->title();
         }
     }
 }
 
 void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( item == 0 || item->type() == ViewListItem::ItemType_Category ) {
         return ;
     }
@@ -329,7 +329,7 @@ void ViewListWidget::slotActivated( QTreeWidgetItem *item, QTreeWidgetItem *prev
 
 ViewListItem *ViewListWidget::addCategory( const QString &tag, const QString& name )
 {
-    //kDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo;
     ViewListItem *item = m_viewlist->findCategory( tag );
     if ( item == 0 ) {
         item = new ViewListItem( m_viewlist, tag, QStringList( name ), ViewListItem::ItemType_Category );
@@ -346,7 +346,7 @@ ViewListItem *ViewListWidget::addView( QTreeWidgetItem *category, const QString 
     item->setDocument( doc );
     if ( !icon.isEmpty() )
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
-    //kDebug() << k_funcinfo << "added: " << item << endl;
+    //kDebug() << k_funcinfo <<"added:" << item;
     return item;
 }
 
@@ -360,18 +360,18 @@ ViewListItem *ViewListWidget::createView( const QString& tag, const QString& nam
         item->setData( 0, Qt::DecorationRole, KIcon( icon ) );
     }
     item->setFlags( item->flags() | Qt::ItemIsEditable );
-    //kDebug() << k_funcinfo << "added: " << item << endl;
+    //kDebug() << k_funcinfo <<"added:" << item;
     return item;
 }
 
 void ViewListWidget::setSelected( QTreeWidgetItem *item )
 {
-    //kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
+    //kDebug()<<k_funcinfo<<item<<","<<m_viewlist->currentItem();
     if ( item == 0 ) {
         return;
     }
     m_viewlist->setCurrentItem( item );
-    //kDebug()<<k_funcinfo<<item<<", "<<m_viewlist->currentItem()<<endl;
+    //kDebug()<<k_funcinfo<<item<<","<<m_viewlist->currentItem();
 }
 
 KoView *ViewListWidget::findView( const QString &tag )
@@ -391,7 +391,7 @@ ViewListItem *ViewListWidget::findItem( const QString &tag, QTreeWidgetItem *par
     for (int i = 0; i < parent->childCount(); ++i ) {
         ViewListItem * ch = static_cast<ViewListItem*>( parent->child( i ) );
         if ( ch->tag() == tag ) {
-            //kDebug()<<k_funcinfo<<ch<<", "<<view<<endl;
+            //kDebug()<<k_funcinfo<<ch<<","<<view;
             return ch;
         }
         ch = findItem( tag, ch );
@@ -410,7 +410,7 @@ ViewListItem *ViewListWidget::findItem(  const QWidget *view, QTreeWidgetItem *p
     for (int i = 0; i < parent->childCount(); ++i ) {
         ViewListItem * ch = static_cast<ViewListItem*>( parent->child( i ) );
         if ( ch->view() == view ) {
-            //kDebug()<<k_funcinfo<<ch<<", "<<view<<endl;
+            //kDebug()<<k_funcinfo<<ch<<","<<view;
             return ch;
         }
         ch = findItem( view, ch );
@@ -423,9 +423,9 @@ ViewListItem *ViewListWidget::findItem(  const QWidget *view, QTreeWidgetItem *p
 
 void ViewListWidget::slotCreatePart()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<k_funcinfo;
     QString servName = sender()->objectName();
-    kDebug()<<k_funcinfo<<servName<<endl;
+    kDebug()<<k_funcinfo<<servName;
     KService::Ptr serv = KService::serviceByName( servName );
     KoDocumentEntry entry = KoDocumentEntry( serv );
     emit createKofficeDocument( entry );
@@ -435,7 +435,7 @@ void ViewListWidget::slotEditDocumentTitle()
 {
     //QTreeWidgetItem *item = m_viewlist->currentItem();
     if ( m_contextitem ) {
-        kDebug()<<k_funcinfo<<m_contextitem<<": "<<m_contextitem->type()<<endl;
+        kDebug()<<k_funcinfo<<m_contextitem<<":"<<m_contextitem->type();
         m_viewlist->editItem( m_contextitem );
     }
 }
@@ -443,7 +443,7 @@ void ViewListWidget::slotEditDocumentTitle()
 void ViewListWidget::slotRemoveDocument()
 {
     if ( m_contextitem ) {
-        kDebug()<<k_funcinfo<<m_contextitem<<": "<<m_contextitem->type()<<endl;
+        kDebug()<<k_funcinfo<<m_contextitem<<":"<<m_contextitem->type();
         m_part->addCommand( new DeleteEmbeddedDocumentCmd( m_part, this, m_contextitem, i18n( "Remove Document" ) ) );
         m_contextitem = 0;
     }
@@ -569,7 +569,7 @@ View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
         m_currentEstimateType( Estimate::Use_Expected )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     getProject().setCurrentSchedule( Schedule::Expected );
 
     setComponentData( Factory::global() );
@@ -793,7 +793,7 @@ View::View( Part* part, QWidget* parent )
 
 
     m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
-    //kDebug()<<k_funcinfo<<" end "<<endl;
+    //kDebug()<<k_funcinfo<<" end";
 }
 
 View::~View()
@@ -1093,12 +1093,12 @@ void View::setZoom( double )
 
 void View::setupPrinter( KPrinter & /*printer*/ )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 void View::print( KPrinter &printer )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( printer.previewOnly() ) {
         //HACK: KoMainWindow shows setup on print, but not on print preview!
         if ( !printer.setup() ) {
@@ -1122,22 +1122,22 @@ void View::print( KPrinter &printer )
 
 void View::slotEditCut()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 void View::slotEditCopy()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 void View::slotEditPaste()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 void View::slotViewGanttResources()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1149,7 +1149,7 @@ void View::slotViewGanttResources()
 
 void View::slotViewGanttTaskName()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1161,7 +1161,7 @@ void View::slotViewGanttTaskName()
 
 void View::slotViewGanttTaskLinks()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1173,7 +1173,7 @@ void View::slotViewGanttTaskLinks()
 
 void View::slotViewGanttProgress()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1185,7 +1185,7 @@ void View::slotViewGanttProgress()
 
 void View::slotViewGanttFloat()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1197,7 +1197,7 @@ void View::slotViewGanttFloat()
 
 void View::slotViewGanttCriticalTasks()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1209,7 +1209,7 @@ void View::slotViewGanttCriticalTasks()
 
 void View::slotViewGanttCriticalPath()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1221,7 +1221,7 @@ void View::slotViewGanttCriticalPath()
 
 void View::slotViewGanttNoInformation()
 {
-    //kDebug() << k_funcinfo << ganttview->showNoInformation() << endl;
+    //kDebug() << k_funcinfo << ganttview->showNoInformation();
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1233,7 +1233,7 @@ void View::slotViewGanttNoInformation()
 
 void View::slotViewTaskAppointments()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
     if ( v == 0 ) {
         return;
@@ -1246,49 +1246,49 @@ void View::slotViewTaskAppointments()
 
 void View::slotViewSelector( bool show )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_viewlist->setVisible( show );
 }
 
 void View::slotViewGantt()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_viewlist->setSelected( m_viewlist->findItem( "Ganttview" ) );
 }
 
 void View::slotViewResources()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_viewlist->setSelected( m_viewlist->findItem( "ResourceView" ) );
 }
 
 void View::slotViewResourceAppointments()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 
 }
 
 void View::slotViewAccounts()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_viewlist->setSelected( m_viewlist->findItem( "AccountsView" ) );
 }
 
 void View::slotViewTaskEditor()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
 }
 
 void View::slotViewCalendarEditor()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_viewlist->setSelected( m_viewlist->findItem( "CalendarEditor" ) );
 }
 
 void View::slotViewTaskStatusView()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_viewlist->setSelected( m_viewlist->findItem( "TaskStatusView" ) );
 }
 
@@ -1319,7 +1319,7 @@ void View::slotEditCalendar( Calendar *calendar )
     if ( dia->exec()  == QDialog::Accepted) {
         K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
-            //kDebug()<<k_funcinfo<<"Modifying calendar"<<endl;
+            //kDebug()<<k_funcinfo<<"Modifying calendar";
             getPart() ->addCommand( cmd ); //also executes
         }
     }
@@ -1332,7 +1332,7 @@ void View::slotProjectCalendar()
     if ( dia->exec()  == QDialog::Accepted) {
         K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
-            //kDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
+            //kDebug()<<k_funcinfo<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
         }
     }
@@ -1345,7 +1345,7 @@ void View::slotProjectAccounts()
     if ( dia->exec()  == QDialog::Accepted) {
         K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
-            //kDebug()<<k_funcinfo<<"Modifying account(s)"<<endl;
+            //kDebug()<<k_funcinfo<<"Modifying account(s)";
             getPart() ->addCommand( cmd ); //also executes
         }
     }
@@ -1358,7 +1358,7 @@ void View::slotProjectWorktime()
     if ( dia->exec()  == QDialog::Accepted) {
         K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
-            //kDebug()<<k_funcinfo<<"Modifying calendar(s)"<<endl;
+            //kDebug()<<k_funcinfo<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
         }
     }
@@ -1371,7 +1371,7 @@ void View::slotProjectResources()
     if ( dia->exec()  == QDialog::Accepted) {
         K3Command * cmd = dia->buildCommand( getPart() );
         if ( cmd ) {
-            //kDebug()<<k_funcinfo<<"Modifying resources"<<endl;
+            //kDebug()<<k_funcinfo<<"Modifying resources";
             getPart() ->addCommand( cmd ); //also executes
         }
     }
@@ -1409,7 +1409,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
         return; // Only view expected
     }
     MainSchedule *s = const_cast<MainSchedule*>( sch ); // FIXME
-    //kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
+    //kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted();
     QAction *checked = m_scheduleActionGroup->checkedAction();
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
@@ -1428,7 +1428,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
 
 void View::slotScheduleChanged( MainSchedule *sch )
 {
-    //kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted()<<endl;
+    //kDebug()<<k_funcinfo<<sch->name()<<" deleted="<<sch->isDeleted();
     if ( sch->isDeleted() || ! sch->isScheduled() ) {
         slotScheduleRemoved( sch );
         return;
@@ -1448,7 +1448,7 @@ QAction *View::addScheduleAction( Schedule *sch )
         actionCollection()->addAction(n, act );
         m_scheduleActions.insert( act, sch );
         m_scheduleActionGroup->addAction( act );
-        //kDebug()<<k_funcinfo<<"Add: "<<n<<endl;
+        //kDebug()<<k_funcinfo<<"Add:"<<n;
         connect( act, SIGNAL(destroyed( QObject* ) ), SLOT( slotActionDestroyed( QObject* ) ) );
     }
     return act;
@@ -1456,12 +1456,12 @@ QAction *View::addScheduleAction( Schedule *sch )
 
 void View::slotViewSchedule( QAction *act )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( act != 0 ) {
         Schedule *sch = m_scheduleActions.value( act, 0 );
         if ( sch->id() != getProject().currentViewScheduleId() ) {
             getProject().setCurrentViewScheduleId( sch->id() );
-            //kDebug()<<k_funcinfo<<sch->id()<<endl;
+            //kDebug()<<k_funcinfo<<sch->id();
         }
     }
     setLabel();
@@ -1469,14 +1469,14 @@ void View::slotViewSchedule( QAction *act )
 
 void View::slotActionDestroyed( QObject *o )
 {
-    //kDebug()<<k_funcinfo<<o->name()<<endl;
+    //kDebug()<<k_funcinfo<<o->name();
     m_scheduleActions.remove( static_cast<QAction*>( o ) );
     slotViewSchedule( m_scheduleActionGroup->checkedAction() );
 }
 
 void View::slotPlugScheduleActions()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     unplugActionList( "view_schedule_list" );
     foreach( QAction *act, m_scheduleActions.keys() ) {
         m_scheduleActionGroup->removeAction( act );
@@ -1548,12 +1548,12 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
 
 void View::slotViewReportDesign()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 void View::slotViewReports()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     //m_tab->setCurrentWidget(m_reportview);
 }
 
@@ -1575,7 +1575,7 @@ void View::slotAddSubTask()
             delete dia;
             return ;
         } else
-            kDebug() << k_funcinfo << "Cannot insert new project. Hmm, no current node!?" << endl;
+            kDebug() << k_funcinfo <<"Cannot insert new project. Hmm, no current node!?";
     }
     delete node;
     delete dia;
@@ -1596,7 +1596,7 @@ void View::slotAddTask()
             delete dia;
             return ;
         } else
-            kDebug() << k_funcinfo << "Cannot insert new task. Hmm, no current node!?" << endl;
+            kDebug() << k_funcinfo <<"Cannot insert new task. Hmm, no current node!?";
     }
     delete node;
     delete dia;
@@ -1619,7 +1619,7 @@ void View::slotAddMilestone()
             delete dia;
             return ;
         } else
-            kDebug() << k_funcinfo << "Cannot insert new milestone. Hmm, no current node!?" << endl;
+            kDebug() << k_funcinfo <<"Cannot insert new milestone. Hmm, no current node!?";
     }
     delete node;
     delete dia;
@@ -1627,7 +1627,7 @@ void View::slotAddMilestone()
 
 void View::slotDefineWBS()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     WBSDefinitionDialog * dia = new WBSDefinitionDialog( getPart() ->wbsDefinition() );
     dia->exec();
 
@@ -1636,14 +1636,14 @@ void View::slotDefineWBS()
 
 void View::slotGenerateWBS()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     getPart() ->generateWBS();
     slotUpdate();
 }
 
 void View::slotConfigure()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     ConfigDialog * dia = new ConfigDialog( getPart() ->config(), getProject() );
     dia->exec();
     delete dia;
@@ -1693,14 +1693,14 @@ ResourceGroup *View::currentResourceGroup()
 
 void View::slotOpenNode()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Node * node = currentTask();
     slotOpenNode( node );
 }
 
 void View::slotOpenNode( Node *node )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( !node )
         return ;
 
@@ -1770,7 +1770,7 @@ void View::slotOpenNode( Node *node )
 
 void View::slotTaskProgress()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Node * node = currentTask();
     if ( !node )
         return ;
@@ -1818,7 +1818,7 @@ void View::slotTaskProgress()
 
 void View::slotDeleteTask( QList<Node*> lst )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( lst.count() == 1 ) {
         slotDeleteTask( lst.takeFirst() );
         return;
@@ -1828,7 +1828,7 @@ void View::slotDeleteTask( QList<Node*> lst )
     while ( !lst.isEmpty() ) {
         Node *node = lst.takeFirst();
         if ( node == 0 || node->parentNode() == 0 ) {
-            kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
+            kDebug() << k_funcinfo << ( node ?"Task is main project" :"No current task" );
             continue;
         }
         bool del = true;
@@ -1839,7 +1839,7 @@ void View::slotDeleteTask( QList<Node*> lst )
             }
         }
         if ( del ) {
-            //kDebug()<<k_funcinfo<<num<<": delete: "<<node->name()<<endl;
+            //kDebug()<<k_funcinfo<<num<<": delete:"<<node->name();
             cmd->addCommand( new NodeDeleteCmd( getPart(), node, i18n( "Delete Task" ) ) );
             num++;
         }
@@ -1853,9 +1853,9 @@ void View::slotDeleteTask( QList<Node*> lst )
 
 void View::slotDeleteTask( Node *node )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( node == 0 || node->parentNode() == 0 ) {
-        kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
+        kDebug() << k_funcinfo << ( node ?"Task is main project" :"No current task" );
         return ;
     }
     NodeDeleteCmd *cmd = new NodeDeleteCmd( getPart(), node, i18n( "Delete Task" ) );
@@ -1864,16 +1864,16 @@ void View::slotDeleteTask( Node *node )
 
 void View::slotDeleteTask()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     return slotDeleteTask( currentTask() );
 }
 
 void View::slotIndentTask()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Node * node = currentTask();
     if ( node == 0 || node->parentNode() == 0 ) {
-        kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
+        kDebug() << k_funcinfo << ( node ?"Task is main project" :"No current task" );
         return ;
     }
     if ( getProject().canIndentTask( node ) ) {
@@ -1884,10 +1884,10 @@ void View::slotIndentTask()
 
 void View::slotUnindentTask()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Node * node = currentTask();
     if ( node == 0 || node->parentNode() == 0 ) {
-        kDebug() << k_funcinfo << ( node ? "Task is main project" : "No current task" ) << endl;
+        kDebug() << k_funcinfo << ( node ?"Task is main project" :"No current task" );
         return ;
     }
     if ( getProject().canUnindentTask( node ) ) {
@@ -1898,7 +1898,7 @@ void View::slotUnindentTask()
 
 void View::slotMoveTaskUp()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 
     Node * task = currentTask();
     if ( 0 == task ) {
@@ -1909,7 +1909,7 @@ void View::slotMoveTaskUp()
     }
 
     if ( Node::Type_Project == task->type() ) {
-        kDebug() << k_funcinfo << "The root node cannot be moved up" << endl;
+        kDebug() << k_funcinfo <<"The root node cannot be moved up";
         return ;
     }
     if ( getProject().canMoveTaskUp( task ) ) {
@@ -1920,7 +1920,7 @@ void View::slotMoveTaskUp()
 
 void View::slotMoveTaskDown()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 
     Node * task = currentTask();
     if ( 0 == task ) {
@@ -1930,7 +1930,7 @@ void View::slotMoveTaskDown()
     }
 
     if ( Node::Type_Project == task->type() ) {
-        kDebug() << k_funcinfo << "The root node cannot be moved down" << endl;
+        kDebug() << k_funcinfo <<"The root node cannot be moved down";
         return ;
     }
     if ( getProject().canMoveTaskDown( task ) ) {
@@ -1941,7 +1941,7 @@ void View::slotMoveTaskDown()
 
 void View::slotAddRelation( Node *par, Node *child )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Relation * rel = new Relation( par, child );
     AddRelationDialog *dia = new AddRelationDialog( rel, this );
     if ( dia->exec()  == QDialog::Accepted) {
@@ -1956,7 +1956,7 @@ void View::slotAddRelation( Node *par, Node *child )
 
 void View::slotAddRelation( Node *par, Node *child, int linkType )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( linkType == Relation::FinishStart ||
             linkType == Relation::StartStart ||
             linkType == Relation::FinishFinish ) {
@@ -1969,7 +1969,7 @@ void View::slotAddRelation( Node *par, Node *child, int linkType )
 
 void View::slotModifyRelation( Relation *rel )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     ModifyRelationDialog * dia = new ModifyRelationDialog( rel, this );
     if ( dia->exec()  == QDialog::Accepted) {
         if ( dia->relationIsDeleted() ) {
@@ -1986,7 +1986,7 @@ void View::slotModifyRelation( Relation *rel )
 
 void View::slotModifyRelation( Relation *rel, int linkType )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( linkType == Relation::FinishStart ||
             linkType == Relation::StartStart ||
             linkType == Relation::FinishFinish ) {
@@ -2022,7 +2022,7 @@ void View::slotDeleteRelation()
 
 void View::slotAddResource( ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( group == 0 ) {
         return;
     }
@@ -2045,7 +2045,7 @@ void View::slotAddResource( ResourceGroup *group )
 
 void View::slotEditResource()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Resource * r = currentResource();
     if ( r == 0 ) {
         return ;
@@ -2071,7 +2071,7 @@ void View::slotDeleteResourceGroup( ResourceGroup *group )
 
 void View::slotDeleteResourceObjects( QObjectList lst )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     if ( lst.count() == 1 ) {
         Resource *r = qobject_cast<Resource*>( lst.first() );
         if ( r ) {
@@ -2121,16 +2121,16 @@ Part *View::getPart() const
 
 void View::slotConnectNode()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     /*    NodeItem *curr = ganttview->currentItem();
         if (curr) {
-            kDebug()<<k_funcinfo<<"node="<<curr->getNode().name()<<endl;
+            kDebug()<<k_funcinfo<<"node="<<curr->getNode().name();
         }*/
 }
 
 QMenu * View::popupMenu( const QString& name )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Q_ASSERT( factory() );
     if ( factory() )
         return ( ( QMenu* ) factory() ->container( name, this ) );
@@ -2139,7 +2139,7 @@ QMenu * View::popupMenu( const QString& name )
 
 void View::slotUpdate()
 {
-    //kDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
+    //kDebug()<<k_funcinfo<<"calculate="<<calculate;
 
     m_updateGanttview = true;
     m_updateResourceview = true;
@@ -2153,12 +2153,12 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 {
     if ( activate ) {
         foreach( QString name, view->actionListNames() ) {
-            //kDebug()<<k_funcinfo<<"activate "<<name<<", "<<view->actionList( name ).count()<<endl;
+            //kDebug()<<k_funcinfo<<"activate"<<name<<","<<view->actionList( name ).count();
             plugActionList( name, view->actionList( name ) );
         }
     } else {
         foreach( QString name, view->actionListNames() ) {
-            //kDebug()<<k_funcinfo<<"deactivate "<<name<<endl;
+            //kDebug()<<k_funcinfo<<"deactivate"<<name;
             unplugActionList( name );
         }
     }
@@ -2166,7 +2166,7 @@ void View::slotGuiActivated( ViewBase *view, bool activate )
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    //kDebug()<<k_funcinfo<<ev->activated()<<endl;
+    //kDebug()<<k_funcinfo<<ev->activated();
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone
@@ -2184,7 +2184,7 @@ KoDocument *View::hitTest( const QPoint &pos )
     // TODO: The gui handling can certainly be simplified (at least I think so),
     // by someone who have a better understanding of all the possibilities of KParts
     // than I have.
-    kDebug()<<k_funcinfo<<pos<<endl;
+    kDebug()<<k_funcinfo<<pos;
     // pos is in m_tab->currentWidget() coordinates
     QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
     if ( m_tab->currentWidget()->frameGeometry().contains( m_tab->currentWidget()->mapFromGlobal( gl ) ) ) {
@@ -2195,7 +2195,7 @@ KoDocument *View::hitTest( const QPoint &pos )
                 // Check which view has actually been hit (can aslo be the splitter)
                 ViewBase *v = sp->findView( pos );
                 if ( v ) {
-                    kDebug()<<k_funcinfo<<"Hit on: "<<v<<endl;
+                    kDebug()<<k_funcinfo<<"Hit on:"<<v;
                     v->setGuiActive( true );
                 }
             }
@@ -2224,7 +2224,7 @@ KoDocument *View::hitTest( const QPoint &pos )
             return 0;
         }
     }
-    kDebug()<<k_funcinfo<<"No hit: "<<pos<<endl;
+    kDebug()<<k_funcinfo<<"No hit:"<<pos;
     return 0;
 
 }
@@ -2304,17 +2304,17 @@ void View::slotCreateKofficeDocument( KoDocumentEntry &entry)
 
 void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
 {
-    //kDebug() << k_funcinfo << "item=" << item << ", "<<prev<<endl;
+    //kDebug() << k_funcinfo <<"item=" << item <<","<<prev;
     if ( prev && prev->type() != ViewListItem::ItemType_ChildDocument ) {
         // Remove sub-view specific gui
-        //kDebug()<<k_funcinfo<<"Deactivate: "<<prev<<endl;
+        //kDebug()<<k_funcinfo<<"Deactivate:"<<prev;
         ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
         if ( v ) {
             v->setGuiActive( false );
         }
     }
     if ( item->type() == ViewListItem::ItemType_SubView ) {
-        //kDebug()<<k_funcinfo<<"Activate: "<<item<<endl;
+        //kDebug()<<k_funcinfo<<"Activate:"<<item;
         m_tab->setCurrentWidget( item->view() );
         if (  prev && prev->type() != ViewListItem::ItemType_SubView ) {
             // Put back my own gui (removed when (if) viewing different doc)
@@ -2328,7 +2328,7 @@ void View::slotViewActivated( ViewListItem *item, ViewListItem *prev )
         return;
     }
     if ( item->type() == ViewListItem::ItemType_ChildDocument ) {
-        //kDebug()<<k_funcinfo<<"Activated: "<<item->view()<<endl;
+        //kDebug()<<k_funcinfo<<"Activated:"<<item->view();
         // changing doc also takes care of all gui
         m_tab->setCurrentWidget( item->view() );
         item->documentChild()->setActivated( true, item->view() );
@@ -2343,12 +2343,12 @@ QWidget *View::canvas() const
 
 void View::slotCurrentChanged( int )
 {
-    kDebug()<<k_funcinfo<<m_tab->currentIndex()<<endl;
+    kDebug()<<k_funcinfo<<m_tab->currentIndex();
     ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
     if ( item == 0 ) {
         return;
     }
-    kDebug()<<k_funcinfo<<item->text(0)<<endl;
+    kDebug()<<k_funcinfo<<item->text(0);
     item->setSelected( true );
 }
 
@@ -2383,7 +2383,7 @@ void View::updateView( QWidget * )
 
 void View::slotRenameNode( Node *node, const QString& name )
 {
-    //kDebug()<<k_funcinfo<<name<<endl;
+    //kDebug()<<k_funcinfo<<name;
     if ( node ) {
         NodeModifyNameCmd * cmd = new NodeModifyNameCmd( getPart(), *node, name, i18n( "Modify Name" ) );
         getPart() ->addCommand( cmd );
@@ -2394,21 +2394,21 @@ void View::slotPopupMenu( const QString& menuname, const QPoint & pos )
 {
     QMenu * menu = this->popupMenu( menuname );
     if ( menu ) {
-        //kDebug()<<k_funcinfo<<menu<<": "<<menu->actions().count()<<endl;
+        //kDebug()<<k_funcinfo<<menu<<":"<<menu->actions().count();
         menu->exec( pos );
     }
 }
 
 void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListItem *item )
 {
-    //kDebug()<<k_funcinfo<<menuname<<endl;
+    //kDebug()<<k_funcinfo<<menuname;
     m_viewlistItem = item;
     slotPopupMenu( menuname, pos );
 }
 
 bool View::setContext( const Context &context )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_currentEstimateType = context.currentEstimateType;
 
     getProject().setCurrentViewScheduleId( context.currentSchedule );
@@ -2440,14 +2440,14 @@ bool View::setContext( const Context &context )
 
 void View::getContext( Context &context ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     context.currentEstimateType = m_currentEstimateType;
 
     context.currentSchedule = getProject().currentViewScheduleId();
     ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
     if ( item ) {
         context.currentView = item->tag();
-        kDebug()<<k_funcinfo<<"Context currentview: "<<context.currentView<<", "<<item->text( 0 )<<endl;
+        kDebug()<<k_funcinfo<<"Context currentview:"<<context.currentView<<","<<item->text( 0 );
     }
     // get context for each subview
     for ( int i = 0; i < m_tab->count(); ++i ) {
@@ -2460,7 +2460,7 @@ void View::getContext( Context &context ) const
 
 void View::setLabel()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     long id = getProject().currentViewScheduleId();
     Schedule *s = id == -1 ? getProject().currentSchedule() : getProject().findSchedule( id );
     if ( s && !s->isDeleted() && s->isScheduled() ) {
@@ -2473,7 +2473,7 @@ void View::setLabel()
 #ifndef NDEBUG
 void View::slotPrintDebug()
 {
-    kDebug() << "-------- Debug printout: Node list" << endl;
+    kDebug() <<"-------- Debug printout: Node list";
     /*    Node *curr = ganttview->currentNode();
         if (curr) {
             curr->printDebug(true,"");
@@ -2486,7 +2486,7 @@ void View::slotPrintSelectedDebug()
     if ( m_tab->currentWidget() == ganttview ) {
         Node * curr = ganttview->currentNode();
         if ( curr ) {
-            kDebug() << "-------- Debug printout: Selected node" << endl;
+            kDebug() <<"-------- Debug printout: Selected node";
             curr->printDebug( true, "" );
         } else
             slotPrintDebug();
@@ -2494,13 +2494,13 @@ void View::slotPrintSelectedDebug()
     } else if ( m_tab->currentWidget() == m_viewlist->findView( "ResourceEditor" ) ) {
         Resource *r = static_cast<ViewBase*>( m_tab->currentWidget() )->currentResource();
         if ( r ) {
-            kDebug() <<"-------- Debug printout: Selected resource"<<endl;
+            kDebug() <<"-------- Debug printout: Selected resource";
             r->printDebug("  !");
             return;
         }
         ResourceGroup *g = static_cast<ViewBase*>( m_tab->currentWidget() )->currentResourceGroup();
         if ( g ) {
-            kDebug() <<"-------- Debug printout: Selected group"<<endl;
+            kDebug() <<"-------- Debug printout: Selected group";
             g->printDebug("  !");
             return;
         }
@@ -2509,7 +2509,7 @@ void View::slotPrintSelectedDebug()
 }
 void View::slotPrintCalendarDebug()
 {
-    //kDebug() << "-------- Debug printout: Calendars" << endl;
+    //kDebug() <<"-------- Debug printout: Calendars";
     /*    Node *curr = ganttview->currentNode();
         if (curr) {
             curr->printDebug(true,"");
@@ -2521,33 +2521,33 @@ void View::slotPrintTestDebug()
     const QStringList & lst = getPart() ->xmlLoader().log();
 
     for ( QStringList::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it ) {
-        kDebug() << *it << endl;
+        kDebug() << *it;
     }
-    //     kDebug()<<"------------Test 1---------------------"<<endl;
+    //     kDebug()<<"------------Test 1---------------------";
     //     {
     //     DateTime d1(QDate(2006,1,2), QTime(8,0,0));
     //     DateTime d2 = d1.addSecs(3600);
     //     Duration d = d2 - d1;
     //     bool b = d==Duration(0,0,0,3600);
-    //     kDebug()<<"1: Success="<<b<<"    "<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString()<<endl;
+    //     kDebug()<<"1: Success="<<b<<""<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString();
     //     d = d1 - d2;
     //     b = d==Duration(0,0,0,3600);
-    //     kDebug()<<"2: Success="<<b<<"    "<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString()<<endl;
+    //     kDebug()<<"2: Success="<<b<<""<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString();
     //     d2 = d2.addDays(-2);
     //     d = d1 - d2;
     //     b = d==Duration(2,0,0)-Duration(0,0,0,3600);
-    //     kDebug()<<"3: Success="<<b<<"    "<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString()<<endl;
+    //     kDebug()<<"3: Success="<<b<<""<<d1.toString()<<"-"<<d2.toString()<<"="<<d.toString();
     //     d = d2 - d1;
     //     b = d==Duration(2,0,0)-Duration(0,0,0,3600);
-    //     kDebug()<<"4: Success="<<b<<"     "<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString()<<endl;
-    //     kDebug()<<endl;
+    //     kDebug()<<"4: Success="<<b<<""<<d2.toString()<<"-"<<d1.toString()<<"="<<d.toString();
+    //     kDebug();
     //     b = (d2 + d)==d1;
-    //     kDebug()<<"5: Success="<<b<<"   "<<d2<<"+"<<d.toString()<<"="<<d1<<endl;
+    //     kDebug()<<"5: Success="<<b<<""<<d2<<"+"<<d.toString()<<"="<<d1;
     //     b = (d1 - d)==d2;
-    //     kDebug()<<"6: Success="<<b<<"   "<<d1<<"-"<<d.toString()<<"="<<d2<<endl;
+    //     kDebug()<<"6: Success="<<b<<""<<d1<<"-"<<d.toString()<<"="<<d2;
     //     } // end test 1
-    //     kDebug()<<endl;
-    //     kDebug()<<"------------Test 2 Single calendar-----------------"<<endl;
+    //     kDebug();
+    //     kDebug()<<"------------Test 2 Single calendar-----------------";
     //     {
     //     Calendar *t = new Calendar("Test 2");
     //     QDate wdate(2006,1,2);
@@ -2560,53 +2560,53 @@ void View::slotPrintTestDebug()
     //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), CalendarDay::Working);
     //     day->addInterval(TimeInterval(t1, t2));
     //     if (!t->addDay(day)) {
-    //         kDebug()<<"Failed to add day"<<endl;
+    //         kDebug()<<"Failed to add day";
     //         delete day;
     //         delete t;
     //         return;
     //     }
-    //     kDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
-    //     kDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay()<<endl;
+    //     kDebug()<<"Added     date="<<day->date().toString()<<""<<day->startOfDay().toString()<<" -"<<day->endOfDay();
+    //     kDebug()<<"Found     date="<<day->date().toString()<<""<<day->startOfDay().toString()<<" -"<<day->endOfDay();
     //
     //     CalendarDay *d = t->findDay(wdate);
     //     bool b = (day == d);
-    //     kDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
+    //     kDebug()<<"1: Success="<<b<<"      Find same day";
     //
     //     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
     //     b = !dt.isValid();
-    //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
+    //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt;
     //
     //     dt = t->firstAvailableBefore(before, before.addDays(-10));
     //     b = !dt.isValid();
-    //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
+    //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt;
     //
     //     dt = t->firstAvailableAfter(before, after);
     //     b = dt == wdt1;
-    //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before<<"): ="<<dt<<endl;
+    //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before<<"): ="<<dt;
     //
     //     dt = t->firstAvailableBefore(after, before);
     //     b = dt == wdt2;
-    //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after<<"): ="<<dt<<endl;
+    //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after<<"): ="<<dt;
     //
     //     b = t->hasInterval(before, after);
-    //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before<<", "<<after<<")"<<endl;
+    //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before<<","<<after<<")";
     //
     //     b = !t->hasInterval(after, after.addDays(1));
-    //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after<<", "<<after.addDays(1)<<")"<<endl;
+    //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after<<","<<after.addDays(1)<<")";
     //
     //     b = !t->hasInterval(before, before.addDays(-1));
-    //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before<<", "<<before.addDays(-1)<<")"<<endl;
+    //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before<<","<<before.addDays(-1)<<")";
     //
     //     Duration e1(0, 2, 0); // 2 hours
     //     Duration e2 = t->effort(before, after);
     //     b = e1==e2;
-    //     kDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<" = "<<e2.toString()<<endl;
+    //     kDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<" ="<<e2.toString();
     //
     //     delete t;
     //     }// end test 2
     //
-    //     kDebug()<<endl;
-    //     kDebug()<<"------------Test 3 Parent calendar-----------------"<<endl;
+    //     kDebug();
+    //     kDebug()<<"------------Test 3 Parent calendar-----------------";
     //     {
     //     Calendar *t = new Calendar("Test 3");
     //     Calendar *p = new Calendar("Test 3 parent");
@@ -2621,65 +2621,65 @@ void View::slotPrintTestDebug()
     //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), CalendarDay::Working);
     //     day->addInterval(TimeInterval(t1, t2));
     //     if (!p->addDay(day)) {
-    //         kDebug()<<"Failed to add day"<<endl;
+    //         kDebug()<<"Failed to add day";
     //         delete day;
     //         delete t;
     //         return;
     //     }
-    //     kDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-    //     kDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
+    //     kDebug()<<"Added     date="<<day->date().toString()<<""<<day->startOfDay().toString()<<" -"<<day->endOfDay().toString();
+    //     kDebug()<<"Found     date="<<day->date().toString()<<""<<day->startOfDay().toString()<<" -"<<day->endOfDay().toString();
     //
     //     CalendarDay *d = p->findDay(wdate);
     //     bool b = (day == d);
-    //     kDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
+    //     kDebug()<<"1: Success="<<b<<"      Find same day";
     //
     //     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
     //     b = !dt.isValid();
-    //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after.toString()<<"): ="<<!b<<endl;
+    //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after.toString()<<"): ="<<!b;
     //
     //     dt = t->firstAvailableBefore(before, before.addDays(-10));
     //     b = !dt.isValid();
-    //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<!b<<endl;
+    //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<!b;
     //
     //     dt = t->firstAvailableAfter(before, after);
     //     b = dt == wdt1;
-    //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
+    //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString();
     //
     //     dt = t->firstAvailableBefore(after, before);
     //     b = dt == wdt2;
-    //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
+    //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString();
     //
     //     b = t->hasInterval(before, after);
-    //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
+    //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<","<<after<<")";
     //
     //     b = !t->hasInterval(after, after.addDays(1));
-    //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
+    //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<","<<after.addDays(1)<<")";
     //
     //     b = !t->hasInterval(before, before.addDays(-1));
-    //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
+    //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<","<<before.addDays(-1)<<")";
     //     Duration e1(0, 2, 0); // 2 hours
     //     Duration e2 = t->effort(before, after);
     //     b = e1==e2;
-    //     kDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"=="<<e2.toString()<<endl;
+    //     kDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<"=="<<e2.toString();
     //
     //     delete t;
     //     delete p;
     //     }// end test 3
-    //     kDebug()<<endl;
-    //     kDebug()<<"------------Test 4 Parent calendar/weekdays-------------"<<endl;
+    //     kDebug();
+    //     kDebug()<<"------------Test 4 Parent calendar/weekdays-------------";
     //     {
     //     QTime t1(8,0,0);
     //     QTime t2(10,0,0);
     //     Calendar *p = new Calendar("Test 4 parent");
     //     CalendarDay *wd1 = p->weekday(0); // monday
     //     if (wd1 == 0) {
-    //         kDebug()<<"Failed to get weekday"<<endl;
+    //         kDebug()<<"Failed to get weekday";
     //     }
     //     wd1->setState(CalendarDay::NonWorking);
     //
     //     CalendarDay *wd2 = p->weekday(2); // wednesday
     //     if (wd2 == 0) {
-    //         kDebug()<<"Failed to get weekday"<<endl;
+    //         kDebug()<<"Failed to get weekday";
     //     }
     //     wd2->addInterval(TimeInterval(t1, t2));
     //     wd2->setState(CalendarDay::Working);
@@ -2694,53 +2694,53 @@ void View::slotPrintTestDebug()
     //     CalendarDay *day = new CalendarDay(QDate(2006,1,2), CalendarDay::Working);
     //     day->addInterval(TimeInterval(t1, t2));
     //     if (!p->addDay(day)) {
-    //         kDebug()<<"Failed to add day"<<endl;
+    //         kDebug()<<"Failed to add day";
     //         delete day;
     //         delete t;
     //         return;
     //     }
-    //     kDebug()<<"Added     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
-    //     kDebug()<<"Found     date="<<day->date().toString()<<" "<<day->startOfDay().toString()<<" - "<<day->endOfDay().toString()<<endl;
+    //     kDebug()<<"Added     date="<<day->date().toString()<<""<<day->startOfDay().toString()<<" -"<<day->endOfDay().toString();
+    //     kDebug()<<"Found     date="<<day->date().toString()<<""<<day->startOfDay().toString()<<" -"<<day->endOfDay().toString();
     //
     //     CalendarDay *d = p->findDay(wdate);
     //     bool b = (day == d);
-    //     kDebug()<<"1: Success="<<b<<"      Find same day"<<endl;
+    //     kDebug()<<"1: Success="<<b<<"      Find same day";
     //
     //     DateTime dt = t->firstAvailableAfter(after, after.addDays(10));
     //     b = (dt.isValid() && dt == DateTime(QDate(2006,1,11), t1));
-    //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt<<endl;
+    //     kDebug()<<"2: Success="<<b<<"      firstAvailableAfter("<<after<<"): ="<<dt;
     //
     //     dt = t->firstAvailableBefore(before, before.addDays(-10));
     //     b = (dt.isValid() && dt == DateTime(QDate(2005, 12, 28), t2));
-    //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt<<endl;
+    //     kDebug()<<"3: Success="<<b<<"       firstAvailableBefore("<<before.toString()<<"): ="<<dt;
     //
     //     dt = t->firstAvailableAfter(before, after);
     //     b = dt == wdt1; // We find the day jan 2
-    //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString()<<endl;
+    //     kDebug()<<"4: Success="<<b<<"      firstAvailableAfter("<<before.toString()<<"): ="<<dt.toString();
     //
     //     dt = t->firstAvailableBefore(after, before);
     //     b = dt == wdt2; // We find the weekday (wednesday)
-    //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString()<<endl;
+    //     kDebug()<<"5: Success="<<b<<"      firstAvailableBefore("<<after.toString()<<"): ="<<dt.toString();
     //
     //     b = t->hasInterval(before, after);
-    //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<", "<<after<<")"<<endl;
+    //     kDebug()<<"6: Success="<<b<<"      hasInterval("<<before.toString()<<","<<after<<")";
     //
     //     b = !t->hasInterval(after, after.addDays(1));
-    //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<", "<<after.addDays(1)<<")"<<endl;
+    //     kDebug()<<"7: Success="<<b<<"      !hasInterval("<<after.toString()<<","<<after.addDays(1)<<")";
     //
     //     b = !t->hasInterval(before, before.addDays(-1));
-    //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<", "<<before.addDays(-1)<<")"<<endl;
+    //     kDebug()<<"8: Success="<<b<<"      !hasInterval("<<before.toString()<<","<<before.addDays(-1)<<")";
     //     Duration e1(0, 4, 0); // 2 hours
     //     Duration e2 = t->effort(before, after);
     //     b = e1==e2;
-    //     kDebug()<<"9: Success="<<b<<"      effort "<<e1.toString()<<"="<<e2.toString()<<endl;
+    //     kDebug()<<"9: Success="<<b<<"      effort"<<e1.toString()<<"="<<e2.toString();
     //
     //     DateTimeInterval r = t->firstInterval(before, after);
     //     b = r.first == wdt1; // We find the monday jan 2
-    //     kDebug()<<"10: Success="<<b<<"      firstInterval("<<before<<"): ="<<r.first<<", "<<r.second<<endl;
+    //     kDebug()<<"10: Success="<<b<<"      firstInterval("<<before<<"): ="<<r.first<<","<<r.second;
     //     r = t->firstInterval(r.second, after);
     //     b = r.first == DateTime(QDate(2006, 1, 4),t1); // We find the wednesday jan 4
-    //     kDebug()<<"11: Success="<<b<<"      firstInterval("<<r.second<<"): ="<<r.first<<", "<<r.second<<endl;
+    //     kDebug()<<"11: Success="<<b<<"      firstInterval("<<r.second<<"): ="<<r.first<<","<<r.second;
     //
     //     delete t;
     //     delete p;

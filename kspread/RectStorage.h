@@ -353,7 +353,7 @@ void RectStorage<T>::garbageCollection()
     // check wether the default style is placed first
     if ( currentPair.second == T() && pairs[0].second == T() && pairs[0].first == currentPair.first )
     {
-        kDebug(36001) << "RectStorage: removing default data at " << Region(currentPair.first.toRect()).name() << endl;
+        kDebug(36001) <<"RectStorage: removing default data at" << Region(currentPair.first.toRect()).name();
         m_tree.remove( currentPair.first, currentPair.second );
         triggerGarbageCollection();
         return; // already done
@@ -378,7 +378,7 @@ void RectStorage<T>::garbageCollection()
         if ( ( pair.second == currentPair.second || pair.second == T() ) &&
              pair.first.contains( currentPair.first ) )
         {
-            kDebug(36001) << "RectStorage: removing data at " << Region(currentPair.first.toRect()).name() << endl;
+            kDebug(36001) <<"RectStorage: removing data at" << Region(currentPair.first.toRect()).name();
             m_tree.remove( currentPair.first, currentPair.second );
             break;
         }

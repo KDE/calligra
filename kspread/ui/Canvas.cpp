@@ -466,7 +466,7 @@ void Canvas::validateSelection()
 
             if ( !d->validationInfo )
                 d->validationInfo = new QLabel(  this );
-            kDebug(36001)<<" display info validation\n";
+            kDebug(36001)<<" display info validation";
             double u = cell.width();
             double v = cell.height();
             double xpos = sheet->columnPosition( selection()->marker().x() ) - xOffset();
@@ -589,8 +589,8 @@ void Canvas::slotScrollHorz( int _value )
     if (!sheet)
         return;
 
-    kDebug(36005) << "slotScrollHorz: value = " << _value << endl;
-    //kDebug(36005) << kBacktrace() << endl;
+    kDebug(36005) <<"slotScrollHorz: value =" << _value;
+    //kDebug(36005) << kBacktrace();
 
     if ( sheet->layoutDirection() == Qt::RightToLeft )
         _value = horzScrollBar()->maximum() - _value;
@@ -632,7 +632,7 @@ void Canvas::slotScrollVert( int _value )
     if ( _value < 0 )
     {
         _value = 0;
-        kDebug (36001) << "Canvas::slotScrollVert: value out of range (_value: " <<
+        kDebug (36001) <<"Canvas::slotScrollVert: value out of range (_value:" <<
                 _value << ')' << endl;
     }
 
@@ -854,7 +854,7 @@ void Canvas::focusInEvent( QFocusEvent* )
   if ( !d->cellEditor )
     return;
 
-  //kDebug(36005) << "d->chooseCell : " << ( d->chooseCell ? "true" : "false" ) << endl;
+  //kDebug(36005) <<"d->chooseCell :" << ( d->chooseCell ?"true" :"false" );
   // If we are in editing mode, we redirect the
   // focus to the CellEditor or EditWidget
   // And we know which, using lastEditorWithFocus.
@@ -862,11 +862,11 @@ void Canvas::focusInEvent( QFocusEvent* )
   if ( lastEditorWithFocus() == EditWidget )
   {
     d->editWidget->setFocus();
-    //kDebug(36005) << "Focus to EditWidget" << endl;
+    //kDebug(36005) <<"Focus to EditWidget";
     return;
   }
 
-  //kDebug(36005) << "Redirecting focus to editor" << endl;
+  //kDebug(36005) <<"Redirecting focus to editor";
   d->cellEditor->setFocus();
 }
 
@@ -914,12 +914,12 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   {
     if ( event->source() == this  )
     {
-      kDebug(36005) << "source == this" << endl;
+      kDebug(36005) <<"source == this";
       dragMarkingRect = selection()->boundingRect();
     }
     else
     {
-      kDebug(36005) << "source != this" << endl;
+      kDebug(36005) <<"source != this";
       QByteArray data = mimeData->data( "application/x-kspread-snippet" );
       QString errorMsg;
       int errorLine;
@@ -928,7 +928,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
       if ( !doc.setContent( data, false, &errorMsg, &errorLine, &errorColumn ) )
       {
         // an error occurred
-        kDebug(36005) << "Canvas::daragMoveEvent: an error occurred" << endl
+        kDebug(36005) <<"Canvas::daragMoveEvent: an error occurred" << endl
                  << "line: " << errorLine << " col: " << errorColumn
                  << ' ' << errorMsg << endl;
         dragMarkingRect = QRect(1,1,1,1);
@@ -944,7 +944,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   }
   else // if ( mimeData->hasText() )
   {
-    kDebug(36005) << "has text" << endl;
+    kDebug(36005) <<"has text";
     dragMarkingRect = QRect(1,1,1,1);
   }
 #endif
@@ -981,7 +981,7 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
   const int col = sheet->leftColumn( eventPosX, tmp );
   const int row = sheet->topRow( eventPosY, tmp );
   dragMarkingRect.moveTo( QPoint( col, row ) );
-  kDebug(36005) << "MARKING RECT = " << dragMarkingRect << endl;
+  kDebug(36005) <<"MARKING RECT =" << dragMarkingRect;
 #endif
 }
 
@@ -1093,7 +1093,7 @@ QPoint Canvas::cursorPos()
 
 QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 {
-  kDebug(36005) << "Canvas::moveDirection" << endl;
+  kDebug(36005) <<"Canvas::moveDirection";
 
   register Sheet * const sheet = activeSheet();
   if (!sheet)
@@ -2002,7 +2002,7 @@ void Canvas::slotAutoScroll(const QPoint &scrollDistance)
   //              initiated in the canvas.
   if (!d->mousePressed)
     return;
-//   kDebug(36005) << "Canvas::slotAutoScroll(" << scrollDistance << " " << endl;
+//   kDebug(36005) <<"Canvas::slotAutoScroll(" << scrollDistance <<"";
   horzScrollBar()->setValue( horzScrollBar()->value() + scrollDistance.x() );
   vertScrollBar()->setValue( vertScrollBar()->value() + scrollDistance.y() );
 }
@@ -2191,7 +2191,7 @@ void Canvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 //     diffDueToBorders.setX( pageRect.right() - (rect.right() + move.x()) );
 
 
-  //kDebug(36005) << "rect.top() + move.y():" << rect.top() + move.y()<< endl;
+  //kDebug(36005) <<"rect.top() + move.y():" << rect.top() + move.y();
   if ( rect.top() + move.y() < 0 )
     diffDueToBorders.setY( -rect.top() - move.y() );
 //   else if ( rect.bottom() + move.y() > pageRect.bottom() )
@@ -2220,7 +2220,7 @@ void Canvas::moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged )
 
   if ( move != QPointF( 0, 0 ) )
   {
-        //kDebug(33001) << "moveObjectsByMouse move = " << move << endl;
+        //kDebug(33001) <<"moveObjectsByMouse move =" << move;
     activeSheet()->moveObject( view(), move, false );
   }
 }
@@ -2656,7 +2656,7 @@ void Canvas::copyOasisObjects()
     if ( !picture.isNull() )
         multiDrag->setMimeData( picture.dragObject( 0 ) );
 #endif
-    kDebug(36003) << k_funcinfo << "setting zip data: " << buffer.buffer().size() << " bytes." << endl;
+    kDebug(36003) << k_funcinfo <<"setting zip data:" << buffer.buffer().size() <<" bytes.";
     mimeData->setData( mimeType, buffer.buffer() );
 
     //save the objects as pictures too so that other programs can access them

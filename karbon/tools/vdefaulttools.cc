@@ -40,7 +40,7 @@ VDefaultTools::VDefaultTools(QObject *parent, const QStringList &)
 {
 	setComponentData(VDefaultToolsFactory::componentData());
 
-	kDebug() << "VDefaultTools. Class: "
+	kDebug() <<"VDefaultTools. Class:"
 		<< metaObject()->className()
 		<< ", Parent: "
 		<< parent->metaObject()->className()

@@ -106,7 +106,7 @@ QImage KWEFBaseWorker::loadAndConvertToImage(const QString& strName, const QStri
         return QImage();
     }
 
-    kDebug(30508) << "Picture " << strName << " has size: " << io->size() << endl;
+    kDebug(30508) <<"Picture" << strName <<" has size:" << io->size();
     
     KoPicture picture;
     if (!picture.load(io, inExtension)) // we do not care about KoPictureKey

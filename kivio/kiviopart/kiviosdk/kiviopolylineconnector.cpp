@@ -172,7 +172,7 @@ namespace Kivio {
   void PolyLineConnector::paint(KivioIntraStencilData* data)
   {
     if(m_points.count() < 2) {
-      kDebug(43000) << "ARGH! We're missing points in this connector!" << endl;
+      kDebug(43000) <<"ARGH! We're missing points in this connector!";
       return;
     }
 
@@ -464,7 +464,7 @@ namespace Kivio {
     int index = customID - (kctCustom + 1);
 
     if((index < 0) || index >= (int)m_points.count()) {
-      kDebug(43000) << "PolyLineConnector::setCustomIDPoint: Index out of range! Index = " << index << endl;
+      kDebug(43000) <<"PolyLineConnector::setCustomIDPoint: Index out of range! Index =" << index;
       return;
     }
 
@@ -487,7 +487,7 @@ namespace Kivio {
     int index = customID - (kctCustom + 1);
 
     if((index < 0) || index >= (int)m_points.count()) {
-      kDebug(43000) << "PolyLineConnector::customIDPoint: Index out of range! Index = " << index << endl;
+      kDebug(43000) <<"PolyLineConnector::customIDPoint: Index out of range! Index =" << index;
       return KoPoint();
     }
 

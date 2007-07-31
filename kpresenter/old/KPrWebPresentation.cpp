@@ -212,7 +212,7 @@ void KPrWebPresentation::loadConfig()
     title = cfg.readEntry( "Title", title );
     email = cfg.readEntry( "EMail", email );
     unsigned int num = cfg.readEntry( "Slides", slideInfos.count() );
-    //kDebug(33001) << "KPrWebPresentation::loadConfig num=" << num << endl;
+    //kDebug(33001) <<"KPrWebPresentation::loadConfig num=" << num;
 
     if ( num <= slideInfos.count() ) {
         for ( unsigned int i = 0; i < num; i++ )
@@ -222,8 +222,8 @@ void KPrWebPresentation::loadConfig()
             {
                 // We'll assume that the selected pages haven't changed... Hmm.
                 slideInfos[ i ].slideTitle = cfg.readEntry( key, QString() );
-                kDebug(33001) << "KPrWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
-            } else kDebug(33001) << " key not found " << key << endl;
+                kDebug(33001) <<"KPrWebPresentation::loadConfig key=" << key <<" data=" << slideInfos[i].slideTitle;
+            } else kDebug(33001) <<" key not found" << key;
         }
     }
 
@@ -590,7 +590,7 @@ void KPrWebPresentation::init()
     }
 
     title = i18n("Slideshow");
-    kDebug(33001) << "KPrWebPresentation::init : " << doc->getPageNums() << " pages." << endl;
+    kDebug(33001) <<"KPrWebPresentation::init :" << doc->getPageNums() <<" pages.";
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
     {
         if ( doc->isSlideSelected( i ) )
@@ -949,7 +949,7 @@ void KPrWebPresentationWizard::setupPage4()
     for ( int i = infos.count() - 1; i >= 0; --i ) {
         K3ListViewItem *item = new K3ListViewItem( slideTitles );
         item->setText( 0, QString::number( i + 1 ) );
-        //kDebug(33001) << "KPrWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
+        //kDebug(33001) <<"KPrWebPresentationWizard::setupPage3" << infos[ i ].slideTitle;
         item->setText( 1, infos[ i ].slideTitle );
     }
 

@@ -56,7 +56,7 @@ void ProgressObject::slotProgress(int /* progress */ )
 {
     // Well, we could have a nifty "=====> " progress bar, but with all the
     // debug output, it would be badly messed up :)
-    // kDebug() << "ProgressObject::slotProgress " << progress << endl;
+    // kDebug() <<"ProgressObject::slotProgress" << progress;
 }
 
 int main( int argc, char **argv )
@@ -103,7 +103,7 @@ int main( int argc, char **argv )
             KIO::UDSEntry entry;
             if ( KIO::NetAccess::stat( uOut, entry, 0L ) ) // this file exists => backup
             {
-                kDebug() << "Making backup..." << endl;;
+                kDebug() <<"Making backup...";;
                 KUrl backup( uOut );
                 backup.setPath( uOut.path() + '~' );
                 KIO::NetAccess::file_copy( uOut, backup, -1, true /*overwrite*/, false /*resume*/, 0L );

@@ -74,13 +74,13 @@ void KWMailMergeKABCConfig::acceptSelection()
     Q3ListViewItem* top = _ui->mSelectedView->firstChild();
     while(top)
     {
-        kDebug() << "acceptSelection(): " << top->text(0) << endl;
+        kDebug() <<"acceptSelection():" << top->text(0);
         if( top->text(0) == i18n("Distribution Lists") )
         {
             Q3ListViewItem* item = top->firstChild();
             while(item)
             {
-                kDebug() << "acceptSelection(): " << item->text(0) << endl;
+                kDebug() <<"acceptSelection():" << item->text(0);
                 _db->addList( item->text(0) );
                 item = item->nextSibling();
             }
@@ -90,7 +90,7 @@ void KWMailMergeKABCConfig::acceptSelection()
             Q3ListViewItem* item = top->firstChild();
             while(item)
             {
-                kDebug() << "acceptSelection(): " << item->text(0) << endl;
+                kDebug() <<"acceptSelection():" << item->text(0);
                 _db->addEntry( item->text(-1) );
                 item = item->nextSibling();
             }
@@ -113,7 +113,7 @@ void KWMailMergeKABCConfig::addSelectedContacts()
         if( it.current()->depth() > 0 )
         {
             QString uid = it.current()->text( -1 );
-            kDebug() << "addSelectedContacts(): uid :" << uid << endl;
+            kDebug() <<"addSelectedContacts(): uid :" << uid;
             if( !uid.isEmpty() )
             {
                 KWMailMergeKABCConfigListItem *item =
@@ -163,7 +163,7 @@ void KWMailMergeKABCConfig::destroyAvailableClones( const QString& uid )
 
 void KWMailMergeKABCConfig::filterChanged( const QString& txt )
 {
-    kDebug() << "KWMailMergeKABCConfig::filterChanged( " << txt << " )" << endl;
+    kDebug() <<"KWMailMergeKABCConfig::filterChanged(" << txt <<" )";
 
     bool showAll = txt.isEmpty();
 
@@ -243,7 +243,7 @@ void KWMailMergeKABCConfig::initSelectedLists()
 {
     QStringList lists = _db->lists();
 
-    kDebug() << "::initSelectedLists()" << lists.join(",") << endl;
+    kDebug() <<"::initSelectedLists()" << lists.join(",");
 
     Q3ListViewItem* l = _ui->mAvailableView->findItem(
                            i18n("Distribution Lists"), 0, Q3ListView::ExactMatch );
@@ -356,7 +356,7 @@ void KWMailMergeKABCConfig::removeSelectedContacts()
 
     while( it.current() )
     {
-        kDebug() << "removeSelectedContacts(): text: " << it.current()->text(-1) << endl;
+        kDebug() <<"removeSelectedContacts(): text:" << it.current()->text(-1);
         removeContact( it.current() );
         ++it;
     }

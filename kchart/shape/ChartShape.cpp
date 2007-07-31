@@ -72,12 +72,12 @@ KDChart::Chart* ChartShape::chart() const
 
 void ChartShape::setModel( QAbstractItemModel* model )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     d->model = model;
     d->chart->coordinatePlane()->takeDiagram( d->diagram );
     d->diagram->setModel( model );
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
-    kDebug() << k_funcinfo << " END" << endl;
+    kDebug() << k_funcinfo <<" END";
 }
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )

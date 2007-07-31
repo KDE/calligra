@@ -1890,7 +1890,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_parag, doc->lastParag()->paragId() );
         return 0;
     }
-    //kDebug() << "KWOasisPasteCommand::execute m_parag=" << m_parag << " m_idx=" << m_idx
+    //kDebug() <<"KWOasisPasteCommand::execute m_parag=" << m_parag <<" m_idx=" << m_idx
     //          << " firstParag=" << firstParag << " " << firstParag->paragId() << endl;
     cursor.setParag( firstParag );
     cursor.setIndex( m_idx );
@@ -1973,7 +1973,7 @@ KoTextCursor * KPrOasisPasteTextCommand::unexecute( KoTextCursor *c )
     // Get hold of the document before deleting the parag
     //KoTextDocument* textdoc = lastParag->document();
 
-    //kDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
+    //kDebug() <<"Undoing paste: deleting from (" << firstParag->paragId() <<"," << m_idx <<")"
     //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;
 
     cursor.setParag( lastParag );
@@ -2314,7 +2314,7 @@ void KPrHideShowHeaderFooter::execute()
     else if( m_textObject==m_doc->header())
         m_page->setHeader( newValue );
     else
-        kDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()\n";
+        kDebug(33001)<<"Error in void KPrHideShowHeaderFooter::execute()";
 
     m_doc->updateSideBarItem( m_doc->masterPage() );
 }
@@ -2326,7 +2326,7 @@ void KPrHideShowHeaderFooter::unexecute()
     else if( m_textObject==m_doc->header())
         m_page->setHeader( !newValue );
     else
-        kDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()\n";
+        kDebug(33001)<<"Error in void KPrHideShowHeaderFooter::unexecute()";
 
     m_doc->updateSideBarItem( m_doc->masterPage() );
 }

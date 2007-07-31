@@ -161,7 +161,7 @@ void KSpreadBrush::loadOasisFillStyle( KoOasisContext &context, const char * pro
     if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) )
     {
         const QString fill = styleStack.property( KoXmlNS::draw, "fill" );
-        kDebug(33001) << " load object gradient fill type :" << fill << endl;
+        kDebug(33001) <<" load object gradient fill type :" << fill;
 
         if ( fill == "solid" || fill == "hatch" )
         {
@@ -178,7 +178,7 @@ void KSpreadBrush::loadOasisFillStyle( KoOasisContext &context, const char * pro
                 setGColor2( draw->attributeNS( KoXmlNS::draw, "end-color", QString() ) );
 
                 QString type = draw->attributeNS( KoXmlNS::draw, "style", QString() );
-                kDebug()<<" type :"<<type<<endl;
+                kDebug()<<" type :"<<type;
                 if ( type == "linear" )
                 {
                     int angle = draw->attributeNS( KoXmlNS::draw, "angle", QString() ).toInt() / 10;

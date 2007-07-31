@@ -52,7 +52,7 @@ VTool::~VTool()
 		toolController()->unregisterTool( this );
 
 	delete m_action;
-	//kDebug(38000) << "Deleting : " << name().latin1() << endl;
+	//kDebug(38000) <<"Deleting :" << name().latin1();
 }
 
 void
@@ -256,7 +256,7 @@ VTool::keyEvent( QEvent* event )
 void
 VTool::activate()
 {
-	kDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo;
 	refreshUnit();
 	QPixmap Icon = BarIcon( icon() );
 	view()->contextHelpAction()->updateHelp( uiname(), contextHelp(), &Icon );

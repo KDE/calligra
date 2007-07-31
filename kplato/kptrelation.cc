@@ -34,7 +34,7 @@ Relation::Relation(Node *parent, Node *child, Type type, Duration lag) {
     m_child=child;
     m_type=type;
     m_lag=lag;
-    //kDebug()<<k_funcinfo<<this<<endl;
+    //kDebug()<<k_funcinfo<<this;
 }
 
 Relation::Relation(Node *parent, Node *child, Type type) {
@@ -42,7 +42,7 @@ Relation::Relation(Node *parent, Node *child, Type type) {
     m_child=child;
     m_type=type;
     m_lag=Duration();
-    //kDebug()<<k_funcinfo<<this<<endl;
+    //kDebug()<<k_funcinfo<<this;
 }
 
 Relation::Relation(Relation *rel) {
@@ -50,11 +50,11 @@ Relation::Relation(Relation *rel) {
     m_child=rel->child();
     m_type=rel->type();
     m_lag=rel->lag();
-    //kDebug()<<k_funcinfo<<this<<endl;
+    //kDebug()<<k_funcinfo<<this;
 }
 
 Relation::~Relation() {
-    //kDebug()<<k_funcinfo<<"("<<this<<") parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") parent:"<<(m_parent ? m_parent->name():"none")<<" child:"<<(m_child ? m_child->name():"None");
     if (m_parent)
         m_parent->takeDependChildNode(this);
     if (m_child)
@@ -76,11 +76,11 @@ bool Relation::load(KoXmlElement &element, Project &project) {
         return false;
     }
     if (m_child == m_parent) {
-        kDebug()<<k_funcinfo<<"child == parent"<<endl;
+        kDebug()<<k_funcinfo<<"child == parent";
         return false;
     }
     if (m_child == m_parent) {
-        kDebug()<<k_funcinfo<<"child == parent"<<endl;
+        kDebug()<<k_funcinfo<<"child == parent";
         return false;
     }
     if (!m_parent->legalToLink(m_child))
@@ -108,7 +108,7 @@ bool Relation::load(KoXmlElement &element, Project &project) {
         return false;
     }
 
-    //kDebug()<<k_funcinfo<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
+    //kDebug()<<k_funcinfo<<"Added relation: Child="<<m_child->name()<<" parent="<<m_parent->name();
     return true;
 }
 
@@ -141,9 +141,9 @@ void Relation::save(QDomElement &element) const {
 void Relation::printDebug(const QByteArray& _indent) { 
     QString indent = _indent;
     indent += "  ";
-    kDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
-    kDebug()<<indent<<"  Child: "<<m_child->name()<<endl;
-    kDebug()<<indent<<"  Type: "<<m_type<<endl;
+    kDebug()<<indent<<"  Parent:"<<m_parent->name();
+    kDebug()<<indent<<"  Child:"<<m_child->name();
+    kDebug()<<indent<<"  Type:"<<m_type;
 }
 #endif
 

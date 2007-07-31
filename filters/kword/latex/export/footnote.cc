@@ -33,7 +33,7 @@ Footnote::Footnote(Para* para): Format(para)
 
 Footnote::~Footnote()
 {
-	kDebug(30522) << "Destruction of a footnote." << endl;
+	kDebug(30522) <<"Destruction of a footnote.";
 }
 
 /* Modifiers */
@@ -63,38 +63,38 @@ void Footnote::analyze(const QDomNode node)
 	/* Markup <FORMAT id="1" pos="0" len="17">...</FORMAT> */
 	
 	/* Parameter analysis */
-	kDebug(30522) << "ANALYZE A FOOTNOTE" << endl;
+	kDebug(30522) <<"ANALYZE A FOOTNOTE";
 	
 	/* Child markup analysis */
 	for(int index= 0; index < getNbChild(node); index++)
 	{
 		if(getChildName(node, index).compare("INTERNAL")== 0)
 		{
-			kDebug(30522) << "INTERNAL: " << endl;
+			kDebug(30522) <<"INTERNAL:";
 			analyzeInternal(node);
 		}
 		else if(getChildName(node, index).compare("RANGE")== 0)
 		{
-			kDebug(30522) << "RANGE: " << endl;
+			kDebug(30522) <<"RANGE:";
 			analyzeRange(node);
 		}
 		else if(getChildName(node, index).compare("TEXT")== 0)
 		{
-			kDebug(30522) << "TEXT: " << endl;
+			kDebug(30522) <<"TEXT:";
 			analyzeText(node);
 		}
 		else if(getChildName(node, index).compare("DESCRIPT")== 0)
 		{
-			kDebug(30522) << "DESCRIPT: " << endl;
+			kDebug(30522) <<"DESCRIPT:";
 			analyzeDescript(node);
 		}
 		else if(getChildName(node, index).compare("FORMAT")== 0)
 		{
-			kDebug(30522) << "SUBFORMAT: " << endl;
+			kDebug(30522) <<"SUBFORMAT:";
 			Format::analyze(node);
 		}
 	}
-	kDebug(30522) << "END OF FOOTNOTE" << endl;
+	kDebug(30522) <<"END OF FOOTNOTE";
 }
 
 void Footnote::analyzeInternal(const QDomNode node)
@@ -108,7 +108,7 @@ void Footnote::analyzeInternal(const QDomNode node)
 	{
 		if(getChildName(node, index).compare("PART")== 0)
 		{
-			kDebug(30522) << "PART : " << endl;
+			kDebug(30522) <<"PART :";
 			setFrom(getAttr(node, "FROM").toInt());
 			setTo(getAttr(node, "TO").toInt());
 			setSpace(getAttr(node, "SPACE"));
@@ -119,21 +119,21 @@ void Footnote::analyzeInternal(const QDomNode node)
 
 void Footnote::analyzeRange(const QDomNode node)
 {
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	setStart(getAttr(node, "START").toInt());
 	setEnd(getAttr(node, "END").toInt());
 }
 
 void Footnote::analyzeText(const QDomNode node)
 {
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	setBefore(getAttr(node, "BEFORE"));
 	setAfter(getAttr(node, "AFTER"));
 }
 
 void Footnote::analyzeDescript(const QDomNode node)
 {
-	kDebug(30522) << "PARAM" << endl;
+	kDebug(30522) <<"PARAM";
 	setRef(getAttr(node, "REF"));
 }
 
@@ -141,16 +141,16 @@ void Footnote::generate(QTextStream &out)
 {
 	Element *footnote = 0;
 
-	kDebug(30522) << "  GENERATION FOOTNOTE" << endl;
+	kDebug(30522) <<"  GENERATION FOOTNOTE";
 	// Go to keep the footnote parag.
 	// then write it with this format.
 	// like this: \,\footnote{the parag. }
 	out << "\\,\\footnote{";
-	kDebug(30522) << "footnote : " << _ref << endl;
+	kDebug(30522) <<"footnote :" << _ref;
 	if((footnote = getRoot()->searchFootnote(_ref)) != 0)
 		footnote->generate(out);
 	out << "}";
-	kDebug(30522) << "FOOTNOTE GENERATED" << endl;
+	kDebug(30522) <<"FOOTNOTE GENERATED";
 }
 
 

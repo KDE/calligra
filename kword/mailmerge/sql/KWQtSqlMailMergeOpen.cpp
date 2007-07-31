@@ -99,8 +99,8 @@ void KWQtSqlMailMergeOpen::slotSave()
 	bool ok;
 	value=KLineEditDlg::getText(i18n("Store Settings"),i18n("Name:"),
 		QString::null, &ok,this);
-	if (!ok) kDebug()<<"Cancel was pressed"<<endl;
-	if (value.isEmpty()) kDebug()<<"Name value was empty"<<endl;
+	if (!ok) kDebug()<<"Cancel was pressed";
+	if (value.isEmpty()) kDebug()<<"Name value was empty";
 	if ((ok) && (!value.isEmpty()))
 	{
 		KConfig conf("kwmailmergerc");

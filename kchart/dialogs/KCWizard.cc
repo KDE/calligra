@@ -69,7 +69,7 @@ KCWizard::KCWizard ( KChartPart* _chart, QWidget *parent, const char* name,
     adjustSize();
 
     subType( m_chart->params()->chartType() );
-    kDebug(35001) << "kchartwizard created" << endl;
+    kDebug(35001) <<"kchartwizard created";
 }
 
 

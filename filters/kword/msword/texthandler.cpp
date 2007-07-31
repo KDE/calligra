@@ -230,7 +230,7 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
     if ( m_bInParagraph )
         paragraphEnd();
     m_bInParagraph = true;
-    //kDebug(30513) << "paragraphStart. style index:" << paragraphProperties->pap().istd << endl;
+    //kDebug(30513) <<"paragraphStart. style index:" << paragraphProperties->pap().istd;
     m_formats = mainDocument().createElement( "FORMATS" );
     m_paragraphProperties = paragraphProperties;
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
@@ -295,7 +295,7 @@ void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<c
 void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
     QConstString newText( Conversion::string( text ) );
-    //kDebug(30513) << "runOfText: " << newText.string() << endl;
+    //kDebug(30513) <<"runOfText:" << newText.string();
 
     // text after fieldStart and before fieldSeparator is useless
     if( m_insideField && !m_fieldAfterSeparator ) return;
@@ -348,7 +348,7 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
 
     if ( !refChp || refChp->hps != chp->hps )
     {
-        //kDebug(30513) << "        font size: " << chp->hps/2 << endl;
+        //kDebug(30513) <<"        font size:" << chp->hps/2;
         QDomElement fontSize( mainDocument().createElement( "SIZE" ) );
         fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
         format.appendChild( fontSize );
@@ -491,7 +491,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
     QString font = fontName.string();
 
 #ifdef FONT_DEBUG
-    kDebug(30513) << "    MS-FONT: " << font << endl;
+    kDebug(30513) <<"    MS-FONT:" << font;
 #endif
 
     static const unsigned ENTRIES = 6;
@@ -523,7 +523,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
     }
 
 #ifdef FONT_DEBUG
-    kDebug(30513) << "    FUZZY-FONT: " << font << endl;
+    kDebug(30513) <<"    FUZZY-FONT:" << font;
 #endif
 
     // Use Qt to look up our canonical equivalent of the font name.
@@ -531,7 +531,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
     QFontInfo info( xFont );
 
 #ifdef FONT_DEBUG
-    kDebug(30513) << "    QT-FONT: " << info.family() << endl;
+    kDebug(30513) <<"    QT-FONT:" << info.family();
 #endif
 
     return info.family();
@@ -580,7 +580,7 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
     flowElement.setAttribute( "align", alignment );
     parentElement.appendChild( flowElement );
 
-    //kDebug(30513) << k_funcinfo << " dxaLeft1=" << pap.dxaLeft1 << " dxaLeft=" << pap.dxaLeft << " dxaRight=" << pap.dxaRight << " dyaBefore=" << pap.dyaBefore << " dyaAfter=" << pap.dyaAfter << " lspd=" << pap.lspd.dyaLine << "/" << pap.lspd.fMultLinespace << endl;
+    //kDebug(30513) << k_funcinfo <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
 
     if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
     {
@@ -654,7 +654,7 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
             const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
             QDomElement tabElement = mainDocument().createElement( "TABULATOR" );
             tabElement.setAttribute( "ptpos", (double)td.dxaTab / 20.0 );
-            //kDebug(30513) << "ptpos=" << (double)td.dxaTab / 20.0 << endl;
+            //kDebug(30513) <<"ptpos=" << (double)td.dxaTab / 20.0;
             // Wow, lucky here. The type enum matches. Only, MSWord has 4=bar,
             // which kword doesn't support. We map it to 0 with a clever '%4' :)
             tabElement.setAttribute( "type", td.tbd.jc % 4 );
@@ -717,7 +717,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
                 counterElement.setAttribute( "type", 11 ); // Box. We have no triangle.
             } else {
                 // Map all other bullets to a "custom bullet" in kword.
-                kDebug(30513) << "custom bullet, code=" << QString::number(code,16) << endl;
+                kDebug(30513) <<"custom bullet, code=" << QString::number(code,16);
                 counterElement.setAttribute( "type", 6 ); // custom
                 counterElement.setAttribute( "bullet", code );
                 QString paragFont = getFont( style->chp().ftcAscii );
@@ -739,7 +739,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         {
             depth = style->sti() - 1;
         }
-        kDebug(30513) << "  ilfo=" << pap.ilfo << " ilvl=" << pap.ilvl << " sti=" << style->sti() << " depth=" << depth << " numberingType=" << numberingType << endl;
+        kDebug(30513) <<"  ilfo=" << pap.ilfo <<" ilvl=" << pap.ilvl <<" sti=" << style->sti() <<" depth=" << depth <<" numberingType=" << numberingType;
         counterElement.setAttribute( "depth", depth );
 
         // Now we need to parse the text, to try and convert msword's powerful list template
@@ -753,7 +753,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         for ( int i = 0 ; i < text.length() ; ++i )
         {
             short ch = text[i].unicode();
-            //kDebug(30513) << i << ":" << ch << endl;
+            //kDebug(30513) << i <<":" << ch;
             if ( ch < 10 ) { // List level place holder
                 if ( ch == pap.ilvl ) {
                     if ( depthFound )
@@ -782,7 +782,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
             // The question is whether the '.' is the suffix of the parent level already..
             if ( depth > 0 && !prefix.isEmpty() && m_listSuffixes[ depth - 1 ] == prefix )  {
                 prefix.clear(); // it's already the parent's suffix -> remove it
-                kDebug(30513) << "depth=" << depth << " parent suffix is " << prefix << " -> clearing" << endl;
+                kDebug(30513) <<"depth=" << depth <<" parent suffix is" << prefix <<" -> clearing";
             }
         }
         if ( isHeading )
@@ -792,12 +792,12 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
             // Word6 models "1." as nfc=5
             if ( nfc == 5 && suffix.isEmpty() )
                 suffix = ".";
-            kDebug(30513) << " prefix=" << prefix << " suffix=" << suffix << endl;
+            kDebug(30513) <<" prefix=" << prefix <<" suffix=" << suffix;
             counterElement.setAttribute( "type", Conversion::numberFormatCode( nfc ) );
             counterElement.setAttribute( "lefttext", prefix );
             counterElement.setAttribute( "righttext", suffix );
             counterElement.setAttribute( "display-levels", displayLevels );
-            kDebug(30513) << "storing suffix " << suffix << " for depth " << depth << endl;
+            kDebug(30513) <<"storing suffix" << suffix <<" for depth" << depth;
             m_listSuffixes[ depth ] = suffix;
         }
         else

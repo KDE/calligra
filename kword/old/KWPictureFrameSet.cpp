@@ -169,7 +169,7 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoTextSavingContext& con
 
 void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << k_funcinfo;
     KoPictureKey key;
     QDomNode binaryData = KoDom::namedItemNS( tag, KoXmlNS::office, "binary-data" );
     if ( !binaryData.isNull() )
@@ -217,7 +217,7 @@ void KWPictureFrameSet::drawFrameContents( KWFrame *frame, QPainter *painter, co
                                            const QColorGroup &, bool, bool, KWFrameSetEdit *, KWViewMode * )
 {
 #ifdef DEBUG_DRAW
-    kDebug(32001) << "KWPictureFrameSet::drawFrameContents crect=" << crect << " size=" << kWordDocument()->zoomItXOld( frame->innerWidth() ) << "x" << kWordDocument()->zoomItYOld( frame->innerHeight() ) << endl;
+    kDebug(32001) <<"KWPictureFrameSet::drawFrameContents crect=" << crect <<" size=" << kWordDocument()->zoomItXOld( frame->innerWidth() ) <<"x" << kWordDocument()->zoomItYOld( frame->innerHeight() );
 #endif
     m_picture.draw( *painter, 0, 0, kWordDocument()->zoomItXOld( frame->innerWidth() ), kWordDocument()->zoomItYOld( frame->innerHeight() ),
                   crect.x(), crect.y(), crect.width(), crect.height(), !m_finalSize);
@@ -244,7 +244,7 @@ void KWPictureFrameSet::printDebug( KWFrame *frame )
     KWFrameSet::printDebug( frame );
     if ( !isDeleted() )
     {
-        kDebug(32001) << "Image: key=" << m_picture.getKey().toString() << endl;
+        kDebug(32001) <<"Image: key=" << m_picture.getKey().toString();
     }
 }
 #endif

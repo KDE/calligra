@@ -69,7 +69,7 @@ KoTextParag * KWTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, K
 
 KoTextDocCommand *KWTextDocument::deleteTextCommand( KoTextDocument *textdoc, int id, int index, const Q3MemArray<KoTextStringChar> & str, const CustomItemsMap & customItemsMap, const QList<KoParagLayout> & oldParagLayouts )
 {
-    //kDebug(32500)<<" KoTextDocument::deleteTextCommand************\n";
+    //kDebug(32500)<<" KoTextDocument::deleteTextCommand************";
     return new KWTextDeleteCommand( textdoc, id, index, str, customItemsMap, oldParagLayouts );
 }
 
@@ -194,7 +194,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
 #if 0
     const QString localName( tag.localName() );
     const bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
-    kDebug(32500) << "KWTextDocument::loadSpanTag: " << localName << endl;
+    kDebug(32500) <<"KWTextDocument::loadSpanTag:" << localName;
 
     if ( isTextNS )
     {
@@ -222,7 +222,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                 else {
                     // The save/restore of the stack is done by the caller (KoTextParag::loadOasisSpan)
                     // This allows to use the span's format for the variable.
-                    //kDebug(32500) << "filling stack with " << spanElem.attributeNS( KoXmlNS::text, "style-name", QString::null ) << endl;
+                    //kDebug(32500) <<"filling stack with" << spanElem.attributeNS( KoXmlNS::text,"style-name", QString::null );
                     context.fillStyleStack( spanElem, KoXmlNS::text, "style-name", "text" );
                     text = spanElem.text();
                 }
@@ -291,7 +291,7 @@ bool KWTextDocument::loadSpanTag( const QDomElement& tag, KoOasisContext& contex
                     }
                     if ( numberOfElements == 1 ) // if someone added more stuff, keep the wrapper frame
                     {
-                        kDebug(32001) << "Wrapper frame removed, loading " << firstElem.tagName() << " directly" << endl;
+                        kDebug(32001) <<"Wrapper frame removed, loading" << firstElem.tagName() <<" directly";
                         // load the only child, e.g. table:table
                         return loadSpanTag( firstElem, context, parag, pos, textData, customItem );
                     }

@@ -45,7 +45,7 @@ public:
     virtual bool contains(QDate date) const { return DateMapType::contains(date.toString(Qt::ISODate)); }
 
     void insert(QString date, int state=CalendarDay::NonWorking) {
-        //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
+        //kDebug()<<k_funcinfo<<date<<"="<<state;
         if (state == CalendarDay::None)
             DateMapType::remove(date);
         else
@@ -54,7 +54,7 @@ public:
     void insert(QDate date, int state=CalendarDay::NonWorking) { insert(date.toString(Qt::ISODate), state); }
 
     void remove(QDate date) {
-        //kDebug()<<k_funcinfo<<date.toString(Qt::ISODate)<<endl;
+        //kDebug()<<k_funcinfo<<date.toString(Qt::ISODate);
         DateMapType::remove(date.toString(Qt::ISODate));
     }
 
@@ -74,7 +74,7 @@ public:
 
     // boolean use
     void toggle(QString date, int state=CalendarDay::NonWorking) {
-        //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
+        //kDebug()<<k_funcinfo<<date<<"="<<state;
         if (DateMapType::contains(date))
             DateMapType::remove(date);
         else
@@ -82,7 +82,7 @@ public:
     }
     void toggle(QDate date, int state=CalendarDay::NonWorking) { return toggle(date.toString(Qt::ISODate), state); }
     void toggleClear(QString date, int state=CalendarDay::NonWorking) {
-        //kDebug()<<k_funcinfo<<date<<"="<<state<<endl;
+        //kDebug()<<k_funcinfo<<date<<"="<<state;
         bool s = DateMapType::contains(date);
         clear();
         if (!s) insert(date, state);

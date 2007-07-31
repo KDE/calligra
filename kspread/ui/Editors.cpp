@@ -674,7 +674,7 @@ void CellEditor::functionAutoComplete( const QString& item )
 
 void CellEditor::slotCursorPositionChanged()
 {
-//   kDebug() << k_funcinfo << endl << "position: " << cursorPosition() << endl;
+//   kDebug() << k_funcinfo << endl <<"position:" << cursorPosition();
 
   // TODO Stefan: optimize this function!
 
@@ -704,7 +704,7 @@ void CellEditor::slotCursorPositionChanged()
   {
     if (tokens[i].pos() >= d->textEdit->textCursor().position() - 1) // without '='
     {
-/*      kDebug() << "token.pos >= cursor.pos" << endl;*/
+/*      kDebug() <<"token.pos >= cursor.pos";*/
       type = tokens[i].type();
       if (type == Token::Cell || type == Token::Range)
       {
@@ -753,7 +753,7 @@ void CellEditor::slotCursorPositionChanged()
     }
   }
 
-//   kDebug() << "regionStart = " << regionStart/* << endl*/
+//   kDebug() <<"regionStart =" << regionStart/* << endl*/
 //             << ", regionEnd = " << regionEnd/* << endl*/
 //             << ", currentRange = " << currentRange << endl;
 
@@ -863,7 +863,7 @@ void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completi
 
 void CellEditor::slotTextChanged()
 {
-//   kDebug() << k_funcinfo << endl;
+//   kDebug() << k_funcinfo;
 
   //FIXME - text() may return richtext?
   QString t = text();
@@ -1151,7 +1151,7 @@ void CellEditor::setText(const QString& text)
 
     // This also ensures that the caret is sized correctly for the text
     setCursorPosition( text.length() );
-    kDebug() << "text cursor positioned at the end" << endl;
+    kDebug() <<"text cursor positioned at the end";
 
     if (d->fontLength == 0)
     {
@@ -1199,7 +1199,7 @@ bool CellEditor::eventFilter( QObject* obj, QEvent* ev )
                 // select a different cell.
                 case Qt::Key_Return:
                 case Qt::Key_Enter:
-                    kDebug() << "CellEditor::eventFilter: quitting choose mode" << endl;
+                    kDebug() <<"CellEditor::eventFilter: quitting choose mode";
                     canvas()->endChoose();
                     // fall through
                 case Qt::Key_Up:
@@ -1318,7 +1318,7 @@ void LocationEditWidget::addCompletionItem( const QString &_item )
     if ( completionList.items().contains( _item) == 0 )
     {
         completionList.addItem( _item );
-        kDebug(36005) << "LocationEditWidget::addCompletionItem: " << _item << endl;
+        kDebug(36005) <<"LocationEditWidget::addCompletionItem:" << _item;
     }
 }
 
@@ -1560,7 +1560,7 @@ void EditWidget::setEditMode( bool mode )
 
 void EditWidget::focusOutEvent( QFocusEvent* ev )
 {
-  //kDebug(36001) << "EditWidget lost focus" << endl;
+  //kDebug(36001) <<"EditWidget lost focus";
   // See comment about setLastEditorWithFocus
   m_pCanvas->setLastEditorWithFocus( Canvas::EditWidget );
 
@@ -1696,7 +1696,7 @@ bool RegionSelector::eventFilter( QObject* object, QEvent* event )
 void RegionSelector::switchDisplayMode( bool state )
 {
   Q_UNUSED(state)
-      kDebug() << k_funcinfo << endl;
+      kDebug() << k_funcinfo;
 
   if ( d->displayMode == Widget )
   {

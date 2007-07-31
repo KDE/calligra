@@ -214,7 +214,7 @@ void KPrTextObjectAdaptor::changeCaseOfText( const QString & caseType)
     else if( caseType.toLower() =="sentencecase" )
         cmd = m_textobject->textObject()->setChangeCaseOfTextCommand( KoChangeCaseDia::SentenceCase );
     else
-        kDebug(33001)<<"Error in void KWordTextFrameSetAdaptor::changeCaseOfText( const QString & caseType) parameter\n";
+        kDebug(33001)<<"Error in void KWordTextFrameSetAdaptor::changeCaseOfText( const QString & caseType) parameter";
     delete cmd;
 }
 

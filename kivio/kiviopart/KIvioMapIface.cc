@@ -47,11 +47,11 @@ DCOPRef KIvioMapIface::pageByIndex( int index )
     KivioPage* t = m_map->pageList().at( index );
     if ( !t )
     {
-        kDebug(43000) << "+++++ No page found at index " << index << endl;
+        kDebug(43000) <<"+++++ No page found at index" << index;
         return DCOPRef();
     }
 
-    kDebug(43000) << "+++++++ Returning page " << t->QObject::name() << endl;
+    kDebug(43000) <<"+++++++ Returning page" << t->QObject::name();
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }

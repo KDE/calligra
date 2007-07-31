@@ -46,7 +46,7 @@ KWFindReplace::KWFindReplace( KWCanvas * canvas, KoReplaceDia * dialog, const QL
 
 KWFindReplace::~KWFindReplace()
 {
-    //kDebug() << "KWFindReplace::~KWFindReplace m_destroying=" << m_destroying << endl;
+    //kDebug() <<"KWFindReplace::~KWFindReplace m_destroying=" << m_destroying;
 }
 
 void KWFindReplace::emitNewCommand(KCommand *cmd)

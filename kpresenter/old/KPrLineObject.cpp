@@ -162,7 +162,7 @@ void KPrLineObject::loadOasis(const QDomElement &element, KoOasisContext & conte
     double x2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) );
     double y2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString::null ) );
 
-    kDebug()<<" KPrLineObject::loadOasis(const QDomElement &element) : x1 "<< x1 <<" y1 : "<<y1<<" x2 :"<<x2 <<" y2 "<<y2<<endl;
+    kDebug()<<" KPrLineObject::loadOasis(const QDomElement &element) : x1"<< x1 <<" y1 :"<<y1<<" x2 :"<<x2 <<" y2"<<y2;
     double x = qMin( x1, x2 );
     double y = qMin( y1, y2 );
 
@@ -191,7 +191,7 @@ void KPrLineObject::loadOasis(const QDomElement &element, KoOasisContext & conte
     else
         lineType=LT_LD_RU;
 
-    kDebug()<<"KPrLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
+    kDebug()<<"KPrLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y"<<orig.y()<<" width :"<<ext.width()<<" height :"<<ext.height();
 
     QString attr = (x1 <= x2) ?  "marker-start" : "marker-end";
     loadOasisMarkerElement( context, attr, lineBegin );

@@ -99,7 +99,7 @@ void Binding::update(const Region& region)
             changedRegion.add(rect, (*it)->sheet());
         }
     }
-    kDebug() << "Binding: " << changedRegion << " changed." << endl;
+    kDebug() <<"Binding:" << changedRegion <<" changed.";
     d->model->emitChanged(changedRegion);
 }
 
@@ -190,7 +190,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
         default:
             break;
     }
-    kDebug() << k_funcinfo << index.column() << ", " << index.row() << ", " << variant << endl;
+    kDebug() << k_funcinfo << index.column() <<"," << index.row() <<"," << variant;
     return variant;
 }
 

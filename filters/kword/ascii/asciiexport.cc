@@ -144,7 +144,7 @@ bool ASCIIWorker::doOpenFile(const QString& filenameOut, const QString& /*to*/)
         return false;
     }
 
-    kDebug(30502) << "Charset used: " << getCodec()->name() << endl;
+    kDebug(30502) <<"Charset used:" << getCodec()->name();
 
     if (!getCodec())
     {
@@ -212,7 +212,7 @@ bool ASCIIWorker::doFullParagraph(const ParaData& para)
 bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& layout,
     const ValueListFormatData& paraFormatDataList)
 {
-    kDebug(30502) << "Entering ASCIIWorker::doFullParagraph" << endl;
+    kDebug(30502) <<"Entering ASCIIWorker::doFullParagraph";
 
 #if 0
     // As KWord has only one depth of lists, we can process lists very simply.
@@ -350,14 +350,14 @@ bool ASCIIWorker::doFullParagraph(const QString& paraText, const LayoutData& lay
     if (!ProcessParagraphData(paraText, paraFormatDataList)) return false;
 #endif
 
-    kDebug(30502) << "Exiting ASCIIWorker::doFullParagraph" << endl;
+    kDebug(30502) <<"Exiting ASCIIWorker::doFullParagraph";
     return true;
 }
 
 
 bool ASCIIWorker::ProcessTable(const Table& table)
 {
-    kDebug(30502) << "processTable CALLED!" << endl;
+    kDebug(30502) <<"processTable CALLED!";
 
     // just dump the table out (no layout for now)
     for (Q3ValueList<TableCell>::ConstIterator it = table.cellList.begin();

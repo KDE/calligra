@@ -168,13 +168,13 @@ KPrDocument::KPrDocument( QWidget *parentWidget, QObject* parent,
 
     // Try to force a scalable font.
     m_defaultFont.setStyleStrategy( QFont::ForceOutline );
-    //kDebug(33001) << "Default font: requested family: " << m_defaultFont.family() << endl;
-    //kDebug(33001) << "Default font: real family: " << QFontInfo(m_defaultFont).family() << endl;
+    //kDebug(33001) <<"Default font: requested family:" << m_defaultFont.family();
+    //kDebug(33001) <<"Default font: real family:" << QFontInfo(m_defaultFont).family();
 
     int ptSize = m_defaultFont.pointSize();
     if ( ptSize == -1 ) // specified with a pixel size ?
         ptSize = QFontInfo(m_defaultFont).pointSize();
-    //kDebug(33001) << "KPrDocument::KPrDocument[2] ptSize=" << ptSize << endl;
+    //kDebug(33001) <<"KPrDocument::KPrDocument[2] ptSize=" << ptSize;
     // Ok, this is KPresenter. A default font of 10 makes no sense. Let's go for 20.
     ptSize = qMax( 20, ptSize );
 
@@ -435,7 +435,7 @@ KPrDocument::~KPrDocument()
 
 void KPrDocument::addCommand( KCommand * cmd )
 {
-    kDebug(33001) << "KPrDocument::addCommand " << cmd->name() << endl;
+    kDebug(33001) <<"KPrDocument::addCommand" << cmd->name();
     m_commandHistory->addCommand( cmd, false );
     setModified( true );
 }
@@ -1049,7 +1049,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         QList<KoGenStyles::NamedStyle> autoStyles = mainStyles.styles(  KoGenStyle::StyleAuto );
         for ( QList<KoGenStyles::NamedStyle>::const_iterator it = autoStyles.begin();
                 it != autoStyles.end(); ++it ) {
-            kDebug() << "marking for styles.xml:" << (  *it ).name << endl;
+            kDebug() <<"marking for styles.xml:" << (  *it ).name;
             mainStyles.markStyleForStylesXml(  ( *it ).name );
         }
 
@@ -1251,13 +1251,13 @@ void KPrDocument::loadOasisHeaderFooter(QDomNode & drawPage, KoOasisContext & co
     QDomNode tmp = KoDom::namedItemNS( drawPage, KoXmlNS::style, "header" );
     if ( !tmp.isNull() )
     {
-        //kDebug()<<" there is a header \n";
+        //kDebug()<<" there is a header";
         _header->textObject()->loadOasisContent( tmp.toElement(), context, styleCollection() );
     }
     tmp = KoDom::namedItemNS( drawPage, KoXmlNS::style, "footer" );
     if ( !tmp.isNull() )
     {
-        //kDebug()<<" there is a footer \n";
+        //kDebug()<<" there is a footer";
         _footer->textObject()->loadOasisContent( tmp.toElement(), context, styleCollection() );
     }
 }
@@ -1313,7 +1313,7 @@ void KPrDocument::saveOasisSettings( KoXmlWriter &settingsWriter )
 
 void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)
 {
-    kDebug(33001)<<"void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)**********\n";
+    kDebug(33001)<<"void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)**********";
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
@@ -1331,7 +1331,7 @@ void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)
         m_bSnapToGrid = firstView.parseConfigItemBool( "IsSnapToGrid" );
 
         int activePage = firstView.parseConfigItemInt( "SelectedPage" );
-        kDebug(33001)<<" activePage :"<<activePage<<endl;
+        kDebug(33001)<<" activePage :"<<activePage;
         if(activePage!=-1)
             m_initialActivePage=m_pageList.at(activePage);
     }
@@ -1349,7 +1349,7 @@ void KPrDocument::parseOasisGuideLines( const QString &text )
         {
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
-            //kDebug()<<" vertical  :"<< str <<endl;
+            //kDebug()<<" vertical  :"<< str;
             double posX = ( str.toInt() / 100.0 );
             m_vGuideLines.append( MM_TO_POINT( posX ) );
             newPos = pos-1;
@@ -1358,7 +1358,7 @@ void KPrDocument::parseOasisGuideLines( const QString &text )
         {
             //horizontal element
             str = text.mid( pos+1, ( newPos-pos ) );
-            //kDebug()<<" horizontal  :"<< str <<endl;
+            //kDebug()<<" horizontal  :"<< str;
             double posY = ( str.toInt() / 100.0 );
             m_hGuideLines.append( MM_TO_POINT( posY ) );
             newPos = pos-1;
@@ -1368,9 +1368,9 @@ void KPrDocument::parseOasisGuideLines( const QString &text )
 
 void KPrDocument::loadOasisPresentationSettings( QDomNode &settingsDoc )
 {
-    //kDebug()<<"presentation:settings ********************************************* \n";
+    //kDebug()<<"presentation:settings *********************************************";
     QDomElement settings( settingsDoc.toElement() );
-    //kDebug()<<"settings.attribute(presentation:endless) :"<<settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)<<endl;
+    //kDebug()<<"settings.attribute(presentation:endless) :"<<settings.attributeNS( KoXmlNS::presentation,"endless", QString::null);
     if (settings.attributeNS( KoXmlNS::presentation, "endless", QString::null)=="true")
         _spInfiniteLoop = true;
 // FIXME Element "show-end-of-presentation-slide" does not exist in the ODP specification yet
@@ -1389,29 +1389,29 @@ void KPrDocument::loadOasisPresentationSettings( QDomNode &settingsDoc )
     if ( settings.hasAttributeNS( KoXmlNS::presentation, "show" ) )
     {
         m_presentationName = settings.attributeNS( KoXmlNS::presentation, "show", QString::null );
-        kDebug()<<" default presentation name :"<<m_presentationName<<endl;
+        kDebug()<<" default presentation name :"<<m_presentationName;
     }
     loadOasisPresentationCustomSlideShow( settingsDoc );
 }
 
 void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )
 {
-    //kDebug()<<"void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )**********\n";
+    //kDebug()<<"void KPrDocument::loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc )**********";
     for ( QDomNode element = settingsDoc.firstChild(); !element.isNull(); element = element.nextSibling() )
     {
         QDomElement e = element.toElement();
         QByteArray tagName = e.tagName().toLatin1();
-        //kDebug()<<" tagName :"<<tagName<<endl;
+        //kDebug()<<" tagName :"<<tagName;
         if ( tagName == "show" && e.namespaceURI() == KoXmlNS::presentation )
         {
-            //kDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation, "name", QString::null)<< " e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation, "pages", QString::null)<<endl;
+            //kDebug()<<" e.attribute(presentation:name) :"<<e.attributeNS( KoXmlNS::presentation,"name", QString::null)<<" e.attribute(presentation:pages) :"<<e.attributeNS( KoXmlNS::presentation,"pages", QString::null);
             QString name = e.attributeNS( KoXmlNS::presentation, "name", QString::null );
             QList<KPrPage *> pageList;
             foreach (QString s, e.attributeNS( KoXmlNS::presentation, "pages", QString::null).split( "," ))
             {
                 if ( m_loadingInfo->m_name2page.contains( s ) )
                 {
-                    kDebug(33001) << "slide show " << name << " page = " << s << endl;
+                    kDebug(33001) <<"slide show" << name <<" page =" << s;
                     pageList.push_back( m_loadingInfo->m_name2page[s] );
                 }
             }
@@ -1580,7 +1580,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         // Some simple import filters don't define any style,
         // so let's have a Standard style at least
         KoParagStyle * standardStyle = new KoParagStyle( "Standard" ); // This gets translated later on
-        //kDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
+        //kDebug() <<"KWDocument::KWDocument creating standardStyle" << standardStyle;
         standardStyle->format().setFont( m_defaultFont );
         m_styleColl->addStyle( standardStyle );
 
@@ -1647,8 +1647,8 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         QString masterPageName = drawPage.toElement().attributeNS( KoXmlNS::draw, "master-page-name", QString::null );
         QDomElement *master = oasisStyles.masterPages()[ masterPageName];
 
-        kDebug()<<" master :"<<master<<endl;
-        kDebug()<<" masterPageName:"<<masterPageName<<endl;
+        kDebug()<<" master :"<<master;
+        kDebug()<<" masterPageName:"<<masterPageName;
         if ( ! master )
         {
             masterPageName = "Standard"; // use default layout as fallback (default in kpresenter)
@@ -1663,10 +1663,10 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
             return false;
         }
 
-        kDebug()<<" load oasis master styles\n";
+        kDebug()<<" load oasis master styles";
         QDomNode node = *master;
         QDomElement masterElement = node.toElement();
-        kDebug()<<" node.isNull() :"<<node.isNull()<< ", " << masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null ) << endl;
+        kDebug()<<" node.isNull() :"<<node.isNull()<<"," << masterElement.attributeNS( KoXmlNS::draw,"style-name", QString::null );
         // add the correct styles
         const QDomElement* masterPageStyle = context.oasisStyles().findStyleAutoStyle( masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null ), "drawing-page" );
 	if (masterPageStyle)
@@ -1685,21 +1685,21 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         loadOasisHeaderFooter( node,context );
         context.setUseStylesAutoStyles( false );
 
-        kDebug()<<" end load oasis master style \n";
+        kDebug()<<" end load oasis master style";
 
         Q_ASSERT( master );
         const QDomElement *style = oasisStyles.findStyle(master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ));
         const QDomElement *backgroundStyle = oasisStyles.findStyle( "Standard-background", "presentation" );
-        kDebug()<<"Standard background "<<backgroundStyle<<endl;
+        kDebug()<<"Standard background"<<backgroundStyle;
         // parse all pages
         Q_ASSERT( style );
         if ( style )
         {
             __pgLayout.loadOasis( *style );
-            kDebug()<<"Page size __pgLayout.ptWidth :"<<__pgLayout.ptWidth<<" __pgLayout.ptHeight :"<<__pgLayout.ptHeight<<endl;
-            kDebug()<<"Page orientation :"<<(( __pgLayout.orientation== KoPageFormat::Landscape )? " landscape " : " portrait ")<<endl;
+            kDebug()<<"Page size __pgLayout.ptWidth :"<<__pgLayout.ptWidth<<" __pgLayout.ptHeight :"<<__pgLayout.ptHeight;
+            kDebug()<<"Page orientation :"<<(( __pgLayout.orientation== KoPageFormat::Landscape )?" landscape" :" portrait");
 
-            kDebug()<<" margin right:"<< __pgLayout.ptRight <<" __pgLayout.ptBottom :"<<__pgLayout.ptBottom<<" __pgLayout.ptLeft :"<<__pgLayout.ptLeft<<" __pgLayout.ptTop :"<<__pgLayout.ptTop<<endl;
+            kDebug()<<" margin right:"<< __pgLayout.ptRight <<" __pgLayout.ptBottom :"<<__pgLayout.ptBottom<<" __pgLayout.ptLeft :"<<__pgLayout.ptLeft<<" __pgLayout.ptTop :"<<__pgLayout.ptTop;
         }
         if ( _clean )
         {
@@ -1712,13 +1712,13 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     for ( drawPage = body.firstChild(); !drawPage.isNull(); drawPage = drawPage.nextSibling() )
     {
         dp = drawPage.toElement();
-        kDebug()<<"dp.tagName() :"<<dp.tagName()<<endl;
+        kDebug()<<"dp.tagName() :"<<dp.tagName();
         if ( dp.tagName()== "page" && dp.namespaceURI() == KoXmlNS::draw ) // don't try to parse "</draw:page>" as page
         {
             context.styleStack().clear(); // remove all styles
             fillStyleStack( dp, context, "drawing-page" );
             context.styleStack().save();
-            kDebug ()<<"insert new page "<<pos<<endl;
+            kDebug ()<<"insert new page"<<pos;
             KPrPage *newpage = 0L;
             if ( m_pageWhereLoadObject )
             {
@@ -1771,12 +1771,12 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
 
     //load settings at the end as we need to know what the draw:name of a page is
     QDomNode settings  = KoDom::namedItemNS( body, KoXmlNS::presentation, "settings" );
-    kDebug()<<"settings :"<<settings.isNull()<<endl;
+    kDebug()<<"settings :"<<settings.isNull();
     if (!settings.isNull() && _clean /*don't load settings when we copy/paste a page*/)
         loadOasisPresentationSettings( settings );
 
     ignoreSticky = true;
-    kDebug()<<" _clean :"<<_clean<<endl;
+    kDebug()<<" _clean :"<<_clean;
     if(_clean)
     {
         setModified(false);
@@ -1785,7 +1785,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         startBackgroundSpellCheck();
 #endif
     }
-    kDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+    kDebug(33001) <<"Loading took" << (float)(dt.elapsed()) / 1000.0 <<" seconds";
 
     if ( !settingsDoc.isNull() )
     {
@@ -1815,11 +1815,11 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         QString name = o.tagName();
         if ( !name.isEmpty() )
         {
-            kDebug()<<" name :"<<name<<endl;
+            kDebug()<<" name :"<<name;
             if ( o.hasAttributeNS( KoXmlNS::presentation, "placeholder" ) &&
                  o.attributeNS( KoXmlNS::presentation, "placeholder", QString::null ) == "true" )
             {
-                kDebug(33001) << "Placeholder" << endl;
+                kDebug(33001) <<"Placeholder";
                 continue;
             }
             context.styleStack().save();
@@ -1953,7 +1953,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                 {
                     case OT_CUBICBEZIERCURVE:
                         {
-                            kDebug(33001) << "Cubicbeziercurve" << endl;
+                            kDebug(33001) <<"Cubicbeziercurve";
                             KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
                             kpCurveObject->loadOasis( o, context, m_loadingInfo );
                             if ( groupObject )
@@ -1963,7 +1963,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         } break;
                     case OT_QUADRICBEZIERCURVE:
                         {
-                            kDebug(33001) << "Quadricbeziercurve" << endl;
+                            kDebug(33001) <<"Quadricbeziercurve";
                             KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
                             kpQuadricObject->loadOasis( o, context, m_loadingInfo );
                             if ( groupObject )
@@ -1973,7 +1973,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         } break;
                     case OT_FREEHAND:
                         {
-                            kDebug(33001) << "Freehand" << endl;
+                            kDebug(33001) <<"Freehand";
                             KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
                             kpFreeHandObject->loadOasis( o, context, m_loadingInfo );
                             if ( groupObject )
@@ -1983,7 +1983,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                         } break;
                     case OT_CLOSED_LINE:
                         {
-                            kDebug(33001) << "Closed Line" << endl;
+                            kDebug(33001) <<"Closed Line";
                             KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
                             kpClosedObject->loadOasis( o, context, m_loadingInfo );
                             if ( groupObject )
@@ -1992,7 +1992,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                                 newpage->appendObject( kpClosedObject );
                         } break;
                     default:
-                        kDebug(33001) << "draw:path found unsupported object type " << objType << " in svg:d " << d << endl;
+                        kDebug(33001) <<"draw:path found unsupported object type" << objType <<" in svg:d" << d;
                         break;
                 }
             }
@@ -2017,7 +2017,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
 #if 0 // not yet supported
                             case OT_CUBICBEZIERCURVE:
                                 {
-                                    kDebug(33001) << "Cubicbeziercurve" << endl;
+                                    kDebug(33001) <<"Cubicbeziercurve";
                                     KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
                                     kpCurveObject->loadOasis( o, context, m_loadingInfo );
                                     if ( groupObject )
@@ -2027,7 +2027,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                                 } break;
                             case OT_QUADRICBEZIERCURVE:
                                 {
-                                    kDebug(33001) << "Quadricbeziercurve" << endl;
+                                    kDebug(33001) <<"Quadricbeziercurve";
                                     KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
                                     kpQuadricObject->loadOasis( o, context, m_loadingInfo );
                                     if ( groupObject )
@@ -2037,7 +2037,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                                 } break;
                             case OT_FREEHAND:
                                 {
-                                    kDebug(33001) << "Freehand" << endl;
+                                    kDebug(33001) <<"Freehand";
                                     KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
                                     kpFreeHandObject->loadOasis( o, context, m_loadingInfo );
                                     if ( groupObject )
@@ -2048,7 +2048,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
 #endif
                             case OT_CLOSED_LINE:
                                 {
-                                    kDebug(33001) << "Closed Line" << endl;
+                                    kDebug(33001) <<"Closed Line";
                                     KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
                                     kpClosedObject->loadOasis( o, context, m_loadingInfo );
                                     if ( groupObject )
@@ -2057,13 +2057,13 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                                         newpage->appendObject( kpClosedObject );
                                 } break;
                             default:
-                                kDebug(33001) << "draw:custom-shape found unsupported object type " << objType << " in draw:enhanced-path " << d << endl;
+                                kDebug(33001) <<"draw:custom-shape found unsupported object type" << objType <<" in draw:enhanced-path" << d;
                                 break;
                         }
                     }
                     else
                     {
-                        kDebug(33001) << "draw:custom-shape not supported" << endl;
+                        kDebug(33001) <<"draw:custom-shape not supported";
                     }
                 }
             }
@@ -2082,7 +2082,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             else if ( name == "notes" && o.namespaceURI() == KoXmlNS::presentation ) // notes
             {
                 //we must extend note attribute
-                //kDebug()<<"presentation:notes----------------------------------\n";
+                //kDebug()<<"presentation:notes----------------------------------";
                 QDomNode frameBox = KoDom::namedItemNS( o, KoXmlNS::draw, "frame" );
                 QString note;
 
@@ -2119,7 +2119,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else
             {
-                kDebug() << "Unsupported object '" << name << "'" << endl;
+                kDebug() <<"Unsupported object '" << name <<"'";
             }
             context.styleStack().restore();
         }
@@ -2129,7 +2129,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
 
 int KPrDocument::createPresentationAnimation(const QDomElement& element, int order, bool increaseOrder)
 {
-    kDebug()<<"void KPrDocument::createPresentationAnimation(const QDomElement& element)\n";
+    kDebug()<<"void KPrDocument::createPresentationAnimation(const QDomElement& element)";
     int orderAnimation = increaseOrder ? 0 : order;
     for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
@@ -2143,7 +2143,7 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
             {
                 Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
                 QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
-                kDebug()<<" insert animation " << tagName << " name :" << name << endl;
+                kDebug()<<" insert animation" << tagName <<" name :" << name;
 
                 if ( e.hasAttributeNS( KoXmlNS::koffice, "order-id" ) )
                 {
@@ -2265,7 +2265,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
     }
     if ( m_pageWhereLoadObject == 0 && m_insertFilePage == 0 )
         setModified( false );
-    kDebug(33001) << "Loading took " << (float)(dt.elapsed()) / 1000.0 << " seconds" << endl;
+    kDebug(33001) <<"Loading took" << (float)(dt.elapsed()) / 1000.0 <<" seconds";
     return b;
 }
 
@@ -2288,7 +2288,7 @@ void KPrDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCom
     QDomElement elem = topElem.firstChild().toElement();
     for ( ; !elem.isNull() ; elem = elem.nextSibling().toElement() )
     {
-        kDebug(33001) << "Element name: " << elem.tagName() << endl;
+        kDebug(33001) <<"Element name:" << elem.tagName();
         if(elem.tagName()=="EMBEDDED") {
             KPrChild *ch = new KPrChild( this );
             KPrPartObject *kppartobject = 0L;
@@ -2397,7 +2397,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
     loadTextStyle( document );
 
     while(!elem.isNull()) {
-        kDebug(33001) << "Element name: " << elem.tagName() << endl;
+        kDebug(33001) <<"Element name:" << elem.tagName();
         if(elem.tagName()=="EMBEDDED") {
             KPrChild *ch = new KPrChild( this );
             KPrPartObject *kppartobject = 0L;
@@ -2650,7 +2650,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                         {
                             if ( name2page.contains(s) )
                             {
-                                kDebug(33001) << "slide show " << slide.attribute( "name" ) << " page = " << s << endl;
+                                kDebug(33001) <<"slide show" << slide.attribute("name" ) <<" page =" << s;
                                 pageList.push_back( name2page[s] );
                             }
                         }
@@ -2675,7 +2675,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                             show=static_cast<bool>(slide.attribute("show").toInt());
                         if ( nr >= 0 )
                         {
-                            //kDebug(33001) << "KPrDocument::loadXML m_selectedSlides nr=" << nr << " show=" << show << endl;
+                            //kDebug(33001) <<"KPrDocument::loadXML m_selectedSlides nr=" << nr <<" show=" << show;
                             if ( nr > ( (int)m_pageList.count() - 1 ) )
                             {
                                 for (int i=(m_pageList.count()-1); i<nr;i++)
@@ -2735,13 +2735,13 @@ void KPrDocument::loadPictureMap ( const QDomElement& domElement )
 
 void KPrDocument::loadBackground( const QDomElement &element )
 {
-    kDebug(33001) << "KPrDocument::loadBackground" << endl;
+    kDebug(33001) <<"KPrDocument::loadBackground";
     QDomElement page=element.firstChild().toElement();
     int i=m_insertFilePage;
     while(!page.isNull()) {
         if(m_pageWhereLoadObject)
         {
-            kDebug(33001) << "m_pageWhereLoadObject->load(...)" << m_pageWhereLoadObject <<  endl;
+            kDebug(33001) <<"m_pageWhereLoadObject->load(...)" << m_pageWhereLoadObject;
             m_pageWhereLoadObject->load(page);
             break;
         }
@@ -3167,7 +3167,7 @@ void KPrDocument::loadImagesFromStore( KoStore *_store )
 
 bool KPrDocument::completeLoading( KoStore* _store )
 {
-    kDebug()<<"bool KPrDocument::completeLoading( KoStore* _store )*************************\n";
+    kDebug()<<"bool KPrDocument::completeLoading( KoStore* _store )*************************";
     emit sigProgress( 80 );
 
     if ( _store ) {
@@ -3223,7 +3223,7 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, const QStringList
         QString soundFile = *it;
 
         if ( _store->open( soundFile ) ) {
-            kDebug( 33001 ) << "Not found file on disk. Use this( " << soundFile << " ) file." << endl;
+            kDebug( 33001 ) <<"Not found file on disk. Use this(" << soundFile <<" ) file.";
             KoStoreDevice dev( _store );
             int size = _store->size();
             if (size < 0)
@@ -3268,7 +3268,7 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, const QStringList
             delete[] data;
         }
         else {
-            kDebug( 33001 ) << "Found this( " << soundFile << " ) file on disk" << endl;
+            kDebug( 33001 ) <<"Found this(" << soundFile <<" ) file on disk";
         }
     }
 }
@@ -3440,7 +3440,7 @@ int KPrDocument::getRightBorder() const
 
 void KPrDocument::deletePage( int _page )
 {
-    kDebug(33001) << "KPrDocument::deletePage " << _page << endl;
+    kDebug(33001) <<"KPrDocument::deletePage" << _page;
     //m_pageList.at(_page)->deletePage();
     if ( m_pageList.count()==1 )
         return;
@@ -3515,7 +3515,7 @@ void KPrDocument::pageOrderChanged()
 
 void KPrDocument::movePageTo( int oldPos, int newPos )
 {
-    kDebug(33001) << "movePage oldPos = " << oldPos << ", neuPos = " << newPos << endl;
+    kDebug(33001) <<"movePage oldPos =" << oldPos <<", neuPos =" << newPos;
 
     KPrPage * page = m_pageList.take( oldPos );
     m_pageList.insert( newPos, page );
@@ -3562,7 +3562,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
         KUrl src, dest;
         src.setPath( fileName );
         dest.setPath( KStandardDirs::locateLocal( "appdata", "default.kpr" ) );
-        kDebug(33001) << "Copying template  (in KPrDocument::templateFileName)" << endl
+        kDebug(33001) <<"Copying template  (in KPrDocument::templateFileName)" << endl
                        << "  from: " << src.prettyUrl() << endl
                        << "  to: " << dest.prettyUrl() << endl;
         KIO::NetAccess::file_copy( src,
@@ -3576,7 +3576,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
 int KPrDocument::insertNewPage( const QString &cmdName, int _page, InsertPos _insPos,
                                   bool chooseTemplate, const QString &theFile )
 {
-    kDebug(33001) << "KPrDocument::insertNewPage " << _page << endl;
+    kDebug(33001) <<"KPrDocument::insertNewPage" << _page;
 
     QString fileName=templateFileName(chooseTemplate, theFile);
     if(fileName.isEmpty())
@@ -3847,7 +3847,7 @@ void KPrDocument::addShell( KoMainWindow *shell )
 
 void KPrDocument::movePage( int from, int to )
 {
-    kDebug(33001) << "KPrDocument::movePage from=" << from << " to=" << to << endl;
+    kDebug(33001) <<"KPrDocument::movePage from=" << from <<" to=" << to;
     KPrMovePageCmd *cmd = new KPrMovePageCmd( i18n("Move Slide"), from, to, this );
     cmd->execute();
     addCommand(cmd);
@@ -3860,8 +3860,8 @@ void KPrDocument::copyPage( int from )
 
     _duplicatePage=true; // ### now also set via savePage() parameter below
 
-    kDebug(33001) << "KPrDocument::copyPage from=" << from << " to=" << from + 1 << endl;
-    kDebug(33001) << "mimeType = " << mimeType() << ", outputMimeType = " << outputMimeType() << endl;
+    kDebug(33001) <<"KPrDocument::copyPage from=" << from <<" to=" << from + 1;
+    kDebug(33001) <<"mimeType =" << mimeType() <<", outputMimeType =" << outputMimeType();
     bool wasSelected = isSlideSelected( from );
     KTemporaryFile tempFile;
     tempFile.setSuffix(mimeType() == nativeOasisMimeType() ? ".oop": ".kpr");
@@ -3896,8 +3896,8 @@ void KPrDocument::copyPageToClipboard( int pgnum )
     // Yes it's a hack but at least we don't hit the clipboard size limit :)
     // (and we don't have to implement copy-tar-structure-to-clipboard)
     // In fact it even allows copying a [1-page] kpr in konq and pasting it in kpresenter :))
-    kDebug(33001) << "KPrDocument::copyPageToClipboard pgnum=" << pgnum << endl;
-    kDebug(33001) << "mimeType = " << mimeType() << ", outputMimeType = " << outputMimeType() << endl;
+    kDebug(33001) <<"KPrDocument::copyPageToClipboard pgnum=" << pgnum;
+    kDebug(33001) <<"mimeType =" << mimeType() <<", outputMimeType =" << outputMimeType();
     KTemporaryFile tempFile;
     tempFile.setSuffix(mimeType() == nativeOasisMimeType() ? ".oop": ".kpr");
     tempFile.open();
@@ -3923,7 +3923,7 @@ void KPrDocument::clipboardDataChanged()
 {
     if ( !m_tempFileInClipboard.isEmpty() )
     {
-        kDebug(33001) << "KPrDocument::clipboardDataChanged, deleting temp file " << m_tempFileInClipboard << endl;
+        kDebug(33001) <<"KPrDocument::clipboardDataChanged, deleting temp file" << m_tempFileInClipboard;
         unlink( QFile::encodeName( m_tempFileInClipboard ) );
         m_tempFileInClipboard.clear();
     }
@@ -3939,7 +3939,7 @@ void KPrDocument::selectPage( int pgNum /* 0-based */, bool select )
     Q_ASSERT( pgNum >= 0 );
     KPrPage *page = m_pageList.at( pgNum );
     page->slideSelected(select);
-    kDebug(33001) << "KPrDocument::selectPage pgNum=" << pgNum << " select=" << select << endl;
+    kDebug(33001) <<"KPrDocument::selectPage pgNum=" << pgNum <<" select=" << select;
     setModified(true);
 
     updateSideBarItem( page );
@@ -3953,18 +3953,18 @@ KPrPage * KPrDocument::findPage(KPrObject *object)
     Q3PtrList<KPrObject> masterObjects( m_masterPage->objectList() );
     if ( masterObjects.findRef( object ) != -1 )
     {
-        //kDebug(33001) << "Object is on the master page" << endl;
+        //kDebug(33001) <<"Object is on the master page";
         return m_masterPage;
     }
     Q3PtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it ) {
         Q3PtrList<KPrObject> list( it.current()->objectList() );
         if ( list.findRef( object ) != -1 ) {
-            //kDebug(33001) << "Object is on page " << m_pageList.findRef(it.current()) + 1 << endl;
+            //kDebug(33001) <<"Object is on page" << m_pageList.findRef(it.current()) + 1;
             return it.current();
         }
     }
-    kDebug(33001) << "Object not found on a page" << endl;
+    kDebug(33001) <<"Object not found on a page";
     return 0L;
 }
 
@@ -3975,7 +3975,7 @@ KPrPage * KPrDocument::findPage(Q3PtrList<KPrObject> &objects)
         Q3PtrList<KPrObject> list( m_masterPage->objectList() );
         if ( list.findRef( object ) != -1 )
         {
-            //kDebug(33001) << "Object is on the master page" << endl;
+            //kDebug(33001) <<"Object is on the master page";
             return m_masterPage;
         }
     }
@@ -3983,11 +3983,11 @@ KPrPage * KPrDocument::findPage(Q3PtrList<KPrObject> &objects)
     for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
         Q3PtrList<KPrObject> list( page->objectList() );
         if ( list.findRef( object ) != -1 ) {
-            //kDebug(33001) << "The Objects are on page " << m_pageList.findRef(page) + 1 << endl;
+            //kDebug(33001) <<"The Objects are on page" << m_pageList.findRef(page) + 1;
             return page;
         }
     }
-    kDebug(33001) << "Objects not found on a page" << endl;
+    kDebug(33001) <<"Objects not found on a page";
     return 0L;
 }
 
@@ -4012,7 +4012,7 @@ QList<int> KPrDocument::listOfDisplaySelectedSlides( const QList<KPrPage*> & lst
         int pageNum = m_pageList.find(page);
         if ( pageNum != -1 )
         {
-            kDebug()<<" KPrDocument::displaySelectedSlide : add slide number :"<<pageNum<<endl;
+            kDebug()<<" KPrDocument::displaySelectedSlide : add slide number :"<<pageNum;
             result << pageNum;
         }
     }
@@ -4029,7 +4029,7 @@ QList<int> KPrDocument::displaySelectedSlides()  /* returned list is 0-based */
         return selectedSlides();
     else
     {
-        kDebug()<<" KPrDocument::displaySelectedSlide m_presentationName : "<<m_presentationName<<endl;
+        kDebug()<<" KPrDocument::displaySelectedSlide m_presentationName :"<<m_presentationName;
         result = listOfDisplaySelectedSlides( m_customListSlideShow[m_presentationName]);
     }
     return result;
@@ -4161,7 +4161,7 @@ void KPrDocument::insertObjectInPage(double offset, KPrObject *_obj, int pos)
     int page = (int)(offset/__pgLayout.ptHeight)+m_insertFilePage;
     if ( page < 0 )
     {
-        kDebug(33001) << "insertObjectInPage object cound not be inserted page = " << page << endl;
+        kDebug(33001) <<"insertObjectInPage object cound not be inserted page =" << page;
         return;
     }
     double newPos = offset - ( page - m_insertFilePage ) * __pgLayout.ptHeight;
@@ -4286,7 +4286,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
     QDomNodeList listStyles = stylesElem.elementsByTagName( "STYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
         KoParagStyle *s = m_styleColl->findStyle("Standard");
-        kDebug(32001) << "KPrDocument::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
+        kDebug(32001) <<"KPrDocument::loadStyleTemplates looking for Standard, to delete it. Found" << s;
         if(s) // delete the standard style.
             m_styleColl->removeStyle(s);
     }
@@ -4305,7 +4305,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
         // Style created, now let's try to add it
         sty = m_styleColl->addStyle( sty );
-        kDebug() << k_funcinfo << m_styleColl->styleList().count() << " styles, " << followingStyles.count() << " following styles" << endl;
+        kDebug() << k_funcinfo << m_styleColl->styleList().count() <<" styles," << followingStyles.count() <<" following styles";
         if(m_styleColl->styleList().count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");
@@ -4707,13 +4707,13 @@ QList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loa
     {
         for ( int i = 0; i < static_cast<int>( m_pageList.count() ); i++ )
         {
-            //kDebug()<<" insert page name :"<<*itList<<endl;
+            //kDebug()<<" insert page name :"<<*itList;
             if ( loadOasis )
             {
                 if ( m_pageList.at( i )->oasisNamePage(i+1)== ( *itList ) )
                 {
                     tmpValueList.append(  m_pageList.at( i ) );
-                    //kDebug()<<" really insert\n";
+                    //kDebug()<<" really insert";
                     break;
                 }
             }
@@ -4722,7 +4722,7 @@ QList <KPrPage *> KPrDocument::customListPage( const QStringList & lst, bool loa
                 if ( m_pageList.at( i )->pageTitle()== ( *itList ) )
                 {
                     tmpValueList.append( m_pageList.at( i ) );
-                    //kDebug()<<" really insert\n";
+                    //kDebug()<<" really insert";
                     break;
                 }
             }

@@ -302,7 +302,7 @@ void Navigator::calculateMinWidth()
     if (item->width( this ) > mMinWidth)
       mMinWidth = item->width( this );
   }
-  //kDebug() << "minWidth:" << mMinWidth << endl;
+  //kDebug() <<"minWidth:" << mMinWidth;
   parentWidget()->setFixedWidth( mMinWidth );
   triggerUpdate(true);
 }
@@ -314,7 +314,7 @@ int Navigator::insertItem(const QString &_text, const QString & _pix)
   {
     mMinWidth = item->width( this );
     parentWidget()->setMinimumWidth( mMinWidth );
-    //kDebug() << "minWidth:" << mMinWidth << endl;
+    //kDebug() <<"minWidth:" << mMinWidth;
   }
   return item->id();
 }
@@ -553,7 +553,7 @@ void IconSidePane::selectGroup(int group_id)
 
 void IconSidePane::itemSelected(int item)
 {
-  kDebug() << "Item selected:" << item << endl;
+  kDebug() <<"Item selected:" << item;
 }
 
 Navigator * IconSidePane::group(int _grp)
@@ -609,7 +609,7 @@ IconViewMode IconSidePane::sizeIntToEnum(int size) const
     default:
       // Stick with sane values
       return NormalIcons;
-      kDebug() << "View mode not implemented!" << endl;
+      kDebug() <<"View mode not implemented!";
       break;
   }
 }

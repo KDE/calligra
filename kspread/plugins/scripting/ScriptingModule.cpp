@@ -68,7 +68,7 @@ ScriptingModule::ScriptingModule(QObject* parent)
 
 ScriptingModule::~ScriptingModule()
 {
-	kDebug() << "ScriptingModule::~ScriptingModule()" << endl;
+	kDebug() <<"ScriptingModule::~ScriptingModule()";
 	delete d;
 }
 

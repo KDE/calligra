@@ -158,7 +158,7 @@ void KCConfigFontPage::changeLabelFont()
         state = &labelIsRelative;
     }
     else
-        kDebug( 35001 ) << "Pb in listBox" << endl;
+        kDebug( 35001 ) <<"Pb in listBox";
 
     if ( diffAxes ) {
         QFont newFont;

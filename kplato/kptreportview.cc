@@ -78,7 +78,7 @@ public:
     }
 
     QString getData(const QString& tag) const {
-        //kDebug()<<k_funcinfo<<"tag="<<tag<<endl;
+        //kDebug()<<k_funcinfo<<"tag="<<tag;
         KLocale *l = KGlobal::locale();
         if (!tag.contains('.')) {
             // global tags
@@ -175,7 +175,7 @@ ReportView::ReportView(View *view, QWidget *parent)
     m_mainview(view),
     m_reportTags(0)
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_reportList = new K3ListView(this);
     m_reportList->setShadeSortColumn(false);
     m_reportList->addColumn(i18n("Report Template"));
@@ -212,7 +212,7 @@ ReportView::~ReportView() {
 
 void ReportView::initReportList() {
 //FIXME: We need a solution that takes care project specific reports.
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QStringList list;
     m_reportList->clear();
     KStandardDirs std;
@@ -221,7 +221,7 @@ void ReportView::initReportList() {
         KDesktopFile file((*it), true);
         QString name = file.readName();
         if (!name.isNull()) {
-            //kDebug()<<" file: "<<*it<<" name="<<name<<endl;
+            //kDebug()<<" file:"<<*it<<" name="<<name;
             QString url = file.readURL();
             if (!url.isNull()) {
                 if (url.left(1) != "/" || url.left(6) != "file:/") {
@@ -235,7 +235,7 @@ void ReportView::initReportList() {
 }
 
 void ReportView::draw(const QString &report) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_reportview->clearReport();
     m_reportTags = new ReportTagsPrivate();
     getTemplateFile(report);
@@ -249,12 +249,12 @@ void ReportView::draw(const QString &report) {
 }
 
 void ReportView::setup(KPrinter &printer) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     m_reportview->setupPrinter(printer);
 }
 
 void ReportView::print(KPrinter &printer) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 	m_reportview->printReport(printer);
 }
 
@@ -264,15 +264,15 @@ void ReportView::setReportData() {
     s+="<KugarData>\n";
     s += setReportDetail();
     s+="</KugarData>\n";
-    //kDebug()<<s<<endl;
+    //kDebug()<<s;
     m_reportview->setReportData(s);
 }
 
 QString ReportView::setReportDetail() {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QString s;
     if (m_reportTags->alltasksLevel != "-1") {
-        //kDebug()<<k_funcinfo<<"alltasks level="<<m_reportTags->alltasksLevel<<endl;
+        //kDebug()<<k_funcinfo<<"alltasks level="<<m_reportTags->alltasksLevel;
         if (m_reportTags->summarytasksLevel == "-1") {
             m_reportTags->summarytasksLevel = m_reportTags->alltasksLevel;
             m_reportTags->summarytasksProps = m_reportTags->alltasksProps;
@@ -332,16 +332,16 @@ QString ReportView::setReportDetail() {
             }
         }
     }
-    //kDebug()<<k_funcinfo<<s<<endl;
+    //kDebug()<<k_funcinfo<<s;
     return s;
 }
 
 QString ReportView::setResourceGroupDetail(ResourceGroup *group) {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<k_funcinfo<<group->name();
     QString s;
     if (m_reportTags->resourcegroupsLevel != "-1") {
         m_reportTags->m_resourcegroup = group;
-        //kDebug()<<k_funcinfo<<group->name()<<": level="<<m_reportTags->resourcegroupsLevel<<endl;
+        //kDebug()<<k_funcinfo<<group->name()<<": level="<<m_reportTags->resourcegroupsLevel;
         s = setDetail("resourcegroup", m_reportTags->resourcegroupsProps, m_reportTags->resourcegroupsLevel);
         Q3PtrListIterator<Resource> rit(group->resources());
         for (; rit.current(); ++rit) {
@@ -352,18 +352,18 @@ QString ReportView::setResourceGroupDetail(ResourceGroup *group) {
 }
 
 QString ReportView::setResourceDetail(Resource *res) {
-    //kDebug()<<k_funcinfo<<res->name()<<endl;
+    //kDebug()<<k_funcinfo<<res->name();
     QString s;
     if (m_reportTags->resourcesLevel != "-1") {
         m_reportTags->m_resource = res;
-        //kDebug()<<k_funcinfo<<res->name()<<": level="<<m_reportTags->resourcesLevel<<endl;
+        //kDebug()<<k_funcinfo<<res->name()<<": level="<<m_reportTags->resourcesLevel;
         s = setDetail("resource", m_reportTags->resourcesProps, m_reportTags->resourcesLevel);
     }
     return s;
 }
 
 QString ReportView::setTaskChildren(Node *node) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QString s;
     Q3PtrListIterator<Node> it(node->childNodeIterator());
     for (; it.current(); ++it) {
@@ -375,7 +375,7 @@ QString ReportView::setTaskChildren(Node *node) {
 }
 
 QString ReportView::setTaskDetail(Node *node) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QString s;
     QStringList props;
     QString level = "-1";
@@ -400,7 +400,7 @@ QString ReportView::setDetail(const QString & source, QStringList &properties, Q
     QString s = "<Row";
     s += " level=\"" + level + "\"";
     for (unsigned int i=0; i < properties.count(); ++i) {
-        //kDebug()<<k_funcinfo<<"Property: "<<properties[i]<<endl;
+        //kDebug()<<k_funcinfo<<"Property:"<<properties[i];
         s += ' ' + properties[i].section('=', 0, 0) + '='; // Field
         QString data = m_reportTags->getData(source, properties[i].section('=', 1, 1));
         if (data.isNull())
@@ -410,7 +410,7 @@ QString ReportView::setDetail(const QString & source, QStringList &properties, Q
         data = data.replace('"', "&quot;");
         
         s += "\"" + data + "\""; // Property
-        //kDebug()<<k_funcinfo<<s<<endl;
+        //kDebug()<<k_funcinfo<<s;
     }
     s += "/>\n";
     return s;
@@ -499,7 +499,7 @@ void ReportView::loadTemplate(QDomDocument &doc) {
         child = children.item(j);
         if(child.nodeType() == QDomNode::ElementNode) {
             QDomElement e = child.toElement();
-            //kDebug()<<child.nodeName()<<endl;
+            //kDebug()<<child.nodeName();
             // Report Header
             if(child.nodeName() == "ReportHeader") {
                 handleHeader(child);
@@ -546,7 +546,7 @@ void ReportView::handleHeader(QDomNode &node) {
                 }
             } while (i != -1 && j != -1);
             n.setNodeValue(r);
-            //kDebug()<<" new Text="<<n.nodeValue()<<endl;
+            //kDebug()<<" new Text="<<n.nodeValue();
         } else if (child.nodeName() == "Field") {
             QDomElement e = child.toElement();
             if (!e.isElement()) {
@@ -555,7 +555,7 @@ void ReportView::handleHeader(QDomNode &node) {
             QString s = e.attribute("Field");
             QString data = m_reportTags->getData(s);
             e.setAttribute("Text", data);
-            //kDebug()<<" new Text="<<e.attribute("Text")<<endl;
+            //kDebug()<<" new Text="<<e.attribute("Text");
         }
     }
 }
@@ -585,14 +585,14 @@ void ReportView::handleKPlato(QDomElement &elem) {
             }
             QString source = e.attribute("SelectFrom");
             QString level = e.attribute("Level", "-1");
-            //kDebug()<<k_funcinfo<<"SelectFrom="<<source<<" Level="<<level<<endl;
+            //kDebug()<<k_funcinfo<<"SelectFrom="<<source<<" Level="<<level;
             if (source.isNull() || level == "-1")
                 continue;
         
             QStringList list = QStringList::split(" ", source);
             QStringList::iterator it = list.begin();
             for (; it != list.end(); ++it) {
-                //kDebug()<<k_funcinfo<<(*it)<<endl;
+                //kDebug()<<k_funcinfo<<(*it);
                 if ((*it) == "alltasks") {
                     m_reportTags->alltasksLevel = level;
                 }
@@ -617,7 +617,7 @@ void ReportView::handleKPlato(QDomElement &elem) {
 }
 
 void ReportView::handleDetail(QDomElement &elem) {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QString level = elem.attribute("Level", "-1");
     if (level == "-1") {
         return;
@@ -675,7 +675,7 @@ void ReportView::getTemplateFile(const QString &tpl) {
 }
 
 void ReportView::enableNavigationBtn() {
-    //kDebug()<<k_funcinfo<<"curr="<<m_reportview->currentPage()<<" count="<<m_reportview->pageCount()<<endl;
+    //kDebug()<<k_funcinfo<<"curr="<<m_reportview->currentPage()<<" count="<<m_reportview->pageCount();
     emit setFirstPageActionEnabled(m_reportview->currentPage() > 0);
     emit setNextPageActionEnabled(m_reportview->currentPage() < m_reportview->pageCount()-1);
     emit setPriorPageActionEnabled(m_reportview->currentPage() > 0);
@@ -703,13 +703,13 @@ void ReportView::slotLastPage() {
 
 bool ReportView::setContext(Context::Reportview &context) {
     Q_UNUSED(context);
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     return true;
 }
 
 void ReportView::getContext(Context::Reportview &context) const {
     Q_UNUSED(context);
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
 }
 
 void ReportView::slotReportListClicked(Q3ListViewItem* item) {

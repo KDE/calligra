@@ -342,7 +342,7 @@ void KWTableStyleManager::setupMain()
 
 void KWTableStyleManager::switchStyle()
 {
-    kDebug() << "KWTableStyleManager::switchStyle noSignals=" << noSignals << endl;
+    kDebug() <<"KWTableStyleManager::switchStyle noSignals=" << noSignals;
     if(noSignals) return;
     noSignals=true;
 
@@ -352,7 +352,7 @@ void KWTableStyleManager::switchStyle()
     m_currentTableStyle = 0L;
     int num = tableStyleIndex( m_stylesList->currentItem() );
 
-    kDebug() << "KWTableStyleManager::switchStyle switching to " << num << endl;
+    kDebug() <<"KWTableStyleManager::switchStyle switching to" << num;
     if( m_tableStyles.at(num)->origTableStyle() == m_tableStyles.at(num)->changedTableStyle() )
         m_tableStyles.at(num)->switchStyle();
     else
@@ -386,7 +386,7 @@ int KWTableStyleManager::tableStyleIndex( int pos )
 
 void KWTableStyleManager::updateGUI()
 {
-    kDebug() << "KWTableStyleManager::updateGUI m_currentTableStyle=" << m_currentTableStyle << " " << m_currentTableStyle->name() << endl;
+    kDebug() <<"KWTableStyleManager::updateGUI m_currentTableStyle=" << m_currentTableStyle <<"" << m_currentTableStyle->name();
 
     // Update name
     m_nameString->setText(m_currentTableStyle->displayName());
@@ -573,16 +573,16 @@ void KWTableStyleManager::apply() {
     noSignals=true;
     for (unsigned int i =0 ; i < m_tableStyles.count() ; i++) {
         if(m_tableStyles.at(i)->origTableStyle() == 0) {           // newly added style
-            kDebug() << "adding new tablestyle" << m_tableStyles.at(i)->changedTableStyle()->name() << " (" << i << ")" << endl;
+            kDebug() <<"adding new tablestyle" << m_tableStyles.at(i)->changedTableStyle()->name() <<" (" << i <<")";
             KWTableStyle *tmp = m_doc->tableStyleCollection()->addStyle( m_tableStyles.take(i)->changedTableStyle() );
             m_tableStyles.insert(i, new KWTableStyleListItem(0, tmp) );
         } else if(m_tableStyles.at(i)->changedTableStyle() == 0) { // deleted style
-            kDebug() << "deleting orig tablestyle " << m_tableStyles.at(i)->origTableStyle()->name() << " (" << i << ")" << endl;
+            kDebug() <<"deleting orig tablestyle" << m_tableStyles.at(i)->origTableStyle()->name() <<" (" << i <<")";
 
             KWTableStyle *orig = m_tableStyles.at(i)->origTableStyle();
             m_doc->tableStyleCollection()->removeStyle( orig );
         } else {
-            kDebug() << "update tablestyle " << m_tableStyles.at(i)->changedTableStyle()->name() << " (" << i << ")" << endl;
+            kDebug() <<"update tablestyle" << m_tableStyles.at(i)->changedTableStyle()->name() <<" (" << i <<")";
 
             m_tableStyles.at(i)->apply();
         }
@@ -598,7 +598,7 @@ void KWTableStyleManager::renameStyle(const QString &theText) {
     noSignals=true;
 
     int index = m_stylesList->currentItem();
-    kDebug() << "KWTableStyleManager::renameStyle " << index << " to " << theText << endl;
+    kDebug() <<"KWTableStyleManager::renameStyle" << index <<" to" << theText;
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
     m_stylesList->changeItem( theText, index );
@@ -709,7 +709,7 @@ void KWTableStyleManager::updateAllStyleCombos()
 
 void KWTableStyleManager::selectFrameStyle(int index)
 {
-    kDebug() << "KWTableStyleManager::selectFrameStyle index " << index << endl;
+    kDebug() <<"KWTableStyleManager::selectFrameStyle index" << index;
 
     if ( (index>=0) && ( index < (int)m_doc->frameStyleCollection()->count() ) )
         m_currentTableStyle->setFrameStyle( m_doc->frameStyleCollection()->frameStyleAt(index) );
@@ -719,7 +719,7 @@ void KWTableStyleManager::selectFrameStyle(int index)
 
 void KWTableStyleManager::selectStyle(int index)
 {
-    kDebug() << "KWTableStyleManager::selectStyle index " << index << endl;
+    kDebug() <<"KWTableStyleManager::selectStyle index" << index;
     if ( (index>=0) && ( index < (int)m_doc->styleCollection()->styleList().count() ) )
         m_currentTableStyle->setParagraphStyle( m_doc->styleCollection()->styleAt(index) );
     save();

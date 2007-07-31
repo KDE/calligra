@@ -103,7 +103,7 @@ QString ValueFormatter::formatText(const Value &value, Format::Type fmtType, int
   if( !postfix.isEmpty())
     str += ' ' + postfix;
 
-  //kDebug() << "ValueFormatter says: " << str << endl;
+  //kDebug() <<"ValueFormatter says:" << str;
   return str;
 }
 
@@ -267,7 +267,7 @@ QString ValueFormatter::createNumberFormat ( Number value, int precision,
     default :
       //other formatting?
       // This happens with Format::Custom...
-      kDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
+      kDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt <<"";
       break;
   }
 
@@ -332,7 +332,7 @@ QString ValueFormatter::fractionFormat (Number value, Format::Type fmtType)
     limit = 999;
     break;
   default:
-    kDebug(36001) << "Error in Fraction format\n";
+    kDebug(36001) <<"Error in Fraction format";
     return QString::number(numToDouble (value));
     break;
   } /* switch */

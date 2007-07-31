@@ -45,7 +45,7 @@ namespace Scripting {
 
             virtual void setProperties(const KoProperties* props)
             {
-                kDebug(32010) << "Scripting::Variable::setProperties" << endl;
+                kDebug(32010) <<"Scripting::Variable::setProperties";
                 //Q_ASSERT(props);
                 //QString value = props->property("value").toString();
                 //setValue(value);
@@ -55,12 +55,12 @@ namespace Scripting {
 #if 0
                 Q_ASSERT(props);
                 const QString function = m_props->property("getValue").toString();
-                kDebug(32010) << "Scripting::Variable::setProperties: function=" << function << endl;
+                kDebug(32010) <<"Scripting::Variable::setProperties: function=" << function;
                 if( ! function.isEmpty() ) {
                     QVariantList args;
                     args << m_props->property("id").toString();
                     QVariant result = m_action->callFunction(function, args);
-                    kDebug(32010) << "Scripting::Variable::setProperties: Calling function.name=" << function << " result.value=" << result.toString() << " result.type=" << result.typeName() << endl;
+                    kDebug(32010) <<"Scripting::Variable::setProperties: Calling function.name=" << function <<" result.value=" << result.toString() <<" result.type=" << result.typeName();
                     if( result.isValid() ) {
                         setValue( result.toString() );
                         return;
@@ -73,7 +73,7 @@ namespace Scripting {
 
             virtual QWidget* createOptionsWidget()
             {
-                kDebug(32010) << "Scripting::Variable::createOptionsWidget" << endl;
+                kDebug(32010) <<"Scripting::Variable::createOptionsWidget";
                 emit optionsWidgetRequest();
                 return m_optionswidget;
 
@@ -85,7 +85,7 @@ namespace Scripting {
                     QVariantList args;
                     args << m_props->property("id").toString();
                     QVariant result = m_action->callFunction(function, args);
-                    kDebug(32010) << "Scripting::Variable::createOptionsWidget: Calling function.name=" << function << " result.value=" << result.toString() << " result.type=" << result.typeName() << endl;
+                    kDebug(32010) <<"Scripting::Variable::createOptionsWidget: Calling function.name=" << function <<" result.value=" << result.toString() <<" result.type=" << result.typeName();
                     if( result.isValid() ) {
                         if( qVariantCanConvert< QWidget* >(result) )
                             resultwidget = qvariant_cast< QWidget* >(result);
@@ -167,11 +167,11 @@ namespace Scripting {
             {
                 Q_ASSERT(action);
                 if( action->objectName().isEmpty() ) {
-                    kDebug(32010) << "Scripting::VariableFactory::create: Action has empty objectName" << endl;
+                    kDebug(32010) <<"Scripting::VariableFactory::create: Action has empty objectName";
                     return 0;
                 }
                 if( KoInlineObjectRegistry::instance()->contains(action->objectName()) ) {
-                    kDebug(32010) << "Scripting::VariableFactory::create: Action \"" << action->objectName() << "\" already exist" << endl;
+                    kDebug(32010) <<"Scripting::VariableFactory::create: Action \"" << action->objectName() <<"\" already exist";
                     return 0;
                 }
                 VariableFactory* factory = new VariableFactory(action);

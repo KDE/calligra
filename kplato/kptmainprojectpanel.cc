@@ -185,7 +185,7 @@ void MainProjectPanelImpl::enableDateTime()
 {
     if (bStartDate->isChecked())
     {
-        kDebug()<<k_funcinfo<<endl;
+        kDebug()<<k_funcinfo;
         startTime->setEnabled(true);
         startDate->setEnabled(true);
         endTime->setEnabled(false);
@@ -193,7 +193,7 @@ void MainProjectPanelImpl::enableDateTime()
     }
     if (bEndDate->isChecked())
     {
-        kDebug()<<k_funcinfo<<endl;
+        kDebug()<<k_funcinfo;
         startTime->setEnabled(false);
         startDate->setEnabled(false);
         endTime->setEnabled(true);

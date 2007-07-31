@@ -180,8 +180,8 @@ void KWPageLayout::marginsChanged() {
         m_pageLayout.bindingSide = left;
         m_pageLayout.pageEdge = right;
     }
-    // kDebug() << "  " << m_pageLayout.left << "|"<< m_pageLayout.bindingSide << ", " <<
-    //    m_pageLayout.right << "|"<< m_pageLayout.pageEdge << endl;
+    // kDebug() << "  " << m_pageLayout.left <<"|"<< m_pageLayout.bindingSide << "," <<
+    //    m_pageLayout.right << "|"<< m_pageLayout.pageEdge;
     emit layoutChanged(m_pageLayout);
     m_allowSignals = true;
 }

@@ -152,7 +152,7 @@ QString AbiWordWorker::escapeAbiWordText(const QString& strText) const
 
 bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
 {
-    kDebug(30506) << "Opening file: " << filenameOut
+    kDebug(30506) <<"Opening file:" << filenameOut
         << " (in AbiWordWorker::doOpenFile)" << endl;
     //Find the last extension
     QString strExt;
@@ -182,7 +182,7 @@ bool AbiWordWorker::doOpenFile(const QString& filenameOut, const QString& )
         strMimeType="text/plain";
     }
 
-    kDebug(30506) << "Compression: " << strMimeType << endl;
+    kDebug(30506) <<"Compression:" << strMimeType;
 
     m_ioDevice = KFilterDev::deviceForFile(filenameOut,strMimeType);
 
@@ -216,7 +216,7 @@ bool AbiWordWorker::doCloseFile(void)
 
 bool AbiWordWorker::doOpenDocument(void)
 {
-    kDebug(30506)<< "AbiWordWorker::doOpenDocument" << endl;
+    kDebug(30506)<<"AbiWordWorker::doOpenDocument";
     // Make the file header
 
     // First the XML header in UTF-8 version
@@ -251,7 +251,7 @@ bool AbiWordWorker::doOpenDocument(void)
 
 void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& keyName)
 {
-    kDebug(30506) << "AbiWordWorker::writeImageData" << endl;
+    kDebug(30506) <<"AbiWordWorker::writeImageData";
 
     QByteArray image;
 
@@ -523,7 +523,7 @@ bool AbiWordWorker::makeTable(const FrameAnchor& anchor)
 
 bool AbiWordWorker::makePicture(const FrameAnchor& anchor)
 {
-    kDebug(30506) << "New image/clipart: " << anchor.picture.koStoreName
+    kDebug(30506) <<"New image/clipart:" << anchor.picture.koStoreName
         << " , " << anchor.picture.key.toString() << endl;
 
     const double height=anchor.frame.bottom - anchor.frame.top;
@@ -1090,14 +1090,14 @@ bool AbiWordWorker::doCloseHead(void)
 
 bool AbiWordWorker::doOpenSpellCheckIgnoreList (void)
 {
-    kDebug(30506) << "AbiWordWorker::doOpenSpellCheckIgnoreList" << endl;
+    kDebug(30506) <<"AbiWordWorker::doOpenSpellCheckIgnoreList";
     m_inIgnoreWords=false; // reset
     return true;
 }
 
 bool AbiWordWorker::doCloseSpellCheckIgnoreList (void)
 {
-    kDebug(30506) << "AbiWordWorker::doCloseSpellCheckIgnoreList" << endl;
+    kDebug(30506) <<"AbiWordWorker::doCloseSpellCheckIgnoreList";
     if (m_inIgnoreWords)
         *m_streamOut << "</ignorewords>\n";
     return true;
@@ -1105,7 +1105,7 @@ bool AbiWordWorker::doCloseSpellCheckIgnoreList (void)
 
 bool AbiWordWorker::doFullSpellCheckIgnoreWord (const QString& ignoreword)
 {
-    kDebug(30506) << "AbiWordWorker::doFullSpellCheckIgnoreWord: " << ignoreword << endl;
+    kDebug(30506) <<"AbiWordWorker::doFullSpellCheckIgnoreWord:" << ignoreword;
     if (!m_inIgnoreWords)
     {
         *m_streamOut << "<ignorewords>\n";

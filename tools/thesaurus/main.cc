@@ -269,11 +269,11 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
 
     // Check whether we can accept the data
     if ( datatype != "QString" ) {
-        kDebug(31000) << "Thesaurus only accepts datatype QString" << endl;
+        kDebug(31000) <<"Thesaurus only accepts datatype QString";
         return false;
     }
     if ( mimetype != "text/plain" ) {
-        kDebug(31000) << "Thesaurus only accepts mimetype text/plain" << endl;
+        kDebug(31000) <<"Thesaurus only accepts mimetype text/plain";
         return false;
     }
 
@@ -290,8 +290,8 @@ bool Thesaurus::run(const QString& command, void* data, const QString& datatype,
         m_replace->setEnabled(false);
         m_replace_label->setEnabled(false);
     } else {
-        kDebug(31000) << "Thesaurus does only accept the command 'thesaurus' or 'thesaurus_standalone'" << endl;
-        kDebug(31000) << "The command " << command << " is not accepted" << endl;
+        kDebug(31000) <<"Thesaurus does only accept the command 'thesaurus' or 'thesaurus_standalone'";
+        kDebug(31000) <<"The command" << command <<" is not accepted";
         return false;
     }
 
@@ -684,7 +684,7 @@ void Thesaurus::findTermWordnet(const QString &term)
 
     if( m_wnproc->isRunning() ) {
         // should never happen
-        kDebug(31000) << "Warning: findTerm(): process is already running?!" << endl;
+        kDebug(31000) <<"Warning: findTerm(): process is already running?!";
         QApplication::restoreOverrideCursor();
         return;
     }
@@ -754,7 +754,7 @@ void Thesaurus::wnExited(K3Process *)
         result += "\n</table></qt>\n";
         m_resultbox->setHtml(result);
 //         m_resultbox->setContentsPos(0,0);
-        //kDebug() << result << endl;
+        //kDebug() << result;
     }
 
     QApplication::restoreOverrideCursor();

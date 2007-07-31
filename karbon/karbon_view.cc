@@ -153,7 +153,7 @@
 #define KARBON_DEBUG_VIEW
 
 #ifdef KARBON_DEBUG_VIEW
-#define debugView(text) kDebug(38000) << "KARBON_DEBUG_VIEW: " << text << endl
+#define debugView(text) kDebug(38000) <<"KARBON_DEBUG_VIEW:" << text << endl
 #else
 #define debugView(text)
 #endif
@@ -421,9 +421,9 @@ KarbonView::fileImportGraphic()
 		return;
 	}
 	QString fname = dialog->selectedFile();
-	//kDebug(38000) << "in : " << fname.latin1() << endl;
-	//kDebug(38000) << "part()->document()->nativeFormatMimeType().latin1() : " << part()->nativeFormatMimeType() << endl;
-	//kDebug(38000) << "dialog->currentMimeFilter().latin1() : " << dialog->currentMimeFilter().latin1() << endl;
+	//kDebug(38000) <<"in :" << fname.latin1();
+	//kDebug(38000) <<"part()->document()->nativeFormatMimeType().latin1() :" << part()->nativeFormatMimeType();
+	//kDebug(38000) <<"dialog->currentMimeFilter().latin1() :" << dialog->currentMimeFilter().latin1();
 	if( part()->nativeFormatMimeType() == dialog->currentMimeFilter().toLatin1() )
 		part()->mergeNativeFormat( fname );
 	else
@@ -503,7 +503,7 @@ void KarbonView::editSelectAll()
         return;
 
     QList<KoShape*> shapes = part()->document().shapes();
-    kDebug(38000) << "shapes.size() = " << shapes.size() << endl;
+    kDebug(38000) <<"shapes.size() =" << shapes.size();
 
     foreach( KoShape* shape, shapes )
     {
@@ -1327,7 +1327,7 @@ KarbonView::selectionChanged()
     m_unitePath->setEnabled( false );
     m_deleteSelectionAction->setEnabled( count > 0 );
 
-    kDebug(38000) << count << " shapes selected" << endl;
+    kDebug(38000) << count <<" shapes selected";
 
     if( count > 0 )
     {
@@ -1466,7 +1466,7 @@ KarbonView::toolController()
 void KarbonView::updateReadWrite( bool readwrite )
 {
     debugView("KarbonView::updateReadWrite( bool )");
-    kDebug(38000) << "writable state = " << readwrite << endl;
+    kDebug(38000) <<"writable state =" << readwrite;
 }
 
 #include "karbon_view.moc"

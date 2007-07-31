@@ -120,7 +120,7 @@ QDomDocumentFragment KPrPolygonObject::save( QDomDocument& doc, double offset )
 
 void KPrPolygonObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info )
 {
-    kDebug()<<"void KPrPolygonObject::loadOasis( const QDomElement &element )***********\n";
+    kDebug()<<"void KPrPolygonObject::loadOasis( const QDomElement &element )***********";
     KPr2DObject::loadOasis( element,context, info );
     cornersValue = element.attributeNS( KoXmlNS::draw, "corners", QString::null ).toInt();
     checkConcavePolygon = element.attributeNS( KoXmlNS::draw, "concave", QString::null ) == "true";
@@ -259,7 +259,7 @@ void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
 
 void KPrPolygonObject::drawPolygon()
 {
-    kDebug()<<"void KPrPolygonObject::drawPolygon()***********\n";
+    kDebug()<<"void KPrPolygonObject::drawPolygon()***********";
     QRectF _rect( 0, 0, ext.width(), ext.height() );
     double angle = 2 * M_PI / cornersValue;
     double diameter = static_cast<double>( qMax( _rect.width(), _rect.height() ) );

@@ -247,7 +247,7 @@ void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType)
     }
 
     else
-        kDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter\n";
+        kDebug()<<"Error in void KWordTextFrameSetIface::changeCaseOfText( const QString & caseType) parameter";
     delete cmd;
 }
 

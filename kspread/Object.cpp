@@ -97,7 +97,7 @@ void EmbeddedObject::resizeBy( double _dx, double _dy)
 
 bool EmbeddedObject::load( const KoXmlElement& /*element*/ )
 {
-    kDebug() << "Loading EmbeddedObject" << endl;
+    kDebug() <<"Loading EmbeddedObject";
     return false;
 }
 
@@ -109,7 +109,7 @@ void EmbeddedObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContex
   m_geometry.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
   m_geometry.setWidth(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() )) );
   m_geometry.setHeight(KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) ) );
-    //kDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
+    //kDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height():"<<ext.height();
   KoStyleStack &styleStack = context.styleStack();
 
   styleStack.setTypeProperties( "" ); //no type default type
@@ -118,7 +118,7 @@ void EmbeddedObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContex
 
 QDomElement EmbeddedObject::save( QDomDocument& /*doc*/ )
 {
-    kDebug() << "Saving EmbeddedObject..." << endl;
+    kDebug() <<"Saving EmbeddedObject...";
     return QDomElement();
 }
 
@@ -141,7 +141,7 @@ void EmbeddedObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) 
 
 bool EmbeddedObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &/* sc */ ) const
 {
-    kDebug() << "bool saveOasisObjectAttributes not implemented";
+    kDebug() <<"bool saveOasisObjectAttributes not implemented";
     return true;
 }
 
@@ -380,7 +380,7 @@ KoDocumentChild* EmbeddedKOfficeObject::embeddedObject()
 
 bool EmbeddedKOfficeObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
 {
-    kDebug() << "EmbeddedKOfficeObject::saveOasisPart " << sc.partIndexObj << endl;
+    kDebug() <<"EmbeddedKOfficeObject::saveOasisPart" << sc.partIndexObj;
 
     sc.xmlWriter.startElement( "draw:object" );
     const QString name = QString( "Object_%1" ).arg( sc.partIndexObj + 1 );
@@ -399,7 +399,7 @@ const char * EmbeddedKOfficeObject::getOasisElementName() const
 
 bool EmbeddedKOfficeObject::load( const KoXmlElement& element )
 {
-    kDebug() << "Loading EmbeddedKOfficeObject" << endl;
+    kDebug() <<"Loading EmbeddedKOfficeObject";
     bool result = embeddedObject()->load( element );
     setGeometry( embeddedObject()->geometry()  );
     return result;
@@ -407,7 +407,7 @@ bool EmbeddedKOfficeObject::load( const KoXmlElement& element )
 
 void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element)******************\n";
+    kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element)******************";
     EmbeddedObject::loadOasis( element, context );
 
     KoXmlElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
@@ -419,14 +419,14 @@ void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOasisLoadin
 
 QDomElement EmbeddedKOfficeObject::save( QDomDocument& doc )
 {
-    kDebug() << "Saving EmbeddedKOfficeObject" << endl;
+    kDebug() <<"Saving EmbeddedKOfficeObject";
     embeddedObject()->setGeometry( geometry().toRect() );
     return m_embeddedObject->save( doc );
 }
 
 void EmbeddedKOfficeObject::draw( QPainter *_painter )
 {
-  kDebug() << "Painting..." << endl;
+  kDebug() <<"Painting...";
 
   int const penw = pen.width() ;
   QRectF bound( 0, 0,
@@ -474,7 +474,7 @@ void EmbeddedKOfficeObject::activate( View *_view, Canvas* /* canvas */ )
     KoDocument* part = embeddedObject()->document();
     if ( !part )
         return;
-    kDebug() << "Activating..." << endl;
+    kDebug() <<"Activating...";
 
     _view->partManager()->addPart( part, false );
     _view->partManager()->setActivePart( part, _view );
@@ -494,10 +494,10 @@ void EmbeddedKOfficeObject::updateChildGeometry()
 //   QRect r = doc()->zoomRectOld( geometry() );
 //   if ( _canvas )
 //   {
-//     kDebug() << "_canvas->xOffset():" << _canvas->xOffset() << endl;
-//     kDebug() << "         _canvas->xOffset()*_canvas->doc()->zoomedResolutionX():" << _canvas->xOffset() * _canvas->doc()->zoomedResolutionX() << endl;
-//     kDebug() << "_canvas->yOffset():" << _canvas->yOffset() << endl;
-//     kDebug() << "         _canvas->yOffset()*_canvas->doc()->zoomedResolutionY():" << _canvas->yOffset() * _canvas->doc()->zoomedResolutionY() << endl;
+//     kDebug() <<"_canvas->xOffset():" << _canvas->xOffset();
+//     kDebug() <<"         _canvas->xOffset()*_canvas->doc()->zoomedResolutionX():" << _canvas->xOffset() * _canvas->doc()->zoomedResolutionX();
+//     kDebug() <<"_canvas->yOffset():" << _canvas->yOffset();
+//     kDebug() <<"         _canvas->yOffset()*_canvas->doc()->zoomedResolutionY():" << _canvas->yOffset() * _canvas->doc()->zoomedResolutionY();
 //     r.translate( -_canvas->xOffset() / _canvas->doc()->zoomedResolutionX() , -_canvas->yOffset() / _canvas->doc()->zoomedResolutionY() );
 //   }
 //   embeddedObject()->setGeometry( r , true );
@@ -548,7 +548,7 @@ const char * EmbeddedChart::getOasisElementName() const
 
 bool EmbeddedChart::load( const KoXmlElement& element )
 {
-    kDebug() << "Loading EmbeddedChart" << endl;
+    kDebug() <<"Loading EmbeddedChart";
     if ( !EmbeddedKOfficeObject::load( element ) )
         return false;
 
@@ -571,7 +571,7 @@ bool EmbeddedChart::load( const KoXmlElement& element )
 
 void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kDebug()<<"void EmbeddedChart::loadOasis(const KoXmlElement &element)******************\n";
+    kDebug()<<"void EmbeddedChart::loadOasis(const KoXmlElement &element)******************";
     EmbeddedKOfficeObject::loadOasis( element, context );
 
     KoXmlElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
@@ -593,7 +593,7 @@ void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOasisLoadingContext
 
 bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
 {
-    kDebug() << "EmbeddedChart::saveOasisPart " << sc.partIndexObj << endl;
+    kDebug() <<"EmbeddedChart::saveOasisPart" << sc.partIndexObj;
 
     EmbeddedKOfficeObject::saveOasisObjectAttributes( sc );
 
@@ -605,7 +605,7 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
         sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
     }
     else {
-        kDebug() << "EmbeddedChart::saveOasisPart m_pBinding is NULL" << endl;
+        kDebug() <<"EmbeddedChart::saveOasisPart m_pBinding is NULL";
     }
     sc.xmlWriter.endElement();
 
@@ -614,7 +614,7 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
 
 QDomElement EmbeddedChart::save( QDomDocument& doc )
 {
-    kDebug() << "Saving EmbeddedChart" << endl;
+    kDebug() <<"Saving EmbeddedChart";
     QDomElement element = EmbeddedKOfficeObject::save( doc );
     element.setTagName( "chart" );
 
@@ -725,7 +725,7 @@ bool EmbeddedPictureObject::load( const KoXmlElement& /*element*/ )
 
 QDomElement EmbeddedPictureObject::save( QDomDocument& /*doc*/ )
 {
-    kDebug() << "Saving EmbeddedPictureObject" << endl;
+    kDebug() <<"Saving EmbeddedPictureObject";
     return QDomElement();
 }
 
@@ -971,7 +971,7 @@ void EmbeddedPictureObject::loadOasis(const KoXmlElement &element, KoOasisLoadin
     loadOasisPictureEffect( context );
     KoXmlNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString()) );
-    kDebug()<<" href: "<<href<<endl;
+    kDebug()<<" href:"<<href;
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
     {
         QString strExtension;
@@ -1175,7 +1175,7 @@ QPixmap EmbeddedPictureObject::generatePixmap(KoZoomHandler*_zoomHandler)
     const double penw = _zoomHandler->zoomItXOld( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSizeOld( m_geometry.size() /*ext*/ ) );
-    //kDebug(33001) << "EmbeddedPictureObject::generatePixmap size= " << size << endl;
+    //kDebug(33001) <<"EmbeddedPictureObject::generatePixmap size=" << size;
     QPixmap pixmap(size);
     QPainter paint;
 
@@ -1287,7 +1287,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 #endif
             )
         {
-            //kDebug(33001) << "Drawing cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) <<"Drawing cached pixmap" << (void*) this <<"" << k_funcinfo;
         }
         else
         {
@@ -1305,7 +1305,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
             m_cachedPar1 = m_ie_par1;
             m_cachedPar2 = m_ie_par2;
             m_cachedPar3 = m_ie_par3;
-            //kDebug(33001) <<  "Drawing non-cached pixmap " << (void*) this << " " << k_funcinfo << endl;
+            //kDebug(33001) <<"Drawing non-cached pixmap" << (void*) this <<"" << k_funcinfo;
         }
         _painter->eraseRect( rect );
         _painter->drawPixmap( rect, m_cachedPixmap);
@@ -1338,7 +1338,7 @@ void EmbeddedPictureObject::draw( QPainter *_painter/*, KoZoomHandler*_zoomHandl
 QPixmap EmbeddedPictureObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
-    kDebug(33001) << "EmbeddedPictureObject::getOriginalPixmap size= " << _pixSize << endl;
+    kDebug(33001) <<"EmbeddedPictureObject::getOriginalPixmap size=" << _pixSize;
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
     image.clearCache(); // Release the memoy of the picture cache
 

@@ -54,10 +54,10 @@ void KWFrameSet::removeFrame(KWFrame *frame) {
 
 #ifndef NDEBUG
 void KWFrameSet::printDebug() {
-    //kDebug(32001) << " |  Visible: " << isVisible() << endl;
+    //kDebug(32001) <<" |  Visible:" << isVisible();
     int i=1;
     foreach(KWFrame *frame, frames()) {
-        kDebug(32001) << " +-- Frame " << i++ << " of "<< frameCount() << "    (" << frame << ")  " <<
+        kDebug(32001) <<" +-- Frame" << i++ <<" of"<< frameCount() <<"    (" << frame <<")" <<
         (frame->isCopy() ? "[copy]" : "") << endl;
         printDebug(frame);
     }
@@ -68,20 +68,20 @@ void KWFrameSet::printDebug(KWFrame *frame) {
     static const char * runaroundSide[] = { "Biggest", "Left", "Right", "ERROR" };
     static const char * frameBh[] = { "AutoExtendFrame", "AutoCreateNewFrame", "Ignore", "ERROR" };
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
-    kDebug(32001) << "     Rectangle : " << frame->shape()->position().x() << "," << frame->shape()->position().y() << " " << frame->shape()->size().width() << "x" << frame->shape()->size().height() << endl;
-    kDebug(32001) << "     RunAround: "<< runaround[ frame->textRunAround() ] << " side:" << runaroundSide[ frame->runAroundSide() ]<< endl;
-    kDebug(32001) << "     FrameBehavior: "<< frameBh[ frame->frameBehavior() ] << endl;
-    kDebug(32001) << "     NewFrameBehavior: "<< newFrameBh[ frame->newFrameBehavior() ] << endl;
+    kDebug(32001) <<"     Rectangle :" << frame->shape()->position().x() <<"," << frame->shape()->position().y() <<"" << frame->shape()->size().width() <<"x" << frame->shape()->size().height();
+    kDebug(32001) <<"     RunAround:"<< runaround[ frame->textRunAround() ] <<" side:" << runaroundSide[ frame->runAroundSide() ];
+    kDebug(32001) <<"     FrameBehavior:"<< frameBh[ frame->frameBehavior() ];
+    kDebug(32001) <<"     NewFrameBehavior:"<< newFrameBh[ frame->newFrameBehavior() ];
     if(frame->shape()->background().style() == Qt::NoBrush)
-        kDebug(32001) << "     BackgroundColor: Transparent\n";
+        kDebug(32001) <<"     BackgroundColor: Transparent";
     else {
         QColor col = frame->shape()->background().color();
-        kDebug(32001) << "     BackgroundColor: "<< ( col.isValid() ? col.name() : QString("(default)") ) << endl;
+        kDebug(32001) <<"     BackgroundColor:"<< ( col.isValid() ? col.name() : QString("(default)") );
     }
-    kDebug(32001) << "     frameOnBothSheets: "<< frame->frameOnBothSheets() << endl;
-    kDebug(32001) << "     Z Order: " << frame->shape()->zIndex() << endl;
+    kDebug(32001) <<"     frameOnBothSheets:"<< frame->frameOnBothSheets();
+    kDebug(32001) <<"     Z Order:" << frame->shape()->zIndex();
 
-    //kDebug(32001) << "     minFrameHeight "<< frame->minimumFrameHeight() << endl;
+    //kDebug(32001) <<"     minFrameHeight"<< frame->minimumFrameHeight();
     //QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
 }
 #endif

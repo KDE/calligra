@@ -63,7 +63,7 @@ Schedule::Schedule( Schedule *parent )
         m_type = parent->type();
         m_id = parent->id();
     }
-    //kDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id;
 }
 
 Schedule::Schedule( const QString& name, Type type, long id )
@@ -75,7 +75,7 @@ Schedule::Schedule( const QString& name, Type type, long id )
         m_calculationMode( Schedule::Scheduling )
 {
 
-    //kDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id;
 }
 
 Schedule::~Schedule()
@@ -89,7 +89,7 @@ void Schedule::setParent( Schedule *parent )
 
 void Schedule::setDeleted( bool on )
 {
-    //kDebug()<<k_funcinfo<<"deleted="<<on<<endl;
+    //kDebug()<<k_funcinfo<<"deleted="<<on;
     m_deleted = on;
     //changed( this ); don't do this!
 }
@@ -233,7 +233,7 @@ void Schedule::saveXML( QDomElement &element ) const
 
 void Schedule::saveCommonXML( QDomElement &element ) const
 {
-    //kDebug()<<k_funcinfo<<m_name<<" save schedule"<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" save schedule";
     element.setAttribute( "name", m_name );
     element.setAttribute( "type", typeToString() );
     element.setAttribute( "id", qlonglong( m_id ) );
@@ -241,7 +241,7 @@ void Schedule::saveCommonXML( QDomElement &element ) const
 
 void Schedule::saveAppointments( QDomElement &element ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QListIterator<Appointment*> it = m_appointments;
     while ( it.hasNext() ) {
         it.next() ->saveXML( element );
@@ -272,8 +272,8 @@ bool Schedule::attatch( Appointment *appointment )
             return false;
         }
         m_appointments.append( appointment );
-        //if (resource()) kDebug()<<k_funcinfo<<appointment<<" For resource '"<<resource()->name()<<"'"<<" count="<<m_appointments.count()<<endl;
-        //if (node()) kDebug()<<k_funcinfo<<"("<<this<<")"<<appointment<<" For node '"<<node()->name()<<"'"<<" count="<<m_appointments.count()<<endl;
+        //if (resource()) kDebug()<<k_funcinfo<<appointment<<" For resource '"<<resource()->name()<<"'"<<" count="<<m_appointments.count();
+        //if (node()) kDebug()<<k_funcinfo<<"("<<this<<")"<<appointment<<" For node '"<<node()->name()<<"'"<<" count="<<m_appointments.count();
         return true;
     }
     if ( mode == CalculateForward ) {
@@ -282,8 +282,8 @@ bool Schedule::attatch( Appointment *appointment )
             return false;
         }
         m_forward.append( appointment );
-        //if (resource()) kDebug()<<k_funcinfo<<"For resource '"<<resource()->name()<<"'"<<endl;
-        //if (node()) kDebug()<<k_funcinfo<<"For node '"<<node()->name()<<"'"<<endl;
+        //if (resource()) kDebug()<<k_funcinfo<<"For resource '"<<resource()->name()<<"'";
+        //if (node()) kDebug()<<k_funcinfo<<"For node '"<<node()->name()<<"'";
         return true;
     }
     if ( mode == CalculateBackward ) {
@@ -292,8 +292,8 @@ bool Schedule::attatch( Appointment *appointment )
             return false;
         }
         m_backward.append( appointment );
-        //if (resource()) kDebug()<<k_funcinfo<<"For resource '"<<resource()->name()<<"'"<<endl;
-        //if (node()) kDebug()<<k_funcinfo<<"For node '"<<node()->name()<<"'"<<endl;
+        //if (resource()) kDebug()<<k_funcinfo<<"For resource '"<<resource()->name()<<"'";
+        //if (node()) kDebug()<<k_funcinfo<<"For node '"<<node()->name()<<"'";
         return true;
     }
     kError()<<k_funcinfo<<"Unknown mode: "<<m_calculationMode<<endl;
@@ -303,14 +303,14 @@ bool Schedule::attatch( Appointment *appointment )
 // used to add new schedules
 bool Schedule::add( Appointment *appointment )
 {
-    //kDebug()<<k_funcinfo<<this<<endl;
+    //kDebug()<<k_funcinfo<<this;
     appointment->setCalculationMode( m_calculationMode );
     return attatch( appointment );
 }
 
 void Schedule::takeAppointment( Appointment *appointment, int mode )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<") "<<mode<<": "<<appointment<<", "<<appointment->calculationMode()<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<mode<<":"<<appointment<<","<<appointment->calculationMode();
     int i = m_forward.indexOf( appointment );
     if ( i != -1 ) {
         m_forward.removeAt( i );
@@ -330,7 +330,7 @@ void Schedule::takeAppointment( Appointment *appointment, int mode )
 
 Appointment *Schedule::findAppointment( Schedule *resource, Schedule *node, int mode )
 {
-    //kDebug()<<k_funcinfo<<this<<" ("<<resourceError<<", "<<node<<") "<<mode<<endl;
+    //kDebug()<<k_funcinfo<<this<<" ("<<resourceError<<","<<node<<")"<<mode;
     if ( mode == Scheduling ) {
         foreach( Appointment *a,  m_appointments ) {
             if ( a->node() == node && a->resource() == resource ) {
@@ -371,17 +371,17 @@ Appointment Schedule::appointmentIntervals( int which ) const
 {
     Appointment app;
     if ( which == Schedule::CalculateForward ) {
-        //kDebug()<<k_funcinfo<<"list == CalculateForward"<<endl;
+        //kDebug()<<k_funcinfo<<"list == CalculateForward";
         foreach ( Appointment *a, m_forward ) {
             app += *a;
         }
         return app;
     } else if ( which == Schedule::CalculateBackward ) {
-        //kDebug()<<k_funcinfo<<"list == CalculateBackward"<<endl;
+        //kDebug()<<k_funcinfo<<"list == CalculateBackward";
         foreach ( Appointment *a, m_backward ) {
             app += *a;
         }
-        //kDebug()<<k_funcinfo<<"list == CalculateBackward: "<<m_backward.count()<<endl;
+        //kDebug()<<k_funcinfo<<"list == CalculateBackward:"<<m_backward.count();
         return app;
     }
     foreach ( Appointment *a, m_appointments ) {
@@ -393,11 +393,11 @@ Appointment Schedule::appointmentIntervals( int which ) const
 
 EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end ) const
 {
-    //kDebug()<<k_funcinfo<<m_name<<endl;
+    //kDebug()<<k_funcinfo<<m_name;
     EffortCostMap ec;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
-        //kDebug()<<k_funcinfo<<m_name<<endl;
+        //kDebug()<<k_funcinfo<<m_name;
         ec += it.next() ->plannedPrDay( start, end );
     }
     return ec;
@@ -405,7 +405,7 @@ EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate 
 
 Duration Schedule::plannedEffort() const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Duration eff;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
@@ -416,7 +416,7 @@ Duration Schedule::plannedEffort() const
 
 Duration Schedule::plannedEffort( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Duration eff;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
@@ -427,7 +427,7 @@ Duration Schedule::plannedEffort( const QDate &date ) const
 
 Duration Schedule::plannedEffortTo( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Duration eff;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
@@ -438,7 +438,7 @@ Duration Schedule::plannedEffortTo( const QDate &date ) const
 
 double Schedule::plannedCost() const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     double c = 0;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
@@ -449,7 +449,7 @@ double Schedule::plannedCost() const
 
 double Schedule::plannedCost( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     double c = 0;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
@@ -460,7 +460,7 @@ double Schedule::plannedCost( const QDate &date ) const
 
 double Schedule::plannedCostTo( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     double c = 0;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
@@ -474,7 +474,7 @@ NodeSchedule::NodeSchedule()
         : Schedule(),
         m_node( 0 )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")";
     init();
 }
 
@@ -482,7 +482,7 @@ NodeSchedule::NodeSchedule( Node *node, const QString& name, Schedule::Type type
         : Schedule( name, type, id ),
         m_node( node )
 {
-    //kDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<"node name:"<<node->name();
     init();
 }
 
@@ -491,25 +491,25 @@ NodeSchedule::NodeSchedule( Schedule *parent, Node *node )
         m_node( node )
 {
 
-    //kDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<"node name:"<<node->name();
     init();
 }
 
 NodeSchedule::~NodeSchedule()
 {
-    //kDebug()<<k_funcinfo<<this<<" "<<m_appointments.count()<<endl;
+    //kDebug()<<k_funcinfo<<this<<""<<m_appointments.count();
     while ( !m_appointments.isEmpty() ) {
         Appointment *a = m_appointments.takeFirst();
         a->setNode( 0 );
         delete a;
     }
-    //kDebug()<<k_funcinfo<<"forw "<<m_forward.count()<<endl;
+    //kDebug()<<k_funcinfo<<"forw"<<m_forward.count();
     while ( !m_forward.isEmpty() ) {
         Appointment *a = m_forward.takeFirst();
         a->setNode( 0 );
         delete a;
     }
-    //kDebug()<<k_funcinfo<<"backw "<<m_backward.count()<<endl;
+    //kDebug()<<k_funcinfo<<"backw"<<m_backward.count();
     while ( !m_backward.isEmpty() ) {
         Appointment *a = m_backward.takeFirst();
         a->setNode( 0 );
@@ -535,7 +535,7 @@ void NodeSchedule::init()
 
 void NodeSchedule::setDeleted( bool on )
 {
-    //kDebug()<<k_funcinfo<<"deleted="<<on<<endl;
+    //kDebug()<<k_funcinfo<<"deleted="<<on;
     m_deleted = on;
     // set deleted also for possible resource schedules
     QListIterator<Appointment*> it = m_appointments;
@@ -549,7 +549,7 @@ void NodeSchedule::setDeleted( bool on )
 
 bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QString s;
     Schedule::loadXML( sch );
     s = sch.attribute( "earlystart" );
@@ -606,7 +606,7 @@ bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 
 void NodeSchedule::saveXML( QDomElement &element ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QDomElement sch = element.ownerDocument().createElement( "schedule" );
     element.appendChild( sch );
     saveCommonXML( sch );
@@ -650,24 +650,24 @@ void NodeSchedule::saveXML( QDomElement &element ) const
 
 void NodeSchedule::addAppointment( Schedule *resource, DateTime &start, DateTime &end, double load )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     Appointment * a = findAppointment( resource, this, m_calculationMode );
     if ( a != 0 ) {
-        //kDebug()<<k_funcinfo<<"Add interval to existing "<<a<<endl;
+        //kDebug()<<k_funcinfo<<"Add interval to existing"<<a;
         a->addInterval( start, end, load );
         return ;
     }
     a = new Appointment( resource, this, start, end, load );
     Q_ASSERT ( add( a ) == true );
     Q_ASSERT ( resource->add( a ) == true );
-    //kDebug()<<k_funcinfo<<"Added interval to new "<<a<<endl;
+    //kDebug()<<k_funcinfo<<"Added interval to new"<<a;
 }
 
 void NodeSchedule::takeAppointment( Appointment *appointment, int mode )
 {
     Schedule::takeAppointment( appointment, mode );
     appointment->setNode( 0 ); // not my appointment anymore
-    //kDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
+    //kDebug()<<k_funcinfo<<"Taken:"<<appointment;
     if ( appointment->resource() )
         appointment->resource() ->takeAppointment( appointment );
 }
@@ -677,7 +677,7 @@ ResourceSchedule::ResourceSchedule()
         : Schedule(),
         m_resource( 0 )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")";
 }
 
 ResourceSchedule::ResourceSchedule( Resource *resource, const QString& name, Schedule::Type type, long id )
@@ -685,7 +685,7 @@ ResourceSchedule::ResourceSchedule( Resource *resource, const QString& name, Sch
         m_resource( resource ),
         m_parent( 0 )
 {
-    //kDebug()<<k_funcinfo<<"resource: "<<resource->name()<<endl;
+    //kDebug()<<k_funcinfo<<"resource:"<<resource->name();
 }
 
 ResourceSchedule::ResourceSchedule( Schedule *parent, Resource *resource )
@@ -693,24 +693,24 @@ ResourceSchedule::ResourceSchedule( Schedule *parent, Resource *resource )
         m_resource( resource ),
         m_parent( parent )
 {
-    //kDebug()<<k_funcinfo<<"resource: "<<resource->name()<<endl;
+    //kDebug()<<k_funcinfo<<"resource:"<<resource->name();
 }
 
 ResourceSchedule::~ResourceSchedule()
 {
-    //kDebug()<<k_funcinfo<<this<<" "<<m_appointments.count()<<endl;
+    //kDebug()<<k_funcinfo<<this<<""<<m_appointments.count();
     while ( !m_appointments.isEmpty() ) {
         Appointment *a = m_appointments.takeFirst();
         a->setResource( 0 );
         delete a;
     }
-    //kDebug()<<k_funcinfo<<"forw "<<m_forward.count()<<endl;
+    //kDebug()<<k_funcinfo<<"forw"<<m_forward.count();
     while ( !m_forward.isEmpty() ) {
         Appointment *a = m_forward.takeFirst();
         a->setResource( 0 );
         delete a;
     }
-    //kDebug()<<k_funcinfo<<"backw "<<m_backward.count()<<endl;
+    //kDebug()<<k_funcinfo<<"backw"<<m_backward.count();
     while ( !m_backward.isEmpty() ) {
         Appointment *a = m_backward.takeFirst();
         a->setResource( 0 );
@@ -722,24 +722,24 @@ ResourceSchedule::~ResourceSchedule()
 void ResourceSchedule::addAppointment( Schedule *node, DateTime &start, DateTime &end, double load )
 {
     Q_ASSERT( start < end );
-    //kDebug()<<k_funcinfo<<"("<<this<<") "<<node<<", "<<m_calculationMode<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")"<<node<<","<<m_calculationMode;
     Appointment * a = findAppointment( this, node, m_calculationMode );
     if ( a != 0 ) {
-        //kDebug()<<k_funcinfo<<"Add interval to existing "<<a<<endl;
+        //kDebug()<<k_funcinfo<<"Add interval to existing"<<a;
         a->addInterval( start, end, load );
         return ;
     }
     a = new Appointment( this, node, start, end, load );
     Q_ASSERT ( add( a ) == true );
     Q_ASSERT ( node->add( a ) == true );
-    //kDebug()<<k_funcinfo<<"Added interval to new "<<a<<endl;
+    //kDebug()<<k_funcinfo<<"Added interval to new"<<a;
 }
 
 void ResourceSchedule::takeAppointment( Appointment *appointment, int mode )
 {
     Schedule::takeAppointment( appointment, mode );
     appointment->setResource( 0 );
-    //kDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
+    //kDebug()<<k_funcinfo<<"Taken:"<<appointment;
     if ( appointment->node() )
         appointment->node() ->takeAppointment( appointment );
 }
@@ -753,20 +753,20 @@ bool ResourceSchedule::isOverbooked( const DateTime &start, const DateTime &end 
 {
     if ( m_resource == 0 )
         return false;
-    //kDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
+    //kDebug()<<k_funcinfo<<start.toString()<<" -"<<end.toString();
     Appointment a = appointmentIntervals();
     foreach ( AppointmentInterval *i, a.intervals() ) {
         if ( ( !end.isValid() || i->startTime() < end ) &&
                 ( !start.isValid() || i->endTime() > start ) ) {
             if ( i->load() > m_resource->units() ) {
-                //kDebug()<<k_funcinfo<<m_name<<" overbooked"<<endl;
+                //kDebug()<<k_funcinfo<<m_name<<" overbooked";
                 return true;
             }
         }
         if ( i->startTime() >= end )
             break;
     }
-    //kDebug()<<k_funcinfo<<m_name<<" not overbooked"<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<" not overbooked";
     return false;
 }
 
@@ -783,34 +783,34 @@ TimeInterval ResourceSchedule::available( const DateTime &date, const TimeInterv
 
 DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval ) const
 {
-    //kDebug()<<k_funcinfo<<"id="<<m_id<<"Mode="<<m_calculationMode<<" "<<interval.first<<", "<<interval.second<<endl;
+    //kDebug()<<k_funcinfo<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second;
     if ( allowOverbooking() ) {
         return DateTimeInterval( interval.first, interval.second );
     }
     Appointment a = appointmentIntervals( m_calculationMode );
     if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
-        //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<" "<<interval.first<<", "<<interval.second<<" FREE"<<endl;
+        //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
         return DateTimeInterval( interval.first, interval.second );
     }
     foreach ( AppointmentInterval *i, a.intervals() ) {
         if ( i->startTime() < interval.second && i->endTime() > interval.first ) {
             DateTime t = i->startTime();
             if ( t > interval.first ) {
-                //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<" "<<interval.first<<", "<<t<<" PART"<<endl;
+                //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<t<<" PART";
                 return DateTimeInterval( interval.first, t );
             }
             t = i->endTime();
             if ( t < interval.second ) {
-                //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<" "<<t<<", "<<interval.second<<" PART"<<endl;
+                //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<t<<","<<interval.second<<" PART";
                 return DateTimeInterval( t, interval.second );
             }
             if ( i->startTime() <= interval.first && i->endTime() >= interval.second ) {
-                //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<" "<<interval.first<<", "<<interval.second<<" BUSY"<<endl;
+                //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" BUSY";
                 return DateTimeInterval( DateTime(), DateTime() );
             }
         }
     }
-    //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<" "<<interval.first<<", "<<interval.second<<" FREE"<<endl;
+    //kDebug()<<k_funcinfo<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
     return DateTimeInterval( interval.first, interval.second );
 }
 
@@ -821,7 +821,7 @@ MainSchedule::MainSchedule()
     : NodeSchedule(),
     m_manager( 0 )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")";
     init();
 }
 
@@ -829,13 +829,13 @@ MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type
     : NodeSchedule( node, name, type, id ),
     m_manager( 0 )
 {
-    //kDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
+    //kDebug()<<k_funcinfo<<"node name:"<<node->name();
     init();
 }
 
 MainSchedule::~MainSchedule()
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kDebug()<<k_funcinfo<<"("<<this<<")";
 }
 
 bool MainSchedule::usePert() const
@@ -857,7 +857,7 @@ void MainSchedule::changed( Schedule *sch )
 
 bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<k_funcinfo;
     QString s;
     Schedule::loadXML( sch );
 
@@ -962,7 +962,7 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     m_optimistic( 0 ),
     m_pessimistic( 0 )
 {
-    //kDebug()<<k_funcinfo<<name<<endl;
+    //kDebug()<<k_funcinfo<<name;
 }
 
 ScheduleManager::~ScheduleManager()
@@ -993,7 +993,7 @@ int ScheduleManager::removeChild( const ScheduleManager *sm )
 
 void ScheduleManager::insertChild( ScheduleManager *sm, int index )
 {
-    kDebug()<<k_funcinfo<<m_name<<", insert "<<sm->name()<<", "<<index<<endl;
+    kDebug()<<k_funcinfo<<m_name<<", insert"<<sm->name()<<","<<index;
     if ( index == -1 ) {
         m_children.append( sm );
     } else {
@@ -1015,7 +1015,7 @@ void ScheduleManager::createSchedules()
 
 int ScheduleManager::indexOf( const ScheduleManager *child ) const
 {
-    //kDebug()<<k_funcinfo<<this<<", "<<child<<endl;
+    //kDebug()<<k_funcinfo<<this<<","<<child;
     return m_children.indexOf( const_cast<ScheduleManager*>( child ) );
 }
 
@@ -1076,14 +1076,14 @@ void ScheduleManager::setName( const QString& name )
 
 void ScheduleManager::setAllowOverbooking( bool on )
 {
-    //kDebug()<<k_funcinfo<<on<<endl;
+    //kDebug()<<k_funcinfo<<on;
     m_allowOverbooking = on;
     m_project.changed( this );
 }
 
 bool ScheduleManager::allowOverbooking() const
 {
-    //kDebug()<<k_funcinfo<<m_name<<"="<<m_allowOverbooking<<endl;
+    //kDebug()<<k_funcinfo<<m_name<<"="<<m_allowOverbooking;
     return m_allowOverbooking;
 }
 
@@ -1121,7 +1121,7 @@ void ScheduleManager::setDeleted( bool on )
 
 void ScheduleManager::setExpected( MainSchedule *sch )
 {
-    //kDebug()<<k_funcinfo<<m_expected<<", "<<sch<<endl;
+    //kDebug()<<k_funcinfo<<m_expected<<","<<sch;
     if ( m_expected ) {
         int i = m_schedules.indexOf( m_expected );
         m_project.sendScheduleToBeRemoved( m_expected );
@@ -1251,7 +1251,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
             continue;
         }
         KoXmlElement e = n.toElement();
-        //kDebug()<<k_funcinfo<<e.tagName()<<endl;
+        //kDebug()<<k_funcinfo<<e.tagName();
         if ( e.tagName() == "schedule" ) {
             sch = loadMainSchedule( e, status );
             if ( sch ) {
@@ -1300,7 +1300,7 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "distribution", m_usePert );
     el.setAttribute( "overbooking", m_allowOverbooking );
     foreach ( MainSchedule *s, schedules() ) {
-        //kDebug()<<k_funcinfo<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"")<<endl;
+        //kDebug()<<k_funcinfo<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
         if ( !s->isDeleted() && s->isScheduled() ) {
             QDomElement schs = el.ownerDocument().createElement( "schedule" );
             el.appendChild( schs );
@@ -1317,7 +1317,7 @@ void ScheduleManager::saveXML( QDomElement &element ) const
 #ifndef NDEBUG
 void Schedule::printDebug( const QString& indent )
 {
-    kDebug() << indent << "Schedule[" << m_id << "] '" << m_name << "' type: " << typeToString() << " (" << m_type << ")" << ( isDeleted() ? "   Deleted" : "" ) << endl;
+    kDebug() << indent <<"Schedule[" << m_id <<"] '" << m_name <<"' type:" << typeToString() <<" (" << m_type <<")" << ( isDeleted() ?"   Deleted" :"" );
 }
 void NodeSchedule::printDebug( const QString& _indent )
 {
@@ -1325,47 +1325,47 @@ void NodeSchedule::printDebug( const QString& _indent )
     Schedule::printDebug( indent );
     indent += "!  ";
     if ( m_parent == 0 )
-        kDebug() << indent << "No parent schedule!" << endl;
+        kDebug() << indent <<"No parent schedule!";
     if ( !notScheduled ) {
 //FIXME: QT3 support
 /*        if ( node() )
-            kDebug() << indent << "Node: " << node() ->name() << endl;
+            kDebug() << indent <<"Node:" << node() ->name();
         else
-            kDebug() << indent << "No parent node!" << endl;*/
+            kDebug() << indent <<"No parent node!";*/
     }
-    kDebug() << indent << "Not scheduled=" << notScheduled << endl;
-    kDebug() << indent << "Start time: " << startTime.toString() << endl;
-    kDebug() << indent << "End time: " << endTime.toString() << endl;
-    kDebug() << indent << "Duration: " << duration.seconds() << QByteArray( " secs" ) << " (" << duration.toString() << ")" << endl;
-    kDebug() << indent << "Earliest start: " << earlyStart.toString() << endl;
-    kDebug() << indent << "Latest finish: " << lateFinish.toString() << endl;
+    kDebug() << indent <<"Not scheduled=" << notScheduled;
+    kDebug() << indent <<"Start time:" << startTime.toString();
+    kDebug() << indent <<"End time:" << endTime.toString();
+    kDebug() << indent <<"Duration:" << duration.seconds() << QByteArray(" secs" ) <<" (" << duration.toString() <<")";
+    kDebug() << indent <<"Earliest start:" << earlyStart.toString();
+    kDebug() << indent <<"Latest finish:" << lateFinish.toString();
 
-    kDebug() << indent << "schedulingError=" << schedulingError << endl;
+    kDebug() << indent <<"schedulingError=" << schedulingError;
     Task *t = qobject_cast<Task*>( m_node );
     if ( t ) {
-        kDebug() << indent << "Effort not met="<<t->effortMetError()<<endl;
+        kDebug() << indent <<"Effort not met="<<t->effortMetError();
     }
-    kDebug() << indent << "resourceError=" << resourceError << endl;
-    kDebug() << indent << "resourceNotAvailable=" << resourceNotAvailable << endl;
-    kDebug() << indent << "Resource overbooked=" << resourceOverbooked << endl;
+    kDebug() << indent <<"resourceError=" << resourceError;
+    kDebug() << indent <<"resourceNotAvailable=" << resourceNotAvailable;
+    kDebug() << indent <<"Resource overbooked=" << resourceOverbooked;
     if ( resourceOverbooked ) {
-        kDebug() << indent << "  " << overbookedResources() << endl;
+        kDebug() << indent <<"" << overbookedResources();
     }
 
-    kDebug() << indent << "inCriticalPath=" << inCriticalPath << endl;
-    kDebug() << indent << endl;
-    kDebug() << indent << "workStartTime=" << workStartTime.toString() << endl;
-    kDebug() << indent << "workEndTime=" << workEndTime.toString() << endl;
-    kDebug() << indent << endl;
-    kDebug() << indent << "Appointments (Scheduling): " << m_appointments.count() << endl;
+    kDebug() << indent <<"inCriticalPath=" << inCriticalPath;
+    kDebug() << indent;
+    kDebug() << indent <<"workStartTime=" << workStartTime.toString();
+    kDebug() << indent <<"workEndTime=" << workEndTime.toString();
+    kDebug() << indent;
+    kDebug() << indent <<"Appointments (Scheduling):" << m_appointments.count();
     foreach( Appointment *a, m_appointments ) {
         a->printDebug( indent + "  " );
     }
-    kDebug() << indent << "Appointments (Forward): " << m_forward.count() << endl;
+    kDebug() << indent <<"Appointments (Forward):" << m_forward.count();
     foreach( Appointment *a, m_forward ) {
         a->printDebug( indent + "  " );
     }
-    kDebug() << indent << "Appointments (Backward): " << m_backward.count() << endl;
+    kDebug() << indent <<"Appointments (Backward):" << m_backward.count();
     foreach( Appointment *a, m_backward ) {
         a->printDebug( indent + "  " );
     }
@@ -1376,27 +1376,27 @@ void ResourceSchedule::printDebug( const QString& _indent )
     Schedule::printDebug( indent );
     indent += "!  ";
     if ( m_parent == 0 )
-        kDebug() << indent << "No parent schedule!" << endl;
+        kDebug() << indent <<"No parent schedule!";
     if ( resource() )
-        kDebug() << indent << "Resource: " << resource() ->name() << endl;
+        kDebug() << indent <<"Resource:" << resource() ->name();
     else
-        kDebug() << indent << "No parent resource!" << endl;
-    kDebug() << indent << endl;
-    kDebug() << indent << "Appointments: " << m_appointments.count() << endl;
-    kDebug() << indent << endl;
-    kDebug() << indent << "Appointments (Scheduling): " << m_appointments.count() << endl;
+        kDebug() << indent <<"No parent resource!";
+    kDebug() << indent;
+    kDebug() << indent <<"Appointments:" << m_appointments.count();
+    kDebug() << indent;
+    kDebug() << indent <<"Appointments (Scheduling):" << m_appointments.count();
     foreach( Appointment *a, m_appointments ) {
         a->printDebug( indent + "  " );
     }
-    kDebug() << indent << endl;
-    kDebug() << indent << "Appointments (Total): " << endl;
+    kDebug() << indent;
+    kDebug() << indent <<"Appointments (Total):";
     appointmentIntervals().printDebug( indent + "  " );
-    kDebug() << indent << endl;
-    kDebug() << indent << "Appointments (Forward): " << m_forward.count() << endl;
+    kDebug() << indent;
+    kDebug() << indent <<"Appointments (Forward):" << m_forward.count();
     foreach( Appointment *a, m_forward ) {
         a->printDebug( indent + "  " );
     }
-    kDebug() << indent << "Appointments (Backward): " << m_backward.count() << endl;
+    kDebug() << indent <<"Appointments (Backward):" << m_backward.count();
     foreach( Appointment *a, m_backward ) {
         a->printDebug( indent + "  " );
     }
@@ -1409,19 +1409,19 @@ void MainSchedule::printDebug( const QString& _indent )
     indent += "!  ";
 //FIXME: QT3 support
 //     if ( node() )
-//         kDebug() << indent << "Node: " << node() ->name() << endl;
+//         kDebug() << indent <<"Node:" << node() ->name();
 //     else
-//         kDebug() << indent << "No parent node!" << endl;
+//         kDebug() << indent <<"No parent node!";
 
-    kDebug() << indent << "Not scheduled=" << notScheduled << endl;
-    kDebug() << indent << "Start time: " << startTime.toString() << endl;
-    kDebug() << indent << "End time: " << endTime.toString() << endl;
-    kDebug() << indent << "Duration: " << duration.seconds() << QByteArray( " secs" ) << " (" << duration.toString() << ")" << endl;
-    kDebug() << indent << "Earliest start: " << earlyStart.toString() << endl;
-    kDebug() << indent << "Latest finish: " << lateFinish.toString() << endl;
+    kDebug() << indent <<"Not scheduled=" << notScheduled;
+    kDebug() << indent <<"Start time:" << startTime.toString();
+    kDebug() << indent <<"End time:" << endTime.toString();
+    kDebug() << indent <<"Duration:" << duration.seconds() << QByteArray(" secs" ) <<" (" << duration.toString() <<")";
+    kDebug() << indent <<"Earliest start:" << earlyStart.toString();
+    kDebug() << indent <<"Latest finish:" << lateFinish.toString();
 
-    kDebug() << indent << endl;
-    kDebug() << indent << "Appointments: " << m_appointments.count() << endl;
+    kDebug() << indent;
+    kDebug() << indent <<"Appointments:" << m_appointments.count();
     QListIterator<Appointment*> it = m_appointments;
     while ( it.hasNext() ) {
         it.next() ->printDebug( indent + "  " );

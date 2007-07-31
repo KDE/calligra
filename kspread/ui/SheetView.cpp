@@ -143,8 +143,8 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     //              d->visibleRect are traversed. This may appear suboptimal at the first look, but
     //              ensures that the borders are not erased by the background of adjacent cells.
 
-// kDebug() << "paintRect: " << paintRect << endl;
-// kDebug() << "topLeft: " << topLeft << endl;
+// kDebug() <<"paintRect:" << paintRect;
+// kDebug() <<"topLeft:" << topLeft;
     // 1. Paint the cell background
 
     // Handle right-to-left layout.
@@ -164,7 +164,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             continue;
         if ( rightToLeft )
             offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
-// kDebug() << "offset: " << offset << endl;
+// kDebug() <<"offset:" << offset;
         const int bottom = d->visibleRect.bottom();
         for ( int row = d->visibleRect.top(); row <= bottom; ++row )
         {

@@ -128,7 +128,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
   page = doc.map()->findPage(dlg.selectedPage());
 
   if(!page) {
-    kDebug() << "The page named " << dlg.selectedPage() << " wasn't found!!" << endl;
+    kDebug() <<"The page named" << dlg.selectedPage() <<" wasn't found!!";
     return KoFilter::InternalError;
   }
 

@@ -38,7 +38,7 @@ ListElement::ListElement()
 ListElement::~ListElement()
 {
 	Element *elt = 0;
-	kDebug(30522) << "Destruction of a list of elements" << endl;
+	kDebug(30522) <<"Destruction of a list of elements";
 	while(_start != 0)
 	{
 		elt    = _start;

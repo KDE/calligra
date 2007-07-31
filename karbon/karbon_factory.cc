@@ -61,7 +61,7 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 		KParts::Plugin* plugin =
 		KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, QStringList(), &errCode);
 		if ( plugin )
-			kDebug() << "found plugin " << service -> property("Name").toString() << "\n";
+			kDebug() <<"found plugin" << service -> property("Name").toString() <<"";
 	}
 	*/
 }

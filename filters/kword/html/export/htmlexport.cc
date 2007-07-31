@@ -88,7 +88,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
 
         if (!dialog.exec())
         {
-            kDebug(30503) << "Dialog was aborted! Aborting filter!" << endl;
+            kDebug(30503) <<"Dialog was aborted! Aborting filter!";
             return KoFilter::UserCancelled;
         }
 

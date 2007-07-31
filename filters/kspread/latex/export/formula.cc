@@ -58,7 +58,7 @@ void Formula::analyze(const QDomNode node)
 	/* Parameter analysis */
 	Element::analyze(node);
 
-	kDebug(30522) << "FRAME ANALYSIS (Formula)" << endl;
+	kDebug(30522) <<"FRAME ANALYSIS (Formula)";
 
 	/* Child markup analysis */
 	for(int index= 0; index < getNbChild(node); index++)
@@ -70,11 +70,11 @@ void Formula::analyze(const QDomNode node)
 		else if(getChildName(node, index).compare("FORMULA")== 0)
 		{
 			getFormula(getChild(getChild(node, "FORMULA"), "FORMULA"), 0);
-			kDebug(30522) << _formula << endl;
+			kDebug(30522) << _formula;
 		}
 
 	}
-	kDebug(30522) << "END OF A FRAME" << endl;
+	kDebug(30522) <<"END OF A FRAME";
 }
 
 /*******************************************/
@@ -151,7 +151,7 @@ void Formula::analyzeParamFrame(const QDomNode node)
 /*******************************************/
 void Formula::generate(QTextStream &out)
 {
-	kDebug(30522) << "FORMULA GENERATION" << endl;
+	kDebug(30522) <<"FORMULA GENERATION";
 	QDomDocument doc;
 	doc.setContent(_formula);
 

@@ -31,7 +31,7 @@ void PertResult::draw( Project &project)
 
 void PertResult::draw()
 {
-    //kDebug() << "UPDATE PE" << endl;
+    //kDebug() <<"UPDATE PE";
     widget.treeWidgetTaskResult->clear();
     if ( current_schedule == 0 || current_schedule->id() == -1 ) {
         return;
@@ -160,7 +160,7 @@ Duration PertResult::getTaskFloat(Node * currentNode)
 //-----------------------------------
 PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
 {
-    kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
+    kDebug() <<" ---------------- KPlato: Creating PertResult ----------------";
     widget.setupUi(this);
     QHeaderView *header=widget.treeWidgetTaskResult->header();
     
@@ -221,7 +221,7 @@ void PertResult::slotUpdate(){
 
 void PertResult::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
-    kDebug()<<k_funcinfo<<sm<<endl;
+    kDebug()<<k_funcinfo<<sm;
     current_schedule = sm;
     draw(m_part->getProject());
 }
