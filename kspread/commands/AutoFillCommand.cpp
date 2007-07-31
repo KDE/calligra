@@ -775,6 +775,7 @@ static void fillSequence(const QList<Cell>& _srcList,
 
 AutoFillCommand::AutoFillCommand()
 {
+    setText(i18n("Autofill"));
 }
 
 AutoFillCommand::~AutoFillCommand()
