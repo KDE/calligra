@@ -93,7 +93,7 @@ namespace {
             }
         }
         else if (type == LABColorspace) {
-            kDebug(41008) << "Lab!\n";
+            kDebug(41008) <<"Lab!";
             return "LABA";
         }
         else if (type == RGBColorspace || type == sRGBColorspace || type == TransparentColorspace) {
@@ -113,7 +113,7 @@ namespace {
         if ( KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16") ) return CMYKColorspace;
         if ( KoID(cs->id()) == KoID("LABA") ) return LABColorspace;
 
-//         kDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
+//         kDebug(41008) <<"Cannot export images in" + cs->id().name() +" yet.";
         return RGBColorspace;
 
     }
@@ -275,18 +275,18 @@ namespace {
     {
         while(it != annotationsEnd) {
             if (!(*it) || (*it) -> type() == QString()) {
-                    kDebug(41008) << "Warning: empty annotation" << endl;
+                    kDebug(41008) <<"Warning: empty annotation";
                     ++it;
                     continue;
             }
 
-            kDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+            kDebug(41008) <<"Trying to store annotation of type" << (*it) -> type() <<" of size" << (*it) -> annotation() . size();
 
             if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
                 if (!SetImageAttribute(dst,
                                         (*it) -> type().mid(strlen("krita_attribute:")).ascii(),
                                         (*it) -> annotation() . data()) ) {
-                        kDebug(41008) << "Storing of attribute " << (*it) -> type() << "failed!\n";
+                        kDebug(41008) <<"Storing of attribute" << (*it) -> type() <<"failed!";
                     }
             } else { // Profile
                     unsigned char * profiledata = new unsigned char[(*it) -> annotation() . size()];
@@ -294,7 +294,7 @@ namespace {
                     if (!ProfileImage(dst, (*it) -> type().ascii(),
                                     profiledata,
                                     (*it) -> annotation() . size(), MagickFalse)) {
-                        kDebug(41008) << "Storing failed!" << endl;
+                        kDebug(41008) <<"Storing failed!";
                     }
             }
             ++it;
@@ -420,7 +420,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
         // Determine image depth -- for now, all channels of an imported image are of the same depth
         unsigned long imageDepth = image->depth;
-        kDebug(41008) << "Image depth: " << imageDepth << "\n";
+        kDebug(41008) <<"Image depth:" << imageDepth <<"";
 
         QString csName;
         KoColorSpace * cs = 0;
@@ -439,19 +439,19 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             csName = colorSpaceName(image -> colorspace, imageDepth);
         }
 
-        kDebug(41008) << "image has " << csName << " colorspace\n";
+        kDebug(41008) <<"image has" << csName <<" colorspace";
 
         KoColorProfile * colorProfile = profile(image);
         if (colorProfile)
         {
-            kDebug(41008) << "image has embedded profile: " << colorProfile -> name() << "\n";
+            kDebug(41008) <<"image has embedded profile:" << colorProfile -> name() <<"";
             cs = KoColorSpaceRegistry::instance()->colorSpace(csName, colorProfile);
         }
         else
             cs = KoColorSpaceRegistry::instance()->colorSpace(KoID(csName,""),"");
 
         if (!cs) {
-            kDebug(41008) << "Krita does not support colorspace " << image -> colorspace<< "\n";
+            kDebug(41008) <<"Krita does not support colorspace" << image -> colorspace<<"";
             CloseCacheView(vi);
             DestroyImage(image);
             DestroyExceptionInfo(&ei);
@@ -738,8 +738,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         image -> columns = img -> width();
         image -> rows = img -> height();
 
-        kDebug(41008) << "Saving with colorspace " << image->colorspace << ", (" << layer->paintDevice()->colorSpace()->id() << ")\n";
-        kDebug(41008) << "IM Image thinks it has depth: " << image->depth << "\n";
+        kDebug(41008) <<"Saving with colorspace" << image->colorspace <<", (" << layer->paintDevice()->colorSpace()->id() <<")";
+        kDebug(41008) <<"IM Image thinks it has depth:" << image->depth <<"";
 
 #ifdef HAVE_MAGICK6
         //    if ( layer-> hasAlpha() )
@@ -887,7 +887,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
             }
             else {
-                kDebug(41008) << "Unsupported image format\n";
+                kDebug(41008) <<"Unsupported image format";
                 return KisImageBuilder_RESULT_INVALID_ARG;
             }
 
@@ -895,10 +895,10 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 
 #ifdef HAVE_MAGICK6
             if (SyncImagePixels(image) == MagickFalse)
-                kDebug(41008) << "Syncing pixels failed\n";
+                kDebug(41008) <<"Syncing pixels failed";
 #else
             if (!SyncImagePixels(image))
-                kDebug(41008) << "Syncing pixels failed\n";
+                kDebug(41008) <<"Syncing pixels failed";
 #endif
         }
 
@@ -1019,7 +1019,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             if (info -> decoder) {
                 name = info -> name;
                 description = info -> description;
-                kDebug(41008) << "Found import filter for: " << name << "\n";
+                kDebug(41008) <<"Found import filter for:" << name <<"";
 
                 if (!description.isEmpty() && !description.contains('/')) {
                     all += "*." + name.lower() + " *." + name + " ";
@@ -1036,7 +1036,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             if (mi -> decoder) {
                 name = mi -> name;
                 description = mi -> description;
-                kDebug(41008) << "Found import filter for: " << name << "\n";
+                kDebug(41008) <<"Found import filter for:" << name <<"";
 
                 if (!description.isEmpty() && !description.contains('/')) {
                     all += "*." + name.lower() + " *." + name + ' ';
@@ -1082,14 +1082,14 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
 // #endif // HAVE_MAGICK6
 
         if (!mi) {
-            kDebug(41008) << "Eek, no magick info!\n";
+            kDebug(41008) <<"Eek, no magick info!";
             return s;
         }
 
 /*#ifdef HAVE_MAGICK6
         for (unsigned long i = 0; i < matches; i++) {
             const MagickInfo *info = mi[i];
-            kDebug(41008) << "Found export filter for: " << info -> name << "\n";
+            kDebug(41008) <<"Found export filter for:" << info -> name <<"";
             if (info -> stealth)
                 continue;
 
@@ -1108,7 +1108,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         }
 #else*/
         for (; mi; mi = reinterpret_cast<const MagickInfo*>(mi -> next)) {
-            kDebug(41008) << "Found export filter for: " << mi -> name << "\n";
+            kDebug(41008) <<"Found export filter for:" << mi -> name <<"";
             if (mi -> stealth)
                 continue;
 

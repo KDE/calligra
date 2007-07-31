@@ -67,7 +67,7 @@ KisPDFImport::~KisPDFImport()
 KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray& )
 {
     QString filename = m_chain -> inputFile();
-    kDebug(41008) << "Importing using PDFImport!" << filename << endl;
+    kDebug(41008) <<"Importing using PDFImport!" << filename;
 
     if (filename.isEmpty())
         return KoFilter::FileNotFound;
@@ -91,7 +91,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     if ( !pdoc)
     {
-        kDebug(41008) << "Error when reading the PDF" << endl;
+        kDebug(41008) <<"Error when reading the PDF";
         return KoFilter::StorageCreationError;
     }
 
@@ -103,7 +103,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 	dlg.setWindowTitle( i18n("A password is required to read that pdf") );
 	if( dlg.exec() != QDialog::Accepted )
 	{
-            kDebug(41008) << "Password canceled" << endl;
+            kDebug(41008) <<"Password canceled";
             return KoFilter::StorageCreationError;
 	}
 	else

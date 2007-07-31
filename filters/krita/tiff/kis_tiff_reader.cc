@@ -30,7 +30,7 @@
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-//         kDebug(41008) << " depth expension coefficient : " << coeff << endl;
+//         kDebug(41008) <<" depth expension coefficient :" << coeff;
         while (!it.isDone()) {
             quint8 *d = it.rawData();
             quint8 i;
@@ -56,7 +56,7 @@
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-//         kDebug(41008) << " depth expension coefficient : " << coeff << endl;
+//         kDebug(41008) <<" depth expension coefficient :" << coeff;
         while (!it.isDone()) {
             quint16 *d = reinterpret_cast<quint16 *>(it.rawData());
             quint8 i;
@@ -83,7 +83,7 @@
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint32_MAX / (double)( pow(2, sourceDepth() ) - 1 );
-//         kDebug(41008) << " depth expension coefficient : " << coeff << endl;
+//         kDebug(41008) <<" depth expension coefficient :" << coeff;
         while (!it.isDone()) {
             quint32 *d = reinterpret_cast<quint32 *>(it.rawData());
             quint8 i;
