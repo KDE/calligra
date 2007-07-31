@@ -126,6 +126,13 @@ Things not in bugzilla
     - (Re-)Adjust the saving algos to use the new (old) iteration	----
       functionality.
     - Rewrite the MergeManipulator to work directly on the CellStorage.	----
+    - PointStorage: Implement setLoadingEnabled(bool) that switches	----
+      the insertion method to a mode in which the value, column and
+      row are just appended to the vectors.
+    - Point-/RectStorage: All yet stored data is implicitly shared.	----
+      Make use of this fact: Implement book-keeping with a hash and
+      reuse the already stored values. This is already done in
+      StyleStorage.
 
   + Style Storage						      1 STEF
     This would dramatically reduce memory consumption and allows
