@@ -55,6 +55,8 @@ Regressions
 
 General bugs
 ------------
+* Autofill							      1 ----
+  Fix the 'May'-may-be-a-short-or-long-month issue.
 
 Filter bugs
 -----------
