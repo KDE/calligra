@@ -53,7 +53,6 @@ install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
 
 # that functionality got moved to kexi/main2/CMakeLists.txt
 #set(kexi_KDEINIT_SRCS main.cpp )
-#kde4_automoc(${kexi_KDEINIT_SRCS})
 #kde4_add_kdeinit_executable( kexi ${kexi_KDEINIT_SRCS})
 #target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
 #install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
