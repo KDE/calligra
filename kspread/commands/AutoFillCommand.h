@@ -36,58 +36,8 @@
 
 namespace KSpread
 {
+class AutoFillSequence;
 class Cell;
-
-/**
- * A cell content for auto-filling.
- */
-class AutoFillSequenceItem
-{
-public:
-    enum Type { INTEGER, FLOAT, STRING, DAY, SHORTDAY,
-      MONTH, SHORTMONTH, FORMULA, OTHER, DATE, TIME };
-
-    explicit AutoFillSequenceItem( const Cell& cell );
-
-    double delta( AutoFillSequenceItem *_seq, bool *ok = 0 ) const;
-
-    QVariant nextValue( int _no, double _delta );
-    QVariant prevValue( int _no, double _delta );
-
-    Type type()          const { return m_Type; }
-    int getIValue()      const { return m_IValue; }
-    double getDValue()   const { return m_DValue; }
-    QString getString()  const { return m_String; }
-    int getIOtherEnd()   const {return m_OtherEnd; }
-    int getIOtherBegin() const {return m_OtherBegin; }
-
-    static QStringList *other;
-    static QStringList *month;
-    static QStringList *day;
-    static QStringList *shortMonth;
-    static QStringList *shortDay;
-
-protected:
-    int     m_IValue;
-    double  m_DValue;
-    int     m_OtherBegin;
-    int     m_OtherEnd;
-    QString m_String;
-    Type    m_Type;
-};
-
-/**
- * A sequence of cell contents for auto-filling.
- */
-class AutoFillSequence : public QList<AutoFillSequenceItem*>
-{
-public:
-    AutoFillSequence();
-    AutoFillSequence( const QList<AutoFillSequenceItem*>& );
-    ~AutoFillSequence();
-
-    QList<double> createDeltaSequence( int intervalLength ) const;
-};
 
 class AutoFillCommand : public AbstractDataManipulator
 {
@@ -109,6 +59,13 @@ public:
      * Executes the actual operation.
      */
     virtual bool mainProcessing();
+
+public:
+    static QStringList *other;
+    static QStringList *month;
+    static QStringList *day;
+    static QStringList *shortMonth;
+    static QStringList *shortDay;
 
 private:
     void fillSequence( const QList<Cell>& _srcList,

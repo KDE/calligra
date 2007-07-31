@@ -47,11 +47,11 @@
 
 using namespace KSpread;
 
-QStringList *AutoFillSequenceItem::month = 0;
-QStringList *AutoFillSequenceItem::shortMonth = 0;
-QStringList *AutoFillSequenceItem::day = 0;
-QStringList *AutoFillSequenceItem::shortDay = 0;
-QStringList *AutoFillSequenceItem::other = 0;
+QStringList *AutoFillCommand::month = 0;
+QStringList *AutoFillCommand::shortMonth = 0;
+QStringList *AutoFillCommand::day = 0;
+QStringList *AutoFillCommand::shortDay = 0;
+QStringList *AutoFillCommand::other = 0;
 
 /**********************************************************************************
  *
@@ -59,353 +59,409 @@ QStringList *AutoFillSequenceItem::other = 0;
  *
  **********************************************************************************/
 
-AutoFillSequenceItem::AutoFillSequenceItem( const Cell& cell )
-    : m_IValue( 0 )
-    , m_DValue( 0.0 )
-    , m_OtherBegin( 0 )
-    , m_OtherEnd( 0 )
-    , m_Type( INTEGER )
+namespace KSpread
 {
-    if ( cell.isFormula() )
+/**
+ * A cell content for auto-filling.
+ */
+class AutoFillSequenceItem
+{
+public:
+    enum Type { VALUE, FORMULA, DAY, SHORTDAY, MONTH, SHORTMONTH, OTHER };
+
+    explicit AutoFillSequenceItem(const Cell& cell);
+
+    Value delta(AutoFillSequenceItem *_seq, bool *ok) const;
+
+    Value nextValue(int _no, Value _delta) const;
+    Value prevValue(int _no, Value _delta) const;
+
+    Type type() const { return m_type; }
+    Value value() const { return m_value; }
+    int otherEnd() const { return m_otherEnd; }
+    int otherBegin() const { return m_otherBegin; }
+
+protected:
+    Value   m_value;
+    Type    m_type;
+    int     m_otherBegin;
+    int     m_otherEnd;
+};
+}
+
+AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
+    : m_value()
+    , m_type(VALUE)
+    , m_otherBegin(0)
+    , m_otherEnd(0)
+{
+    if (cell.isFormula())
     {
-        m_String = cell.encodeFormula();
-        m_Type = FORMULA;
+        m_value = Value(cell.encodeFormula());
+        m_type = FORMULA;
     }
-    else if ( cell.value().isInteger() || cell.isDate() )
+    else if (cell.isDate())
     {
-        m_IValue = static_cast<int>( cell.value().asInteger() );
-        m_Type = INTEGER;
+        m_value = cell.doc()->converter()->asDate(cell.value());
+        m_type = VALUE;
     }
-    else if ( cell.value().isFloat() || cell.isTime() )
+    else if (cell.isTime())
     {
-        m_DValue = numToDouble (cell.value().asFloat());
-        m_Type = FLOAT;
+        m_value = cell.doc()->converter()->asTime(cell.value());
+        m_type = VALUE;
     }
-    else if ( !cell.userInput().isEmpty() )
+    else if (cell.value().isNumber())
     {
-        m_String = cell.userInput();
-        m_Type = STRING;
+        m_value = cell.value();
+        m_type = VALUE;
+    }
+    else
+    {
+        m_value = cell.value();
+        m_type = VALUE;
 
-        if ( month == 0 )
+        if (AutoFillCommand::month == 0)
         {
-            month = new QStringList();
-            month->append( i18n("January") );
-            month->append( i18n("February") );
-            month->append( i18n("March") );
-            month->append( i18n("April") );
-            month->append( i18n("May") );
-            month->append( i18n("June") );
-            month->append( i18n("July") );
-            month->append( i18n("August") );
-            month->append( i18n("September") );
-            month->append( i18n("October") );
-            month->append( i18n("November") );
-            month->append( i18n("December") );
+            AutoFillCommand::month = new QStringList();
+            AutoFillCommand::month->append(i18n("January"));
+            AutoFillCommand::month->append(i18n("February"));
+            AutoFillCommand::month->append(i18n("March"));
+            AutoFillCommand::month->append(i18n("April"));
+            AutoFillCommand::month->append(i18n("May"));
+            AutoFillCommand::month->append(i18n("June"));
+            AutoFillCommand::month->append(i18n("July"));
+            AutoFillCommand::month->append(i18n("August"));
+            AutoFillCommand::month->append(i18n("September"));
+            AutoFillCommand::month->append(i18n("October"));
+            AutoFillCommand::month->append(i18n("November"));
+            AutoFillCommand::month->append(i18n("December"));
         }
 
-        if ( shortMonth == 0 )
+        if (AutoFillCommand::shortMonth == 0)
         {
-            shortMonth = new QStringList();
-            shortMonth->append( i18n("Jan") );
-            shortMonth->append( i18n("Feb") );
-            shortMonth->append( i18n("Mar") );
-            shortMonth->append( i18n("Apr") );
-            shortMonth->append( i18nc("May short", "May") );
-            shortMonth->append( i18n("Jun") );
-            shortMonth->append( i18n("Jul") );
-            shortMonth->append( i18n("Aug") );
-            shortMonth->append( i18n("Sep") );
-            shortMonth->append( i18n("Oct") );
-            shortMonth->append( i18n("Nov") );
-            shortMonth->append( i18n("Dec") );
+            AutoFillCommand::shortMonth = new QStringList();
+            AutoFillCommand::shortMonth->append(i18n("Jan"));
+            AutoFillCommand::shortMonth->append(i18n("Feb"));
+            AutoFillCommand::shortMonth->append(i18n("Mar"));
+            AutoFillCommand::shortMonth->append(i18n("Apr"));
+            AutoFillCommand::shortMonth->append(i18nc("May short", "May"));
+            AutoFillCommand::shortMonth->append(i18n("Jun"));
+            AutoFillCommand::shortMonth->append(i18n("Jul"));
+            AutoFillCommand::shortMonth->append(i18n("Aug"));
+            AutoFillCommand::shortMonth->append(i18n("Sep"));
+            AutoFillCommand::shortMonth->append(i18n("Oct"));
+            AutoFillCommand::shortMonth->append(i18n("Nov"));
+            AutoFillCommand::shortMonth->append(i18n("Dec"));
         }
 
-        if ( day == 0 )
+        if (AutoFillCommand::day == 0)
         {
-            day = new QStringList();
-            day->append( i18n("Monday") );
-            day->append( i18n("Tuesday") );
-            day->append( i18n("Wednesday") );
-            day->append( i18n("Thursday") );
-            day->append( i18n("Friday") );
-            day->append( i18n("Saturday") );
-            day->append( i18n("Sunday") );
+            AutoFillCommand::day = new QStringList();
+            AutoFillCommand::day->append(i18n("Monday"));
+            AutoFillCommand::day->append(i18n("Tuesday"));
+            AutoFillCommand::day->append(i18n("Wednesday"));
+            AutoFillCommand::day->append(i18n("Thursday"));
+            AutoFillCommand::day->append(i18n("Friday"));
+            AutoFillCommand::day->append(i18n("Saturday"));
+            AutoFillCommand::day->append(i18n("Sunday"));
         }
 
-        if ( shortDay == 0 )
+        if (AutoFillCommand::shortDay == 0)
         {
-            shortDay = new QStringList();
-            shortDay->append( i18n("Mon") );
-            shortDay->append( i18n("Tue") );
-            shortDay->append( i18n("Wed") );
-            shortDay->append( i18n("Thu") );
-            shortDay->append( i18n("Fri") );
-            shortDay->append( i18n("Sat") );
-            shortDay->append( i18n("Sun") );
+            AutoFillCommand::shortDay = new QStringList();
+            AutoFillCommand::shortDay->append(i18n("Mon"));
+            AutoFillCommand::shortDay->append(i18n("Tue"));
+            AutoFillCommand::shortDay->append(i18n("Wed"));
+            AutoFillCommand::shortDay->append(i18n("Thu"));
+            AutoFillCommand::shortDay->append(i18n("Fri"));
+            AutoFillCommand::shortDay->append(i18n("Sat"));
+            AutoFillCommand::shortDay->append(i18n("Sun"));
         }
 
-        if ( other == 0 )
+        if (AutoFillCommand::other == 0)
         {
-            // other=new QStringList();
+            // AutoFillCommand::other = new QStringList();
             KSharedConfigPtr config = Factory::global().config();
-            other=new QStringList(config->group( "Parameters" ).readEntry("Other list", QStringList()));
+            AutoFillCommand::other = new QStringList(config->group("Parameters").readEntry("Other list", QStringList()));
         }
 
-        if ( month->contains( m_String ) )
+        if (AutoFillCommand::month->contains(m_value.asString()))
         {
-            m_Type = MONTH;
+            m_type = MONTH;
             return;
         }
 
-        if ( shortMonth->contains( m_String ) )
+        if (AutoFillCommand::shortMonth->contains(m_value.asString()))
         {
-            m_Type = SHORTMONTH;
+            m_type = SHORTMONTH;
             return;
         }
 
-        if ( day->contains( m_String ) )
+        if (AutoFillCommand::day->contains(m_value.asString()))
         {
-            m_Type = DAY;
+            m_type = DAY;
             return;
         }
 
-        if ( shortDay->contains( m_String ) )
+        if (AutoFillCommand::shortDay->contains(m_value.asString()))
         {
-            m_Type = SHORTDAY;
+            m_type = SHORTDAY;
             return;
         }
 
-        if ( other->contains( m_String ) )
+        if (AutoFillCommand::other->contains(m_value.asString()))
         {
-            m_Type = OTHER;
-            int index = other->indexOf( m_String );
-            int otherBegin = other->lastIndexOf( "\\", index ); // backward
-            int otherEnd = other->indexOf( "\\", index ); // forward
-            m_OtherBegin = (otherBegin != -1) ? otherBegin : 0;
-            m_OtherEnd = (otherEnd != -1) ? otherEnd : other->count();
+            m_type = OTHER;
+            int index = AutoFillCommand::other->indexOf(m_value.asString());
+            int otherBegin = AutoFillCommand::other->lastIndexOf("\\", index); // backward
+            int otherEnd = AutoFillCommand::other->indexOf("\\", index); // forward
+            m_otherBegin = (otherBegin != -1) ? otherBegin : 0;
+            m_otherEnd = (otherEnd != -1) ? otherEnd : AutoFillCommand::other->count();
             return;
         }
     }
 }
 
-double AutoFillSequenceItem::delta( AutoFillSequenceItem *seq, bool *ok ) const
+Value AutoFillSequenceItem::delta(AutoFillSequenceItem *seq, bool *ok) const
 {
-    if ( seq->type() != m_Type )
+    if (seq->type() != m_type)
     {
-        if ( ok )
-            *ok = false;
-        return 0.0;
+        *ok = false;
+        return Value();
     }
 
-    if ( ok )
-        *ok = true;
+    *ok = true;
 
-    switch( m_Type )
+    switch(m_type)
     {
-    case INTEGER:
-    case DATE:
-        return static_cast<double>( seq->getIValue() - m_IValue );
-    case FLOAT:
-    case TIME:
-        return seq->getDValue() - m_DValue;
+    case VALUE:
     case FORMULA:
-    case STRING:
-        if ( ok )
-            *ok = ( m_String == seq->getString() );
-        return 0.0;
+    {
+        switch (m_value.type())
+        {
+        case Value::Boolean:
+        {
+            // delta indicates a flipping of the boolean
+            if (seq->value().type() != Value::Boolean)
+                *ok = false;
+            return Value(seq->value().asBoolean() != m_value.asBoolean());
+        }
+        case Value::Integer:
+        {
+            if (seq->value().type() == Value::Empty)
+                *ok = false;
+            return Value(seq->value().asInteger() - m_value.asInteger());
+        }
+        case Value::Float:
+        {
+            if (seq->value().type() == Value::Empty)
+                *ok = false;
+            return Value(seq->value().asFloat() - m_value.asFloat());
+        }
+        case Value::Complex:
+        {
+            if (seq->value().type() == Value::Empty)
+                *ok = false;
+            return Value(seq->value().asComplex() - m_value.asComplex());
+        }
+        case Value::Empty:
+        case Value::String:
+        case Value::Array:
+        case Value::CellRange:
+        case Value::Error:
+        {
+            *ok = (m_value == seq->value());
+            return Value();
+        }
+        }
+    }
     case MONTH:
     {
-        int i = month->indexOf( m_String );
-        int j = month->indexOf( seq->getString() );
-        int k = j;
-
-        if ( j + 1 == i )
-            return -1.0;
-        else
-            return static_cast<double>( k - i );
+        const int i = AutoFillCommand::month->indexOf(m_value.asString());
+        const int j = AutoFillCommand::month->indexOf(seq->value().asString());
+        return Value(j - i);
     }
     case SHORTMONTH:
     {
-        int i = shortMonth->indexOf( m_String );
-        int j = shortMonth->indexOf( seq->getString() );
-        int k = j;
-
-        if ( j + 1 == i )
-            return -1.0;
-        else
-            return static_cast<double>( k - i );
+        const int i = AutoFillCommand::shortMonth->indexOf(m_value.asString());
+        const int j = AutoFillCommand::shortMonth->indexOf(seq->value().asString());
+        return Value(j - i);
     }
     case DAY:
     {
-        int i = day->indexOf( m_String );
-        int j = day->indexOf( seq->getString() );
-        int k = j;
-
-        if ( j + 1 == i )
-            return -1.0;
-        else
-        {
-            kDebug() << m_String <<" i:" << i <<" j:" << j <<" k:" << k <<" delta:" << k-i;
-            return static_cast<double>( k - i );
-        }
+        const int i = AutoFillCommand::day->indexOf(m_value.asString());
+        const int j = AutoFillCommand::day->indexOf(seq->value().asString());
+        return Value(j - i);
     }
     case SHORTDAY:
     {
-        int i = shortDay->indexOf( m_String );
-        int j = shortDay->indexOf( seq->getString() );
-        int k = j;
-
-        if ( j + 1 == i )
-            return -1.0;
-        else
-            return static_cast<double>( k - i );
+        const int i = AutoFillCommand::shortDay->indexOf(m_value.asString());
+        const int j = AutoFillCommand::shortDay->indexOf(seq->value().asString());
+        return Value(j - i);
     }
     case OTHER:
     {
-        if ( ok )
-            *ok = ( m_OtherEnd!= seq->getIOtherEnd() || m_OtherBegin!= seq->getIOtherBegin() );
-
-        int i = other->indexOf( m_String );
-        int j = other->indexOf( seq->getString() );
+        *ok = (m_otherEnd != seq->otherEnd() || m_otherBegin != seq->otherBegin());
+        const int i = AutoFillCommand::other->indexOf(m_value.asString());
+        const int j = AutoFillCommand::other->indexOf(seq->value().asString());
         int k = j;
-        if ( j < i )
-            k += (m_OtherEnd - m_OtherBegin - 1);
-/*        if ( j + 1 == i )
+        if (j < i)
+            k += (m_otherEnd - m_otherBegin - 1);
+/*        if (j + 1 == i)
             return -1.0;
         else*/
-            return static_cast<double>( k - i );
+            return Value(k - i);
     }
     default:
-        if ( ok )
-            *ok = false;
+        *ok = false;
     }
-    return 0.0;
+    return Value();
 }
 
-QVariant AutoFillSequenceItem::nextValue( int _no, double _delta )
+Value AutoFillSequenceItem::nextValue(int _no, Value _delta) const
 {
-    switch( m_Type )
+    switch(m_type)
     {
-    case INTEGER:
-    case DATE:
-        return QVariant( m_IValue + _no * static_cast<int>(_delta ) );
-    case FLOAT:
-    case TIME:
-        return QVariant( m_DValue + static_cast<double>(_no) * _delta );
+    case VALUE:
     case FORMULA:
-    case STRING:
-        return m_String;
-        break;
+    {
+        if (m_value.isBoolean())
+        {
+            if (!_delta.asBoolean() || _delta.isEmpty()) // no change?
+                return m_value;
+            return Value(_no % 2 ? !m_value.asBoolean() : m_value.asBoolean());
+        }
+        else if (m_value.isInteger())
+        {
+            return Value(m_value.asInteger() + _no * _delta.asInteger());
+        }
+        else if (m_value.isFloat())
+            return Value(m_value.asFloat() + _no * _delta.asFloat());
+        else if (m_value.isComplex())
+            return Value(m_value.asComplex() + (double)_no * _delta.asComplex());
+        else // string or empty
+            return m_value;
+    }
     case MONTH:
     {
-        int i = month->indexOf( m_String );
-        int j = i + _no * (int) _delta;
+        int i = AutoFillCommand::month->indexOf(m_value.asString());
+        int j = i + _no * _delta.asInteger();
         while (j < 0)
-            j += month->count();
-        int k = j % month->count();
-        return (month->at( k ));
+            j += AutoFillCommand::month->count();
+        int k = j % AutoFillCommand::month->count();
+        return Value(AutoFillCommand::month->at(k));
     }
     case SHORTMONTH:
     {
-        int i = shortMonth->indexOf( m_String );
-        int j = i + _no * (int) _delta;
+        int i = AutoFillCommand::shortMonth->indexOf(m_value.asString());
+        int j = i + _no * _delta.asInteger();
         while (j < 0)
-            j += shortMonth->count();
-        int k = j % shortMonth->count();
-        return (shortMonth->at( k ));
+            j += AutoFillCommand::shortMonth->count();
+        int k = j % AutoFillCommand::shortMonth->count();
+        return Value(AutoFillCommand::shortMonth->at(k));
     }
     case DAY:
     {
-        int i = day->indexOf( m_String );
-        int j = i + _no * (int) _delta;
+        int i = AutoFillCommand::day->indexOf(m_value.asString());
+        int j = i + _no * _delta.asInteger();
         while (j < 0)
-            j += day->count();
-        int k = j % day->count();
-        return (day->at( k ));
+            j += AutoFillCommand::day->count();
+        int k = j % AutoFillCommand::day->count();
+        return Value(AutoFillCommand::day->at(k));
     }
     case SHORTDAY:
     {
-        int i = shortDay->indexOf( m_String );
-        int j = i + _no * (int) _delta;
+        int i = AutoFillCommand::shortDay->indexOf(m_value.asString());
+        int j = i + _no * _delta.asInteger();
         while (j < 0)
-            j += shortDay->count();
-        int k = j % shortDay->count();
-        return (shortDay->at( k ));
+            j += AutoFillCommand::shortDay->count();
+        int k = j % AutoFillCommand::shortDay->count();
+        return Value(AutoFillCommand::shortDay->at(k));
     }
     case OTHER:
     {
-        int i = other->indexOf( m_String )-(m_OtherBegin+1);
-        int j = i + _no * (int) _delta;
-        int k = j % (m_OtherEnd - m_OtherBegin-1);
-        return (other->at( (k+m_OtherBegin+1) ));
+        int i = AutoFillCommand::other->indexOf(m_value.asString())-(m_otherBegin+1);
+        int j = i + _no * _delta.asInteger();
+        int k = j % (m_otherEnd - m_otherBegin-1);
+        return Value(AutoFillCommand::other->at((k+m_otherBegin+1)));
     }
     default:
         break;
     }
-    return QString();
+    return Value();
 }
 
-QVariant AutoFillSequenceItem::prevValue( int _no, double _delta )
+Value AutoFillSequenceItem::prevValue(int _no, Value _delta) const
 {
-    switch( m_Type )
+    switch(m_type)
     {
-    case INTEGER:
-        return QVariant( m_IValue - _no * static_cast<int>(_delta) );
-    case FLOAT:
-    case TIME:
-        return QVariant( m_DValue - static_cast<double>(_no) * _delta );
+    case VALUE:
     case FORMULA:
-    case STRING:
-        return m_String;
+    {
+        if (m_value.isBoolean())
+        {
+            if (!_delta.asBoolean() || _delta.isEmpty()) // no change?
+                return m_value;
+            return Value(_no % 2 ? !m_value.asBoolean() : m_value.asBoolean());
+        }
+        else if (m_value.isInteger())
+            return Value(m_value.asInteger() - _no * _delta.asInteger());
+        else if (m_value.isFloat())
+            return Value(m_value.asFloat() - _no * _delta.asFloat());
+        else if (m_value.isComplex())
+            return Value(m_value.asComplex() - (double)_no * _delta.asComplex());
+        else // string or empty
+            return m_value;
+    }
     case MONTH:
     {
-        int i = month->indexOf( m_String );
-        int j = i - _no * (int) _delta;
-        while ( j < 0 )
-            j += month->count();
-        int k = j % month->count();
-        return (month->at( k ));
+        int i = AutoFillCommand::month->indexOf(m_value.asString());
+        int j = i - _no * _delta.asInteger();
+        while (j < 0)
+            j += AutoFillCommand::month->count();
+        int k = j % AutoFillCommand::month->count();
+        return Value(AutoFillCommand::month->at(k));
     }
     case SHORTMONTH:
     {
-        int i = shortMonth->indexOf( m_String );
-        int j = i - _no * (int) _delta;
-        while ( j < 0 )
-            j += shortMonth->count();
-        int k = j % shortMonth->count();
-        return (shortMonth->at( k ));
+        int i = AutoFillCommand::shortMonth->indexOf(m_value.asString());
+        int j = i - _no * _delta.asInteger();
+        while (j < 0)
+            j += AutoFillCommand::shortMonth->count();
+        int k = j % AutoFillCommand::shortMonth->count();
+        return Value(AutoFillCommand::shortMonth->at(k));
     }
     case DAY:
     {
-        int i = day->indexOf( m_String );
-        int j = i - _no * (int) _delta;
-        while ( j < 0 )
-            j += day->count();
-        int k = j % day->count();
-        return (day->at( k ));
+        int i = AutoFillCommand::day->indexOf(m_value.asString());
+        int j = i - _no * _delta.asInteger();
+        while (j < 0)
+            j += AutoFillCommand::day->count();
+        int k = j % AutoFillCommand::day->count();
+        return Value(AutoFillCommand::day->at(k));
     }
     case SHORTDAY:
     {
-        int i = shortDay->indexOf( m_String );
-        int j = i - _no * (int) _delta;
-        while ( j < 0 )
-            j += shortDay->count();
-        int k = j % shortDay->count();
-        return (shortDay->at( k ));
+        int i = AutoFillCommand::shortDay->indexOf(m_value.asString());
+        int j = i - _no * _delta.asInteger();
+        while (j < 0)
+            j += AutoFillCommand::shortDay->count();
+        int k = j % AutoFillCommand::shortDay->count();
+        return Value(AutoFillCommand::shortDay->at(k));
     }
     case OTHER:
     {
-        int i = other->indexOf( m_String ) - (m_OtherBegin + 1);
-        int j = i - _no * (int) _delta;
-        while ( j < 0 )
-            j += (m_OtherEnd - m_OtherBegin - 1);
-        int k = j % (m_OtherEnd - m_OtherBegin - 1);
-        return (other->at( (k + m_OtherBegin + 1) ));
+        int i = AutoFillCommand::other->indexOf(m_value.asString()) - (m_otherBegin + 1);
+        int j = i - _no * _delta.asInteger();
+        while (j < 0)
+            j += (m_otherEnd - m_otherBegin - 1);
+        int k = j % (m_otherEnd - m_otherBegin - 1);
+        return Value(AutoFillCommand::other->at((k + m_otherBegin + 1)));
     }
     default:
         break;
     }
-    return QVariant( QString() );
+    return Value();
 }
 
 
@@ -415,12 +471,28 @@ QVariant AutoFillSequenceItem::prevValue( int _no, double _delta )
  *
  **********************************************************************************/
 
+namespace KSpread
+{
+/**
+ * A sequence of cell contents for auto-filling.
+ */
+class AutoFillSequence : public QList<AutoFillSequenceItem*>
+{
+public:
+    AutoFillSequence();
+    AutoFillSequence(const QList<AutoFillSequenceItem*>&);
+    ~AutoFillSequence();
+
+    QList<Value> createDeltaSequence(int intervalLength) const;
+};
+}
+
 AutoFillSequence::AutoFillSequence()
 {
 }
 
-AutoFillSequence::AutoFillSequence( const QList<AutoFillSequenceItem*>& list )
-    : QList<AutoFillSequenceItem*>( list )
+AutoFillSequence::AutoFillSequence(const QList<AutoFillSequenceItem*>& list)
+    : QList<AutoFillSequenceItem*>(list)
 {
 }
 
@@ -428,25 +500,25 @@ AutoFillSequence::~AutoFillSequence()
 {
 }
 
-QList<double> AutoFillSequence::createDeltaSequence( int intervalLength ) const
+QList<Value> AutoFillSequence::createDeltaSequence(int intervalLength) const
 {
     bool ok = true;
-    QList<double> deltaSequence;
+    QList<Value> deltaSequence;
 
     // Guess the delta by looking at cells 0...2*intervalLength-1
     //
     // Since the interval may be of length 'intervalLength' we calculate the delta
     // between cells 0 and intervalLength, 1 and intervalLength+1, ...., intervalLength-1 and 2*intervalLength-1.
-    for ( int t = 0; t < intervalLength && t + intervalLength < count(); ++t )
+    for (int t = 0; t < intervalLength /*&& t + intervalLength < count()*/; ++t)
     {
-        deltaSequence.append( value( t )->delta( value( t + intervalLength ), &ok ) );
-        if ( !ok )
-            return QList<double>();
+        deltaSequence.append(value(t)->delta(value((t + intervalLength) % count()), &ok));
+        if (!ok)
+            return QList<Value>();
     }
 
     // fill to the interval length
-    while ( deltaSequence.count() < intervalLength )
-        deltaSequence.append( 0.0 );
+    while (deltaSequence.count() < intervalLength)
+        deltaSequence.append(Value());
 
     return deltaSequence;
 }
@@ -458,7 +530,7 @@ QList<double> AutoFillSequence::createDeltaSequence( int intervalLength ) const
  *
  **********************************************************************************/
 
-static QList<double> findInterval( const AutoFillSequence& _seqList )
+static QList<Value> findInterval(const AutoFillSequence& _seqList)
 {
     // What is the interval (block)? If your sheet looks like this:
     // 1 3 5 7 9
@@ -466,7 +538,7 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
     // 2 200 3 300 4 400
     // Here the interval has length 2 and the delta list is [1,100]
 
-    QList<double> deltaSequence;
+    QList<Value> deltaSequence;
 
     kDebug() <<"Sequence length:" << _seqList.count();
 
@@ -474,29 +546,39 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
     //
     // We try to find the shortest interval.
     int intervalLength = 1;
-    for ( intervalLength = 1; intervalLength < _seqList.count(); ++intervalLength )
+    for (intervalLength = 1; intervalLength < _seqList.count(); ++intervalLength)
     {
         kDebug() <<"Checking interval of length:" << intervalLength;
 
         // Create the delta list.
-        deltaSequence = _seqList.createDeltaSequence( intervalLength );
+        deltaSequence = _seqList.createDeltaSequence(intervalLength);
 
-        QString str( "Deltas: [ " );
-        foreach ( double d, deltaSequence )
-            str += QString::number( d ) + ' ';
-        kDebug() << str << ']';
+        QString str("Deltas: [ ");
+        foreach (Value v, deltaSequence)
+        {
+            if (v.isBoolean())
+                str += v.asBoolean() ? "change " : "nochange ";
+            else if (v.isInteger())
+                str += QString::number(v.asInteger()) + ' ';
+            else if (v.isFloat())
+                str += QString::number(v.asFloat()) + ' ';
+            else
+                str += v.asString() + ' ';
+        }
+        str += ']';
+        kDebug() << str;
 
         // Verify the delta by looking at cells intervalLength.._seqList.count().
         // We only looked at the cells 0..2*intervalLength-1.
         // Now test wether the cells from "(i-1) * intervalLength + s" share the same delta
         // with the cell "i * intervalLength + s" for all test=1..._seqList.count()/intervalLength
         // and for all s=0...intervalLength-1.
-        for ( int i = 1; (i+1) * intervalLength < _seqList.count(); ++i )
+        for (int i = 1; (i+1) * intervalLength < _seqList.count(); ++i)
         {
-            AutoFillSequence tail = _seqList.mid( i * intervalLength );
+            AutoFillSequence tail = _seqList.mid(i * intervalLength);
 //             kDebug() <<"Verifying for sequence after" << i * intervalLength <<", length:" << tail.count();
-            QList<double> otherDeltaSequence = tail.createDeltaSequence( intervalLength );
-            if ( deltaSequence != otherDeltaSequence )
+            QList<Value> otherDeltaSequence = tail.createDeltaSequence(intervalLength);
+            if (deltaSequence != otherDeltaSequence)
             {
                 kDebug() <<"Interval does not match.";
                 deltaSequence.clear();
@@ -505,30 +587,40 @@ static QList<double> findInterval( const AutoFillSequence& _seqList )
         }
 
         // Did we find a valid interval?
-        if ( !deltaSequence.isEmpty() )
+        if (!deltaSequence.isEmpty())
             break;
     }
 
     // if the full interval has to be taken fill the delta sequence with zeros
-    if ( intervalLength == _seqList.count() )
+    if (intervalLength == _seqList.count())
     {
-        while ( intervalLength-- )
-            deltaSequence.append( 0.0 );
+        while (intervalLength--)
+            deltaSequence.append(Value());
 
-        QString str( "Deltas: [ " );
-        foreach ( double d, deltaSequence )
-            str += QString::number( d ) + ' ';
-        kDebug() << str << ']';
+        QString str("Deltas: [ ");
+        foreach (Value v, deltaSequence)
+        {
+            if (v.isBoolean())
+                str += v.asBoolean() ? "change " : "nochange ";
+            else if (v.isInteger())
+                str += QString::number(v.asInteger()) + ' ';
+            else if (v.isFloat())
+                str += QString::number(v.asFloat()) + ' ';
+            else
+                str += v.asString() + ' ';
+        }
+        str += ']';
+        kDebug() << str;
     }
 
     return deltaSequence;
 }
 
-static void fillSequence( const QList<Cell>& _srcList,
-                          const QList<Cell>& _destList,
-                          const AutoFillSequence& _seqList,
-                          const QList<double>& deltaSequence,
-                          bool down )
+static void fillSequence(const QList<Cell>& _srcList,
+                         const QList<Cell>& _destList,
+                         const AutoFillSequence& _seqList,
+                         const QList<Value>& deltaSequence,
+                         bool down)
 {
     const int intervalLength = deltaSequence.count();
     // starting position depends on the sequence and interval length
@@ -540,7 +632,7 @@ static void fillSequence( const QList<Cell>& _srcList,
     // Start iterating with the first cell
     Cell cell;
     int destIndex = 0;
-    if ( down )
+    if (down)
         cell = _destList.first();
     else
     {
@@ -551,12 +643,12 @@ static void fillSequence( const QList<Cell>& _srcList,
 
     // Fill destination cells
     //
-    while ( !cell.isNull() )
+    while (!cell.isNull())
     {
         // End of block? -> start again from beginning
-        if ( down )
+        if (down)
         {
-            if ( s == intervalLength )
+            if (s == intervalLength)
             {
                 ++block;
                 s = 0;
@@ -564,7 +656,7 @@ static void fillSequence( const QList<Cell>& _srcList,
         }
         else
         {
-            if ( s == -1 )
+            if (s == -1)
             {
                 s = intervalLength - 1;
                 ++block;
@@ -576,77 +668,73 @@ static void fillSequence( const QList<Cell>& _srcList,
         // Calculate the new value of 'cell' by adding 'block' times the delta to the
         // value of cell 's'.
         //
-        QVariant variant;
-        if ( down )
-            variant = _seqList.value( s )->nextValue( block, deltaSequence.value( s ) );
+        Value value;
+        if (down)
+            value = _seqList.value(s)->nextValue(block, deltaSequence.value(s));
         else
-            variant = _seqList.value( s )->prevValue( block, deltaSequence.value( s ) );
+            value = _seqList.value(s)->prevValue(block, deltaSequence.value(s));
 
         // insert the new value
         //
-        if ( _seqList.value( s )->type() == AutoFillSequenceItem::TIME )
+        if (_seqList.value(s)->type() == AutoFillSequenceItem::FORMULA)
         {
-            const Value timeValue = cell.doc()->converter()->asTime( Value( variant.toDouble() ) );
+            // Special handling for formulas
+            cell.parseUserInput(cell.decodeFormula(_seqList.value(s)->value().asString()));
+        }
+        else if (value.format() == Value::fmt_Time)
+        {
+            const Value timeValue = cell.doc()->converter()->asTime(Value(value.asFloat()));
             cell.setValue(timeValue);
             cell.setUserInput(cell.doc()->converter()->asString(timeValue).asString());
         }
-        else if ( _seqList.value( s )->type() == AutoFillSequenceItem::DATE )
+        else if (value.format() == Value::fmt_Date)
         {
-            const Value dateValue = cell.doc()->converter()->asDate( Value( variant.toInt() ) );
+            const Value dateValue = cell.doc()->converter()->asDate(Value(value.asInteger()));
             cell.setValue(dateValue);
             cell.setUserInput(cell.doc()->converter()->asString(dateValue).asString());
         }
-        else if ( _seqList.value( s )->type() == AutoFillSequenceItem::FORMULA )
+        else if (value.type() == Value::Boolean ||
+                 value.type() == Value::Complex ||
+                 value.type() == Value::Float ||
+                 value.type() == Value::Integer)
         {
-            // Special handling for formulas
-            cell.parseUserInput( cell.decodeFormula( _seqList.value( s )->getString() ) );
-        }
-        else if ( variant.type() == QVariant::Double )
-        {
-            const Value value(variant.toDouble());
             cell.setValue(value);
             cell.setUserInput(cell.doc()->converter()->asString(value).asString());
         }
-        else if ( variant.type() == QVariant::Int )
+        else // if (value.type() == Value::String)
         {
-            const Value value(variant.toInt());
-            cell.setValue(value);
-            cell.setUserInput(cell.doc()->converter()->asString(value).asString());
-        }
-        else if ( variant.type() == QVariant::String )
-        {
-            QRegExp number( "(\\d+)" );
-            int pos = number.indexIn( variant.toString() );
-            if ( pos!=-1 )
+            QRegExp number("(\\d+)");
+            int pos = number.indexIn(value.asString());
+            if (pos!=-1)
             {
-                const int num = number.cap( 1 ).toInt() + 1;
-                cell.parseUserInput( variant.toString().replace( number, QString::number( num ) ) );
+                const int num = number.cap(1).toInt() + 1;
+                cell.parseUserInput(value.asString().replace(number, QString::number(num)));
             }
-            else if ( !_srcList.at( s ).link().isEmpty() )
+            else if (!_srcList.at(s).link().isEmpty())
             {
-                cell.parseUserInput( variant.toString() );
-                cell.setLink( _srcList.at( s ).link() );
+                cell.parseUserInput(value.asString());
+                cell.setLink(_srcList.at(s).link());
             }
             else
             {
-                cell.setValue( Value( variant.toString() ) );
-                cell.setUserInput(variant.toString());
+                cell.setValue(value);
+                cell.setUserInput(value.asString());
             }
         }
 
         // copy the style of the source cell
         //
-        cell.copyFormat( _srcList.at( s ) );
+        cell.copyFormat(_srcList.at(s));
 
         // next/previous cell
-        if ( down )
+        if (down)
         {
-            cell = _destList.value( ++destIndex );
+            cell = _destList.value(++destIndex);
             ++s;
         }
         else
         {
-            cell = _destList.value( --destIndex );
+            cell = _destList.value(--destIndex);
             --s;
         }
     }
@@ -655,11 +743,9 @@ static void fillSequence( const QList<Cell>& _srcList,
 
 /**********************************************************************************
  *
- * Sheet
+ * AutoFillCommand
  *
  **********************************************************************************/
-
-
 
 AutoFillCommand::AutoFillCommand()
 {
@@ -669,22 +755,22 @@ AutoFillCommand::~AutoFillCommand()
 {
 }
 
-void AutoFillCommand::setSourceRange( const QRect& range )
+void AutoFillCommand::setSourceRange(const QRect& range)
 {
     m_sourceRange = range;
 }
 
-void AutoFillCommand::setTargetRange( const QRect& range )
+void AutoFillCommand::setTargetRange(const QRect& range)
 {
     m_targetRange = range;
 }
 
 bool AutoFillCommand::mainProcessing()
 {
-    if ( m_sourceRange.contains( m_targetRange ) )
+    if (m_sourceRange.contains(m_targetRange))
         return false;
 
-    if ( m_reverse )
+    if (m_reverse)
     {
         // reverse - use the stored value
         AbstractDataManipulator::mainProcessing();
@@ -692,99 +778,99 @@ bool AutoFillCommand::mainProcessing()
     }
 
     // Fill from left to right
-    if ( m_sourceRange.left() == m_targetRange.left() && m_sourceRange.right() < m_targetRange.right() )
+    if (m_sourceRange.left() == m_targetRange.left() && m_sourceRange.right() < m_targetRange.right())
     {
-        for ( int y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
+        for (int y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++)
         {
             int x;
             QList<Cell> destList;
-            for ( x = m_sourceRange.right() + 1; x <= m_targetRange.right(); x++ )
-                destList.append(Cell( m_sheet, x, y ) );
+            for (x = m_sourceRange.right() + 1; x <= m_targetRange.right(); x++)
+                destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
-            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
-                srcList.append(Cell( m_sheet, x, y ) );
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+                srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
-                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
-            fillSequence( srcList, destList, seqList );
-            qDeleteAll( seqList );
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+            fillSequence(srcList, destList, seqList);
+            qDeleteAll(seqList);
         }
     }
 
     // Fill from top to bottom
-    if ( m_sourceRange.top() == m_targetRange.top() && m_sourceRange.bottom() < m_targetRange.bottom() )
+    if (m_sourceRange.top() == m_targetRange.top() && m_sourceRange.bottom() < m_targetRange.bottom())
     {
-        for ( int x = m_sourceRange.left(); x <= m_targetRange.right(); x++ )
+        for (int x = m_sourceRange.left(); x <= m_targetRange.right(); x++)
         {
             int y;
             QList<Cell> destList;
-            for ( y = m_sourceRange.bottom() + 1; y <= m_targetRange.bottom(); y++ )
-                destList.append(Cell( m_sheet, x, y ) );
+            for (y = m_sourceRange.bottom() + 1; y <= m_targetRange.bottom(); y++)
+                destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
-            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
-                srcList.append(Cell( m_sheet, x, y ) );
+            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++)
+                srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
-                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
-            fillSequence( srcList, destList, seqList );
-            qDeleteAll( seqList );
+            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++)
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+            fillSequence(srcList, destList, seqList);
+            qDeleteAll(seqList);
         }
     }
 
     // Fill from right to left
-    if ( m_sourceRange.left() == m_targetRange.right() && m_sourceRange.right() >= m_targetRange.right() )
+    if (m_sourceRange.left() == m_targetRange.right() && m_sourceRange.right() >= m_targetRange.right())
     {
-        for ( int y = m_targetRange.top(); y <= m_targetRange.bottom(); y++ )
+        for (int y = m_targetRange.top(); y <= m_targetRange.bottom(); y++)
         {
             int x;
             QList<Cell> destList;
-            for ( x = m_targetRange.left(); x < m_sourceRange.left(); x++ )
-                destList.append(Cell( m_sheet, x, y ) );
+            for (x = m_targetRange.left(); x < m_sourceRange.left(); x++)
+                destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
-            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
-                srcList.append(Cell( m_sheet, x, y ) );
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+                srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for ( x = m_sourceRange.left(); x <= m_sourceRange.right(); x++ )
-                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
-            fillSequence( srcList, destList, seqList, false );
-            qDeleteAll( seqList );
+            for (x = m_sourceRange.left(); x <= m_sourceRange.right(); x++)
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+            fillSequence(srcList, destList, seqList, false);
+            qDeleteAll(seqList);
         }
     }
 
     // Fill from bottom to top
-    if ( m_sourceRange.top() == m_targetRange.bottom() && m_sourceRange.bottom() >= m_targetRange.bottom() )
+    if (m_sourceRange.top() == m_targetRange.bottom() && m_sourceRange.bottom() >= m_targetRange.bottom())
     {
-        const int startVal = qMin( m_targetRange.left(), m_sourceRange.left() );
-        const int endVal = qMax( m_sourceRange.right(), m_targetRange.right() );
-        for ( int x = startVal; x <= endVal; x++ )
+        const int startVal = qMin(m_targetRange.left(), m_sourceRange.left());
+        const int endVal = qMax(m_sourceRange.right(), m_targetRange.right());
+        for (int x = startVal; x <= endVal; x++)
         {
             int y;
             QList<Cell> destList;
-            for ( y = m_targetRange.top(); y < m_sourceRange.top(); y++ )
-                destList.append(Cell( m_sheet, x, y ) );
+            for (y = m_targetRange.top(); y < m_sourceRange.top(); y++)
+                destList.append(Cell(m_sheet, x, y));
             QList<Cell> srcList;
-            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y )
-                srcList.append(Cell( m_sheet, x, y ) );
+            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); ++y)
+                srcList.append(Cell(m_sheet, x, y));
             AutoFillSequence seqList;
-            for ( y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++ )
-                seqList.append( new AutoFillSequenceItem(Cell( m_sheet, x, y ) ) );
-            fillSequence( srcList, destList, seqList, false );
-            qDeleteAll( seqList );
+            for (y = m_sourceRange.top(); y <= m_sourceRange.bottom(); y++)
+                seqList.append(new AutoFillSequenceItem(Cell(m_sheet, x, y)));
+            fillSequence(srcList, destList, seqList, false);
+            qDeleteAll(seqList);
         }
     }
     return true;
 }
 
-void AutoFillCommand::fillSequence( const QList<Cell>& _srcList,
-                                    const QList<Cell>& _destList,
-                                    const AutoFillSequence& _seqList,
-                                    bool down )
+void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
+                                   const QList<Cell>& _destList,
+                                   const AutoFillSequence& _seqList,
+                                   bool down)
 {
-    if ( _srcList.isEmpty() || _destList.isEmpty() )
+    if (_srcList.isEmpty() || _destList.isEmpty())
         return;
 
     // find an interval to use to fill the sequence
-    QList<double> deltaSequence;
+    QList<Value> deltaSequence;
 
     //If we only have a single cell, the interval will depend upon the data type.
     //- For numeric values, set the interval to 0 as we don't know what might be useful as a sequence
@@ -794,25 +880,25 @@ void AutoFillCommand::fillSequence( const QList<Cell>& _srcList,
     //Note that the above options were chosen for consistency with Excel.  Gnumeric (1.59) sets
     //the interval to 0 for all types, OpenOffice.org (2.00) uses increments of 1.00, 1 hour and 1 day
     //respectively
-    if ( _srcList.count() == 1 )
+    if (_srcList.count() == 1)
     {
-        const Cell cell = _srcList.value( 0 );
-        if ( cell.isTime() )
+        const Cell cell = _srcList.value(0);
+        if (cell.isTime())
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append( numToDouble (Value( QTime( 1, 0 ), m_sheet->doc() ).asFloat() ));
+            deltaSequence.append(Value(QTime(1, 0), m_sheet->doc()));
         }
-        else if ( cell.isDate() )
+        else if (cell.isDate())
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append( numToDouble ((int) Value( QDate( 0, 0, 1 ), m_sheet->doc() ).asInteger() ));
+            deltaSequence.append(Value(QDate(0, 0, 1), m_sheet->doc()));
         }
         else
-            deltaSequence.append( 0.0 );
+            deltaSequence.append(Value());
     }
     else
-        deltaSequence = findInterval( _seqList );
+        deltaSequence = findInterval(_seqList);
 
     // fill the sequence
-    ::fillSequence( _srcList, _destList, _seqList, deltaSequence, down );
+    ::fillSequence(_srcList, _destList, _seqList, deltaSequence, down);
 }

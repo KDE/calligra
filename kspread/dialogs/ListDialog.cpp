@@ -279,12 +279,12 @@ void ListDialog::slotOk()
             }
         }
         config->group( "Parameters" ).writeEntry("Other list",result);
-        //todo refresh AutoFillSequenceItem::other
+        //todo refresh AutoFillCommand::other
         // I don't know how to do for the moment
-        if(AutoFillSequenceItem::other!=0)
+        if(AutoFillCommand::other!=0)
         {
-            delete(AutoFillSequenceItem::other);
-            AutoFillSequenceItem::other=0;
+            delete(AutoFillCommand::other);
+            AutoFillCommand::other=0;
         }
     }
     accept();
