@@ -14,7 +14,7 @@
   </property>
   <layout class="QVBoxLayout" >
    <item>
-    <widget class="QListWidget" name="partsList" />
+    <widget class="QListView" name="partsList" />
    </item>
    <item>
     <layout class="QHBoxLayout" >

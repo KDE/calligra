@@ -231,7 +231,9 @@ public:
 
     void setStaffSystemCount(int count);
     int staffSystemCount();
-    
+signals:
+    void partAdded(int index, MusicCore::Part* part);
+    void partRemoved(int index, MusicCore::Part* part);
 private:
     class Private;
     Private * const d;

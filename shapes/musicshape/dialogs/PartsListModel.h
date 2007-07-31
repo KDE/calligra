@@ -16,38 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PARTSWIDGET_H
-#define PARTSWIDGET_H
+#ifndef MUSIC_PARTSLISTMODEL_H
+#define MUSIC_PARTSLISTMODEL_H
 
-#include "ui_PartsWidget.h"
+#include <QtCore/QAbstractListModel>
 
-#include <QWidget>
-
-class QListWidgetItem;
-class MusicTool;
-class MusicShape;
 namespace MusicCore {
     class Sheet;
+    class Part;
 }
 
-class PartsWidget : public QWidget {
+class PartsListModel : public QAbstractListModel
+{
     Q_OBJECT
 public:
-    explicit PartsWidget(MusicTool *tool, QWidget *parent = 0);
+    PartsListModel(MusicCore::Sheet* sheet);
 
-public slots:
-    void setShape(MusicShape* shape);
+    virtual int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 private slots:
-    void partDoubleClicked(const QModelIndex & index);
-    void selectionChanged(const QModelIndex& current, const QModelIndex& prev);
-    void addPart();
-    void removePart();
-    void editPart();
+    void partAdded(int index, MusicCore::Part* part);
+    void partRemoved(int index, MusicCore::Part* part);
 private:
-    Ui::PartsWidget widget;
-    MusicTool *m_tool;
-    MusicShape *m_shape;
     MusicCore::Sheet* m_sheet;
 };
 
-#endif // PARTSWIDGET_H
+#endif // MUSIC_PARTSLISTMODEL_H

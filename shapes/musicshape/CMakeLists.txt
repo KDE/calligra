@@ -22,7 +22,7 @@ set( musiccore_SRCS
     core/KeySignature.cpp
     core/TimeSignature.cpp
     core/StaffSystem.cpp
-    
+
     core/MusicXmlWriter.cpp
 )
 
@@ -40,7 +40,9 @@ SET (musicshape_LIB_SRCS
     dialogs/PartsWidget.cpp
     dialogs/PartDetailsDialog.cpp
     dialogs/SimpleEntryWidget.cpp
-    
+
+    dialogs/PartsListModel.cpp
+
     commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp
     commands/ChangePartNameCommand.cpp
