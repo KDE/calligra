@@ -18,19 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <csvimport.h>
+#include "csvimport.h"
 
+#include <QByteArray>
 #include <QFile>
 #include <QRegExp>
-//Added by qt3to4:
-#include <QByteArray>
-#include <Q3MemArray>
+#include <QVector>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
 
+#include <KoCsvImportDialog.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
@@ -43,8 +43,6 @@
 #include <kspread/Style.h>
 #include <kspread/Value.h>
 #include <kspread/ValueConverter.h>
-
-#include <csvdialog.h>
 
 using namespace KSpread;
 
@@ -105,17 +103,18 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     QByteArray inputFile( in.readAll() );
     in.close();
 
-    CSVDialog *dialog = new CSVDialog(0L, inputFile, csv_delimiter );
+    KoCsvImportDialog* dialog = new KoCsvImportDialog(0);
+    dialog->setData(inputFile);
     if (!m_chain->manager()->getBatchMode() && !dialog->exec())
-	  return KoFilter::UserCancelled;
+        return KoFilter::UserCancelled;
     inputFile.resize( 0 ); // Release memory (input file content)
 
     ElapsedTime t( "Filling data into document" );
 
     Sheet *sheet=ksdoc->map()->addNewSheet();
 
-    int numRows = dialog->getRows();
-    int numCols = dialog->getCols();
+    int numRows = dialog->rows();
+    int numCols = dialog->cols();
 
     if (numRows == 0)
       ++numRows;
@@ -128,7 +127,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
     int i;
     double init = sheet->nonDefaultColumnFormat( 1 )->width();
-    Q3MemArray<double> widths( numCols );
+    QVector<double> widths( numCols );
     for ( i = 0; i < numCols; ++i )
       widths[i] = init;
 
@@ -141,18 +140,18 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
         {
             value += step;
             emit sigProgress(value);
-            const QString text( dialog->getText( row, col ) );
+            const QString text( dialog->text( row, col ) );
 
             // ### FIXME: how to calculate the width of numbers (as they might not be in the right format)
             const double len = fm.width( text );
             if ( len > widths[col] )
               widths[col] = len;
 
-            switch (dialog->getHeader(col))
+            switch (dialog->headerType(col))
             {
-             case CSVDialog::TEXT:
+             case KoCsvImportDialog::TEXT:
              {
-               //see CSVDialog::accept(), Tomas introduced the Generic format between KOffice 1.3 and 1.4
+               //see KoCsvImportDialog::accept(), Tomas introduced the Generic format between KOffice 1.3 and 1.4
                //the Insert->External Data-> ... dialog uses the generic format for everything (see mentioned method)
                //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
                //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
@@ -167,7 +166,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
               break;
              // ### TODO: put the code for the different numbers together (at least partially)
              }
-             case CSVDialog::NUMBER:
+             case KoCsvImportDialog::NUMBER:
                 {
                     bool ok = false;
                     double d = ksdoc->locale()->readNumber( text, &ok );
@@ -187,7 +186,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     cell.setUserInput(text);
                     break;
                 }
-             case CSVDialog::COMMANUMBER:
+             case KoCsvImportDialog::COMMANUMBER:
                 {
                     bool ok = false;
                     QString tmp ( text );
@@ -208,7 +207,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     cell.setUserInput(tmp);
                     break;
                 }
-             case CSVDialog::POINTNUMBER:
+             case KoCsvImportDialog::POINTNUMBER:
                 {
                     bool ok = false;
                     QString tmp ( text );
@@ -229,14 +228,14 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                     cell.setUserInput(tmp);
                     break;
                 }
-             case CSVDialog::DATE:
+             case KoCsvImportDialog::DATE:
              {
               cell = Cell( sheet, col + 1, row + 1 );
               cell.setUserInput(text);
               cell.setValue(ksdoc->converter()->asDate(Value(text)));
               break;
              }
-             case CSVDialog::CURRENCY:
+             case KoCsvImportDialog::CURRENCY:
              {
               cell = Cell( sheet, col + 1, row + 1 );
               cell.setUserInput(text);
