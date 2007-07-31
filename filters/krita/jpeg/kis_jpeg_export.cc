@@ -138,8 +138,8 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
 
     KisJPEGConverter kpc(output, output->undoAdapter());
 
-    KisPaintDeviceSP pd = KisPaintDeviceSP(new KisPaintDevice(*img->projection()));
-    KisPaintLayerSP l = KisPaintLayerSP(new KisPaintLayer(img.data(), "projection", OPACITY_OPAQUE, pd));
+    KisPaintDeviceSP pd = new KisPaintDevice(*img->projection());
+    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, pd);
 
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
