@@ -57,8 +57,6 @@ protected:
   void accept();
 
 private:
-  QString getText(int row, int col);
-
   View*   m_pView;
   bool    m_canceled;
   QRect   m_targetRect;

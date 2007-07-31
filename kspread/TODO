@@ -350,26 +350,10 @@ Not yet sorted (will be entered into categories above)
   define action if pressed, or selection changes,...
 - interface for mail merge
 
-*********
-* Taken:
-*********
-
-Philipp
-=======
-
 - Printing enhancements:
   + Expand selection to page
   + Fit selection to page
   + Print selection only
-
-- Filter, Autofilter                                             (but will take long, haven't started yet)
-- Performance improvements at end of ranges - last column/row    (started)
-- Support "unlimited" columns/rows,
-  unlimited means a reasonable defined value                     (concept finished, will include after beta1)
-
-
-Norbert
-=======
 
 + option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
 + CSV export dialog: define deliminers, Table(s), cell content in '"'
@@ -387,25 +371,16 @@ Norbert
 + Lookup & Reference functions (LOOKUP needs to fixed)
 - more information functions (Excel compatible)
 
-Ariya
-=====
 - more "Related Functions" in function help/desc text
 - improve function compatibility with MS Excel
 - dBASE export filter
 
-
-OpenCalc - filter
-=================
 - changing text angle should resize the cell height automatically
-- conditional cell attribute support is just poor in KSpread:
-  we should be able to assign complete styles (KSpreadLayout objects)
 - support for format strings (dd/mm/yyyy)       - Norbert
 - more font attributes (outline, shadow,...) + attributes for parts of the text
 - double borders
 - multiline header/footer support
 - for formulas: fit precision so the result fits in the cell or resize the cell
-- save m_strOutText in file => no parsing on load  (Norbert)
-- save formula results etc in a certain way in the cell (Norbert)
 
 
 

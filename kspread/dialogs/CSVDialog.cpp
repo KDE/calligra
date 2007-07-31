@@ -23,6 +23,7 @@
 // Local
 #include "CSVDialog.h"
 
+#include <QApplication>
 #include <QByteArray>
 #include <QMimeData>
 #include <QString>
@@ -85,7 +86,7 @@ void CSVDialog::init()
       m_canceled = true;
       return;
     }
-    m_fileArray = QByteArray( mime->text().toUtf8() );
+    setData(QByteArray(mime->text().toUtf8()));
   }
   else if ( m_mode == File )
   {
@@ -109,28 +110,29 @@ void CSVDialog::init()
       m_canceled = true;
       return;
     }
-    m_fileArray = in.readAll();
+    setData(in.readAll());
     in.close();
   }
-  else
+  else // if ( m_mode == Column )
   {
     setWindowTitle( i18n( "Text to Columns" ) );
-    m_dialog->m_tabWidget->setTabEnabled(0, false);
-    m_fileArray.clear();
+    setDataWidgetEnabled(false);
+    setData(QByteArray());
     Cell cell;
     Sheet * sheet = m_pView->activeSheet();
+    QByteArray data;
     int col = m_targetRect.left();
     for (int i = m_targetRect.top(); i <= m_targetRect.bottom(); ++i)
     {
       cell = Cell( sheet, col, i );
       if ( !cell.isEmpty() )
       {
-        m_fileArray.append( cell.displayText().toUtf8() /* FIXME */ );
+        data.append( cell.displayText().toUtf8() /* FIXME */ );
       }
-      m_fileArray.append( '\n' );
+      data.append( '\n' );
     }
+    setData(data);
   }
-  fillTable();
 }
 
 bool CSVDialog::canceled()
@@ -142,8 +144,8 @@ void CSVDialog::accept()
 {
   Sheet * sheet  = m_pView->activeSheet();
 
-  int numRows = m_dialog->m_sheet->numRows();
-  int numCols = m_dialog->m_sheet->numCols();
+  int numRows = rows();
+  int numCols = cols();
 
   if ((numRows == 0) || (numCols == 0))
     return;  // nothing to do here
@@ -163,7 +165,7 @@ void CSVDialog::accept()
   Value val( Value::Array );
   for (int row = 0; row < numRows; ++row)
     for (int col = 0; col < numCols; ++col)
-      val.setElement (col, row, Value(getText (row, col)));
+      val.setElement (col, row, Value(text(row, col)));
 
   DataManipulator *manipulator = new DataManipulator;
   if ( m_mode == Clipboard )
@@ -181,11 +183,6 @@ void CSVDialog::accept()
 
   m_pView->slotUpdateView( sheet );
   KoCsvImportDialog::accept();
-}
-
-QString CSVDialog::getText(int row, int col)
-{
-  return m_dialog->m_sheet->text(row, col);
 }
 
 #include "CSVDialog.moc"
