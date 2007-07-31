@@ -431,7 +431,8 @@ void Cell::copyFormat( const Cell& cell )
     Value value = this->value();
     value.setFormat( cell.value().format() );
     sheet()->cellStorage()->setValue( d->column, d->row, value );
-    setStyle( cell.style() );
+    if (!style().isDefault() || !cell.style().isDefault())
+        setStyle( cell.style() );
     setConditions( cell.conditions() );
 }
 
