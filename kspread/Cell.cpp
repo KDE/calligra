@@ -432,8 +432,9 @@ void Cell::copyFormat( const Cell& cell )
     value.setFormat( cell.value().format() );
     sheet()->cellStorage()->setValue( d->column, d->row, value );
     if (!style().isDefault() || !cell.style().isDefault())
-        setStyle( cell.style() );
-    setConditions( cell.conditions() );
+        setStyle(cell.style());
+    if (!conditions().isEmpty() || !cell.conditions().isEmpty())
+        setConditions(cell.conditions());
 }
 
 void Cell::copyAll( const Cell& cell )
@@ -442,8 +443,10 @@ void Cell::copyAll( const Cell& cell )
     Q_ASSERT( !cell.isNull() );
     copyFormat( cell );
     copyContent( cell );
-    setComment( cell.comment() );
-    setValidity( cell.validity() );
+    if (!comment().isEmpty() || !cell.comment().isEmpty())
+        setComment(cell.comment());
+    if (!validity().isEmpty() || !cell.validity().isEmpty())
+        setValidity(cell.validity());
 }
 
 void Cell::copyContent( const Cell& cell )
