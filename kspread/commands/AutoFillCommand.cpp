@@ -105,9 +105,9 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
         m_value = cell.doc()->converter()->asDate(cell.value());
         m_type = VALUE;
     }
-    else if (cell.isTime())
+    else if (cell.isTime() || cell.value().format() == Value::fmt_DateTime)
     {
-        m_value = cell.doc()->converter()->asTime(cell.value());
+        m_value = cell.doc()->converter()->asDateTime(cell.value());
         m_type = VALUE;
     }
     else if (cell.value().isNumber())
@@ -250,13 +250,17 @@ Value AutoFillSequenceItem::delta(AutoFillSequenceItem *seq, bool *ok) const
         {
             if (seq->value().type() == Value::Empty)
                 *ok = false;
-            return Value(seq->value().asInteger() - m_value.asInteger());
+            Value value(seq->value().asInteger() - m_value.asInteger());
+            value.setFormat(m_value.format()); // may be a date format
+            return value;
         }
         case Value::Float:
         {
             if (seq->value().type() == Value::Empty)
                 *ok = false;
-            return Value(seq->value().asFloat() - m_value.asFloat());
+            Value value(seq->value().asFloat() - m_value.asFloat());
+            value.setFormat(m_value.format()); // may be a time format
+            return value;
         }
         case Value::Complex:
         {
@@ -333,12 +337,22 @@ Value AutoFillSequenceItem::nextValue(int _no, Value _delta) const
         }
         else if (m_value.isInteger())
         {
-            return Value(m_value.asInteger() + _no * _delta.asInteger());
+            Value value(m_value.asInteger() + _no * _delta.asInteger());
+            value.setFormat(_delta.format());
+            return value;
         }
         else if (m_value.isFloat())
-            return Value(m_value.asFloat() + _no * _delta.asFloat());
+        {
+            Value value(m_value.asFloat() + (double)_no * _delta.asFloat());
+            value.setFormat(_delta.format());
+            return value;
+        }
         else if (m_value.isComplex())
-            return Value(m_value.asComplex() + (double)_no * _delta.asComplex());
+        {
+            Value value(m_value.asComplex() + (double)_no * _delta.asComplex());
+            value.setFormat(_delta.format());
+            return value;
+        }
         else // string or empty
             return m_value;
     }
@@ -405,11 +419,23 @@ Value AutoFillSequenceItem::prevValue(int _no, Value _delta) const
             return Value(_no % 2 ? !m_value.asBoolean() : m_value.asBoolean());
         }
         else if (m_value.isInteger())
-            return Value(m_value.asInteger() - _no * _delta.asInteger());
+        {
+            Value value(m_value.asInteger() - _no * _delta.asInteger());
+            value.setFormat(_delta.format());
+            return value;
+        }
         else if (m_value.isFloat())
-            return Value(m_value.asFloat() - _no * _delta.asFloat());
+        {
+            Value value(m_value.asFloat() - (double)_no * _delta.asFloat());
+            value.setFormat(_delta.format());
+            return value;
+        }
         else if (m_value.isComplex())
-            return Value(m_value.asComplex() - (double)_no * _delta.asComplex());
+        {
+            Value value(m_value.asComplex() - (double)_no * _delta.asComplex());
+            value.setFormat(_delta.format());
+            return value;
+        }
         else // string or empty
             return m_value;
     }
@@ -683,13 +709,13 @@ static void fillSequence(const QList<Cell>& _srcList,
         }
         else if (value.format() == Value::fmt_Time)
         {
-            const Value timeValue = cell.doc()->converter()->asTime(Value(value.asFloat()));
+            const Value timeValue = cell.doc()->converter()->asTime(value);
             cell.setValue(timeValue);
             cell.setUserInput(cell.doc()->converter()->asString(timeValue).asString());
         }
         else if (value.format() == Value::fmt_Date)
         {
-            const Value dateValue = cell.doc()->converter()->asDate(Value(value.asInteger()));
+            const Value dateValue = cell.doc()->converter()->asDate(value);
             cell.setValue(dateValue);
             cell.setUserInput(cell.doc()->converter()->asString(dateValue).asString());
         }
@@ -883,7 +909,7 @@ void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
     if (_srcList.count() == 1)
     {
         const Cell cell = _srcList.value(0);
-        if (cell.isTime())
+        if (cell.isTime() || cell.value().format() == Value::fmt_DateTime)
         {
             // TODO Stefan: delta depending on minimum unit of format
             deltaSequence.append(Value(QTime(1, 0), m_sheet->doc()));
@@ -891,7 +917,9 @@ void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
         else if (cell.isDate())
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append(Value(QDate(0, 0, 1), m_sheet->doc()));
+            Value value(1);
+            value.setFormat(Value::fmt_Date);
+            deltaSequence.append(value);
         }
         else
             deltaSequence.append(Value());
