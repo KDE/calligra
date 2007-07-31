@@ -766,7 +766,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             editingPluginEvents();
             ensureCursorVisible();
         }
-        else { // insert the text
+        else if(! (event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
