@@ -22,9 +22,7 @@
 
 #include <tiffio.h>
 
-#include <krita_export.h>
-
-class KRITAUI_EXPORT KisBufferStreamBase {
+class KisBufferStreamBase {
     public:
        KisBufferStreamBase( uint16 depth ) : m_depth(depth) {}
         virtual uint32 nextValue() =0;
@@ -35,7 +33,7 @@ class KRITAUI_EXPORT KisBufferStreamBase {
         uint16 m_depth;
 };
 
-class KRITAUI_EXPORT KisBufferStreamContigBase : public KisBufferStreamBase {
+class KisBufferStreamContigBase : public KisBufferStreamBase {
     public:
         KisBufferStreamContigBase( uint8* src, uint16 depth, uint32 lineSize );
         virtual void restart();
@@ -48,7 +46,7 @@ class KRITAUI_EXPORT KisBufferStreamContigBase : public KisBufferStreamBase {
         uint32 m_lineSize;
 };
 
-class KRITAUI_EXPORT KisBufferStreamContigBelow16 : public KisBufferStreamContigBase {
+class KisBufferStreamContigBelow16 : public KisBufferStreamContigBase {
     public:
         KisBufferStreamContigBelow16( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
@@ -56,7 +54,7 @@ class KRITAUI_EXPORT KisBufferStreamContigBelow16 : public KisBufferStreamContig
         virtual uint32 nextValue();
 };
 
-class KRITAUI_EXPORT KisBufferStreamContigBelow32 : public KisBufferStreamContigBase {
+class KisBufferStreamContigBelow32 : public KisBufferStreamContigBase {
     public:
         KisBufferStreamContigBelow32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
@@ -64,7 +62,7 @@ class KRITAUI_EXPORT KisBufferStreamContigBelow32 : public KisBufferStreamContig
         virtual uint32 nextValue();
 };
 
-class KRITAUI_EXPORT KisBufferStreamContigAbove32 : public KisBufferStreamContigBase {
+class KisBufferStreamContigAbove32 : public KisBufferStreamContigBase {
     public:
         KisBufferStreamContigAbove32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
@@ -73,7 +71,7 @@ class KRITAUI_EXPORT KisBufferStreamContigAbove32 : public KisBufferStreamContig
 };
 
 
-class KRITAUI_EXPORT KisBufferStreamSeperate : public KisBufferStreamBase {
+class KisBufferStreamSeperate : public KisBufferStreamBase {
     public:
         KisBufferStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize);
         virtual ~KisBufferStreamSeperate();
