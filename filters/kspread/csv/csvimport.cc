@@ -147,102 +147,42 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
             if ( len > widths[col] )
               widths[col] = len;
 
-            switch (dialog->headerType(col))
+            cell = Cell( sheet, col + 1, row + 1 );
+
+            switch (dialog->dataType(col))
             {
-             case KoCsvImportDialog::TEXT:
+             case KoCsvImportDialog::Generic:
+             default:
              {
-               //see KoCsvImportDialog::accept(), Tomas introduced the Generic format between KOffice 1.3 and 1.4
-               //the Insert->External Data-> ... dialog uses the generic format for everything (see mentioned method)
-               //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
-               //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default
-
-               cell = Cell( sheet, col + 1, row + 1 );
-               cell.parseUserInput( text );
-
-               /* old code
-              cell = Cell( sheet, col + 1, row + 1, s );
-              cell.setValue( Value( text ) );
-               */
-              break;
-             // ### TODO: put the code for the different numbers together (at least partially)
+                cell.parseUserInput(text);
+                break;
              }
-             case KoCsvImportDialog::NUMBER:
-                {
-                    bool ok = false;
-                    double d = ksdoc->locale()->readNumber( text, &ok );
-                    // If not, try with the '.' as decimal separator
-                    if ( !ok )
-                        d = text.toDouble( &ok );
-                    if ( !ok )
-                    {
-                        cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setValue( Value( text ) );
-                    }
-                    else
-                    {
-                        cell = Cell( sheet,  col + 1, row + 1 );
-                        cell.setValue(Value(d));
-                    }
-                    cell.setUserInput(text);
-                    break;
-                }
-             case KoCsvImportDialog::COMMANUMBER:
-                {
-                    bool ok = false;
-                    QString tmp ( text );
-                    tmp.remove ( QRegExp( "[^0-9,Ee+-]" ) ); // Keep only 0 to 9, comma, E, e, plus, minus
-                    tmp.replace ( ',', '.' );
-                    kDebug(30501) <<"Comma:" << text <<" =>" << tmp;
-                    const double d = tmp.toDouble( &ok );
-                    if ( !ok )
-                    {
-                        cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setValue( Value( text ) );
-                    }
-                    else
-                    {
-                        cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setValue(Value(d));
-                    }
-                    cell.setUserInput(tmp);
-                    break;
-                }
-             case KoCsvImportDialog::POINTNUMBER:
-                {
-                    bool ok = false;
-                    QString tmp ( text );
-                    tmp.remove ( QRegExp( "[^0-9\\.EeD+-]" ) ); // Keep only 0 to 9, dot, E, e, D, plus, minus
-                    tmp.replace ( 'D', 'E' ); // double from FORTRAN use D instead of E
-                    kDebug(30501) <<"Point:" << text <<" =>" << tmp;
-                    const double d = tmp.toDouble( &ok );
-                    if ( !ok )
-                    {
-                        cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setValue( Value( text ) );
-                    }
-                    else
-                    {
-                        cell = Cell( sheet, col + 1, row + 1 );
-                        cell.setValue(Value(d));
-                    }
-                    cell.setUserInput(tmp);
-                    break;
-                }
-             case KoCsvImportDialog::DATE:
+             case KoCsvImportDialog::Text:
              {
-              cell = Cell( sheet, col + 1, row + 1 );
-              cell.setUserInput(text);
-              cell.setValue(ksdoc->converter()->asDate(Value(text)));
-              break;
+                Value value(text);
+                cell.setValue(value);
+                cell.setUserInput(ksdoc->converter()->asString(value).asString());
+                break;
              }
-             case KoCsvImportDialog::CURRENCY:
+             case KoCsvImportDialog::Date:
              {
-              cell = Cell( sheet, col + 1, row + 1 );
-              cell.setUserInput(text);
-              Value value(text);
-              value.setFormat(Value::fmt_Money);
-              cell.setValue(value);
-              break;
+                Value value(text);
+                cell.setValue(ksdoc->converter()->asDate(value));
+                cell.setUserInput(ksdoc->converter()->asString(value).asString());
+                break;
+             }
+             case KoCsvImportDialog::Currency:
+             {
+                Value value(text);
+                value.setFormat(Value::fmt_Money);
+                cell.setValue(value);
+                cell.setUserInput(ksdoc->converter()->asString(value).asString());
+                break;
+             }
+             case KoCsvImportDialog::None:
+             {
+                // just skip the content
+                break;
              }
             }
         }
