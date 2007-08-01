@@ -79,20 +79,24 @@ void KWFrame::copySettings(const KWFrame *frame) {
 
 void KWFrame::saveOdf(KoShapeSavingContext & context) {
     KoXmlWriter &writer = context.xmlWriter();
-    writer.startElement("draw:frame");
-    /*
-    ODF: 9.3 Frames
-    The attributes that may be associated with the <draw:frame> element are:
-       Position, Size (relative sizes, see below), Style, Layer, Z-Index, ID, Caption ID and
-       Transformation – see section 9.2.15.
-       Text anchor, table background, draw end position – see section 9.2.16
-       Presentation class – see section 9.6.1
-       Copy frames
-    */
-
-    shape()->saveOdfFrameAttributes(context);
+    const bool mainTextFrame = context.isSet(KoShapeSavingContext::MainTextFrame);
+    if (!mainTextFrame) {
+        writer.startElement("draw:frame");
+        /*
+        ODF: 9.3 Frames
+        The attributes that may be associated with the <draw:frame> element are:
+        Position, Size (relative sizes, see below), Style, Layer, Z-Index, ID, Caption ID and
+        Transformation – see section 9.2.15.
+        Text anchor, table background, draw end position – see section 9.2.16
+        Presentation class – see section 9.6.1
+        Copy frames
+        */
+    
+        shape()->saveOdfFrameAttributes(context);
+    }
     shape()->saveOdf(context);
-    writer.endElement();
+    if (!mainTextFrame)
+        writer.endElement();
 }
 
 void KWFrame::setShape(KoShape *shape) {
