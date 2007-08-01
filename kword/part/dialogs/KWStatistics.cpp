@@ -20,6 +20,7 @@
 #include "KWStatistics.h"
 #include "KWord.h"
 #include "KWDocument.h"
+#include "frames/KWFrame.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 
@@ -27,26 +28,36 @@
 #include <KoExecutePolicy.h>
 #include <KoAction.h>
 #include <KoSelection.h>
+#include <KoShape.h>
 
 #include <QTextDocument>
 #include <QTextBlock>
 #include <QTextLayout>
+#include <QTimer>
 
-KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, QWidget *parent, bool showInDocker)
+KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
     : QWidget(parent),
     m_resourceProvider(provider),
     m_action(new KoAction(this)),
     m_document(document),
-    m_showInDocker(showInDocker)
+    m_selection(selection)
 {
-    if (m_showInDocker) {
+    if (m_selection) {
+        m_showInDocker = true;
+        m_autoUpdate = false;
+        m_timer = new QTimer(this);
+        m_timer->setInterval(2000); // make the interval configurable?
+        m_timer->setSingleShot(true);
         widgetDocker.setupUi(this);
         widgetDocker.refresh->setIcon(KIcon("view-refresh"));
-        widgetDocker.autoRefresh->setEnabled(false);
 
         connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
+        connect(widgetDocker.autoRefresh, SIGNAL(stateChanged(int)), this, SLOT(setAutoUpdate(int)));
+        connect(m_selection, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+        connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData()));
     }
     else {
+        m_showInDocker = false;
         widget.setupUi(this);
         m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
 
@@ -234,6 +245,38 @@ void KWStatistics::updateDataUi() {
         if( m_words < 200 ) // a kind of warning if too few words:
             flesch = i18n("approximately %1", flesch );
         widget.flesch->setText(flesch);
+    }
+}
+
+void KWStatistics::setAutoUpdate(int state)
+{
+    if (state == Qt::Checked) {
+        m_autoUpdate = true;
+        connect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
+        updateData();
+    }
+    else {
+        m_autoUpdate = false;
+        disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
+    }
+}
+
+void KWStatistics::selectionChanged()
+{
+    if (m_selection->count() != 1)
+        return;
+
+    KoShape *shape = m_selection->firstSelectedShape();
+    if (!shape) return;
+    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+    Q_ASSERT(frame);
+    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+    if (fs) {
+        if (m_textDocument && m_autoUpdate)
+            disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
+        m_textDocument = fs->document();
+        if (m_autoUpdate)
+            connect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
     }
 }
 

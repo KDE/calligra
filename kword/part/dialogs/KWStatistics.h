@@ -25,6 +25,8 @@
 
 #include <QWidget>
 
+class QTimer;
+class QTextDocument;
 class KoCanvasResourceProvider;
 class KoAction;
 class KoSelection;
@@ -34,12 +36,14 @@ class KWStatistics : public QWidget {
     Q_OBJECT
 public:
     KWStatistics(KoCanvasResourceProvider *provider, KWDocument *m_document,
-            QWidget *parent = 0, bool showInDocker = false);
+            KoSelection *selection = 0, QWidget *parent = 0);
 
 private slots:
     void updateResource(int which);
     void updateData();
     void updateDataUi();
+    void setAutoUpdate(int);
+    void selectionChanged();
 
 private:
     Ui::KWStatistics widget;
@@ -48,6 +52,8 @@ private:
     KoAction *m_action;
     KoSelection *m_selection;
     KWDocument *m_document;
+    QTextDocument *m_textDocument;
+    QTimer *m_timer;
 
     long m_charsWithSpace;
     long m_charsWithoutSpace;
@@ -57,6 +63,7 @@ private:
     long m_syllables;
     long m_paragraphs;
 
+    bool m_autoUpdate;
     bool m_showInDocker;
 };
 
