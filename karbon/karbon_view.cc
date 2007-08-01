@@ -54,7 +54,6 @@
 
 // Dockers.
 #include "vcolordocker.h"
-#include "vstrokedocker.h"
 #include "vdocumentdocker.h"
 #include "vstyledocker.h"
 #include "vtransformdocker.h"
@@ -108,6 +107,7 @@
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
+#include <KoDockRegistry.h>
 
 // kde header
 #include <kaction.h>
@@ -220,7 +220,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 	m_DocumentTab = 0L;
     m_stylePreview = 0L;
 	m_ColorManager = 0L;
-	m_strokeDocker = 0L;
 	m_styleDocker = 0L;
 	m_TransformDocker = 0L;
 	m_layerDocker = 0L;
@@ -268,7 +267,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 		//Create Dockers
 		createColorDock();
-		createStrokeDock();
 		createTransformDock();
 		//createDocumentTabDock();
 		createLayersTabDock();
@@ -1334,7 +1332,6 @@ KarbonView::selectionChanged()
         KoShape *shape = *selection->selectedShapes().begin();
         if( shape )
         {
-            m_strokeDocker->setStroke( shape->border() );
             if ( shell() ) {
                 //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
                     m_stylePreview->updateStyle( shape->border(), shape->background() );
@@ -1413,15 +1410,6 @@ void KarbonView::createLayersTabDock()
 	VLayerDockerFactory layerFactory( m_part, &part()->document() );
 	m_layerDocker = qobject_cast<VLayerDocker*>(createDockWidget(&layerFactory));
 	connect( this, SIGNAL( selectionChange() ), m_layerDocker, SLOT( updateView() ) );
-}
-
-void KarbonView::createStrokeDock()
-{
-	debugView("KarbonView::createStrokeDock()");
-
-	KoStrokeDockerFactory strokeFactory;
-	m_strokeDocker = qobject_cast<KoStrokeDocker*>(createDockWidget(&strokeFactory));
-	connect( part(), SIGNAL( unitChanged( KoUnit ) ), m_strokeDocker, SLOT( setUnit( KoUnit ) ) );
 }
 
 void KarbonView::createColorDock()

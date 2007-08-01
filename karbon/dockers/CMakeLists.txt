@@ -3,7 +3,6 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} $
 set(karbondockers_SRCS
     vcolordocker.cc
     vdocumentdocker.cc
-    vstrokedocker.cc
     vstyledocker.cc
     vtransformdocker.cc
     vlayerdocker.cpp

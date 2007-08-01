@@ -25,38 +25,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOSTROKEDOCKER_H
-#define KOSTROKEDOCKER_H
+#ifndef KARBONSTROKEDOCKER_H
+#define KARBONSTROKEDOCKER_H
 
-#include <KoDockFactory.h>
 #include <KoUnit.h>
 #include <QtGui/QDockWidget>
 
 class KoShapeBorderModel;
-
-// TODO move the docker to a plugin or into guiutils so other 
-// applications can use that too
-
-
-/// the factory which creates the stroke docker
-class KoStrokeDockerFactory : public KoDockFactory
-{
-public:
-    KoStrokeDockerFactory();
-
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-};
+class KoCanvasController;
 
 /// A docker for setting properties of a line border
-class KoStrokeDocker : public QDockWidget
+class KarbonStrokeDocker : public QDockWidget
 {
     Q_OBJECT
 
 public:
     /// Creates the stroke docker
-    KoStrokeDocker();
-    virtual ~KoStrokeDocker();
+    KarbonStrokeDocker();
+    virtual ~KarbonStrokeDocker();
 
 public slots:
     /// Sets the border to edit the properties of
@@ -81,10 +67,14 @@ private slots:
     void styleChanged();
     /// blocks/unblocks child control signals
     void blockChildSignals( bool block );
+    /// selection has changed
+    void selectionChanged();
+    /// canvas controller has changed
+    void canvasChanged( const KoCanvasController *controller );
 private:
     class Private;
     Private * const d;
 };
 
-#endif // KOSTROKEDOCKER_H
+#endif // KARBONSTROKEDOCKER_H
 

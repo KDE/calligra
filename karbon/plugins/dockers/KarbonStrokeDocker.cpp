@@ -27,7 +27,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vstrokedocker.h"
+#include "KarbonStrokeDocker.h"
 
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -40,7 +40,8 @@
 #include <KoSelection.h>
 #include <KoLineBorder.h>
 #include <KoLineStyleSelector.h>
-
+#include <KoCanvasController.h>
+// 
 #include <kiconloader.h>
 #include <klocale.h>
 
@@ -52,24 +53,7 @@
 #include <QDockWidget>
 #include <QButtonGroup>
 
-KoStrokeDockerFactory::KoStrokeDockerFactory()
-{
-}
-
-QString KoStrokeDockerFactory::id() const
-{
-    return QString("Stroke Properties");
-}
-
-QDockWidget* KoStrokeDockerFactory::createDockWidget()
-{
-    KoStrokeDocker* widget = new KoStrokeDocker();
-    widget->setObjectName(id());
-
-    return widget;
-}
-
-class KoStrokeDocker::Private
+class KarbonStrokeDocker::Private
 {
 public:
     Private() {}
@@ -81,7 +65,7 @@ public:
     KoLineBorder border;
 };
 
-KoStrokeDocker::KoStrokeDocker()
+KarbonStrokeDocker::KarbonStrokeDocker()
     : d( new Private() )
 {
     setWindowTitle( i18n( "Stroke Properties" ) );
@@ -92,9 +76,10 @@ KoStrokeDocker::KoStrokeDocker()
     QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
     mainLayout->addWidget( widthLabel, 0, 0 );
     // set min/max/step and value in points, then set actual unit
-    d->setLineWidth = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit(KoUnit::Point), 2 );
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    d->setLineWidth->setUnit( canvasController->canvas()->unit() );
+    d->setLineWidth = new KoUnitDoubleSpinBox( mainWidget );
+    d->setLineWidth->setMinMaxStep( 0.0, 1000.0, 0.5 );
+    d->setLineWidth->setDecimals( 1 );
+    d->setLineWidth->setUnit( KoUnit(KoUnit::Point) );
     d->setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
     mainLayout->addWidget( d->setLineWidth, 0, 1, 1, 3 );
     connect( d->setLineWidth, SIGNAL( valueChanged( double ) ), this, SLOT( widthChanged() ) );
@@ -162,8 +147,10 @@ KoStrokeDocker::KoStrokeDocker()
     QLabel* miterLabel = new QLabel( i18n ( "Miter limit:" ), mainWidget );
     mainLayout->addWidget( miterLabel, 3, 0 );
     // set min/max/step and value in points, then set actual unit
-    d->miterLimit = new KoUnitDoubleSpinBox( mainWidget, 0.0, 1000.0, 0.5, 1.0, KoUnit(KoUnit::Point), 2 );
-    d->miterLimit->setUnit( canvasController->canvas()->unit() );
+    d->miterLimit = new KoUnitDoubleSpinBox( mainWidget );
+    d->miterLimit->setMinMaxStep( 0.0, 1000.0, 0.5 );
+    d->miterLimit->setDecimals( 1 );
+    d->miterLimit->setUnit( KoUnit(KoUnit::Point) );
     d->miterLimit->setToolTip( i18n( "Set miter limit" ) );
     mainLayout->addWidget( d->miterLimit, 3, 1, 1, 3 );
     connect( d->miterLimit, SIGNAL( valueChanged( double ) ), this, SLOT( miterLimitChanged() ) );
@@ -183,14 +170,17 @@ KoStrokeDocker::KoStrokeDocker()
     setWidget( mainWidget );
 
     updateControls();
+
+    connect( KoToolManager::instance(), SIGNAL( changedCanvas( const KoCanvasController *) ), 
+             this, SLOT( canvasChanged(const KoCanvasController *) ) );
 }
 
-KoStrokeDocker::~KoStrokeDocker()
+KarbonStrokeDocker::~KarbonStrokeDocker()
 {
     delete d;
 }
 
-void KoStrokeDocker::applyChanges()
+void KarbonStrokeDocker::applyChanges()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -206,19 +196,19 @@ void KoStrokeDocker::applyChanges()
     canvasController->canvas()->addCommand( cmd );
 }
 
-void KoStrokeDocker::slotCapChanged( int ID )
+void KarbonStrokeDocker::slotCapChanged( int ID )
 {
     d->border.setCapStyle( static_cast<Qt::PenCapStyle>( ID ) );
     applyChanges();
 }
 
-void KoStrokeDocker::slotJoinChanged( int ID )
+void KarbonStrokeDocker::slotJoinChanged( int ID )
 {
     d->border.setJoinStyle( static_cast<Qt::PenJoinStyle>( ID ) );
     applyChanges();
 }
 
-void KoStrokeDocker::updateControls()
+void KarbonStrokeDocker::updateControls()
 {
     blockChildSignals( true );
 
@@ -231,25 +221,25 @@ void KoStrokeDocker::updateControls()
     blockChildSignals( false );
 }
 
-void KoStrokeDocker::widthChanged()
+void KarbonStrokeDocker::widthChanged()
 {
     d->border.setLineWidth( d->setLineWidth->value() );
     applyChanges();
 }
 
-void KoStrokeDocker::miterLimitChanged()
+void KarbonStrokeDocker::miterLimitChanged()
 {
     d->border.setMiterLimit( d->miterLimit->value() );
     applyChanges();
 }
 
-void KoStrokeDocker::styleChanged()
+void KarbonStrokeDocker::styleChanged()
 {
     d->border.setLineStyle( d->lineStyle->lineStyle(), d->lineStyle->lineDashes() );
     applyChanges();
 }
 
-void KoStrokeDocker::setStroke( const KoShapeBorderModel *border )
+void KarbonStrokeDocker::setStroke( const KoShapeBorderModel *border )
 {
     const KoLineBorder *lineBorder = dynamic_cast<const KoLineBorder*>( border );
     if( lineBorder )
@@ -271,14 +261,16 @@ void KoStrokeDocker::setStroke( const KoShapeBorderModel *border )
     updateControls();
 }
 
-void KoStrokeDocker::setUnit( KoUnit unit )
+void KarbonStrokeDocker::setUnit( KoUnit unit )
 {
+    // TODO this has to be connect to a unit changed signal
     blockChildSignals( true );
     d->setLineWidth->setUnit( unit );
+    d->miterLimit->setUnit( unit );
     blockChildSignals( false );
 }
 
-void KoStrokeDocker::blockChildSignals( bool block )
+void KarbonStrokeDocker::blockChildSignals( bool block )
 {
     d->setLineWidth->blockSignals( block );
     d->capGroup->blockSignals( block );
@@ -287,5 +279,22 @@ void KoStrokeDocker::blockChildSignals( bool block )
     d->lineStyle->blockSignals( block );
 }
 
-#include "vstrokedocker.moc"
+void KarbonStrokeDocker::selectionChanged()
+{
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( selection->count() )
+        setStroke( selection->firstSelectedShape()->border() );
+}
+
+void KarbonStrokeDocker::canvasChanged( const KoCanvasController *controller )
+{
+    if( controller )
+    {
+        connect( controller->canvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+        setUnit( controller->canvas()->unit() );
+    }
+}
+
+// #include "KarbonStrokeDocker.moc"
 
