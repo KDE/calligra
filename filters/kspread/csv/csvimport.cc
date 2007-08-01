@@ -133,11 +133,10 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     emit sigProgress(value);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    int i;
-    double init = ksdoc->defaultColumnFormat()->width();
+    const double defaultWidth = ksdoc->defaultColumnFormat()->width();
     QVector<double> widths( numCols );
-    for ( i = 0; i < numCols; ++i )
-      widths[i] = init;
+    for (int i = 0; i < numCols; ++i)
+        widths[i] = defaultWidth;
 
     Cell cell( sheet, 1, 1 );
     QFontMetrics fm( cell.style().font() );
@@ -198,11 +197,10 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
     emit sigProgress( 98 );
 
-    ElapsedTime t2( "Resizing columns" );
-    for ( i = 0; i < numCols; ++i )
+    for (int i = 0; i < numCols; ++i)
     {
-      ColumnFormat * c  = sheet->nonDefaultColumnFormat( i + 1 );
-      c->setWidth( widths[i] );
+        if (widths[i] > defaultWidth)
+            sheet->nonDefaultColumnFormat(i + 1)->setWidth(widths[i]);
     }
 
     // Restore the document's decimal symbol and thousands separator.
