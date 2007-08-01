@@ -441,7 +441,6 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter) {
 void TextTool::mousePressEvent( KoPointerEvent *event ) {
     const bool canMoveCaret = !m_caret.hasSelection() || event->button() !=  Qt::RightButton;
 
-    bool selectNewShape = false;
     if(canMoveCaret && ! m_textShape->boundingRect().contains(event->point)) {
         QRectF area(event->point, QSizeF(1,1));
         repaintSelection();
@@ -450,17 +449,14 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
             if(textShape) {
                 m_textShape = textShape;
                 KoTextShapeData *d = static_cast<KoTextShapeData*> (textShape->userData());
-                selectNewShape = true;
-                if(d->document() == m_textShapeData->document()) {
-                    selectNewShape = false;
+                if(d->document() == m_textShapeData->document())
                     break; // stop looking.
-                }
             }
         }
         setShapeData(static_cast<KoTextShapeData*> (m_textShape->userData()));
     }
-    if(selectNewShape) {
-        KoSelection *selection = m_canvas->shapeManager()->selection();
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if(!selection->isSelected(m_textShape)) {
         selection->deselectAll();
         selection->select(m_textShape);
     }
