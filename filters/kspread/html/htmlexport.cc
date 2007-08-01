@@ -263,7 +263,6 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             if (cell.needsPrinting())
                 nonempty_cells++;
             QString text;
-            QColor bgcolor = style.fontColor();
             // FIXME: some formatting seems to be missing with cell.userInput(), e.g.
             // "208.00" in KSpread will be "208" in HTML (not always?!)
             bool link = false;
@@ -302,6 +301,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             line += "  <" + html_cell_tag + html_cell_options;
 	    if (text.isRightToLeft() != (sheet->layoutDirection() == Qt::RightToLeft))
                 line += QString(" dir=\"%1\" ").arg(text.isRightToLeft()?"rtl":"ltr");
+            const QColor bgcolor = style.backgroundColor();
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
 
@@ -344,7 +344,7 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
                 currentcolumn += extra_cells;
             }
             text = text.trimmed();
-            if( text.at(0) == '!' ) {
+            if( !text.isEmpty() && text.at(0) == '!' ) {
                 // this is supposed to be markup, just remove the '!':
                 text = text.right(text.length()-1);
             } else if ( !link ) {
