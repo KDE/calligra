@@ -181,7 +181,6 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
 
     KoShapeSavingContext context (contentTmpWriter, savingContext);
 
-    kDebug() << "Ok, we're saving this document... It contains :" << frameSets().count();
     foreach(KWFrameSet *fs, frameSets()) {
         // TODO loop over all non-autocreated frames and save them.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
