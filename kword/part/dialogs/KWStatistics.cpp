@@ -32,15 +32,14 @@
 #include <QTextBlock>
 #include <QTextLayout>
 
-KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
+KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, QWidget *parent, bool showInDocker)
     : QWidget(parent),
     m_resourceProvider(provider),
     m_action(new KoAction(this)),
-    m_selection(selection),
-    m_document(document)
+    m_document(document),
+    m_showInDocker(showInDocker)
 {
-    if (m_selection) {
-        m_showInDocker = true;
+    if (m_showInDocker) {
         widgetDocker.setupUi(this);
         widgetDocker.refresh->setIcon(KIcon("view-refresh"));
         widgetDocker.autoRefresh->setEnabled(false);
@@ -48,7 +47,6 @@ KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* docum
         connect(widgetDocker.refresh, SIGNAL(pressed()), this, SLOT(updateData()));
     }
     else {
-        m_showInDocker = false;
         widget.setupUi(this);
         m_action->setExecutePolicy(KoExecutePolicy::onlyLastPolicy);
 

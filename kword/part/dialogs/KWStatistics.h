@@ -34,7 +34,7 @@ class KWStatistics : public QWidget {
     Q_OBJECT
 public:
     KWStatistics(KoCanvasResourceProvider *provider, KWDocument *m_document,
-            KoSelection *selection = 0, QWidget *parent = 0);
+            QWidget *parent = 0, bool showInDocker = false);
 
 private slots:
     void updateResource(int which);
