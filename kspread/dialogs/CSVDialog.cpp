@@ -41,7 +41,7 @@
 #include "Sheet.h"
 #include "View.h"
 
-#include "commands/DataManipulators.h"
+#include "commands/CSVDataCommand.h"
 
 using namespace KSpread;
 
@@ -162,24 +162,33 @@ void CSVDialog::accept()
   else
     m_targetRect.setBottom( m_targetRect.top() + numRows - 1 );
 
-  Value val( Value::Array );
-  for (int row = 0; row < numRows; ++row)
-    for (int col = 0; col < numCols; ++col)
-      val.setElement (col, row, Value(text(row, col)));
+    QList<KoCsvImportDialog::DataType> dataTypes;
+    Value value(Value::Array);
+    for (int row = 0; row < numRows; ++row)
+    {
+        for (int col = 0; col < numCols; ++col)
+        {
+            value.setElement(col, row, Value(text(row, col)));
+            if (row == 0)
+                dataTypes.insert(col, dataType(col));
+        }
+    }
 
-  DataManipulator *manipulator = new DataManipulator;
-  if ( m_mode == Clipboard )
-    manipulator->setText( i18n( "Inserting From Clipboard" ) );
-  else if ( m_mode == File )
-      manipulator->setText( i18n( "Inserting Text File" ) );
-  else
-    manipulator->setText( i18n( "Text to Columns" ) );
-  manipulator->setSheet (sheet);
-  manipulator->setParsing (true);
-  manipulator->setFormat (Format::Generic);
-  manipulator->setValue (val);
-  manipulator->add (m_targetRect);
-  manipulator->execute ();
+    CSVDataCommand* command = new CSVDataCommand();
+    if (m_mode == Clipboard)
+        command->setText(i18n("Inserting From Clipboard"));
+    else if (m_mode == File)
+        command->setText(i18n("Inserting Text File"));
+    else
+        command->setText(i18n("Text to Columns"));
+    command->setSheet(sheet);
+    command->setValue(value);
+    command->setColumnDataTypes(dataTypes);
+    command->setDecimalSymbol(decimalSymbol());
+    command->setThousandsSeparator(thousandsSeparator());
+    command->add(m_targetRect);
+    if (!command->execute())
+        delete command;
 
   m_pView->slotUpdateView( sheet );
   KoCsvImportDialog::accept();

@@ -41,6 +41,7 @@ SET (commands_DIR_SRCS
 	commands/AutoFormatCommand.cpp
 	commands/CommentCommand.cpp
 	commands/ConditionCommand.cpp
+	commands/CSVDataCommand.cpp
 	commands/DataManipulators.cpp
 	commands/DefinePrintRangeCommand.cpp
 	commands/DeleteCommand.cpp
