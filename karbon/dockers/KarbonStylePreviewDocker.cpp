@@ -92,9 +92,9 @@ QString KarbonStylePreviewDockerFactory::id() const
     return QString("Style Preview");
 }
 
-Qt::DockWidgetArea KarbonStylePreviewDockerFactory::defaultDockWidgetArea() const
+Qt::Dock KarbonStylePreviewDockerFactory::defaultDockPosition() const
 {
-    return Qt::LeftDockWidgetArea;
+    return Qt::DockLeft;
 }
 
 QDockWidget* KarbonStylePreviewDockerFactory::createDockWidget()

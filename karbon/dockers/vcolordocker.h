@@ -42,7 +42,6 @@ public:
     VColorDockerFactory();
 
     virtual QString id() const;
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
     virtual QDockWidget* createDockWidget();
 };
 

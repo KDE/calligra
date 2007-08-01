@@ -63,11 +63,6 @@ QString VTransformDockerFactory::id() const
     return QString("Transform");
 }
 
-Qt::DockWidgetArea VTransformDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* VTransformDockerFactory::createDockWidget()
 {
     VTransformDocker* widget = new VTransformDocker();

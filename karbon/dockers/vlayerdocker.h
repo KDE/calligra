@@ -39,7 +39,6 @@ public:
     VLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document );
 
     virtual QString id() const;
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
     virtual QDockWidget* createDockWidget();
 private:
     KoShapeControllerBase * m_shapeController;

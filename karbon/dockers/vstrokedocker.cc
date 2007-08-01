@@ -61,11 +61,6 @@ QString KoStrokeDockerFactory::id() const
     return QString("Stroke Properties");
 }
 
-Qt::DockWidgetArea KoStrokeDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* KoStrokeDockerFactory::createDockWidget()
 {
     KoStrokeDocker* widget = new KoStrokeDocker();

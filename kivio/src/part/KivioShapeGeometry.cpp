@@ -262,11 +262,6 @@ QString KivioShapeGeometryFactory::id() const
     return QString("KivioShapeGeometry");
 }
 
-Qt::DockWidgetArea KivioShapeGeometryFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* KivioShapeGeometryFactory::createDockWidget()
 {
     KivioShapeGeometry* dockWidget = new KivioShapeGeometry(m_doc);

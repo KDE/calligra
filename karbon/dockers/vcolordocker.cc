@@ -65,11 +65,6 @@ QString VColorDockerFactory::id() const
     return QString("Color Chooser");
 }
 
-Qt::DockWidgetArea VColorDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* VColorDockerFactory::createDockWidget()
 {
     VColorDocker* widget = new VColorDocker();

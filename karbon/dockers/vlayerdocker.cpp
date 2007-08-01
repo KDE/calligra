@@ -67,11 +67,6 @@ QString VLayerDockerFactory::id() const
     return QString("Layer view");
 }
 
-Qt::DockWidgetArea VLayerDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* VLayerDockerFactory::createDockWidget()
 {
     VLayerDocker* widget = new VLayerDocker( m_shapeController, m_document);

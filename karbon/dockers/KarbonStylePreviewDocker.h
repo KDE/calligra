@@ -51,7 +51,7 @@ public:
     KarbonStylePreviewDockerFactory();
 
     virtual QString id() const;
-    virtual Qt::DockWidgetArea defaultDockWidgetArea() const;
+    virtual Qt::Dock defaultDockPosition() const;
     virtual QDockWidget* createDockWidget();
 };
 

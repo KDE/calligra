@@ -66,11 +66,6 @@ QString KWStatisticsDockerFactory::id() const
     return QString("Statistics");
 }
 
-Qt::DockWidgetArea KWStatisticsDockerFactory::defaultDockWidgetArea() const
-{
-    return Qt::RightDockWidgetArea;
-}
-
 QDockWidget* KWStatisticsDockerFactory::createDockWidget()
 {
     KWStatisticsDocker *widget = new KWStatisticsDocker(m_view);
