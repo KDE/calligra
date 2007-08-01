@@ -50,7 +50,7 @@ KisPNGExport::~KisPNGExport()
 
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(41008) <<"Png export! From:" << from <<", To:" << to <<"";
+    kDebug(41008) <<"Png export! From:" << from <<", To:" << to <<"" << endl;
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
@@ -113,12 +113,11 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
 
-
     if ( (res = kpc.buildFile(url, img, l->paintDevice(), beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
-        kDebug(41008) <<"success !";
+        kDebug(41008) <<"success !" << endl;
         return KoFilter::OK;
     }
-    kDebug(41008) <<" Result =" << res;
+    kDebug(41008) <<" Result =" << res << endl;
     return KoFilter::InternalError;
 }
 

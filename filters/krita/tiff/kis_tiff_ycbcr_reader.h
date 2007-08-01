@@ -37,7 +37,7 @@ public:
      */
     KisTIFFYCbCrReaderTarget8Bit( KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position );
     ~KisTIFFYCbCrReaderTarget8Bit();
-    virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream);
+    virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
     virtual void finalize();
 private:
     quint8* m_bufferCb;
@@ -58,7 +58,7 @@ public:
      */
     KisTIFFYCbCrReaderTarget16Bit( KisPaintDeviceSP device, quint32 width, quint32 height, quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position );
     ~KisTIFFYCbCrReaderTarget16Bit();
-    virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream);
+    virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
     virtual void finalize();
 private:
     quint16* m_bufferCb;

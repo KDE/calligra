@@ -43,7 +43,7 @@
 
 #include "kis_tiff_reader.h"
 #include "kis_tiff_ycbcr_reader.h"
-#include "kis_tiff_stream.h"
+#include "kis_buffer_stream.h"
 #include "kis_tiff_writer_visitor.h"
 
 namespace {
@@ -353,7 +353,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     KisPaintLayer* layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX);
     tdata_t buf = 0;
     tdata_t* ps_buf = 0; // used only for planar configuration separated
-    TIFFStreamBase* tiffstream;
+    KisBufferStreamBase* tiffstream;
 
     KisTIFFReaderBase* tiffReader = 0;
 
@@ -461,12 +461,12 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             buf = _TIFFmalloc(TIFFTileSize(image));
             if(depth < 16)
             {
-                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth, linewidth);
+                tiffstream = new KisBufferStreamContigBelow16((uint8*)buf, depth, linewidth);
             } else if(depth < 32)
             {
-                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth, linewidth);
+                tiffstream = new KisBufferStreamContigBelow32((uint8*)buf, depth, linewidth);
             } else {
-                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth, linewidth);
+                tiffstream = new KisBufferStreamContigAbove32((uint8*)buf, depth, linewidth);
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
@@ -477,7 +477,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 ps_buf[i] = _TIFFmalloc(baseSize);
                 lineSizes[i] = baseSize / lineSizeCoeffs[i];
             }
-            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
+            tiffstream = new KisBufferStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
             delete [] lineSizes;
         }
         kDebug(41008) << linewidth <<"" << nbchannels <<"" << layer->paintDevice()->colorSpace()->colorChannelCount();
@@ -516,12 +516,12 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             buf = _TIFFmalloc(stripsize);
             if(depth < 16)
             {
-                tiffstream = new TIFFStreamContigBelow16((uint8*)buf, depth, stripsize/rowsPerStrip);
+                tiffstream = new KisBufferStreamContigBelow16((uint8*)buf, depth, stripsize/rowsPerStrip);
             } else if(depth < 32)
             {
-                tiffstream = new TIFFStreamContigBelow32((uint8*)buf, depth, stripsize/rowsPerStrip);
+                tiffstream = new KisBufferStreamContigBelow32((uint8*)buf, depth, stripsize/rowsPerStrip);
             } else {
-                tiffstream = new TIFFStreamContigAbove32((uint8*)buf, depth, stripsize/rowsPerStrip);
+                tiffstream = new KisBufferStreamContigAbove32((uint8*)buf, depth, stripsize/rowsPerStrip);
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
@@ -533,7 +533,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 ps_buf[i] = _TIFFmalloc(stripsize);
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
-            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
+            tiffstream = new KisBufferStreamSeperate( (uint8**) ps_buf, nbchannels, depth, lineSizes);
             delete [] lineSizes;
         }
 

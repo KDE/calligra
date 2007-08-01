@@ -22,7 +22,7 @@
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 
-#include "kis_tiff_stream.h"
+#include "kis_buffer_stream.h"
 
 
 KisTIFFYCbCrReaderTarget8Bit::KisTIFFYCbCrReaderTarget8Bit( KisPaintDeviceSP device, quint32 width, quint32 height,quint8* poses, int8 alphapos, uint8 sourceDepth, uint8 nbcolorssamples, uint8 extrasamplescount,  cmsHTRANSFORM transformProfile, KisTIFFPostProcessor* postprocessor, uint16 hsub, uint16 vsub, KisTIFFYCbCr::Position position ) : KisTIFFReaderBase(device, poses, alphapos, sourceDepth,  nbcolorssamples, extrasamplescount, transformProfile, postprocessor), m_hsub(hsub), m_vsub(vsub), m_position(position)
@@ -44,7 +44,7 @@ KisTIFFYCbCrReaderTarget8Bit::~KisTIFFYCbCrReaderTarget8Bit()
     delete[] m_bufferCr;
 }
 
-uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
+uint KisTIFFYCbCrReaderTarget8Bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
     int numcols = dataWidth / m_hsub;
     double coeff = quint8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
@@ -116,7 +116,7 @@ KisTIFFYCbCrReaderTarget16Bit::~KisTIFFYCbCrReaderTarget16Bit()
     delete[] m_bufferCr;
 }
 
-uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
+uint KisTIFFYCbCrReaderTarget16Bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
 {
     int numcols = dataWidth / m_hsub;
     double coeff = quint16_MAX / (double)( pow(2, sourceDepth() ) - 1 );

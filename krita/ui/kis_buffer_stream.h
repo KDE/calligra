@@ -17,28 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TIFFSTREAM_H_
-#define TIFFSTREAM_H_
+#ifndef _KIS_BUFFER_STREAM_H_
+#define _KIS_BUFFER_STREAM_H_
 
 #include <tiffio.h>
 
-class TIFFStreamBase {
+#include <krita_export.h>
+
+class KRITAUI_EXPORT KisBufferStreamBase {
     public:
-       TIFFStreamBase( uint16 depth ) : m_depth(depth) {}
+       KisBufferStreamBase( uint16 depth ) : m_depth(depth) {}
         virtual uint32 nextValue() =0;
         virtual void restart() =0;
         virtual void moveToLine(uint32 lineNumber) =0;
-		virtual ~TIFFStreamBase(){}
+		virtual ~KisBufferStreamBase(){}
     protected:
         uint16 m_depth;
 };
 
-class TIFFStreamContigBase : public TIFFStreamBase {
+class KRITAUI_EXPORT KisBufferStreamContigBase : public KisBufferStreamBase {
     public:
-        TIFFStreamContigBase( uint8* src, uint16 depth, uint32 lineSize );
+        KisBufferStreamContigBase( uint8* src, uint16 depth, uint32 lineSize );
         virtual void restart();
         virtual void moveToLine(uint32 lineNumber);
-		virtual ~TIFFStreamContigBase() {}
+		virtual ~KisBufferStreamContigBase() {}
     protected:
         uint8* m_src;
         uint8* m_srcit;
@@ -46,40 +48,40 @@ class TIFFStreamContigBase : public TIFFStreamBase {
         uint32 m_lineSize;
 };
 
-class TIFFStreamContigBelow16 : public TIFFStreamContigBase {
+class KRITAUI_EXPORT KisBufferStreamContigBelow16 : public KisBufferStreamContigBase {
     public:
-        TIFFStreamContigBelow16( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamContigBase(src, depth, lineSize) { }
+        KisBufferStreamContigBelow16( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
-		virtual ~TIFFStreamContigBelow16() {}
+		virtual ~KisBufferStreamContigBelow16() {}
         virtual uint32 nextValue();
 };
 
-class TIFFStreamContigBelow32 : public TIFFStreamContigBase {
+class KRITAUI_EXPORT KisBufferStreamContigBelow32 : public KisBufferStreamContigBase {
     public:
-        TIFFStreamContigBelow32( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamContigBase(src, depth, lineSize) { }
+        KisBufferStreamContigBelow32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
-		virtual ~TIFFStreamContigBelow32() {}
+		virtual ~KisBufferStreamContigBelow32() {}
         virtual uint32 nextValue();
 };
 
-class TIFFStreamContigAbove32 : public TIFFStreamContigBase {
+class KRITAUI_EXPORT KisBufferStreamContigAbove32 : public KisBufferStreamContigBase {
     public:
-        TIFFStreamContigAbove32( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamContigBase(src, depth, lineSize) { }
+        KisBufferStreamContigAbove32( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamContigBase(src, depth, lineSize) { }
     public:
-		virtual ~TIFFStreamContigAbove32(){}
+		virtual ~KisBufferStreamContigAbove32(){}
         virtual uint32 nextValue();
 };
 
 
-class TIFFStreamSeperate : public TIFFStreamBase {
+class KRITAUI_EXPORT KisBufferStreamSeperate : public KisBufferStreamBase {
     public:
-        TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize);
-        virtual ~TIFFStreamSeperate();
+        KisBufferStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize);
+        virtual ~KisBufferStreamSeperate();
         virtual uint32 nextValue();
         virtual void restart();
         virtual void moveToLine(uint32 lineNumber);
     private:
-        TIFFStreamContigBase** streams;
+        KisBufferStreamContigBase** streams;
         uint8 m_current_sample, m_nb_samples;
 };
 

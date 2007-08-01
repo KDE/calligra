@@ -24,9 +24,9 @@
 #include <kis_iterators_pixel.h>
 #include <kis_paint_device.h>
 
-#include "kis_tiff_stream.h"
+#include "kis_buffer_stream.h"
 
-    uint KisTIFFReaderTarget8bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderTarget8bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint8_MAX / (double)( pow(2, sourceDepth() ) - 1 );
@@ -52,7 +52,7 @@
         }
         return 1;
     }
-    uint KisTIFFReaderTarget16bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderTarget16bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint16_MAX / (double)( pow(2, sourceDepth() ) - 1 );
@@ -79,7 +79,7 @@
         return 1;
     }
     
-    uint KisTIFFReaderTarget32bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderTarget32bit::copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         double coeff = quint32_MAX / (double)( pow(2, sourceDepth() ) - 1 );
@@ -105,7 +105,7 @@
         }
         return 1;
     }
-    uint KisTIFFReaderFromPalette::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth,  TIFFStreamBase* tiffstream)
+    uint KisTIFFReaderFromPalette::copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth,  KisBufferStreamBase* tiffstream)
     {
         KisHLineIterator it = paintDevice() -> createHLineIterator(x, y, dataWidth);
         while (!it.isDone()) {

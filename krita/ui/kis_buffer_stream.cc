@@ -17,23 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
  
-#include "kis_tiff_stream.h"
+#include "kis_buffer_stream.h"
 
-TIFFStreamContigBase::TIFFStreamContigBase( uint8* src, uint16 depth, uint32 lineSize ) : TIFFStreamBase(depth), m_src(src), m_lineSize(lineSize) { restart(); }
+KisBufferStreamContigBase::KisBufferStreamContigBase( uint8* src, uint16 depth, uint32 lineSize ) : KisBufferStreamBase(depth), m_src(src), m_lineSize(lineSize) { restart(); }
 
-void TIFFStreamContigBase::restart()
+void KisBufferStreamContigBase::restart()
 {
     m_srcit = m_src;
     m_posinc = 8;
 }
 
-void TIFFStreamContigBase::moveToLine(uint32 lineNumber)
+void KisBufferStreamContigBase::moveToLine(uint32 lineNumber)
 {
     m_srcit = m_src + lineNumber * m_lineSize;
     m_posinc = 8;
 }
 
-uint32 TIFFStreamContigBelow16::nextValue()
+uint32 KisBufferStreamContigBelow16::nextValue()
 {
     register uint8 remain;
     register uint32 value;
@@ -56,7 +56,7 @@ uint32 TIFFStreamContigBelow16::nextValue()
     return value;
 }
 
-uint32 TIFFStreamContigBelow32::nextValue()
+uint32 KisBufferStreamContigBelow32::nextValue()
 {
     register uint8 remain;
     register uint32 value;
@@ -79,7 +79,7 @@ uint32 TIFFStreamContigBelow32::nextValue()
     return value;
 }
 
-uint32 TIFFStreamContigAbove32::nextValue()
+uint32 KisBufferStreamContigAbove32::nextValue()
 {
     register uint8 remain;
     register uint32 value;
@@ -105,31 +105,31 @@ uint32 TIFFStreamContigAbove32::nextValue()
     return value;
 }
 
-TIFFStreamSeperate::TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize) : TIFFStreamBase(depth), m_nb_samples(nb_samples)
+KisBufferStreamSeperate::KisBufferStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth, uint32* lineSize) : KisBufferStreamBase(depth), m_nb_samples(nb_samples)
 {
-    streams = new TIFFStreamContigBase*[nb_samples];
+    streams = new KisBufferStreamContigBase*[nb_samples];
     if(depth < 16)
     {
         for(uint8 i = 0; i < m_nb_samples; i++)
         {
-            streams[i] = new TIFFStreamContigBelow16(srcs[i], depth, lineSize[i]);
+            streams[i] = new KisBufferStreamContigBelow16(srcs[i], depth, lineSize[i]);
         }
     } else if( depth < 32 )
     {
         for(uint8 i = 0; i < m_nb_samples; i++)
         {
-            streams[i] = new TIFFStreamContigBelow32(srcs[i], depth, lineSize[i]);
+            streams[i] = new KisBufferStreamContigBelow32(srcs[i], depth, lineSize[i]);
         }
     } else {
         for(uint8 i = 0; i < m_nb_samples; i++)
         {
-            streams[i] = new TIFFStreamContigAbove32(srcs[i], depth, lineSize[i]);
+            streams[i] = new KisBufferStreamContigAbove32(srcs[i], depth, lineSize[i]);
         }
     }
     restart();
 }
 
-TIFFStreamSeperate::~TIFFStreamSeperate()
+KisBufferStreamSeperate::~KisBufferStreamSeperate()
 {
     for(uint8 i = 0; i < m_nb_samples; i++)
     {
@@ -138,7 +138,7 @@ TIFFStreamSeperate::~TIFFStreamSeperate()
     delete[] streams;
 }
 
-uint32 TIFFStreamSeperate::nextValue()
+uint32 KisBufferStreamSeperate::nextValue()
 {
     uint32 value = streams[ m_current_sample ]->nextValue();
     if( (++m_current_sample) >= m_nb_samples)
@@ -146,7 +146,7 @@ uint32 TIFFStreamSeperate::nextValue()
     return value;
 }
 
-void TIFFStreamSeperate::restart()
+void KisBufferStreamSeperate::restart()
 {
     m_current_sample = 0;
     for(uint8 i = 0; i < m_nb_samples; i++)
@@ -155,7 +155,7 @@ void TIFFStreamSeperate::restart()
     }
 }
 
-void TIFFStreamSeperate::moveToLine(uint32 lineNumber)
+void KisBufferStreamSeperate::moveToLine(uint32 lineNumber)
 {
     for(uint8 i = 0; i < m_nb_samples; i++)
     {

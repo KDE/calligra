@@ -4,7 +4,6 @@ include_directories(${KRITA_INCLUDES})
 
 set(libkritatiffconverter_LIB_SRCS
     kis_tiff_converter.cc
-    kis_tiff_stream.cc
     kis_tiff_writer_visitor.cpp
     kis_tiff_reader.cc
     kis_tiff_ycbcr_reader.cc

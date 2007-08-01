@@ -41,7 +41,7 @@
 
 #define quint32_MAX 4294967295u
 
-class TIFFStreamBase;
+class KisBufferStreamBase;
 
 class KisTIFFPostProcessor {
     public:
@@ -138,7 +138,7 @@ class KisTIFFReaderBase {
          * 
          * @return the number of line which were copied
          */
-        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream) =0;
+        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) =0;
         /**
          * This function is called when all data has been read and should be used for any postprocessing.
          */
@@ -171,7 +171,7 @@ class KisTIFFReaderTarget8bit : public KisTIFFReaderBase {
             
         }
     public:
-        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream);
+        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream);
 };
 
 
@@ -182,7 +182,7 @@ class KisTIFFReaderTarget16bit : public KisTIFFReaderBase {
             
         }
     public:
-        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, TIFFStreamBase* tiffstream) ;
+        virtual uint copyDataToChannels( Q_UINT32 x, Q_UINT32 y, Q_UINT32 dataWidth, KisBufferStreamBase* tiffstream) ;
 };
 
 class KisTIFFReaderTarget32bit : public KisTIFFReaderBase {
@@ -192,7 +192,7 @@ class KisTIFFReaderTarget32bit : public KisTIFFReaderBase {
             
         }
     public:
-        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream) ;
+        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
 };
 
 class KisTIFFReaderFromPalette : public  KisTIFFReaderBase {
@@ -202,7 +202,7 @@ class KisTIFFReaderFromPalette : public  KisTIFFReaderBase {
             
         }
     public:
-        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, TIFFStreamBase* tiffstream) ;
+        virtual uint copyDataToChannels( quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase* tiffstream) ;
     private:
         uint16 *m_red,  *m_green, *m_blue;
 };
