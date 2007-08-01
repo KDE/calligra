@@ -134,7 +134,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
     int i;
-    double init = sheet->nonDefaultColumnFormat( 1 )->width();
+    double init = ksdoc->defaultColumnFormat()->width();
     QVector<double> widths( numCols );
     for ( i = 0; i < numCols; ++i )
       widths[i] = init;
