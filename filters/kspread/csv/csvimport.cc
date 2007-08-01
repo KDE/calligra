@@ -105,6 +105,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
     KoCsvImportDialog* dialog = new KoCsvImportDialog(0);
     dialog->setData(inputFile);
+    dialog->setDecimalSymbol(ksdoc->locale()->decimalSymbol());
+    dialog->setThousandsSeparator(ksdoc->locale()->thousandsSeparator());
     if (!m_chain->manager()->getBatchMode() && !dialog->exec())
         return KoFilter::UserCancelled;
     inputFile.resize( 0 ); // Release memory (input file content)
@@ -118,6 +120,12 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
     if (numRows == 0)
       ++numRows;
+
+    // Initialize the decimal symbol and thousands separator to use for parsing.
+    const QString documentDecimalSymbol = ksdoc->locale()->decimalSymbol();
+    const QString documentThousandsSeparator= ksdoc->locale()->thousandsSeparator();
+    ksdoc->locale()->setDecimalSymbol(dialog->decimalSymbol());
+    ksdoc->locale()->setThousandsSeparator(dialog->thousandsSeparator());
 
     int step = 100 / numRows * numCols;
     int value = 0;
@@ -196,6 +204,10 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
       ColumnFormat * c  = sheet->nonDefaultColumnFormat( i + 1 );
       c->setWidth( widths[i] );
     }
+
+    // Restore the document's decimal symbol and thousands separator.
+    ksdoc->locale()->setDecimalSymbol(documentDecimalSymbol);
+    ksdoc->locale()->setThousandsSeparator(documentThousandsSeparator);
 
     emit sigProgress( 100 );
     QApplication::restoreOverrideCursor();
