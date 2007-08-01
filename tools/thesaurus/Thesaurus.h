@@ -74,7 +74,6 @@ private slots:
     void slotForward();
 
 private:
-    void findTerm(const QString &term);
     void findTermThesaurus(const QString &term);
     void findTermWordnet(const QString &term);
     QString formatLine(const QString &line) const;

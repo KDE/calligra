@@ -192,8 +192,6 @@ Thesaurus::Thesaurus()
 
     m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
-    // m_resultTextBrowser->setTextFormat(Qt::RichText);
-    // TODO?: m_resultbox->setMimeSourceFactory(...); to avoid warning
     connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
     wnLayout->addWidget(m_resultTextBrowser);
 
@@ -377,7 +375,7 @@ void Thesaurus::slotSetReplaceTermHypo(QListWidgetItem *item)
 // Triggered when Return is pressed.
 void Thesaurus::slotFindTerm()
 {
-    findTerm(m_edit->currentText());
+    slotFindTerm(m_edit->currentText());
 }
 
 // Triggered when a list item is double-clicked.
@@ -390,6 +388,7 @@ void Thesaurus::slotFindTermFromList(QListWidgetItem *item)
 void Thesaurus::slotFindTermFromUrl(const QUrl &url)
 {
     slotFindTerm(url.toString());
+    m_replaceLineEdit->setText(url.toString());
 }
 
 // Triggered when a word is clicked
@@ -406,14 +405,9 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
             m_edit->setCurrentIndex(0);
         }
         updateNavButtons();
-        findTerm(term);
+        findTermThesaurus(term);
+        findTermWordnet(term);
     }
-}
-
-void Thesaurus::findTerm(const QString &term)
-{
-    findTermThesaurus(term);
-    findTermWordnet(term);
 }
 
 //
@@ -538,7 +532,7 @@ void Thesaurus::findTermWordnet(const QString &term)
     *m_wnProc << term;
 
     // get all results: nouns, verbs, adjectives, adverbs (see below for order):
-    if (m_wnComboBox->currentIndex() == 0) {
+    if (m_wnComboBox->currentIndex() == -1 || m_wnComboBox->currentIndex() == 0) {
         *m_wnProc << "-synsn" << "-synsv" << "-synsa" << "-synsr";
         m_mode = other;
     }
@@ -595,7 +589,7 @@ void Thesaurus::findTermWordnet(const QString &term)
     }
     *m_wnProc << "-g";    // "Display gloss"
 
-    int current = m_wnComboBox->currentIndex();    // remember current position
+    int current = m_wnComboBox->currentIndex() != -1 ? m_wnComboBox->currentIndex() : 0;    // remember current position
     m_wnComboBox->clear();
 
     // warning: order matters!
@@ -701,7 +695,6 @@ void Thesaurus::findTermWordnet(const QString &term)
         }
         result += "\n</table></qt>\n";
         m_resultTextBrowser->setHtml(result);
-//         m_resultbox->setContentsPos(0,0);
         //kDebug() << result;
     }
 }
