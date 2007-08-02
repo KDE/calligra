@@ -1,5 +1,8 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 The Karbon Developers
+   Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,36 +27,36 @@
 #include <kdialog.h>
 
 class KarbonView;
-class VFlattenDlg;
+class FlattenDlg;
 
 class FlattenPathPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	FlattenPathPlugin( KarbonView *parent, const QStringList & );
-	virtual ~FlattenPathPlugin() {}
+    FlattenPathPlugin( KarbonView *parent, const QStringList & );
+    virtual ~FlattenPathPlugin() {}
 
 private slots:
-	void slotFlattenPath();
+    void slotFlattenPath();
 
 private:
-	VFlattenDlg	*m_flattenPathDlg;
+    FlattenDlg *m_flattenPathDlg;
 };
 
 class KDoubleNumInput;
 
-class VFlattenDlg : public KDialog
+class FlattenDlg : public KDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	VFlattenDlg( QWidget* parent = 0L, const char* name = 0L );
+    FlattenDlg( QWidget* parent = 0L, const char* name = 0L );
 
-	double flatness() const;
-	void setFlatness( double value );
+    double flatness() const;
+    void setFlatness( double value );
 
 private:
-	KDoubleNumInput* m_flatness;
+    KDoubleNumInput* m_flatness;
 };
 
 #endif
