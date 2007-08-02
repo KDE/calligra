@@ -27,6 +27,8 @@
 #include "../core/Voice.h"
 #include "../core/Part.h"
 #include "../core/VoiceBar.h"
+#include "../core/Sheet.h"
+#include "../core/Bar.h"
 
 #include <kicon.h>
 #include <kdebug.h>
@@ -96,7 +98,18 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
         c->addNote(staff, pitch);
     }
     Voice* voice = staff->part()->voice(m_tool->voice());
-    voice->bar(bar)->addElement(c);
+    VoiceBar* vb = voice->bar(bar);
+
+    // find element before which to insert the chord
+    int before = 0;
+    double realX = pos.x() / staff->part()->sheet()->bar(bar)->scale();
+    for (int i = 0; i < vb->elementCount(); i++) {
+        VoiceElement* e = vb->element(i);
+        if (e->x() >= realX) break;
+        before++;
+    }
+
+    vb->insertElement(c, before);
     m_tool->shape()->engrave();
     m_tool->shape()->repaint();
 }
