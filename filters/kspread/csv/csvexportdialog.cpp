@@ -223,7 +223,7 @@ void CSVExportDialog::selectionOnlyChanged( bool on )
   m_dialog->m_delimiterLineBox->setEnabled( !on );
 
   if ( on )
-    m_dialog->m_tabWidget->setCurrentPage( 1 );
+    m_dialog->m_tabWidget->setCurrentIndex( 1 );
 }
 
 bool CSVExportDialog::exportSelectionOnly() const
@@ -237,7 +237,7 @@ QTextCodec* CSVExportDialog::getCodec(void) const
     kDebug(30502) <<"Encoding:" << strCodec;
 
     bool ok = false;
-    QTextCodec* codec = QTextCodec::codecForName( strCodec.utf8() );
+    QTextCodec* codec = QTextCodec::codecForName( strCodec.toUtf8() );
 
     // If QTextCodec has not found a valid encoding, so try with KCharsets.
     if ( codec )

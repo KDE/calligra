@@ -309,7 +309,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
              tabctr = tabnostr;
 
              // Searching for the rowcol part and adding to the hole string
-             pos = my_rc.tabname.findIndex (tabnostr);
+             pos = my_rc.tabname.indexOf(tabnostr);
              if (pos > -1) str += my_rc.rc[pos];
           }
 
@@ -639,7 +639,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
         return KoFilter::StorageCreationError;
     }
 
-    QByteArray cstring = str.utf8();
+    QByteArray cstring = str.toUtf8();
     out->write ( cstring, cstring.length() );
 
     in.close  ();
