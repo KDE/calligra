@@ -40,8 +40,10 @@ SET (musicshape_LIB_SRCS
     dialogs/PartsWidget.cpp
     dialogs/PartDetailsDialog.cpp
     dialogs/SimpleEntryWidget.cpp
-
     dialogs/PartsListModel.cpp
+
+    actions/AbstractMusicAction.cpp
+    actions/NoteEntryAction.cpp
 
     commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp

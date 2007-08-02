@@ -97,7 +97,7 @@ public:
      * specified and no clef changes are found in the given bar, this method returns oldClef instead of searching for
      * older clef changes.
      */
-    Clef* lastClefChange(int bar, int time, Clef* oldClef = 0);
+    Clef* lastClefChange(int bar, int time = -1, Clef* oldClef = 0);
 public slots:
     /**
      * Set the spacing between this staff and the staff above it.

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,46 +16,14 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Voice.h"
-#include "VoiceBar.h"
-#include "Bar.h"
-#include "Part.h"
-#include "Sheet.h"
-#include <QtCore/QList>
+#include "AbstractMusicAction.h"
+#include "../SimpleEntryTool.h"
 
-namespace MusicCore {
-
-class Voice::Private
+AbstractMusicAction::AbstractMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool)
+    : QAction(icon, text, tool)
+    , m_tool(tool)
 {
-public:
-    Part* part;
-};
-
-Voice::Voice(Part* part) : d(new Private)
-{
-    d->part = part;
+    setCheckable(true);
 }
 
-Voice::~Voice()
-{
-    delete d;
-}
-
-Part* Voice::part()
-{
-    return d->part;
-}
-
-VoiceBar* Voice::bar(Bar* bar)
-{
-    return bar->voice(this);
-}
-
-VoiceBar* Voice::bar(int barIdx)
-{
-    return bar(part()->sheet()->bar(barIdx));
-}
-
-} // namespace MusicCore
-
-#include "Voice.moc"
+#include "AbstractMusicAction.moc"

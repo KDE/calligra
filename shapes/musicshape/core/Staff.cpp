@@ -125,6 +125,7 @@ int Staff::line(double y) const
 
 Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
 {
+    if (time < 0) time = INT_MAX;
     for (int b = bar; b >= 0; b--) {
         Bar* curBar = part()->sheet()->bar(b);
         for (int i = curBar->staffElementCount(this)-1; i >= 0; i--) {

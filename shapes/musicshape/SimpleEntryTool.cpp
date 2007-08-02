@@ -20,10 +20,10 @@
 #include <QGridLayout>
 #include <QToolButton>
 #include <QTabWidget>
+#include <QPair>
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kiconloader.h>
 #include <KFileDialog>
 
 #include <KoCanvasBase.h>
@@ -39,6 +39,8 @@
 
 #include "dialogs/SimpleEntryWidget.h"
 
+#include "actions/NoteEntryAction.h"
+
 #include "core/Sheet.h"
 #include "core/Part.h"
 #include "core/Staff.h"
@@ -53,68 +55,86 @@ using namespace MusicCore;
 SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     : KoTool( canvas ),
     m_musicshape(0),
-    m_duration(MusicCore::Chord::Quarter),
     m_voice(0)
 {
-    QActionGroup* noteGroup = new QActionGroup(this);
-    connect(noteGroup, SIGNAL(triggered(QAction*)), this, SLOT(noteLengthChanged(QAction*)));
-    
-    m_actionBreveNote = new QAction(KIcon("music-note-breve"), i18n("Double whole note"), this);
-    addAction("note_breve", m_actionBreveNote);
-    m_actionBreveNote->setCheckable(true);
-    noteGroup->addAction(m_actionBreveNote);
-    m_actionBreveNote->setData(MusicCore::Chord::Breve);
-    
-    m_actionWholeNote = new QAction(KIcon("music-note-whole"), i18n("Whole note"), this);
-    addAction("note_whole", m_actionWholeNote);
-    m_actionWholeNote->setCheckable(true);
-    noteGroup->addAction(m_actionWholeNote);
-    m_actionWholeNote->setData(MusicCore::Chord::Whole);
-    
-    m_actionHalfNote = new QAction(KIcon("music-note-half"), i18n("Half note"), this);
-    addAction("note_half", m_actionHalfNote);
-    m_actionHalfNote->setCheckable(true);
-    noteGroup->addAction(m_actionHalfNote);
-    m_actionHalfNote->setData(MusicCore::Chord::Half);
-    
-    m_actionQuarterNote = new QAction(KIcon("music-note-quarter"), i18n("Quarter note"), this);
-    addAction("note_quarter", m_actionQuarterNote);
-    m_actionQuarterNote->setCheckable(true);
-    noteGroup->addAction(m_actionQuarterNote);
-    m_actionQuarterNote->setData(MusicCore::Chord::Quarter);
-    
-    m_actionNote8 = new QAction(KIcon("music-note-eighth"), i18n("Eighth note"), this);
-    addAction("note_eighth", m_actionNote8);
-    m_actionNote8->setCheckable(true);
-    noteGroup->addAction(m_actionNote8);
-    m_actionNote8->setData(MusicCore::Chord::Eighth);
-    
-    m_actionNote16 = new QAction(KIcon("music-note-16th"), i18n("16th note"), this);
-    addAction("note_16th", m_actionNote16);
-    m_actionNote16->setCheckable(true);
-    noteGroup->addAction(m_actionNote16);
-    m_actionNote16->setData(MusicCore::Chord::Sixteenth);
-    
-    m_actionNote32 = new QAction(KIcon("music-note-32nd"), i18n("32nd note"), this);
-    addAction("note_32nd", m_actionNote32);
-    m_actionNote32->setCheckable(true);
-    noteGroup->addAction(m_actionNote32);
-    m_actionNote32->setData(MusicCore::Chord::ThirtySecond);
-    
-    m_actionNote64 = new QAction(KIcon("music-note-64th"), i18n("64th note"), this);
-    addAction("note_64th", m_actionNote64);
-    m_actionNote64->setCheckable(true);
-    noteGroup->addAction(m_actionNote64);
-    m_actionNote64->setData(MusicCore::Chord::SixtyFourth);
-    
-    m_actionNote128 = new QAction(KIcon("music-note-128th"), i18n("128th note"), this);
-    addAction("note_128th", m_actionNote128);
-    m_actionNote128->setCheckable(true);
-    noteGroup->addAction(m_actionNote128);
-    m_actionNote128->setData(MusicCore::Chord::HundredTwentyEighth);
-    
-    
-    m_actionQuarterNote->setChecked(true);
+    QActionGroup* actionGroup = new QActionGroup(this);
+    connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
+
+    AbstractMusicAction* actionBreveNote = new NoteEntryAction(Chord::Breve, false, this);
+    addAction("note_breve", actionBreveNote);
+    actionGroup->addAction(actionBreveNote);
+
+    AbstractMusicAction* actionWholeNote = new NoteEntryAction(Chord::Whole, false, this);
+    addAction("note_whole", actionWholeNote);
+    actionGroup->addAction(actionWholeNote);
+
+    AbstractMusicAction* actionHalfNote = new NoteEntryAction(Chord::Half, false, this);
+    addAction("note_half", actionHalfNote);
+    actionGroup->addAction(actionHalfNote);
+
+    AbstractMusicAction* actionQuarterNote = new NoteEntryAction(Chord::Quarter, false, this);
+    addAction("note_quarter", actionQuarterNote);
+    actionGroup->addAction(actionQuarterNote);
+
+    AbstractMusicAction* actionNote8 = new NoteEntryAction(Chord::Eighth, false, this);
+    addAction("note_eighth", actionNote8);
+    actionGroup->addAction(actionNote8);
+
+    AbstractMusicAction* actionNote16 = new NoteEntryAction(Chord::Sixteenth, false, this);
+    addAction("note_16th", actionNote16);
+    actionGroup->addAction(actionNote16);
+
+    AbstractMusicAction* actionNote32 = new NoteEntryAction(Chord::ThirtySecond, false, this);
+    addAction("note_32nd", actionNote32);
+    actionGroup->addAction(actionNote32);
+
+    AbstractMusicAction* actionNote64 = new NoteEntryAction(Chord::SixtyFourth, false, this);
+    addAction("note_64th", actionNote64);
+    actionGroup->addAction(actionNote64);
+
+    AbstractMusicAction* actionNote128 = new NoteEntryAction(Chord::HundredTwentyEighth, false, this);
+    addAction("note_128th", actionNote128);
+    actionGroup->addAction(actionNote128);
+
+    AbstractMusicAction* actionBreveRest = new NoteEntryAction(Chord::Breve, true, this);
+    addAction("rest_breve", actionBreveRest);
+    actionGroup->addAction(actionBreveRest);
+
+    AbstractMusicAction* actionWholeRest = new NoteEntryAction(Chord::Whole, true, this);
+    addAction("rest_whole", actionWholeRest);
+    actionGroup->addAction(actionWholeRest);
+
+    AbstractMusicAction* actionHalfRest = new NoteEntryAction(Chord::Half, true, this);
+    addAction("rest_half", actionHalfRest);
+    actionGroup->addAction(actionHalfRest);
+
+    AbstractMusicAction* actionQuarterRest = new NoteEntryAction(Chord::Quarter, true, this);
+    addAction("rest_quarter", actionQuarterRest);
+    actionGroup->addAction(actionQuarterRest);
+
+    AbstractMusicAction* actionRest8 = new NoteEntryAction(Chord::Eighth, true, this);
+    addAction("rest_eighth", actionRest8);
+    actionGroup->addAction(actionRest8);
+
+    AbstractMusicAction* actionRest16 = new NoteEntryAction(Chord::Sixteenth, true, this);
+    addAction("rest_16th", actionRest16);
+    actionGroup->addAction(actionRest16);
+
+    AbstractMusicAction* actionRest32 = new NoteEntryAction(Chord::ThirtySecond, true, this);
+    addAction("rest_32nd", actionRest32);
+    actionGroup->addAction(actionRest32);
+
+    AbstractMusicAction* actionRest64 = new NoteEntryAction(Chord::SixtyFourth, true, this);
+    addAction("rest_64th", actionRest64);
+    actionGroup->addAction(actionRest64);
+
+    AbstractMusicAction* actionRest128 = new NoteEntryAction(Chord::HundredTwentyEighth, true, this);
+    addAction("rest_128th", actionRest128);
+    actionGroup->addAction(actionRest128);
+
+
+    actionQuarterNote->setChecked(true);
+    m_activeAction = actionQuarterNote;
 }
 
 SimpleEntryTool::~SimpleEntryTool()
@@ -124,8 +144,6 @@ SimpleEntryTool::~SimpleEntryTool()
 void SimpleEntryTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
-    kDebug() << k_funcinfo;
-    
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
     {
@@ -159,12 +177,8 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
             m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), Qt::red);
         }
     }
-    
-    double sl = 3.5;
-    if (m_duration < MusicCore::Chord::Sixteenth) sl += 1;
-    if (m_duration < MusicCore::Chord::ThirtySecond) sl += 1;
-    
-    m_musicshape->renderer()->renderNote(painter, m_duration, m_point, sl * 5, Qt::gray);
+
+    m_activeAction->renderPreview(painter, m_point);
 }
 
 void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
@@ -205,15 +219,15 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
         }
     }
 
-    int line = closestStaff->line(yrel - closestStaff->top());
-    kDebug() <<"line:" << line;
-    
+//    int line = closestStaff->line(yrel - closestStaff->top());
+//    kDebug() << "line: " << line << endl;
+
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {
         part->addVoice();
     }
     Voice* voice = part->voice(m_voice);
-    
+
     // find correct bar
     Bar* bar = 0;
     int barIdx = -1;
@@ -227,9 +241,9 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
     if (!bar) return;
-
+/*
     Clef* clef = closestStaff->lastClefChange(barIdx, INT_MAX);
-    
+
     Chord* c = new Chord(closestStaff, m_duration);
     if (clef) {
         kDebug() <<"clef:" << clef->shape();
@@ -239,7 +253,8 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
     voice->bar(bar)->addElement(c);
     m_musicshape->engrave();
-    m_musicshape->repaint();
+    m_musicshape->repaint();*/
+    m_activeAction->mousePress(closestStaff, barIdx, QPointF(p.x() - bar->position().x(), yrel - closestStaff->top()));
 }
 
 void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
@@ -263,17 +278,27 @@ QWidget * SimpleEntryTool::createOptionWidget()
     SimpleEntryWidget* widget = new SimpleEntryWidget(this);
 
     connect(widget, SIGNAL(voiceChanged(int)), this, SLOT(voiceChanged(int)));
-    
+
     return widget;
 }
 
-void SimpleEntryTool::noteLengthChanged(QAction* action)
+void SimpleEntryTool::activeActionChanged(QAction* action)
 {
-    m_duration = static_cast<MusicCore::Chord::Duration>(action->data().value<int>());
+    m_activeAction = qobject_cast<AbstractMusicAction*>(action);
 }
 
 void SimpleEntryTool::voiceChanged(int voice)
 {
     m_voice = voice;
     m_musicshape->repaint();
+}
+
+MusicShape* SimpleEntryTool::shape()
+{
+    return m_musicshape;
+}
+
+int SimpleEntryTool::voice()
+{
+    return m_voice;
 }

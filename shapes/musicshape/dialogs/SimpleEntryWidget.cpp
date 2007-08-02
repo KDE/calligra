@@ -35,6 +35,16 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     widget.note64Button->setDefaultAction(tool->action("note_64th"));
     widget.note128Button->setDefaultAction(tool->action("note_128th"));
 
+    widget.breveRestButton->setDefaultAction(tool->action("rest_breve"));
+    widget.wholeRestButton->setDefaultAction(tool->action("rest_whole"));
+    widget.halfRestButton->setDefaultAction(tool->action("rest_half"));
+    widget.quarterRestButton->setDefaultAction(tool->action("rest_quarter"));
+    widget.rest8Button->setDefaultAction(tool->action("rest_eighth"));
+    widget.rest16Button->setDefaultAction(tool->action("rest_16th"));
+    widget.rest32Button->setDefaultAction(tool->action("rest_32nd"));
+    widget.rest64Button->setDefaultAction(tool->action("rest_64th"));
+    widget.rest128Button->setDefaultAction(tool->action("rest_128th"));
+
     connect(widget.voiceList, SIGNAL(currentIndexChanged(int)), this, SIGNAL(voiceChanged(int)));
 }
 

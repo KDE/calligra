@@ -66,6 +66,8 @@ public:
      * @param bar the bar for which to return the VoiceBar instance.
      */
     VoiceBar* bar(Bar* bar);
+
+    VoiceBar* bar(int barIdx);
 private:
     class Private;
     Private * const d;

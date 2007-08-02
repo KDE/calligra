@@ -217,12 +217,17 @@ static double stemLength(Chord::Duration duration)
     return 0;
 }
 
+void MusicRenderer::renderRest(QPainter& painter, Chord::Duration duration, QPointF pos, const QColor& color)
+{
+    m_style->renderRest(painter, pos.x(), pos.y(), duration, color);
+}
+
 void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, RenderState& state, double xScale, const QColor& color)
 {
     double x = chord->x() * xScale;
     if (chord->noteCount() == 0) { // a rest
         Staff *s = chord->staff();
-        m_style->renderRest( painter, ref.x() + x, ref.y() + s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing(), chord->duration(), color );
+        renderRest(painter, chord->duration(), ref + QPointF(x, s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing()), color);
         return;
     }
     Note *n = chord->note(0);
@@ -265,7 +270,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, Re
     if (n->accidentals()) {
         m_style->renderAccidental( painter, ref.x() + x - 10, ref.y() + chord->y() + s->top() + line * s->lineSpacing() / 2, n->accidentals(), color );
     }
-    
+
     // render dots of notes
     double dotX = x + 11;
     painter.setPen(m_style->noteDotPen());

@@ -25,7 +25,7 @@
 
 class MusicShape;
 class QUndoCommand;
-class QAction;
+class AbstractMusicAction;
 
 /**
  * Tool that provides functionality to insert/remove notes/rests. Named after Finale's Simple Entry tool.
@@ -36,38 +36,31 @@ class SimpleEntryTool : public KoTool
     public:
         explicit SimpleEntryTool( KoCanvasBase* canvas );
         ~SimpleEntryTool();
-        
+
         virtual void paint( QPainter& painter, const KoViewConverter& converter );
-        
+
         virtual void mousePressEvent( KoPointerEvent* event ) ;
         virtual void mouseMoveEvent( KoPointerEvent* event );
         virtual void mouseReleaseEvent( KoPointerEvent* event );
-        
+
         void activate (bool temporary=false);
         void deactivate();
-        
+
         void addCommand(QUndoCommand* command);
+
+        MusicShape* shape();
+        int voice();
     protected:
         /*
          * Create default option widget
          */
         virtual QWidget * createOptionWidget();
-        
     protected slots:
-        void noteLengthChanged(QAction* action);
+        void activeActionChanged(QAction* action);
         void voiceChanged(int voice);
     private:
         MusicShape *m_musicshape;
-        QAction *m_actionBreveNote;
-        QAction *m_actionWholeNote;
-        QAction *m_actionHalfNote;
-        QAction *m_actionQuarterNote;
-        QAction *m_actionNote8;
-        QAction *m_actionNote16;
-        QAction *m_actionNote32;
-        QAction *m_actionNote64;
-        QAction *m_actionNote128;
-        MusicCore::Chord::Duration m_duration;
+        AbstractMusicAction* m_activeAction;
         QPointF m_point;
         int m_voice;
 };
