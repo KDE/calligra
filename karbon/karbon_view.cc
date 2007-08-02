@@ -153,7 +153,7 @@
 #define KARBON_DEBUG_VIEW
 
 #ifdef KARBON_DEBUG_VIEW
-#define debugView(text) kDebug(38000) <<"KARBON_DEBUG_VIEW:" << text << endl
+#define debugView(text) kDebug(38000) <<"KARBON_DEBUG_VIEW:" << text
 #else
 #define debugView(text)
 #endif
