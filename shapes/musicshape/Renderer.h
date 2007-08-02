@@ -51,15 +51,15 @@ public:
     void renderPart(QPainter& painter, MusicCore::Part* part);
     void renderStaff(QPainter& painter, MusicCore::Staff* staff);
     void renderVoice(QPainter& painter, MusicCore::Voice* voice, const QColor& color = Qt::black);
-    void renderElement(QPainter& painter, MusicCore::VoiceElement* element, QPointF pos, RenderState& state, double xScale, const QColor& color = Qt::black);
-    void renderStaffElement(QPainter& painter, MusicCore::StaffElement* element, QPointF pos, RenderState& state, double xScale);
+    void renderElement(QPainter& painter, MusicCore::VoiceElement* element, const QPointF& pos, RenderState& state, double xScale, const QColor& color = Qt::black);
+    void renderStaffElement(QPainter& painter, MusicCore::StaffElement* element, const QPointF& pos, RenderState& state, double xScale);
 
-    void renderClef(QPainter& painter, MusicCore::Clef* clef, QPointF pos, RenderState& state, double xScale);
-    void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, QPointF pos, RenderState& state, double xScale);
-    void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, QPointF pos, double xScale);
-    void renderChord(QPainter& painter, MusicCore::Chord* chord, QPointF ref, RenderState& state, double xScale, const QColor& color = Qt::black);
-    void renderRest(QPainter& painter, MusicCore::Chord::Duration duration, QPointF pos, const QColor& color = Qt::black);
-    void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, QPointF pos, double stemLength, const QColor& color = Qt::black);
+    void renderClef(QPainter& painter, MusicCore::Clef* clef, const QPointF& pos, RenderState& state, double xScale);
+    void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, const QPointF& pos, RenderState& state, double xScale);
+    void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, const QPointF& pos, double xScale);
+    void renderChord(QPainter& painter, MusicCore::Chord* chord, const QPointF& ref, RenderState& state, double xScale, const QColor& color = Qt::black);
+    void renderRest(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, const QColor& color = Qt::black);
+    void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, double stemLength, const QColor& color = Qt::black);
 private:
     MusicStyle* m_style;
     bool m_debug;

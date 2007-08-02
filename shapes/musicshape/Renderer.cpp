@@ -97,7 +97,7 @@ void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, const QColor& c
     }
 }
 
-void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, QPointF pos, RenderState& state, double xScale, const QColor& color)
+void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, const QPointF& pos, RenderState& state, double xScale, const QColor& color)
 {
     double top = 0;
     if (me->staff()) top += me->staff()->top();
@@ -112,7 +112,7 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, QPointF p
     if (c) renderChord(painter, c, pos, state, xScale, color);
 }
 
-void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, QPointF pos, RenderState& state, double xScale)
+void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, const QPointF& pos, RenderState& state, double xScale)
 {
     double top = 0;
     top += se->staff()->top();
@@ -131,14 +131,14 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
 }
 
 
-void MusicRenderer::renderClef(QPainter& painter, Clef *c, QPointF pos, RenderState& state, double xScale)
+void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, RenderState& state, double xScale)
 {
     state.clef = c;
     Staff* s = c->staff();
     m_style->renderClef(painter, pos.x() + c->x() * xScale, pos.y() + s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }
 
-void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, QPointF pos, RenderState& state, double xScale)
+void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, const QPointF& pos, RenderState& state, double xScale)
 {
     Staff * s = ks->staff();
     double curx = pos.x() + ks->x() * xScale;
@@ -187,7 +187,7 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, QPoi
     }
 }
 
-void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, QPointF pos, double xScale)
+void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, const QPointF& pos, double xScale)
 {
     Staff* s = ts->staff();
     double hh = 0.5 * (s->lineCount() - 1) * s->lineSpacing();
@@ -217,12 +217,12 @@ static double stemLength(Chord::Duration duration)
     return 0;
 }
 
-void MusicRenderer::renderRest(QPainter& painter, Chord::Duration duration, QPointF pos, const QColor& color)
+void MusicRenderer::renderRest(QPainter& painter, Chord::Duration duration, const QPointF& pos, const QColor& color)
 {
     m_style->renderRest(painter, pos.x(), pos.y(), duration, color);
 }
 
-void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, RenderState& state, double xScale, const QColor& color)
+void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& ref, RenderState& state, double xScale, const QColor& color)
 {
     double x = chord->x() * xScale;
     if (chord->noteCount() == 0) { // a rest
@@ -280,7 +280,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, QPointF ref, Re
     }
 }
 
-void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, QPointF pos, double stemLength, const QColor& color)
+void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, double stemLength, const QColor& color)
 {
     m_style->renderNoteHead(painter, pos.x(), pos.y(), duration, color);
 

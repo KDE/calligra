@@ -85,7 +85,7 @@ void NoteEntryAction::renderPreview(QPainter& painter, const QPointF& point)
     }
 }
 
-void NoteEntryAction::mousePress(Staff* staff, int bar, QPointF pos)
+void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
 {
     Clef* clef = staff->lastClefChange(bar);
 
