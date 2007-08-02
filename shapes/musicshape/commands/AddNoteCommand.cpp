@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,36 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "AddPartCommand.h"
-#include "../core/Sheet.h"
-#include "../core/Part.h"
+#include "AddNoteCommand.h"
+
+#include "../core/Note.h"
 #include "../MusicShape.h"
 
 #include <klocale.h>
 
 using namespace MusicCore;
 
-AddPartCommand::AddPartCommand(MusicShape* shape)
-    : m_sheet(shape->sheet()),
-    m_shape(shape)
+AddNoteCommand::AddNoteCommand(MusicShape* shape, Chord* chord, Staff* staff, Chord::Duration duration, int pitch)
+    : m_shape(shape), m_chord(chord), m_oldDuration(chord->duration()), m_newDuration(duration)
 {
-    setText(i18n("Add part"));
-    m_part = new Part(m_sheet, QString("Part %1").arg(m_sheet->partCount() + 1));
-    m_part->addStaff();
+    setText(i18n("Add note"));
+    m_note = new Note(staff, pitch);
 }
 
-void AddPartCommand::redo()
+void AddNoteCommand::redo()
 {
-    m_sheet->addPart(m_part);
-    m_sheet->setStaffSystemCount(0);
+    m_chord->setDuration(m_newDuration);
+    m_chord->addNote(m_note);
     m_shape->engrave();
     m_shape->repaint();
+
 }
 
-void AddPartCommand::undo()
+void AddNoteCommand::undo()
 {
-    m_sheet->removePart(m_part, false);
-    m_sheet->setStaffSystemCount(0);
+    m_chord->setDuration(m_oldDuration);
+    m_chord->removeNote(m_note, false);
     m_shape->engrave();
     m_shape->repaint();
 }

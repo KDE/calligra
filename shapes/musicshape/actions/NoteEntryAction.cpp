@@ -30,6 +30,9 @@
 #include "../core/Sheet.h"
 #include "../core/Bar.h"
 
+#include "../commands/CreateChordCommand.h"
+#include "../commands/AddNoteCommand.h"
+
 #include <kicon.h>
 #include <kdebug.h>
 
@@ -106,26 +109,24 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
     Chord* join = NULL;
     if (before > 0) join = dynamic_cast<Chord*>(vb->element(before-1));
     if (join && join->x() + join->width() >= realX) {
-        join->setDuration(m_duration);
+        //join->setDuration(m_duration);
         if (clef && !m_isRest) {
             int line = staff->line(pos.y());
             int pitch = clef->lineToPitch(line);
-            join->addNote(staff, pitch);
+            m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, m_duration, pitch));
+            //join->addNote(staff, pitch);
         } else {
             // make it a rest
         }
         kDebug() << "join!";
     } else {
-        Chord* c = new Chord(staff, m_duration);
         if (clef && !m_isRest) {
             int line = staff->line(pos.y());
             int pitch = clef->lineToPitch(line);
-            c->addNote(staff, pitch);
+            m_tool->addCommand(new CreateChordCommand(m_tool->shape(), vb, staff, m_duration, before, pitch));
+        } else {
+            m_tool->addCommand(new CreateChordCommand(m_tool->shape(), vb, staff, m_duration, before));
         }
-
-        vb->insertElement(c, before);
     }
-    m_tool->shape()->engrave();
-    m_tool->shape()->repaint();
 }
 

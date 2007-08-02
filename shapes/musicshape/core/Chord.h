@@ -123,6 +123,7 @@ public:
      */
     void removeNote(int index, bool deleteNote = true);
 
+    void removeNote(Note* note, bool deleteNote = true);
     /**
      * This method converts a duration to a number of ticks.
      */

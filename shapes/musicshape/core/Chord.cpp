@@ -133,6 +133,14 @@ void Chord::removeNote(int index, bool deleteNote)
     }
 }
 
+void Chord::removeNote(Note* note, bool deleteNote)
+{
+    Q_ASSERT( note );
+    int index = d->notes.indexOf(note);
+    Q_ASSERT( index != -1 );
+    removeNote(index, deleteNote);
+}
+
 int Chord::durationToTicks(Duration duration)
 {
     switch (duration) {

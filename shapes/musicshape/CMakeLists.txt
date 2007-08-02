@@ -49,6 +49,8 @@ SET (musicshape_LIB_SRCS
     commands/RemovePartCommand.cpp
     commands/ChangePartNameCommand.cpp
     commands/ChangePartAbbreviationCommand.cpp
+    commands/CreateChordCommand.cpp
+    commands/AddNoteCommand.cpp
 
     ${musiccore_SRCS}
 )

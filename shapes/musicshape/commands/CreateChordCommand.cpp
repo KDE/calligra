@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,36 +16,42 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "AddPartCommand.h"
-#include "../core/Sheet.h"
-#include "../core/Part.h"
+#include "CreateChordCommand.h"
+
+#include "../core/VoiceBar.h"
 #include "../MusicShape.h"
 
 #include <klocale.h>
 
 using namespace MusicCore;
 
-AddPartCommand::AddPartCommand(MusicShape* shape)
-    : m_sheet(shape->sheet()),
-    m_shape(shape)
+
+CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Chord::Duration duration, int before, int pitch)
+    : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
-    setText(i18n("Add part"));
-    m_part = new Part(m_sheet, QString("Part %1").arg(m_sheet->partCount() + 1));
-    m_part->addStaff();
+    setText(i18n("Add chord"));
+    m_chord = new Chord(staff, duration);
+    m_chord->addNote(staff, pitch);
 }
 
-void AddPartCommand::redo()
+CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Chord::Duration duration, int before)
+    : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
-    m_sheet->addPart(m_part);
-    m_sheet->setStaffSystemCount(0);
+    setText(i18n("Add rest"));
+    m_chord = new Chord(staff, duration);
+}
+
+void CreateChordCommand::redo()
+{
+    m_voiceBar->insertElement(m_chord, m_before);
     m_shape->engrave();
     m_shape->repaint();
+
 }
 
-void AddPartCommand::undo()
+void CreateChordCommand::undo()
 {
-    m_sheet->removePart(m_part, false);
-    m_sheet->setStaffSystemCount(0);
+    m_voiceBar->removeElement(m_chord, false);
     m_shape->engrave();
     m_shape->repaint();
 }

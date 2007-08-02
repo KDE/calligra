@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,36 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "AddPartCommand.h"
-#include "../core/Sheet.h"
-#include "../core/Part.h"
-#include "../MusicShape.h"
+#ifndef ADDNOTECOMMAND_H
+#define ADDNOTECOMMAND_H
 
-#include <klocale.h>
+#include <QUndoCommand>
 
-using namespace MusicCore;
+#include "../core/Chord.h"
 
-AddPartCommand::AddPartCommand(MusicShape* shape)
-    : m_sheet(shape->sheet()),
-    m_shape(shape)
-{
-    setText(i18n("Add part"));
-    m_part = new Part(m_sheet, QString("Part %1").arg(m_sheet->partCount() + 1));
-    m_part->addStaff();
+namespace MusicCore {
+    class Staff;
+    class Note;
 }
+class MusicShape;
 
-void AddPartCommand::redo()
-{
-    m_sheet->addPart(m_part);
-    m_sheet->setStaffSystemCount(0);
-    m_shape->engrave();
-    m_shape->repaint();
-}
+class AddNoteCommand : public QUndoCommand {
+public:
+    AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int pitch);
+    virtual void redo();
+    virtual void undo();
+private:
+    MusicShape* m_shape;
+    MusicCore::Chord* m_chord;
+    MusicCore::Chord::Duration m_oldDuration, m_newDuration;
+    MusicCore::Note* m_note;
+};
 
-void AddPartCommand::undo()
-{
-    m_sheet->removePart(m_part, false);
-    m_sheet->setStaffSystemCount(0);
-    m_shape->engrave();
-    m_shape->repaint();
-}
+#endif // ADDNOTECOMMAND_H
