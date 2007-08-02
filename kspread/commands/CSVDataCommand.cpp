@@ -100,6 +100,7 @@ bool CSVDataCommand::preProcessing()
     m_documentThousandsSeparator = m_sheet->doc()->locale()->thousandsSeparator();
     m_sheet->doc()->locale()->setDecimalSymbol(m_decimalSymbol);
     m_sheet->doc()->locale()->setThousandsSeparator(m_thousandsSeparator);
+    return true;
 }
 
 bool CSVDataCommand::postProcessing()
@@ -111,4 +112,5 @@ bool CSVDataCommand::postProcessing()
     m_sheet->doc()->locale()->setThousandsSeparator(m_documentThousandsSeparator);
     m_documentDecimalSymbol.clear();
     m_documentThousandsSeparator.clear();
+    return true;
 }
