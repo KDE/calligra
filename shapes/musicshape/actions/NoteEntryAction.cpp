@@ -81,7 +81,7 @@ void NoteEntryAction::renderPreview(QPainter& painter, const QPointF& point)
         double sl = 3.5;
         if (m_duration < MusicCore::Chord::Sixteenth) sl += 1;
         if (m_duration < MusicCore::Chord::ThirtySecond) sl += 1;
-        m_tool->shape()->renderer()->renderNote(painter, m_duration, point, sl * 5, Qt::gray);
+        m_tool->shape()->renderer()->renderNote(painter, m_duration, point - QPointF(3, 0), sl * 5, Qt::gray);
     } else {
         m_tool->shape()->renderer()->renderRest(painter, m_duration, point, Qt::gray);
     }
@@ -91,12 +91,6 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
 {
     Clef* clef = staff->lastClefChange(bar);
 
-    Chord* c = new Chord(staff, m_duration);
-    if (clef && !m_isRest) {
-        int line = staff->line(pos.y());
-        int pitch = clef->lineToPitch(line);
-        c->addNote(staff, pitch);
-    }
     Voice* voice = staff->part()->voice(m_tool->voice());
     VoiceBar* vb = voice->bar(bar);
 
@@ -109,7 +103,28 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
         before++;
     }
 
-    vb->insertElement(c, before);
+    Chord* join = NULL;
+    if (before > 0) join = dynamic_cast<Chord*>(vb->element(before-1));
+    if (join && join->x() + join->width() >= realX) {
+        join->setDuration(m_duration);
+        if (clef && !m_isRest) {
+            int line = staff->line(pos.y());
+            int pitch = clef->lineToPitch(line);
+            join->addNote(staff, pitch);
+        } else {
+            // make it a rest
+        }
+        kDebug() << "join!";
+    } else {
+        Chord* c = new Chord(staff, m_duration);
+        if (clef && !m_isRest) {
+            int line = staff->line(pos.y());
+            int pitch = clef->lineToPitch(line);
+            c->addNote(staff, pitch);
+        }
+
+        vb->insertElement(c, before);
+    }
     m_tool->shape()->engrave();
     m_tool->shape()->repaint();
 }

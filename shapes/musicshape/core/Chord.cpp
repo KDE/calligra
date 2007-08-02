@@ -72,6 +72,12 @@ void Chord::setDuration(Duration duration)
 {
     if (d->duration == duration) return;
     d->duration = duration;
+    int baseLength = durationToTicks(d->duration);
+    int length = baseLength;
+    for (int i = 0; i < d->dots; i++) {
+        length += baseLength >> (i+1);
+    }
+    setLength(length);
     emit durationChanged(duration);
 }
 
