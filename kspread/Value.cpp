@@ -864,3 +864,61 @@ QTextStream& operator<<( QTextStream& ts, Value value )
   }
   return ts;
 }
+
+/***************************************************************************
+  QHash/QSet support
+****************************************************************************/
+
+uint qHash(const Value& value)
+{
+    switch (value.type())
+    {
+    case Value::Empty:
+    case Value::CellRange:
+        return 0;
+    case Value::Boolean:
+        return qHash(value.asBoolean());
+    case Value::Integer:
+        return qHash(value.asInteger());
+    case Value::Float:
+        return qHash((qint64)numToDouble(value.asFloat()));
+    case Value::Complex:
+        return qHash((qint64)value.asComplex().real());
+    case Value::String:
+        return qHash(value.asString());
+    case Value::Array:
+        return qHash(value.element(0, 0));
+    case Value::Error:
+        return qHash(value.errorMessage());
+    }
+}
+
+/***************************************************************************
+  kDebug support
+****************************************************************************/
+
+kdbgstream operator<<(kdbgstream str, const KSpread::Value& v)
+{
+    QString string;
+    QTextStream stream(&string);
+    stream << v;
+    str << string;
+    return str;
+}
+
+kdbgstream operator<<(kdbgstream stream, const KSpread::Value::Format& f)
+{
+    switch (f)
+    {
+        case KSpread::Value::fmt_None:     stream << "None";     break;
+        case KSpread::Value::fmt_Boolean:  stream << "Boolean";  break;
+        case KSpread::Value::fmt_Number:   stream << "Number";   break;
+        case KSpread::Value::fmt_Percent:  stream << "Percent";  break;
+        case KSpread::Value::fmt_Money:    stream << "Money";    break;
+        case KSpread::Value::fmt_DateTime: stream << "DateTime"; break;
+        case KSpread::Value::fmt_Date:     stream << "Date";     break;
+        case KSpread::Value::fmt_Time:     stream << "Time";     break;
+        case KSpread::Value::fmt_String:   stream << "String";   break;
+    }
+    return stream;
+}

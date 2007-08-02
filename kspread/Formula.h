@@ -20,6 +20,7 @@
 #ifndef KSPREAD_FORMULA
 #define KSPREAD_FORMULA
 
+#include <QHash>
 #include <QSharedDataPointer>
 #include <QString>
 #include <QTextStream>
@@ -368,6 +369,15 @@ bool isIdentifier( QChar ch );
 } // namespace KSpread
 
 Q_DECLARE_TYPEINFO( KSpread::Formula, Q_MOVABLE_TYPE );
+
+/***************************************************************************
+  QHash/QSet support
+****************************************************************************/
+
+inline uint qHash(const KSpread::Formula& formula)
+{
+    return qHash(formula.expression());
+}
 
 #endif // KSPREAD_FORMULA
 

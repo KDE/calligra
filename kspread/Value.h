@@ -457,37 +457,25 @@ private:
 
 Q_DECLARE_TYPEINFO( KSpread::Value, Q_MOVABLE_TYPE );
 
+
+/***************************************************************************
+  QTextStream support
+****************************************************************************/
+
 KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value::Type type );
 KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
+
+/***************************************************************************
+  QHash/QSet support
+****************************************************************************/
+
+uint qHash(const KSpread::Value& value);
 
 /***************************************************************************
   kDebug support
 ****************************************************************************/
 
-inline kdbgstream operator<<( kdbgstream str, const KSpread::Value& v )
-{
-    QString string;
-    QTextStream stream(&string);
-    stream << v;
-    str << string;
-    return str;
-}
-
-inline kdbgstream operator<<( kdbgstream stream, const KSpread::Value::Format& f )
-{
-    switch ( f )
-    {
-        case KSpread::Value::fmt_None:     stream << "None";     break;
-        case KSpread::Value::fmt_Boolean:  stream << "Boolean";  break;
-        case KSpread::Value::fmt_Number:   stream << "Number";   break;
-        case KSpread::Value::fmt_Percent:  stream << "Percent";  break;
-        case KSpread::Value::fmt_Money:    stream << "Money";    break;
-        case KSpread::Value::fmt_DateTime: stream << "DateTime"; break;
-        case KSpread::Value::fmt_Date:     stream << "Date";     break;
-        case KSpread::Value::fmt_Time:     stream << "Time";     break;
-        case KSpread::Value::fmt_String:   stream << "String";   break;
-    }
-    return stream;
-}
+kdbgstream operator<<(kdbgstream str, const KSpread::Value& v);
+kdbgstream operator<<(kdbgstream stream, const KSpread::Value::Format& f);
 
 #endif // KSPREAD_VALUE_H
