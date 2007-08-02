@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KPresenter Old File Format Filter
+Name[bg]=Филтър за стария файлов формат на KPresenter
 Name[de]=KPresenter Filter für altes Dateiformat
 Name[fa]=پالایۀ قالب پروندۀ قدیمی KPresenter
 Name[ja]=KPresenter 旧ファイル形式フィルタ

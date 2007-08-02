@@ -1,12 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Karbon Dockers plugin
-Name[de]=Karbon Docker-Modul
-Name[fa]=وصلۀ پیونددهنده‌های KOffice
-Name[pt]='Plugin' de Módulos Acopláveis para o Karbon
-Name[pt_BR]='Plugin' de Módulos Acopláveis para o Karbon
-Name[sv]=Karbon dockningsinsticksprogram
-Name[x-test]=xxKarbon Dockers pluginxx
 ServiceTypes=KOffice/Dock
 Type=Service
 X-KDE-Library=karbondockersplugin

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon WPG Import Filter
+Name[bg]=Филтър за импортиране от WPG в Karbon
 Name[de]=Karbon14 WPG-Importfilter
 Name[fa]=پالایۀ واردات Karbon WPG
 Name[ga]=Scagaire Iompórtála Karbon WPG
