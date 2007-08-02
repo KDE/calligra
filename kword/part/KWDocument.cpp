@@ -196,11 +196,13 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
         }
     }
 
-    context.addOption(KoShapeSavingContext::MainTextFrame);
-    foreach(KWFrame *frame, mainTextFrame->frames()) {
-        frame->saveOdf(context);
+    if (mainTextFrame) {
+        context.addOption(KoShapeSavingContext::MainTextFrame);
+        foreach(KWFrame *frame, mainTextFrame->frames()) {
+            frame->saveOdf(context);
+        }
+        context.removeOption(KoShapeSavingContext::MainTextFrame);
     }
-    context.removeOption(KoShapeSavingContext::MainTextFrame);
 
 /*
     contentTmpWriter.startElement( odfTagName() );
