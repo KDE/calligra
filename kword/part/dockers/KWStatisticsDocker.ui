@@ -59,8 +59,8 @@
      </item>
      <item>
       <widget class="QLineEdit" name="count" >
-       <property name="enabled" >
-        <bool>false</bool>
+       <property name="readOnly" >
+        <bool>true</bool>
        </property>
        <property name="text" >
         <string>0</string>
