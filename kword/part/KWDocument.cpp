@@ -181,18 +181,26 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
 
     KoShapeSavingContext context (contentTmpWriter, savingContext);
 
+    KWTextFrameSet *mainTextFrame = 0;
     foreach(KWFrameSet *fs, frameSets()) {
         // TODO loop over all non-autocreated frames and save them.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
-        if (tfs)
-            if (tfs->textFrameSetType() == KWord::MainTextFrameSet)
-                context.addOption(KoShapeSavingContext::MainTextFrame);
+        if (tfs) {
+            if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+                mainTextFrame = tfs;
+                continue;
+            }
+        }
         foreach(KWFrame *frame, fs->frames()) {
             frame->saveOdf(context);
         }
     }
 
-    // TODO save text
+    context.addOption(KoShapeSavingContext::MainTextFrame);
+    foreach(KWFrame *frame, mainTextFrame->frames()) {
+        frame->saveOdf(context);
+    }
+    context.removeOption(KoShapeSavingContext::MainTextFrame);
 
 /*
     contentTmpWriter.startElement( odfTagName() );
