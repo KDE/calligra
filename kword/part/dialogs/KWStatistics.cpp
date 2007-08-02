@@ -39,8 +39,18 @@ KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* docum
     : QWidget(parent),
     m_resourceProvider(provider),
     m_action(new KoAction(this)),
+    m_selection(selection),
     m_document(document),
-    m_selection(selection)
+    m_textDocument(0),
+    m_timer(0),
+    m_charsWithSpace(0),
+    m_charsWithoutSpace(0),
+    m_words(0),
+    m_sentences(0),
+    m_lines(0),
+    m_syllables(0),
+    m_paragraphs(0),
+    m_autoUpdate(true)
 {
     if (m_selection) {
         m_showInDocker = true;
