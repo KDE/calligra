@@ -78,7 +78,7 @@ Thesaurus::Thesaurus()
     m_dialog = new KDialog(0);
     m_dialog->setButtons(KDialog::Help | KDialog::Ok | KDialog::Cancel);
     m_dialog->setDefaultButton(KDialog::Ok);
-    m_dialog->setHelp(QString::null, "thesaurus");
+    m_dialog->setHelp(QString(), "thesaurus");
     m_dialog->resize(600, 400);
 
     KConfigGroup cfg = KGlobal::config()->group("");
@@ -399,7 +399,7 @@ void Thesaurus::slotFindTerm(const QString &term, bool addToHistory)
         (void) new KRun(KUrl(term),0L);
     }
     else {
-        if (addToHistory) {
+        if (addToHistory && m_edit->itemText(0) != term) {
             m_edit->insertItem(0, term);
             m_historyPos = m_edit->count();
             m_edit->setCurrentIndex(0);
@@ -424,7 +424,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
 
     // Find only whole words. Looks clumsy, but this way we don't have to rely on
     // features that might only be in certain versions of grep:
-    QString searchTermTmp = ";" + searchTerm.trimmed() + ";";
+    QString searchTermTmp = ';' + searchTerm.trimmed() + ';';
     m_thesProc->setOutputChannelMode(KProcess::SeparateChannels);
     m_thesProc->clearProgram();
     m_thesProc->setReadChannel(QProcess::StandardOutput);
@@ -437,8 +437,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
 
     m_thesProc->start();
     if (!m_thesProc->waitForFinished()) {
-        KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep. "
-                    "Output:<br>%1", QString(m_thesProc->readAllStandardError())));
+        KMessageBox::error(0, i18n("<b>Error:</b> Failed to execute grep."));
         return;
     }
 
@@ -643,13 +642,6 @@ void Thesaurus::findTermWordnet(const QString &term)
                     "http://www.cogsci.princeton.edu/~wn/</a>. Note that WordNet only supports "
                     "the English language."));
         m_wnComboBox->setEnabled(false);
-        return;
-    }
-
-    QString stderrString = m_wnProc->readAllStandardError();
-    if (!stderrString.isEmpty()) {
-        m_resultTextBrowser->setHtml(i18n("<b>Error:</b> Failed to execute WordNet program 'wn'. "
-                    "Output:<br>%1", stderrString));
         return;
     }
 

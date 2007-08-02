@@ -17,12 +17,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KWORDCREATOR_H_
-#define _KWORDCREATOR_H_ 
+#ifndef _KOFFICECREATOR_H_
+#define _KOFFICECREATOR_H_ 
 
 #include <kio/thumbcreator.h>
 #include <kparts/part.h>
-#include "KoDocument.h"
 //Added by qt3to4:
 #include <QTimerEvent>
 
