@@ -40,6 +40,7 @@
 #include "dialogs/SimpleEntryWidget.h"
 
 #include "actions/NoteEntryAction.h"
+#include "actions/AccidentalAction.h"
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -132,6 +133,26 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     addAction("rest_128th", actionRest128);
     actionGroup->addAction(actionRest128);
 
+    AbstractMusicAction* action;
+    action = new AccidentalAction(-2, this);
+    addAction("accidental_doubleflat", action);
+    actionGroup->addAction(action);
+
+    action = new AccidentalAction(-1, this);
+    addAction("accidental_flat", action);
+    actionGroup->addAction(action);
+
+    action = new AccidentalAction(0, this);
+    addAction("accidental_natural", action);
+    actionGroup->addAction(action);
+
+    action = new AccidentalAction(1, this);
+    addAction("accidental_sharp", action);
+    actionGroup->addAction(action);
+
+    action = new AccidentalAction(2, this);
+    addAction("accidental_doublesharp", action);
+    actionGroup->addAction(action);
 
     actionQuarterNote->setChecked(true);
     m_activeAction = actionQuarterNote;
@@ -220,7 +241,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
 //    int line = closestStaff->line(yrel - closestStaff->top());
-//    kDebug() << "line: " << line;
+//    kDebug() << "line: " << line << endl;
 
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {

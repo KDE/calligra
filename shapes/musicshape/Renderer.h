@@ -60,6 +60,7 @@ public:
     void renderChord(QPainter& painter, MusicCore::Chord* chord, const QPointF& ref, RenderState& state, double xScale, const QColor& color = Qt::black);
     void renderRest(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, const QColor& color = Qt::black);
     void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, double stemLength, const QColor& color = Qt::black);
+    void renderAccidental(QPainter& painter, int accidentals, const QPointF& pos, const QColor& color = Qt::black);
 private:
     MusicStyle* m_style;
     bool m_debug;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,49 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Note.h"
+#include "SetAccidentalsCommand.h"
 
-namespace MusicCore {
+#include "../MusicShape.h"
 
-class Note::Private {
-public:
-    Staff* staff;
-    int pitch;
-    int accidentals;
-};
+#include "../core/Note.h"
 
-Note::Note(Staff* staff, int pitch, int accidentals) : d(new Private)
+#include <klocale.h>
+
+SetAccidentalsCommand::SetAccidentalsCommand(MusicShape* shape, MusicCore::Note* note, int accidentals)
+    : m_shape(shape), m_note(note), m_oldAccidentals(note->accidentals()), m_newAccidentals(accidentals)
 {
-    d->staff = staff;
-    d->pitch = pitch;
-    d->accidentals = accidentals;
+    setText(i18n("Set accidentals"));
 }
 
-Note::~Note()
+void SetAccidentalsCommand::redo()
 {
-    delete d;
+    m_note->setAccidentals(m_newAccidentals);
+    m_shape->repaint();
 }
 
-Staff* Note::staff()
+void SetAccidentalsCommand::undo()
 {
-    return d->staff;
+    m_note->setAccidentals(m_oldAccidentals);
+    m_shape->repaint();
 }
-
-int Note::pitch() const
-{
-    return d->pitch;
-}
-
-int Note::accidentals() const
-{
-    return d->accidentals;
-}
-
-void Note::setAccidentals(int accidentals)
-{
-    d->accidentals = accidentals;
-}
-
-} // namespace MusicCore
-
-#include "Note.moc"

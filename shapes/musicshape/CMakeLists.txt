@@ -44,6 +44,7 @@ SET (musicshape_LIB_SRCS
 
     actions/AbstractMusicAction.cpp
     actions/NoteEntryAction.cpp
+    actions/AccidentalAction.cpp
 
     commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp
@@ -51,6 +52,7 @@ SET (musicshape_LIB_SRCS
     commands/ChangePartAbbreviationCommand.cpp
     commands/CreateChordCommand.cpp
     commands/AddNoteCommand.cpp
+    commands/SetAccidentalsCommand.cpp
 
     ${musiccore_SRCS}
 )

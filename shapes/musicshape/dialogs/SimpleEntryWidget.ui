@@ -232,7 +232,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QToolButton" name="toolButton" >
+         <widget class="QToolButton" name="doubleFlatButton" >
           <property name="text" >
            <string/>
           </property>
@@ -242,7 +242,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButton_2" >
+         <widget class="QToolButton" name="flatButton" >
           <property name="text" >
            <string/>
           </property>
@@ -252,7 +252,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButton_3" >
+         <widget class="QToolButton" name="naturalButton" >
           <property name="text" >
            <string/>
           </property>
@@ -262,7 +262,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButton_4" >
+         <widget class="QToolButton" name="sharpButton" >
           <property name="text" >
            <string/>
           </property>
@@ -272,7 +272,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="toolButton_5" >
+         <widget class="QToolButton" name="doubleSharpButton" >
           <property name="text" >
            <string/>
           </property>

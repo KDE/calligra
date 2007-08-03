@@ -45,6 +45,12 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     widget.rest64Button->setDefaultAction(tool->action("rest_64th"));
     widget.rest128Button->setDefaultAction(tool->action("rest_128th"));
 
+    widget.doubleFlatButton->setDefaultAction(tool->action("accidental_doubleflat"));
+    widget.flatButton->setDefaultAction(tool->action("accidental_flat"));
+    widget.naturalButton->setDefaultAction(tool->action("accidental_natural"));
+    widget.sharpButton->setDefaultAction(tool->action("accidental_sharp"));
+    widget.doubleSharpButton->setDefaultAction(tool->action("accidental_doublesharp"));
+
     connect(widget.voiceList, SIGNAL(currentIndexChanged(int)), this, SIGNAL(voiceChanged(int)));
 }
 

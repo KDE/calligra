@@ -27,9 +27,9 @@ class Staff;
 
 /**
  * This class represents one note in a chord. You should not add the same note instance to more than one chord, nor
- * should you add a note to a chord in a different part than the part in which staff this note belongs to is in. 
+ * should you add a note to a chord in a different part than the part in which staff this note belongs to is in.
  */
-class Note : public QObject 
+class Note : public QObject
 {
     Q_OBJECT
 public:
@@ -41,26 +41,28 @@ public:
      * @param accidentals the accidentals of the new note
      */
     Note(Staff* staff, int pitch, int accidentals = 0);
-    
+
     /**
      * Destructor.
      */
     ~Note();
-    
+
     /**
      * Returns the staff for this note.
      */
     Staff* staff();
-    
+
     /**
      * Returns the pitch for this note.
      */
     int pitch() const;
-    
+
     /**
      * Returns the accidentaaals for this note.
      */
     int accidentals() const;
+
+    void setAccidentals(int accidentals);
 private:
     class Private;
     Private * const d;

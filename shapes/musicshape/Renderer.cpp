@@ -317,3 +317,7 @@ void MusicRenderer::renderNote(QPainter& painter, MusicCore::Chord::Duration dur
     }
 }
 
+void MusicRenderer::renderAccidental(QPainter& painter, int accidentals, const QPointF& pos, const QColor& color)
+{
+    m_style->renderAccidental( painter, pos.x(), pos.y(), accidentals, color );
+}

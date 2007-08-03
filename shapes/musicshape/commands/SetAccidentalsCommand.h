@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+ * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,49 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Note.h"
+#ifndef SETACCIDENTALSCOMMAND_H
+#define SETACCIDENTALSCOMMAND_H
+
+#include <QUndoCommand>
 
 namespace MusicCore {
+    class Note;
+}
+class MusicShape;
 
-class Note::Private {
+class SetAccidentalsCommand : public QUndoCommand {
 public:
-    Staff* staff;
-    int pitch;
-    int accidentals;
+    SetAccidentalsCommand(MusicShape* shape, MusicCore::Note* note, int accidentals);
+    virtual void redo();
+    virtual void undo();
+private:
+    MusicShape* m_shape;
+    MusicCore::Note* m_note;
+    int m_oldAccidentals, m_newAccidentals;
 };
 
-Note::Note(Staff* staff, int pitch, int accidentals) : d(new Private)
-{
-    d->staff = staff;
-    d->pitch = pitch;
-    d->accidentals = accidentals;
-}
-
-Note::~Note()
-{
-    delete d;
-}
-
-Staff* Note::staff()
-{
-    return d->staff;
-}
-
-int Note::pitch() const
-{
-    return d->pitch;
-}
-
-int Note::accidentals() const
-{
-    return d->accidentals;
-}
-
-void Note::setAccidentals(int accidentals)
-{
-    d->accidentals = accidentals;
-}
-
-} // namespace MusicCore
-
-#include "Note.moc"
+#endif // SETACCIDENTALSCOMMAND_H
