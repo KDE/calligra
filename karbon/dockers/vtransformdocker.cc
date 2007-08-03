@@ -267,7 +267,8 @@ void VTransformDocker::scale()
 
         QList<KoShape*> selectedShapes = selection->selectedShapes( KoFlake::TopLevelSelection );
         QList<QSizeF> oldSizes, newSizes;
-        QList<QMatrix> transformations;
+        QList<QMatrix> oldState;
+        QList<QMatrix> newState;
 
         foreach( KoShape* shape, selectedShapes )
         {
@@ -289,11 +290,12 @@ void VTransformDocker::scale()
             oldSizes << oldSize;
             newSizes << QSizeF( scaleX * oldSize.width(), scaleY * oldSize.height() );
             // save the rest of the transformation without the resizing part
-            transformations << scaleMatrix.inverted() * resizeMatrix;
+            oldState << shapeMatrix;
+            newState << shapeMatrix * scaleMatrix.inverted() * resizeMatrix;
         }
         QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
         new KoShapeSizeCommand( selectedShapes, oldSizes, newSizes, cmd );
-        new KoShapeTransformCommand( selectedShapes, transformations, cmd );
+        new KoShapeTransformCommand( selectedShapes, oldState, newState, cmd );
         canvasController->canvas()->addCommand( cmd );
     }
 }
