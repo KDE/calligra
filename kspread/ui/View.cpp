@@ -4814,7 +4814,7 @@ void View::print( KPrinter &prt )
         Sheet* sheet = doc()->map()->findSheet(*sheetlistiterator);
         if (sheet == 0)
         {
-          kWarning() << i18n("Sheet %1 could not be found for printing",*sheetlistiterator) << endl;
+          kWarning() << i18n("Sheet %1 could not be found for printing",*sheetlistiterator);
           continue;
         }
 

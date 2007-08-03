@@ -197,7 +197,7 @@ bool ScriptingFunction::registerFunction()
     kDebug() <<"ScriptingFunction::registerFunction";
 
     if( d->name.isEmpty() ) {
-        kWarning() << "ScriptingFunction::registerFunction() name is empty!" << endl;
+        kWarning() << "ScriptingFunction::registerFunction() name is empty!";
         return false;
     }
 

@@ -220,7 +220,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     }
 
 //    int line = closestStaff->line(yrel - closestStaff->top());
-//    kDebug() << "line: " << line << endl;
+//    kDebug() << "line: " << line;
 
     Part* part = closestStaff->part();
     for (int i = part->voiceCount(); i <= m_voice; i++) {

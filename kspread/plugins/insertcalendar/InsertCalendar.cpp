@@ -61,12 +61,12 @@ PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const QStringList& 
       }
       else
       {
-        kWarning() << "Parent does not inherit View!!!" << endl;
+        kWarning() << "Parent does not inherit View!!!";
       }
     }
     else
     {
-      kWarning() << "Plugin created without a parent!!!" << endl;
+      kWarning() << "Plugin created without a parent!!!";
     }
 
 

@@ -112,7 +112,7 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
         tmpElement->readMathML( tmp );
     }
 
-    kWarning( DEBUGID ) << "Loaded " << m_childElements.count() << " inside Row element" << endl;
+    kWarning( DEBUGID ) << "Loaded " << m_childElements.count() << " inside Row element";
     return true;
 }
 

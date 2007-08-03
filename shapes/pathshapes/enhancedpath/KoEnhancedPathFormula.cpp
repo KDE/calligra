@@ -216,7 +216,7 @@ double KoEnhancedPathFormula::evaluate()
             // (i.e. there's a bug in the compile() function)
             if( stack.count() < index )
             {
-                kWarning() << "not enough arguments for function " << m_text << endl;
+                kWarning() << "not enough arguments for function " << m_text;
                 m_error = ErrorValue; // not enough arguments
                 return 0.0;
             }
@@ -701,7 +701,7 @@ bool KoEnhancedPathFormula::compile( const TokenList & tokens )
     {
         m_constants.clear();
         m_codes.clear();
-        kWarning() << "compiling of "<< m_text << " failed" << endl;
+        kWarning() << "compiling of "<< m_text << " failed";
     }
 
     return m_valid;

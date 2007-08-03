@@ -1858,7 +1858,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
 #ifdef __GNUC__
 #warning Problem with KoXmlReader conversion!
 #endif
-      kWarning() << "Problem with KoXmlReader conversion!" << endl;
+      kWarning() << "Problem with KoXmlReader conversion!";
 #endif
 
       KoXmlElement result = cell.namedItem( "result" ).toElement();
@@ -2062,7 +2062,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
           setValue ( Value( t.toLongLong(&ok) ) );
         if ( !ok )
         {
-          kWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
+          kWarning(36001) << "Couldn't parse '" << t << "' as number.";
         }
         /* We will need to localize the text version of the number */
         KLocale* locale = doc()->locale();

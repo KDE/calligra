@@ -146,7 +146,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
             const CustomStyle* parentStyle = this->style(m_oasisStyles.value(parentOasisName));
             if ( !parentStyle )
             {
-                kWarning(36003) << parentOasisName << " not found." << endl;
+                kWarning(36003) << parentOasisName << " not found.";
                 continue;
             }
             style->setParentName(m_oasisStyles.value(parentOasisName));
@@ -418,7 +418,7 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QStr
                 const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOasisName));
                 if ( !parentStyle )
                 {
-                    kWarning(36003) << parentOasisName << " not found." << endl;
+                    kWarning(36003) << parentOasisName << " not found.";
                     continue;
                 }
                 autoStyles[name].setParentName( parentStyle->name() );

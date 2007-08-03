@@ -32,7 +32,7 @@ QString IdentifierElement::stringToRender( const QString& rawString ) const
     const entityMap* pos = std::lower_bound( begin, end, rawString.toAscii() );
 
     if ( pos == end || QString( pos->name ) != rawString )
-         kWarning(DEBUGID) << "Invalid entity refererence: " << rawString << endl;
+         kWarning(DEBUGID) << "Invalid entity refererence: " << rawString;
     else
          return QChar( pos->unicode );
 

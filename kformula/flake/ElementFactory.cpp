@@ -49,7 +49,7 @@
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )
 {
-    kWarning( DEBUGID ) << "Creating element: " << tagName << endl;
+    kWarning( DEBUGID ) << "Creating element: " << tagName;
     if( tagName == "mi" )
         return new IdentifierElement( parent );
     else if ( tagName == "mo" )
@@ -89,7 +89,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if ( tagName == "mmultiscripts" )
           return new MultiscriptElement( parent );
 
-    kWarning( DEBUGID ) << "Do not know how to create the following element: " << tagName << endl;
+    kWarning( DEBUGID ) << "Do not know how to create the following element: " << tagName;
     return 0;
 }
 

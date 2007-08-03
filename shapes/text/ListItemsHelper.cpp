@@ -38,7 +38,7 @@ QString Lists::intToRoman( int n ) {
     static const QByteArray RNThousands[] = {"", "m", "mm", "mmm"};
 
     if ( n <= 0 ) {
-        kWarning(32500) << "intToRoman called with negative number: n=" << n << endl;
+        kWarning(32500) << "intToRoman called with negative number: n=" << n;
         return QString::number( n );
     }
     return QString::fromLatin1( RNThousands[ ( n / 1000 ) ] + RNHundreds[ ( n / 100 ) % 10 ] +

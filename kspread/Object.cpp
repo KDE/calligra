@@ -989,7 +989,7 @@ void EmbeddedPictureObject::loadOasis(const KoXmlElement &element, KoOasisLoadin
         {
             KoStoreDevice dev(store);
             if ( !image.load( &dev, strExtension ) )
-                kWarning() << "Cannot load picture: " << filename << " " << href << endl;
+                kWarning() << "Cannot load picture: " << filename << " " << href;
             store->close();
         }
         imageCollection->insertPicture( key, image );

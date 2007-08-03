@@ -3086,7 +3086,7 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
     {
         if ( !autoStyles.contains( styleNames[i] ) && !doc()->styleManager()->style( styleNames[i] ) )
         {
-            kWarning(36003) << "\t" << styleNames[i] << " not used" << endl;
+            kWarning(36003) << "\t" << styleNames[i] << " not used";
             continue;
         }
         const bool hasConditions = conditionalStyles.contains( styleNames[i] );

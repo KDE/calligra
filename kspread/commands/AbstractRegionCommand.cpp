@@ -104,7 +104,7 @@ void AbstractRegionCommand::redo()
     if ( !successfully )
     {
         m_success = false;
-        kWarning() << "AbstractRegionCommand::redo(): processing was not successful!" << endl;
+        kWarning() << "AbstractRegionCommand::redo(): processing was not successful!";
     }
 
     successfully = true;
@@ -112,7 +112,7 @@ void AbstractRegionCommand::redo()
     if ( !successfully )
     {
         m_success = false;
-        kWarning() << "AbstractRegionCommand::redo(): postprocessing was not successful!" << endl;
+        kWarning() << "AbstractRegionCommand::redo(): postprocessing was not successful!";
     }
 
     m_sheet->doc()->emitEndOperation();

@@ -430,7 +430,7 @@ void PaperLayout::slotOk()
           double zoomvalue = zoomtext.toDouble(&convertok);
           if (!convertok)
           {
-            kWarning() << "Could not convert zoom text to double value!!!" << endl;
+            kWarning() << "Could not convert zoom text to double value!!!";
           }
           else if( zoomvalue != 0.0 )
           {
@@ -486,7 +486,7 @@ void PaperLayout::slotOk()
         kDebug() <<"Zoom after setting y limit:" << print->zoom();
       }
       else
-        kWarning() << "ERROR: unknown zoom option selected" << endl;
+        kWarning() << "ERROR: unknown zoom option selected";
 
       sheet->doc()->setModified( true );
 

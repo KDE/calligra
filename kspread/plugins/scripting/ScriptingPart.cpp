@@ -60,11 +60,11 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
 		QFileInfo fi(url.path());
 		const QString file = fi.absoluteFilePath();
 		if( ! fi.exists() ) {
-			kWarning() << QString("ScriptingPart: scriptfile \"%1\" does not exist.").arg(file) << endl;
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" does not exist.").arg(file);
 			continue;
 		}
 		if( ! fi.isExecutable() ) {
-			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not executable. Please set the executable-attribute on that file.").arg(file) << endl;
+			kWarning() << QString("ScriptingPart: scriptfile \"%1\" is not executable. Please set the executable-attribute on that file.").arg(file);
 			continue;
 		}
 		{ // check whether file is not in some temporary directory.
@@ -79,12 +79,12 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
 					break;
 				}
 			if( inTemp ) {
-				kWarning() << QString("ScriptingPart: scriptfile \"%1\" is in a temporary directory. Execution denied.").arg(file) << endl;
+				kWarning() << QString("ScriptingPart: scriptfile \"%1\" is in a temporary directory. Execution denied.").arg(file);
 				continue;
 			}
 		}
 		if( ! Kross::Manager::self().executeScriptFile(url) )
-			kWarning() << QString("ScriptingPart: Failed to execute scriptfile \"%1\"").arg(file) << endl;
+			kWarning() << QString("ScriptingPart: Failed to execute scriptfile \"%1\"").arg(file);
 	}
 }
 

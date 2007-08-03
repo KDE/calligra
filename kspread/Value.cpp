@@ -216,7 +216,7 @@ bool Value::operator==( const Value& o ) const
     case Error:   return ( !d->ps && !o.d->ps ) || ( ( d->ps && o.d->ps ) && ( *o.d->ps == *d->ps ) );
     default: break;
   }
-  kWarning() << "Unhandled type in Value::operator==: " << d->type << endl;
+  kWarning() << "Unhandled type in Value::operator==: " << d->type;
   return false;
 }
 

@@ -63,7 +63,7 @@ KoShape* MusicShapeFactory::createShape( const KoProperties* params ) const
     if (!loadedFont) {
         QString fontFile = KStandardDirs::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
         if (QFontDatabase::addApplicationFont(fontFile) == -1) {
-            kWarning() << "Could not load emmentaler font" << endl;
+            kWarning() << "Could not load emmentaler font";
         }
         loadedFont = true;
     }

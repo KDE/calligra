@@ -1189,7 +1189,7 @@ const char* SheetPrint::orientationString() const
         return "Landscape";
     }
 
-    kWarning(36001)<<"SheetPrint: Unknown orientation, using now portrait"<<endl;
+    kWarning(36001)<<"SheetPrint: Unknown orientation, using now portrait";
     return 0;
 }
 
@@ -1218,7 +1218,7 @@ QString SheetPrint::completeHeading( const QString &_data, int _page, const QStr
     QString organization;
     QString tmp;
     if ( !info )
-        kWarning() << "Author information not found in Document Info !" << endl;
+        kWarning() << "Author information not found in Document Info !";
     else
     {
         full_name = info->authorInfo( "creator" );
