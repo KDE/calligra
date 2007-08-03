@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 ########### next target ###############
 
-set(karbon_whirlpinchplugin_PART_SRCS whirlpinchplugin.cc )
+set(karbon_whirlpinchplugin_PART_SRCS whirlpinchplugin.cc KarbonWhirlPinchCommand.cpp )
 
 
 kde4_add_plugin(karbon_whirlpinchplugin ${karbon_whirlpinchplugin_PART_SRCS})

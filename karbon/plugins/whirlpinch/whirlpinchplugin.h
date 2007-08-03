@@ -1,5 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006 Peter Simonsson <psn@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,79 +21,56 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __WHIRLPINCHPLUGIN_H__
-#define __WHIRLPINCHPLUGIN_H__
+#ifndef WHIRLPINCHPLUGIN_H
+#define WHIRLPINCHPLUGIN_H
 
 #include <kdialog.h>
 #include <kparts/plugin.h>
 #include <commands/vcommand.h>
 
-#include <QPointF>
+#include <QtCore/QPointF>
 
 class KarbonView;
-class VWhirlPinchDlg;
+class WhirlPinchDlg;
 
 class WhirlPinchPlugin : public KParts::Plugin
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	WhirlPinchPlugin( KarbonView *parent, const QStringList & );
-	virtual ~WhirlPinchPlugin() {}
+    WhirlPinchPlugin( KarbonView *parent, const QStringList & );
+    virtual ~WhirlPinchPlugin() {}
 
 private slots:
-	void slotWhirlPinch();
+    void slotWhirlPinch();
 
 private:
-	VWhirlPinchDlg	*m_whirlPinchDlg;
+    WhirlPinchDlg	*m_whirlPinchDlg;
 };
 
 class KDoubleNumInput;
+class KoUnitDoubleSpinBox;
+class KoUnit;
 
-class VWhirlPinchDlg : public KDialog
+class WhirlPinchDlg : public KDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	VWhirlPinchDlg( QWidget* parent = 0L, const char* name = 0L );
+    WhirlPinchDlg( QWidget* parent = 0L, const char* name = 0L );
 
-	double angle() const;
-	double pinch() const;
-	double radius() const;
-	void setAngle( double value );
-	void setPinch( double value );
-	void setRadius( double value );
+    double angle() const;
+    double pinch() const;
+    double radius() const;
+    void setAngle( double value );
+    void setPinch( double value );
+    void setRadius( double value );
+    void setUnit( const KoUnit &unit );
 
 private:
-	KDoubleNumInput* m_angle;
-	KDoubleNumInput* m_pinch;
-	KDoubleNumInput* m_radius;
+    KDoubleNumInput* m_angle;
+    KDoubleNumInput* m_pinch;
+    KoUnitDoubleSpinBox* m_radius;
 };
 
-class VPath;
-class VSubpath;
-class VSelection;
-
-class VWhirlPinchCmd : public VCommand
-{
-public:
-	VWhirlPinchCmd( VDocument* doc,
-		double angle, double pinch, double radius );
-	virtual ~VWhirlPinchCmd();
-
-	virtual void redo();
-	virtual void undo();
-
-	virtual void visitVPath( VPath& composite );
-	virtual void visitVSubpath( VSubpath& path );
-
-protected:
-	VSelection* m_selection;
-
-	QPointF m_center;
-	double m_angle;
-	double m_pinch;
-	double m_radius;
-};
-
-#endif
+#endif // WHIRLPINCHPLUGIN_H
 
