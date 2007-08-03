@@ -286,8 +286,8 @@ Things not in bugzilla
     - Move Cell::calc() to RecalcManager.				done
     - Emit an appropriate Damage after cell/col/row insertion/deletion.	done
 
-  + Named areas							      1 ----
-    - Update on cell/col/row insertion/deletion.			----
+  + Named areas							      1 DONE
+    - Update on cell/col/row insertion/deletion.			done
       Maybe refactor the code to have a separate manager for the named
       areas and store them in a RectStorage; similar to Binding storage.
 
@@ -323,10 +323,6 @@ Things not in bugzilla
   + Painting: Indent and multiline doesn't work together	      2 ----
   + Split view							      1 ----
   + "Freeze/Unfreeze Panes"					      2 ----
-    Started but had some problems caused by the scrollbars, it
-    works, but not very nice (not committed (Norbert)).
-    Maybe not as important if we get split view to work correctly.
-
   + Function optimizer ('Solver')				      2 ----
     - evaluate, if we're able to use linear methods (derivatives!)	----
     - evaluate, how to include side conditions				----
@@ -345,42 +341,35 @@ Other things: (please add the things you are working on!)
 
 Not yet sorted (will be entered into categories above)
 
-- Multible Operations (in Excel: "Data"->"Table") (Norbert)
+- Multiple Operations (in Excel: "Data"->"Table")
 - Insert widgets like buttons, drop down lists,... + having the possibily to
   define action if pressed, or selection changes,...
+- Button + Drop-Down-List support (within cells)
 - interface for mail merge
-
 - Printing enhancements:
   + Expand selection to page
   + Fit selection to page
   + Print selection only
-
-+ option: ignore duplicate deliminers in CSV import and Insert data from file/clipboard
-+ CSV export dialog: define deliminers, Table(s), cell content in '"'
-+ enhance the Gnumeric import filter
-- sync the Gnumeric export filter
-+ StarCalc/OpenCalc import filter
-- StarCalc/OpenCalc filter for embedding/embedded objects
-+ StarCalc/OpenCalc export filter
-- qsa support + recording
-- Button + Drop-Down-List support (within cells)
-- better AutoFormat dialog + better templates
 - new dialog for conditional cell attributes
+- multiline header/footer support
+- for formulas: fit precision so the result fits in the cell or resize the cell
 
-- Multiple Operations
-+ Lookup & Reference functions (LOOKUP needs to fixed)
-- more information functions (Excel compatible)
+- changing text angle should resize the cell height automatically
+- support for format strings (dd/mm/yyyy)
+- more font attributes (outline, shadow,...) + attributes for parts of the text
+- double borders
+- better AutoFormat dialog + better templates
 
 - more "Related Functions" in function help/desc text
 - improve function compatibility with MS Excel
-- dBASE export filter
+- more information functions (Excel compatible)
 
-- changing text angle should resize the cell height automatically
-- support for format strings (dd/mm/yyyy)       - Norbert
-- more font attributes (outline, shadow,...) + attributes for parts of the text
-- double borders
-- multiline header/footer support
-- for formulas: fit precision so the result fits in the cell or resize the cell
+- enhance the Gnumeric import filter
+- sync the Gnumeric export filter
+- StarCalc/OpenCalc import filter
+- StarCalc/OpenCalc filter for embedding/embedded objects
+- StarCalc/OpenCalc export filter
+- dBASE export filter
 
 
 
