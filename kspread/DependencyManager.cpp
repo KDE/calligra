@@ -511,6 +511,7 @@ void DependencyManager::Private::generateDepths(const Region& region)
                 if (!consumers.contains(cell.sheet()))
                 {
                     formula = sheet->formulaStorage()->nextInRow( col, row, &col );
+                    continue;
                 }
                 const QList<Cell> consumers = this->consumers.value(cell.sheet())->contains(cell.cellPosition());
                 for (int i = 0; i < consumers.count(); ++i)
