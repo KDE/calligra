@@ -29,6 +29,7 @@ public:
     double y;
     double width;
     double height;
+    VoiceBar* voiceBar;
 };
 
 VoiceElement::VoiceElement(int length) : d(new Private)
@@ -39,6 +40,7 @@ VoiceElement::VoiceElement(int length) : d(new Private)
     d->y = 0;
     d->width = 0;
     d->height = 0;
+    d->voiceBar = 0;
 }
 
 VoiceElement::~VoiceElement()
@@ -46,7 +48,7 @@ VoiceElement::~VoiceElement()
     delete d;
 }
 
-Staff* VoiceElement::staff()
+Staff* VoiceElement::staff() const
 {
     return d->staff;
 }
@@ -54,6 +56,16 @@ Staff* VoiceElement::staff()
 void VoiceElement::setStaff(Staff* staff)
 {
     d->staff = staff;
+}
+
+VoiceBar* VoiceElement::voiceBar() const
+{
+    return d->voiceBar;
+}
+
+void VoiceElement::setVoiceBar(VoiceBar* voiceBar)
+{
+    d->voiceBar = voiceBar;
 }
 
 double VoiceElement::x() const

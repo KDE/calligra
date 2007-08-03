@@ -24,6 +24,7 @@
 namespace MusicCore {
 
 class Staff;
+class VoiceBar;
 
 /**
  * This is the base class for all musical elements that can be added to a voice.
@@ -46,7 +47,7 @@ public:
      * Returns the staff this music element should be displayed on. It can also be NULL, for example if the element
      * should not be visible.
      */
-    Staff* staff();
+    Staff* staff() const;
 
     /**
      * Sets the staff this element should be displayed on.
@@ -55,28 +56,30 @@ public:
      */
     void setStaff(Staff* staff);
 
+    VoiceBar* voiceBar() const;
+    void setVoiceBar(VoiceBar* voiceBar);
+
     /**
      * Returns the x position of this musical element. The x position of an element is measured relative to the left
      * barline of the bar the element is in.
      */
-    double x() const;
+    virtual double x() const;
 
     /**
-     * Returns the y position of this musical element. The y position of an element is measure relative to the center
-     * of the staff it is in, although some musical elements that have a notion of pitch such as notes/rests/clefs or
-     * key signatures might have a different reference point.
+     * Returns the y position of this musical element. The y position of an element is measure relative to the top
+     * of the staff it is in.
      */
-    double y() const;
+    virtual double y() const;
 
     /**
      * Returns the width of this musical element.
      */
-    double width() const;
+    virtual double width() const;
 
     /**
      * Returns the height of this musical element.
      */
-    double height() const;
+    virtual double height() const;
 
     /**
      * Returns the duration of this musical elements in ticks.

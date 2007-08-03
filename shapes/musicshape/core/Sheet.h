@@ -175,6 +175,8 @@ public:
      */
     Bar* bar(int index);
 
+    int indexOfBar(Bar* bar);
+
     /**
      * Adds count new bars at the end of this piece of music.
      *

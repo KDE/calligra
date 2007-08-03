@@ -24,12 +24,15 @@
 #include "Part.h"
 #include "Voice.h"
 #include "VoiceElement.h"
+#include "Bar.h"
 
 using namespace MusicCore;
 
 void VoiceBarTest::init()
 {
-    voiceBar = new VoiceBar();;
+    Sheet* sheet = new Sheet();
+    Bar* bar = new Bar(sheet);
+    voiceBar = new VoiceBar(bar);
 }
 
 void VoiceBarTest::cleanup()

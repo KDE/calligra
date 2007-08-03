@@ -109,16 +109,13 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
     Chord* join = NULL;
     if (before > 0) join = dynamic_cast<Chord*>(vb->element(before-1));
     if (join && join->x() + join->width() >= realX) {
-        //join->setDuration(m_duration);
         if (clef && !m_isRest) {
             int line = staff->line(pos.y());
             int pitch = clef->lineToPitch(line);
             m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, m_duration, pitch));
-            //join->addNote(staff, pitch);
         } else {
-            // make it a rest
+            // TODO make it a rest
         }
-        kDebug() << "join!";
     } else {
         if (clef && !m_isRest) {
             int line = staff->line(pos.y());

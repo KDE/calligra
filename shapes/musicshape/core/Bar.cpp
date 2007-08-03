@@ -56,7 +56,7 @@ VoiceBar* Bar::voice(Voice* voice)
 {
     VoiceBar* vb = d->voices.value(voice);
     if (!vb) {
-        vb = new VoiceBar();
+        vb = new VoiceBar(this);
         d->voices.insert(voice, vb);
     }
     return vb;

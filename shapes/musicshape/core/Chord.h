@@ -129,6 +129,9 @@ public:
      */
     static int durationToTicks(Duration duration);
     static QString durationToString(Duration duration);
+
+    virtual double y() const;
+    virtual double height() const;
 public slots:
     /**
      * Changes the duration of the chord.

@@ -15,6 +15,7 @@ set(SheetTest_test_SRCS
     ../StaffElement.cpp
     ../Clef.cpp
     ../StaffSystem.cpp
+    ../VoiceElement.cpp
 )
 
 kde4_add_unit_test(SheetTest TESTNAME shapes-musicshape-SheetTest ${SheetTest_test_SRCS})
@@ -27,6 +28,15 @@ set(VoiceBarTest_test_SRCS
     VoiceBarTest.cpp
     ../VoiceBar.cpp
     ../VoiceElement.cpp
+    ../Sheet.cpp
+    ../Bar.cpp
+    ../PartGroup.cpp
+    ../Part.cpp
+    ../StaffSystem.cpp
+    ../Staff.cpp
+    ../StaffElement.cpp
+    ../Voice.cpp
+    ../Clef.cpp
 )
 
 kde4_add_unit_test(VoiceBarTest TESTNAME shapes-musicshape-VoiceBarTest ${VoiceBarTest_test_SRCS})

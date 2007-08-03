@@ -18,6 +18,10 @@
  */
 #include "Chord.h"
 #include "Note.h"
+#include "Staff.h"
+#include "VoiceBar.h"
+#include "Clef.h"
+
 #include <QtCore/QList>
 
 namespace MusicCore {
@@ -171,6 +175,69 @@ QString Chord::durationToString(Duration duration)
         case Breve:                 return "breve";
     }
     return "[unknown note length]";
+}
+
+double Chord::y() const
+{
+    if (d->notes.size() == 0) {
+        return staff()->lineSpacing();
+    }
+
+    double top = 1e9;
+    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+
+    foreach (Note* n, d->notes) {
+        int line = 14;
+        if (clef && clef->shape() == Clef::FClef) line = 4;
+        if (clef) {
+            line -= 2 * clef->line();
+        } else {
+            line -= 4;
+        }
+        line = line - n->pitch();
+
+        Staff* s = n->staff();
+        line--;
+        double y = s->top() + line * s->lineSpacing() / 2;
+        if (y < top) top = y;
+    }
+    if (staff()) top -= staff()->top();
+    return top;
+}
+
+double Chord::height() const
+{
+    if (d->notes.size() == 0) {
+        return staff()->lineSpacing() * 2;
+    }
+
+    double top = 1e9;
+    double bottom = -1e9;
+    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+
+    foreach (Note* n, d->notes) {
+        int line = 14;
+        if (clef && clef->shape() == Clef::FClef) line = 4;
+        if (clef) {
+            line -= 2 * clef->line();
+        } else {
+            line -= 4;
+        }
+        line = line - n->pitch();
+
+        Staff* s = n->staff();
+        line--;
+        double y = s->top() + line * s->lineSpacing() / 2;
+        if (y < top) top = y;
+        line += 2;
+        y = s->top() + line * s->lineSpacing() / 2;
+        if (y > bottom) bottom = y;
+    }
+    if (staff()) {
+        top -= staff()->top();
+        bottom -= staff()->top();
+    }
+    return bottom - top;
 }
 
 } // namespace MusicCore

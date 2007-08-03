@@ -39,12 +39,14 @@ public:
     /**
      * Creates a new empty voice bar.
      */
-    VoiceBar();
+    explicit VoiceBar(Bar* bar);
 
     /**
      * Destructor.
      */
     ~VoiceBar();
+
+    Bar* bar();
 
     /**
      * Returns the number of elements in the bar.

@@ -25,17 +25,25 @@ namespace MusicCore {
 class VoiceBar::Private
 {
 public:
+    Bar* bar;
     QList<VoiceElement*> elements;
 };
 
-VoiceBar::VoiceBar() : d(new Private)
+VoiceBar::VoiceBar(Bar* bar) : d(new Private)
 {
+    Q_ASSERT( bar );
+    d->bar = bar;
 }
 
 VoiceBar::~VoiceBar()
 {
     Q_FOREACH(VoiceElement* me, d->elements) delete me;
     delete d;
+}
+
+Bar* VoiceBar::bar()
+{
+    return d->bar;
 }
 
 int VoiceBar::elementCount() const
@@ -53,6 +61,7 @@ void VoiceBar::addElement(VoiceElement* element)
 {
     Q_ASSERT( element );
     d->elements.append(element);
+    element->setVoiceBar(this);
 }
 
 void VoiceBar::insertElement(VoiceElement* element, int before)
@@ -60,6 +69,7 @@ void VoiceBar::insertElement(VoiceElement* element, int before)
     Q_ASSERT( element );
     Q_ASSERT( before >= 0 && before <= elementCount() );
     d->elements.insert(before, element);
+    element->setVoiceBar(this);
 }
 
 void VoiceBar::insertElement(VoiceElement* element, VoiceElement* before)

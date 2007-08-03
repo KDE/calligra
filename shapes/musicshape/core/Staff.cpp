@@ -142,6 +142,11 @@ Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
     return 0;
 }
 
+Clef* Staff::lastClefChange(Bar* bar, int time, Clef* oldClef)
+{
+    return lastClefChange(d->part->sheet()->indexOfBar(bar), time, oldClef);
+}
+
 } // namespace MusicCore
 
 #include "Staff.moc"

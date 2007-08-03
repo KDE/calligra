@@ -159,6 +159,12 @@ Bar* Sheet::bar(int index)
     return d->bars[index];
 }
 
+int Sheet::indexOfBar(Bar* bar)
+{
+    Q_ASSERT( bar );
+    return d->bars.indexOf(bar);
+}
+
 void Sheet::addBars(int count)
 {
     for (int i = 0; i < count; i++) {
