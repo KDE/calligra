@@ -8,6 +8,7 @@ Name[ga]=Scagaire Easpórtála JPEG Krita
 Name[pt]=Filtro de Exportação de JPEG para o Krita
 Name[pt_BR]=Filtro de Exportação de JPEG para o Krita
 Name[sv]=Krita JPEG-exportfilter
+Name[zh_TW]=Krita JPEG 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/jpeg

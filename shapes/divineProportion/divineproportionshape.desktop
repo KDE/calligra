@@ -5,6 +5,7 @@ Name[de]=Göttliche-Teilung-Form
 Name[pt]=Forma de Proporção Divina
 Name[pt_BR]=Forma de Proporção Divina
 Name[sv]=Gudomlig proportionsform
+Name[zh_TW]=DivineProportion 形狀
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=divineproportionshape

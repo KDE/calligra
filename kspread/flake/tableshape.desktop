@@ -7,6 +7,7 @@ Name[pt]=Forma de Tabela
 Name[pt_BR]=Forma de Tabela
 Name[sv]=Tabellform
 Name[x-test]=xxTable Shapexx
+Name[zh_TW]=表格形狀
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=tableshape

@@ -11,6 +11,7 @@ Name[pt_BR]=Filtro do Formato Antigo do KPresenter
 Name[sv]=Kpresenter gammalt filformatfilter
 Name[uk]=Фільтр старого формату файлів KPresenter
 Name[x-test]=xxKPresenter Old File Format Filterxx
+Name[zh_TW]=KPresenter 舊檔案格式過濾程式
 X-KDE-Export=application/x-kpresenter
 X-KDE-Weight=1
 X-KDE-Import=application/vnd.oasis.opendocument.presentation

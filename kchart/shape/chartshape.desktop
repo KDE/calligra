@@ -7,6 +7,7 @@ Name[ja]=グラフシェイプ
 Name[pt]=Forma do Gráfico
 Name[pt_BR]=Forma do Gráfico
 Name[sv]=Diagramform
+Name[zh_TW]=圖表形狀
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=chartshape

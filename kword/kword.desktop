@@ -69,6 +69,7 @@ Comment[pt_BR]=Documentos de Texto
 Comment[sv]=Skriv textdokument
 Comment[uk]=Текстові документи
 Comment[x-test]=xxWrite text documentsxx
+Comment[zh_TW]=文字文件
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;application/rtf;text/plain;application/x-mswrite
 Icon=kword
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text

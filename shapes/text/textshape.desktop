@@ -7,6 +7,7 @@ Name[pt]=Forma de Texto
 Name[pt_BR]=Forma de Texto
 Name[sv]=Textform
 Name[x-test]=xxText Shapexx
+Name[zh_TW]=文字形狀
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=textshape

@@ -7,6 +7,7 @@ Name[ja]=Kexi MS Access (MDB) データ移行ドライバ
 Name[pt]=Controlador de Migração de MS Access (MDB) do Kexi
 Name[pt_BR]=Controlador de Migração de MS Access (MDB) do Kexi
 Name[sv]=MS Access (MDB)-övergångsdrivrutin för Kexi
+Name[zh_TW]=Kexi 的 MS Access（MDB）轉移驅動程式
 X-KDE-Library=keximigrate_mdb
 ServiceTypes=Kexi/MigrationDriver
 Type=Service

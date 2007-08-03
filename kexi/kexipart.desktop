@@ -10,6 +10,7 @@ Name[pt_BR]=Componente de Bases de Dados do KOffice
 Name[sv]=Koffice-databaskomponent
 Name[uk]=Компонент бази даних KOffice
 Name[x-test]=xxKOffice Database Componentxx
+Name[zh_TW]=KOffice 資料庫元件
 X-KDE-Library=libkexipart
 MimeType=application/x-kexiproject-sqlite;application/x-sqlite2;application/x-kexiproject-shortcut;application/x-kexiproject-sqlite2;application/x-kexiproject-sqlite3;application/x-sqlite3;application/x-kexi-connectiondata;application/x-msaccess
 Type=Service
