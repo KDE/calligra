@@ -109,12 +109,12 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
 
     if( !::qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-        kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
+        kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if(from!="application/x-quattropro" || to!="application/x-kspread")
     {
-        kWarning(30501) << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning(30501) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
@@ -125,7 +125,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
 
     if(ksdoc->mimeType()!="application/x-kspread")
     {
-        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 

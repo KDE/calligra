@@ -179,7 +179,7 @@ void Table::generateTopLineBorder(QTextStream& out, int row)
 	{
 		/* Search the cell in the list */
 		elt = searchCell(row, index);
-		kDebug(30522) << endl <<"name (" << row <<"," << index <<") =" << elt->getName() << endl;
+		kDebug(30522) << endl <<"name (" << row <<"," << index <<") =" << elt->getName();
 
 		/* If the element has a border display it here */
 		if(elt->hasTopBorder())

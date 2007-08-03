@@ -226,7 +226,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
         strTag="\\pngblip";
         if( !loadAndConvertToImage(anchor.picture.koStoreName,strExt,"PNG",image) )
         {
-            kWarning(30515) << "Unable to convert " << anchor.picture.koStoreName << endl;
+            kWarning(30515) << "Unable to convert " << anchor.picture.koStoreName;
             return QString();
         }
     }
@@ -236,7 +236,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
     if( !image.size() )
         if (!loadSubFile(anchor.picture.koStoreName,image))
         {
-            kWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName << endl;
+            kWarning(30515) << "Unable to load picture " << anchor.picture.koStoreName;
             return QString();
         }
 
@@ -281,7 +281,7 @@ QString RTFWorker::makeImage(const FrameAnchor& anchor)
         QImage img( image );
         if( img.isNull() )
         {
-            kWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName << endl;
+            kWarning(30515) << "Unable to load picture as image " << anchor.picture.koStoreName;
             return QString();
         }
         // check resolution, assume 2835 dpm (72 dpi) if not available
@@ -1316,7 +1316,7 @@ static QString writeDate(const QString keyword, const QDateTime& now)
         str += '}';
     }
     else
-        kWarning(30515) << "Date " << keyword << " is not valid! Skipping!" << endl;
+        kWarning(30515) << "Date " << keyword << " is not valid! Skipping!";
 
     return str;
 }
@@ -1489,7 +1489,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
         }
         else
         {
-            kWarning(30515) << "Unknown alignment: " << layout.alignment << endl;
+            kWarning(30515) << "Unknown alignment: " << layout.alignment;
         }
     }
 
@@ -1574,7 +1574,7 @@ QString RTFWorker::layoutToRtf(const LayoutData& layoutOrigin,
            strLayout += QString("\\sl-%1\\slmult0").arg(int(layout.lineSpacing)*20);
 
         else
-            kWarning(30515) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+            kWarning(30515) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)";
     }
 
     if (!layout.tabulatorList.isEmpty()

@@ -542,7 +542,7 @@ void KWordTextHandler::writeOutParagraph( const QString& styleName, const QStrin
     if ( m_framesetElement.isNull() )
     {
         if ( !text.isEmpty() ) // vertically merged table cells are ignored, and have empty text -> no warning on those
-            kWarning(30513) << "KWordTextHandler: no frameset element to write to! text=" << text << endl;
+            kWarning(30513) << "KWordTextHandler: no frameset element to write to! text=" << text;
         return;
     }
     QDomElement paragraphElementOut=mainDocument().createElement("PARAGRAPH");
@@ -724,7 +724,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
                 counterElement.setAttribute( "bulletfont", paragFont );
             }
         } else
-            kWarning(30513) << "Bullet with more than one character, not supported" << endl;
+            kWarning(30513) << "Bullet with more than one character, not supported";
     }
     else
     {
@@ -757,7 +757,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
             if ( ch < 10 ) { // List level place holder
                 if ( ch == pap.ilvl ) {
                     if ( depthFound )
-                        kWarning(30513) << "ilvl " << pap.ilvl << " found twice in listInfo text..." << endl;
+                        kWarning(30513) << "ilvl " << pap.ilvl << " found twice in listInfo text...";
                     else
                         depthFound = true;
                     suffix.clear();
@@ -802,7 +802,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
         }
         else
         {
-            kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text).string() << endl;
+            kWarning(30513) << "Not supported: counter text without the depth in it:" << Conversion::string(text).string();
         }
 
         if ( listInfo->startAtOverridden() ||

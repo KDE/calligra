@@ -147,7 +147,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack&
             }
             else // fixed value (use KoUnit::parseValue to get it in pt)
             {
-                kWarning(30519) << "Unhandled value for fo:line-height: " << value << endl;
+                kWarning(30519) << "Unhandled value for fo:line-height: " << value;
             }
             parentElement.appendChild( lineSpacing );
         }
@@ -159,7 +159,7 @@ void OoUtils::importLineSpacing( QDomElement& parentElement, const KoStyleStack&
         // kotext has "at least" but that's for the linespacing, not for the entire line height!
         // Strange. kotext also has "at least" for the whole line height....
         // Did we make the wrong choice in kotext?
-        //kWarning(30519) << "Unimplemented support for style:line-height-at-least: " << value << endl;
+        //kWarning(30519) << "Unimplemented support for style:line-height-at-least: " << value;
         // Well let's see if this makes a big difference.
         QDomElement lineSpacing = parentElement.ownerDocument().createElement("LINESPACING");
         lineSpacing.setAttribute("type", "atleast");
@@ -376,7 +376,7 @@ void OoUtils::importUnderline( const QString& in, QString& underline, QString& s
         styleline = "solid";
     }
     else
-        kWarning(30519) << k_funcinfo << " unsupported text-underline value: " << in << endl;
+        kWarning(30519) << k_funcinfo << " unsupported text-underline value: " << in;
 }
 
 void OoUtils::importTextPosition( const QString& text_position, QString& value, QString& relativetextsize )
@@ -393,7 +393,7 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
         if ( !lst.isEmpty() )
             textSize = lst.front().trimmed();
         if ( !lst.isEmpty() )
-            kWarning(30519) << "Strange text position: " << text_position << endl;
+            kWarning(30519) << "Strange text position: " << text_position;
         bool super = textPos == "super";
         bool sub = textPos == "sub";
         if ( textPos.endsWith("%") )
@@ -501,7 +501,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& fileName, KoXmlD
 
     if (!m_store->open(fileName))
     {
-        kWarning(30519) << "Entry " << fileName << " not found!" << endl;
+        kWarning(30519) << "Entry " << fileName << " not found!";
         return KoFilter::FileNotFound;
     }
     KoFilter::ConversionStatus convertStatus = loadAndParse( m_store->device(),doc, fileName );
@@ -547,12 +547,12 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(const QString& filename, KoXmlD
     const KArchiveEntry* entry = m_zip->directory()->entry( filename );
     if (!entry)
     {
-        kWarning(30519) << "Entry " << filename << " not found!" << endl;
+        kWarning(30519) << "Entry " << filename << " not found!";
         return KoFilter::FileNotFound;
     }
     if (entry->isDirectory())
     {
-        kWarning(30519) << "Entry " << filename << " is a directory!" << endl;
+        kWarning(30519) << "Entry " << filename << " is a directory!";
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
@@ -577,12 +577,12 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
     const KArchiveEntry* entry = m_zip->directory()->entry( filename );
     if (!entry)
     {
-        kWarning(30519) << "Entry " << filename << " not found!" << endl;
+        kWarning(30519) << "Entry " << filename << " not found!";
         return KoFilter::FileNotFound;
     }
     if (entry->isDirectory())
     {
-        kWarning(30519) << "Entry " << filename << " is a directory!" << endl;
+        kWarning(30519) << "Entry " << filename << " is a directory!";
         return KoFilter::WrongFormat;
     }
     const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
@@ -591,14 +591,14 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
 
     if ( ! io->open( QIODevice::ReadOnly ) )
     {
-        kWarning(30519) << "Thumbnail could not be opened!" <<endl;
+        kWarning(30519) << "Thumbnail could not be opened!";
         delete io;
         return KoFilter::StupidError;
     }
 
     if ( ! thumbnail.load( io, "PNG" ) )
     {
-        kWarning(30519) << "Thumbnail could not be read!" <<endl;
+        kWarning(30519) << "Thumbnail could not be read!";
         delete io;
         return KoFilter::StupidError;
     }
@@ -607,7 +607,7 @@ KoFilter::ConversionStatus OoUtils::loadThumbnail( QImage& thumbnail, KZip * m_z
 
     if ( thumbnail.isNull() )
     {
-        kWarning(30519) << "Read thumbnail is null!" <<endl;
+        kWarning(30519) << "Read thumbnail is null!";
         delete io;
         return KoFilter::StupidError;
     }

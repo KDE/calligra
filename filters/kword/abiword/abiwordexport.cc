@@ -289,7 +289,7 @@ void AbiWordWorker::writePictureData(const QString& koStoreName, const QString& 
     }
     else
     {
-        kWarning(30506) << "Unable to load picture: " << koStoreName << endl;
+        kWarning(30506) << "Unable to load picture: " << koStoreName;
     }
 }
 
@@ -743,7 +743,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
         }
         else
         {
-            kWarning(30506) << "Unknown alignment: " << layout.alignment << endl;
+            kWarning(30506) << "Unknown alignment: " << layout.alignment;
         }
     }
 
@@ -877,7 +877,7 @@ QString AbiWordWorker::layoutToCss(const LayoutData& layoutOrigin,
             }
         default:
             {
-                kWarning(30506) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                kWarning(30506) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)";
                 break;
             }
         }

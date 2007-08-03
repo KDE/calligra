@@ -42,7 +42,7 @@ bool Document::analyze(Q3PtrList<Element>* root)
 
 bool Document::analyzeDocumentClass(Command* documentclass)
 {
-	kWarning(documentclass != NULL) << "no documentclass found !" << endl;
+	kWarning(documentclass != NULL) << "no documentclass found !";
 	Q3PtrList<Param> params = documentclass->getOptions();
 	Param* param;
 	for ( param = params.first(); param; param = params.next() )

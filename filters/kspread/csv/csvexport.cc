@@ -122,12 +122,12 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
 
   if ( !qobject_cast<const KSpread::Doc *>( document ) )
   {
-    kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
+    kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
     return KoFilter::NotImplemented;
   }
   if ( ( to != "text/csv" && to != "text/plain" ) || from != "application/x-kspread" )
   {
-    kWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
+    kWarning(30501) << "Invalid mimetypes " << to << " " << from;
     return KoFilter::NotImplemented;
   }
 
@@ -135,7 +135,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QByteArray & from, const QB
 
   if ( ksdoc->mimeType() != "application/x-kspread" )
   {
-    kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+    kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
     return KoFilter::NotImplemented;
   }
 

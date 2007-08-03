@@ -37,13 +37,13 @@ KWord13Frameset::~KWord13Frameset( void )
 
 bool KWord13Frameset::addParagraph(const KWord13Paragraph&)
 {
-    kWarning(30520) << "Cannot add paragraph! Not a text frameset!" << endl;
+    kWarning(30520) << "Cannot add paragraph! Not a text frameset!";
     return false;
 }
 
 bool KWord13Frameset::setKey(const QString&)
 {
-    kWarning(30520) << "Cannot set a key! Not a picture frameset!" << endl;
+    kWarning(30520) << "Cannot set a key! Not a picture frameset!";
     return false;
 }
 

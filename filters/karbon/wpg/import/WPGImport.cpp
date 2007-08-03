@@ -118,14 +118,14 @@ KoFilter::ConversionStatus WPGImport::convert( const QByteArray& from, const QBy
 
   if ( !storeout )
   {
-    kWarning() << "Couldn't open the requested file." << endl;
+    kWarning() << "Couldn't open the requested file.";
     return KoFilter::FileNotFound;
   }
 
 #if 0
   if ( !storeout->open( "styles.xml" ) )
   {
-    kWarning() << "Couldn't open the file 'styles.xml'." << endl;
+    kWarning() << "Couldn't open the file 'styles.xml'.";
     return KoFilter::CreationError;
   }
   //storeout->write( createStyles() );
@@ -134,7 +134,7 @@ KoFilter::ConversionStatus WPGImport::convert( const QByteArray& from, const QBy
 
   if ( !storeout->open( "content.xml" ) )
   {
-    kWarning() << "Couldn't open the file 'content.xml'." << endl;
+    kWarning() << "Couldn't open the file 'content.xml'.";
     return KoFilter::CreationError;
   }
   storeout->write(tmpStringStream.str().c_str());
@@ -144,7 +144,7 @@ KoFilter::ConversionStatus WPGImport::convert( const QByteArray& from, const QBy
   storeout->enterDirectory( "META-INF" );
   if ( !storeout->open( "manifest.xml" ) )
   {
-     kWarning() << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+     kWarning() << "Couldn't open the file 'META-INF/manifest.xml'.";
      return KoFilter::CreationError;
   }
   storeout->write( createManifest() );

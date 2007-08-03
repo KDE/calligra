@@ -966,12 +966,12 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
 
     if ( !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
+      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread")
     {
-        kWarning(30521) << "Invalid mimetypes " << to << " " << from << endl;
+        kWarning(30521) << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
@@ -979,7 +979,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
 
     if (ksdoc->mimeType() != "application/x-kspread")
     {
-        kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 

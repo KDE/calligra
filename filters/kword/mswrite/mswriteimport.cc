@@ -312,7 +312,7 @@ public:
 		if (m_codec)
 			m_decoder = m_codec->makeDecoder();
 		else
-			kWarning (30509) << "Cannot convert from Win Charset!" << endl;
+			kWarning (30509) << "Cannot convert from Win Charset!";
 	}
 
 	virtual ~KWordGenerator ()
@@ -924,7 +924,7 @@ public:
 						output += "double";
 						break;
 					default:
-						kWarning (30509) << "non-\"standard\" linespacing value: " <<  lineSpacing << endl;
+						kWarning (30509) << "non-\"standard\" linespacing value: " <<  lineSpacing;
 						output += "atleast\" ";
 						output += "spacingvalue=\"";
 							output += QString::number (Twip2Point (lineSpacing));
@@ -957,7 +957,7 @@ public:
 						amount = 14;
 						break;
 					default:
-						kWarning (30509) << "unknown linespacing value: " << lineSpacing << endl;
+						kWarning (30509) << "unknown linespacing value: " << lineSpacing;
 						break;
 					}
 
@@ -1476,7 +1476,7 @@ KoFilter::ConversionStatus MSWriteImport::convert (const QByteArray &from, const
 			return KoFilter::StupidError;	// got a better return value?
 		}
 
-		kWarning (30509) << "Unknown error: " << errorCode << endl;
+		kWarning (30509) << "Unknown error: " << errorCode;
 		return KoFilter::StupidError;
 	}
 

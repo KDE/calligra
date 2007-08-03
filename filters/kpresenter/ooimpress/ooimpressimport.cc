@@ -74,7 +74,7 @@ KoFilter::ConversionStatus OoImpressImport::convert( QByteArray const & from, QB
     if ( (from != "application/vnd.sun.xml.impress" && from != "application/vnd.sun.xml.impress.template" )
 			    || to != "application/x-kpresenter" )
     {
-        kWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning(30518) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
@@ -1592,7 +1592,7 @@ bool OoImpressImport::pushListLevelStyle( const QString& listStyleName, int leve
 {
     QDomElement* fullListStyle = m_listStyles[listStyleName];
     if ( !fullListStyle ) {
-        kWarning(30518) << "List style " << listStyleName << " not found!" << endl;
+        kWarning(30518) << "List style " << listStyleName << " not found!";
         return false;
     }
     else
@@ -1610,7 +1610,7 @@ bool OoImpressImport::pushListLevelStyle( const QString& listStyleName, // for d
         --i;
     }
     if ( listLevelStyle.isNull() ) {
-        kWarning(30518) << "List level style for level " << level << " in list style " << listStyleName << " not found!" << endl;
+        kWarning(30518) << "List level style for level " << level << " in list style " << listStyleName << " not found!";
         return false;
     }
     kDebug(30518) <<"Pushing list-level-style from list-style" << listStyleName <<" level" << level;
@@ -1793,7 +1793,7 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
         }
         else if ( t.isNull() ) // no textnode, we must ignore
         {
-            kWarning(30518) << "Ignoring tag " << ts.tagName() << endl;
+            kWarning(30518) << "Ignoring tag " << ts.tagName();
             continue;
         }
         else

@@ -150,7 +150,7 @@ int Conversion::fillPatternStyle( int ipat )
     case 25: // Diagonal Cross
         return Qt::DiagCrossPattern;
     default:
-        kWarning(30513) << "Unhandled undocumented SHD ipat value: " << ipat << endl;
+        kWarning(30513) << "Unhandled undocumented SHD ipat value: " << ipat;
         return Qt::NoBrush;
     }
 }
@@ -281,7 +281,7 @@ QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
         // Better implement line-height-at-least like OOo has.
     }
     else
-        kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace << endl;
+        kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace;
     return value;
 }
 
@@ -350,7 +350,7 @@ int Conversion::numberFormatCode( int nfc )
     case 0: // arabic
         return 1;
     }
-    kWarning(30513) << k_funcinfo << "Unknown NFC: " << nfc << endl;
+    kWarning(30513) << k_funcinfo << "Unknown NFC: " << nfc;
     return 1;
 }
 

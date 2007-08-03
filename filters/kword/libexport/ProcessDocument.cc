@@ -316,12 +316,12 @@ void ProcessAnchorTag ( QDomNode       myNode,
 
     if ( type != "frameset" )
     {
-        kWarning (30508) << "Unknown ANCHOR type " << type << "!" << endl;
+        kWarning (30508) << "Unknown ANCHOR type " << type << "!";
     }
 
     if ( (*instance).isEmpty () )
     {
-        kWarning (30508) << "Bad ANCHOR instance name!" << endl;
+        kWarning (30508) << "Bad ANCHOR instance name!";
     }
 
     AllowNoSubtags (myNode, leader);
@@ -528,7 +528,7 @@ static void SubProcessFormatTwoTag(QDomNode myNode,
     if ( (formatPos == -1) )
     {
         // We have no position defined
-        kWarning(30508) << "Missing text image position!" << endl;
+        kWarning(30508) << "Missing text image position!";
         return;
     }
     // In KWord 0.8, the len attribute was not defined
@@ -568,7 +568,7 @@ static void SubProcessFormatThreeTag(QDomNode myNode,
     if ( (formatPos == -1) ) // formatLen is never there but is 1.
     {
         // We have no position and no length defined
-        kWarning(30508) << "Missing variable formatting!" << endl;
+        kWarning(30508) << "Missing variable formatting!";
         return;
     }
     AllowNoSubtags (myNode, leader);
@@ -584,7 +584,7 @@ static void SubProcessFormatFourTag(QDomNode myNode,
     if ( (formatPos == -1) || (formatLen == -1) )
     {
         // We have no position and no length defined
-        kWarning(30508) << "Missing variable formatting!" << endl;
+        kWarning(30508) << "Missing variable formatting!";
         return;
     }
     FormatData formatData(4, formatPos, formatLen);
@@ -621,7 +621,7 @@ static void SubProcessFormatSixTag(QDomNode myNode,
     }
     else
     {
-        kWarning (30508) << "Missing or bad anchor formatting!" << endl;
+        kWarning (30508) << "Missing or bad anchor formatting!";
     }
 }
 
@@ -672,13 +672,13 @@ static void ProcessFormatTag (QDomNode myNode, void *tagData, KWEFKWordLeader *l
         }
     case -1:
         {
-            kWarning (30508) << "FORMAT attribute id value not set!" << endl;
+            kWarning (30508) << "FORMAT attribute id value not set!";
             AllowNoSubtags (myNode, leader);
             break;
         }
     case 5: // KWord 0.8 footnote
     default:
-            kWarning(30508) << "Unexpected FORMAT attribute id value " << formatId << endl;
+            kWarning(30508) << "Unexpected FORMAT attribute id value " << formatId;
             AllowNoSubtags (myNode, leader);
     }
 
@@ -955,7 +955,7 @@ static void ProcessFlowTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *le
             const int align = oldAlign.toInt();
             if ( ( align < 0 ) || ( align > 3) )
             {
-                kWarning(30508) << "KWord 0.8 flow unknown: " << oldAlign << endl;
+                kWarning(30508) << "KWord 0.8 flow unknown: " << oldAlign;
                 layout->alignment = "left"; // Unknown, so assume left
             }
             else
@@ -1019,7 +1019,7 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
     if ( formatDataList.isEmpty () )
     {
-        kWarning (30508) << "No FORMAT tag within LAYOUT/STYLE!" << endl;
+        kWarning (30508) << "No FORMAT tag within LAYOUT/STYLE!";
     }
     else
     {
@@ -1027,14 +1027,14 @@ void ProcessLayoutTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader 
 
         if ( formatDataList.count () > 1 )
         {
-            kWarning (30508) << "More than one FORMAT tag within LAYOUT/STYLE!" << endl;
+            kWarning (30508) << "More than one FORMAT tag within LAYOUT/STYLE!";
         }
     }
 
     if ( layout->styleName.isEmpty () )
     {
         layout->styleName = "Standard";
-        kWarning (30508) << "Empty layout name!" << endl;
+        kWarning (30508) << "Empty layout name!";
     }
 
 }

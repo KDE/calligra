@@ -61,7 +61,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
 
     if ( ( to != "application/vnd.sun.xml.impress") || (from != "application/x-kpresenter" ) )
     {
-        kWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
+        kWarning(30518) << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
@@ -83,13 +83,13 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
 
     if ( !m_storeout )
     {
-        kWarning(30518) << "Couldn't open the requested file." << endl;
+        kWarning(30518) << "Couldn't open the requested file.";
         return KoFilter::FileNotFound;
     }
 
     if ( !m_storeout->open( "meta.xml" ) )
     {
-        kWarning(30518) << "Couldn't open the file 'meta.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'meta.xml'.";
         return KoFilter::CreationError;
     }
 
@@ -110,7 +110,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     // store document content
     if ( !m_storeout->open( "content.xml" ) )
     {
-        kWarning(30518) << "Couldn't open the file 'content.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'content.xml'.";
         return KoFilter::CreationError;
     }
 
@@ -128,7 +128,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     // store document content
     if ( !m_storeout->open( "settings.xml" ) )
     {
-        kWarning(30518) << "Couldn't open the file 'settings.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'settings.xml'.";
         return KoFilter::CreationError;
     }
 
@@ -147,7 +147,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     // store document styles
     if ( !m_storeout->open( "styles.xml" ) )
     {
-        kWarning(30518) << "Couldn't open the file 'styles.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'styles.xml'.";
         return KoFilter::CreationError;
     }
 
@@ -166,7 +166,7 @@ KoFilter::ConversionStatus OoImpressExport::convert( const QByteArray & from,
     m_storeout->enterDirectory( "META-INF" );
     if ( !m_storeout->open( "manifest.xml" ) )
     {
-        kWarning(30518) << "Couldn't open the file 'META-INF/manifest.xml'." << endl;
+        kWarning(30518) << "Couldn't open the file 'META-INF/manifest.xml'.";
         return KoFilter::CreationError;
     }
 
@@ -184,13 +184,13 @@ KoFilter::ConversionStatus OoImpressExport::openFile()
 
     if ( !m_storeinp )
     {
-        kWarning(30518) << "Couldn't open the requested file." << endl;
+        kWarning(30518) << "Couldn't open the requested file.";
         return KoFilter::FileNotFound;
     }
 
     if ( !m_storeinp->open( "maindoc.xml" ) )
     {
-        kWarning(30518) << "This file doesn't seem to be a valid KPresenter file" << endl;
+        kWarning(30518) << "This file doesn't seem to be a valid KPresenter file";
         return KoFilter::WrongFormat;
     }
 
@@ -203,7 +203,7 @@ KoFilter::ConversionStatus OoImpressExport::openFile()
         m_storeinp->close();
     }
     else
-        kWarning(30518) << "Documentinfo do not exist!" << endl;
+        kWarning(30518) << "Documentinfo do not exist!";
 
     emit sigProgress( 10 );
 

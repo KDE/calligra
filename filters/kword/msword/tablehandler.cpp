@@ -62,7 +62,7 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
 {
     if ( m_row == -2 )
     {
-        kWarning(30513) << "tableRowStart: tableStart not called previously!" << endl;
+        kWarning(30513) << "tableRowStart: tableStart not called previously!";
         return;
     }
     Q_ASSERT( m_currentTable );
@@ -221,7 +221,7 @@ int KWord::Table::columnNumber(int cellEdge) const
             return i;
     }
     // This can't happen, if cacheCellEdge has been properly called
-    kWarning(30513) << "Column not found for cellEdge x=" << cellEdge << " - BUG." << endl;
+    kWarning(30513) << "Column not found for cellEdge x=" << cellEdge << " - BUG.";
     return 0;
 }
 

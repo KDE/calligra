@@ -84,7 +84,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
 {
     if(to!="text/html" || from!="application/x-kspread")
     {
-      kWarning(30501) << "Invalid mimetypes " << to << " " << from << endl;
+      kWarning(30501) << "Invalid mimetypes " << to << " " << from;
       return KoFilter::NotImplemented;
     }
 
@@ -95,7 +95,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
 
     if( !::qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
+      kWarning(30501) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
       return KoFilter::NotImplemented;
     }
 
@@ -103,7 +103,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QByteArray& from, const QB
 
     if( ksdoc->mimeType() != "application/x-kspread" )
     {
-      kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+      kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
       return KoFilter::NotImplemented;
     }
 

@@ -47,7 +47,7 @@ bool KWord13PostParsing::postParsePictures( KoStore* store )
         kDebug(30520) <<"Loading..." << it.currentKey();
         if ( ! it.current()->loadPicture( store ) )
         {
-            kWarning(30520) << "Could not load picture!" << endl;
+            kWarning(30520) << "Could not load picture!";
             return false;
         }
     }

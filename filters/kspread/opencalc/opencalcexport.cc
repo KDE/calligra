@@ -116,7 +116,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QByteArray & from,
 
   if ( ( to != "application/vnd.sun.xml.calc") || (from != "application/x-kspread" ) )
   {
-    kWarning(30518) << "Invalid mimetypes " << to << " " << from << endl;
+    kWarning(30518) << "Invalid mimetypes " << to << " " << from;
     return KoFilter::NotImplemented;
   }
 
@@ -124,7 +124,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QByteArray & from,
 
   if ( ksdoc->mimeType() != "application/x-kspread" )
   {
-    kWarning(30518) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+    kWarning(30518) << "Invalid document mimetype " << ksdoc->mimeType();
     return KoFilter::NotImplemented;
   }
 

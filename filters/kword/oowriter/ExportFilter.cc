@@ -185,7 +185,7 @@ QString OOWriterWorker::escapeOOSpan(const QString& strText) const
         case 30:
         case 31:
             {
-                kWarning(30518) << "Not allowed XML character: " << ch.unicode() << endl;
+                kWarning(30518) << "Not allowed XML character: " << ch.unicode();
                 strReturn += '?';
                 break;
             }
@@ -1381,7 +1381,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
 
     if (!isImageLoaded)
     {
-        kWarning(30518) << "Unable to load picture: " << koStoreName << endl;
+        kWarning(30518) << "Unable to load picture: " << koStoreName;
         return true;
     }
 
@@ -1405,7 +1405,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
         }
         else
         {
-            kWarning(30518) << "Could not load KoPicture: " << koStoreName << endl;
+            kWarning(30518) << "Could not load KoPicture: " << koStoreName;
         }
         buffer.close();
     }
@@ -1418,12 +1418,12 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
 
     if ( height < 1.0 )
     {
-        kWarning(30518) << "Silly height for " << koStoreName << " : "  << height << endl;
+        kWarning(30518) << "Silly height for " << koStoreName << " : "  << height;
         height = 72.0;
     }
     if ( width < 1.0 )
     {
-        kWarning(30518) << "Silly width for " << koStoreName << " : "  << width << endl;
+        kWarning(30518) << "Silly width for " << koStoreName << " : "  << width;
         width = 72.0;
     }
 
@@ -1767,7 +1767,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
         }
         else
         {
-            kWarning(30518) << "Unknown alignment: " << layout.alignment << endl;
+            kWarning(30518) << "Unknown alignment: " << layout.alignment;
         }
     }
 
@@ -1889,7 +1889,7 @@ QString OOWriterWorker::layoutToParagraphStyle(const LayoutData& layoutOrigin,
             }
         default:
             {
-                kWarning(30518) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)" << endl;
+                kWarning(30518) << "Unsupported lineSpacingType: " << layout.lineSpacingType << " (Ignoring!)";
                 break;
             }
         }
@@ -2024,7 +2024,7 @@ bool OOWriterWorker::doFullParagraph(const QString& paraText, const LayoutData& 
     }
     else
     {   // SHould not happen
-        kWarning(30518) << "No style for a paragraph!" << endl;
+        kWarning(30518) << "No style for a paragraph!";
     }
 
     *m_streamOut << ">";
@@ -2087,7 +2087,7 @@ bool OOWriterWorker::doFullPaperFormat(const int format,
         || ( width < 1.0 )
         || ( height < 1.0 ) )
     {
-        kWarning(30518) << "Page size problem: format: " << format << " width: " << width << " height: " << height << endl;
+        kWarning(30518) << "Page size problem: format: " << format << " width: " << width << " height: " << height;
         // Something is wrong with the page size
         KoPageFormat::Format newFormat = KoPageFormat::Format ( format );
         m_paperWidth = KoPageFormat::width ( newFormat, KoPageFormat::Orientation( orientation ) ) * 72.0 / 25.4 ;
@@ -2215,7 +2215,7 @@ QString OOWriterWorker::makeAutomaticStyleName(const QString& prefix, ulong& cou
     if (m_styleMap.find(str2)==m_styleMap.end())
         return str2;
 
-    kWarning(30518) << "Could not make an unique style name: " << str2 << endl;
+    kWarning(30518) << "Could not make an unique style name: " << str2;
     return str2; // Still return, as we have nothing better
 }
 

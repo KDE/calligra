@@ -55,7 +55,7 @@ void KWord13OasisGenerator::prepareTextFrameset( KWordTextFrameset* frameset )
 {
     if ( ! frameset )
     {
-        kWarning(30520) << "Tried to prepare a NULL text frameset!" << endl;
+        kWarning(30520) << "Tried to prepare a NULL text frameset!";
         return;
     }
 
@@ -137,7 +137,7 @@ bool KWord13OasisGenerator::prepare( KWord13Document& kwordDocument )
 {
     if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
     {
-        kWarning(30520) << "KWord Document is different!" <<endl;
+        kWarning(30520) << "KWord Document is different!";
     }
 
     m_kwordDocument = &kwordDocument;
@@ -514,7 +514,7 @@ void KWord13OasisGenerator::generateTextFrameset( KoXmlWriter& writer, KWordText
 {
     if ( ! frameset )
     {
-        kWarning(30520) << "Tried to generate a NULL text frameset!" << endl;
+        kWarning(30520) << "Tried to generate a NULL text frameset!";
         return;
     }
 
@@ -836,7 +836,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     QImage image( m_kwordDocument->m_previewFile->name() );
     if ( image.isNull() )
     {
-        kWarning(30520) << "Could not re-read preview from temp file!" << endl;
+        kWarning(30520) << "Could not re-read preview from temp file!";
         return;
     }
 
@@ -844,7 +844,7 @@ void KWord13OasisGenerator::writePreviewFile(void)
     QImage preview( image.convertDepth( 32, Qt::ColorOnly ).smoothScale( 128, 128 ) );
     if ( preview.isNull() )
     {
-        kWarning(30520) << "Could not create preview!" << endl;
+        kWarning(30520) << "Could not create preview!";
         return;
     }
     if ( !preview.hasAlphaBuffer() )
@@ -882,13 +882,13 @@ void KWord13OasisGenerator::writePictures( void )
         QFile file( fileName );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
-            kWarning(30520) << "Cannot open: " << fileName << endl;
+            kWarning(30520) << "Cannot open: " << fileName;
             continue;
         }
         QByteArray array( file.readAll() );
         if ( array.isNull() )
         {
-            kWarning(30520) << "Null picture for " << fileName << endl;
+            kWarning(30520) << "Null picture for " << fileName;
             file.close();
             continue;
         }
@@ -903,7 +903,7 @@ void KWord13OasisGenerator::writePictures( void )
             const QString mimeType ( KMimeType::findByContent( array, 0 )->name() );
             if ( mimeType == "application/octet-stream" )
             {
-                kWarning(30520) << "Generic mime type for " << it.currentKey() << endl;
+                kWarning(30520) << "Generic mime type for " << it.currentKey();
                 // ### TODO: try harder to find a mime type
             }
             m_manifestWriter->addManifestEntry( oasisName, mimeType );
@@ -917,7 +917,7 @@ bool KWord13OasisGenerator::generate ( const QString& fileName, KWord13Document&
 {
     if ( m_kwordDocument && ( (void*) m_kwordDocument ) != ( (void*) &kwordDocument ) )
     {
-        kWarning(30520) << "KWord Document is different!" <<endl;
+        kWarning(30520) << "KWord Document is different!";
     }
 
     m_kwordDocument = &kwordDocument;

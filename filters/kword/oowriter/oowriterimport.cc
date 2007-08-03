@@ -77,7 +77,7 @@ KoFilter::ConversionStatus OoWriterImport::convert( QByteArray const & from, QBy
          && from != "application/vnd.sun.xml.writer.master" )
          || to != "application/x-kword" )
     {
-        kWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning(30518) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
@@ -344,7 +344,7 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const KoXmlElement& 
         // TODO text:sequence-decls
         else
         {
-            kWarning(30518) << "Unsupported body element '" << localName << "'" << endl;
+            kWarning(30518) << "Unsupported body element '" << localName << "'";
         }
 
         if ( !e.isNull() )
@@ -451,7 +451,7 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     else
     {
         // We have no master page! We need defaults.
-        kWarning(30518) << "NO MASTER PAGE" << endl;
+        kWarning(30518) << "NO MASTER PAGE";
         orientation=KoPageFormat::Portrait;
         paperFormat=KoPageFormat::IsoA4Size;
         width=MM_TO_POINT(KoPageFormat::width(paperFormat, orientation));
@@ -640,7 +640,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
               kDebug(30518) <<"Master style: '" << name <<"' loaded";
               m_masterPages.insert( name, new KoXmlElement( master ) );
           } else
-              kWarning(30518) << "Unknown tag " << master.tagName() << " in office:master-styles" << endl;
+              kWarning(30518) << "Unknown tag " << master.tagName() << " in office:master-styles";
       }
   }
 
@@ -696,7 +696,7 @@ void OoWriterImport::insertStyles( const KoXmlElement& styles, QDomDocument& doc
                       || localName == "time-style" ) && ns == ooNS::number ) {
             importDateTimeStyle( e );
         } else {
-            kWarning(30518) << "Unknown element " << localName << " in styles" << endl;
+            kWarning(30518) << "Unknown element " << localName << " in styles";
         }
     }
 }
@@ -805,7 +805,7 @@ void OoWriterImport::fillStyleStack( const KoXmlElement& object, const char* nsU
         if ( style )
             addStyles( style );
         else
-            kWarning(30518) << "fillStyleStack: no style named " << styleName << " found." << endl;
+            kWarning(30518) << "fillStyleStack: no style named " << styleName << " found.";
     }
 }
 
@@ -820,7 +820,7 @@ void OoWriterImport::addStyles( const KoXmlElement* style )
         if ( parentStyle )
             addStyles( parentStyle );
         else
-            kWarning(30518) << "Parent style not found: " << parentStyleName << endl;
+            kWarning(30518) << "Parent style not found: " << parentStyleName;
     }
     else if ( !m_defaultStyle.isNull() ) // on top of all, the default style
         m_styleStack.push( m_defaultStyle );
@@ -931,7 +931,7 @@ bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, int level
 {
     KoXmlElement* fullListStyle = m_listStyles[listStyleName];
     if ( !fullListStyle ) {
-        kWarning(30518) << "List style " << listStyleName << " not found!" << endl;
+        kWarning(30518) << "List style " << listStyleName << " not found!";
         return false;
     }
     else
@@ -949,7 +949,7 @@ bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, // for de
         --i;
     }
     if ( listLevelStyle.isNull() ) {
-        kWarning(30518) << "List level style for level " << level << " in list style " << listStyleName << " not found!" << endl;
+        kWarning(30518) << "List level style for level " << level << " in list style " << listStyleName << " not found!";
         return false;
     }
     kDebug(30518) <<"Pushing list-level-style from list-style" << listStyleName <<" level" << level;
@@ -1137,7 +1137,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& 
             } else {
                 if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
                     // Oh tell me this never happens...
-                    kWarning(30518) << "Cross-frameset bookmark! Not supported." << endl;
+                    kWarning(30518) << "Cross-frameset bookmark! Not supported.";
                 } else {
                     appendBookmark( doc, (*it).paragId, (*it).pos,
                                     numberOfParagraphs( m_currentFrameset ), pos, it.key() );
@@ -1147,7 +1147,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& 
         }
         else if ( t.isNull() ) // no textnode, we must ignore
         {
-            kWarning(30518) << "Ignoring tag " << ts.tagName() << endl;
+            kWarning(30518) << "Ignoring tag " << ts.tagName();
             continue;
         }
         else
@@ -1579,7 +1579,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const KoXmlEleme
         // min-width is not supported in KWord. Let's use it as a fixed width.
         width = KoUnit::parseValue( object.attributeNS( ooNS::fo, "min-width", QString::null ) );
     } else {
-        kWarning(30518) << "Error in text-box: neither width nor min-width specified!" << endl;
+        kWarning(30518) << "Error in text-box: neither width nor min-width specified!";
     }
     double height = 100;
     bool hasMinHeight = false;
@@ -1590,7 +1590,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const KoXmlEleme
         height = KoUnit::parseValue( object.attributeNS( ooNS::fo, "min-height", QString::null ) );
         hasMinHeight = true;
     } else {
-        kWarning(30518) << "Error in text-box: neither height nor min-height specified!" << endl;
+        kWarning(30518) << "Error in text-box: neither height nor min-height specified!";
     }
 
     // draw:textarea-vertical-align, draw:textarea-horizontal-align
@@ -1824,12 +1824,12 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const KoXmlElement& obj
         const KArchiveEntry* entry = m_zip->directory()->entry( filename );
         if (!entry)
         {
-            kWarning(30518) << "Picture " << filename << " not found!" << endl;
+            kWarning(30518) << "Picture " << filename << " not found!";
             return frameName;
         }
         if (entry->isDirectory())
         {
-            kWarning(30518) << "Picture " << filename << " is a directory!" << endl;
+            kWarning(30518) << "Picture " << filename << " is a directory!";
             return frameName;
         }
         const KZipFileEntry* f = static_cast<const KZipFileEntry *>(entry);
@@ -1838,11 +1838,11 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const KoXmlElement& obj
 
         if (!io)
         {
-            kWarning(30518) << "No QIODevice for picture  " << frameName << " " << href << endl;
+            kWarning(30518) << "No QIODevice for picture  " << frameName << " " << href;
             return frameName;
         }
         if (!picture.load(io,strExtension))
-            kWarning(30518) << "Cannot load picture: " << frameName << " " << href << endl;
+            kWarning(30518) << "Cannot load picture: " << frameName << " " << href;
         delete io;
     }
     else
@@ -1867,16 +1867,16 @@ QString OoWriterImport::appendPicture(QDomDocument& doc, const KoXmlElement& obj
     {
         if (!out->open(QIODevice::WriteOnly))
         {
-            kWarning(30518) << "Cannot open for saving picture: " << frameName << " " << href << endl;
+            kWarning(30518) << "Cannot open for saving picture: " << frameName << " " << href;
             return frameName;
         }
         if (!picture.save(out))
-        kWarning(30518) << "Cannot save picture: " << frameName << " " << href << endl;
+        kWarning(30518) << "Cannot save picture: " << frameName << " " << href;
         out->close();
     }
     else
     {
-         kWarning(30518) << "Cannot store picture: " << frameName << " " << href << endl;
+         kWarning(30518) << "Cannot store picture: " << frameName << " " << href;
          return frameName;
     }
 
@@ -2159,7 +2159,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
     }
     else
     {
-        kWarning(30518) << "Unsupported field " << localName << endl;
+        kWarning(30518) << "Unsupported field " << localName;
     }
 // TODO localName == "page-variable-get", "initial-creator" and many more
 }
@@ -2240,18 +2240,18 @@ void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, 
                 const KoXmlElement elemProps( KoDom::namedItemNS( *style, ooNS::style, "properties") );
                 if (elemProps.isNull())
                 {
-                    kWarning(30518) << "Could not find table column style properties!" << endl;
+                    kWarning(30518) << "Could not find table column style properties!";
                 }
                 const QString strWidth ( elemProps.attributeNS( ooNS::style, "column-width", QString::null) );
                 kDebug(30518) <<"- raw style width" << strWidth;
                 width = KoUnit::parseValue( strWidth );
             }
             else
-                kWarning(30518) << "Could not find table column style!" << endl;
+                kWarning(30518) << "Could not find table column style!";
 
             if (width < 1.0) // Something is wrong with the width
             {
-                kWarning(30518) << "Table column width ridiculous, assuming 1 inch!" << endl;
+                kWarning(30518) << "Table column width ridiculous, assuming 1 inch!";
                 width=72.0;
             }
             else
@@ -2295,7 +2295,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const KoXmlElement& 
         const QString localName = e.localName();
         const QString ns = e.namespaceURI();
         if ( ns != ooNS::table ) {
-            kWarning(30518) << "Skipping element " << e.tagName() << " (in OoWriterImport::parseInsideOfTable)" << endl;
+            kWarning(30518) << "Skipping element " << e.tagName() << " (in OoWriterImport::parseInsideOfTable)";
             continue;
         }
 
@@ -2359,7 +2359,7 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const KoXmlElement& 
         // TODO sub-table
         else
         {
-            kWarning(30518) << "Skipping element " << localName << " (in OoWriterImport::parseInsideOfTable)" << endl;
+            kWarning(30518) << "Skipping element " << localName << " (in OoWriterImport::parseInsideOfTable)";
         }
 
         m_styleStack.restore();

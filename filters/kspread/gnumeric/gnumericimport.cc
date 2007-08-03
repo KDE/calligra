@@ -142,7 +142,7 @@ void GNUMERICFilter::GnumericDate::jul2greg( double num, int & y, int & m, int &
   if (i > g_dateSerial_19000228)
     --i;
   else if (i == g_dateSerial_19000228 + 1)
-    kWarning(30521) << "Request for date 02/29/1900." << endl;
+    kWarning(30521) << "Request for date 02/29/1900.";
 
   kDebug(30521) <<"***** Num:" << num <<", i:" << i;
 
@@ -1878,12 +1878,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
     if ( !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
+      kWarning(30521) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if ( from != "application/x-gnumeric" || to != "application/x-kspread" )
     {
-        kWarning(30521) << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning(30521) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
@@ -1894,7 +1894,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
     if ( ksdoc->mimeType() != "application/x-kspread" )
     {
-        kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType() << endl;
+        kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
@@ -2038,7 +2038,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         QDomNode mergedRegion = mergedCells.namedItem( "gmr:Merge" );
         if ( cell.isNull() )
         {
-          kWarning(30521) << "No cells" << endl;
+          kWarning(30521) << "No cells";
         }
 
 	while ( !cell.isNull() )
@@ -2201,7 +2201,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
         if ( mergedRegion.isNull() )
         {
-          kWarning(30521) << "No cells merged !" << endl;
+          kWarning(30521) << "No cells merged !";
         }
 	while ( !mergedRegion.isNull() )
         {

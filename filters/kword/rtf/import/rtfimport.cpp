@@ -304,9 +304,9 @@ RTFImport::RTFImport( QObject* parent, const QStringList& )
     // Check the hash size (see QDict doc)
     kDebug(30515) << properties.count() <<" normal and" << destinationProperties.count() <<" destination keywords loaded";
     if (properties.size() < properties.count())
-        kWarning(30515) << "Hash size of properties too small: " << properties.size() << ". It should be at least " << properties.count() << " and be a prime number"<< endl;
+        kWarning(30515) << "Hash size of properties too small: " << properties.size() << ". It should be at least " << properties.count() << " and be a prime number";
     if (destinationProperties.size() < destinationProperties.count())
-        kWarning(30515) << "Hash size of destinationProperties too small: " << destinationProperties.size() << ". It should be at least " << destinationProperties.count() << " and be a prime number"<< endl;
+        kWarning(30515) << "Hash size of destinationProperties too small: " << destinationProperties.size() << ". It should be at least " << destinationProperties.count() << " and be a prime number";
     // DEBUG END
     fnnum=0;
 }
@@ -530,7 +530,7 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
                 //kDebug(30515) <<"Closing destination..." << destinationStack.count();
                 if (destinationStack.isEmpty())
                 {
-                    kWarning(30515) << "Destination stack is empty! Document might be buggy!" << endl;
+                    kWarning(30515) << "Destination stack is empty! Document might be buggy!";
                     // Keep the destination to save what can still be saved!
                 }
                 else
@@ -586,9 +586,9 @@ KoFilter::ConversionStatus RTFImport::convert( const QByteArray& from, const QBy
 		}
                 else if ( !property )
                 {
-                    kWarning(30515) << "Unknown first non-ignorable token of a group: " << token.text << endl; kDebug(30515) <<"Destination:" << ( (void*) destination.name ) <<" Destination stack depth:" << destinationStack.count();
+                    kWarning(30515) << "Unknown first non-ignorable token of a group: " << token.text; kDebug(30515) <<"Destination:" << ( (void*) destination.name ) <<" Destination stack depth:" << destinationStack.count();
                     // Put the second warning separately, as it can crash if destination.name is dangling
-                    kWarning(30515) << " Assuming destination: " << destination.name << endl;
+                    kWarning(30515) << " Assuming destination: " << destination.name;
                     debugUnknownKeywords[token.text]++;
                 }
 	    }
@@ -1264,7 +1264,7 @@ void RTFImport::insertHexSymbol( RTFProperty * )
     // (e.g. attachment #7758 of bug #90649)
     if ( !token.value )
     {
-        kWarning(30515) << "Trying to insert NUL character!" << endl;
+        kWarning(30515) << "Trying to insert NUL character!";
         return;
     }
 
@@ -1728,7 +1728,7 @@ void RTFImport::parseField( RTFProperty * )
 	    }
                 if (!ok)
                 {
-                    kWarning(30515) << "Field not supported: " << fieldName << endl;
+                    kWarning(30515) << "Field not supported: " << fieldName;
                     return;
                 }
 	    if (fieldTable[i].type == 4)
@@ -1794,7 +1794,7 @@ void RTFImport::parseField( RTFProperty * )
                 QRegExp regexp("\\\\@\\s*\"(.+)\""); // \@ "Text"
                 if (regexp.search(strFldinst)==-1)
                 { // Not found? Perhaps it is not in quotes (even if it is rare)
-                    kWarning(30515) << "Date/time field format not in quotes!" << endl;
+                    kWarning(30515) << "Date/time field format not in quotes!";
                     strFldinst += ' '; // Add a space at the end to simplify the regular expression
                     regexp = QRegExp("\\\\@(\\S+)\\s+"); // \@some_text_up_to_a_space
                     regexp.search(strFldinst);
@@ -2442,7 +2442,7 @@ void RTFImport::addParagraph( DomNode &node, bool frameBreak )
 
     if ( name.isEmpty() )
     {
-        kWarning(30515) << "Style name empty! Assuming Standard!" << endl;
+        kWarning(30515) << "Style name empty! Assuming Standard!";
         name = "Standard";
     }
 

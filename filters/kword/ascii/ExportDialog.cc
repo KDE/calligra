@@ -85,7 +85,7 @@ QTextCodec* AsciiExportDialog::getCodec(void) const
     if ( !codec || !ok )
     {
         // Default: UTF-8
-        kWarning(30502) << "Cannot find encoding:" << strCodec << endl;
+        kWarning(30502) << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
         KMessageBox::error( 0, i18n("Cannot find encoding: %1", strCodec ) );
         return 0;

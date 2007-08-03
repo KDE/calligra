@@ -407,7 +407,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         {
             // The field type is currently not supported by this filter,
             //   therefore write the field type in red as normal text
-            kWarning(30506) << "Unknown <field> type: " << strType << endl;
+            kWarning(30506) << "Unknown <field> type: " << strType;
             QDomElement formatElement=mainDocument.createElement("FORMAT");
             formatElement.setAttribute("id",1); // Variable
             formatElement.setAttribute("pos",stackItem->pos); // Start position
@@ -464,7 +464,7 @@ static bool StartElementS(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
     if (strStyleName.isEmpty())
     {
-        kWarning(30506) << "Style has no name!" << endl;
+        kWarning(30506) << "Style has no name!";
     }
     else
     {
@@ -512,7 +512,7 @@ bool StructureParser::StartElementImage(StackItem* stackItem, StackItem* stackCu
 
     if (strDataId.isEmpty())
     {
-        kWarning(30506) << "Image has no data id!" << endl;
+        kWarning(30506) << "Image has no data id!";
     }
     else
     {
@@ -594,7 +594,7 @@ static bool StartElementD(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
     if (strName.isEmpty())
     {
-        kWarning(30506) << "Data has no name!" << endl;
+        kWarning(30506) << "Data has no name!";
         stackItem->elementType=ElementTypeEmpty;
         return true;
     }
@@ -718,7 +718,7 @@ static bool StartElementM(StackItem* stackItem, StackItem* /*stackCurrent*/,
 
     if (strKey.isEmpty())
     {
-        kWarning(30506) << "Metadata has no key!" << endl;
+        kWarning(30506) << "Metadata has no key!";
         stackItem->elementType=ElementTypeIgnore;
         return true;
     }
@@ -860,7 +860,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
 {
     if (attributes.value("page-scale").toDouble()!=1.0)
     {
-        kWarning(30506) << "Ignoring unsupported page scale: " << attributes.value("page-scale") << endl;
+        kWarning(30506) << "Ignoring unsupported page scale: " << attributes.value("page-scale");
     }
 
     int kwordOrientation;
@@ -876,7 +876,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
     }
     else
     {
-        kWarning(30506) << "Unknown page orientation: " << strOrientation << "! Ignoring! " << endl;
+        kWarning(30506) << "Unknown page orientation: " << strOrientation << "! Ignoring! ";
         kwordOrientation=0;
     }
 
@@ -922,7 +922,7 @@ static bool StartElementPageSize(QDomElement& paperElement, const QXmlAttributes
         {
             kwordHeight = 0.0;
             kwordWidth  = 0.0;
-            kWarning(30506) << "Unknown unit type: " << strUnits << endl;
+            kWarning(30506) << "Unknown unit type: " << strUnits;
         }
     }
     else
@@ -1066,7 +1066,7 @@ bool StructureParser::StartElementFoot(StackItem* stackItem, StackItem* /*stackC
 
     if (id.isEmpty())
     {
-        kWarning(30506) << "Footnote has no id!" << endl;
+        kWarning(30506) << "Footnote has no id!";
         stackItem->elementType=ElementTypeIgnore;
         return true;
     }
@@ -1296,12 +1296,12 @@ bool StructureParser :: startElement( const QString&, const QString&, const QStr
         StackItem* stackCurrent=structureStack.current();
         if (stackCurrent->elementType==ElementTypeContent)
         {
-            kWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
+            kWarning(30506) << "Forced column break found! Transforming to forced page break";
             success=complexForcedPageBreak(stackItem);
         }
         else if (stackCurrent->elementType==ElementTypeParagraph)
         {
-            kWarning(30506) << "Forced column break found! Transforming to forced page break" << endl;
+            kWarning(30506) << "Forced column break found! Transforming to forced page break";
             success=StartElementPBR(stackItem,stackCurrent,mainDocument);
         }
         else
@@ -1587,7 +1587,7 @@ bool StructureParser::endDocument(void)
         AddStyle(styleElement, it.key(),it.value(),mainDocument);
     }
     else
-        kWarning(30506) << "No 'Normal' style" << endl;
+        kWarning(30506) << "No 'Normal' style";
 
     for (it=styleDataMap.begin();it!=styleDataMap.end();++it)
     {

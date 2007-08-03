@@ -986,7 +986,7 @@ bool OpenCalcImport::readRowsAndCells( KoXmlElement & content, Sheet * table )
     columns = 1;
   }
 
-  kDebug(30518) <<"Reading in rows done" << endl;
+  kDebug(30518) <<"Reading in rows done";
 
   return true;
 }
@@ -1939,7 +1939,7 @@ QString * OpenCalcImport::loadFormat( KoXmlElement * element,
     format->append( f );
   }
 
-  kDebug(30518) <<"*** New FormatString:" << *format << endl;
+  kDebug(30518) <<"*** New FormatString:" << *format;
 
   m_formats.insert( name, format );
 
@@ -2727,13 +2727,13 @@ KoFilter::ConversionStatus OpenCalcImport::convert( QByteArray const & from, QBy
 
   if (  !qobject_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
   {
-    kWarning(30518) << "document isn't a KSpread::Doc but a " << document->metaObject()->className() << endl;
+    kWarning(30518) << "document isn't a KSpread::Doc but a " << document->metaObject()->className();
     return KoFilter::NotImplemented;
   }
 
   if ( ( from != "application/vnd.sun.xml.calc" && from != "application/vnd.sun.xml.calc.template") || to != "application/x-kspread" )
   {
-    kWarning(30518) << "Invalid mimetypes " << from << " " << to << endl;
+    kWarning(30518) << "Invalid mimetypes " << from << " " << to;
     return KoFilter::NotImplemented;
   }
 
@@ -2741,7 +2741,7 @@ KoFilter::ConversionStatus OpenCalcImport::convert( QByteArray const & from, QBy
 
   if ( m_doc->mimeType() != "application/x-kspread" )
   {
-    kWarning(30518) << "Invalid document mimetype " << m_doc->mimeType() << endl;
+    kWarning(30518) << "Invalid document mimetype " << m_doc->mimeType();
     return KoFilter::NotImplemented;
   }
 
@@ -2772,7 +2772,7 @@ KoFilter::ConversionStatus OpenCalcImport::openFile()
 
   if ( !store )
   {
-    kWarning(30518) << "Couldn't open the requested file." << endl;
+    kWarning(30518) << "Couldn't open the requested file.";
     return KoFilter::FileNotFound;
   }
 

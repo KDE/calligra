@@ -47,7 +47,7 @@ bool KWord13Picture::loadPicture( KoStore* store )
  
     if ( !m_tempFile->open() || !store->extractFile( m_storeName, m_tempFile->fileName() ) )
     {
-        kWarning(30520) << "Could not write temporary file!" << endl;
+        kWarning(30520) << "Could not write temporary file!";
         delete m_tempFile;
         m_tempFile = 0;
         m_valid = false;

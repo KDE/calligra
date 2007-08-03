@@ -94,7 +94,7 @@ bool KWord13Import::parseRoot( QIODevice* io, KWord13Document& kwordDocument )
 
     if (!reader.parse( source ))
     {
-        kWarning(30520) << "Parse Error" << endl;
+        kWarning(30520) << "Parse Error";
         return false;
     }
     return true;
@@ -138,7 +138,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         kDebug (30520) <<"Processing document info...";
         if ( ! parseInfo ( &ioInfo, kwordDocument ) )
         {
-            kWarning(30520) << "Parsing documentinfo.xml has failed. Ignoring!" << endl;
+            kWarning(30520) << "Parsing documentinfo.xml has failed. Ignoring!";
         }
         ioInfo.close();
         store->close();
@@ -155,7 +155,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
         kDebug (30520) <<"Processing root...";
         if ( ! parseRoot ( &ioMain, kwordDocument ) )
         {
-            kWarning(30520) << "Parsing maindoc.xml has failed! Aborting!" << endl;
+            kWarning(30520) << "Parsing maindoc.xml has failed! Aborting!";
             delete store;
             return KoFilter::StupidError;
         }
@@ -171,7 +171,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
             const QByteArray image ( ioPreview.readAll() );
             if ( image.isNull() )
             {
-                kWarning(30520) << "Loading of preview failed! Ignoring!" << endl;
+                kWarning(30520) << "Loading of preview failed! Ignoring!";
             }
             else
             {
@@ -192,7 +192,7 @@ KoFilter::ConversionStatus KWord13Import::convert( const QByteArray& from, const
     }
     else
     {
-        kWarning(30520) << "Opening store has failed. Trying raw XML file!" << endl;
+        kWarning(30520) << "Opening store has failed. Trying raw XML file!";
         // Be sure to undefine store
         delete store;
         store = 0;

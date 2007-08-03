@@ -58,7 +58,7 @@ bool KHTMLReader::filter(const KUrl& url) {
 	_html->setJavaEnabled(false);
 	_html->setMetaRefreshEnabled(false);
 	if (_html->openUrl(url) == false) {
-		kWarning(30503) << "openUrl returned false" << endl;
+		kWarning(30503) << "openUrl returned false";
 		return false;
 	}
 
@@ -143,7 +143,7 @@ void KHTMLReader::completed() {
 	DOM::Node docbody=list.item(0);
 
 	if (docbody.isNull()) {
-		kWarning(30503) << "no <BODY>, giving up" << endl;
+		kWarning(30503) << "no <BODY>, giving up";
 		_it_worked=false;
 		return;
 	}
@@ -156,7 +156,7 @@ void KHTMLReader::completed() {
 	if (!dochead.isNull())
 		parse_head(dochead);
 	else
-		kWarning(30503) << "WARNING: no html <HEAD> section" << endl;
+		kWarning(30503) << "WARNING: no html <HEAD> section";
 
 	_writer->cleanUpParagraph(state()->paragraph);
         _it_worked=_writer->writeDoc();

@@ -178,7 +178,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     
     if ( m_currentFormat )
     {
-        kWarning(30520) << "Current format already defined!" << endl;
+        kWarning(30520) << "Current format already defined!";
         delete m_currentFormat;
         m_currentFormat = 0;
     }
@@ -219,7 +219,7 @@ bool KWord13Parser::startElementFormat( const QString&, const QXmlAttributes& at
     }
     else
     {
-        kWarning(30520) << "Cannot set position of <FORMAT>: " << attributes.value( "pos" ) << endl;
+        kWarning(30520) << "Cannot set position of <FORMAT>: " << attributes.value( "pos" );
         return false; // Assume parse error!
     }
     
@@ -240,14 +240,14 @@ bool KWord13Parser::startElementLayout( const QString&, const QXmlAttributes& at
     
     if ( m_currentFormat )
     {
-        kWarning(30520) << "Current format defined! (Layout)" << endl;
+        kWarning(30520) << "Current format defined! (Layout)";
         delete m_currentFormat;
         m_currentFormat = 0;
     }
     if ( m_currentLayout )
     {
         // Delete an eventually already existing paragraph (should not happen)
-        kWarning(30520) << "Current layout already defined!" << endl;
+        kWarning(30520) << "Current layout already defined!";
         delete m_currentLayout;
     }
         
@@ -270,7 +270,7 @@ bool KWord13Parser::startElementParagraph( const QString&, const QXmlAttributes&
     if ( m_currentParagraph )
     {
         // Delete an eventually already existing paragraph (should not happen)
-        kWarning(30520) << "Current paragraph already defined!" << endl;
+        kWarning(30520) << "Current paragraph already defined!";
         delete m_currentParagraph;
     }
         
@@ -368,7 +368,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
     {
         if ( !frameInfo )
         {
-            kWarning(30520) << "Unknown FrameInfo for pictures: " << frameInfo << endl;
+            kWarning(30520) << "Unknown FrameInfo for pictures: " << frameInfo;
         }
         stackItem->elementType = KWord13TypePictureFrameset;
         KWord13PictureFrameset* frameset = new KWord13PictureFrameset( frameType, frameInfo, attributes.value( "name" ) );
@@ -381,7 +381,7 @@ bool KWord13Parser::startElementFrameset( const QString& name, const QXmlAttribu
     else
     {
         // Frame of unknown/unsupported type
-        kWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr << endl;
+        kWarning(30520) << "Unknown/unsupported <FRAMESET> type! Type: " << frameTypeStr << " Info: " << frameInfoStr;
         stackItem->elementType = KWord13TypeUnknownFrameset;
         KWord13Frameset* frameset = new KWord13Frameset( frameType, frameInfo, attributes.value( "name" ) );
         m_kwordDocument->m_otherFramesetList.append( frameset );
@@ -459,7 +459,7 @@ bool KWord13Parser::startElementAnchor( const QString& name, const QXmlAttribute
     {
         const QString anchorType ( attributes.value( "type" ) );
 	if ( anchorType == "grpMgr" )
-	    kWarning(30520) << "Anchor of type grpMgr! Not tested!" << endl; // ### TODO
+	    kWarning(30520) << "Anchor of type grpMgr! Not tested!"; // ### TODO
         else if ( anchorType != "frameset" )
 	{
 	    kError(30520) << "Unsupported anchor type: " << anchorType << endl;
@@ -817,7 +817,7 @@ bool KWord13Parser :: characters ( const QString & ch )
                 }
             }
             if ( found )
-                kWarning(30520) << "Unexcepted control characters found in text!" << endl;
+                kWarning(30520) << "Unexcepted control characters found in text!";
             m_currentParagraph->appendText( tmp );
             success = true;
         }

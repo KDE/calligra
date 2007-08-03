@@ -173,7 +173,7 @@ void MSODImport::gotPicture(
 
             QString srcMime( KoEmbeddingFilter::mimeTypeByExtension( extension ) );
             if ( srcMime == KMimeType::defaultMimeType() )
-                kWarning( s_area ) << "Couldn't determine the mimetype from the extension" << endl;
+                kWarning( s_area ) << "Couldn't determine the mimetype from the extension";
 
             Q3CString destMime; // intentionally empty, the filter manager will do the rest
             KoFilter::ConversionStatus status;
@@ -183,7 +183,7 @@ void MSODImport::gotPicture(
             m_embeddeeLength = 0;
 
             if ( status != KoFilter::OK ) {
-                kWarning(s_area) << "Couldn't convert the image!" << endl;
+                kWarning(s_area) << "Couldn't convert the image!";
                 return;
             }
         }

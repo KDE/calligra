@@ -119,7 +119,7 @@ AttrProcessing::AttrProcessing ( const QString& n, const QString& t, void *d )
         type = AttrNull;
     else
     {
-        kWarning(30508) << "Unknown type: " << t << " for element " << n << " assuming NULL" << endl;
+        kWarning(30508) << "Unknown type: " << t << " for element " << n << " assuming NULL";
         type = AttrNull;
     }
 }

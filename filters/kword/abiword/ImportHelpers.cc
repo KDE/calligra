@@ -48,7 +48,7 @@ void AbiPropsMap::splitAndAddAbiProps(const QString& strProps)
         {
             name=(*it);
             value.clear();
-            kWarning(30506) << "Property without value: " << name << endl;
+            kWarning(30506) << "Property without value: " << name;
         }
         else
         {
@@ -75,7 +75,7 @@ double ValueWithLengthUnit( const QString& _str, bool* atleast )
         bool flag=false;
         result=_str.toDouble(&flag);
         if (!flag)
-            kWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)" << endl;
+            kWarning(30506) << "Unknown value: " << _str << " (ValueWithLengthUnit)";
     }
     else
     {

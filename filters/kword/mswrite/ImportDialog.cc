@@ -93,7 +93,7 @@ QTextCodec* MSWriteImportDialog::getCodec(void) const
     if (!codec)
     {
         // Default: UTF-8
-        kWarning(30509) << "No codec set, assuming UTF-8" << endl;
+        kWarning(30509) << "No codec set, assuming UTF-8";
         codec=QTextCodec::codecForName("UTF-8");
     }
 

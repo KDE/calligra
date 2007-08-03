@@ -264,7 +264,7 @@ public:
 		if (m_codec)
 			m_encoder = m_codec->makeEncoder();
 		else
-			kWarning (30509) << "Cannot convert to Win Charset!" << endl;
+			kWarning (30509) << "Cannot convert to Win Charset!";
 
 		m_device = new WRIDevice;
 		if (!m_device)
@@ -430,7 +430,7 @@ public:
 			m_isHeaderOnFirstPage = false;
 			break;
 		default:
-			kWarning (30509) << "Unknown headerType: " << headerType << endl;
+			kWarning (30509) << "Unknown headerType: " << headerType;
 			m_isHeaderOnFirstPage = false;	// just a guess
 			break;
 		}
@@ -447,7 +447,7 @@ public:
 			m_isFooterOnFirstPage = false;
 			break;
 		default:
-			kWarning (30590) << "Unknown footerType: " << footerType << endl;
+			kWarning (30590) << "Unknown footerType: " << footerType;
 			m_isFooterOnFirstPage = false;	// just a guess
 			break;
 		}
@@ -1066,7 +1066,7 @@ public:
 						int defaultDpi = wmf.defaultDpi ();
 						if (defaultDpi <= 0)
 						{
-							kWarning (30509) << "Invalid defaultDPI: " << defaultDpi << endl;
+							kWarning (30509) << "Invalid defaultDPI: " << defaultDpi;
 							defaultDpi = 1440;
 						}
 						imageActualWidth = width * 1440 / defaultDpi;
@@ -1449,7 +1449,7 @@ public:
 			else if (layout.alignment == "justify")
 				paraProp.setAlignment (MSWrite::Alignment::Justify);
 			else
-				kWarning (30509) << "Unknown Alignment: " << layout.alignment << endl;
+				kWarning (30509) << "Unknown Alignment: " << layout.alignment;
 		}
 
 		// Indentation
@@ -1483,7 +1483,7 @@ public:
 		case LayoutData::LS_MULTIPLE:
 			break;
 		default:
-			kWarning (30509) << "unknown lineSpacingType \'" << layout.lineSpacingType << "\'" << endl;
+			kWarning (30509) << "unknown lineSpacingType \'" << layout.lineSpacingType << "\'";
 		}
 		paraProp.setLineSpacing (lineSpacing);
 
@@ -1503,7 +1503,7 @@ public:
 			// Actually, KWord's UI also only supports 12 so this should never be true
 			if (numTabs >= 12)
 			{
-				kWarning (30509) << "Write does not support more 12 tabulators, not writing out all tabulators" << endl;
+				kWarning (30509) << "Write does not support more 12 tabulators, not writing out all tabulators";
 				break;
 			}
 
@@ -1519,7 +1519,7 @@ public:
 			// int m_filling;
 			// double m_width;
 			if ((*tabIt).m_filling != TabulatorData::TF_NONE)
-				kWarning (30509) <<  "Write does not support Tabulator Filling" << endl;
+				kWarning (30509) <<  "Write does not support Tabulator Filling";
 
 			paraProp.addTabulator (&tab);
 			numTabs++;
@@ -1702,7 +1702,7 @@ public:
 						exportedAtLeastOneImage = true;
 					}
 					else
-						kWarning (30509) << "Unknown type of anchor: " << (*formatIt).frameAnchor.type << endl;
+						kWarning (30509) << "Unknown type of anchor: " << (*formatIt).frameAnchor.type;
 
 
 					// recontinue paragraph
@@ -1959,7 +1959,7 @@ KoFilter::ConversionStatus MSWriteExport::convert (const QByteArray &from, const
 		return KoFilter::CreationError;
 	}
 
-	kWarning (30509) << "Unknown error" << endl;
+	kWarning (30509) << "Unknown error";
 	return KoFilter::StupidError;
 }
 

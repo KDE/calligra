@@ -90,7 +90,7 @@ static FrameAnchor *findAnchor ( const KoPictureKey& key,
         }
     }
 
-    kWarning(30508) << "findAnchor returning NULL!" << endl;
+    kWarning(30508) << "findAnchor returning NULL!";
     return NULL;
 }
 
@@ -212,7 +212,7 @@ static void ProcessParagraphTag ( QDomNode         myNode,
         }
         else
         {
-            kWarning (30508) << "No useful FORMAT tag found for text in PARAGRAPH" << endl;
+            kWarning (30508) << "No useful FORMAT tag found for text in PARAGRAPH";
         }
     }
 
@@ -511,7 +511,7 @@ static void ProcessFramesetTag ( QDomNode        myNode,
                             }
                             else
                             {
-                                kWarning(30508) << "Table anchor not found: " << grpMgr << endl;
+                                kWarning(30508) << "Table anchor not found: " << grpMgr;
                                 FrameAnchor anchor;
                                 ProcessTableAnchor( myNode, leader, &anchor, col, row, cols, rows );
                                 anchor.key = key; // Needed, so that the pseudo-anchor can be found again
@@ -566,11 +566,11 @@ static void ProcessFramesetTag ( QDomNode        myNode,
 
     case 4: // KFormula
         {
-            kWarning(30508) << "KFormula frameset not supported yet!" << endl; // ### TODO
+            kWarning(30508) << "KFormula frameset not supported yet!"; // ### TODO
             break;
         }
     default:
-            kWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)" << endl;
+            kWarning (30508) << "Unexpected frametype " << frameType << " (in ProcessFramesetTag)";
     }
 
     leader->m_currentFramesetName = oldName;
@@ -871,7 +871,7 @@ static void ProcessPixmapsKeyTag ( QDomNode         myNode,
     
     if ( !found )
     {
-        kWarning (30508) << "Could not find any anchor for picture " << key.toString() << endl;
+        kWarning (30508) << "Could not find any anchor for picture " << key.toString();
     }
 
     AllowNoSubtags (myNode, leader);
@@ -1038,7 +1038,7 @@ void ProcessDocTag ( QDomNode         myNode,
         }
         else
         {
-            kWarning(30508) << "No syntax version found, author attribute does not match => assuming new syntax" << endl;
+            kWarning(30508) << "No syntax version found, author attribute does not match => assuming new syntax";
         }
     }
 
@@ -1054,21 +1054,21 @@ void ProcessDocTag ( QDomNode         myNode,
     // Process <PAPER> now, even if mostly the output will need to be delayed.
     QDomNode nodePaper=myNode.namedItem("PAPER");
     if ( nodePaper.isNull () )
-        kWarning (30508) << "No <PAPER>" << endl;
+        kWarning (30508) << "No <PAPER>";
     else
         ProcessPaperTag (nodePaper, NULL, leader);
 
     // Process <VARIABLESETTINGS>
     QDomNode nodeVariableSettings=myNode.namedItem("VARIABLESETTINGS");
     if ( nodeVariableSettings.isNull () )
-	kWarning (30508) << "No <VARIABLESETTINGS>" << endl;
+	kWarning (30508) << "No <VARIABLESETTINGS>";
     else
 	ProcessVariableSettingsTag (nodeVariableSettings, NULL, leader);
 
     // Then we process the styles
     QDomNode nodeStyles=myNode.namedItem("STYLES");
     if ( nodeStyles.isNull () )
-        kWarning (30508) << "No <STYLES>" << endl;
+        kWarning (30508) << "No <STYLES>";
     else
         ProcessStylesPluralTag (nodeStyles, NULL, leader);
 
@@ -1295,7 +1295,7 @@ static bool ProcessStoreFile ( QIODevice* subFile,
 {
     if (!subFile)
     {
-        kWarning(30508) << "Could not get a device for the document!" << endl;
+        kWarning(30508) << "Could not get a device for the document!";
     }
     else if ( subFile->open ( QIODevice::ReadOnly ) )
     {
@@ -1318,7 +1318,7 @@ static bool ProcessStoreFile ( QIODevice* subFile,
     else
     {
         // Note: we do not worry too much if we cannot open the document info!
-        kWarning (30508) << "Unable to open document!" << endl;
+        kWarning (30508) << "Unable to open document!";
     }
     return false;
 }
@@ -1403,7 +1403,7 @@ KoFilter::ConversionStatus KWEFKWordLeader::convert( KoFilterChain* chain,
     kDebug (30508) <<"Processing root...";
     if (!ProcessStoreFile (subFile, ProcessDocTag, this))
     {
-        kWarning(30508) << "Opening root has failed. Trying raw XML file!" << endl;
+        kWarning(30508) << "Opening root has failed. Trying raw XML file!";
 
         const QString filename( chain->inputFile() );
         if (filename.isEmpty() )

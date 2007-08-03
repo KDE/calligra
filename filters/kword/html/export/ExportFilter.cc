@@ -205,7 +205,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
             image.resize( 0 );
             if ( ! loadAndConvertToImage( anchor.picture.koStoreName, extension, "PNG", image ) )
             {
-                kWarning(30503) << "Could not convert picture to PNG!" << endl;
+                kWarning(30503) << "Could not convert picture to PNG!";
                 return false;
             }
             *m_streamOut << "<img "; // This is an empty element!
@@ -232,7 +232,7 @@ bool HtmlWorker::makeImage(const FrameAnchor& anchor)
     }
     else
     {
-        kWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName << endl;
+        kWarning(30503) << "Unable to load picture " << anchor.picture.koStoreName;
     }
 
     return true;
@@ -598,7 +598,7 @@ bool HtmlWorker::doOpenHead(void)
     if (m_strTitle.isEmpty())
     {
         // Somehow we have still an empty title (this should not happen!)
-        kWarning(30503) << "Title still empty! (HtmlWorker::doOpenHead)" << endl;
+        kWarning(30503) << "Title still empty! (HtmlWorker::doOpenHead)";
         m_strTitle=i18n("Untitled Document");
     }
     *m_streamOut << "<title>"<< escapeHtmlText(m_strTitle) <<"</title>\n";  // <TITLE> is mandatory!

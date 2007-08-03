@@ -71,7 +71,7 @@ KoFilter::ConversionStatus OoDrawImport::convert( QByteArray const & from, QByte
 
     if( from != "application/vnd.sun.xml.draw" || to != "application/x-karbon" )
     {
-        kWarning() << "Invalid mimetypes " << from << " " << to << endl;
+        kWarning() << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 

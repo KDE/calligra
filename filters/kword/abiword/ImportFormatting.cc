@@ -326,7 +326,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
             }
             else
             {
-                kWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)" << endl;
+                kWarning(30506) << "Unsupported line height " << lineHeight << " (Ignoring !)";
             }
         }
         else
@@ -376,7 +376,7 @@ void AddLayout(const QString& strStyleName, QDomElement& layoutElement,
                 type=0;
             else
             {
-                kWarning(30506)<<"Unknown tabulator type: " << QString(tabType) << endl;
+                kWarning(30506)<<"Unknown tabulator type: " << QString(tabType);
                 type=0;
             }
             int filling;
