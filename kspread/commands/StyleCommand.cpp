@@ -51,8 +51,12 @@ bool StyleCommand::process(Element* element)
     {
         if ( m_firstrun )
         {
+            const QRect rect = range.adjusted(m_style->hasAttribute(Style::LeftPen) ? -1 : 0,
+                                              m_style->hasAttribute(Style::TopPen) ? -1 : 0,
+                                              m_style->hasAttribute(Style::RightPen) ? 1 : 0,
+                                              m_style->hasAttribute(Style::BottomPen) ? 1 : 0);
             const QList< QPair<QRectF,SharedSubStyle> > rawUndoData
-                    = m_sheet->styleStorage()->undoData( Region(element->rect()) );
+                    = m_sheet->styleStorage()->undoData( Region(rect) );
             for ( int i = 0; i < rawUndoData.count(); ++i )
             {
 //                 if ( m_style->hasAttribute( rawUndoData[i].second->type() ) ||
@@ -115,6 +119,15 @@ bool StyleCommand::process(Element* element)
             style.setLeftBorderPen( leftPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), 1, range.height())), style );
             m_style->setLeftBorderPen(leftPen); // restore pen
+            // reset the border of the adjacent cell
+            if (range.left() > 1)
+            {
+                Style tmpStyle;
+                tmpStyle.setRightBorderPen(QPen(Qt::NoPen));
+                const Region region(QRect(range.left() - 1, range.top(), 1, range.height()));
+                m_sheet->cellStorage()->setStyle(region, tmpStyle);
+                m_sheet->setRegionPaintDirty(region);
+            }
         }
         if ( rightPen.style() != Qt::NoPen )
         {
@@ -122,6 +135,15 @@ bool StyleCommand::process(Element* element)
             style.setRightBorderPen( rightPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.right(), range.top(), 1, range.height())), style );
             m_style->setRightBorderPen(rightPen); // restore pen
+            // reset the border of the adjacent cell
+            if (range.right() < KS_colMax)
+            {
+                Style tmpStyle;
+                tmpStyle.setLeftBorderPen(QPen(Qt::NoPen));
+                const Region region(QRect(range.right() + 1, range.top(), 1, range.height()));
+                m_sheet->cellStorage()->setStyle(region, tmpStyle);
+                m_sheet->setRegionPaintDirty(region);
+            }
         }
         if ( topPen.style() != Qt::NoPen )
         {
@@ -129,6 +151,15 @@ bool StyleCommand::process(Element* element)
             style.setTopBorderPen( topPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.top(), range.width(), 1)), style );
             m_style->setTopBorderPen(topPen); // restore pen
+            // reset the border of the adjacent cell
+            if (range.top() > 1)
+            {
+                Style tmpStyle;
+                tmpStyle.setBottomBorderPen(QPen(Qt::NoPen));
+                const Region region(QRect(range.left(), range.top() - 1, range.width(), 1));
+                m_sheet->cellStorage()->setStyle(region, tmpStyle);
+                m_sheet->setRegionPaintDirty(region);
+            }
         }
         if ( bottomPen.style() != Qt::NoPen )
         {
@@ -136,6 +167,15 @@ bool StyleCommand::process(Element* element)
             style.setBottomBorderPen( bottomPen );
             m_sheet->cellStorage()->setStyle( Region(QRect(range.left(), range.bottom(), range.width(), 1)), style );
             m_style->setBottomBorderPen(bottomPen); // restore pen
+            // reset the border of the adjacent cell
+            if (range.bottom() < KS_rowMax)
+            {
+                Style tmpStyle;
+                tmpStyle.setTopBorderPen(QPen(Qt::NoPen));
+                const Region region(QRect(range.left(), range.bottom() + 1, range.width(), 1));
+                m_sheet->cellStorage()->setStyle(region, tmpStyle);
+                m_sheet->setRegionPaintDirty(region);
+            }
         }
     }
     return true;
