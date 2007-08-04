@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 #include "CellStorage.h"
+#include "CellStorage_p.h"
 #include "Damages.h"
 #include "Doc.h"
 #include "RowColumnFormat.h"
@@ -638,6 +639,11 @@ InsertDeleteColumnManipulator::InsertDeleteColumnManipulator()
     setText( i18n( "Insert Columns" ) );
 }
 
+InsertDeleteColumnManipulator::~InsertDeleteColumnManipulator()
+{
+    delete m_undoData;
+}
+
 void InsertDeleteColumnManipulator::setReverse( bool reverse )
 {
     m_reverse = reverse;
@@ -698,6 +704,11 @@ InsertDeleteRowManipulator::InsertDeleteRowManipulator()
     , m_mode( Insert )
 {
     setText( i18n( "Insert Rows" ) );
+}
+
+InsertDeleteRowManipulator::~InsertDeleteRowManipulator()
+{
+    delete m_undoData;
 }
 
 void InsertDeleteRowManipulator::setReverse( bool reverse )

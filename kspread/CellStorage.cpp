@@ -19,6 +19,7 @@
 
 // Local
 #include "CellStorage.h"
+#include "CellStorage_p.h"
 
 // KDE
 #include <klocale.h>
@@ -42,53 +43,6 @@
 using namespace KSpread;
 
 typedef RectStorage<QString> NamedAreaStorage;
-
-class KSpread::CellStorageUndoData
-{
-public:
-    bool isEmpty() const
-    {
-        if ( !comments.isEmpty() )
-            return false;
-        if ( !conditions.isEmpty() )
-            return false;
-        if ( !databases.isEmpty() )
-            return false;
-        if ( !formulas.isEmpty() )
-            return false;
-        if ( !fusions.isEmpty() )
-            return false;
-        if ( !links.isEmpty() )
-            return false;
-        if ( !matrices.isEmpty() )
-            return false;
-        if ( !namedAreas.isEmpty() )
-            return false;
-        if ( !styles.isEmpty() )
-            return false;
-        if ( !userInputs.isEmpty() )
-            return false;
-        if ( !validities.isEmpty() )
-            return false;
-        if ( !values.isEmpty() )
-            return false;
-        return true;
-    }
-
-    QList< QPair<QRectF,Binding> >          bindings;
-    QList< QPair<QRectF,QString> >          comments;
-    QList< QPair<QRectF,Conditions> >       conditions;
-    QList< QPair<QRectF,Database> >         databases;
-    QVector< QPair<QPoint,Formula> >        formulas;
-    QList< QPair<QRectF,bool> >             fusions;
-    QVector< QPair<QPoint,QString> >        links;
-    QList< QPair<QRectF,bool> >             matrices;
-    QList< QPair<QRectF,QString> >          namedAreas;
-    QList< QPair<QRectF,SharedSubStyle> >   styles;
-    QVector< QPair<QPoint,QString> >        userInputs;
-    QList< QPair<QRectF,Validity> >         validities;
-    QVector< QPair<QPoint,Value> >          values;
-};
 
 class CellStorage::Private
 {

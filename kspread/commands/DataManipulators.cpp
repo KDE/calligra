@@ -24,6 +24,7 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
+#include "CellStorage_p.h"
 #include "Damages.h"
 #include "Doc.h"
 #include "Sheet.h"
@@ -42,6 +43,7 @@ AbstractDataManipulator::AbstractDataManipulator ()
 
 AbstractDataManipulator::~AbstractDataManipulator ()
 {
+    delete m_undoData;
 }
 
 bool AbstractDataManipulator::process (Element* element)
@@ -424,6 +426,11 @@ ShiftManipulator::ShiftManipulator()
 {
     m_checkLock = true;
     setText(i18n( "Insert Cells" ));
+}
+
+ShiftManipulator::~ShiftManipulator()
+{
+    delete m_undoData;
 }
 
 void ShiftManipulator::setReverse( bool reverse )

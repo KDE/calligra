@@ -194,6 +194,7 @@ class ShiftManipulator : public AbstractRegionCommand
 public:
     enum Direction { ShiftRight, ShiftBottom };
     ShiftManipulator();
+    virtual ~ShiftManipulator();
     void setDirection( Direction direction ) { m_direction = direction; }
     virtual void setReverse( bool reverse );
 

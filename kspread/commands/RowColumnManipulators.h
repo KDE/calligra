@@ -144,6 +144,7 @@ class InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
     InsertDeleteColumnManipulator();
+    virtual ~InsertDeleteColumnManipulator();
 
     virtual void setReverse( bool reverse );
 
@@ -168,6 +169,7 @@ class InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
     InsertDeleteRowManipulator();
+    virtual ~InsertDeleteRowManipulator();
 
     virtual void setReverse( bool reverse );
 
