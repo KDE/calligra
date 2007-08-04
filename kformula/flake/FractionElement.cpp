@@ -20,10 +20,9 @@
 */
 
 #include "FractionElement.h"
-#include "ElementFactory.h"
-#include "FormulaCursor.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <QPainter>
 
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
@@ -110,6 +109,11 @@ const QList<BasicElement*> FractionElement::childElements()
     return list;
 }
 
+BasicElement* FractionElement::acceptCursor( CursorDirection direction )
+{
+    return 0;
+}
+
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
     /*
@@ -137,22 +141,6 @@ void FractionElement::removeChild( BasicElement* element )
         m_denominator = new BasicElement( this );
     }
     */
-}
-
-void FractionElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == m_denominator )
-        m_numerator->moveUp( cursor, this );
-    else
-        parentElement()->moveUp( cursor, this );
-}
-
-void FractionElement::moveDown(FormulaCursor* cursor, BasicElement* from)
-{
-    if( from == m_numerator )
-        m_denominator->moveDown( cursor, this );
-    else
-        parentElement()->moveDown( cursor, this );
 }
 
 QString FractionElement::attributesDefaultValue( const QString& attribute ) const

@@ -28,7 +28,7 @@
 #ifndef ENTITIES_H
 #define ENTITIES_H
 
-#include "kformuladefs.h"
+#include <QByteArray>
 
 struct entityMap {
     static int size();

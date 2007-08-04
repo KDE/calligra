@@ -35,6 +35,7 @@ public:
     /// The standard constructor
     TextElement( BasicElement* parent = 0 );
 
+    /// @return The element's ElementType
     ElementType elementType() const;
 };
 

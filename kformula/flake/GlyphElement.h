@@ -24,6 +24,12 @@
 #include "BasicElement.h"
 #include <QPainterPath>
 
+/**
+ * @short Implementation of the MathML mglyph element
+ *
+ * GlyphElement uses the the QT font database classes to load the additional fonts to
+ * display its contents.
+ */
 class KOFORMULA_EXPORT GlyphElement : public BasicElement {
 public:
     /// The standart constructor

@@ -20,8 +20,6 @@
 */
 
 #include "ElementFactory.h"
-#include "kformuladefs.h"
-#include <kdebug.h>
 
 #include "ActionElement.h"
 #include "FencedElement.h"
@@ -45,6 +43,8 @@
 #include "StyleElement.h"
 #include "TextElement.h"
 #include "UnderOverElement.h"
+
+#include <kdebug.h>
 
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )

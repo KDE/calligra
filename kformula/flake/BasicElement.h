@@ -25,7 +25,8 @@
 
 #include "kformula_export.h"
 #include "ElementFactory.h"
-#include <KoXmlReader.h>
+#include "FormulaCursor.h"
+
 #include <QHash>
 #include <QList>
 #include <QString>
@@ -33,9 +34,10 @@
 #include <QVariant>
 class QPainter;
 class KoXmlWriter;
-
+class KoXmlElement;
 class AttributeManager;
-class FormulaCursor;
+
+#define DEBUGID 40000
 
 /**
  * @short The base class for all elements of a formula
@@ -108,34 +110,13 @@ public:
      * @param am The AttributeManager providing information about attributes values
      */
     virtual void layout( const AttributeManager* am );
-    
-    /**
-     * Move the FormulaCursor left
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    virtual void moveLeft( FormulaCursor* cursor, BasicElement* from );
 
     /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
+     * Implement the cursor behaviour for the element
+     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @return A this pointer if the element accepts if not the element to asked instead
      */
-    virtual void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    virtual void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    virtual void moveDown( FormulaCursor* cursor, BasicElement* from );
+    virtual BasicElement* acceptCursor( CursorDirection direction );
 
     /// @return The element's ElementType
     virtual ElementType elementType() const;

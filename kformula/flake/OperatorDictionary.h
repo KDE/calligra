@@ -28,7 +28,7 @@
 #ifndef OPERATORDICTIONARY_H
 #define OPERATORDICTIONARY_H
 
-#include "kformuladefs.h"
+#include <QByteArray>
 
 struct DictionaryKey
 {

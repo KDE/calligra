@@ -54,20 +54,6 @@ public:
     virtual void layout( const AttributeManager* am );
 
     /**
-     * Move the FormulaCursor left - reimplemented from BasicElement
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveLeft( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor right - reimplemented from BasicElement
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
@@ -86,12 +72,18 @@ public:
      */
     void removeChild( BasicElement* element );
 
+    /**
+     * Implement the cursor behaviour for the element
+     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @param upHirachy True if the cursor comes from a child element
+     * @return A this pointer if the element accepts if not the element to asked instead
+     */
+    BasicElement* acceptCursor( CursorDirection direction );
+
     /// @return The element's ElementType
     ElementType elementType() const;
 
 protected:
-    QRectF childBoundingRect();
-
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );
 

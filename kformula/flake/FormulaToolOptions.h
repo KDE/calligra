@@ -26,6 +26,7 @@ class KoFormulaTool;
 class QPushButton;
 class QComboBox;
 class QListWidget;
+class QListWidgetItem;
 class QGridLayout;
 
 /**
@@ -44,6 +45,7 @@ public:
 private slots:
     void slotLoadFormula();
     void slotSaveFormula();
+    void slotTemplateComboIndexChange( int index );
 
 private:
     KoFormulaTool* m_tool;
@@ -57,6 +59,12 @@ private:
     QPushButton* m_loadFormula;
 
     QPushButton* m_saveFormula;
+
+    QList<QListWidgetItem*> m_operators;
+
+    QList<QListWidgetItem*> m_functions;
+
+    QList<QListWidgetItem*> m_general;
 };
 
 #endif // FORMULATOOLOPTIONS_H

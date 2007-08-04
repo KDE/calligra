@@ -21,10 +21,9 @@
 */
 
 #include "BasicElement.h"
-#include "FormulaCursor.h"
 #include "AttributeManager.h"
-#include "ElementFactory.h"
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <QPainter>
 
 #include <kdebug.h>
@@ -51,6 +50,12 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
 
 void BasicElement::layout( const AttributeManager* )
 { /* do nothing */ }
+
+BasicElement* BasicElement::acceptCursor( CursorDirection direction )
+{
+    Q_UNUSED( direction )
+    return 0;
+}
 
 void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
 {
@@ -115,38 +120,6 @@ QString BasicElement::inheritsAttribute( const QString& ) const
 QString BasicElement::attributesDefaultValue( const QString& ) const
 {
     return QString();  // do nothing
-}
-
-void BasicElement::moveLeft( FormulaCursor* cursor, BasicElement* )
-{
-    if( cursor->currentElement() == this )
-        parentElement()->moveLeft( cursor, this );
-    else
-        cursor->moveCursorTo( this, 0 );
-}
-
-void BasicElement::moveRight( FormulaCursor* cursor, BasicElement* )
-{
-    if( cursor->currentElement() == this )
-        parentElement()->moveRight( cursor, this );
-    else
-        cursor->moveCursorTo( this, 0 );
-}
-
-void BasicElement::moveUp( FormulaCursor* cursor, BasicElement* )
-{
-    if( cursor->currentElement() == this )
-        parentElement()->moveUp( cursor, this );
-    else
-        cursor->moveCursorTo( this, 0 );
-}
-
-void BasicElement::moveDown( FormulaCursor* cursor, BasicElement* )
-{
-    if( cursor->currentElement() == this )
-        parentElement()->moveDown( cursor, this );
-    else
-        cursor->moveCursorTo( this, 0 );
 }
 
 void BasicElement::readMathML( const KoXmlElement& element )

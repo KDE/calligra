@@ -73,18 +73,11 @@ public:
     void removeChild( BasicElement* element );
 
     /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
+     * Implement the cursor behaviour for the element
+     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @return A this pointer if the element accepts if not the element to asked instead
      */
-    void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveDown( FormulaCursor* cursor, BasicElement* from );
+    BasicElement* acceptCursor( CursorDirection direction );
 
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;

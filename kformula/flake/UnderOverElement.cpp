@@ -19,9 +19,8 @@
 */
 
 #include "UnderOverElement.h"
-#include "ElementFactory.h"
+#include <KoXmlReader.h>
 #include <kdebug.h>
-#include <KoXmlWriter.h>
 
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -43,28 +42,24 @@ const QList<BasicElement*> UnderOverElement::childElements()
     return tmp << m_baseElement << m_underElement << m_overElement;
 }
 
-void UnderOverElement::paint( QPainter& painter, AttributeManager* am )
-{
-}
+void UnderOverElement::paint( QPainter& , AttributeManager* )
+{ /*do nothing as UnderOverElement has no visual representance*/ }
 
 void UnderOverElement::layout( const AttributeManager* am )
 {
+    Q_UNUSED( am ) 
 }
 
-void UnderOverElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+BasicElement* UnderOverElement::acceptCursor( CursorDirection direction )
 {
+    return 0;
 }
 
-void UnderOverElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+QString UnderOverElement::attributesDefaultValue( const QString& attribute ) const
 {
-}
-
-void UnderOverElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-}
-
-void UnderOverElement::moveDown( FormulaCursor* cursor, BasicElement* from )
-{
+/*    if( m_overElement->elementType() == Operator )
+    else if( m_underElement->elementType() == Operator )*/
+    return "false";  // the default for accent and
 }
 
 bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
@@ -98,7 +93,7 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
         m_overElement = ElementFactory::createElement( child.tagName(), this );
     }
     return true;
-}
+} 
 
 void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
 {

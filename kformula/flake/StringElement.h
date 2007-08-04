@@ -23,6 +23,9 @@
 #include "TokenElement.h"
 #include "kformula_export.h"
 
+/**
+ * @short Implementation of the MathML ms element 
+ */
 class KOFORMULA_EXPORT StringElement : public TokenElement {
 public:
     /// The standart constructor

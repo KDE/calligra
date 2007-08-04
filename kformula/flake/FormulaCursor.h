@@ -22,13 +22,22 @@
 #ifndef FORMULACURSOR_H
 #define FORMULACURSOR_H
 
-#include <QString>
-#include <QStack>
 #include "kformula_export.h"
 
+class BasicElement;
+class QString;
 class QPainter;
 
-class BasicElement;
+enum CursorDirection {
+    RightToParent,
+    RightToChild,
+    LeftToParent,
+    LeftToChild,
+    UpToParent,
+    UpToChild,
+    DownToParent,
+    DownToChild
+};
 
 /**
  * @short The cursor being moved through a formula
@@ -61,11 +70,22 @@ public:
     void paint( QPainter &painter ) const;
 
     /**
-     * Set the cursor to a new position
-     * @param current The new element the pointer is inside
-     * @þaram position The position in the new element the cursor is set to
+     * Insert text content at the current cursor position
+     * @param text The text to insert
      */
-    void moveCursorTo( BasicElement* current, int position );
+    void insertText( const QString& text );
+
+    /**
+     * Insert an element at the current cursor position
+     * @param element The element to be inserted
+     */
+    void insert( BasicElement* element );
+
+    /**
+     * Remove an element from the formula
+     * @param elementBeforePosition Indicates removal of element before or after cursor
+     */
+    void remove( bool elementBeforePosition );
 
     /// Move the cursor to the left
     void moveLeft();
@@ -91,6 +111,12 @@ public:
     /// @return whether the cursor is at the last position
     bool isEnd() const;
 
+    /// @return The element the FormulaCursor is currently inside
+    BasicElement* currentElement() const;
+
+    /// @return The current position in m_currentElement
+    int position() const;
+
     /**
      * Make the cursor selecting
      * @param selecting When true the cursor is selecting
@@ -100,12 +126,6 @@ public:
     /// @return @c true when the cursor is selecting
     bool hasSelection() const;
 
-    /// @return The element the FormulaCursor is currently inside
-    BasicElement* currentElement() const;
-
-    /// @return The current position in m_currentElement
-    int position() const;
-
     /**
      * Make the cursor move a whole element
      * @param wordMovement When true the cursor moves a whole element
@@ -113,10 +133,9 @@ public:
     void setWordMovement( bool wordMovement );
 
 private:
-    /// The element that currently owns the cursor
+    /// The element that is currently left to the cursor
     BasicElement* m_currentElement;
-    
-    /// The cursor's position inside m_ownerElement - 0 based index
+
     int m_positionInElement;
 
     /// Indicates whether the cursor should move a whole element
@@ -124,8 +143,6 @@ private:
 
     /// Indicates whether the cursor is currently selecting
     bool m_selecting;
-    
-    QStack<BasicElement*> m_selectedElements;
 };
 
 #endif // FORMULACURSOR_H

@@ -24,7 +24,6 @@
 #define ROOTELEMENT_H
 
 #include "BasicElement.h"
-#include "kformuladefs.h"
 #include "kformula_export.h"
 
 #include <QPainterPath>
@@ -72,42 +71,21 @@ public:
     void layout( const AttributeManager* am );
 
     /**
-     * Move the FormulaCursor left
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
+     * Implement the cursor behaviour for the element
+     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @return A this pointer if the element accepts if not the element to asked instead
      */
-    void moveLeft( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveDown( FormulaCursor* cursor, BasicElement* from );
+    BasicElement* acceptCursor( CursorDirection direction );
 
     /// @return The element's ElementType
     ElementType elementType() const;
 
 protected:
     /// Read root contents - reimplemented from BasicElement
-    virtual bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent( const KoXmlElement& element );
 
     /// Write root contents - reimplemented from BasicElement
-    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
     /// The element that is the radicand of the root

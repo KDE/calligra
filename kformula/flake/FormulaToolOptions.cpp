@@ -99,6 +99,10 @@ void FormulaToolOptions::slotSaveFormula()
 //    m_tool->shape()->saveOdf( );
 }
 
+void FormulaToolOptions::slotTemplateComboIndexChange( int index )
+{
+}
+
 void FormulaToolOptions::setFormulaTool( KoFormulaTool* tool )
 {
     m_tool = tool;

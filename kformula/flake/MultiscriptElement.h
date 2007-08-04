@@ -41,7 +41,39 @@ public:
      */
     const QList<BasicElement*> childElements();
 
-    
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
+     */
+    void paint( QPainter& painter, AttributeManager* am );
+
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    void layout( const AttributeManager* am );
+
+    /**
+     * Implement the cursor behaviour for the element
+     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @return A this pointer if the element accepts if not the element to asked instead
+     */
+    BasicElement* acceptCursor( CursorDirection direction );
+
+    /// @return The default value of the attribute for this element
+    QString attributesDefaultValue( const QString& attribute ) const; 
+
+    /// @return The element's ElementType
+    ElementType elementType() const;
+
+protected:
+    /// Read all content from the node
+    bool readMathMLContent( const KoXmlElement& element );
+
+    /// Write all content to the KoXmlWriter
+    void writeMathMLContent( KoXmlWriter* writer ) const;
+
 private:
     /// The BasicElement representing the base element of the multiscript
     BasicElement* m_baseElement;
@@ -57,10 +89,6 @@ private:
 
     /// The BasicElement representing the superscript right to the base element
     BasicElement* m_postSuperscript;
-
-
-    virtual QString elementName() const { return "mmultiscript"; }
-    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
 };
 
 #endif // MULTISCRIPTELEMENT_H

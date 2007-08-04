@@ -22,11 +22,7 @@
 
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
-#include "FormulaCursor.h"
-#include <KoXmlWriter.h>
-
-#include <klocale.h>
-
+#include <KoXmlReader.h>
 #include <QPainter>
 #include <QList>
 
@@ -37,6 +33,11 @@ MatrixRowElement::MatrixRowElement( BasicElement* parent ) : BasicElement( paren
 
 MatrixRowElement::~MatrixRowElement()
 {
+}
+
+BasicElement* MatrixRowElement::acceptCursor( CursorDirection direction )
+{
+    return 0;
 }
 
 int MatrixRowElement::positionOfEntry( BasicElement* entry ) const
@@ -69,32 +70,6 @@ const QList<BasicElement*> MatrixRowElement::childElements()
     return tmp;
 }
 
-void MatrixRowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == parentElement() )   // coming from the parent go to the very right entry
-        m_matrixEntryElements.last()->moveLeft( cursor, this );
-    else                            // coming from a child go to the parent
-        parentElement()->moveLeft( cursor, from );
-}
-
-void MatrixRowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == parentElement() )
-        m_matrixEntryElements.first()->moveRight( cursor, this );
-    else
-        parentElement()->moveRight( cursor, this );
-}
-
-void MatrixRowElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-    parentElement()->moveUp( cursor, from );   // just forward the call to MatrixElement   
-}
-
-void MatrixRowElement::moveDown( FormulaCursor* cursor, BasicElement* from )
-{
-    parentElement()->moveDown( cursor, from ); // just forward the call to MatrixElement
-}
-
 bool MatrixRowElement::readMathMLContent( const KoXmlElement& element )
 {
     MatrixEntryElement* tmpEntry = 0;
@@ -115,7 +90,10 @@ void MatrixRowElement::writeMathMLContent( KoXmlWriter* writer ) const
         tmpEntry->writeMathML( writer );
 }
 
-
+ElementType MatrixRowElement::elementType() const
+{
+    return MatrixRow;
+}
 
 #if 0
 void MatrixRowElement::calcSizes( const ContextStyle& context,
@@ -213,6 +191,4 @@ void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
     }
 }
 #endif
-
-
 

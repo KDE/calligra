@@ -18,7 +18,6 @@
 */
 
 #include "ActionElement.h"
-#include "ElementFactory.h"
 
 ActionElement::ActionElement( BasicElement* parent ) : RowElement( parent )
 {

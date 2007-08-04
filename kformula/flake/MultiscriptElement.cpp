@@ -38,9 +38,37 @@ MultiscriptElement::~MultiscriptElement()
     delete m_postSuperscript;
 }
 
+void MultiscriptElement::paint( QPainter& painter, AttributeManager* am )
+{
+}
+
+void MultiscriptElement::layout( const AttributeManager* am )
+{
+}
+
+BasicElement* MultiscriptElement::acceptCursor( CursorDirection direction )
+{
+    return 0;
+}
+
 const QList<BasicElement*> MultiscriptElement::childElements()
 {
     return QList<BasicElement*>();
+}
+
+QString MultiscriptElement::attributesDefaultValue( const QString& attribute ) const
+{
+    return QString();
+}
+
+ElementType MultiscriptElement::elementType() const
+{
+    return MultiScript;
+}
+
+bool MultiscriptElement::readMathMLContent( const KoXmlElement& element )
+{
+    return false;
 }
 
 void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const

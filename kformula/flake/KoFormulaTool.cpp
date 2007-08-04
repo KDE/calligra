@@ -118,66 +118,18 @@ void KoFormulaTool::mouseMoveEvent( KoPointerEvent *event )
 {
     Q_UNUSED( event )
 
-    // TODO find the old implementation and use it
-    //
-    // the old implementation
-/*    setSelection(true);
-    BasicElement* element = getElement();
-    int mark = getMark();
+    if( !m_formulaCursor->hasSelection() )
+        return;
 
-   FormulaElement* formula = getElement()->formula();
-    formula->goToPos( this, point );
-    BasicElement* newElement = getElement();
-    int pos = getPos();
-
-    BasicElement* posChild = 0;
-    BasicElement* markChild = 0;
-    while (element != newElement) {
-        posChild = newElement;
-        newElement = newElement->getParent();
-        if (newElement == 0) {
-            posChild = 0;
-            newElement = getElement();
-            markChild = element;
-            element = element->getParent();
-        }
-    }
-
-    if (dynamic_cast<SequenceElement*>(element) == 0) {
-        element = element->getParent();
-        element->selectChild(this, newElement);
-    }
-    else {
-        if (posChild != 0) {
-            element->selectChild(this, posChild);
-            pos = getPos();
-        }
-        if (markChild != 0) {
-            element->selectChild(this, markChild);
-            mark = getMark();
-        }
-        if (pos == mark) {
-            if ((posChild == 0) && (markChild != 0)) {
-                mark++;
-            }
-            else if ((posChild != 0) && (markChild == 0)) {
-                mark--;
-            }
-        }
-        else if (pos < mark) {
-            if (posChild != 0) {
-                pos--;
-            }
-        }
-        setTo(element, pos, mark);
-    }*/
+    //TODO Implement drag and drop of elements
+    //TODO Implement selecting via mouse
 }
 
 void KoFormulaTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     Q_UNUSED( event )
 
-    // TODO what should happen here ?
+    // TODO Implement drag and drop
 }
 
 void KoFormulaTool::keyPressEvent( QKeyEvent *event )
@@ -214,10 +166,10 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Home:
 	    m_formulaCursor->moveHome();
             break;
-/*        default:
+        default:
             if( event->text().length() == 0 )
                 return;
-            insertText( event->text() );*/
+            m_formulaCursor->insertText( event->text() );
     }
 
     event->accept();
@@ -238,9 +190,7 @@ void KoFormulaTool::remove( bool backSpace )
 //        m_formulaCursor->setCursorTo( );
     }
     else                                  // remove only the current element
-    {
-//        m_formulaCursor->currentElement()->parentElement()->removeChild( m_currentElement );
-    }
+        m_formulaCursor->remove( backSpace );
 }
 
 QWidget* KoFormulaTool::createOptionWidget()

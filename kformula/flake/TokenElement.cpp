@@ -19,8 +19,8 @@
 
 #include "TokenElement.h"
 #include "AttributeManager.h"
-#include "ElementFactory.h"
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <QPainter>
 #include <QFontMetricsF>
 
@@ -71,6 +71,11 @@ void TokenElement::layout( const AttributeManager* am )
     QMatrix tmpMatrix;
     tmpMatrix.translate( 0, m_contentPath.boundingRect().height() );
     m_contentPath = tmpMatrix.map( m_contentPath );
+}
+
+BasicElement* TokenElement::acceptCursor( CursorDirection direction )
+{
+    return 0;
 }
 
 bool TokenElement::readMathMLContent( const KoXmlElement& element )

@@ -20,12 +20,11 @@
 */
 
 #include "RowElement.h"
-#include "kformuladefs.h"
-#include "ElementFactory.h"
-#include "FormulaCursor.h"
-#include <kdebug.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <QPainter>
+
+#include <kdebug.h>
 
 RowElement::RowElement( BasicElement* parent ) : BasicElement( parent )
 {}
@@ -62,6 +61,11 @@ void RowElement::layout( const AttributeManager* am )
     setBaseLine( topToBaseline );
 }
 
+const QList<BasicElement*> RowElement::childElements()
+{
+    return m_childElements;
+}
+
 void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
 }
@@ -70,36 +74,15 @@ void RowElement::removeChild( BasicElement* element )
 {
 }
 
-void RowElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == parentElement() )  // parent element enters the seqeunce from the left
-        cursor->moveCursorTo( this, m_childElements.count() );
-    else if( from == this )        // moveLeft was invoked in this element
-        m_childElements[ cursor->position()-1 ]->moveLeft( cursor, this );
-    else                           // the cursor comes from a child element
-        cursor->moveCursorTo( this, m_childElements.indexOf( from ) );
-}
-
-void RowElement::moveRight( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == parentElement() )  // parent element enters the seqeunce from the right
-        cursor->moveCursorTo( this, 0 );
-    else if( from == this )        // moveRight was invoked in this element
-        m_childElements[ cursor->position() ]->moveRight( cursor, this );
-    else                           // the cursor comes from a child element
-        cursor->moveCursorTo( this, m_childElements.indexOf( from )+1 );
-}
-
-QRectF RowElement::childBoundingRect()
-{
-    return QRectF();
-}
-
 ElementType RowElement::elementType() const
 {
     return Row;
 }
 
+BasicElement* RowElement::acceptCursor( CursorDirection direction )
+{
+    return 0;
+}
 
 bool RowElement::readMathMLContent( const KoXmlElement& parent )
 {
@@ -120,10 +103,5 @@ void RowElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     foreach( BasicElement* tmp, m_childElements )
         tmp->writeMathML( writer );
-}
-
-const QList<BasicElement*> RowElement::childElements()
-{
-    return m_childElements;
 }
 

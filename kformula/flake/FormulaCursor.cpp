@@ -27,10 +27,8 @@
 #include <kdebug.h>
 
 FormulaCursor::FormulaCursor( BasicElement* element )
-              : m_wordMovement( false ),
-                m_selecting( false )
+              : m_currentElement( element )
 {
-    m_currentElement = element;
     m_positionInElement = 0;
 }
 
@@ -54,40 +52,69 @@ void FormulaCursor::paint( QPainter& painter ) const
     painter.drawLine( top, bottom );
 }
 
-void FormulaCursor::moveCursorTo( BasicElement* current, int position )
+void FormulaCursor::insertText( const QString& text )
 {
-    m_currentElement = current;
-    m_positionInElement = position;
+}
+
+void FormulaCursor::insert( BasicElement* element )
+{
+}
+
+void FormulaCursor::remove( bool elementBeforePosition )
+{
 }
 
 void FormulaCursor::moveLeft()
 {
-    if( m_wordMovement && !isHome() )               
-        m_positionInElement--;                       
-    else if( isHome() )
-        m_currentElement->parentElement()->moveLeft( this, m_currentElement );
-    else 
-        m_currentElement->moveLeft( this, m_currentElement );
+    BasicElement* tmp;
+    if( isHome() )
+    {
+        tmp = m_currentElement->parentElement();
+        while( tmp != tmp->acceptCursor( LeftToParent ) && tmp->elementType() != Formula )
+            tmp = tmp->acceptCursor( LeftToParent );
+    }
+    else
+    {
+        tmp = m_currentElement;
+        while( tmp != m_currentElement->acceptCursor( LeftToChild ) )
+            tmp = tmp->acceptCursor( LeftToChild );
+    }
+
+    if( !isHome() && tmp == m_currentElement )
+        m_positionInElement--;
+    else
+        m_currentElement = tmp;
 }
 
 void FormulaCursor::moveRight()
 {
-    if( m_wordMovement && !isEnd() )
+    BasicElement* tmp;
+    if( isEnd() )
+    {
+        tmp = m_currentElement->parentElement();
+        while( tmp != tmp->acceptCursor( RightToParent ) &&
+               tmp->elementType() != Formula )
+            tmp = tmp->acceptCursor( RightToParent );
+    }
+    else
+    {
+        tmp = m_currentElement;
+        while( tmp != m_currentElement->acceptCursor( RightToChild ) )
+            tmp = tmp->acceptCursor( RightToChild );
+    }
+
+    if( !isEnd() && tmp == m_currentElement )
         m_positionInElement++;
-    else if( isEnd() )           // if the cursor is at the end move it out
-        m_currentElement->parentElement()->moveRight( this, m_currentElement );
-    else 
-        m_currentElement->moveRight( this, m_currentElement );
+    else
+        m_currentElement = tmp;
 }
 
 void FormulaCursor::moveUp()
 {
-    m_currentElement->moveUp( this, m_currentElement );
 }
 
 void FormulaCursor::moveDown()
 {
-    m_currentElement->moveDown( this, m_currentElement );
 }
 
 void FormulaCursor::moveHome()
@@ -125,6 +152,8 @@ int FormulaCursor::position() const
 {
     return m_positionInElement;
 }
+
+
 
 bool FormulaCursor::hasSelection() const
 {

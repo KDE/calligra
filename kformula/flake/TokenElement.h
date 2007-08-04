@@ -61,6 +61,13 @@ public:
      */
     virtual void layout( const AttributeManager* am );
 
+    /**
+     * Implement the cursor behaviour for the element
+     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @return A this pointer if the element accepts if not the element to asked instead
+     */
+    BasicElement* acceptCursor( CursorDirection direction );
+
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
     bool readMathMLContent( const KoXmlElement& parent );

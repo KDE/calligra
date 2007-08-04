@@ -54,34 +54,16 @@ public:
      * @param am The AttributeManager providing information about attributes values
      */
     void layout( const AttributeManager* am );
-    
-    /**
-     * Move the FormulaCursor left
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveLeft( FormulaCursor* cursor, BasicElement* from );
 
     /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
+     * Implement the cursor behaviour for the element
+     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @return A this pointer if the element accepts if not the element to asked instead
      */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
+    BasicElement* acceptCursor( CursorDirection direction );
 
-    /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveDown( FormulaCursor* cursor, BasicElement* from );
+    /// @return The default value of the attribute for this element
+    QString attributesDefaultValue( const QString& attribute ) const; 
 
     /// @return The element's ElementType
     ElementType elementType() const;
@@ -94,10 +76,13 @@ protected:
     void writeMathMLContent( KoXmlWriter* writer ) const;   
  
 private:
+    /// The element used as basis for the under and the over element
     BasicElement* m_baseElement;
 
+    /// The element that is layouted under the base element
     BasicElement* m_underElement;
 
+    /// The element that is layouted over the base element
     BasicElement* m_overElement;
 };
 

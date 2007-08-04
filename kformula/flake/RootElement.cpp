@@ -22,8 +22,7 @@
 
 #include "RootElement.h"
 #include "AttributeManager.h"
-#include "FormulaCursor.h"
-#include "ElementFactory.h"
+#include <KoXmlReader.h>
 #include <QPainter>
 #include <QPen>
 #include <kdebug.h>
@@ -42,7 +41,13 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
+    QPen pen( painter.pen() );
+    pen.setWidth( 1 );
+
+    painter.save();
+    painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
+    painter.restore();
 }
 
 void RootElement::layout( const AttributeManager* am )
@@ -102,28 +107,9 @@ void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 }
 */
 
-void RootElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
+BasicElement* RootElement::acceptCursor( CursorDirection direction )
 {
-}
-
-void RootElement::moveRight( FormulaCursor* cursor, BasicElement* from )
-{
-}
-
-void RootElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == m_radicand )
-        cursor->moveCursorTo( m_exponent, -1 );
-    else
-        parentElement()->moveUp( cursor, from );
-}
-
-void RootElement::moveDown( FormulaCursor* cursor, BasicElement* from )
-{
-    if( from == m_exponent )
-        cursor->moveCursorTo( m_radicand, 0 );
-    else
-        parentElement()->moveDown( cursor, this );
+    return 0;
 }
 
 ElementType RootElement::elementType() const

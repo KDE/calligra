@@ -28,7 +28,15 @@ FencedElement::FencedElement( BasicElement* parent ) : RowElement( parent )
 
 void FencedElement::paint( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED( am )
+
+    QPen pen( painter.pen() );
+    pen.setWidth( 1 );
+
+    painter.save();
+    painter.setPen( pen );
     painter.drawPath( m_buffer );
+    painter.restore();
 }
 
 void FencedElement::layout( const AttributeManager* am )

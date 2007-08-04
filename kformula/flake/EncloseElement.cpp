@@ -41,8 +41,8 @@ void EncloseElement::layout( const AttributeManager* am )
     // TODO: actuarial (how does it look?) - radical - circle (how to determine extends )
     m_enclosePath = QPainterPath();
     QString tmp = am->stringOf( "notation", this );
-    QRectF tmpRect = childBoundingRect();
-
+    RowElement::layout( am );
+    QRectF tmpRect = boundingRect();
 /*    if( tmp.contains( "longdiv" ) ) {
         m_enclosePath.moveTo( 0, 0 );
         m_enclosePath.lineTo();

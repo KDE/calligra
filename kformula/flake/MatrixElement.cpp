@@ -22,8 +22,7 @@
 #include "MatrixElement.h"
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
-#include "FormulaCursor.h"
-#include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <QPainter>
 
 MatrixElement::MatrixElement( BasicElement* parent ) : BasicElement( parent )
@@ -67,68 +66,9 @@ const QList<BasicElement*> MatrixElement::childElements()
     return tmp;
 }
 
-void MatrixElement::moveRight( FormulaCursor* cursor, BasicElement* from )
+BasicElement* MatrixElement::acceptCursor( CursorDirection direction )
 {
-    /*
-    if( from == parentElement() )
-    {
-        if( parentElement()->elementType() == Row )
-            m_matrixRowElements.first()->moveRight( cursor, this ); // enter the matrix
-	else
-            cursor->setCursorTo( this, 0 );
-    }
-    else if( cursor->currentElement() == this )
-        m_matrixRowElements.first()->moveRight( cursor, this );
-    else
-        parentElement()->moveRight( cursor, this );
-    */
-}
-
-void MatrixElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
-{
-    /*
-    if( from == parentElement() )
-    {
-        if( parentElement()->elementType() == Row )
-            m_matrixRowElements.last()->moveLeft( cursor, this ); // enter the matrix
-	else
-            cursor->setCursorTo( this, 1 );
-    }
-    else if( cursor->currentElement() == this )
-        m_matrixRowElements.last()->moveLeft( cursor, this );
-    else
-        parentElement()->moveLeft( cursor, this );
-    */
-}
-
-void MatrixElement::moveDown( FormulaCursor* cursor, BasicElement* from )
-{
-    /*
-    if( cursor->currentElement() == this )
-        parentElement()->moveDown( cursor, this );
-    else if( cursor->currentElement()->elementType() == MatrixEntry )
-    {
-        int row = indexOfRow( from );
-        int pos = m_matrixRowElements[row]->positionOfEntry( cursor->currentElement() );
-	if( m_matrixRowElements.count() > row++ )
-            cursor->setCursorTo( m_matrixRowElements[ row++ ]->entryAt( pos ), 0 );
-    }
-    */
-}
-
-void MatrixElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-    /*
-    if( cursor->currentElement() == this )
-        parentElement()->moveUp( cursor, this );
-    else if( cursor->currentElement()->elementType() == MatrixEntry )
-    {
-        int row = indexOfRow( from );
-        int pos = m_matrixRowElements[row]->positionOfEntry( cursor->currentElement() );
-	if( 0 < row )
-            cursor->setCursorTo( m_matrixRowElements[ row-- ]->entryAt( pos ), 0 );
-    }
-    */
+    return 0;
 }
 
 QString MatrixElement::attributesDefaultValue( const QString& attribute ) const
