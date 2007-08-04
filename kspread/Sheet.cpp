@@ -853,7 +853,7 @@ void Sheet::emitHideColumn()
 
 QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                                        int nbCol, const QPoint& point, bool isColumnFixed,
-                                       bool isRowFixed, bool& error)
+                                       bool isRowFixed)
 {
     QString newPoint;
     int col = point.x();
@@ -912,18 +912,16 @@ QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, 
             && ( fullRowOrColumn || col == pos.x() ) ) ) )
     {
         newPoint = '#' + i18n("Dependency") + '!';
-        error = true;
     }
     return newPoint;
 }
 
 void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                              const QString& tabname, int nbCol, UndoInsertRemoveAction* undo)
+                              const QString& tabname, int nbCol)
 {
     for (int c = 0; c < formulaStorage()->count(); ++c)
     {
         QString newText('=');
-        bool error = false;
         const Tokens tokens = formulaStorage()->data(c).tokens();
         for (int t = 0; t < tokens.count(); ++t)
         {
@@ -963,7 +961,7 @@ void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef
                                                                        nbCol,
                                                                        element->rect().topLeft(),
                                                                        element->isColumnFixed(),
-                                                                       element->isRowFixed(), error);
+                                                                       element->isRowFixed());
                             newText.append(newPoint);
                         }
                         else // (element->type() == Region::Element::Range)
@@ -974,12 +972,12 @@ void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef
                             newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
                                                                nbCol, element->rect().topLeft(),
                                                                element->isColumnFixed(),
-                                                               element->isRowFixed(), error);
+                                                               element->isRowFixed());
                             newText.append(newPoint + ':');
                             newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
                                                                nbCol, element->rect().bottomRight(),
                                                                element->isColumnFixed(),
-                                                               element->isRowFixed(), error);
+                                                               element->isRowFixed());
                             newText.append(newPoint);
                         }
                     }
@@ -992,25 +990,6 @@ void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef
                 }
             }
         }
-
-      if ( error && undo != 0 ) //Save the original formula, as we cannot calculate the undo of broken formulas
-      {
-          QString formulaText = formulaStorage()->data( c ).expression();
-          int origCol = formulaStorage()->col( c );
-          int origRow = formulaStorage()->row( c );
-
-          if ( ref == ColumnInsert && origCol >= pos.x() )
-              origCol -= nbCol;
-          if ( ref == RowInsert && origRow >= pos.y() )
-              origRow -= nbCol;
-
-          if ( ref == ColumnRemove && origCol >= pos.x() )
-              origCol += nbCol;
-          if ( ref == RowRemove && origRow >= pos.y() )
-              origRow += nbCol;
-
-          undo->saveFormulaReference( this, origCol, origRow, formulaText );
-      }
 
       Cell cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) );
       Formula formula( this, cell );
@@ -4619,7 +4598,7 @@ void Sheet::removeSheet()
     emit sig_SheetRemoved(this);
 }
 
-bool Sheet::setSheetName( const QString& name, bool init, bool /*makeUndo*/ )
+bool Sheet::setSheetName(const QString& name, bool init)
 {
     if ( map()->findSheet( name ) )
         return false;

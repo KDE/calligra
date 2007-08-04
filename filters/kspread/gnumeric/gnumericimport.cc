@@ -1986,9 +1986,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         QDomElement sheetElement = sheet.toElement();
 
         if ( !name.isNull() )
-          table->setSheetName( name.text(), false, false );
+          table->setSheetName( name.text(), true );
         else
-          table->setSheetName( "Sheet" + QString::number( num ), false, false );
+          table->setSheetName( "Sheet" + QString::number( num ), true );
 
         //kDebug()<<" sheetElement.hasAttribute( DisplayFormulas ) :"<<sheetElement.hasAttribute("DisplayFormulas" );
         QString tmp;

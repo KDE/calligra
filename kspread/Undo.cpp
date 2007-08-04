@@ -165,7 +165,6 @@ QString Undo::getUndoName()
 	return QString("");
     return  m_stckUndo.top()->getName();
 }
-#endif
 
 /****************************************************************************
  *
@@ -211,7 +210,6 @@ void UndoInsertRemoveAction::undoFormulaReference()
 }
 
 
-#if 0
 /****************************************************************************
  *
  * UndoRemoveColumn

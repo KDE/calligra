@@ -80,7 +80,6 @@ class SheetPrint;
 class SheetShapeContainer;
 class Style;
 class StyleStorage;
-class UndoInsertRemoveAction;
 class Validity;
 class ValidityStorage;
 class ValueStorage;
@@ -149,8 +148,6 @@ public:
      * @param init If set to true then no formula will be changed and no signal
      *             will be emitted and no undo action created. Usually you do not
      *             want to do that.
-     * @param makeUndo If set to @p true , the renaming is inserted in the
-     *                 undo list.
      *
      * @return @c true if the sheet was renamed successfully
      * @return @c false if the sheet could not be renamed. Usually the reason is
@@ -160,7 +157,7 @@ public:
      * @see TabBar::renameTab
      * @see sheetName
      */
-    bool setSheetName( const QString& name, bool init = false, bool makeUndo=true );
+    bool setSheetName(const QString& name, bool init = false);
 
     /**
      * \return \c true , if a document is currently loading
@@ -846,13 +843,11 @@ public:
      * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
      *                        if false, we inserted or removed a cell
      * @param ref see ChangeRef
-     * @param tabname completes the pos specification by giving the sheet name
-     * @param NbCol number of columns which were inserted
-     * @param undo is the handler of the undo class in case of lost cell references
+     * @param sheetName completes the pos specification by giving the sheet name
+     * @param number number of columns which were inserted
      */
-    void changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
-                            ChangeRef ref, const QString& tabname, int NbCol = 1,
-                            UndoInsertRemoveAction * undo = 0 );
+    void changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
+                           const QString& sheetName, int number);
 
 
     void refreshRemoveAreaName(const QString &_areaName);
@@ -1138,7 +1133,7 @@ protected:
 
     QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                                     int NbCol, const QPoint& pos, bool isColumnFixed,
-                                    bool isRowFixed, bool& error);
+                                    bool isRowFixed);
 
     static Sheet* find( int _id );
     static int s_id;

@@ -133,6 +133,7 @@ protected:
     bool m_firstRun;
 };
 
+#if 0
 class UndoInsertRemoveAction : public UndoAction
 {
 public:
@@ -146,7 +147,6 @@ protected:
     QLinkedList<FormulaOfCell> m_lstFormulaCells;
 };
 
-#if 0
 class UndoRemoveColumn : public UndoInsertRemoveAction
 {
 public:

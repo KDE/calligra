@@ -343,7 +343,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
                 if( !sheetElement.attributeNS( KoXmlNS::table, "name", QString() ).isEmpty() )
                 {
                     Sheet* sheet = addNewSheet();
-                    sheet->setSheetName( sheetElement.attributeNS( KoXmlNS::table, "name", QString() ), true, false );
+                    sheet->setSheetName(sheetElement.attributeNS(KoXmlNS::table, "name", QString()), true);
                     d->overallRowCount += KoXml::childNodesCount(sheetElement);
                 }
             }

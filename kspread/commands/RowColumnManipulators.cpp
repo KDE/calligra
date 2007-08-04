@@ -657,7 +657,7 @@ void InsertDeleteColumnManipulator::setReverse( bool reverse )
 bool InsertDeleteColumnManipulator::process( Element* element )
 {
     if ( m_firstrun )
-        m_sheet->cellStorage()->startUndoRecording();
+        m_sheet->cellStorage()->startUndoRecording(); // FIXME Stefan: Must be global!
 
     const QRect range = element->rect();
     const int pos = range.left();
@@ -724,7 +724,7 @@ void InsertDeleteRowManipulator::setReverse( bool reverse )
 bool InsertDeleteRowManipulator::process( Element* element )
 {
     if ( m_firstrun )
-        m_sheet->cellStorage()->startUndoRecording();
+        m_sheet->cellStorage()->startUndoRecording(); // FIXME Stefan: Must be global!
 
     const QRect range = element->rect();
     const int pos = range.top();

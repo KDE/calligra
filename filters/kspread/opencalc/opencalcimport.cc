@@ -1428,7 +1428,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
 
     table = m_doc->map()->addNewSheet();
 
-    table->setSheetName( t.attributeNS( ooNS::table, "name", QString::null ), true, false );
+    table->setSheetName( t.attributeNS( ooNS::table, "name", QString::null ), true );
     kDebug()<<" table->name()"<<table->objectName();
     sheet = sheet.nextSibling();
   }
