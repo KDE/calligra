@@ -60,6 +60,16 @@ bool AutoFormatCommand::preProcessing()
     return true;
 }
 
+bool AutoFormatCommand::mainProcessing()
+{
+    if (m_reverse)
+    {
+        m_sheet->cellStorage()->undo(m_undoData);
+        return true;
+    }
+    return AbstractRegionCommand::mainProcessing();
+}
+
 bool AutoFormatCommand::process(Element* element)
 {
     const QRect rect = element->rect();

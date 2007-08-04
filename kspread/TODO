@@ -52,7 +52,7 @@ Regressions
   the KCommand to QUndoCommand.
 * Border (l,r,t,b & outline)					      1 DONE
   Redo does not work.
-* Auto-Format							      1 ----
+* Auto-Format							      1 DONE
   Undo does not work.
 
 General bugs

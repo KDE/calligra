@@ -47,6 +47,7 @@ public:
 protected:
     virtual bool process(Element* element);
     virtual bool preProcessing();
+    virtual bool mainProcessing();
 
 private:
     QList<Style> m_styles;
