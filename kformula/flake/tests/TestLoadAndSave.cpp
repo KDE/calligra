@@ -24,6 +24,7 @@
 #include <QtXml/QDomDocument>
 
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 #include "BasicElement.h"
 #include "IdentifierElement.h"
