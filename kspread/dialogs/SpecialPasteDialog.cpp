@@ -22,7 +22,7 @@
 */
 
 // Local
-#include "SpecialDialog.h"
+#include "SpecialPasteDialog.h"
 
 #include <QRadioButton>
 
@@ -107,4 +107,4 @@ void SpecialPasteDialog::slotToggled( bool b )
     divisionButton->setEnabled( !b );
 }
 
-#include "SpecialDialog.moc"
+#include "SpecialPasteDialog.moc"

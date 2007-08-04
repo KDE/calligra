@@ -98,7 +98,7 @@ SET (dialogs_DIR_SRCS
 	dialogs/ShowDialog.cpp
 	dialogs/ShowColRowDialog.cpp
 	dialogs/SortDialog.cpp
-	dialogs/SpecialDialog.cpp
+	dialogs/SpecialPasteDialog.cpp
 	dialogs/StyleManagerDialog.cpp
 	dialogs/SubtotalDialog.cpp
 	dialogs/ValidityDialog.cpp

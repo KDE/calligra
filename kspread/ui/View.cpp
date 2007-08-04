@@ -187,7 +187,7 @@
 #include "dialogs/ShowDialog.h"
 #include "dialogs/ShowColRowDialog.h"
 #include "dialogs/SortDialog.h"
-#include "dialogs/SpecialDialog.h"
+#include "dialogs/SpecialPasteDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/SubtotalDialog.h"
 #include "dialogs/ValidityDialog.h"
@@ -1027,11 +1027,10 @@ void View::Private::initActions()
     ac->addAction("clearHyperlink", actions->clearHyperlink);
     connect(actions->clearHyperlink, SIGNAL(triggered(bool)), view, SLOT(clearHyperlink()));
 
-  actions->insertSpecialChar  = new KAction(KIcon("char"), i18n("S&pecial Character..."), view);
-  ac->addAction("insertSpecialChar", actions->insertSpecialChar );
-  connect( actions->insertSpecialChar, SIGNAL( toggled( bool ) ),
-                    view, SLOT( insertSpecialChar() ) );
-  actions->insertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard" ) );
+    actions->insertSpecialChar = new KAction(KIcon("char"), i18n("S&pecial Character..."), view);
+    ac->addAction("insertSpecialChar", actions->insertSpecialChar);
+    actions->insertSpecialChar->setToolTip(i18n("Insert one or more symbols or letters not found on the keyboard"));
+    connect(actions->insertSpecialChar, SIGNAL(triggered(bool)), view, SLOT(insertSpecialChar()));
 
   actions->insertPart = new KoPartSelectAction( i18n("&Object"), "frame_query",      view, SLOT( insertObject() ), ac, "insertPart");
   actions->insertPart->setToolTip(i18n("Insert an object from another program"));
@@ -6200,7 +6199,9 @@ void View::paperLayoutDlg()
   hf.footMid   = print->localizeHeadFootLine( print->footMid()   );
 
   KoUnit unit = doc()->unit();
-
+#ifdef __GNUC__
+#warning KDE4 porting needed
+#endif
 // TODO create a nice dialog with only the properties that KSpread needs
 #if 0
   PaperLayout * dlg
