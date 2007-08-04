@@ -311,6 +311,7 @@ KarbonView::~KarbonView()
 	delete m_painterFactory;
 
 	delete m_toolController;
+    KoToolManager::instance()->removeCanvasController( m_canvasController );
 }
 
 void
