@@ -181,7 +181,8 @@ void AutoFormatDialog::slotOk()
     command->setSheet(d->view->activeSheet());
     command->setStyles(d->styles);
     command->add(*d->view->selection());
-    command->execute();
+    if (!command->execute())
+        delete command;
 
     accept();
 }
