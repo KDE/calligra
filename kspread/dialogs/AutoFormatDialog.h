@@ -1,5 +1,12 @@
 /* This file is part of the KDE project
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2002-2003 Norbert Andres <nandres@web.de>
+   Copyright 2002 Ariya Hidayat <ariya@kde.org>
+   Copyright 2002 John Dailey <dailey@vt.edu>
+   Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+   Copyright 2000-2002 Laurent Montel <montel@kde.org>
+   Copyright 2000 Werner Trobin <trobin@kde.org>
+   Copyright 1998-2000 Torben Weis <weis@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,42 +24,34 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_AUTO_FORMAT_COMMAND
-#define KSPREAD_AUTO_FORMAT_COMMAND
+#ifndef KSPREAD_AUTO_FORMAT_DIALOG
+#define KSPREAD_AUTO_FORMAT_DIALOG
 
-#include "AbstractRegionCommand.h"
-
-#include <QList>
+#include <kdialog.h>
 
 namespace KSpread
 {
-class CellStorageUndoData;
-class Style;
+class View;
 
-class AutoFormatCommand : public AbstractRegionCommand
+/**
+ * Dialog for the "Auto-Format..." action
+ */
+class AutoFormatDialog : public KDialog
 {
+    Q_OBJECT
 public:
-    /**
-     * Constructor.
-     */
-    AutoFormatCommand();
+    explicit AutoFormatDialog(View* view);
+    ~AutoFormatDialog();
 
-    /**
-     * Destructor.
-     */
-    virtual ~AutoFormatCommand();
-
-    void setStyles(const QList<Style>& styles);
-
-protected:
-    virtual bool process(Element* element);
-    virtual bool preProcessing();
+private Q_SLOTS:
+    void slotActivated(int index);
+    void slotOk();
 
 private:
-    QList<Style> m_styles;
-    CellStorageUndoData* m_undoData;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread
 
-#endif // KSPREAD_AUTO_FORMAT_COMMAND
+#endif // KSPREAD_AUTO_FORMAT_DIALOG

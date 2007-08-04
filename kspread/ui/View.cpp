@@ -171,7 +171,7 @@
 #include "dialogs/ConsolidateDialog.h"
 #include "dialogs/CSVDialog.h"
 #include "dialogs/DatabaseDialog.h"
-#include "dialogs/FormatDialog.h"
+#include "dialogs/AutoFormatDialog.h"
 #include "dialogs/FormulaDialog.h"
 #include "dialogs/GoalSeekDialog.h"
 #include "dialogs/GotoDialog.h"
@@ -991,7 +991,7 @@ void View::Private::initActions()
   connect(actions->hideSheet, SIGNAL(triggered(bool)),view, SLOT( hideSheet() ));
   actions->hideSheet->setToolTip(i18n("Hide the active sheet"));
 
-  actions->autoFormat  = new KAction(i18n("AutoFormat..."), view);
+  actions->autoFormat  = new KAction(i18n("Auto-Format..."), view);
   ac->addAction("sheetFormat", actions->autoFormat );
   connect(actions->autoFormat, SIGNAL(triggered(bool)),view, SLOT( sheetFormat() ));
   actions->autoFormat->setToolTip(i18n("Set the worksheet formatting"));
@@ -2826,7 +2826,7 @@ void View::createTemplate()
 
 void View::sheetFormat()
 {
-    FormatDialog dlg( this );
+    AutoFormatDialog dlg( this );
     dlg.exec();
 }
 

@@ -73,13 +73,13 @@ SET (database_DIR_SRCS
 SET (dialogs_DIR_SRCS
 	dialogs/AddNamedAreaDialog.cpp
 	dialogs/AngleDialog.cpp
+	dialogs/AutoFormatDialog.cpp
 	dialogs/CommentDialog.cpp
 	dialogs/ConditionalDialog.cpp
 	dialogs/ConsolidateDialog.cpp
 	dialogs/CSVDialog.cpp
 	dialogs/DatabaseDialog.cpp
 	dialogs/FindDialog.cpp
-	dialogs/FormatDialog.cpp
 	dialogs/FormulaDialog.cpp
 	dialogs/GoalSeekDialog.cpp
 	dialogs/GotoDialog.cpp
