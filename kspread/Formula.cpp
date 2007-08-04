@@ -221,6 +221,35 @@ static Value tokenAsValue( const Token& token )
   else if( token.isInteger() ) value = Value( token.asInteger() );
   else if( token.isFloat() ) value = Value( token.asFloat() );
   else if( token.isString() ) value = Value( token.asString() );
+  else if (token.isError())
+  {
+      const QString error = token.asError();
+      if (error == Value::errorCIRCLE().errorMessage())
+          value = Value::errorCIRCLE();
+      else if (error == Value::errorDEPEND().errorMessage())
+          value = Value::errorDEPEND();
+      else if (error == Value::errorDIV0().errorMessage())
+          value = Value::errorDIV0();
+      else if (error == Value::errorNA().errorMessage())
+          value = Value::errorNA();
+      else if (error == Value::errorNAME().errorMessage())
+          value = Value::errorNAME();
+      else if (error == Value::errorNUM().errorMessage())
+          value = Value::errorNUM();
+      else if (error == Value::errorNULL().errorMessage())
+          value = Value::errorNULL();
+      else if (error == Value::errorPARSE().errorMessage())
+          value = Value::errorPARSE();
+      else if (error == Value::errorREF().errorMessage())
+          value = Value::errorREF();
+      else if (error == Value::errorVALUE().errorMessage())
+          value = Value::errorVALUE();
+      else
+      {
+          value = Value(Value::Error);
+          value.setError(error);
+      }
+  }
   return value;
 }
 
@@ -278,6 +307,14 @@ QString Token::asString() const
   else return QString();
 }
 
+QString Token::asError() const
+{
+    if (isError())
+        return m_text;
+    else
+        return QString();
+}
+
 Token::Op Token::asOperator() const
 {
   if( isOperator() ) return matchOperator( m_text );
@@ -307,6 +344,7 @@ QString Token::description() const
     case  Cell:       desc = "Cell"; break;
     case  Range:      desc = "Range"; break;
     case  Operator:   desc = "Operator"; break;
+    case  Error:      desc = "Error"; break;
     default:          desc = "Unknown"; break;
   }
 
@@ -500,7 +538,7 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
 
   // parsing state
   enum { Start, Finish, Bad, InNumber, InDecimal, InExpIndicator, InExponent,
-    InString, InIdentifier, InCell, InRange, InSheetOrAreaName } state;
+    InString, InIdentifier, InCell, InRange, InSheetOrAreaName, InError } state;
 
   // use locale settings if specified
   QString thousand = locale ? locale->thousandsSeparator() : "";
@@ -570,6 +608,13 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        {
          tokenText.append( ex[i++] );
          state = InDecimal;
+       }
+
+       // error value?
+       else if (ch == '#')
+       {
+           tokenText.append(ex[i++]);
+           state = InError;
        }
 
        // terminator character
@@ -848,6 +893,20 @@ Tokens Formula::scan( const QString& expr, const KLocale* locale ) const
        }
        break;
 
+    case InError:
+
+       // consume until !
+       if (ch != '!')
+            tokenText.append(ex[i++]);
+       else
+       {
+            tokenText.append(ex[i++]);
+            tokens.append(Token(Token::Error, tokenText, tokenStart));
+            tokenText.clear();
+            state = Start;
+       }
+       break;
+
     case Bad:
     default:
        break;
@@ -917,7 +976,8 @@ void Formula::compile( const Tokens& tokens ) const
     // for constants, push immediately to stack
     // generate code to load from a constant
     if ( ( tokenType == Token::Integer ) || ( tokenType == Token::Float ) ||
-    ( tokenType == Token::String ) || ( tokenType == Token::Boolean ) )
+         ( tokenType == Token::String ) || ( tokenType == Token::Boolean ) ||
+         ( tokenType == Token::Error ) )
     {
       syntaxStack.push( token );
       d->constants.append( tokenAsValue( token ) );

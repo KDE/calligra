@@ -721,16 +721,18 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
             if ( row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax )
             {
                 kDebug(36003) <<"Cell::decodeFormula: row or column out of range (col:" << col <<" | row:" << row << ')';
-                erg = "=\"#### " + i18n("REFERENCE TO COLUMN OR ROW IS OUT OF RANGE") + '"';
-                return erg;
+                erg += Value::errorREF().errorMessage();
             }
-            if ( abs1 )
-                erg += '$';
-            erg += Cell::columnName(col); //Get column text
+            else
+            {
+                if ( abs1 )
+                    erg += '$';
+                erg += Cell::columnName(col); //Get column text
 
-            if ( abs2 )
-                erg += '$';
-            erg += QString::number( row );
+                if ( abs2 )
+                    erg += '$';
+                erg += QString::number( row );
+            }
         }
         else
             erg += _text[pos++];

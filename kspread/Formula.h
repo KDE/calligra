@@ -57,7 +57,8 @@ class KSPREAD_EXPORT Token
       Operator,    ///< +, *, /, -
       Cell,        ///< $A$1, F4, Sheet2!B5, 'Sales Forecast'!Sum
       Range,       ///< C1:C100
-      Identifier   ///< function name or named area
+      Identifier,  ///< function name or named area
+      Error        ///< error, like #REF!, #VALUE!, ...
     };
 
     /**
@@ -160,6 +161,11 @@ class KSPREAD_EXPORT Token
     bool isIdentifier() const { return m_type == Identifier; }
 
     /**
+     * Returns true if token is a error token.
+     */
+    bool isError() const { return m_type == Error; }
+
+    /**
      * Returns boolean value for an boolean token.
      * For any other type of token, return value is undefined.
      */
@@ -193,6 +199,12 @@ class KSPREAD_EXPORT Token
      * For any other type of token, returns Token::InvalidOp.
      */
     Op asOperator() const;
+
+    /**
+     * Returns string value for a error token.
+     * For any other type of token, it returns QString().
+     */
+    QString asError() const;
 
     /**
      * Returns sheet name in a cell reference token.
