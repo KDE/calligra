@@ -115,7 +115,7 @@
 // commands
 #include "commands/DeleteCommand.h"
 #include "commands/EmbeddedObjectCommands.h"
-#include "commands/StyleManipulators.h"
+#include "commands/StyleCommand.h"
 
 #define MIN_SIZE 10
 
@@ -1937,7 +1937,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
          key != Qt::Key_NumberSign )
         return false;
 
-    StyleManipulator* manipulator = new StyleManipulator();
+    StyleCommand* manipulator = new StyleCommand();
     manipulator->setSheet( activeSheet() );
 
     switch ( _ev->key() )

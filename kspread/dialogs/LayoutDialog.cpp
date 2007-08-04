@@ -75,7 +75,7 @@
 #include "ValueFormatter.h"
 
 #include "commands/MergeCommand.h"
-#include "commands/StyleManipulators.h"
+#include "commands/StyleCommand.h"
 #include "commands/RowColumnManipulators.h"
 
 using namespace KSpread;
@@ -851,7 +851,7 @@ void CellFormatDialog::slotApply()
   }
 
   // (Tomas) TODO: this will be slow !!!
-  // We need to create a manipulator that would act as macro,
+  // We need to create a command that would act as macro,
   // but which would also ensure that updates are not painted until everything
   // is updated properly ...
   m_doc->beginMacro( "Change Format" );
@@ -860,60 +860,60 @@ void CellFormatDialog::slotApply()
   {
     if ( positionPage->getMergedCellState() )
     {
-      MergeCommand* manipulator = new MergeCommand();
-      manipulator->setSheet(m_pView->activeSheet());
-      manipulator->add(*m_pView->selection());
-      m_doc->addCommand( manipulator );
+      MergeCommand* command = new MergeCommand();
+      command->setSheet(m_pView->activeSheet());
+      command->add(*m_pView->selection());
+      m_doc->addCommand( command );
     }
     else
     {
       //dissociate cells
-      MergeCommand* manipulator = new MergeCommand();
-      manipulator->setSheet(m_pView->activeSheet());
-      manipulator->setReverse(true);
-      manipulator->add(*m_pView->selection());
-      m_doc->addCommand( manipulator );
+      MergeCommand* command = new MergeCommand();
+      command->setSheet(m_pView->activeSheet());
+      command->setReverse(true);
+      command->add(*m_pView->selection());
+      m_doc->addCommand( command );
     }
   }
 
-  StyleManipulator* manipulator = new StyleManipulator();
-  manipulator->setSheet(m_pView->activeSheet());
-  manipulator->add(*m_pView->selection());
-  borderPage->apply(manipulator);
-  floatPage->apply(manipulator);
-  fontPage->apply(manipulator);
-  positionPage->apply(manipulator);
-  patternPage->apply(manipulator);
-  protectPage->apply(manipulator);
+  StyleCommand* command = new StyleCommand();
+  command->setSheet(m_pView->activeSheet());
+  command->add(*m_pView->selection());
+  borderPage->apply(command);
+  floatPage->apply(command);
+  fontPage->apply(command);
+  positionPage->apply(command);
+  patternPage->apply(command);
+  protectPage->apply(command);
 
-  if (!manipulator->isEmpty())
+  if (!command->isEmpty())
   {
-    m_doc->addCommand( manipulator );
+    m_doc->addCommand( command );
   }
   else
   {
-    delete manipulator;
+    delete command;
   }
 
   if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
   {
-    ResizeRowManipulator* manipulator = new ResizeRowManipulator();
-    manipulator->setSheet(m_pView->activeSheet());
-    manipulator->setSize(positionPage->getSizeHeight());
+    ResizeRowManipulator* command = new ResizeRowManipulator();
+    command->setSheet(m_pView->activeSheet());
+    command->setSize(positionPage->getSizeHeight());
     // TODO Stefan:
-    manipulator->setOldSize(heightSize);
-    manipulator->add(*m_pView->selection());
-    m_doc->addCommand( manipulator );
+    command->setOldSize(heightSize);
+    command->add(*m_pView->selection());
+    m_doc->addCommand( command );
   }
   if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
   {
-    ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
-    manipulator->setSheet(m_pView->activeSheet());
-    manipulator->setSize(positionPage->getSizeWidth());
+    ResizeColumnManipulator* command = new ResizeColumnManipulator();
+    command->setSheet(m_pView->activeSheet());
+    command->setSize(positionPage->getSizeWidth());
     // TODO Stefan:
-    manipulator->setOldSize(widthSize);
-    manipulator->add(*m_pView->selection());
-    m_doc->addCommand( manipulator );
+    command->setOldSize(widthSize);
+    command->add(*m_pView->selection());
+    m_doc->addCommand( command );
   }
 
   m_doc->endMacro();
@@ -1637,7 +1637,7 @@ void CellFormatPageFloat::apply( CustomStyle * style )
   }
 }
 
-void CellFormatPageFloat::apply(StyleManipulator* _obj)
+void CellFormatPageFloat::apply(StyleCommand* _obj)
 {
   if ( postfix->text() != dlg->postfix )
     if ( postfix->isEnabled())
@@ -1755,7 +1755,7 @@ void CellFormatPageProtection::apply( CustomStyle * style )
   }
 }
 
-void CellFormatPageProtection::apply(StyleManipulator* _obj)
+void CellFormatPageProtection::apply(StyleCommand* _obj)
 {
   if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked())
     _obj->setDontPrintText( m_bDontPrint->isChecked() );
@@ -1888,7 +1888,7 @@ void CellFormatPageFont::apply( CustomStyle * style )
   style->setFontUnderline( underline->isChecked() );
 }
 
-void CellFormatPageFont::apply(StyleManipulator* _obj)
+void CellFormatPageFont::apply(StyleCommand* _obj)
 {
   if ( !bTextColorUndefined && textColor != dlg->textColor )
     _obj->setFontColor( textColor );
@@ -2268,7 +2268,7 @@ void CellFormatPagePosition::apply( CustomStyle * style )
   }
 }
 
-void CellFormatPagePosition::apply(StyleManipulator* _obj)
+void CellFormatPagePosition::apply(StyleCommand* _obj)
 {
   Style::HAlign  ax;
   Style::VAlign ay;
@@ -2821,7 +2821,7 @@ void CellFormatPageBorder::loadIcon( const QString& _pix, BorderButton *_button)
   _button->setIcon( KIcon(_pix, Factory::iconLoader() ) );
 }
 
-void CellFormatPageBorder::apply(StyleManipulator* obj)
+void CellFormatPageBorder::apply(StyleCommand* obj)
 {
   if (borderButtons[BorderType_Horizontal]->isChanged())
     applyHorizontalOutline(obj);
@@ -2846,7 +2846,7 @@ void CellFormatPageBorder::apply(StyleManipulator* obj)
     applyDiagonalOutline(obj);
 }
 
-void CellFormatPageBorder::applyTopOutline(StyleManipulator* obj)
+void CellFormatPageBorder::applyTopOutline(StyleCommand* obj)
 {
   BorderButton * top = borderButtons[BorderType_Top];
 
@@ -2863,7 +2863,7 @@ void CellFormatPageBorder::applyTopOutline(StyleManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyBottomOutline(StyleManipulator* obj)
+void CellFormatPageBorder::applyBottomOutline(StyleCommand* obj)
 {
   BorderButton * bottom = borderButtons[BorderType_Bottom];
 
@@ -2880,7 +2880,7 @@ void CellFormatPageBorder::applyBottomOutline(StyleManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyLeftOutline(StyleManipulator* obj)
+void CellFormatPageBorder::applyLeftOutline(StyleCommand* obj)
 {
   BorderButton * left = borderButtons[BorderType_Left];
   QPen tmpPen( left->getColor(), left->getPenWidth(), left->getPenStyle() );
@@ -2896,7 +2896,7 @@ void CellFormatPageBorder::applyLeftOutline(StyleManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyRightOutline(StyleManipulator* obj)
+void CellFormatPageBorder::applyRightOutline(StyleCommand* obj)
 {
   BorderButton* right = borderButtons[BorderType_Right];
   QPen tmpPen( right->getColor(), right->getPenWidth(), right->getPenStyle() );
@@ -2912,7 +2912,7 @@ void CellFormatPageBorder::applyRightOutline(StyleManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyDiagonalOutline(StyleManipulator* obj)
+void CellFormatPageBorder::applyDiagonalOutline(StyleCommand* obj)
 {
   BorderButton * fallDiagonal = borderButtons[BorderType_FallingDiagonal];
   BorderButton * goUpDiagonal = borderButtons[BorderType_RisingDiagonal];
@@ -2937,7 +2937,7 @@ void CellFormatPageBorder::applyDiagonalOutline(StyleManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyHorizontalOutline(StyleManipulator* obj)
+void CellFormatPageBorder::applyHorizontalOutline(StyleCommand* obj)
 {
   QPen tmpPen( borderButtons[BorderType_Horizontal]->getColor(),
                borderButtons[BorderType_Horizontal]->getPenWidth(),
@@ -2954,7 +2954,7 @@ void CellFormatPageBorder::applyHorizontalOutline(StyleManipulator* obj)
   }
 }
 
-void CellFormatPageBorder::applyVerticalOutline(StyleManipulator* obj)
+void CellFormatPageBorder::applyVerticalOutline(StyleCommand* obj)
 {
   BorderButton* vertical = borderButtons[BorderType_Vertical];
   QPen tmpPen( vertical->getColor(), vertical->getPenWidth(),
@@ -3755,7 +3755,7 @@ void CellFormatPagePattern::apply( CustomStyle * style )
     style->setBackgroundColor( bgColor );
 }
 
-void CellFormatPagePattern::apply(StyleManipulator *_obj)
+void CellFormatPagePattern::apply(StyleCommand *_obj)
 {
   if ( selectedBrush != 0
        && ( dlg->brushStyle != selectedBrush->getBrushStyle()

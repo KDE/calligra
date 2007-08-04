@@ -39,6 +39,7 @@ SET (commands_DIR_SRCS
 	commands/AutoFillCommand.cpp
 	commands/AutoFilterCommand.cpp
 	commands/AutoFormatCommand.cpp
+	commands/BorderColorCommand.cpp
 	commands/CommentCommand.cpp
 	commands/ConditionCommand.cpp
 	commands/CSVDataCommand.cpp
@@ -46,15 +47,17 @@ SET (commands_DIR_SRCS
 	commands/DefinePrintRangeCommand.cpp
 	commands/DeleteCommand.cpp
 # 	commands/EmbeddedObjectCommands.cpp
+	commands/IndentationCommand.cpp
 	commands/LinkCommand.cpp
 	commands/MacroCommand.cpp
 	commands/MergeCommand.cpp
 	commands/NamedAreaCommand.cpp
 	commands/PaperLayoutCommand.cpp
+	commands/PrecisionCommand.cpp
 	commands/RowColumnManipulators.cpp
 	commands/SheetCommands.cpp
 	commands/SortManipulator.cpp
-	commands/StyleManipulators.cpp
+	commands/StyleCommand.cpp
 	commands/UndoWrapperCommand.cpp
 	commands/ValidityCommand.cpp
 	)

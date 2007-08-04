@@ -348,11 +348,8 @@ protected:
     bool releaseSubStyle( Key key );
 
 private:
-    friend class StyleManipulator;
     friend class StyleStorage;
-    friend class BorderColorManipulator;
-    friend class IncreaseIndentManipulator;
-    friend class IncreasePrecisionManipulator;
+    friend class BorderColorCommand;
 
     class Private;
     QSharedDataPointer<Private> d;

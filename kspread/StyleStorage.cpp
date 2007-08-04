@@ -32,9 +32,6 @@
 #include "StyleManager.h"
 #include "RectStorage.h"
 
-// commands
-#include "commands/StyleManipulators.h"
-
 static const int g_maximumCachedStyles = 10000;
 
 using namespace KSpread;

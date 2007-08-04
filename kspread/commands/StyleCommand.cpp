@@ -18,7 +18,7 @@
 */
 
 // Local
-#include "StyleManipulators.h"
+#include "StyleCommand.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -32,19 +32,19 @@
 
 using namespace KSpread;
 
-StyleManipulator::StyleManipulator()
+StyleCommand::StyleCommand()
     : m_horizontalPen( QPen(QColor(), 0, Qt::NoPen) )
     , m_verticalPen( QPen(QColor(), 0, Qt::NoPen) )
     , m_style( new Style() )
 {
 }
 
-StyleManipulator::~StyleManipulator()
+StyleCommand::~StyleCommand()
 {
     delete m_style;
 }
 
-bool StyleManipulator::process(Element* element)
+bool StyleCommand::process(Element* element)
 {
     const QRect range = element->rect();
     if ( !m_reverse ) // (re)do
@@ -141,7 +141,7 @@ bool StyleManipulator::process(Element* element)
     return true;
 }
 
-bool StyleManipulator::preProcessing()
+bool StyleCommand::preProcessing()
 {
     if (m_firstrun)
     {
@@ -162,7 +162,7 @@ bool StyleManipulator::preProcessing()
     return AbstractRegionCommand::preProcessing();
 }
 
-bool StyleManipulator::mainProcessing()
+bool StyleCommand::mainProcessing()
 {
     if ( !m_reverse )
     {
@@ -184,196 +184,7 @@ bool StyleManipulator::mainProcessing()
     return AbstractRegionCommand::mainProcessing();
 }
 
-bool StyleManipulator::postProcessing()
+bool StyleCommand::postProcessing()
 {
     return true;
-}
-
-
-/***************************************************************************
-  class IncreaseIndentManipulator
-****************************************************************************/
-
-IncreaseIndentManipulator::IncreaseIndentManipulator()
-  : AbstractRegionCommand()
-{
-    setText( i18n( "Increase Indentation" ) );
-}
-
-bool IncreaseIndentManipulator::mainProcessing()
-{
-    Style style;
-    if ( !m_reverse )
-    {
-        // increase the indentation
-        style.setIndentation( m_sheet->doc()->indentValue() );
-    }
-    else // m_reverse
-    {
-        // decrease the indentation
-        style.setIndentation( -m_sheet->doc()->indentValue() );
-    }
-    m_sheet->cellStorage()->setStyle( *this, style );
-    return true;
-}
-
-bool IncreaseIndentManipulator::postProcessing()
-{
-    return true;
-}
-
-void IncreaseIndentManipulator::setReverse(bool reverse)
-{
-  AbstractRegionCommand::setReverse(reverse);
-  if ( !m_reverse )
-    setText( i18n( "Increase Indentation" ) );
-  else
-    setText( i18n( "Decrease Indentation" ) );
-}
-
-
-
-/***************************************************************************
-  class BorderColorManipulator
-****************************************************************************/
-
-BorderColorManipulator::BorderColorManipulator()
-  : AbstractRegionCommand()
-{
-    setText(i18n( "Change Border Color" ));
-}
-
-bool BorderColorManipulator::preProcessing()
-{
-    if ( m_firstrun )
-    {
-        QList< QPair<QRectF,SharedSubStyle> > undoData = m_sheet->styleStorage()->undoData( *this );
-        ConstIterator endOfList = constEnd();
-        for (ConstIterator it = constBegin(); it != endOfList; ++it)
-        {
-            for ( int i = 0; i < undoData.count(); ++i )
-            {
-                if ( undoData[i].second->type() != Style::LeftPen ||
-                     undoData[i].second->type() != Style::RightPen ||
-                     undoData[i].second->type() != Style::TopPen ||
-                     undoData[i].second->type() != Style::BottomPen ||
-                     undoData[i].second->type() != Style::FallDiagonalPen ||
-                     undoData[i].second->type() != Style::GoUpDiagonalPen )
-                {
-                    undoData.removeAt( i-- );
-                }
-            }
-            m_undoData += undoData;
-        }
-    }
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool BorderColorManipulator::mainProcessing()
-{
-    if ( !m_reverse )
-    {
-        // change colors
-        Style style;
-        for ( int i = 0; i < m_undoData.count(); ++i )
-        {
-            style.clear();
-            style.insertSubStyle( m_undoData[i].second );
-            QPen pen;
-            if ( m_undoData[i].second->type() == Style::LeftPen )
-            {
-                pen = style.leftBorderPen();
-                pen.setColor( m_color );
-                style.setLeftBorderPen( pen );
-            }
-            if ( m_undoData[i].second->type() == Style::RightPen )
-            {
-                pen = style.rightBorderPen();
-                pen.setColor( m_color );
-                style.setRightBorderPen( pen );
-            }
-            if ( m_undoData[i].second->type() == Style::TopPen )
-            {
-                pen = style.topBorderPen();
-                pen.setColor( m_color );
-                style.setTopBorderPen( pen );
-            }
-            if ( m_undoData[i].second->type() == Style::BottomPen )
-            {
-                pen = style.bottomBorderPen();
-                pen.setColor( m_color );
-                style.setBottomBorderPen( pen );
-            }
-            if ( m_undoData[i].second->type() == Style::FallDiagonalPen )
-            {
-                pen = style.fallDiagonalPen();
-                pen.setColor( m_color );
-                style.setFallDiagonalPen( pen );
-            }
-            if ( m_undoData[i].second->type() == Style::GoUpDiagonalPen )
-            {
-                pen = style.goUpDiagonalPen();
-                pen.setColor( m_color );
-                style.setGoUpDiagonalPen( pen );
-            }
-            m_sheet->cellStorage()->setStyle( Region(m_undoData[i].first.toRect()), style );
-        }
-    }
-    else // m_reverse
-    {
-        for ( int i = 0; i < m_undoData.count(); ++i )
-        {
-            Style style;
-            style.insertSubStyle( m_undoData[i].second );
-            m_sheet->cellStorage()->setStyle( Region(m_undoData[i].first.toRect()), style );
-        }
-    }
-    return true;
-}
-
-bool BorderColorManipulator::postProcessing()
-{
-    return true;
-}
-
-
-/***************************************************************************
-  class IncreasePrecisionManipulator
-****************************************************************************/
-
-IncreasePrecisionManipulator::IncreasePrecisionManipulator()
-  : AbstractRegionCommand()
-{
-    setText( i18n( "Increase Precision" ) );
-}
-
-bool IncreasePrecisionManipulator::mainProcessing()
-{
-    Style style;
-    if ( !m_reverse )
-    {
-        // increase the precision
-        style.setPrecision( 1 );
-    }
-    else // m_reverse
-    {
-        // decrease the precision
-        style.setPrecision( -1 );
-    }
-    m_sheet->cellStorage()->setStyle( *this, style );
-    return true;
-}
-
-bool IncreasePrecisionManipulator::postProcessing()
-{
-    return true;
-}
-
-void IncreasePrecisionManipulator::setReverse(bool reverse)
-{
-    AbstractRegionCommand::setReverse(reverse);
-    if ( !m_reverse )
-        setText( i18n( "Increase Precision" ) );
-    else
-        setText( i18n( "Decrease Precision" ) );
 }

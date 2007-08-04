@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_STYLE_MANIPULATORS
-#define KSPREAD_STYLE_MANIPULATORS
+#ifndef KSPREAD_STYLE_COMMAND
+#define KSPREAD_STYLE_COMMAND
 
 #include <QPair>
 #include <QPen>
@@ -28,18 +28,17 @@
 
 namespace KSpread
 {
-
 class Style;
 
 /**
- * \class StyleManipulator
+ * \class StyleCommand
  * \brief Manipulates the style of a cell region.
  */
-class StyleManipulator : public AbstractRegionCommand
+class StyleCommand : public AbstractRegionCommand
 {
 public:
-    StyleManipulator();
-    virtual ~StyleManipulator();
+    StyleCommand();
+    virtual ~StyleCommand();
 
     // SetSelectionFontWorker
     // SetSelectionSizeWorker
@@ -102,52 +101,6 @@ private:
     QList< QPair<QRectF,SharedSubStyle> > m_undoData;
 };
 
-
-
-class BorderColorManipulator : public AbstractRegionCommand
-{
-public:
-    BorderColorManipulator();
-    void setColor( const QColor& color ) { m_color = color; }
-
-protected:
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
-
-private:
-    QColor m_color;
-    QList< QPair<QRectF,SharedSubStyle> > m_undoData;
-};
-
-
-
-class IncreaseIndentManipulator : public AbstractRegionCommand
-{
-public:
-    IncreaseIndentManipulator();
-
-    virtual void setReverse(bool reverse);
-
-protected:
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
-};
-
-
-
-class IncreasePrecisionManipulator : public AbstractRegionCommand
-{
-public:
-    IncreasePrecisionManipulator();
-
-    virtual void setReverse(bool reverse);
-
-protected:
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
-};
-
 }  // namespace KSpread
 
-#endif // KSPREAD_STYLE_MANIPULATORS
+#endif // KSPREAD_STYLE_COMMAND

@@ -73,7 +73,7 @@ class Sheet;
 class CustomStyle;
 class StyleManager;
 class CellFormatDialog;
-class StyleManipulator;
+class StyleCommand;
 
 enum BorderType
 {
@@ -171,7 +171,7 @@ public:
     CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg );
 
     void apply( CustomStyle * style );
-    void apply( StyleManipulator *_obj );
+    void apply( StyleCommand *_obj );
 
 signals:
     /**
@@ -212,7 +212,7 @@ class CellFormatPageFloat : public QWidget
 public:
     CellFormatPageFloat( QWidget *parent, CellFormatDialog *_dlg );
     void apply( CustomStyle * style );
-    void apply( StyleManipulator *_obj );
+    void apply( StyleCommand *_obj );
 
 public slots:
     void slotChangeState();
@@ -256,7 +256,7 @@ public:
     CellFormatPagePosition( QWidget *parent, CellFormatDialog *_dlg );
 
     void apply( CustomStyle * style );
-    void apply( StyleManipulator *_obj );
+    void apply( StyleCommand *_obj );
 
     double getSizeHeight() const;
     double getSizeWidth() const;
@@ -327,7 +327,7 @@ class CellFormatPageBorder : public QWidget
 public:
     CellFormatPageBorder( QWidget *parent, CellFormatDialog *_dlg );
 
-    void apply(StyleManipulator* obj);
+    void apply(StyleCommand* obj);
     void invertState(BorderButton *_button);
     QPixmap paintFormatPixmap(Qt::PenStyle _style);
 
@@ -369,13 +369,13 @@ private:
   void InitializeBorderButtons();
   void InitializePatterns();
   void SetConnections();
-  void applyTopOutline(StyleManipulator* obj);
-  void applyBottomOutline(StyleManipulator* obj);
-  void applyLeftOutline(StyleManipulator* obj);
-  void applyRightOutline(StyleManipulator* obj);
-  void applyVerticalOutline(StyleManipulator* obj);
-  void applyHorizontalOutline(StyleManipulator* obj);
-  void applyDiagonalOutline(StyleManipulator* obj);
+  void applyTopOutline(StyleCommand* obj);
+  void applyBottomOutline(StyleCommand* obj);
+  void applyLeftOutline(StyleCommand* obj);
+  void applyRightOutline(StyleCommand* obj);
+  void applyVerticalOutline(StyleCommand* obj);
+  void applyHorizontalOutline(StyleCommand* obj);
+  void applyDiagonalOutline(StyleCommand* obj);
 };
 
 class BrushSelect : public QFrame
@@ -414,7 +414,7 @@ public:
     CellFormatPagePattern( QWidget *parent, CellFormatDialog *_dlg );
 
     void apply( CustomStyle * style );
-    void apply( StyleManipulator *_obj );
+    void apply( StyleCommand *_obj );
 
     void init();
 public slots:
@@ -460,7 +460,7 @@ class CellFormatPageProtection : public QWidget, public Ui::ProtectionWidget
   ~CellFormatPageProtection();
   ///when protection is set through Style Manager
   void apply( CustomStyle * style );
-  void apply( StyleManipulator * _obj );
+  void apply( StyleCommand * _obj );
 
  protected:
   CellFormatDialog * m_dlg;
