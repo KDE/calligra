@@ -182,6 +182,11 @@ public:
      */
     QList< QPair<QRectF,SharedSubStyle> > removeShiftUp(const QRect& rect);
 
+    /**
+     * Invalidates all cached styles.
+     */
+    void invalidateCache();
+
 protected Q_SLOTS:
     void garbageCollection();
 

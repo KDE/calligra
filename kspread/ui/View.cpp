@@ -143,6 +143,7 @@
 #include "SheetView.h"
 #include "Style.h"
 #include "StyleManager.h"
+#include "StyleStorage.h"
 #include "Undo.h"
 #include "Util.h"
 #include "ValueCalc.h"
@@ -2098,6 +2099,10 @@ void View::refreshSheetViews()
 {
     qDeleteAll(d->sheetViews);
     d->sheetViews.clear();
+    const QRect rect = QRect(1, 1, KS_colMax, KS_rowMax);
+    const QList<Sheet*> sheets = d->doc->map()->sheetList();
+    for (int i = 0; i < sheets.count(); ++i)
+        sheets[i]->cellStorage()->styleStorage()->invalidateCache();
 }
 
 void View::initConfig()

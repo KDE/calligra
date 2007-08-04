@@ -341,6 +341,12 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::removeShiftUp( const QRect& 
     return undoData;
 }
 
+void StyleStorage::invalidateCache()
+{
+    d->cache.clear();
+    d->cachedArea = QRegion();
+}
+
 void StyleStorage::garbageCollection()
 {
     // any possible garbage left?

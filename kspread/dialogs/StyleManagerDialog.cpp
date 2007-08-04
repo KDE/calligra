@@ -248,7 +248,7 @@ void StyleManagerDialog::slotEdit()
     CellFormatDialog dialog(m_view, style, m_styleManager, m_view->doc());
     dialog.exec();
 
-    if (dialog.result() == Accepted && name == i18n("Default"))
+    if (dialog.result() == Accepted)
         m_view->refreshSheetViews();
 
     slotDisplayMode(m_displayBox->currentIndex());
