@@ -101,8 +101,6 @@ void ResizeRow::slotOk()
     ResizeRowManipulator* manipulator = new ResizeRowManipulator();
     manipulator->setSheet(m_pView->activeSheet());
     manipulator->setSize(height);
-    // TODO Stefan:
-    manipulator->setOldSize(rowHeight);
     manipulator->add(*m_pView->selection());
     manipulator->execute();
   }
@@ -165,8 +163,6 @@ void ResizeColumn::slotOk()
     ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
     manipulator->setSheet(m_pView->activeSheet());
     manipulator->setSize(width);
-    // TODO Stefan:
-    manipulator->setOldSize(columnWidth);
     manipulator->add(*m_pView->selection());
     manipulator->execute();
   }

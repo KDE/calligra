@@ -1619,7 +1619,7 @@ void UndoDragDrop::redo()
     doc()->setUndoLocked( false );
 }
 
-
+#if 0
 /****************************************************************************
  *
  * UndoResizeColRow
@@ -1817,6 +1817,7 @@ void UndoResizeColRow::redo()
 
     doc()->setUndoLocked( false );
 }
+#endif
 
 /****************************************************************************
  *

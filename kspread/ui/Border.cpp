@@ -73,6 +73,9 @@
 #include "Undo.h"
 #include "View.h"
 
+// commands
+#include "commands/RowColumnManipulators.h"
+
 using namespace KSpread;
 
 /****************************************************************
@@ -260,36 +263,26 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
         else
             height = ev_PosY - y;
 
-        if ( !sheet->isProtected() )
+        if ( height != 0.0 )
         {
-          if ( !m_pView->doc()->undoLocked() )
-          {
-            //just resize
-            if ( height != 0.0 )
-            {
-              // TODO Stefan: replace this
-              UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(rect) );
-                m_pView->doc()->addCommand( undo );
-            }
-          }
-
-          for( int i = start; i <= end; i++ )
-          {
-            RowFormat *rl = sheet->nonDefaultRowFormat( i );
-            if ( height != 0.0 )
-            {
-              if ( !rl->isHiddenOrFiltered() )
-                rl->setHeight( height );
-            }
-            else
-            {
-              m_pView->hideRow();
-            }
-          }
-
-          delete m_lSize;
-          m_lSize = 0;
+            ResizeRowManipulator* command = new ResizeRowManipulator();
+            command->setSheet(sheet);
+            command->setSize(height);
+            command->add(Region(rect, sheet));
+            if (!command->execute())
+                delete command;
         }
+        else // hide
+        {
+            HideShowManipulator* command = new HideShowManipulator();
+            command->setSheet(sheet);
+            command->setManipulateRows(true);
+            command->add(Region(rect, sheet));
+            if (!command->execute())
+                delete command;
+        }
+        delete m_lSize;
+        m_lSize = 0;
     }
     else if ( m_bSelection )
     {
@@ -324,23 +317,24 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
 void VBorder::equalizeRow( double resize )
 {
-  register Sheet * const sheet = m_pView->activeSheet();
-  if (!sheet)
-    return;
-
-  QRect selection( m_pView->selection()->lastRange() );
-  if ( !m_pView->doc()->undoLocked() )
-  {
-     UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(selection) );
-     m_pView->doc()->addCommand( undo );
-  }
-  RowFormat *rl;
-  for ( int i = selection.top(); i <= selection.bottom(); i++ )
-  {
-     rl = sheet->nonDefaultRowFormat( i );
-     resize = qMax( 2.0, resize);
-     rl->setHeight( resize );
-  }
+    if (resize != 0.0)
+    {
+        ResizeRowManipulator* command = new ResizeRowManipulator();
+        command->setSheet(m_pView->activeSheet());
+        command->setSize(qMax(2.0, resize));
+        command->add(*m_pView->selection());
+        if (!command->execute())
+            delete command;
+    }
+    else // hide
+    {
+        HideShowManipulator* command = new HideShowManipulator();
+        command->setSheet(m_pView->activeSheet());
+        command->setManipulateRows(true);
+        command->add(*m_pView->selection());
+        if (!command->execute())
+            delete command;
+    }
 }
 
 void VBorder::mouseDoubleClickEvent(QMouseEvent*)
@@ -916,36 +910,26 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         else
           width = ev_PosX - x;
 
-        if ( !sheet->isProtected() )
+        if (width != 0.0)
         {
-          if ( !m_pView->doc()->undoLocked() )
-          {
-            //just resize
-            if ( width != 0.0 )
-            {
-              // TODO Stefan: replace this
-                UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(rect) );
-                m_pView->doc()->addCommand( undo );
-            }
-          }
-
-          for( int i = start; i <= end; i++ )
-          {
-            ColumnFormat *cl = sheet->nonDefaultColumnFormat( i );
-            if ( width != 0.0 )
-            {
-                if ( !cl->isHiddenOrFiltered() )
-                    cl->setWidth( width );
-            }
-            else
-            {
-              m_pView->hideColumn();
-            }
-          }
-
-          delete m_lSize;
-          m_lSize = 0;
+            ResizeColumnManipulator* command = new ResizeColumnManipulator();
+            command->setSheet(sheet);
+            command->setSize(width);
+            command->add(Region(rect, sheet));
+            if (!command->execute())
+                delete command;
         }
+        else // hide
+        {
+            HideShowManipulator* command = new HideShowManipulator();
+            command->setSheet(sheet);
+            command->setManipulateColumns(true);
+            command->add(Region(rect, sheet));
+            if (!command->execute())
+                delete command;
+        }
+        delete m_lSize;
+        m_lSize = 0;
     }
     else if ( m_bSelection )
     {
@@ -980,23 +964,24 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 
 void HBorder::equalizeColumn( double resize )
 {
-  register Sheet * const sheet = m_pView->activeSheet();
-  Q_ASSERT( sheet );
-
-  QRect selection( m_pView->selection()->lastRange() );
-  if ( !m_pView->doc()->undoLocked() )
-  {
-      UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), sheet, Region(selection) );
-      m_pView->doc()->addCommand( undo );
-  }
-  ColumnFormat *cl;
-  for ( int i = selection.left(); i <= selection.right(); i++ )
-  {
-      cl = sheet->nonDefaultColumnFormat( i );
-      resize = qMax( 2.0, resize );
-      cl->setWidth( resize );
-  }
-
+    if (resize != 0.0)
+    {
+        ResizeColumnManipulator* command = new ResizeColumnManipulator();
+        command->setSheet(m_pView->activeSheet());
+        command->setSize(qMax(2.0, resize));
+        command->add(*m_pView->selection());
+        if (!command->execute())
+            delete command;
+    }
+    else // hide
+    {
+        HideShowManipulator* command = new HideShowManipulator();
+        command->setSheet(m_pView->activeSheet());
+        command->setManipulateColumns(true);
+        command->add(*m_pView->selection());
+        if (!command->execute())
+            delete command;
+    }
 }
 
 void HBorder::mouseDoubleClickEvent(QMouseEvent*)

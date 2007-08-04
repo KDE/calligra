@@ -900,8 +900,6 @@ void CellFormatDialog::slotApply()
     ResizeRowManipulator* command = new ResizeRowManipulator();
     command->setSheet(m_pView->activeSheet());
     command->setSize(positionPage->getSizeHeight());
-    // TODO Stefan:
-    command->setOldSize(heightSize);
     command->add(*m_pView->selection());
     m_doc->addCommand( command );
   }
@@ -910,8 +908,6 @@ void CellFormatDialog::slotApply()
     ResizeColumnManipulator* command = new ResizeColumnManipulator();
     command->setSheet(m_pView->activeSheet());
     command->setSize(positionPage->getSizeWidth());
-    // TODO Stefan:
-    command->setOldSize(widthSize);
     command->add(*m_pView->selection());
     m_doc->addCommand( command );
   }

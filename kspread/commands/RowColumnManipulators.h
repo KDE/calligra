@@ -34,22 +34,21 @@ class CellStorageUndoData;
    * \class ResizeColumnManipulator
    * \brief Resize column operation.
  */
-  class ResizeColumnManipulator : public AbstractRegionCommand
-  {
-    public:
-      ResizeColumnManipulator();
-      ~ResizeColumnManipulator();
+class ResizeColumnManipulator : public AbstractRegionCommand
+{
+public:
+    ResizeColumnManipulator();
+    ~ResizeColumnManipulator();
 
-      void setSize(double size) { m_newSize = size; }
-      void setOldSize(double size) { m_oldSize = size; }
+    void setSize(double size) { m_newSize = size; }
 
-    protected:
-      virtual bool process(Element*);
+protected:
+    virtual bool process(Element*);
 
-    private:
-      double m_newSize;
-      double m_oldSize;
-  };
+private:
+    double m_newSize;
+    QHash<int, double> m_oldSizes;
+};
 
 
 
@@ -64,14 +63,13 @@ class ResizeRowManipulator : public AbstractRegionCommand
     ~ResizeRowManipulator();
 
     void setSize(double size) { m_newSize = size; }
-    void setOldSize(double size) { m_oldSize = size; }
 
   protected:
     virtual bool process(Element*);
 
   private:
     double m_newSize;
-    double m_oldSize;
+    QHash<int, double> m_oldSizes;
 };
 
 

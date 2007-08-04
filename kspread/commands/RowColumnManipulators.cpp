@@ -55,7 +55,9 @@ bool ResizeColumnManipulator::process(Element* element)
   for (int col = range.right(); col >= range.left(); --col)
   {
     ColumnFormat *format = m_sheet->nonDefaultColumnFormat( col );
-    format->setWidth( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
+    if (m_firstrun)
+        m_oldSizes[col] = format->width();
+    format->setWidth( qMax( 2.0, m_reverse ? m_oldSizes[col] : m_newSize ) );
   }
   return true;
 }
@@ -81,7 +83,9 @@ bool ResizeRowManipulator::process(Element* element)
   for (int row = range.bottom(); row >= range.top(); --row)
   {
     RowFormat* rl = m_sheet->nonDefaultRowFormat( row );
-    rl->setHeight( qMax( 2.0, m_reverse ? m_oldSize : m_newSize ) );
+    if (m_firstrun)
+        m_oldSizes[row] = rl->height();
+    rl->setHeight( qMax( 2.0, m_reverse ? m_oldSizes[row] : m_newSize ) );
   }
   return true;
 }

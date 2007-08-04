@@ -405,6 +405,7 @@ protected:
                        const Region& region );
 };
 
+#if 0
 class UndoResizeColRow : public UndoAction
 {
 public:
@@ -424,6 +425,7 @@ protected:
     QLinkedList<rowSize> m_lstRedoRow;
     QString m_sheetName;
 };
+#endif
 
 class UndoChangeAreaTextCell : public UndoAction
 {
