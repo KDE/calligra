@@ -21,6 +21,7 @@
 #include <KoPathShape.h>
 #include <KoPathPoint.h>
 #include <KoPathPointData.h>
+#include <klocale.h>
 #include <QtGlobal>
 #include <math.h>
 
@@ -158,6 +159,7 @@ KarbonPathFlattenCommand::KarbonPathFlattenCommand( KoPathShape * path, double f
         }
         d->oldPointData.append( subpathData );
     }
+    setText( i18n( "Flatten path" ) );
 }
 
 KarbonPathFlattenCommand::~KarbonPathFlattenCommand()

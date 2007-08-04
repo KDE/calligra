@@ -23,7 +23,6 @@
 #include <QtGui/QUndoCommand>
 
 class KoPathShape;
-class KoPathPoint;
 
 /// The undo / redo command for flatten a given path
 class KarbonPathFlattenCommand : public QUndoCommand
