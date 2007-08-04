@@ -22,6 +22,7 @@
 #include "Bar.h"
 #include "StaffElement.h"
 #include "Clef.h"
+#include "KeySignature.h"
 
 #include <math.h>
 #include <limits.h>
@@ -145,6 +146,19 @@ Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
 Clef* Staff::lastClefChange(Bar* bar, int time, Clef* oldClef)
 {
     return lastClefChange(d->part->sheet()->indexOfBar(bar), time, oldClef);
+}
+
+KeySignature* Staff::lastKeySignatureChange(int bar)
+{
+    for (int b = bar; b >= 0; b--) {
+        Bar* curBar = part()->sheet()->bar(b);
+        for (int i = curBar->staffElementCount(this)-1; i >= 0; i--) {
+            StaffElement* e = curBar->staffElement(this, i);
+            KeySignature* ks = dynamic_cast<KeySignature*>(e);
+            if (ks) return ks;
+        }
+    }
+    return 0;
 }
 
 } // namespace MusicCore

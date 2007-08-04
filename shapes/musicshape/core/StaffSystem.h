@@ -34,6 +34,10 @@ public:
 
     double top() const;
     int firstBar() const;
+    double indent() const;
+    void setIndent(double indent);
+    double lineWidth() const;
+    void setLineWidth(double width);
 public slots:
     void setTop(double top);
     void setFirstBar(int bar);

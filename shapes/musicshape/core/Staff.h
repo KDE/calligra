@@ -27,6 +27,7 @@ namespace MusicCore {
 class Part;
 class Clef;
 class Bar;
+class KeySignature;
 
 /**
  * A Staff is purely used for displaying/formatting. The staff class is used to indicate on what staff
@@ -100,7 +101,8 @@ public:
      */
     Clef* lastClefChange(int bar, int time = -1, Clef* oldClef = 0);
     Clef* lastClefChange(Bar* bar, int time = -1, Clef* oldClef = 0);
-public slots:
+    KeySignature* lastKeySignatureChange(int bar);
+    public slots:
     /**
      * Set the spacing between this staff and the staff above it.
      *

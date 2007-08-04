@@ -26,6 +26,7 @@
 #include "core/Clef.h"
 #include "core/Staff.h"
 #include "core/StaffSystem.h"
+#include "core/KeySignature.h"
 
 #include <limits.h>
 
@@ -49,13 +50,16 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
         }
     }
 
+    // now layout bars in staff systems
     int curSystem = 0;
     QPointF p(0, sheet->staffSystem(curSystem)->top());
     int lastStart = 0;
+    double lineWidth = size.width();
+    double indent = 0;
     for (int i = 0; i < sheet->barCount(); i++) {
-        if (i > 0 && p.x() + sheet->bar(i)->desiredSize() > size.width()) {
+        if (i > 0 && p.x() + sheet->bar(i)->desiredSize() - indent > lineWidth) {
             // scale all sizes
-            double factor = size.width() / p.x();
+            double factor = lineWidth / (p.x() - indent);
             QPointF sp = sheet->bar(lastStart)->position();
             for (int j = lastStart; j < i; j++) {
                 sheet->bar(j)->setPosition(sp);
@@ -69,14 +73,33 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
             curSystem++;
             p.setY(sheet->staffSystem(curSystem)->top());
             sheet->staffSystem(curSystem)->setFirstBar(i);
+
+            indent = 0;
+            // Extra space for clef/key signature repeating
+            for (int partIdx = 0; partIdx < sheet->partCount(); partIdx++) {
+                Part* part = sheet->part(partIdx);
+                for (int staffIdx = 0; staffIdx < part->staffCount(); staffIdx++) {
+                    Staff* staff = part->staff(staffIdx);
+                    double w = 0;
+                    Clef* clef = staff->lastClefChange(i, 0);
+                    if (clef) w += clef->width() + 15;
+                    KeySignature* ks = staff->lastKeySignatureChange(i);
+                    if (ks) w += ks->width() + 15;
+                    if (w > indent) indent = w;
+                }
+            }
+            sheet->staffSystem(curSystem)->setIndent(indent);
+            sheet->staffSystem(curSystem)->setLineWidth(lineWidth);
+            lineWidth = size.width() - indent;
+            p.setX(indent);
         }
         sheet->bar(i)->setPosition(p);
         sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
         p.setX(p.x() + sheet->bar(i)->size());
     }
     // potentially scale last staff system if it is too wide
-    if (p.x() > size.width()) {
-        double factor = size.width() / p.x();
+    if (p.x() - indent > lineWidth) {
+        double factor = lineWidth / (p.x() - indent);
         QPointF sp = sheet->bar(lastStart)->position();
         for (int j = lastStart; j < sheet->barCount(); j++) {
             sheet->bar(j)->setPosition(sp);
@@ -86,8 +109,6 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
     }
 
     sheet->setStaffSystemCount(curSystem+1);
-    // now layout bars in staff systems
-    // TODO
 }
 
 void Engraver::engraveBar(Bar* bar)
@@ -149,7 +170,7 @@ void Engraver::engraveBar(Bar* bar)
                 }
             }
         }
-        
+
         // none found, break
         if (time == INT_MAX) break;
 
@@ -177,7 +198,7 @@ void Engraver::engraveBar(Bar* bar)
                 }
             }
         }
-        
+
         x = maxEnd;
     }
     bar->setDesiredSize(x + 15);

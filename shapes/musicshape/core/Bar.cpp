@@ -133,6 +133,13 @@ StaffElement* Bar::staffElement(Staff* staff, int index)
 void Bar::addStaffElement(StaffElement* element)
 {
     Q_ASSERT( element );
+    for (int i = 0; i < d->staffElements.size(); i++) {
+        StaffElement* se = d->staffElements[i];
+        if (se->startTime() > element->startTime()) {
+            d->staffElements.insert(i, element);
+            return;
+        }
+    }
     d->staffElements.append(element);
 }
 

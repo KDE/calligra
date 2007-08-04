@@ -26,6 +26,8 @@ public:
     Sheet* sheet;
     double top;
     int firstBar;
+    double indent;
+    double lineWidth;
 };
 
 StaffSystem::StaffSystem(Sheet* sheet)
@@ -34,6 +36,8 @@ StaffSystem::StaffSystem(Sheet* sheet)
     d->sheet = sheet;
     d->top = 0.0;
     d->firstBar = 0;
+    d->indent = 0;
+    d->lineWidth = 100;
 }
 
 StaffSystem::~StaffSystem()
@@ -63,6 +67,21 @@ void StaffSystem::setFirstBar(int bar)
     if (d->firstBar == bar) return;
     d->firstBar = bar;
     emit firstBarChanged(bar);
+}
+
+double StaffSystem::indent() const
+{
+    return d->indent;
+}
+
+void StaffSystem::setIndent(double indent)
+{
+    d->indent = indent;
+}
+
+void StaffSystem::setLineWidth(double width)
+{
+    d->lineWidth = width;
 }
 
 } // namespace MusicCore

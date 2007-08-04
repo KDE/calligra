@@ -30,6 +30,7 @@
 #include "core/Bar.h"
 #include "core/KeySignature.h"
 #include "core/TimeSignature.h"
+#include "core/StaffSystem.h"
 
 using namespace MusicCore;
 
@@ -41,6 +42,38 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet)
 {
     for (int i = 0; i < sheet->partCount(); i++) {
         renderPart(painter, sheet->part(i));
+    }
+    for (int i = 0; i < sheet->staffSystemCount(); i++) {
+        StaffSystem* ss = sheet->staffSystem(i);
+        if (ss->indent() == 0) continue;
+        int b = ss->firstBar();
+        Bar* bar = sheet->bar(b);
+        double by = bar->position().y();
+        double ind = ss->indent();
+
+        for (int p = 0; p < sheet->partCount(); p++) {
+            Part* part = sheet->part(p);
+            for (int s = 0; s < part->staffCount(); s++) {
+                Staff* staff = part->staff(s);
+                double y = staff->top();
+                double dy = staff->lineSpacing();
+
+                painter.setPen(m_style->staffLinePen());
+                for (int l = 0; l < staff->lineCount(); l++) {
+                    painter.drawLine(QPointF(0, by + y + l * dy), QPointF(ind, by + y + l * dy));
+                }
+
+                Clef* clef = staff->lastClefChange(b, 0);
+                RenderState foo;
+                if (clef) {
+                    renderClef(painter, clef, QPointF(0, by), foo, 1);
+                }
+                KeySignature* ks = staff->lastKeySignatureChange(b);
+                if (ks) {
+                    renderKeySignature(painter, ks, QPointF(0, by), foo, 1);
+                }
+            }
+        }
     }
 }
 
