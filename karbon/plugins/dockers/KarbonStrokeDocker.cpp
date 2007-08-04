@@ -170,9 +170,6 @@ KarbonStrokeDocker::KarbonStrokeDocker()
     setWidget( mainWidget );
 
     updateControls();
-
-    connect( KoToolManager::instance(), SIGNAL( changedCanvas( const KoCanvasController *) ), 
-             this, SLOT( canvasChanged(const KoCanvasController *) ) );
 }
 
 KarbonStrokeDocker::~KarbonStrokeDocker()
@@ -287,12 +284,12 @@ void KarbonStrokeDocker::selectionChanged()
         setStroke( selection->firstSelectedShape()->border() );
 }
 
-void KarbonStrokeDocker::canvasChanged( const KoCanvasController *controller )
+void KarbonStrokeDocker::setCanvas( KoCanvasBase *canvas )
 {
-    if( controller )
+    if( canvas )
     {
-        connect( controller->canvas()->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-        setUnit( controller->canvas()->unit() );
+        connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+        setUnit( canvas->unit() );
     }
 }
 

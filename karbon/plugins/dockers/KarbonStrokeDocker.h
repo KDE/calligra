@@ -29,13 +29,14 @@
 #define KARBONSTROKEDOCKER_H
 
 #include <KoUnit.h>
+#include <KoCanvasObserver.h>
 #include <QtGui/QDockWidget>
 
 class KoShapeBorderModel;
 class KoCanvasController;
 
 /// A docker for setting properties of a line border
-class KarbonStrokeDocker : public QDockWidget
+class KarbonStrokeDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 
@@ -69,8 +70,10 @@ private slots:
     void blockChildSignals( bool block );
     /// selection has changed
     void selectionChanged();
-    /// canvas controller has changed
-    void canvasChanged( const KoCanvasController *controller );
+
+    /// reimplemented
+    virtual void setCanvas( KoCanvasBase *canvas );
+
 private:
     class Private;
     Private * const d;
