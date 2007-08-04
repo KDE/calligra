@@ -9,9 +9,6 @@
     <height>383</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>PertEditor</string>
-  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>0</number>

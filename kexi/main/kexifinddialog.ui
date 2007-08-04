@@ -102,9 +102,6 @@
        <property name="text" >
         <string>&amp;Replace</string>
        </property>
-       <property name="shortcut" >
-        <string>Alt+R</string>
-       </property>
       </widget>
      </item>
      <item>
@@ -117,9 +114,6 @@
        </property>
        <property name="text" >
         <string>Replace All</string>
-       </property>
-       <property name="shortcut" >
-        <string>Alt+R</string>
        </property>
       </widget>
      </item>
@@ -268,9 +262,6 @@
      <property name="text" >
       <string>C&amp;ase sensitive</string>
      </property>
-     <property name="shortcut" >
-      <string>Alt+A</string>
-     </property>
     </widget>
    </item>
    <item row="5" column="2" >
@@ -280,9 +271,6 @@
      </property>
      <property name="text" >
       <string>&amp;Whole words only</string>
-     </property>
-     <property name="shortcut" >
-      <string>Alt+W</string>
      </property>
     </widget>
    </item>
