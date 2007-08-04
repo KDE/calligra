@@ -53,6 +53,14 @@ class ElapsedTime
 {
  public:
   enum OutputMode { Default, PrintOnlyTime };
+
+#ifdef NDEBUG
+
+  ElapsedTime() {}
+  explicit ElapsedTime(QString const& , OutputMode = Default) {}
+
+#else // NDEBUG
+
   ElapsedTime()
   {
     m_time.start();
@@ -83,6 +91,8 @@ class ElapsedTime
  private:
   QTime   m_time;
   QString m_name;
+
+#endif // NDEBUG
 };
 
 /**
