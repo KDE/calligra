@@ -6,6 +6,8 @@
             <Action name="edit_undo"/>
             <Action name="edit_redo"/>
             <Separator/>
+            <Action name="edit_insertpage"/>
+            <Action name="edit_deletepage"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>
