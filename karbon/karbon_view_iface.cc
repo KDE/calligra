@@ -22,7 +22,6 @@
 
 #include "karbon_view.h"
 #include "karbon_view_iface.h"
-#include "vcanvas.h"
 
 KarbonViewIface::KarbonViewIface( KarbonView* view )
 		: KoViewIface( view )

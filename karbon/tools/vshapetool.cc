@@ -23,7 +23,6 @@
 
 #include "karbon_part.h"
 #include "karbon_view.h"
-#include "vcanvas.h"
 #include "vcomposite.h"
 #include "vglobal.h"
 #include "vpainter.h"

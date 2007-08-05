@@ -45,7 +45,7 @@
 #include "vqpainter.h"
 #include "vselection.h"
 #include "vstroke.h"
-#include "vcanvas.h"
+#include "KarbonCanvas.h"
 #include "vdocumentdocker.h"
 
 /*************************************************************************

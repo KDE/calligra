@@ -1,7 +1,7 @@
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KOPAINTER_INCLUDES} ${FLAKE_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon )
 
 set(karbonwidgets_SRCS
-    vcanvas.cc
+    KarbonCanvas.cpp
     vcolorslider.cc
     vgradientwidget.cc
     vgradienttabwidget.cc

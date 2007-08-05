@@ -47,7 +47,7 @@
 #include "vpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
-#include "vcanvas.h"
+#include "KarbonCanvas.h"
 #include "vdocumentdocker.h"
 #include "vtoolcontroller.h"
 #include "vtool.h"

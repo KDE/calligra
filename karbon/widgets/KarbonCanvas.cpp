@@ -2,7 +2,7 @@
    Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2001-2002 Rob Buis <buis@kde.org>
    Copyright (C) 2002-2004, 2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2002 Beno�t Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2004 Waldo Bastian <bastian@kde.org>
    Copyright (C) 2004-2005 David Faure <faure@kde.org>
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
@@ -28,7 +28,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vcanvas.h"
+#include "KarbonCanvas.h"
 #include "vdocument.h"
 #include "karbon_part.h"
 
@@ -376,5 +376,5 @@ void KarbonCanvas::updateInputMethodInfo() {
     updateMicroFocus();
 }
 
-#include "vcanvas.moc"
+#include "KarbonCanvas.moc"
 

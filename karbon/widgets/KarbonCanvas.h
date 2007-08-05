@@ -29,8 +29,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VCANVAS_H__
-#define __VCANVAS_H__
+#ifndef KARBONCANVAS_H
+#define KARBONCANVAS_H
 
 #include <karbon_export.h>
 
@@ -161,4 +161,4 @@ private:
     KarbonCanvasPrivate * const d;
 };
 
-#endif
+#endif // KARBONCANVAS_H

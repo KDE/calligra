@@ -64,7 +64,7 @@ class KoStrokeDocker;
 class VColorDocker;
 class VStyleDocker;
 class VTransformDocker;
-class VLayerDocker;
+class KarbonLayerDocker;
 
 class VPainterFactory;
 class VSmallPreview;
@@ -236,7 +236,7 @@ private:
 	KoStrokeDocker		*m_strokeDocker;
 	VStyleDocker		*m_styleDocker;
 	VTransformDocker	*m_TransformDocker;
-	VLayerDocker		*m_layerDocker;
+	KarbonLayerDocker		*m_layerDocker;
 
 	//Status Bar
 	QLabel				*m_status;       // Ordinary status

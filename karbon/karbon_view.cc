@@ -71,7 +71,7 @@
 #include "vtoolcontroller.h"
 #include "vpainterfactory.h"
 #include "vtypebuttonbox.h"
-#include "vcanvas.h"
+#include "KarbonCanvas.h"
 #include "karbon_drag.h"
 
 #include <KoMainWindow.h>
