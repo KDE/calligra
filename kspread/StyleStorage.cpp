@@ -45,7 +45,7 @@ public:
     QMap<int, bool> usedRows;
     QRegion usedArea;
     QHash<Style::Key, QList<SharedSubStyle> > subStyles;
-    QList< QPair<QRectF,SharedSubStyle> > possibleGarbage;
+    QMap<int, QPair<QRectF,SharedSubStyle> > possibleGarbage;
     QCache<QPoint, Style> cache;
     QRegion cachedArea;
 };
@@ -102,7 +102,7 @@ QList< QPair<QRectF,SharedSubStyle> > StyleStorage::undoData(const Region& regio
     for ( Region::ConstIterator it = region.constBegin(); it != end; ++it )
     {
         const QRect rect = (*it)->rect();
-        QList< QPair<QRectF,SharedSubStyle> > pairs = d->tree.intersectingPairs(rect);
+        QList< QPair<QRectF,SharedSubStyle> > pairs = d->tree.intersectingPairs(rect).values();
         for ( int i = 0; i < pairs.count(); ++i )
         {
             // trim the rects
@@ -147,7 +147,7 @@ void StyleStorage::saveOdfCreateDefaultStyles(QMap<int, Style>& columnDefaultSty
         maxRows = KS_rowMax;
     if (d->usedRows.count() != 0)
         maxCols = KS_colMax;
-    const QList< QPair<QRectF,SharedSubStyle> > pairs = d->tree.intersectingPairs(sheetRect);
+    const QList< QPair<QRectF,SharedSubStyle> > pairs = d->tree.intersectingPairs(sheetRect).values();
     for (int i = 0; i < pairs.count(); ++i)
     {
         const QRect rect = pairs[i].first.toRect();
@@ -353,7 +353,8 @@ void StyleStorage::garbageCollection()
     if ( d->possibleGarbage.isEmpty() )
         return;
 
-    const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.takeFirst();
+    const int currentZIndex = d->possibleGarbage.constBegin().key();
+    const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.take(currentZIndex);
 
     // check wether the named style still exists
     if ( currentPair.second->type() == Style::NamedStyleKey &&
@@ -369,14 +370,17 @@ void StyleStorage::garbageCollection()
     }
 
     typedef QPair<QRectF,SharedSubStyle> SharedSubStylePair;
-    QList<SharedSubStylePair> pairs = d->tree.intersectingPairs(currentPair.first.toRect());
+    QMap<int, SharedSubStylePair> pairs = d->tree.intersectingPairs(currentPair.first.toRect());
     if ( pairs.isEmpty() ) // actually never true, just for sanity
          return;
+    int zIndex = pairs.constBegin().key();
+    SharedSubStylePair pair = pairs[zIndex];
 
     // check wether the default style is placed first
-    if ( currentPair.second->type() == Style::DefaultStyleKey &&
-         pairs[0].second->type() == Style::DefaultStyleKey &&
-         pairs[0].first == currentPair.first )
+    if ( zIndex == currentZIndex &&
+         currentPair.second->type() == Style::DefaultStyleKey &&
+         pair.second->type() == Style::DefaultStyleKey &&
+         pair.first == currentPair.first )
     {
         kDebug(36006) <<"StyleStorage: removing default style"
                         << " at " << Region(currentPair.first.toRect()).name()
@@ -388,9 +392,10 @@ void StyleStorage::garbageCollection()
 
     // special handling for indentation:
     // check wether the default indentation is placed first
-    if ( currentPair.second->type() == Style::Indentation &&
+    if ( zIndex == currentZIndex &&
+         currentPair.second->type() == Style::Indentation &&
          static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 == 0 &&
-         pairs[0].first == currentPair.first )
+         pair.first == currentPair.first )
     {
         kDebug(36006) <<"StyleStorage: removing default indentation"
                       << " at " << Region(currentPair.first.toRect()).name()
@@ -402,9 +407,10 @@ void StyleStorage::garbageCollection()
 
     // special handling for precision:
     // check wether the storage default precision is placed first
-    if ( currentPair.second->type() == Style::Precision &&
+    if ( zIndex == currentZIndex &&
+         currentPair.second->type() == Style::Precision &&
          static_cast<const SubStyleOne<Style::Precision, int>*>(currentPair.second.data())->value1 == 0 &&
-         pairs[0].first == currentPair.first )
+         pair.first == currentPair.first )
     {
         kDebug(36006) <<"StyleStorage: removing default precision"
                       << " at " << Region(currentPair.first.toRect()).name()
@@ -416,13 +422,18 @@ void StyleStorage::garbageCollection()
 
     // check, if the current substyle is covered by others added after it
     bool found = false;
-    foreach( const SharedSubStylePair& pair, pairs )
+    QMap<int, SharedSubStylePair>::ConstIterator end = pairs.constEnd();
+    for (QMap<int, SharedSubStylePair>::ConstIterator it = pairs.find(currentZIndex); it != end; ++it)
     {
+        zIndex = it.key();
+        pair = it.value();
+
         // as long as the substyle in question was not found, skip the substyle
         if ( !found )
         {
             if ( pair.first == currentPair.first &&
-                 Style::compare( pair.second.data(), currentPair.second.data() ) )
+                 Style::compare( pair.second.data(), currentPair.second.data() ) &&
+                 zIndex == currentZIndex)
             {
                 found = true;
             }
@@ -432,7 +443,8 @@ void StyleStorage::garbageCollection()
         // remove the current pair, if another substyle of the same type,
         // the default style or a named style follows and the rectangle
         // is completely covered
-        if ( ( pair.second->type() == currentPair.second->type() ||
+        if ( zIndex != currentZIndex &&
+             ( pair.second->type() == currentPair.second->type() ||
                pair.second->type() == Style::DefaultStyleKey ||
                pair.second->type() == Style::NamedStyleKey ) &&
              pair.first.contains( currentPair.first ) )
@@ -483,7 +495,9 @@ void StyleStorage::regionChanged( const QRect& rect )
     if ( d->doc->isLoading() )
          return;
     // mark the possible garbage
-    d->possibleGarbage += d->tree.intersectingPairs( rect );
+    // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
+    // has to be inserted most recently, because it should be accessed first.
+    d->possibleGarbage = d->tree.intersectingPairs(rect).unite(d->possibleGarbage);
     QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
     // invalidate cache
     invalidateCache( rect );

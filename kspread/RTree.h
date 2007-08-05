@@ -140,7 +140,7 @@ public:
    */
   virtual QList<T> intersects( const QRectF& rect ) const;
 
-  virtual QList< QPair<QRectF,T> > intersectingPairs( const QRectF& rect ) const;
+  virtual QMap<int, QPair<QRectF,T> > intersectingPairs( const QRectF& rect ) const;
 
   /**
    * Inserts \p number rows at the position \p position .
@@ -328,11 +328,11 @@ QList<T> RTree<T>::intersects( const QRectF& rect ) const
 }
 
 template<typename T>
-QList< QPair<QRectF,T> > RTree<T>::intersectingPairs( const QRectF& rect ) const
+QMap<int, QPair<QRectF,T> > RTree<T>::intersectingPairs( const QRectF& rect ) const
 {
     QMap<int,QPair<QRectF,T> > result;
     dynamic_cast<Node*>(this->m_root)->intersectingPairs( rect.normalized().adjusted(0, 0, -0.1, -0.1), result );
-    return result.values();
+    return result;
 }
 
 template<typename T>
@@ -382,7 +382,7 @@ QList< QPair<QRectF,T> > RTree<T>::insertShiftRight(const QRect& r, InsertMode m
     if (rect.left() < 1 || rect.left() > KS_colMax)
         return QList< QPair<QRectF,T> >();
     const QRect boundingRect = QRect( rect.topLeft(), QPoint( KS_colMax, rect.bottom() ) );
-    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect ).values();
     if ( oldPairs.isEmpty() )
         return QList< QPair<QRectF,T> >();
     // insert default data at the bounding rectangle
@@ -392,7 +392,7 @@ QList< QPair<QRectF,T> > RTree<T>::insertShiftRight(const QRect& r, InsertMode m
     {
         const int offset = (mode == CopyPrevious) ? 1 : 0;
         const QRect copyRect = QRect( rect.left() - offset, rect.top(), 1, rect.height() );
-        const QList< QPair<QRectF,T> > copyPairs = intersectingPairs( copyRect );
+        const QList< QPair<QRectF,T> > copyPairs = intersectingPairs( copyRect ).values();
         for ( int i = 0; i < copyPairs.count(); ++i )
         {
             insert((copyPairs[i].first.toRect() & copyRect).adjusted(offset,0,rect.width()+offset-1,0), copyPairs[i].second);
@@ -415,7 +415,7 @@ QList< QPair<QRectF,T> > RTree<T>::insertShiftDown(const QRect& r, InsertMode mo
     if (rect.top() < 1 || rect.top() > KS_rowMax)
         return QList< QPair<QRectF,T> >();
     const QRect boundingRect = QRect( rect.topLeft(), QPoint( rect.right(), KS_rowMax ) );
-    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect ).values();
     if ( oldPairs.isEmpty() )
         return QList< QPair<QRectF,T> >();
     // insert default data at the bounding rectangle
@@ -425,7 +425,7 @@ QList< QPair<QRectF,T> > RTree<T>::insertShiftDown(const QRect& r, InsertMode mo
     {
         const int offset = (mode == CopyPrevious) ? 1 : 0;
         const QRect copyRect = QRect( rect.left(), rect.top() - offset, rect.width(), 1 );
-        const QList< QPair<QRectF,T> > copyPairs = intersectingPairs( copyRect );
+        const QList< QPair<QRectF,T> > copyPairs = intersectingPairs( copyRect ).values();
         for ( int i = 0; i < copyPairs.count(); ++i )
         {
             insert((copyPairs[i].first.toRect() & copyRect).adjusted(0,offset,0,rect.height()+offset-1), copyPairs[i].second);
@@ -447,7 +447,7 @@ QList< QPair<QRectF,T> > RTree<T>::removeShiftLeft(const QRect& r)
     if (rect.left() < 1 || rect.left() > KS_colMax)
         return QList< QPair<QRectF,T> >();
     const QRect boundingRect = QRect( rect.topLeft(), QPoint( KS_colMax, rect.bottom() ) );
-    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect ).values();
     if ( oldPairs.isEmpty() )
         return QList< QPair<QRectF,T> >();
     // insert default data at the bounding rectangle
@@ -468,7 +468,7 @@ QList< QPair<QRectF,T> > RTree<T>::removeShiftUp(const QRect& r)
     if (rect.top() < 1 || rect.top() > KS_rowMax)
         return QList< QPair<QRectF,T> >();
     const QRect boundingRect = QRect( rect.topLeft(), QPoint( rect.right(), KS_rowMax ) );
-    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect );
+    const QList< QPair<QRectF,T> > oldPairs = intersectingPairs( boundingRect ).values();
     if ( oldPairs.isEmpty() )
         return QList< QPair<QRectF,T> >();
     // insert default data at the bounding rectangle

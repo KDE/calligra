@@ -154,7 +154,7 @@ private:
     Doc* m_doc;
     RTree<T> m_tree;
     QRegion m_usedArea;
-    QList< QPair<QRectF,T> > m_possibleGarbage;
+    QMap<int, QPair<QRectF,T> > m_possibleGarbage;
     QList<T> m_storedData;
     mutable QCache<QPoint,T> m_cache;
     mutable QRegion m_cachedArea;
@@ -191,7 +191,7 @@ T RectStorage<T>::contains(const QPoint& point) const
 template<typename T>
 QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint& point) const
 {
-    const QList< QPair<QRectF,T> > results = m_tree.intersectingPairs( QRect(point,point) );
+    const QList< QPair<QRectF,T> > results = m_tree.intersectingPairs( QRect(point,point) ).values();
     return results.isEmpty() ? qMakePair(QRectF(),T()) : results.last();
 }
 
@@ -201,7 +201,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::intersectingPairs(const Region& region
     QList< QPair<QRectF,T> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-        result += m_tree.intersectingPairs((*it)->rect());
+        result += m_tree.intersectingPairs((*it)->rect()).values();
     return result;
 }
 
@@ -213,7 +213,7 @@ QList< QPair<QRectF,T> > RectStorage<T>::undoData(const Region& region) const
     for ( Region::ConstIterator it = region.constBegin(); it != end; ++it )
     {
         const QRect rect = (*it)->rect();
-        QList< QPair<QRectF,T> > pairs = m_tree.intersectingPairs(rect);
+        QList< QPair<QRectF,T> > pairs = m_tree.intersectingPairs(rect).values();
         for ( int i = 0; i < pairs.count(); ++i )
         {
             // trim the rects
@@ -344,14 +344,22 @@ void RectStorage<T>::garbageCollection()
     // any possible garbage left?
     if ( m_possibleGarbage.isEmpty() )
         return;
-    const QPair<QRectF,T> currentPair = m_possibleGarbage.takeFirst();
+
+    const int currentZIndex = m_possibleGarbage.constBegin().key();
+    const QPair<QRectF,T> currentPair = m_possibleGarbage.take(currentZIndex);
+
     typedef QPair<QRectF,T> DataPair;
-    QList<DataPair> pairs = m_tree.intersectingPairs(currentPair.first.toRect());
+    QMap<int, DataPair> pairs = m_tree.intersectingPairs(currentPair.first.toRect());
     if ( pairs.isEmpty() ) // actually never true, just for sanity
          return;
+    int zIndex = pairs.constBegin().key();
+    DataPair pair = pairs[zIndex];
 
     // check wether the default style is placed first
-    if ( currentPair.second == T() && pairs[0].second == T() && pairs[0].first == currentPair.first )
+    if (zIndex == currentZIndex &&
+        currentPair.second == T() &&
+        pair.second == T() &&
+        pair.first == currentPair.first)
     {
         kDebug(36001) <<"RectStorage: removing default data at" << Region(currentPair.first.toRect()).name();
         m_tree.remove( currentPair.first, currentPair.second );
@@ -360,12 +368,18 @@ void RectStorage<T>::garbageCollection()
     }
 
     bool found = false;
-    foreach ( const DataPair pair, pairs )
+    typename QMap<int, DataPair>::ConstIterator end = pairs.constEnd();
+    for (typename QMap<int, DataPair>::ConstIterator it = pairs.find(currentZIndex); it != end; ++it)
     {
+        zIndex = it.key();
+        pair = it.value();
+
         // as long as the substyle in question was not found, skip the substyle
         if ( !found )
         {
-            if ( pair.first == currentPair.first && pair.second == currentPair.second )
+            if (zIndex == currentZIndex &&
+                pair.first == currentPair.first &&
+                pair.second == currentPair.second)
             {
                 found = true;
             }
@@ -374,9 +388,10 @@ void RectStorage<T>::garbageCollection()
 
         // remove the current pair, if another substyle of the same type,
         // the default style or a named style follows and the rectangle
-        // is completely convered
-        if ( ( pair.second == currentPair.second || pair.second == T() ) &&
-             pair.first.contains( currentPair.first ) )
+        // is completely covered
+        if (zIndex != currentZIndex &&
+            (pair.second == currentPair.second || pair.second == T()) &&
+            pair.first.contains(currentPair.first))
         {
             kDebug(36001) <<"RectStorage: removing data at" << Region(currentPair.first.toRect()).name();
             m_tree.remove( currentPair.first, currentPair.second );
@@ -392,7 +407,9 @@ void RectStorage<T>::regionChanged( const QRect& rect )
     if (m_doc->isLoading())
          return;
     // mark the possible garbage
-    m_possibleGarbage += m_tree.intersectingPairs( rect );
+    // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
+    // has to be inserted most recently, because it should be accessed first.
+    m_possibleGarbage = m_tree.intersectingPairs(rect).unite(m_possibleGarbage);
     triggerGarbageCollection();
     // invalidate cache
     invalidateCache( rect );
