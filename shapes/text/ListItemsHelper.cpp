@@ -167,7 +167,7 @@ http://en.wikipedia.org/wiki/Japanese_numerals
 
 QList<ListStyleItem> Lists::genericListStyleItems() {
     QList<ListStyleItem> answer;
-    answer.append( ListStyleItem( i18n( "None" ), KoListStyle::NoItem) );
+    answer.append( ListStyleItem( i18nc("Text list-style", "None" ), KoListStyle::NoItem) );
     answer.append( ListStyleItem( i18n( "Arabic" ), KoListStyle::DecimalItem) );
     answer.append( ListStyleItem( i18n( "Lower Alphabetical" ), KoListStyle::AlphaLowerItem) );
     answer.append( ListStyleItem( i18n( "Upper Alphabetical" ), KoListStyle::UpperAlphaItem) );

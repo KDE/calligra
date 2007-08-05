@@ -38,9 +38,9 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
         addStyle(item);
 
     widget.alignment->addItem(i18nc("Automatic horizontal alignment", "Auto"));
-    widget.alignment->addItem(i18n("Left"));
-    widget.alignment->addItem(i18n("Right"));
-    widget.alignment->addItem(i18n("Centered"));
+    widget.alignment->addItem(i18nc("Text alignment", "Left"));
+    widget.alignment->addItem(i18nc("Text alignment", "Right"));
+    widget.alignment->addItem(i18nc("Text alignment", "Centered"));
 
     connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
     connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));

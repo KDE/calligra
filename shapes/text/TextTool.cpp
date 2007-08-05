@@ -132,7 +132,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionFormatItalic->setCheckable(true);
     connect( m_actionFormatItalic, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(italic(bool)) );
 
-    m_actionFormatUnderline  = new QAction(KIcon("format-text-underline"), i18n("Underline"), this);
+    m_actionFormatUnderline  = new QAction(KIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
     addAction("format_underline", m_actionFormatUnderline );
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);

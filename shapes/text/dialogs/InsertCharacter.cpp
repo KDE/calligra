@@ -37,7 +37,7 @@ InsertCharacter::InsertCharacter(QWidget *parent)
     lay->addWidget(m_charSelector, 0, 0, 1, 3);
     QPushButton *insert = new QPushButton(i18n("Insert"), specialCharacterWidget);
     lay->addWidget(insert, 1, 1);
-    QPushButton *close = new QPushButton(i18n("Close"), specialCharacterWidget);
+    QPushButton *close = new QPushButton(i18nc("Close dialog", "Close"), specialCharacterWidget);
     lay->addWidget(close, 1, 2);
     lay->setColumnStretch(0, 9);
 

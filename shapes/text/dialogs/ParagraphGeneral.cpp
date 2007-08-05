@@ -50,7 +50,7 @@ void ParagraphGeneral::setStyle(KoParagraphStyle *style) {
     m_blockSignals = true;
 
     widget.inheritStyle->clear();
-    widget.inheritStyle->addItem(i18n("None"));
+    widget.inheritStyle->addItem(i18nc("Inherit style", "None"));
     widget.inheritStyle->setCurrentIndex(0);
     foreach(KoParagraphStyle *s, m_paragraphStyles) {
         KoParagraphStyle *parent = s;

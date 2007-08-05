@@ -32,9 +32,9 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     widget.lineSpacing->addItem( i18nc( "Line spacing value", "Single" ) );
     widget.lineSpacing->addItem( i18nc( "Line spacing value", "1.5 Lines" ) );
     widget.lineSpacing->addItem( i18nc( "Line spacing value", "Double" ) );
-    widget.lineSpacing->addItem( i18n( "Proportional") ); // called Proportional like in OO
-    widget.lineSpacing->addItem( i18n( "Additional") ); // normal distance + absolute value
-    widget.lineSpacing->addItem( i18n( "Fixed") );
+    widget.lineSpacing->addItem( i18nc( "Line spacing type", "Proportional") ); // called Proportional like in OO
+    widget.lineSpacing->addItem( i18nc( "Line spacing type", "Additional") ); // normal distance + absolute value
+    widget.lineSpacing->addItem( i18nc( "Line spacing type", "Fixed") );
 
     connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
     connect(widget.useFont, SIGNAL(toggled (bool)), this, SLOT(useFontMetrices(bool)));
