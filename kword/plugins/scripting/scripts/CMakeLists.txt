@@ -3,8 +3,10 @@ install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/kword/scripts)
 #install(FILES variable_readfile.py DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/variables)
 
 install(FILES
+    importfile.py
+    importdoxyxml.py
     ooimport.py ooimportconfig.ui
-    importfile.py exportfile.py
+    exportfile.py
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)
 
 install(FILES

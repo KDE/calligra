@@ -40,7 +40,7 @@ def addList(text,liststyle):
     cursor.insertHtml("<br><h2>%s</h2>" % text)
     # Create a new style and set the liststyle
     s = KWord.addParagraphStyle("My%sStyle" % text)
-    s.setListStyle( getattr(s,liststyle) ) # e.g. s.setListStyle( s.SquareItem )
+    #s.setListStyle( getattr(s,liststyle) ) # e.g. s.setListStyle( s.SquareItem )
     # Create the list and apply the style
     l = cursor.insertList()
     l.setStyle(s)

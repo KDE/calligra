@@ -11,6 +11,12 @@
                interpreter="python"
                file="extensions/importfile.py" />
         <script
+               name="pyimportdoxyxml"
+               text="Doxygen XML"
+               comment="Python script to import content from a combined doxygen XML file"
+               interpreter="python"
+               file="extensions/importdoxyxml.py" />
+        <script
                name="pyooimport"
                text="OpenOffice.org UNO"
                comment="Python script to import content using OpenOffice.org PyUNO"
