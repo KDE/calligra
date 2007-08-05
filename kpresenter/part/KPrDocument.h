@@ -36,14 +36,14 @@ public:
 
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
 
-protected:
-    KoView * createViewInstance( QWidget *parent );
-    const char *odfTagName();
-
     /// reimplemented
     virtual KoPAPage * newPage();
     /// reimplemented
     virtual KoPAMasterPage * newMasterPage();
+
+protected:
+    KoView * createViewInstance( QWidget *parent );
+    const char *odfTagName();
 };
 
 #endif /* KPRDOCUMENT_H */
