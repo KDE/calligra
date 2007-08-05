@@ -24,8 +24,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VTRANSFORMDOCKER_H__
-#define __VTRANSFORMDOCKER_H__
+#ifndef KARBONTRANSFORMDOCKER_H
+#define KARBONTRANSFORMDOCKER_H
 
 #include <KoUnit.h>
 #include <KoDockFactory.h>
@@ -35,21 +35,21 @@ class KDoubleSpinBox;
 class KoUnitDoubleSpinBox;
 class KoDockFactory;
 
-class VTransformDockerFactory : public KoDockFactory
+class KarbonTransformDockerFactory : public KoDockFactory
 {
 public:
-    VTransformDockerFactory();
+    KarbonTransformDockerFactory();
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
 };
 
-class VTransformDocker : public QDockWidget
+class KarbonTransformDocker : public QDockWidget
 {
     Q_OBJECT
 
 public:
-    VTransformDocker();
+    KarbonTransformDocker();
 
 public slots:
     void update();
@@ -73,5 +73,5 @@ private:
     KDoubleSpinBox *m_shearY;
 };
 
-#endif
+#endif // KARBONTRANSFORMDOCKER_H
 

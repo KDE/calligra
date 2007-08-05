@@ -4,7 +4,7 @@ set(karbondockers_SRCS
     vcolordocker.cc
     vdocumentdocker.cc
     vstyledocker.cc
-    vtransformdocker.cc
+    KarbonTransformDocker.cpp
     KarbonLayerDocker.cpp
     KarbonStylePreviewDocker.cpp
     )

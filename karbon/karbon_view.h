@@ -63,7 +63,7 @@ class VDocumentTab;
 class KoStrokeDocker;
 class VColorDocker;
 class VStyleDocker;
-class VTransformDocker;
+class KarbonTransformDocker;
 class KarbonLayerDocker;
 
 class VPainterFactory;
@@ -235,7 +235,7 @@ private:
 	VColorDocker		*m_ColorManager;
 	KoStrokeDocker		*m_strokeDocker;
 	VStyleDocker		*m_styleDocker;
-	VTransformDocker	*m_TransformDocker;
+    KarbonTransformDocker *m_TransformDocker;
 	KarbonLayerDocker		*m_layerDocker;
 
 	//Status Bar

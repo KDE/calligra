@@ -29,7 +29,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vtransformdocker.h"
+#include "KarbonTransformDocker.h"
 
 #include <KoDockFactory.h>
 #include <KoUnitDoubleSpinBox.h>
@@ -54,24 +54,24 @@
 #include <QtCore/QPointF>
 #include <QtCore/QRectF>
 
-VTransformDockerFactory::VTransformDockerFactory()
+KarbonTransformDockerFactory::KarbonTransformDockerFactory()
 {
 }
 
-QString VTransformDockerFactory::id() const
+QString KarbonTransformDockerFactory::id() const
 {
     return QString("Transform");
 }
 
-QDockWidget* VTransformDockerFactory::createDockWidget()
+QDockWidget* KarbonTransformDockerFactory::createDockWidget()
 {
-    VTransformDocker* widget = new VTransformDocker();
+    KarbonTransformDocker* widget = new KarbonTransformDocker();
     widget->setObjectName(id());
 
     return widget;
 }
 
-VTransformDocker::VTransformDocker()
+KarbonTransformDocker::KarbonTransformDocker()
 {
     setWindowTitle( i18n( "Transform" ) );
 
@@ -161,7 +161,7 @@ VTransformDocker::VTransformDocker()
     update();
 }
 
-void VTransformDocker::enableSignals( bool enable )
+void KarbonTransformDocker::enableSignals( bool enable )
 {
     m_x->blockSignals( ! enable );
     m_y->blockSignals( ! enable );
@@ -172,7 +172,7 @@ void VTransformDocker::enableSignals( bool enable )
     m_rotate->blockSignals( ! enable );
 }
 
-QRectF VTransformDocker::selectionRect()
+QRectF KarbonTransformDocker::selectionRect()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -188,7 +188,7 @@ QRectF VTransformDocker::selectionRect()
    return aaBB;
 }
 
-void VTransformDocker::update()
+void KarbonTransformDocker::update()
 {
     enableSignals( false );
 
@@ -223,7 +223,7 @@ void VTransformDocker::update()
     enableSignals( true );
 }
 
-void VTransformDocker::translate()
+void KarbonTransformDocker::translate()
 {
     QPointF newPos( m_x->value(), m_y->value() );
 
@@ -250,7 +250,7 @@ void VTransformDocker::translate()
     update();
 }
 
-void VTransformDocker::scale()
+void KarbonTransformDocker::scale()
 {
     QSizeF newSize( m_width->value(), m_height->value() );
 
@@ -300,7 +300,7 @@ void VTransformDocker::scale()
     }
 }
 
-void VTransformDocker::setUnit( KoUnit unit )
+void KarbonTransformDocker::setUnit( KoUnit unit )
 {
     enableSignals( false );
 
@@ -312,7 +312,7 @@ void VTransformDocker::setUnit( KoUnit unit )
     enableSignals( true );
 }
 
-void VTransformDocker::shear()
+void KarbonTransformDocker::shear()
 {
     double shearX = m_shearX->value();
     double shearY = m_shearY->value();
@@ -339,7 +339,7 @@ void VTransformDocker::shear()
     }
 }
 
-void VTransformDocker::rotate()
+void KarbonTransformDocker::rotate()
 {
     double angle = m_rotate->value();
 
@@ -362,5 +362,5 @@ void VTransformDocker::rotate()
     canvasController->canvas()->addCommand( cmd );
 }
 
-#include "vtransformdocker.moc"
+#include "KarbonTransformDocker.moc"
 

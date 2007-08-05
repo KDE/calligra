@@ -56,7 +56,7 @@
 #include "vcolordocker.h"
 #include "vdocumentdocker.h"
 #include "vstyledocker.h"
-#include "vtransformdocker.h"
+#include "KarbonTransformDocker.h"
 #include "KarbonLayerDocker.h"
 #include "KarbonStylePreviewDocker.h"
 
@@ -1427,8 +1427,8 @@ void KarbonView::createTransformDock()
 {
 	debugView("KarbonView::createTransformDock()");
 
-	VTransformDockerFactory transformFactory;
-	m_TransformDocker = qobject_cast<VTransformDocker*>(createDockWidget(&transformFactory));
+    KarbonTransformDockerFactory transformFactory;
+    m_TransformDocker = qobject_cast<KarbonTransformDocker*>(createDockWidget(&transformFactory));
 	connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	connect( part(), SIGNAL( unitChanged( KoUnit ) ), m_TransformDocker, SLOT( setUnit( KoUnit ) ) );
 }
