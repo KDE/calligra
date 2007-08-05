@@ -63,8 +63,6 @@ bool AbstractDataManipulator::process (Element* element)
         continue;
 
         val = newValue (element, col, row, &parse, &fmtType);
-        if (parse)
-          text = val.asString();
 
       Cell cell = Cell( m_sheet, col, row);
       // we have the data - set it !
@@ -75,7 +73,7 @@ bool AbstractDataManipulator::process (Element* element)
             style.setFormatType (fmtType);
             cell.setStyle( style );
         }
-        cell.parseUserInput (text);
+        cell.parseUserInput(val.asString());
       } else {
         if ( !val.isEmpty() )
         {
@@ -221,26 +219,7 @@ Value DataManipulator::newValue( Element *element, int col, int row,
     int rowidx = row - range.top();
     if ( m_parsing && m_expandMatrix )
     {
-        if ( !colidx && !rowidx )
-        {
-            const QString expression = m_data.asString();
-            if ( !expression.isEmpty() && expression[0] == '=' )
-            {
-                Formula formula( m_sheet, Cell( m_sheet, col, row ) );
-                formula.setExpression( expression );
-                if ( formula.isValid() )
-                {
-                    const Value result = formula.eval();
-                    if ( result.columns() > 1 || result.rows() > 1 )
-                    {
-                        *parsing = false;
-                        m_sheet->cellStorage()->setFormula( col, row, formula );
-                        return result;
-                    }
-                }
-            }
-        }
-        else
+        if (colidx || rowidx)
         {
             *parsing = false;
             return Cell( m_sheet, range.topLeft() ).value().element( colidx, rowidx );
