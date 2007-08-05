@@ -1,13 +1,20 @@
-#!/usr/bin/env kross
+#!/usr/bin/env python
 
 """
 This KWord python script implements import of with doxygen generated content into KWord.
 
-To generate the handbook;
+To generate the handbook from within the commandline;
     cd kspread/plugins/scripting/docs
     doxygen kspreadscripting.doxyfile
     cd xml
     xsltproc combine.xslt index.xml | ../doxy2doc.py ../kspread.html
+
+To import the handbook in KWord, first generate the doxygen xml file like demonstrated
+bellow and then use in KWord the "Import Doxygen XML File" python script;
+    cd kspread/plugins/scripting/docs
+    doxygen kspreadscripting.doxyfile
+    cd xml
+    xsltproc combine.xslt index.xml > ~/mydoxygen.xml
 """
 
 import os, sys, re, xml.dom.minidom
@@ -18,30 +25,60 @@ class Class:
         def __init__(self, id, node):
             self.id = id
             self.node = node
+
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
-            d = self.node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "virtual QString sheet"
+
+            d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "virtual QString sheet"
             d = d.replace("virtual ","")
-            a = self.node.getElementsByTagName("argsstring")[0].childNodes[0].data #e.g. "(const QString &amp;name)"
+            a = node.getElementsByTagName("argsstring")[0].childNodes[0].data #e.g. "(const QString &amp;name)"
             a = re.sub("=[\s]*0$","",a)
             a = re.sub("(^|[^a-zA-Z0-9])const($|[^a-zA-Z0-9])", "\\1\\2", "%s%s" % (d,a))
             a = re.sub("&|\*","",a)
             a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
+            a += " [slot]"
             self.definition = a.strip()
 
     class Signal:
         def __init__(self, id, node):
             self.id = id
             self.node = node
+
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
-            d = self.node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "void changedSheet"
+
+            d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "void changedSheet"
             d = d.replace("virtual ","")
-            a = self.node.getElementsByTagName("argsstring")[0].childNodes[0].data #e.g. "(const QString &amp;name)"
+            a = node.getElementsByTagName("argsstring")[0].childNodes[0].data #e.g. "(const QString &amp;name)"
             a = re.sub("=[\s]*0$","",a)
             a = re.sub("(^|[^a-zA-Z0-9])const($|[^a-zA-Z0-9])", "\\1\\2", "%s%s" % (d,a))
             a = re.sub("&|\*","",a)
             a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
+            a += " [signal]"
             self.definition = a.strip()
             #print node.toxml()
+
+    class Property:
+        def __init__(self, id, node):
+            self.id = id
+            self.node = node
+
+            read = len(node.getElementsByTagName("read")) > 0
+            write = len(node.getElementsByTagName("write")) > 0
+
+            self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
+
+            d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "QString error"
+            d = d.replace("const ","")
+            d = re.sub("&|\*","",d)
+
+            if read and write: d += " [property, read+write]"
+            elif read: d += " [property, read]"
+            elif write: d += " [property, write]"
+
+            self.definition = d.strip()
+
+            print "1-----------------------------"
+            print node.toxml()
+            print "2-----------------------------"
 
     def __init__(self, node):
         self.node = node
@@ -54,13 +91,15 @@ class Class:
             if kind == "slot":
                 self.memberDict[id] = Class.Slot(id, n)
                 self.memberList.append(id)
-            if kind == "signal":
+            elif kind == "signal":
                 self.memberDict[id] = Class.Signal(id, n)
                 self.memberList.append(id)
+            elif kind == "property":
+                self.memberDict[id] = Class.Property(id, n)
+                self.memberList.append(id)
             else:
-                #print "  Skipping class-member id=%s kind=%s" % (id, kind)
+                print "  Skipping class-member id=%s kind=%s" % (id, kind)
                 #print n.toxml()
-                pass
 
 class Page:
 
@@ -192,32 +231,38 @@ class Writer:
         file.write("</body></html>")
 
 class ImportDialog:
-    def __init__(self, scriptaction):
+    def __init__(self, action):
         import Kross, KWord
 
         forms = Kross.module("forms")
-        self.dialog = forms.createDialog("Import File")
+        self.dialog = forms.createDialog("Import Doxygen XML File")
         self.dialog.setButtons("Ok|Cancel")
-        self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
+        self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        openpage = self.dialog.addPage("Open","Import File","document-open")
+        openpage = self.dialog.addPage("Open","Import Doxygen XML File","document-open")
         openwidget = forms.createFileWidget(openpage, "kfiledialog:///kwordsampleimportfile")
         openwidget.setMode("Opening")
         #openwidget.minimumWidth = 540
         #openwidget.minimumHeight = 400
-
         openwidget.setFilter("*.xml|XML Files\n*|All Files")
+
+        #configpage = self.dialog.addPage("Options","Import Options","configure")
+        #configwidget = forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"importdoxyxml.ui"))
+
+        stylepage = self.dialog.addPage("Styles","Cascading Style Sheet","color-fill")
+        stylewidget = forms.createWidgetFromUIFile(stylepage, os.path.join(action.currentPath(),"importdoxyxmlstyle.ui"))
+        styleedit = stylewidget["textEdit"]
 
         if self.dialog.exec_loop():
             fileName = openwidget.selectedFile()
             if not fileName:
                 raise "No file selected"
-            self.importFile(fileName)
+            self.importFile(fileName, styleedit.plainText)
 
     def __del__(self):
         self.dialog.delayedDestruct()
 
-    def importFile(self, fileName):
+    def importFile(self, fileName, styles):
         import Kross, KWord
 
         try:
@@ -226,33 +271,22 @@ class ImportDialog:
             raise "Failed to read file \"%s\":\n%s" % (fileName, strerror)
 
         xmldoc = xml.dom.minidom.parse( file )
-        doc = KWord.mainFrameSet().document()
-        doc.setDefaultStyleSheet(
-            (
-                "h1 { color:#000099; margin-top:1em; margin-bottom:1em; }"
-                "h2 { color:#000066; margin-top:1em; margin-bottom:0.7em; }"
-                "h3 { color:#000033; margin-top:1em; margin-bottom:0.5em; }"
-                #"li { margin-left:1em; color:#aa0000; }"
-            )
-        )
 
-        cursor = doc.lastCursor()
-        cursor.insertDefaultBlock()
+        kwdoc = KWord.mainFrameSet().document()
+        kwdoc.setDefaultStyleSheet("%s" % styles)
 
         class KWordFileWriter:
-            def __init__(self, cursor):
-                self.cursor = cursor
+            def __init__(self, kwdoc):
+                self.kwdoc = kwdoc
                 self.lines = []
             def write(self, line):
-                #print line
-                #self.cursor.insertHtml( line )
                 self.lines.append(line)
             def flush(self):
-                self.cursor.insertHtml( ' '.join(self.lines) )
+                self.kwdoc.setHtml( ' '.join(self.lines) )
         writer = Writer(xmldoc)
-        kwf = KWordFileWriter(cursor)
-        writer.writeHtml( kwf )
-        kwf.flush()
+        kwwriter = KWordFileWriter(kwdoc)
+        writer.writeHtml(kwwriter)
+        kwwriter.flush()
 
 if __name__=="__main__":
     if len(sys.argv) != 2:
@@ -269,4 +303,5 @@ if __name__=="__main__":
     writer.writeHtml(file)
 
 else:
+    import Kross
     ImportDialog(self)
