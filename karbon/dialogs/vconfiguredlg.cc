@@ -291,10 +291,16 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
 	QGridLayout* layoutSpacingGrp = new QGridLayout( spacingGrp );
 	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ) );
-    m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pageSize.width(), 0.1, gd.gridX(), unit );
+    m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp );
+    m_spaceHorizUSpin->setMinMaxStep( 0.0, pageSize.width(), 0.1 );
+    m_spaceHorizUSpin->setUnit( unit );
+    m_spaceHorizUSpin->changeValue( gd.gridX() );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
 	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ) );
-    m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp, 0.0, pageSize.height(), 0.1, gd.gridY(), unit );
+    m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp );
+    m_spaceVertUSpin->setMinMaxStep( 0.0, pageSize.height(), 0.1 );
+    m_spaceVertUSpin->setUnit( unit );
+    m_spaceVertUSpin->changeValue( gd.gridY() );
 	spaceVertLbl->setBuddy( m_spaceVertUSpin );
 	layoutSpacingGrp->addWidget(spaceHorizLbl, 0, 0);
 	layoutSpacingGrp->addWidget(m_spaceHorizUSpin, 0, 1);
