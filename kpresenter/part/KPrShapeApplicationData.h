@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,37 +23,21 @@
 
 #include <KoShapeApplicationData.h>
 
-class KPrShapeUserData : public KoShapeApplicationData
+#include <QSet>
+
+class KPrShapeAnimation;
+
+class KPrShapeApplicationData : public KoShapeApplicationData
 {
 public:
-   KPrShapeUserData();
-   
-   void setAppearSoundEffectFileName( const QString & _a_fileName );
+   KPrShapeApplicationData();
+   ~KPrShapeApplicationData();
 
-   void setDisappearSoundEffectFileName( const QString &_d_fileName );
+   QSet<KPrShapeAnimation *> & animations();
    
-   /**
-    * Return sound name used when object appear.
-    * @param return sound name used when object appear.
-    */
-   QString appearSoundEffectFileName() const;
-   
-   /**
-    * Return sound name used when object disappear.
-    * @param return sound name used when object disappear.
-    */
-   QString disappearSoundEffectFileName() const;
-
-#if 0 //TODO
-   void loadOasis(const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo *info);
-   virtual bool saveOasisObject( KPOasisSaveContext &sc ) const;
-#endif
-
 private:
-   int m_appearTimer;
-   int m_disappearTimer;
-   QString m_a_soundFileName;
-   QString m_d_soundFileName;
+   // stores the animations of a shape
+   QSet<KPrShapeAnimation *> m_animations;
 };
 
 

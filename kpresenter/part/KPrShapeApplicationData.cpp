@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,27 +20,18 @@
 
 #include <KPrShapeApplicationData.h>
 
+#include "shapeanimations/KPrShapeAnimation.h"
+
 KPrShapeApplicationData::KPrShapeApplicationData()
- : KoShapeApplicationData()
 {
 }
 
-void KPrShapeApplicationData::setAppearSoundEffectFileName( const QString & _a_fileName )
+KPrShapeApplicationData::~KPrShapeApplicationData()
 {
-  m_a_soundFileName = _a_fileName;
+    qDeleteAll( m_animations );
 }
 
-void KPrShapeApplicationData::setDisappearSoundEffectFileName( const QString &_d_fileName )
+QSet<KPrShapeAnimation *> & KPrShapeApplicationData::animations()
 {
-  m_d_soundFileName = _d_fileName;
-}
-
-QString KPrShapeApplicationData::appearSoundEffectFileName() const
-{
-  return m_a_soundFileName;
-}
-
-QString KPrShapeApplicationData::disappearSoundEffectFileName() const
-{
-  return m_d_soundFileName;
+    return m_animations;
 }
