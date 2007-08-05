@@ -200,9 +200,10 @@ bool DataManipulator::process( Element* element )
     bool success = AbstractDataManipulator::process( element );
     if ( !success )
         return false;
-    if ( m_expandMatrix )
+    if (!m_reverse)
     {
-        if ( !m_reverse )
+        // Only lock cells, if expansion is desired and the value is a formula.
+        if (m_expandMatrix && (m_data.asString().isEmpty() || m_data.asString().at(0) == '='))
             m_sheet->cellStorage()->lockCells( element->rect() );
     }
     return true;
@@ -222,6 +223,8 @@ Value DataManipulator::newValue( Element *element, int col, int row,
         if (colidx || rowidx)
         {
             *parsing = false;
+            if (m_data.asString().isEmpty() || m_data.asString().at(0) == '=')
+                m_sheet->cellStorage()->setValue(col, row, Value()); // for proper undo
             return Cell( m_sheet, range.topLeft() ).value().element( colidx, rowidx );
         }
     }

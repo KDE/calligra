@@ -6620,7 +6620,7 @@ void View::setText( const QString& text, bool expandMatrix )
     manipulator->setValue( Value( text ) );
     manipulator->setParsing( true );
     manipulator->setExpandMatrix( expandMatrix );
-    manipulator->add( *selection() );
+    manipulator->add(expandMatrix ? *selection() : Region(selection()->cursor(), activeSheet()));
     manipulator->execute();
 
     if ( expandMatrix && selection()->isSingular() )
