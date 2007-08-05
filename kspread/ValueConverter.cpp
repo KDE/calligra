@@ -44,8 +44,7 @@ Value ValueConverter::asBoolean(const Value &value, bool* ok) const
 {
   Value val;
 
-  if (ok)
-      *ok = true;
+  bool okay = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -64,9 +63,11 @@ Value ValueConverter::asBoolean(const Value &value, bool* ok) const
       val = Value((value.asComplex().real() == complex<Number>( 0.0, 0.0 ) ) ? false : true);
     break;
     case Value::String:
-      val = m_parser->tryParseBool (value.asString(), ok);
-      if (!*ok)
+      val = m_parser->tryParseBool (value.asString(), &okay);
+      if (!okay)
         val = Value(false);
+      if (ok)
+          *ok = okay;
     break;
     case Value::Array:
       val = asBoolean (value.element (0, 0));
@@ -176,7 +177,7 @@ Value ValueConverter::asFloat(const Value &value, bool* ok) const
   return val;
 }
 
-Value ValueConverter::asComplex(const Value &value, bool *ok) const
+Value ValueConverter::asComplex(const Value &value, bool* ok) const
 {
     Value val;
 
@@ -363,12 +364,11 @@ Value ValueConverter::asString (const Value &value) const
   return val;
 }
 
-Value ValueConverter::asDateTime(const Value &value, bool *ok) const
+Value ValueConverter::asDateTime(const Value &value, bool* ok) const
 {
   Value val;
 
-  if (ok)
-      *ok = true;
+  bool okay = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -386,9 +386,11 @@ Value ValueConverter::asDateTime(const Value &value, bool *ok) const
     break;
     case Value::String:
       //no DateTime m_parser, so we parse as Date, hoping for the best ...
-      val = m_parser->tryParseDate (value.asString(), ok);
-      if (!*ok)
+      val = m_parser->tryParseDate (value.asString(), &okay);
+      if (!okay)
         val = Value::errorVALUE();
+      if (ok)
+          *ok = okay;
       val.setFormat (Value::fmt_DateTime);
     break;
     case Value::Array:
@@ -408,8 +410,7 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
 {
   Value val;
 
-  if (ok)
-      *ok = true;
+  bool okay = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -426,9 +427,11 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
       val.setFormat (Value::fmt_Date);
     break;
     case Value::String:
-      val = m_parser->tryParseDate (value.asString(), ok);
-      if (!*ok)
+      val = m_parser->tryParseDate (value.asString(), &okay);
+      if (!okay)
         val = Value::errorVALUE();
+      if (ok)
+          *ok = okay;
     break;
     case Value::Array:
       val = asDate (value.element (0, 0));
@@ -447,8 +450,7 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
 {
   Value val;
 
-  if (ok)
-      *ok = true;
+  bool okay = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -465,9 +467,11 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
       val.setFormat (Value::fmt_Time);
     break;
     case Value::String:
-      val = m_parser->tryParseTime (value.asString(), ok);
-      if (!*ok)
+      val = m_parser->tryParseTime (value.asString(), &okay);
+      if (!okay)
         val = Value::errorVALUE();
+      if (ok)
+          *ok = okay;
     break;
     case Value::Array:
       val = asTime (value.element (0, 0));
