@@ -16,8 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef V_LAYER_DOCKER
-#define V_LAYER_DOCKER
+#ifndef KARBONLAYERDOCKER_H
+#define KARBONLAYERDOCKER_H
 
 #include <QDockWidget>
 #include <KoDocumentSectionModel.h>
@@ -30,13 +30,13 @@ class KoShape;
 class KoShapeContainer;
 class KoShapeLayer;
 class QAbstractItemModel;
-class VDocumentModel;
+class KarbonDocumentModel;
 class KoViewConverter;
 
-class VLayerDockerFactory : public KoDockFactory
+class KarbonLayerDockerFactory : public KoDockFactory
 {
 public:
-    VLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document );
+    KarbonLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document );
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
@@ -45,13 +45,13 @@ private:
     VDocument *m_document;
 };
 
-class VLayerDocker : public QDockWidget
+class KarbonLayerDocker : public QDockWidget
 {
 Q_OBJECT
 
 public:
-    VLayerDocker( KoShapeControllerBase *shapeController, VDocument *document );
-    virtual ~VLayerDocker();
+    KarbonLayerDocker( KoShapeControllerBase *shapeController, VDocument *document );
+    virtual ~KarbonLayerDocker();
 public slots:
     void updateView();
 private slots:
@@ -66,13 +66,13 @@ private:
     KoShapeControllerBase *m_shapeController;
     VDocument *m_document;
     KoDocumentSectionView *m_layerView;
-    VDocumentModel *m_model;
+    KarbonDocumentModel *m_model;
 };
 
-class VDocumentModel : public KoDocumentSectionModel
+class KarbonDocumentModel : public KoDocumentSectionModel
 {
 public:
-    VDocumentModel( VDocument *document );
+    KarbonDocumentModel( VDocument *document );
     void update();
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -96,6 +96,6 @@ private:
     mutable KoShapeContainer *m_lastContainer;
 };
 
-#endif // V_LAYER_DOCKER
+#endif // KARBONLAYERDOCKER_H
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

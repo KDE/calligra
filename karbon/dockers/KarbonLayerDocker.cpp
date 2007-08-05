@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "vlayerdocker.h"
+#include "KarbonLayerDocker.h"
 
 #include <vdocument.h>
 #include <KarbonLayerReorderCommand.h>
@@ -57,25 +57,25 @@ enum ButtonIds
     Button_Delete
 };
 
-VLayerDockerFactory::VLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document )
+KarbonLayerDockerFactory::KarbonLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document )
     : m_shapeController( shapeController ), m_document( document )
 {
 }
 
-QString VLayerDockerFactory::id() const
+QString KarbonLayerDockerFactory::id() const
 {
     return QString("Layer view");
 }
 
-QDockWidget* VLayerDockerFactory::createDockWidget()
+QDockWidget* KarbonLayerDockerFactory::createDockWidget()
 {
-    VLayerDocker* widget = new VLayerDocker( m_shapeController, m_document);
+    KarbonLayerDocker* widget = new KarbonLayerDocker( m_shapeController, m_document);
     widget->setObjectName(id());
 
     return widget;
 }
 
-VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *document )
+KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VDocument *document )
     : m_shapeController( shapeController ), m_document( document ), m_model( 0 )
 {
     setWindowTitle( i18n( "Layer view" ) );
@@ -118,7 +118,7 @@ VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *d
 
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
-    m_model = new VDocumentModel( m_document );
+    m_model = new KarbonDocumentModel( m_document );
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_model );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -128,16 +128,16 @@ VLayerDocker::VLayerDocker( KoShapeControllerBase *shapeController, VDocument *d
     connect( m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
 }
 
-VLayerDocker::~VLayerDocker()
+KarbonLayerDocker::~KarbonLayerDocker()
 {
 }
 
-void VLayerDocker::updateView()
+void KarbonLayerDocker::updateView()
 {
     m_model->update();
 }
 
-void VLayerDocker::slotButtonClicked( int buttonId )
+void KarbonLayerDocker::slotButtonClicked( int buttonId )
 {
     switch( buttonId )
     {
@@ -156,7 +156,7 @@ void VLayerDocker::slotButtonClicked( int buttonId )
     }
 }
 
-void VLayerDocker::itemClicked( const QModelIndex &index )
+void KarbonLayerDocker::itemClicked( const QModelIndex &index )
 {
     Q_ASSERT(index.internalPointer());
 
@@ -193,7 +193,7 @@ void VLayerDocker::itemClicked( const QModelIndex &index )
     }
 }
 
-void VLayerDocker::addLayer()
+void KarbonLayerDocker::addLayer()
 {
     bool ok = true;
     QString name = KInputDialog::getText( i18n( "New Layer" ), i18n( "Enter the name of the new layer:" ),
@@ -210,7 +210,7 @@ void VLayerDocker::addLayer()
     }
 }
 
-void VLayerDocker::deleteItem()
+void KarbonLayerDocker::deleteItem()
 {
     QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
@@ -251,7 +251,7 @@ void VLayerDocker::deleteItem()
     }
 }
 
-void VLayerDocker::raiseItem()
+void KarbonLayerDocker::raiseItem()
 {
     QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
@@ -284,7 +284,7 @@ void VLayerDocker::raiseItem()
     }
 }
 
-void VLayerDocker::lowerItem()
+void KarbonLayerDocker::lowerItem()
 {
     QList<KoShapeLayer*> selectedLayers;
     QList<KoShape*> selectedShapes;
@@ -317,7 +317,7 @@ void VLayerDocker::lowerItem()
     }
 }
 
-void VLayerDocker::extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes )
+void KarbonLayerDocker::extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes )
 {
     layers.clear();
     shapes.clear();
@@ -338,18 +338,18 @@ void VLayerDocker::extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers,
     }
 }
 
-VDocumentModel::VDocumentModel( VDocument *document )
+KarbonDocumentModel::KarbonDocumentModel( VDocument *document )
 : m_document( document )
 , m_lastContainer( 0 )
 {
 }
 
-void VDocumentModel::update()
+void KarbonDocumentModel::update()
 {
     emit layoutChanged();
 }
 
-int VDocumentModel::rowCount( const QModelIndex &parent ) const
+int KarbonDocumentModel::rowCount( const QModelIndex &parent ) const
 {
     // check if parent is root node
     if( ! parent.isValid() )
@@ -365,12 +365,12 @@ int VDocumentModel::rowCount( const QModelIndex &parent ) const
     return parentShape->childCount();
 }
 
-int VDocumentModel::columnCount( const QModelIndex & ) const
+int KarbonDocumentModel::columnCount( const QModelIndex & ) const
 {
     return 1;
 }
 
-QModelIndex VDocumentModel::index( int row, int column, const QModelIndex &parent ) const
+QModelIndex KarbonDocumentModel::index( int row, int column, const QModelIndex &parent ) const
 {
     // check if parent is root node
     if( ! parent.isValid() )
@@ -394,7 +394,7 @@ QModelIndex VDocumentModel::index( int row, int column, const QModelIndex &paren
         return QModelIndex();
 }
 
-QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
+QModelIndex KarbonDocumentModel::parent( const QModelIndex &child ) const
 {
     // check if child is root node
     if( ! child.isValid() )
@@ -427,7 +427,7 @@ QModelIndex VDocumentModel::parent( const QModelIndex &child ) const
     return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
 }
 
-QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
+QVariant KarbonDocumentModel::data( const QModelIndex &index, int role ) const
 {
     if( ! index.isValid() )
         return QVariant();
@@ -491,7 +491,7 @@ QVariant VDocumentModel::data( const QModelIndex &index, int role ) const
     }
 }
 
-Qt::ItemFlags VDocumentModel::flags(const QModelIndex &index) const
+Qt::ItemFlags KarbonDocumentModel::flags(const QModelIndex &index) const
 {
     if( ! index.isValid() )
         return Qt::ItemIsEnabled;
@@ -505,7 +505,7 @@ Qt::ItemFlags VDocumentModel::flags(const QModelIndex &index) const
     return flags;
 }
 
-bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, int role )
+bool KarbonDocumentModel::setData(const QModelIndex &index, const QVariant &value, int role )
 {
     if( ! index.isValid() )
         return false;
@@ -542,7 +542,7 @@ bool VDocumentModel::setData(const QModelIndex &index, const QVariant &value, in
     return true;
 }
 
-KoDocumentSectionModel::PropertyList VDocumentModel::properties( KoShape* shape ) const
+KoDocumentSectionModel::PropertyList KarbonDocumentModel::properties( KoShape* shape ) const
 {
     PropertyList l;
     l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
@@ -550,7 +550,7 @@ KoDocumentSectionModel::PropertyList VDocumentModel::properties( KoShape* shape 
     return l;
 }
 
-void VDocumentModel::setProperties( KoShape* shape, const PropertyList &properties )
+void KarbonDocumentModel::setProperties( KoShape* shape, const PropertyList &properties )
 {
     bool oldVisibleState = shape->isVisible();
     bool oldLockedState = shape->isLocked();
@@ -562,7 +562,7 @@ void VDocumentModel::setProperties( KoShape* shape, const PropertyList &properti
         shape->repaint();
 }
 
-QImage VDocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
+QImage KarbonDocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
 {
     // compute the transformed shape bounding box
     QRectF shapeBox = transformedShapeBox( shape );
@@ -609,7 +609,7 @@ QImage VDocumentModel::createThumbnail( KoShape* shape, const QSize &thumbSize )
     return thumb;
 }
 
-QRectF VDocumentModel::transformedShapeBox( KoShape *shape ) const
+QRectF KarbonDocumentModel::transformedShapeBox( KoShape *shape ) const
 {
     QRectF shapeBox;
 
@@ -636,7 +636,7 @@ QRectF VDocumentModel::transformedShapeBox( KoShape *shape ) const
     return shapeBox;
 }
 
-void VDocumentModel::paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool isSingleShape ) const
+void KarbonDocumentModel::paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool isSingleShape ) const
 {
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
     if( container )
@@ -665,7 +665,7 @@ void VDocumentModel::paintShape( KoShape *shape, QPainter &painter, const KoView
     }
 }
 
-KoShape * VDocumentModel::childFromIndex( KoShapeContainer *parent, int row ) const
+KoShape * KarbonDocumentModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
     return parent->iterator().at(row);
 
@@ -678,7 +678,7 @@ KoShape * VDocumentModel::childFromIndex( KoShapeContainer *parent, int row ) co
     return m_childs.at( row );
 }
 
-int VDocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
+int KarbonDocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
 {
     return parent->iterator().indexOf( child );
 
@@ -691,6 +691,6 @@ int VDocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) c
     return m_childs.indexOf( child );
 }
 
-#include "vlayerdocker.moc"
+#include "KarbonLayerDocker.moc"
 
 // kate: replace-tabs on; space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

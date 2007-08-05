@@ -57,7 +57,7 @@
 #include "vdocumentdocker.h"
 #include "vstyledocker.h"
 #include "vtransformdocker.h"
-#include "vlayerdocker.h"
+#include "KarbonLayerDocker.h"
 #include "KarbonStylePreviewDocker.h"
 
 // Statusbar
@@ -1408,8 +1408,8 @@ void KarbonView::createLayersTabDock()
 {
 	debugView("KarbonView::createLayersTabDock()");
 
-	VLayerDockerFactory layerFactory( m_part, &part()->document() );
-	m_layerDocker = qobject_cast<VLayerDocker*>(createDockWidget(&layerFactory));
+	KarbonLayerDockerFactory layerFactory( m_part, &part()->document() );
+	m_layerDocker = qobject_cast<KarbonLayerDocker*>(createDockWidget(&layerFactory));
 	connect( this, SIGNAL( selectionChange() ), m_layerDocker, SLOT( updateView() ) );
 }
 
