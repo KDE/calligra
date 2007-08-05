@@ -464,8 +464,7 @@ void VBorder::doAutoScroll()
 
 void VBorder::wheelEvent( QWheelEvent* _ev )
 {
-  if ( m_pCanvas->vertScrollBar() )
-    QApplication::sendEvent( m_pCanvas->vertScrollBar(), _ev );
+    QApplication::sendEvent( m_pCanvas, _ev );
 }
 
 
@@ -1157,8 +1156,7 @@ void HBorder::doAutoScroll()
 
 void HBorder::wheelEvent( QWheelEvent* _ev )
 {
-  if ( m_pCanvas->horzScrollBar() )
-    QApplication::sendEvent( m_pCanvas->horzScrollBar(), _ev );
+    QApplication::sendEvent( m_pCanvas, _ev );
 }
 
 void HBorder::resizeEvent( QResizeEvent* _ev )
@@ -1526,6 +1524,11 @@ void SelectAllButton::mouseReleaseEvent( QMouseEvent* event )
         return;
     m_mousePressed = false;
     m_view->selectAll();
+}
+
+void SelectAllButton::wheelEvent(QWheelEvent* event)
+{
+    QApplication::sendEvent(m_view->canvasWidget(), event);
 }
 
 #include "Border.moc"

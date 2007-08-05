@@ -57,7 +57,6 @@ class QPaintEvent;
 class QPen;
 class QResizeEvent;
 class QScrollBar;
-class QWheelEvent;
 
 namespace KSpread
 {
@@ -411,7 +410,6 @@ protected:
     virtual void mouseReleaseEvent( QMouseEvent* _ev );
     virtual void mouseMoveEvent( QMouseEvent* _ev );
     virtual void mouseDoubleClickEvent( QMouseEvent* );
-    virtual void wheelEvent( QWheelEvent* );
     virtual void focusInEvent( QFocusEvent* );
     virtual void focusOutEvent( QFocusEvent* );
     virtual void dragEnterEvent(QDragEnterEvent*);

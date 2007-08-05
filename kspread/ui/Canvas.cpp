@@ -71,7 +71,6 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QToolTip>
-#include <QWheelEvent>
 #include <QWidget>
 
 // KDE
@@ -781,19 +780,6 @@ void Canvas::startTheDrag()
   drag->start();
 
   setCursor( Qt::ArrowCursor );
-}
-
-void Canvas::wheelEvent( QWheelEvent* _ev )
-{
-  if ( _ev->orientation() == Qt::Vertical )
-  {
-    if ( vertScrollBar() )
-      QApplication::sendEvent( vertScrollBar(), _ev );
-  }
-  else if ( horzScrollBar() )
-  {
-    QApplication::sendEvent( horzScrollBar(), _ev );
-  }
 }
 
 void Canvas::paintEvent( QPaintEvent* event )

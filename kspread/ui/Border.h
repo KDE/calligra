@@ -185,6 +185,7 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
+    virtual void wheelEvent( QWheelEvent* );
 
 private:
     View*  m_view;
