@@ -83,7 +83,6 @@ KWScriptingPart::KWScriptingPart(QObject* parent, const QStringList& args)
 
 KWScriptingPart::~KWScriptingPart()
 {
-    kDebug(32010) <<"KWScriptingPart::~KWScriptingPart()";
     delete d;
 }
 
