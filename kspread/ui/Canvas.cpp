@@ -3253,47 +3253,38 @@ void Canvas::showToolTip( const QPoint& p )
         tipText = tipText.left(maxLen).append("...");
 
     // Determine position and width of the current cell.
-    double u = cell.width();
-    double v = cell.height();
+    double cellWidth = cell.width();
+    double cellHeight = cell.height();
 
     // Special treatment for obscured cells.
-    if ( cell.isPartOfMerged() )
+    if (view()->sheetView(sheet)->cellView(col, row).isObscured())
     {
-      cell = cell.masterCell();
-      const int moveX = cell.column();
-      const int moveY = cell.row();
-
-      // Use the obscuring cells dimensions
-      u = cell.width();
-      v = cell.height();
-      xpos = sheet->columnPosition( moveX );
-      ypos = sheet->rowPosition( moveY );
+        cell = Cell(sheet, view()->sheetView(sheet)->cellView(col, row).obscuringCell());
+        // Use the obscuring cells dimensions
+        cellWidth = cell.width();
+        cellHeight = cell.height();
+        xpos = sheet->columnPosition(cell.column());
+        ypos = sheet->rowPosition(cell.row());
     }
 
     // Get the cell dimensions
-    QRectF marker;
-    bool insideMarker = false;
+    QRect cellRect;
+    bool insideCellRect = false;
     if ( sheet->layoutDirection() == Qt::RightToLeft )
     {
-      QRectF unzoomedMarker( dwidth - u - xpos + xOffset(),
-                             ypos - yOffset(),
-                             u,
-                             v );
-      marker = viewConverter()->documentToView( unzoomedMarker );
-      insideMarker = marker.contains( p );
+        const QRectF rect(dwidth - cellWidth - xpos + xOffset(), ypos - yOffset(), cellWidth, cellHeight);
+        cellRect = viewConverter()->documentToView(rect).toRect();
+        insideCellRect = cellRect.contains( p );
     }
     else
     {
-      QRectF unzoomedMarker( xpos - xOffset(),
-                             ypos - yOffset(),
-                             u,
-                             v );
-      marker = viewConverter()->documentToView( unzoomedMarker );
-      insideMarker = marker.contains( p );
+        QRectF rect(xpos - xOffset(), ypos - yOffset(), cellWidth, cellHeight);
+        cellRect = viewConverter()->documentToView(rect).toRect();
+        insideCellRect = cellRect.contains( p );
     }
 
     // No use if mouse is somewhere else
-    if ( !insideMarker )
+    if ( !insideCellRect )
         return;
 
     // Find the tipLabel
@@ -3303,23 +3294,10 @@ void Canvas::showToolTip( const QPoint& p )
     // Ensure that it is plain text
     // Not funny if (intentional or not) <a> appears as hyperlink
     if ( tipLabel )
+    {
          tipLabel->setTextFormat( Qt::PlainText );
-
-    QFontMetrics fm = tipLabel? tipLabel->fontMetrics() : fontMetrics();
-    const QRect r( 0, 0, 200, -1 );
-    // Wrap the text if too long
-    if ( tipText.length() > 16 )
-    {
-        KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, tipText );
-        tipText = wrap->wrappedString();
-        delete wrap;
-    }
-    // Wrap the comment if too long
-    if ( comment.length() > 16 )
-    {
-      KWordWrap* wrap = KWordWrap::formatText( fm, r, 0, comment );
-      comment = wrap->wrappedString();
-      delete wrap;
+         tipLabel->setWordWrap(true);
+         tipLabel->setMaximumSize(size() / 2.0);
     }
 
     // Show comment, if any
@@ -3337,17 +3315,21 @@ void Canvas::showToolTip( const QPoint& p )
     }
 
     // Now we shows the tip
-    QToolTip::showText( mapToGlobal( marker.toRect().bottomRight() ), tipText, this );
+    QToolTip::showText(mapToGlobal(cellRect.bottomRight()), tipText, this,
+                       cellRect.translated(-mapToGlobal(cellRect.topLeft())));
 
     // Here we try to find the tip label again
     // Reason: the previous tip_findLabel might fail if no tip has ever shown yet
     if ( !tipLabel )
     {
-      tipLabel = tip_findLabel();
-      if ( tipLabel )
-        tipLabel->setTextFormat( Qt::PlainText );
+        tipLabel = tip_findLabel();
+        if (tipLabel)
+        {
+            tipLabel->setTextFormat( Qt::PlainText );
+            tipLabel->setWordWrap(true);
+            tipLabel->setMaximumSize(size() / 2.0);
+        }
     }
-
 }
 
 int Canvas::metric( PaintDeviceMetric metric ) const
