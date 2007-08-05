@@ -19,11 +19,14 @@
 
 #include "vlayerdocker.h"
 
-#include <QGridLayout>
-#include <QPushButton>
-#include <QButtonGroup>
-#include <QAbstractItemModel>
-#include <QPainterPath>
+#include <vdocument.h>
+#include <KarbonLayerReorderCommand.h>
+
+#include <QtGui/QGridLayout>
+#include <QtGui/QPushButton>
+#include <QtGui/QButtonGroup>
+#include <QtCore/QAbstractItemModel>
+#include <QtGui/QPainterPath>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -45,9 +48,6 @@
 #include <KoShapeReorderCommand.h>
 #include <KoZoomHandler.h>
 #include <KoShapeLayer.h>
-
-#include "vdocument.h"
-#include "vlayercmd.h"
 
 enum ButtonIds
 {
@@ -270,7 +270,7 @@ void VLayerDocker::raiseItem()
             if( ! m_document->canRaiseLayer( layer ) )
                 return;
 
-        cmd = new VLayerZOrderCmd( m_document, selectedLayers, VLayerZOrderCmd::raiseLayer );
+        cmd = new KarbonLayerReorderCommand( m_document, selectedLayers, KarbonLayerReorderCommand::RaiseLayer );
     }
     else if( selectedShapes.count() )
     {
@@ -303,7 +303,7 @@ void VLayerDocker::lowerItem()
             if( ! m_document->canLowerLayer( layer ) )
                 return;
 
-        cmd = new VLayerZOrderCmd( m_document, selectedLayers, VLayerZOrderCmd::lowerLayer );
+        cmd = new KarbonLayerReorderCommand( m_document, selectedLayers, KarbonLayerReorderCommand::LowerLayer );
     }
     else if( selectedShapes.count() )
     {

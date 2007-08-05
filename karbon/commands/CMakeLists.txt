@@ -4,7 +4,7 @@ set(karboncommands_SRCS
     vclipartcmd.cc
     vcommand.cc
     vfillcmd.cc 
-    vlayercmd.cc
+    KarbonLayerReorderCommand.cpp
     vreplacingcmd.cc 
     vshapecmd.cc 
     vtransformcmd.cc 
