@@ -64,6 +64,7 @@
 #include "SheetView.h"
 #include "StyleManager.h"
 #include "Value.h"
+#include "ValueFormatter.h"
 #include "View.h"
 
 using namespace KSpread;
@@ -188,19 +189,37 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     // do not touch the other Private members, just return here.
     if ( cell.isDefault() ) return;
 
-    // horizontal align
-    if ( d->style.halign() == Style::HAlignUndefined )
+    Value value;
+    // Display a formula if warranted.  If not, simply display the value.
+    if (cell.isFormula() && cell.sheet()->getShowFormula() &&
+        !(cell.sheet()->isProtected() && d->style.hideFormula()))
     {
-        //numbers should be right-aligned by default, as well as BiDi text
-        if ( ( d->style.formatType() == Format::Text) || cell.value().isString() )
-            d->style.setHAlign( d->displayText.isRightToLeft() ? Style::Right : Style::Left );
+        d->displayText = cell.userInput();
+        value.setFormat(Value::fmt_String);
+    }
+    else if (!cell.isEmpty())
+    {
+        // Format the value appropriately and set the display text.
+        // The format of the resulting value is used below to determine the alignment.
+        value = cell.doc()->formatter()->formatText(cell.value(), d->style.formatType(),
+                                                    d->style.precision(), d->style.floatFormat(),
+                                                    d->style.prefix(), d->style.postfix(),
+                                                    d->style.currency().symbol());
+        d->displayText = value.asString();
+    }
+
+    // horizontal align
+    if (d->style.halign() == Style::HAlignUndefined)
+    {
+        // errors are always centered
+        if (cell.value().type() == Value::Error)
+            d->style.setHAlign(Style::Center);
+        // if the format is text, align it according to the text direction
+        else if (d->style.formatType() == Format::Text || value.format() == Value::fmt_String)
+            d->style.setHAlign(d->displayText.isRightToLeft() ? Style::Right : Style::Left);
+        // if the style does not define a specific format, align it according to the sheet layout
         else
-        {
-            Value val = cell.value();
-            while (val.isArray())
-                val = val.element(0, 0);
-            d->style.setHAlign( (val.isBoolean() || val.isNumber()) ? Style::Right : Style::Left );
-        }
+            d->style.setHAlign(cell.sheet()->layoutDirection() == Qt::RightToLeft ? Style::Left : Style::Right);
     }
 
     makeLayout( sheetView, cell );
@@ -1830,9 +1849,6 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
 {
   if ( d->hidden )
     return;
-
-  // Get the output text, cell.displayText().
-  d->displayText = cell.displayText();
 
     // Hide zero.
     if ( cell.sheet()->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0 )

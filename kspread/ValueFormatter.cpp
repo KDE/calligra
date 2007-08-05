@@ -45,79 +45,117 @@ const Doc* ValueFormatter::doc() const
     return m_converter->doc();
 }
 
-QString ValueFormatter::formatText(const Value &value, Format::Type fmtType, int precision,
-                                   Style::FloatFormat floatFormat, const QString &prefix,
-                                   const QString &postfix, const QString &currencySymbol)
+Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int precision,
+                                 Style::FloatFormat floatFormat, const QString &prefix,
+                                 const QString &postfix, const QString &currencySymbol)
 {
-  if (value.isError())
-    return value.errorMessage();
+    if (value.isError())
+        return Value(value.errorMessage());
 
-  //if we have an array, use its first element
-  if (value.isArray())
-    return formatText (value.element (0, 0), fmtType, precision,
-        floatFormat, prefix, postfix, currencySymbol);
+    //if we have an array, use its first element
+    if (value.isArray())
+        return formatText(value.element(0, 0), fmtType, precision,
+                          floatFormat, prefix, postfix, currencySymbol);
 
-  QString str;
+    Value result;
 
-  //step 1: determine formatting that will be used
-  fmtType = determineFormatting (value, fmtType);
+    //step 1: determine formatting that will be used
+    fmtType = determineFormatting(value, fmtType);
 
-  //step 2: format the value !
+    //step 2: format the value !
+    bool ok = false;
 
-  //text
-  if (fmtType == Format::Text)
-  {
-    str = m_converter->asString (value).asString();
-    if (!str.isEmpty() && str[0]=='\'' )
-      str = str.mid(1);
-  }
+    //text
+    if (fmtType == Format::Text)
+    {
+        QString str = m_converter->asString(value).asString();
+        if (!str.isEmpty() && str[0]=='\'')
+            str = str.mid(1);
+        result = Value(str);
+        ok = true;
+    }
 
-  //date
-  else if (Format::isDate (fmtType))
-    str = dateFormat (value.asDate( doc() ), fmtType);
+    //date
+    else if (Format::isDate(fmtType))
+    {
+        Value dateValue = m_converter->asDate(value, &ok);
+        if (ok)
+        {
+            result = Value(dateFormat(dateValue.asDate(doc()), fmtType));
+            result.setFormat(Value::fmt_Date);
+        }
+    }
 
-  //time
-  else if (Format::isTime (fmtType))
-    str = timeFormat (value.asDateTime( doc() ), fmtType);
+    //time
+    else if (Format::isTime(fmtType))
+    {
+        Value timeValue = m_converter->asDateTime(value, &ok);
+        if (ok)
+        {
+            result = Value(timeFormat(timeValue.asDateTime(doc()), fmtType));
+            result.setFormat(Value::fmt_DateTime);
+        }
+    }
 
-  //fraction
-  else if (Format::isFraction (fmtType))
-    str = fractionFormat (value.asFloat(), fmtType);
+    //fraction
+    else if (Format::isFraction(fmtType))
+    {
+        Value fractionValue = m_converter->asFloat(value, &ok);
+        if (ok)
+        {
+            result = Value(fractionFormat(fractionValue.asFloat(), fmtType));
+            result.setFormat(Value::fmt_Number);
+        }
+    }
 
-  //another
-  else
-  {
-    // complex
-    if ( value.isComplex() )
-        str = complexFormat( value, precision, fmtType, floatFormat, currencySymbol );
-
-    // real number
+    //another
     else
-        str = createNumberFormat( m_converter->asFloat( value ).asFloat(),
-                                  precision, fmtType, floatFormat, currencySymbol );
-  }
+    {
+        // complex
+        if (value.isComplex())
+        {
+            Value complexValue = m_converter->asComplex(value, &ok);
+            if (ok)
+            {
+                result = Value(complexFormat(complexValue, precision, fmtType, floatFormat, currencySymbol));
+                result.setFormat(Value::fmt_Number);
+            }
+        }
 
-  if (!prefix.isEmpty())
-    str = prefix + ' ' + str;
+        // real number
+        else
+        {
+            Number number = m_converter->asFloat(value, &ok).asFloat();
+            if (ok)
+            {
+                result = Value(createNumberFormat(number, precision, fmtType, floatFormat, currencySymbol));
+                result.setFormat(Value::fmt_Number);
+            }
+        }
+    }
 
-  if( !postfix.isEmpty())
-    str += ' ' + postfix;
+    // Only string values can fail. If so, keep the string.
+    if (!ok)
+    {
+        QString str = m_converter->asString(value).asString();
+        if (!str.isEmpty() && str[0]=='\'')
+            str = str.mid(1);
+        result = Value(str);
+    }
 
-  //kDebug() <<"ValueFormatter says:" << str;
-  return str;
+    if (!prefix.isEmpty())
+        result = Value(prefix + ' ' + result.asString());
+
+    if (!postfix.isEmpty())
+        result = Value(result.asString() + ' ' + postfix);
+
+    //kDebug() <<"ValueFormatter says:" << str;
+    return result;
 }
 
 Format::Type ValueFormatter::determineFormatting (const Value &value,
     Format::Type fmtType)
 {
-  //if the cell value is a string, then we want to display it as-is,
-  //no matter what, same if the cell is empty
-  if (value.isString () || (value.format() == Value::fmt_None))
-    return Format::Text;
-  //same if we're supposed to display string, no matter what we actually got
-  if (fmtType == Format::Text)
-    return Format::Text;
-
   //now, everything depends on whether the formatting is Generic or not
   if (fmtType == Format::Generic)
   {

@@ -53,29 +53,29 @@ public:
     /**
      * Converts \p value to a Value of boolean type.
      */
-    Value asBoolean( const Value& value ) const;
+    Value asBoolean( const Value& value, bool *ok = 0 ) const;
 
     /**
      * Converts \p value to a Value of integer type.
      */
-    Value asInteger( const Value& value ) const;
+    Value asInteger( const Value& value, bool *ok = 0 ) const;
 
     /**
      * Converts \p value to a Value of floating point type.
      */
-    Value asFloat( const Value& value ) const;
+    Value asFloat( const Value& value, bool* ok = 0 ) const;
 
     /**
      * Converts \p value to a Value of complex number type.
      */
-    Value asComplex( const Value& value ) const;
+    Value asComplex( const Value& value, bool *ok = 0 ) const;
 
     /**
      * Converts \p value to a Value of number type, i.e. Values of integer and
      * complex number type stay as they are; all others are converted to the
      * floating point type.
      */
-    Value asNumeric( const Value& value ) const;
+    Value asNumeric( const Value& value, bool *ok = 0 ) const;
 
     /**
      * Converts \p value to a Value of string type.
@@ -85,17 +85,17 @@ public:
     /**
      * Converts \p value to a Value of date/time type.
      */
-    Value asDateTime( const Value& value ) const;
+    Value asDateTime( const Value& value, bool *ok = 0 ) const;
 
     /**
      * Converts \p value to a Value of date type.
      */
-    Value asDate( const Value& value ) const;
+    Value asDate( const Value& value, bool *ok = 0 ) const;
 
     /**
      * Converts \p value to a Value of time type.
      */
-    Value asTime( const Value& value ) const;
+    Value asTime( const Value& value, bool *ok = 0 ) const;
 
 
     bool toBoolean( const Value& value ) const;

@@ -400,7 +400,7 @@ QString Cell::displayText() const
     {
         string = doc()->formatter()->formatText(value(), style.formatType(), style.precision(),
                                                 style.floatFormat(), style.prefix(),
-                                                style.postfix(), style.currency().symbol());
+                                                style.postfix(), style.currency().symbol()).asString();
     }
     return string;
 }

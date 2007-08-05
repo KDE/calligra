@@ -59,12 +59,12 @@ public:
      * \param postfix the subsequent text
      * \param currencySymbol the currency symbol
      */
-    QString formatText( const Value& value,
-                        Format::Type formatType, int precision = -1,
-                        Style::FloatFormat floatFormat = Style::OnlyNegSigned,
-                        const QString& prefix = QString(),
-                        const QString& postfix = QString(),
-                        const QString& currencySymbol = QString() );
+    Value formatText(const Value& value,
+                     Format::Type formatType, int precision = -1,
+                     Style::FloatFormat floatFormat = Style::OnlyNegSigned,
+                     const QString& prefix = QString(),
+                     const QString& postfix = QString(),
+                     const QString& currencySymbol = QString());
 
     /**
      * Creates a date format.

@@ -40,10 +40,13 @@ const KLocale* ValueConverter::locale() const
   return m_parser->locale();
 }
 
-Value ValueConverter::asBoolean (const Value &value) const
+Value ValueConverter::asBoolean(const Value &value, bool* ok) const
 {
   Value val;
-  bool ok;
+
+  if (ok)
+      *ok = true;
+
   switch (value.type()) {
     case Value::Empty:
       val = Value(false);
@@ -61,8 +64,8 @@ Value ValueConverter::asBoolean (const Value &value) const
       val = Value((value.asComplex().real() == complex<Number>( 0.0, 0.0 ) ) ? false : true);
     break;
     case Value::String:
-      val = m_parser->tryParseBool (value.asString(), &ok);
-      if (!ok)
+      val = m_parser->tryParseBool (value.asString(), ok);
+      if (!*ok)
         val = Value(false);
     break;
     case Value::Array:
@@ -79,9 +82,12 @@ Value ValueConverter::asBoolean (const Value &value) const
   return val;
 }
 
-Value ValueConverter::asInteger (const Value &value) const
+Value ValueConverter::asInteger(const Value &value, bool* ok) const
 {
   Value val;
+
+  if (ok)
+      *ok = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -102,7 +108,11 @@ Value ValueConverter::asInteger (const Value &value) const
     case Value::String:
       val = m_parser->parse(value.asString());
       if (!val.isNumber())
+      {
         val = Value(0);
+        if (ok)
+            *ok = false;
+      }
       val = Value(val.asInteger());
     break;
     case Value::Array:
@@ -119,9 +129,12 @@ Value ValueConverter::asInteger (const Value &value) const
   return val;
 }
 
-Value ValueConverter::asFloat (const Value &value) const
+Value ValueConverter::asFloat(const Value &value, bool* ok) const
 {
   Value val;
+
+  if (ok)
+      *ok = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -142,7 +155,11 @@ Value ValueConverter::asFloat (const Value &value) const
     case Value::String:
       val = m_parser->parse(value.asString());
       if (!val.isNumber())
+      {
         val = Value(0.0);
+        if (ok)
+            *ok = false;
+      }
       val = Value(val.asFloat());
     break;
     case Value::Array:
@@ -159,9 +176,12 @@ Value ValueConverter::asFloat (const Value &value) const
   return val;
 }
 
-Value ValueConverter::asComplex( const Value &value ) const
+Value ValueConverter::asComplex(const Value &value, bool *ok) const
 {
     Value val;
+
+    if (ok)
+        *ok = true;
 
     switch (value.type())
     {
@@ -181,7 +201,11 @@ Value ValueConverter::asComplex( const Value &value ) const
         case Value::String:
             val = m_parser->parse(value.asString());
             if (!val.isNumber())
+            {
                 val = Value( complex<Number>( 0.0, 0.0 ) );
+                if (ok)
+                    *ok = false;
+            }
             val = Value(val.asComplex());
             break;
         case Value::Array:
@@ -198,9 +222,12 @@ Value ValueConverter::asComplex( const Value &value ) const
     return val;
 }
 
-Value ValueConverter::asNumeric (const Value &value) const
+Value ValueConverter::asNumeric(const Value &value, bool* ok) const
 {
     Value val;
+
+    if (ok)
+        *ok = true;
 
     switch (value.type())
     {
@@ -218,7 +245,11 @@ Value ValueConverter::asNumeric (const Value &value) const
         case Value::String:
             val = m_parser->parse(value.asString());
             if (!val.isNumber())
+            {
                 val = Value(0.0);
+                if (ok)
+                    *ok = false;
+            }
             break;
         case Value::Array:
             val = asNumeric( value.element( 0, 0 ) );
@@ -332,10 +363,12 @@ Value ValueConverter::asString (const Value &value) const
   return val;
 }
 
-Value ValueConverter::asDateTime (const Value &value) const
+Value ValueConverter::asDateTime(const Value &value, bool *ok) const
 {
   Value val;
-  bool ok;
+
+  if (ok)
+      *ok = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -353,8 +386,8 @@ Value ValueConverter::asDateTime (const Value &value) const
     break;
     case Value::String:
       //no DateTime m_parser, so we parse as Date, hoping for the best ...
-      val = m_parser->tryParseDate (value.asString(), &ok);
-      if (!ok)
+      val = m_parser->tryParseDate (value.asString(), ok);
+      if (!*ok)
         val = Value::errorVALUE();
       val.setFormat (Value::fmt_DateTime);
     break;
@@ -371,10 +404,12 @@ Value ValueConverter::asDateTime (const Value &value) const
   return val;
 }
 
-Value ValueConverter::asDate (const Value &value) const
+Value ValueConverter::asDate(const Value &value, bool* ok) const
 {
   Value val;
-  bool ok;
+
+  if (ok)
+      *ok = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -391,8 +426,8 @@ Value ValueConverter::asDate (const Value &value) const
       val.setFormat (Value::fmt_Date);
     break;
     case Value::String:
-      val = m_parser->tryParseDate (value.asString(), &ok);
-      if (!ok)
+      val = m_parser->tryParseDate (value.asString(), ok);
+      if (!*ok)
         val = Value::errorVALUE();
     break;
     case Value::Array:
@@ -408,10 +443,12 @@ Value ValueConverter::asDate (const Value &value) const
   return val;
 }
 
-Value ValueConverter::asTime (const Value &value) const
+Value ValueConverter::asTime(const Value &value, bool* ok) const
 {
   Value val;
-  bool ok;
+
+  if (ok)
+      *ok = true;
 
   switch (value.type()) {
     case Value::Empty:
@@ -428,8 +465,8 @@ Value ValueConverter::asTime (const Value &value) const
       val.setFormat (Value::fmt_Time);
     break;
     case Value::String:
-      val = m_parser->tryParseTime (value.asString(), &ok);
-      if (!ok)
+      val = m_parser->tryParseTime (value.asString(), ok);
+      if (!*ok)
         val = Value::errorVALUE();
     break;
     case Value::Array:
