@@ -4,7 +4,6 @@ set(karboncommands_SRCS
     vclipartcmd.cc
     vcommand.cc
     vfillcmd.cc 
-    vflattencmd.cc 
     vlayercmd.cc
     vreplacingcmd.cc 
     vshapecmd.cc 
