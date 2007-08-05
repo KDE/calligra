@@ -1,25 +1,53 @@
 <KrossScripting>
 
-    <script
-        name="pyimportfile"
-        text="Import File..."
-        comment="Python script to import content from a text or html file"
-        interpreter="python"
-        file="extensions/importfile.py" />
+    <!--
+        The "import" collection provides scripts to import content into KWord.
+        //-->
+    <collection name="import" text="Import" comment="Import content">
+        <script
+               name="pyimportfile"
+               text="Text or HTML File"
+               comment="Python script to import content from a text or html file"
+               interpreter="python"
+               file="extensions/importfile.py" />
+        <script
+               name="pyooimport"
+               text="OpenOffice.org UNO"
+               comment="Python script to import content using OpenOffice.org PyUNO"
+               interpreter="python"
+               file="extensions/ooimport.py" />
+    </collection>
 
-    <script
-        name="pyexportfile"
-        text="Export File..."
-        comment="Python script to export content to a text or html file"
-        interpreter="python"
-        file="extensions/exportfile.py" />
+    <!--
+        The "import" collection provides scripts to export content from KWord.
+        //-->
+    <collection name="export" text="Export" comment="Export content">
+        <script
+               name="pyexportfile"
+               text="Text or HTML File"
+               comment="Python script to export content to a text or html file"
+               interpreter="python"
+               file="extensions/exportfile.py" />
+    </collection>
 
-    <script
-        name="pyooimport"
-        text="Import File with OO.org"
-        comment="Python script to import content using OpenOffice.org PyUNO"
-        interpreter="python"
-        file="extensions/ooimport.py" />
+    <!--
+        The "samples" collection provides misc example scripts to demonstrate
+        parts of the KWord scripting functionality.
+        //-->
+    <collection name="tools" text="Tools" comment="Miscellaneous scripts">
+        <script
+               name="rbsampledoctree"
+               text="Document Tree"
+               comment="QtRuby script that displays the document structur within a treeview"
+               interpreter="ruby"
+               file="samples/sample_doctree.rb" />
+        <script
+               name="pysampleonlinehelp"
+               text="Online Help"
+               comment="Python script that uses the KHTML Part to display the KWord Scripting online help"
+               interpreter="python"
+               file="samples/sample_onlinehelp.py" />
+    </collection>
 
     <!--
         The "variables" collection provides scripting variables to KWord. Those
@@ -47,21 +75,14 @@
     <!--
         The "samples" collection provides misc example scripts to demonstrate
         parts of the KWord scripting functionality.
-    //-->
-    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord">
-
+        //-->
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord" enabled="true">
         <script
             name="pysampleinsertshape"
             text="Insert Shape..."
             comment="Python script to insert a shape"
             interpreter="python"
             file="samples/sample_insertshape.py" />
-        <script
-            name="rbsampledoctree"
-            text="Document Tree..."
-            comment="QtRuby script that displays the document structur within a treeview"
-            interpreter="ruby"
-            file="samples/sample_doctree.rb" />
         <script
             name="rbsamplecursor"
             text="Control Cursor..."
@@ -122,13 +143,6 @@
             comment="Python script adds all shapes"
             interpreter="python"
             file="samples/sample_allshapes.py" />
-        <script
-            name="pysampleonlinehelp"
-            text="Online Help..."
-            comment="Python script that uses the KHTML Part to display the KWord Scripting online help"
-            interpreter="python"
-            file="samples/sample_onlinehelp.py" />
-
     </collection>
 
 </KrossScripting>
