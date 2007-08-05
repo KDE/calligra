@@ -44,6 +44,8 @@ Value ValueConverter::asBoolean(const Value &value, bool* ok) const
 {
   Value val;
 
+  if (ok)
+      *ok = true;
   bool okay = true;
 
   switch (value.type()) {
@@ -368,6 +370,8 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
 {
   Value val;
 
+  if (ok)
+      *ok = true;
   bool okay = true;
 
   switch (value.type()) {
@@ -410,6 +414,8 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
 {
   Value val;
 
+  if (ok)
+      *ok = true;
   bool okay = true;
 
   switch (value.type()) {
@@ -450,6 +456,8 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
 {
   Value val;
 
+  if (ok)
+      *ok = true;
   bool okay = true;
 
   switch (value.type()) {
