@@ -19,7 +19,6 @@ class Class:
             self.id = id
             self.node = node
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
-
             d = self.node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "virtual QString sheet"
             d = d.replace("virtual ","")
             a = self.node.getElementsByTagName("argsstring")[0].childNodes[0].data #e.g. "(const QString &amp;name)"
@@ -28,6 +27,21 @@ class Class:
             a = re.sub("&|\*","",a)
             a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
             self.definition = a.strip()
+
+    class Signal:
+        def __init__(self, id, node):
+            self.id = id
+            self.node = node
+            self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
+            d = self.node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "void changedSheet"
+            d = d.replace("virtual ","")
+            a = self.node.getElementsByTagName("argsstring")[0].childNodes[0].data #e.g. "(const QString &amp;name)"
+            a = re.sub("=[\s]*0$","",a)
+            a = re.sub("(^|[^a-zA-Z0-9])const($|[^a-zA-Z0-9])", "\\1\\2", "%s%s" % (d,a))
+            a = re.sub("&|\*","",a)
+            a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
+            self.definition = a.strip()
+            #print node.toxml()
 
     def __init__(self, node):
         self.node = node
@@ -40,11 +54,16 @@ class Class:
             if kind == "slot":
                 self.memberDict[id] = Class.Slot(id, n)
                 self.memberList.append(id)
-                #print "  Adding class-member id=%s kind=%s" % (id,kind)
+            if kind == "signal":
+                self.memberDict[id] = Class.Signal(id, n)
+                self.memberList.append(id)
             else:
-                print "  Skipping class-member id=%s kind=%s" % (id, kind)
+                #print "  Skipping class-member id=%s kind=%s" % (id, kind)
+                #print n.toxml()
+                pass
 
 class Page:
+
     def __init__(self, node):
         self.title = node.getElementsByTagName("title")[0].childNodes[0].data #e.g. "KSpread Scripting Plugin"
         self.description = " ".join( [ n.toxml() for n in node.childNodes if n.nodeName == "detaileddescription" ] )
@@ -162,13 +181,13 @@ class Writer:
             if self.CompoundDict[i].kind != "class": continue
             file.write("<h3><a name=\"%s\" />%s</h3>" % (i,self.CompoundDict[i].name))
             file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
-            #file.write( "<ul>" )
+            file.write( "<ul>" )
             for m in self.CompoundDict[i].memberList:
                 s = self.CompoundDict[i].memberDict[m].definition
                 if len(self.CompoundDict[i].memberDict[m].description) > 0:
                     s += "<br /><blockquote>%s</blockquote>" % parseToHtml( self.CompoundDict[i].memberDict[m].description )
                 file.write("<li>%s</li>" % s)
-            #file.write( "</ul>" )
+            file.write( "</ul>" )
 
         file.write("</body></html>")
 
@@ -210,8 +229,8 @@ class ImportDialog:
         doc = KWord.mainFrameSet().document()
         doc.setDefaultStyleSheet(
             (
-                "h1 { color:#000099; margin-top:1em; margin-bottom:0.5em; }"
-                "h2 { color:#000066; margin-top:1em; margin-bottom:0.5em; }"
+                "h1 { color:#000099; margin-top:1em; margin-bottom:1em; }"
+                "h2 { color:#000066; margin-top:1em; margin-bottom:0.7em; }"
                 "h3 { color:#000033; margin-top:1em; margin-bottom:0.5em; }"
                 #"li { margin-left:1em; color:#aa0000; }"
             )
