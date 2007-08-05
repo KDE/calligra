@@ -1,1 +1,1 @@
-SKIP /old\|/mailmerge/\|/tests
+SKIP /old\|/mailmerge/\|/tests|/collaboration
