@@ -27,6 +27,8 @@
 
 #include "Region.h"
 
+// #define KSPREAD_POINT_STORAGE_HASH
+
 namespace KSpread
 {
 
@@ -112,7 +114,11 @@ public:
             // insert missing rows
             m_rows.insert( m_rows.count(), row - m_rows.count(), m_data.count() );
             // append the actual data
+#ifdef KSPREAD_POINT_STORAGE_HASH
+            m_data.append( *m_usedData.insert(data) );
+#else
             m_data.append( data );
+#endif
             // append the column index
             m_cols.append( col );
         }
@@ -128,7 +134,11 @@ public:
                 // determine the index where the data and column has to be inserted
                 const int index = m_rows.value( row - 1 ) + ( cit - cstart );
                 // insert the actual data
+#ifdef KSPREAD_POINT_STORAGE_HASH
+                m_data.insert( index, *m_usedData.insert(data) );
+#else
                 m_data.insert( index, data );
+#endif
                 // insert the column index
                 m_cols.insert( index, col );
                 // adjust the offsets of the following rows
@@ -140,7 +150,11 @@ public:
             {
                 const int index = m_rows.value( row - 1 ) + ( cit - cstart );
                 const T oldData = m_data[ index ];
+#ifdef KSPREAD_POINT_STORAGE_HASH
+                m_data[ index ] = *m_usedData.insert(data);
+#else
                 m_data[ index ] = data;
+#endif
                 return oldData;
             }
         }
@@ -916,6 +930,10 @@ private:
     QVector<int> m_cols;    // stores the column indices (beginning with one)
     QVector<int> m_rows;    // stores the row offsets in m_data
     QVector<T>   m_data;    // stores the actual non-default data
+
+#ifdef KSPREAD_POINT_STORAGE_HASH
+    QSet<T> m_usedData;
+#endif
 };
 
 } // namespace KSpread

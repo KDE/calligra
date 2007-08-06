@@ -453,6 +453,12 @@ private:
     QSharedDataPointer<Private> d;
 };
 
+/***************************************************************************
+  QHash/QSet support
+****************************************************************************/
+
+uint qHash(const Value& value);
+
 } // namespace KSpread
 
 Q_DECLARE_TYPEINFO( KSpread::Value, Q_MOVABLE_TYPE );
@@ -464,12 +470,6 @@ Q_DECLARE_TYPEINFO( KSpread::Value, Q_MOVABLE_TYPE );
 
 KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value::Type type );
 KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
-
-/***************************************************************************
-  QHash/QSet support
-****************************************************************************/
-
-uint qHash(const KSpread::Value& value);
 
 /***************************************************************************
   kDebug support

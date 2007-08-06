@@ -869,6 +869,8 @@ QTextStream& operator<<( QTextStream& ts, Value value )
   QHash/QSet support
 ****************************************************************************/
 
+namespace KSpread
+{
 uint qHash(const Value& value)
 {
     switch (value.type())
@@ -877,21 +879,23 @@ uint qHash(const Value& value)
     case Value::CellRange:
         return 0;
     case Value::Boolean:
-        return qHash(value.asBoolean());
+        return ::qHash(value.asBoolean());
     case Value::Integer:
-        return qHash(value.asInteger());
+        return ::qHash(value.asInteger());
     case Value::Float:
-        return qHash((qint64)numToDouble(value.asFloat()));
+        return ::qHash((qint64)numToDouble(value.asFloat()));
     case Value::Complex:
-        return qHash((qint64)value.asComplex().real());
+        return ::qHash((qint64)value.asComplex().real());
     case Value::String:
-        return qHash(value.asString());
+        return ::qHash(value.asString());
     case Value::Array:
         return qHash(value.element(0, 0));
     case Value::Error:
-        return qHash(value.errorMessage());
+        return ::qHash(value.errorMessage());
     }
+    return 0;
 }
+} // namespace KSpread
 
 /***************************************************************************
   kDebug support

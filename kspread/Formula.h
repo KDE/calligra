@@ -378,18 +378,17 @@ Token::Op matchOperator( const QString& text );
  */
 bool isIdentifier( QChar ch );
 
-} // namespace KSpread
-
-Q_DECLARE_TYPEINFO( KSpread::Formula, Q_MOVABLE_TYPE );
-
 /***************************************************************************
   QHash/QSet support
 ****************************************************************************/
 
-inline uint qHash(const KSpread::Formula& formula)
+inline uint qHash(const Formula& formula)
 {
     return qHash(formula.expression());
 }
 
-#endif // KSPREAD_FORMULA
+} // namespace KSpread
 
+Q_DECLARE_TYPEINFO( KSpread::Formula, Q_MOVABLE_TYPE );
+
+#endif // KSPREAD_FORMULA
