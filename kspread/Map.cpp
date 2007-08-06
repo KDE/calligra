@@ -605,5 +605,9 @@ void Map::increaseLoadedRowsCounter(int number)
     d->doc->emitProgress(100 * d->loadedRowsCounter / d->overallRowCount);
 }
 
-#include "Map.moc"
+void Map::emitAddSheet(Sheet* sheet)
+{
+    emit sig_addSheet(sheet);
+}
 
+#include "Map.moc"

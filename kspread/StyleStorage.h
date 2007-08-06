@@ -49,6 +49,7 @@ class KSPREAD_EXPORT StyleStorage : public QObject
 
 public:
     explicit StyleStorage(Doc* doc);
+    StyleStorage(const StyleStorage& other);
     virtual ~StyleStorage();
 
     /**
@@ -216,7 +217,8 @@ protected:
     StyleManager* styleManager() const;
 
 private:
-    Q_DISABLE_COPY( StyleStorage )
+    // disable assignment
+    void operator=(const StyleStorage& other);
 
     class Private;
     Private * const d;

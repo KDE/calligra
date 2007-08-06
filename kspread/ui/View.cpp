@@ -439,6 +439,7 @@ public:
     // sheet/workbook operations
     QAction * sheetProperties;
     QAction * insertSheet;
+    QAction * duplicateSheet;
     QAction * deleteSheet;
     QAction * renameSheet;
     QAction * hideSheet;
@@ -973,6 +974,11 @@ void View::Private::initActions()
     actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
     ac->addAction("insertSheet", actions->insertSheet );
     connect(actions->insertSheet, SIGNAL(triggered(bool)), view, SLOT( insertSheet() ));
+
+    actions->duplicateSheet = new KAction(/*KIcon("inserttable"),*/ i18n("Duplicate Sheet"), view);
+    actions->duplicateSheet->setToolTip(i18n("Duplicate the selected sheet"));
+    ac->addAction("duplicateSheet", actions->duplicateSheet);
+    connect(actions->duplicateSheet, SIGNAL(triggered(bool)), view, SLOT(duplicateSheet()));
 
     actions->deleteSheet = new KAction(KIcon("delete_table"), i18n("Sheet"), view);
     actions->deleteSheet->setIconText(i18n("Remove Sheet"));
@@ -1605,6 +1611,7 @@ void View::Private::adjustWorkbookActions( bool mode )
   actions->hideSheet->setEnabled( mode );
   actions->showSheet->setEnabled( mode );
   actions->insertSheet->setEnabled( mode );
+  actions->duplicateSheet->setEnabled( mode );
   actions->deleteSheet->setEnabled( mode );
 
   if ( mode )
@@ -3905,6 +3912,25 @@ void View::insertSheet()
   }
 
   doc()->emitEndOperation();
+}
+
+void View::duplicateSheet()
+{
+    if (doc()->map()->isProtected())
+    {
+        KMessageBox::error(this, i18n("You cannot change a protected sheet."));
+        return;
+    }
+
+    DuplicateSheetCommand* command = new DuplicateSheetCommand();
+    command->setSheet(activeSheet());
+    doc()->addCommand(command);
+
+    if (doc()->map()->visibleSheets().count() > 1)
+    {
+        d->actions->deleteSheet->setEnabled(true);
+        d->actions->hideSheet->setEnabled(true);
+    }
 }
 
 void View::hideSheet()
@@ -7025,7 +7051,7 @@ void View::popupTabBarMenu( const QPoint & _point )
         QAction* insertSheet = new KAction(KIcon("inserttable"), i18n("Insert Sheet"), this);
         insertSheet->setToolTip(i18n("Remove the active sheet"));
         connect(insertSheet, SIGNAL(triggered(bool)), this, SLOT(insertSheet()));
-        menu->insertAction(d->actions->hideSheet, insertSheet);
+        menu->insertAction(d->actions->duplicateSheet, insertSheet);
 
         QAction* deleteSheet = new KAction(KIcon("delete_table"), i18n("Remove Sheet"), this);
         deleteSheet->setToolTip(i18n("Remove the active sheet"));

@@ -341,6 +341,7 @@ public Q_SLOTS:
     void textToColumns();
     void consolidate();
     void insertSheet();
+    void duplicateSheet();
     void deleteSheet();
     void hideSheet();
     void showSheet();

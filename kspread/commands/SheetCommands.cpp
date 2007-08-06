@@ -138,6 +138,47 @@ void AddSheetCommand::undo()
 }
 
 
+// ----- DuplicateSheetCommand -----
+
+DuplicateSheetCommand::DuplicateSheetCommand()
+    : QUndoCommand(i18n("Duplicate Sheet"))
+    , m_oldSheet(0)
+    , m_newSheet(0)
+    , m_firstrun(true)
+{
+}
+
+void DuplicateSheetCommand::setSheet(Sheet* sheet)
+{
+    m_oldSheet = sheet;
+}
+
+void DuplicateSheetCommand::redo()
+{
+    // Once created the sheet stays alive forever. See comment in undo.
+    if (m_firstrun)
+    {
+        m_newSheet = new Sheet(*m_oldSheet);
+        m_newSheet->map()->insertSheet(m_newSheet);
+        m_newSheet->map()->emitAddSheet(m_newSheet);
+        m_firstrun = false;
+    }
+    else
+    {
+        m_newSheet->map()->insertSheet(m_newSheet);
+        m_newSheet->doc()->insertSheet(m_newSheet);
+    }
+}
+
+void DuplicateSheetCommand::undo()
+{
+    // The new sheet is not deleted, but just becomes a zombie,
+    // so that the sheet pointer used in commands later on stays valid.
+    m_newSheet->map()->takeSheet(m_newSheet);
+    m_newSheet->doc()->takeSheet(m_newSheet);
+}
+
+
 // ----- RemoveSheetCommand -----
 
 RemoveSheetCommand::RemoveSheetCommand( Sheet* s )

@@ -228,6 +228,7 @@
 <Menu name="menupage_popup">
   <Action name="renameSheet"/>
   <!--<Action name="insertSheet"/>-->
+  <Action name="duplicateSheet"/>
   <!--<Action name="deleteSheet"/>-->
   <Action name="hideSheet"/>
   <Action name="showSheet"/>

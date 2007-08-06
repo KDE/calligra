@@ -108,6 +108,12 @@ public:
     Sheet ( Map* map, const QString &sheetName, const char* name = 0 );
 
     /**
+     * Copy constructor.
+     * Creates a sheet with the contents and the settings of \p other.
+     */
+    Sheet(const Sheet& other);
+
+    /**
      * Destructor.
      */
     ~Sheet();
@@ -1152,7 +1158,8 @@ private:
      */
     void checkContentDirection( QString const & name );
 
-    Q_DISABLE_COPY( Sheet )
+    // disable assignment operator
+    void operator=(const Sheet& other);
 
     class Private;
     Private * const d;

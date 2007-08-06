@@ -64,6 +64,23 @@ public:
         , valueStorage( new ValueStorage() )
         , undoData( 0 ) {}
 
+    Private(const Private& other, Sheet* sheet)
+        : sheet(sheet)
+        , bindingStorage(new BindingStorage(*other.bindingStorage))
+        , commentStorage(new CommentStorage(*other.commentStorage))
+        , conditionsStorage(new ConditionsStorage(*other.conditionsStorage))
+        , databaseStorage(new DatabaseStorage(*other.databaseStorage))
+        , formulaStorage(new FormulaStorage(*other.formulaStorage))
+        , fusionStorage(new FusionStorage(*other.fusionStorage))
+        , linkStorage(new LinkStorage(*other.linkStorage))
+        , matrixStorage(new MatrixStorage(*other.matrixStorage))
+        , namedAreaStorage(new NamedAreaStorage(*other.namedAreaStorage))
+        , styleStorage(new StyleStorage(*other.styleStorage))
+        , userInputStorage(new UserInputStorage(*other.userInputStorage))
+        , validityStorage(new ValidityStorage(*other.validityStorage))
+        , valueStorage(new ValueStorage(*other.valueStorage))
+        , undoData(0) {}
+
     ~Private()
     {
         delete bindingStorage;
@@ -107,6 +124,12 @@ CellStorage::CellStorage( Sheet* sheet )
 CellStorage::CellStorage( const CellStorage& other )
     : QObject( other.d->sheet )
     , d( new Private( *other.d ) )
+{
+}
+
+CellStorage::CellStorage(const CellStorage& other, Sheet* sheet)
+    : QObject(sheet)
+    , d(new Private(*other.d, sheet))
 {
 }
 

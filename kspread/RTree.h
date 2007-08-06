@@ -198,6 +198,11 @@ public:
    */
   virtual QList< QPair<QRectF,T> > removeShiftUp(const QRect& rect);
 
+  /**
+   * Assignment.
+   */
+  void operator=(const RTree& other);
+
 protected:
   class Node;
   class NoneLeafNode;
@@ -212,6 +217,10 @@ protected:
   {
     return new NoneLeafNode( capacity, level, dynamic_cast<Node*>(parent) );
   }
+
+private:
+  // disable copy constructor
+  RTree(const RTree& other);
 };
 
 /**
@@ -232,6 +241,10 @@ public:
   virtual QMap< int, QPair<QRectF,T> > insertColumns(int position, int number, InsertMode mode) = 0;
   virtual QMap< int, QPair<QRectF,T> > removeRows(int position, int number) = 0;
   virtual QMap< int, QPair<QRectF,T> > removeColumns(int position, int number) = 0;
+  QVector<QRectF> childBoundingBox() const { return this->m_childBoundingBox; }
+private:
+  // disable copy constructor
+  Node(const Node& other);
 };
 
 /**
@@ -254,6 +267,10 @@ public:
   virtual QMap< int, QPair<QRectF,T> > insertColumns(int position, int number, InsertMode mode);
   virtual QMap< int, QPair<QRectF,T> > removeRows(int position, int number);
   virtual QMap< int, QPair<QRectF,T> > removeColumns(int position, int number);
+  virtual void operator=(const LeafNode& other);
+private:
+  // disable copy constructor
+  LeafNode(const LeafNode& other);
 };
 
 /**
@@ -276,6 +293,10 @@ public:
   virtual QMap< int, QPair<QRectF,T> > insertColumns(int position, int number, InsertMode mode);
   virtual QMap< int, QPair<QRectF,T> > removeRows(int position, int number);
   virtual QMap< int, QPair<QRectF,T> > removeColumns(int position, int number);
+  virtual void operator=(const NoneLeafNode& other);
+private:
+  // disable copy constructor
+  NoneLeafNode(const NoneLeafNode& other);
 };
 
 
@@ -480,6 +501,24 @@ QList< QPair<QRectF,T> > RTree<T>::removeShiftUp(const QRect& r)
         insert( shiftedRect & boundingRect, oldPairs[i].second );
     }
     return oldPairs;
+}
+
+template<typename T>
+void RTree<T>::operator=(const RTree<T>& other)
+{
+    this->m_capacity = other.m_capacity;
+    this->m_minimum = other.m_minimum;
+    delete this->m_root;
+    if (other.m_root->isLeaf())
+    {
+        this->m_root = new LeafNode(this->m_capacity + 1, 0, 0);
+        *dynamic_cast<LeafNode*>(this->m_root) = *dynamic_cast<LeafNode*>(other.m_root);
+    }
+    else
+    {
+        this->m_root = new NoneLeafNode(this->m_capacity + 1, 0, 0);
+        *dynamic_cast<NoneLeafNode*>(this->m_root) = *dynamic_cast<NoneLeafNode*>(other.m_root);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -715,6 +754,21 @@ QMap< int, QPair<QRectF,T> > RTree<T>::LeafNode::removeColumns(int position, int
     return removedPairs;
 }
 
+template<typename T>
+void RTree<T>::LeafNode::operator=(const LeafNode& other)
+{
+    // leave alone the m_parent
+    this->m_boundingBox = other.m_boundingBox;
+    this->m_childBoundingBox = other.m_childBoundingBox;
+    this->m_counter = other.m_counter;
+    this->m_place = other.m_place;
+#ifdef KOFFICE_RTREE_DEBUG
+    this->m_nodeId = other.m_nodeId;
+#endif
+    this->m_level = other.m_level;
+    this->m_data = other.m_data;
+    this->m_dataIds = other.m_dataIds;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // RTree<T>::NoneLeafNode definition
@@ -887,6 +941,35 @@ QMap< int, QPair<QRectF,T> > RTree<T>::NoneLeafNode::removeColumns(int position,
         }
     }
     return removedPairs;
+}
+
+template<typename T>
+void RTree<T>::NoneLeafNode::operator=(const NoneLeafNode& other)
+{
+    // leave alone the m_parent
+    this->m_boundingBox = other.m_boundingBox;
+    this->m_childBoundingBox = other.childBoundingBox();
+    this->m_counter = other.m_counter;
+    this->m_place = other.m_place;
+#ifdef KOFFICE_RTREE_DEBUG
+    this->m_nodeId = other.m_nodeId;
+#endif
+    this->m_level = other.m_level;
+    for (int i = 0; i < other.m_counter; ++i)
+    {
+        if (other.m_childs[i]->isLeaf())
+        {
+            LeafNode* child = dynamic_cast<LeafNode*>(other.m_childs[i]);
+            this->m_childs[i] = new LeafNode(child->childBoundingBox().size(), child->level(), this);
+            *dynamic_cast<LeafNode*>(this->m_childs[i]) = *child;
+        }
+        else
+        {
+            NoneLeafNode* child = dynamic_cast<NoneLeafNode*>(other.m_childs[i]);
+            this->m_childs[i] = new NoneLeafNode(child->childBoundingBox().size(), child->level(), this);
+            *dynamic_cast<NoneLeafNode*>(this->m_childs[i]) = *child;
+        }
+    }
 }
 
 } // namespace KSpread

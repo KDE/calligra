@@ -42,6 +42,15 @@ SheetShapeContainer::SheetShapeContainer( Sheet* sheet )
     d->sheet = sheet;
 }
 
+SheetShapeContainer::SheetShapeContainer(const SheetShapeContainer& other, Sheet* sheet)
+    : d( new Private )
+{
+    d->sheet = sheet;
+    QList<KoShape*> shapes = other.iterator();
+    for (int i = 0; i < shapes.count(); ++i)
+        addChild(shapes[i]); // FIXME
+}
+
 SheetShapeContainer::~SheetShapeContainer()
 {
     delete d;

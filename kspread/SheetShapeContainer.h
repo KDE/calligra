@@ -39,6 +39,11 @@ public:
     SheetShapeContainer( Sheet* sheet );
 
     /**
+     * Copy Constructor.
+     */
+    SheetShapeContainer(const SheetShapeContainer& other, Sheet* sheet);
+
+    /**
      * Destructor.
      */
     virtual ~SheetShapeContainer();

@@ -1154,6 +1154,34 @@ ColumnFormat* ColumnCluster::next( int col ) const
   return 0;
 }
 
+void ColumnCluster::operator=(const ColumnCluster& other)
+{
+    m_first = 0;
+    m_autoDelete = other.m_autoDelete;
+    // TODO Stefan: Optimize!
+    m_cluster = (ColumnFormat***)malloc(KSPREAD_CLUSTER_LEVEL1 * sizeof(ColumnFormat**));
+    for (int i = 0; i < KSPREAD_CLUSTER_LEVEL1; ++i)
+    {
+        if (other.m_cluster[i])
+        {
+            m_cluster[i] = (ColumnFormat**)malloc(KSPREAD_CLUSTER_LEVEL2 * sizeof(ColumnFormat*));
+            for (int j = 0; j < KSPREAD_CLUSTER_LEVEL2; ++j)
+            {
+                m_cluster[i][j] = 0;
+                if (other.m_cluster[i][j])
+                {
+                    ColumnFormat* columnFormat = new ColumnFormat(*other.m_cluster[i][j]);
+                    columnFormat->setNext(0);
+                    columnFormat->setPrevious(0);
+                    insertElement(columnFormat, columnFormat->column());
+                }
+            }
+        }
+        else
+            m_cluster[i] = 0;
+    }
+}
+
 /****************************************************
  *
  * RowCluster
@@ -1437,4 +1465,32 @@ void RowCluster::setAutoDelete( bool a )
 bool RowCluster::autoDelete() const
 {
     return m_autoDelete;
+}
+
+void RowCluster::operator=(const RowCluster& other)
+{
+    m_first = 0;
+    m_autoDelete = other.m_autoDelete;
+    // TODO Stefan: Optimize!
+    m_cluster = (RowFormat***)malloc(KSPREAD_CLUSTER_LEVEL1 * sizeof(RowFormat**));
+    for (int i = 0; i < KSPREAD_CLUSTER_LEVEL1; ++i)
+    {
+        if (other.m_cluster[i])
+        {
+            m_cluster[i] = (RowFormat**)malloc(KSPREAD_CLUSTER_LEVEL2 * sizeof(RowFormat*));
+            for (int j = 0; j < KSPREAD_CLUSTER_LEVEL2; ++j)
+            {
+                m_cluster[i][j] = 0;
+                if (other.m_cluster[i][j])
+                {
+                    RowFormat* rowFormat = new RowFormat(*other.m_cluster[i][j]);
+                    rowFormat->setNext(0);
+                    rowFormat->setPrevious(0);
+                    insertElement(rowFormat, rowFormat->row());
+                }
+            }
+        }
+        else
+            m_cluster[i] = 0;
+    }
 }

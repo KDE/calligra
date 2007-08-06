@@ -186,6 +186,8 @@ public:
 
   static bool respectCase;
 
+  void emitAddSheet(Sheet* sheet);
+
 signals:
 
   /**

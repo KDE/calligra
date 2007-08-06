@@ -57,6 +57,7 @@ class KSPREAD_EXPORT RectStorage
 {
 public:
     explicit RectStorage(Doc* doc);
+    RectStorage(const RectStorage& other);
     virtual ~RectStorage();
 
     /**
@@ -164,6 +165,15 @@ template<typename T>
 RectStorage<T>::RectStorage(Doc* doc)
     : m_doc(doc)
 {
+}
+
+template<typename T>
+RectStorage<T>::RectStorage(const RectStorage& other)
+    : m_doc(other.m_doc)
+    , m_usedArea(other.m_usedArea)
+    , m_storedData(other.m_storedData)
+{
+    m_tree = other.m_tree;
 }
 
 template<typename T>
@@ -436,7 +446,8 @@ class BindingStorage : public QObject, public RectStorage<Binding>
 {
     Q_OBJECT
 public:
-    explicit BindingStorage(Doc* doc) : RectStorage<Binding>(doc) {}
+    explicit BindingStorage(Doc* doc) : QObject(doc), RectStorage<Binding>(doc) {}
+    BindingStorage(const BindingStorage& other) : QObject(other.parent()), RectStorage<Binding>(other) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -449,7 +460,8 @@ class CommentStorage : public QObject, public RectStorage<QString>
 {
     Q_OBJECT
 public:
-    explicit CommentStorage(Doc* doc) : RectStorage<QString>(doc) {}
+    explicit CommentStorage(Doc* doc) : QObject(doc), RectStorage<QString>(doc) {}
+    CommentStorage(const CommentStorage& other) : QObject(other.parent()), RectStorage<QString>(other) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -462,7 +474,8 @@ class ConditionsStorage : public QObject, public RectStorage<Conditions>
 {
     Q_OBJECT
 public:
-    explicit ConditionsStorage(Doc* doc) : RectStorage<Conditions>(doc) {}
+    explicit ConditionsStorage(Doc* doc) : QObject(doc), RectStorage<Conditions>(doc) {}
+    ConditionsStorage(const ConditionsStorage& other) : QObject(other.parent()), RectStorage<Conditions>(other) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -475,7 +488,8 @@ class DatabaseStorage : public QObject, public RectStorage<Database>
 {
     Q_OBJECT
 public:
-    explicit DatabaseStorage(Doc* doc) : RectStorage<Database>(doc) {}
+    explicit DatabaseStorage(Doc* doc) : QObject(doc), RectStorage<Database>(doc) {}
+    DatabaseStorage(const DatabaseStorage& other) : QObject(other.parent()), RectStorage<Database>(other) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -488,7 +502,8 @@ class FusionStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit FusionStorage(Doc* doc) : RectStorage<bool>(doc) {}
+    explicit FusionStorage(Doc* doc) : QObject(doc), RectStorage<bool>(doc) {}
+    FusionStorage(const FusionStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -501,7 +516,8 @@ class MatrixStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit MatrixStorage(Doc* doc) : RectStorage<bool>(doc) {}
+    explicit MatrixStorage(Doc* doc) : QObject(doc), RectStorage<bool>(doc) {}
+    MatrixStorage(const MatrixStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
@@ -514,7 +530,8 @@ class ValidityStorage : public QObject, public RectStorage<Validity>
 {
     Q_OBJECT
 public:
-    explicit ValidityStorage(Doc* doc) : RectStorage<Validity>(doc) {}
+    explicit ValidityStorage(Doc* doc) : QObject(doc), RectStorage<Validity>(doc) {}
+    ValidityStorage(const ValidityStorage& other) : QObject(other.parent()), RectStorage<Validity>(other) {}
 
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }

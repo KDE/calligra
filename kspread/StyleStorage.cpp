@@ -58,6 +58,19 @@ StyleStorage::StyleStorage(Doc* doc)
     d->cache.setMaxCost( g_maximumCachedStyles );
 }
 
+StyleStorage::StyleStorage(const StyleStorage& other)
+    : QObject(other.d->doc)
+    , d(new Private)
+{
+    d->doc = other.d->doc;
+    d->tree = other.d->tree;
+    d->usedColumns = other.d->usedColumns;
+    d->usedRows = other.d->usedRows;
+    d->usedArea = other.d->usedArea;
+    d->subStyles = other.d->subStyles;
+    // the other member variables are temporary stuff
+}
+
 StyleStorage::~StyleStorage()
 {
     delete d;

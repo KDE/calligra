@@ -213,6 +213,52 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
             doc()->namedAreaManager(), SLOT(remove(const QString&)));
 }
 
+Sheet::Sheet(const Sheet& other)
+    : QObject(other.d->workbook)
+    , d(new Private)
+{
+    d->workbook = other.d->workbook;
+
+    // create a unique name
+    int i = 1;
+    do
+        d->name = other.d->name + QString("_%1").arg(i++);
+    while (d->workbook->findSheet(d->name));
+
+    setObjectName(d->name.replace(' ', '_').toUtf8());
+    new SheetAdaptor(this);
+    kDebug() << d->workbook->doc()->objectName() << d->workbook->objectName() << objectName();
+    QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
+                                                 '/' + d->workbook->objectName() +
+                                                 '/' + objectName(), this);
+
+    d->id = s_id++;
+    s_mapSheets->insert(d->id, this);
+
+    d->layoutDirection = other.d->layoutDirection;
+    d->hide = other.d->hide;
+    d->password = other.d->password;
+    d->showGrid = other.d->showGrid;
+    d->showFormula = other.d->showFormula;
+    d->showFormulaIndicator = other.d->showFormulaIndicator;
+    d->showCommentIndicator = other.d->showCommentIndicator;
+    d->autoCalc = other.d->autoCalc;
+    d->lcMode = other.d->lcMode;
+    d->showColumnNumber = other.d->showColumnNumber;
+    d->hideZero = other.d->hideZero;
+    d->firstLetterUpper = other.d->firstLetterUpper;
+
+    d->cellStorage = new CellStorage(*other.d->cellStorage, this);
+    d->rows = other.d->rows;
+    d->columns = other.d->columns;
+    d->shapeContainer = new SheetShapeContainer(*other.d->shapeContainer, this);
+
+    d->print = new SheetPrint(this); // FIXME = new SheetPrint(*other.d->print);
+
+    d->showPageBorders = other.d->showPageBorders;
+    d->documentSize = other.d->documentSize;
+}
+
 Sheet::~Sheet()
 {
     //Disable automatic recalculation of dependancies on this sheet to prevent crashes

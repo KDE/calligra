@@ -287,6 +287,11 @@ public:
     ColumnFormat* first() const { return m_first; }
     ColumnFormat* next( int col ) const;
 
+    void operator=(const ColumnCluster& other);
+
+private:
+    ColumnCluster(const ColumnCluster& other);
+
 private:
     ColumnFormat*** m_cluster;
     ColumnFormat* m_first;
@@ -318,6 +323,11 @@ public:
     bool autoDelete() const;
 
     RowFormat* first()const { return m_first; }
+
+    void operator=(const RowCluster& other);
+
+private:
+    RowCluster(const RowCluster& other);
 
 private:
     RowFormat*** m_cluster;

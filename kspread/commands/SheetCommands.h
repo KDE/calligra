@@ -93,6 +93,23 @@ protected:
 };
 
 
+class DuplicateSheetCommand : public QUndoCommand
+{
+public:
+    explicit DuplicateSheetCommand();
+
+    void setSheet(Sheet* sheet);
+
+    virtual void redo();
+    virtual void undo();
+
+protected:
+    Sheet* m_oldSheet;
+    Sheet* m_newSheet;
+    bool m_firstrun;
+};
+
+
 class RemoveSheetCommand : public QUndoCommand
 {
 public:

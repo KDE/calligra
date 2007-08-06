@@ -76,7 +76,7 @@ public:
 
     /**
      * Constructor.
-     * Creates an empty storage.
+     * Creates an empty storage for \p sheet.
      */
     CellStorage( Sheet* sheet );
 
@@ -85,6 +85,12 @@ public:
      * \note Take care: does not perform a deep copy!
      */
     CellStorage( const CellStorage& other );
+
+    /**
+     * Copy constructor.
+     * Creates a CellStorage for \p sheet and copies the data from \p other.
+     */
+    CellStorage(const CellStorage& other, Sheet* sheet);
 
     /**
      * Destructor.
