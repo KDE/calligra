@@ -584,13 +584,13 @@ QString Cell::encodeFormula( bool _era, int _col, int _row ) const
                     tmp += userInput[pos];
                     buffer[pos2++] = userInput[pos++];
                 }
-                if ( userInput[pos] == '$' )
+                if ( pos < length && userInput[pos] == '$' )
                 {
                     tmp += '$';
                     pos++;
                     fix2 = true;
                 }
-                if ( userInput[pos].isDigit() )
+                if ( pos < length && userInput[pos].isDigit() )
                 {
                     const unsigned int oldPos = pos;
                     while ( pos < length && userInput[pos].isDigit() ) ++pos;
