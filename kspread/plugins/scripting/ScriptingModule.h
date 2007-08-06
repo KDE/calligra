@@ -146,10 +146,24 @@ class ScriptingModule : public KoScriptingModule
         */
         QString toXML();
 
-        //do we need them anyway or is it enough to use KoDocument here?!
+        /**
+        * Open a document from the defined \p url .
+        */
         bool openUrl(const QString& url);
+
+        /**
+        * Save the current document to the defined \p url .
+        */
         bool saveUrl(const QString& url);
+
+        /**
+        * Import a document from the defined \p url .
+        */
         bool importUrl(const QString& url);
+
+        /**
+        * Export the current document to the defined \p url .
+        */
         bool exportUrl(const QString& url);
 
         /**

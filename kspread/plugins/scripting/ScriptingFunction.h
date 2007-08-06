@@ -54,12 +54,39 @@ class ScriptingFunction : public QObject
 {
         Q_OBJECT
 
+        /**
+        * The name the function has.
+        */
         Q_PROPERTY(QString name READ name)
+
+        /**
+        * Minimum number of parameters the function expects.
+        */
         Q_PROPERTY(int minparam READ minParam WRITE setMinParam)
+
+        /**
+        * Maximum number of parameters the function expects.
+        */
         Q_PROPERTY(int maxparam READ maxParam WRITE setMaxParam)
+
+        /**
+        * The comment that describes what the function does.
+        */
         Q_PROPERTY(QString comment READ comment WRITE setComment)
+
+        /**
+        * The syntax string the function looks like.
+        */
         Q_PROPERTY(QString syntax READ syntax WRITE setSyntax)
+
+        /**
+        * The error-message if there was an error.
+        */
         Q_PROPERTY(QString error READ error WRITE setError)
+
+        /**
+        * The result of the function call.
+        */
         Q_PROPERTY(QVariant result READ result WRITE setResult)
 
     public:
@@ -96,15 +123,31 @@ class ScriptingFunction : public QObject
         void setResult(const QVariant& result);
 
     public slots:
-        /// An an example to demonstrate the usage of the function.
+
+        /**
+        * Add an example to demonstrate the usage of the function.
+        */
         void addExample(const QString& example);
-        /// An details about a parameter the function may expect.
+
+        /**
+        * Add details about a parameter the function may expect.
+        *
+        * Valid values for \p typeName are String, Int, Float, Double,
+        * Boolean, Date, Range or Any while the \p comment is a
+        * describing string.
+        */
         void addParameter(const QString& typeName, const QString& comment);
-        /// Register this function.
+
+        /**
+        * Register this function.
+        */
         bool registerFunction();
 
     signals:
-        /// This signal is emitted if the function got called.
+
+        /**
+        * This signal is emitted if the function got called.
+        */
         void called(QVariantList args);
 
     private:

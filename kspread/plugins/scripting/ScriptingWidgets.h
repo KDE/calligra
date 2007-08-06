@@ -37,8 +37,17 @@ class ScriptingModule;
 class ScriptingSheetsListView : public QWidget
 {
         Q_OBJECT
+
+        /**
+        * Enumeration of selection types.
+        */
         Q_ENUMS(SelectionType)
+
+        /**
+        * Enumeration of editor types.
+        */
         Q_ENUMS(EditorType)
+
     public:
 
         /**
@@ -59,10 +68,30 @@ class ScriptingSheetsListView : public QWidget
 
     public slots:
 
+        /**
+        * Set the selection type to \p selectiontype. This could be either
+        * "SingleSelect" or "MultiSelect".
+        */
         void setSelectionType(const QString& selectiontype);
+
+        /**
+        * Set the editor type to \p editortype. This could be either
+        * "Disabled", "Cell" or "Range".
+        */
         void setEditorType(const QString& editortype);
 
+        /**
+        * Return the name of the sheet. This makes only sense of
+        * "SingleSelect" was defined as selection type else, if
+        * "MultiSelect" was defined, use the sheets() function.
+        */
         QString sheet();
+
+        /**
+        * Return the content of the editor. This makes only sense of
+        * "SingleSelect" was defined as selection type else, if
+        * "MultiSelect" was defined, use the sheets() function.
+        */
         QString editor();
 
         /**

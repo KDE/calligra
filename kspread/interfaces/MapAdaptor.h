@@ -31,6 +31,9 @@ namespace KSpread
 {
 class Map;
 
+/**
+* The MapAdaptor class provides additional functionality to deal with sheets.
+*/
 class KSPREAD_EXPORT MapAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
@@ -42,11 +45,18 @@ public:
 // 				DCOPCString& replyType, QByteArray &replyData);
 
 public Q_SLOTS: // METHODS
+
+    /** Return the objectName of the sheet with the defined sheet name. */
     virtual QString sheet( const QString& name );
+    /** Return the objectName of the sheet with the defined index. */
     virtual QString sheetByIndex( int index );
+    /** Return the number of available sheets. */
     virtual int sheetCount() const;
+    /** Return a list of available sheet names. */
     virtual QStringList sheetNames() const;
+    /** Return a list of available sheet objectName's. */
     virtual QStringList sheets();
+    /** Insert a new sheet with the defined sheet name. */
     virtual QString insertSheet( const QString& name );
 
 private:

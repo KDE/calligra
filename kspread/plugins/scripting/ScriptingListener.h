@@ -57,7 +57,15 @@ namespace KSpread {
             virtual ~ScriptingCellListener();
 
         Q_SIGNALS:
+
+            /**
+            * This signal got emitted if the content of a region of cells changed.
+            */
             void regionChanged(const QVariantList& ranges);
+
+            /**
+            * This signal got emitted if the content of a cell changed.
+            */
             void cellChanged(int column, int row);
 
         private Q_SLOTS:

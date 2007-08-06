@@ -108,7 +108,7 @@ class ScriptingWriter : public QObject
         }
 
         /**
-        * \return the current row number.
+        * Return the current row number.
         */
         int row() {
             return m_row;
@@ -123,7 +123,7 @@ class ScriptingWriter : public QObject
         }
 
         /**
-        * \return the current column number.
+        * Return the current column number.
         */
         int column() {
             return m_column;
@@ -152,6 +152,10 @@ class ScriptingWriter : public QObject
         //void first() {}
         //void last() {}
         //void prev() {}
+
+        /**
+        * Go to the next row.
+        */
         void next() {
             m_row++;
             clearCell();
@@ -160,6 +164,16 @@ class ScriptingWriter : public QObject
         //QVariant value() {}
         //QVariantList values() {}
 
+        /**
+        * Set the value of the current cell.
+        *
+        * \param value The value that should be set.
+        * \param parse If this is true, the default, then the
+        * value got parsed to look for the type else we
+        * assume the value has the correct type.
+        * \return true if the value was set successful else
+        * false is returned.
+        */
         bool setValue(const QVariant& value, bool parse = true) {
             KSpread::Value v;
             if( parse )
@@ -188,6 +202,16 @@ class ScriptingWriter : public QObject
             return dm->execute();
         }
 
+        /**
+        * Set the values of the cells in the current row.
+        *
+        * \param values The list of values that should be set.
+        * \param parse If this is true, the default, then the
+        * value got parsed to look for the type else we
+        * assume the value has the correct type.
+        * \return true if the values got set successful else
+        * false is returned.
+        */
         bool setValues(const QVariantList& values, bool parse = true) {
             bool ok = true;
             const int prevcolumn = m_column;
