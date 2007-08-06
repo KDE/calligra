@@ -50,6 +50,7 @@ class KarbonTransformDocker : public QDockWidget
 
 public:
     KarbonTransformDocker();
+    ~KarbonTransformDocker();
 
 public slots:
     void update();
@@ -61,16 +62,16 @@ private slots:
     void enableSignals( bool enable );
     void shear();
     void rotate();
+    void dockLocationChanged( Qt::DockWidgetArea area );
 
 private:
     QRectF selectionRect();
-    KoUnitDoubleSpinBox *m_x;
-    KoUnitDoubleSpinBox *m_y;
-    KoUnitDoubleSpinBox *m_width;
-    KoUnitDoubleSpinBox *m_height;
-    KDoubleSpinBox *m_rotate;
-    KDoubleSpinBox *m_shearX;
-    KDoubleSpinBox *m_shearY;
+    void layoutVertical();
+    void layoutHorizontal();
+    void clearLayout();
+
+    class Private;
+    Private * const d;
 };
 
 #endif // KARBONTRANSFORMDOCKER_H

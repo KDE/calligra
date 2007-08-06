@@ -71,12 +71,34 @@ QDockWidget* KarbonTransformDockerFactory::createDockWidget()
     return widget;
 }
 
+class KarbonTransformDocker::Private
+{
+public:
+    KoUnitDoubleSpinBox * x;
+    KoUnitDoubleSpinBox * y;
+    KoUnitDoubleSpinBox * width;
+    KoUnitDoubleSpinBox * height;
+    KDoubleSpinBox * rotate;
+    KDoubleSpinBox * shearX;
+    KDoubleSpinBox * shearY;
+
+    QLabel * xLabel;
+    QLabel * yLabel;
+    QLabel * wLabel;
+    QLabel * hLabel;
+    QLabel * rLabel;
+    QLabel * sxLabel;
+    QLabel * syLabel;
+
+    QGridLayout * mainLayout;
+};
+
 KarbonTransformDocker::KarbonTransformDocker()
+    : d( new Private() )
 {
     setWindowTitle( i18n( "Transform" ) );
 
-    QWidget *mainWidget = new QWidget( this );
-    QGridLayout *mainLayout = new QGridLayout( mainWidget );
+    QWidget * mainWidget = new QWidget( this );
 
     //TODO: Set 5000 limit to real Karbon14 limit
     const double limit = 5000.0;
@@ -85,91 +107,148 @@ KarbonTransformDocker::KarbonTransformDocker()
     KoUnit documentUnit = canvasController->canvas()->unit();
 
     //X:
-    QLabel* xLabel = new QLabel( i18n ( "X:" ), mainWidget );
-    mainLayout->addWidget( xLabel, 0, 0 );
-    m_x = new KoUnitDoubleSpinBox( mainWidget );
-    m_x->setMinMaxStep( -limit, limit, 1.0 );
-    m_x->setUnit( documentUnit );
-    m_x->setDecimals( 1 );
-    m_x->setToolTip( i18n("Set x-position of actual selection") );
-    mainLayout->addWidget( m_x, 0, 1 );
-    connect( m_x, SIGNAL( editingFinished() ), this, SLOT( translate() ) );
+    d->xLabel = new QLabel( i18n ( "X:" ), mainWidget );
+    d->x = new KoUnitDoubleSpinBox( mainWidget );
+    d->x->setMinMaxStep( -limit, limit, 1.0 );
+    d->x->setUnit( documentUnit );
+    d->x->setDecimals( 1 );
+    d->x->setToolTip( i18n("Set x-position of actual selection") );
+    connect( d->x, SIGNAL( editingFinished() ), this, SLOT( translate() ) );
 
     //Y:
-    QLabel* yLabel = new QLabel( i18n ( "Y:" ), mainWidget );
-    mainLayout->addWidget( yLabel, 0, 2 );
-    m_y = new KoUnitDoubleSpinBox( mainWidget );
-    m_y->setMinMaxStep( -limit, limit, 1.0 );
-    m_y->setUnit( documentUnit );
-    m_y->setDecimals( 1 );
-    m_y->setToolTip( i18n("Set y-position of actual selection") );
-    mainLayout->addWidget( m_y, 0, 3 );
-    connect( m_y, SIGNAL( editingFinished() ), this, SLOT( translate() ) );
+    d->yLabel = new QLabel( i18n ( "Y:" ), mainWidget );
+    d->y = new KoUnitDoubleSpinBox( mainWidget );
+    d->y->setMinMaxStep( -limit, limit, 1.0 );
+    d->y->setUnit( documentUnit );
+    d->y->setDecimals( 1 );
+    d->y->setToolTip( i18n("Set y-position of actual selection") );
+    connect( d->y, SIGNAL( editingFinished() ), this, SLOT( translate() ) );
 
     //Width:
-    QLabel* wLabel = new QLabel( i18n ( "W:" ), mainWidget );
-    mainLayout->addWidget( wLabel, 1, 0 );
-    m_width = new KoUnitDoubleSpinBox( mainWidget );
-    m_width->setMinMaxStep( 0.0, limit, 1.0 );
-    m_width->setUnit( documentUnit );
-    m_width->setDecimals( 1 );
-    m_width->setToolTip( i18n("Set width of actual selection") );
-    mainLayout->addWidget( m_width, 1, 1 );
-    connect( m_width, SIGNAL( editingFinished() ), this, SLOT( scale() ) );
+    d->wLabel = new QLabel( i18n ( "W:" ), mainWidget );
+    d->width = new KoUnitDoubleSpinBox( mainWidget );
+    d->width->setMinMaxStep( 0.0, limit, 1.0 );
+    d->width->setUnit( documentUnit );
+    d->width->setDecimals( 1 );
+    d->width->setToolTip( i18n("Set width of actual selection") );
+    connect( d->width, SIGNAL( editingFinished() ), this, SLOT( scale() ) );
 
     //Height:
-    QLabel* hLabel = new QLabel( i18n ( "H:" ), mainWidget );
-    mainLayout->addWidget( hLabel, 1, 2 );
-    m_height = new KoUnitDoubleSpinBox( mainWidget );
-    m_height->setMinMaxStep( 0.0, limit, 1.0 );
-    m_height->setUnit( documentUnit );
-    m_height->setDecimals( 1 );
-    m_height->setToolTip( i18n("Set height of actual selection") );
-    mainLayout->addWidget( m_height, 1, 3 );
-    connect( m_height, SIGNAL( editingFinished() ), this, SLOT( scale() ) );
+    d->hLabel = new QLabel( i18n ( "H:" ), mainWidget );
+    d->height = new KoUnitDoubleSpinBox( mainWidget );
+    d->height->setMinMaxStep( 0.0, limit, 1.0 );
+    d->height->setUnit( documentUnit );
+    d->height->setDecimals( 1 );
+    d->height->setToolTip( i18n("Set height of actual selection") );
+    connect( d->height, SIGNAL( editingFinished() ), this, SLOT( scale() ) );
 
     //ROTATE:
-    QLabel* rLabel = new QLabel( i18n ( "R:" ), mainWidget );
-    mainLayout->addWidget( rLabel, 3, 0 );
-    m_rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
-    mainLayout->addWidget( m_rotate, 3, 1 );
-    m_rotate->setToolTip( i18n("Rotate actual selection") );
-    connect( m_rotate, SIGNAL( editingFinished() ), this, SLOT( rotate() ) );
+    d->rLabel = new QLabel( i18n ( "R:" ), mainWidget );
+    d->rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
+    d->rotate->setToolTip( i18n("Rotate actual selection") );
+    connect( d->rotate, SIGNAL( editingFinished() ), this, SLOT( rotate() ) );
 
     //X-Shear:
-    QLabel* sxLabel = new QLabel( i18n ( "SX:" ), mainWidget );
-    mainLayout->addWidget( sxLabel, 2, 0 );
-    m_shearX = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
-    mainLayout->addWidget( m_shearX, 2, 1 );
-    m_shearX->setToolTip( i18n("Shear actual selection in x-direction") );
-    connect( m_shearX, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
+    d->sxLabel = new QLabel( i18n ( "SX:" ), mainWidget );
+    d->shearX = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
+    d->shearX->setToolTip( i18n("Shear actual selection in x-direction") );
+    connect( d->shearX, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
 
     //Y-Shear:
-    QLabel* syLabel = new QLabel( i18n ( "SY:" ), mainWidget );
-    mainLayout->addWidget( syLabel, 2, 2 );
-    m_shearY = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
-    mainLayout->addWidget( m_shearY, 2, 3 );
-    m_shearY->setToolTip( i18n("Shear actual selection in y-direction") );
-    connect( m_shearY, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
-
-    mainLayout->setRowStretch( 4, 1 );
-    mainLayout->setColumnStretch( 1, 1 );
-    mainLayout->setColumnStretch( 3, 1 );
+    d->syLabel = new QLabel( i18n ( "SY:" ), mainWidget );
+    d->shearY = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
+    d->shearY->setToolTip( i18n("Shear actual selection in y-direction") );
+    connect( d->shearY, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
 
     setWidget( mainWidget );
 
+    d->mainLayout = new QGridLayout( mainWidget );
+
+    layoutVertical();
+
     update();
+
+    connect( this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(dockLocationChanged(Qt::DockWidgetArea)) );
+}
+
+KarbonTransformDocker::~KarbonTransformDocker()
+{
+    delete d;
+}
+
+void KarbonTransformDocker::layoutVertical()
+{
+    clearLayout();
+
+    d->mainLayout->addWidget( d->xLabel, 0, 0 );
+    d->mainLayout->addWidget( d->x, 0, 1 );
+    d->mainLayout->addWidget( d->yLabel, 0, 2 );
+    d->mainLayout->addWidget( d->y, 0, 3 );
+    d->mainLayout->addWidget( d->wLabel, 1, 0 );
+    d->mainLayout->addWidget( d->width, 1, 1 );
+    d->mainLayout->addWidget( d->hLabel, 1, 2 );
+    d->mainLayout->addWidget( d->height, 1, 3 );
+    d->mainLayout->addWidget( d->rLabel, 3, 0 );
+    d->mainLayout->addWidget( d->rotate, 3, 1 );
+    d->mainLayout->addWidget( d->sxLabel, 2, 0 );
+    d->mainLayout->addWidget( d->shearX, 2, 1 );
+    d->mainLayout->addWidget( d->syLabel, 2, 2 );
+    d->mainLayout->addWidget( d->shearY, 2, 3 );
+    d->mainLayout->setRowStretch( 4, 1 );
+    d->mainLayout->setColumnStretch( 1, 1 );
+    d->mainLayout->setColumnStretch( 3, 1 );
+}
+
+void KarbonTransformDocker::layoutHorizontal()
+{
+    clearLayout();
+
+    d->mainLayout->addWidget( d->xLabel, 0, 0 );
+    d->mainLayout->addWidget( d->x, 0, 1 );
+    d->mainLayout->addWidget( d->yLabel, 0, 2 );
+    d->mainLayout->addWidget( d->y, 0, 3 );
+    d->mainLayout->addWidget( d->wLabel, 0, 4 );
+    d->mainLayout->addWidget( d->width, 0, 5 );
+    d->mainLayout->addWidget( d->hLabel, 0, 6 );
+    d->mainLayout->addWidget( d->height, 0, 7 );
+    d->mainLayout->addWidget( d->rLabel, 0, 8 );
+    d->mainLayout->addWidget( d->rotate, 0, 9 );
+    d->mainLayout->addWidget( d->sxLabel, 0, 10 );
+    d->mainLayout->addWidget( d->shearX, 0, 11 );
+    d->mainLayout->addWidget(d->syLabel, 0, 12 );
+    d->mainLayout->addWidget( d->shearY, 0, 13 );
+    d->mainLayout->setRowStretch( 4, 1 );
+    d->mainLayout->setColumnStretch( 1, 0 );
+    d->mainLayout->setColumnStretch( 3, 0 );
+    d->mainLayout->setColumnStretch( 14, 1 );
+}
+
+void KarbonTransformDocker::clearLayout()
+{
+    d->mainLayout->removeWidget( d->xLabel );
+    d->mainLayout->removeWidget( d->x );
+    d->mainLayout->removeWidget( d->yLabel );
+    d->mainLayout->removeWidget( d->y );
+    d->mainLayout->removeWidget( d->wLabel );
+    d->mainLayout->removeWidget( d->width );
+    d->mainLayout->removeWidget( d->hLabel );
+    d->mainLayout->removeWidget( d->height );
+    d->mainLayout->removeWidget( d->rLabel );
+    d->mainLayout->removeWidget( d->rotate );
+    d->mainLayout->removeWidget( d->sxLabel );
+    d->mainLayout->removeWidget(d->syLabel );
+    d->mainLayout->removeWidget( d->shearY );
 }
 
 void KarbonTransformDocker::enableSignals( bool enable )
 {
-    m_x->blockSignals( ! enable );
-    m_y->blockSignals( ! enable );
-    m_width->blockSignals( ! enable );
-    m_height->blockSignals( ! enable );
-    m_shearX->blockSignals( ! enable );
-    m_shearY->blockSignals( ! enable );
-    m_rotate->blockSignals( ! enable );
+    d->x->blockSignals( ! enable );
+    d->y->blockSignals( ! enable );
+    d->width->blockSignals( ! enable );
+    d->height->blockSignals( ! enable );
+    d->shearX->blockSignals( ! enable );
+    d->shearY->blockSignals( ! enable );
+    d->rotate->blockSignals( ! enable );
 }
 
 QRectF KarbonTransformDocker::selectionRect()
@@ -199,24 +278,24 @@ void KarbonTransformDocker::update()
         setEnabled( true );
         QRectF rect = selectionRect();
 
-        m_x->changeValue( rect.x() );
-        m_y->changeValue( rect.y() );
-        m_width->changeValue( rect.width() );
-        m_height->changeValue( rect.height() );
+        d->x->changeValue( rect.x() );
+        d->y->changeValue( rect.y() );
+        d->width->changeValue( rect.width() );
+        d->height->changeValue( rect.height() );
 
-        m_shearX->setValue(0.0);
-        m_shearY->setValue(0.0);
-        m_rotate->setValue(0.0);
+        d->shearX->setValue(0.0);
+        d->shearY->setValue(0.0);
+        d->rotate->setValue(0.0);
     }
     else
     {
-        m_x->changeValue(0.0);
-        m_y->changeValue(0.0);
-        m_width->changeValue(0.0);
-        m_height->changeValue(0.0);
-        m_shearX->setValue(0.0);
-        m_shearY->setValue(0.0);
-        m_rotate->setValue(0.0);
+        d->x->changeValue(0.0);
+        d->y->changeValue(0.0);
+        d->width->changeValue(0.0);
+        d->height->changeValue(0.0);
+        d->shearX->setValue(0.0);
+        d->shearY->setValue(0.0);
+        d->rotate->setValue(0.0);
         setEnabled( false );
     }
 
@@ -225,7 +304,7 @@ void KarbonTransformDocker::update()
 
 void KarbonTransformDocker::translate()
 {
-    QPointF newPos( m_x->value(), m_y->value() );
+    QPointF newPos( d->x->value(), d->y->value() );
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -252,7 +331,7 @@ void KarbonTransformDocker::translate()
 
 void KarbonTransformDocker::scale()
 {
-    QSizeF newSize( m_width->value(), m_height->value() );
+    QSizeF newSize( d->width->value(), d->height->value() );
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -304,18 +383,18 @@ void KarbonTransformDocker::setUnit( KoUnit unit )
 {
     enableSignals( false );
 
-    m_x->setUnit( unit );
-    m_y->setUnit( unit );
-    m_width->setUnit( unit );
-    m_height->setUnit( unit );
+    d->x->setUnit( unit );
+    d->y->setUnit( unit );
+    d->width->setUnit( unit );
+    d->height->setUnit( unit );
 
     enableSignals( true );
 }
 
 void KarbonTransformDocker::shear()
 {
-    double shearX = m_shearX->value();
-    double shearY = m_shearY->value();
+    double shearX = d->shearX->value();
+    double shearY = d->shearY->value();
 
     if( shearX != 0.0 || shearY != 0.0 )
     {
@@ -328,8 +407,8 @@ void KarbonTransformDocker::shear()
         shearMatrix.shear( shearX / rect.height(), shearY / rect.width() );
         shearMatrix.translate( -center.x(), -center.y() );
 
-        m_shearX->setValue( 0.0 );
-        m_shearY->setValue( 0.0 );
+        d->shearX->setValue( 0.0 );
+        d->shearY->setValue( 0.0 );
 
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
         KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -341,7 +420,7 @@ void KarbonTransformDocker::shear()
 
 void KarbonTransformDocker::rotate()
 {
-    double angle = m_rotate->value();
+    double angle = d->rotate->value();
 
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -355,11 +434,21 @@ void KarbonTransformDocker::rotate()
     matrix.rotate( angle );
     matrix.translate( -center.x(), -center.y() );
 
-    m_rotate->setValue( 0.0 );
+    d->rotate->setValue( 0.0 );
 
     QUndoCommand * cmd = new KoShapeTransformCommand( selectedShapes, matrix, 0 );
     cmd->setText( i18n("Rotate") ); 
     canvasController->canvas()->addCommand( cmd );
+}
+
+void KarbonTransformDocker::dockLocationChanged( Qt::DockWidgetArea area )
+{
+    kDebug() << "docking at area" << area;
+
+    if( area == Qt::LeftDockWidgetArea || area == Qt::RightDockWidgetArea )
+        layoutVertical();
+    else
+        layoutHorizontal();
 }
 
 #include "KarbonTransformDocker.moc"
