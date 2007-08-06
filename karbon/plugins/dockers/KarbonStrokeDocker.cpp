@@ -40,8 +40,7 @@
 #include <KoSelection.h>
 #include <KoLineBorder.h>
 #include <KoLineStyleSelector.h>
-#include <KoCanvasController.h>
-// 
+
 #include <kiconloader.h>
 #include <klocale.h>
 
