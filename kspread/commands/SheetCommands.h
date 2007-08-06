@@ -88,8 +88,8 @@ public:
   virtual void undo();
 
 protected:
-    Sheet* sheet;
-    Doc* doc;
+    Sheet*  m_sheet;
+    bool    m_firstrun;
 };
 
 

@@ -190,7 +190,7 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
   d->documentSize = QSizeF( KS_colMax * doc()->defaultColumnFormat()->width(),
                             KS_rowMax * doc()->defaultRowFormat()->height() );
 
-  setHidden( false );
+  d->hide = false;
   d->showGrid=true;
   d->showFormula=false;
   d->showFormulaIndicator=true;

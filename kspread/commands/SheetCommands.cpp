@@ -108,24 +108,33 @@ void ShowSheetCommand::undo()
 
 // ----- AddSheetCommand -----
 
-AddSheetCommand::AddSheetCommand( Sheet* s )
+AddSheetCommand::AddSheetCommand(Sheet* sheet)
+    : QUndoCommand(i18n("Add Sheet"))
+    , m_sheet(sheet)
+    , m_firstrun(true)
 {
-    sheet = s;
-    doc = sheet->doc();
-    doc->map()->addSheet( s );
-    setText(i18n("Add Sheet"));
 }
 
 void AddSheetCommand::redo()
 {
-    sheet->map()->insertSheet( sheet );
-    doc->insertSheet( sheet );
+    if (m_firstrun)
+    {
+        m_sheet->map()->addSheet(m_sheet);
+        m_firstrun = false;
+    }
+    else
+    {
+        m_sheet->map()->insertSheet(m_sheet);
+        m_sheet->doc()->insertSheet(m_sheet);
+    }
 }
 
 void AddSheetCommand::undo()
 {
-    sheet->map()->takeSheet( sheet );
-    doc->takeSheet( sheet );
+    // The sheet becomes a zombie, i.e. it is not deleted,
+    // so that the sheet pointer used in other commands later on stays valid.
+    m_sheet->map()->takeSheet(m_sheet);
+    m_sheet->doc()->takeSheet(m_sheet);
 }
 
 
