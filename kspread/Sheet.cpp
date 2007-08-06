@@ -142,10 +142,6 @@ public:
   // Max range of canvas in x and y direction.
   //  Depends on KS_colMax/KS_rowMax and the width/height of all columns/rows
   QSizeF documentSize;
-
-  QPen emptyPen;
-  QBrush emptyBrush;
-  QColor emptyColor;
 };
 
 int Sheet::s_id = 0;
@@ -181,7 +177,6 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
   d->layoutDirection = Qt::LeftToRight;
 
-  d->emptyPen.setStyle( Qt::NoPen );
   d->name = sheetName;
 
   new SheetAdaptor(this);
@@ -491,21 +486,6 @@ void Sheet::adjustDocumentHeight( double deltaHeight )
 {
     d->documentSize.rheight() += deltaHeight;
     emit documentSizeChanged( d->documentSize );
-}
-
-const QPen& Sheet::emptyPen() const
-{
-  return d->emptyPen;
-}
-
-const QBrush& Sheet::emptyBrush() const
-{
-  return d->emptyBrush;
-}
-
-const QColor& Sheet::emptyColor() const
-{
-  return d->emptyColor;
 }
 
 #if 0 // KSPREAD_KOPART_EMBEDDING

@@ -976,16 +976,6 @@ public:
     void emit_updateRow( RowFormat* rowFormat, int _row, bool repaint = true );
     void emit_updateColumn( ColumnFormat* columnFormat, int _column );
 
-    /**
-     * Needed for Cell::leftBorderPen and friends, since we can not
-     * have a static pen object.
-     *
-     * The returned pen has pen style NoPen set.
-     */
-    const QPen& emptyPen() const ;
-    const QBrush& emptyBrush() const;
-    const QColor& emptyColor() const;
-
     void updateLocale();
 
 
