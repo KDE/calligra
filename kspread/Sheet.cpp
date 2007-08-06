@@ -225,12 +225,12 @@ Sheet::Sheet(const Sheet& other)
         d->name = other.d->name + QString("_%1").arg(i++);
     while (d->workbook->findSheet(d->name));
 
-    setObjectName(d->name.replace(' ', '_').toUtf8());
+    QString objectName = d->name;
+    setObjectName(objectName.replace(' ', '_'));
     new SheetAdaptor(this);
-    kDebug() << d->workbook->doc()->objectName() << d->workbook->objectName() << objectName();
     QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
                                                  '/' + d->workbook->objectName() +
-                                                 '/' + objectName(), this);
+                                                 '/' + this->objectName(), this);
 
     d->id = s_id++;
     s_mapSheets->insert(d->id, this);
