@@ -29,9 +29,9 @@
 #include "Validity.h"
 
 class QLabel;
-class QLineEdit;
+class KLineEdit;
 class QTextEdit;
-class QComboBox;
+class KComboBox;
 class QCheckBox;
 
 namespace KSpread
@@ -57,21 +57,21 @@ protected:
 
     View* m_pView;
     QRect  marker;
-    QLineEdit *val_max;
-    QLineEdit *val_min;
+    KLineEdit *val_max;
+    KLineEdit *val_min;
     QLabel *edit1;
     QLabel *edit2;
     QLabel *chooseLabel;
-    QComboBox *choose;
-    QComboBox *chooseAction;
-    QComboBox *chooseType;
-    QLineEdit * title;
+    KComboBox *choose;
+    KComboBox *chooseAction;
+    KComboBox *chooseType;
+    KLineEdit * title;
     QTextEdit *message;
     QCheckBox *displayMessage;
     QCheckBox *allowEmptyCell;
     QCheckBox *displayHelp;
     QTextEdit *messageHelp;
-    QLineEdit *titleHelp;
+    KLineEdit *titleHelp;
     QTextEdit *validityList;
     QLabel *validityLabelList;
 };

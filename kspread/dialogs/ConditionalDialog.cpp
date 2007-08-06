@@ -64,7 +64,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   QLabel * textLabel1_3 = new QLabel( groupBox1_3 );
   groupBox1_3Layout->addWidget( textLabel1_3, 0, 0 );
 
-  m_condition_3 = new QComboBox( groupBox1_3 );
+  m_condition_3 = new KComboBox( groupBox1_3 );
   groupBox1_3Layout->addWidget( m_condition_3, 0, 1 );
 
   m_firstValue_3 = new KLineEdit( groupBox1_3);
@@ -75,7 +75,7 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   m_secondValue_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_secondValue_3, 0, 3 );
 
-  m_style_3 = new QComboBox( groupBox1_3 );
+  m_style_3 = new KComboBox( groupBox1_3 );
   m_style_3->setEnabled( false );
   groupBox1_3Layout->addWidget( m_style_3, 1, 1 );
 
@@ -100,10 +100,10 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   QLabel * textLabel2_2 = new QLabel( groupBox1_2 );
   groupBox1_2Layout->addWidget( textLabel2_2, 1, 0 );
 
-  m_condition_2 = new QComboBox( groupBox1_2 );
+  m_condition_2 = new KComboBox( groupBox1_2 );
   groupBox1_2Layout->addWidget( m_condition_2, 0, 1 );
 
-  m_style_2 = new QComboBox( groupBox1_2 );
+  m_style_2 = new KComboBox( groupBox1_2 );
   m_style_2->setEnabled( false );
   groupBox1_2Layout->addWidget( m_style_2, 1, 1 );
 
@@ -134,10 +134,10 @@ ConditionalWidget::ConditionalWidget( QWidget* parent, const char* /*name*/, Qt:
   QLabel * textLabel2_1 = new QLabel( groupBox1_1 );
   groupBox1_1Layout->addWidget( textLabel2_1, 1, 0 );
 
-  m_condition_1 = new QComboBox( groupBox1_1 );
+  m_condition_1 = new KComboBox( groupBox1_1 );
   groupBox1_1Layout->addWidget( m_condition_1, 0, 1 );
 
-  m_style_1 = new QComboBox( groupBox1_1 );
+  m_style_1 = new KComboBox( groupBox1_1 );
   m_style_1->setEnabled( false );
   groupBox1_1Layout->addWidget( m_style_1, 1, 1 );
 
@@ -413,8 +413,8 @@ void ConditionalDialog::init()
 void ConditionalDialog::init( Conditional const & tmp, int numCondition )
 {
   kDebug() <<"Adding" << numCondition;
-  QComboBox * cb  = 0;
-  QComboBox * sb  = 0;
+  KComboBox * cb  = 0;
+  KComboBox * sb  = 0;
   KLineEdit * kl1 = 0;
   KLineEdit * kl2 = 0;
   QString value;
@@ -515,7 +515,7 @@ void ConditionalDialog::init( Conditional const & tmp, int numCondition )
   }
 }
 
-Conditional::Type ConditionalDialog::typeOfCondition( QComboBox const * const cb ) const
+Conditional::Type ConditionalDialog::typeOfCondition( KComboBox const * const cb ) const
 {
   Conditional::Type result = Conditional::None;
   switch( cb->currentIndex() )
@@ -591,9 +591,9 @@ bool ConditionalDialog::checkInputData()
   return true;
 }
 
-bool ConditionalDialog::getCondition( Conditional & newCondition, const QComboBox * cb,
+bool ConditionalDialog::getCondition( Conditional & newCondition, const KComboBox * cb,
                                           const KLineEdit * edit1, const KLineEdit * edit2,
-                                          const QComboBox * sb, Style * style )
+                                          const KComboBox * sb, Style * style )
 {
   if ( !cb->isEnabled() )
     return false;

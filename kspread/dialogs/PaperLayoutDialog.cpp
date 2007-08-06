@@ -34,10 +34,8 @@
 #include <QApplication>
 #include <QCheckBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QRadioButton>
 #include <q3buttongroup.h>
-#include <QComboBox>
 #include <QLayout>
 #include <QGroupBox>
 //#include <qhgroupbox.h>
@@ -47,7 +45,9 @@
 #include <QEvent>
 #include <QVBoxLayout>
 
+#include <kcombobox.h>
 #include <kdebug.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
@@ -145,14 +145,14 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     QLabel *pPrintRange = new QLabel ( i18n("Print range:"), rangeGroup );
     grid->addWidget( pPrintRange, 0, 0 );
 
-    ePrintRange = new QLineEdit( rangeGroup );
+    ePrintRange = new KLineEdit( rangeGroup );
     ePrintRange->setText( Region( print->printRange() ).name() );
     grid->addWidget( ePrintRange, 0, 1 );
 
     QLabel *pRepeatCols = new QLabel ( i18n("Repeat columns on each page:"), rangeGroup );
     grid->addWidget( pRepeatCols, 1, 0 );
 
-    eRepeatCols = new QLineEdit( rangeGroup );
+    eRepeatCols = new KLineEdit( rangeGroup );
     if ( print->printRepeatColumns().first != 0 )
         eRepeatCols->setText( Cell::columnName( print->printRepeatColumns().first ) +  ':' +
                               Cell::columnName( print->printRepeatColumns().second ) );
@@ -161,7 +161,7 @@ void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     QLabel *pRepeatRows = new QLabel ( i18n("Repeat rows on each page:"), rangeGroup );
     grid->addWidget( pRepeatRows, 2, 0 );
 
-    eRepeatRows = new QLineEdit( rangeGroup );
+    eRepeatRows = new KLineEdit( rangeGroup );
     if ( print->printRepeatRows().first != 0 )
         eRepeatRows->setText( QString().setNum( print->printRepeatRows().first ) +
                               ':' +
@@ -198,7 +198,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     m_rScalingZoom = new QRadioButton ( i18n("Zoom:"), zoomGroup );
     grid->addWidget( m_rScalingZoom, 0, 0 );
 
-    m_cZoom = new QComboBox( zoomGroup );
+    m_cZoom = new KComboBox( zoomGroup );
     m_cZoom->setEditable(true);
     grid->addWidget( m_cZoom, 0, 0, 1, 5, Qt::AlignLeft );
 
@@ -231,7 +231,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     QLabel *pLimitPagesX = new QLabel ( i18n("X:"), zoomGroup );
     grid->addWidget( pLimitPagesX, 1, 1 );
 
-    m_cLimitPagesX = new QComboBox( zoomGroup );
+    m_cLimitPagesX = new KComboBox( zoomGroup );
     m_cLimitPagesX->setEditable(true);
     grid->addWidget( m_cLimitPagesX, 1, 2 );
 
@@ -255,7 +255,7 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     QLabel *pLimitPagesY = new QLabel ( i18n("Y:"), zoomGroup );
     grid->addWidget( pLimitPagesY, 1, 3 );
 
-    m_cLimitPagesY = new QComboBox( zoomGroup );
+    m_cLimitPagesY = new KComboBox( zoomGroup );
     m_cLimitPagesY->setEditable(true);
     grid->addWidget( m_cLimitPagesY, 1, 4 );
 

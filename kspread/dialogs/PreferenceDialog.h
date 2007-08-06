@@ -29,9 +29,9 @@
 
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 
 #include <kconfig.h>
+#include <klineedit.h>
 #include <kpagedialog.h>
 #include <ksharedconfig.h>
 #include <kvbox.h>
@@ -42,7 +42,7 @@ class KIntNumInput;
 class KDoubleNumInput;
 class KSpellConfig;
 class QCheckBox;
-class QComboBox;
+class KComboBox;
 class QPushButton;
 class KColorButton;
 
@@ -120,9 +120,9 @@ protected:
    */
   KoUnit indentUnit;
   KSharedConfigPtr config;
-  QComboBox *typeCompletion;
-  QComboBox *typeCalc;
-  QComboBox *typeOfMove;
+  KComboBox *typeCompletion;
+  KComboBox *typeCalc;
+  KComboBox *typeOfMove;
   QCheckBox *msgError;
 #if 0
   KIntNumInput* m_undoRedoLimit;
@@ -155,9 +155,9 @@ public:
   void initCombo();
 protected:
   View* m_pView;
-  QComboBox *defaultOrientationPage;
-  QComboBox *defaultSizePage;
-  QComboBox *defaultUnit;
+  KComboBox *defaultOrientationPage;
+  KComboBox *defaultSizePage;
+  KComboBox *defaultUnit;
   //store old config
   int paper;
   int orientation;
@@ -200,7 +200,7 @@ private:
   QCheckBox* m_cbSpeakDisabled;
   QCheckBox* m_cbSpeakAccelerators;
   QLabel* m_lblAcceleratorPrefix;
-  QLineEdit* m_leAcceleratorPrefixWord;
+  KLineEdit* m_leAcceleratorPrefixWord;
   KIntNumInput* m_iniPollingInterval;
 };
 

@@ -23,11 +23,11 @@
 #include <QApplication>
 #include <QGridLayout>
 #include <QLabel>
-#include <QLineEdit>
 #include <QPainter>
 #include <QSpinBox>
 
 #include <kdebug.h>
+#include <klineedit.h>
 #include <klocale.h>
 
 #include <KoCanvasBase.h>
@@ -250,7 +250,7 @@ QWidget* TableTool::createOptionWidget()
     QLabel* label = 0;
     QSpinBox* spinBox = 0;
 
-    QLineEdit* lineEdit = new QLineEdit(optionWidget);
+    KLineEdit* lineEdit = new KLineEdit(optionWidget);
     layout->addWidget(lineEdit, 0, 1);
     connect(lineEdit, SIGNAL(editingFinished()), this, SLOT(applyUserInput()));
     connect(lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(changeUserInput(const QString&)));

@@ -38,12 +38,12 @@
 #include <klocale.h>
 #include <QLabel>
 
+#include <klineedit.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <QLineEdit>
 
 #include <knuminput.h>
 

@@ -27,12 +27,12 @@
 // Local
 #include "AutoFormatDialog.h"
 
-#include <QComboBox>
 #include <QFile>
 #include <QLabel>
 #include <QPixmap>
 #include <QVBoxLayout>
 
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -66,7 +66,7 @@ class AutoFormatDialog::Private
 {
 public:
     View* view;
-    QComboBox* combo;
+    KComboBox* combo;
     QLabel* label;
     QList<Entry> entries;
     QList<Style> styles;
@@ -92,7 +92,7 @@ AutoFormatDialog::AutoFormatDialog(View* view)
     vbox->setSpacing(KDialog::spacingHint());
 
     QLabel *toplabel = new QLabel(i18n("Select the sheet style to apply:"), page);
-    d->combo = new QComboBox(page);
+    d->combo = new KComboBox(page);
     d->label = new QLabel(page);
 
     vbox->addWidget(toplabel);

@@ -29,12 +29,12 @@
 #include "PreferenceDialog.h"
 
 #include <QCheckBox>
-#include <QComboBox>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QScrollBar>
 
+#include <kcombobox.h>
 #include <kconfig.h>
 #include <kicon.h>
 #include <kstatusbar.h>
@@ -432,7 +432,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 
   QLabel *label=new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
 
-  typeCompletion=new QComboBox(tmpQGroupBox);
+  typeCompletion=new KComboBox(tmpQGroupBox);
   label->setBuddy(typeCompletion);
   typeCompletion->setWhatsThis( i18n( "Lets you choose the (auto) text completion mode from a range of options in the drop down selection box." ) );
   QStringList listType;
@@ -447,7 +447,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 
   label=new QLabel(i18n("&Pressing enter moves cell cursor:"), tmpQGroupBox);
-  typeOfMove=new QComboBox( tmpQGroupBox);
+  typeOfMove=new KComboBox( tmpQGroupBox);
   label->setBuddy(typeOfMove);
   listType.clear();
   listType+=i18n("Down");
@@ -461,7 +461,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 
   label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
 
-  typeCalc=new QComboBox( tmpQGroupBox);
+  typeCalc=new KComboBox( tmpQGroupBox);
   label->setBuddy(typeCalc);
   QStringList listTypeCalc;
   listTypeCalc+=i18n("Sum");
@@ -790,7 +790,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
 
   grid1->addWidget(label,0,0);
 
-  defaultSizePage=new QComboBox( tmpQGroupBox);
+  defaultSizePage=new KComboBox( tmpQGroupBox);
   label->setBuddy(defaultSizePage);
   defaultSizePage->insertItems( 0, KoPageFormat::allFormats() );
   defaultSizePage->setCurrentIndex(1);
@@ -800,7 +800,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
   label=new QLabel(i18n("Default page &orientation:"), tmpQGroupBox);
   grid1->addWidget(label,2,0);
 
-  defaultOrientationPage=new QComboBox( tmpQGroupBox);
+  defaultOrientationPage=new KComboBox( tmpQGroupBox);
   label->setBuddy(defaultOrientationPage);
 
   QStringList listType;
@@ -814,7 +814,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
   label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Default page &unit:"));
   grid1->addWidget(label,4,0);
-  defaultUnit=new QComboBox( tmpQGroupBox);
+  defaultUnit=new KComboBox( tmpQGroupBox);
   label->setBuddy(defaultUnit);
 
   defaultUnit->insertItems( 0,KoUnit::listOfUnitName());

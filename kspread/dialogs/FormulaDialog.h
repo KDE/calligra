@@ -35,9 +35,9 @@
 #include <kcompletion.h>
 #include <kdialog.h>
 
-class QComboBox;
+class KComboBox;
 class QLabel;
-class QLineEdit;
+class KLineEdit;
 class Q3ListBox;
 class QPushButton;
 class QTabWidget;
@@ -135,9 +135,9 @@ private:
     QWidget* m_input;
 
     QPushButton *selectFunction;
-    QComboBox *typeFunction;
+    KComboBox *typeFunction;
     Q3ListBox *functions;
-    QLineEdit *result;
+    KLineEdit *result;
 
     KLineEdit *searchFunct;
     KCompletion listFunct;
@@ -147,17 +147,17 @@ private:
     QLabel* label3;
     QLabel* label4;
     QLabel* label5;
-    QLineEdit *firstElement;
-    QLineEdit *secondElement;
-    QLineEdit *thirdElement;
-    QLineEdit *fourElement;
-    QLineEdit *fiveElement;
+    KLineEdit *firstElement;
+    KLineEdit *secondElement;
+    KLineEdit *thirdElement;
+    KLineEdit *fourElement;
+    KLineEdit *fiveElement;
     /**
      * Tells which of the lineedits has the logical focus currently.
      * It may happen that a lineedit does not have qt focus but
      * logical focus but not the other way round.
      */
-    QLineEdit* m_focus;
+    KLineEdit* m_focus;
 
     int m_column;
     int m_row;

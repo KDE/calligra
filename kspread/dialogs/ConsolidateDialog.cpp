@@ -35,18 +35,18 @@
 //Qt Includes
 #include <QCheckBox>
 #include <QCloseEvent>
-#include <QComboBox>
 #include <QGridLayout>
 #include <QLabel>
-#include <QLineEdit>
 #include <QPushButton>
 #include <Q3ListBox>
 
 //KDE Includes
-#include <kpushbutton.h>
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <kdialog.h>
+#include <klineedit.h>
 #include <kmessagebox.h>
+#include <kpushbutton.h>
 
 //KSpread Includes
 #include <Canvas.h>
@@ -84,7 +84,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   grid1->addWidget(tmpQLabel, 0, 0);
   tmpQLabel->setText( i18n("&Function:") );
 
-  m_pFunction = new QComboBox( page );
+  m_pFunction = new KComboBox( page );
   grid1->addWidget(m_pFunction, 0, 1);
   tmpQLabel->setBuddy(m_pFunction);
 
@@ -101,7 +101,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   tmpQLabel->setText( i18n("Re&ference:") );
   grid1->addWidget(tmpQLabel, 1, 0);
 
-  m_pRef = new QLineEdit( page );
+  m_pRef = new KLineEdit( page );
   grid1->addWidget(m_pRef, 1, 1);
   tmpQLabel->setBuddy(m_pRef);
 

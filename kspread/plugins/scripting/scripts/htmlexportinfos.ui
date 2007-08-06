@@ -43,7 +43,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="Title" >
+        <widget class="KLineEdit" name="Title" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -72,7 +72,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="Subject" >
+        <widget class="KLineEdit" name="Subject" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -101,7 +101,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="Author" >
+        <widget class="KLineEdit" name="Author" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -130,7 +130,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="EMail" >
+        <widget class="KLineEdit" name="EMail" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -159,7 +159,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="Keywords" >
+        <widget class="KLineEdit" name="Keywords" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -188,7 +188,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="Filename" >
+        <widget class="KLineEdit" name="Filename" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -217,7 +217,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="Date" >
+        <widget class="KLineEdit" name="Date" >
          <property name="sizePolicy" >
           <sizepolicy>
            <hsizetype>7</hsizetype>
@@ -249,4 +249,13 @@
  </widget>
  <resources/>
  <connections/>
+  <customwidgets>
+    <customwidget>
+      <class>KLineEdit</class>
+      <extends>QLineEdit</extends>
+      <header>klineedit.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
 </ui>

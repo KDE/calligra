@@ -35,9 +35,9 @@
 #include <QLabel>
 
 class QCheckBox;
-class QComboBox;
+class KComboBox;
 class QLabel;
-class QLineEdit;
+class KLineEdit;
 class QRadioButton;
 class QTabWidget;
 class QWidget;
@@ -86,15 +86,15 @@ class SortDialog : public KDialog
 
   QTabWidget   * m_tabWidget;
 
-  QComboBox    * m_sortKey1;
-  QComboBox    * m_sortOrder1;
-  QComboBox    * m_sortKey2;
-  QComboBox    * m_sortOrder2;
-  QComboBox    * m_sortKey3;
-  QComboBox    * m_sortOrder3;
+  KComboBox    * m_sortKey1;
+  KComboBox    * m_sortOrder1;
+  KComboBox    * m_sortKey2;
+  KComboBox    * m_sortOrder2;
+  KComboBox    * m_sortKey3;
+  KComboBox    * m_sortOrder3;
 
   QCheckBox    * m_useCustomLists;
-  QComboBox    * m_customList;
+  KComboBox    * m_customList;
 
   QRadioButton * m_sortColumn;
   QRadioButton * m_sortRow;
@@ -103,8 +103,8 @@ class SortDialog : public KDialog
   QCheckBox    * m_firstRowOrColHeader;
   QCheckBox    * m_respectCase;
 
-  /*QComboBox    * m_outputSheet;
-  QLineEdit    * m_outputCell;*/
+  /*KComboBox    * m_outputSheet;
+  KLineEdit    * m_outputCell;*/
 };
 
 } // namespace KSpread

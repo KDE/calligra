@@ -31,9 +31,9 @@
 #include <QCloseEvent>
 
 class QCheckBox;
-class QComboBox;
+class KComboBox;
 class QRadioButton;
-class QLineEdit;
+class KLineEdit;
 
 namespace KSpread
 {
@@ -82,13 +82,13 @@ private:
   QCheckBox * pPrintObjects;
   QCheckBox * pPrintCharts;
   QCheckBox * pPrintGraphics;
-  QLineEdit * ePrintRange;
-  QLineEdit * eRepeatCols;
-  QLineEdit * eRepeatRows;
-  QLineEdit * m_focus;
-  QComboBox * m_cZoom;
-  QComboBox * m_cLimitPagesX;
-  QComboBox * m_cLimitPagesY;
+  KLineEdit * ePrintRange;
+  KLineEdit * eRepeatCols;
+  KLineEdit * eRepeatRows;
+  KLineEdit * m_focus;
+  KComboBox * m_cZoom;
+  KComboBox * m_cLimitPagesX;
+  KComboBox * m_cLimitPagesY;
   QRadioButton * m_rScalingZoom;
   QRadioButton * m_rScalingLimitPages;
 };

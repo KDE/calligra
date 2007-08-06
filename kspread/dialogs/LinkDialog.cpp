@@ -24,11 +24,11 @@
 
 #include "LinkDialog.h"
 
-#include <QComboBox>
 #include <QFrame>
 #include <QLabel>
 #include <QVBoxLayout>
 
+#include <kcombobox.h>
 #include <kdesktopfile.h>
 #include <kpagedialog.h>
 #include <kicon.h>
@@ -116,7 +116,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     d->fileLink = new KUrlRequester( d->filePage );
     fLayout->addWidget( d->fileLink );
     fLayout->addWidget( new QLabel( i18n("Recent file:" ), d->filePage ) );
-    QComboBox* recentFile = new QComboBox( d->filePage );
+    KComboBox* recentFile = new KComboBox( d->filePage );
     recentFile->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     fLayout->addWidget( recentFile );
     fLayout->addItem( new QSpacerItem( 0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding ) );

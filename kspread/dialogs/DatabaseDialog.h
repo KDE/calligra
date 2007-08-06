@@ -32,10 +32,10 @@
 #include <kassistantdialog.h>
 
 class QCheckBox;
-class QComboBox;
+class KComboBox;
 class QFrame;
 class QLabel;
-class QLineEdit;
+class KLineEdit;
 class Q3ListViewItem;
 class QRadioButton;
 class QTextEdit;
@@ -83,15 +83,15 @@ class DatabaseDialog : public KAssistantDialog
 
   KPageWidgetItem * m_database;
   QLabel       * m_databaseStatus;
-  QLineEdit    * m_username;
-  QLineEdit    * m_port;
-  QLineEdit    * m_databaseName;
-  QComboBox    * m_driver;
-  QLineEdit    * m_password;
-  QLineEdit    * m_host;
+  KLineEdit    * m_username;
+  KLineEdit    * m_port;
+  KLineEdit    * m_databaseName;
+  KComboBox    * m_driver;
+  KLineEdit    * m_password;
+  KLineEdit    * m_host;
   QLabel       * m_Type;
   KPageWidgetItem * m_table;
-  QComboBox    * m_databaseList;
+  KComboBox    * m_databaseList;
   KPushButton  * m_connectButton;
   QLabel       * m_tableStatus;
   QLabel       * m_SelectTableLabel;
@@ -100,27 +100,27 @@ class DatabaseDialog : public KAssistantDialog
   K3ListView    * m_columnView;
   QLabel       * m_columnsStatus;
   KPageWidgetItem * m_options;
-  QComboBox    * m_columns_1;
-  QComboBox    * m_columns_2;
-  QComboBox    * m_columns_3;
-  QComboBox    * m_operator_1;
-  QComboBox    * m_operator_2;
-  QComboBox    * m_operator_3;
-  QLineEdit    * m_operatorValue_1;
-  QLineEdit    * m_operatorValue_2;
-  QLineEdit    * m_operatorValue_3;
+  KComboBox    * m_columns_1;
+  KComboBox    * m_columns_2;
+  KComboBox    * m_columns_3;
+  KComboBox    * m_operator_1;
+  KComboBox    * m_operator_2;
+  KComboBox    * m_operator_3;
+  KLineEdit    * m_operatorValue_1;
+  KLineEdit    * m_operatorValue_2;
+  KLineEdit    * m_operatorValue_3;
   QRadioButton * m_andBox;
   QRadioButton * m_orBox;
-  QComboBox    * m_columnsSort_1;
-  QComboBox    * m_columnsSort_2;
-  QComboBox    * m_sortMode_1;
-  QComboBox    * m_sortMode_2;
+  KComboBox    * m_columnsSort_1;
+  KComboBox    * m_columnsSort_2;
+  KComboBox    * m_sortMode_1;
+  KComboBox    * m_sortMode_2;
   QCheckBox    * m_distinct;
   KPageWidgetItem * m_result;
   QTextEdit    * m_sqlQuery;
   QRadioButton * m_startingRegion;
-  QLineEdit    * m_cell;
-  QLineEdit    * m_region;
+  KLineEdit    * m_cell;
+  KLineEdit    * m_region;
   QRadioButton * m_startingCell;
 
   void switchPage( int id );

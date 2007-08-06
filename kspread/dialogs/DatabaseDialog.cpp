@@ -29,8 +29,10 @@
 #include "Undo.h"
 #include "View.h"
 
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <kdialog.h>
+#include <klineedit.h>
 #include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -38,14 +40,12 @@
 #include <kpushbutton.h>
 
 #include <QCheckBox>
-#include <QComboBox>
 #include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QLayout>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
 #include <qsqldatabase.h>
@@ -96,13 +96,13 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   TextLabel2->setText( i18n( "Host:" ) );
   databaseFrameLayout->addWidget( TextLabel2, 2, 0 );
 
-  m_driver = new QComboBox( databaseFrame );
+  m_driver = new KComboBox( databaseFrame );
   databaseFrameLayout->addWidget( m_driver, 0, 1 );
 
-  m_username = new QLineEdit( databaseFrame );
+  m_username = new KLineEdit( databaseFrame );
   databaseFrameLayout->addWidget( m_username, 4, 1 );
 
-  m_host = new QLineEdit( databaseFrame );
+  m_host = new KLineEdit( databaseFrame );
   m_host->setText("localhost");
   databaseFrameLayout->addWidget( m_host, 2, 1 );
 
@@ -110,11 +110,11 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   TextLabel3->setText( i18n( "Port:\n(if necessary)") );
   databaseFrameLayout->addWidget( TextLabel3, 3, 0 );
 
-  m_password = new QLineEdit( databaseFrame );
-  m_password->setEchoMode( QLineEdit::Password );
+  m_password = new KLineEdit( databaseFrame );
+  m_password->setEchoMode( KLineEdit::Password );
   databaseFrameLayout->addWidget( m_password, 5, 1 );
 
-  m_port = new QLineEdit( databaseFrame );
+  m_port = new KLineEdit( databaseFrame );
   m_port->setValidator( new KIntValidator( m_port ) );
   databaseFrameLayout->addWidget( m_port, 3, 1 );
 
@@ -122,7 +122,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   dbName->setText( i18n( "Database name: ") );
   databaseFrameLayout->addWidget( dbName, 1, 0 );
 
-  m_databaseName = new QLineEdit( databaseFrame );
+  m_databaseName = new KLineEdit( databaseFrame );
   databaseFrameLayout->addWidget( m_databaseName, 1, 1 );
 
   QLabel * TextLabel5 = new QLabel( databaseFrame );
@@ -154,7 +154,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   //  TextLabel12_2->setText( i18n( "Database:" ) );
   //  Layout21->addWidget( TextLabel12_2 );
 
-  //  m_databaseList = new QComboBox( tablesFrame );
+  //  m_databaseList = new KComboBox( tablesFrame );
   //  Layout21->addWidget( m_databaseList );
 
   //  m_connectButton = new KPushButton( tablesFrame, "m_connectButton" );
@@ -221,10 +221,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_orBox->setText( i18n( "Match any of the following (OR)" ) );
   optionsFrameLayout->addWidget( m_orBox, 1, 0, 1, 3 );
 
-  m_columns_1 = new QComboBox( optionsFrame );
+  m_columns_1 = new KComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columns_1, 2, 0 );
 
-  m_operator_1 = new QComboBox( optionsFrame );
+  m_operator_1 = new KComboBox( optionsFrame );
   m_operator_1->insertItem( 0, i18n( "equals" ) );
   m_operator_1->insertItem( 1, i18n( "not equal" ) );
   m_operator_1->insertItem( 2, i18n( "in" ) );
@@ -236,14 +236,14 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operator_1->insertItem( 8, i18n( "less or equal" ) );
   optionsFrameLayout->addWidget( m_operator_1, 2, 1 );
 
-  m_operatorValue_1 = new QLineEdit( optionsFrame );
+  m_operatorValue_1 = new KLineEdit( optionsFrame );
   optionsFrameLayout->addWidget( m_operatorValue_1, 2, 2 );
 
-  m_columns_2 = new QComboBox(optionsFrame);
+  m_columns_2 = new KComboBox(optionsFrame);
   m_columns_2->setEditable(false);
   optionsFrameLayout->addWidget( m_columns_2, 3, 0 );
 
-  m_operator_2 = new QComboBox( optionsFrame );
+  m_operator_2 = new KComboBox( optionsFrame );
   m_operator_2->insertItem( 0, i18n( "equals" ) );
   m_operator_2->insertItem( 1, i18n( "not equal" ) );
   m_operator_2->insertItem( 2, i18n( "in" ) );
@@ -253,13 +253,13 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operator_2->insertItem( 6, i18n( "lesser" ) );
   optionsFrameLayout->addWidget( m_operator_2, 3, 1 );
 
-  m_operatorValue_2 = new QLineEdit( optionsFrame );
+  m_operatorValue_2 = new KLineEdit( optionsFrame );
   optionsFrameLayout->addWidget( m_operatorValue_2, 3, 2 );
 
-  m_columns_3 = new QComboBox( optionsFrame );
+  m_columns_3 = new KComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columns_3, 4, 0 );
 
-  m_operator_3 = new QComboBox( optionsFrame );
+  m_operator_3 = new KComboBox( optionsFrame );
   m_operator_3->insertItem( 0, i18n( "equals" ) );
   m_operator_3->insertItem( 1, i18n( "not equal" ) );
   m_operator_3->insertItem( 2, i18n( "in" ) );
@@ -269,17 +269,17 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_operator_3->insertItem( 6, i18n( "lesser" ) );
   optionsFrameLayout->addWidget( m_operator_3, 4, 1 );
 
-  m_operatorValue_3 = new QLineEdit( optionsFrame );
+  m_operatorValue_3 = new KLineEdit( optionsFrame );
   optionsFrameLayout->addWidget( m_operatorValue_3, 4, 2 );
 
   QLabel * TextLabel19 = new QLabel( optionsFrame );
   TextLabel19->setText( i18n( "Sorted by" ) );
   optionsFrameLayout->addWidget( TextLabel19, 5, 0 );
 
-  m_columnsSort_1 = new QComboBox( optionsFrame );
+  m_columnsSort_1 = new KComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columnsSort_1, 5, 1 );
 
-  m_sortMode_1 = new QComboBox( optionsFrame );
+  m_sortMode_1 = new KComboBox( optionsFrame );
   m_sortMode_1->insertItem( 0, i18n( "Ascending" ) );
   m_sortMode_1->insertItem( 1, i18n( "Descending" ) );
   optionsFrameLayout->addWidget( m_sortMode_1, 5, 2 );
@@ -288,10 +288,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   TextLabel19_2->setText( i18n( "Sorted by" ) );
   optionsFrameLayout->addWidget( TextLabel19_2, 6, 0 );
 
-  m_columnsSort_2 = new QComboBox( optionsFrame );
+  m_columnsSort_2 = new KComboBox( optionsFrame );
   optionsFrameLayout->addWidget( m_columnsSort_2, 6, 1 );
 
-  m_sortMode_2 = new QComboBox( optionsFrame );
+  m_sortMode_2 = new KComboBox( optionsFrame );
   m_sortMode_2->insertItem( 0, i18n( "Ascending" ) );
   m_sortMode_2->insertItem( 1, i18n( "Descending" ) );
   optionsFrameLayout->addWidget( m_sortMode_2, 6, 2 );
@@ -331,10 +331,10 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   m_startingRegion->setText( i18n( "Insert in region" ) );
   Frame12Layout->addWidget( m_startingRegion, 0, 0 );
 
-  m_cell = new QLineEdit( Frame12 );
+  m_cell = new KLineEdit( Frame12 );
   Frame12Layout->addWidget( m_cell, 1, 1 );
 
-  m_region = new QLineEdit( Frame12 );
+  m_region = new KLineEdit( Frame12 );
   Frame12Layout->addWidget( m_region, 0, 1 );
 
   m_startingCell = new QRadioButton( Frame12 );

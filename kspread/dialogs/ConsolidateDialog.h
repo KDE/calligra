@@ -34,9 +34,9 @@
 #include <QCloseEvent>
 #include <kdialog.h>
 
-class QLineEdit;
+class KLineEdit;
 class QPushButton;
-class QComboBox;
+class KComboBox;
 class QCheckBox;
 class Q3ListBox;
 
@@ -64,9 +64,9 @@ public slots:
 
 protected:
   View* m_pView;
-  QLineEdit* m_pRef;
+  KLineEdit* m_pRef;
   Q3ListBox* m_pRefs;
-  QComboBox* m_pFunction;
+  KComboBox* m_pFunction;
   QPushButton* m_pAdd;
   QPushButton* m_pRemove;
   QCheckBox* m_pRow;

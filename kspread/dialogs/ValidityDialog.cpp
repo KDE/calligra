@@ -26,8 +26,6 @@
 #include "ValidityDialog.h"
 
 #include <QCheckBox>
-#include <QComboBox>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QLabel>
 #include <QTextEdit>
@@ -35,9 +33,11 @@
 #include <QGridLayout>
 #include <QFrame>
 
-#include <knumvalidator.h>
+#include <kcombobox.h>
 #include <kdebug.h>
+#include <klineedit.h>
 #include <kmessagebox.h>
+#include <knumvalidator.h>
 
 #include "Canvas.h"
 #include "Doc.h"
@@ -76,7 +76,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Allow:" ));
   tmpGridLayout->addWidget(tmpQLabel, 0, 0);
 
-  chooseType=new QComboBox(page1);
+  chooseType=new KComboBox(page1);
   tmpGridLayout->addWidget(chooseType, 0, 1);
   QStringList listType;
   listType+=i18n("All");
@@ -97,7 +97,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   chooseLabel->setText(i18n("Data:" ));
   tmpGridLayout->addWidget(chooseLabel, 2, 0);
 
-  choose=new QComboBox(page1);
+  choose=new KComboBox(page1);
   tmpGridLayout->addWidget(choose, 2, 1);
   QStringList list;
   list+=i18n("equal to");
@@ -115,7 +115,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   edit1->setText(i18n("Minimum:" ));
   tmpGridLayout->addWidget(edit1, 3, 0);
 
-  val_min=new QLineEdit(page1);
+  val_min=new KLineEdit(page1);
   tmpGridLayout->addWidget(val_min, 3, 1);
   val_min->setValidator( new KFloatValidator( val_min ) );
 
@@ -123,7 +123,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   edit2->setText(i18n("Maximum:" ));
   tmpGridLayout->addWidget(edit2, 4, 0);
 
-  val_max=new QLineEdit(page1);
+  val_max=new KLineEdit(page1);
   tmpGridLayout->addWidget(val_max, 4, 1);
   val_max->setValidator( new KFloatValidator( val_max ) );
 
@@ -173,7 +173,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Action:" ));
   tmpGridLayout->addWidget(tmpQLabel, 1, 0);
 
-  chooseAction=new QComboBox(page2);
+  chooseAction=new KComboBox(page2);
   tmpGridLayout->addWidget(chooseAction, 1, 1);
   QStringList list2;
   list2+=i18n("Stop");
@@ -186,7 +186,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Title:" ));
   tmpGridLayout->addWidget(tmpQLabel, 2, 0);
 
-  title=new QLineEdit(  page2);
+  title=new KLineEdit(  page2);
   tmpGridLayout->addWidget(title, 2, 1);
 
   tmpQLabel = new QLabel(page2);
@@ -211,7 +211,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Title:" ));
   tmpGridLayout->addWidget(tmpQLabel, 1, 0);
 
-  titleHelp=new QLineEdit(  page3);
+  titleHelp=new KLineEdit(  page3);
   tmpGridLayout->addWidget(titleHelp, 1, 1);
 
   tmpQLabel = new QLabel(page3);

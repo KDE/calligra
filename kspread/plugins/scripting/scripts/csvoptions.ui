@@ -25,7 +25,7 @@
         </widget>
        </item>
        <item row="0" column="1" >
-        <widget class="QComboBox" name="DelimiterComboBox" >
+        <widget class="KComboBox" name="DelimiterComboBox" >
          <property name="editable" >
           <bool>true</bool>
          </property>
@@ -59,7 +59,7 @@
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="QComboBox" name="LineTerminatorComboBox" >
+        <widget class="KComboBox" name="LineTerminatorComboBox" >
          <property name="editable" >
           <bool>true</bool>
          </property>
@@ -98,7 +98,7 @@
         </widget>
        </item>
        <item row="2" column="1" >
-        <widget class="QComboBox" name="EscapeCharComboBox" >
+        <widget class="KComboBox" name="EscapeCharComboBox" >
          <property name="editable" >
           <bool>true</bool>
          </property>
@@ -132,7 +132,7 @@
         </widget>
        </item>
        <item row="4" column="1" >
-        <widget class="QComboBox" name="QuoteCharComboBox" >
+        <widget class="KComboBox" name="QuoteCharComboBox" >
          <property name="editable" >
           <bool>true</bool>
          </property>
@@ -196,4 +196,13 @@
  </widget>
  <resources/>
  <connections/>
+  <customwidgets>
+    <customwidget>
+      <class>KComboBox</class>
+      <extends>QComboBox</extends>
+      <header>kcombobox.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
 </ui>

@@ -63,7 +63,7 @@ class QFrame;
 class Q3ListBox;
 class QCheckBox;
 class KColorButton;
-class QComboBox;
+class KComboBox;
 class KComboBox;
 class KoUnitDoubleSpinBox;
 
@@ -223,11 +223,11 @@ public slots:
     void formatChanged(int);
     void currencyChanged(const QString &);
 protected:
-    QLineEdit* postfix;
+    KLineEdit* postfix;
     KIntNumInput* precision;
-    QLineEdit* prefix;
-    QComboBox *format;
-    QComboBox *currency;
+    KLineEdit* prefix;
+    KComboBox *format;
+    KComboBox *currency;
     QLabel    *currencyLabel;
     QRadioButton *generic;
     QRadioButton *number;
@@ -240,7 +240,7 @@ protected:
     QRadioButton *textFormat;
     QRadioButton *customFormat;
     Q3ListBox *listFormat;
-    QLineEdit* customFormatEdit;
+    KLineEdit* customFormatEdit;
     QLabel *exampleLabel;
     CellFormatDialog *dlg;
     Format::Type cellFormatType, newFormatType;
@@ -355,8 +355,8 @@ protected:
 
   /* the pattern box that is the 'preview' of what is selected above. */
   PatternSelect* preview;
-  QComboBox* size;
-  QComboBox* style;
+  KComboBox* size;
+  KComboBox* style;
   KColorButton* color;
   QCheckBox* customize;
   QColor currentColor;

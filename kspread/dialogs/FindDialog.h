@@ -27,7 +27,7 @@
 
 class QCheckBox;
 class QPushButton;
-class QComboBox;
+class KComboBox;
 
 namespace KSpread
 {
@@ -55,8 +55,8 @@ private:
     QPushButton *m_moreOptions;
     QCheckBox *m_searchInAllSheet;
     QWidget *m_findExtension;
-    QComboBox *m_searchIn;
-    QComboBox *m_searchDirection;
+    KComboBox *m_searchIn;
+    KComboBox *m_searchDirection;
 };
 
 class FindDlg : public KFindDialog

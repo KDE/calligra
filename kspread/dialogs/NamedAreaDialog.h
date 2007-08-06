@@ -29,9 +29,9 @@
 
 #include <kdialog.h>
 
-class QComboBox;
+class KComboBox;
 class QLabel;
-class QLineEdit;
+class KLineEdit;
 
 class KListWidget;
 
@@ -80,9 +80,9 @@ public Q_SLOTS:
 
 private:
     View*       m_pView;
-    QLineEdit*  m_areaNameEdit;
-    QComboBox*  m_sheets;
-    QLineEdit*  m_cellRange;
+    KLineEdit*  m_areaNameEdit;
+    KComboBox*  m_sheets;
+    KLineEdit*  m_cellRange;
     QString     m_initialAreaName;
 };
 

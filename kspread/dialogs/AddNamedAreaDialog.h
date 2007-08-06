@@ -26,7 +26,7 @@
 
 #include <kdialog.h>
 
-class QLineEdit;
+class KLineEdit;
 
 namespace KSpread
 {
@@ -45,7 +45,7 @@ public slots:
 
 protected:
     View*       m_pView;
-    QLineEdit*  m_areaName;
+    KLineEdit*  m_areaName;
 };
 
 } // namespace KSpread

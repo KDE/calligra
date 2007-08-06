@@ -127,7 +127,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </property>
      <layout class="QGridLayout" >
       <item row="1" column="3" >
-       <widget class="QComboBox" name="comboBox_2" >
+       <widget class="KComboBox" name="comboBox_2" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>3</hsizetype>
@@ -139,7 +139,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
        </widget>
       </item>
       <item row="0" column="3" >
-       <widget class="QComboBox" name="comboBox" >
+       <widget class="KComboBox" name="comboBox" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>3</hsizetype>
@@ -172,7 +172,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
        </widget>
       </item>
       <item row="2" column="1" >
-       <widget class="QLineEdit" name="lineEdit_2" >
+       <widget class="KLineEdit" name="lineEdit_2" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>3</hsizetype>
@@ -184,7 +184,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
        </widget>
       </item>
       <item row="0" column="1" >
-       <widget class="QLineEdit" name="lineEdit" >
+       <widget class="KLineEdit" name="lineEdit" >
         <property name="sizePolicy" >
          <sizepolicy>
           <hsizetype>3</hsizetype>
@@ -233,4 +233,20 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
  </includes>
  <resources/>
  <connections/>
+  <customwidgets>
+    <customwidget>
+      <class>KComboBox</class>
+      <extends>QComboBox</extends>
+      <header>kcombobox.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+    <customwidget>
+      <class>KLineEdit</class>
+      <extends>QLineEdit</extends>
+      <header>klineedit.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
 </ui>

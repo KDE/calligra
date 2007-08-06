@@ -24,11 +24,11 @@
 
 // Qt
 #include <QCheckBox>
-#include <QComboBox>
 #include <q3listview.h>
 #include <QVector>
 
 // KDE
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>

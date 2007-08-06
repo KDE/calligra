@@ -24,7 +24,6 @@
 
 #include <QLabel>
 #include <QLayout>
-#include <QLineEdit>
 #include <q3listbox.h>
 #include <q3multilineedit.h>
 #include <QPushButton>
@@ -34,6 +33,7 @@
 
 #include <kconfig.h>
 #include <kdebug.h>
+#include <klineedit.h>
 #include <kmessagebox.h>
 #include <kcomponentdata.h>
 

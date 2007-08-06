@@ -48,7 +48,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
             </attribute>
             <layout class="QGridLayout" >
               <item row="3" column="0" >
-                <widget class="QComboBox" name="m_functionBox" />
+                <widget class="KComboBox" name="m_functionBox" />
               </item>
               <item row="4" column="0" >
                 <widget class="QLabel" name="m_addSubtotalToLabel" >
@@ -65,7 +65,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                 </widget>
               </item>
               <item row="1" column="0" >
-                <widget class="QComboBox" name="m_columnBox" />
+                <widget class="KComboBox" name="m_columnBox" />
               </item>
               <item row="0" column="0" >
                 <widget class="QLabel" name="m_eachChangeLabel" >
@@ -173,4 +173,13 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
   <includes>
     <include location="global">kdialog.h</include>
   </includes>
+  <customwidgets>
+    <customwidget>
+      <class>KComboBox</class>
+      <extends>QComboBox</extends>
+      <header>kcombobox.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
 </ui>

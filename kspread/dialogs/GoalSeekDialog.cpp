@@ -38,6 +38,7 @@
 #include "commands/DataManipulators.h"
 
 #include <kdebug.h>
+#include <klineedit.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <KStandardGuiItem>
@@ -48,7 +49,6 @@
 #include <QLabel>
 #include <QLayout>
 #include <QApplication>
-#include <QLineEdit>
 #include <QToolTip>
 #include <QVariant>
 #include <QVBoxLayout>

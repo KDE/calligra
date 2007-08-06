@@ -993,7 +993,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
 
     grid->addWidget(box2,9,1,2,1);
 
-    customFormatEdit = new QLineEdit( grp );
+    customFormatEdit = new KLineEdit( grp );
     grid->addWidget( customFormatEdit, 0, 1 );
     customFormatEdit->setHidden( true );
 
@@ -1010,7 +1010,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
 
-    postfix = new QLineEdit( box );
+    postfix = new KLineEdit( box );
     postfix->setWhatsThis( i18n( "You can add here a Postfix such as a $HK symbol to the end of each cell content in the checked format." ) );
     grid->addWidget(postfix,2,1);
     precision = new KIntNumInput( dlg->precision, box, 10 );
@@ -1019,11 +1019,11 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     precision->setWhatsThis( i18n( "You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. " ) );
     grid->addWidget(precision,1,1);
 
-    prefix = new QLineEdit( box );
+    prefix = new KLineEdit( box );
     prefix->setWhatsThis( i18n( "You can add here a Prefix such as a $ symbol at the start of each cell content in the checked format." ) );
     grid->addWidget(prefix,0,1);
 
-    format = new QComboBox( box );
+    format = new KComboBox( box );
     format->setWhatsThis( i18n( "You can choose whether positive values are displayed with a leading + sign and whether negative values are shown in red." ) );
     grid->addWidget(format,0,3);
 
@@ -1059,7 +1059,7 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addWidget(currencyLabel, 1, 2);
     currencyLabel->setText( i18n("Currency:") );
 
-    currency = new QComboBox( box );
+    currency = new KComboBox( box );
     grid->addWidget(currency, 1, 3);
 
     // fill the currency combo box
@@ -1827,7 +1827,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
   size_combo->insertItems( 0, lst );
 
 
-  size_combo->setInsertPolicy(QComboBox::NoInsert);
+  size_combo->setInsertPolicy(KComboBox::NoInsert);
 
   connect( size_combo, SIGNAL(activated(const QString &)),
            SLOT(size_chosen_slot(const QString &)) );
@@ -1964,7 +1964,7 @@ void CellFormatPageFont::display_example(const QFont& font)
 void CellFormatPageFont::setCombos()
 {
  QString string;
- QComboBox* combo;
+ KComboBox* combo;
  int number_of_entries;
  bool found;
 
@@ -2617,7 +2617,7 @@ void CellFormatPageBorder::InitializeGrids()
   grid2->addWidget(customize,6,0);
   connect( customize, SIGNAL( clicked()), SLOT(cutomize_chosen_slot()) );
 
-  size=new QComboBox(tmpQGroupBox);
+  size=new KComboBox(tmpQGroupBox);
   size->setEditable(true);
   grid2->addWidget(size,7,1);
   size->setValidator(new KIntValidator( size ));
@@ -2629,7 +2629,7 @@ void CellFormatPageBorder::InitializeGrids()
   }
   size->setCurrentIndex(1);
 
-  style=new QComboBox(tmpQGroupBox);
+  style=new KComboBox(tmpQGroupBox);
   grid2->addWidget(style,7,0);
   style->setIconSize(QSize(100, 14));
   style->insertItem(0,paintFormatPixmap(Qt::DotLine), "");

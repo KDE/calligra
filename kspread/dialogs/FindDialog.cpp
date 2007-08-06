@@ -17,17 +17,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-
 #include "FindDialog.h"
+
 #include <QCheckBox>
-#include <QLayout>
-//Added by qt3to4:
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <klocale.h>
-#include <QPushButton>
 #include <QLabel>
-#include <QComboBox>
+#include <QLayout>
+#include <QPushButton>
+#include <QVBoxLayout>
+
+#include <kcombobox.h>
+#include <klocale.h>
 
 using namespace KSpread;
 
@@ -49,7 +49,7 @@ FindOption::FindOption( QWidget *parent)
     QLabel *label = new QLabel( i18n( "Search in:" ), m_findExtension );
     comboLayout->addWidget( label );
 
-    m_searchIn = new QComboBox( m_findExtension );
+    m_searchIn = new KComboBox( m_findExtension );
     comboLayout->addWidget( m_searchIn );
     layout1->addLayout( comboLayout );
 
@@ -62,7 +62,7 @@ FindOption::FindOption( QWidget *parent)
     label = new QLabel( i18n( "Search direction:" ), m_findExtension );
     comboLayout->addWidget( label );
 
-    m_searchDirection = new QComboBox( m_findExtension );
+    m_searchDirection = new KComboBox( m_findExtension );
     comboLayout->addWidget( m_searchDirection );
     layout1->addLayout( comboLayout );
 

@@ -36,9 +36,9 @@ The default font is set for all cells in the Format -> Style Manager menu with t
       <item row="0" column="1" >
         <layout class="QGridLayout" >
           <item row="0" column="1" >
-            <widget class="QComboBox" name="style_combo" >
+            <widget class="KComboBox" name="style_combo" >
               <property name="insertPolicy" >
-                <enum>QComboBox::NoInsert</enum>
+                <enum>KComboBox::NoInsert</enum>
               </property>
               <property name="whatsThis" stdset="0" >
                 <string>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to Varying (No Change) and leaving it that way will keep all your current style settings for each cell. Changing to Roman for example will change all the selected cells style text to Roman.</string>
@@ -61,9 +61,9 @@ The default font is set for all cells in the Format -> Style Manager menu with t
             </widget>
           </item>
           <item row="2" column="1" >
-            <widget class="QComboBox" name="weight_combo" >
+            <widget class="KComboBox" name="weight_combo" >
               <property name="insertPolicy" >
-                <enum>QComboBox::NoInsert</enum>
+                <enum>KComboBox::NoInsert</enum>
               </property>
               <property name="whatsThis" stdset="0" >
                 <string>Choose the weight for your font for the currently selected cells. When you select several cells with different font weight, the displayed weight is set to Varying (No Change) and leaving it that way will keep all your current weight settings for each cell. Changing to Bold for example will change all the selected cells font weight to Bold.</string>
@@ -144,7 +144,7 @@ The default font is set for all cells in the Format -> Style Manager menu with t
             </widget>
           </item>
           <item row="1" column="1" >
-            <widget class="QComboBox" name="size_combo" >
+            <widget class="KComboBox" name="size_combo" >
               <property name="editable" >
                 <bool>true</bool>
               </property>
@@ -185,7 +185,7 @@ The default font is set for all cells in the Format -> Style Manager menu with t
           </property>
           <layout class="QHBoxLayout" >
             <item>
-              <widget class="QLineEdit" name="example_label" >
+              <widget class="KLineEdit" name="example_label" >
                 <property name="sizePolicy" >
                   <sizepolicy>
                     <hsizetype>7</hsizetype>
@@ -212,4 +212,20 @@ The default font is set for all cells in the Format -> Style Manager menu with t
   <includes>
     <include location="global">kdialog.h</include>
   </includes>
+  <customwidgets>
+    <customwidget>
+      <class>KComboBox</class>
+      <extends>QComboBox</extends>
+      <header>kcombobox.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+    <customwidget>
+      <class>KLineEdit</class>
+      <extends>QLineEdit</extends>
+      <header>klineedit.h</header>
+      <container>0</container>
+      <pixmap></pixmap>
+    </customwidget>
+  </customwidgets>
 </ui>

@@ -46,10 +46,10 @@
 #include "View.h"
 #include "Functions.h"
 
+#include <kcombobox.h>
 #include <kdebug.h>
 
 #include <knumvalidator.h>
-#include <QComboBox>
 #include <QEvent>
 #include <q3listbox.h>
 #include <QLabel>
@@ -102,7 +102,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
 
     grid1->addWidget( searchFunct, 0, 0 );
 
-    typeFunction = new QComboBox(page);
+    typeFunction = new KComboBox(page);
     QStringList cats = FunctionRepository::self()->groups();
     cats.prepend( i18n("All") );
     typeFunction->setMaxVisibleItems(15);
@@ -119,7 +119,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     selectFunction->setIcon( BarIcon( "go-down", K3Icon::SizeSmall ) );
     grid1->addWidget( selectFunction, 3, 0 );
 
-    result = new QLineEdit( page );
+    result = new KLineEdit( page );
     grid1->addWidget( result, 4, 0, 1, -1 );
 
     m_tabwidget = new QTabWidget( page );
@@ -143,31 +143,31 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     label1 = new QLabel(m_input);
     grid2->addWidget( label1 );
 
-    firstElement=new QLineEdit(m_input);
+    firstElement=new KLineEdit(m_input);
     grid2->addWidget( firstElement );
 
     label2=new QLabel(m_input);
     grid2->addWidget( label2 );
 
-    secondElement=new QLineEdit(m_input);
+    secondElement=new KLineEdit(m_input);
     grid2->addWidget( secondElement );
 
     label3=new QLabel(m_input);
     grid2->addWidget( label3 );
 
-    thirdElement=new QLineEdit(m_input);
+    thirdElement=new KLineEdit(m_input);
     grid2->addWidget( thirdElement );
 
     label4=new QLabel(m_input);
     grid2->addWidget( label4 );
 
-    fourElement=new QLineEdit(m_input);
+    fourElement=new KLineEdit(m_input);
     grid2->addWidget( fourElement );
 
     label5=new QLabel(m_input);
     grid2->addWidget( label5 );
 
-    fiveElement=new QLineEdit(m_input);
+    fiveElement=new KLineEdit(m_input);
     grid2->addWidget( fiveElement );
 
     grid2->addStretch( 10 );
@@ -537,7 +537,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
     return text;
 }
 
-static void showEntry( QLineEdit* edit, QLabel* label,
+static void showEntry( KLineEdit* edit, QLabel* label,
     FunctionDescription* desc, int param )
 {
     edit->show();
@@ -586,7 +586,7 @@ void FormulaDialog::slotDoubleClicked( Q3ListBoxItem* item )
     m_tabwidget->setCurrentIndex( 1 );
 
     //
-    // Show as many QLineEdits as needed.
+    // Show as many KLineEdits as needed.
     //
     if( m_desc->params() > 0 )
     {
@@ -666,7 +666,7 @@ void FormulaDialog::slotDoubleClicked( Q3ListBoxItem* item )
       result->setText('=' + result->text());
 
     //
-    // Put focus somewhere is there are no QLineEdits visible
+    // Put focus somewhere is there are no KLineEdits visible
     //
     if( m_desc->params() == 0 )
     {

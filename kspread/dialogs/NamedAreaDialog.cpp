@@ -28,19 +28,19 @@
 #include "NamedAreaDialog.h"
 
 // Qt
-#include <QComboBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLayout>
-#include <QLineEdit>
 #include <QList>
 #include <QPushButton>
 #include <QVariant>
 #include <QVBoxLayout>
 
 // KDE
+#include <kcombobox.h>
 #include <kdebug.h>
+#include <klineedit.h>
 #include <klistwidget.h>
 #include <kmessagebox.h>
 #include <KStandardGuiItem>
@@ -239,21 +239,21 @@ EditNamedAreaDialog::EditNamedAreaDialog(View* parent)
     textLabel4->setText(i18n("Cells:"));
     gridLayout->addWidget(textLabel4, 2, 0);
 
-    m_cellRange = new QLineEdit(page);
+    m_cellRange = new KLineEdit(page);
     gridLayout->addWidget(m_cellRange, 2, 1);
 
     QLabel * textLabel1 = new QLabel(page);
     textLabel1->setText(i18n("Sheet:"));
     gridLayout->addWidget(textLabel1, 1, 0);
 
-    m_sheets = new QComboBox(page);
+    m_sheets = new KComboBox(page);
     gridLayout->addWidget(m_sheets, 1, 1);
 
     QLabel * textLabel2 = new QLabel(page);
     textLabel2->setText(i18n("Area name:"));
     gridLayout->addWidget(textLabel2, 0, 0);
 
-    m_areaNameEdit = new QLineEdit(page);
+    m_areaNameEdit = new KLineEdit(page);
     gridLayout->addWidget(m_areaNameEdit, 0, 1);
 
     const QList<Sheet*> sheetList = m_pView->doc()->map()->sheetList();

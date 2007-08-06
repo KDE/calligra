@@ -79,7 +79,7 @@ Qt::LayoutDirection SheetPropertiesDialog::layoutDirection() const
 
 void SheetPropertiesDialog::setLayoutDirection(Qt::LayoutDirection direction)
 {
-    QComboBox* comboBox = m_widget->directionComboBox;
+    KComboBox* comboBox = m_widget->directionComboBox;
     switch(direction)
     {
     case Qt::LeftToRight:
