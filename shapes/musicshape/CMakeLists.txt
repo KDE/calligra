@@ -24,6 +24,7 @@ set( musiccore_SRCS
     core/StaffSystem.cpp
 
     core/MusicXmlWriter.cpp
+    core/MusicXmlReader.cpp
 )
 
 SET (musicshape_LIB_SRCS

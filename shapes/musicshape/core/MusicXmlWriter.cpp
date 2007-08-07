@@ -120,7 +120,7 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
     w.startElement("music:voice");
     w.addTextNode(QString::number(part->indexOfVoice(voice) + 1));
     w.endElement(); // music:voice
-    
+
     w.startElement("music:type");
     w.addTextNode(Chord::durationToString(chord->duration()));
     w.endElement(); // music:type
@@ -142,7 +142,7 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
         }
         w.endElement(); // music:accidental
     }
-    
+
     if (part->staffCount() > 1) {
         // only write staff info when more than one staff exists
         Staff* s = chord->staff();
@@ -165,6 +165,11 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
 
         if (i == 0) {
             w.startElement("music:attributes");
+            if (part->staffCount() != 1) {
+                w.startElement("music:staves");
+                w.addTextNode(QString::number(part->staffCount()));
+                w.endElement(); // music:staves
+            }
             w.startElement("music:divisions");
             w.addTextNode(QString::number(VoiceElement::QuarterLength));
             w.endElement(); // music:divisions
@@ -204,7 +209,7 @@ void MusicXmlWriter::writeSheet(KoXmlWriter& w, Sheet* sheet, bool writeNamespac
     w.startElement("music:score-partwise");
     if (writeNamespaceDef) {
         w.addAttribute("xmlns:music", "http://www.koffice.org/music");
-    } 
+    }
     w.addAttribute("version", "1.1");
 
     w.startElement("music:part-list");
@@ -229,7 +234,7 @@ void MusicXmlWriter::writeSheet(KoXmlWriter& w, Sheet* sheet, bool writeNamespac
     for (int i = 0; i < sheet->partCount(); i++) {
         writePart(w, i, sheet->part(i));
     }
-        
+
     w.endElement(); // music:score-partwise
 //    w.endDocument();
 }

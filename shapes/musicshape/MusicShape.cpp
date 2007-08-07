@@ -22,6 +22,7 @@
 #include <KoViewConverter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -35,6 +36,7 @@
 #include "core/KeySignature.h"
 #include "core/TimeSignature.h"
 #include "core/MusicXmlWriter.h"
+#include "core/MusicXmlReader.h"
 
 #include "MusicStyle.h"
 #include "Engraver.h"
@@ -164,7 +166,20 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 
 bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
     loadOdfAttributes( element, context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation );
-    return true;
+
+    KoXmlElement score = KoXml::namedItemNS(element, "http://www.koffice.org/music", "score-partwise");
+    if (score.isNull()) {
+        kWarning() << "no music:score-partwise element as first child";
+        return false;
+    }
+    Sheet* sheet = MusicXmlReader::loadSheet(score);
+    if (sheet) {
+        delete m_sheet;
+        m_sheet = sheet;
+        m_engraver->engraveSheet(m_sheet, QSizeF(1e9, 1e9), true);
+        return true;
+    }
+    return false;
 }
 
 Sheet* MusicShape::sheet()
