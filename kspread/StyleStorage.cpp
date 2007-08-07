@@ -560,14 +560,19 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
                     parentStyles.prepend( parentStyle );
                     parentStyle = styleManager()->style( parentStyle->parentName() );
                 }
+                Style tmpStyle;
                 for ( int i = 0; i < parentStyles.count(); ++i )
                 {
 //                     kDebug(36006) <<"StyleStorage: merging" << parentStyles[i]->name() <<" in.";
-                    style.merge( *parentStyles[i] );
+                    tmpStyle = *parentStyles[i];
+                    tmpStyle.merge(style);
+                    style = tmpStyle;
                 }
                 // second, merge the other attributes in
 //                 kDebug(36006) <<"StyleStorage: merging" << namedStyle->name() <<" in.";
-                style.merge( *namedStyle );
+                tmpStyle = *namedStyle;
+                tmpStyle.merge(style);
+                style = tmpStyle;
                 // not the default anymore
                 style.clearAttribute( Style::DefaultStyleKey );
                 // reset the parent name
@@ -577,6 +582,7 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
         }
         else if ( subStyles[i]->type() == Style::Indentation )
         {
+            // special handling for indentation
             const int indentation = static_cast<const SubStyleOne<Style::Indentation, int>*>(subStyles[i].data())->value1;
             if ( indentation == 0 || ( style.indentation() + indentation <= 0 ) )
                 style.clearAttribute( Style::Indentation ); // reset
@@ -585,6 +591,8 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
         }
         else if ( subStyles[i]->type() == Style::Precision )
         {
+            // special handling for precision
+            // The Style default (-1) and the storage default (0) differ.
             const int precision = static_cast<const SubStyleOne<Style::Precision, int>*>(subStyles[i].data())->value1;
             if ( precision == 0 ) // storage default
                 style.clearAttribute( Style::Precision ); // reset

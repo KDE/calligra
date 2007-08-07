@@ -296,7 +296,14 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
 
             if (dataStyle.precision > -1)
             {
-                setPrecision( dataStyle.precision );
+                // special handling for precision
+                // The Style default (-1) and the storage default (0) differ.
+                // The maximum is 10. Replace the Style value 0 with -11, which always results
+                // in a storage value < 0 and is interpreted as Style value 0.
+                int precision = dataStyle.precision;
+                if (type() == AUTO && precision == 0)
+                    precision = -11;
+                setPrecision(precision);
             }
         }
     }
@@ -1605,6 +1612,14 @@ bool Style::loadXML(KoXmlElement& format, Paste::Mode mode)
             kDebug(36003) <<"Value out of range Cell::precision=" << i;
             return false;
         }
+        // special handling for precision
+        // The Style default (-1) and the storage default (0) differ.
+        if (type() == AUTO && i == -1)
+            i = 0;
+        // The maximum is 10. Replace the Style value 0 with -11, which always results
+        // in a storage value < 0 and is interpreted as Style value 0.
+        else if (type() == AUTO && i == 0)
+            i = -11;
         setPrecision( i );
     }
 
