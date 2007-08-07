@@ -190,6 +190,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
 {
     painter.setMatrix( painter.matrix() * m_musicshape->transformationMatrix(&viewConverter) );
     KoShape::applyConversion( painter, viewConverter );
+    painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
 
     Sheet* sheet = m_musicshape->sheet();
     for (int i = 0; i < sheet->partCount(); i++) {
