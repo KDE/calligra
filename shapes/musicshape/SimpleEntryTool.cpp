@@ -21,9 +21,11 @@
 #include <QToolButton>
 #include <QTabWidget>
 #include <QPair>
+#include <QInputDialog>
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kicon.h>
 #include <KFileDialog>
 
 #include <KoCanvasBase.h>
@@ -41,6 +43,8 @@
 
 #include "actions/NoteEntryAction.h"
 #include "actions/AccidentalAction.h"
+
+#include "commands/AddBarsCommand.h"
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -60,6 +64,10 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
 {
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
+
+    QAction* addBars = new QAction(KIcon("edit-add"), i18n("Add measures"), this);
+    addAction("add_bars", addBars);
+    connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 
     AbstractMusicAction* actionBreveNote = new NoteEntryAction(Chord::Breve, false, this);
     addAction("note_breve", actionBreveNote);
@@ -313,6 +321,14 @@ void SimpleEntryTool::voiceChanged(int voice)
 {
     m_voice = voice;
     m_musicshape->repaint();
+}
+
+void SimpleEntryTool::addBars()
+{
+    bool ok;
+    int barCount = QInputDialog::getInteger(NULL, "Add measures", "Add how many measures?", 1, 1, 1000, 1, &ok);
+    if (!ok) return;
+    addCommand(new AddBarsCommand(m_musicshape, barCount));
 }
 
 MusicShape* SimpleEntryTool::shape()

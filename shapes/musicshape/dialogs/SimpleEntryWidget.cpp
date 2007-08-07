@@ -25,6 +25,8 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
 {
     widget.setupUi(this);
 
+    widget.addBarsButton->setDefaultAction(tool->action("add_bars"));
+
     widget.breveNoteButton->setDefaultAction(tool->action("note_breve"));
     widget.wholeNoteButton->setDefaultAction(tool->action("note_whole"));
     widget.halfNoteButton->setDefaultAction(tool->action("note_half"));

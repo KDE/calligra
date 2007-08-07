@@ -54,6 +54,7 @@ SET (musicshape_LIB_SRCS
     commands/CreateChordCommand.cpp
     commands/AddNoteCommand.cpp
     commands/SetAccidentalsCommand.cpp
+    commands/AddBarsCommand.cpp
 
     ${musiccore_SRCS}
 )

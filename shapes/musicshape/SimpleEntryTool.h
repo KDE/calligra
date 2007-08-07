@@ -58,6 +58,7 @@ class SimpleEntryTool : public KoTool
     protected slots:
         void activeActionChanged(QAction* action);
         void voiceChanged(int voice);
+        void addBars();
     private:
         MusicShape *m_musicshape;
         AbstractMusicAction* m_activeAction;
