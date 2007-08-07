@@ -192,9 +192,8 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
             }
         }
         foreach(KWFrame *frame, fs->frames()) {
+            //FIXME: Each text frame will save the entire document of the frameset.
             frame->saveOdf(context);
-            if (tfs)
-                break;
         }
     }
 
