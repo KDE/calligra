@@ -8,7 +8,8 @@ macro_optional_find_package(PopplerQt4)
 
 include_directories(${KRITA_INCLUDES})
 
-add_subdirectory( raw )
+message("Port RAW filter to libkdcraw")
+#add_subdirectory( raw )
 
 if(EXIV2_FOUND)
   add_subdirectory(libkisexiv2)
