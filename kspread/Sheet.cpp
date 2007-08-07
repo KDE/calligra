@@ -2757,14 +2757,17 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     }
 
     // insert the styles into the storage (column defaults)
+    kDebug(36003) <<"Inserting column default cell styles ...";
     loadOasisInsertStyles( autoStyles, columnStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+                           QRect( 1, 1, maxColumn - 1, rowIndex - 1 ) );
     // insert the styles into the storage (row defaults)
+    kDebug(36003) <<"Inserting row default cell styles ...";
     loadOasisInsertStyles( autoStyles, rowStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+                           QRect( 1, 1, maxColumn - 1, rowIndex - 1 ) );
     // insert the styles into the storage
+    kDebug(36003) <<"Inserting cell styles ...";
     loadOasisInsertStyles( autoStyles, cellStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
+                           QRect( 1, 1, maxColumn - 1, rowIndex - 1 ) );
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
@@ -3085,7 +3088,6 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
                                    const QHash<QString, Conditions>& conditionalStyles,
                                    const QRect& usedArea )
 {
-    kDebug(36003) <<"Inserting styles ...";
     const QList<QString> styleNames = styleRegions.keys();
     for ( int i = 0; i < styleNames.count(); ++i )
     {
