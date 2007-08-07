@@ -303,7 +303,28 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         m_style->renderNoteHead( painter, ref.x() + x, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
 
         // render accidentals
-        if (n->accidentals()) {
+        // TODO I think this could really use some improvements
+        // fetch key signature of current bar
+        VoiceBar* vb = chord->voiceBar();
+        Bar* bar = vb->bar();
+        KeySignature* ks = s->lastKeySignatureChange(bar);
+        int curAccidentals = 0;
+        if (ks) curAccidentals = ks->accidentals(n->pitch());
+        // next check the bar for the last previous note in the same voice with the same pitch
+        for (int e = 0; i < vb->elementCount(); e++) {
+            Chord* c = dynamic_cast<Chord*>(vb->element(e));
+            if (!c) continue;
+            if (c == chord) break;
+            for (int nid = 0; nid < c->noteCount(); nid++) {
+                Note* note = c->note(nid);
+                if (note->staff() != s) continue;
+                if (note->pitch() == n->pitch()) {
+                    curAccidentals = note->accidentals();
+                }
+            }
+        }
+
+        if (n->accidentals() != curAccidentals) {
             m_style->renderAccidental( painter, ref.x() + x - 10, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, n->accidentals(), color );
         }
 

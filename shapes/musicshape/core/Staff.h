@@ -102,7 +102,9 @@ public:
     Clef* lastClefChange(int bar, int time = -1, Clef* oldClef = 0);
     Clef* lastClefChange(Bar* bar, int time = -1, Clef* oldClef = 0);
     KeySignature* lastKeySignatureChange(int bar);
-    public slots:
+    KeySignature* lastKeySignatureChange(Bar* bar);
+
+public slots:
     /**
      * Set the spacing between this staff and the staff above it.
      *

@@ -161,6 +161,11 @@ KeySignature* Staff::lastKeySignatureChange(int bar)
     return 0;
 }
 
+KeySignature* Staff::lastKeySignatureChange(Bar* bar)
+{
+    return lastKeySignatureChange(d->part->sheet()->indexOfBar(bar));
+}
+
 } // namespace MusicCore
 
 #include "Staff.moc"
