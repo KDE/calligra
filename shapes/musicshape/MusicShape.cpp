@@ -176,7 +176,7 @@ bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &c
     if (sheet) {
         delete m_sheet;
         m_sheet = sheet;
-        m_engraver->engraveSheet(m_sheet, QSizeF(1e9, 1e9), true);
+        m_engraver->engraveSheet(m_sheet, size(), true);
         return true;
     }
     return false;

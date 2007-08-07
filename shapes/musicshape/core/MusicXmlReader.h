@@ -19,7 +19,7 @@
 #ifndef MUSICXMLREADER_H
 #define MUSICXMLREADER_H
 
-class KoXmlElement;
+#include <KoXmlReaderForward.h>
 
 namespace MusicCore {
     class Sheet;
