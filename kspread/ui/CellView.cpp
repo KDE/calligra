@@ -584,6 +584,9 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
                                     Borders paintBorder, const QRect& cellRegion,
                                     const Cell& cell, SheetView* sheetView )
 {
+    // Should the default borders be shown?
+    if (!cell.sheet()->getShowGrid())
+        return;
     // Does the cell intersect the clipped painting region?
     if (!painter.clipRegion().intersects(QRectF(coordinate, QSizeF(d->width, d->height)).toRect()))
         return;
@@ -617,6 +620,16 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
     paintBorder = CellView::NoBorder;
 
     // borders
+    // Paint border if outermost cell or if the pen is more "worth"
+    // than the border pen of the cell on the other side of the
+    // border or if the cell on the other side is not painted. In
+    // the latter case get the pen that is of more "worth"
+
+    // Each cell is responsible for drawing it's top and left portions
+    // of the "default" grid. --Or not drawing it if it shouldn't be
+    // there.  It's also responsible to paint the right and bottom, if
+    // it is the last cell on a print out.
+
     // NOTE Stefan: the borders of the adjacent cells are taken for the case,
     //              that the cell is located on the edge of the cell range,
     //              that is painted.
@@ -645,10 +658,36 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
     else if (d->style.bottomPenValue() >= sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
         paintBorder |= BottomBorder;
 
-    // Paint border if outermost cell or if the pen is more "worth"
-    // than the border pen of the cell on the other side of the
-    // border or if the cell on the other side is not painted. In
-    // the latter case get the pen that is of more "worth"
+    // Check merging...
+    if (d->merged)
+    {
+        // by default: none ...
+        paintBorder = NoBorder;
+        // left and top, only if it's the left or top of the merged cell
+        if (cell.column() == cell.masterCell().column())
+            paintBorder |= LeftBorder;
+        else if (cell.row() == cell.masterCell().row())
+            paintBorder |= TopBorder;
+        // right and bottom only, if it's the outermost border of the cell region being painted
+        // checked later below...
+    }
+
+    // Check obscuring...
+    if (isObscured())
+    {
+        // by default: none ...
+        paintBorder = NoBorder;
+        // left and top, only if it's the left or top of the obscuring cell
+        const QPoint obscuringCell = this->obscuringCell();
+        if (cell.column() == obscuringCell.x())
+            paintBorder |= LeftBorder;
+        else if (cell.row() == obscuringCell.y())
+            paintBorder |= TopBorder;
+        // right and bottom only, if it's the outermost border of the cell region being painted
+        // checked later below...
+    }
+
+    // Force painting, if it's the outermost border of the cell region being painted...
     if ( col == cellRegion.right() )
         paintBorder |= CellView::RightBorder;
     if ( row == cellRegion.bottom() )
@@ -658,29 +697,15 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
     if ( row == cellRegion.top() )
         paintBorder |= CellView::TopBorder;
 
-    // Each cell is responsible for drawing it's top and left portions
-    // of the "default" grid. --Or not drawing it if it shouldn't be
-    // there.  It's also responsible to paint the right and bottom, if
-    // it is the last cell on a print out.
-
-    const bool isMergedOrObscured = d->merged || isObscured();
-
-    const bool paintLeft    = ( paintBorder & LeftBorder &&
-                                d->style.leftBorderPen().style() == Qt::NoPen &&
-                                cell.sheet()->getShowGrid() &&
-                                !isMergedOrObscured );
-    const bool paintRight   = ( paintBorder & RightBorder &&
-                                d->style.rightBorderPen().style() == Qt::NoPen &&
-                                cell.sheet()->getShowGrid() &&
-                                !isMergedOrObscured );
-    const bool paintTop     = ( paintBorder & TopBorder &&
-                                d->style.topBorderPen().style() == Qt::NoPen &&
-                                cell.sheet()->getShowGrid() &&
-                                !isMergedOrObscured );
-    const bool paintBottom  = ( paintBorder & BottomBorder &&
-                                cell.sheet()->getShowGrid() &&
-                                d->style.bottomBorderPen().style() == Qt::NoPen &&
-                                !isMergedOrObscured );
+    // Check, if a custom border exists and the default border is not necessary...
+    if (d->style.leftBorderPen().style() != Qt::NoPen)
+        paintBorder &= ~LeftBorder;
+    if (d->style.topBorderPen().style() != Qt::NoPen)
+        paintBorder &= ~TopBorder;
+    if (d->style.rightBorderPen().style() != Qt::NoPen)
+        paintBorder &= ~RightBorder;
+    if (d->style.bottomBorderPen().style() != Qt::NoPen)
+        paintBorder &= ~BottomBorder;
 
     // Set the single-pixel width pen for drawing the borders with.
     // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
@@ -689,7 +714,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
     QLineF line;
 
     // The left border.
-    if ( paintLeft )
+    if (paintBorder & LeftBorder)
     {
         int dt = 0;
         int db = 0;
@@ -727,7 +752,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
 
 
     // The top border.
-    if ( paintTop ) {
+    if (paintBorder & TopBorder) {
         int dl = 0;
         int dr = 0;
 
@@ -765,7 +790,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
 
 
     // The right border.
-    if ( paintRight ) {
+    if (paintBorder & RightBorder) {
         int dt = 0;
         int db = 0;
 
@@ -806,7 +831,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
     }
 
     // The bottom border.
-    if ( paintBottom ) {
+    if (paintBorder & BottomBorder) {
         int dl = 0;
         int dr = 0;
 #if 0
