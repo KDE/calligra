@@ -57,6 +57,12 @@ VoiceElement* VoiceBar::element(int index)
     return d->elements[index];
 }
 
+int VoiceBar::indexOfElement(VoiceElement* element)
+{
+    Q_ASSERT( element );
+    return d->elements.indexOf(element);
+}
+
 void VoiceBar::addElement(VoiceElement* element)
 {
     Q_ASSERT( element );

@@ -43,6 +43,7 @@
 
 #include "actions/NoteEntryAction.h"
 #include "actions/AccidentalAction.h"
+#include "actions/EraserAction.h"
 
 #include "commands/AddBarsCommand.h"
 
@@ -160,6 +161,10 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
 
     action = new AccidentalAction(2, this);
     addAction("accidental_doublesharp", action);
+    actionGroup->addAction(action);
+
+    action = new EraserAction(this);
+    addAction("eraser", action);
     actionGroup->addAction(action);
 
     actionQuarterNote->setChecked(true);

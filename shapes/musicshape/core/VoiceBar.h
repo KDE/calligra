@@ -60,6 +60,8 @@ public:
      */
     VoiceElement* element(int index);
 
+    int indexOfElement(VoiceElement* element);
+
     /**
      * Adds an element to this bar. You should not add an element to more than one bar, because when the bar is deleted
      * all elements in the bar are also deleted.

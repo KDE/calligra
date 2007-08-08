@@ -215,10 +215,7 @@
     <layout class="QHBoxLayout" >
      <item>
       <widget class="QFrame" name="frame" >
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>0</number>
-        </property>
+       <layout class="QGridLayout" >
         <property name="leftMargin" >
          <number>0</number>
         </property>
@@ -231,7 +228,13 @@
         <property name="bottomMargin" >
          <number>0</number>
         </property>
-        <item>
+        <property name="horizontalSpacing" >
+         <number>0</number>
+        </property>
+        <property name="verticalSpacing" >
+         <number>0</number>
+        </property>
+        <item row="0" column="0" >
          <widget class="QToolButton" name="doubleFlatButton" >
           <property name="text" >
            <string/>
@@ -241,7 +244,7 @@
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="1" >
          <widget class="QToolButton" name="flatButton" >
           <property name="text" >
            <string/>
@@ -251,7 +254,7 @@
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="2" >
          <widget class="QToolButton" name="naturalButton" >
           <property name="text" >
            <string/>
@@ -261,7 +264,7 @@
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="3" >
          <widget class="QToolButton" name="sharpButton" >
           <property name="text" >
            <string/>
@@ -271,8 +274,28 @@
           </property>
          </widget>
         </item>
-        <item>
+        <item row="0" column="4" >
          <widget class="QToolButton" name="doubleSharpButton" >
+          <property name="text" >
+           <string/>
+          </property>
+          <property name="autoRaise" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QToolButton" name="dotButton" >
+          <property name="text" >
+           <string/>
+          </property>
+          <property name="autoRaise" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2" >
+         <widget class="QToolButton" name="eraserButton" >
           <property name="text" >
            <string/>
           </property>
