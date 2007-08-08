@@ -38,7 +38,7 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kicon.h>
-#include <k3listbox.h>
+#include <klistwidget.h>
 #include <kmessagebox.h>
 #include <ktextedit.h>
 #include <klocale.h>
@@ -56,12 +56,11 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QResizeEvent>
+#include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
 #include <QToolTip>
 #include <QVBoxLayout>
-//Added by qt3to4:
-#include <q3listbox.h>
 
 #include "commands/NamedAreaCommand.h"
 
@@ -316,7 +315,7 @@ class FunctionCompletion::Private
 public:
   CellEditor* editor;
   QFrame *completionPopup;
-  K3ListBox *completionListBox;
+  KListWidget *completionListBox;
   QLabel* hintLabel;
 };
 
@@ -336,10 +335,10 @@ FunctionCompletion::FunctionCompletion( CellEditor* editor )
   layout->setMargin( 0 );
   layout->setSpacing( 0 );
 
-  d->completionListBox = new K3ListBox( d->completionPopup );
+  d->completionListBox = new KListWidget( d->completionPopup );
   d->completionPopup->setFocusProxy( d->completionListBox );
   d->completionListBox->setFrameStyle( QFrame::NoFrame );
-  d->completionListBox->setVariableWidth( true );
+//   d->completionListBox->setVariableWidth( true );
   d->completionListBox->installEventFilter( this );
   connect( d->completionListBox, SIGNAL(selected(const QString&)), this,
     SLOT(itemSelected(const QString&)) );
@@ -437,7 +436,7 @@ void FunctionCompletion::doneCompletion()
   d->hintLabel->hide();
   d->completionPopup->close();
   d->editor->setFocus();
-  emit selectedCompletion( d->completionListBox->currentText() );
+  emit selectedCompletion( d->completionListBox->currentItem()->text() );
 }
 
 void FunctionCompletion::showCompletion( const QStringList &choices )
@@ -445,8 +444,7 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
   if( !choices.count() ) return;
 
   d->completionListBox->clear();
-  for( int i = 0; i < choices.count(); i++ )
-    new Q3ListBoxText( (Q3ListBox*)d->completionListBox, choices[i] );
+  d->completionListBox->addItems(choices);
   d->completionListBox->setCurrentItem( 0 );
 
   // size of the pop-up

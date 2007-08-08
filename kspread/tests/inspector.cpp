@@ -22,9 +22,8 @@
 // Qt
 #include <QFrame>
 #include <QLayout>
-#include <q3listview.h>
 #include <QTextStream>
-//Added by qt3to4:
+#include <QTreeWidget>
 #include <QVBoxLayout>
 
 #include <kpagedialog.h>
@@ -48,10 +47,10 @@ public:
   Style style;
   Sheet* sheet;
 
-  Q3ListView *cellView;
-  Q3ListView *sheetView;
-  Q3ListView *styleView;
-  Q3ListView* depView;
+  QTreeWidget *cellView;
+  QTreeWidget *sheetView;
+  QTreeWidget *styleView;
+  QTreeWidget* depView;
 
   void handleCell();
   void handleSheet();
@@ -94,28 +93,28 @@ void Inspector::Private::handleCell()
 
   cellView->clear();
 
-  new Q3ListViewItem( cellView, "Column", QString::number( cell.column() ) );
-  new Q3ListViewItem( cellView, "Row", QString::number( cell.row() ) );
-  new Q3ListViewItem( cellView, "Name", cell.name() );
-  new Q3ListViewItem( cellView, "Full Name", cell.fullName() );
+  new QTreeWidgetItem( cellView, QStringList() << "Column" << QString::number( cell.column() ) );
+  new QTreeWidgetItem( cellView, QStringList() << "Row" << QString::number( cell.row() ) );
+  new QTreeWidgetItem( cellView, QStringList() << "Name" << cell.name() );
+  new QTreeWidgetItem( cellView, QStringList() << "Full Name" << cell.fullName() );
 
-  new Q3ListViewItem( cellView, "Default", boolAsString( cell.isDefault() ) );
-  new Q3ListViewItem( cellView, "Empty", boolAsString( cell.isEmpty() ) );
-  new Q3ListViewItem( cellView, "Formula", boolAsString( cell.isFormula() ) );
-//   new Q3ListViewItem( cellView, "Format Properties", longAsHexstring( static_cast<long>( cell.style()->propertiesMask() ) ) );
-//   new Q3ListViewItem( cellView, "Style Properties", longAsHexstring( static_cast<long>( cell.style()->style()->features() ) ) );
-  new Q3ListViewItem( cellView, "Text", cell.userInput() );
-  new Q3ListViewItem( cellView, "Text (Displayed)",
+  new QTreeWidgetItem( cellView, QStringList() << "Default" << boolAsString( cell.isDefault() ) );
+  new QTreeWidgetItem( cellView, QStringList() << "Empty" << boolAsString( cell.isEmpty() ) );
+  new QTreeWidgetItem( cellView, QStringList() << "Formula" << boolAsString( cell.isFormula() ) );
+//   new QTreeWidgetItem( cellView, QStringList() << "Format Properties" << longAsHexstring( static_cast<long>( cell.style()->propertiesMask() ) ) );
+//   new QTreeWidgetItem( cellView, QStringList() << "Style Properties" << longAsHexstring( static_cast<long>( cell.style()->style()->features() ) ) );
+  new QTreeWidgetItem( cellView, QStringList() << "Text" << cell.userInput() );
+  new QTreeWidgetItem( cellView, QStringList() << "Text (Displayed)" <<
 		     cell.displayText().replace( QChar('\n'), "\\n" ) );
 
   QTextStream ts( &str, QIODevice::WriteOnly );
   ts << cell.value();
-  new Q3ListViewItem( cellView, "Value", str );
+  new QTreeWidgetItem( cellView, QStringList() << "Value" << str );
 
-  new Q3ListViewItem( cellView, "Link", cell.link() );
+  new QTreeWidgetItem( cellView, QStringList() << "Link" << cell.link() );
 
-  new Q3ListViewItem( cellView, "Width", QString::number( cell.width() ) );
-  new Q3ListViewItem( cellView, "Height", QString::number( cell.height() ) );
+  new QTreeWidgetItem( cellView, QStringList() << "Width" << QString::number( cell.width() ) );
+  new QTreeWidgetItem( cellView, QStringList() << "Height" << QString::number( cell.height() ) );
 }
 
 void Inspector::Private::handleStyle() // direct style access
@@ -123,27 +122,27 @@ void Inspector::Private::handleStyle() // direct style access
   styleView->clear();
   const Style style = cell.style();
 
-  new Q3ListViewItem( styleView, "Style Name", style.parentName() );
+  new QTreeWidgetItem( styleView, QStringList() << "Style Name" << style.parentName() );
 
-  new Q3ListViewItem( styleView, "Angle", QString::number( style.angle() ) );
-  new Q3ListViewItem( styleView, "Multirow", boolAsString( style.wrapText() ) );
-  new Q3ListViewItem( styleView, "Protected", boolAsString( !style.notProtected() ) );
-  new Q3ListViewItem( styleView, "Vertical Text", boolAsString( style.verticalText() ) );
+  new QTreeWidgetItem( styleView, QStringList() << "Angle" << QString::number( style.angle() ) );
+  new QTreeWidgetItem( styleView, QStringList() << "Multirow" << boolAsString( style.wrapText() ) );
+  new QTreeWidgetItem( styleView, QStringList() << "Protected" << boolAsString( !style.notProtected() ) );
+  new QTreeWidgetItem( styleView, QStringList() << "Vertical Text" << boolAsString( style.verticalText() ) );
 
-  new Q3ListViewItem( styleView, "Currency symbol", style.currency().symbol() );
-  new Q3ListViewItem( styleView, "Currency code", style.currency().code() );
+  new QTreeWidgetItem( styleView, QStringList() << "Currency symbol" << style.currency().symbol() );
+  new QTreeWidgetItem( styleView, QStringList() << "Currency code" << style.currency().code() );
 
-  Q3ListViewItem* flags = new Q3ListViewItem( styleView, "Flags" );
-  new Q3ListViewItem( flags, "Border (left)",
+  QTreeWidgetItem* flags = new QTreeWidgetItem( styleView, QStringList("Flags") );
+  new QTreeWidgetItem( flags, QStringList() << "Border (left)" <<
                      boolAsString( style.hasAttribute(Style::LeftPen) ) );
-  new Q3ListViewItem( flags, "Border (right)",
+  new QTreeWidgetItem( flags, QStringList() << "Border (right)" <<
                      boolAsString( style.hasAttribute(Style::RightPen) ) );
-  new Q3ListViewItem( flags, "Border (top)",
+  new QTreeWidgetItem( flags, QStringList() << "Border (top)" <<
                      boolAsString( style.hasAttribute(Style::TopPen) ) );
-  new Q3ListViewItem( flags, "Border (bottom)",
+  new QTreeWidgetItem( flags, QStringList() << "Border (bottom)" <<
                      boolAsString( style.hasAttribute(Style::BottomPen) ) );
 
-  new Q3ListViewItem( styleView, "Border pen width (bottom)",
+  new QTreeWidgetItem( styleView, QStringList() << "Border pen width (bottom)" <<
                      QString::number( style.bottomBorderPen().width() ) );
 }
 
@@ -151,8 +150,8 @@ void Inspector::Private::handleSheet()
 {
   sheetView->clear();
 
-  new Q3ListViewItem( sheetView, "Name", sheet->sheetName() ) ;
-  new Q3ListViewItem( sheetView, "Layout Direction", dirAsString( sheet->layoutDirection() ) );
+  new QTreeWidgetItem( sheetView, QStringList() << "Name" << sheet->sheetName() ) ;
+  new QTreeWidgetItem( sheetView, QStringList() << "Layout Direction" << dirAsString( sheet->layoutDirection() ) );
 }
 
 void Inspector::Private::handleDep()
@@ -172,7 +171,7 @@ void Inspector::Private::handleDep()
 
     k1 = Cell::fullName( (*it)->sheet(), col, row );
 
-    new Q3ListViewItem( depView, k1, k2 );
+    new QTreeWidgetItem( depView, QStringList() << k1 << k2 );
     }
   }
 
@@ -196,38 +195,34 @@ Inspector::Inspector( const Cell& cell )
   QVBoxLayout* cellLayout = new QVBoxLayout( cellPage );
   cellLayout->setMargin(KDialog::marginHint());
   cellLayout->setSpacing(KDialog::spacingHint());
-  d->cellView = new Q3ListView( cellPage );
+  d->cellView = new QTreeWidget( cellPage );
   cellLayout->addWidget( d->cellView );
-  d->cellView->addColumn( "Key", 150 );
-  d->cellView->addColumn( "Value" );
+  d->cellView->setHeaderLabels(QStringList() << "Key" << "Value");
 
   QFrame* stylePage = new QFrame();
   addPage(stylePage, QString("Style") );
   QVBoxLayout* styleLayout = new QVBoxLayout( stylePage );
-  d->styleView = new Q3ListView( stylePage );
+  d->styleView = new QTreeWidget( stylePage );
   styleLayout->addWidget( d->styleView );
-  d->styleView->addColumn( "Key", 150 );
-  d->styleView->addColumn( "Value" );
+  d->styleView->setHeaderLabels(QStringList() << "Key" << "Value");
 
   QFrame* sheetPage = new QFrame();
   addPage(sheetPage,  QString("Sheet") );
   QVBoxLayout* sheetLayout = new QVBoxLayout( sheetPage );
   sheetLayout->setMargin(KDialog::marginHint());
   sheetLayout->setSpacing(KDialog::spacingHint());
-  d->sheetView = new Q3ListView( sheetPage );
+  d->sheetView = new QTreeWidget( sheetPage );
   sheetLayout->addWidget( d->sheetView );
-  d->sheetView->addColumn( "Key", 150 );
-  d->sheetView->addColumn( "Value" );
+  d->sheetView->setHeaderLabels(QStringList() << "Key" << "Value");
 
   QFrame* depPage = new QFrame();
   addPage(depPage,  QString("Dependencies") );
   QVBoxLayout* depLayout = new QVBoxLayout( depPage );
   depLayout->setMargin(KDialog::marginHint());
   depLayout->setSpacing(KDialog::spacingHint());
-  d->depView = new Q3ListView( depPage );
+  d->depView = new QTreeWidget( depPage );
   depLayout->addWidget( d->depView );
-  d->depView->addColumn( "Cell", 150 );
-  d->depView->addColumn( "Content" );
+  d->depView->setHeaderLabels(QStringList() << "Cell" << "Content");
 
   d->handleCell();
   d->handleSheet();
