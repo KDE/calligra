@@ -31,7 +31,7 @@ class MusicShape;
 
 class CreateChordCommand : public QUndoCommand {
 public:
-    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int before, int pitch);
+    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int before, int pitch, int accidentals);
     CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int before);
     virtual void redo();
     virtual void undo();

@@ -26,12 +26,12 @@
 using namespace MusicCore;
 
 
-CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Chord::Duration duration, int before, int pitch)
+CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Chord::Duration duration, int before, int pitch, int accidentals)
     : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
     setText(i18n("Add chord"));
     m_chord = new Chord(staff, duration);
-    m_chord->addNote(staff, pitch);
+    m_chord->addNote(staff, pitch, accidentals);
 }
 
 CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Chord::Duration duration, int before)

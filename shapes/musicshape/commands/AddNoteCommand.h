@@ -31,7 +31,7 @@ class MusicShape;
 
 class AddNoteCommand : public QUndoCommand {
 public:
-    AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int pitch);
+    AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int pitch, int accidentals=0);
     virtual void redo();
     virtual void undo();
 private:

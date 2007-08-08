@@ -29,6 +29,8 @@
 #include "../core/VoiceBar.h"
 #include "../core/Sheet.h"
 #include "../core/Bar.h"
+#include "../core/KeySignature.h"
+#include "../core/Note.h"
 
 #include "../commands/CreateChordCommand.h"
 #include "../commands/AddNoteCommand.h"
@@ -106,21 +108,35 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
         before++;
     }
 
+    int line = staff->line(pos.y());
+    int pitch, accidentals = 0;
+    if (clef && !m_isRest) {
+        pitch = clef->lineToPitch(line);
+        // get correct accidentals for note
+        KeySignature* ks = staff->lastKeySignatureChange(bar);
+        if (ks) accidentals = ks->accidentals(pitch);
+        for (int i = 0; i < before; i++) {
+            Chord* c = dynamic_cast<Chord*>(vb->element(i));
+            if (!c) continue;
+            for (int n = 0; n < c->noteCount(); n++) {
+                if (c->note(n)->pitch() == pitch) {
+                    accidentals = c->note(n)->accidentals();
+                }
+            }
+        }
+    }
+    
     Chord* join = NULL;
     if (before > 0) join = dynamic_cast<Chord*>(vb->element(before-1));
     if (join && join->x() + join->width() >= realX) {
         if (clef && !m_isRest) {
-            int line = staff->line(pos.y());
-            int pitch = clef->lineToPitch(line);
-            m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, m_duration, pitch));
+            m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, m_duration, pitch, accidentals));
         } else {
             // TODO make it a rest
         }
     } else {
         if (clef && !m_isRest) {
-            int line = staff->line(pos.y());
-            int pitch = clef->lineToPitch(line);
-            m_tool->addCommand(new CreateChordCommand(m_tool->shape(), vb, staff, m_duration, before, pitch));
+            m_tool->addCommand(new CreateChordCommand(m_tool->shape(), vb, staff, m_duration, before, pitch, accidentals));
         } else {
             m_tool->addCommand(new CreateChordCommand(m_tool->shape(), vb, staff, m_duration, before));
         }
