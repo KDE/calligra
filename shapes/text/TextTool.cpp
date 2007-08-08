@@ -904,6 +904,7 @@ void TextTool::updateActions() {
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
     m_actionFormatFontSize->setFontSize(qRound(cf.fontPointSize()));
+    m_actionFormatFontFamily->setFont(cf.font().family());
 
     QTextBlockFormat bf = m_caret.blockFormat();
     if(bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
