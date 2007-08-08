@@ -201,5 +201,6 @@ void Engraver::engraveBar(Bar* bar)
 
         x = maxEnd;
     }
+    if (x < 30) x = 30;
     bar->setDesiredSize(x + 15);
 }

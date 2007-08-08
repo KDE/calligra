@@ -89,6 +89,32 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part)
         Bar* bar = part->sheet()->bar(b);
         QPointF p = bar->position();
         painter.drawLine(QPointF(p.x() + bar->size(), p.y() + firstStaff), QPointF(p.x() + bar->size(), p.y() + lastStaff));
+        
+        // check if the bar contains any elements, if not render a rest
+        bool hasContents = false;
+        for (int v = 0; v < part->voiceCount(); v++) {
+            if (part->voice(v)->bar(bar)->elementCount() > 0) {
+                hasContents = true;
+                break;
+            }
+        }
+        if (!hasContents) {
+            for (int s = 0; s < part->staffCount(); s++) {
+                if (bar->staffElementCount(part->staff(s)) > 0) {
+                    hasContents = true;
+                    break;
+                }
+            }
+        }
+        
+        if (!hasContents) {
+            QPointF pos = bar->position();
+            double w = bar->size();
+            for (int sid = 0; sid < part->staffCount(); sid++) {
+                Staff* s = part->staff(sid);
+                renderRest(painter, Chord::Whole, pos + QPointF(w/2, s->top() + s->lineSpacing()), Qt::black);
+            }
+        }
     }
     for (int i = 0; i < part->voiceCount(); i++) {
         renderVoice(painter, part->voice(i));
