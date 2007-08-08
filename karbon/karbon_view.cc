@@ -906,10 +906,9 @@ void KarbonView::booleanOperation( KarbonBooleanCommand::BooleanOperation operat
 
     if( paths.size() == 2 )
     {
-        KarbonBooleanCommand * cmd = new KarbonBooleanCommand( part() );
-        cmd->setFirstOperand( paths[0] );
-        cmd->setSecondOperand( paths[1] );
-        cmd->setOperation( operation );
+        KarbonBooleanCommand * cmd = new KarbonBooleanCommand( part(), paths[0], paths[1], operation );
+        new KoShapeDeleteCommand( part(), paths[0], cmd );
+        new KoShapeDeleteCommand( part(), paths[1], cmd );
         m_canvas->addCommand( cmd );
     }
 }

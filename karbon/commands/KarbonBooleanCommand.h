@@ -31,24 +31,22 @@ class KarbonBooleanCommand : public QUndoCommand
 public:
     enum BooleanOperation
     {
-        Intersection,
-        Subtraction,
-        Union
+        Intersection, ///< the intersection of A and B
+        Subtraction,  ///< the subtraction A - B
+        Union         ///< the union A + B
     };
 
     /**
      * Command for doing a boolean operation on two given path shapes.
      * @param controller the controller to used for removing/inserting.
+     * @param pathA the first operand
+     * @param pathB the second operand
+     * @param operation the booelan operation to execute
      * @param parent the parent command used for macro commands
      */
-    explicit KarbonBooleanCommand( KoShapeControllerBase *controller, QUndoCommand *parent = 0 );
+    explicit KarbonBooleanCommand( KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB, 
+                                   BooleanOperation operation, QUndoCommand *parent = 0 );
     virtual ~KarbonBooleanCommand();
-    /// Sets the first operand of the boolean operation
-    void setFirstOperand( KoPathShape* pathA );
-    /// Sets the second operand of the boolean operation
-    void setSecondOperand( KoPathShape * pathB );
-    /// Sets the type of the booelan operation to execute
-    void setOperation( BooleanOperation operation );
     /// redo the command
     void redo();
     /// revert the actions done in redo

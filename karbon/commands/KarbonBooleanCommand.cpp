@@ -20,6 +20,7 @@
 #include "KarbonBooleanCommand.h"
 #include <KoShapeControllerBase.h>
 #include <KoPathShape.h>
+#include <KoShapeContainer.h>
 
 #include <klocale.h>
 
@@ -30,7 +31,7 @@ class KarbonBooleanCommand::Private
 public:
     Private( KoShapeControllerBase * c )
     : controller( c ), pathA(0), pathB(0), resultingPath(0)
-    , operation( Intersection ), isExecuted(false)
+    , resultParent(0), operation( Intersection ), isExecuted(false)
     {}
 
     ~Private()
@@ -43,13 +44,21 @@ public:
     KoPathShape * pathA;
     KoPathShape * pathB;
     KoPathShape * resultingPath;
+    KoShapeContainer * resultParent;
     BooleanOperation operation;
     bool isExecuted;
 };
 
-KarbonBooleanCommand::KarbonBooleanCommand( KoShapeControllerBase *controller, QUndoCommand *parent )
+KarbonBooleanCommand::KarbonBooleanCommand( KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB, 
+                                            BooleanOperation operation, QUndoCommand *parent )
     : QUndoCommand( parent ), d( new Private( controller ) )
 {
+    Q_ASSERT( controller );
+
+    d->pathA = pathA;
+    d->pathB = pathB;
+    d->operation = operation;
+
     setText( i18n( "Boolean Operation" ) );
 }
 
@@ -58,25 +67,8 @@ KarbonBooleanCommand::~KarbonBooleanCommand()
     delete d;
 }
 
-void KarbonBooleanCommand::setFirstOperand( KoPathShape* pathA )
-{
-    d->pathA = pathA;
-}
-
-void KarbonBooleanCommand::setSecondOperand( KoPathShape * pathB )
-{
-    d->pathB = pathB;
-}
-
-void KarbonBooleanCommand::setOperation( BooleanOperation operation )
-{
-    d->operation = operation;
-}
-
 void KarbonBooleanCommand::redo()
 {
-    QUndoCommand::redo();
-
     if( ! d->resultingPath )
     {
         QPainterPath pa = d->pathA->transformationMatrix(0).map( d->pathA->outline() );
@@ -96,15 +88,18 @@ void KarbonBooleanCommand::redo()
 
         d->resultingPath = shapeFromPath( pr );
         d->resultingPath->setBorder( d->pathA->border() );
+        d->resultingPath->setBackground( d->pathA->background() );
         d->resultingPath->setShapeId( d->pathA->shapeId() );
     }
 
     if( d->controller )
     {
-        d->controller->removeShape( d->pathA );
-        d->controller->removeShape( d->pathB );
+        if( d->resultParent )
+            d->resultParent->addChild( d->resultingPath );
         d->controller->addShape( d->resultingPath );
     }
+
+    QUndoCommand::redo();
 
     d->isExecuted = true;
 }
@@ -115,9 +110,10 @@ void KarbonBooleanCommand::undo()
 
     if( d->controller && d->resultingPath )
     {
+        d->resultParent = d->resultingPath->parent();
+        if( d->resultParent )
+            d->resultParent->removeChild( d->resultingPath );
         d->controller->removeShape( d->resultingPath );
-        d->controller->addShape( d->pathA );
-        d->controller->addShape( d->pathB );
     }
 
     d->isExecuted = false;
