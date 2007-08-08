@@ -375,7 +375,9 @@ private:
      */
     CellView( SheetView* sheetView );
 
-    // not allowed
+    /**
+     * Assingment. Only used by SheetView.
+     */
     CellView& operator=( const CellView& );
 
     class Private;

@@ -2462,3 +2462,9 @@ void CellView::Private::checkForFilterButton(const Cell& cell)
     else // Qt::Vertical
         filterButton = database.range().firstRange().top() == cell.row();
 }
+
+CellView& CellView::operator=(const CellView& other)
+{
+    d = other.d;
+    return *this;
+}
