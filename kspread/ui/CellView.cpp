@@ -2303,7 +2303,7 @@ void CellView::obscureHorizontalCells( SheetView* sheetView, const Cell& masterC
 
             if ( nextCell.isEmpty() )
             {
-                extraWidth += nextCell.width() - 1;
+                extraWidth += nextCell.width();
                 col += 1 + nextCell.mergedXCells();
 
                 // Enough space?
@@ -2376,7 +2376,7 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell& masterCel
 
             if ( nextCell.isEmpty() )
             {
-                extraHeight += nextCell.height() - 1.0;
+                extraHeight += nextCell.height();
                 row += 1 + nextCell.mergedYCells();
 
                 // Enough space ?
