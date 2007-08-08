@@ -21,18 +21,7 @@
 
 #include <vdocument.h>
 #include <KarbonLayerReorderCommand.h>
-
-#include <QtGui/QGridLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QButtonGroup>
-#include <QtCore/QAbstractItemModel>
-#include <QtGui/QPainterPath>
-
-#include <klocale.h>
-#include <kicon.h>
-#include <kiconloader.h>
-#include <kinputdialog.h>
-#include <kmessagebox.h>
+#include <KarbonShapeReparentCommand.h>
 
 #include <KoDocumentSectionView.h>
 #include <KoShapeManager.h>
@@ -48,6 +37,20 @@
 #include <KoShapeReorderCommand.h>
 #include <KoZoomHandler.h>
 #include <KoShapeLayer.h>
+#include <KoShapeGroup.h>
+
+#include <klocale.h>
+#include <kicon.h>
+#include <kiconloader.h>
+#include <kinputdialog.h>
+#include <kmessagebox.h>
+
+#include <QtGui/QGridLayout>
+#include <QtGui/QPushButton>
+#include <QtGui/QButtonGroup>
+#include <QtCore/QAbstractItemModel>
+#include <QtGui/QPainterPath>
+#include <QtCore/QMimeData>
 
 enum ButtonIds
 {
@@ -124,6 +127,7 @@ KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VD
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
     m_layerView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_layerView->setSelectionBehavior( QAbstractItemView::SelectRows );
+    m_layerView->setDragDropMode( QAbstractItemView::InternalMove );
 
     connect( m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
 }
@@ -342,6 +346,7 @@ KarbonDocumentModel::KarbonDocumentModel( VDocument *document )
 : m_document( document )
 , m_lastContainer( 0 )
 {
+    setSupportedDragActions( Qt::MoveAction );
 }
 
 void KarbonDocumentModel::update()
@@ -494,13 +499,13 @@ QVariant KarbonDocumentModel::data( const QModelIndex &index, int role ) const
 Qt::ItemFlags KarbonDocumentModel::flags(const QModelIndex &index) const
 {
     if( ! index.isValid() )
-        return Qt::ItemIsEnabled;
+        return Qt::ItemIsEnabled | Qt::ItemIsDropEnabled;
 
     Q_ASSERT(index.model() == this);
     Q_ASSERT(index.internalPointer());
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
-    if( dynamic_cast<KoShapeContainer*>( (KoShape*)index.internalPointer() ) )
+    //if( dynamic_cast<KoShapeContainer*>( (KoShape*)index.internalPointer() ) )
         flags |= Qt::ItemIsDropEnabled;
     return flags;
 }
@@ -689,6 +694,188 @@ int KarbonDocumentModel::indexFromChild( KoShapeContainer *parent, KoShape *chil
         qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
     }
     return m_childs.indexOf( child );
+}
+
+Qt::DropActions KarbonDocumentModel::supportedDropActions () const
+{
+    kDebug(38000) <<"KarbonDocumentModel::supportedDropActions";
+    return Qt::MoveAction | Qt::CopyAction;
+}
+
+QStringList KarbonDocumentModel::mimeTypes() const
+{
+    QStringList types;
+    types << QLatin1String("application/x-karbonlayermodeldatalist");
+    return types;
+}
+
+QMimeData * KarbonDocumentModel::mimeData( const QModelIndexList & indexes ) const
+{
+    // check if there is data to encode
+    if( ! indexes.count() )
+        return 0;
+
+    // check if we support a format
+    QStringList types = mimeTypes();
+    if( types.isEmpty() )
+        return 0;
+
+    QMimeData *data = new QMimeData();
+    QString format = types[0];
+    QByteArray encoded;
+    QDataStream stream(&encoded, QIODevice::WriteOnly);
+
+    // encode the data
+    QModelIndexList::ConstIterator it = indexes.begin();
+    for( ; it != indexes.end(); ++it)
+        stream << qVariantFromValue( qulonglong( it->internalPointer() ) );
+
+    data->setData(format, encoded);
+    return data;
+}
+
+bool KarbonDocumentModel::dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent )
+{
+    // check if the action is supported
+    if( ! data || action != Qt::MoveAction )
+        return false;
+    // check if the format is supported
+    QStringList types = mimeTypes();
+    if( types.isEmpty() )
+        return false;
+    QString format = types[0];
+    if( ! data->hasFormat(format) )
+        return false;
+
+    QByteArray encoded = data->data( format );
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QList<KoShape*> shapes;
+
+    // decode the data
+    while( ! stream.atEnd() )
+    {
+        QVariant v;
+        stream >> v;
+        shapes.append( static_cast<KoShape*>( (void*)v.value<qulonglong>() ) );
+    }
+
+    QList<KoShape*> toplevelShapes;
+    QList<KoShapeLayer*> layers;
+    // remove shapes having its parent in the list
+    // and seperate the layers
+    foreach( KoShape * shape, shapes )
+    {
+        KoShapeContainer * parent = shape->parent();
+        bool hasParentInList = false;
+        while( parent )
+        {
+            if( shapes.contains( parent ) )
+            {
+                hasParentInList = true;
+                break;
+            }
+            parent = parent->parent();
+        }
+        if( hasParentInList )
+            continue;
+
+        KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( shape );
+        if( layer )
+            layers.append( layer );
+        else
+            toplevelShapes.append( shape );
+    }
+
+    if( action == Qt::IgnoreAction )
+        return true;
+
+    if( action != Qt::MoveAction )
+        return false;
+
+    if( ! parent.isValid() )
+    {
+        kDebug(38000) <<"KarbonDocumentModel::dropMimeData parent = root";
+        return false;
+    }
+    else
+    {
+        KoShape *shape = static_cast<KoShape*>( parent.internalPointer() );
+        KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
+        if( container )
+        {
+            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( container );
+            if( group )
+            {
+                kDebug(38000) <<"KarbonDocumentModel::dropMimeData parent = group";
+                return false;
+            }
+            else
+            {
+                kDebug(38000) <<"KarbonDocumentModel::dropMimeData parent = container";
+                if( toplevelShapes.count() )
+                {
+                    QList<KoShapeContainer*> oldParents;
+                    QList<KoShapeContainer*> newParents;
+                    foreach( KoShape * shape, toplevelShapes )
+                    {
+                        oldParents.append( shape->parent() );
+                        newParents.append( container );
+                    }
+
+                    // shapes are dropped on a layer, so add them to layer if they are not yet part of it
+                    foreach( KoShape * shape, toplevelShapes )
+                    {
+                        int index = indexFromChild( shape->parent(), shape );
+                        beginRemoveRows( parentIndexFromShape( shape ), index, index );
+                        beginInsertRows( parent, container->childCount(), container->childCount() );
+                        container->addChild( shape );
+                        endInsertRows();
+                        endRemoveRows();
+                    }
+                    KarbonShapeReparentCommand * cmd = new KarbonShapeReparentCommand( toplevelShapes, oldParents, newParents );
+                    KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+                    canvasController->canvas()->addCommand( cmd );
+                }
+                else if( layers.count() )
+                {
+                    // layers are dropped on a layer, so change layer ordering
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            kDebug(38000) <<"KarbonDocumentModel::dropMimeData parent = shape";
+            return false;
+        }
+    }
+
+    return true;
+}
+
+QModelIndex KarbonDocumentModel::parentIndexFromShape( const KoShape * child )
+{
+    // check if child shape is a layer, and return invalid model index if it is
+    const KoShapeLayer *childlayer = dynamic_cast<const KoShapeLayer*>( child );
+    if( childlayer )
+        return QModelIndex();
+
+    // get the children's parent shape
+    KoShapeContainer *parentShape = child->parent();
+    if( ! parentShape )
+        return QModelIndex();
+
+    // check if the parent is a layer
+    KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
+    if( parentLayer )
+        return createIndex( m_document->layers().count()-1-m_document->layers().indexOf( parentLayer ), 0, parentShape );
+
+    // get the grandparent to determine the row of the parent shape
+    KoShapeContainer *grandParentShape = parentShape->parent();
+    if( ! grandParentShape )
+        return QModelIndex();
+
+    return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
 }
 
 #include "KarbonLayerDocker.moc"

@@ -10,6 +10,7 @@ set(karboncommands_SRCS
     vtransformcmd.cc 
     vinsertcmd.cc
     KarbonBooleanCommand.cpp
+    KarbonShapeReparentCommand.cpp
     )
 
 
