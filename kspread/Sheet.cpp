@@ -2719,7 +2719,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     kDebug(36003)<<" table-column found : index column before"<< indexCol;
                     loadColumnFormat( rowElement, oasisContext.oasisStyles(), indexCol, columnStyleRegions );
                     kDebug(36003)<<" table-column found : index column after"<< indexCol;
-                    maxColumn = qMax( maxColumn, indexCol );
+                    maxColumn = qMax( maxColumn, indexCol - 1 );
                 }
                 else if ( rowElement.localName() == "table-header-rows" )
                 {
@@ -2759,15 +2759,15 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     // insert the styles into the storage (column defaults)
     kDebug(36003) <<"Inserting column default cell styles ...";
     loadOasisInsertStyles( autoStyles, columnStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn - 1, rowIndex - 1 ) );
+                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
     // insert the styles into the storage (row defaults)
     kDebug(36003) <<"Inserting row default cell styles ...";
     loadOasisInsertStyles( autoStyles, rowStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn - 1, rowIndex - 1 ) );
+                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
     // insert the styles into the storage
     kDebug(36003) <<"Inserting cell styles ...";
     loadOasisInsertStyles( autoStyles, cellStyleRegions, conditionalStyles,
-                           QRect( 1, 1, maxColumn - 1, rowIndex - 1 ) );
+                           QRect( 1, 1, maxColumn, rowIndex - 1 ) );
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
     {
