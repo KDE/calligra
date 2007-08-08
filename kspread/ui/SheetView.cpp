@@ -163,7 +163,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
 // kDebug() <<"coordinate:" << coordinate;
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
@@ -178,13 +178,13 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
                 // if the rect of visible cells contains this master cell, it was already painted
                 if (d->visibleRect.contains(cell.cellPosition()))
                 {
-                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
                     continue; // next row
                 }
                 // if the out of bounds master cell was already painted, there's nothing more to do
                 if (processedMergedCells.contains(cell))
                 {
-                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
                     continue; // next row
                 }
                 processedMergedCells.insert(cell);
@@ -198,11 +198,11 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             cellView.paintCellBackground(painter, coordinate);
             // restore coordinate
             coordinate = savedCoordinate;
-            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
         }
         coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
@@ -213,7 +213,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
             if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
@@ -227,13 +227,13 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
                 // if the rect of visible cells contains this master cell, it was already painted
                 if (d->visibleRect.contains(cell.cellPosition()))
                 {
-                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
                     continue; // next row
                 }
                 // if the out of bounds master cell was already painted, there's nothing more to do
                 if (processedMergedCells.contains(cell))
                 {
-                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
                     continue; // next row
                 }
                 processedMergedCells.insert(cell);
@@ -247,11 +247,11 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             cellView.paintCellContents(paintRect, painter, paintDevice, coordinate, cell, this);
             // restore coordinate
             coordinate = savedCoordinate;
-            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
         }
         coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
     }
 
     // 3. Paint the default borders
@@ -261,7 +261,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
             if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
@@ -273,11 +273,11 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
                                           CellView::LeftBorder | CellView::RightBorder |
                                           CellView::TopBorder | CellView::BottomBorder,
                                           d->visibleRect, Cell(d->sheet, col, row), this );
-            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
         }
         coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
     }
 
     // 4. Paint the custom borders, diagonal lines and page borders
@@ -287,7 +287,7 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
             if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
@@ -298,11 +298,11 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             cellView.paintCellBorders( paintRect, painter, coordinate,
                                        d->visibleRect,
                                        Cell( sheet(), col, row ), this );
-            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->height());
         }
         coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
     }
 }
 
