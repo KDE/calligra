@@ -26,16 +26,31 @@
 using namespace MusicCore;
 
 AddNoteCommand::AddNoteCommand(MusicShape* shape, Chord* chord, Staff* staff, Chord::Duration duration, int pitch)
-    : m_shape(shape), m_chord(chord), m_oldDuration(chord->duration()), m_newDuration(duration)
+    : m_shape(shape), m_chord(chord), m_oldDuration(chord->duration()), m_newDuration(duration), m_oldDots(chord->dots()), m_note(0)
 {
-    setText(i18n("Add note"));
-    m_note = new Note(staff, pitch);
+    bool exists = false;
+    for (int i = 0; i < m_chord->noteCount(); i++) {
+        Note* n = m_chord->note(i);
+        if (n->staff() == staff && n->pitch() == pitch) {
+            exists = true;
+            break;
+        }
+    }
+    if (exists) {
+        setText(i18n("Set chord duration"));
+    } else {
+        setText(i18n("Add note"));
+        m_note = new Note(staff, pitch);
+    }
 }
 
 void AddNoteCommand::redo()
 {
     m_chord->setDuration(m_newDuration);
-    m_chord->addNote(m_note);
+    m_chord->setDots(0);
+    if (m_note) {
+        m_chord->addNote(m_note);
+    }
     m_shape->engrave();
     m_shape->repaint();
 
@@ -44,7 +59,10 @@ void AddNoteCommand::redo()
 void AddNoteCommand::undo()
 {
     m_chord->setDuration(m_oldDuration);
-    m_chord->removeNote(m_note, false);
+    m_chord->setDots(m_oldDots);
+    if (m_note) {
+        m_chord->removeNote(m_note, false);
+    }
     m_shape->engrave();
     m_shape->repaint();
 }

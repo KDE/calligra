@@ -38,6 +38,7 @@ private:
     MusicShape* m_shape;
     MusicCore::Chord* m_chord;
     MusicCore::Chord::Duration m_oldDuration, m_newDuration;
+    int m_oldDots;
     MusicCore::Note* m_note;
 };
 
