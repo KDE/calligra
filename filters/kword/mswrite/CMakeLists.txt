@@ -1,7 +1,5 @@
 
-
-
-include_directories(${CMAKE_SOURCE_DIR}/libs/kwmf )
+include_directories( ${KWMF_INCLUDES} )
 
 ########### next target ###############
 
