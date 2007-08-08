@@ -628,9 +628,9 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
         paintBorder |= LeftBorder;
     if ( col == KS_colMax )
         paintBorder |= CellView::RightBorder;
-    else if ( d->style.rightPenValue() < sheetView->cellView( col + 1, row ).style().leftPenValue() )
-        d->style.setRightBorderPen( sheetView->cellView( col + 1, row ).style().leftBorderPen() );
-    else if ( d->style.rightPenValue() > sheetView->cellView( col + 1, row ).style().leftPenValue() )
+    else if (d->style.rightPenValue() < sheetView->cellView(col + cell.mergedXCells(), row).style().leftPenValue())
+        d->style.setRightBorderPen(sheetView->cellView(col + cell.mergedXCells(), row).style().leftBorderPen());
+    else if (d->style.rightPenValue() > sheetView->cellView(col + cell.mergedXCells(), row).style().leftPenValue())
         paintBorder |= CellView::RightBorder;
     if ( row == 1 )
         paintBorder |= TopBorder;
@@ -640,9 +640,9 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
         paintBorder |= TopBorder;
     if ( row == KS_rowMax )
         paintBorder |= BottomBorder;
-    else if ( d->style.bottomPenValue() < sheetView->cellView( col, row + 1 ).style().topPenValue() )
-        d->style.setBottomBorderPen( sheetView->cellView( col, row + 1 ).style().topBorderPen() );
-    else if ( d->style.bottomPenValue() >= sheetView->cellView( col, row + 1 ).style().topPenValue() )
+    else if (d->style.bottomPenValue() < sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
+        d->style.setBottomBorderPen( sheetView->cellView(col, row + cell.mergedYCells()).style().topBorderPen());
+    else if (d->style.bottomPenValue() >= sheetView->cellView(col, row + cell.mergedYCells()).style().topPenValue())
         paintBorder |= BottomBorder;
 
     // Paint border if outermost cell or if the pen is more "worth"
@@ -2389,12 +2389,17 @@ void CellView::drawText( QPainter& painter, const QFont& font,
     Q_UNUSED( cell )
     QTextLayout textLayout( text, font );
     textLayout.beginLayout();
+    const double leading = QFontMetrics(font).leading(); // FIXME I bet, it takes the wrong paint device
+    double height = 0.0;
     forever
     {
         QTextLine line = textLayout.createLine();
         if ( !line.isValid() )
             break;
         line.setLineWidth( d->width );
+        height += leading;
+        line.setPosition(QPoint(0, qRound(height)));
+        height += line.height();
     }
     textLayout.endLayout();
     QPointF loc( location.x(), location.y() - font.pointSizeF() );
