@@ -188,6 +188,7 @@ public:
     Cell masterCell( int column, int row ) const;
     int mergedXCells( int column, int row ) const;
     int mergedYCells( int column, int row ) const;
+    QList<Cell> masterCells(const Region& region) const;
 
     /**
      * \return \c true, if the cell's value is a matrix and obscures other cells

@@ -473,6 +473,23 @@ int CellStorage::mergedYCells( int column, int row ) const
     return pair.first.toRect().height() - 1;
 }
 
+QList<Cell> CellStorage::masterCells(const Region& region) const
+{
+    const QList<QPair<QRectF, bool> > pairs = d->fusionStorage->intersectingPairs(region);
+    if (pairs.isEmpty())
+        return QList<Cell>();
+    QList<Cell> masterCells;
+    for (int i = 0; i < pairs.count(); ++i)
+    {
+        if (pairs[i].first.isNull())
+            continue;
+        if (pairs[i].second == false)
+            continue;
+        masterCells.append(Cell(d->sheet, pairs[i].first.toRect().topLeft()));
+    }
+    return masterCells;
+}
+
 bool CellStorage::locksCells( int column, int row ) const
 {
     const QPair<QRectF,bool> pair = d->matrixStorage->containedPair( QPoint( column, row ) );

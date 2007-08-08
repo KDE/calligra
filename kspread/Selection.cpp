@@ -28,6 +28,7 @@
 #include <KoZoomHandler.h>
 
 #include "Cell.h"
+#include "CellStorage.h"
 #include "Doc.h"
 #include "Editors.h"
 #include "RowColumnFormat.h"
@@ -1016,6 +1017,10 @@ void Selection::emitChanged(const Region& region)
 
     extendedRegion.add(area, element->sheet());
   }
+
+  const QList<Cell> masterCells = sheet->cellStorage()->masterCells(extendedRegion);
+  for (int i = 0; i < masterCells.count(); ++i)
+      extendedRegion.add(masterCells[i].cellPosition(), sheet);
 
   emit changed(extendedRegion);
 }

@@ -2981,7 +2981,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
     painter.setPen( pen );
 
     const KSpread::Selection* selection = this->selection();
-    const QRect currentRange = Region::normalized( QRect( selection->anchor(), selection->marker() ) );
+    const QRect currentRange = selection->extendToMergedAreas(QRect(selection->anchor(), selection->marker()));
     const QRect effMarker = selection->extendToMergedAreas( QRect( selection->marker(), selection->marker() ) );
     const QRectF markerRegion = viewConverter()->viewToDocument( cellCoordinatesToView( effMarker ) );
     Region::ConstIterator end(selection->constEnd());
