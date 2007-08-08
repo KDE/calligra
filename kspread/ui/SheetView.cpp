@@ -156,21 +156,21 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
     // otherwise the cell's painting location will flip back and forth in
     // consecutive calls to paintCell when painting obscured cells.
     const bool rightToLeft = sheet()->layoutDirection() == Qt::RightToLeft;
-    QPointF offset( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    QPointF coordinate(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
     QSet<Cell> processedMergedCells;
     for ( int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col )
     {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
-// kDebug() <<"offset:" << offset;
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
+// kDebug() <<"coordinate:" << coordinate;
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
             if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
                 continue;
-            // save the offset
-            const QPointF savedOffset = offset;
+            // save the coordinate
+            const QPointF savedCoordinate = coordinate;
             Cell cell(d->sheet, col, row);
             if (cell.isPartOfMerged())
             {
@@ -178,48 +178,48 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
                 // if the rect of visible cells contains this master cell, it was already painted
                 if (d->visibleRect.contains(cell.cellPosition()))
                 {
-                    offset.setY(offset.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
                     continue; // next row
                 }
                 // if the out of bounds master cell was already painted, there's nothing more to do
                 if (processedMergedCells.contains(cell))
                 {
-                    offset.setY(offset.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
                     continue; // next row
                 }
                 processedMergedCells.insert(cell);
-                // take the offset of the master cell
+                // take the coordinate of the master cell
                 for (int c = cell.column(); c < col; ++c)
-                    offset.setX(offset.x() - d->sheet->columnFormat(c)->width());
+                    coordinate.setX(coordinate.x() - d->sheet->columnFormat(c)->width());
                 for (int r = cell.row(); r < row; ++r)
-                    offset.setY(offset.y() - d->sheet->rowFormat(r)->height());
+                    coordinate.setY(coordinate.y() - d->sheet->rowFormat(r)->height());
             }
             CellView cellView = this->cellView(cell.column(), cell.row());
-            cellView.paintCellBackground(painter, offset);
-            // restore offset
-            offset = savedOffset;
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
+            cellView.paintCellBackground(painter, coordinate);
+            // restore coordinate
+            coordinate = savedCoordinate;
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
         }
-        offset.setY( topLeft.y() );
+        coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
     processedMergedCells.clear();
-    offset = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    coordinate = QPointF(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
     for ( int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col )
     {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
             if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
                 continue;
-            // save the offset
-            const QPointF savedOffset = offset;
+            // save the coordinate
+            const QPointF savedCoordinate = coordinate;
             Cell cell(d->sheet, col, row);
             if (cell.isPartOfMerged())
             {
@@ -227,41 +227,41 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
                 // if the rect of visible cells contains this master cell, it was already painted
                 if (d->visibleRect.contains(cell.cellPosition()))
                 {
-                    offset.setY(offset.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
                     continue; // next row
                 }
                 // if the out of bounds master cell was already painted, there's nothing more to do
                 if (processedMergedCells.contains(cell))
                 {
-                    offset.setY(offset.y() + d->sheet->rowFormat(row)->visibleHeight());
+                    coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
                     continue; // next row
                 }
                 processedMergedCells.insert(cell);
-                // take the offset of the master cell
+                // take the coordinate of the master cell
                 for (int c = cell.column(); c < col; ++c)
-                    offset.setX(offset.x() - d->sheet->columnFormat(c)->width());
+                    coordinate.setX(coordinate.x() - d->sheet->columnFormat(c)->width());
                 for (int r = cell.row(); r < row; ++r)
-                    offset.setY(offset.y() - d->sheet->rowFormat(r)->height());
+                    coordinate.setY(coordinate.y() - d->sheet->rowFormat(r)->height());
             }
             CellView cellView = this->cellView(cell.column(), cell.row());
-            cellView.paintCellContents(paintRect, painter, paintDevice, offset, cell, this);
-            // restore offset
-            offset = savedOffset;
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
+            cellView.paintCellContents(paintRect, painter, paintDevice, coordinate, cell, this);
+            // restore coordinate
+            coordinate = savedCoordinate;
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
         }
-        offset.setY( topLeft.y() );
+        coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
     }
 
     // 3. Paint the default borders
-    offset = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    coordinate = QPointF(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
     for ( int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col )
     {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
             if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
@@ -269,25 +269,25 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
             CellView cellView = this->cellView( col, row );
-            cellView.paintDefaultBorders( painter, paintRect, offset,
+            cellView.paintDefaultBorders( painter, paintRect, coordinate,
                                           CellView::LeftBorder | CellView::RightBorder |
                                           CellView::TopBorder | CellView::BottomBorder,
                                           d->visibleRect, Cell(d->sheet, col, row), this );
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
         }
-        offset.setY( topLeft.y() );
+        coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
     }
 
     // 4. Paint the custom borders, diagonal lines and page borders
-    offset = QPointF( rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y() );
+    coordinate = QPointF(rightToLeft ? paintRect.width() - topLeft.x() : topLeft.x(), topLeft.y());
     for ( int col = d->visibleRect.left(); col <= d->visibleRect.right(); ++col )
     {
         if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
             continue;
         if ( rightToLeft )
-            offset.setX( offset.x() - d->sheet->columnFormat( col )->visibleWidth() );
+            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->visibleWidth());
         for ( int row = d->visibleRect.top(); row <= d->visibleRect.bottom(); ++row )
         {
             if (d->sheet->rowFormat(row)->isHiddenOrFiltered())
@@ -295,14 +295,14 @@ void SheetView::paintCells( QPaintDevice* paintDevice, QPainter& painter, const 
             // For borders even cells, that are merged in, need to be traversed.
             // Think of a merged cell with a set border and one its neighbours has a thicker border.
             CellView cellView = this->cellView( col, row );
-            cellView.paintCellBorders( paintRect, painter, offset,
+            cellView.paintCellBorders( paintRect, painter, coordinate,
                                        d->visibleRect,
                                        Cell( sheet(), col, row ), this );
-            offset.setY( offset.y() + d->sheet->rowFormat( row )->visibleHeight() );
+            coordinate.setY(coordinate.y() + d->sheet->rowFormat(row)->visibleHeight());
         }
-        offset.setY( topLeft.y() );
+        coordinate.setY(topLeft.y());
         if ( !rightToLeft )
-            offset.setX( offset.x() + d->sheet->columnFormat( col )->visibleWidth() );
+            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->visibleWidth());
     }
 }
 
