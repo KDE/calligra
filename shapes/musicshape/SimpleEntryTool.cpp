@@ -44,6 +44,7 @@
 #include "actions/NoteEntryAction.h"
 #include "actions/AccidentalAction.h"
 #include "actions/EraserAction.h"
+#include "actions/DotsAction.h"
 
 #include "commands/AddBarsCommand.h"
 
@@ -167,6 +168,10 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     addAction("eraser", action);
     actionGroup->addAction(action);
 
+    action = new DotsAction(this);
+    addAction("dots", action);
+    actionGroup->addAction(action);
+    
     actionQuarterNote->setChecked(true);
     m_activeAction = actionQuarterNote;
 }
