@@ -42,8 +42,15 @@ public:
     virtual KoPAMasterPage * newMasterPage();
 
 protected:
-    KoView * createViewInstance( QWidget *parent );
-    const char *odfTagName();
+    /// reimplemented
+    virtual KoView * createViewInstance( QWidget *parent );
+    /// reimplemented
+    virtual const char *odfTagName();
+
+    /// reimplemented
+    virtual void postAddShape(  KoPAPageBase * page, KoShape * shape );
+    /// reimplemented
+    virtual void postRemoveShape(  KoPAPageBase * page, KoShape * shape );
 };
 
 #endif /* KPRDOCUMENT_H */

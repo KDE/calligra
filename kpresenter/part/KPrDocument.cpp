@@ -65,4 +65,13 @@ KoPAMasterPage * KPrDocument::newMasterPage()
     return new KPrMasterPage();
 }
 
+void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
+{
+}
+
+void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
+{
+}
+
+
 #include "KPrDocument.moc"
