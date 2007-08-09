@@ -221,6 +221,9 @@ CellView::CellView( SheetView* sheetView, int col, int row )
         else
             d->style.setHAlign(cell.sheet()->layoutDirection() == Qt::RightToLeft ? Style::Left : Style::Right);
     }
+    // force left alignment, if there's a formula and it should be shown
+    if (cell.isFormula() && sheet->getShowFormula() && !(sheet->isProtected() && d->style.hideFormula()))
+        d->style.setHAlign(Style::Left);
 
     makeLayout( sheetView, cell );
 }
@@ -1144,9 +1147,9 @@ void CellView::paintText( QPainter& painter,
   if ( !tmpMultiRow && !tmpVerticalText && !tmpAngle ) {
     // Case 1: The simple case, one line, no angle.
 
-    const QPointF position( indent + coordinate.x() + d->textX - offsetCellTooShort,
+    const QPointF position( indent + coordinate.x() - offsetCellTooShort,
                             coordinate.y() + d->textY - offsetFont );
-    drawText( painter, effectiveFont( paintDevice ), position, d->displayText, cell );
+    drawText(painter, position, d->displayText.split('\n'), cell);
   }
   else if ( tmpAngle != 0 ) {
     // Case 2: an angle.
@@ -1156,9 +1159,9 @@ void CellView::paintText( QPainter& painter,
     painter.rotate( angle );
     double x;
     if ( angle > 0 )
-      x = indent + coordinate.x() + d->textX;
+      x = indent + coordinate.x();
     else
-      x = indent + coordinate.x() + d->textX
+      x = indent + coordinate.x()
           - ( fontMetrics.descent() + fontMetrics.ascent() ) * ::sin( angle * M_PI / 180 );
     double y;
     if ( angle > 0 )
@@ -1167,69 +1170,27 @@ void CellView::paintText( QPainter& painter,
       y = coordinate.y() + d->textY + d->textHeight;
     const QPointF position( x * ::cos( angle * M_PI / 180 ) + y * ::sin( angle * M_PI / 180 ),
                            -x * ::sin( angle * M_PI / 180 ) + y * ::cos( angle * M_PI / 180 ) );
-    drawText( painter, effectiveFont( paintDevice ), position, d->displayText, cell );
+    drawText(painter, position, d->displayText.split('\n'), cell);
     painter.rotate( -angle );
   }
   else if ( tmpMultiRow && !tmpVerticalText ) {
-    // Case 3: Multiple rows, but horizontal.
-
-    QString text;
-    int i;
-    int pos = 0;
-    double dy = 0.0;
-
-    do {
-      i = d->displayText.indexOf( "\n", pos );
-      if ( i == -1 )
-        text = d->displayText.mid( pos, d->displayText.length() - pos );
-      else {
-        text = d->displayText.mid( pos, i - pos );
-        pos = i + 1;
-      }
-
-      int align = d->style.halign();
-      if ( cell.sheet()->getShowFormula()
-          && !( cell.sheet()->isProtected()
-          && style().hideFormula() ) )
-        align = Style::Left;
-
-      // ### Torben: This looks duplicated for me
-      switch ( align ) {
-        case Style::Left:
-          d->textX = d->style.leftBorderPen().width() + s_borderSpace;
-          break;
-
-        case Style::Right:
-          d->textX = d->width - s_borderSpace - fontMetrics.width( text )
-                   - d->style.rightBorderPen().width();
-          break;
-
-        case Style::Center:
-          d->textX = ( d->width - fontMetrics.width( text ) ) / 2;
-      }
-
-      const QPointF position( indent + coordinate.x() + d->textX, coordinate.y() + d->textY + dy );
-      drawText( painter, effectiveFont( paintDevice ), position, text, cell );
-      dy += fontMetrics.descent() + fontMetrics.ascent();
-    } while ( i != -1 );
+      // Case 3: Multiple rows, but horizontal.
+      const QPointF position(indent + coordinate.x(), coordinate.y() + d->textY);
+      drawText(painter, position, d->displayText.split('\n'), cell);
   }
   else if ( tmpVerticalText && !d->displayText.isEmpty() ) {
-    // Case 4: Vertical text.
-
-    QString text;
-    int i = 0;
-    int len = 0;
-    double dy = 0.0;
-
-    do {
-      len = d->displayText.length();
-      text = d->displayText.at( i );
-      const QPointF position( indent + coordinate.x() + d->textX,
-                              coordinate.y() + d->textY + dy );
-      drawText( painter, effectiveFont( paintDevice ), position, text, cell );
-      dy += fontMetrics.descent() + fontMetrics.ascent();
-      i++;
-    } while ( i != len );
+      // Case 4: Vertical text.
+      QStringList textLines = d->displayText.split('\n');
+      double dx = 0.0;
+      for (int i = 0; i < textLines.count(); ++i)
+      {
+          QStringList textColumn;
+          for (int j = 0; j < textLines[i].count(); ++j)
+              textColumn << QString(textLines[i][j]);
+          const QPointF position(indent + coordinate.x() + dx, coordinate.y() + d->textY);
+          drawText(painter, position, textColumn, cell);
+          dx += fontMetrics.maxWidth();
+      }
   }
 }
 
@@ -1961,11 +1922,11 @@ void CellView::calculateCellDimension( const Cell& cell )
 void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
 {
     const double ascent = fontMetrics.ascent();
-    Style::HAlign hAlign = d->style.halign();
+    const Style::HAlign hAlign = d->style.halign();
     const Style::VAlign vAlign = d->style.valign();
     const int tmpAngle = d->style.angle();
     const bool tmpVerticalText = d->style.verticalText();
-    const bool tmpMultiRow = d->style.wrapText();
+    const bool tmpMultiRow = d->style.wrapText() || d->displayText.contains('\n');
 
   double  w = d->width;
   double  h = d->height;
@@ -2026,7 +1987,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
           }
         }
       }
-      else if ( (tmpMultiRow || d->displayText.contains( '\n' ) ) && !tmpVerticalText )
+      else if (tmpMultiRow && !tmpVerticalText )
       {
       // Is enough place available?
         if ( effBottom - effTop - d->textHeight > 0 )
@@ -2085,7 +2046,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
           }
         }
       }
-      else if ( (tmpMultiRow || d->displayText.contains( '\n' ) ) && !tmpVerticalText )
+      else if (tmpMultiRow && !tmpVerticalText )
       {
       // Is enough place available?
         if ( effBottom - effTop - d->textHeight > 0 )
@@ -2109,12 +2070,6 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
       }
       break;
     }
-  }
-
-  hAlign = d->style.halign();
-  if ( cell.sheet()->getShowFormula() && !( cell.sheet()->isProtected() && style().hideFormula() ) )
-  {
-    hAlign = Style::Left;
   }
 
   // Calculate d->textX based on alignment and textwidth.
@@ -2259,6 +2214,10 @@ void CellView::breakLines( const QFontMetrics& fontMetrics )
 
         breakpos++;
       } while( outText.indexOf( ' ', breakpos ) != -1 );
+
+      // cut off the last line feed
+      if (!outText.isEmpty() && outText[outText.length()-1] == '\n')
+          outText = outText.left(outText.length()-1);
     }
   }
 }
@@ -2407,28 +2366,54 @@ void CellView::obscureVerticalCells( SheetView* sheetView, const Cell& masterCel
     }
 }
 
-void CellView::drawText( QPainter& painter, const QFont& font,
-                         const QPointF& location, const QString& text,
+void CellView::drawText( QPainter& painter, const QPointF& location, const QStringList& textLines,
                          const Cell& cell ) const
 {
     Q_UNUSED( cell )
-    QTextLayout textLayout( text, font );
-    textLayout.beginLayout();
-    const double leading = QFontMetrics(font).leading(); // FIXME I bet, it takes the wrong paint device
-    double height = 0.0;
-    forever
+
+    QTextOption options;
+    switch (d->style.halign())
     {
-        QTextLine line = textLayout.createLine();
-        if ( !line.isValid() )
-            break;
-        line.setLineWidth( d->width );
-        height += leading;
-        line.setPosition(QPoint(0, qRound(height)));
-        height += line.height();
+    default:
+    case Style::Left:
+        options.setAlignment(Qt::AlignLeft);
+        break;
+    case Style::Right:
+        options.setAlignment(Qt::AlignRight);
+        break;
+    case Style::Center:
+        options.setAlignment(Qt::AlignHCenter);
     }
-    textLayout.endLayout();
-    QPointF loc( location.x(), location.y() - font.pointSizeF() );
-    textLayout.draw( &painter, loc );
+    // The text consists of a single character, if it's vertical. Always center it.
+    if (d->style.verticalText())
+        options.setAlignment(Qt::AlignHCenter);
+    options.setWrapMode(d->style.wrapText() ? QTextOption::WordWrap : QTextOption::NoWrap);
+
+    const QFontMetrics fontMetrics(effectiveFont(painter.device()), painter.device());
+    const double leading = fontMetrics.leading();
+
+    double offset = -fontMetrics.ascent();
+    for (int i = 0; i < textLines.count(); ++i)
+    {
+        QTextLayout textLayout(textLines[i], effectiveFont(painter.device()));
+        textLayout.setTextOption(options);
+        textLayout.beginLayout();
+        double height = 0.0;
+        forever
+        {
+            QTextLine line = textLayout.createLine();
+            if (!line.isValid())
+                break;
+            line.setLineWidth(d->width);
+            height += leading;
+            line.setPosition(QPoint(0.0, qRound(height)));
+            height += line.height();
+        }
+        textLayout.endLayout();
+
+        textLayout.draw(&painter, QPointF(location.x(), location.y() + offset));
+        offset += height;
+    }
 }
 
 void CellView::obscure( int col, int row )

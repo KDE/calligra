@@ -366,9 +366,8 @@ private:
      */
     void obscure( int col, int row );
 
-    void drawText( QPainter& painter, const QFont& font,
-                   const QPointF& location, const QString& text,
-                   const Cell& cell ) const;
+    void drawText(QPainter& painter, const QPointF& location, const QStringList& textLines,
+                  const Cell& cell) const;
 
     /**
      * Default CellView used by SheetView.
