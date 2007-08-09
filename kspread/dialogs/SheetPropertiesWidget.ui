@@ -182,7 +182,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
                 <string>Show formula &amp;indicator</string>
               </property>
               <property name="whatsThis" stdset="0" >
-                <string>If this box is checked KSpread will display a small Qt::blue triangle at the bottom left corner of cells containing formulae. This is useful if you want to protect cells with formulae.</string>
+                <string>If this box is checked KSpread will display a small blue triangle at the bottom left corner of cells containing formulae. This is useful if you want to protect cells with formulae.</string>
               </property>
             </widget>
           </item>
