@@ -356,7 +356,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
 
         // render dots of notes
         double dotX = x + 11;
-        painter.setPen(m_style->noteDotPen());
+        painter.setPen(m_style->noteDotPen(color));
         for (int i = 0; i < chord->dots(); i++) {
             painter.drawPoint(ref + QPointF(dotX, /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2));
             dotX += 3;
