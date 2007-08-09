@@ -31,6 +31,8 @@
 
 #include <QPainter>
 
+// #define PRINT_VIA_KRITA
+
 KWPrintingDialog::KWPrintingDialog(KWView *view)
     : KoPrintingDialog(view),
     m_document(view->kwdocument()),
@@ -63,7 +65,11 @@ void KWPrintingDialog::preparePage(int pageNumber) {
         if(offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
             continue;
         m_originalImages.insert(image, image->imageQuality());
+#ifdef PRINT_VIA_KRITA
         image->setImageQuality(KWImageFrame::EditableQuality);
+#else
+        image->setImageQuality(KWImageFrame::HighQuality);
+#endif
         shapeManager()->add(image->shape()); // just in case the image change internally create a new shape
     }
 
