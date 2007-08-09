@@ -130,6 +130,15 @@ public:
 
 public:
     void checkForFilterButton(const Cell&);
+    void calculateTextSize(const QFont& font, const QFontMetricsF& fontMetrics);
+    void calculateHorizontalTextSize(const QFont& font, const QFontMetricsF& fontMetrics);
+    void calculateVerticalTextSize(const QFont& font, const QFontMetricsF& fontMetrics);
+    void calculateAngledTextSize(const QFont& font, const QFontMetricsF& fontMetrics);
+    void truncateText(const QFont& font, const QFontMetricsF& fontMetrics);
+    void truncateHorizontalText(const QFont& font, const QFontMetricsF& fontMetrics);
+    void truncateVerticalText(const QFont& font, const QFontMetricsF& fontMetrics);
+    void truncateAngledText(const QFont& font, const QFontMetricsF& fontMetrics);
+    QTextOption textOptions() const;
 };
 
 
@@ -182,6 +191,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
         d->hidden = true;
         d->height = 0.0;
         d->width = 0.0;
+        return; // nothing more to do
     }
 
     d->checkForFilterButton(cell);
@@ -207,6 +217,14 @@ CellView::CellView( SheetView* sheetView, int col, int row )
                                                     d->style.currency().symbol());
         d->displayText = value.asString();
     }
+
+    // Hide zero.
+    if (sheet->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0.0)
+        d->displayText.clear();
+
+    // If text is empty, there's nothing more to do.
+    if (d->displayText.isEmpty())
+        return;
 
     // horizontal align
     if (d->style.halign() == Style::HAlignUndefined)
@@ -1127,7 +1145,7 @@ void CellView::paintText( QPainter& painter,
   if ( hAlign == Style::Right && !cell.isEmpty() && !d->fittingWidth )
     offsetCellTooShort = 4;
 
-  const QFontMetrics fontMetrics( font, paintDevice );
+  const QFontMetricsF fontMetrics( font, paintDevice );
   double offsetFont = 0.0;
 
   if ( style().valign() == Style::Bottom && style().underline() )
@@ -1665,7 +1683,7 @@ void CellView::paintFilterButton( QPainter& painter, const QPointF& coordinate,
 //
 // Used in paintText().
 //
-QString CellView::textDisplaying( const QFontMetrics& fm, const Cell& cell )
+QString CellView::textDisplaying( const QFontMetricsF& fm, const Cell& cell )
 {
   Style::HAlign hAlign = style().halign();
   if ( !d->fittingWidth )
@@ -1833,55 +1851,46 @@ QFont CellView::effectiveFont( QPaintDevice* paintDevice ) const
 //
 void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
 {
-  if ( d->hidden )
-    return;
+    // Up to here, we have just cared about the contents, not the
+    // painting of it.  Now it is time to see if the contents fits into
+    // the cell and, if not, maybe rearrange the outtext a bit.
 
-    // Hide zero.
-    if ( cell.sheet()->getHideZero() && cell.value().isNumber() && cell.value().asFloat() == 0 )
-        d->displayText.clear();
+    // First, Determine the correct font with zoom taken into account.
+    const QFont font(effectiveFont(sheetView->paintDevice()));
+    const QFontMetricsF fontMetrics(font, sheetView->paintDevice());
 
-  // Empty text?
-  if ( d->displayText.isEmpty() )
-      return;
+    // Then calculate text dimensions, i.e. d->textWidth and d->textHeight,
+    // and check wether the text fits into the cell dimension by the way.
+    d->calculateTextSize(font, fontMetrics);
 
-  // Up to here, we have just cared about the contents, not the
-  // painting of it.  Now it is time to see if the contents fits into
-  // the cell and, if not, maybe rearrange the outtext a bit.
-  //
-  // First, Determine the correct font with zoom taken into account.
-  // Then calculate text dimensions, i.e. d->textWidth and d->textHeight.
-  const QFontMetrics fontMetrics( effectiveFont( sheetView->paintDevice() ),
-                                  sheetView->paintDevice() );
-  textSize( fontMetrics );
+    // Obscure horizontal cells, if necessary.
+    if (!d->fittingWidth)
+    {
+        obscureHorizontalCells(sheetView, cell);
+        // Recalculate the text dimensions and check wether the text fits.
+        d->calculateTextSize(font, fontMetrics);
+    }
 
-  // Calculate the size of the cell.
-  calculateCellDimension( cell );
+    // Obscure vertical cells, if necessary.
+    if (!d->fittingHeight)
+    {
+        obscureVerticalCells(sheetView, cell);
+        // Recalculate the text dimensions and check wether the text fits.
+        d->calculateTextSize(font, fontMetrics);
+    }
 
-  // Check, if we need to break the line into multiple lines and are
-  // allowed to do so.
-  breakLines( fontMetrics );
+    // text still does not fit into cell dimension?
+    if (!d->fittingWidth || !d->fittingHeight)
+    {
+        // Truncate the output text.
+        d->displayText = textDisplaying(fontMetrics, cell);
+//         d->truncateText(font, fontMetrics);
+//         // Recalculate the text dimensions and check wether the text fits.
+//         d->calculateTextSize(font, fontMetrics);
+    }
 
-  // Also recalculate text dimensions, i.e. d->textWidth and d->textHeight,
-  // because of new line breaks.
-  textSize( fontMetrics );
-
-  // Calculate text offset, i.e. d->textX and d->textY.
-  textOffset( fontMetrics, cell );
-
-  // Obscure cells, if necessary.
-  obscureHorizontalCells( sheetView, cell );
-  obscureVerticalCells( sheetView, cell );
-
-    // text fits into cell dimension?
-    if ( dimensionFits() )
-        return;
-
-    // Recalculate the output text.
-    d->displayText = textDisplaying( fontMetrics, cell );
-
-    // Recalculate the text dimensions and the offset.
-    textSize( fontMetrics );
-    textOffset( fontMetrics, cell );
+    // Recalculate the text offset.
+    textOffset(fontMetrics, cell);
 }
 
 
@@ -1919,8 +1928,9 @@ void CellView::calculateCellDimension( const Cell& cell )
 //
 // Used in makeLayout().
 //
-void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
+void CellView::textOffset( const QFontMetricsF& fontMetrics, const Cell& cell )
 {
+    Q_UNUSED(cell)
     const double ascent = fontMetrics.ascent();
     const Style::HAlign hAlign = d->style.halign();
     const Style::VAlign vAlign = d->style.valign();
@@ -2096,7 +2106,7 @@ void CellView::textOffset( const QFontMetrics& fontMetrics, const Cell& cell )
 //
 // Used in makeLayout().
 //
-void CellView::textSize( const QFontMetrics& fm )
+void CellView::textSize( const QFontMetricsF& fm )
 {
     const Style::VAlign vAlign = d->style.valign();
     const int tmpAngle = d->style.angle();
@@ -2109,7 +2119,7 @@ void CellView::textSize( const QFontMetrics& fm )
         // Horizontal text.
 
         d->textWidth = ( fm.size( 0, d->displayText ).width() );
-        int offsetFont = 0;
+        double offsetFont = 0.0;
         if ( ( vAlign == Style::Bottom ) && fontUnderlined ) {
             offsetFont = fm.underlinePos() + 1;
         }
@@ -2129,7 +2139,7 @@ void CellView::textSize( const QFontMetrics& fm )
     else {
         // Vertical text.
 
-        int width = 0;
+        double width = 0.0;
         for ( int i = 0; i < d->displayText.length(); i++ )
             width = qMax( width, fm.width( d->displayText.at( i ) ) );
 
@@ -2138,7 +2148,7 @@ void CellView::textSize( const QFontMetrics& fm )
     }
 }
 
-void CellView::breakLines( const QFontMetrics& fontMetrics )
+void CellView::breakLines( const QFontMetricsF& fontMetrics )
 {
   if ( style().wrapText() &&
        d->textWidth > ( d->width - 2 * s_borderSpace
@@ -2371,42 +2381,29 @@ void CellView::drawText( QPainter& painter, const QPointF& location, const QStri
 {
     Q_UNUSED( cell )
 
-    QTextOption options;
-    switch (d->style.halign())
-    {
-    default:
-    case Style::Left:
-        options.setAlignment(Qt::AlignLeft);
-        break;
-    case Style::Right:
-        options.setAlignment(Qt::AlignRight);
-        break;
-    case Style::Center:
-        options.setAlignment(Qt::AlignHCenter);
-    }
-    // The text consists of a single character, if it's vertical. Always center it.
-    if (d->style.verticalText())
-        options.setAlignment(Qt::AlignHCenter);
-    options.setWrapMode(d->style.wrapText() ? QTextOption::WordWrap : QTextOption::NoWrap);
-
-    const QFontMetrics fontMetrics(effectiveFont(painter.device()), painter.device());
+    const QFontMetricsF fontMetrics(effectiveFont(painter.device()), painter.device());
     const double leading = fontMetrics.leading();
 
-    double offset = -fontMetrics.ascent();
+    const QTextOption options = d->textOptions();
+
+    double offset = 1.0 - fontMetrics.ascent();
     for (int i = 0; i < textLines.count(); ++i)
     {
         QTextLayout textLayout(textLines[i], effectiveFont(painter.device()));
+        textLayout.setCacheEnabled(true);
         textLayout.setTextOption(options);
         textLayout.beginLayout();
         double height = 0.0;
         forever
         {
+            if (offset + height + leading + fontMetrics.height() > d->height)
+                break;
             QTextLine line = textLayout.createLine();
             if (!line.isValid())
                 break;
             line.setLineWidth(d->width);
             height += leading;
-            line.setPosition(QPoint(0.0, qRound(height)));
+            line.setPosition(QPoint(0, qRound(height)));
             height += line.height();
         }
         textLayout.endLayout();
@@ -2458,6 +2455,12 @@ bool CellView::dimensionFits() const
     return d->fittingHeight && d->fittingWidth;
 }
 
+CellView& CellView::operator=(const CellView& other)
+{
+    d = other.d;
+    return *this;
+}
+
 
 void CellView::Private::checkForFilterButton(const Cell& cell)
 {
@@ -2473,8 +2476,141 @@ void CellView::Private::checkForFilterButton(const Cell& cell)
         filterButton = database.range().firstRange().top() == cell.row();
 }
 
-CellView& CellView::operator=(const CellView& other)
+void CellView::Private::calculateTextSize(const QFont& font, const QFontMetricsF& fontMetrics)
 {
-    d = other.d;
-    return *this;
+    if (style.angle() != 0)
+        calculateAngledTextSize(font, fontMetrics);
+    else if (style.verticalText())
+        calculateVerticalTextSize(font, fontMetrics);
+    else
+        calculateHorizontalTextSize(font, fontMetrics);
+}
+
+void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFontMetricsF& fontMetrics)
+{
+    const QStringList textLines = displayText.split('\n');
+    const double leading = fontMetrics.leading();
+    const QTextOption options = textOptions();
+
+    textHeight = 0.0;
+    textWidth = 0.0;
+    fittingHeight = true;
+    fittingWidth = true;
+    for (int i = 0; i < textLines.count(); ++i)
+    {
+        textWidth = qMax(textWidth, fontMetrics.width(textLines[i]));
+        QTextLayout textLayout(textLines[i], font);
+        textLayout.setTextOption(options);
+        textLayout.beginLayout();
+        forever
+        {
+            QTextLine line = textLayout.createLine();
+            if (!line.isValid())
+                break; // forever
+            line.setLineWidth(width);
+            textHeight += leading + line.height();
+            if (textHeight > (height - 2 * s_borderSpace
+                              - 0.5 * style.topBorderPen().width()
+                              - 0.5 * style.bottomBorderPen().width()))
+            {
+                fittingHeight = false;
+                break; // forever
+            }
+        }
+        textLayout.endLayout();
+    }
+    // The width fits, if the text fits wrapped or all lines are smaller than the cell width.
+    fittingWidth = (style.wrapText() && fittingHeight) ||
+                   textWidth <= (width - 2 * s_borderSpace
+                                 - 0.5 * style.leftBorderPen().width()
+                                 - 0.5 * style.rightBorderPen().width());
+}
+
+void CellView::Private::calculateVerticalTextSize(const QFont& font, const QFontMetricsF& fontMetrics)
+{
+    Q_UNUSED(font)
+    int rows = 0;
+    const QStringList textLines = displayText.split('\n');
+    for (int i = 0; i < textLines.count(); ++i)
+        rows = qMax(rows, textLines[i].count());
+    textHeight = (fontMetrics.ascent() + fontMetrics.descent()) * rows;
+    textWidth  = (displayText.count('\n') + 1) * fontMetrics.maxWidth();
+    fittingHeight = textHeight <= this->width;
+    fittingWidth = textWidth <= this->height;
+}
+
+void CellView::Private::calculateAngledTextSize(const QFont& font, const QFontMetricsF& fontMetrics)
+{
+    Q_UNUSED(font)
+    const double angle = style.angle();
+    const double height = fontMetrics.ascent() + fontMetrics.descent();
+    const double width  = fontMetrics.width(displayText);
+    textHeight = height * ::cos(angle * M_PI / 180) + qAbs(width * ::sin(angle * M_PI / 180));
+    textWidth = qAbs(height * ::sin(angle * M_PI / 180)) + width * ::cos(angle * M_PI / 180);
+    fittingHeight = textHeight <= this->width;
+    fittingWidth = textWidth <= this->height;
+}
+
+void CellView::Private::truncateText(const QFont& font, const QFontMetricsF& fontMetrics)
+{
+    if (style.angle() != 0)
+        truncateAngledText(font, fontMetrics);
+    else if (style.verticalText())
+        truncateVerticalText(font, fontMetrics);
+    else
+        truncateHorizontalText(font, fontMetrics);
+}
+
+void CellView::Private::truncateHorizontalText(const QFont& font, const QFontMetricsF& fontMetrics)
+{
+    Q_UNUSED(font)
+    if (!style.wrapText())
+    {
+        const QStringList textLines = displayText.split('\n');
+        displayText.clear();
+        double height = font.pointSizeF();
+        for (int i = 0; i < textLines.count(); ++i)
+        {
+            if (height > this->height)
+                break;
+            int count = 0;
+            while (count < textLines[i].count() && fontMetrics.width(textLines[i].left(count)) <= this->width)
+                ++count;
+            displayText += textLines[i].left(count);
+            height += fontMetrics.height();
+            if (height <= this->height)
+                displayText += '\n';
+        }
+    }
+    // else it is handled by QTextLayout
+}
+
+void CellView::Private::truncateVerticalText(const QFont& font, const QFontMetricsF& fontMetrics)
+{
+}
+
+void CellView::Private::truncateAngledText(const QFont& font, const QFontMetricsF& fontMetrics)
+{
+}
+
+QTextOption CellView::Private::textOptions() const
+{
+    QTextOption options;
+    switch (style.halign())
+    {
+    default:
+    case Style::Left:
+        options.setAlignment(Qt::AlignLeft);
+        break;
+    case Style::Right:
+        options.setAlignment(Qt::AlignRight);
+        break;
+    case Style::Center:
+        options.setAlignment(Qt::AlignHCenter);
+    }
+    // The text consists of a single character, if it's vertical. Always center it.
+    if (style.verticalText())
+        options.setAlignment(Qt::AlignHCenter);
+    options.setWrapMode(style.wrapText() ? QTextOption::WordWrap : QTextOption::NoWrap);
+    return options;
 }

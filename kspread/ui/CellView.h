@@ -42,6 +42,7 @@
 #include "Global.h"
 #include "Style.h"
 
+class QFontMetricsF;
 class QPaintDevice;
 class QRectF;
 
@@ -190,7 +191,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void textSize( const QFontMetrics& fontMetrics );
+  void textSize( const QFontMetricsF& fontMetrics );
 
   /**
    * \ingroup Layout
@@ -208,7 +209,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void textOffset( const QFontMetrics& fontMetrics, const Cell& cell );
+  void textOffset( const QFontMetricsF& fontMetrics, const Cell& cell );
 
   /**
    * \ingroup Layout
@@ -217,7 +218,7 @@ private:
    *
    * \internal Called from makeLayout().
    */
-  void breakLines( const QFontMetrics& fontMetrics );
+  void breakLines( const QFontMetricsF& fontMetrics );
 
   /**
    * \ingroup Layout
@@ -278,7 +279,7 @@ private:
    *
    * \internal Called from paintText().
    */
-  QString textDisplaying( const QFontMetrics& fontMetrics, const Cell& cell );
+  QString textDisplaying( const QFontMetricsF& fontMetrics, const Cell& cell );
 
   /**
    * \ingroup Painting
