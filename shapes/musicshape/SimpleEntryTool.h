@@ -59,11 +59,16 @@ class SimpleEntryTool : public KoTool
         void activeActionChanged(QAction* action);
         void voiceChanged(int voice);
         void addBars();
+        void actionTriggered();
     private:
         MusicShape *m_musicshape;
         AbstractMusicAction* m_activeAction;
         QPointF m_point;
         int m_voice;
+        
+        MusicCore::Staff* m_contextMenuStaff;
+        int m_contextMenuBar;
+        QPointF m_contextMenuPoint;
 };
 
 #endif

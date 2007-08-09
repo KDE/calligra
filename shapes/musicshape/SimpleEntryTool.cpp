@@ -22,6 +22,7 @@
 #include <QTabWidget>
 #include <QPair>
 #include <QInputDialog>
+#include <QMenu>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -45,6 +46,7 @@
 #include "actions/AccidentalAction.h"
 #include "actions/EraserAction.h"
 #include "actions/DotsAction.h"
+#include "actions/SetClefAction.h"
 
 #include "commands/AddBarsCommand.h"
 
@@ -174,6 +176,25 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     
     actionQuarterNote->setChecked(true);
     m_activeAction = actionQuarterNote;
+    
+    QMenu* clefMenu = new QMenu();
+    clefMenu->addAction(action = new SetClefAction(Clef::Trebble, 2, 0, this));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    clefMenu->addAction(action = new SetClefAction(Clef::Bass, 4, 0, this));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    clefMenu->addAction(action = new SetClefAction(Clef::Alto, 3, 0, this));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    clefMenu->addAction(action = new SetClefAction(Clef::Tenor, 4, 0, this));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    clefMenu->addAction(action = new SetClefAction(Clef::Soprano, 1, 0, this));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+
+    QAction* clefAction = new QAction(i18n("Clef"), this);
+    clefAction->setMenu(clefMenu);
+    
+    QList<QAction*> contextMenu;
+    contextMenu.append(clefAction);
+    setPopupActionList(contextMenu);
 }
 
 SimpleEntryTool::~SimpleEntryTool()
@@ -280,21 +301,19 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
         }
     }
 
-    if (!bar) return;
-/*
-    Clef* clef = closestStaff->lastClefChange(barIdx, INT_MAX);
-
-    Chord* c = new Chord(closestStaff, m_duration);
-    if (clef) {
-        kDebug() <<"clef:" << clef->shape();
-        int pitch = clef->lineToPitch(line);
-        kDebug() <<"pitch:" << pitch;
-        c->addNote(closestStaff, pitch);
+    foreach (QAction* a, popupActionList()) {
+        a->setVisible(bar);
     }
-    voice->bar(bar)->addElement(c);
-    m_musicshape->engrave();
-    m_musicshape->repaint();*/
-    m_activeAction->mousePress(closestStaff, barIdx, QPointF(p.x() - bar->position().x(), yrel - closestStaff->top()));
+    
+    if (!bar) return;
+
+    if (event->button() == Qt::RightButton) {
+        m_contextMenuStaff = closestStaff;
+        m_contextMenuBar = barIdx;
+        m_contextMenuPoint = QPointF(p.x() - bar->position().x(), yrel - closestStaff->top());
+    } else {
+        m_activeAction->mousePress(closestStaff, barIdx, QPointF(p.x() - bar->position().x(), yrel - closestStaff->top()));
+    }
 }
 
 void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
@@ -339,6 +358,13 @@ void SimpleEntryTool::addBars()
     int barCount = QInputDialog::getInteger(NULL, "Add measures", "Add how many measures?", 1, 1, 1000, 1, &ok);
     if (!ok) return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
+}
+
+void SimpleEntryTool::actionTriggered()
+{
+    AbstractMusicAction* action = dynamic_cast<AbstractMusicAction*>(sender());
+    if (!action) return;
+    action->mousePress(m_contextMenuStaff, m_contextMenuBar, m_contextMenuPoint);    
 }
 
 MusicShape* SimpleEntryTool::shape()

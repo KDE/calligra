@@ -26,4 +26,8 @@ AbstractMusicAction::AbstractMusicAction(const QIcon& icon, const QString& text,
     setCheckable(true);
 }
 
+void AbstractMusicAction::renderPreview(QPainter& painter, const QPointF& point)
+{
+}
+
 #include "AbstractMusicAction.moc"
