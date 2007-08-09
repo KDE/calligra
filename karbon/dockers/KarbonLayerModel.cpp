@@ -20,7 +20,6 @@
 #include "KarbonLayerModel.h"
 
 #include <vdocument.h>
-#include <KarbonShapeReparentCommand.h>
 
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -33,6 +32,8 @@
 #include <KoZoomHandler.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
+#include <KoShapeGroupCommand.h>
+#include <KoShapeUngroupCommand.h>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -79,7 +80,7 @@ QModelIndex KarbonLayerModel::index( int row, int column, const QModelIndex &par
     // check if parent is root node
     if( ! parent.isValid() )
     {
-        if( row < m_document->layers().count() )
+        if( row >= 0 && row < m_document->layers().count() )
             return createIndex( row, column, m_document->layers().at(m_document->layers().count()-1-row) );
         else
             return QModelIndex();
@@ -397,7 +398,6 @@ int KarbonLayerModel::indexFromChild( KoShapeContainer *parent, KoShape *child )
 
 Qt::DropActions KarbonLayerModel::supportedDropActions () const
 {
-    kDebug(38000) <<"KarbonLayerModel::supportedDropActions";
     return Qt::MoveAction | Qt::CopyAction;
 }
 
@@ -485,68 +485,84 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
             toplevelShapes.append( shape );
     }
 
-    if( action == Qt::IgnoreAction )
-        return true;
-
-    if( action != Qt::MoveAction )
-        return false;
-
     if( ! parent.isValid() )
     {
         kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = root";
         return false;
     }
-    else
+    KoShape *shape = static_cast<KoShape*>( parent.internalPointer() );
+    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
+    if( container )
     {
-        KoShape *shape = static_cast<KoShape*>( parent.internalPointer() );
-        KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
-        if( container )
+        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( container );
+        if( group )
         {
-            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( container );
-            if( group )
-            {
-                kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = group";
+            kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = group";
+            if( ! toplevelShapes.count() )
                 return false;
-            }
-            else
-            {
-                kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = container";
-                if( toplevelShapes.count() )
-                {
-                    QList<KoShapeContainer*> oldParents;
-                    QList<KoShapeContainer*> newParents;
-                    foreach( KoShape * shape, toplevelShapes )
-                    {
-                        oldParents.append( shape->parent() );
-                        newParents.append( container );
-                    }
 
-                    // shapes are dropped on a layer, so add them to layer if they are not yet part of it
-                    foreach( KoShape * shape, toplevelShapes )
-                    {
-                        int index = indexFromChild( shape->parent(), shape );
-                        beginRemoveRows( parentIndexFromShape( shape ), index, index );
-                        beginInsertRows( parent, container->childCount(), container->childCount() );
-                        container->addChild( shape );
-                        endInsertRows();
-                        endRemoveRows();
-                    }
-                    KarbonShapeReparentCommand * cmd = new KarbonShapeReparentCommand( toplevelShapes, oldParents, newParents );
-                    KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
-                    canvasController->canvas()->addCommand( cmd );
-                }
-                else if( layers.count() )
-                {
-                    // layers are dropped on a layer, so change layer ordering
-                    return false;
-                }
-            }
+            beginInsertRows( parent, group->childCount(), group->childCount()+toplevelShapes.count() );
+
+            QUndoCommand * cmd = new QUndoCommand();
+            cmd->setText( i18n("Reparent shapes") );
+
+            foreach( KoShape * shape, toplevelShapes )
+                new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, cmd );
+
+            new KoShapeGroupCommand( group, toplevelShapes, cmd );
+            KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+            canvasController->canvas()->addCommand( cmd );
+
+            endInsertRows();
         }
         else
         {
-            kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = shape";
-            return false;
+            kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = container";
+            if( toplevelShapes.count() )
+            {
+                beginInsertRows( parent, container->childCount(), container->childCount()+toplevelShapes.count() );
+
+                QUndoCommand * cmd = new QUndoCommand();
+                cmd->setText( i18n("Reparent shapes") );
+
+                QList<bool> clipped;
+                foreach( KoShape * shape, toplevelShapes )
+                {
+                    if( ! shape->parent() )
+                    {
+                        clipped.append( false );
+                        continue;
+                    }
+
+                    clipped.append( shape->parent()->childClipped( shape ) );
+                    new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, cmd );
+                }
+                // shapes are dropped on a container, so add them to the container
+                new KoShapeGroupCommand( container, toplevelShapes, clipped, cmd ); 
+                KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
+                canvasController->canvas()->addCommand( cmd );
+
+                endInsertRows();
+            }
+            else if( layers.count() )
+            {
+                KoShapeLayer * layer = dynamic_cast<KoShapeLayer*>( container );
+                if( ! layer )
+                    return false;
+
+                // TODO layers are dropped on a layer, so change layer ordering
+                return false;
+            }
         }
+    }
+    else
+    {
+        kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = shape";
+        if( ! toplevelShapes.count() )
+            return false;
+
+        // TODO shapes are dropped on a shape, reorder them
+        return false;
     }
 
     return true;

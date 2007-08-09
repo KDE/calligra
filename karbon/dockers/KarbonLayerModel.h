@@ -23,7 +23,6 @@
 #include <KoDocumentSectionModel.h>
 
 class VDocument;
-class KoDocumentSectionView;
 class KoShape;
 class KoShapeContainer;
 class QAbstractItemModel;
