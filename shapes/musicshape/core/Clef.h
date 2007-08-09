@@ -80,6 +80,8 @@ public:
      * Returns the pitch for a given line.
      */
     int lineToPitch(int line) const;
+    
+    int pitchToLine(int pitch) const;
 public slots:
     /**
      * Changes the shape of the clef.

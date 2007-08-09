@@ -81,7 +81,7 @@ int Clef::lineToPitch(int line) const
     int pitch = 0;
     switch (d->shape) {
         case GClef: pitch = 4; break;
-        case FClef: pitch = -6; break;
+        case FClef: pitch = -4; break;
         case CClef: pitch = 0; break;
     }
     // d->line is the line which has pitch 'pitch' (not counting spaces between lines)
@@ -89,6 +89,18 @@ int Clef::lineToPitch(int line) const
     return line - 2 * d->line + 2 + pitch;
 }
 
+int Clef::pitchToLine(int pitch) const
+{
+    int line = 0;
+    switch (d->shape) {
+        case GClef: line = 14; break;
+        case FClef: line = 6; break;
+    }
+    line -= 2 * d->line;
+    line -= pitch;
+    return line;
+}
+    
 } // namespace MusicCore
 
 #include "Clef.moc"

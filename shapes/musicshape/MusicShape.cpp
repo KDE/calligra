@@ -106,7 +106,7 @@ MusicShape::MusicShape()
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 2));
     voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 3));
     voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
-    b1->addStaffElement(new Clef(staff2, 0, Clef::Bass, 3, 0));
+    b1->addStaffElement(new Clef(staff2, 0, Clef::Bass, 4, 0));
     b1->addStaffElement(new KeySignature(staff2, 0, 5));
     b1->addStaffElement(new TimeSignature(staff2, 0, 4, 4, TimeSignature::Number));
     voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));

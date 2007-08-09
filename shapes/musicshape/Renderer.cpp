@@ -211,17 +211,11 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
     int idx = 3;
     for (int i = 0; i < 7; i++) {
         if (ks->accidentals(idx) > 0) {
-            int line = 14;
-            if (state.clef && state.clef->shape() == Clef::FClef) line = 4;
-            if (state.clef) {
-                line -= 2*state.clef->line();
-            } else {
-                line -= 4;
-            }
-            line = line - idx;
+            int line = 10;
+            if (state.clef) line = state.clef->pitchToLine(idx);
+            
             while (line < 0) line += 7;
             while (line >= 6) line -= 7;
-
             m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 1 );
 
             curx += 6;
@@ -233,17 +227,12 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
     idx = 6;
     for (int i = 0; i < 7; i++) {
         if (ks->accidentals(idx) < 0) {
-            int line = 14;
-            if (state.clef && state.clef->shape() == Clef::FClef) line = 4;
-            if (state.clef) {
-                line -= 2*state.clef->line();
-            } else {
-                line -= 4;
-            }
-            line = line - idx;
+            int line = 10;
+            if (state.clef) line = state.clef->pitchToLine(idx);
+            
             while (line < 0) line += 7;
             while (line >= 6) line -= 7;
-
+            
             m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, -1 );
 
             curx += 6;
@@ -300,14 +289,8 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
         Staff * s = n->staff();
-        int line = 14;
-        if (state.clef && state.clef->shape() == Clef::FClef) line = 4;
-        if (state.clef) {
-            line -= 2*state.clef->line();
-        } else {
-            line -= 4;
-        }
-        line = line - n->pitch();
+        int line = 10;
+        if (state.clef) line = state.clef->pitchToLine(n->pitch());
 
         if (line < topLine) topLine = line;
         if (line > bottomLine) bottomLine = line;
