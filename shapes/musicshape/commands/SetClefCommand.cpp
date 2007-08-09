@@ -27,13 +27,22 @@
 using namespace MusicCore;
 
 SetClefCommand::SetClefCommand(MusicShape* shape, Bar* bar, Staff* staff, Clef::ClefShape clefShape, int line, int octaveChange)
-    : m_shape(shape), m_bar(bar), m_clef(new Clef(staff, 0, clefShape, line, octaveChange))
+    : m_shape(shape), m_bar(bar), m_clef(new Clef(staff, 0, clefShape, line, octaveChange)), m_oldClef(NULL)
 {
     setText(i18n("Change clef"));
+    
+    for (int i = 0; i < bar->staffElementCount(staff); i++) {
+        Clef* c = dynamic_cast<Clef*>(bar->staffElement(staff, i));
+        if (c && c->startTime() == 0) {
+            m_oldClef = c;
+            break;
+        }
+    }
 }
 
 void SetClefCommand::redo()
 {
+    if (m_oldClef) m_bar->removeStaffElement(m_oldClef, false);
     m_bar->addStaffElement(m_clef);
     m_shape->engrave();
     m_shape->repaint();
@@ -41,7 +50,8 @@ void SetClefCommand::redo()
 
 void SetClefCommand::undo()
 {
-    m_bar->removeStaffElement(m_clef);
+    m_bar->removeStaffElement(m_clef, false);
+    if (m_oldClef) m_bar->addStaffElement(m_oldClef);
     m_shape->engrave();
     m_shape->repaint();
 }

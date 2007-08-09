@@ -38,7 +38,7 @@ public:
 private:
     MusicShape* m_shape;
     MusicCore::Bar* m_bar;
-    MusicCore::Clef* m_clef;
+    MusicCore::Clef* m_clef, *m_oldClef;
 };
 
 #endif // SETCLEFCOMMAND_H
