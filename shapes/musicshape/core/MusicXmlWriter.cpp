@@ -25,6 +25,7 @@
 #include "VoiceBar.h"
 #include "Bar.h"
 #include "Note.h"
+#include "Clef.h"
 
 #include <KoXmlWriter.h>
 #include <kofficeversion.h>
@@ -154,15 +155,33 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
     w.endElement(); // music:note
 }
 
+static void writeClef(KoXmlWriter& w, Clef* clef)
+{
+    w.startElement("music:clef");
+    
+    w.startElement("music:sign");
+    switch (clef->shape()) {
+        case Clef::GClef: w.addTextNode("G"); break;
+        case Clef::FClef: w.addTextNode("F"); break;
+        case Clef::CClef: w.addTextNode("C"); break;
+    }
+    w.endElement(); // music:sign
+    
+    w.endElement(); // music:clef
+}
+
 static void writePart(KoXmlWriter& w, int id, Part* part)
 {
     w.startElement("music:part");
     w.addAttribute("id", QString("P%1").arg(id));
 
     for (int i = 0; i < part->sheet()->barCount(); i++) {
+        Bar* bar = part->sheet()->bar(i);
+        
         w.startElement("music:measure");
         w.addAttribute("number", i+1);
 
+        bool inAttributes = false;
         if (i == 0) {
             w.startElement("music:attributes");
             if (part->staffCount() != 1) {
@@ -173,6 +192,26 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
             w.startElement("music:divisions");
             w.addTextNode(QString::number(VoiceElement::QuarterLength));
             w.endElement(); // music:divisions
+            inAttributes = true;
+        }
+        
+        for (int st = 0; st < part->staffCount(); st++) {
+            Staff* staff = part->staff(st);
+            for (int e = 0; e < bar->staffElementCount(staff); e++) {
+                StaffElement* se = bar->staffElement(staff, e);
+                
+                Clef* c = dynamic_cast<Clef*>(se);
+                if (c) {
+                    if (!inAttributes) {
+                        w.startElement("music:attributes");
+                        inAttributes = true;
+                    }
+                    writeClef(w, c);
+                }
+            }
+        }
+
+        if (inAttributes) {
             w.endElement(); // music:attributes
         }
 
