@@ -6,14 +6,11 @@ set(karbondockers_SRCS
     vstyledocker.cc
     KarbonTransformDocker.cpp
     KarbonLayerDocker.cpp
+    KarbonLayerModel.cpp
     KarbonStylePreviewDocker.cpp
     )
 
 kde4_add_library(karbondockers ${karbondockers_SRCS})
-
-
-
-#target_link_libraries( karbondockers ${KDE4_CORE} karbonpart )
 
 install(TARGETS karbondockers  DESTINATION ${LIB_INSTALL_DIR})
 
