@@ -38,6 +38,7 @@
 #include <QValidator>
 
 #include <kapplication.h>
+#include <kconfig.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcombobox.h>
@@ -91,12 +92,67 @@ CSVExportDialog::CSVExportDialog( QWidget * parent )
            this, SLOT( selectionOnlyChanged( bool ) ) );
   connect( this,SIGNAL(okClicked()),SLOT(slotOk()));
   connect( this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
+
+  loadSettings();
 }
 
 CSVExportDialog::~CSVExportDialog()
 {
+  saveSettings();
   kapp->setOverrideCursor(Qt::WaitCursor);
   delete m_delimiterValidator;
+}
+
+void CSVExportDialog::loadSettings()
+{
+    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    m_textquote = configGroup.readEntry("textQuote", "\"")[0];
+    m_delimiter = configGroup.readEntry("delimiter", ",");
+    const QString codecText = configGroup.readEntry("codec", "");
+    bool selectionOnly = configGroup.readEntry("selectionOnly", false);
+    const QString sheetDelim = configGroup.readEntry("sheetDelimiter", m_dialog->m_sheetDelimiter->text());
+    bool delimAbove = configGroup.readEntry("sheetDelimiterAbove", false);
+    const QString eol = configGroup.readEntry("eol", "\r\n");
+
+    // update widgets
+    if (!codecText.isEmpty()) {
+      m_dialog->comboBoxEncoding->setCurrentIndex(m_dialog->comboBoxEncoding->findText(codecText));
+    }
+    if (m_delimiter == ",")
+        m_dialog->m_radioComma->setChecked(true);
+    else if (m_delimiter == "\t")
+        m_dialog->m_radioTab->setChecked(true);
+    else if (m_delimiter == " ")
+        m_dialog->m_radioSpace->setChecked(true);
+    else if (m_delimiter == ";")
+        m_dialog->m_radioSemicolon->setChecked(true);
+    else {
+        m_dialog->m_radioOther->setChecked(true);
+        m_dialog->m_delimiterEdit->setText(m_delimiter);
+    }
+    m_dialog->m_comboQuote->setCurrentIndex(m_textquote == '\'' ? 1 : m_textquote == '"' ? 0 : 2);
+    m_dialog->m_selectionOnly->setChecked(selectionOnly);
+    m_dialog->m_sheetDelimiter->setText(sheetDelim);
+    m_dialog->m_delimiterAboveAll->setChecked(delimAbove);
+    if (eol == "\r\n")
+        m_dialog->radioEndOfLineCRLF->setChecked(true);
+    else if (eol == "\r")
+        m_dialog->radioEndOfLineCR->setChecked(true);
+    else
+        m_dialog->radioEndOfLineLF->setChecked(true);
+}
+
+void CSVExportDialog::saveSettings()
+{
+    KConfigGroup configGroup = KGlobal::config()->group("CSVDialog Settings");
+    configGroup.writeEntry("textQuote", QString(m_textquote));
+    configGroup.writeEntry("delimiter", m_delimiter);
+    configGroup.writeEntry("codec", m_dialog->comboBoxEncoding->currentText());
+    configGroup.writeEntry("selectionOnly", exportSelectionOnly());
+    configGroup.writeEntry("sheetDelimiter", getSheetDelimiter());
+    configGroup.writeEntry("sheetDelimiterAbove", printAlwaysSheetDelimiter());
+    configGroup.writeEntry("eol", getEndOfLine());
+    configGroup.sync();
 }
 
 void CSVExportDialog::fillSheet( Map * map )
