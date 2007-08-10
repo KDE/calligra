@@ -19,6 +19,20 @@ bellow and then use in KWord the "Import Doxygen XML File" python script;
 
 import os, sys, re, xml.dom.minidom
 
+class Config:
+
+    def __init__(self):
+        self.FileName = ""
+        self.TableOfContent = True
+        self.IndexPage = True
+        self.ClassDescription = True
+        self.MemberDescription = True
+        self.EnableSlots = True
+        self.EnableSignals = True
+        self.EnableProperties = True
+        self.EnableFunctions = False
+        self.EnableVariables = False
+
 class Class:
 
     class Slot:
@@ -76,11 +90,38 @@ class Class:
 
             self.definition = d.strip()
 
-            print "1-----------------------------"
-            print node.toxml()
-            print "2-----------------------------"
+            #print "1-----------------------------"
+            #print node.toxml()
+            #print "2-----------------------------"
 
-    def __init__(self, node):
+    class Variable:
+        def __init__(self, id, node):
+            self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
+            d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "QString error"
+            d = d.replace("const ","")
+            d = re.sub("&|\*","",d)
+            d += " [variable]"
+            self.definition = d.strip()
+            print "VARIABLE --------------------------\n%s" % node.toxml()
+
+    class Function:
+        def __init__(self, id, node):
+            print ""
+            self.id = id
+            self.node = node
+            self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
+            d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "virtual QString sheet"
+            d = d.replace("virtual ","")
+            a = node.getElementsByTagName("argsstring")[0].childNodes[0].data #e.g. "(const QString &amp;name)"
+            a = re.sub("=[\s]*0$","",a)
+            a = re.sub("(^|[^a-zA-Z0-9])const($|[^a-zA-Z0-9])", "\\1\\2", "%s%s" % (d,a))
+            a = re.sub("&|\*","",a)
+            a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
+            a += " [function]"
+            self.definition = a.strip()
+            print "FUNCTION --------------------------\n%s" % node.toxml()
+
+    def __init__(self, config, node):
         self.node = node
         self.description = " ".join( [ n.toxml() for n in node.childNodes if n.nodeName == "detaileddescription" ] )
         self.memberDict = {}
@@ -89,28 +130,40 @@ class Class:
             id = n.getAttribute("id")
             kind = n.getAttribute("kind")
             if kind == "slot":
-                self.memberDict[id] = Class.Slot(id, n)
-                self.memberList.append(id)
+                if config.EnableSlots:
+                    self.memberDict[id] = Class.Slot(id, n)
+                    self.memberList.append(id)
             elif kind == "signal":
-                self.memberDict[id] = Class.Signal(id, n)
-                self.memberList.append(id)
+                if config.EnableSignals:
+                    self.memberDict[id] = Class.Signal(id, n)
+                    self.memberList.append(id)
             elif kind == "property":
-                self.memberDict[id] = Class.Property(id, n)
-                self.memberList.append(id)
+                if config.EnableProperties:
+                    self.memberDict[id] = Class.Property(id, n)
+                    self.memberList.append(id)
+            elif kind == "function":
+                if config.EnableFunctions:
+                    self.memberDict[id] = Class.Function(id, n)
+                    self.memberList.append(id)
+            elif kind == "variable":
+                if config.EnableVariables:
+                    self.memberDict[id] = Class.Variable(id, n)
+                    self.memberList.append(id)
             else:
                 print "  Skipping class-member id=%s kind=%s" % (id, kind)
                 #print n.toxml()
 
 class Page:
 
-    def __init__(self, node):
+    def __init__(self, config, node):
         self.title = node.getElementsByTagName("title")[0].childNodes[0].data #e.g. "KSpread Scripting Plugin"
         self.description = " ".join( [ n.toxml() for n in node.childNodes if n.nodeName == "detaileddescription" ] )
 
 class Writer:
 
-    def __init__(self, doc):
+    def __init__(self, doc, config):
         self.doc = doc
+        self.config = config
         self.CompoundDict = {}
         self.CompoundList = []
 
@@ -124,9 +177,9 @@ class Writer:
                 continue
 
             if kind == "class":
-                impl = Class(node)
+                impl = Class(self.config, node)
             elif kind == "page":
-                impl = Page(node)
+                impl = Page(self.config, node)
             else:
                 print "Skipping id=%s name=%s kind=%s" % (id, name, kind)
                 #raise RuntimeError("Unknown kind '%s'" % kind)
@@ -196,43 +249,54 @@ class Writer:
         file.write( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n" )
         file.write( "</head><body><h1>%s</h1>\n" % title )
 
-        file.write("<ol>")
+        if self.config.TableOfContent:
+            file.write("<ol>")
 
-        file.write("<li><a href=\"#pages\">Pages</a><ol>")
-        for i in self.CompoundList:
-            if self.CompoundDict[i].kind != "page": continue
-            file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
-        file.write("</ol></li>")
+            file.write("<li><a href=\"#pages\">Pages</a><ol>")
+            for i in self.CompoundList:
+                if self.CompoundDict[i].kind != "page":
+                    continue
+                file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
+            file.write("</ol></li>")
 
-        file.write("<li><a href=\"#objects\">Objects</a><ol>")
-        for i in self.CompoundList:
-            if self.CompoundDict[i].kind != "class": continue
-            file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
-        file.write("</ol></li>")
+            file.write("<li><a href=\"#objects\">Objects</a><ol>")
+            for i in self.CompoundList:
+                if self.CompoundDict[i].kind != "class":
+                    continue
+                file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
+            file.write("</ol></li>")
 
-        file.write("</ol>")
+            file.write("</ol>")
 
-        file.write("<h2><a name=\"indexpage\" />%s</h2>" % self.CompoundDict["indexpage"].name)
-        file.write( parseToHtml( self.CompoundDict["indexpage"].description ) )
+        if self.config.IndexPage:
+            file.write("<h2><a name=\"indexpage\" />%s</h2>" % self.CompoundDict["indexpage"].name)
+            file.write( parseToHtml( self.CompoundDict["indexpage"].description ) )
 
         file.write("<h2><a name=\"objects\" />Objects</h2>")
         for i in self.CompoundList:
-            if self.CompoundDict[i].kind != "class": continue
+            if self.CompoundDict[i].kind != "class":
+                continue
             file.write("<h3><a name=\"%s\" />%s</h3>" % (i,self.CompoundDict[i].name))
-            file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
+            if self.config.ClassDescription:
+                file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
             file.write( "<ul>" )
             for m in self.CompoundDict[i].memberList:
-                s = self.CompoundDict[i].memberDict[m].definition
-                if len(self.CompoundDict[i].memberDict[m].description) > 0:
-                    s += "<br /><blockquote>%s</blockquote>" % parseToHtml( self.CompoundDict[i].memberDict[m].description )
+                member = self.CompoundDict[i].memberDict[m]
+                s = member.definition
+                if self.config.MemberDescription:
+                    if len(member.description) > 0:
+                        s += "<br /><blockquote>%s</blockquote>" % parseToHtml( member.description )
                 file.write("<li>%s</li>" % s)
             file.write( "</ul>" )
 
         file.write("</body></html>")
 
 class ImportDialog:
-    def __init__(self, action):
+    def __init__(self, action, config):
         import Kross, KWord
+
+        self.action = action
+        self.config = config
 
         forms = Kross.module("forms")
         self.dialog = forms.createDialog("Import Doxygen XML File")
@@ -246,8 +310,8 @@ class ImportDialog:
         #openwidget.minimumHeight = 400
         openwidget.setFilter("*.xml|XML Files\n*|All Files")
 
-        #configpage = self.dialog.addPage("Options","Import Options","configure")
-        #configwidget = forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"importdoxyxml.ui"))
+        configpage = self.dialog.addPage("Options","Import Options","configure")
+        configwidget = forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"importdoxyxmloptions.ui"))
 
         stylepage = self.dialog.addPage("Styles","Cascading Style Sheet","color-fill")
         stylewidget = forms.createWidgetFromUIFile(stylepage, os.path.join(action.currentPath(),"importdoxyxmlstyle.ui"))
@@ -257,18 +321,30 @@ class ImportDialog:
             fileName = openwidget.selectedFile()
             if not fileName:
                 raise "No file selected"
-            self.importFile(fileName, styleedit.plainText)
+
+            self.config.FileName = fileName
+            self.config.TableOfContent = configwidget["TocCheckBox"].checked
+            self.config.IndexPage = configwidget["IndexPageCheckBox"].checked
+            self.config.ClassDescription = configwidget["ClassDescriptionCheckBox"].checked
+            self.config.MemberDescription = configwidget["MemberDescriptionCheckBox"].checked
+            self.config.EnableSlots = configwidget["SlotsCheckBox"].checked
+            self.config.EnableSignals = configwidget["SignalsCheckBox"].checked
+            self.config.EnableProperties = configwidget["PropertiesCheckBox"].checked
+            self.config.EnableFunctions = configwidget["FunctionsCheckBox"].checked
+            self.config.EnableVariables = configwidget["VariablesCheckBox"].checked
+
+            self.importFile(styleedit.plainText)
 
     def __del__(self):
         self.dialog.delayedDestruct()
 
-    def importFile(self, fileName, styles):
+    def importFile(self, styles):
         import Kross, KWord
 
         try:
-            file = open(fileName, "r")
+            file = open(self.config.FileName, "r")
         except IOError, (errno, strerror):
-            raise "Failed to read file \"%s\":\n%s" % (fileName, strerror)
+            raise "Failed to read file \"%s\":\n%s" % (self.config.FileName, strerror)
 
         xmldoc = xml.dom.minidom.parse( file )
 
@@ -283,7 +359,7 @@ class ImportDialog:
                 self.lines.append(line)
             def flush(self):
                 self.kwdoc.setHtml( ' '.join(self.lines) )
-        writer = Writer(xmldoc)
+        writer = Writer(xmldoc, self.config)
         kwwriter = KWordFileWriter(kwdoc)
         writer.writeHtml(kwwriter)
         kwwriter.flush()
@@ -299,9 +375,9 @@ if __name__=="__main__":
     except IOError, (errno, strerror):
         raise "Failed to create file \"%s\":\n%s" % (filename, strerror)
     xmldoc = xml.dom.minidom.parse( sys.stdin )
-    writer = Writer(xmldoc)
+    writer = Writer(xmldoc, Config())
     writer.writeHtml(file)
 
 else:
     import Kross
-    ImportDialog(self)
+    ImportDialog(self, Config())
