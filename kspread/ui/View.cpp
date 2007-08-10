@@ -103,7 +103,7 @@
 #include <KoPartSelectAction.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoColorSetWidget.h>
+#include <KoColorSetAction.h>
 #include <KoTabBar.h>
 #include <KoToolBox.h>
 #include <KoToolBoxFactory.h>
@@ -1870,7 +1870,9 @@ void View::initView()
     d->formulaBarLayout->addSpacing( 4 );
 
 /****** FIXME TEST new colorset widget (simply remove these lines when testing is done) ****/
-    d->formulaBarLayout->addWidget( new KoColorSetWidget(d->toolWidget) );
+    QToolButton *tb = new QToolButton(d->toolWidget);
+    tb->setDefaultAction(new KoColorSetAction(d->toolWidget));
+    d->formulaBarLayout->addWidget(tb);
     d->formulaBarLayout->addSpacing( 4 );
 /****** FIXME TEST end *********/
 
