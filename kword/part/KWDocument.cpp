@@ -53,6 +53,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoImageCollection.h>
 #include <KoDocumentInfo.h>
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -64,6 +66,7 @@
 #include <QTimer>
 #include <QThread>
 #include <QCoreApplication>
+#include <QUrl>
 
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
@@ -148,6 +151,7 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
     KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
 
     KoGenStyles mainStyles;
+    
     KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
     // for office:master-styles
@@ -177,11 +181,13 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
     KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
     contentTmpWriter.startElement( "office:body" );
+    
     contentTmpWriter.startElement( "office:text" );
 
     KoShapeSavingContext context (contentTmpWriter, savingContext);
 
     KWTextFrameSet *mainTextFrame = 0;
+    
     foreach(KWFrameSet *fs, frameSets()) {
         // TODO loop over all non-autocreated frames and save them.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
@@ -224,6 +230,13 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
 
     contentWriter->startElement( "office:automatic-styles" );
     //saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
+    KoGenStyles::StyleMap styles = mainStyles.styles();
+    QMapIterator<KoGenStyle, QString> i(styles);
+    while (i.hasNext()) {
+        i.next();
+        i.key().writeStyle(contentWriter, mainStyles, "style:style", i.value(), "");
+    }
+    
     contentWriter->endElement();
 
     // And now we can copy over the contents from the tempfile to the real one

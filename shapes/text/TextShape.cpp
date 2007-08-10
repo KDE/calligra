@@ -235,7 +235,7 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const {
     if (!mainTextFrame)
         writer->startElement( "draw:text-box" );
 
-    m_textShapeData->saveOdf(writer);
+    m_textShapeData->saveOdf(context);
 
     if (!mainTextFrame) {
         writer->endElement(); // draw-text-box
