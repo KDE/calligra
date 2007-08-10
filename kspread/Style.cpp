@@ -2423,10 +2423,11 @@ bool Style::operator==( const Style& other ) const
 {
     if ( other.isEmpty() )
         return isEmpty() ? true : false;
-    QList<Key> attributes = d->subStyles.keys() + other.d->subStyles.keys();
-    for ( int i = 0; i < attributes.count(); ++i )
+    const QSet<Key> keys = QSet<Key>::fromList(d->subStyles.keys() + other.d->subStyles.keys());
+    const QSet<Key>::ConstIterator end = keys.constEnd();
+    for (QSet<Key>::ConstIterator it = keys.constBegin(); it != end; ++it)
     {
-        if ( !compare( d->subStyles.value(attributes[i]).data(), other.d->subStyles.value(attributes[i]).data() ) )
+        if (!compare( d->subStyles.value(*it).data(), other.d->subStyles.value(*it).data()))
             return false;
     }
     return true;
