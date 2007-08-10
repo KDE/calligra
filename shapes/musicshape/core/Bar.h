@@ -83,7 +83,8 @@ public:
 
     int staffElementCount(Staff* staff) const;
     StaffElement* staffElement(Staff* staff, int index);
-    void addStaffElement(StaffElement* element);
+    int indexOfStaffElement(StaffElement* element);
+    void addStaffElement(StaffElement* element, int indexHint = -1);
     void removeStaffElement(StaffElement* element, bool deleteElement = true);
 public slots:
     /**

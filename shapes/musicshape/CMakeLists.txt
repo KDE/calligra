@@ -62,6 +62,7 @@ SET (musicshape_LIB_SRCS
     commands/RemoveChordCommand.cpp
     commands/AddDotCommand.cpp
     commands/SetClefCommand.cpp
+    commands/RemoveStaffElementCommand.cpp
 
     ${musiccore_SRCS}
 )

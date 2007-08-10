@@ -130,9 +130,32 @@ StaffElement* Bar::staffElement(Staff* staff, int index)
     return 0;
 }
 
-void Bar::addStaffElement(StaffElement* element)
+int Bar::indexOfStaffElement(StaffElement* element)
 {
     Q_ASSERT( element );
+    return d->staffElements.indexOf(element);
+}
+
+void Bar::addStaffElement(StaffElement* element, int index)
+{
+    Q_ASSERT( element );
+    if (index >= 0) {
+        bool correct = true;
+        if (index > 0) {
+            StaffElement* se = d->staffElements[index-1];
+            if (se->startTime() > element->startTime()) correct = false;
+        }
+        if (index < d->staffElements.size()) {
+            StaffElement* se = d->staffElements[index];
+            if (se->startTime() < element->startTime()) correct = false;
+        }
+        
+        if (correct) {
+            d->staffElements.insert(index, element);
+            return;
+        }
+    }
+    
     for (int i = 0; i < d->staffElements.size(); i++) {
         StaffElement* se = d->staffElements[i];
         if (se->startTime() > element->startTime()) {

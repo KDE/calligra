@@ -34,6 +34,7 @@
 
 #include "../commands/RemoveNoteCommand.h"
 #include "../commands/RemoveChordCommand.h"
+#include "../commands/RemoveStaffElementCommand.h"
 
 #include <kicon.h>
 #include <kdebug.h>
@@ -110,13 +111,34 @@ void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
             }
         }
     }
+    
+    StaffElement* se = 0;
+    for (int e = 0; e < bar->staffElementCount(staff); e++) {
+        StaffElement* elem = bar->staffElement(staff, e);
+        double centerX = elem->x() + (elem->width() / 2);
+        double centerY = elem->y() + (elem->height() / 2);
+        double dist = sqrt(sqr(centerX - realX) + sqr(centerY - pos.y()));
+        if (dist < closestDist) {
+            se = elem;
+            closestDist = dist;
+            chord = 0;
+        }
+    }
 
-    if (!chord) return;
+    if (!chord && !se) return;
     if (closestDist > 10) return; // bah, magic numbers are ugly....
 
-    if (closestNote && chord->noteCount() > 1) {
-        m_tool->addCommand(new RemoveNoteCommand(m_tool->shape(), chord, closestNote));
+    if (chord) {
+        if (closestNote && chord->noteCount() > 1) {
+            m_tool->addCommand(new RemoveNoteCommand(m_tool->shape(), chord, closestNote));
+        } else {
+            m_tool->addCommand(new RemoveChordCommand(m_tool->shape(), chord));
+        }
     } else {
-        m_tool->addCommand(new RemoveChordCommand(m_tool->shape(), chord));
+        // remove staff element
+        if (barIdx > 0 || se->startTime() > 0) {
+            // don't allow removal of staff elements at the start of the first bar
+            m_tool->addCommand(new RemoveStaffElementCommand(m_tool->shape(), se, bar));
+        }
     }
 }
