@@ -298,7 +298,7 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
             // 0% means all polygon points are on a single ellipse
             // 100% means inner points are located at polygon center point
             double percent = (m_radius[tip]-m_radius[base]) / m_radius[tip] * 100.0;
-            context.xmlWriter().addAttribute( "draw:sharpness", QString("%1%%" ).arg( percent ) );
+            context.xmlWriter().addAttribute( "draw:sharpness", QString("%1\%" ).arg( percent ) );
         }
         context.xmlWriter().endElement();
         saveOdfConnections(context);
