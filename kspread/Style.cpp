@@ -2335,7 +2335,7 @@ bool Style::compare( const SubStyle* one, const SubStyle* two )
         case DefaultStyleKey:
             return true;
         case NamedStyleKey:
-            return static_cast<const NamedStyle*>(one)->name != static_cast<const NamedStyle*>(two)->name;
+            return static_cast<const NamedStyle*>(one)->name == static_cast<const NamedStyle*>(two)->name;
         // borders
         case LeftPen:
             return static_cast<const SubStyleOne<LeftPen,QPen>*>(one)->value1 == static_cast<const SubStyleOne<LeftPen,QPen>*>(two)->value1;
