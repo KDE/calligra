@@ -133,7 +133,7 @@ QRect StyleStorage::usedArea() const
     return QRect(QPoint(1, 1), d->usedArea.boundingRect().bottomRight());
 }
 
-void StyleStorage::saveOdfCreateDefaultStyles(int maxCols, int maxRows,
+void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows,
                                               QMap<int, Style>& columnDefaultStyles,
                                               QMap<int, Style>& rowDefaultStyles) const
 {
@@ -156,14 +156,21 @@ void StyleStorage::saveOdfCreateDefaultStyles(int maxCols, int maxRows,
 #endif
     const QRect sheetRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
     if (d->usedColumns.count() != 0)
+    {
+        maxCols = qMax(maxCols, (--d->usedColumns.constEnd()).key());
         maxRows = KS_rowMax;
+    }
     if (d->usedRows.count() != 0)
+    {
         maxCols = KS_colMax;
+        maxRows = qMax(maxRows, (--d->usedRows.constEnd()).key());
+    }
     const QList< QPair<QRectF,SharedSubStyle> > pairs = d->tree.intersectingPairs(sheetRect).values();
     for (int i = 0; i < pairs.count(); ++i)
     {
         const QRect rect = pairs[i].first.toRect();
         // column default cell styles
+        // Columns have no content. Prefer them over rows for the default cell styles.
         if (rect.top() == 1 && rect.bottom() == maxRows)
         {
             for (int col = rect.left(); col <= rect.right(); ++col)

@@ -3723,12 +3723,11 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     kDebug(36003) <<"Sheet::saveOasisColRowCell:" << d->name;
 
     // calculate the column/row default cell styles
+    int maxMaxRows = maxRows; // includes the max row a column default style occupies
     QMap<int, Style> columnDefaultStyles;
     QMap<int, Style> rowDefaultStyles;
-    styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxRows, columnDefaultStyles, rowDefaultStyles);
-    // adjusting the maximum columns/rows
-    if (columnDefaultStyles.count() != 0)
-        maxCols = qMax(maxCols, (--columnDefaultStyles.constEnd()).key());
+    // also extends the maximum column/row to include column/row styles
+    styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, columnDefaultStyles, rowDefaultStyles);
     if (rowDefaultStyles.count() != 0)
         maxRows = qMax(maxRows, (--rowDefaultStyles.constEnd()).key());
     kDebug(36003) <<"\t Sheet dimension:" << maxCols <<" x" << maxRows;
@@ -3977,6 +3976,22 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         }
         xmlWriter.endElement();
     }
+
+    // Fill in rows with empty cells, if there's a column default cell style.
+    if (!columnDefaultStyles.isEmpty())
+    {
+        if (maxMaxRows > maxRows)
+        {
+            xmlWriter.startElement("table:table-row");
+            if (maxMaxRows > maxRows + 1)
+                xmlWriter.addAttribute("table:number-rows-repeated", maxMaxRows - maxRows - 1);
+            xmlWriter.startElement("table:table-cell");
+            const int col = qMin(maxCols, (--columnDefaultStyles.constEnd()).key());
+            xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col));
+            xmlWriter.endElement();
+            xmlWriter.endElement();
+        }
+    }
 }
 
 void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
@@ -4000,10 +4015,34 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
                        columnDefaultStyles, rowDefaultStyles);
         i += repeated;
         // stop if we reached the end column
-        if ( i > maxCols )
+        if (i > maxCols || nextCell.isNull())
           break;
         cell = Cell( this, i, row );
         nextCell = d->cellStorage->nextInRow( i, row );
+    }
+
+    // Fill the row with empty cells, if there's a row default cell style.
+    if (rowDefaultStyles.contains(row))
+    {
+        if (maxCols >= i)
+        {
+            xmlWriter.startElement("table:table-cell");
+            if (maxCols > i)
+                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(maxCols - i));
+            xmlWriter.endElement();
+        }
+    }
+    // Fill the row with empty cells up to the last column with a default cell style.
+    else if (!columnDefaultStyles.isEmpty())
+    {
+        const int col = (--columnDefaultStyles.constEnd()).key();
+        if (col >= i)
+        {
+            xmlWriter.startElement("table:table-cell");
+            if (col > i)
+                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col - i));
+            xmlWriter.endElement();
+        }
     }
 }
 
