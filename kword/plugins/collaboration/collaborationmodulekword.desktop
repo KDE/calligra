@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Collaboration plugin
+Name[es]=Complemento de colaboración
 Name[fa]=وصلۀ همکاری
 Name[ga]=Breiseán comhoibrithe
 Name[pt]='Plugin' de colaboração
@@ -8,6 +9,7 @@ Name[pt_BR]='Plugin' de colaboração
 Name[sv]=Insticksprogram för samverkan
 Name[zh_TW]=變動外掛程式
 Comment=Allow multiple users to work on document in real-time
+Comment[es]=Permitir que varios usuarios trabajen sobre un documento en tiempo real
 Comment[pt]=Permite a vários utilizadores trabalharem sobre o documento em tempo-real
 Comment[pt_BR]=Permite a vários utilizadores trabalharem sobre o documento em tempo-real
 Comment[sv]=Tillåt flera användare arbete på ett dokument i realtid
