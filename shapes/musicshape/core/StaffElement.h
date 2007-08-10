@@ -76,6 +76,7 @@ public:
      * Returns the start time of this musical elements in ticks.
      */
     int startTime() const;
+    virtual int priority() const = 0; // higher priority is sorted to the left
 public slots:
     /**
      * Sets the x position of this musical element.

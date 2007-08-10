@@ -41,6 +41,11 @@ TimeSignature::~TimeSignature()
     delete d;
 }
 
+int TimeSignature::priority() const
+{
+    return 50;
+}
+
 int TimeSignature::beats() const
 {
     return d->beats;

@@ -82,6 +82,7 @@ public:
     int lineToPitch(int line) const;
     
     int pitchToLine(int pitch) const;
+    virtual int priority() const;
 public slots:
     /**
      * Changes the shape of the clef.

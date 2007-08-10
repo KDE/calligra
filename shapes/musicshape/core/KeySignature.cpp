@@ -38,6 +38,10 @@ KeySignature::~KeySignature()
     delete d;
 }
 
+int KeySignature::priority() const
+{
+    return 100;
+}
 int KeySignature::accidentals() const
 {
     int sum = 0;

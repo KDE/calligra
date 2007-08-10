@@ -40,6 +40,11 @@ Clef::~Clef()
     delete d;
 }
 
+int Clef::priority() const
+{
+    return 150;
+}
+
 Clef::ClefShape Clef::shape() const
 {
     return d->shape;

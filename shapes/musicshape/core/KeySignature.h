@@ -56,6 +56,7 @@ public:
      * @param pitch the pitch of the note for which to return the accidentals
      */
     int accidentals(int pitch) const;
+    virtual int priority() const;
 public slots:
     /**
      * Sets the number of accidentals in this key signature. Use positive values for sharps and negative values for

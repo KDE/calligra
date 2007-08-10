@@ -61,6 +61,7 @@ public:
      * Returns the type of the time signature.
      */
     TimeSignatureType type() const;
+    virtual int priority() const;
 public slots:
     /**
      * Changes the number of beats in this time signature.
