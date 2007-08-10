@@ -169,25 +169,6 @@ bool util_isRectValid( const QRect& rect )
         return false;
 }
 
-//used in View::slotRename
-bool KSpread::Util::validateSheetName(const QString &name)
-{
-  if (name[0] == ' ')
-  {
-    return false;
-  }
-  for (int i = 0; i < name.length(); i++)
-  {
-    if ( !(name[i].isLetterOrNumber() ||
-           name[i] == ' ' || name[i] == '.' ||
-           name[i] == '_'))
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
 
 //not used anywhere
 int KSpread::Util::penCompare( QPen const & pen1, QPen const & pen2 )

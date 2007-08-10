@@ -102,10 +102,9 @@ public:
     enum TestType        { Text, Validity, Comment, ConditionalCellAttribute };
 
     /**
-     * Creates a sheet in \p map with the name \p sheetName . The internal
-     * name, for scripting, is set by \p name .
+     * Creates a sheet in \p map with the name \p sheetName.
      */
-    Sheet ( Map* map, const QString &sheetName, const char* name = 0 );
+    Sheet(Map* map, const QString& sheetName);
 
     /**
      * Copy constructor.

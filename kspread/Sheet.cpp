@@ -95,6 +95,20 @@
 
 namespace KSpread {
 
+static QString createObjectName(const QString& sheetName)
+{
+    QString objectName;
+    for (int i = 0; i < sheetName.count(); ++i)
+    {
+        if (sheetName[i].isLetterOrNumber() || sheetName[i] == '_')
+            objectName.append(sheetName[i]);
+        else
+            objectName.append('_');
+    }
+    return objectName;
+}
+
+
 class Sheet::Private
 {
 public:
@@ -155,18 +169,10 @@ Sheet* Sheet::find( int _id )
   return (*s_mapSheets)[ _id ];
 }
 
-Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
+Sheet::Sheet(Map* map, const QString& sheetName)
     : QObject( map )
     , d( new Private )
 {
-  Q_ASSERT(objectName);
-  // Get a unique name so that we can offer scripting
-  if ( !objectName )
-  {
-    objectName = "Sheet" + QByteArray::number(s_id);
-  }
-  setObjectName( objectName );
-
   if ( s_mapSheets == 0 )
     s_mapSheets = new QHash<int,Sheet*>;
 
@@ -179,8 +185,12 @@ Sheet::Sheet( Map* map, const QString &sheetName, const char *objectName )
 
   d->name = sheetName;
 
+  // Set a valid object name, so that we can offer scripting.
+  setObjectName(createObjectName(d->name));
   new SheetAdaptor(this);
-  QDBusConnection::sessionBus().registerObject( '/'+map->doc()->objectName() + '/' + map->objectName()+ '/' + objectName, this);
+  QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
+                                               '/' + d->workbook->objectName() +
+                                               '/' + this->objectName(), this);
 
   d->cellStorage = new CellStorage( this );
   d->rows.setAutoDelete( true );
@@ -225,8 +235,8 @@ Sheet::Sheet(const Sheet& other)
         d->name = other.d->name + QString("_%1").arg(i++);
     while (d->workbook->findSheet(d->name));
 
-    QString objectName = d->name;
-    setObjectName(objectName.replace(' ', '_'));
+    // Set a valid object name, so that we can offer scripting.
+    setObjectName(createObjectName(d->name));
     new SheetAdaptor(this);
     QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
                                                  '/' + d->workbook->objectName() +

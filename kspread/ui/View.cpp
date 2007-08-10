@@ -6592,24 +6592,6 @@ void View::slotRename()
 
   if( !ok ) return;
 
-  while (!Util::validateSheetName(newName))
-  {
-    KMessageBox::information( this, i18n("Sheet name contains illegal characters. Only numbers and letters are allowed."),
-      i18n("Change Sheet Name") );
-
-    newName = newName.simplified();
-    int n = newName.indexOf('-');
-    if ( n > -1 ) newName[n] = '_';
-    n = newName.indexOf('!');
-    if ( n > -1 ) newName[n] = '_';
-    n = newName.indexOf('$');
-    if ( n > -1 ) newName[n] = '_';
-
-    newName = KInputDialog::getText( i18n("Rename Sheet"),i18n("Enter name:"), newName, &ok, this );
-
-    if ( !ok ) return;
-  }
-
   if ( (newName.trimmed()).isEmpty() ) // Sheet name is empty.
   {
     KMessageBox::information( this, i18n("Sheet name cannot be empty."), i18n("Change Sheet Name") );

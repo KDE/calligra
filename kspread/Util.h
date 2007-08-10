@@ -62,8 +62,6 @@ namespace Util
      */
     KSPREAD_EXPORT QString encodeColumnLabelText( int column );
 
-    bool validateSheetName(const QString &name);
-
     //Return true when it's a reference to cell from sheet.
     KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
 

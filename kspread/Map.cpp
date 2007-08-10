@@ -124,7 +124,7 @@ void Map::setProtected( QByteArray const & passwd )
 Sheet* Map::createSheet()
 {
   QString name( i18n("Sheet%1", d->tableId++) );
-  Sheet* sheet = new Sheet( this, name, name.toUtf8() );
+  Sheet* sheet = new Sheet(this, name);
   return sheet;
 }
 
