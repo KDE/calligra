@@ -52,8 +52,6 @@ NOT TODO:
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QGroupBox>
-#include <QComboBox>
-#include <QTextBrowser>
 
 #include <kglobal.h>
 #include <kprocess.h>
@@ -67,6 +65,8 @@ NOT TODO:
 #include <klineedit.h>
 #include <kdebug.h>
 #include <krun.h>
+#include <kcombobox.h>
+#include <ktextbrowser.h>
 #include <kurl.h>
 
 Thesaurus::Thesaurus()
@@ -109,11 +109,11 @@ Thesaurus::Thesaurus()
     row1->addWidget(m_search, 0);
     m_back = new QToolButton(page);
     m_back->setIcon(KIcon(QString::fromLatin1("go-previous")));
-    m_back->setToolTip(i18n("Back"));
+    m_back->setToolTip(i18nc("@action:button", "Back"));
     row1->addWidget(m_back, 0);
     m_forward = new QToolButton(page);
     m_forward->setIcon(KIcon(QString::fromLatin1("go-next")));
-    m_forward->setToolTip(i18n("Forward"));
+    m_forward->setToolTip(i18nc("@action:button", "Back"));
     row1->addWidget(m_forward, 0);
 
     KPushButton *lang = new KPushButton(i18n("Change Language..."), page);
@@ -185,12 +185,12 @@ Thesaurus::Thesaurus()
     wnLayout->setMargin(KDialog::marginHint());
     wnWidget->setLayout(wnLayout);
 
-    m_wnComboBox = new QComboBox(wnWidget);
+    m_wnComboBox = new KComboBox(wnWidget);
     m_wnComboBox->setEditable(false);
     wnLayout->addWidget(m_wnComboBox);
     connect(m_wnComboBox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
 
-    m_resultTextBrowser = new QTextBrowser(wnWidget);
+    m_resultTextBrowser = new KTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
     connect(m_resultTextBrowser, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(slotFindTermFromUrl(const QUrl &)));
     wnLayout->addWidget(m_resultTextBrowser);
@@ -249,7 +249,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
             m_word = document->toPlainText();
         m_dialog->showButton(KDialog::Ok, false);
         m_dialog->setButtonGuiItem(KDialog::Cancel,
-                KGuiItem(i18n("&Close"), QString::fromLatin1("dialog-cancel")));
+                KGuiItem(i18nc("@action:button Close thesaurus dialog", "&Close"), QString::fromLatin1("dialog-cancel")));
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
     }
@@ -417,8 +417,7 @@ void Thesaurus::findTermThesaurus(const QString &searchTerm)
 {
     if (!QFile::exists(m_dataFile)) {
         KMessageBox::error(0, i18n("The thesaurus file '%1' was not found. "
-            "Please use 'Change Language...' to select a thesaurus file.").
-            arg(m_dataFile));
+            "Please use 'Change Language...' to select a thesaurus file.", m_dataFile));
         return;
     }
 
