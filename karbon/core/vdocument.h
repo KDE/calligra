@@ -38,7 +38,7 @@
 
 #include <karbon_export.h>
 #include <KoUnit.h>
-#include <KoShapeControllerBase.h>
+#include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>
 #include <KoXmlReader.h>
 
@@ -181,7 +181,7 @@ public:
     void saveOasis( KoShapeSavingContext & context ) const;
 	enum { STYLE_LINEAR_GRADIENT = KoGenStyle::StyleFirstCustom, STYLE_RADIAL_GRADIENT };
 	bool loadXML( const KoXmlElement& doc );
-	virtual bool loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context );
+    virtual bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
 	virtual void save( QDomElement& element ) const;
 	virtual void load( const KoXmlElement& element );
 	void loadDocumentContent( const KoXmlElement& doc );

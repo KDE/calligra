@@ -297,7 +297,11 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
         return false;
 
     KoOasisLoadingContext context( this, oasisStyles, store );
-    m_doc.loadOasis( page, context );
+    KoShapeLoadingContext shapeContext( context );
+
+    m_doc.loadOasis( page, shapeContext );
+
+    shapeContext.transferShapesToDocument( this );
 
     if( m_doc.pageSize().isEmpty() )
     {
@@ -606,8 +610,7 @@ KarbonPart::mergeNativeFormat( const QString &file )
 	return result;
 }
 
-void
-KarbonPart::addShape( KoShape* shape )
+void KarbonPart::addShape( KoShape* shape )
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
 
@@ -615,8 +618,11 @@ KarbonPart::addShape( KoShape* shape )
     if( layer )
     {
         m_doc.insertLayer( layer );
-        KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-        selection->setActiveLayer( layer );
+        if( canvasController )
+        {
+            KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+            selection->setActiveLayer( layer );
+        }
     }
     else
     {
@@ -624,12 +630,18 @@ KarbonPart::addShape( KoShape* shape )
         if( ! shape->parent() )
         {
             kDebug(38000) <<"shape has no parent, adding to the active layer!";
-            KoShapeLayer *activeLayer = canvasController->canvas()->shapeManager()->selection()->activeLayer();
+            KoShapeLayer *activeLayer = 0;
+            if( canvasController )
+                activeLayer = canvasController->canvas()->shapeManager()->selection()->activeLayer();
+            else if( m_doc.layers().count() )
+                activeLayer = m_doc.layers().first();
+
             if( activeLayer )
                 activeLayer->addChild( shape );
         }
 
         m_doc.add( shape );
+
         foreach( KoView *view, views() ) {
             KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
             canvas->shapeManager()->add(shape);

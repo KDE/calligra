@@ -251,18 +251,16 @@ VDocument::loadDocumentContent( const KoXmlElement& doc )
     }
 }
 
-bool VDocument::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
+bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
     qDeleteAll( d->layers );
     d->layers.clear();
 
-    KoShapeLoadingContext shapeContext( context );
-
     KoXmlElement layerElement;
-    forEachElement( layerElement, context.oasisStyles().layerSet() )
+    forEachElement( layerElement, context.koLoadingContext().oasisStyles().layerSet() )
     {
         KoShapeLayer * l = new KoShapeLayer();
-        if( l->loadOdf( layerElement, shapeContext ) )
+        if( l->loadOdf( layerElement, context ) )
             insertLayer( l );
     }
 
@@ -277,7 +275,7 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &c
     {
         kDebug(38000) <<"loading shape" << child.localName();
 
-        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, shapeContext );
+        KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
         if( shape )
         {
             if( ! shape->parent() )

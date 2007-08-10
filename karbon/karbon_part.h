@@ -32,6 +32,7 @@
 #ifndef __KARBON_PART_H__
 #define __KARBON_PART_H__
 
+#include <KoShapeControllerBase.h>
 
 #include <q3ptrlist.h>
 
