@@ -2138,7 +2138,17 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool era)
 QDomElement Sheet::saveXML( QDomDocument& dd )
 {
     QDomElement sheet = dd.createElement( "table" );
-    sheet.setAttribute( "name", sheetName() );
+
+    // backward compatibility
+    QString sheetName;
+    for (int i = 0; i < d->name.count(); ++i)
+    {
+        if (d->name[i].isLetterOrNumber() || d->name[i] == ' ' || d->name[i] == '.')
+            sheetName.append(d->name[i]);
+        else
+            sheetName.append('_');
+    }
+    sheet.setAttribute("name", sheetName);
 
     //Laurent: for oasis format I think that we must use style:direction...
     sheet.setAttribute( "layoutDirection", (layoutDirection() == Qt::RightToLeft) ? "rtl" : "ltr" );
