@@ -346,7 +346,8 @@ public:
      */
     bool saveOasis( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
                     int row, int column, int &repeated,
-                    GenValidationStyles &valStyle );
+                    GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                    const QMap<int, Style>& rowDefaultStyles );
 
     /**
      * Copies the format from \p cell .

@@ -92,7 +92,8 @@ public:
      * \return the OpenDocument column/row default cell styles
      * \ingroup OpenDocument
      */
-    void saveOdfCreateDefaultStyles(QMap<int, Style>& columnDefaultStyles,
+    void saveOdfCreateDefaultStyles(int maxCols, int maxRows,
+                                    QMap<int, Style>& columnDefaultStyles,
                                     QMap<int, Style>& rowDefaultStyles) const;
 
     /**

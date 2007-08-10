@@ -1142,7 +1142,8 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
 
 bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
                       int row, int column, int &repeated,
-                      GenValidationStyles &valStyle )
+                      GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                      const QMap<int, Style>& rowDefaultStyles )
 {
     if ( !isPartOfMerged() )
         xmlwriter.startElement( "table:table-cell" );
@@ -1165,11 +1166,19 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if ( link().isEmpty() )
       saveOasisValue (xmlwriter);
 
-    KoGenStyle currentCellStyle; // the type determined in saveOasisCellStyle
-    saveOasisCellStyle( currentCellStyle, mainStyles );
-    // skip 'table:style-name' attribute for the default style
-    if ( !currentCellStyle.isDefaultStyle() )
-      xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
+    // Either there's no column and row default and the style's not the default style,
+    // or the style is different to one of them. The row default takes precedence.
+    if ((!rowDefaultStyles.contains(row) && !columnDefaultStyles.contains(column) &&
+         !(style().isDefault() && conditions().isEmpty())) ||
+        (rowDefaultStyles.contains(row) && rowDefaultStyles[row] != style()) ||
+        (columnDefaultStyles.contains(column) && columnDefaultStyles[column] != style()))
+    {
+        KoGenStyle currentCellStyle; // the type determined in saveOasisCellStyle
+        saveOasisCellStyle( currentCellStyle, mainStyles );
+        // skip 'table:style-name' attribute for the default style
+        if ( !currentCellStyle.isDefaultStyle() )
+            xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
+    }
 
     // group empty cells with the same style
     const QString comment = this->comment();
@@ -1198,12 +1207,9 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
           break;
         }
 
-        KoGenStyle nextCellStyle; // the type is determined in saveOasisCellStyle
-        nextCell.saveOasisCellStyle( nextCellStyle, mainStyles );
-
         if ( nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
              !nextCell.comment().isEmpty() ||
-             !(nextCellStyle == currentCellStyle) )
+             !(nextCell.style() == style() && nextCell.conditions() == conditions()) )
         {
           break;
         }

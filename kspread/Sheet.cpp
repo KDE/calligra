@@ -3725,7 +3725,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     // calculate the column/row default cell styles
     QMap<int, Style> columnDefaultStyles;
     QMap<int, Style> rowDefaultStyles;
-    styleStorage()->saveOdfCreateDefaultStyles(columnDefaultStyles, rowDefaultStyles);
+    styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxRows, columnDefaultStyles, rowDefaultStyles);
     // adjusting the maximum columns/rows
     if (columnDefaultStyles.count() != 0)
         maxCols = qMax(maxCols, (--columnDefaultStyles.constEnd()).key());
@@ -3996,7 +3996,8 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
         int repeated = 1;
-        cell.saveOasis( xmlWriter, mainStyles, row, i, repeated, valStyle );
+        cell.saveOasis(xmlWriter, mainStyles, row, i, repeated, valStyle,
+                       columnDefaultStyles, rowDefaultStyles);
         i += repeated;
         // stop if we reached the end column
         if ( i > maxCols )

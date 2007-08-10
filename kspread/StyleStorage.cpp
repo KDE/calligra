@@ -133,7 +133,8 @@ QRect StyleStorage::usedArea() const
     return QRect(QPoint(1, 1), d->usedArea.boundingRect().bottomRight());
 }
 
-void StyleStorage::saveOdfCreateDefaultStyles(QMap<int, Style>& columnDefaultStyles,
+void StyleStorage::saveOdfCreateDefaultStyles(int maxCols, int maxRows,
+                                              QMap<int, Style>& columnDefaultStyles,
                                               QMap<int, Style>& rowDefaultStyles) const
 {
 #if 0 // TODO
@@ -154,8 +155,6 @@ void StyleStorage::saveOdfCreateDefaultStyles(QMap<int, Style>& columnDefaultSty
     }
 #endif
     const QRect sheetRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    int maxCols = qMax(1, usedArea().right());
-    int maxRows = qMax(1, usedArea().bottom());
     if (d->usedColumns.count() != 0)
         maxRows = KS_rowMax;
     if (d->usedRows.count() != 0)
