@@ -26,6 +26,14 @@ AbstractMusicAction::AbstractMusicAction(const QIcon& icon, const QString& text,
     setCheckable(true);
 }
 
+AbstractMusicAction::AbstractMusicAction(const QString& text, SimpleEntryTool* tool)
+    : QAction(text, tool)
+    , m_tool(tool)
+{
+    setCheckable(true);
+}
+
+
 void AbstractMusicAction::renderPreview(QPainter& painter, const QPointF& point)
 {
 }

@@ -67,6 +67,8 @@ MusicShape::MusicShape()
     Staff* staff = part->addStaff();
     Voice* voice = part->addVoice();
     b1->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
+    b1->addStaffElement(new KeySignature(staff, 0, 0));
+    b1->addStaffElement(new TimeSignature(staff, 0, 4, 4));
     voice->bar(b1)->addElement(mkNote(Chord::Eighth, staff, 0));
     voice->bar(b1)->addElement(mkNote(Chord::Eighth, staff, 1));
     voice->bar(b1)->addElement(mkNote(Chord::Sixteenth, staff, 0));

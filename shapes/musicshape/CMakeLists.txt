@@ -49,6 +49,7 @@ SET (musicshape_LIB_SRCS
     actions/EraserAction.cpp
     actions/DotsAction.cpp
     actions/SetClefAction.cpp
+    actions/TimeSignatureAction.cpp
 
     commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp
@@ -63,6 +64,7 @@ SET (musicshape_LIB_SRCS
     commands/AddDotCommand.cpp
     commands/SetClefCommand.cpp
     commands/RemoveStaffElementCommand.cpp
+    commands/SetTimeSignatureCommand.cpp
 
     ${musiccore_SRCS}
 )

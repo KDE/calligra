@@ -47,6 +47,7 @@
 #include "actions/EraserAction.h"
 #include "actions/DotsAction.h"
 #include "actions/SetClefAction.h"
+#include "actions/TimeSignatureAction.h"
 
 #include "commands/AddBarsCommand.h"
 
@@ -189,11 +190,40 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     clefMenu->addAction(action = new SetClefAction(Clef::Soprano, 1, 0, this));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
 
+    QList<QAction*> contextMenu;
+
     QAction* clefAction = new QAction(i18n("Clef"), this);
     clefAction->setMenu(clefMenu);
-    
-    QList<QAction*> contextMenu;
     contextMenu.append(clefAction);
+    
+    QMenu* ksMenu = new QMenu();
+    ksMenu->addAction(action = new TimeSignatureAction(this, 2, 2));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 2, 4));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 3, 4));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 4, 4));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 5, 4));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 3, 8));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 5, 8));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 6, 8));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 7, 8));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 9, 8));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addAction(action = new TimeSignatureAction(this, 12, 8));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+
+    QAction* timeSigAction = new QAction(i18n("Time signature"), this);
+    timeSigAction->setMenu(ksMenu);
+    contextMenu.append(timeSigAction);
+    
     setPopupActionList(contextMenu);
 }
 

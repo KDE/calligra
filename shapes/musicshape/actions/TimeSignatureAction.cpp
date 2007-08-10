@@ -16,27 +16,34 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef ABSTRACTMUSICACTION_H
-#define ABSTRACTMUSICACTION_H
+#include "TimeSignatureAction.h"
 
-#include <QAction>
+#include "../core/Bar.h"
+#include "../core/Staff.h"
+#include "../core/Part.h"
+#include "../core/Sheet.h"
+#include "../core/TimeSignature.h"
 
-class SimpleEntryTool;
-namespace MusicCore {
-    class Staff;
+#include "../commands/SetTimeSignatureCommand.h"
+
+#include "../SimpleEntryTool.h"
+#include "../MusicShape.h"
+
+using namespace MusicCore;
+
+static QString getText(int beats, int beat)
+{
+    return QString("%1/%2").arg(beats).arg(beat);
 }
 
-class AbstractMusicAction : public QAction
+TimeSignatureAction::TimeSignatureAction(SimpleEntryTool* tool, int beats, int beat)
+    : AbstractMusicAction(getText(beats, beat), tool), m_beats(beats), m_beat(beat)
 {
-    Q_OBJECT
-public:
-    AbstractMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool);
-    AbstractMusicAction(const QString& text, SimpleEntryTool* tool);
+    setCheckable(false);
+}
 
-    virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) = 0;
-protected:
-    SimpleEntryTool* m_tool;
-};
-
-#endif // ABSTRACTMUSICACTION_H
+void TimeSignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
+{
+    Bar* bar = staff->part()->sheet()->bar(barIdx);
+    m_tool->addCommand(new SetTimeSignatureCommand(m_tool->shape(), bar, m_beats, m_beat));
+}

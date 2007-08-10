@@ -16,27 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef ABSTRACTMUSICACTION_H
-#define ABSTRACTMUSICACTION_H
+#ifndef SETTIMESIGNATURECOMMAND_H
+#define SETTIMESIGNATURECOMMAND_H
 
-#include <QAction>
+#include <QUndoCommand>
+#include <QList>
 
-class SimpleEntryTool;
+#include "../core/TimeSignature.h"
+
+class MusicShape;
 namespace MusicCore {
-    class Staff;
+    class Bar;
+    class TimeSignature;
 }
 
-class AbstractMusicAction : public QAction
+class SetTimeSignatureCommand : public QUndoCommand
 {
-    Q_OBJECT
 public:
-    AbstractMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool);
-    AbstractMusicAction(const QString& text, SimpleEntryTool* tool);
-
-    virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) = 0;
-protected:
-    SimpleEntryTool* m_tool;
+    SetTimeSignatureCommand(MusicShape* shape, MusicCore::Bar* bar, int beats, int beat);
+    virtual void redo();
+    virtual void undo();
+private:
+    MusicShape* m_shape;
+    MusicCore::Bar* m_bar;
+    QList<MusicCore::TimeSignature*> m_oldSigs, m_newSigs;
 };
 
-#endif // ABSTRACTMUSICACTION_H
+#endif // SETTIMESIGNATURECOMMAND_H
