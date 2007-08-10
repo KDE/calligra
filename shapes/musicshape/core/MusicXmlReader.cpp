@@ -42,7 +42,7 @@ static QString getProperty(const KoXmlElement& elem, const char *propName)
     return propElem.text();
 }
 
-static Chord::Duration parseDuration(QString type, int length, int div)
+static Chord::Duration parseDuration(const QString& type, int length, int div)
 {
     if (type == "128th")        return Chord::HundredTwentyEighth;
     else if (type == "64th")    return Chord::SixtyFourth;

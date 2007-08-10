@@ -21,13 +21,13 @@
 #include <QToolButton>
 #include <QTabWidget>
 #include <QPair>
-#include <QInputDialog>
 #include <QMenu>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kicon.h>
 #include <KFileDialog>
+#include <KInputDialog>
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -355,7 +355,7 @@ void SimpleEntryTool::voiceChanged(int voice)
 void SimpleEntryTool::addBars()
 {
     bool ok;
-    int barCount = QInputDialog::getInteger(NULL, "Add measures", "Add how many measures?", 1, 1, 1000, 1, &ok);
+    int barCount = KInputDialog::getInteger("Add measures", "Add how many measures?", 1, 1, 1000, 1, &ok);
     if (!ok) return;
     addCommand(new AddBarsCommand(m_musicshape, barCount));
 }
