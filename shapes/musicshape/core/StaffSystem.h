@@ -20,10 +20,13 @@
 #define MUSIC_CORE_STAFFSYSTEM_H
 
 #include <QtCore/QObject>
+#include <QtCore/QList>
 
 namespace MusicCore {
 
 class Sheet;
+class Clef;
+class Staff;
 
 class StaffSystem : public QObject
 {
@@ -38,6 +41,9 @@ public:
     void setIndent(double indent);
     double lineWidth() const;
     void setLineWidth(double width);
+    QList<Clef*> clefs() const;
+    Clef* clef(Staff* staff) const;
+    void setClefs(QList<Clef*> clefs);
 public slots:
     void setTop(double top);
     void setFirstBar(int bar);

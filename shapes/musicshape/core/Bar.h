@@ -77,7 +77,22 @@ public:
      * Returns the size of the bar.
      */
     double size() const;
-
+    
+    /**
+     * The prefix of a bar contains any staff elements at time 0 such as clefs and key signatures.
+     * When this bar is the first bar of a staff system the prefix will be drawn at the end of the previous
+     * system instead of the start of this system.
+     *
+     * The prefix is not included in the size of the bar, so the actual size of a bar as it will be drawn is
+     * size() + prefix(), and the size a bar wants to have is desiredSize() + prefix(). The actual contents of the
+     * bar start at position() + (size(), 0); all coordinates (including staff elements with start time 0) are relative
+     * to position(). This means that elements in the prefix have negative x coordinates.
+     */
+    double prefix() const;
+    void setPrefix(double prefix);
+    QPointF prefixPosition() const;
+    void setPrefixPosition(const QPointF& pos);
+    
     double desiredSize() const;
     double scale() const;
 
@@ -90,7 +105,7 @@ public slots:
     /**
      * Sets the top-left corner of the bounding box of this bar.
      */
-    void setPosition(const QPointF& position);
+    void setPosition(const QPointF& position, bool setPrefix=true);
     
     /**
      * Sets the size of the bar.

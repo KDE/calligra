@@ -33,6 +33,8 @@ public:
     QPointF position;
     double size;
     double desiredSize;
+    double prefix;
+    QPointF prefixPosition;
     QList<StaffElement*> staffElements;
 };
 
@@ -40,6 +42,7 @@ Bar::Bar(Sheet* sheet) : d(new Private)
 {
     d->sheet = sheet;
     setDesiredSize(100);
+    d->prefix = 0;
 }
 
 Bar::~Bar()
@@ -67,10 +70,13 @@ QPointF Bar::position() const
     return d->position;
 }
 
-void Bar::setPosition(const QPointF& position)
+void Bar::setPosition(const QPointF& position, bool setPrefix)
 {
     if (d->position == position) return;
     d->position = position;
+    if (setPrefix) {
+        setPrefixPosition(position - QPointF(prefix(), 0));
+    }
     emit positionChanged(position);
 }
 
@@ -97,6 +103,26 @@ void Bar::setDesiredSize(double size)
     d->desiredSize = size;
     setSize(size);
     emit desiredSizeChanged(size);
+}
+
+double Bar::prefix() const
+{
+    return d->prefix;
+}
+
+void Bar::setPrefix(double prefix)
+{
+    d->prefix = prefix;
+}
+
+QPointF Bar::prefixPosition() const
+{
+    return d->prefixPosition;
+}
+
+void Bar::setPrefixPosition(const QPointF& position)
+{
+    d->prefixPosition = position;
 }
 
 double Bar::scale() const

@@ -63,14 +63,16 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet)
                     painter.drawLine(QPointF(0, by + y + l * dy), QPointF(ind, by + y + l * dy));
                 }
 
-                Clef* clef = staff->lastClefChange(b, 0);
+                Clef* clef = ss->clef(staff);
                 RenderState foo;
+                double x = 15;
                 if (clef) {
-                    renderClef(painter, clef, QPointF(0, by), foo, 1);
+                    renderClef(painter, clef, QPointF(x, by), foo, 0);
+                    x += clef->width() + 15;
                 }
                 KeySignature* ks = staff->lastKeySignatureChange(b);
                 if (ks) {
-                    renderKeySignature(painter, ks, QPointF(0, by), foo, 1);
+                    renderKeySignature(painter, ks, QPointF(x, by), foo, 0);
                 }
             }
         }
@@ -89,6 +91,11 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part)
         Bar* bar = part->sheet()->bar(b);
         QPointF p = bar->position();
         painter.drawLine(QPointF(p.x() + bar->size(), p.y() + firstStaff), QPointF(p.x() + bar->size(), p.y() + lastStaff));
+        if (m_debug) {
+            painter.setPen(QPen(Qt::green));
+            painter.drawLine(QPointF(p.x(), p.y() + firstStaff - 3), QPointF(p.x(), p.y() + lastStaff + 3));
+            painter.drawLine(QPointF(p.x() - bar->prefix(), p.y() + firstStaff - 3), QPointF(p.x() - bar->prefix(), p.y() + lastStaff + 3));
+        }
         
         // check if the bar contains any elements, if not render a rest
         bool hasContents = false;
@@ -128,13 +135,25 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff )
     for (int b = 0; b < staff->part()->sheet()->barCount(); b++) {
         Bar* bar = staff->part()->sheet()->bar(b);
         QPointF p = bar->position();
+        QPointF prep = bar->prefixPosition() + QPointF(bar->prefix(), 0);
         painter.setPen(m_style->staffLinePen());
         for (int i = 0; i < staff->lineCount(); i++) {
             painter.drawLine(QPointF(p.x(), p.y() + y + i * dy), QPointF(p.x() + bar->size(), p.y() + y + i * dy));
         }
+        if (bar->prefix() > 0) {
+            QPointF q = bar->prefixPosition();
+            for (int i = 0; i < staff->lineCount(); i++) {
+                painter.drawLine(QPointF(q.x(), q.y() + y + i * dy), QPointF(q.x() + bar->prefix(), q.y() + y + i * dy));
+            }
+        }
         RenderState state;
         for (int e = 0; e < bar->staffElementCount(staff); e++) {
-            renderStaffElement(painter, bar->staffElement(staff, e), p, state, bar->scale());
+            StaffElement* se = bar->staffElement(staff, e);
+            if (se->startTime() == 0) {
+                renderStaffElement(painter, bar->staffElement(staff, e), prep, state, 1);
+            } else {
+                renderStaffElement(painter, bar->staffElement(staff, e), p, state, bar->scale());
+            }
         }
     }
 }

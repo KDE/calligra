@@ -56,33 +56,54 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
     int lastStart = 0;
     double lineWidth = size.width();
     double indent = 0;
+    bool prevPrefixPlaced = false;
     for (int i = 0; i < sheet->barCount(); i++) {
-        if (i > 0 && p.x() + sheet->bar(i)->desiredSize() - indent > lineWidth) {
+        Bar* bar = sheet->bar(i);
+        bool prefixPlaced = false;
+        if (i > 0 && p.x() + bar->desiredSize() + bar->prefix() - indent > lineWidth) {
             // scale all sizes
-            double factor = lineWidth / (p.x() - indent);
-            QPointF sp = sheet->bar(lastStart)->position();
+            // first calculate the total scalable width and total fixed width of all preceding bars
+            double scalable = 0, fixed = 0;
             for (int j = lastStart; j < i; j++) {
-                sheet->bar(j)->setPosition(sp);
-                sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
-                sp.setX(sp.x() + sheet->bar(j)->size());
+                scalable += sheet->bar(j)->size();
+                fixed += sheet->bar(j)->prefix();
             }
-
+            fixed += bar->prefix();
+            if (prevPrefixPlaced) {
+                fixed -= sheet->bar(lastStart)->prefix();
+            }
+            // now scale factor is (available width - fixed) / scalable width;
+            double factor = (lineWidth - fixed) / scalable;
+            QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
+            for (int j = lastStart; j < i; j++) {
+                sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
+                sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
+                sp.setX(sp.x() + sheet->bar(j)->size() + sheet->bar(j)->prefix());
+            }
             lastStart = i;
+            if (bar->prefix() > 0) {
+                bar->setPrefixPosition(sp);
+                prefixPlaced = true;
+            }
+            prevPrefixPlaced = prefixPlaced;
 
-            p.setX(0);
             curSystem++;
             p.setY(sheet->staffSystem(curSystem)->top());
             sheet->staffSystem(curSystem)->setFirstBar(i);
 
             indent = 0;
-            // Extra space for clef/key signature repeating
+            QList<Clef*> clefs;
+            // Extra space for clef/key signature repeating            
             for (int partIdx = 0; partIdx < sheet->partCount(); partIdx++) {
                 Part* part = sheet->part(partIdx);
                 for (int staffIdx = 0; staffIdx < part->staffCount(); staffIdx++) {
                     Staff* staff = part->staff(staffIdx);
                     double w = 0;
                     Clef* clef = staff->lastClefChange(i, 0);
-                    if (clef) w += clef->width() + 15;
+                    if (clef) {
+                        w += clef->width() + 15;
+                        clefs.append(clef);
+                    }
                     KeySignature* ks = staff->lastKeySignatureChange(i);
                     if (ks) w += ks->width() + 15;
                     if (w > indent) indent = w;
@@ -90,21 +111,28 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
             }
             sheet->staffSystem(curSystem)->setIndent(indent);
             sheet->staffSystem(curSystem)->setLineWidth(lineWidth);
+            sheet->staffSystem(curSystem)->setClefs(clefs);
             lineWidth = size.width() - indent;
-            p.setX(indent);
+            p.setX(indent - bar->prefix());
         }
-        sheet->bar(i)->setPosition(p);
+        sheet->bar(i)->setPosition(p + QPointF(bar->prefix(), 0), !prefixPlaced);
         sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
-        p.setX(p.x() + sheet->bar(i)->size());
+        p.setX(p.x() + sheet->bar(i)->size() + bar->prefix());
     }
     // potentially scale last staff system if it is too wide
     if (p.x() - indent > lineWidth) {
-        double factor = lineWidth / (p.x() - indent);
-        QPointF sp = sheet->bar(lastStart)->position();
+        double scalable = 0, fixed = 0;
         for (int j = lastStart; j < sheet->barCount(); j++) {
-            sheet->bar(j)->setPosition(sp);
+            scalable += sheet->bar(j)->size();
+            fixed += sheet->bar(j)->prefix();
+        }
+        // now scale factor is (available width - fixed) / scalable width;
+        double factor = (lineWidth - fixed) / scalable;
+        QPointF sp = sheet->bar(lastStart)->position() - QPointF(sheet->bar(lastStart)->prefix(), 0);
+        for (int j = lastStart; j < sheet->barCount(); j++) {
+            sheet->bar(j)->setPosition(sp + QPointF(sheet->bar(j)->prefix(), 0));
             sheet->bar(j)->setSize(sheet->bar(j)->desiredSize() * factor);
-            sp.setX(sp.x() + sheet->bar(j)->size());
+            sp.setX(sp.x() + sheet->bar(j)->size() + sheet->bar(j)->prefix());
         }
     }
 
@@ -151,6 +179,8 @@ void Engraver::engraveBar(Bar* bar)
     }
 
     double x = 0; // this is the end position of the last placed elements
+    bool endOfPrefix = false;
+    QList<StaffElement*> prefix;
     // loop until all elements are placed
     for (;;) {
         // find earliest start time
@@ -174,6 +204,20 @@ void Engraver::engraveBar(Bar* bar)
         // none found, break
         if (time == INT_MAX) break;
 
+        if ((!staffElement || time > 0) && !endOfPrefix) {
+            // we've reached the end of the prefix; now update all already placed staff elements to have correct
+            // (negative) x coordinates, and set the size of the prefix.
+            if (prefix.size() > 0) {
+                double prefixSize = x + 5;
+                bar->setPrefix(prefixSize);
+                foreach (StaffElement* se, prefix) {
+                    se->setX(se->x() - prefixSize);
+                }
+                x = 0;
+            }
+            endOfPrefix = true;
+        }
+        
         double maxEnd = x;
         // now update all items with correct start time
         if (staffElement) {
@@ -184,6 +228,7 @@ void Engraver::engraveBar(Bar* bar)
                     se->setX(xpos);
                     double xend = se->width() + xpos;
                     if (xend > maxEnd) maxEnd = xend;
+                    if (!endOfPrefix) prefix.append(se);
                 }
             }
         } else {

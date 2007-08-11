@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "StaffSystem.h"
+#include "Clef.h"
 
 namespace MusicCore {
 
@@ -28,6 +29,7 @@ public:
     int firstBar;
     double indent;
     double lineWidth;
+    QList<Clef*> clefs;
 };
 
 StaffSystem::StaffSystem(Sheet* sheet)
@@ -82,6 +84,26 @@ void StaffSystem::setIndent(double indent)
 void StaffSystem::setLineWidth(double width)
 {
     d->lineWidth = width;
+}
+
+QList<Clef*> StaffSystem::clefs() const
+{
+    return d->clefs;
+}
+
+Clef* StaffSystem::clef(Staff* staff) const
+{
+    foreach (Clef* c, d->clefs) {
+        if (c->staff() == staff) {
+            return c;
+        }
+    }
+    return NULL;
+}
+
+void StaffSystem::setClefs(QList<Clef*> clefs)
+{
+    d->clefs = clefs;
 }
 
 } // namespace MusicCore
