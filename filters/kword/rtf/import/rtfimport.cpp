@@ -1758,7 +1758,7 @@ void RTFImport::parseField( RTFProperty * )
 		    {
 			hrefName += '#';
 		    }
-		    else if (list[i].startsWith( "\"" ) && list[i].endsWith( "\"" ))
+		    else if (list[i].startsWith( '"' ) && list[i].endsWith( '"' ))
 		    {
 			hrefName += list[i].mid( 1, (list[i].length() - 2) );
 		    }

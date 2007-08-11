@@ -1756,7 +1756,7 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
         {
             m_styleStack.save();
             QString href( ts.attributeNS( ooNS::xlink, "href", QString::null) );
-            if ( href.startsWith("#") )
+            if ( href.startsWith('#') )
             {
                 // We have a reference to a bookmark (### TODO)
                 // As we do not support it now, treat it as a <text:span> without formatting

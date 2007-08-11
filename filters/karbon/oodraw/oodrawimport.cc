@@ -743,7 +743,7 @@ OoDrawImport::parseColor( VColor &color, const QString &s )
 	{
 		QString rgbColor = s.trimmed();
 		QColor c;
-		if( rgbColor.startsWith( "#" ) )
+		if( rgbColor.startsWith( '#' ) )
 			c.setNamedColor( rgbColor );
 		//else
 		//	c = parseColor( rgbColor );

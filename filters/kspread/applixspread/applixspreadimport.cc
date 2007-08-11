@@ -357,7 +357,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert( const QByteArray& from, 
               sscanf ((*it).toLatin1(), "TF%d", &fontnr);
               kDebug()<<" = Font :"<<fontnr<<""<<typefacetab[fontnr];
 	    }
-            else if ((*it).startsWith("P") )
+            else if ((*it).startsWith('P') )
 	    {
               sscanf ((*it).toLatin1(), "P%d", &fontsize);
               kDebug()<<"   = Fontsize"<<fontsize;

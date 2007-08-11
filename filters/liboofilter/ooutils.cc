@@ -396,7 +396,7 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
             kWarning(30519) << "Strange text position: " << text_position;
         bool super = textPos == "super";
         bool sub = textPos == "sub";
-        if ( textPos.endsWith("%") )
+        if ( textPos.endsWith('%') )
         {
             textPos.truncate( textPos.length() - 1 );
             // This is where we interpret the text position into kotext's simpler
@@ -413,7 +413,7 @@ void OoUtils::importTextPosition( const QString& text_position, QString& value, 
             value = "1";
         else
             value = "0";
-        if ( !textSize.isEmpty() && textSize.endsWith("%") )
+        if ( !textSize.isEmpty() && textSize.endsWith('%') )
         {
             textSize.truncate( textSize.length() - 1 );
             double textSizeValue = textSize.toDouble() / 100; // e.g. 0.58

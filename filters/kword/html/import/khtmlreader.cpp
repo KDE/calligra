@@ -617,9 +617,9 @@ bool KHTMLReader::parse_font(DOM::Element e) {
         	color=parsecolor(e.getAttribute("color").string());
         QString size=e.getAttribute("size").string();
         int isize=-1;
-        if (size.startsWith("+"))
+        if (size.startsWith('+'))
         	isize=12+size.right(size.length()-1).toInt();
-        else if (size.startsWith("-"))
+        else if (size.startsWith('-'))
         	isize=12-size.right(size.length()-1).toInt();
         else
 	        isize=12+size.toInt();

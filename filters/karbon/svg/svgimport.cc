@@ -170,7 +170,7 @@ void SvgImport::convert()
 
 double SvgImport::toPercentage( QString s )
 {
-	if( s.endsWith( "%" ) )
+	if( s.endsWith( '%' ) )
 		return s.remove( '%' ).toDouble();
 	else
 		return s.toDouble() * 100.0;
@@ -178,7 +178,7 @@ double SvgImport::toPercentage( QString s )
 
 double SvgImport::fromPercentage( QString s )
 {
-	if( s.endsWith( "%" ) )
+	if( s.endsWith( '%' ) )
 		return s.remove( '%' ).toDouble() / 100.0;
 	else
 		return s.toDouble();
@@ -488,7 +488,7 @@ void SvgImport::parseColor( VColor &color, const QString &s )
 	{
 		QString rgbColor = s.trimmed();
 		QColor c;
-		if( rgbColor.startsWith( "#" ) )
+		if( rgbColor.startsWith( '#' ) )
 			c.setNamedColor( rgbColor );
 		else
 			c = parseColor( rgbColor );
@@ -1175,7 +1175,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				if( ! e.attribute( "startOffset" ).isEmpty() )
 				{
 					QString start = e.attribute( "startOffset" );
-					if( start.endsWith( "%" ) )
+					if( start.endsWith( '%' ) )
 						offset = 0.01 * start.remove( '%' ).toDouble();
 					else
 					{

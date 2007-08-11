@@ -413,7 +413,7 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
             QString width = footnoteSep.attributeNS( ooNS::style, "width", QString::null );
             elementPaper.setAttribute( "slFootNoteWidth", KoUnit::parseValue( width ) );
             QString pageWidth = footnoteSep.attributeNS( ooNS::style, "rel-width", QString::null );
-            if ( pageWidth.endsWith( "%" ) ) {
+            if ( pageWidth.endsWith( '%' ) ) {
                 pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
                 elementPaper.setAttribute( "slFootNoteLenth", pageWidth );
             }
@@ -1064,7 +1064,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& 
         {
             m_styleStack.save();
             QString href( ts.attributeNS( ooNS::xlink, "href", QString::null) );
-            if ( href.startsWith("#") )
+            if ( href.startsWith('#') )
             {
                 // We have a reference to a bookmark (### TODO)
                 // As we do not support it now, treat it as a <text:span> without formatting

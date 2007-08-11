@@ -158,7 +158,7 @@ XAMLImport::convert()
 double
 XAMLImport::toPercentage( QString s )
 {
-	if( s.endsWith( "%" ) )
+	if( s.endsWith( '%' ) )
 		return s.remove( '%' ).toDouble();
 	else
 		return s.toDouble() * 100.0;
@@ -167,7 +167,7 @@ XAMLImport::toPercentage( QString s )
 double
 XAMLImport::fromPercentage( QString s )
 {
-	if( s.endsWith( "%" ) )
+	if( s.endsWith( '%' ) )
 		return s.remove( '%' ).toDouble() / 100.0;
 	else
 		return s.toDouble();
@@ -331,7 +331,7 @@ XAMLImport::parseColor( VColor &color, const QString &s )
 	{
 		QString rgbColor = s.trimmed();
 		QColor c;
-		if( rgbColor.startsWith( "#" ) )
+		if( rgbColor.startsWith( '#' ) )
 			c.setNamedColor( rgbColor );
 		else
 			c = parseColor( rgbColor );
