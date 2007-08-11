@@ -13,9 +13,9 @@
  * \li KSpread::View The View class displays a document.
  *
  * \section plugins Plugins
- * \ref KSpreadScripting KSpread Scripting Plugin that offers flexible access
+ * \li \ref KSpreadScripting KSpread Scripting Plugin that offers flexible access
  *      to the Kross scripting framework.
- * \ref CalendarPlugin Plugin for inserting a calendar into a spreadsheet.
+ * \li \ref CalendarPlugin Plugin for inserting a calendar into a spreadsheet.
  *
  * \todo code examples
  */
