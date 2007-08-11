@@ -3805,7 +3805,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           }
 
           // stop, if the next column differs from the current one
-          if ( nextColumn && ( *column != *nextColumn ) )
+          if ((nextColumn && (*column != *nextColumn)) || (!nextColumn && !column->isDefault()))
               break;
           if ( style != columnDefaultStyles.value( j ) )
               break;
