@@ -24,7 +24,11 @@ class Config:
     def __init__(self):
         self.FileName = ""
         self.TableOfContent = True
+        self.EnablePages = True
         self.IndexPage = True
+        self.OtherPages = True
+        self.PageDescription = True
+        self.EnableClasses = True
         self.ClassDescription = True
         self.MemberDescription = True
         self.EnableSlots = True
@@ -180,8 +184,12 @@ class Writer:
                 continue
 
             if kind == "class":
+                if not self.config.EnableClasses:
+                    continue
                 impl = Class(self.config, node)
             elif kind == "page":
+                if not self.config.EnablePages:
+                    continue
                 impl = Page(self.config, node)
             else:
                 print "Skipping id=%s name=%s kind=%s" % (id, name, kind)
@@ -259,53 +267,64 @@ class Writer:
         if self.config.TableOfContent:
             file.write("<ol>")
 
-            file.write("<li><a href=\"#pages\">Pages</a><ol>")
-            for i in self.CompoundList:
-                if self.CompoundDict[i].kind != "page":
-                    continue
-                file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
-            file.write("</ol></li>")
+            if self.config.EnablePages:
+                file.write("<li><a href=\"#pages\">Pages</a><ol>")
+                for i in self.CompoundList:
+                    if self.CompoundDict[i].kind != "page":
+                        continue
+                    if i == "indexpage":
+                        if not self.config.IndexPage:
+                            continue
+                    else:
+                        if not self.config.OtherPages:
+                            continue
+                    file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
+                file.write("</ol></li>")
 
-            file.write("<li><a href=\"#objects\">Objects</a><ol>")
-            for i in self.CompoundList:
-                if self.CompoundDict[i].kind != "class":
-                    continue
-                file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
-            file.write("</ol></li>")
+            if self.config.EnableClasses:
+                file.write("<li><a href=\"#objects\">Classes</a><ol>")
+                for i in self.CompoundList:
+                    if self.CompoundDict[i].kind != "class":
+                        continue
+                    file.write( "<li><a href=\"#%s\">%s</a></li>" % (i, self.CompoundDict[i].name) )
+                file.write("</ol></li>")
 
             file.write("</ol>")
 
-        if self.config.IndexPage:
-            try:
-                file.write("<h2><a name=\"indexpage\" />%s</h2>" % self.CompoundDict["indexpage"].name)
-                file.write( parseToHtml( self.CompoundDict["indexpage"].description ) )
-            except KeyError:
-                pass
-
         # Pages
-        for i in self.CompoundList:
-            if self.CompoundDict[i].kind != "page" or i == "indexpage":
-                continue
-            file.write("<h3><a name=\"%s\" />%s</h3>" % (i,self.CompoundDict[i].name))
-            file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
+        if self.config.EnablePages:
+            if self.config.IndexPage:
+                try:
+                    file.write("<h2><a name=\"indexpage\" />%s</h2>" % self.CompoundDict["indexpage"].name)
+                    file.write( parseToHtml( self.CompoundDict["indexpage"].description ) )
+                except KeyError:
+                    pass
+            if self.config.OtherPages:
+                for i in self.CompoundList:
+                    if self.CompoundDict[i].kind != "page" or i == "indexpage":
+                        continue
+                    file.write("<h3><a name=\"%s\" />%s</h3>" % (i,self.CompoundDict[i].name))
+                    if self.config.PageDescription:
+                        file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
 
         # Classes
-        file.write("<h2><a name=\"objects\" />Objects</h2>")
-        for i in self.CompoundList:
-            if self.CompoundDict[i].kind != "class":
-                continue
-            file.write("<h3><a name=\"%s\" />%s</h3>" % (i,self.CompoundDict[i].name))
-            if self.config.ClassDescription:
-                file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
-            file.write( "<ul>" )
-            for m in self.CompoundDict[i].memberList:
-                member = self.CompoundDict[i].memberDict[m]
-                s = "%s <i>[%s]</i>" % (member.definition,member.kindName)
-                if self.config.MemberDescription:
-                    if len(member.description) > 0:
-                        s += "<br><blockquote>%s</blockquote>" % parseToHtml( member.description )
-                file.write("<li>%s</li>" % s)
-            file.write( "</ul>" )
+        if self.config.EnableClasses:
+            file.write("<h2><a name=\"objects\" />Classes</h2>")
+            for i in self.CompoundList:
+                if self.CompoundDict[i].kind != "class":
+                    continue
+                file.write("<h3><a name=\"%s\" />%s</h3>" % (i,self.CompoundDict[i].name))
+                if self.config.ClassDescription:
+                    file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
+                file.write( "<ul>" )
+                for m in self.CompoundDict[i].memberList:
+                    member = self.CompoundDict[i].memberDict[m]
+                    s = "%s <i>[%s]</i>" % (member.definition,member.kindName)
+                    if self.config.MemberDescription:
+                        if len(member.description) > 0:
+                            s += "<br><blockquote>%s</blockquote>" % parseToHtml( member.description )
+                    file.write("<li>%s</li>" % s)
+                file.write( "</ul>" )
 
         file.write("</body></html>")
 
@@ -343,6 +362,10 @@ class ImportDialog:
             self.config.FileName = fileName
             self.config.TableOfContent = configwidget["TocCheckBox"].checked
             self.config.IndexPage = configwidget["IndexPageCheckBox"].checked
+            self.config.OtherPages = configwidget["OtherPagesCheckBox"].checked
+            self.config.EnablePages = configwidget["PagesCheckBox"].checked
+            self.config.PageDescription = configwidget["PageDescriptionCheckBox"].checked
+            self.config.EnableClasses = configwidget["ClassesCheckBox"].checked
             self.config.ClassDescription = configwidget["ClassDescriptionCheckBox"].checked
             self.config.MemberDescription = configwidget["MemberDescriptionCheckBox"].checked
             self.config.EnableSlots = configwidget["SlotsCheckBox"].checked

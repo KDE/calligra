@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>288</height>
+    <width>550</width>
+    <height>426</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -26,9 +26,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="IndexPageCheckBox" >
+      <widget class="QCheckBox" name="PagesCheckBox" >
        <property name="text" >
-        <string>Index Page</string>
+        <string>Pages</string>
        </property>
        <property name="checked" >
         <bool>true</bool>
@@ -36,9 +36,64 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="ClassDescriptionCheckBox" >
+      <widget class="QFrame" name="frame" >
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow" >
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QHBoxLayout" >
+        <property name="leftMargin" >
+         <number>16</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" >
+          <item>
+           <widget class="QCheckBox" name="IndexPageCheckBox" >
+            <property name="text" >
+             <string>Index Page</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="OtherPagesCheckBox" >
+            <property name="text" >
+             <string>Other Pages</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="PageDescriptionCheckBox" >
+            <property name="text" >
+             <string>Page Description</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="ClassesCheckBox" >
        <property name="text" >
-        <string>Class Description</string>
+        <string>Classes</string>
        </property>
        <property name="checked" >
         <bool>true</bool>
@@ -46,57 +101,92 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="MemberDescriptionCheckBox" >
-       <property name="text" >
-        <string>Member Description</string>
+      <widget class="QFrame" name="frame_2" >
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
        </property>
-       <property name="checked" >
-        <bool>true</bool>
+       <property name="frameShadow" >
+        <enum>QFrame::Raised</enum>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="SlotsCheckBox" >
-       <property name="text" >
-        <string>Slots</string>
-       </property>
-       <property name="checked" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="SignalsCheckBox" >
-       <property name="text" >
-        <string>Signals</string>
-       </property>
-       <property name="checked" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="PropertiesCheckBox" >
-       <property name="text" >
-        <string>Properties</string>
-       </property>
-       <property name="checked" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="FunctionsCheckBox" >
-       <property name="text" >
-        <string>Functions</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="VariablesCheckBox" >
-       <property name="text" >
-        <string>Variables</string>
-       </property>
+       <layout class="QHBoxLayout" >
+        <property name="leftMargin" >
+         <number>16</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" >
+          <item>
+           <widget class="QCheckBox" name="ClassDescriptionCheckBox" >
+            <property name="text" >
+             <string>Class Description</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="MemberDescriptionCheckBox" >
+            <property name="text" >
+             <string>Member Description</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="SlotsCheckBox" >
+            <property name="text" >
+             <string>Slots</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="SignalsCheckBox" >
+            <property name="text" >
+             <string>Signals</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="PropertiesCheckBox" >
+            <property name="text" >
+             <string>Properties</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="FunctionsCheckBox" >
+            <property name="text" >
+             <string>Functions</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="VariablesCheckBox" >
+            <property name="text" >
+             <string>Variables</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -106,8 +196,8 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>20</width>
-         <height>40</height>
+         <width>518</width>
+         <height>16</height>
         </size>
        </property>
       </spacer>
@@ -117,5 +207,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>PagesCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>49</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>49</x>
+     <y>94</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ClassesCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>frame_2</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>35</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>30</x>
+     <y>180</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
