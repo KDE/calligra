@@ -322,11 +322,18 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     // find correct bar
     Bar* bar = 0;
     int barIdx = -1;
+    bool inPrefix = false;
     for (int b = system->firstBar(); b < sheet->barCount(); b++) {
         Bar* bb = sheet->bar(b);
         if (bb->position().x() <= p.x() && bb->position().x() + bb->size() >= p.x()) {
             bar = bb;
             barIdx = b;
+            break;
+        }
+        if (bb->prefixPosition().x() <= p.x() && bb->prefixPosition().x() + bb->prefix() >= p.x()) {
+            bar = bb;
+            barIdx = b;
+            inPrefix = true;
             break;
         }
     }
@@ -337,12 +344,19 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     
     if (!bar) return;
 
+    QPointF point;
+    if (inPrefix) {
+        point = QPointF(p.x() - bar->prefixPosition().x() - bar->prefix(), yrel - closestStaff->top());
+    } else {
+        point = QPointF((p.x() - bar->position().x()) / bar->scale(), yrel - closestStaff->top());
+    }
+
     if (event->button() == Qt::RightButton) {
         m_contextMenuStaff = closestStaff;
         m_contextMenuBar = barIdx;
-        m_contextMenuPoint = QPointF(p.x() - bar->position().x(), yrel - closestStaff->top());
+        m_contextMenuPoint = point;
     } else {
-        m_activeAction->mousePress(closestStaff, barIdx, QPointF(p.x() - bar->position().x(), yrel - closestStaff->top()));
+        m_activeAction->mousePress(closestStaff, barIdx, point);
     }
 }
 

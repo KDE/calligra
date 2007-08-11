@@ -101,10 +101,9 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
 
     // find element before which to insert the chord
     int before = 0;
-    double realX = pos.x() / staff->part()->sheet()->bar(bar)->scale();
     for (int i = 0; i < vb->elementCount(); i++) {
         VoiceElement* e = vb->element(i);
-        if (e->x() >= realX) break;
+        if (e->x() >= pos.x()) break;
         before++;
     }
 
@@ -128,7 +127,7 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
     
     Chord* join = NULL;
     if (before > 0) join = dynamic_cast<Chord*>(vb->element(before-1));
-    if (join && join->x() + join->width() >= realX) {
+    if (join && join->x() + join->width() >= pos.x()) {
         if (clef && !m_isRest) {
             m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, m_duration, pitch, accidentals));
         } else {

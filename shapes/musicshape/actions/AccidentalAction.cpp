@@ -93,8 +93,6 @@ void AccidentalAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 
     Clef* clef = staff->lastClefChange(barIdx, 0);
 
-    double realX = pos.x() / bar->scale();
-
     // loop over all noteheads
     double closestDist = 1e9;
     Note* closestNote = 0;
@@ -121,7 +119,7 @@ void AccidentalAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
                 line = line - note->pitch();
                 double centerY = line * staff->lineSpacing() / 2;
 
-                double dist = sqrt(sqr(centerX - realX) + sqr(centerY - pos.y()));
+                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestNote = note;

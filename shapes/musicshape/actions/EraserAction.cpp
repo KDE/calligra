@@ -63,8 +63,6 @@ void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 
     Clef* clef = staff->lastClefChange(barIdx, 0);
 
-    double realX = pos.x() / bar->scale();
-
     // loop over all noteheads
     double closestDist = 1e9;
     Note* closestNote;
@@ -84,7 +82,7 @@ void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 
             if (c->noteCount() == 0) {
                 double centerY = c->y() + (c->height() / 2);
-                double dist = sqrt(sqr(centerX - realX) + sqr(centerY - pos.y()));
+                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestNote = NULL;
@@ -102,7 +100,7 @@ void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
                 line = line - note->pitch();
                 double centerY = line * staff->lineSpacing() / 2;
 
-                double dist = sqrt(sqr(centerX - realX) + sqr(centerY - pos.y()));
+                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
                 if (dist < closestDist) {
                     closestDist = dist;
                     closestNote = note;
@@ -117,7 +115,7 @@ void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
         StaffElement* elem = bar->staffElement(staff, e);
         double centerX = elem->x() + (elem->width() / 2);
         double centerY = elem->y() + (elem->height() / 2);
-        double dist = sqrt(sqr(centerX - realX) + sqr(centerY - pos.y()));
+        double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
         if (dist < closestDist) {
             se = elem;
             closestDist = dist;
