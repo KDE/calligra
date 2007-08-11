@@ -3755,10 +3755,6 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //                       << "i:" << i
 //                       << "column:" << (column ? column->column() : 0) << endl;
 
-        KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
-        currentColumnStyle.addPropertyPt( "style:column-width", column->width() );
-        currentColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
-
         //style default layout for column
         const Style style = columnDefaultStyles.value(i);
 
@@ -3813,10 +3809,15 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         }
 
         xmlWriter.startElement( "table:table-column" );
+        if (!column->isDefault())
+        {
+            KoGenStyle currentColumnStyle(Doc::STYLE_COLUMN_AUTO, "table-column");
+            currentColumnStyle.addPropertyPt("style:column-width", column->width());
+            currentColumnStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
+            xmlWriter.addAttribute("table:style-name", mainStyles.lookup(currentColumnStyle, "co"));
+        }
         if ( !column->isDefault() || !style.isDefault() )
         {
-          xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentColumnStyle, "co" ) );
-
           if ( !style.isDefault() )
           {
               KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisStyle
@@ -3832,7 +3833,6 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         }
         if (count > 1)
             xmlWriter.addAttribute("table:number-columns-repeated", count - 1);
-
         xmlWriter.endElement();
 
         kDebug(36003) << "Sheet::saveOasisColRowCell: column" << i
