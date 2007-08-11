@@ -2,7 +2,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 
-PROJECT_NAME           = KSpreadScripting
+PROJECT_NAME           = KSpread Scripting
 PROJECT_NUMBER         = 1.0.
 OUTPUT_DIRECTORY       = .
 CREATE_SUBDIRS         = NO
@@ -82,8 +82,8 @@ WARN_LOGFILE           =
 
 INPUT                  = ../../../
 IMAGE_PATH             =
-#FILE_PATTERNS          = Scripting*.h Scripting*.cpp *Adaptor.h *Adaptor.cpp scripting.dox
-FILE_PATTERNS          = Scripting*.h *Adaptor.h scripting.dox
+#FILE_PATTERNS         = Scripting*.h Scripting*.cpp *Adaptor.h *Adaptor.cpp Scripting.dox
+FILE_PATTERNS          = Scripting*.h *Adaptor.h Scripting.dox
 RECURSIVE              = YES
 
 EXCLUDE                =
