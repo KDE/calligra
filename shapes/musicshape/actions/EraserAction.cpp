@@ -94,10 +94,7 @@ void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
                 Note* note = c->note(n);
                 if (note->staff() != staff) continue;
 
-                int line = 14;
-                if (clef->shape() == Clef::FClef) line = 4;
-                line -= 2 * clef->line();
-                line = line - note->pitch();
+                int line = clef->pitchToLine(note->pitch());
                 double centerY = line * staff->lineSpacing() / 2;
 
                 double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
