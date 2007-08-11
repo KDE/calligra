@@ -187,14 +187,8 @@ double Chord::y() const
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
     foreach (Note* n, d->notes) {
-        int line = 14;
-        if (clef && clef->shape() == Clef::FClef) line = 4;
-        if (clef) {
-            line -= 2 * clef->line();
-        } else {
-            line -= 4;
-        }
-        line = line - n->pitch();
+        int line = 10;
+        if (clef) line = clef->pitchToLine(n->pitch());
 
         Staff* s = n->staff();
         line--;
@@ -216,14 +210,8 @@ double Chord::height() const
     Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
 
     foreach (Note* n, d->notes) {
-        int line = 14;
-        if (clef && clef->shape() == Clef::FClef) line = 4;
-        if (clef) {
-            line -= 2 * clef->line();
-        } else {
-            line -= 4;
-        }
-        line = line - n->pitch();
+        int line = 10;
+        if (clef) line = clef->pitchToLine(n->pitch());
 
         Staff* s = n->staff();
         line--;
