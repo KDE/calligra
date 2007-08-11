@@ -192,7 +192,7 @@ void Engraver::engraveBar(Bar* bar)
         }
 
         bool staffElement = false;
-        int priority = -1000000000;
+        int priority = INT_MIN;
         for (int s = 0; s < staffCount; s++) {
             if (staffElements[s].size() > 0) {
                 if (staffElements[s][0]->startTime() <= time) {
