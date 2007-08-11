@@ -1217,8 +1217,8 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         // get the next cell and set the index to the adjacent cell
         nextCell = sheet()->cellStorage()->nextInRow( j++, row );
       }
-      kDebug(36003) <<"Cell::saveOasis: empty cell in column" << column <<""
-                    << "repeated " << repeated << " time(s)" << endl;
+      kDebug(36003) << "Cell::saveOasis: empty cell in column" << column
+                    << "repeated" << repeated << "time(s)" << endl;
 
       if ( repeated > 1 )
         xmlwriter.addAttribute( "table:number-columns-repeated", QString::number( repeated ) );

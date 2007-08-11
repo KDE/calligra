@@ -3376,18 +3376,28 @@ bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
 //         kDebug(36003) <<"\t Formats of" << row1 <<" and" << row2 <<" are different";
         return false;
     }
-    // TODO Stefan: Make use of the cluster functionality.
-    for ( int col = 1; col <= maxCols; ++col )
+    Cell cell1 = cellStorage()->firstInRow(row1);
+    Cell cell2 = cellStorage()->firstInRow(row2);
+    if (cell1.isNull() != cell2.isNull())
+        return false;
+    while (!cell1.isNull())
     {
-        if ( !Cell( this, col, row1 ).compareData( Cell( this, col, row2 ) ) )
+        if (cell1.column() != cell2.column())
+            return false;
+        if (cell1.column() > maxCols)
+            break;
+        if (!cell1.compareData(cell2))
         {
 //             kDebug(36003) <<"\t Cell at column" << col <<" in row" << row2 <<" differs from the one in row" << row1;
             return false;
         }
+        cell1 = cellStorage()->nextInRow(cell1.column(), cell1.row());
+        cell2 = cellStorage()->nextInRow(cell2.column(), cell2.row());
+        if (cell1.isNull() != cell2.isNull())
+            return false;
     }
     return true;
 }
-
 
 void Sheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
 {
@@ -3785,15 +3795,11 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             {
               // we count the default columns
               if ( !nextColumn && !nextStyleColumnIndex )
-              {
-                count = maxCols - i;
-                // stop completely
-                i = maxCols + 1;
-              }
+                count = maxCols - i + 1;
               else if ( nextColumn && ( !nextStyleColumnIndex || nextColumn->column() <= nextStyleColumnIndex ) )
-                count = nextColumn->column() - i;
+                count = nextColumn->column() - i + 1;
               else
-                count = nextStyleColumnIndex - i;
+                count = nextStyleColumnIndex - i + 1;
             }
             // otherwise we just stop here to process the adjacent
             // column in the next iteration of the outer loop
@@ -3847,19 +3853,19 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     {
         const RowFormat* row = rowFormat( i );
 
-        KoGenStyle currentRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
-        currentRowStyle.addPropertyPt( "style:row-height", row->height() );
-        currentRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
-
         // default cell style for row
         const Style style = rowDefaultStyles.value(i);
 
         xmlWriter.startElement( "table:table-row" );
 
-        if ( !row->isDefault() )
+        if (!row->isDefault())
         {
-          xmlWriter.addAttribute( "table:style-name", mainStyles.lookup( currentRowStyle, "ro" ) );
+            KoGenStyle currentRowStyle(Doc::STYLE_ROW_AUTO, "table-row");
+            currentRowStyle.addPropertyPt("style:row-height", row->height());
+            currentRowStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
+            xmlWriter.addAttribute("table:style-name", mainStyles.lookup(currentRowStyle, "ro"));
         }
+
         int repeated = 1;
         // empty row?
         if (!d->cellStorage->firstInRow(i)) // row is empty
@@ -3867,8 +3873,6 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //             kDebug(36003) <<"Sheet::saveOasisColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row() << endl;
-            //bool isHidden = row->isHidden();
-            bool isDefault = row->isDefault() && style.isDefault();
             int j = i + 1;
 
             // search for
@@ -3883,7 +3887,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //                         << " row: " << nextRow->row() << endl;
 
               // if the reference row has the default row format
-              if ( isDefault )
+              if (row->isDefault() && style.isDefault())
               {
                 // if the next is not default, stop here
                 if (!nextRow->isDefault() || !rowDefaultStyles.value(j).isDefault())
@@ -3892,25 +3896,9 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 ++j;
                 continue;
               }
-#if 0
-              // create the Oasis representation of the format for the comparison
-              KoGenStyle nextRowStyle( Doc::STYLE_ROW_AUTO, "table-row" );
-              nextRowStyle.addPropertyPt( "style:row-height", nextRow->height() );
-              nextRowStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
-              // default cell style name for next row
-              KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
-              QString nextDefaultCellStyleName = nextRow->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
-
-              // if the formats differ, stop here
-              if ( isHidden != nextRow->isHidden() ||
-                   nextDefaultCellStyleName != currentDefaultCellStyleName ||
-                   !(nextRowStyle == currentRowStyle) )
-              {
-                break;
-              }
-#endif
-              if ( *row != *nextRow )
+              // stop, if the next row differs from the current one
+              if ((nextRow && *row != *nextRow ) || (!nextRow && !row->isDefault()))
                   break;
               if (style != rowDefaultStyles.value(j))
                   break;
@@ -3920,7 +3908,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             repeated = j - i;
 
             if ( repeated > 1 )
-                xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
+                xmlWriter.addAttribute("table:number-rows-repeated", repeated + 1);
             if (!style.isDefault())
             {
               KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
@@ -3936,12 +3924,19 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             // NOTE Stefan: Even if paragraph 8.1 states, that rows may be empty, the
             //              RelaxNG schema does not allow that.
             xmlWriter.startElement( "table:table-cell" );
+            // Fill the row with empty cells, if there's a row default cell style.
             if (!style.isDefault())
-                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(KS_colMax));
+                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(maxCols));
+            // Fill the row with empty cells up to the last column with a default cell style.
+            else if (!columnDefaultStyles.isEmpty())
+            {
+                const int col = (--columnDefaultStyles.constEnd()).key();
+                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col));
+            }
             xmlWriter.endElement();
 
-            kDebug(36003) <<"Sheet::saveOasisColRowCell: empty row" << i <<""
-                      << "repeated " << repeated << " time(s)" << endl;
+            kDebug(36003) << "Sheet::saveOasisColRowCell: empty row" << i
+                          << "repeated" << repeated << "time(s)" << endl;
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
@@ -3968,10 +3963,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             }
             if ( repeated > 1 )
             {
-              kDebug(36003) <<"Sheet::saveOasisColRowCell: NON-empty row" << i <<""
-                        << "repeated " << repeated << " times" << endl;
+              kDebug(36003) << "Sheet::saveOasisColRowCell: NON-empty row" << i
+                            << "repeated" << repeated << "times" << endl;
 
-              xmlWriter.addAttribute( "table:number-rows-repeated", repeated  );
+              xmlWriter.addAttribute("table:number-rows-repeated", repeated + 1);
             }
 
             saveOasisCells(xmlWriter, mainStyles, i, maxCols, valStyle,
@@ -3990,7 +3985,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
             xmlWriter.startElement("table:table-row");
             if (maxMaxRows > maxRows + 1)
-                xmlWriter.addAttribute("table:number-rows-repeated", maxMaxRows - maxRows - 1);
+                xmlWriter.addAttribute("table:number-rows-repeated", maxMaxRows - maxRows);
             xmlWriter.startElement("table:table-cell");
             const int col = qMin(maxCols, (--columnDefaultStyles.constEnd()).key());
             xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col));
@@ -4034,7 +4029,7 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
         {
             xmlWriter.startElement("table:table-cell");
             if (maxCols > i)
-                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(maxCols - i));
+                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(maxCols - i + 1));
             xmlWriter.endElement();
         }
     }
@@ -4046,7 +4041,7 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
         {
             xmlWriter.startElement("table:table-cell");
             if (col > i)
-                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col - i));
+                xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col - i + 1));
             xmlWriter.endElement();
         }
     }
