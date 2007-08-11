@@ -76,6 +76,7 @@
 #include <kactionmenu.h>
 #include <kxmlguifactory.h>
 #include <kstatusbar.h>
+#include <kfiledialog.h>
 
 KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     : KoView( document, parent )
@@ -140,7 +141,8 @@ void KWView::setupActions() {
     m_actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    QAction *print  = new KAction("MyPrint", this);
+    QAction *print  = new KAction(i18n("Export as PDF..."), this);
+    print->setIcon(KIcon("pdf"));
     actionCollection()->addAction("file_my_print", print );
     connect(print, SIGNAL(triggered()), this, SLOT(print()));
     m_actionInsertFrameBreak  = new KAction(QString(), this);
@@ -789,18 +791,21 @@ void KWView::print() {
 //   duplex
 // const bool clipToPage=false; // should become a setting in the GUI
 
-    KWPrintingDialog *dia = new KWPrintingDialog(this);
-    dia->printer().setOutputFormat(QPrinter::PdfFormat);
-    dia->printer().setCreator("KWord 2.0alpha2");
-    dia->printer().setDocName ("Demo canvas");
-    dia->printer().setOutputFileName("output.pdf");
-    dia->printer().setResolution(600);
-    dia->printer().setFullPage(true); // ignore printer margins
-    QList<int> pages;
-    for(int i=m_document->startPage(); i <= m_document->lastPage(); i++)
-        pages.append(i);
-    dia->setPageRange(pages);
-    dia->show();
+    QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///KWordExportPdf"), "*.pdf", this, i18n("Export as PDF..."));
+    if(! file.isEmpty()) {
+        KWPrintingDialog *dia = new KWPrintingDialog(this);
+        dia->printer().setOutputFormat(QPrinter::PdfFormat);
+        dia->printer().setCreator("KWord 2.0");
+        dia->printer().setDocName("Export as PDF");
+        dia->printer().setOutputFileName(file);
+        dia->printer().setResolution(600);
+        dia->printer().setFullPage(true); // ignore printer margins
+        QList<int> pages;
+        for(int i=m_document->startPage(); i <= m_document->lastPage(); i++)
+            pages.append(i);
+        dia->setPageRange(pages);
+        dia->show();
+    }
 }
 
 void KWView::insertFrameBreak() {
