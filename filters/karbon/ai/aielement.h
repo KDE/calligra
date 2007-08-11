@@ -53,17 +53,17 @@ public:
 
     AIElement();
     ~AIElement();
-    AIElement( const AIElement& );
-    AIElement( const QString&, Type type = String );
-    AIElement( const Q3CString& );
-    AIElement( const char* );
+    explicit AIElement( const AIElement& );
+    explicit AIElement( const QString&, Type type = String );
+    explicit AIElement( const Q3CString& );
+    explicit AIElement( const char* );
 //    AIElement( const QValueList<AIElement>& );
-    AIElement( const Q3ValueVector<AIElement>&, Type type = ElementArray);
-    AIElement( int );
-    AIElement( uint );
-    AIElement( double );
-    AIElement( const QByteArray& );
-    AIElement( uchar );
+    explicit AIElement( const Q3ValueVector<AIElement>&, Type type = ElementArray);
+    explicit AIElement( int );
+    explicit AIElement( uint );
+    explicit AIElement( double );
+    explicit AIElement( const QByteArray& );
+    explicit AIElement( uchar );
 
     AIElement& operator= ( const AIElement& );
     bool operator==( const AIElement& ) const;
