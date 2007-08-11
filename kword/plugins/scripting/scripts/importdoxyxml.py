@@ -17,7 +17,7 @@ bellow and then use in KWord the "Import Doxygen XML File" python script;
     xsltproc combine.xslt index.xml > ~/mydoxygen.xml
 """
 
-import os, sys, re, xml.dom.minidom
+import os, sys, re, traceback, xml.dom.minidom
 
 class Config:
 
@@ -39,6 +39,7 @@ class Class:
         def __init__(self, id, node):
             self.id = id
             self.node = node
+            self.kindName = "slot"
 
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
 
@@ -49,13 +50,13 @@ class Class:
             a = re.sub("(^|[^a-zA-Z0-9])const($|[^a-zA-Z0-9])", "\\1\\2", "%s%s" % (d,a))
             a = re.sub("&|\*","",a)
             a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
-            a += " [slot]"
             self.definition = a.strip()
 
     class Signal:
         def __init__(self, id, node):
             self.id = id
             self.node = node
+            self.kindName = "signal"
 
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
 
@@ -66,7 +67,6 @@ class Class:
             a = re.sub("(^|[^a-zA-Z0-9])const($|[^a-zA-Z0-9])", "\\1\\2", "%s%s" % (d,a))
             a = re.sub("&|\*","",a)
             a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
-            a += " [signal]"
             self.definition = a.strip()
             #print node.toxml()
 
@@ -77,38 +77,40 @@ class Class:
 
             read = len(node.getElementsByTagName("read")) > 0
             write = len(node.getElementsByTagName("write")) > 0
+            if read and write:
+                self.kindName = "property, read+write"
+            elif read:
+                self.kindName = "property, read only"
+            elif write:
+                self.kindName = "property, write only"
+            else:
+                self.kindName = "property"
 
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
-
             d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "QString error"
             d = d.replace("const ","")
             d = re.sub("&|\*","",d)
-
-            if read and write: d += " [property, read+write]"
-            elif read: d += " [property, read]"
-            elif write: d += " [property, write]"
-
             self.definition = d.strip()
-
-            #print "1-----------------------------"
             #print node.toxml()
-            #print "2-----------------------------"
 
     class Variable:
         def __init__(self, id, node):
+            self.id = id
+            self.node = node
+            self.kindName = "variable"
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
             d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "QString error"
             d = d.replace("const ","")
             d = re.sub("&|\*","",d)
-            d += " [variable]"
             self.definition = d.strip()
-            print "VARIABLE --------------------------\n%s" % node.toxml()
+            #print node.toxml()
 
     class Function:
         def __init__(self, id, node):
             print ""
             self.id = id
             self.node = node
+            self.kindName = "function"
             self.description = node.getElementsByTagName("detaileddescription")[0].toxml()
             d = node.getElementsByTagName("definition")[0].childNodes[0].data #e.g. "virtual QString sheet"
             d = d.replace("virtual ","")
@@ -117,9 +119,8 @@ class Class:
             a = re.sub("(^|[^a-zA-Z0-9])const($|[^a-zA-Z0-9])", "\\1\\2", "%s%s" % (d,a))
             a = re.sub("&|\*","",a)
             a = re.sub("[\s]*(\(|\))[\s]*","\\1",a)
-            a += " [function]"
             self.definition = a.strip()
-            print "FUNCTION --------------------------\n%s" % node.toxml()
+            #print node.toxml()
 
     def __init__(self, config, node):
         self.node = node
@@ -156,6 +157,8 @@ class Class:
 class Page:
 
     def __init__(self, config, node):
+        print "PAGE -------------------------------------\n"
+        print node.toxml()
         self.title = node.getElementsByTagName("title")[0].childNodes[0].data #e.g. "KSpread Scripting Plugin"
         self.description = " ".join( [ n.toxml() for n in node.childNodes if n.nodeName == "detaileddescription" ] )
 
@@ -191,7 +194,11 @@ class Writer:
             self.CompoundList.append(id)
 
     def writeHtml(self, file):
-        title = self.CompoundDict["indexpage"].title
+        try:
+            title = self.CompoundDict["indexpage"].title
+        except KeyError:
+            #print "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
+            title = "Doxygen XML"
 
         class HtmlParser:
             def __init__(self, writer): self.writer = writer
@@ -269,9 +276,20 @@ class Writer:
             file.write("</ol>")
 
         if self.config.IndexPage:
-            file.write("<h2><a name=\"indexpage\" />%s</h2>" % self.CompoundDict["indexpage"].name)
-            file.write( parseToHtml( self.CompoundDict["indexpage"].description ) )
+            try:
+                file.write("<h2><a name=\"indexpage\" />%s</h2>" % self.CompoundDict["indexpage"].name)
+                file.write( parseToHtml( self.CompoundDict["indexpage"].description ) )
+            except KeyError:
+                pass
 
+        # Pages
+        for i in self.CompoundList:
+            if self.CompoundDict[i].kind != "page" or i == "indexpage":
+                continue
+            file.write("<h3><a name=\"%s\" />%s</h3>" % (i,self.CompoundDict[i].name))
+            file.write( "%s<br />" % parseToHtml( self.CompoundDict[i].description ) )
+
+        # Classes
         file.write("<h2><a name=\"objects\" />Objects</h2>")
         for i in self.CompoundList:
             if self.CompoundDict[i].kind != "class":
@@ -282,10 +300,10 @@ class Writer:
             file.write( "<ul>" )
             for m in self.CompoundDict[i].memberList:
                 member = self.CompoundDict[i].memberDict[m]
-                s = member.definition
+                s = "%s <i>[%s]</i>" % (member.definition,member.kindName)
                 if self.config.MemberDescription:
                     if len(member.description) > 0:
-                        s += "<br /><blockquote>%s</blockquote>" % parseToHtml( member.description )
+                        s += "<br><blockquote>%s</blockquote>" % parseToHtml( member.description )
                 file.write("<li>%s</li>" % s)
             file.write( "</ul>" )
 
