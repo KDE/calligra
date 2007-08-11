@@ -13,6 +13,8 @@
 * \li The \a ScriptingFunction class provides access to the KSpread::Function
 *     functionality to deal with formula functions that are written in
 *     a scripting language like Python or Ruby.
+* \li The \a ScriptingCellListener class implements a listener to changes
+      within cells of a sheet.
 * \li The \a ScriptingReader class provides abstract high-level functionality
 *     to read content from KSpread sheets.
 * \li The \a ScriptingWriter class provides abstract high-level functionality
