@@ -1,4 +1,4 @@
-/** @mainpage KSpread Scripting Plugin
+/** @page KSpreadScripting KSpread Scripting Plugin
 *
 * The KSpread scripting plugin offers flexible access to the
 * Kross scripting framework. Languages like Python or Ruby
@@ -6,16 +6,24 @@
 * with script-packages, automate tasks or control the
 * runtime-environment.
 *
-* The \a ScriptingPart class implements a KPart component
-* to integrate scripting into KSpread.
-* The \a ScriptingModule class enables access to the KSpread
-* functionality from within the scripting backends.
-* The \a ScriptingFunction class provides access to the KSpread::Function
-* functionality to deal with formula functions that are written in
-* a scripting language like Python or Ruby.
+* \li The \a ScriptingPart class implements a KPart component
+*     to integrate scripting into KSpread.
+* \li The \a ScriptingModule class enables access to the KSpread
+*     functionality from within the scripting backends.
+* \li The \a ScriptingFunction class provides access to the KSpread::Function
+*     functionality to deal with formula functions that are written in
+*     a scripting language like Python or Ruby.
+* \li The \a ScriptingReader class provides abstract high-level functionality
+*     to read content from KSpread sheets.
+* \li The \a ScriptingWriter class provides abstract high-level functionality
+*     to write content to KSpread sheets and to manipulate the content of cells.
+* \li The \a ScriptingSheetsListView provides provides a listview-widget that
+*     displays all sheets and lets the user choose 0..n of them plus specify
+*     cell-ranges for all of them.
 *
 * \see http://www.koffice.org/kspread
 * \see http://kross.dipe.org
+* \see http://api.kde.org/4.0-api/kdelibs-apidocs/kross/html/index.html
 *
 ***************************************************************************
 *

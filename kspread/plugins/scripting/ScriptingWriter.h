@@ -39,6 +39,31 @@
 /**
 * The ScriptingWriter class provides abstract high-level functionality to write
 * content to KSpread sheets and to manipulate the content of cells.
+*
+* The following python sample demonstrates how to use the ScriptingWriter to
+* write content to KSpread.
+* \code
+* # Import the KSpread module
+* import KSpread
+* # Create a writer instance.
+* writer = KSpread.writer()
+* # Set the sheet we like to write to.
+* sheetname = "Sheet2"
+* if not writer.setSheet(sheetname):
+*     raise "Invalid sheet \"%s\" defined." % sheetname
+* # Set the cell(s) we like to start to write to. If this
+* # is not defined, writing starts from A1.
+* cellname = "B12"
+* if not writer.setCell(cellname):
+*     raise "Invalid cell \"%s\" defined." % cellname
+* # Now fill the cells with some content.
+* for record in [ ["One,"Two"] , ["Three,"Four"] ]:
+*     # Write the tuple to the current row.
+*     if not writer.setValues(record):
+*         raise "Failed to set record %s" % record
+*     # Go to the next row.
+*     writer.next()
+* \endcode
 */
 class ScriptingWriter : public QObject
 {

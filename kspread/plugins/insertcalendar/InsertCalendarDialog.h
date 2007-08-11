@@ -33,6 +33,10 @@ class KDatePicker;
 namespace KSpread
 {
 
+/**
+* The InsertCalendarDialog class implements a dialog window that allows to
+* define how details about the calendar that should be inserted.
+*/
 class InsertCalendarDialog : public QDialog, public Ui::InsertCalendarDialogBase
 {
   Q_OBJECT
