@@ -57,7 +57,7 @@ public:
     void renderClef(QPainter& painter, MusicCore::Clef* clef, const QPointF& pos, RenderState& state, double xScale);
     void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, const QPointF& pos, RenderState& state, double xScale);
     void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, const QPointF& pos, double xScale);
-    void renderChord(QPainter& painter, MusicCore::Chord* chord, const QPointF& ref, RenderState& state, double xScale, const QColor& color = Qt::black);
+    void renderChord(QPainter& painter, MusicCore::Chord* chord, const QPointF& ref, double xScale, const QColor& color = Qt::black);
     void renderRest(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, const QColor& color = Qt::black);
     void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, double stemLength, const QColor& color = Qt::black);
     void renderAccidental(QPainter& painter, int accidentals, const QPointF& pos, const QColor& color = Qt::black);

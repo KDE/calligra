@@ -190,7 +190,7 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, const QPo
 
     // TODO: make this less hacky
     Chord *c = dynamic_cast<Chord*>(me);
-    if (c) renderChord(painter, c, pos, state, xScale, color);
+    if (c) renderChord(painter, c, pos, xScale, color);
 }
 
 void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, const QPointF& pos, RenderState& state, double xScale)
@@ -295,7 +295,7 @@ void MusicRenderer::renderRest(QPainter& painter, Chord::Duration duration, cons
     m_style->renderRest(painter, pos.x(), pos.y(), duration, color);
 }
 
-void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& ref, RenderState& state, double xScale, const QColor& color)
+void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& ref, double xScale, const QColor& color)
 {
     double x = chord->x() * xScale;
     if (chord->noteCount() == 0) { // a rest
@@ -303,16 +303,19 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         renderRest(painter, chord->duration(), ref + QPointF(x, s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing()), color);
         return;
     }
-    int topLine = 10000;
-    int bottomLine = -10000;
+    int topLine, bottomLine;
+    VoiceBar* vb = chord->voiceBar();
+    Bar* bar = vb->bar();
+    int barIdx = bar->sheet()->indexOfBar(bar);
+    double topy = 1e9, bottomy = -1e9;
+    Staff* topStaff, *bottomStaff;
+    
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
         Staff * s = n->staff();
+        Clef* clef = s->lastClefChange(barIdx);
         int line = 10;
-        if (state.clef) line = state.clef->pitchToLine(n->pitch());
-
-        if (line < topLine) topLine = line;
-        if (line > bottomLine) bottomLine = line;
+        if (clef) line = clef->pitchToLine(n->pitch());
 
         if (line > 9) { // lines under the bar
             painter.setPen(m_style->staffLinePen(color));
@@ -328,6 +331,18 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
             }
         }
 
+        double ypos = s->top() + line * s->lineSpacing() / 2;
+        if (ypos < topy) {
+            topy = ypos;
+            topLine = line;
+            topStaff = s;
+        }
+        if (ypos > bottomy) {
+            bottomy = ypos;
+            bottomLine = line;
+            bottomStaff = s;
+        }        
+        
         m_style->renderNoteHead( painter, ref.x() + x, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
 
         // render accidentals
@@ -365,7 +380,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         }
     }
 
-    Staff * s = chord->note(0)->staff(); // TODO: make this work with chords spanning multiple staves
+    //Staff * s = chord->note(0)->staff(); // TODO: make this work with chords spanning multiple staves
 
     double center = (bottomLine + topLine) * 0.5;
     double stemLen = stemLength(chord->duration());
@@ -375,13 +390,13 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         if (center < 4) { stemX = x; stemsUp = false; }
         painter.setPen(m_style->stemPen(color));
         if (stemsUp) {
-            painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ s->top() + (topLine - stemLen) * s->lineSpacing() / 2),
-                             ref + QPointF(stemX, /*chord->y() +*/ s->top() + bottomLine * s->lineSpacing() / 2));
-            m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + /*chord->y() +*/ s->top() + (topLine - stemLen) * s->lineSpacing() / 2, chord->duration(), stemsUp, color );
+            painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2),
+                             ref + QPointF(stemX, /*chord->y() +*/ bottomStaff->top() + bottomLine * bottomStaff->lineSpacing() / 2));
+            m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + /*chord->y() +*/ topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
         } else {
-            painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ s->top() + topLine * s->lineSpacing() / 2),
-                             ref + QPointF(stemX, /*chord->y() +*/ s->top() + (bottomLine + stemLen) * s->lineSpacing() / 2));
-            m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + /*chord->y() +*/ s->top() + (bottomLine + stemLen) * s->lineSpacing() / 2, chord->duration(), stemsUp, color );
+            painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ topStaff->top() + topLine * topStaff->lineSpacing() / 2),
+                             ref + QPointF(stemX, /*chord->y() +*/ bottomStaff->top() + (bottomLine + stemLen) * bottomStaff->lineSpacing() / 2));
+            m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + /*chord->y() +*/ bottomStaff->top() + (bottomLine + stemLen) * bottomStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
         }
     }
 }
