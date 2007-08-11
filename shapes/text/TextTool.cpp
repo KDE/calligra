@@ -37,6 +37,8 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoColor.h>
+#include <KoColorSetAction.h>
 
 #include <KoCharacterStyle.h>
 #include <KoTextDocumentLayout.h>
@@ -318,6 +320,10 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     m_actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), this);
     addAction("format_fontsize", m_actionFormatFontSize );
     connect( m_actionFormatFontSize, SIGNAL(fontSizeChanged( int )), &m_selectionHandler, SLOT(setFontSize(int)) );
+
+    m_actionFormatTextColor = new KoColorSetAction(this);
+    addAction("format_color", m_actionFormatTextColor);
+    connect(m_actionFormatTextColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setTextColor(const KoColor &)) );
 
     action = new QAction(i18n("Default Format"), this);
     addAction("text_default", action);
@@ -1583,6 +1589,11 @@ void TextTool::finishedWord() {
 void TextTool::finishedParagraph() {
     foreach(KoTextEditingPlugin* plugin, m_textEditingPlugins.values())
         plugin->finishedParagraph(m_textShapeData->document(), m_prevCursorPosition);
+}
+
+void TextTool::setTextColor(const KoColor &color)
+{
+    m_selectionHandler.setTextColor(color.toQColor());
 }
 
 #include "TextTool.moc"
