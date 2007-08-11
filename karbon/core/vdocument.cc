@@ -63,6 +63,7 @@ public:
     {
         delete( selection );
         qDeleteAll( layers );
+        qDeleteAll( objects );
     }
 
     QSizeF pageSize; ///< the documents page size

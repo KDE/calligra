@@ -63,6 +63,7 @@ public:
     {
         delete toolProxy;
         toolProxy = 0;
+        delete shapeManager;
     }
 
     KoShapeManager* shapeManager;
