@@ -80,7 +80,6 @@ public:
         const double bottom, const double right);
     /**
      * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
-     * @since 1.4
      */
     virtual bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );        
     virtual bool doOpenStyles(void);
@@ -89,7 +88,7 @@ public:
     virtual bool doFullDocumentInfo(const KWEFDocumentInfo& docInfo);
     virtual bool doVariableSettings(const VariableSettingsData& vs);
     virtual bool doOpenBody (void);
-    virtual bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
+    virtual bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); 
 private:
     void processParagraphData (const QString& paraText,
         const TextFormatting& formatLayout,

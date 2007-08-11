@@ -67,7 +67,6 @@ class KWORD_LIBEXPORT_EXPORT KWEFBaseWorker
             const double bottom, const double right); ///< Like KWord's \<PAPERBORDERS\>
         /**
          * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
-         * @since 1.4
          */
         virtual bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );
         virtual bool doPageInfo(const int headerType, const int footerType);
@@ -83,7 +82,7 @@ class KWORD_LIBEXPORT_EXPORT KWEFBaseWorker
         virtual bool doOpenSpellCheckIgnoreList (void); ///< like AbiWord's \<ignorewords\> and KWord's \<SPELLCHECKIGNORELIST\>
         virtual bool doCloseSpellCheckIgnoreList (void); ///< like AbiWord's \</ignorewords\> and Kwords \</SPELLCHECKIGNORELIST\>
         virtual bool doFullSpellCheckIgnoreWord (const QString& ignoreword); ///< like AbiWord's \<iw\> and Kwords \</SPELLCHECKIGNOREWORD\>
-        virtual bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
+        virtual bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); 
     protected:
         KWEFKWordLeader* m_kwordLeader;
 };

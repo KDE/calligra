@@ -242,7 +242,6 @@ public:
     QString getFieldValue(void) const;
     /**
      * Set parameters of a \<FOOTNOTE\> element
-     * @since 1.4 (change of parameters)
      */
     void setFootnote( const QString& notetype, const QString& automatic, const QString& value, Q3ValueList<ParaData>* para );
     /**
@@ -255,7 +254,6 @@ public:
     /**
      * Get type of footnote
      * @return true for footnote, false for endnote
-     * @since 1.4
      */
     bool getFootnoteType( void ) const;
     /// Paragrapgh of the footnote
@@ -263,12 +261,10 @@ public:
 
     /**
      * Set generic variable data
-     * @since 1.3.1, 1.4
      */
     void setGenericData( const QString& key, const QString& data );
     /**
      * Get generic variable data
-     * @since 1.3.1, 1.4
      */
     QString getGenericData( const QString& key ) const;
 

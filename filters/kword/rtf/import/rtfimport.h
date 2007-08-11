@@ -315,26 +315,22 @@ public:
     void setEnumProperty( RTFProperty *property );
     /**
      * Set font style hint
-     * @since 1.4
      */
     void setFontStyleHint( RTFProperty* property );
     /**
      * Set the picture type
      * (BMP, PNG...)
-     * @since 1.4
      */
     void setPictureType( RTFProperty* property );
     /**
      * Sets the enumaration value for \\ul-type keywords
      * \\ul switches on simple underline
      * \\ul0 switches off all underlines
-     * @since 1.4 (renamed)
      */
     void setSimpleUnderlineProperty( RTFProperty* );
     /**
      * Set underline properties
      * @param property the property to set
-     * @since 1.4 (changed behaviour)
      */
     void setUnderlineProperty( RTFProperty* property );
     /**

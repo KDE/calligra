@@ -57,7 +57,6 @@ class KWORD_LIBEXPORT_EXPORT KWEFKWordLeader
         bool doFullPaperBorders (const double top, const double left, const double bottom, const double right);
         /**
          * Other data of KWord's \<PAPER\> which are not in @see doFullPaperFormat
-         * @since 1.4
          */
         bool doFullPaperFormatOther ( const int columns, const double columnspacing, const int numPages );
         bool doOpenHead (void);
@@ -72,7 +71,7 @@ class KWORD_LIBEXPORT_EXPORT KWEFKWordLeader
         bool doFullSpellCheckIgnoreWord (const QString& ignoreword);
         bool doHeader(const HeaderData&);
         bool doFooter(const FooterData&);
-        bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors ); ///< @since 1.4
+        bool doDeclareNonInlinedFramesets( Q3ValueList<FrameAnchor>& pictureAnchors, Q3ValueList<FrameAnchor>& tableAnchors );
 
         Q3ValueList<FootnoteData> footnoteList;
 
@@ -98,9 +97,9 @@ class KWORD_LIBEXPORT_EXPORT KWEFKWordLeader
         QMap<QString,int> m_paraCountMap;
         /// List of bookmarks
         Q3ValueList<Bookmark> m_bookmarkList;
-        QStringList m_unanchoredFramesets; ///< List of framesets where an anchor was searched but not found (DEBUG) @since 1.4
-        Q3ValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors @since 1.4
-        Q3ValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables @since 1.4
+        QStringList m_unanchoredFramesets; ///< List of framesets where an anchor was searched but not found (DEBUG) 
+        Q3ValueList<FrameAnchor> m_nonInlinedPictureAnchors; ///< Pseudo-anchors for non-inlined anchors 
+        Q3ValueList<FrameAnchor> m_nonInlinedTableAnchors; ///< Pseudo-anchors for non-inlined tables
     private:
         KWEFBaseWorker *m_worker;
         KoFilterChain* m_chain;

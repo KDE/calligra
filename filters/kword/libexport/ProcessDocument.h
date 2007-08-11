@@ -43,7 +43,6 @@ void ProcessTextTag         ( QDomNode myNode, void *tagData, KWEFKWordLeader *l
 void ProcessDocumentInfoTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
 /**
  * @internal
- * @since 1.4 (made public)
  */
 void ProcessImageTag ( QDomNode myNode, void *tagData, KWEFKWordLeader *leader );
 
