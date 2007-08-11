@@ -184,6 +184,8 @@ RectStorage<T>::~RectStorage()
 template<typename T>
 T RectStorage<T>::contains(const QPoint& point) const
 {
+    if (!m_usedArea.contains(point)/* && !m_usedColumns.contains(point.x()) && !m_usedRows.contains(point.y())*/)
+        return T();
     // first, lookup point in the cache
     if ( m_cache.contains( point ) )
     {

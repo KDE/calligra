@@ -78,6 +78,8 @@ StyleStorage::~StyleStorage()
 
 Style StyleStorage::contains(const QPoint& point) const
 {
+    if (!d->usedArea.contains(point) && !d->usedColumns.contains(point.x()) && !d->usedRows.contains(point.y()))
+        return *styleManager()->defaultStyle();
     // first, lookup point in the cache
     if ( d->cache.contains( point ) )
     {
