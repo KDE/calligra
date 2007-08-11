@@ -3074,6 +3074,15 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
         isNonDefaultColumn = true;
     }
 
+    // If it's a default column, we can return here.
+    // This saves the iteration, which can be caused by column cell default styles,
+    // but which are not inserted here.
+    if (!isNonDefaultColumn)
+    {
+        indexCol += number;
+        return true;
+    }
+
     for ( int i = 0; i < number; ++i )
     {
         kDebug(36003)<<" insert new column: pos :"<<indexCol<<" width :"<<width<<" hidden ?"<<visibility;
@@ -3730,6 +3739,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, columnDefaultStyles, rowDefaultStyles);
     if (rowDefaultStyles.count() != 0)
         maxRows = qMax(maxRows, (--rowDefaultStyles.constEnd()).key());
+    // OpenDocument needs at least one cell per sheet.
+    maxCols = qMax(1, maxCols);
+    maxRows = qMax(1, maxRows);
+    maxMaxRows = qMax(1, maxMaxRows);
     kDebug(36003) <<"\t Sheet dimension:" << maxCols <<" x" << maxRows;
 
     // saving the columns
@@ -3738,9 +3751,9 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     while ( i <= maxCols )
     {
         const ColumnFormat* column = columnFormat( i );
-//         kDebug(36003) <<"Sheet::saveOasisColRowCell: first col loop:"
-//                   << " i: " << i
-//                   << ", column: " << (column ? column->column() : 0) << endl;
+//         kDebug(36003) << "Sheet::saveOasisColRowCell: first col loop:"
+//                       << "i:" << i
+//                       << "column:" << (column ? column->column() : 0) << endl;
 
         KoGenStyle currentColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
         currentColumnStyle.addPropertyPt( "style:column-width", column->width() );
@@ -3749,62 +3762,54 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         //style default layout for column
         const Style style = columnDefaultStyles.value(i);
 
-//         bool hide = column->isHidden();
-        bool refColumnIsDefault = column->isDefault() && style.isDefault();
         int j = i;
-        int repeated = 1;
+        int count = 1;
 
         while ( j <= maxCols )
         {
           const ColumnFormat* nextColumn = d->columns.next(j);
           const int nextColumnIndex = nextColumn ? nextColumn->column() : 0;
-          const QMap<int, Style>::ConstIterator nextColumnDefaultStyle = columnDefaultStyles.upperBound(j++);
+          const QMap<int, Style>::ConstIterator nextColumnDefaultStyle = columnDefaultStyles.upperBound(j);
           const int nextStyleColumnIndex = nextColumnDefaultStyle == columnDefaultStyles.end()
                                          ? 0 : nextColumnDefaultStyle.key();
+          // j becomes the index of the adjacent column
+          ++j;
+
 //           kDebug(36003) <<"Sheet::saveOasisColRowCell: second col loop:"
-//                         << " j: " << j
-//                         << ", next column: " << (nextColumn ? nextColumn->column() : 0)
-//                         << ", next styled column: " << nextStyleColumnIndex << endl;
+//                         << "j:" << j
+//                         << "next column:" << (nextColumn ? nextColumn->column() : 0)
+//                         << "next styled column:" << nextStyleColumnIndex << endl;
 
           // no next or not the adjacent column?
           if ( ( !nextColumn && !nextStyleColumnIndex ) ||
                ( nextColumnIndex != j && nextStyleColumnIndex != j ) )
           {
-            if ( refColumnIsDefault )
+            // if the origin column was a default column,
+            if (column->isDefault() && style.isDefault())
             {
-              // if the origin column was a default column,
               // we count the default columns
               if ( !nextColumn && !nextStyleColumnIndex )
-                repeated = maxCols - i + 1;
+              {
+                count = maxCols - i;
+                // stop completely
+                i = maxCols + 1;
+              }
               else if ( nextColumn && ( !nextStyleColumnIndex || nextColumn->column() <= nextStyleColumnIndex ) )
-                repeated = nextColumn->column() - j + 1;
+                count = nextColumn->column() - i;
               else
-                repeated = nextStyleColumnIndex - j + 1;
+                count = nextStyleColumnIndex - i;
             }
             // otherwise we just stop here to process the adjacent
             // column in the next iteration of the outer loop
             break;
           }
-#if 0
-          KoGenStyle nextColumnStyle( Doc::STYLE_COLUMN_AUTO, "table-column" );
-          nextColumnStyle.addPropertyPt( "style:column-width", nextColumn->width() );
-          nextColumnStyle.addProperty( "fo:break-before", "auto" );/*FIXME auto or not ?*/
 
-          KoGenStyle nextDefaultCellStyle; // the type is determined in saveOasisCellStyle
-          QString nextDefaultCellStyleName = nextColumn->saveOasisCellStyle( nextDefaultCellStyle, mainStyles );
-
-          if ( hide != nextColumn->isHidden() ||
-               nextDefaultCellStyleName != currentDefaultCellStyleName ||
-               !( nextColumnStyle == currentColumnStyle ) )
-          {
-            break;
-          }
-#endif
+          // stop, if the next column differs from the current one
           if ( nextColumn && ( *column != *nextColumn ) )
               break;
           if ( style != columnDefaultStyles.value( j ) )
               break;
-          ++repeated;
+          ++count;
         }
 
         xmlWriter.startElement( "table:table-column" );
@@ -3825,14 +3830,15 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           else if (column->isFiltered())
               xmlWriter.addAttribute("table:visibility", "filter");
         }
-        if ( repeated > 1 )
-            xmlWriter.addAttribute( "table:number-columns-repeated", repeated  );
+        if (count > 1)
+            xmlWriter.addAttribute("table:number-columns-repeated", count - 1);
 
         xmlWriter.endElement();
 
-        kDebug(36003) <<"Sheet::saveOasisColRowCell: column" << i <<""
-                  << "repeated " << repeated << " time(s)" << endl;
-        i += repeated;
+        kDebug(36003) << "Sheet::saveOasisColRowCell: column" << i
+                      << "repeated" << count-1 << "time(s)" << endl;
+
+        i += count;
     }
 
     // saving the rows and the cells
