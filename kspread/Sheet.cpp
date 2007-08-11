@@ -3016,7 +3016,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
           // Some spreadsheet programs may support more rows than KSpread so
           // limit the number of repeated rows.
           // FIXME POSSIBLE DATA LOSS!
-          number = qMin( n, KS_colMax - indexCol + 1 );
+          number = qMin(n + 1, KS_colMax - indexCol + 1);
         kDebug(36003) <<"Repeated:" << number;
     }
 
