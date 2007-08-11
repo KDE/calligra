@@ -615,6 +615,8 @@ bool Doc::loadChildren( KoStore* _store )
 
 bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
+    ElapsedTime et("OpenDocument Saving", ElapsedTime::PrintOnlyTime);
+
   emitBeginOperation(true);
     bool result=saveOasisHelper( store, manifestWriter, SaveAll );
   emitEndOperation();
