@@ -192,11 +192,15 @@ void Engraver::engraveBar(Bar* bar)
         }
 
         bool staffElement = false;
+        int priority = -1000000000;
         for (int s = 0; s < staffCount; s++) {
             if (staffElements[s].size() > 0) {
                 if (staffElements[s][0]->startTime() <= time) {
                     time = staffElements[s][0]->startTime();
                     staffElement = true;
+                    if (staffElements[s][0]->priority() > priority) {
+                        priority = staffElements[s][0]->priority();
+                    }
                 }
             }
         }
@@ -222,7 +226,7 @@ void Engraver::engraveBar(Bar* bar)
         // now update all items with correct start time
         if (staffElement) {
             for (int s = 0; s < staffCount; s++) {
-                if (staffElements[s].size() > 0 && staffElements[s][0]->startTime() == time) {
+                if (staffElements[s].size() > 0 && staffElements[s][0]->startTime() == time && staffElements[s][0]->priority() == priority) {
                     StaffElement* se = staffElements[s].takeAt(0);
                     double xpos = x + 15;
                     se->setX(xpos);
