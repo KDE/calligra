@@ -34,6 +34,10 @@
 
 namespace Scripting {
 
+    /**
+    * The Variable class implements functionality to deal with KWord variables within
+    * documents.
+    */
     class Variable : public QObject, public KoVariable
     {
             Q_OBJECT
@@ -103,21 +107,51 @@ namespace Scripting {
 
         public Q_SLOTS:
 
+            /**
+            * Return the values the variable has as string.
+            */
             QString value() const {
                 return KoVariable::value();
             }
 
+            /**
+            * Set the value the variable has to the defined string \p value .
+            */
             void setValue(const QString& value) {
                 KoVariable::setValue(value);
             }
 
+            /**
+            * Set the options-widget that should be used.
+            *
+            * This widget will be shown if the user likes to insert a new
+            * instance of the variable and it allows a variable to provide
+            * additional optional options.
+            */
             void setOptionsWidget(QWidget* optionswidget = 0) {
                 //delete m_optionswidget;
                 m_optionswidget = optionswidget;
             }
 
         Q_SIGNALS:
+
+            /**
+            * This signal got emitted if properties got updated.
+            *
+            * Such properties are additional optional options a variable
+            * defines and they could be changed by the user. If such a
+            * property changed, this signal got emitted to be able to
+            * react on it - e.g. update the value the variable has cause
+            * such a property changed.
+            */
             void propertiesUpdated();
+
+            /**
+            * This signal got emitted if KWord requestes the options-widget.
+            *
+            * That way you are able to use the setOptionsWidget() method
+            * to create register a new options-widget on demand.
+            */
             void optionsWidgetRequest();
 
         private:
@@ -126,6 +160,8 @@ namespace Scripting {
             QWidget* m_optionswidget;
     };
 
+    /** \internal implementation of a factory for \a Variable instances used
+    by KWord to create variables on demand. */
     class VariableFactory : public KoInlineObjectFactory
     {
         protected:

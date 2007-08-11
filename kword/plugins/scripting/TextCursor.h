@@ -72,9 +72,43 @@ namespace Scripting {
             int anchor() const;
             /** Set the position the cursor is on. */
             void setPosition(int pos, bool moveAnchor = true);
-            /** Moves to the defined position. The \p operation defines
-            the \a MoveOperation that should be performed while \p moveAnchor
-            defines if the anchor should be moved too to the new position. */
+
+            /** Moves the cursor to the defined position.
+            *
+            * The \p operation defines the \a MoveOperation that should be performed
+            * while \p moveAnchor defines if the anchor should be moved too to the
+            * new position.
+            *
+            * The operation could be one of the following;
+            * \li Start = Move to the start of the document.
+            * \li End = Move to the end of the document.
+            * \li StartOfLine = Move to the start of the current line.
+            * \li EndOfLine = Move to the end of the current line.
+            * \li StartOfBlock = Move to the start of the current block.
+            * \li EndOfBlock = Move to the end of the current block.
+            * \li PreviousBlock = Move to the start of the previous block.
+            * \li NextBlock = Move to the beginning of the next block.
+            * \li StartOfWord = Move to the start of the current word.
+            * \li EndOfWord = Move to the end of the current word.
+            * \li PreviousWord = Move to the beginning of the previous word.
+            * \li NextWord = Move to the next word.
+            * \li WordLeft = Move left one word.
+            * \li PreviousCharacter = Move to the previous character.
+            * \li NextCharacter = Move to the next character.
+            * \li Up = Move up one line.
+            * \li Down = Move down one line.
+            * \li Left = Move left one character.
+            * \li Right = Move right one character.
+            *
+            * Python sample code;
+            * \code
+            * import KWord
+            * doc = KWord.mainFrameSet().document()
+            * cursor = doc.rootFrame().firstCursorPosition()
+            * cursor.movePosition(cursor.NextBlock, true)
+            * cursor.movePosition(cursor.End)
+            * \endcode
+            */
             bool movePosition(int operation, bool moveAnchor = true);
 
             /** Return true if the cursor is at the beginning of the document. */

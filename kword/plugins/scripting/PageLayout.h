@@ -41,10 +41,12 @@ namespace Scripting {
 
         public Q_SLOTS:
 
-            /** Page format */
-            //KoPageFormat::Format format;
-
-            /** Return page orientation */
+            /** Return the page orientation.
+            *
+            * The returned string could be one of the following;
+            * \li Portrait
+            * \li Landscape
+            */
             QString orientation() {
                 switch( m_pagelayout.orientation ) {
                     case KoPageFormat::Portrait: return "Portrait";

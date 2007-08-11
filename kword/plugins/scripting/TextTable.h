@@ -42,9 +42,7 @@ namespace Scripting {
         public Q_SLOTS:
 
             /** Return the table content as plain text. */
-            QString text() {
-                return QTextCursor(m_table).block().text();
-            }
+            QString text() { return QTextCursor(m_table).block().text(); }
 
             /** Return the number of columns the table has. */
             int columns() const { return m_table->columns(); }

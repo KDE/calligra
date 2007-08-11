@@ -43,10 +43,12 @@ namespace Scripting {
             /** Return the number of this page as it will be shown to the user. */
             int pageNumber() const { return m_page->pageNumber(); }
 
-            /** Return the pageside of this page. The string could be one of the following;
-                \li "Left" for left page used for even-numbered pages.
-                \li "Right" for right page used for odd numbered pages.
-                \li "Spread" for page spread which is one page that represents 2 pagenumbers.
+            /** Return the pageside of this page.
+            *
+            * The returned string could be one of the following;
+            * \li "Left" for left page used for even-numbered pages.
+            * \li "Right" for right page used for odd numbered pages.
+            * \li "Spread" for page spread which is one page that represents 2 pagenumbers.
             */
             QString pageSide() const {
                 switch( m_page->pageSide() ) {

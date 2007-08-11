@@ -69,10 +69,13 @@ namespace Scripting {
             }
 #endif
 
+            /** Return the content as text of the defined item with index \p index . */
             QString itemText(int index) {
                 QTextBlock block = m_list->item(index);
                 return block.isValid() ? m_list->itemText(block) : QString();
             }
+
+            /** Return the content of the list as text. */
             QString text() {
                 QString result;
                 for(int i = 0; i < m_list->count(); ++i) {

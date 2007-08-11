@@ -87,21 +87,25 @@ namespace Scripting {
             int pageCount();
 
             /** Return the \a Page of the specific page number.
-            Python example that iterates over all pages;
-            \code
-            import KWord
-            for i in range( KWord.pageCount() ):
-                page = KWord.page(i)
-                print "width=%s height=%s" % (page.width(),page.height())
-            \endcode */
+            *
+            * Python example that iterates over all pages;
+            * \code
+            * import KWord
+            * for i in range( KWord.pageCount() ):
+            *     page = KWord.page(i)
+            *     print "width=%s height=%s" % (page.width(),page.height())
+            * \endcode
+            */
             QObject* page(int pageNumber);
 
             /** Insert a new page and returns the new \a Page object.
-            The new page is inserted after the page which has the pagenumber
-            \p afterPageNum . If \p afterPageNum is 0, the new page is
-            inserted before page 1.  In all cases, the new page will have
-            the number afterPageNum+1. To append a new page use
-            insertPage( pageCount() ). */
+            *
+            * The new page is inserted after the page which has the pagenumber
+            * \p afterPageNum . If \p afterPageNum is 0, the new page is
+            * inserted before page 1.  In all cases, the new page will have
+            * the number afterPageNum+1. To append a new page use
+            * insertPage( pageCount() ).
+            */
             QObject* insertPage( int afterPageNum );
             /** Remove the page with the pagenumber \p pageNumber . */
             void removePage( int pageNumber );
@@ -158,11 +162,14 @@ namespace Scripting {
             QObject* frame(int frameNr);
 
             /** Add and return a new \a FrameSet object for text handled with \a TextDocument .
-            \code
-                import KWord
-                textshape = KWord.addTextFrame("MyTextShape")
-                textshape.document().setText("Some text")
-            \endcode */
+            *
+            * Python sample code;
+            * \code
+            * import KWord
+            * textshape = KWord.addTextFrame("MyTextShape")
+            * textshape.document().setText("Some text")
+            * \endcode
+            */
             QObject* addTextFrame(const QString& framesetname);
             /** Add and return a new \a FrameSet object. */
             QObject* addFrame(const QString& framesetname, const QString& shapeId);
