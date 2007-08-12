@@ -78,6 +78,11 @@ void CharacterGeneral::save() {
     m_characterDecorations->save();
     m_characterHighlighting->save();
     m_styleOptions->save();
+    QFont font = m_fontChooser->font();
+    m_style->setFontFamily(font.family());
+    m_style->setFontPointSize(font.pointSizeF());
+    m_style->setFontWeight(font.weight());
+    m_style->setFontItalic(font.italic());
 }
 
 void CharacterGeneral::switchToGeneralTab() {
