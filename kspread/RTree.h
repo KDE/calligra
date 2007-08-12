@@ -527,7 +527,6 @@ void RTree<T>::operator=(const RTree<T>& other)
 template<typename T>
 void RTree<T>::LeafNode::remove( const QRectF& rect, const T& data )
 {
-    int old_counter = this->m_counter;
     for ( int i = 0; i < this->m_counter; ++i )
     {
         if ( this->m_childBoundingBox[i] == rect && this->m_data[i] == data )
