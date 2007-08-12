@@ -54,7 +54,7 @@
 
 #include <unistd.h>
 
-ClipartChooser::ClipartChooser( QSize iconSize, QWidget *parent, const char *name )
+ClipartChooser::ClipartChooser( const QSize &iconSize, QWidget *parent, const char *name )
 	: KoResourceChooser( iconSize, parent)
 {
 	setDragEnabled( true );

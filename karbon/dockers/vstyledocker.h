@@ -38,7 +38,7 @@ class VClipartIconItem;
 class ClipartChooser : public KoResourceChooser
 {
 public:
-	ClipartChooser( QSize iconSize, QWidget *parent = 0L, const char *name = 0L );
+	ClipartChooser( const QSize &iconSize, QWidget *parent = 0L, const char *name = 0L );
 	virtual void startDrag();
 };
 

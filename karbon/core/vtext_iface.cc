@@ -26,7 +26,7 @@ VTextIface::VTextIface( VText *text )
 }
 
 void 
-VTextIface::setText( QString text )
+VTextIface::setText( const QString &text )
 {
 	m_text->setText( text );
 }

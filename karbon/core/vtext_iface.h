@@ -32,7 +32,7 @@ public:
 	VTextIface( VText *text );
 
 k_dcop:
-	void setText( QString text );
+	void setText( const QString &text );
 	QString text();
 
 	void setFontSize( int pointSize );
