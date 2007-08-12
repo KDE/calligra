@@ -68,6 +68,10 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
             widget.underlineStyle->setCurrentIndex(0);
             break;
     }
+    if(style->underlineType() == KoCharacterStyle::NoLineType)
+        widget.underlineStyle->setCurrentIndex(0);
+    // TODO represent single and double lines.
+
     underlineChanged(widget.underlineStyle->currentIndex());
     widget.underlineColor->setColor(style->underlineColor());
 
