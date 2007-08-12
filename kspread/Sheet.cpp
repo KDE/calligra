@@ -3908,7 +3908,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             repeated = j - i;
 
             if ( repeated > 1 )
-                xmlWriter.addAttribute("table:number-rows-repeated", repeated + 1);
+                xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             if (!style.isDefault())
             {
               KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
@@ -3966,7 +3966,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               kDebug(36003) << "Sheet::saveOasisColRowCell: NON-empty row" << i
                             << "repeated" << repeated << "times" << endl;
 
-              xmlWriter.addAttribute("table:number-rows-repeated", repeated + 1);
+              xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }
 
             saveOasisCells(xmlWriter, mainStyles, i, maxCols, valStyle,
