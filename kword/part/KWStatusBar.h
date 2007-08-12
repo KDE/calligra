@@ -22,13 +22,8 @@
 
 #include <QObject>
 
-class QLabel;
 class QPoint;
-class QTextCursor;
 class KStatusBar;
-//class KSqueezedTextLabel;
-class KoCanvasController;
-class KoToolProxy;
 class KWView;
 
 /**
@@ -57,19 +52,14 @@ public:
 private Q_SLOTS:
     void slotModifiedChanged(bool);
     void slotPagesChanged();
-    void slotCursorPositionChanged(const QTextCursor&);
     void slotChangedTool();
     void slotMousePositionChanged(const QPoint&);
 
 private:
-    KStatusBar * m_statusbar;
-    KWView* m_view;
-    KoToolProxy* m_toolproxy;
-    KoCanvasController* m_controller;
-
-    QLabel* m_modifiedLabel;
-    QLabel* m_pageLabel;
-    QLabel* m_mousePosLabel;
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 };
 
 #endif
