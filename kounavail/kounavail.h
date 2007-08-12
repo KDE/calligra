@@ -30,7 +30,7 @@ class KoUnavailPart : public KoDocument
     Q_PROPERTY( QString unavailReason READ unavailReason WRITE setUnavailReason )
     Q_PROPERTY( QString realURL READ realURL WRITE setRealURL )
 public:
-    KoUnavailPart( QWidget *parentWidget = 0, QObject* parent = 0 );
+    explicit KoUnavailPart( QWidget *parentWidget = 0, QObject* parent = 0 );
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
@@ -74,7 +74,7 @@ class KoUnavailView : public KoView
 {
     Q_OBJECT
 public:
-    KoUnavailView( KoUnavailPart* part, QWidget* parent = 0 );
+    explicit KoUnavailView( KoUnavailPart* part, QWidget* parent = 0 );
 
 protected:
     virtual void paintEvent( QPaintEvent* );
@@ -90,7 +90,7 @@ class KoUnavailFactory : public KoFactory
 {
     Q_OBJECT
 public:
-    KoUnavailFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KoUnavailFactory( QObject* parent = 0, const char* name = 0 );
     ~KoUnavailFactory();
 
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
