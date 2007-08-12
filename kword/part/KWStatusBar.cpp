@@ -58,6 +58,9 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     KWDocument* kwdoc = m_view->kwdocument();
     Q_ASSERT(kwdoc);
 
+    //sebsauer, 2007-08-12, this crashes within QMainWindowLayout::animationFinished
+    //FIXME check later if it's fixed.
+#if 0
     m_modifiedLabel = new QLabel(m_statusbar);
     m_modifiedLabel->setFrameShape(QFrame::Panel);
     m_modifiedLabel->setFrameShadow(QFrame::Sunken);
@@ -108,6 +111,7 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
 
     slotChangedTool();
     connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*,int)), this, SLOT(slotChangedTool()));
+#endif
 }
 
 KWStatusBar::~KWStatusBar()
