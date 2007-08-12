@@ -237,7 +237,7 @@ bool StructureParser::StartElementA(StackItem* stackItem, StackItem* stackCurren
     {
 
         //AbiPropsMap abiPropsMap;
-        //PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
+        //PopulateProperties(stackItem,QString(),attributes,abiPropsMap,true);
 
         stackItem->elementType=ElementTypeAnchor;
         stackItem->stackElementParagraph=stackCurrent->stackElementParagraph;   // <PARAGRAPH>
@@ -396,7 +396,7 @@ static bool StartElementField(StackItem* stackItem, StackItem* stackCurrent,
         kDebug(30506)<<"<field> type:"<<strType;
 
         AbiPropsMap abiPropsMap;
-        PopulateProperties(stackItem,QString::null,attributes,abiPropsMap,true);
+        PopulateProperties(stackItem,QString(),attributes,abiPropsMap,true);
 
         stackItem->elementType=ElementTypeEmpty;
 

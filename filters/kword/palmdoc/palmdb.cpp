@@ -41,8 +41,8 @@ PalmDB::PalmDB()
   setCreationDate( QDateTime::currentDateTime() );
   setModificationDate( QDateTime::currentDateTime() );
   setLastBackupDate( QDateTime::currentDateTime() );
-  setType( QString::null );
-  setCreator( QString::null );
+  setType( QString() );
+  setCreator( QString() );
 
   // crash if autodelete ?
   records.setAutoDelete( true );

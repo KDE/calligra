@@ -111,7 +111,7 @@ void StyleDataMap::defineDefaultStyles(void)
 {
     // Add a few of AbiWord predefined style sheets
     // AbiWord file: src/text/ptbl/xp/pt_PT_Styles.cpp
-    defineNewStyle("Normal",-1,QString::null);
+    defineNewStyle("Normal",-1,QString());
     // TODO: font should be "Arial"
     // TODO: "keep with next"
     QString strHeading("font-weight: bold; margin-top: 22pt; margin-bottom: 3pt; ");

@@ -189,7 +189,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement settings = KoDom::namedItemNS( body, ooNS::presentation, "settings");
     if (!settings.isNull())
     {
-        if (settings.attributeNS( ooNS::presentation, "endless", QString::null)=="true")
+        if (settings.attributeNS( ooNS::presentation, "endless", QString())=="true")
         {
             QDomElement infElem = doc.createElement("INFINITLOOP");
             infElem.setAttribute("value", 1);
@@ -199,14 +199,14 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         // FIXME show-end-of-presentation-slide is not standard as of 20060531.
         // dfaure will request its addition per #koffice on 20060531
         // (pgquiles AT elpauer DOT org)
-        if (settings.attributeNS( ooNS::presentation, "show-end-of-presentation-slide", QString::null)=="true")
+        if (settings.attributeNS( ooNS::presentation, "show-end-of-presentation-slide", QString())=="true")
         {
             QDomElement infElem = doc.createElement("SHOWENDOFPRESENTATIONSLIDE");
             infElem.setAttribute("value", 1);
             docElement.appendChild(infElem);
         }
 
-        if (settings.attributeNS( ooNS::presentation, "force-manual", QString::null)=="true")
+        if (settings.attributeNS( ooNS::presentation, "force-manual", QString())=="true")
         {
             QDomElement manualElem = doc.createElement("MANUALSWITCH");
             manualElem.setAttribute("value", 1);
@@ -215,7 +215,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         if ( settings.hasAttributeNS( ooNS::presentation, "show") )
         {
             QDomElement defaultPage = doc.createElement("DEFAULTCUSTOMSLIDESHOWNAME");
-            defaultPage.setAttribute("name", settings.attributeNS( ooNS::presentation, "show", QString::null) );
+            defaultPage.setAttribute("name", settings.attributeNS( ooNS::presentation, "show", QString()) );
             docElement.appendChild(defaultPage);
         }
     }
@@ -229,8 +229,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
                  presentationShow.hasAttributeNS( ooNS::presentation, "name"))
             {
                 QDomElement slide=doc.createElement("CUSTOMSLIDESHOW");
-                slide.setAttribute( "pages",  presentationShow.attributeNS( ooNS::presentation, "pages", QString::null ));
-                slide.setAttribute( "name", presentationShow.attributeNS( ooNS::presentation, "name", QString::null ));
+                slide.setAttribute( "pages",  presentationShow.attributeNS( ooNS::presentation, "pages", QString() ));
+                slide.setAttribute( "name", presentationShow.attributeNS( ooNS::presentation, "name", QString() ));
                 customSlideShow.appendChild( slide );
             }
         }
@@ -250,14 +250,14 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     QDomElement selSlideElement = doc.createElement( "SELSLIDES" );
     QDomElement helpLineElement = doc.createElement( "HELPLINES" );
     QDomElement attributeElement = doc.createElement( "ATTRIBUTES" );
-    QDomElement *master = m_styles[drawPage.attributeNS( ooNS::draw, "master-page-name", QString::null )];
+    QDomElement *master = m_styles[drawPage.attributeNS( ooNS::draw, "master-page-name", QString() )];
 
     appendObject(*master, doc, soundElement,pictureElement,pageNoteElement,objectElement, 0, true);
 
-    QDomElement *style = m_styles[master->attributeNS( ooNS::style, "page-master-name", QString::null )];
+    QDomElement *style = m_styles[master->attributeNS( ooNS::style, "page-master-name", QString() )];
     QDomElement properties = KoDom::namedItemNS( *style, ooNS::style, "properties" );
-    //kDebug(30518)<<" master->attribute( draw:style-name ) :"<<master->attributeNS( ooNS::draw,"style-name", QString::null );
-    QDomElement *backgroundStyle = m_stylesPresentation[ master->attributeNS( ooNS::draw, "style-name", QString::null ).isEmpty() ? "Standard-background" : master->attributeNS( ooNS::draw, "style-name", QString::null ) ];
+    //kDebug(30518)<<" master->attribute( draw:style-name ) :"<<master->attributeNS( ooNS::draw,"style-name", QString() );
+    QDomElement *backgroundStyle = m_stylesPresentation[ master->attributeNS( ooNS::draw, "style-name", QString() ).isEmpty() ? "Standard-background" : master->attributeNS( ooNS::draw, "style-name", QString() ) ];
 
     //kDebug(30518)<<" backgroundStyle :"<<backgroundStyle;
     double pageHeight;
@@ -281,8 +281,8 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
     }
     else
     {
-        paperElement.setAttribute( "ptWidth", KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString::null ) ) );
-        paperElement.setAttribute( "ptHeight", KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-height", QString::null ) ) );
+        paperElement.setAttribute( "ptWidth", KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString() ) ) );
+        paperElement.setAttribute( "ptHeight", KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-height", QString() ) ) );
 //         paperElement.setAttribute( "unit", 0 );
 //         paperElement.setAttribute( "format", 5 );
 //         paperElement.setAttribute( "tabStopValue", 42.5198 );
@@ -290,20 +290,20 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
         // Keep pageHeight in cm to avoid rounding-errors that would
         // get multiplied with every new slide.
 
-        if (properties.attributeNS( ooNS::style, "print-orientation", QString::null)=="portrait")
+        if (properties.attributeNS( ooNS::style, "print-orientation", QString())=="portrait")
             paperElement.setAttribute("orientation", 0);
-        else if (properties.attributeNS( ooNS::style, "print-orientation", QString::null)=="landscape")
+        else if (properties.attributeNS( ooNS::style, "print-orientation", QString())=="landscape")
             paperElement.setAttribute("orientation", 1);
 
 
 
-        pageHeight = properties.attributeNS( ooNS::fo, "page-height", QString::null ).remove( "cm" ).toDouble();
+        pageHeight = properties.attributeNS( ooNS::fo, "page-height", QString() ).remove( "cm" ).toDouble();
 
         QDomElement paperBorderElement = doc.createElement( "PAPERBORDERS" );
-        paperBorderElement.setAttribute( "ptRight", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-right", QString::null ) ) );
-        paperBorderElement.setAttribute( "ptBottom", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-bottom", QString::null ) ) );
-        paperBorderElement.setAttribute( "ptLeft", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-left", QString::null ) ) );
-        paperBorderElement.setAttribute( "ptTop", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-top", QString::null ) ) );
+        paperBorderElement.setAttribute( "ptRight", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-right", QString() ) ) );
+        paperBorderElement.setAttribute( "ptBottom", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-bottom", QString() ) ) );
+        paperBorderElement.setAttribute( "ptLeft", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-left", QString() ) ) );
+        paperBorderElement.setAttribute( "ptTop", KoUnit::parseValue( properties.attributeNS( ooNS::fo, "margin-top", QString() ) ) );
         paperElement.appendChild( paperBorderElement );
     }
 
@@ -316,7 +316,7 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             m_styleStack.clear(); // remove all styles
             fillStyleStack( drawPage );
             m_styleStack.save();
-            int pagePos = drawPage.attributeNS( ooNS::draw, "id", QString::null ).toInt() - 1;
+            int pagePos = drawPage.attributeNS( ooNS::draw, "id", QString() ).toInt() - 1;
             // take care of a possible page background or slide transition or sound
             if ( m_styleStack.hasProperty( ooNS::draw, "fill" )
                  || m_styleStack.hasProperty( ooNS::presentation, "transition-style" ))
@@ -344,12 +344,12 @@ void OoImpressImport::createDocumentContent( QDomDocument &doccontent )
             }
             // set the pagetitle
             QDomElement titleElement = doc.createElement( "Title" );
-            titleElement.setAttribute( "title", drawPage.attributeNS( ooNS::draw, "name", QString::null ) );
+            titleElement.setAttribute( "title", drawPage.attributeNS( ooNS::draw, "name", QString() ) );
             pageTitleElement.appendChild( titleElement );
 
             // The '+1' is necessary to avoid that objects that start on the first line
             // of a slide will show up on the last line of the previous slide.
-            double offset = CM_TO_POINT( ( drawPage.attributeNS( ooNS::draw, "id", QString::null ).toInt() - 1 ) * pageHeight ) + 1;
+            double offset = CM_TO_POINT( ( drawPage.attributeNS( ooNS::draw, "id", QString() ).toInt() - 1 ) * pageHeight ) + 1;
 
             // animations (object effects)
             createPresentationAnimation(KoDom::namedItemNS( drawPage, ooNS::presentation, "animations") );
@@ -473,7 +473,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
     {
         const QString localName = o.localName();
         const QString ns = o.namespaceURI();
-        const QString drawID = o.attributeNS( ooNS::draw, "id", QString::null);
+        const QString drawID = o.attributeNS( ooNS::draw, "id", QString());
         m_styleStack.save();
 
         QDomElement e;
@@ -528,7 +528,7 @@ void OoImpressImport::appendObject(QDomNode & drawPage,  QDomDocument & doc,  QD
                 appendPie( doc, e, o );
                 QDomElement type = doc.createElement( "PIETYPE" );
 
-                QString kind = o.attributeNS( ooNS::draw, "kind", QString::null );
+                QString kind = o.attributeNS( ooNS::draw, "kind", QString() );
                 if ( kind == "section" )
                 {
                     appendBrush( doc, e );
@@ -810,7 +810,7 @@ void OoImpressImport::appendName(QDomDocument& doc, QDomElement& e, const QDomEl
     if( object.hasAttributeNS( ooNS::draw, "name" ))
         {
             QDomElement name = doc.createElement( "OBJECTNAME" );
-            name.setAttribute( "objectName", object.attributeNS( ooNS::draw, "name", QString::null ));
+            name.setAttribute( "objectName", object.attributeNS( ooNS::draw, "name", QString() ));
             e.appendChild( name );
         }
 }
@@ -818,19 +818,19 @@ void OoImpressImport::appendName(QDomDocument& doc, QDomElement& e, const QDomEl
 void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
 {
     QDomElement orig = doc.createElement( "ORIG" );
-    orig.setAttribute( "x", KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString::null ) ) );
-    orig.setAttribute( "y", KoUnit::parseValue( object.attributeNS( ooNS::svg, "y", QString::null ) ) + offset );
+    orig.setAttribute( "x", KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString() ) ) );
+    orig.setAttribute( "y", KoUnit::parseValue( object.attributeNS( ooNS::svg, "y", QString() ) ) + offset );
     e.appendChild( orig );
 
     QDomElement size = doc.createElement( "SIZE" );
-    size.setAttribute( "width", KoUnit::parseValue( object.attributeNS( ooNS::svg, "width", QString::null ) ) );
-    size.setAttribute( "height", KoUnit::parseValue( object.attributeNS( ooNS::svg, "height", QString::null ) ) );
+    size.setAttribute( "width", KoUnit::parseValue( object.attributeNS( ooNS::svg, "width", QString() ) ) );
+    size.setAttribute( "height", KoUnit::parseValue( object.attributeNS( ooNS::svg, "height", QString() ) ) );
     e.appendChild( size );
     if( object.hasAttributeNS( ooNS::draw, "transform" ))
         {
             kDebug(30518)<<" object transform";
             //todo parse it
-            QString transform = object.attributeNS( ooNS::draw, "transform", QString::null );
+            QString transform = object.attributeNS( ooNS::draw, "transform", QString() );
             if( transform.contains("rotate ("))
                 {
                     //kDebug(30518)<<" rotate object";
@@ -854,10 +854,10 @@ void OoImpressImport::append2DGeometry( QDomDocument& doc, QDomElement& e, const
 //return true if (x1 < x2) necessary to load correctly start-line and end-line
 bool OoImpressImport::appendLineGeometry( QDomDocument& doc, QDomElement& e, const QDomElement& object, int offset )
 {
-    double x1 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "x1", QString::null ) );
-    double y1 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "y1", QString::null ) );
-    double x2 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "x2", QString::null ) );
-    double y2 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "y2", QString::null ) );
+    double x1 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "x1", QString() ) );
+    double y1 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "y1", QString() ) );
+    double x2 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "x2", QString() ) );
+    double y2 = KoUnit::parseValue( object.attributeNS( ooNS::svg, "y2", QString() ) );
 
     double x = qMin( x1, x2 );
     double y = qMin( y1, y2 );
@@ -971,16 +971,16 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
             if ( draw )
                 {
                     if( draw->hasAttributeNS( ooNS::draw, "color" ) )
-                        brush.setAttribute( "color", draw->attributeNS( ooNS::draw, "color", QString::null ) );
+                        brush.setAttribute( "color", draw->attributeNS( ooNS::draw, "color", QString() ) );
                     int angle = 0;
                     if( draw->hasAttributeNS( ooNS::draw, "rotation" ))
                         {
-                            angle = (draw->attributeNS( ooNS::draw, "rotation", QString::null ).toInt())/10;
+                            angle = (draw->attributeNS( ooNS::draw, "rotation", QString() ).toInt())/10;
                             kDebug(30518)<<"angle :"<<angle;
                         }
                     if( draw->hasAttributeNS( ooNS::draw, "style" ))
                         {
-                            QString styleHash = draw->attributeNS( ooNS::draw, "style", QString::null );
+                            QString styleHash = draw->attributeNS( ooNS::draw, "style", QString() );
                             if( styleHash == "single")
                                 {
                                     switch( angle )
@@ -1054,14 +1054,14 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
             QDomElement* draw = m_draws[style];
             if ( draw )
             {
-                gradient.setAttribute( "color1", draw->attributeNS( ooNS::draw, "start-color", QString::null ) );
-                gradient.setAttribute( "color2", draw->attributeNS( ooNS::draw, "end-color", QString::null ) );
+                gradient.setAttribute( "color1", draw->attributeNS( ooNS::draw, "start-color", QString() ) );
+                gradient.setAttribute( "color2", draw->attributeNS( ooNS::draw, "end-color", QString() ) );
 
-                QString type = draw->attributeNS( ooNS::draw, "style", QString::null );
+                QString type = draw->attributeNS( ooNS::draw, "style", QString() );
                 //kDebug(30518)<<" type !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :"<<type;
                 if ( type == "linear" )
                 {
-                    int angle = draw->attributeNS( ooNS::draw, "angle", QString::null ).toInt() / 10;
+                    int angle = draw->attributeNS( ooNS::draw, "angle", QString() ).toInt() / 10;
 
                     // make sure the angle is between 0 and 359
                     angle = abs( angle );
@@ -1102,12 +1102,12 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
                 // and (un-)balanced settings of kpresenter. Let's try it.
                 int x, y;
                 if ( draw->hasAttributeNS( ooNS::draw, "cx" ) )
-                    x = draw->attributeNS( ooNS::draw, "cx", QString::null ).remove( '%' ).toInt();
+                    x = draw->attributeNS( ooNS::draw, "cx", QString() ).remove( '%' ).toInt();
                 else
                     x = 50;
 
                 if ( draw->hasAttributeNS( ooNS::draw, "cy" ) )
-                    y = draw->attributeNS( ooNS::draw, "cy", QString::null ).remove( '%' ).toInt();
+                    y = draw->attributeNS( ooNS::draw, "cy", QString() ).remove( '%' ).toInt();
                 else
                     y = 50;
 
@@ -1137,12 +1137,12 @@ void OoImpressImport::appendBrush( QDomDocument& doc, QDomElement& e )
 void OoImpressImport::appendPie( QDomDocument& doc, QDomElement& e, const QDomElement& object )
 {
     QDomElement angle = doc.createElement( "PIEANGLE" );
-    int start = (int) ( object.attributeNS( ooNS::draw, "start-angle", QString::null ).toDouble() );
+    int start = (int) ( object.attributeNS( ooNS::draw, "start-angle", QString() ).toDouble() );
     angle.setAttribute( "value",  start * 16 );
     e.appendChild( angle );
 
     QDomElement length = doc.createElement( "PIELENGTH" );
-    int end = (int) ( object.attributeNS( ooNS::draw, "end-angle", QString::null ).toDouble() );
+    int end = (int) ( object.attributeNS( ooNS::draw, "end-angle", QString() ).toDouble() );
     if ( end < start )
         length.setAttribute( "value",  ( 360 - start + end ) * 16 );
     else
@@ -1240,11 +1240,11 @@ void OoImpressImport::appendBackgroundGradient( QDomDocument& doc, QDomElement& 
                                                 const QDomElement& object )
 {
     QDomElement backColor1 = doc.createElement( "BACKCOLOR1" );
-    backColor1.setAttribute( "color", object.attributeNS( ooNS::draw, "start-color", QString::null ) );
+    backColor1.setAttribute( "color", object.attributeNS( ooNS::draw, "start-color", QString() ) );
     e.appendChild( backColor1 );
 
     QDomElement backColor2 = doc.createElement( "BACKCOLOR2" );
-    backColor2.setAttribute( "color", object.attributeNS( ooNS::draw, "end-color", QString::null ) );
+    backColor2.setAttribute( "color", object.attributeNS( ooNS::draw, "end-color", QString() ) );
     e.appendChild( backColor2 );
 
     QDomElement backType = doc.createElement( "BACKTYPE" );
@@ -1252,10 +1252,10 @@ void OoImpressImport::appendBackgroundGradient( QDomDocument& doc, QDomElement& 
     e.appendChild( backType );
 
     QDomElement bcType = doc.createElement( "BCTYPE" );
-    QString type = object.attributeNS( ooNS::draw, "style", QString::null );
+    QString type = object.attributeNS( ooNS::draw, "style", QString() );
     if ( type == "linear" )
     {
-        int angle = object.attributeNS( ooNS::draw, "angle", QString::null ).toInt() / 10;
+        int angle = object.attributeNS( ooNS::draw, "angle", QString() ).toInt() / 10;
 
         // make sure the angle is between 0 and 359
         angle = abs( angle );
@@ -1300,12 +1300,12 @@ void OoImpressImport::appendBackgroundGradient( QDomDocument& doc, QDomElement& 
     // and (un-)balanced settings of kpresenter. Let's try it.
     int x, y;
     if ( object.hasAttributeNS( ooNS::draw, "cx" ) )
-        x = object.attributeNS( ooNS::draw, "cx", QString::null ).remove( '%' ).toInt();
+        x = object.attributeNS( ooNS::draw, "cx", QString() ).remove( '%' ).toInt();
     else
         x = 50;
 
     if ( object.hasAttributeNS( ooNS::draw, "cy" ) )
-        y = object.attributeNS( ooNS::draw, "cy", QString::null ).remove( '%' ).toInt();
+        y = object.attributeNS( ooNS::draw, "cy", QString() ).remove( '%' ).toInt();
     else
         y = 50;
 
@@ -1332,7 +1332,7 @@ void OoImpressImport::appendRounding( QDomDocument& doc, QDomElement& e, const Q
     {
         // kpresenter uses percent, ooimpress uses cm ... hmm?
         QDomElement rounding = doc.createElement( "RNDS" );
-        int corner = static_cast<int>(KoUnit::parseValue(object.attributeNS( ooNS::draw, "corner-radius", QString::null)));
+        int corner = static_cast<int>(KoUnit::parseValue(object.attributeNS( ooNS::draw, "corner-radius", QString())));
         rounding.setAttribute( "x", corner );
         rounding.setAttribute( "y", corner );
         e.appendChild( rounding );
@@ -1562,7 +1562,7 @@ void OoImpressImport::applyListStyle( QDomElement& paragraph )
         //const QDomElement listStyle = m_listStyleStack.currentListStyle();
         //bool heading = paragraph.localName() == "h";
         m_nextItemIsListItem = false;
-        /*int level = heading ? paragraph.attributeNS( ooNS::text, "level", QString::null ).toInt()
+        /*int level = heading ? paragraph.attributeNS( ooNS::text, "level", QString() ).toInt()
                     : m_listStyleStack.level();*/
 
         QDomElement counter = paragraph.ownerDocument().createElement( "COUNTER" );
@@ -1582,7 +1582,7 @@ static QDomElement findListLevelStyle( QDomElement& fullListStyle, int level )
     QDomElement listLevelItem;
     forEachElement( listLevelItem, fullListStyle )
     {
-       if ( listLevelItem.attributeNS( ooNS::text, "level", QString::null ).toInt() == level )
+       if ( listLevelItem.attributeNS( ooNS::text, "level", QString() ).toInt() == level )
            return listLevelItem;
     }
     return QDomElement();
@@ -1625,7 +1625,7 @@ void OoImpressImport::parseList( QDomDocument& doc, QDomElement& textObjectEleme
     m_insideOrderedList = ( list.localName() == "ordered-list" );
     QString oldListStyleName = m_currentListStyleName;
     if ( list.hasAttributeNS( ooNS::text, "style-name" ) )
-        m_currentListStyleName = list.attributeNS( ooNS::text, "style-name", QString::null );
+        m_currentListStyleName = list.attributeNS( ooNS::text, "style-name", QString() );
     bool listOK = !m_currentListStyleName.isEmpty();
     const int level = m_listStyleStack.level() + 1;
     //kDebug(30518) << k_funcinfo <<" listOK=" << listOK <<" level=" << level;
@@ -1640,7 +1640,7 @@ void OoImpressImport::parseList( QDomDocument& doc, QDomElement& textObjectEleme
         m_nextItemIsListItem = ( listItem.localName() != "list-header" );
         m_restartNumbering = -1;
         if ( listItem.hasAttributeNS( ooNS::text, "start-value" ) )
-            m_restartNumbering = listItem.attributeNS( ooNS::text, "start-value", QString::null ).toInt();
+            m_restartNumbering = listItem.attributeNS( ooNS::text, "start-value", QString() ).toInt();
         // ### Oasis: can be p h or list only.
         parseParagraphs( doc, textObjectElement, listItem );
         m_restartNumbering = -1;
@@ -1755,7 +1755,7 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
         else if ( isTextNS && localName == "a" )
         {
             m_styleStack.save();
-            QString href( ts.attributeNS( ooNS::xlink, "href", QString::null) );
+            QString href( ts.attributeNS( ooNS::xlink, "href", QString()) );
             if ( href.startsWith('#') )
             {
                 // We have a reference to a bookmark (### TODO)
@@ -1773,7 +1773,7 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
                 parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
                 textData = '#'; // hyperlink placeholder
                 QDomElement linkElement (doc.createElement("LINK"));
-                linkElement.setAttribute("hrefName",ts.attributeNS( ooNS::xlink, "href", QString::null));
+                linkElement.setAttribute("hrefName",ts.attributeNS( ooNS::xlink, "href", QString()));
                 linkElement.setAttribute("linkName",text);
                 appendVariable(doc, ts, pos, "STRING", 9, text, linkElement);
 #endif
@@ -1962,7 +1962,7 @@ void OoImpressImport::insertDraws( const QDomElement& styles )
         if ( !e.hasAttributeNS( ooNS::draw, "name" ) )
             continue;
 
-        QString name = e.attributeNS( ooNS::draw, "name", QString::null );
+        QString name = e.attributeNS( ooNS::draw, "name", QString() );
         m_draws.insert( name, new QDomElement( e ) );
     }
 }
@@ -1977,7 +1977,7 @@ void OoImpressImport::insertStyles( const QDomElement& styles )
         if ( !e.hasAttributeNS( ooNS::style, "name" ) )
             continue;
 
-        const QString name = e.attributeNS( ooNS::style, "name", QString::null );
+        const QString name = e.attributeNS( ooNS::style, "name", QString() );
         if ( localName == "list-style" && ns == ooNS::text ) {
             QDomElement* ep = new QDomElement( e );
             m_listStyles.insert( name, ep );
@@ -1999,7 +1999,7 @@ void OoImpressImport::insertStylesPresentation( const QDomElement& styles )
         if ( !e.hasAttributeNS( ooNS::style, "name" ) )
             continue;
 
-        QString name = e.attributeNS( ooNS::style, "name", QString::null );
+        QString name = e.attributeNS( ooNS::style, "name", QString() );
         m_stylesPresentation.insert( name, new QDomElement( e ) );
         //kDebug(30518) <<"Style: '" << name <<"' loaded";
     }
@@ -2010,20 +2010,20 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( ooNS::presentation, "style-name" ) )
     {
-        kDebug(30518)<<" presentation:style-name **************************** :"<<object.attributeNS( ooNS::presentation,"style-name", QString::null );
+        kDebug(30518)<<" presentation:style-name **************************** :"<<object.attributeNS( ooNS::presentation,"style-name", QString() );
         if ( sticky )
-            addStyles( m_stylesPresentation[object.attributeNS( ooNS::presentation, "style-name", QString::null )] );
+            addStyles( m_stylesPresentation[object.attributeNS( ooNS::presentation, "style-name", QString() )] );
         else
-            addStyles( m_styles[object.attributeNS( ooNS::presentation, "style-name", QString::null )] );
+            addStyles( m_styles[object.attributeNS( ooNS::presentation, "style-name", QString() )] );
     }
     if ( object.hasAttributeNS( ooNS::draw, "style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::draw, "style-name", QString::null )] );
+        addStyles( m_styles[object.attributeNS( ooNS::draw, "style-name", QString() )] );
 
     if ( object.hasAttributeNS( ooNS::draw, "text-style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::draw, "text-style-name", QString::null )] );
+        addStyles( m_styles[object.attributeNS( ooNS::draw, "text-style-name", QString() )] );
 
     if ( object.hasAttributeNS( ooNS::text, "style-name" ) ) {
-        QString styleName = object.attributeNS( ooNS::text, "style-name", QString::null );
+        QString styleName = object.attributeNS( ooNS::text, "style-name", QString() );
         //kDebug(30518) <<"adding style" << styleName;
         addStyles( m_styles[styleName] );
     }
@@ -2031,12 +2031,12 @@ void OoImpressImport::fillStyleStack( const QDomElement& object, bool sticky )
 
 void OoImpressImport::addStyles( const QDomElement* style )
 {
-    kDebug(30518)<<" addStyle :" << style->attributeNS( ooNS::style,"name", QString::null );
+    kDebug(30518)<<" addStyle :" << style->attributeNS( ooNS::style,"name", QString() );
     // this function is necessary as parent styles can have parents themself
     if ( style->hasAttributeNS( ooNS::style, "parent-style-name" ) )
     {
-        //kDebug(30518)<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attributeNS( ooNS::style,"parent-style-name", QString::null )];
-        addStyles( m_styles[style->attributeNS( ooNS::style, "parent-style-name", QString::null )] );
+        //kDebug(30518)<<"m_styles[style->attribute( style:parent-style-name )] :"<<m_styles[style->attributeNS( ooNS::style,"parent-style-name", QString() )];
+        addStyles( m_styles[style->attributeNS( ooNS::style, "parent-style-name", QString() )] );
     }
     //kDebug(30518)<<" void OoImpressImport::addStyles( const QDomElement* style ) :"<<style;
     m_styleStack.push( *style );
@@ -2045,7 +2045,7 @@ void OoImpressImport::addStyles( const QDomElement* style )
 QString OoImpressImport::storeImage( const QDomElement& object )
 {
     // store the picture
-    QString url = object.attributeNS( ooNS::xlink, "href", QString::null ).remove( '#' );
+    QString url = object.attributeNS( ooNS::xlink, "href", QString() ).remove( '#' );
     KArchiveFile* file = (KArchiveFile*) m_zip->directory()->entry( url );
 
     QString extension = url.mid( url.find( '.' ) );
@@ -2065,7 +2065,7 @@ QString OoImpressImport::storeSound(const QDomElement & object, QDomElement & p,
 {
     QFileInfo fi(m_chain->inputFile()); // handle relative URLs
     QDir::setCurrent(fi.dirPath(true));
-    fi.setFile(object.attributeNS( ooNS::xlink, "href", QString::null));
+    fi.setFile(object.attributeNS( ooNS::xlink, "href", QString()));
     QString url = fi.absoluteFilePath();
 
     //kDebug(30518) <<"Sound URL:" << url;
@@ -2122,7 +2122,7 @@ void OoImpressImport::appendPoints(QDomDocument& doc, QDomElement& e, const QDom
 {
     QDomElement ptsElem = doc.createElement("POINTS");
 
-    QStringList ptList = QStringList::split(' ', object.attributeNS( ooNS::draw, "points", QString::null));
+    QStringList ptList = QStringList::split(' ', object.attributeNS( ooNS::draw, "points", QString()));
 
     QString pt_x, pt_y;
     double tmp_x, tmp_y;
@@ -2159,9 +2159,9 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
     if (isTextNS && tag == "date")
     {
-        QDateTime dt(QDate::fromString(object.attributeNS( ooNS::text, "date-value", QString::null), Qt::ISODate));
+        QDateTime dt(QDate::fromString(object.attributeNS( ooNS::text, "date-value", QString()), Qt::ISODate));
 
-        bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString::null)=="true");
+        bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString())=="true");
 
         if (!dt.isValid()) {
             dt = QDateTime::currentDateTime(); // OOo docs say so :)
@@ -2187,16 +2187,16 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
         dateElement.setAttribute("minute", time.minute());
         dateElement.setAttribute("second", time.second());
         if (object.hasAttributeNS( ooNS::text, "date-adjust"))
-            dateElement.setAttribute("correct", object.attributeNS( ooNS::text, "date-adjust", QString::null));
+            dateElement.setAttribute("correct", object.attributeNS( ooNS::text, "date-adjust", QString()));
 
         variable.appendChild(dateElement);
     }
     else if (isTextNS && tag == "time")
     {
         // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
-        QDateTime dt(QDateTime::fromString(object.attributeNS( ooNS::text, "time-value", QString::null), Qt::ISODate));
+        QDateTime dt(QDateTime::fromString(object.attributeNS( ooNS::text, "time-value", QString()), Qt::ISODate));
 
-        bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString::null)=="true");
+        bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString())=="true");
 
         if (!dt.isValid()) {
             dt = QDateTime::currentDateTime(); // OOo docs say so :)
@@ -2218,7 +2218,7 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
         timeElement.setAttribute("minute", time.minute());
         timeElement.setAttribute("second", time.second());
         /*if (object.hasAttributeNS( ooNS::text, "time-adjust"))
-          timeElem.setAttribute("correct", object.attributeNS( ooNS::text, "time-adjust", QString::null));*/ // ### TODO
+          timeElem.setAttribute("correct", object.attributeNS( ooNS::text, "time-adjust", QString()));*/ // ### TODO
 
         variable.appendChild(timeElement);
     }
@@ -2237,7 +2237,7 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
         if (object.hasAttributeNS( ooNS::text, "select-page"))
         {
-            const QString select = object.attributeNS( ooNS::text, "select-page", QString::null);
+            const QString select = object.attributeNS( ooNS::text, "select-page", QString());
 
             if (select == "previous")
                 subtype = 3;    // VST_PGNUM_PREVIOUS
@@ -2265,7 +2265,7 @@ void OoImpressImport::appendField(QDomDocument& doc, QDomElement& e, const QDomE
 
         if (object.hasAttributeNS( ooNS::text, "display"))
         {
-            const QString display = object.attributeNS( ooNS::text, "display", QString::null);
+            const QString display = object.attributeNS( ooNS::text, "display", QString());
 
             if (display == "path")
                 subtype = 1;    // VST_DIRECTORYNAME
@@ -2319,7 +2319,7 @@ void OoImpressImport::createPresentationAnimation(const QDomElement& element)
         const QString ns = e.namespaceURI();
         if ( ns == ooNS::presentation && localName == "show-shape" && e.hasAttributeNS( ooNS::draw, "shape-id" ) )
         {
-            QString name = e.attributeNS( ooNS::draw, "shape-id", QString::null );
+            QString name = e.attributeNS( ooNS::draw, "shape-id", QString() );
             //kDebug(30518)<<" insert animation style : name :"<<name;
             animationList *lst = new animationList;
             QDomElement* ep = new QDomElement( e );
@@ -2345,8 +2345,8 @@ QDomElement OoImpressImport::findAnimationByObjectID(const QString & id,  int & 
     {
         QDomElement e = node.toElement();
         order = animation->order;
-        kDebug(30518)<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attributeNS( ooNS::draw,"shape-id", QString::null);
-        if (e.tagName()=="presentation:show-shape" && e.attributeNS( ooNS::draw, "shape-id", QString::null)==id)
+        kDebug(30518)<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attributeNS( ooNS::draw,"shape-id", QString());
+        if (e.tagName()=="presentation:show-shape" && e.attributeNS( ooNS::draw, "shape-id", QString())==id)
                 return e;
     }
 
@@ -2358,14 +2358,14 @@ void OoImpressImport::appendObjectEffect(QDomDocument& doc, QDomElement& e, cons
                                          QDomElement& sound)
 {
     int order = 0;
-    QDomElement origEffect = findAnimationByObjectID(object.attributeNS( ooNS::draw, "id", QString::null), order).toElement();
+    QDomElement origEffect = findAnimationByObjectID(object.attributeNS( ooNS::draw, "id", QString()), order).toElement();
 
     if (origEffect.isNull())
         return;
 
-    QString effect = origEffect.attributeNS( ooNS::presentation, "effect", QString::null);
-    QString dir = origEffect.attributeNS( ooNS::presentation, "direction", QString::null);
-    QString speed = origEffect.attributeNS( ooNS::presentation, "speed", QString::null);
+    QString effect = origEffect.attributeNS( ooNS::presentation, "effect", QString());
+    QString dir = origEffect.attributeNS( ooNS::presentation, "direction", QString());
+    QString speed = origEffect.attributeNS( ooNS::presentation, "speed", QString());
     kDebug(30518)<<"speed :"<<speed;
     //todo implement speed value.
 

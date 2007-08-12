@@ -27,7 +27,7 @@
 PalmDoc::PalmDoc(): PalmDB()
 {
   m_result = PalmDoc::OK;
-  setText( QString::null );
+  setText( QString() );
 }
 
 PalmDoc::~PalmDoc()
@@ -86,7 +86,7 @@ bool PalmDoc::load( const char* filename )
   }
 
   // initialize
-  setText( QString::null );
+  setText( QString() );
 
   // assemble the records
   QByteArray rec;

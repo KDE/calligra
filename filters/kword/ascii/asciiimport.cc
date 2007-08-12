@@ -301,7 +301,7 @@ void ASCIIImport::oldWayConvert(QTextStream& stream, QDomDocument& mainDocument,
             strLine=readLine(stream,lastCharWasCr);
             if (strLine.isEmpty())
             {
-                paragraph.append(QString::null);
+                paragraph.append(QString());
                 break;
             }
 
