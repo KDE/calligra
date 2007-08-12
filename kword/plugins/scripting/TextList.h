@@ -51,19 +51,21 @@ namespace Scripting {
 
             /** Return the number of items the list has. */
             int countItems() {
-                return m_list->count();
+                return m_list ? m_list->count() : 0;
             }
 
             /** Return a \a TextCursor object for the item at the position \p index . */
             QObject* item(int index) {
-                QTextCursor cursor( m_list->item(index) );
+                QTextCursor cursor = m_list ? QTextCursor(m_list->item(index)) : QTextCursor();
                 return cursor.isNull() ? 0 : new TextCursor(this, cursor);
             }
 
 #if 0
             QObject* addItem() {
+                if( ! m_list )
+                    return 0;
                 QTextBlock block;
-                m_list->add(block); //CRASHES
+                m_list->add(block);
                 QTextCursor cursor(block);
                 return cursor.isNull() ? 0 : new TextCursor(this, cursor);
             }
@@ -71,14 +73,15 @@ namespace Scripting {
 
             /** Return the content as text of the defined item with index \p index . */
             QString itemText(int index) {
-                QTextBlock block = m_list->item(index);
+                QTextBlock block = m_list ? m_list->item(index) : QTextBlock();
                 return block.isValid() ? m_list->itemText(block) : QString();
             }
 
             /** Return the content of the list as text. */
             QString text() {
                 QString result;
-                for(int i = 0; i < m_list->count(); ++i) {
+                const int count = m_list ? m_list->count() : 0;
+                for(int i = 0; i < count; ++i) {
                     const QString s = m_list->itemText( m_list->item(i) );
                     if( ! s.isNull() )
                         result += QString("%1\n").arg(s);
@@ -88,7 +91,8 @@ namespace Scripting {
 
             /** Remove the item at position \p index . */
             void removeItem(int index) {
-                m_list->removeItem(index);
+                if( m_list )
+                    m_list->removeItem(index);
             }
 
             /** Set the style this TextList uses to the as argument passed \a Style object. */
@@ -103,7 +107,7 @@ namespace Scripting {
                     kWarning() << "TextList.setStyle Invalid KoParagraphStyle object" << endl;
                     return;
                 }
-                const int count = m_list->count();
+                const int count = m_list ? m_list->count() : 0;
                 for(int i = 0; i < count; ++i) {
                     QTextBlock block = m_list->item(i);
                     ps->applyStyle(block);
@@ -114,7 +118,8 @@ namespace Scripting {
             void setListStyle(int liststyle) {
                 KoListStyle s;
                 s.setStyle( (KoListStyle::Style)liststyle );
-                for(int i = 0; i < m_list->count(); i++)
+                const int count = m_list ? m_list->count() : 0;
+                for(int i = 0; i < count; i++)
                     s.applyStyle( m_list->item(i) );
             }
 #endif
