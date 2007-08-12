@@ -26,24 +26,38 @@ class QLabel;
 class QPoint;
 class QTextCursor;
 class KStatusBar;
-class KSqueezedTextLabel;
+//class KSqueezedTextLabel;
 class KoCanvasController;
 class KoToolProxy;
 class KWView;
 
-/// XXX: Conform to Karbon in our statusbar
+/**
+* The KWStatusBar class implements an extended statusbar for KWord.
+*/
 class KWStatusBar : public QObject
 {
     Q_OBJECT
 public:
+
+    /**
+    * Constructor.
+    *
+    * \param statusBar The parent statusbar this statusbar is child
+    * of. We will embed our own widgets into this statusbar.
+    * \param view The KWord view instance the statusbar belongs to. Each
+    * KWStatusBar instance belongs to exactly one view.
+    */
     KWStatusBar(KStatusBar* statusBar, KWView* view);
-    ~KWStatusBar();
+
+    /**
+    * Destructor.
+    */
+    virtual ~KWStatusBar();
 
 private Q_SLOTS:
     void slotModifiedChanged(bool);
     void slotPagesChanged();
     void slotCursorPositionChanged(const QTextCursor&);
-    //void slotSelectionChanged(bool);
     void slotChangedTool();
     void slotMousePositionChanged(const QPoint&);
 
@@ -53,7 +67,6 @@ private:
     KoToolProxy* m_toolproxy;
     KoCanvasController* m_controller;
 
-    //KSqueezedTextLabel* m_statusLabel;
     QLabel* m_modifiedLabel;
     QLabel* m_pageLabel;
     QLabel* m_mousePosLabel;
