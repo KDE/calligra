@@ -600,7 +600,7 @@ VPath::parseTransform( const QString &transform )
 		QRegExp reg("[,( ]");
 		QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
 
-		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
+		if(subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
 			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
 
 		if(subtransform[0] == "rotate")
@@ -665,7 +665,7 @@ VPath::parseOasisTransform( const QString &transform )
 		QRegExp reg("[,( ]");
 		QStringList params = subtransform[1].split(reg, QString::SkipEmptyParts);
 
-		if(subtransform[0].startsWith(";") || subtransform[0].startsWith(","))
+		if(subtransform[0].startsWith(';') || subtransform[0].startsWith(','))
 			subtransform[0] = subtransform[0].right(subtransform[0].length() - 1);
 
 		if(subtransform[0] == "rotate")
