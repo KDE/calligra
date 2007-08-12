@@ -686,8 +686,9 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem) {
                             data.document = fs->document();
                             data.frameSetName = anchor.attribute("instance");
                             m_anchors.append(data);
-                        } else
-                            ;// TODO
+                        } else {
+                            // TODO
+                        }
                     }
                 }
             }
