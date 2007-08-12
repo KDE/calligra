@@ -537,10 +537,6 @@ void RTree<T>::LeafNode::remove( const QRectF& rect, const T& data )
             break;
         }
     }
-    if ( old_counter == this->m_counter )
-    {
-        qWarning( "LeafNode::remove( const T&data) data not found" );
-    }
 }
 
 template<typename T>
