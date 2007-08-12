@@ -23,6 +23,7 @@
 #include "KPrView.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
+#include "KPrShapeApplicationData.h"
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
@@ -65,12 +66,53 @@ KoPAMasterPage * KPrDocument::newMasterPage()
     return new KPrMasterPage();
 }
 
+void KPrDocument::addAnimation( KPrShapeAnimation * animation )
+{
+    KoShape * shape = animation->shape();
+
+    KPrShapeAnimations * animations( animationsByPage( pageByShape( shape ) ) );
+
+    Q_ASSERT( animations );
+
+    // add animation to the list of animations
+    animations->add( animation );
+
+    // add animation to the shape animation data so that it can be regenerated on delete shape and undo
+    KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
+    if ( applicationData == 0 ) {
+        applicationData = new KPrShapeApplicationData();
+    }
+    applicationData->animations().insert( animation );
+}
+
+void KPrDocument::removeAnimation( KPrShapeAnimation * animation )
+{
+}
+
 void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
 {
 }
 
 void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
 {
+}
+
+KPrShapeAnimations * KPrDocument::animationsByPage( KoPAPageBase * page )
+{
+    KPrShapeAnimations * animations = 0;
+
+    KPrPage * kprPage = dynamic_cast<KPrPage*>( page );
+    if ( kprPage ) {
+        animations = &( kprPage->animations() );
+    }
+    else {
+        KPrMasterPage * kprMasterPage = dynamic_cast<KPrMasterPage*>( page );
+        if ( kprMasterPage ) {
+            animations = &( kprMasterPage->animations() );
+        }
+    }
+
+    return animations;
 }
 
 

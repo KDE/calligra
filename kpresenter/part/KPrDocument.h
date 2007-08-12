@@ -24,6 +24,9 @@
 
 #include <KoPADocument.h>
 
+class KPrShapeAnimation;
+class KPrShapeAnimations;
+
 class KPrDocument : public KoPADocument
 {
     Q_OBJECT
@@ -41,6 +44,20 @@ public:
     /// reimplemented
     virtual KoPAMasterPage * newMasterPage();
 
+    /**
+     * @brief Add animation to shape
+     *
+     * @param animation animation to add to shape
+     */
+    void addAnimation( KPrShapeAnimation * animation );
+
+    /**
+     * @brief Remove animation from shape
+     *
+     * @param animation animation to remove from shape
+     */
+    void removeAnimation( KPrShapeAnimation * animation );
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );
@@ -48,9 +65,14 @@ protected:
     virtual const char *odfTagName();
 
     /// reimplemented
-    virtual void postAddShape(  KoPAPageBase * page, KoShape * shape );
+    virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
     /// reimplemented
-    virtual void postRemoveShape(  KoPAPageBase * page, KoShape * shape );
+    virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
+
+    /**
+     * @brief get the animations of the page
+     */
+    KPrShapeAnimations * animationsByPage( KoPAPageBase * page );
 };
 
 #endif /* KPRDOCUMENT_H */
