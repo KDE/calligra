@@ -87,7 +87,7 @@ public:
     /**
      * Get a list of used steps in the animations
      *
-     * Step 0 is the step for showing a new page. The list will allways contain 
+     * Step 0 is the step for showing a new page. The list will always contain 
      * step 0 even when there is no animation for it.
      */
     QList<int> steps() const;
