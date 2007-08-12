@@ -59,6 +59,7 @@
 #include "Localization.h"
 #include "LoadingInfo.h"
 #include "Map.h"
+#include "NamedAreaManager.h"
 #include "Object.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
@@ -512,141 +513,99 @@ bool Cell::needsPrinting() const
 }
 
 
-QString Cell::encodeFormula( bool _era, int _col, int _row ) const
+QString Cell::encodeFormula( bool fixedReferences, int _col, int _row ) const
 {
-    if ( _col == -1 )
+    if (!isFormula())
+        return QString();
+    if (_col == -1)
         _col = d->column;
-    if ( _row == -1 )
+    if (_row == -1)
         _row = d->row;
 
-    QString erg = "";
-
-    if ( userInput().isEmpty() )
-        return QString();
-
-    const QString userInput = this->userInput();
-
-    bool fix1 = false;
-    bool fix2 = false;
-    bool onNumber = false;
-    unsigned int pos = 0;
-    const unsigned int length = userInput.length();
-
-    // All this can surely be made 10 times faster, but I just "ported" it to QString
-    // without any attempt to optimize things -- this is really brittle (Werner)
-    while ( pos < length )
+    QString result('=');
+    const Tokens tokens = formula().tokens();
+    for (int i = 0; i < tokens.count(); ++i)
     {
-        if ( userInput[pos] == '"' )
+        const Token token = tokens[i];
+        switch (token.type())
         {
-            erg += userInput[pos++];
-            while ( pos < length && userInput[pos] != '"' )  // till the end of the world^H^H^H "string"
+            case Token::Cell:
+            case Token::Range:
             {
-                erg += userInput[pos++];
-                // Allow escaped double quotes (\")
-                if ( pos < length && userInput[pos] == '\\' && userInput[pos+1] == '"' )
+                if (doc()->namedAreaManager()->contains(token.text()))
                 {
-                    erg += userInput[pos++];
-                    erg += userInput[pos++];
+                    result.append(token.text()); // simply keep the area name
+                    break;
                 }
-            }
-            if ( pos < length )  // also copy the trailing double quote
-                erg += userInput[pos++];
-
-            onNumber = false;
-        }
-        else if ( userInput[pos].isDigit() )
-        {
-          erg += userInput[pos++];
-          fix1 = fix2 = false;
-          onNumber = true;
-        }
-        else if ( userInput[pos] != '$' && !userInput[pos].isLetter() )
-        {
-            erg += userInput[pos++];
-            fix1 = fix2 = false;
-            onNumber = false;
-        }
-        else
-        {
-            QString tmp = "";
-            if ( userInput[pos] == '$' )
-            {
-                tmp = '$';
-                pos++;
-                fix1 = true;
-            }
-            if ( userInput[pos].isLetter() )
-            {
-                QString buffer;
-                unsigned int pos2 = 0;
-                while ( pos < length && userInput[pos].isLetter() )
+                const Region region(token.text(), doc()->map());
+                // Actually, a contiguous region, but the fixation is needed
+                Region::ConstIterator end = region.constEnd();
+                for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
                 {
-                    tmp += userInput[pos];
-                    buffer[pos2++] = userInput[pos++];
-                }
-                if ( pos < length && userInput[pos] == '$' )
-                {
-                    tmp += '$';
-                    pos++;
-                    fix2 = true;
-                }
-                if ( pos < length && userInput[pos].isDigit() )
-                {
-                    const unsigned int oldPos = pos;
-                    while ( pos < length && userInput[pos].isDigit() ) ++pos;
-                    int row = 0;
-                    if ( pos != oldPos )
-                        row = userInput.mid(oldPos, pos-oldPos).toInt();
-                    // Is it a sheet name || is it a function name like DEC2HEX
-                    /* or if we're parsing a number, this could just be the
-                       exponential part of it  (1.23E4) */
-                    if ( pos < length &&
-                         ( ( userInput[pos] == '!' ) ||
-                         userInput[pos].isLetter() ||
-                         onNumber ) )
+                    if (!(*it)->isValid())
+                        continue;
+                    if ((*it)->type() == Region::Element::Point)
                     {
-                        erg += tmp;
-                        fix1 = fix2 = false;
-                        pos = oldPos;
+                        if ((*it)->sheet())
+                            result.append((*it)->sheet()->sheetName() + '!');
+                        const QPoint pos = (*it)->rect().topLeft();
+                        if ((*it)->isColumnFixed())
+                            result.append(QString("$%1").arg(pos.x()));
+                        else if (fixedReferences)
+                            result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
+                        else
+                            result.append(QString("#%1").arg(pos.x() - _col));
+                        if ((*it)->isRowFixed())
+                            result.append(QString("$%1#").arg(pos.y()));
+                        else if (fixedReferences)
+                            result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
+                        else
+                            result.append(QString("#%1#").arg(pos.y() - _row));
                     }
-                    else // It must be a cell identifier
+                    else // ((*it)->type() == Region::Range)
                     {
-                        //now calculate the row as integer value
-                        int col = 0;
-                        col = Util::decodeColumnLabelText( buffer );
-                        if ( fix1 )
-                            erg += QString( "$%1" ).arg( col );
+                        if ((*it)->sheet())
+                            result.append((*it)->sheet()->sheetName() + '!');
+                        QPoint pos = (*it)->rect().topLeft();
+                        if ((*it)->isLeftFixed())
+                            result.append(QString("$%1").arg(pos.x()));
+                        else if (fixedReferences)
+                            result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                         else
-                            if (_era)
-                                erg += QChar(0xA7) + QString( "%1" ).arg( col );
-                            else
-                                erg += QString( "#%1" ).arg( col - _col );
-
-                        if ( fix2 )
-                            erg += QString( "$%1#").arg( row );
+                            result.append(QString("#%1").arg(pos.x() - _col));
+                        if ((*it)->isTopFixed())
+                            result.append(QString("$%1#").arg(pos.y()));
+                        else if (fixedReferences)
+                            result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                         else
-                            if (_era)
-                                erg += QChar(0xA7) + QString( "%1#" ).arg( row );
-                            else
-                                erg += QString( "#%1#" ).arg( row - _row );
+                            result.append(QString("#%1#").arg(pos.y() - _row));
+                        result.append(':');
+                        pos = (*it)->rect().bottomRight();
+                        if ((*it)->isRightFixed())
+                            result.append(QString("$%1").arg(pos.x()));
+                        else if (fixedReferences)
+                            result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
+                        else
+                            result.append(QString("#%1").arg(pos.x() - _col));
+                        if ((*it)->isBottomFixed())
+                            result.append(QString("$%1#").arg(pos.y()));
+                        else if (fixedReferences)
+                            result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
+                        else
+                            result.append(QString("#%1#").arg(pos.y() - _row));
                     }
                 }
-                else
-                {
-                    erg += tmp;
-                    fix1 = fix2 = false;
-                }
+                break;
             }
-            else
+            default:
             {
-                erg += tmp;
-                fix1 = false;
+                result.append(token.text());
+                break;
             }
-            onNumber = false;
         }
     }
-
-    return erg;
+    kDebug() << k_funcinfo << result;
+    return result;
 }
 
 QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
