@@ -461,7 +461,7 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
     QList<KoShape*> toplevelShapes;
     QList<KoShapeLayer*> layers;
     // remove shapes having its parent in the list
-    // and seperate the layers
+    // and separate the layers
     foreach( KoShape * shape, shapes )
     {
         KoShapeContainer * parent = shape->parent();
