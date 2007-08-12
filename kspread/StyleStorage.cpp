@@ -516,7 +516,7 @@ void StyleStorage::garbageCollection()
         kDebug(36006) <<"StyleStorage: removing" << currentPair.second->debugData()
                         << " at " << Region(currentPair.first.toRect()).name()
                         << ", used " << currentPair.second->ref << " times" << endl;
-        d->tree.remove( currentPair.first, currentPair.second );
+        d->tree.remove(currentPair.first.toRect(), currentPair.second);
         d->subStyles[currentPair.second->type()].removeAll( currentPair.second );
         QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
@@ -538,7 +538,7 @@ void StyleStorage::garbageCollection()
         kDebug(36006) <<"StyleStorage: removing default style"
                         << " at " << Region(currentPair.first.toRect()).name()
                         << ", used " << currentPair.second->ref << " times" << endl;
-        d->tree.remove( currentPair.first, currentPair.second );
+        d->tree.remove(currentPair.first.toRect(), currentPair.second);
         QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
     }
@@ -553,7 +553,7 @@ void StyleStorage::garbageCollection()
         kDebug(36006) <<"StyleStorage: removing default indentation"
                       << " at " << Region(currentPair.first.toRect()).name()
                       << ", used " << currentPair.second->ref << " times" << endl;
-        d->tree.remove( currentPair.first, currentPair.second );
+        d->tree.remove(currentPair.first.toRect(), currentPair.second);
         QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
     }
@@ -568,7 +568,7 @@ void StyleStorage::garbageCollection()
         kDebug(36006) <<"StyleStorage: removing default precision"
                       << " at " << Region(currentPair.first.toRect()).name()
                       << ", used " << currentPair.second->ref << " times" << endl;
-        d->tree.remove( currentPair.first, currentPair.second );
+        d->tree.remove(currentPair.first.toRect(), currentPair.second);
         QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) );
         return; // already done
     }
@@ -600,7 +600,7 @@ void StyleStorage::garbageCollection()
              ( pair.second->type() == currentPair.second->type() ||
                pair.second->type() == Style::DefaultStyleKey ||
                pair.second->type() == Style::NamedStyleKey ) &&
-             pair.first.contains( currentPair.first ) )
+            pair.first.toRect().contains(currentPair.first.toRect()))
         {
             // special handling for indentation
             // only remove, if covered by default
@@ -621,7 +621,7 @@ void StyleStorage::garbageCollection()
             kDebug(36006) <<"StyleStorage: removing" << currentPair.second->debugData()
                           << " at " << Region(currentPair.first.toRect()).name()
                           << ", used " << currentPair.second->ref << "times" << endl;
-            d->tree.remove( currentPair.first, currentPair.second );
+            d->tree.remove(currentPair.first.toRect(), currentPair.second);
 #if 0
             kDebug(36006) <<"StyleStorage: usage of" << currentPair.second->debugData() <<" is" << currentPair.second->ref;
             // FIXME Stefan: The usage of substyles used once should be

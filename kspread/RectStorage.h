@@ -506,7 +506,7 @@ void RectStorage<T>::garbageCollection()
         pair.first == currentPair.first)
     {
         kDebug(36001) <<"RectStorage: removing default data at" << Region(currentPair.first.toRect()).name();
-        m_tree.remove( currentPair.first, currentPair.second );
+        m_tree.remove(currentPair.first.toRect(), currentPair.second);
         triggerGarbageCollection();
         return; // already done
     }
@@ -535,10 +535,10 @@ void RectStorage<T>::garbageCollection()
         // is completely covered
         if (zIndex != currentZIndex &&
             (pair.second == currentPair.second || pair.second == T()) &&
-            pair.first.contains(currentPair.first))
+            pair.first.toRect().contains(currentPair.first.toRect()))
         {
             kDebug(36001) <<"RectStorage: removing data at" << Region(currentPair.first.toRect()).name();
-            m_tree.remove( currentPair.first, currentPair.second );
+            m_tree.remove(currentPair.first.toRect(), currentPair.second);
             break;
         }
     }
