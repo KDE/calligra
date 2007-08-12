@@ -238,14 +238,14 @@ VGradient::loadOasis( const KoXmlElement &object, KoStyleStack &/*stack*/, VObje
 	if( object.namespaceURI() == KoXmlNS::draw && object.localName() == "gradient" )
 	{
 		m_repeatMethod = VGradient::reflect;
-		QString strType = object.attributeNS( KoXmlNS::draw, "style", QString::null );
+		QString strType = object.attributeNS( KoXmlNS::draw, "style", QString() );
 		if( strType == "radial" )
 		{
 			m_type = VGradient::radial;
 			// TODO : find out whether Oasis works with boundingBox only?
-			double cx = KoUnit::parseValue( object.attributeNS( KoXmlNS::draw, "cx", QString::null ).remove("%") );
+			double cx = KoUnit::parseValue( object.attributeNS( KoXmlNS::draw, "cx", QString() ).remove("%") );
 			m_origin.setX( bb.bottomLeft().x() + bb.width() * 0.01 * cx );
-			double cy = KoUnit::parseValue( object.attributeNS( KoXmlNS::draw, "cy", QString::null ).remove("%") );
+			double cy = KoUnit::parseValue( object.attributeNS( KoXmlNS::draw, "cy", QString() ).remove("%") );
 			m_origin.setY(  bb.bottomLeft().y() - bb.height() * 0.01 * cy );
 			m_focalPoint = m_origin;
 			m_vector = bb.topRight();
@@ -265,8 +265,8 @@ VGradient::loadOasis( const KoXmlElement &object, KoStyleStack &/*stack*/, VObje
 		}
 		else return;
 
-		VColor startColor( QColor( object.attributeNS( KoXmlNS::draw, "start-color", QString::null ) ) );
-		VColor endColor( QColor( object.attributeNS( KoXmlNS::draw, "end-color", QString::null ) ) );
+		VColor startColor( QColor( object.attributeNS( KoXmlNS::draw, "start-color", QString() ) ) );
+		VColor endColor( QColor( object.attributeNS( KoXmlNS::draw, "end-color", QString() ) ) );
 
 		double startOpacity = 0.01 * object.attributeNS( KoXmlNS::draw, "start-intensity", "100" ).remove("%").toDouble();
 		double endOpacity = 0.01 * object.attributeNS( KoXmlNS::draw, "end-intensity", "100" ).remove("%").toDouble();
@@ -284,22 +284,22 @@ VGradient::loadOasis( const KoXmlElement &object, KoStyleStack &/*stack*/, VObje
 		if( object.localName() == "linearGradient" )
 		{
 			m_type = VGradient::linear;
-			m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
-			m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
-			m_vector.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );
-			m_vector.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "y2", QString::null ) ) );
+			m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "x1", QString() ) ) );
+			m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "y1", QString() ) ) );
+			m_vector.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "x2", QString() ) ) );
+			m_vector.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "y2", QString() ) ) );
 			m_focalPoint = m_origin;
 		}
 		else if( object.localName() == "radialGradient" )
 		{
 			m_type = VGradient::radial;
-			m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
-			m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
-			double r = KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "r", QString::null ) );
+			m_origin.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cx", QString() ) ) );
+			m_origin.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "cy", QString() ) ) );
+			double r = KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "r", QString() ) );
 			m_vector.setX( m_origin.x() + r );
 			m_vector.setY( m_origin.y() );
-			m_focalPoint.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "fx", QString::null ) ) );
-			m_focalPoint.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "fy", QString::null ) ) );
+			m_focalPoint.setX( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "fx", QString() ) ) );
+			m_focalPoint.setY( KoUnit::parseValue( object.attributeNS( KoXmlNS::svg, "fy", QString() ) ) );
 		}
 
 		QString strSpread( object.attributeNS( KoXmlNS::svg, "spreadMethod", "pad" ) );
@@ -318,7 +318,7 @@ VGradient::loadOasis( const KoXmlElement &object, KoStyleStack &/*stack*/, VObje
 		{
 				if( colorstop.namespaceURI() == KoXmlNS::svg && colorstop.localName() == "stop" )
 				{
-					VColor color( QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString::null ) ) );
+					VColor color( QColor( colorstop.attributeNS( KoXmlNS::svg, "color", QString() ) ) );
 					color.setOpacity( colorstop.attributeNS( KoXmlNS::svg, "stop-opacity", "1.0" ).toDouble() );
 					addStop( color, colorstop.attributeNS( KoXmlNS::svg, "offset", "0.0" ).toDouble(), 0.5 );
 				}

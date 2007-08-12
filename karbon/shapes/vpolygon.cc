@@ -160,13 +160,13 @@ VPolygon::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context
 {
 	setState( normal );
 
-	m_points = element.attributeNS( KoXmlNS::draw, "points", QString::null );
+	m_points = element.attributeNS( KoXmlNS::draw, "points", QString() );
 
 	init();
 
-	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString() ) );
 
-	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString() );
 	if( !trafo.isEmpty() )
 		transformOasis( trafo );
 

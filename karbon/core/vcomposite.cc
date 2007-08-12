@@ -424,10 +424,10 @@ VPath::transformByViewbox( const KoXmlElement &element, QString viewbox )
 		// allow for viewbox def with ',' or whitespace
 		QStringList points = viewbox.replace( ',', ' ' ).simplified().split( ' ', QString::SkipEmptyParts );
 
-		double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
-		double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
-		double x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) );
-		double y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) );
+		double w = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) );
+		double h = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) );
+		double x = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) );
+		double y = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) );
 
 		QMatrix mat;
 		mat.translate( x-KoUnit::parseValue( points[0] ), y-KoUnit::parseValue( points[1] ) );
@@ -446,15 +446,15 @@ VPath::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 
 	if( element.localName() == "path" )
 	{
-		QString data = element.attributeNS( KoXmlNS::svg, "d", QString::null );
+		QString data = element.attributeNS( KoXmlNS::svg, "d", QString() );
 		if( data.length() > 0 )
 		{
 			loadSvgPath( data );
 		}
 	
-		m_fillRule = element.attributeNS( KoXmlNS::svg, "fill-rule", QString::null ) == "winding" ? winding : evenOdd;
+		m_fillRule = element.attributeNS( KoXmlNS::svg, "fill-rule", QString() ) == "winding" ? winding : evenOdd;
 
-		viewbox = element.attributeNS( KoXmlNS::svg, "viewBox", QString::null );
+		viewbox = element.attributeNS( KoXmlNS::svg, "viewBox", QString() );
 	}
 	else if( element.localName() == "custom-shape" )
 	{
@@ -466,18 +466,18 @@ VPath::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context )
 				
 				if( e.localName() == "enhanced-geometry" )
 				{
-					QString data = e.attributeNS( KoXmlNS::draw, "enhanced-path", QString::null );
+					QString data = e.attributeNS( KoXmlNS::draw, "enhanced-path", QString() );
 					if( ! data.isEmpty() )
 						loadSvgPath( data );
 
-					viewbox = e.attributeNS( KoXmlNS::svg, "viewBox", QString::null );
+					viewbox = e.attributeNS( KoXmlNS::svg, "viewBox", QString() );
 				}
 		}
 	}
 
 	transformByViewbox( element, viewbox );
 
-	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString() );
 	if( !trafo.isEmpty() )
 		transformOasis( trafo );
 

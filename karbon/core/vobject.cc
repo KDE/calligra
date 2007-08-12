@@ -189,7 +189,7 @@ VObject::loadOasis( const KoXmlElement &object, KoOasisLoadingContext &context )
 	m_fill->loadOasis( object, context, this );
 
 	if( object.hasAttributeNS( KoXmlNS::draw, "name" ) )
-		setName( object.attributeNS( KoXmlNS::draw, "name", QString::null ) );
+		setName( object.attributeNS( KoXmlNS::draw, "name", QString() ) );
 
 	return true;
 }
@@ -201,7 +201,7 @@ VObject::addStyles( const KoXmlElement* style, KoOasisLoadingContext & context )
 	{
 		// this function is necessary as parent styles can have parents themself
 		if( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
-			addStyles( context.oasisStyles().findStyle( style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null ) ), context );
+			addStyles( context.oasisStyles().findStyle( style->attributeNS( KoXmlNS::style, "parent-style-name", QString() ) ), context );
 		context.addStyles( style, "style-name" );
 	}
 }

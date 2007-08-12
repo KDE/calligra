@@ -148,10 +148,10 @@ VPolyline::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &contex
 	if( element.localName() == "line" )
 	{
 		QPointF p1, p2;
-		p1.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString::null ) ) );
-		p1.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString::null ) ) );
-		p2.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) ) );
-		p2.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString::null ) ) );
+		p1.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString() ) ) );
+		p1.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString() ) ) );
+		p2.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString() ) ) );
+		p2.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString() ) ) );
 		
 		m_points = QString( "%1,%2 %3,%4" ).arg( p1.x() ).arg( p1.y() ).arg( p2.x() ).arg( p2.y() );
 
@@ -160,13 +160,13 @@ VPolyline::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &contex
 	}
 	else if( element.localName() == "polyline" )
 	{
-		m_points = element.attributeNS( KoXmlNS::draw, "points", QString::null );
+		m_points = element.attributeNS( KoXmlNS::draw, "points", QString() );
 		init();
 	}
 
-	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString() ) );
 
-	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString() );
 	if( !trafo.isEmpty() )
 		transformOasis( trafo );
 

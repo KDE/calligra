@@ -205,38 +205,38 @@ VEllipse::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context
 	if( element.tagName() == "ellipse" )
 	{
 		if( element.hasAttributeNS( KoXmlNS::svg, "rx" ) )
-			m_rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx", QString::null ) );
+			m_rx = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "rx", QString() ) );
 		else 
-			m_rx = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
+			m_rx = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) );
 
 		if( element.hasAttributeNS( KoXmlNS::svg, "ry" ) )
-			m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", QString::null ) );
+			m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "ry", QString() ) );
 		else 
-			m_ry = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ) );
+			m_ry = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ) );
 
 	}
 	else if( element.tagName() == "circle" )
 	{
 		if( element.hasAttributeNS( KoXmlNS::svg, "r" ) )
-			m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r", QString::null ) );
+			m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "r", QString() ) );
 		else 
-			m_rx = m_ry = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ) );
+			m_rx = m_ry = 0.5 * KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ) );
 	}
 
 	if( element.hasAttributeNS( KoXmlNS::svg, "cx" ) )
-		m_center.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx", QString::null ) ) );
+		m_center.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cx", QString() ) ) );
 	else
-		m_center.setX( m_rx + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
+		m_center.setX( m_rx + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
 
 	if( element.hasAttributeNS( KoXmlNS::svg, "cy" ) )
-		m_center.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy", QString::null ) ) );
+		m_center.setY( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "cy", QString() ) ) );
 	else
-		m_center.setY( m_ry + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
+		m_center.setY( m_ry + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
 
-	m_startAngle = element.attributeNS( KoXmlNS::draw, "start-angle", QString::null ).toDouble();
-	m_endAngle = element.attributeNS( KoXmlNS::draw, "end-angle", QString::null ).toDouble();
+	m_startAngle = element.attributeNS( KoXmlNS::draw, "start-angle", QString() ).toDouble();
+	m_endAngle = element.attributeNS( KoXmlNS::draw, "end-angle", QString() ).toDouble();
 
-	QString kind = element.attributeNS( KoXmlNS::draw, "kind", QString::null );
+	QString kind = element.attributeNS( KoXmlNS::draw, "kind", QString() );
 	if( kind == "cut" )
 		m_type = cut;
 	else if( kind == "section" )
@@ -248,9 +248,9 @@ VEllipse::loadOasis( const KoXmlElement &element, KoOasisLoadingContext &context
 
 	init();
 
-	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString() ) );
 
-	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString() );
 	if( !trafo.isEmpty() )
 		transformOasis( trafo );
 

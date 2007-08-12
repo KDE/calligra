@@ -79,19 +79,19 @@ bool KarbonRectangle::loadOasis( const QDomElement &element, KoOasisLoadingConte
 #if 0
 	setState( normal );
 
-	m_width  = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString::null ), 10.0 );
-	m_height = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString::null ), 10.0 );
+	m_width  = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "width", QString() ), 10.0 );
+	m_height = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "height", QString() ), 10.0 );
 
-	m_topLeft.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString::null ) ) );
-	m_topLeft.setY( m_height + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString::null ) ) );
+	m_topLeft.setX( KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x", QString() ) ) );
+	m_topLeft.setY( m_height + KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
 
-	m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null ) );
+	m_rx = m_ry = KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString() ) );
 
 	init();
 
-	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+	transformByViewbox( element, element.attributeNS( KoXmlNS::svg, "viewBox", QString() ) );
 
-	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+	QString trafo = element.attributeNS( KoXmlNS::draw, "transform", QString() );
 	if( !trafo.isEmpty() )
 		transformOasis( trafo );
 
