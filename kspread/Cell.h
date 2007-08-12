@@ -466,25 +466,21 @@ public:
     //
 
     /**
-     * Encodes a formula into a text representation.
+     * Encodes the cell's formula into a text representation.
      *
-     * @param _era encode relative references absolutely (this is used for copying
+     * \param fixedReferences encode relative references absolutely (this is used for copying
      *             a cell to make the paste operation create a formula that points
      *             to the original cells, not the cells at the same relative position)
-     * @param _col row the formula is in
-     * @param _row column the formula is in
-     *
-     * \todo possibly rewrite to make use of the formula tokenizer
+     * \see decodeFormula()
      */
-    QString encodeFormula( bool _era = false, int _col = -1, int _row = -1 ) const;
+    QString encodeFormula(bool fixedReferences = false) const;
 
     /**
-     * inverse operation to encodeFormula()
-     * \see encodeFormula()
+     * Decodes a text representation \p text into a formula expression.
      *
-     * \todo possibly rewrite to make use of the formula tokenizer
+     * \see encodeFormula()
      */
-    QString decodeFormula( const QString &_text, int _col = -1, int _row = -1 ) const;
+    QString decodeFormula(const QString& text) const;
 
     /**
      * Merges the @p new_text with @p old_text during a paste operation.

@@ -513,14 +513,10 @@ bool Cell::needsPrinting() const
 }
 
 
-QString Cell::encodeFormula( bool fixedReferences, int _col, int _row ) const
+QString Cell::encodeFormula(bool fixedReferences) const
 {
     if (!isFormula())
         return QString();
-    if (_col == -1)
-        _col = d->column;
-    if (_row == -1)
-        _row = d->row;
 
     QString result('=');
     const Tokens tokens = formula().tokens();
@@ -554,13 +550,13 @@ QString Cell::encodeFormula( bool fixedReferences, int _col, int _row ) const
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                         else
-                            result.append(QString("#%1").arg(pos.x() - _col));
+                            result.append(QString("#%1").arg(pos.x() - d->column));
                         if ((*it)->isRowFixed())
                             result.append(QString("$%1#").arg(pos.y()));
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                         else
-                            result.append(QString("#%1#").arg(pos.y() - _row));
+                            result.append(QString("#%1#").arg(pos.y() - d->row));
                     }
                     else // ((*it)->type() == Region::Range)
                     {
@@ -572,13 +568,13 @@ QString Cell::encodeFormula( bool fixedReferences, int _col, int _row ) const
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                         else
-                            result.append(QString("#%1").arg(pos.x() - _col));
+                            result.append(QString("#%1").arg(pos.x() - d->column));
                         if ((*it)->isTopFixed())
                             result.append(QString("$%1#").arg(pos.y()));
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                         else
-                            result.append(QString("#%1#").arg(pos.y() - _row));
+                            result.append(QString("#%1#").arg(pos.y() - d->row));
                         result.append(':');
                         pos = (*it)->rect().bottomRight();
                         if ((*it)->isRightFixed())
@@ -586,13 +582,13 @@ QString Cell::encodeFormula( bool fixedReferences, int _col, int _row ) const
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                         else
-                            result.append(QString("#%1").arg(pos.x() - _col));
+                            result.append(QString("#%1").arg(pos.x() - d->column));
                         if ((*it)->isBottomFixed())
                             result.append(QString("$%1#").arg(pos.y()));
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                         else
-                            result.append(QString("#%1#").arg(pos.y() - _row));
+                            result.append(QString("#%1#").arg(pos.y() - d->row));
                     }
                 }
                 break;
@@ -608,13 +604,8 @@ QString Cell::encodeFormula( bool fixedReferences, int _col, int _row ) const
     return result;
 }
 
-QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
+QString Cell::decodeFormula(const QString &_text) const
 {
-    if ( _col == -1 )
-        _col = d->column;
-    if ( _row == -1 )
-        _row = d->row;
-
     QString erg = "";
     unsigned int pos = 0;
     const unsigned int length = _text.length();
@@ -659,7 +650,7 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
             if ( pos != oldPos )
                 col = _text.mid(oldPos, pos-oldPos).toInt();
             if ( !abs1 && !era1 )
-                col += _col;
+                col += d->column;
             // Skip '#' or '$'
 
             _t = _text[pos++];
@@ -674,7 +665,7 @@ QString Cell::decodeFormula( const QString &_text, int _col, int _row) const
             if ( pos != oldPos )
                 row = _text.mid(oldPos, pos-oldPos).toInt();
             if ( !abs2 && !era2)
-                row += _row;
+                row += d->row;
             // Skip '#' or '$'
             ++pos;
             if ( row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax )
@@ -1938,7 +1929,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
   // A formula like =A1+A2 ?
   if( (!t.isEmpty()) && (t[0] == '=') )
   {
-    t = decodeFormula( t, d->column, d->row );
+    t = decodeFormula(t);
     parseUserInput (pasteOperation( t, userInput(), op ));
 
     makeFormula();
@@ -2230,11 +2221,11 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
             Q_ASSERT( 0 );
         }
 
-        tmp_op = decodeFormula( tmp_op, d->column, d->row );
+        tmp_op = decodeFormula(tmp_op);
         return tmp_op;
     }
 
-    tmp = decodeFormula( new_text, d->column, d->row );
+    tmp = decodeFormula(new_text);
     return tmp;
 }
 

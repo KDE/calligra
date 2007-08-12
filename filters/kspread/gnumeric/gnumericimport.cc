@@ -2184,11 +2184,11 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 
 		    kDebug(30521) <<"FOO:" << column << row;
 		    kDebug(30521) <<
-                           Cell( table, column, row ).decodeFormula( expr, column, row ).toLatin1() << endl;
+                           Cell( table, column, row ).decodeFormula(expr).toLatin1() << endl;
 		    kDebug(30521) << expr;
 
 		    table->setText(row, column,
-                                   Cell( table, column, row ).decodeFormula( expr, column, row ),
+                                   Cell( table, column, row ).decodeFormula(expr),
                                    false);
 		  }
                   kspread_cell.setStyle(style);
