@@ -33,6 +33,7 @@ class KWCanvas;
 class KWFrame;
 class KWGui;
 class KWPage;
+class KWStatusBar;
 
 class KoShape;
 class KoZoomController;
@@ -138,6 +139,7 @@ private:
     KoZoomHandler m_zoomHandler;
     KoZoomController *m_zoomController;
     KWPage *m_currentPage;
+    KWStatusBar* m_statusBar;
 
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;

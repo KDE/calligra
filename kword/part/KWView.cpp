@@ -26,6 +26,7 @@
 #include "KWPage.h"
 #include "KWViewMode.h"
 #include "KWFactory.h"
+#include "KWStatusBar.h"
 #include "frames/KWFrame.h"
 #include "frames/KWCopyShape.h"
 #include "frames/KWTextFrameSet.h"
@@ -116,6 +117,8 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
     KWStatisticsDockerFactory statisticsFactory(this);
     KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
     if (docker->view() != this) docker->setView(this);
+
+    m_statusBar = statusBar() ? new KWStatusBar( statusBar(), this ) : 0;
 }
 
 KWView::~KWView() {
