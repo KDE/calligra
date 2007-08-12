@@ -31,7 +31,7 @@ class KPRESENTER_EXPORT KPrFactory : public KoFactory
 {
     Q_OBJECT
 public:
-    KPrFactory( QObject* parent = 0, const char* name = 0 );
+    explicit KPrFactory( QObject* parent = 0, const char* name = 0 );
     ~KPrFactory();
 
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, QObject *parent = 0,
