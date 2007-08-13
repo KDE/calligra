@@ -52,8 +52,9 @@ public:
 private Q_SLOTS:
     void slotModifiedChanged(bool);
     void slotPagesChanged();
-    void slotChangedTool();
     void slotMousePositionChanged(const QPoint&);
+    void slotResourceChanged(int, const QVariant&);
+    void slotChangedTool();
 
 private:
     /// \internal d-pointer class.

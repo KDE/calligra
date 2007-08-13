@@ -27,21 +27,26 @@
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <klocale.h>
+#include <kactioncollection.h>
+//#include <klocalizedstring.h>
 
 #include <KoMainWindow.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoCanvasController.h>
 #include <KoTextSelectionHandler.h>
-//#include <KoViewConverter.h>
+#include <KoShapeManager.h>
+#include <KoZoomAction.h>
 
 #include "KWView.h"
 #include "KWDocument.h"
+#include "KWPage.h"
 #include "KWCanvas.h"
 #include "frames/KWTextFrameSet.h"
 
 const QString i18nModified = i18n("Modified");
 const QString i18nSaved = i18n("Saved");
+const KLocalizedString i18nPage = ki18n("Page: %1/%2");
 
  /// \internal d-pointer class.
 class KWStatusBar::Private
@@ -51,18 +56,22 @@ class KWStatusBar::Private
         KWView* view;
         KoToolProxy* toolproxy;
         KoCanvasController* controller;
+        int currentPageNumber;
 
         QLabel* modifiedLabel;
         QLabel* pageLabel;
         QLabel* mousePosLabel;
+        QWidget* zoomWidget;
 
         Private(KStatusBar* sb, KWView* v)
             : statusbar(sb)
             , view(v)
             , controller(0)
+            , currentPageNumber(1)
             , modifiedLabel(0)
             , pageLabel(0)
             , mousePosLabel(0)
+            , zoomWidget(0)
         {
         }
         ~Private() {
@@ -72,6 +81,8 @@ class KWStatusBar::Private
             delete pageLabel;
             //if(mousePosLabel) statusbar->removeWidget(mousePosLabel);
             delete mousePosLabel;
+            //if(zoomWidget) statusbar->removeWidget(zoomWidget);
+            delete zoomWidget;
         }
 };
 
@@ -84,8 +95,10 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
 
     d->statusbar->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    KWDocument* kwdoc = d->view->kwdocument();
+    KWDocument* const kwdoc = d->view->kwdocument();
     Q_ASSERT(kwdoc);
+    KWCanvas* const canvas =  d->view->kwcanvas();
+    Q_ASSERT(canvas);
 
     //sebsauer, 2007-08-12, this crashes within QMainWindowLayout::animationFinished
     //This may the same bug that let's KWord crash if "Split View" got called.
@@ -102,7 +115,7 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
         slotModifiedChanged(kwdoc->isModified());
         connect(kwdoc, SIGNAL(modified(bool)), this, SLOT(slotModifiedChanged(bool)));
 
-        QAction* action = new KAction(i18n("Document saved/modified"), this);
+        QAction* action = new KAction(i18n("State: saved/modified"), this);
         action->setObjectName("doc_save_state");
         action->setCheckable(true);
         action->setChecked(true);
@@ -114,12 +127,13 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
         d->pageLabel = new QLabel(d->statusbar);
         d->pageLabel->setFrameShape(QFrame::Panel);
         d->pageLabel->setFrameShadow(QFrame::Sunken);
-        d->pageLabel->setMinimumWidth( QFontMetrics(d->pageLabel->font()).width(i18n("999/999")) );
+        const QString s = i18nPage.subs("999").subs("999").toString();
+        d->pageLabel->setMinimumWidth( QFontMetrics(d->pageLabel->font()).width(s) );
         d->statusbar->addWidget(d->pageLabel);
         slotPagesChanged();
         connect(kwdoc, SIGNAL(pageSetupChanged()), this, SLOT(slotPagesChanged()));
 
-        QAction* action = new KAction(i18n("Pages current/total"), this);
+        QAction* action = new KAction(i18n("Page: current/total"), this);
         action->setObjectName("pages_current_total");
         action->setCheckable(true);
         action->setChecked(true);
@@ -134,7 +148,7 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
         d->mousePosLabel->setMinimumWidth( QFontMetrics(d->mousePosLabel->font()).width("9999:9999") );
         d->statusbar->addWidget(d->mousePosLabel);
 
-        QAction* action = new KAction(i18n("Mousecursor X:Y Position"), this);
+        QAction* action = new KAction(i18n("Mouseposition: X:Y"), this);
         action->setObjectName("mousecursor_pos");
         action->setCheckable(true);
         action->setChecked(true);
@@ -143,8 +157,7 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     }
 
     /*
-    KWCanvas* canvas =  d->view->kwcanvas();
-    d->toolproxy = canvas ? canvas->toolProxy() : 0;
+    d->toolproxy = canvas->toolProxy();
     if( d->toolproxy ) {
         d->selectionLabel = new QLabel(d->statusbar);
         d->selectionLabel->setFrameShape(QFrame::Panel);
@@ -158,8 +171,28 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     //d->statusLabel = new KSqueezedTextLabel(d->statusbar);
     //d->statusbar->addWidget(d->statusLabel,1);
 
+    {
+        KActionCollection* collection = d->view->actionCollection();
+        KoZoomAction* zoomaction = dynamic_cast<KoZoomAction*>( collection->action("view_zoom") );
+        d->zoomWidget = zoomaction ? zoomaction->createWidget(d->statusbar) : 0;
+        if( d->zoomWidget ) {
+            d->statusbar->addWidget(d->zoomWidget);
+
+            QAction* action = new KAction(i18n("Zoom Controller"), this);
+            action->setObjectName("zoom_controller");
+            action->setCheckable(true);
+            action->setChecked(true);
+            d->statusbar->addAction(action);
+            connect(action, SIGNAL(toggled(bool)), d->zoomWidget, SLOT(setVisible(bool)));
+        }
+    }
+
     slotChangedTool();
     connect(KoToolManager::instance(), SIGNAL(changedTool(const KoCanvasController*,int)), this, SLOT(slotChangedTool()));
+
+    KoCanvasResourceProvider* resourceprovider = canvas->resourceProvider();
+    Q_ASSERT(resourceprovider);
+    connect(resourceprovider, SIGNAL(resourceChanged(int,QVariant)), this, SLOT(slotResourceChanged(int,QVariant)));
 #endif
 }
 
@@ -175,11 +208,22 @@ void KWStatusBar::slotModifiedChanged(bool modified)
 
 void KWStatusBar::slotPagesChanged()
 {
-    kDebug()<<"===> KWStatusBar::slotPagesChanged"<<endl;
     KWDocument* kwdoc = d->view->kwdocument();
     Q_ASSERT(kwdoc);
-    //TODO how to fetch the current page?
-    d->pageLabel->setText( QString("%1/%2").arg(1).arg(kwdoc->pageCount()) );
+    d->pageLabel->setText( i18nPage.subs(d->currentPageNumber).subs(kwdoc->pageCount()).toString() );
+}
+
+void KWStatusBar::slotResourceChanged(int key, const QVariant& value)
+{
+    switch( key ) {
+        case KWord::CurrentPage: {
+            d->currentPageNumber = value.toInt();
+            slotPagesChanged();
+        } break;
+        default: {
+            kDebug()<<"KWStatusBar::slotResourceChanged Unhandled key="<<key<<" value="<<value<<endl;
+        } break;
+    }
 }
 
 /*
@@ -201,7 +245,7 @@ void KWStatusBar::slotSelectionChanged(bool hasSelection)
 
 void KWStatusBar::slotChangedTool()
 {
-    kDebug()<<"===> KWStatusBar::slotChangedTool"<<endl;
+    kDebug()<<"KWStatusBar::slotChangedTool"<<endl;
     if(d->controller) {
         disconnect(d->controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(slotMousePositionChanged(const QPoint&)));
     }
@@ -216,7 +260,7 @@ void KWStatusBar::slotChangedTool()
 
 void KWStatusBar::slotMousePositionChanged(const QPoint& pos)
 {
-    kDebug()<<"===> KWStatusBar::slotMousePositionChanged"<<endl;
+    //kDebug()<<"KWStatusBar::slotMousePositionChanged"<<endl;
     d->mousePosLabel->setText( QString("%1:%2").arg(pos.x()).arg(pos.y()) );
 }
 
