@@ -88,7 +88,7 @@ ScriptingPart::ScriptingPart(QObject* parent, const QStringList& list)
                 }
             }
             if( ! Kross::Manager::self().executeScriptFile(url) )
-                errors << i18n("ScriptingPart: Failed to execute scriptfile \"%1\"", file);
+                errors << i18n("Failed to execute scriptfile \"%1\"", file);
         }
         if( errors.count() > 0 )
             KMessageBox::errorList(module()->view(), i18n("Errors on execution of scripts."), errors);
