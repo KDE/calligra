@@ -102,7 +102,7 @@ void KWMailMergeKSpread::initDocument()
 
   connect( _document, SIGNAL( completed() ), SLOT( initSpreadSheets() ) );
 
-  _document->openURL( _url );
+  _document->openUrl( _url );
 }
 
 void KWMailMergeKSpread::initSpreadSheets()

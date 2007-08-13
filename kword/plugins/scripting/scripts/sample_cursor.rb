@@ -18,8 +18,7 @@ rescue LoadError
     KWord = Kross.module('KWord')
 
     # Testcase to fill KWord with some content. You are also able to e.g.
-    # load a document here with "KWord.document().openURL('/path/file.odt')"
-    # (maybe openURL was renamed to openUrl meanwhile ;)
+    # load a document here with "KWord.document().openUrl('/path/file.odt')"
     mytextframeset1 = KWord.addTextFrameSet("myFirstTextFrame")
     mytextframeset1.addTextFrame()
     mytextframeset1.document().setHtml("<h1>First Header</h1><p>Some text</p><p>Some more text with <b>bold</b> and <i>italic</i> and <u>underline</u> to test the stuff.</p>")

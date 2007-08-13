@@ -301,7 +301,7 @@ KFormDesignerPart::open()
 	m_openingFile = true;
 	KUrl url = KFileDialog::getOpenURL("kfiledialog:///kformdesigner", i18n("*.ui|Qt Designer UI Files"), m_workspace->topLevelWidget());
 	if(!url.isEmpty())
-		ReadWritePart::openURL(url);
+		ReadWritePart::openUrl(url);
 	m_openingFile = false;
 }
 

@@ -83,7 +83,7 @@ void KWMailMergeKSpreadConfig::loadDocument()
     _document = new Doc();
     connect( _document, SIGNAL( completed() ), SLOT( documentLoaded() ) );
 
-    _document->openURL( _urlRequester->url() );
+    _document->openUrl( _urlRequester->url() );
   }
 }
 

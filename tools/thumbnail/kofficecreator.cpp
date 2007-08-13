@@ -79,7 +79,7 @@ bool KOfficeCreator::create(const QString &path, int width, int height, QImage &
     url.setPath( path );
     m_doc->setCheckAutoSaveFile( false );
     m_doc->setAutoErrorHandlingEnabled( false ); // don't show message boxes
-    if ( !m_doc->openURL( url ) )
+    if ( !m_doc->openUrl( url ) )
         return false;
     m_completed = false;
     startTimer(5000);

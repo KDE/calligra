@@ -101,7 +101,7 @@ void KoFormulaShape::importFormula( const KUrl& url )
     delete m_document;
 	delete m_formulaElement;
     m_document = new KFormulaPartDocument();
-    m_document->openURL(url);
+    m_document->openUrl(url);
 	m_formulaElement = m_document->formulaElement();
 	m_formulaRenderer->layoutElement( m_formulaElement );
 }

@@ -168,7 +168,7 @@ QString ScriptingModule::toXML()
 
 bool ScriptingModule::openUrl(const QString& url)
 {
-    return kspreadDoc()->openURL(url);
+    return kspreadDoc()->openUrl(url);
 }
 
 bool ScriptingModule::saveUrl(const QString& url)
