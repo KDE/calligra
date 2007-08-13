@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright 2007 Marijn Kruisselbrink <m.Kruisselbrink@student.tue.nl>
+ * Copyright (C) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,21 +16,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KEYSIGNATUREACTION_H
-#define KEYSIGNATUREACTION_H
+#ifndef KEYSIGNATUREDIALOG_H
+#define KEYSIGNATUREDIALOG_H
 
-#include "AbstractMusicAction.h"
+#include "ui_KeySignatureDialog.h"
 
-class KeySignatureAction : public AbstractMusicAction
-{
+#include <KDialog>
+namespace MusicCore {
+    class KeySignature;
+}
+
+class KeySignatureDialog : public KDialog {
+    Q_OBJECT
 public:
-    KeySignatureAction(SimpleEntryTool* tool, int accidentals);
-    KeySignatureAction(SimpleEntryTool* tool);
+    explicit KeySignatureDialog(QWidget *parent = 0);
     
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    void setBar(int bar);
+    int accidentals();
+    void setAccidentals(int accidentals);
+    void setMusicStyle(MusicStyle* style);
+private slots:
+    void accidentalsChanged(int accidentals);
 private:
-    int m_accidentals;
-    bool m_showDialog;
+    Ui::KeySignatureDialog widget;
+    MusicCore::KeySignature* m_ks;
 };
 
-#endif // KEYSIGNATUREACTION_H
+#endif // KEYSIGNATUREDIALOG_H

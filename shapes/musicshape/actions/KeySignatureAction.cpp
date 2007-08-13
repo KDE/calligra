@@ -26,6 +26,8 @@
 
 #include "../commands/SetKeySignatureCommand.h"
 
+#include "../dialogs/KeySignatureDialog.h"
+
 #include "../SimpleEntryTool.h"
 #include "../MusicShape.h"
 
@@ -49,13 +51,30 @@ static QString getText(int accidentals)
 }
 
 KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool, int accidentals)
-    : AbstractMusicAction(getText(accidentals), tool), m_accidentals(accidentals)
+    : AbstractMusicAction(getText(accidentals), tool), m_accidentals(accidentals), m_showDialog(false)
 {
     setCheckable(false);
 }
 
+KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool)
+: AbstractMusicAction("Other", tool), m_showDialog(true)
+{
+    setCheckable(false);
+}
+
+
 void KeySignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {
     Bar* bar = staff->part()->sheet()->bar(barIdx);
-    m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, staff, m_accidentals));
+    if (m_showDialog) {
+        KeySignatureDialog dlg;
+        dlg.setMusicStyle(m_tool->shape()->style());
+        dlg.setBar(0);
+        dlg.setAccidentals(0);
+        if (dlg.exec() == QDialog::Accepted) {
+            m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, staff, dlg.accidentals()));
+        }
+    } else {
+        m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, staff, m_accidentals));
+    }
 }

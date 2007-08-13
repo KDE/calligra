@@ -199,3 +199,8 @@ void MusicShape::engrave()
     m_engraver->engraveSheet(m_sheet, size());
 }
 
+MusicStyle* MusicShape::style()
+{
+    return m_style;
+}
+

@@ -246,6 +246,9 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     ksMenu->addAction(action = new KeySignatureAction(this, -4));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    ksMenu->addSeparator();
+    ksMenu->addAction(action = new KeySignatureAction(this));
+    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     
     QAction* keySigAction = new QAction(i18n("Key signature"), this);
     keySigAction->setMenu(ksMenu);

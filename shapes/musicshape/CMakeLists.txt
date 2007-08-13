@@ -42,6 +42,8 @@ SET (musicshape_LIB_SRCS
     dialogs/PartDetailsDialog.cpp
     dialogs/SimpleEntryWidget.cpp
     dialogs/PartsListModel.cpp
+    dialogs/KeySignatureDialog.cpp
+    dialogs/StaffElementPreviewWidget.cpp
 
     actions/AbstractMusicAction.cpp
     actions/NoteEntryAction.cpp
@@ -75,6 +77,7 @@ kde4_add_ui_files(musicshape_LIB_SRCS
     dialogs/PartsWidget.ui
     dialogs/PartDetailsDialog.ui
     dialogs/SimpleEntryWidget.ui
+    dialogs/KeySignatureDialog.ui
 )
 
 kde4_add_plugin(musicshape ${musicshape_LIB_SRCS})
