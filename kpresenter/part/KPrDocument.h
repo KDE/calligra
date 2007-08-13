@@ -55,8 +55,10 @@ public:
      * @brief Remove animation from shape
      *
      * @param animation animation to remove from shape
+     * @param removeFromApplicationData if true the animation will also be removed from the 
+     *        application data
      */
-    void removeAnimation( KPrShapeAnimation * animation );
+    void removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData = true );
 
 protected:
     /// reimplemented
