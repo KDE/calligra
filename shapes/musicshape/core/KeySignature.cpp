@@ -29,7 +29,7 @@ public:
 
 KeySignature::KeySignature(Staff* staff, int startTime, int accidentals) : StaffElement(staff, startTime), d(new Private)
 {
-    d->accidentalCount = -1;
+    d->accidentalCount = 9999; // just some random illegal value
     setAccidentals(accidentals);
 }
 
