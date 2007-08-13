@@ -82,7 +82,7 @@
         The "samples" collection provides misc example scripts to demonstrate
         parts of the KWord scripting functionality.
         //-->
-    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord" enabled="true">
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KWord" enabled="false">
         <script
             name="pysampleinsertshape"
             text="Insert Shape..."
