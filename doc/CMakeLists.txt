@@ -19,3 +19,5 @@ endif(SHOULD_BUILD_KSPREAD)
 add_subdirectory(kugar)
 add_subdirectory(kword)
 add_subdirectory(thesaurus)
+
+INSTALL(FILES   koffice.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
