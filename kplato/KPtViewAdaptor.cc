@@ -69,7 +69,7 @@ void ViewAdaptor::slotViewGantt()
 
 void ViewAdaptor::slotViewResources()
 {
-  m_view->slotViewResources();
+//  m_view->slotViewResources();
 }
 
 void ViewAdaptor::slotAddTask()

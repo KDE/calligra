@@ -21,6 +21,7 @@
 #ifndef KPTRESOURCE_H
 #define KPTRESOURCE_H
 
+#include "kptglobal.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
 
@@ -261,9 +262,14 @@ public:
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save( QDomElement &element ) const;
 
-    ///Return the list of appointments for current schedule.
-    QList<Appointment*> appointments();
-
+    /// Return the list of appointments for schedule @p id.
+    QList<Appointment*> appointments( long id = -1 ) const;
+    /// Return the number of appointments (nodes)
+    int numAppointments( long id = -1 ) const { return appointments( id ).count(); }
+    /// Return the appointment at @p index for schedule @p id
+    Appointment *appointmentAt( int index, long id = -1 ) const { return appointments( id ).value( index ); }
+    int indexOf( Appointment *a, long id = -1 ) const { return appointments( id ).indexOf( a ); }
+    
     Appointment *findAppointment( Node *node );
     /// Adds appointment to current schedule
     virtual bool addAppointment( Appointment *appointment );
@@ -366,7 +372,7 @@ public:
     Schedule *currentSchedule() const { return m_currentSchedule; }
 
     QHash<long, Schedule*> &schedules() { return m_schedules; }
-    Schedule *findSchedule( long id )
+    Schedule *findSchedule( long id ) const
     {
         if ( m_schedules.contains( id ) )
             return m_schedules[ id ];

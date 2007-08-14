@@ -24,7 +24,7 @@
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptfactory.h"
-#include "kptresourceappointmentsview.h"
+//#include "kptresourceappointmentsview.h"
 #include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"

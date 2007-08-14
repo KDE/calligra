@@ -21,6 +21,7 @@
 #ifndef KPTNODE_H
 #define KPTNODE_H
 
+#include "kptglobal.h"
 #include "kptrelation.h"
 #include "kptduration.h"
 #include "kptdatetime.h"

@@ -140,7 +140,7 @@ void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
 {
     kDebug()<<k_funcinfo<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
-    //r.setHeight(r.height() + 50);
+    //r.setHeight(r.height() 50);
     editor->setGeometry(r);
 }
 
@@ -648,44 +648,89 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 }
 
 //--------------------------------
-DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
+DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
     : QSplitter( parent ),
+    m_rightview( 0 ),
     m_model( 0 ),
     m_selectionmodel( 0 )
 {
-    setOrientation( Qt::Horizontal );
-    setHandleWidth( 2 );
-    m_leftview = new TreeViewBase( this );
-    m_leftview->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_leftview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    m_rightview = new TreeViewBase( this );
-    m_rightview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    
-    connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), this, SLOT( setExpanded( const QModelIndex & ) ) );
-    connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), this, SLOT( setCollapsed( const QModelIndex & ) ) );
-    
-    connect( m_rightview, SIGNAL( expanded( const QModelIndex & ) ), this, SLOT( setExpanded( const QModelIndex & ) ) );
-    connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), this, SLOT( setCollapsed( const QModelIndex & ) ) );
-    
-    connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
-    connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
+    init( mode );
+}
 
-    connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
-    connect( m_rightview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotRightHeaderContextMenuRequested( const QPoint& ) ) );
-
-    connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( setValue( int ) ) );
-    
-    connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
-    connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
+  DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
+    : QSplitter( parent ),
+    m_rightview( 0 ),
+    m_model( 0 ),
+    m_selectionmodel( 0 )
+{
+    init( true );
 }
 
 DoubleTreeViewBase::~DoubleTreeViewBase()
 {
 }
 
+void DoubleTreeViewBase::init( bool mode )
+{
+    setOrientation( Qt::Horizontal );
+    setHandleWidth( 2 );
+    m_leftview = new TreeViewBase( this );
+    if ( mode ) {
+        m_leftview->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        m_leftview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        
+        m_rightview = new TreeViewBase( this );
+        m_rightview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    }
+
+    connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
+    if ( m_rightview ) {
+        connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
+        connect( m_rightview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotRightHeaderContextMenuRequested( const QPoint& ) ) );
+
+        connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( setValue( int ) ) );
+    
+        connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
+        connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
+    
+        connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), m_rightview, SLOT( expand( const QModelIndex & ) ) );
+        connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
+    }
+}
+
+void DoubleTreeViewBase::hideColumns( TreeViewBase *view, const QList<int> &hideList )
+{
+    if ( view == 0 ) {
+        return;
+    }
+    for ( int i=0; i < view->model()->columnCount(); ++i ) {
+        if ( ! hideList.contains( i ) ) {
+            view->showColumn( i );
+        }
+    }
+    int prev = 0;
+    foreach ( int c, hideList ) {
+        if ( c == -1 ) {
+            // hide rest
+            for ( int i = prev; i < view->model()->columnCount(); ++i ) {
+                if ( ! hideList.contains( i ) ) {
+                    view->hideColumn( i );
+                }
+            }
+            break;
+        }
+        view->hideColumn( c );
+        prev = c;
+    }
+}
+
 void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 {
-    kDebug()<<k_funcinfo<<index.column();
+    kDebug()<<k_funcinfo<<index.column()<<endl;
+    if ( m_rightview == 0 ) {
+        return;
+    }
     m_rightview->setFocus();
     QModelIndex nxt = m_rightview->nextColumn( index );
     if ( nxt.isValid() ) {
@@ -703,29 +748,16 @@ void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
     }
 }
 
-void DoubleTreeViewBase::setExpanded( const QModelIndex &index )
-{
-    m_rightview->setExpanded( index, true );
-    m_leftview->setExpanded( index, true );
-}
-
-void DoubleTreeViewBase::setCollapsed( const QModelIndex &index )
-{
-    m_rightview->setExpanded( index, false );
-    m_leftview->setExpanded( index, false );
-}
-
 void DoubleTreeViewBase::setModel( ItemModelBase *model )
 {
     m_model = model;
     m_leftview->setModel( model );
-    m_rightview->setModel( model );
-    
-    m_leftview->showColumn( 0 );
-    m_rightview->hideColumn( 0 );
-    for (int i=1; i < m_model->columnCount(); ++i ) {
-        m_leftview->hideColumn( i );
-        m_rightview->showColumn( i );
+    if ( m_rightview ) {
+        m_rightview->setModel( model );
+        QList<int> lst; lst << 1 << -1;
+        hideColumns( m_leftview, lst );
+        lst.clear(); lst << 0;
+        hideColumns( m_rightview, lst );
     }
     if ( m_selectionmodel ) {
         disconnect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
@@ -734,7 +766,9 @@ void DoubleTreeViewBase::setModel( ItemModelBase *model )
     }
     m_selectionmodel = new QItemSelectionModel( m_model );
     m_leftview->setSelectionModel( m_selectionmodel );
-    m_rightview->setSelectionModel( m_selectionmodel );
+    if ( m_rightview ) {
+        m_rightview->setSelectionModel( m_selectionmodel );
+    }
     
     connect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
 
@@ -755,19 +789,25 @@ void DoubleTreeViewBase::slotSelectionChanged( const QItemSelection &sel, const 
 void DoubleTreeViewBase::setSelectionMode( QAbstractItemView::SelectionMode mode )
 {
     m_leftview->setSelectionMode( mode );
-    m_rightview->setSelectionMode( mode );
+    if ( m_rightview ) {
+        m_rightview->setSelectionMode( mode );
+    }
 }
 
 void DoubleTreeViewBase::setItemDelegateForColumn( int col, QAbstractItemDelegate * delegate )
 {
     m_leftview->setItemDelegateForColumn( col, delegate );
-    m_rightview->setItemDelegateForColumn( col, delegate );
+    if ( m_rightview ) {
+        m_rightview->setItemDelegateForColumn( col, delegate );
+    }
 }
 
 void DoubleTreeViewBase::setEditTriggers( QAbstractItemView::EditTriggers mode )
 {
     m_leftview->setEditTriggers( mode );
-    m_rightview->setEditTriggers( mode );
+    if ( m_rightview ) {
+        m_rightview->setEditTriggers( mode );
+    }
 }
 
 QAbstractItemView::EditTriggers DoubleTreeViewBase::editTriggers() const
@@ -777,14 +817,18 @@ QAbstractItemView::EditTriggers DoubleTreeViewBase::editTriggers() const
 
 void DoubleTreeViewBase::setStretchLastSection( bool mode )
 {
-    m_rightview->header()->setStretchLastSection( mode );
+    if ( m_rightview ) {
+        m_rightview->header()->setStretchLastSection( mode );
+    } else {
+        m_leftview->header()->setStretchLastSection( mode );
+    }
 }
 
 void DoubleTreeViewBase::edit( const QModelIndex &index )
 {
     if ( ! m_leftview->isColumnHidden( index.column() ) ) {
         m_leftview->edit( index );
-    } else if ( ! m_leftview->isColumnHidden( index.column() ) ) {
+    } else if ( m_rightview && ! m_leftview->isColumnHidden( index.column() ) ) {
         m_rightview->edit( index );
     }
 }

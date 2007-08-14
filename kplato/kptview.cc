@@ -94,7 +94,7 @@
 #include "kptcommand.h"
 #include "kptrelation.h"
 #include "kptrelationdialog.h"
-#include "kptresourceview.h"
+#include "kptresourceappointmentsview.h"
 #include "kptresourceeditor.h"
 #include "kptscheduleeditor.h"
 #include "kptresourcedialog.h"
@@ -606,7 +606,7 @@ View::View( Part* part, QWidget* parent )
     cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
     createTaskStatusView( cat );
     createGanttView( cat );
-    createResourceView( cat );
+    createResourceAppointmentsView( cat );
     createAccountsView( cat );
     createResourceAssignmentView( cat );
     createChartView( cat );
@@ -806,6 +806,21 @@ View::~View()
 ViewAdaptor* View::dbusObject()
 {
     return m_dbus;
+}
+
+void View::createResourceAppointmentsView( ViewListItem *cat )
+{
+    ResourceAppointmentsView *v = new ResourceAppointmentsView( getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, "ResourceAppointmentsView", i18n( "Resource Assignments" ), v, getPart(), "resource_view" );
+    i->setToolTip( 0, i18n( "View resource assignments." ) );
+
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    v->setProject( &( getProject() ) );
 }
 
 void View::createResourceditor( ViewListItem *cat )
@@ -1014,21 +1029,6 @@ void View::createGanttView( ViewListItem *cat )
 
 }
 
-void View::createResourceView( ViewListItem *cat )
-{
-    ResourceView *resourceview = new ResourceView( getPart(), m_tab );
-    m_updateResourceview = true;
-    m_tab->addWidget( resourceview );
-
-    ViewListItem *i = m_viewlist->addView( cat, "ResourceView", i18n( "Resources" ), resourceview, getPart(), "resources" );
-    i->setToolTip( 0, i18n( "View resource information" ) );
-
-    connect( resourceview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
-
-    connect( resourceview, SIGNAL( itemDoubleClicked() ), SLOT( slotEditResource() ) );
-    connect( resourceview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
-}
 
 void View::createAccountsView( ViewListItem *cat )
 {
@@ -1256,11 +1256,11 @@ void View::slotViewGantt()
     m_viewlist->setSelected( m_viewlist->findItem( "Ganttview" ) );
 }
 
-void View::slotViewResources()
-{
-    //kDebug()<<k_funcinfo;
-    m_viewlist->setSelected( m_viewlist->findItem( "ResourceView" ) );
-}
+// void View::slotViewResources()
+// {
+//     //kDebug()<<k_funcinfo;
+//     m_viewlist->setSelected( m_viewlist->findItem( "ResourceView" ) );
+// }
 
 void View::slotViewResourceAppointments()
 {
@@ -2142,7 +2142,7 @@ void View::slotUpdate()
     //kDebug()<<k_funcinfo<<"calculate="<<calculate;
 
     m_updateGanttview = true;
-    m_updateResourceview = true;
+//    m_updateResourceview = true;
     m_updateAccountsview = true;
     m_updateResourceAssignmentView = true;
     m_updatePertEditor = true;
@@ -2361,9 +2361,9 @@ void View::updateView( QWidget * )
     QWidget *widget2;
 
     widget2 = m_viewlist->findView( "ResourceView" ) ;
-    if ( m_updateResourceview )
-        static_cast<ViewBase*>( widget2 ) ->draw( getPart() ->getProject() );
-    m_updateResourceview = false;
+//     if ( m_updateResourceview )
+//         static_cast<ViewBase*>( widget2 ) ->draw( getPart() ->getProject() );
+//     m_updateResourceview = false;
 
     widget2 = m_viewlist->findView( "AccountsView" );
     if ( m_updateAccountsview )

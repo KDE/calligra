@@ -427,12 +427,15 @@ bool Resource::isAvailable(Task */*task*/) {
     return !busy;
 }
 
-QList<Appointment*> Resource::appointments() {
-    QList<Appointment*> lst;
-    if (m_currentSchedule)
-        lst = m_currentSchedule->appointments();
-    //kDebug()<<k_funcinfo<<lst.count();
-    return lst;
+QList<Appointment*> Resource::appointments( long id ) const {
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s == 0 ) {
+        return QList<Appointment*>();
+    }
+    return s->appointments();
 }
 
 Appointment *Resource::findAppointment(Node */*node*/) {

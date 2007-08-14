@@ -73,6 +73,8 @@ public:
         m_days.clear();
     }
     
+    void clear() { m_days.clear(); }
+    
     EffortCost effortCost(const QDate &date) const {
         EffortCost ec;
         if (!date.isValid()) {

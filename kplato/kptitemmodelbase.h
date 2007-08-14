@@ -245,6 +245,7 @@ class DoubleTreeViewBase : public QSplitter
     Q_OBJECT
 public:
     explicit DoubleTreeViewBase( QWidget *parent );
+    DoubleTreeViewBase( bool mode, QWidget *parent );
     ~DoubleTreeViewBase();
     
     void setModel( ItemModelBase *model );
@@ -268,16 +269,24 @@ public:
 
     void setStretchLastSection( bool );
     
-    void hideColumn( int col ) { m_leftview->hideColumn( col ); m_rightview->hideColumn( col ); }
+    /// Hide columns in the @p hideList, show all other columns.
+    /// If the hideList.last() == -1, the rest of the columns are hidden.
+    void hideColumns( TreeViewBase *view, const QList<int> &hideList );
+    void hideColumn( int col ) {
+        m_leftview->hideColumn( col ); 
+        if ( m_rightview ) m_rightview->hideColumn( col );
+    }
     void showColumn( int col ) { 
-        if ( col == 0 ) m_leftview->showColumn( col );
+        if ( col == 0 || m_rightview == 0 ) m_leftview->showColumn( col );
         else m_rightview->showColumn( col );
     }
-    bool isColumnHidden( int col ) const { return m_rightview->isColumnHidden( col ); }
+    bool isColumnHidden( int col ) const {
+        return m_rightview ? m_rightview->isColumnHidden( col ) : m_leftview->isColumnHidden( col );
+    }
     
     TreeViewBase *masterView() const { return m_leftview; }
     TreeViewBase *slaveView() const { return m_rightview; }
-    
+
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( QModelIndex index, const QPoint& pos );
@@ -292,8 +301,6 @@ signals:
     void selectionChanged( const QModelIndexList );
     
 public slots:
-    void setExpanded( const QModelIndex & );
-    void setCollapsed( const QModelIndex & );
     void edit( const QModelIndex &index );
 
 protected slots:
@@ -304,6 +311,9 @@ protected slots:
     void slotRightHeaderContextMenuRequested( const QPoint &pos );
     void slotLeftHeaderContextMenuRequested( const QPoint &pos );
 
+protected:
+    void init( bool mode );
+    
 protected:
     TreeViewBase *m_leftview;
     TreeViewBase *m_rightview;

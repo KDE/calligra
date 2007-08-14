@@ -366,14 +366,15 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
     foreach (AppointmentInterval *i, m_intervals.values() ) {
         DateTime st = i->startTime();
         DateTime e = i->endTime();
-        if (end < st.date())
+        if (end < st.date()) {
             break;
+        }
         if (dt < st.date()) {
             dt = st.date();
         }
         ndt = dt.addDays(1);
         while (dt <= e.date()) {
-            eff = i->effort(DateTime(dt, st.timeSpec()), DateTime(ndt, st.timeSpec()));
+            eff = i->effort(DateTime(dt, QTime( 0, 0, 0 ), st.timeSpec()), DateTime(ndt, QTime( 0, 0, 0 ), st.timeSpec()));
             ec.add(dt, eff, eff.toDouble(Duration::Unit_h) * rate);
             if (dt < e.date()) {
                 // loop trough the interval (it spans dates)

@@ -20,6 +20,8 @@
 #ifndef KPTAPPOINTMENT_H
 #define KPTAPPOINTMENT_H
 
+#include "kptglobal.h"
+
 #include "kptduration.h"
 #include "kptdatetime.h"
 
@@ -105,7 +107,7 @@ typedef QListIterator<AppointmentInterval*> AppointmentIntervalListIterator;
  */
 class Appointment {
 public:
-    Appointment();
+    explicit Appointment();
     Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load);
     Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load);
     Appointment( const Appointment &app );
@@ -154,6 +156,7 @@ public:
     /**
      * Returns the planned effort and cost for the interval start to end (inclusive).
      * Only dates with any planned effort is returned.
+     * If start or end is not valid, startTime.date() respectivly endTime().date() is used.
      */
     EffortCostMap plannedPrDay(const QDate& start, const QDate& end) const;
     

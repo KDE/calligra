@@ -226,7 +226,7 @@ public slots:
     void slotViewGanttNoInformation();
     void slotViewTaskAppointments();
 
-    void slotViewResources();
+//    void slotViewResources();
     void slotViewResourceAppointments();
 
     void slotViewAccounts();
@@ -341,7 +341,7 @@ private:
     void createPertEditor( ViewListItem *cat );
     void createTaskStatusView( ViewListItem *cat );
     void createGanttView( ViewListItem *cat );
-    void createResourceView( ViewListItem *cat );
+    void createResourceAppointmentsView( ViewListItem *cat );
     void createAccountsView( ViewListItem *cat );
     void createResourceAssignmentView( ViewListItem *cat );
     void createChartView( ViewListItem *cat );
@@ -363,7 +363,7 @@ private:
     int m_currentEstimateType;
 
     bool m_updateGanttview;
-    bool m_updateResourceview;
+//    bool m_updateResourceview;
     bool m_updateAccountsview;
     bool m_updateResourceAssignmentView;
     bool m_updatePertEditor;
