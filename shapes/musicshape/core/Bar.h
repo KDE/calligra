@@ -58,6 +58,8 @@ public:
 
     /**
      * Changes the sheet this bar is part of. This method should not be called after the bar has been added to a sheet.
+     *
+     * @param sheet the sheet this bar is part of
      */
     void setSheet(Sheet* sheet);
 
@@ -74,7 +76,7 @@ public:
     QPointF position() const;
 
     /**
-     * Returns the size of the bar.
+     * Returns the (horizontal) size of the bar.
      */
     double size() const;
     
@@ -89,21 +91,67 @@ public:
      * to position(). This means that elements in the prefix have negative x coordinates.
      */
     double prefix() const;
+    
+    /**
+     * Set the size of the prefix of this bar. The prefix contains all staff elements at time 0.
+     *
+     * @param prefix the new size of the prefix of this bar
+     */
     void setPrefix(double prefix);
+    
+    /**
+     * Returns the position at which the prefix is drawn. This position is relative to the top-left corner of the sheet
+     * the bar is in. Most often this is position() - (prefix(), 0).
+     */
     QPointF prefixPosition() const;
+    
+    /**
+     * Sets the position of the prefix of this bar.
+     *
+     * @param pos the new position of the prefix of this bar
+     */
     void setPrefixPosition(const QPointF& pos);
     
+    /**
+     * Returns the desired size of this bar. The desired size is the space all the elements in this bar would ideally use.
+     */
     double desiredSize() const;
+    
+    /**
+     * Returns the horizontal scale of this bar. The scale is the size divided by the desired size.
+     */
     double scale() const;
 
+    /**
+     * Returns the number of staff elements in the given staff in this bar.
+     */
     int staffElementCount(Staff* staff) const;
+    
+    /**
+     * Returns the staff element with the given index in the given staff in this bar.
+     */
     StaffElement* staffElement(Staff* staff, int index);
+    
+    /**
+     * Returns the index of the provided staff element in this bar (this index is not the same as the index that is used in calls to
+     * staffElement, as this index is global for the bar, and that index is relative to the elements in a specific staff).
+     */
     int indexOfStaffElement(StaffElement* element);
+    
+    /**
+     * Adds a staff element to this bar. The indexHint parameter can be used to provide a hint as to what index the element should be
+     * inserted. If inserting at that index does not result in a correct sort order for the staff elements, the indexHint is ignored.
+     */
     void addStaffElement(StaffElement* element, int indexHint = -1);
+    
+    /**
+     * Remove a staff element from this bar. If deleteElement is true, the element is not only removed but also deleted.
+     */
     void removeStaffElement(StaffElement* element, bool deleteElement = true);
 public slots:
     /**
-     * Sets the top-left corner of the bounding box of this bar.
+     * Sets the top-left corner of the bounding box of this bar. If setPrefix is true, the position of the prefix is also set relative
+     * to the position of the bar.
      */
     void setPosition(const QPointF& position, bool setPrefix=true);
     
@@ -113,11 +161,25 @@ public slots:
      * @param size the new size of the bar
      */
     void setSize(double size);
-    
+
+    /**
+     * Sets the desired size of the bar.
+     */
     void setDesiredSize(double size);
 signals:
+    /**
+     * This signal is emitted when the position of the bar is changed.
+     */
     void positionChanged(const QPointF& position);
+    
+    /**
+     * This signal is emitted when the size of the bar is changed.
+     */
     void sizeChanged(double size);
+    
+    /**
+     * This signal is emitted when the desired size of the bar is changed.
+     */
     void desiredSizeChanged(double size);
 private:
     class Private;
