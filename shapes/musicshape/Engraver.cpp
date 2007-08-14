@@ -218,6 +218,8 @@ void Engraver::engraveBar(Bar* bar)
                     se->setX(se->x() - prefixSize);
                 }
                 x = 0;
+            } else {
+                bar->setPrefix(0.0);
             }
             endOfPrefix = true;
         }
