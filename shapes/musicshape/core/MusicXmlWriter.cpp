@@ -30,6 +30,8 @@
 #include <KoXmlWriter.h>
 #include <kofficeversion.h>
 
+#include <kdebug.h>
+
 using namespace MusicCore;
 
 MusicXmlWriter::MusicXmlWriter()
@@ -161,9 +163,15 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
     w.endElement(); // music:note
 }
 
-static void writeClef(KoXmlWriter& w, Clef* clef)
+static void writeClef(KoXmlWriter& w, Clef* clef, Part* part)
 {
     w.startElement("music:clef");
+  
+      if (part->staffCount() > 1) {
+        // only write staff info when more than one staff exists
+        Staff* s = clef->staff();
+        w.addAttribute("number", QString::number(part->indexOfStaff(s) + 1));
+    }
     
     w.startElement("music:sign");
     switch (clef->shape()) {
@@ -212,7 +220,7 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
                         w.startElement("music:attributes");
                         inAttributes = true;
                     }
-                    writeClef(w, c);
+                    writeClef(w, c, part);
                 }
             }
         }
