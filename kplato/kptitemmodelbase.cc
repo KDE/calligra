@@ -432,6 +432,30 @@ void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
     emit headerContextMenuRequested( header()->mapToGlobal( pos ) );
 }
 
+void TreeViewBase::setColumnsHidden( const QList<int> &list )
+{
+    m_hideList = list;
+}
+
+void TreeViewBase::updateColumnsHidden()
+{
+    kDebug()<<k_funcinfo<<m_hideList<<endl;
+    int prev = 0;
+    foreach ( int c, m_hideList ) {
+        if ( c == -1 ) {
+            // hide rest
+            for ( int i = prev+1; i < model()->columnCount(); ++i ) {
+                if ( ! m_hideList.contains( i ) ) {
+                    hideColumn( i );
+                }
+            }
+            break;
+        }
+        hideColumn( c );
+        prev = c;
+    }
+}
+
 QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr ) const
 {
     int s = header()->visualIndex( curr.column() ) + 1;
@@ -698,31 +722,21 @@ void DoubleTreeViewBase::init( bool mode )
         connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
     }
 }
-
-void DoubleTreeViewBase::hideColumns( TreeViewBase *view, const QList<int> &hideList )
+void DoubleTreeViewBase::updateColumnsHidden()
 {
-    if ( view == 0 ) {
-        return;
+    m_leftview->updateColumnsHidden();
+    if ( m_rightview ) {
+        m_rightview->updateColumnsHidden();
     }
-    for ( int i=0; i < view->model()->columnCount(); ++i ) {
-        if ( ! hideList.contains( i ) ) {
-            view->showColumn( i );
-        }
+}
+void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> slaveList )
+{
+    m_leftview->setColumnsHidden( masterList );
+    if ( m_rightview ) {
+        m_rightview->setColumnsHidden( slaveList );
     }
-    int prev = 0;
-    foreach ( int c, hideList ) {
-        if ( c == -1 ) {
-            // hide rest
-            for ( int i = prev; i < view->model()->columnCount(); ++i ) {
-                if ( ! hideList.contains( i ) ) {
-                    view->hideColumn( i );
-                }
-            }
-            break;
-        }
-        view->hideColumn( c );
-        prev = c;
-    }
+    // HACK: Bug in qt
+    QTimer::singleShot( 100, this, SLOT( updateColumnsHidden() ) );
 }
 
 void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
@@ -754,18 +768,13 @@ void DoubleTreeViewBase::setModel( ItemModelBase *model )
     m_leftview->setModel( model );
     if ( m_rightview ) {
         m_rightview->setModel( model );
-        QList<int> lst; lst << 1 << -1;
-        hideColumns( m_leftview, lst );
-        lst.clear(); lst << 0;
-        hideColumns( m_rightview, lst );
     }
     if ( m_selectionmodel ) {
         disconnect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
     
         disconnect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
     }
-    m_selectionmodel = new QItemSelectionModel( m_model );
-    m_leftview->setSelectionModel( m_selectionmodel );
+    m_selectionmodel = m_leftview->selectionModel();
     if ( m_rightview ) {
         m_rightview->setSelectionModel( m_selectionmodel );
     }
@@ -791,6 +800,14 @@ void DoubleTreeViewBase::setSelectionMode( QAbstractItemView::SelectionMode mode
     m_leftview->setSelectionMode( mode );
     if ( m_rightview ) {
         m_rightview->setSelectionMode( mode );
+    }
+}
+
+void DoubleTreeViewBase::setSelectionBehavior( QAbstractItemView::SelectionBehavior mode )
+{
+    m_leftview->setSelectionBehavior( mode );
+    if ( m_rightview ) {
+        m_rightview->setSelectionBehavior( mode );
     }
 }
 

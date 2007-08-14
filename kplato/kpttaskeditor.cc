@@ -65,6 +65,7 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
     setModel( new NodeItemModel( part ) );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
     
     for ( int c = 0; c < itemModel()->columnCount(); ++c ) {
         QItemDelegate *delegate = itemModel()->createDelegate( c, this );
@@ -72,11 +73,9 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
             setItemDelegateForColumn( c, delegate );
         }
     }
-    // Don't show start- and endtime in editor
-    hideColumn( 18 );
-    hideColumn( 19 );
-    
-
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0 << 18 << 19;
+    hideColumns( lst1, lst2 );
 }
 
 void NodeTreeView::slotActivated( const QModelIndex index )

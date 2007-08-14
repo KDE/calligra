@@ -213,6 +213,8 @@ public:
     void mapToSection( int column, int section );
     int section( int col ) const;
 
+    void setColumnsHidden( const QList<int> &list );
+
 signals:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( QModelIndex, const QPoint &pos );
@@ -221,6 +223,9 @@ signals:
     
     void moveAfterLastColumn( const QModelIndex & );
     void moveBeforeFirstColumn( const QModelIndex & );
+    
+public slots:
+    void updateColumnsHidden();
     
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -237,6 +242,7 @@ protected slots:
 protected:
     bool m_arrowKeyNavigation;
     bool m_acceptDropsOnView;
+    QList<int> m_hideList;
 };
 
 
@@ -257,6 +263,7 @@ public:
     QItemSelectionModel *selectionModel() const { return m_selectionmodel; }
     
     void setSelectionMode( QAbstractItemView::SelectionMode mode );
+    void setSelectionBehavior( QAbstractItemView::SelectionBehavior mode );
     void setItemDelegateForColumn( int col, QAbstractItemDelegate * delegate );
     void setEditTriggers ( QAbstractItemView::EditTriggers );
     QAbstractItemView::EditTriggers editTriggers() const;
@@ -272,6 +279,7 @@ public:
     /// Hide columns in the @p hideList, show all other columns.
     /// If the hideList.last() == -1, the rest of the columns are hidden.
     void hideColumns( TreeViewBase *view, const QList<int> &hideList );
+    void hideColumns( const QList<int> &masterList, const QList<int> List = QList<int>() );
     void hideColumn( int col ) {
         m_leftview->hideColumn( col ); 
         if ( m_rightview ) m_rightview->hideColumn( col );
@@ -310,6 +318,8 @@ protected slots:
     
     void slotRightHeaderContextMenuRequested( const QPoint &pos );
     void slotLeftHeaderContextMenuRequested( const QPoint &pos );
+
+    void updateColumnsHidden();
 
 protected:
     void init( bool mode );

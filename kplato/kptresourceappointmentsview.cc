@@ -820,10 +820,9 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( Part *part, QWidget 
     
     ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel( part );
     setModel( m );
-    QList<int> lst; lst << 2 << -1;
-    hideColumns( m_leftview, lst );
-    lst.clear(); lst << 0 << 1;
-    hideColumns( m_rightview, lst );
+    QList<int> lst1; lst1 << 2 << -1;
+    QList<int> lst2; lst2 << 0 << 1;
+    hideColumns( lst1, lst2 );
     
     //connect( model(), SIGNAL( columnsInserted ( const QModelIndex&, int, int ) ), SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
     //slotRefreshed();
@@ -845,8 +844,9 @@ void ResourceAppointmentsTreeView::slotRefreshed()
 {
     kDebug()<<k_funcinfo<<itemModel()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount()<<endl;
     m_leftview->selectionModel()->clear();
-    QList<int> lst; lst << 2 << -1;
-    hideColumns( m_leftview, lst );
+    QList<int> lst1; lst1 << 2 << -1;
+    QList<int> lst2; lst2 << 0 << 1;
+    hideColumns( lst1, lst2 );
 }
 
 //-----------------------------------
