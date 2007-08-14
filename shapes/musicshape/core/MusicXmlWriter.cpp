@@ -26,6 +26,7 @@
 #include "Bar.h"
 #include "Note.h"
 #include "Clef.h"
+#include "KeySignature.h"
 
 #include <KoXmlWriter.h>
 #include <kofficeversion.h>
@@ -184,6 +185,23 @@ static void writeClef(KoXmlWriter& w, Clef* clef, Part* part)
     w.endElement(); // music:clef
 }
 
+static void writeKeySignature(KoXmlWriter& w, KeySignature* ks, Part* part)
+{
+    w.startElement("music:key");
+    
+    if (part->staffCount() > 1) {
+        // only write staff info when more than one staff exists
+        Staff* s = ks->staff();
+        w.addAttribute("number", QString::number(part->indexOfStaff(s) + 1));
+    }
+    
+    w.startElement("music:fifths");
+    w.addTextNode(QString::number(ks->accidentals()));
+    w.endElement(); // music:fifths
+    
+    w.endElement(); // music:key
+}
+
 static void writePart(KoXmlWriter& w, int id, Part* part)
 {
     w.startElement("music:part");
@@ -201,14 +219,31 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
             w.startElement("music:divisions");
             w.addTextNode(QString::number(VoiceElement::QuarterLength));
             w.endElement(); // music:divisions
-            if (part->staffCount() != 1) {
-                w.startElement("music:staves");
-                w.addTextNode(QString::number(part->staffCount()));
-                w.endElement(); // music:staves
-            }            
             inAttributes = true;
         }
-        
+
+        for (int st = 0; st < part->staffCount(); st++) {
+            Staff* staff = part->staff(st);
+            for (int e = 0; e < bar->staffElementCount(staff); e++) {
+                StaffElement* se = bar->staffElement(staff, e);
+                
+                KeySignature* ks = dynamic_cast<KeySignature*>(se);
+                if (ks) {
+                    if (!inAttributes) {
+                        w.startElement("music:attributes");
+                        inAttributes = true;
+                    }
+                    writeKeySignature(w, ks, part);
+                }
+            }
+        }        
+
+        if (i == 0 && part->staffCount() != 1) {
+            w.startElement("music:staves");
+            w.addTextNode(QString::number(part->staffCount()));
+            w.endElement(); // music:staves
+        }            
+            
         for (int st = 0; st < part->staffCount(); st++) {
             Staff* staff = part->staff(st);
             for (int e = 0; e < bar->staffElementCount(staff); e++) {
