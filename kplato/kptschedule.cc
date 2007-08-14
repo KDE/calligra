@@ -875,16 +875,47 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
         if ( ! n.isElement() ) {
             continue;
         }
-        KoXmlElement app = n.toElement();
-        if ( app.tagName() == "appointment" ) {
+        KoXmlElement el = n.toElement();
+        if ( el.tagName() == "appointment" ) {
             // Load the appointments.
             // Resources and tasks must already be loaded
             Appointment * child = new Appointment();
-            if ( !child->loadXML( app, status, *this ) ) {
+            if ( !child->loadXML( el, status, *this ) ) {
                 // TODO: Complain about this
                 kError() << k_funcinfo << "Failed to load appointment" << endl;
                 delete child;
             }
+        } else if ( el.tagName() == "criticalpath-list" ) {
+            // Tasks must already be loaded
+            for ( KoXmlNode n1 = el.firstChild(); ! n1.isNull(); n1 = n1.nextSibling() ) {
+                if ( ! n1.isElement() ) {
+                    continue;
+                }
+                KoXmlElement e1 = n1.toElement();
+                if ( e1.tagName() != "criticalpath" ) {
+                    continue;
+                }
+                QList<Node*> lst;
+                for ( KoXmlNode n2 = e1.firstChild(); ! n2.isNull(); n2 = n2.nextSibling() ) {
+                    if ( ! n2.isElement() ) {
+                        continue;
+                    }
+                    KoXmlElement e2 = n2.toElement();
+                    if ( e2.tagName() != "node" ) {
+                        continue;
+                    }
+                    kDebug()<<k_funcinfo<<"node"<<endl;
+                    QString s = e2.attribute( "id" );
+                    Node *node = status.project().findNode( s );
+                    if ( node ) {
+                        lst.append( node );
+                    } else {
+                        kError()<<k_funcinfo<<"Failed to find node id="<<s<<endl;
+                    }
+                }
+                m_pathlists.append( lst );
+            }
+            criticalPathListCached = true;
         }
     }
     return true;
@@ -896,6 +927,23 @@ void MainSchedule::saveXML( QDomElement &element ) const
 
     element.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
     element.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
+    
+    if ( ! m_pathlists.isEmpty() ) {
+        QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );
+        element.appendChild( lists );
+        foreach ( QList<Node*> l, m_pathlists ) {
+            if ( l.isEmpty() ) {
+                continue;
+            }
+            QDomElement list = lists.ownerDocument().createElement( "criticalpath" );
+            lists.appendChild( list );
+            foreach ( Node *n, l ) {
+                QDomElement el = list.ownerDocument().createElement( "node" );
+                list.appendChild( el );
+                el.setAttribute( "id", n->id() );
+            }
+        }
+    }
 }
 
 DateTime MainSchedule::calculateForward( int use )

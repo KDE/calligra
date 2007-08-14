@@ -280,6 +280,7 @@ const QList< QList<Node*> > *Project::criticalPathList( long id )
     }
     MainSchedule *ms = static_cast<MainSchedule*>( s );
     if ( ! ms->criticalPathListCached ) {
+        initiateCalculationLists( *ms );
         calcCriticalPathList( ms );
     }
     return ms->criticalPathList();
