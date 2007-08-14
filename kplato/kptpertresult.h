@@ -216,10 +216,8 @@ public:
     Duration getTaskFloat(Node * currentNode);
     void testComplexGraph();
 
-//    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.treeWidgetTaskResult->itemModel() ); }
+    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.treeWidgetTaskResult->model() ); }
 
-    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( treeWidgetTaskResult->itemModel() ); }
-    
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
@@ -234,9 +232,7 @@ private:
     bool complexGraph;
     QList<Node *> m_criticalPath;
     ScheduleManager *current_schedule;
-    //Ui::PertResult widget;
-    
-    TreeViewBase *treeWidgetTaskResult;
+    Ui::PertResult widget;
     
 private slots:
     void slotUpdate();

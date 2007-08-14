@@ -77,7 +77,7 @@ void CriticalPathItemModel::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
     
@@ -581,7 +581,7 @@ void PertResultItemModel::setProject( Project *project )
     clear();
     if ( m_project ) {
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
     
@@ -1146,17 +1146,11 @@ void PertResultItemModel::slotNodeChanged( Node *)
 PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
-    //widget.setupUi(this);
+    widget.setupUi(this);
     PertResultItemModel *m = new PertResultItemModel( part );
-/*    widget.treeWidgetTaskResult->setModel( m );
-    widget.treeWidgetTaskResult->header()->setStretchLastSection( false );*/
-    treeWidgetTaskResult = new TreeViewBase( this );
-    treeWidgetTaskResult->setModel( m );
-    treeWidgetTaskResult->header()->setStretchLastSection( false );
+    widget.treeWidgetTaskResult->setModel( m );
+    widget.treeWidgetTaskResult->setStretchLastSection( false );
 
-    QVBoxLayout *l = new QVBoxLayout( this );
-    l->setContentsMargins( 0, 0, 0, 0 );
-    l->addWidget( treeWidgetTaskResult );
 //    QHeaderView *header=widget.treeWidgetTaskResult->header();
     
     current_schedule=0;
@@ -1165,14 +1159,10 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     m_node = m_project;
 
         
-/*    (*header).resizeSection(0,60);
-    (*header).resizeSection(1,120);
-    (*header).resizeSection(2,110);
-    (*header).resizeSection(3,110);
-    (*header).resizeSection(4,110);
-    (*header).resizeSection(5,110);
-    (*header).resizeSection(6,80);
-    (*header).resizeSection(7,80);*/
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0;
+    widget.treeWidgetTaskResult->hideColumns( lst1, lst2 );
+    
     draw( part->getProject() );
 }
 
@@ -1184,7 +1174,7 @@ void PertResult::draw( Project &project)
   
 void PertResult::draw()
 {
-/*    widget.scheduleName->setText( i18n( "None" ) );
+    widget.scheduleName->setText( i18n( "None" ) );
     widget.totalFloat->clear();
     if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
         long id = model()->manager()->id();
@@ -1200,7 +1190,7 @@ void PertResult::draw()
             }
         }
         widget.totalFloat->setText( locale->formatNumber( f.toDouble( Duration::Unit_h ) ) );
-    }*/
+    }
 /*    kDebug() << "UPDATE PE" << endl;
       widget.treeWidgetTaskResult->clear();
       if ( current_schedule == 0 || current_schedule->id() == -1 ) {
@@ -1396,7 +1386,7 @@ void PertResult::setProject( Project *project )
         disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
     }
     m_project = project;
-    treeWidgetTaskResult->itemModel()->setProject( m_project );
+    widget.treeWidgetTaskResult->model()->setProject( m_project );
     if ( m_project ) {
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
@@ -1418,6 +1408,10 @@ PertCpmView::PertCpmView( Part *part, QWidget *parent )
     widget.cpmTable->setStretchLastSection ( false );
     CriticalPathItemModel *m = new CriticalPathItemModel( part );
     widget.cpmTable->setModel( m );
+    
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0;
+    widget.cpmTable->hideColumns( lst1, lst2 );
     
     setProject( &( part->getProject() ) );
 

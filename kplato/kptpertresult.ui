@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>424</width>
-    <height>238</height>
+    <width>407</width>
+    <height>285</height>
    </rect>
   </property>
   <property name="contextMenuPolicy" >
@@ -29,6 +29,12 @@
     <layout class="QHBoxLayout" >
      <item>
       <widget class="QLabel" name="label_1" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="frameShape" >
         <enum>QFrame::NoFrame</enum>
        </property>
@@ -48,6 +54,12 @@
      </item>
      <item>
       <widget class="QLabel" name="scheduleName" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="frameShape" >
         <enum>QFrame::NoFrame</enum>
        </property>
@@ -68,7 +80,7 @@
      <item>
       <widget class="QLabel" name="label" >
        <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Minimum" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -86,6 +98,12 @@
      </item>
      <item>
       <widget class="QLabel" name="label_3" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="frameShape" >
         <enum>QFrame::NoFrame</enum>
        </property>
@@ -99,6 +117,12 @@
      </item>
      <item>
       <widget class="QLabel" name="totalFloat" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="frameShape" >
         <enum>QFrame::NoFrame</enum>
        </property>
@@ -115,9 +139,12 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
        <property name="sizeHint" >
         <size>
-         <width>31</width>
+         <width>40</width>
          <height>20</height>
         </size>
        </property>
@@ -126,15 +153,23 @@
     </layout>
    </item>
    <item>
-    <widget class="TreeViewBase" name="treeWidgetTaskResult" />
+    <widget class="DoubleTreeViewBase" name="treeWidgetTaskResult" >
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TreeViewBase</class>
-   <extends>QTreeView</extends>
+   <class>DoubleTreeViewBase</class>
+   <extends>QFrame</extends>
    <header>kptitemmodelbase.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
