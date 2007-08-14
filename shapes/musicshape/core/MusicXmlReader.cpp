@@ -25,6 +25,7 @@
 #include "KeySignature.h"
 #include "Bar.h"
 #include "Clef.h"
+#include "TimeSignature.h"
 
 #include <KoXmlReader.h>
 
@@ -98,6 +99,14 @@ static Clef* loadClef(const KoXmlElement& element, Staff* staff)
     return new Clef(staff, 0, shape, line, octave);
 }
 
+static TimeSignature* loadTimeSignature(const KoXmlElement& element, Staff* staff)
+{
+    int beats = getProperty(element, "beats").toInt();
+    int beat = getProperty(element, "beat-type").toInt();
+    
+    return new TimeSignature(staff, 0, beats, beat);
+}
+
 static void loadPart(const KoXmlElement& partElement, Part* part)
 {
     Sheet* sheet = part->sheet();
@@ -152,6 +161,13 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                         
                         Clef* clef = loadClef(attr, part->staff(staffId));
                         bar->addStaffElement(clef);
+                    } else if (attr.localName() == "time") {
+                        QString number = attr.attribute("number");
+                        int staffId = 0;
+                        if (!number.isNull()) staffId = number.toInt() - 1;
+                        
+                        TimeSignature* ts = loadTimeSignature(attr, part->staff(staffId));
+                        bar->addStaffElement(ts);
                     }
                 }
                 
