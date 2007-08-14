@@ -35,6 +35,7 @@ public:
     int accidentals();
     void setAccidentals(int accidentals);
     void setMusicStyle(MusicStyle* style);
+    bool updateAllStaves();
 private slots:
     void accidentalsChanged(int accidentals);
 private:

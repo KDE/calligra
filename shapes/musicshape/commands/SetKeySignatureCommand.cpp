@@ -20,6 +20,9 @@
 
 #include "../core/Bar.h"
 #include "../core/KeySignature.h"
+#include "../core/Sheet.h"
+#include "../core/Part.h"
+#include "../core/Staff.h"
 
 #include "../MusicShape.h"
 
@@ -28,31 +31,60 @@
 using namespace MusicCore;
 
 SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, Bar* bar, Staff* staff, int accidentals)
-    : m_shape(shape), m_bar(bar), m_keySignature(new KeySignature(staff, 0, accidentals)), m_oldKeySignature(NULL)
+    : m_shape(shape), m_bar(bar)
 {
     setText(i18n("Change key signature"));
     
-    for (int i = 0; i < bar->staffElementCount(staff); i++) {
-        KeySignature* c = dynamic_cast<KeySignature*>(bar->staffElement(staff, i));
-        if (c && c->startTime() == 0) {
-            m_oldKeySignature = c;
-            break;
+    if (staff) {
+        m_newKeySignatures.append(new KeySignature(staff, 0, accidentals));
+        
+        for (int i = 0; i < bar->staffElementCount(staff); i++) {
+            KeySignature* c = dynamic_cast<KeySignature*>(bar->staffElement(staff, i));
+            if (c && c->startTime() == 0) {
+                m_oldKeySignatures.append(c);
+                break;
+            }
         }
+    } else {
+        Sheet* sheet = bar->sheet();
+        for (int p = 0; p < sheet->partCount(); p++) {
+            Part* part = sheet->part(p);
+            for (int s = 0; s < part->staffCount(); s++) {
+                Staff* staff = part->staff(s);
+                m_newKeySignatures.append(new KeySignature(staff, 0, accidentals));
+                for (int i = 0; i < bar->staffElementCount(staff); i++) {
+                    KeySignature* ks = dynamic_cast<KeySignature*>(bar->staffElement(staff, i));
+                    if (ks) {
+                        m_oldKeySignatures.append(ks);
+                        break;
+                    }
+                }
+            }
+        }        
     }
 }
 
 void SetKeySignatureCommand::redo()
 {
-    if (m_oldKeySignature) m_bar->removeStaffElement(m_oldKeySignature, false);
-    m_bar->addStaffElement(m_keySignature);
+    foreach (KeySignature* ks, m_oldKeySignatures) {
+        m_bar->removeStaffElement(ks, false);
+    }
+    foreach (KeySignature* ks, m_newKeySignatures) {
+        kDebug() << "Adding with" << ks->accidentals() << "accidentals";
+        m_bar->addStaffElement(ks);
+    }
     m_shape->engrave();
     m_shape->repaint();
 }
 
 void SetKeySignatureCommand::undo()
 {
-    m_bar->removeStaffElement(m_keySignature, false);
-    if (m_oldKeySignature) m_bar->addStaffElement(m_oldKeySignature);
+    foreach (KeySignature* ks, m_newKeySignatures) {
+        m_bar->removeStaffElement(ks, false);
+    }
+    foreach (KeySignature* ks, m_oldKeySignatures) {
+        m_bar->addStaffElement(ks);
+    }
     m_shape->engrave();
     m_shape->repaint();
 }

@@ -72,9 +72,13 @@ void KeySignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos
         dlg.setBar(0);
         dlg.setAccidentals(0);
         if (dlg.exec() == QDialog::Accepted) {
+            if (dlg.updateAllStaves()) {
+                staff = NULL;
+            }
             m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, staff, dlg.accidentals()));
         }
     } else {
-        m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, staff, m_accidentals));
+        kDebug() << "Executing action to set ks to" << m_accidentals << "accidentals";
+        m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, NULL, m_accidentals));
     }
 }

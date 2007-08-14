@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>308</height>
+    <width>420</width>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -203,6 +203,32 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Staves</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="QRadioButton" name="allStaves" >
+        <property name="text" >
+         <string>Update all staves</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="selectedStaff" >
+        <property name="text" >
+         <string>Only update selected staff</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -210,7 +236,7 @@
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>31</height>
       </size>
      </property>
     </spacer>

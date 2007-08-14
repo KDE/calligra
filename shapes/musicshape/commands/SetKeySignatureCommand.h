@@ -20,6 +20,7 @@
 #define SETKEYSIGNATURECOMMAND_H
 
 #include <QUndoCommand>
+#include <QList>
 
 class MusicShape;
 namespace MusicCore {
@@ -37,7 +38,7 @@ public:
 private:
     MusicShape* m_shape;
     MusicCore::Bar* m_bar;
-    MusicCore::KeySignature* m_keySignature, *m_oldKeySignature;
+    QList<MusicCore::KeySignature*> m_newKeySignatures, m_oldKeySignatures;
 };
 
 #endif // SETKEYSIGNATURECOMMAND_H
