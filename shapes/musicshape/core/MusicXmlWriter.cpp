@@ -28,6 +28,7 @@
 #include "Clef.h"
 #include "KeySignature.h"
 #include "TimeSignature.h"
+#include "Staff.h"
 
 #include <KoXmlWriter.h>
 #include <kofficeversion.h>
@@ -98,7 +99,7 @@ static void writePartDesc(KoXmlWriter& w, int id, Part* part)
     w.endElement(); // music:score-part
 }
 
-static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
+static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part, int bar)
 {
     if (!chord->noteCount()) {
         w.startElement("music:note");
@@ -132,6 +133,7 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
         }
         w.endElement(); // music:note
     } else for (int n = 0; n < chord->noteCount(); n++) {
+        Staff* staff = chord->note(n)->staff();
         w.startElement("music:note");
         
         if (n > 0) {
@@ -173,10 +175,27 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
             w.endElement(); // music:dot
         }
         
-        if (chord->noteCount() && chord->note(n)->accidentals()) {
-            // TODO this should actually depend on key signature/previous accidentals
+        int activeAccidentals = 0;
+        KeySignature* ks = staff->lastKeySignatureChange(bar);
+        if (ks) activeAccidentals = ks->accidentals(chord->note(n)->pitch());
+        VoiceBar* vb = chord->voiceBar();
+        // next check the bar for the last previous note in the same voice with the same pitch
+        for (int e = 0; e < vb->elementCount(); e++) {
+            Chord* c = dynamic_cast<Chord*>(vb->element(e));
+            if (!c) continue;
+            if (c == chord) break;
+            for (int nid = 0; nid < c->noteCount(); nid++) {
+                Note* note = c->note(nid);
+                if (note->staff() != staff) continue;
+                if (note->pitch() == chord->note(n)->pitch()) {
+                    activeAccidentals = note->accidentals();
+                }
+            }
+        }
+        
+        if (chord->note(n)->accidentals() != activeAccidentals) {
             w.startElement("music:accidental");
-            switch (chord->note(0)->accidentals()) {
+            switch (chord->note(n)->accidentals()) {
                 case -2: w.addTextNode("flat-flat"); break;
                 case -1: w.addTextNode("flat"); break;
                 case  0: w.addTextNode("natural"); break;
@@ -350,7 +369,7 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
                 curTime += ve->length();
 
                 Chord* c =  dynamic_cast<Chord*>(ve);
-                if(c) writeChord(w, c, v, part);
+                if(c) writeChord(w, c, v, part, i);
             }
         }
         w.endElement(); // music:measure
