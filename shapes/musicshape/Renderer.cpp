@@ -354,7 +354,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         int curAccidentals = 0;
         if (ks) curAccidentals = ks->accidentals(n->pitch());
         // next check the bar for the last previous note in the same voice with the same pitch
-        for (int e = 0; i < vb->elementCount(); e++) {
+        for (int e = 0; e < vb->elementCount(); e++) {
             Chord* c = dynamic_cast<Chord*>(vb->element(e));
             if (!c) continue;
             if (c == chord) break;
