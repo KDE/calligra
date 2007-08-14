@@ -25,7 +25,7 @@
 #include <QMap>
 
 class QSplitter;
-
+class QTabWidget;
 
 /// The main namespace
 namespace KPlato
@@ -39,9 +39,10 @@ class Context;
 
 /**
  * SplitterView is a view with a vertical QSplitter that can contain
- * other ViewBase based views.
- * This view is created by the main View, and subviews can then be
- * added with addView()
+ * other ViewBase based views and/or QTabWidgets that can hold
+ * ViewVase based views as well.
+ * This splitter view is created by the main View, and subviews can then be
+ * added with addView(). A QTabWidget is added with addTabWidget().
 */
 class SplitterView : public ViewBase
 {
@@ -52,6 +53,7 @@ public:
     /// Destructor
     virtual ~SplitterView() {}
     
+    /// Set zoom
     virtual void setZoom( double zoom );
     /// Set the project this view shall handle.
     virtual void setProject( Project *project );
@@ -72,7 +74,13 @@ public:
     /// Gets context info from this view. Reimplement.
     virtual void getContext( Context &/*context*/ ) const {}
     
+    /// Add a QTabWidget to the splitter
+    QTabWidget *addTabWidget();
+    /// Add the @p view to the splitter
     void addView( ViewBase *view );
+    /// Add the @p view to the @p tab. Set the tabs label to @p label
+    void addView( ViewBase *view, QTabWidget *tab, const QString &label );
+    /// Return the active view at @p pos
     ViewBase *findView( const QPoint &pos ) const;
 
 public slots:

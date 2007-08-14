@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QSplitter>
+#include <QTabWidget>
 
 namespace KPlato
 {
@@ -39,9 +40,22 @@ SplitterView::SplitterView(Part *doc, QWidget *parent)
     b->addWidget( m_splitter );
 }
     
+QTabWidget *SplitterView::addTabWidget(  )
+{
+    QTabWidget *w = new QTabWidget( m_splitter );
+    m_splitter->addWidget( w );
+    return w;
+}
+
 void SplitterView::addView( ViewBase *view )
 {
     m_splitter->addWidget( view );
+    connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+}
+
+void SplitterView::addView( ViewBase *view, QTabWidget *tab, const QString &label )
+{
+    tab->addTab( view, label );
     connect( view, SIGNAL( guiActivated( ViewBase*, bool ) ), this, SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 }
 
@@ -75,6 +89,13 @@ ViewBase *SplitterView::findView( const QPoint &pos ) const
         if ( w && w->frameGeometry().contains( pos ) ) {
             return w;
         }
+        QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+        if (tw && tw->frameGeometry().contains( pos ) ) {
+            w = dynamic_cast<ViewBase*>( tw->currentWidget() );
+            if ( w ) {
+                return w;
+            }
+        }
     }
     return const_cast<SplitterView*>( this );
 }
@@ -85,6 +106,16 @@ void SplitterView::setZoom(double zoom)
         ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
         if ( v ) {
             v->setZoom( zoom );
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                for ( int j = 0; j < tw->count(); ++j ) {
+                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    if ( v ) {
+                        v->setZoom( zoom );
+                    }
+                }
+            }
         }
     }
 }
@@ -95,6 +126,16 @@ void SplitterView::setProject( Project *project )
         ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
         if ( v ) {
             v->setProject( project );
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                for ( int j = 0; j < tw->count(); ++j ) {
+                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    if ( v ) {
+                        v->setProject( project );
+                    }
+                }
+            }
         }
     }
 }
@@ -105,16 +146,36 @@ void SplitterView::draw()
         ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
         if ( v ) {
             v->draw();
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                for ( int j = 0; j < tw->count(); ++j ) {
+                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    if ( v ) {
+                        v->draw();
+                    }
+                }
+            }
         }
     }
 }
 
-void SplitterView::draw(Project &project )
+void SplitterView::draw( Project &project )
 {
     for ( int i = 0; i < m_splitter->count(); ++i ) {
         ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
         if ( v ) {
             v->draw( project );
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                for ( int j = 0; j < tw->count(); ++j ) {
+                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    if ( v ) {
+                        v->draw( project );
+                    }
+                }
+            }
         }
     }
 }
@@ -126,6 +187,16 @@ void SplitterView::updateReadWrite( bool mode )
         ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
         if ( v ) {
             v->updateReadWrite( mode );
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                for ( int j = 0; j < tw->count(); ++j ) {
+                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    if ( v ) {
+                        v->updateReadWrite( mode );
+                    }
+                }
+            }
         }
     }
 }
@@ -134,8 +205,20 @@ QStringList SplitterView::actionListNames() const
 {
     for ( int i = 0; i < m_splitter->count(); ++i ) {
         ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v && v->hasFocus() ) {
-            return v->actionListNames();
+        if ( v  ) {
+            if ( v->hasFocus() ) {
+                return v->actionListNames();
+            }
+            continue;
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                if ( v && v->hasFocus() ) {
+                    return v->actionListNames();
+                }
+                continue;
+            }
         }
     }
     return QStringList();
@@ -145,8 +228,20 @@ QList<QAction*> SplitterView::actionList( const QString name ) const
 {
     for ( int i = 0; i < m_splitter->count(); ++i ) {
         ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
-        if ( v && v->hasFocus() ) {
-            return v->actionList( name );
+        if ( v ) {
+            if ( v->hasFocus() ) {
+                return v->actionList( name );
+            }
+            continue;
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                if ( v && v->hasFocus() ) {
+                    return v->actionList( name );
+                }
+                continue;
+            }
         }
     }
     return QList<QAction*>();
