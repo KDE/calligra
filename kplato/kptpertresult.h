@@ -33,6 +33,7 @@
 #include <kdebug.h>
 
 
+/// The main namespace
 namespace KPlato
 {
 #include "ui_kptpertresult.h"
@@ -47,6 +48,9 @@ class View;
 
 typedef QList<Node*> NodeList;
 
+/**
+ This model displays results from project scheduling.
+*/
 class PertResultItemModel : public ItemModelBase
 {
     Q_OBJECT
@@ -119,6 +123,7 @@ private:
     NodeList m_cp;
     NodeList m_critical;
     NodeList m_noncritical;
+    NodeList m_dummyList;
     
     ScheduleManager *m_manager;
 };
@@ -145,7 +150,9 @@ public:
     Duration getTaskFloat(Node * currentNode);
     void testComplexGraph();
 
-    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.treeWidgetTaskResult->itemModel() ); }
+//    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.treeWidgetTaskResult->itemModel() ); }
+
+    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( treeWidgetTaskResult->itemModel() ); }
     
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
@@ -161,7 +168,9 @@ private:
     bool complexGraph;
     QList<Node *> m_criticalPath;
     ScheduleManager *current_schedule;
-    Ui::PertResult widget;
+    //Ui::PertResult widget;
+    
+    TreeViewBase *treeWidgetTaskResult;
     
 private slots:
     void slotUpdate();

@@ -154,6 +154,8 @@ void PertResultItemModel::refresh()
     if ( id == -1 ) {
         return;
     }
+    m_topNames << i18n( "Project" );
+    m_top << &m_dummyList; // dummy
     const QList< NodeList > *lst = m_project->criticalPathList( id );
     if ( lst ) {
         for ( int i = 0; i < lst->count(); ++i ) {
@@ -219,7 +221,7 @@ QModelIndex PertResultItemModel::parent( const QModelIndex &index ) const
     if ( m_top.value( row ) == 0 ) {
         return QModelIndex();
     }
-    return createIndex( row, index.column(), -1 );
+    return createIndex( row, 0, -1 );
 }
 
 QModelIndex PertResultItemModel::index( int row, int column, const QModelIndex &parent ) const
@@ -228,12 +230,19 @@ QModelIndex PertResultItemModel::index( int row, int column, const QModelIndex &
         return QModelIndex();
     }
     if ( ! parent.isValid() ) {
+        if ( row == 0 ) {
+            QModelIndex idx = createIndex(row, column, -2 ); // project
+            return idx;
+        }
         if ( row >= m_top.count() ) {
-            return QModelIndex();
+            return QModelIndex(); // shouldn't happend
         }
         QModelIndex idx = createIndex(row, column, -1 );
         //kDebug()<<k_funcinfo<<parent<<", "<<idx<<endl;
         return idx;
+    }
+    if ( parent.row() == 0 ) {
+        return QModelIndex();
     }
     NodeList *l = m_top.value( parent.row() );
     if ( l == 0 ) {
@@ -264,7 +273,7 @@ QModelIndex PertResultItemModel::index( const NodeList *lst ) const
     }
     NodeList *l = const_cast<NodeList*>( lst );
     int row = m_top.indexOf( l );
-    if ( row == -1 ) {
+    if ( row <= 0 ) {
         return QModelIndex();
     }
     return createIndex( row, 0, -1 );
@@ -272,6 +281,7 @@ QModelIndex PertResultItemModel::index( const NodeList *lst ) const
 
 QVariant PertResultItemModel::name( int row, int role ) const
 {
+    
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
@@ -425,6 +435,21 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
                 return QVariant();
         }
     }
+    if ( n->type() == Node::Type_Project ) {
+        Project *p = static_cast<Project*>( n );
+        switch ( index.column() ) {
+            case 0: result = name( 0, role ); break;
+/*            case 1: result = earlyStart( p, role ); break;
+            case 2: result = earlyFinish( p, role ); break;
+            case 3: result = lateStart( p, role ); break;
+            case 4: result = lateFinish( p, role ); break;
+            case 5: result = positiveFloat( p, role ); break;
+            case 6: result = freeFloat( p, role ); break;*/
+            default:
+                //kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
+                return QVariant();
+        }
+    }
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
@@ -542,7 +567,13 @@ NodeList *PertResultItemModel::list( const QModelIndex &index ) const
 
 Node *PertResultItemModel::node( const QModelIndex &index ) const
 {
-    if ( ! index.isValid() || index.internalId() < 0 ) {
+    if ( ! index.isValid() ) {
+        return 0;
+    }
+    if ( index.internalId() == -2 ) {
+        return m_project;
+    }
+    if ( index.internalId() == 0 ) {
         return 0;
     }
     NodeList *l = m_top.value( index.internalId() );
@@ -567,11 +598,17 @@ void PertResultItemModel::slotNodeChanged( Node *)
 PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
-    widget.setupUi(this);
+    //widget.setupUi(this);
     PertResultItemModel *m = new PertResultItemModel( part );
-    widget.treeWidgetTaskResult->setModel( m );
-    widget.treeWidgetTaskResult->header()->setStretchLastSection( false );
-    
+/*    widget.treeWidgetTaskResult->setModel( m );
+    widget.treeWidgetTaskResult->header()->setStretchLastSection( false );*/
+    treeWidgetTaskResult = new TreeViewBase( this );
+    treeWidgetTaskResult->setModel( m );
+    treeWidgetTaskResult->header()->setStretchLastSection( false );
+
+    QVBoxLayout *l = new QVBoxLayout( this );
+    l->setContentsMargins( 0, 0, 0, 0 );
+    l->addWidget( treeWidgetTaskResult );
 //    QHeaderView *header=widget.treeWidgetTaskResult->header();
     
     current_schedule=0;
@@ -593,25 +630,25 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
 
 }
 
-  void PertResult::draw( Project &project)
-  {
-      setProject( &project );
+void PertResult::draw( Project &project)
+{
+    setProject( &project );
 //    draw();
-  }
+}
   
-  void PertResult::draw()
-  {
-    widget.labelResultProjectFloat->clear();
-    if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
-        Duration f;
-        long id = model()->manager()->id();
-        foreach ( Node *n, m_project->allNodes() ) {
-            if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
-                f += static_cast<Task*>( n )->positiveFloat( id );
-            }
-        }
-        widget.labelResultProjectFloat->setText( KGlobal::locale()->formatNumber( f.toDouble( Duration::Unit_h ) ) );
-    }
+void PertResult::draw()
+{
+//     widget.labelResultProjectFloat->clear();
+//     if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
+//         Duration f;
+//         long id = model()->manager()->id();
+//         foreach ( Node *n, m_project->allNodes() ) {
+//             if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+//                 f += static_cast<Task*>( n )->positiveFloat( id );
+//             }
+//         }
+//         widget.labelResultProjectFloat->setText( KGlobal::locale()->formatNumber( f.toDouble( Duration::Unit_h ) ) );
+//     }
 
 /*    kDebug() << "UPDATE PE" << endl;
       widget.treeWidgetTaskResult->clear();
@@ -807,7 +844,8 @@ void PertResult::setProject( Project *project )
         disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
     }
     m_project = project;
-    widget.treeWidgetTaskResult->itemModel()->setProject( m_project );
+//    widget.treeWidgetTaskResult->itemModel()->setProject( m_project );
+    treeWidgetTaskResult->itemModel()->setProject( m_project );
     if ( m_project ) {
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
