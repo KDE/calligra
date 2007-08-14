@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2002 - 2005 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2002 - 2007 Dag Andersen <danders@get2net.dk>
   Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
   This library is free software; you can redistribute it and/or
@@ -19,13 +19,10 @@
 */
 
 #include "kptganttview.h"
-#include "kdganttproxymodel.h"
-
 #include "kptnodeitemmodel.h"
 #include "kptappointment.h"
 #include "kptpart.h"
 #include "kptview.h"
-//#include "kptcanvasitem.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
@@ -36,9 +33,8 @@
 #include "kptcontext.h"
 #include "kptschedule.h"
 
-#include "kdganttview.h"
-
-#include "kdganttconstraintmodel.h"
+#include <kdganttproxymodel.h>
+#include <kdganttconstraintmodel.h>
 
 #include <kdebug.h>
 
@@ -54,54 +50,107 @@
 namespace KPlato
 {
 
-class MyKDGanttView : public KDGantt::View
+MyKDGanttView::MyKDGanttView( Part *part, QWidget *parent )
+    : KDGantt::View( parent ),
+    m_project( 0 )
 {
-public:
-    MyKDGanttView( Part *part, QWidget *parent )
-        : KDGantt::View( parent )
-    {
-        KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
-        //m->setColumn( KDGantt::ItemTypeRole, 1 );
-        m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
-        m->setColumn( KDGantt::StartTimeRole, 18 );
-        m->setColumn( KDGantt::EndTimeRole, 19 );
-        m_model = new NodeItemModel( part, this );
-        setModel( m_model );
-        QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
-        if ( tv ) {
-            tv->header()->setStretchLastSection( true );
-            // Only show name in treeview ;)
-            tv->hideColumn( 1 );
-            tv->hideColumn( 2 );
-            tv->hideColumn( 3 );
-            tv->hideColumn( 4 );
-            tv->hideColumn( 5 );
-            tv->hideColumn( 6 );
-            tv->hideColumn( 7 );
-            tv->hideColumn( 8 );
-            tv->hideColumn( 9 );
-            tv->hideColumn( 10 );
-            tv->hideColumn( 11 );
-            tv->hideColumn( 12 );
-            tv->hideColumn( 13 );
-            tv->hideColumn( 14 );
-            tv->hideColumn( 15 );
-            tv->hideColumn( 16 );
-            tv->hideColumn( 17 );
-            tv->hideColumn( 18 );
-            tv->hideColumn( 19 );
-        } else kDebug()<<k_funcinfo<<"No treeview !!!";
-    }
-    NodeItemModel *itemModel() const { return m_model; }
-    void setProject( Project *project ) { m_model->setProject( project ); }
-    void update()
-{
-    kDebug()<<k_funcinfo;
-    kDebug()<<"POULOU";
+    setConstraintModel( new KDGantt::ConstraintModel() );
+    KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
+    //m->setColumn( KDGantt::ItemTypeRole, 1 );
+    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
+    m->setColumn( KDGantt::StartTimeRole, 18 );
+    m->setColumn( KDGantt::EndTimeRole, 19 );
+    m_model = new NodeItemModel( part, this );
+    setModel( m_model );
+    QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
+    if ( tv ) {
+        tv->header()->setStretchLastSection( true );
+        // Only show name in treeview ;)
+        tv->hideColumn( 1 );
+        tv->hideColumn( 2 );
+        tv->hideColumn( 3 );
+        tv->hideColumn( 4 );
+        tv->hideColumn( 5 );
+        tv->hideColumn( 6 );
+        tv->hideColumn( 7 );
+        tv->hideColumn( 8 );
+        tv->hideColumn( 9 );
+        tv->hideColumn( 10 );
+        tv->hideColumn( 11 );
+        tv->hideColumn( 12 );
+        tv->hideColumn( 13 );
+        tv->hideColumn( 14 );
+        tv->hideColumn( 15 );
+        tv->hideColumn( 16 );
+        tv->hideColumn( 17 );
+        tv->hideColumn( 18 );
+        tv->hideColumn( 19 );
+    } else kDebug()<<k_funcinfo<<"No treeview !!!"<<endl;
 }
-protected:
-    NodeItemModel *m_model;
-};
+
+void MyKDGanttView::update()
+{
+    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<"POULOU"<<endl;
+}
+
+void MyKDGanttView::setProject( Project *project )
+{
+    clearDependencies();
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
+        disconnect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
+    }
+    m_model->setProject( project );
+    m_project = project;
+    if ( m_project ) {
+        connect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
+        connect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
+    }
+    createDependencies();
+}
+
+void MyKDGanttView::addDependency( Relation *rel )
+{
+    QModelIndex par = m_model->index( rel->parent() );
+    QModelIndex ch = m_model->index( rel->child() );
+    qDebug()<<"addDependency() "<<m_model<<par.model();
+    if ( par.isValid() && ch.isValid() ) {
+        KDGantt::Constraint con( par, ch );
+        if ( ! constraintModel()->hasConstraint( con ) ) {
+            constraintModel()->addConstraint( con );
+        }
+    }
+}
+
+void MyKDGanttView::removeDependency( Relation *rel )
+{
+    QModelIndex par = m_model->index( rel->parent() );
+    QModelIndex ch = m_model->index( rel->child() );
+    qDebug()<<"removeDependency() "<<m_model<<par.model();
+    KDGantt::Constraint con( par, ch );
+    constraintModel()->removeConstraint( con );
+}
+
+void MyKDGanttView::clearDependencies()
+{
+    constraintModel()->clear();
+}
+
+void MyKDGanttView::createDependencies()
+{
+    clearDependencies();
+    if ( m_project == 0 ) {
+        return;
+    }
+    foreach ( Node* n, m_project->allNodes() ) {
+        foreach ( Relation *r, n->dependChildNodes() ) {
+            addDependency( r );
+        }
+    }
+}
+
+//------------------------------------------
 
 GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
         : ViewBase( part, parent ),

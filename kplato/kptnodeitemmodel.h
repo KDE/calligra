@@ -82,6 +82,8 @@ protected slots:
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
 
+    void slotLayoutChanged();
+    
 protected:
     QVariant name( const Node *node, int role ) const;
     bool setName( Node *node, const QVariant &value, int role );

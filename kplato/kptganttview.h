@@ -24,7 +24,8 @@
 #include "kptviewbase.h"
 #include "kptcontext.h"
 
-#include <q3ptrlist.h>
+#include <kdganttglobal.h>
+#include <kdganttview.h>
 
 class QPoint;
 class QSplitter;
@@ -33,21 +34,41 @@ class QSplitter;
 namespace KPlato
 {
 
-class MyKDGanttView;
 class TaskAppointmentsView;
 
 class Node;
+class NodeItemModel;
 class Task;
 class Part;
 class Project;
 class Relation;
 
+class MyKDGanttView : public KDGantt::View
+{
+    Q_OBJECT
+public:
+    MyKDGanttView( Part *part, QWidget *parent );
+    
+    NodeItemModel *itemModel() const { return m_model; }
+    void setProject( Project *project );
+    void update();
+
+    void clearDependencies();
+    void createDependencies();
+
+public slots:
+    void addDependency( Relation *rel );
+    void removeDependency( Relation *rel );
+
+protected:
+    NodeItemModel *m_model;
+    Project *m_project;
+};
+
 class GanttView : public ViewBase
 {
     Q_OBJECT
-
 public:
-
     GanttView( Part *part, QWidget *parent, bool readWrite = true );
 
     //~GanttView();
