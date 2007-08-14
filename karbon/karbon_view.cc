@@ -108,6 +108,7 @@
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
 #include <KoDockRegistry.h>
+#include <KoShapeLayer.h>
 
 // kde header
 #include <kaction.h>
@@ -770,6 +771,8 @@ void KarbonView::groupSelection()
         groupedShapes << shape;
     }
     KoShapeGroup *group = new KoShapeGroup();
+    if( selection->activeLayer() )
+        selection->activeLayer()->addChild( group );
     QUndoCommand *cmd = new QUndoCommand( i18n("Group shapes") );
     new KoShapeCreateCommand( m_part, group, cmd );
     new KoShapeGroupCommand( group, groupedShapes, cmd );
