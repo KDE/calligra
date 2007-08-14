@@ -1014,8 +1014,9 @@ ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
     setAcceptDrops( true );
     setDropIndicatorShown( true );
     
-
-
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0;
+    hideColumns( lst1, lst2 );
 }
 
 void ResourceTreeView::slotActivated( const QModelIndex index )
