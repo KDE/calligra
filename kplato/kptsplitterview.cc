@@ -33,6 +33,7 @@ SplitterView::SplitterView(Part *doc, QWidget *parent)
     m_activeview( 0 )
 {
     QVBoxLayout *b = new QVBoxLayout( this );
+    b->setContentsMargins( 0, 0, 0, 0 );
     m_splitter = new QSplitter( this );
     m_splitter->setOrientation( Qt::Vertical );
     b->addWidget( m_splitter );

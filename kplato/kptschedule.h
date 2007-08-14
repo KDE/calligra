@@ -39,6 +39,7 @@ class Appointment;
 class DateTime;
 class Duration;
 class Node;
+class Project;
 class Task;
 class ScheduleManager;
 class XMLLoaderObject;
@@ -382,10 +383,18 @@ public:
     virtual void insertSummaryTask( Node *node ) { m_summarytasks.append( node ); }
     QList<Node*> summaryTasks() const { return m_summarytasks; }
     
+    void clearCriticalPathList();
+    QList<Node*> *currentCriticalPath() const;
+    void addCriticalPath( QList<Node*> *lst = 0 );
+    const QList< QList<Node*> > *criticalPathList() const { return &(m_pathlists); }
+    void addCriticalPathNode( Node *node );
+    
 protected:
     virtual void changed( Schedule *sch );
 
 private:
+    friend class Project;
+    
     ScheduleManager *m_manager;
     QList<Node*> m_hardconstraints;
     QList<Node*> m_softconstraints;
@@ -394,6 +403,10 @@ private:
     QList<Node*> m_startNodes;
     QList<Node*> m_endNodes;
     QList<Node*> m_summarytasks;
+    
+    QList< QList<Node*> > m_pathlists;
+    QList<Node*> *m_currentCriticalPath;
+    bool criticalPathListCached;
     
 #ifndef NDEBUG
 public:

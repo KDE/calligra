@@ -367,8 +367,11 @@ public:
     virtual DateTime workEndTime( long id = -1 ) const;
     void setWorkEndTime(const DateTime &dt,  long id = -1 );
     
+    /// Returns true if this node is critical
     virtual bool isCritical( long id = -1 ) const { Q_UNUSED(id); return false; }
+    /// Returns true if this node is in a critical path
     virtual bool inCriticalPath( long id = -1 ) const;
+    
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level();
     /// Generate WBS

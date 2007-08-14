@@ -424,6 +424,13 @@ public:
      */
     void setRelationLag( Relation *relation, const Duration &lag );
     
+    void calcCriticalPathList( MainSchedule *cs );
+    void calcCriticalPathList( MainSchedule *cs, Node *node );
+    /**
+     * Returns the list of critical paths for schedule @p id
+     */
+    const QList< QList<Node*> > *criticalPathList( long id = -1 );
+
 signals:
     /// Emitted when a schedule has been calculated
     void projectCalculated( ScheduleManager *sm );

@@ -827,7 +827,9 @@ MainSchedule::MainSchedule()
 
 MainSchedule::MainSchedule( Node *node, const QString& name, Schedule::Type type, long id )
     : NodeSchedule( node, name, type, id ),
-    m_manager( 0 )
+    m_manager( 0 ),
+    m_currentCriticalPath( 0 ),
+    criticalPathListCached( false )
 {
     //kDebug()<<k_funcinfo<<"node name:"<<node->name();
     init();
@@ -947,6 +949,37 @@ DateTime MainSchedule::scheduleBackward( const DateTime &latest, int use )
 bool MainSchedule::recalculate() const
 {
     return m_manager == 0 ? false : m_manager->recalculate();
+}
+
+void MainSchedule::clearCriticalPathList()
+{
+    m_pathlists.clear();
+    m_currentCriticalPath = 0;
+    criticalPathListCached = false;
+}
+
+QList<Node*> *MainSchedule::currentCriticalPath() const
+{
+    return m_currentCriticalPath;
+}
+
+void MainSchedule::addCriticalPath( QList<Node*> *lst )
+{
+    QList<Node*> l;
+    if ( lst ) {
+        l = *lst;
+    }
+    m_pathlists.append( l );
+    m_currentCriticalPath = &( m_pathlists.last() );
+}
+
+void MainSchedule::addCriticalPathNode( Node *node )
+{
+    if ( m_currentCriticalPath == 0 ) {
+        kError()<<k_funcinfo<<"No currentCriticalPath"<<endl;
+        return;
+    }
+    m_currentCriticalPath->append( node );
 }
 
 //-----------------------------------------
