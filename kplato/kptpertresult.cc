@@ -626,8 +626,6 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     (*header).resizeSection(6,80);
     (*header).resizeSection(7,80);*/
     draw( part->getProject() );
-    connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-
 }
 
 void PertResult::draw( Project &project)
@@ -638,18 +636,23 @@ void PertResult::draw( Project &project)
   
 void PertResult::draw()
 {
-//     widget.labelResultProjectFloat->clear();
-//     if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
-//         Duration f;
-//         long id = model()->manager()->id();
-//         foreach ( Node *n, m_project->allNodes() ) {
-//             if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
-//                 f += static_cast<Task*>( n )->positiveFloat( id );
-//             }
-//         }
-//         widget.labelResultProjectFloat->setText( KGlobal::locale()->formatNumber( f.toDouble( Duration::Unit_h ) ) );
-//     }
-
+/*    widget.scheduleName->setText( i18n( "None" ) );
+    widget.totalFloat->clear();
+    if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
+        long id = model()->manager()->id();
+        if ( id == -1 ) {
+            return;
+        }
+        widget.scheduleName->setText( model()->manager()->name() );
+        KLocale *locale =  KGlobal::locale();
+        Duration f;
+        foreach ( Node *n, m_project->allNodes() ) {
+            if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                f += static_cast<Task*>( n )->positiveFloat( id );
+            }
+        }
+        widget.totalFloat->setText( locale->formatNumber( f.toDouble( Duration::Unit_h ) ) );
+    }*/
 /*    kDebug() << "UPDATE PE" << endl;
       widget.treeWidgetTaskResult->clear();
       if ( current_schedule == 0 || current_schedule->id() == -1 ) {
@@ -672,7 +675,7 @@ void PertResult::draw()
             item->setText(6,res.number(getTaskFloat(currentNode).days()));
             item->setText(7,res.number(getFreeMargin(currentNode).days()));
         }
-        widget.labelResultProjectFloat->setText(res.number(getProjectFloat(m_project).days()));
+        widget.totalFloat->setText(res.number(getProjectFloat(m_project).days()));
 
     }
     list=criticalPath();
@@ -840,18 +843,94 @@ void PertResult::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
 void PertResult::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
     }
     m_project = project;
-//    widget.treeWidgetTaskResult->itemModel()->setProject( m_project );
     treeWidgetTaskResult->itemModel()->setProject( m_project );
     if ( m_project ) {
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
     }
     draw();
 }
+
+
+//--------------------
+PertCpmView::PertCpmView( Part *part, QWidget *parent ) 
+    : ViewBase( part, parent ),
+    m_project( 0 ),
+    current_schedule( 0 )
+{
+    kDebug() << " ---------------- KPlato: Creating PertCpmView ----------------" << endl;
+    widget.setupUi(this);
+
+    PertResultItemModel *m = new PertResultItemModel( part );
+    widget.cpmTable->setModel( m );
+    
+    setProject( &( part->getProject() ) );
+
+}
+
+void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )
+{
+    kDebug()<<k_funcinfo<<sm<<endl;
+    current_schedule = sm;
+    model()->setManager( sm );
+    draw();
+}
+
+void PertCpmView::slotProjectCalculated( ScheduleManager *sm )
+{
+    if ( sm && sm == model()->manager() ) {
+        model()->setManager( sm );
+    }
+}
+
+void PertCpmView::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
+{
+    if ( sm == current_schedule ) {
+        current_schedule = 0;
+        model()->setManager( 0 );
+    }
+}
+
+void PertCpmView::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
+    }
+    m_project = project;
+    widget.cpmTable->model()->setProject( m_project );
+    if ( m_project ) {
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
+    }
+    draw();
+}
+
+void PertCpmView::draw()
+{
+    widget.scheduleName->setText( i18n( "None" ) );
+    if ( m_project && current_schedule && current_schedule->isScheduled() ) {
+        long id = current_schedule->id();
+        if ( id == -1 ) {
+            return;
+        }
+        widget.scheduleName->setText( current_schedule->name() );
+    }
+}
+
+void PertCpmView::slotUpdate()
+{
+    draw();
+}
+
 
 } // namespace KPlato
 

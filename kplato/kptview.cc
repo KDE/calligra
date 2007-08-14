@@ -909,10 +909,17 @@ void View::createScheduleHandler( ViewListItem *cat )
     ScheduleEditor *e = createScheduleEditor( handler );
     handler->addView( e );
 
-    PertResult *p = new PertResult( getPart(), handler );
-    handler->addView( p );
+    QTabWidget *tab = handler->addTabWidget();
+    
+    PertResult *p = new PertResult( getPart() );
+    handler->addView( p, tab, "PERT" );
 
     connect( e, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), p, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
+    
+    PertCpmView *c = new PertCpmView( getPart() );
+    handler->addView( c, tab, "CPM" );
+
+    connect( e, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), c, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
     
     handler->draw( getProject() );
 

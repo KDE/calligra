@@ -32,6 +32,7 @@
 
 #include <kdebug.h>
 
+#include "ui_kptcpmwidget.h"
 
 /// The main namespace
 namespace KPlato
@@ -133,8 +134,7 @@ class PertResult : public ViewBase
 {
     Q_OBJECT
 public:
-
-    PertResult( Part *part, QWidget *parent );
+    PertResult( Part *part, QWidget *parent = 0 );
     void setProject( Project *project );
     void draw( Project &project );
     void draw();
@@ -174,6 +174,37 @@ private:
     
 private slots:
     void slotUpdate();
+
+};
+
+//--------------------
+class PertCpmView : public ViewBase
+{
+    Q_OBJECT
+public:
+    PertCpmView( Part *part, QWidget *parent = 0 );
+    
+    void setProject( Project *project );
+    void draw();
+    
+    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.cpmTable->model() ); }
+
+public slots:
+    void slotScheduleSelectionChanged( ScheduleManager *sm );
+    
+protected slots:
+    void slotProjectCalculated( ScheduleManager *sm );
+    void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
+    
+private slots:
+    void slotUpdate();
+
+private:
+    Project * m_project;
+    QList<Node *> m_criticalPath;
+    ScheduleManager *current_schedule;
+    Ui::CpmWidget widget;
+    
 
 };
 
