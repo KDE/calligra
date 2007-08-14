@@ -298,7 +298,7 @@ public:
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0.0; }
     
-            /// Effort based performance index
+    /// Effort based performance index
     double effortPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }
     /// Cost performance index
     double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }
@@ -315,7 +315,13 @@ public:
     virtual void adjustSummarytask() = 0;
 
     /// Returns the (previously) calculated duration
-    const Duration &duration( long id = -1 );
+    const Duration &duration( long id = -1 ) const;
+    
+    /**
+     *  variance is calculated based on the optimistic/pessimistic ratio
+     *  specified for the estimate.
+     */
+    Duration variance( long id = -1 ) const;
     
     Node *siblingBefore();
     Node *childBefore(Node *node);

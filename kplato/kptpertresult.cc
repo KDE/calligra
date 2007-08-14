@@ -39,6 +39,495 @@ class Task;
 
 typedef QList<Node*> NodeList;
 
+CriticalPathItemModel::CriticalPathItemModel( Part *part, QObject *parent )
+    : ItemModelBase( part, parent ),
+    m_manager( 0 )
+{
+/*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
+    connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
+}
+
+CriticalPathItemModel::~CriticalPathItemModel()
+{
+}
+    
+void CriticalPathItemModel::slotNodeToBeInserted( Node *, int )
+{
+    //kDebug()<<k_funcinfo<<node->name()<<endl;
+}
+
+void CriticalPathItemModel::slotNodeInserted( Node */*node*/ )
+{
+    //kDebug()<<k_funcinfo<<node->getParent->name()<<"-->"<<node->name()<<endl;
+}
+
+void CriticalPathItemModel::slotNodeToBeRemoved( Node *node )
+{
+    //kDebug()<<k_funcinfo<<node->name()<<endl;
+/*    if ( m_path.contains( node ) ) {
+    }*/
+}
+
+void CriticalPathItemModel::slotNodeRemoved( Node *node )
+{
+    //kDebug()<<k_funcinfo<<node->name()<<endl;
+}
+
+void CriticalPathItemModel::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+    
+        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+    }
+    m_project = project;
+    if ( project ) {
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeToBeMoved( Node* ) ), this, SLOT( slotLayoutToBeChanged() ) );
+    
+        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+        connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
+    }
+    reset();
+}
+
+void CriticalPathItemModel::setManager( ScheduleManager *sm )
+{
+    kDebug()<<k_funcinfo<<this<<endl;
+    m_manager = sm;
+    if ( m_project == 0 || m_manager == 0 ) {
+        m_path.clear();
+    } else {
+        m_path = m_project->criticalPath( m_manager->id(), 0 );
+    }
+    kDebug()<<k_funcinfo<<m_path<<endl;
+    reset();
+}
+
+QModelIndex CriticalPathItemModel::parent( const QModelIndex & ) const
+{
+    return QModelIndex();
+}
+
+QModelIndex CriticalPathItemModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+        return QModelIndex();
+    }
+    if ( parent.isValid() ) {
+        return QModelIndex();
+    }
+    Node *n = m_path.value( row );
+    QModelIndex i = createIndex(row, column, n );
+    return i;
+}
+
+QVariant CriticalPathItemModel::name( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return node->name();
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::name( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return i18n( "Project" );
+        case Qt::ToolTipRole:
+        case Qt::EditRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::duration( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                Duration::Unit unit = node->estimate()->displayUnit();
+                QList<double> scales; // TODO: week
+                if ( node->estimate()->type() == Estimate::Type_Effort ) {
+                    scales << m_project->standardWorktime()->day();
+                    // rest is default
+                }
+                double v = Estimate::scale( node->duration( m_manager->id() ), unit, scales );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+            }
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::duration( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            return KGlobal::locale()->formatNumber( m_project->duration( m_manager->id() ).toDouble( Duration::Unit_h ), 1 );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::variance( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                Duration::Unit unit = node->estimate()->displayUnit();
+                QList<double> scales; // TODO: week
+                if ( node->estimate()->type() == Estimate::Type_Effort ) {
+                    scales << m_project->standardWorktime()->day();
+                    // rest is default
+                }
+                double v = Estimate::scale( node->variance( m_manager->id() ), unit, scales );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+            }
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::variance( const Estimate *est, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+                double v = est->variance().toDouble( Duration::Unit_h );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+            break;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::variance( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+            Duration v;
+            foreach ( Node *n, m_path ) {
+                v += n->variance( m_manager->id() );
+            }
+            return KGlobal::locale()->formatNumber( v.toDouble( Duration::Unit_h ), 1 );
+            break;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::optimistic( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+                Duration d = node->duration( m_manager->id() );
+                d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
+                double v = d.toDouble( Duration::Unit_h );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+            break;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::optimistic( const Estimate *est, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+                Duration::Unit unit = est->displayUnit();
+                QList<double> scales; // TODO: week
+                if ( est->type() == Estimate::Type_Effort ) {
+                    scales << m_project->standardWorktime()->day();
+                    // rest is default
+                }
+                double v = Estimate::scale( est->optimistic(), unit, scales );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+            break;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+
+QVariant CriticalPathItemModel::estimate( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                Duration::Unit unit = node->estimate()->displayUnit();
+                QList<double> scales; // TODO: week
+                if ( node->estimate()->type() == Estimate::Type_Effort ) {
+                    scales << m_project->standardWorktime()->day();
+                    // rest is default
+                }
+                double v = Estimate::scale( node->estimate()->expected(), unit, scales );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+            }
+            break;
+        case Role::DurationScales: {
+            QVariantList lst; // TODO: week
+            if ( node->estimate()->type() == Estimate::Type_Effort ) {
+                lst.append( m_project->standardWorktime()->day() );
+            } else {
+                lst.append( 24.0 );
+            }
+            lst << 60.0 << 60.0 << 1000.0;
+            return lst;
+        }
+        case Role::DurationUnit:
+            return static_cast<int>( node->estimate()->displayUnit() );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::notUsed( int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return "";
+        default:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::expected( const Estimate *est, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+            Duration::Unit unit = est->displayUnit();
+            QList<double> scales; // TODO: week
+            if ( est->type() == Estimate::Type_Effort ) {
+                scales << m_project->standardWorktime()->day();
+                // rest is default
+            }
+            double v = Estimate::scale( est->pertExpected(), unit, scales );
+            //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::pessimistic( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+                Duration d = node->duration( m_manager->id() );
+                d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
+                double v = d.toDouble( Duration::Unit_h );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+            break;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::pessimistic( const Estimate *est, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole: {
+                Duration::Unit unit = est->displayUnit();
+                QList<double> scales; // TODO: week
+                if ( est->type() == Estimate::Type_Effort ) {
+                    scales << m_project->standardWorktime()->day();
+                    // rest is default
+                }
+                double v = Estimate::scale( est->pessimistic(), unit, scales );
+                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+            break;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::data( const QModelIndex &index, int role ) const
+{
+    QVariant result;
+    if ( ! index.isValid() ) {
+        return result;
+    }
+    if ( role == Qt::TextAlignmentRole ) {
+        return alignment( index.column() );
+    }
+    Node *n = node( index );
+    if ( n == 0 ) {
+        switch ( index.column() ) {
+            case 0: result = name( role ); break;
+            case 1: result = duration( role ); break;
+            case 2: result = variance( role ); break;
+            default:
+                result = notUsed( role ); break;
+        }
+    } else  {
+        switch ( index.column() ) {
+            case 0: result = name( n, role ); break;
+            case 1: result = duration( n, role ); break;
+            case 2: result = variance( n, role ); break;
+            case 3: result = optimistic( n, role ); break;
+            case 4: result = pessimistic( n, role ); break;
+            case 5: result = estimate( n, role ); break;
+            case 6: result = variance( n->estimate(), role ); break;
+            case 7: result = expected( n->estimate(), role ); break;
+            case 8: result = optimistic( n->estimate(), role ); break;
+            case 9: result = pessimistic( n->estimate(), role ); break;
+            default:
+                kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
+                return QVariant();
+        }
+    }
+    if ( result.isValid() ) {
+        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
+            // HACK to show focus in empty cells
+            result = " ";
+        }
+        return result;
+    }
+    return QVariant();
+}
+
+QVariant CriticalPathItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if ( orientation == Qt::Horizontal ) {
+        if ( role == Qt::DisplayRole ) {
+            switch ( section ) {
+                case 0: return i18n( "Name" );
+                case 1: return i18n( "Duration" );
+                case 2: return i18n( "Variance" );
+                case 3: return i18n( "Optimistic" );
+                case 4: return i18n( "Pessimistic" );
+                case 5: return i18n( "Estimate" );
+                case 6: return i18n( "Variance (Est)" );
+                case 7: return i18n( "Expected" );
+                case 8: return i18n( "Optimistic" );
+                case 9: return i18n( "Pessimistic" );
+                default: return QVariant();
+            }
+        } else if ( role == Qt::TextAlignmentRole ) {
+            return alignment( section );
+        }
+    }
+    if ( role == Qt::ToolTipRole ) {
+        switch ( section ) {
+            default: return QVariant();
+        }
+    }
+    return ItemModelBase::headerData(section, orientation, role);
+}
+
+QVariant CriticalPathItemModel::alignment( int column ) const
+{
+    switch ( column ) {
+        case 0: return QVariant(); // use default
+        default: return Qt::AlignCenter;
+    }
+    return QVariant();
+}
+
+int CriticalPathItemModel::columnCount( const QModelIndex & ) const
+{
+    return 10;
+}
+
+int CriticalPathItemModel::rowCount( const QModelIndex &parent ) const
+{
+    if ( parent.isValid() ) {
+        return 0;
+    }
+    if ( m_manager && m_manager->expected() && m_manager->expected()->criticalPathList() ) {
+        return m_path.count() + 1;
+    }
+    return 0;
+}
+
+Node *CriticalPathItemModel::node( const QModelIndex &index ) const
+{
+    if ( ! index.isValid() ) {
+        return 0;
+    }
+    return m_path.value( index.row() );
+}
+
+void CriticalPathItemModel::slotNodeChanged( Node *node )
+{
+    kDebug()<<k_funcinfo<<endl;
+    if ( node == 0 || node->type() == Node::Type_Project || ! m_path.contains( node ) ) {
+        return;
+    }
+    int row = m_path.indexOf( node );
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+}
+
+
+//-----------------------------
 PertResultItemModel::PertResultItemModel( Part *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_manager( 0 )
@@ -122,6 +611,7 @@ void PertResultItemModel::setManager( ScheduleManager *sm )
 
 void PertResultItemModel::clear()
 {
+    kDebug()<<k_funcinfo<<this<<endl;
     foreach ( NodeList *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
@@ -315,7 +805,6 @@ QVariant PertResultItemModel::earlyStart( const Task *node, int role ) const
             return node->earlyStart( m_manager->id() ).dateTime();
         case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->earlyStart( m_manager->id() ).date() );
-            return QString();
         case Qt::EditRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -329,10 +818,8 @@ QVariant PertResultItemModel::earlyFinish( const Task *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
             return node->earlyFinish( m_manager->id() ).dateTime();
-        case Qt::ToolTipRole: {
+        case Qt::ToolTipRole:
             return KGlobal::locale()->formatDate( node->earlyFinish( m_manager->id() ).date() );
-            break;
-        }
         case Qt::EditRole:
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -403,6 +890,51 @@ QVariant PertResultItemModel::freeFloat( const Task *node, int role ) const
     return QVariant();
 }
 
+QVariant PertResultItemModel::negativeFloat( const Task *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->negativeFloat( m_manager->id() ).toString( Duration::Format_i18nHourFraction );
+        case Qt::ToolTipRole:
+            return node->negativeFloat( m_manager->id() ).toString( Duration::Format_i18nDayTime );
+        case Qt::EditRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant PertResultItemModel::startFloat( const Task *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->startFloat( m_manager->id() ).toString( Duration::Format_i18nHourFraction );
+        case Qt::ToolTipRole:
+            return node->startFloat( m_manager->id() ).toString( Duration::Format_i18nDayTime );
+        case Qt::EditRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant PertResultItemModel::finishFloat( const Task *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->finishFloat( m_manager->id() ).toString( Duration::Format_i18nHourFraction );
+        case Qt::ToolTipRole:
+            return node->finishFloat( m_manager->id() ).toString( Duration::Format_i18nDayTime );
+        case Qt::EditRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -430,6 +962,9 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
             case 4: result = lateFinish( t, role ); break;
             case 5: result = positiveFloat( t, role ); break;
             case 6: result = freeFloat( t, role ); break;
+            case 7: result = negativeFloat( t, role ); break;
+            case 8: result = startFloat( t, role ); break;
+            case 9: result = finishFloat( t, role ); break;
             default:
                 kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
@@ -477,6 +1012,9 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
                 case 4: return i18n( "Late Finish" );
                 case 5: return i18n( "Positive Float" );
                 case 6: return i18n( "Free Float" );
+                case 7: return i18n( "Negative Float" );
+                case 8: return i18n( "Start Float" );
+                case 9: return i18n( "Finish Float" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -485,6 +1023,16 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
+            case 0: return ToolTip::NodeName;
+                case 1: return ToolTip::NodeEarlyStart;
+                case 2: return ToolTip::NodeEarlyFinish;
+                case 3: return ToolTip::NodeLateStart;
+                case 4: return ToolTip::NodeLateFinish;
+                case 5: return ToolTip::NodePositiveFloat;
+                case 6: return ToolTip::NodeFreeFloat;
+                case 7: return ToolTip::NodeNegativeFloat;
+                case 8: return ToolTip::NodeStartFloat;
+                case 9: return ToolTip::NodeFinishFloat;
             default: return QVariant();
         }
     }
@@ -510,7 +1058,7 @@ QItemDelegate *PertResultItemModel::createDelegate( int column, QWidget */*paren
 
 int PertResultItemModel::columnCount( const QModelIndex & ) const
 {
-    return 7;
+    return 10;
 }
 
 int PertResultItemModel::rowCount( const QModelIndex &parent ) const
@@ -867,7 +1415,8 @@ PertCpmView::PertCpmView( Part *part, QWidget *parent )
     kDebug() << " ---------------- KPlato: Creating PertCpmView ----------------" << endl;
     widget.setupUi(this);
 
-    PertResultItemModel *m = new PertResultItemModel( part );
+    widget.cpmTable->setStretchLastSection ( false );
+    CriticalPathItemModel *m = new CriticalPathItemModel( part );
     widget.cpmTable->setModel( m );
     
     setProject( &( part->getProject() ) );
@@ -923,6 +1472,8 @@ void PertCpmView::draw()
             return;
         }
         widget.scheduleName->setText( current_schedule->name() );
+//        widget.finishTime->setDateTime( m_project->endTime( current_schedule->id() ).dateTime() );
+//        widget.probability->setValue( 68 );
     }
 }
 

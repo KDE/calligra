@@ -1056,7 +1056,7 @@ DateTime Task::calculateLateStart(int use) {
     }
     m_visitedBackward = true;
     cs->insertBackwardNode( this );
-    //kDebug()<<"Latestart:"<<cs->lateFinish<<"-"<<m_durationBackward.toString()<<"="<<(cs->lateFinish-m_durationBackward)<<""<<m_name<<" calculateBackward()";
+    kDebug()<<"Latestart: "<<cs->lateFinish.dateTime()<<"-"<<m_durationBackward.toString()<<"="<<cs->lateStart.dateTime()<<" "<<m_name<<" calculateBackward()"<<endl;
     cs->lateStart = cs->lateFinish - m_durationBackward;
     return cs->lateStart;
 }
@@ -1134,8 +1134,6 @@ DateTime Task::scheduleFromStartTime(int use) {
         if ( cs->recalculate() && m_completion.isFinished() ) {
             cs->startTime = m_completion.startTime();
             cs->endTime = m_completion.finishTime();
-            cs->startFloat = Duration::zeroDuration;
-            cs->finishFloat = Duration::zeroDuration;
             m_visitedForward = true;
             return cs->endTime;
         }
@@ -1248,8 +1246,6 @@ DateTime Task::scheduleFromStartTime(int use) {
         if ( cs->recalculate() && m_completion.isFinished() ) {
             cs->startTime = m_completion.startTime();
             cs->endTime = m_completion.finishTime();
-            cs->startFloat = Duration::zeroDuration;
-            cs->finishFloat = Duration::zeroDuration;
             m_visitedForward = true;
             return cs->endTime;
         }
@@ -1311,8 +1307,6 @@ DateTime Task::scheduleFromStartTime(int use) {
         cs->duration = cs->endTime - cs->startTime;
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
-    cs->startFloat = cs->lateStart - cs->earlyStart;
-    cs->finishFloat = cs->lateFinish - cs->earlyFinish;
     //kDebug()<<cs->startTime<<" :"<<cs->endTime<<""<<m_name<<" scheduleForward()";
     m_visitedForward = true;
     return cs->endTime;
@@ -1554,8 +1548,6 @@ DateTime Task::scheduleFromEndTime(int use) {
         cs->duration = cs->endTime - cs->startTime;
         kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
-    cs->startFloat = cs->lateStart - cs->earlyStart;
-    cs->finishFloat = cs->lateFinish - cs->earlyFinish;
     //kDebug()<<k_funcinfo<<m_name<<":"<<cs->startTime<<" :"<<cs->endTime;
     m_visitedBackward = true;
     return cs->startTime;
@@ -1795,7 +1787,7 @@ Duration Task::startFloat( long id ) const {
     if ( id != -1 ) {
         s = findSchedule( id );
     }
-    return s == 0 ? Duration::zeroDuration : s->startFloat;
+    return s == 0 ? Duration::zeroDuration : ( s->earlyStart - s->lateStart );
 }
 
 Duration Task::finishFloat( long id ) const {
@@ -1803,7 +1795,7 @@ Duration Task::finishFloat( long id ) const {
     if ( id != -1 ) {
         s = findSchedule( id );
     }
-    return s == 0 ? Duration::zeroDuration : s->finishFloat;
+    return s == 0 ? Duration::zeroDuration : ( s->lateFinish - s->earlyFinish );
 }
 
 bool Task::isCritical( long id ) const {
@@ -1862,6 +1854,7 @@ bool Task::calcCriticalPath(bool fromEnd) {
 }
 
 void Task::calcFreeFloat() {
+    kDebug()<<k_funcinfo<<m_name<<endl;
     if ( type() == Node::Type_Summarytask ) {
         Node::calcFreeFloat();
         return;
@@ -1870,7 +1863,6 @@ void Task::calcFreeFloat() {
     if ( cs == 0 ) {
         return;
     }
-    cs->finishFloat = Duration::zeroDuration;
     DateTime t;
     foreach ( Relation *r, m_dependChildNodes ) {
         DateTime c = r->child()->startTime();
@@ -1886,6 +1878,7 @@ void Task::calcFreeFloat() {
     }
     if ( t.isValid() && t > cs->endTime ) {
         cs->freeFloat = t - cs->endTime;
+        kDebug()<<k_funcinfo<<m_name<<": "<<cs->freeFloat.toString()<<endl;
     }
 }
 

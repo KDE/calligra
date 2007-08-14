@@ -430,6 +430,7 @@ public:
      * Returns the list of critical paths for schedule @p id
      */
     const QList< QList<Node*> > *criticalPathList( long id = -1 );
+    QList<Node*> criticalPath( long id = -1, int index = 0 );
 
 signals:
     /// Emitted when a schedule has been calculated

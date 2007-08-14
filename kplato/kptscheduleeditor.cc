@@ -32,6 +32,7 @@
 #include "kptschedule.h"
 #include "kptdatetime.h"
 #include "kptcontext.h"
+#include "kptpertresult.h"
 
 #include <QMenu>
 #include <QPainter>
@@ -820,6 +821,29 @@ void ScheduleEditor::slotDeleteSelection()
     if ( sm ) {
         emit deleteScheduleManager( m_editor->project(), sm );
     }
+}
+
+
+//---------------------------
+
+ScheduleHandlerView::ScheduleHandlerView( Part *part, QWidget *parent )
+    : SplitterView( part, parent )
+{
+    m_scheduleEditor = new ScheduleEditor( part, this );
+    addView( m_scheduleEditor );
+
+    QTabWidget *tab = addTabWidget();
+    
+    PertResult *p = new PertResult( part );
+    addView( p, tab, i18n( "Result" ) );
+
+    connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), p, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
+    
+    PertCpmView *c = new PertCpmView( part );
+    addView( c, tab, i18n( "Critical Path" ) );
+
+    connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), c, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
+    
 }
 
 

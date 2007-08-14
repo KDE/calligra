@@ -439,7 +439,7 @@ void TreeViewBase::setColumnsHidden( const QList<int> &list )
 
 void TreeViewBase::updateColumnsHidden()
 {
-    kDebug()<<k_funcinfo<<m_hideList<<endl;
+    //kDebug()<<k_funcinfo<<m_hideList<<endl;
     int prev = 0;
     foreach ( int c, m_hideList ) {
         if ( c == -1 ) {

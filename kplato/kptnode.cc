@@ -424,13 +424,31 @@ void Node::calcResourceOverbooked() {
 }
 
 // Returns the (previously) calculated duration
-const Duration& Node::duration( long id )
+const Duration& Node::duration( long id ) const
 {
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
         s = findSchedule( id );
     }
     return s ? s->duration : Duration::zeroDuration;
+}
+
+Duration Node::variance( long id ) const
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    Duration d;
+    if ( s && m_estimate ) {
+        d = s->duration;
+        Duration o = ( d *  ( 100 + m_estimate->optimisticRatio() ) ) / 100;
+        Duration p = ( d * ( 100 + m_estimate->pessimisticRatio() ) ) / 100;
+        d =  ( p - o ) / 6;
+        kDebug()<<k_funcinfo<<d.toString()<<endl;
+    }
+    kDebug()<<k_funcinfo<<d.toString()<<endl;
+    return d;
 }
 
 DateTime Node::startTime( long id ) const

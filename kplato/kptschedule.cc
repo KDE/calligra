@@ -529,8 +529,6 @@ void NodeSchedule::init()
     positiveFloat = Duration::zeroDuration;
     negativeFloat = Duration::zeroDuration;
     freeFloat = Duration::zeroDuration;
-    startFloat = Duration::zeroDuration;
-    finishFloat = Duration::zeroDuration;
 }
 
 void NodeSchedule::setDeleted( bool on )
@@ -598,8 +596,6 @@ bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
     positiveFloat = Duration::fromString( sch.attribute( "positive-float" ) );
     negativeFloat = Duration::fromString( sch.attribute( "negative-float" ) );
     freeFloat = Duration::fromString( sch.attribute( "free-float" ) );
-    startFloat = Duration::fromString( sch.attribute( "start-float" ) );
-    finishFloat = Duration::fromString( sch.attribute( "finish-float" ) );
 
     return true;
 }
@@ -644,8 +640,6 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     sch.setAttribute( "positive-float", positiveFloat.toString() );
     sch.setAttribute( "negative-float", negativeFloat.toString() );
     sch.setAttribute( "free-float", freeFloat.toString() );
-    sch.setAttribute( "start-float", startFloat.toString() );
-    sch.setAttribute( "finish-float", finishFloat.toString() );
 }
 
 void NodeSchedule::addAppointment( Schedule *resource, DateTime &start, DateTime &end, double load )
@@ -869,6 +863,8 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
     s = sch.attribute( "end" );
     if ( !s.isEmpty() )
         endTime = DateTime::fromString( s, status.projectSpec() );
+    
+    duration = Duration::fromString( sch.attribute( "duration" ) );
 
     KoXmlNode n = sch.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -927,6 +923,7 @@ void MainSchedule::saveXML( QDomElement &element ) const
 
     element.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
     element.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
+    element.setAttribute( "duration", duration.toString() );
     
     if ( ! m_pathlists.isEmpty() ) {
         QDomElement lists = element.ownerDocument().createElement( "criticalpath-list" );

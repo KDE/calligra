@@ -251,8 +251,6 @@ protected:
     Duration positiveFloat;
     Duration negativeFloat;
     Duration freeFloat;
-    Duration startFloat;
-    Duration finishFloat;
 
 #ifndef NDEBUG
 public:
@@ -387,6 +385,10 @@ public:
     QList<Node*> *currentCriticalPath() const;
     void addCriticalPath( QList<Node*> *lst = 0 );
     const QList< QList<Node*> > *criticalPathList() const { return &(m_pathlists); }
+    QList<Node*> criticalPath( int index = 0 ) {
+        QList<Node*> lst;
+        return m_pathlists.count() <= index ? lst : m_pathlists[ index ];
+    }
     void addCriticalPathNode( Node *node );
     
 protected:

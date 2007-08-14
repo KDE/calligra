@@ -900,31 +900,20 @@ void View::createCalendarEditor( ViewListItem *cat )
 
 void View::createScheduleHandler( ViewListItem *cat )
 {
-    SplitterView *handler = new SplitterView( getPart(), m_tab );
+    ScheduleHandlerView *handler = new ScheduleHandlerView( getPart(), m_tab );
     m_tab->addWidget( handler );
 
     ViewListItem *i = m_viewlist->addView( cat, "ScheduleHandler", i18n( "Schedules" ), handler, getPart(), "schedule_editor" );
     i->setToolTip( 0, i18n( "Calculate and analyze project schedules" ) );
 
-    ScheduleEditor *e = createScheduleEditor( handler );
-    handler->addView( e );
+    connect( handler->scheduleEditor(), SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
+    connect( handler->scheduleEditor(), SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
 
-    QTabWidget *tab = handler->addTabWidget();
-    
-    PertResult *p = new PertResult( getPart() );
-    handler->addView( p, tab, "PERT" );
-
-    connect( e, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), p, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
-    
-    PertCpmView *c = new PertCpmView( getPart() );
-    handler->addView( c, tab, "CPM" );
-
-    connect( e, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), c, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
-    
-    handler->draw( getProject() );
+    connect( handler->scheduleEditor(), SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
     connect( handler, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
+    handler->draw( getProject() );
 }
 
 ScheduleEditor *View::createScheduleEditor( QWidget *parent )

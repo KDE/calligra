@@ -188,6 +188,7 @@ void Project::calculate()
             propagateLatestFinish( cs->lateFinish );
             cs->calculateBackward( estType );
             cs->endTime = scheduleForward( cs->startTime, estType );
+            cs->duration = cs->endTime - cs->startTime;
             calcCriticalPath( false );
         } else {
             //kDebug()<<k_funcinfo<<"Node="<<m_name<<" End="<<m_constraintEndTime.toString();
@@ -199,6 +200,7 @@ void Project::calculate()
             propagateEarliestStart( cs->earlyStart );
             cs->calculateForward( estType );
             cs->startTime = scheduleBackward( cs->endTime, estType );
+            cs->duration = cs->endTime - cs->startTime;
             calcCriticalPath( true );
         }
         //makeAppointments();
@@ -284,6 +286,24 @@ const QList< QList<Node*> > *Project::criticalPathList( long id )
         calcCriticalPathList( ms );
     }
     return ms->criticalPathList();
+}
+
+QList<Node*> Project::criticalPath( long id, int index )
+{
+    Schedule *s = m_currentSchedule;
+    if ( id != -1 ) {
+        s = findSchedule( id );
+    }
+    if ( s == 0 ) {
+        kDebug()<<k_funcinfo<<"No schedule with id="<<id<<endl;
+        return QList<Node*>();
+    }
+    MainSchedule *ms = static_cast<MainSchedule*>( s );
+    if ( ! ms->criticalPathListCached ) {
+        initiateCalculationLists( *ms );
+        calcCriticalPathList( ms );
+    }
+    return ms->criticalPath( index );
 }
 
 DateTime Project::startTime( long id ) const

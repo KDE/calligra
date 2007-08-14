@@ -41,6 +41,7 @@ namespace KPlato
 
 class DateTime;
 class Duration;
+class Estimate;
 class Node;
 class Project;
 class ScheduleManager;
@@ -48,6 +49,68 @@ class Task;
 class View;
 
 typedef QList<Node*> NodeList;
+
+class CriticalPathItemModel : public ItemModelBase
+{
+    Q_OBJECT
+public:
+    explicit CriticalPathItemModel( Part *part, QObject *parent = 0 );
+    ~CriticalPathItemModel();
+    
+    virtual void setProject( Project *project );
+    
+    virtual QModelIndex parent( const QModelIndex & index ) const;
+    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    
+    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+    
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+    
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    
+    Node *node( const QModelIndex &index ) const;
+    void setManager( ScheduleManager *sm );
+    ScheduleManager *manager() const { return m_manager; }
+    
+protected slots:
+    void slotNodeChanged( Node* );
+    void slotNodeToBeInserted( Node *node, int row );
+    void slotNodeInserted( Node *node );
+    void slotNodeToBeRemoved( Node *node );
+    void slotNodeRemoved( Node *node );
+
+protected:
+    QVariant alignment( int column ) const;
+    
+    QVariant name( const Node *node, int role ) const;
+    QVariant name( int role ) const;
+    QVariant duration( const Node *node, int role ) const;
+    QVariant duration( int role ) const;
+    
+    QVariant variance( const Node *node, int role ) const;
+    QVariant variance( int role ) const;
+    QVariant variance( const Estimate *est, int role ) const;
+    
+    QVariant optimistic( const Node *node, int role ) const;
+    QVariant optimistic( int role ) const;
+    QVariant optimistic( const Estimate *est, int role ) const;
+    
+    QVariant expected( const Estimate *est, int role ) const;
+
+    QVariant pessimistic( const Node *node, int role ) const;
+    QVariant pessimistic( int role ) const;
+    QVariant pessimistic( const Estimate *est, int role ) const;
+    
+    QVariant estimate( const Node *node, int role ) const;
+    QVariant notUsed( int role ) const;
+
+private:
+    ScheduleManager *m_manager;
+    QList<Node*> m_path;
+};
+
+//--------------------
 
 /**
  This model displays results from project scheduling.
@@ -117,6 +180,9 @@ protected:
     QVariant lateFinish( const Task *node, int role ) const;
     QVariant positiveFloat( const Task *node, int role ) const;
     QVariant freeFloat( const Task *node, int role ) const;
+    QVariant negativeFloat( const Task *node, int role ) const;
+    QVariant startFloat( const Task *node, int role ) const;
+    QVariant finishFloat( const Task *node, int role ) const;
 
 private:
     QStringList m_topNames;
@@ -187,7 +253,7 @@ public:
     void setProject( Project *project );
     void draw();
     
-    PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.cpmTable->model() ); }
+    CriticalPathItemModel *model() const { return static_cast<CriticalPathItemModel*>( widget.cpmTable->model() ); }
 
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );

@@ -30,10 +30,10 @@
      <item>
       <widget class="QLabel" name="label_1" >
        <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
+        <enum>QFrame::Plain</enum>
        </property>
        <property name="text" >
         <string>Project Schedule:</string>
@@ -49,10 +49,10 @@
      <item>
       <widget class="QLabel" name="scheduleName" >
        <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
+        <enum>QFrame::Plain</enum>
        </property>
        <property name="text" >
         <string>...</string>
@@ -87,7 +87,7 @@
      <item>
       <widget class="QLabel" name="label_3" >
        <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="frameShadow" >
         <enum>QFrame::Raised</enum>
@@ -100,10 +100,10 @@
      <item>
       <widget class="QLabel" name="totalFloat" >
        <property name="frameShape" >
-        <enum>QFrame::Panel</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
        <property name="frameShadow" >
-        <enum>QFrame::Raised</enum>
+        <enum>QFrame::Plain</enum>
        </property>
        <property name="text" >
         <string>...</string>

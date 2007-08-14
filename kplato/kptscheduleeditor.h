@@ -20,12 +20,13 @@
 #ifndef KPTSCHEDULEEDITOR_H
 #define KPTSCHEDULEEDITOR_H
 
+#include "kptcontext.h"
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
+#include "kptsplitterview.h"
 
 #include <QTreeWidget>
 
-#include "kptcontext.h"
 
 
 class QPoint;
@@ -199,6 +200,21 @@ private:
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
 };
+
+
+//-----------------------------
+class ScheduleHandlerView : public SplitterView
+{
+    Q_OBJECT
+public:
+    ScheduleHandlerView( Part *part, QWidget *parent );
+    
+    ScheduleEditor *scheduleEditor() const { return m_scheduleEditor; }
+
+private:
+    ScheduleEditor *m_scheduleEditor;
+};
+
 
 }  //KPlato namespace
 

@@ -59,6 +59,17 @@ namespace ToolTip
     static QString NodeStartupCost = i18n( "The cost incurred at startup of the task." );
     static QString NodeShutdownAccount = i18n( "Account for cost incurred at shutdown of the task." );
     static QString NodeShutdownCost = i18n( "The cost incurred at shutdown of the task." );
+                
+    static QString NodeEarlyStart = i18n( "Early start" );
+    static QString NodeEarlyFinish = i18n( "Early start" );
+    static QString NodeLateStart = i18n( "Late start" );
+    static QString NodeLateFinish = i18n( "Late finish" );
+    
+    static QString  NodePositiveFloat = i18n( "The duration by which a tasks start can be delayed  without affecting the project completion time." );
+    static QString  NodeNegativeFloat = i18n( "The duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint." );
+    static QString  NodeFreeFloat = i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task." );
+    static QString  NodeStartFloat = i18n( "The duration from Early Start to Late Start." );
+    static QString  NodeFinishFloat = i18n( "The duration from Early Finish to Late Finish." );
 
     static QString EstimateType = i18n( "Type of estimate." );
     static QString Estimate = i18n( "The expected estimate." );
@@ -88,6 +99,15 @@ namespace ToolTip
     static QString ScheduleCalculate = i18n( "Defines the schedules to be calculated." );
 
 } //namespace ToolTip
+
+namespace WhatsThis
+{
+    static QString  NodeNegativeFloat = i18n( "Negative float is the duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint." );
+    static QString  NodeFreeFloat = i18n( "Free float is the duration by which a task can be delayed or extended without affecting the start of any succeeding task." );
+    static QString  NodeStartFloat = i18n( "Start float is the duration from Early Start to Late Start." );
+    static QString  NodeFinishFloat = i18n( "Finish float is the duration from Early Finish to Late Finish." );
+
+} //namespace WhatsThis
 
 
 } //namespace KPlato
