@@ -230,13 +230,11 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
 
     contentWriter->startElement( "office:automatic-styles" );
     //saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
-    KoGenStyles::StyleMap styles = mainStyles.styles();
-    QMapIterator<KoGenStyle, QString> i(styles);
-    while (i.hasNext()) {
-        i.next();
-        i.key().writeStyle(contentWriter, mainStyles, "style:style", i.value(), "");
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles(KoGenStyle::StyleAuto, false);
+    Q3ValueList<KoGenStyles::NamedStyle>::iterator it;
+    for ( it = styles.begin(); it != styles.end(); ++it ) {
+        (*it).style->writeStyle(contentWriter, mainStyles, "style:style", (*it).name, "");
     }
-    
     contentWriter->endElement();
 
     // And now we can copy over the contents from the tempfile to the real one
@@ -254,13 +252,21 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
 
     if ( !store->open( "styles.xml" ) )
         return false;
-
-    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
     //saveOdfDocumentStyles( store, mainStyles, &masterStyles );
-
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
+    stylesWriter->startElement("styles:styles");
+    styles = mainStyles.styles(KoGenStyle::StyleUser, true);
+    for ( it = styles.begin(); it != styles.end(); ++it ) {
+        (*it).style->writeStyle(stylesWriter, mainStyles, "style:style", (*it).name, "");
+    }
+    stylesWriter->endElement(); // "styles:styles"
+    stylesWriter->endElement(); // "office:document-styles"
+    stylesWriter->endDocument();
+    
     if ( !store->close() ) // done with styles.xml
         return false;
-
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
     return true;
 }
 
