@@ -63,6 +63,7 @@ set(MusicXmlWriterTest_test_SRCS
     ../Chord.cpp
     ../Note.cpp
     ../KeySignature.cpp
+    ../TimeSignature.cpp
 )
 
 kde4_add_unit_test(MusicXmlWriterTest TESTNAME shapes-musicshape-MusicXmlWriterTest ${MusicXmlWriterTest_test_SRCS})

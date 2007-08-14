@@ -27,6 +27,7 @@
 #include "Note.h"
 #include "Clef.h"
 #include "KeySignature.h"
+#include "TimeSignature.h"
 
 #include <KoXmlWriter.h>
 #include <kofficeversion.h>
@@ -202,6 +203,27 @@ static void writeKeySignature(KoXmlWriter& w, KeySignature* ks, Part* part)
     w.endElement(); // music:key
 }
 
+static void writeTimeSignature(KoXmlWriter& w, TimeSignature* ts, Part* part)
+{
+    w.startElement("music:time");
+    
+    if (part->staffCount() > 1) {
+        // only write staff info when more than one staff exists
+        Staff* s = ts->staff();
+        w.addAttribute("number", QString::number(part->indexOfStaff(s) + 1));
+    }
+    
+    w.startElement("music:beats");
+    w.addTextNode(QString::number(ts->beats()));
+    w.endElement(); // music:beats
+    
+    w.startElement("music:beat-type");
+    w.addTextNode(QString::number(ts->beat()));
+    w.endElement(); // music:beat-type
+    
+    w.endElement(); // music:time
+}
+
 static void writePart(KoXmlWriter& w, int id, Part* part)
 {
     w.startElement("music:part");
@@ -236,7 +258,22 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
                     writeKeySignature(w, ks, part);
                 }
             }
-        }        
+        }
+        for (int st = 0; st < part->staffCount(); st++) {
+            Staff* staff = part->staff(st);
+            for (int e = 0; e < bar->staffElementCount(staff); e++) {
+                StaffElement* se = bar->staffElement(staff, e);
+                
+                TimeSignature* ts = dynamic_cast<TimeSignature*>(se);
+                if (ts) {
+                    if (!inAttributes) {
+                        w.startElement("music:attributes");
+                        inAttributes = true;
+                    }
+                    writeTimeSignature(w, ts, part);
+                }
+            }
+        }
 
         if (i == 0 && part->staffCount() != 1) {
             w.startElement("music:staves");
