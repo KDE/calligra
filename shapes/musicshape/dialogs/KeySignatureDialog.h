@@ -36,6 +36,12 @@ public:
     void setAccidentals(int accidentals);
     void setMusicStyle(MusicStyle* style);
     bool updateAllStaves();
+    
+    bool updateToNextChange();
+    bool updateTillEndOfPiece();
+    
+    int startBar();
+    int endBar();
 private slots:
     void accidentalsChanged(int accidentals);
 private:

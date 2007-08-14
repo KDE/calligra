@@ -69,7 +69,7 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QRadioButton" name="radioButton" >
+         <widget class="QRadioButton" name="throughBar" >
           <property name="text" >
            <string>Measure</string>
           </property>
@@ -120,7 +120,7 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QRadioButton" name="radioButton_2" >
+         <widget class="QRadioButton" name="throughEndOfPiece" >
           <property name="text" >
            <string>Measure</string>
           </property>
@@ -161,7 +161,7 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QRadioButton" name="radioButton_3" >
+         <widget class="QRadioButton" name="toNextChange" >
           <property name="text" >
            <string>Measure</string>
           </property>
@@ -254,7 +254,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>radioButton</sender>
+   <sender>throughBar</sender>
    <signal>toggled(bool)</signal>
    <receiver>startBar1</receiver>
    <slot>setEnabled(bool)</slot>
@@ -270,7 +270,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioButton</sender>
+   <sender>throughBar</sender>
    <signal>toggled(bool)</signal>
    <receiver>endBar</receiver>
    <slot>setEnabled(bool)</slot>
@@ -286,7 +286,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioButton_2</sender>
+   <sender>throughEndOfPiece</sender>
    <signal>toggled(bool)</signal>
    <receiver>startBar2</receiver>
    <slot>setEnabled(bool)</slot>
@@ -302,7 +302,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>radioButton_3</sender>
+   <sender>toNextChange</sender>
    <signal>toggled(bool)</signal>
    <receiver>startBar3</receiver>
    <slot>setEnabled(bool)</slot>

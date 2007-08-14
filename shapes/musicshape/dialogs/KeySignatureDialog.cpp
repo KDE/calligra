@@ -36,10 +36,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget* parent)
 
 void KeySignatureDialog::setBar(int bar)
 {
-    widget.startBar1->setValue(bar);
-    widget.startBar2->setValue(bar);
-    widget.startBar3->setValue(bar);
-    widget.endBar->setValue(bar);
+    widget.startBar1->setValue(bar+1);
+    widget.startBar2->setValue(bar+1);
+    widget.startBar3->setValue(bar+1);
+    widget.endBar->setValue(bar+1);
 }
 
 int KeySignatureDialog::accidentals()
@@ -62,6 +62,37 @@ void KeySignatureDialog::accidentalsChanged(int accidentals)
 void KeySignatureDialog::setMusicStyle(MusicStyle* style)
 {
     widget.preview->setMusicStyle(style);
+}
+
+bool KeySignatureDialog::updateAllStaves()
+{
+    return widget.allStaves->isChecked();
+}
+
+bool KeySignatureDialog::updateToNextChange()
+{
+    return widget.toNextChange->isChecked();
+}
+
+bool KeySignatureDialog::updateTillEndOfPiece()
+{
+    return widget.throughEndOfPiece->isChecked();
+}
+
+int KeySignatureDialog::startBar()
+{
+    if (updateToNextChange()) {
+        return widget.startBar3->value() - 1;
+    } else if (updateTillEndOfPiece()) {
+        return widget.startBar2->value() - 1;
+    } else {
+        return widget.startBar1->value() - 1;
+    }
+}
+
+int KeySignatureDialog::endBar()
+{
+    return widget.endBar->value() - 1;
 }
 
 #include "KeySignatureDialog.moc"

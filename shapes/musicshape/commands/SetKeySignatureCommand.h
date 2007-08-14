@@ -21,6 +21,7 @@
 
 #include <QUndoCommand>
 #include <QList>
+#include <QPair>
 
 class MusicShape;
 namespace MusicCore {
@@ -32,13 +33,17 @@ namespace MusicCore {
 class SetKeySignatureCommand : public QUndoCommand
 {
 public:
-    SetKeySignatureCommand(MusicShape* shape, MusicCore::Bar* bar, MusicCore::Staff* staff, int accidentals);
+    enum RegionType {
+        EndOfPiece,
+        NextChange
+    };
+    SetKeySignatureCommand(MusicShape* shape, int bar, RegionType type, MusicCore::Staff* staff, int accidentals);
+    SetKeySignatureCommand(MusicShape* shape, int startBar, int endBar, MusicCore::Staff* staff, int accidentals);
     virtual void redo();
     virtual void undo();
 private:
     MusicShape* m_shape;
-    MusicCore::Bar* m_bar;
-    QList<MusicCore::KeySignature*> m_newKeySignatures, m_oldKeySignatures;
+    QList<QPair<MusicCore::Bar*, MusicCore::KeySignature*> > m_newKeySignatures, m_oldKeySignatures;
 };
 
 #endif // SETKEYSIGNATURECOMMAND_H

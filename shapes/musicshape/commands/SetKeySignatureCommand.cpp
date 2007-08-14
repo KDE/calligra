@@ -30,33 +30,92 @@
 
 using namespace MusicCore;
 
-SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, Bar* bar, Staff* staff, int accidentals)
-    : m_shape(shape), m_bar(bar)
+typedef QPair<Bar*, KeySignature*> BarKeySignaturePair;
+
+SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int bar, RegionType type, Staff* staff, int accidentals)
+    : m_shape(shape)
 {
     setText(i18n("Change key signature"));
+    Sheet* sheet = shape->sheet();
     
     if (staff) {
-        m_newKeySignatures.append(new KeySignature(staff, 0, accidentals));
+        m_newKeySignatures.append(qMakePair(sheet->bar(bar), new KeySignature(staff, 0, accidentals)));
         
-        for (int i = 0; i < bar->staffElementCount(staff); i++) {
-            KeySignature* c = dynamic_cast<KeySignature*>(bar->staffElement(staff, i));
-            if (c && c->startTime() == 0) {
-                m_oldKeySignatures.append(c);
-                break;
+        for (int b = bar; b < sheet->barCount(); b++) {
+            Bar* curBar = sheet->bar(b);
+            
+            for (int i = 0; i < curBar->staffElementCount(staff); i++) {
+                KeySignature* c = dynamic_cast<KeySignature*>(curBar->staffElement(staff, i));
+                if (c && c->startTime() == 0) {
+                    m_oldKeySignatures.append(qMakePair(curBar, c));
+                    break;
+                }
             }
+            
+            if (type == NextChange) break;
         }
     } else {
-        Sheet* sheet = bar->sheet();
         for (int p = 0; p < sheet->partCount(); p++) {
             Part* part = sheet->part(p);
             for (int s = 0; s < part->staffCount(); s++) {
                 Staff* staff = part->staff(s);
-                m_newKeySignatures.append(new KeySignature(staff, 0, accidentals));
-                for (int i = 0; i < bar->staffElementCount(staff); i++) {
-                    KeySignature* ks = dynamic_cast<KeySignature*>(bar->staffElement(staff, i));
-                    if (ks) {
-                        m_oldKeySignatures.append(ks);
-                        break;
+                m_newKeySignatures.append(qMakePair(sheet->bar(bar), new KeySignature(staff, 0, accidentals)));
+                
+                for (int b = bar; b < sheet->barCount(); b++) {
+                    Bar* curBar = sheet->bar(b);
+                    
+                    for (int i = 0; i < curBar->staffElementCount(staff); i++) {
+                        KeySignature* ks = dynamic_cast<KeySignature*>(curBar->staffElement(staff, i));
+                        if (ks) {
+                            m_oldKeySignatures.append(qMakePair(curBar, ks));
+                            break;
+                        }
+                    }
+                    
+                    if (type == NextChange) break;
+                }
+            }
+        }        
+    }
+}
+
+SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int startBar, int endBar, MusicCore::Staff* staff, int accidentals)
+    : m_shape(shape)
+{
+    setText(i18n("Change key signature"));
+    Sheet* sheet = shape->sheet();
+    
+    if (staff) {
+        m_newKeySignatures.append(qMakePair(sheet->bar(startBar), new KeySignature(staff, 0, accidentals)));
+        
+        for (int b = startBar; b <= endBar; b++) {
+            Bar* curBar = sheet->bar(b);
+            
+            for (int i = 0; i < curBar->staffElementCount(staff); i++) {
+                KeySignature* c = dynamic_cast<KeySignature*>(curBar->staffElement(staff, i));
+                if (c && c->startTime() == 0) {
+                    m_oldKeySignatures.append(qMakePair(curBar, c));
+                    break;
+                }
+            }
+        }
+        // TODO: possibly add key signature in endBar
+    } else {
+        for (int p = 0; p < sheet->partCount(); p++) {
+            Part* part = sheet->part(p);
+            for (int s = 0; s < part->staffCount(); s++) {
+                Staff* staff = part->staff(s);
+                m_newKeySignatures.append(qMakePair(sheet->bar(startBar), new KeySignature(staff, 0, accidentals)));
+                
+                for (int b = startBar; b <= endBar; b++) {
+                    Bar* curBar = sheet->bar(b);
+                    
+                    for (int i = 0; i < curBar->staffElementCount(staff); i++) {
+                        KeySignature* ks = dynamic_cast<KeySignature*>(curBar->staffElement(staff, i));
+                        if (ks) {
+                            m_oldKeySignatures.append(qMakePair(curBar, ks));
+                            break;
+                        }
                     }
                 }
             }
@@ -66,12 +125,11 @@ SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, Bar* bar, Staf
 
 void SetKeySignatureCommand::redo()
 {
-    foreach (KeySignature* ks, m_oldKeySignatures) {
-        m_bar->removeStaffElement(ks, false);
+    foreach (BarKeySignaturePair p, m_oldKeySignatures) {
+        p.first->removeStaffElement(p.second, false);
     }
-    foreach (KeySignature* ks, m_newKeySignatures) {
-        kDebug() << "Adding with" << ks->accidentals() << "accidentals";
-        m_bar->addStaffElement(ks);
+    foreach (BarKeySignaturePair p, m_newKeySignatures) {
+        p.first->addStaffElement(p.second);
     }
     m_shape->engrave();
     m_shape->repaint();
@@ -79,11 +137,11 @@ void SetKeySignatureCommand::redo()
 
 void SetKeySignatureCommand::undo()
 {
-    foreach (KeySignature* ks, m_newKeySignatures) {
-        m_bar->removeStaffElement(ks, false);
+    foreach (BarKeySignaturePair p, m_newKeySignatures) {
+        p.first->removeStaffElement(p.second, false);
     }
-    foreach (KeySignature* ks, m_oldKeySignatures) {
-        m_bar->addStaffElement(ks);
+    foreach (BarKeySignaturePair p, m_oldKeySignatures) {
+        p.first->addStaffElement(p.second);
     }
     m_shape->engrave();
     m_shape->repaint();

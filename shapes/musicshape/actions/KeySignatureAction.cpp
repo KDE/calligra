@@ -69,16 +69,20 @@ void KeySignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos
     if (m_showDialog) {
         KeySignatureDialog dlg;
         dlg.setMusicStyle(m_tool->shape()->style());
-        dlg.setBar(0);
+        dlg.setBar(barIdx);
         dlg.setAccidentals(0);
         if (dlg.exec() == QDialog::Accepted) {
             if (dlg.updateAllStaves()) {
                 staff = NULL;
             }
-            m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, staff, dlg.accidentals()));
+            if (dlg.updateToNextChange() || dlg.updateTillEndOfPiece()) {
+                SetKeySignatureCommand::RegionType t = dlg.updateToNextChange() ? SetKeySignatureCommand::NextChange : SetKeySignatureCommand::EndOfPiece;
+                m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), dlg.startBar(), t, staff, dlg.accidentals()));
+            } else {
+                m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), dlg.startBar(), dlg.endBar(), staff, dlg.accidentals()));
+            }
         }
     } else {
-        kDebug() << "Executing action to set ks to" << m_accidentals << "accidentals";
-        m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), bar, NULL, m_accidentals));
+        m_tool->addCommand(new SetKeySignatureCommand(m_tool->shape(), barIdx, SetKeySignatureCommand::NextChange, NULL, m_accidentals));
     }
 }
