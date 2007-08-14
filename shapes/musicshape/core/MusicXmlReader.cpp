@@ -22,6 +22,8 @@
 #include "Chord.h"
 #include "Voice.h"
 #include "VoiceBar.h"
+#include "KeySignature.h"
+#include "Bar.h"
 
 #include <KoXmlReader.h>
 
@@ -94,18 +96,33 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
             if (e.namespaceURI() != NS_MUSIC) continue;
 
             if (e.localName() == "attributes") {
-                QString divisions = getProperty(e, "divisions");
-                if (!divisions.isNull()) {
-                    curDivisions = divisions.toInt();
-                }
+                KoXmlElement attr;
 
-                QString staves = getProperty(e, "staves");
-                if (!staves.isNull()) {
-                    int staffCount = staves.toInt();
+                QString staffCountStr = getProperty(e, "staves");
+                if (!staffCountStr.isNull()) {
+                    int staffCount = staffCountStr.toInt();
                     while (staffCount > part->staffCount()) {
                         part->addStaff();
                     }
                 }
+                
+                forEachElement(attr, e) {
+                    if (attr.namespaceURI() != NS_MUSIC) continue;
+                    
+                    if (attr.localName() == "divisions") {
+                        curDivisions = attr.text().toInt();
+                    } else if (attr.localName() == "key") {
+                        QString number = attr.attribute("number");
+                        int staffId = 0;
+                        if (!number.isNull()) staffId = number.toInt() - 1;
+                        kDebug() << "staffid:" << staffId;
+                        kDebug() << "staffCount:" << part->staffCount();
+                        
+                        KeySignature* ks = new KeySignature(part->staff(staffId), 0, getProperty(attr, "fifths").toInt());
+                        bar->addStaffElement(ks);
+                    }
+                }
+                
             } else if (e.localName() == "note") {
                 if (KoXml::namedItemNS(e, NS_MUSIC, "chord").isNull()) {
                     // no chord element, so this is the start of a new chord
