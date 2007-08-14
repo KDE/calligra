@@ -28,7 +28,6 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QLabel>
-#include <QTextEdit>
 #include <QLayout>
 #include <QGridLayout>
 #include <QFrame>
@@ -38,6 +37,7 @@
 #include <klineedit.h>
 #include <kmessagebox.h>
 #include <knumvalidator.h>
+#include <ktextedit.h>
 
 #include "Canvas.h"
 #include "Doc.h"
@@ -149,7 +149,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   edit2->setText( i18n( "Number:" ) );
   tmpGridLayout->addItem(new QSpacerItem( edit2->width(), 0), 0, 0 );
 
-  validityList = new QTextEdit(page1);
+  validityList = new KTextEdit(page1);
   tmpGridLayout->addWidget(validityList, 2, 1, 3, 1);
 
   validityLabelList = new QLabel(page1);
@@ -193,7 +193,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Message:" ));
   tmpGridLayout->addWidget(tmpQLabel, 3, 0, Qt::AlignTop);
 
-  message =new QTextEdit( page2);
+  message =new KTextEdit( page2);
   tmpGridLayout->addWidget(message, 3, 1);
 
   QFrame *page3 = new QFrame();
@@ -218,7 +218,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   tmpQLabel->setText(i18n("Message:" ));
   tmpGridLayout->addWidget(tmpQLabel, 2, 0, Qt::AlignTop);
 
-  messageHelp =new QTextEdit( page3);
+  messageHelp =new KTextEdit( page3);
   tmpGridLayout->addWidget(messageHelp, 2, 1);
 
   connect(choose,SIGNAL(activated(int )),this,SLOT(changeIndexCond(int)));

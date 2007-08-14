@@ -38,6 +38,7 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 #include <kpushbutton.h>
+#include <ktextedit.h>
 
 #include <QCheckBox>
 #include <QFrame>
@@ -56,7 +57,6 @@
 #include <QToolTip>
 #include <QVariant>
 #include <QWidget>
-#include <QTextEdit>
 
 using namespace KSpread;
 
@@ -319,7 +319,7 @@ DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * 
   TextLabel17->setText( i18n( "SQL query:" ) );
   resultFrameLayout->addWidget( TextLabel17, 0, 0 );
 
-  m_sqlQuery = new QTextEdit( resultFrame );
+  m_sqlQuery = new KTextEdit( resultFrame );
   resultFrameLayout->addWidget( m_sqlQuery, 1, 0 );
 
   QFrame * Frame12 = new QFrame( resultFrame );

@@ -17,6 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KSPREAD_CELL_STORAGE_P
+#define KSPREAD_CELL_STORAGE_P
+
 // KSpread
 #include "Style.h"
 
@@ -71,3 +74,5 @@ public:
 };
 
 } // namespace KSpread
+
+#endif // KSPREAD_CELL_STORAGE_P

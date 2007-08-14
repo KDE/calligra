@@ -30,7 +30,7 @@
 
 class QLabel;
 class KLineEdit;
-class QTextEdit;
+class KTextEdit;
 class KComboBox;
 class QCheckBox;
 
@@ -66,13 +66,13 @@ protected:
     KComboBox *chooseAction;
     KComboBox *chooseType;
     KLineEdit * title;
-    QTextEdit *message;
+    KTextEdit *message;
     QCheckBox *displayMessage;
     QCheckBox *allowEmptyCell;
     QCheckBox *displayHelp;
-    QTextEdit *messageHelp;
+    KTextEdit *messageHelp;
     KLineEdit *titleHelp;
-    QTextEdit *validityList;
+    KTextEdit *validityList;
     QLabel *validityLabelList;
 };
 

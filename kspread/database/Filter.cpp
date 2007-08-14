@@ -420,7 +420,7 @@ public:
             case NotMatch:  result += "Not Match"; break;
             default:        break;
         }
-        return result + " value: " + value + "\n";
+        return result + " value: " + value + '\n';
     }
 
 public:

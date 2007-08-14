@@ -38,7 +38,7 @@ class QLabel;
 class KLineEdit;
 class Q3ListViewItem;
 class QRadioButton;
-class QTextEdit;
+class KTextEdit;
 
 class K3ListView;
 class KPageWidgetItem;
@@ -117,7 +117,7 @@ class DatabaseDialog : public KAssistantDialog
   KComboBox    * m_sortMode_2;
   QCheckBox    * m_distinct;
   KPageWidgetItem * m_result;
-  QTextEdit    * m_sqlQuery;
+  KTextEdit    * m_sqlQuery;
   QRadioButton * m_startingRegion;
   KLineEdit    * m_cell;
   KLineEdit    * m_region;
