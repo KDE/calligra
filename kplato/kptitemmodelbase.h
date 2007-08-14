@@ -261,7 +261,7 @@ public:
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
     QItemSelectionModel *selectionModel() const { return m_selectionmodel; }
-    
+    void setSelectionModel( QItemSelectionModel *model );
     void setSelectionMode( QAbstractItemView::SelectionMode mode );
     void setSelectionBehavior( QAbstractItemView::SelectionBehavior mode );
     void setItemDelegateForColumn( int col, QAbstractItemDelegate * delegate );

@@ -795,6 +795,14 @@ void DoubleTreeViewBase::slotSelectionChanged( const QItemSelection &sel, const 
     emit selectionChanged( sel.indexes() );
 }
 
+void DoubleTreeViewBase::setSelectionModel( QItemSelectionModel *model )
+{
+    m_leftview->setSelectionModel( model );
+    if ( m_rightview ) {
+        m_rightview->setSelectionModel( model );
+    }
+}
+
 void DoubleTreeViewBase::setSelectionMode( QAbstractItemView::SelectionMode mode )
 {
     m_leftview->setSelectionMode( mode );

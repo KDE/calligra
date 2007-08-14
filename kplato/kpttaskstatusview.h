@@ -119,7 +119,7 @@ private:
 };
 
 
-class TaskStatusTreeView : public TreeViewBase
+class TaskStatusTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
@@ -132,20 +132,10 @@ public:
     Project *project() const { return itemModel()->project(); }
     void setProject( Project *project ) { itemModel()->setProject( project ); }
     
-signals:
-    void currentChanged( const QModelIndex& );
-    void currentColumnChanged( QModelIndex, QModelIndex );
-    void selectionChanged( const QModelIndexList );
-    void contextMenuRequested( Node *node, const QPoint &pos );
-    
 protected slots:
-    void headerContextMenuRequested( const QPoint &pos );
     void slotActivated( const QModelIndex index );
-    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
     
 protected:
-    void contextMenuEvent( QContextMenuEvent * event );
     void dragMoveEvent(QDragMoveEvent *event);
 
 };
@@ -176,18 +166,15 @@ protected:
     void updateActionsEnabled( bool on );
 
 private slots:
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotContextMenuRequested( Node *node, const QPoint& pos );
     void slotHeaderContextMenuRequested( const QPoint& );
     void slotOptions();
     
-    void slotAddTask();
-
 private:
     Project *m_project;
     int m_id;
     TaskStatusTreeView *m_view;
-
-    KAction *actionAddTask;
 
     // View options context menu
     KAction *actionOptions;

@@ -239,7 +239,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
     if ( lst == 0 ) {
         return QModelIndex();
     }
-    return createIndex( m_top.indexOf( lst ), index.column(), lst );
+    return createIndex( m_top.indexOf( lst ), 0, lst );
 }
 
 bool TaskStatusItemModel::hasChildren( const QModelIndex &parent ) const
@@ -679,16 +679,18 @@ void TaskStatusItemModel::slotNodeChanged( Node *)
 
 //--------------------
 TaskStatusTreeView::TaskStatusTreeView( Part *part, QWidget *parent )
-    : TreeViewBase( parent )
+    : DoubleTreeViewBase( parent )
 {
-    header()->setContextMenuPolicy( Qt::CustomContextMenu );
+    setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new TaskStatusItemModel( part ) );
-    setSelectionModel( new QItemSelectionModel( model() ) );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     
-    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
+
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0;
+    hideColumns( lst1, lst2 );
 
 }
 
@@ -697,46 +699,9 @@ void TaskStatusTreeView::slotActivated( const QModelIndex index )
     kDebug()<<k_funcinfo<<index.column();
 }
 
-void TaskStatusTreeView::headerContextMenuRequested( const QPoint &pos )
-{
-    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at"<<pos;
-}
-
-void TaskStatusTreeView::selectionChanged( const QItemSelection &sel, const QItemSelection &desel )
-{
-    kDebug()<<k_funcinfo<<sel.indexes().count();
-    foreach( QModelIndex i, selectionModel()->selectedIndexes() ) {
-        kDebug()<<k_funcinfo<<i.row()<<","<<i.column();
-    }
-    TreeViewBase::selectionChanged( sel, desel );
-    emit selectionChanged( selectionModel()->selectedIndexes() );
-}
-
-void TaskStatusTreeView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
-{
-    kDebug()<<k_funcinfo;
-    TreeViewBase::currentChanged( current, previous );
-    emit currentChanged( current );
-}
-
-
-void TaskStatusTreeView::contextMenuEvent ( QContextMenuEvent * event )
-{
-    kDebug()<<k_funcinfo;
-    QModelIndex i = indexAt( event->pos() );
-    if ( ! i.isValid() ) {
-        return;
-    }
-    Node *node = itemModel()->node( i );
-    if ( node == 0 ) {
-        return;
-    }
-    emit contextMenuRequested( node, event->globalPos() );
-}
-
 void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (dragDropMode() == InternalMove
+/*    if (dragDropMode() == InternalMove
         && (event->source() != this || !(event->possibleActions() & Qt::MoveAction)))
         return;
 
@@ -772,7 +737,7 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
             break;
         default:
             break;
-    }
+    }*/
 }
 
 
@@ -781,6 +746,7 @@ TaskStatusView::TaskStatusView( Part *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_id( -1 )
 {
+    kDebug()<<"-------------------- creating TaskStatusView -------------------"<<endl;
     setupGui();
 
     QVBoxLayout * l = new QVBoxLayout( this );
@@ -790,8 +756,8 @@ TaskStatusView::TaskStatusView( Part *part, QWidget *parent )
 
     m_view->itemModel()->setProject( &(part->getProject()) );
     
-    connect( m_view, SIGNAL( contextMenuRequested( Node* , const QPoint& ) ), this, SLOT( slotContextMenuRequested( Node* , const QPoint& ) ) );
-
+    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+    
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
@@ -807,7 +773,7 @@ void TaskStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
 
 Node *TaskStatusView::currentNode() const 
 {
-    Node * n = m_view->itemModel()->node( m_view->currentIndex() );
+    Node * n = m_view->itemModel()->node( m_view->selectionModel()->currentIndex() );
     if ( n && n->type() != Node::Type_Task ) {
         return 0;
     }
@@ -834,6 +800,19 @@ void TaskStatusView::setGuiActive( bool activate )
     ViewBase::setGuiActive( activate );
 }
 
+void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
+{
+    kDebug()<<k_funcinfo<<index<<pos<<endl;
+    if ( ! index.isValid() ) {
+        return;
+    }
+    Node *node = m_view->itemModel()->node( index );
+    if ( node == 0 ) {
+        return;
+    }
+    slotContextMenuRequested( node, pos );
+}
+
 void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 {
     kDebug()<<k_funcinfo<<node->name()<<" :"<<pos;
@@ -858,12 +837,6 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 
 void TaskStatusView::setupGui()
 {
-    QString name = "taskeditor_add_list";
-    actionAddTask  = new KAction(KIcon( "add_task" ), i18n("Add Task..."), this);
-    actionCollection()->addAction("add_task", actionAddTask );
-    connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
-    addAction( name, actionAddTask );
-    
     // Add the context menu actions for the view options
     actionOptions = new KAction(KIcon("options"), i18n("Options"), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
@@ -873,14 +846,8 @@ void TaskStatusView::setupGui()
 void TaskStatusView::slotOptions()
 {
     kDebug()<<k_funcinfo;
-    ItemViewSettupDialog dlg( m_view, true/*includeColumn0*/ );
+    ItemViewSettupDialog dlg( m_view->slaveView() );
     dlg.exec();
-}
-
-
-void TaskStatusView::slotAddTask()
-{
-    kDebug()<<k_funcinfo;
 }
 
 
