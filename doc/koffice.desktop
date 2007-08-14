@@ -2,8 +2,6 @@
 Encoding=UTF-8
 Type=Application
 Name=KOffice
-Name[sv]=Koffice
-Name[tr]=Koffice
 NoDisplay=true
 DocPath=koffice/index.html
 Categories=Qt;KDE;Office;
