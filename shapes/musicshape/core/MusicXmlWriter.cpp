@@ -104,16 +104,22 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part)
         char note = 'A' + ((((pitch + 2) % 7) + 7) % 7);
         w.addTextNode(QString(note));
         w.endElement(); // music:step
-        w.startElement("music:octave");
-        w.addTextNode(QString::number((pitch + 4*7) / 7)); // first add, than divide to get proper rounding
-        w.endElement(); // music:octave
+
         if (chord->note(0)->accidentals()) {
             w.startElement("music:alter");
             w.addTextNode(QString::number(chord->note(0)->accidentals()));
             w.endElement(); // music:alter
         }
+        
+        w.startElement("music:octave");
+        w.addTextNode(QString::number((pitch + 4*7) / 7)); // first add, than divide to get proper rounding
+        w.endElement(); // music:octave
         w.endElement(); // music:pitch
+    } else {
+        w.startElement("music:rest");
+        w.endElement();  // music:rest
     }
+    
     w.startElement("music:duration");
     w.addTextNode(QString::number(chord->length()));
     w.endElement(); // music:duration
@@ -184,14 +190,14 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
         bool inAttributes = false;
         if (i == 0) {
             w.startElement("music:attributes");
+            w.startElement("music:divisions");
+            w.addTextNode(QString::number(VoiceElement::QuarterLength));
+            w.endElement(); // music:divisions
             if (part->staffCount() != 1) {
                 w.startElement("music:staves");
                 w.addTextNode(QString::number(part->staffCount()));
                 w.endElement(); // music:staves
-            }
-            w.startElement("music:divisions");
-            w.addTextNode(QString::number(VoiceElement::QuarterLength));
-            w.endElement(); // music:divisions
+            }            
             inAttributes = true;
         }
         
