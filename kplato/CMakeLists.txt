@@ -73,7 +73,6 @@ set(kplatoprivate_LIB_SRCS
     kptganttview.cc
     kptresourcespanel.cc
     kptrelationdialog.cc
-#    kptresourceview.cc
     kptrequestresourcespanel.cc
     kptresourcedialog.cc
     kptdatetime.cc
