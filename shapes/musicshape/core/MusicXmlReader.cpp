@@ -182,10 +182,17 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                     QString type = getProperty(e, "type");
                     Chord::Duration duration = parseDuration(type, length, curDivisions);
                     
+                    QString voiceStr = getProperty(e, "voice");
+                    int voiceId = 0;
+                    if (!voiceStr.isNull()) voiceId = voiceStr.toInt() - 1;
+                    while (voiceId >= part->voiceCount()) {
+                        part->addVoice();
+                    }
+                    
                     //TODO dots
                     Staff* staff = part->staff(staffId);
                     lastNote = new Chord(staff, duration);
-                    Voice* voice = part->voice(0);
+                    Voice* voice = part->voice(voiceId);
                     voice->bar(bar)->addElement(lastNote);
                 }
 
