@@ -522,16 +522,10 @@ QVariant NodeModel::duration( const Node *node, int role ) const
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->displayUnit();
-                QList<double> scales; // TODO: week
-                if ( node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << m_project->standardWorktime()->day();
-                    // rest is default
-                }
-                double v = Estimate::scale( node->duration( id() ), unit, scales );
-                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                double v = node->duration( id() ).toDouble( unit );
                 return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             } else if ( node->type() == Node::Type_Project ) {
-                Duration::Unit unit = Duration::Unit_h;
+                Duration::Unit unit = Duration::Unit_d;
                 double v = node->duration( id() ).toDouble( unit );
                 return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             }
@@ -550,14 +544,8 @@ QVariant NodeModel::varianceDuration( const Node *node, int role ) const
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->displayUnit();
-                QList<double> scales; // TODO: week
-                if ( node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << m_project->standardWorktime()->day();
-                    // rest is default
-                }
-                double v = Estimate::scale( node->variance( id() ), unit, scales );
-                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
+                double v = node->variance( id(), unit );
+                return KGlobal::locale()->formatNumber( v );
             }
             break;
         case Qt::StatusTipRole:
@@ -570,12 +558,21 @@ QVariant NodeModel::varianceDuration( const Node *node, int role ) const
 QVariant NodeModel::varianceEstimate( const Estimate *est, int role ) const
 {
     switch ( role ) {
-        case Qt::DisplayRole:
+        case Qt::DisplayRole: {
+            Duration::Unit unit = Duration::Unit_h;
+            double v = est->variance( unit );
+            //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            return KGlobal::locale()->formatNumber( v );
+        }
         case Qt::ToolTipRole: {
-                double v = est->variance().toDouble( Duration::Unit_h );
-                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( Duration::Unit_h, true );
-            break;
+            Duration::Unit unit = Duration::Unit_d;
+            double v = est->variance( unit );
+            QString s = QString("%1%2").arg( KGlobal::locale()->formatNumber( v ) ).arg( Duration::unitToString( unit, true ) );
+            
+            unit = Duration::Unit_m;
+            v = est->variance( unit );
+            s = QString("%1, %2%3").arg( s ).arg( KGlobal::locale()->formatNumber( v ) ).arg( Duration::unitToString( unit, true ) );
+            return s;
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -591,9 +588,10 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
         case Qt::ToolTipRole: {
                 Duration d = node->duration( id() );
                 d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
-                double v = d.toDouble( Duration::Unit_h );
+                Duration::Unit unit = node->estimate()->displayUnit();
+                double v = d.toDouble( unit );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( Duration::Unit_h, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
         case Qt::StatusTipRole:
@@ -608,7 +606,7 @@ QVariant NodeModel::optimisticEstimate( const Estimate *est, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-                Duration::Unit unit = est->displayUnit();
+                Duration::Unit unit = Duration::Unit_h;//est->displayUnit();
                 QList<double> scales; // TODO: week
                 if ( est->type() == Estimate::Type_Effort ) {
                     scales << m_project->standardWorktime()->day();
@@ -631,14 +629,13 @@ QVariant NodeModel::pertExpected( const Estimate *est, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration::Unit unit = est->displayUnit();
+            Duration::Unit unit = Duration::Unit_h;
             QList<double> scales; // TODO: week
             if ( est->type() == Estimate::Type_Effort ) {
                 scales << m_project->standardWorktime()->day();
                 // rest is default
             }
             double v = Estimate::scale( est->pertExpected(), unit, scales );
-            //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
         }
         case Qt::StatusTipRole:
@@ -655,9 +652,10 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
         case Qt::ToolTipRole: {
                 Duration d = node->duration( id() );
                 d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
-                double v = d.toDouble( Duration::Unit_h );
+                Duration::Unit unit = node->estimate()->displayUnit();
+                double v = d.toDouble( unit );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( Duration::Unit_h, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
         case Qt::StatusTipRole:
@@ -672,7 +670,7 @@ QVariant NodeModel::pessimisticEstimate( const Estimate *est, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-                Duration::Unit unit = est->displayUnit();
+                Duration::Unit unit = Duration::Unit_h;//est->displayUnit();
                 QList<double> scales; // TODO: week
                 if ( est->type() == Estimate::Type_Effort ) {
                     scales << m_project->standardWorktime()->day();

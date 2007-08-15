@@ -116,6 +116,12 @@ Duration Duration::operator*(const double value) const {
     return dur;
 }
 
+Duration Duration::operator*(const Duration value) const {
+    Duration dur(*this);
+    dur.m_ms = m_ms * value.m_ms;
+    return dur;
+}
+
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
         kDebug()<<k_funcinfo<<"Devide by zero:"<<this->toString();

@@ -108,6 +108,7 @@ class KPLATO_TEST_EXPORT Duration {
         Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
         Duration operator*(int unit) const; 
         Duration operator*(const double value) const;
+        Duration operator*(const Duration value) const;
         /// Divide duration with the integer @p unit
         Duration operator/(int unit) const;
         /// Divide duration with the duration @p d

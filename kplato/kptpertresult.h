@@ -77,6 +77,8 @@ public:
     void setManager( ScheduleManager *sm );
     ScheduleManager *manager() const { return m_manager; }
     
+    Duration::Unit presentationUnit() const { return Duration::Unit_d; }
+    
 protected slots:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
@@ -84,7 +86,7 @@ protected slots:
     void slotNodeToBeRemoved( Node *node );
     void slotNodeRemoved( Node *node );
 
-protected:
+public:
     QVariant alignment( int column ) const;
     
     QVariant name( const Node *node, int role ) const;
@@ -266,6 +268,9 @@ public:
     
     CriticalPathItemModel *model() const { return static_cast<CriticalPathItemModel*>( widget.cpmTable->model() ); }
 
+    double probability( double z ) const;
+    double valueZ( double p ) const;
+    
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
@@ -276,6 +281,9 @@ protected slots:
     
     void slotOptions();
     
+    void slotFinishTimeChanged( const QDateTime &dt );
+    void slotProbabilityChanged( int value );
+
 private slots:
     void slotUpdate();
 
@@ -288,6 +296,7 @@ private:
     // View options context menu
     KAction *actionOptions;
 
+    bool block;
 };
 
 }  //KPlato namespace

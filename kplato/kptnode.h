@@ -318,10 +318,15 @@ public:
     const Duration &duration( long id = -1 ) const;
     
     /**
-     *  variance is calculated based on the optimistic/pessimistic ratio
-     *  specified for the estimate.
+     * The variance is calculated based on
+     * the optimistic/pessimistic ratio specified for the estimate.
      */
-    Duration variance( long id = -1 ) const;
+    double variance( long id = -1, Duration::Unit unit = Duration::Unit_ms ) const;
+    /**
+     * The standard deviation is calculated based on 
+     * the optimistic/pessimistic ratio specified for the estimate.
+     */
+    double deviation( long id = -1, Duration::Unit unit = Duration::Unit_ms ) const;
     
     Node *siblingBefore();
     Node *childBefore(Node *node);
@@ -658,7 +663,17 @@ public:
      */
     int pessimisticRatio() const;
 
-    Duration variance() const;
+    /**
+     * The variance is calculated based on
+     * the optimistic/pessimistic ratio.
+     */
+    double variance( Duration::Unit unit = Duration::Unit_ms ) const;
+    /**
+     * The standard deviation is calculated based on 
+     * the optimistic/pessimistic ratio.
+     */
+    double deviation( Duration::Unit unit = Duration::Unit_ms ) const;
+    
     Duration pertExpected() const;
     Duration pertOptimistic() const;
     Duration pertPessimistic() const;

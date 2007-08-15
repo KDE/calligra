@@ -433,21 +433,25 @@ const Duration& Node::duration( long id ) const
     return s ? s->duration : Duration::zeroDuration;
 }
 
-Duration Node::variance( long id ) const
+double Node::variance( long id, Duration::Unit unit ) const
+{
+    double d = deviation( id, unit );
+    return d * d;
+}
+
+double Node::deviation( long id, Duration::Unit unit ) const
 {
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
         s = findSchedule( id );
     }
-    Duration d;
+    double d = 0.0;
     if ( s && m_estimate ) {
-        d = s->duration;
-        Duration o = ( d *  ( 100 + m_estimate->optimisticRatio() ) ) / 100;
-        Duration p = ( d * ( 100 + m_estimate->pessimisticRatio() ) ) / 100;
+        d = s->duration.toDouble( unit );
+        double o = ( d *  ( 100 + m_estimate->optimisticRatio() ) ) / 100;
+        double p = ( d * ( 100 + m_estimate->pessimisticRatio() ) ) / 100;
         d =  ( p - o ) / 6;
-        kDebug()<<k_funcinfo<<d.toString()<<endl;
     }
-    kDebug()<<k_funcinfo<<d.toString()<<endl;
     return d;
 }
 
@@ -1159,9 +1163,18 @@ void Estimate::expectedEstimate(unsigned *days, unsigned *hours, unsigned *minut
     m_expectedEstimate.get(days, hours, minutes);
 }
 
-Duration Estimate::variance() const {
-    return (m_pessimisticEstimate - m_optimisticEstimate)/6;
+double Estimate::variance( Duration::Unit unit ) const {
+    double d = deviation( unit );
+    return d * d;
 }
+
+double Estimate::deviation( Duration::Unit unit ) const {
+    double p = m_pessimisticEstimate.toDouble( unit );
+    double o = m_optimisticEstimate.toDouble( unit );
+    double v = ( p - o ) / 6;
+    return v;
+}
+
 Duration Estimate::pertExpected() const {
     if (m_risktype == Risk_Low) {
         return (m_optimisticEstimate + m_pessimisticEstimate + (m_expectedEstimate*4))/6;
@@ -1172,13 +1185,13 @@ Duration Estimate::pertExpected() const {
 }
 Duration Estimate::pertOptimistic() const {
     if (m_risktype != Risk_None) {
-        return pertExpected() - variance();
+        return pertExpected() - Duration( variance() );
     }
     return m_optimisticEstimate;
 }
 Duration Estimate::pertPessimistic() const {
     if (m_risktype != Risk_None) {
-        return pertExpected() + variance();
+        return pertExpected() + Duration( variance() );
     }
     return m_pessimisticEstimate;
 }
@@ -1400,10 +1413,11 @@ void Estimate::printDebug(const QByteArray& _indent) {
     kDebug()<<indent<<"  Pessimistic:"<<m_pessimisticEstimate.toString();
     
     kDebug()<<indent<<"  Risk:"<<risktypeToString();
-    kDebug()<<indent<<"  Pert expected:"<<pertExpected().toString();
-    kDebug()<<indent<<"  Pert optimistic:"<<pertOptimistic().toString();
-    kDebug()<<indent<<"  Pert pessimistic:"<<pertPessimistic().toString();
-    kDebug()<<indent<<"  Pert variance:"<<variance().toString();
+    kDebug()<<indent<<"  Pert expected:      "<<pertExpected().toString()<<endl;
+    kDebug()<<indent<<"  Pert optimistic:    "<<pertOptimistic().toString()<<endl;
+    kDebug()<<indent<<"  Pert pessimistic:   "<<pertPessimistic().toString()<<endl;
+    kDebug()<<indent<<"  Pert variance:      "<<variance()<<endl;
+    kDebug()<<indent<<"  Pert std deviation: "<<deviation()<<endl;
 }
 #endif
 

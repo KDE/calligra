@@ -160,7 +160,7 @@ QVariant CriticalPathItemModel::name( int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return i18n( "Project" );
+            return i18n( "Path" );
         case Qt::ToolTipRole:
         case Qt::EditRole:
         case Qt::StatusTipRole:
@@ -176,7 +176,7 @@ QVariant CriticalPathItemModel::duration( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                Duration::Unit unit = node->estimate()->displayUnit();
+                Duration::Unit unit = presentationUnit();
                 QList<double> scales; // TODO: week
                 if ( node->estimate()->type() == Estimate::Type_Effort ) {
                     scales << m_project->standardWorktime()->day();
@@ -199,7 +199,7 @@ QVariant CriticalPathItemModel::duration( int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatNumber( m_project->duration( m_manager->id() ).toDouble( Duration::Unit_h ), 1 );
+            return KGlobal::locale()->formatNumber( m_project->duration( m_manager->id() ).toDouble( presentationUnit() ), 1 );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -213,13 +213,8 @@ QVariant CriticalPathItemModel::variance( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                Duration::Unit unit = node->estimate()->displayUnit();
-                QList<double> scales; // TODO: week
-                if ( node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << m_project->standardWorktime()->day();
-                    // rest is default
-                }
-                double v = Estimate::scale( node->variance( m_manager->id() ), unit, scales );
+                Duration::Unit unit = presentationUnit();
+                double v = node->variance( m_manager->id(), unit );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             }
@@ -236,9 +231,9 @@ QVariant CriticalPathItemModel::variance( const Estimate *est, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-                double v = est->variance().toDouble( Duration::Unit_h );
+                double v = est->variance( presentationUnit() );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+                return KGlobal::locale()->formatNumber( v );
             break;
         }
         case Qt::StatusTipRole:
@@ -253,12 +248,19 @@ QVariant CriticalPathItemModel::variance( int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration v;
+            double v = 0.0;
+            foreach ( Node *n, m_path ) {
+                v += n->variance( m_manager->id(), presentationUnit() );
+            }
+            return KGlobal::locale()->formatNumber( v, 1 );
+            break;
+        }
+        case Qt::EditRole: {
+            double v = 0.0;
             foreach ( Node *n, m_path ) {
                 v += n->variance( m_manager->id() );
             }
-            return KGlobal::locale()->formatNumber( v.toDouble( Duration::Unit_h ), 1 );
-            break;
+            return v;
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -274,9 +276,8 @@ QVariant CriticalPathItemModel::optimistic( const Node *node, int role ) const
         case Qt::ToolTipRole: {
                 Duration d = node->duration( m_manager->id() );
                 d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
-                double v = d.toDouble( Duration::Unit_h );
-                //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+                double v = d.toDouble( presentationUnit() );
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( presentationUnit(), true );
             break;
         }
         case Qt::StatusTipRole:
@@ -291,7 +292,7 @@ QVariant CriticalPathItemModel::optimistic( const Estimate *est, int role ) cons
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-                Duration::Unit unit = est->displayUnit();
+                Duration::Unit unit = presentationUnit();
                 QList<double> scales; // TODO: week
                 if ( est->type() == Estimate::Type_Effort ) {
                     scales << m_project->standardWorktime()->day();
@@ -316,7 +317,7 @@ QVariant CriticalPathItemModel::estimate( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
             if ( node->type() == Node::Type_Task ) {
-                Duration::Unit unit = node->estimate()->displayUnit();
+                Duration::Unit unit = presentationUnit();
                 QList<double> scales; // TODO: week
                 if ( node->estimate()->type() == Estimate::Type_Effort ) {
                     scales << m_project->standardWorktime()->day();
@@ -338,7 +339,7 @@ QVariant CriticalPathItemModel::estimate( const Node *node, int role ) const
             return lst;
         }
         case Role::DurationUnit:
-            return static_cast<int>( node->estimate()->displayUnit() );
+            return static_cast<int>( presentationUnit() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -362,14 +363,13 @@ QVariant CriticalPathItemModel::expected( const Estimate *est, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration::Unit unit = est->displayUnit();
+            Duration::Unit unit = Duration::Unit_h;
             QList<double> scales; // TODO: week
             if ( est->type() == Estimate::Type_Effort ) {
                 scales << m_project->standardWorktime()->day();
                 // rest is default
             }
             double v = Estimate::scale( est->pertExpected(), unit, scales );
-            //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
         }
         case Qt::StatusTipRole:
@@ -386,9 +386,9 @@ QVariant CriticalPathItemModel::pessimistic( const Node *node, int role ) const
         case Qt::ToolTipRole: {
                 Duration d = node->duration( m_manager->id() );
                 d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
-                double v = d.toDouble( Duration::Unit_h );
+                double v = d.toDouble( presentationUnit() );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( presentationUnit(), true );
             break;
         }
         case Qt::StatusTipRole:
@@ -403,7 +403,7 @@ QVariant CriticalPathItemModel::pessimistic( const Estimate *est, int role ) con
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-                Duration::Unit unit = est->displayUnit();
+                Duration::Unit unit = presentationUnit();
                 QList<double> scales; // TODO: week
                 if ( est->type() == Estimate::Type_Effort ) {
                     scales << m_project->standardWorktime()->day();
@@ -1422,10 +1422,13 @@ void PertResult::setProject( Project *project )
 PertCpmView::PertCpmView( Part *part, QWidget *parent ) 
     : ViewBase( part, parent ),
     m_project( 0 ),
-    current_schedule( 0 )
+    current_schedule( 0 ),
+    block( false )
 {
     kDebug() << " ---------------- KPlato: Creating PertCpmView ----------------" << endl;
     widget.setupUi(this);
+    widget.finishTime->setEnabled( false );
+    widget.probability->setEnabled( false );
 
     widget.cpmTable->setStretchLastSection ( false );
     CriticalPathItemModel *m = new CriticalPathItemModel( part );
@@ -1447,15 +1450,18 @@ PertCpmView::PertCpmView( Part *part, QWidget *parent )
     widget.cpmTable->slaveView()->mapToSection( 35, 2 );
     widget.cpmTable->slaveView()->mapToSection( 36, 3 );
     widget.cpmTable->slaveView()->mapToSection( 5, 4 );
-    widget.cpmTable->slaveView()->mapToSection( 19, 5 );
-    widget.cpmTable->slaveView()->mapToSection( 18, 6 );
+    widget.cpmTable->slaveView()->mapToSection( 18, 5 );
+    widget.cpmTable->slaveView()->mapToSection( 19, 6 );
     widget.cpmTable->slaveView()->mapToSection( 20, 7 );
     widget.cpmTable->slaveView()->mapToSection( 21, 8 );
     
     setProject( &( part->getProject() ) );
 
     connect( widget.cpmTable, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
-
+    
+    connect( widget.finishTime, SIGNAL( dateTimeChanged( const QDateTime& ) ), SLOT( slotFinishTimeChanged( const QDateTime& ) ) );
+    
+    connect( widget.probability, SIGNAL( valueChanged( int ) ), SLOT( slotProbabilityChanged( int ) ) );
 }
 
 void PertCpmView::setupGui()
@@ -1485,6 +1491,8 @@ void PertCpmView::slotOptions()
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
     kDebug()<<k_funcinfo<<sm<<endl;
+    widget.finishTime->setEnabled( sm != 0 );
+    widget.probability->setEnabled( sm != 0 );
     current_schedule = sm;
     model()->setManager( sm );
     draw();
@@ -1502,6 +1510,8 @@ void PertCpmView::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
     if ( sm == current_schedule ) {
         current_schedule = 0;
         model()->setManager( 0 );
+        widget.finishTime->setEnabled( false );
+        widget.probability->setEnabled( false );
     }
 }
 
@@ -1531,9 +1541,76 @@ void PertCpmView::draw()
             return;
         }
         widget.scheduleName->setText( current_schedule->name() );
-//        widget.finishTime->setDateTime( m_project->endTime( current_schedule->id() ).dateTime() );
-//        widget.probability->setValue( 68 );
+        widget.finishTime->setDateTime( m_project->endTime( id ).dateTime() );
     }
+}
+
+void PertCpmView::slotFinishTimeChanged( const QDateTime &dt )
+{
+    kDebug()<<k_funcinfo<<dt<<endl;
+    if ( block || m_project == 0 || current_schedule == 0 ) {
+        return;
+    }
+    block = true;
+    double var = model()->variance( Qt::EditRole ).toDouble();
+    double dev = sqrt( var );
+    DateTime et = m_project->endTime( current_schedule->id() );
+    DateTime t = DateTime( KDateTime( dt ) );
+    double d = ( et - t ).toDouble();
+    d = t < et ? -d : d;
+    double z = d / dev;
+    double v = probability( z );
+    widget.probability->setValue( (int)( v * 100 ) );
+    kDebug()<<k_funcinfo<<z<<", "<<v<<endl;
+    block = false;
+}
+
+void PertCpmView::slotProbabilityChanged( int value )
+{
+    kDebug()<<k_funcinfo<<value<<endl;
+    if ( value == 0 || block || m_project == 0 || current_schedule == 0 ) {
+        return;
+    }
+    block = true;
+    double var = model()->variance( Qt::EditRole ).toDouble();
+    double dev = sqrt( var );
+    DateTime et = m_project->endTime( current_schedule->id() );
+    double p = valueZ( value );
+    DateTime t = et + Duration( qint64( p * dev ) );
+    widget.finishTime->setDateTime( t.dateTime() );
+    kDebug()<<k_funcinfo<<p<<", "<<t.toString()<<endl;
+    block = false;
+}
+
+double PertCpmView::probability( double z ) const
+{
+    // TODO proper table
+    double dist[][2] = { {0.0, 0.5}, {0.68, 0.7517}, {3.0, 0.9987}  };
+    double p = 1.0;
+    int i = 1;
+    for ( ; i < 3; ++i ) {
+        if ( QABS( z ) <= dist[i][0] ) {
+            break;
+        }
+    }
+    p = dist[i-1][1] + ( ( dist[i][1] - dist[i-1][1] ) * ( ( QABS(z) - dist[i-1][0] ) / (dist[i][0] - dist[i-1][0] ) ) );
+    return z < 0 ? 1- p : p;
+}
+
+double PertCpmView::valueZ( double pr ) const
+{
+    // TODO proper table
+    double prob[][2] = { {50.0, 0.0}, {75.0, 0.674}, {99.0, 2.326}  };
+    double p = pr >= 50.0 ? pr : 100.0 - pr;
+    double z = 3.0;
+    int i = 1;
+    for ( ; i < 3; ++i ) {
+        if ( p < prob[i][0] ) {
+            break;
+        }
+    }
+    z = prob[i-1][1] + ( ( prob[i][1] - prob[i-1][1] ) * ( ( p - prob[i-1][0] ) / (prob[i][0] - prob[i-1][0] ) ) );
+    return pr < 50.0 ? -z : z;
 }
 
 void PertCpmView::slotUpdate()
