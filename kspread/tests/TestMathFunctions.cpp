@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Ariya Hidayat <ariya@kde.org>
+   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -188,6 +189,13 @@ void TestMathFunctions::testFIB()
   CHECK_EVAL( "FIB(0)", Value::errorNUM() );
   CHECK_EVAL( "FIB(-1)", Value::errorNUM() );
   CHECK_EVAL( "FIB(\"text\")", Value::errorVALUE() );
+}
+
+void TestMathFunctions::testGAMMA()
+{
+  CHECK_EVAL( "GAMMA(1.00)", 1.0000000000 );
+  CHECK_EVAL( "GAMMA(1.10)", 0.9513507700 );
+  CHECK_EVAL( "GAMMA(1.50)", 0.8862269255 );
 }
 
 void TestMathFunctions::testGCD()

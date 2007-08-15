@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Ariya Hidayat <ariya@kde.org>
+   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,6 +40,7 @@ private slots:
   void testFACT();
   void testFACTDOUBLE();
   void testFIB();
+  void testGAMMA();
   void testGCD();
   void testLCM();
   void testLOG();
