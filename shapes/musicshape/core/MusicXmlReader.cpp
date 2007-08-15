@@ -210,7 +210,25 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                     note -= 2;
                     if (note < 0) note += 7;
                     note += (octave - 4) * 7;
-                    lastNote->addNote(part->staff(staffId), note);
+                    
+                    int alter = 0;
+                    QString alterStr = getProperty(pitch, "alter");
+                    if (!alterStr.isNull()) alter = alterStr.toInt();
+                    
+                    QString accidental = getProperty(e, "accidental");
+                    if (accidental == "double-sharp" || accidental == "sharp-sharp") {
+                        alter = 2;
+                    } else if (accidental == "sharp" || accidental == "natural-sharp") {
+                        alter = 1;
+                    } else if (accidental == "natural") {
+                        alter = 0;
+                    } else if (accidental == "flat" || accidental == "natural-flat") {
+                        alter = -1;
+                    } else if (accidental == "double-flat" || accidental == "flat-flat") {
+                        alter = -2;
+                    }
+                    
+                    lastNote->addNote(part->staff(staffId), note, alter);
                 }
             }
         }
