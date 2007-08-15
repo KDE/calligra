@@ -1417,6 +1417,17 @@ void PertResult::setProject( Project *project )
     draw();
 }
 
+bool PertResult::loadContext( const KoXmlElement &context )
+{
+    kDebug()<<k_funcinfo<<endl;
+    return widget.treeWidgetTaskResult->loadContext( context );
+}
+
+void PertResult::saveContext( QDomElement &context ) const
+{
+    widget.treeWidgetTaskResult->saveContext( context );
+}
+
 
 //--------------------
 PertCpmView::PertCpmView( Part *part, QWidget *parent ) 
@@ -1617,6 +1628,18 @@ void PertCpmView::slotUpdate()
 {
     draw();
 }
+
+bool PertCpmView::loadContext( const KoXmlElement &context )
+{
+    kDebug()<<k_funcinfo<<objectName()<<endl;
+    return widget.cpmTable->loadContext( context );
+}
+
+void PertCpmView::saveContext( QDomElement &context ) const
+{
+    widget.cpmTable->saveContext( context );
+}
+
 
 
 } // namespace KPlato

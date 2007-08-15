@@ -25,19 +25,22 @@
 #include <QString>
 #include <qstringlist.h>
 
-#include <KoXmlReader.h>
+#include "KoDom.h"
 
 namespace KPlato
 {
+
+class View;
 
 class Context {
 public:
     Context();
     virtual ~Context();
     
-    virtual bool load(KoXmlElement &element);
-    virtual void save(QDomElement &element) const;
-    
+    virtual bool load( const KoXmlDocument &doc );
+    virtual QDomDocument save( const View *view ) const;
+    const KoXmlElement &context() const;
+    bool isLoaded() const { return m_contextLoaded; }
 
     // View
     QString currentView;
@@ -80,6 +83,10 @@ public:
     struct Reportview {
     } reportview;
 
+private:
+    bool m_contextLoaded;
+    KoXmlElement m_context;
+    KoXmlDocument m_document;
 };
 
 }  //KPlato namespace

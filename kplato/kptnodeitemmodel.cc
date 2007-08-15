@@ -1282,7 +1282,7 @@ NodeItemModel::~NodeItemModel()
     
 void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 {
-    //kDebug()<<k_funcinfo<<node->name();
+    //kDebug()<<k_funcinfo<<parent->name()<<"; "<<row<<endl;
     Q_ASSERT( m_node == 0 );
     m_node = parent;
     beginInsertRows( index( parent ), row, row );
@@ -1290,7 +1290,7 @@ void NodeItemModel::slotNodeToBeInserted( Node *parent, int row )
 
 void NodeItemModel::slotNodeInserted( Node *node )
 {
-    //kDebug()<<k_funcinfo<<node->parentNode->name()<<"-->"<<node->name();
+    //kDebug()<<k_funcinfo<<node->parentNode()->name()<<"-->"<<node->name()<<endl;
     Q_ASSERT( node->parentNode() == m_node );
     endInsertRows();
     m_node = 0;
@@ -1372,6 +1372,9 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
     if ( m_readWrite ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
+            case 0: // name
+                flags |= Qt::ItemIsEditable;
+                break;
             case 1: break; // Node type
             case 2: // Responsible
                 flags |= Qt::ItemIsEditable;
@@ -1456,7 +1459,7 @@ QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
 
 bool NodeItemModel::hasChildren( const QModelIndex &parent ) const
 {
-    if ( m_nodemodel.manager() == 0 || m_project == 0 ) {
+    if ( m_project == 0 ) {
         return 0;
     }
     Node *p = node( parent );
@@ -1465,7 +1468,7 @@ bool NodeItemModel::hasChildren( const QModelIndex &parent ) const
 
 QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    if ( m_nodemodel.manager() == 0 || m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         //kDebug()<<k_funcinfo<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
@@ -2146,25 +2149,26 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
         row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
-        //kDebug()<<k_funcinfo<<"Inserted:"<<account->name();
+        //kDebug()<<k_funcinfo<<"Inserted: "<<node->name()<<"; "<<row<<endl;
         return createIndex( row, 0, node );
     }
-    //kDebug()<<k_funcinfo<<"Can't find"<<node->name();
+    //kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
     return QModelIndex();
 }
 
 QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
     m_part->addCommand( new SubtaskAddCmd( m_part, m_project, node, parent, i18n( "Add Subtask" ) ) );
+    reset();
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
     }
     if ( row != -1 ) {
-        //kDebug()<<k_funcinfo<<"Inserted:"<<account->name();
+        //kDebug()<<k_funcinfo<<node->parentNode()<<" inserted: "<<node->name()<<"; "<<row<<endl;
         return createIndex( row, 0, node );
     }
-    //kDebug()<<k_funcinfo<<"Can't find"<<node->name();
+    //kDebug()<<k_funcinfo<<"Can't find "<<node->name()<<endl;
     return QModelIndex();
 }
 

@@ -22,6 +22,8 @@
 
 #include "kptviewbase.h"
 
+#include <KoXmlReaderForward.h>
+
 #include <QMap>
 
 class QSplitter;
@@ -43,6 +45,9 @@ class Context;
  * ViewVase based views as well.
  * This splitter view is created by the main View, and subviews can then be
  * added with addView(). A QTabWidget is added with addTabWidget().
+ *
+ * To have context info loaded, views added to this splitter must have a
+ * unique objectName().
 */
 class SplitterView : public ViewBase
 {
@@ -83,6 +88,11 @@ public:
     /// Return the active view at @p pos
     ViewBase *findView( const QPoint &pos ) const;
 
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+    
 public slots:
     /// Activate/deactivate the gui (also of subviews)
     virtual void setGuiActive( bool activate );

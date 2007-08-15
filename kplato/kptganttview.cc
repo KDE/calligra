@@ -249,10 +249,13 @@ Node *GanttView::currentNode() const
     return 0;
 }
 
-bool GanttView::setContext( const Context &c )
+bool GanttView::loadContext( const KoXmlElement &settings )
 {
-    kDebug()<<k_funcinfo;
-    const Context::Ganttview &context = c.ganttview;
+    kDebug()<<k_funcinfo<<endl;
+/*    QDomElement elm = context.firstChildElement( objectName() );
+    if ( elm.isNull() ) {
+        return false;
+    }*/
     
 //     Q3ValueList<int> list = m_splitter->sizes();
 //     list[ 0 ] = context.ganttviewsize;
@@ -262,14 +265,14 @@ bool GanttView::setContext( const Context &c )
     //TODO this does not work yet!
     //     currentItemChanged(findItem(project.findNode(context.currentNode)));
 
-    m_showResources = context.showResources ;
-    m_showTaskName = context.showTaskName;
-    m_showTaskLinks = context.showTaskLinks;
-    m_showProgress = context.showProgress;
+/*    m_showResources = context.showResources ;
+    m_showTaskName = context.showTaskName;*/
+    m_showTaskLinks = (bool)settings.attribute( "show-dependencies" , "0" ).toInt();
+/*    m_showProgress = context.showProgress;
     m_showPositiveFloat = context.showPositiveFloat;
     m_showCriticalTasks = context.showCriticalTasks;
     m_showCriticalPath = context.showCriticalPath;
-    m_showNoInformation = context.showNoInformation;
+    m_showNoInformation = context.showNoInformation;*/
     //TODO this does not work yet!
     //     getContextClosedNodes(context, m_gantt->firstChild());
     //     for (QStringList::ConstIterator it = context.closedNodes.begin(); it != context.closedNodes.end(); ++it) {
@@ -281,9 +284,14 @@ bool GanttView::setContext( const Context &c )
     return true;
 }
 
-void GanttView::getContext( Context &c ) const
+void GanttView::saveContext( QDomElement &settings ) const
 {
-    Context::Ganttview &context = c.ganttview;
+    kDebug()<<k_funcinfo<<endl;
+/*    QDomElement elm = context.firstChildElement( objectName() );
+    if ( elm.isNull() ) {
+        return;
+    }*/
+/*    Context::Ganttview &context = c.ganttview;
 
     //kDebug()<<k_funcinfo;
     context.ganttviewsize = m_splitter->sizes() [ 0 ];
@@ -293,13 +301,13 @@ void GanttView::getContext( Context &c ) const
         context.currentNode = currentNode() ->id();
     }
     context.showResources = m_showResources;
-    context.showTaskName = m_showTaskName;
-    context.showTaskLinks = m_showTaskLinks;
-    context.showProgress = m_showProgress;
+    context.showTaskName = m_showTaskName;*/
+    settings.setAttribute( "show-dependencies", m_showTaskLinks );
+/*    context.showProgress = m_showProgress;
     context.showPositiveFloat = m_showPositiveFloat;
     context.showCriticalTasks = m_showCriticalTasks;
     context.showCriticalPath = m_showCriticalPath;
-    context.showNoInformation = m_showNoInformation;
+    context.showNoInformation = m_showNoInformation;*/
 }
 
 void GanttView::setReadWriteMode( bool on )

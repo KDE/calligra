@@ -55,6 +55,9 @@ public:
     /// Return the part (document) this view handles
     Part *part() const;
     
+    /// Return the type of view this is (class name)
+    QString viewType() const { return metaObject()->className(); }
+    
     virtual void setZoom(double /*zoom*/) {}
     /// Set the project this view shall handle.
     virtual void setProject( Project */*project*/ ) {}
@@ -85,10 +88,10 @@ public:
     /// Add an action to the specified action list
     void addAction( const QString list, QAction *action ) { m_actionListMap[list].append( action ); }
     
-    /// Sets context info to this view. Reimplement.
-    virtual bool setContext( const Context &/*context*/ ) { return false; }
-    /// Gets context info from this view. Reimplement.
-    virtual void getContext( Context &/*context*/ ) const {}
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ ) { return false; }
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const {}
     
     virtual QList<QAction*> contextActionList() const { return m_contextActionList; }
     void addContextAction( QAction *action ) { m_contextActionList.append( action ); }

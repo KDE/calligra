@@ -25,6 +25,8 @@
 #include <kptitemmodelbase.h>
 #include "kptsplitterview.h"
 
+#include <KoXmlReaderForward.h>
+
 #include <QTreeWidget>
 
 
@@ -163,6 +165,11 @@ public:
     virtual void draw();
     virtual void updateReadWrite( bool /*readwrite*/ ) {}
 
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+    
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
     void calculateSchedule( Project*, ScheduleManager* );
@@ -182,6 +189,7 @@ public slots:
 
 private slots:
     void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
     
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
@@ -192,13 +200,17 @@ private slots:
     void slotAddSubSchedule();
     void slotDeleteSelection();
     
+    void slotOptions();
+    
 private:
-    ScheduleTreeView *m_editor;
+    ScheduleTreeView *m_view;
 
     KAction *actionCalculateSchedule;
     KAction *actionAddSchedule;
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
+    
+    KAction *actionOptions;
 };
 
 

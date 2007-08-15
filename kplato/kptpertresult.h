@@ -228,6 +228,11 @@ public:
 
     PertResultItemModel *model() const { return static_cast<PertResultItemModel*>( widget.treeWidgetTaskResult->model() ); }
 
+    /// Loads context info into this view.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     
@@ -271,6 +276,11 @@ public:
     double probability( double z ) const;
     double valueZ( double p ) const;
     
+    /// Loads context info into this view.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
 public slots:
     void slotScheduleSelectionChanged( ScheduleManager *sm );
     

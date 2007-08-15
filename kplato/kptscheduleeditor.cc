@@ -33,6 +33,7 @@
 #include "kptdatetime.h"
 #include "kptcontext.h"
 #include "kptpertresult.h"
+#include "kptitemviewsettup.h"
 
 #include <QMenu>
 #include <QPainter>
@@ -675,21 +676,22 @@ ScheduleEditor::ScheduleEditor( Part *part, QWidget *parent )
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_editor = new ScheduleTreeView(part,this);
-    l->addWidget( m_editor );
-    m_editor->setEditTriggers( m_editor->editTriggers() | QAbstractItemView::EditKeyPressed );
+    m_view = new ScheduleTreeView(part,this);
+    l->addWidget( m_view );
+    m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
-    connect( m_editor, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
+    connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
-    connect( m_editor, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
+    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
     
-    connect( m_editor, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
     
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void ScheduleEditor::draw( Project &project )
 {
-    m_editor->setProject( &project );
+    m_view->setProject( &project );
 }
 
 void ScheduleEditor::draw()
@@ -700,8 +702,17 @@ void ScheduleEditor::setGuiActive( bool activate )
 {
     //kDebug()<<k_funcinfo<<activate;
     ViewBase::setGuiActive( activate );
-    if ( activate && !m_editor->currentIndex().isValid() ) {
-        m_editor->selectionModel()->setCurrentIndex(m_editor->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    if ( activate && !m_view->currentIndex().isValid() ) {
+        m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    }
+}
+
+void ScheduleEditor::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
     }
 }
 
@@ -710,7 +721,7 @@ void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
     kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<":"<<pos;
 /*    QString name;
     if ( index.isValid() ) {
-        QObject *obj = m_editor->itemModel()->object( index );
+        QObject *obj = m_view->itemModel()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             name = "resourceeditor_group_popup";
@@ -736,7 +747,7 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
     // The list has one entry per column, and we only select one row at a time, so...
     ScheduleManager *sm = 0;
     if ( ! list.isEmpty() ) {
-        sm = m_editor->itemModel()->manager( list.first() );
+        sm = m_view->itemModel()->manager( list.first() );
         emit scheduleSelectionChanged( sm );
     } else {
         emit scheduleSelectionChanged( 0 );
@@ -775,52 +786,74 @@ void ScheduleEditor::setupGui()
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
 
+    // Add the context menu actions for the view options
+    actionOptions = new KAction(KIcon("options"), i18n("Options"), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
+
+void ScheduleEditor::slotOptions()
+{
+    kDebug()<<k_funcinfo<<endl;
+    ItemViewSettupDialog dlg( m_view );
+    dlg.exec();
 }
 
 void ScheduleEditor::slotCalculateSchedule()
 {
-    //kDebug()<<k_funcinfo;
-    ScheduleManager *sm = m_editor->currentManager();
+    //kDebug()<<k_funcinfo<<endl;
+    ScheduleManager *sm = m_view->currentManager();
     if ( sm == 0 ) {
         return;
     }
     sm->setRecalculate( sm->parentManager() );
-    emit calculateSchedule( m_editor->project(), sm );
+    emit calculateSchedule( m_view->project(), sm );
 }
 
 void ScheduleEditor::slotAddSchedule()
 {
-    //kDebug()<<k_funcinfo;
-    ScheduleManager *sm = m_editor->currentManager();
+    //kDebug()<<k_funcinfo<<endl;
+    ScheduleManager *sm = m_view->currentManager();
     if ( sm && sm->parentManager() ) {
         sm = sm->parentManager();
-        ScheduleManager *m = m_editor->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        m_editor->part()->addCommand( new AddScheduleManagerCmd( m_editor->part(), sm, m, i18n( "Create sub-schedule" ) ) );
+        ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
+        m_view->part()->addCommand( new AddScheduleManagerCmd( m_view->part(), sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
-        emit addScheduleManager( m_editor->project() );
+        emit addScheduleManager( m_view->project() );
     }
 }
 
 void ScheduleEditor::slotAddSubSchedule()
 {
-    //kDebug()<<k_funcinfo;
-    ScheduleManager *sm = m_editor->currentManager();
+    //kDebug()<<k_funcinfo<<endl;
+    ScheduleManager *sm = m_view->currentManager();
     if ( sm ) {
-        ScheduleManager *m = m_editor->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
+        ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
         
-        m_editor->part()->addCommand( new AddScheduleManagerCmd( m_editor->part(), sm, m, i18n( "Create sub-schedule" ) ) );
+        m_view->part()->addCommand( new AddScheduleManagerCmd( m_view->part(), sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
-        emit addScheduleManager( m_editor->project() );
+        emit addScheduleManager( m_view->project() );
     }
 }
 
 void ScheduleEditor::slotDeleteSelection()
 {
-    //kDebug()<<k_funcinfo;
-    ScheduleManager *sm = m_editor->currentManager();
+    //kDebug()<<k_funcinfo<<endl;
+    ScheduleManager *sm = m_view->currentManager();
     if ( sm ) {
-        emit deleteScheduleManager( m_editor->project(), sm );
+        emit deleteScheduleManager( m_view->project(), sm );
     }
+}
+
+bool ScheduleEditor::loadContext( const KoXmlElement &context )
+{
+    kDebug()<<k_funcinfo<<endl;
+    return m_view->loadContext( context );
+}
+
+void ScheduleEditor::saveContext( QDomElement &context ) const
+{
+    m_view->saveContext( context );
 }
 
 
@@ -830,16 +863,19 @@ ScheduleHandlerView::ScheduleHandlerView( Part *part, QWidget *parent )
     : SplitterView( part, parent )
 {
     m_scheduleEditor = new ScheduleEditor( part, this );
+    m_scheduleEditor->setObjectName( "ScheduleEditor" );
     addView( m_scheduleEditor );
 
     QTabWidget *tab = addTabWidget();
     
     PertResult *p = new PertResult( part );
+    p->setObjectName( "PertResult" );
     addView( p, tab, i18n( "Result" ) );
 
     connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), p, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );
     
     PertCpmView *c = new PertCpmView( part );
+    c->setObjectName( "PertCpmView" );
     addView( c, tab, i18n( "Critical Path" ) );
 
     connect( m_scheduleEditor, SIGNAL( scheduleSelectionChanged( ScheduleManager* ) ), c, SLOT( slotScheduleSelectionChanged( ScheduleManager* ) ) );

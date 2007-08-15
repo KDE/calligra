@@ -87,8 +87,8 @@ public:
 
     void clear();
 
-    virtual bool setContext( const Context &context );
-    virtual void getContext( Context &context ) const;
+    virtual bool loadContext( const KoXmlElement &context );
+    virtual void saveContext( QDomElement &context ) const;
 
     void setReadWriteMode( bool on );
     bool isReadWriteMode() const { return m_readWrite; }

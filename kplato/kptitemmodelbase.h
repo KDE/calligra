@@ -28,6 +28,10 @@
 #include <QScrollBar>
 #include <QTreeView>
 
+#include <KoXmlReaderForward.h>
+
+class QDomElement;
+
 namespace KPlato
 {
 
@@ -215,6 +219,11 @@ public:
 
     void setColumnsHidden( const QList<int> &list );
 
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
 signals:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( QModelIndex, const QPoint &pos );
@@ -294,6 +303,12 @@ public:
     
     TreeViewBase *masterView() const { return m_leftview; }
     TreeViewBase *slaveView() const { return m_rightview; }
+
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+    
 
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos

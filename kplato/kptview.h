@@ -93,6 +93,8 @@ public:
     KoDocument *document() const;
 
     QString tag() const { return m_tag; }
+    void save( QDomElement &element ) const;
+
 private:
     QString m_tag;
 };
@@ -103,6 +105,8 @@ class ViewListTreeWidget : public QTreeWidget
 public:
     explicit ViewListTreeWidget( QWidget *parent );
     ViewListItem *findCategory( const QString &cat );
+
+    void save( QDomElement &element ) const;
 
 protected:
     void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
@@ -124,19 +128,24 @@ public:
 
     /// Add a category if it does not already exist
     ViewListItem *addCategory( const QString &tag, const QString& name );
+    /// Create a unique tag
+    QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
     ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString() );
     /// Create a embedded child document view (callers resposibility to add to the list)
     ViewListItem *createView( const QString &tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
 
     void setSelected( QTreeWidgetItem *item );
-    KoView *findView( const QString &tag );
-    ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent = 0 );
-    ViewListItem *findItem( const QWidget *view, QTreeWidgetItem* parent = 0 );
+    KoView *findView( const QString &tag ) const;
+    ViewListItem *findItem( const QString &tag ) const;
+    ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent ) const;
+    ViewListItem *findItem( const QWidget *view, QTreeWidgetItem* parent = 0 ) const;
 
     int takeViewListItem( ViewListItem *item );
     void insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
 
+    void save( QDomElement &element ) const;
+    
 signals:
     void activated( ViewListItem*, ViewListItem* );
     void createKofficeDocument( KoDocumentEntry &entry );
@@ -197,8 +206,8 @@ public:
 
     virtual ViewAdaptor* dbusObject();
 
-    virtual bool setContext( const Context &context );
-    virtual void getContext( Context &context ) const;
+    virtual bool loadContext();
+    virtual void saveContext( QDomElement &context ) const;
 
     QWidget *canvas() const;
 
@@ -335,21 +344,23 @@ private slots:
     void slotViewListItemInserted( ViewListItem *item );
 
 private:
-    void createTaskeditor( ViewListItem *cat );
-    void createResourceditor( ViewListItem *cat );
-    void createAccountsEditor( ViewListItem *cat );
-    void createCalendarEditor( ViewListItem *cat );
-    void createScheduleHandler( ViewListItem *cat );
+    void createViews();
+    
+    ViewBase *createTaskeditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createResourceditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ScheduleEditor *createScheduleEditor( QWidget *parent );
-    void createScheduleEditor( ViewListItem *cat );
-    void createDependencyEditor( ViewListItem *cat );
-    void createPertEditor( ViewListItem *cat );
-    void createTaskStatusView( ViewListItem *cat );
-    void createGanttView( ViewListItem *cat );
-    void createResourceAppointmentsView( ViewListItem *cat );
-    void createAccountsView( ViewListItem *cat );
-    void createResourceAssignmentView( ViewListItem *cat );
-    void createChartView( ViewListItem *cat );
+    ViewBase *createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
 
     void createChildDocumentViews();
     ViewListItem *createChildDocumentView( DocumentChild *ch );

@@ -63,8 +63,8 @@ public:
     virtual void draw();
     void print( KPrinter &printer );
 
-    virtual bool setContext( const Context &context );
-    virtual void getContext( Context &context ) const;
+    virtual bool loadContext( const KoXmlElement &context );
+    virtual void saveContext( QDomElement *context ) const;
 
 signals:
     void configChanged();

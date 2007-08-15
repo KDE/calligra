@@ -1051,6 +1051,17 @@ void ResourceAppointmentsView::slotDeleteSelection()
     }*/
 }
 
+bool ResourceAppointmentsView::loadContext( const KoXmlElement &context )
+{
+    kDebug()<<k_funcinfo<<endl;
+    return m_view->loadContext( context );
+}
+
+void ResourceAppointmentsView::saveContext( QDomElement &context ) const
+{
+    m_view->saveContext( context );
+}
+
 
 } // namespace KPlato
 

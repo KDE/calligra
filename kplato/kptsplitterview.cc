@@ -247,6 +247,44 @@ QList<QAction*> SplitterView::actionList( const QString name ) const
     return QList<QAction*>();
 }
     
+bool SplitterView::loadContext( const KoXmlElement &context )
+{
+    kDebug()<<k_funcinfo<<endl;
+    KoXmlElement e = context.namedItem( "views" ).toElement();
+    if ( e.isNull() ) {
+        return true;
+    }
+    foreach ( QString s, e.attributeNames() ) {
+        ViewBase *v = findChildren<ViewBase*>( s ).first();
+        if ( v == 0 ) {
+            continue;
+        }
+        KoXmlElement e1 = e.namedItem( s ).toElement();
+        if ( e1.isNull() ) {
+            continue;
+        }
+        v->loadContext( e1 );
+    }
+    return true;
+}
+
+void SplitterView::saveContext( QDomElement &context ) const
+{
+    QList<ViewBase*> lst = findChildren<ViewBase*>();
+    if ( lst.isEmpty() ) {
+        return;
+    }
+    QDomElement e = context.ownerDocument().createElement( "views" );
+    context.appendChild( e );
+    foreach ( ViewBase *v, lst ) {
+        e.setAttribute( v->objectName(), "" );
+    }
+    foreach ( ViewBase *v, lst ) {
+        QDomElement e1 = e.ownerDocument().createElement( v->objectName() );
+        e.appendChild( e1 );
+        v->saveContext( e1 );
+    }
+}
 
 } // namespace KPlato
 

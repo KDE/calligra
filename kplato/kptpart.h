@@ -77,7 +77,8 @@ public:
     void setCommandType( int type );
 
     Config &config() { return m_config; }
-
+    Context *context() const { return m_context; }
+    
     void generateWBS();
     WBSDefinition &wbsDefinition() { return m_wbsDefinition; }
 
@@ -89,29 +90,27 @@ public:
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
     virtual bool loadChildren( KoStore* );
+     
+    /// Load kplato specfic files
+    virtual bool completeLoading( KoStore* store );
+    /// Save kplato specfic files
+    virtual bool completeSaving( KoStore* store );
+
 
 protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted( K3Command * );
-    void slotCopyContextFromView();
     void slotViewDestroyed();
 
 private:
     void loadObjects( const KoXmlElement &element );
+    bool loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc);
     
 private:
     Project *m_project;
     MainProjectDialog *m_projectDialog;
     QWidget* m_parentWidget;
     View *m_view;
-
-    /**
-     * Used for drawing the project when embedded into another koffice app.
-     * @see paintContent()
-     */
-    GanttView* m_embeddedGanttView;
-    Context* m_embeddedContext;
-    bool m_embeddedContextInitialized;
 
     K3CommandHistory *m_commandHistory;
     bool m_update, m_calculate;
@@ -141,10 +140,14 @@ public:
     void setTitle( const QString &title ) { m_title = title; }
     QString title() const { return m_title; }
     
+    void setCategory( const QString &category ) { m_category = category; }
+    QString category() const { return m_category; }
+    
 private:
     //bool m_embedded;
     QString m_icon;
     QString m_title;
+    QString m_category;
 };
 
 }  //KPlato namespace

@@ -32,6 +32,8 @@
 #include <KoZoomHandler.h>
 #include <KoStore.h>
 #include <KoXmlReader.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <qpainter.h>
 #include <qfileinfo.h>
@@ -57,8 +59,6 @@ namespace KPlato
 Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         : KoDocument( parentWidget, parent, singleViewMode ),
         m_project( 0 ), m_projectDialog( 0 ), m_parentWidget( parentWidget ), m_view( 0 ),
-        m_embeddedGanttView( 0 ),  //new GanttView(parentWidget)),
-        m_embeddedContext( 0 ),  //new Context()), m_embeddedContextInitialized(false),
         m_context( 0 ), m_xmlLoader()
 {
     m_update = m_calculate = false;
@@ -75,11 +75,6 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     connect( m_commandHistory, SIGNAL( commandExecuted( K3Command * ) ), SLOT( slotCommandExecuted( K3Command * ) ) );
     connect( m_commandHistory, SIGNAL( documentRestored() ), SLOT( slotDocumentRestored() ) );
 
-    //FIXME the following is really dirty, we should make KPlato::Context a real class
-    //      with getter and setter and signals when content changes, thus we can keep track
-    QTimer* timer = new QTimer( this, "context update timer" );
-    connect( timer, SIGNAL( timeout() ), this, SLOT( slotCopyContextFromView() ) );
-    timer->start( 500 );
 }
 
 
@@ -89,10 +84,6 @@ Part::~Part()
     delete m_commandHistory; // before project, in case of dependencies...
     delete m_project;
     delete m_projectDialog;
-    if ( m_embeddedGanttView )
-        delete m_embeddedGanttView;
-    if ( m_embeddedContext )
-        delete m_embeddedContext;
 }
 
 
@@ -109,12 +100,9 @@ KoView *Part::createViewInstance( QWidget *parent )
         delete m_projectDialog;
         m_projectDialog = 0;
     }
-    if ( m_context )
-        m_view->setContext( *m_context );
-    else if ( m_embeddedContext && m_embeddedContextInitialized )
-        m_view->setContext( *m_embeddedContext );
-    else {
-    }
+/*    if ( m_context ) {
+        m_view->loadContext( m_context->context() );
+    }*/
     //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release
     return m_view;
 }
@@ -180,10 +168,10 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
 #else
     int numNodes = plan.childNodesCount();
 #endif
-    if ( numNodes > 3 ) {
+    if ( numNodes > 2 ) {
         //TODO: Make a proper bitching about this
         kDebug() <<"*** Error ***";
-        kDebug() <<"  Children count should be maximum 3, but is" << numNodes;
+        kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
         return false;
     }
     m_xmlLoader.startLoad();
@@ -193,11 +181,7 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
             continue;
         }
         KoXmlElement e = n.toElement();
-        if ( e.tagName() == "context" ) {
-            delete m_context;
-            m_context = new Context();
-            m_context->load( e );
-        } else if ( e.tagName() == "project" ) {
+        if ( e.tagName() == "project" ) {
             Project * newProject = new Project();
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
@@ -247,15 +231,6 @@ QDomDocument Part::saveXML()
     doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
     document.appendChild( doc );
 
-    delete m_context;
-    m_context = 0;
-    if ( m_view ) {
-        m_context = new Context();
-        m_view->getContext( *m_context );
-    }
-    if ( m_context ) {
-        m_context->save( doc );
-    }
     // Save the project
     m_project->save( doc );
     
@@ -287,40 +262,7 @@ void Part::slotDocumentRestored()
 
 void Part::paintContent( QPainter &, const QRect &)
 {
-//    kDebug() <<"----------- KPlato: Part::paintContent ------------";
-/*    if ( isEmbedded() && m_embeddedGanttView && m_project ) {
-        if ( m_embeddedContext ) {
-            int ganttsize = m_embeddedContext->ganttview.ganttviewsize;
-            int tasksize = m_embeddedContext->ganttview.taskviewsize;
-            bool showtaskname = m_embeddedContext->ganttview.showTaskName;
-
-            //            m_embeddedContext->ganttview.ganttviewsize += m_embeddedContext->ganttview.taskviewsize;
-            //            m_embeddedContext->ganttview.taskviewsize = 0;  //TODO this doesn't have any effect?! (bug?)
-            m_embeddedContext->ganttview.showTaskName = true;  //since task view is not shown(?), show name in the gantt itself
-
-            m_embeddedGanttView->setContext( *m_embeddedContext );
-
-            m_embeddedContext->ganttview.ganttviewsize = ganttsize;
-            m_embeddedContext->ganttview.taskviewsize = tasksize;
-            m_embeddedContext->ganttview.showTaskName = showtaskname;
-        } else {
-            kWarning() << "Don't have any context to set!" << endl;
-        }
-        painter.setClipRect( rect );
-        m_embeddedGanttView->clear();
-        m_embeddedGanttView->draw( *m_project );
-        m_embeddedGanttView->drawOnPainter( &painter, rect );
-    }*/
-    // Need to draw only the document rectangle described in the parameter rect.
-    //     int left = rect.left() / 20;
-    //     int right = rect.right() / 20 + 1;
-    //     int top = rect.top() / 20;
-    //     int bottom = rect.bottom() / 20 + 1;
-
-    //     for( int x = left; x < right; ++x )
-    //         painter.drawLine( x * 40, top * 20, 40 * 20, bottom * 20 );
-    //     for( int y = left; y < right; ++y )
-    //         painter.drawLine( left * 20, y * 20, right * 20, y * 20 );
+    // Don't embed this app!!!
 }
 
 
@@ -341,21 +283,6 @@ void Part::slotCommandExecuted( K3Command * )
         m_view->slotUpdate();
 
     m_update = m_calculate = false;
-}
-
-void Part::slotCopyContextFromView()
-{
-    if ( m_view && m_embeddedContext ) {
-        //         kDebug() <<"Updating embedded context from view context.";
-        this->m_view->getContext( *m_embeddedContext );
-        this->m_embeddedContextInitialized = true;
-    }
-    //     else
-    //     {
-    //         kDebug() <<"Not updating the context.";
-    //         if (m_context)
-    //           kDebug() <<"Current View:" << m_context->currentView;
-    //     }
 }
 
 void Part::slotViewDestroyed()
@@ -418,6 +345,73 @@ bool Part::loadChildren( KoStore* store )
     foreach ( KoDocumentChild *ch, children() ) {
         ch->loadDocument( store );
     }
+    return true;
+}
+
+bool Part::completeLoading( KoStore *store )
+{
+    if ( store == 0 ) {
+        // can happen if loading a template
+        kDebug()<<k_funcinfo<<"No store"<<endl;
+        return true; // continue anyway
+    }
+    delete m_context;
+    m_context = new Context();
+    KoXmlDocument doc;
+    if ( loadAndParse( store, "context.xml", doc ) ) {
+        store->close();
+        m_context->load( doc );
+    } else kWarning()<<k_funcinfo<<"No context"<<endl;
+    return true;
+}
+
+bool Part::completeSaving( KoStore *store )
+{
+    delete m_context;
+    m_context = 0;
+    if ( m_view ) {
+        m_context = new Context();
+        m_context->save( m_view );
+        if ( store->open( "context.xml" ) )
+        {
+            QDomDocument doc = m_context->save( m_view );
+            KoStoreDevice dev( store );
+
+            QByteArray s = doc.toByteArray(); // this is already Utf8!
+            (void)dev.write( s.data(), s.size() );
+            (void)store->close();
+        }
+    }
+    return true;
+}
+
+bool Part::loadAndParse(KoStore* store, const QString& filename, KoXmlDocument& doc)
+{
+    //kDebug(30003) << "oldLoadAndParse: Trying to open " << filename << endl;
+
+    if (!store->open(filename))
+    {
+        kWarning() << "Entry " << filename << " not found!" << endl;
+//        d->lastErrorMessage = i18n( "Could not find %1",filename );
+        return false;
+    }
+    // Error variables for QDomDocument::setContent
+    QString errorMsg;
+    int errorLine, errorColumn;
+    bool ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
+    if ( !ok )
+    {
+        kError() << "Parsing error in " << filename << "! Aborting!" << endl
+            << " In line: " << errorLine << ", column: " << errorColumn << endl
+            << " Error message: " << errorMsg << endl;
+/*        d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4"
+                              ,filename  ,errorLine, errorColumn ,
+                              QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
+                                  QCoreApplication::UnicodeUTF8));*/
+        store->close();
+        return false;
+    }
+    kDebug() << "File " << filename << " loaded and parsed" << endl;
     return true;
 }
 

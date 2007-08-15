@@ -1261,6 +1261,17 @@ void ResourceEditor::slotDeleteSelection()
     }
 }
 
+bool ResourceEditor::loadContext( const KoXmlElement &context )
+{
+    kDebug()<<k_funcinfo<<endl;
+    return m_view->loadContext( context );
+}
+
+void ResourceEditor::saveContext( QDomElement &context ) const
+{
+    m_view->saveContext( context );
+}
+
 
 } // namespace KPlato
 

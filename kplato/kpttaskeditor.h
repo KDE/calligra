@@ -81,6 +81,11 @@ public:
 
     virtual void updateReadWrite( bool /*readwrite*/ ) {}
 
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
 signals:
     void requestPopupMenu( const QString&, const QPoint & );
     void openNode();

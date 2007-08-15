@@ -402,10 +402,10 @@ void AccountsView::print( KPrinter &printer )
     p.end();
 }
 
-bool AccountsView::setContext( const Context &c )
+bool AccountsView::loadContext( const KoXmlElement &context )
 {
-    //kDebug()<<k_funcinfo<<"---->";
-    const Context::Accountsview &context = c.accountsview;
+    //kDebug()<<k_funcinfo<<"---->"<<endl;
+/*    const Context::Accountsview &context = c.accountsview;
     
     QList<int> list;
     list << context.accountsviewsize << context.periodviewsize;
@@ -415,7 +415,7 @@ bool AccountsView::setContext( const Context &c )
         m_date = QDate::currentDate();
     m_period = context.period;
     m_cumulative = context.cumulative;
-    setContextClosedItems( context );
+    setContextClosedItems( context );*/
     //kDebug()<<k_funcinfo<<"<----";
     return true;
 }
@@ -435,21 +435,20 @@ void AccountsView::setContextClosedItems( const Context::Accountsview &context )
     }
 }
 
-void AccountsView::getContext( Context &c ) const
+void AccountsView::saveContext( QDomElement *context ) const
 {
-    //kDebug()<<k_funcinfo;
-    Context::Accountsview &context = c.accountsview;
+    //kDebug()<<k_funcinfo<<endl;
+/*    Context::Accountsview &context = c.accountsview;
     
     context.accountsviewsize = m_dlv->sizes() [ 0 ];
     context.periodviewsize = m_dlv->sizes() [ 1 ];
     context.date = m_date;
     context.period = m_period;
-    context.cumulative = m_cumulative;
-    //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1];
+    context.cumulative = m_cumulative;*/
+    //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
 
-    getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
+    //getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
 }
-
 
 void AccountsView::getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const
 {
