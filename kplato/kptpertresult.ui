@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>PertResult</class>
- <widget class="QWidget" name="PertResult" >
+ <class>KPlato::PertResult</class>
+ <widget class="QWidget" name="KPlato::PertResult" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -154,6 +154,12 @@
    </item>
    <item>
     <widget class="DoubleTreeViewBase" name="treeWidgetTaskResult" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="MinimumExpanding" hsizetype="Preferred" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape" >
       <enum>QFrame::NoFrame</enum>
      </property>

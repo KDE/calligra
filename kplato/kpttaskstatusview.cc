@@ -183,10 +183,12 @@ void TaskStatusItemModel::refresh()
     if ( m_project == 0 ) {
         return;
     }
-    QDate begin = m_nodemodel.now().addDays( m_period );
-    QDate end = m_nodemodel.now().addDays( m_period );
-    
     m_id = m_nodemodel.id();
+    if ( m_id == -1 ) {
+        return;
+    }
+    QDate begin = m_nodemodel.now().addDays( -m_period );
+    QDate end = m_nodemodel.now().addDays( m_period );
     
     foreach( Node* n, m_project->allNodes() ) {
         if ( n->type() != Node::Type_Task ) {

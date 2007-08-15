@@ -915,6 +915,8 @@ void View::createScheduleHandler( ViewListItem *cat )
 
     connect( handler, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), handler, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ) );
+    
     handler->draw( getProject() );
 }
 

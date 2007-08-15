@@ -275,7 +275,7 @@ QVariant NodeModel::estimate( const Node *node, int role ) const
                 }
                 double v = Estimate::scale( node->estimate()->expected(), unit, scales );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             }
             break;
         case Qt::EditRole:
@@ -529,7 +529,11 @@ QVariant NodeModel::duration( const Node *node, int role ) const
                 }
                 double v = Estimate::scale( node->duration( id() ), unit, scales );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
+            } else if ( node->type() == Node::Type_Project ) {
+                Duration::Unit unit = Duration::Unit_h;
+                double v = node->duration( id() ).toDouble( unit );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             }
             break;
         case Qt::StatusTipRole:
@@ -553,7 +557,7 @@ QVariant NodeModel::varianceDuration( const Node *node, int role ) const
                 }
                 double v = Estimate::scale( node->variance( id() ), unit, scales );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             }
             break;
         case Qt::StatusTipRole:
@@ -570,7 +574,7 @@ QVariant NodeModel::varianceEstimate( const Estimate *est, int role ) const
         case Qt::ToolTipRole: {
                 double v = est->variance().toDouble( Duration::Unit_h );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( Duration::Unit_h, true );
             break;
         }
         case Qt::StatusTipRole:
@@ -589,7 +593,7 @@ QVariant NodeModel::optimisticDuration( const Node *node, int role ) const
                 d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
                 double v = d.toDouble( Duration::Unit_h );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( Duration::Unit_h, true );
             break;
         }
         case Qt::StatusTipRole:
@@ -612,7 +616,7 @@ QVariant NodeModel::optimisticEstimate( const Estimate *est, int role ) const
                 }
                 double v = Estimate::scale( est->optimistic(), unit, scales );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
         case Qt::StatusTipRole:
@@ -635,7 +639,7 @@ QVariant NodeModel::pertExpected( const Estimate *est, int role ) const
             }
             double v = Estimate::scale( est->pertExpected(), unit, scales );
             //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-            return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+            return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -653,7 +657,7 @@ QVariant NodeModel::pessimisticDuration( const Node *node, int role ) const
                 d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
                 double v = d.toDouble( Duration::Unit_h );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( Duration::Unit_h, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( Duration::Unit_h, true );
             break;
         }
         case Qt::StatusTipRole:
@@ -676,7 +680,7 @@ QVariant NodeModel::pessimisticEstimate( const Estimate *est, int role ) const
                 }
                 double v = Estimate::scale( est->pessimistic(), unit, scales );
                 //kDebug()<<k_funcinfo<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
+                return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
             break;
         }
         case Qt::StatusTipRole:
@@ -1123,8 +1127,8 @@ QVariant NodeModel::headerData( int section, int role )
             case 3: return i18n( "Allocation" );
             case 4: return i18n( "Estimate Type" );
             case 5: return i18n( "Estimate" );
-            case 6: return i18n( "Optimistic" );
-            case 7: return i18n( "Pessimistic" );
+            case 6: return i18n( "Optimistic" ); // Ratio
+            case 7: return i18n( "Pessimistic" ); // Ratio
             case 8: return i18n( "Risk" );
             case 9: return i18n( "Constraint" );
             case 10: return i18n( "Constraint Start" );

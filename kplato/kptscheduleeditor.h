@@ -211,6 +211,9 @@ public:
     
     ScheduleEditor *scheduleEditor() const { return m_scheduleEditor; }
 
+signals:
+    void currentScheduleManagerChanged( ScheduleManager* );
+
 private:
     ScheduleEditor *m_scheduleEditor;
 };

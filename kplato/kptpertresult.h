@@ -24,6 +24,7 @@
 
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
+#include <kptnodeitemmodel.h>
 
 #include <QList>
 #include <QStringList>
@@ -32,12 +33,15 @@
 
 #include <kdebug.h>
 
+#include "ui_kptpertresult.h"
 #include "ui_kptcpmwidget.h"
+
+class KAction;
+class KIcon;
 
 /// The main namespace
 namespace KPlato
 {
-#include "ui_kptpertresult.h"
 
 class DateTime;
 class Duration;
@@ -108,6 +112,7 @@ protected:
 private:
     ScheduleManager *m_manager;
     QList<Node*> m_path;
+    NodeModel m_nodemodel;
 };
 
 //--------------------
@@ -193,6 +198,7 @@ private:
     NodeList m_dummyList;
     
     ScheduleManager *m_manager;
+    NodeModel m_nodemodel;
 };
 
 //--------------------
@@ -201,6 +207,8 @@ class PertResult : public ViewBase
     Q_OBJECT
 public:
     PertResult( Part *part, QWidget *parent = 0 );
+    
+    void setupGui();
     void setProject( Project *project );
     void draw( Project &project );
     void draw();
@@ -224,6 +232,9 @@ public slots:
 protected slots:
     void slotProjectCalculated( ScheduleManager *sm );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    
+    void slotOptions();
     
 private:
     Node * m_node;
@@ -234,6 +245,9 @@ private:
     ScheduleManager *current_schedule;
     Ui::PertResult widget;
     
+    // View options context menu
+    KAction *actionOptions;
+
 private slots:
     void slotUpdate();
 
@@ -246,6 +260,7 @@ class PertCpmView : public ViewBase
 public:
     PertCpmView( Part *part, QWidget *parent = 0 );
     
+    void setupGui();
     void setProject( Project *project );
     void draw();
     
@@ -257,6 +272,9 @@ public slots:
 protected slots:
     void slotProjectCalculated( ScheduleManager *sm );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    
+    void slotOptions();
     
 private slots:
     void slotUpdate();
@@ -267,6 +285,8 @@ private:
     ScheduleManager *current_schedule;
     Ui::CpmWidget widget;
     
+    // View options context menu
+    KAction *actionOptions;
 
 };
 

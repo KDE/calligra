@@ -20,6 +20,7 @@
 */
 #include "kptpertresult.h"
 #include "kptitemmodelbase.h"
+#include "kptitemviewsettup.h"
 #include "kptpart.h"
 #include "kpttask.h"
 #include "kptnode.h"
@@ -28,7 +29,16 @@
 #include <QTreeView>
 #include <QStringList>
 
+#include <kicon.h>
+#include <kaction.h>
+#include <kglobal.h>
 #include <klocale.h>
+#include <ktoggleaction.h>
+#include <kactionmenu.h>
+#include <kstandardaction.h>
+#include <kstandardshortcut.h>
+#include <kaccelgen.h>
+#include <kactioncollection.h>
 
 namespace KPlato
 {
@@ -86,6 +96,7 @@ void CriticalPathItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
+    m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
@@ -103,6 +114,7 @@ void CriticalPathItemModel::setManager( ScheduleManager *sm )
 {
     kDebug()<<k_funcinfo<<this<<endl;
     m_manager = sm;
+    m_nodemodel.setManager( sm );
     if ( m_project == 0 || m_manager == 0 ) {
         m_path.clear();
     } else {
@@ -422,27 +434,13 @@ QVariant CriticalPathItemModel::data( const QModelIndex &index, int role ) const
     if ( n == 0 ) {
         switch ( index.column() ) {
             case 0: result = name( role ); break;
-            case 1: result = duration( role ); break;
-            case 2: result = variance( role ); break;
+            case 33: result = duration( role ); break;
+            case 34: result = variance( role ); break;
             default:
                 result = notUsed( role ); break;
         }
     } else  {
-        switch ( index.column() ) {
-            case 0: result = name( n, role ); break;
-            case 1: result = duration( n, role ); break;
-            case 2: result = variance( n, role ); break;
-            case 3: result = optimistic( n, role ); break;
-            case 4: result = pessimistic( n, role ); break;
-            case 5: result = estimate( n, role ); break;
-            case 6: result = variance( n->estimate(), role ); break;
-            case 7: result = expected( n->estimate(), role ); break;
-            case 8: result = optimistic( n->estimate(), role ); break;
-            case 9: result = pessimistic( n->estimate(), role ); break;
-            default:
-                kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
-                return QVariant();
-        }
+        result = m_nodemodel.data( n, index.column(), role );
     }
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
@@ -451,26 +449,14 @@ QVariant CriticalPathItemModel::data( const QModelIndex &index, int role ) const
         }
         return result;
     }
-    return QVariant();
+    return result;
 }
 
 QVariant CriticalPathItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
-            switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "Duration" );
-                case 2: return i18n( "Variance" );
-                case 3: return i18n( "Optimistic" );
-                case 4: return i18n( "Pessimistic" );
-                case 5: return i18n( "Estimate" );
-                case 6: return i18n( "Variance (Est)" );
-                case 7: return i18n( "Expected" );
-                case 8: return i18n( "Optimistic" );
-                case 9: return i18n( "Pessimistic" );
-                default: return QVariant();
-            }
+            return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             return alignment( section );
         }
@@ -494,7 +480,7 @@ QVariant CriticalPathItemModel::alignment( int column ) const
 
 int CriticalPathItemModel::columnCount( const QModelIndex & ) const
 {
-    return 10;
+    return m_nodemodel.propertyCount();
 }
 
 int CriticalPathItemModel::rowCount( const QModelIndex &parent ) const
@@ -590,6 +576,7 @@ void PertResultItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
+    m_nodemodel.setProject( project );
     if ( project ) {
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
@@ -606,6 +593,7 @@ void PertResultItemModel::setProject( Project *project )
 void PertResultItemModel::setManager( ScheduleManager *sm )
 {
     m_manager = sm;
+    m_nodemodel.setManager( sm );
     refresh();
 }
 
@@ -953,7 +941,8 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
         return QVariant();
     }
     if ( n->type() == Node::Type_Task ) {
-        Task *t = static_cast<Task*>( n );
+        result = m_nodemodel.data( n, index.column(), role );
+/*        Task *t = static_cast<Task*>( n );
         switch ( index.column() ) {
             case 0: result = name( t, role ); break;
             case 1: result = earlyStart( t, role ); break;
@@ -968,7 +957,7 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
             default:
                 kDebug()<<k_funcinfo<<"data: invalid display value column "<<index.column()<<endl;;
                 return QVariant();
-        }
+        }*/
     }
     if ( n->type() == Node::Type_Project ) {
         Project *p = static_cast<Project*>( n );
@@ -1004,7 +993,8 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
 {
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
-            switch ( section ) {
+            return m_nodemodel.headerData( section, role );
+/*            switch ( section ) {
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "Early Start" );
                 case 2: return i18n( "Early Finish" );
@@ -1016,13 +1006,14 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
                 case 8: return i18n( "Start Float" );
                 case 9: return i18n( "Finish Float" );
                 default: return QVariant();
-            }
+            }*/
         } else if ( role == Qt::TextAlignmentRole ) {
             return alignment( section );
         }
     }
     if ( role == Qt::ToolTipRole ) {
-        switch ( section ) {
+        return m_nodemodel.headerData( section, role );
+/*        switch ( section ) {
             case 0: return ToolTip::NodeName;
             case 1: return ToolTip::NodeEarlyStart;
             case 2: return ToolTip::NodeEarlyFinish;
@@ -1034,7 +1025,7 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
             case 8: return ToolTip::NodeStartFloat;
             case 9: return ToolTip::NodeFinishFloat;
             default: return QVariant();
-        }
+        }*/
     }
     return ItemModelBase::headerData(section, orientation, role);
 }
@@ -1058,7 +1049,7 @@ QItemDelegate *PertResultItemModel::createDelegate( int column, QWidget */*paren
 
 int PertResultItemModel::columnCount( const QModelIndex & ) const
 {
-    return 10;
+    return m_nodemodel.propertyCount();
 }
 
 int PertResultItemModel::rowCount( const QModelIndex &parent ) const
@@ -1152,6 +1143,7 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     widget.treeWidgetTaskResult->setStretchLastSection( false );
 
 //    QHeaderView *header=widget.treeWidgetTaskResult->header();
+    setupGui();
     
     current_schedule=0;
     m_part = part;
@@ -1160,10 +1152,16 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
 
         
     QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0;
+    QList<int> lst2; 
+    for ( int i = 0; i < 24; ++i ) {
+        lst2 << i;
+    }
+    lst2 << 33 << -1;
     widget.treeWidgetTaskResult->hideColumns( lst1, lst2 );
     
     draw( part->getProject() );
+
+    connect( widget.treeWidgetTaskResult, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void PertResult::draw( Project &project)
@@ -1348,6 +1346,30 @@ void PertResult::testComplexGraph()
     } 
 }
 
+void PertResult::setupGui()
+{
+    // Add the context menu actions for the view options
+    actionOptions = new KAction( KIcon("options"), i18n("Options"), this );
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
+
+void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
+void PertResult::slotOptions()
+{
+    kDebug()<<k_funcinfo<<endl;
+    ItemViewSettupDialog dlg( widget.treeWidgetTaskResult->slaveView() );
+    dlg.exec();
+}
+
 void PertResult::slotUpdate(){
 
     draw(m_part->getProject());
@@ -1409,12 +1431,55 @@ PertCpmView::PertCpmView( Part *part, QWidget *parent )
     CriticalPathItemModel *m = new CriticalPathItemModel( part );
     widget.cpmTable->setModel( m );
     
+    setupGui();
+    
     QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0;
+    QList<int> show; show << 5 << 18 << 19 << 20 << 21 << 33 << 34 << 35 << 36;
+    QList<int> lst2;
+    for ( int i = 0; i < m->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            lst2 << i;
+        }
+    }
     widget.cpmTable->hideColumns( lst1, lst2 );
+    widget.cpmTable->slaveView()->mapToSection( 33, 0 );
+    widget.cpmTable->slaveView()->mapToSection( 34, 1 );
+    widget.cpmTable->slaveView()->mapToSection( 35, 2 );
+    widget.cpmTable->slaveView()->mapToSection( 36, 3 );
+    widget.cpmTable->slaveView()->mapToSection( 5, 4 );
+    widget.cpmTable->slaveView()->mapToSection( 19, 5 );
+    widget.cpmTable->slaveView()->mapToSection( 18, 6 );
+    widget.cpmTable->slaveView()->mapToSection( 20, 7 );
+    widget.cpmTable->slaveView()->mapToSection( 21, 8 );
     
     setProject( &( part->getProject() ) );
 
+    connect( widget.cpmTable, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+
+}
+
+void PertCpmView::setupGui()
+{
+    // Add the context menu actions for the view options
+    actionOptions = new KAction( KIcon("options"), i18n("Options"), this );
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
+
+void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug()<<k_funcinfo<<endl;
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
+void PertCpmView::slotOptions()
+{
+    kDebug()<<k_funcinfo<<endl;
+    ItemViewSettupDialog dlg( widget.cpmTable->slaveView() );
+    dlg.exec();
 }
 
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )

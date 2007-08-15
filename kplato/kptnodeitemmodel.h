@@ -23,6 +23,7 @@
 #include "kptitemmodelbase.h"
 #include "kptschedule.h"
 
+#include <QDate>
 #include <QItemDelegate>
 
 class QMimeData;
@@ -39,7 +40,13 @@ class NodeModel : public QObject
 {
     Q_OBJECT
 public:
-    NodeModel() : QObject(), m_project( 0 ), m_manager( 0 ) {}
+    NodeModel()
+        : QObject(), 
+        m_project( 0 ), 
+        m_manager( 0 ), 
+        m_now( QDate::currentDate() ),
+        m_prec( 1 )
+     {}
     ~NodeModel() {}
     
     void setProject( Project *project );
@@ -113,6 +120,7 @@ private:
     Project *m_project;
     ScheduleManager *m_manager;
     QDate m_now;
+    int m_prec;
 };
 
 class NodeItemModel : public ItemModelBase
