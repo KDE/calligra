@@ -172,14 +172,18 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                 }
                 
             } else if (e.localName() == "note") {
+                QString staffStr = getProperty(e, "staff");
+                int staffId = 0;
+                if (!staffStr.isNull()) staffId = staffStr.toInt() - 1;
+                                
                 if (KoXml::namedItemNS(e, NS_MUSIC, "chord").isNull()) {
                     // no chord element, so this is the start of a new chord
                     int length = getProperty(e, "duration").toInt();
                     QString type = getProperty(e, "type");
                     Chord::Duration duration = parseDuration(type, length, curDivisions);
-
+                    
                     //TODO dots
-                    Staff* staff = part->staff(0);
+                    Staff* staff = part->staff(staffId);
                     lastNote = new Chord(staff, duration);
                     Voice* voice = part->voice(0);
                     voice->bar(bar)->addElement(lastNote);
@@ -193,7 +197,7 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                     note -= 2;
                     if (note < 0) note += 7;
                     note += (octave - 4) * 7;
-                    lastNote->addNote(part->staff(0), note);
+                    lastNote->addNote(part->staff(staffId), note);
                 }
             }
         }
