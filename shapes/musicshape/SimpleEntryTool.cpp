@@ -287,7 +287,7 @@ void SimpleEntryTool::deactivate()
 
 void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
-    painter.setMatrix( painter.matrix() * m_musicshape->transformationMatrix(&viewConverter) );
+    painter.setMatrix( m_musicshape->transformationMatrix(&viewConverter) * painter.matrix() );
     KoShape::applyConversion( painter, viewConverter );
     painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
 
