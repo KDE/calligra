@@ -270,9 +270,9 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    
-    // Create the cmsTransform if needed 
     cmsHTRANSFORM transform = 0;
+#if 0    
+    // Create the cmsTransform if needed 
     if(profile && !profile->isSuitableForOutput())
     {
         kdDebug(41008) << "The profile can't be used in krita, need conversion" << endl;
@@ -280,7 +280,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                                        cs->getProfile()->profile() , cs->colorSpaceType(),
                                        INTENT_PERCEPTUAL, 0);
     }
-
+#endif
     
     // Check if there is an alpha channel
     int8 alphapos = -1; // <- no alpha
