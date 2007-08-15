@@ -28,14 +28,14 @@
 namespace KPlato
 {
 
-TaskProgressDialog::TaskProgressDialog(Task &task, StandardWorktime *workTime, QWidget *p)
+TaskProgressDialog::TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *p)
     : KDialog( p)
 {
     setCaption( i18n("Task Progress") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    m_panel = new TaskProgressPanel(task, workTime, this);
+    m_panel = new TaskProgressPanel(task, sm, workTime, this);
 
     setMainWidget(m_panel);
 

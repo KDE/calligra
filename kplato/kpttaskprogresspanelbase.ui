@@ -6,263 +6,263 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>336</height>
+    <width>398</width>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>TaskProgressPanelBase</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
+   <property name="leftMargin" >
+    <number>0</number>
    </property>
-   <property name="spacing" >
-    <number>6</number>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="frame" >
-     <property name="frameShape" >
-      <enum>QFrame::StyledPanel</enum>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>2</number>
      </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="started" >
-        <property name="text" >
-         <string>Started:</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="KDateTimeWidget" name="startTime" >
-        <property name="focusPolicy" >
-         <enum>Qt::NoFocus</enum>
-        </property>
-       </widget>
-      </item>
-      <item rowspan="2" row="0" column="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>141</width>
-          <height>47</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QCheckBox" name="finished" >
-        <property name="text" >
-         <string>Finished:</string>
-        </property>
-        <property name="shortcut" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="KDateTimeWidget" name="finishTime" >
-        <property name="focusPolicy" >
-         <enum>Qt::NoFocus</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QFrame" name="performedGroup" >
-     <property name="frameShape" >
-      <enum>QFrame::Box</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Raised</enum>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="6" column="1" colspan="4" >
-       <widget class="QWidget" native="1" name="actualEffortHolder" >
-        <property name="minimumSize" >
-         <size>
-          <width>250</width>
-          <height>18</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="0" >
-       <widget class="QLabel" name="textLabel1_3" >
-        <property name="text" >
-         <string>Actual effort:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-        <property name="buddy" >
-         <cstring>totalPerformed</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="0" colspan="5" >
-       <widget class="UsedEffortEditor" name="resourceTable" />
-      </item>
-      <item row="0" column="2" colspan="2" >
-       <widget class="QDateEdit" name="dateEdit" />
-      </item>
-      <item row="1" column="2" >
-       <widget class="QSpinBox" name="percentFinished" >
-        <property name="maximum" >
-         <number>100</number>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Date:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2" >
-       <widget class="QLabel" name="textLabel1" >
-        <property name="text" >
-         <string>Percent completed:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="2" >
-       <widget class="QLabel" name="textLabel1_2" >
-        <property name="text" >
-         <string>Remaining effort:</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-        <property name="buddy" >
-         <cstring>remainingEffortHolder</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2" colspan="3" >
-       <widget class="QWidget" native="1" name="remainingEffortHolder" >
-        <property name="minimumSize" >
-         <size>
-          <width>250</width>
-          <height>18</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="3" colspan="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType" >
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>231</width>
-          <height>23</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="4" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>191</width>
-          <height>23</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="3" column="0" colspan="5" >
-       <widget class="Line" name="line" >
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="5" >
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="prevWeekBtn" >
-          <property name="text" >
-           <string>Prev</string>
+     <widget class="QWidget" name="completionTab" >
+      <attribute name="title" >
+       <string>Completion</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QCheckBox" name="started" >
+         <property name="text" >
+          <string>Started:</string>
+         </property>
+         <property name="shortcut" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QDateTimeEdit" name="startTime" />
+       </item>
+       <item row="0" column="2" >
+        <widget class="QCheckBox" name="finished" >
+         <property name="text" >
+          <string>Finished:</string>
+         </property>
+         <property name="shortcut" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3" >
+        <widget class="QDateTimeEdit" name="finishTime" />
+       </item>
+       <item row="0" column="4" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" colspan="5" >
+        <widget class="QGroupBox" name="performedGroup" >
+         <property name="title" >
+          <string/>
+         </property>
+         <property name="flat" >
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="leftMargin" >
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="weekNumber" />
-        </item>
-        <item>
-         <widget class="QPushButton" name="nextWeekBtn" >
-          <property name="text" >
-           <string>Next</string>
+          <property name="topMargin" >
+           <number>0</number>
           </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
+          <property name="rightMargin" >
+           <number>0</number>
           </property>
-          <property name="sizeHint" >
-           <size>
-            <width>16</width>
-            <height>25</height>
-           </size>
+          <property name="bottomMargin" >
+           <number>0</number>
           </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="addResource" >
-          <property name="text" >
-           <string>Add Resource...</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
+          <item row="0" column="0" >
+           <layout class="QHBoxLayout" >
+            <item>
+             <widget class="QPushButton" name="addEntryBtn" >
+              <property name="text" >
+               <string>Add Entry</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="removeEntryBtn" >
+              <property name="text" >
+               <string>Remove Entry</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="1" >
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="CompletionEntryEditor" name="entryTable" />
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="usedEffortTab" >
+      <attribute name="title" >
+       <string>Per Resource</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>9</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="prevWeekBtn" >
+           <property name="text" >
+            <string>Prev</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="weekNumber" />
+         </item>
+         <item>
+          <widget class="QPushButton" name="nextWeekBtn" >
+           <property name="text" >
+            <string>Next</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>16</width>
+             <height>25</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="addResource" >
+           <property name="text" >
+            <string>Add Resource...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="UsedEffortEditor" name="resourceTable" />
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="optionsTab" >
+      <attribute name="title" >
+       <string>Mode</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QRadioButton" name="optionCompleted" >
+         <property name="text" >
+          <string>Have used- and remaining effort calculated based on percent completed</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QRadioButton" name="optionEffort" >
+         <property name="text" >
+          <string>Enter used effort per task</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QRadioButton" name="optionResource" >
+         <property name="text" >
+          <string>Enter used effort per resource</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -275,16 +275,17 @@
    <header>kptusedefforteditor.h</header>
   </customwidget>
   <customwidget>
-   <class>KDateTimeWidget</class>
-   <extends>QWidget</extends>
-   <header>kdatetimewidget.h</header>
+   <class>CompletionEntryEditor</class>
+   <extends>QTableView</extends>
+   <header>kptusedefforteditor.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>started</tabstop>
-  <tabstop>finished</tabstop>
-  <tabstop>finishTime</tabstop>
-  <tabstop>startTime</tabstop>
+  <tabstop>prevWeekBtn</tabstop>
+  <tabstop>weekNumber</tabstop>
+  <tabstop>nextWeekBtn</tabstop>
+  <tabstop>addResource</tabstop>
+  <tabstop>resourceTable</tabstop>
  </tabstops>
  <includes>
   <include location="local" >kdatetimewidget.h</include>

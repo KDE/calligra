@@ -940,6 +940,19 @@ class KPLATO_TEST_EXPORT ModifyResourceGroupTypeCmd : public NamedCommand
         int m_oldvalue;
 };
 
+class KPLATO_TEST_EXPORT ModifyCompletionEntrymodeCmd : public NamedCommand
+{
+public:
+    ModifyCompletionEntrymodeCmd( Part *part, Completion &completion, Completion::Entrymode value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    Completion::Entrymode oldvalue;
+    Completion::Entrymode newvalue;
+};
+
 class KPLATO_TEST_EXPORT ModifyCompletionStartedCmd : public NamedCommand
 {
 public:
@@ -1005,9 +1018,35 @@ public:
 private:
     Completion &m_completion;
     QDate m_date;
-    Completion::Entry *oldvalue;
     Completion::Entry *newvalue;
-    bool m_newmine, m_oldmine;
+    bool m_newmine;
+};
+
+class KPLATO_TEST_EXPORT RemoveCompletionEntryCmd : public NamedCommand
+{
+public:
+    RemoveCompletionEntryCmd( Part *part, Completion &completion, const QDate& date, const QString& name = QString() );
+    ~RemoveCompletionEntryCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDate m_date;
+    Completion::Entry *value;
+    bool m_mine;
+};
+
+class KPLATO_TEST_EXPORT ModifyCompletionEntryCmd : public NamedCommand
+{
+public:
+    ModifyCompletionEntryCmd( Part *part, Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
+    ~ModifyCompletionEntryCmd();
+    void execute();
+    void unexecute();
+
+private:
+    K3MacroCommand *cmd;
 };
 
 class KPLATO_TEST_EXPORT AddCompletionUsedEffortCmd : public NamedCommand

@@ -112,6 +112,7 @@ public:
     QVariant finishedTime( const Node *node, int role ) const;
     QVariant plannedEffortTo( const Node *node, int role ) const;
     QVariant actualEffortTo( const Node *node, int role ) const;
+    QVariant remainingEffort( const Node *node, int role ) const;
     QVariant plannedCostTo( const Node *node, int role ) const;
     QVariant actualCostTo( const Node *node, int role ) const;
     QVariant note( const Node *node, int role ) const;

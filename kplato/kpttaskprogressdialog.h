@@ -31,11 +31,12 @@ class TaskProgressPanel;
 class Task;
 class Part;
 class StandardWorktime;
+class ScheduleManager;
 
 class TaskProgressDialog : public KDialog {
     Q_OBJECT
 public:
-    TaskProgressDialog(Task &task, StandardWorktime *workTime, QWidget *parent=0);
+    TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent=0);
 
     K3Command *buildCommand(Part *part);
 

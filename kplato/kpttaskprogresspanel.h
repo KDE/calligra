@@ -35,23 +35,22 @@ class DurationWidget;
 class Part;
 class StandardWorktime;
 class Duration;
+class ScheduleManager;
 
 //------------------------
 class TaskProgressPanelImpl : public QWidget, public Ui_TaskProgressPanelBase {
     Q_OBJECT
 public:
-    explicit TaskProgressPanelImpl(QWidget *parent=0, const char *name=0);
+    explicit TaskProgressPanelImpl( Task &task, QWidget *parent=0 );
     
     void enableWidgets();
-
-    DurationWidget *actualEffort;
-    DurationWidget *remainingEffort;
     
 signals:
     void changed();
     
 public slots:
     void slotChanged();
+    void optionChanged( int id );
     void slotStartedChanged(bool state);
     void slotFinishedChanged(bool state);
     void slotPercentFinishedChanged(int value);
@@ -63,6 +62,11 @@ protected slots:
     void slotCalculateEffort();
 
 protected:
+    Task &m_task;
+    Completion &m_original;
+    Completion m_completion;
+    int m_dayLength;
+    
     Duration scheduledEffort;
     int m_weekOffset;
     int m_year;
@@ -71,7 +75,7 @@ protected:
 class TaskProgressPanel : public TaskProgressPanelImpl {
     Q_OBJECT
 public:
-    explicit TaskProgressPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    explicit TaskProgressPanel( Task &task, ScheduleManager *sm, StandardWorktime *workTime=0, QWidget *parent=0 );
 
     K3Command *buildCommand(Part *part);
     
@@ -80,15 +84,11 @@ public:
 protected slots:
     void slotWeekNumberChanged( int );
     void slotAddResource();
-
+    void slotEntryAdded( const QDate date);
+    
 protected:
     void setEstimateScales( int day );
     
-private:
-    Task &m_task;
-    Completion &m_original;
-    Completion m_completion;
-    int m_dayLength;
 };
 
 }  //KPlato namespace

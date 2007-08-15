@@ -286,6 +286,7 @@ void DoubleSpinBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &in
     box->setDecimals( 1 );
     box->setRange( min, max );
     box->setValue( value );
+    box->selectAll();
 }
 
 void DoubleSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,

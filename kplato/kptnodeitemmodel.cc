@@ -932,7 +932,10 @@ QVariant NodeModel::startedTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( t->completion().startTime().date() );
+            if ( t->completion().isStarted() ) {
+                return KGlobal::locale()->formatDate( t->completion().startTime().date() );
+            }
+            break;
         case Qt::EditRole:
             break;
         case Qt::StatusTipRole:
@@ -951,7 +954,10 @@ QVariant NodeModel::finishedTime( const Node *node, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( t->completion().finishTime().date() );
+            if ( t->completion().isFinished() ) {
+                return KGlobal::locale()->formatDate( t->completion().finishTime().date() );
+            }
+            break;
         case Qt::EditRole:
             break;
         case Qt::StatusTipRole:
@@ -982,8 +988,28 @@ QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
+            //kDebug()<<k_funcinfo<<m_now<<node<<endl;
             return KGlobal::locale()->formatNumber( node->actualEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 );
             break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::remainingEffort( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole: {
+            const Task *t = dynamic_cast<const Task*>( node );
+            if ( t ) {
+                return KGlobal::locale()->formatNumber( t->completion().remainingEffort().toDouble( Duration::Unit_h ), 1 );
+            }
+            break;
+        }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1094,11 +1120,12 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case 38: result = completed( n, role ); break;
         case 39: result = plannedEffortTo( n, role ); break;
         case 40: result = actualEffortTo( n, role ); break;
-        case 41: result = plannedCostTo( n, role ); break;
-        case 42: result = actualCostTo( n, role ); break;
-        case 43: result = startedTime( n, role ); break;
-        case 44: result = finishedTime( n, role ); break;
-        case 45: result = note( n, role ); break;
+        case 41: result = remainingEffort( n, role ); break;
+        case 42: result = plannedCostTo( n, role ); break;
+        case 43: result = actualCostTo( n, role ); break;
+        case 44: result = startedTime( n, role ); break;
+        case 45: result = finishedTime( n, role ); break;
+        case 46: result = note( n, role ); break;
         
         default:
             //kDebug()<<k_funcinfo<<"Invalid property number: "<<property<<endl;;
@@ -1109,7 +1136,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
 
 int NodeModel::propertyCount()
 {
-    return 46;
+    return 47;
 }
 
 bool NodeModel::setData( Node *node, int property, const QVariant & value, int role )
@@ -1170,11 +1197,12 @@ QVariant NodeModel::headerData( int section, int role )
             case 38: return i18n( "% Completed" );
             case 39: return i18n( "Planned Effort" );
             case 40: return i18n( "Actual Effort" );
-            case 41: return i18n( "Planned Cost" );
-            case 42: return i18n( "Actual Cost" );
-            case 43: return i18n( "Started" );
-            case 44: return i18n( "Finished" );
-            case 45: return i18n( "Status Note" );
+            case 41: return i18n( "Remaining Effort" );
+            case 42: return i18n( "Planned Cost" );
+            case 43: return i18n( "Actual Cost" );
+            case 44: return i18n( "Started" );
+            case 45: return i18n( "Finished" );
+            case 46: return i18n( "Status Note" );
         
             default: return QVariant();
         }
@@ -1230,11 +1258,12 @@ QVariant NodeModel::headerData( int section, int role )
             case 38: return ToolTip::NodeCompletion;
             case 39: return ToolTip::NodePlannedEffortTo;
             case 40: return ToolTip::NodeActualEffortTo;
-            case 41: return ToolTip::NodePlannedCostTo;
-            case 42: return ToolTip::NodeActualCostTo;
-            case 43: return ToolTip::CompletionStartedTime;
-            case 44: return ToolTip::CompletionFinishedTime;
-            case 45: return ToolTip::CompletionStatusNote;
+            case 41: return ToolTip::NodeRemainingEffort;
+            case 42: return ToolTip::NodePlannedCostTo;
+            case 43: return ToolTip::NodeActualCostTo;
+            case 44: return ToolTip::CompletionStartedTime;
+            case 45: return ToolTip::CompletionFinishedTime;
+            case 46: return ToolTip::CompletionStatusNote;
     
             default: return QVariant();
         }

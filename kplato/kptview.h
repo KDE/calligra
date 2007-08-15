@@ -206,6 +206,8 @@ public:
 
     KoDocument *hitTest( const QPoint &viewPos );
 
+    ScheduleManager *currentScheduleManager() const;
+    
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     

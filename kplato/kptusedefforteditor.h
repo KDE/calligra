@@ -31,12 +31,15 @@ namespace KPlato
 
 class Completion;
 class Resource;
+class Project;
 
 class UsedEffortItemModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
     UsedEffortItemModel( QWidget *parent );
+    
+    void setProject( Project *project ) { m_project = project; }
     
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
@@ -53,10 +56,23 @@ public:
     Completion::UsedEffort *usedEffort(const QModelIndex &index ) const;
     void setCurrentMonday( const QDate &date );
 
+    QModelIndex addRow();
+    
+signals:
+    void rowInserted( const QModelIndex& );
+    void changed();
+    
+public slots:
+    bool submit();
+    void revert();
+    
 private:
+    Project *m_project;
     Completion *m_completion;
     QList<QDate> m_dates;
     QStringList m_headers;
+    QList<const Resource*> m_resourcelist;
+    QMap<QString, const Resource*> m_editlist;
 };
 
 class UsedEffortEditor : public QTableView
@@ -64,15 +80,99 @@ class UsedEffortEditor : public QTableView
     Q_OBJECT
 public:
     UsedEffortEditor( QWidget *parent );
+    void setProject( Project *project );
     void setCompletion( Completion *completion );
     void setCurrentMonday( const QDate &date );
+    void addResource();
     
 signals:
-    void dataChanged( const QModelIndex&, const QModelIndex& );
+    void changed();
+    void resourceAdded();
     
 private:
     
 };
+
+//--------------------------------------------
+class CompletionEntryItemModel : public QAbstractItemModel
+{
+    Q_OBJECT
+public:
+    CompletionEntryItemModel( QWidget *parent );
+    
+    void setTask( Task *t ) { m_node = t; }
+    
+    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
+    virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
+    virtual bool setData( const QModelIndex &index, const QVariant & value, int role = Qt::EditRole );
+    virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+    virtual int columnCount( const QModelIndex &parent = QModelIndex() ) const;
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const;
+    virtual QModelIndex parent(const QModelIndex &) const { return QModelIndex(); }
+    QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    
+    void setCompletion( Completion *completion );
+    const Resource *resource(const QModelIndex &index ) const;
+    Completion::UsedEffort *usedEffort(const QModelIndex &index ) const;
+    void setCurrentMonday( const QDate &date );
+
+    QModelIndex addRow();
+    
+    void setFlags( int col, Qt::ItemFlags flags ) { m_flags[ col ] = flags; }
+    
+signals:
+    void rowInserted( const QDate& );
+    void changed();
+    
+public slots:
+    bool submit();
+    void revert();
+    void slotDataChanged();
+    void setManager( ScheduleManager *sm );
+    
+protected:
+    QVariant date ( int row, int role = Qt::DisplayRole ) const;
+    QVariant percentFinished ( int row, int role ) const;
+    QVariant remainingEffort ( int row, int role ) const;
+    QVariant actualEffort ( int row, int role ) const;
+    QVariant plannedEffort ( int row, int role ) const;
+
+    void removeEntry( const QDate date );
+    void addEntry( const QDate date );
+    void refresh();
+    
+private:
+    Task *m_node;
+    ScheduleManager *m_manager;
+    Completion *m_completion;
+    QList<QDate> m_dates;
+    QStringList m_headers;
+    QList<QDate> m_datelist;
+    Qt::ItemFlags m_flags[5];
+};
+
+class CompletionEntryEditor : public QTableView
+{
+    Q_OBJECT
+public:
+    CompletionEntryEditor( QWidget *parent );
+    void setCompletion( Completion *completion );
+    
+    CompletionEntryItemModel *model() const { return static_cast<CompletionEntryItemModel*>( QTableView::model() ); }
+
+signals:
+    void changed();
+    void rowInserted( const QDate );
+
+public slots:
+    void addEntry();
+    void removeEntry();
+    
+private:
+    
+};
+
 
 }  //KPlato namespace
 

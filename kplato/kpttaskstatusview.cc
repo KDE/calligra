@@ -197,7 +197,7 @@ void TaskStatusItemModel::refresh()
         Task *t = static_cast<Task*>( n );
         const Completion &c = t->completion();
         if ( c.isFinished() ) {
-            if ( c.finishTime().date() > begin && c.finishTime().date() <= m_nodemodel.now() ) {
+            if ( c.finishTime().date() > begin ) {
                 m_finished.append( t );
             }
         } else if ( c.isStarted() ) {

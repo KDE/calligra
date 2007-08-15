@@ -82,6 +82,7 @@ namespace ToolTip
     static QString NodeCompletion = i18n( "Task completion" );
     static QString NodePlannedEffortTo = i18n( "Planned effort" );
     static QString NodeActualEffortTo = i18n( "Actual effort" );
+    static QString NodeRemainingEffort = i18n( "Remaining effort" );
     static QString NodePlannedCostTo = i18n( "Planned cost" );
     static QString NodeActualCostTo = i18n( "Actual cost" );
     static QString CompletionStartedTime = i18n( "Time when task was actually started" );

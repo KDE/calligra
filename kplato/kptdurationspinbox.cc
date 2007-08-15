@@ -38,7 +38,7 @@ namespace KPlato
 DurationSpinBox::DurationSpinBox(QWidget *parent)
     : QDoubleSpinBox(parent)
 {
-    setAlignment( Qt::AlignRight );
+    //setAlignment( Qt::AlignRight );
     setUnit( Duration::Unit_h );
     setMaximum(140737488355328.0);
 

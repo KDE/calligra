@@ -71,6 +71,8 @@ public:
             bool operator!=( const UsedEffort &e ) const { return !operator==( e ); }
             void mergeEffort( const UsedEffort &value );
             void setEffort( const QDate &date, ActualEffort *value );
+            /// Returns the total effort up to @p date
+            Duration effortTo( const QDate &date ) const;
             /// Returns the total effort on @p date
             ActualEffort *effort( const QDate &date ) const { return m_actual.value( date ); }
             ActualEffort *takeEffort( const QDate &date ) { return m_actual.take( date ); }
@@ -108,6 +110,7 @@ public:
                     && totalPerformed == e.totalPerformed
                     && note == e.note;
             }
+            bool operator!=( const Entry &e ) const { return ! operator==( e ); }
             Entry &operator=(const Entry &e ) { copy( e ); return *this; }
             
             int percentFinished;
@@ -189,6 +192,10 @@ public:
     void changed();
     Node *node() const { return m_node; }
     
+    enum Entrymode { FollowPlan, EnterCompleted, EnterEffortPerTask, EnterEffortPerResource };
+    void setEntrymode( Entrymode mode ) { m_entrymode = mode; }
+    Entrymode entrymode() const { return m_entrymode; }
+    
 protected:
     void copy( const Completion &copy);
     
@@ -198,6 +205,7 @@ private:
     DateTime m_startTime, m_finishTime;
     EntryList m_entries;
     ResourceUsedEffortMap m_usedEffort;
+    Entrymode m_entrymode;
     
 #ifndef NDEBUG
 public:

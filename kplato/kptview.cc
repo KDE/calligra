@@ -1771,6 +1771,15 @@ void View::slotOpenNode( Node *node )
     }
 }
 
+ScheduleManager *View::currentScheduleManager() const
+{
+    Schedule *s = getProject().findSchedule( getProject().currentViewScheduleId() );
+    if ( s == 0 ) {
+        return 0;
+    }
+    return s->manager();
+}
+
 void View::slotTaskProgress()
 {
     //kDebug()<<k_funcinfo;
@@ -1788,7 +1797,7 @@ void View::slotTaskProgress()
         case Node::Type_Task: {
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                TaskProgressDialog *dia = new TaskProgressDialog( *task, getProject().standardWorktime() );
+                TaskProgressDialog *dia = new TaskProgressDialog( *task, currentScheduleManager(),  getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
                     K3Command * m = dia->buildCommand( getPart() );
                     if ( m ) {

@@ -1931,7 +1931,8 @@ uint Task::state( long id ) const
 Completion::Completion( Node *node )
     : m_node( node ),
       m_started( false ),
-      m_finished( false )
+      m_finished( false ),
+      m_entrymode( EnterCompleted )
 {}
 
 Completion::Completion( const Completion &c )
@@ -1950,6 +1951,7 @@ void Completion::copy( const Completion &p )
     m_node = 0; //NOTE
     m_started = p.isStarted(); m_finished = p.isFinished();
     m_startTime = p.startTime(); m_finishTime = p.finishTime();
+    m_entrymode = p.entrymode();
     foreach ( QDate d, p.entries().keys() ) {
         addEntry( d, new Entry( *(p.entries()[ d ]) ) );
     }
@@ -2041,10 +2043,14 @@ Duration Completion::remainingEffort() const
 Duration Completion::actualEffort() const
 {
     Duration eff;
-    foreach( UsedEffort *ue, m_usedEffort.values() ) {
-        foreach ( QDate d, ue->actualEffortMap().keys() ) {
-            eff += ue->actualEffortMap()[ d ]->effort();
+    if ( m_entrymode == EnterEffortPerResource ) {
+        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+            foreach ( QDate d, ue->actualEffortMap().keys() ) {
+                eff += ue->actualEffortMap()[ d ]->effort();
+            }
         }
+    } else if ( ! m_entries.isEmpty() ) {
+        eff = m_entries.values().last()->totalPerformed;
     }
     return eff;
 }
@@ -2052,23 +2058,35 @@ Duration Completion::actualEffort() const
 Duration Completion::actualEffort( const QDate &date ) const
 {
     Duration eff;
-    foreach( UsedEffort *ue, m_usedEffort.values() ) {
-        if ( ue && ue->actualEffortMap().contains( date ) ) {
-            eff += ue->actualEffortMap().value( date )->effort();
+    if ( m_entrymode == EnterEffortPerResource ) {
+        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+            if ( ue && ue->actualEffortMap().contains( date ) ) {
+                eff += ue->actualEffortMap().value( date )->effort();
+            }
         }
+    } else {
+        //FIXME: How to know on a specific date?
     }
     return eff;
 }
 
 Duration Completion::actualEffortTo( const QDate &date ) const
 {
+    //kDebug()<<k_funcinfo<<date<<endl;
     Duration eff;
-    foreach( UsedEffort *ue, m_usedEffort.values() ) {
-        foreach ( QDate d, ue->actualEffortMap().keys() ) {
-            if ( d > date ) {
+    if ( m_entrymode == EnterEffortPerResource ) {
+        foreach( UsedEffort *ue, m_usedEffort.values() ) {
+            eff += ue->effortTo( date );
+        }
+    } else {
+        QListIterator<QDate> it( m_entries.uniqueKeys() );
+        it.toBack();
+        while ( it.hasPrevious() ) {
+            QDate d = it.previous();
+            if ( d <= date ) {
+                eff = m_entries[ d ]->totalPerformed;
                 break;
             }
-            eff += ue->actualEffortMap()[ d ]->effort();
         }
     }
     return eff;
@@ -2277,6 +2295,18 @@ void Completion::UsedEffort::mergeEffort( const Completion::UsedEffort &value )
 void Completion::UsedEffort::setEffort( const QDate &date, ActualEffort *value )
 {
     m_actual.insert( date, value );
+}
+
+Duration Completion::UsedEffort::effortTo( const QDate &date ) const
+{
+    Duration eff;
+    foreach ( QDate d, m_actual.keys() ) {
+        if ( d > date ) {
+            break;
+        }
+        eff += m_actual[ d ]->effort();
+    }
+    return eff;
 }
 
 Duration Completion::UsedEffort::effort() const

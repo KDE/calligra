@@ -1977,6 +1977,26 @@ void ModifyResourceGroupTypeCmd::unexecute()
     setCommandType( 0 );
 }
 
+ModifyCompletionEntrymodeCmd::ModifyCompletionEntrymodeCmd( Part *part, Completion &completion, Completion::Entrymode value, const QString& name )
+        : NamedCommand( part, name ),
+        m_completion( completion ),
+        oldvalue( m_completion.entrymode() ),
+        newvalue( value )
+{
+}
+void ModifyCompletionEntrymodeCmd::execute()
+{
+    m_completion.setEntrymode( newvalue );
+
+    setCommandType( 0 );
+}
+void ModifyCompletionEntrymodeCmd::unexecute()
+{
+    m_completion.setEntrymode( oldvalue );
+
+    setCommandType( 0 );
+}
+
 ModifyCompletionStartedCmd::ModifyCompletionStartedCmd( Part *part, Completion &completion, bool value, const QString& name )
         : NamedCommand( part, name ),
         m_completion( completion ),
@@ -2064,24 +2084,17 @@ AddCompletionEntryCmd::AddCompletionEntryCmd( Part *part, Completion &completion
         m_completion( completion ),
         m_date( date ),
         newvalue( value ),
-        m_newmine( true ),
-        m_oldmine( false)
+        m_newmine( true )
 {
-    oldvalue = m_completion.entry( date );
 }
 AddCompletionEntryCmd::~AddCompletionEntryCmd()
 {
-    if ( m_oldmine )
-        delete oldvalue;
     if ( m_newmine )
         delete newvalue;
 }
 void AddCompletionEntryCmd::execute()
 {
-    if ( oldvalue ) {
-        m_completion.takeEntry( m_date );
-        m_oldmine = true;
-    }
+    Q_ASSERT( ! m_completion.entries().contains( m_date ) );
     m_completion.addEntry( m_date, newvalue );
     m_newmine = false;
     setCommandType( 0 );
@@ -2089,12 +2102,60 @@ void AddCompletionEntryCmd::execute()
 void AddCompletionEntryCmd::unexecute()
 {
     m_completion.takeEntry( m_date );
-    if ( oldvalue ) {
-        m_completion.addEntry( m_date, oldvalue );
-    }
     m_newmine = true;
-    m_oldmine = false;
     setCommandType( 0 );
+}
+
+RemoveCompletionEntryCmd::RemoveCompletionEntryCmd( Part *part, Completion &completion, const QDate &date, const QString& name )
+        : NamedCommand( part, name ),
+        m_completion( completion ),
+        m_date( date ),
+        m_mine( false )
+{
+    value = m_completion.entry( date );
+}
+RemoveCompletionEntryCmd::~RemoveCompletionEntryCmd()
+{
+    if ( m_mine )
+        delete value;
+}
+void RemoveCompletionEntryCmd::execute()
+{
+    Q_ASSERT( m_completion.entries().contains( m_date ) );
+    if ( value ) {
+        m_completion.takeEntry( m_date );
+        m_mine = true;
+    }
+    setCommandType( 0 );
+}
+void RemoveCompletionEntryCmd::unexecute()
+{
+    if ( value ) {
+        m_completion.addEntry( m_date, value );
+    }
+    m_mine = false;
+    setCommandType( 0 );
+}
+
+
+ModifyCompletionEntryCmd::ModifyCompletionEntryCmd( Part *part, Completion &completion, const QDate &date, Completion::Entry *value, const QString& name )
+        : NamedCommand( part, name )
+{
+    cmd = new K3MacroCommand("");
+    cmd->addCommand( new RemoveCompletionEntryCmd( part, completion, date ) );
+    cmd->addCommand( new AddCompletionEntryCmd( part, completion, date, value ) );
+}
+ModifyCompletionEntryCmd::~ModifyCompletionEntryCmd()
+{
+    delete cmd;
+}
+void ModifyCompletionEntryCmd::execute()
+{
+    cmd->execute();
+}
+void ModifyCompletionEntryCmd::unexecute()
+{
+    cmd->unexecute();
 }
 
 AddCompletionUsedEffortCmd::AddCompletionUsedEffortCmd( Part *part, Completion &completion, const Resource *resource, Completion::UsedEffort *value, const QString& name )
