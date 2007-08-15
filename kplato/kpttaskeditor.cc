@@ -74,7 +74,7 @@ NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
         }
     }
     QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0 << 18 << 19;
+    QList<int> lst2; lst2 << 0 << 18 << -1;
     hideColumns( lst1, lst2 );
 }
 
@@ -200,6 +200,12 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     }
     kDebug()<<k_funcinfo<<name;
     emit requestPopupMenu( name, pos );
+}
+
+void TaskEditor::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
+{
+    //kDebug()<<k_funcinfo<<endl;
+    static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );
 }
 
 void TaskEditor::slotHeaderContextMenuRequested( const QPoint &pos )

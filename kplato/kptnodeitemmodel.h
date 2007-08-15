@@ -21,6 +21,7 @@
 #define NODEITEMMODEL_H
 
 #include "kptitemmodelbase.h"
+#include "kptschedule.h"
 
 #include <QItemDelegate>
 
@@ -32,6 +33,87 @@ namespace KPlato
 
 class Project;
 class Node;
+class Estimate;
+
+class NodeModel : public QObject
+{
+    Q_OBJECT
+public:
+    NodeModel() : QObject(), m_project( 0 ), m_manager( 0 ) {}
+    ~NodeModel() {}
+    
+    void setProject( Project *project );
+    void setManager( ScheduleManager *sm );
+    Project *project() const { return m_project; }
+    ScheduleManager *manager() const { return m_manager; }
+    long id() const { return m_manager == 0 ? -1 : m_manager->id(); }
+    
+    QVariant data( const Node *node, int property, int role = Qt::DisplayRole ) const; 
+    static bool setData( Node *node, int property, const QVariant & value, int role = Qt::EditRole );
+    
+    static QVariant headerData( int section, int role = Qt::DisplayRole );
+
+    static int propertyCount();
+    
+    void setNow( const QDate &now ) { m_now = now; }
+    QDate now() const { return m_now; }
+    
+    QVariant name( const Node *node, int role ) const;
+    QVariant leader( const Node *node, int role ) const;
+    QVariant allocation( const Node *node, int role ) const;
+    QVariant description( const Node *node, int role ) const;
+    QVariant type( const Node *node, int role ) const;
+    QVariant constraint( const Node *node, int role ) const;
+    QVariant constraintStartTime( const Node *node, int role ) const;
+    QVariant constraintEndTime( const Node *node, int role ) const;
+    QVariant estimateType( const Node *node, int role ) const;
+    QVariant estimate( const Node *node, int role ) const;
+    QVariant optimisticRatio( const Node *node, int role ) const;
+    QVariant pessimisticRatio( const Node *node, int role ) const;
+    QVariant riskType( const Node *node, int role ) const;
+    QVariant runningAccount( const Node *node, int role ) const;
+    QVariant startupAccount( const Node *node, int role ) const;
+    QVariant startupCost( const Node *node, int role ) const;
+    QVariant shutdownAccount( const Node *node, int role ) const;
+    QVariant shutdownCost( const Node *node, int role ) const;
+    
+    QVariant startTime( const Node *node, int role ) const;
+    QVariant endTime( const Node *node, int role ) const;
+
+    QVariant duration( const Node *node, int role ) const;
+    QVariant varianceDuration( const Node *node, int role ) const;
+    QVariant varianceEstimate( const Estimate *est, int role ) const;
+    QVariant optimisticDuration( const Node *node, int role ) const;
+    QVariant optimisticEstimate( const Estimate *est, int role ) const;
+    QVariant pertExpected( const Estimate *est, int role ) const;
+    QVariant pessimisticDuration( const Node *node, int role ) const;
+    QVariant pessimisticEstimate( const Estimate *est, int role ) const;
+
+    QVariant earlyStart( const Node *node, int role ) const;
+    QVariant earlyFinish( const Node *node, int role ) const;
+    QVariant lateStart( const Node *node, int role ) const;
+    QVariant lateFinish( const Node *node, int role ) const;
+    QVariant positiveFloat( const Node *node, int role ) const;
+    QVariant freeFloat( const Node *node, int role ) const;
+    QVariant negativeFloat( const Node *node, int role ) const;
+    QVariant startFloat( const Node *node, int role ) const;
+    QVariant finishFloat( const Node *node, int role ) const;
+
+    QVariant status( const Node *node, int role ) const;
+    QVariant completed( const Node *node, int role ) const;
+    QVariant startedTime( const Node *node, int role ) const;
+    QVariant finishedTime( const Node *node, int role ) const;
+    QVariant plannedEffortTo( const Node *node, int role ) const;
+    QVariant actualEffortTo( const Node *node, int role ) const;
+    QVariant plannedCostTo( const Node *node, int role ) const;
+    QVariant actualCostTo( const Node *node, int role ) const;
+    QVariant note( const Node *node, int role ) const;
+
+private:
+    Project *m_project;
+    ScheduleManager *m_manager;
+    QDate m_now;
+};
 
 class NodeItemModel : public ItemModelBase
 {
@@ -41,6 +123,7 @@ public:
     ~NodeItemModel();
     
     virtual void setProject( Project *project );
+    void setManager( ScheduleManager *sm );
     
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     
@@ -85,51 +168,29 @@ protected slots:
     void slotLayoutChanged();
     
 protected:
-    QVariant name( const Node *node, int role ) const;
     bool setName( Node *node, const QVariant &value, int role );
-    QVariant leader( const Node *node, int role ) const;
     bool setLeader( Node *node, const QVariant &value, int role );
     QVariant allocation( const Node *node, int role ) const;
     bool setAllocation( Node *node, const QVariant &value, int role );
-    QVariant description( const Node *node, int role ) const;
     bool setDescription( Node *node, const QVariant &value, int role );
-    QVariant type( const Node *node, int role ) const;
     bool setType( Node *node, const QVariant &value, int role );
-    QVariant constraint( const Node *node, int role ) const;
     bool setConstraint( Node *node, const QVariant &value, int role );
-    QVariant constraintStartTime( const Node *node, int role ) const;
     bool setConstraintStartTime( Node *node, const QVariant &value, int role );
-    QVariant constraintEndTime( const Node *node, int role ) const;
     bool setConstraintEndTime( Node *node, const QVariant &value, int role );
-    QVariant estimateType( const Node *node, int role ) const;
     bool setEstimateType( Node *node, const QVariant &value, int role );
-    QVariant estimate( const Node *node, int role ) const;
     bool setEstimate( Node *node, const QVariant &value, int role );
-    QVariant optimisticRatio( const Node *node, int role ) const;
     bool setOptimisticRatio( Node *node, const QVariant &value, int role );
-    QVariant pessimisticRatio( const Node *node, int role ) const;
     bool setPessimisticRatio( Node *node, const QVariant &value, int role );
-    QVariant riskType( const Node *node, int role ) const;
     bool setRiskType( Node *node, const QVariant &value, int role );
-    QVariant runningAccount( const Node *node, int role ) const;
     bool setRunningAccount( Node *node, const QVariant &value, int role );
-    QVariant startupAccount( const Node *node, int role ) const;
     bool setStartupAccount( Node *node, const QVariant &value, int role );
-    QVariant startupCost( const Node *node, int role ) const;
     bool setStartupCost( Node *node, const QVariant &value, int role );
-    QVariant shutdownAccount( const Node *node, int role ) const;
     bool setShutdownAccount( Node *node, const QVariant &value, int role );
-    QVariant shutdownCost( const Node *node, int role ) const;
     bool setShutdownCost( Node *node, const QVariant &value, int role );
     
-    QVariant startTime( const Node *node, int role ) const;
-    QVariant endTime( const Node *node, int role ) const;
-    
-    QVariant test( const Node *node, int role ) const;
-    bool setTest( Node *node, const QVariant &value, int role );
-
 private:
     Node *m_node; // for sanety check
+    NodeModel m_nodemodel;
 };
 
 } //namespace KPlato

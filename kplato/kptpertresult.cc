@@ -1024,15 +1024,15 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
             case 0: return ToolTip::NodeName;
-                case 1: return ToolTip::NodeEarlyStart;
-                case 2: return ToolTip::NodeEarlyFinish;
-                case 3: return ToolTip::NodeLateStart;
-                case 4: return ToolTip::NodeLateFinish;
-                case 5: return ToolTip::NodePositiveFloat;
-                case 6: return ToolTip::NodeFreeFloat;
-                case 7: return ToolTip::NodeNegativeFloat;
-                case 8: return ToolTip::NodeStartFloat;
-                case 9: return ToolTip::NodeFinishFloat;
+            case 1: return ToolTip::NodeEarlyStart;
+            case 2: return ToolTip::NodeEarlyFinish;
+            case 3: return ToolTip::NodeLateStart;
+            case 4: return ToolTip::NodeLateFinish;
+            case 5: return ToolTip::NodePositiveFloat;
+            case 6: return ToolTip::NodeFreeFloat;
+            case 7: return ToolTip::NodeNegativeFloat;
+            case 8: return ToolTip::NodeStartFloat;
+            case 9: return ToolTip::NodeFinishFloat;
             default: return QVariant();
         }
     }

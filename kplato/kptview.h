@@ -206,6 +206,9 @@ public:
 
     KoDocument *hitTest( const QPoint &viewPos );
 
+signals:
+    void currentScheduleManagerChanged( ScheduleManager *sm );
+    
 public slots:
     void slotUpdate();
     void slotAddResource( ResourceGroup *group );

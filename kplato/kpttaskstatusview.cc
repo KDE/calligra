@@ -61,9 +61,10 @@ namespace KPlato
 
 TaskStatusItemModel::TaskStatusItemModel( Part *part, QObject *parent )
     : ItemModelBase( part, parent ),
-    m_now( QDate::currentDate() ),
     m_period( 7 )
 {
+    m_nodemodel.setNow( QDate::currentDate() );
+    
     m_topNames << i18n( "Not Started" );
     m_top.append(&m_notstarted );
     
@@ -124,8 +125,6 @@ void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotReset() ) );
-        
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -136,9 +135,8 @@ void TaskStatusItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
+    m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotReset() ) );
-        
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -151,6 +149,18 @@ void TaskStatusItemModel::setProject( Project *project )
     }
     refresh();
 }
+
+void TaskStatusItemModel::setManager( ScheduleManager *sm )
+{
+    clear();
+    if ( m_nodemodel.manager() ) {
+    }
+    m_nodemodel.setManager( sm );
+    if ( sm ) {
+    }
+    refresh();
+}
+
 
 void TaskStatusItemModel::clear()
 {
@@ -173,10 +183,10 @@ void TaskStatusItemModel::refresh()
     if ( m_project == 0 ) {
         return;
     }
-    QDate begin = m_now.addDays( m_period );
-    QDate end = m_now.addDays( m_period );
+    QDate begin = m_nodemodel.now().addDays( m_period );
+    QDate end = m_nodemodel.now().addDays( m_period );
     
-    m_id = m_project->currentViewScheduleId();
+    m_id = m_nodemodel.id();
     
     foreach( Node* n, m_project->allNodes() ) {
         if ( n->type() != Node::Type_Task ) {
@@ -185,12 +195,12 @@ void TaskStatusItemModel::refresh()
         Task *t = static_cast<Task*>( n );
         const Completion &c = t->completion();
         if ( c.isFinished() ) {
-            if ( c.finishTime().date() > begin && c.finishTime().date() <= m_now ) {
+            if ( c.finishTime().date() > begin && c.finishTime().date() <= m_nodemodel.now() ) {
                 m_finished.append( t );
             }
         } else if ( c.isStarted() ) {
             m_running.append( t );
-        } else if ( t->startTime( m_id ).date() < m_now ) {
+        } else if ( t->startTime( m_id ).date() < m_nodemodel.now() ) {
             // should have been started
             m_notstarted.append( t );
         } else if ( t->startTime( m_id ).date() <= end ) {
@@ -308,183 +318,6 @@ QVariant TaskStatusItemModel::name( int row, int role ) const
     return QVariant();
 }
 
-QVariant TaskStatusItemModel::name( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return node->name();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::completed( const Task *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            if ( node->type() == Node::Type_Task ) {
-                return node->completion().percentFinished();
-            }
-            return QString();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::status( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole: {
-            int st = node->state( m_id );
-            if ( st & Node::State_Finished ) {
-                if ( st & Node::State_FinishedLate ) {
-                    return i18n( "Finished late" );
-                }
-                if ( st & Node::State_FinishedEarly ) {
-                    return i18n( "Finished early" );
-                }
-                return i18n( "Finished" );
-            }
-            if ( st & Node::State_Running ) {
-                return i18n( "Running" );
-            }
-            if ( st & Node::State_Started ) {
-                if ( st & Node::State_StartedLate ) {
-                    return i18n( "Started late" );
-                }
-                if ( st & Node::State_StartedEarly ) {
-                    return i18n( "Started early" );
-                }
-                return i18n( "Started" );
-            }
-            return i18n( "Not started" );
-            break;
-        }
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::startTime( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( node->startTime( m_id ).date() );
-        case Qt::EditRole:
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::endTime( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDate( node->endTime( m_id ).date() );
-        case Qt::EditRole:
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::plannedEffortTo( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatNumber( node->plannedEffortTo( m_now, m_id ).toDouble( Duration::Unit_h ), 1 );
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::actualEffortTo( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatNumber( node->actualEffortTo( m_now, m_id ).toDouble( Duration::Unit_h ), 1 );
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::plannedCostTo( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatMoney( node->plannedCostTo( m_now ) );
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::actualCostTo( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatMoney( node->actualCostTo( m_now ) );
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant TaskStatusItemModel::note( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            if ( node->type() == Node::Type_Task ) {
-                Node *n = const_cast<Node*>( node );
-                return static_cast<Task*>( n )->completion().note();
-            }
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
 {
     QVariant result;
@@ -502,24 +335,7 @@ QVariant TaskStatusItemModel::data( const QModelIndex &index, int role ) const
         }
         return QVariant();
     }
-    if ( n->type() == Node::Type_Task ) {
-        Task *t = static_cast<Task*>( n );
-        switch ( index.column() ) {
-            case 0: result = name( t, role ); break;
-            case 1: result = status( t, role ); break;
-            case 2: result = completed( t, role ); break;
-            case 3: result = plannedEffortTo( t, role ); break;
-            case 4: result = actualEffortTo( t, role ); break;
-            case 5: result = plannedCostTo( t, role ); break;
-            case 6: result = actualCostTo( t, role ); break;
-            case 7: result = startTime( t, role ); break;
-            case 8: result = endTime( t, role ); break;
-            case 9: result = note( t, role ); break;
-            default:
-                kDebug()<<k_funcinfo<<"data: invalid display value column"<<index.column();;
-                return QVariant();
-        }
-    }
+    result = m_nodemodel.data( n, index.column(), role );
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
             // HACK to show focus in empty cells
@@ -539,27 +355,13 @@ QVariant TaskStatusItemModel::headerData( int section, Qt::Orientation orientati
 {
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
-            switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "Status" );
-                case 2: return i18n( "% Completed" );
-                case 3: return i18n( "Planned Effort" );
-                case 4: return i18n( "Actual Effort" );
-                case 5: return i18n( "Planned Cost" );
-                case 6: return i18n( "Actual Cost" );
-                case 7: return i18n( "Start" );
-                case 8: return i18n( "End" );
-                case 9: return i18n( "Status Note" );
-                default: return QVariant();
-            }
+            return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             return alignment( section );
         }
     }
     if ( role == Qt::ToolTipRole ) {
-        switch ( section ) {
-            default: return QVariant();
-        }
+        return m_nodemodel.headerData( section, role );
     }
     return ItemModelBase::headerData(section, orientation, role);
 }
@@ -583,7 +385,7 @@ QItemDelegate *TaskStatusItemModel::createDelegate( int column, QWidget */*paren
 
 int TaskStatusItemModel::columnCount( const QModelIndex & ) const
 {
-    return 10;
+    return m_nodemodel.propertyCount();
 }
 
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
@@ -685,13 +487,16 @@ TaskStatusTreeView::TaskStatusTreeView( Part *part, QWidget *parent )
     setModel( new TaskStatusItemModel( part ) );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setStretchLastSection( false );
     
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
     QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0;
+    QList<int> lst2;
+    for ( int i = 0; i < 37; ++i ) {
+     lst2 << i;
+    }
     hideColumns( lst1, lst2 );
-
 }
 
 void TaskStatusTreeView::slotActivated( const QModelIndex index )
@@ -770,6 +575,11 @@ void TaskStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
     }
 }
 
+void TaskStatusView::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
+{
+    //kDebug()<<k_funcinfo<<endl;
+    static_cast<TaskStatusItemModel*>( m_view->model() )->setManager( sm );
+}
 
 Node *TaskStatusView::currentNode() const 
 {

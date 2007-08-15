@@ -21,6 +21,7 @@
 #define TASKSTATUSVIEW_H
 
 #include "kptitemmodelbase.h"
+#include "kptnodeitemmodel.h"
 #include "kptviewbase.h"
 
 
@@ -43,6 +44,7 @@ public:
     ~TaskStatusItemModel();
     
     virtual void setProject( Project *project );
+    void setManager( ScheduleManager *sm );
     
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     
@@ -77,7 +79,7 @@ public:
     void clear();
     void refresh();
     
-    void setNow( const QDate &date ) { m_now = date; }
+    void setNow( const QDate &date ) { m_nodemodel.setNow( date ); }
     void setPeriod( int days ) { m_period = days; }
     
 protected slots:
@@ -94,18 +96,9 @@ protected:
     QVariant alignment( int column ) const;
     
     QVariant name( int row, int role ) const;
-    QVariant name( const Node *node, int role ) const;
-    QVariant status( const Node *node, int role ) const;
-    QVariant completed( const Task *node, int role ) const;
-    QVariant startTime( const Node *node, int role ) const;
-    QVariant endTime( const Node *node, int role ) const;
-    QVariant plannedEffortTo( const Node *node, int role ) const;
-    QVariant actualEffortTo( const Node *node, int role ) const;
-    QVariant plannedCostTo( const Node *node, int role ) const;
-    QVariant actualCostTo( const Node *node, int role ) const;
-    QVariant note( const Node *node, int role ) const;
 
 private:
+    NodeModel m_nodemodel;
     QStringList m_topNames;
     QList<NodeList*> m_top;
     NodeList m_notstarted;
@@ -114,7 +107,6 @@ private:
     NodeList m_upcomming;
     
     long m_id; // schedule id
-    QDate m_now;
     int m_period;
 };
 
@@ -161,6 +153,8 @@ signals:
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
+
+    void slotCurrentScheduleManagerChanged( ScheduleManager *sm );
 
 protected:
     void updateActionsEnabled( bool on );

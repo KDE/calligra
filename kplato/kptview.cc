@@ -851,6 +851,8 @@ void View::createTaskeditor( ViewListItem *cat )
 
     taskeditor->draw( getProject() );
 
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskeditor, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
+    
     connect( taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( taskeditor, SIGNAL( addTask() ), SLOT( slotAddTask() ) );
@@ -998,6 +1000,8 @@ void View::createTaskStatusView( ViewListItem *cat )
 
     connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskstatusview, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
+    
     connect( taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
 }
@@ -1457,7 +1461,8 @@ void View::slotViewSchedule( QAction *act )
         Schedule *sch = m_scheduleActions.value( act, 0 );
         if ( sch->id() != getProject().currentViewScheduleId() ) {
             getProject().setCurrentViewScheduleId( sch->id() );
-            //kDebug()<<k_funcinfo<<sch->id();
+            //kDebug()<<k_funcinfo<<sch->id()<<", "<<sch->manager()<<endl;
+            emit currentScheduleManagerChanged( sch->manager() );
         }
     }
     setLabel();

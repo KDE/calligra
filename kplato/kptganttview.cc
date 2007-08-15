@@ -66,25 +66,9 @@ MyKDGanttView::MyKDGanttView( Part *part, QWidget *parent )
     if ( tv ) {
         tv->header()->setStretchLastSection( true );
         // Only show name in treeview ;)
-        tv->hideColumn( 1 );
-        tv->hideColumn( 2 );
-        tv->hideColumn( 3 );
-        tv->hideColumn( 4 );
-        tv->hideColumn( 5 );
-        tv->hideColumn( 6 );
-        tv->hideColumn( 7 );
-        tv->hideColumn( 8 );
-        tv->hideColumn( 9 );
-        tv->hideColumn( 10 );
-        tv->hideColumn( 11 );
-        tv->hideColumn( 12 );
-        tv->hideColumn( 13 );
-        tv->hideColumn( 14 );
-        tv->hideColumn( 15 );
-        tv->hideColumn( 16 );
-        tv->hideColumn( 17 );
-        tv->hideColumn( 18 );
-        tv->hideColumn( 19 );
+        for ( int i = 1; i < m_model->columnCount(); ++i ) {
+            tv->hideColumn( i );
+        }
     } else kDebug()<<k_funcinfo<<"No treeview !!!"<<endl;
 }
 
