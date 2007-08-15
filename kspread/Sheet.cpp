@@ -3159,7 +3159,6 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
 {
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOasisStyles& oasisStyles, bool isLast )***********";
 
-    int backupRow = rowIndex;
     bool isNonDefaultRow = false;
 
     KoStyleStack styleStack;
@@ -3228,118 +3227,70 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
         isNonDefaultRow = true;
     }
 
-    //number == number of row to be copy. But we must copy cell too.
-    for ( int i = 0; i < number; ++i )
+//     kDebug(36003)<<" create non defaultrow format :"<<rowIndex<<" repeate :"<<number<<" height :"<<height;
+    if (isNonDefaultRow)
     {
-       // kDebug(36003)<<" create non defaultrow format :"<<rowIndex<<" repeate :"<<number<<" height :"<<height;
-
-      const RowFormat* rowFormat;
-      if ( isNonDefaultRow )
-      {
-        RowFormat* rf = nonDefaultRowFormat( rowIndex );
-        rowFormat = rf;
-
-        if ( height != -1.0 )
-          rf->setHeight( height );
-        if ( visibility == Collapsed )
-          rf->setHidden( true );
-        else if (visibility == Filtered)
-            rf->setFiltered(true);
-      }
-      else
-      {
-        rowFormat = this->rowFormat( rowIndex );
-      }
-      ++rowIndex;
+        for (int r = 0; r < number; ++r)
+        {
+            RowFormat* rowFormat = nonDefaultRowFormat(rowIndex + r);
+            if (height != -1.0)
+                rowFormat->setHeight(height);
+            if (visibility == Collapsed)
+                rowFormat->setHidden(true);
+            else if (visibility == Filtered)
+                rowFormat->setFiltered(true);
+        }
     }
 
-    int columnIndex = 0;
-    KoXmlNode cellNode = row.firstChild();
-    int endRow = qMin(backupRow+number,KS_rowMax);
+    int columnIndex = 1;
+    const int endRow = qMin(rowIndex + number - 1, KS_rowMax);
 
-
-    while ( !cellNode.isNull() )
+    KoXmlElement cellElement;
+    forEachElement(cellElement, row)
     {
-        KoXmlElement cellElement = cellNode.toElement();
-        if ( !cellElement.isNull() )
+        if (cellElement.namespaceURI() != KoXmlNS::table)
+            continue;
+        if (cellElement.localName() != "table-cell" && cellElement.localName() != "covered-table-cell")
+            continue;
+
+        Cell cell(this, columnIndex, rowIndex);
+        cell.loadOasis(cellElement, oasisContext);
+
+        bool ok = false;
+        const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
+        // Some spreadsheet programs may support more columns than
+        // KSpread so limit the number of repeated columns.
+        // FIXME POSSIBLE DATA LOSS!
+        const int numberColumns = ok ? qMin(n, KS_colMax - columnIndex + 1) : 1;
+
+        // Styles are inserted at the end of the loading process, so check the XML directly here.
+        const QString styleName = cellElement.attributeNS(KoXmlNS::table , "style-name", QString());
+        if (!styleName.isEmpty())
+            cellStyleRegions[styleName] += QRect(columnIndex, rowIndex, numberColumns, number);
+
+        if (!cell.comment().isEmpty())
+            cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, this), cell.comment());
+        if (!cell.conditions().isEmpty())
+            cellStorage()->setConditions(Region(columnIndex, rowIndex, numberColumns, number, this), cell.conditions());
+        if (!cell.validity().isEmpty())
+            cellStorage()->setValidity(Region(columnIndex, rowIndex, numberColumns, number, this), cell.validity());
+
+        if (cell.isFormula() || !cell.userInput().isEmpty() || !cell.value().isEmpty())
         {
-            columnIndex++;
-            QString localName = cellElement.localName();
-
-            if ( ((localName == "table-cell") || (localName == "covered-table-cell")) && cellElement.namespaceURI() == KoXmlNS::table)
+            for (int c = 0; c < numberColumns; ++c)
             {
-                //kDebug(36003) <<"Loading cell #" << cellCount;
-
-                const bool cellHasStyle = cellElement.hasAttributeNS( KoXmlNS::table, "style-name" );
-                const QString styleName = cellElement.attributeNS( KoXmlNS::table , "style-name" , QString() );
-                if ( cellHasStyle && !styleName.isEmpty())
-                    cellStyleRegions[styleName] += QRect( columnIndex, backupRow, 1, 1 );
-
-                Cell cell = Cell( this, columnIndex, backupRow );
-                cell.loadOasis( cellElement, oasisContext );
-
-                int cols = 1;
-
-                // Copy this cell across & down, if it has repeated rows or columns, but only
-                // if the cell has some content or a style associated with it.
-                if ( (number > 1) || cellElement.hasAttributeNS( KoXmlNS::table, "number-columns-repeated" ) )
+                for (int r = rowIndex; r <= endRow; ++r)
                 {
-                    bool ok = false;
-                    int n = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt( &ok );
-
-                    if (ok)
-                        // Some spreadsheet programs may support more columns than
-                        // KSpread so limit the number of repeated columns.
-                        // FIXME POSSIBLE DATA LOSS!
-                        cols = qMin( n, KS_colMax - columnIndex + 1 );
-
-                    if ( !cellHasStyle && ( cell.isEmpty() && Cell( this, columnIndex, backupRow ).comment().isEmpty() ) )
-                    {
-                        // just increment it
-                        columnIndex += cols - 1;
-                    }
-                    else
-                    {
-                        for ( int k = cols ; k ; --k )
-                        {
-                            if ( k != cols )
-                                columnIndex++;
-
-                            for ( int newRow = backupRow; newRow < endRow; ++newRow )
-                            {
-                                if ( !cell.isEmpty() )
-                                {
-                                    Cell target = Cell( this, columnIndex, newRow );
-                                    if ( !cell.compareData( target ) )
-                                        target.copyContent( cell );
-                                }
-                                // TODO Stefan: set the attributes in one go for the repeated range
-                                if ( cellHasStyle && !styleName.isEmpty())
-                                    cellStyleRegions[styleName] += QRect( columnIndex, newRow, 1, 1 );
-                                const QString comment = Cell( this, columnIndex, backupRow ).comment();
-                                if ( !comment.isEmpty() )
-                                    cellStorage()->setComment( Region(QPoint(columnIndex, newRow)), comment );
-                                const Conditions conditions = cellStorage()->conditions( columnIndex, backupRow );
-                                if ( !conditions.isEmpty() )
-                                    cellStorage()->setConditions( Region(QPoint(columnIndex, newRow)), conditions );
-                                const KSpread::Validity validity = cellStorage()->validity( columnIndex, backupRow );
-                                if ( !validity.isEmpty() )
-                                    cellStorage()->setValidity( Region(QPoint(columnIndex, newRow)), validity );
-                            }
-                        }
-                    }
-                }
-
-                // delete non-default cell, if it is empty
-                if ( cell.isEmpty() )
-                {
-                    d->cellStorage->take( cell.column(), cell.row() );
+                    Cell target(this, columnIndex + c, r);
+                    target.setFormula(cell.formula());
+                    target.setUserInput(cell.userInput());
+                    target.setValue(cell.value());
                 }
             }
         }
-        cellNode = cellNode.nextSibling();
+        columnIndex += numberColumns;
     }
-
+    rowIndex += number;
     return true;
 }
 
