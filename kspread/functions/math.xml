@@ -191,6 +191,20 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>GAMMA</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Floating point value</Comment>
+	<Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The GAMMA() function returns the gamma function value.</Text>
+        <Syntax>GAMMA(value)</Syntax>
+        <Example>GAMMA(1) returns 1</Example>
+        <Related>FACT</Related>
+      </Help>
+    </Function>
 
     <Function>
       <Name>MOD</Name>
