@@ -190,8 +190,14 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                     }
                     
                     //TODO dots
+                    int nDots = 0;
+                    KoXmlElement dot;
+                    forEachElement(dot, e) {
+                        if (dot.namespaceURI() == NS_MUSIC && dot.localName() == "dot") nDots++;
+                    }
+                    
                     Staff* staff = part->staff(staffId);
-                    lastNote = new Chord(staff, duration);
+                    lastNote = new Chord(staff, duration, nDots);
                     Voice* voice = part->voice(voiceId);
                     voice->bar(bar)->addElement(lastNote);
                 }
