@@ -561,7 +561,7 @@ void Canvas::scrollToCell(const QPoint& location) const
     const double width = sheet->doc()->defaultColumnFormat()->width();
     const double height = sheet->doc()->defaultRowFormat()->height();
     QRectF rect(xpos, ypos, cell.width(), cell.height());
-    rect.adjust(-width, -height, width, height);
+    rect.adjust(-width-2, -height-2, width+2, height+2);
     rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());
 
     d->view->canvasController()->ensureVisible(rect, true);
