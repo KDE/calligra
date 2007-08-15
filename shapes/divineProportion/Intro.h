@@ -33,6 +33,9 @@ public:
     virtual void save();
     virtual KAction *createAction();
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 private:
     Ui::Intro widget;
     DivineProportionShape *m_shape;

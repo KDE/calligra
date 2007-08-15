@@ -44,6 +44,9 @@ public:
     /// reimplemented
     void save();
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 private slots:
     void newPageGroupUpdated(int which);
 

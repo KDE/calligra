@@ -47,6 +47,9 @@ public:
     /// reimplemented
     void save();
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 private slots:
     void frameSetSelected();
     void nameChanged(const QString &text);

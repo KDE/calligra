@@ -48,6 +48,9 @@ public:
     /// reimplemented
     virtual void setUnit(KoUnit unit);
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 private slots:
     void updateShape();
     void protectSizeChanged(int protectSizeState);

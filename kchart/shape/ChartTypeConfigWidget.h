@@ -48,6 +48,9 @@ public:
     void save();
     KAction* createAction();
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 public slots:
     void apply();
 

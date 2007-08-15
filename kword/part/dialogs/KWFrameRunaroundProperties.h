@@ -45,6 +45,9 @@ public:
     /// reimplemented
     void save();
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 private:
     Ui::KWFrameRunaroundProperties widget;
     FrameConfigSharedState *m_state;

@@ -43,6 +43,9 @@ public:
     /// reimplemented
     KAction *createAction();
 
+    /// reimplemented 
+    virtual bool showOnShapeCreate() { return true; }
+
 protected:
     virtual void showEvent( QShowEvent* event );
 
