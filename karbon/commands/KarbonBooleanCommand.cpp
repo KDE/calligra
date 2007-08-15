@@ -71,8 +71,8 @@ void KarbonBooleanCommand::redo()
 {
     if( ! d->resultingPath )
     {
-        QPainterPath pa = d->pathA->transformationMatrix(0).map( d->pathA->outline() );
-        QPainterPath pb = d->pathB->transformationMatrix(0).map( d->pathB->outline() );
+        QPainterPath pa = d->pathA->absoluteTransformation(0).map( d->pathA->outline() );
+        QPainterPath pb = d->pathB->absoluteTransformation(0).map( d->pathB->outline() );
         QPainterPath pr;
         switch( d->operation )
         {

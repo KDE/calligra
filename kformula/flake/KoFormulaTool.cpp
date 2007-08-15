@@ -72,7 +72,7 @@ void KoFormulaTool::deactivate()
 void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
     painter.setMatrix( painter.matrix() *
-                       m_formulaShape->transformationMatrix( &converter ) );
+                       m_formulaShape->absoluteTransformation( &converter ) );
     double zoomX, zoomY;              // apply view conversions for painting
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);

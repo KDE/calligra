@@ -390,8 +390,8 @@ void KWTextDocumentLayout::layout() {
                         }
                         if(isChild)
                             continue;
-                        QMatrix matrix = (frame->outlineShape() ? frame->outlineShape() : frame->shape())->transformationMatrix(0);
-                        matrix = matrix * currentShape->transformationMatrix(0).inverted();
+                        QMatrix matrix = (frame->outlineShape() ? frame->outlineShape() : frame->shape())->absoluteTransformation(0);
+                        matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                         matrix.translate(0, m_state->documentOffsetInShape());
                         outlines.append(new Outline(frame, matrix));
                     }
@@ -424,8 +424,8 @@ void KWTextDocumentLayout::layout() {
 
         foreach(KWAnchorStrategy *strategy, m_newAnchors) {
             if(strategy->anchoredShape() != 0) {
-                QMatrix matrix = strategy->anchoredShape()->transformationMatrix(0);
-                matrix = matrix * currentShape->transformationMatrix(0).inverted();
+                QMatrix matrix = strategy->anchoredShape()->absoluteTransformation(0);
+                matrix = matrix * currentShape->absoluteTransformation(0).inverted();
                 matrix.translate(0, m_state->documentOffsetInShape());
                 outlines.append(new Outline(strategy->anchoredShape(), matrix));
             }
@@ -517,7 +517,7 @@ void KWTextDocumentLayout::layout() {
                 pageRect.adjust(page->leftMargin(), page->topMargin(), -page->rightMargin(), -page->bottomMargin());
 
                 QLineF top(QPointF(0, 0), QPointF(lastFrame->shape()->size().width(), 0));
-                top = lastFrame->shape()->transformationMatrix(0).map(top);
+                top = lastFrame->shape()->absoluteTransformation(0).map(top);
                 const double multiplier = qMax(pageRect.height(), pageRect.width()) / top.length();
                 QLineF down(top.p1(), QPointF( top.p1().x() - top.dy() * multiplier,
                             top.p1().y() + top.dx() * multiplier));

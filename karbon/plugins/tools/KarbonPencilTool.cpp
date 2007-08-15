@@ -59,7 +59,7 @@ void KarbonPencilTool::paint( QPainter &painter, const KoViewConverter &converte
 
     painter.save();
 
-    painter.setMatrix( m_shape->transformationMatrix( &converter ) * painter.matrix() );
+    painter.setMatrix( m_shape->absoluteTransformation( &converter ) * painter.matrix() );
 
     //KoShape::applyConversion( painter, converter );
 

@@ -177,7 +177,7 @@ QVariant KarbonLayerModel::data( const QModelIndex &index, int role ) const
         case PropertiesRole: return QVariant::fromValue( properties( shape ) );
         case AspectRatioRole:
         {
-            QMatrix matrix = shape->transformationMatrix( 0 );
+            QMatrix matrix = shape->absoluteTransformation( 0 );
             QRectF bbox = matrix.mapRect( shape->outline().boundingRect() );
             KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
             if( container )
@@ -301,7 +301,7 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
     QPointF shapeOrigin( 0.0, 0.0 );
     if( ! dynamic_cast<KoShapeContainer*>( shape ) )
     {
-        QMatrix shapeMatrix = shape->transformationMatrix( 0 );
+        QMatrix shapeMatrix = shape->absoluteTransformation( 0 );
         shapeOrigin = shapeMatrix.map( shapeOrigin );
         painter.translate( -shapeOrigin.x(), -shapeOrigin.y() );
     }
@@ -327,7 +327,7 @@ QRectF KarbonLayerModel::transformedShapeBox( KoShape *shape ) const
     }
     else
     {
-        shapeBox = shape->outline().toFillPolygon( shape->transformationMatrix(0) ).boundingRect();
+        shapeBox = shape->outline().toFillPolygon( shape->absoluteTransformation(0) ).boundingRect();
 
         // correct shape box with border sizes
         if( shape->border() )
@@ -353,7 +353,7 @@ void KarbonLayerModel::paintShape( KoShape *shape, QPainter &painter, const KoVi
     {
         painter.save();
         // set the shapes transformation matrix
-        painter.setMatrix( shape->transformationMatrix( isSingleShape ? 0 : &converter ), true );
+        painter.setMatrix( shape->absoluteTransformation( isSingleShape ? 0 : &converter ), true );
         // paint the shape
         painter.save();
         shape->paint( painter, converter );

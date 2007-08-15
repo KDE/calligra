@@ -287,7 +287,7 @@ void SimpleEntryTool::deactivate()
 
 void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
-    painter.setMatrix( m_musicshape->transformationMatrix(&viewConverter) * painter.matrix() );
+    painter.setMatrix( m_musicshape->absoluteTransformation(&viewConverter) * painter.matrix() );
     KoShape::applyConversion( painter, viewConverter );
     painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
 
@@ -304,7 +304,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
 
 void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 {
-    QPointF p = m_musicshape->transformationMatrix(0).inverted().map(event->point);
+    QPointF p = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
     Sheet *sheet = m_musicshape->sheet();
 
     // find closest staff system
@@ -392,7 +392,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 
 void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
 {
-    m_point = m_musicshape->transformationMatrix(0).inverted().map(event->point);
+    m_point = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
     m_canvas->updateCanvas(QRectF(QPointF(event->point.x() - 100, event->point.y() - 100), QSizeF(200, 200)));
 }
 

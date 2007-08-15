@@ -34,7 +34,7 @@ KarbonPatternEditStrategy::KarbonPatternEditStrategy( KoShape * shape )
 : m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
 {
     // cache the shapes transformation matrix
-    m_matrix = m_shape->transformationMatrix( 0 );
+    m_matrix = m_shape->absoluteTransformation( 0 );
     QSizeF size = m_shape->size();
     // the fixed length of half the average shape dimension
     m_normalizedLength = 0.25 * ( size.width() + size.height() );

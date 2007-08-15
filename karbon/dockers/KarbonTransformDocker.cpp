@@ -260,9 +260,9 @@ QRectF KarbonTransformDocker::selectionRect()
     foreach( KoShape * shape, selectedShapes )
     {
         if( aaBB.isEmpty() )
-            aaBB = shape->transformationMatrix(0).map( shape->outline() ).boundingRect();
+            aaBB = shape->absoluteTransformation(0).map( shape->outline() ).boundingRect();
         else
-            aaBB = aaBB.united( shape->transformationMatrix(0).map( shape->outline() ).boundingRect() );
+            aaBB = aaBB.united( shape->absoluteTransformation(0).map( shape->outline() ).boundingRect() );
     }
    return aaBB;
 }
@@ -352,8 +352,8 @@ void KarbonTransformDocker::scale()
         foreach( KoShape* shape, selectedShapes )
         {
             QSizeF oldSize = shape->size();
-            oldState << shape->localTransformation();
-            QMatrix shapeMatrix = shape->transformationMatrix(0);
+            oldState << shape->transformation();
+            QMatrix shapeMatrix = shape->absoluteTransformation(0);
 
             // calculate the matrix we would apply to the local shape matrix
             // that tells us the effective scale values we have to use for the resizing
@@ -370,8 +370,8 @@ void KarbonTransformDocker::scale()
             oldSizes << oldSize;
             newSizes << QSizeF( scaleX * oldSize.width(), scaleY * oldSize.height() );
             // apply the rest of the transformation without the resizing part
-            shape->applyTransformation( scaleMatrix.inverted() * resizeMatrix );
-            newState << shape->localTransformation();
+            shape->applyAbsoluteTransformation( scaleMatrix.inverted() * resizeMatrix );
+            newState << shape->transformation();
         }
         QUndoCommand * cmd = new QUndoCommand(i18n("Resize"));
         new KoShapeSizeCommand( selectedShapes, oldSizes, newSizes, cmd );
@@ -417,9 +417,9 @@ void KarbonTransformDocker::shear()
         QList<QMatrix> oldTransforms, newTransforms;
         foreach( KoShape * shape, selection->selectedShapes() )
         {
-            oldTransforms << shape->localTransformation();
-            shape->applyTransformation( shearMatrix );
-            newTransforms << shape->localTransformation();
+            oldTransforms << shape->transformation();
+            shape->applyAbsoluteTransformation( shearMatrix );
+            newTransforms << shape->transformation();
         }
         QUndoCommand * cmd = new KoShapeTransformCommand( selection->selectedShapes(), oldTransforms, newTransforms );
         cmd->setText( i18n("Shear") );
@@ -448,9 +448,9 @@ void KarbonTransformDocker::rotate()
     QList<QMatrix> oldTransforms, newTransforms;
     foreach( KoShape * shape, selectedShapes )
     {
-        oldTransforms << shape->localTransformation();
-        shape->applyTransformation( matrix );
-        newTransforms << shape->localTransformation();
+        oldTransforms << shape->transformation();
+        shape->applyAbsoluteTransformation( matrix );
+        newTransforms << shape->transformation();
     }
 
     QUndoCommand * cmd = new KoShapeTransformCommand( selectedShapes, oldTransforms, newTransforms );

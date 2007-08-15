@@ -116,7 +116,7 @@ void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const {
     Q_ASSERT(page);
     QRectF pageRect (page->rect().adjusted(5, 5, -5, -5));
     QRectF movedRect = pageRect;
-    QPainterPath path (shape->transformationMatrix(0).map(shape->outline()));
+    QPainterPath path (shape->absoluteTransformation(0).map(shape->outline()));
 
     movedRect.moveLeft(pageRect.x() - move.x());
     if(! path.intersects(movedRect))

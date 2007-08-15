@@ -51,7 +51,7 @@ void KWCreateOutlineCommand::redo() {
     }
     else {
         KoShape *child = m_frame->shape();
-        m_container->setTransformation(child->transformationMatrix(0));
+        m_container->setTransformation(child->absoluteTransformation(0));
         QMatrix matrix;
         child->setTransformation(matrix);
         m_container->addChild(child);
@@ -65,7 +65,7 @@ void KWCreateOutlineCommand::undo() {
     QUndoCommand::undo();
     Q_ASSERT(m_container);
     KoShape *child = m_frame->shape();
-    child->setTransformation(m_container->transformationMatrix(0));
+    child->setTransformation(m_container->absoluteTransformation(0));
     m_container->removeChild(m_frame->shape());
     m_container->setApplicationData(0);
     m_controller->removeShape(m_container);

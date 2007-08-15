@@ -412,7 +412,7 @@ void TextTool::paint( QPainter &painter, const KoViewConverter &converter) {
             return;
     }
 
-    painter.setMatrix( painter.matrix() * m_textShape->transformationMatrix(&converter) );
+    painter.setMatrix( painter.matrix() * m_textShape->absoluteTransformation(&converter) );
     double zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     painter.scale(zoomX, zoomY);
@@ -847,7 +847,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = textRect(m_caret.position(), m_caret.position());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
-        rect = m_textShape->transformationMatrix(&converter).mapRect(rect);
+        rect = m_textShape->absoluteTransformation(&converter).mapRect(rect);
         return rect.toRect();
     }
     case Qt::ImFont:
@@ -893,7 +893,7 @@ void TextTool::ensureCursorVisible() {
         }
     }
     cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
-    m_canvas->ensureVisible(m_textShape->transformationMatrix(0).mapRect(cursorPos));
+    m_canvas->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cursorPos));
 }
 
 void TextTool::keyReleaseEvent(QKeyEvent *event) {
@@ -1033,7 +1033,7 @@ void TextTool::repaintCaret() {
             repaintRect.setWidth(6);
         }
         repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
-        repaintRect = m_textShape->transformationMatrix(0).mapRect(repaintRect);
+        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
         m_canvas->updateCanvas(repaintRect);
     }
 }
@@ -1063,7 +1063,7 @@ void TextTool::repaintSelection(int startPosition, int endPosition) {
     foreach(TextShape *ts, shapes) {
         QRectF rect = repaintRect;
         rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
-        rect = ts->transformationMatrix(0).mapRect(rect);
+        rect = ts->absoluteTransformation(0).mapRect(rect);
         m_canvas->updateCanvas(ts->boundingRect().intersected(rect));
     }
 }

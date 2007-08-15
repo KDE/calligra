@@ -35,7 +35,7 @@ int GradientStrategy::m_handleRadius = 3;
 GradientStrategy::GradientStrategy( KoShape *shape )
 : m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
 {
-    m_matrix = m_shape->background().matrix() * m_shape->transformationMatrix( 0 );
+    m_matrix = m_shape->background().matrix() * m_shape->absoluteTransformation( 0 );
 }
 
 void GradientStrategy::setEditing( bool on )
