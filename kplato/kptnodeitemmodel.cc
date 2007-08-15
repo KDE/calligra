@@ -1332,8 +1332,6 @@ void NodeItemModel::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         //disconnect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
-        
-//        disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotLayoutChanged() ) );
     }
     m_project = project;
     kDebug()<<k_funcinfo<<m_project<<"->"<<project<<endl;
@@ -1347,8 +1345,6 @@ void NodeItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
         connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
         //connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
-    
-//        connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotLayoutChanged() ) );
     }
     reset();
 }
@@ -1360,6 +1356,7 @@ void NodeItemModel::setManager( ScheduleManager *sm )
     m_nodemodel.setManager( sm );
     if ( sm ) {
     }
+    kDebug()<<k_funcinfo<<sm<<endl;
     reset();
 }
     
@@ -1459,13 +1456,16 @@ QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
 
 bool NodeItemModel::hasChildren( const QModelIndex &parent ) const
 {
+    if ( m_nodemodel.manager() == 0 || m_project == 0 ) {
+        return 0;
+    }
     Node *p = node( parent );
     return p->numChildren() > 0;
 }
 
 QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+    if ( m_nodemodel.manager() == 0 || m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         //kDebug()<<k_funcinfo<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
@@ -1844,11 +1844,15 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     Node *n = node( index );
     if ( n != 0 ) {
         // Special for kdgantt
-        if ( role ==  KDGantt::StartTimeRole ) {
-            return n->startTime( m_nodemodel.id() ).dateTime();
+        if ( index.column() == 18 && role ==  KDGantt::StartTimeRole ) {
+            QDateTime t = n->startTime( m_nodemodel.id() ).dateTime();
+            //kDebug()<<k_funcinfo<<n->name()<<": "<<index.column()<<", "<<role<<t<<endl;
+            return t;
         }
-        if ( role == KDGantt::EndTimeRole ) {
-            return n->endTime( m_nodemodel.id() ).dateTime();
+        if ( index.column() == 19 && role == KDGantt::EndTimeRole ) {
+            QDateTime t = n->endTime( m_nodemodel.id() ).dateTime();
+            //kDebug()<<k_funcinfo<<n->name()<<": "<<index.column()<<", "<<role<<t<<endl;
+            return t;
         }
 
         result = m_nodemodel.data( n, index.column(), role );

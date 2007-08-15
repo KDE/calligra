@@ -18,6 +18,7 @@
 */
 #include "kptchart.h"
 #include "kptchartpanel.h"
+#include "kptschedule.h"
 
 #include <klocale.h>
 #include <cmath>
@@ -220,7 +221,7 @@ namespace KPlato
         totalCostPlanned=BCWS.last().y();
     }
 
-    void Chart::calculatePlannedCost(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p)
+    void Chart::calculatePlannedCost(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p, ScheduleManager &sm)
     {
         //kDebug()<<"calculatePlannedCost()"<<weeks<<","<<vect;
         QVector<QPointF>::iterator it= vect.begin();
@@ -232,7 +233,7 @@ namespace KPlato
         {
             for (int i = 0; i < 7; ++i ) {
                 QDate date = (*it_weeks).addDays(i);
-                sum+=(float)p.plannedCost(date, p.currentViewScheduleId());
+                sum+=(float)p.plannedCost(date, sm.id());
                 if ( date == weeks.last() ) {
                     break;
                 }
@@ -247,7 +248,7 @@ namespace KPlato
         //kDebug()<<"calculatePlannedCost()"<<vect;
     }
 
-    void Chart::calculateActualCost(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p)
+    void Chart::calculateActualCost(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p, ScheduleManager &sm)
     {
         //kDebug()<<"calculateActualCost()"<<weeks<<vect;
         QVector<QPointF>::iterator it= vect.begin();
@@ -259,7 +260,7 @@ namespace KPlato
         {
             for (int i = 0; i < 7; ++i ) {
                 QDate date = (*it_weeks).addDays(i);
-                sum+=(float)p.actualCost((*it_weeks).addDays(i));
+                sum+=(float)p.actualCost((*it_weeks).addDays(i), sm.id());
                 if ( date == weeks.last() ) {
                     break;
                 }
@@ -274,7 +275,7 @@ namespace KPlato
         //kDebug()<<"calculateActualCost()"<<vect;
     }
 
-    void Chart::calculateBCWP(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p)
+    void Chart::calculateBCWP(QVector<QPointF> & vect,QVector<QDate> weeks,Project & p, ScheduleManager &sm)
     {
         kDebug()<<"calculateBCWP()"<<weeks<<vect;
         QVector<QPointF>::iterator it= vect.begin();
@@ -284,7 +285,7 @@ namespace KPlato
         it++;
         while(it != vect.end())
         {
-            sum = (float)p.bcwp((*it_weeks), p.currentViewScheduleId()); // up to date
+            sum = (float)p.bcwp((*it_weeks), sm.id()); // up to date
             it->setY(sum);
             it++;
             it_weeks++;
@@ -303,17 +304,17 @@ namespace KPlato
         }
     }
 
-    void Chart::calculateWeeks(QVector<QDate> & weeks,Project & p)
+    void Chart::calculateWeeks(QVector<QDate> & weeks,Project & p, ScheduleManager &sm)
     {
-        //Schedule *s = p.findSchedule( p.currentViewScheduleId() );
-        //kDebug()<<k_funcinfo<<weeks.count()<<" Schedule:"<<(s==0?"None":s->name()+QString(", %1").arg(s->type()));
-        QDate myDate = p.startTime( p.currentViewScheduleId() ).date();
-        while(myDate < p.endTime( p.currentViewScheduleId() ).date())
+        //Schedule *s = p.findSchedule( sm.id() );
+        //kDebug()<<k_funcinfo<<weeks.count()<<" Schedule: " <<(s==0?"None":s->name()+QString(", %1").arg(s->type()))<<endl;
+        QDate myDate = p.startTime( sm.id() ).date();
+        while(myDate < p.endTime( sm.id() ).date())
         {
             weeks.push_back(myDate);
             myDate=myDate.addDays(7);
         }
-        weeks.push_back(p.endTime( p.currentViewScheduleId() ).date());
+        weeks.push_back(p.endTime( sm.id() ).date());
         for ( int i = 0; i < weeks.count(); ++i ) {
             kDebug()<<i<<":"<<weeks[i];
         }

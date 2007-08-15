@@ -567,10 +567,11 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
-        m_currentEstimateType( Estimate::Use_Expected )
+        m_currentEstimateType( Estimate::Use_Expected ),
+        m_manager( 0 )
 {
     //kDebug()<<k_funcinfo;
-    getProject().setCurrentSchedule( Schedule::Expected );
+//    getProject().setCurrentSchedule( Schedule::Expected );
 
     setComponentData( Factory::global() );
     if ( !part->isReadWrite() )
@@ -818,9 +819,12 @@ void View::createResourceAppointmentsView( ViewListItem *cat )
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
     v->setProject( &( getProject() ) );
+    v->setScheduleManager( currentScheduleManager() );
 }
 
 void View::createResourceditor( ViewListItem *cat )
@@ -1018,6 +1022,7 @@ void View::createGanttView( ViewListItem *cat )
     i->setToolTip( 0, i18n( "View gantt chart" ) );
 
     ganttview->setProject( &( getProject() ) );
+    ganttview->setScheduleManager( currentScheduleManager() );
 
     connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 /*  TODO: Review these
@@ -1026,6 +1031,9 @@ void View::createGanttView( ViewListItem *cat )
     connect( ganttview, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
     connect( ganttview, SIGNAL( itemDoubleClicked() ), SLOT( slotOpenNode() ) );
     connect( ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );*/
+    
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), ganttview, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
     connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
 
 
@@ -1041,6 +1049,8 @@ void View::createAccountsView( ViewListItem *cat )
     ViewListItem *i = m_viewlist->addView( cat, "AccountsView", i18n( "Accounts" ), accountsview, getPart(), "accounts" );
     i->setToolTip( 0, i18n( "View planned cost" ) );
 
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), accountsview, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
     connect( accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
 }
@@ -1461,13 +1471,13 @@ void View::slotViewSchedule( QAction *act )
     //kDebug()<<k_funcinfo;
     if ( act != 0 ) {
         Schedule *sch = m_scheduleActions.value( act, 0 );
-        if ( sch->id() != getProject().currentViewScheduleId() ) {
-            getProject().setCurrentViewScheduleId( sch->id() );
-            //kDebug()<<k_funcinfo<<sch->id()<<", "<<sch->manager()<<endl;
-            emit currentScheduleManagerChanged( sch->manager() );
-        }
+        m_manager = sch->manager();
+    } else {
+        m_manager = 0;
     }
+    kDebug()<<k_funcinfo<<m_manager<<endl;
     setLabel();
+    emit currentScheduleManagerChanged( m_manager );
 }
 
 void View::slotActionDestroyed( QObject *o )
@@ -1773,11 +1783,11 @@ void View::slotOpenNode( Node *node )
 
 ScheduleManager *View::currentScheduleManager() const
 {
-    Schedule *s = getProject().findSchedule( getProject().currentViewScheduleId() );
-    if ( s == 0 ) {
+/*    Schedule *s = getProject().findSchedule( getProject().currentViewScheduleId() );
+    if ( s == 0 ) {*/
         return 0;
-    }
-    return s->manager();
+/*    }
+    return s->manager();*/
 }
 
 void View::slotTaskProgress()
@@ -2423,7 +2433,7 @@ bool View::setContext( const Context &context )
     //kDebug()<<k_funcinfo;
     m_currentEstimateType = context.currentEstimateType;
 
-    getProject().setCurrentViewScheduleId( context.currentSchedule );
+//    getProject().setCurrentViewScheduleId( context.currentSchedule );
 
     // set context for each subview
     for ( int i = 0; i < m_tab->count(); ++i ) {
@@ -2455,7 +2465,7 @@ void View::getContext( Context &context ) const
     //kDebug()<<k_funcinfo;
     context.currentEstimateType = m_currentEstimateType;
 
-    context.currentSchedule = getProject().currentViewScheduleId();
+//    context.currentSchedule = getProject().currentViewScheduleId();
     ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
     if ( item ) {
         context.currentView = item->tag();
@@ -2473,10 +2483,9 @@ void View::getContext( Context &context ) const
 void View::setLabel()
 {
     //kDebug()<<k_funcinfo;
-    long id = getProject().currentViewScheduleId();
-    Schedule *s = id == -1 ? getProject().currentSchedule() : getProject().findSchedule( id );
+    Schedule *s = m_manager == 0 ? 0 : m_manager->expected();
     if ( s && !s->isDeleted() && s->isScheduled() ) {
-        m_estlabel->setText( s->name() );
+        m_estlabel->setText( m_manager->name() );
         return;
     }
     m_estlabel->setText( i18n( "Not scheduled" ) );

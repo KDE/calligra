@@ -380,6 +380,8 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
+    ScheduleManager *m_manager;
+    
     // ------ Edit
     QAction *actionCut;
     QAction *actionCopy;

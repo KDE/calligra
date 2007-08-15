@@ -52,12 +52,16 @@ namespace KPlato
 
 MyKDGanttView::MyKDGanttView( Part *part, QWidget *parent )
     : KDGantt::View( parent ),
-    m_project( 0 )
+    m_project( 0 ),
+    m_manager( 0 )
 {
+    kDebug()<<"------------------- create MyKDGanttView -----------------------"<<endl;
     setConstraintModel( new KDGantt::ConstraintModel() );
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
     //m->setColumn( KDGantt::ItemTypeRole, 1 );
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
+    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
+    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
     m->setColumn( KDGantt::StartTimeRole, 18 );
     m->setColumn( KDGantt::EndTimeRole, 19 );
     m_model = new NodeItemModel( part, this );
@@ -84,15 +88,34 @@ void MyKDGanttView::setProject( Project *project )
     if ( m_project ) {
         disconnect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         disconnect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
     m_model->setProject( project );
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( relationAdded( Relation* ) ), this, SLOT( addDependency( Relation* ) ) );
         connect( m_project, SIGNAL( relationToBeRemoved( Relation* ) ), this, SLOT( removeDependency( Relation* ) ) );
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
     createDependencies();
 }
+
+void MyKDGanttView::slotProjectCalculated( ScheduleManager *sm )
+{
+    if ( m_manager == sm ) {
+        setScheduleManager( sm );
+    }
+}
+
+void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug()<<k_funcinfo<<id<<endl;
+    clearDependencies();
+    m_model->setManager( sm );
+    m_manager = sm;
+    createDependencies();
+}
+
 
 void MyKDGanttView::addDependency( Relation *rel )
 {
@@ -124,7 +147,7 @@ void MyKDGanttView::clearDependencies()
 void MyKDGanttView::createDependencies()
 {
     clearDependencies();
-    if ( m_project == 0 ) {
+    if ( m_project == 0 || m_manager == 0 ) {
         return;
     }
     foreach ( Node* n, m_project->allNodes() ) {
@@ -140,8 +163,7 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
         : ViewBase( part, parent ),
         m_readWrite( readWrite ),
         m_taskView( 0 ),
-        m_project( 0 ),
-        m_id( -1 )
+        m_project( 0 )
 {
     kDebug() <<" ---------------- KPlato: Creating GanttView ----------------";
 
@@ -203,10 +225,10 @@ void GanttView::setProject( Project *project )
     m_gantt->setProject( project );
 }
 
-void GanttView::slotScheduleIdChanged( long id )
+void GanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug()<<k_funcinfo<<id;
-    m_id = id;
+    //kDebug()<<k_funcinfo<<id<<endl;
+    m_gantt->setScheduleManager( sm );
 }
 
 void GanttView::draw( Project &project )
@@ -232,10 +254,10 @@ bool GanttView::setContext( const Context &c )
     kDebug()<<k_funcinfo;
     const Context::Ganttview &context = c.ganttview;
     
-    Q3ValueList<int> list = m_splitter->sizes();
-    list[ 0 ] = context.ganttviewsize;
-    list[ 1 ] = context.taskviewsize;
-    m_splitter->setSizes( list );
+//     Q3ValueList<int> list = m_splitter->sizes();
+//     list[ 0 ] = context.ganttviewsize;
+//     list[ 1 ] = context.taskviewsize;
+//     m_splitter->setSizes( list );
 
     //TODO this does not work yet!
     //     currentItemChanged(findItem(project.findNode(context.currentNode)));

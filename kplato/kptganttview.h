@@ -42,6 +42,7 @@ class Task;
 class Part;
 class Project;
 class Relation;
+class ScheduleManager;
 
 class MyKDGanttView : public KDGantt::View
 {
@@ -51,6 +52,7 @@ public:
     
     NodeItemModel *itemModel() const { return m_model; }
     void setProject( Project *project );
+    void setScheduleManager( ScheduleManager *sm );
     void update();
 
     void clearDependencies();
@@ -59,10 +61,12 @@ public:
 public slots:
     void addDependency( Relation *rel );
     void removeDependency( Relation *rel );
-
+    void slotProjectCalculated( ScheduleManager *sm );
+    
 protected:
     NodeItemModel *m_model;
     Project *m_project;
+    ScheduleManager *m_manager;
 };
 
 class GanttView : public ViewBase
@@ -105,6 +109,8 @@ signals:
     void requestPopupMenu( const QString& menuname, const QPoint & pos );
 
 public slots:
+    void setScheduleManager( ScheduleManager *sm );
+    
     void setShowExpected( bool on ) { m_showExpected = on; }
     void setShowOptimistic( bool on ) { m_showOptimistic = on; }
     void setShowPessimistic( bool on ) { m_showPessimistic = on; }
@@ -118,9 +124,6 @@ public slots:
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
     void setShowAppointments( bool on ) { m_showAppointments = on; }
     void update();
-
-private slots:
-    void slotScheduleIdChanged( long id );
 
 private:
     bool m_readWrite;
@@ -141,7 +144,6 @@ private:
     bool m_showNoInformation;
     bool m_showAppointments;
     Project *m_project;
-    long m_id;
 };
 
 }  //KPlato namespace

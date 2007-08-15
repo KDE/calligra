@@ -70,7 +70,8 @@ ResourceAppointmentsItemModel::ResourceAppointmentsItemModel( Part *part, QObjec
     : ItemModelBase( part, parent ),
     m_columnCount( 3 ),
     m_group( 0 ),
-    m_resource( 0 )
+    m_resource( 0 ),
+    m_manager( 0 )
 {
 }
 
@@ -160,11 +161,11 @@ void ResourceAppointmentsItemModel::slotResourceGroupRemoved( const ResourceGrou
     m_group = 0;
 }
 
-
-void ResourceAppointmentsItemModel::slotCurrentViewScheduleIdChanged( long id )
+void ResourceAppointmentsItemModel::slotProjectCalculated( ScheduleManager *sm )
 {
-    kDebug()<<k_funcinfo<<id<<endl;
-    refresh();
+    if ( sm == m_manager ) {
+        setScheduleManager( sm );
+    }
 }
 
 void ResourceAppointmentsItemModel::setProject( Project *project )
@@ -192,7 +193,7 @@ void ResourceAppointmentsItemModel::setProject( Project *project )
         
         disconnect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
       
-        disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotCurrentViewScheduleIdChanged( long ) ) );
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
     m_project = project;
     if ( m_project ) {
@@ -217,10 +218,17 @@ void ResourceAppointmentsItemModel::setProject( Project *project )
       
         connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
       
-        connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotCurrentViewScheduleIdChanged( long ) ) );
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
     refresh();
     kDebug()<<k_funcinfo<<endl;
+}
+
+void ResourceAppointmentsItemModel::setScheduleManager( ScheduleManager *sm )
+{
+    kDebug()<<k_funcinfo<<sm<<endl;
+    m_manager = sm;
+    refresh();
 }
 
 Qt::ItemFlags ResourceAppointmentsItemModel::flags( const QModelIndex &index ) const
@@ -232,8 +240,8 @@ Qt::ItemFlags ResourceAppointmentsItemModel::flags( const QModelIndex &index ) c
 
 QModelIndex ResourceAppointmentsItemModel::parent( const QModelIndex &index ) const
 {
-    if ( !index.isValid() || m_project == 0 || m_project->currentViewScheduleId() == -1 ) {
-        kWarning()<<k_funcinfo<<"No data"<<endl;
+    if ( !index.isValid() || m_project == 0 || m_manager == 0 ) {
+        kWarning()<<k_funcinfo<<"No data "<<index<<endl;
         return QModelIndex();
     }
     //kDebug()<<k_funcinfo<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
@@ -254,7 +262,7 @@ QModelIndex ResourceAppointmentsItemModel::parent( const QModelIndex &index ) co
 
 QModelIndex ResourceAppointmentsItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
+    if ( m_project == 0 || m_manager == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         return QModelIndex();
     }
     if ( ! parent.isValid() ) {
@@ -274,9 +282,9 @@ QModelIndex ResourceAppointmentsItemModel::index( int row, int column, const QMo
     }
     Resource *r = resource( parent );
     if ( r ) {
-        if ( row < r->numAppointments( m_project->currentViewScheduleId() ) ) {
-            //kDebug()<<k_funcinfo<<"Appointment: "<<r->appointmentAt( row, m_project->currentViewScheduleId() )<<endl;
-            return createAppointmentIndex( row, column, r->appointmentAt( row, m_project->currentViewScheduleId() ) );
+        if ( row < r->numAppointments( m_manager->id() ) ) {
+            //kDebug()<<k_funcinfo<<"Appointment: "<<r->appointmentAt( row, m_manager->id() )<<endl;
+            return createAppointmentIndex( row, column, r->appointmentAt( row, m_manager->id() ) );
         }
         return QModelIndex();
     }
@@ -311,7 +319,7 @@ QModelIndex ResourceAppointmentsItemModel::index( const ResourceGroup *group ) c
 
 void ResourceAppointmentsItemModel::refresh()
 {
-    long id = m_project->currentViewScheduleId();
+    long id = m_manager == 0 ? -1 : m_manager->id();
     //kDebug()<<k_funcinfo<<"Schedule id: "<<id<<endl;
     QDate start;
     QDate end;
@@ -332,29 +340,12 @@ void ResourceAppointmentsItemModel::refresh()
         }
     }
     int cols = QMAX( 2 + start.daysTo( end ), 3 );
-/*    int scol, ecol;
-    if ( cols > m_columnCount ) {
-        scol = m_columnCount;
-        ecol = cols-1;
-        beginInsertColumns( QModelIndex(), scol, ecol );
-    } else if ( cols < m_columnCount ) {
-        scol = cols-1;
-        ecol = m_columnCount-1;
-        beginRemoveColumns( QModelIndex(), scol, ecol );
-    }*/
     m_groups.clear();
     m_resources.clear();
     m_appointments.clear();
     m_effortMap = ec;
     m_start = start;
     m_end = end;
-/*    if ( cols > m_columnCount ) {
-        endInsertColumns();
-    } else if ( cols < m_columnCount ) {
-        endRemoveColumns();
-    } else {
-        emit headerDataChanged( Qt::Horizontal, 2, m_columnCount );
-    }*/
     kDebug()<<k_funcinfo<<m_columnCount<<" -> "<<cols<<endl;
     m_columnCount = cols;
     reset();
@@ -368,7 +359,7 @@ int ResourceAppointmentsItemModel::columnCount( const QModelIndex &/*parent*/ ) 
 
 int ResourceAppointmentsItemModel::rowCount( const QModelIndex &parent ) const
 {
-    if ( m_project == 0 || m_project->currentViewScheduleId() == -1 ) {
+    if ( m_project == 0 || m_manager == 0 ) {
         return 0;
     }
     //kDebug()<<k_funcinfo<<parent.row()<<", "<<parent.column()<<endl;
@@ -382,7 +373,7 @@ int ResourceAppointmentsItemModel::rowCount( const QModelIndex &parent ) const
         return g->numResources();
     }
     Resource *r = resource( parent );
-    long id = m_project->currentViewScheduleId();
+    long id = m_manager->id();
     if ( r ) {
         return r->numAppointments( id );
     }
@@ -438,7 +429,7 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, int role ) c
 {
     switch ( role ) {
         case Qt::DisplayRole: {
-            QList<Appointment*> lst = res->appointments( m_project->currentViewScheduleId() );
+            QList<Appointment*> lst = res->appointments( m_manager->id() );
             Duration d;
             foreach ( Appointment *a, lst ) {
                 if ( m_effortMap.contains( a ) ) {
@@ -462,7 +453,7 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, const QDate 
 {
     switch ( role ) {
         case Qt::DisplayRole: {
-            QList<Appointment*> lst = res->appointments( m_project->currentViewScheduleId() );
+            QList<Appointment*> lst = res->appointments( m_manager->id() );
             Duration d;
             foreach ( Appointment *a, lst ) {
                 if ( m_effortMap.contains( a ) ) {
@@ -882,6 +873,11 @@ void ResourceAppointmentsView::draw( Project &project )
 void ResourceAppointmentsView::setProject( Project *project )
 {
     m_view->setProject( project );
+}
+
+void ResourceAppointmentsView::setScheduleManager( ScheduleManager *sm )
+{
+    m_view->setScheduleManager( sm );
 }
 
 void ResourceAppointmentsView::draw()

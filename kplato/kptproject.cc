@@ -61,7 +61,7 @@ Project::Project( Node *parent )
 
 void Project::init()
 {
-    m_currentViewScheduleId = -1;
+//    m_currentViewScheduleId = -1;
     m_spec = KDateTime::Spec::LocalZone();
     if ( !m_spec.timeZone().isValid() ) {
         m_spec.setType( KTimeZone() );
@@ -748,13 +748,13 @@ void Project::save( QDomElement &element ) const
     }
 }
 
-void Project::setCurrentViewScheduleId( long id )
-{
-    if ( id != m_currentViewScheduleId ) {
-        m_currentViewScheduleId = id;
-        emit currentViewScheduleIdChanged( id );
-    }
-}
+// void Project::setCurrentViewScheduleId( long id )
+// {
+//     if ( id != m_currentViewScheduleId ) {
+//         m_currentViewScheduleId = id;
+//         emit currentViewScheduleIdChanged( id );
+//     }
+// }
 
 void Project::setParentSchedule( Schedule *sch )
 {

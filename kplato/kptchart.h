@@ -32,7 +32,7 @@
 
 namespace KPlato
 {
-
+class ScheduleManager;
 
     class Chart
     {
@@ -55,12 +55,12 @@ namespace KPlato
             void costToPercent(QVector<QPointF>&);
             void timeToPercent(QVector<QPointF>&);
 
-            void calculatePlannedCost(QVector<QPointF> &,QVector<QDate> ,Project &);
-            void calculateActualCost(QVector<QPointF> &,QVector<QDate> ,Project &);
-            void calculateBCWP(QVector<QPointF> &,QVector<QDate> ,Project &);
+            void calculatePlannedCost(QVector<QPointF> &,QVector<QDate> ,Project &,  ScheduleManager &);
+            void calculateActualCost(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
+            void calculateBCWP(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
 
             void initXCurvesVectors(QVector<QDate> ,QVector<QPointF> & , QVector<QPointF> & , QVector<QPointF> & );
-            void calculateWeeks(QVector<QDate> & ,Project & );
+            void calculateWeeks(QVector<QDate> & ,Project &, ScheduleManager & );
 
     };
 

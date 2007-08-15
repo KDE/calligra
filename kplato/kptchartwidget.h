@@ -63,9 +63,10 @@ public:
     static const int BCWS = 1;
     static const int ACWP = 2;
 
-    ChartWidget(Project &, QWidget *parent=0, const char *name=0);
+    ChartWidget(QWidget *parent=0, const char *name=0);
   
-    void draw( Project &project );
+    void clear();
+    void draw( Project &project, ScheduleManager &sm );
     
     void drawBasicChart(QPainter & painter);
     void paintEvent(QPaintEvent * ev);

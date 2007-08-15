@@ -87,7 +87,8 @@ void AccountsView::AccountItem::add
 
 AccountsView::AccountsView( Project *project, Part *part, QWidget *parent )
         : ViewBase( part, parent ),
-        m_project(0)
+        m_project(0),
+        m_manager( 0 )
 {
     m_date = QDate::currentDate();
     m_period = 0;
@@ -144,24 +145,23 @@ void AccountsView::init()
 void AccountsView::setProject( Project *project )
 {
     if ( m_project && project != m_project ) {
-        disconnect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
         m_dlv->clearLists();
     }
     if ( project && project != m_project ) {
         m_project = project;
-        connect( m_project, SIGNAL( currentViewScheduleIdChanged( long ) ), this, SLOT( slotScheduleIdChanged( long ) ) );
         draw();
     }
 }
 
-void AccountsView::slotScheduleIdChanged( long /*id*/ )
+void AccountsView::setScheduleManager( ScheduleManager *sm )
 {
+    m_manager = sm;
     draw();
 }
 
 void AccountsView::draw()
 {
-    if ( m_project == 0 ) {
+    if ( m_project == 0 || m_manager == 0 ) {
         m_dlv->clearLists();
         return;
     }
@@ -232,11 +232,11 @@ void AccountsView::createPeriods()
 
 void AccountsView::slotUpdate()
 {
-    if ( m_project == 0 ) {
+    if ( m_project == 0  || m_manager == 0 ) {
         return;
     }
     Accounts &accounts = m_project->accounts();
-    long id = m_project->currentViewScheduleId();
+    long id = m_manager->id();
     //kDebug()<<k_funcinfo;
     QApplication::setOverrideCursor( Qt::WaitCursor );
     createPeriods();

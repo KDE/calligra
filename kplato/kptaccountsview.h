@@ -47,8 +47,7 @@ class Account;
 class View;
 class Project;
 class Resource;
-
-class Resource;
+class ScheduleManager;
 
 class AccountsView : public ViewBase
 {
@@ -72,10 +71,10 @@ signals:
 
 public slots:
     void slotConfigure();
-
+    void setScheduleManager( ScheduleManager *sm );
+    
 protected slots:
     void slotUpdate();
-    void slotScheduleIdChanged( long id );
     
 protected:
     void getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const;
@@ -106,6 +105,7 @@ private:
 
 private:
     Project *m_project;
+    ScheduleManager *m_manager;
 
     int m_defaultFontSize;
 

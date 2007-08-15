@@ -31,41 +31,45 @@ namespace KPlato
 
 ChartView::ChartView( Part *part, QWidget *parent )
     : ViewBase( part, parent ),
-    m_project( 0 )
+    m_project( 0 ),
+    m_manager( 0 )
 {
     QVBoxLayout *l = new QVBoxLayout( this );
     l->setContentsMargins( 0, 0, 0, 0 );
-    m_panel = new ChartPanel( part->getProject(), this );
+    m_panel = new ChartPanel( this );
     l->addWidget( m_panel );
+    setProject( &( part->getProject() ) );
 }
 
 void ChartView::setProject( Project *project )
 {
+    m_panel->clear();
     if ( m_project ) {
-        disconnect( m_project, SIGNAL(currentViewScheduleIdChanged( long ) ), this, SLOT( slotCurrentViewScheduleIdChanged( long ) ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
     }
     m_project = project;
     if ( project ) {
-        connect( m_project, SIGNAL(currentViewScheduleIdChanged( long ) ), this, SLOT( slotCurrentViewScheduleIdChanged( long ) ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-        m_panel->draw( *project );
+    }
+    if ( m_manager != 0 ) {
+        m_panel->draw( *project, *m_manager );
     }
 }
 
-void ChartView::slotCurrentViewScheduleIdChanged( long id )
+void ChartView::setScheduleManager( ScheduleManager *sm )
 {
-    if ( m_project ) {
-        kDebug()<<k_funcinfo<<id;
-        m_panel->draw( *m_project );
+    m_panel->clear();
+    m_manager = sm;
+    if ( m_project && sm ) {
+        m_panel->draw( *m_project, *sm );
     }
 }
 
 void ChartView::slotNodeChanged( Node* )
 {
-    if ( m_project ) {
-        kDebug()<<k_funcinfo;
-        m_panel->draw( *m_project );
+    if ( m_project && m_manager) {
+        kDebug()<<k_funcinfo<<endl;
+        m_panel->draw( *m_project, *m_manager );
     }
 }
 

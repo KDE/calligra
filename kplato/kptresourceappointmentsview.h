@@ -46,6 +46,7 @@ class Project;
 class Appointment;
 class Resource;
 class ResourceGroup;
+class ScheduleManager;
 
 class ResourceAppointmentsItemModel : public ItemModelBase
 {
@@ -55,6 +56,7 @@ public:
     ~ResourceAppointmentsItemModel();
 
     virtual void setProject( Project *project );
+    virtual void setScheduleManager( ScheduleManager *sm );
 
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
@@ -88,7 +90,7 @@ public:
 signals:
     void refreshed();
       
-  protected slots:
+protected slots:
     void slotResourceChanged( Resource* );
     void slotResourceGroupChanged( ResourceGroup * );
     void slotResourceGroupToBeInserted( const ResourceGroup *group, int row );
@@ -100,8 +102,8 @@ signals:
     void slotResourceToBeRemoved( const Resource *resource );
     void slotResourceRemoved( const Resource *resource );
     void slotCalendarChanged( Calendar* cal );
-    void slotCurrentViewScheduleIdChanged( long id );
-      
+    void slotProjectCalculated( ScheduleManager *sm );
+    
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
     
@@ -129,6 +131,8 @@ protected:
     
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
+    
+    ScheduleManager *m_manager;
   };
   
 class ResourceAppointmentsTreeView : public DoubleTreeViewBase
@@ -141,6 +145,7 @@ public:
 
     Project *project() const { return itemModel()->project(); }
     void setProject( Project *project ) { itemModel()->setProject( project ); }
+    void setScheduleManager( ScheduleManager *sm ) { itemModel()->setScheduleManager( sm ); }
 
 protected slots:
     void slotActivated( const QModelIndex index );
@@ -173,6 +178,8 @@ signals:
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
+    
+    void setScheduleManager( ScheduleManager *sm );
 
 protected:
     void updateActionsEnabled(  bool on = true );

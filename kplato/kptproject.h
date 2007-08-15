@@ -344,12 +344,12 @@ public:
     Accounts &accounts() { return m_accounts; }
 
     /// Set current view schedule identity to id.
-    void setCurrentViewScheduleId( long id );
+    //void setCurrentViewScheduleId( long id );
     /**
      * Returns the id of the current view schedule.
      * This is meant to be used by views when fetching data from nodes.
      */
-    long currentViewScheduleId() const { return m_currentViewScheduleId; }
+    //long currentViewScheduleId() const { return m_currentViewScheduleId; }
 
     /**
      * Set current schedule to schedule with identity id, for me and my children
@@ -477,7 +477,7 @@ signals:
     void scheduleToBeRemoved( const MainSchedule *sch );
     void scheduleRemoved( const MainSchedule *sch );
 
-    void currentViewScheduleIdChanged( long id );
+//    void currentViewScheduleIdChanged( long id );
     
     void calendarChanged( Calendar *cal );
     void calendarToBeAdded( const Calendar *cal, int row );
@@ -541,7 +541,7 @@ protected:
 
 private:
     void init();
-    long m_currentViewScheduleId;
+//    long m_currentViewScheduleId;
     
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;

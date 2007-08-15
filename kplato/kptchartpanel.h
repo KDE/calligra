@@ -33,6 +33,7 @@ class QWidget;
 
 namespace KPlato
 {
+class ScheduleManager;
 
 class ChartPanelBase : public QWidget, public Ui::ChartPanelBase
 {
@@ -54,9 +55,10 @@ private:
     bool is_acwp_draw;
 
 public:
-    ChartPanel(Project &, QWidget *parent=0);
+    ChartPanel(QWidget *parent=0);
     
-    void draw( Project &project );
+    void clear();
+    void draw( Project &project, ScheduleManager &sm );
 
 public slots:
     void slotBCWP();

@@ -30,6 +30,7 @@ namespace KPlato
 class ChartPanel;
 class Part;
 class Project;
+class ScheduleManager;
 
 class ChartView : public ViewBase 
 {
@@ -39,13 +40,16 @@ public:
     
     virtual void setProject( Project *project );
     
+public slots:
+    void setScheduleManager( ScheduleManager *sm );
+
 protected slots:
-    void slotCurrentViewScheduleIdChanged( long );
     void slotNodeChanged( Node* );
     
 private:
     ChartPanel *m_panel;
     Project *m_project;
+    ScheduleManager *m_manager;
 
 };
 

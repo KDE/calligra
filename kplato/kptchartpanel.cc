@@ -25,10 +25,10 @@
 namespace KPlato
 {
 
-ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
+ChartPanel::ChartPanel(QWidget *parent) : ChartPanelBase(parent)
 {
     //frame->setBackgroundRole( QPalette::Base );
-    chart = new ChartWidget(p, chartFrame );
+    chart = new ChartWidget(chartFrame );
     QHBoxLayout *l = new QHBoxLayout( chartFrame );
     l->addWidget( chart );
     
@@ -42,9 +42,14 @@ ChartPanel::ChartPanel(Project &p, QWidget *parent) : ChartPanelBase(parent)
     is_acwp_draw=false;
 }
 
-void ChartPanel::draw( Project &project )
+void ChartPanel::clear()
 {
-    chart->draw( project );
+    chart->clear();
+}
+
+void ChartPanel::draw( Project &project, ScheduleManager &sm )
+{
+    chart->draw( project, sm );
 }
 
 void ChartPanel::slotBCWP()

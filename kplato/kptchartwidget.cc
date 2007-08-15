@@ -28,31 +28,36 @@ namespace KPlato
 {
 
 
-ChartWidget::ChartWidget(Project &p, QWidget *parent, const char *name) : QWidget(parent,name)
+ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,name)
 {
-    kDebug() <<"------------> ChartWidget :: Constructor";
+    kDebug() << "------------> ChartWidget :: Constructor"<<endl;
     is_bcwp_draw=false;
     is_bcws_draw=true;
     is_acwp_draw=false;
 
-    draw( p );
+    clear();
     
-    kDebug() <<"ChartWidget :: Constructor Ended";
+    kDebug() << "ChartWidget :: Constructor Ended"<<endl;
 
 }
- 
-void ChartWidget::draw( Project &p ) 
+
+void ChartWidget::clear() 
 {
     weeks.clear();
     bcwpPoints.clear();
     bcwsPoints.clear();
     acwpPoints.clear();
-    chartEngine.calculateWeeks(weeks,p);
+}
+
+void ChartWidget::draw( Project &p, ScheduleManager &sm ) 
+{
+    clear();
+    chartEngine.calculateWeeks(weeks,p,sm);
     chartEngine.initXCurvesVectors(weeks,bcwpPoints,bcwsPoints,acwpPoints);
 
-    chartEngine.calculateBCWP(bcwpPoints,weeks,p);
-    chartEngine.calculateActualCost(acwpPoints,weeks,p);
-    chartEngine.calculatePlannedCost(bcwsPoints,weeks,p);
+    chartEngine.calculateBCWP(bcwpPoints,weeks,p,sm);
+    chartEngine.calculateActualCost(acwpPoints,weeks,p,sm);
+    chartEngine.calculatePlannedCost(bcwsPoints,weeks,p,sm);
     
     chartEngine.setMaxCost(bcwsPoints);
 
