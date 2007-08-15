@@ -1349,7 +1349,9 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case 1: break; // Node type
-            
+            case 2: // Responsible
+                flags |= Qt::ItemIsEditable;
+                break;
             case 3: // allocation
             case 4: // estimateType
             case 5: // estimate
@@ -1370,6 +1372,9 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
+            case 9: // constraint type
+                flags |= Qt::ItemIsEditable;
+                break;
             case 10: { // constraint start
                 Node *n = node( index );
                 if ( n == 0 )
@@ -1404,7 +1409,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case 17: // description
                 break;
             default: 
-                flags |= Qt::ItemIsEditable;
+                flags &= ~Qt::ItemIsEditable;
         }
     }
     return flags;
