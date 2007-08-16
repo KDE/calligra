@@ -123,14 +123,38 @@ public:
      */
     void removeNote(int index, bool deleteNote = true);
 
-    void removeNote(Note* note, bool deleteNote = true);
     /**
-     * This method converts a duration to a number of ticks.
+     * Removes a note from this chord. if deleteNote is true, the note is not only removed but also deleted.
+     *
+     * @param note the note to remove
+     * @param deleteNote should the note also be deleted
+     */
+    void removeNote(Note* note, bool deleteNote = true);
+    
+    /**
+     * Convert a duration to a number of ticks.
+     *
+     * @param duration the duration to convert to ticks
      */
     static int durationToTicks(Duration duration);
+    
+    /**
+     * Concert a duration to a string representation as it is expected when written to a MusicXML file.
+     *
+     * @param duration the duration to convert to a string
+     */
     static QString durationToString(Duration duration);
 
+    /**
+     * This overrides the method in the VoiceElement class to return the correct y position based on pitch
+     * of the notes this chord contains.
+     */
     virtual double y() const;
+    
+    /**
+     * This overrides the method in the VoiceElement class to return the correct height based on the pitch of
+     * the notes in this chord.
+     */
     virtual double height() const;
 public slots:
     /**
@@ -146,8 +170,15 @@ public slots:
      * @param dots the new number of dots
      */
     void setDots(int dots);
-signals:
+signals:    
+    /**
+     * This signal is emitted when the duration of this chord changes.
+     */
     void durationChanged(Duration duration);
+    
+    /**
+     * This signal is emitted when the number of dots of this chord changes.
+     */
     void dotsChanged(int dots);
 private:
     class Private;
