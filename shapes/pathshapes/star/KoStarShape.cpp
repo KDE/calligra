@@ -307,5 +307,7 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
         KoPathShape::saveOdf( context );
 }
 
-
-
+QString KoStarShape::pathShapeId() const
+{
+    return KoStarShapeId;
+}

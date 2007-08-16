@@ -16,14 +16,16 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+#include "star/KoStarShapeFactory.h"
+#include "star/KoStarShape.h"
+#include "star/StarShapeConfigWidget.h"
+
 #include <KoShapeFactory.h>
 #include <KoLineBorder.h>
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
-
-#include "star/KoStarShapeFactory.h"
-#include "star/KoStarShape.h"
 
 #include <klocale.h>
 
@@ -112,6 +114,13 @@ KoShape * KoStarShapeFactory::createShape( const KoProperties * params ) const
 bool KoStarShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw );
+}
+
+QList<KoShapeConfigWidgetBase*> KoStarShapeFactory::createShapeOptionPanels()
+{
+    QList<KoShapeConfigWidgetBase*> panels;
+    panels.append( new StarShapeConfigWidget() );
+    return panels;
 }
 
 #include "KoStarShapeFactory.moc"

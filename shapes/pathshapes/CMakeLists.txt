@@ -1,4 +1,4 @@
-include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} )
+include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 add_subdirectory(pics)
 
@@ -9,6 +9,7 @@ set(pathshapes_PART_SRCS
     regularpolygon/KoRegularPolygonShapeFactory.cpp
     star/KoStarShape.cpp
     star/KoStarShapeFactory.cpp
+    star/StarShapeConfigWidget.cpp
     rectangle/KoRectangleShape.cpp
     rectangle/KoRectangleShapeFactory.cpp
     arrow/KoArrowShape.cpp
@@ -22,6 +23,9 @@ set(pathshapes_PART_SRCS
     PathShapesPlugin.cpp
 )
 
+kde4_add_ui_files(pathshapes_PART_SRCS
+    star/StarShapeConfigWidget.ui
+)
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 
 target_link_libraries(pathshapes flake koguiutils)

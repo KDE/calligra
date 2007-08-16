@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,39 +16,32 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef PATHTOOLOPTIONWIDGET_H
-#define PATHTOOLOPTIONWIDGET_H
 
-#include <QWidget>
-#include <QFlags>
+#ifndef STARSHAPECONFIGWIDGET_H
+#define STARSHAPECONFIGWIDGET_H
 
-#include <ui_PathToolOptionWidgetBase.h>
+#include "ui_StarShapeConfigWidget.h"
 
-class KoPathTool;
-class KoPathShape;
+#include <KoShapeConfigWidgetBase.h>
 
-class PathToolOptionWidget : public QWidget {
+class KoStarShape;
+
+class StarShapeConfigWidget : public KoShapeConfigWidgetBase
+{
     Q_OBJECT
 public:
-    enum Type {
-        PlainPath = 1,
-        ParametricShape = 2
-    };
-    Q_DECLARE_FLAGS(Types, Type)
-
-    explicit PathToolOptionWidget(KoPathTool *tool, QWidget *parent = 0);
-    ~PathToolOptionWidget();
-
-public slots:
-    void setSelectionType(int type);
-    void setSelectedPath( KoPathShape * path );
-
+    StarShapeConfigWidget();
+    /// reimplemented
+    virtual void open(KoShape *shape);
+    /// reimplemented
+    virtual void save();
+    /// reimplemented
+    virtual void setUnit(KoUnit unit);
+    /// reimplemented
+    virtual bool showOnShapeCreate() { return false; }
 private:
-    Ui::PathToolOptionWidgetBase widget;
-    KoPathTool *m_tool;
-    KoPathShape *m_path;
+    Ui::StarShapeConfigWidget widget;
+    KoStarShape * m_star;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(PathToolOptionWidget::Types)
-
-#endif
+#endif // STARSHAPECONFIGWIDGET_H
