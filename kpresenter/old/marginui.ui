@@ -75,7 +75,7 @@
                     <item row="0" column="2" >
                       <widget class="QLabel" name="topLabel" >
                         <property name="text" >
-                          <string>&amp;Qt::DockTop:</string>
+                          <string>&amp;Top:</string>
                         </property>
                         <property name="buddy" stdset="0" >
                           <cstring>topInput</cstring>
@@ -88,7 +88,7 @@
                     <item row="1" column="2" >
                       <widget class="QLabel" name="bottomLabel" >
                         <property name="text" >
-                          <string>&amp;Qt::DockBottom:</string>
+                          <string>&amp;Bottom:</string>
                         </property>
                         <property name="buddy" stdset="0" >
                           <cstring>bottomInput</cstring>
@@ -107,7 +107,7 @@
                     <item row="0" column="0" >
                       <widget class="QLabel" name="leftLabel" >
                         <property name="text" >
-                          <string>&amp;Qt::DockLeft:</string>
+                          <string>&amp;Left:</string>
                         </property>
                         <property name="buddy" stdset="0" >
                           <cstring>leftInput</cstring>

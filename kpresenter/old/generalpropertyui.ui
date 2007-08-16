@@ -100,7 +100,7 @@
             <item row="0" column="2" >
               <widget class="QLabel" name="topLabel" >
                 <property name="text" >
-                  <string>&amp;Qt::DockTop:</string>
+                  <string>&amp;Top:</string>
                 </property>
                 <property name="buddy" stdset="0" >
                   <cstring>yInput</cstring>
@@ -113,7 +113,7 @@
             <item row="0" column="0" >
               <widget class="QLabel" name="leftLabel" >
                 <property name="text" >
-                  <string>&amp;Qt::DockLeft:</string>
+                  <string>&amp;Left:</string>
                 </property>
                 <property name="buddy" stdset="0" >
                   <cstring>xInput</cstring>

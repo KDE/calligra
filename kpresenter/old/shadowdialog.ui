@@ -143,7 +143,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="title">
-                                <string>Qt::Orientation</string>
+                                <string>Orientation</string>
                             </property>
                             <property name="exclusive">
                                 <bool>true</bool>
@@ -381,7 +381,7 @@
                 </property>
                 <spacer>
                     <property name="name">
-                        <cstring>Qt::Horizontal Spacing2</cstring>
+                        <cstring>Horizontal Spacing</cstring>
                     </property>
                     <property name="orientation">
                         <enum>Qt::Horizontal</enum>

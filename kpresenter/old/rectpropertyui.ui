@@ -35,7 +35,7 @@
               <item row="0" column="0" >
                 <widget class="QLabel" name="xRndLabel" >
                   <property name="text" >
-                    <string>Qt::Vertical declination:</string>
+                    <string>Vertical declination:</string>
                   </property>
                   <property name="buddy" stdset="0" >
                     <cstring>xRndInput</cstring>
@@ -48,7 +48,7 @@
               <item row="1" column="0" >
                 <widget class="QLabel" name="yRndLabel" >
                   <property name="text" >
-                    <string>Qt::Horizontal declination:</string>
+                    <string>Horizontal declination:</string>
                   </property>
                   <property name="buddy" stdset="0" >
                     <cstring>yRndInput</cstring>
