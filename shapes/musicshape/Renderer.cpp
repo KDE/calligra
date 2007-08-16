@@ -34,7 +34,7 @@
 
 using namespace MusicCore;
 
-MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(false)
+MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(true)
 {
 }
 

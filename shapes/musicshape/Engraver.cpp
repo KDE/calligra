@@ -205,9 +205,6 @@ void Engraver::engraveBar(Bar* bar)
             }
         }
 
-        // none found, break
-        if (time == INT_MAX) break;
-
         if ((!staffElement || time > 0) && !endOfPrefix) {
             // we've reached the end of the prefix; now update all already placed staff elements to have correct
             // (negative) x coordinates, and set the size of the prefix.
@@ -223,7 +220,10 @@ void Engraver::engraveBar(Bar* bar)
             }
             endOfPrefix = true;
         }
-        
+                
+        // none found, break
+        if (time == INT_MAX) break;
+
         double maxEnd = x;
         // now update all items with correct start time
         if (staffElement) {
