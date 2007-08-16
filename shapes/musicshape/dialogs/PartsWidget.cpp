@@ -66,8 +66,7 @@ void PartsWidget::setShape(MusicShape* shape)
 void PartsWidget::partDoubleClicked(const QModelIndex & index)
 {
     int row = index.row();
-    PartDetailsDialog *dlg = new PartDetailsDialog(m_tool, m_sheet->part(row), this);
-    dlg->show();
+    PartDetailsDialog::showDialog(m_tool, m_sheet->part(row), this);
 }
 
 void PartsWidget::selectionChanged(const QModelIndex& current, const QModelIndex& prev)
@@ -90,8 +89,8 @@ void PartsWidget::removePart()
 
 void PartsWidget::editPart()
 {
-    PartDetailsDialog *dlg = new PartDetailsDialog(m_tool, m_sheet->part(widget.partsList->currentIndex().row()));
-    dlg->show();
+    int row = widget.partsList->currentIndex().row();
+    PartDetailsDialog::showDialog(m_tool, m_sheet->part(row), this);
 }
 
 #include "PartsWidget.moc"

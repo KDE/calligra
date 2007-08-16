@@ -16,27 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef CHANGEPARTNAMECOMMAND_H
-#define CHANGEPARTNAMECOMMAND_H
+#ifndef CHANGEPARTDETAILSCOMMAND_H
+#define CHANGEPARTDETAILSCOMMAND_H
 
 #include <QUndoCommand>
 
 namespace MusicCore {
-    class Sheet;
     class Part;
-}
+};
 class MusicShape;
 
-class ChangePartNameCommand : public QUndoCommand {
+class ChangePartDetailsCommand : public QUndoCommand
+{
 public:
-    ChangePartNameCommand(MusicShape* shape, MusicCore::Part* part, const QString& name);
+    ChangePartDetailsCommand(MusicShape* shape, MusicCore::Part* part, const QString& name, const QString& abbreviation, int staffCount);
     virtual void redo();
     virtual void undo();
 private:
-    MusicCore::Sheet* m_sheet;
-    MusicCore::Part* m_part;
     MusicShape* m_shape;
-    QString m_name, m_oldName;
+    MusicCore::Part* m_part;
+    QString m_oldName, m_newName;
+    QString m_oldAbbr, m_newAbbr;
+    int m_oldStaffCount, m_newStaffCount;
 };
 
-#endif // ADDPARTCOMMAND_H
+#endif // CHANGEPARTDETAILSCOMMAND_H

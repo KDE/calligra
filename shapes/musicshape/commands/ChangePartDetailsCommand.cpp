@@ -16,31 +16,33 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "ChangePartNameCommand.h"
-#include "../core/Sheet.h"
-#include "../core/Part.h"
-#include "../MusicShape.h"
+#include "ChangePartDetailsCommand.h"
 
-#include "klocale.h"
+#include "../core/Part.h"
 
 using namespace MusicCore;
 
-ChangePartNameCommand::ChangePartNameCommand(MusicShape* shape, Part* part, const QString& name)
-    : m_sheet(shape->sheet()),
-    m_part(part),
-    m_shape(shape),
-    m_name(name),
-    m_oldName(part->name())
+ChangePartDetailsCommand::ChangePartDetailsCommand(MusicShape* shape, Part* part, const QString& name, const QString& abbr, int staffCount)
+    : m_shape(shape), m_part(part), m_oldName(part->name()), m_newName(name), m_oldAbbr(part->shortName(false))
+    , m_newAbbr(abbr), m_oldStaffCount(part->staffCount()), m_newStaffCount(staffCount)
 {
-    setText(i18n("Change part name"));
+    setText("Change part details");
 }
 
-void ChangePartNameCommand::redo()
+void ChangePartDetailsCommand::redo()
 {
-    m_part->setName(m_name);
+    m_part->setName(m_newName);
+    m_part->setShortName(m_newAbbr);
+    if (m_newStaffCount > m_oldStaffCount) {
+    } else if (m_newStaffCount < m_oldStaffCount) {
+    }
 }
 
-void ChangePartNameCommand::undo()
+void ChangePartDetailsCommand::undo()
 {
     m_part->setName(m_oldName);
+    m_part->setShortName(m_oldAbbr);
+    if (m_oldStaffCount > m_newStaffCount) {
+    } else if (m_oldStaffCount < m_newStaffCount) {
+    }
 }

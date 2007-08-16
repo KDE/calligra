@@ -22,19 +22,14 @@
 
 #include "../core/Part.h"
 
-#include "../commands/ChangePartNameCommand.h"
-#include "../commands/ChangePartAbbreviationCommand.h"
+#include "../commands/ChangePartDetailsCommand.h"
 
 using namespace MusicCore;
 
-PartDetailsDialog::PartDetailsDialog(MusicTool* tool, Part* part, QWidget* parent)
-    : KDialog(parent),
-    m_tool(tool),
-    m_part(part)
+PartDetailsDialog::PartDetailsDialog(Part* part, QWidget* parent)
+    : KDialog(parent)
 {
     setCaption(i18n("Part details"));
-    setButtons( Close );
-    setDefaultButton( Close );
     QWidget* w = new QWidget(this);
     widget.setupUi(w);
     setMainWidget(w);
@@ -42,26 +37,16 @@ PartDetailsDialog::PartDetailsDialog(MusicTool* tool, Part* part, QWidget* paren
     widget.nameEdit->setText(part->name());
     widget.shortNameEdit->setText(part->shortName());
     widget.staffCount->setValue(part->staffCount());
-
-    connect(part, SIGNAL(nameChanged(const QString&)), widget.nameEdit, SLOT(setText(const QString&)));
-    connect(part, SIGNAL(shortNameChanged(const QString&)), widget.shortNameEdit, SLOT(setText(const QString&)));
-    
-    connect(widget.nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(nameChanged(const QString&)));
-    connect(widget.shortNameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(shortNameChanged(const QString&)));
 }
 
-void PartDetailsDialog::nameChanged(const QString& text)
+void PartDetailsDialog::showDialog(MusicTool *tool, Part* part, QWidget* parent)
 {
-    m_tool->addCommand(new ChangePartNameCommand(m_tool->shape(), m_part, text));     
-}
-
-void PartDetailsDialog::shortNameChanged(const QString& text)
-{
-    m_tool->addCommand(new ChangePartAbbreviationCommand(m_tool->shape(), m_part, text));
-}
-
-void PartDetailsDialog::staffCountChanged(int count)
-{
+    PartDetailsDialog dlg(part, parent);
+    if (dlg.exec() == QDialog::Accepted) {
+        tool->addCommand(new ChangePartDetailsCommand(tool->shape(), part, dlg.widget.nameEdit->text(),
+                                                        dlg.widget.shortNameEdit->text(),
+                                                        dlg.widget.staffCount->value()));
+    }
 }
 
 #include "PartDetailsDialog.moc"

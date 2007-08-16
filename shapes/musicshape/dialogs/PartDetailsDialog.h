@@ -31,16 +31,11 @@ namespace MusicCore {
 class PartDetailsDialog : public KDialog {
     Q_OBJECT
 public:
-    PartDetailsDialog(MusicTool *tool, MusicCore::Part* part, QWidget *parent = 0);
-
-private slots:
-    void nameChanged(const QString& text);
-    void shortNameChanged(const QString& text);
-    void staffCountChanged(int count);
+    PartDetailsDialog(MusicCore::Part* part, QWidget *parent = 0);
+    
+    static void showDialog(MusicTool *tool, MusicCore::Part* part, QWidget *parent = 0);
 private:
     Ui::PartDetailsDialog widget;
-    MusicTool *m_tool;
-    MusicCore::Part *m_part;
 };
 
 #endif // PARTDETAILSDIALOG_H

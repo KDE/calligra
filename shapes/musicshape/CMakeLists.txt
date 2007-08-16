@@ -56,8 +56,7 @@ SET (musicshape_LIB_SRCS
     
     commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp
-    commands/ChangePartNameCommand.cpp
-    commands/ChangePartAbbreviationCommand.cpp
+    commands/ChangePartDetailsCommand.cpp
     commands/CreateChordCommand.cpp
     commands/AddNoteCommand.cpp
     commands/SetAccidentalsCommand.cpp
