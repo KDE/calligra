@@ -141,12 +141,12 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Qt::Horizontal Differencing</string>
+                                    <string>Horizontal Differencing</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Floating Point Qt::Horizontal Differencing</string>
+                                    <string>Floating Point Horizontal Differencing</string>
                                 </property>
                             </item>
                             <property name="name">
