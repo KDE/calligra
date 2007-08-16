@@ -58,70 +58,14 @@ MusicShape::MusicShape()
     m_renderer(new MusicRenderer(m_style))
 {
     m_sheet = new Sheet();
-    Bar* b1 = m_sheet->addBar();
-    Bar* b2 = m_sheet->addBar();
-    Bar* b3 = m_sheet->addBar();
-    Bar* b4 = m_sheet->addBar();
+    Bar* bar = m_sheet->addBar();
 
-    Part* part = m_sheet->addPart("Violin");
+    Part* part = m_sheet->addPart("Part 1");
     Staff* staff = part->addStaff();
     Voice* voice = part->addVoice();
-    b1->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
-    b1->addStaffElement(new KeySignature(staff, 0, 0));
-    b1->addStaffElement(new TimeSignature(staff, 0, 4, 4));
-    voice->bar(b1)->addElement(mkNote(Chord::Eighth, staff, 0));
-    voice->bar(b1)->addElement(mkNote(Chord::Eighth, staff, 1));
-    voice->bar(b1)->addElement(mkNote(Chord::Sixteenth, staff, 0));
-    voice->bar(b1)->addElement(mkNote(Chord::ThirtySecond, staff, 1));
-    voice->bar(b1)->addElement(mkNote(Chord::SixtyFourth, staff, 2));
-    voice->bar(b1)->addElement(mkNote(Chord::HundredTwentyEighth, staff, 3));
-    voice->bar(b2)->addElement(mkNote(Chord::Eighth, staff, 10));
-    voice->bar(b2)->addElement(mkNote(Chord::Sixteenth, staff, 11));
-    voice->bar(b2)->addElement(mkNote(Chord::ThirtySecond, staff, 12));
-    voice->bar(b2)->addElement(mkNote(Chord::SixtyFourth, staff, 13));
-    voice->bar(b2)->addElement(mkNote(Chord::HundredTwentyEighth, staff, 14));
-    voice->bar(b2)->addElement(mkNote(Chord::Whole, staff, 5));
-    voice->bar(b3)->addElement(mkNote(Chord::Breve, staff, 7));
+    bar->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
+    bar->addStaffElement(new TimeSignature(staff, 0, 4, 4));
 
-    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, 1));
-    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, 2));
-    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, -1));
-    voice->bar(b4)->addElement(mkNote(Chord::Quarter, staff, 4, 0, -2));
-
-    part = m_sheet->addPart("Piano");
-    staff = part->addStaff();
-    Staff* staff2 = part->addStaff();
-    voice = part->addVoice();
-    Voice* voice2 = part->addVoice();
-
-    b1->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
-    b1->addStaffElement(new KeySignature(staff, 0, -4));
-    b1->addStaffElement(new TimeSignature(staff, 0, 4, 4));
-    voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
-    voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 1));
-    voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 2));
-    voice->bar(b1)->addElement(mkNote(Chord::Quarter, staff, 0));
-    voice->bar(b2)->addElement(mkNote(Chord::Quarter, staff, 0));
-    voice->bar(b2)->addElement(mkNote(Chord::Quarter, staff, 1));
-    voice->bar(b2)->addElement(mkNote(Chord::Quarter, staff, 2));
-    voice->bar(b2)->addElement(mkNote(Chord::Quarter, staff, 0));
-    voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 2));
-    voice->bar(b3)->addElement(mkNote(Chord::Quarter, staff, 3));
-    voice->bar(b3)->addElement(mkNote(Chord::Half, staff, 4));
-    b1->addStaffElement(new Clef(staff2, 0, Clef::Bass, 4, 0));
-    b1->addStaffElement(new KeySignature(staff2, 0, 5));
-    b1->addStaffElement(new TimeSignature(staff2, 0, 4, 4, TimeSignature::Number));
-    voice2->bar(b1)->addElement(new Chord(staff2, Chord::Whole));
-    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Quarter));
-    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Eighth));
-    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
-    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Sixteenth));
-    voice2->bar(b2)->addElement(new Chord(staff2, Chord::Half));
-    voice2->bar(b2)->addElement(mkNote(Chord::Quarter, staff2, -5, 3));
-    voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
-    voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 1));
-    voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 2));
-    voice2->bar(b3)->addElement(mkNote(Chord::Quarter, staff2, 0));
     m_engraver->engraveSheet(m_sheet, QSizeF(1e9, 1e9), true);
 }
 
