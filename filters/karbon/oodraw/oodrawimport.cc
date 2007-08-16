@@ -193,8 +193,8 @@ void OoDrawImport::convert()
 	if( drawPage.isNull() ) // no pages? give up.
 		return;
 
-	QDomElement *master = m_styles[drawPage.attributeNS( ooNS::draw, "master-page-name", QString::null )];
-	QDomElement *style = m_styles[master->attributeNS( ooNS::style, "page-master-name", QString::null )];
+	QDomElement *master = m_styles[drawPage.attributeNS( ooNS::draw, "master-page-name", QString() )];
+	QDomElement *style = m_styles[master->attributeNS( ooNS::style, "page-master-name", QString() )];
 	QDomElement properties = KoDom::namedItemNS( *style, ooNS::style, "properties" ).toElement();
 
 	if( properties.isNull() )
@@ -204,8 +204,8 @@ void OoDrawImport::convert()
 	}
 	else
 	{
-		m_document.setWidth( KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString::null ) ) );
-		m_document.setHeight( KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-height", QString::null ) ) );
+		m_document.setWidth( KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString() ) ) );
+		m_document.setHeight( KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-height", QString() ) ) );
 	}
 
     // parse all pages
@@ -240,7 +240,7 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		QDomElement o = object.toElement();
 		if( o.namespaceURI() != ooNS::draw ) continue;
 		QString name = o.localName();
-		QString drawID = o.attributeNS( ooNS::draw, "id", QString::null );
+		QString drawID = o.attributeNS( ooNS::draw, "id", QString() );
 		VObject *obj = 0L;
 
 		if( name == "g" ) // polyline
@@ -255,11 +255,11 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		else if( name == "rect" ) // rectangle
 		{
 			storeObjectStyles( o );
-			double x = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x", QString::null ) );
-			double y = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y", QString::null ) ) );
-			double w = KoUnit::parseValue( o.attributeNS( ooNS::svg, "width", QString::null ) );
-			double h = KoUnit::parseValue( o.attributeNS( ooNS::svg, "height", QString::null ) );
-			int corner = static_cast<int>( KoUnit::parseValue( o.attributeNS( ooNS::draw, "corner-radius", QString::null ) ) );
+			double x = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x", QString() ) );
+			double y = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y", QString() ) ) );
+			double w = KoUnit::parseValue( o.attributeNS( ooNS::svg, "width", QString() ) );
+			double h = KoUnit::parseValue( o.attributeNS( ooNS::svg, "height", QString() ) );
+			int corner = static_cast<int>( KoUnit::parseValue( o.attributeNS( ooNS::draw, "corner-radius", QString() ) ) );
 			VRectangle *rect = new VRectangle( parent, KoPoint( x, y ), w, h, corner );
 			appendPen( *rect );
 			appendBrush( *rect );
@@ -268,13 +268,13 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		else if( name == "circle" || name == "ellipse" )
 		{
 			storeObjectStyles( o );
-			double w = KoUnit::parseValue( o.attributeNS( ooNS::svg, "width", QString::null ) );
-			double h = KoUnit::parseValue( o.attributeNS( ooNS::svg, "height", QString::null ) );
-			double x = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x", QString::null ) );
-			double y = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y", QString::null ) ) ) - h;
-			double start = o.attributeNS( ooNS::draw, "start-angle", QString::null ).toDouble();
-			double end = o.attributeNS( ooNS::draw, "end-angle", QString::null ).toDouble();
-			QString kind = o.attributeNS( ooNS::draw, "kind", QString::null );
+			double w = KoUnit::parseValue( o.attributeNS( ooNS::svg, "width", QString() ) );
+			double h = KoUnit::parseValue( o.attributeNS( ooNS::svg, "height", QString() ) );
+			double x = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x", QString() ) );
+			double y = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y", QString() ) ) ) - h;
+			double start = o.attributeNS( ooNS::draw, "start-angle", QString() ).toDouble();
+			double end = o.attributeNS( ooNS::draw, "end-angle", QString() ).toDouble();
+			QString kind = o.attributeNS( ooNS::draw, "kind", QString() );
 			VEllipse::VEllipseType type = VEllipse::full;
 			if( !kind.isEmpty() )
 			{
@@ -296,10 +296,10 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		{
 			storeObjectStyles( o );
 			VPath *line = new VPath( parent );
-			double x1 = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x1", QString::null ) );
-			double y1 = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y1", QString::null ) ) );
-			double x2 = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x2", QString::null ) );
-			double y2 = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y2", QString::null ) ) );
+			double x1 = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x1", QString() ) );
+			double y1 = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y1", QString() ) ) );
+			double x2 = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x2", QString() ) );
+			double y2 = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y2", QString() ) ) );
 			line->moveTo( KoPoint( x1, y1 ) );
 			line->lineTo( KoPoint( x2, y2 ) );
 			appendPen( *line );
@@ -330,12 +330,12 @@ OoDrawImport::parseGroup( VGroup *parent, const QDomElement& parentobject )
 		{
 			storeObjectStyles( o );
 			VPath *path = new VPath( parent );
-			path->loadSvgPath( o.attributeNS( ooNS::svg, "d", QString::null ) );
+			path->loadSvgPath( o.attributeNS( ooNS::svg, "d", QString() ) );
 			KoRect rect = parseViewBox( o );
-			double x = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x", QString::null ) );
-			double y = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y", QString::null ) ) );
-			double w = KoUnit::parseValue( o.attributeNS( ooNS::svg, "width", QString::null ) );
-			double h = KoUnit::parseValue( o.attributeNS( ooNS::svg, "height", QString::null ) );
+			double x = KoUnit::parseValue( o.attributeNS( ooNS::svg, "x", QString() ) );
+			double y = ymirror( KoUnit::parseValue( o.attributeNS( ooNS::svg, "y", QString() ) ) );
+			double w = KoUnit::parseValue( o.attributeNS( ooNS::svg, "width", QString() ) );
+			double h = KoUnit::parseValue( o.attributeNS( ooNS::svg, "height", QString() ) );
 			QMatrix mat;
 			mat.translate( x, y );
 			mat.scale( w / rect.width(), -h / rect.height() );
@@ -440,18 +440,18 @@ OoDrawImport::appendBrush( VObject &obj )
 			{
 				double border = 0.0;
 				if( draw->hasAttributeNS( ooNS::draw, "border" ) )
-					border += draw->attributeNS( ooNS::draw, "border", QString::null ).remove( '%' ).toDouble() / 100.0;
+					border += draw->attributeNS( ooNS::draw, "border", QString() ).remove( '%' ).toDouble() / 100.0;
 				VColor c;
-				parseColor( c, draw->attributeNS( ooNS::draw, "start-color", QString::null ) );
+				parseColor( c, draw->attributeNS( ooNS::draw, "start-color", QString() ) );
 				gradient.addStop( c, border, 0.5 );
-				parseColor( c, draw->attributeNS( ooNS::draw, "end-color", QString::null ) );
+				parseColor( c, draw->attributeNS( ooNS::draw, "end-color", QString() ) );
 				gradient.addStop( c, 1.0, 0.5 );
 
-				QString type = draw->attributeNS( ooNS::draw, "style", QString::null );
+				QString type = draw->attributeNS( ooNS::draw, "style", QString() );
 				if( type == "linear" || type == "axial" )
 				{
 					gradient.setType( VGradient::linear );
-					int angle = draw->attributeNS( ooNS::draw, "angle", QString::null ).toInt() / 10;
+					int angle = draw->attributeNS( ooNS::draw, "angle", QString() ).toInt() / 10;
 
 					// make sure the angle is between 0 and 359
 					angle = abs( angle );
@@ -518,12 +518,12 @@ OoDrawImport::appendBrush( VObject &obj )
 					// and (un-)balanced settings of kpresenter. Let's try it.
 					double x, y;
 					if( draw->hasAttributeNS( ooNS::draw, "cx" ) )
-						x = draw->attributeNS( ooNS::draw, "cx", QString::null ).remove( '%' ).toDouble() / 100.0;
+						x = draw->attributeNS( ooNS::draw, "cx", QString() ).remove( '%' ).toDouble() / 100.0;
 					else
 						x = 0.5;
 
 					if( draw->hasAttributeNS( ooNS::draw, "cy" ) )
-						y = draw->attributeNS( ooNS::draw, "cy", QString::null ).remove( '%' ).toDouble() / 100.0;
+						y = draw->attributeNS( ooNS::draw, "cy", QString() ).remove( '%' ).toDouble() / 100.0;
 					else
 						y = 0.5;
 
@@ -597,7 +597,7 @@ OoDrawImport::insertDraws( const QDomElement& styles )
 		if( !e.hasAttributeNS( ooNS::draw, "name" ) )
 			continue;
 
-		QString name = e.attributeNS( ooNS::draw, "name", QString::null );
+		QString name = e.attributeNS( ooNS::draw, "name", QString() );
 		m_draws.insert( name, new QDomElement( e ) );
 	}
 }
@@ -613,7 +613,7 @@ OoDrawImport::insertStyles( const QDomElement& styles )
 		if( !e.hasAttributeNS( ooNS::style, "name" ) )
 			continue;
 
-		QString name = e.attributeNS( ooNS::style, "name", QString::null );
+		QString name = e.attributeNS( ooNS::style, "name", QString() );
 		m_styles.insert( name, new QDomElement( e ) );
 		//kDebug() <<"Style: '" << name <<"' loaded";
 	}
@@ -624,16 +624,16 @@ OoDrawImport::fillStyleStack( const QDomElement& object )
 {
     // find all styles associated with an object and push them on the stack
     if( object.hasAttributeNS( ooNS::presentation, "style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::presentation, "style-name", QString::null )] );
+        addStyles( m_styles[object.attributeNS( ooNS::presentation, "style-name", QString() )] );
 
     if( object.hasAttributeNS( ooNS::draw, "style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::draw, "style-name", QString::null )] );
+        addStyles( m_styles[object.attributeNS( ooNS::draw, "style-name", QString() )] );
 
     if( object.hasAttributeNS( ooNS::draw, "text-style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::draw, "text-style-name", QString::null )] );
+        addStyles( m_styles[object.attributeNS( ooNS::draw, "text-style-name", QString() )] );
 
     if( object.hasAttributeNS( ooNS::text, "style-name" ) )
-        addStyles( m_styles[object.attributeNS( ooNS::text, "style-name", QString::null )] );
+        addStyles( m_styles[object.attributeNS( ooNS::text, "style-name", QString() )] );
 }
 
 void
@@ -641,7 +641,7 @@ OoDrawImport::addStyles( const QDomElement* style )
 {
     // this function is necessary as parent styles can have parents themself
     if( style->hasAttributeNS( ooNS::style, "parent-style-name" ) )
-        addStyles( m_styles[style->attributeNS( ooNS::style, "parent-style-name", QString::null )] );
+        addStyles( m_styles[style->attributeNS( ooNS::style, "parent-style-name", QString() )] );
 
     m_styleStack.push( *style );
 }
@@ -658,10 +658,10 @@ KoRect
 OoDrawImport::parseViewBox( const QDomElement& object )
 {
 	KoRect rect;
-	if( !object.attributeNS( ooNS::svg, "viewBox", QString::null ).isEmpty() )
+	if( !object.attributeNS( ooNS::svg, "viewBox", QString() ).isEmpty() )
 	{
 		// allow for viewbox def with ',' or whitespace
-		QString viewbox( object.attributeNS( ooNS::svg, "viewBox", QString::null ) );
+		QString viewbox( object.attributeNS( ooNS::svg, "viewBox", QString() ) );
 		QStringList points = QStringList::split( ' ', viewbox.replace( ',', ' ').simplified() );
 
 		rect.setX( points[0].toFloat() );
@@ -675,16 +675,16 @@ OoDrawImport::parseViewBox( const QDomElement& object )
 void
 OoDrawImport::appendPoints(VPath &path, const QDomElement& object)
 {
-	double x = KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString::null ) );
-	double y = KoUnit::parseValue( object.attributeNS( ooNS::svg, "y", QString::null ) );
-	double w = KoUnit::parseValue( object.attributeNS( ooNS::svg, "width", QString::null ) );
-	double h = KoUnit::parseValue( object.attributeNS( ooNS::svg, "height", QString::null ) );
+	double x = KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString() ) );
+	double y = KoUnit::parseValue( object.attributeNS( ooNS::svg, "y", QString() ) );
+	double w = KoUnit::parseValue( object.attributeNS( ooNS::svg, "width", QString() ) );
+	double h = KoUnit::parseValue( object.attributeNS( ooNS::svg, "height", QString() ) );
 
 	KoRect rect = parseViewBox( object );
 	rect.setX( rect.x() + x );
 	rect.setY( rect.y() + y );
 
-	QStringList ptList = QStringList::split( ' ', object.attributeNS( ooNS::draw, "points", QString::null ) );
+	QStringList ptList = QStringList::split( ' ', object.attributeNS( ooNS::draw, "points", QString() ) );
 
 	QString pt_x, pt_y;
 	double tmp_x, tmp_y;
