@@ -51,6 +51,8 @@ public:
      * Returns the staff for this note.
      */
     Staff* staff();
+    
+    void setStaff(Staff* staff);
 
     /**
      * Returns the pitch for this note.

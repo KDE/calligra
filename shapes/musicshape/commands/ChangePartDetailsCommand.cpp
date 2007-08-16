@@ -23,10 +23,17 @@
 #include "../core/Clef.h"
 #include "../core/Bar.h"
 #include "../core/Sheet.h"
+#include "../core/VoiceBar.h"
+#include "../core/VoiceElement.h"
+#include "../core/Chord.h"
+#include "../core/Note.h"
 
 #include "../MusicShape.h"
 
 using namespace MusicCore;
+
+typedef QPair<VoiceElement*, Staff*> VoiceElementStaffPair;
+typedef QPair<Note*, Staff*> NoteStaffPair;
 
 ChangePartDetailsCommand::ChangePartDetailsCommand(MusicShape* shape, Part* part, const QString& name, const QString& abbr, int staffCount)
     : m_shape(shape), m_part(part), m_oldName(part->name()), m_newName(name), m_oldAbbr(part->shortName(false))
@@ -44,6 +51,31 @@ ChangePartDetailsCommand::ChangePartDetailsCommand(MusicShape* shape, Part* part
         for (int i = m_newStaffCount; i < m_oldStaffCount; i++) {
             m_staves.append(m_part->staff(i));
         }
+        // now collect all elements that exist in one of the staves that is removed
+        Sheet* sheet = part->sheet();
+        for (int v = 0; v < part->voiceCount(); v++) {
+            Voice* voice = part->voice(v);
+            for (int b = 0; b < sheet->barCount(); b++) {
+                VoiceBar* vb = sheet->bar(b)->voice(voice);
+                for (int e = 0; e < vb->elementCount(); e++) {
+                    VoiceElement* ve = vb->element(e);
+                    int sid = part->indexOfStaff(ve->staff());
+                    if (sid >= m_newStaffCount) {
+                        m_elements.append(qMakePair(ve, ve->staff()));
+                    }
+                    Chord* c = dynamic_cast<Chord*>(ve);
+                    if (c) {
+                        for (int n = 0; n < c->noteCount(); n++) {
+                            Note* note = c->note(n);
+                            int sid = part->indexOfStaff(note->staff());
+                            if (sid >= m_newStaffCount) {
+                                m_notes.append(qMakePair(note, note->staff()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -58,6 +90,13 @@ void ChangePartDetailsCommand::redo()
     } else if (m_newStaffCount < m_oldStaffCount) {
         foreach (Staff* s, m_staves) {
             m_part->removeStaff(s, false);
+        }
+        Staff* s = m_part->staff(m_newStaffCount - 1);
+        foreach (VoiceElementStaffPair p, m_elements) {
+            p.first->setStaff(s);
+        }
+        foreach (NoteStaffPair p, m_notes) {
+            p.first->setStaff(s);
         }
     }
     if (m_newStaffCount != m_oldStaffCount) {
@@ -75,6 +114,12 @@ void ChangePartDetailsCommand::undo()
         foreach (Staff* s, m_staves) {
             m_part->addStaff(s);
         }
+        foreach (VoiceElementStaffPair p, m_elements) {
+            p.first->setStaff(p.second);
+        }
+        foreach (NoteStaffPair p, m_notes) {
+            p.first->setStaff(p.second);
+        }        
     } else if (m_oldStaffCount < m_newStaffCount) {
         foreach (Staff* s, m_staves) {
             m_part->removeStaff(s, false);

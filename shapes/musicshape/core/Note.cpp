@@ -44,6 +44,11 @@ Staff* Note::staff()
     return d->staff;
 }
 
+void Note::setStaff(Staff* staff)
+{
+    d->staff = staff;
+}
+
 int Note::pitch() const
 {
     return d->pitch;
