@@ -17,8 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "AddPartCommand.h"
+
 #include "../core/Sheet.h"
 #include "../core/Part.h"
+#include "../core/Clef.h"
+#include "../core/Bar.h"
+
 #include "../MusicShape.h"
 
 #include <klocale.h>
@@ -31,7 +35,8 @@ AddPartCommand::AddPartCommand(MusicShape* shape)
 {
     setText(i18n("Add part"));
     m_part = new Part(m_sheet, QString("Part %1").arg(m_sheet->partCount() + 1));
-    m_part->addStaff();
+    Staff* s = m_part->addStaff();
+    m_part->sheet()->bar(0)->addStaffElement(new Clef(s, 0, Clef::GClef, 2));
 }
 
 void AddPartCommand::redo()
