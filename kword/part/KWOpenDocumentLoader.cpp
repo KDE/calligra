@@ -43,6 +43,8 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTextFrameLoader.h>
 #include <KWPage.h>
+#include <KoProperties.h>
+//#include <TextShape.h>
 
 // KDE + Qt includes
 #include <QTextCursor>
@@ -164,6 +166,37 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
             else
                 kWarning(32001)<<"KWOpenDocumentLoader::loadImage Unknown anchor-type: "<<anchortype<<endl;
 
+            return shape;
+        }
+        
+        virtual KoShape* loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor) {
+            const QString anchortype = frameElem.attribute("anchor-type");
+            KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
+            Q_ASSERT(factory);
+            KoProperties props;
+            KoShape *shape = factory->createShape(&props);
+            if (!shape) {
+                kDebug() << "No text shape";
+                return 0;
+            }
+            KoShapeLoadingContext shapecontext(context);
+            shape->loadOdf(textElem, shapecontext);
+            KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
+            // fs->setName is needed ? I hope it isn't...
+            KWTextFrame *textFrame = new KWTextFrame(shape, fs);
+            if( anchortype == "paragraph" ) {
+                // Anchor position is the paragraph that the current drawing shape element is contained in.
+                // The shape appears at the start of the paragraph element.
+                KoTextAnchor* anchor = new KoTextAnchor(shape);
+                anchor->setOffset( shape->position() );
+                anchor->setAlignment(KoTextAnchor::HorizontalOffset);
+                anchor->setAlignment(KoTextAnchor::VerticalOffset);
+                KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
+                Q_ASSERT(layout && layout->inlineObjectTextManager());
+                layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
+            } else {
+                kDebug() << "Support for '" << anchortype << "' is going to wait.";
+            }
             return shape;
         }
 
