@@ -244,16 +244,6 @@ public:
   void setSelectionMode(Mode mode);
 
   /**
-   * \return the first selected range
-   */
-  QRect firstRange() const;
-
-  /**
-   * \return the last selected range
-   */
-  QRect lastRange() const;
-
-  /**
    * Extends \p area to include the merged cells, that are not fully covered,
    * completely.
    * \return the extended area
@@ -327,8 +317,7 @@ private:
 ****************************************************************************/
 
 /**
- * This Point is extended by an color attribute and
- * the ability to be fixed.
+ * This Point is extended by an color attribute.
  */
 class Selection::Point : public Region::Point
 {
@@ -339,15 +328,8 @@ public:
   void setColor(const QColor& color) { m_color = color; }
   virtual const QColor& color() const { return m_color; }
 
-  bool columnFixed() const { return m_columnFixed; }
-  bool rowFixed() const { return m_rowFixed; }
-
-protected:
-
 private:
   QColor m_color;
-  bool m_columnFixed : 1;
-  bool m_rowFixed    : 1;
 };
 
 /***************************************************************************
@@ -355,8 +337,7 @@ private:
 ****************************************************************************/
 
 /**
- * This Range is extended by an color attribute and
- * the ability to be fixed.
+ * This Range is extended by an color attribute.
  */
 class Selection::Range : public Region::Range
 {
@@ -364,19 +345,11 @@ public:
   Range(const QRect& rect);
   Range(const QString& string);
 
-  virtual bool isColorizable() const { return true; }
-
   void setColor(const QColor& color) { m_color = color; }
   const QColor& color() const { return m_color; }
 
-protected:
-
 private:
   QColor m_color;
-  bool m_leftFixed   : 1;
-  bool m_rightFixed  : 1;
-  bool m_topFixed    : 1;
-  bool m_bottomFixed : 1;
 };
 
 } // namespace KSpread

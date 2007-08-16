@@ -21,8 +21,6 @@
 // Local
 #include "Selection.h"
 
-#include <QRegExp>
-
 #include <kdebug.h>
 
 #include <KoZoomHandler.h>
@@ -33,8 +31,6 @@
 #include "Editors.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
-
-// TODO Stefan: Substract points in selections
 
 using namespace KSpread;
 
@@ -849,16 +845,6 @@ const QList<QColor>& Selection::colors() const
   return d->colors;
 }
 
-QRect Selection::firstRange() const
-{
-  return cells().isEmpty() ? QRect(1,1,1,1) : cells().first()->rect();
-}
-
-QRect Selection::lastRange() const
-{
-  return cells().isEmpty() ? QRect(1,1,1,1) : cells().last()->rect();
-}
-
 QRect Selection::extendToMergedAreas(const QRect& _area) const
 {
   if (!d->activeSheet)
@@ -1039,36 +1025,14 @@ void Selection::dump() const
 
 Selection::Point::Point(const QPoint& point)
   : Region::Point(point),
-    m_color(Qt::black),
-    m_columnFixed(false),
-    m_rowFixed(false)
+    m_color(Qt::black)
 {
 }
 
 Selection::Point::Point(const QString& string)
   : Region::Point(string),
-    m_color(Qt::black),
-    m_columnFixed(false),
-    m_rowFixed(false)
+    m_color(Qt::black)
 {
-  if (!isValid())
-  {
-    return;
-  }
-
-  uint p = 0;
-  // Fixed?
-  if (string[p++] == '$')
-  {
-    m_columnFixed = true;
-  }
-
-  //search for the first character != text
-  int result = string.indexOf( QRegExp("[^A-Za-z]+"), p );
-  if (string[result] == '$')
-  {
-    m_rowFixed = true;
-  }
 }
 
 /***************************************************************************
@@ -1077,44 +1041,14 @@ Selection::Point::Point(const QString& string)
 
 Selection::Range::Range(const QRect& range)
   : Region::Range(range),
-    m_color(Qt::black),
-    m_leftFixed(false),
-    m_rightFixed(false),
-    m_topFixed(false),
-    m_bottomFixed(false)
+    m_color(Qt::black)
 {
 }
 
 Selection::Range::Range(const QString& string)
   : Region::Range(string),
-    m_color(Qt::black),
-    m_leftFixed(false),
-    m_rightFixed(false),
-    m_topFixed(false),
-    m_bottomFixed(false)
+    m_color(Qt::black)
 {
-  if (!isValid())
-  {
-    return;
-  }
-
-  int delimiterPos = string.indexOf(':');
-  if (delimiterPos == -1)
-  {
-    return;
-  }
-
-  Selection::Point ul(string.left(delimiterPos));
-  Selection::Point lr(string.mid(delimiterPos + 1));
-
-  if (!ul.isValid() || !lr.isValid())
-  {
-    return;
-  }
-  m_leftFixed = ul.columnFixed();
-  m_rightFixed = lr.columnFixed();
-  m_topFixed = ul.rowFixed();
-  m_bottomFixed = lr.rowFixed();
 }
 
 } // namespace KSpread
