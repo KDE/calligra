@@ -203,7 +203,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         if ( !e.hasAttributeNS( ooNS::style, "name" ) )
             continue;
         // We only generate paragraph styles for now
-        if ( e.attributeNS( ooNS::style, "family", QString::null ) != "paragraph" )
+        if ( e.attributeNS( ooNS::style, "family", QString() ) != "paragraph" )
              continue;
 
         // We use the style stack, to flatten out parent styles
@@ -214,7 +214,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         QDomElement styleElem = doc.createElement("STYLE");
         stylesElem.appendChild( styleElem );
 
-        QString styleName = kWordStyleName( e.attributeNS( ooNS::style, "name", QString::null ) );
+        QString styleName = kWordStyleName( e.attributeNS( ooNS::style, "name", QString() ) );
         QDomElement element = doc.createElement("NAME");
         element.setAttribute( "value", styleName );
         styleElem.appendChild( element );
@@ -247,7 +247,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
             if ( outline )
                 listOK = pushListLevelStyle( "<outline-style>", m_outlineStyle, level );
             else {
-                const QString listStyleName = e.attributeNS( ooNS::style, "list-style-name", QString::null );
+                const QString listStyleName = e.attributeNS( ooNS::style, "list-style-name", QString() );
                 listOK = !listStyleName.isEmpty();
                 if ( listOK )
                     listOK = pushListLevelStyle( listStyleName, level );
@@ -286,7 +286,7 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const KoXmlElement& 
         else if ( isTextNS && localName == "h" ) // heading
         {
             fillStyleStack( t, ooNS::text, "style-name" );
-            int level = t.attributeNS( ooNS::text, "level", QString::null ).toInt();
+            int level = t.attributeNS( ooNS::text, "level", QString() ).toInt();
             bool listOK = false;
             // When a heading is inside a list, it seems that the list prevails.
             // Example:
@@ -301,7 +301,7 @@ void OoWriterImport::parseBodyOrSimilar( QDomDocument &doc, const KoXmlElement& 
             m_nextItemIsListItem = true;
             if ( t.hasAttributeNS( ooNS::text, "start-value" ) )
                  // OASIS extension http://lists.oasis-open.org/archives/office/200310/msg00033.html
-                 m_restartNumbering = t.attributeNS( ooNS::text, "start-value", QString::null ).toInt();
+                 m_restartNumbering = t.attributeNS( ooNS::text, "start-value", QString() ).toInt();
             e = parseParagraph( doc, t );
             if ( listOK )
                 m_listStyleStack.pop();
@@ -383,16 +383,16 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
 
     KoXmlElement* masterPage = m_masterPages[ masterPageName ];
     Q_ASSERT( masterPage );
-    kDebug(30518) <<"page-master-name:" << masterPage->attributeNS( ooNS::style,"page-master-name", QString::null );
-    KoXmlElement *style = masterPage ? m_styles[masterPage->attributeNS( ooNS::style, "page-master-name", QString::null )] : 0;
+    kDebug(30518) <<"page-master-name:" << masterPage->attributeNS( ooNS::style,"page-master-name", QString() );
+    KoXmlElement *style = masterPage ? m_styles[masterPage->attributeNS( ooNS::style, "page-master-name", QString() )] : 0;
     Q_ASSERT( style );
     if ( style )
     {
         KoXmlElement properties( KoDom::namedItemNS( *style, ooNS::style, "properties" ) );
         Q_ASSERT( !properties.isNull() );
-        orientation = ( (properties.attributeNS( ooNS::style, "print-orientation", QString::null) != "portrait") ? KoPageFormat::Landscape : KoPageFormat::Portrait );
-        width = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString::null));
-        height = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-height", QString::null));
+        orientation = ( (properties.attributeNS( ooNS::style, "print-orientation", QString()) != "portrait") ? KoPageFormat::Landscape : KoPageFormat::Portrait );
+        width = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString()));
+        height = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-height", QString()));
         kDebug(30518) <<"width=" << width <<" height=" << height;
         // guessFormat takes millimeters
         if ( orientation == KoPageFormat::Landscape )
@@ -400,24 +400,24 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         else
             paperFormat = KoPageFormat::guessFormat( POINT_TO_MM(width), POINT_TO_MM(height) );
 
-        marginLeft = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-left", QString::null));
-        marginTop = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-top", QString::null));
-        marginRight = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-right", QString::null));
-        marginBottom = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-bottom", QString::null));
+        marginLeft = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-left", QString()));
+        marginTop = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-top", QString()));
+        marginRight = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-right", QString()));
+        marginBottom = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-bottom", QString()));
 
         KoXmlElement footnoteSep = KoDom::namedItemNS( properties, ooNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
             // style:rel-width="25%" style:color="#000000"
-            QString width = footnoteSep.attributeNS( ooNS::style, "width", QString::null );
+            QString width = footnoteSep.attributeNS( ooNS::style, "width", QString() );
             elementPaper.setAttribute( "slFootNoteWidth", KoUnit::parseValue( width ) );
-            QString pageWidth = footnoteSep.attributeNS( ooNS::style, "rel-width", QString::null );
+            QString pageWidth = footnoteSep.attributeNS( ooNS::style, "rel-width", QString() );
             if ( pageWidth.endsWith( '%' ) ) {
                 pageWidth.truncate( pageWidth.length() - 1 ); // remove '%'
                 elementPaper.setAttribute( "slFootNoteLenth", pageWidth );
             }
-            elementPaper.setAttribute( "slFootNotePosition", footnoteSep.attributeNS( ooNS::style, "adjustment", QString::null ) );
+            elementPaper.setAttribute( "slFootNotePosition", footnoteSep.attributeNS( ooNS::style, "adjustment", QString() ) );
             // Not in KWord: color, distance before and after separator
             // Not in OOo: line type of separator (solid, dot, dash etc.)
         }
@@ -587,7 +587,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
   if ( docElement.hasAttributeNS( ooNS::office, "version" ) )
   {
     bool ok = true;
-    double d = docElement.attributeNS( ooNS::office, "version", QString::null ).toDouble( &ok );
+    double d = docElement.attributeNS( ooNS::office, "version", QString() ).toDouble( &ok );
 
     if ( ok )
     {
@@ -595,7 +595,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
       if ( d > 1.0 )
       {
         QString message( i18n("This document was created with OpenOffice.org version '%1'. This filter was written for version 1.0. Reading this file could cause strange behavior, crashes or incorrect display of the data. Do you want to continue converting the document?") );
-        message = message.arg( docElement.attributeNS( ooNS::office, "version", QString::null ) );
+        message = message.arg( docElement.attributeNS( ooNS::office, "version", QString() ) );
         if ( KMessageBox::warningYesNo( 0, message, i18n( "Unsupported document version" ) ) == KMessageBox::No )
           return false;
       }
@@ -636,7 +636,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
       {
           if ( master.localName() ==  "master-page" && master.namespaceURI() == ooNS::style )
           {
-              QString name = master.attributeNS( ooNS::style, "name", QString::null );
+              QString name = master.attributeNS( ooNS::style, "name", QString() );
               kDebug(30518) <<"Master style: '" << name <<"' loaded";
               m_masterPages.insert( name, new KoXmlElement( master ) );
           } else
@@ -667,7 +667,7 @@ void OoWriterImport::insertStyles( const KoXmlElement& styles, QDomDocument& doc
         const QString localName = e.localName();
         const QString ns = e.namespaceURI();
 
-        const QString name = e.attributeNS( ooNS::style, "name", QString::null );
+        const QString name = e.attributeNS( ooNS::style, "name", QString() );
         if ( ns == ooNS::style && (
                 localName == "style"
              || localName == "page-master"
@@ -715,7 +715,7 @@ void OoWriterImport::importDateTimeStyle( const KoXmlElement& parent )
         if ( ns != ooNS::number )
             continue;
         const QString localName = e.localName();
-        const QString numberStyle = e.attributeNS( ooNS::number, "style", QString::null );
+        const QString numberStyle = e.attributeNS( ooNS::number, "style", QString() );
         const bool shortForm = numberStyle == "short" || numberStyle.isEmpty();
         if ( localName == "day" ) {
             format += shortForm ? "d" : "dd";
@@ -723,7 +723,7 @@ void OoWriterImport::importDateTimeStyle( const KoXmlElement& parent )
             format += shortForm ? "ddd" : "dddd";
         } else if ( localName == "month" ) {
             // TODO the spec has a strange mention of number:format-source
-            if ( e.attributeNS( ooNS::number, "textual", QString::null ) == "true" ) {
+            if ( e.attributeNS( ooNS::number, "textual", QString() ) == "true" ) {
                 format += shortForm ? "MMM" : "MMMM";
             } else { // month number
                 format += shortForm ? "M" : "MM";
@@ -759,7 +759,7 @@ void OoWriterImport::importDateTimeStyle( const KoXmlElement& parent )
         if ( ns != ooNS::number )
             continue;
         QString localName = e.tagName();
-        const QString numberStyle = e.attributeNS( ooNS::number, "style", QString::null );
+        const QString numberStyle = e.attributeNS( ooNS::number, "style", QString() );
         const bool shortForm = numberStyle == "short" || numberStyle.isEmpty();
         if ( localName == "day" ) {
             kdeFormat += shortForm ? "%e" : "%d";
@@ -767,7 +767,7 @@ void OoWriterImport::importDateTimeStyle( const KoXmlElement& parent )
             kdeFormat += shortForm ? "%a" : "%A";
         } else if ( localName == "month" ) {
             // TODO the spec has a strange mention of number:format-source
-            if ( e.attributeNS( ooNS::number, "textual", QString::null ) == "true" ) {
+            if ( e.attributeNS( ooNS::number, "textual", QString() ) == "true" ) {
                 kdeFormat += shortForm ? "%b" : "%B";
             } else { // month number
                 kdeFormat += shortForm ? "%n" : "%m";
@@ -790,7 +790,7 @@ void OoWriterImport::importDateTimeStyle( const KoXmlElement& parent )
     }
 #endif
 
-    QString styleName = parent.attributeNS( ooNS::style, "name", QString::null );
+    QString styleName = parent.attributeNS( ooNS::style, "name", QString() );
     kDebug(30518) <<"datetime style:" << styleName <<" qt format=" << format;
     m_dateTimeFormats.insert( styleName, format );
 }
@@ -800,7 +800,7 @@ void OoWriterImport::fillStyleStack( const KoXmlElement& object, const char* nsU
     // find all styles associated with an object and push them on the stack
     // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
     if ( object.hasAttributeNS( nsURI, attrName ) ) {
-        const QString styleName = object.attributeNS( nsURI, attrName, QString::null );
+        const QString styleName = object.attributeNS( nsURI, attrName, QString() );
         const KoXmlElement* style = m_styles[styleName];
         if ( style )
             addStyles( style );
@@ -815,7 +815,7 @@ void OoWriterImport::addStyles( const KoXmlElement* style )
     if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( ooNS::style, "parent-style-name" ) ) {
-        const QString parentStyleName = style->attributeNS( ooNS::style, "parent-style-name", QString::null );
+        const QString parentStyleName = style->attributeNS( ooNS::style, "parent-style-name", QString() );
         KoXmlElement* parentStyle = m_styles[ parentStyleName ];
         if ( parentStyle )
             addStyles( parentStyle );
@@ -825,7 +825,7 @@ void OoWriterImport::addStyles( const KoXmlElement* style )
     else if ( !m_defaultStyle.isNull() ) // on top of all, the default style
         m_styleStack.push( m_defaultStyle );
 
-    //kDebug(30518) <<"pushing style" << style->attributeNS( ooNS::style,"name", QString::null );
+    //kDebug(30518) <<"pushing style" << style->attributeNS( ooNS::style,"name", QString() );
     m_styleStack.push( *style );
 }
 
@@ -835,7 +835,7 @@ void OoWriterImport::applyListStyle( QDomDocument& doc, QDomElement& layoutEleme
     if ( m_listStyleStack.hasListStyle() && m_nextItemIsListItem ) {
         bool heading = paragraph.localName() == "h";
         m_nextItemIsListItem = false;
-        int level = heading ? paragraph.attributeNS( ooNS::text, "level", QString::null ).toInt() : m_listStyleStack.level();
+        int level = heading ? paragraph.attributeNS( ooNS::text, "level", QString() ).toInt() : m_listStyleStack.level();
         writeCounter( doc, layoutElement, heading, level, m_insideOrderedList );
     }
 }
@@ -852,10 +852,10 @@ void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement
     //               << " m_restartNumbering=" << m_restartNumbering << endl;
 
     if ( ordered || heading ) {
-        counter.setAttribute( "type", Conversion::importCounterType( listStyle.attributeNS( ooNS::style, "num-format", QString::null ) ) );
-        counter.setAttribute( "lefttext", listStyle.attributeNS( ooNS::style, "num-prefix", QString::null ) );
-        counter.setAttribute( "righttext", listStyle.attributeNS( ooNS::style, "num-suffix", QString::null ) );
-        QString dl = listStyle.attributeNS( ooNS::text, "display-levels", QString::null );
+        counter.setAttribute( "type", Conversion::importCounterType( listStyle.attributeNS( ooNS::style, "num-format", QString() ) ) );
+        counter.setAttribute( "lefttext", listStyle.attributeNS( ooNS::style, "num-prefix", QString() ) );
+        counter.setAttribute( "righttext", listStyle.attributeNS( ooNS::style, "num-suffix", QString() ) );
+        QString dl = listStyle.attributeNS( ooNS::text, "display-levels", QString() );
         if ( dl.isEmpty() )
             dl = "1";
         counter.setAttribute( "display-levels", dl );
@@ -864,17 +864,17 @@ void OoWriterImport::writeCounter( QDomDocument& doc, QDomElement& layoutElement
             counter.setAttribute( "restart", "true" );
         } else {
             // useful?
-            counter.setAttribute( "start", listStyle.attributeNS( ooNS::text, "start-value", QString::null ) );
+            counter.setAttribute( "start", listStyle.attributeNS( ooNS::text, "start-value", QString() ) );
         }
     }
     else { // bullets, see 3.3.6 p138
         counter.setAttribute( "type", 6 );
-        QString bulletChar = listStyle.attributeNS( ooNS::text, "bullet-char", QString::null );
+        QString bulletChar = listStyle.attributeNS( ooNS::text, "bullet-char", QString() );
         if ( !bulletChar.isEmpty() ) {
 #if 0 // doesn't work well. Fonts lack those symbols!
             counter.setAttribute( "bullet", bulletChar[0].unicode() );
             kDebug(30518) <<"bullet code" << bulletChar[0].unicode();
-            QString fontName = listStyleProperties.attributeNS( ooNS::style, "font-name", QString::null );
+            QString fontName = listStyleProperties.attributeNS( ooNS::style, "font-name", QString() );
             counter.setAttribute( "bulletfont", fontName );
 #endif
             // Reverse engineering, I found those codes:
@@ -921,7 +921,7 @@ static KoXmlElement findListLevelStyle( const KoXmlElement& fullListStyle, int l
     KoXmlElement listLevelItem;
     forEachElement( listLevelItem, fullListStyle )
     {
-       if ( listLevelItem.attributeNS( ooNS::text, "level", QString::null ).toInt() == level )
+       if ( listLevelItem.attributeNS( ooNS::text, "level", QString() ).toInt() == level )
            return listLevelItem;
     }
     return KoXmlElement();
@@ -964,7 +964,7 @@ void OoWriterImport::parseList( QDomDocument& doc, const KoXmlElement& list, QDo
     m_insideOrderedList = ( list.localName() == "ordered-list" );
     QString oldListStyleName = m_currentListStyleName;
     if ( list.hasAttributeNS( ooNS::text, "style-name" ) )
-        m_currentListStyleName = list.attributeNS( ooNS::text, "style-name", QString::null );
+        m_currentListStyleName = list.attributeNS( ooNS::text, "style-name", QString() );
     bool listOK = !m_currentListStyleName.isEmpty();
     const int level = m_listStyleStack.level() + 1;
     //kDebug(30518) << k_funcinfo <<" listOK=" << listOK <<" level=" << level;
@@ -979,7 +979,7 @@ void OoWriterImport::parseList( QDomDocument& doc, const KoXmlElement& list, QDo
         m_nextItemIsListItem = ( listItem.localName() != "list-header" );
         m_restartNumbering = -1;
         if ( listItem.hasAttributeNS( ooNS::text, "start-value" ) )
-            m_restartNumbering = listItem.attributeNS( ooNS::text, "start-value", QString::null ).toInt();
+            m_restartNumbering = listItem.attributeNS( ooNS::text, "start-value", QString() ).toInt();
         // ### Oasis: can be p h or list only.
         parseBodyOrSimilar( doc, listItem, currentFramesetElement );
         m_restartNumbering = -1;
@@ -1063,7 +1063,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& 
         else if ( isTextNS && localName == "a" )
         {
             m_styleStack.save();
-            QString href( ts.attributeNS( ooNS::xlink, "href", QString::null) );
+            QString href( ts.attributeNS( ooNS::xlink, "href", QString()) );
             if ( href.startsWith('#') )
             {
                 // We have a reference to a bookmark (### TODO)
@@ -1080,7 +1080,7 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& 
                 parseSpanOrSimilar( doc, ts, fakeParagraph, fakeFormats, text, fakePos);
                 textData = '#'; // hyperlink placeholder
                 QDomElement linkElement (doc.createElement("LINK"));
-                linkElement.setAttribute("hrefName",ts.attributeNS( ooNS::xlink, "href", QString::null));
+                linkElement.setAttribute("hrefName",ts.attributeNS( ooNS::xlink, "href", QString()));
                 linkElement.setAttribute("linkName",text);
                 appendKWordVariable(doc, outputFormats, ts, pos, "STRING", 9, linkElement);
             }
@@ -1119,21 +1119,21 @@ void OoWriterImport::parseSpanOrSimilar( QDomDocument& doc, const KoXmlElement& 
             // (-1 for starting at 0, +1 since not written yet)
             Q_ASSERT( !m_currentFrameset.isNull() );
             appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
-                            pos, ts.attributeNS( ooNS::text, "name", QString::null ) );
+                            pos, ts.attributeNS( ooNS::text, "name", QString() ) );
         }
         else if ( isTextNS && localName == "bookmark-start" ) {
-            m_bookmarkStarts.insert( ts.attributeNS( ooNS::text, "name", QString::null ),
+            m_bookmarkStarts.insert( ts.attributeNS( ooNS::text, "name", QString() ),
                                      BookmarkStart( m_currentFrameset.attribute( "name" ),
                                                     numberOfParagraphs( m_currentFrameset ),
                                                     pos ) );
         }
         else if ( isTextNS && localName == "bookmark-end" ) {
-            QString bkName = ts.attributeNS( ooNS::text, "name", QString::null );
+            QString bkName = ts.attributeNS( ooNS::text, "name", QString() );
             BookmarkStartsMap::iterator it = m_bookmarkStarts.find( bkName );
             if ( it == m_bookmarkStarts.end() ) { // bookmark end without start. This seems to happen..
                 // insert simple bookmark then
                 appendBookmark( doc, numberOfParagraphs( m_currentFrameset ),
-                                pos, ts.attributeNS( ooNS::text, "name", QString::null ) );
+                                pos, ts.attributeNS( ooNS::text, "name", QString() ) );
             } else {
                 if ( (*it).frameSetName != m_currentFrameset.attribute( "name" ) ) {
                     // Oh tell me this never happens...
@@ -1204,8 +1204,8 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const KoXmlElemen
 
     applyListStyle( doc, layoutElement, paragraph );
 
-    KoXmlElement* paragraphStyle = m_styles[paragraph.attributeNS( ooNS::text, "style-name", QString::null )];
-    QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( ooNS::style, "master-page-name", QString::null ) : QString::null;
+    KoXmlElement* paragraphStyle = m_styles[paragraph.attributeNS( ooNS::text, "style-name", QString() )];
+    QString masterPageName = paragraphStyle ? paragraphStyle->attributeNS( ooNS::style, "master-page-name", QString() ) : QString();
     if ( masterPageName.isEmpty() )
         masterPageName = "Standard"; // Seems to be a builtin name for the default layout...
     if ( masterPageName != m_currentMasterPage )
@@ -1574,10 +1574,10 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const KoXmlEleme
     double width = 100;
     if ( object.hasAttributeNS( ooNS::svg, "width" ) ) { // fixed width
         // TODO handle percentage (of enclosing table/frame/page)
-        width = KoUnit::parseValue( object.attributeNS( ooNS::svg, "width", QString::null ) );
+        width = KoUnit::parseValue( object.attributeNS( ooNS::svg, "width", QString() ) );
     } else if ( object.hasAttributeNS( ooNS::fo, "min-width" ) ) {
         // min-width is not supported in KWord. Let's use it as a fixed width.
-        width = KoUnit::parseValue( object.attributeNS( ooNS::fo, "min-width", QString::null ) );
+        width = KoUnit::parseValue( object.attributeNS( ooNS::fo, "min-width", QString() ) );
     } else {
         kWarning(30518) << "Error in text-box: neither width nor min-width specified!";
     }
@@ -1585,9 +1585,9 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const KoXmlEleme
     bool hasMinHeight = false;
     if ( object.hasAttributeNS( ooNS::svg, "height" ) ) { // fixed height
         // TODO handle percentage (of enclosing table/frame/page)
-        height = KoUnit::parseValue( object.attributeNS( ooNS::svg, "height", QString::null ) );
+        height = KoUnit::parseValue( object.attributeNS( ooNS::svg, "height", QString() ) );
     } else if ( object.hasAttributeNS( ooNS::fo, "min-height" ) ) {
-        height = KoUnit::parseValue( object.attributeNS( ooNS::fo, "min-height", QString::null ) );
+        height = KoUnit::parseValue( object.attributeNS( ooNS::fo, "min-height", QString() ) );
         hasMinHeight = true;
     } else {
         kWarning(30518) << "Error in text-box: neither height nor min-height specified!";
@@ -1605,8 +1605,8 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const KoXmlEleme
     // TODO draw:auto-grow-height  draw:auto-grow-width - hmm? I thought min-height meant auto-grow-height...
 
 
-    QRectF frameRect( KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString::null ) ),
-                      KoUnit::parseValue( object.attributeNS( ooNS::svg, "y", QString::null ) ),
+    QRectF frameRect( KoUnit::parseValue( object.attributeNS( ooNS::svg, "x", QString() ) ),
+                      KoUnit::parseValue( object.attributeNS( ooNS::svg, "y", QString() ) ),
                       width, height );
 
     frameElementOut.setAttribute("left", frameRect.left() );
@@ -1615,7 +1615,7 @@ void OoWriterImport::importFrame( QDomElement& frameElementOut, const KoXmlEleme
     frameElementOut.setAttribute("bottom", frameRect.bottom() );
     if ( hasMinHeight )
         frameElementOut.setAttribute("min-height", height );
-    frameElementOut.setAttribute( "z-index", object.attributeNS( ooNS::draw, "z-index", QString::null ) );
+    frameElementOut.setAttribute( "z-index", object.attributeNS( ooNS::draw, "z-index", QString() ) );
     QPair<int, QString> attribs = Conversion::importWrapping( m_styleStack.property( ooNS::style, "wrap" ) );
     frameElementOut.setAttribute("runaround", attribs.first );
     if ( !attribs.second.isEmpty() )
@@ -1728,7 +1728,7 @@ void OoWriterImport::importCommonFrameProperties( QDomElement& frameElementOut )
 
 QString OoWriterImport::appendTextBox(QDomDocument& doc, const KoXmlElement& object)
 {
-    const QString frameName ( object.attributeNS( ooNS::draw, "name", QString::null) ); // ### TODO: what if empty, i.e. non-unique
+    const QString frameName ( object.attributeNS( ooNS::draw, "name", QString()) ); // ### TODO: what if empty, i.e. non-unique
     kDebug(30518) <<"appendTextBox" << frameName;
     m_styleStack.save();
     fillStyleStack( object, ooNS::draw, "style-name" ); // get the style for the graphics element
@@ -1763,12 +1763,12 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const KoXmlElement& obj
 // OOo SPEC: 3.6.3 p149
 void OoWriterImport::importFootnote( QDomDocument& doc, const KoXmlElement& object, QDomElement& formats, uint pos, const QString& localName )
 {
-    const QString frameName( object.attributeNS( ooNS::text, "id", QString::null) );
+    const QString frameName( object.attributeNS( ooNS::text, "id", QString()) );
     KoXmlElement citationElem = KoDom::namedItemNS( object, ooNS::text, (localName+"-citation").latin1() ).toElement();
 
     bool endnote = localName == "endnote";
 
-    QString label = citationElem.attributeNS( ooNS::text, "label", QString::null );
+    QString label = citationElem.attributeNS( ooNS::text, "label", QString() );
     bool autoNumbered = label.isEmpty();
 
     // The var
@@ -1800,8 +1800,8 @@ void OoWriterImport::importFootnote( QDomDocument& doc, const KoXmlElement& obje
 
 QString OoWriterImport::appendPicture(QDomDocument& doc, const KoXmlElement& object)
 {
-    const QString frameName ( object.attributeNS( ooNS::draw, "name", QString::null) ); // ### TODO: what if empty, i.e. non-unique
-    const QString href ( object.attributeNS( ooNS::xlink, "href", QString::null) );
+    const QString frameName ( object.attributeNS( ooNS::draw, "name", QString()) ); // ### TODO: what if empty, i.e. non-unique
+    const QString href ( object.attributeNS( ooNS::xlink, "href", QString()) );
 
     kDebug(30518) <<"Picture:" << frameName <<"" << href <<" (in OoWriterImport::appendPicture)";
 
@@ -1950,7 +1950,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
 
     if ( localName.endsWith( "date" ) || localName.endsWith( "time" ) )
     {
-        QString dataStyleName = object.attributeNS( ooNS::style, "data-style-name", QString::null );
+        QString dataStyleName = object.attributeNS( ooNS::style, "data-style-name", QString() );
         QString dateFormat = "locale";
         DataFormatsMap::const_iterator it = m_dateTimeFormats.find( dataStyleName );
         if ( it != m_dateTimeFormats.end() )
@@ -1960,9 +1960,9 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         {
             subtype = 1; // current (or fixed) date
             // Standard form of the date is in date-value. Example: 2004-01-21T10:57:05
-            QDateTime dt(QDate::fromString(object.attributeNS( ooNS::text, "date-value", QString::null), Qt::ISODate));
+            QDateTime dt(QDate::fromString(object.attributeNS( ooNS::text, "date-value", QString()), Qt::ISODate));
 
-            bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString::null)=="true");
+            bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString())=="true");
             if (!dt.isValid())
             {
                 dt = QDateTime::currentDateTime(); // OOo docs say so :)
@@ -1983,15 +1983,15 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
             dateElement.setAttribute("minute", time.minute());
             dateElement.setAttribute("second", time.second());
             if (object.hasAttributeNS( ooNS::text, "date-adjust"))
-                dateElement.setAttribute("correct", object.attributeNS( ooNS::text, "date-adjust", QString::null));
+                dateElement.setAttribute("correct", object.attributeNS( ooNS::text, "date-adjust", QString()));
             appendKWordVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
         }
         else if (localName == "time")
         {
             // Use QDateTime to work around a possible problem of QTime::FromString in Qt 3.2.2
-            QDateTime dt(QDateTime::fromString(object.attributeNS( ooNS::text, "time-value", QString::null), Qt::ISODate));
+            QDateTime dt(QDateTime::fromString(object.attributeNS( ooNS::text, "time-value", QString()), Qt::ISODate));
 
-            bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString::null)=="true");
+            bool fixed = (object.hasAttributeNS( ooNS::text, "fixed") && object.attributeNS( ooNS::text, "fixed", QString())=="true");
 
             if (!dt.isValid()) {
                 dt = QDateTime::currentDateTime(); // OOo docs say so :)
@@ -2005,7 +2005,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
             timeElement.setAttribute("minute", time.minute());
             timeElement.setAttribute("second", time.second());
             /*if (object.hasAttributeNS( ooNS::text, "time-adjust"))
-              timeElem.setAttribute("correct", object.attributeNS( ooNS::text, "time-adjust", QString::null));*/ // ### TODO
+              timeElem.setAttribute("correct", object.attributeNS( ooNS::text, "time-adjust", QString()));*/ // ### TODO
             appendKWordVariable(doc, outputFormats, object, pos, "TIME" + dateFormat, 2, timeElement);
 
         }
@@ -2027,7 +2027,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
             QDomElement dateElement ( doc.createElement("DATE") );
             dateElement.setAttribute("subtype", subtype);
             if (object.hasAttributeNS( ooNS::text, "date-adjust"))
-                dateElement.setAttribute("correct", object.attributeNS( ooNS::text, "date-adjust", QString::null));
+                dateElement.setAttribute("correct", object.attributeNS( ooNS::text, "date-adjust", QString()));
             appendKWordVariable(doc, outputFormats, object, pos, "DATE" + dateFormat, 0, dateElement);
         }
     }// end of date/time variables
@@ -2037,7 +2037,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
 
         if (object.hasAttributeNS( ooNS::text, "select-page"))
         {
-            const QString select = object.attributeNS( ooNS::text, "select-page", QString::null);
+            const QString select = object.attributeNS( ooNS::text, "select-page", QString());
 
             if (select == "previous")
                 subtype = 3;    // VST_PGNUM_PREVIOUS
@@ -2052,7 +2052,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
     }
     else if (localName == "chapter")
     {
-        const QString display = object.attributeNS( ooNS::text, "display", QString::null );
+        const QString display = object.attributeNS( ooNS::text, "display", QString() );
         // display can be name, number, number-and-name, plain-number-and-name, plain-number
         QDomElement pgnumElement ( doc.createElement("PGNUM") );
         pgnumElement.setAttribute("subtype", 2); // VST_CURRENT_SECTION
@@ -2065,7 +2065,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
 
         if (object.hasAttributeNS( ooNS::text, "display"))
         {
-            const QString display = object.attributeNS( ooNS::text, "display", QString::null);
+            const QString display = object.attributeNS( ooNS::text, "display", QString());
 
             if (display == "path")
                 subtype = 1;    // VST_DIRECTORYNAME
@@ -2153,7 +2153,7 @@ void OoWriterImport::appendField(QDomDocument& doc, QDomElement& outputFormats, 
         //                 its value can change in the middle of the document.
         // - user-defined is related to meta::user-defined in meta.xml
         QDomElement customElem = doc.createElement( "CUSTOM" );
-        customElem.setAttribute( "name", object.attributeNS( ooNS::text, "name", QString::null ) );
+        customElem.setAttribute( "name", object.attributeNS( ooNS::text, "name", QString() ) );
         customElem.setAttribute( "value", object.text() );
         appendKWordVariable(doc, outputFormats, object, pos, "STRING", 6, customElem);
     }
@@ -2189,7 +2189,7 @@ void OoWriterImport::appendKWordVariable(QDomDocument& doc, QDomElement& formats
 
 void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, QDomElement& currentFramesetElement )
 {
-    QString tableName ( parent.attributeNS( ooNS::table, "name", QString::null) ); // TODO: what if empty (non-unique?)
+    QString tableName ( parent.attributeNS( ooNS::table, "name", QString()) ); // TODO: what if empty (non-unique?)
     kDebug(30518) <<"Found table" << tableName;
 
     // In OOWriter a table is never inside a paragraph, in KWord it is always in a paragraph
@@ -2231,7 +2231,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, 
             uint repeat = elem.attributeNS( ooNS::table, "number-columns-repeated", "1").toUInt(); // Default 1 time
             if (!repeat)
                 repeat=1; // At least one column defined!
-            const QString styleName ( elem.attributeNS( ooNS::table, "style-name", QString::null) );
+            const QString styleName ( elem.attributeNS( ooNS::table, "style-name", QString()) );
             kDebug(30518) <<"Column" << col <<" style" << styleName;
             const KoXmlElement* style=m_styles.find(styleName);
             double width=0.0;
@@ -2242,7 +2242,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, 
                 {
                     kWarning(30518) << "Could not find table column style properties!";
                 }
-                const QString strWidth ( elemProps.attributeNS( ooNS::style, "column-width", QString::null) );
+                const QString strWidth ( elemProps.attributeNS( ooNS::style, "column-width", QString()) );
                 kDebug(30518) <<"- raw style width" << strWidth;
                 width = KoUnit::parseValue( strWidth );
             }
@@ -2312,9 +2312,9 @@ void OoWriterImport::parseInsideOfTable( QDomDocument &doc, const KoXmlElement& 
             framesetElement.setAttribute("name",frameName);
             framesetElement.setAttribute("row",row);
             framesetElement.setAttribute("col",column);
-            int rowSpan = e.attributeNS( ooNS::table, "number-rows-spanned", QString::null ).toInt();
+            int rowSpan = e.attributeNS( ooNS::table, "number-rows-spanned", QString() ).toInt();
             framesetElement.setAttribute("rows",rowSpan == 0 ? 1 : rowSpan);
-            int colSpan = e.attributeNS( ooNS::table, "number-columns-spanned", QString::null ).toInt();
+            int colSpan = e.attributeNS( ooNS::table, "number-columns-spanned", QString() ).toInt();
             framesetElement.setAttribute("cols",colSpan == 0 ? 1 : colSpan);
             framesetElement.setAttribute("grpMgr",tableName);
             framesetsPluralElement.appendChild(framesetElement);
@@ -2406,13 +2406,13 @@ void OoWriterImport::importFootnotesConfiguration( QDomDocument& doc, const KoXm
     // let's ignore this for now.
 #if 0
     if ( elem.hasAttributeNS( ooNS::text, "start-value" ) ) {
-        int startValue = elem.attributeNS( ooNS::text, "start-value", QString::null ).toInt();
+        int startValue = elem.attributeNS( ooNS::text, "start-value", QString() ).toInt();
         settings.setAttribute( "start", startValue );
     }
 #endif
-    settings.setAttribute( "type", Conversion::importCounterType( elem.attributeNS( ooNS::style, "num-format", QString::null ) ) );
-    settings.setAttribute( "lefttext", elem.attributeNS( ooNS::style, "num-prefix", QString::null ) );
-    settings.setAttribute( "righttext", elem.attributeNS( ooNS::style, "num-suffix", QString::null ) );
+    settings.setAttribute( "type", Conversion::importCounterType( elem.attributeNS( ooNS::style, "num-format", QString() ) ) );
+    settings.setAttribute( "lefttext", elem.attributeNS( ooNS::style, "num-prefix", QString() ) );
+    settings.setAttribute( "righttext", elem.attributeNS( ooNS::style, "num-suffix", QString() ) );
 }
 
 void OoWriterImport::appendTOC( QDomDocument& doc, const KoXmlElement& toc )
