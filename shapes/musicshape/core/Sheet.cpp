@@ -187,6 +187,12 @@ Bar* Sheet::insertBar(int before)
     return bar;
 }
 
+void Sheet::insertBar(int before, Bar* bar)
+{
+    Q_ASSERT( before >= 0 && before <= barCount() );
+    d->bars.insert(before, bar);
+}
+
 void Sheet::removeBar(int index, bool deleteBar)
 {
     Q_ASSERT( index >= 0 && index < barCount() );

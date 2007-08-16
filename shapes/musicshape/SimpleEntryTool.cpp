@@ -49,6 +49,7 @@
 #include "actions/SetClefAction.h"
 #include "actions/TimeSignatureAction.h"
 #include "actions/KeySignatureAction.h"
+#include "actions/RemoveBarAction.h"
 
 #include "commands/AddBarsCommand.h"
 
@@ -253,6 +254,11 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QAction* keySigAction = new QAction(i18n("Key signature"), this);
     keySigAction->setMenu(ksMenu);
     contextMenu.append(keySigAction);
+    
+    QAction* removeBarAction = new RemoveBarAction(this);
+    connect(removeBarAction, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    contextMenu.append(removeBarAction);
+    
     
     setPopupActionList(contextMenu);
 }
