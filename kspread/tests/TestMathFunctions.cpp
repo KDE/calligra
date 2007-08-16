@@ -83,6 +83,70 @@ void TestMathFunctions::testABS()
 
 }
 
+void TestMathFunctions::testACOS()
+{
+  // ODF-tests
+  CHECK_EVAL( "ACOS(SQRT(2)/2)*4/PI()",    1.0 ); // arc cosine of SQRT(2)/2 is PI()/4 radians.
+  CHECK_EVAL( "ACOS(TRUE())",              0.0 ); // TRUE() is 1 if inline.
+  CHECK_EVAL( "ACOS(-1.0)/PI()",           1.0 ); // The result must be between 0.0 and PI().
+  CHECK_EVAL( "ACOS(2.0)", Value::errorVALUE() ); // The argument must be between -1.0 and 1.0.
+}
+
+void TestMathFunctions::testACOSH()
+{
+  // ODF-tests
+  CHECK_EVAL( "ACOSH(1)", 0           ); //
+  CHECK_EVAL( "ACOSH(2)", 1.316957897 ); // 
+}
+
+void TestMathFunctions::testACOT()
+{
+  // ODF-tests
+  CHECK_EVAL( "ACOT(0)-PI()/2", 0     ); //
+}
+
+void TestMathFunctions::testACOTH()
+{
+  // ODF-tests
+  CHECK_EVAL( "ACOTH(2)", 0.549306144 ); //
+}
+
+void TestMathFunctions::testASIN()
+{
+  // ODF-tests
+  CHECK_EVAL( "ASIN(SQRT(2)/2)*4/PI()",  1.0 ); // arc sine of SQRT(2)/2 is PI()/4 radians.
+  CHECK_EVAL( "ASIN(TRUE())*2/PI()",     1.0 ); // TRUE() is 1 if inline.
+  CHECK_EVAL( "ASIN(-1)*2/PI()",        -1.0 ); // The result must be between -PI()/2 and PI()/2.
+  CHECK_EVAL( "ASIN(2)", Value::errorVALUE() ); // The argument must be between -1.0 and 1.0.
+}
+
+void TestMathFunctions::testASINH()
+{
+  // ODF-tests
+  CHECK_EVAL( "ASINH(0)", 0           ); // 
+  CHECK_EVAL( "ASINH(1)", 0.881373587 ); //
+}
+
+void TestMathFunctions::testATAN()
+{
+  // ODF-tests
+  CHECK_EVAL( "ATAN(1)*4/PI()", 1        ); // arc tangent of 1 is PI()/4 radians.
+  CHECK_EVAL( "ATAN(-1.0e16)", -1.570796 ); // Check if ATAN gives reasonably accurate results, 
+                                            // and that slightly negative values as input produce numbers near -£k/2.
+}
+
+void TestMathFunctions::testATAN2()
+{
+  // ODF-tests
+  CHECK_EVAL( "ATAN2(1;1)*4/PI()",         1 ); // arc tangent of 1.0/1.0 is PI()/4 radians.
+  CHECK_EVAL( "ATAN2(1;-1)*4/PI()",       -1 ); // Location of sign makes a difference.
+  CHECK_EVAL( "ATAN2(-1;1)*4/PI()",        3 ); // Location of sign makes a difference.
+  CHECK_EVAL( "ATAN2(-1;-1)*4/PI()",      -3 ); // Location of sign makes a difference.
+  CHECK_EVAL( "SIGN(ATAN2(-1.0;0.001))",   1 ); // If y is small, it's still important
+  CHECK_EVAL( "SIGN(ATAN2(-1.0;-0.001))", -1 ); // If y is small, it's still important
+  CHECK_EVAL( "ATAN2(-1.0;0)/PI()",        1 ); // By definition ATAN2(-1,0) should give PI() rather than -PI().
+}
+
 void TestMathFunctions::testCEIL()
 {
   CHECK_EVAL( "CEIL(0)", 0 );
@@ -193,9 +257,19 @@ void TestMathFunctions::testFIB()
 
 void TestMathFunctions::testGAMMA()
 {
+  // ODF-Tests
   CHECK_EVAL( "GAMMA(1.00)", 1.0000000000 );
   CHECK_EVAL( "GAMMA(1.10)", 0.9513507700 );
   CHECK_EVAL( "GAMMA(1.50)", 0.8862269255 );
+}
+
+void TestMathFunctions::testGAMMALN()
+{
+  // ODF-Tests
+  CHECK_EVAL( "GAMMALN(1.00)",  0.0000000000 );
+  CHECK_EVAL( "GAMMALN(2.00)",  0.0000000000 );
+  CHECK_EVAL( "GAMMALN(3.00)",  0.6931471806 );
+  CHECK_EVAL( "GAMMALN(1.50)", -0.1207822376 );
 }
 
 void TestMathFunctions::testGCD()
