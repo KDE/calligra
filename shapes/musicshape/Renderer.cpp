@@ -105,14 +105,6 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part)
                 break;
             }
         }
-        if (!hasContents) {
-            for (int s = 0; s < part->staffCount(); s++) {
-                if (bar->staffElementCount(part->staff(s)) > 0) {
-                    hasContents = true;
-                    break;
-                }
-            }
-        }
         
         if (!hasContents) {
             QPointF pos = bar->position();
