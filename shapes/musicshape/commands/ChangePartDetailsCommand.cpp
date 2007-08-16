@@ -19,6 +19,12 @@
 #include "ChangePartDetailsCommand.h"
 
 #include "../core/Part.h"
+#include "../core/Staff.h"
+#include "../core/Clef.h"
+#include "../core/Bar.h"
+#include "../core/Sheet.h"
+
+#include "../MusicShape.h"
 
 using namespace MusicCore;
 
@@ -27,6 +33,18 @@ ChangePartDetailsCommand::ChangePartDetailsCommand(MusicShape* shape, Part* part
     , m_newAbbr(abbr), m_oldStaffCount(part->staffCount()), m_newStaffCount(staffCount)
 {
     setText("Change part details");
+    
+    if (m_newStaffCount > m_oldStaffCount) {
+        for (int i = 0; i < m_newStaffCount - m_oldStaffCount; i++) {
+            Staff* s = new Staff(m_part);
+            m_part->sheet()->bar(0)->addStaffElement(new Clef(s, 0, Clef::GClef, 2));
+            m_staves.append(s);
+        }
+    } else if (m_newStaffCount < m_oldStaffCount) {
+        for (int i = m_newStaffCount; i < m_oldStaffCount; i++) {
+            m_staves.append(m_part->staff(i));
+        }
+    }
 }
 
 void ChangePartDetailsCommand::redo()
@@ -34,8 +52,19 @@ void ChangePartDetailsCommand::redo()
     m_part->setName(m_newName);
     m_part->setShortName(m_newAbbr);
     if (m_newStaffCount > m_oldStaffCount) {
+        foreach (Staff* s, m_staves) {
+            m_part->addStaff(s);
+        }
     } else if (m_newStaffCount < m_oldStaffCount) {
+        foreach (Staff* s, m_staves) {
+            m_part->removeStaff(s, false);
+        }
     }
+    if (m_newStaffCount != m_oldStaffCount) {
+        m_shape->sheet()->setStaffSystemCount(0);
+        m_shape->engrave();
+        m_shape->repaint();
+    }        
 }
 
 void ChangePartDetailsCommand::undo()
@@ -43,6 +72,17 @@ void ChangePartDetailsCommand::undo()
     m_part->setName(m_oldName);
     m_part->setShortName(m_oldAbbr);
     if (m_oldStaffCount > m_newStaffCount) {
+        foreach (Staff* s, m_staves) {
+            m_part->addStaff(s);
+        }
     } else if (m_oldStaffCount < m_newStaffCount) {
+        foreach (Staff* s, m_staves) {
+            m_part->removeStaff(s, false);
+        }
     }
+    if (m_newStaffCount != m_oldStaffCount) {
+        m_shape->sheet()->setStaffSystemCount(0);
+        m_shape->engrave();
+        m_shape->repaint();
+    }        
 }

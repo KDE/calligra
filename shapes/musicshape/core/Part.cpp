@@ -103,6 +103,12 @@ Staff* Part::addStaff()
     return staff;
 }
 
+void Part::addStaff(Staff* staff)
+{
+    Q_ASSERT( staff );
+    d->staves.append(staff);
+}
+
 Staff* Part::insertStaff(int before)
 {
     Q_ASSERT( before >= 0 && before <= staffCount() );
@@ -115,6 +121,13 @@ int Part::indexOfStaff(Staff* staff)
 {
     Q_ASSERT(staff);
     return d->staves.indexOf(staff);
+}
+
+void Part::removeStaff(Staff* staff, bool deleteStaff)
+{
+    Q_ASSERT(staff);
+    d->staves.remove(staff);
+    if (deleteStaff) delete staff;
 }
 
 int Part::voiceCount() const

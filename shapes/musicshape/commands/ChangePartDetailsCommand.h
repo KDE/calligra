@@ -20,9 +20,11 @@
 #define CHANGEPARTDETAILSCOMMAND_H
 
 #include <QUndoCommand>
+#include <QList>
 
 namespace MusicCore {
     class Part;
+    class Staff;
 };
 class MusicShape;
 
@@ -38,6 +40,7 @@ private:
     QString m_oldName, m_newName;
     QString m_oldAbbr, m_newAbbr;
     int m_oldStaffCount, m_newStaffCount;
+    QList<MusicCore::Staff*> m_staves;
 };
 
 #endif // CHANGEPARTDETAILSCOMMAND_H

@@ -80,7 +80,6 @@ double Staff::top()
     for (int i = 0; i < part()->staffCount(); i++) {
         if (part()->staff(i) == this) return 30 + 50 * (n+i);
     }
-    Q_ASSERT(false);
     return 30;
 }
 

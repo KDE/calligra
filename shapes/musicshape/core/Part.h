@@ -88,6 +88,8 @@ public:
      */
     Staff* addStaff();
 
+    void addStaff(Staff* staff);
+    
     /**
      * Inserts a new staff into this part. The staff is inserted before the staff with index before.
      *
@@ -96,6 +98,8 @@ public:
     Staff* insertStaff(int before);
 
     int indexOfStaff(Staff* staff);
+    
+    void removeStaff(Staff* staff, bool deleteStaff=true);
     
     /**
      * Returns the number of voices in this part. Normally the number of voices will be at least as high as the
