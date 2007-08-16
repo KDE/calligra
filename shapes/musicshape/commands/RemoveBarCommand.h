@@ -23,7 +23,7 @@
 
 namespace MusicCore {
     class Bar;
-};
+}
 class MusicShape;
 
 class RemoveBarCommand : public QUndoCommand

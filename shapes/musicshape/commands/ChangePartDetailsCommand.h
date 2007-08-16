@@ -28,7 +28,7 @@ namespace MusicCore {
     class Staff;
     class VoiceElement;
     class Note;
-};
+}
 class MusicShape;
 
 class ChangePartDetailsCommand : public QUndoCommand
