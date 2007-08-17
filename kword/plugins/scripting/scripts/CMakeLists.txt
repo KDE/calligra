@@ -7,6 +7,7 @@ install(FILES
     importdoxyxml.py importdoxyxmloptions.ui importdoxyxmlstyle.ui
     ooimport.py ooimportconfig.ui
     exportfile.py
+    kwreportlab.py
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)
 
 install(FILES
