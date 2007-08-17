@@ -36,7 +36,7 @@
                file="extensions/exportfile.py" />
         <script
                name="kwreportlab"
-               text="ReportLab PDF"
+               text="ReportLab.org PDF"
                comment="Python script to export content to a PDF file using ReportLab.org"
                interpreter="python"
                file="extensions/kwreportlab.py" />
