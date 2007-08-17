@@ -257,6 +257,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer(), KisLayerSP(0));
+    layer->setDirty();
 
     // Read exif information
 
@@ -321,7 +322,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     kDebug(41008) <<"Looking for IPTC information";
-    
+
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         kDebug(41008) <<"Marker is" << marker->marker;
         if (marker->marker != (JOCTET) (JPEG_APP0 + 13) ||
@@ -337,7 +338,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             kDebug(41008) <<"No photoshop marker";
             break; /* No IPTC Header */
         }
-        
+
         kDebug(41008) <<"Found Photoshop information of length :"<< marker->data_length;
         KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
         Q_ASSERT(iptcIO);
@@ -360,7 +361,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
     // Dump loaded metadata
     layer->metaData()->debugDump();
-    
+
     // Finish decompression
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
@@ -457,19 +458,19 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Start compression
     jpeg_start_compress(&cinfo, true);
     // Save exif and iptc information if any available
-    
+
     if(metaData and not metaData->empty())
     {
         // Save EXIF
         {
             kDebug(41008) <<"Trying to save exif information";
-            
+
             KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
             Q_ASSERT(exifIO);
-    
+
             QBuffer buffer;
             exifIO->saveTo( metaData, &buffer);
-            
+
             kDebug(41008) <<"Exif information size is" << buffer.data().size();
             QByteArray header(6,0);
             header[0] = 0x45;
@@ -478,7 +479,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             header[3] = 0x66;
             header[4] = 0x00;
             header[5] = 0x00;
-            
+
             QByteArray data = buffer.data();
             data.prepend(header);
             if (data.size() < MAX_DATA_BYTES_IN_MARKER)
@@ -493,10 +494,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             kDebug(41008) <<"Trying to save exif information";
             KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
             Q_ASSERT(iptcIO);
-    
+
             QBuffer buffer;
             iptcIO->saveTo( metaData, &buffer);
-            
+
             QByteArray header;
             header.append( photoshopMarker );
             header.append( QByteArray(1, 0) ); // Null terminated string
@@ -510,7 +511,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             sizeArray[2] = (char)((size & 0x0000ff00) >> 8);
             sizeArray[3] =  (char)(size & 0x000000ff);
             header.append( sizeArray);
-            
+
             kDebug(41008) <<"IPTC information size is" << buffer.data().size() <<" and header is of size =" << header.size();
             QByteArray data = buffer.data();
             data.prepend(header);

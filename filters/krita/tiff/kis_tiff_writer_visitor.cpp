@@ -71,7 +71,9 @@ namespace {
     }
 }
 
-KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options) : m_image(img), m_options(options)
+KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options)
+    : m_image(img)
+    , m_options(options)
 {
 }
 
@@ -229,11 +231,6 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
 {
     kDebug(41008) <<"Visiting on grouplayer" << layer->name() <<"";
-    KisLayerSP child = layer->firstChild();
-    while (child) {
-        child->accept(*this);
-        child = child->nextSibling();
-    }
-    return true;
+    return visitAll( layer, true );
 }
 

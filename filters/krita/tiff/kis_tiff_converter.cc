@@ -269,7 +269,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Create the cmsTransform if needed
     cmsHTRANSFORM transform = 0;
 #if 0
-    // TODO: fixit
+    // TODO: fixit See also: [Bug 148864] New: CMYK colors distorted when loading / saving
     if(profile && !profile->isSuitableForOutput())
     {
         kDebug(41008) <<"The profile can't be used in krita, need conversion";
@@ -577,6 +577,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     }
 
     m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
+    layer->setDirty();
     m_img->unlock();
     return KisImageBuilder_RESULT_OK;
 }

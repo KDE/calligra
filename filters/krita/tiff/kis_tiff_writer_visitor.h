@@ -20,7 +20,7 @@
 #ifndef KIS_TIFF_WRITER_VISITOR_H
 #define KIS_TIFF_WRITER_VISITOR_H
 
-#include <kis_layer_visitor.h>
+#include <kis_node_visitor.h>
 
 #include <kis_iterators_pixel.h>
 
@@ -31,7 +31,7 @@ class KisTIFFOptions;
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
-class KisTIFFWriterVisitor : public KisLayerVisitor
+class KisTIFFWriterVisitor : public KisNodeVisitor
 {
     public:
         KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);

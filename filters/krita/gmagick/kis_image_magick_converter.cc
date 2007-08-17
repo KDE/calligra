@@ -638,6 +638,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 }
                 m_img->addLayer(layer.data(), m_img->rootLayer());
                 layer->paintDevice()->move(x_offset, y_offset);
+                layer->setDirty();
             }
 
             emit notifyProgressDone();

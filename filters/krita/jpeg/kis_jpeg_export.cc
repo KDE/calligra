@@ -33,7 +33,7 @@
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 #include <kis_progress_display_interface.h>
-#include <kis_layer_visitor.h>
+#include <kis_node_visitor.h>
 
 #include "kis_jpeg_converter.h"
 #include "kis_wdg_options_jpeg.h"
@@ -42,7 +42,7 @@
 
 class KisExternalLayer;
 
-class KisExifInfoVisitor : public KisLayerVisitor
+class KisExifInfoVisitor : public KisNodeVisitor
 {
     public:
         KisExifInfoVisitor() :
@@ -67,12 +67,7 @@ class KisExifInfoVisitor : public KisLayerVisitor
         virtual bool visit(KisGroupLayer* layer)
         {
             kDebug(41008) <<"Visiting on grouplayer" << layer->name() <<"";
-            KisLayerSP child = layer->firstChild();
-            while (child) {
-                child->accept(*this);
-                child = child->nextSibling();
-            }
-            return true;
+            return visitAll( layer, true );
         }
         virtual bool visit(KisAdjustmentLayer* ) {  return true; }
     public:
