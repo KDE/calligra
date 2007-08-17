@@ -54,6 +54,9 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     widget.naturalButton->setDefaultAction(tool->action("accidental_natural"));
     widget.sharpButton->setDefaultAction(tool->action("accidental_sharp"));
     widget.doubleSharpButton->setDefaultAction(tool->action("accidental_doublesharp"));
+    
+    widget.importButton->setDefaultAction(tool->action("import"));
+    widget.exportButton->setDefaultAction(tool->action("export"));
 
     connect(widget.voiceList, SIGNAL(currentIndexChanged(int)), this, SIGNAL(voiceChanged(int)));
 }

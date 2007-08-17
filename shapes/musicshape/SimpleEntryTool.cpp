@@ -33,6 +33,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoXmlReader.h>
 
 #include "MusicShape.h"
 #include "Renderer.h"
@@ -61,6 +62,7 @@
 #include "core/VoiceBar.h"
 #include "core/Clef.h"
 #include "core/StaffSystem.h"
+#include "core/MusicXmlReader.h"
 
 using namespace MusicCore;
 
@@ -72,6 +74,14 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
 
+    QAction* importAction = new QAction(KIcon("file-import"), i18n("Import"), this);
+    addAction("import", importAction);
+    connect(importAction, SIGNAL(triggered()), this, SLOT(importSheet()));
+
+    QAction* exportAction = new QAction(KIcon("file-export"), i18n("Export"), this);
+    addAction("export", exportAction);
+    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
+    
     QAction* addBars = new QAction(KIcon("edit-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
@@ -455,4 +465,25 @@ MusicShape* SimpleEntryTool::shape()
 int SimpleEntryTool::voice()
 {
     return m_voice;
+}
+
+void SimpleEntryTool::importSheet()
+{
+    QString file = KFileDialog::getOpenFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Import");
+    if (file.isEmpty() || file.isNull()) return;
+    QFile f(file);
+    f.open(QIODevice::ReadOnly);
+    KoXmlDocument doc;
+    KoXml::setDocument(doc, &f, true);
+    KoXmlElement e = doc.documentElement();
+    kDebug() << e.localName() << e.nodeName();
+    Sheet* sheet = MusicXmlReader(0).loadSheet(doc.documentElement());
+    if (sheet) {
+        m_musicshape->setSheet(sheet);
+        m_musicshape->repaint();
+    }
+}
+
+void SimpleEntryTool::exportSheet()
+{
 }

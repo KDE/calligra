@@ -118,7 +118,7 @@ bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &c
         kWarning() << "no music:score-partwise element as first child";
         return false;
     }
-    Sheet* sheet = MusicXmlReader::loadSheet(score);
+    Sheet* sheet = MusicXmlReader().loadSheet(score);
     if (sheet) {
         delete m_sheet;
         m_sheet = sheet;
@@ -131,6 +131,13 @@ bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &c
 Sheet* MusicShape::sheet()
 {
     return m_sheet;
+}
+
+void MusicShape::setSheet(Sheet* sheet)
+{
+    delete m_sheet;
+    m_sheet = sheet;
+    m_engraver->engraveSheet(m_sheet, size(), true);
 }
 
 MusicRenderer* MusicShape::renderer()

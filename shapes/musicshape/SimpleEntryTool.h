@@ -33,42 +33,44 @@ class AbstractMusicAction;
 class SimpleEntryTool : public KoTool
 {
     Q_OBJECT
-    public:
-        explicit SimpleEntryTool( KoCanvasBase* canvas );
-        ~SimpleEntryTool();
+public:
+    explicit SimpleEntryTool( KoCanvasBase* canvas );
+    ~SimpleEntryTool();
 
-        virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    virtual void paint( QPainter& painter, const KoViewConverter& converter );
 
-        virtual void mousePressEvent( KoPointerEvent* event ) ;
-        virtual void mouseMoveEvent( KoPointerEvent* event );
-        virtual void mouseReleaseEvent( KoPointerEvent* event );
+    virtual void mousePressEvent( KoPointerEvent* event ) ;
+    virtual void mouseMoveEvent( KoPointerEvent* event );
+    virtual void mouseReleaseEvent( KoPointerEvent* event );
 
-        void activate (bool temporary=false);
-        void deactivate();
+    void activate (bool temporary=false);
+    void deactivate();
 
-        void addCommand(QUndoCommand* command);
+    void addCommand(QUndoCommand* command);
 
-        MusicShape* shape();
-        int voice();
-    protected:
-        /*
-         * Create default option widget
-         */
-        virtual QWidget * createOptionWidget();
-    protected slots:
-        void activeActionChanged(QAction* action);
-        void voiceChanged(int voice);
-        void addBars();
-        void actionTriggered();
-    private:
-        MusicShape *m_musicshape;
-        AbstractMusicAction* m_activeAction;
-        QPointF m_point;
-        int m_voice;
-        
-        MusicCore::Staff* m_contextMenuStaff;
-        int m_contextMenuBar;
-        QPointF m_contextMenuPoint;
+    MusicShape* shape();
+    int voice();
+protected:
+    /*
+     * Create default option widget
+     */
+    virtual QWidget * createOptionWidget();
+protected slots:
+    void activeActionChanged(QAction* action);
+    void voiceChanged(int voice);
+    void addBars();
+    void actionTriggered();
+    void importSheet();
+    void exportSheet();
+private:
+    MusicShape *m_musicshape;
+    AbstractMusicAction* m_activeAction;
+    QPointF m_point;
+    int m_voice;
+    
+    MusicCore::Staff* m_contextMenuStaff;
+    int m_contextMenuBar;
+    QPointF m_contextMenuPoint;
 };
 
 #endif

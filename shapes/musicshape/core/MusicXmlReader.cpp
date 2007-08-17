@@ -35,15 +35,11 @@
 
 #include <math.h>
 
-#define NS_MUSIC "http://www.koffice.org/music"
-
 namespace MusicCore {
-namespace MusicXmlReader {
 
-static QString getProperty(const KoXmlElement& elem, const char *propName)
+MusicXmlReader::MusicXmlReader(const char* musicNamespace)
+    : m_namespace(musicNamespace)
 {
-    KoXmlElement propElem = KoXml::namedItemNS(elem, NS_MUSIC, propName);
-    return propElem.text();
 }
 
 static Chord::Duration parseDuration(const QString& type, int length, int div)
@@ -57,7 +53,7 @@ static Chord::Duration parseDuration(const QString& type, int length, int div)
     else if (type == "half")    return Chord::Half;
     else if (type == "whole")   return Chord::Whole;
     else if (type == "breve")   return Chord::Breve;
-
+    
     // else try to parse it from length
     double fact = 26880.0 / div;
     int ticks = (int) round(length * fact);
@@ -73,7 +69,64 @@ static Chord::Duration parseDuration(const QString& type, int length, int div)
     else                                            return Chord::Breve;
 }
 
-static Clef* loadClef(const KoXmlElement& element, Staff* staff)
+Sheet* MusicXmlReader::loadSheet(const KoXmlElement& scoreElement)
+{
+    Sheet* sheet = new Sheet();
+    
+    QHash<QString, Part*> parts;
+    
+    KoXmlElement partList = namedItem(scoreElement, "part-list");
+    if (partList.isNull()) {
+        kDebug() << "no part list found";
+        return 0;
+    }
+    KoXmlElement elem;
+    forEachElement(elem, partList) {
+        if (checkNamespace(elem) && elem.localName() == "score-part") {
+            QString id = elem.attribute("id");
+            QString name = getProperty(elem, "part-name");
+            QString abbr = getProperty(elem, "part-abbreviation");
+            Part* p = sheet->addPart(name);
+            p->setShortName(abbr);
+            // always add one voice and one staff
+            p->addVoice();
+            p->addStaff();
+            parts[id] = p;
+        }
+    }
+    
+    forEachElement(elem, scoreElement) {
+        if (checkNamespace(elem) && elem.localName() == "part") {
+            QString id = elem.attribute("id");
+            loadPart(elem, parts[id]);
+        }
+    }
+    
+    return sheet;
+}
+
+
+QString MusicXmlReader::getProperty(const KoXmlElement& elem, const char *propName)
+{
+    KoXmlElement propElem = namedItem(elem, propName);
+    return propElem.text();
+}
+
+KoXmlElement MusicXmlReader::namedItem(const KoXmlNode& node, const char* localName)
+{
+    if (m_namespace) {
+        return KoXml::namedItemNS(node, m_namespace, localName);
+    } else {
+        return node.namedItem(localName).toElement();
+    }
+}
+
+bool MusicXmlReader::checkNamespace(const KoXmlNode& node)
+{
+    return !m_namespace || node.namespaceURI() == m_namespace;
+}
+
+Clef* MusicXmlReader::loadClef(const KoXmlElement& element, Staff* staff)
 {
     QString shapeStr = getProperty(element, "sign");
     Clef::ClefShape shape = Clef::GClef;
@@ -99,7 +152,7 @@ static Clef* loadClef(const KoXmlElement& element, Staff* staff)
     return new Clef(staff, 0, shape, line, octave);
 }
 
-static TimeSignature* loadTimeSignature(const KoXmlElement& element, Staff* staff)
+TimeSignature* MusicXmlReader::loadTimeSignature(const KoXmlElement& element, Staff* staff)
 {
     int beats = getProperty(element, "beats").toInt();
     int beat = getProperty(element, "beat-type").toInt();
@@ -107,7 +160,7 @@ static TimeSignature* loadTimeSignature(const KoXmlElement& element, Staff* staf
     return new TimeSignature(staff, 0, beats, beat);
 }
 
-static void loadPart(const KoXmlElement& partElement, Part* part)
+void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
 {
     Sheet* sheet = part->sheet();
 
@@ -118,7 +171,7 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
     Chord* lastNote = NULL;
 
     forEachElement(barElem, partElement) {
-        if (barElem.namespaceURI() != NS_MUSIC || barElem.localName() != "measure") continue;
+        if (!checkNamespace(barElem) || barElem.localName() != "measure") continue;
 
         Bar* bar = NULL;
         if (curBar >= sheet->barCount()) {
@@ -129,7 +182,7 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
 
         KoXmlElement e;
         forEachElement(e, barElem) {
-            if (e.namespaceURI() != NS_MUSIC) continue;
+            if (!checkNamespace(e)) continue;
 
             if (e.localName() == "attributes") {
                 KoXmlElement attr;
@@ -143,7 +196,7 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                 }
                 
                 forEachElement(attr, e) {
-                    if (attr.namespaceURI() != NS_MUSIC) continue;
+                    if (!checkNamespace(attr)) continue;
                     
                     if (attr.localName() == "divisions") {
                         curDivisions = attr.text().toInt();
@@ -176,7 +229,7 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                 int staffId = 0;
                 if (!staffStr.isNull()) staffId = staffStr.toInt() - 1;
                                 
-                if (KoXml::namedItemNS(e, NS_MUSIC, "chord").isNull()) {
+                if (namedItem(e, "chord").isNull()) {
                     // no chord element, so this is the start of a new chord
                     int length = getProperty(e, "duration").toInt();
                     QString type = getProperty(e, "type");
@@ -193,7 +246,7 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                     int nDots = 0;
                     KoXmlElement dot;
                     forEachElement(dot, e) {
-                        if (dot.namespaceURI() == NS_MUSIC && dot.localName() == "dot") nDots++;
+                        if (checkNamespace(dot) && dot.localName() == "dot") nDots++;
                     }
                     
                     Staff* staff = part->staff(staffId);
@@ -202,7 +255,7 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
                     voice->bar(bar)->addElement(lastNote);
                 }
 
-                KoXmlElement pitch = KoXml::namedItemNS(e, NS_MUSIC, "pitch");
+                KoXmlElement pitch = namedItem(e, "pitch");
                 if (!pitch.isNull()) {
                     QString step = getProperty(pitch, "step");
                     int octave = getProperty(pitch, "octave").toInt();
@@ -237,39 +290,5 @@ static void loadPart(const KoXmlElement& partElement, Part* part)
     }
 }
 
-Sheet* loadSheet(const KoXmlElement& scoreElement)
-{
-    Sheet* sheet = new Sheet();
 
-    QHash<QString, Part*> parts;
-
-    kDebug() << "loading sheet ======================================================================================";
-
-    KoXmlElement partList = KoXml::namedItemNS(scoreElement, NS_MUSIC, "part-list");
-    KoXmlElement elem;
-    forEachElement(elem, partList) {
-        if (elem.namespaceURI() == NS_MUSIC && elem.localName() == "score-part") {
-            QString id = elem.attribute("id");
-            QString name = getProperty(elem, "part-name");
-            QString abbr = getProperty(elem, "part-abbreviation");
-            Part* p = sheet->addPart(name);
-            p->setShortName(abbr);
-            // always add one voice and one staff
-            p->addVoice();
-            p->addStaff();
-            parts[id] = p;
-        }
-    }
-
-    forEachElement(elem, scoreElement) {
-        if (elem.namespaceURI() == NS_MUSIC && elem.localName() == "part") {
-            QString id = elem.attribute("id");
-            loadPart(elem, parts[id]);
-        }
-    }
-
-    return sheet;
-}
-
-}
 } // namespace MusicCore
