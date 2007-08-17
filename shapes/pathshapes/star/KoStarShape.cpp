@@ -106,6 +106,11 @@ void KoStarShape::setConvex( bool convex )
     createPath();
 }
 
+bool KoStarShape::convex() const
+{
+    return m_convex;
+}
+
 void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
 {
     if( modifiers & Qt::ShiftModifier )

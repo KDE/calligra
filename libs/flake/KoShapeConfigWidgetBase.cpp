@@ -17,34 +17,36 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef STARSHAPECONFIGWIDGET_H
-#define STARSHAPECONFIGWIDGET_H
+#include "KoShapeConfigWidgetBase.h"
 
-#include "ui_StarShapeConfigWidget.h"
-
-#include <KoShapeConfigWidgetBase.h>
-
-class KoStarShape;
-
-class StarShapeConfigWidget : public KoShapeConfigWidgetBase
+KoShapeConfigWidgetBase::KoShapeConfigWidgetBase()
+    : m_resourceProvider( 0 ) 
 {
-    Q_OBJECT
-public:
-    StarShapeConfigWidget();
-    /// reimplemented
-    virtual void open(KoShape *shape);
-    /// reimplemented
-    virtual void save();
-    /// reimplemented
-    virtual void setUnit(KoUnit unit);
-    /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
-    /// reimplemented
-    virtual QUndoCommand * createCommand();
+}
 
-private:
-    Ui::StarShapeConfigWidget widget;
-    KoStarShape * m_star;
-};
+KoShapeConfigWidgetBase::~KoShapeConfigWidgetBase()
+{
+}
 
-#endif // STARSHAPECONFIGWIDGET_H
+void KoShapeConfigWidgetBase::setUnit(KoUnit unit)
+{
+    Q_UNUSED(unit);
+}
+
+void KoShapeConfigWidgetBase::setResourceProvider(KoCanvasResourceProvider* provider)
+{
+    m_resourceProvider = provider;
+}
+
+bool KoShapeConfigWidgetBase::showOnShapeCreate()
+{
+    return false;
+}
+
+QUndoCommand * KoShapeConfigWidgetBase::createCommand()
+{
+    return 0;
+}
+
+#include "KoShapeConfigWidgetBase.moc"
+

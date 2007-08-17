@@ -19,11 +19,17 @@
 
 #include "StarShapeConfigWidget.h"
 #include "KoStarShape.h"
+#include "StarShapeConfigCommand.h"
 
 StarShapeConfigWidget::StarShapeConfigWidget()
 {
     widget.setupUi( this );
     layout()->setContentsMargins( 0,0,0,0 );
+
+    connect( widget.corners, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
+    connect( widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect( widget.outerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect( widget.convex, SIGNAL(stateChanged(int)), this, SIGNAL(propertyChanged()));
 }
 
 void StarShapeConfigWidget::setUnit(KoUnit unit)
@@ -38,9 +44,20 @@ void StarShapeConfigWidget::open(KoShape *shape)
     if( ! m_star )
         return;
 
+    widget.corners->blockSignals( true );
+    widget.innerRadius->blockSignals( true );
+    widget.outerRadius->blockSignals( true );
+    widget.convex->blockSignals( true );
+
     widget.corners->setValue( m_star->cornerCount() );
     widget.innerRadius->setValue( m_star->baseRadius() );
     widget.outerRadius->setValue( m_star->tipRadius() );
+    widget.convex->setCheckState( m_star->convex() ? Qt::Checked : Qt::Unchecked );
+
+    widget.corners->blockSignals( false );
+    widget.innerRadius->blockSignals( false );
+    widget.outerRadius->blockSignals( false );
+    widget.convex->blockSignals( false );
 }
 
 void StarShapeConfigWidget::save()
@@ -51,6 +68,16 @@ void StarShapeConfigWidget::save()
     m_star->setCornerCount( widget.corners->value() );
     m_star->setBaseRadius( widget.innerRadius->value() );
     m_star->setTipRadius( widget.outerRadius->value() );
+    m_star->setConvex( widget.convex->checkState() == Qt::Checked );
+}
+
+QUndoCommand * StarShapeConfigWidget::createCommand()
+{
+    if( ! m_star )
+        return 0;
+    else
+        return new StarShapeConfigCommand( m_star, widget.corners->value(), widget.innerRadius->value(), 
+                                           widget.outerRadius->value(), widget.convex->checkState() == Qt::Checked );
 }
 
 #include "StarShapeConfigWidget.moc"

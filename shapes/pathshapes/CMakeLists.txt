@@ -10,6 +10,7 @@ set(pathshapes_PART_SRCS
     star/KoStarShape.cpp
     star/KoStarShapeFactory.cpp
     star/StarShapeConfigWidget.cpp
+    star/StarShapeConfigCommand.cpp
     rectangle/KoRectangleShape.cpp
     rectangle/KoRectangleShapeFactory.cpp
     arrow/KoArrowShape.cpp
