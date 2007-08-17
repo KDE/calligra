@@ -78,10 +78,10 @@ public:
 
   /**
    * Constructor.
-   * Creates a region consisting of the region defined in @p strRegion .
+   * Creates a region consisting of the region defined in @p expression .
    * @param expression a string representing the region (e.g. "A1:B3")
    * @param map used to determine the sheet, if it's named in the string
-   * @param sheet the fallback sheet, if \p strRegion does not contain one
+   * @param sheet the fallback sheet, if \p expression does not contain one
    */
   explicit Region(const QString& expression, const Map* map = 0, Sheet* sheet = 0);
 
@@ -332,21 +332,23 @@ protected:
    * @param index the index of the element in whose front the new point
    * is inserted
    * @param point the location of the point to be inserted
+   * @param sheet the sheet the point belongs to
    * @param multi @c true to allow multiple occurrences of a point
    * @return the added point, a null pointer, if @p point is not
    * valid or the element containing @p point
    */
-  Element* insert(int index, const QPoint& point, Sheet*, bool multi = true);
+  Element* insert(int index, const QPoint& point, Sheet* sheet, bool multi = true);
 
   /**
    * @param index the index of the element in whose front the new range
    * is inserted
    * @param range the location of the range to be inserted
+   * @param sheet the sheet the range belongs to
    * @param multi @c true to allow multiple occurrences of a range
    * @return the added range, a null pointer, if @p range is not
    * valid or the element containing @p range
    */
-  Element* insert(int index, const QRect& range, Sheet*, bool multi = true);
+  Element* insert(int index, const QRect& range, Sheet* sheet, bool multi = true);
 
   /**
    * @internal used to create derived Points
