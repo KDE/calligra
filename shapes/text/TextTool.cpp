@@ -343,6 +343,12 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins.values()) {
         connect(plugin, SIGNAL(startMacro(const QString &)), this, SLOT(startMacro(const QString &)));
         connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+        QHash<QString, QAction*> actions = plugin->actions();
+        QHash<QString, QAction*>::iterator i = actions.begin();
+        while (i != actions.end()) {
+            addAction(i.key(), i.value());
+            i++;
+        }
     }
 
     action = new QAction(i18n("Paragraph..."), this);
