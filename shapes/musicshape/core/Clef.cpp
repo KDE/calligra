@@ -100,6 +100,7 @@ int Clef::pitchToLine(int pitch) const
     switch (d->shape) {
         case GClef: line = 14; break;
         case FClef: line = 6; break;
+        case CClef: line = 10; break;
     }
     line -= 2 * d->line;
     line -= pitch;
