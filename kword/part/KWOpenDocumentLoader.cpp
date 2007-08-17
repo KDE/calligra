@@ -179,11 +179,13 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
                 kDebug() << "No text shape";
                 return 0;
             }
-            KoShapeLoadingContext shapecontext(context);
-            shape->loadOdf(textElem, shapecontext);
             KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
             // fs->setName is needed ? I hope it isn't...
             KWTextFrame *textFrame = new KWTextFrame(shape, fs);
+            
+            QTextCursor frameCursor( fs->document() );
+            m_loader->loadBody(context, textElem, frameCursor);
+            
             if( anchortype == "paragraph" ) {
                 // Anchor position is the paragraph that the current drawing shape element is contained in.
                 // The shape appears at the start of the paragraph element.
