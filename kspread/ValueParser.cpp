@@ -444,15 +444,16 @@ QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
   int days = -1;
   int hour = -1, minute = -1;
   int second = withSeconds ? -1 : 0; // don't require seconds
+  int msecs = 0;
   bool g_12h = false;
   bool pm = false;
   uint strpos = 0;
   uint formatpos = 0;
 
-  QDate refDate( m_doc->referenceDate() );
+  const QDate refDate( m_doc->referenceDate() );
 
-  uint l  = format.length();
-  uint sl = str.length();
+  const uint l  = format.length();
+  const uint sl = str.length();
 
   while (l > formatpos || sl > strpos)
   {
@@ -535,6 +536,13 @@ QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
       second = readInt(str, strpos);
       if (second < 0 || second > 59)
         goto error;
+      if (strpos < sl && str.indexOf(m_doc->locale()->decimalSymbol()) == strpos)
+      {
+          strpos += m_doc->locale()->decimalSymbol().length();
+          msecs = readInt(str, strpos);
+          if (msecs < 0 || msecs > 999)
+              goto error;
+      }
 
       break;
     }
@@ -554,7 +562,7 @@ QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
 
   if (ok)
     *ok = true;
-  return QDateTime( refDate, QTime( hour, minute, second ), Qt::UTC );
+  return QDateTime( refDate, QTime( hour, minute, second, msecs ), Qt::UTC );
 
  error:
   if (ok)
