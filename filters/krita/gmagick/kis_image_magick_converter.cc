@@ -49,7 +49,6 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 #include "kis_undo_adapter.h"
-#include "kis_meta_registry.h"
 #include "kis_iterators_pixel.h"
 #include "kis_annotation.h"
 #include "kis_paint_layer.h"

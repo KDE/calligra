@@ -54,7 +54,6 @@
 #include "kis_raw_import.h"
 #include "kis_doc2.h"
 #include "kis_image.h"
-#include "kis_meta_registry.h"
 #include "kis_layer.h"
 #include "kis_annotation.h"
 #include "KoColorProfile.h"

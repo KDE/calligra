@@ -45,7 +45,6 @@ extern "C" {
 #include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
-#include <kis_meta_registry.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_store.h>
