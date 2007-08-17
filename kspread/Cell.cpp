@@ -550,13 +550,13 @@ QString Cell::encodeFormula(bool fixedReferences) const
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                         else
-                            result.append(QString("#%1").arg(pos.x() - d->column));
+                            result.append(QString("#%1").arg(pos.x() - (int)d->column));
                         if ((*it)->isRowFixed())
                             result.append(QString("$%1#").arg(pos.y()));
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                         else
-                            result.append(QString("#%1#").arg(pos.y() - d->row));
+                            result.append(QString("#%1#").arg(pos.y() - (int)d->row));
                     }
                     else // ((*it)->type() == Region::Range)
                     {
@@ -568,13 +568,13 @@ QString Cell::encodeFormula(bool fixedReferences) const
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                         else
-                            result.append(QString("#%1").arg(pos.x() - d->column));
+                            result.append(QString("#%1").arg(pos.x() - (int)d->column));
                         if ((*it)->isTopFixed())
                             result.append(QString("$%1#").arg(pos.y()));
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                         else
-                            result.append(QString("#%1#").arg(pos.y() - d->row));
+                            result.append(QString("#%1#").arg(pos.y() - (int)d->row));
                         result.append(':');
                         pos = (*it)->rect().bottomRight();
                         if ((*it)->isRightFixed())
@@ -582,13 +582,13 @@ QString Cell::encodeFormula(bool fixedReferences) const
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                         else
-                            result.append(QString("#%1").arg(pos.x() - d->column));
+                            result.append(QString("#%1").arg(pos.x() - (int)d->column));
                         if ((*it)->isBottomFixed())
                             result.append(QString("$%1#").arg(pos.y()));
                         else if (fixedReferences)
                             result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                         else
-                            result.append(QString("#%1#").arg(pos.y() - d->row));
+                            result.append(QString("#%1#").arg(pos.y() - (int)d->row));
                     }
                 }
                 break;
