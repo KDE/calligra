@@ -30,19 +30,20 @@
 
 #include <knuminput.h>
 #include <klocale.h>
+#include <kcombobox.h>
 
-#include <QStackedWidget>
-#include <QComboBox>
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QVBoxLayout>
-#include <QPainter>
+#include <QtGui/QStackedWidget>
+//#include <QComboBox>
+#include <QtGui/QGroupBox>
+#include <QtGui/QCheckBox>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QPainter>
 
 #include <math.h>
 
 KarbonPencilTool::KarbonPencilTool(KoCanvasBase *canvas)
-    : KoTool( canvas ),  m_mode( ModeRaw ), m_optimizeRaw( false )
-    , m_optimizeCurve( false ), m_combineAngle( 15.0 ), m_fittingError( 4.0 )
+    : KoTool( canvas ),  m_mode( ModeCurve ), m_optimizeRaw( false )
+    , m_optimizeCurve( false ), m_combineAngle( 15.0 ), m_fittingError( 5.0 )
     , m_close( false ), m_shape( 0 )
 
 {
@@ -119,7 +120,7 @@ void KarbonPencilTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void KarbonPencilTool::activate( bool temporary )
+void KarbonPencilTool::activate( bool )
 {
     m_points.clear();
     m_close = false;
@@ -250,7 +251,7 @@ QWidget * KarbonPencilTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QVBoxLayout * layout = new QVBoxLayout( optionWidget );
 
-    QComboBox * modeBox = new QComboBox( optionWidget );
+    KComboBox * modeBox = new KComboBox( optionWidget );
     modeBox->addItem( i18n( "Raw" ) );
     modeBox->addItem( i18n( "Curve" ) );
     modeBox->addItem( i18n( "Straight" ) );
@@ -290,6 +291,9 @@ QWidget * KarbonPencilTool::createOptionWidget()
     connect( optimizeCurve, SIGNAL(stateChanged(int)), this, SLOT(setOptimize(int)));
     connect( fittingError, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
     connect( combineAngle, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
+
+    modeBox->setCurrentIndex( m_mode );
+    stackedWidget->setCurrentIndex( m_mode );
 
     return optionWidget;
 }
