@@ -67,6 +67,10 @@ public:
 
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
+
+    /// reimplemented
+    virtual QString pathShapeId() const;
+
 protected:
 
     void moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers = Qt::NoModifier );

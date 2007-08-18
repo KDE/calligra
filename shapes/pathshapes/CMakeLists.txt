@@ -13,6 +13,8 @@ set(pathshapes_PART_SRCS
     star/StarShapeConfigCommand.cpp
     rectangle/KoRectangleShape.cpp
     rectangle/KoRectangleShapeFactory.cpp
+    rectangle/RectangleShapeConfigWidget.cpp
+    rectangle/RectangleShapeConfigCommand.cpp
     arrow/KoArrowShape.cpp
     arrow/KoArrowShapeFactory.cpp
     enhancedpath/KoEnhancedPathShape.cpp
@@ -26,6 +28,7 @@ set(pathshapes_PART_SRCS
 
 kde4_add_ui_files(pathshapes_PART_SRCS
     star/StarShapeConfigWidget.ui
+    rectangle/RectangleShapeConfigWidget.ui
 )
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 

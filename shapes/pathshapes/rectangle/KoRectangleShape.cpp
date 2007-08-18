@@ -166,7 +166,7 @@ void KoRectangleShape::updatePath( const QSizeF &size )
     m_points[cp]->setPoint( QPointF( rx, 0 ) );
     m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint1 );
     m_points[cp]->unsetProperty( KoPathPoint::HasControlPoint2 );
-    
+
     if ( m_cornerRadiusX < 100 || m_cornerRadiusY == 0 )
     {
         m_points[++cp]->setPoint( QPointF( x2, 0 ) );
@@ -229,7 +229,7 @@ void KoRectangleShape::updatePath( const QSizeF &size )
         m_points[0]->setControlPoint1( curvePoints[1] );
         m_points[0]->setPoint( curvePoints[2] );
     }
-    
+
     qDebug() << "KoRectangleShape" << cp;
     m_subpaths[0]->clear();
     for ( int i = 0; i < cp; ++i )
@@ -275,6 +275,7 @@ void KoRectangleShape::setCornerRadiusX( double radius )
     {
         m_cornerRadiusX = radius;
         updatePath( size() );
+        updateHandles();
     }
 }
 
@@ -289,5 +290,11 @@ void KoRectangleShape::setCornerRadiusY( double radius )
     {
         m_cornerRadiusY = radius;
         updatePath( size() );
+        updateHandles();
     }
+}
+
+QString KoRectangleShape::pathShapeId() const
+{
+    return KoRectangleShapeId;
 }

@@ -19,6 +19,7 @@
 
 #include "KoRectangleShapeFactory.h"
 #include "KoRectangleShape.h"
+#include "RectangleShapeConfigWidget.h"
 #include "KoLineBorder.h"
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
@@ -59,3 +60,11 @@ bool KoRectangleShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw );
 }
+
+QList<KoShapeConfigWidgetBase*> KoRectangleShapeFactory::createShapeOptionPanels()
+{
+    QList<KoShapeConfigWidgetBase*> panels;
+    panels.append( new RectangleShapeConfigWidget() );
+    return panels;
+}
+
