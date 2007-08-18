@@ -267,6 +267,9 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
     if ( !store->close() ) // done with styles.xml
         return false;
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+    
+    if (!context.saveImages(store, manifestWriter))
+        return false;
     return true;
 }
 

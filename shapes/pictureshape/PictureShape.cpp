@@ -25,6 +25,8 @@
 #include <KoImageData.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOasisLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 
@@ -53,8 +55,12 @@ void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) 
 
 void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 {
-    Q_UNUSED(context);
-    //TODO
+    KoXmlWriter &writer = context.xmlWriter();
+    writer.startElement("draw:image");
+    // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
+    QString name = context.addImageForSaving( m_imageData->pixmap() );
+    writer.addAttribute("xlink:href", name);
+    writer.endElement();
 }
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
