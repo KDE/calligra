@@ -181,10 +181,12 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
             }
             KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
             // fs->setName is needed ? I hope it isn't...
-            KWTextFrame *textFrame = new KWTextFrame(shape, fs);
+            fs->setName("test-textbox");
             
             QTextCursor frameCursor( fs->document() );
             m_loader->loadBody(context, textElem, frameCursor);
+            
+            KWTextFrame *textFrame = new KWTextFrame(shape, fs);
             
             if( anchortype == "paragraph" ) {
                 // Anchor position is the paragraph that the current drawing shape element is contained in.

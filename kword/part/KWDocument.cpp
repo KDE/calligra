@@ -255,12 +255,12 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
     //saveOdfDocumentStyles( store, mainStyles, &masterStyles );
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
-    stylesWriter->startElement("styles:styles");
+    stylesWriter->startElement("office:styles");
     styles = mainStyles.styles(KoGenStyle::StyleUser, true);
     for ( it = styles.begin(); it != styles.end(); ++it ) {
         (*it).style->writeStyle(stylesWriter, mainStyles, "style:style", (*it).name, "");
     }
-    stylesWriter->endElement(); // "styles:styles"
+    stylesWriter->endElement(); // "office:styles"
     stylesWriter->endElement(); // "office:document-styles"
     stylesWriter->endDocument();
     
