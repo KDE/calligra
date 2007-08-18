@@ -245,8 +245,8 @@ class MyDialog:
         savewidget.setFilter("*.pdf|PDF Documents\n*|All Files")
         savewidget.setMode("Saving")
 
-        layoutpage = self.dialog.addPage("Page","Page Options","book")
-        layoutwidget = forms.createWidgetFromUIFile(layoutpage, os.path.join(action.currentPath(), "kwreportlabpage.ui"))
+        #layoutpage = self.dialog.addPage("Page","Page Options","book")
+        #layoutwidget = forms.createWidgetFromUIFile(layoutpage, os.path.join(action.currentPath(), "kwreportlabpage.ui"))
 
         if self.dialog.exec_loop():
             if not self.config.writeFileName:
