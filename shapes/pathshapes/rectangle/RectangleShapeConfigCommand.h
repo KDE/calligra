@@ -24,15 +24,15 @@
 
 class KoRectangleShape;
 
-/// The undo / redo command for configuring a Rectangle shape
+/// The undo / redo command for configuring a rectangle shape
 class RectangleShapeConfigCommand : public QUndoCommand
 {
 public:
     /**
-     * Configures a Rectangle shape
-     * @param Rectangle the Rectangle shape to configure
-     * @param cornerRadiusX the inner radius
-     * @param cornerRadiusY the outer radius
+     * Configures a rectangle shape
+     * @param Rectangle the rectangle shape to configure
+     * @param cornerRadiusX the x corner radius
+     * @param cornerRadiusY the y corner radius
      * @param parent the optional parent command
      */
     RectangleShapeConfigCommand( KoRectangleShape * rectangle, double cornerRadiusX, double cornerRadiusY, QUndoCommand *parent = 0 );
