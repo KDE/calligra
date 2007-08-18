@@ -4321,6 +4321,8 @@ void View::textToColumns()
   }*/
 
   CSVDialog dialog( this, area, CSVDialog::Column );
+  dialog.setDecimalSymbol(doc()->locale()->decimalSymbol());
+  dialog.setThousandsSeparator(doc()->locale()->thousandsSeparator());
   if( !dialog.canceled() )
     dialog.exec();
 }
@@ -4774,6 +4776,8 @@ void View::insertFromTextfile()
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
     CSVDialog dialog( this, d->selection->lastRange(), CSVDialog::File );
+    dialog.setDecimalSymbol(doc()->locale()->decimalSymbol());
+    dialog.setThousandsSeparator(doc()->locale()->thousandsSeparator());
     if( !dialog.canceled() )
       dialog.exec();
 }
@@ -4783,6 +4787,8 @@ void View::insertFromClipboard()
     d->canvas->closeEditor();
 
     CSVDialog dialog( this, d->selection->lastRange(), CSVDialog::Clipboard );
+    dialog.setDecimalSymbol(doc()->locale()->decimalSymbol());
+    dialog.setThousandsSeparator(doc()->locale()->thousandsSeparator());
     if( !dialog.canceled() )
       dialog.exec();
 }
