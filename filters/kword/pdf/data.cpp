@@ -103,7 +103,7 @@ Data::Data(KoFilterChain *chain, const DRect &pageRect,
 
 QDomElement Data::pictureFrameset(const DRect &r)
 {
-    QDomElement frameset = createFrameset(Picture, QString::null);
+    QDomElement frameset = createFrameset(Picture, QString());
     QDomElement frame = createFrame(Picture, r, false);
     frameset.appendChild(frame);
     return frameset;

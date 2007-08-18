@@ -69,7 +69,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from,
 
     // read file
     KoFilter::ConversionStatus result
-        = _doc.init(m_chain->inputFile(), QString::null, QString::null);
+        = _doc.init(m_chain->inputFile(), QString(), QString());
     if ( result!=KoFilter::OK ) return result;
 
     // options dialog

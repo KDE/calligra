@@ -507,7 +507,7 @@ void KWDWriter::cleanUpParagraph(QDomElement paragraph) {
 	QDomElement e=paragraph.elementsByTagName("FORMATS").item(0).toElement();
 	if (e.isNull()) { kWarning(30503) << "cleanup : no valid paragraph"; return; }
 	for (QDomElement k=e.firstChild().toElement();!k.isNull();k=k.nextSibling().toElement()) {
-	     if (k.attribute("len",QString::null).isNull()) {
+            if (k.attribute("len",QString()).isNull()) {
 	         e.removeChild(k);
 	         cleanUpParagraph(paragraph);
 	         return;

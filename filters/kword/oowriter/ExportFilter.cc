@@ -235,7 +235,7 @@ bool OOWriterWorker::doOpenFile(const QString& filenameOut, const QString& )
 
     const QByteArray appId( "application/vnd.sun.xml.writer" );
 
-    m_zip->writeFile( "mimetype", QString::null, QString::null,appId.data(), appId.length() );
+    m_zip->writeFile( "mimetype", QString(), QString(), appId.data(), appId.length() );
 
     m_zip->setCompression( KZip::DeflateCompression );
 
@@ -251,7 +251,7 @@ bool OOWriterWorker::zipPrepareWriting(const QString& name)
     if (!m_zip)
         return false;
     m_size=0;
-    return m_zip->prepareWriting(name, QString::null, QString::null, 0);
+    return m_zip->prepareWriting(name, QString(), QString(), 0);
 }
 
 bool OOWriterWorker::zipDoneWriting(void)
@@ -1462,7 +1462,7 @@ bool OOWriterWorker::makePicture( const FrameAnchor& anchor, const AnchorType an
     {
 #if 0
         // ### FIXME Why is the following line not working (at least with KDE 3.1)? (It makes unzip having problems with meta.xml)
-        m_zip->writeFile(ooName,QString::null, QString::null, image.size(), image.data());
+        m_zip->writeFile(ooName, QString(), QString(), image.size(), image.data());
 #else
         zipPrepareWriting(ooName);
         zipWriteData( image );

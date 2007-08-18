@@ -535,7 +535,7 @@ bool KWord13Parser::startElement( const QString&, const QString&, const QString&
         if ( stackItem->elementType == KWord13TypeParagraph && m_currentParagraph )
         {
             stackItem->elementType = KWord13TypeText;
-            m_currentParagraph->setText( QString::null );
+            m_currentParagraph->setText( QString() );
         }
         else
         {

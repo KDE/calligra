@@ -439,7 +439,7 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
 
 void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
 {
-    SubDocument subdoc( functor, data, QString::null, QString::null );
+    SubDocument subdoc( functor, data, QString(), QString() );
     m_subdocQueue.push( subdoc );
 }
 

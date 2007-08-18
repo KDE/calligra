@@ -1644,7 +1644,7 @@ void RTFImport::insertPageNumber( RTFProperty * )
 void RTFImport::insertDateTime( RTFProperty *property )
 {
     kDebug(30515) <<"insertDateTime:" << property->value;
-    addDateTime( QString::null, bool(property->value), state.format );
+    addDateTime( QString(), bool(property->value), state.format );
 }
 
 void RTFImport::addDateTime( const QString& format, const bool isDate, RTFFormat& fmt )

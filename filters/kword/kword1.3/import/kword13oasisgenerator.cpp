@@ -206,7 +206,7 @@ void KWord13OasisGenerator::declareLayout( KWord13Layout& layout )
 // Inspired by KoParagStyle::saveStyle
 void KWord13OasisGenerator::declareStyle( KWord13Layout& layout )
 {
-    KoGenStyle gs( KoGenStyle::StyleUser, "paragraph", QString::null );
+    KoGenStyle gs( KoGenStyle::StyleUser, "paragraph", QString() );
 
     gs.addAttribute( "style:display-name", layout.m_name );
 #if 0

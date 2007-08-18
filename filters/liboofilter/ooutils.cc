@@ -53,7 +53,7 @@ QString OoUtils::expandWhitespace(const KoXmlElement& tag)
 
     int howmany=1;
     if (tag.hasAttributeNS( ooNS::text, "c"))
-        howmany = tag.attributeNS( ooNS::text, "c", QString::null).toInt();
+        howmany = tag.attributeNS( ooNS::text, "c", QString()).toInt();
 
     QString result;
     return result.fill(32, howmany);
@@ -210,7 +210,7 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
     {
         KoXmlElement tabStop = it.toElement();
         Q_ASSERT( tabStop.tagName() == "style:tab-stop" );
-        QString type = tabStop.attributeNS( ooNS::style, "type", QString::null ); // left, right, center or char
+        QString type = tabStop.attributeNS( ooNS::style, "type", QString() ); // left, right, center or char
 
         QDomElement elem = parentElement.ownerDocument().createElement( "TABULATOR" );
         int kOfficeType = 0;
@@ -221,19 +221,19 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
         else if ( type == "right" )
             kOfficeType = 2;
         else if ( type == "char" ) {
-            QString delimiterChar = tabStop.attributeNS( ooNS::style, "char", QString::null ); // single character
+            QString delimiterChar = tabStop.attributeNS( ooNS::style, "char", QString() ); // single character
             elem.setAttribute( "alignchar", delimiterChar );
             kOfficeType = 3; // "alignment on decimal point"
         }
 
         elem.setAttribute( "type", kOfficeType );
 
-        double pos = KoUnit::parseValue( tabStop.attributeNS( ooNS::style, "position", QString::null ) );
+        double pos = KoUnit::parseValue( tabStop.attributeNS( ooNS::style, "position", QString() ) );
         elem.setAttribute( "ptpos", pos );
 
         // TODO Convert leaderChar's unicode value to the KOffice enum
         // (blank/dots/line/dash/dash-dot/dash-dot-dot, 0 to 5)
-        QString leaderChar = tabStop.attributeNS( ooNS::style, "leader-char", QString::null ); // single character
+        QString leaderChar = tabStop.attributeNS( ooNS::style, "leader-char", QString() ); // single character
         if ( !leaderChar.isEmpty() )
         {
             int filling = 0;

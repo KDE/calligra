@@ -356,7 +356,7 @@ AIElement::Type AIElement::nameToType( const char* name )
 /*!
   Returns the aielement as a QString if the aielement has type()
   String, CString, ByteArray, Int, Uint, Double,
-  or QString::null otherwise.
+  or QString() otherwise.
 
   \sa asString()
 */

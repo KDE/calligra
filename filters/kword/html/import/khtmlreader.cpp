@@ -540,7 +540,7 @@ bool KHTMLReader::parse_table(DOM::Element e) {
  		ncol=0;
  		for (DOM::Node colsnode=rows.firstChild();!colsnode.isNull();colsnode=colsnode.nextSibling()) {
 			DOM::Element cols = colsnode;
-			const QString nodename = cols.isNull() ? QString::null : cols.nodeName().string().toLower();
+			const QString nodename = cols.isNull() ? QString() : cols.nodeName().string().toLower();
 			if (nodename == "td" || nodename == "th") {
 				QColor bbgcolor=bgcolor;
 				if (!cols.getAttribute("bgcolor").string().isEmpty())

@@ -1285,8 +1285,8 @@ bool RTFWorker::doFullDefineStyle(LayoutData& layout)
 
     // Now we must register a few things (with help of the lookup methods.)
     lookupFont("\\f", layout.formatData.text.fontName);
-    lookupColor(QString::null, layout.formatData.text.fgColor);
-    lookupColor(QString::null, layout.formatData.text.bgColor);
+    lookupColor(QString(), layout.formatData.text.fgColor);
+    lookupColor(QString(), layout.formatData.text.bgColor);
 
     return true;
 }
