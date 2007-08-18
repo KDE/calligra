@@ -4,25 +4,21 @@ import os, sys, re, types, string, datetime
 
 import reportlab
 from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
-#import sys, os, re, types, string, getopt, copy, time
-#from string import find, join, split, replace, expandtabs, rstrip
-#from reportlab.pdfgen import canvas
-#from reportlab.lib import colors
 from reportlab.lib.units import inch, cm
 from reportlab.lib.pagesizes import A4
-#from reportlab.lib import enums
-#from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-#from reportlab.platypus.flowables import Flowable, Spacer
 from reportlab.platypus.paragraph import Paragraph
-#from reportlab.platypus.flowables import Flowable, Preformatted,Spacer, Image, KeepTogether
 from reportlab.platypus.flowables import PageBreak
+from reportlab.platypus.frames import Frame
+#from string import find, join, split, replace, expandtabs, rstrip
+#from reportlab.pdfgen import canvas
+#from reportlab.lib import colors, enums
+#from reportlab.lib.enums import TA_CENTER, TA_LEFT
+#from reportlab.platypus.flowables import Flowable, Preformatted, Spacer, Image, KeepTogether
 #from reportlab.platypus.tableofcontents import TableOfContents
 #from reportlab.platypus.xpreformatted import XPreformatted
-from reportlab.platypus.frames import Frame
 #from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
 #from reportlab.platypus.tables import TableStyle, Table
-#import inspect
 
 import Kross
 
@@ -34,47 +30,13 @@ except ImportError:
 class MyConfig:
     def __init__(self):
         self.showDialog = True
-        #self.showDialog = True
+        #self.showDialog = False
 
         self.readOdfFile = ""
         #self.readOdfFile = "/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt"
 
         self.writeFileName = ""
         #self.writeFileName = "/home/kde4/__MyReportLabTest.pdf"
-
-class MyReader:
-
-    class BaseImpl:
-        def __init__(self, config):
-            self.config = config
-        def drawPageHeader(self, canvas):
-            canvas.setFont('Times-Roman', 12)
-            canvas.drawString(2*cm, A4[1]-1.2*cm, "This is the Title")
-            canvas.drawString(2*cm, A4[1]-1.2*cm-14, "Joe User")
-            canvas.line(2*cm, A4[1]-2*cm, A4[0]-2*cm, A4[1]-2*cm)
-        def drawPageFooter(self, canvas):
-            canvas.line(2*cm, 2*cm, A4[0]-2*cm, 2*cm)
-            #if hasattr(canvas, 'headerLine'): # hackish
-            #    headerline = string.join(canvas.headerLine, ' \215 ') # bullet
-            #    canvas.drawString(2*cm, A4[1]-1.75*cm, headerline)
-            canvas.setFont('Times-Roman', 8)
-            canvas.drawString(2*cm, 1.65*cm, self.config.writeFileName)
-            canvas.drawString(2*cm, 1.65*cm - 10, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-            canvas.setFont('Times-Roman', 12)
-            pageNumber = canvas.getPageNumber()
-            canvas.drawString(4 * inch, cm, "%d" % pageNumber)
-        def drawPageBody(self, canvas):
-            pass
-
-    class TestImpl(BaseImpl):
-        def __init__(self, config):
-            MyReader.BaseImpl.__init__(self,config)
-
-    def __init__(self, config):
-        self.impl = MyReader.TestImpl(config)
-
-    def __getattr__(self, name):
-        return getattr(self.impl, name)
 
 class MyWriter:
 
@@ -83,8 +45,8 @@ class MyWriter:
 
         def __init__(self, writer):
             self.writer = writer
-            self.reader = writer.reader
-            self.config = writer.reader.config
+            self.config = writer.config
+            self.kwdoc = writer.kwdoc
             apply(BaseDocTemplate.__init__, (self, self.config.writeFileName), )
             x = 2.5*cm
             y = 2.5*cm
@@ -97,9 +59,49 @@ class MyWriter:
         def onPage(self, canvas, doc):
             print "=> onPage"
             canvas.saveState()
-            self.reader.drawPageHeader(canvas)
-            self.reader.drawPageBody(canvas)
-            self.reader.drawPageFooter(canvas)
+
+            # header
+            title = self.kwdoc.documentInfoTitle()
+            if not title:
+                title = self.kwdoc.documentInfoSubject()
+            if title:
+                canvas.setFont('Times-Roman', 12)
+                canvas.drawString(2*cm, A4[1]-1.2*cm, title)
+
+            author = self.kwdoc.documentInfoAuthorName()
+            company = self.kwdoc.documentInfoCompanyName()
+            mail = self.kwdoc.documentInfoEmail()
+            if company:
+                if author:
+                    author = "%s, %s" % (company,author)
+                else:
+                    author = company
+            if mail:
+                if author:
+                    author = "%s, %s" % (author,mail)
+                else:
+                    author = mail
+            if author:
+                canvas.setFont('Times-Roman', 10)
+                canvas.drawString(2*cm, A4[1]-1.2*cm-14, author)
+
+            canvas.line(2*cm, A4[1]-2*cm, A4[0]-2*cm, A4[1]-2*cm)
+
+            # body
+            #self.reader.drawPageBody(canvas)
+
+            # footer
+            canvas.line(2*cm, 2*cm, A4[0]-2*cm, 2*cm)
+            #if hasattr(canvas, 'headerLine'): # hackish
+            #    headerline = string.join(canvas.headerLine, ' \215 ') # bullet
+            #    canvas.drawString(2*cm, A4[1]-1.75*cm, headerline)
+            canvas.setFont('Times-Roman', 8)
+            canvas.drawString(2*cm, 1.65*cm, self.config.writeFileName)
+            canvas.drawString(2*cm, 1.65*cm - 10, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+            canvas.setFont('Times-Roman', 12)
+            pageNumber = canvas.getPageNumber()
+            canvas.drawString(4 * inch, cm, "%d" % pageNumber)
+
             canvas.restoreState()
 
         def onPageEnd(self, canvas, doc):
@@ -146,10 +148,36 @@ class MyWriter:
                     #except ValueError:
                         #pass
 
-    def __init__(self, reader):
-        self.reader = reader
-        self.config = reader.config
+    def __init__(self, config):
+        self.config = config
+        self.kwdoc = KWord.document()
         self.doc = MyWriter.MyTemplate(self)
+        self.style = getSampleStyleSheet()
+
+    def getParagraphStyle(self, styleName):
+        try:
+            return self.style[styleName]
+        except KeyError:
+            parentStyle = None
+            style = ParagraphStyle(styleName, parentStyle)
+
+            #style.defaults['fontName'] = 'Times-Roman'
+            #style.defaults['fontSize'] = 20
+            #style.defaults['fontSize'] = 20
+            #style.defaults['leading'] = 12
+            #style.defaults['leftIndent'] = 0
+            #style.defaults['rightIndent'] = 0
+            #style.defaults['firstLineIndent'] = 0
+            #style.defaults['alignment'] = TA_LEFT
+            #style.defaults['spaceBefore'] = 0
+            #style.defaults['spaceAfter'] = 0
+            #style.defaults['bulletFontName'] = 'Times-Roman'
+            #style.defaults['bulletFontSize'] = 10
+            #style.defaults['bulletIndent'] = 0
+            #style.defaults['textColor'] = black
+
+            self.style.add(style)
+            return style
 
     def write(self):
         style = getSampleStyleSheet()
@@ -171,15 +199,22 @@ class MyWriter:
 
         # This method got called on each readed element.
         def onElement():
-            print "  name=%s namespaceURI=%s level=%s" % (reader.name(),reader.namespaceURI(),reader.level())
-            #print "  attributeNames=%s" % reader.attributeNames()
-            #print "  isElement=%s isText=%s" % (reader.isElement(),reader.isText())
             if reader.isNull():
                 return
             if reader.name() == "text:p":
+                print "onElement: text:p name=%s namespaceURI=%s level=%s" % (reader.name(),reader.namespaceURI(),reader.level())
                 text = reader.text()
-                if text:
-                    story.append( Paragraph("%s" % text, style['BodyText']) )
+                if not text:
+                    return
+                styleName = reader.attribute("text:style-name","default")
+                style = self.getParagraphStyle(styleName) #styleName='BodyText'
+                story.append( Paragraph("%s" % text, style) )
+            elif reader.name() == "style:style":
+                print "onElement: style:style attributeNames=%s styleName=%s" % (reader.attributeNames(),reader.attribute('style:name'))
+            else:
+                print "onElement: Unhandled name=%s" % reader.name()
+            #print "  attributeNames=%s" % reader.attributeNames()
+            #print "  isElement=%s isText=%s" % (reader.isElement(),reader.isText())
 
         # Connect the onElement-signal with our function above.
         reader.connect("onElement()", onElement)
@@ -204,31 +239,33 @@ class MyDialog:
         self.dialog.minimumWidth = 580
         self.dialog.minimumHeight = 400
 
-        if not self.config.writeFileName:
-            savepage = self.dialog.addPage("Save","Export File","document-save")
-            savewidget = forms.createFileWidget(savepage, "kfiledialog:///kwordreportlab")
-            savewidget.setFilter("*.pdf|PDF Documents\n*|All Files")
-            savewidget.setMode("Saving")
+        #if not self.config.writeFileName:
+        savepage = self.dialog.addPage("Save","Export to PDF Document","document-save")
+        savewidget = forms.createFileWidget(savepage, "kfiledialog:///kwordreportlab")
+        savewidget.setFilter("*.pdf|PDF Documents\n*|All Files")
+        savewidget.setMode("Saving")
 
-        #layoutpage = self.dialog.addPage("Page","Page Options","book")
-        #layoutwidget = forms.createWidgetFromUIFile(layoutpage, os.path.join(action.currentPath(), "kwreportlabpage.ui"))
+        layoutpage = self.dialog.addPage("Page","Page Options","book")
+        layoutwidget = forms.createWidgetFromUIFile(layoutpage, os.path.join(action.currentPath(), "kwreportlabpage.ui"))
 
         if self.dialog.exec_loop():
             if not self.config.writeFileName:
                 self.config.writeFileName = savewidget.selectedFile()
                 if not self.config.writeFileName:
                     raise "No file selected."
-            reader = MyReader(config)
-            writer = MyWriter(reader)
+            writer = MyWriter(config)
             writer.write()
 
     def __del__(self):
         self.dialog.delayedDestruct()
 
 config = MyConfig()
+
+if not config.writeFileName:
+    config.showDialog = True
+
 if config.showDialog:
     MyDialog(self, config)
 else:
-    reader = MyReader(config)
-    writer = MyWriter(reader)
+    writer = MyWriter(config)
     writer.write()
