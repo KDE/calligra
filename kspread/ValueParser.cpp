@@ -383,11 +383,10 @@ Value ValueParser::tryParseDate( const QString& str, bool *ok ) const
 Value ValueParser::tryParseTime( const QString& str, bool *ok ) const
 {
     bool valid = false;
-    bool duration = false;
 
-    QDateTime tmpTime = readTime(str, true, &valid, duration);
+    QDateTime tmpTime = readTime(str, true, &valid);
     if (!valid)
-        tmpTime = readTime(str, false, &valid, duration);
+        tmpTime = readTime(str, false, &valid);
 
     if (!valid)
     {
@@ -400,9 +399,9 @@ Value ValueParser::tryParseTime( const QString& str, bool *ok ) const
             QString tmp = str.mid(0, str.length() - stringPm.length());
             tmp = tmp.simplified();
             // try again
-            tmpTime = readTime(tmp, true, &valid, duration);
+            tmpTime = readTime(tmp, true, &valid);
             if (!valid)
-                tmpTime = readTime(tmp, false, &valid, duration);
+                tmpTime = readTime(tmp, false, &valid);
             if (valid && tmpTime.time().hour() > 11)
                 valid = false;
             else if (valid)
@@ -414,9 +413,9 @@ Value ValueParser::tryParseTime( const QString& str, bool *ok ) const
             QString tmp = str.mid(0, str.length() - stringAm.length());
             tmp = tmp.simplified();
             // try again
-            tmpTime = readTime(tmp, true, &valid, duration);
+            tmpTime = readTime(tmp, true, &valid);
             if (!valid)
-                tmpTime = readTime(tmp, false, &valid, duration);
+                tmpTime = readTime(tmp, false, &valid);
             if (valid && tmpTime.time().hour() > 11)
                 valid = false;
         }
@@ -424,15 +423,17 @@ Value ValueParser::tryParseTime( const QString& str, bool *ok ) const
 
     if (ok)
         *ok = valid;
+    Value value;
     if (valid)
-        return duration ? Value( tmpTime, doc() ) : Value( tmpTime.time(), doc() );
-    return Value();
+    {
+        value = Value(tmpTime, doc());
+        value.setFormat(Value::fmt_Time);
+    }
+    return value;
 }
 
-QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
-                                 bool* ok, bool& duration ) const
+QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* ok) const
 {
-  duration = false;
   QString str = intstr.simplified().toLower();
   QString format = m_doc->locale()->timeFormat().simplified();
   if ( !withSeconds )
@@ -441,16 +442,16 @@ QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
     format = format.left( n - 1 );
   }
 
-  int days = -1;
-  int hour = -1, minute = -1;
-  int second = withSeconds ? -1 : 0; // don't require seconds
+  QDateTime result;
+  int hour = 0;
+  int minute = 0;
+  int second = 0;
   int msecs = 0;
   bool g_12h = false;
   bool pm = false;
+  bool negative = false;
   uint strpos = 0;
   uint formatpos = 0;
-
-  const QDate refDate( m_doc->referenceDate() );
 
   const uint l  = format.length();
   const uint sl = str.length();
@@ -505,20 +506,27 @@ QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
      case 'k':
      case 'H':
       g_12h = false;
+      if (str.at(strpos) == '-')
+      {
+          negative = true;
+          if (sl <= ++strpos)
+              goto error;
+      }
       hour = readInt(str, strpos);
       if (hour < 0)
         goto error;
-      if (hour > 23)
-      {
-        days = (int)(hour / 24);
-        hour %= 24;
-      }
 
       break;
 
      case 'l':
      case 'I':
       g_12h = true;
+      if (str.at(strpos) == '-')
+      {
+          negative = true;
+          if (sl <= ++strpos)
+              goto error;
+      }
       hour = readInt(str, strpos);
       if (hour < 1 || hour > 12)
         goto error;
@@ -533,10 +541,12 @@ QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
       break;
 
      case 'S':
+      if (!withSeconds)
+        break;
       second = readInt(str, strpos);
       if (second < 0 || second > 59)
         goto error;
-      if (strpos < sl && str.indexOf(m_doc->locale()->decimalSymbol()) == strpos)
+      if (strpos < sl && str.indexOf(m_doc->locale()->decimalSymbol()) == (int)strpos)
       {
           strpos += m_doc->locale()->decimalSymbol().length();
           msecs = readInt(str, strpos);
@@ -554,21 +564,18 @@ QDateTime ValueParser::readTime( const QString& intstr, bool withSeconds,
     if (pm) hour += 12;
   }
 
-  if (days > 0)
-  {
-    refDate.addDays( days );
-    duration = true;
-  }
-
   if (ok)
     *ok = true;
-  return QDateTime( refDate, QTime( hour, minute, second, msecs ), Qt::UTC );
+  result = QDateTime(m_doc->referenceDate(), QTime(0, 0), Qt::UTC);
+  msecs += (((hour * 60 + minute) * 60 + second) * 1000);
+  result = result.addMSecs(negative ? -msecs : msecs);
+  return result;
 
  error:
   if (ok)
     *ok = false;
   // return invalid date if it didn't work
-  return QDateTime( refDate, QTime( -1, -1, -1 ), Qt::UTC );
+  return QDateTime(m_doc->referenceDate(), QTime(-1, -1, -1), Qt::UTC);
 }
 
 /**

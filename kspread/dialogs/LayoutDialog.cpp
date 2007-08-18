@@ -1259,9 +1259,9 @@ void CellFormatPageFloat::slotChangeState()
             list+= fmt->timeFormat(tmpTime, Format::Time3);
             list+= fmt->timeFormat(tmpTime, Format::Time4);
             list+= fmt->timeFormat(tmpTime, Format::Time5);
-            list+= ( fmt->timeFormat(tmpTime, Format::Time6) + i18n(" (=[mm]::ss)") );
-            list+= ( fmt->timeFormat(tmpTime, Format::Time7) + i18n(" (=[hh]::mm::ss)") );
-            list+= ( fmt->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]::mm)") );
+            list+= ( fmt->timeFormat(tmpTime, Format::Time6) + i18n(" (=[mm]:ss)") );
+            list+= ( fmt->timeFormat(tmpTime, Format::Time7) + i18n(" (=[hh]:mm:ss)") );
+            list+= ( fmt->timeFormat(tmpTime, Format::Time8) + i18n(" (=[hh]:mm)") );
             listFormat->insertStringList(list);
 
             if ( cellFormatType == Format::Time )

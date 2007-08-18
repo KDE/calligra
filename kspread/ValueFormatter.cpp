@@ -93,7 +93,7 @@ Value ValueFormatter::formatText(const Value &value, Format::Type fmtType, int p
         if (ok)
         {
             result = Value(timeFormat(timeValue.asDateTime(doc()), fmtType));
-            result.setFormat(Value::fmt_DateTime);
+            result.setFormat(Value::fmt_Time);
         }
     }
 
@@ -187,7 +187,7 @@ Format::Type ValueFormatter::determineFormatting (const Value &value,
         fmtType = Format::ShortDate;
       break;
       case Value::fmt_Time:
-        fmtType = Format::Time;
+        fmtType = Format::Time8; // [h]:mm
       break;
       case Value::fmt_String:
         //this should never happen
@@ -451,76 +451,88 @@ QString ValueFormatter::fractionFormat (Number value, Format::Type fmtType)
 
 QString ValueFormatter::timeFormat (const QDateTime &_dt, Format::Type fmtType)
 {
-  const QDateTime dt( _dt.toUTC() );
-  if (fmtType == Format::Time)
-    return m_converter->locale()->formatTime(dt.time(), false);
+    const QDateTime dt(_dt.toUTC());
+    QString result;
+    if (fmtType == Format::Time)
+        result = m_converter->locale()->formatTime(dt.time(), false);
+    else if (fmtType == Format::SecondeTime)
+        result = m_converter->locale()->formatTime(dt.time(), true);
+    else
+    {
+        const int d = doc()->referenceDate().daysTo(dt.date());
+        int h, m, s;
+        if (fmtType != Format::Time6 && fmtType != Format::Time7 && fmtType != Format::Time8) // time
+        {
+            h = dt.time().hour();
+            m = dt.time().minute();
+            s = dt.time().second();
+        }
+        else if (d >= 0) // positive duration
+        {
+            h = dt.time().hour() + 24 * d;
+            m = dt.time().minute();
+            s = dt.time().second();
+        }
+        else // negative duration
+        {
+            s = (60 - dt.time().second()) % 60;
+            m = (60 - dt.time().minute() - ((s == 0) ? 0 : 1)) % 60;
+            h = -(dt.time().hour() + 24 * d) - ((m == 0 && s == 0) ? 0 : 1);
+        }
+        const bool pm = (h > 12);
+        const QString sign = d < 0 ? QString('-') : QString("");
 
-  if (fmtType == Format::SecondeTime)
-    return m_converter->locale()->formatTime(dt.time(), true);
-
-  int h = dt.time().hour();
-  int m = dt.time().minute();
-  int s = dt.time().second();
-
-  QString hour = ( h < 10 ? '0' + QString::number(h) : QString::number(h) );
-  QString minute = ( m < 10 ? '0' + QString::number(m) : QString::number(m) );
-  QString second = ( s < 10 ? '0' + QString::number(s) : QString::number(s) );
-  bool pm = (h > 12);
-  QString AMPM( pm ? i18n("PM"):i18n("AM") );
-
-  if (fmtType == Format::Time1) {  // 9 : 01 AM
-    return QString("%1:%2 %3")
-      .arg((pm ? h - 12 : h),2)
-      .arg(minute,2)
-      .arg(AMPM);
-  }
-
-  if (fmtType == Format::Time2) {  //9:01:05 AM
-    return QString("%1:%2:%3 %4")
-      .arg((pm ? h-12 : h),2)
-      .arg(minute,2)
-      .arg(second,2)
-      .arg(AMPM);
-  }
-
-  if (fmtType == Format::Time3) {
-    return QString("%1 %2 %3 %4 %5 %6")      // 9 h 01 min 28 s
-      .arg(hour,2)
-      .arg(i18n("h"))
-      .arg(minute,2)
-      .arg(i18n("min"))
-      .arg(second,2)
-      .arg(i18n("s"));
-  }
-
-  if (fmtType == Format::Time4) {  // 9:01
-    return QString("%1:%2").arg(hour, 2).arg(minute, 2);
-  }
-
-  if (fmtType == Format::Time5) {  // 9:01:12
-    return QString("%1:%2:%3").arg(hour, 2).arg(minute, 2).arg(second, 2);
-  }
-
-  QDate refDate( doc()->referenceDate() );
-  int d = refDate.daysTo( dt.date() );
-
-  h += d * 24;
-
-  if (fmtType == Format::Time6)
-  {  // [mm]:ss
-    m += (h * 60);
-    return QString("%1:%2").arg(m, 1).arg(second, 2);
-  }
-  if (fmtType == Format::Time7) {  // [h]:mm:ss
-    return QString("%1:%2:%3").arg(h, 1).arg(minute, 2).arg(second, 2);
-  }
-  if (fmtType == Format::Time8)
-  {  // [h]:mm
-    m += (h * 60);
-    return QString("%1:%2").arg(h, 1).arg(minute, 2);
-  }
-
-  return m_converter->locale()->formatTime( dt.time(), false );
+        if (fmtType == Format::Time1) {  // 9:01 AM
+            result = QString("%1:%2 %3")
+                    .arg(QString::number(pm ? h - 12 : h), 1)
+                    .arg(QString::number(m), 2, '0')
+                    .arg(pm ? i18n("PM") : i18n("AM"));
+        }
+        else if (fmtType == Format::Time2) {  // 9:01:05 AM
+            result = QString("%1:%2:%3 %4")
+                    .arg(QString::number(pm ? h - 12 : h), 1)
+                    .arg(QString::number(m), 2, '0')
+                    .arg(QString::number(s), 2, '0')
+                    .arg(pm ? i18n("PM") : i18n("AM"));
+        }
+        else if (fmtType == Format::Time3) {  // 9 h 01 min 28 s
+            result = QString("%1 %2 %3 %4 %5 %6")
+                    .arg(QString::number(h), 2, '0')
+                    .arg(i18n("h"))
+                    .arg(QString::number(m), 2, '0')
+                    .arg(i18n("min"))
+                    .arg(QString::number(s), 2, '0')
+                    .arg(i18n("s"));
+        }
+        else if (fmtType == Format::Time4) {  // 9:01
+            result = QString("%1:%2")
+                    .arg(QString::number(h), 1)
+                    .arg(QString::number(m), 2, '0');
+        }
+        else if (fmtType == Format::Time5) {  // 9:01:12
+            result = QString("%1:%2:%3")
+                    .arg(QString::number(h), 1)
+                    .arg(QString::number(m), 2, '0')
+                    .arg(QString::number(s), 2, '0');
+        }
+        else if (fmtType == Format::Time6) {  // [mm]:ss
+            result = sign + QString("%1:%2")
+                    .arg(QString::number(m + h * 60), 2, '0')
+                    .arg(QString::number(s), 2, '0');
+        }
+        else if (fmtType == Format::Time7) {  // [h]:mm:ss
+            result = sign + QString("%1:%2:%3")
+                    .arg(QString::number(h), 1)
+                    .arg(QString::number(m), 2, '0')
+                    .arg(QString::number(s), 2, '0');
+        }
+        else if (fmtType == Format::Time8) {  // [h]:mm
+            result = sign + QString("%1:%2")
+                    .arg(QString::number(h), 1)
+                    .arg(QString::number(m), 2, '0');
+        }
+    }
+    return result;
 }
 
 QString ValueFormatter::dateFormat (const QDate &date, Format::Type fmtType)

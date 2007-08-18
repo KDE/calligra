@@ -24,16 +24,16 @@ using namespace KSpread;
 
 bool Format::isDate( Type fmt )
 {
-  return ((fmt == Format::ShortDate ) || (fmt == Format::TextDate ) ||
-      (((int) fmt >= 200) && ((int) fmt < 300)));
+    return ((fmt == Format::ShortDate) || (fmt == Format::TextDate) ||
+            ((fmt >= Format::DatesBegin) && (fmt <= DatesEnd)));
 }
 
 bool Format::isTime( Type fmt )
 {
-  return (((int) fmt >= 50) && ((int) fmt < 70));
+    return ((fmt >= TimesBegin) && (fmt <= TimesEnd));
 }
 
 bool Format::isFraction( Type fmt )
 {
-  return (((int) fmt >= 70) && ((int) fmt < 80));
+    return ((fmt >= FractionsBegin) && (fmt <= FractionsEnd));
 }

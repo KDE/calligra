@@ -94,8 +94,7 @@ protected:
     /**
      * Converts \p str to a date/time value.
      */
-    QDateTime readTime( const QString& str, bool withSeconds,
-                        bool *ok, bool& duration ) const;
+    QDateTime readTime(const QString& str, bool withSeconds, bool *ok) const;
 
     /**
      * A helper function to read numbers and distinguish integers and FPs.
