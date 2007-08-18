@@ -202,11 +202,14 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                         curDivisions = attr.text().toInt();
                     } else if (attr.localName() == "key") {
                         QString number = attr.attribute("number");
-                        int staffId = 0;
-                        if (!number.isNull()) staffId = number.toInt() - 1;
+                        int firstStaffId = 0;
+                        int lastStaffId = part->staffCount()-1;
+                        if (!number.isNull()) firstStaffId = lastStaffId = number.toInt() - 1;
                         
-                        KeySignature* ks = new KeySignature(part->staff(staffId), 0, getProperty(attr, "fifths").toInt());
-                        bar->addStaffElement(ks);
+                        for (int staffId = firstStaffId; staffId <= lastStaffId; staffId++) {
+                            KeySignature* ks = new KeySignature(part->staff(staffId), 0, getProperty(attr, "fifths").toInt());
+                            bar->addStaffElement(ks);
+                        }
                     } else if (attr.localName() == "clef") {
                         QString number = attr.attribute("number");
                         int staffId = 0;
@@ -216,11 +219,14 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                         bar->addStaffElement(clef);
                     } else if (attr.localName() == "time") {
                         QString number = attr.attribute("number");
-                        int staffId = 0;
-                        if (!number.isNull()) staffId = number.toInt() - 1;
-                        
-                        TimeSignature* ts = loadTimeSignature(attr, part->staff(staffId));
-                        bar->addStaffElement(ts);
+                        int firstStaffId = 0;
+                        int lastStaffId = part->staffCount()-1;
+                        if (!number.isNull()) firstStaffId = lastStaffId = number.toInt() - 1;
+ 
+                        for (int staffId = firstStaffId; staffId <= lastStaffId; staffId++) {                       
+                            TimeSignature* ts = loadTimeSignature(attr, part->staff(staffId));
+                            bar->addStaffElement(ts);
+                        }
                     }
                 }
                 

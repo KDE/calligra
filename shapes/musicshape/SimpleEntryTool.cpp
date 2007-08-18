@@ -469,7 +469,8 @@ int SimpleEntryTool::voice()
 
 void SimpleEntryTool::importSheet()
 {
-    QString file = KFileDialog::getOpenFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Import");
+    //QString file = KFileDialog::getOpenFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Import");
+    QString file = KInputDialog::getText("Import", "Filename:", "/Users/marijn/KDE/music/musicxml/samples/");
     if (file.isEmpty() || file.isNull()) return;
     QFile f(file);
     f.open(QIODevice::ReadOnly);
