@@ -5,38 +5,43 @@ import os, sys, re, types, string, datetime
 import reportlab
 from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
 from reportlab.lib.units import inch, cm
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A0,A1,A2,A3,A4,A5,A6,B0,B1,B2,B3,B4,B5,B6,letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus.paragraph import Paragraph
-from reportlab.platypus.flowables import PageBreak
+from reportlab.platypus.flowables import PageBreak, Spacer
 from reportlab.platypus.frames import Frame
-#from string import find, join, split, replace, expandtabs, rstrip
 #from reportlab.pdfgen import canvas
 #from reportlab.lib import colors, enums
-#from reportlab.lib.enums import TA_CENTER, TA_LEFT
-#from reportlab.platypus.flowables import Flowable, Preformatted, Spacer, Image, KeepTogether
+from reportlab.lib.enums import TA_LEFT,TA_CENTER,TA_RIGHT,TA_JUSTIFY
+#from reportlab.platypus.flowables import Flowable, Preformatted, Image, KeepTogether
 #from reportlab.platypus.tableofcontents import TableOfContents
 #from reportlab.platypus.xpreformatted import XPreformatted
-#from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
 #from reportlab.platypus.tables import TableStyle, Table
 
 import Kross
-
 try:
     import KWord
+    embeddedInKWord = True
 except ImportError:
     KWord = Kross.module("kword")
+    embeddedInKWord = False
 
 class MyConfig:
+
     def __init__(self):
-        self.showDialog = True
-        #self.showDialog = False
+        #self.showDialog = True
+        self.showDialog = False
 
-        self.readOdfFile = ""
+        #self.readOdfFile = ""
         #self.readOdfFile = "/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt"
+        self.readOdfFile = "/home/kde4/odf/_works/textFormatting_alignment/testDoc/testDoc.odt"
 
-        self.writeFileName = ""
-        #self.writeFileName = "/home/kde4/__MyReportLabTest.pdf"
+        #self.writeFileName = ""
+        self.writeFileName = "/home/kde4/__MyReportLabTest.pdf"
+
+        self.pageSize = A4 # [width,height]
+        #self.pageMargin = [ 2.0, 2.0, 2.0, 2.0 ] # [left,top,width,height]
+        self.pageCompression = 1 # 0=No compression, 1=Enable compression
 
 class MyWriter:
 
@@ -47,60 +52,82 @@ class MyWriter:
             self.writer = writer
             self.config = writer.config
             self.kwdoc = writer.kwdoc
+
             apply(BaseDocTemplate.__init__, (self, self.config.writeFileName), )
-            x = 2.5*cm
-            y = 2.5*cm
-            width = 15*cm
-            height = 25*cm
+
+            (x,y,width,height) = (2.0*cm, 2.0*cm, 15.0*cm, 25.0*cm)
             mainFrame = Frame(x, y, width, height, id='MainFrame')
             page = PageTemplate('normal', [mainFrame,], self.onPage, self.onPageEnd)
             self.addPageTemplates(page)
 
         def onPage(self, canvas, doc):
-            print "=> onPage"
+            print "onPage PageNumber=%s" % canvas.getPageNumber()
+
+            if not hasattr(self,"_title"):
+                self._title = self.kwdoc.documentInfoTitle()
+                if not self._title:
+                    self._title = self.kwdoc.documentInfoSubject()
+                    if not self._title:
+                        self._title = self.kwdoc.url()
+
+            if not hasattr(self,"_author"):
+                self._author = self.kwdoc.documentInfoAuthorName()
+                company = self.kwdoc.documentInfoCompanyName()
+                mail = self.kwdoc.documentInfoEmail()
+                if company:
+                    if self._author:
+                        self._author = "%s, %s" % (company, self._author)
+                    else:
+                        self._author = company
+                if mail:
+                    if self._author:
+                        self._author = "%s, %s" % (self._author, mail)
+                    else:
+                        self._author = mail
+
             canvas.saveState()
 
+            #canvas.setAuthor()
+            #canvas.addOutlineEntry(title, key, level=0, closed=None)
+            #canvas.setTitle(title)
+            #canvas.setSubject(subj)
+            #canvas.pageHasData()
+            #canvas.showOutline()
+            #canvas.bookmarkPage(name)
+            #canvas.bookmarkHorizontalAbsolute(name, yhorizontal)
+            #canvas.doForm()
+            #canvas.beginForm(name, lowerx=0, lowery=0, upperx=None, uppery=None)
+            #canvas.endForm()
+            #canvas.linkAbsolute(contents, destinationname, Rect=None, addtopage=1, name=None, **kw)
+            #canvas.linkRect(contents, destinationname, Rect=None, addtopage=1, relative=1, name=None, **kw)
+            #canvas.addLiteral()
+            #canvas.stringWidth(self, text, fontName, fontSize, encoding=None)
+            canvas.setPageCompression(self.config.pageCompression)
+            #canvas.setPageTransition(self, effectname=None, duration=1, direction=0,dimension='H',motion='I')
+
             # header
-            title = self.kwdoc.documentInfoTitle()
-            if not title:
-                title = self.kwdoc.documentInfoSubject()
-            if title:
+            if self._title:
                 canvas.setFont('Times-Roman', 12)
-                canvas.drawString(2*cm, A4[1]-1.2*cm, title)
-
-            author = self.kwdoc.documentInfoAuthorName()
-            company = self.kwdoc.documentInfoCompanyName()
-            mail = self.kwdoc.documentInfoEmail()
-            if company:
-                if author:
-                    author = "%s, %s" % (company,author)
-                else:
-                    author = company
-            if mail:
-                if author:
-                    author = "%s, %s" % (author,mail)
-                else:
-                    author = mail
-            if author:
+                canvas.drawString(2.0*cm, self.config.pageSize[1] - 1.2*cm, self._title)
+            if self._author:
                 canvas.setFont('Times-Roman', 10)
-                canvas.drawString(2*cm, A4[1]-1.2*cm-14, author)
-
-            canvas.line(2*cm, A4[1]-2*cm, A4[0]-2*cm, A4[1]-2*cm)
+                canvas.drawString(2.0*cm, self.config.pageSize[1] - 1.2*cm - 14.0, self._author)
+            canvas.line(2.0*cm, self.config.pageSize[1] - 2.0*cm, self.config.pageSize[0] - 2.0*cm, self.config.pageSize[1] - 2.0*cm)
 
             # body
             #self.reader.drawPageBody(canvas)
 
             # footer
-            canvas.line(2*cm, 2*cm, A4[0]-2*cm, 2*cm)
+            canvas.line(2.0*cm, 2.0*cm, self.config.pageSize[0]-2.0*cm, 2.0*cm)
             #if hasattr(canvas, 'headerLine'): # hackish
             #    headerline = string.join(canvas.headerLine, ' \215 ') # bullet
-            #    canvas.drawString(2*cm, A4[1]-1.75*cm, headerline)
+            #    canvas.drawString(2*cm, self.config.pageSize[1]-1.75*cm, headerline)
             canvas.setFont('Times-Roman', 8)
-            canvas.drawString(2*cm, 1.65*cm, self.config.writeFileName)
-            canvas.drawString(2*cm, 1.65*cm - 10, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+            canvas.drawString(2.0*cm, 1.65*cm, self.config.writeFileName)
+            canvas.drawString(2.0*cm, 1.65*cm - 10.0, datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
             canvas.setFont('Times-Roman', 12)
             pageNumber = canvas.getPageNumber()
-            canvas.drawString(4 * inch, cm, "%d" % pageNumber)
+            canvas.drawString(4.0*inch, 1.0*cm, "%d" % pageNumber)
 
             canvas.restoreState()
 
@@ -151,8 +178,8 @@ class MyWriter:
     def __init__(self, config):
         self.config = config
         self.kwdoc = KWord.document()
-        self.doc = MyWriter.MyTemplate(self)
         self.style = getSampleStyleSheet()
+        self.doc = MyWriter.MyTemplate(self)
 
     def getParagraphStyle(self, styleName):
         try:
@@ -161,20 +188,34 @@ class MyWriter:
             parentStyle = None
             style = ParagraphStyle(styleName, parentStyle)
 
-            #style.defaults['fontName'] = 'Times-Roman'
-            #style.defaults['fontSize'] = 20
-            #style.defaults['fontSize'] = 20
-            #style.defaults['leading'] = 12
-            #style.defaults['leftIndent'] = 0
-            #style.defaults['rightIndent'] = 0
-            #style.defaults['firstLineIndent'] = 0
-            #style.defaults['alignment'] = TA_LEFT
-            #style.defaults['spaceBefore'] = 0
-            #style.defaults['spaceAfter'] = 0
-            #style.defaults['bulletFontName'] = 'Times-Roman'
-            #style.defaults['bulletFontSize'] = 10
-            #style.defaults['bulletIndent'] = 0
-            #style.defaults['textColor'] = black
+            #kwparagstyle = KWord.paragraphStyle(styleName)
+            #if kwparagstyle:
+                #print "STYLE=>%s" % kwparagstyle.name()
+
+                #alignment = kwparagstyle.alignment()
+                #if alignment == kwparagstyle.AlignLeft:
+                    #style.defaults['alignment'] = TA_LEFT
+                #elif alignment == kwparagstyle.AlignHCenter:
+                    #style.defaults['alignment'] = TA_CENTER
+                #elif alignment == kwparagstyle.AlignRight:
+                    #style.defaults['alignment'] = TA_RIGHT
+                #elif alignment == kwparagstyle.AlignJustify:
+                    #style.defaults['alignment'] = TA_JUSTIFY
+
+                ##style.defaults['fontName'] = 'Times-Roman'
+                ##style.defaults['fontSize'] = 20
+                ##style.defaults['leading'] = 12
+                ##style.defaults['leftIndent'] = 0
+                ##style.defaults['rightIndent'] = 0
+                ##style.defaults['firstLineIndent'] = 0
+                ##style.defaults['spaceBefore'] = 0
+                ##style.defaults['spaceAfter'] = 0
+                ##style.defaults['bulletFontName'] = 'Times-Roman'
+                ##style.defaults['bulletFontSize'] = 10
+                ##style.defaults['bulletIndent'] = 0
+                ##style.defaults['textColor'] = black
+            #else:
+                #print "hmmmm... KWord does not know about a paragraph-style named '%s'" % styleName
 
             self.style.add(style)
             return style
@@ -186,7 +227,7 @@ class MyWriter:
         #story.append(Paragraph('<font size=18>Date generated: %s</font>' % timeString, self.bt))
 
         kwdoc = KWord.document()
-        if self.config.readOdfFile:
+        if not embeddedInKWord and self.config.readOdfFile:
             kwdoc.openUrl(self.config.readOdfFile)
 
         # Get the KoStore backend for the file.
@@ -206,9 +247,14 @@ class MyWriter:
                 text = reader.text()
                 if not text:
                     return
-                styleName = reader.attribute("text:style-name","default")
+                styleName = reader.attribute("text:style-name","Standard")
+                print "onElement: text:p attributeNames=%s styleName=%s" % (reader.attributeNames(),styleName)
                 style = self.getParagraphStyle(styleName) #styleName='BodyText'
                 story.append( Paragraph("%s" % text, style) )
+            #elif reader.name() == "text:span":
+            elif reader.name() == "text:s":
+                #story.append( Spacer(1.0*inch, 0.0*inch) )
+                pass
             elif reader.name() == "style:style":
                 print "onElement: style:style attributeNames=%s styleName=%s" % (reader.attributeNames(),reader.attribute('style:name'))
             else:
@@ -222,9 +268,7 @@ class MyWriter:
         # Start the reading.
         reader.start()
 
-        #story.append( Paragraph('<font size=18>Some text !!!</font>', style['BodyText']) )
-        #story.append( PageBreak() )
-        #story.append( Paragraph('<font size=18>Some</font>', style['BodyText']))
+        #story.append( Paragraph('<font size=18>Some Text</font>', style['BodyText']) )
         #story.append( PageBreak() )
         self.doc.multiBuild(story)
 
@@ -233,7 +277,7 @@ class MyDialog:
         self.config = config
 
         forms = Kross.module("forms")
-        self.dialog = forms.createDialog("ReportLab")
+        self.dialog = forms.createDialog("ReportLab.org")
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
         self.dialog.minimumWidth = 580
@@ -261,7 +305,7 @@ class MyDialog:
 
 config = MyConfig()
 
-if not config.writeFileName:
+if embeddedInKWord or not config.writeFileName:
     config.showDialog = True
 
 if config.showDialog:

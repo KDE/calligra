@@ -24,28 +24,158 @@
 //#include <QMetaObject>
 //#include <QMetaEnum>
 #include <KoParagraphStyle.h>
+#include <KoCharacterStyle.h>
 #include <KoListStyle.h>
 
 namespace Scripting {
 
     /**
-    * The Style class defines style-options and formatting functionality
-    * for content. Styles and content are strictly separated and could
-    * be manipulated detached from each other. This follows the common
-    * idiom of separation of presentation and content.
+    * The CharacterStyle class provides access to styles for characters.
     */
-    class Style : public QObject
+    class CharacterStyle : public QObject
     {
             Q_OBJECT
+        public:
+            CharacterStyle(QObject* parent, KoCharacterStyle* style) : QObject(parent), m_style(style) {}
+            virtual ~CharacterStyle() {}
+            KoCharacterStyle* style() const { return m_style; }
+        public Q_SLOTS:
 
+            /***** Name *****/
+
+            /** Return the user-visible name the character-style has. */
+            QString name() const { return m_style->name(); }
+            /** Set the user-visible name the character-style has. */
+            void setName(const QString& name) { m_style->setName(name); }
+
+            /***** Font *****/
+
+            /** Return the font-family name. */
+            QString family() const { return m_style->fontFamily(); }
+            /**
+            * Set the font-family name.
+            *
+            * The following python sets the font for the two character-styles
+            * mycharstyle1 and mycharstyle2;
+            * \code
+            * mycharstyle1.setFamily("Times New Roman")
+            * mycharstyle2.setFamily("Arial")
+            * \endcode
+            */
+            void setFamily(const QString &family) { m_style->setFontFamily(family); }
+
+            /** Return the size of the font. */
+            double size() const { return m_style->fontPointSize(); }
+            /**
+            * Set the size of the font.
+            *
+            * Python sample that sets the font size;
+            * \code
+            * mycharstyle.setSize(12.0)
+            * \endcode
+            */
+            void setSize(double size) { m_style->setFontPointSize(size); }
+
+            /** Return the weight of the font. */
+            int weight() const { return m_style->fontWeight(); }
+            /**
+            * Set the weight of the font.
+            *
+            * Python sample that sets the font weight;
+            * \code
+            * if style == "normal":
+            *     mycharstyle.setWeight(50)
+            * elif style == "bold":
+            *     mycharstyle.setWeight(75)
+            * else:
+            *     raise "Invalid style %s" % style
+            * \endcode
+            */
+            void setWeight(int weight) { m_style->setFontWeight(weight); }
+
+            /** Return true if the font is italic. */
+            bool italic() const { return m_style->fontItalic(); }
+            /**
+            * Set if the font should be italic or not.
+            *
+            * Python sample that sets the font italic for the both
+            * character-styles mycharstyle1 and mycharstyle2;
+            * \code
+            * mycharstyle1.setItalic(True)
+            * mycharstyle2.setItalic(False)
+            * \endcode
+            */
+            void setItalic(bool italic) { m_style->setFontItalic(italic); }
+
+            /** Return true if the font is bold. */
+            bool bold() const { return m_style->fontWeight() >= 75; }
+            /**
+            * Set if the font should be bold or not.
+            *
+            * Python sample that sets the font bold for the both
+            * character-styles mycharstyle1 and mycharstyle2;
+            * \code
+            * mycharstyle1.setBold(True)
+            * mycharstyle2.setBold(False)
+            * \endcode
+            */
+            void setBold(bool bold) { m_style->setFontWeight(bold ? 75 : 50); }
+
+            /***** Foreground *****/
+
+            /** Return the font-color. */
+            QColor color() const { return m_style->foreground().color(); }
+            /**
+            * Set the font-color.
+            *
+            * Python sample that sets the font text-color to red aka
+            * RGB-value FF0000 ;
+            * \code
+            * mycharstyle.setColor("#ff0000")
+            * \endcode
+            */
+            void setColor(const QColor& color) {
+                QBrush brush = m_style->foreground();
+                brush.setColor(color);
+                m_style->setForeground(brush);
+            }
+
+            /***** Background *****/
+
+            /** Return the background-color. */
+            QColor backgroundColor() const { return m_style->background().color(); }
+            /**
+            * Set the background-color.
+            *
+            * Python sample that sets the text- and the background-color
+            * of the character-style mycharstyle;
+            * \code
+            * mycharstyle.setColor("#ffffff")
+            * mycharstyle.setBackgroundColor("#0000ff")
+            * \endcode
+            */
+            void setBackgroundColor(const QColor &color) {
+                QBrush brush = m_style->background();
+                brush.setColor(color);
+                m_style->setBackground(brush);
+            }
+
+        private:
+            KoCharacterStyle* m_style;
+    };
+
+    /**
+    * The ParagraphStyle class provides access to styles for paragraphs.
+    */
+    class ParagraphStyle : public QObject
+    {
+            Q_OBJECT
             Q_ENUMS(Alignment)
             //Q_ENUMS(BorderStyle)
             Q_ENUMS(ListStyle)
-
         public:
-            Style(QObject* parent, KoParagraphStyle* style)
-                : QObject(parent), m_style(style) {}
-            virtual ~Style() {}
+            ParagraphStyle(QObject* parent, KoParagraphStyle* style) : QObject(parent), m_style(style) {}
+            virtual ~ParagraphStyle() {}
             KoParagraphStyle* style() const { return m_style; }
 
             enum Alignment {
@@ -92,24 +222,43 @@ namespace Scripting {
 
             /***** Name *****/
 
-            /** Return the user-visible name the style has. */
+            /** Return the user-visible name the paragraph-style has. */
             QString name() const {
                 return m_style->name();
             }
 
-            /** Set the user-visible name the style has. */
+            /** Set the user-visible name the paragraph-style has. */
             void setName(const QString& name) {
                 m_style->setName(name);
             }
 
             /***** Alignment *****/
 
-            /** Return the alignment the style has. */
+            /**
+            * Return the alignment the paragraph-style has.
+            *
+            * Valid values are;
+            * \li AlignLeft, AlignRight, AlignHCenter, AlignJustify
+            * \li AlignTop, AlignBottom, AlignVCenter, AlignCenter
+            *
+            * The following python sample demonstrates the usage;
+            * \code
+            * alignment = MyParagraphStyle.alignment()
+            * if alignment == MyParagraphStyle.AlignLeft:
+            *     print "Align Left"
+            * elif alignment == MyParagraphStyle.AlignRight:
+            *     print "Align Right"
+            * elif alignment == MyParagraphStyle.AlignHCenter:
+            *     print "Align Center"
+            * elif alignment == MyParagraphStyle.AlignJustify:
+            *     print "Align Justify"
+            * \endcode
+            */
             int alignment() const {
                 return m_style->alignment();
             }
 
-            /** Set the alignment the style has. */
+            /** Set the alignment the paragraph-style has. */
             void setAlignment(int alignment) {
                 m_style->setAlignment( (Qt::Alignment) alignment);
             }
@@ -144,16 +293,17 @@ namespace Scripting {
                 m_style->setBottomMargin(r.height());
             }
 
-/*TODO simplify border options even more. Propably just deal with a QVariantMap using QMetaEnum's, e.g.
+#if 0
+            /***** Border *****/
+
+            /*TODO simplify border options even more. Propably just deal with a QVariantMap using QMetaEnum's, e.g.
             QVariantMap border() {
                 QVariantMap map;
                 for(int i = KoParagraphStyle::HasLeftBorder; i <= KoParagraphStyle::BottomBorderColor; i++)
                     map.insert("", m_style->property(""));
                 return map;
             }
-*/
-#if 0
-            /***** Border *****/
+            */
 
             QRect borderStyle() {
                 return QRect(m_style->leftBorderStyle(), m_style->topBorderStyle(), m_style->rightBorderStyle(), m_style->bottomBorderStyle());
@@ -211,15 +361,15 @@ namespace Scripting {
             }
 #endif
 
-            /***** List *****/
-
 #if 0
+//TODO Move this logic into a ListStyle class
+
+            /***** List *****/
 // No clue what the next two methods should do.  can't we use an enum if that is what this int is for?
             /** Return the style of listitems. */
             int listStyle(int liststyle) const {
                 return m_style->listStyle() ? m_style->listStyle()->style() : 0;
             }
-
             /** Set the style of listitems. */
             void setListStyle(int liststyle) {
                 if( m_style->listStyle() )
@@ -231,6 +381,18 @@ namespace Scripting {
                 }
             }
 #endif
+
+            /** Return the character-style for this paragraph-style. */
+            QObject* characterStyle() {
+               KoCharacterStyle* charstyle = m_style->characterStyle();
+               return charstyle ? new CharacterStyle(this, charstyle) : 0;
+            }
+            /** Set the character-style for this paragraph-style. */
+            void setCharacterStyle(QObject *style) {
+                CharacterStyle* charstyle = dynamic_cast<CharacterStyle*>(style);
+                KoCharacterStyle* s = charstyle ? charstyle->style() : 0;
+                if( s ) m_style->setCharacterStyle(s);
+            }
 
         private:
             KoParagraphStyle* m_style;

@@ -185,12 +185,17 @@ namespace Scripting {
 
             /***** Style *****/
 
-            /** Return the default paragraph \a Style that will always be present in each document. */
+            /** Return the default paragraph \a ParagraphStyle that will always be present in each document. */
             QObject* defaultParagraphStyle();
-            /** Return the first paragraph \a Style with the param user-visible-name. */
+            /** Return the \a ParagraphStyle with the defined user-visible-name \p name . */
             QObject* paragraphStyle(const QString& name);
-            /** Add and return a new paragraph \a Style object. */
+            /** Add and return a new \a ParagraphStyle object. */
             QObject* addParagraphStyle(const QString& name);
+
+            /** Return the \a CharacterStyle with the defined user-visible-name \p name . */
+            QObject* characterStyle(const QString& name);
+            /** Add and return a new \a CharacterStyle object. */
+            QObject* addCharacterStyle(const QString& name);
 
             /***** Active selection *****/
 

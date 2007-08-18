@@ -240,13 +240,13 @@ void Module::setDefaultPageLayout(QObject* pagelayout)
 QObject* Module::defaultParagraphStyle()
 {
     KoParagraphStyle* s = kwDoc()->styleManager()->defaultParagraphStyle();
-    return s ? new Style(this, s) : 0;
+    return s ? new ParagraphStyle(this, s) : 0;
 }
 
 QObject* Module::paragraphStyle(const QString& name)
 {
     KoParagraphStyle* s = kwDoc()->styleManager()->paragraphStyle(name);
-    return s ? new Style(this, s) : 0;
+    return s ? new ParagraphStyle(this, s) : 0;
 }
 
 QObject* Module::addParagraphStyle(const QString& name)
@@ -254,7 +254,21 @@ QObject* Module::addParagraphStyle(const QString& name)
     KoParagraphStyle* s = new KoParagraphStyle();
     s->setName(name);
     kwDoc()->styleManager()->add(s);
-    return new Style(this, s);
+    return new ParagraphStyle(this, s);
+}
+
+QObject* Module::characterStyle(const QString& name)
+{
+    KoCharacterStyle* s = kwDoc()->styleManager()->characterStyle(name);
+    return s ? new CharacterStyle(this, s) : 0;
+}
+
+QObject* Module::addCharacterStyle(const QString& name)
+{
+    KoCharacterStyle* s = new KoCharacterStyle();
+    s->setName(name);
+    kwDoc()->styleManager()->add(s);
+    return new CharacterStyle(this, s);
 }
 
 QObject* Module::tool()

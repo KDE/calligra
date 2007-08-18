@@ -97,9 +97,9 @@ namespace Scripting {
 
             /** Set the style this TextList uses to the as argument passed \a Style object. */
             void setStyle(QObject* style) {
-                Style* s = dynamic_cast<Style*>(style);
+                ParagraphStyle* s = dynamic_cast<ParagraphStyle*>(style);
                 if( ! s ) {
-                    kWarning() << "TextList.setStyle Invalid Style object" << endl;
+                    kWarning() << "TextList.setStyle Invalid ParagraphStyle object" << endl;
                     return;
                 }
                 KoParagraphStyle* ps = s->style();

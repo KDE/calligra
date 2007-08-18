@@ -65,7 +65,8 @@ namespace Scripting {
 
             /** Return the number of frames this frameset has. */
             int frameCount() { return m_frameset->frames().count(); }
-            /** Return the \a Frame object with index \p frameNr or NULL if there exists no \a Frame with such a index. */
+            /** Return the \a Frame object with index \p frameNr or NULL if there
+            exists no \a Frame with such a index. */
             QObject* frame(int frameNr) {
                 if( frameNr >= 0 && frameNr < m_frameset->frames().count() )
                     return new Frame(this, m_frameset->frames().at(frameNr));
@@ -99,7 +100,8 @@ namespace Scripting {
             //void addFrame(KWFrame *frame);
             //void removeFrame(KWFrame *frame);
 
-            /** Return the \a TextDocument object or NULL if this frameset does not have a \a TextDocument object. */
+            /** Return the \a TextDocument object or NULL if this frameset does not
+            have a \a TextDocument object. */
             QObject* document() {
                 KWTextFrameSet* textframeset = dynamic_cast< KWTextFrameSet* >( (KWFrameSet*)m_frameset );
                 return textframeset ? new TextDocument(this, textframeset->document()) : 0;
