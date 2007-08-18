@@ -7,8 +7,6 @@ set(pathshapes_PART_SRCS
     ellipse/KoEllipseShapeFactory.cpp
     ellipse/EllipseShapeConfigWidget.cpp
     ellipse/EllipseShapeConfigCommand.cpp
-    regularpolygon/KoRegularPolygonShape.cpp
-    regularpolygon/KoRegularPolygonShapeFactory.cpp
     star/KoStarShape.cpp
     star/KoStarShapeFactory.cpp
     star/StarShapeConfigWidget.cpp

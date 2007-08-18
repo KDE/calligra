@@ -66,11 +66,25 @@ KoStarShapeFactory::KoStarShapeFactory( QObject *parent )
     addTemplate(t);
 
     t.id = KoPathShapeId;
-    t.name = i18n("Polygon");
-    t.toolTip = i18n("A polygon");
-    t.icon = "polygon-shape";
+    t.name = i18n("Pentagon");
+    t.toolTip = i18n("A pentagon");
+    t.icon = "pentagon-shape";
     props = new KoProperties();
     props->setProperty( "corners", 5 );
+    props->setProperty( "convex", true );
+    props->setProperty( "tipRadius", 50.0 );
+    props->setProperty( "tipRoundness", 0.0 );
+    v.setValue( QColor( Qt::blue ) );
+    props->setProperty( "background", v );
+    t.properties = props;
+    addTemplate(t);
+
+    t.id = KoPathShapeId;
+    t.name = i18n("Hexagon");
+    t.toolTip = i18n("A hexagon");
+    t.icon = "hexagon-shape";
+    props = new KoProperties();
+    props->setProperty( "corners", 6 );
     props->setProperty( "convex", true );
     props->setProperty( "tipRadius", 50.0 );
     props->setProperty( "tipRoundness", 0.0 );
