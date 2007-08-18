@@ -32,7 +32,7 @@ public:
      * Configures a star shape
      * @param star the star shape to configure
      * @param cornerCount the number of corners to set
-     * @param innerradius the inner radius
+     * @param innerRadius the inner radius
      * @param outerRadius the outer radius
      * @param convex indictaes if the star is convex of not
      * @param parent the optional parent command
