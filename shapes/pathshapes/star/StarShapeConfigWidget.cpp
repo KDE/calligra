@@ -30,6 +30,7 @@ StarShapeConfigWidget::StarShapeConfigWidget()
     connect( widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
     connect( widget.outerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
     connect( widget.convex, SIGNAL(stateChanged(int)), this, SIGNAL(propertyChanged()));
+    connect( widget.convex, SIGNAL(clicked()), this, SLOT(typeChanged()) );
 }
 
 void StarShapeConfigWidget::setUnit(KoUnit unit)
@@ -53,6 +54,7 @@ void StarShapeConfigWidget::open(KoShape *shape)
     widget.innerRadius->setValue( m_star->baseRadius() );
     widget.outerRadius->setValue( m_star->tipRadius() );
     widget.convex->setCheckState( m_star->convex() ? Qt::Checked : Qt::Unchecked );
+    typeChanged();
 
     widget.corners->blockSignals( false );
     widget.innerRadius->blockSignals( false );
@@ -78,6 +80,18 @@ QUndoCommand * StarShapeConfigWidget::createCommand()
     else
         return new StarShapeConfigCommand( m_star, widget.corners->value(), widget.innerRadius->value(), 
                                            widget.outerRadius->value(), widget.convex->checkState() == Qt::Checked );
+}
+
+void StarShapeConfigWidget::typeChanged()
+{
+    if( widget.convex->checkState() == Qt::Checked )
+    {
+        widget.innerRadius->setEnabled( false );
+    }
+    else
+    {
+        widget.innerRadius->setEnabled( true );
+    }
 }
 
 #include "StarShapeConfigWidget.moc"

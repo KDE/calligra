@@ -42,6 +42,8 @@ public:
     /// reimplemented
     virtual QUndoCommand * createCommand();
 
+private slots:
+    void typeChanged();
 private:
     Ui::StarShapeConfigWidget widget;
     KoStarShape * m_star;
