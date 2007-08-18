@@ -28,16 +28,24 @@
 
 namespace KSpread
 {
+class Doc;
 
 class TestStatisticalFunctions : public QObject
 {
 Q_OBJECT
 
 private slots:
+    void initTestCase();
+    void testAVERAGEA();
     void testFREQUENCY();
+    void testMAXA();
+    void testMINA();
+    void cleanupTestCase();
 
 private:
-    Value evaluate( const QString& );
+    Value evaluate(const QString&, Value& ex);
+
+    Doc* m_doc;
 };
 
 } // namespace KSpread

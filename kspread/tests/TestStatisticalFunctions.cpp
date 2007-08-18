@@ -18,14 +18,19 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "TestStatisticalFunctions.h"
+
 #include <math.h>
 
 #include "qtest_kde.h"
 
+#include <CellStorage.h>
+#include <Doc.h>
 #include <Formula.h>
-#include <Value.h>
+#include <Map.h>
+#include <Sheet.h>
 
-#include "TestStatisticalFunctions.h"
+#include "TestKspreadCommon.h"
 
 using namespace KSpread;
 
@@ -34,54 +39,66 @@ using namespace KSpread;
 //  - different algorithms among spreadsheet programs
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
-#define CHECK_EVAL(x,y) QCOMPARE(evaluate(x),RoundNumber(y))
+#define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
 #define ROUND(x) (roundf(1e15 * x) / 1e15)
-
-// round to get at most 15-digits number
-static Value RoundNumber(double f)
-{
-  return Value( ROUND(f) );
-}
 
 // round to get at most 15-digits number
 static Value RoundNumber(const Value& v)
 {
   if(v.isNumber())
-    return Value( ROUND(numToDouble(v.asFloat())) );
+  {
+    double d = numToDouble(v.asFloat());
+    if(fabs(d) < DBL_EPSILON)
+      d = 0.0;
+    return Value( ROUND(d) );
+  }
   else
-    return v;  
+    return v;
 }
 
-Value TestStatisticalFunctions::evaluate(const QString& formula)
+Value TestStatisticalFunctions::evaluate(const QString& formula, Value& ex)
 {
-  Formula f;
-  QString expr = formula;
-  if ( expr[0] != '=' )
-    expr.prepend( '=' );
-  f.setExpression( expr );
-  Value result = f.eval();
+    Formula f(m_doc->map()->sheet(0));
+    QString expr = formula;
+    if ( expr[0] != '=' )
+        expr.prepend( '=' );
+    f.setExpression( expr );
+    Value result = f.eval();
+
+    if(result.isFloat() && ex.isInteger())
+        ex = Value(ex.asFloat());
+    if(result.isInteger() && ex.isFloat())
+        result = Value(result.asFloat());
 
 #if 0
   // this magically generates the CHECKs
   printf("  CHECK_EVAL( \"%s\",  %.14e) );\n", qPrintable(formula), result.asFloat());
 #endif
 
-  return RoundNumber(result);
+    return RoundNumber(result);
 }
 
-namespace QTest
+void TestStatisticalFunctions::initTestCase()
 {
-  template<>
-  char *toString(const Value& value)
-  {
-    QString message;
-    QTextStream ts( &message, QIODevice::WriteOnly );
-    if( value.isFloat() )
-      ts << ROUND(numToDouble(value.asFloat()));
-    else
-      ts << value;
-    return qstrdup(message.toLatin1());
-  }
+    m_doc = new Doc();
+    m_doc->map()->addNewSheet();
+    Sheet* sheet = m_doc->map()->sheet(0);
+    CellStorage* storage = sheet->cellStorage();
+
+    // B3:B7
+    storage->setValue(2, 3, Value("7"));
+    storage->setValue(2, 4, Value(2));
+    storage->setValue(2, 5, Value(3));
+    storage->setValue(2, 6, Value(true));
+    storage->setValue(2, 7, Value("Hello"));
+    // B9
+    storage->setValue(2, 9, Value::errorDIV0());
+}
+
+void TestStatisticalFunctions::testAVERAGEA()
+{
+    CHECK_EVAL("AVERAGE(2; 4)", Value(3))
+    CHECK_EVAL("AVERAGE(TRUE(); FALSE(); 5)", Value(2));
 }
 
 void TestStatisticalFunctions::testFREQUENCY()
@@ -98,24 +115,29 @@ void TestStatisticalFunctions::testFREQUENCY()
     CHECK_EVAL( "FREQUENCY({1;2;3;4;5;6;7;8;9;10};)", Value( 10 ) );
 }
 
-#include <QtTest/QtTest>
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
-#include <kapplication.h>
-
-#define KSPREAD_TEST(TestObject) \
-int main(int argc, char *argv[]) \
-{ \
-    setenv("LC_ALL", "C", 1); \
-    setenv("KDEHOME", QFile::encodeName( QDir::homePath() + "/.kde-unit-test" ), 1); \
-    KAboutData aboutData( "qttest", 0, ki18n("qttest"), "version" );  \
-    KCmdLineArgs::init(&aboutData); \
-    KApplication app; \
-    TestObject tc; \
-    return QTest::qExec( &tc, argc, argv ); \
+void TestStatisticalFunctions::testMAXA()
+{
+    CHECK_EVAL("MAXA(2;4;1;-8)", Value(4));
+    CHECK_EVAL("MAXA(B4:B5)", Value(3));
+//     CHECK_EVAL("ISNA(MAXA(NA())", Value(true));
+    CHECK_EVAL("MAXA(B3:B5)", Value(3));
+    CHECK_EVAL("MAXA(-1;B7)", Value(0));
+    CHECK_EVAL("MAXA(\"a\")", Value::errorVALUE());
+    CHECK_EVAL("MAXA(B3:B9)", Value::errorVALUE());
+    CHECK_EVAL("MAXA(B6:B7)", Value(1));
 }
 
-KSPREAD_TEST(TestStatisticalFunctions)
-//QTEST_KDEMAIN(TestStatisticalFunctions, GUI)
+void TestStatisticalFunctions::testMINA()
+{
+    CHECK_EVAL("MIN(2;4;1;-8)", Value(-8));
+    CHECK_EVAL("MIN(B4:B5)", Value(2));
+}
+
+void TestStatisticalFunctions::cleanupTestCase()
+{
+    delete m_doc;
+}
+
+QTEST_KDEMAIN(TestStatisticalFunctions, GUI)
 
 #include "TestStatisticalFunctions.moc"
