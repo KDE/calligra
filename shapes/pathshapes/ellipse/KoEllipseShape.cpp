@@ -289,6 +289,14 @@ void KoEllipseShape::updateKindHandle()
    }
 }
 
+void KoEllipseShape::updateAngleHandles()
+{
+    double startRadian = m_startAngle * M_PI / 180.0;
+    double endRadian = m_endAngle * M_PI / 180.0;
+    m_handles[0] = m_center + QPointF( cos(startRadian) * m_radii.x(), -sin(startRadian) * m_radii.y());
+    m_handles[1] = m_center + QPointF( cos(endRadian) * m_radii.x(), -sin(endRadian) * m_radii.y());
+}
+
 double KoEllipseShape::sweepAngle() const
 {
     double sAngle =  m_endAngle - m_startAngle;
@@ -318,6 +326,7 @@ void KoEllipseShape::setStartAngle( double angle )
 {
     m_startAngle = angle;
     updateKindHandle();
+    updateAngleHandles();
     updatePath( size() );
 }
 
@@ -330,10 +339,16 @@ void KoEllipseShape::setEndAngle( double angle )
 {
     m_endAngle = angle;
     updateKindHandle();
+    updateAngleHandles();
     updatePath( size() );
 }
 
 double KoEllipseShape::endAngle() const
 {
     return m_endAngle;
+}
+
+QString KoEllipseShape::pathShapeId() const
+{
+    return KoEllipseShapeId;
 }

@@ -5,6 +5,8 @@ add_subdirectory(pics)
 set(pathshapes_PART_SRCS
     ellipse/KoEllipseShape.cpp
     ellipse/KoEllipseShapeFactory.cpp
+    ellipse/EllipseShapeConfigWidget.cpp
+    ellipse/EllipseShapeConfigCommand.cpp
     regularpolygon/KoRegularPolygonShape.cpp
     regularpolygon/KoRegularPolygonShapeFactory.cpp
     star/KoStarShape.cpp
@@ -29,6 +31,7 @@ set(pathshapes_PART_SRCS
 kde4_add_ui_files(pathshapes_PART_SRCS
     star/StarShapeConfigWidget.ui
     rectangle/RectangleShapeConfigWidget.ui
+    ellipse/EllipseShapeConfigWidget.ui
 )
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 

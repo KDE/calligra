@@ -75,6 +75,9 @@ public:
     /// Returns the actual ellipse end angle in degree
     double endAngle() const;
 
+    /// reimplemented
+    virtual QString pathShapeId() const;
+
 protected:
     // reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
@@ -89,6 +92,7 @@ private:
     double sweepAngle() const;
 
     void updateKindHandle();
+    void updateAngleHandles();
 
     // start angle in degree
     double m_startAngle;

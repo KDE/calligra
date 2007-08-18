@@ -19,7 +19,8 @@
 
 #include "KoEllipseShapeFactory.h"
 #include "KoEllipseShape.h"
-#include "KoLineBorder.h"
+#include "EllipseShapeConfigWidget.h"
+#include <KoLineBorder.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 
@@ -64,4 +65,11 @@ bool KoEllipseShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "ellipse" || e.localName() == "circle" ) &&
            ( e.namespaceURI() == KoXmlNS::draw );
+}
+
+QList<KoShapeConfigWidgetBase*> KoEllipseShapeFactory::createShapeOptionPanels()
+{
+    QList<KoShapeConfigWidgetBase*> panels;
+    panels.append( new EllipseShapeConfigWidget() );
+    return panels;
 }
