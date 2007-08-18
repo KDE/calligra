@@ -34,6 +34,7 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoXmlReader.h>
+#include <KoXmlWriter.h>
 
 #include "MusicShape.h"
 #include "Renderer.h"
@@ -63,6 +64,7 @@
 #include "core/Clef.h"
 #include "core/StaffSystem.h"
 #include "core/MusicXmlReader.h"
+#include "core/MusicXmlWriter.h"
 
 using namespace MusicCore;
 
@@ -486,4 +488,16 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
+    QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
+    //QString file = "/Users/marijn/KDE/test.xml";
+    if (file.isEmpty() || file.isNull()) return;
+    
+    QFile f(file);
+    f.open(QIODevice::WriteOnly);
+    KoXmlWriter w(&f);
+    w.startDocument("score-partwise", "-//Recordare//DTD MusicXML 2.0 Partwise//EN",
+            "http://www.musicxml.org/dtds/partwise.dtd");
+    MusicXmlWriter().writeSheet(w, m_musicshape->sheet(), true);
+    w.endDocument();
+    f.close();
 }
