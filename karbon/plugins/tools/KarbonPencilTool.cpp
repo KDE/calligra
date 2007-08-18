@@ -33,7 +33,6 @@
 #include <kcombobox.h>
 
 #include <QtGui/QStackedWidget>
-//#include <QComboBox>
 #include <QtGui/QGroupBox>
 #include <QtGui/QCheckBox>
 #include <QtGui/QVBoxLayout>
