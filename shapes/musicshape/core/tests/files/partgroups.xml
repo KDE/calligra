@@ -51,6 +51,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
@@ -58,6 +59,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
@@ -65,6 +67,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
@@ -72,6 +75,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
@@ -79,6 +83,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
@@ -86,6 +91,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
@@ -93,6 +99,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
@@ -100,6 +107,7 @@
   <music:measure number="1">
    <music:attributes>
     <music:divisions>26880</music:divisions>
+    <music:staves>0</music:staves>
    </music:attributes>
   </music:measure>
  </music:part>
