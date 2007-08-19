@@ -34,6 +34,7 @@
 
 #include "../commands/CreateChordCommand.h"
 #include "../commands/AddNoteCommand.h"
+#include "../commands/MakeRestCommand.h"
 
 #include <kicon.h>
 #include <kdebug.h>
@@ -132,6 +133,7 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
         if (clef && !m_isRest) {
             m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, m_duration, pitch, accidentals));
         } else {
+            m_tool->addCommand(new MakeRestCommand(m_tool->shape(), join));
             // TODO make it a rest
         }
     } else {

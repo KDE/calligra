@@ -70,6 +70,7 @@ SET (musicshape_LIB_SRCS
     commands/SetTimeSignatureCommand.cpp
     commands/SetKeySignatureCommand.cpp
     commands/RemoveBarCommand.cpp
+    commands/MakeRestCommand.cpp
 
     ${musiccore_SRCS}
 )
