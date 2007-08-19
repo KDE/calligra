@@ -52,13 +52,11 @@ public:
     virtual bool animate( QPainter &painter ) = 0;
 
     /**
-     * @brief Get the bounding rect of the shape in the animation
+     * @brief Update the bounding rect of the shape in the animation
      *
-     * @param rect The bounding rect of the shape
-     *
-     * @return The bounding rect in the animation
+     * @param rect The bounding rect of the shape to update
      */
-    virtual QRectF animateRect( const QRectF & rect ) = 0;
+    virtual void animateRect( QRectF & rect ) = 0;
 
     /**
      * @brief Trigger an update of the canvas needed for the given time

@@ -45,9 +45,9 @@ bool KPrAnimationMoveAppear::animate( QPainter &painter )
     return m_finished;
 }
 
-QRectF KPrAnimationMoveAppear::animateRect( const QRectF & rect )
+void KPrAnimationMoveAppear::animateRect( QRectF & rect )
 {
-    return rect.translated( m_translate );
+    rect.translate( m_translate );
 }
 
 void KPrAnimationMoveAppear::next( int currentTime, KoCanvasBase * canvas )

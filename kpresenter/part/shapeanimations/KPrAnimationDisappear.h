@@ -32,7 +32,7 @@ public:
     virtual ~KPrAnimationDisappear();
 
     virtual bool animate( QPainter &painter );
-    virtual QRectF animateRect( const QRectF & rect );
+    virtual void animateRect( QRectF & rect );
     virtual void next( int currentTime, KoCanvasBase * canvas );
     virtual void finish( KoCanvasBase * canvas );
 
