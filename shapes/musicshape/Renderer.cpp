@@ -218,8 +218,41 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
 {
     Staff * s = ks->staff();
     double curx = pos.x() + ks->x() * xScale;
-    // draw sharps
+    // draw naturals for sharps
     int idx = 3;
+    for (int i = 0; i < 7; i++) {
+        if (ks->cancel(idx) > 0) {
+            int line = 10;
+            if (state.clef) line = state.clef->pitchToLine(idx);
+            
+            while (line < 0) line += 7;
+            while (line >= 6) line -= 7;
+            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 0 );
+            
+            curx += 6;
+        }
+        idx = (idx + 4) % 7;
+    }
+    
+    // draw naturals for flats
+    idx = 6;
+    for (int i = 0; i < 7; i++) {
+        if (ks->cancel(idx) < 0) {
+            int line = 10;
+            if (state.clef) line = state.clef->pitchToLine(idx);
+            
+            while (line < 0) line += 7;
+            while (line >= 6) line -= 7;
+            
+            m_style->renderAccidental( painter, curx, pos.y() + s->top() + line * s->lineSpacing() / 2, 0 );
+            
+            curx += 6;
+        }
+        idx = (idx + 3) % 7;
+    }
+    
+    // draw sharps
+    idx = 3;
     for (int i = 0; i < 7; i++) {
         if (ks->accidentals(idx) > 0) {
             int line = 10;

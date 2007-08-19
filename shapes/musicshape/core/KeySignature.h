@@ -37,7 +37,7 @@ public:
      * @param accidentals the number of accidentals in this key signature, positive values for sharps, negative values
      * for flats.
      */
-    KeySignature(Staff* staff, int startTime, int accidentals);
+    KeySignature(Staff* staff, int startTime, int accidentals, int cancel = 0);
 
     /**
      * Destructor.
@@ -61,6 +61,9 @@ public:
      * Returns the priority of this staff element with regard to order in which it should be sorted.
      */    
     virtual int priority() const;
+    
+    int cancel() const;
+    int cancel(int pitch) const;
 public slots:
     /**
      * Sets the number of accidentals in this key signature. Use positive values for sharps and negative values for
@@ -69,6 +72,8 @@ public slots:
      * @param accidentals the new accidentals for this key signature
      */
     void setAccidentals(int accidentals);
+    
+    void setCancel(int cancel);
 signals:
     /**
      * This signal is emitten when the number of accidentals change.
