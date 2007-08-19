@@ -30,6 +30,7 @@
 
 #include <kicon.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 using namespace MusicCore;
 
@@ -46,17 +47,17 @@ static KIcon getIcon(Clef::ClefShape shape)
 static QString getText(Clef::ClefShape shape, int line)
 {
     switch (shape) {
-        case Clef::GClef: return "Trebble";
-        case Clef::FClef: return "Bass";
+        case Clef::GClef: return i18n("Trebble");
+        case Clef::FClef: return i18n("Bass");
         case Clef::CClef:
             switch (line) {
-                case 1: return "Soprano";
-                case 3: return "Alto";
-                case 4: return "Tenor";
-                default: return QString("C clef on line %1").arg(line);
+                case 1: return i18n("Soprano");
+                case 3: return i18n("Alto");
+                case 4: return i18n("Tenor");
+                default: return i18n("C clef on line %1").arg(line);
             }
     }
-    return "Unknown clef";
+    return i18n("Unknown clef");
 }
 
 SetClefAction::SetClefAction(Clef::ClefShape shape, int line, int octaveChange, SimpleEntryTool* tool)

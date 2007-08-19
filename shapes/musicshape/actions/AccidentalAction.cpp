@@ -36,6 +36,7 @@
 
 #include <kicon.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <math.h>
 
@@ -56,16 +57,16 @@ static QIcon getIcon(int accidentals)
 static QString getText(int accidentals)
 {
     switch (accidentals) {
-        case -2: return "Double flat";
-        case -1: return "Flat";
-        case 0:  return "Natural";
-        case 1:  return "Sharp";
-        case 2:  return "Double sharp";
+        case -2: return i18n("Double flat");
+        case -1: return i18n("Flat");
+        case 0:  return i18n("Natural");
+        case 1:  return i18n("Sharp");
+        case 2:  return i18n("Double sharp");
     }
     if (accidentals < 0) {
-        return QString("%1 flats").arg(-accidentals);
+        return i18n("%1 flats").arg(-accidentals);
     } else {
-        return QString("%1 sharps").arg(accidentals);
+        return i18n("%1 sharps").arg(accidentals);
     }
 }
 

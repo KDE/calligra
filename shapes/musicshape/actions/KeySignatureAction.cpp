@@ -31,23 +31,25 @@
 #include "../SimpleEntryTool.h"
 #include "../MusicShape.h"
 
+#include <klocale.h>
+
 using namespace MusicCore;
 
 static QString getText(int accidentals)
 {
     switch (accidentals) {
-        case -4: return "Ab Major";
-        case -3: return "Eb Major";
-        case -2: return "Bb Major";
-        case -1: return "F Major";
-        case 0: return "C Major";
-        case 1: return "G Major";
-        case 2: return "D Major";
-        case 3: return "A Major";
-        case 4: return "E Major";
+        case -4: return i18n("Ab Major");
+        case -3: return i18n("Eb Major");
+        case -2: return i18n("Bb Major");
+        case -1: return i18n("F Major");
+        case 0: return i18n("C Major");
+        case 1: return i18n("G Major");
+        case 2: return i18n("D Major");
+        case 3: return i18n("A Major");
+        case 4: return i18n("E Major");
     }
-    if (accidentals < 0) return QString("%1 flats").arg(-accidentals);
-    else return QString("%1 sharps").arg(accidentals);
+    if (accidentals < 0) return i18n("%1 flats").arg(-accidentals);
+    else return i18n("%1 sharps").arg(accidentals);
 }
 
 KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool, int accidentals)
@@ -57,7 +59,7 @@ KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool, int accidentals)
 }
 
 KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool)
-: AbstractMusicAction("Other", tool), m_showDialog(true)
+: AbstractMusicAction(i18n("Other"), tool), m_showDialog(true)
 {
     setCheckable(false);
 }

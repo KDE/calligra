@@ -27,10 +27,12 @@
 #include "../SimpleEntryTool.h"
 #include "../MusicShape.h"
 
+#include <klocale.h>
+
 using namespace MusicCore;
 
 RemoveBarAction::RemoveBarAction(SimpleEntryTool* tool)
-    : AbstractMusicAction("Remove bar", tool)
+    : AbstractMusicAction(i18n("Remove bar"), tool)
 {
     setCheckable(false);
 }

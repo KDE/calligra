@@ -37,6 +37,7 @@
 
 #include <kicon.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 using namespace MusicCore;
 
@@ -59,19 +60,19 @@ static QIcon getIcon(Chord::Duration duration, bool isRest)
 
 static QString getText(Chord::Duration duration, bool isRest)
 {
-    QString base = isRest ? "rest" : "note";
+    QString base = isRest ? i18n("rest") : i18n("note");
     switch (duration) {
-        case Chord::Breve:          return "Double whole " + base;
-        case Chord::Whole:          return "Whole " + base;
-        case Chord::Half:           return "Half " + base;
-        case Chord::Quarter:        return "Quarter " + base;
-        case Chord::Eighth:         return "Eighth " + base;
-        case Chord::Sixteenth:      return "16th " + base;
-        case Chord::ThirtySecond:   return "32nd " + base;
-        case Chord::SixtyFourth:    return "64th " + base;
-        case Chord::HundredTwentyEighth: return "128th " + base;
+        case Chord::Breve:          return i18n("Double whole ") + base;
+        case Chord::Whole:          return i18n("Whole ") + base;
+        case Chord::Half:           return i18n("Half ") + base;
+        case Chord::Quarter:        return i18n("Quarter ") + base;
+        case Chord::Eighth:         return i18n("Eighth ") + base;
+        case Chord::Sixteenth:      return i18n("16th ") + base;
+        case Chord::ThirtySecond:   return i18n("32nd ") + base;
+        case Chord::SixtyFourth:    return i18n("64th ") + base;
+        case Chord::HundredTwentyEighth: return i18n("128th ") + base;
     }
-    return "Unknown " + base;
+    return i18n("Unknown ") + base;
 }
 
 NoteEntryAction::NoteEntryAction(Chord::Duration duration, bool isRest, SimpleEntryTool* tool)
