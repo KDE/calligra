@@ -51,16 +51,14 @@ private:
     void visitVText( VText& text );
     void getBrush( QBrush& brush, const VFill *fill );
     void getPen( QPen& pen, const VStroke *stroke );
-    
+
     // coordinate transformation
     // translate origin from (left,bottom) to (left,top) -> scale to wmf size 
     // Wmf origin is (left,top) corner
     // Karbon origin is (left,bottom) corner
-    int coordX( double left ) 
-            { return (int)(left * mScaleX); }
-    int coordY( double top ) 
-            { return (int)((mDoc->height() - top) * mScaleY); }
-    
+    int coordX( double left );
+    int coordY( double top );
+
 private:
     KoWmfWrite *mWmf;
     VDocument *mDoc;

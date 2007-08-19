@@ -27,6 +27,7 @@
 #include <core/vcomposite.h>
 #include <kowmfread.h>
 
+class KoPathShape;
 
 /**
  * WMFImportParser inherit KoWmfRead
@@ -111,21 +112,17 @@ private:
     //-----------------------------------------------------------------------------
     // Utilities 
     // Add pen, brush and points to a path
-    void appendPen( VObject& obj );
-    void appendBrush( VObject& obj );
-    void appendPoints(VPath& path, const Q3PointArray& pa);
+    void appendPen( KoShape& obj );
+    void appendBrush( KoShape& obj );
+    void appendPoints(KoPathShape& path, const Q3PointArray& pa);
     // coordinate transformation
     // translate wmf to (0,0) -> scale to document size -> translate to karbon (0,0)
     // Wmf origin is (left,top) corner
     // Karbon origin is (left,bottom) corner
-    double coordX( int left ) 
-            { return ((double)(left - mCurrentOrg.x()) * mScaleX); }
-    double coordY( int top ) 
-            { return (mDoc->height() - ((double)(top - mCurrentOrg.y()) * mScaleY)); }
-    double scaleW( int width ) 
-            { return (width * mScaleX); }
-    double scaleH( int height ) 
-            { return (height * mScaleY); }
+    double coordX( int left );
+    double coordY( int top );
+    double scaleW( int width );
+    double scaleH( int height );
 
 private:
     VDocument *mDoc;

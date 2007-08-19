@@ -16,14 +16,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include <shapes/vellipse.h>
-#include <shapes/vrectangle.h>
-#include <shapes/vpolygon.h>
-#include <core/vstroke.h>
-#include <core/vfill.h>
-
 #include "wmfimportparser.h"
+
+#include <KoPathShape.h>
+#include <rectangle/KoRectangleShape.h>
+#include <ellipse/KoEllipseShape.h>
+#include <KoLineBorder.h>
+#include <KoShapeLayer.h>
+
+#include <kdebug.h>
+//#include <shapes/vellipse.h>
+//#include <shapes/vrectangle.h>
+//#include <shapes/vpolygon.h>
+//#include <core/vstroke.h>
+//#include <core/vfill.h>
+
 //Added by qt3to4:
 #include <Q3PointArray>
 #include <Q3ValueList>
@@ -39,41 +46,65 @@ WMFImportParser::WMFImportParser() : KoWmfRead() {
 
 bool WMFImportParser::play( VDocument& doc )
 {
+    kDebug() << "start playing wmf file";
+
     mDoc = &doc;
     mScaleX = mScaleY = 1;
-    
+
     // Play the wmf file
-    return KoWmfRead::play( );
+    if( ! KoWmfRead::play( ) )
+        return false;
+
+    KoShapeLayer * layer = 0;
+    // check if we have to insert a default layer
+    if( mDoc->layers().count() == 0 )
+    {
+        layer = new KoShapeLayer();
+        mDoc->insertLayer( layer );
+    }
+    else
+        layer = mDoc->layers().first();
+
+    uint zIndex = 0;
+    // add all toplevel shape to the layer
+    foreach( KoShape * shape, mDoc->shapes() )
+    {
+        kDebug() << "shape type =" << shape->shapeId();
+        shape->setZIndex( zIndex++ );
+        if( ! shape->parent() )
+            layer->addChild( shape );
+    }
+
+    return true;
 }
 
 
 //-----------------------------------------------------------------------------
 // Virtual Painter
 
-bool WMFImportParser::begin() { 
+bool WMFImportParser::begin() {
     QRect bounding = boundingRect();
-    
+
     mBackgroundMode = Qt::TransparentMode;
     mCurrentOrg.setX( bounding.left() );
     mCurrentOrg.setY( bounding.top() );
-    
+
     if ( isStandard() ) {
-        mDoc->setUnit( KoUnit::Point );
-        mDoc->setWidth( bounding.width() );  
-        mDoc->setHeight( bounding.height() ); 
+        mDoc->setUnit( KoUnit( KoUnit::Point ) );
+        mDoc->setPageSize( bounding.size() );
     }
     else {
         // Placeable Wmf store the boundingRect() in pixel and the default DPI
         // The placeable format doesn't have information on which Unit to use
         // so we choose millimeters by default
-        mDoc->setUnit( KoUnit::Millimeter );
-        mDoc->setWidth( INCH_TO_POINT( (double)bounding.width() / defaultDpi() ) );  
-        mDoc->setHeight( INCH_TO_POINT( (double)bounding.height() / defaultDpi() ) ); 
+        mDoc->setUnit( KoUnit( KoUnit::Millimeter ) );
+        mDoc->setPageSize( QSizeF( INCH_TO_POINT( (double)bounding.width() / defaultDpi() ),
+                                   INCH_TO_POINT( (double)bounding.height() / defaultDpi() ) ) );
     }
     if ( (bounding.width() != 0) && (bounding.height() != 0) ) {
-        mScaleX = mDoc->width() / (double)bounding.width();
-        mScaleY = mDoc->height() / (double)bounding.height();
-    }    
+        mScaleX = mDoc->pageSize().width() / (double)bounding.width();
+        mScaleY = mDoc->pageSize().height() / (double)bounding.height();
+    }
     return true;
 }
 
@@ -127,11 +158,11 @@ void WMFImportParser::setWindowOrg( int left, int top ) {
 }
 
 
-void WMFImportParser::setWindowExt( int width, int height ) {    
+void WMFImportParser::setWindowExt( int width, int height ) {
     // the wmf file can change width/height during the drawing
     if ( (width != 0) && (height != 0) ) {  
-        mScaleX = mDoc->width() / (double)width;
-        mScaleY = mDoc->height() / (double)height;
+        mScaleX = mDoc->pageSize().width() / (double)width;
+        mScaleY = mDoc->pageSize().height() / (double)height;
     }
 }
 
@@ -155,49 +186,55 @@ void WMFImportParser::moveTo( int left, int top ) {
 }
 
 
-void WMFImportParser::lineTo( int left, int top ) {    
-    VPath *line = new VPath( mDoc );
-    line->moveTo( KoPoint( coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y()) ) );
-    line->lineTo( KoPoint( coordX(left), coordY(top) ) );
+void WMFImportParser::lineTo( int left, int top ) {
+    KoPathShape * line = new KoPathShape();
+    line->moveTo( QPointF( coordX(mCurrentPoint.x()), coordY(mCurrentPoint.y()) ) );
+    line->lineTo( QPointF( coordX(left), coordY(top) ) );
     appendPen( *line );
-    
-    mDoc->append( line );
+
+    mDoc->add( line );
     mCurrentPoint.setX( left );
     mCurrentPoint.setY( top );
 }
 
 
 void WMFImportParser::drawRect( int left, int top, int width, int height ) {
-    VRectangle *rectangle;
-    
-    rectangle = new VRectangle( mDoc, KoPoint( coordX(left), coordY(top) ), scaleW(width), scaleH(height), 0 );
+    KoRectangleShape * rectangle = new KoRectangleShape();
+    rectangle->setPosition( QPointF( coordX(left), coordY(top) ) );
+    rectangle->setSize( QSizeF( scaleW(width), scaleH(height) ) );
+
     appendPen( *rectangle );
     appendBrush( *rectangle );
 
-    mDoc->append( rectangle );
+    mDoc->add( rectangle );
 }
 
 
-void WMFImportParser::drawRoundRect( int left, int top, int width, int height, int roudw, int  ) {
-    VRectangle *rectangle;
-    
-    // TODO : round rectangle
-    rectangle = new VRectangle( mDoc, KoPoint( coordX(left), coordY(top) ), scaleW(width), scaleH(height), roudw );
+void WMFImportParser::drawRoundRect( int left, int top, int width, int height, int roundw, int roundh ) {
+    KoRectangleShape * rectangle = new KoRectangleShape();
+    rectangle->setPosition( QPointF( coordX(left), coordY(top) ) );
+    rectangle->setSize( QSizeF( scaleW(width), scaleH(height) ) );
+    double radiusX = 100.0 * roundw / (0.5*rectangle->size().width());
+    rectangle->setCornerRadiusX( radiusX );
+    double radiusY = 100.0 * roundh / (0.5*rectangle->size().height());
+    rectangle->setCornerRadiusX( radiusY );
+
     appendPen( *rectangle );
     appendBrush( *rectangle );
 
-    mDoc->append( rectangle );
+    mDoc->add( rectangle );
 }
 
 
 void WMFImportParser::drawEllipse( int left, int top, int width, int height ) {
-    VEllipse *ellipse;
-     
-    ellipse = new VEllipse( mDoc, KoPoint( coordX(left), coordY(top+height) ), scaleW(width), scaleH(height) );
+    KoEllipseShape *ellipse = new KoEllipseShape();
+    ellipse->setPosition( QPointF( coordX(left), coordY(top) ) );
+    ellipse->setSize( QSizeF( scaleW(width), scaleH(height) ) );
+
     appendPen( *ellipse );
     appendBrush( *ellipse );
 
-    mDoc->append( ellipse );
+    mDoc->add( ellipse );
 }
 
 
@@ -205,12 +242,18 @@ void WMFImportParser::drawArc( int x, int y, int w, int h, int aStart, int aLen 
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
     end += start;
-    VEllipse::VEllipseType type = VEllipse::arc;
-    
-    VEllipse *arc = new VEllipse( mDoc, KoPoint( coordX(x), coordY(y+h) ), scaleW(w), scaleH(h), type, start, end );    
+
+    KoEllipseShape * arc = new KoEllipseShape();
+    arc->setType( KoEllipseShape::Arc );
+    arc->setPosition( QPointF( coordX(y), coordY(y) ) );
+    arc->setSize( QSizeF( scaleW(w), scaleH(h) ) );
+    arc->setStartAngle( start );
+    arc->setEndAngle( end );
+
     appendPen( *arc );
-    
-    mDoc->append( arc );
+    //appendBrush( *arc );
+
+    mDoc->add( arc );
 }
 
 
@@ -218,13 +261,18 @@ void WMFImportParser::drawPie( int x, int y, int w, int h, int aStart, int aLen 
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
     end += start;
-    VEllipse::VEllipseType type = VEllipse::cut;
-    
-    VEllipse *arc = new VEllipse( mDoc, KoPoint( coordX(x), coordY(y+h) ), scaleW(w), scaleH(h), type, start, end );    
-    appendPen( *arc );
-    appendBrush( *arc );
-    
-    mDoc->append( arc );
+
+    KoEllipseShape * pie = new KoEllipseShape();
+    pie->setType( KoEllipseShape::Pie );
+    pie->setPosition( QPointF( coordX(y), coordY(y) ) );
+    pie->setSize( QSizeF( scaleW(w), scaleH(h) ) );
+    pie->setStartAngle( start );
+    pie->setEndAngle( end );
+
+    appendPen( *pie );
+    appendBrush( *pie );
+
+    mDoc->add( pie );
 }
 
 
@@ -232,39 +280,44 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
     double start = (aStart * 180) / 2880.0;
     double end = (aLen * 180) / 2880.0;
     end += start;
-    VEllipse::VEllipseType type = VEllipse::section;
-    
-    VEllipse *arc = new VEllipse( mDoc, KoPoint( coordX(x), coordY(y+h) ), scaleW(w), scaleH(h), type, start, end );    
-    appendPen( *arc );
-    appendBrush( *arc );
-    
-    mDoc->append( arc );
+
+    KoEllipseShape * chord = new KoEllipseShape();
+    chord->setType( KoEllipseShape::Chord );
+    chord->setPosition( QPointF( coordX(y), coordY(y) ) );
+    chord->setSize( QSizeF( scaleW(w), scaleH(h) ) );
+    chord->setStartAngle( start );
+    chord->setEndAngle( end );
+
+    appendPen( *chord );
+    appendBrush( *chord );
+
+    mDoc->add( chord );
 }
 
 
 void WMFImportParser::drawPolyline( const QPolygon &pa ) {
-    VPath *polyline = new VPath( mDoc );
+    KoPathShape *polyline = new KoPathShape();
     appendPen( *polyline );
     appendPoints( *polyline, pa );
-    
-    mDoc->append( polyline );
+
+    mDoc->add( polyline );
 }
 
 
 void WMFImportParser::drawPolygon( const QPolygon &pa, bool ) {
-    VPath *polygon = new VPath( mDoc );
+    KoPathShape *polygon = new KoPathShape();
     appendPen( *polygon );
     appendBrush( *polygon );
     appendPoints( *polygon, pa );
-    
+
     polygon->close();
-    mDoc->append( polygon );
+    mDoc->add( polygon );
 }
 
 
 void WMFImportParser::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool ) {
-    VPath *path = new VPath( mDoc );
-    
+    KoPathShape *path = new KoPathShape();
+
     if ( listPa.count() > 0 ) {
         appendPen( *path );
         appendBrush( *path );
@@ -272,13 +325,13 @@ void WMFImportParser::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool ) {
         path->close();
 
         while ( listPa.next() ) {
-            VPath *newPath = new VPath( mDoc );
+            KoPathShape *newPath = new KoPathShape();
             appendPoints( *newPath, *listPa.current() );
             newPath->close();
-            path->combine( *newPath ); 
+            path->combine( newPath );
         }
 
-        mDoc->append( path );
+        mDoc->add( path );
     }
 }
 
@@ -292,46 +345,25 @@ void WMFImportParser::drawText( int , int , int , int , int , const QString& , d
 //-----------------------------------------------------------------------------
 // Utilities
 
-void WMFImportParser::appendPen( VObject& obj )
+void WMFImportParser::appendPen( KoShape& obj )
 {
-    VStroke stroke( mDoc );
-    stroke.setLineCap( VStroke::capRound );
-    
-    if ( mPen.style() == Qt::NoPen ) {
-        stroke.setType( VStroke::none );
-    }
-    else {
-        Q3ValueList<float> dashes;
-        stroke.setType( VStroke::solid );
-        switch ( mPen.style() ) {
-            case Qt::DashLine :
-            stroke.dashPattern().setArray( dashes << MM_TO_POINT(3) << MM_TO_POINT(2) );
-            break;
-            case Qt::DotLine :
-            stroke.dashPattern().setArray( dashes << MM_TO_POINT(1) << MM_TO_POINT(1) );
-            break;
-            case Qt::DashDotLine :
-            stroke.dashPattern().setArray( dashes << MM_TO_POINT(3) << MM_TO_POINT(1) << MM_TO_POINT(1) << MM_TO_POINT(1) );
-            break;
-            case Qt::DashDotDotLine :
-            stroke.dashPattern().setArray( dashes << MM_TO_POINT(3) << MM_TO_POINT(1) << MM_TO_POINT(1) << MM_TO_POINT(1) << MM_TO_POINT(1) << MM_TO_POINT(1) );
-            break;
-            default:
-            break;
-        }
-    }
-    stroke.setColor( mPen.color() );
     double width = mPen.width() * mScaleX;
-    stroke.setLineWidth( ((width < 0.99) ? 1 : width) );
-    obj.setStroke( stroke );    
+
+    KoLineBorder * border = new KoLineBorder( ((width < 0.99) ? 1 : width), mPen.color() );
+    border->setCapStyle( Qt::RoundCap );
+    border->setLineStyle( mPen.style(), mPen.dashPattern() );
+
+    obj.setBorder( border );
 }
 
 
-void WMFImportParser::appendBrush( VObject& obj )
+void WMFImportParser::appendBrush( KoShape& obj )
 {
+    obj.setBackground( mBrush );
+    /*
     VFill fill( mBackgroundColor );
     fill.setColor( mBrush.color() );
-        
+
     switch ( mBrush.style() ) {
         case Qt::NoBrush :
         fill.setType( VFill::none );
@@ -356,6 +388,7 @@ void WMFImportParser::appendBrush( VObject& obj )
         break;
     }
     obj.setFill( fill );
+    */
 }
 
 void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )
@@ -363,14 +396,34 @@ void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )
 		//TODO
 }
 
-void WMFImportParser::appendPoints(VPath &path, const Q3PointArray& pa)
+void WMFImportParser::appendPoints(KoPathShape &path, const Q3PointArray& pa)
 {
     // list of point array
     if ( pa.size() > 0 ) {
-        path.moveTo( KoPoint( coordX(pa.point(0).x()), coordY(pa.point(0).y()) ) );
+        path.moveTo( QPointF( coordX(pa.point(0).x()), coordY(pa.point(0).y()) ) );
     }
     for ( uint i=1 ; i < pa.size() ; i++ ) {
-        path.lineTo( KoPoint( coordX(pa.point(i).x()), coordY(pa.point(i).y()) ) );
+        path.lineTo( QPointF( coordX(pa.point(i).x()), coordY(pa.point(i).y()) ) );
     }
+    path.normalize();
 }
 
+double WMFImportParser::coordX( int left )
+{
+    return ((double)(left - mCurrentOrg.x()) * mScaleX);
+}
+
+double WMFImportParser::coordY( int top )
+{
+    return ((double)(top - mCurrentOrg.y()) * mScaleY);
+}
+
+double WMFImportParser::scaleW( int width )
+{
+    return (width * mScaleX);
+}
+
+double WMFImportParser::scaleH( int height )
+{
+    return (height * mScaleY);
+}

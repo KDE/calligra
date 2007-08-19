@@ -28,13 +28,11 @@
 #include "vcomposite.h"
 #include "vdashpattern.h"
 #include "vdocument.h"
-#include "vlayer.h"
 #include "vpath.h"
 #include "vsegment.h"
 #include "vfill.h"
 #include "vstroke.h"
 #include "vtext.h"
-#include "vflattencmd.h"
 
 #include "wmfexport.h"
 #include "kowmfwrite.h"
@@ -75,6 +73,7 @@ KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QBy
         return KoFilter::WrongFormat;
     }
 
+    /*
     QDomDocument domIn;
     domIn.setContent( storeIn );
     QDomElement docNode = domIn.documentElement();
@@ -91,6 +90,7 @@ KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QBy
     delete mWmf;
     delete mDoc;
 
+    */
     return KoFilter::OK;
 }
 
@@ -257,6 +257,15 @@ void WmfExport::getPen( QPen& pen, const VStroke *stroke ) {
     }
 }
 
+int WmfExport::coordX( double left )
+{
+    return (int)(left * mScaleX);
+}
+
+int WmfExport::coordY( double top )
+{
+    return (int)((mDoc->pageSize().height() - top) * mScaleY);
+}
 
 #include <wmfexport.moc>
 

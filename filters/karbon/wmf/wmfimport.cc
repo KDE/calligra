@@ -20,15 +20,17 @@
 DESCRIPTION
 */
 
-#include <qdom.h>
+#include "wmfimport.h"
+#include "wmfimportparser.h"
+
+#include <core/vdocument.h>
+
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
-#include <core/vdocument.h>
-
-#include "wmfimport.h"
-#include "wmfimportparser.h"
+#include <KoOasisStore.h>
+#include <KoGenStyles.h>
 
 typedef KGenericFactory<WMFImport> WMFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "kofficefilters" ) )
@@ -45,11 +47,11 @@ WMFImport::~WMFImport()
 
 KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QByteArray& to )
 {
-    if( to != "application/x-karbon" || from != "image/x-wmf" )
-    return KoFilter::NotImplemented;
+    if( to != "application/vnd.oasis.opendocument.graphics" || from != "image/x-wmf" )
+        return KoFilter::NotImplemented;
 
     WMFImportParser wmfParser;
-    if( !wmfParser.load( m_chain->inputFile() ) ) {
+    if( !wmfParser.load( QString(m_chain->inputFile()) ) ) {
         return KoFilter::WrongFormat;
     }
 
@@ -59,17 +61,32 @@ KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QBy
         return KoFilter::WrongFormat;
     }
 
-    KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
-    if( !out ) {
-        kError(3800) << "Unable to open output file!" << endl;
-        return KoFilter::StorageCreationError;
-    }
-    QDomDocument outdoc = document.saveXML();
-    QByteArray content = outdoc.toByteArray();
-    // kDebug() <<" content :" << content;
-    out->write( content , content.length() );
+    // create output store
+    KoStore* storeout = KoStore::createStore( m_chain->outputFile(), KoStore::Write, to, KoStore::Zip );
 
-    return KoFilter::OK;
+    if ( !storeout )
+    {
+        kWarning() << "Couldn't open the requested file.";
+        return KoFilter::FileNotFound;
+    }
+
+    // Tell KoStore not to touch the file names
+    storeout->disallowNameExpansion();
+    KoOasisStore oasisStore( storeout );
+    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( to );
+
+    KoGenStyles mainStyles;
+
+    bool success = document.saveOasis( storeout, manifestWriter, mainStyles );
+
+    // cleanup
+    oasisStore.closeManifestWriter();
+    delete storeout;
+
+    if( ! success )
+        return KoFilter::CreationError;
+    else
+        return KoFilter::OK;
 }
 
 
