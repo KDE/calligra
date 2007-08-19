@@ -21,6 +21,7 @@
 #define KPRANIMATIONDIRECTOR_H
 
 #include <QList>
+#include <QMap>
 #include <QObject>
 #include <QTimeLine>
 
@@ -29,10 +30,12 @@
 class QPainter;
 class QPaintEvent;
 class KoViewConverter;
+class KoShape;
 class KoPACanvas;
 class KoPAPageBase;
 class KoPAView;
 class KPrPageEffect;
+class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject
 {
@@ -57,6 +60,25 @@ public:
      * do the next step in the presentation
      */
     bool navigate( Navigation navigation );
+
+    /**
+     * Check if the shape is shown
+     *
+     * A shape is visible when there are no animations on it or when it
+     * is animated at the moment even when it is a disappear animation. 
+     */
+    bool shapeShown( KoShape * shape );
+
+    /**
+     * Animate the shape by manipulating the painter matrix
+     *
+     * This checks if the shape has to be animated and if so it 
+     * manipulated the painter.
+     *
+     * @param shape which should be animated
+     * @painter painter to manipulate the shape position
+     */
+    KPrShapeAnimation * shapeAnimation( KoShape * shape );
 
 protected:
     // set the page to be shon and update the UI
@@ -86,6 +108,7 @@ private:
     QRect m_pageRect;
 
     KPrPageEffect * m_pageEffect;
+    QMap<KoShape *, KPrShapeAnimation *> m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;
 };

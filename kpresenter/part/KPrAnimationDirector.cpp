@@ -38,16 +38,20 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
 , m_pages( pages )
 , m_pageEffect( 0 )                  
 {
+    Q_ASSERT( !m_pages.empty() );
+
     updateActivePage( m_pages[0] );
     connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away
     connect( m_canvas, SIGNAL( sizeChanged( const QSize & ) ), this, SLOT( updateZoom( const QSize & ) ) );
     m_timeLine.setCurveShape( QTimeLine::LinearCurve );
     m_timeLine.setUpdateInterval( 20 ); 
+    // set the animation strategy in the KoShapeManagers
 }
 
 KPrAnimationDirector::~KPrAnimationDirector()
 {
+    //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
 }
 
 void KPrAnimationDirector::paintEvent( QPaintEvent* event )
@@ -60,6 +64,8 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
         {
             delete m_pageEffect;
             m_pageEffect = 0;
+
+            // if there are animations starting right after the page effect start them now
         }
     }
     else
@@ -84,9 +90,14 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
         m_pageEffect->finish();
         m_timeLine.stop();
     }
+    else if ( 0 ) { // there are still shape animations running
+        //finish the shape animations and stop the timeline
+        m_timeLine.stop();
+    }
     else {
         nextStep();
         
+        // this only needs to be done if there is a new page
         QPixmap oldPage( m_canvas->size() );
         m_canvas->render( &oldPage );
 
@@ -102,10 +113,25 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
         m_timeLine.setCurrentTime( 0 );
         m_timeLine.setDuration( m_pageEffect->duration() );
         m_timeLine.start();
+
+        // todo what happens on a new substep
     }
 
     return true;
 }
+
+bool KPrAnimationDirector::shapeShown( KoShape * shape )
+{
+    return !m_animations.contains( shape ) || m_animations[shape] != 0;
+}
+
+KPrShapeAnimation * KPrAnimationDirector::shapeAnimation( KoShape * shape )
+{
+    QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.find( shape ) );
+
+    return ( it != m_animations.end() ) ? it.value() : 0;
+}
+
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 {
@@ -140,13 +166,20 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
 
 void KPrAnimationDirector::nextStep()
 {
+    // check if there are still substeps
+    // if there are sub steps go to the next substep
+    // if there are no more sub steps go to the next page
     m_pageIndex = m_pageIndex < m_pages.size() - 1 ? m_pageIndex + 1 : 0;
+    // should return true if there is a new page
 }
 
 void KPrAnimationDirector::animate()
 {
     if ( m_pageEffect ) {
         m_pageEffect->next( m_timeLine.currentTime() );
+    }
+    else if ( 0 ) { //if there are animnations
+        // call next on each animation
     }
 }
 
