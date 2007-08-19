@@ -657,6 +657,8 @@ void DefaultTool::activate( bool temporary )
 
 void DefaultTool::deactivate()
 {
+    // close the cell editor
+    d->canvas->closeEditor();
     // clear the selection rectangle
     d->canvas->update();
 }
