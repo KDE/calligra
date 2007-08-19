@@ -68,11 +68,15 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
     if ( mBuffer != 0 ) {
         mBuffer->close();
         delete mBuffer;
+        mBuffer = 0;
     }
 
+    if( array.size() == 0 )
+        return false;
+
     // load into buffer
-    QByteArray nonConstArray( array ); // hack
-    mBuffer = new QBuffer( &nonConstArray );
+    mBuffer = new QBuffer();
+    mBuffer->setData( array );
     mBuffer->open( QIODevice::ReadOnly );
 
     // read and check the header
