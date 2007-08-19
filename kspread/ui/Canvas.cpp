@@ -3168,19 +3168,6 @@ void Canvas::retrieveMarkerInfo( const QRect &cellRange,
     positions[3] = qMin( bottom, viewRect.bottom() );
 }
 
-// find the label for the tip
-// this is a hack of course, because it's not available from QToolTip
-QLabel *tip_findLabel()
-{
-    QWidgetList widgets = QApplication::allWidgets();
-    foreach ( QWidget* widget, widgets )
-    {
-      QLabel* label = qobject_cast<QLabel*>(widget);
-      return label;
-    }
-    return 0;
-}
-
 void Canvas::showToolTip( const QPoint& p )
 {
     register Sheet * const sheet = activeSheet();
@@ -3202,35 +3189,31 @@ void Canvas::showToolTip( const QPoint& p )
     int row = sheet->topRow( (d->view->zoomHandler()->viewToDocumentY( p.y() ) +
                                    yOffset()), ypos );
 
-    Cell cell = Cell( sheet, col, row ).masterCell();
-    if ( !cell )
-        return;
+    Cell cell = Cell(sheet, col, row).masterCell();
+    CellView cellView = view()->sheetView(sheet)->cellView(cell.column(), cell.row());
+    if (cellView.isObscured())
+    {
+        cell = Cell(sheet, cellView.obscuringCell());
+        cellView = view()->sheetView(sheet)->cellView(cellView.obscuringCell().x(), cellView.obscuringCell().y());
+    }
 
-#if 0
-    // Quick cut
-    if( cell.displayText().isEmpty() )
-        return;
-#endif
     // displayed tool tip, which has the following priorities:
     //  - cell content if the cell dimension is too small
     //  - cell comment
     //  - hyperlink
+    // Ensure that it is plain text.
+    // Not funny if (intentional or not) <a> appears as hyperlink.
     QString tipText;
-    QString comment = Cell( sheet, col, row ).comment();
     // If cell is too small, show the content
-    if ( !view()->sheetView( sheet )->cellView( col, row ).dimensionFits() )
-    {
-        tipText = cell.displayText();
-    }
+    if (!cellView.dimensionFits())
+        tipText = cell.displayText().replace('<', "&lt;");
 
     // Show hyperlink, if any
     if ( tipText.isEmpty() )
-    {
-      tipText = cell.link();
-    }
+        tipText = cell.link().replace('<', "&lt;");
 
     // Nothing to display, bail out
-    if ( tipText.isEmpty() && comment.isEmpty() )
+    if (tipText.isEmpty() && cell.comment().isEmpty())
       return;
 
     // Cut if the tip is ridiculously long
@@ -3239,19 +3222,8 @@ void Canvas::showToolTip( const QPoint& p )
         tipText = tipText.left(maxLen).append("...");
 
     // Determine position and width of the current cell.
-    double cellWidth = cell.width();
-    double cellHeight = cell.height();
-
-    // Special treatment for obscured cells.
-    if (view()->sheetView(sheet)->cellView(col, row).isObscured())
-    {
-        cell = Cell(sheet, view()->sheetView(sheet)->cellView(col, row).obscuringCell());
-        // Use the obscuring cells dimensions
-        cellWidth = cell.width();
-        cellHeight = cell.height();
-        xpos = sheet->columnPosition(cell.column());
-        ypos = sheet->rowPosition(cell.row());
-    }
+    const double cellWidth = cellView.cellWidth();
+    const double cellHeight = cellView.cellHeight();
 
     // Get the cell dimensions
     QRect cellRect;
@@ -3273,49 +3245,15 @@ void Canvas::showToolTip( const QPoint& p )
     if ( !insideCellRect )
         return;
 
-    // Find the tipLabel
-    // NOTE: if we failed, check again when the tip is shown already
-    QLabel* tipLabel = tip_findLabel();
+    // Show comment, if any.
+    if (tipText.isEmpty())
+        tipText = cell.comment().replace('<', "&lt;");
+    else if (!cell.comment().isEmpty())
+        tipText += "</p><h4>" + i18n("Comment:") + "</h4><p>" + cell.comment().replace('<', "&lt;");
 
-    // Ensure that it is plain text
-    // Not funny if (intentional or not) <a> appears as hyperlink
-    if ( tipLabel )
-    {
-         tipLabel->setTextFormat( Qt::PlainText );
-         tipLabel->setWordWrap(true);
-         tipLabel->setMaximumSize(size() / 2.0);
-    }
-
-    // Show comment, if any
-    if ( tipText.isEmpty() )
-    {
-      tipText = comment;
-    }
-    else if ( !comment.isEmpty() )
-    {
-      //Add 2 extra lines and a text, when both should be in the tooltip
-      if ( !comment.isEmpty() )
-        comment = "\n\n" + i18n("Comment:") + '\n' + comment;
-
-      tipText += comment;
-    }
-
-    // Now we shows the tip
-    QToolTip::showText(mapToGlobal(cellRect.bottomRight()), tipText, this,
-                       cellRect.translated(-mapToGlobal(cellRect.topLeft())));
-
-    // Here we try to find the tip label again
-    // Reason: the previous tip_findLabel might fail if no tip has ever shown yet
-    if ( !tipLabel )
-    {
-        tipLabel = tip_findLabel();
-        if (tipLabel)
-        {
-            tipLabel->setTextFormat( Qt::PlainText );
-            tipLabel->setWordWrap(true);
-            tipLabel->setMaximumSize(size() / 2.0);
-        }
-    }
+    // Now we show the tip
+    QToolTip::showText(mapToGlobal(cellRect.bottomRight()), "<p>" + tipText + "</p>",
+                       this, cellRect.translated(-mapToGlobal(cellRect.topLeft())));
 }
 
 int Canvas::metric( PaintDeviceMetric metric ) const

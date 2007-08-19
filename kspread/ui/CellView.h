@@ -165,6 +165,11 @@ public:
 
     bool dimensionFits() const;
 
+    /**
+     * Assignment.
+     */
+    CellView& operator=(const CellView&);
+
 private:
     /**
      * \ingroup Layout
@@ -374,11 +379,6 @@ private:
      * Default CellView used by SheetView.
      */
     CellView( SheetView* sheetView );
-
-    /**
-     * Assingment. Only used by SheetView.
-     */
-    CellView& operator=( const CellView& );
 
     class Private;
     QSharedDataPointer<Private> d;
