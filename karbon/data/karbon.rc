@@ -118,9 +118,6 @@
 		<Action name="selection_group"/>
 		<Action name="selection_ungroup"/>
 	</ToolBar>
-	<ToolBar name="Tools" position="left">
-		<Text>Toolbox</Text>
-	</ToolBar>
 	<ToolBar name="align_toolbar" hidden="true" fullWidth="false">
 		<Text>Align</Text>
 		<Action name="object_align_horizontal_left"/>
