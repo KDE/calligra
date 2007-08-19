@@ -76,7 +76,12 @@ public:
      * Returns the start time of this musical elements in ticks.
      */
     int startTime() const;
-    virtual int priority() const = 0; // higher priority is sorted to the left
+    
+    /**
+     * Returns the priority of this staff element with regard to order in which it should be sorted. The higher the
+     * priority of an element is, it is sorted more to the left in a group of element with equal start time.
+     */    
+    virtual int priority() const = 0;
 public slots:
     /**
      * Sets the x position of this musical element.

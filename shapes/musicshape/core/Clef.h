@@ -81,7 +81,14 @@ public:
      */
     int lineToPitch(int line) const;
     
+    /**
+     * Returns the line for a given pitch.
+     */
     int pitchToLine(int pitch) const;
+    
+    /**
+     * Returns the priority of this staff element with regard to order in which it should be sorted.
+     */
     virtual int priority() const;
 public slots:
     /**
@@ -105,8 +112,19 @@ public slots:
      */
     void setOctaveChange(int octaveChange);
 signals:
+    /**
+     * This signal is emitted whenever the shape of the clef changes.
+     */
     void shapeChanged(ClefShape shape);
+    
+    /**
+     * This signal is emitted whenever the line of the clef changes.
+     */
     void lineChanged(int line);
+    
+    /**
+     * This signal is emitted whenever the octaveChange of the clef changes.
+     */
     void octaveChangeChanged(int octaveChange);
 private:
     class Private;
