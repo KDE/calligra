@@ -43,39 +43,39 @@ private slots:
   void testASINH();
   void testATAN();
   void testATAN2();
-//   void testATANH();
-//   void testBESSELI();
-//   void testBESSELJ();
-//   void testBESSELK();
-//   void testBESSELY();
-//   void testCOMBIN();
-//   void testCOMBINA(); // to be implemented
-//   void testCONVERT();
+  void testATANH();
+  void testBESSELI();
+  void testBESSELJ();
+  void testBESSELK();
+  void testBESSELY();
+  void testCOMBIN();
+  void testCOMBINA(); // to be implemented
+  void testCONVERT();
   void testCEIL();
   void testCEILING();
-//   void testCOT();// to be implemented
-//   void testCOTH();// to be implemented
-//   void testDEGREES();
-//   void testDELTA();
+  void testCOT();     // to be implemented
+  void testCOTH();    // to be implemented
+  void testDEGREES();
+  void testDELTA();
 //   void testERF();  -> TestEngineering
 //   void testERFC(); -> TestEngineering
-//   void testEVEN();
-//   void testEXP();
+  void testEVEN();
+  void testEXP();
   void testFACT();
   void testFACTDOUBLE();
   void testFIB();
   void testGAMMA();
   void testGAMMALN();
   void testGCD();
-//   void testGESTEP();
+  void testGESTEP();
   void testLCM();
-//   void testLN();
+  void testLN();
   void testLOG();
   void testLOG10();
   void testMDETERM();
   void testMINVERSE();
   void testMMULT();
-//   void testMOD();
+  void testMOD();
 //   void testMULTINOMINAL();
   void testMUNIT();
   void testODD();
