@@ -22,7 +22,7 @@
       <item row="0" column="0" >
        <widget class="QLabel" name="label_3" >
         <property name="text" >
-         <string>Type</string>
+         <string>Type:</string>
         </property>
        </widget>
       </item>
@@ -32,7 +32,7 @@
       <item row="1" column="0" >
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Start angle</string>
+         <string>Start angle:</string>
         </property>
        </widget>
       </item>
@@ -49,7 +49,7 @@
       <item row="2" column="0" >
        <widget class="QLabel" name="label_2" >
         <property name="text" >
-         <string>End angle</string>
+         <string>End angle:</string>
         </property>
        </widget>
       </item>
