@@ -230,7 +230,6 @@ void KoRectangleShape::updatePath( const QSizeF &size )
         m_points[0]->setPoint( curvePoints[2] );
     }
 
-    qDebug() << "KoRectangleShape" << cp;
     m_subpaths[0]->clear();
     for ( int i = 0; i < cp; ++i )
     {
