@@ -3252,7 +3252,8 @@ void Canvas::showToolTip( const QPoint& p )
         tipText += "</p><h4>" + i18n("Comment:") + "</h4><p>" + cell.comment().replace('<', "&lt;");
 
     // Now we show the tip
-    QToolTip::showText(mapToGlobal(cellRect.bottomRight()), "<p>" + tipText + "</p>",
+    QToolTip::showText(mapToGlobal(cellRect.bottomRight()),
+                       "<p>" + tipText.replace('\n', "<br>") + "</p>",
                        this, cellRect.translated(-mapToGlobal(cellRect.topLeft())));
 }
 
