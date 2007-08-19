@@ -1899,12 +1899,14 @@ void View::initView()
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
     KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
     createDockWidget( &toolBoxFactory );
-    KoToolManager::instance()->switchToolRequested( KSPREAD_DEFAULT_TOOL_ID );
 
     // Setup the tool options dock widget.
     KoToolDockerFactory toolDockerFactory;
     KoToolDocker *td =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
     connect(d->canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), td, SLOT(newOptionWidget(QWidget*)));
+
+    // Activate the cell tool.
+    KoToolManager::instance()->switchToolRequested(KSPREAD_DEFAULT_TOOL_ID);
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
