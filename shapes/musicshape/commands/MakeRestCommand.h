@@ -20,7 +20,7 @@
 #define MAKERESTCOMMAND_H
 
 #include <QUndoCommand>
-#include <Qlist>
+#include <QList>
 
 namespace MusicCore {
     class Chord;
