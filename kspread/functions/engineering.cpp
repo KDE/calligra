@@ -480,22 +480,26 @@ static double kspread_convert_prefix( QMap<QString,double> map, QString& unit )
   static QMap<char,double> prefixMap;
   if( prefixMap.isEmpty() )
   {
-     prefixMap[ 'E' ] = 1e18;  //  exa
-     prefixMap[ 'P' ] = 1e15;  //  peta
-     prefixMap[ 'T' ] = 1e12;  // tera
-     prefixMap[ 'G' ] = 1e9;   // giga
-     prefixMap[ 'M' ] = 1e6;   // mega
-     prefixMap[ 'k' ] = 1e3;   // kilo
-     prefixMap[ 'h' ] = 1e2;   // hecto
-     prefixMap[ 'e' ] = 1e1;   // dekao
-     prefixMap[ 'd' ] = 1e1;   // deci
-     prefixMap[ 'c' ] = 1e2;   // centi
-     prefixMap[ 'm' ] = 1e3;   // milli
-     prefixMap[ 'u' ] = 1e6;   // micro
-     prefixMap[ 'n' ] = 1e9;   // nano
-     prefixMap[ 'p' ] = 1e12;  // pico
-     prefixMap[ 'f' ] = 1e15;  // femto
-     prefixMap[ 'a' ] = 1e18;  // atto
+     prefixMap[ 'Y' ] = 1e24;   // yotta
+     prefixMap[ 'Z' ] = 1e21;   // zetta
+     prefixMap[ 'E' ] = 1e18;   //  exa
+     prefixMap[ 'P' ] = 1e15;   //  peta
+     prefixMap[ 'T' ] = 1e12;   // tera
+     prefixMap[ 'G' ] = 1e9;    // giga
+     prefixMap[ 'M' ] = 1e6;    // mega
+     prefixMap[ 'k' ] = 1e3;    // kilo
+     prefixMap[ 'h' ] = 1e2;    // hecto
+     prefixMap[ 'e' ] = 1e1;    // dekao
+     prefixMap[ 'd' ] = 1e-1;   // deci
+     prefixMap[ 'c' ] = 1e-2;   // centi
+     prefixMap[ 'm' ] = 1e-3;   // milli
+     prefixMap[ 'u' ] = 1e-6;   // micro
+     prefixMap[ 'n' ] = 1e-9;   // nano
+     prefixMap[ 'p' ] = 1e-12;  // pico
+     prefixMap[ 'f' ] = 1e-15;  // femto
+     prefixMap[ 'a' ] = 1e-18;  // atto
+     prefixMap[ 'z' ] = 1e-21;  // zepto
+     prefixMap[ 'y' ] = 1e-24;  // yocto
   }
 
   // check for possible prefix
