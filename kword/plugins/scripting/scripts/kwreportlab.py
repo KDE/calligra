@@ -185,37 +185,36 @@ class MyWriter:
         try:
             return self.style[styleName]
         except KeyError:
-            parentStyle = None
+            parentStyle = self.style['BodyText']
             style = ParagraphStyle(styleName, parentStyle)
 
             #kwparagstyle = KWord.paragraphStyle(styleName)
             #if kwparagstyle:
                 #print "STYLE=>%s" % kwparagstyle.name()
-
-                #alignment = kwparagstyle.alignment()
-                #if alignment == kwparagstyle.AlignLeft:
-                    #style.defaults['alignment'] = TA_LEFT
-                #elif alignment == kwparagstyle.AlignHCenter:
-                    #style.defaults['alignment'] = TA_CENTER
-                #elif alignment == kwparagstyle.AlignRight:
-                    #style.defaults['alignment'] = TA_RIGHT
-                #elif alignment == kwparagstyle.AlignJustify:
-                    #style.defaults['alignment'] = TA_JUSTIFY
-
-                ##style.defaults['fontName'] = 'Times-Roman'
-                ##style.defaults['fontSize'] = 20
-                ##style.defaults['leading'] = 12
-                ##style.defaults['leftIndent'] = 0
-                ##style.defaults['rightIndent'] = 0
-                ##style.defaults['firstLineIndent'] = 0
-                ##style.defaults['spaceBefore'] = 0
-                ##style.defaults['spaceAfter'] = 0
-                ##style.defaults['bulletFontName'] = 'Times-Roman'
-                ##style.defaults['bulletFontSize'] = 10
-                ##style.defaults['bulletIndent'] = 0
-                ##style.defaults['textColor'] = black
+                ##alignment = kwparagstyle.alignment()
+                ##if alignment == kwparagstyle.AlignLeft:
+                    ##style.defaults['alignment'] = TA_LEFT
+                ##elif alignment == kwparagstyle.AlignHCenter:
+                    ##style.defaults['alignment'] = TA_CENTER
+                ##elif alignment == kwparagstyle.AlignRight:
+                    ##style.defaults['alignment'] = TA_RIGHT
+                ##elif alignment == kwparagstyle.AlignJustify:
+                    ##style.defaults['alignment'] = TA_JUSTIFY
             #else:
-                #print "hmmmm... KWord does not know about a paragraph-style named '%s'" % styleName
+                #kwparagstyle = KWord.addParagraphStyle(styleName)
+
+            #style.defaults['fontName'] = 'Times-Roman'
+            #style.defaults['fontSize'] = 20
+            #style.defaults['leading'] = 12
+            #style.defaults['leftIndent'] = 0
+            #style.defaults['rightIndent'] = 0
+            #style.defaults['firstLineIndent'] = 0
+            #style.defaults['spaceBefore'] = 0
+            #style.defaults['spaceAfter'] = 0
+            #style.defaults['bulletFontName'] = 'Times-Roman'
+            #style.defaults['bulletFontSize'] = 10
+            #style.defaults['bulletIndent'] = 0
+            #style.defaults['textColor'] = black
 
             self.style.add(style)
             return style
@@ -234,7 +233,7 @@ class MyWriter:
         store = KWord.store()
 
         # We like to read the content.xml file from the KoStore.
-        reader = store.readFile("content.xml")
+        reader = store.open("content.xml")
         if not reader:
             raise "Failed to read file from the store"
 
