@@ -245,7 +245,7 @@ void WMFImportParser::drawArc( int x, int y, int w, int h, int aStart, int aLen 
 
     KoEllipseShape * arc = new KoEllipseShape();
     arc->setType( KoEllipseShape::Arc );
-    arc->setPosition( QPointF( coordX(y), coordY(y) ) );
+    arc->setPosition( QPointF( coordX(x), coordY(y) ) );
     arc->setSize( QSizeF( scaleW(w), scaleH(h) ) );
     arc->setStartAngle( start );
     arc->setEndAngle( end );
@@ -264,7 +264,7 @@ void WMFImportParser::drawPie( int x, int y, int w, int h, int aStart, int aLen 
 
     KoEllipseShape * pie = new KoEllipseShape();
     pie->setType( KoEllipseShape::Pie );
-    pie->setPosition( QPointF( coordX(y), coordY(y) ) );
+    pie->setPosition( QPointF( coordX(x), coordY(y) ) );
     pie->setSize( QSizeF( scaleW(w), scaleH(h) ) );
     pie->setStartAngle( start );
     pie->setEndAngle( end );
