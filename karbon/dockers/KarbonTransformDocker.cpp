@@ -160,6 +160,15 @@ KarbonTransformDocker::KarbonTransformDocker()
     d->shearY->setToolTip( i18n("Shear actual selection in y-direction") );
     connect( d->shearY, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
 
+    const int minimumWidth = 60;
+    d->x->setMinimumWidth( minimumWidth );
+    d->y->setMinimumWidth( minimumWidth );
+    d->width->setMinimumWidth( minimumWidth );
+    d->height->setMinimumWidth( minimumWidth );
+    d->rotate->setMinimumWidth( minimumWidth );
+    d->shearX->setMinimumWidth( minimumWidth );
+    d->shearY->setMinimumWidth( minimumWidth );
+
     setWidget( mainWidget );
 
     d->mainLayout = new QGridLayout( mainWidget );
@@ -236,7 +245,7 @@ void KarbonTransformDocker::clearLayout()
     d->mainLayout->removeWidget( d->rLabel );
     d->mainLayout->removeWidget( d->rotate );
     d->mainLayout->removeWidget( d->sxLabel );
-    d->mainLayout->removeWidget(d->syLabel );
+    d->mainLayout->removeWidget( d->syLabel );
     d->mainLayout->removeWidget( d->shearY );
 }
 
