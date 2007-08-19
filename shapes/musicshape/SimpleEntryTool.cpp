@@ -22,6 +22,9 @@
 #include <QTabWidget>
 #include <QPair>
 #include <QMenu>
+#include <QBuffer>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -488,16 +491,54 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
-    //QString file = "/Users/marijn/KDE/test.xml";
+    //QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
+    QString file = "/Users/marijn/KDE/test.xml";
     if (file.isEmpty() || file.isNull()) return;
     
+    QBuffer b;
+    b.open(QIODevice::ReadWrite);
+    KoXmlWriter kw(&b);
+    kw.startDocument("score-partwise", "-//Recordare//DTD MusicXML 2.0 Partwise//EN",
+                     "http://www.musicxml.org/dtds/partwise.dtd");
+    MusicXmlWriter().writeSheet(kw, m_musicshape->sheet(), true);
+    kw.endDocument();
+    
+    b.seek(0);
+    
+    //kDebug() << b.data();
     QFile f(file);
     f.open(QIODevice::WriteOnly);
-    KoXmlWriter w(&f);
-    w.startDocument("score-partwise", "-//Recordare//DTD MusicXML 2.0 Partwise//EN",
-            "http://www.musicxml.org/dtds/partwise.dtd");
-    MusicXmlWriter().writeSheet(w, m_musicshape->sheet(), true);
-    w.endDocument();
-    f.close();
+    QXmlStreamWriter w(&f);
+    
+    QXmlStreamReader xml(&b);
+    while (!xml.atEnd()) {
+        xml.readNext();
+        //kDebug() << xml.tokenType() << xml.tokenString();
+        //kDebug() << xml.error() << xml.errorString();
+        if (xml.isCDATA()) {
+            w.writeCDATA(xml.text().toString());
+        } else if (xml.isCharacters()) {
+            w.writeCharacters(xml.text().toString());
+        } else if (xml.isComment()) {
+            w.writeComment(xml.text().toString());
+        } else if (xml.isDTD()) {
+            w.writeDTD(xml.text().toString());
+        } else if (xml.isEndDocument()) {
+            w.writeEndDocument();
+        } else if (xml.isEndElement()) {
+            w.writeEndElement();
+        } else if (xml.isEntityReference()) {
+            w.writeEntityReference(xml.name().toString());
+        } else if (xml.isProcessingInstruction()) {
+            w.writeProcessingInstruction(xml.processingInstructionTarget().toString(), xml.processingInstructionData().toString()
+                                         );            
+        } else if (xml.isStartDocument()) {
+            w.writeStartDocument();
+        } else if (xml.isStartElement()) {
+            w.writeStartElement(xml.name().toString());
+            foreach (QXmlStreamAttribute attr, xml.attributes()) {
+                w.writeAttribute(attr.name().toString(), attr.value().toString());
+            }
+        }
+    }
 }
