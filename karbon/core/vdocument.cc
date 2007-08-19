@@ -43,7 +43,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
+#include <KoStoreDevice.h>
+#include <KoDocument.h>
+#include <KoSavingContext.h>
+#include <KoShapeStyleWriter.h>
 
+#include <ktemporaryfile.h>
 #include <kdebug.h>
 
 #include <qdom.h>
@@ -256,6 +261,7 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
 {
     qDeleteAll( d->layers );
     d->layers.clear();
+    qDeleteAll( d->objects );
 
     KoXmlElement layerElement;
     forEachElement( layerElement, context.koLoadingContext().oasisStyles().layerSet() )
@@ -263,12 +269,6 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
         KoShapeLayer * l = new KoShapeLayer();
         if( l->loadOdf( layerElement, context ) )
             insertLayer( l );
-    }
-
-    // check if we have to insert a default layer
-    if( d->layers.count() == 0 )
-    {
-        insertLayer( new KoShapeLayer() );
     }
 
     KoXmlElement child;
@@ -283,6 +283,19 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
                 d->layers.first()->addChild( shape );
             d->objects.append( shape );
         }
+    }
+
+    // check if we have to insert a default layer
+    if( d->layers.count() == 0 )
+    {
+        KoShapeLayer * defaultLayer = new KoShapeLayer();
+        // add all toplevel shape to the layer
+        foreach( KoShape * shape, d->objects )
+        {
+            if( ! shape->parent() )
+                defaultLayer->addChild( shape );
+        }
+        insertLayer( defaultLayer );
     }
 
     return true;
@@ -361,4 +374,158 @@ void VDocument::setUnit( KoUnit unit )
 const VLayerList& VDocument::layers() const
 {
     return d->layers;
+}
+
+//#############################################################################
+// ODF saving
+//#############################################################################
+
+bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenStyles &mainStyles )
+{
+    if( !store->open( "content.xml" ) )
+        return false;
+
+    KoStoreDevice storeDev( store );
+    KoXmlWriter * docWriter = KoDocument::createOasisXmlWriter( &storeDev, "office:document-content" );
+
+    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
+
+    // for office:master-styles
+    KTemporaryFile masterStyles;
+    masterStyles.open();
+    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
+
+    KoPageLayout page;
+    page.format = KoPageFormat::defaultFormat();
+    page.orientation = KoPageFormat::Portrait;
+    page.width = pageSize().width();
+    page.height = pageSize().height();
+
+    KoGenStyle pageLayout = page.saveOasis();
+    QString layoutName = mainStyles.lookup( pageLayout, "PL" );
+    KoGenStyle masterPage( KoGenStyle::StyleMaster );
+    masterPage.addAttribute( "style:page-layout-name", layoutName );
+    mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
+
+    KTemporaryFile contentTmpFile;
+    contentTmpFile.open();
+    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
+
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( "office:drawing" );
+
+    KoShapeSavingContext shapeContext( contentTmpWriter, savingContext );
+    saveOasis( shapeContext ); // Save contents
+
+    contentTmpWriter.endElement(); // office:drawing
+    contentTmpWriter.endElement(); // office:body
+
+    saveOasisAutomaticStyles( docWriter, mainStyles, false );
+
+    // And now we can copy over the contents from the tempfile to the real one
+    contentTmpFile.seek(0);
+    docWriter->addCompleteElement( &contentTmpFile );
+
+    docWriter->endElement(); // Root element
+    docWriter->endDocument();
+    delete docWriter;
+
+    if( !store->close() )
+        return false;
+
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+
+    if( !store->open( "styles.xml" ) )
+        return false;
+
+    saveOasisDocumentStyles( store, shapeContext );
+
+    if( !store->close() )
+        return false;
+
+    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
+
+    if(!store->open("settings.xml"))
+        return false;
+
+    saveOasisSettings( store );
+
+    if(!store->close())
+        return false;
+
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    if( ! shapeContext.saveImages( store, manifestWriter ) )
+        return false;
+
+    return true;
+}
+
+void VDocument::saveOasisDocumentStyles( KoStore * store, KoShapeSavingContext & context )
+{
+    KoStoreDevice stylesDev( store );
+    KoXmlWriter* styleWriter = KoDocument::createOasisXmlWriter( &stylesDev, "office:document-styles" );
+    KoGenStyles & mainStyles = context.mainStyles();
+
+    styleWriter->startElement( "office:styles" );
+
+    KoShapeStyleWriter styleHandler( context );
+    styleHandler.writeOfficeStyles( styleWriter );
+
+    styleWriter->endElement(); // office:styles
+
+    saveOasisAutomaticStyles( styleWriter, mainStyles, true );
+
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleMaster );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+
+    styleWriter->startElement("office:master-styles");
+
+    for( ; it != styles.end(); ++it)
+        (*it).style->writeStyle( styleWriter, mainStyles, "style:master-page", (*it).name, "");
+
+    context.saveLayerSet( styleWriter );
+
+    styleWriter->endElement();  // office:master-styles
+    styleWriter->endElement();  // office:styles
+    styleWriter->endDocument(); // office:document-styles
+
+    delete styleWriter;
+}
+
+void VDocument::saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles, bool forStylesXml )
+{
+    contentWriter->startElement( "office:automatic-styles" );
+
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGraphicAuto, forStylesXml );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for( ; it != styles.end() ; ++it )
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:graphic-properties" );
+
+    styles = mainStyles.styles( KoGenStyle::StylePageLayout, forStylesXml );
+    it = styles.begin();
+
+    for( ; it != styles.end(); ++it )
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
+
+    contentWriter->endElement(); // office:automatic-styles
+}
+
+void VDocument::saveOasisSettings( KoStore * store )
+{
+    KoStoreDevice settingsDev( store );
+    KoXmlWriter * settingsWriter = KoDocument::createOasisXmlWriter( &settingsDev, "office:document-settings");
+
+    settingsWriter->startElement("office:settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
+
+    KoUnit::saveOasis( settingsWriter, unit() );
+
+    settingsWriter->endElement(); // config:config-item-set
+    settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // office:document-settings
+    settingsWriter->endDocument();
+
+    delete settingsWriter;
 }

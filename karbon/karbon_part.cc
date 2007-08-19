@@ -55,10 +55,8 @@
 #include "vtransformcmd.h"
 
 #include <KoApplication.h>
-#include <KoStoreDevice.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
-#include <KoSavingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -69,12 +67,10 @@
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
-#include <KoShapeStyleWriter.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktemporaryfile.h>
 
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -329,151 +325,24 @@ KarbonPart::loadOasisSettings( const KoXmlDocument&settingsDoc )
 }
 
 
-bool
-KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
+bool KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
 {
-    if( !store->open( "content.xml" ) )
-        return false;
-
-    KoStoreDevice storeDev( store );
-    KoXmlWriter * docWriter = createOasisXmlWriter( &storeDev, "office:document-content" );
-
     KoGenStyles mainStyles;
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
 
-    // for office:master-styles
-    KTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
-
+    /*
     KoGenStyle pageLayout = m_pageLayout.saveOasis();
     QString layoutName = mainStyles.lookup( pageLayout, "PL" );
     KoGenStyle masterPage( KoGenStyle::StyleMaster );
     masterPage.addAttribute( "style:page-layout-name", layoutName );
     mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
+    */
 
-    KTemporaryFile contentTmpFile;
-    contentTmpFile.open();
-    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
-
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:drawing" );
-
-    KoShapeSavingContext shapeContext( contentTmpWriter, savingContext );
-    m_doc.saveOasis( shapeContext ); // Save contents
-
-    contentTmpWriter.endElement(); // office:drawing
-    contentTmpWriter.endElement(); // office:body
-
-    saveOasisAutomaticStyles( docWriter, mainStyles, false );
-
-    // And now we can copy over the contents from the tempfile to the real one
-    contentTmpFile.seek(0);
-    docWriter->addCompleteElement( &contentTmpFile );
-
-    docWriter->endElement(); // Root element
-    docWriter->endDocument();
-    delete docWriter;
-
-    if( !store->close() )
-        return false;
-
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-
-    if( !store->open( "styles.xml" ) )
-        return false;
-
-    saveOasisDocumentStyles( store, shapeContext );
-
-    if( !store->close() )
-        return false;
-
-    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-
-    if(!store->open("settings.xml"))
-        return false;
-
-    saveOasisSettings( store );
-
-    if(!store->close())
-        return false;
-
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
-
-    if( ! shapeContext.saveImages( store, manifestWriter ) )
+    if( ! m_doc.saveOasis( store, manifestWriter, mainStyles ) )
         return false;
 
     setModified( false );
+
     return true;
-}
-
-void KarbonPart::saveOasisDocumentStyles( KoStore * store, KoShapeSavingContext & context )
-{
-    KoStoreDevice stylesDev( store );
-    KoXmlWriter* styleWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
-    KoGenStyles & mainStyles = context.mainStyles();
-
-    styleWriter->startElement( "office:styles" );
-
-    KoShapeStyleWriter styleHandler( context );
-    styleHandler.writeOfficeStyles( styleWriter );
-
-    styleWriter->endElement(); // office:styles
-
-    saveOasisAutomaticStyles( styleWriter, mainStyles, true );
-
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleMaster );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-
-    styleWriter->startElement("office:master-styles");
-
-    for( ; it != styles.end(); ++it)
-        (*it).style->writeStyle( styleWriter, mainStyles, "style:master-page", (*it).name, "");
-
-    context.saveLayerSet( styleWriter );
-
-    styleWriter->endElement();  // office:master-styles
-    styleWriter->endElement();  // office:styles
-    styleWriter->endDocument(); // office:document-styles
-
-    delete styleWriter;
-}
-
-void KarbonPart::saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles, bool forStylesXml )
-{
-    contentWriter->startElement( "office:automatic-styles" );
-
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleGraphicAuto, forStylesXml );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for( ; it != styles.end() ; ++it )
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:graphic-properties" );
-
-    styles = mainStyles.styles( KoGenStyle::StylePageLayout, forStylesXml );
-    it = styles.begin();
-
-    for( ; it != styles.end(); ++it )
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties" );
-
-    contentWriter->endElement(); // office:automatic-styles
-}
-
-void KarbonPart::saveOasisSettings( KoStore * store )
-{
-    KoStoreDevice settingsDev( store );
-    KoXmlWriter * settingsWriter = createOasisXmlWriter( &settingsDev, "office:document-settings");
-
-    settingsWriter->startElement("office:settings");
-    settingsWriter->startElement("config:config-item-set");
-    settingsWriter->addAttribute("config:name", "view-settings");
-
-    KoUnit::saveOasis( settingsWriter, unit() );
-
-    settingsWriter->endElement(); // config:config-item-set
-    settingsWriter->endElement(); // office:settings
-    settingsWriter->endElement(); // office:document-settings
-    settingsWriter->endDocument();
-
-    delete settingsWriter;
 }
 
 void

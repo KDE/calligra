@@ -179,6 +179,8 @@ public:
 
 	QDomDocument saveXML() const;
     void saveOasis( KoShapeSavingContext & context ) const;
+    bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenStyles &mainStyles );
+
 	enum { STYLE_LINEAR_GRADIENT = KoGenStyle::StyleFirstCustom, STYLE_RADIAL_GRADIENT };
 	bool loadXML( const KoXmlElement& doc );
     virtual bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
@@ -235,6 +237,10 @@ public:
     void setPageSize( QSizeF pageSize );
 
 private:
+
+    void saveOasisSettings( KoStore * store );
+    void saveOasisDocumentStyles( KoStore * store, KoShapeSavingContext &context );
+    void saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles, bool forStylesXml );
 
     class Private;
     Private * const d;
