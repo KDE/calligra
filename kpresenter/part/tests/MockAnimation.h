@@ -31,7 +31,7 @@ public:
 
     bool animate( QPainter &painter ) { Q_UNUSED( painter ); return true; }
 
-    QRectF animateRect( const QRectF & rect ) { Q_UNUSED( rect ); return QRectF(); }
+    void animateRect( QRectF & rect ) { Q_UNUSED( rect ); }
 
     void next( int currentTime, KoCanvasBase * canvas ) { Q_UNUSED( currentTime ); Q_UNUSED( canvas ); }
     
@@ -47,7 +47,7 @@ public:
 
     bool animate( QPainter &painter ) { Q_UNUSED( painter ); return true; }
 
-    QRectF animateRect( const QRectF & rect ) { Q_UNUSED( rect ); return QRectF(); }
+    void animateRect( QRectF & rect ) { Q_UNUSED( rect ); }
 
     void next( int currentTime, KoCanvasBase * canvas ) { Q_UNUSED( currentTime ); Q_UNUSED( canvas ); }
     
