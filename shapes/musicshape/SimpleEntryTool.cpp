@@ -491,8 +491,7 @@ void SimpleEntryTool::importSheet()
 
 void SimpleEntryTool::exportSheet()
 {
-    //QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
-    QString file = "/Users/marijn/KDE/test.xml";
+    QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
     if (file.isEmpty() || file.isNull()) return;
     
     QBuffer b;
@@ -530,8 +529,7 @@ void SimpleEntryTool::exportSheet()
         } else if (xml.isEntityReference()) {
             w.writeEntityReference(xml.name().toString());
         } else if (xml.isProcessingInstruction()) {
-            w.writeProcessingInstruction(xml.processingInstructionTarget().toString(), xml.processingInstructionData().toString()
-                                         );            
+            w.writeProcessingInstruction(xml.processingInstructionTarget().toString(), xml.processingInstructionData().toString());            
         } else if (xml.isStartDocument()) {
             w.writeStartDocument();
         } else if (xml.isStartElement()) {
