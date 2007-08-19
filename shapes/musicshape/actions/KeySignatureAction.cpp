@@ -72,7 +72,8 @@ void KeySignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos
         KeySignatureDialog dlg;
         dlg.setMusicStyle(m_tool->shape()->style());
         dlg.setBar(barIdx);
-        dlg.setAccidentals(0);
+        KeySignature* ks = staff->lastKeySignatureChange(barIdx);
+        dlg.setAccidentals(ks ? ks->accidentals() : 0);
         if (dlg.exec() == QDialog::Accepted) {
             if (dlg.updateAllStaves()) {
                 staff = NULL;
