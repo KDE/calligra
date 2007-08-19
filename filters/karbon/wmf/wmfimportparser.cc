@@ -245,10 +245,10 @@ void WMFImportParser::drawArc( int x, int y, int w, int h, int aStart, int aLen 
 
     KoEllipseShape * arc = new KoEllipseShape();
     arc->setType( KoEllipseShape::Arc );
-    arc->setPosition( QPointF( coordX(x), coordY(y) ) );
-    arc->setSize( QSizeF( scaleW(w), scaleH(h) ) );
     arc->setStartAngle( start );
     arc->setEndAngle( end );
+    arc->setPosition( QPointF( coordX(x), coordY(y) ) );
+    arc->setSize( QSizeF( scaleW(w), scaleH(h) ) );
 
     appendPen( *arc );
     //appendBrush( *arc );
@@ -264,10 +264,10 @@ void WMFImportParser::drawPie( int x, int y, int w, int h, int aStart, int aLen 
 
     KoEllipseShape * pie = new KoEllipseShape();
     pie->setType( KoEllipseShape::Pie );
-    pie->setPosition( QPointF( coordX(x), coordY(y) ) );
-    pie->setSize( QSizeF( scaleW(w), scaleH(h) ) );
     pie->setStartAngle( start );
     pie->setEndAngle( end );
+    pie->setPosition( QPointF( coordX(x), coordY(y) ) );
+    pie->setSize( QSizeF( scaleW(w), scaleH(h) ) );
 
     appendPen( *pie );
     appendBrush( *pie );
@@ -283,10 +283,10 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
 
     KoEllipseShape * chord = new KoEllipseShape();
     chord->setType( KoEllipseShape::Chord );
-    chord->setPosition( QPointF( coordX(y), coordY(y) ) );
-    chord->setSize( QSizeF( scaleW(w), scaleH(h) ) );
     chord->setStartAngle( start );
     chord->setEndAngle( end );
+    chord->setPosition( QPointF( coordX(y), coordY(y) ) );
+    chord->setSize( QSizeF( scaleW(w), scaleH(h) ) );
 
     appendPen( *chord );
     appendBrush( *chord );
