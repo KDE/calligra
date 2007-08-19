@@ -165,6 +165,7 @@ int Bar::indexOfStaffElement(StaffElement* element)
 void Bar::addStaffElement(StaffElement* element, int index)
 {
     Q_ASSERT( element );
+    element->setBar(this);
     if (index >= 0) {
         bool correct = true;
         if (index > 0) {

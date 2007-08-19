@@ -99,7 +99,15 @@ SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int startBar, 
                 }
             }
         }
-        // TODO: possibly add key signature in endBar
+        
+        // Figure out old key signature in endBar if more bars follow
+        if (endBar < sheet->barCount()-1) {
+            KeySignature* ks = staff->lastKeySignatureChange(endBar+1);
+            if (!ks || ks->bar() != sheet->bar(endBar+1)) {
+                KeySignature* n = new KeySignature(staff, 0, ks ? ks->accidentals() : 0);
+                m_newKeySignatures.append(qMakePair(sheet->bar(endBar+1), n));
+            } 
+        }
     } else {
         for (int p = 0; p < sheet->partCount(); p++) {
             Part* part = sheet->part(p);
@@ -117,6 +125,15 @@ SetKeySignatureCommand::SetKeySignatureCommand(MusicShape* shape, int startBar, 
                             break;
                         }
                     }
+                }
+
+                // Figure out old key signature in endBar if more bars follow
+                if (endBar < sheet->barCount()-1) {
+                    KeySignature* ks = staff->lastKeySignatureChange(endBar+1);
+                    if (!ks || ks->bar() != sheet->bar(endBar+1)) {
+                        KeySignature* n = new KeySignature(staff, 0, ks ? ks->accidentals() : 0);
+                        m_newKeySignatures.append(qMakePair(sheet->bar(endBar+1), n));
+                    } 
                 }
             }
         }        

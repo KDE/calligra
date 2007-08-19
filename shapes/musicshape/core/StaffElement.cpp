@@ -24,6 +24,7 @@ class StaffElement::Private
 {
 public:
     Staff* staff;
+    Bar* bar;
     int startTime;
     double x;
     double y;
@@ -34,6 +35,7 @@ public:
 StaffElement::StaffElement(Staff* staff, int startTime) : d(new Private)
 {
     d->staff = staff;
+    d->bar = NULL;
     d->startTime = startTime;
     d->x = 0;
     d->y = 0;
@@ -49,6 +51,16 @@ StaffElement::~StaffElement()
 Staff* StaffElement::staff()
 {
     return d->staff;
+}
+
+Bar* StaffElement::bar()
+{
+    return d->bar;
+}
+
+void StaffElement::setBar(Bar* bar)
+{
+    d->bar = bar;
 }
 
 double StaffElement::x() const

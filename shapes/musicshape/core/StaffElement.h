@@ -24,6 +24,7 @@
 namespace MusicCore {
 
 class Staff;
+class Bar;
 
 /**
  * This is the base class for all musical elements that can be added to a staff.
@@ -48,7 +49,9 @@ public:
      * Returns the staff this staff element is part of.
      */
     Staff* staff();
-
+    Bar* bar();
+    void setBar(Bar* bar);
+    
     /**
      * Returns the x position of this musical element. The x position of an element is measured relative to the left
      * barline of the bar the element is in.
