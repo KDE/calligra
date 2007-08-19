@@ -16,7 +16,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "MusicXmlWriterTest.h"
 #include "Sheet.h"
 #include "Part.h"
 #include "PartGroup.h"
@@ -31,139 +30,147 @@
 #include <QtTest/QtTest>
 #include <QBuffer>
 
-
 using namespace MusicCore;
 
-void MusicXmlWriterTest::init()
+bool compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path = QString());
+bool validateOutput(MusicCore::Sheet* sheet, const char* fname);
+
+class MusicXmlWriterTest : public QObject
 {
-}
-
-void MusicXmlWriterTest::cleanup()
-{
-}
-
-void MusicXmlWriterTest::testParts()
-{
-    Sheet* sheet = new Sheet();
-    Part* p = sheet->addPart("first part");
-    p->setShortName("part1");
-    sheet->addPart("second part");
-
-    sheet->addBar();
-
-    validateOutput(sheet, "parts.xml");
-    delete sheet;
-}
-
-void MusicXmlWriterTest::testPartGroups()
-{
-    Sheet* sheet = new Sheet();
-    sheet->addBar();
-    for (int i = 0; i < 8; i++) {
-        sheet->addPart(QString("part %1").arg(i));
+    Q_OBJECT
+private slots:
+    void init() 
+    {
     }
-
-    PartGroup* pg = sheet->addPartGroup(0, 1);
-    pg->setName("group 1");
     
-    pg = sheet->addPartGroup(2, 3);
-    pg->setSymbol(PartGroup::Brace);
-
-    pg = sheet->addPartGroup(4, 5);
-    pg->setSymbol(PartGroup::Line);
-
-    pg = sheet->addPartGroup(6, 7);
-    pg->setSymbol(PartGroup::Bracket);
-    pg->setCommonBarLines(false);
-
-    validateOutput(sheet, "partgroups.xml");
-    delete sheet;
-}
-
-void MusicXmlWriterTest::testNestedPartGroups()
-{
-    Sheet* sheet = new Sheet();
-    sheet->addBar();
-    for (int i = 0; i < 7; i++) {
-        sheet->addPart(QString("part %1").arg(i));
+    void cleanup() 
+    {
+    }
+    
+    void testParts()
+    {
+        Sheet* sheet = new Sheet();
+        Part* p = sheet->addPart("first part");
+        p->setShortName("part1");
+        sheet->addPart("second part");
+        
+        sheet->addBar();
+        
+        validateOutput(sheet, "parts.xml");
+        delete sheet;
     }
 
-    sheet->addPartGroup(0, 1)->setName("group 1");
-    sheet->addPartGroup(1, 2)->setName("group 2");
-    sheet->addPartGroup(2, 3)->setName("group 3");
-
-    sheet->addPartGroup(0, 6)->setName("group 4");
-    sheet->addPartGroup(4, 5)->setName("group 5");
-    sheet->addPartGroup(4, 5)->setName("group 6");
-
-    validateOutput(sheet, "nestedpartgroups.xml");
-    delete sheet;
-}
-
-void MusicXmlWriterTest::testNoteDurations()
-{
-    Sheet* sheet = new Sheet();
-    Bar* bar = sheet->addBar();
-    Part* part = sheet->addPart("part");
-    Voice* voice = part->addVoice();
-    Staff* staff = part->addStaff();
-    VoiceBar* vb = bar->voice(voice);
-
-    for (Chord::Duration d = Chord::HundredTwentyEighth; d <= Chord::Breve; d = (Chord::Duration)(d + 1)) {
-        Chord* c = new Chord(d);
-        c->addNote(staff, 0);
-        vb->addElement(c);
-    }
-    for (int i = 1; i < 4; i++) {
-        Chord* c = new Chord(Chord::Quarter, i);
-        c->addNote(staff, 0);
-        vb->addElement(c);
+    void testPartGroups()
+    {
+        Sheet* sheet = new Sheet();
+        sheet->addBar();
+        for (int i = 0; i < 8; i++) {
+            sheet->addPart(QString("part %1").arg(i));
+        }
+        
+        PartGroup* pg = sheet->addPartGroup(0, 1);
+        pg->setName("group 1");
+        
+        pg = sheet->addPartGroup(2, 3);
+        pg->setSymbol(PartGroup::Brace);
+        
+        pg = sheet->addPartGroup(4, 5);
+        pg->setSymbol(PartGroup::Line);
+        
+        pg = sheet->addPartGroup(6, 7);
+        pg->setSymbol(PartGroup::Bracket);
+        pg->setCommonBarLines(false);
+        
+        validateOutput(sheet, "partgroups.xml");
+        delete sheet;
     }
 
-    validateOutput(sheet, "notedurations.xml");
-    delete sheet;
-}
-
-void MusicXmlWriterTest::testNotePitch()
-{
-    Sheet* sheet = new Sheet();
-    Bar* bar = sheet->addBar();
-    Part* part = sheet->addPart("part");
-    Voice* voice = part->addVoice();
-    Staff* staff = part->addStaff();
-    VoiceBar* vb = bar->voice(voice);
-
-    for (int p = -20; p <= 20; p++) {
-        Chord* c = new Chord(Chord::Quarter);
-        c->addNote(staff, p);
-        vb->addElement(c);
+    void testNestedPartGroups()
+    {
+        Sheet* sheet = new Sheet();
+        sheet->addBar();
+        for (int i = 0; i < 7; i++) {
+            sheet->addPart(QString("part %1").arg(i));
+        }
+        
+        sheet->addPartGroup(0, 1)->setName("group 1");
+        sheet->addPartGroup(1, 2)->setName("group 2");
+        sheet->addPartGroup(2, 3)->setName("group 3");
+        
+        sheet->addPartGroup(0, 6)->setName("group 4");
+        sheet->addPartGroup(4, 5)->setName("group 5");
+        sheet->addPartGroup(4, 5)->setName("group 6");
+        
+        validateOutput(sheet, "nestedpartgroups.xml");
+        delete sheet;
+    }
+    
+    void testNoteDurations()
+    {
+        Sheet* sheet = new Sheet();
+        Bar* bar = sheet->addBar();
+        Part* part = sheet->addPart("part");
+        Voice* voice = part->addVoice();
+        Staff* staff = part->addStaff();
+        VoiceBar* vb = bar->voice(voice);
+        
+        for (Chord::Duration d = Chord::HundredTwentyEighth; d <= Chord::Breve; d = (Chord::Duration)(d + 1)) {
+            Chord* c = new Chord(d);
+            c->addNote(staff, 0);
+            vb->addElement(c);
+        }
+        for (int i = 1; i < 4; i++) {
+            Chord* c = new Chord(Chord::Quarter, i);
+            c->addNote(staff, 0);
+            vb->addElement(c);
+        }
+        
+        validateOutput(sheet, "notedurations.xml");
+        delete sheet;
     }
 
-    validateOutput(sheet, "notepitch.xml");
-    delete sheet;
-}
-
-void MusicXmlWriterTest::testNoteAccidentals()
-{
-    Sheet* sheet = new Sheet();
-    Bar* bar = sheet->addBar();
-    Part* part = sheet->addPart("part");
-    Voice* voice = part->addVoice();
-    Staff* staff = part->addStaff();
-    VoiceBar* vb = bar->voice(voice);
-
-    for (int a = -2; a <= 2; a++) {
-        Chord* c = new Chord(Chord::Quarter);
-        c->addNote(staff, 0, a);
-        vb->addElement(c);
+    void testNotePitch()
+    {
+        Sheet* sheet = new Sheet();
+        Bar* bar = sheet->addBar();
+        Part* part = sheet->addPart("part");
+        Voice* voice = part->addVoice();
+        Staff* staff = part->addStaff();
+        VoiceBar* vb = bar->voice(voice);
+        
+        for (int p = -20; p <= 20; p++) {
+            Chord* c = new Chord(Chord::Quarter);
+            c->addNote(staff, p);
+            vb->addElement(c);
+        }
+        
+        validateOutput(sheet, "notepitch.xml");
+        delete sheet;
     }
+        
+    void testNoteAccidentals()
+    {
+        Sheet* sheet = new Sheet();
+        Bar* bar = sheet->addBar();
+        Part* part = sheet->addPart("part");
+        Voice* voice = part->addVoice();
+        Staff* staff = part->addStaff();
+        VoiceBar* vb = bar->voice(voice);
+        
+        for (int a = -2; a <= 2; a++) {
+            Chord* c = new Chord(Chord::Quarter);
+            c->addNote(staff, 0, a);
+            vb->addElement(c);
+        }
+        
+        validateOutput(sheet, "noteaccidentals.xml");
+        delete sheet;
+    }
+};
 
-    validateOutput(sheet, "noteaccidentals.xml");
-    delete sheet;
-}
 
 #define FAIL(message) do { QTest::qFail(message, __FILE__, __LINE__); return false; } while (0)
-bool MusicXmlWriterTest::compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path)
+bool compareNodes(KoXmlNode& valid, KoXmlNode& result, QString path)
 {
     path += '/' + valid.nodeName();
     
@@ -227,7 +234,7 @@ bool MusicXmlWriterTest::compareNodes(KoXmlNode& valid, KoXmlNode& result, QStri
     return true;
 }
 
-bool MusicXmlWriterTest::validateOutput(Sheet* sheet, const char* fname)
+bool validateOutput(Sheet* sheet, const char* fname)
 {
     MusicCore::MusicXmlWriter writer;
     QIODevice* dev = new QBuffer();
