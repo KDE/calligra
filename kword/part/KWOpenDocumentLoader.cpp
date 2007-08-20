@@ -86,10 +86,12 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
                 kWarning(32500) << "KoTextFrameLoader::loadImage Failed to load odf for picture shape" << endl;
             }
 
+            KoTextAnchor* anchor = 0;
+            
             if( anchortype == "paragraph" ) {
                 // Anchor position is the paragraph that the current drawing shape element is contained in.
                 // The shape appears at the start of the paragraph element.
-                KoTextAnchor* anchor = new KoTextAnchor(shape);
+                anchor = new KoTextAnchor(shape);
                 anchor->setOffset( shape->position() );
                 anchor->setAlignment(KoTextAnchor::HorizontalOffset);
                 anchor->setAlignment(KoTextAnchor::VerticalOffset);
@@ -100,7 +102,7 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
             else if( anchortype == "char" ) {
                 // Anchor position is the character after the drawing shape element.
                 // The shape appears just before the character.
-                KoTextAnchor* anchor = new KoTextAnchor(shape);
+                anchor = new KoTextAnchor(shape);
                 //anchor->setOffset( shape->position() );
                 //anchor->setAlignment(KoTextAnchor::HorizontalOffset);
                 //anchor->setAlignment(KoTextAnchor::VerticalOffset);
@@ -126,7 +128,7 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
                 KWPage* page = pagemanager->page(pagenum);
                 Q_ASSERT(page);
 
-                KoTextAnchor* anchor = new KoTextAnchor(shape);
+                anchor = new KoTextAnchor(shape);
                 anchor->setAlignment(KoTextAnchor::HorizontalOffset);
                 anchor->setAlignment(KoTextAnchor::VerticalOffset);
 
@@ -147,7 +149,7 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
                 // Anchor position is the parent text box that the current drawing shape element is
                 // contained in. The shape appears in the element representing the text box to which
                 // the drawing object is bound.
-                KoTextAnchor* anchor = new KoTextAnchor(shape);
+                anchor = new KoTextAnchor(shape);
                 anchor->setOffset( shape->position() );
                 anchor->setAlignment(KoTextAnchor::TopOfFrame);
                 anchor->setAlignment(KoTextAnchor::Left);
@@ -158,14 +160,15 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
             else if( anchortype == "as-char" ) {
                 // There is no anchor position. The drawing shape behaves like a character.
                 // The shape appears at the position where the character appears in the document.
-                KoTextAnchor* anchor = new KoTextAnchor(shape);
+                anchor = new KoTextAnchor(shape);
                 KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
                 Q_ASSERT(layout && layout->inlineObjectTextManager());
                 layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
             }
             else
                 kWarning(32001)<<"KWOpenDocumentLoader::loadImage Unknown anchor-type: "<<anchortype<<endl;
-
+            if (anchor)
+                imageFrame->attachAnchor(anchor);
             return shape;
         }
         

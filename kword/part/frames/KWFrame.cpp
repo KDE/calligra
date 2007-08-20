@@ -36,7 +36,8 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
     m_runAround( KWord::RunAround ),
     m_runAroundDistance( 1.0 ),
     m_frameSet( parent ),
-    m_outline(0)
+    m_outline(0),
+    m_anchor(0)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
@@ -78,6 +79,8 @@ void KWFrame::copySettings(const KWFrame *frame) {
 }
 
 void KWFrame::saveOdf(KoShapeSavingContext & context) {
+    if (m_anchor)
+        return;
     KoXmlWriter &writer = context.xmlWriter();
     const bool mainTextFrame = context.isSet(KoShapeSavingContext::MainTextFrame);
     if (!mainTextFrame) {
@@ -130,4 +133,12 @@ void KWFrame::makeCopyFrame() {
 
 void KWFrame::setOutlineShape(KWOutlineShape *outline) {
     m_outline = outline;
+}
+
+void KWFrame::attachAnchor (KoTextAnchor *anchor) {
+    m_anchor = anchor;
+}
+
+KoTextAnchor *KWFrame::getAnchor() {
+    return m_anchor;
 }

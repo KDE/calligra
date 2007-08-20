@@ -163,6 +163,8 @@ public:
     KWOutlineShape *outlineShape() const { return m_outline; }
     void setOutlineShape(KWOutlineShape *outline);
 
+    void attachAnchor (KoTextAnchor *anchor);
+    KoTextAnchor *getAnchor();
 protected:
     /// replace the current set shape with the argument one.
     void setShape(KoShape *shape);
@@ -175,6 +177,7 @@ private:
     KWord::RunAroundSide m_runAroundSide;
     KWord::TextRunAround m_runAround;
     double m_runAroundDistance;
+    KoTextAnchor *m_anchor;
 
     KWFrameSet *m_frameSet;
     KWOutlineShape *m_outline;
