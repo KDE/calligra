@@ -25,16 +25,6 @@
 #include <KoShapeLayer.h>
 
 #include <kdebug.h>
-//#include <shapes/vellipse.h>
-//#include <shapes/vrectangle.h>
-//#include <shapes/vpolygon.h>
-//#include <core/vstroke.h>
-//#include <core/vfill.h>
-
-//Added by qt3to4:
-#include <Q3PointArray>
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 /*
 bug : see motar.wmf
@@ -315,18 +305,19 @@ void WMFImportParser::drawPolygon( const QPolygon &pa, bool ) {
 }
 
 
-void WMFImportParser::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool ) {
+void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool ) {
     KoPathShape *path = new KoPathShape();
 
     if ( listPa.count() > 0 ) {
         appendPen( *path );
         appendBrush( *path );
-        appendPoints( *path, *listPa.first() );
+        appendPoints( *path, listPa.first() );
         path->close();
 
-        while ( listPa.next() ) {
+        foreach( QPolygon pa, listPa )
+        {
             KoPathShape *newPath = new KoPathShape();
-            appendPoints( *newPath, *listPa.current() );
+            appendPoints( *newPath, pa );
             newPath->close();
             path->combine( newPath );
         }
@@ -396,7 +387,7 @@ void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )
 		//TODO
 }
 
-void WMFImportParser::appendPoints(KoPathShape &path, const Q3PointArray& pa)
+void WMFImportParser::appendPoints(KoPathShape &path, const QPolygon& pa)
 {
     // list of point array
     if ( pa.size() > 0 ) {

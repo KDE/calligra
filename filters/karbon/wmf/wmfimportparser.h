@@ -22,7 +22,6 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3PointArray>
-#include <Q3PtrList>
 #include <core/vdocument.h>
 #include <core/vcomposite.h>
 #include <kowmfread.h>
@@ -98,7 +97,7 @@ private:
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=false );
+    void  drawPolyPolygon( QList<QPolygon>& listPa, bool winding=false );
     void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing 
@@ -114,7 +113,7 @@ private:
     // Add pen, brush and points to a path
     void appendPen( KoShape& obj );
     void appendBrush( KoShape& obj );
-    void appendPoints(KoPathShape& path, const Q3PointArray& pa);
+    void appendPoints(KoPathShape& path, const QPolygon& pa);
     // coordinate transformation
     // translate wmf to (0,0) -> scale to document size -> translate to karbon (0,0)
     // Wmf origin is (left,top) corner
