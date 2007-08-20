@@ -2790,11 +2790,13 @@ void View::updateReadWrite( bool readwrite )
     // d->okButton->setEnabled( readwrite );
   d->editWidget->setEnabled( readwrite );
 
-  QList<QAction*> actions = actionCollection()->actions();
-  QList<QAction*>::ConstIterator aIt = actions.begin();
-  QList<QAction*>::ConstIterator aEnd = actions.end();
-  for (; aIt != aEnd; ++aIt )
-    (*aIt)->setEnabled( readwrite );
+    const QList<QAction*> actions = actionCollection()->actions();
+    for (int i = 0; i < actions.count(); ++i)
+    {
+        // The action collection contains also the flake tool actions. Skip them.
+        if (actions[i]->parent() == this)
+            actions[i]->setEnabled( readwrite );
+    }
 
 //   d->actions->transform->setEnabled( false );
   if ( !doc() || !doc()->map() || doc()->map()->isProtected() )
