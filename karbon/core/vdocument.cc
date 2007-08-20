@@ -262,6 +262,7 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
     qDeleteAll( d->layers );
     d->layers.clear();
     qDeleteAll( d->objects );
+    d->objects.clear();
 
     KoXmlElement layerElement;
     forEachElement( layerElement, context.koLoadingContext().oasisStyles().layerSet() )
