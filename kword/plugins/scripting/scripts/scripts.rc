@@ -48,17 +48,23 @@
         //-->
     <collection name="tools" text="Tools" comment="Miscellaneous scripts">
         <script
-               name="rbsampledoctree"
+               name="pyxmlviewer"
+               text="XML Viewer"
+               comment="Python script to view the ODT XML representation of the current document"
+               interpreter="python"
+               file="extensions/xmlviewer.py" />
+        <script
+               name="rbdoctree"
                text="Document Tree"
                comment="QtRuby script that displays the document structur within a treeview"
                interpreter="ruby"
-               file="samples/sample_doctree.rb" />
+               file="extensions/doctree.rb" />
         <script
-               name="pysampleonlinehelp"
+               name="pyonlinehelp"
                text="Online Help"
                comment="Python script that uses the KHTML Part to display the KWord Scripting online help"
                interpreter="python"
-               file="samples/sample_onlinehelp.py" />
+               file="extensions/onlinehelp.py" />
     </collection>
 
     <!--

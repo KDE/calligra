@@ -8,10 +8,12 @@ install(FILES
     ooimport.py ooimportconfig.ui
     exportfile.py
     kwreportlab.py
+    xmlviewer.py
+    doctree.rb
+    onlinehelp.py
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/extensions)
 
 install(FILES
-    sample_doctree.rb
     sample_cursor.rb
     sample_actions.py
     sample_toolactions.py
@@ -23,5 +25,4 @@ install(FILES
     sample_variables.py
     sample_insertshape.py
     sample_allshapes.py
-    sample_onlinehelp.py
     DESTINATION ${DATA_INSTALL_DIR}/kword/scripts/samples)
