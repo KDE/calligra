@@ -16,26 +16,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qdom.h>
-#include <Q3PointArray>
+#include "wmfexport.h"
+#include <kowmfwrite.h>
+
+#include <vdocument.h>
+#include <karbon_part.h>
+
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <KoFilterChain.h>
-#include <KoStore.h>
-#include <KoStoreDevice.h>
-#include "vdocument.h"
-#include "vcolor.h"
-#include "vcomposite.h"
-#include "vdashpattern.h"
-#include "vdocument.h"
-#include "vpath.h"
-#include "vsegment.h"
-#include "vfill.h"
-#include "vstroke.h"
-#include "vtext.h"
-
-#include "wmfexport.h"
-#include "kowmfwrite.h"
+#include <KoLineBorder.h>
+#include <KoShape.h>
+#include <KoShapeContainer.h>
 
 /*
 TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
@@ -56,15 +48,16 @@ WmfExport::~WmfExport()
 
 KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QByteArray& to )
 {
-    if( to != "image/x-wmf" || from != "application/x-karbon" ) {
+    if( to != "image/x-wmf" || from != "application/vnd.oasis.opendocument.graphics" ) 
         return KoFilter::NotImplemented;
-    }
 
-    KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
+    KoDocument * doc = m_chain->inputDocument();
+    if( ! doc )
+        return KoFilter::ParsingError;
 
-    if( !storeIn ) {
-        return KoFilter::StupidError;
-    }
+    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>( doc );
+    if( ! karbonPart )
+        return KoFilter::WrongFormat;
 
     // open Placeable Wmf file
     mWmf = new KoWmfWrite( m_chain->outputFile() );
@@ -73,188 +66,92 @@ KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QBy
         return KoFilter::WrongFormat;
     }
 
-    /*
-    QDomDocument domIn;
-    domIn.setContent( storeIn );
-    QDomElement docNode = domIn.documentElement();
-
-    // Load the document.
-    mDoc = new VDocument;
-    mDoc->load( docNode );
-
-    // Process the document.
-    mDoc->accept( *this );
+    paintDocument( karbonPart->document() );
 
     mWmf->end();
 
     delete mWmf;
-    delete mDoc;
 
-    */
     return KoFilter::OK;
 }
 
-
-void WmfExport::visitVDocument( VDocument& document ) {
-    int width;
-    int height;
-
-    mDoc = &document;
-    mListPa.setAutoDelete( true );
+void WmfExport::paintDocument( VDocument& document ) {
 
     // resolution
     mDpi = 1000;
-    width = (int)(POINT_TO_INCH( document.width() ) * mDpi);
-    height = (int)(POINT_TO_INCH( document.height() ) * mDpi);
+
+    QSizeF pageSize = document.pageSize();
+    int width = static_cast<int>(POINT_TO_INCH( pageSize.width() ) * mDpi);
+    int height = static_cast<int>(POINT_TO_INCH( pageSize.height() ) * mDpi);
 
     mWmf->setDefaultDpi( mDpi );
     mWmf->setWindow( 0, 0, width, height );
 
-    if ( (document.width() != 0) && (document.height() != 0) ) {
-        mScaleX = (double)width / document.width();
-        mScaleY = (double)height / document.height();
+    if ( (pageSize.width() != 0) && (pageSize.height() != 0) ) {
+        mScaleX = static_cast<double>(width) / pageSize.width();
+        mScaleY = static_cast<double>(height) / pageSize.height();
     }
+
+    QList<KoShape*> shapes = document.shapes();
+    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.
-    VVisitor::visitVDocument( document );
-
-}
-
-
-void WmfExport::visitVPath( VPath& composite ) {
-    QPen      pen;
-    QBrush    brush;
-
-    getPen( pen, composite.stroke() );
-    getBrush( brush, composite.fill() );
-
-    VVisitor::visitVPath( composite );
-
-    if ( mListPa.count() > 0 ) {
-        mWmf->setPen( pen );
-        if( (brush.style() == Qt::NoBrush)
-            && (mListPa.count() == 1) ) {
-            mWmf->drawPolyline( *mListPa.first() );
-        }
-        else {
-            mWmf->setBrush( brush );
-
-            if ( mListPa.count() == 1 ) {
-                mWmf->drawPolygon( *mListPa.first() );
-            }
-            else {
-                // combined path
-                mWmf->drawPolyPolygon( mListPa );
-            }
-        }
-    }
-    mListPa.clear();
-}
-
-
-// Export segment.
-void WmfExport::visitVSubpath( VSubpath& path ) {
-    VSubpath *newPath;
-    VSubpathIterator itr( path );
-    VFlattenCmd cmd( 0L, INCH_TO_POINT(0.3 / (double)mDpi) );
-    Q3PointArray *pa = new Q3PointArray( path.count() );
-    int  nbrPoint=0;      // number of points in the path
-
-    for( ; itr.current(); ++itr ) {
-	VSegment *segment= itr.current();
-	if (segment->isCurve()) {
-	    newPath = new VSubpath( mDoc );
-
-	    // newPath duplicate the list of curve
-	    newPath->moveTo( itr.current()->prev()->knot() );
-	    newPath->append( itr.current()->clone() );
-	    while( itr.current()->next() ) {
-		if ( itr.current()->next()->isCurve() ) {
-		    newPath->append( itr.current()->next()->clone() );
-		}
-		else {
-		    break;
-		}
-		++itr;
-	    }
-
-	    // flatten the curve
-	    cmd.visit( *newPath );
-
-	    // adjust the number of points
-	    pa->resize( pa->size() + newPath->count() - 2 );
-
-	    // Ommit the first segment and insert points
-	    newPath->first();
-	    while( newPath->next() ) {
-		pa->setPoint( nbrPoint++, coordX( newPath->current()->knot().x() ),
-			coordY( newPath->current()->knot().y() ) );
-	    }
-	    delete newPath;
-	} else if (segment->isLine()) {
-	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ),
-		    coordY( itr.current()->knot().y() ) );
-	} else if (segment->isBegin()) {
-	    // start a new polygon
-	    pa->setPoint( nbrPoint++, coordX( itr.current()->knot().x() ),
-		    coordY( itr.current()->knot().y() ) );
-        }
-    }
-
-    // adjust the number of points
-    if ( nbrPoint > 1 ) {
-        pa->resize( nbrPoint );
-        mListPa.append( pa );
-    }
-    else {
-        delete pa;
-        // TODO: check why we have empty path
-        kDebug() <<"WmfExport::visitVSubpath : Empty path ?";
+    foreach( KoShape * shape, shapes )
+    {
+        if( dynamic_cast<KoShapeContainer*>( shape ) )
+            continue;
+        paintShape( shape );
     }
 }
 
+void WmfExport::paintShape( KoShape * shape )
+{
+    QList<QPolygonF> subpaths = shape->outline().toFillPolygons( shape->absoluteTransformation(0) );
 
-void WmfExport::visitVText( VText& text ) {
-    // TODO: export text
-    visitVSubpath( text.basePath() );
+    if( ! subpaths.count() )
+        return;
+
+    QList<QPolygon> polygons;
+    foreach( QPolygonF subpath, subpaths )
+    {
+        QPolygon p;
+        uint pointCount = subpath.count();
+        for( uint i = 0; i < pointCount; ++i )
+            p.append( QPoint( coordX( subpath[i].x() ), coordY( subpath[i].y() ) ) );
+
+        polygons.append( p );
+    }
+    mWmf->setPen( getPen( shape->border() ) );
+
+    if( polygons.count() == 1 && shape->background().style() == Qt::NoBrush )
+        mWmf->drawPolyline( polygons.first() );
+    else
+    {
+        mWmf->setBrush( shape->background() );
+        if( polygons.count() == 1 )
+            mWmf->drawPolygon( polygons.first() );
+        else
+            mWmf->drawPolyPolygon( polygons );
+    }
 }
 
+QPen WmfExport::getPen( const KoShapeBorderModel * stroke )
+{
+    const KoLineBorder * lineBorder = dynamic_cast<const KoLineBorder*>( stroke );
+    if( ! lineBorder )
+        return QPen( Qt::NoPen );
 
-void WmfExport::getBrush( QBrush& brush, const VFill *fill ) {
-    if( (fill->type() == VFill::solid) || (fill->type() == VFill::grad)
-        || (fill->type() == VFill::patt) ) {
-        if ( fill->color().opacity() < 0.1 ) {
-            brush.setStyle( Qt::NoBrush );
-        }
-        else {
-            brush.setStyle( Qt::SolidPattern );
-            brush.setColor( fill->color() );
-        }
-    }
-    else {
-        brush.setStyle( Qt::NoBrush );
-    }
-}
+    QPen pen( lineBorder->lineStyle() );
+    if( pen.style() > Qt::SolidLine )
+        pen.setDashPattern( lineBorder->lineDashes() );
 
+    pen.setColor( lineBorder->color() );
+    pen.setCapStyle( lineBorder->capStyle() );
+    pen.setJoinStyle( lineBorder->joinStyle() );
+    pen.setWidthF( coordX(lineBorder->lineWidth()) );
+    pen.setMiterLimit( lineBorder->miterLimit() );
 
-void WmfExport::getPen( QPen& pen, const VStroke *stroke ) {
-    if( (stroke->type() == VStroke::solid) || (stroke->type() == VStroke::grad)
-        || (stroke->type() == VStroke::patt) ) {
-        // TODO : Dash pattern.
-
-        if ( stroke->lineCap() == VStroke::capRound ) {
-            pen.setCapStyle( Qt::RoundCap );
-        }
-        else {
-            pen.setCapStyle( Qt::SquareCap );
-        }
-        pen.setStyle( Qt::SolidLine );
-        pen.setColor( stroke->color() );
-        pen.setWidth( coordX( stroke->lineWidth() ) );
-    }
-    else {
-        pen.setStyle( Qt::NoPen );
-    }
+    return pen;
 }
 
 int WmfExport::coordX( double left )
@@ -264,7 +161,7 @@ int WmfExport::coordX( double left )
 
 int WmfExport::coordY( double top )
 {
-    return (int)((mDoc->pageSize().height() - top) * mScaleY);
+    return (int)(top * mScaleY);
 }
 
 #include <wmfexport.moc>

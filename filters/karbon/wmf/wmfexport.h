@@ -19,22 +19,16 @@
 #ifndef WMFEXPORT_H
 #define WMFEXPORT_H
 
-#include <QPen>
-#include <QBrush>
-#include <q3ptrlist.h>
-#include <QPolygon>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QtGui/QPen>
 #include <KoFilter.h>
-#include "vvisitor.h"
 
 class KoWmfWrite;
-class VPath;
 class VDocument;
-class VSubpath;
-class VText;
+class KoShape;
+class KoShapeBorderModel;
+class QPainterPath;
 
-class WmfExport : public KoFilter, private VVisitor
+class WmfExport : public KoFilter
 {
     Q_OBJECT
 
@@ -45,12 +39,10 @@ public:
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 private:
-    void visitVPath( VPath& composite );
-    void visitVDocument( VDocument& document );
-    void visitVSubpath( VSubpath& path );
-    void visitVText( VText& text );
-    void getBrush( QBrush& brush, const VFill *fill );
-    void getPen( QPen& pen, const VStroke *stroke );
+    void paintDocument( VDocument& document );
+    void paintShape( KoShape * shape );
+
+    QPen getPen( const KoShapeBorderModel *stroke );
 
     // coordinate transformation
     // translate origin from (left,bottom) to (left,top) -> scale to wmf size 
@@ -61,11 +53,9 @@ private:
 
 private:
     KoWmfWrite *mWmf;
-    VDocument *mDoc;
     int       mDpi;
     double    mScaleX;
     double    mScaleY;
-    Q3PtrList<QPolygon> mListPa;
 };
 
 #endif

@@ -25,21 +25,19 @@ install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 
-#set(wmfexport_PART_SRCS wmfexport.cc )
+set(wmfexport_PART_SRCS wmfexport.cc )
 
-#kde4_add_plugin(wmfexport WITH_PREFIX ${wmfexport_PART_SRCS})
+kde4_add_plugin(wmfexport WITH_PREFIX ${wmfexport_PART_SRCS})
 
 
+target_link_libraries(wmfexport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
 
-#target_link_libraries(wmfexport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
-
-#install(TARGETS wmfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
+install(TARGETS wmfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-#install( FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  karbon_wmf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  karbon_wmf_import.desktop karbon_wmf_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+#install( FILES  karbon_wmf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 
