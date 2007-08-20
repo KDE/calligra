@@ -30,6 +30,9 @@ class Dialog:
             path = reader.path(i)
             widgets = []
             if typeName == "text/xml":
+                if not self.store.hasFile(path):
+                    print "Skipping not existing path %s" % path
+                    continue
                 page = self.dialog.addPage(path, "")
 
                 browser = self.forms.createWidget(page, "QTextBrowser", "Editor")
@@ -46,6 +49,11 @@ class Dialog:
                 openBtn.text = "Open with..."
                 openBtn.connect("clicked()", self.openClicked)
                 widgets.append(openBtn)
+
+                kwriteBtn = self.forms.createWidget(w, "QPushButton")
+                kwriteBtn.text = "Open with KWrite"
+                kwriteBtn.connect("clicked(bool)", self.kwriteClicked)
+                widgets.append(kwriteBtn)
 
                 kxmleditorBtn = self.forms.createWidget(w, "QPushButton")
                 kxmleditorBtn.text = "Open with KXMLEditor"
@@ -118,9 +126,18 @@ class Dialog:
             toFile += ".xml"
         if not self.store.extractToFile(path,toFile):
             raise "Failed to extract \"%s\" to \"%s\"" % (path,toFile)
-        os.system( "\"%s\" \"%s\"" % (program,toFile) )
-        if os.path.isfile(toFile):
-            os.remove(toFile)
+        if not ( program.startswith('"') and program.endswith('"') ):
+            program = "\"%s\"" % program
+
+        result = os.system( "%s \"%s\"" % (program,toFile) )
+        if result != 0:
+            self.forms.showMessageBox("Error", "Error", "<qt>Failed to execute program:<br><br>%s \"%s\"</qt>" % (program,toFile))
+
+        try:
+            if os.path.isfile(toFile):
+                os.remove(toFile)
+        except:
+            pass
 
         print "DONE doOpen program=\"%s\" path=\"%s\" typeName=\"%s\"" % (program,path,typeName)
 
@@ -131,7 +148,7 @@ class Dialog:
         dialog.minimumWidth = 360
         page = dialog.addPage("", "")
         edit = self.forms.createWidget(page, "QLineEdit", "Filter")
-        edit.text = 'kwrite'
+        edit.text = 'kate'
         edit.setFocus()
         if dialog.exec_loop():
             program = edit.text.strip()
@@ -139,6 +156,9 @@ class Dialog:
             if not program:
                 raise "No program defined."
             self.doOpen(program)
+
+    def kwriteClicked(self, *args):
+        self.doOpen('kwrite')
 
     def kxmleditorClicked(self, *args):
         self.doOpen('kxmleditor')
