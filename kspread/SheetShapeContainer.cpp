@@ -46,9 +46,14 @@ SheetShapeContainer::SheetShapeContainer(const SheetShapeContainer& other, Sheet
     : d( new Private )
 {
     d->sheet = sheet;
+    KoShape* shape;
     QList<KoShape*> shapes = other.iterator();
     for (int i = 0; i < shapes.count(); ++i)
-        addChild(shapes[i]); // FIXME
+    {
+        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShape();
+        shape->copySettings(shapes[i]);
+        addChild(shape);
+    }
 }
 
 SheetShapeContainer::~SheetShapeContainer()
