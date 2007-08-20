@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=PostgreSQL
-Name[ne]=पोस्ट ग्रे एसक्यूएल
+Name[ne]=पोस्टग्रे SQL
 Name[x-test]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
 Comment[bg]=Драйвер за мигриране от PostgreSQL към Kexi
@@ -26,7 +26,7 @@ Comment[km]=កម្មវិធី​បញ្ជា​សម្រាប់�
 Comment[lv]=PostgreSQL datu migrācijas draiveris priekš Kexi
 Comment[nb]=Kexi-programmodul for migrering av MySQL-drivere
 Comment[nds]=PostgreSQL-Datenutlagerndriever för Kexi
-Comment[ne]=केक्सीका लागि पोस्टग्रेसSQL मापग्रेसन ड्राइभर
+Comment[ne]=केक्सीका लागि पोस्टग्रे SQL माइग्रेसन ड्राइभर
 Comment[nl]=PostgreSQL-migratiestuurprogramma voor Kexi
 Comment[nn]=Kexi-programmodul for migrering av MySQL-drivarar
 Comment[pl]=Wtyczka migracji danych z serwera PostgreSQL dla Kexi

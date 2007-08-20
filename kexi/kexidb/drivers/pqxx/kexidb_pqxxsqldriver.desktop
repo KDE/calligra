@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=PostgreSQL
-Name[ne]=पोस्ट ग्रे एसक्यूएल
+Name[ne]=पोस्टग्रे SQL
 Name[x-test]=xxPostgreSQLxx
 X-KDE-Library=kexidb_pqxxsqldriver
 ServiceTypes=Kexi/DBDriver

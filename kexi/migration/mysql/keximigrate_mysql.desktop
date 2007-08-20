@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=MySQL
-Name[ne]=मेरो एसक्यूएल
 Name[x-test]=xxMySQLxx
 Comment=MySQL Migration Driver for Kexi
 Comment[bg]=Драйвер за мигриране от MySQL към Kexi
