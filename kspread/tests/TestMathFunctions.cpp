@@ -156,7 +156,7 @@ void TestMathFunctions::testATAN()
   // ODF-tests
   CHECK_EVAL( "ATAN(1)*4/PI()", Value(  1        ) );       // arc tangent of 1 is PI()/4 radians.
   CHECK_EVAL_SHORT( "ATAN(-1.0e16)",  Value( -1.570796 ) ); // TODO expand / Check if ATAN gives reasonably accurate results, 
-                                                            // and that slightly negative values as input produce numbers near -£k/2.
+                                                            // and that slightly negative values as input produce numbers near -PI/2.
 }
 
 void TestMathFunctions::testATAN2()
@@ -300,11 +300,11 @@ void TestMathFunctions::testCONVERT()
   CHECK_EVAL( "CONVERT(  20; \"F\";      \"m\")",    Value::errorNA() );      // Different groups produce an error.
   CHECK_EVAL_SHORT( "CONVERT(1000;\"qt\";\"l\")",    Value( 946.5588641 ) );  // Quart is U.S. customary, liquid measure
   CHECK_EVAL_SHORT( "CONVERT(1000;\"tbs\";\"l\")",   Value( 14.78998225 ) );  // Tablespoon uses U.S. customary historic definition
-                                                                              // ¡V note that there are many other definitions
+                                                                              // - note that there are many other definitions
   CHECK_EVAL( "CONVERT(1000; \"tsp\";    \"l\")",    Value( 4.929994084 ) );  // Teaspoon uses U.S. customary historic definition
-                                                                              // ¡V note that there are many other definitions
-//   CHECK_EVAL( "CONVERT(   1; \"das\";    \"sec\")",   Value( 10 ) );         // Does it support both ¡§s¡¨ and ¡§sec¡¨ for second?
-                                                                              // Does it support ¡§da¡¨ as the SI standard deka prefix?
+                                                                              // - note that there are many other definitions
+//   CHECK_EVAL( "CONVERT(   1; \"das\";    \"sec\")",   Value( 10 ) );         // Does it support both "s" and "sec" for second?
+                                                                              // Does it support "da" as the SI standard deka prefix?
   CHECK_EVAL( "CONVERT(   1; \"ar\";     \"m^2\")",  Value( 100 ) );          // A hectare (ar) is 100 square meters.
 //   CHECK_EVAL( "CONVERT(   1; \"cal\";    \"J\")",      Value( 4.1868 ) );    // "cal" is an International Table (IT) calorie, 4.1868 J.
   CHECK_EVAL( "CONVERT(   1; \"lbf\";    \"N\")",    Value( 4.448222 ) );     // Converting pound-force to Newtons
@@ -320,7 +320,7 @@ void TestMathFunctions::testCONVERT()
 //   CHECK_EVAL( "CONVERT(   1; \"day\";    \"s\")", Value( 86400 ) );          // Day to seconds.  Note: This test uses the 
                                                                               // international standard abbreviation for second (s),
                                                                               // not the abbreviation traditionally used in spreadsheets
-                                                                              // (sec); both ¡§s¡¨ and ¡§sec¡¨ must be supported.
+                                                                              // (sec); both "s" and "sec" must be supported.
 //   CHECK_EVAL_SHORT( "CONVERT( 1; \"qt\";    \"L\")", Value( 0.9463529460 ) ); // Quart (U.S. customary liquid measure) to liter.
                                                                               // This is 0.946352946 liters,
 }
