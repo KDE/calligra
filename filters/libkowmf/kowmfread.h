@@ -18,21 +18,20 @@
 #ifndef _KOWMFREAD_H_
 #define _KOWMFREAD_H_
 
-#include <QPen>
-#include <QBrush>
-#include <QFont>
-#include <QColor>
-#include <QRect>
-#include <qregion.h>
-#include <QImage>
-#include <QMatrix>
-#include <QString>
-#include <q3ptrlist.h>
-#include <q3pointarray.h>
-#include <QPainter>
-
 #include <kowmf_export.h>
+
+#include <QtCore/QRect>
+#include <QtGui/QRegion>
+#include <QtGui/QPainter>
+
 class KoWmfReadPrivate;
+class QString;
+class QPen;
+class QBrush;
+class QFont;
+class QColor;
+class QImage;
+class QMatrix;
 
 /**
  * KoWmfRead allows the redirection of the actions stored in a WMF file.
@@ -135,7 +134,7 @@ public:
     virtual void  drawPolygon( const QPolygon &pa, bool winding=false ) = 0;
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    virtual void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=false ) = 0;
+    virtual void  drawPolyPolygon( QList<QPolygon>& listPa, bool winding=false ) = 0;
     virtual void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 ) = 0;
 
     // Text drawing functions

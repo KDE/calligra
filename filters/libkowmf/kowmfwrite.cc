@@ -16,18 +16,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <math.h>
-#include <QFile>
-#include <QDataStream>
-//Added by qt3to4:
-#include <QPolygon>
-#include <Q3PtrList>
+#include "kowmfwrite.h"
+#include "kowmfstruct.h"
+#include "kowmfreadprivate.h"
 
 #include <kdebug.h>
 
-#include "kowmfstruct.h"
-#include "kowmfreadprivate.h"
-#include "kowmfwrite.h"
+#include <QFile>
+#include <QDataStream>
+#include <QPolygon>
+#include <QtGui/QPen>
+#include <QtGui/QBrush>
+#include <QtGui/QColor>
+#include <QtGui/QFont>
+#include <QtGui/QRegion>
+
+#include <math.h>
 
 /**
  * Private data
@@ -349,29 +353,27 @@ void KoWmfWrite::drawPolygon( const QPolygon &pa, bool  ) {
 }
 
 
-void KoWmfWrite::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool ) {
+void KoWmfWrite::drawPolyPolygon( QList<QPolygon>& listPa, bool ) {
 
-    QPolygon *pa;
     int sizeArrayPoly = 0;
 
-    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
-        sizeArrayPoly += (pa->size() * 2);
+    foreach ( QPolygon pa, listPa ) {
+        sizeArrayPoly += (pa.size() * 2);
     }
     int size = 4 + listPa.count() + sizeArrayPoly;
     d->mSt << (quint32)size << (quint16)0x0538 << (quint16)listPa.count();
 
     // number of point for each Polygon
-    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
-        d->mSt << (quint16)pa->size();
+    foreach ( QPolygon pa, listPa ) {
+        d->mSt << (quint16)pa.size();
     }
 
     // list of points
-    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
-        pointArray( *pa );
+    foreach ( QPolygon pa, listPa ) {
+        pointArray( pa );
     }
 
     d->mMaxRecordSize = qMax( d->mMaxRecordSize, size );
-
 }
 
 
@@ -406,7 +408,7 @@ void KoWmfWrite::pointArray( const QPolygon &pa ) {
 }
 
 
-quint32 KoWmfWrite::winColor( QColor color ) {
+quint32 KoWmfWrite::winColor( const QColor &color ) {
     quint32 c;
 
     c = (color.red() & 0xFF);

@@ -18,21 +18,18 @@
 #ifndef _KOWMFWRITE_H_
 #define _KOWMFWRITE_H_
 
-#include <QPen>
-#include <QBrush>
-#include <QColor>
-#include <QFont>
-#include <QRect>
-#include <QBuffer>
-#include <qregion.h>
-#include <QString>
-#include <QMatrix>
-#include <QImage>
-#include <q3ptrlist.h>
-#include <q3pointarray.h>
 #include <kowmf_export.h>
-#include <QPainter>
+
+#include <QtGui/QPainter>
+
 class KoWmfWritePrivate;
+class QPen;
+class QBrush;
+class QColor;
+class QFont;
+class QRegion;
+class QString;
+class QImage;
 
 /**
  * KoWmfWrite allows to create a windows placeable meta file (WMF).
@@ -108,7 +105,7 @@ public:
     void  drawPolygon( const QPolygon& pa, bool winding=false );
     // drawPolyPolygon draw the XOR of a list of polygons
     // listPa : list of polygons
-    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=false );
+    void  drawPolyPolygon( QList<QPolygon>& listPa, bool winding=false );
     void  drawImage( int left, int top, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions
@@ -124,7 +121,7 @@ private:
     void pointArray( const QPolygon& pa );
 
     /** Convertion between windows color and QColor */
-    quint32 winColor( QColor color );
+    quint32 winColor( const QColor &color );
 
     /** Convert angle a and alen in coordinate (xStart,yStart) and (xEnd, yEnd) */
     void angleToxy( int& xStart, int& yStart, int& xEnd, int& yEnd, int a, int alen );

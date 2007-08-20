@@ -20,20 +20,15 @@
 #ifndef _KOWMFREADPRIVATE_H_
 #define _KOWMFREADPRIVATE_H_
 
-#include <QPen>
-#include <QColor>
-#include <QFont>
-#include <QRect>
-#include <qregion.h>
-#include <QBuffer>
-#include <QString>
-//Added by qt3to4:
-#include <QPolygon>
-
 #include "kowmfstruct.h"
 #include "kowmfstack.h"
 
+#include <QtGui/QColor>
+#include <QtCore/QRect>
+
 class KoWmfRead;
+class QBuffer;
+class QPolygon;
 
 /**
  * KoWmfReadPrivate allows to read WMF files

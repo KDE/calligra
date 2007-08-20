@@ -16,13 +16,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-
 #include "kowmfpaint.h"
-//Added by qt3to4:
+
 #include <QPolygon>
-#include <Q3PtrList>
 #include <QPrinter>
+
+#include <kdebug.h>
 
 KoWmfPaint::KoWmfPaint() : KoWmfRead() {
     mTarget = 0;
@@ -257,22 +256,20 @@ void KoWmfPaint::drawPolyline( const QPolygon &pa ) {
 
 void KoWmfPaint::drawPolygon( const QPolygon &pa, bool winding ) {
     if( winding )
-	mPainter.drawPolygon( pa, Qt::WindingFill );
+        mPainter.drawPolygon( pa, Qt::WindingFill );
     else
-	mPainter.drawPolygon( pa, Qt::OddEvenFill );
+        mPainter.drawPolygon( pa, Qt::OddEvenFill );
 }
 
 
-void KoWmfPaint::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding ) {
-    QPolygon *pa;
-
+void KoWmfPaint::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
     mPainter.save();
     QBrush brush = mPainter.brush();
 
     // define clipping region
     QRegion region;
-    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
-        region = region.eor( *pa );
+    foreach ( QPolygon pa, listPa ) {
+        region = region.xored( pa );
     }
     mPainter.setClipRegion( region );
 
@@ -285,12 +282,12 @@ void KoWmfPaint::drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding ) {
     mPainter.setClipping( false );
     if ( mPainter.pen().style() != Qt::NoPen ) {
         mPainter.setBrush( Qt::NoBrush );
-        for ( pa = listPa.first() ; pa ; pa = listPa.next() ) 
-	{
-	    if( winding )
-	        mPainter.drawPolygon( *pa, Qt::WindingFill );
-	    else
-		mPainter.drawPolygon( *pa, Qt::OddEvenFill );
+        foreach ( QPolygon pa, listPa )
+        {
+            if( winding )
+                mPainter.drawPolygon( pa, Qt::WindingFill );
+            else
+                mPainter.drawPolygon( pa, Qt::OddEvenFill );
         }
     }
 

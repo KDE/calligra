@@ -18,21 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <math.h>
-
-#include <QFileInfo>
-#include <QImage>
-#include <QMatrix>
-#include <q3ptrlist.h>
-#include <q3pointarray.h>
-#include <QPainter>
-#include <QDataStream>
-#include <QByteArray>
-#include <kdebug.h>
-
 #include "kowmfreadprivate.h"
 #include "kowmfread.h"
 
+#include <kdebug.h>
+
+#include <QtGui/QImage>
+#include <QtGui/QMatrix>
+#include <QtCore/QDataStream>
+#include <QtCore/QByteArray>
+#include <QtCore/QBuffer>
+#include <QtGui/QPolygon>
+
+#include <math.h>
 
 KoWmfReadPrivate::KoWmfReadPrivate()
 {
@@ -445,20 +443,18 @@ void KoWmfReadPrivate::polyPolygon( quint32, QDataStream& stream )
 {
     quint16 numberPoly;
     quint16 sizePoly;
-    Q3PtrList<QPolygon> listPa;
+    QList<QPolygon> listPa;
 
     stream >> numberPoly;
 
-    listPa.setAutoDelete( true );
     for ( int i=0 ; i < numberPoly ; i++ ) {
         stream >> sizePoly;
-        listPa.append( new QPolygon( sizePoly ) );
+        listPa.append( QPolygon( sizePoly ) );
     }
 
     // list of point array
-    QPolygon *pa;
-    for ( pa = listPa.first() ; pa ; pa = listPa.next() ) {
-        pointArray( stream, *pa );
+    foreach ( QPolygon pa, listPa ) {
+        pointArray( stream, pa );
     }
 
     // draw polygon's

@@ -16,11 +16,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <QFile>
-#include <kdebug.h>
-
 #include "kowmfread.h"
 #include "kowmfreadprivate.h"
+
+#include <kdebug.h>
+
+#include <QtCore/QFile>
+#include <QtCore/QString>
 
 KoWmfRead::KoWmfRead() {
     mKwmf = new KoWmfReadPrivate();

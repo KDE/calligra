@@ -18,12 +18,12 @@
 #ifndef _KOWMFPAINT_H_
 #define _KOWMFPAINT_H_
 
-#include <QPainter>
-#include <QPolygon>
-#include <Q3PtrList>
-
 #include "kowmfread.h"
 #include <kowmf_export.h>
+
+#include <QtGui/QPainter>
+
+class QPolygon;
 
 /**
  * KoWmfPaint inherits the abstract class KoWmfRead
@@ -107,7 +107,7 @@ private:
      * drawPolyPolygon draw the XOR of a list of polygons
      * listPa : list of polygons
      */
-    void  drawPolyPolygon( Q3PtrList<QPolygon>& listPa, bool winding=false );
+    void  drawPolyPolygon( QList<QPolygon>& listPa, bool winding=false );
     void  drawImage( int x, int y, const QImage &, int sx = 0, int sy = 0, int sw = -1, int sh = -1 );
 
     // Text drawing functions
