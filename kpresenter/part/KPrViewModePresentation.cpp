@@ -28,7 +28,6 @@
 #include <KoPointerEvent.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
-#include <KoPADocument.h>
 #include <KoPAView.h>
 #include "KPrPresentationTool.h"
 
