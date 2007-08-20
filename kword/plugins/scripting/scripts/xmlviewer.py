@@ -114,6 +114,8 @@ class Dialog:
         print "START doOpen program=\"%s\" path=\"%s\" typeName=\"%s\"" % (program,path,typeName)
 
         toFile = tempfile.mktemp()
+        if typeName == "text/xml":
+            toFile += ".xml"
         if not self.store.extractToFile(path,toFile):
             raise "Failed to extract \"%s\" to \"%s\"" % (path,tempfile)
         os.system( "\"%s\" \"%s\"" % (program,toFile) )
