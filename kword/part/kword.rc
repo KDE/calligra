@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="111">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="112">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -196,7 +196,7 @@
   <Action name="configure" group="settings_configure"/>
  </Menu>
 </MenuBar>
-<ToolBar name="edit_toolbar" position="top"><Text>Edit</Text>
+<ToolBar name="edit_toolbar" position="top" iconText="textundericon"><Text>Edit</Text>
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Separator/>

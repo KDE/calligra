@@ -100,7 +100,7 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     KWCanvas* const canvas =  d->view->kwcanvas();
     Q_ASSERT(canvas);
 
-    //sebsauer, 2007-08-12, this crashes within QMainWindowLayout::animationFinished
+    //sebsauer, 2007-08-15, this crashes within QMainWindowLayout::animationFinished
     //This may the same bug that let's KWord crash if "Split View" got called.
     //FIXME check later if it's fixed.
 #if 0
