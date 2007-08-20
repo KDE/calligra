@@ -534,6 +534,7 @@ static bool kspread_convert_mass( const QString& fromUnit,
     massMap[ "hweight" ]  = 1.968413E-05; // Hundredweight
     massMap[ "shweight" ] = 2.204623E-05; // Shorthundredweight
     massMap[ "brton" ]    = 9.842065E-07; // Gross Registered Ton
+    massMap[ "uk_ton" ]    = 1.0/2240*2.2046229146913400E-03; // It's long ton or Imperial ton, 2240 lbm.
   }
 
   QString fromU = fromUnit;
@@ -623,6 +624,7 @@ static bool kspread_convert_force( const QString& fromUnit,
   {
     forceMap[ "N" ]      = 1.0; // Newton (reference)
     forceMap[ "dyn" ]    = 1.0e5; // dyn
+    forceMap[ "lbf" ]    = 1.0/4.448222; // Pound force (see ¡§lbm¡¨ for pound mass)
     forceMap[ "pond" ]   = 1.019716e2; // pond
   }
 
@@ -682,8 +684,9 @@ static bool kspread_convert_power( const QString& fromUnit,
   if( powerMap.isEmpty() )
   {
     powerMap[ "W" ]   = 1.0; // Watt (the reference)
-    powerMap[ "HP" ]  = 1.341022e-3; // Horsepower
-    powerMap[ "PS" ]  = 1.359622e-3; // Pferdestï¿½ke (German)
+//     powerMap[ "HP" ]  = 1.341022e-3; // Horsepower
+    powerMap[ "HP" ]  = 1.0/745.701; // Horsepower (UK)
+    powerMap[ "PS" ]  = 1.359622e-3; // Pferdestaerke (German)
   }
 
   QString fromU = fromUnit;
@@ -798,14 +801,22 @@ static bool kspread_convert_area( const QString& fromUnit,
   // first-time initialization
   if( areaMap.isEmpty() )
   {
-    areaMap[ "m2" ]   = 1.0; // square meter (the reference)
-    areaMap[ "mi2" ]  = 3.8610215854244585e-7; // square mile
-    areaMap[ "Nmi2" ] = 2.9155334959812286e-7; // square Nautical mile
-    areaMap[ "in2" ]  = 1.5500031000062000e3; // square inch
-    areaMap[ "ft2" ]  = 1.0763910416709722e1; // square foot
-    areaMap[ "yd2" ]  = 1.0936132983377078; // square yard
-    areaMap[ "acre" ] = 4.046856e3; // acre
-    areaMap[ "ha" ]   = 1.0e4; // hectare
+    areaMap[ "m2" ]    = 1.0; // square meter (the reference)
+    areaMap[ "m^2" ]   = 1.0; // square meter (the reference)
+
+    areaMap[ "acre" ]  = 4.046856e3;            // acre
+    areaMap[ "ar" ]    = 1.0/100;               // are
+    areaMap[ "ft2" ]   = 1.0763910416709722e1;  // square foot
+    areaMap[ "ft^2" ]  = 1.0763910416709722e1;  // square foot
+    areaMap[ "ha" ]    = 1.0e4;                 // hectare
+    areaMap[ "in2" ]   = 1.5500031000062000e3;  // square inch
+    areaMap[ "in^2" ]  = 1.5500031000062000e3;  // square inch
+    areaMap[ "mi2" ]   = 3.8610215854244585e-7; // square mile
+    areaMap[ "mi^2" ]  = 3.8610215854244585e-7; // square mile
+    areaMap[ "Nmi2" ]  = 2.9155334959812286e-7; // square Nautical mile
+    areaMap[ "Nmi^2" ] = 2.9155334959812286e-7; // square Nautical mile
+    areaMap[ "yd2" ]  = 1.0936132983377078;     // square yard
+    areaMap[ "yd^2" ]  = 1.0936132983377078;    // square yard
   }
 
   QString fromU = fromUnit;
