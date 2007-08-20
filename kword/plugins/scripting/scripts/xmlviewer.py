@@ -117,7 +117,7 @@ class Dialog:
         if typeName == "text/xml":
             toFile += ".xml"
         if not self.store.extractToFile(path,toFile):
-            raise "Failed to extract \"%s\" to \"%s\"" % (path,tempfile)
+            raise "Failed to extract \"%s\" to \"%s\"" % (path,toFile)
         os.system( "\"%s\" \"%s\"" % (program,toFile) )
         if os.path.isfile(toFile):
             os.remove(toFile)
