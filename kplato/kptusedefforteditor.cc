@@ -79,7 +79,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
         case Qt::DisplayRole: {
             if ( index.column() == 0 ) {
                 const Resource *r = resource( index );
-                //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<""<<r;
+                //kDebug()<<index.row()<<","<<index.column()<<""<<r;
                 if ( r ) {
                     return r->name();
                 }
@@ -91,7 +91,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
             }
             if ( index.column() == 8 ) {
                 // Total
-                //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<" total"<<endl;
+                //kDebug()<<index.row()<<","<<index.column()<<" total"<<endl;
                 double res = 0.0;
                 foreach ( QDate d, m_dates ) {
                     Completion::UsedEffort::ActualEffort *e = ue->effort( d );
@@ -114,7 +114,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
             }
             if ( index.column() == 0 ) {
                 const Resource *r = resource( index );
-                //kDebug()<<k_funcinfo<<index.row()<<","<<index.column()<<" "<<r<<endl;
+                //kDebug()<<index.row()<<","<<index.column()<<" "<<r<<endl;
                 if ( r ) {
                     return r->name();
                 }
@@ -152,7 +152,7 @@ QVariant UsedEffortItemModel::data ( const QModelIndex &index, int role ) const
 
 bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == 8 ) {
@@ -196,13 +196,13 @@ bool UsedEffortItemModel::setData ( const QModelIndex &idx, const QVariant &valu
 
 bool UsedEffortItemModel::submit()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     return QAbstractItemModel::submit();
 }
 
 void UsedEffortItemModel::revert()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     QList<const Resource*> lst = m_resourcelist;
     foreach ( const Resource *r, lst ) {
         if ( ! m_completion->usedEffortMap().contains( r ) ) {
@@ -464,7 +464,7 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
                 }
             }
             double v = Estimate::scale( e->remainingEffort, unit, scales );
-            //kDebug()<<k_funcinfo<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
         case Qt::EditRole:
@@ -521,7 +521,7 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
             } else {
                 v = Estimate::scale( e->totalPerformed, unit, scales );
             }
-            //kDebug()<<k_funcinfo<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
         case Qt::EditRole:
@@ -572,7 +572,7 @@ QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
                 }
             }
             double v = Estimate::scale( m_node->plannedEffort( m_manager->id() ), unit, scales );
-            //kDebug()<<k_funcinfo<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
         case Qt::EditRole:
@@ -621,7 +621,7 @@ QVariant CompletionEntryItemModel::data ( const QModelIndex &index, int role ) c
 
 bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == 0 ) {
@@ -680,13 +680,13 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
 
 bool CompletionEntryItemModel::submit()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     return QAbstractItemModel::submit();
 }
 
 void CompletionEntryItemModel::revert()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     refresh();
 }
 
@@ -748,7 +748,7 @@ void CompletionEntryItemModel::refresh()
             m_flags[ 2 ] = Qt::ItemIsEditable;
         }
     }
-    kDebug()<<k_funcinfo<<m_datelist<<endl;
+    kDebug()<<m_datelist<<endl;
     reset();
 }
 
@@ -775,14 +775,14 @@ void CompletionEntryItemModel::removeEntry( const QDate date )
         beginRemoveRows( QModelIndex(), i, i );
         m_datelist.removeAt( i );
         endRemoveRows();
-        kDebug()<<k_funcinfo<<date<<" removed"<<endl;
+        kDebug()<<date<<" removed"<<endl;
     }
     m_completion->takeEntry( date );
 }
 
 void CompletionEntryItemModel::addEntry( const QDate date )
 {
-    kDebug()<<k_funcinfo<<date<<endl;
+    kDebug()<<date<<endl;
     Completion::Entry *e = new Completion::Entry();
     if ( m_completion->entries().isEmpty() ) {
         if ( m_node ) {
@@ -799,7 +799,7 @@ void CompletionEntryItemModel::addEntry( const QDate date )
     if ( i != -1 ) {
         emit rowInserted( date );
         emit dataChanged( createIndex( i, 1 ), createIndex( i, rowCount() - 1 ) );
-    } else  kError()<<k_funcinfo<<"Failed to find added entry: "<<date<<endl;
+    } else  kError()<<"Failed to find added entry: "<<date<<endl;
 }
 
 
@@ -820,13 +820,13 @@ CompletionEntryEditor::CompletionEntryEditor( QWidget *parent )
 
 void CompletionEntryEditor::setCompletion( Completion *completion )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     model()->setCompletion( completion );
 }
 
 void CompletionEntryEditor::addEntry()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     QModelIndex i = model()->addRow();
     if ( i.isValid() ) {
         model()->setFlags( i.column(), model()->flags( i ) | Qt::ItemIsEditable );
@@ -838,7 +838,7 @@ void CompletionEntryEditor::addEntry()
 
 void CompletionEntryEditor::removeEntry()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     //static_cast<CompletionEntryItemModel*>( model() )->setCompletion( completion );
 }
 

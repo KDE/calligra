@@ -124,13 +124,13 @@ void Part::editProject()
 
 bool Part::loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     return loadXML( 0, doc ); // We have only one format, so try to load that!
 }
 
 bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
@@ -196,7 +196,7 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
                 //TODO add some ui here
             }
         } else if ( e.tagName() == "objects" ) {
-            kDebug()<<k_funcinfo<<"loadObjects";
+            kDebug()<<"loadObjects";
             loadObjects( e );
         }
     }
@@ -218,7 +218,7 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
 
 QDomDocument Part::saveXML()
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     QDomDocument document( "kplato" );
 
     document.appendChild( document.createProcessingInstruction(
@@ -255,7 +255,7 @@ QDomDocument Part::saveXML()
 
 void Part::slotDocumentRestored()
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     setModified( false );
 }
 
@@ -273,7 +273,7 @@ void Part::addCommand( K3Command * cmd, bool execute )
 
 void Part::slotCommandExecuted( K3Command * )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     setModified( true );
     kDebug() <<"------- KPlato, is embedded:" << isEmbedded();
     if ( m_view == NULL )
@@ -292,7 +292,7 @@ void Part::slotViewDestroyed()
 
 void Part::setCommandType( int type )
 {
-    //kDebug()<<k_funcinfo<<"type="<<type;
+    //kDebug()<<"type="<<type;
     if ( type == 0 )
         m_update = true;
     else if ( type == 1 )
@@ -319,7 +319,7 @@ DocumentChild *Part::createChild( KoDocument *doc, const QRect& geometry )
 
 void Part::loadObjects( const KoXmlElement &element )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -329,10 +329,10 @@ void Part::loadObjects( const KoXmlElement &element )
         if ( e.tagName() == "object" ) {
             DocumentChild *ch = new DocumentChild( this );
             if ( ch->load( e ) ) {
-                kDebug()<<k_funcinfo<<"loaded";
+                kDebug()<<"loaded";
                 insertChild( ch );
             } else {
-                kDebug()<<k_funcinfo<<"Failed to load object";
+                kDebug()<<"Failed to load object";
                 delete ch;
             }
         }
@@ -341,7 +341,7 @@ void Part::loadObjects( const KoXmlElement &element )
 
 bool Part::loadChildren( KoStore* store )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     foreach ( KoDocumentChild *ch, children() ) {
         ch->loadDocument( store );
     }
@@ -352,7 +352,7 @@ bool Part::completeLoading( KoStore *store )
 {
     if ( store == 0 ) {
         // can happen if loading a template
-        kDebug()<<k_funcinfo<<"No store"<<endl;
+        kDebug()<<"No store"<<endl;
         return true; // continue anyway
     }
     delete m_context;
@@ -361,7 +361,7 @@ bool Part::completeLoading( KoStore *store )
     if ( loadAndParse( store, "context.xml", doc ) ) {
         store->close();
         m_context->load( doc );
-    } else kWarning()<<k_funcinfo<<"No context"<<endl;
+    } else kWarning()<<"No context"<<endl;
     return true;
 }
 
@@ -455,7 +455,7 @@ QDomElement DocumentChild::save( QDomDocument &doc, bool uppercase )
         return QDomElement();
     }
     QDomElement e = KoDocumentChild::save( doc, uppercase );
-    kDebug()<<k_funcinfo<<m_title;
+    kDebug()<<m_title;
     e.setAttribute( "title", m_title );
     e.setAttribute( "icon", m_icon );
     return e;
@@ -466,7 +466,7 @@ bool DocumentChild::load( const KoXmlElement& element, bool uppercase )
     if ( KoDocumentChild::load( element, uppercase ) ) {
         m_icon = element.attribute( "icon", QString() );
         m_title = element.attribute( "title", QString() );
-        kDebug()<<k_funcinfo<<m_title;
+        kDebug()<<m_title;
         return true;
     }
     return false;

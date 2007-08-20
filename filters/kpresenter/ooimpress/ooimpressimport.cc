@@ -1620,7 +1620,7 @@ bool OoImpressImport::pushListLevelStyle( const QString& listStyleName, // for d
 
 void OoImpressImport::parseList( QDomDocument& doc, QDomElement& textObjectElement, const QDomElement& list )
 {
-    //kDebug(30518) << k_funcinfo <<"parseList";
+    //kDebug(30518) <<"parseList";
 
     m_insideOrderedList = ( list.localName() == "ordered-list" );
     QString oldListStyleName = m_currentListStyleName;
@@ -1628,7 +1628,7 @@ void OoImpressImport::parseList( QDomDocument& doc, QDomElement& textObjectEleme
         m_currentListStyleName = list.attributeNS( ooNS::text, "style-name", QString() );
     bool listOK = !m_currentListStyleName.isEmpty();
     const int level = m_listStyleStack.level() + 1;
-    //kDebug(30518) << k_funcinfo <<" listOK=" << listOK <<" level=" << level;
+    //kDebug(30518) <<" listOK=" << listOK <<" level=" << level;
     if ( listOK )
         listOK = pushListLevelStyle( m_currentListStyleName, level );
 
@@ -1803,7 +1803,7 @@ void OoImpressImport::parseSpanOrSimilar( QDomDocument& doc, const QDomElement& 
 
         QDomElement text = saveHelper(textData, doc);
 
-        kDebug(30518) << k_funcinfo <<"Para text is:" << textData;
+        kDebug(30518) <<"Para text is:" << textData;
 
         if (m_styleStack.hasProperty( ooNS::fo, "language" )) {
             QString lang = m_styleStack.property( ooNS::fo, "language" );

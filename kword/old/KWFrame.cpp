@@ -110,11 +110,11 @@ int KWFrame::pageNumber() const
 {
     Q_ASSERT( m_frameSet );
     if( !m_frameSet ) {
-        kDebug() << k_funcinfo << this <<" has no frameset!";
+        kDebug() << this <<" has no frameset!";
         return 0;
     }
     if( !m_frameSet->pageManager() ) {
-        kWarning() << k_funcinfo << this << " is not a frame that is in use; misses a pageManager!" << endl;
+        kWarning() << this << " is not a frame that is in use; misses a pageManager!" << endl;
         return -1;
     }
     return frameSet()->pageManager()->pageNumber(absolutePosition());

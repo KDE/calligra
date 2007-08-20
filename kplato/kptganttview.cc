@@ -73,12 +73,12 @@ MyKDGanttView::MyKDGanttView( Part *part, QWidget *parent )
         for ( int i = 1; i < m_model->columnCount(); ++i ) {
             tv->hideColumn( i );
         }
-    } else kDebug()<<k_funcinfo<<"No treeview !!!"<<endl;
+    } else kDebug()<<"No treeview !!!"<<endl;
 }
 
 void MyKDGanttView::update()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     kDebug()<<"POULOU"<<endl;
 }
 
@@ -109,7 +109,7 @@ void MyKDGanttView::slotProjectCalculated( ScheduleManager *sm )
 
 void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug()<<k_funcinfo<<id<<endl;
+    //kDebug()<<id<<endl;
     clearDependencies();
     m_model->setManager( sm );
     m_manager = sm;
@@ -227,7 +227,7 @@ void GanttView::setProject( Project *project )
 
 void GanttView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug()<<k_funcinfo<<id<<endl;
+    //kDebug()<<id<<endl;
     m_gantt->setScheduleManager( sm );
 }
 
@@ -251,7 +251,7 @@ Node *GanttView::currentNode() const
 
 bool GanttView::loadContext( const KoXmlElement &settings )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
 /*    QDomElement elm = context.firstChildElement( objectName() );
     if ( elm.isNull() ) {
         return false;
@@ -286,17 +286,17 @@ bool GanttView::loadContext( const KoXmlElement &settings )
 
 void GanttView::saveContext( QDomElement &settings ) const
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
 /*    QDomElement elm = context.firstChildElement( objectName() );
     if ( elm.isNull() ) {
         return;
     }*/
 /*    Context::Ganttview &context = c.ganttview;
 
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     context.ganttviewsize = m_splitter->sizes() [ 0 ];
     context.taskviewsize = m_splitter->sizes() [ 1 ];
-    //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1];
+    //kDebug()<<"sizes="<<sizes()[0]<<","<<sizes()[1];
     if ( currentNode() ) {
         context.currentNode = currentNode() ->id();
     }
@@ -317,7 +317,7 @@ void GanttView::setReadWriteMode( bool on )
 
 void GanttView::update()
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     kDebug()<<"POULOU";
 }
 

@@ -51,27 +51,27 @@ ResourceTableItem::ResourceTableItem(Resource *resource, ResourceRequest *reques
     m_checkitem = 0;
     m_units = 100;
     m_origUnits = 100;
-    //kDebug()<<k_funcinfo<<"Added: '"<<resource->name()<<"' checked="<<m_checked;
+    //kDebug()<<"Added: '"<<resource->name()<<"' checked="<<m_checked;
 }
 
 ResourceTableItem::~ResourceTableItem() {
-    //kDebug()<<k_funcinfo<<m_resource->name();
+    //kDebug()<<m_resource->name();
 }
 
 void ResourceTableItem::update() {
     if (m_checkitem)
         m_checked = m_checkitem->checkState() == Qt::Checked;
-    //kDebug()<<k_funcinfo<<m_resource->name()<<" checked="<<m_checked;
+    //kDebug()<<m_resource->name()<<" checked="<<m_checked;
 }
 
 void ResourceTableItem::insert(QTableWidget *table, int row) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     m_checkitem = new QTableWidgetItem(m_resource->name());
     m_checkitem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
     m_checkitem->setCheckState(m_checked ? Qt::Checked : Qt::Unchecked);
     table->setItem(row, 0, m_checkitem);
 
-    //kDebug()<<k_funcinfo<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked;
+    //kDebug()<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked;
 }
 
 GroupLVItem::GroupLVItem(QTreeWidget *parent, ResourceGroup *group, Task &task)
@@ -87,7 +87,7 @@ GroupLVItem::GroupLVItem(QTreeWidget *parent, ResourceGroup *group, Task &task)
         m_units = m_request->units();
     }
     foreach (Resource *r, group->resources()) {
-        //kDebug()<<k_funcinfo<<"resource="<<r->name();
+        //kDebug()<<"resource="<<r->name();
         ResourceRequest *req=0;
         if (m_request) {
             req = m_request->find(r);
@@ -97,7 +97,7 @@ GroupLVItem::GroupLVItem(QTreeWidget *parent, ResourceGroup *group, Task &task)
 }
 
 GroupLVItem::~GroupLVItem() {
-    //kDebug()<<k_funcinfo<<m_group->name();
+    //kDebug()<<m_group->name();
 
     while (!m_resources.isEmpty())
         delete m_resources.takeFirst();
@@ -126,7 +126,7 @@ void GroupLVItem::insert(QTableWidget *table) {
 }
 
 int GroupLVItem::numRequests() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     int value = m_units;
     foreach (ResourceTableItem *r, m_resources) {
         value += r->numRequests();
@@ -135,7 +135,7 @@ int GroupLVItem::numRequests() {
 }
 
 bool GroupLVItem::isNull() const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     foreach (ResourceTableItem *r, m_resources) {
         if (r->isChecked())
             return false;
@@ -158,7 +158,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool)
         foreach (ResourceGroup *grp, p->resourceGroups()) {
             GroupLVItem *grpitem = new GroupLVItem(groupList, grp, task);
             groupList-> addTopLevelItem(grpitem);
-            //kDebug()<<k_funcinfo<<" Added group:"<<grp->name();
+            //kDebug()<<" Added group:"<<grp->name();
         }
     }
     QTreeWidgetItem *item = groupList->topLevelItem(0);
@@ -176,7 +176,7 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool)
 }
 
 void RequestResourcesPanel::groupChanged() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QTreeWidgetItem *item = 0;
     QList<QTreeWidgetItem*> lst = groupList->selectedItems();
     if (lst.count() > 0)
@@ -185,7 +185,7 @@ void RequestResourcesPanel::groupChanged() {
 }
 
 void RequestResourcesPanel::groupChanged(QTreeWidgetItem *item) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     GroupLVItem *grp = dynamic_cast<GroupLVItem *>(item);
     if (grp == 0)
         return;
@@ -203,12 +203,12 @@ void RequestResourcesPanel::groupChanged(QTreeWidgetItem *item) {
 }
 
 void RequestResourcesPanel::resourceChanged(int /*r*/, int /*c*/) {
-    //kDebug()<<k_funcinfo<<"("<<r<<","<<c<<")";
+    //kDebug()<<"("<<r<<","<<c<<")";
     sendChanged();
 }
 
 void RequestResourcesPanel::unitsChanged(int units) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if (selectedGroup) {
         selectedGroup->m_units = units;
         sendChanged();
@@ -216,7 +216,7 @@ void RequestResourcesPanel::unitsChanged(int units) {
 }
 
 K3Command *RequestResourcesPanel::buildCommand(Part *part) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     K3MacroCommand *cmd = 0;
     if (selectedGroup) {
         selectedGroup->update();
@@ -242,7 +242,7 @@ K3Command *RequestResourcesPanel::buildCommand(Part *part) {
                         cmd->addCommand(new RemoveResourceGroupRequestCmd(part, m_task, grp->m_request));
                     }
                 } else {
-                    kError()<<k_funcinfo<<"Remove failed"<<endl;
+                    kError()<<"Remove failed"<<endl;
                 }
                 continue;
             }

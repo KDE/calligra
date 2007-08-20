@@ -55,7 +55,7 @@ Account::Account(const QString& name, const QString& description)
 }
 
 Account::~Account() {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (findAccount() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
@@ -122,7 +122,7 @@ void Account::take(Account *account) {
     } else {
         m_list->take(account);
     }
-    //kDebug()<<k_funcinfo<<account->name();
+    //kDebug()<<account->name();
 }
 
 bool Account::isChildOf( const Account *account) const
@@ -158,7 +158,7 @@ bool Account::load(KoXmlElement &element, Project &project) {
                 m_accountList.append(child);
             } else {
                 // TODO: Complain about this
-                kWarning()<<k_funcinfo<<"Loading failed"<<endl;
+                kWarning()<<"Loading failed"<<endl;
                 delete child;
             }
         }
@@ -283,7 +283,7 @@ bool Account::insertId(Account *account) {
 }
 
 void Account::deleteCostPlace(CostPlace *cp) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     int i = m_costPlaces.indexOf(cp);
     if (i != -1)
         m_costPlaces.removeAt(i);
@@ -337,15 +337,15 @@ void Account::CostPlace::setShutdown(bool on ) {
 }
 
 bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     m_nodeId = element.attribute("node-id");
     if (m_nodeId.isEmpty()) {
-        kError()<<k_funcinfo<<"No node id"<<endl;
+        kError()<<"No node id"<<endl;
         return false;
     }
     m_node = project.findNode(m_nodeId);
     if (m_node == 0) {
-        kError()<<k_funcinfo<<"Cannot not find node with id: "<<m_nodeId<<endl;
+        kError()<<"Cannot not find node with id: "<<m_nodeId<<endl;
         return false;
     }
     setRunning(element.attribute("running-cost").toInt());
@@ -355,7 +355,7 @@ bool Account::CostPlace::load(KoXmlElement &element, Project &project) {
 }
 
 void Account::CostPlace::save(QDomElement &element) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QDomElement me = element.ownerDocument().createElement("costplace");
     element.appendChild(me);
     me.setAttribute("node-id", m_nodeId);
@@ -375,7 +375,7 @@ Accounts::Accounts(Project &project)
 }
 
 Accounts::~Accounts() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     while (!m_accountList.isEmpty()) {
         delete m_accountList.takeFirst();
     }
@@ -388,7 +388,7 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
         if (n == 0) {
             continue;
         }
-        //kDebug()<<k_funcinfo<<"n="<<n->name();
+        //kDebug()<<"n="<<n->name();
         if (cp->running()) {
             ec += n->plannedEffortCostPrDay(start, end, id);
         }
@@ -439,7 +439,7 @@ void Accounts::insert(Account *account, Account *parent, int index) {
         emit accountToBeAdded( parent, i );
         parent->insert( account, i );
     }
-    //kDebug()<<k_funcinfo<<account->name();
+    //kDebug()<<account->name();
     emit accountAdded( account );
 }
 
@@ -452,7 +452,7 @@ void Accounts::take(Account *account){
         emit accountToBeRemoved( account );
         account->parent()->take(account);
         emit accountRemoved( account );
-        //kDebug()<<k_funcinfo<<account->name();
+        //kDebug()<<account->name();
         return;
     }
     int i = m_accountList.indexOf(account);
@@ -461,7 +461,7 @@ void Accounts::take(Account *account){
         m_accountList.removeAt(i);
         emit accountRemoved( account );
     }
-    //kDebug()<<k_funcinfo<<account->name();
+    //kDebug()<<account->name();
 }
     
 bool Accounts::load(KoXmlElement &element, Project &project) {
@@ -477,7 +477,7 @@ bool Accounts::load(KoXmlElement &element, Project &project) {
                 insert(child);
             } else {
                 // TODO: Complain about this
-                kWarning()<<k_funcinfo<<"Loading failed"<<endl;
+                kWarning()<<"Loading failed"<<endl;
                 delete child;
             }
         }
@@ -485,7 +485,7 @@ bool Accounts::load(KoXmlElement &element, Project &project) {
     if (element.hasAttribute("default-account")) {
         m_defaultAccount = findAccount(element.attribute("default-account"));
         if (m_defaultAccount == 0) {
-            kWarning()<<k_funcinfo<<"Could not find default account."<<endl;
+            kWarning()<<"Could not find default account."<<endl;
         }
     }
     return true;
@@ -548,23 +548,23 @@ bool Accounts::insertId(Account *account) {
     Q_ASSERT(account);
     Account *a = findAccount(account->name());
     if (a == 0) {
-        //kDebug()<<k_funcinfo<<"'"<<account->name()<<"' inserted";
+        //kDebug()<<"'"<<account->name()<<"' inserted";
         m_idDict.insert(account->name(), account);
         return true;
     }
     if (a == account) {
-        kDebug()<<k_funcinfo<<"'"<<a->name()<<"' already exists";
+        kDebug()<<"'"<<a->name()<<"' already exists";
         return true;
     }
     //TODO: Create unique id?
-    kWarning()<<k_funcinfo<<"Insert failed, creating unique id"<<endl;
+    kWarning()<<"Insert failed, creating unique id"<<endl;
     account->setName( uniqueId( account->name() ) ); // setName() calls insertId !!
     return false;
 }
 
 bool Accounts::removeId(const QString &id) {
     bool res = m_idDict.remove(id);
-    //kDebug()<<k_funcinfo<<id<<": removed="<<res;
+    //kDebug()<<id<<": removed="<<res;
     return res;
 }
 
@@ -576,7 +576,7 @@ QString Accounts::uniqueId( const QString &seed ) const
     while (  findAccount( n ) ) {
         n = s.arg( ++i );
     }
-    kDebug()<<k_funcinfo<<n;
+    kDebug()<<n;
     return n;
 }
 

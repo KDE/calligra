@@ -68,7 +68,7 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
         if (sch)
             st = project.startTime();
     } else {
-        kWarning()<<k_funcinfo<<"Illegal constraint: "<<project.constraint()<<endl;
+        kWarning()<<"Illegal constraint: "<<project.constraint()<<endl;
         bStartDate->setDown(true);;
         if (sch)
             et = project.endTime();
@@ -185,7 +185,7 @@ void MainProjectPanelImpl::enableDateTime()
 {
     if (bStartDate->isChecked())
     {
-        kDebug()<<k_funcinfo;
+        kDebug();
         startTime->setEnabled(true);
         startDate->setEnabled(true);
         endTime->setEnabled(false);
@@ -193,7 +193,7 @@ void MainProjectPanelImpl::enableDateTime()
     }
     if (bEndDate->isChecked())
     {
-        kDebug()<<k_funcinfo;
+        kDebug();
         startTime->setEnabled(false);
         startDate->setEnabled(false);
         endTime->setEnabled(true);

@@ -258,7 +258,7 @@ void ExportSizeDia::slotOk()
     //doc->newZoomAndResolution( false, false );
     int width = widthEdit->value();
     int height = heightEdit->value();
-//     kDebug( KFormula::DEBUGID ) << k_funcinfo
+//     kDebug( KFormula::DEBUGID ) 
 //                                  << "(" << width << " " << height << ")"
 //                                  << endl;
 //     width = realWidth;

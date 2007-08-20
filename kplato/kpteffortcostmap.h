@@ -40,10 +40,10 @@ public:
     EffortCost(const Duration &effort, const double cost)
         : m_effort(effort),
           m_cost(cost) {
-        //kDebug()<<k_funcinfo;
+        //kDebug();
     }
     ~EffortCost() {
-        //kDebug()<<k_funcinfo;
+        //kDebug();
     }
     Duration effort() const { return m_effort; }
     double cost() const { return m_cost; }
@@ -66,10 +66,10 @@ class EffortCostMap
 public:
     EffortCostMap()
         : m_days() {
-        //kDebug()<<k_funcinfo; 
+        //kDebug(); 
     }
     ~EffortCostMap() {
-        //kDebug()<<k_funcinfo;
+        //kDebug();
         m_days.clear();
     }
     
@@ -78,7 +78,7 @@ public:
     EffortCost effortCost(const QDate &date) const {
         EffortCost ec;
         if (!date.isValid()) {
-            kError()<<k_funcinfo<<"Date not valid"<<endl;
+            kError()<<"Date not valid"<<endl;
             return ec;
         }
         EffortCostDayMap::const_iterator it = m_days.find(date);
@@ -88,7 +88,7 @@ public:
     }
     void insert(const QDate &date, const Duration &effort, const double cost) {
         if (!date.isValid()) {
-            kError()<<k_funcinfo<<"Date not valid"<<endl;
+            kError()<<"Date not valid"<<endl;
             return;
         }
         m_days.insert(date, EffortCost(effort, cost));
@@ -106,10 +106,10 @@ public:
      */
     EffortCost &add(const QDate &date, const EffortCost &ec) {
         if (!date.isValid()) {
-            kError()<<k_funcinfo<<"Date not valid"<<endl;
+            kError()<<"Date not valid"<<endl;
             return zero();
         }
-        //kDebug()<<k_funcinfo<<date.toString();
+        //kDebug()<<date.toString();
         return m_days[date] += ec;
     }
     
@@ -120,7 +120,7 @@ public:
     EffortCostDayMap days() const { return m_days; }
     
     EffortCostMap &operator+=(const EffortCostMap &ec) {
-        //kDebug()<<k_funcinfo<<"me="<<m_days.count()<<" ec="<<ec.days().count();
+        //kDebug()<<"me="<<m_days.count()<<" ec="<<ec.days().count();
         if (ec.isEmpty()) {
             return *this;
         }
@@ -147,7 +147,7 @@ public:
     }
     double costOnDate(const QDate &date) const {
         if (!date.isValid()) {
-            kError()<<k_funcinfo<<"Date not valid"<<endl;
+            kError()<<"Date not valid"<<endl;
             return 0.0;
         }
         if (m_days.contains(date)) {
@@ -157,7 +157,7 @@ public:
     }
     Duration effortOnDate(const QDate &date) const {
         if (!date.isValid()) {
-            kError()<<k_funcinfo<<"Date not valid"<<endl;
+            kError()<<"Date not valid"<<endl;
             return Duration::zeroDuration;
         }
         if (m_days.contains(date)) {

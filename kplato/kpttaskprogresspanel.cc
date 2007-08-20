@@ -52,14 +52,14 @@ namespace KPlato
 TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent )
     : TaskProgressPanelImpl( task, parent )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     started->setChecked(m_completion.isStarted());
     finished->setChecked(m_completion.isFinished());
     startTime->setDateTime(m_completion.startTime().dateTime());
     finishTime->setDateTime(m_completion.finishTime().dateTime());
     
     if (workTime) {
-        kDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours();
+        kDebug()<<"daylength="<<workTime->durationDay().hours();
         m_dayLength = workTime->durationDay().hours();
         setEstimateScales(m_dayLength);
     }
@@ -80,7 +80,7 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     }
     date = QDate( m_year, 12, 31 );
     wn = date.weekNumber( &year );
-    kDebug()<<k_funcinfo<<date<<","<<wn<<","<<year;
+    kDebug()<<date<<","<<wn<<","<<year;
     if ( wn == 53 ) {
         weekNumber->addItem( i18nc( "Week number", "Week %1", wn ) );
     } else if ( wn == 1 ) {
@@ -158,12 +158,12 @@ K3Command *TaskProgressPanel::buildCommand(Part *part) {
                 continue;
             }
             if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-            kDebug()<<k_funcinfo<<"modify entry "<<d<<endl;
+            kDebug()<<"modify entry "<<d<<endl;
             Completion::Entry *e = new Completion::Entry( *( m_completion.entry( d ) ) );
             cmd->addCommand( new ModifyCompletionEntryCmd(part, m_original, d, e ) );
         } else {
             if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-            kDebug()<<k_funcinfo<<"remove entry "<<d<<endl;
+            kDebug()<<"remove entry "<<d<<endl;
             cmd->addCommand( new RemoveCompletionEntryCmd(part, m_original, d ) );
         }
     }
@@ -171,7 +171,7 @@ K3Command *TaskProgressPanel::buildCommand(Part *part) {
         if ( ! org.contains( d ) ) {
             if ( cmd == 0 ) cmd = new K3MacroCommand( c );
             Completion::Entry *e = new Completion::Entry( * ( m_completion.entry( d ) ) );
-            kDebug()<<k_funcinfo<<"add entry "<<d<<e<<endl;
+            kDebug()<<"add entry "<<d<<e<<endl;
             cmd->addCommand( new AddCompletionEntryCmd(part, m_original, d, e ) );
         }
     }
@@ -206,7 +206,7 @@ void TaskProgressPanel::setEstimateScales( int day )
 
 void TaskProgressPanel::slotWeekNumberChanged( int index )
 {
-    kDebug()<<k_funcinfo<<index<<","<<m_weekOffset;
+    kDebug()<<index<<","<<m_weekOffset;
     QDate date = QDate( m_year, 1, 1 ).addDays( Qt::Monday - QDate( m_year, 1, 1 ).dayOfWeek() );
     date = date.addDays( index * 7 );
     resourceTable->setCurrentMonday( date );
@@ -214,13 +214,13 @@ void TaskProgressPanel::slotWeekNumberChanged( int index )
 
 void TaskProgressPanel::slotAddResource()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     resourceTable->addResource();
 }
 
 void TaskProgressPanel::slotEntryAdded( const QDate date )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
 }
 
 //-------------------------------------
@@ -283,12 +283,12 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
 
 
 void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     if (state) {
-        kDebug()<<k_funcinfo<<state<<endl;
+        kDebug()<<state<<endl;
 //        percentFinished->setValue(100);
         finishTime->setDateTime(QDateTime::currentDateTime());
-        kDebug()<<k_funcinfo<<finishTime->dateTime()<<endl;
+        kDebug()<<finishTime->dateTime()<<endl;
         slotCalculateEffort();
     }   
     enableWidgets();
@@ -315,7 +315,7 @@ void TaskProgressPanelImpl::slotCalculateEffort()
 
 void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     int i = weekNumber->currentIndex();
     if ( i > 0 && i < weekNumber->count() - 1 ) {
         weekNumber->setCurrentIndex( i - 1 );
@@ -324,7 +324,7 @@ void TaskProgressPanelImpl::slotPrevWeekBtnClicked()
 
 void TaskProgressPanelImpl::slotNextWeekBtnClicked()
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     int i = weekNumber->currentIndex();
     if ( i > 0 && i < weekNumber->count() - 1 ) {
         weekNumber->setCurrentIndex( i + 1 );

@@ -50,7 +50,7 @@ MusicTool::~MusicTool()
 void MusicTool::activate (bool temporary)
 {
     Q_UNUSED( temporary );
-    kDebug() << k_funcinfo;
+    kDebug() ;
 
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )

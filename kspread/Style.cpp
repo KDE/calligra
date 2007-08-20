@@ -669,7 +669,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
                                          const QString &_prefix, const QString &_postfix,
                                          int _precision, const QString& symbol )
 {
-//  kDebug(36003) << k_funcinfo;
+//  kDebug(36003) ;
     QString styleName;
     QString valueType;
     switch( _style )

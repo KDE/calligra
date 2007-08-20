@@ -350,7 +350,7 @@ int Conversion::numberFormatCode( int nfc )
     case 0: // arabic
         return 1;
     }
-    kWarning(30513) << k_funcinfo << "Unknown NFC: " << nfc;
+    kWarning(30513) << "Unknown NFC: " << nfc;
     return 1;
 }
 
@@ -408,7 +408,7 @@ int Conversion::headerMaskToHType( unsigned char mask )
     bool hasFirst = ( mask & wvWare::HeaderData::HeaderFirst );
     // Odd is always there. We have even!=odd only if Even is there too.
     bool hasEvenOdd = ( mask & wvWare::HeaderData::HeaderEven );
-    //kDebug(30513) << k_funcinfo <<" hasEvenOdd=" << hasEvenOdd;
+    //kDebug(30513) <<" hasEvenOdd=" << hasEvenOdd;
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;
@@ -419,7 +419,7 @@ int Conversion::headerMaskToFType( unsigned char mask )
     bool hasFirst = ( mask & wvWare::HeaderData::FooterFirst );
     bool hasEvenOdd = ( mask & wvWare::HeaderData::FooterEven );
     // Odd is always there. We have even!=odd only if Even is there too.
-    kDebug(30513) << k_funcinfo <<" hasEvenOdd=" << hasEvenOdd;
+    kDebug(30513) <<" hasEvenOdd=" << hasEvenOdd;
     if ( hasFirst )
         return hasEvenOdd ? 1 : 2;
     return hasEvenOdd ? 3 : 0;

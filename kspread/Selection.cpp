@@ -492,7 +492,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
     d->activeElement--;
   }
 
-  kDebug() << k_funcinfo;
+  kDebug() ;
 
   if (!sheet)
   {
@@ -812,7 +812,7 @@ void Selection::fixSubRegionDimension()
 
 void Selection::setActiveSubRegion(uint start, uint length)
 {
-//   kDebug() << k_funcinfo;
+//   kDebug() ;
   d->activeElement = start;
   d->activeSubRegionStart = start;
   d->activeSubRegionLength = length;

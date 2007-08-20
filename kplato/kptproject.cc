@@ -53,7 +53,7 @@ Project::Project( Node *parent )
         m_accounts( *this ),
         m_defaultCalendar( 0 )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
     init();
@@ -66,7 +66,7 @@ void Project::init()
     if ( !m_spec.timeZone().isValid() ) {
         m_spec.setType( KTimeZone() );
     }
-    //kDebug()<<k_funcinfo<<m_spec.timeZone();
+    //kDebug()<<m_spec.timeZone();
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
         m_constraintStartTime = DateTime( QDate::currentDate(), QTime(), m_spec );
@@ -92,7 +92,7 @@ int Project::type() const { return Node::Type_Project; }
 void Project::calculate( Schedule *schedule, const DateTime &dt )
 {
     if ( schedule == 0 ) {
-        kError() << k_funcinfo << "Schedule == 0, cannot calculate" << endl;
+        kError() << "Schedule == 0, cannot calculate" << endl;
         return ;
     }
     m_currentSchedule = schedule;
@@ -102,7 +102,7 @@ void Project::calculate( Schedule *schedule, const DateTime &dt )
 void Project::calculate( const DateTime &dt )
 {
     if ( m_currentSchedule == 0 ) {
-        kError() << k_funcinfo << "No current schedule to calculate" << endl;
+        kError() << "No current schedule to calculate" << endl;
         return ;
     }
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
@@ -110,7 +110,7 @@ void Project::calculate( const DateTime &dt )
     if ( type() == Type_Project ) {
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
-        //kDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
+        //kDebug()<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
         cs->startTime = dt;
         cs->earlyStart = dt;
         // Calculate from start time
@@ -126,16 +126,16 @@ void Project::calculate( const DateTime &dt )
         calcFreeFloat();
         emit scheduleChanged( cs );
     } else if ( type() == Type_Subproject ) {
-        kWarning() << k_funcinfo << "Subprojects not implemented" << endl;
+        kWarning() << "Subprojects not implemented" << endl;
     } else {
-        kError() << k_funcinfo << "Illegal project type: " << type() << endl;
+        kError() << "Illegal project type: " << type() << endl;
     }
 }
 
 void Project::calculate( ScheduleManager &sm )
 {
     emit sigProgress( 0 );
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if ( sm.recalculate() ) {
         sm.setCalculateAll( false );
         sm.createSchedules();
@@ -160,7 +160,7 @@ void Project::calculate( ScheduleManager &sm )
 void Project::calculate( Schedule *schedule )
 {
     if ( schedule == 0 ) {
-        kError() << k_funcinfo << "Schedule == 0, cannot calculate" << endl;
+        kError() << "Schedule == 0, cannot calculate" << endl;
         return ;
     }
     m_currentSchedule = schedule;
@@ -170,7 +170,7 @@ void Project::calculate( Schedule *schedule )
 void Project::calculate()
 {
     if ( m_currentSchedule == 0 ) {
-        kError() << k_funcinfo << "No current schedule to calculate" << endl;
+        kError() << "No current schedule to calculate" << endl;
         return ;
     }
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
@@ -179,7 +179,7 @@ void Project::calculate()
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         if ( m_constraint == Node::MustStartOn ) {
-            //kDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
+            //kDebug()<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
             cs->startTime = m_constraintStartTime;
             cs->earlyStart = m_constraintStartTime;
             // Calculate from start time
@@ -191,7 +191,7 @@ void Project::calculate()
             cs->duration = cs->endTime - cs->startTime;
             calcCriticalPath( false );
         } else {
-            //kDebug()<<k_funcinfo<<"Node="<<m_name<<" End="<<m_constraintEndTime.toString();
+            //kDebug()<<"Node="<<m_name<<" End="<<m_constraintEndTime.toString();
             cs->endTime = m_constraintEndTime;
             cs->lateFinish = m_constraintEndTime;
             // Calculate from end time
@@ -209,15 +209,15 @@ void Project::calculate()
         calcFreeFloat();
         emit scheduleChanged( cs );
     } else if ( type() == Type_Subproject ) {
-        kWarning() << k_funcinfo << "Subprojects not implemented" << endl;
+        kWarning() << "Subprojects not implemented" << endl;
     } else {
-        kError() << k_funcinfo << "Illegal project type: " << type() << endl;
+        kError() << "Illegal project type: " << type() << endl;
     }
 }
 
 bool Project::calcCriticalPath( bool fromEnd )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 ) {
         return false;
@@ -239,7 +239,7 @@ bool Project::calcCriticalPath( bool fromEnd )
 
 void Project::calcCriticalPathList( MainSchedule *cs )
 {
-    kDebug()<<k_funcinfo<<m_name<<", "<<cs->name()<<endl;
+    kDebug()<<m_name<<", "<<cs->name()<<endl;
     cs->clearCriticalPathList();
     foreach ( Node *n, allNodes() ) {
         if ( n->numDependParentNodes() == 0 && n->inCriticalPath( cs->id() ) ) {
@@ -249,19 +249,19 @@ void Project::calcCriticalPathList( MainSchedule *cs )
         }
     }
     cs->criticalPathListCached = true;
-    kDebug()<<k_funcinfo<<*(criticalPathList( cs->id() ))<<endl;
+    kDebug()<<*(criticalPathList( cs->id() ))<<endl;
 }
 
 void Project::calcCriticalPathList( MainSchedule *cs, Node *node )
 {
-    kDebug()<<k_funcinfo<<node->name()<<", "<<cs->id()<<endl;
+    kDebug()<<node->name()<<", "<<cs->id()<<endl;
     bool newPath = false;
     QList<Node*> lst = *( cs->currentCriticalPath() );
     foreach ( Relation *r, node->dependChildNodes() ) {
         if ( r->child()->inCriticalPath( cs->id() ) ) {
             if ( newPath ) {
                 cs->addCriticalPath( &lst );
-                kDebug()<<k_funcinfo<<node->name()<<" new path"<<endl;
+                kDebug()<<node->name()<<" new path"<<endl;
             }
             cs->addCriticalPathNode( r->child() );
             calcCriticalPathList( cs, r->child() );
@@ -277,7 +277,7 @@ const QList< QList<Node*> > *Project::criticalPathList( long id )
         s = findSchedule( id );
     }
     if ( s == 0 ) {
-        kDebug()<<k_funcinfo<<"No schedule with id="<<id<<endl;
+        kDebug()<<"No schedule with id="<<id<<endl;
         return 0;
     }
     MainSchedule *ms = static_cast<MainSchedule*>( s );
@@ -295,7 +295,7 @@ QList<Node*> Project::criticalPath( long id, int index )
         s = findSchedule( id );
     }
     if ( s == 0 ) {
-        kDebug()<<k_funcinfo<<"No schedule with id="<<id<<endl;
+        kDebug()<<"No schedule with id="<<id<<endl;
         return QList<Node*>();
     }
     MainSchedule *ms = static_cast<MainSchedule*>( s );
@@ -331,7 +331,7 @@ Duration *Project::getRandomDuration()
 
 DateTime Project::calculateForward( int use )
 {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 ) {
         return DateTime();
@@ -350,7 +350,7 @@ DateTime Project::calculateForward( int use )
             if ( !finish.isValid() || time > finish )
                 finish = time;
         }
-        //kDebug()<<k_funcinfo<<m_name<<" finish="<<finish.toString();
+        //kDebug()<<m_name<<" finish="<<finish.toString();
         return finish;
     } else {
         //TODO: subproject
@@ -360,7 +360,7 @@ DateTime Project::calculateForward( int use )
 
 DateTime Project::calculateBackward( int use )
 {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     if ( cs == 0 ) {
         return DateTime();
@@ -379,7 +379,7 @@ DateTime Project::calculateBackward( int use )
             if ( !start.isValid() || time < start )
                 start = time;
         }
-        //kDebug()<<k_funcinfo<<m_name<<" start="<<start.toString();
+        //kDebug()<<m_name<<" start="<<start.toString();
         return start;
     } else {
         //TODO: subproject
@@ -441,7 +441,7 @@ void Project::adjustSummarytask()
 
 void Project::initiateCalculation( MainSchedule &sch )
 {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     // clear all resource appointments
     m_visitedForward = false;
     m_visitedBackward = false;
@@ -454,7 +454,7 @@ void Project::initiateCalculation( MainSchedule &sch )
 
 void Project::initiateCalculationLists( MainSchedule &sch )
 {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     sch.clearNodes();
     if ( type() == Node::Type_Project ) {
         QListIterator<Node*> it = childNodeIterator();
@@ -468,13 +468,13 @@ void Project::initiateCalculationLists( MainSchedule &sch )
 
 bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 {
-    //kDebug()<<k_funcinfo<<"--->";
+    //kDebug()<<"--->";
     QList<Calendar*> cals;
     QString s;
     bool ok = false;
     QString id = element.attribute( "id" );
     if ( !setId( id ) ) {
-        kWarning() << k_funcinfo << "Id must be unique: " << id << endl;
+        kWarning() << "Id must be unique: " << id << endl;
     }
     m_name = element.attribute( "name" );
     m_leader = element.attribute( "leader" );
@@ -482,7 +482,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
     KTimeZone tz = KSystemTimeZones::zone( element.attribute( "timezone" ) );
     if ( tz.isValid() ) {
         m_spec = KDateTime::Spec( tz );
-    } else kWarning()<<k_funcinfo<<"No timezone specified, using default (local)"<<endl;
+    } else kWarning()<<"No timezone specified, using default (local)"<<endl;
     status.setProjectSpec( m_spec );
     
     // Allow for both numeric and text
@@ -492,7 +492,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         setConstraint( s );
     if ( m_constraint != Node::MustStartOn &&
             m_constraint != Node::MustFinishOn ) {
-        kError() << k_funcinfo << "Illegal constraint: " << constraintToString() << endl;
+        kError() << "Illegal constraint: " << constraintToString() << endl;
         setConstraint( Node::MustStartOn );
     }
     s = element.attribute( "start-time" );
@@ -504,7 +504,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
 
     // Load the project children
     // Do calendars first, they only refrence other calendars
-    //kDebug()<<k_funcinfo<<"Calendars--->";
+    //kDebug()<<"Calendars--->";
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -520,7 +520,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 cals.append( child ); // temporary, reorder later
             } else {
                 // TODO: Complain about this
-                kError() << k_funcinfo << "Failed to load calendar" << endl;
+                kError() << "Failed to load calendar" << endl;
                 delete child;
             }
         } else if ( e.tagName() == "standard-worktime" ) {
@@ -529,7 +529,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             if ( child->load( e, status ) ) {
                 setStandardWorktime( child );
             } else {
-                kError() << k_funcinfo << "Failed to load standard worktime" << endl;
+                kError() << "Failed to load standard worktime" << endl;
                 delete child;
             }
         }
@@ -544,25 +544,25 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             if ( c->parentId().isEmpty() ) {
                 addCalendar( c, status.baseCalendar() ); // handle pre 0.6 version
                 added = true;
-                //kDebug()<<k_funcinfo<<"added to project:"<<c->name();
+                //kDebug()<<"added to project:"<<c->name();
             } else {
                 Calendar *par = calendar( c->parentId() );
                 if ( par ) {
                     addCalendar( c, par );
                     added = true;
-                    //kDebug()<<k_funcinfo<<"added:"<<c->name()<<" to parent:"<<par->name();
+                    //kDebug()<<"added:"<<c->name()<<" to parent:"<<par->name();
                 } else {
                     lst.append( c ); // treat later
-                    //kDebug()<<k_funcinfo<<"treat later:"<<c->name();
+                    //kDebug()<<"treat later:"<<c->name();
                 }
             }
         }
         cals = lst;
     } while ( added );
     if ( ! cals.isEmpty() ) {
-        kError()<<k_funcinfo<<"All calendars not saved!"<<endl;
+        kError()<<"All calendars not saved!"<<endl;
     }
-    //kDebug()<<k_funcinfo<<"Calendars<---";
+    //kDebug()<<"Calendars<---";
     // Resource groups and resources, can reference calendars
     n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -590,7 +590,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "project" ) {
-            //kDebug()<<k_funcinfo<<"Sub project--->";
+            //kDebug()<<"Sub project--->";
 /*                // Load the subproject
             Project * child = new Project( this );
             if ( child->load( e ) ) {
@@ -602,7 +602,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 delete child;
             }*/
         } else if ( e.tagName() == "task" ) {
-            //kDebug()<<k_funcinfo<<"Task--->";
+            //kDebug()<<"Task--->";
             // Load the task (and resourcerequests).
             // Depends on resources already loaded
             Task * child = new Task( this );
@@ -624,25 +624,25 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
         }
         KoXmlElement e = n.toElement();
         if ( e.tagName() == "accounts" ) {
-            //kDebug()<<k_funcinfo<<"Accounts--->";
+            //kDebug()<<"Accounts--->";
             // Load accounts
             // References tasks
             if ( !m_accounts.load( e, *this ) ) {
-                kError() << k_funcinfo << "Failed to load accounts" << endl;
+                kError() << "Failed to load accounts" << endl;
             }
         } else if ( e.tagName() == "relation" ) {
-            //kDebug()<<k_funcinfo<<"Relation--->";
+            //kDebug()<<"Relation--->";
             // Load the relation
             // References tasks
             Relation * child = new Relation();
             if ( !child->load( e, *this ) ) {
                 // TODO: Complain about this
-                kError() << k_funcinfo << "Failed to load relation" << endl;
+                kError() << "Failed to load relation" << endl;
                 delete child;
             }
-            //kDebug()<<k_funcinfo<<"Relation<---";
+            //kDebug()<<"Relation<---";
         } else if ( e.tagName() == "schedules" ) {
-            //kDebug()<<k_funcinfo<<"Project schedules & task appointments--->";
+            //kDebug()<<"Project schedules & task appointments--->";
             // References tasks and resources
             n = e.firstChild();
             for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -650,7 +650,7 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                     continue;
                 }
                 KoXmlElement el = n.toElement();
-                //kDebug()<<k_funcinfo<<el.tagName()<<" Version="<<status.version();
+                //kDebug()<<el.tagName()<<" Version="<<status.version();
                 ScheduleManager *sm = 0;
                 bool add = false;
                 if ( status.version() <= "0.5" ) {
@@ -670,25 +670,25 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                         if ( add )
                             addScheduleManager( sm );
                     } else {
-                        kError() << k_funcinfo << "Failed to load schedule manager" << endl;
+                        kError() << "Failed to load schedule manager" << endl;
                         delete sm;
                     }
                 } else {
-                    kDebug()<<k_funcinfo<<"No schedule manager ?!";
+                    kDebug()<<"No schedule manager ?!";
                 }
             }
-            //kDebug()<<k_funcinfo<<"Node schedules<---";
+            //kDebug()<<"Node schedules<---";
         }
     }
-    //kDebug()<<k_funcinfo<<"Project schedules--->";
+    //kDebug()<<"Project schedules--->";
     foreach ( Schedule * s, m_schedules ) {
         if ( m_constraint == Node::MustFinishOn )
             m_constraintEndTime = s->endTime;
         else
             m_constraintStartTime = s->startTime;
     }
-    //kDebug()<<k_funcinfo<<"Project schedules<---";
-    //kDebug()<<k_funcinfo<<"<---";
+    //kDebug()<<"Project schedules<---";
+    //kDebug()<<"<---";
     return true;
 }
 
@@ -830,7 +830,7 @@ bool Project::addTask( Node* task, Node* position )
     if ( 0 == position ) {
         return addSubTask( task, this );
     }
-    //kDebug()<<k_funcinfo<<"Add"<<task->name()<<" after"<<position->name();
+    //kDebug()<<"Add"<<task->name()<<" after"<<position->name();
     // in case we want to add to the main project, we make it child element
     // of the root element.
     if ( Node::Type_Project == position->type() ) {
@@ -840,13 +840,13 @@ bool Project::addTask( Node* task, Node* position )
     // we have to tell the parent that we want to delete one of its children
     Node* parentNode = position->parentNode();
     if ( !parentNode ) {
-        kDebug() << k_funcinfo <<"parent node not found???";
+        kDebug() <<"parent node not found???";
         return false;
     }
     int index = parentNode->findChildNode( position );
     if ( -1 == index ) {
         // ok, it does not exist
-        kDebug() << k_funcinfo <<"Task not found???";
+        kDebug() <<"Task not found???";
         return false;
     }
     return addSubTask( task, index + 1, parentNode );
@@ -867,7 +867,7 @@ bool Project::addSubTask( Node* task, int index, Node* parent )
         p = this;
     }
     if ( !registerNodeId( task ) ) {
-        kError() << k_funcinfo << "Failed to register node id, can not add subtask: " << task->name() << endl;
+        kError() << "Failed to register node id, can not add subtask: " << task->name() << endl;
         return false;
     }
     int i = index == -1 ? p->numChildren() : index;
@@ -881,7 +881,7 @@ void Project::takeTask( Node *node )
 {
     Node * parent = node->parentNode();
     if ( parent == 0 ) {
-        kDebug() << k_funcinfo <<"Node must have a parent!";
+        kDebug() <<"Node must have a parent!";
         return;
     }
     removeId( node->id() );
@@ -892,7 +892,7 @@ void Project::takeTask( Node *node )
 
 bool Project::canMoveTask( Node* node, Node *newParent )
 {
-    //kDebug()<<k_funcinfo<<node->name()<<" to"<<newParent->name();
+    //kDebug()<<node->name()<<" to"<<newParent->name();
     Node *p = newParent;
     while ( p && p != this ) {
         if ( ! node->canMoveTo( p ) ) {
@@ -905,7 +905,7 @@ bool Project::canMoveTask( Node* node, Node *newParent )
 
 bool Project::moveTask( Node* node, Node *newParent, int newPos )
 {
-    //kDebug()<<k_funcinfo<<node->name()<<" to"<<newParent->name()<<","<<newPos;
+    //kDebug()<<node->name()<<" to"<<newParent->name()<<","<<newPos;
     if ( ! canMoveTask( node, newParent ) ) {
         return false;
     }
@@ -924,7 +924,7 @@ bool Project::canIndentTask( Node* node )
         return false;
     }
     if ( node->type() == Node::Type_Project ) {
-        //kDebug()<<k_funcinfo<<"The root node cannot be indented";
+        //kDebug()<<"The root node cannot be indented";
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
@@ -933,16 +933,16 @@ bool Project::canIndentTask( Node* node )
         return false;
     }
     if ( parentNode->findChildNode( node ) == -1 ) {
-        kError() << k_funcinfo << "Tasknot found???" << endl;
+        kError() << "Tasknot found???" << endl;
         return false;
     }
     Node *sib = node->siblingBefore();
     if ( !sib ) {
-        //kDebug()<<k_funcinfo<<"new parent node not found";
+        //kDebug()<<"new parent node not found";
         return false;
     }
     if ( node->findParentRelation( sib ) || node->findChildRelation( sib ) ) {
-        //kDebug()<<k_funcinfo<<"Cannot have relations to parent";
+        //kDebug()<<"Cannot have relations to parent";
         return false;
     }
     return true;
@@ -954,7 +954,7 @@ bool Project::indentTask( Node* node, int index )
         Node * newParent = node->siblingBefore();
         int i = index == -1 ? newParent->numChildren() : index;
         moveTask( node, newParent, i );
-        //kDebug()<<k_funcinfo;
+        //kDebug();
         return true;
     }
     return false;
@@ -968,7 +968,7 @@ bool Project::canUnindentTask( Node* node )
         return false;
     }
     if ( Node::Type_Project == node->type() ) {
-        //kDebug()<<k_funcinfo<<"The root node cannot be unindented";
+        //kDebug()<<"The root node cannot be unindented";
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
@@ -979,12 +979,12 @@ bool Project::canUnindentTask( Node* node )
     }
     Node* grandParentNode = parentNode->parentNode();
     if ( !grandParentNode ) {
-        //kDebug()<<k_funcinfo<<"This node already is at the top level";
+        //kDebug()<<"This node already is at the top level";
         return false;
     }
     int index = parentNode->findChildNode( node );
     if ( -1 == index ) {
-        kError() << k_funcinfo << "Tasknot found???" << endl;
+        kError() << "Tasknot found???" << endl;
         return false;
     }
     return true;
@@ -1000,7 +1000,7 @@ bool Project::unindentTask( Node* node )
             i = grandParentNode->numChildren();
         }
         moveTask( node, grandParentNode, i );
-        //kDebug()<<k_funcinfo;
+        //kDebug();
         return true;
     }
     return false;
@@ -1013,11 +1013,11 @@ bool Project::canMoveTaskUp( Node* node )
     // we have to find the parent of task to manipulate its list of children
     Node* parentNode = node->parentNode();
     if ( !parentNode ) {
-        //kDebug()<<k_funcinfo<<"No parent found";
+        //kDebug()<<"No parent found";
         return false;
     }
     if ( parentNode->findChildNode( node ) == -1 ) {
-        kError() << k_funcinfo << "Tasknot found???" << endl;
+        kError() << "Tasknot found???" << endl;
         return false;
     }
     if ( node->siblingBefore() ) {
@@ -1045,7 +1045,7 @@ bool Project::canMoveTaskDown( Node* node )
         return false;
     }
     if ( parentNode->findChildNode( node ) == -1 ) {
-        kError() << k_funcinfo << "Tasknot found???" << endl;
+        kError() << "Tasknot found???" << endl;
         return false;
     }
     if ( node->siblingAfter() ) {
@@ -1088,13 +1088,13 @@ QString Project::uniqueNodeId( int seed )
 
 bool Project::removeId( const QString &id )
 {
-    //kDebug() << k_funcinfo <<"id=" << id;
+    //kDebug() <<"id=" << id;
     return ( m_parent ? m_parent->removeId( id ) : nodeIdDict.remove( id ) );
 }
 
 void Project::insertId( const QString &id, Node *node )
 {
-    //kDebug() << k_funcinfo <<"id=" << id <<"" << node->name();
+    //kDebug() <<"id=" << id <<"" << node->name();
     if ( m_parent == 0 )
         return ( void ) nodeIdDict.insert( id, node );
     m_parent->insertId( id, node );
@@ -1103,7 +1103,7 @@ void Project::insertId( const QString &id, Node *node )
 bool Project::registerNodeId( Node *node )
 {
     if ( node->id().isEmpty() ) {
-        kError() << k_funcinfo << "Id is empty." << endl;
+        kError() << "Id is empty." << endl;
         return false;
     }
     Node *rn = findNode( node->id() );
@@ -1112,7 +1112,7 @@ bool Project::registerNodeId( Node *node )
         return true;
     }
     if ( rn != node ) {
-        kError() << k_funcinfo << "Id already exists for different task: " << node->id() << endl;
+        kError() << "Id already exists for different task: " << node->id() << endl;
         return false;
     }
     return true;
@@ -1252,7 +1252,7 @@ QStringList Project::resourceNameList() const
 // TODO
 EffortCostMap Project::plannedEffortCostPrDay( const QDate & /*start*/, const QDate & /*end*/, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     EffortCostMap ec;
     return ec;
 
@@ -1261,7 +1261,7 @@ EffortCostMap Project::plannedEffortCostPrDay( const QDate & /*start*/, const QD
 // Returns the total planned effort for this project (or subproject)
 Duration Project::plannedEffort( long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1273,7 +1273,7 @@ Duration Project::plannedEffort( long id ) const
 // Returns the total planned effort for this project (or subproject) on date
 Duration Project::plannedEffort( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1285,7 +1285,7 @@ Duration Project::plannedEffort( const QDate &date, long id ) const
 // Returns the total planned effort for this project (or subproject) upto and including date
 Duration Project::plannedEffortTo( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1297,7 +1297,7 @@ Duration Project::plannedEffortTo( const QDate &date, long id ) const
 // Returns the total actual effort for this project (or subproject)
 Duration Project::actualEffort( long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1309,7 +1309,7 @@ Duration Project::actualEffort( long id ) const
 // Returns the total actual effort for this project (or subproject) on date
 Duration Project::actualEffort( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1321,7 +1321,7 @@ Duration Project::actualEffort( const QDate &date, long id ) const
 // Returns the total actual effort for this project (or subproject) upto and including date
 Duration Project::actualEffortTo( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Duration eff;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1333,7 +1333,7 @@ Duration Project::actualEffortTo( const QDate &date, long id ) const
 
 double Project::plannedCost( long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1346,7 +1346,7 @@ double Project::plannedCost( long id ) const
 // Returns the total planned effort for this project (or subproject) on date
 double Project::plannedCost( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1359,7 +1359,7 @@ double Project::plannedCost( const QDate &date, long id ) const
 // Returns the total planned effort for this project (or subproject) upto and including date
 double Project::plannedCostTo( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1371,7 +1371,7 @@ double Project::plannedCostTo( const QDate &date, long id ) const
 
 double Project::actualCost( long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1384,7 +1384,7 @@ double Project::actualCost( long id ) const
 // Returns the total planned effort for this project (or subproject) on date
 double Project::actualCost( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1397,7 +1397,7 @@ double Project::actualCost( const QDate &date, long id ) const
 // Returns the total planned effort for this project (or subproject) upto and including date
 double Project::actualCostTo( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
@@ -1409,7 +1409,7 @@ double Project::actualCostTo( const QDate &date, long id ) const
 
 double Project::bcwp( long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     foreach (Node *n, childNodeIterator()) {
         c += n->bcwp(id);
@@ -1419,7 +1419,7 @@ double Project::bcwp( long id ) const
 
 double Project::bcwp( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     foreach (Node *n, childNodeIterator()) {
         c += n->bcwp( date, id );
@@ -1431,7 +1431,7 @@ double Project::bcwp( const QDate &date, long id ) const
 void Project::addCalendar( Calendar *calendar, Calendar *parent )
 {
     Q_ASSERT( calendar != 0 );
-    //kDebug()<<k_funcinfo<<calendar->name()<<","<<(parent?parent->name():"No parent");
+    //kDebug()<<calendar->name()<<","<<(parent?parent->name():"No parent");
     int row = parent == 0 ? m_calendars.count() : parent->calendars().count();
     emit calendarToBeAdded( parent, row );
     if ( parent == 0 ) {
@@ -1560,7 +1560,7 @@ void Project::setStandardWorktime( StandardWorktime * worktime )
 
 bool Project::legalToLink( Node *par, Node *child )
 {
-    //kDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents)"<<child.name()<<" ("<<child.numDependChildNodes()<<" children)";
+    //kDebug()<<par.name()<<" ("<<par.numDependParentNodes()<<" parents)"<<child.name()<<" ("<<child.numDependChildNodes()<<" children)";
 
     if ( par == 0 || child == 0 || par == child || par->isDependChildOf( child ) ) {
         return false;
@@ -1581,11 +1581,11 @@ bool Project::legalToLink( Node *par, Node *child )
 bool Project::legalParents( Node *par, Node *child )
 {
     bool legal = true;
-    //kDebug()<<k_funcinfo<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
+    //kDebug()<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
     for ( int i = 0; i < par->numDependParentNodes() && legal; ++i ) {
         Node *pNode = par->getDependParentNode( i ) ->parent();
         if ( child->isParentOf( pNode ) || pNode->isParentOf( child ) ) {
-            //kDebug()<<k_funcinfo<<"Found:"<<pNode->name()<<" is related to"<<child->name();
+            //kDebug()<<"Found:"<<pNode->name()<<" is related to"<<child->name();
             legal = false;
         } else {
             legal = legalChildren( pNode, child );
@@ -1599,11 +1599,11 @@ bool Project::legalParents( Node *par, Node *child )
 bool Project::legalChildren( Node *par, Node *child )
 {
     bool legal = true;
-    //kDebug()<<k_funcinfo<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
+    //kDebug()<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
     for ( int j = 0; j < child->numDependChildNodes() && legal; ++j ) {
         Node *cNode = child->getDependChildNode( j ) ->child();
         if ( par->isParentOf( cNode ) || cNode->isParentOf( par ) ) {
-            //kDebug()<<k_funcinfo<<"Found:"<<par->name()<<" is related to"<<cNode->name();
+            //kDebug()<<"Found:"<<par->name()<<" is related to"<<cNode->name();
             legal = false;
         } else {
             legal = legalChildren( par, cNode );
@@ -1627,7 +1627,7 @@ void Project::generateWBS( int count, WBSDefinition &def, const QString& wbs )
 
 void Project::setCurrentSchedule( long id )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     setCurrentSchedulePtr( findSchedule( id ) );
     Node::setCurrentSchedule( id );
     QHash<QString, Resource*> hash = resourceIdDict;
@@ -1639,7 +1639,7 @@ void Project::setCurrentSchedule( long id )
 
 ScheduleManager *Project::findScheduleManager( const QString &name ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     ScheduleManager *m = 0;
     foreach( ScheduleManager *sm, m_managers ) {
         m = sm->findManager( name );
@@ -1661,7 +1661,7 @@ QList<ScheduleManager*> Project::allScheduleManagers() const
 }
 
 QString Project::uniqueScheduleName() const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QString n = i18n( "Plan" );
     bool unique = findScheduleManager( n ) == 0;
     if ( unique ) {
@@ -1688,7 +1688,7 @@ void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent )
         sm->setParentManager( parent );
     }
     emit scheduleManagerAdded( sm );
-    //kDebug()<<k_funcinfo<<"Added:"<<sm->name()<<", now"<<m_managers.count();
+    //kDebug()<<"Added:"<<sm->name()<<", now"<<m_managers.count();
 }
 
 int Project::takeScheduleManager( ScheduleManager *sm )
@@ -1728,20 +1728,20 @@ bool Project::isScheduleManager( void *ptr ) const
 
 ScheduleManager *Project::createScheduleManager( const QString name )
 {
-    //kDebug()<<k_funcinfo<<name;
+    //kDebug()<<name;
     ScheduleManager *sm = new ScheduleManager( *this, name );
     return sm;
 }
 
 ScheduleManager *Project::createScheduleManager()
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     return createScheduleManager( uniqueScheduleName() );
 }
 
 MainSchedule *Project::createSchedule( const QString& name, Schedule::Type type )
 {
-    //kDebug()<<k_funcinfo<<"No of schedules:"<<m_schedules.count();
+    //kDebug()<<"No of schedules:"<<m_schedules.count();
     MainSchedule *sch = new MainSchedule();
     sch->setName( name );
     sch->setType( type );
@@ -1754,7 +1754,7 @@ void Project::addMainSchedule( MainSchedule *sch )
     if ( sch == 0 ) {
         return;
     }
-    //kDebug()<<k_funcinfo<<"No of schedules:"<<m_schedules.count();
+    //kDebug()<<"No of schedules:"<<m_schedules.count();
     long i = 1;
     while ( m_schedules.contains( i ) ) {
         ++i;
@@ -1766,13 +1766,13 @@ void Project::addMainSchedule( MainSchedule *sch )
 
 bool Project::removeCalendarId( const QString &id )
 {
-    //kDebug() << k_funcinfo <<"id=" << id;
+    //kDebug() <<"id=" << id;
     return calendarIdDict.remove( id );
 }
 
 void Project::insertCalendarId( const QString &id, Calendar *calendar )
 {
-    //kDebug() << k_funcinfo <<"id=" << id <<":" << calendar->name();
+    //kDebug() <<"id=" << id <<":" << calendar->name();
     calendarIdDict.insert( id, calendar );
 }
 
@@ -1787,7 +1787,7 @@ void Project::changed( Node *node )
 
 void Project::changed( ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     emit resourceGroupChanged( group );
 }
 
@@ -1798,7 +1798,7 @@ void Project::changed( ScheduleManager *sm )
 
 void Project::changed( MainSchedule *sch )
 {
-    //kDebug()<<k_funcinfo<<sch->id();
+    //kDebug()<<sch->id();
     emit scheduleChanged( sch );
 }
 
@@ -1809,7 +1809,7 @@ void Project::sendScheduleToBeAdded( const ScheduleManager *sm, int row )
 
 void Project::sendScheduleAdded( const MainSchedule *sch )
 {
-    //kDebug()<<k_funcinfo<<sch->id();
+    //kDebug()<<sch->id();
     emit scheduleAdded( sch );
 }
 
@@ -1820,7 +1820,7 @@ void Project::sendScheduleToBeRemoved( const MainSchedule *sch )
 
 void Project::sendScheduleRemoved( const MainSchedule *sch )
 {
-    //kDebug()<<k_funcinfo<<sch->id();
+    //kDebug()<<sch->id();
     emit scheduleRemoved( sch );
 }
 

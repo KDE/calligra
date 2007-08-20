@@ -4305,7 +4305,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
         // Style created, now let's try to add it
         sty = m_styleColl->addStyle( sty );
-        kDebug() << k_funcinfo << m_styleColl->styleList().count() <<" styles," << followingStyles.count() <<" following styles";
+        kDebug() << m_styleColl->styleList().count() <<" styles," << followingStyles.count() <<" following styles";
         if(m_styleColl->styleList().count() > followingStyles.count() )
         {
             QString following = styleElem.namedItem("FOLLOWING").toElement().attribute("name");

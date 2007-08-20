@@ -1159,11 +1159,11 @@ void KWFrameDia::initGeometrySettings()
             }
 
             if ( qAbs( f->width() - commonWidth ) > 1E-6 ) {
-                kDebug() << k_funcinfo <<"width differs:" << f->width() <<"" << commonWidth;
+                kDebug() <<"width differs:" << f->width() <<"" << commonWidth;
                 m_sw->setEnabled( false );
             }
             if ( qAbs( f->height() - commonHeight ) > 1E-6 ) {
-                kDebug() << k_funcinfo <<"height differs:" << f->height() <<"" << commonHeight;
+                kDebug() <<"height differs:" << f->height() <<"" << commonHeight;
                 m_sh->setEnabled( false );
             }
 

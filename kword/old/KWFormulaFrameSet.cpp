@@ -58,7 +58,7 @@
 KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
     : KWFrameSet( doc ), m_changed( false ), m_edit( 0 )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
 
     // The newly created formula is not yet part of the formula
     // document. It will be added when a frame is created.
@@ -95,13 +95,13 @@ KWFormulaFrameSet::KWFormulaFrameSet( KWDocument *doc, const QString & name )
 
 KWFormulaFrameSet::~KWFormulaFrameSet()
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     delete formula;
 }
 
 void KWFormulaFrameSet::addFrame( KWFrame *frame, bool recalc )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     if ( formula ) {
         frame->setWidth( formula->width() );
         frame->setHeight( formula->height() );
@@ -114,7 +114,7 @@ void KWFormulaFrameSet::addFrame( KWFrame *frame, bool recalc )
 
 void KWFormulaFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     assert( num == 0 );
     KWFrameSet::deleteFrame( num, remove, recalc );
     formula->unregisterFormula();
@@ -265,7 +265,7 @@ void KWFormulaFrameSet::paste( QDomNode& formulaElem )
 
 void KWFormulaFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     KWFrameSet::moveFloatingFrame( frameNum, position );
     if ( !m_frames.isEmpty() ) {
         formula->setDocumentPosition( position.x(), position.y()+formula->baseline() );
@@ -477,7 +477,7 @@ void KWFormulaFrameSetEdit::slotLeaveFormula( KFormula::Container*,
                                               KFormula::FormulaCursor* cursor,
                                               int cmd )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
 
     if ( cursor == formulaView->getCursor() ) {
         switch ( cmd ) {

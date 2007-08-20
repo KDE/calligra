@@ -79,7 +79,7 @@ void ChartWidget::draw( Project &p, ScheduleManager &sm )
 
 void ChartWidget::paintEvent(QPaintEvent * ev)
 {
-   kDebug()<<k_funcinfo<<size();
+   kDebug()<<size();
     //this->updateGeometry();
     QPainter painter(this);
 
@@ -90,7 +90,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
         painter.setPen(QColor(Qt::black));
         chartEngine.api(bcwpPoints, bcwpPoints_display, size() );
         painter.drawPolyline(QPolygonF(bcwpPoints_display));
-        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
+        kDebug()<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
         is_bcwp_draw=true;
     }
 
@@ -99,7 +99,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
         kDebug()<<" Height :"<<size().height()<<" Width :"<<size().width();
         chartEngine.api( bcwsPoints, bcwsPoints_display, size() );
         painter.drawPolyline(QPolygonF(bcwsPoints_display));
-        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
+        kDebug()<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
         is_bcws_draw=true;
     }
 
@@ -108,7 +108,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
         painter.setPen(QColor(Qt::green));
         chartEngine.api( acwpPoints, acwpPoints_display, size() );
         painter.drawPolyline(QPolygonF(acwpPoints_display));
-        kDebug()<<k_funcinfo<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
+        kDebug()<<bcwpPoints_display<<QPolygonF(bcwpPoints_display);
         is_acwp_draw=true;
     }
 

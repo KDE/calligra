@@ -50,13 +50,13 @@ DurationSpinBox::DurationSpinBox(QWidget *parent)
 
 void DurationSpinBox::setValue( const Duration &value )
 {
-    //kDebug()<<k_funcinfo<<value.milliseconds();
+    //kDebug()<<value.milliseconds();
     QDoubleSpinBox::setValue( durationToDouble( value, m_unit ) );
 }
 
 void DurationSpinBox::setValue( const qint64 value )
 {
-    //kDebug()<<k_funcinfo<<value;
+    //kDebug()<<value;
     setValue( Duration( value ) );
 }
 
@@ -79,7 +79,7 @@ void DurationSpinBox::setUnit( Duration::Unit unit )
 
 void DurationSpinBox::stepUnitUp()
 {
-    //kDebug()<<k_funcinfo<<m_unit<<" >"<<Duration::Unit_d;
+    //kDebug()<<m_unit<<" >"<<Duration::Unit_d;
     if ( m_unit > Duration::Unit_d ) {
         setUnit( static_cast<Duration::Unit>(m_unit - 1) );
         // line may change length, make sure cursor stays within unit
@@ -89,7 +89,7 @@ void DurationSpinBox::stepUnitUp()
 
 void DurationSpinBox::stepUnitDown()
 {
-    //kDebug()<<k_funcinfo<<m_unit<<" <"<<Duration::Unit_ms;
+    //kDebug()<<m_unit<<" <"<<Duration::Unit_ms;
     if ( m_unit < Duration::Unit_ms ) {
         setUnit( static_cast<Duration::Unit>(m_unit + 1) );
         // line may change length, make sure cursor stays within unit
@@ -99,7 +99,7 @@ void DurationSpinBox::stepUnitDown()
 
 void DurationSpinBox::stepBy( int steps )
 {
-    //kDebug()<<k_funcinfo<<steps;
+    //kDebug()<<steps;
     if ( lineEdit()->cursorPosition() > text().size() - Duration::unitToString( m_unit, true ).size() ) {
         // we are in unit
         if ( steps > 0 ) {
@@ -117,7 +117,7 @@ QString DurationSpinBox::textFromValue(double value) const
 {
     QString s = QDoubleSpinBox::textFromValue( value );
     s += Duration::unitToString( m_unit, true );
-    //kDebug()<<k_funcinfo<<value<<" ->"<<s;
+    //kDebug()<<value<<" ->"<<s;
     return s;
 }
 
@@ -127,7 +127,7 @@ double DurationSpinBox::valueFromText(const QString &text) const
     QString t = text;
     t = t.remove( Duration::unitToString( m_unit, true ) );
     double s = QDoubleSpinBox::valueFromText( t );
-    //kDebug()<<k_funcinfo<<text<<","<<t<<" ->"<<s;
+    //kDebug()<<text<<","<<t<<" ->"<<s;
     return s;
 }
 
@@ -140,19 +140,19 @@ QValidator::State DurationSpinBox::validate(QString &txt, int &pos) const
     if ( !unit.isEmpty() ) {
         if ( txt.indexOf( unit ) < txt.length() - unit.length() ) {
             // no unit or unit in the middle of the value
-            //kDebug()<<k_funcinfo<<t<<","<<pos<<";"<<s;
+            //kDebug()<<t<<","<<pos<<";"<<s;
             return QValidator::Invalid;
         } else if ( pos > txt.length() - unit.length() ) {
             // inside unit
             if ( txt.indexOf( unit ) == -1 ) {
-                //kDebug()<<k_funcinfo<<t<<","<<pos<<";"<<s;
+                //kDebug()<<t<<","<<pos<<";"<<s;
                 return QValidator::Invalid;
             }
         }
         t.remove( unit );
     }
     s = QDoubleSpinBox::validate( t, pos );
-    //kDebug()<<k_funcinfo<<t<<","<<pos<<";"<<s;
+    //kDebug()<<t<<","<<pos<<";"<<s;
     return s;
 }
 
@@ -170,7 +170,7 @@ QAbstractSpinBox::StepEnabled DurationSpinBox::stepEnabled () const
 
 void DurationSpinBox::keyPressEvent( QKeyEvent * event )
 {
-    //kDebug()<<k_funcinfo<<lineEdit()->cursorPosition()<<","<<(text().size() - Duration::unitToString( m_unit, true ).size())<<""<<event->text().isEmpty();
+    //kDebug()<<lineEdit()->cursorPosition()<<","<<(text().size() - Duration::unitToString( m_unit, true ).size())<<""<<event->text().isEmpty();
     
     if ( lineEdit()->cursorPosition() > text().size() - Duration::unitToString( m_unit, true ).size() ) {
         // we are in unit

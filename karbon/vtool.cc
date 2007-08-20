@@ -256,7 +256,7 @@ VTool::keyEvent( QEvent* event )
 void
 VTool::activate()
 {
-	kDebug() << k_funcinfo;
+	kDebug() ;
 	refreshUnit();
 	QPixmap Icon = BarIcon( icon() );
 	view()->contextHelpAction()->updateHelp( uiname(), contextHelp(), &Icon );

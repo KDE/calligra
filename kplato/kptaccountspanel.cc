@@ -98,7 +98,7 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
 }
     
 void AccountsPanel::addItems(QTreeWidget *lv, Accounts &acc) {
-    //kDebug()<<k_funcinfo<<"No of accs:"<<acc.accountList().count();
+    //kDebug()<<"No of accs:"<<acc.accountList().count();
     AccountListIterator it = acc.accountList();
     foreach (Account *a, acc.accountList()) {
         QString n = a->name();
@@ -132,7 +132,7 @@ void AccountsPanel::addElement(QTreeWidgetItem *item) {
         removeElement(item->parent());
     }
     m_elements.insert(item->text(0), item);
-    //kDebug()<<k_funcinfo<<item->text(0);
+    //kDebug()<<item->text(0);
     refreshDefaultAccount();
 }
 
@@ -160,22 +160,22 @@ void AccountsPanel::refreshDefaultAccount() {
         if (static_cast<AccountItem*>(m_elements[key])->isDefault) {
             m_currentIndex = i;
             accountsComboBox->setCurrentIndex(i);
-            //kDebug()<<k_funcinfo<<"Default="<<key;
+            //kDebug()<<"Default="<<key;
         }
         ++i;
     }
-    //kDebug()<<k_funcinfo<<"size="<<accountsComboBox->count();
+    //kDebug()<<"size="<<accountsComboBox->count();
 }
 
 void AccountsPanel::slotItemChanged(QTreeWidgetItem*, int ) {
-    //kDebug()<<k_funcinfo<<item->text(0)<<","<<col;
+    //kDebug()<<item->text(0)<<","<<col;
     emit changed(true);
 }
 
 void AccountsPanel::slotActivated(int index) {
-    //kDebug()<<k_funcinfo<<index;
+    //kDebug()<<index;
     if (m_currentIndex >= (int)m_elements.count()) {
-        kError()<<k_funcinfo<<"currentIndex ("<<m_currentIndex<<") out of range ("<<m_elements.count()<<")"<<endl;
+        kError()<<"currentIndex ("<<m_currentIndex<<") out of range ("<<m_elements.count()<<")"<<endl;
     } else if (m_currentIndex > 0) {
         AccountItem *i = static_cast<AccountItem*>(m_elements[accountsComboBox->text(m_currentIndex)]);
         if (i) 
@@ -187,7 +187,7 @@ void AccountsPanel::slotActivated(int index) {
         if (i) {
             i->isDefault = true;
             m_currentIndex = index;
-            //kDebug()<<k_funcinfo<<"currentIndex="<<m_currentIndex<<","<<m_elements[accountsComboBox->currentText()]->text(0);
+            //kDebug()<<"currentIndex="<<m_currentIndex<<","<<m_elements[accountsComboBox->currentText()]->text(0);
         }
     }
     slotChanged();
@@ -198,7 +198,7 @@ void AccountsPanel::slotChanged() {
 }
 
 void AccountsPanel::slotSelectionChanged() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if (accountList->topLevelItemCount() == 0) {
         removeBtn->setEnabled(false);
         newBtn->setEnabled(true);
@@ -231,7 +231,7 @@ void AccountsPanel::slotRemoveBtn() {
 }
 
 void AccountsPanel::slotNewBtn() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QList<QTreeWidgetItem*> lst = accountList->selectedItems();
     QTreeWidgetItem *item = 0;
     if (lst.count() > 0) {
@@ -253,7 +253,7 @@ void AccountsPanel::slotNewBtn() {
 }
 
 void AccountsPanel::slotSubBtn() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QList<QTreeWidgetItem*> lst = accountList->selectedItems();
     QTreeWidgetItem* item = 0;
     if (lst.count() > 0) {
@@ -276,7 +276,7 @@ K3Command *AccountsPanel::buildCommand(Part *part) {
     // First remove
     while (!m_removedItems.isEmpty()) {
         AccountItem *item = static_cast<AccountItem*>(m_removedItems.takeFirst());
-        //kDebug()<<k_funcinfo<<"Removed item";
+        //kDebug()<<"Removed item";
         if (!cmd) cmd = new K3MacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(new RemoveAccountCmd(part, part->getProject(), item->account));
         delete item;
@@ -308,11 +308,11 @@ K3Command *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i)
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
         if (!item->text(0).isEmpty()) {
-            kDebug()<<k_funcinfo<<"New account:"<<item->text(0);
+            kDebug()<<"New account:"<<item->text(0);
             if (!cmd) cmd = new K3MacroCommand("");
             item->account = new Account(item->text(0), item->text(1));
             if (item->parent()) {
-                kDebug()<<k_funcinfo<<"New account:"<<item->text(0);
+                kDebug()<<"New account:"<<item->text(0);
                 cmd->addCommand(new AddAccountCmd(part, project, item->account, item->parent()->text(0)));
             } else {
                 cmd->addCommand(new AddAccountCmd(part, project, item->account));
@@ -321,12 +321,12 @@ K3Command *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i)
     } else {
         if (!item->text(0).isEmpty() && (item->text(0) != item->account->name())) {
             if (!cmd) cmd = new K3MacroCommand("");
-            //kDebug()<<k_funcinfo<<"Renamed:"<<item->account->name()<<" to"<<item->text(0);
+            //kDebug()<<"Renamed:"<<item->account->name()<<" to"<<item->text(0);
             cmd->addCommand(new RenameAccountCmd(part, item->account, item->text(0)));
         }
         if (item->text(1) != item->account->description()) {
             if (!cmd) cmd = new K3MacroCommand("");
-            //kDebug()<<k_funcinfo<<"New description:"<<item->account->description()<<" to"<<item->text(1);
+            //kDebug()<<"New description:"<<item->account->description()<<" to"<<item->text(1);
             cmd->addCommand(new ModifyAccountDescriptionCmd(part, item->account, item->text(1)));
         }
     }
@@ -355,7 +355,7 @@ void AccountsPanel::slotRemoveItem(QTreeWidgetItem *i) {
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item == 0)
         return;
-    //kDebug()<<k_funcinfo<<item->text(0);
+    //kDebug()<<item->text(0);
     removeElement(item);
     QTreeWidgetItem *p = item->parent();
     if (p) {

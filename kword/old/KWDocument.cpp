@@ -2350,7 +2350,7 @@ void KWDocument::loadImagesFromStore( KoStore *store )
 
 bool KWDocument::completeLoading( KoStore *store )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     // Old-XML stuff. No-op when loading OASIS.
     loadImagesFromStore( store );
     processPictureRequests();
@@ -2978,7 +2978,7 @@ Q3DragObject* KWDocument::dragSelectedPrivate( QWidget *parent, const Q3ValueLis
     if ( !picture.isNull() )
         multiDrag->addDragObject( picture.dragObject( 0 ) );
     KoStoreDrag* storeDrag = new KoStoreDrag( KWOasisSaver::selectionMimeType(), 0 );
-    kDebug() << k_funcinfo <<"setting zip data:" << buffer.buffer().size() <<" bytes.";
+    kDebug() <<"setting zip data:" << buffer.buffer().size() <<" bytes.";
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
     return multiDrag;
@@ -3849,7 +3849,7 @@ void KWDocument::slotRepaintAllViews() {
 }
 
 void KWDocument::delayedRecalcFrames( int fromPage ) {
-    //kDebug() << k_funcinfo << fromPage;
+    //kDebug() << fromPage;
     if ( m_recalcFramesPending == -1 || fromPage < m_recalcFramesPending )
     {
         m_recalcFramesPending = fromPage;
@@ -3859,7 +3859,7 @@ void KWDocument::delayedRecalcFrames( int fromPage ) {
 
 void KWDocument::slotRecalcFrames() {
     int from = m_recalcFramesPending;
-    kDebug() << k_funcinfo <<"from=" << from;
+    kDebug() <<"from=" << from;
     m_recalcFramesPending = -1;
     if ( from != -1 )
         recalcFrames( from );
@@ -4525,7 +4525,7 @@ KFormula::Document* KWDocument::formulaDocument( bool init )
 {
     KFormula::Document* formulaDocument = m_formulaDocumentWrapper->document();
     if (!formulaDocument) {
-        kDebug() << k_funcinfo;
+        kDebug() ;
         formulaDocument = new KFormula::Document;
         m_formulaDocumentWrapper->document( formulaDocument, init );
         if ( formulaDocument != 0 ) {

@@ -58,7 +58,7 @@ public:
 ChartShape::ChartShape()
     : d( new Private )
 {
-    kDebug() << k_funcinfo << endl;
+    kDebug() << endl;
     d->chart = new Chart();
     d->diagram = new BarDiagram( d->chart, static_cast<CartesianCoordinatePlane*>(d->chart->coordinatePlane() ) );
     d->model = 0;
@@ -142,7 +142,7 @@ Chart* ChartShape::chart() const
 
 void ChartShape::setModel( QAbstractItemModel* model )
 {
-    kDebug() << k_funcinfo << "BEGIN";
+    kDebug() << "BEGIN";
     d->model = model;
     d->chart->coordinatePlane()->takeDiagram( d->diagram );
     d->diagram->setModel( model );
@@ -176,7 +176,7 @@ void ChartShape::setModel( QAbstractItemModel* model )
     m_legend->setOrientation( Qt::Horizontal );
     d->chart->addLegend( m_legend );
 
-    kDebug() << k_funcinfo <<" END";
+    kDebug() <<" END";
 }
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )

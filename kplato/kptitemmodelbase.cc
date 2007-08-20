@@ -138,7 +138,7 @@ void EnumDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<k_funcinfo<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() 50);
     editor->setGeometry(r);
@@ -180,7 +180,7 @@ void DurationDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void DurationDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<k_funcinfo<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
@@ -218,7 +218,7 @@ void DurationSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *
 
 void DurationSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<k_funcinfo<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
@@ -257,7 +257,7 @@ void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
 void SpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    kDebug()<<k_funcinfo<<editor<<":"<<option.rect<<","<<editor->sizeHint();
+    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
@@ -391,13 +391,13 @@ void ItemModelBase::setProject( Project *project )
 
 void ItemModelBase::slotLayoutChanged()
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     emit layoutChanged();
 }
 
 void ItemModelBase::slotLayoutToBeChanged()
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     emit layoutAboutToBeChanged();
 }
 
@@ -429,7 +429,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 
 void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     emit headerContextMenuRequested( header()->mapToGlobal( pos ) );
 }
 
@@ -440,7 +440,7 @@ void TreeViewBase::setColumnsHidden( const QList<int> &list )
 
 void TreeViewBase::updateColumnsHidden()
 {
-    //kDebug()<<k_funcinfo<<m_hideList<<endl;
+    //kDebug()<<m_hideList<<endl;
     int prev = 0;
     foreach ( int c, m_hideList ) {
         if ( c == -1 ) {
@@ -467,7 +467,7 @@ QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr ) const
         }
         ++s;
     }
-    kDebug()<<k_funcinfo<<curr.column()<<": next="<<header()->logicalIndex( s )<<","<<s;
+    kDebug()<<curr.column()<<": next="<<header()->logicalIndex( s )<<","<<s;
     return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
 }
 
@@ -481,7 +481,7 @@ QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr ) const
         }
         --s;
     }
-    kDebug()<<k_funcinfo<<curr.column()<<": prev="<<header()->logicalIndex( s )<<","<<s;
+    kDebug()<<curr.column()<<": prev="<<header()->logicalIndex( s )<<","<<s;
     return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
 }
 
@@ -490,7 +490,7 @@ QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr ) const
  */
 void TreeViewBase::keyPressEvent(QKeyEvent *event)
 {
-    kDebug()<<k_funcinfo<<event->key()<<","<<m_arrowKeyNavigation;
+    kDebug()<<event->key()<<","<<m_arrowKeyNavigation;
     if ( !m_arrowKeyNavigation ) {
         QTreeView::keyPressEvent( event );
         return;
@@ -590,7 +590,7 @@ QItemSelectionModel::SelectionFlags TreeViewBase::selectionCommand(const QModelI
 
 void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
@@ -646,10 +646,10 @@ int TreeViewBase::section( int col ) const
 
 void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if (dragDropMode() == InternalMove
         && (event->source() != this || !(event->possibleActions() & Qt::MoveAction))) {
-        //kDebug()<<k_funcinfo<<"Internal:"<<event->isAccepted();
+        //kDebug()<<"Internal:"<<event->isAccepted();
         return;
     }
     QTreeView::dragMoveEvent( event );
@@ -658,23 +658,23 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
         if ( m_acceptDropsOnView ) {
             event->accept();
         }
-        //kDebug()<<k_funcinfo<<"On viewport:"<<event->isAccepted();
+        //kDebug()<<"On viewport:"<<event->isAccepted();
         return;
     }
     QModelIndex index = indexAt( event->pos() );
     if ( ! index.isValid() ) {
-        //kDebug()<<k_funcinfo<<"Invalid index:"<<event->isAccepted();
+        //kDebug()<<"Invalid index:"<<event->isAccepted();
         return;
     }
     if ( itemModel()->dropAllowed( index, dropIndicatorPosition(), event->mimeData() ) ) {
         event->accept();
     }
-    //kDebug()<<k_funcinfo<<event->isAccepted();
+    //kDebug()<<event->isAccepted();
 }
 
 bool TreeViewBase::loadContext( const KoXmlElement &element )
 {
-    kDebug()<<k_funcinfo<<objectName()<<endl;
+    kDebug()<<objectName()<<endl;
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
         for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
@@ -789,7 +789,7 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> s
 
 void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 {
-    kDebug()<<k_funcinfo<<index.column()<<endl;
+    kDebug()<<index.column()<<endl;
     if ( m_rightview == 0 ) {
         return;
     }
@@ -802,7 +802,7 @@ void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 {
-    kDebug()<<k_funcinfo<<index.column();
+    kDebug()<<index.column();
     m_leftview->setFocus();
     QModelIndex prv = m_leftview->previousColumn( index );
     if ( prv.isValid() ) {
@@ -933,21 +933,21 @@ void DoubleTreeViewBase::setAcceptDropsOnView( bool mode )
 
 void DoubleTreeViewBase::slotRightHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     emit slaveHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
 
 void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     emit masterHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
 
 bool DoubleTreeViewBase::loadContext( const KoXmlElement &element )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     QList<int> lst1;
     QList<int> lst2;
     KoXmlElement e = element.namedItem( "master" ).toElement();

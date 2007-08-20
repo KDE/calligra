@@ -58,7 +58,7 @@ AccountsView::AccountItem::AccountItem( Account *a, QTreeWidget *parent, bool hi
     if ( parent->columnCount() >= 3 ) {
         setText( 2, a->description() );
     }
-    //kDebug()<<k_funcinfo;
+    //kDebug();
 }
 AccountsView::AccountItem::AccountItem( Account *a, QTreeWidgetItem *p, bool highlight )
         : DoubleListViewBase::MasterListItem( p, a->name(), highlight ),
@@ -67,14 +67,14 @@ AccountsView::AccountItem::AccountItem( Account *a, QTreeWidgetItem *p, bool hig
     if ( treeWidget() && columnCount() >= 3 ) {
         setText( 2, a->description() );
     }
-    //kDebug()<<k_funcinfo;
+    //kDebug();
 }
 
 AccountsView::AccountItem::AccountItem( const QString& text, Account *a, QTreeWidgetItem *parent, bool highlight )
         : DoubleListViewBase::MasterListItem( parent, text, highlight ),
         account( a )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
 }
 
 void AccountsView::AccountItem::add
@@ -165,7 +165,7 @@ void AccountsView::draw()
         m_dlv->clearLists();
         return;
     }
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Context::Accountsview context;
     getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
     initAccList( m_project->accounts().accountList() );
@@ -237,7 +237,7 @@ void AccountsView::slotUpdate()
     }
     Accounts &accounts = m_project->accounts();
     long id = m_manager->id();
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QApplication::setOverrideCursor( Qt::WaitCursor );
     createPeriods();
     KLocale *locale = KGlobal::locale();
@@ -254,7 +254,7 @@ void AccountsView::slotUpdate()
     // Add columns for selected period/periods
     QDate start = m_project->startTime( id ).date();
     QDate end = m_date;
-    //kDebug()<<k_funcinfo<<start<<" -"<<end;
+    //kDebug()<<start<<" -"<<end;
     QStringList df;
     if ( m_period == 0 ) { //Daily
         for ( QDate dt = start; dt <= end; dt = cal->addDays( dt, 1 ) ) {
@@ -288,7 +288,7 @@ void AccountsView::slotUpdate()
         QDate pend = cal->addDays( dt, 7 + weekStartDay - 1 - cal->dayOfWeek( dt ) );
         int c = 0;
         for ( ; pend <= end; ++c ) {
-            //kDebug()<<k_funcinfo<<c<<":"<<dt<<"-"<<pend<<" :"<<end;
+            //kDebug()<<c<<":"<<dt<<"-"<<pend<<" :"<<end;
             int y;
             int w = cal->weekNumber( dt, &y );
             t << i18nc( "<week>-<year>", "%1-%2", w, y );
@@ -336,7 +336,7 @@ void AccountsView::slotUpdate()
         cal->setYMD( pend, dt.year(), dt.month(), dt.daysInMonth() );
         int c = 0;
         for ( ; pend <= end; ++c ) {
-            //kDebug()<<k_funcinfo<<c<<":"<<dt<<"-"<<pend<<" :"<<end;
+            //kDebug()<<c<<":"<<dt<<"-"<<pend<<" :"<<end;
             m << cal->monthName( dt, KCalendarSystem::ShortName ) + QString( " %1" ).arg( dt.year() );
             dt = pend.addDays( 1 ); // 1. next month
             pend = cal->addDays( pend, dt.daysInMonth() );
@@ -379,7 +379,7 @@ void AccountsView::slotUpdate()
 
 void AccountsView::print( KPrinter &printer )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     uint top, left, bottom, right;
     printer.margins( &top, &left, &bottom, &right );
     //kDebug()<<m.width()<<"x"<<m.height()<<" :"<<top<<","<<left<<","<<bottom<<","<<right<<" :"<<size();
@@ -404,7 +404,7 @@ void AccountsView::print( KPrinter &printer )
 
 bool AccountsView::loadContext( const KoXmlElement &context )
 {
-    //kDebug()<<k_funcinfo<<"---->"<<endl;
+    //kDebug()<<"---->"<<endl;
 /*    const Context::Accountsview &context = c.accountsview;
     
     QList<int> list;
@@ -416,7 +416,7 @@ bool AccountsView::loadContext( const KoXmlElement &context )
     m_period = context.period;
     m_cumulative = context.cumulative;
     setContextClosedItems( context );*/
-    //kDebug()<<k_funcinfo<<"<----";
+    //kDebug()<<"<----";
     return true;
 }
 
@@ -437,7 +437,7 @@ void AccountsView::setContextClosedItems( const Context::Accountsview &context )
 
 void AccountsView::saveContext( QDomElement *context ) const
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<endl;
 /*    Context::Accountsview &context = c.accountsview;
     
     context.accountsviewsize = m_dlv->sizes() [ 0 ];
@@ -445,7 +445,7 @@ void AccountsView::saveContext( QDomElement *context ) const
     context.date = m_date;
     context.period = m_period;
     context.cumulative = m_cumulative;*/
-    //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
+    //kDebug()<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
 
     //getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
 }
@@ -457,7 +457,7 @@ void AccountsView::getContextClosedItems( Context::Accountsview &context, QTreeW
     /*    for (QTreeWidgetItem *i = item; i; i = i->nextSibling()) {
             if (!i->isOpen()) {
                 context.closedItems.append(i->text(0));
-                //kDebug()<<k_funcinfo<<"add closed"<<i->text(0);
+                //kDebug()<<"add closed"<<i->text(0);
             }
             getContextClosedItems(context, i->firstChild());
         }*/
@@ -465,7 +465,7 @@ void AccountsView::getContextClosedItems( Context::Accountsview &context, QTreeW
 
 void AccountsView::slotConfigure()
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     AccountsviewConfigDialog * dia = new AccountsviewConfigDialog( m_date, m_period, m_periodTexts, m_cumulative, this );
     if ( dia->exec() ) {
         m_date = dia->date();

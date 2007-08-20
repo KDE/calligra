@@ -600,7 +600,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
             }
         }
     }
-    kDebug() << k_funcinfo << result;
+    kDebug() << result;
     return result;
 }
 
@@ -698,7 +698,7 @@ QString Cell::decodeFormula(const QString &_text) const
 
 bool Cell::makeFormula()
 {
-//   kDebug(36002) << k_funcinfo;
+//   kDebug(36002) ;
 
     // sanity check
     if ( !isFormula() )
@@ -760,7 +760,7 @@ double Cell::height() const
 // parses the text
 void Cell::parseUserInput( const QString& text )
 {
-//   kDebug() << k_funcinfo;
+//   kDebug() ;
 
     // empty string?
     if ( text.isEmpty() )

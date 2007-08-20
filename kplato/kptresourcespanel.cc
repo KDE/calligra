@@ -59,10 +59,10 @@ public:
             m_originalResource = res;
             m_resource = new Resource(res);
         }
-        //kDebug()<<k_funcinfo<<"("<<this<<")"<<" orgres="<<m_originalResource<<" newres="<<m_resource;
+        //kDebug()<<"("<<this<<")"<<" orgres="<<m_originalResource<<" newres="<<m_resource;
     }
     ~ResourcesPanelResourceItem() {
-        //kDebug()<<k_funcinfo<<"("<<this<<") state="<<m_state;
+        //kDebug()<<"("<<this<<") state="<<m_state;
         delete m_resource;
     }
     void setState(State s) {
@@ -89,11 +89,11 @@ public:
 K3Command *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup *group) {
     K3MacroCommand *m=0;
     if (m_state == New) {
-        //kDebug()<<k_funcinfo<<"Add resource:"<<m_resource->name();
+        //kDebug()<<"Add resource:"<<m_resource->name();
         if (!m) m = new K3MacroCommand("Add resource");
         m->addCommand(new AddResourceCmd(part, group, takeResource()));
     } else if (m_state == Modified) {
-        //kDebug()<<k_funcinfo<<"Modify resource:"<<m_originalResource->name();
+        //kDebug()<<"Modify resource:"<<m_originalResource->name();
         K3Command *cmd = ResourceDialog::buildCommand(m_originalResource, *m_resource, part);
         if (cmd) {
             if (!m) m = new K3MacroCommand("Modify resource");
@@ -127,10 +127,10 @@ public:
         m_group = group;
         m_name = group->name();
         m_state = state;
-        //kDebug()<<k_funcinfo<<"("<<this<<")";
+        //kDebug()<<"("<<this<<")";
     }
     ~GroupItem() {
-        //kDebug()<<k_funcinfo<<"("<<this<<")";
+        //kDebug()<<"("<<this<<")";
         if (m_state & New) {
             delete m_group;
         }
@@ -146,14 +146,14 @@ public:
         if (m_state & New)
             m_group->setName(newName);
         setState(Modified);
-        //kDebug()<<k_funcinfo<<"New name: '"<<newName<<"', group name: '"<<m_group->name()<<"' state="<<m_state;
+        //kDebug()<<"New name: '"<<newName<<"', group name: '"<<m_group->name()<<"' state="<<m_state;
     }
     void addResource(ResourcesPanelResourceItem *item) {
-        //kDebug()<<k_funcinfo<<" add:"<<(item?item->name():"")<<" ("<<item<<")";
+        //kDebug()<<" add:"<<(item?item->name():"")<<" ("<<item<<")";
         m_resourceItems.append(item);
     }
     void deleteResource(ResourcesPanelResourceItem *item) {
-        //kDebug()<<k_funcinfo<<" Deleted:"<<item->m_name<<" ("<<item<<")";
+        //kDebug()<<" Deleted:"<<item->m_name<<" ("<<item<<")";
         if (item == 0)
             return;
         int i = m_resourceItems.indexOf(item);
@@ -163,10 +163,10 @@ public:
             delete item;
         else
             m_deletedItems.append(item);
-        //kDebug()<<k_funcinfo<<"No of items now="<<m_resourceItems.count()<<", no of deleted items="<<m_deletedItems.count();
+        //kDebug()<<"No of items now="<<m_resourceItems.count()<<", no of deleted items="<<m_deletedItems.count();
     }
     ResourceGroup *takeGroup() {
-        //kDebug()<<k_funcinfo<<"("<<m_group<<")";
+        //kDebug()<<"("<<m_group<<")";
         ResourceGroup *g = m_group;
         m_group = 0;
         return g;
@@ -174,7 +174,7 @@ public:
     void saveResources() {
         while (!m_resourceItems.isEmpty()) {
             ResourcesPanelResourceItem *item = m_resourceItems.takeFirst();
-            //kDebug()<<k_funcinfo<<item->m_resource->name();
+            //kDebug()<<item->m_resource->name();
             m_group->addResource(-1, item->takeResource(), 0);
             delete item;
         }
@@ -195,10 +195,10 @@ public:
        
         setText(0, item->m_name);
         setFlags(flags() | Qt::ItemIsEditable);
-        //kDebug()<<k_funcinfo<<"("<<this<<")";
+        //kDebug()<<"("<<this<<")";
     }
     ~ResourcesPanelGroupLVItem() {
-        //kDebug()<<k_funcinfo<<"("<<this<<")";
+        //kDebug()<<"("<<this<<")";
     }
     void setName(const QString &newName) {
         setText(0, newName);
@@ -209,7 +209,7 @@ public:
         m_group = 0;
     }
     GroupItem *takeGroup() {
-        //kDebug()<<k_funcinfo<<"("<<m_group<<")";
+        //kDebug()<<"("<<m_group<<")";
         GroupItem *g = m_group;
         m_group = 0;
         return g;
@@ -239,11 +239,11 @@ ResourcesPanel::ResourcesPanel(QWidget *parent, Project *p) : ResourcesPanelBase
     
     foreach (ResourceGroup *grp, project->resourceGroups()) {
         GroupItem *groupItem = new GroupItem(grp);
-        //kDebug()<<k_funcinfo<<" Added group:"<<groupItem->m_name<<" ("<<groupItem<<")";
+        //kDebug()<<" Added group:"<<groupItem->m_name<<" ("<<groupItem<<")";
         foreach (Resource *res, grp->resources()) {
             ResourcesPanelResourceItem *ritem = new ResourcesPanelResourceItem(res);
             groupItem->addResource(ritem);
-            //kDebug()<<k_funcinfo<<"      Added resource:"<<ritem->m_name<<" ("<<ritem<<")";
+            //kDebug()<<"      Added resource:"<<ritem->m_name<<" ("<<ritem<<")";
         }
         m_groupItems.append(groupItem);
         new ResourcesPanelGroupLVItem(*this, listOfGroups, groupItem);
@@ -276,7 +276,7 @@ ResourcesPanel::~ResourcesPanel()
 }
 
 void ResourcesPanel::slotAddGroup() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     listOfGroups->clearSelection();
     ResourceGroup *r = new ResourceGroup();
     GroupItem *gitem = new GroupItem(r, GroupItem::New);
@@ -287,7 +287,7 @@ void ResourcesPanel::slotAddGroup() {
 }
 
 void ResourcesPanel::slotDeleteGroup() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QList<QTreeWidgetItem*> lst = listOfGroups->selectedItems();
     foreach (QTreeWidgetItem *i, lst) {
         listOfResources->clear();
@@ -296,7 +296,7 @@ void ResourcesPanel::slotDeleteGroup() {
         m_groupItems.takeAt(m_groupItems.indexOf(groupLVItem->m_group)); // remove GroupItem from active list
         m_deletedGroupItems.append(groupLVItem->takeGroup()); // remove GroupItem from GroupLVItem and add to deleted list
     
-        //kDebug()<<k_funcinfo<<" No of deleted groups="<<m_deletedGroupItems.count()<<", now"<<m_groupItems.count()<<" groups left";
+        //kDebug()<<" No of deleted groups="<<m_deletedGroupItems.count()<<", now"<<m_groupItems.count()<<" groups left";
     
         delete groupLVItem; // delete GroupLVItem (but not GroupItem)
     }
@@ -323,7 +323,7 @@ void ResourcesPanel::slotAddResource() {
         listOfResources->addItem(item);
         item->setSelected(true);
         emit changed();
-        //kDebug()<<k_funcinfo<<" Added:"<<resourceItem->name()<<" to"<<m_groupItem->m_group->m_name;
+        //kDebug()<<" Added:"<<resourceItem->name()<<" to"<<m_groupItem->m_group->m_name;
     } else {
         delete r;
     }
@@ -331,7 +331,7 @@ void ResourcesPanel::slotAddResource() {
 }
 
 void ResourcesPanel::slotEditResource() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QList<QListWidgetItem*> lst = listOfResources->selectedItems();
     if (lst.isEmpty()) {
         return;
@@ -353,7 +353,7 @@ void ResourcesPanel::slotEditResource() {
 }
 
 void ResourcesPanel::slotDeleteResource() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QList<QListWidgetItem*> lst = listOfResources->selectedItems();
     if (lst.isEmpty()) {
         return;
@@ -398,22 +398,22 @@ K3Command *ResourcesPanel::buildCommand(Part *part) {
     foreach (GroupItem *gitem, m_deletedGroupItems) {
         if (!(gitem->m_state & GroupItem::New)) {
             if (!m) m = new K3MacroCommand(cmdName);
-            //kDebug()<<k_funcinfo<<"Remove group: '"<<gitem->m_name<<"'";
+            //kDebug()<<"Remove group: '"<<gitem->m_name<<"'";
             m->addCommand(new RemoveResourceGroupCmd(part, project, gitem->takeGroup()));
         }
     }
     foreach (GroupItem *gitem, m_groupItems) {
-        //kDebug()<<k_funcinfo<<"Group:"<<gitem->m_name<<" has"<<gitem->m_resourceItems.count()<<" resources"<<" and"<<gitem->m_deletedItems.count()<<" deleted resources";
+        //kDebug()<<"Group:"<<gitem->m_name<<" has"<<gitem->m_resourceItems.count()<<" resources"<<" and"<<gitem->m_deletedItems.count()<<" deleted resources";
         //First remove deleted resources from group
         foreach (ResourcesPanelResourceItem *ditem, gitem->m_deletedItems) {
             if (!m) m = new K3MacroCommand(cmdName);
-            //kDebug()<<k_funcinfo<<" Deleting resource: '"<<ditem->m_originalResource->name()<<"'";
+            //kDebug()<<" Deleting resource: '"<<ditem->m_originalResource->name()<<"'";
             m->addCommand(new RemoveResourceCmd(part, gitem->m_group, ditem->m_originalResource));
         }
         // Now add/modify group/resources
         if (gitem->m_state & GroupItem::New) {
             if (!m) m = new K3MacroCommand(cmdName);
-            //kDebug()<<k_funcinfo<<" Adding group: '"<<gitem->m_name<<"'";
+            //kDebug()<<" Adding group: '"<<gitem->m_name<<"'";
             gitem->saveResources();
             m->addCommand(new AddResourceGroupCmd(part, project, gitem->takeGroup()));
             continue;
@@ -422,7 +422,7 @@ K3Command *ResourcesPanel::buildCommand(Part *part) {
         if (gitem->m_state & GroupItem::Modified) {
             if (gitem->m_name != rg->name()) {
                 if (!m) m = new K3MacroCommand(cmdName);
-                //kDebug()<<k_funcinfo<<" Modifying group: '"<<gitem->m_name<<"'";
+                //kDebug()<<" Modifying group: '"<<gitem->m_name<<"'";
                 m->addCommand(new ModifyResourceGroupNameCmd(part, rg, gitem->m_name));
             }
         }
@@ -440,7 +440,7 @@ K3Command *ResourcesPanel::buildCommand(Part *part) {
 void ResourcesPanel::slotGroupChanged(QTreeWidgetItem *ci, int) {
     if (ci == 0)
         return;
-    //kDebug()<<k_funcinfo<<ci->text(0)<<","<<col;
+    //kDebug()<<ci->text(0)<<","<<col;
     ResourcesPanelGroupLVItem *item = static_cast<ResourcesPanelGroupLVItem*>(ci);
     item->setName(item->text(0));
     emit changed();
@@ -468,7 +468,7 @@ void ResourcesPanel::slotGroupSelectionChanged(QTreeWidgetItem *itm) {
 
     foreach (ResourcesPanelResourceItem *i, m_groupItem->m_group->m_resourceItems) {
         listOfResources->addItem(new ResourceLBItem(i));
-        //kDebug()<<k_funcinfo<<"Insert resource item:"<<i->name();
+        //kDebug()<<"Insert resource item:"<<i->name();
     }
     bAdd->setEnabled(true);
     bRemove->setEnabled(true);

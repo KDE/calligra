@@ -61,7 +61,7 @@ ResourcesList::ResourcesList( QWidget * parent )
 
 void ResourceAssignmentView::slotRequestPopupMenu( const QPoint &p )
 {
-    kDebug() << k_funcinfo << p;
+    kDebug() << p;
     emit requestPopupMenu( "resourceassigment_popup", QCursor::pos() );
 }
 
@@ -411,7 +411,7 @@ void ResourceAssignmentView::drawTasksAttributedToAGroup (ResourceGroup *group, 
 
 void ResourceAssignmentView::setGuiActive( bool activate )
 {
-    kDebug()<<k_funcinfo<<activate;
+    kDebug()<<activate;
 //    updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
 }

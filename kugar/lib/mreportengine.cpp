@@ -88,7 +88,7 @@ MReportEngine::~MReportEngine()
 {
     // Clear the grand total data
     grandTotal.clear();
-    kDebug( 31000 ) << k_funcinfo;
+    kDebug( 31000 ) ;
 }
 
 void MReportEngine::addRef()

@@ -1531,7 +1531,7 @@ void KPrView::startScreenPres( int pgNum /*1-based*/ )
             proc << xdgScreenSaver;
             proc << "suspend";
             proc << QString::number( topLevelWidget()->winId() );
-            kDebug() << k_funcinfo << proc.args();
+            kDebug() << proc.args();
             proc.start( KProcess::DontCare );
         } else {
 
@@ -1652,7 +1652,7 @@ void KPrView::screenStop()
             proc << xdgScreenSaver;
             proc << "resume";
             proc << QString::number( topLevelWidget()->winId() );
-            kDebug() << k_funcinfo << proc.args();
+            kDebug() << proc.args();
             proc.start( KProcess::DontCare );
         } else {
         if ( m_screenSaverWasEnabled )
@@ -4701,7 +4701,7 @@ void KPrView::slotApplyParag()
     KMacroCommand * macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
     KoParagLayout newLayout = m_paragDlg->paragLayout();
     int flags = m_paragDlg->changedFlags();
-    kDebug() << k_funcinfo <<"flags=" << flags;
+    kDebug() <<"flags=" << flags;
     if ( !flags )
         return;
     for ( ; it.current() ; ++it )

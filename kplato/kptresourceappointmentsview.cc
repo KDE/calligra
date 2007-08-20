@@ -81,7 +81,7 @@ ResourceAppointmentsItemModel::~ResourceAppointmentsItemModel()
 
 void ResourceAppointmentsItemModel::slotResourceToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<", "<<row<<endl;
+    //kDebug()<<group->name()<<", "<<row<<endl;
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( index( group ), row, row );
@@ -89,7 +89,7 @@ void ResourceAppointmentsItemModel::slotResourceToBeInserted( const ResourceGrou
 
 void ResourceAppointmentsItemModel::slotResourceInserted( const Resource *resource )
 {
-    //kDebug()<<k_funcinfo<<resource->name()<<endl;
+    //kDebug()<<resource->name()<<endl;
     Q_ASSERT( resource->parentGroup() == m_group );
     endInsertRows();
     m_group = 0;
@@ -98,7 +98,7 @@ void ResourceAppointmentsItemModel::slotResourceInserted( const Resource *resour
 
 void ResourceAppointmentsItemModel::slotResourceToBeRemoved( const Resource *resource )
 {
-    //kDebug()<<k_funcinfo<<resource->name()<<endl;
+    //kDebug()<<resource->name()<<endl;
     Q_ASSERT( m_resource == 0 );
     m_resource = const_cast<Resource*>(resource);
     int row = index( resource ).row();
@@ -107,7 +107,7 @@ void ResourceAppointmentsItemModel::slotResourceToBeRemoved( const Resource *res
 
 void ResourceAppointmentsItemModel::slotResourceRemoved( const Resource *resource )
 {
-    //kDebug()<<k_funcinfo<<resource->name()<<endl;
+    //kDebug()<<resource->name()<<endl;
     Q_ASSERT( resource == m_resource );
     endRemoveRows();
     int i = m_resources.indexOf( resource );
@@ -119,7 +119,7 @@ void ResourceAppointmentsItemModel::slotResourceRemoved( const Resource *resourc
 
 void ResourceAppointmentsItemModel::slotResourceGroupToBeInserted( const ResourceGroup *group, int row )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<group->name()<<endl;
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     beginInsertRows( QModelIndex(), row, row );
@@ -127,7 +127,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupToBeInserted( const Resourc
 
 void ResourceAppointmentsItemModel::slotResourceGroupInserted( const ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<group->name()<<endl;
     Q_ASSERT( group == m_group );
     endInsertRows();
     m_group = 0;
@@ -136,7 +136,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupInserted( const ResourceGro
 
 void ResourceAppointmentsItemModel::slotResourceGroupToBeRemoved( const ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<group->name()<<endl;
     Q_ASSERT( m_group == 0 );
     m_group = const_cast<ResourceGroup*>(group);
     int row = index( group ).row();
@@ -145,7 +145,7 @@ void ResourceAppointmentsItemModel::slotResourceGroupToBeRemoved( const Resource
 
 void ResourceAppointmentsItemModel::slotResourceGroupRemoved( const ResourceGroup *group )
 {
-    //kDebug()<<k_funcinfo<<group->name()<<endl;
+    //kDebug()<<group->name()<<endl;
     Q_ASSERT( group == m_group );
     foreach ( Resource *r, const_cast<ResourceGroup*>( group )->resources() ) {
         int i = m_resources.indexOf( r );
@@ -170,7 +170,7 @@ void ResourceAppointmentsItemModel::slotProjectCalculated( ScheduleManager *sm )
 
 void ResourceAppointmentsItemModel::setProject( Project *project )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     if ( m_project ) {
         disconnect( m_project, SIGNAL( resourceChanged( Resource* ) ), this, SLOT( slotResourceChanged( Resource* ) ) );
         disconnect( m_project, SIGNAL( resourceGroupChanged( ResourceGroup* ) ), this, SLOT( slotResourceGroupChanged( ResourceGroup* ) ) );
@@ -221,12 +221,12 @@ void ResourceAppointmentsItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
     }
     refresh();
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
 }
 
 void ResourceAppointmentsItemModel::setScheduleManager( ScheduleManager *sm )
 {
-    kDebug()<<k_funcinfo<<sm<<endl;
+    kDebug()<<sm<<endl;
     m_manager = sm;
     refresh();
 }
@@ -241,10 +241,10 @@ Qt::ItemFlags ResourceAppointmentsItemModel::flags( const QModelIndex &index ) c
 QModelIndex ResourceAppointmentsItemModel::parent( const QModelIndex &index ) const
 {
     if ( !index.isValid() || m_project == 0 || m_manager == 0 ) {
-        kWarning()<<k_funcinfo<<"No data "<<index<<endl;
+        kWarning()<<"No data "<<index<<endl;
         return QModelIndex();
     }
-    //kDebug()<<k_funcinfo<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
+    //kDebug()<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
 
     Resource *r = resource( index );
     if ( r ) {
@@ -267,7 +267,7 @@ QModelIndex ResourceAppointmentsItemModel::index( int row, int column, const QMo
     }
     if ( ! parent.isValid() ) {
         if ( row < m_project->numResourceGroups() ) {
-            //kDebug()<<k_funcinfo<<"Group: "<<m_project->resourceGroupAt( row )<<endl;
+            //kDebug()<<"Group: "<<m_project->resourceGroupAt( row )<<endl;
             return createGroupIndex( row, column, m_project->resourceGroupAt( row ) );
         }
         return QModelIndex();
@@ -275,7 +275,7 @@ QModelIndex ResourceAppointmentsItemModel::index( int row, int column, const QMo
     ResourceGroup *g = resourcegroup( parent );
     if ( g ) {
         if ( row < g->numResources() ) {
-            //kDebug()<<k_funcinfo<<"Resource: "<<g->resourceAt( row )<<endl;
+            //kDebug()<<"Resource: "<<g->resourceAt( row )<<endl;
             return createResourceIndex( row, column, g->resourceAt( row ) );
         }
         return QModelIndex();
@@ -283,7 +283,7 @@ QModelIndex ResourceAppointmentsItemModel::index( int row, int column, const QMo
     Resource *r = resource( parent );
     if ( r ) {
         if ( row < r->numAppointments( m_manager->id() ) ) {
-            //kDebug()<<k_funcinfo<<"Appointment: "<<r->appointmentAt( row, m_manager->id() )<<endl;
+            //kDebug()<<"Appointment: "<<r->appointmentAt( row, m_manager->id() )<<endl;
             return createAppointmentIndex( row, column, r->appointmentAt( row, m_manager->id() ) );
         }
         return QModelIndex();
@@ -320,7 +320,7 @@ QModelIndex ResourceAppointmentsItemModel::index( const ResourceGroup *group ) c
 void ResourceAppointmentsItemModel::refresh()
 {
     long id = m_manager == 0 ? -1 : m_manager->id();
-    //kDebug()<<k_funcinfo<<"Schedule id: "<<id<<endl;
+    //kDebug()<<"Schedule id: "<<id<<endl;
     QDate start;
     QDate end;
     QMap<const Appointment*, EffortCostMap> ec;
@@ -336,7 +336,7 @@ void ResourceAppointmentsItemModel::refresh()
             if ( ! end.isValid() || e > end ) {
                 end = e;
             }
-            //kDebug()<<k_funcinfo<<a->node()->node()->name()<<": "<<s<<e<<": "<<m_effortMap[ a ].totalEffort().toDouble(Duration::Unit_h)<<endl;
+            //kDebug()<<a->node()->node()->name()<<": "<<s<<e<<": "<<m_effortMap[ a ].totalEffort().toDouble(Duration::Unit_h)<<endl;
         }
     }
     int cols = QMAX( 2 + start.daysTo( end ), 3 );
@@ -346,7 +346,7 @@ void ResourceAppointmentsItemModel::refresh()
     m_effortMap = ec;
     m_start = start;
     m_end = end;
-    kDebug()<<k_funcinfo<<m_columnCount<<" -> "<<cols<<endl;
+    kDebug()<<m_columnCount<<" -> "<<cols<<endl;
     m_columnCount = cols;
     reset();
     emit refreshed();
@@ -362,14 +362,14 @@ int ResourceAppointmentsItemModel::rowCount( const QModelIndex &parent ) const
     if ( m_project == 0 || m_manager == 0 ) {
         return 0;
     }
-    //kDebug()<<k_funcinfo<<parent.row()<<", "<<parent.column()<<endl;
+    //kDebug()<<parent.row()<<", "<<parent.column()<<endl;
     if ( ! parent.isValid() ) {
-        //kDebug()<<k_funcinfo<<m_project->name()<<": "<<m_project->numResourceGroups()<<endl;
+        //kDebug()<<m_project->name()<<": "<<m_project->numResourceGroups()<<endl;
         return m_project->numResourceGroups();
     }
     ResourceGroup *g = resourcegroup( parent );
     if ( g ) {
-        //kDebug()<<k_funcinfo<<g->name()<<": "<<g->numResources()<<endl;
+        //kDebug()<<g->name()<<": "<<g->numResources()<<endl;
         return g->numResources();
     }
     Resource *r = resource( parent );
@@ -533,7 +533,7 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
 {
     QVariant result;
     if ( index.column() >= m_columnCount ) {
-        kDebug()<<k_funcinfo<<"invalid display value column "<<index.column()<<" ("<<columnCount()<<")"<<endl;;
+        kDebug()<<"invalid display value column "<<index.column()<<" ("<<columnCount()<<")"<<endl;;
         return result;
     }
     Resource *r = resource( index );
@@ -599,7 +599,7 @@ QVariant ResourceAppointmentsItemModel::data( const QModelIndex &index, int role
         }
         return QVariant();
     }
-    //kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<": "<<index.internalPointer()<<endl;
+    //kDebug()<<index.row()<<", "<<index.column()<<": "<<index.internalPointer()<<endl;
     return QVariant();
 }
 
@@ -637,7 +637,7 @@ QVariant ResourceAppointmentsItemModel::headerData( int section, Qt::Orientation
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "Total" );
                 default: {
-                    //kDebug()<<k_funcinfo<<section<<", "<<m_start<<m_end<<endl;
+                    //kDebug()<<section<<", "<<m_start<<m_end<<endl;
                     if ( section < m_columnCount && m_start.isValid() && m_end.isValid() ) {
                         QDate d = m_start.addDays( section - 2 );
                         if ( d <= m_end ) {
@@ -764,14 +764,14 @@ QStringList ResourceAppointmentsItemModel::mimeTypes() const
 
 bool ResourceAppointmentsItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
-    kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
+    kDebug()<<row<<" p:"<<parent.row()<<endl;
     if (action == Qt::IgnoreAction)
         return true;
 
     if (column > 0) {
         return false;
     }
-    //kDebug()<<k_funcinfo<<row<<" p:"<<parent.row()<<endl;
+    //kDebug()<<row<<" p:"<<parent.row()<<endl;
     ResourceGroup *g = 0;
     if ( parent.isValid() ) {
         g = resourcegroup( parent );
@@ -822,18 +822,18 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( Part *part, QWidget 
 
 void ResourceAppointmentsTreeView::slotActivated( const QModelIndex index )
 {
-    kDebug()<<k_funcinfo<<index.column()<<endl;
+    kDebug()<<index.column()<<endl;
 }
 
 void ResourceAppointmentsTreeView::slotColumnsInserted( const QModelIndex&, int c1, int c2 )
 {
-    kDebug()<<k_funcinfo<<c1<<", "<<c2<<endl;
+    kDebug()<<c1<<", "<<c2<<endl;
     slotRefreshed();
 }
 
 void ResourceAppointmentsTreeView::slotRefreshed()
 {
-    kDebug()<<k_funcinfo<<itemModel()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount()<<endl;
+    kDebug()<<itemModel()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount()<<endl;
     m_leftview->selectionModel()->clear();
     QList<int> lst1; lst1 << 2 << -1;
     QList<int> lst2; lst2 << 0 << 1;
@@ -886,7 +886,7 @@ void ResourceAppointmentsView::draw()
 
 void ResourceAppointmentsView::setGuiActive( bool activate )
 {
-    kDebug()<<k_funcinfo<<activate<<endl;
+    kDebug()<<activate<<endl;
     updateActionsEnabled( true );
     ViewBase::setGuiActive( activate );
     if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
@@ -896,7 +896,7 @@ void ResourceAppointmentsView::setGuiActive( bool activate )
 
 void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, const QPoint& pos )
 {
-    //kDebug()<<k_funcinfo<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
+    //kDebug()<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
 /*    QString name;
     if ( index.isValid() ) {
         QObject *obj = m_view->itemModel()->object( index );
@@ -915,7 +915,7 @@ void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, cons
 
 void ResourceAppointmentsView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -934,13 +934,13 @@ ResourceGroup *ResourceAppointmentsView::currentResourceGroup() const
 
 void ResourceAppointmentsView::slotCurrentChanged(  const QModelIndex & )
 {
-    //kDebug()<<k_funcinfo<<curr.row()<<", "<<curr.column()<<endl;
+    //kDebug()<<curr.row()<<", "<<curr.column()<<endl;
 //    slotEnableActions();
 }
 
 void ResourceAppointmentsView::slotSelectionChanged( const QModelIndexList )
 {
-    //kDebug()<<k_funcinfo<<list.count()<<endl;
+    //kDebug()<<list.count()<<endl;
     updateActionsEnabled();
 }
 
@@ -996,7 +996,7 @@ void ResourceAppointmentsView::setupGui()
 
 void ResourceAppointmentsView::slotOptions()
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     ItemViewSettupDialog dlg( m_view->slaveView() );
     dlg.exec();
 }
@@ -1004,7 +1004,7 @@ void ResourceAppointmentsView::slotOptions()
 
 void ResourceAppointmentsView::slotAddResource()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<endl;
 /*    QList<ResourceGroup*> gl = m_view->selectedGroups();
     if ( gl.count() > 1 ) {
         return;
@@ -1033,7 +1033,7 @@ void ResourceAppointmentsView::slotAddResource()
 
 void ResourceAppointmentsView::slotAddGroup()
 {
-    //kDebug()<<k_funcinfo<<endl;
+    //kDebug()<<endl;
 /*    ResourceGroup *g = new ResourceGroup();
     QModelIndex i = m_view->itemModel()->insertGroup( g );
     if ( i.isValid() ) {
@@ -1045,7 +1045,7 @@ void ResourceAppointmentsView::slotAddGroup()
 void ResourceAppointmentsView::slotDeleteSelection()
 {
 /*    QObjectList lst = m_view->selectedObjects();
-    //kDebug()<<k_funcinfo<<lst.count()<<" objects"<<endl;
+    //kDebug()<<lst.count()<<" objects"<<endl;
     if ( ! lst.isEmpty() ) {
         emit deleteObjectList( lst );
     }*/
@@ -1053,7 +1053,7 @@ void ResourceAppointmentsView::slotDeleteSelection()
 
 bool ResourceAppointmentsView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     return m_view->loadContext( context );
 }
 

@@ -35,23 +35,23 @@ namespace KPlato
 class Resource;
 
 AppointmentInterval::AppointmentInterval() {
-    //kDebug()<<k_funcinfo<<this;
+    //kDebug()<<this;
     m_load = 100.0;
 }
 AppointmentInterval::AppointmentInterval(const AppointmentInterval &interval) {
-    //kDebug()<<k_funcinfo<<this;
+    //kDebug()<<this;
     m_start = interval.startTime();
     m_end = interval.endTime();
     m_load = interval.load();
 }
 AppointmentInterval::AppointmentInterval(const DateTime &start, const DateTime end, double load) {
-    //kDebug()<<k_funcinfo<<this;
+    //kDebug()<<this;
     m_start = start;
     m_end = end;
     m_load = load;
 }
 AppointmentInterval::~AppointmentInterval() {
-    //kDebug()<<k_funcinfo<<this;
+    //kDebug()<<this;
 }
 
 Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) const {
@@ -81,7 +81,7 @@ Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
 }
 
 bool AppointmentInterval::loadXML(KoXmlElement &element, XMLLoaderObject &status) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     bool ok;
     QString s = element.attribute("start");
     if (!s.isEmpty())
@@ -108,7 +108,7 @@ bool AppointmentInterval::isValid() const {
 }
 
 AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval &interval, const DateTime &from) const {
-    //kDebug()<<k_funcinfo<<interval.startTime().toString()<<" -"<<interval.endTime().toString()<<" from="<<from.toString();
+    //kDebug()<<interval.startTime().toString()<<" -"<<interval.endTime().toString()<<" from="<<from.toString();
     DateTime f = from;
     DateTime s1 = m_start;
     DateTime e1 = m_end;
@@ -152,7 +152,7 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
             a.setEndTime(e2);
         a.setLoad(m_load + interval.load());
     }
-    //kDebug()<<k_funcinfo<<a.startTime().toString()<<" -"<<a.endTime().toString()<<" load="<<a.load();
+    //kDebug()<<a.startTime().toString()<<" -"<<a.endTime().toString()<<" load="<<a.load();
     return a;
 }
 
@@ -165,7 +165,7 @@ void AppointmentIntervalList::inSort(AppointmentInterval *a)
 ////
 Appointment::Appointment()
     : m_extraRepeats(), m_skipRepeats() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     m_resource=0;
     m_node=0;
     m_calculationMode = Schedule::Scheduling;
@@ -176,7 +176,7 @@ Appointment::Appointment()
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     m_node = node;
     m_resource = resource;
     m_calculationMode = Schedule::Scheduling;
@@ -189,7 +189,7 @@ Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Dat
 Appointment::Appointment(Schedule *resource, Schedule *node, DateTime start, Duration duration, double load)
     : m_extraRepeats(),
       m_skipRepeats() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     m_node = node;
     m_resource = resource;
     m_calculationMode = Schedule::Scheduling;
@@ -207,7 +207,7 @@ Appointment::Appointment( const Appointment &app)
 
 
 Appointment::~Appointment() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     detach();
     qDeleteAll( m_intervals );
 }
@@ -215,7 +215,7 @@ Appointment::~Appointment() {
 void Appointment::addInterval(AppointmentInterval *a) {
     Q_ASSERT( a->startTime() < a->endTime() );
     m_intervals.inSort(a);
-    //if ( m_resource && m_resource->resource() && m_node && m_node->node() ) kDebug()<<k_funcinfo<<"Mode="<<m_calculationMode<<":"<<m_resource->resource()->name()<<" to"<<m_node->node()->name()<<""<<a->startTime()<<a->endTime();
+    //if ( m_resource && m_resource->resource() && m_node && m_node->node() ) kDebug()<<"Mode="<<m_calculationMode<<":"<<m_resource->resource()->name()<<" to"<<m_node->node()->name()<<""<<a->startTime()<<a->endTime();
 }
 void Appointment::addInterval(const DateTime &start, const DateTime &end, double load) {
     Q_ASSERT( start < end );
@@ -237,7 +237,7 @@ double Appointment::maxLoad() const {
 
 DateTime Appointment::startTime() const {
     if ( isEmpty() ) {
-        //kDebug()<<k_funcinfo<<"empty list";
+        //kDebug()<<"empty list";
         return DateTime();
     }
     return m_intervals.values().first()->startTime();
@@ -245,7 +245,7 @@ DateTime Appointment::startTime() const {
 
 DateTime Appointment::endTime() const {
     if ( isEmpty() ) {
-        //kDebug()<<k_funcinfo<<"empty list";
+        //kDebug()<<"empty list";
         return DateTime();
     }
     return m_intervals.values().last()->endTime();
@@ -262,27 +262,27 @@ bool Appointment::isBusy(const DateTime &/*start*/, const DateTime &/*end*/) {
 }
 
 bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedule &sch) {
-    //kDebug()<<k_funcinfo<<project.name();
+    //kDebug()<<project.name();
     Node *node = status.project().findNode(element.attribute("task-id"));
     if (node == 0) {
-        kError()<<k_funcinfo<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
+        kError()<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
         return false;
     }
     Resource *res = status.project().resource(element.attribute("resource-id"));
     if (res == 0) {
-        kError()<<k_funcinfo<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id")<<endl;
+        kError()<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id")<<endl;
         return false;
     }
     if (!res->addAppointment(this, sch)) {
-        kError()<<k_funcinfo<<"Failed to add appointment to resource: "<<res->name()<<endl;
+        kError()<<"Failed to add appointment to resource: "<<res->name()<<endl;
         return false;
     }
     if (!node->addAppointment(this, sch)) {
-        kError()<<k_funcinfo<<"Failed to add appointment to node: "<<node->name()<<endl;
+        kError()<<"Failed to add appointment to node: "<<node->name()<<endl;
         m_resource->takeAppointment(this);
         return false;
     }
-    //kDebug()<<k_funcinfo<<"res="<<m_resource<<" node="<<m_node;
+    //kDebug()<<"res="<<m_resource<<" node="<<m_node;
     KoXmlElement e;
     forEachElement(e, element) {
             if (e.tagName() == "interval") {
@@ -290,7 +290,7 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
                 if (a->loadXML(e, status)) {
                     addInterval(a);
                 } else {
-                    kError()<<k_funcinfo<<"Could not load interval"<<endl;
+                    kError()<<"Could not load interval"<<endl;
                     delete a;
                 }
             }
@@ -303,17 +303,17 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
 
 void Appointment::saveXML(QDomElement &element) const {
     if (isEmpty()) {
-        kError()<<k_funcinfo<<"Incomplete appointment data: No intervals"<<endl;
+        kError()<<"Incomplete appointment data: No intervals"<<endl;
     }
     if (m_resource == 0 || m_resource->resource() == 0) {
-        kError()<<k_funcinfo<<"Incomplete appointment data: No resource"<<endl;
+        kError()<<"Incomplete appointment data: No resource"<<endl;
         return;
     }
     if (m_node == 0 || m_node->node() == 0) {
-        kError()<<k_funcinfo<<"Incomplete appointment data: No node"<<endl;
+        kError()<<"Incomplete appointment data: No node"<<endl;
         return; // shouldn't happen
     }
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QDomElement me = element.ownerDocument().createElement("appointment");
     element.appendChild(me);
 
@@ -357,7 +357,7 @@ Duration Appointment::plannedEffortTo(const QDate& date) const {
 // Returns a list of efforts pr day for interval start, end inclusive
 // The list only includes days with any planned effort
 EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) const {
-    //kDebug()<<k_funcinfo<<m_node->id()<<","<<m_resource->id();
+    //kDebug()<<m_node->id()<<","<<m_resource->id();
     EffortCostMap ec;
     Duration eff;
     QDate dt(start);
@@ -413,19 +413,19 @@ double Appointment::plannedCostTo(const QDate &date) {
 }
 
 bool Appointment::attach() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     if (m_resource && m_node) {
         m_resource->attatch(this);
         m_node->attatch(this);
         return true;
     }
-    kWarning()<<k_funcinfo<<"Failed: "<<(m_resource ? "" : "resource=0 ")
+    kWarning()<<"Failed: "<<(m_resource ? "" : "resource=0 ")
                                        <<(m_node ? "" : "node=0")<<endl;
     return false;
 }
 
 void Appointment::detach() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<m_calculationMode<<":"<<m_resource<<","<<m_node;
+    //kDebug()<<"("<<this<<")"<<m_calculationMode<<":"<<m_resource<<","<<m_node;
     if (m_resource) {
         m_resource->takeAppointment(this, m_calculationMode); // takes from node also
     }
@@ -496,7 +496,7 @@ void Appointment::merge(const Appointment &app) {
     QList<AppointmentInterval*> lst1 = m_intervals.values();
     AppointmentInterval *i1;
     QList<AppointmentInterval*> lst2 = app.intervals().values();
-    //kDebug()<<k_funcinfo<<"add"<<lst1.count()<<" intervals to"<<lst2.count()<<" intervals";
+    //kDebug()<<"add"<<lst1.count()<<" intervals to"<<lst2.count()<<" intervals";
     AppointmentInterval *i2;
     int index1 = 0, index2 = 0;
     DateTime from;
@@ -542,7 +542,7 @@ void Appointment::merge(const Appointment &app) {
     foreach ( AppointmentInterval *i, result ) {
         m_intervals.inSort( i );
     }
-    //kDebug()<<k_funcinfo<<this<<":"<<m_intervals.count();
+    //kDebug()<<this<<":"<<m_intervals.count();
     return;
 }
 

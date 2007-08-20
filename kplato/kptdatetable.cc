@@ -85,7 +85,7 @@ DateTable::DateTable(QWidget *parent, const QDate& _date, const char* name, Qt::
       m_enabled(true)
 {
     QDate date_ = _date;
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     m_dateStartCol = 1;
     m_selectedDates.clear();
     m_selectedWeekdays.clear();
@@ -95,7 +95,7 @@ DateTable::DateTable(QWidget *parent, const QDate& _date, const char* name, Qt::
 
     setFontSize(10);
     if(!date_.isValid()) {
-        kError() <<k_funcinfo<<"Given date is invalid, using current date." << endl;
+        kError() <<"Given date is invalid, using current date." << endl;
         date_=QDate::currentDate();
     }
     setFocusPolicy( Qt::StrongFocus );
@@ -132,7 +132,7 @@ void DateTable::paintWeekday(QPainter *painter, int col) {
 
     int day = weekday(col);
 
-    //kDebug()<<k_funcinfo<<" col="<<col<<" day="<<day<<" name="<<daystr;
+    //kDebug()<<" col="<<col<<" day="<<day<<" name="<<daystr;
 
     painter->setBrush(KGlobalSettings::baseColor());
     painter->setPen(KGlobalSettings::baseColor());
@@ -164,7 +164,7 @@ void DateTable::paintWeekday(QPainter *painter, int col) {
     if(rect.width()>maxCell.width()) maxCell.setWidth(rect.width());
     if(rect.height()>maxCell.height()) maxCell.setHeight(rect.height());
 
-    //kDebug()<<k_funcinfo<<"headline: row,col=("<<row<<","<<col<<")"<<" day="<<daystr;
+    //kDebug()<<"headline: row,col=("<<row<<","<<col<<")"<<" day="<<daystr;
 }
 
 void DateTable::paintWeekNumber(QPainter *painter, int row) {
@@ -192,7 +192,7 @@ void DateTable::paintWeekNumber(QPainter *painter, int row) {
 }
 
 void DateTable::paintDay(QPainter *painter, int row, int col) {
-    //kDebug()<<k_funcinfo<<"row,col=("<<row<<","<<col<<")"<<" num col="<<numCols();
+    //kDebug()<<"row,col=("<<row<<","<<col<<")"<<" num col="<<numCols();
     QRect rect;
     int w=cellWidth();
     int h=cellHeight();
@@ -211,18 +211,18 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
 
     // First paint the dates background
     if (m_markedDates.state(d) == CalendarDay::NonWorking) {
-        //kDebug()<<k_funcinfo<<"Marked date:"<<d<<"  row,col=("<<row<<","<<col<<")=NonWorking";
+        //kDebug()<<"Marked date:"<<d<<"  row,col=("<<row<<","<<col<<")=NonWorking";
         painter->setPen(colorBackgroundHoliday);
         painter->setBrush(colorBackgroundHoliday);
         painter->drawRect(0, 0, w, h);
     } else if (m_markedDates.state(d) == CalendarDay::Working) {
-        //kDebug()<<k_funcinfo<<"Marked date:"<<d<<"  row,col=("<<row<<","<<col<<")=Working";
+        //kDebug()<<"Marked date:"<<d<<"  row,col=("<<row<<","<<col<<")=Working";
         painter->setPen(colorBackgroundWorkday);
         painter->setBrush(colorBackgroundWorkday);
         painter->drawRect(0, 0, w, h);
     }
     if(m_selectedDates.contains(d)) {
-        //kDebug()<<k_funcinfo<<"Selected:"<<d<<" row,col=("<<row<<","<<col<<")";
+        //kDebug()<<"Selected:"<<d<<" row,col=("<<row<<","<<col<<")";
         painter->setPen(backgroundSelectColor);
         painter->setBrush(backgroundSelectColor);
         painter->drawRect(2, 2, w-4, h-4);
@@ -230,7 +230,7 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
     // If weeks or weekdays are selected/marked we draw lines around the date
     QPen pen = painter->pen();
     if (m_markedWeekdays.state(weekday(col)) == CalendarDay::Working) {
-        //kDebug()<<k_funcinfo<<"Marked weekday: row,dayCol=("<<row<<","<<dayCol<<")=Working";
+        //kDebug()<<"Marked weekday: row,dayCol=("<<row<<","<<dayCol<<")=Working";
         pen.setColor(colorBackgroundWorkday);
         painter->setPen(pen);
         painter->drawLine(0, 0, 0, h-1);
@@ -251,7 +251,7 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
 }
 
 void DateTable::paintCell(QPainter *painter, int row, int col) {
-    //kDebug()<<k_funcinfo<<"row,col=("<<row<<","<<col<<")"<<"enabled="<<m_enabled;
+    //kDebug()<<"row,col=("<<row<<","<<col<<")"<<"enabled="<<m_enabled;
     if (row == 0 && col == 0) {
         painter->save();
         int w=cellWidth();
@@ -373,7 +373,7 @@ void DateTable::wheelEvent ( QWheelEvent * e ) {
 void DateTable::contentsMousePressEvent(QMouseEvent *e) {
     if (!m_enabled)
         return;
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if(e->type()!=QEvent::MouseButtonPress) {
         return;
     }
@@ -437,7 +437,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         updateSelectedCells();
         repaintContents(false);
         if (m_enabled) {
-            //kDebug()<<k_funcinfo<<"emit weekdaySelected("<<day<<")";
+            //kDebug()<<"emit weekdaySelected("<<day<<")";
             emit weekdaySelected(day); // day= 1..7
         }
         if ( m_selectedWeekdays.isEmpty() ) {
@@ -455,7 +455,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
             QDate last;
             DateMap::ConstIterator it;
             for (it = m_selectedDates.constBegin(); it != m_selectedDates.constEnd(); ++it) {
-                //kDebug()<<k_funcinfo<<it.key();
+                //kDebug()<<it.key();
                 QDate d = QDate::fromString(it.key(), Qt::ISODate);
                 if (!d.isValid())
                     continue;
@@ -470,7 +470,7 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
                 QDate anchor = first < date ? first : last;
                 int i = anchor > date ? -1 : 1;
                 while (anchor != date) {
-                    //kDebug()<<k_funcinfo<<anchor.toString(Qt::ISODate);
+                    //kDebug()<<anchor.toString(Qt::ISODate);
                     m_selectedDates.toggle(anchor);
                     anchor = anchor.addDays(i);
                 }
@@ -479,12 +479,12 @@ void DateTable::contentsMousePressEvent(QMouseEvent *e) {
         } else if (e->state() & Qt::ControlModifier) {
             // toggle select this date
             m_selectedDates.toggle(date);
-            //kDebug()<<k_funcinfo<<"toggle date:"<<date.toString()<<" state="<<m_selectedDates.state(date);
+            //kDebug()<<"toggle date:"<<date.toString()<<" state="<<m_selectedDates.state(date);
         } else {
             // Select this, clear all others
             m_selectedDates.clear();
             m_selectedDates.toggleClear(date);
-            //kDebug()<<k_funcinfo<<"toggleClear date:"<<date.toString()<<" state="<<m_selectedDates.state(date);
+            //kDebug()<<"toggleClear date:"<<date.toString()<<" state="<<m_selectedDates.state(date);
         }
         if ( m_selectedDates.isEmpty() ) {
             emit selectionCleared();
@@ -500,13 +500,13 @@ bool DateTable::contentsMousePressEvent_internal(QMouseEvent *e) {
     if(row<1 || col<0) { // the user clicked on the frame of the table
         return false;
     }
-    //kDebug()<<k_funcinfo<<"pos["<<row<<","<<col<<"]="<<position(row,col)<<" firstday="<<firstday;
+    //kDebug()<<"pos["<<row<<","<<col<<"]="<<position(row,col)<<" firstday="<<firstday;
     selectDate(getDate(position(row, col)));
     return true;
 }
 
 bool DateTable::selectDate(const QDate& date_) {
-    //kDebug()<<k_funcinfo<<"date="<<date_.toString();
+    //kDebug()<<"date="<<date_.toString();
     bool changed=false;
     QDate temp;
     // -----
@@ -540,7 +540,7 @@ bool DateTable::selectDate(const QDate& date_) {
 }
 
 bool DateTable::setDate(const QDate& date_, bool repaint) {
-    //kDebug()<<k_funcinfo<<"date="<<date_.toString();
+    //kDebug()<<"date="<<date_.toString();
     bool changed=false;
     QDate temp;
     // -----
@@ -557,7 +557,7 @@ bool DateTable::setDate(const QDate& date_, bool repaint) {
     temp.setYMD(date.year(), date.month(), 1);
     firstday=column(KGlobal::locale()->calendar()->dayOfWeek(temp));
     if(firstday==1) firstday=8;
-    //kDebug()<<k_funcinfo<<"date="<<temp<<"day="<<(KGlobal::locale()->calendar()->dayOfWeek(temp))<<" firstday="<<firstday;
+    //kDebug()<<"date="<<temp<<"day="<<(KGlobal::locale()->calendar()->dayOfWeek(temp))<<" firstday="<<firstday;
     numdays=date.daysInMonth();
     if(date.month()==1) { // set to december of previous year
         temp.setYMD(date.year()-1, 12, 1);
@@ -570,7 +570,7 @@ bool DateTable::setDate(const QDate& date_, bool repaint) {
 /*    if (m_selectedWeekdays.isEmpty() &&
         !m_selectedDates.isEmpty() && !m_selectedDates.contains(date))
     {
-        //kDebug()<<k_funcinfo<<"date inserted";
+        //kDebug()<<"date inserted";
         m_selectedDates.insert(date);
     }*/
     numDaysPrevMonth=temp.daysInMonth();
@@ -606,18 +606,18 @@ QSize DateTable::sizeHint() const {
 
 void DateTable::setWeekNumbers(const QDate& date) {
     if (!date.isValid()) {
-        kError()<<k_funcinfo<<"Invalid date"<<endl;
+        kError()<<"Invalid date"<<endl;
     }
     QDate d(date);
     for (int i = 1; i < 7; ++i) {
         m_weeks[i].first = d.weekNumber(&(m_weeks[i].second));
-        //kDebug()<<k_funcinfo<<"date="<<d.toString()<<" week=("<<m_weeks[i].first<<","<<m_weeks[i].second<<")";
+        //kDebug()<<"date="<<d.toString()<<" week=("<<m_weeks[i].first<<","<<m_weeks[i].second<<")";
         d = d.addDays(7);
     }
 }
 
 void DateTable::updateCells() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     for (int row=0; row < numRows(); ++row) {
         for (int col=0; col < numCols(); ++col) {
             updateCell(row, col);
@@ -626,7 +626,7 @@ void DateTable::updateCells() {
 }
 
 void DateTable::updateSelectedCells() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QDate dt(date.year(), date.month(), 1);
     dt = dt.addDays(-firstday);
     for (int pos=0; pos < 42; ++pos) {
@@ -634,7 +634,7 @@ void DateTable::updateSelectedCells() {
             m_selectedWeekdays.contains(pos%7+1))
         {
             updateCell(pos/7+1, pos%7+1);
-            //kDebug()<<k_funcinfo<<" update cell ("<<pos/7+1<<","<<pos%7+1<<") date="<<dt.addDays(pos).toString();
+            //kDebug()<<" update cell ("<<pos/7+1<<","<<pos%7+1<<") date="<<dt.addDays(pos).toString();
         }
     }
 }
@@ -647,7 +647,7 @@ void DateTable::updateMarkedCells() {
             m_markedWeekdays.contains(pos%7+1))
         {
             updateCell(pos/7+1, pos%7+1);
-            //kDebug()<<k_funcinfo<<" update cell ("<<pos/7+1<<","<<pos%7+1<<") date="<<dt.addDays(pos).toString();
+            //kDebug()<<" update cell ("<<pos/7+1<<","<<pos%7+1<<") date="<<dt.addDays(pos).toString();
         }
     }
 }
@@ -675,14 +675,14 @@ QDate DateTable::getDate(int pos) const {
 int DateTable::weekday(int col) const {
     int day = col - m_dateStartCol + KGlobal::locale()->weekStartDay();
     if (day > 7) day %= 7;
-    //kDebug()<<k_funcinfo<<"col="<<col<<" day="<<day<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay();
+    //kDebug()<<"col="<<col<<" day="<<day<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay();
     return day;
 }
 
 int DateTable::column(int weekday) const {
     int col = weekday - KGlobal::locale()->weekStartDay();
     if (col < 0) col += 7;
-    //kDebug()<<k_funcinfo<<"col="<<col<<" day="<<col<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay();
+    //kDebug()<<"col="<<col<<" day="<<col<<" StartCol="<<m_dateStartCol<<" weekStartDay="<<KGlobal::locale()->weekStartDay();
     return col + m_dateStartCol;
 }
 
@@ -711,13 +711,13 @@ void DateTable::markSelected(int state) {
         DateMap::iterator it;
         for(it = m_selectedDates.begin(); it != m_selectedDates.end(); ++it) {
             m_markedDates.insert(it.key(), state);
-            //kDebug()<<k_funcinfo<<"marked date:"<<it.key()<<"="<<state;
+            //kDebug()<<"marked date:"<<it.key()<<"="<<state;
         }
     } else if (!m_selectedWeekdays.isEmpty()) {
         IntMap::iterator it;
         for(it = m_selectedWeekdays.begin(); it != m_selectedWeekdays.end(); ++it) {
             m_markedWeekdays.insert(it.key(), state);
-            //kDebug()<<k_funcinfo<<"marked weekday:"<<it.key()<<"="<<state;
+            //kDebug()<<"marked weekday:"<<it.key()<<"="<<state;
         }
     }
     updateSelectedCells();

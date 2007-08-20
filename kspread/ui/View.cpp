@@ -4415,8 +4415,8 @@ void View::initFindReplace()
     d->findRightColumn = region.right();
     d->findPos = QPoint( colStart, rowStart );
     d->findEnd = QPoint( colEnd, rowEnd );
-    //kDebug() << k_funcinfo << d->findPos <<" to" << d->findEnd;
-    //kDebug() << k_funcinfo <<"leftcol=" << d->findLeftColumn <<" rightcol=" << d->findRightColumn;
+    //kDebug() << d->findPos <<" to" << d->findEnd;
+    //kDebug() <<"leftcol=" << d->findLeftColumn <<" rightcol=" << d->findRightColumn;
 }
 
 void View::findNext()
@@ -4557,7 +4557,7 @@ Cell View::findNextCell()
     // if ( !cell )
     // No more next cell - TODO go to next sheet (if not looking in a selection)
     // (and make d->findEnd (max,max) in that case...)
-    //kDebug() << k_funcinfo <<" returning" << cell;
+    //kDebug() <<" returning" << cell;
     return cell;
 }
 

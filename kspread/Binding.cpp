@@ -190,7 +190,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
         default:
             break;
     }
-    kDebug() << k_funcinfo << index.column() <<"," << index.row() <<"," << variant;
+    kDebug() << index.column() <<"," << index.row() <<"," << variant;
     return variant;
 }
 

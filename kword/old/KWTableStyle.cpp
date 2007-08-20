@@ -197,7 +197,7 @@ void KWTableStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context, 
     m_displayName = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
     if ( m_displayName.isEmpty() )
         m_displayName = m_name;
-    kDebug() << k_funcinfo << m_name <<"" << m_displayName;
+    kDebug() << m_name <<"" << m_displayName;
 
     KoStyleStack& styleStack = context.styleStack();
     styleStack.setTypeProperties( "table-cell" );

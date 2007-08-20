@@ -121,7 +121,7 @@ void Document::finishDocument()
     Q_ASSERT ( !paperElement.isNull() ); // slotFirstSectionFound should have been called!
     if ( !paperElement.isNull() )
     {
-        kDebug(30513) << k_funcinfo <<"m_headerFooters=" << m_headerFooters;
+        kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
         paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
         paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
     }
@@ -178,12 +178,12 @@ void Document::processStyles()
     m_textHandler->setFrameSetElement( stylesElem ); /// ### naming!
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
-    //kDebug(30513) << k_funcinfo <<"styles count=" << count;
+    //kDebug(30513) <<"styles count=" << count;
     for ( unsigned int i = 0; i < count ; ++i )
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        //kDebug(30513) << k_funcinfo <<"style" << i <<"" << style;
+        //kDebug(30513) <<"style" << i <<"" << style;
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             QDomElement styleElem = m_mainDocument.createElement("STYLE");
@@ -194,7 +194,7 @@ void Document::processStyles()
             element.setAttribute( "value", name.string() );
             styleElem.appendChild( element );
 
-            kDebug(30513) << k_funcinfo <<"Style" << i <<":" << name.string();
+            kDebug(30513) <<"Style" << i <<":" << name.string();
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -225,7 +225,7 @@ bool Document::parse()
 
 void Document::bodyStart()
 {
-    kDebug(30513) << k_funcinfo;
+    kDebug(30513) ;
 
     QDomElement mainFramesetElement = m_mainDocument.createElement("FRAMESET");
     mainFramesetElement.setAttribute("frameType",1);
@@ -244,7 +244,7 @@ void Document::bodyStart()
 
 void Document::bodyEnd()
 {
-    kDebug(30513) << k_funcinfo;
+    kDebug(30513) ;
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
 }
@@ -252,7 +252,7 @@ void Document::bodyEnd()
 
 void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
-    kDebug(30513) << k_funcinfo;
+    kDebug(30513) ;
     QDomElement elementDoc = m_mainDocument.documentElement();
 
     QDomElement elementPaper = m_mainDocument.createElement("PAPER");
@@ -342,7 +342,7 @@ void Document::footnoteStart()
 
 void Document::footnoteEnd()
 {
-    kDebug(30513) << k_funcinfo;
+    kDebug(30513) ;
     m_textHandler->setFrameSetElement( QDomElement() );
 }
 

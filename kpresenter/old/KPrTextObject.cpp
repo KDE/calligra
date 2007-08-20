@@ -713,14 +713,14 @@ void KPrTextObject::loadKTextObject( const QDomElement &elem )
                 paragLayout.margins[Q3StyleSheetItem::MarginLeft] = depth * MM_TO_POINT(10.0);
             }
 
-            //kDebug(33001) << k_funcinfo <<"old bullet depth is:" << depth;
+            //kDebug(33001) <<"old bullet depth is:" << depth;
 
             // 1.1 compatibility (bullets)
             QString type;
             if( e.hasAttribute(attrType) )
                 type = e.attribute( attrType );
 
-            //kDebug(33001) << k_funcinfo <<"old PARAG type is:" << type;
+            //kDebug(33001) <<"old PARAG type is:" << type;
 
             // Do not import type="2" (enum list). The enum was there in 1.1, but not the code!
             if(type == "1")
@@ -1466,7 +1466,7 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
         // Is this object in the current active page?
         if ( canvas->activePage()->findTextObject( this ) )
         {
-            kDebug(33001) << k_funcinfo <<"object in current page";
+            kDebug(33001) <<"object in current page";
         }
         else
         {
@@ -1607,7 +1607,7 @@ void KPrTextObject::slotAfterFormatting( int bottom, KoTextParag* lastFormatted,
             double pageBottom = p.ptHeight - p.ptBottom;
             double newBottom = qMin( wantedPosition, pageBottom ); // don't grow bigger than the page
             newBottom = qMax( newBottom, getOrig().y() ); // avoid negative heights
-            //kDebug(33001) << k_funcinfo <<" current bottom=" << getRect().bottom() <<" newBottom=" << newBottom;
+            //kDebug(33001) <<" current bottom=" << getRect().bottom() <<" newBottom=" << newBottom;
             if ( getRect().bottom() != newBottom )
             {
                 // We resize the text object, but skipping the KPrTextObject::setSize code
@@ -1654,7 +1654,7 @@ KCommand * KPrTextObject::textContentsToHeight()
 
     double textHeight = m_doc->zoomHandler()->layoutUnitPtToPt( textHeightLU );
     double lineSpacing = ( innerHeight() - textHeight ) /  numLines; // this gives the linespacing diff to apply, in pt
-    //kDebug(33001) << k_funcinfo <<"lineSpacing=" << lineSpacing;
+    //kDebug(33001) <<"lineSpacing=" << lineSpacing;
 
     if ( QABS( innerHeight() - textHeight ) < DBL_EPSILON ) // floating-point equality test
         return 0L; // nothing to do
@@ -1735,7 +1735,7 @@ void KPrTextObject::recalcVerticalAlignment()
     double txtHeight = m_doc->zoomHandler()->layoutUnitPtToPt( m_doc->zoomHandler()->pixelYToPt( textDocument()->height() ) ) + btop + bbottom;
     double diffy = getSize().height() - txtHeight;
 
-    //kDebug(33001) << k_funcinfo <<"txtHeight:" << txtHeight <<" rectHeight:" << getSize().height() <<" -> diffy=" << diffy;
+    //kDebug(33001) <<"txtHeight:" << txtHeight <<" rectHeight:" << getSize().height() <<" -> diffy=" << diffy;
 
     if ( diffy <= 0.0 ) {
         alignVertical = 0.0;
@@ -2437,7 +2437,7 @@ Q3DragObject * KPrTextView::newDrag( QWidget * parent )
     if (  !plainText.isEmpty() )
         multiDrag->addDragObject( new Q3TextDrag( plainText, 0 ) );
     KoStoreDrag* storeDrag = new KoStoreDrag( mimeType, 0 );
-    kDebug() << k_funcinfo <<"setting zip data:" << buffer.buffer().size() <<" bytes.";
+    kDebug() <<"setting zip data:" << buffer.buffer().size() <<" bytes.";
     storeDrag->setEncodedData( buffer.buffer() );
     multiDrag->addDragObject( storeDrag );
     return multiDrag;

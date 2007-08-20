@@ -41,7 +41,7 @@ Node::Node(Node *parent)
       m_nodes(), m_dependChildNodes(), m_dependParentNodes(),
       m_estimate( 0 )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     m_parent = parent;
     init();
     m_id = QString(); // Not mapped
@@ -52,7 +52,7 @@ Node::Node(Node &node, Node *parent)
       m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     m_parent = parent;
     init();
     m_name = node.name();
@@ -72,7 +72,7 @@ Node::Node(Node &node, Node *parent)
 }
 
 Node::~Node() {
-    //kDebug()<<k_funcinfo<<"("<<this<<")"<<m_name;
+    //kDebug()<<"("<<this<<")"<<m_name;
     delete m_estimate;
     while (!m_nodes.isEmpty())
         delete m_nodes.takeFirst();
@@ -152,12 +152,12 @@ Node *Node::projectNode() {
     if (m_parent)
         return m_parent->projectNode();
 
-    kError()<<k_funcinfo<<"Ooops, no parent and no project found"<<endl;
+    kError()<<"Ooops, no parent and no project found"<<endl;
     return 0;
 }
 
 void Node::takeChildNode( Node *node) {
-    //kDebug()<<k_funcinfo<<"find="<<m_nodes.indexOf(node);
+    //kDebug()<<"find="<<m_nodes.indexOf(node);
     int t = type();
     int i = m_nodes.indexOf(node);
     if ( i != -1 ) {
@@ -173,7 +173,7 @@ void Node::takeChildNode( int number ) {
     int t = type();
     if (number >= 0 && number < m_nodes.size()) {
         Node *n = m_nodes.takeAt(number);
-        //kDebug()<<k_funcinfo<<(n?n->id():"null")<<" :"<<(n?n->name():"");
+        //kDebug()<<(n?n->id():"null")<<" :"<<(n?n->name():"");
         if (n) {
             n->setParentNode( 0 );
         }
@@ -232,7 +232,7 @@ bool Node::isChildOf( Node* node )
 
 Node* Node::childNode(int number)
 {
-    //kDebug()<<k_funcinfo<<number;
+    //kDebug()<<number;
     return m_nodes.value( number );
 }
 
@@ -287,7 +287,7 @@ bool Node::addDependChildNode( Relation *relation) {
 void Node::takeDependChildNode( Relation *rel ) {
     int i = m_dependChildNodes.indexOf(rel);
     if ( i != -1 ) {
-        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")";
+        //kDebug()<<m_name<<": ("<<rel<<")";
         m_dependChildNodes.removeAt(i);
     }
 }
@@ -322,7 +322,7 @@ bool Node::addDependParentNode( Relation *relation) {
 void Node::takeDependParentNode( Relation *rel ) {
     int i = m_dependParentNodes.indexOf(rel);
     if ( i != -1 ) {
-        //kDebug()<<k_funcinfo<<m_name<<": ("<<rel<<")";
+        //kDebug()<<m_name<<": ("<<rel<<")";
         m_dependParentNodes.removeAt(i);
     }
 }
@@ -365,7 +365,7 @@ Relation *Node::findRelation(Node *node) {
 }
 
 bool Node::isDependChildOf(Node *node) {
-    //kDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'";
+    //kDebug()<<" '"<<m_name<<"' checking against '"<<node->name()<<"'";
     for (int i=0; i<numDependParentNodes(); i++) {
         Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
@@ -398,7 +398,7 @@ bool Node::canMoveTo( Node *newParent )
         return false;
     }
     if ( isDependChildOf( newParent ) || newParent->isDependChildOf( this ) ) {
-        kDebug()<<k_funcinfo<<"Can't move, node is dependent on new parent";
+        kDebug()<<"Can't move, node is dependent on new parent";
         return false;
     }
     foreach ( Node *n, m_nodes ) {
@@ -700,7 +700,7 @@ void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->earlyStart = time;
-    //kDebug()<<k_funcinfo<<m_name<<":"<<m_currentSchedule->earlyStart.toString();
+    //kDebug()<<m_name<<":"<<m_currentSchedule->earlyStart.toString();
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateEarliestStart(time);
@@ -711,7 +711,7 @@ void Node::propagateLatestFinish(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->lateFinish = time;
-    //kDebug()<<k_funcinfo<<m_name<<":"<<m_currentSchedule->lateFinish;
+    //kDebug()<<m_name<<":"<<m_currentSchedule->lateFinish;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateLatestFinish(time);
@@ -757,14 +757,14 @@ void Node::resetVisited() {
 }
 
 Node *Node::siblingBefore() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if (parentNode())
         return parentNode()->childBefore(this);
     return 0;
 }
 
 Node *Node::childBefore(Node *node) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     int index = m_nodes.indexOf(node);
     if (index > 0){
         return m_nodes.at(index-1);
@@ -773,7 +773,7 @@ Node *Node::childBefore(Node *node) {
 }
 
 Node *Node::siblingAfter() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if (parentNode())
         return parentNode()->childAfter(this);
     return 0;
@@ -781,7 +781,7 @@ Node *Node::siblingAfter() {
 
 Node *Node::childAfter(Node *node)
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     int index = m_nodes.indexOf(node);
     if (index < m_nodes.count()-1) {
         return m_nodes.at(index+1);
@@ -833,30 +833,30 @@ bool Node::isStartNode() const {
 }
 
 bool Node::setId(const QString& id) {
-    //kDebug()<<k_funcinfo<<id;
+    //kDebug()<<id;
     if (id.isEmpty()) {
-        kError()<<k_funcinfo<<"id is empty"<<endl;
+        kError()<<"id is empty"<<endl;
         m_id = id;
         return false;
     }
     if (!m_id.isEmpty()) {
         Node *n = findNode();
         if (n == this) {
-            //kDebug()<<k_funcinfo<<"My id found, remove it";
+            //kDebug()<<"My id found, remove it";
             removeId();
         } else if (n) {
             //Hmmm, shouldn't happen
-            kError()<<k_funcinfo<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
+            kError()<<"My id '"<<m_id<<"' already used for different node: "<<n->name()<<endl;
         }
     }
     if (findNode(id)) {
-        kError()<<k_funcinfo<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name()<<endl;
+        kError()<<"id '"<<id<<"' is already used for different node: "<<findNode(id)->name()<<endl;
         m_id = QString(); // hmmm
         return false;
     }
     m_id = id;
     insertId(id);
-    //kDebug()<<k_funcinfo<<m_name<<": inserted id="<<id;
+    //kDebug()<<m_name<<": inserted id="<<id;
     return true;
 }
 
@@ -879,7 +879,7 @@ void Node::setEndTime(DateTime endTime, long id ) {
 }
 
 void Node::saveAppointments(QDomElement &element, long id) const {
-    //kDebug()<<k_funcinfo<<m_name<<" id="<<id;
+    //kDebug()<<m_name<<" id="<<id;
     QListIterator<Node*> it(m_nodes);
     while (it.hasNext()) {
         it.next()->saveAppointments(element, id);
@@ -915,7 +915,7 @@ bool Node::addAppointment(Appointment *appointment, Schedule &main) {
         s = createSchedule(&main);
     }
     appointment->setNode(s);
-    //kDebug()<<k_funcinfo<<this<<":"<<appointment<<","<<s<<","<<s->id()<<","<<main.id();
+    //kDebug()<<this<<":"<<appointment<<","<<s<<","<<s->id()<<","<<main.id();
     return s->add(appointment);
 }
 
@@ -943,14 +943,14 @@ void Node::addSchedule(Schedule *schedule) {
 }
 
 Schedule *Node::createSchedule(const QString& name, Schedule::Type type, long id) {
-    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id;
+    //kDebug()<<name<<" type="<<type<<" id="<<(int)id;
     NodeSchedule *sch = new NodeSchedule(this, name, type, id);
     addSchedule(sch);
     return sch;
 }
 
 Schedule *Node::createSchedule(Schedule *parent) {
-    //kDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id;
+    //kDebug()<<name<<" type="<<type<<" id="<<(int)id;
     NodeSchedule *sch = new NodeSchedule(parent, this);
     addSchedule(sch);
     return sch;
@@ -982,7 +982,7 @@ Schedule *Node::findSchedule(const QString name) {
 
 
 Schedule *Node::findSchedule(const Schedule::Type type) {
-    //kDebug()<<k_funcinfo<<m_name<<" find type="<<type<<" nr="<<m_schedules.count();
+    //kDebug()<<m_name<<" find type="<<type<<" nr="<<m_schedules.count();
     QHash<long, Schedule*> hash;
     foreach (Schedule *sch, hash) {
         if (!sch->isDeleted() && sch->type() == type) {
@@ -995,7 +995,7 @@ Schedule *Node::findSchedule(const Schedule::Type type) {
 void Node::setScheduleDeleted(long id, bool on) {
     Schedule *ns = findSchedule(id);
     if (ns == 0) {
-        kError()<<k_funcinfo<<m_name<<" Could not find schedule with id="<<id<<endl;
+        kError()<<m_name<<" Could not find schedule with id="<<id<<endl;
     } else {
         ns->setDeleted(on);
     }
@@ -1015,7 +1015,7 @@ void Node::setParentSchedule(Schedule *sch) {
 bool Node::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (!isCritical()) {
         return false;
     }
@@ -1050,7 +1050,7 @@ int Node::level() {
 
 void Node::generateWBS(int count, WBSDefinition &def, const QString& wbs) {
     m_wbs = wbs + def.code(count, level());
-    //kDebug()<<k_funcinfo<<m_name<<" wbs:"<<m_wbs;
+    //kDebug()<<m_name<<" wbs:"<<m_wbs;
     QString w = wbs + def.wbs(count, level());
     QListIterator<Node*> it = m_nodes;
     int i=0;
@@ -1065,7 +1065,7 @@ void Node::setCurrentSchedule(long id) {
     while (it.hasNext()) {
         it.next()->setCurrentSchedule(id);
     }
-    //kDebug()<<k_funcinfo<<m_name<<" id:"<<id<<"="<<m_currentSchedule;
+    //kDebug()<<m_name<<" id:"<<id<<"="<<m_currentSchedule;
 }
 
 void Node::setStartupCost(double cost)
@@ -1076,7 +1076,7 @@ void Node::setStartupCost(double cost)
 
 void Node::setStartupAccount(Account *acc)
 {
-    //kDebug()<<k_funcinfo<<m_name<<"="<<acc;
+    //kDebug()<<m_name<<"="<<acc;
     m_startupAccount = acc;
     changed();
 }
@@ -1089,14 +1089,14 @@ void Node::setShutdownCost(double cost)
 
 void Node::setShutdownAccount(Account *acc)
 {
-    //kDebug()<<k_funcinfo<<m_name<<"="<<acc;
+    //kDebug()<<m_name<<"="<<acc;
     m_shutdownAccount = acc;
     changed();
 }
 
 void Node::setRunningAccount(Account *acc)
 {
-    //kDebug()<<k_funcinfo<<m_name<<"="<<acc;
+    //kDebug()<<m_name<<"="<<acc;
     m_runningAccount = acc;
     changed();
 }
@@ -1136,7 +1136,7 @@ void Estimate::set( Duration e, Duration p, Duration o ) {
     m_expectedEstimate = e;
     m_pessimisticEstimate = (p == Duration::zeroDuration) ? e :  p;
     m_optimisticEstimate = (o == Duration::zeroDuration) ? e :  o;
-    //kDebug()<<k_funcinfo<<"   Expected:"<<m_expectedEstimate.toString();
+    //kDebug()<<"   Expected:"<<m_expectedEstimate.toString();
     changed();
 }
 
@@ -1144,18 +1144,18 @@ void Estimate::set( int e, int p, int o ) {
     m_expectedEstimate = Duration((qint64)(e)*1000);
     m_pessimisticEstimate = (p < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(p)*1000);
     m_optimisticEstimate = (o < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(o)*1000);
-    //kDebug()<<k_funcinfo<<"   Expected:"<<m_expectedEstimate.toString();
-    //kDebug()<<k_funcinfo<<"   Optimistic:"<<m_optimisticEstimate.toString();
-    //kDebug()<<k_funcinfo<<"   Pessimistic:"<<m_pessimisticEstimate.toString();
+    //kDebug()<<"   Expected:"<<m_expectedEstimate.toString();
+    //kDebug()<<"   Optimistic:"<<m_optimisticEstimate.toString();
+    //kDebug()<<"   Pessimistic:"<<m_pessimisticEstimate.toString();
 
-    //kDebug()<<k_funcinfo<<"   Expected:"<<m_expectedEstimate.duration()<<" manseconds";
+    //kDebug()<<"   Expected:"<<m_expectedEstimate.duration()<<" manseconds";
     changed();
 }
 
 void Estimate::set(unsigned days, unsigned hours, unsigned minutes) {
     Duration dur(days, hours, minutes);
     set(dur);
-    //kDebug()<<k_funcinfo<<"estimate="<<dur.toString();
+    //kDebug()<<"estimate="<<dur.toString();
     changed();
 }
 
@@ -1318,7 +1318,7 @@ double Estimate::scale( const Duration &value, Duration::Unit unit, QList<double
     v /= lst[1];
     if (unit == Duration::Unit_h) return v;
     v /= lst[0];
-    //kDebug()<<k_funcinfo<<value.toString()<<","<<unit<<"="<<v;
+    //kDebug()<<value.toString()<<","<<unit<<"="<<v;
     return v;
 }
 
@@ -1350,7 +1350,7 @@ Duration Estimate::scale( double value, Duration::Unit unit, const QList<double>
         case Duration::Unit_ms:
             break; // nothing
     }
-    //kDebug()<<k_funcinfo<<value<<","<<unit<<"="<<v;
+    //kDebug()<<value<<","<<unit<<"="<<v;
     return Duration( v, Duration::Unit_ms );
 }
 

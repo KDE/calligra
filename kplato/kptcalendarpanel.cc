@@ -547,25 +547,25 @@ int CalendarPanel::weekOfYear(const QDate& date)
 }
 
 void CalendarPanel::slotWeekdaySelected(int day) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     emit weekdaySelected(day);
 }
 
 void CalendarPanel::slotWeekSelected(int week, int year) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     emit weekSelected(week, year);
 }
 
 void CalendarPanel::setCalendar(Calendar *cal) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     table->clear();
     if (cal) {
         table->setMarkedWeekdays(cal->weekdayStateMap());
-        //kDebug()<<k_funcinfo<<"Days="<<it.count();
+        //kDebug()<<"Days="<<it.count();
         foreach (CalendarDay *d, cal->days()) {
             if (d->state() != CalendarDay::None) {
                 table->addMarkedDate(d->date(), d->state());
-                //kDebug()<<k_funcinfo<<"Added day:"<<d->date()<<"="<<d->state();
+                //kDebug()<<"Added day:"<<d->date()<<"="<<d->state();
             }
         }
         setEnabled(true);

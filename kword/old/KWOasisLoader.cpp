@@ -119,7 +119,7 @@ QList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCursor* c
         {
             context.styleStack().save();
             const QString bodyTagLocalName = tag.localName();
-            kDebug() << k_funcinfo << bodyTagLocalName;
+            kDebug() << bodyTagLocalName;
             if ( bodyTagLocalName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
             {
                 KWFrame * frame = loadFrame( tag, context, KoPoint( 10, 10 ) /*offset pasted object*/ );

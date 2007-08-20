@@ -2839,7 +2839,7 @@ void KWTextFrameSet::highlightPortion( KoTextParag * parag, int index, int lengt
                                (expose.right()-expose.left()) / 2,  // margin = half-width of the rect
                                (expose.bottom()-expose.top()) / 2); */
         if ( dialog ) {
-            //kDebug() << k_funcinfo <<" dialog=" << dialog <<" avoiding rect=" << expose;
+            //kDebug() <<" dialog=" << dialog <<" avoiding rect=" << expose;
             QRect globalRect( expose );
             globalRect.moveTopLeft( canvas->mapToGlobal( globalRect.topLeft() ) );
             KDialog::avoidArea( dialog, globalRect );
@@ -3949,7 +3949,7 @@ void KWTextFrameSetEdit::insertWPPage()
         textobj->formatMore( 2 );
     } while ( pages == doc->pageCount() && ++inserted <= columns );
     if ( pages == doc->pageCount() )
-        kWarning(32002) << k_funcinfo << " didn't manage to insert a new page! inserted=" << inserted << " columns=" << columns << " pages=" << pages << endl;
+        kWarning(32002) << " didn't manage to insert a new page! inserted=" << inserted << " columns=" << columns << " pages=" << pages << endl;
 
     doc->addCommand( macroCmd );
 
@@ -4084,7 +4084,7 @@ QPoint KWTextFrameSet::cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFram
 bool KWFootNoteFrameSet::isFootNote() const
 {
     if ( !m_footNoteVar ) {
-        kWarning() << k_funcinfo << " called too early? No footnote var." << endl;
+        kWarning() << " called too early? No footnote var." << endl;
         return false;
     }
     return ( m_footNoteVar->noteType() == FootNote );
@@ -4093,7 +4093,7 @@ bool KWFootNoteFrameSet::isFootNote() const
 bool KWFootNoteFrameSet::isEndNote() const
 {
     if ( !m_footNoteVar ) {
-        kWarning() << k_funcinfo << " called too early? No footnote var." << endl;
+        kWarning() << " called too early? No footnote var." << endl;
         return false;
     }
     return ( m_footNoteVar->noteType() == EndNote );

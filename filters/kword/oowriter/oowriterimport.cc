@@ -218,7 +218,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
         QDomElement element = doc.createElement("NAME");
         element.setAttribute( "value", styleName );
         styleElem.appendChild( element );
-        //kDebug(30518) << k_funcinfo <<"generating style" << styleName;
+        //kDebug(30518) <<"generating style" << styleName;
 
         QString followingStyle = m_styleStack.property( ooNS::style, "next-style-name" );
         if ( !followingStyle.isEmpty() )
@@ -959,7 +959,7 @@ bool OoWriterImport::pushListLevelStyle( const QString& listStyleName, // for de
 
 void OoWriterImport::parseList( QDomDocument& doc, const KoXmlElement& list, QDomElement& currentFramesetElement )
 {
-    //kDebug(30518) << k_funcinfo <<"parseList";
+    //kDebug(30518) <<"parseList";
 
     m_insideOrderedList = ( list.localName() == "ordered-list" );
     QString oldListStyleName = m_currentListStyleName;
@@ -967,7 +967,7 @@ void OoWriterImport::parseList( QDomDocument& doc, const KoXmlElement& list, QDo
         m_currentListStyleName = list.attributeNS( ooNS::text, "style-name", QString() );
     bool listOK = !m_currentListStyleName.isEmpty();
     const int level = m_listStyleStack.level() + 1;
-    //kDebug(30518) << k_funcinfo <<" listOK=" << listOK <<" level=" << level;
+    //kDebug(30518) <<" listOK=" << listOK <<" level=" << level;
     if ( listOK )
         listOK = pushListLevelStyle( m_currentListStyleName, level );
 
@@ -1184,7 +1184,7 @@ QDomElement OoWriterImport::parseParagraph( QDomDocument& doc, const KoXmlElemen
     text.appendChild( doc.createTextNode( paragraphText ) );
     text.setAttribute( "xml:space", "preserve" );
     p.appendChild( text );
-    //kDebug(30518) << k_funcinfo <<"Para text is:" << paragraphText;
+    //kDebug(30518) <<"Para text is:" << paragraphText;
 
     p.appendChild( formats );
     QDomElement layoutElement = doc.createElement( "LAYOUT" );
@@ -2469,7 +2469,7 @@ void OoWriterImport::finishDocumentContent( QDomDocument& mainDocument )
     Q_ASSERT ( !paperElement.isNull() ); // writePageLayout should have been called!
     if ( !paperElement.isNull() )
     {
-        //kDebug(30513) << k_funcinfo <<"m_headerFooters=" << m_headerFooters;
+        //kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
         //paperElement.setAttribute("hType", Conversion::headerMaskToHType( m_headerFooters ) );
         //paperElement.setAttribute("fType", Conversion::headerMaskToFType( m_headerFooters ) );
     }

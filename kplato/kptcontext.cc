@@ -159,7 +159,7 @@ bool Context::load( const KoXmlDocument &document ) {
                             }
                         }
                     } else {
-                        kError()<<k_funcinfo<<"Unknown tag: "<<e.tagName()<<endl;
+                        kError()<<"Unknown tag: "<<e.tagName()<<endl;
                     }
                 }
             }*/
@@ -169,7 +169,7 @@ bool Context::load( const KoXmlDocument &document ) {
 }
 
 QDomDocument Context::save( const View *view ) const {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     QDomDocument document( "kplato.context" );
 
     document.appendChild( document.createProcessingInstruction(

@@ -249,7 +249,7 @@ QList<QAction*> SplitterView::actionList( const QString name ) const
     
 bool SplitterView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<k_funcinfo<<endl;
+    kDebug()<<endl;
     KoXmlElement e = context.namedItem( "views" ).toElement();
     if ( e.isNull() ) {
         return true;

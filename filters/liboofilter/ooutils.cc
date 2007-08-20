@@ -205,7 +205,7 @@ void OoUtils::importTabulators( QDomElement& parentElement, const KoStyleStack& 
     if ( !styleStack.hasChildNode( ooNS::style, "tab-stops" ) ) // 3.11.10
         return;
     KoXmlElement tabStops = styleStack.childNode( ooNS::style, "tab-stops" );
-    //kDebug(30519) << k_funcinfo << tabStops.childNodes().count() <<" tab stops in layout.";
+    //kDebug(30519) << tabStops.childNodes().count() <<" tab stops in layout.";
     for ( KoXmlNode it = tabStops.firstChild(); !it.isNull(); it = it.nextSibling() )
     {
         KoXmlElement tabStop = it.toElement();
@@ -376,7 +376,7 @@ void OoUtils::importUnderline( const QString& in, QString& underline, QString& s
         styleline = "solid";
     }
     else
-        kWarning(30519) << k_funcinfo << " unsupported text-underline value: " << in;
+        kWarning(30519) << " unsupported text-underline value: " << in;
 }
 
 void OoUtils::importTextPosition( const QString& text_position, QString& value, QString& relativetextsize )

@@ -187,7 +187,7 @@ void KWPartFrameSet::startEditing()
     // Content is protected -> can't edit. Maybe we should open part in readonly mode?
     if ( m_protectContent )
         return;
-    kDebug() << k_funcinfo;
+    kDebug() ;
     //create undo/redo move command
     KWFrame* frame = m_frames.first();
     if (!frame)
@@ -202,7 +202,7 @@ void KWPartFrameSet::startEditing()
 
 void KWPartFrameSet::endEditing()
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     if( m_cmdMoveChild && m_cmdMoveChild->frameMoved() )
         m_doc->addCommand(m_cmdMoveChild);
     else
@@ -214,7 +214,7 @@ void KWPartFrameSet::endEditing()
 void KWPartFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
 {
 #if 0
-    //kDebug()<<k_funcinfo<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y();
+    //kDebug()<<" frame no="<<frameNum<<" to pos="<<position.x()<<","<<position.y();
     KWFrame * frame = m_frames.at( frameNum );
     if ( frame )
     {
@@ -316,7 +316,7 @@ void KWPartFrameSet::storeInternal()
         getChild()->document()->setStoreInternal(true);
     }
 
-    kDebug()<<k_funcinfo<<"url:"<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal();
+    kDebug()<<"url:"<<getChild()->url().url()<<" store internal="<<getChild()->document()->storeInternal();
 }
 
 

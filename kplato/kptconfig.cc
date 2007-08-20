@@ -38,7 +38,7 @@ Config::~Config()
 }
 
 void Config::load() {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     KSharedConfigPtr config = Factory::global().config();
 
 /*    if( config->hasGroup("Behavior"))
@@ -69,7 +69,7 @@ void Config::load() {
 }
 
 void Config::save() {
-    //kDebug()<<k_funcinfo<<m_readWrite;
+    //kDebug()<<m_readWrite;
     if (!m_readWrite)
         return;
 

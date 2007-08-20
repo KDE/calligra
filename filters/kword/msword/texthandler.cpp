@@ -580,7 +580,7 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
     flowElement.setAttribute( "align", alignment );
     parentElement.appendChild( flowElement );
 
-    //kDebug(30513) << k_funcinfo <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
+    //kDebug(30513) <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
 
     if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
     {

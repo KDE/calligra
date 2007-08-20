@@ -38,7 +38,7 @@ TaskAppointmentsView::ResourceItem::ResourceItem( Resource *r, QTreeWidget *pare
 {
 
     setFormat( 0, 'f', 1 );
-    //kDebug()<<k_funcinfo;
+    //kDebug();
 }
 TaskAppointmentsView::ResourceItem::ResourceItem( Resource *r, QTreeWidgetItem *p, bool highlight )
         : DoubleListViewBase::MasterListItem( p, r->name(), highlight ),
@@ -46,7 +46,7 @@ TaskAppointmentsView::ResourceItem::ResourceItem( Resource *r, QTreeWidgetItem *
 {
 
     setFormat( 0, 'f', 1 );
-    //kDebug()<<k_funcinfo;
+    //kDebug();
 }
 
 TaskAppointmentsView::ResourceItem::ResourceItem( const QString& text, QTreeWidgetItem *parent, bool highlight )
@@ -55,7 +55,7 @@ TaskAppointmentsView::ResourceItem::ResourceItem( const QString& text, QTreeWidg
 {
 
     setFormat( 0, 'f', 1 );
-    //kDebug()<<k_funcinfo;
+    //kDebug();
 }
 
 //-------------------------------------------
@@ -88,7 +88,7 @@ void TaskAppointmentsView::draw( Task *task )
 
 void TaskAppointmentsView::draw()
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     clearLists();
     if ( !m_task )
         return ;
@@ -107,7 +107,7 @@ void TaskAppointmentsView::draw()
 
 void TaskAppointmentsView::slotUpdate()
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     if ( !m_task )
         return ;
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -118,7 +118,7 @@ void TaskAppointmentsView::slotUpdate()
     // Add columns for selected period/periods
     QDate start = m_task->startTime().date();
     QDate end = m_task->endTime().date();
-    //kDebug()<<k_funcinfo<<start.toString()<<" -"<<end.toString();
+    //kDebug()<<start.toString()<<" -"<<end.toString();
     QStringList df;
     for ( QDate dt = start; dt <= end; dt = cal->addDays( dt, 1 ) ) {
         df << locale->formatDate( dt, KLocale::ShortDate );
@@ -144,11 +144,11 @@ void TaskAppointmentsView::slotUpdate()
 
 void TaskAppointmentsView::print( KPrinter & /*printer*/ )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
 }
 
 // bool TaskAppointmentsView::setContext(const Context::TaskAppointmentsView &c) {
-//     //kDebug()<<k_funcinfo;
+//     //kDebug();
 //     const Context::TaskAppointmentsView &context = c.taskAppointmentsView;
 //     QValueList<int> list;
 //     list << context.accountsviewsize << context.periodviewsize;
@@ -163,14 +163,14 @@ void TaskAppointmentsView::print( KPrinter & /*printer*/ )
 // }
 //
 // void TaskAppointmentsView::getContext(Context::TaskAppointmentsView &c) const {
-//     //kDebug()<<k_funcinfo;
+//     //kDebug();
 //     Context::TaskAppointmentsView &context = c.taskAppointmentsView;
 //     context.accountsviewsize = m_dlv->sizes()[0];
 //     context.periodviewsize = m_dlv->sizes()[1];
 //     context.date = m_date;
 //     context.period = m_period;
 //     context.cumulative = m_cumulative;
-//     //kDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1];
+//     //kDebug()<<"sizes="<<sizes()[0]<<","<<sizes()[1];
 // }
 
 void TaskAppointmentsView::clear()

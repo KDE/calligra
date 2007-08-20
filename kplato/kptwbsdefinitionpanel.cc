@@ -42,14 +42,14 @@ namespace KPlato
 ComboBoxDelegate::ComboBoxDelegate(QStringList &list, QObject *parent)
     : QItemDelegate(parent)
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     setObjectName("ComboBoxDelegate");
     m_list = list;
 }
 
 QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
 {
-    kDebug()<<k_funcinfo;
+    kDebug();
     QComboBox *editor = new QComboBox(parent);
     editor->installEventFilter(const_cast<ComboBoxDelegate*>(this));
     return editor;
@@ -58,7 +58,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
 void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     QString value = index.model()->data(index, Qt::DisplayRole).toString();
-    kDebug()<<k_funcinfo<<value<<":"<<m_list;
+    kDebug()<<value<<":"<<m_list;
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
 
     comboBox->insertItems(0, m_list);
@@ -68,7 +68,7 @@ void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
-    kDebug()<<k_funcinfo<<comboBox->currentText();
+    kDebug()<<comboBox->currentText();
     model->setData(index, comboBox->currentText());
 }
 
@@ -88,7 +88,7 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     setupUi(this);
     
     QStringList codeList = def.codeList();
-    kDebug()<<k_funcinfo<<codeList;
+    kDebug()<<codeList;
     defaultSeparator->setText(def.defaultSeparator());
     defaultCode->addItems(codeList);
     defaultCode->setCurrentIndex(def.defaultCodeIndex());
@@ -137,7 +137,7 @@ K3MacroCommand *WBSDefinitionPanel::buildCommand(Part */*part*/) {
 }
 
 bool WBSDefinitionPanel::ok() {
-    kDebug()<<k_funcinfo;
+    kDebug();
     m_def.setDefaultCode(defaultCode->currentIndex());
     m_def.setDefaultSeparator(defaultSeparator->text());
     
@@ -165,11 +165,11 @@ void WBSDefinitionPanel::slotSelectionChanged() {
         s = "None selected";
     }
     removeBtn->setEnabled(selectedRow != -1);
-    kDebug()<<k_funcinfo<<s;
+    kDebug()<<s;
 }
 
 void WBSDefinitionPanel::slotRemoveBtnClicked() {
-    kDebug()<<k_funcinfo<<selectedRow;
+    kDebug()<<selectedRow;
     if (selectedRow == -1) {
         return;
     }
@@ -179,10 +179,10 @@ void WBSDefinitionPanel::slotRemoveBtnClicked() {
 }
 
 void WBSDefinitionPanel::slotAddBtnClicked() {
-    kDebug()<<k_funcinfo;
+    kDebug();
     int i=levelsTable->rowCount()-1;
     for (; i >= 0; --i) {
-        kDebug()<<k_funcinfo<<"Checking row["<<i<<"]="<<levelsTable->verticalHeaderItem(i)->text()<<" with"<<level->value();
+        kDebug()<<"Checking row["<<i<<"]="<<levelsTable->verticalHeaderItem(i)->text()<<" with"<<level->value();
         if (level->value() > levelsTable->verticalHeaderItem(i)->text().toInt()) {
             break;
         }
@@ -200,7 +200,7 @@ void WBSDefinitionPanel::slotAddBtnClicked() {
     addBtn->setEnabled(false);
     slotChanged();
     
-    kDebug()<<k_funcinfo<<"Added row="<<i<<" level="<<level->value();
+    kDebug()<<"Added row="<<i<<" level="<<level->value();
 }
 
 void WBSDefinitionPanel::slotLevelChanged(int value) {
@@ -214,7 +214,7 @@ void WBSDefinitionPanel::slotLevelChanged(int value) {
     slotChanged();
 }
 void WBSDefinitionPanel::slotLevelsGroupToggled(bool /*on*/) {
-    kDebug()<<k_funcinfo;
+    kDebug();
     slotLevelChanged(level->value());
 }
 

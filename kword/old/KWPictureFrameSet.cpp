@@ -169,7 +169,7 @@ void KWPictureFrameSet::saveOasis( KoXmlWriter& writer, KoTextSavingContext& con
 
 void KWPictureFrameSet::loadOasis( const QDomElement& frame, const QDomElement& tag, KoOasisContext& context )
 {
-    kDebug() << k_funcinfo;
+    kDebug() ;
     KoPictureKey key;
     QDomNode binaryData = KoDom::namedItemNS( tag, KoXmlNS::office, "binary-data" );
     if ( !binaryData.isNull() )

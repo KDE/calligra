@@ -44,7 +44,7 @@ void DateTime::add(const Duration &duration) {
         KDateTime x = addMSecs(duration.milliseconds());
         setDate( x.date() );
         setTime( x.time() );
-        //kDebug()<<k_funcinfo<<toString();
+        //kDebug()<<toString();
     }
 }
 
@@ -53,7 +53,7 @@ void DateTime::subtract(const Duration &duration) {
         KDateTime x = addMSecs(-duration.milliseconds());
         setDate( x.date() );
         setTime( x.time() );
-        //kDebug()<<k_funcinfo<<toString();
+        //kDebug()<<toString();
     }
 }
 
@@ -62,7 +62,7 @@ Duration DateTime::duration(const DateTime &dt) const {
     if (isValid() && dt.isValid()) {
         qint64 s = secsTo_long( dt );
         qint64 ms = dt.time().msec() - time().msec();
-        //kDebug()<<k_funcinfo<<s<<","<<ms;
+        //kDebug()<<s<<","<<ms;
         if ( ms < 0  && s > 0 ) {
             s += 1;
         } else if ( ms > 0 && s < 0 ) {
@@ -70,7 +70,7 @@ Duration DateTime::duration(const DateTime &dt) const {
         }
         dur = Duration( QABS( (s * 1000 ) + ms ) );
     }
-    //kDebug()<<k_funcinfo<<dur.milliseconds();
+    //kDebug()<<dur.milliseconds();
     return dur;
 }
 
@@ -111,7 +111,7 @@ DateTime DateTime::fromString( const QString dts, const KDateTime::Spec &spec )
         return DateTime( dt.dateTime(), spec );
     }
     DateTime t = DateTime( dt.toTimeSpec( spec ) );
-    //kDebug()<<k_funcinfo<<dt<<" ->"<<t.toString();
+    //kDebug()<<dt<<" ->"<<t.toString();
     return t;
 }
 

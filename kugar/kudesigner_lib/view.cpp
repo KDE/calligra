@@ -748,7 +748,7 @@ void View::contentsDragEnterEvent ( QDragEnterEvent * /*event*/ )
 
 void View::keyPressEvent( QKeyEvent *e )
 {
-    kDebug(31000) << k_funcinfo;
+    kDebug(31000) ;
 
     if ( m_canvas->selected.count() == 1 )
     {

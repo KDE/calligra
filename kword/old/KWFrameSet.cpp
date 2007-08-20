@@ -74,7 +74,7 @@ void KWFrameSet::addFrame( KWFrame *frame, bool recalc )
     if ( m_frames.findRef( frame ) != -1 )
         return;
 
-    //kDebug(32001) << k_funcinfo << name() <<" adding frame" <<  frame <<" recalc=" << recalc;
+    //kDebug(32001) << name() <<" adding frame" <<  frame <<" recalc=" << recalc;
     if(m_doc)
         KWFrameList::createFrameList(frame, m_doc);
     frame->setFrameSet(this);
@@ -87,7 +87,7 @@ void KWFrameSet::addFrame( KWFrame *frame, bool recalc )
 
 void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
 {
-    //kDebug(32001) << k_funcinfo << name() <<" deleting frame" <<  num <<" remove=" << remove <<" recalc=" << recalc; //kBacktrace();
+    //kDebug(32001) << name() <<" deleting frame" <<  num <<" remove=" << remove <<" recalc=" << recalc; //kBacktrace();
     KWFrame *frm = m_frames.at( num );
     Q_ASSERT( frm );
     m_frames.take( num );
@@ -112,7 +112,7 @@ void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
         // ###### should something similar be done when just removing a frame from the list?
         frameDeleted( frm, recalc ); // inform kwtableframeset if necessary
         delete frm;
-        //kDebug(32001) << k_funcinfo << frm <<" deleted. Now I have" << m_frames.count() <<" m_frames";
+        //kDebug(32001) << frm <<" deleted. Now I have" << m_frames.count() <<" m_frames";
     }
 
     if ( recalc )
@@ -972,7 +972,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
         // TODO handle percentage (of enclosing table/frame/page)
         height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "height", QString::null ) );
     }
-    //kDebug(32001) << k_funcinfo <<"width=" << width <<" height=" << height <<" pt";
+    //kDebug(32001) <<"width=" << width <<" height=" << height <<" pt";
 
     KWFrame * frame = new KWFrame(this,
                                   KoUnit::parseValue( tag.attributeNS( KoXmlNS::svg, "x", QString::null ) ),

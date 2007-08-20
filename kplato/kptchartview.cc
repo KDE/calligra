@@ -68,7 +68,7 @@ void ChartView::setScheduleManager( ScheduleManager *sm )
 void ChartView::slotNodeChanged( Node* )
 {
     if ( m_project && m_manager) {
-        kDebug()<<k_funcinfo<<endl;
+        kDebug()<<endl;
         m_panel->draw( *m_project, *m_manager );
     }
 }

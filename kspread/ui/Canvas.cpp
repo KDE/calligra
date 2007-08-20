@@ -2642,7 +2642,7 @@ void Canvas::copyOasisObjects()
     if ( !picture.isNull() )
         multiDrag->setMimeData( picture.dragObject( 0 ) );
 #endif
-    kDebug(36003) << k_funcinfo <<"setting zip data:" << buffer.buffer().size() <<" bytes.";
+    kDebug(36003) <<"setting zip data:" << buffer.buffer().size() <<" bytes.";
     mimeData->setData( mimeType, buffer.buffer() );
 
     //save the objects as pictures too so that other programs can access them

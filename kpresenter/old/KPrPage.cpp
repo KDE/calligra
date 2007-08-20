@@ -1606,12 +1606,12 @@ void KPrPage::insertPicture( const QString &filename, const QPointF &pos )
     if ( kppixmapobject->getSize().height() > s.height() )
         fakt = qMin( fakt, (float)s.height() / (float)kppixmapobject->getSize().height() );
 
-    //kDebug(33001) << k_funcinfo <<"Fakt:" << fakt;
+    //kDebug(33001) <<"Fakt:" << fakt;
 
     if ( fakt < 1 ) {
         int w = (int)( fakt * (float)kppixmapobject->getSize().width() );
         int h = (int)( fakt * (float)kppixmapobject->getSize().height() );
-        //kDebug(33001) << k_funcinfo <<"Size:" << w <<"," << h;
+        //kDebug(33001) <<"Size:" << w <<"," << h;
         kppixmapobject->setOrig(0,0);
         kppixmapobject->setSize(w, h);
         m_doc->repaint( false );

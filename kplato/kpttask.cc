@@ -48,7 +48,7 @@ Task::Task(Node *parent)
       m_resource(),
       m_completion( this )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     Duration d(1, 0, 0);
     m_estimate = new Estimate();
     m_estimate->setOptimisticRatio(-10);
@@ -66,7 +66,7 @@ Task::Task(Task &task, Node *parent)
       m_resource(),
       m_completion( this )
 {
-    //kDebug()<<k_funcinfo<<"("<<this<<")";
+    //kDebug()<<"("<<this<<")";
     m_requests = 0;
     
     if ( task.estimate() ) {
@@ -130,7 +130,7 @@ void Task::addRequest(ResourceGroup *group, int numResources) {
 }
 
 void Task::addRequest(ResourceGroupRequest *request) {
-    //kDebug()<<k_funcinfo<<request;
+    //kDebug()<<request;
     if (!m_requests) {
         m_requests = new ResourceRequestCollection(*this);
     }
@@ -138,7 +138,7 @@ void Task::addRequest(ResourceGroupRequest *request) {
 }
 
 void Task::takeRequest(ResourceGroupRequest *request) {
-    //kDebug()<<k_funcinfo<<request;
+    //kDebug()<<request;
     if (m_requests) {
         m_requests->takeRequest(request);
     }
@@ -177,16 +177,16 @@ void Task::makeAppointments() {
         return;
     if (type() == Node::Type_Task) {
         if (m_requests) {
-            //kDebug()<<k_funcinfo<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
+            //kDebug()<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
             m_requests->makeAppointments(m_currentSchedule);
-            //kDebug()<<k_funcinfo<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
+            //kDebug()<<m_name<<":"<<m_currentSchedule->startTime<<","<<m_currentSchedule->endTime<<";"<<m_currentSchedule->duration.toString();
         }
     } else if (type() == Node::Type_Summarytask) {
         foreach (Node *n, m_nodes) {
             n->makeAppointments();
         }
     } else if (type() == Node::Type_Milestone) {
-        //kDebug()<<k_funcinfo<<"Milestone not implemented";
+        //kDebug()<<"Milestone not implemented";
         // Well, shouldn't have resources anyway...
     }
 }
@@ -210,7 +210,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     m_name = element.attribute("name");
     m_leader = element.attribute("leader");
     m_description = element.attribute("description");
-    //kDebug()<<k_funcinfo<<m_name<<": id="<<m_id;
+    //kDebug()<<m_name<<": id="<<m_id;
 
     // Allow for both numeric and text
     QString constraint = element.attribute("scheduling","0");
@@ -271,7 +271,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             if (r->load(e, status.project())) {
                 addRequest(r);
             } else {
-                kError()<<k_funcinfo<<"Failed to load resource request"<<endl;
+                kError()<<"Failed to load resource request"<<endl;
                 delete r;
             }
         } else if (e.tagName() == "progress") {
@@ -289,14 +289,14 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                         sch->setNode(this);
                         addSchedule(sch);
                     } else {
-                        kError()<<k_funcinfo<<"Failed to load schedule"<<endl;
+                        kError()<<"Failed to load schedule"<<endl;
                         delete sch;
                     }
                 }
             }
         }
     }
-    //kDebug()<<k_funcinfo<<m_name<<" loaded";
+    //kDebug()<<m_name<<" loaded";
     return true;
 }
 
@@ -340,7 +340,7 @@ void Task::save(QDomElement &element)  const {
 }
 
 void Task::saveAppointments(QDomElement &element, long id) const {
-    //kDebug()<<k_funcinfo<<m_name<<" id="<<id;
+    //kDebug()<<m_name<<" id="<<id;
     Schedule *sch = findSchedule(id);
     if (sch) {
         sch->saveAppointments(element);
@@ -351,7 +351,7 @@ void Task::saveAppointments(QDomElement &element, long id) const {
 }
 
 EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     Schedule *s = m_currentSchedule;
     if ( id != -1 ) {
         s = findSchedule( id );
@@ -364,7 +364,7 @@ EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end,
 
 // Returns the total planned effort for this task (or subtasks) 
 Duration Task::plannedEffort( long id ) const {
-   //kDebug()<<k_funcinfo;
+   //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -384,7 +384,7 @@ Duration Task::plannedEffort( long id ) const {
 
 // Returns the total planned effort for this task (or subtasks) on date
 Duration Task::plannedEffort(const QDate &date, long id ) const {
-   //kDebug()<<k_funcinfo;
+   //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -404,7 +404,7 @@ Duration Task::plannedEffort(const QDate &date, long id ) const {
 
 // Returns the total planned effort for this task (or subtasks) upto and including date
 Duration Task::plannedEffortTo(const QDate &date, long id) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -424,7 +424,7 @@ Duration Task::plannedEffortTo(const QDate &date, long id) const {
 
 // Returns the total actual effort for this task (or subtasks) 
 Duration Task::actualEffort( long id ) const {
-   //kDebug()<<k_funcinfo;
+   //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -436,7 +436,7 @@ Duration Task::actualEffort( long id ) const {
 
 // Returns the total actual effort for this task (or subtasks) on date
 Duration Task::actualEffort(const QDate &date, long id) const {
-   //kDebug()<<k_funcinfo;
+   //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -449,7 +449,7 @@ Duration Task::actualEffort(const QDate &date, long id) const {
 
 // Returns the total actual effort for this task (or subtasks) to date
 Duration Task::actualEffortTo(const QDate &date, long id) const {
-   //kDebug()<<k_funcinfo;
+   //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -461,7 +461,7 @@ Duration Task::actualEffortTo(const QDate &date, long id) const {
 }
 
 double Task::plannedCost( long id ) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -480,7 +480,7 @@ double Task::plannedCost( long id ) const {
 }
 
 double Task::plannedCost(const QDate &date, long id) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -499,7 +499,7 @@ double Task::plannedCost(const QDate &date, long id) const {
 }
 
 double Task::plannedCostTo(const QDate &date, long id) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -518,7 +518,7 @@ double Task::plannedCostTo(const QDate &date, long id) const {
 }
 
 double Task::actualCost( long id ) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -530,7 +530,7 @@ double Task::actualCost( long id ) const {
 }
 
 double Task::actualCost(const QDate &date, long id) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -542,7 +542,7 @@ double Task::actualCost(const QDate &date, long id) const {
 }
 
 double Task::actualCostTo(const QDate &date, long id) const {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -555,7 +555,7 @@ double Task::actualCostTo(const QDate &date, long id) const {
 
 double Task::bcwp( long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -568,7 +568,7 @@ double Task::bcwp( long id ) const
 
 double Task::bcwp( const QDate &date, long id ) const
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
@@ -577,7 +577,7 @@ double Task::bcwp( const QDate &date, long id ) const
         return c;
     }
     c = plannedCostTo( date, id ) * (double)m_completion.percentFinished( date ) / 100.0;
-    //kDebug()<<k_funcinfo<<m_name<<"("<<id<<")"<<date<<"="<<c;
+    //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
     return c;
 }
 
@@ -613,7 +613,7 @@ double Task::costPerformanceIndex(const QDate &date, bool *error) const {
 }
 
 void Task::initiateCalculation(MainSchedule &sch) {
-    //kDebug()<<k_funcinfo<<m_name<<" schedule:"<<sch.name()<<" id="<<sch.id();
+    //kDebug()<<m_name<<" schedule:"<<sch.name()<<" id="<<sch.id();
     m_visitedForward = false;
     m_visitedBackward = false;
     m_currentSchedule = createSchedule(&sch);
@@ -624,7 +624,7 @@ void Task::initiateCalculation(MainSchedule &sch) {
 
 
 void Task::initiateCalculationLists(MainSchedule &sch) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (type() == Node::Type_Summarytask) {
         sch.insertSummaryTask(this);
         // propagate my relations to my children and dependent nodes
@@ -638,11 +638,11 @@ void Task::initiateCalculationLists(MainSchedule &sch) {
     } else {
         if (isEndNode()) {
             sch.insertEndNode(this);
-            //kDebug()<<k_funcinfo<<"endnodes append:"<<m_name;
+            //kDebug()<<"endnodes append:"<<m_name;
         }
         if (isStartNode()) {
             sch.insertStartNode(this);
-            //kDebug()<<k_funcinfo<<"startnodes append:"<<m_name;
+            //kDebug()<<"startnodes append:"<<m_name;
         }
         if ( ( m_constraint == Node::MustStartOn && m_estimate->type() == Estimate::Type_FixedDuration ) ||
             ( m_constraint == Node::MustFinishOn && m_estimate->type() == Estimate::Type_FixedDuration ) ||
@@ -662,7 +662,7 @@ DateTime Task::calculatePredeccessors(const QList<Relation*> &list, int use) {
     DateTime time;
     foreach (Relation *r, list) {
         if (r->parent()->type() == Type_Summarytask) {
-            //kDebug()<<k_funcinfo<<"Skip summarytask:"<<it.current()->parent()->name();
+            //kDebug()<<"Skip summarytask:"<<it.current()->parent()->name();
             continue; // skip summarytasks
         }
         DateTime t = r->parent()->calculateForward(use); // early finish
@@ -711,7 +711,7 @@ DateTime Task::calculateForward(int use) {
 }
 
 DateTime Task::calculateEarlyFinish(int use) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -722,7 +722,7 @@ DateTime Task::calculateEarlyFinish(int use) {
         //kDebug()<<earliestStart.toString()<<" +"<<m_durationBackward.toString()<<""<<m_name<<" calculateForward() (visited)";
         return cs->earlyFinish;
     }
-    //kDebug()<<k_funcinfo<<"------>"<<m_name<<""<<cs->earlyStart;
+    //kDebug()<<"------>"<<m_name<<""<<cs->earlyStart;
     if (type() == Node::Type_Task) {
         m_durationForward = m_estimate->value(use, pert);
         switch (constraint()) {
@@ -735,7 +735,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                     m_earlyStart = workStartAfter(cs->earlyStart);
                 }
                 m_durationForward = duration(m_earlyStart, use, false);
-                //kDebug()<<k_funcinfo<<m_name<<":"<<earlyStart<<"+"<<m_durationForward.toString()<<"="<<(earlyStart+m_durationForward);
+                //kDebug()<<m_name<<":"<<earlyStart<<"+"<<m_durationForward.toString()<<"="<<(earlyStart+m_durationForward);
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = m_earlyStart;
                     cs->endTime = m_earlyStart + m_durationForward;
@@ -780,7 +780,7 @@ DateTime Task::calculateEarlyFinish(int use) {
                 break;
             case Node::MustStartOn:
             {
-                //kDebug()<<k_funcinfo<<cs->earlyStart<<">"<<m_constraintStartTime;
+                //kDebug()<<cs->earlyStart<<">"<<m_constraintStartTime;
                 DateTime earlyStart = workStartAfter( m_constraintStartTime );
                 if ( cs->earlyStart > m_constraintStartTime ) {
                     cs->schedulingError = true;
@@ -855,9 +855,9 @@ DateTime Task::calculateEarlyFinish(int use) {
                 break;
         }
         m_earlyStart = cs->earlyStart;
-        //kDebug()<<k_funcinfo<<m_name<<""<<earliestStart.toString()<<endl
+        //kDebug()<<m_name<<""<<earliestStart.toString()<<endl
     } else if (type() == Node::Type_Summarytask) {
-        kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     } else { // ???
         m_durationForward = Duration::zeroDuration;
     }
@@ -873,7 +873,7 @@ DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
     DateTime time;
     foreach (Relation *r, list) {
         if (r->child()->type() == Type_Summarytask) {
-            //kDebug()<<k_funcinfo<<"Skip summarytask:"<<r->parent()->name();
+            //kDebug()<<"Skip summarytask:"<<r->parent()->name();
             continue; // skip summarytasks
         }
         DateTime t = r->child()->calculateBackward(use);
@@ -901,7 +901,7 @@ DateTime Task::calculateSuccessors(const QList<Relation*> &list, int use) {
 }
 
 DateTime Task::calculateBackward(int use) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -924,7 +924,7 @@ DateTime Task::calculateBackward(int use) {
 }
 
 DateTime Task::calculateLateStart(int use) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -935,7 +935,7 @@ DateTime Task::calculateLateStart(int use) {
         //kDebug()<<latestFinish.toString()<<" -"<<m_durationBackward.toString()<<""<<m_name<<" calculateBackward() (visited)";
         return cs->lateStart;
     }
-    kDebug()<<k_funcinfo<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish.dateTime()<<endl;
+    kDebug()<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish.dateTime()<<endl;
     if (type() == Node::Type_Task) {
         m_durationBackward = m_estimate->value(use, pert);
         switch (constraint()) {
@@ -1056,9 +1056,9 @@ DateTime Task::calculateLateStart(int use) {
                 break;
         }
         m_lateFinish = cs->lateFinish;
-        //kDebug()<<k_funcinfo<<m_name<<""<<cs->lateFinish;
+        //kDebug()<<m_name<<""<<cs->lateFinish;
     } else if (type() == Node::Type_Summarytask) {
-        kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     } else { // ???
         m_durationBackward = Duration::zeroDuration;
     }
@@ -1073,7 +1073,7 @@ DateTime Task::schedulePredeccessors(const QList<Relation*> &list, int use) {
     DateTime time;
     foreach (Relation *r, list) {
         if (r->parent()->type() == Type_Summarytask) {
-            //kDebug()<<k_funcinfo<<"Skip summarytask:"<<r->parent()->name();
+            //kDebug()<<"Skip summarytask:"<<r->parent()->name();
             continue; // skip summarytasks
         }
         // schedule the predecessors
@@ -1111,19 +1111,19 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
     DateTime time = schedulePredeccessors(dependParentNodes(), use);
     if (time.isValid() && time > cs->startTime) {
         cs->startTime = time;
-        //kDebug()<<k_funcinfo<<m_name<<" new startime="<<cs->startTime;
+        //kDebug()<<m_name<<" new startime="<<cs->startTime;
     }
     // Then my parents
     time = schedulePredeccessors(m_parentProxyRelations, use);
     if (time.isValid() && time > cs->startTime) {
         cs->startTime = time;
-        //kDebug()<<k_funcinfo<<m_name<<" new startime="<<cs->startTime;
+        //kDebug()<<m_name<<" new startime="<<cs->startTime;
     }
     return scheduleFromStartTime( use );
 }
 
 DateTime Task::scheduleFromStartTime(int use) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1137,7 +1137,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     if ( !cs->startTime.isValid() ) {
         cs->startTime = cs->earlyStart;
     }
-    //kDebug()<<k_funcinfo<<m_name<<" startTime="<<cs->startTime;
+    //kDebug()<<m_name<<" startTime="<<cs->startTime;
     if(type() == Node::Type_Task) {
         if ( cs->recalculate() && m_completion.isFinished() ) {
             cs->startTime = m_completion.startTime();
@@ -1169,7 +1169,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->duration = duration(cs->lateFinish, use, true);
             cs->endTime = cs->lateFinish;
             cs->startTime = cs->endTime - cs->duration;
-            //kDebug()<<k_funcinfo<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish;
+            //kDebug()<<m_name<<" endTime="<<cs->endTime<<" latest="<<cs->lateFinish;
             makeAppointments();
             if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
@@ -1344,12 +1344,12 @@ DateTime Task::scheduleFromStartTime(int use) {
             break;
         }
         cs->duration = Duration::zeroDuration;
-        //kDebug()<<k_funcinfo<<m_name<<":"<<cs->startTime<<","<<cs->endTime;
+        //kDebug()<<m_name<<":"<<cs->startTime<<","<<cs->endTime;
     } else if (type() == Node::Type_Summarytask) {
         //shouldn't come here
         cs->endTime = cs->startTime;
         cs->duration = cs->endTime - cs->startTime;
-        kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
     //kDebug()<<cs->startTime<<" :"<<cs->endTime<<""<<m_name<<" scheduleForward()";
     m_visitedForward = true;
@@ -1360,7 +1360,7 @@ DateTime Task::scheduleSuccessors(const QList<Relation*> &list, int use) {
     DateTime time;
     foreach (Relation *r, list) {
         if (r->child()->type() == Type_Summarytask) {
-            //kDebug()<<k_funcinfo<<"Skip summarytask:"<<r->child()->name();
+            //kDebug()<<"Skip summarytask:"<<r->child()->name();
             continue;
         }
         // get the successors starttime
@@ -1406,7 +1406,7 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
 }
 
 DateTime Task::scheduleFromEndTime(int use) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (m_currentSchedule == 0) {
         return DateTime();
     }
@@ -1420,13 +1420,13 @@ DateTime Task::scheduleFromEndTime(int use) {
     if ( !cs->endTime.isValid() ) {
         cs->endTime = cs->lateFinish;
     }
-    //kDebug()<<k_funcinfo<<"------>"<<m_name<<""<<cs->endTime;
+    //kDebug()<<"------>"<<m_name<<""<<cs->endTime;
     if (type() == Node::Type_Task) {
         cs->duration = m_estimate->value(use, pert);
         switch (m_constraint) {
         case Node::ASAP: {
             // cs->endTime calculated above
-            //kDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  early="<<cs->earlyStart;
+            //kDebug()<<m_name<<": end="<<cs->endTime<<"  early="<<cs->earlyStart;
             if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
                 cs->endTime = workFinishBefore(cs->endTime);
                 cs->startTime = workStartAfter( cs->earlyStart );
@@ -1437,7 +1437,7 @@ DateTime Task::scheduleFromEndTime(int use) {
                 cs->schedulingError = true;
             }
             cs->endTime = e;
-            //kDebug()<<k_funcinfo<<m_name<<": start="<<cs->startTime<<"+"<<cs->duration.toString()<<"="<<e<<" -> end="<<cs->endTime;
+            //kDebug()<<m_name<<": start="<<cs->startTime<<"+"<<cs->duration.toString()<<"="<<e<<" -> end="<<cs->endTime;
             makeAppointments();
             if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
@@ -1449,7 +1449,7 @@ DateTime Task::scheduleFromEndTime(int use) {
         case Node::ALAP:
         {
             // cs->endTime calculated above
-            //kDebug()<<k_funcinfo<<m_name<<": end="<<cs->endTime<<"  late="<<cs->lateFinish<<endl;
+            //kDebug()<<m_name<<": end="<<cs->endTime<<"  late="<<cs->lateFinish<<endl;
             if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
                 cs->endTime = workFinishBefore(cs->endTime);
             }
@@ -1458,7 +1458,7 @@ DateTime Task::scheduleFromEndTime(int use) {
             if ( cs->startTime < cs->earlyStart ) {
                 cs->schedulingError = true;
             }
-            //kDebug()<<k_funcinfo<<m_name<<": lateStart="<<cs->startTime;
+            //kDebug()<<m_name<<": lateStart="<<cs->startTime;
             makeAppointments();
             if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
@@ -1550,10 +1550,10 @@ DateTime Task::scheduleFromEndTime(int use) {
             break;
         case Node::FixedInterval: {
             // cs->endTime calculated above
-            //kDebug()<<k_funcinfo<<"FixedInterval="<<m_constraintEndTime<<""<<cs->endTime;
+            //kDebug()<<"FixedInterval="<<m_constraintEndTime<<""<<cs->endTime;
             if (m_constraintEndTime > cs->endTime) {
                 cs->schedulingError = true;
-                //kDebug()<<k_funcinfo<<"FixedInterval error:"<<m_constraintEndTime<<" >"<<cs->endTime;
+                //kDebug()<<"FixedInterval error:"<<m_constraintEndTime<<" >"<<cs->endTime;
             }
             cs->startTime = m_constraintStartTime;
             cs->endTime = m_constraintEndTime;
@@ -1628,9 +1628,9 @@ DateTime Task::scheduleFromEndTime(int use) {
         //shouldn't come here
         cs->startTime = cs->endTime;
         cs->duration = cs->endTime - cs->startTime;
-        kWarning()<<k_funcinfo<<"Summarytasks should not be calculated here: "<<m_name<<endl;
+        kWarning()<<"Summarytasks should not be calculated here: "<<m_name<<endl;
     }
-    //kDebug()<<k_funcinfo<<m_name<<":"<<cs->startTime<<" :"<<cs->endTime;
+    //kDebug()<<m_name<<":"<<cs->startTime<<" :"<<cs->endTime;
     m_visitedBackward = true;
     return cs->startTime;
 }
@@ -1652,26 +1652,26 @@ void Task::adjustSummarytask() {
         m_currentSchedule->endTime = end;
         m_currentSchedule->duration = end - start;
         m_currentSchedule->notScheduled = false;
-        //kDebug()<<k_funcinfo<<cs->name<<":"<<m_currentSchedule->startTime.toString()<<" :"<<m_currentSchedule->endTime.toString();
+        //kDebug()<<cs->name<<":"<<m_currentSchedule->startTime.toString()<<" :"<<m_currentSchedule->endTime.toString();
     }
 }
 
 Duration Task::duration(const DateTime &time, int use, bool backward) {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     // TODO: handle risc
     if (!time.isValid()) {
-        kError()<<k_funcinfo<<"Time is invalid"<<endl;
+        kError()<<"Time is invalid"<<endl;
         return Duration::zeroDuration;
     }
     if (m_currentSchedule == 0) {
         return Duration::zeroDuration;
-        kError()<<k_funcinfo<<"No current schedule"<<endl;
+        kError()<<"No current schedule"<<endl;
     }
-    //kDebug()<<k_funcinfo<<m_name<<": Use="<<use;
+    //kDebug()<<m_name<<": Use="<<use;
     Duration eff;
     if ( m_currentSchedule->recalculate() && m_completion.isStarted() ) {
         eff = m_completion.remainingEffort();
-        //kDebug()<<k_funcinfo<<m_name<<": recalculate, effort="<<eff.toDouble(Duration::Unit_h);
+        //kDebug()<<m_name<<": recalculate, effort="<<eff.toDouble(Duration::Unit_h);
         if ( eff == 0 || m_completion.isFinished() ) {
             return eff;
         }
@@ -1694,7 +1694,7 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
         }
         dur = m_requests->duration(time, effort, m_currentSchedule, backward);
         if (dur == Duration::zeroDuration) {
-            kWarning()<<k_funcinfo<<"zero duration: Resource not available"<<endl;
+            kWarning()<<"zero duration: Resource not available"<<endl;
             m_currentSchedule->resourceNotAvailable = true;
             dur = effort; //???
         }
@@ -1704,7 +1704,7 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
         //TODO: Different types of fixed duration
         return dur; //
     }
-    kError()<<k_funcinfo<<"Unsupported estimate type: "<<m_estimate->type()<<endl;
+    kError()<<"Unsupported estimate type: "<<m_estimate->type()<<endl;
     return dur;
 }
 
@@ -1714,17 +1714,17 @@ void Task::clearProxyRelations() {
 }
 
 void Task::addParentProxyRelations(QList<Relation*> &list) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (type() == Type_Summarytask) {
         // propagate to my children
-        //kDebug()<<k_funcinfo<<m_name<<" is summary task";
+        //kDebug()<<m_name<<" is summary task";
         foreach (Node *n, m_nodes) {
             n->addParentProxyRelations(list);
             n->addParentProxyRelations(dependParentNodes());
         }        
     } else {
         // add 'this' as child relation to the relations parent
-        //kDebug()<<k_funcinfo<<m_name<<" is not summary task";
+        //kDebug()<<m_name<<" is not summary task";
         foreach (Relation *r, list) {
             r->parent()->addChildProxyRelation(this, r);
             // add a parent relation to myself
@@ -1734,17 +1734,17 @@ void Task::addParentProxyRelations(QList<Relation*> &list) {
 }
 
 void Task::addChildProxyRelations(QList<Relation*> &list) {
-    //kDebug()<<k_funcinfo<<m_name;
+    //kDebug()<<m_name;
     if (type() == Type_Summarytask) {
         // propagate to my children
-        //kDebug()<<k_funcinfo<<m_name<<" is summary task";
+        //kDebug()<<m_name<<" is summary task";
         foreach (Node *n, m_nodes) {
             n->addChildProxyRelations(list);
             n->addChildProxyRelations(dependChildNodes());
         }        
     } else {
         // add 'this' as parent relation to the relations child
-        //kDebug()<<k_funcinfo<<m_name<<" is not summary task";
+        //kDebug()<<m_name<<" is not summary task";
         foreach (Relation *r, list) {
             r->child()->addParentProxyRelation(this, r);
             // add a child relation to myself
@@ -1825,7 +1825,7 @@ DateTime Task::workTimeBefore(const DateTime &dt) const {
 DateTime Task::workStartAfter(const DateTime &dt) {
     if (m_requests) {
         DateTime t = m_requests->availableAfter(dt, m_currentSchedule);
-        //kDebug()<<k_funcinfo<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
+        //kDebug()<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
         return t.isValid() ? t : dt;
     }
     return dt;
@@ -1834,7 +1834,7 @@ DateTime Task::workStartAfter(const DateTime &dt) {
 DateTime Task::workFinishBefore(const DateTime &dt) {
     if (m_requests) {
         DateTime t = m_requests->availableBefore(dt, m_currentSchedule);
-        //kDebug()<<k_funcinfo<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
+        //kDebug()<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
         return t.isValid() ? t : dt;
     }
     return dt;
@@ -1891,7 +1891,7 @@ bool Task::isCritical( long id ) const {
 bool Task::calcCriticalPath(bool fromEnd) {
     if (m_currentSchedule == 0)
         return false;
-    //kDebug()<<k_funcinfo<<m_name<<" fromEnd="<<fromEnd<<" cp="<<m_currentSchedule->inCriticalPath;
+    //kDebug()<<m_name<<" fromEnd="<<fromEnd<<" cp="<<m_currentSchedule->inCriticalPath;
     if (m_currentSchedule->inCriticalPath) {
         return true; // path already calculated
     }
@@ -1901,7 +1901,7 @@ bool Task::calcCriticalPath(bool fromEnd) {
     if (fromEnd) {
         if (isEndNode()) {
             m_currentSchedule->inCriticalPath = true;
-            //kDebug()<<k_funcinfo<<m_name<<" end node";
+            //kDebug()<<m_name<<" end node";
             return true;
         }
         foreach (Relation *r, m_childProxyRelations) {
@@ -1917,7 +1917,7 @@ bool Task::calcCriticalPath(bool fromEnd) {
     } else {
         if (isStartNode()) {
             m_currentSchedule->inCriticalPath = true;
-            //kDebug()<<k_funcinfo<<m_name<<" start node";
+            //kDebug()<<m_name<<" start node";
             return true;
         }
         foreach (Relation *r, m_parentProxyRelations) {
@@ -1931,12 +1931,12 @@ bool Task::calcCriticalPath(bool fromEnd) {
             }
         }
     }
-    //kDebug()<<k_funcinfo<<m_name<<" return cp="<<m_currentSchedule->inCriticalPath;
+    //kDebug()<<m_name<<" return cp="<<m_currentSchedule->inCriticalPath;
     return m_currentSchedule->inCriticalPath;
 }
 
 void Task::calcFreeFloat() {
-    kDebug()<<k_funcinfo<<m_name<<endl;
+    kDebug()<<m_name<<endl;
     if ( type() == Node::Type_Summarytask ) {
         Node::calcFreeFloat();
         return;
@@ -1960,7 +1960,7 @@ void Task::calcFreeFloat() {
     }
     if ( t.isValid() && t > cs->endTime ) {
         cs->freeFloat = t - cs->endTime;
-        kDebug()<<k_funcinfo<<m_name<<": "<<cs->freeFloat.toString()<<endl;
+        kDebug()<<m_name<<": "<<cs->freeFloat.toString()<<endl;
     }
 }
 
@@ -2089,7 +2089,7 @@ void Completion::setFinishTime( const DateTime &dt )
 void Completion::addEntry( const QDate &date, Entry *entry )
 {
      m_entries.insert( date, entry );
-     //kDebug()<<k_funcinfo<<m_entries.count()<<" added:"<<date;
+     //kDebug()<<m_entries.count()<<" added:"<<date;
      changed();
 }
     
@@ -2154,7 +2154,7 @@ Duration Completion::actualEffort( const QDate &date ) const
 
 Duration Completion::actualEffortTo( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<date<<endl;
+    //kDebug()<<date<<endl;
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
         foreach( UsedEffort *ue, m_usedEffort.values() ) {
@@ -2201,7 +2201,7 @@ void Completion::setNote( const QString &str )
 
 double Completion::actualCost( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<date;
+    //kDebug()<<date;
     double c = 0.0;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
         double nc = r->normalRate();
@@ -2238,7 +2238,7 @@ double Completion::actualCost( const Resource *resource ) const
 
 double Completion::actualCostTo( const QDate &date ) const
 {
-    //kDebug()<<k_funcinfo<<date;
+    //kDebug()<<date;
     double c = 0.0;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
         double nc = r->normalRate();
@@ -2259,7 +2259,7 @@ double Completion::actualCostTo( const QDate &date ) const
 
 bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     QString s;
     m_started = (bool)element.attribute("started", "0").toInt();
     m_finished = (bool)element.attribute("finished", "0").toInt();
@@ -2292,7 +2292,7 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                         date = QDate::fromString( s, Qt::ISODate );
                     }
                     if ( !date.isValid() ) {
-                        kWarning()<<k_funcinfo<<"Illegal date: "<<date<<s<<endl;
+                        kWarning()<<"Illegal date: "<<date<<s<<endl;
                         continue;
                     }
                     Entry *entry = new Entry( e.attribute("percent-finished", "0").toInt(), Duration::fromString(e.attribute("remaining-effort")),  Duration::fromString(e.attribute("performed-effort")) );
@@ -2304,7 +2304,7 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
                                 QString id = el.attribute( "id" );
                                 Resource *r = status.project().resource( id );
                                 if ( r == 0 ) {
-                                    kWarning()<<k_funcinfo<<"Cannot find resource, id="<<id<<endl;
+                                    kWarning()<<"Cannot find resource, id="<<id<<endl;
                                     continue;
                                 }
                                 UsedEffort *ue = new UsedEffort();
@@ -2407,7 +2407,7 @@ bool Completion::UsedEffort::operator==( const Completion::UsedEffort &e ) const
 
 bool Completion::UsedEffort::loadXML(KoXmlElement &element, XMLLoaderObject & )
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     KoXmlElement e;
     forEachElement(e, element) {
             if (e.tagName() == "actual-effort") {

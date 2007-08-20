@@ -6860,7 +6860,7 @@ void KWView::insertFile(const KUrl& url)
                                                 if ( name == iName )
                                                 {
                                                     paragList.append( fsElem );
-                                                    //kDebug()<<k_funcinfo<<" Inline frameset:"<<name<<" added";
+                                                    //kDebug()<<" Inline frameset:"<<name<<" added";
                                                 }
                                                 else if ( grpMgr == iName )
                                                 {   // Table so we need to create table frameset if it is new
@@ -6874,17 +6874,17 @@ void KWView::insertFile(const KUrl& url)
                                                         table.setAttribute("name", tableName);
                                                         table.setAttribute("visible", fsElem.attribute("visible","1"));
                                                         paragList.append( table ); // same level as paragraphs, so it goes into the paragList
-                                                        //kDebug()<<k_funcinfo<<" paragList Added new table:"<<grpMgr;
+                                                        //kDebug()<<" paragList Added new table:"<<grpMgr;
                                                     }
 
                                                     table.appendChild( fsElem.cloneNode() ); // add the cell as child to the table frameset
-                                                    //kDebug()<<k_funcinfo<<" Inline table:"<<grpMgr<<" Added new cell:"<<name;
+                                                    //kDebug()<<" Inline table:"<<grpMgr<<" Added new cell:"<<name;
                                                 }
-                                                //else kDebug()<<k_funcinfo<<" Fixed frameset:"<<name;
+                                                //else kDebug()<<" Fixed frameset:"<<name;
                                             }
-                                            //else kDebug()<<k_funcinfo<<" Not frameset:"<<fsElem.tagName();
+                                            //else kDebug()<<" Not frameset:"<<fsElem.tagName();
                                         }
-                                        //kDebug()<<k_funcinfo<<" Treated"<<i<<" frameset elements";
+                                        //kDebug()<<" Treated"<<i<<" frameset elements";
                                     }
                                 }
                             }
@@ -6897,10 +6897,10 @@ void KWView::insertFile(const KUrl& url)
                 Q3ValueList<QDomElement>::Iterator end = paragList.end();
                 for ( ; it!= end ; ++it )
                 {
-                    //kDebug()<<k_funcinfo<<" paragList tag:"<<(*it).tagName()<<" name:"<<(*it).attribute("name" )<<" grpMgr:"<<(*it).attribute("grpMgr" );
+                    //kDebug()<<" paragList tag:"<<(*it).tagName()<<" name:"<<(*it).attribute("name" )<<" grpMgr:"<<(*it).attribute("grpMgr" );
                     paragsElem.appendChild( *it );
                 }
-                //kDebug() << k_funcinfo <<"Paragraphs:" << domDoc.toCString();
+                //kDebug() <<"Paragraphs:" << domDoc.toCString();
 
                 // The fixed framesets
                 // doctype SELECTION is used for fixed framesets
@@ -6945,20 +6945,20 @@ void KWView::insertFile(const KUrl& url)
                                     table.setAttribute("name", tableName);
                                     table.setAttribute("visible", framesetElem.attribute("visible","1"));
                                     framesetsList.append( table );
-                                    //kDebug()<<k_funcinfo<<" framesetsList Added new table:"<<grpMgr;
+                                    //kDebug()<<" framesetsList Added new table:"<<grpMgr;
                                 }
                                 table.appendChild( framesetElem.cloneNode() ); // add the cell as child to the table frameset
-                                //kDebug()<<k_funcinfo<<" Fixed table '"<<grpMgr<<"': Added new cell: '"<<name<<"'";
+                                //kDebug()<<" Fixed table '"<<grpMgr<<"': Added new cell: '"<<name<<"'";
                             }
                             else // other frameset type
                             {
                                 framesetsList.append( framesetElem );
-                                //kDebug()<<k_funcinfo<<" Fixed frameset: '"<<name<<"' added";
+                                //kDebug()<<" Fixed frameset: '"<<name<<"' added";
                             }
                         }
-                        //else kDebug()<<k_funcinfo<<" Inline frameset, skipped:"<<name;
+                        //else kDebug()<<" Inline frameset, skipped:"<<name;
                     }
-                    //else kDebug()<<k_funcinfo<<" Not frameset element, skipped:"<<framesetElem.tagName();
+                    //else kDebug()<<" Not frameset element, skipped:"<<framesetElem.tagName();
                 }
                 it = framesetsList.begin();
                 end = framesetsList.end();
@@ -7016,12 +7016,12 @@ void KWView::insertFile(const KUrl& url)
                 if ( hasFixedFramesets )
                 {
                     // insert fixed framesets
-                    //kDebug() << k_funcinfo << domDocFrames.toCString();
+                    //kDebug() << domDocFrames.toCString();
                     m_doc->pasteFrames( topElem, macroCmd, false, false, false /* don't select frames */ );
                 }
                 if ( hasEmbedded )
                 {
-                    //kDebug()<<k_funcinfo<<" Embedded:"<<embeddedDoc.toCString();
+                    //kDebug()<<" Embedded:"<<embeddedDoc.toCString();
                     if ( !macroCmd )
                         macroCmd = new KMacroCommand( i18n("Insert File") );
                     m_doc->insertEmbedded( store, selElem, macroCmd, 0 );
@@ -7048,7 +7048,7 @@ void KWView::insertFile(const KUrl& url)
 
 Q3ValueList<QString> KWView::getInlineFramesets( const QDomNode &framesetElem)
 {
-    //kDebug()<<k_funcinfo<<" Frameset:"<<framesetElem.toElement().attribute("name");
+    //kDebug()<<" Frameset:"<<framesetElem.toElement().attribute("name");
     Q3ValueList<QString> list;
     QDomNode n = framesetElem.firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling() )
@@ -7071,7 +7071,7 @@ Q3ValueList<QString> KWView::getInlineFramesets( const QDomNode &framesetElem)
                         {
                             QString iName = anchorElem.attribute( "instance" );
                             list.append( iName );
-                            //kDebug()<<k_funcinfo<<" added:"<<iName;
+                            //kDebug()<<" added:"<<iName;
                         }
                     }
                 }
@@ -7415,7 +7415,7 @@ void KWView::addWordToDictionary()
 
 void KWView::embeddedStoreInternal()
 {
-    kDebug(31001)<<k_funcinfo;
+    kDebug(31001);
     KWFrameView *view = frameViewManager()->selectedFrame();
     KWFrame *frame = view == 0 ? 0 : view->frame();
     if( !frame)

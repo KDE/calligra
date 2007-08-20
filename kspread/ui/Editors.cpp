@@ -672,7 +672,7 @@ void CellEditor::functionAutoComplete( const QString& item )
 
 void CellEditor::slotCursorPositionChanged()
 {
-//   kDebug() << k_funcinfo << endl <<"position:" << cursorPosition();
+//   kDebug() << endl <<"position:" << cursorPosition();
 
   // TODO Stefan: optimize this function!
 
@@ -861,7 +861,7 @@ void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completi
 
 void CellEditor::slotTextChanged()
 {
-//   kDebug() << k_funcinfo;
+//   kDebug() ;
 
   //FIXME - text() may return richtext?
   QString t = text();
@@ -1694,7 +1694,7 @@ bool RegionSelector::eventFilter( QObject* object, QEvent* event )
 void RegionSelector::switchDisplayMode( bool state )
 {
   Q_UNUSED(state)
-      kDebug() << k_funcinfo;
+      kDebug() ;
 
   if ( d->displayMode == Widget )
   {

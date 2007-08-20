@@ -61,7 +61,7 @@ namespace KPlato
         float inverse;
         float tmp;
         
-        kDebug()<<k_funcinfo<<maximumHeight;
+        kDebug()<<maximumHeight;
         QVector<QPointF>::iterator it= vect.begin();
         QVector<QPointF>::iterator it_display= vect_display.begin();
         while (it != vect.end())
@@ -76,7 +76,7 @@ namespace KPlato
     void Chart::reCalculateX(QVector<QPointF> & vect, QVector<QPointF> & vect_display, int maximumWidth)// WORKS, TESTED
     {
         float tmp; 
-        //kDebug()<<k_funcinfo<<maximumWidth;
+        //kDebug()<<maximumWidth;
         QVector<QPointF>::iterator it= vect.begin();
         QVector<QPointF>::iterator it_display= vect_display.begin();
         while (it != vect.end())
@@ -307,7 +307,7 @@ namespace KPlato
     void Chart::calculateWeeks(QVector<QDate> & weeks,Project & p, ScheduleManager &sm)
     {
         //Schedule *s = p.findSchedule( sm.id() );
-        //kDebug()<<k_funcinfo<<weeks.count()<<" Schedule: " <<(s==0?"None":s->name()+QString(", %1").arg(s->type()))<<endl;
+        //kDebug()<<weeks.count()<<" Schedule: " <<(s==0?"None":s->name()+QString(", %1").arg(s->type()))<<endl;
         QDate myDate = p.startTime( sm.id() ).date();
         while(myDate < p.endTime( sm.id() ).date())
         {

@@ -200,7 +200,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     for (unsigned int i = 0; i < size; i++)
     {
         if (m_cellEdges[i] == cellEdge)  {
-            kDebug(30513) << k_funcinfo << cellEdge <<" -> found";
+            kDebug(30513) << cellEdge <<" -> found";
             return;
         }
     }
@@ -208,7 +208,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
     // Add the edge to the array.
     m_cellEdges.resize(size + 1, Q3GArray::SpeedOptim);
     m_cellEdges[size] = cellEdge;
-    kDebug(30513) << k_funcinfo << cellEdge <<" -> added. Size=" << size+1;
+    kDebug(30513) << cellEdge <<" -> added. Size=" << size+1;
 }
 
 // Lookup a cell edge from the cache of cell edges

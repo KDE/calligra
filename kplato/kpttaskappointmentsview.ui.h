@@ -47,7 +47,7 @@ void TaskAppointmentsView::clear()
 
 void TaskAppointmentsView::draw(Task *task)
 {
-    //kDebug()<<k_funcinfo;
+    //kDebug();
     m_task = task;
     clear();
     if (!task)
