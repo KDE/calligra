@@ -622,10 +622,10 @@ static bool kspread_convert_force( const QString& fromUnit,
   // first-time initialization
   if( forceMap.isEmpty() )
   {
-    forceMap[ "N" ]      = 1.0; // Newton (reference)
-    forceMap[ "dyn" ]    = 1.0e5; // dyn
-    forceMap[ "lbf" ]    = 1.0/4.448222; // Pound force (see ¡§lbm¡¨ for pound mass)
-    forceMap[ "pond" ]   = 1.019716e2; // pond
+    forceMap[ "N" ]      = 1.0;          // Newton (reference)
+    forceMap[ "dyn" ]    = 1.0e5;        // dyn
+    forceMap[ "lbf" ]    = 1.0/4.448222; // Pound force (see "lbm" for pound mass)
+    forceMap[ "pond" ]   = 1.019716e2;   // pond
   }
 
   QString fromU = fromUnit;
