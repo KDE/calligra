@@ -219,7 +219,7 @@
   <Action name="table_delrow"/>
   <Action name="table_delcol"/>
 </ToolBar>
-<ToolBar name="insert_toolbar" position="left"><Text>Insert</Text>
+<ToolBar hidden="true" name="insert_toolbar" position="left"><Text>Insert</Text>
   <Action name="insert_table"/>
   <Action name="insert_picture"/>
   <Separator/>
@@ -241,7 +241,7 @@
   <Action name="format_decreaseindent"/>
   <Action name="format_increaseindent"/>
 </ToolBar>
-<ToolBar hidden="true" name="format_toolbar" position="top"><Text>Font</Text>
+<ToolBar name="format_toolbar" position="top"><Text>Font</Text>
   <Action name="format_fontfamily"/>
   <Action name="format_fontsize"/>
   <Separator/>
