@@ -241,7 +241,7 @@
   <Action name="format_decreaseindent"/>
   <Action name="format_increaseindent"/>
 </ToolBar>
-<ToolBar name="format_toolbar" position="top"><Text>Font</Text>
+<ToolBar hidden="true" name="format_toolbar" position="top"><Text>Font</Text>
   <Action name="format_fontfamily"/>
   <Action name="format_fontsize"/>
   <Separator/>
