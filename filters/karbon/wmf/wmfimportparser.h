@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ * Copyright (c) 2003 thierry lorthiois <lorthioist@wanadoo.fr>
+ * Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,14 +20,11 @@
 #define _WMFIMPORTPARSER_H_
 
 #include <QPainter>
-#include <qdom.h>
-//Added by qt3to4:
-#include <Q3PointArray>
-#include <core/vdocument.h>
-#include <core/vcomposite.h>
 #include <kowmfread.h>
 
+class KoShape;
 class KoPathShape;
+class VDocument;
 
 /**
  * WMFImportParser inherit KoWmfRead
@@ -64,8 +62,8 @@ private:
     // Drawing attributes/modes
     void  setBackgroundColor( const QColor &c );
     void  setBackgroundMode( Qt::BGMode mode );
-	
-	void  setCompositionMode( QPainter::CompositionMode );
+
+    void  setCompositionMode( QPainter::CompositionMode );
 
     /**
      * Change logical Coordinate
@@ -75,7 +73,7 @@ private:
      */
     void  setWindowOrg( int left, int top );
     void  setWindowExt( int width, int height );
-    
+
     // Clipping
     // the 'CoordinateMode' is ommitted : always CoordPainter in wmf
     // setClipRegion() is often used with save() and restore() => implement all or none
@@ -115,9 +113,7 @@ private:
     void appendBrush( KoShape& obj );
     void appendPoints(KoPathShape& path, const QPolygon& pa);
     // coordinate transformation
-    // translate wmf to (0,0) -> scale to document size -> translate to karbon (0,0)
-    // Wmf origin is (left,top) corner
-    // Karbon origin is (left,bottom) corner
+    // translate wmf to (0,0) -> scale to document size
     double coordX( int left );
     double coordY( int top );
     double scaleW( int width );

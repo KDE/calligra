@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (c) 2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ * Copyright (c) 2003 thierry lorthiois <lorthioist@wanadoo.fr>
+ * Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,13 +19,13 @@
 
 #include "wmfimportparser.h"
 
+#include <core/vdocument.h>
+
 #include <KoPathShape.h>
-#include <rectangle/KoRectangleShape.h>
-#include <ellipse/KoEllipseShape.h>
 #include <KoLineBorder.h>
 #include <KoShapeLayer.h>
-
-#include <kdebug.h>
+#include <rectangle/KoRectangleShape.h>
+#include <ellipse/KoEllipseShape.h>
 
 /*
 bug : see motar.wmf
@@ -36,8 +37,6 @@ WMFImportParser::WMFImportParser() : KoWmfRead() {
 
 bool WMFImportParser::play( VDocument& doc )
 {
-    kDebug() << "start playing wmf file";
-
     mDoc = &doc;
     mScaleX = mScaleY = 1;
 
@@ -56,10 +55,9 @@ bool WMFImportParser::play( VDocument& doc )
         layer = mDoc->layers().first();
 
     uint zIndex = 0;
-    // add all toplevel shape to the layer
+    // add all toplevel shapes to the layer
     foreach( KoShape * shape, mDoc->shapes() )
     {
-        kDebug() << "shape type =" << shape->shapeId();
         shape->setZIndex( zIndex++ );
         if( ! shape->parent() )
             layer->addChild( shape );
@@ -275,7 +273,7 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
     chord->setType( KoEllipseShape::Chord );
     chord->setStartAngle( start );
     chord->setEndAngle( end );
-    chord->setPosition( QPointF( coordX(y), coordY(y) ) );
+    chord->setPosition( QPointF( coordX(x), coordY(y) ) );
     chord->setSize( QSizeF( scaleW(w), scaleH(h) ) );
 
     appendPen( *chord );
@@ -351,40 +349,11 @@ void WMFImportParser::appendPen( KoShape& obj )
 void WMFImportParser::appendBrush( KoShape& obj )
 {
     obj.setBackground( mBrush );
-    /*
-    VFill fill( mBackgroundColor );
-    fill.setColor( mBrush.color() );
-
-    switch ( mBrush.style() ) {
-        case Qt::NoBrush :
-        fill.setType( VFill::none );
-        break;
-        case Qt::SolidPattern :
-        fill.setType( VFill::solid );
-        break;
-        case Qt::TexturePattern :
-        // TODO: bitmap pattern brush
-        fill.setType( VFill::solid );
-        //fill.pattern().
-        break;
-        default :
-        // TODO: pattern brush
-        if ( mBackgroundMode == Qt::OpaqueMode ) {
-            fill.setColor( mBackgroundColor );
-            fill.setType( VFill::solid );
-        }
-        else {
-            fill.setType( VFill::none );
-        }
-        break;
-    }
-    obj.setFill( fill );
-    */
 }
 
 void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )
 {
-		//TODO
+    //TODO
 }
 
 void WMFImportParser::appendPoints(KoPathShape &path, const QPolygon& pa)
@@ -393,7 +362,7 @@ void WMFImportParser::appendPoints(KoPathShape &path, const QPolygon& pa)
     if ( pa.size() > 0 ) {
         path.moveTo( QPointF( coordX(pa.point(0).x()), coordY(pa.point(0).y()) ) );
     }
-    for ( uint i=1 ; i < pa.size() ; i++ ) {
+    for ( int i=1 ; i < pa.size() ; i++ ) {
         path.lineTo( QPointF( coordX(pa.point(i).x()), coordY(pa.point(i).y()) ) );
     }
     path.normalize();

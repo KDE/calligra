@@ -1,6 +1,6 @@
-/*
+/*  This file is part of the KDE project
     Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
-    This file is part of the KDE project
+    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public

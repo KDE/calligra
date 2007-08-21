@@ -1,6 +1,5 @@
-/*
-    Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
-    This file is part of the KDE project
+/*  This file is part of the KDE project
+    Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,9 +23,6 @@ DESCRIPTION
 #define WMFIMPORT_H
 
 #include <KoFilter.h>
-#include <KoStore.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 
 class WMFImport : public KoFilter
