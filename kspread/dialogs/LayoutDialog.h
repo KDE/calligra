@@ -445,7 +445,6 @@ protected:
     QColor currentColor;
 
     QColor bgColor;
-    bool bBgColorUndefined;
     KColorButton *bgColorButton;
     bool b_notAnyColor;
     CellFormatDialog *dlg;

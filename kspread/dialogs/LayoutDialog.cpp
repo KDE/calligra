@@ -3392,8 +3392,6 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
 {
     dlg = _dlg;
 
-    bBgColorUndefined = !dlg->bBgColor;
-
     QGridLayout *grid = new QGridLayout(this);
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
@@ -3604,7 +3602,6 @@ void CellFormatPagePattern::slotSetBackgroundColor( const QColor &_color )
   QPalette palette = current->palette();
   palette.setColor(current->backgroundRole(), bgColor);
   current->setPalette(palette);
-  bBgColorUndefined = false;
   b_notAnyColor = false;
 }
 
@@ -3741,14 +3738,8 @@ void CellFormatPagePattern::apply( CustomStyle * style )
          || dlg->brushColor != selectedBrush->getBrushColor() ) )
     style->setBackgroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
 
-  /*
-    TODO: check...
-  if ( b_notAnyColor)
-    style->setBgColor( QColor() );
-  else
-  */
-  if ( bgColor != dlg->getStyle()->backgroundColor() )
-    style->setBackgroundColor( bgColor );
+    if (!b_notAnyColor && bgColor != dlg->getStyle()->backgroundColor())
+        style->setBackgroundColor(bgColor);
 }
 
 void CellFormatPagePattern::apply(StyleCommand *_obj)
@@ -3761,10 +3752,8 @@ void CellFormatPagePattern::apply(StyleCommand *_obj)
   if ( bgColor == dlg->bgColor )
     return;
 
-  if ( b_notAnyColor)
-    _obj->setBackgroundColor( QColor() );
-  else if ( !bBgColorUndefined )
-    _obj->setBackgroundColor( bgColor );
+    if (!b_notAnyColor)
+        _obj->setBackgroundColor(bgColor);
 }
 
 #include "LayoutDialog.moc"
