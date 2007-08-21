@@ -3503,7 +3503,7 @@ CellFormatPagePattern::CellFormatPagePattern( QWidget* parent, CellFormatDialog 
     grid3->addWidget(notAnyColor,0,2);
     connect( notAnyColor, SIGNAL( clicked( ) ),
              this, SLOT( slotNotAnyColor(  ) ) );
-    b_notAnyColor=false;
+    b_notAnyColor = true;
 
     grid2->addItem(grid3,7,0,1,3);
 
