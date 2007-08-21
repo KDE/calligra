@@ -27,6 +27,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeApplicationData.h>
 
+class KoTextAnchor;
 class KWFrameSet;
 class KoViewConverter;
 class KWOutlineShape;

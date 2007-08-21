@@ -22,6 +22,7 @@
 #include "KWFrameSet.h"
 #include "KWCopyShape.h"
 #include "KWOutlineShape.h"
+#include "KoTextAnchor.h"
 
 #include <KoXmlWriter.h>
 
