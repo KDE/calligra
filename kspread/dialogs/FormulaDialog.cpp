@@ -28,7 +28,7 @@
 #include "FormulaDialog.h"
 
 #include <q3textbrowser.h>
-#include <QTabWidget>
+#include <KTabWidget>
 #include <QApplication>
 #include <QCloseEvent>
 #include <QGridLayout>
@@ -122,7 +122,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     result = new KLineEdit( page );
     grid1->addWidget( result, 4, 0, 1, -1 );
 
-    m_tabwidget = new QTabWidget( page );
+    m_tabwidget = new KTabWidget( page );
     QSizePolicy sp2( QSizePolicy::Expanding, QSizePolicy::Expanding );
     m_tabwidget->setSizePolicy( sp2 );
     grid1->addWidget( m_tabwidget, 0, 1, 3, 1 );
@@ -130,7 +130,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     m_browser = new Q3TextBrowser( m_tabwidget );
     m_browser->setMinimumWidth( 300 );
 
-    m_tabwidget->addTab( m_browser, i18n("&Help") );
+    m_tabwidget->addTab( m_browser, i18n("Help") );
     int index = m_tabwidget->currentIndex();
 
     m_input = new QWidget( m_tabwidget );
@@ -172,7 +172,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
 
     grid2->addStretch( 10 );
 
-    m_tabwidget->addTab( m_input, i18n("&Parameters") );
+    m_tabwidget->addTab( m_input, i18n("Parameters") );
     m_tabwidget->setTabEnabled( m_tabwidget->indexOf(m_input), false );
 
     m_tabwidget->setCurrentIndex( index );

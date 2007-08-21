@@ -40,7 +40,7 @@ class QLabel;
 class KLineEdit;
 class Q3ListBox;
 class QPushButton;
-class QTabWidget;
+class KTabWidget;
 class Q3TextBrowser;
 class KLineEdit;
 
@@ -130,7 +130,7 @@ protected:
 private:
     View* m_pView;
 
-    QTabWidget* m_tabwidget;
+    KTabWidget* m_tabwidget;
     Q3TextBrowser* m_browser;
     QWidget* m_input;
 

@@ -38,7 +38,7 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QRect>
-#include <QTabWidget>
+#include <KTabWidget>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -84,7 +84,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
   KVBox *page = new KVBox();
   setMainWidget( page );
 
-  m_tabWidget = new QTabWidget( page );
+  m_tabWidget = new KTabWidget( page );
 
   m_page1 = new QWidget( m_tabWidget );
   QGridLayout * page1Layout = new QGridLayout( m_page1 );

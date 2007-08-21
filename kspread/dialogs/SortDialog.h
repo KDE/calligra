@@ -39,7 +39,7 @@ class KComboBox;
 class QLabel;
 class KLineEdit;
 class QRadioButton;
-class QTabWidget;
+class KTabWidget;
 class QWidget;
 
 namespace KSpread
@@ -84,7 +84,7 @@ class SortDialog : public KDialog
   QWidget      * m_page1;
   QWidget      * m_page2;
 
-  QTabWidget   * m_tabWidget;
+  KTabWidget   * m_tabWidget;
 
   KComboBox    * m_sortKey1;
   KComboBox    * m_sortOrder1;
