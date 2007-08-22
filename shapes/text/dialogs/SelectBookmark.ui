@@ -54,6 +54,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>bookmarkList</tabstop>
+  <tabstop>buttonRename</tabstop>
+  <tabstop>buttonDelete</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
