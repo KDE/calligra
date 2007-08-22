@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998-2002 The KSpread Team <koffice-devel@kde.org>
    Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
+   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -473,43 +474,63 @@ Value func_decimal (valVector args, ValueCalc *calc, FuncExtra *)
 // example: "kPa" will return 1e3 and change unit into "Pa"
 static double kspread_convert_prefix( QMap<QString,double> map, QString& unit )
 {
+//   kDebug()<<"unit="<<unit;
   if( map.contains( unit ) )
     return 1.0;
 
   // initialize prefix mapping if necessary
-  static QMap<char,double> prefixMap;
+  static QMap<QString,double> prefixMap;
   if( prefixMap.isEmpty() )
   {
-     prefixMap[ 'Y' ] = 1e24;   // yotta
-     prefixMap[ 'Z' ] = 1e21;   // zetta
-     prefixMap[ 'E' ] = 1e18;   //  exa
-     prefixMap[ 'P' ] = 1e15;   //  peta
-     prefixMap[ 'T' ] = 1e12;   // tera
-     prefixMap[ 'G' ] = 1e9;    // giga
-     prefixMap[ 'M' ] = 1e6;    // mega
-     prefixMap[ 'k' ] = 1e3;    // kilo
-     prefixMap[ 'h' ] = 1e2;    // hecto
-     prefixMap[ 'e' ] = 1e1;    // dekao
-     prefixMap[ 'd' ] = 1e-1;   // deci
-     prefixMap[ 'c' ] = 1e-2;   // centi
-     prefixMap[ 'm' ] = 1e-3;   // milli
-     prefixMap[ 'u' ] = 1e-6;   // micro
-     prefixMap[ 'n' ] = 1e-9;   // nano
-     prefixMap[ 'p' ] = 1e-12;  // pico
-     prefixMap[ 'f' ] = 1e-15;  // femto
-     prefixMap[ 'a' ] = 1e-18;  // atto
-     prefixMap[ 'z' ] = 1e-21;  // zepto
-     prefixMap[ 'y' ] = 1e-24;  // yocto
+     prefixMap[ "Y" ]  = 1e24;   // yotta
+     prefixMap[ "Z" ]  = 1e21;   // zetta
+     prefixMap[ "E" ]  = 1e18;   // exa
+     prefixMap[ "P" ]  = 1e15;   // peta
+     prefixMap[ "T" ]  = 1e12;   // tera
+     prefixMap[ "G" ]  = 1e9;    // giga
+     prefixMap[ "M" ]  = 1e6;    // mega
+     prefixMap[ "k" ]  = 1e3;    // kilo
+     prefixMap[ "h" ]  = 1e2;    // hecto
+     prefixMap[ "e" ]  = 1e1;    // deka
+     prefixMap[ "da" ] = 1e1;    // deka
+     prefixMap[ "d" ]  = 1e-1;   // deci
+     prefixMap[ "c" ]  = 1e-2;   // centi
+     prefixMap[ "m" ]  = 1e-3;   // milli
+     prefixMap[ "u" ]  = 1e-6;   // micro
+     prefixMap[ "n" ]  = 1e-9;   // nano
+     prefixMap[ "p" ]  = 1e-12;  // pico
+     prefixMap[ "f" ]  = 1e-15;  // femto
+     prefixMap[ "a" ]  = 1e-18;  // atto
+     prefixMap[ "z" ]  = 1e-21;  // zepto
+     prefixMap[ "y" ]  = 1e-24;  // yocto
+
+     // binary prefixes
+     prefixMap[ "ki" ]  = 1024.0                      ;  // kibi
+     prefixMap[ "Mi" ]  = 1048576.0                   ;  // mebi
+     prefixMap[ "Gi" ]  = 1073741824.0                ;  // gibi
+     prefixMap[ "Ti" ]  = 1099511627776.0             ;  // tebi
+     prefixMap[ "Pi" ]  = 1125899906842624.0          ;  // pebi
+     prefixMap[ "Ei" ]  = 1152921504606846976.0       ;  // exbi
+     prefixMap[ "Zi" ]  = 1180591620717411303424.0    ;  // zebi
+     prefixMap[ "Yi" ]  = 1208925819614629174706176.0 ;  // yobi
   }
 
   // check for possible prefix
-  char prefix = unit[0].toLatin1();
-  if( prefixMap.contains( prefix ) )
-  {
-    unit.remove( 0, 1 );
-    return prefixMap[ prefix ];
-  }
+  QString prefix = unit.left(2).toLatin1();
+//   kDebug()<<"prefix="<<prefix;  
 
+  if ( prefixMap.contains(prefix) )
+  {
+    unit.remove( 0, 2);
+//     kDebug()<<"new unit="<<unit<<" Value="<<prefixMap[prefix];
+    return prefixMap[prefix];
+  }
+  else if ( prefixMap.contains(prefix.left(1)) )
+  {
+    unit.remove( 0, 1);
+//     kDebug()<<"new unit="<<unit<<" Value="<<prefixMap[prefix.left(1)];
+    return prefixMap[prefix.left(1)];
+  }
   // fail miserably
   return 0.0;
 }
@@ -560,15 +581,21 @@ static bool kspread_convert_distance( const QString& fromUnit,
   // first-time initialization
   if( distanceMap.isEmpty() )
   {
-    distanceMap[ "m" ]         = 1.0;  // meter (the reference)
-    distanceMap[ "in" ]        = 1.0 / 0.0254; // inch
-    distanceMap[ "ft" ]        = 1.0 / (12.0 * 0.0254); // feet
-    distanceMap[ "yd" ]        = 1.0 / (3.0 * 12.0 * 0.0254); // yar
-    distanceMap[ "mi" ]        = 6.2137119223733397e-4; // mile
-    distanceMap[ "Nmi" ]       = 5.3995680345572354e-04; // nautical mile
-    distanceMap[ "ang" ]       = 1e10; // Angstrom
-    distanceMap[ "parsec" ]    = 3.240779e-17; // Parsec
-    distanceMap[ "lightyear" ] = 1.057023455773293e-16; // lightyear
+    distanceMap[ "m" ]          = 1.0;  // meter (the reference)
+    
+    distanceMap[ "ang" ]        = 1e10;                        // Angstrom
+    distanceMap[ "ell" ]        = 1.0 / (45.0 * 0.0254);       // Ell, exactly 45 international inches
+    distanceMap[ "ft" ]         = 1.0 / (12.0 * 0.0254);       // feet
+    distanceMap[ "in" ]         = 1.0 / 0.0254;                // inch
+    distanceMap[ "lightyear" ]  = 1.057023455773293e-16;       // lightyear
+    distanceMap[ "ly" ]         = 1.057023455773293e-16;       // lightyear
+    distanceMap[ "mi" ]         = 6.2137119223733397e-4;       // mile
+    distanceMap[ "Nmi" ]        = 5.3995680345572354e-04;      // nautical mile
+    distanceMap[ "parsec" ]     = 3.240779e-17;                // Parsec
+    distanceMap[ "pc" ]         = 3.240779e-17;                // Parsec
+    distanceMap[ "Pica" ]       = 1.0 * 72 / 0.0254;           // Pica (1/72) inch
+    distanceMap[ "statute_mi" ] = 1.0 / (6336000.0/3937.0);    // U.S. survey mile aka U.S. statute mile
+    distanceMap[ "yd" ]         = 1.0 / (3.0 * 12.0 * 0.0254); // yard
   }
 
   QString fromU = fromUnit;
@@ -593,11 +620,13 @@ static bool kspread_convert_pressure( const QString& fromUnit,
   // first-time initialization
   if( pressureMap.isEmpty() )
   {
-    pressureMap[ "Pa" ] = 1.0;
-    pressureMap[ "atm" ] = 0.9869233e-5;
-    pressureMap[ "mmHg" ] = 0.00750061708;
-    pressureMap[ "psi" ] = 1 / 6894.754;
-    pressureMap[ "Torr" ] = 1 / 133.32237;
+    pressureMap[ "Pa" ]   = 1.0;
+
+    pressureMap[ "atm" ]  = 0.9869233e-5;  // Atmosphere
+    pressureMap[ "atm" ]  = 0.9869233e-5;  // Atmosphere
+    pressureMap[ "mmHg" ] = 0.00750061708; // mm of Mercury
+    pressureMap[ "psi" ]  = 1 / 6894.754;  // Pounds per square inch
+    pressureMap[ "Torr" ] = 1 / 133.32237; // Torr, exactly 101325/760 Pa
   }
 
   QString fromU = fromUnit;
@@ -623,7 +652,8 @@ static bool kspread_convert_force( const QString& fromUnit,
   if( forceMap.isEmpty() )
   {
     forceMap[ "N" ]      = 1.0;          // Newton (reference)
-    forceMap[ "dyn" ]    = 1.0e5;        // dyn
+    forceMap[ "dy" ]     = 1.0e5;        // dyne
+    forceMap[ "dyn" ]    = 1.0e5;        // dyne
     forceMap[ "lbf" ]    = 1.0/4.448222; // Pound force (see "lbm" for pound mass)
     forceMap[ "pond" ]   = 1.019716e2;   // pond
   }
@@ -650,13 +680,13 @@ static bool kspread_convert_energy( const QString& fromUnit,
   // first-time initialization
   if( energyMap.isEmpty() )
   {
-    energyMap[ "J" ]   = 1.0; // Joule (the reference)
-    energyMap[ "e" ]   = 1.0e7; //erg
-    energyMap[ "c" ]   = 0.239006249473467; // thermodynamical calorie
-    energyMap[ "cal" ] = 0.238846190642017; // calorie
-    energyMap[ "eV" ]  = 6.241457e+18; // electronvolt
-    energyMap[ "HPh" ] = 3.72506111e-7; // horsepower-hour
-    energyMap[ "Wh" ]  = 0.000277778; // watt-hour
+    energyMap[ "J" ]   = 1.0;                 // Joule (the reference)
+    energyMap[ "e" ]   = 1.0e7;               // erg
+    energyMap[ "c" ]   = 0.239006249473467;   // thermodynamical calorie
+    energyMap[ "cal" ] = 0.238846190642017;   // calorie
+    energyMap[ "eV" ]  = 6.241457e+18;        // electronvolt
+    energyMap[ "HPh" ] = 3.72506111e-7;       // horsepower-hour
+    energyMap[ "Wh" ]  = 0.000277778;         // watt-hour
     energyMap[ "flb" ] = 23.73042222;
     energyMap[ "BTU" ] = 9.47815067349015e-4; // British Thermal Unit
   }
@@ -712,7 +742,8 @@ static bool kspread_convert_magnetism( const QString& fromUnit,
   if( magnetismMap.isEmpty() )
   {
     magnetismMap[ "T" ]   = 1.0;    // Tesla (the reference)
-    magnetismMap[ "ga" ]   = 1.0e4; // Gauss
+
+    magnetismMap[ "ga" ]  = 1.0e4;  // Gauss
   }
 
   QString fromU = fromUnit;
@@ -762,21 +793,30 @@ static bool kspread_convert_volume( const QString& fromUnit,
   // first-time initialization
   if( volumeMap.isEmpty() )
   {
-    volumeMap[ "l" ]      = 1.0; // Liter (the reference)
-    volumeMap[ "tsp" ]    = 202.84; // teaspoon
-    volumeMap[ "tbs" ]    = 67.6133333333333; // sheetspoon
-    volumeMap[ "oz" ]     = 33.8066666666667; // ounce liquid
-    volumeMap[ "cup" ]    = 4.22583333333333; // cup
-    volumeMap[ "pt" ]     = 2.11291666666667; // pint
-    volumeMap[ "qt" ]     = 1.05645833333333; // quart
-    volumeMap[ "gal" ]    = 0.26411458333333; // gallone
-    volumeMap[ "m3" ]     = 1.0e-3; // cubic meter
+    volumeMap[ "l" ]      = 1.0;                    // Liter (the reference)
+
+//TODO ang3    
+    volumeMap[ "barrel" ] = 6.289811E-03;           // barrel
+//TODO bushel
+    volumeMap[ "cup" ]    = 4.22583333333333;       // cup
+    volumeMap[ "ft3" ]    = 3.5314666721488590e-2;  // cubic foot
+    volumeMap[ "gal" ]    = 0.26411458333333;       // gallone
+    volumeMap[ "in3" ]    = 6.1023744094732284e1;   // cubic inch
+    volumeMap[ "m3" ]     = 1.0e-3;                 // cubic meter
     volumeMap[ "mi3" ]    = 2.3991275857892772e-13; // cubic mile
+//TODO MTON
     volumeMap[ "Nmi3" ]   = 1.5742621468581148e-13; // cubic Nautical mile
-    volumeMap[ "in3" ]    = 6.1023744094732284e1; // cubic inch
-    volumeMap[ "ft3" ]    = 3.5314666721488590e-2; // cubic foot
-    volumeMap[ "yd3" ]    = 1.3079506193143922; // cubic yard
-    volumeMap[ "barrel" ] = 6.289811E-03; // barrel
+    volumeMap[ "oz" ]     = 33.8066666666667;       // ounce liquid
+//TODO Pica3    
+    volumeMap[ "pt" ]     = 2.11291666666667;       // pint
+    volumeMap[ "qt" ]     = 1.05645833333333;       // quart
+//TODO GRT    
+    volumeMap[ "tbs" ]    = 67.6133333333333;       // sheetspoon
+    volumeMap[ "tsp" ]    = 202.84;                 // teaspoon
+//TODO tspm
+//TODO uk_pt
+    volumeMap[ "yd3" ]    = 1.3079506193143922;     // cubic yard
+    
   }
 
   QString fromU = fromUnit;
@@ -815,7 +855,7 @@ static bool kspread_convert_area( const QString& fromUnit,
     areaMap[ "mi^2" ]  = 3.8610215854244585e-7; // square mile
     areaMap[ "Nmi2" ]  = 2.9155334959812286e-7; // square Nautical mile
     areaMap[ "Nmi^2" ] = 2.9155334959812286e-7; // square Nautical mile
-    areaMap[ "yd2" ]  = 1.0936132983377078;     // square yard
+    areaMap[ "yd2" ]   = 1.0936132983377078;    // square yard
     areaMap[ "yd^2" ]  = 1.0936132983377078;    // square yard
   }
 
@@ -861,6 +901,63 @@ static bool kspread_convert_speed( const QString& fromUnit,
   return true;
 }
 
+static bool kspread_convert_time( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> timeMap;
+
+  // first-time initialization
+  if( timeMap.isEmpty() )
+  {
+    timeMap[ "s" ]   = 1.0;                          // second (the reference)
+    timeMap[ "sec" ] = 1.0;                          // second (the reference)
+    timeMap[ "mn" ]  = 1.0 / 60;                     // 24 hour per day
+    timeMap[ "min" ] = 1.0 / 60;                     // 24 hour per day
+    timeMap[ "hr" ]  = 1.0 / 3600;                   // 3600 seconds per hour
+    timeMap[ "d" ]   = 1.0 / ( 3600 * 24 );          // 24 hour per day
+    timeMap[ "day" ] = 1.0 / ( 3600 * 24 );          // 24 hour per day
+    timeMap[ "yr" ]  = 1.0 / ( 3600 * 24 * 365.25 ); // 24 hour per day
+   }
+
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( timeMap, fromU );
+  double toPrefix = kspread_convert_prefix( timeMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !timeMap.contains( fromU ) ) return false;
+  if( !timeMap.contains( toU ) ) return false;
+
+  result = value * fromPrefix * timeMap[toU] / (timeMap[fromU] * toPrefix);
+
+  return true;
+}
+
+static bool kspread_convert_info( const QString& fromUnit,
+  const QString& toUnit, double value, double& result )
+{
+  static QMap<QString, double> infoMap;
+
+  // first-time initialization
+  if( infoMap.isEmpty() )
+  {
+    infoMap[ "bit" ]  = 1.0;     // bit (the reference)
+    infoMap[ "byte" ] = 1.0 / 8; // 8 bit per byte
+   }
+
+  QString fromU = fromUnit;
+  QString toU = toUnit;
+  double fromPrefix = kspread_convert_prefix( infoMap, fromU );
+  double toPrefix = kspread_convert_prefix( infoMap, toU );
+  if( fromPrefix == 0.0 ) return false;
+  if( toPrefix == 0.0 ) return false;
+  if( !infoMap.contains( fromU ) ) return false;
+  if( !infoMap.contains( toU ) ) return false;
+
+  result = value * fromPrefix * infoMap[toU] / (infoMap[fromU] * toPrefix);
+
+  return true;
+}
 
 // Function: CONVERT
 Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
@@ -884,6 +981,8 @@ Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
                   if( !kspread_convert_volume( fromUnit, toUnit, value, result ) )
                     if( !kspread_convert_area( fromUnit, toUnit, value, result ) )
                       if( !kspread_convert_speed( fromUnit, toUnit, value, result ) )
+                        if( !kspread_convert_time( fromUnit, toUnit, value, result ) )
+                          if( !kspread_convert_info( fromUnit, toUnit, value, result ) )
                         return Value::errorNA();
 
   return Value (result);
