@@ -51,10 +51,6 @@ class Dialog:
 
                 browser = self.forms.createWidget(page, "QTextBrowser", "Editor")
                 widgets.append(browser)
-                ##self.part = self.forms.loadPart(partpage, "libkmultipart","file:///home/kde4/kword.py")
-                #self.part = self.forms.loadPart(partpage, "libnotepadpart","file:///home/kde4/kword.py")
-                #if not self.part:
-                    #raise "Failed to load the KPart"
 
                 w = self.forms.createWidget(page, "QWidget")
                 self.forms.createLayout(w,"QHBoxLayout")
@@ -74,28 +70,11 @@ class Dialog:
                 kxmleditorBtn.connect("clicked(bool)", self.kxmleditorClicked)
                 widgets.append(kxmleditorBtn)
 
-                #saveBtn = self.forms.createWidget(w, "QPushButton")
-                #saveBtn.text = "Save to..."
-                #saveBtn.connect("clicked(bool)", self.saveClicked)
-
-                #compareBtn = self.forms.createWidget(w, "QPushButton")
-                #compareBtn.text = "Compare with..."
-                #compareBtn.connect("clicked()", self.compareClicked)
-                #widgets.append(compareBtn)
-
-            self.pages[path] = [typeName, None, widgets]
-
-        #doc.setDefaultStyleSheet(
-            #(
-                #"li { text-color:#ff0000; color:#ff0000; background:#ff0000; background-color:#ff0000; margin:5em; }"
-            #)
-        #)
+                self.pages[path] = [typeName, None, widgets]
 
         self.dialog.connect("currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)",self.currentPageChanged)
         self.currentPageChanged()
-
-        if self.dialog.exec_loop():
-            pass
+        self.dialog.exec_loop()
 
     def __del__(self):
         self.dialog.delayedDestruct()
@@ -112,7 +91,6 @@ class Dialog:
         if not reader:
             raise "failed to open %s" % path
         def onElement():
-            #print "############### name=%s namespaceURI=%s level=%s" % (reader.name(),reader.namespaceURI(),reader.level())
             level = reader.level()
             if level > self._prevLevel:
                 self._text += "<ul>"
@@ -123,7 +101,7 @@ class Dialog:
 
             name = reader.name()
             self._text += "<li>%s" % name
-            if not name.startswith("office:"):
+            if level > 0:
                 attributes = [ "%s=%s" % (n,reader.attribute(n)) for n in reader.attributeNames() ]
                 if len(attributes) > 0:
                     self._text += " <small>%s</small>" % ", ".join(attributes)
@@ -139,17 +117,14 @@ class Dialog:
         widgets[0].html = "<style>ul { margin:0; } small { color:#909090; } blockquote { margin:0; color:#000099; }</style>%s" % self._text
         self.pages[path][1] = self._text
 
-        #self.store.close()
-        #widget.plainText = "%s" % self.store.extract(path)
-
     def doOpen(self, program):
         path = self.dialog.currentPage()
         typeName = self.pages[path][0]
-        print "START doOpen program=\"%s\" path=\"%s\" typeName=\"%s\"" % (program,path,typeName)
-
         toFile = tempfile.mktemp()
         if typeName == "text/xml":
             toFile += ".xml"
+
+        print "doOpen program=\"%s\" path=\"%s\" typeName=\"%s\" toFile=\"%s\"" % (program,path,typeName,toFile)
         if not self.store.extractToFile(path,toFile):
             raise "Failed to extract \"%s\" to \"%s\"" % (path,toFile)
         if not ( program.startswith('"') and program.endswith('"') ):
@@ -164,8 +139,6 @@ class Dialog:
                 os.remove(toFile)
         except:
             pass
-
-        print "DONE doOpen program=\"%s\" path=\"%s\" typeName=\"%s\"" % (program,path,typeName)
 
     def openClicked(self, *args):
         dialog = self.forms.createDialog("Open with...")
