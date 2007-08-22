@@ -8,17 +8,31 @@ try:
 except ImportError:
     KWord = Kross.module("kword")
 
+    #testcase
+    #KWord.document().openUrl("/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt")
+
+    if not KWord.document().url():
+        forms = Kross.module("forms")
+        dialog = forms.createDialog("XML Viewer")
+        dialog.setButtons("Ok|Cancel")
+        dialog.setFaceType("Plain")
+        openwidget = forms.createFileWidget(dialog.addPage("Open","Open ODT File"))
+        openwidget.setMode("Opening")
+        openwidget.setFilter("*.odt|ODT Files\n*|All Files")
+        if not dialog.exec_loop():
+            raise "Aborted."
+        KWord.document().openUrl(openwidget.selectedFile())
+
 class Dialog:
     def __init__(self, action):
         self.forms = Kross.module("forms")
         self.dialog = self.forms.createDialog("XML Viewer")
         self.dialog.setButtons("Ok")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
-        self.dialog.minimumWidth = 620
-        self.dialog.minimumHeight = 400
+        self.dialog.minimumWidth = 720
+        self.dialog.minimumHeight = 500
 
         doc = KWord.document()
-        #doc.openUrl("/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt")
         self.store = KWord.store()
         self.pages = {}
 
@@ -64,6 +78,11 @@ class Dialog:
                 #saveBtn.text = "Save to..."
                 #saveBtn.connect("clicked(bool)", self.saveClicked)
 
+                #compareBtn = self.forms.createWidget(w, "QPushButton")
+                #compareBtn.text = "Compare with..."
+                #compareBtn.connect("clicked()", self.compareClicked)
+                #widgets.append(compareBtn)
+
             self.pages[path] = [typeName, None, widgets]
 
         #doc.setDefaultStyleSheet(
@@ -88,7 +107,7 @@ class Dialog:
         if self._text:
             return
         self._text = ""
-        self._prevLevel = -1
+        self._prevLevel = 0
         reader = self.store.open(path)
         if not reader:
             raise "failed to open %s" % path
@@ -96,11 +115,18 @@ class Dialog:
             #print "############### name=%s namespaceURI=%s level=%s" % (reader.name(),reader.namespaceURI(),reader.level())
             level = reader.level()
             if level > self._prevLevel:
-                self._text += "<li><ul>"
-                self._prevLevel = reader.level()
+                self._text += "<ul>"
+                self._prevLevel = level
             if level < self._prevLevel:
-                self._text += "</ul></li>"
-            self._text += "<li>%s" % reader.name()
+                self._text += "</ul>"
+                self._prevLevel = level
+
+            name = reader.name()
+            self._text += "<li>%s" % name
+            if not name.startswith("office:"):
+                attributes = [ "%s=%s" % (n,reader.attribute(n)) for n in reader.attributeNames() ]
+                if len(attributes) > 0:
+                    self._text += " <small>%s</small>" % ", ".join(attributes)
             #print "  attributeNames=%s" % reader.attributeNames()
             #print "  isElement=%s isText=%s" % (reader.isElement(),reader.isText())
             #if reader.isText():
@@ -110,7 +136,7 @@ class Dialog:
             self._text += "</li>"
         reader.connect("onElement()", onElement)
         reader.start()
-        widgets[0].html = "%s" % self._text
+        widgets[0].html = "<style>ul { margin:0; } small { color:#909090; } blockquote { margin:0; color:#000099; }</style>%s" % self._text
         self.pages[path][1] = self._text
 
         #self.store.close()
