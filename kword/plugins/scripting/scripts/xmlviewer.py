@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 
 # import some python modules.
-import os, sys, tempfile
+import os, sys, tempfile, zipfile
 
 # import the kross module.
 import Kross
@@ -87,11 +87,20 @@ class Dialog:
                 kxmleditorBtn.connect("clicked(bool)", self.kxmleditorClicked)
                 widgets.append(kxmleditorBtn)
 
+                compareBtn = self.forms.createWidget(w, "QPushButton")
+                compareBtn.text = "Compare..."
+                compareBtn.connect("clicked()", self.compareClicked)
+                widgets.append(compareBtn)
+
                 self.pages[path] = [typeName, None, widgets]
 
         self.currentPageChanged()
         self.dialog.connect("currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)",self.currentPageChanged)
         self.dialog.exec_loop()
+
+        #TESTCASE!!!
+        #self.compareClicked()
+
 
     def __del__(self):
         self.dialog.delayedDestruct()
@@ -157,7 +166,7 @@ class Dialog:
         # Extract the XML content to a file.
         if not self.store.extractToFile(path,toFile):
             raise "Failed to extract \"%s\" to \"%s\"" % (path,toFile)
-        if not ( program.startswith('"') and program.endswith('"') ):
+        if not '"' in program:
             program = "\"%s\"" % program
 
         # Execute the external program with the tempfile as argument.
@@ -177,7 +186,7 @@ class Dialog:
         # that should be used executed.
         dialog = self.forms.createDialog("Open with...")
         dialog.setButtons("Ok|Cancel")
-        dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
+        dialog.setFaceType("Plain")
         dialog.minimumWidth = 360
         page = dialog.addPage("", "")
         edit = self.forms.createWidget(page, "QLineEdit", "Filter")
@@ -195,5 +204,81 @@ class Dialog:
 
     def kxmleditorClicked(self, *args):
         self.doOpen('kxmleditor')
+
+    def compareClicked(self, *args):
+        # the current page, e.g. "content.xml"
+        path = self.dialog.currentPage()
+        # the typename, e.g. "text/xml"
+        typeName = self.pages[path][0]
+
+        dialog = self.forms.createDialog("Compare...")
+        dialog.setButtons("Ok|Cancel")
+        dialog.setFaceType("Plain")
+        dialog.minimumWidth = 540
+        page = dialog.addPage("", "")
+
+        self.forms.createWidget(page, "QLabel").text = "Command:"
+        cmdEdit = self.forms.createWidget(page, "QLineEdit")
+        cmdEdit.text = "\"kdiff3\" --L1 \"Current\" --L2 \"ODT File\""
+
+        self._url = KWord.document().url()
+        self.forms.createWidget(page, "QLabel").text = "Compare with ODT file:"
+        urlEdit = self.forms.createWidget(page, "KUrlRequester")
+        urlEdit.setPath(self._url)
+        def editChanged(text):
+            self._url = text
+        urlEdit.connect("textChanged(QString)", editChanged)
+        if not dialog.exec_loop():
+            return
+
+        if self._url.startswith("file://"):
+            self._url = self._url[7:]
+        if not os.path.isfile(self._url):
+            raise "No ODT file to compare with selected."
+
+        program = cmdEdit.text
+        if not program:
+            raise "No command selected."
+        if not '"' in program:
+            program = "\"%s\"" % program
+
+        # Open the ODT that is just a Zip-file anyway.
+        try:
+            zf = zipfile.ZipFile(self._url)
+        except BadZipfile:
+            raise "Invalid ODT file: %s" % self._url
+        # Check if the expected file is there.
+        if not path in zf.namelist():
+            raise "The ODT file does not contain any file named \"%s\"" % path
+
+        # Create the temp-files.
+        currentFile = tempfile.mktemp()
+        withFile = tempfile.mktemp()
+        if typeName == "text/xml":
+            currentFile += ".xml"
+            withFile += ".xml"
+
+        try:
+            # Extract the XML content to a file.
+            if not self.store.extractToFile(path,currentFile):
+                raise "Failed to extract \"%s\" to \"%s\"" % (path,currentFile)
+
+            # Extract the file from the ODT Zip file to the temp-file.
+            outfile = open(withFile, 'wb')
+            outfile.write(zf.read(path))
+            outfile.flush()
+            outfile.close()
+
+            # Execute the external program with the tempfile as argument.
+            result = os.system( "%s \"%s\" \"%s\"" % (program,currentFile,withFile) )
+            if result != 0:
+                raise "<qt>Failed to execute program:<br><br>%s \"%s\" \"%s\"</qt>" % (program,currentFile,withFile)
+        finally:
+            # Remove the tempfiles again.
+            for n in (currentFile,withFile):
+                try:
+                    os.remove(n)
+                except:
+                    pass
 
 Dialog(self)
