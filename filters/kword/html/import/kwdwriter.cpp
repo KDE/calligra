@@ -151,7 +151,8 @@ void KWDWriter::createDocInfo(const QString& author, const QString& title) {
 }
 
 
-void KWDWriter::createInline(QDomElement paragraph, QDomElement toInline) {
+void KWDWriter::createInline(const QDomElement &paragraph,
+			     const QDomElement &toInline) {
  if (toInline.tagName() == "FRAMESET") {
      formatAttribute(paragraph,"ANCHOR","type","frameset");
      // fixme: support other kinds of inlines.
@@ -163,7 +164,7 @@ void KWDWriter::createInline(QDomElement paragraph, QDomElement toInline) {
 }
 
 
-QDomElement KWDWriter::currentLayout(QDomElement paragraph) {
+QDomElement KWDWriter::currentLayout(const QDomElement &paragraph) {
 	return paragraph.elementsByTagName("LAYOUT").item(0).toElement();
 }
 
@@ -207,7 +208,7 @@ void KWDWriter::finishTable(int tableno) {
 }
 
 
-void KWDWriter::createHR(QDomElement paragraph, int width) {
+void KWDWriter::createHR(const QDomElement &paragraph, int width) {
 	layoutAttribute(paragraph,"BOTTOMBORDER","width",QString("%1").arg(width));
 }
 
@@ -279,7 +280,7 @@ void KWDWriter::finishTable(int tableno,QRect rect) {
 }
 
 
-QDomElement KWDWriter::addFrameSet(QDomElement parent, int frametype,
+QDomElement KWDWriter::addFrameSet(QDomElement &parent, int frametype,
 				   int frameinfo, const QString& name, int visible) {
 
 	QDomElement frameset=_doc->createElement("FRAMESET");
@@ -296,7 +297,7 @@ QDomElement KWDWriter::addFrameSet(QDomElement parent, int frametype,
 	return frameset;
 }
 
-QDomElement KWDWriter::addParagraph(QDomElement parent) {
+QDomElement KWDWriter::addParagraph(QDomElement &parent) {
 	QDomElement k;
 	return addParagraph(parent,k);
 }
@@ -317,7 +318,8 @@ void KWDWriter::appendKWordVariable(QDomDocument& doc, QDomElement& format,
 	format.appendChild(variableElement);
 }
 
-QDomElement KWDWriter::createLink(QDomElement paragraph, const QString& linkName, const QString& hrefName) {
+QDomElement KWDWriter::createLink(const QDomElement &paragraph,
+				  const QString& linkName, const QString& hrefName) {
 	QDomElement linkElement = _doc->createElement("LINK");
 	linkElement.setAttribute( "linkName", linkName );
 	linkElement.setAttribute( "hrefName", hrefName );
@@ -329,7 +331,8 @@ QDomElement KWDWriter::createLink(QDomElement paragraph, const QString& linkName
 }
 
 
-QDomElement KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
+QDomElement KWDWriter::setLayout(QDomElement &paragraph,
+				 const QDomElement &layout) {
 	QDomElement theLayout;
 	if (layout.isNull())
 		theLayout=_doc->createElement("LAYOUT");
@@ -342,7 +345,7 @@ QDomElement KWDWriter::setLayout(QDomElement paragraph, QDomElement layout) {
 }
 
 
-QRect getRect(QDomElement frameset) {
+QRect getRect(const QDomElement &frameset) {
 	// returns the rect of the first frame.
 	QDomElement frame=frameset.elementsByTagName("FRAME").item(0).toElement();
 	return QRect(frame.attribute("left").toInt(),
@@ -354,7 +357,8 @@ QRect getRect(QDomElement frameset) {
 }
 
 
-QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClone) {
+QDomElement KWDWriter::addParagraph(QDomElement &parent,
+				    const QDomElement &layoutToClone) {
 
 	QDomElement paragraph=_doc->createElement("PARAGRAPH");
 	QDomElement formats=_doc->createElement("FORMATS");
@@ -376,7 +380,10 @@ QDomElement KWDWriter::addParagraph(QDomElement parent, QDomElement layoutToClon
 	return paragraph;
 }
 
-QDomElement KWDWriter::formatAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr) {
+QDomElement KWDWriter::formatAttribute(const QDomElement &paragraph,
+				       const QString& name,
+				       const QString& attrName,
+				       const QString& attr) {
 	QDomElement lastformat=currentFormat(paragraph,true);
 	QDomNodeList qdnl= lastformat.elementsByTagName(name);
 	if (qdnl.length()) {
@@ -393,7 +400,7 @@ QDomElement KWDWriter::formatAttribute(QDomElement paragraph, const QString& nam
 
 }
 
-QString KWDWriter::getLayoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName) {
+QString KWDWriter::getLayoutAttribute(const QDomElement &paragraph, const QString& name, const QString& attrName) {
 	QDomElement currentLayout=paragraph.elementsByTagName("LAYOUT").item(0).toElement();
 	QDomNodeList qdnl= currentLayout.elementsByTagName(name);
 	if (qdnl.length()) {
@@ -403,7 +410,7 @@ QString KWDWriter::getLayoutAttribute(QDomElement paragraph, const QString& name
 	return QString();
 }
 
-QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr) {
+QDomElement KWDWriter::layoutAttribute(const QDomElement &paragraph, const QString& name, const QString& attrName, const QString& attr) {
 	QDomElement currentLayout=paragraph.elementsByTagName("LAYOUT").item(0).toElement();
 	QDomNodeList qdnl= currentLayout.elementsByTagName(name);
 
@@ -420,7 +427,7 @@ QDomElement KWDWriter::layoutAttribute(QDomElement paragraph, const QString& nam
 	}
 }
 
-void KWDWriter::addText(QDomElement paragraph, const QString& _text, int format_id, bool keep_formatting) {
+void KWDWriter::addText(const QDomElement &paragraph, const QString& _text, int format_id, bool keep_formatting) {
         QString text = _text;
 
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
@@ -454,7 +461,7 @@ void KWDWriter::addText(QDomElement paragraph, const QString& _text, int format_
 	lastformat.setAttribute("len",QString("%1").arg(newLength));
 }
 
-QString KWDWriter::getText(QDomElement paragraph) {
+QString KWDWriter::getText(const QDomElement &paragraph) {
 	QDomNode temp=paragraph.elementsByTagName("TEXT").item(0).firstChild();
 	QDomText currentText=temp.toText();
 	if (temp.isNull()) { kWarning(30503) << "no text"; }
@@ -462,7 +469,7 @@ QString KWDWriter::getText(QDomElement paragraph) {
 }
 
 
-QDomElement KWDWriter::startFormat(QDomElement paragraph) {
+QDomElement KWDWriter::startFormat(const QDomElement &paragraph) {
         if (paragraph.isNull()) { kWarning(30503) << "startFormat on empty paragraph"; }
 	QDomElement format=_doc->createElement("FORMAT");
 	paragraph.elementsByTagName("FORMATS").item(0).appendChild(format);
@@ -470,7 +477,8 @@ QDomElement KWDWriter::startFormat(QDomElement paragraph) {
 }
 
 
-QDomElement KWDWriter::startFormat(QDomElement paragraph, QDomElement formatToClone) {
+QDomElement KWDWriter::startFormat(const QDomElement &paragraph,
+				   const QDomElement &formatToClone) {
 	QDomElement format=formatToClone.cloneNode().toElement();
 	if (format.isNull()) { kWarning(30503) << "startFormat: null format cloned"; }
         if (paragraph.isNull()) { kWarning(30503) << "startFormat on empty paragraph"; }
@@ -487,7 +495,8 @@ QDomElement KWDWriter::startFormat(QDomElement paragraph, QDomElement formatToCl
 	return format;
 }
 
-QDomElement KWDWriter::currentFormat(QDomElement paragraph, bool start_new_one) {
+QDomElement KWDWriter::currentFormat(const QDomElement &paragraph,
+				     bool start_new_one) {
 
 	QDomElement e=paragraph.elementsByTagName("FORMATS").item(0).lastChild().toElement();
 	if (e.isNull()) {
@@ -503,7 +512,7 @@ QDomElement KWDWriter::currentFormat(QDomElement paragraph, bool start_new_one) 
 }
 
 
-void KWDWriter::cleanUpParagraph(QDomElement paragraph) {
+void KWDWriter::cleanUpParagraph(const QDomElement &paragraph) {
 	QDomElement e=paragraph.elementsByTagName("FORMATS").item(0).toElement();
 	if (e.isNull()) { kWarning(30503) << "cleanup : no valid paragraph"; return; }
 	for (QDomElement k=e.firstChild().toElement();!k.isNull();k=k.nextSibling().toElement()) {
@@ -516,7 +525,7 @@ void KWDWriter::cleanUpParagraph(QDomElement paragraph) {
 }
 
 
-QDomElement KWDWriter::addFrame(QDomElement frameset, QRect rect, int runaround, int copy,
+QDomElement KWDWriter::addFrame(QDomElement &frameset, QRect rect, int runaround, int copy,
                                 int newFrameBehaviour, int runaroundGap
 				 ) {
 	QDomElement frame = _doc->createElement("FRAME");
@@ -561,7 +570,7 @@ QDomElement KWDWriter::mainFrameset() {
 }
 
 
-void KWDWriter::addRect(QDomElement e,QRect rect) {
+void KWDWriter::addRect(QDomElement &e,QRect rect) {
      e.setAttribute("top", rect.top());
      e.setAttribute("left", rect.left());
      e.setAttribute("bottom", rect.bottom());

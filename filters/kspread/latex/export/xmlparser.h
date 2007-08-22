@@ -57,16 +57,16 @@ class XmlParser
 		QString     getDocument     () const { return _document.toString(); }
 		Document*   getRoot         () const { return _root;                }
 		FileHeader* getFileHeader   () const { return _fileHeader; }
-		QString     getChildName(QDomNode, int);
-		QDomNode    getChild(QDomNode, QString);
-		QDomNode    getChild(QDomNode, QString, int);
-		QDomNode    getChild(QDomNode, int);
-		QString     getData(QDomNode, int);
-		QString     getData(QDomNode, QString);
-		int         getNbChild(QDomNode, QString);
-		int         getNbChild(QDomNode);
-		QString     getAttr(QDomNode, QString) const;
-		bool        isChild(QDomNode, QString);
+		QString     getChildName(const QDomNode &, int);
+		QDomNode    getChild(const QDomNode &, QString);
+		QDomNode    getChild(const QDomNode &, QString, int);
+		QDomNode    getChild(const QDomNode &, int);
+		QString     getData(const QDomNode &, int);
+		QString     getData(const QDomNode &, QString);
+		int         getNbChild(const QDomNode &, QString);
+		int         getNbChild(const QDomNode &);
+		QString     getAttr(const QDomNode &, QString) const;
+		bool        isChild(const QDomNode &, QString);
 
 		void setFileHeader(FileHeader* h) { _fileHeader = h; }
 		void setRoot      (Document*   r) { _root       = r; }

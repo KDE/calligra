@@ -72,21 +72,21 @@ XmlParser::~XmlParser()
 		_in->close();
 }
 
-QDomNode XmlParser::getChild(QDomNode node, QString name)
+QDomNode XmlParser::getChild(const QDomNode &node, QString name)
 {
 	QDomNode childNode = getChild(node, name, 0);
 	kDebug(30522) << childNode.nodeName();
 	return childNode;
 }
 
-bool XmlParser::isChild(QDomNode node, QString name)
+bool XmlParser::isChild(const QDomNode &node, QString name)
 {
 	if(node.isElement())
 		return node.toElement().elementsByTagName(name).count();
 	return false;
 }
 
-QDomNode XmlParser::getChild(QDomNode node, QString name, int index)
+QDomNode XmlParser::getChild(const QDomNode &node, QString name, int index)
 {
 	if(node.isElement()) {
 		QDomNodeList children = node.toElement().elementsByTagName(name);
@@ -96,7 +96,7 @@ QDomNode XmlParser::getChild(QDomNode node, QString name, int index)
 	return QDomNode();
 }
 
-QDomNode XmlParser::getChild(QDomNode node, int index)
+QDomNode XmlParser::getChild(const QDomNode &node, int index)
 {
 	QDomNodeList children = node.childNodes();
 	if ( children.count() )
@@ -104,34 +104,34 @@ QDomNode XmlParser::getChild(QDomNode node, int index)
 	return QDomNode();
 }
 
-QString XmlParser::getData(QDomNode node, int index)
+QString XmlParser::getData(const QDomNode &node, int index)
 {
 	return getChild(getChild(node, index), 0).nodeValue();
 }
 
-QString XmlParser::getData(QDomNode node, QString name)
+QString XmlParser::getData(const QDomNode &node, QString name)
 {
 	return getChild(getChild(node, name), 0).nodeValue();
 }
 
-int XmlParser::getNbChild(QDomNode node)
+int XmlParser::getNbChild(const QDomNode &node)
 {
 	return node.childNodes().count();
 }
 
-int XmlParser::getNbChild(QDomNode node, QString name)
+int XmlParser::getNbChild(const QDomNode &node, QString name)
 {
 	if(node.isElement())
 		return node.toElement().elementsByTagName(name).count();
 	return -1;
 }
 
-QString  XmlParser::getChildName(QDomNode node, int index)
+QString  XmlParser::getChildName(const QDomNode &node, int index)
 {
 	return node.childNodes().item(index).nodeName();
 }
 
-QString  XmlParser::getAttr(QDomNode node, QString name) const
+QString  XmlParser::getAttr(const QDomNode &node, QString name) const
 {
 	if(node.isElement())
 		return node.toElement().attributeNode(name).value();

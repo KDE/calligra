@@ -43,8 +43,8 @@ public:
 	/**
 	 * adds a frameset to parent FIXME
 	 **/
-	QDomElement addFrameSet(QDomElement parent, int frametype=1,
-				int frameinfo=0, const QString& name=QString(),
+	QDomElement addFrameSet(QDomElement &parent, int frametype=1,
+				int frameinfo=0, const QString&name=QString(),
 				int visible=1);
 
 	/**
@@ -86,23 +86,23 @@ public:
 	 * @param paragraph: the paragraph the anchor should be placed in
 	 * @param toInline: the element that should be inlined
 	 **/
-	void createInline(QDomElement paragraph, QDomElement toInline);
+	void createInline(const QDomElement &paragraph, const QDomElement &toInline);
 
 
 	/**
 	 * create a horizontal ruler layout
 	 **/
-	void createHR(QDomElement paragraph, int width=1);
+	void createHR(const QDomElement &paragraph, int width=1);
 
 	/**
 	 *
 	 **/
-	QDomElement currentLayout(QDomElement paragraph);
+	QDomElement currentLayout(const QDomElement &paragraph);
 
 	/**
 	 * adds a frame to frameset FIXME
 	 **/
-	QDomElement addFrame(QDomElement frameset, QRect rect, int runaround=0, int copy=0,
+	QDomElement addFrame(QDomElement &frameset, QRect rect, int runaround=0, int copy=0,
                                 //int top=42, int left=28, int bottom=799, int right=567,
                                 int newFrameBehaviour=0, int runaroundGap=2
 				);
@@ -111,69 +111,69 @@ public:
 	/**
 	 * adds a paragraph
 	 **/
-	QDomElement addParagraph(QDomElement parent);
-	QDomElement addParagraph(QDomElement parent, QDomElement layout);
+	QDomElement addParagraph(QDomElement &parent);
+	QDomElement addParagraph(QDomElement &parent, const QDomElement &layout);
 
 	/**
 	 * adds/changes an attribute to/of the current format
 	 **/
-        QDomElement formatAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr);
+        QDomElement formatAttribute(const QDomElement &paragraph, const QString& name, const QString& attrName, const QString& attr);
 
         /**
          * get a layout attribute
          **/
-	QString getLayoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName);
+	QString getLayoutAttribute(const QDomElement &paragraph, const QString& name, const QString& attrName);
 
 
         /**
          * adds/changes an attribute to/of the current layout
          **/
-        QDomElement layoutAttribute(QDomElement paragraph, const QString& name, const QString& attrName, const QString& attr);
+        QDomElement layoutAttribute(const QDomElement &paragraph, const QString& name, const QString& attrName, const QString& attr);
 
         /**
          * creates a new format in the current paragraph. do this before adding text
          * FIXME: you can only do addText once per format
          **/
-        QDomElement startFormat(QDomElement paragraph);
-        QDomElement startFormat(QDomElement paragraph, QDomElement formatToClone);
+        QDomElement startFormat(const QDomElement &paragraph);
+        QDomElement startFormat(const QDomElement &paragraph, const QDomElement &formatToClone);
 
 
 	/**
 	 * cleans up the current paragraph (throw away unused formats)
 	 * FIXME: find a better solution
 	 **/
-	 void cleanUpParagraph(QDomElement paragraph);
+	 void cleanUpParagraph(const QDomElement &paragraph);
 
 	/**
 	 * adds some text to the current format in this paragraph
 	 **/
-	void addText(QDomElement paragraph, const QString& text, int format_id, bool keep_formatting=false);
+	void addText(const QDomElement &paragraph, const QString& text, int format_id, bool keep_formatting=false);
 
 	/**
 	 * returns the current format
 	 * if start_new_one is true, a new format will be started if needed
 	 **/
-	QDomElement currentFormat(QDomElement paragraph, bool start_new_one=false);
+	QDomElement currentFormat(const QDomElement &paragraph, bool start_new_one=false);
 
 	/**
 	 * create a Link (URL)
 	 **/
-	QDomElement createLink(QDomElement paragraph, const QString& linkName, const QString& hrefName);
+	QDomElement createLink(const QDomElement &paragraph, const QString& linkName, const QString& hrefName);
 
 	/**
 	 * copy the given layout, and set it as layout of the given paragraph
 	 **/
-	QDomElement setLayout(QDomElement paragraph, QDomElement layout);
+	QDomElement setLayout(QDomElement &paragraph, const QDomElement &layout);
 
 	/**
 	 * returns the text of this paragraph.
 	 **/
-	QString getText(QDomElement paragraph);
+	QString getText(const QDomElement &paragraph);
 
 	/**
 	 * returns the rectangle of the first frame of this frameset
 	 **/
-	QRect getRect(QDomElement frameset);
+	QRect getRect(const QDomElement &frameset);
 
 	/**
 	 * returns the 'main' frameset of this document.
@@ -200,7 +200,7 @@ private:
 	/**
 	 * creates a rectangle
 	 **/
-	void addRect(QDomElement e, QRect rect);
+	void addRect(QDomElement &e, QRect rect);
 
        	
 protected:
