@@ -303,10 +303,13 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     connect(action, SIGNAL(triggered()), this, SLOT( lineBreak() ));
 
     action = new QAction(i18n("Bookmark..."), this);
+    //action->setIcon(KIcon("bookmark-new"));
     addAction("add_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT( addBookmark() ));
 
     action = new QAction(i18n("Select Bookmark..."), this);
+    //action->setIcon(KIcon("bookmark"));
+    action->setShortcut( Qt::CTRL+ Qt::Key_G);
     addAction("select_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT( selectBookmark() ));
 
@@ -374,6 +377,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     addAction("edit_selectall", action);
 
     action = new QAction(i18n( "Special Character..." ), this);
+    action->setIcon(KIcon("character-set"));
     action->setShortcut(Qt::ALT + Qt::SHIFT + Qt::Key_C);
     addAction("insert_specialchar", action);
     action->setToolTip( i18n( "Insert one or more symbols or characters not found on the keyboard" ) );
