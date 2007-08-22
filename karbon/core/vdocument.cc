@@ -272,6 +272,12 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
             insertLayer( l );
     }
 
+    KoShapeLayer * defaultLayer = 0;
+
+    // check if we have to insert a default layer
+    if( d->layers.count() == 0 )
+        defaultLayer = new KoShapeLayer();
+
     KoXmlElement child;
     forEachElement( child, element )
     {
@@ -279,25 +285,23 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
 
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
         if( shape )
-        {
-            if( ! shape->parent() )
-                d->layers.first()->addChild( shape );
             d->objects.append( shape );
+    }
+
+    // add all toplevel shapes to the default layer
+    foreach( KoShape * shape, d->objects )
+    {
+        if( ! shape->parent() )
+        {
+            if( ! defaultLayer )
+                defaultLayer = new KoShapeLayer();
+
+            defaultLayer->addChild( shape );
         }
     }
 
-    // check if we have to insert a default layer
-    if( d->layers.count() == 0 )
-    {
-        KoShapeLayer * defaultLayer = new KoShapeLayer();
-        // add all toplevel shape to the layer
-        foreach( KoShape * shape, d->objects )
-        {
-            if( ! shape->parent() )
-                defaultLayer->addChild( shape );
-        }
+    if( defaultLayer )
         insertLayer( defaultLayer );
-    }
 
     return true;
 }
