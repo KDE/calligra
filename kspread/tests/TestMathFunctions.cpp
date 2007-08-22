@@ -303,13 +303,14 @@ void TestMathFunctions::testCONVERT()
                                                                               // - note that there are many other definitions
   CHECK_EVAL( "CONVERT(1000; \"tsp\";    \"l\")",    Value( 4.929994084 ) );  // Teaspoon uses U.S. customary historic definition
                                                                               // - note that there are many other definitions
-//   CHECK_EVAL( "CONVERT(   1; \"das\";    \"sec\")",   Value( 10 ) );         // Does it support both "s" and "sec" for second?
+  CHECK_EVAL( "CONVERT(   1; \"das\";    \"sec\")",   Value( 10 ) );          // Does it support both "s" and "sec" for second?
                                                                               // Does it support "da" as the SI standard deka prefix?
   CHECK_EVAL( "CONVERT(   1; \"ar\";     \"m^2\")",  Value( 100 ) );          // A hectare (ar) is 100 square meters.
 //   CHECK_EVAL( "CONVERT(   1; \"cal\";    \"J\")",      Value( 4.1868 ) );    // "cal" is an International Table (IT) calorie, 4.1868 J.
   CHECK_EVAL( "CONVERT(   1; \"lbf\";    \"N\")",    Value( 4.448222 ) );     // Converting pound-force to Newtons
   CHECK_EVAL( "CONVERT(   1; \"HP\";     \"W\")",    Value( 745.701 ) );      // Horsepower to Watts
-//   CHECK_EVAL( "CONVERT(   1; \"Mibyte\"; \"bit\")", Value( 8388608 ) );      // Converts bytes to bits, and tests binary prefixes
+  CHECK_EVAL( "CONVERT(   1; \"Mibyte\"; \"bit\")", Value( 8388608 ) );       // Converts bytes to bits, and tests binary prefixes
+  CHECK_EVAL( "CONVERT(   1; \"Gibyte\"; \"Mibyte\")", Value( 1024 ) );       // Converts bytes to bits, and tests binary prefixes
   CHECK_EVAL( "CONVERT(   1; \"T\";      \"ga\")",   Value( 10000 ) );        // Tesla to Gauss
 //   CHECK_EVAL( "CONVERT(   1; \"lbm\";    \"g\")",    Value( 453.59237 ) );   // International pound mass (avoirdupois) to grams.
                                                                               // (This is actually exact.)
@@ -317,7 +318,7 @@ void TestMathFunctions::testCONVERT()
                                                                               // or "weight ton", is 2240 lbm.
 //   CHECK_EVAL( "CONVERT(   1; \"psi\";    \"Pa\")",   Value( 6894.76 ) );     // Pounds per square inch to Pascals.
   CHECK_EVAL( "CONVERT(  60; \"mph\";    \"km/h\")", Value( 96.56064 ) );     // Miles per hour to kilometers per hour.
-//   CHECK_EVAL( "CONVERT(   1; \"day\";    \"s\")", Value( 86400 ) );          // Day to seconds.  Note: This test uses the 
+  CHECK_EVAL( "CONVERT(   1; \"day\";    \"s\")", Value( 86400 ) );           // Day to seconds.  Note: This test uses the 
                                                                               // international standard abbreviation for second (s),
                                                                               // not the abbreviation traditionally used in spreadsheets
                                                                               // (sec); both "s" and "sec" must be supported.
