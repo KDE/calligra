@@ -69,7 +69,7 @@ public:
      * @param filename the filename of the image
      * @param name the relative path to the image in the store (optional)
      */
-    void addKey( const QDateTime& dt, const QString& filename, const QString& name = QString::null );
+    void addKey( const QDateTime& dt, const QString& filename, const QString& name = QString() );
     /**
      * Add frameset to document (see KWord DTD).
      */

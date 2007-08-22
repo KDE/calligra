@@ -47,7 +47,7 @@ public:
 
     virtual bool filterImport( const QString &file, KoDocument *,
                                const QString &from, const QString &to,
-                               const QString &config=QString::null );
+                               const QString &config=QString() );
 
 private:
   void parseColorObject (istream& fin);

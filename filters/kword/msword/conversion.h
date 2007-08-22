@@ -69,12 +69,12 @@ namespace Conversion
     // Set the 3 color attributes in the XML element, from a color code (ico)
     // prefix: if empty, the attribute names will be red/blue/green
     // if not empty, they will be xRed/xBlue/xGreen
-    void setColorAttributes( QDomElement& element, int ico, const QString& prefix = QString::null, bool defaultWhite = false );
+    void setColorAttributes( QDomElement& element, int ico, const QString& prefix = QString(), bool defaultWhite = false );
 
     // Set all border attributes in the XML element, from a BRC structure
     // prefix: if empty, the attribute names will be red/blue/green/width/style
     // if not empty, they will be xRed/xBlue/xGreen/xWidth/xStyle
-    void setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc, const QString& prefix = QString::null );
+    void setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc, const QString& prefix = QString() );
 
     // Convert wv2's Header Type to a KWord frameInfo value
     int headerTypeToFrameInfo( unsigned char type );

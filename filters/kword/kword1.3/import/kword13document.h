@@ -60,7 +60,7 @@ public:
      * \param name name of the property
      * \param oldName alternative name of the property (in old KWord syntax)
      */
-    QString getProperty( const QString& name, const QString& oldName = QString::null ) const;
+    QString getProperty( const QString& name, const QString& oldName = QString() ) const;
 protected:
     /// Get a document property \internal
     QString getPropertyInternal( const QString& name ) const;

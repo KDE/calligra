@@ -27,7 +27,7 @@
 class HtmlBasicWorker : public HtmlWorker
 {
 public:
-    HtmlBasicWorker( const QString &cssURL = QString::null );
+    HtmlBasicWorker( const QString &cssURL = QString() );
     virtual ~HtmlBasicWorker(void) { }
 public:
 protected:

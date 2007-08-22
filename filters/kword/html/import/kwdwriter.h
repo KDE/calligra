@@ -44,8 +44,8 @@ public:
 	 * adds a frameset to parent FIXME
 	 **/
 	QDomElement addFrameSet(QDomElement parent, int frametype=1,
-				   int frameinfo=0, const QString& name=QString::null,
-				   int visible=1);
+				int frameinfo=0, const QString& name=QString(),
+				int visible=1);
 
 	/**
 	 * \returns true if we are currently in a table (\a createTable() got called,
