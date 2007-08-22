@@ -67,7 +67,9 @@ set(karboncommon_LIB_SRCS
    karbon_tool_registry.cc
    karbon_tool_factory.cc 
    vtoolcontroller.cc 
-   vtool.cc )
+   vtool.cc 
+   KarbonShapePainter.cpp
+)
 
 
 #kde4_add_dcop_skels(karboncommon_LIB_SRCS karbon_part_iface.h karbon_view_iface.h )
