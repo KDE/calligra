@@ -1,5 +1,15 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002-2004 Rob Buis <buis@kde.org>
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2002 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2004 Nicolas Goutte <nicolasg@snafu.de>
+   Copyright (C) 2005 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2005-2006 David Faure <faure@kde.org>
+   Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,94 +27,59 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3cstring.h>
-#include <qdom.h>
-#include <QFile>
-#include <QString>
-#include <q3valuelist.h>
-#include <QImage>
+#include "pngexport.h"
 
-#include <kgenericfactory.h>
+#include <vdocument.h>
+#include <karbon_part.h>
+#include <KarbonShapePainter.h>
+
 #include <KoFilter.h>
 #include <KoFilterChain.h>
-#include <KoStore.h>
 
-#include "pngexport.h"
-#include "vdocument.h"
-#include "vselection.h"
-#include "vkopainter.h"
-#include "vlayer.h"
+#include <kgenericfactory.h>
 
-#include <kdebug.h>
-
+#include <QImage>
 
 typedef KGenericFactory<PngExport> PngExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonpngexport, PngExportFactory( "kofficefilters" ) )
 
 
 PngExport::PngExport( QObject*parent, const QStringList& )
-	: KoFilter(parent)
+    : KoFilter(parent)
 {
 }
 
 KoFilter::ConversionStatus
 PngExport::convert( const QByteArray& from, const QByteArray& to )
 {
-	if ( to != "image/png" || from != "application/x-karbon" )
-	{
-		return KoFilter::NotImplemented;
-	}
+    if ( to != "image/png" || from != "application/vnd.oasis.opendocument.graphics" )
+    {
+        return KoFilter::NotImplemented;
+    }
 
-	KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
-	if( !storeIn )
-		return KoFilter::StupidError;
+    KoDocument * document = m_chain->inputDocument();
+    if( ! document )
+        return KoFilter::ParsingError;
 
-	QDomDocument domIn;
-	domIn.setContent( storeIn );
-	QDomElement docNode = domIn.documentElement();
+    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>( document );
+    if( ! karbonPart )
+        return KoFilter::WrongFormat;
 
-	// load the document and export it:
-	VDocument doc;
-	doc.load( docNode );
+    KarbonShapePainter painter;
+    painter.setShapes( karbonPart->document().shapes() );
 
-	VLayerListIterator layerItr( doc.layers() );
-	VLayer *currentLayer;
+    QRectF shapesRect = painter.contentRect();
+    QImage image( shapesRect.size().toSize(), QImage::Format_RGB32 );
 
-	for( ; currentLayer = layerItr.current(); ++layerItr )
-	{
-		if( currentLayer->state() == VObject::normal || currentLayer->state() == VObject::normal_locked || currentLayer->state() == VObject::selected )
-		{
-			doc.selection()->append(currentLayer->objects());
-		}
-	}
+    // draw the background of the thumbnail
+    image.fill( QColor( Qt::white).rgb() );
 
-	// get the bounding box of all selected objects:
-	const KoRect& rect = doc.selection()->boundingBox();
+    if( ! painter.paintShapes( image ) )
+        return KoFilter::CreationError;
 
-	// create image with correct width and height
-	QImage img( int( rect.width() ), int( rect.height() ), 32 );
-	//img.setAlphaBuffer( true );
+    image.save( m_chain->outputFile(), "PNG" );
 
-	// Create painter and set up objects to draw
-	VKoPainter p( img.bits(), rect.width(), rect.height() );
-	p.clear( qRgba( 0xFF, 0xFF, 0xFF, 0xFF ) );
-	p.setMatrix( QMatrix().translate( -rect.x(), -rect.y() ) );
-	VObjectList objects = doc.selection()->objects();
-	VObjectListIterator itr = objects;
-
-	// we do not need the selection anymore:
-	doc.selection()->clear();
-
-	// paint shapes over image
-	for ( ; itr.current(); ++itr )
-		itr.current()->draw( &p, &rect );
-
-	QImage image = img.swapRGB();
-	QImage mirrored = image.mirror( false, true );
-	// save png
-	mirrored.save( m_chain->outputFile(), "PNG" );
-
-	return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 #include "pngexport.moc"

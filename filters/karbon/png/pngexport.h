@@ -1,5 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002 Rob Buis <buis@kde.org>
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,24 +21,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __PNGEXPORT_H__
-#define __PNGEXPORT_H__
+#ifndef PNGEXPORT_H
+#define PNGEXPORT_H
 
 #include <KoFilter.h>
 
-#include "vvisitor.h"
-//Added by qt3to4:
-#include <Q3CString>
-
-class PngExport : public KoFilter, private VVisitor
+class PngExport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PngExport( QObject* parent, const QStringList& );
-	virtual ~PngExport() {}
-
-	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    PngExport( QObject* parent, const QStringList& );
+    virtual ~PngExport() {}
+    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 };
 
 #endif
