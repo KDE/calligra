@@ -20,6 +20,7 @@
 #include "KarbonLayerModel.h"
 
 #include <vdocument.h>
+#include <KarbonShapePainter.h>
 
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -109,6 +110,9 @@ QModelIndex KarbonLayerModel::parent( const QModelIndex &child ) const
     Q_ASSERT(child.internalPointer());
 
     KoShape *childShape = static_cast<KoShape*>( child.internalPointer() );
+    if( ! childShape )
+        return QModelIndex();
+
     // check if child shape is a layer, and return invalid model index if it is
     KoShapeLayer *childlayer = dynamic_cast<KoShapeLayer*>( childShape );
     if( childlayer )
@@ -269,105 +273,25 @@ void KarbonLayerModel::setProperties( KoShape* shape, const PropertyList &proper
 
 QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
 {
-    // compute the transformed shape bounding box
-    QRectF shapeBox = transformedShapeBox( shape );
-    // convert the thumbnail size into document coordinates
-    KoZoomHandler zoomHandler;
-    QRectF imageBox = zoomHandler.viewToDocument( QRectF( 0, 0, thumbSize.width(), thumbSize.height() ) );
+    KarbonShapePainter painter;
 
-    // compute the zoom factor based on the bounding rects in document coordinates
-    double zoomW = imageBox.width() / shapeBox.width();
-    double zoomH = imageBox.height() / shapeBox.height();
-    double zoom = qMin( zoomW, zoomH );
+    QList<KoShape*> shapes;
 
-    // now set the zoom into the zoom handler used for painting the shape
-    zoomHandler.setZoom( zoom );
+    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
+    if( container )
+        shapes = container->iterator();
+    else
+        shapes.append( shape );
 
-    // create the thumbnail image and a painter for painting into the image
+    painter.setShapes( shapes );
+
     QImage thumb( thumbSize, QImage::Format_RGB32 );
-    QPainter painter( &thumb );
-
-    // set some painting hints
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen( QPen(Qt::NoPen) );
     // draw the background of the thumbnail
-    painter.setBrush( QBrush( Qt::white ) );
-    painter.drawRect( 0, 0, thumbSize.width(), thumbSize.height() );
-    painter.setBrush( Qt::NoBrush );
+    thumb.fill( QColor( Qt::white ).rgb() );
 
-    // move the origin into the image center
-    painter.translate( QPointF(0.5*thumbSize.width(), 0.5*thumbSize.height() ) );
-    // move origin so that the shapes local origin is in the image center
-    QPointF shapeOrigin( 0.0, 0.0 );
-    if( ! dynamic_cast<KoShapeContainer*>( shape ) )
-    {
-        QMatrix shapeMatrix = shape->absoluteTransformation( 0 );
-        shapeOrigin = shapeMatrix.map( shapeOrigin );
-        painter.translate( -shapeOrigin.x(), -shapeOrigin.y() );
-    }
-    // move origin so that the transformed shapes center point is in the image center
-    painter.translate( zoomHandler.documentToView( shapeOrigin - shapeBox.center() ) );
-
-    // paint the shape
-    paintShape( shape, painter, zoomHandler, true );
+    painter.paintShapes( thumb );
 
     return thumb;
-}
-
-QRectF KarbonLayerModel::transformedShapeBox( KoShape *shape ) const
-{
-    QRectF shapeBox;
-
-    // compute the transformed shape bounding box
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
-    if( container )
-    {
-        foreach( KoShape *child, container->iterator() )
-            shapeBox = shapeBox.united( transformedShapeBox( child ) );
-    }
-    else
-    {
-        shapeBox = shape->outline().toFillPolygon( shape->absoluteTransformation(0) ).boundingRect();
-
-        // correct shape box with border sizes
-        if( shape->border() )
-        {
-            KoInsets inset;
-            shape->border()->borderInsets( shape, inset );
-            shapeBox.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
-        }
-    }
-
-    return shapeBox;
-}
-
-void KarbonLayerModel::paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool isSingleShape ) const
-{
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>( shape );
-    if( container )
-    {
-        foreach( KoShape *child, container->iterator() )
-            paintShape( child, painter, converter, false );
-    }
-    else
-    {
-        painter.save();
-        // set the shapes transformation matrix
-        painter.setMatrix( shape->absoluteTransformation( isSingleShape ? 0 : &converter ), true );
-        // paint the shape
-        painter.save();
-        shape->paint( painter, converter );
-        painter.restore();
-
-        // paint the shapes border
-        if(shape->border())
-        {
-            painter.save();
-            shape->border()->paintBorder(shape, painter, converter);
-            painter.restore();
-        }
-        painter.restore();
-    }
 }
 
 KoShape * KarbonLayerModel::childFromIndex( KoShapeContainer *parent, int row ) const

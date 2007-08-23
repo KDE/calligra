@@ -25,6 +25,7 @@
 #include <KoZoomHandler.h>
 #include <KoUnit.h>
 #include <KoShape.h>
+#include <KoShapeBorderModel.h>
 
 #include <QtGui/QImage>
 
@@ -130,9 +131,11 @@ bool KarbonShapePainter::paintShapes( QImage & image )
     QSizeF size = image.size();
 
     KoZoomHandler zoomHandler;
+    // calculate the image size in document coordinates
     QRectF imageBox = zoomHandler.viewToDocument( QRectF( 0, 0, size.width(), size.height() ) );
 
     // compute the zoom factor based on the bounding rects in document coordinates
+    // so that the content fits into the image
     double zoomW = imageBox.width() / bound.width();
     double zoomH = imageBox.height() / bound.height();
     double zoom = qMin( zoomW, zoomH );
@@ -142,12 +145,19 @@ bool KarbonShapePainter::paintShapes( QImage & image )
 
     QPainter painter( &image );
 
+    // intialize painter
     painter.setPen( QPen(Qt::NoPen) );
     painter.setBrush( Qt::NoBrush );
     painter.setRenderHint(QPainter::Antialiasing);
+    painter.setClipRect( QRectF(QPoint(),size) );
 
-    painter.translate( -bound.x(), -bound.y() );
+    QRectF zoomedBound = zoomHandler.documentToView( bound );
+    QPointF offset = QPointF( 0.5 * size.width(), 0.5 * size.height() ) - zoomedBound.center();
 
+    // center content in image
+    painter.translate( offset.x(), offset.y() );
+
+    // finally paint the shapes
     paintShapes( painter, zoomHandler );
 
     return true;
@@ -159,10 +169,18 @@ QRectF KarbonShapePainter::contentRect()
     foreach( KoShape * shape, d->canvas->shapeManager()->shapes() )
     {
         QPainterPath outline = shape->absoluteTransformation(0).map( shape->outline() );
+        QRectF shapeRect = outline.boundingRect();
+        // correct shape box with border sizes
+        if( shape->border() )
+        {
+            KoInsets inset;
+            shape->border()->borderInsets( shape, inset );
+            shapeRect.adjust( -inset.left, -inset.top, inset.right, inset.bottom );
+        }
         if( bound.isEmpty() )
-            bound = outline.boundingRect();
+            bound = shapeRect;
         else
-            bound = bound.united( outline.boundingRect() );
+            bound = bound.united( shapeRect );
     }
     return bound;
 }

@@ -55,9 +55,6 @@ private:
     void setProperties( KoShape* shape, const PropertyList &properties );
     /// Creates a thumbnail image with the specified size from the given shape
     QImage createThumbnail( KoShape* shape, const QSize &thumbSize ) const;
-    QRectF transformedShapeBox( KoShape *shape ) const;
-    /// Paints shape using the given painter and view converter
-    void paintShape( KoShape *shape, QPainter &painter, const KoViewConverter &converter, bool isSingleShape ) const;
     /// Returns the child shape with the given index from the parent shape
     KoShape * childFromIndex( KoShapeContainer *parent, int row ) const;
     /// Returns the zero based index of a child shape within its parent shape
