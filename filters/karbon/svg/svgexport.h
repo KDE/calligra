@@ -1,5 +1,14 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 The Karbon Developers
+   Copyright (C) 2002 Lars Siebold <khandha5@gmx.net>
+   Copyright (C) 2002 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2005,2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,74 +26,59 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __SVGEXPORT_H__
-#define __SVGEXPORT_H__
+#ifndef SVGEXPORT_H
+#define SVGEXPORT_H
 
 #include <KoFilter.h>
+#include <QtGui/QGradient>
 
-#include "vvisitor.h"
-#include "vgradient.h"
-
-#include "svggraphiccontext.h"
-
-#include <q3ptrstack.h>
-//Added by qt3to4:
-#include <QTextStream>
-#include <Q3CString>
-
-class QTextStream;
-class VColor;
-class VPath;
 class VDocument;
-class VFill;
-class VGroup;
-class VImage;
-class VLayer;
-class VSubpath;
-class VStroke;
-class VText;
-class VTransformCmd;
+class KoShapeLayer;
+class KoShapeContainer;
+class KoShape;
+class KoPathShape;
+class KoShapeBorderModel;
+class QTextStream;
+class QPixmap;
+class QImage;
+class QColor;
+class QBrush;
 
-
-class SvgExport : public KoFilter, private VVisitor
+class SvgExport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	SvgExport( QObject* parent, const QStringList& );
-	virtual ~SvgExport() {}
+    SvgExport( QObject* parent, const QStringList& );
+    virtual ~SvgExport() {}
 
-	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 private:
-	virtual void visitVPath( VPath& composite );
-	virtual void visitVDocument( VDocument& document );
-	virtual void visitVGroup( VGroup& group );
-	virtual void visitVImage( VImage& image );
-	virtual void visitVLayer( VLayer& layer );
-	virtual void visitVSubpath( VSubpath& path );
-	virtual void visitVText( VText& text );
+    void saveDocument( VDocument& document );
+    void saveLayer( KoShapeLayer * layer );
+    void saveGroup( KoShapeContainer * group );
+    void saveShape( KoShape * shape );
+    void savePath( KoPathShape * path );
 
-	void getStroke( const VStroke& stroke, QTextStream *stream );
-	void getColorStops( const Q3PtrVector<VColorStop> &colorStops );
-	void getFill( const VFill& fill, QTextStream *stream );
-	void getGradient( const VGradient& grad );
-	void getPattern( const VPattern& patt );
-	void getHexColor( QTextStream *, const VColor& color  );
-	QString getID( VObject *obj );
+    void saveImage( QImage& image );
+    //void saveText( VText& text );
 
-	void writePathToStream( VPath &composite, const QString &id, QTextStream *stream, unsigned int indent );
+    void getFill( const QBrush & fill, QTextStream *stream );
 
-	QTextStream* m_stream;
-	QTextStream* m_defs;
-	QTextStream* m_body;
+    void getStroke( const KoShapeBorderModel * stroke, QTextStream *stream );
+    void getColorStops( const QGradientStops & colorStops );
+    void getGradient( const QGradient * grad );
+    void getPattern( const QPixmap& patt );
+    void getHexColor( QTextStream *, const QColor & color  );
+    QString getID( KoShape *obj );
 
-	Q3PtrStack<SvgGraphicsContext>	m_gc;
+    QTextStream* m_stream;
+    QTextStream* m_defs;
+    QTextStream* m_body;
 
-	unsigned int m_indent;
-	unsigned int m_indent2;
-
-	VTransformCmd *m_trans;
+    unsigned int m_indent;
+    unsigned int m_indent2;
 };
 
 #endif

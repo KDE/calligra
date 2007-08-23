@@ -1,5 +1,20 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, 2003 The Karbon Developers
+   Copyright (C) 2002 Lars Siebold <khandha5@gmx.net>
+   Copyright (C) 2002-2003,2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2002,2005-2006 David Faure <faure@kde.org>
+   Copyright (C) 2002 Werner Trobin <trobin@kde.org>
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2004 Nicolas Goutte <nicolasg@snafu.de>
+   Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2005,2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
+   Copyright (C) 2006 Laurent Montel <montel@kde.org>
+   Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
+   Copyright (C) 2006 Ariya Hidayat <ariya@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,473 +32,411 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3cstring.h>
-#include <qdom.h>
-#include <QFile>
-#include <QString>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <QTextStream>
-
-#include <kgenericfactory.h>
-#include <KoFilter.h>
-#include <KoFilterChain.h>
-#include <KoStore.h>
-#include <KoRect.h>
-
 #include "svgexport.h"
-#include "vcolor.h"
-#include "vcomposite.h"
-#include "vdashpattern.h"
-#include "vdocument.h"
-#include "vfill.h"
-#include "vgradient.h"
-#include "vgroup.h"
-#include "vimage.h"
-#include "vlayer.h"
-#include "vpath.h"
-#include "vpattern.h"
-#include "vsegment.h"
-#include "vselection.h"
-#include "vstroke.h"
-#include "vtext.h"
-#include <commands/vtransformcmd.h>
+
+#include <vdocument.h>
+#include <karbon_part.h>
+
+#include <KoDocument.h>
+#include <KoFilterChain.h>
+#include <KoShapeLayer.h>
+#include <KoPathShape.h>
+#include <KoLineBorder.h>
 
 #include <kdebug.h>
+#include <kgenericfactory.h>
+
+#include <QtCore/QFile>
+#include <QtCore/QString>
+#include <QtCore/QTextStream>
+#include <QtGui/QLinearGradient>
+#include <QtGui/QRadialGradient>
 
 QString INDENT("  ");
 
-void
-printIndentation( QTextStream *stream, unsigned int indent )
+void printIndentation( QTextStream *stream, unsigned int indent )
 {
-	for( unsigned int i = 0; i < indent;++i)
-		*stream << INDENT;
+    for( unsigned int i = 0; i < indent;++i)
+        *stream << INDENT;
 }
 
 typedef KGenericFactory<SvgExport> SvgExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilters" ) )
 
-
 SvgExport::SvgExport( QObject*parent, const QStringList& )
-	: KoFilter(parent), m_indent( 0 ), m_indent2( 0 ), m_trans( 0L )
+    : KoFilter(parent), m_indent( 0 ), m_indent2( 0 )
 {
-	m_gc.setAutoDelete( true );
 }
 
-KoFilter::ConversionStatus
-SvgExport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus SvgExport::convert( const QByteArray& from, const QByteArray& to )
 {
-	if ( to != "image/svg+xml" || from != "application/x-karbon" )
-	{
-		return KoFilter::NotImplemented;
-	}
+    if ( to != "image/svg+xml" || from != "application/vnd.oasis.opendocument.graphics" )
+        return KoFilter::NotImplemented;
 
-	KoStoreDevice* storeIn = m_chain->storageFile( "root", KoStore::Read );
-	if( !storeIn )
-		return KoFilter::StupidError;
+    KoDocument * document = m_chain->inputDocument();
+    if( ! document )
+        return KoFilter::ParsingError;
 
-	QFile fileOut( m_chain->outputFile() );
-	if( !fileOut.open( QIODevice::WriteOnly ) )
-	{
-		delete storeIn;
-		return KoFilter::StupidError;
-	}
+    KarbonPart * karbonPart = dynamic_cast<KarbonPart*>( document );
+    if( ! karbonPart )
+        return KoFilter::WrongFormat;
 
-	QDomDocument domIn;
-	domIn.setContent( storeIn );
-	QDomElement docNode = domIn.documentElement();
+    QFile fileOut( m_chain->outputFile() );
+    if( !fileOut.open( QIODevice::WriteOnly ) )
+        return KoFilter::StupidError;
 
-	m_stream = new QTextStream( &fileOut );
-	QString body;
-	m_body = new QTextStream( &body, QIODevice::ReadWrite );
-	QString defs;
-	m_defs = new QTextStream( &defs, QIODevice::ReadWrite );
+    m_stream = new QTextStream( &fileOut );
+    QString body;
+    m_body = new QTextStream( &body, QIODevice::ReadWrite );
+    QString defs;
+    m_defs = new QTextStream( &defs, QIODevice::ReadWrite );
 
-	// load the document and export it:
-	VDocument doc;
-	doc.load( docNode );
-	doc.accept( *this );
+    saveDocument( karbonPart->document() );
 
-	*m_stream << defs;
-	*m_stream << body;
+    *m_stream << defs;
+    *m_stream << body;
 
-	fileOut.close();
+    fileOut.close();
 
-	delete m_stream;
-	delete m_defs;
-	delete m_body;
+    delete m_stream;
+    delete m_defs;
+    delete m_body;
 
-	return KoFilter::OK;
+    return KoFilter::OK;
 }
 
-void
-SvgExport::visitVDocument( VDocument& document )
+void SvgExport::saveDocument( VDocument& document )
 {
-	// select all objects:
-	document.selection()->append();
+    // get the bounding box of the page
+    QSizeF pageSize = document.pageSize();
 
-	// get the bounding box of the page
-	KoRect rect( 0, 0, document.width(), document.height() );
+    // standard header:
+    *m_defs <<
+        "<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
+        "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<
+        "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
+    << endl;
 
-	// standard header:
-	*m_defs <<
-		"<?xml version=\"1.0\" standalone=\"no\"?>\n" <<
-		"<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" " <<
-		"\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">"
-	<< endl;
+    // add some PR.  one line is more than enough.  
+    *m_defs <<
+        "<!-- Created using Karbon14, part of koffice: http://www.koffice.org/karbon -->" << endl;
 
-	// add some PR.  one line is more than enough.  
-	*m_defs <<
-		"<!-- Created using Karbon14, part of koffice: http://www.koffice.org/karbon -->" << endl;
+    *m_defs <<
+        "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" <<
+        pageSize.width() << "px\" height=\"" << pageSize.height() << "px\">" << endl;
+    printIndentation( m_defs, ++m_indent2 );
+    *m_defs << "<defs>" << endl;
 
-	*m_defs <<
-		"<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" <<
-		rect.width() << "px\" height=\"" << rect.height() << "px\">" << endl;
-	printIndentation( m_defs, ++m_indent2 );
-	*m_defs << "<defs>" << endl;
+    m_indent++;
+    m_indent2++;
 
-	m_indent++;
-	m_indent2++;
+    // export layers:
+    foreach( KoShapeLayer * layer, document.layers() )
+        saveLayer( layer );
 
-	// we do not need the selection anymore:
-	document.selection()->clear();
-
-	// set up gc
-	SvgGraphicsContext *gc = new SvgGraphicsContext;
-	m_gc.push( gc );
-
-	QMatrix mat;
-	mat.scale( 1, -1 );
-	mat.translate( 0, -document.height() );
-
-	m_trans = new VTransformCmd( 0L, mat, false );
-	
-	// export layers:
-	VVisitor::visitVDocument( document );
-
-	delete m_trans;
-	m_trans = 0L;
-
-	// end tag:
-	printIndentation( m_defs, --m_indent2 );
-	*m_defs << "</defs>" << endl;
-	*m_body << "</svg>" << endl;
+    // end tag:
+    printIndentation( m_defs, --m_indent2 );
+    *m_defs << "</defs>" << endl;
+    *m_body << "</svg>" << endl;
 }
 
-QString
-SvgExport::getID( VObject *obj )
+void SvgExport::saveLayer( KoShapeLayer * layer )
 {
-	if( obj && !obj->name().isEmpty() )
-		return QString( " id=\"%1\"" ).arg( obj->name() );
-	return QString();
+    printIndentation( m_body, m_indent++ );
+    *m_body << "<g" << getID( layer ) << ">" << endl;
+
+    foreach( KoShape * shape, layer->iterator() )
+    {
+        KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
+        if( container )
+            saveGroup( container );
+        else
+            saveShape( shape );
+    }
+
+    printIndentation( m_body, --m_indent );
+    *m_body << "</g>" << endl;
 }
 
-void
-SvgExport::visitVGroup( VGroup& group )
+void SvgExport::saveGroup( KoShapeContainer * group )
 {
-	printIndentation( m_body, m_indent++ );
-	*m_body << "<g" << getID( &group ) << ">" << endl;
-	VVisitor::visitVGroup( group );
-	printIndentation( m_body, --m_indent );
-	*m_body << "</g>" << endl;
+    printIndentation( m_body, m_indent++ );
+    *m_body << "<g" << getID( group ) << ">" << endl;
+
+    foreach( KoShape * shape, group->iterator() )
+    {
+        KoShapeContainer * container = dynamic_cast<KoShapeContainer*>( shape );
+        if( container )
+            saveGroup( container );
+        else
+            saveShape( shape );
+    }
+
+    printIndentation( m_body, --m_indent );
+    *m_body << "</g>" << endl;
 }
 
-// horrible but at least something gets exported now
-// will need this for patterns
-void
-SvgExport::visitVImage( VImage& image )
+void SvgExport::saveShape( KoShape * shape )
 {
-	printIndentation( m_body, m_indent );
-	*m_body << "<image ";
-	VVisitor::visitVImage( image );
-	*m_body << "x=\"" << "\" ";
-	*m_body << "y=\"" << "\" ";
-	*m_body << "width=\"" << "\" ";
-	*m_body << "height=\"" << "\" ";
-	*m_body << "xlink:href=\"" << "\"";
-	*m_body << " />" << endl;
+    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+    if( path )
+    {
+        // TODO differentiate between rects, circles and paths
+        savePath( path );
+    }
+    else
+    {
+        // TODO export text and images
+    }
 }
 
-void
-SvgExport::visitVLayer( VLayer& layer )
+void SvgExport::savePath( KoPathShape * path )
 {
-	printIndentation( m_body, m_indent++ );
-	*m_body << "<g" << getID( &layer ) << ">" << endl;
-	//*m_body << " transform=\"scale(1, -1) translate(0, -" << layer.document()->height() << ")\">" << endl;
-	VVisitor::visitVLayer( layer );
-	printIndentation( m_body, --m_indent );
-	*m_body << "</g>" << endl;
+    printIndentation( m_body, m_indent );
+    *m_body << "<path" << getID( path );
+
+    getFill( path->background(), m_body );
+    getStroke( path->border(), m_body );
+
+    *m_body << " d=\"" << path->toString( path->absoluteTransformation(0) ) << "\" ";
+
+    /*
+    if( composite.fillRule() == evenOdd )
+        *m_body << " fill-rule=\"evenodd\"";
+    else
+        *m_body << " fill-rule=\"nonzero\"";
+    */
+
+    *m_body << " />" << endl;
 }
 
-void
-SvgExport::writePathToStream( VPath &composite, const QString &id, QTextStream *stream, unsigned int indent )
+QString SvgExport::getID( KoShape *obj )
 {
-	if( ! stream )
-		return;
-
-	printIndentation( stream, indent );
-	*stream << "<path" << id;
-
-	VVisitor::visitVPath( composite );
-
-	getFill( *( composite.fill() ), stream );
-	getStroke( *( composite.stroke() ), stream );
-
-	QString d;
-	composite.saveSvgPath( d );
-	*stream << " d=\"" << d << "\" ";
-
-	if( composite.fillRule() != m_gc.current()->fillRule )
-	{
-		if( composite.fillRule() == evenOdd )
-			*stream << " fill-rule=\"evenodd\"";
-		else
-			*stream << " fill-rule=\"nonzero\"";
-	}
-
-	*stream << " />" << endl;
-}
-
-void
-SvgExport::visitVPath( VPath& composite )
-{
-	m_trans->visitVPath( composite );
-	writePathToStream( composite, getID( &composite ), m_body, m_indent );
-	m_trans->visitVPath( composite );
-}
-
-void
-SvgExport::visitVSubpath( VSubpath& )
-{
+    if( obj && !obj->name().isEmpty() )
+        return QString( " id=\"%1\"" ).arg( obj->name() );
+    return QString();
 }
 
 QString createUID()
 {
-	static unsigned int nr = 0;
+    static unsigned int nr = 0;
 
-	return "defitem" + QString().setNum( nr++ );
+    return "defitem" + QString().setNum( nr++ );
 }
 
-void
-SvgExport::getColorStops( const Q3PtrVector<VColorStop> &colorStops )
+void SvgExport::getColorStops( const QGradientStops & colorStops )
 {
-	m_indent2++;
-	for( unsigned int i = 0; i < colorStops.count() ; i++ )
-	{
-		printIndentation( m_defs, m_indent2 );
-		*m_defs << "<stop stop-color=\"";
-		getHexColor( m_defs, colorStops.at( i )->color );
-		*m_defs << "\" offset=\"" << QString().setNum( colorStops.at( i )->rampPoint );
-		*m_defs << "\" stop-opacity=\"" << colorStops.at( i )->color.opacity() << "\"" << " />" << endl;
-	}
-	m_indent2--;
+    m_indent2++;
+    foreach( QGradientStop stop, colorStops )
+    {
+        printIndentation( m_defs, m_indent2 );
+        *m_defs << "<stop stop-color=\"";
+        getHexColor( m_defs, stop.second );
+        *m_defs << "\" offset=\"" << QString().setNum( stop.first );
+        *m_defs << "\" stop-opacity=\"" << stop.second.alphaF() << "\"" << " />" << endl;
+    }
+    m_indent2--;
 }
 
-void
-SvgExport::getGradient( const VGradient& grad )
+void SvgExport::getGradient( const QGradient * grad )
 {
-	QString uid = createUID();
-	if( grad.type() == VGradient::linear )
-	{
-		printIndentation( m_defs, m_indent2 );
-		// do linear grad
-		*m_defs << "<linearGradient id=\"" << uid << "\" ";
-		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-		*m_defs << "x1=\"" << grad.origin().x() << "\" ";
-		*m_defs << "y1=\"" << grad.origin().y() << "\" ";
-		*m_defs << "x2=\"" << grad.vector().x() << "\" ";
-		*m_defs << "y2=\"" << grad.vector().y() << "\" ";
-		if( grad.repeatMethod() == VGradient::reflect )
-			*m_defs << "spreadMethod=\"reflect\" ";
-		else if( grad.repeatMethod() == VGradient::repeat )
-			*m_defs << "spreadMethod=\"repeat\" ";
-		*m_defs << ">" << endl;
+    const QString spreadMethod[3] = {
+        QString("spreadMethod=\"pad\" "),
+        QString("spreadMethod=\"reflect\" "),
+        QString("spreadMethod=\"repeat\" ")
+    };
 
-		// color stops
-		getColorStops( grad.colorStops() );
+    QString uid = createUID();
+    if( grad->type() == QGradient::LinearGradient )
+    {
+        const QLinearGradient * g = static_cast<const QLinearGradient*>( grad );
+        // do linear grad
+        printIndentation( m_defs, m_indent2 );
+        *m_defs << "<linearGradient id=\"" << uid << "\" ";
+        *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+        *m_defs << "x1=\"" << g->start().x() << "\" ";
+        *m_defs << "y1=\"" << g->start().y() << "\" ";
+        *m_defs << "x2=\"" << g->finalStop().x() << "\" ";
+        *m_defs << "y2=\"" << g->finalStop().y() << "\" ";
+        *m_defs << spreadMethod[g->spread()];
+        *m_defs << ">" << endl;
 
-		printIndentation( m_defs, m_indent2 );
-		*m_defs << "</linearGradient>" << endl;
-		*m_body << "url(#" << uid << ")";
-	}
-	else if( grad.type() == VGradient::radial )
-	{
-		// do radial grad
-		printIndentation( m_defs, m_indent2 );
-		*m_defs << "<radialGradient id=\"" << uid << "\" ";
-		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-		*m_defs << "cx=\"" << grad.origin().x() << "\" ";
-		*m_defs << "cy=\"" << grad.origin().y() << "\" ";
-		*m_defs << "fx=\"" << grad.focalPoint().x() << "\" ";
-		*m_defs << "fy=\"" << grad.focalPoint().y() << "\" ";
-		double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
-		*m_defs << "r=\"" << QString().setNum( r ) << "\" ";
-		if( grad.repeatMethod() == VGradient::reflect )
-			*m_defs << "spreadMethod=\"reflect\" ";
-		else if( grad.repeatMethod() == VGradient::repeat )
-			*m_defs << "spreadMethod=\"repeat\" ";
-		*m_defs << ">" << endl;
+        // color stops
+        getColorStops( grad->stops() );
 
-		// color stops
-		getColorStops( grad.colorStops() );
+        printIndentation( m_defs, m_indent2 );
+        *m_defs << "</linearGradient>" << endl;
+        *m_body << "url(#" << uid << ")";
+    }
+    else if( grad->type() == QGradient::RadialGradient )
+    {
+        const QRadialGradient * g = static_cast<const QRadialGradient*>( grad );
+        // do radial grad
+        printIndentation( m_defs, m_indent2 );
+        *m_defs << "<radialGradient id=\"" << uid << "\" ";
+        *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+        *m_defs << "cx=\"" << g->center().x() << "\" ";
+        *m_defs << "cy=\"" << g->center().y() << "\" ";
+        *m_defs << "fx=\"" << g->focalPoint().x() << "\" ";
+        *m_defs << "fy=\"" << g->focalPoint().y() << "\" ";
+        *m_defs << "r=\"" << QString().setNum( g->radius() ) << "\" ";
+        *m_defs << spreadMethod[g->spread()];
+        *m_defs << ">" << endl;
 
-		printIndentation( m_defs, m_indent2 );
-		*m_defs << "</radialGradient>" << endl;
-		*m_body << "url(#" << uid << ")";
-	}
-	// gah! pointless abbreviation of conical to conic
-	else if( grad.type() == VGradient::conic )
-	{
-		// fake conical grad as radial.  
-		// fugly but better than data loss.  
-		printIndentation( m_defs, m_indent2 );
-		*m_defs << "<radialGradient id=\"" << uid << "\" ";
-		*m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-		*m_defs << "cx=\"" << grad.origin().x() << "\" ";
-		*m_defs << "cy=\"" << grad.origin().y() << "\" ";
-		*m_defs << "fx=\"" << grad.focalPoint().x() << "\" ";
-		*m_defs << "fy=\"" << grad.focalPoint().y() << "\" ";
-		double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
-		*m_defs << "r=\"" << QString().setNum( r ) << "\" ";
-		if( grad.repeatMethod() == VGradient::reflect )
-			*m_defs << "spreadMethod=\"reflect\" ";
-		else if( grad.repeatMethod() == VGradient::repeat )
-			*m_defs << "spreadMethod=\"repeat\" ";
-		*m_defs << ">" << endl;
+        // color stops
+        getColorStops( grad->stops() );
 
-		// color stops
-		getColorStops( grad.colorStops() );
+        printIndentation( m_defs, m_indent2 );
+        *m_defs << "</radialGradient>" << endl;
+        *m_body << "url(#" << uid << ")";
+    }
+    else if( grad->type() == QGradient::ConicalGradient )
+    {
+        //const QConicalGradient * g = static_cast<const QConicalGradient*>( grad );
+        // fake conical grad as radial.
+        // fugly but better than data loss.
+        /*
+        printIndentation( m_defs, m_indent2 );
+        *m_defs << "<radialGradient id=\"" << uid << "\" ";
+        *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+        *m_defs << "cx=\"" << g->center().x() << "\" ";
+        *m_defs << "cy=\"" << g->center().y() << "\" ";
+        *m_defs << "fx=\"" << grad.focalPoint().x() << "\" ";
+        *m_defs << "fy=\"" << grad.focalPoint().y() << "\" ";
+        double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
+        *m_defs << "r=\"" << QString().setNum( r ) << "\" ";
+        *m_defs << spreadMethod[g->spread()];
+        *m_defs << ">" << endl;
 
-		printIndentation( m_defs, m_indent2 );
-		*m_defs << "</radialGradient>" << endl;
-		*m_body << "url(#" << uid << ")";
-	}
+        // color stops
+        getColorStops( grad->stops() );
+
+        printIndentation( m_defs, m_indent2 );
+        *m_defs << "</radialGradient>" << endl;
+        *m_body << "url(#" << uid << ")";
+        */
+    }
 }
 
 // better than nothing
-void
-SvgExport::getPattern( const VPattern & )
+void SvgExport::getPattern( const QPixmap & )
 {
-	QString uid = createUID();
-	printIndentation( m_defs, m_indent2 );
-	*m_defs << "<pattern id=\"" << uid << "\" ";
-	*m_defs << "width=\"" << "\" ";
-	*m_defs << "height=\"" << "\" ";
-	*m_defs << "patternUnits=\"userSpaceOnUse\" ";
-	*m_defs << "patternContentUnits=\"userSpaceOnUse\" "; 
-	*m_defs << " />" << endl;
-	// TODO: insert hard work here ;)
-	printIndentation( m_defs, m_indent2 );
-	*m_defs << "</pattern>" << endl;
-	*m_body << "url(#" << uid << ")";
+    QString uid = createUID();
+    printIndentation( m_defs, m_indent2 );
+    *m_defs << "<pattern id=\"" << uid << "\" ";
+    *m_defs << "width=\"" << "\" ";
+    *m_defs << "height=\"" << "\" ";
+    *m_defs << "patternUnits=\"userSpaceOnUse\" ";
+    *m_defs << "patternContentUnits=\"userSpaceOnUse\" "; 
+    *m_defs << " />" << endl;
+    // TODO: insert hard work here ;)
+    printIndentation( m_defs, m_indent2 );
+    *m_defs << "</pattern>" << endl;
+    *m_body << "url(#" << uid << ")";
 }
 
-void
-SvgExport::getFill( const VFill& fill, QTextStream *stream )
+void SvgExport::getFill( const QBrush& fill, QTextStream *stream )
 {
-	*stream << " fill=\"";
-	if( fill.type() == VFill::none )
-		*stream << "none";
-	else if( fill.type() == VFill::grad )
-		getGradient( fill.gradient() );
-	else if( fill.type() == VFill::patt )
-		getPattern( fill.pattern() );
-	else
-		getHexColor( stream, fill.color() );
-	*stream << "\"";
+    *stream << " fill=\"";
 
-	if( fill.color().opacity() != m_gc.current()->fill.color().opacity() )
-		*stream << " fill-opacity=\"" << fill.color().opacity() << "\"";
+    switch( fill.style() )
+    {
+        case Qt::NoBrush:
+            *stream << "none";
+            break;
+        case Qt::LinearGradientPattern:
+        case Qt::RadialGradientPattern:
+        case Qt::ConicalGradientPattern:
+            getGradient( fill.gradient() );
+            break;
+        case Qt::TexturePattern:
+            getPattern( fill.texture() );
+            break;
+        case Qt::SolidPattern:
+            getHexColor( stream, fill.color() );
+            break;
+        default:
+            break;
+    }
+
+    *stream << "\"";
+
+    *stream << " fill-opacity=\"" << fill.color().alphaF() << "\"";
 }
 
-void
-SvgExport::getStroke( const VStroke& stroke, QTextStream *stream )
+void SvgExport::getStroke( const KoShapeBorderModel * stroke, QTextStream *stream )
 {
-	if( stroke.type() != m_gc.current()->stroke.type() )
-	{
-		*stream << " stroke=\"";
-		if( stroke.type() == VStroke::none )
-			*stream << "none";
-		else if( stroke.type() == VStroke::grad )
-			getGradient( stroke.gradient() );
-		else
-			getHexColor( stream, stroke.color() );
-		*stream << "\"";
-	}
+    const KoLineBorder * line = dynamic_cast<const KoLineBorder*>( stroke );
+    if( ! line )
+        return;
 
-	if( stroke.color().opacity() != m_gc.current()->stroke.color().opacity() )
-		*stream << " stroke-opacity=\"" << stroke.color().opacity() << "\"";
+    *stream << " stroke=\"";
+    if( line->lineStyle() == Qt::NoPen )
+        *stream << "none";
+    /*
+    else if( line->type() == VStroke::grad )
+        getGradient( line->gradient() );
+    */
+    else
+        getHexColor( stream, line->color() );
+    *stream << "\"";
 
-	if( stroke.lineWidth() != m_gc.current()->stroke.lineWidth() )
-		*stream << " stroke-width=\"" << stroke.lineWidth() << "\"";
+    *stream << " stroke-opacity=\"" << line->color().alphaF() << "\"";
+    *stream << " stroke-width=\"" << line->lineWidth() << "\"";
 
-	if( stroke.lineCap() != m_gc.current()->stroke.lineCap() )
-	{
-		if( stroke.lineCap() == VStroke::capButt )
-			*stream << " stroke-linecap=\"butt\"";
-		else if( stroke.lineCap() == VStroke::capRound )
-			*stream << " stroke-linecap=\"round\"";
-		else if( stroke.lineCap() == VStroke::capSquare )
-			*stream << " stroke-linecap=\"square\"";
-	}
+    if( line->capStyle() == Qt::FlatCap )
+        *stream << " stroke-linecap=\"butt\"";
+    else if( line->capStyle() == Qt::RoundCap )
+        *stream << " stroke-linecap=\"round\"";
+    else if( line->capStyle() == Qt::SquareCap )
+        *stream << " stroke-linecap=\"square\"";
 
-	if( stroke.lineJoin() != m_gc.current()->stroke.lineJoin() )
-	{
-		if( stroke.lineJoin() == VStroke::joinMiter )
-		{
-			*stream << " stroke-linejoin=\"miter\"";
-			*stream << " stroke-miterlimit=\"" << stroke.miterLimit() << "\"";
-		}
-		else if( stroke.lineJoin() == VStroke::joinRound )
-			*stream << " stroke-linejoin=\"round\"";
-		else if( stroke.lineJoin() == VStroke::joinBevel )
-				*stream << " stroke-linejoin=\"bevel\"";
-	}
+    if( line->joinStyle() == Qt::MiterJoin )
+    {
+        *stream << " stroke-linejoin=\"miter\"";
+        *stream << " stroke-miterlimit=\"" << line->miterLimit() << "\"";
+    }
+    else if( line->joinStyle() == Qt::RoundJoin )
+        *stream << " stroke-linejoin=\"round\"";
+    else if( line->joinStyle() == Qt::BevelJoin )
+            *stream << " stroke-linejoin=\"bevel\"";
 
-	// dash
-	if( stroke.dashPattern().array().count() > 0 )
-	{
-		*stream << " stroke-dashoffset=\"" << stroke.dashPattern().offset() << "\"";
-		*stream << " stroke-dasharray=\" ";
+    // dash
+    if(  line->lineStyle() > Qt::SolidLine )
+    {
+        //*stream << " stroke-dashoffset=\"" << line->dashPattern().offset() << "\"";
+        *stream << " stroke-dasharray=\" ";
 
-		Q3ValueListConstIterator<float> itr;
-		for(itr = stroke.dashPattern().array().begin(); itr != stroke.dashPattern().array().end(); ++itr )
-		{
-			*stream << *itr << " ";
-		}
-		*stream << "\"";
-	}
+        foreach( qreal dash, line->lineDashes() )
+        {
+            *stream << dash << " ";
+        }
+        *stream << "\"";
+    }
 }
 
-void
-SvgExport::getHexColor( QTextStream *stream, const VColor& color )
+void SvgExport::getHexColor( QTextStream *stream, const QColor & color )
 {
-	// Convert the various color-spaces to hex
+    // Convert the various color-spaces to hex
+    QString Output;
 
-	QString Output;
+    Output.sprintf( "#%02x%02x%02x", color.red(), color.green(), color.blue() );
 
-	VColor copy( color );
-	copy.setColorSpace( VColor::rgb );
-
-	Output.sprintf( "#%02x%02x%02x", int( copy[0] * 255.0 ), int( copy[1] * 255.0 ), int( copy[2] * 255.0 ) );
-
-	*stream << Output;
+    *stream << Output;
 }
 
-void
-SvgExport::visitVText( VText& text )
+/*
+void SvgExport::visitVText( VText& text )
 {
 	VPath path( 0L );
 	path.combinePath( text.basePath() );
-
-	m_trans->visitVPath( path );
 
 	QString id = createUID();
 	writePathToStream( path, " id=\""+ id + "\"", m_defs, m_indent2 );
 
 	printIndentation( m_body, m_indent++ );
 	*m_body << "<text" << getID( &text );
-	//*m_body << " transform=\"scale(1, -1) translate(0, -" << text.document()->height() << ")\"";
+	// *m_body << " transform=\"scale(1, -1) translate(0, -" << text.document()->height() << ")\"";
 	getFill( *( text.fill() ), m_body );
 	getStroke( *( text.stroke() ), m_body );
 
@@ -509,6 +462,22 @@ SvgExport::visitVText( VText& text )
 	*m_body << "</textPath>" << endl;
 	printIndentation( m_body, --m_indent );
 	*m_body << "</text>" << endl;
+}
+*/
+
+// horrible but at least something gets exported now
+// will need this for patterns
+void SvgExport::saveImage( QImage& )
+{
+    printIndentation( m_body, m_indent );
+    *m_body << "<image ";
+
+    *m_body << "x=\"" << "\" ";
+    *m_body << "y=\"" << "\" ";
+    *m_body << "width=\"" << "\" ";
+    *m_body << "height=\"" << "\" ";
+    *m_body << "xlink:href=\"" << "\"";
+    *m_body << " />" << endl;
 }
 
 #include "svgexport.moc"

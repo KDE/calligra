@@ -10,6 +10,7 @@ include_directories(
         ${KDE4_INCLUDES}  )
 
 add_subdirectory( png )
+add_subdirectory( svg )
 add_subdirectory( wpg )
 add_subdirectory( wmf )
 
@@ -18,7 +19,6 @@ add_subdirectory( wmf )
 if(FALSE)
 add_subdirectory( eps )
 add_subdirectory( ai )
-add_subdirectory( svg )
 add_subdirectory( kontour )
 add_subdirectory( xcf )
 add_subdirectory( msod )

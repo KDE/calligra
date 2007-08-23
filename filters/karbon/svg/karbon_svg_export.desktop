@@ -54,6 +54,6 @@ Name[zh_TW]=Karbon14 SVG 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/svg+xml
-X-KDE-Import=application/x-karbon
+X-KDE-Import=application/vnd.oasis.opendocument.graphics
 X-KDE-Library=libkarbonsvgexport
 X-KDE-Weight=1
