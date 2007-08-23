@@ -303,13 +303,13 @@ void TestMathFunctions::testCONVERT()
                                                                               // - note that there are many other definitions
   CHECK_EVAL( "CONVERT(1000; \"tsp\";    \"l\")",    Value( 4.929994084 ) );  // Teaspoon uses U.S. customary historic definition
                                                                               // - note that there are many other definitions
-  CHECK_EVAL( "CONVERT(   1; \"das\";    \"sec\")",   Value( 10 ) );          // Does it support both "s" and "sec" for second?
+  CHECK_EVAL( "CONVERT(   1; \"das\";    \"sec\")",  Value( 10 ) );           // Does it support both "s" and "sec" for second?
                                                                               // Does it support "da" as the SI standard deka prefix?
   CHECK_EVAL( "CONVERT(   1; \"ar\";     \"m^2\")",  Value( 100 ) );          // A hectare (ar) is 100 square meters.
 //   CHECK_EVAL( "CONVERT(   1; \"cal\";    \"J\")",      Value( 4.1868 ) );    // "cal" is an International Table (IT) calorie, 4.1868 J.
   CHECK_EVAL( "CONVERT(   1; \"lbf\";    \"N\")",    Value( 4.448222 ) );     // Converting pound-force to Newtons
   CHECK_EVAL( "CONVERT(   1; \"HP\";     \"W\")",    Value( 745.701 ) );      // Horsepower to Watts
-  CHECK_EVAL( "CONVERT(   1; \"Mibyte\"; \"bit\")", Value( 8388608 ) );       // Converts bytes to bits, and tests binary prefixes
+  CHECK_EVAL( "CONVERT(   1; \"Mibyte\"; \"bit\")",  Value( 8388608 ) );       // Converts bytes to bits, and tests binary prefixes
   CHECK_EVAL( "CONVERT(   1; \"Gibyte\"; \"Mibyte\")", Value( 1024 ) );       // Converts bytes to bits, and tests binary prefixes
   CHECK_EVAL( "CONVERT(   1; \"T\";      \"ga\")",   Value( 10000 ) );        // Tesla to Gauss
 //   CHECK_EVAL( "CONVERT(   1; \"lbm\";    \"g\")",    Value( 453.59237 ) );   // International pound mass (avoirdupois) to grams.
@@ -318,7 +318,7 @@ void TestMathFunctions::testCONVERT()
                                                                               // or "weight ton", is 2240 lbm.
 //   CHECK_EVAL( "CONVERT(   1; \"psi\";    \"Pa\")",   Value( 6894.76 ) );     // Pounds per square inch to Pascals.
   CHECK_EVAL( "CONVERT(  60; \"mph\";    \"km/h\")", Value( 96.56064 ) );     // Miles per hour to kilometers per hour.
-  CHECK_EVAL( "CONVERT(   1; \"day\";    \"s\")", Value( 86400 ) );           // Day to seconds.  Note: This test uses the 
+  CHECK_EVAL( "CONVERT(   1; \"day\";    \"s\")",    Value( 86400 ) );        // Day to seconds.  Note: This test uses the 
                                                                               // international standard abbreviation for second (s),
                                                                               // not the abbreviation traditionally used in spreadsheets
                                                                               // (sec); both "s" and "sec" must be supported.
@@ -618,6 +618,53 @@ void TestMathFunctions::testQUOTIENT()
 void TestMathFunctions::testRADIANS()
 {
     CHECK_EVAL( "RADIANS(180)/PI()", Value( 1 ) ); // 180 degrees is PI() radians.
+}
+
+void TestMathFunctions::testRAND()
+{
+    CHECK_EVAL( "RAND()>=0", Value( true ) ); // The random number must be between 0 and 1.
+    CHECK_EVAL( "RAND()<=1", Value( true ) ); // The random number must be between 0 and 1.
+}
+
+void TestMathFunctions::testRANDBETWEEN()
+{
+    CHECK_EVAL( "RANDBETWEEN(8;8)",      Value(    8 ) ); // If A=B, return A.
+    CHECK_EVAL( "RANDBETWEEN(5;15)>=5",  Value( true ) ); // Must return value in range
+    CHECK_EVAL( "RANDBETWEEN(5;15)<=15", Value( true ) ); // Must return value in range
+    CHECK_EVAL( "RANDBETWEEN(15;5)>=5",  Value( true ) ); // Must return value in range
+    CHECK_EVAL( "RANDBETWEEN(15;5)<=15", Value( true ) ); // Must return value in range
+}
+
+void TestMathFunctions::testSIGN()
+{
+    CHECK_EVAL( "SIGN(-4)", Value( -1 ) ); // N < 0 returns -1
+    CHECK_EVAL( "SIGN(4)",  Value(  1 ) ); // N > 0 returns +1
+    CHECK_EVAL( "SIGN(0)",  Value(  0 ) ); // N == 0 returns 0
+}
+
+void TestMathFunctions::testSQRT()
+{
+    CHECK_EVAL( "SQRT(4)",  Value( 2 ) );        // The square root of 4 is 2.
+    CHECK_EVAL( "SQRT(-4)", Value::errorNUM() ); // N > 0 returns +1
+}
+
+void TestMathFunctions::testSQRTPI()
+{
+    CHECK_EVAL_SHORT( "SQRTPI(1)",  Value( 1.77245385   ) ); // TODO more digits / The square root of PI
+    CHECK_EVAL( "SQRTPI(2)",  Value( 2.5066282746 ) ); // The square root of 2PI
+    CHECK_EVAL( "SQRTPI(-4)", Value::errorNUM()     ); // The argument must be non-negative
+}
+
+void TestMathFunctions::testSUBTOTAL()
+{
+    CHECK_EVAL( "SUBTOTAL(1;7)", Value( 7 ) ); // Average.
+    CHECK_EVAL( "SUBTOTAL(2;8)", Value( 1 ) ); // Count.
+}
+
+void TestMathFunctions::testSUM()
+{
+    CHECK_EVAL( "SUM(1;2;3)",      Value( 6 ) ); // Simple sum.
+    CHECK_EVAL( "SUM(TRUE();2;3)", Value( 6 ) ); // TRUE() is 1.
 }
 
 QTEST_KDEMAIN(TestMathFunctions, GUI)

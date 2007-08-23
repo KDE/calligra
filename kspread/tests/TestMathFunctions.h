@@ -84,14 +84,14 @@ private slots:
   void testPRODUCT();
   void testQUOTIENT();
   void testRADIANS();
-//   void testRAND();
-//   void testRANDBETWEEN();
+  void testRAND();
+  void testRANDBETWEEN();
 //   void testSERIESSUM(); // to be implemented
-//   void testSIGN();
-//   void testSQRT();
-//   void testSQRTPI();
-//   void testSUBTOTAL();
-//   void testSUM();
+  void testSIGN();
+  void testSQRT();
+  void testSQRTPI();
+  void testSUBTOTAL();
+  void testSUM();
 //   void testSUMIF();
 //   void testSUMSQ();
 
