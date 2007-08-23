@@ -1,7 +1,7 @@
 #!/usr/bin/env kross
 
 # import some python modules.
-import os, sys, tempfile, zipfile
+import os, sys, traceback, tempfile, zipfile
 
 # import the kross module.
 import Kross
@@ -26,7 +26,7 @@ except ImportError:
         openwidget.setMode("Opening")
         openwidget.setFilter("*.odt|ODT Files\n*|All Files")
         if not dialog.exec_loop():
-            raise "Aborted."
+            raise Exception("Aborted.")
         KWord.document().openUrl(openwidget.selectedFile())
 
 # This class does provide us the viewer dialog we are using to display something to the user.
@@ -49,7 +49,7 @@ class Dialog:
         # let's read the manifest file by using a KoScriptingOdfReader
         reader = self.store.open("META-INF/manifest.xml")
         if not reader:
-            raise "Failed to read the mainfest"
+            raise Exception("Failed to read the mainfest")
         # walk over all file-entry items the manifest does know about.
         for i in range( reader.count() ):
             # the typename, e.g. "text/xml"
@@ -114,7 +114,7 @@ class Dialog:
         # open a KoScriptingOdfReader for the text/xml file.
         reader = self.store.open(path)
         if not reader:
-            raise "failed to open %s" % path
+            raise Exception("failed to open %s" % path)
         # this function will be called for each XML element.
         def onElement():
             # the level the element is on to handle indention of the displayed lists
@@ -161,7 +161,7 @@ class Dialog:
 
         # Extract the XML content to a file.
         if not self.store.extractToFile(path,toFile):
-            raise "Failed to extract \"%s\" to \"%s\"" % (path,toFile)
+            raise Exception("Failed to extract \"%s\" to \"%s\"" % (path,toFile))
         if not '"' in program:
             program = "\"%s\"" % program
 
@@ -192,7 +192,7 @@ class Dialog:
             program = edit.text.strip()
             dialog.delayedDestruct()
             if not program:
-                raise "No program defined."
+                raise Exception("No program defined.")
             self.doOpen(program)
 
     def kwriteClicked(self, *args):
@@ -227,52 +227,55 @@ class Dialog:
         if not dialog.exec_loop():
             return
 
-        if self._url.startswith("file://"):
-            self._url = self._url[7:]
-        if not os.path.isfile(self._url):
-            raise "No ODT file to compare with selected."
-
-        program = cmdEdit.text
-        if not program:
-            raise "No command selected."
-        if not '"' in program:
-            program = "\"%s\"" % program
-
-        # Open the ODT that is just a Zip-file anyway.
         try:
-            zf = zipfile.ZipFile(self._url)
-        except BadZipfile:
-            raise "Invalid ODT file: %s" % self._url
-        # Check if the expected file is there.
-        if not path in zf.namelist():
-            raise "The ODT file does not contain any file named \"%s\"" % path
+            if self._url.startswith("file://"):
+                self._url = self._url[7:]
+            if not os.path.isfile(self._url):
+                raise Exception("No ODT file to compare with selected.")
 
-        # Create the temp-files.
-        currentFile = tempfile.mktemp()
-        withFile = tempfile.mktemp()
-        if typeName == "text/xml":
-            currentFile += ".xml"
-            withFile += ".xml"
+            program = cmdEdit.text
+            if not program:
+                raise Exception("No command selected.")
+            if not '"' in program:
+                program = "\"%s\"" % program
 
-        try:
-            # Extract the XML content to a file.
-            if not self.store.extractToFile(path,currentFile):
-                raise "Failed to extract \"%s\" to \"%s\"" % (path,currentFile)
+            # Open the ODT that is just a Zip-file anyway.
+            try:
+                zf = zipfile.ZipFile(self._url)
+            except BadZipfile:
+                raise Exception("Invalid ODT file: %s" % self._url)
+            # Check if the expected file is there.
+            if not path in zf.namelist():
+                raise Exception("The ODT file does not contain any file named \"%s\"" % path)
 
-            # Extract the file from the ODT Zip file to the temp-file.
-            outfile = open(withFile, 'wb')
-            outfile.write(zf.read(path))
-            outfile.flush()
-            outfile.close()
+            # Create the temp-files.
+            currentFile = tempfile.mktemp()
+            withFile = tempfile.mktemp()
+            if typeName == "text/xml":
+                currentFile += ".xml"
+                withFile += ".xml"
 
-            # Execute the external program with the tempfile as argument.
-            result = os.system( "%s \"%s\" \"%s\"" % (program,currentFile,withFile) )
-        finally:
-            # Remove the tempfiles again.
-            for n in (currentFile,withFile):
-                try:
-                    os.remove(n)
-                except:
-                    pass
+            try:
+                # Extract the XML content to a file.
+                if not self.store.extractToFile(path,currentFile):
+                    raise Exception("Failed to extract \"%s\" to \"%s\"" % (path,currentFile))
+
+                # Extract the file from the ODT Zip file to the temp-file.
+                outfile = open(withFile, 'wb')
+                outfile.write(zf.read(path))
+                outfile.flush()
+                outfile.close()
+
+                # Execute the external program with the tempfile as argument.
+                result = os.system( "%s \"%s\" \"%s\"" % (program,currentFile,withFile) )
+            finally:
+                # Remove the tempfiles again.
+                for n in (currentFile,withFile):
+                    try:
+                        os.remove(n)
+                    except:
+                        pass
+        except:
+            self.forms.showMessageBox("Error", "Error", "<qt>%s</qt>" % str(sys.exc_value))
 
 Dialog(self)
