@@ -429,6 +429,9 @@ void VBorder::slotAutoScroll(const QPoint& scrollDistance)
         return;
     const QPoint offset = m_pCanvas->viewConverter()->documentToView(m_pCanvas->offset()).toPoint();
     m_pCanvas->setDocumentOffset(offset + QPoint(0, scrollDistance.y()));
+    QMouseEvent event(QEvent::MouseMove, mapFromGlobal(QCursor::pos()),
+                      Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
+    QApplication::sendEvent(this, &event);
     m_pCanvas->update();
 }
 
@@ -1088,6 +1091,9 @@ void HBorder::slotAutoScroll(const QPoint& scrollDistance)
         return;
     const QPoint offset = m_pCanvas->viewConverter()->documentToView(m_pCanvas->offset()).toPoint();
     m_pCanvas->setDocumentOffset(offset + QPoint(scrollDistance.x(), 0));
+    QMouseEvent event(QEvent::MouseMove, mapFromGlobal(QCursor::pos()),
+                      Qt::NoButton, Qt::NoButton, QApplication::keyboardModifiers());
+    QApplication::sendEvent(this, &event);
     m_pCanvas->update();
 }
 
