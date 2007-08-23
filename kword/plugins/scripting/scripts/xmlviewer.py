@@ -98,10 +98,6 @@ class Dialog:
         self.dialog.connect("currentPageChanged(KPageWidgetItem*,KPageWidgetItem*)",self.currentPageChanged)
         self.dialog.exec_loop()
 
-        #TESTCASE!!!
-        #self.compareClicked()
-
-
     def __del__(self):
         self.dialog.delayedDestruct()
 
@@ -271,8 +267,6 @@ class Dialog:
 
             # Execute the external program with the tempfile as argument.
             result = os.system( "%s \"%s\" \"%s\"" % (program,currentFile,withFile) )
-            if result != 0:
-                raise "<qt>Failed to execute program:<br><br>%s \"%s\" \"%s\"</qt>" % (program,currentFile,withFile)
         finally:
             # Remove the tempfiles again.
             for n in (currentFile,withFile):
