@@ -91,9 +91,9 @@ private slots:
   void testSQRT();
   void testSQRTPI();
   void testSUBTOTAL();
-  void testSUM();
+  void testSUMA();
 //   void testSUMIF();
-//   void testSUMSQ();
+  void testSUMSQ();
 
 private:
   Value evaluate(const QString&);

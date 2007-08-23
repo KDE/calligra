@@ -494,7 +494,8 @@ void TestMathFunctions::testLN()
                                                         // Values in this domain are valid, but implementations that compute LN(x)
                                                         // by blindly summing the series (1/n)((x-1)/x)^n won't get this value
                                                         // correct, because that series requires x > 0.5.
-  CHECK_EVAL( "LN(0)", Value::errorNUM() );             // TODO return err / The argument must be greater than zero.
+  CHECK_EVAL( "LN(0)",     Value::errorNUM() );         // The argument must be greater than zero.
+  CHECK_EVAL( "LN(\"s\")", Value::errorNUM() );         // The argument must be a number.
 }
 
 void TestMathFunctions::testLOG()
@@ -661,10 +662,16 @@ void TestMathFunctions::testSUBTOTAL()
     CHECK_EVAL( "SUBTOTAL(2;8)", Value( 1 ) ); // Count.
 }
 
-void TestMathFunctions::testSUM()
+void TestMathFunctions::testSUMA()
 {
-    CHECK_EVAL( "SUM(1;2;3)",      Value( 6 ) ); // Simple sum.
-    CHECK_EVAL( "SUM(TRUE();2;3)", Value( 6 ) ); // TRUE() is 1.
+    CHECK_EVAL( "SUMA(1;2;3)",      Value( 6 ) ); // Simple sum.
+    CHECK_EVAL( "SUMA(TRUE();2;3)", Value( 6 ) ); // TRUE() is 1.
+}
+
+void TestMathFunctions::testSUMSQ()
+{
+    CHECK_EVAL( "SUMSQ(1;2;3)",      Value( 14 ) ); // Simple sum.
+    CHECK_EVAL( "SUMSQ(TRUE();2;3)", Value( 14 ) ); // TRUE() is 1.
 }
 
 QTEST_KDEMAIN(TestMathFunctions, GUI)

@@ -502,6 +502,8 @@ Value func_gamma (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: ln
 Value func_ln (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  if ( ( args [0].isNumber() == false ) || args[0].asFloat() <= 0 )
+    return Value::errorNUM();
   return calc->ln (args[0]);
 }
 
