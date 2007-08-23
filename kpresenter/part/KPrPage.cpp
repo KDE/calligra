@@ -20,15 +20,10 @@
 #include "KPrPage.h"
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage )
-: KoPAPage( masterPage )    
+: KoPAPage( masterPage )
 {
 }
 
 KPrPage::~KPrPage()
 {
-}
-
-KPrShapeAnimations & KPrPage::animations()
-{
-    return m_animations;
 }

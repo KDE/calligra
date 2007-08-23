@@ -22,21 +22,14 @@
 
 #include <KoPAPage.h>
 
+#include "KPrAnimationController.h"
 #include "KPrShapeAnimations.h"
 
-class KPrPage : public KoPAPage
+class KPrPage : public KoPAPage , public KPrAnimationController
 {
 public:
-	explicit KPrPage( KoPAMasterPage * masterPage );
+    explicit KPrPage( KoPAMasterPage * masterPage );
     virtual ~KPrPage();
-
-    /**
-     * Get the animations of the page.
-     */
-    KPrShapeAnimations & animations();
-
-private:
-    KPrShapeAnimations m_animations;
 };
 
 #endif /* KPRPAGE_H */

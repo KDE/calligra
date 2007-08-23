@@ -20,6 +20,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrAnimationDirector.cpp
      KPrShapeAnimations.cpp
      KPrShapeManagerAnimationStrategy.cpp
+     KPrAnimationController.cpp
      KPrPage.cpp
      KPrMasterPage.cpp
      KPrShapeApplicationData.cpp

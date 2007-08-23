@@ -17,12 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrMasterPage.h"
+#ifndef KPRANIMATIONCONTROLLER_H
+#define KPRANIMATIONCONTROLLER_H
 
-KPrMasterPage::KPrMasterPage()
-{
-}
+#include "KPrShapeAnimations.h"
 
-KPrMasterPage::~KPrMasterPage()
+class KPrAnimationController
 {
-}
+public:
+    KPrAnimationController();
+    ~KPrAnimationController();
+
+    KPrShapeAnimations & animations();
+
+private:
+    KPrShapeAnimations m_animations;
+};
+
+#endif /* KPRANIMATIONCONTROLLER_H */

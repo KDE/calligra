@@ -84,8 +84,12 @@ protected:
     // set the page to be shon and update the UI
     void updateActivePage( KoPAPageBase * page );
 
-    // update to the next step
-    void nextStep();
+    /**
+     * Update to the next step
+     *
+     * @return true if the next step switched to a new page
+     */
+    bool nextStep();
 
     // paint the given step to the painter
     void paintStep( QPainter & painter );
@@ -93,6 +97,8 @@ protected:
 protected slots:
     // update the zoom value
     void updateZoom( const QSize & size );
+    // set the animations to the current m_stepIndex
+    void updateAnimations();
 
 private slots:
     // acts on the time line event
@@ -111,6 +117,8 @@ private:
     QMap<KoShape *, KPrShapeAnimation *> m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;
+    int m_stepIndex;
+    QList<int> m_steps;
 };
 
 #endif /* KPRANIMATIONDIRECTOR_H */
