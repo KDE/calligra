@@ -80,10 +80,10 @@ private slots:
   void testMUNIT();
   void testODD();
 //   void testPI(); -> TestEngineering
-//   void testPOWER();
-//   void testPRODUCT();
-//   void testQUOTIENT();
-//   void testRADIANS();
+  void testPOWER();
+  void testPRODUCT();
+  void testQUOTIENT();
+  void testRADIANS();
 //   void testRAND();
 //   void testRANDBETWEEN();
 //   void testSERIESSUM(); // to be implemented

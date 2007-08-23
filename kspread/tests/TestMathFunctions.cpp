@@ -588,6 +588,38 @@ void TestMathFunctions::testODD()
     CHECK_EVAL( "ODD(0)",    Value(  1 ) );
 }
 
+void TestMathFunctions::testPOWER()
+{
+    CHECK_EVAL( "POWER(10;0)", Value(   1 ) ); // Anything raised to the 0 power is 1
+    CHECK_EVAL( "POWER(2;8)" , Value( 256 ) ); // 2^8 is 256
+}
+
+void TestMathFunctions::testPRODUCT()
+{
+    CHECK_EVAL( "PRODUCT(2;3;4)",       Value( 24 ) ); // Anything raised to the 0 power is 1
+    CHECK_EVAL( "PRODUCT(TRUE();2;3)" , Value(  6 ) ); // TRUE() is 1 if inline
+    CHECK_EVAL( "PRODUCT()",            Value(  0 ) ); // Product with no parameters returns 0
+//TODO
+// check inline-values e.g. product(2;3;"2")
+}
+
+void TestMathFunctions::testQUOTIENT()
+{
+    CHECK_EVAL( "QUOTIENT(10;5)",     Value(  2 ) ); // 
+    CHECK_EVAL( "QUOTIENT(14;5)" ,    Value(  2 ) ); // 
+    CHECK_EVAL( "QUOTIENT(-204;-23)", Value(  8 ) ); //
+    CHECK_EVAL( "QUOTIENT(-45;8)",    Value( -5 ) ); // 
+    CHECK_EVAL( "QUOTIENT(24;-5)" ,   Value( -4 ) ); // 
+    CHECK_EVAL( "QUOTIENT(21;-5)",    Value( -4 ) ); //
+    CHECK_EVAL( "QUOTIENT(-14;5)",    Value( -2 ) ); // 
+    CHECK_EVAL( "QUOTIENT(5;0)" ,     Value::errorDIV0() ); //
+}
+
+void TestMathFunctions::testRADIANS()
+{
+    CHECK_EVAL( "RADIANS(180)/PI()", Value( 1 ) ); // 180 degrees is PI() radians.
+}
+
 QTEST_KDEMAIN(TestMathFunctions, GUI)
 
 #include "TestMathFunctions.moc"

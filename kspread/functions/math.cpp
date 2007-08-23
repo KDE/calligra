@@ -639,7 +639,14 @@ Value func_quotient (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (calc->isZero (args[1]))
     return Value::errorDIV0();
-  return calc->conv()->asInteger (calc->div (args[0], args[1]));
+
+  double res = calc->conv()->toFloat ( calc->div (args[0], args[1]) );
+  if ( res < 0 )
+    res = ceil (res);
+  else
+    res = floor (res);
+
+  return Value( res );
 }
 
 
