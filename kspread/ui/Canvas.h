@@ -296,22 +296,6 @@ public:
 
     virtual bool focusNextPrevChild( bool );
 
-    /**
-     * Depending on the offset in "zoomed" screen pixels
-     * for the horizontal direction,
-     * the function returns the steps in unzoomed points
-     * for the autoscroll acceleration
-     */
-    double autoScrollAccelerationX( int offset );
-
-    /**
-     * Depending on the offset in "zoomed" screen pixels
-     * for the vertical direction,
-     * the function returns the steps in unzoomed points
-     * for the autoscroll acceleration
-     */
-    double autoScrollAccelerationY( int offset );
-
     //TODO: These embedded-object related methods need API documentation!
     EmbeddedObject* getObject( const QPoint &pos, Sheet *_sheet );
     void selectAllObjects();
@@ -434,9 +418,6 @@ private slots:
      * Scroll canvas when receiving this signal
      */
     void slotAutoScroll(const QPoint &scrollDist);
-
-// FIXME Stefan: Still needed?
-//     void doAutoScroll();
 
 private:
     virtual bool eventFilter( QObject *o, QEvent *e );

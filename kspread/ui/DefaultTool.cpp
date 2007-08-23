@@ -184,9 +184,6 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
         d->canvas->deleteEditor( true ); // save changes
     }
 
-// FIXME Stefan: Still needed?
-//     d->scrollTimer->start( 50 );
-
     // Did we click in the lower right corner of the marker/marked-area ?
     if ( d->canvas->selection()->selectionHandleArea(d->canvas->view()->zoomHandler()).contains( QPointF( position.x(), position.y() ) ) )
     {
@@ -342,10 +339,6 @@ void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
     register Sheet * const sheet = d->canvas->activeSheet();
     if (!sheet)
         return;
-
-// TODO Stefan: Still needed?
-//   if ( d->scrollTimer->isActive() )
-//     d->scrollTimer->stop();
 
     d->canvas->d->mousePressed = false;
     d->canvas->view()->disableAutoScroll();

@@ -174,15 +174,9 @@ Canvas::Canvas(View *view)
   d->prevSpokenRow = -1;
   d->prevSpokenCol = -1;
 
-// TODO Stefan: Still neeeded?
-//   d->scrollTimer = new QTimer( this );
-//   connect (d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
-
-  if (d->view)
-  {
     connect( d->view, SIGNAL( autoScroll( const QPoint & )),
              this, SLOT( slotAutoScroll( const QPoint &)));
-  }
+
   setFocus();
   installEventFilter( this ); // for TAB key processing, otherwise focus change
   setAcceptDrops( true );
@@ -195,8 +189,6 @@ Canvas::Canvas(View *view)
 
 Canvas::~Canvas()
 {
-// FIXME Stefan: Still needed?
-//   delete d->scrollTimer;
     delete d->shapeManager;
     delete d->toolProxy;
     delete d->validationInfo;
@@ -858,9 +850,6 @@ void Canvas::focusInEvent( QFocusEvent* )
 
 void Canvas::focusOutEvent( QFocusEvent* )
 {
-// FIXME Stefan: Still needed?
-//     if ( d->scrollTimer->isActive() )
-//         d->scrollTimer->stop();
     d->mousePressed = false;
     d->view->disableAutoScroll();
 }
@@ -973,18 +962,12 @@ void Canvas::dragMoveEvent( QDragMoveEvent* event )
 
 void Canvas::dragLeaveEvent( QDragLeaveEvent * )
 {
-// FIXME Stefan: Still needed?
-//   if ( d->scrollTimer->isActive() )
-//     d->scrollTimer->stop();
 }
 
 void Canvas::dropEvent( QDropEvent * _ev )
 {
   d->dragging = false;
   d->view->disableAutoScroll();
-// FIXME Stefan: Still needed?
-//   if ( d->scrollTimer->isActive() )
-//     d->scrollTimer->stop();
   register Sheet * const sheet = activeSheet();
   if ( !sheet || sheet->isProtected() )
   {
@@ -1988,86 +1971,8 @@ void Canvas::slotAutoScroll(const QPoint &scrollDistance)
   //              initiated in the canvas.
   if (!d->mousePressed)
     return;
-//   kDebug(36005) <<"Canvas::slotAutoScroll(" << scrollDistance <<"";
-  horzScrollBar()->setValue( horzScrollBar()->value() + scrollDistance.x() );
-  vertScrollBar()->setValue( vertScrollBar()->value() + scrollDistance.y() );
+  d->view->canvasController()->scrollContentsBy(scrollDistance.x(), scrollDistance.y());
 }
-
-// TODO Stefan: Still needed?
-#if 0
-void Canvas::doAutoScroll()
-{
-    if ( !d->mousePressed )
-    {
-        d->scrollTimer->stop();
-        return;
-    }
-    bool select = false;
-    QPoint pos = mapFromGlobal( QCursor::pos() );
-
-    //Provide progressive scrolling depending on the mouse position
-    if ( pos.y() < 0 )
-    {
-        vertScrollBar()->setValue ((int) (vertScrollBar()->value() -
-                                   autoScrollAccelerationY( - pos.y())));
-        select = true;
-    }
-    else if ( pos.y() > height() )
-    {
-        vertScrollBar()->setValue ((int) (vertScrollBar()->value() +
-                                   autoScrollAccelerationY (pos.y() - height())));
-        select = true;
-    }
-
-    if ( pos.x() < 0 )
-    {
-        horzScrollBar()->setValue ((int) (horzScrollBar()->value() -
-                                   autoScrollAccelerationX( - pos.x() )));
-        select = true;
-    }
-    else if ( pos.x() > width() )
-    {
-        horzScrollBar()->setValue ((int) (horzScrollBar()->value() +
-                                 autoScrollAccelerationX( pos.x() - width())));
-        select = true;
-    }
-
-    if ( select )
-    {
-        QMouseEvent * event = new QMouseEvent(QEvent::MouseMove, pos,
-                                              Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-        mouseMoveEvent( event );
-        delete event;
-    }
-
-    //Restart timer
-    d->scrollTimer->start( 50 );
-}
-
-double Canvas::autoScrollAccelerationX( int offset )
-{
-    switch( static_cast<int>( offset / 20 ) )
-    {
-        case 0: return 5.0;
-        case 1: return 20.0;
-        case 2: return viewConverter()->viewToDocumentX( width() );
-        case 3: return viewConverter()->viewToDocumentX( width() );
-        default: return viewConverter()->viewToDocumentX( (int) (width() * 5.0) );
-    }
-}
-
-double Canvas::autoScrollAccelerationY( int offset )
-{
-    switch( static_cast<int>( offset / 20 ) )
-    {
-        case 0: return 5.0;
-        case 1: return 20.0;
-        case 2: return viewConverter()->viewToDocumentY( height() );
-        case 3: return viewConverter()->viewToDocumentY( height() );
-        default: return viewConverter()->viewToDocumentY( (int) (height() * 5.0) );
-    }
-}
-#endif
 
 #if 0 // KSPREAD_KOPART_EMBEDDING
 KSpread::EmbeddedObject *Canvas::getObject( const QPoint &pos, Sheet *_sheet )

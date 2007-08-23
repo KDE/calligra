@@ -64,7 +64,6 @@ protected:
 private:
     Canvas *m_pCanvas;
     View *m_pView;
-//     QTimer * m_scrollTimer;
 
     /**
      * Flag that inidicates whether the user wants to mark columns.
@@ -148,7 +147,6 @@ protected:
 private:
     Canvas *m_pCanvas;
     View *m_pView;
-//     QTimer * m_scrollTimer;
 
     bool m_bSelection;
     int m_iSelectionAnchor;

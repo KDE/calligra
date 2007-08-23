@@ -46,8 +46,6 @@ public:
     KSpread::CellEditor *cellEditor;
 
     View *view;
-// FIXME Stefan: Still needed?
-//     QTimer* scrollTimer;
 
     // Non-visible range top-left from current screen
     // Example: If the first visible column is 'E', then offset stores
