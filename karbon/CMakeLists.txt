@@ -45,13 +45,11 @@ add_subdirectory( widgets )
 add_subdirectory( dialogs )
 add_subdirectory( dockers )
 add_subdirectory( render )
-add_subdirectory( tools )
+#add_subdirectory( tools )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
 add_subdirectory( templates )
-
-
 
 
 ########### next target ###############
@@ -60,19 +58,12 @@ set(karboncommon_LIB_SRCS
    karbon_factory.cc 
    karbon_resourceserver.cc 
    karbon_part.cc 
-#   karbon_part_iface.cc 
    karbon_view.cc 
-#   karbon_view_iface.cc 
    karbon_drag.cpp 
    karbon_tool_registry.cc
    karbon_tool_factory.cc 
-   vtoolcontroller.cc 
-   vtool.cc 
    KarbonShapePainter.cpp
 )
-
-
-#kde4_add_dcop_skels(karboncommon_LIB_SRCS karbon_part_iface.h karbon_view_iface.h )
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
@@ -81,20 +72,15 @@ target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain koguiutils kopai
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})
 
-
 ########### next target ###############
 
 set(karbonpart_PART_SRCS karbon_factory_init.cc )
 
-
 kde4_add_plugin(karbonpart WITH_PREFIX ${karbonpart_PART_SRCS})
-
-
 
 target_link_libraries(karbonpart  ${KDE4_KDECORE_LIBS} karboncommon )
 
 install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
-
 
 ########### next target ###############
 

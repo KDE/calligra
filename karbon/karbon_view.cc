@@ -68,7 +68,6 @@
 #include "karbon_part.h"
 #include "vglobal.h"
 #include "vselection.h"
-#include "vtoolcontroller.h"
 #include "vpainterfactory.h"
 #include "vtypebuttonbox.h"
 #include "KarbonCanvas.h"
@@ -77,13 +76,11 @@
 #include <KoMainWindow.h>
 #include <KoLineBorder.h>
 #include <KoCanvasController.h>
-#include <KoCreateShapesTool.h>
 #include <KoFilterManager.h>
 #include <KoContextHelp.h>
 #include <KoUnitDoubleSpinBox.h>
 // #include <KoPageLayoutDia.h>
 #include <KoRuler.h>
-#include <KoToolBox.h>
 #include <KoToolManager.h>
 #include <KoToolDocker.h>
 #include <KoToolDockerFactory.h>
@@ -163,9 +160,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		: KoView( p, parent ), KXMLGUIBuilder( shell() ), m_part( p ), m_canvas( 0L )
 {
 	debugView("KarbonView::KarbonView");
-
-	m_toolController = new VToolController( this );
-	m_toolController->init();
 
 	setComponentData( KarbonFactory::componentData(), true );
 
@@ -311,7 +305,6 @@ KarbonView::~KarbonView()
 
 	delete m_painterFactory;
 
-	delete m_toolController;
     KoToolManager::instance()->removeCanvasController( m_canvasController );
 }
 
@@ -1444,14 +1437,6 @@ void KarbonView::createResourceDock()
 	m_styleDocker->setWindowTitle(i18n("Resources"));
     createDock(i18n("Resources"), m_styleDocker);
     */
-}
-
-VToolController *
-KarbonView::toolController()
-{
-	debugView("KarbonView::toolController()");
-
-	return m_toolController;
 }
 
 void KarbonView::updateReadWrite( bool readwrite )

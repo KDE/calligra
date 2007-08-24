@@ -49,8 +49,6 @@
 #include "vselection.h"
 #include "KarbonCanvas.h"
 #include "vdocumentdocker.h"
-#include "vtoolcontroller.h"
-#include "vtool.h"
 #include "vcommand.h"
 #include "vtransformcmd.h"
 

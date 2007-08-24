@@ -71,8 +71,6 @@ class VSmallPreview;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
-class VToolController;
-
 class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
 {
 	Q_OBJECT
@@ -102,8 +100,6 @@ public:
 	QLabel* statusMessage() const { return m_status; }
 
 	void setCursor( const QCursor & );
-
-	VToolController *toolController();
 
 public slots:
 	// editing:
@@ -242,7 +238,6 @@ private:
 	QLabel				*m_status;       // Ordinary status
 	QLabel				*m_cursorCoords; // Cursor coordinates
 	VSmallPreview		*m_smallPreview; // Stroke and Fill
-	VToolController	*m_toolController;
 
     KoZoomController * m_zoomController;
 };
