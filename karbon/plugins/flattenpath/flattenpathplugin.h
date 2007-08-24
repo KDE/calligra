@@ -20,20 +20,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __FLATTENPATHPLUGIN_H__
-#define __FLATTENPATHPLUGIN_H__
+#ifndef FLATTENPATHPLUGIN_H
+#define FLATTENPATHPLUGIN_H
 
 #include <kparts/plugin.h>
 #include <kdialog.h>
 
-class KarbonView;
 class FlattenDlg;
 
 class FlattenPathPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    FlattenPathPlugin( KarbonView *parent, const QStringList & );
+    FlattenPathPlugin( QWidget *parent, const QStringList & );
     virtual ~FlattenPathPlugin() {}
 
 private slots:

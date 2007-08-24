@@ -20,37 +20,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __INSERTKNOTSPLUGIN_H__
-#define __INSERTKNOTSPLUGIN_H__
+#ifndef INSERTKNOTSPLUGIN_H
+#define INSERTKNOTSPLUGIN_H
 
 #include <kparts/plugin.h>
 #include <kdialog.h>
 
-class KarbonView;
-class VInsertKnotsDlg;
+class InsertKnotsDlg;
 
 class InsertKnotsPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    InsertKnotsPlugin( KarbonView *parent, const QStringList & );
+    InsertKnotsPlugin( QWidget *parent, const QStringList & );
     virtual ~InsertKnotsPlugin() {}
 
 private slots:
     void slotInsertKnots();
 
 private:
-    VInsertKnotsDlg * m_insertKnotsDlg;
+    InsertKnotsDlg * m_insertKnotsDlg;
 };
 
 class KIntSpinBox;
 
-class VInsertKnotsDlg : public KDialog
+class InsertKnotsDlg : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit VInsertKnotsDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit InsertKnotsDlg( QWidget* parent = 0L, const char* name = 0L );
 
     uint knots() const;
     void setKnots( uint value );

@@ -29,8 +29,6 @@
 
 #include "insertknotsplugin.h"
 #include "KarbonPathRefineCommand.h"
-#include <karbon_view.h>
-#include <karbon_part.h>
 
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
@@ -50,16 +48,16 @@
 #include <QtGui/QLabel>
 #include <QtGui/QHBoxLayout>
 
-typedef KGenericFactory<InsertKnotsPlugin, KarbonView> InsertKnotsPluginFactory;
+typedef KGenericFactory<InsertKnotsPlugin,QWidget> InsertKnotsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( "karboninsertknotsplugin" ) )
 
-InsertKnotsPlugin::InsertKnotsPlugin( KarbonView *parent, const QStringList & ) : Plugin( parent )
+InsertKnotsPlugin::InsertKnotsPlugin( QWidget *parent, const QStringList & ) : Plugin( parent )
 {
     QAction *actionInsertKnots  = new KAction(KIcon("14_insertknots"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_insert_knots", actionInsertKnots );
     connect(actionInsertKnots, SIGNAL(triggered()), this, SLOT(slotInsertKnots()));
 
-    m_insertKnotsDlg = new VInsertKnotsDlg( parent );
+    m_insertKnotsDlg = new InsertKnotsDlg( parent );
 }
 
 void InsertKnotsPlugin::slotInsertKnots()
@@ -86,7 +84,7 @@ void InsertKnotsPlugin::slotInsertKnots()
     canvasController->canvas()->addCommand( new KarbonPathRefineCommand( path, m_insertKnotsDlg->knots() ) );
 }
 
-VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
+InsertKnotsDlg::InsertKnotsDlg( QWidget* parent, const char* name )
     : KDialog( parent )
 {
     setObjectName(name);
@@ -106,12 +104,12 @@ VInsertKnotsDlg::VInsertKnotsDlg( QWidget* parent, const char* name )
     hbox->addWidget( m_knots );
 }
 
-uint VInsertKnotsDlg::knots() const
+uint InsertKnotsDlg::knots() const
 {
     return m_knots->value();
 }
 
-void VInsertKnotsDlg::setKnots( uint value )
+void InsertKnotsDlg::setKnots( uint value )
 {
     m_knots->setValue( value );
 }

@@ -37,14 +37,14 @@ class WhirlPinchPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    WhirlPinchPlugin( KarbonView *parent, const QStringList & );
+    WhirlPinchPlugin( QWidget *parent, const QStringList & );
     virtual ~WhirlPinchPlugin() {}
 
 private slots:
     void slotWhirlPinch();
 
 private:
-    WhirlPinchDlg	*m_whirlPinchDlg;
+    WhirlPinchDlg *m_whirlPinchDlg;
 };
 
 class KDoubleNumInput;

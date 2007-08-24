@@ -32,8 +32,6 @@
 #include "whirlpinchplugin.h"
 #include "KarbonWhirlPinchCommand.h"
 
-#include <karbon_view.h>
-
 #include <KoUnitDoubleSpinBox.h>
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
@@ -41,6 +39,7 @@
 #include <KoShapeManager.h>
 #include <KoPathShape.h>
 #include <KoParameterShape.h>
+#include <KoSelection.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -53,17 +52,17 @@
 #include <QtGui/QGridLayout>
 
 
-typedef KGenericFactory<WhirlPinchPlugin, KarbonView> WhirlPinchPluginFactory;
+typedef KGenericFactory<WhirlPinchPlugin, QWidget> WhirlPinchPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_whirlpinchplugin, WhirlPinchPluginFactory( "karbonwhirlpinchplugin" ) )
 
-WhirlPinchPlugin::WhirlPinchPlugin( KarbonView *parent, const QStringList & ) 
+WhirlPinchPlugin::WhirlPinchPlugin( QWidget *parent, const QStringList & ) 
     : Plugin( parent )
 {
     QAction *a = new KAction(KIcon( "14_whirl" ), i18n("&Whirl/Pinch..."), this );
     actionCollection()->addAction("path_whirlpinch", a);
     connect( a, SIGNAL( triggered() ), this, SLOT( slotWhirlPinch() ) );
 
-    m_whirlPinchDlg = new WhirlPinchDlg();
+    m_whirlPinchDlg = new WhirlPinchDlg(parent);
     m_whirlPinchDlg->setAngle( 180.0 );
     m_whirlPinchDlg->setPinch( 0.0 );
     m_whirlPinchDlg->setRadius( 100.0 );

@@ -29,9 +29,6 @@
 #include "flattenpathplugin.h"
 #include "KarbonPathFlattenCommand.h"
 
-#include <karbon_view.h>
-#include <karbon_part.h>
-
 #include <KoToolManager.h>
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
@@ -51,17 +48,17 @@
 #include <QtGui/QHBoxLayout>
 
 
-typedef KGenericFactory<FlattenPathPlugin, KarbonView> FlattenPathPluginFactory;
+typedef KGenericFactory<FlattenPathPlugin,QWidget> FlattenPathPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_flattenpathplugin, FlattenPathPluginFactory( "karbonflattenpathplugin" ) )
 
-FlattenPathPlugin::FlattenPathPlugin( KarbonView *parent, const QStringList & )
+FlattenPathPlugin::FlattenPathPlugin( QWidget *parent, const QStringList & )
 : Plugin( parent/*, name*/ )
 {
     KAction *actionFlattenPath  = new KAction(KIcon("14_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath );
     connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
 
-    m_flattenPathDlg = new FlattenDlg();
+    m_flattenPathDlg = new FlattenDlg( parent );
     m_flattenPathDlg->setFlatness( 10.0 );
 }
 
