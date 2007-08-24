@@ -50,7 +50,7 @@ class FlattenDlg : public KDialog
     Q_OBJECT
 
 public:
-    FlattenDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit FlattenDlg( QWidget* parent = 0L, const char* name = 0L );
 
     double flatness() const;
     void setFlatness( double value );

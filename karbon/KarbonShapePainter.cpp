@@ -145,7 +145,7 @@ bool KarbonShapePainter::paintShapes( QImage & image )
 
     QPainter painter( &image );
 
-    // intialize painter
+    // initialize painter
     painter.setPen( QPen(Qt::NoPen) );
     painter.setBrush( Qt::NoBrush );
     painter.setRenderHint(QPainter::Antialiasing);

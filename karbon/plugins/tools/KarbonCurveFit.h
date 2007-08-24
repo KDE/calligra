@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VCURVEFIT_H__
-#define __VCURVEFIT_H__
+#ifndef KARBONCURVEFIT_H
+#define KARBONCURVEFIT_H
 
 #include <QList>
 #include <QPointF>

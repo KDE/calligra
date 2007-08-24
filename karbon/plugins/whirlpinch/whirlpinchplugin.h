@@ -56,7 +56,7 @@ class WhirlPinchDlg : public KDialog
     Q_OBJECT
 
 public:
-    WhirlPinchDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit WhirlPinchDlg( QWidget* parent = 0L, const char* name = 0L );
 
     double angle() const;
     double pinch() const;
