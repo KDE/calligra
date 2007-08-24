@@ -34,7 +34,7 @@
 #include <widget/kexidatasourcecombobox.h>
 #include <widget/kexifieldlistview.h>
 #include <widget/kexifieldcombobox.h>
-#include <widget/kexismalltoolbutton.h>
+#include <kexiutils/SmallToolButton.h>
 #include <kexidb/connection.h>
 #include <kexiproject.h>
 

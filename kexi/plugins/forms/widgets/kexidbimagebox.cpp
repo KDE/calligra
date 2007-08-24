@@ -71,7 +71,7 @@ struct KexiDBImageBox_Static
 K_GLOBAL_STATIC(KexiDBImageBox_Static, KexiDBImageBox_static)
 
 KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent )
-	: KexiFrame( parent, Qt::WNoAutoErase )
+	: KexiFrame( parent /* Qt 4 not neede: , Qt::WNoAutoErase*/ )
 	, KexiFormDataItemInterface()
 	, m_alignment(Qt::AlignAuto|Qt::AlignTop)
 	, m_designMode(designMode)
@@ -88,9 +88,9 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent )
 	installEventFilter(this);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
-	//setup popup menu
-	m_popupMenu = new KexiImageContextMenu(this);
-	m_popupMenu->installEventFilter(this);
+	//setup context menu
+	m_contextMenu = new KexiImageContextMenu(this);
+	m_contextMenu->installEventFilter(this);
 
 	if (m_designMode) {
 		m_chooser = 0;
@@ -98,7 +98,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent )
 	else {
 		m_chooser = new KexiDropDownButton(this);
 		m_chooser->setFocusPolicy(Qt::StrongFocus);
-		m_chooser->setMenu(m_popupMenu);
+		m_chooser->setMenu(m_contextMenu);
 		setFocusProxy(m_chooser);
 		m_chooser->installEventFilter(this);
 //		m_chooser->setPalette(qApp->palette());
@@ -112,24 +112,24 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent )
 	
 	m_paletteBackgroundColorChanged = false; //set this here, not before
 
-	connect(m_popupMenu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
+	connect(m_contextMenu, SIGNAL(updateActionsAvailabilityRequested(bool&, bool&)), 
 		this, SLOT(slotUpdateActionsAvailabilityRequested(bool&, bool&)));
-	connect(m_popupMenu, SIGNAL(insertFromFileRequested(const KUrl&)),
+	connect(m_contextMenu, SIGNAL(insertFromFileRequested(const KUrl&)),
 		this, SLOT(handleInsertFromFileAction(const KUrl&)));
-	connect(m_popupMenu, SIGNAL(saveAsRequested(const QString&)),
+	connect(m_contextMenu, SIGNAL(saveAsRequested(const QString&)),
 		this, SLOT(handleSaveAsAction(const QString&)));
-	connect(m_popupMenu, SIGNAL(cutRequested()),
+	connect(m_contextMenu, SIGNAL(cutRequested()),
 		this, SLOT(handleCutAction()));
-	connect(m_popupMenu, SIGNAL(copyRequested()),
+	connect(m_contextMenu, SIGNAL(copyRequested()),
 		this, SLOT(handleCopyAction()));
-	connect(m_popupMenu, SIGNAL(pasteRequested()),
+	connect(m_contextMenu, SIGNAL(pasteRequested()),
 		this, SLOT(handlePasteAction()));
-	connect(m_popupMenu, SIGNAL(clearRequested()),
+	connect(m_contextMenu, SIGNAL(clearRequested()),
 		this, SLOT(clear()));
-	connect(m_popupMenu, SIGNAL(showPropertiesRequested()),
+	connect(m_contextMenu, SIGNAL(showPropertiesRequested()),
 		this, SLOT(handleShowPropertiesAction()));
 
-//	connect(m_popupMenu, SIGNAL(aboutToHide()), this, SLOT(slotAboutToHidePopupMenu()));
+//	connect(m_contextMenu, SIGNAL(aboutToHide()), this, SLOT(slotAboutToHidePopupMenu()));
 //	if (m_chooser) {
 		//we couldn't use m_chooser->setPopup() because of drawing problems
 //		connect(m_chooser, SIGNAL(pressed()), this, SLOT(slotChooserPressed()));
@@ -146,7 +146,7 @@ KexiDBImageBox::~KexiDBImageBox()
 
 KexiImageContextMenu* KexiDBImageBox::contextMenu() const
 {
-	return m_popupMenu;
+	return m_contextMenu;
 }
 
 QVariant KexiDBImageBox::value()
@@ -164,7 +164,7 @@ void KexiDBImageBox::setValueInternal( const QVariant& add, bool removeOld, bool
 {
 	if (isReadOnly())
 		return;
-	m_popupMenu->hide();
+	m_contextMenu->hide();
 	if (removeOld) 
 		m_value = add.toByteArray();
 	else //do not add "m_origValue" to "add" as this is QByteArray
@@ -323,7 +323,7 @@ QByteArray KexiDBImageBox::data() const
 
 void KexiDBImageBox::insertFromFile()
 {
-	m_popupMenu->insertFromFile();
+	m_contextMenu->insertFromFile();
 }
 
 void KexiDBImageBox::handleInsertFromFileAction(const KUrl& url)
@@ -502,7 +502,7 @@ void KexiDBImageBox::slotAboutToHidePopupMenu()
 void KexiDBImageBox::contextMenuEvent( QContextMenuEvent * e )
 {
 	if (popupMenuAvailable())
-		m_popupMenu->exec( e->globalPos() );
+		m_contextMenu->exec( e->globalPos() );
 }
 
 /*void KexiDBImageBox::slotChooserPressed()
@@ -529,39 +529,39 @@ void KexiDBImageBox::slotToggled(bool on)
 	QRect screen = qApp->desktop()->availableGeometry( m_chooser );
 	QPoint p;
 	if ( QApplication::reverseLayout() ) {
-		if ( (mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popupMenu->sizeHint().height()) <= screen.height() )
+		if ( (mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_contextMenu->sizeHint().height()) <= screen.height() )
 			p = m_chooser->mapToGlobal( m_chooser->rect().bottomRight() );
 		else
-			p = m_chooser->mapToGlobal( m_chooser->rect().topRight() - QPoint( 0, m_popupMenu->sizeHint().height() ) );
-		p.rx() -= m_popupMenu->sizeHint().width();
+			p = m_chooser->mapToGlobal( m_chooser->rect().topRight() - QPoint( 0, m_contextMenu->sizeHint().height() ) );
+		p.rx() -= m_contextMenu->sizeHint().width();
 	}
 	else {
-		if ( (m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_popupMenu->sizeHint().height()) <= screen.height() )
+		if ( (m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() ).y() + m_contextMenu->sizeHint().height()) <= screen.height() )
 			p = m_chooser->mapToGlobal( m_chooser->rect().bottomLeft() );
 		else
-			p = m_chooser->mapToGlobal( m_chooser->rect().topLeft() - QPoint( 0, m_popupMenu->sizeHint().height() ) );
+			p = m_chooser->mapToGlobal( m_chooser->rect().topLeft() - QPoint( 0, m_contextMenu->sizeHint().height() ) );
 	}
-	if (!m_popupMenu->isVisible() && on) {
-		m_popupMenu->exec( p, -1 );
-		m_popupMenu->setFocus();
+	if (!m_contextMenu->isVisible() && on) {
+		m_contextMenu->exec( p, -1 );
+		m_contextMenu->setFocus();
 	}
 	//m_chooser->setDown( false );
 }*/
 
 void KexiDBImageBox::updateActionStrings()
 {
-	if (!m_popupMenu)
+	if (!m_contextMenu)
 		return;
 	if (m_designMode) {
 /*		QString titleString( i18n("Image Box") );
 		if (!dataSource().isEmpty())
 			titleString.prepend(dataSource() + " : ");
-		m_popupMenu->changeTitle(m_popupMenu->idAt(0), m_popupMenu->titlePixmap(m_popupMenu->idAt(0)), titleString);*/
+		m_contextMenu->changeTitle(m_contextMenu->idAt(0), m_contextMenu->titlePixmap(m_contextMenu->idAt(0)), titleString);*/
 	}
 	else {
 		//update title in data view mode, based on the data source
 		if (columnInfo()) {
-			KexiImageContextMenu::updateTitle( m_popupMenu, columnInfo()->captionOrAliasOrName(),
+			KexiImageContextMenu::updateTitle( m_contextMenu, columnInfo()->captionOrAliasOrName(),
 				KexiFormPart::library()->iconName(metaObject()->className()) );
 		}
 	}
@@ -801,7 +801,7 @@ bool KexiDBImageBox::keyPressed(QKeyEvent *ke)
 {
 	// Esc key should close the popup
 	if (ke->modifiers() == Qt::NoModifier && ke->key() == Qt::Key_Escape) {
-		if (m_popupMenu->isVisible()) {
+		if (m_contextMenu->isVisible()) {
 			m_setFocusOnButtonAfterClosingPopup = true;
 			return true;
 		}
@@ -870,8 +870,8 @@ bool KexiDBImageBox::eventFilter( QObject * watched, QEvent * e )
 		}
 	}
 	// hide popup menu as soon as it loses focus
-	if (watched==m_popupMenu && e->type()==QEvent::FocusOut) {
-		m_popupMenu->hide();
+	if (watched==m_contextMenu && e->type()==QEvent::FocusOut) {
+		m_contextMenu->hide();
 	}
 	return KexiFrame::eventFilter(watched, e);
 }

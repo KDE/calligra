@@ -261,7 +261,7 @@ class KEXIFORMUTILS_EXPORT KexiDBImageBox :
 		KexiBLOBBuffer::Handle m_data;
 //		QString m_originalFileName;
 		KexiDropDownButton *m_chooser;
-		KexiImageContextMenu *m_popupMenu;
+		KexiImageContextMenu *m_contextMenu;
 //moved		KActionCollection m_actionCollection;
 //moved		KAction *m_insertFromFileAction, *m_saveAsAction, *m_cutAction, *m_copyAction, *m_pasteAction,
 //			*m_deleteAction, *m_propertiesAction;

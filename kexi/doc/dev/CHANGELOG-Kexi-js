@@ -22,10 +22,41 @@ KDE4: TODO:
 - fix KMenu::addTitle():
   http://api.kde.org/4.0-api/kdelibs-apidocs/kdeui/html/kmenu_8cpp-source.html#l00144
 
-
 TODO: check reports at scan.coverity.com
+TODO: shared actions are not so usable now as we move actions down to KexiWindow
 
 ===================== Kexi 2.0 Alpha =====================
+
+2007-08-21
+Table View
+- fixed appearance of record navigator
+- removed unnecessary Qt3 double buffering
+- fixed appearance of horizontal and vertical headers
+- fixed placement of context menu title, and added one for data view
+Table Designer
+- show field name in property editor instead of field caption 
+  if the latter is not available
+Main Window
+- fixed presentation of "dirty" state for designed object
+- "save" button added
+
+2007-08-20
+Core
+- "switch to view mode" toggle buttons moved down to windows
+Main Window
+- Property Editor is now visible only when there are properties to edit
+  (i.e not in Data View)
+- fixed switching between context of current tab (window), 
+  so e.g. Property Editor and Find window are properly updated
+- Tabbed Toolbar gets Kexi menu and help area
+- support for User Mode reintroduced
+
+2007-08-17
+Main Window
+- tabbed toolbar: delayed tab switching on mouse hover (0.5 sec)
+- standard actions work
+= fixed "close window" button
+
 2007-07-26
 Main Window
 - prototype tabbed toolbar

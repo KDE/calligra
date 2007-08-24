@@ -54,12 +54,14 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
 	: KexiPart::Part((int)KexiPart::ScriptObjectType, parent, l)
 	, d( new Private() )
 {
-	setTranslatedString("instanceName",
+	setInternalPropertyValue("instanceName",
 		i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
 		"script"));
-	setTranslatedString("instanceCaption", i18n("Script"));
+	setInternalPropertyValue("instanceCaption", i18n("Script"));
+	setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new script"));
+	setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new script."));
 	setSupportedViewModes(Kexi::DesignViewMode);
 }
 

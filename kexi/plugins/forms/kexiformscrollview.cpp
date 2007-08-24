@@ -52,8 +52,8 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
 	connect(this, SIGNAL(resizingStarted()), this, SLOT(slotResizingStarted()));
 
-	m_popupMenu = new KMenu(this);
-	m_popupMenu->setObjectName("m_popupMenu");
+	m_contextMenu = new KMenu(this);
+	m_contextMenu->setObjectName("m_contextMenu");
 
 //	setFocusPolicy(NoFocus);
 }

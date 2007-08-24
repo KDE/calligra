@@ -383,6 +383,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   autoreports and auto web forms. Especially usable for tables with lots of fields.
   We could even define the groupping levels so top-level groups can be splitted using Tab Wigget.
 - fix support for blob visible values for the combo box widget
+- unhide "widgetType" property for Auto Field
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor

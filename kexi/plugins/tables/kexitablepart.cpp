@@ -62,12 +62,14 @@ KexiTablePart::KexiTablePart(QObject *parent, const QStringList &l)
  , d(new Private())
 {
 	kDebug() << "KexiTablePart::KexiTablePart()" << endl;
-	setTranslatedString("instanceName",
+	setInternalPropertyValue("instanceName",
 		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
 		"table"));
-	setTranslatedString("instanceCaption", i18n("Table"));
+	setInternalPropertyValue("instanceCaption", i18n("Table"));
+	setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new table"));
+	setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new table."));
 	setSupportedViewModes( Kexi::DataViewMode | Kexi::DesignViewMode );
 //! @todo js: also add Kexi::TextViewMode when we'll have SQL ALTER TABLE EDITOR!!!
 }

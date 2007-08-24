@@ -186,7 +186,7 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 
 	//d->contextMenuTitle = new KPopupTitle(d->view->contextMenu());
 	//d->view->contextMenu()->insertItem(d->contextMenuTitle, -1, 0);
-	d->contextMenuTitle = d->view->contextMenu()->addTitle(QString());
+//	d->contextMenuTitle = d->view->contextMenu()->addTitle(QString());
 	connect(d->view->contextMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(slotAboutToShowContextMenu()));
 
@@ -1690,17 +1690,19 @@ void KexiTableDesignerView::slotCommandExecuted(K3Command *command)
 void KexiTableDesignerView::slotAboutToShowContextMenu()
 {
 	//update title
+	QString title;
 	if (propertySet()) {
 		const KoProperty::Set &set = *propertySet();
 		QString captionOrName(set["caption"].value().toString());
 		if (captionOrName.isEmpty())
 			captionOrName = set["name"].value().toString();
-//! @todo show "field" icon
-		d->contextMenuTitle->setText( i18n("Table field \"%1\"", captionOrName) );
+		title = i18n("Table field \"%1\"", captionOrName);
 	}
 	else {
-		d->contextMenuTitle->setText( i18nc("Empty table row", "Empty Row") );
+		title = i18nc("Empty table row", "Empty Row");
 	}
+//! \todo replace lineedit with table_field icon
+	d->view->setContextMenuTitle( KIcon("lineedit"), title );
 }
 
 QString KexiTableDesignerView::debugStringForCurrentTableSchema(tristate& result)
@@ -1949,8 +1951,9 @@ void KexiTableDesignerView::changePropertyVisibility(
 void KexiTableDesignerView::propertySetSwitched()
 {
 	KexiDataTable::propertySetSwitched();
-	static_cast<KexiTablePart*>(window()->part())->lookupColumnPage()
-		->assignPropertySet(propertySet());
+	KexiLookupColumnPage *page = static_cast<KexiTablePart*>(window()->part())->lookupColumnPage();
+	if (page)
+		page->assignPropertySet(propertySet());
 }
 
 bool KexiTableDesignerView::isPhysicalAlteringNeeded()

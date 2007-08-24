@@ -42,12 +42,15 @@
 KexiQueryPart::KexiQueryPart(QObject *parent, const QStringList &l)
  : KexiPart::Part((int)KexiPart::QueryObjectType, parent, l)
 {
-	setTranslatedString("instanceName",
+	setInternalPropertyValue("instanceName",
 		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
 		"query"));
-	setTranslatedString("instanceCaption", i18n("Query"));
+	setInternalPropertyValue("instanceCaption", i18n("Query"));
+	setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new query"));
+	setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new query."));
+	setInternalPropertyValue("textViewModeCaption", i18n("&SQL View"));
 	setSupportedViewModes( Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode );
 }
 
