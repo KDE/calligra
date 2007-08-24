@@ -114,7 +114,7 @@ void KexiActionProxy::plugSharedAction(const QString& action_name, QObject* rece
 {
 	if (action_name.isEmpty())// || !receiver || !slot)
 		return;
-	QPair<Q3Signal*,bool> *p = m_signals.contains(action_name) ? m_signals[action_name] : 0;
+	QPair<Q3Signal*,bool> *p = m_signals.value(action_name);
 	if( ! p ) {
 		p = new QPair<Q3Signal*,bool>( new Q3Signal(&m_signal_parent), true );
 		m_signals.insert(action_name, p);
@@ -201,7 +201,7 @@ void KexiActionProxy::plugSharedActionsToExternalGUI(QList<QString> action_names
 
 bool KexiActionProxy::activateSharedAction(const QString& action_name, bool alsoCheckInChildren)
 {
-	QPair<Q3Signal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals.value(action_name);
 	if (!p || !p->second) {
 		//try in children...
 		if (alsoCheckInChildren) {
@@ -224,7 +224,7 @@ QAction* KexiActionProxy::sharedAction(const QString& action_name)
 
 bool KexiActionProxy::isSupported(const QString& action_name) const
 {
-	QPair<Q3Signal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals.value(action_name);
 	if (!p) {
 		//not supported explicitly - try in children...
 		if (m_focusedChild)
@@ -240,7 +240,7 @@ bool KexiActionProxy::isSupported(const QString& action_name) const
 
 bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInChildren) const
 {
-	QPair<Q3Signal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals.value(action_name);
 	if (!p) {
 		//not supported explicitly - try in children...
 		if (alsoCheckInChildren) {
@@ -259,7 +259,7 @@ bool KexiActionProxy::isAvailable(const QString& action_name, bool alsoCheckInCh
 
 void KexiActionProxy::setAvailable(const QString& action_name, bool set)
 {
-	QPair<Q3Signal*,bool> *p = m_signals[action_name];
+	QPair<Q3Signal*,bool> *p = m_signals.value(action_name);
 	if (!p)
 		return;
 	p->second = set;

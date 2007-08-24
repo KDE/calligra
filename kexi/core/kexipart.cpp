@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -81,17 +81,6 @@ public:
 		return cancelled;
 	}
 
-	QString name(const QByteArray& name, const QString& defaultString)
-	{
-		QString result( names.value(name) );
-		return result.isEmpty() ? defaultString : result;
-	}
-	
-	//! Set of i18n'd action names for, initialised on KexiPart::Part subclass ctor
-	//! The names are useful because the same action can have other name for each part
-	//! E.g. "New table" vs "New query" can have different forms for some languages...
-	QHash<QByteArray,QString> names;
-
 	/*! Supported modes for dialogs created by this part.
 	@see supportedViewModes() */
 	Kexi::ViewModes supportedViewModes;
@@ -158,6 +147,10 @@ void Part::createGUIClients()//KexiMainWindow *win)
 			KexiMainWindowIface::global()->actionCollection()
 		);
 		act->setObjectName(KexiPart::nameForCreateAction(*info()));
+		QString defaultToolTip( i18n("Create new object of type \"%1\"", instanceCaption().toLower()) );
+		act->setToolTip(internalPropertyValue("instanceToolTip", defaultToolTip).toString());
+		QString defaultWhatsThis( i18n("Creates new object of type \"%1\"", instanceCaption().toLower()) );
+		act->setWhatsThis(internalPropertyValue("instanceWhatsThis", defaultWhatsThis).toString());
 		connect(act, SIGNAL(triggered()), this, SLOT(slotCreate()));
 		KexiMainWindowIface::global()->actionCollection()->addAction( act->objectName(), act );
 #ifdef __GNUC__
@@ -370,7 +363,8 @@ KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::View
 
 	//dirty only if it's a new object
 	if (window->selectedView())
-		window->selectedView()->setDirty( d->newObjectsAreDirty ? item.neverSaved() : false );
+		window->selectedView()->setDirty( 
+			internalPropertyValue("newObjectsAreDirty", false).toBool() ? item.neverSaved() : false );
 	
 	kexidbg << "Part::openInstance() window returned."<<endl;
 	return window;
@@ -442,16 +436,16 @@ QString Part::instanceName() const
 	// "instanceName" should be already valid identifier but we're using
 	// KexiUtils::string2Identifier() to be sure translators did it right.
 	return KexiUtils::string2Identifier(
-		d->name("instanceName", 
+		internalPropertyValue("instanceName", 
 		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
-		"object"))).toLower();
+		"object")).toString()).toLower();
 }
 
 QString Part::instanceCaption() const
 {
-	return d->name("instanceCaption", i18n("Object"));
+	return internalPropertyValue("instanceCaption", i18n("Object")).toString();
 }
 
 tristate Part::rename(KexiPart::Item &item, const QString& newName)
@@ -501,11 +495,6 @@ int Part::registeredPartID() const
 	return d->registeredPartID;
 }
 
-void Part::setTranslatedString(const QByteArray& name, const QString& translatedString)
-{
-	d->names.insert(name, translatedString);
-}
-
 void Part::setSupportedViewModes(Kexi::ViewModes modes)
 {
 	d->supportedViewModes = modes;
@@ -514,11 +503,6 @@ void Part::setSupportedViewModes(Kexi::ViewModes modes)
 void Part::setSupportedUserViewModes(Kexi::ViewModes modes)
 {
 	d->supportedUserViewModes = modes;
-}
-
-void Part::setNewObjectsAreDirty(bool set)
-{
-	d->newObjectsAreDirty = set;
 }
 
 //-------------------------------------------------------------------------

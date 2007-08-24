@@ -31,7 +31,6 @@
 #include <QPointer>
 #include <QEvent>
 #include <QCloseEvent>
-#include <QStackedWidget>
 
 //#include <k3mdichildview.h>
 //#include <kxmlguiwindow.h>
@@ -48,13 +47,29 @@ namespace KoProperty {
 	class Set;
 }
 
+//! @short action for toggling view mode
+class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
+{
+	Q_OBJECT
+	public:
+		//! Creates action for toggling to view mode @a mode. @a slot should have signature 
+		//! matching switchedTo(Kexi::ViewMode mode) signal.
+		KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent, QObject* receiver, const char* slot);
+	signals:
+		void switchedTo(Kexi::ViewMode mode);
+	private slots:
+		void slotToggled(bool);
+
+	private:
+		class Private;
+		Private * const d;
+};
+
 //! Base class for child window of Kexi's main application window.
 /*! This class can contain a number of configurable views, switchable using toggle action.
- It also automatically works as a proxy for shared (application-wide) actions.
-*/
+ It also automatically works as a proxy for shared (application-wide) actions. */
 class KEXICORE_EXPORT KexiWindow
-//	: public KexiMdiChildView
-	: public QStackedWidget
+	: public QWidget
 	, public KexiActionProxy
 	, public Kexi::ObjectStatus
 {
@@ -63,6 +78,7 @@ class KEXICORE_EXPORT KexiWindow
 	public:
 		virtual ~KexiWindow();
 
+		//! \return true if the window is registered.
 		bool isRegistered() const;
 
 		//! \return currently selected view or 0 if there is no current view
@@ -100,13 +116,13 @@ class KEXICORE_EXPORT KexiWindow
 		/*! If there is a part item associated with this dialog (see partItem()),
 		 partItem()->identifier() is returned, otherwise internal dialog's identifier
 		 (previously set by setID()) is returned. */
-		int	id() const;
+		int id() const;
 
 		//! \return Kexi part used to create this window
 		KexiPart::Part* part() const;
 
 		//! \return Kexi part item used to create this window
-		KexiPart::Item *partItem() const;
+		KexiPart::Item* partItem() const;
 
 		//! Kexi dialog's gui COMMON client.
 		//! It's obtained by querying part object for this dialog.
@@ -137,14 +153,6 @@ class KEXICORE_EXPORT KexiWindow
 
 		/*! \return current view mode for this dialog. */
 		Kexi::ViewMode currentViewMode() const;
-
-		/*! Switches this dialog to \a newViewMode.
-		 \a viewMode is one of Kexi::ViewMode enum elements.
-		 \return true for successful switching
-		 True is returned also if user has cancelled switching
-		 (rarely, but for any reason) - cancelled is returned.
-		 */
-		tristate switchToViewMode(Kexi::ViewMode newViewMode);
 
 		void setContextHelp(const QString& caption, const QString& text, const QString& iconName);
 
@@ -257,6 +265,13 @@ class KEXICORE_EXPORT KexiWindow
 		/*!  Sets 'dirty' flag on every dialog's view. */
 		void setDirty(bool dirty);
 
+		/*! Switches this dialog to \a newViewMode.
+		 \a viewMode is one of Kexi::ViewMode enum elements.
+		 \return true for successful switching
+		 True is returned also if user has cancelled switching
+		 (rarely, but for any reason) - cancelled is returned. */
+		tristate switchToViewMode(Kexi::ViewMode newViewMode);
+
 	protected:
 		//! Used by KexiPart::Part
 		KexiWindow(QWidget *parent, Kexi::ViewModes supportedViewModes, KexiPart::Part& part,
@@ -294,7 +309,16 @@ class KEXICORE_EXPORT KexiWindow
 		/*! Sets temporary data shared between views. */
 		void setData(KexiWindowData* data);
 
+	private slots:
+		/*! Helper, calls KexiMainWindowIface::switchToViewMode() which in turn calls KexiWindow::switchToViewMode()
+		 to get error handling and reporting as well on main window level. */
+		tristate switchToViewModeInternal(Kexi::ViewMode newViewMode);
+
 	private:
+		void createSubwidgets();
+		void createViewModeToggleButtons();
+		void showSaveDesignButton(bool show);
+
 		class Private;
 		Private * d;
 

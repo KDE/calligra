@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 #include <qmap.h>
 
 #include <kexiutils/tristate.h>
+#include <kexiutils/InternalPropertyMap.h>
 #include "kexi.h"
 
 class KActionCollection;
@@ -56,10 +57,28 @@ enum ObjectTypes {
 	UserObjectType = 100 //!< external types
 };
 
-/**
- * The main class for kexi frontend parts like tables, queries, forms and reports
+//! @short The main class for kexi frontend parts (plugins) like tables, queries, forms and reports
+/*! 
+  Plugins create windows (KexiWindow) for a given type of object.
+
+  Notes for plugins implementors:  This class supports InternalPropertyMap interface,
+  so supported internal properties affecting its behaviour are:
+  - newObjectsAreDirty: True if newly created, unsaved objects are dirty. False by default.
+  - instanceName: base i18n'd name of objects created by a plugin, e.g. "table", 
+    see instanceName().
+  - instanceCaption: i18n'd instance name usable for displaying in gui as object's caption,
+    e.g. "Table", see instanceCaption()
+  - instanceToolTip: i18n'd tool tip for "Create" action for a given part, e.g. "Create new table"
+  - instanceWhatsThis: i18n'd "What's This" text for "Create" action for a given part, 
+    e.g. "Creates new table."
+  - textViewModeCaption: custum action text replacing standard "Text View" text. 
+    Used in for query's "SQL View".
+  In general: a whole set of i18n'd action names, initialised on KexiPart::Part subclass ctor.
+  The names are useful because the same action can have other name for each part
+  E.g. "New table" vs "New query" can have different forms for some languages.
+  So this is a flexible way for customizing translatable strings.
  */
-class KEXICORE_EXPORT Part : public QObject
+class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalPropertyMap
 {
 	Q_OBJECT
 
@@ -300,11 +319,6 @@ class KEXICORE_EXPORT Part : public QObject
 		
 		int registeredPartID() const;
 		
-		/*! Sets translated string for name, e.g. "instanceName" -&gt; "table" 
-		 and "instanceCaption" -&gt; "Table" for the table plugin.
-		 This is a flexible way for customizing translatable strings. */
-		void setTranslatedString(const QByteArray& name, const QString& translatedString);
-
 		/*! Sets supported modes for windows created by this part in "user mode".
 		 The default is Kexi::DataViewMode. It is altered in classes like KexiSimplePrintingPart.
 		 @see supportedUserViewModes() */
@@ -313,17 +327,12 @@ class KEXICORE_EXPORT Part : public QObject
 		/*! Sets supported view modes for this part. */
 		void setSupportedViewModes(Kexi::ViewModes modes);
 
-		/*! True if newly created, unsaved objects are dirty. False by default.
-		 You can change it in your subclass' constructor using setNewObjectsAreDirty(bool set). */
-		bool newObjectsAreDirty() const ;
-
-		//! Changes "newObjectsAreDirty" flag. */
-		void setNewObjectsAreDirty(bool set);
-
+	private:
 		class Private;
 		Private * const d;
 
 	friend class Manager;
+	friend class KexiWindow;
 	//friend class KexiMainWindowIface;
 	friend class GUIClient;
 };

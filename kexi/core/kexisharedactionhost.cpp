@@ -278,6 +278,7 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
 		KAction* action = new KAction(KIcon(pix_name), text, col);
 		action->setObjectName(name);
 		action->setShortcut(cut);
+		col->addAction(name, action);
 		return createSharedActionInternal(action);
 	}
 	else if (qstricmp(subclassName,"KToggleAction")==0) {
@@ -291,6 +292,7 @@ KAction* KexiSharedActionHost::createSharedAction(const QString &text, const QSt
 		KActionMenu* action = new KActionMenu(KIcon(pix_name), text, col);
 		action->setObjectName(name);
 		action->setShortcut(cut);
+		col->addAction(name, action);
 		return createSharedActionInternal(action);
 	}
 	//TODO: more KAction subclasses

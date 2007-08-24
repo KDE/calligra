@@ -135,6 +135,10 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 		/*! \return currently active window or 0 if there is no active window. */
 		virtual KexiWindow* currentWindow() const = 0;
 
+		/*! Switches \a window to view \a mode. 
+		 Activates the window if it is not the current window. */
+		virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode) = 0;
+
 		/*! \return true if this window is in the User Mode. */
 		virtual bool userMode() const = 0;
 

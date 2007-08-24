@@ -155,7 +155,7 @@ class KEXICORE_EXPORT KexiActionProxy
 
 		KexiSharedActionHost *m_host;
 		QPointer<QObject> m_receiver;
-		QMap<QString, QPair<Q3Signal*,bool>* > m_signals;
+		QHash<QString, QPair<Q3Signal*,bool>* > m_signals;
 
 		QList<KexiActionProxy*> m_sharedActionChildren;
 
@@ -181,4 +181,3 @@ class KEXICORE_EXPORT KexiActionProxy
 };
 
 #endif
-

@@ -21,7 +21,6 @@
 #define KEXI_H
 
 #include <qpointer.h>
-#include <qfont.h>
 
 #include <kexi_version.h>
 #include "kexiprojectdata.h"
@@ -51,8 +50,12 @@ namespace Kexi
 	};
 	Q_DECLARE_FLAGS(ViewModes, ViewMode)
 	
-	//! i18n'ed name of view mode \a m
-	KEXICORE_EXPORT QString nameForViewMode(ViewMode mode);
+	/*! @return i18n'ed name of view mode @a mode. If @a withAmpersand is true, 
+	 ampersands used for accelerators are included, e.g. "&Data View".*/
+	KEXICORE_EXPORT QString nameForViewMode(ViewMode mode, bool withAmpersand = false);
+
+	/*! @return icon name of view mode @a mode. */
+	KEXICORE_EXPORT QString iconNameForViewMode(ViewMode mode);
 
 	//! A set of known connections
 	KEXICORE_EXPORT KexiDBConnectionSet& connset();
@@ -81,11 +84,6 @@ namespace Kexi
 
 	//! false by default, flag loaded on main window startup
 	KEXICORE_EXPORT bool& tempShowScripts(); 
-
-	/*! A global setting for minimal readable font.
-	 Note: this is defined because KDE has no such setting yet.
-	 \a init is a widget that should be passed if no qApp->mainWidget() is available yet. */
-	KEXICORE_EXPORT QFont smallFont(QWidget *init = 0);
 
 	/*! Helper class for storing object status. */
 	class KEXICORE_EXPORT ObjectStatus

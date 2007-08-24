@@ -49,20 +49,17 @@ class KexiInternal
 	public:
 		KexiInternal()
 		 : connset(0)
-		 , smallFont(0)
 		{
 		}
 		~KexiInternal()
 		{
 			delete connset;
-			delete smallFont;
 		}
 		KexiDBConnectionSet* connset;
 		KexiProjectSet recentProjects;
 		KexiDBConnectionSet recentConnections;
 		KexiDB::DriverManager driverManager;
 		KexiPart::Manager partManager;
-		QFont *smallFont;
 };
 
 K_GLOBAL_STATIC(KexiInternal, _int)
@@ -125,28 +122,33 @@ bool& Kexi::tempShowScripts() {
 }
 
 //--------------------------------------------------------------------------------
-
-QFont Kexi::smallFont(QWidget *init)
+QString Kexi::nameForViewMode(ViewMode mode, bool withAmpersand)
 {
-	if (!_int->smallFont) {
-		_int->smallFont = new QFont( init->font() );
-		const int wdth = KGlobalSettings::desktopGeometry(init).width();
-		int size = 10 + qMax(0, wdth - 1100) / 100;
-		size = qMin( init->fontInfo().pixelSize(), size );
-		_int->smallFont->setPixelSize( size );
-	}
-	return *_int->smallFont;
+	if (!withAmpersand)
+		return Kexi::nameForViewMode(mode, true).replace("&","");
+
+	if (mode==NoViewMode)
+		return i18n("&No View");
+	else if (mode==DataViewMode)
+		return i18n("&Data View");
+	else if (mode==DesignViewMode)
+		return i18n("D&esign View");
+	else if (mode==TextViewMode)
+		return i18n("&Text View");
+
+	return i18n("&Unknown");
 }
 
 //--------------------------------------------------------------------------------
-QString Kexi::nameForViewMode(ViewMode mode)
+QString Kexi::iconNameForViewMode(ViewMode mode)
 {
-	if (mode==NoViewMode) return i18n("No View");
-	else if (mode==DataViewMode) return i18n("Data View");
-	else if (mode==DesignViewMode) return i18n("Design View");
-	else if (mode==TextViewMode) return i18n("Text View");
-
-	return i18n("Unknown");
+	if (mode==DataViewMode)
+		return i18n("state_data");
+	else if (mode==DesignViewMode)
+		return i18n("state_edit");
+	else if (mode==TextViewMode)
+		return i18n("state_sql");
+	return QString();
 }
 
 //--------------------------------------------------------------------------------
