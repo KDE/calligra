@@ -467,7 +467,7 @@ void
 KarbonView::editPaste()
 {
 	debugView("KarbonView::editPaste()");
-
+    /*
 	KarbonDrag kd;
 	VObjectList objects;
 
@@ -485,6 +485,7 @@ KarbonView::editPaste()
 
 	part()->repaintAllViews();
 	selectionChanged();
+    */
 }
 
 void KarbonView::editSelectAll()
@@ -597,7 +598,7 @@ KarbonView::selectionAlign(KoShapeAlignCommand::Align align)
 	bRect= (selectedShapes.count() == 1) ? part()->document().boundingRect() : selection->boundingRect();
 	KoShapeAlignCommand *cmd = new KoShapeAlignCommand( selectedShapes, align, bRect);
 
-	part()->KoDocument::addCommand( cmd );
+    m_canvas->addCommand( cmd );
 }
 
 
@@ -677,14 +678,14 @@ KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distribute)
 
 	KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand( selectedShapes, distribute, selection->boundingRect());
 
-	part()->KoDocument::addCommand( cmd );
+    m_canvas->addCommand( cmd );
 }
 
 void
 KarbonView::selectionDuplicate()
 {
 	debugView("KarbonView::selectionDuplicate()");
-
+    /*
 	if ( !part()->document().selection()->objects().count() )
 		return;
 
@@ -707,6 +708,7 @@ KarbonView::selectionDuplicate()
 
 	part()->repaintAllViews();
 	selectionChanged();
+    */
 }
 
 void
@@ -715,7 +717,7 @@ KarbonView::selectionBringToFront()
     debugView("KarbonView::selectionBringToFront()");
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::BringToFront ) );
+    m_canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::BringToFront ) );
 }
 
 void
@@ -724,7 +726,7 @@ KarbonView::selectionMoveUp()
     debugView("KarbonView::selectionMoveUp()");
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape ) );
+    m_canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::RaiseShape ) );
 }
 
 void
@@ -733,7 +735,7 @@ KarbonView::selectionMoveDown()
     debugView("KarbonView::selectionMoveDown()");
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape ) );
+    m_canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::LowerShape ) );
 }
 
 void
@@ -742,7 +744,7 @@ KarbonView::selectionSendToBack()
     debugView("KarbonView::selectionSendToBack()");
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes( KoFlake::TopLevelSelection );
-    part()->KoDocument::addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::SendToBack ) );
+    m_canvas->addCommand( KoShapeReorderCommand::createCommand( selectedShapes, m_canvas->shapeManager(), KoShapeReorderCommand::SendToBack ) );
 }
 
 void KarbonView::groupSelection()

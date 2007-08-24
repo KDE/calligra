@@ -55,9 +55,11 @@ ShadowEffectPlugin::ShadowEffectPlugin( KarbonView *parent, const QStringList & 
 void
 ShadowEffectPlugin::slotShadowEffect()
 {
+    /*
 	KarbonPart *part = ((KarbonView *)parent())->part();
 	if( part && m_shadowEffectDlg->exec() )
 		part->addCommand( new VCreateShadowCmd( &part->document(), m_shadowEffectDlg->distance(), m_shadowEffectDlg->angle(), double( m_shadowEffectDlg->opacity() ) / 255.0 ), true );
+    */
 }
 
 VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )

@@ -52,9 +52,11 @@ VRoundCornersPlugin::~VRoundCornersPlugin()
 void
 VRoundCornersPlugin::slotRoundCorners()
 {
+    /*
 	KarbonPart *part = ((KarbonView *)parent())->part();
 	if( part && m_roundCornersDlg->exec() )
 		part->addCommand( new VRoundCornersCmd( &part->document(), m_roundCornersDlg->radius() ), true );
+    */
 }
 
 

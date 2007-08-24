@@ -49,8 +49,6 @@
 #include "vselection.h"
 #include "KarbonCanvas.h"
 #include "vdocumentdocker.h"
-#include "vcommand.h"
-#include "vtransformcmd.h"
 
 #include <KoApplication.h>
 #include <KoOasisStyles.h>
@@ -341,13 +339,6 @@ bool KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     setModified( false );
 
     return true;
-}
-
-void
-KarbonPart::addCommand( VCommand* cmd, bool repaint )
-{
-	kDebug(38000) <<"KarbonPart::addCommand: please port to new command handling";
-        delete cmd;
 }
 
 void

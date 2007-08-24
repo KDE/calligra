@@ -31,6 +31,7 @@ class QPixmap;
 
 class VDocument;
 class KarbonView;
+class VCommand;
 
 /*************************************************************************
  *  Document Tab                                                         *

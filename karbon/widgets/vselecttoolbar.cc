@@ -72,14 +72,14 @@ void
 VSelectToolBar::slotXChanged( double newval )
 {
 	double dx = newval - m_view->part()->document().selection()->boundingBox().topLeft().x();
-	m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), dx, 0.0 ), true );
+	//m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), dx, 0.0 ), true );
 }
 
 void
 VSelectToolBar::slotYChanged( double newval )
 {
 	double dy = newval - m_view->part()->document().selection()->boundingBox().topLeft().y();
-	m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), 0.0, dy ), true );
+	//m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), 0.0, dy ), true );
 }
 
 void
@@ -89,7 +89,7 @@ VSelectToolBar::slotWidthChanged( double newval )
 	{
 		double sx = newval / m_view->part()->document().selection()->boundingBox().width();
 		QPointF sp = m_view->part()->document().selection()->boundingBox().topLeft();
-		m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, sx, 1.0 ), true );
+		//m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, sx, 1.0 ), true );
 	}
 }
 
@@ -100,7 +100,7 @@ VSelectToolBar::slotHeightChanged( double newval )
 	{
 		double sy = newval / m_view->part()->document().selection()->boundingBox().height();
 		QPointF sp = m_view->part()->document().selection()->boundingBox().bottomLeft();
-		m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, 1.0, sy ), true );
+		//m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, 1.0, sy ), true );
 	}
 }
 

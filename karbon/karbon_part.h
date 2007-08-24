@@ -34,16 +34,12 @@
 
 #include <KoShapeControllerBase.h>
 
-#include <q3ptrlist.h>
-
 #include <KoDocument.h>
 #include <KoUnit.h>
 #include "vdocument.h"
 #include "karbon_export.h"
 
 class QRect;
-class VCommand;
-class VDocument;
 
 /**
  * Keeps track of visual per document properties.
@@ -70,9 +66,6 @@ public:
 	/// file-> save and file-> save as call this method
 	virtual QDomDocument saveXML();
 	virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
-
-	/// insert a command into the undo/redo-history:
-	void addCommand( VCommand* cmd, bool repaint = false );
 
 	// access static document:
 	VDocument& document() { return m_doc; }

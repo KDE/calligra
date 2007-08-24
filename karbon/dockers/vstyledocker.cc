@@ -113,6 +113,7 @@ VStyleDocker::~VStyleDocker()
 
 void VStyleDocker::slotItemSelected( QTableWidgetItem *item )
 {
+    /*
 	VPattern *pattern = (VPattern *)item;
 	if( !pattern ) return;
 	kDebug(38000) <<"loading pattern :" << pattern->tilename().toLatin1();
@@ -124,6 +125,7 @@ void VStyleDocker::slotItemSelected( QTableWidgetItem *item )
 		fill.setType( VFill::patt );
 		m_part->addCommand( new VFillCmd( &m_part->document(), fill ), true );
 	}
+    */
 }
 
 void
