@@ -36,9 +36,9 @@ KWFrame::KWFrame(KoShape *shape, KWFrameSet *parent)
     m_runAroundSide( KWord::BiggestRunAroundSide ),
     m_runAround( KWord::RunAround ),
     m_runAroundDistance( 1.0 ),
+    m_anchor(0),
     m_frameSet( parent ),
-    m_outline(0),
-    m_anchor(0)
+    m_outline(0)
 {
     Q_ASSERT(shape);
     shape->setApplicationData(this);
