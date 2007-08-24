@@ -24,6 +24,7 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QFontMetrics>
+#include <QPointer>
 #include <ksqueezedtextlabel.h>
 #include <kstatusbar.h>
 #include <klocale.h>
@@ -55,7 +56,7 @@ class KWStatusBar::Private
         KStatusBar * statusbar;
         KWView* view;
         KoToolProxy* toolproxy;
-        KoCanvasController* controller;
+        QPointer<KoCanvasController> controller;
         int currentPageNumber;
 
         QLabel* modifiedLabel;
