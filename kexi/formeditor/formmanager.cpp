@@ -1451,7 +1451,7 @@ void
 FormManager::deleteWidgetLater( QWidget *w )
 {
 	w->hide();
-	w->setParent(0, Qt::WType_TopLevel);
+	w->setParent(0, Qt::Window);
 	m_deleteWidgetLater_list.append( w );
 	m_deleteWidgetLater_timer.setSingleShot( true );
 	m_deleteWidgetLater_timer.start( 100 );

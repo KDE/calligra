@@ -55,7 +55,7 @@
 #warning "Port Kexi flow layout!"
 #endif
 #ifndef KEXI_NO_FLOWLAYOUT
-#include "kexiflowlayout.h"
+#include <kexiutils/FlowLayout.h>
 #endif
 
 using namespace KFormDesigner;
