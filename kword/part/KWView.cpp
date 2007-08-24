@@ -794,7 +794,7 @@ void KWView::print() {
 //   duplex
 // const bool clipToPage=false; // should become a setting in the GUI
 
-    QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///KWordExportPdf"), "*.pdf", this, i18n("Export as PDF..."));
+    QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///KWordExportPdf"),"application/pdf", this, i18n("Export as PDF..."));
     if(! file.isEmpty()) {
         KWPrintingDialog *dia = new KWPrintingDialog(this);
         dia->printer().setOutputFormat(QPrinter::PdfFormat);
