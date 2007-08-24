@@ -45,7 +45,7 @@
 
 KexiSimplePrintPreviewView::KexiSimplePrintPreviewView(
 	QWidget *parent, KexiSimplePrintPreviewWindow *window)
- : QWidget(parent, "KexiSimplePrintPreviewView", Qt::WStaticContents)//|WNoAutoErase)
+ : QWidget(parent, "KexiSimplePrintPreviewView", Qt::WA_StaticContents)//|WNoAutoErase)
  , m_window(window)
 {
 	enablePainting = false;
@@ -76,7 +76,7 @@ void KexiSimplePrintPreviewView::paintEvent( QPaintEvent *pe )
 
 KexiSimplePrintPreviewScrollView::KexiSimplePrintPreviewScrollView(
 	KexiSimplePrintPreviewWindow *window)
- : Q3ScrollView(window, "scrollview", Qt::WStaticContents|Qt::WNoAutoErase)
+ : Q3ScrollView(window, "scrollview", Qt::WA_StaticContents /*Qt 4-not needed |Qt::WNoAutoErase*/ )
  , m_window(window)
 {
 //			this->settings = settings;

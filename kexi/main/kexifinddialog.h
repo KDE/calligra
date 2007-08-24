@@ -26,7 +26,7 @@
 
 class KAction;
 
-//! @short A Kexi-specific "Find text" dialog.
+//! @short A Kexi-specific "Find" dialog.
 /*! Also used for as replace dialog. 
 
  @todo replace m_textToFind and m_textToReplace KComboBoxes with Kexi's db-aware comboboxes,
@@ -122,6 +122,7 @@ class KexiFindDialog : public QDialog, private Ui::KexiFindDialog
 
 	protected slots:
 		void slotCloseClicked();
+		void updateMessage(const QString&) { updateMessage(); }
 
 	protected:
 		class Private;

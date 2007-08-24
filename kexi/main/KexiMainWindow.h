@@ -47,6 +47,7 @@ namespace KexiPart {
 
 class KXMLGUIClient;
 class KXMLGUIFactory;
+class KexiMainWidget;
 
 #include <KTabWidget>
 
@@ -55,13 +56,18 @@ class KexiMainWindowTabWidget : public KTabWidget
 {
 	Q_OBJECT
 	public:
-		KexiMainWindowTabWidget(QWidget *parent);
+		KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget *mainWidget);
 		virtual ~KexiMainWindowTabWidget();
-	signals:
+	public slots:
 		void closeTab();
 	protected:
+		//! Implemented to update main window on creation of the first tab
+		virtual void tabInserted(int index);
+
 		//! Reimplemented to hide frame when no tabs are displayed
 		virtual void paintEvent( QPaintEvent * event );
+
+		KexiMainWidget *m_mainWidget;
 };
 
 #define KexiMainWindowSuper QWidget //KMainWindow
@@ -138,7 +144,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		bool activateWindow(int id);
 
 		/*! Like above, using \a window passed explicitly. Above method just calls this one. */
-		bool activateWindow(KexiWindow *window);
+		bool activateWindow(KexiWindow& window);
 
 		/*! Performs startup actions. \return false if application should exit immediately
 		 with an error status. */
@@ -196,6 +202,12 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 This should not be usually used, maybe except for test suites 
 		 (see kexi/tests/altertable/ directory). */
 		tristate closeWindow(KexiWindow *window, bool layoutTaskBar, bool doNotSaveChanges = false);
+
+		/*! Activates next window. */
+		void activateNextWindow();
+
+		/*! Activates previous window. */
+		void activatePreviousWindow();
 
 #ifdef __GNUC__
 #warning TODO 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
@@ -352,10 +364,11 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 These actions only depend on project availability, not on curently active window. */
 		void invalidateProjectWideActions();
 
-		/*! Invalidates action availability for current application state.
+/* UNUSED, see KexiToggleViewModeAction
+		 Invalidates action availability for current application state.
 		 These actions only depend on curently active window and currently selected view
-		 (KexiView derived object) within this window. */
-		void invalidateViewModeActions();
+		 (KexiView derived object) within this window. 
+		void invalidateViewModeActions();*/
 
 		/*! Shows dialog for creating new blank project,
 		 and creates one. The dialog is not shown if option for automatic creation
@@ -404,8 +417,9 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		//! Called by KexiMainWidget::queryExit()
 		bool queryExit();
 
-		/*! Helper: switches to view \a mode. */
-		bool switchToViewMode(Kexi::ViewMode viewMode);
+		/*! Implemented for KexiMainWindowIface. 
+		 Switches \a window to view \a mode. Activates the window if it is not the current window. */
+		virtual tristate switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode);
 
 		/*! Helper. Removes and/or adds GUI client for current window's view;
 		 on switching to other window (activeWindowChanged())
@@ -431,12 +445,8 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		/*! Called once after timeout (after ctors are executed). */
 		void slotAutoOpenObjectsLater();
 
-		/*! This slot is called if a window changes */
-#ifdef __GNUC__
-#warning TODO		void activeWindowChanged(KMdiChildView *dlg);
-#else
-#pragma WARNING( TODO		void activeWindowChanged(KMdiChildView *dlg); )
-#endif
+		/*! Called if a window (tab) changes from \a prevWindow to \a window. Both parameters can be 0. */
+		void activeWindowChanged(KexiWindow *window, KexiWindow *prevWindow);
 
 		/*! This slot is called if a window gets colsed and will unregister stuff */
 #ifdef __GNUC__
@@ -447,14 +457,15 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		void slotPartLoaded(KexiPart::Part* p);
 
-		void slotCaptionForCurrentMDIChild(bool childrenMaximized);
+//		void slotCaptionForCurrentMDIChild(bool childrenMaximized);
+/*
 #ifdef __GNUC__
 #warning TODO		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*);
 #else
 #pragma WARNING( TODO		void slotNoMaximizedChildFrmLeft(KMdiChildFrm*); )
 #endif
 		void slotLastChildViewClosed();
-		void slotChildViewIsDetachedNow(QWidget*);
+		void slotChildViewIsDetachedNow(QWidget*);*/
 
 		//! internal - creates and initializes kexi project
 		void createKexiProject(KexiProjectData* new_data);
@@ -576,7 +587,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 			bool preservePrevSelection = true, const QByteArray& propertyToSelect = QByteArray());
 
 		/*! Handles changes in 'dirty' flag for windows. */
-		void slotDirtyFlagChanged(KexiWindow*);
+		void slotDirtyFlagChanged(KexiWindow* window);
 
 #ifdef __GNUC__
 #warning TODO		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);

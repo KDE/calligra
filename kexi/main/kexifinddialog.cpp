@@ -37,6 +37,8 @@
 #include <QShortcut>
 #include <QPointer>
 
+#include <kexi_global.h>
+
 //! @internal
 class KexiFindDialog::Private
 {
@@ -61,7 +63,7 @@ class KexiFindDialog::Private
 #endif
 			if (!action)
 				return;
-			QObject::connect(parent, member, action, SLOT(activate()));
+			QObject::connect(parent, member, action, SLOT(trigger()));
 			if (action->shortcut().isEmpty())
 				return;
 			// we want to handle dialog-wide shortcut as well
@@ -90,8 +92,7 @@ class KexiFindDialog::Private
 
 KexiFindDialog::KexiFindDialog( QWidget* parent )
  : QDialog(parent, 
-	Qt::WType_Dialog|Qt::WStyle_NormalBorder|Qt::WStyle_Title
-	|Qt::WStyle_SysMenu|Qt::WStyle_Customize|Qt::WStyle_Tool)
+	Qt::Dialog|Qt::WindowTitleHint|Qt::WindowSystemMenuHint|Qt::Tool)
  , d( new Private() )
 {
 	setObjectName("KexiFindDialog");
@@ -111,8 +112,8 @@ KexiFindDialog::KexiFindDialog( QWidget* parent )
 	connect(m_btnReplace, SIGNAL(clicked()), this, SIGNAL(replaceNext()));
 	connect(m_btnReplaceAll, SIGNAL(clicked()), this, SIGNAL(replaceAll()));
 	// clear message after the text is changed
-	connect(m_textToFind, SIGNAL(textChanged()), this, SIGNAL(updateMessage()));
-	connect(m_textToReplace, SIGNAL(textChanged()), this, SIGNAL(updateMessage()));
+	connect(m_textToFind, SIGNAL(editTextChanged(const QString&)), this, SLOT(updateMessage(const QString&)));
+	connect(m_textToReplace, SIGNAL(editTextChanged(const QString&)), this, SLOT(updateMessage(const QString&)));
 
 	d->replaceMode = true; //to force updating by setReplaceMode()
 	setReplaceMode(false);
