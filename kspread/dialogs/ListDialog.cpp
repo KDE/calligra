@@ -73,26 +73,30 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   entryList=new Q3MultiLineEdit(page);
   grid1->addWidget(entryList,1,1,7,1);
 
-  m_pRemove=new QPushButton(i18n("&Remove"),page);
-  grid1->addWidget(m_pRemove,3,2);
-
-  m_pAdd=new QPushButton(i18n("&Add"),page);
+  m_pAdd=new QPushButton(i18n("Add"),page);
+  m_pAdd->setEnabled(false);
   grid1->addWidget(m_pAdd,1,2);
 
-  m_pNew=new QPushButton(i18n("&New"),page);
-  grid1->addWidget(m_pNew,2,2);
+  m_pCancel=new QPushButton(i18n("Cancel"),page);
+  m_pCancel->setEnabled(false);
+  grid1->addWidget(m_pCancel,2,2);
 
-  m_pModify=new QPushButton(i18n("&Modify"),page);
-  grid1->addWidget(m_pModify,4,2);
+  m_pNew=new QPushButton(i18n("New"),page);
+  grid1->addWidget(m_pNew,3,2);
 
-  m_pCopy=new QPushButton(i18n("Co&py"),page);
-  grid1->addWidget(m_pCopy,5,2);
+  m_pRemove=new QPushButton(i18n("Remove"),page);
+  grid1->addWidget(m_pRemove,4,2);
 
-  m_pAdd->setEnabled(false);
+  m_pModify=new QPushButton(i18n("Modify"),page);
+  grid1->addWidget(m_pModify,5,2);
 
-  connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
+  m_pCopy=new QPushButton(i18n("Copy"),page);
+  grid1->addWidget(m_pCopy,6,2);
+
   connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
+  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
   connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );
+  connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
   connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
@@ -114,7 +118,7 @@ void ListDialog::slotTextClicked(Q3ListBoxItem*)
     bool state=list->currentItem()>1;
     m_pRemove->setEnabled(state);
     m_pModify->setEnabled(state);
-
+    m_pCopy->setEnabled(list->currentItem()>=0);
 }
 
 void ListDialog::init()
@@ -206,18 +210,20 @@ void ListDialog::slotDoubleClicked(Q3ListBoxItem *)
 void ListDialog::slotAdd()
 {
   m_pAdd->setEnabled(false);
+  m_pCancel->setEnabled(false);
+  m_pNew->setEnabled(true);
   list->setEnabled(true);
   QString tmp;
   for(int i=0;i<entryList->numLines();i++)
+  {
+    if(!entryList->textLine(i).isEmpty())
     {
-      if(!entryList->textLine(i).isEmpty())
-	{
-	  if(tmp.isEmpty())
-	    tmp=entryList->textLine(i);
-	  else
-	    tmp+=", "+entryList->textLine(i);
-	}
+      if(tmp.isEmpty())
+        tmp=entryList->textLine(i);
+      else
+        tmp+=", "+entryList->textLine(i);
     }
+  }
   if(!tmp.isEmpty())
     list->insertItem(tmp,list->count());
 
@@ -228,9 +234,20 @@ void ListDialog::slotAdd()
   m_bChanged=true;
 }
 
+void ListDialog::slotCancel()
+{
+  entryList->setText("");
+  slotAdd();
+}
+
 void ListDialog::slotNew()
 {
   m_pAdd->setEnabled(true);
+  m_pCancel->setEnabled(true);
+  m_pNew->setEnabled(false);
+  m_pRemove->setEnabled(false);
+  m_pModify->setEnabled(false);
+  m_pCopy->setEnabled(false);
   list->setEnabled(false);
   entryList->setText("");
   entryList->setEnabled(true);
@@ -239,7 +256,7 @@ void ListDialog::slotNew()
 
 void ListDialog::slotRemove()
 {
-  if(list->currentItem()==-1)
+  if(!list->isEnabled() || list->currentItem()==-1)
     return;
   //don't remove the two first line
   if(list->currentItem()<2)

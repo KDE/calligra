@@ -46,9 +46,10 @@ public slots:
   virtual void slotOk();
   void slotDoubleClicked(Q3ListBoxItem *);
   void slotTextClicked(Q3ListBoxItem*);
-  void slotRemove();
   void slotAdd();
+  void slotCancel();
   void slotNew();
+  void slotRemove();
   void slotModify();
   void slotCopy();
 
@@ -57,9 +58,10 @@ protected:
 
   Q3ListBox * list;
   Q3MultiLineEdit *entryList;
+  QPushButton* m_pAdd;
+  QPushButton* m_pCancel;
   QPushButton* m_pRemove;
   QPushButton* m_pNew;
-  QPushButton* m_pAdd;
   QPushButton* m_pModify;
   QPushButton* m_pCopy;
   bool m_bChanged;
