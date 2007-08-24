@@ -99,20 +99,19 @@ ListDialog::ListDialog( QWidget* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
-  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked(Q3ListBoxItem *)));
-  connect( list, SIGNAL(clicked ( Q3ListBoxItem * )),this,SLOT(slotTextClicked(Q3ListBoxItem * )));
+  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked()));
+  connect( list, SIGNAL(clicked ( Q3ListBoxItem * )),this,SLOT(slotTextClicked()));
   connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   init();
   entryList->setEnabled(false);
   m_pModify->setEnabled(false);
-  if(list->count()<=2)
-    m_pRemove->setEnabled(false);
+  slotTextClicked();
   resize( 600, 250 );
   m_bChanged=false;
 }
 
 
-void ListDialog::slotTextClicked(Q3ListBoxItem*)
+void ListDialog::slotTextClicked()
 {
     //we can't remove the two first item
     bool state=list->currentItem()>1;
@@ -189,7 +188,7 @@ void ListDialog::init()
     list->insertStringList(lst);
 }
 
-void ListDialog::slotDoubleClicked(Q3ListBoxItem *)
+void ListDialog::slotDoubleClicked()
 {
     //we can't modify the two first item
     if(list->currentItem()<2)
@@ -230,7 +229,7 @@ void ListDialog::slotAdd()
   entryList->setText("");
   entryList->setEnabled(false);
   entryList->setFocus();
-  slotTextClicked(0);
+  slotTextClicked();
   m_bChanged=true;
 }
 

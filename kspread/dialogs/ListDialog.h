@@ -27,7 +27,6 @@
 #include <ksharedconfig.h>
 
 class Q3ListBox;
-class Q3ListBoxItem;
 class Q3MultiLineEdit;
 class QPushButton;
 
@@ -44,8 +43,8 @@ public:
 
 public slots:
   virtual void slotOk();
-  void slotDoubleClicked(Q3ListBoxItem *);
-  void slotTextClicked(Q3ListBoxItem*);
+  void slotDoubleClicked();
+  void slotTextClicked();
   void slotAdd();
   void slotCancel();
   void slotNew();
