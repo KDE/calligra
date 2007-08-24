@@ -52,14 +52,14 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
     m_timeLine.setUpdateInterval( 20 ); 
     // set the animation strategy in the KoShapeManagers
     // TODO also set for the master shape manager
-    m_canvas->shapeManager()->setStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), this ) );
+    m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), this ) );
 }
 
 KPrAnimationDirector::~KPrAnimationDirector()
 {
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     // TODO also set for the master shape manager
-    m_canvas->shapeManager()->setStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
+    m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
 }
 
 void KPrAnimationDirector::paintEvent( QPaintEvent* event )
