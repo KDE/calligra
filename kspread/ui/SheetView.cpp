@@ -118,7 +118,8 @@ CellView SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coordinate,
 
 
 SheetView::SheetView( const Sheet* sheet )
-    : d( new Private )
+    : QObject(const_cast<Sheet*>(sheet))
+    , d(new Private)
 {
     d->sheet = sheet;
     d->viewConverter = 0;
@@ -390,8 +391,6 @@ const CellView& SheetView::defaultCellView() const
 
 void SheetView::updateAccessedCellRange( const QPoint& location )
 {
-    Q_ASSERT( sheet() );
-    if ( ! sheet() ) return;
     const QSize cellRange = d->accessedCellRange.expandedTo(QSize(location.x(), location.y()));
     if (d->accessedCellRange != cellRange || location.isNull())
     {

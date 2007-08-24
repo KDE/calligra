@@ -2108,6 +2108,16 @@ SheetView* View::sheetView( const Sheet* sheet ) const
 
 void View::refreshSheetViews()
 {
+    const QList<SheetView*> sheetViews = d->sheetViews.values();
+    for (int i = 0; i < sheetViews.count(); ++i)
+    {
+        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
+                   d->canvas, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(const QSizeF&)),
+                   d->zoomController, SLOT(setDocumentSize(const QSizeF&)));
+        disconnect(sheetViews[i]->sheet(), SIGNAL(visibleSizeChanged()),
+                   sheetViews[i], SLOT(updateAccessedCellRange()));
+    }
     qDeleteAll(d->sheetViews);
     d->sheetViews.clear();
     const QList<Sheet*> sheets = d->doc->map()->sheetList();
