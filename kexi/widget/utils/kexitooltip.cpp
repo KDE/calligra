@@ -38,8 +38,9 @@ KexiToolTip::KexiToolTip(const QVariant& value, QWidget* parent)
  : QWidget(parent)
  , m_value(value)
 {
-	setWindowFlags( Qt::WStyle_Customize | Qt::WType_Popup | Qt::WStyle_NoBorder
-		| Qt::WX11BypassWM | Qt::WDestructiveClose );
+	setWindowFlags( Qt::ToolTip | Qt::FramelessWindowHint 
+		| Qt::X11BypassWindowManagerHint );
+	setAttribute( Qt::WA_DeleteOnClose, true );
 	setPalette( QToolTip::palette() );
 	setFocusPolicy(Qt::NoFocus);
 }

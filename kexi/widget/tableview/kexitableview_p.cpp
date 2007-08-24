@@ -38,7 +38,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 	clearVariables();
 	tv = t;
 	editOnDoubleClick = true;
-	pBufferPm = 0;
+//Qt4	pBufferPm = 0;
 	disableDrawContents = false;
 	navigatorEnabled = true;
 	contextMenuEnabled = true;
@@ -57,7 +57,7 @@ KexiTableViewPrivate::KexiTableViewPrivate(KexiTableView* t)
 
 KexiTableViewPrivate::~KexiTableViewPrivate()
 {
-	delete pBufferPm;
+//Qt4	delete pBufferPm;
 //moved	delete scrollBarTip;
 }
 

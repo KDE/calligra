@@ -421,7 +421,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void dataSet( KexiTableViewData *data ) = 0;
 
 		/*! \return a pointer to context menu. This can be used to plug some actions there. */
-		KMenu* contextMenu() const { return m_popupMenu; }
+		KMenu* contextMenu() const { return m_contextMenu; }
 
 		/*! \return true if the context menu is enabled (visible) for the view.
 		  True by default. */
@@ -429,6 +429,18 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 
 		/*! Enables or disables the context menu for the view. */
 		void setContextMenuEnabled(bool set) { m_contextMenuEnabled = set; }
+
+		/*! Sets a title with icon for the context menu. 
+		 Set empty icon and text to remove the title item.
+		 This method should be called before customizing the menu 
+		 because it will be recreated by the method. */
+		void setContextMenuTitle(const QIcon &icon, const QString &text);
+
+		/*! \return title text of the context menu. */
+		QString contextMenuTitleText() const { return m_contextMenuTitleText; }
+
+		/*! \return title icon of the context menu. */
+		QIcon contextMenuTitleIcon() const { return m_contextMenuTitleIcon; }
 
 		/*! \return true if vertical scrollbar's tooltips are enabled (true by default). */
 		bool scrollbarToolTipsEnabled() const;
@@ -820,8 +832,15 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		int m_dragIndicatorLine;
 
 		/*! Context menu widget. */
-		KMenu *m_popupMenu;
+		KMenu *m_contextMenu;
 
+		/*! Text of context menu title. */
+		QString m_contextMenuTitleText;
+
+		/*! Icon of context menu title. */
+		QIcon m_contextMenuTitleIcon;
+
+		/*! True if context menu is enabled. */
 		bool m_contextMenuEnabled : 1;
 
 		//! Used by updateAfterCancelRowEdit()

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,14 +21,13 @@
 #define KEXISMALLTOOLBUTTON_H
 
 #include <QToolButton>
-#include <QPointer>
-#include <KAction>
-#include <kexi_export.h>
+#include "kexiutils_export.h"
 
+class QAction;
 class KIcon;
 
-//! A small tool button with icon and optional text
-class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
+//! @short A small tool button with icon and optional text
+class KEXIUTILS_EXPORT KexiSmallToolButton : public QToolButton
 {
 	Q_OBJECT
 
@@ -39,7 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 
 		KexiSmallToolButton(const KIcon& icon, const QString& text, QWidget* parent = 0);
 
-		KexiSmallToolButton(KAction *action, QWidget* parent = 0);
+		KexiSmallToolButton(QAction *action, QWidget* parent = 0);
 		
 		virtual ~KexiSmallToolButton();
 
@@ -48,16 +47,42 @@ class KEXIEXTWIDGETS_EXPORT KexiSmallToolButton : public QToolButton
 		virtual void setIcon( const QIcon& icon );
 		virtual void setIcon( const QString& icon );
 		virtual void setText( const QString& text );
-	
+		void setToolButtonStyle(Qt::ToolButtonStyle style);
+
+		virtual QSize sizeHint() const;
+
 	protected slots:
 		void slotActionChanged();
+		void slotButtonToggled(bool checked);
+		void slotActionToggled(bool checked);
 
 	protected:
 		void update(const QString& text, const QIcon& icon, bool tipToo = false);
 		void init();
 //		virtual void paintEvent(QPaintEvent *pe);
 
-		QPointer<KAction> m_action;
+		class Private;
+		Private * const d;
+};
+
+class QStyleOption;
+
+//! @short separator for custom toolbars
+class KEXIUTILS_EXPORT KexiToolBarSeparator : public QWidget
+{
+	Q_OBJECT
+	public:
+		KexiToolBarSeparator(QWidget *parent);
+		QSize sizeHint() const;
+		Qt::Orientation orientation() const;
+	public slots:
+		void setOrientation(Qt::Orientation o);
+	protected:
+		virtual void paintEvent(QPaintEvent *e);
+		void initStyleOption(QStyleOption *o) const;
+
+	private:
+		Qt::Orientation m_orientation;
 };
 
 #endif

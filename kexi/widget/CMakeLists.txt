@@ -22,7 +22,6 @@ set(kexiextendedwidgets_LIB_SRCS
    kexifieldcombobox.cpp 
    kexidatasourcecombobox.cpp 
    kexipropertyeditorview.cpp 
-   kexismalltoolbutton.cpp 
    kexicustompropertyfactory.cpp 
    kexicustompropertyfactory_p.cpp 
    kexicharencodingcombobox.cpp

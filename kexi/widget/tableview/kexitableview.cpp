@@ -203,11 +203,12 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 //-----------------------------------------
 
 KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const char* name)
-: Q3ScrollView(parent, name, /*Qt::WRepaintNoErase | */Qt::WStaticContents /*| Qt::WResizeNoErase*/)
+: Q3ScrollView(parent, name /*Qt::WRepaintNoErase | */ /*| Qt::WResizeNoErase*/)
 , KexiRecordNavigatorHandler()
 , KexiSharedActionClient()
 , KexiDataAwareObjectInterface()
 {
+	setAttribute( Qt::WA_StaticContents, true );
 //not needed	KexiTableView::initCellEditorFactories();
 
 	d = new KexiTableViewPrivate(this);
@@ -246,14 +247,17 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	verticalScrollBar()->raise();
 
 	//context menu
-	m_popupMenu = new KMenu(this);
-	m_popupMenu->setObjectName("m_popupMenu");
+	m_contextMenu = new KMenu(this);
+	m_contextMenu->setObjectName("m_contextMenu");
 #if 0 //moved to mainwindow's actions
-	d->menu_id_addRecord = m_popupMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
-	d->menu_id_removeRecord = m_popupMenu->insertItem(
+	d->menu_id_addRecord = m_contextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
+	d->menu_id_removeRecord = m_contextMenu->insertItem(
 		KIconLoader::global()->loadIcon("dialog-cancel", K3Icon::Small),
 		i18n("Remove Record"), this, SLOT(removeRecord()), Qt::CTRL+Qt::Key_Delete);
 #endif
+
+//! \todo replace lineedit with table_field icon
+	setContextMenuTitle( KIcon("lineedit"), i18n("Row") ); // the default
 
 #ifdef Q_WS_WIN
 	d->rowHeight = fontMetrics().lineSpacing() + 4;
@@ -368,7 +372,7 @@ void KexiTableView::setupNavigator()
 {
 	updateScrollBars();
 	
-	m_navPanel = new KexiRecordNavigator(this, leftMargin());
+	m_navPanel = new KexiRecordNavigator(this, this, leftMargin());
 	m_navPanel->setObjectName("navPanel");
 	m_navPanel->setRecordHandler(this);
 	m_navPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
@@ -562,6 +566,7 @@ QSize KexiTableView::minimumSizeHint() const
 	);
 }
 
+#if 0
 void KexiTableView::createBuffer(int width, int height)
 {
 #ifdef __GNUC__
@@ -576,6 +581,7 @@ void KexiTableView::createBuffer(int width, int height)
 			*d->pBufferPm = QPixmap(width, height);
 //	d->pBufferPm->fill();
 }
+#endif
 
 //internal
 inline void KexiTableView::paintRow(KexiTableItem *item,
@@ -592,7 +598,8 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 	if (collast==-1)
 		collast=columns()-1;
 
-	int transly = rowp-cy;
+//	int transly = rowp-cy;
+	int transly = rowp;
 
 	if (d->appearance.rowHighlightingEnabled && r == m_curRow && !d->appearance.fullRowSelection) {
 		pb->fillRect(0, transly, maxwc, d->rowHeight, d->appearance.rowHighlightingColor);
@@ -697,17 +704,17 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 		}
 	}
 
-	createBuffer(cw, ch);
-	if(d->pBufferPm->isNull())
-		return;
-	QPainter *pb = new QPainter(d->pBufferPm/* Qt4 , this*/);
+//Qt4	createBuffer(cw, ch);
+//Qt4	if(d->pBufferPm->isNull())
+//Qt4		return;
+//Qt4	QPainter *pb = new QPainter(d->pBufferPm/* Qt4 , this*/);
 //	pb->fillRect(0, 0, cw, ch, colorGroup().base());
 
 //	int maxwc = qMin(cw, (columnPos(d->numCols - 1) + columnWidth(d->numCols - 1)));
 	int maxwc = columnPos(columns() - 1) + columnWidth(columns() - 1);
 //	kDebug(44021) << "KexiTableView::drawContents(): maxwc: " << maxwc << endl;
 
-	pb->fillRect(cx, cy, cw, ch, d->appearance.baseColor);
+	p->fillRect(cx, cy, cw, ch, d->appearance.baseColor);
 
 	int rowp;
 	int r;
@@ -720,17 +727,17 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 		it += rowfirst;//move to 1st row
 		rowp = rowPos(rowfirst); // row position 
 		for (r = rowfirst;r <= rowlast; r++, ++it, rowp+=d->rowHeight) {
-			paintRow(it.current(), pb, r, rowp, cx, cy, colfirst, collast, maxwc);
+			paintRow(it.current(), p, r, rowp, cx, cy, colfirst, collast, maxwc);
 		}
 	}
 
 	if (plus1row) { //additional - 'insert' row
-		paintRow(m_insertItem, pb, r, rowp, cx, cy, colfirst, collast, maxwc);
+		paintRow(m_insertItem, p, r, rowp, cx, cy, colfirst, collast, maxwc);
 	}
 
-	delete pb;
+//Qt4	delete pb;
 
-	p->drawPixmap(cx,cy,*d->pBufferPm, 0,0,cw,ch);
+//Qt4	p->drawPixmap(cx,cy,*d->pBufferPm, 0,0,cw,ch);
 
   //(js)
 	paintEmptyArea(p, cx, cy, cw, ch);
@@ -1166,7 +1173,7 @@ bool KexiTableView::handleContentsMousePressOrRelease(QMouseEvent* e, bool relea
 
 void KexiTableView::showContextMenu(const QPoint& _pos)
 {
-	if (!d->contextMenuEnabled || m_popupMenu->isEmpty())
+	if (!d->contextMenuEnabled || m_contextMenu->isEmpty())
 		return;
 	QPoint pos(_pos);
 	if (pos==QPoint(-1,-1)) {
@@ -1175,7 +1182,7 @@ void KexiTableView::showContextMenu(const QPoint& _pos)
 	//show own context menu if configured
 //	if (updateContextMenu()) {
 		selectRow(m_curRow);
-		m_popupMenu->exec(pos);
+		m_contextMenu->exec(pos);
 /*	}
 	else {
 		//request other context menu
@@ -1898,9 +1905,12 @@ void KexiTableView::updateGeometries()
 	if (m_horizontalHeader->offset() && ts.width() < (m_horizontalHeader->offset() + m_horizontalHeader->width()))
 		horizontalScrollBar()->setValue(ts.width() - m_horizontalHeader->width());
 
+	int frameLeftMargin = style()->pixelMetric( QStyle::PM_FocusFrameVMargin, 0, this );
+	int frameTopMargin = style()->pixelMetric( QStyle::PM_FocusFrameHMargin, 0, this );
 //	m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
-	m_horizontalHeader->setGeometry(leftMargin() + 1, 1, visibleWidth(), topMargin());
-	m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
+	m_horizontalHeader->setGeometry(leftMargin() + frameLeftMargin, frameTopMargin, visibleWidth(), topMargin());
+//	m_verticalHeader->setGeometry(1, topMargin() + 1, leftMargin(), visibleHeight());
+	m_verticalHeader->setGeometry(frameLeftMargin, topMargin() + frameTopMargin, leftMargin(), visibleHeight());
 }
 
 int KexiTableView::columnWidth(int col) const
@@ -2588,12 +2598,7 @@ void KexiTableView::setAppearance(const Appearance& a)
 	if (a.rowHighlightingEnabled)
 		m_updateEntireRowWhenMovingToOtherRow = true;
 
-	if(!a.navigatorEnabled)
-		m_navPanel->hide();
-	else
-		m_navPanel->show();
-//	}
-
+	m_navPanel->setVisible(a.navigatorEnabled);
 	d->highlightedRow = -1;
 //! @todo is setMouseTracking useful for other purposes?
 	viewport()->setMouseTracking(a.rowMouseOverHighlightingEnabled);

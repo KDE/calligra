@@ -195,6 +195,8 @@ void KexiPropertyEditorView::updateInfoLabelForPropertySet(KexiObjectInfoLabel *
 			&& (*set)["this:useCaptionAsObjectName"].value().toBool();
 		if (set->contains(useCaptionAsObjectName ? "caption" : "name"))
 			objectName = (*set)[useCaptionAsObjectName ? "caption" : "name"].value().toString();
+		if (objectName.isEmpty() && useCaptionAsObjectName && set->contains("name")) // get name if there is no caption
+			objectName = (*set)["name"].value().toString();
 	}
 	if (!set || objectName.isEmpty()) {
 		objectName = textToDisplayForNullSet;

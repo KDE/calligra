@@ -22,15 +22,15 @@
 
 #include <QLayout>
 #include <QList>
-#include <kexi_global.h>
+#include "kexiutils_export.h"
 
 //! @short a special "flow" layout
-class KEXIGUIUTILS_EXPORT KexiFlowLayout : public QLayout
+class KEXIUTILS_EXPORT KexiFlowLayout : public QLayout
 {
 	public:
-		KexiFlowLayout(QWidget *parent, int margin=0, int spacing=-1);
-		KexiFlowLayout(QLayout* parent, int spacing=-1);
-		KexiFlowLayout(int spacing=-1);
+		KexiFlowLayout(QWidget *parent, int margin = 0, int spacing = -1);
+		KexiFlowLayout(QLayout* parent, int margin = 0, int spacing = -1);
+		KexiFlowLayout(int margin = 0, int spacing=-1);
 
 		virtual ~KexiFlowLayout();
 

@@ -4,7 +4,9 @@ include_directories(
 )
 
 set(kexiutils_LIB_SRCS identifier.cpp validator.cpp utils.cpp debuggui.cpp 
-	styleproxy.cpp longlongvalidator.cpp ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp)
+  styleproxy.cpp longlongvalidator.cpp InternalPropertyMap.cpp
+  SmallToolButton.cpp FlowLayout.cpp
+  ${CMAKE_CURRENT_BINARY_DIR}/transliteration_table.cpp)
 
 add_definitions( -DMAKE_KEXIUTILS_LIB )
 kde4_add_library(kexiutils SHARED ${kexiutils_LIB_SRCS})
@@ -24,5 +26,7 @@ set_target_properties(kexiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION
 install(TARGETS kexiutils  DESTINATION ${LIB_INSTALL_DIR})
 
 install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h
-	longlongvalidator.h DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils)
+  styleproxy.h longlongvalidator.h InternalPropertyMap.h 
+  SmallToolButton.h FlowLayout.h
+  DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils)
 

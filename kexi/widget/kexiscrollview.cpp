@@ -47,12 +47,14 @@ class KexiScrollViewData
 K_GLOBAL_STATIC(KexiScrollViewData, KexiScrollView_data)
 
 KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
- : Q3ScrollView(parent, "kexiscrollview", Qt::WStaticContents)
+ : Q3ScrollView(parent)
  , m_widget(0)
  , m_helpFont(font())
  , m_preview(preview)
  , m_scrollViewNavPanel(0)
 {
+	setObjectName("kexiscrollview");
+	setAttribute(Qt::WA_StaticContents, true);
 	setFrameStyle(Q3Frame::WinPanel | Q3Frame::Sunken);
 	viewport()->setPaletteBackgroundColor(colorGroup().mid());
 	QColor fc = palette().active().foreground(),
@@ -82,7 +84,7 @@ KexiScrollView::KexiScrollView(QWidget *parent, bool preview)
 		refreshContentsSizeLater(true, true);
 //! @todo allow to hide navigator
 		updateScrollBars();
-		m_scrollViewNavPanel = new KexiRecordNavigator(this, leftMargin());
+		m_scrollViewNavPanel = new KexiRecordNavigator(this, this, leftMargin());
 		m_scrollViewNavPanel->setObjectName("nav");
 		m_scrollViewNavPanel->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
 	}

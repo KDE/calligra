@@ -37,6 +37,7 @@
 #include <kiconeffect.h>
 #include <kpixmapeffect.h>
 #include <kiconloader.h>
+#include <KGlobalSettings>
 
 using namespace KexiUtils;
 
@@ -580,6 +581,22 @@ const WidgetMargins KexiUtils::operator+ (
 		margins1.top+margins1.top,
 		margins1.right+margins1.right,
 		margins1.bottom+margins1.bottom);
+}
+
+//---------
+
+K_GLOBAL_STATIC(QFont, _smallFont)
+
+QFont KexiUtils::smallFont(QWidget *init)
+{
+	if (init) {
+		*_smallFont = init->font();
+		const int wdth = KGlobalSettings::desktopGeometry(init).width();
+		int size = 10 + qMax(0, wdth - 1100) / 100;
+		size = qMin( init->fontInfo().pixelSize(), size );
+		_smallFont->setPixelSize( size );
+	}
+	return *_smallFont;
 }
 
 #include "utils_p.moc"

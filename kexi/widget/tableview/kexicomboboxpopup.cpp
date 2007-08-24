@@ -107,7 +107,7 @@ class KexiComboBoxPopupPrivate
 const int KexiComboBoxPopup::defaultMaxRows = 8;
 
 KexiComboBoxPopup::KexiComboBoxPopup(QWidget* parent, KexiTableViewColumn &column)
- : QFrame( parent, Qt::WType_Popup )
+ : QFrame( parent, Qt::Popup )
 {
 	init();
 	//setup tv data

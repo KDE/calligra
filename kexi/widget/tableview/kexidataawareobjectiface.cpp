@@ -74,7 +74,7 @@ KexiDataAwareObjectInterface::KexiDataAwareObjectInterface()
 	m_updateEntireRowWhenMovingToOtherRow = false;
 	m_dragIndicatorLine = -1;
 	m_emptyRowInsertingEnabled = false;
-	m_popupMenu = 0;
+	m_contextMenu = 0;
 	m_contextMenuEnabled = true;
 	m_rowWillBeDeleted = -1;
 	m_alsoUpdateNextRow = false;
@@ -1803,6 +1803,13 @@ void KexiDataAwareObjectInterface::vScrollBarValueChanged(int v)
 		slotUpdate();
 		triggerUpdate();
 	}*/
+}
+
+void KexiDataAwareObjectInterface::setContextMenuTitle(const QIcon &icon, const QString &text)
+{
+	m_contextMenuTitleIcon = icon;
+	m_contextMenuTitleText = text;
+	/*emit*/ reloadActions();
 }
 
 bool KexiDataAwareObjectInterface::scrollbarToolTipsEnabled() const

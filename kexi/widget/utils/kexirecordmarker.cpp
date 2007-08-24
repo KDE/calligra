@@ -2,7 +2,7 @@
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Till Busch <till@bux.at>
    Copyright (C) 2002 Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -67,7 +67,6 @@ public:
 	 , highlightedRow(-1)
 	 , editRow(-1)
 	 , rows(0)
-	 , selectionBackgroundColor(qApp->palette().active().highlight())
 	 , showInsertRow(true)
 	{
 	}
@@ -87,6 +86,7 @@ KexiRecordMarker::KexiRecordMarker(QWidget *parent)
  : QWidget(parent)
  , d( new Private() )
 {
+	setSelectionBackgroundColor( parent->palette().color(QPalette::Highlight) );
 }
 
 KexiRecordMarker::~KexiRecordMarker()
@@ -149,41 +149,33 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 
 	int first = (r.top()    + d->offset) / d->rowHeight;
 	int last  = (r.bottom() + d->offset) / d->rowHeight;
-	if(last > (d->rows-1+(d->showInsertRow?1:0)))
+	if (last > (d->rows - 1 + (d->showInsertRow?1:0)))
 		last = d->rows-1+(d->showInsertRow?1:0);
 
-	QColorGroup selectedColorGroup(colorGroup());
-	selectedColorGroup.setColor( QColorGroup::Button, 
-		KexiUtils::blendedColors( selectedColorGroup.color(QColorGroup::Background), 
-			d->selectionBackgroundColor, 2, 1) );
-	selectedColorGroup.setColor( QColorGroup::Background, 
-		selectedColorGroup.color(QColorGroup::Button) ); //set background color as well (e.g. for thinkeramik)
-	QColorGroup highlightedColorGroup(colorGroup());
-	highlightedColorGroup.setColor( QColorGroup::Button, 
-		KexiUtils::blendedColors( highlightedColorGroup.color(QColorGroup::Background), 
-			d->selectionBackgroundColor, 4, 1) );
-	highlightedColorGroup.setColor( QColorGroup::Background, 
-		highlightedColorGroup.color(QColorGroup::Button) ); //set background color as well (e.g. for thinkeramik)
-	for(int i=first; i <= last; i++)
-	{
+	for (int i = first; i <= last; i++) {
 		int y = ((d->rowHeight * i)-d->offset);
-		QRect r(0, y, width(), d->rowHeight);
 		p.drawRect(r);
 		QStyleOptionHeader optionHeader;
 		optionHeader.initFrom(this);
 		optionHeader.orientation = Qt::Vertical;
-		optionHeader.rect = r;
-		optionHeader.state = QStyle::State_Raised;
+		optionHeader.rect = QRect(0, y, width(), d->rowHeight);
+////		optionHeader.state = QStyle::State_Raised;
+		// alter background for selected or highlighted row
+		QColor alteredColor;
+//! @todo Qt4: blend entire QBrush?
+		if (d->currentRow == i)
+			alteredColor = KexiUtils::blendedColors(
+				palette().color(QPalette::Window), d->selectionBackgroundColor, 2, 1);
+		else if (d->highlightedRow == i)
+			alteredColor = KexiUtils::blendedColors(
+				palette().color(QPalette::Window), d->selectionBackgroundColor, 4, 1);
+
+		if (alteredColor.isValid()) {
+			optionHeader.palette.setColor(QPalette::Button, alteredColor);
+			//set background color as well (e.g. for thinkeramik)
+			optionHeader.palette.setColor(QPalette::Window, alteredColor);
+		}
 		style()->drawControl( QStyle::CE_HeaderSection, &optionHeader, &p );
-#ifdef __GNUC__
-#warning 2.0: TODO?
-#else
-#pragma WARNING( 2.0: TODO? )
-#endif
-/* 2.0: TODO		
-		, r,
-			(d->currentRow == i) ? selectedColorGroup : (d->highlightedRow == i ? highlightedColorGroup : colorGroup()), 
-			QStyle::Style_Raised | (isEnabled() ? QStyle::Style_Enabled : 0));*/
 	}
 	if (d->editRow!=-1 && d->editRow >= first && d->editRow <= (last/*+1 for insert row*/)) {
 		//show pen when editing
@@ -196,7 +188,7 @@ void KexiRecordMarker::paintEvent(QPaintEvent *e)
 		&& (!d->showInsertRow || (d->showInsertRow && d->currentRow < last)))/*don't display marker for 'insert' row*/ 
 	{
 		//show marker
-		p.setBrush(colorGroup().foreground());
+		p.setBrush( palette().brush(foregroundRole()) );
 		p.setPen(QPen(Qt::NoPen));
 		QPolygon points(3);
 		int ofs = d->rowHeight / 4;

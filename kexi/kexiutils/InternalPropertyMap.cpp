@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004,2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,38 +17,44 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIUTILS_P_H
-#define KEXIUTILS_P_H
+#include "InternalPropertyMap.h"
+#include <QHash>
 
-#include <qtimer.h>
-#include <qapplication.h>
-#include <qdialog.h>
+using namespace KexiUtils;
 
-/*! @internal */
-class DelayedCursorHandler : public QObject
-{
-	Q_OBJECT
-	public:
-		DelayedCursorHandler();
-		void start(bool noDelay);
-		void stop();
-		bool startedOrActive : 1; //! true if ounting started or the cursor is active
-	protected slots:
-		void show();
-	protected:
-		QTimer timer;
-};
-
-/*! @internal */
-class DebugWindowDialog : public QDialog
+class InternalPropertyMap::Private
 {
 	public:
-		explicit DebugWindowDialog( QWidget * parent )
-		 : QDialog(parent, Qt::Dialog|Qt::WindowMinMaxButtonsHint|Qt::WindowStaysOnTopHint)
-		{
-			setWindowState( Qt::WindowMinimized );
-		}
+		Private() {}
+
+	QHash<QByteArray, QVariant> map;
 };
 
-#endif
+//---------------------------------
 
+InternalPropertyMap::InternalPropertyMap()
+ : d( new Private )
+{
+}
+
+InternalPropertyMap::~InternalPropertyMap()
+{
+	delete d;
+}
+
+QVariant InternalPropertyMap::internalPropertyValue(
+	const QByteArray& name, 
+	const QVariant& defaultValue) const
+{
+	const QVariant result( d->map.value(name.toLower()) );
+	return result.isNull() ? defaultValue : result;
+}
+
+void InternalPropertyMap::setInternalPropertyValue(
+	const QByteArray& name, const QVariant& value)
+{
+	if (value.isNull())
+		d->map.remove(name.toLower());
+	else
+		d->map.insert(name.toLower(), value);
+}

@@ -17,7 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexiflowlayout.h"
+#include "FlowLayout.h"
+#include <kexi_global.h>
 
 #include <KDebug>
 
@@ -84,19 +85,21 @@ KexiFlowLayout::KexiFlowLayout(QWidget *parent, int margin, int spacing)
 	m_cached_width = 0;
 }
 
-KexiFlowLayout::KexiFlowLayout(QLayout* parent, int spacing)
+KexiFlowLayout::KexiFlowLayout(QLayout* parent, int margin, int spacing)
  : QLayout()
 {
 	parent->addItem(this);
+	setMargin(margin);
 	setSpacing(spacing);
 	m_orientation = Qt::Horizontal;
 	m_justify = false;
 	m_cached_width = 0;
 }
 
-KexiFlowLayout::KexiFlowLayout(int spacing)
+KexiFlowLayout::KexiFlowLayout(int margin, int spacing)
  : QLayout()
  {
+	setMargin(margin);
 	setSpacing(spacing);
 	m_orientation = Qt::Horizontal;
 	m_justify = false;

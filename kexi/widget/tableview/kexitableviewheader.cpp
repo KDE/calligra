@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -19,21 +19,16 @@
 
 #include "kexitableviewheader.h"
 
-#include <qapplication.h>
-#include <qtooltip.h>
+#include <QApplication>
+#include <QToolTip>
 #include <QStyle>
-#include <QStyleOption>
+#include <QStyleOptionHeader>
 #include <QMouseEvent>
 #include <QHelpEvent>
 
+#include <KIconLoader>
 #include <kexiutils/utils.h>
 #include <kexiutils/styleproxy.h>
-
-#ifdef __GNUC__
-#warning KexiTableViewHeader ported but not tested
-#else
-#pragma WARNING( KexiTableViewHeader ported but not tested )
-#endif
 
 //! @internal A style that allows to temporary change background color while
 //!           drawing header section primitive. Used in KexiTableViewHeader.
@@ -55,10 +50,10 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 			//const QStyleOption& option = QStyleOption::Default ) const
 		{
 			if (ce == CE_HeaderSection && option) {
-				QStyleOption newOption(*option);
+				QStyleOptionHeader newOption(*qstyleoption_cast<const QStyleOptionHeader*>(option));
 				newOption.palette.setColor(QPalette::Button, m_backgroundColor);
 				//set background color as well (e.g. for thinkeramik)
-				newOption.palette.setColor(QPalette::Background, m_backgroundColor);
+				newOption.palette.setColor(QPalette::Window, m_backgroundColor);
 				m_style->drawControl( ce, &newOption, painter, widget );
 				return;
 			}
@@ -74,10 +69,10 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 KexiTableViewHeader::KexiTableViewHeader(QWidget * parent) 
 	: Q3Header(parent)
 	, m_lastToolTipSection(-1)
-	, m_selectionBackgroundColor(qApp->palette().active().highlight())
+	, m_selectionBackgroundColor(qApp->palette().highlight().color())
 	, m_selectedSection(-1)
 	, m_styleChangeEnabled(true)
-{	
+{
 	styleChanged();
 	installEventFilter(this);
 	connect(this, SIGNAL(sizeChange(int,int,int)), 
@@ -119,11 +114,11 @@ int KexiTableViewHeader::addLabel ( const QString & s, int size )
 	return Q3Header::addLabel(s, size);
 }
 
-int KexiTableViewHeader::addLabel ( const QIconSet & iconset, const QString & s, int size )
+int KexiTableViewHeader::addLabel ( const QIcon & icon, const QString & s, int size )
 {
 	m_toolTips += "";
 	slotSizeChange(0,0,0);//refresh
-	return Q3Header::addLabel(iconset, s, size);
+	return Q3Header::addLabel(icon, s, size);
 }
 
 void KexiTableViewHeader::removeLabel( int section )
@@ -132,7 +127,7 @@ void KexiTableViewHeader::removeLabel( int section )
 		return;
 	QStringList::Iterator it = m_toolTips.begin();
 	it += section;
-	m_toolTips.remove(it);
+	it = m_toolTips.erase(it);
 	slotSizeChange(0,0,0);//refresh
 	Q3Header::removeLabel(section);
 }
@@ -151,18 +146,18 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
 		if (section != m_lastToolTipSection && section >= 0 && section < (int)m_toolTips.count()) {
 			//QToolTip::remove(this, m_toolTipRect);
 #ifdef __GNUC__
-#warning TODO	
+#warning TODO KexiTableViewHeader::eventFilter	
 #else
-#pragma WARNING( TODO	 )
+#pragma WARNING( TODO KexiTableViewHeader::eventFilter	 )
 #endif
 			QString tip = m_toolTips[ section ];
 			if (tip.isEmpty()) { //try label
 				QFontMetrics fm(font());
 				int minWidth = fm.width( label( section ) )
 					+ style()->pixelMetric( QStyle::PM_HeaderMargin );
-				QIconSet *iset = iconSet( section );
+				QIcon *iset = iconSet( section );
 				if (iset)
-					minWidth += (2+iset->pixmap( QIconSet::Small, QIconSet::Normal ).width()); //taken from QHeader::sectionSizeHint()
+					minWidth += (2+iset->pixmap( IconSize(K3Icon::Small) ).width()); //taken from QHeader::sectionSizeHint()
 				if (minWidth > sectionSize( section ))
 					tip = label( section );
 			}
@@ -239,9 +234,10 @@ void KexiTableViewHeader::paintSection( QPainter * p, int index, const QRect & f
 {
 	const bool paintSelection = index==m_selectedSection && index != -1;
 	if (paintSelection && dynamic_cast<KexiTableViewHeaderStyle*>(style())) {
+//! @todo Qt4: blend entire QBrush?
 		dynamic_cast<KexiTableViewHeaderStyle*>(style())->setBackgroundColor(
 			KexiUtils::blendedColors( 
-				palette().active().background(), m_selectionBackgroundColor, 2, 1) );
+				palette().color(backgroundRole()), m_selectionBackgroundColor, 2, 1) );
 	}
 
 	Q3Header::paintSection( p, index, fr );
@@ -249,7 +245,7 @@ void KexiTableViewHeader::paintSection( QPainter * p, int index, const QRect & f
 	if (paintSelection && dynamic_cast<KexiTableViewHeaderStyle*>(style())) {
 		//revert the color for subsequent paints
 		dynamic_cast<KexiTableViewHeaderStyle*>(style())->setBackgroundColor(
-			palette().active().background());
+			palette().color(backgroundRole()));
 	}
 }
 

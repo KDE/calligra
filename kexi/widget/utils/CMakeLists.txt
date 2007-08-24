@@ -8,7 +8,6 @@ set(kexiguiutils_LIB_SRCS
    kexirecordnavigator.cpp 
    kexirecordmarker.cpp 
    kexidisplayutils.cpp 
-   kexiflowlayout.cpp
    kexitooltip.cpp
    kexiarrowtip.cpp
    kexicontextmenuutils.cpp

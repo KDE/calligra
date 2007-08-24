@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QMetaMethod>
+#include <QFont>
 
 #include <KMimeType>
 #include <K3Icon>
@@ -200,6 +201,11 @@ namespace KexiUtils
 	/*! Like QString fileDialogFilterString(const KMimeType::Ptr& mime, bool kdeFormat = true)
 	 but returns a list of filter strings. */
 	KEXIUTILS_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat);
+
+	/*! A global setting for minimal readable font.
+	 Note: this is defined because KDE has no such setting yet.
+	 \a init is a widget that should be passed if no qApp->mainWidget() is available yet. */
+	KEXIUTILS_EXPORT QFont smallFont(QWidget *init = 0);
 
 	/*! \return a color being a result of blending \a c1 with \a c2 with \a factor1 
 	 and \a factor1 factors: (c1*factor1+c2*factor2)/(factor1+factor2). */

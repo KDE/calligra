@@ -53,8 +53,8 @@
 #include <kexiproject.h>
 #include <KexiMainWindowIface.h>
 #include <kexiutils/identifier.h>
-#include <widget/utils/kexiflowlayout.h>
-#include <widget/kexismalltoolbutton.h>
+#include <kexiutils/FlowLayout.h>
+#include <kexiutils/SmallToolButton.h>
 #include <kexidb/utils.h>
 #include <kexi_global.h>
 
@@ -131,7 +131,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 
 	// actions
 	m_openAction = addAction("open_object", KIcon("document-open"), i18n("&Open"), 
-		i18n("Open object"), i18n("Opens object selected in the list"),
+		i18n("Open object"), i18n("Opens object selected in the list."),
 		SLOT(slotOpenObject()));
 
 //	m_openAction->plug(m_toolbar);
@@ -152,11 +152,11 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 	}
 	else {
 		m_deleteAction = addAction("edit_delete", KIcon("edit-delete"), i18n("&Delete"),
-			i18n("Delete object"), i18n("Deletes the object selected in the list"),
+			i18n("Delete object"), i18n("Deletes the object selected in the list."),
 			SLOT(slotRemove()));
 
 		m_renameAction = addAction("edit_rename", KIcon(), i18n("&Rename"),
-			i18n("Rename object"), i18n("Renames the object selected in the list"),
+			i18n("Rename object"), i18n("Renames the object selected in the list."),
 			SLOT(slotRename()));
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 		//todo	plugSharedAction("edit_cut",SLOT(slotCut()));
@@ -165,7 +165,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 #endif
 
 		m_designAction = addAction("design_object", KIcon("edit"), i18n("&Design"),
-			i18n("Design object"), i18n("Starts designing of the object selected in the list"),
+			i18n("Design object"), i18n("Starts designing of the object selected in the list."),
 			SLOT(slotDesignObject()));
 		if (m_features & Toolbar) {
 			btn = new KexiSmallToolButton(m_designAction, this);
@@ -174,7 +174,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 		}
 
 		m_editTextAction = addAction("editText_object", KIcon(), i18n("Open in &Text View"),
-			i18n("Open object in text view"), i18n("Opens selected object in the list in text view"),
+			i18n("Open object in text view"), i18n("Opens selected object in the list in text view."),
 			SLOT(slotEditTextObject()));
 
 /*(new action removed)		m_newObjectAction = addAction("new_object", KIcon("document-new"), QString(),

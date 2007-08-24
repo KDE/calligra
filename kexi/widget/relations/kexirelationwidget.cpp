@@ -109,7 +109,8 @@ KexiRelationWidget::KexiRelationWidget(QWidget *parent)
 	m_tableQueryPopup->addSeparator();
 
 	KAction* hide_action = plugSharedAction("edit_delete", i18n("&Hide Table"), m_tableQueryPopup);
-	hide_action->setIcon(KIcon());
+	if (hide_action)
+		hide_action->setIcon(KIcon());
 
 	plugSharedAction("edit_delete", m_connectionPopup);
 	plugSharedAction("edit_delete", this, SLOT(removeSelectedObject()));

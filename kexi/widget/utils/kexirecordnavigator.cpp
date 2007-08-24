@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,35 +29,53 @@
 #include <QFocusEvent>
 #include <QKeyEvent>
 #include <QEvent>
-#include <Q3Frame>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
+#include <QPainter>
+#include <QStyleOptionFrameV2>
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <klineedit.h>
-#include <kguiitem.h>
+#include <KLocale>
+#include <KIconLoader>
+#include <KLineEdit>
+#include <KGuiItem>
+#include <KDialog>
 
 #include "kexirecordnavigator.h"
 #include "kexirecordmarker.h"
+#include <kexiutils/SmallToolButton.h>
 #include <kexi_global.h>
 
 //! @internal
-class KexiRecordNavigatorPrivate
+class KexiRecordNavigator::Private
 {
 	public:
-		KexiRecordNavigatorPrivate()
+		Private()
 		 : handler(0)
+		 , view(0)
+		 , isInsertingEnabled(true)
 		 , editingIndicatorLabel(0)
 		 , editingIndicatorEnabled(false)
 		 , editingIndicatorVisible(false)
 		{
 		}
 		KexiRecordNavigatorHandler *handler;
-		Q3HBoxLayout *lyr;
+		QHBoxLayout *lyr;
+		QLabel *textLabel;
+		QToolButton *navBtnFirst;
+		QToolButton *navBtnPrev;
+		QToolButton *navBtnNext;
+		QToolButton *navBtnLast;
+		QToolButton *navBtnNew;
+		KLineEdit *navRecordNumber;
+		QIntValidator *navRecordNumberValidator;
+		QLabel *navRecordCount; //!< readonly counter
+		uint nav1DigitWidth;
+//		uint m_recordCount;
+		Q3ScrollView *view;
 
 		QLabel *editingIndicatorLabel;
 		bool editingIndicatorEnabled : 1;
 		bool editingIndicatorVisible : 1;
+		bool isInsertingEnabled : 1;
 };
 
 //--------------------------------------------------
@@ -72,103 +90,77 @@ KexiRecordNavigatorHandler::~KexiRecordNavigatorHandler()
 
 //--------------------------------------------------
 
-KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, int leftMargin)
- : Q3Frame(parent)
- , m_view(0)
- , m_isInsertingEnabled(true)
- , d( new KexiRecordNavigatorPrivate() )
+KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentView, int leftMargin)
+ : QWidget(parent)
+ , d( new Private )
 {
-	if (dynamic_cast<Q3ScrollView*>(parent))
-		setParentView( dynamic_cast<Q3ScrollView*>(parent) );
-	setFrameStyle(Q3Frame::NoFrame);
-	d->lyr = new Q3HBoxLayout(this,0,0,"nav_lyr");
+	setAttribute(Qt::WA_OpaquePaintEvent, true);
+	if (parentView)
+		setParentView( parentView );
+//	setFrameStyle(QFrame::NoFrame);
+	d->lyr = new QHBoxLayout(this);
+	d->lyr->setContentsMargins(0,0,0,0);
+	d->lyr->setSpacing(2);
 
-	m_textLabel = new QLabel(this);
-	d->lyr->addWidget( m_textLabel  );
+	d->textLabel = new QLabel(this);
+	d->lyr->addWidget( d->textLabel  );
 	setLabelText(i18n("Row:"));
 		
-	int bw = 6+SmallIcon("navigator_first").width(); //qMin( horizontalScrollBar()->height(), 20);
+	int bw = 6 + SmallIcon("navigator_first").width(); //qMin( horizontalScrollBar()->height(), 20);
 	QFont f = font();
 	f.setPixelSize((bw > 12) ? 12 : bw);
 	QFontMetrics fm(f);
-	m_nav1DigitWidth = fm.width("8");
+	d->nav1DigitWidth = fm.width("8");
 
-	d->lyr->addWidget( m_navBtnFirst = new QToolButton(this) );
-	m_navBtnFirst->setFixedWidth(bw);
-	m_navBtnFirst->setFocusPolicy(Qt::NoFocus);
-	m_navBtnFirst->setIcon( KIcon("navigator_first") );
-	m_navBtnFirst->setToolTip( i18n("First row"));
+	d->navBtnFirst = createAction( KexiRecordNavigator::Actions::moveToFirstRecord() );
+	d->navBtnPrev = createAction( KexiRecordNavigator::Actions::moveToPreviousRecord() );
+	d->navBtnPrev->setAutoRepeat(true);
+
+	d->lyr->addSpacing( 2 );
 	
-	d->lyr->addWidget( m_navBtnPrev = new QToolButton(this) );
-	m_navBtnPrev->setFixedWidth(bw);
-	m_navBtnPrev->setFocusPolicy(Qt::NoFocus);
-	m_navBtnPrev->setIcon( KIcon("navigator_prev") );
-	m_navBtnPrev->setAutoRepeat(true);
-	m_navBtnPrev->setToolTip( i18n("Previous row"));
+	d->lyr->addWidget( d->navRecordNumber = new KLineEdit(this) );
+	d->navRecordNumber->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	d->navRecordNumber->setFocusPolicy(Qt::ClickFocus);
+	d->navRecordNumber->installEventFilter(this);
+	d->navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
+	d->navRecordNumber->setValidator(d->navRecordNumberValidator);
+	d->navRecordNumber->installEventFilter(this);
+	d->navRecordNumber->setToolTip(i18n("Current row number"));
 	
-	d->lyr->addSpacing( 6 );
-	
-	d->lyr->addWidget( m_navRecordNumber = new KLineEdit(this) );
-	m_navRecordNumber->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	m_navRecordNumber->setFocusPolicy(Qt::ClickFocus);
-	m_navRecordNumber->installEventFilter(this);
-//	m_navRowNumber->setFixedWidth(fw);
-	m_navRecordNumberValidator = new QIntValidator(1, INT_MAX, this);
-	m_navRecordNumber->setValidator(m_navRecordNumberValidator);
-	m_navRecordNumber->installEventFilter(this);
-	m_navRecordNumber->setToolTip( i18n("Current row number"));
-	
-	KLineEdit *lbl_of = new KLineEdit(i18n("of"), this);
+	QLabel *lbl_of = new QLabel(" " + i18n("of") + " ", this);
 	lbl_of->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
 	lbl_of->setMaximumWidth(fm.width(lbl_of->text())+8);
-	lbl_of->setReadOnly(true);
-	//lbl_of->setLineWidth(0); // ### Qt4 TODO
-	lbl_of->setFocusPolicy(Qt::NoFocus);
 	lbl_of->setAlignment(Qt::AlignCenter);
 	d->lyr->addWidget( lbl_of );
 	
-	d->lyr->addWidget( m_navRecordCount = new KLineEdit(this) );
-	m_navRecordCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
-	m_navRecordCount->setReadOnly(true);
-	//m_navRecordCount->setLineWidth(0); // ### Qt4 TODO
-	m_navRecordCount->setFocusPolicy(Qt::NoFocus);
-	m_navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	m_navRecordCount->setToolTip( i18n("Number of rows"));
+	d->lyr->addWidget( d->navRecordCount = new QLabel(this) );
+	d->navRecordCount->setTextInteractionFlags( Qt::TextSelectableByMouse );
+	d->navRecordCount->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred);
+	d->navRecordCount->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+	d->navRecordCount->setToolTip(i18n("Number of rows"));
 
 	lbl_of->setFont(f);
-	m_navRecordNumber->setFont(f);
-	m_navRecordCount->setFont(f);
+	d->navRecordNumber->setFont(f);
+	d->navRecordCount->setFont(f);
 	setFont(f);
 
-	d->lyr->addWidget( m_navBtnNext = new QToolButton(this) );
-	m_navBtnNext->setFixedWidth(bw);
-	m_navBtnNext->setFocusPolicy(Qt::NoFocus);
-	m_navBtnNext->setIcon( KIcon("navigator_next") );
-	m_navBtnNext->setAutoRepeat(true);
-	m_navBtnNext->setToolTip( i18n("Next row"));
+	d->navBtnNext = createAction( KexiRecordNavigator::Actions::moveToNextRecord() );
+	d->navBtnNext->setAutoRepeat(true);
+	d->navBtnLast = createAction( KexiRecordNavigator::Actions::moveToLastRecord() );
 	
-	d->lyr->addWidget( m_navBtnLast = new QToolButton(this) );
-	m_navBtnLast->setFixedWidth(bw);
-	m_navBtnLast->setFocusPolicy(Qt::NoFocus);
-	m_navBtnLast->setIcon( KIcon("navigator_last") );
-	m_navBtnLast->setToolTip( i18n("Last row"));
-	
-	d->lyr->addSpacing( 6 );
-	d->lyr->addWidget( m_navBtnNew = new QToolButton(this) );
-	m_navBtnNew->setFixedWidth(bw);
-	m_navBtnNew->setFocusPolicy(Qt::NoFocus);
-	m_navBtnNew->setIcon( KIcon("navigator_new") );
-	m_navBtnNew->setToolTip( i18n("New row"));
-	m_navBtnNext->setEnabled(isInsertingEnabled());
+	d->lyr->addSpacing( 2 );
+
+	d->navBtnNew = createAction( KexiRecordNavigator::Actions::moveToNewRecord() );
+	d->navBtnNew->setEnabled(isInsertingEnabled());
 	
 	d->lyr->addSpacing( 6 );
 	d->lyr->addStretch(10);
 
-	connect(m_navBtnPrev,SIGNAL(clicked()),this,SLOT(slotPrevButtonClicked()));
-	connect(m_navBtnNext,SIGNAL(clicked()),this,SLOT(slotNextButtonClicked()));
-	connect(m_navBtnLast,SIGNAL(clicked()),this,SLOT(slotLastButtonClicked()));
-	connect(m_navBtnFirst,SIGNAL(clicked()),this,SLOT(slotFirstButtonClicked()));
-	connect(m_navBtnNew,SIGNAL(clicked()),this,SLOT(slotNewButtonClicked()));
+	connect(d->navBtnPrev,SIGNAL(clicked()),this,SLOT(slotPrevButtonClicked()));
+	connect(d->navBtnNext,SIGNAL(clicked()),this,SLOT(slotNextButtonClicked()));
+	connect(d->navBtnLast,SIGNAL(clicked()),this,SLOT(slotLastButtonClicked()));
+	connect(d->navBtnFirst,SIGNAL(clicked()),this,SLOT(slotFirstButtonClicked()));
+	connect(d->navBtnNew,SIGNAL(clicked()),this,SLOT(slotNewButtonClicked()));
 
 	setRecordCount(0);
 	setCurrentRecordNumber(0);
@@ -181,25 +173,35 @@ KexiRecordNavigator::~KexiRecordNavigator()
 	delete d;
 }
 
+QToolButton* KexiRecordNavigator::createAction( const KGuiItem& item )
+{
+	QToolButton *toolButton;
+	d->lyr->addWidget( toolButton = new KexiSmallToolButton(item.icon(), QString(), this) );
+	toolButton->setFocusPolicy(Qt::NoFocus);
+	toolButton->setToolTip(item.toolTip());
+	toolButton->setWhatsThis(item.whatsThis());
+	return toolButton;
+}
+
 void KexiRecordNavigator::setInsertingEnabled(bool set)
 {
-	if (m_isInsertingEnabled==set)
+	if (d->isInsertingEnabled==set)
 		return;
-	m_isInsertingEnabled = set;
+	d->isInsertingEnabled = set;
 	if (isEnabled())
-		m_navBtnNew->setEnabled( m_isInsertingEnabled );
+		d->navBtnNew->setEnabled( d->isInsertingEnabled );
 }
 
 void KexiRecordNavigator::setEnabled( bool set )
 {
-	Q3Frame::setEnabled(set);
-	if (set && !m_isInsertingEnabled)
-		m_navBtnNew->setEnabled( false );
+	QWidget::setEnabled(set);
+	if (set && !d->isInsertingEnabled)
+		d->navBtnNew->setEnabled( false );
 }
 
 bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 {
-	if (o==m_navRecordNumber) {
+	if (o==d->navRecordNumber) {
 		bool recordEntered = false;
 		bool ret;
 		if (e->type()==QEvent::KeyPress) {
@@ -207,9 +209,9 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 			switch (ke->key()) {
 			case Qt::Key_Escape: {
 				ke->accept();
-				m_navRecordNumber->undo();
-				if (m_view)
-					m_view->setFocus();
+				d->navRecordNumber->undo();
+				if (d->view)
+					d->view->setFocus();
 				return true;
 			}
 			case Qt::Key_Enter:
@@ -234,11 +236,11 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 
 		if (recordEntered) {
 			bool ok=true;
-			uint r = m_navRecordNumber->text().toUInt(&ok);
+			uint r = d->navRecordNumber->text().toUInt(&ok);
 			if (!ok || r<1)
 				r = (recordCount()>0)?1:0;
-			if (m_view && (hasFocus() || e->type()==QEvent::KeyPress))
-				m_view->setFocus();
+			if (d->view && (hasFocus() || e->type()==QEvent::KeyPress))
+				d->view->setFocus();
 			setCurrentRecordNumber(r);
 			emit recordNumberEntered(r);
 			if (d->handler)
@@ -246,33 +248,21 @@ bool KexiRecordNavigator::eventFilter( QObject *o, QEvent *e )
 			return ret;
 		}
 	}
-/*
-	bool ok=true;
-	int r = text.toInt(&ok);
-	if (!ok || r<1)
-		r = 1;
-	emit recordNumberEntered(r);*/
 	return false;
 }
 
 void KexiRecordNavigator::setCurrentRecordNumber(uint r)
 {
 	uint recCnt = recordCount();
-	if (r>(recCnt+(m_isInsertingEnabled?1:0)))
-		r = recCnt+(m_isInsertingEnabled?1:0);
+	if (r>(recCnt+(d->isInsertingEnabled?1:0)))
+		r = recCnt+(d->isInsertingEnabled?1:0);
 	QString n;
 	if (r>0)
 		n = QString::number(r);
 	else
 		n = " ";
-//	if (d->navRecordNumber->text().length() != n.length()) {//resize
-//		d->navRecordNumber->setFixedWidth(
-//			d->nav1DigitWidth*qMax( qMax(n.length(),2)+1,d->navRecordCount->text().length()+1)+6 
-//		);
-//	}
 
-	m_navRecordNumber->setText(n);
-	m_navRecordCount->deselect();
+	d->navRecordNumber->setText(n);
 	updateButtons(recCnt);
 }
 
@@ -280,45 +270,43 @@ void KexiRecordNavigator::updateButtons(uint recCnt)
 {
 	const uint r = currentRecordNumber();
 	if (isEnabled()) {
-		m_navBtnPrev->setEnabled(r > 1);
-		m_navBtnFirst->setEnabled(r > 1);
-		m_navBtnNext->setEnabled(r > 0 
-			&& r < (recCnt +(m_isInsertingEnabled?(1+d->editingIndicatorVisible/*if we're editing, next btn is avail.*/):0) ) );
-		m_navBtnLast->setEnabled(r!=(recCnt+(m_isInsertingEnabled?1:0)) && (m_isInsertingEnabled || recCnt>0));
+		d->navBtnPrev->setEnabled(r > 1);
+		d->navBtnFirst->setEnabled(r > 1);
+		d->navBtnNext->setEnabled(r > 0 
+			&& r < (recCnt +(d->isInsertingEnabled?(1+d->editingIndicatorVisible/*if we're editing, next btn is avail.*/):0) ) );
+		d->navBtnLast->setEnabled(r!=(recCnt+(d->isInsertingEnabled?1:0)) && (d->isInsertingEnabled || recCnt>0));
 	}
 }
 
 void KexiRecordNavigator::setRecordCount(uint count)
 {
 	const QString & n = QString::number(count);
-	if (m_isInsertingEnabled && currentRecordNumber()==0) {
+	if (d->isInsertingEnabled && currentRecordNumber()==0) {
 		setCurrentRecordNumber(1);
 	}
-	if (m_navRecordCount->text().length() != n.length()) {//resize
-		m_navRecordCount->setFixedWidth(m_nav1DigitWidth*n.length()+6);
+	if (d->navRecordCount->text().length() != n.length()) {//resize
+		d->navRecordCount->setFixedWidth(d->nav1DigitWidth*n.length() + 2);
 		
-		if (m_view && m_view->horizontalScrollBar()->isVisible()) {
+		if (d->view && d->view->horizontalScrollBar()->isVisible()) {
 			//+width of the delta
-			resize(width()+(n.length()-m_navRecordCount->text().length())*m_nav1DigitWidth, height());
-//			horizontalScrollBar()->move(d->navPanel->x()+d->navPanel->width()+20,horizontalScrollBar()->y());
+			resize(width()+(n.length()-d->navRecordCount->text().length())*d->nav1DigitWidth, height());
 		}
 	}
 	//update row number widget's width
-	const int w = m_nav1DigitWidth*qMax( qMax(n.length(),2)+1,m_navRecordNumber->text().length()+1)+6;
-	if (m_navRecordNumber->width()!=w) //resize
-		m_navRecordNumber->setFixedWidth(w);
+	const int w = d->nav1DigitWidth*qMax( qMax(n.length(),2)+1,d->navRecordNumber->text().length()+1) + 2;
+	if (d->navRecordNumber->width()!=w) //resize
+		d->navRecordNumber->setFixedWidth(w);
 
-	m_navRecordCount->setText(n);
-	m_navRecordCount->deselect();
-	if (m_view)
-		m_view->updateScrollBars();
+	d->navRecordCount->setText(n);
+	if (d->view)
+		d->view->updateScrollBars();
 	updateButtons(recordCount());
 }
 
 uint KexiRecordNavigator::currentRecordNumber() const
 {
 	bool ok=true;
-	int r = m_navRecordNumber->text().toInt(&ok);
+	int r = d->navRecordNumber->text().toInt(&ok);
 	if (!ok || r<1)
 		r = 0;
 	return r;
@@ -327,7 +315,7 @@ uint KexiRecordNavigator::currentRecordNumber() const
 uint KexiRecordNavigator::recordCount() const
 {
 	bool ok=true;
-	int r = m_navRecordCount->text().toInt(&ok);
+	int r = d->navRecordCount->text().toInt(&ok);
 	if (!ok || r<1)
 		r = 0;
 	return r;
@@ -335,36 +323,36 @@ uint KexiRecordNavigator::recordCount() const
 
 void KexiRecordNavigator::setParentView(Q3ScrollView *view)
 {
-	m_view = view;
+	d->view = view;
 }
 
 void KexiRecordNavigator::updateGeometry(int leftMargin)
 {
-	Q3Frame::updateGeometry();
-//	kexidbg <<"view "<<m_view<<endl;
-	if (m_view) {
+	QWidget::updateGeometry();
+//	kexidbg <<"view "<<d->view<<endl;
+	if (d->view) {
 		int navWidth;
-		if (m_view->horizontalScrollBar()->isVisible()) {
+		if (d->view->horizontalScrollBar()->isVisible()) {
 			navWidth = sizeHint().width();
 		}
 		else {
-			navWidth = leftMargin + m_view->clipper()->width();
+			navWidth = leftMargin + d->view->clipper()->width();
 		}
 		
 /*		kexidbg << "setGeometry("<<QRect(
-			m_view->frameWidth(),
-			m_view->height() - m_view->horizontalScrollBar()->sizeHint().height()-m_view->frameWidth(),
+			d->view->frameWidth(),
+			d->view->height() - d->view->horizontalScrollBar()->sizeHint().height()-d->view->frameWidth(),
 			navWidth,
-			m_view->horizontalScrollBar()->sizeHint().height())<<")"<<endl;*/
+			d->view->horizontalScrollBar()->sizeHint().height())<<")"<<endl;*/
 
 		setGeometry(
-			m_view->frameWidth(),
-			m_view->height() - m_view->horizontalScrollBar()->sizeHint().height()-m_view->frameWidth(),
+			d->view->frameWidth(),
+			d->view->height() - d->view->horizontalScrollBar()->sizeHint().height()-d->view->frameWidth(),
 			navWidth,
-			m_view->horizontalScrollBar()->sizeHint().height()
+			d->view->horizontalScrollBar()->sizeHint().height()
 		);
 
-		m_view->updateScrollBars();
+		d->view->updateScrollBars();
 	}
 }
 
@@ -375,15 +363,12 @@ void KexiRecordNavigator::setHBarGeometry( QScrollBar & hbar, int x, int y, int 
 
 void KexiRecordNavigator::setLabelText(const QString& text)
 {
-	m_textLabel->setText(text.isEmpty() ? QString() : (QString::fromLatin1(" ")+text+" "));
+	d->textLabel->setText(text.isEmpty() ? QString() : (QString::fromLatin1(" ")+text+" "));
 }
 
 void KexiRecordNavigator::setInsertingButtonVisible(bool set)
 {
-	if (set)
-		m_navBtnNew->show();
-	else
-		m_navBtnNew->hide();
+	d->navBtnNew->setVisible(set);
 }
 
 void KexiRecordNavigator::slotPrevButtonClicked()
@@ -425,6 +410,11 @@ void KexiRecordNavigator::slotNewButtonClicked()
 void KexiRecordNavigator::setRecordHandler(KexiRecordNavigatorHandler *handler)
 {
 	d->handler = handler;
+}
+
+bool KexiRecordNavigator::isInsertingEnabled() const
+{
+	return d->isInsertingEnabled;
 }
 
 bool KexiRecordNavigator::editingIndicatorVisible() const
@@ -476,6 +466,19 @@ void KexiRecordNavigator::showEditingIndicator(bool show)
 	}
 }
 
+void KexiRecordNavigator::paintEvent(QPaintEvent* pe)
+{
+	QPainter p(this);
+	p.fillRect(rect(), palette().window());
+	// add frame on top
+	QStyleOptionFrameV2 option;
+	option.initFrom(this);
+	option.features = QStyleOptionFrameV2::Flat;
+	option.rect = QRect(option.rect.left()-5,option.rect.top(),
+		option.rect.width()+10,option.rect.height()+5); // to avoid rounding
+	style()->drawPrimitive(QStyle::PE_Frame, &option, &p, this);
+}
+
 //------------------------------------------------
 
 //! @internal
@@ -488,6 +491,11 @@ class KexiRecordNavigatorActionsInternal {
 		 , moveToLastRecord(i18n("Last row"), "navigator_last", i18n("Go to last row"))
 		 , moveToNewRecord(i18n("New row"), "navigator_new", i18n("Go to new row"))
 		{
+			moveToFirstRecord.setWhatsThis(i18n("Moves cursor to first row."));
+			moveToPreviousRecord.setWhatsThis(i18n("Moves cursor to previous row."));
+			moveToNextRecord.setWhatsThis(i18n("Moves cursor to next row."));
+			moveToLastRecord.setWhatsThis(i18n("Moves cursor to last row."));
+			moveToNewRecord.setWhatsThis(i18n("Moves cursor to new row and allows inserting."));
 		}
 		KGuiItem moveToFirstRecord;
 		KGuiItem moveToPreviousRecord;

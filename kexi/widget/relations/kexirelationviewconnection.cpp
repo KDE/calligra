@@ -34,6 +34,7 @@
 #include <kexidb/tableschema.h>
 #include <kexidb/utils.h>
 #include <core/kexi.h>
+#include <kexiutils/utils.h>
 
 //#include "r1.xpm"
 //#include "rn.xpm"
@@ -73,7 +74,7 @@ KexiRelationViewConnection::drawConnection(QPainter *p)
 	int rx = m_detailsTable->x() + m_parent->contentsX();
 	int ry = m_detailsTable->globalY(m_detailsField);
 
-	QFont f( Kexi::smallFont( m_parent ) );
+	QFont f( KexiUtils::smallFont( m_parent ) );
 	QFontMetrics fm(f);
 	int side1x=0, side1y=sy - fm.height(), 
 		sideNx=0, sideNy=ry - fm.height();

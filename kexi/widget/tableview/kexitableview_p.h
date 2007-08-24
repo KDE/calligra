@@ -81,7 +81,7 @@ class KexiTableViewPrivate
 
 	int rowHeight;
 
-	QPixmap *pBufferPm;
+//Qt4	QPixmap *pBufferPm;
 	QTimer *pUpdateTimer;
 	int menu_id_addRecord;
 	int menu_id_removeRecord;

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and,or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #define KEXITABLEVIEWHEADER_H
 
 #include <kexi_global.h>
-#include <q3header.h>
+#include <Q3Header>
 #include <QPointer>
 #include <QStyle>
 
@@ -42,7 +42,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
 
 		int addLabel( const QString & s, int size = -1 );
 
-		int addLabel( const QIconSet & iconset, const QString & s, int size = -1 );
+		int addLabel( const QIcon & icon, const QString & s, int size = -1 );
 
 		void removeLabel( int section );
 
@@ -54,6 +54,7 @@ class KEXIDATATABLE_EXPORT KexiTableViewHeader : public Q3Header
 		void setSelectedSection(int section);
 		int selectedSection() const;
 
+//! @todo Qt4: support entire QBrush here?
 		QColor selectionBackgroundColor() const;
 		void setSelectionBackgroundColor(const QColor &color);
 

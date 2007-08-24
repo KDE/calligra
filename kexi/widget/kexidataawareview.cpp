@@ -196,6 +196,11 @@ void KexiDataAwareView::reloadActions()
 	setXMLFile("kexidatatableui.rc");
 */
 	m_dataAwareObject->contextMenu()->clear();
+	if (!m_dataAwareObject->contextMenuTitleText().isEmpty()) {
+		m_dataAwareObject->contextMenu()->addTitle( 
+			m_dataAwareObject->contextMenuTitleIcon(), 
+			m_dataAwareObject->contextMenuTitleText() );
+	}
 
 	plugSharedAction("edit_cut", m_dataAwareObject->contextMenu());
 	plugSharedAction("edit_copy", m_dataAwareObject->contextMenu());
