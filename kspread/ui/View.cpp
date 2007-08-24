@@ -5025,7 +5025,9 @@ void View::toggleProtectDoc( bool mode )
      dlg.setWindowTitle( i18n( "Protect Document" ) );
      if ( dlg.exec() != KPasswordDialog::Accepted )
      {
+       d->actions->protectDoc->blockSignals( true );
        d->actions->protectDoc->setChecked( false );
+       d->actions->protectDoc->blockSignals( false );
        return;
      }
 
@@ -5042,7 +5044,9 @@ void View::toggleProtectDoc( bool mode )
      dlg.setWindowTitle( i18n( "Unprotect Document" ) );
      if ( dlg.exec() != KPasswordDialog::Accepted )
      {
+       d->actions->protectDoc->blockSignals( true );
        d->actions->protectDoc->setChecked( true );
+       d->actions->protectDoc->blockSignals( false );
        return;
      }
 
@@ -5053,7 +5057,9 @@ void View::toggleProtectDoc( bool mode )
      if ( !doc()->map()->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Password is incorrect." ) );
+       d->actions->protectDoc->blockSignals( true );
        d->actions->protectDoc->setChecked( true );
+       d->actions->protectDoc->blockSignals( false );
        return;
      }
 
