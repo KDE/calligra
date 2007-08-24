@@ -5076,7 +5076,9 @@ void View::toggleProtectSheet( bool mode )
      dlg.setWindowTitle( i18n( "Protect Sheet" ) );
      if ( dlg.exec() != KPasswordDialog::Accepted )
      {
+       d->actions->protectSheet->blockSignals( true );
        d->actions->protectSheet->setChecked( false );
+       d->actions->protectSheet->blockSignals( false );
        return;
      }
 
@@ -5093,7 +5095,9 @@ void View::toggleProtectSheet( bool mode )
      dlg.setWindowTitle( i18n( "Unprotect Sheet" ) );
      if ( dlg.exec() != KPasswordDialog::Accepted )
      {
+       d->actions->protectSheet->blockSignals( true );
        d->actions->protectSheet->setChecked( true );
+       d->actions->protectSheet->blockSignals( false );
        return;
      }
 
@@ -5106,7 +5110,9 @@ void View::toggleProtectSheet( bool mode )
      if ( !d->activeSheet->checkPassword( hash ) )
      {
        KMessageBox::error( 0, i18n( "Password is incorrect." ) );
+       d->actions->protectSheet->blockSignals( true );
        d->actions->protectSheet->setChecked( true );
+       d->actions->protectSheet->blockSignals( false );
        return;
      }
 
