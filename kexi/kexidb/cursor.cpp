@@ -118,11 +118,14 @@ Cursor::~Cursor()
 		KexiDBDbg << "Cursor::~Cursor() " << endl;*/
 
 	//take me if delete was 
-	if (!m_conn->m_destructor_started && !m_conn->m_insideCloseDatabase)
-		m_conn->takeCursor(*this);
-	else {
-		KexiDBDbg << "Cursor::~Cursor() can be destroyed with Conenction::deleteCursor(), not with delete operator !"<< endl;
-		exit(1);
+	if (!m_conn->m_insideCloseDatabase) {
+		if (!m_conn->m_destructor_started) {
+			m_conn->takeCursor(*this);
+		}
+		else {
+			KexiDBDbg << "Cursor::~Cursor() can be destroyed with Conenction::deleteCursor(), not with delete operator !"<< endl;
+			exit(1);
+		}
 	}
 	delete m_fieldsExpanded;
 	delete m_queryParameters;
