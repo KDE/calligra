@@ -390,11 +390,11 @@ const CellView& SheetView::defaultCellView() const
 
 void SheetView::updateAccessedCellRange( const QPoint& location )
 {
+    Q_ASSERT( sheet() );
+    if ( ! sheet() ) return;
     const QSize cellRange = d->accessedCellRange.expandedTo(QSize(location.x(), location.y()));
     if (d->accessedCellRange != cellRange || location.isNull())
     {
-        Q_ASSERT( sheet() );
-        if ( ! sheet() ) return;
         d->accessedCellRange = cellRange;
         const int col = qMin(KS_colMax, cellRange.width() + 10);
         const int row = qMin(KS_rowMax, cellRange.height() + 10);
