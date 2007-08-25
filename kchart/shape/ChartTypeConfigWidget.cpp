@@ -1,25 +1,22 @@
 
 #include "ChartTypeConfigWidget.h"
 
+// Qt
 #include <QButtonGroup>
-#include <QLabel>
-#include <QLayout>
-#include <QPushButton>
-#include <QPixmap>
+#include <QGridLayout>
 #include <QToolButton>
 
+// KDE
 #include <klocale.h>
-#include <kglobal.h>
 #include <kiconloader.h>
-#include <kvbox.h>
 
-#include "KDChartBarDiagram.h"
+// KDChart
 #include "KDChartChart.h"
 
+// KChart
 #include "ChartShape.h"
 
-namespace KChart
-{
+using namespace KChart;
 
 class Button : public QToolButton
 {
@@ -34,10 +31,6 @@ public:
         setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     }
 };
-
-}; // namespace KChart
-
-using namespace KChart;
 
 // ================================================================
 

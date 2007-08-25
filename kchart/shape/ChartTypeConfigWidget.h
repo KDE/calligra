@@ -1,17 +1,8 @@
-#ifndef _KCWIZARDCHARTTYPEPAGE_H
-#define _KCWIZARDCHARTTYPEPAGE_H
 
-
-#include <QWidget>
-#include <QPixmap>
-
-#include <kvbox.h>
+#ifndef KCHART_CHART_TYPE_CONFIG_WIDGET
+#define KCHART_CHART_TYPE_CONFIG_WIDGET
 
 #include "KoShapeConfigWidgetBase.h"
-
-class QGridLayout;
-class QPushButton;
-class QButtonGroup;
 
 class KoShape;
 
@@ -51,6 +42,6 @@ private:
     Private * const d;
 };
 
-}  //namespace KChart
+}  // namespace KChart
 
-#endif
+#endif // KCHART_CHART_TYPE_CONFIG_WIDGET
