@@ -25,7 +25,6 @@ set(kchartcommon_LIB_SRCS
    #kchart_params.cc 
    KChartViewAdaptor.cc 
    #KChartParamsAdaptor.cc 
-   kchartDataEditor.cc 
 
    commands/ChartTypeCommand.cpp
 

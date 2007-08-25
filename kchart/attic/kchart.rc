@@ -5,11 +5,6 @@
     <Action name="extra_template"/>
  </Menu>
  <Menu name="Edit"><text>&amp;Edit</text>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
-<!--  <Separator/>
-  <Action name="copy"/>-->
-  <Separator/>
   <Action name="editdata"/>
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
@@ -29,13 +24,8 @@
   <Separator group="settings_show"/>
  </Menu>
 </MenuBar>
-<ToolBar fullWidth="true" iconText="icontextbottom" name="editToolBar"><text>Edit</text>
- <Action name="edit_undo"/>
- <Action name="edit_redo"/>
-<!-- <Separator/>
- <Action name="copy"/>-->
-</ToolBar>
 <ToolBar name="KChartToolBar" position="top"><Text>Actions</Text>
+ <Action name="editdata"/>
  <Action name="config"/>
  <Action name="wizard"/>
 </ToolBar>

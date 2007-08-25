@@ -38,6 +38,7 @@ public:
 
 public Q_SLOTS: // METHODS
     virtual void wizard();
+    virtual void editData();
     virtual void configureChart();
 
     virtual void configureBackground();

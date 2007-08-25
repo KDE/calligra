@@ -40,6 +40,8 @@
 #if 0
 #include "kchart_params.h"
 #endif
+//FIXME
+//#include "kchartDataEditor.h"
 #include "KChartViewAdaptor.h"
 
 //FIXME
@@ -200,6 +202,70 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
+
+// Edit the data to the chart.
+// This opens a spreadsheet like editor with the data in it.
+//
+
+void KChartView::editData()
+{
+#if 0
+    kchartDataEditor   ed(this);
+    KChartParams      *params = ((KChartPart*)koDocument())->params();
+    KDChartTableData  *dat    = ((KChartPart*)koDocument())->data();
+
+    kDebug(35001) <<"***Before calling editor: cols =" << dat->cols()
+		   << " , rows = "     << dat->rows()
+		   << " , usedCols = " << dat->usedCols()
+		   << "  usedRows = "  << dat->usedRows() << endl;
+
+    ed.setData( params, dat );
+    ed.setRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
+    ed.setColLabels(((KChartPart*)koDocument())->colLabelTexts());
+
+    // Activate the Apply button in the editor.
+    connect(&ed,  SIGNAL(applyClicked(kchartDataEditor *)),
+	    this, SLOT(applyEdit(kchartDataEditor *)));
+
+    // Execute the data editor.
+    if ( ed.exec() != QDialog::Accepted ) {
+        return;
+    }
+    if (!ed.modified())
+	return;
+
+    // Get the data and legend back.
+    ed.getData(params, dat);
+    ed.getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
+    ed.getColLabels(((KChartPart*)koDocument())->colLabelTexts());
+    ((KChartPart*)koDocument())->setModified(true);
+
+    kDebug(35001) <<"***After calling editor: cols =" << dat->cols()
+		   << " , rows = "     << dat->rows()
+		   << " , usedCols = " << dat->usedCols()
+		   << "  usedRows = "  << dat->usedRows() << endl;
+    update();
+#endif
+}
+
+
+void KChartView::applyEdit(kchartDataEditor *ed)
+{
+    Q_UNUSED( ed );
+#if 0
+    if (!ed->modified())
+	return;
+
+    ed->getData( ((KChartPart*)koDocument())->params(),
+		 ((KChartPart*)koDocument())->data() );
+    ed->getRowLabels(((KChartPart*)koDocument())->rowLabelTexts());
+    ed->getColLabels(((KChartPart*)koDocument())->colLabelTexts());
+
+    ((KChartPart*)koDocument())->setModified(true);
+
+    update();
+#endif
+}
 
 
 void KChartView::wizard()

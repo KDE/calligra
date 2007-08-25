@@ -190,9 +190,9 @@ class structure will evolve during the work.
 
 There is lots of code in KChart 1.x that can be reused.  However, we
 should provide new classes for KChart 2.x and steal code from the
-KChart 1.x classes, not try to convert the KChart 1.x classes to
-KChart 2.  This way we will not have to deal with all the cruft that
-has collected during the previous years.
+KChart 1.x classes when needed, not try to convert the KChart 1.x
+classes to KChart 2.  This way we will not have to deal with all the
+cruft that has collected during the previous years.
 
 Most of the KChart 1.x classes will be moved to a new directory,
 kchart/attic, where code can be copied from it to implement features

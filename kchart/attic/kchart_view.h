@@ -24,8 +24,8 @@ namespace KChart
 {
 
 class KChartPart;
-class ViewAdaptor;
-
+class kchartDataEditor;
+ class ViewAdaptor;
 class KChartView : public KoView
 {
     Q_OBJECT
@@ -38,6 +38,8 @@ public:
     void config(int flag);
 
 public slots:
+    void  editData();
+     void applyEdit(kchartDataEditor *ed);
     void  slotConfig();
     void  wizard();
     void  saveConfig();

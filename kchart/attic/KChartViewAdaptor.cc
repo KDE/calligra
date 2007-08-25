@@ -37,6 +37,11 @@ void ViewAdaptor::wizard()
     view->wizard();
 }
 
+void ViewAdaptor::editData()
+{
+    view->editData();
+}
+
 void ViewAdaptor::configureChart()
 {
     view->slotConfig();
