@@ -19,23 +19,9 @@ namespace KChart
 {
 class ChartShape;
 
-// Contains a button with a text label below it
-//
-// FIXME: Move to kchartWizardSelectChartTypePage.cc
-
-class KChartButton : public KVBox
-{
-  Q_OBJECT
-  public:
-    KChartButton(QWidget* parent, const QString &, const KIcon &);
-    ~KChartButton();
-
-    QPushButton *button() const { return m_button;}
-  private:
-    QPushButton *m_button;
-};
-
-
+/**
+ * Chart type configuration widget.
+ */
 class ChartTypeConfigWidget : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
@@ -59,10 +45,6 @@ private slots:
 
 signals:
     void chartChange(int);
-
-private:
-    void addButton(const QString &name, const QString &icon_name, int type);
-    void incPos();
 
 private:
     class Private;

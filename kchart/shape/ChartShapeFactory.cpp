@@ -22,6 +22,7 @@
 
 #include <QStringList>
 
+#include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 
@@ -47,6 +48,7 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
     : KoShapeFactory( parent, ChartShapeId, i18n( "Chart" ) )
 {
     setToolTip( i18n( "A shape that shows a chart" ) );
+    KIconLoader::global()->addAppDir("kchart");
     setIcon( "kchart" );
     // default 'app specific' config pages
     // i.e. unless an app defines other config pages, these are used.

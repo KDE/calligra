@@ -1,12 +1,12 @@
 
 #include "ChartTypeConfigWidget.h"
 
-#include <QLayout>
 #include <QButtonGroup>
-#include <q3frame.h>
 #include <QLabel>
+#include <QLayout>
 #include <QPushButton>
 #include <QPixmap>
+#include <QToolButton>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -21,24 +21,23 @@
 namespace KChart
 {
 
-KChartButton::KChartButton(QWidget *parent, const QString & _text, const KIcon &_icon)
-    : KVBox(parent)
+class Button : public QToolButton
 {
-    // The button
-    m_button = new QPushButton(this);
-    m_button->setIcon( _icon );
-    m_button->setCheckable( true );
+public:
+    Button(QWidget* parent, const QString& text, const KIcon& icon)
+        : QToolButton(parent)
+    {
+        setCheckable(true);
+        setIcon(icon);
+        setIconSize(QSize(48, 48));
+        setText(text);
+        setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    }
+};
 
-    // The text
-    QLabel *label = new QLabel(_text, this);
-    label->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-}
+}; // namespace KChart
 
-KChartButton::~KChartButton()
-{
-}
-
+using namespace KChart;
 
 // ================================================================
 
@@ -49,51 +48,64 @@ public:
 
     ChartShape* shape;
     ChartType type;
-    int colPos;
-    int rowPos;
-    QButtonGroup* typeBG;
-    QGridLayout* layout;
 };
 
 ChartTypeConfigWidget::ChartTypeConfigWidget()
-    : d( new Private() )
+    : d(new Private)
 {
     d->shape = 0;
-    d->typeBG = new QButtonGroup( this );
-    d->typeBG->setExclusive( true );
-    //d->typeBG->hide();
+    setObjectName("Chart Type");
 
-    d->colPos=0;
-    d->rowPos=0;
-    d->layout = new QGridLayout( this );
-    d->layout->setMargin( 5 );
-    d->layout->setRowStretch( 0, 0 );
-    d->layout->setRowStretch( 1, 0 );
-    d->layout->setRowStretch( 2, 0 );
+    QGridLayout* layout = new QGridLayout(this);
+    layout->setMargin(5);
+    layout->setRowStretch(0, 0);
+    layout->setRowStretch(1, 0);
+    layout->setRowStretch(2, 0);
 
-    setObjectName( i18n( "Chart Type" ) );
+    QButtonGroup* buttonGroup = new QButtonGroup(this);
+    buttonGroup->setExclusive(true);
+    //buttonGroup->hide();
 
-    addButton( i18n( "Bar" ),            "chart_bar",    Private::Bar );
-    addButton( i18n( "Lines" ),          "chart_line",   Private::Line );
-    addButton( i18n( "Area" ),           "chart_area",   Private::Area );
+    Button* button = new Button(this, i18n("Bar"), KIcon("chart_bar"));
+    layout->addWidget(button, 0, 0);
+    buttonGroup->addButton(button, Private::Bar);
 
-    addButton( i18n("HiLo"),             "chart_hilo",   Private::HiLo );
-    addButton( i18n("Box & Whisker "),   "chart_boxwhisker", Private::BoxWhisker );
-    incPos();
+    button = new Button(this, i18n("Lines"), KIcon("chart_line"));
+    layout->addWidget(button, 0, 1);
+    buttonGroup->addButton(button, Private::Line);
 
-    addButton( i18n( "Pie" ),            "chart_pie",    Private::Pie );
-    addButton( i18n( "Ring" ),           "chart_ring",   Private::Ring );
-    addButton( i18n( "Polar" ),          "chart_polar",  Private::Polar);
+    button = new Button(this, i18n("Area"), KIcon("chart_area"));
+    layout->addWidget(button, 0, 2);
+    buttonGroup->addButton(button, Private::Area);
+
+    button = new Button(this, i18n("HiLo"), KIcon("chart_hilo"));
+    layout->addWidget(button, 1, 0);
+    buttonGroup->addButton(button, Private::HiLo);
+
+    button = new Button(this, i18n("Box && Whisker"), KIcon("chart_boxwhisker"));
+    layout->addWidget(button, 1, 1, 1, 2);
+    buttonGroup->addButton(button, Private::BoxWhisker);
+
+    button = new Button(this, i18n("Pie"), KIcon("chart_pie"));
+    layout->addWidget(button, 2, 0);
+    buttonGroup->addButton(button, Private::Pie);
+
+    button = new Button(this, i18n("Ring"), KIcon("chart_ring"));
+    layout->addWidget(button, 2, 1);
+    buttonGroup->addButton(button, Private::Ring);
+
+    button = new Button(this, i18n("Polar"), KIcon("chart_polar"));
+    layout->addWidget(button, 2, 2);
+    buttonGroup->addButton(button, Private::Polar);
 
     // Make the button for the current type selected.
-//     QPushButton *current = ((QPushButton*)d->typeBG->button( d->shape->params()->chartType() ));
+//     QPushButton *current = ((QPushButton*)buttonGroup->button( d->shape->params()->chartType() ));
 //     if (current != 0) {
 //         current->setChecked( true );
 //     }
 // 
 //     d->type = d->shape->params()->chartType();
-    connect( d->typeBG, SIGNAL( clicked( int ) ),
-            this,      SLOT( chartTypeSelected( int ) ) );
+    connect(buttonGroup, SIGNAL(clicked(int)), this, SLOT(chartTypeSelected(int)));
 }
 
 ChartTypeConfigWidget::~ChartTypeConfigWidget()
@@ -116,27 +128,6 @@ KAction* ChartTypeConfigWidget::createAction()
     return 0;
 }
 
-void ChartTypeConfigWidget::addButton(const QString &name,
-                                                const QString &icon_name,
-                                                int type)
-{
-    KChartButton *button = new KChartButton( this, name, KIcon( icon_name ) );
-    d->layout->addWidget(button, d->rowPos, d->colPos);
-    d->typeBG->addButton( button->button(), type );
-
-    incPos();
-}
-
-void ChartTypeConfigWidget::incPos()
-{
-    if (d->colPos == 2) {
-        d->colPos=0;
-        d->rowPos++; //place the next button in the second row
-    }
-    else
-        d->colPos++;
-}
-
 void ChartTypeConfigWidget::chartTypeSelected( int type )
 {
     d->type = (Private::ChartType) type;
@@ -147,7 +138,5 @@ void ChartTypeConfigWidget::apply()
 {
 //     d->shape->chart()->setChartType( m_type );
 }
-
-}  //namespace KChart
 
 #include "ChartTypeConfigWidget.moc"

@@ -36,6 +36,7 @@
 #include <KoViewConverter.h>
 
 // KDE
+#include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -156,7 +157,7 @@ void ChartShape::setModel( QAbstractItemModel* model )
         pen.setWidth(4);
         d->diagram->setPen( iColumn, pen );
     }
-
+/*
     KDChart::FrameAttributes faChart( d->chart->frameAttributes() );
     faChart.setPen( QPen(QColor(0x60,0x60,0xb0), 8) );
     d->chart->setFrameAttributes( faChart );
@@ -165,7 +166,7 @@ void ChartShape::setModel( QAbstractItemModel* model )
     baChart.setVisible( true );
     baChart.setBrush( QColor(0xd0,0xd0,0xff) );
     d->chart->setBackgroundAttributes( baChart );
-
+*/
     // Set up the legend
     Legend* m_legend;
     m_legend = new Legend( d->diagram, d->chart );
@@ -188,6 +189,7 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 
     kDebug() << "Painting chart into " << paintRect << endl;
     // painting chart contents
+    painter.fillRect(paintRect, KApplication::palette().base());
     d->chart->paint( &painter, paintRect.toRect() );
 }
 
