@@ -21,6 +21,7 @@
 
 // KDE
 #include <kdebug.h>
+#include <klocalizedstring.h>
 
 // KDChart
 #include "KDChartAbstractCoordinatePlane.h"
@@ -84,6 +85,7 @@ void ChartTypeCommand::undo()
 {
     if (m_oldType == m_newType)
         return;
+    kDebug() << m_oldType;
     // save the model
     QAbstractItemModel* model = m_chart->coordinatePlane()->diagram()->model();
     // restore the old coordinate plane
@@ -100,6 +102,33 @@ void ChartTypeCommand::undo()
 void ChartTypeCommand::setChartType(OdfChartType type)
 {
     m_newType = type;
+    switch (type)
+    {
+    case BarChartType:
+        setText(i18n("Bar Chart"));
+        break;
+    case LineChartType:
+        setText(i18n("Line Chart"));
+        break;
+    case PieChartType:
+        setText(i18n("Pie Chart"));
+        break;
+    case RingChartType:
+        setText(i18n("Ring Chart"));
+        break;
+    case PolarChartType:
+        setText(i18n("Polar Chart"));
+        break;
+    case AreaChartType:
+        setText(i18n("Area Chart"));
+        break;
+    case BoxWhiskerChartType:
+        setText(i18n("Box && Whisker Chart"));
+        break;
+    case HiLoChartType:
+        setText(i18n("HiLo Chart"));
+        break;
+    }
 }
 
 void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
