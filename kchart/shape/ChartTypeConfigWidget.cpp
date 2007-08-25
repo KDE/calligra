@@ -14,7 +14,9 @@
 #include "KDChartChart.h"
 
 // KChart
+#include "kchart_global.h"
 #include "ChartShape.h"
+#include "commands/ChartTypeCommand.h"
 
 using namespace KChart;
 
@@ -37,10 +39,8 @@ public:
 class ChartTypeConfigWidget::Private
 {
 public:
-    enum ChartType { Bar, Line, Area, HiLo, BoxWhisker, Pie, Ring, Polar };
-
     ChartShape* shape;
-    ChartType type;
+    OdfChartType type;
 };
 
 ChartTypeConfigWidget::ChartTypeConfigWidget()
@@ -61,35 +61,38 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
 
     Button* button = new Button(this, i18n("Bar"), KIcon("chart_bar"));
     layout->addWidget(button, 0, 0);
-    buttonGroup->addButton(button, Private::Bar);
+    buttonGroup->addButton(button, BarChartType);
 
     button = new Button(this, i18n("Lines"), KIcon("chart_line"));
     layout->addWidget(button, 0, 1);
-    buttonGroup->addButton(button, Private::Line);
+    buttonGroup->addButton(button, LineChartType);
 
     button = new Button(this, i18n("Area"), KIcon("chart_area"));
+    button->setEnabled(false); // TODO not supported yet
     layout->addWidget(button, 0, 2);
-    buttonGroup->addButton(button, Private::Area);
+    buttonGroup->addButton(button, AreaChartType);
 
     button = new Button(this, i18n("HiLo"), KIcon("chart_hilo"));
+    button->setEnabled(false); // TODO not supported yet
     layout->addWidget(button, 1, 0);
-    buttonGroup->addButton(button, Private::HiLo);
+    buttonGroup->addButton(button, HiLoChartType);
 
     button = new Button(this, i18n("Box && Whisker"), KIcon("chart_boxwhisker"));
+    button->setEnabled(false); // TODO not supported yet
     layout->addWidget(button, 1, 1, 1, 2);
-    buttonGroup->addButton(button, Private::BoxWhisker);
+    buttonGroup->addButton(button, BoxWhiskerChartType);
 
     button = new Button(this, i18n("Pie"), KIcon("chart_pie"));
     layout->addWidget(button, 2, 0);
-    buttonGroup->addButton(button, Private::Pie);
+    buttonGroup->addButton(button, PieChartType);
 
     button = new Button(this, i18n("Ring"), KIcon("chart_ring"));
     layout->addWidget(button, 2, 1);
-    buttonGroup->addButton(button, Private::Ring);
+    buttonGroup->addButton(button, RingChartType);
 
     button = new Button(this, i18n("Polar"), KIcon("chart_polar"));
     layout->addWidget(button, 2, 2);
-    buttonGroup->addButton(button, Private::Polar);
+    buttonGroup->addButton(button, PolarChartType);
 
     // Make the button for the current type selected.
 //     QPushButton *current = ((QPushButton*)buttonGroup->button( d->shape->params()->chartType() ));
@@ -113,7 +116,9 @@ void ChartTypeConfigWidget::open( KoShape* shape )
 
 void ChartTypeConfigWidget::save()
 {
-//     d->shape->chart()->coordinatePlane()->replaceDiagram( new KDChart::BarDiagram() );
+    ChartTypeCommand command(d->shape->chart());
+    command.setChartType(d->type);
+    command.redo();
 }
 
 KAction* ChartTypeConfigWidget::createAction()
@@ -123,13 +128,8 @@ KAction* ChartTypeConfigWidget::createAction()
 
 void ChartTypeConfigWidget::chartTypeSelected( int type )
 {
-    d->type = (Private::ChartType) type;
+    d->type = (OdfChartType) type;
     emit chartChange(type);
-}
-
-void ChartTypeConfigWidget::apply()
-{
-//     d->shape->chart()->setChartType( m_type );
 }
 
 #include "ChartTypeConfigWidget.moc"

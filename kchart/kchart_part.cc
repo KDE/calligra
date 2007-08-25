@@ -103,6 +103,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
         m_subtype = BarNormalSubtype;
 
         m_chart       = new KDChart::Chart();
+        m_chart->coordinatePlane()->replaceDiagram(new KDChart::BarDiagram()); // FIXME
         m_currentData = new QStandardItemModel();
         //FIXME: m_chart->diagram()->setModel( m_currentData );
 
@@ -336,8 +337,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 
     // Make the chart use our model.
     kDebug(35001) <<"Painting!!";
-    Q_ASSERT( m_chart->coordinatePlane() );
-    m_chart->coordinatePlane()->replaceDiagram( new KDChart::BarDiagram() );
     Q_ASSERT( m_chart->coordinatePlane()->diagram() );
     m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
 

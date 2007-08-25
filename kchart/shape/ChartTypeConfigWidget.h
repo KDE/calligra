@@ -28,13 +28,10 @@ public:
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
 
-public slots:
-    void apply();
-
-private slots:
+private Q_SLOTS:
     void chartTypeSelected( int type );
 
-signals:
+Q_SIGNALS:
     void chartChange(int);
 
 private:

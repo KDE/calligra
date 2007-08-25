@@ -9,6 +9,7 @@ SET (chartshape_LIB_SRCS
 	ChartShape.cpp
 	ChartShapeFactory.cpp
 	ChartTypeConfigWidget.cpp
+	../commands/ChartTypeCommand.cpp
 	)
 
 kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})

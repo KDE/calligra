@@ -50,6 +50,7 @@
 #include "KCPageLayout.h"
 #include "KCPrinterDialog.h"
 
+#include "commands/ChartTypeCommand.h"
 
 using namespace std;
 
@@ -104,15 +105,20 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     actionCollection()->addAction("areaschart", m_chartareas );
     connect(m_chartareas, SIGNAL(triggered(bool)), SLOT( areasChart() ));
 	charttypes->addAction(m_chartareas);
+    m_chartareas->setEnabled(false); // TODO not supported yet
 
     m_charthilo  = new KToggleAction(KIcon("chart_hilo"), i18n("&HiLo"), this);
     actionCollection()->addAction("hilochart", m_charthilo );
     connect(m_charthilo, SIGNAL(triggered(bool)), SLOT( hiLoChart() ));
 	charttypes->addAction(m_charthilo);
+    m_charthilo->setEnabled(false); // TODO not supported yet
+
     m_chartbw  = new KToggleAction(KIcon("chart_boxwhisker"), i18n("Bo&x && Whiskers"), this);
     actionCollection()->addAction("bwchart", m_chartbw );
  connect(m_chartbw, SIGNAL(triggered(bool)), SLOT( bwChart() ));
 	charttypes->addAction(m_chartbw);
+    m_chartbw->setEnabled(false); // TODO not supported yet
+
     m_chartpie  = new KToggleAction(KIcon("chart_pie"), i18n("&Pie"), this);
     actionCollection()->addAction("piechart", m_chartpie );
  connect(m_chartpie, SIGNAL(triggered(bool)), SLOT( pieChart() ));
@@ -401,6 +407,11 @@ void KChartView::pieChart()
     }
     else
         m_chartpie->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(PieChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 
@@ -438,6 +449,11 @@ void KChartView::lineChart()
     }
     else
 	m_chartline->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(LineChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 
@@ -459,6 +475,11 @@ void KChartView::barsChart()
     }
     else
 	m_chartbars->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(BarChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 
@@ -479,6 +500,11 @@ void KChartView::areasChart()
     }
     else
 	m_chartareas->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(AreaChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 
@@ -499,6 +525,11 @@ void KChartView::hiLoChart()
     }
     else
 	m_charthilo->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(HiLoChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 
@@ -518,6 +549,11 @@ void KChartView::ringChart()
     }
     else
 	m_chartring->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(RingChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 
@@ -537,6 +573,11 @@ void KChartView::polarChart()
     }
     else
         m_chartpolar->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(PolarChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 
@@ -556,6 +597,11 @@ void KChartView::bwChart()
     }
     else
         m_chartbw->setChecked( true ); // always one has to be checked !
+#else
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
+    command->setChartType(BoxWhiskerChartType);
+    koDocument()->addCommand(command);
+    update();
 #endif
 }
 

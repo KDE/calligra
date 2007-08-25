@@ -27,6 +27,8 @@ set(kchartcommon_LIB_SRCS
    #KChartParamsAdaptor.cc 
    kchartDataEditor.cc 
 
+   commands/ChartTypeCommand.cpp
+
    #dialogs/KCConfigDialog.cc 
    #dialogs/KCConfigDataPage.cc 
    #dialogs/KCConfigSubtypePage.cc 
