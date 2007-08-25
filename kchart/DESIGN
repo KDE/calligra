@@ -1,0 +1,174 @@
+                         Design of KChart 2.0
+                         ====================
+
+
+This file describes the overall design of KChart version 2.  It is
+intended for people who want to start to develop KChart, and need an
+introduction to the structure of the code.  For a more detailed
+description of the classes, see the API-docs generated from doxygen.
+
+
+1. KOffice 1.x architecture
+---------------------------
+
+Before we start to describe the design of KChart 2.x, we should
+recapitulate how KOffice 1.x was designed and also KChart 1.x.  We
+will then emphasize differences between this and the new design for
+those who have seen the old code.
+
+KOffice 1.x was generally built on KParts, the general KDE embedding
+technology.  Each KOffice 1.x application (component) consist of the
+application itself, which is really not much more than a frame, and an
+embeddable KPart.  The KPart implements the real functionality of the
+application, and can also be embedded into other non-KOffice
+applications, like Konqueror.
+
+When one document embeds another, e.g. a chart in a spreadsheet, and
+the user wants to edit the embedded document, the KPart for that
+embedded document gets enabled inside the application of the embedding
+document.  This makes the whole GUI change, and it changes back when
+the embedded component is no longer active.  So, when KSpread embeds a
+chart and the user double clicks the chart to edit it, the KSpread gui
+changes to the KChart one.
+
+
+1.1 Internals of KChart 1.x
+- - - - - - - - - - - - - -
+
+KChart 1.x is built as a GUI for the embeddable chart component
+KDChart from Klarälvdalens Datakonsult AB. This is a commercial
+component that was graciously released under a GPL license and made
+available for KOffice to use.  KDChart is built in the subdirectory
+kchart/kdchart, and is really the component that provides the real
+functionality for KChart.  One example of how deep the dependency of
+KDChart goes is the fact that the file format for KChart 1.x is the
+builtin file format for KDChart, just enhanced with very few extra XML
+tags. 
+
+KDChart is represented by mainly two classes:
+
+ - KDChart:
+       the class representing the chart itself. This is the class that
+       actually draws the chart on the widget. 
+
+ - KDChartParams
+       a class that holds all parameters for the KDChart, like legend,
+       fonts, colors, background image, etc, etc
+
+In addition there is also he class KDChartTableData, which holds the
+numerical and string data that is presented in the chart.  
+
+When support for the OpenDocument format was implemented,
+KDChartParams was extended by the class KChartParams.  This class was
+supposed to hold all the missing parts of the ODF that was not
+supported by KDChart directly, but this idea was never fully
+implemented.
+
+So, to conclude, the main classes of KChart 1.x was:
+
+ - KChartPart : public KoDocument (via KoChart in koffice/interfaces)
+       The class that held the chart document itself as represented by
+       the KDChart classes above.  This class provided embedding into
+       other KOffice 1.x classes as well as other KDE
+       applications.  There was support for both read/write editing of
+       the chart and also a read-only variation for only show.
+
+ - KChartView : public KoView
+       The class that implemented the GUI and held all the KActions.
+       This was the important part of the KChart application.
+
+
+2. KOffice 2.x architecture
+---------------------------
+
+The architecture of KOffice 2.x is totally different.  The most
+important change is that KParts are no longer used  for embedding
+documents into other documents.  Instead, embedding is done with so
+called Flake Shapes, as defined and implemented by the Flake library
+in koffice/libs/flake.  
+
+A Flake Shape (from now on 'shape') can be as simple as a line or
+circle, or as complex as a full spreadsheet or a chart. Each shape can
+be manipulated by so called Tools, either generic tools like the
+transform tool or specialized tools that only apply to one or a few
+different shapes.  Examples of very specialized tools are the tools
+that handle insertion and manipulation of musical notes in the Music
+Score Shape.  We will not go into more details about Flake here, but
+instead ask the eager developer to read the Flake API docs.
+
+
+1.1 KOffice 2.x and KChart
+- - - - - - - - - - - - - 
+
+From the above, we realize that the main part of KChart for KOffice
+2.x has to be a Chart Flake Shape.  This shape will contain all
+necessary classes to represent the chart and the data to be shown in
+the chart.  In addition, we have to provide some Flake Tools that will
+aid the user in the manipulation of the chart shape.
+
+But even if KOffice embedding is no longer done by KParts, we still
+need to provide a KChart KPart.  Without it, Konqueror will not be
+able to show a .odc (OpenDocument Chart) file, and neither will any
+other KDE application.
+
+We will also have to provide a main KChart application whose only
+purpose will be to embed the chart shape and host the tools to
+manipulate it. 
+
+So, to summarize we will provide:
+
+ - ChartShape : public KoShape
+       the class that implements the Chart Flake Shape.  This will
+       make the chart embeddable into any KOffice application
+
+ - KChartPart
+       a KPart that lets KChart be embedded into other KDE
+       applications.  It is not yet clear whether KChartPart will
+       simply embed a ChartShape or if it will implement it's own
+       chart painting without going through the flake classes.
+
+
+2.2 Internals of KChart 2.x
+- - - - - - - - - - - - - -
+
+KChart 2 will have to answer to more demands than KChart 1.  The
+biggest differences is full support for OpenDocument and the Flake
+embedding technology.  We will also reduce the dependency of the
+KDChart library, and use it more as a pure View in the Qt/KDE sense
+than the central class which also stores the data and reads/writes it
+from/to files.
+
+So here are the main classes that will be implemented for KChart 2:
+
+ - KChartDocument : public KoDocument
+
+       This is the central class that holds all the chart data and
+       configuration.  It contains all the configuration for the chart
+       as well as a pointer to a KDChart and a QStandardItemModel
+       based data class (details not yet decided).
+
+       This class is public, and can be used by other applications
+       when they want to manipulate a chart, automatically or through
+       a GUI like the ChartShape.  It will also have a Kross interface
+       that will expose the chart to Kross scripts and a DBUS adaptor
+       that will let the chart be manipulated through DBUS.
+
+ - ChartShape : public QObject, public KoShape
+
+       The Flake shape implementing KChart that was described above.
+       This class contains a KChartDocument that represents the actual
+       chart.  In connection to the shape, there are a number of
+       tools, as yet undecided.
+
+ - KChartPart
+
+       A KPart that will let Konqueror and other browsers embed and
+       preview charts.  This class also will either embed a ChartShape
+       or contain the ChartDocument directly.
+
+ - KChartView : public KoView
+
+       The view that implements the main GUI of the KChart
+       application.
+
+
