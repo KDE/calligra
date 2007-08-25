@@ -69,22 +69,32 @@ void ChartTypeCommand::redo()
     m_oldType = chartType(m_chart->coordinatePlane()->diagram());
     if (m_oldType == m_newType)
         return;
+    // save the model
+    QAbstractItemModel* model = m_chart->coordinatePlane()->diagram()->model();
     // set a proper coordinate plane
     replaceCoordinatePlane(m_newType);
     // set the new type
     replaceDiagram(m_newType);
+    // transfer the model
+    m_chart->coordinatePlane()->diagram()->setModel(model);
+    m_chart->coordinatePlane()->relayout();
 }
 
 void ChartTypeCommand::undo()
 {
     if (m_oldType == m_newType)
         return;
+    // save the model
+    QAbstractItemModel* model = m_chart->coordinatePlane()->diagram()->model();
     // restore the old coordinate plane
     m_chart->replaceCoordinatePlane(m_oldCoordinatePlane);
     m_oldCoordinatePlane = 0;
     // restore the old diagram
     m_chart->coordinatePlane()->replaceDiagram(m_oldDiagram);
     m_oldDiagram = 0;
+    // transfer the model
+    m_chart->coordinatePlane()->diagram()->setModel(model);
+    m_chart->coordinatePlane()->relayout();
 }
 
 void ChartTypeCommand::setChartType(OdfChartType type)
@@ -130,38 +140,42 @@ void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
 void ChartTypeCommand::replaceDiagram(OdfChartType type)
 {
     Q_ASSERT(m_chart->coordinatePlane());
-    // save the old diagram
-    m_oldDiagram = m_chart->coordinatePlane()->diagram();
-    // do not delete old diagram
-    m_chart->coordinatePlane()->takeDiagram(m_oldDiagram);
+    AbstractDiagram* diagram = 0;
     switch (type)
     {
     case BarChartType:
-        m_chart->coordinatePlane()->replaceDiagram(new BarDiagram());
+        diagram = new BarDiagram();
         break;
     case LineChartType:
-        m_chart->coordinatePlane()->replaceDiagram(new LineDiagram());
+        diagram = new LineDiagram();
         break;
     case AreaChartType:
         kDebug() << "Area not supported yet";
-//         m_chart->coordinatePlane()->replaceDiagram(new AreaDiagram());
         break;
     case PieChartType:
-        m_chart->coordinatePlane()->replaceDiagram(new PieDiagram());
+        diagram = new PieDiagram();
         break;
     case HiLoChartType:
         kDebug() << "HiLo not supported yet";
-//         m_chart->coordinatePlane()->replaceDiagram(new HiLoDiagram());
         break;
     case RingChartType:
-        m_chart->coordinatePlane()->replaceDiagram(new RingDiagram());
+        diagram = new RingDiagram();
         break;
     case PolarChartType:
-        m_chart->coordinatePlane()->replaceDiagram(new PolarDiagram());
+        diagram = new PolarDiagram();
         break;
     case BoxWhiskerChartType:
         kDebug() << "BoxWhisker not supported yet";
-//         m_chart->coordinatePlane()->replaceDiagram(new BoxWhiskerDiagram());
         break;
+    }
+
+    if (diagram)
+    {
+        // save the old diagram
+        m_oldDiagram = m_chart->coordinatePlane()->diagram();
+        // remove but do not delete old diagram
+        m_chart->coordinatePlane()->takeDiagram(m_oldDiagram);
+        // set the new diagram
+        m_chart->coordinatePlane()->replaceDiagram(diagram);
     }
 }

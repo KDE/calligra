@@ -105,7 +105,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
         m_chart       = new KDChart::Chart();
         m_chart->coordinatePlane()->replaceDiagram(new KDChart::BarDiagram()); // FIXME
         m_currentData = new QStandardItemModel();
-        //FIXME: m_chart->diagram()->setModel( m_currentData );
+        m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
 
 	// Handle data in columns by default
         m_dataDirection   = DataRowsDirection;
@@ -166,7 +166,7 @@ void KChartPart::initNullChart()
     if ( m_currentData )
         delete m_currentData;
     m_currentData = new QStandardItemModel();
-    //m_chart->diagram()->setModel( m_currentData );
+    m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
 
 #if 0
     m_currentData->setDataHasVerticalHeaders( false );
@@ -337,8 +337,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 
     // Make the chart use our model.
     kDebug(35001) <<"Painting!!";
-    Q_ASSERT( m_chart->coordinatePlane()->diagram() );
-    m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
 
    // ## TODO: support zooming
 
