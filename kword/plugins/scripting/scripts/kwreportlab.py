@@ -1,6 +1,6 @@
 #!/usr/bin/env kross
 
-import os, sys, re, types, string, datetime
+import os, sys, re, types, string, datetime, urllib
 
 import reportlab
 from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
@@ -34,7 +34,9 @@ class MyConfig:
 
         #self.readOdfFile = ""
         #self.readOdfFile = "/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt"
-        self.readOdfFile = "/home/kde4/odf/_works/textFormatting_alignment/testDoc/testDoc.odt"
+        #self.readOdfFile = "/home/kde4/odf/_works/textFormatting_alignment/testDoc/testDoc.odt"
+        self.readOdfFile = "/home/kde4/odf/_works/Paragraph_AttributedText/testDoc/bold.odt"
+        #self.readOdfFile = "/home/kde4/odf/_works/textFormatting_fontSize/testDoc/testDoc.odt"
 
         #self.writeFileName = ""
         self.writeFileName = "/home/kde4/__MyReportLabTest.pdf"
@@ -175,55 +177,119 @@ class MyWriter:
                     #except ValueError:
                         #pass
 
+    class MyParagraph:
+        def __init__(self, story, reader, styles):
+            self.story = story
+            self.reader = reader
+            self.styles = styles
+            self.styleName = reader.attribute("text:style-name","Standard")
+            print "MyParagraph: name=%s namespaceURI=%s level=%s styleName=%s text=%s" % (self.reader.name(),self.reader.namespaceURI(),self.reader.level(),self.styleName,self.reader.text())
+
+            try:
+                self.style = self.styles[self.styleName]
+            except KeyError:
+                parentStyle = self.styles['BodyText']
+                self.style = ParagraphStyle(self.styleName, parentStyle)
+
+                kwparagstyle = KWord.paragraphStyle(self.styleName)
+                if not kwparagstyle:
+                    decodedStyleName = urllib.unquote( self.styleName.replace('_','%') )
+                    kwparagstyle = KWord.paragraphStyle(decodedStyleName)
+                    if not kwparagstyle:
+                        for n in (decodedStyleName, self.styleName):
+                            kwparagstyle = KWord.paragraphStyle( re.sub('[0-9]+','',n) )
+                            if kwparagstyle:
+                                break
+
+                if kwparagstyle:
+                    print "PARAG-STYLE=>%s" % kwparagstyle.name()
+                    kwcharstyle = kwparagstyle.characterStyle()
+
+                    fontFamily = kwcharstyle.family()
+                    if fontFamily:
+                        self.style.fontName = fontFamily #'Times-Roman'
+
+                    fontSize = kwcharstyle.size()
+                    if fontSize < 6:
+                        fontSize = 6
+                    self.style.fontSize = fontSize #20
+
+                    #self.style.leading = 12
+                    #self.style.leftIndent = 0
+                    #self.style.rightIndent = 0
+                    #self.style.firstLineIndent = 0
+                    #self.style.spaceBefore = 0
+                    #self.style.spaceAfter = 0
+                    #self.style.bulletFontName = 'Times-Roman'
+                    #self.style.bulletFontSize = 10
+                    #self.style.bulletIndent = 0
+                    #self.style.textColor = black
+
+                    alignment = kwparagstyle.alignment()
+                    if alignment == kwparagstyle.AlignLeft:
+                        self.style.alignment = TA_LEFT
+                    elif alignment == kwparagstyle.AlignHCenter:
+                        self.style.alignment = TA_CENTER
+                    elif alignment == kwparagstyle.AlignRight:
+                        self.style.alignment = TA_RIGHT
+                    elif alignment == kwparagstyle.AlignJustify:
+                        self.style.alignment = TA_JUSTIFY
+
+            self.styles.add( self.style )
+
+            self.text = ""
+            t = self.reader.text()
+            if t and not self.reader.hasChildren():
+                self.text = t.replace('&','&amp;').replace('"','&quot;').replace('<','&gt;').replace('>','&lt;')
+
+        def __del__(self):
+            if self.text:
+                #text = "<font size=\"%s\">%s</font>" % (style._size,text)
+                self.story.append( Paragraph("%s" % self.text, self.style) )
+
+    class MySpan:
+        def __init__(self, myParagraph):
+            #self.story = myParagraph.story
+            self.reader = myParagraph.reader
+            #self.styles = myParagraph.styles
+            self.styleName = self.reader.attribute("text:style-name","Standard")
+            print "MySpan: name=%s namespaceURI=%s level=%s styleName=%s text=%s" % (self.reader.name(),self.reader.namespaceURI(),self.reader.level(),self.styleName,self.reader.text())
+
+            text = self.reader.text()
+            if text:
+                text = text.replace('&','&amp;').replace('"','&quot;').replace('<','&gt;').replace('>','&lt;')
+                kwcharstyle = self.getCharacterStyle()
+                if kwcharstyle:
+                    print "CHAR-STYLE=>%s" % kwcharstyle.name()
+                    if kwcharstyle.italic():
+                        text = "<i>%s</i>" % text
+                    if kwcharstyle.bold():
+                        text = "<b>%s</b>" % text
+                    if kwcharstyle.underline():
+                        text = "<u>%s</u>" % text
+                myParagraph.text += "%s " % text
+
+        def getCharacterStyle(self):
+            kwcharstyle = KWord.characterStyle(self.styleName)
+            if not kwcharstyle:
+                decodedStyleName = urllib.unquote( self.styleName.replace('_','%') )
+                kwcharstyle = KWord.characterStyle(decodedStyleName)
+                if not kwcharstyle:
+                    for n in (decodedStyleName, self.styleName):
+                        kwcharstyle = KWord.characterStyle( re.sub('[0-9]+','',n) )
+                        if kwcharstyle:
+                            break
+            return kwcharstyle
+
     def __init__(self, config):
         self.config = config
         self.kwdoc = KWord.document()
         self.style = getSampleStyleSheet()
         self.doc = MyWriter.MyTemplate(self)
 
-    def getParagraphStyle(self, styleName):
-        try:
-            return self.style[styleName]
-        except KeyError:
-            parentStyle = self.style['BodyText']
-            style = ParagraphStyle(styleName, parentStyle)
-
-            #kwparagstyle = KWord.paragraphStyle(styleName)
-            #if kwparagstyle:
-                #print "STYLE=>%s" % kwparagstyle.name()
-                ##alignment = kwparagstyle.alignment()
-                ##if alignment == kwparagstyle.AlignLeft:
-                    ##style.defaults['alignment'] = TA_LEFT
-                ##elif alignment == kwparagstyle.AlignHCenter:
-                    ##style.defaults['alignment'] = TA_CENTER
-                ##elif alignment == kwparagstyle.AlignRight:
-                    ##style.defaults['alignment'] = TA_RIGHT
-                ##elif alignment == kwparagstyle.AlignJustify:
-                    ##style.defaults['alignment'] = TA_JUSTIFY
-            #else:
-                #kwparagstyle = KWord.addParagraphStyle(styleName)
-
-            #style.defaults['fontName'] = 'Times-Roman'
-            #style.defaults['fontSize'] = 20
-            #style.defaults['leading'] = 12
-            #style.defaults['leftIndent'] = 0
-            #style.defaults['rightIndent'] = 0
-            #style.defaults['firstLineIndent'] = 0
-            #style.defaults['spaceBefore'] = 0
-            #style.defaults['spaceAfter'] = 0
-            #style.defaults['bulletFontName'] = 'Times-Roman'
-            #style.defaults['bulletFontSize'] = 10
-            #style.defaults['bulletIndent'] = 0
-            #style.defaults['textColor'] = black
-
-            self.style.add(style)
-            return style
-
     def write(self):
         style = getSampleStyleSheet()
         story = []
-        #story.append(Paragraph('<font size=18>Generated by: docpy.py version %s</font>' %  __version__, self.bt))
-        #story.append(Paragraph('<font size=18>Date generated: %s</font>' % timeString, self.bt))
 
         kwdoc = KWord.document()
         if not embeddedInKWord and self.config.readOdfFile:
@@ -237,20 +303,16 @@ class MyWriter:
         if not reader:
             raise "Failed to read file from the store"
 
+        self._myParagraph = None
+
         # This method got called on each readed element.
         def onElement():
             if reader.isNull():
                 return
             if reader.name() == "text:p":
-                print "onElement: text:p name=%s namespaceURI=%s level=%s" % (reader.name(),reader.namespaceURI(),reader.level())
-                text = reader.text()
-                if not text:
-                    return
-                styleName = reader.attribute("text:style-name","Standard")
-                print "onElement: text:p attributeNames=%s styleName=%s" % (reader.attributeNames(),styleName)
-                style = self.getParagraphStyle(styleName) #styleName='BodyText'
-                story.append( Paragraph("%s" % text, style) )
-            #elif reader.name() == "text:span":
+                self._myParagraph = MyWriter.MyParagraph(story, reader, self.style)
+            elif reader.name() == "text:span":
+                myspan = MyWriter.MySpan(self._myParagraph)
             elif reader.name() == "text:s":
                 #story.append( Spacer(1.0*inch, 0.0*inch) )
                 pass

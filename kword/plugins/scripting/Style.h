@@ -121,6 +121,13 @@ namespace Scripting {
             */
             void setBold(bool bold) { m_style->setFontWeight(bold ? 75 : 50); }
 
+            /** Return true if the there is a underline. */
+            bool underline() const { return m_style->underlineStyle() != KoCharacterStyle::NoLineStyle; }
+            /** Set the underline. */
+            void setUnderline(bool underline) {
+                m_style->setUnderlineStyle(underline ? KoCharacterStyle::SolidLine : KoCharacterStyle::NoLineStyle);
+            }
+
             /***** Foreground *****/
 
             /** Return the font-color. */
