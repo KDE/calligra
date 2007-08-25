@@ -138,7 +138,7 @@ KDChart library, and use it more as a pure View in the Qt/KDE sense
 than the central class which also stores the data and reads/writes it
 from/to files.
 
-So here are the main classes that will be implemented for KChart 2:
+So here are the main classes for KChart 2:
 
  - KChartDocument : public KoDocument
 
@@ -172,3 +172,32 @@ So here are the main classes that will be implemented for KChart 2:
        application.
 
 
+3. Some Notes About the Work Towards KChart 2.0
+-----------------------------------------------
+
+The most important class is KChartDocument.  This class will be
+responsible for holding the whole chart and perform the following
+duties:
+
+ - Giving a full API to the chart
+ - Reading/writing ODF files
+ - Controlling the KDChart classes so that KDChart can be used to show
+   the chart visually.
+
+Most of these tasks will be performed via subclasses and helper
+classes.  The main classes should be implemented first, and the full
+class structure will evolve during the work.
+
+There is lots of code in KChart 1.x that can be reused.  However, we
+should provide new classes for KChart 2.x and steal code from the
+KChart 1.x classes, not try to convert the KChart 1.x classes to
+KChart 2.  This way we will not have to deal with all the cruft that
+has collected during the previous years.
+
+Most of the KChart 1.x classes will be moved to a new directory,
+kchart/attic, where code can be copied from it to implement features
+like ODF reading/writing and similar low-level things..
+
+Much of kchart 1.x is useless, e.g. the old configuration dialogs.
+These features will insted be implemented using Flake Tools, and qt
+designer .ui files will be mandatory.
