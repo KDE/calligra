@@ -235,7 +235,7 @@ class MyWriter:
                     elif alignment == kwparagstyle.AlignJustify:
                         self.style.alignment = TA_JUSTIFY
 
-            self.styles.add( self.style )
+                self.styles.add( self.style )
 
             self.text = ""
             t = self.reader.text()
