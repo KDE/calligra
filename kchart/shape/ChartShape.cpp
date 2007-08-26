@@ -197,6 +197,8 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 {
 }
 
-bool ChartShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
+bool ChartShape::loadOdf( const KoXmlElement &element, 
+			  KoShapeLoadingContext &context )
+{
     return false; // TODO
 }
