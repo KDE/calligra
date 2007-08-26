@@ -25,7 +25,8 @@ Item								   Prio Status
 * Build the foundation                                                  ----
  - Move the data editor to the attic                                    done
  - Move the wizard to the attic                                         done
- - Move the configuration dialog to the attic                           --
+ - Move the configuration dialog to the attic                           done
+ - Add KChart coding standards.						--
  - Rename all C++ files to .cpp instead of .cc to follow the KDE        --
    coding standards.                                                    --
  - Copy kchart_part.cc to KChartDocument.cpp and use that in the shape  --

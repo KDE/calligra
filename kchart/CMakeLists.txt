@@ -28,19 +28,6 @@ set(kchartcommon_LIB_SRCS
 
    commands/ChartTypeCommand.cpp
 
-   #dialogs/KCConfigDialog.cc 
-   #dialogs/KCConfigDataPage.cc 
-   #dialogs/KCConfigSubtypePage.cc 
-   #dialogs/KCConfigSubtypeBarPage.cc 
-   #dialogs/KCConfigSubtypeLinePage.cc
-   #dialogs/KCConfigSubtypePiePage.cc
-   #dialogs/KCConfigSubtypePolarPage.cc
-   #dialogs/KCConfigHeaderFooterPage.cc 
-   #dialogs/KCConfigLegendPage.cc 
-   #dialogs/KCConfigAxesPage.cc 
-   #dialogs/KCConfigColorPage.cc 
-   #dialogs/KCConfigFontPage.cc 
-   #dialogs/KCConfigBackgroundPage.cc 
    dialogs/KCPageLayout.cc 
    dialogs/KCPrinterDialog.cc
 

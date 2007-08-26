@@ -38,7 +38,6 @@ public:
     void config(int flag);
 
 public slots:
-    void  slotConfig();
     void  saveConfig();
     void  loadConfig();
     void  defaultConfig();
@@ -55,13 +54,6 @@ public slots:
     void  setupPrinter(KPrinter &);
 
     void  slotRepaint();
-    void  slotConfigBack();
-    void  slotConfigFont();
-    void  slotConfigColor();
-    void  slotConfigLegend();
-    void  slotConfigHeaderFooterChart();
-    void  slotConfigSubTypeChart();
-    void  slotConfigDataFormat();
 
     void  slotConfigPageLayout();
     void  importData();
@@ -78,18 +70,9 @@ protected:
 private:
     KAction  *m_importData;
     KAction  *m_edit;
-    KAction  *m_config;
     KAction  *m_saveconfig;
     KAction  *m_loadconfig;
     KAction  *m_defaultconfig;
-    KAction  *m_colorConfig;
-    KAction  *m_fontConfig;
-    KAction  *m_backConfig;
-    KAction  *m_legendConfig;
-    KAction  *m_dataFormatConfig;
-    KAction  *m_subTypeChartConfig;
-    KAction  *m_headerFooterConfig;
-    KAction  *m_pageLayoutConfig;
 
     KToggleAction  *m_chartpie;
     KToggleAction  *m_chartareas;

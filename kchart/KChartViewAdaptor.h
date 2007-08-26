@@ -37,14 +37,6 @@ public:
     explicit ViewAdaptor( KChartView *view_ );
 
 public Q_SLOTS: // METHODS
-    virtual void configureChart();
-    virtual void configureBackground();
-    virtual void configureFont();
-    virtual void configureColor();
-    virtual void configureLegend();
-    virtual void configSubTypeChart();
-    virtual void configHeaderFooter();
-
     virtual void updateGuiTypeOfChart();
 
     virtual void saveConfig();

@@ -42,7 +42,6 @@
 #endif
 #include "KChartViewAdaptor.h"
 
-#include "KCConfigDialog.h"
 #include "KCPageLayout.h"
 #include "KCPrinterDialog.h"
 
@@ -78,9 +77,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     m_edit  = new KAction(KIcon("edit"), i18n("Edit &Data..."), this);
     actionCollection()->addAction("editdata", m_edit );
     connect(m_edit, SIGNAL(triggered(bool) ), SLOT( editData() ));
-    m_config  = new KAction(KIcon("configure"), i18n("&Chart..."), this);
-    actionCollection()->addAction("config", m_config );
-    connect(m_config, SIGNAL(triggered(bool) ), SLOT( slotConfig() ));
 
     // One KToggleAction per chart type
     m_chartbars  = new KToggleAction(KIcon("chart_bar_3d"), i18n("&Bar"), this);
@@ -124,31 +120,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     actionCollection()->addAction("polarchart", m_chartpolar );
  connect(m_chartpolar, SIGNAL(triggered(bool)), SLOT( polarChart() ));
 	charttypes->addAction(m_chartpolar);
-    // Configuration KActions
-    m_colorConfig  = new KAction(i18n("&Colors..."), this);
-    actionCollection()->addAction("color_config", m_colorConfig );
-    connect(m_colorConfig, SIGNAL(triggered(bool)), SLOT( slotConfigColor() ));
-    m_fontConfig  = new KAction(i18n("&Font..."), this);
-    actionCollection()->addAction("font_config", m_fontConfig );
- connect(m_fontConfig, SIGNAL(triggered(bool)), SLOT( slotConfigFont() ));
-    m_backConfig  = new KAction(i18n("&Background..."), this);
-    actionCollection()->addAction("back_config", m_backConfig );
- connect(m_backConfig, SIGNAL(triggered(bool)), SLOT( slotConfigBack() ));
-    m_legendConfig  = new KAction(i18n("&Legend..."), this);
-    actionCollection()->addAction("legend_config", m_legendConfig );
- connect(m_legendConfig, SIGNAL(triggered(bool)), SLOT( slotConfigLegend() ));
-    m_subTypeChartConfig  = new KAction(i18n("Chart &Sub-type..."), this);
-    actionCollection()->addAction("legend_subtype", m_subTypeChartConfig );
- connect(m_subTypeChartConfig, SIGNAL(triggered(bool)), SLOT( slotConfigSubTypeChart() ));
-    m_dataFormatConfig  = new KAction(i18n("&Data Format..."), this);
-    actionCollection()->addAction("data_format", m_dataFormatConfig );
- connect(m_dataFormatConfig, SIGNAL(triggered(bool)), SLOT( slotConfigDataFormat() ));
-    m_headerFooterConfig  = new KAction(i18n("&Header && Footer..."), this);
-    actionCollection()->addAction("headerfooter_subtype", m_headerFooterConfig );
- connect(m_headerFooterConfig, SIGNAL(triggered(bool)), SLOT( slotConfigHeaderFooterChart() ));
-    m_pageLayoutConfig  = new KAction(i18n("Page Layout..."), this);
-    actionCollection()->addAction("page_layout", m_pageLayoutConfig );
- connect(m_pageLayoutConfig, SIGNAL(triggered(bool)), SLOT( slotConfigPageLayout() ));
 
     // initialize the configuration
     //    loadConfig();
@@ -239,31 +210,6 @@ void KChartView::updateGuiTypeOfChart()
     updateButton();
 }
 
-
-void KChartView::slotConfig()
-{
-#if 0
-    config(KCConfigDialog::KC_ALL);
-#endif
-}
-
-
-void KChartView::config(int flags)
-{
-    Q_UNUSED( flags );
-#if 0
-    // open a config dialog depending on the chart type
-    KChartParams      *params = ((KChartPart*)koDocument())->params();
-    KDChartTableData  *dat    = ((KChartPart*)koDocument())->data();
-
-    KCConfigDialog    *d      = new KCConfigDialog( params, this, flags, dat );
-
-    connect( d, SIGNAL( dataChanged() ),
-             this, SLOT( slotRepaint() ) );
-    d->exec();
-    delete d;
-#endif
-}
 
 
 void KChartView::slotRepaint()
@@ -527,49 +473,10 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
 }
 
 
-void KChartView::slotConfigColor()
-{
-    config(KCConfigDialog::KC_COLORS);
-}
-
-
-void KChartView::slotConfigFont()
-{
-    config(KCConfigDialog::KC_FONT);
-}
-
-
-void KChartView::slotConfigBack()
-{
-    config(KCConfigDialog::KC_BACK);
-}
-
-
-void KChartView::slotConfigLegend()
-{
-   config(KCConfigDialog::KC_LEGEND);
-}
-
-void KChartView::slotConfigDataFormat()
-{
-    config(KCConfigDialog::KC_DATAFORMAT);
-}
-
-void KChartView::slotConfigSubTypeChart()
-{
-    config(KCConfigDialog::KC_SUBTYPE);
-}
-
-
-void KChartView::slotConfigHeaderFooterChart()
-{
-    config(KCConfigDialog::KC_HEADERFOOTER);
-}
-
-
 // FIXME: Rename into something suitable.
 void KChartView::updateButton()
 {
+#if 0
     // Disable sub chart config item.
     KChartPart* part = qobject_cast<KChartPart*>(koDocument());
 
@@ -579,6 +486,7 @@ void KChartView::updateButton()
                 part->chartType() == HiLoChartType ||
                 part->chartType() == PolarChartType);
     m_subTypeChartConfig->setEnabled(state);
+#endif
 }
 
 

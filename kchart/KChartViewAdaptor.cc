@@ -32,31 +32,6 @@ ViewAdaptor::ViewAdaptor( KChartView *view_ )
     view = view_;
 }
 
-void ViewAdaptor::configureChart()
-{
-    view->slotConfig();
-}
-
-void ViewAdaptor::configureBackground()
-{
-    view->slotConfigBack();
-}
-
-void ViewAdaptor::configureFont()
-{
-    view->slotConfigFont();
-}
-
-void ViewAdaptor::configureColor()
-{
-    view->slotConfigColor();
-}
-
-void ViewAdaptor::configureLegend()
-{
-    view->slotConfigLegend();
-}
-
 void ViewAdaptor::updateGuiTypeOfChart()
 {
     view->updateGuiTypeOfChart();
@@ -75,16 +50,6 @@ void ViewAdaptor::loadConfig()
 void ViewAdaptor::defaultConfig()
 {
     view->defaultConfig();
-}
-
-void ViewAdaptor::configSubTypeChart()
-{
-    view->slotConfigSubTypeChart();
-}
-
-void ViewAdaptor::configHeaderFooter()
-{
-    view->slotConfigHeaderFooterChart();
 }
 
 }  //KChart namespace

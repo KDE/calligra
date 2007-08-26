@@ -46,7 +46,6 @@ public Q_SLOTS: // METHODS
     virtual QString chartType()const;
     virtual void setChartType( const QString & );
     
-#if 0
     //bar chart config
     virtual bool threeDBars();
     virtual void setThreeDBars( bool threeDBars );
@@ -140,7 +139,7 @@ public Q_SLOTS: // METHODS
     virtual bool legendTitleFontUseRelSize() const;
     virtual void setLegendTitleFontRelSize( int legendTitleFontRelSize );
     virtual int legendTitleFontRelSize() const;
-#endif    
+    
 
     virtual bool showGrid();
     
