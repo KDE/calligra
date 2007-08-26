@@ -937,8 +937,16 @@ Value func_round (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: EVEN
 Value func_even (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  const Value value = calc->roundUp (args[0], 0);
-  return calc->isZero( calc->mod(value, Value(2)) ) ? value : calc->add(value, Value(1));
+  if ( calc->greater(args[0], 0.0) )
+  {
+    const Value value = calc->roundUp (args[0], 0);
+    return calc->isZero( calc->mod(value, Value(2)) ) ? value : calc->add(value, Value(1));
+  }
+  else
+  {
+    const Value value = calc->roundDown (args[0], 0);
+    return calc->isZero( calc->mod(value, Value(2)) ) ? value : calc->sub(value, Value(1));
+  }
 }
 
 // Function: ODD
