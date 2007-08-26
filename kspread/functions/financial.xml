@@ -737,6 +737,41 @@
     </Function>
 
     <Function>
+      <Name>MDURATION</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Settlement</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Maturity</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Coupon</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Yield</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Frequency</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Basis</Comment>
+        <Type>Integer</Type>
+      </Parameter>
+      <Help>
+      <Text>The MDURATION() function will calculate the modified Macauley duration of a fixed interest security in years.</Text>
+        <Syntax>MDURATION( Settlement; Maturity; Coupon; Yield; Frequency; [ Basis=0 ])</Syntax>
+        <Example>MDURATION("2004-02-01"; "2004-05-31"; 0.08; 0.09; 2; 0) returns 0.316321106</Example>
+        <Related>DURATION</Related>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>MIRR</Name>
       <Type>Float</Type>
       <Parameter>

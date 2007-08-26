@@ -1227,6 +1227,9 @@ Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() == 2)
     y = args[1];
 
+  if ( x.isString() || y.isString() )
+    return Value::errorNUM();
+
   int result = 0;
   if (calc->greater (x, y) || calc->approxEqual (x, y))
     result = 1;
