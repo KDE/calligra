@@ -28,6 +28,7 @@
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
 {
+    setTemplateType( "kpresenter_template" );
 }
 
 KPrDocument::~KPrDocument()
@@ -56,9 +57,9 @@ const char * KPrDocument::odfTagName()
     return "presentation";
 }
 
-KoPAPage * KPrDocument::newPage()
+KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )
 {
-    return new KPrPage( 0 );
+    return new KPrPage( masterPage );
 }
 
 KoPAMasterPage * KPrDocument::newMasterPage()

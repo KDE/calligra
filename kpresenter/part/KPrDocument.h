@@ -40,7 +40,7 @@ public:
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
 
     /// reimplemented
-    virtual KoPAPage * newPage();
+    virtual KoPAPage * newPage( KoPAMasterPage * masterPage = 0 );
     /// reimplemented
     virtual KoPAMasterPage * newMasterPage();
 
