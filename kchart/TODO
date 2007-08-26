@@ -27,7 +27,7 @@ Item								   Prio Status
  - Move the wizard to the attic                                         done
  - Move the configuration dialog to the attic                           done
  - Add KChart coding standards.						--
- - Rename all C++ files to .cpp instead of .cc to follow the KDE        --
+ - Rename all C++ files to .cpp instead of .cc to follow the KDE        done
    coding standards.                                                    --
  - Copy kchart_part.cc to KChartDocument.cpp and use that in the shape  --
  - Make the application include the shape and also have a toolbar.      --

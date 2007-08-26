@@ -19,17 +19,17 @@ include_directories(
 ########### next target ###############
 
 set(kchartcommon_LIB_SRCS 
-   kchart_factory.cc 
-   kchart_part.cc 
-   kchart_view.cc 
+   kchart_factory.cpp
+   kchart_part.cpp
+   kchart_view.cpp
+   KChartViewAdaptor.cpp
    #kchart_params.cc 
-   KChartViewAdaptor.cc 
    #KChartParamsAdaptor.cc 
 
    commands/ChartTypeCommand.cpp
 
-   dialogs/KCPageLayout.cc 
-   dialogs/KCPrinterDialog.cc
+   dialogs/KCPageLayout.cpp
+   dialogs/KCPrinterDialog.cpp
 
    kdchart/examples/tools/TableModel.cpp
 )
@@ -45,7 +45,7 @@ install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kchartpart_PART_SRCS kchart_factory_init.cc )
+set(kchartpart_PART_SRCS kchart_factory_init.cpp )
 
 
 kde4_add_plugin(kchartpart WITH_PREFIX ${kchartpart_PART_SRCS})
@@ -59,7 +59,7 @@ install(TARGETS kchartpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kchart_KDEINIT_SRCS main.cc )
+set(kchart_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kchart ${kchart_KDEINIT_SRCS})
 
