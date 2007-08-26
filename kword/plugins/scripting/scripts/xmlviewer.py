@@ -6,28 +6,31 @@ import os, sys, traceback, tempfile, zipfile
 # import the kross module.
 import Kross
 
+KOfficeAppName="KWord"
+KOfficeAppExt="odt"
+
 try:
-    # try to import KWord. If this fails we are not running embedded in KWord.
-    import KWord
+    # try to import the KOffice application. If this fails we are not running embedded.
+    KOfficeAppModule = __import__(KOfficeAppName)
 except ImportError:
-    # looks as we are not running embedded within KWord. So, let's use Kross to import the KWord library.
-    KWord = Kross.module("kword")
+    # looks as we are not running embedded within the KOffice application. So, let's use Kross to import the library.
+    KOfficeAppModule = Kross.module(KOfficeAppName)
 
     # testcase that loads a ODT file direct without the probably annoying fileopen-dialog.
-    #KWord.document().openUrl("/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt")
+    #KOfficeAppModule.document().openUrl("/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt")
 
-    if not KWord.document().url():
-        # if KWord does not have a loaded document now we show a fileopen-dialog to let the user choose the odt file.
+    if not KOfficeAppModule.document().url():
+        # if the app does not have a loaded document now we show a fileopen-dialog to let the user choose the file.
         forms = Kross.module("forms")
         dialog = forms.createDialog("XML Viewer")
         dialog.setButtons("Ok|Cancel")
         dialog.setFaceType("Plain")
-        openwidget = forms.createFileWidget(dialog.addPage("Open","Open ODT File"))
+        openwidget = forms.createFileWidget(dialog.addPage("Open","Open OpenDocument File"))
         openwidget.setMode("Opening")
-        openwidget.setFilter("*.odt|ODT Files\n*|All Files")
+        openwidget.setFilter("*.%s|OpenDocument Files\n*|All Files" % KOfficeAppExt)
         if not dialog.exec_loop():
             raise Exception("Aborted.")
-        KWord.document().openUrl(openwidget.selectedFile())
+        KOfficeAppModule.document().openUrl(openwidget.selectedFile())
 
 # This class does provide us the viewer dialog we are using to display something to the user.
 class Dialog:
@@ -42,8 +45,8 @@ class Dialog:
 
         # we like to fetch the KoStore which is the backend for the document and does
         # allow us to access files within the store direct.
-        doc = KWord.document()
-        self.store = KWord.store()
+        doc = KOfficeAppModule.document()
+        self.store = KOfficeAppModule.store()
         self.pages = {}
 
         # let's read the manifest file by using a KoScriptingOdfReader
@@ -215,10 +218,10 @@ class Dialog:
 
         self.forms.createWidget(page, "QLabel").text = "Command:"
         cmdEdit = self.forms.createWidget(page, "QLineEdit")
-        cmdEdit.text = "\"kdiff3\" --L1 \"Current\" --L2 \"ODT File\""
+        cmdEdit.text = "\"kdiff3\" --L1 \"Current\" --L2 \"OpenDocument File\""
 
-        self._url = KWord.document().url()
-        self.forms.createWidget(page, "QLabel").text = "Compare with ODT file:"
+        self._url = KOfficeAppModule.document().url()
+        self.forms.createWidget(page, "QLabel").text = "Compare with OpenDocument file:"
         urlEdit = self.forms.createWidget(page, "KUrlRequester")
         urlEdit.setPath(self._url)
         def editChanged(text):
@@ -231,7 +234,7 @@ class Dialog:
             if self._url.startswith("file://"):
                 self._url = self._url[7:]
             if not os.path.isfile(self._url):
-                raise Exception("No ODT file to compare with selected.")
+                raise Exception("No OpenDocument file to compare with selected.")
 
             program = cmdEdit.text
             if not program:
@@ -239,14 +242,14 @@ class Dialog:
             if not '"' in program:
                 program = "\"%s\"" % program
 
-            # Open the ODT that is just a Zip-file anyway.
+            # Open the OpenDocument that is just a Zip-file anyway.
             try:
                 zf = zipfile.ZipFile(self._url)
             except BadZipfile:
-                raise Exception("Invalid ODT file: %s" % self._url)
+                raise Exception("Invalid OpenDocument file: %s" % self._url)
             # Check if the expected file is there.
             if not path in zf.namelist():
-                raise Exception("The ODT file does not contain any file named \"%s\"" % path)
+                raise Exception("The OpenDocument file does not contain any file named \"%s\"" % path)
 
             # Create the temp-files.
             currentFile = tempfile.mktemp()
@@ -260,7 +263,7 @@ class Dialog:
                 if not self.store.extractToFile(path,currentFile):
                     raise Exception("Failed to extract \"%s\" to \"%s\"" % (path,currentFile))
 
-                # Extract the file from the ODT Zip file to the temp-file.
+                # Extract the file from the OpenDocument Zip file to the temp-file.
                 outfile = open(withFile, 'wb')
                 outfile.write(zf.read(path))
                 outfile.flush()
