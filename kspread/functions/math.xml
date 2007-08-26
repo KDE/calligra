@@ -38,6 +38,33 @@
     </Function>
 
     <Function>
+      <Name>SERIESSUM</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>X the independent variable of the power series</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>N the initial power to which X is to be raised</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>M the increment by which to increase N for each term in the series</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Coefficients a set of coefficients by which each sccessive power of the variable X is multiplied</Comment>
+        <Type range="true">FLOAT</Type>
+      </Parameter>
+      <Help>
+        <Text>The SERIESSUM() function returns the sum of a power series.</Text>
+        <Syntax>SERIESSUM( X; N; M; Coefficients)</Syntax>
+        <Example>SERIESSUM(2;0;2;{1;2}) return 9</Example>
+      </Help>
+    </Function>
+
+
+    <Function>
       <Name>LCM</Name>
       <Type>Float</Type>
       <Parameter>

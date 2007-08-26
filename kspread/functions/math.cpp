@@ -595,7 +595,7 @@ Value func_seriessum (valVector args, ValueCalc *calc, FuncExtra *)
   if ( fX != 0.0 )
   {
 
-    for ( int i = 0 ; i < (int)args[3].count(); i++ )
+    for ( unsigned int i = 0 ; i < args[3].count(); i++ )
     {       
       res += args[3].element(i).asFloat() * pow( fX, fN );
       fN += fM;
