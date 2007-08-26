@@ -1,6 +1,6 @@
 project(kpresenter)
 
-include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KOPAGEAPP_INCLUDES})
+include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
 if(KDE4_BUILD_TESTS)
     # only with this definition will the KPRESENTER_TEST_EXPORT macro do something
