@@ -40,7 +40,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
 : m_view( view )
 , m_canvas( view->kopaCanvas() )
 , m_pages( pages )
-, m_pageEffect( 0 )                  
+, m_pageEffect( 0 )
+, m_pageIndex( 0 )
+, m_stepIndex( 0 )
 {
     Q_ASSERT( !m_pages.empty() );
 
@@ -209,7 +211,9 @@ void KPrAnimationDirector::updateAnimations()
     // TODO also get the animations for the master page
     KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( m_pages[m_pageIndex] );
     Q_ASSERT( controller );
-    m_animations = controller->animations().animations( m_steps[m_stepIndex] );
+    if ( m_steps.size() > m_stepIndex ) {
+        m_animations = controller->animations().animations( m_steps[m_stepIndex] );
+    }
 }
 
 void KPrAnimationDirector::animate()
