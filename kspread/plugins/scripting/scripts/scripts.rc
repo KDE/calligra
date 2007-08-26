@@ -75,7 +75,7 @@
         <script
            name="pyxmlviewer"
            text="XML Viewer"
-           comment="Python script to view the ODT XML representation of the current document"
+           comment="Python script to view the OpenDocument XML representation of the current document"
            interpreter="python"
            file="extensions/xmlviewer.py" />
         <script
