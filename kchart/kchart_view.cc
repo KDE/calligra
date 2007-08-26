@@ -42,8 +42,6 @@
 #endif
 #include "KChartViewAdaptor.h"
 
-//FIXME
-//#include "KCWizard.h"
 #include "KCConfigDialog.h"
 #include "KCPageLayout.h"
 #include "KCPrinterDialog.h"
@@ -77,9 +75,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     actionCollection()->addAction("extra_template", actionExtraCreateTemplate );
     connect(actionExtraCreateTemplate, SIGNAL(triggered(bool)), SLOT( extraCreateTemplate() ));
 
-    m_wizard  = new KAction(KIcon("wizard"), i18n("Customize with &Wizard..."), this);
-    actionCollection()->addAction("wizard", m_wizard );
-    connect(m_wizard, SIGNAL(triggered(bool) ), SLOT( wizard() ));
     m_edit  = new KAction(KIcon("edit"), i18n("Edit &Data..."), this);
     actionCollection()->addAction("editdata", m_edit );
     connect(m_edit, SIGNAL(triggered(bool) ), SLOT( editData() ));
@@ -200,23 +195,6 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 #endif
 }
 
-
-
-void KChartView::wizard()
-{
-#if 0
-    kDebug(35001) <<"Wizard called";
-    KCWizard *wiz = new KCWizard((KChartPart*)koDocument(), this,
-				 "KChart Wizard", true);
-    kDebug(35001) <<"Executed. Now, display it";
-    if (wiz->exec()) {
-	((KChartPart*)koDocument())->setModified(true);
-        update();
-        updateGuiTypeOfChart();
-        kDebug(35001) <<"Ok, executed...";
-    }
-#endif
-}
 
 
 void KChartView::updateGuiTypeOfChart()

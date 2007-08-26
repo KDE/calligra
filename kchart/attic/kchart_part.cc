@@ -14,8 +14,6 @@ using std::cerr;
 
 #include <QStandardItemModel>
 
-#include <klocale.h>
-
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
@@ -30,6 +28,7 @@ using std::cerr;
 #include "KDChartAbstractCoordinatePlane"
 #include "KDChartBarDiagram"
 #endif
+#include "dialogs/KCWizard.h"
 
 #include <KoDom.h>
 #include <KoXmlNS.h>
@@ -115,6 +114,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
 #endif
     }
 
+    (void)new WizardExt( this );
     m_bCanChangeValue = true;
 
     // Display parameters
@@ -721,6 +721,26 @@ void KChartPart::setCellData( int row, int column, const QVariant &val)
 
 
 // ----------------------------------------------------------------
+
+
+bool KChartPart::showWizard( QString &area )
+{
+    // FIXME
+    Q_UNUSED( area );
+#if 0
+    KCWizard  *wizard = new KCWizard( this, m_parentWidget, "wizard" );
+
+    connect( wizard, SIGNAL(finished()), this, SLOT(slotModified()) );
+
+    wizard->setDataArea( area );
+
+    bool  ret = wizard->exec();
+
+    delete wizard;
+    return ret;
+#endif
+    return true;
+}
 
 
 void KChartPart::initLabelAndLegend()

@@ -37,7 +37,6 @@
 </ToolBar>
 <ToolBar name="KChartToolBar" position="top"><Text>Actions</Text>
  <Action name="config"/>
- <Action name="wizard"/>
 </ToolBar>
 <ToolBar name="KChartTypes" position="left"><Text>Types</Text>
  <Action name="barschart"/>

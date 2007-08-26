@@ -32,11 +32,6 @@ ViewAdaptor::ViewAdaptor( KChartView *view_ )
     view = view_;
 }
 
-void ViewAdaptor::wizard()
-{
-    view->wizard();
-}
-
 void ViewAdaptor::configureChart()
 {
     view->slotConfig();

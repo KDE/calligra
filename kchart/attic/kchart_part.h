@@ -70,6 +70,7 @@ public:
 		     bool  firstColHeader );
 #endif
 
+    bool showWizard( QString &area );
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
     void saveConfig(KConfig *conf);
@@ -188,6 +189,17 @@ private:
     QPixmap                  m_bufferPixmap;
 };
 
+
+class WizardExt : public KoChart::WizardExtension
+{
+public:
+    WizardExt( KoChart::Part *part )
+        : KoChart::WizardExtension( part ) {}
+
+    virtual bool show( QString &area ) {
+        return static_cast<KChartPart *>( part() )->showWizard( area );
+    }
+};
 
 }  //KChart namespace
 

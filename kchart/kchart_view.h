@@ -39,7 +39,6 @@ public:
 
 public slots:
     void  slotConfig();
-    void  wizard();
     void  saveConfig();
     void  loadConfig();
     void  defaultConfig();
@@ -78,7 +77,6 @@ protected:
 
 private:
     KAction  *m_importData;
-    KAction  *m_wizard;
     KAction  *m_edit;
     KAction  *m_config;
     KAction  *m_saveconfig;

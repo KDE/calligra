@@ -43,12 +43,6 @@ set(kchartcommon_LIB_SRCS
    #dialogs/KCConfigBackgroundPage.cc 
    dialogs/KCPageLayout.cc 
    dialogs/KCPrinterDialog.cc
-   #dialogs/KCWizard.cc 
-   #dialogs/KCWizardDataPage.cc
-   #dialogs/KCWizardCharttype.cc
-   #dialogs/KCWizardSubtypePage.cc
-   #dialogs/KCWizardLabelsLegendPage.cc
-   #dialogs/KCWizardAxesPage.cc
 
    kdchart/examples/tools/TableModel.cpp
 )
