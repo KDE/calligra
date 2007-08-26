@@ -86,7 +86,7 @@ private slots:
   void testRADIANS();
   void testRAND();
   void testRANDBETWEEN();
-//   void testSERIESSUM(); // to be implemented
+  void testSERIESSUM();
   void testSIGN();
   void testSQRT();
   void testSQRTPI();

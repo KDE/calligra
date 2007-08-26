@@ -636,6 +636,16 @@ void TestMathFunctions::testRANDBETWEEN()
     CHECK_EVAL( "RANDBETWEEN(15;5)<=15", Value( true ) ); // Must return value in range
 }
 
+void TestMathFunctions::testSERIESSUM()
+{
+    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2})",           Value(        9 ) ); // 
+    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2;3;4})",       Value(      313 ) ); // 
+    CHECK_EVAL( "SERIESSUM(2;0;2;{1;2;3;4;5;6;7})", Value(    36409 ) ); // 
+    CHECK_EVAL( "SERIESSUM(2;2;2;{1;6;5;4;3;2;7})", Value(   127396 ) ); // 
+    CHECK_EVAL( "SERIESSUM(3;0;2;{1;2;3;4})",       Value(     3178 ) ); // 
+    CHECK_EVAL( "SERIESSUM(\"error\";0;2;{1;2})",   Value::errorNUM() ); // Text is not allowed   
+}
+
 void TestMathFunctions::testSIGN()
 {
     CHECK_EVAL( "SIGN(-4)", Value( -1 ) ); // N < 0 returns -1

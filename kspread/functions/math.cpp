@@ -98,6 +98,7 @@ Value func_rootn (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_round (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rounddown (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_roundup (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_seriessum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sign (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sqrt (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *);
@@ -304,6 +305,10 @@ void RegisterMathFunctions()
   repo->add( f );
   f = new Function ("PRODUCT",       func_product);
   f->setParamCount (1, -1);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("SERIESSUM",     func_seriessum);
+  f->setParamCount (3, -1);
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("SUM",           func_sum);
@@ -573,6 +578,31 @@ Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_product (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->product (args, Value(0.0));
+}
+
+// Function: seriessum
+Value func_seriessum (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  double fX = calc->conv()->asFloat (args[0]).asFloat();
+  double fN = calc->conv()->asFloat (args[1]).asFloat();
+  double fM = calc->conv()->asFloat (args[2]).asFloat();
+
+  if ( fX == 0.0 && fN == 0.0)
+    return Value::errorNUM();
+
+  double res = 0.0;
+ 
+  if ( fX != 0.0 )
+  {
+
+    for ( int i = 0 ; i < (int)args[3].count(); i++ )
+    {       
+      res += args[3].element(i).asFloat() * pow( fX, fN );
+      fN += fM;
+    }
+  }
+
+  return Value(res);
 }
 
 // Function: kproduct
