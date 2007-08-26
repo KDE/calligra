@@ -8,17 +8,14 @@
 
 #include "kchart_global.h"
 
+#include <QStandardItemModel>
+
 #include <kconfig.h>
 #include <KoXmlReader.h>
 
 #include <koChart.h>
 
-#if 0
-#include "kchart_params.h"
-#else
-#include "TableModel.h"         // In kdchart/examples/tools
 #include "KDChartChart.h"
-#endif
 
 #include "kchart_export.h"
 //Added by qt3to4:
@@ -64,8 +61,8 @@ public:
 		     bool  firstRowHeader,
 		     bool  firstColHeader );
 #else
-    void  analyzeHeaders( const TableModel &data );
-    void  doSetData( const TableModel &data,
+    void  analyzeHeaders( const QStandardItemModel &data );
+    void  doSetData( const QStandardItemModel &data,
 		     bool  firstRowHeader,
 		     bool  firstColHeader );
 #endif
@@ -159,7 +156,6 @@ private:
     KDChartTableData         m_currentData; // The data in the chart.
 #else
     KDChart::Chart          *m_chart;
-    //TableModel              *m_currentData;
     QStandardItemModel      *m_currentData;
 
     // Info about the data.
@@ -182,7 +178,7 @@ private:
 #if 0
     KDChartTableData         m_displayData;
 #else
-    TableModel               m_displayData;
+    QStandardItemModel       m_displayData;
 #endif
 
     QPixmap                  m_bufferPixmap;

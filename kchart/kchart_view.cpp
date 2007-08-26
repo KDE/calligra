@@ -37,9 +37,6 @@
 #include "kchart_view.h"
 #include "kchart_factory.h"
 #include "kchart_part.h"
-#if 0
-#include "kchart_params.h"
-#endif
 #include "KChartViewAdaptor.h"
 
 #include "KCPageLayout.h"
@@ -624,7 +621,7 @@ void KChartView::importData()
     ((KChartPart*)koDocument())->doSetData( data,
 					    hasRowHeaders, hasColHeaders );
 #else
-    TableModel        data();
+    QStandardItemModel  data();
 #endif
 }
 

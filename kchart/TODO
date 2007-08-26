@@ -29,7 +29,9 @@ Item								   Prio Status
  - Add KChart coding standards.						--
  - Rename all C++ files to .cpp instead of .cc to follow the KDE        done
    coding standards.                                                    --
- - Copy kchart_part.cc to KChartDocument.cpp and use that in the shape  --
+ + Create KChartDocument.cpp and use it                                 --
+   - Create the class from  from  kchart_part.cc                        --
+   - Use it in ChartShape                                               --
  - Make the application include the shape and also have a toolbar.      --
 
 * Port to Qt4

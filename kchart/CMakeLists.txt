@@ -23,8 +23,6 @@ set(kchartcommon_LIB_SRCS
    kchart_part.cpp
    kchart_view.cpp
    KChartViewAdaptor.cpp
-   #kchart_params.cc 
-   #KChartParamsAdaptor.cc 
 
    commands/ChartTypeCommand.cpp
 

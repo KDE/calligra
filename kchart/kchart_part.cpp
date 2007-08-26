@@ -19,17 +19,10 @@ using std::cerr;
 #include "kchart_part.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
-#if 0
-#include "kchart_params.h"
-#include "KDChart.h"
-#include "KDChartTable.h"
-#else
-#include "TableModel.h"
 #include "KDChartChart"
 #include "KDChartAbstractDiagram" // Base class for the diagrams
 #include "KDChartAbstractCoordinatePlane"
 #include "KDChartBarDiagram"
-#endif
 
 #include <KoDom.h>
 #include <KoXmlNS.h>
@@ -560,7 +553,7 @@ void KChartPart::analyzeHeaders()
 #if 0
     analyzeHeaders( m_currentData );
 #else
-    doSetData( m_currentData, firstRowAsLabel(), firstColAsLabel() );
+    doSetData( *m_currentData, firstRowAsLabel(), firstColAsLabel() );
 #endif
 }
 
@@ -571,7 +564,7 @@ void KChartPart::analyzeHeaders()
 #if 0
 void KChartPart::analyzeHeaders( const KDChartTableData& data )
 #else
-void KChartPart::analyzeHeaders( const TableModel &data )
+void KChartPart::analyzeHeaders( const QStandardItemModel &data )
 #endif
 {
     Q_UNUSED( data );
@@ -630,7 +623,7 @@ void KChartPart::analyzeHeaders( const TableModel &data )
 }
 
 
-void KChartPart::doSetData( const TableModel &data,
+void KChartPart::doSetData( const QStandardItemModel &data,
 			    bool  firstRowHeader,
 			    bool  firstColHeader )
 {
