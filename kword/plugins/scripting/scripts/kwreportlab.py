@@ -2,6 +2,7 @@
 
 import os, sys, re, types, string, datetime, urllib
 
+# import the reportlab module.
 import reportlab
 from reportlab.platypus.doctemplate import PageTemplate, BaseDocTemplate
 from reportlab.lib.units import inch, cm
@@ -10,32 +11,26 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus.paragraph import Paragraph
 from reportlab.platypus.flowables import PageBreak, Spacer
 from reportlab.platypus.frames import Frame
-#from reportlab.pdfgen import canvas
-#from reportlab.lib import colors, enums
 from reportlab.lib.enums import TA_LEFT,TA_CENTER,TA_RIGHT,TA_JUSTIFY
+#from reportlab.pdfgen import canvas
+#from reportlab.lib import colors
 #from reportlab.platypus.flowables import Flowable, Preformatted, Image, KeepTogether
 #from reportlab.platypus.tableofcontents import TableOfContents
 #from reportlab.platypus.xpreformatted import XPreformatted
 #from reportlab.platypus.tables import TableStyle, Table
 
+# import the kross module.
 import Kross
-try:
-    import KWord
-    embeddedInKWord = True
-except ImportError:
-    KWord = Kross.module("kword")
-    embeddedInKWord = False
 
 class MyConfig:
-
     def __init__(self):
-        #self.showDialog = True
-        self.showDialog = False
+        self.showDialog = True
+        #self.showDialog = False
 
         #self.readOdfFile = ""
         #self.readOdfFile = "/home/kde4/odf/_works/Lists_bulletedList/testDoc/testDoc.odt"
-        #self.readOdfFile = "/home/kde4/odf/_works/textFormatting_alignment/testDoc/testDoc.odt"
-        self.readOdfFile = "/home/kde4/odf/_works/Paragraph_AttributedText/testDoc/bold.odt"
+        self.readOdfFile = "/home/kde4/odf/_works/textFormatting_alignment/testDoc/testDoc.odt"
+        #self.readOdfFile = "/home/kde4/odf/_works/Paragraph_AttributedText/testDoc/bold.odt"
         #self.readOdfFile = "/home/kde4/odf/_works/textFormatting_fontSize/testDoc/testDoc.odt"
 
         #self.writeFileName = ""
@@ -45,33 +40,25 @@ class MyConfig:
         #self.pageMargin = [ 2.0, 2.0, 2.0, 2.0 ] # [left,top,width,height]
         self.pageCompression = 1 # 0=No compression, 1=Enable compression
 
-class MyWriter:
+        self.templateName = "DefaultTemplate"
 
-    class MyTemplate(BaseDocTemplate):
+class MyTemplates:
+
+    class _AbstractTemplate( BaseDocTemplate ):
         _invalidInitArgs = ('pageTemplates',)
-
         def __init__(self, writer):
             self.writer = writer
             self.config = writer.config
             self.kwdoc = writer.kwdoc
-
             apply(BaseDocTemplate.__init__, (self, self.config.writeFileName), )
-
-            (x,y,width,height) = (2.0*cm, 2.0*cm, 15.0*cm, 25.0*cm)
-            mainFrame = Frame(x, y, width, height, id='MainFrame')
-            page = PageTemplate('normal', [mainFrame,], self.onPage, self.onPageEnd)
-            self.addPageTemplates(page)
-
         def onPage(self, canvas, doc):
-            print "onPage PageNumber=%s" % canvas.getPageNumber()
-
+            print "..onPage PageNumber=%s" % canvas.getPageNumber()
             if not hasattr(self,"_title"):
                 self._title = self.kwdoc.documentInfoTitle()
                 if not self._title:
                     self._title = self.kwdoc.documentInfoSubject()
                     if not self._title:
                         self._title = self.kwdoc.url()
-
             if not hasattr(self,"_author"):
                 self._author = self.kwdoc.documentInfoAuthorName()
                 company = self.kwdoc.documentInfoCompanyName()
@@ -86,26 +73,38 @@ class MyWriter:
                         self._author = "%s, %s" % (self._author, mail)
                     else:
                         self._author = mail
-
-            canvas.saveState()
-
-            #canvas.setAuthor()
             #canvas.addOutlineEntry(title, key, level=0, closed=None)
             #canvas.setTitle(title)
             #canvas.setSubject(subj)
+            #canvas.setAuthor()
+            canvas.setPageCompression(self.config.pageCompression)
             #canvas.pageHasData()
             #canvas.showOutline()
             #canvas.bookmarkPage(name)
             #canvas.bookmarkHorizontalAbsolute(name, yhorizontal)
-            #canvas.doForm()
-            #canvas.beginForm(name, lowerx=0, lowery=0, upperx=None, uppery=None)
-            #canvas.endForm()
             #canvas.linkAbsolute(contents, destinationname, Rect=None, addtopage=1, name=None, **kw)
             #canvas.linkRect(contents, destinationname, Rect=None, addtopage=1, relative=1, name=None, **kw)
             #canvas.addLiteral()
             #canvas.stringWidth(self, text, fontName, fontSize, encoding=None)
-            canvas.setPageCompression(self.config.pageCompression)
             #canvas.setPageTransition(self, effectname=None, duration=1, direction=0,dimension='H',motion='I')
+        def onPageEnd(self, canvas, doc):
+            print "..onPageEnd PageNumber=%s" % canvas.getPageNumber()
+        def afterFlowable(self, flowable):
+            print "..afterFlowable %s" % flowable.__class__.__name__
+
+    class DefaultTemplate( _AbstractTemplate ):
+        #name = "The default template"
+
+        def __init__(self, writer):
+            MyTemplates._AbstractTemplate.__init__(self, writer)
+            (x,y,width,height) = (2.0*cm, 2.0*cm, 15.0*cm, 25.0*cm)
+            mainFrame = Frame(x, y, width, height, id='MainFrame')
+            page = PageTemplate('normal', [mainFrame,], self.onPage, self.onPageEnd)
+            self.addPageTemplates(page)
+
+        def onPage(self, canvas, doc):
+            canvas.saveState()
+            MyTemplates._AbstractTemplate.onPage(self, canvas, doc)
 
             # header
             if self._title:
@@ -115,9 +114,6 @@ class MyWriter:
                 canvas.setFont('Times-Roman', 10)
                 canvas.drawString(2.0*cm, self.config.pageSize[1] - 1.2*cm - 14.0, self._author)
             canvas.line(2.0*cm, self.config.pageSize[1] - 2.0*cm, self.config.pageSize[0] - 2.0*cm, self.config.pageSize[1] - 2.0*cm)
-
-            # body
-            #self.reader.drawPageBody(canvas)
 
             # footer
             canvas.line(2.0*cm, 2.0*cm, self.config.pageSize[0]-2.0*cm, 2.0*cm)
@@ -133,33 +129,23 @@ class MyWriter:
 
             canvas.restoreState()
 
-        def onPageEnd(self, canvas, doc):
-            print "=> onPageEnd"
-
         def afterFlowable(self, flowable):
-            print "=> afterFlowable %s" % flowable.__class__.__name__
+            MyTemplates._AbstractTemplate.afterFlowable(self, flowable)
             if flowable.__class__.__name__ == 'Paragraph':
                 f = flowable
-                #name7 = f.style.name[:7]
-                #name8 = f.style.name[:8]
+                #(name7,name8) = (f.style.name[:7],f.style.name[:8])
                 print "   style.name=%s" % f.style.name
-
-                ## Build a list of heading parts.
-                ## So far, this is the *last* item on the *previous* page...
-                #if name7 == 'Heading' and not hasattr(self.canv, 'headerLine'):
-                    #self.canv.headerLine = []
-                #if name8 == 'Heading0':
-                    #self.canv.headerLine = [f.text] # hackish
+                ## Build a list of heading parts. So far, this is the *last* item on the *previous* page...
+                #if name7 == 'Heading' and not hasattr(self.canv, 'headerLine'): self.canv.headerLine = []
+                #if name8 == 'Heading0': self.canv.headerLine = [f.text] # hackish
                 #elif name8 == 'Heading1':
-                    #if len(self.canv.headerLine) == 2:
-                        #del self.canv.headerLine[-1]
+                    #if len(self.canv.headerLine) == 2: del self.canv.headerLine[-1]
                     #elif len(self.canv.headerLine) == 3:
                         #del self.canv.headerLine[-1]
                         #del self.canv.headerLine[-1]
                     #self.canv.headerLine.append(f.text)
                 #elif name8 == 'Heading2':
-                    #if len(self.canv.headerLine) == 3:
-                        #del self.canv.headerLine[-1]
+                    #if len(self.canv.headerLine) == 3: del self.canv.headerLine[-1]
                     #self.canv.headerLine.append(f.text)
                 #if name7 == 'Heading':
                     ## Register TOC entries.
@@ -174,8 +160,9 @@ class MyWriter:
                         #else: isClosed = 1
                         #c.bookmarkPage(key)
                         #c.addOutlineEntry(title, key, level=headLevel, closed=isClosed)
-                    #except ValueError:
-                        #pass
+                    #except ValueError: pass
+
+class MyWriter:
 
     class MyParagraph:
         def __init__(self, story, reader, styles):
@@ -210,8 +197,7 @@ class MyWriter:
                         self.style.fontName = fontFamily #'Times-Roman'
 
                     fontSize = kwcharstyle.size()
-                    if fontSize < 6:
-                        fontSize = 6
+                    if fontSize < 6: fontSize = 6
                     self.style.fontSize = fontSize #20
 
                     #self.style.leading = 12
@@ -223,7 +209,17 @@ class MyWriter:
                     #self.style.bulletFontName = 'Times-Roman'
                     #self.style.bulletFontSize = 10
                     #self.style.bulletIndent = 0
-                    #self.style.textColor = black
+
+                    c = kwcharstyle.color()
+                    if c:
+                        if c.startswith('#'): c = c[1:]
+                        if len(c) == 6:
+                            (r,g,b) = (int(c[0:2],16),int(c[2:4],16),int(c[4:6],16))
+                            gray = 0.30*r + 0.59*g + 0.11*b
+                            if gray > 227.0:
+                                n = gray / 285.0
+                                (r,g,b) = (r*n,g*n,b*n)
+                            self.style.textColor = "#%02x%02x%02x" % (r,g,b)
 
                     alignment = kwparagstyle.alignment()
                     if alignment == kwparagstyle.AlignLeft:
@@ -285,15 +281,17 @@ class MyWriter:
         self.config = config
         self.kwdoc = KWord.document()
         self.style = getSampleStyleSheet()
-        self.doc = MyWriter.MyTemplate(self)
+
+        if not hasattr(MyTemplates, config.templateName):
+            raise "No such template \"%s\"" % config.templateName
+        self.doc = getattr(MyTemplates, config.templateName)(self)
 
     def write(self):
         style = getSampleStyleSheet()
         story = []
 
+        # Get the KWord document.
         kwdoc = KWord.document()
-        if not embeddedInKWord and self.config.readOdfFile:
-            kwdoc.openUrl(self.config.readOdfFile)
 
         # Get the KoStore backend for the file.
         store = KWord.store()
@@ -340,7 +338,7 @@ class MyDialog:
         forms = Kross.module("forms")
         self.dialog = forms.createDialog("ReportLab.org")
         self.dialog.setButtons("Ok|Cancel")
-        self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
+        self.dialog.setFaceType("Plain") #Auto Plain List Tree Tabbed
         self.dialog.minimumWidth = 580
         self.dialog.minimumHeight = 400
 
@@ -350,8 +348,8 @@ class MyDialog:
         savewidget.setFilter("*.pdf|PDF Documents\n*|All Files")
         savewidget.setMode("Saving")
 
-        #layoutpage = self.dialog.addPage("Page","Page Options","book")
-        #layoutwidget = forms.createWidgetFromUIFile(layoutpage, os.path.join(action.currentPath(), "kwreportlabpage.ui"))
+        #page = self.dialog.addPage("Template","Template","book")
+        #pagewidget = forms.createWidgetFromUIFile(page, os.path.join(action.currentPath(), "kwreportlabpage.ui"))
 
         if self.dialog.exec_loop():
             if not self.config.writeFileName:
@@ -366,7 +364,32 @@ class MyDialog:
 
 config = MyConfig()
 
-if embeddedInKWord or not config.writeFileName:
+try:
+    # try to import KWord. If this fails we are not running embedded in KWord.
+    import KWord
+    config.showDialog = True
+except ImportError:
+    # looks as we are not running embedded within KWord. So, let's use Kross to import the KWord library.
+    KWord = Kross.module("kword")
+
+    if config.readOdfFile:
+        KWord.document().openUrl(config.readOdfFile)
+
+    if not KWord.document().url():
+        # if KWord does not have a loaded document now we show a fileopen-dialog to let the user choose the odt file.
+        forms = Kross.module("forms")
+        dialog = forms.createDialog("ReportLab.org")
+        dialog.setButtons("Ok|Cancel")
+        dialog.setFaceType("Plain")
+        openwidget = forms.createFileWidget(dialog.addPage("Open","Open ODT File"))
+        openwidget.setMode("Opening")
+        openwidget.setFilter("*.odt|ODT Files\n*|All Files")
+        if not dialog.exec_loop():
+            raise Exception("Aborted.")
+        if not KWord.document().openUrl(openwidget.selectedFile()):
+            raise Exception("Failed to open file: %s" % openwidget.selectedFile())
+
+if not config.writeFileName:
     config.showDialog = True
 
 if config.showDialog:

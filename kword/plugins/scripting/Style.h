@@ -368,15 +368,19 @@ namespace Scripting {
             }
 #endif
 
-#if 0
-//TODO Move this logic into a ListStyle class
-
             /***** List *****/
-// No clue what the next two methods should do.  can't we use an enum if that is what this int is for?
+
+            /** Return true if this item is a list item else false is returned. */
+            bool isList() const { return m_style->listStyle().isValid(); }
+
+#if 0
             /** Return the style of listitems. */
-            int listStyle(int liststyle) const {
-                return m_style->listStyle() ? m_style->listStyle()->style() : 0;
+            int listStyle() const {
+                //return m_style->listStyle() ? m_style->listStyle()->style() : 0;
+                KoListStyle liststyle = m_style->listStyle();
+                return liststyle.isValid() ? new ListStyle(this, liststyle) : 0;
             }
+
             /** Set the style of listitems. */
             void setListStyle(int liststyle) {
                 if( m_style->listStyle() )
