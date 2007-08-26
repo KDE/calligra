@@ -23,12 +23,14 @@ set(kchartcommon_LIB_SRCS
    kchart_part.cpp
    kchart_view.cpp
    KChartViewAdaptor.cpp
+   KChartDocument.cpp
 
    commands/ChartTypeCommand.cpp
 
    dialogs/KCPageLayout.cpp
    dialogs/KCPrinterDialog.cpp
 
+   # FIXME: Remove this
    kdchart/examples/tools/TableModel.cpp
 )
 
