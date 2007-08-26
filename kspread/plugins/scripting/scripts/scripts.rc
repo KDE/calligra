@@ -73,6 +73,12 @@
 
     <collection name="tools" text="Tools" comment="Miscellaneous scripts">
         <script
+           name="pyxmlviewer"
+           text="XML Viewer"
+           comment="Python script to view the ODT XML representation of the current document"
+           interpreter="python"
+           file="extensions/xmlviewer.py" />
+        <script
            name="pylogger"
            text="Logger"
            comment="Log changes in cells to a file"
