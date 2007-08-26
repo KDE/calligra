@@ -332,7 +332,7 @@ class KEXICORE_EXPORT Part : public QObject, public /*protected TODO*/ KexiUtils
 		Private * const d;
 
 	friend class Manager;
-	friend class KexiWindow;
+	friend class ::KexiWindow;
 	//friend class KexiMainWindowIface;
 	friend class GUIClient;
 };
