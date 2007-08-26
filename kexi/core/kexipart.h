@@ -78,7 +78,7 @@ enum ObjectTypes {
   E.g. "New table" vs "New query" can have different forms for some languages.
   So this is a flexible way for customizing translatable strings.
  */
-class KEXICORE_EXPORT Part : public QObject, public /*protected TODO*/ KexiUtils::InternalPropertyMap
+class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalPropertyMap
 {
 	Q_OBJECT
 
@@ -333,7 +333,6 @@ class KEXICORE_EXPORT Part : public QObject, public /*protected TODO*/ KexiUtils
 
 	friend class Manager;
 	friend class ::KexiWindow;
-	//friend class KexiMainWindowIface;
 	friend class GUIClient;
 };
 
