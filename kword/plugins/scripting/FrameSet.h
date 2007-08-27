@@ -46,7 +46,23 @@ namespace Scripting {
 
     /**
     * A frameset holds a number of \a Frame (zero or more) objects where
-    * each frame holds the content that is displayed on screen.
+    * each frame holds the content that is displayed on the screen.
+    *
+    * The following python sample script does use the FrameSet class;
+    * \code
+    * import KWord
+    * # Print the name of the main framset.
+    * fs = KWord.mainFrameSet()
+    * if fs:
+    *     print fs.name()
+    * # Iterate over all framesets.
+    * for i in range( KWord.frameSetCount() ):
+    *     fs = KWord.frameSet(i)
+    *     # iterate over all frames of the frameset.
+    *     for k in fs.frameCount():
+    *         print fs.frame(k).shapeId()
+    * print name()
+    * \endcode
     */
     class FrameSet : public QObject
     {

@@ -34,6 +34,29 @@ namespace Scripting {
     /**
     * A frame holds a number of \a Frame (zero or more) objects where
     * each frame holds the content that is displayed on screen.
+    *
+    * The following python sample resizes the first frame of a
+    * frameset named MyFrameSet to half of it's original size;
+    * \code
+    * import KWord
+    * fs = KWord.frameSetByName("MyFrameSet")
+    * if not fs:
+    *     raise "No FrameSet named 'MyFrameSet'"
+    * if fs.frameCount() < 1:
+    *     raise "The FrameSet has no frames"
+    * f = fs.frame(0)
+    * f.setSize(f.width()/2.0, f.height()/2.0)
+    * \code
+    *
+    * The following python sample script does iterate over all frames
+    * each frameset has and prints the shape-id;
+    * \code
+    * import KWord
+    * for i in range( KWord.frameSetCount() ):
+    *     fs = KWord.frameSet(i)
+    *     for k in fs.frameCount():
+    *         print fs.frame(k).shapeId()
+    * \endcode
     */
     class Frame : public QObject
     {

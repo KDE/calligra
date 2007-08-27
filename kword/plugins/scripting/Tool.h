@@ -45,6 +45,19 @@ namespace Scripting {
     /**
     * The Tool class provides access to functionality like handling for
     * example current/active selections.
+    *
+    * Python sample code that walks through the actions the Tool provides
+    * and executes each of them;
+    * \code
+    * import KWord
+    * tool = KWord.tool()
+    * def triggered(actionname):
+    *     print "Action %s executed" % actionname
+    * tool.connect("actionTriggered(QString)",triggered)
+    * for n in tool.actionNames():
+    *     print "Trying to execute %s" % tool.actionText(n)
+    *     tool.triggerAction(n)
+    * \endcode
     */
     class Tool : public QObject
     {
