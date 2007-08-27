@@ -140,27 +140,23 @@ from/to files.
 
 So here are the main classes for KChart 2:
 
- - KChartDocument : public KoDocument
+ - ChartShape : public QObject, public KoShape
 
        This is the central class that holds all the chart data and
        configuration.  It contains all the configuration for the chart
        as well as a pointer to a KDChart and a QStandardItemModel
        based data class (details not yet decided).
 
-       This class is public, and can be used by other applications
-       when they want to manipulate a chart, automatically or through
-       a GUI like the ChartShape.  It will also have a Kross interface
-       that will expose the chart to Kross scripts and a DBUS adaptor
-       that will let the chart be manipulated through DBUS.
-
- - ChartShape : public QObject, public KoShape
-
        The Flake shape implementing KChart that was described above.
        This class contains a KChartDocument that represents the actual
        chart.  In connection to the shape, there are a number of
        tools, as yet undecided.
 
- - KChartPart
+       This class will also have a Kross interface that will expose
+       the chart to Kross scripts and a DBUS adaptor that will let the
+       chart be manipulated through DBUS.
+
+ - KChartPart : public KoDocument
 
        A KPart that will let Konqueror and other browsers embed and
        preview charts.  This class also will either embed a ChartShape
@@ -170,6 +166,15 @@ So here are the main classes for KChart 2:
 
        The view that implements the main GUI of the KChart
        application.
+
+Boudewijn rempt summed it all up this way:
+
+ - "Look at KWord: It's a KPart that contains a view and a document.
+    The document contains the shape and the shape draws itself on the
+    view and contains the tet data."
+
+I will meditate on that, and will surely understand it myself some
+day.  :-)
 
 
 3. Some Notes About the Work Towards KChart 2.0
@@ -201,3 +206,28 @@ like ODF reading/writing and similar low-level things..
 Much of kchart 1.x is useless, e.g. the old configuration dialogs.
 These features will insted be implemented using Flake Tools, and qt
 designer .ui files will be mandatory.
+
+
+3.1 Recommended reading
+- - - - - - - - - - - -
+
+The following documents are recommended reading for KChart hackers.
+Especially the first 3 are important.
+
+ * ODF Essentials
+   A very nice book that describes the ideas behind OpenDocument, and
+   important parts of the standard.  It can be downloaded from
+   http://books.evc-cit.info/ 
+
+ * Introduction to the Flake library
+   http://api.kde.org/koffice-api/koffice-apidocs/libs/flake/html/index.html
+   http://wiki.koffice.org/index.php?title=Flake
+
+ * KDChart Programmers Manual
+   trunk/koffice/kchart/kdchart/doc/kdchart.pdf
+
+ * The full OpenDocument 1.1 standard
+   http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office#odf11
+
+ * The proposed changes for OpenDocument 1.2
+  http://www.oasis-open.org/committees/download.php/24327/ODF-Metadata-Proposal.pdf
