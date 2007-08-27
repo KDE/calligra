@@ -86,7 +86,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QAction* exportAction = new QAction(KIcon("file-export"), i18n("Export"), this);
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
-    
+
     QAction* addBars = new QAction(KIcon("edit-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
@@ -191,10 +191,10 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     action = new DotsAction(this);
     addAction("dots", action);
     actionGroup->addAction(action);
-    
+
     actionQuarterNote->setChecked(true);
     m_activeAction = actionQuarterNote;
-    
+
     QMenu* clefMenu = new QMenu();
     clefMenu->addAction(action = new SetClefAction(Clef::Trebble, 2, 0, this));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
@@ -212,7 +212,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QAction* clefAction = new QAction(i18n("Clef"), this);
     clefAction->setMenu(clefMenu);
     contextMenu.append(clefAction);
-    
+
     QMenu* tsMenu = new QMenu();
     tsMenu->addAction(action = new TimeSignatureAction(this, 2, 2));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
@@ -240,7 +240,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QAction* timeSigAction = new QAction(i18n("Time signature"), this);
     timeSigAction->setMenu(tsMenu);
     contextMenu.append(timeSigAction);
-    
+
     QMenu* ksMenu = new QMenu();
     ksMenu->addAction(action = new KeySignatureAction(this, 0));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
@@ -265,16 +265,16 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     ksMenu->addSeparator();
     ksMenu->addAction(action = new KeySignatureAction(this));
     connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
-    
+
     QAction* keySigAction = new QAction(i18n("Key signature"), this);
     keySigAction->setMenu(ksMenu);
     contextMenu.append(keySigAction);
-    
+
     QAction* removeBarAction = new RemoveBarAction(this);
     connect(removeBarAction, SIGNAL(triggered()), this, SLOT(actionTriggered()));
     contextMenu.append(removeBarAction);
-    
-    
+
+
     setPopupActionList(contextMenu);
 }
 
@@ -336,9 +336,9 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
         system = ss;
     }
 
-    Q_ASSERT(system);
-    if(system == 0)
+    if(system == 0) {
         return;
+    }
 
     // find closest staff
     Staff* closestStaff = 0;
@@ -392,7 +392,7 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     foreach (QAction* a, popupActionList()) {
         a->setVisible(bar);
     }
-    
+
     if (!bar) return;
 
     QPointF point;
@@ -459,7 +459,7 @@ void SimpleEntryTool::actionTriggered()
 {
     AbstractMusicAction* action = dynamic_cast<AbstractMusicAction*>(sender());
     if (!action) return;
-    action->mousePress(m_contextMenuStaff, m_contextMenuBar, m_contextMenuPoint);    
+    action->mousePress(m_contextMenuStaff, m_contextMenuBar, m_contextMenuPoint);
 }
 
 MusicShape* SimpleEntryTool::shape()
@@ -493,7 +493,7 @@ void SimpleEntryTool::exportSheet()
 {
     QString file = KFileDialog::getSaveFileName(KUrl(), "*xml|MusicXML files (*.xml)", 0, "Export");
     if (file.isEmpty() || file.isNull()) return;
-    
+
     QBuffer b;
     b.open(QIODevice::ReadWrite);
     KoXmlWriter kw(&b);
@@ -501,14 +501,14 @@ void SimpleEntryTool::exportSheet()
                      "http://www.musicxml.org/dtds/partwise.dtd");
     MusicXmlWriter().writeSheet(kw, m_musicshape->sheet(), true);
     kw.endDocument();
-    
+
     b.seek(0);
-    
+
     //kDebug() << b.data();
     QFile f(file);
     f.open(QIODevice::WriteOnly);
     QXmlStreamWriter w(&f);
-    
+
     QXmlStreamReader xml(&b);
     while (!xml.atEnd()) {
         xml.readNext();
@@ -529,7 +529,7 @@ void SimpleEntryTool::exportSheet()
         } else if (xml.isEntityReference()) {
             w.writeEntityReference(xml.name().toString());
         } else if (xml.isProcessingInstruction()) {
-            w.writeProcessingInstruction(xml.processingInstructionTarget().toString(), xml.processingInstructionData().toString());            
+            w.writeProcessingInstruction(xml.processingInstructionTarget().toString(), xml.processingInstructionData().toString());
         } else if (xml.isStartDocument()) {
             w.writeStartDocument();
         } else if (xml.isStartElement()) {
