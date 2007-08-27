@@ -29,10 +29,8 @@ Item								   Prio Status
  - Add KChart coding standards.						--
  - Rename all C++ files to .cpp instead of .cc to follow the KDE        done
    coding standards.
- + Create KChartDocument.cpp and use it                                 --
-   - Create the class from  from  kchart_part.cc                        done
-   - Use it in ChartShape                                               --
- - Make the application include the shape and also have a toolbar.      --
+ - Move code from kchart_part.{h,cpp} to ChartShape to make it work     ----
+ - Remove KChartDocument                                                ----
 
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      	----
@@ -65,6 +63,8 @@ Item								   Prio Status
   + Data Series						----	----
 
 * Integration with rest of KOffice.
+  * Reintegrate the KPart and View into KOffice                         ----
+    - Make the view include the shape and also have a toolbar.          --
   + Give KChart the same page layout dialog as KSpread.		        ----
        (Kivio has a simpler variation with only one page.)
 
