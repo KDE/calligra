@@ -47,14 +47,14 @@ static KIcon getIcon(Clef::ClefShape shape)
 static QString getText(Clef::ClefShape shape, int line)
 {
     switch (shape) {
-        case Clef::GClef: return i18n("Trebble");
-        case Clef::FClef: return i18n("Bass");
+        case Clef::GClef: return i18nc("Trebble clef", "Trebble");
+        case Clef::FClef: return i18nc("Bass clef", "Bass");
         case Clef::CClef:
             switch (line) {
-                case 1: return i18n("Soprano");
-                case 3: return i18n("Alto");
-                case 4: return i18n("Tenor");
-                default: return i18n("C clef on line %1").arg(line);
+                case 1: return i18nc("Soprano clef", "Soprano");
+                case 3: return i18nc("Alto clef", "Alto");
+                case 4: return i18nc("Tenor clef", "Tenor");
+                default: return i18n("C clef on line %1", line);
             }
     }
     return i18n("Unknown clef");

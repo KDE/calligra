@@ -58,15 +58,15 @@ static QString getText(int accidentals)
 {
     switch (accidentals) {
         case -2: return i18n("Double flat");
-        case -1: return i18n("Flat");
+        case -1: return i18nc("lowered half a step", "Flat");
         case 0:  return i18n("Natural");
-        case 1:  return i18n("Sharp");
+        case 1:  return i18nc("raised half a step", "Sharp");
         case 2:  return i18n("Double sharp");
     }
     if (accidentals < 0) {
-        return i18n("%1 flats").arg(-accidentals);
+        return i18n("%1 flats", -accidentals);
     } else {
-        return i18n("%1 sharps").arg(accidentals);
+        return i18n("%1 sharps", accidentals);
     }
 }
 

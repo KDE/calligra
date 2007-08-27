@@ -73,7 +73,7 @@ static QString getText(Chord::Duration duration, bool isRest)
         case Chord::SixtyFourth:    return i18n("64th ") + base;
         case Chord::HundredTwentyEighth: return i18n("128th ") + base;
     }
-    return i18n("Unknown ") + base;
+    return isRest ? i18n("Unknown rest") : i18n("Unknown note");
 }
 
 NoteEntryAction::NoteEntryAction(Chord::Duration duration, bool isRest, SimpleEntryTool* tool)

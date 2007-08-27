@@ -48,8 +48,8 @@ static QString getText(int accidentals)
         case 3: return i18n("A Major");
         case 4: return i18n("E Major");
     }
-    if (accidentals < 0) return i18n("%1 flats").arg(-accidentals);
-    else return i18n("%1 sharps").arg(accidentals);
+    if (accidentals < 0) return i18n("%1 flats", -accidentals);
+    else return i18n("%1 sharps", accidentals);
 }
 
 KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool, int accidentals)
@@ -59,7 +59,7 @@ KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool, int accidentals)
 }
 
 KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool)
-: AbstractMusicAction(i18n("Other"), tool), m_showDialog(true)
+: AbstractMusicAction(i18nc("Other key signature", "Other"), tool), m_showDialog(true)
 {
     setCheckable(false);
 }
