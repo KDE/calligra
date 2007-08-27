@@ -31,7 +31,7 @@ namespace MusicCore {
 class PartDetailsDialog : public KDialog {
     Q_OBJECT
 public:
-    PartDetailsDialog(MusicCore::Part* part, QWidget *parent = 0);
+    explicit PartDetailsDialog(MusicCore::Part* part, QWidget *parent = 0);
     
     static void showDialog(MusicTool *tool, MusicCore::Part* part, QWidget *parent = 0);
 private:

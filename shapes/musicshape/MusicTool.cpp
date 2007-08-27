@@ -19,7 +19,7 @@
 #include <QPainter>
 #include <QGridLayout>
 #include <QToolButton>
-#include <QTabWidget>
+#include <KTabWidget>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -99,7 +99,7 @@ void MusicTool::addCommand(QUndoCommand* command)
 
 QWidget * MusicTool::createOptionWidget()
 {
-    QTabWidget *widget = new QTabWidget();
+    KTabWidget *widget = new KTabWidget();
 
     PartsWidget *pw = new PartsWidget(this, widget);
     widget->addTab(pw, i18n("Parts"));
