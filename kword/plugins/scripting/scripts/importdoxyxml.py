@@ -397,9 +397,9 @@ class ImportDialog:
                 self.kwdoc = kwdoc
                 self.lines = []
             def write(self, line):
-                self.lines.append(line)
+                self.lines.append( line.encode('utf-8') )
             def flush(self):
-                self.kwdoc.setHtml( ' '.join(self.lines) )
+                self.kwdoc.setHtml(' '.join(self.lines))
         writer = Writer(xmldoc, self.config)
         kwwriter = KWordFileWriter(kwdoc)
         writer.writeHtml(kwwriter)

@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re, traceback
 import Kross
 import KWord
 
@@ -11,7 +12,6 @@ class Writer:
         filtername = "Text Files"
         filtermask = "*.txt"
         def __init__(self, file):
-            import KWord
             doc = KWord.mainFrameSet().document()
 
             f = open(file, "w")
@@ -22,11 +22,12 @@ class Writer:
         filtername = "Html Files"
         filtermask = "*.htm *.html"
         def __init__(self, file):
-            import KWord
             doc = KWord.mainFrameSet().document()
 
             f = open(file, "w")
-            f.write( doc.toHtml() )
+            html = doc.toHtml()
+            html = re.sub("<head>","<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>",html,count=1)
+            f.write(html)
             f.close()
 
 class ExportFile:
@@ -37,7 +38,6 @@ class ExportFile:
             if not f.startswith('_'):
                 writerClazzes.append( getattr(Writer,f) )
 
-        import Kross
         forms = Kross.module("forms")
         self.dialog = forms.createDialog("Export File")
         self.dialog.setButtons("Ok|Cancel")
@@ -81,7 +81,6 @@ class ExportFile:
                 writerClazz(file)
 
         except:
-            import traceback
             tb = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )
             forms.showMessageBox("Error","Error",tb)
 
