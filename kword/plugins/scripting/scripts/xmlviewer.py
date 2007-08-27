@@ -117,7 +117,7 @@ class Dialog:
         # open a KoScriptingOdfReader for the text/xml file.
         reader = self.store.open(path)
         if not reader:
-            raise Exception("failed to open %s" % path)
+            raise Exception("Failed to open %s" % path)
         # this function will be called for each XML element.
         def onElement():
             # the level the element is on to handle indention of the displayed lists
@@ -137,8 +137,7 @@ class Dialog:
                 attributes = [ "%s=%s" % (n,reader.attribute(n)) for n in reader.attributeNames() ]
                 if len(attributes) > 0:
                     self._text += " <small>%s</small>" % ", ".join(attributes)
-            #print "isElement=%s isText=%s hasChildren=%s text=%s" % (reader.isElement(),reader.isText(),reader.hasChildren(),reader.text())
-            if reader.name().startswith("text:") and reader.text():
+            if not reader.hasChildren() and reader.text():
                 # display the text the element may have.
                 self._text += "<blockquote>%s</blockquote>" % reader.text()
             self._text += "</li>"
@@ -147,7 +146,7 @@ class Dialog:
         # start the KoScriptingOdfReader. The reader will then call the callback function for each readed element.
         reader.start()
         # display the result within the browser.
-        widgets[0].html = "<style>ul { margin:0; } small { color:#909090; } blockquote { margin:0; color:#000099; }</style>%s" % self._text
+        widgets[0].html = "<style>ul { margin:0; } small { color:#909090; } blockquote { margin:0; color:#0000aa; }</style>%s" % self._text
         self.pages[path][1] = self._text
 
     def doOpen(self, program):
