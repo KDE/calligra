@@ -1,4 +1,5 @@
 #!/usr/bin/env kross
+# -*- coding: utf-8 -*-
 
 # import some python modules.
 import os, sys, traceback, tempfile, zipfile

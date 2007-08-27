@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
+# -*- coding: utf-8 -*-
 
-import Kross
-import KWord
+import codecs, traceback, Kross, KWord
 
 class Reader:
     """ The Reader class provides us implementations for the different file formats
@@ -11,7 +11,6 @@ class Reader:
         filtername = "Text Files"
         filtermask = "*.txt"
         def __init__(self, file):
-            import KWord
             doc = KWord.mainFrameSet().document()
 
             f = open(file, "r")
@@ -22,17 +21,18 @@ class Reader:
         filtername = "Html Files"
         filtermask = "*.htm *.html"
         def __init__(self, file):
-            import KWord
             doc = KWord.mainFrameSet().document()
 
             #cursor = doc.rootFrame().lastCursorPosition()
             #cursor = doc.lastCursor()
             #cursor.insertDefaultBlock()
+            #cursor.insertHtml( ' '.join(f.readlines()) )
 
             f = open(file, "r")
-            #cursor.insertHtml( ' '.join(f.readlines()) )
             doc.setHtml( ' '.join(f.readlines()) )
             f.close()
+            #f = codecs.open(file, "r", "utf-8" )
+            #doc.setHtml( f.read().encode('utf-8') )
 
 class ImportFile:
     def __init__(self, scriptaction):
@@ -42,7 +42,6 @@ class ImportFile:
             if not f.startswith('_'):
                 readerClazzes.append( getattr(Reader,f) )
 
-        import Kross
         forms = Kross.module("forms")
         self.dialog = forms.createDialog("Import File")
         self.dialog.setButtons("Ok|Cancel")
@@ -86,7 +85,6 @@ class ImportFile:
                 readerClazz(file)
 
         except:
-            import traceback
             #list = traceback.format_tb(sys.exc_info()[2], None)
             #s = traceback.format_exception_only(sys.exc_info()[0], sys.exc_info()[1])
             tb = "".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) )

@@ -1,4 +1,5 @@
 #!/usr/bin/env kross
+# -*- coding: utf-8 -*-
 
 """
 This python script connects KWord and OpenOffice.org together.

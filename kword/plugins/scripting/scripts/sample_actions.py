@@ -1,13 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
+# -*- coding: utf-8 -*-
+
+import traceback, Kross, KWord
 
 class Actions:
 
     def __init__(self, scriptaction):
-        try: import Kross
-        except: raise "Failed to import the Kross module."
-        try: import KWord
-        except: raise "Failed to import the KWord module."
-
         self.scriptaction = scriptaction
         #self.currentpath = self.scriptaction.currentPath()
         self.forms = Kross.module("forms")
@@ -56,7 +54,6 @@ class Actions:
         self.dialog.delayedDestruct()
 
     def execAction(self):
-        import KWord, traceback
         try:
             actionName = self.actions[ self.widgetlist.currentRow ]
             (objectName,methodName) = actionName.split('.',1)

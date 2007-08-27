@@ -1,8 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
+# -*- coding: utf-8 -*-
 
-import re, traceback
-import Kross
-import KWord
+import re, traceback, Kross, KWord
 
 class Writer:
     """ The Writer class provides us implementations for the different file formats

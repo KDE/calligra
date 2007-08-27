@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
 This KWord python script implements import of with doxygen generated content into KWord.
@@ -20,6 +21,7 @@ bellow and then use in KWord the "Import Doxygen XML File" python script;
 import os, sys, re, traceback, xml.dom.minidom
 
 class Config:
+    """ The configuration. """
 
     def __init__(self):
         self.FileName = ""
@@ -38,6 +40,7 @@ class Config:
         self.EnableVariables = False
 
 class Class:
+    """ Provides us details about a class and it's members like slots, signals, properties, etc. """
 
     class Slot:
         def __init__(self, id, node):
@@ -159,6 +162,7 @@ class Class:
                 #print n.toxml()
 
 class Page:
+    """ A doxygen page. """
 
     def __init__(self, config, node):
         print "PAGE -------------------------------------\n"
@@ -167,6 +171,7 @@ class Page:
         self.description = " ".join( [ n.toxml() for n in node.childNodes if n.nodeName == "detaileddescription" ] )
 
 class Writer:
+    """ The writer parses the doxygen XML and writes it to e.g. HTML. """
 
     def __init__(self, doc, config):
         self.doc = doc
@@ -329,6 +334,9 @@ class Writer:
         file.write("</body></html>")
 
 class ImportDialog:
+    """ The dialog we are using to provide some frontend to the user if the script runs
+    for example embedded in KWord. """
+
     def __init__(self, action, config):
         import Kross, KWord
 
@@ -406,6 +414,7 @@ class ImportDialog:
         kwwriter.flush()
 
 if __name__=="__main__":
+    # this means we are running direct with the python interpreter.
     if len(sys.argv) != 2:
         print "%s outputfilename.xml" % sys.argv[0]
         sys.exit()
@@ -420,5 +429,7 @@ if __name__=="__main__":
     writer.writeHtml(file)
 
 else:
+    # We are probably embedded into e.g. KWord. But in any case we display
+    # the import-dialog to let the user choose what he wanna do.
     import Kross
     ImportDialog(self, Config())

@@ -1,13 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
+# -*- coding: utf-8 -*-
+
+import traceback, Kross, KWord
 
 class InsertShape:
 
     def __init__(self, scriptaction):
-        try: import Kross
-        except: raise "Failed to import the Kross module."
-        try: import KWord
-        except: raise "Failed to import the KWord module."
-
         self.scriptaction = scriptaction
         #self.currentpath = self.scriptaction.currentPath()
         self.forms = Kross.module("forms")
@@ -44,7 +42,6 @@ class InsertShape:
         self.dialog.delayedDestruct()
 
     def doInsert(self):
-        import KWord, traceback
         try:
             shapeId = self.shapes[ self.widgetlist.currentRow ]
 

@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env kross
+# -*- coding: utf-8 -*-
 
 # Import the KWord module.
 import KWord
