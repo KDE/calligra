@@ -24,8 +24,8 @@
 *     cell-ranges for all of them.
 *
 * \see http://www.koffice.org/kspread
+* \see http://techbase.kde.org/Development/Tutorials/KSpread_Scripting
 * \see http://kross.dipe.org
-* \see http://api.kde.org/4.0-api/kdelibs-apidocs/kross/html/index.html
 *
 ***************************************************************************
 *
