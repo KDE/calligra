@@ -69,6 +69,8 @@ public:
 ChartShape::ChartShape()
     : d( new Private )
 {
+    setShapeId( ChartShapeId );
+
     d->chartType    = BarChartType;
     d->chartSubType = BarNormalSubtype;
 

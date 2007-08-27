@@ -31,6 +31,7 @@
 #include <KoShapeRegistry.h>
 
 #include "ChartShape.h"
+#include "ChartTypeToolFactory.h"
 //#include "ChartDataConfigFactory.h"
 #include "ChartTypeConfigWidget.h"
 
@@ -41,6 +42,8 @@ K_EXPORT_COMPONENT_FACTORY( chartshape, KGenericFactory<ChartShapePlugin>( "Char
 ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
 {
     KoShapeRegistry::instance()->add( new ChartShapeFactory( parent ) );
+
+    KoToolRegistry::instance()->add( new ChartTypeToolFactory( parent ) );
 }
 
 

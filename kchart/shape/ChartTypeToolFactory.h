@@ -27,8 +27,10 @@
 namespace KChart
 {
 
-class ChartTypeToolFactory : public KoToolFactory {
+class ChartTypeToolFactory : public KoToolFactory
+{
     Q_OBJECT
+
 public:
     explicit ChartTypeToolFactory(QObject *parent);
     ~ChartTypeToolFactory();
@@ -37,4 +39,6 @@ public:
 };
 
 } // namespace KChart
+
+
 #endif

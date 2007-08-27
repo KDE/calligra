@@ -28,7 +28,7 @@ using namespace KChart;
 
 
 ChartTypeToolFactory::ChartTypeToolFactory(QObject *parent)
-: KoToolFactory(parent, "ChartTypeToolFactory_ID", i18n("ChartType tool"))
+    : KoToolFactory(parent, "ChartTypeToolFactory_ID", i18n("ChartType tool"))
 {
     setToolTip (i18n("ChartType editing tool"));
     setToolType (dynamicToolType());
@@ -37,11 +37,14 @@ ChartTypeToolFactory::ChartTypeToolFactory(QObject *parent)
     setActivationShapeId (ChartShapeId);
 }
 
-ChartTypeToolFactory::~ChartTypeToolFactory() {
+ChartTypeToolFactory::~ChartTypeToolFactory()
+{
 }
 
-KoTool * ChartTypeToolFactory::createTool(KoCanvasBase *canvas) {
+KoTool * ChartTypeToolFactory::createTool(KoCanvasBase *canvas)
+{
     return new ChartTypeTool(canvas);
 }
+
 
 #include "ChartTypeToolFactory.moc"

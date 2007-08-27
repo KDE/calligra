@@ -28,7 +28,9 @@
 
 #define ChartShapeId "ChartShape"
 
+
 class QAbstractItemModel;
+
 
 namespace KDChart
 {
