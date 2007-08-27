@@ -8,6 +8,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
 SET (chartshape_LIB_SRCS
 	ChartShape.cpp
 	ChartShapeFactory.cpp
+        ChartTypeTool.cpp
+        ChartTypeToolFactory.cpp
 	ChartTypeConfigWidget.cpp
 	../commands/ChartTypeCommand.cpp
 	)
