@@ -20,68 +20,81 @@
 // Local
 #include "ChartShape.h"
 
-// KChart
-#include "KDChartAbstractCoordinatePlane.h"
-#include "KDChartBackgroundAttributes.h"
-#include "KDChartBarDiagram.h"
-#include "KDChartCartesianAxis.h"
-#include "KDChartCartesianCoordinatePlane.h"
-#include "KDChartChart.h"
-#include "KDChartFrameAttributes.h"
-#include "KDChartGridAttributes.h"
-#include "KDChartLegend.h"
-#include "KDChartLineDiagram.h"
-
-// KOffice
-#include <KoViewConverter.h>
+// Qt
+//#include <QAbstractItemModel>
+#include <QStandardItemModel>
+#include <QPainter>
 
 // KDE
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
 
-// Qt
-#include <QAbstractItemModel>
-#include <QPainter>
+// KOffice
+#include <KoViewConverter.h>
+
+// KDChart
+#include "KDChartAbstractCoordinatePlane.h"
+#include "KDChartBackgroundAttributes.h"
+#include "KDChartBarDiagram.h"
+#include "KDChartLineDiagram.h"
+#include "KDChartCartesianAxis.h"
+#include "KDChartCartesianCoordinatePlane.h"
+#include "KDChartChart.h"
+#include "KDChartFrameAttributes.h"
+#include "KDChartGridAttributes.h"
+#include "KDChartLegend.h"
+
+// KChart
+#include "kchart_global.h"
+
 
 using namespace KChart;
 using namespace KDChart;
 
+
 class ChartShape::Private
 {
 public:
-    Chart* chart;
-    AbstractDiagram* diagram;
-    QAbstractItemModel* model;
+    // The chart and its contents
+    OdfChartType        chartType;
+    OdfChartSubtype     chartSubType;
+
+    Chart               *chart;
+    AbstractDiagram     *diagram;
+    QAbstractItemModel  *chartData;
 };
 
 
 ChartShape::ChartShape()
     : d( new Private )
 {
-    kDebug() << endl;
-    d->chart = new Chart();
-    d->diagram = new BarDiagram( d->chart, static_cast<CartesianCoordinatePlane*>(d->chart->coordinatePlane() ) );
-    d->model = 0;
+    d->chartType    = BarChartType;
+    d->chartSubType = BarNormalSubtype;
 
-    AbstractCartesianDiagram* diagram = static_cast<AbstractCartesianDiagram*>(d->diagram);
-    CartesianAxis *xAxis = new CartesianAxis( diagram );
-    CartesianAxis *yAxis = new CartesianAxis( diagram );
-    CartesianAxis *axisTop = new CartesianAxis( diagram );
-    CartesianAxis *axisRight = new CartesianAxis( diagram );
+    // Initialize a basic chart.
+    d->chart     = new Chart();
+    d->diagram   = new BarDiagram();
+    d->chartData = new QStandardItemModel();
+    d->chart->coordinatePlane()->replaceDiagram(d->diagram); // FIXME
+
+    AbstractCartesianDiagram  *diagram = static_cast<AbstractCartesianDiagram*>(d->diagram);
+    CartesianAxis  *xAxis = new CartesianAxis( diagram );
+    CartesianAxis  *yAxis = new CartesianAxis( diagram );
+    //CartesianAxis *axisTop = new CartesianAxis( diagram );
+    //CartesianAxis *axisRight = new CartesianAxis( diagram );
     xAxis->setPosition( CartesianAxis::Bottom );
     yAxis->setPosition( CartesianAxis::Left );
-    axisTop->setPosition( CartesianAxis::Top );
-    axisRight->setPosition( CartesianAxis::Right );
+    //axisTop->setPosition( CartesianAxis::Top );
+    //axisRight->setPosition( CartesianAxis::Right );
 
     diagram->addAxis( xAxis );
     diagram->addAxis( yAxis );
-    diagram->addAxis( axisTop );
-    diagram->addAxis( axisRight );
+    //diagram->addAxis( axisTop );
+    //diagram->addAxis( axisRight );
+    kDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
 
-    d->chart->coordinatePlane()->replaceDiagram( d->diagram );
-qDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
-
+#if 0
     // diagram->coordinatePlane returns an abstract plane one.
     // if we want to specify the orientation we need to cast
     // as follow
@@ -89,7 +102,6 @@ qDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
 		    ( d->diagram->coordinatePlane() );
 
     /* Configure grid steps and pen */
-
     // Vertical
     GridAttributes gv ( plane->gridAttributes( Qt::Vertical ) );
 
@@ -117,7 +129,6 @@ qDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
     gv.setSubGridVisible( true );
 
     // Horizontal
-
     GridAttributes gh = plane->gridAttributes( Qt::Horizontal );
     gh.setGridPen( gridPen );
     gh.setGridStepWidth(  0.5 );
@@ -126,11 +137,12 @@ qDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
 
     plane->setGridAttributes( Qt::Vertical,  gv );
     plane->setGridAttributes( Qt::Horizontal,  gh );
+#endif
 }
 
 ChartShape::~ChartShape()
 {
-    delete d->model;
+    delete d->chartData;
     delete d->diagram;
     delete d->chart;
     delete d;
@@ -141,22 +153,72 @@ Chart* ChartShape::chart() const
     return d->chart;
 }
 
+
+void ChartShape::setChartType( OdfChartType    newType,
+                               OdfChartSubtype newSubType )
+{
+    AbstractDiagram  *new_diagram;
+
+    if (d->chartType == newType)
+        return;
+
+    // FIXME: Take care of subtype too.
+    switch (newType) {
+    case BarChartType:
+        new_diagram = new BarDiagram();
+        break;
+    case LineChartType:
+        new_diagram = new LineDiagram();
+        break;
+    case AreaChartType:
+        // FIXME
+        return;
+        //new_diagram = new AreaDiagram();
+        break;
+    case PieChartType:
+        // FIXME
+        return;
+        break;
+    case HiLoChartType:
+        // FIXME
+        return;
+        break;
+    case RingChartType:
+        // FIXME
+        return;
+        break;
+    case PolarChartType:
+        // FIXME
+        return;
+        break;
+    case BoxWhiskerChartType:
+        // FIXME
+        return;
+        break;
+    }
+
+    d->diagram = new_diagram;
+    d->chart->coordinatePlane()->replaceDiagram(new_diagram); // FIXME
+}
+
+
 void ChartShape::setModel( QAbstractItemModel* model )
 {
     kDebug() << "BEGIN";
-    d->model = model;
+    d->chartData = model;
     d->chart->coordinatePlane()->takeDiagram( d->diagram );
     d->diagram->setModel( model );
     d->diagram->update();
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
 
-    for ( int iColumn = 0; iColumn<d->diagram->model()->columnCount(); ++iColumn )
-    {
-        QPen pen(d->diagram->pen( iColumn ));
+#if 0
+    for ( int col = 0; col < d->diagram->model()->columnCount(); ++col ) {
+        QPen pen(d->diagram->pen( col ));
         pen.setColor( Qt::black );
         pen.setWidth(4);
         d->diagram->setPen( iColumn, pen );
     }
+#endif
 /*
     KDChart::FrameAttributes faChart( d->chart->frameAttributes() );
     faChart.setPen( QPen(QColor(0x60,0x60,0xb0), 8) );
@@ -170,7 +232,7 @@ void ChartShape::setModel( QAbstractItemModel* model )
     // Set up the legend
     Legend* m_legend;
     m_legend = new Legend( d->diagram, d->chart );
-    m_legend->setPosition( Position::South );
+    m_legend->setPosition( Position::East );
     m_legend->setAlignment( Qt::AlignRight );
     m_legend->setShowLines( false );
     m_legend->setTitleText( i18n( "Legend" ) );
@@ -179,6 +241,7 @@ void ChartShape::setModel( QAbstractItemModel* model )
 
     kDebug() <<" END";
 }
+
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
@@ -193,6 +256,7 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
     d->chart->paint( &painter, paintRect.toRect() );
 }
 
+
 void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 {
 }
@@ -202,3 +266,14 @@ bool ChartShape::loadOdf( const KoXmlElement &element,
 {
     return false; // TODO
 }
+
+
+// ----------------------------------------------------------------
+//                         Private methods
+
+
+#if 0
+void ChartShape::initNullChart()
+{
+}
+#endif

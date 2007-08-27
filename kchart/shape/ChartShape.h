@@ -24,6 +24,8 @@
 
 #include "koChart.h"
 
+#include "kchart_global.h"
+
 #define ChartShapeId "ChartShape"
 
 class QAbstractItemModel;
@@ -44,6 +46,9 @@ public:
 
     KDChart::Chart* chart() const;
 
+    /// Set new chart type and subtype.
+    void setChartType( OdfChartType newType, OdfChartSubtype newSubType );
+
     /// reimplemented
     virtual void setModel( QAbstractItemModel* model );
 
@@ -62,5 +67,6 @@ private:
 };
 
 } // namespace KChart
+
 
 #endif // KCHART_CHART_SHAPE
