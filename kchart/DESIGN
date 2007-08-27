@@ -212,7 +212,7 @@ designer .ui files will be mandatory.
 - - - - - - - - - - - -
 
 The following documents are recommended reading for KChart hackers.
-Especially the first 3 are important.
+Especially the first 4 are important.
 
  * ODF Essentials
    A very nice book that describes the ideas behind OpenDocument, and
@@ -225,6 +225,9 @@ Especially the first 3 are important.
 
  * KDChart Programmers Manual
    trunk/koffice/kchart/kdchart/doc/kdchart.pdf
+
+ * Loading and Saving OpenDocument in KOffice
+   http://wiki.koffice.org/index.php?title=KOffice_and_ODF
 
  * The full OpenDocument 1.1 standard
    http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=office#odf11
