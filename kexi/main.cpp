@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 		return result;
 
 	result = qApp->exec();
-//Qt4	KStaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
+//Qt4	K3StaticDeleterHelpers::deleteStaticDeleters(); //to delete GUI singletons before deleting QApp
 	delete qApp->mainWidget();
 	delete qApp;
 	return result;

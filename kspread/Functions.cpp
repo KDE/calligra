@@ -29,7 +29,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 #include <kcomponentdata.h>
 
 #include "Formula.h"
@@ -184,7 +184,7 @@ void RegisterTextFunctions();
 void RegisterTrigFunctions();
 
 
-static KStaticDeleter<FunctionRepository> fr_sd;
+static K3StaticDeleter<FunctionRepository> fr_sd;
 FunctionRepository* FunctionRepository::s_self = 0;
 
 FunctionRepository* FunctionRepository::self()
