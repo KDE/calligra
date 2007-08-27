@@ -46,7 +46,7 @@ ALIASES                =
 OPTIMIZE_OUTPUT_FOR_C  = NO
 OPTIMIZE_OUTPUT_JAVA   = NO
 SUBGROUPING            = NO
-EXTRACT_ALL            = YES
+EXTRACT_ALL            = NO
 EXTRACT_PRIVATE        = NO
 EXTRACT_STATIC         = NO
 EXTRACT_LOCAL_CLASSES  = YES
@@ -78,9 +78,8 @@ WARN_IF_UNDOCUMENTED   = NO
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = NO
 WARN_FORMAT            = "$file:$line: $text"
-WARN_LOGFILE           =
 
-INPUT                  = ../
+INPUT                  = ../ ../../../../libs/kokross/KoScriptingOdf.h ../../../../libs/kokross/KoScriptingModule.h
 IMAGE_PATH             =
 FILE_PATTERNS          = *.h scripting.dox
 RECURSIVE              = YES
@@ -128,42 +127,16 @@ GENERATE_TREEVIEW      = NO
 TREEVIEW_WIDTH         = 250
 
 GENERATE_LATEX         = NO
-LATEX_OUTPUT           = latex
-LATEX_CMD_NAME         = latex
-MAKEINDEX_CMD_NAME     = makeindex
-PAPER_TYPE             = a4wide
-EXTRA_PACKAGES         =
-LATEX_HEADER           =
-COMPACT_LATEX          = YES
-PDF_HYPERLINKS         = YES
-USE_PDFLATEX           = YES
-LATEX_BATCHMODE        = YES
-LATEX_HIDE_INDICES     = NO
-
 GENERATE_RTF           = NO
-RTF_OUTPUT             = rtf
-COMPACT_RTF            = NO
-RTF_HYPERLINKS         = NO
-RTF_STYLESHEET_FILE    =
-RTF_EXTENSIONS_FILE    =
-
 GENERATE_MAN           = NO
-MAN_OUTPUT             = man
-MAN_EXTENSION          = .3
-MAN_LINKS              = NO
+GENERATE_PERLMOD       = NO
+GENERATE_AUTOGEN_DEF   = NO
 
 GENERATE_XML           = YES
 XML_OUTPUT             = xml
 XML_SCHEMA             =
 XML_DTD                =
 XML_PROGRAMLISTING     = YES
-
-GENERATE_AUTOGEN_DEF   = NO
-
-GENERATE_PERLMOD       = NO
-PERLMOD_LATEX          = NO
-PERLMOD_PRETTY         = YES
-PERLMOD_MAKEVAR_PREFIX = 
 
 ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = NO
@@ -176,7 +149,7 @@ EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 
 TAGFILES               =
-GENERATE_TAGFILE       = kwordscripting.tag
+GENERATE_TAGFILE       =
 ALLEXTERNALS           = NO
 EXTERNAL_GROUPS        = NO
 PERL_PATH              = /usr/bin/perl
