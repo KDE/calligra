@@ -52,9 +52,9 @@ KoView * KPrDocument::createViewInstance( QWidget *parent )
     return new KPrView( this, parent );
 }
 
-const char * KPrDocument::odfTagName()
+const char * KPrDocument::odfTagName( bool withNamespace )
 {
-    return "presentation";
+    return withNamespace ? "office:presentation": "presentation";
 }
 
 KoPAPage * KPrDocument::newPage( KoPAMasterPage * masterPage )

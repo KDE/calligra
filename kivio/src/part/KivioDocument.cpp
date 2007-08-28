@@ -42,9 +42,9 @@ KoView* KivioDocument::createViewInstance(QWidget* parent)
     return new KivioView(this, parent);
 }
 
-const char * KivioDocument::odfTagName()
+const char * KivioDocument::odfTagName( bool withNamespace )
 {
-    return "drawing";
+    return withNamespace ? "office:drawing": "drawing";
 }
 
 

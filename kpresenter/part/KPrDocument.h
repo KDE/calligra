@@ -64,7 +64,7 @@ protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );
     /// reimplemented
-    virtual const char *odfTagName();
+    virtual const char *odfTagName( bool withNamespace );
 
     /// reimplemented
     virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
