@@ -844,8 +844,8 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                     fmt.intProperty(KoCharacterStyle::UnderlineType);
                     if ((fontUnderLineStyle != KoCharacterStyle::NoLineStyle) &&
                         (fontUnderLineType != KoCharacterStyle::NoLineType)) {
-                        QFontMetrics metrics( painter->fontMetrics() );
-                        double y = line.position().y() + metrics.ascent() + metrics.underlinePos();
+                        QFontMetrics metrics( fmt.font() );
+                        double y = line.position().y() + line.ascent() + metrics.underlinePos();
                         QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
                         if (!color.isValid())
                             color = fmt.foreground().color();
