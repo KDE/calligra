@@ -101,7 +101,7 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
 //     }
 // 
 //     d->type = d->shape->params()->chartType();
-    connect(buttonGroup, SIGNAL(clicked(int)), 
+    connect(buttonGroup, SIGNAL(buttonClicked(int)), 
 	    this,        SLOT(chartTypeSelected(int)));
 }
 

@@ -239,6 +239,8 @@ void ChartShape::setChartType( OdfChartType    newType,
 
     d->diagram = new_diagram;
     d->chart->coordinatePlane()->replaceDiagram(new_diagram); // FIXME
+    d->diagram->setModel( d->chartData );
+    d->diagram->update();
 }
 
 

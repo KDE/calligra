@@ -34,7 +34,7 @@ private Q_SLOTS:
     void chartTypeSelected( int type );
 
 Q_SIGNALS:
-    void chartTypeChange(OdfChartType);
+    void chartTypeChange(KChart::OdfChartType);
 
 private:
     class Private;

@@ -61,6 +61,7 @@ public:
     virtual QWidget *createOptionWidget();
 
 private slots:
+    void setChartType(KChart::OdfChartType type);
 #if 0
     void catchFoo(bool on);
     void catchBar(bool on);

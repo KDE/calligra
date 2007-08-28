@@ -89,6 +89,8 @@ void ChartTypeTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void ChartTypeTool::activate (bool)
 {
+    // Get the shape that the tool is working on. 
+    // Let m_currentShape point to it.
     KoSelection *selection = m_canvas->shapeManager()->selection();
     foreach (KoShape *shape, selection->selectedShapes()) {
         m_currentShape = dynamic_cast<ChartShape*>(shape);
@@ -126,11 +128,17 @@ void ChartTypeTool::updateActions()
 QWidget *ChartTypeTool::createOptionWidget()
 {
     ChartTypeConfigWidget *widget = new ChartTypeConfigWidget();
-#if 0
-    connect( widget,         SIGNAL(chartTypeChange(OdfChartType)),
-	     m_currentShape, SLOT(setChartType(OdfChartType)) );
-#endif
+    connect( widget, SIGNAL(chartTypeChange(KChart::OdfChartType)),
+	     this,   SLOT(setChartType(KChart::OdfChartType)) );
+
     return widget;
 }
+
+
+void ChartTypeTool::setChartType(OdfChartType type)
+{
+    m_currentShape->setChartType( type );
+}
+
 
 #include "ChartTypeTool.moc"
