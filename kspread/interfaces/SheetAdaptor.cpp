@@ -48,8 +48,11 @@ using namespace KSpread;
 SheetAdaptor::SheetAdaptor( Sheet* t )
 : QDBusAbstractAdaptor( t )
 {
-    setAutoRelaySignals(true);
+    setAutoRelaySignals(false);
     m_sheet = t;
+    connect(t, SIGNAL(sig_nameChanged(Sheet*,QString)), this, SIGNAL(nameChanged()));
+    connect(t, SIGNAL(sig_SheetShown(Sheet*)), this, SIGNAL(showChanged()));
+    connect(t, SIGNAL(sig_SheetHidden(Sheet*)), this, SIGNAL(hideChanged()));
 }
 
 SheetAdaptor::~SheetAdaptor()

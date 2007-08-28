@@ -33,8 +33,11 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "View.h"
-
+#include "Canvas.h"
 #include "MapAdaptor.h"
+
+#include <KoShapeManager.h>
+#include <KoSelection.h>
 
 using namespace KSpread;
 
@@ -49,6 +52,9 @@ ViewAdaptor::ViewAdaptor( View* t )
 {
     setAutoRelaySignals(true);
     m_view = t;
+
+    Q_ASSERT(t->selection());
+    connect(t->selection(), SIGNAL(changed(Region)), this, SIGNAL(selectionChanged()));
 }
 
 ViewAdaptor::~ViewAdaptor()

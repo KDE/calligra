@@ -29,8 +29,8 @@
 #include <QColor>
 #include <QRect>
 #include <QString>
-
 #include <QtDBus/QtDBus>
+#include <KoDocumentChild.h>
 #include "kspread_export.h"
 namespace KSpread
 {
@@ -226,6 +226,22 @@ public Q_SLOTS: // METHODS
     void increaseFontSize();
     /** Decrease the size of the font. */
     void decreaseFontSize();
+
+Q_SIGNALS:
+
+    /** This signal got emitted if this view got activated or deactivated. */
+    void activated( bool active );
+
+    /** This signal got emitted if this view got selected or unselected. */
+    void selected( bool select );
+
+    /** This signal got emitted if the selection changed. */
+    void selectionChanged();
+
+    //void childSelected(KoDocumentChild *sheet);
+    //void childUnselected(KoDocumentChild *sheet);
+    //void childActivated( KoDocumentChild *sheet );
+    //void childDeactivated( KoDocumentChild *sheet );
 
 private:
     View* m_view;

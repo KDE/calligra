@@ -164,6 +164,15 @@ public Q_SLOTS: // METHODS
     /** Protect the document with the password passwd. */
     virtual void setProtected(const QByteArray& passwd);
 
+Q_SIGNALS:
+
+    /** This signal got emitted if the name of the sheet changed. */
+    void nameChanged();
+    /** This signal got emitted if the sheet got shown. */
+    void showChanged();
+    /** This signal got emitted if the sheet got hidden. */
+    void hideChanged();
+
 private:
     Sheet* m_sheet;
     QByteArray ident;
