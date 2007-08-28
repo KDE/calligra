@@ -32,8 +32,6 @@
 
 namespace MSWrite
 {
-	// $Id$
-	// 
 	//    This file is part of the LibMSWrite Library
 	//    Copyright (C) 2001-2003 Clarence Dang <clarencedang@users.sourceforge.net>
 	// 
