@@ -156,6 +156,40 @@ Chart* ChartShape::chart() const
 }
 
 
+void ChartShape::setChartType( OdfChartType newType )
+{
+    // Don't continue if we will just switch to the same type.
+    if (d->chartType == newType)
+        return;
+
+    switch (newType) {
+    case BarChartType:
+	setChartType( BarChartType, BarNormalSubtype);
+        break;
+    case LineChartType:
+	setChartType( LineChartType, LineNormalSubtype);
+        break;
+    case AreaChartType:
+        // FIXME
+        break;
+    case PieChartType:
+        // FIXME
+        break;
+    case HiLoChartType:
+        // FIXME
+        break;
+    case RingChartType:
+        // FIXME
+        break;
+    case PolarChartType:
+        // FIXME
+        break;
+    case BoxWhiskerChartType:
+        // FIXME
+        break;
+    }
+}
+
 void ChartShape::setChartType( OdfChartType    newType,
                                OdfChartSubtype newSubType )
 {

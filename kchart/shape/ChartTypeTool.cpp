@@ -47,27 +47,19 @@ ChartTypeTool::ChartTypeTool(KoCanvasBase *canvas)
     : KoTool(canvas),
       m_currentShape(0)
 {
+    // Create QActions here.
 #if 0
     QActionGroup *group = new QActionGroup(this);
-    m_topLeftOrientation  = new QAction(KIcon("golden-ratio-topleft"), i18n("Top Left"), this);
-    m_topLeftOrientation->setCheckable(true);
-    group->addAction(m_topLeftOrientation);
-    connect( m_topLeftOrientation, SIGNAL(toggled(bool)), this, SLOT(topLeftOrientationToggled(bool)) );
+    m_foo  = new QAction(KIcon("this-action"), i18n("Do something"), this);
+    m_foo->setCheckable(true);
+    group->addAction(m_foo);
+    connect( m_foo, SIGNAL(toggled(bool)), this, SLOT(catchFoo(bool)) );
 
-    m_topRightOrientation  = new QAction(KIcon("golden-ratio-topright"), i18n("Top Right"), this);
-    m_topRightOrientation->setCheckable(true);
-    group->addAction(m_topRightOrientation);
-    connect( m_topRightOrientation, SIGNAL(toggled(bool)), this, SLOT(topRightOrientationToggled(bool)) );
+    m_bar  = new QAction(KIcon("that-action"), i18n("Do something else"), this);
+    m_bar->setCheckable(true);
+    group->addAction(m_bar);
+    connect( m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)) );
 
-    m_bottomRightOrientation  = new QAction(KIcon("golden-ratio-bottomleft"), i18n("Bottom Right"), this);
-    m_bottomRightOrientation->setCheckable(true);
-    group->addAction(m_bottomRightOrientation);
-    connect( m_bottomRightOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomRightOrientationToggled(bool)) );
-
-    m_bottomLeftOrientation  = new QAction(KIcon("golden-ratio-bottomright"), i18n("Bottom Left"), this);
-    m_bottomLeftOrientation->setCheckable(true);
-    group->addAction(m_bottomLeftOrientation);
-    connect( m_bottomLeftOrientation, SIGNAL(toggled(bool)), this, SLOT(bottomLeftOrientationToggled(bool)) );
 #endif
 }
 
@@ -130,64 +122,13 @@ void ChartTypeTool::updateActions()
 #endif
 }
 
-#if 0
-void ChartTypeTool::topLeftOrientationToggled(bool on)
-{
-    if(on && m_currentShape)
-        m_currentShape->setOrientation(ChartTypeShape::TopLeft);
-}
-
-void ChartTypeTool::topRightOrientationToggled(bool on) {
-    if(on && m_currentShape)
-        m_currentShape->setOrientation(ChartTypeShape::TopRight);
-}
-
-void ChartTypeTool::bottomLeftOrientationToggled(bool on) {
-    if(on && m_currentShape)
-        m_currentShape->setOrientation(ChartTypeShape::BottomLeft);
-}
-
-void ChartTypeTool::bottomRightOrientationToggled(bool on) {
-    if(on && m_currentShape)
-        m_currentShape->setOrientation(ChartTypeShape::BottomRight);
-}
-
-
-void ChartTypeTool::setPrintable(bool on)
-{
-    if (m_currentShape)
-        m_currentShape->setPrintable(on);
-}
-#endif
-
 
 QWidget *ChartTypeTool::createOptionWidget()
 {
+    ChartTypeConfigWidget *widget = new ChartTypeConfigWidget();
 #if 0
-    QWidget *widget = new QWidget();
-    QGridLayout *layout = new QGridLayout(widget);
-    QToolButton *tlButton = new QToolButton(widget);
-    tlButton->setDefaultAction(m_topLeftOrientation);
-    layout->addWidget(tlButton, 0, 0);
-    QToolButton *trButton = new QToolButton(widget);
-    trButton->setDefaultAction(m_topRightOrientation);
-    layout->addWidget(trButton, 0, 1);
-    QToolButton *blButton = new QToolButton(widget);
-    blButton->setDefaultAction(m_bottomLeftOrientation);
-    layout->addWidget(blButton, 1, 0);
-    QToolButton *brButton = new QToolButton(widget);
-    brButton->setDefaultAction(m_bottomRightOrientation);
-    layout->addWidget(brButton, 1, 1);
-    QCheckBox *cb = new QCheckBox(i18n("Print the help lines"), widget);
-    layout->addWidget(cb, 2, 0, 1, 3);
-    connect( cb, SIGNAL(toggled(bool)), this, SLOT(setPrintable(bool)) );
-
-    layout->setSpacing(0);
-    layout->setMargin(6);
-    layout->setRowStretch(3, 1);
-    layout->setColumnStretch(2, 1);
-#else
-    QWidget *widget = new ChartTypeConfigWidget();
+    connect( widget,         SIGNAL(chartTypeChange(OdfChartType)),
+	     m_currentShape, SLOT(setChartType(OdfChartType)) );
 #endif
     return widget;
 }

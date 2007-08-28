@@ -101,7 +101,8 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
 //     }
 // 
 //     d->type = d->shape->params()->chartType();
-    connect(buttonGroup, SIGNAL(clicked(int)), this, SLOT(chartTypeSelected(int)));
+    connect(buttonGroup, SIGNAL(clicked(int)), 
+	    this,        SLOT(chartTypeSelected(int)));
 }
 
 ChartTypeConfigWidget::~ChartTypeConfigWidget()
@@ -116,7 +117,7 @@ void ChartTypeConfigWidget::open( KoShape* shape )
 
 void ChartTypeConfigWidget::save()
 {
-    ChartTypeCommand command(d->shape->chart());
+    ChartTypeCommand  command(d->shape->chart());
     command.setChartType(d->type);
     command.redo();
 }
@@ -129,7 +130,7 @@ KAction* ChartTypeConfigWidget::createAction()
 void ChartTypeConfigWidget::chartTypeSelected( int type )
 {
     d->type = (OdfChartType) type;
-    emit chartChange(type);
+    emit chartTypeChange(d->type);
 }
 
 #include "ChartTypeConfigWidget.moc"

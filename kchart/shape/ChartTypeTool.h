@@ -62,11 +62,8 @@ public:
 
 private slots:
 #if 0
-    void topLeftOrientationToggled(bool on);
-    void topRightOrientationToggled(bool on);
-    void bottomLeftOrientationToggled(bool on);
-    void bottomRightOrientationToggled(bool on);
-    void setPrintable(bool on);
+    void catchFoo(bool on);
+    void catchBar(bool on);
 #endif
 
 private:
@@ -75,10 +72,8 @@ private:
     ChartShape  *m_currentShape;
 
 #if 0
-    QAction *m_topLeftOrientation;
-    QAction *m_topRightOrientation;
-    QAction *m_bottomLeftOrientation;
-    QAction *m_bottomRightOrientation;
+    QAction *m_foo;
+    QAction *m_bar;
 #endif
 };
 

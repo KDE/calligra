@@ -4,6 +4,8 @@
 
 #include "KoShapeConfigWidgetBase.h"
 
+#include "kchart_global.h"
+
 class KoShape;
 
 namespace KChart
@@ -32,7 +34,7 @@ private Q_SLOTS:
     void chartTypeSelected( int type );
 
 Q_SIGNALS:
-    void chartChange(int);
+    void chartTypeChange(OdfChartType);
 
 private:
     class Private;

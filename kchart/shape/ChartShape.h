@@ -48,9 +48,6 @@ public:
 
     KDChart::Chart* chart() const;
 
-    /// Set new chart type and subtype.
-    void setChartType( OdfChartType newType, OdfChartSubtype newSubType );
-
     /// reimplemented
     virtual void setModel( QAbstractItemModel* model );
 
@@ -60,6 +57,12 @@ public:
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+
+ public Q_SLOTS:
+    /// Set new chart type and subtype.
+    void setChartType( OdfChartType newType );
+    void setChartType( OdfChartType newType, OdfChartSubtype newSubType );
+
 
 private:
     Q_DISABLE_COPY( ChartShape )

@@ -43,7 +43,11 @@ typedef enum {
 typedef enum {
     BarNormalSubtype,
     BarStackedSubtype,
-    BarPercentSubtype
+    BarPercentSubtype,
+
+    LineNormalSubtype,
+    LineStackedSubtype,
+    LinePercentSubtype
 } OdfChartSubtype;
 
 // Data direction
