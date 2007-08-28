@@ -41,6 +41,8 @@
 #include "KDChartCartesianAxis.h"
 #include "KDChartCartesianCoordinatePlane.h"
 #include "KDChartChart.h"
+#include "KDChartPieDiagram.h"
+#include "KDChartRingDiagram.h"
 #include "KDChartFrameAttributes.h"
 #include "KDChartGridAttributes.h"
 #include "KDChartLegend.h"
@@ -197,7 +199,7 @@ void ChartShape::setChartType( OdfChartType    newType,
 
     if (d->chartType == newType)
         return;
-
+    //FIXME:aren't we missing several charts?
     // FIXME: Take care of subtype too.
     switch (newType) {
     case BarChartType:
@@ -207,26 +209,28 @@ void ChartShape::setChartType( OdfChartType    newType,
         new_diagram = new LineDiagram();
         break;
     case AreaChartType:
-        // FIXME
-        return;
-        //new_diagram = new AreaDiagram();
+        new_diagram = new LineDiagram();
+        //FIXME: is this the right thing to do? a type-cast?
+        ((LineDiagram*) new_diagram)->setType( LineDiagram::Stacked );
         break;
     case PieChartType:
-        // FIXME
-        return;
+        new_diagram = new PieDiagram();
         break;
+    // FIXME What you men by HiLo, this is not deffined in the standard,
+    // or is it chart:radar
     case HiLoChartType:
         // FIXME
         return;
         break;
     case RingChartType:
-        // FIXME
-        return;
+        new_diagram = new RingDiagram();
         break;
+    //FIXME Polar?
     case PolarChartType:
         // FIXME
         return;
         break;
+    //you mean chart:stock ?
     case BoxWhiskerChartType:
         // FIXME
         return;
