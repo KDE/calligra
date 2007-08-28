@@ -8,6 +8,8 @@ Legend
 DONE	Task is all done
 KDCH	Must be fixed in KDChart (new version will be out before 1.4).
 KSPR	Must be fixed in KSpread
+
+--	This subtask is not done
 done	This subtask is done
 kdch	This subtask must be fixed in KDChart
 kspr	This subtask must be fixed in KSpread
