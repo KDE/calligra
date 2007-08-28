@@ -80,6 +80,7 @@ ChartShape::ChartShape()
     d->chart     = new Chart();
     d->diagram   = new BarDiagram();
     d->chartData = new QStandardItemModel();
+    d->diagram->setModel( d->chartData );
     d->chart->coordinatePlane()->replaceDiagram(d->diagram); // FIXME
 
     AbstractCartesianDiagram  *diagram = static_cast<AbstractCartesianDiagram*>(d->diagram);
