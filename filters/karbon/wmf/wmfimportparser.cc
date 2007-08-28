@@ -27,6 +27,8 @@
 #include <rectangle/KoRectangleShape.h>
 #include <ellipse/KoEllipseShape.h>
 
+#include <kdebug.h>
+
 /*
 bug : see motar.wmf
 */
@@ -325,7 +327,9 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool ) {
 }
 
 
-void WMFImportParser::drawImage( int , int , const QImage &, int , int , int , int  ) {}
+void WMFImportParser::drawImage( int , int , const QImage &, int , int , int , int  ) {
+    kDebug() << "importing images is not supported";
+}
 
 
 void WMFImportParser::drawText( int , int , int , int , int , const QString& , double ) {}
@@ -339,8 +343,9 @@ void WMFImportParser::appendPen( KoShape& obj )
     double width = mPen.width() * mScaleX;
 
     KoLineBorder * border = new KoLineBorder( ((width < 0.99) ? 1 : width), mPen.color() );
-    border->setCapStyle( Qt::RoundCap );
     border->setLineStyle( mPen.style(), mPen.dashPattern() );
+    border->setCapStyle( mPen.capStyle() );
+    border->setJoinStyle( mPen.joinStyle() );
 
     obj.setBorder( border );
 }

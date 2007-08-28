@@ -158,5 +158,11 @@ struct WmfEnhMetaRecord
     { Qt::SolidLine, Qt::DashLine, Qt::DotLine, Qt::DashDotLine, Qt::DashDotDotLine,
       Qt::NoPen, Qt::SolidLine };
 
+    static const Qt::PenCapStyle koWmfCapStylePen[] =
+    { Qt::RoundCap, Qt::SquareCap, Qt::FlatCap };
+
+    static const Qt::PenJoinStyle koWmfJoinStylePen[] =
+    { Qt::RoundJoin, Qt::BevelJoin, Qt::MiterJoin };
+
 #endif
 

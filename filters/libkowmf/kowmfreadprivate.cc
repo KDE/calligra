@@ -1,6 +1,7 @@
 /* This file is part of the KDE libraries
  * Copyright (c) 1998 Stefan Taferner
- *                    2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ *               2001/2003 thierry lorthiois (lorthioist@wanadoo.fr)
+ *               2007 Jan Hambrecht <jaham@gmx.net> 
  * With the help of WMF documentation by Caolan Mc Namara
  *
  * This library is free software; you can redistribute it and/or
@@ -905,7 +906,6 @@ void KoWmfReadPrivate::createBrushIndirect( quint32, QDataStream& stream )
 void KoWmfReadPrivate::createPenIndirect( quint32, QDataStream& stream )
 {
     // TODO: userStyle and alternateStyle
-    Qt::PenStyle penStyle;
     quint32 color;
     quint16 style, width, arg;
 
@@ -914,16 +914,34 @@ void KoWmfReadPrivate::createPenIndirect( quint32, QDataStream& stream )
     if ( addHandle( handle ) ) {
         stream >> style >> width >> arg >> color;
 
-        if ( style < 7 )
-            penStyle=koWmfStylePen[ style ];
-        else {
-            kDebug() <<"KoWmfReadPrivate::createPenIndirect: invalid pen" << style;
-            penStyle = Qt::SolidLine;
-        }
-
-        handle->pen.setStyle( penStyle );
-        handle->pen.setColor( qtColor( color ) );
+        // set the style defaults
+        handle->pen.setStyle( Qt::SolidLine );
         handle->pen.setCapStyle( Qt::RoundCap );
+        handle->pen.setJoinStyle( Qt::RoundJoin );
+
+        const int PenStyleMask = 0x0000000F;
+        const int PenCapMask = 0x00000F00;
+        const int PenJoinMask = 0x0000F000;
+
+        quint16 penStyle = style & PenStyleMask;
+        if ( penStyle < 7 )
+            handle->pen.setStyle( koWmfStylePen[ penStyle ] );
+        else
+            kDebug() <<"KoWmfReadPrivate::createPenIndirect: invalid pen" << style;
+
+        quint16 capStyle = (style & PenCapMask) >> 8;
+        if( capStyle < 3 )
+            handle->pen.setCapStyle( koWmfCapStylePen[ capStyle ] );
+        else
+            kDebug() <<"KoWmfReadPrivate::createPenIndirect: invalid pen cap style" << style;
+
+        quint16 joinStyle = (style & PenJoinMask) >> 12;
+        if( joinStyle < 3 )
+            handle->pen.setJoinStyle( koWmfJoinStylePen[ joinStyle ] );
+        else
+            kDebug() <<"KoWmfReadPrivate::createPenIndirect: invalid pen join style" << style;
+
+        handle->pen.setColor( qtColor( color ) );
         handle->pen.setWidth( width );
     }
 }
