@@ -32,9 +32,10 @@
 
 #include "MusicShapeFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( musicshape, KGenericFactory<MusicShapePlugin>( "MusicShape" ) )
+K_PLUGIN_FACTORY(MusicShapePluginFactory, registerPlugin<MusicShapePlugin>();)
+K_EXPORT_PLUGIN(MusicShapePluginFactory( "MusicShape" ))
 
-MusicShapePlugin::MusicShapePlugin( QObject * parent,  const QStringList& )
+MusicShapePlugin::MusicShapePlugin( QObject * parent,  const QVariantList& )
 {
     KoShapeRegistry::instance()->add( new MusicShapeFactory( parent ) );
     KoToolRegistry::instance()->add( new MusicToolFactory( parent ) );

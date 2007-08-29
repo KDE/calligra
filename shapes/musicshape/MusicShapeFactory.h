@@ -31,7 +31,7 @@ class MusicShapePlugin : public QObject
 
 public:
 
-    MusicShapePlugin( QObject * parent,  const QStringList & );
+    MusicShapePlugin( QObject * parent,  const QVariantList& );
     ~MusicShapePlugin() {}
 
 };
