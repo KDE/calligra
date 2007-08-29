@@ -875,6 +875,18 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	}
 
 	KexiPart::ItemDict *dict = items(info);
+	QSet<QString> storedItemNames;
+	for (KexiPart::ItemDict::const_iterator storedIt( dict->constBegin() ); 
+		storedIt!=dict->constEnd(); ++storedIt)
+	{
+		storedItemNames.insert( storedIt.value()->name().toLower() );
+	}
+	QSet<QString> unstoredItemNames;
+	for (QSet<KexiPart::Item*>::ConstIterator itUnstored( d->unstoredItems.constBegin() );
+		itUnstored != d->unstoredItems.constEnd(); ++itUnstored)
+	{
+		unstoredItemNames.insert( (*itUnstored)->name().toLower() );
+	}
 
 	//find new, unique default name for this item
 	int n;
@@ -889,27 +901,15 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 		base_name = KexiUtils::string2Identifier(suggestedCaption).toLower();
 	}
 	base_name = KexiUtils::string2Identifier(base_name).toLower();
-	KexiPart::ItemDict::const_iterator it;
 	do {
 		new_name = base_name;
 		if (n>=1)
 			new_name += QString::number(n);
-		for (it = dict->constBegin(); it!=dict->constEnd(); ++it) {
-			if (it.value()->name().toLower() == new_name)
-				break;
-		}
-		if ( it.value() ) {
+		if (storedItemNames.contains( new_name )) {
 			n++;
 			continue; //stored exists!
 		}
-		QSet<KexiPart::Item*>::ConstIterator itUnstored;
-		for (itUnstored = d->unstoredItems.constBegin();
-			itUnstored!=d->unstoredItems.constEnd(); ++itUnstored)
-		{
-			if ((*itUnstored)->name().toLower()==new_name)
-				break;
-		}
-		if ( itUnstored == d->unstoredItems.constEnd() )
+		if (!unstoredItemNames.contains( new_name ))
 			break; //unstored doesn't exist
 		n++;
 	} while (n<1000/*sanity*/);
