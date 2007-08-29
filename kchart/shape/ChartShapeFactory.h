@@ -24,12 +24,10 @@
 
 #include <KoShapeFactory.h>
 
-#include <kchart_export.h>
-
 class KoShape;
 class KoShapeConfigWidgetBase;
 
-class KCHART_EXPORT ChartShapePlugin : public QObject
+class ChartShapePlugin : public QObject
 {
     Q_OBJECT
 public:
@@ -38,7 +36,7 @@ public:
     ~ChartShapePlugin() {}
 };
 
-class KCHART_EXPORT ChartShapeFactory : public KoShapeFactory
+class ChartShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:
