@@ -200,7 +200,6 @@ void ChartShape::setChartType( OdfChartType    newType,
 
     if (d->chartType == newType)
         return;
-    //FIXME:aren't we missing several charts?
     // FIXME: Take care of subtype too.
     switch (newType) {
     case BarChartType:
@@ -217,8 +216,6 @@ void ChartShape::setChartType( OdfChartType    newType,
     case PieChartType:
         new_diagram = new PieDiagram();
         break;
-    // FIXME What you men by HiLo, this is not deffined in the standard,
-    // or is it chart:radar
     case HiLoChartType:
         // FIXME
         return;
@@ -226,22 +223,23 @@ void ChartShape::setChartType( OdfChartType    newType,
     case RingChartType:
         new_diagram = new RingDiagram();
         break;
-    //FIXME Polar?
     case PolarChartType:
         // FIXME
         return;
         break;
-    //you mean chart:stock ?
     case BoxWhiskerChartType:
         // FIXME
         return;
         break;
     }
 
+    //that's how, IMO, should work:
     d->diagram = new_diagram;
-    d->chart->coordinatePlane()->replaceDiagram(new_diagram); // FIXME
     d->diagram->setModel( d->chartData );
     d->diagram->update();
+    d->chart->coordinatePlane()->replaceDiagram( d->diagram ); // FIXME
+    d->chart->update();
+    repaint();
 }
 
 
