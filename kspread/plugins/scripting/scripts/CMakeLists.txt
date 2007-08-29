@@ -9,6 +9,7 @@ install(FILES
     odfpyexport.py
     logger.py
     xmlviewer.py
+    myorca.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/extensions)
 
 install(FILES

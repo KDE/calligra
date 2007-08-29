@@ -84,6 +84,12 @@
            comment="Log changes in cells to a file"
            interpreter="python"
            file="extensions/logger.py" />
+        <script
+           name="pyOrcaScreenReader"
+           text="Orca Screen Reader"
+           comment="Orca Screen Reader"
+           interpreter="python"
+           file="extensions/myorca.py" />
     </collection>
 
 </KrossScripting>
