@@ -31,13 +31,39 @@ public:
     Chord::Duration duration;
     int dots;
     QList<Note*> notes;
+    Chord::StemDirection stemDirection;
+    double stemLength;
 };
+
+static double calcStemLength(Chord::Duration duration)
+{
+    switch (duration) {
+        case Chord::Breve:
+        case Chord::Whole:
+            return 0;
+        case Chord::Half:
+        case Chord::Quarter:
+        case Chord::Eighth:
+            return 3.5;
+        case Chord::Sixteenth:
+            return 4;
+        case Chord::ThirtySecond:
+            return 4.75;
+        case Chord::SixtyFourth:
+            return 5.5;
+        case Chord::HundredTwentyEighth:
+            return 6.25;
+    }
+    return 0;
+}
 
 Chord::Chord(Duration duration, int dots) : VoiceElement(), d(new Private)
 {
     d->duration = duration;
     d->dots = dots;
-
+    d->stemLength = calcStemLength(duration);
+    d->stemDirection = StemUp;
+    
     int baseLength = durationToTicks(duration);
     int length = baseLength;
     for (int i = 0; i < dots; i++) {
@@ -51,6 +77,9 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
 {
     d->duration = duration;
     d->dots = dots;
+    d->stemLength = calcStemLength(duration);
+    d->stemDirection = StemUp;
+
     int baseLength = durationToTicks(duration);
     int length = baseLength;
     for (int i = 0; i < dots; i++) {
@@ -76,6 +105,7 @@ void Chord::setDuration(Duration duration)
 {
     if (d->duration == duration) return;
     d->duration = duration;
+    d->stemLength = calcStemLength(duration);
     int baseLength = durationToTicks(d->duration);
     int length = baseLength;
     for (int i = 0; i < d->dots; i++) {
@@ -226,6 +256,26 @@ double Chord::height() const
         bottom -= staff()->top();
     }
     return bottom - top;
+}
+
+Chord::StemDirection Chord::stemDirection() const
+{
+    return d->stemDirection;
+}
+
+void Chord::setStemDirection(StemDirection direction)
+{
+    d->stemDirection = direction;
+}
+
+double Chord::stemLength() const
+{
+    return d->stemLength;
+}
+
+void Chord::setStemLength(double stemLength)
+{
+    d->stemLength = stemLength;
 }
 
 } // namespace MusicCore

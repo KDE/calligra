@@ -50,6 +50,11 @@ public:
         Whole,
         Breve
     };
+    
+    enum StemDirection {
+        StemUp,
+        StemDown
+    };
 
     /**
      * Creates a new Chord instance, not specifying the staff on which the chord should be placed. Add this note to
@@ -156,6 +161,15 @@ public:
      * the notes in this chord.
      */
     virtual double height() const;
+    
+    StemDirection stemDirection() const;
+    void setStemDirection(StemDirection direction);
+    
+    /**
+     * Length of the stem as it extends beyond the top-most or bottom-most note, measured in number of lines.
+     */
+    double stemLength() const;
+    void setStemLength(double stemLength);
 public slots:
     /**
      * Changes the duration of the chord.

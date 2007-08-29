@@ -27,6 +27,8 @@
 #include "core/Staff.h"
 #include "core/StaffSystem.h"
 #include "core/KeySignature.h"
+#include "core/Chord.h"
+#include "core/Note.h"
 
 #include <limits.h>
 
@@ -142,6 +144,7 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
 void Engraver::engraveBar(Bar* bar)
 {
     Sheet* sheet = bar->sheet();
+    int barIdx = sheet->indexOfBar(bar);
 
     // collect all voices in all parts
     QList<VoiceBar*> voices;
@@ -240,6 +243,32 @@ void Engraver::engraveBar(Bar* bar)
         } else {
             for (int i = 0; i < voices.size(); i++) {
                 if (nextTime[i] == time && nextIndex[i] < voices[i]->elementCount()) {
+                    // If it is a chord, also figure out correct stem direction for the chord; right now
+                    // direction is only based on position of the notes, but in the future this should
+                    // also depend on other chord in other voices in the same staff
+                    Chord* c = dynamic_cast<Chord*>(voices[i]->element(nextIndex[i]));
+                    if (c) {
+                        int topLine = 0, bottomLine = 0;
+                        double topy = 1e9, bottomy = -1e9;
+                        for (int n = 0; n < c->noteCount(); n++) {
+                            Note* note = c->note(n);
+                            Staff * s = note->staff();
+                            Clef* clef = s->lastClefChange(barIdx);
+                            int line = clef->pitchToLine(note->pitch());
+                            double ypos = s->top() + line * s->lineSpacing() / 2;
+                            if (ypos < topy) {
+                                topy = ypos;
+                                topLine = line;
+                            }
+                            if (ypos > bottomy) {
+                                bottomy = ypos;
+                                bottomLine = line;
+                            }        
+                        }
+                        double center = (bottomLine + topLine) * 0.5;
+                        c->setStemDirection(center < 4 ? Chord::StemDown : Chord::StemUp);
+                    }
+                    
                     double xpos = x + 15;
                     voices[i]->element(nextIndex[i])->setX(xpos);
                     double xend = voices[i]->element(nextIndex[i])->width() + xpos;

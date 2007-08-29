@@ -293,28 +293,6 @@ void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, co
     m_style->renderTimeSignatureNumber( painter, pos.x() + ts->x() * xScale, pos.y() + s->top() + 2*hh, ts->width(), ts->beat());
 }
 
-static double stemLength(Chord::Duration duration)
-{
-    switch (duration) {
-        case Chord::Breve:
-        case Chord::Whole:
-            return 0;
-        case Chord::Half:
-        case Chord::Quarter:
-        case Chord::Eighth:
-            return 7;
-        case Chord::Sixteenth:
-            return 8;
-        case Chord::ThirtySecond:
-            return 9.5;
-        case Chord::SixtyFourth:
-            return 11;
-        case Chord::HundredTwentyEighth:
-            return 12.5;
-    }
-    return 0;
-}
-
 void MusicRenderer::renderRest(QPainter& painter, Chord::Duration duration, const QPointF& pos, const QColor& color)
 {
     m_style->renderRest(painter, pos.x(), pos.y(), duration, color);
@@ -408,11 +386,12 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
     //Staff * s = chord->note(0)->staff(); // TODO: make this work with chords spanning multiple staves
 
     double center = (bottomLine + topLine) * 0.5;
-    double stemLen = stemLength(chord->duration());
+    double stemLen = chord->stemLength() * 2;
     if (stemLen != 0.0 && stemLen != -0.0) {
         double stemX = x + 6;
-        bool stemsUp = true;
-        if (center < 4) { stemX = x; stemsUp = false; }
+        bool stemsUp = chord->stemDirection() == Chord::StemUp;
+        if (!stemsUp) { stemX = x; }
+//        if (center < 4) { stemX = x; stemsUp = false; }
         painter.setPen(m_style->stemPen(color));
         if (stemsUp) {
             painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2),
