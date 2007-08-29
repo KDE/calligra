@@ -79,17 +79,17 @@
            interpreter="python"
            file="extensions/xmlviewer.py" />
         <script
-           name="pylogger"
-           text="Logger"
-           comment="Log changes in cells to a file"
-           interpreter="python"
-           file="extensions/logger.py" />
-        <script
            name="pyOrcaScreenReader"
            text="Orca Screen Reader"
            comment="Orca Screen Reader"
            interpreter="python"
            file="extensions/myorca.py" />
+        <script
+           name="pylogger"
+           text="Logger"
+           comment="Log changes in cells to a file"
+           interpreter="python"
+           file="extensions/logger.py" />
     </collection>
 
 </KrossScripting>
