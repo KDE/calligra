@@ -80,7 +80,7 @@
            file="extensions/xmlviewer.py" />
         <script
            name="pyOrcaScreenReader"
-           text="Orca Screen Reader"
+           text="Orca Reader"
            comment="Orca Screen Reader"
            interpreter="python"
            file="extensions/myorca.py" />
