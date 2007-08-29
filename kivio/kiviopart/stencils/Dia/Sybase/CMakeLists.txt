@@ -1,36 +1,6 @@
 
+FILE(GLOB datafiles *.xpm)
+FILE(GLOB shapefiles *.shape)
+install( FILES  ${datafiles} ${shapefiles} desc DESTINATION
+${DATA_INSTALL_DIR}/kivio/stencils/Dia/Sybase)
 
-
-
-
-########### install files ###############
-
-install( FILES  $(SHAPES DESTINATION ${DATA_INSTALL_DIR}/kivio/stencils/Dia/Sybase)
-
-
-
-
-
-#original Makefile.am contents follow:
-
-#sybasedir = $(kde_datadir)/kivio/stencils/Dia/Sybase
-#
-#SHAPES = \
-#	client.shape \
-#	client.xpm \
-#	dataserver.shape \
-#	dataserver.xpm \
-#	ltm.shape \
-#	ltm.xpm \
-#	repserver.shape \
-#	repserver.xpm \
-#	rsm.shape \
-#	rsm.xpm \
-#	stableq.shape \
-#	stableq.xpm
-#
-#EXTRA_DIST = $(SHAPES)\
-#	desc icon.xpm
-#
-#sybase_DATA = $(SHAPES)\
-#	desc icon.xpm
