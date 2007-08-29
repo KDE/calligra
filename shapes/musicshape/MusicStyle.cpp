@@ -197,5 +197,8 @@ void MusicStyle::renderNoteFlags(QPainter& painter, double x, double y, MusicCor
         case Chord::Eighth:
             painter.drawText(p, QString(stemsUp ? 0xE187 : 0xE18B));
             break;
+        default:
+            // no flags
+            break;
     }
 }

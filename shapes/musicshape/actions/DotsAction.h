@@ -26,7 +26,6 @@ class DotsAction : public AbstractMusicAction
 public:
     DotsAction(SimpleEntryTool* tool);
     
-    virtual void renderPreview(QPainter& painter, const QPointF& point);
     virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
 };
 

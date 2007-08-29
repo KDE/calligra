@@ -47,10 +47,6 @@ DotsAction::DotsAction(SimpleEntryTool* tool)
 {
 }
 
-void DotsAction::renderPreview(QPainter& painter, const QPointF& point)
-{
-}
-
 inline static double sqr(double a) { return a*a; }
 
 void DotsAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
@@ -58,8 +54,6 @@ void DotsAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
     Part* part = staff->part();
     Sheet* sheet = part->sheet();
     Bar* bar = sheet->bar(barIdx);
-    
-    Clef* clef = staff->lastClefChange(barIdx, 0);
     
     // loop over all chords
     double closestDist = 1e9;

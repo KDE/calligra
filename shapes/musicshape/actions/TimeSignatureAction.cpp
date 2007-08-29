@@ -44,6 +44,8 @@ TimeSignatureAction::TimeSignatureAction(SimpleEntryTool* tool, int beats, int b
 
 void TimeSignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {
+    Q_UNUSED( pos );
+    
     Bar* bar = staff->part()->sheet()->bar(barIdx);
     m_tool->addCommand(new SetTimeSignatureCommand(m_tool->shape(), bar, m_beats, m_beat));
 }

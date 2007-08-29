@@ -368,7 +368,6 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
     for (int i = part->voiceCount(); i <= m_voice; i++) {
         part->addVoice();
     }
-    Voice* voice = part->voice(m_voice);
 
     // find correct bar
     Bar* bar = 0;

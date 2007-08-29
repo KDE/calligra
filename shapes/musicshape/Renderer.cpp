@@ -169,6 +169,8 @@ void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, const QColor& c
 
 void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, const QPointF& pos, RenderState& state, double xScale, const QColor& color)
 {
+    Q_UNUSED( state ); // unused for now, but will probably be used again in the future
+    
     double top = 0;
     if (me->staff()) top += me->staff()->top();
     if (m_debug) {
@@ -306,12 +308,12 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         renderRest(painter, chord->duration(), ref + QPointF(x, s->top() + (2 - (chord->duration() == Chord::Whole)) * s->lineSpacing()), color);
         return;
     }
-    int topLine, bottomLine;
+    int topLine = 0, bottomLine = 0;
     VoiceBar* vb = chord->voiceBar();
     Bar* bar = vb->bar();
     int barIdx = bar->sheet()->indexOfBar(bar);
     double topy = 1e9, bottomy = -1e9;
-    Staff* topStaff, *bottomStaff;
+    Staff* topStaff = 0, *bottomStaff = 0;
     
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
@@ -383,15 +385,12 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         }
     }
 
-    //Staff * s = chord->note(0)->staff(); // TODO: make this work with chords spanning multiple staves
-
-    double center = (bottomLine + topLine) * 0.5;
     double stemLen = chord->stemLength() * 2;
     if (stemLen != 0.0 && stemLen != -0.0) {
         double stemX = x + 6;
         bool stemsUp = chord->stemDirection() == Chord::StemUp;
         if (!stemsUp) { stemX = x; }
-//        if (center < 4) { stemX = x; stemsUp = false; }
+        
         painter.setPen(m_style->stemPen(color));
         if (stemsUp) {
             painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2),

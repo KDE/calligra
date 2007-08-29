@@ -126,7 +126,7 @@ int Part::indexOfStaff(Staff* staff)
 void Part::removeStaff(Staff* staff, bool deleteStaff)
 {
     Q_ASSERT(staff);
-    d->staves.remove(staff);
+    d->staves.removeAll(staff);
     if (deleteStaff) delete staff;
 }
 

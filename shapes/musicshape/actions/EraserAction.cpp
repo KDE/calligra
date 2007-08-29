@@ -49,10 +49,6 @@ EraserAction::EraserAction(SimpleEntryTool* tool)
 {
 }
 
-void EraserAction::renderPreview(QPainter& painter, const QPointF& point)
-{
-}
-
 inline static double sqr(double a) { return a*a; }
 
 void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
@@ -65,7 +61,7 @@ void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 
     // loop over all noteheads
     double closestDist = 1e9;
-    Note* closestNote;
+    Note* closestNote = 0;
     Chord* chord = 0;
 
     // outer loop, loop over all voices

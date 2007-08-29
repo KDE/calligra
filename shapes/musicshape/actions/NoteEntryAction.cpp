@@ -110,7 +110,7 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
     }
 
     int line = staff->line(pos.y());
-    int pitch, accidentals = 0;
+    int pitch = 0, accidentals = 0;
     if (clef && !m_isRest) {
         pitch = clef->lineToPitch(line);
         // get correct accidentals for note
@@ -134,7 +134,6 @@ void NoteEntryAction::mousePress(Staff* staff, int bar, const QPointF& pos)
             m_tool->addCommand(new AddNoteCommand(m_tool->shape(), join, staff, m_duration, pitch, accidentals));
         } else {
             m_tool->addCommand(new MakeRestCommand(m_tool->shape(), join));
-            // TODO make it a rest
         }
     } else {
         if (clef && !m_isRest) {

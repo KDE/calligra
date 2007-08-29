@@ -67,7 +67,8 @@ KeySignatureAction::KeySignatureAction(SimpleEntryTool* tool)
 
 void KeySignatureAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {
-    Bar* bar = staff->part()->sheet()->bar(barIdx);
+    Q_UNUSED( pos );
+    
     if (m_showDialog) {
         KeySignatureDialog dlg;
         dlg.setMusicStyle(m_tool->shape()->style());

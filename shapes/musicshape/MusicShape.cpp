@@ -44,14 +44,6 @@
 
 using namespace MusicCore;
 
-// helper method, used by the constructor to easily create a short piece of music
-static Chord* mkNote(Chord::Duration duration, Staff* staff, int pitch, int dots = 0, int accidentals = 0)
-{
-    Chord* c = new Chord(duration, dots);
-    c->addNote(staff, pitch, accidentals);
-    return c;
-}
-
 MusicShape::MusicShape()
     : m_style(new MusicStyle),
     m_engraver(new Engraver()),
@@ -62,7 +54,7 @@ MusicShape::MusicShape()
 
     Part* part = m_sheet->addPart("Part 1");
     Staff* staff = part->addStaff();
-    Voice* voice = part->addVoice();
+    part->addVoice();
     bar->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
     bar->addStaffElement(new TimeSignature(staff, 0, 4, 4));
 
@@ -79,7 +71,6 @@ MusicShape::~MusicShape()
 
 void MusicShape::setSize( const QSizeF &newSize )
 {
-//  kDebug()<<" MusicShape::setSize( const QSizeF &newSize )" << newSize;
     KoShape::setSize(newSize);
 
     m_engraver->engraveSheet(m_sheet, newSize, false);
@@ -87,8 +78,6 @@ void MusicShape::setSize( const QSizeF &newSize )
 
 void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
-//  kDebug()<<" MusicShape::paint( QPainter& painter, const KoViewConverter& converter )";
-
     applyConversion( painter, converter );
 
     painter.setClipping(true);

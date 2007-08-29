@@ -68,6 +68,8 @@ SetClefAction::SetClefAction(Clef::ClefShape shape, int line, int octaveChange, 
 
 void SetClefAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {
+    Q_UNUSED( pos );
+    
     Bar* bar = staff->part()->sheet()->bar(barIdx);
     m_tool->addCommand(new SetClefCommand(m_tool->shape(), bar, staff, m_shape, m_line, m_octaveChange));
 }
