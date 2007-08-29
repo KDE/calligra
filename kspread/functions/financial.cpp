@@ -1399,32 +1399,25 @@ Value func_nominal (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_nper (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value rate = args[0];
-  Value pmt  = args[1];
-  Value pv   = args[2];
-  Value fv = Value(0.0);
-  Value type = Value(0);
-  if (args.count() > 3) fv = args[3];
-  if (args.count() == 5) type = args[4];
+  double rate = calc->conv()->asFloat (args[0]).asFloat();
+  double pmt = calc->conv()->asFloat (args[1]).asFloat();
+  double pv = calc->conv()->asFloat (args[2]).asFloat();
+  double fv = 0.0;
+  double type = 0;
+  
+  // opt. params
+  if (args.count() > 3) fv = calc->conv()->asFloat (args[3]).asFloat();
+  if (args.count() == 5) type = calc->conv()->asFloat (args[4]).asFloat();
 
-  if (!calc->greater (rate, Value(0.0)))
-    return Value::errorVALUE();
+  // if rate is 0, ther NPER solves this 
+  //   PV = -FV -( Payment*NPER )
+  if (rate == 0.0)
+    return Value( -(pv + fv) / pmt );
 
-  // taken from Gnumeric
-  // v = 1.0 + rate * type
-  // d1 = pmt * v - fv * rate
-  // d2 = pmt * v - pv * rate
-  // res = d1 / d2;
-  Value v = calc->add (calc->mul (rate, type), 1.0);
-  Value d1 = calc->sub (calc->mul (pmt, v), calc->mul (fv, rate));
-  Value d2 = calc->add (calc->mul (pmt, v), calc->mul (pv, rate));
-  Value res = calc->div (d1, d2);
-
-  if (!calc->greater (res, Value(0.0)))  // res must be >0
-    return Value::errorVALUE();
-
-  // ln (res) / ln (rate + 1.0)
-  return calc->div (calc->ln (res), calc->ln (calc->add (rate, Value(1.0))));
+  if ( type > 0 ) 
+    return Value( log( -(rate*fv-pmt*(1.0+rate)) / (rate*pv+pmt*(1.0+rate)) ) / log(1.0+rate) );
+  else
+    return Value( log( -(rate*fv-pmt)/(rate*pv+pmt)) / log(1.0+rate));
 }
 
 

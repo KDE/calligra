@@ -20,6 +20,12 @@
 
 #include "TestKspreadCommon.h"
 
+#include <CellStorage.h>
+#include <Doc.h>
+#include <Formula.h>
+#include <Map.h>
+#include <Sheet.h>
+
 #include "TestMathFunctions.h"
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
@@ -31,11 +37,11 @@
 #define CHECK_EVAL_SHORT(x,y) QCOMPARE(TestDouble(x,y,10),y)
 #define ROUND(x) (roundf(1e10 * x) / 1e10)
 
-static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
+Value TestMathFunctions::TestDouble(const QString& formula, const Value& v2, int accuracy)
 {
   double epsilon = DBL_EPSILON*pow(10.0,(double)(accuracy));
 
-  Formula f;
+  Formula f(m_doc->map()->sheet(0));
   QString expr = formula;
   if ( expr[0] != '=' )
     expr.prepend( '=' );
@@ -76,7 +82,7 @@ static Value RoundNumber(const Value& v)
 
 Value TestMathFunctions::evaluate(const QString& formula)
 {
-  Formula f;
+  Formula f(m_doc->map()->sheet(0));
   QString expr = formula;
   if ( expr[0] != '=' )
     expr.prepend( '=' );
@@ -90,6 +96,30 @@ Value TestMathFunctions::evaluate(const QString& formula)
 
   return RoundNumber(result);
 }
+
+void TestMathFunctions::initTestCase()
+{
+    m_doc = new Doc();
+    m_doc->map()->addNewSheet();
+    Sheet* sheet = m_doc->map()->sheet(0);
+    CellStorage* storage = sheet->cellStorage();
+
+    // B3:B7
+    storage->setValue(2, 3, Value("7"));
+    storage->setValue(2, 4, Value(2));
+    storage->setValue(2, 5, Value(3));
+    storage->setValue(2, 6, Value(true));
+    storage->setValue(2, 7, Value("Hello"));
+    // B9
+    storage->setValue(2, 9, Value::errorDIV0());
+}
+
+void TestMathFunctions::cleanupTestCase()
+{
+    delete m_doc;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 void TestMathFunctions::testABS()
 {
@@ -676,6 +706,17 @@ void TestMathFunctions::testSUMA()
 {
     CHECK_EVAL( "SUMA(1;2;3)",      Value( 6 ) ); // Simple sum.
     CHECK_EVAL( "SUMA(TRUE();2;3)", Value( 6 ) ); // TRUE() is 1.
+}
+
+void TestMathFunctions::testSUMIF()
+{
+    // B3 = 7
+    // B4 = 2
+    // B5 = 3
+    CHECK_EVAL( "SUMIF(B4:B5;\">2.5\")", Value( 3 ) ); // B4 is 2 and B5 is 3, so only B5 has a value greater than 2.5.
+    CHECK_EVAL( "SUMIF(B3:B5;B4)",       Value( 2 ) ); // Test if a cell equals the value in B4.
+    CHECK_EVAL( "SUMIF("";B4)",   Value::errorNUM() ); // Constant values are not allowed for the range.
+    CHECK_EVAL( "SUMIF(B3:B4;\"7\")",    Value( 0 ) ); // TODO B3 is the string "7", but only numbers are summed.
 }
 
 void TestMathFunctions::testSUMSQ()

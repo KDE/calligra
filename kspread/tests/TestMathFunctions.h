@@ -28,12 +28,17 @@
 
 namespace KSpread
 {
+class Doc;
 
 class TestMathFunctions: public QObject
 {
 Q_OBJECT
 
 private slots:
+
+  void initTestCase();
+  void cleanupTestCase();
+
   void testABS();
   void testACOS();
   void testACOSH();
@@ -92,11 +97,14 @@ private slots:
   void testSQRTPI();
   void testSUBTOTAL();
   void testSUMA();
-//   void testSUMIF();
+  void testSUMIF();
   void testSUMSQ();
 
 private:
+  Value TestDouble(const QString& formula, const Value& v2, int accuracy);
   Value evaluate(const QString&);
+
+  Doc* m_doc;
 };
 
 } // namespace KSpread
