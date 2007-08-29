@@ -31,7 +31,11 @@ PartsListModel::PartsListModel(Sheet* sheet)
 
 int PartsListModel::rowCount(const QModelIndex& parent) const
 {
-    return m_sheet->partCount();
+    if (!parent.isValid()) {
+        return m_sheet->partCount();
+    } else {
+        return 0;
+    }
 }
 
 QVariant PartsListModel::data(const QModelIndex& index, int role) const
@@ -44,12 +48,16 @@ QVariant PartsListModel::data(const QModelIndex& index, int role) const
 
 void PartsListModel::partAdded(int index, Part* part)
 {
+    Q_UNUSED( part );
+    
     beginInsertRows(QModelIndex(), index, index);
     endInsertRows();
 }
 
 void PartsListModel::partRemoved(int index, Part* part)
 {
+    Q_UNUSED( part );
+    
     beginRemoveRows(QModelIndex(), index, index);
     endRemoveRows();
 }

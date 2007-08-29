@@ -71,6 +71,7 @@ void PartsWidget::partDoubleClicked(const QModelIndex & index)
 
 void PartsWidget::selectionChanged(const QModelIndex& current, const QModelIndex& prev)
 {
+    Q_UNUSED( prev );
     widget.editPart->setEnabled(current.isValid());
     widget.removePart->setEnabled(current.isValid());
 }

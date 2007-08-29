@@ -67,22 +67,23 @@ Staff* StaffElementPreviewWidget::staff()
 
 void StaffElementPreviewWidget::paintEvent(QPaintEvent * event)
 {
-     QPainter painter(this);
-     painter.fillRect(rect(), QBrush(Qt::white));
-     if (!m_style) return;
-     painter.translate(0, height() / 2);
+    Q_UNUSED( event );
+    QPainter painter(this);
+    painter.fillRect(rect(), QBrush(Qt::white));
+    if (!m_style) return;
+    painter.translate(0, height() / 2);
      
-     painter.scale(1.5, 1.5);
-     painter.setPen(m_style->staffLinePen());
-     for (int i = -2; i <= 2; i++) {
-         painter.drawLine(QPointF(0, 5.0 * i), QPointF(width(), 5.0 * i));
-     }
+    painter.scale(1.5, 1.5);
+    painter.setPen(m_style->staffLinePen());
+    for (int i = -2; i <= 2; i++) {
+        painter.drawLine(QPointF(0, 5.0 * i), QPointF(width(), 5.0 * i));
+    }
      
-     m_style->renderClef(painter, 5, 5.0 /* staff line distance */, MusicCore::Clef::Trebble);
+    m_style->renderClef(painter, 5, 5.0 /* staff line distance */, MusicCore::Clef::Trebble);
      
-     MusicRenderer::RenderState state;
-     state.clef = m_clef;
-     m_renderer->renderStaffElement(painter, m_element, QPointF(20.0 + m_clef->width(), -10.0), state, 0);
+    MusicRenderer::RenderState state;
+    state.clef = m_clef;
+    m_renderer->renderStaffElement(painter, m_element, QPointF(20.0 + m_clef->width(), -10.0), state, 0);
 }
 
 

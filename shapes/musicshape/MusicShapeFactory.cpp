@@ -34,7 +34,7 @@
 
 K_EXPORT_COMPONENT_FACTORY( musicshape, KGenericFactory<MusicShapePlugin>( "MusicShape" ) )
 
-MusicShapePlugin::MusicShapePlugin( QObject * parent,  const QStringList & list )
+MusicShapePlugin::MusicShapePlugin( QObject * parent,  const QStringList& )
 {
     KoShapeRegistry::instance()->add( new MusicShapeFactory( parent ) );
     KoToolRegistry::instance()->add( new MusicToolFactory( parent ) );
@@ -59,6 +59,7 @@ KoShape* MusicShapeFactory::createDefaultShape() const
 
 KoShape* MusicShapeFactory::createShape( const KoProperties* params ) const
 {
+    Q_UNUSED( params );
     static bool loadedFont = false;
     if (!loadedFont) {
         QString fontFile = KStandardDirs::locate("data", "musicshape/fonts/Emmentaler-14.ttf");
