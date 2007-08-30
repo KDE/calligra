@@ -43,7 +43,7 @@ private slots:
   void testACOS();
   void testACOSH();
   void testACOT();
-//   void testACOTH(); // to be implemented
+  void testACOTH(); // to be implemented
   void testASIN();
   void testASINH();
   void testATAN();
@@ -58,8 +58,8 @@ private slots:
   void testCONVERT();
   void testCEIL();
   void testCEILING();
-//   void testCOT();     // to be implemented
-//   void testCOTH();    // to be implemented
+  void testCOT();
+  void testCOTH();
   void testDEGREES();
   void testDELTA();
 //   void testERF();  -> TestEngineering

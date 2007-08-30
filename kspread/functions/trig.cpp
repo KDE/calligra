@@ -29,6 +29,7 @@ using namespace KSpread;
 Value func_acos (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_acosh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_acot (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_acoth (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_asinh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_asin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_atan (valVector args, ValueCalc *calc, FuncExtra *);
@@ -36,6 +37,8 @@ Value func_atan2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_atanh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cos (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_cosh (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_cot (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_coth (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_degrees (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_radians (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sin (valVector args, ValueCalc *calc, FuncExtra *);
@@ -56,6 +59,8 @@ void RegisterTrigFunctions()
   repo->add (f);
   f = new Function ("ACOT",   func_acot);
   repo->add (f);
+  f = new Function ("ACOTH",  func_acoth);
+  repo->add (f);
   f = new Function ("ASIN",   func_asin);
   repo->add (f);
   f = new Function ("ASINH",  func_asinh);
@@ -70,6 +75,10 @@ void RegisterTrigFunctions()
   f = new Function ("COS",    func_cos);
   repo->add (f);
   f = new Function ("COSH",   func_cosh);
+  repo->add (f);
+  f = new Function ("COT",    func_cot);
+  repo->add (f);
+  f = new Function ("COTH",   func_coth);
   repo->add (f);
   f = new Function ("DEGREES",func_degrees);
   repo->add (f);
@@ -130,6 +139,15 @@ Value func_acot (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->sub (calc->div (calc->pi(), 2), calc->atg (args[0]));
 }
 
+// function: ACOTH
+Value func_acoth (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  if ( calc->lower (calc->abs(args[0]), Value(1.0)) )
+    return Value::errorNUM();
+
+  return calc->mul( Value(0.5), calc->ln( calc->div( calc->add( args[0], Value(1.0)) , calc->sub( args[0], Value(1.0)) ) ) );
+}
+
 // Function: asinh
 Value func_asinh (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -164,6 +182,21 @@ Value func_sinh (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_cosh (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->cosh (args[0]);
+}
+
+// Function: cot
+Value func_cot (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  return calc->div(1, calc->tg (args[0]) );
+}
+
+// Function: coth
+Value func_coth (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  if ( calc->isZero(args[0]) )
+   return Value::errorNUM();
+
+  return calc->div( 1, calc->tgh (args[0]) );
 }
 
 // Function: DEGREES

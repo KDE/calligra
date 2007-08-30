@@ -159,11 +159,11 @@ void TestMathFunctions::testACOT()
   CHECK_EVAL( "ACOT(0)-PI()/2", Value( 0 )     ); //
 }
 
-// void TestMathFunctions::testACOTH()
-// {
-//   // ODF-tests
-//   CHECK_EVAL( "ACOTH(2)", Value( 0.549306144 ) ); //
-// }
+void TestMathFunctions::testACOTH()
+{
+  // ODF-tests
+  CHECK_EVAL( "ACOTH(2)", Value( 0.5493061443 ) ); //
+}
 
 void TestMathFunctions::testASIN()
 {
@@ -356,20 +356,20 @@ void TestMathFunctions::testCONVERT()
                                                                               // This is 0.946352946 liters,
 }
 
-// void TestMathFunctions::testCOT()
-// {
-//   // ODF-tests
-//   CHECK_EVAL( "COT(PI()/4.0)", Value( 1 ) );  // cotangent of PI()/4.0 radians.
-//   CHECK_EVAL( "COT(PI()/2.0)", Value( 0 ) );  // cotangent of PI()/2 radians.  Not the same as TAN.
-//   CHECK_EVAL( "COT(0)", Value::errorDIV0() ); // cotangent of PI()/4.0 radians.
-// }
-// 
-// void TestMathFunctions::testCOTH()
-// {
-//   // ODF-tests
-//   CHECK_EVAL( "COTH(1)",      Value( 1.313035285 ) ); // 
-//   CHECK_EVAL( "COTH(EXP(1))", Value( 1.00874693  ) ); //
-// }
+void TestMathFunctions::testCOT()
+{
+  // ODF-tests
+  CHECK_EVAL( "COT(PI()/4.0)", Value( 1 ) );         // cotangent of PI()/4.0 radians.
+  CHECK_EVAL( "COT(PI()/2.0)", Value( 0 ) );         // cotangent of PI()/2 radians.  Not the same as TAN.
+  CHECK_EVAL( "COT(0)", Value::errorDIV0() );        // cotangent of PI()/4.0 radians.
+}
+
+void TestMathFunctions::testCOTH()
+{
+  // ODF-tests
+  CHECK_EVAL( "COTH(1)",      Value( 1.3130352855 ) ); // 
+  CHECK_EVAL( "COTH(EXP(1))", Value( 1.0087469296 ) ); //
+}
 
 void TestMathFunctions::testDEGREES()
 {
