@@ -43,7 +43,7 @@ private slots:
   void testACOS();
   void testACOSH();
   void testACOT();
-  void testACOTH(); // to be implemented
+  void testACOTH();
   void testASIN();
   void testASINH();
   void testATAN();
@@ -54,7 +54,7 @@ private slots:
   void testBESSELK();
   void testBESSELY();
   void testCOMBIN();
-//   void testCOMBINA(); // to be implemented
+  void testCOMBINA(); // to be implemented
   void testCONVERT();
   void testCEIL();
   void testCEILING();

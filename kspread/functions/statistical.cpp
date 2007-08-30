@@ -41,6 +41,7 @@ Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_combina (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_confidence (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_correl_pop (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_covar (valVector args, ValueCalc *calc, FuncExtra *);
@@ -125,6 +126,9 @@ void RegisterStatisticalFunctions()
   f->setParamCount (2);
   repo->add (f);
   f = new Function ("COMBIN", func_combin);
+  f->setParamCount (2);
+  repo->add (f);
+    f = new Function ("COMBINA", func_combina);
   f->setParamCount (2);
   repo->add (f);
   f = new Function ("CONFIDENCE", func_confidence);
@@ -864,7 +868,19 @@ Value func_stddevpa (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: combin
 Value func_combin (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  if ( calc->lower(args[1], Value(0.0)) || calc->lower(args[1], Value(0.0)) || calc->greater(args[1],args[0]) )
+    return Value::errorNUM();
+
   return calc->combin (args[0], args[1]);
+}
+
+// Function: combina
+Value func_combina (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  if ( calc->lower(args[1], Value(0.0)) || calc->lower(args[1], Value(0.0)) || calc->greater(args[1],args[0]) )
+    return Value::errorNUM();
+
+  return calc->combin (calc->sub(calc->add(args[0],args[1]),Value(1.0)), args[1]);
 }
 
 // Function: bino

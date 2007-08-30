@@ -296,16 +296,20 @@ void TestMathFunctions::testCEILING()
 void TestMathFunctions::testCOMBIN()
 {
   // ODF-tests
-  CHECK_EVAL( "COMBIN(5;3)",  Value(    10 ) ); //
-  CHECK_EVAL( "COMBIN(6;3)",  Value(    20 ) ); //
-  CHECK_EVAL( "COMBIN(42;3)", Value( 11480 ) ); //
+  CHECK_EVAL( "COMBIN(5;3)",  Value(       10 ) ); //
+  CHECK_EVAL( "COMBIN(6;3)",  Value(       20 ) ); //
+  CHECK_EVAL( "COMBIN(42;3)", Value(    11480 ) ); //
+  CHECK_EVAL( "COMBIN(-1;3)", Value::errorNUM() ); // N must be >= 0
+  CHECK_EVAL( "COMBIN(4;-3)", Value::errorNUM() ); // M must be >= 0
 }
 
-// void TestMathFunctions::testCOMBINA()
-// {
-//   // ODF-tests
-//   CHECK_EVAL( "COMBINA(5;3)", Value( 35 ) ); //
-// }
+void TestMathFunctions::testCOMBINA()
+{
+  // ODF-tests
+  CHECK_EVAL( "COMBINA(5;3)",  Value(       35 ) ); //
+  CHECK_EVAL( "COMBINA(-1;3)", Value::errorNUM() ); // N must be >= 0
+  CHECK_EVAL( "COMBINA(4;-3)", Value::errorNUM() ); // M must be >= 0
+}
 
 void TestMathFunctions::testCONVERT()
 {
