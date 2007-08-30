@@ -335,7 +335,7 @@ void GoalSeekDialog::chooseCleanup()
   Sheet * sheet = 0;
 
   // Switch back to the old sheet
-  if ( m_pView->activeSheet()->sheetName() !=  m_sheetName )
+  if ( ! m_pView->activeSheet() || m_pView->activeSheet()->sheetName() !=  m_sheetName )
   {
     sheet = m_pView->doc()->map()->findSheet( m_sheetName );
     if ( sheet )
