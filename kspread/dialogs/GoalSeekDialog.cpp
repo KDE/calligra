@@ -75,13 +75,11 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   setButtons( 0 );
   setModal( false );
 
-  if ( !name )
-    setObjectName( "GoalSeekDialog" );
+  setObjectName( name ? name : "GoalSeekDialog" );
 
   resize( 458, 153 );
   setWindowTitle( i18n( "Goal Seek" ) );
   setSizeGripEnabled( true );
-  setModal( false );
 
   QWidget* mainWidget = new QWidget( this );
   setMainWidget( mainWidget );
@@ -209,12 +207,15 @@ GoalSeekDialog::~GoalSeekDialog()
 {
   kDebug() <<"~GoalSeekDialog";
 
-  chooseCleanup();
-  if ( !m_restored )
+  if( m_pView->activeSheet() )
   {
-    m_pView->doc()->emitBeginOperation( false );
-    m_sourceCell.setValue(Value(m_oldSource));
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    chooseCleanup();
+    if ( !m_restored )
+    {
+      m_pView->doc()->emitBeginOperation( false );
+      m_sourceCell.setValue(Value(m_oldSource));
+      m_pView->slotUpdateView( m_pView->activeSheet() );
+    }
   }
 }
 
@@ -335,7 +336,8 @@ void GoalSeekDialog::chooseCleanup()
   Sheet * sheet = 0;
 
   // Switch back to the old sheet
-  if ( ! m_pView->activeSheet() || m_pView->activeSheet()->sheetName() !=  m_sheetName )
+  Q_ASSERT( m_pView->activeSheet() );
+  if ( m_pView->activeSheet()->sheetName() !=  m_sheetName )
   {
     sheet = m_pView->doc()->map()->findSheet( m_sheetName );
     if ( sheet )
