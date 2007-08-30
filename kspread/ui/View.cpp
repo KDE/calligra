@@ -1660,8 +1660,6 @@ View::View( QWidget *_parent, Doc *_doc )
     d->view = this;
     d->doc = _doc;
 
-    new ViewAdaptor(this);
-
     d->activeSheet = 0;
 
     d->toolbarLock = false;
@@ -1769,6 +1767,8 @@ View::View( QWidget *_parent, Doc *_doc )
       QTimer::singleShot(50, this, SLOT(initialPosition()));
 
     connect (&d->statusBarOpTimer, SIGNAL(timeout()), this, SLOT(calcStatusBarOp()));
+
+    new ViewAdaptor(this);
 }
 
 View::~View()
