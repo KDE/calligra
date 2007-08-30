@@ -192,7 +192,8 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   // signals and slots connections
   connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( buttonOkClicked() ) );
-  connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( buttonCancelClicked() ) );
+  connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
+  connect( this, SIGNAL( rejected() ), this, SLOT( buttonCancelClicked() ) );
 
   connect( m_pView->choice(), SIGNAL(changed(const Region&)),
            this, SLOT(slotSelectionChanged()));
@@ -324,7 +325,6 @@ void GoalSeekDialog::buttonCancelClicked()
     m_pView->slotUpdateView( m_pView->activeSheet() );
   }
 
-  reject();
   deleteLater();
 }
 
