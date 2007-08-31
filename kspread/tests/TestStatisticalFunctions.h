@@ -36,14 +36,80 @@ Q_OBJECT
 
 private slots:
     void initTestCase();
+//     void testARRANG();
+//     void testAVEDEV();
+//     void testAVERAGE();
     void testAVERAGEA();
+    void testBETADIST();
+//     void testBINO();
+//     void testCHIDIST();
+//     void testCOMBIN();  // in -> TestMathFunctions
+//     void testCOMBINA(); // in -> TestMathFunctions
+    void testCONFIDENCE();
+    void testCORREL();
+//     void testCOVAR();
+//     void testDEVSQ();
+//     void testDEVSQA();
+//     void testEXPONDIST();
+//     void testFDIST();
+//     void testFISHER();
+//     void testFISHERINV();
     void testFREQUENCY();
+//     void testGAMMADIST();
+//     void testGAMMALN();
+//     void testGAUSS();
+//     void testGEOMEAN();
+//     void testHARMEAN();
+//     void testHYPGEOMDIST();
+//     void testINTERCEPT();
+//     void testINVBINO();
+//     void testKURT();
+//     void testLARGE();
+//     void testLOGINV();
+//     void testLOGNORMDIST();
+//     void testMEDIAN();
+//     void testMODE();
+//     void testNEGBINOMDIST();
+//     void testNORMDIST();
+//     void testNORMINV();
+//     void testNORMSDIST();
+//     void testLEGACYNORMSDIST(); // same as NORMSDIST required for OpenFormula compliance
+//     void testPEARSON();
+//     void testPERMUT();
+//     void testPHI();
+//     void testPOISSON();
+//     void testSKEW();
+//     void testSLOPE();
+//     void testSMALL();
+//     void testSTANDARDIZE();
+//     void testSTDEV();
+//     void testSTDEVA();
+//     void testSTDEVP();
+//     void testSTDEVPA();
+//     void testSTEYX();
+//     void testSUMXMY2();
+//     void testSUMPRODUCT();
+//     void testSUMX2PY2();
+//     void testSUMX2MY2();
+//     void testTDIST();
+//     void testTTEST();
+//     void testVARIANCE();
+//     void testVAR();
+//     void testVARP();
+//     void testVARA();
+//     void testVARPA();
+//     void testWEIBULL();
+//     void testZTEST();
+
+    
     void testMAXA();
     void testMINA();
+
     void cleanupTestCase();
 
 private:
     Value evaluate(const QString&, Value& ex);
+    Value TestDouble(const QString& formula, const Value& v2, int accuracy);
 
     Doc* m_doc;
 };

@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright 2006 Ariya Hidayat <ariya@kde.org>
 
@@ -39,8 +40,32 @@ using namespace KSpread;
 //  - different algorithms among spreadsheet programs
 //  - precision limitation of floating-point number representation
 //  - accuracy problem due to propagated error in the implementation
-#define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
+#define CHECK_EVAL(x,y) QCOMPARE(TestDouble(x,y,6),y)
+#define CHECK_EVAL_SHORT(x,y) QCOMPARE(TestDouble(x,y,10),y)
 #define ROUND(x) (roundf(1e15 * x) / 1e15)
+
+Value TestStatisticalFunctions::TestDouble(const QString& formula, const Value& v2, int accuracy)
+{
+  double epsilon = DBL_EPSILON*pow(10.0,(double)(accuracy));
+
+  Formula f(m_doc->map()->sheet(0)); // bind to test case data set 
+  QString expr = formula;
+  if ( expr[0] != '=' )
+    expr.prepend( '=' );
+  f.setExpression( expr );
+  Value result = f.eval();
+
+  bool res = fabs(v2.asFloat()-result.asFloat())<epsilon;
+
+  if (!res)
+    kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << v2.asFloat() <<" to" << result.asFloat() <<"  diff =" << v2.asFloat()-result.asFloat();
+  else
+    kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
+  if (res)
+    return v2;
+  else 
+    return result;
+}
 
 // round to get at most 15-digits number
 static Value RoundNumber(const Value& v)
@@ -85,20 +110,85 @@ void TestStatisticalFunctions::initTestCase()
     Sheet* sheet = m_doc->map()->sheet(0);
     CellStorage* storage = sheet->cellStorage();
 
+    // Test case data set
+
     // B3:B7
-    storage->setValue(2, 3, Value("7"));
-    storage->setValue(2, 4, Value(2));
-    storage->setValue(2, 5, Value(3));
-    storage->setValue(2, 6, Value(true));
-    storage->setValue(2, 7, Value("Hello"));
-    // B9
+    storage->setValue(2, 3, Value(   "7"   ));
+    storage->setValue(2, 4, Value(    2    ));
+    storage->setValue(2, 5, Value(    3    ));
+    storage->setValue(2, 6, Value(  true   ));
+    storage->setValue(2, 7, Value( "Hello" ));
+    // B9:B17
     storage->setValue(2, 9, Value::errorDIV0());
+    storage->setValue(2,10, Value( 0 ));
+    storage->setValue(2,11, Value( 3 ));
+    storage->setValue(2,12, Value( 4 ));
+    storage->setValue(2,13, Value( "2005-0131T01:00:00" ));
+    storage->setValue(2,14, Value( 1 ));
+    storage->setValue(2,15, Value( 2 ));
+    storage->setValue(2,16, Value( 3 ));
+    storage->setValue(2,17, Value( 4 ));
+
+    // C14:C17
+    storage->setValue(3,14, Value( 4 ));
+    storage->setValue(3,15, Value( 3 ));
+    storage->setValue(3,16, Value( 2 ));
+    storage->setValue(3,17, Value( 1 ));
 }
 
 void TestStatisticalFunctions::testAVERAGEA()
 {
-    CHECK_EVAL("AVERAGE(2; 4)", Value(3))
-    CHECK_EVAL("AVERAGE(TRUE(); FALSE(); 5)", Value(2));
+    CHECK_EVAL("AVERAGEA(2; 4)",               Value( 3 ) ); //
+    CHECK_EVAL("AVERAGEA(TRUE(); FALSE(); 5)", Value( 2 ) ); //
+}
+
+void TestStatisticalFunctions::testBETADIST()
+{
+    CHECK_EVAL("BETADIST(0;3;4)",               Value(        0 ) ); //
+    CHECK_EVAL("BETADIST(0.5;3;4)",             Value( 0.656250 ) ); //
+    CHECK_EVAL("BETADIST(0.9;4;3)",             Value( 0.984150 ) ); //
+    CHECK_EVAL("BETADIST(1.5;3;4;1;2)",         Value( 0.656250 ) ); //
+    CHECK_EVAL("BETADIST(2;3;4;1;3)",           Value( 0.656250 ) ); //
+    CHECK_EVAL("BETADIST(0;3;4;0;1;FALSE())",   Value(        0 ) ); // TODO check BOOL
+    CHECK_EVAL("BETADIST(0.5;3;4;0;1;FALSE())", Value( 0.000521 ) ); //
+    CHECK_EVAL("BETADIST(0.9;4;3;0;1;FALSE())", Value( 0.000122 ) ); //
+    CHECK_EVAL("BETADIST(1.5;3;4;1;2;FALSE())", Value( 0.000521 ) ); //
+    CHECK_EVAL("BETADIST(2;3;4;1;3;FALSE())",   Value( 0.000521 ) ); //
+    CHECK_EVAL("BETADIST(2;3;4)",               Value(        1 ) ); //
+    CHECK_EVAL("BETADIST(-1;3;4)",              Value(        0 ) ); //
+    CHECK_EVAL("BETADIST(2;3;4;0;1;FALSE())",   Value(        0 ) ); //
+    CHECK_EVAL("BETADIST(-1;3;4;0;1;FALSE())",  Value(        0 ) ); //
+}
+
+void TestStatisticalFunctions::testCONFIDENCE()
+{
+    // ODF-tests
+    CHECK_EVAL("CONFIDENCE(0.5 ; 1;1)", Value( 0.67448975   ) ); //
+    CHECK_EVAL("CONFIDENCE(0.25; 1;1)", Value( 1.1503493804 ) ); //
+    CHECK_EVAL("CONFIDENCE(0.5 ; 4;1)", Value( 2.6979590008 ) ); // Multiplying stddev by X multiplies result by X.
+    CHECK_EVAL("CONFIDENCE(0.5 ; 1;4)", Value( 0.3372448751 ) ); // Multiplying count by X*X divides result by X.
+    
+    // check constraints
+    CHECK_EVAL("CONFIDENCE(-0.5; 1;4)", Value::errorNUM()   ); // 0 < alpha < 1
+    CHECK_EVAL("CONFIDENCE( 1.5; 1;4)", Value::errorNUM()   ); // 0 < alpha < 1
+    CHECK_EVAL("CONFIDENCE( 0.5;-1;4)", Value::errorNUM()   ); // stddev > 0
+    CHECK_EVAL("CONFIDENCE( 0.5; 1;0)", Value::errorNUM()   ); // size >= 1
+}
+
+void TestStatisticalFunctions::testCORREL()
+{
+    //  Cell | Value      Cell | Value
+    // ------+------     ------+------
+    //   B14 |  1          C14 |  4
+    //   B15 |  2          C15 |  3
+    //   B16 |  3          C16 |  2
+    //   B17 |  4          C17 |  1
+ 
+    // ODF-tests
+    CHECK_EVAL("CORREL(B14:B17;B14:B17)", Value(            1 ) ); // Perfect positive correlation given identical sequences
+    CHECK_EVAL("CORREL(B14:B17;C14:C17)", Value(           -1 ) ); // Perfect negative correlation given reversed sequences
+    CHECK_EVAL("CORREL(1;2)",             Value::errorNUM()     ); // Each list must contain at least 2 values
+    CHECK_EVAL("CORREL(B14:B16;B15:B16)", Value::errorNUM()     ); // The length of each list must be equal
 }
 
 void TestStatisticalFunctions::testFREQUENCY()
