@@ -294,18 +294,19 @@ void WMFImportParser::drawPolyline( const QPolygon &pa ) {
 }
 
 
-void WMFImportParser::drawPolygon( const QPolygon &pa, bool ) {
+void WMFImportParser::drawPolygon( const QPolygon &pa, bool winding ) {
     KoPathShape *polygon = new KoPathShape();
     appendPen( *polygon );
     appendBrush( *polygon );
     appendPoints( *polygon, pa );
 
     polygon->close();
+    polygon->setFillRule( winding ? Qt::WindingFill : Qt::OddEvenFill );
     mDoc->add( polygon );
 }
 
 
-void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool ) {
+void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
     KoPathShape *path = new KoPathShape();
 
     if ( listPa.count() > 0 ) {
@@ -313,7 +314,7 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool ) {
         appendBrush( *path );
         appendPoints( *path, listPa.first() );
         path->close();
-
+        path->setFillRule( winding ? Qt::WindingFill : Qt::OddEvenFill );
         foreach( QPolygon pa, listPa )
         {
             KoPathShape *newPath = new KoPathShape();

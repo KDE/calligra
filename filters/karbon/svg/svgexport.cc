@@ -200,12 +200,10 @@ void SvgExport::savePath( KoPathShape * path )
 
     *m_body << " d=\"" << path->toString( path->absoluteTransformation(0) ) << "\" ";
 
-    /*
-    if( composite.fillRule() == evenOdd )
+    if( path->fillRule() == Qt::OddEvenFill )
         *m_body << " fill-rule=\"evenodd\"";
     else
         *m_body << " fill-rule=\"nonzero\"";
-    */
 
     *m_body << " />" << endl;
 }
