@@ -20,7 +20,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vstrokefillpreview.h"
+#include "KarbonStylePreview.h"
 
 #include <KoPathShape.h>
 #include <KoShapeBorderModel.h>
@@ -39,7 +39,7 @@
 #define PANEL_SIZEX 50.0
 #define PANEL_SIZEY 50.0
 
-VStrokeFillPreview::VStrokeFillPreview( QWidget * parent )
+KarbonStylePreview::KarbonStylePreview( QWidget * parent )
     : QFrame( parent ), m_strokeWidget( false ), m_fill( Qt::NoBrush ), m_stroke( 0 )
     , m_strokeRect( 5.0, 5.0, 30.0, 30.0 ), m_fillRect(15.0, 15.0, 30.0, 30.0 )
 {
@@ -53,11 +53,11 @@ VStrokeFillPreview::VStrokeFillPreview( QWidget * parent )
     update( m_stroke, m_fill );
 }
 
-VStrokeFillPreview::~VStrokeFillPreview()
+KarbonStylePreview::~KarbonStylePreview()
 {
 }
 
-void VStrokeFillPreview::paintEvent( QPaintEvent* event )
+void KarbonStylePreview::paintEvent( QPaintEvent* event )
 {
     QPainter painter( this );
     painter.setClipRect( event->rect() );
@@ -92,22 +92,22 @@ void VStrokeFillPreview::paintEvent( QPaintEvent* event )
     QFrame::paintEvent( event );
 }
 
-QSize VStrokeFillPreview::sizeHint() const
+QSize KarbonStylePreview::sizeHint() const
 {
     return QSize( int(PANEL_SIZEX), int(PANEL_SIZEY) );
 }
 
-QSize VStrokeFillPreview::minimumSizeHint() const
+QSize KarbonStylePreview::minimumSizeHint() const
 {
     return QSize( int(PANEL_SIZEX), int(PANEL_SIZEY) );
 }
 
-QSizePolicy VStrokeFillPreview::sizePolicy() const
+QSizePolicy KarbonStylePreview::sizePolicy() const
 {
     return QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
 }
 
-bool VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
+bool KarbonStylePreview::eventFilter( QObject *, QEvent *event )
 {
     QMouseEvent* e = static_cast<QMouseEvent *>( event );
 
@@ -148,14 +148,14 @@ bool VStrokeFillPreview::eventFilter( QObject *, QEvent *event )
     return false;
 }
 
-void VStrokeFillPreview::update( const KoShapeBorderModel * stroke, const QBrush & fill )
+void KarbonStylePreview::update( const KoShapeBorderModel * stroke, const QBrush & fill )
 {
     m_fill = fill;
     m_stroke = stroke;
     QFrame::update();
 }
 
-void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush & fill )
+void KarbonStylePreview::drawFill( QPainter & painter, const QBrush & fill )
 {
     painter.save();
 
@@ -225,7 +225,7 @@ void VStrokeFillPreview::drawFill( QPainter & painter, const QBrush & fill )
     painter.restore();
 }
 
-void VStrokeFillPreview::drawStroke( QPainter & painter, const KoShapeBorderModel * stroke )
+void KarbonStylePreview::drawStroke( QPainter & painter, const KoShapeBorderModel * stroke )
 {
     painter.save();
 
@@ -306,5 +306,5 @@ void VStrokeFillPreview::drawStroke( QPainter & painter, const KoShapeBorderMode
     painter.restore();
 }
 
-#include "vstrokefillpreview.moc"
+#include "KarbonStylePreview.moc"
 

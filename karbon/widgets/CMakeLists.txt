@@ -5,10 +5,10 @@ set(karbonwidgets_SRCS
     vcolorslider.cc
     vgradientwidget.cc
     vgradienttabwidget.cc
-    vstrokefillpreview.cc
+    KarbonStylePreview.cpp
     vselecttoolbar.cc
     vsmallpreview.cc
-    vtypebuttonbox.cc
+    KarbonStyleButtonBox.cpp
     )
 
 

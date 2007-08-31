@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VSTROKEFILLPREVIEW_H__
-#define __VSTROKEFILLPREVIEW_H__
+#ifndef KARBONSTYLEPREVIEW_H
+#define KARBONSTYLEPREVIEW_H
 
 #include <QFrame>
 
@@ -31,16 +31,16 @@ class QBrush;
 class KoShapeBorderModel;
 
 /// A widget to preview stroke and fill of a shape
-class VStrokeFillPreview : public QFrame
+class KarbonStylePreview : public QFrame
 {
     Q_OBJECT
 
 public:
     /// Constructs preview widget with given parent
-    explicit VStrokeFillPreview( QWidget* parent = 0L );
+    explicit KarbonStylePreview( QWidget* parent = 0L );
 
     /// Destroys the preview widget
-    ~VStrokeFillPreview();
+    ~KarbonStylePreview();
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -84,5 +84,5 @@ private:
     QRectF m_fillRect;
 };
 
-#endif
+#endif // KARBONSTYLEPREVIEW_H
 

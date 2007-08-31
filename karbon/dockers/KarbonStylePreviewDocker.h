@@ -23,8 +23,8 @@
 #include <QDockWidget>
 #include <KoDockFactory.h>
 
-class VStrokeFillPreview;
-class VTypeButtonBox;
+class KarbonStylePreview;
+class KarbonStyleButtonBox;
 class QBrush;
 class KoShapeBorderModel;
 
@@ -41,8 +41,8 @@ private slots:
     void fillSelected();
     void strokeSelected();
 private:
-    VStrokeFillPreview * m_preview;
-    VTypeButtonBox * m_buttons;
+    KarbonStylePreview * m_preview;
+    KarbonStyleButtonBox * m_buttons;
 };
 
 class KarbonStylePreviewDockerFactory : public KoDockFactory

@@ -69,7 +69,6 @@
 #include "vglobal.h"
 #include "vselection.h"
 #include "vpainterfactory.h"
-#include "vtypebuttonbox.h"
 #include "KarbonCanvas.h"
 #include "karbon_drag.h"
 

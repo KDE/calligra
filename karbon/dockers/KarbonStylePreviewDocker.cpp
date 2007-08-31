@@ -18,8 +18,8 @@
  */
 
 #include "KarbonStylePreviewDocker.h"
-#include "vstrokefillpreview.h"
-#include "vtypebuttonbox.h"
+#include "KarbonStylePreview.h"
+#include "KarbonStyleButtonBox.h"
 #include "Karbon.h"
 
 #include <KoToolManager.h>
@@ -39,10 +39,10 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     QWidget *mainWidget = new QWidget( this );
     QVBoxLayout * layout = new QVBoxLayout( mainWidget );
 
-    m_preview = new VStrokeFillPreview( mainWidget );
+    m_preview = new KarbonStylePreview( mainWidget );
     layout->addWidget( m_preview );
 
-    m_buttons = new VTypeButtonBox( mainWidget );
+    m_buttons = new KarbonStyleButtonBox( mainWidget );
     layout->addWidget( m_buttons );
 
     layout->addStretch( 1 );

@@ -18,14 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef VTYPEBUTTONBOX_H
-#define VTYPEBUTTONBOX_H
+#ifndef KARBONSTYLEBUTTONBOX_H
+#define KARBONSTYLEBUTTONBOX_H
 
 #include <QtGui/QFrame>
 
 class QButtonGroup;
 
-class VTypeButtonBox : public QFrame
+class KarbonStyleButtonBox : public QFrame
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ public:
         Winding  = 5
     };
 
-    VTypeButtonBox( QWidget* parent = 0L );
+    KarbonStyleButtonBox( QWidget* parent = 0L );
     bool isStrokeManipulator() const;
 
 public slots:
@@ -55,5 +55,5 @@ private:
     QButtonGroup * m_group;
 };
 
-#endif
+#endif // KARBONSTYLEBUTTONBOX_H
 

@@ -246,7 +246,7 @@ static const char* const buttonwinding[]={
 #endif
 
 
-#include "vtypebuttonbox.h"
+#include "KarbonStyleButtonBox.h"
 #include "karbon_part.h"
 
 #include <KoCanvasBase.h>
@@ -271,7 +271,7 @@ static const char* const buttonwinding[]={
 #include <QtGui/QButtonGroup>
 #include <QtGui/QGridLayout>
 
-VTypeButtonBox::VTypeButtonBox( QWidget* parent )
+KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
     : QFrame( parent ), m_isStrokeManipulator( false )
 {
     setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
@@ -338,7 +338,7 @@ VTypeButtonBox::VTypeButtonBox( QWidget* parent )
     connect( group, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 }
 
-void VTypeButtonBox::slotButtonPressed( int id )
+void KarbonStyleButtonBox::slotButtonPressed( int id )
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -351,26 +351,26 @@ void VTypeButtonBox::slotButtonPressed( int id )
         manipulateFills( id );
 }
 
-void VTypeButtonBox::setStroke()
+void KarbonStyleButtonBox::setStroke()
 {
     m_isStrokeManipulator = true;
     m_group->button( EvenOdd )->setEnabled( false );
     m_group->button( Winding )->setEnabled( false );
 }
 
-void VTypeButtonBox::setFill()
+void KarbonStyleButtonBox::setFill()
 {
     m_isStrokeManipulator = false;
     m_group->button( EvenOdd )->setEnabled( true );
     m_group->button( Winding )->setEnabled( true );
 }
 
-bool VTypeButtonBox::isStrokeManipulator() const
+bool KarbonStyleButtonBox::isStrokeManipulator() const
 {
     return m_isStrokeManipulator;
 }
 
-void VTypeButtonBox::manipulateFills( int id )
+void KarbonStyleButtonBox::manipulateFills( int id )
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -414,7 +414,7 @@ void VTypeButtonBox::manipulateFills( int id )
         canvasController->canvas()->addCommand( cmd );
 }
 
-void VTypeButtonBox::manipulateStrokes( int id )
+void KarbonStyleButtonBox::manipulateStrokes( int id )
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     // TODO get the actual border stroke from the ResourceProvider
@@ -440,5 +440,5 @@ void VTypeButtonBox::manipulateStrokes( int id )
     canvasController->canvas()->addCommand( new KoShapeBorderCommand( selection->selectedShapes(), border ) );
 }
 
-#include "vtypebuttonbox.moc"
+#include "KarbonStyleButtonBox.moc"
 
