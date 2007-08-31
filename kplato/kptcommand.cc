@@ -2877,6 +2877,7 @@ DeleteEmbeddedDocumentCmd::DeleteEmbeddedDocumentCmd( Part *part, ViewListWidget
 DeleteEmbeddedDocumentCmd::~DeleteEmbeddedDocumentCmd()
 {
     if ( m_mine ) {
+        delete m_item->view();
         delete m_item;
     }
 }

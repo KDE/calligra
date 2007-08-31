@@ -989,7 +989,7 @@ void ResourceAppointmentsView::setupGui()
     addAction( name, actionDeleteSelection );
     */
     // Add the context menu actions for the view options
-/*    actionOptions = new KAction(KIcon("options"), i18n("Options"), this);
+/*    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );*/
 }

@@ -103,8 +103,10 @@ set(kplatoprivate_LIB_SRCS
     kptchartwidget.cc
     kptchart.cc
     kptchartview.cc
+    kptviewlistdialog.cc
 )
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
+    kptviewlistaddview.ui
     kptcpmwidget.ui
     kptitemviewsettings.ui
     kptdurationwidget.ui

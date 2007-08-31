@@ -128,12 +128,15 @@ public:
 
     /// Add a category if it does not already exist
     ViewListItem *addCategory( const QString &tag, const QString& name );
+    /// Return a list of all categories
+    QList<ViewListItem*> categories() const;
+    
     /// Create a unique tag
     QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
     ViewListItem *addView(QTreeWidgetItem *category, const QString &tag, const QString& name, KoView *view, KoDocument *doc, const QString& icon = QString() );
     /// Create a embedded child document view (callers resposibility to add to the list)
-    ViewListItem *createView( const QString &tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
+    ViewListItem *createChildDocumentView( const QString &tag, const QString& name, KoView *view, DocumentChild *ch, const QString& icon = QString() );
 
     void setSelected( QTreeWidgetItem *item );
     KoView *findView( const QString &tag ) const;
@@ -148,6 +151,7 @@ public:
     
 signals:
     void activated( ViewListItem*, ViewListItem* );
+    void createView();
     void createKofficeDocument( KoDocumentEntry &entry );
     void viewListItemRemoved( ViewListItem *item );
     void viewListItemInserted( ViewListItem *item );
@@ -157,6 +161,9 @@ protected slots:
     void slotItemChanged( QTreeWidgetItem *item, int col );
     void renameCategory();
     void slotCreatePart();
+    void slotAddView();
+    void slotRemoveView();
+    void slotEditViewTitle();
     void slotEditDocumentTitle();
     void slotRemoveDocument();
 
@@ -173,12 +180,11 @@ private:
     KoDocumentEntry m_documentEntry;
 
     ViewListItem *m_contextitem;
-    QAction *m_separator;
-    QList<QAction*> m_noitem;
-    QList<QAction*> m_category;
-    QList<QAction*> m_view;
-    QList<QAction*> m_document;
-    QList<QAction*> m_parts;
+    QList<QAction*> m_editcategory;
+    QList<QAction*> m_editview;
+    QList<QAction*> m_addview;
+    QList<QAction*> m_editdocument;
+    QList<QAction*> m_adddocument;
 };
 
 
@@ -217,6 +223,22 @@ public:
 
     ScheduleManager *currentScheduleManager() const;
     
+    ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ScheduleEditor *createScheduleEditor( QWidget *parent );
+    ViewBase *createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
     
@@ -256,6 +278,8 @@ public slots:
     void slotGenerateWBS();
 
     void slotViewTaskStatusView();
+    
+    void slotCreateView();
     void slotCreateKofficeDocument( KoDocumentEntry& );
 
     void slotConfigure();
@@ -346,21 +370,6 @@ private slots:
 private:
     void createViews();
     
-    ViewBase *createTaskeditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createResourceditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createAccountsEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createCalendarEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createScheduleHandler( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ScheduleEditor *createScheduleEditor( QWidget *parent );
-    ViewBase *createScheduleEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createResourceAssignmentView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
-    ViewBase *createChartView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
 
     void createChildDocumentViews();
     ViewListItem *createChildDocumentView( DocumentChild *ch );
