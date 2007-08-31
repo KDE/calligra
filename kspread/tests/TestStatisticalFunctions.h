@@ -58,8 +58,9 @@ private slots:
     void testGAMMADIST();
 //     void testGAMMALN(); in -> TestMathFunctions
     void testGAUSS();
+//     void testGROWTH(); // TODO check implemented?
     void testGEOMEAN();
-//     void testHARMEAN();
+    void testHARMEAN();
 //     void testHYPGEOMDIST();
 //     void testINTERCEPT();
 //     void testINVBINO();

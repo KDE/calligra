@@ -250,6 +250,17 @@ void TestStatisticalFunctions::testGEOMEAN()
     CHECK_EVAL("GEOMEAN(B14:B17)",     Value( 2.2133638394 ) ); // Some values, range.
 }
 
+void TestStatisticalFunctions::testHARMEAN()
+{
+    CHECK_EVAL("HARMEAN(7)",           Value(            7 ) ); // Mean of one value.
+    CHECK_EVAL("HARMEAN(4;4;4;4)",     Value(            4 ) ); // Multiple equivalent values.
+    CHECK_EVAL("HARMEAN(2;4;4)",       Value(            3 ) ); // Some values.
+    CHECK_EVAL("HARMEAN(8;0;8;8;8;8)", Value::errorNUM()     ); // Error if there is a 0 in the range.
+    CHECK_EVAL("HARMEAN(C11)",         Value(            5 ) ); // One value, range.
+    CHECK_EVAL("HARMEAN(C11:C17)",     Value( 2.7184466019 ) ); // Some values, range.
+    CHECK_EVAL("HARMEAN(B14:B17)",     Value( 1.92         ) ); // Some values, range.
+}
+
 void TestStatisticalFunctions::testMAXA()
 {
     CHECK_EVAL("MAXA(2;4;1;-8)", Value(4));
