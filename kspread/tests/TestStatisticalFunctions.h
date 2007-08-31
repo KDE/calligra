@@ -47,7 +47,7 @@ private slots:
 //     void testCOMBINA(); // in -> TestMathFunctions
     void testCONFIDENCE();
     void testCORREL();
-//     void testCOVAR();
+    void testCOVAR();
 //     void testDEVSQ();
 //     void testDEVSQA();
 //     void testEXPONDIST();
@@ -55,10 +55,10 @@ private slots:
 //     void testFISHER();
 //     void testFISHERINV();
     void testFREQUENCY();
-//     void testGAMMADIST();
-//     void testGAMMALN();
-//     void testGAUSS();
-//     void testGEOMEAN();
+    void testGAMMADIST();
+//     void testGAMMALN(); in -> TestMathFunctions
+    void testGAUSS();
+    void testGEOMEAN();
 //     void testHARMEAN();
 //     void testHYPGEOMDIST();
 //     void testINTERCEPT();
@@ -108,7 +108,7 @@ private slots:
     void cleanupTestCase();
 
 private:
-    Value evaluate(const QString&, Value& ex);
+    Value evaluate(const QString&);
     Value TestDouble(const QString& formula, const Value& v2, int accuracy);
 
     Doc* m_doc;

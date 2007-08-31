@@ -59,8 +59,8 @@ Value TestStatisticalFunctions::TestDouble(const QString& formula, const Value& 
 
   if (!res)
     kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << v2.asFloat() <<" to" << result.asFloat() <<"  diff =" << v2.asFloat()-result.asFloat();
-  else
-    kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
+//   else
+//     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
   if (res)
     return v2;
   else 
@@ -81,26 +81,21 @@ static Value RoundNumber(const Value& v)
     return v;
 }
 
-Value TestStatisticalFunctions::evaluate(const QString& formula, Value& ex)
+Value TestStatisticalFunctions::evaluate(const QString& formula)
 {
-    Formula f(m_doc->map()->sheet(0));
-    QString expr = formula;
-    if ( expr[0] != '=' )
-        expr.prepend( '=' );
-    f.setExpression( expr );
-    Value result = f.eval();
-
-    if(result.isFloat() && ex.isInteger())
-        ex = Value(ex.asFloat());
-    if(result.isInteger() && ex.isFloat())
-        result = Value(result.asFloat());
+  Formula f(m_doc->map()->sheet(0));
+  QString expr = formula;
+  if ( expr[0] != '=' )
+    expr.prepend( '=' );
+  f.setExpression( expr );
+  Value result = f.eval();
 
 #if 0
   // this magically generates the CHECKs
-  printf("  CHECK_EVAL( \"%s\",  %.14e) );\n", qPrintable(formula), result.asFloat());
+  printf("  CHECK_EVAL( \"%s\",  %15g) );\n", qPrintable(formula), result.asFloat());
 #endif
 
-    return RoundNumber(result);
+  return RoundNumber(result);
 }
 
 void TestStatisticalFunctions::initTestCase()
@@ -129,7 +124,10 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(2,16, Value( 3 ));
     storage->setValue(2,17, Value( 4 ));
 
-    // C14:C17
+    // C11:C17
+    storage->setValue(3,11, Value( 5 ));
+    storage->setValue(3,12, Value( 6 ));
+    storage->setValue(3,13, Value( 8 ));
     storage->setValue(3,14, Value( 4 ));
     storage->setValue(3,15, Value( 3 ));
     storage->setValue(3,16, Value( 2 ));
@@ -191,6 +189,21 @@ void TestStatisticalFunctions::testCORREL()
     CHECK_EVAL("CORREL(B14:B16;B15:B16)", Value::errorNUM()     ); // The length of each list must be equal
 }
 
+void TestStatisticalFunctions::testCOVAR()
+{
+    //  Cell | Value      Cell | Value
+    // ------+------     ------+------
+    //   B14 |  1          C14 |  4
+    //   B15 |  2          C15 |  3
+    //   B16 |  3          C16 |  2
+    //   B17 |  4          C17 |  1
+ 
+    // ODF-tests
+    CHECK_EVAL("COVAR(C11:C17;C11:C17)", Value(  4.9795918367 ) ); // 
+    CHECK_EVAL("COVAR(B14:B17;C14:C17)", Value( -1.25         ) ); // 
+    CHECK_EVAL("COVAR(B14:B17;C13:C17)", Value::errorNUM()      ); // TODO should we check for "array sizes don't match" or "value counts" in array?.
+}
+
 void TestStatisticalFunctions::testFREQUENCY()
 {
     Value result( Value::Array );
@@ -203,6 +216,38 @@ void TestStatisticalFunctions::testFREQUENCY()
     CHECK_EVAL( "ISERROR(FREQUENCY({1;2;3;4;5;6;7;8;9;10};{3;5;9}))", Value(true) );
     // an empty second arg returns the overall number count
     CHECK_EVAL( "FREQUENCY({1;2;3;4;5;6;7;8;9;10};)", Value( 10 ) );
+}
+
+void TestStatisticalFunctions::testGAMMADIST()
+{
+    CHECK_EVAL("GAMMADIST(0;3;4)",           Value(        0 ) );
+    CHECK_EVAL("GAMMADIST(0.5;3;4)",         Value( 0.001724 ) ); // TODO res=Value::error()
+    CHECK_EVAL("GAMMADIST(9  ;4;3)",         Value( 0.066698 ) );
+    CHECK_EVAL("GAMMADIST(0  ;3;4;FALSE())", Value(        0 ) );
+    CHECK_EVAL("GAMMADIST(0.5;3;4;FALSE())", Value( 0.000296 ) );
+    CHECK_EVAL("GAMMADIST(9  ;4;3;FALSE())", Value( 0.390661 ) );
+    CHECK_EVAL("GAMMADIST(0  ;3;4;TRUE())",  evaluate( "GAMMADIST(  0;3;4)" ) );
+    CHECK_EVAL("GAMMADIST(0.5;3;4;TRUE())",  evaluate( "GAMMADIST(0.5;3;4)" ) );
+    CHECK_EVAL("GAMMADIST(9  ;4;3;TRUE())",  evaluate( "GAMMADIST(  9;4;3)" ) );
+    CHECK_EVAL("GAMMADIST(-1 ;4;3;TRUE())",  Value( 0 ));
+    CHECK_EVAL("GAMMADIST(-1 ;3;4;FALSE())", Value( 0 ));
+}
+
+void TestStatisticalFunctions::testGAUSS()
+{
+    CHECK_EVAL("GAUSS(0)", Value(           0 ) ); // Mean of one value.
+    CHECK_EVAL("GAUSS(1)", Value( 0.341344746 ) ); // Multiple equivalent values.
+}
+
+void TestStatisticalFunctions::testGEOMEAN()
+{
+    CHECK_EVAL("GEOMEAN(7)",           Value(            7 ) ); // Mean of one value.
+    CHECK_EVAL("GEOMEAN(5;5;5;5)",     Value(            5 ) ); // Multiple equivalent values.
+    CHECK_EVAL("GEOMEAN(2;8;2;8)",     Value(            4 ) ); // Some values.
+    CHECK_EVAL("GEOMEAN(8;0;8;8;8;8)", Value::errorNUM()     ); // Error if there is a 0 in the range.
+    CHECK_EVAL("GEOMEAN(C11)",         Value(            5 ) ); // One value, range.
+    CHECK_EVAL("GEOMEAN(C11:C17)",     Value( 3.4451109418 ) ); // Some values, range.
+    CHECK_EVAL("GEOMEAN(B14:B17)",     Value( 2.2133638394 ) ); // Some values, range.
 }
 
 void TestStatisticalFunctions::testMAXA()
