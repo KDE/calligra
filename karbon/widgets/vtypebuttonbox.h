@@ -18,10 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VTYPEBUTTONBOX_H__
-#define __VTYPEBUTTONBOX_H__
+#ifndef VTYPEBUTTONBOX_H
+#define VTYPEBUTTONBOX_H
 
-#include <QFrame>
+#include <QtGui/QFrame>
+
+class QButtonGroup;
 
 class VTypeButtonBox : public QFrame
 {
@@ -32,7 +34,9 @@ public:
         None     = 0,
         Solid    = 1,
         Gradient = 2,
-        Pattern  = 3
+        Pattern  = 3,
+        EvenOdd  = 4,
+        Winding  = 5
     };
 
     VTypeButtonBox( QWidget* parent = 0L );
@@ -48,6 +52,7 @@ private:
     void manipulateStrokes( int id );
 
     bool m_isStrokeManipulator; ///< are we manipulating stroke or fill ?
+    QButtonGroup * m_group;
 };
 
 #endif

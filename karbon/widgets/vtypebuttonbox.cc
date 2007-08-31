@@ -98,86 +98,84 @@ static const char* const buttonpattern[]={
 // 16x16 pixels
 
 static const char* const buttonnone[]={
-"16 16 7 1",
-"c c #0a0000",
-". c #0a0a0a",
-"b c #330000",
-"a c #331f1f",
+"16 16 3 1",
 "# c #333333",
 "e c #ff0000",
-"d c #ffffff",
-"..########aabbcc",
-"..########aabbcc",
-"##dddddddddeeebb",
-"##ddddddddeeeebb",
-"##dddddddeeeeeaa",
-"##ddddddeeeeedaa",
-"##dddddeeeeedd##",
-"##ddddeeeeeddd##",
-"##dddeeeeedddd##",
-"##ddeeeeeddddd##",
-"aaeeeeeedddddd##",
-"aaeeeeeddddddd##",
-"bbeeeedddddddd##",
-"bbeeeddddddddd##",
-"ccbbaa########..",
-"ccbbaa########.."};
+"- c #ffffff",
+"################",
+"#------------ee#",
+"#-----------eee#",
+"#----------eee-#",
+"#---------eee--#",
+"#--------eee---#",
+"#-------eee----#",
+"#------eee-----#",
+"#-----eee------#",
+"#----eee-------#",
+"#---eee--------#",
+"#--eee---------#",
+"#-eee----------#",
+"#eee-----------#",
+"#ee------------#",
+"################"};
 
 static const char* const buttonsolid[]={
-"16 16 1 1",
-". c #000000",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................",
-"................"};
+"16 16 2 1",
+"# c #000000",
+". c #969696",
+"################",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"################"};
 
 
 // FIXME: Smoother gradient button.
 
 static const char* const buttongradient[]={
-"16 16 14 1",
-"f c #000000",
-"e c #040404",
-". c #0a0a0a",
-"d c #0f0f0f",
-"c c #181818",
-"b c #212121",
-"a c #292929",
-"# c #303030",
-"g c #333333",
-"l c #484848",
-"k c #787878",
-"j c #a7a7a7",
-"i c #cdcdcd",
-"h c #f1f1f1",
-"..##aabbccddeeff",
-"..##aabbccddeeff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"gghhiijjkkll##ff",
-"..##aabbccddeeff",
-"..##aabbccddeeff"};
+"16 16 15 1",
+"# c #000000",
+"n c #101010",
+"m c #202020",
+"l c #303030",
+"k c #404040",
+"j c #505050",
+"i c #606060",
+"h c #707070",
+"g c #808080",
+"f c #909090",
+"e c #a0a0a0",
+"d c #b0b0b0",
+"c c #c0c0c0",
+"b c #d0d0d0",
+"a c #e0e0e0",
+"################",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"#abcdefghijklmn#",
+"################"};
 
 static const char* const buttonpattern[]={
 "16 16 4 1",
@@ -185,33 +183,71 @@ static const char* const buttonpattern[]={
 "# c #333333",
 "a c #a0a0a0",
 "b c #ffffffff",
-"..############..",
-"..############..",
-"##aaaabbbbaaaa##",
-"##aaaabbbbaaaa##",
-"##aaaabbbbaaaa##",
-"##aaaabbbbaaaa##",
-"##bbbbaaaabbbb##",
-"##bbbbaaaabbbb##",
-"##bbbbaaaabbbb##",
-"##bbbbaaaabbbb##",
-"##aaaabbbbaaaa##",
-"##aaaabbbbaaaa##",
-"##aaaabbbbaaaa##",
-"##aaaabbbbaaaa##",
-"..############..",
-"..############.."};
+"################",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"#bbbbbaaaabbbbb#",
+"#bbbbbaaaabbbbb#",
+"#bbbbbaaaabbbbb#",
+"#bbbbbaaaabbbbb#",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"#aaaaabbbbaaaaa#",
+"################"};
+
+static const char* const buttonevenodd[]={
+"16 16 3 1",
+"# c #0a0a0a",
+". c #969696",
+"o c #ffffffff",
+"################",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#....######....#",
+"#....#oooo#....#",
+"#....#oooo#....#",
+"#....#oooo#....#",
+"#....#oooo#....#",
+"#....######....#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"################"};
+
+static const char* const buttonwinding[]={
+"16 16 2 1",
+"# c #0a0a0a",
+". c #969696",
+"################",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#....######....#",
+"#....#....#....#",
+"#....#....#....#",
+"#....#....#....#",
+"#....#....#....#",
+"#....######....#",
+"#..............#",
+"#..............#",
+"#..............#",
+"#..............#",
+"################"};
 
 #endif
 
 
-#include <QPixmap>
-#include <QPushButton>
-#include <QToolTip>
-#include <QButtonGroup>
-#include <QGridLayout>
-
-#include <klocale.h>
+#include "vtypebuttonbox.h"
+#include "karbon_part.h"
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -224,15 +260,22 @@ static const char* const buttonpattern[]={
 #include <KoShapeBorderModel.h>
 #include <KoLineBorder.h>
 #include <KoColor.h>
+#include <KoPathFillRuleCommand.h>
+#include <KoPathShape.h>
 
-#include "karbon_part.h"
-#include "vtypebuttonbox.h"
+#include <klocale.h>
+
+#include <QtGui/QPixmap>
+#include <QtGui/QPushButton>
+#include <QtGui/QToolTip>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QGridLayout>
 
 VTypeButtonBox::VTypeButtonBox( QWidget* parent )
     : QFrame( parent ), m_isStrokeManipulator( false )
 {
     setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
-    setMinimumSize( 50, 50 );
+    setMinimumSize( 45, 70 );
 
     QGridLayout * layout = new QGridLayout( this );
     QButtonGroup * group = new QButtonGroup( this );
@@ -269,10 +312,28 @@ VTypeButtonBox::VTypeButtonBox( QWidget* parent )
     group->addButton( button, Pattern );
     layout->addWidget( button, 1, 1 );
 
+    // The button for even-odd fill rule
+    button = new QPushButton( this );
+    button->setIcon( QPixmap( (const char **) buttonevenodd ) );
+    button->setMinimumHeight( 20 );
+    button->setToolTip( i18n( "Even-Odd Fill" ) );
+    group->addButton( button, EvenOdd );
+    layout->addWidget( button, 2, 0 );
+
+    // The button for winding fill-rule
+    button = new QPushButton( this );
+    button->setIcon( QPixmap( (const char **) buttonwinding ) );
+    button->setMinimumHeight( 20 );
+    button->setToolTip( i18n( "Winding Fill" ) );
+    group->addButton( button, Winding );
+    layout->addWidget( button, 2, 1 );
+
     layout->setMargin( 1 );
     layout->setSpacing( 1 );
     layout->setColumnStretch( 0, 1 );
     layout->setColumnStretch( 1, 1 );
+
+    m_group = group;
 
     connect( group, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 }
@@ -293,11 +354,15 @@ void VTypeButtonBox::slotButtonPressed( int id )
 void VTypeButtonBox::setStroke()
 {
     m_isStrokeManipulator = true;
+    m_group->button( EvenOdd )->setEnabled( false );
+    m_group->button( Winding )->setEnabled( false );
 }
 
 void VTypeButtonBox::setFill()
 {
     m_isStrokeManipulator = false;
+    m_group->button( EvenOdd )->setEnabled( true );
+    m_group->button( Winding )->setEnabled( true );
 }
 
 bool VTypeButtonBox::isStrokeManipulator() const
@@ -308,27 +373,45 @@ bool VTypeButtonBox::isStrokeManipulator() const
 void VTypeButtonBox::manipulateFills( int id )
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    // TODO get the actual background from the ResourceProvider
-    QBrush fill;
+    QUndoCommand * cmd = 0;
 
     switch( id )
     {
         case None:
-            fill = QBrush();
+            cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush() );
             break;
         case Solid:
-            fill = QBrush( canvasController->canvas()->resourceProvider()->backgroundColor().toQColor() );
+        {
+            QBrush fill = QBrush( canvasController->canvas()->resourceProvider()->backgroundColor().toQColor() );
+            cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), fill );
             break;
+        }
         case Gradient:
             //m_fill.setType( VFill::grad );
             break;
         case Pattern:
             //m_fill.setType( VFill::patt );
             break;
+        case EvenOdd:
+        case Winding:
+        {
+            Qt::FillRule fillRule = id == EvenOdd ? Qt::OddEvenFill : Qt::WindingFill;
+            QList<KoPathShape*> shapes;
+            foreach( KoShape * shape, selection->selectedShapes() )
+            {
+                KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+                if( path && path->fillRule() != fillRule )
+                    shapes.append( path );
+            }
+            if( shapes.count() )
+                cmd = new KoPathFillRuleCommand( shapes, fillRule );
+            break;
+        }
     }
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    canvasController->canvas()->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), fill ) );
+    if( cmd )
+        canvasController->canvas()->addCommand( cmd );
 }
 
 void VTypeButtonBox::manipulateStrokes( int id )
