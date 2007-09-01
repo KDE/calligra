@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
+
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2007 Inge Wallin     <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
