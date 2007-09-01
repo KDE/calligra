@@ -19,7 +19,7 @@
 
 #include "KChartViewAdaptor.h"
 
-#include "kchart_view.h"
+#include "KChartView.h"
 
 
 namespace KChart

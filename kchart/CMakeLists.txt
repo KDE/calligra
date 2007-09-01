@@ -21,7 +21,7 @@ include_directories(
 set(kchartcommon_LIB_SRCS 
    kchart_factory.cpp
    KChartPart.cpp
-   kchart_view.cpp
+   KChartView.cpp
    KChartViewAdaptor.cpp
    KChartDocument.cpp
 

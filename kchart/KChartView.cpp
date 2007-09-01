@@ -21,7 +21,7 @@
 
 
 // Local
-#include "kchart_view.h"
+#include "KChartView.h"
 
 // Qt
 #include <QFile>
@@ -674,4 +674,4 @@ void KChartView::extraCreateTemplate()
 
 }  //KChart namespace
 
-#include "kchart_view.moc"
+#include "KChartView.moc"

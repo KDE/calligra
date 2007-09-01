@@ -61,7 +61,7 @@ using std::cerr;
 #include "KDChartBarDiagram"
 
 // KChart
-#include "kchart_view.h"
+#include "KChartView.h"
 #include "kchart_factory.h"
 
 

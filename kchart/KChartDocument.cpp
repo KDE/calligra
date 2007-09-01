@@ -19,7 +19,7 @@ using std::cerr;
 #include <klocale.h>
 
 #include "KChartPart.h"
-#include "kchart_view.h"
+#include "KChartView.h"
 #include "kchart_factory.h"
 #include "KDChartChart"
 #include "KDChartAbstractDiagram" // Base class for the diagrams
