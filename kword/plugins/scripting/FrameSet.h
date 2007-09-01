@@ -51,7 +51,7 @@ namespace Scripting {
     * The following python sample script does use the FrameSet class;
     * \code
     * import KWord
-    * # Print the name of the main framset.
+    * # Print the name of the main frameset.
     * fs = KWord.mainFrameSet()
     * if fs:
     *     print fs.name()
