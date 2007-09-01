@@ -24,6 +24,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrPage.cpp
      KPrMasterPage.cpp
      KPrShapeApplicationData.cpp
+     commands/KPrAnimationCreateCommand.cpp
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrCoverDownEffect.cpp
      shapeanimations/KPrShapeAnimation.cpp
