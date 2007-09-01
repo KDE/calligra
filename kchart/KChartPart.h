@@ -20,8 +20,8 @@
 */
 
 
-#ifndef KCHART_PART_H
-#define KCHART_PART_H
+#ifndef KCHARTPART_H
+#define KCHARTPART_H
 
 
 #include "kchart_global.h"
@@ -205,4 +205,5 @@ private:
 
 }  //KChart namespace
 
-#endif
+
+#endif // KCHARTPART_H

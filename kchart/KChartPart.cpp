@@ -21,7 +21,7 @@
 
 
 // Local
-#include "kchart_part.h"
+#include "KChartPart.h"
 
 // Posix
 #include <float.h> // For basic data types characteristics.
@@ -2381,4 +2381,4 @@ bool KChartPart::showEmbedInitDialog(QWidget* /*parent*/)
 
 }  //KChart namespace
 
-#include "kchart_part.moc"
+#include "KChartPart.moc"

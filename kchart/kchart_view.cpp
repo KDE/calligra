@@ -58,7 +58,7 @@
 
 // KChart
 #include "kchart_factory.h"
-#include "kchart_part.h"
+#include "KChartPart.h"
 #include "KChartViewAdaptor.h"
 
 #include "KCPageLayout.h"

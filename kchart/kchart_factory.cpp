@@ -32,15 +32,15 @@
 
 // KChart
 #include "kchart_aboutdata.h"
-#include "kchart_part.h"
+#include "KChartPart.h"
 
 
 namespace KChart
 {
 
 KComponentData *KChartFactory::s_global     = 0;
-KIconLoader *KChartFactory::s_iconLoader = 0;
-KAboutData  *KChartFactory::s_aboutData  = 0;
+KIconLoader    *KChartFactory::s_iconLoader = 0;
+KAboutData     *KChartFactory::s_aboutData  = 0;
 
 
 KChartFactory::KChartFactory( QObject* parent, const char* name )

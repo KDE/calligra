@@ -34,7 +34,7 @@
 #include <klocale.h>
 
 // KChart
-#include "kchart_part.h"
+#include "KChartPart.h"
 
 
 namespace KChart

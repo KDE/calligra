@@ -18,7 +18,7 @@ using std::cerr;
 
 #include <klocale.h>
 
-#include "kchart_part.h"
+#include "KChartPart.h"
 #include "kchart_view.h"
 #include "kchart_factory.h"
 #include "KDChartChart"
