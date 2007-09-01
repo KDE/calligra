@@ -32,7 +32,7 @@ Item								   Prio Status
  - Rename all C++ files to .cpp instead of .cc to follow the KDE        done
    coding standards.
  - Move code from kchart_part.{h,cpp} to ChartShape to make it work     ----
- - Remove KChartDocument                                                ----
+ - Remove KChartDocument                                                done
 
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      	----
