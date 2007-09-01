@@ -25,14 +25,16 @@ Item								   Prio Status
 ------------------------------------------------------------------------------
 
 * Build the foundation                                                  ----
- - Move the data editor to the attic                                    done
- - Move the wizard to the attic                                         done
- - Move the configuration dialog to the attic                           done
- - Add KChart coding standards.						--
- - Rename all C++ files to .cpp instead of .cc to follow the KDE        done
+ + Move the data editor to the attic                                    done
+ + Move the wizard to the attic                                         done
+ + Move the configuration dialog to the attic                           done
+ + Add KChart coding standards.						--
+ + Rename all C++ files to .cpp instead of .cc to follow the KDE        done
    coding standards.
- - Move code from kchart_part.{h,cpp} to ChartShape to make it work     ----
- - Remove KChartDocument                                                done
+ + Move code from kchart_part.{h,cpp} to ChartShape to make it work     ----
+   - Start of ODF loading						--
+   - Start of ODF saving						--
+ + Remove KChartDocument                                                done
 
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      	----

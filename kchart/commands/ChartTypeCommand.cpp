@@ -112,17 +112,20 @@ void ChartTypeCommand::setChartType(OdfChartType type)
     case LineChartType:
         setText(i18n("Line Chart"));
         break;
+    case AreaChartType:
+        setText(i18n("Area Chart"));
+        break;
     case CircleChartType:
         setText(i18n("Circle Chart"));
         break;
     case RingChartType:
         setText(i18n("Ring Chart"));
         break;
+    case ScatterChartType:
+        setText(i18n("Scatter Chart"));
+        break;
     case RadarChartType:
         setText(i18n("Radar Chart"));
-        break;
-    case AreaChartType:
-        setText(i18n("Area Chart"));
         break;
     case StockChartType:
         setText(i18n("Stock Chart"));
@@ -132,14 +135,26 @@ void ChartTypeCommand::setChartType(OdfChartType type)
         setText(i18n("HiLo Chart"));
         break;
 #endif
+    case BubbleChartType:
+        setText(i18n("Scatter Chart"));
+        break;
+    case SurfaceChartType:
+        setText(i18n("Surface Chart"));
+        break;
+    case GanttChartType:
+        setText(i18n("Gantt Chart"));
+        break;
+
     }
 }
 
 void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
 {
     switch (type) {
+	// The cartesian types
     case BarChartType:
     case LineChartType:
+    case AreaChartType:
         if (!qobject_cast<CartesianCoordinatePlane*>(m_chart->coordinatePlane()))
         {
             kDebug() << "replacing coordinate plane by a cartesian coordinate plane";
@@ -149,6 +164,8 @@ void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
             m_chart->addCoordinatePlane(coordinatePlane);
         }
         break;
+
+	// The polar types
     case CircleChartType:
     case RingChartType:
     case RadarChartType:
@@ -160,11 +177,13 @@ void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
             m_chart->addCoordinatePlane(coordinatePlane);
         }
         break;
-    case AreaChartType:
+
+	// FIXME: Sort these in where applicable when we start to support them.
+    case ScatterChartType:
     case StockChartType:
-#if 0
-    case HiLoChartType:
-#endif
+    case BubbleChartType:
+    case SurfaceChartType:
+    case GanttChartType:
         // not supported yet
         break;
     }
@@ -187,19 +206,26 @@ void ChartTypeCommand::replaceDiagram(OdfChartType type)
     case CircleChartType:
         diagram = new PieDiagram();
         break;
-#if 0
-    case HiLoChartType:
-        kDebug() << "HiLo not supported yet";
-        break;
-#endif
     case RingChartType:
         diagram = new RingDiagram();
         break;
+    case ScatterChartType:
+        kDebug() << "Scatter chart not supported yet";
+	break;
     case RadarChartType:
         diagram = new PolarDiagram();
         break;
     case StockChartType:
-        kDebug() << "Stock not supported yet";
+        kDebug() << "Stock chart not supported yet";
+        break;
+    case BubbleChartType:
+        kDebug() << "Bubble chart not supported yet";
+        break;
+    case SurfaceChartType:
+        kDebug() << "Surface chart not supported yet";
+        break;
+    case GanttChartType:
+        kDebug() << "Gantt chart not supported yet";
         break;
     }
 

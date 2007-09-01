@@ -72,37 +72,53 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     layout->addWidget(button, 0, 2);
     buttonGroup->addButton(button, AreaChartType);
 
-#if 0
-    // FIXME: Name change of icon
-    button = new Button(this, i18n("HiLo"), KIcon("chart_hilo"));
-    button->setEnabled(false); // FIXME: not supported yet
-    layout->addWidget(button, 1, 0);
-    buttonGroup->addButton(button, StockChartType);
-#endif
-
-    // FIXME: Name change of icon
-    button = new Button(this, i18n("Stock"), KIcon("chart_boxwhisker"));
-    button->setEnabled(false); // TODO not supported yet
-    //layout->addWidget(button, 1, 1, 1, 2);
-    layout->addWidget(button, 1, 0 );
-    buttonGroup->addButton(button, StockChartType);
-
     // FIXME: Must rename chart_pie into chart_circle (or should we?)
     button = new Button(this, i18n("Pie"), KIcon("chart_pie"));
     button->setEnabled(false); // FIXME: not supported yet
-    layout->addWidget(button, 2, 0);
+    layout->addWidget(button, 1, 0);
     buttonGroup->addButton(button, CircleChartType);
 
     button = new Button(this, i18n("Ring"), KIcon("chart_ring"));
     button->setEnabled(false); // FIXME: not supported yet
-    layout->addWidget(button, 2, 1);
+    layout->addWidget(button, 1, 1);
     buttonGroup->addButton(button, RingChartType);
 
     // FIXME: Must rename chart_polar into chart_radar (or should we?)
     button = new Button(this, i18n("Polar"), KIcon("chart_polar"));
     button->setEnabled(false); // FIXME: not supported yet
-    layout->addWidget(button, 2, 2);
+    layout->addWidget(button, 1, 2);
     buttonGroup->addButton(button, RadarChartType);
+
+    // Scatter chart
+    button = new Button(this, i18n("Scatter"), KIcon("chart_scatter"));
+    button->setEnabled(false); // TODO not supported yet
+    layout->addWidget(button, 2, 0 );
+    buttonGroup->addButton(button, ScatterChartType);
+
+    // Bubble chart
+    button = new Button(this, i18n("Bubble"), KIcon("chart_bubble"));
+    button->setEnabled(false); // TODO not supported yet
+    layout->addWidget(button, 2, 1 );
+    buttonGroup->addButton(button, BubbleChartType);
+
+    // FIXME: Name change of icon
+    button = new Button(this, i18n("Stock"), KIcon("chart_boxwhisker"));
+    button->setEnabled(false); // TODO not supported yet
+    layout->addWidget(button, 3, 0 );
+    buttonGroup->addButton(button, StockChartType);
+
+    // Surface chart
+    button = new Button(this, i18n("Surface"), KIcon("chart_surface"));
+    button->setEnabled(false); // TODO not supported yet
+    layout->addWidget(button, 3, 1 );
+    buttonGroup->addButton(button, SurfaceChartType);
+
+    // Gantt chart
+    button = new Button(this, i18n("Gantt"), KIcon("chart_gantt"));
+    button->setEnabled(false); // TODO not supported yet
+    layout->addWidget(button, 3, 2 );
+    buttonGroup->addButton(button, GanttChartType);
+
 
     // Make the button for the current type selected.
 //     QPushButton *current = ((QPushButton*)buttonGroup->button( d->shape->params()->chartType() ));

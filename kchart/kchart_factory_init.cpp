@@ -20,4 +20,3 @@
 #include "kchart_factory.h"
 
 K_EXPORT_COMPONENT_FACTORY( libkchartpart, KChart::KChartFactory )
-

@@ -200,20 +200,30 @@ void ChartShape::setChartType( OdfChartType    newType,
     case CircleChartType:
         new_diagram = new PieDiagram();
         break;
-#if 0
-    case HiLoChartType:
-        // FIXME
-        return;
-        break;
-#endif
     case RingChartType:
         new_diagram = new RingDiagram();
+        break;
+    case ScatterChartType:
+	// FIXME
+	return;
         break;
     case RadarChartType:
         // FIXME
         return;
         break;
     case StockChartType:
+        // FIXME
+        return;
+        break;
+    case BubbleChartType:
+        // FIXME
+        return;
+        break;
+    case SurfaceChartType:
+        // FIXME
+        return;
+        break;
+    case GanttChartType:
         // FIXME
         return;
         break;
@@ -302,6 +312,8 @@ bool ChartShape::loadOdf( const KoXmlElement &element,
 //         QPointF pos( KoUnit::parseValue( title.attributeNS( KoXmlNS::svg, "x", QString() ) ),
 //                      KoUnit::parseValue( title.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
 //     }
+
+    return false;
 }
 
 
