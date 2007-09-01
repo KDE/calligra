@@ -37,6 +37,7 @@ using namespace KDChart;
 
 static OdfChartType chartType(AbstractDiagram* diagram)
 {
+#if 0  //Temporarily disabled
     if (qobject_cast<BarDiagram*>(diagram))
         return BarChartType;
     else if (qobject_cast<LineDiagram*>(diagram))
@@ -48,6 +49,7 @@ static OdfChartType chartType(AbstractDiagram* diagram)
     else if (qobject_cast<PolarDiagram*>(diagram))
         return PolarChartType;
     return BoxWhiskerChartType; // unsupported until now
+#endif
 }
 
 ChartTypeCommand::ChartTypeCommand(Chart* chart)
@@ -102,39 +104,40 @@ void ChartTypeCommand::undo()
 void ChartTypeCommand::setChartType(OdfChartType type)
 {
     m_newType = type;
-    switch (type)
-    {
+
+    switch (type) {
     case BarChartType:
         setText(i18n("Bar Chart"));
         break;
     case LineChartType:
         setText(i18n("Line Chart"));
         break;
-    case PieChartType:
-        setText(i18n("Pie Chart"));
+    case CircleChartType:
+        setText(i18n("Circle Chart"));
         break;
     case RingChartType:
         setText(i18n("Ring Chart"));
         break;
-    case PolarChartType:
-        setText(i18n("Polar Chart"));
+    case RadarChartType:
+        setText(i18n("Radar Chart"));
         break;
     case AreaChartType:
         setText(i18n("Area Chart"));
         break;
-    case BoxWhiskerChartType:
-        setText(i18n("Box && Whisker Chart"));
+    case StockChartType:
+        setText(i18n("Stock Chart"));
         break;
+#if 0  // Temporarily disabled
     case HiLoChartType:
         setText(i18n("HiLo Chart"));
         break;
+#endif
     }
 }
 
 void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
 {
-    switch (type)
-    {
+    switch (type) {
     case BarChartType:
     case LineChartType:
         if (!qobject_cast<CartesianCoordinatePlane*>(m_chart->coordinatePlane()))
@@ -146,11 +149,10 @@ void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
             m_chart->addCoordinatePlane(coordinatePlane);
         }
         break;
-    case PieChartType:
+    case CircleChartType:
     case RingChartType:
-    case PolarChartType:
-        if (!qobject_cast<PolarCoordinatePlane*>(m_chart->coordinatePlane()))
-        {
+    case RadarChartType:
+        if (!qobject_cast<PolarCoordinatePlane*>(m_chart->coordinatePlane())) {
             kDebug() << "replacing coordinate plane by a polar coordinate plane";
             m_oldCoordinatePlane = m_chart->coordinatePlane();
             m_chart->takeCoordinatePlane(m_oldCoordinatePlane);
@@ -159,8 +161,10 @@ void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
         }
         break;
     case AreaChartType:
-    case BoxWhiskerChartType:
+    case StockChartType:
+#if 0
     case HiLoChartType:
+#endif
         // not supported yet
         break;
     }
@@ -170,8 +174,7 @@ void ChartTypeCommand::replaceDiagram(OdfChartType type)
 {
     Q_ASSERT(m_chart->coordinatePlane());
     AbstractDiagram* diagram = 0;
-    switch (type)
-    {
+    switch (type) {
     case BarChartType:
         diagram = new BarDiagram();
         break;
@@ -181,25 +184,26 @@ void ChartTypeCommand::replaceDiagram(OdfChartType type)
     case AreaChartType:
         kDebug() << "Area not supported yet";
         break;
-    case PieChartType:
+    case CircleChartType:
         diagram = new PieDiagram();
         break;
+#if 0
     case HiLoChartType:
         kDebug() << "HiLo not supported yet";
         break;
+#endif
     case RingChartType:
         diagram = new RingDiagram();
         break;
-    case PolarChartType:
+    case RadarChartType:
         diagram = new PolarDiagram();
         break;
-    case BoxWhiskerChartType:
-        kDebug() << "BoxWhisker not supported yet";
+    case StockChartType:
+        kDebug() << "Stock not supported yet";
         break;
     }
 
-    if (diagram)
-    {
+    if (diagram) {
         // save the old diagram
         m_oldDiagram = m_chart->coordinatePlane()->diagram();
         // remove but do not delete old diagram

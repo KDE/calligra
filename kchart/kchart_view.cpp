@@ -28,7 +28,6 @@
 #include <qpainter.h>
 #include <qcursor.h>
 #include <QMenu>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QPaintEvent>
@@ -206,19 +205,21 @@ void KChartView::updateGuiTypeOfChart()
     case AreaChartType:
 	m_chartareas->setChecked(true);
 	break;
-    case PieChartType:
+    case CircleChartType:
 	m_chartpie->setChecked(true);
 	break;
+#if 0 //Temporarily disabled because this is a stock chart and so is BoxWhiskers
     case HiLoChartType:
 	m_charthilo->setChecked(true);
 	break;
+#endif
     case RingChartType:
 	m_chartring->setChecked(true);
 	break;
-    case PolarChartType:
+    case RadarChartType:
         m_chartpolar->setChecked(true);
         break;
-    case BoxWhiskerChartType:
+    case StockChartType:
         m_chartbw->setChecked( true );
         break;
     default:
@@ -287,7 +288,7 @@ void KChartView::pieChart()
         m_chartpie->setChecked( true ); // always one has to be checked !
 #else
     ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(PieChartType);
+    command->setChartType(CircleChartType);
     koDocument()->addCommand(command);
     update();
 #endif
@@ -387,6 +388,7 @@ void KChartView::areasChart()
 }
 
 
+#if 0  // Temporarily disabled because there is no type HiLo in ODF
 void KChartView::hiLoChart()
 {
 #if 0
@@ -405,12 +407,12 @@ void KChartView::hiLoChart()
 	m_charthilo->setChecked( true ); // always one has to be checked !
 #else
     ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(HiLoChartType);
+//     command->setChartType(HiLoChartType);
     koDocument()->addCommand(command);
     update();
 #endif
 }
-
+#endif
 
 void KChartView::ringChart()
 {
@@ -436,7 +438,7 @@ void KChartView::ringChart()
 }
 
 
-void KChartView::polarChart()
+void KChartView::radarChart()
 {
 #if 0
     if ( m_chartpolar->isChecked() ) {
@@ -453,14 +455,14 @@ void KChartView::polarChart()
         m_chartpolar->setChecked( true ); // always one has to be checked !
 #else
     ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(PolarChartType);
+    command->setChartType(RadarChartType);
     koDocument()->addCommand(command);
     update();
 #endif
 }
 
 
-void KChartView::bwChart()
+void KChartView::stockChart()
 {
 #if 0
     if ( m_chartbw->isChecked() ) {
@@ -477,7 +479,7 @@ void KChartView::bwChart()
         m_chartbw->setChecked( true ); // always one has to be checked !
 #else
     ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(BoxWhiskerChartType);
+    command->setChartType(StockChartType);
     koDocument()->addCommand(command);
     update();
 #endif

@@ -34,6 +34,8 @@
 
 // KOffice
 #include <KoViewConverter.h>
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
 
 // KDChart
 #include "KDChartAbstractCoordinatePlane.h"
@@ -48,6 +50,7 @@
 #include "KDChartFrameAttributes.h"
 #include "KDChartGridAttributes.h"
 #include "KDChartLegend.h"
+#include "KDChartHeaderFooter.h"
 
 // KChart
 #include "kchart_global.h"
@@ -55,6 +58,19 @@
 
 using namespace KChart;
 using namespace KDChart;
+
+
+static bool isPolar( OdfChartType type )
+{
+    return ( type == CircleChartType
+	     || type == RingChartType
+	     || type == RadarChartType );
+}
+
+static bool isCartesian( OdfChartType type )
+{
+    return !isPolar( type );
+}
 
 
 class ChartShape::Private
@@ -76,7 +92,7 @@ ChartShape::ChartShape()
     setShapeId( ChartShapeId );
 
     d->chartType    = BarChartType;
-    d->chartSubType = BarNormalSubtype;
+    d->chartSubType = NormalChartSubtype;
 
     // Initialize a basic chart.
     d->chart     = new Chart();
@@ -161,40 +177,6 @@ Chart* ChartShape::chart() const
 }
 
 
-void ChartShape::setChartType( OdfChartType newType )
-{
-    // Don't continue if we will just switch to the same type.
-    if (d->chartType == newType)
-        return;
-
-    switch (newType) {
-    case BarChartType:
-	setChartType( BarChartType, BarNormalSubtype);
-        break;
-    case LineChartType:
-	setChartType( LineChartType, LineNormalSubtype);
-        break;
-    case AreaChartType:
-        // FIXME
-        break;
-    case PieChartType:
-        // FIXME
-        break;
-    case HiLoChartType:
-        // FIXME
-        break;
-    case RingChartType:
-        // FIXME
-        break;
-    case PolarChartType:
-        // FIXME
-        break;
-    case BoxWhiskerChartType:
-        // FIXME
-        break;
-    }
-}
-
 void ChartShape::setChartType( OdfChartType    newType,
                                OdfChartSubtype newSubType )
 {
@@ -215,21 +197,23 @@ void ChartShape::setChartType( OdfChartType    newType,
         //FIXME: is this the right thing to do? a type-cast?
         ((LineDiagram*) new_diagram)->setType( LineDiagram::Stacked );
         break;
-    case PieChartType:
+    case CircleChartType:
         new_diagram = new PieDiagram();
         break;
+#if 0
     case HiLoChartType:
         // FIXME
         return;
         break;
+#endif
     case RingChartType:
         new_diagram = new RingDiagram();
         break;
-    case PolarChartType:
+    case RadarChartType:
         // FIXME
         return;
         break;
-    case BoxWhiskerChartType:
+    case StockChartType:
         // FIXME
         return;
         break;
@@ -300,6 +284,10 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 }
 
 
+// ================================================================
+//               OpenDocument loading and saving
+
+
 void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 {
 }
@@ -307,7 +295,13 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 bool ChartShape::loadOdf( const KoXmlElement &element, 
 			  KoShapeLoadingContext &context )
 {
-    return false; // TODO
+
+//     if( element.hasAttributeNS( KoXmlNS::chart, "title" ) ) {
+//         HeaderFooter Header;
+//         KoXmlElement title = element.attributeNS( KoXmlNS::chart, "title" );
+//         QPointF pos( KoUnit::parseValue( title.attributeNS( KoXmlNS::svg, "x", QString() ) ),
+//                      KoUnit::parseValue( title.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
+//     }
 }
 
 
@@ -318,5 +312,6 @@ bool ChartShape::loadOdf( const KoXmlElement &element,
 #if 0
 void ChartShape::initNullChart()
 {
-}
+} 
 #endif
+

@@ -119,7 +119,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
 	m_params->setDataDirection( KChartParams::DataColumns );
 #else
         m_type    = BarChartType;
-        m_subtype = BarNormalSubtype;
+        m_subtype = NormalChartSubtype;
 
         m_chart       = new KDChart::Chart();
         m_chart->coordinatePlane()->replaceDiagram(new KDChart::BarDiagram()); // FIXME

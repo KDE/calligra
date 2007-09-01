@@ -31,23 +31,22 @@ typedef enum {
     BarChartType,
     LineChartType,
     AreaChartType,
-    PieChartType,
-    HiLoChartType,
+    CircleChartType,		// Pie in KDChart
     RingChartType,
-    PolarChartType,
-    BoxWhiskerChartType
+    ScatterChartType,
+    RadarChartType,		// Polar in KDChart
+    StockChartType,
+    BubbleChartType,
+    SurfaceChartType,
+    GanttChartType
 } OdfChartType;
 
 
-// Chart subtypes
+// Chart subtypes, applicable to Bar, Line, Area, and Radar
 typedef enum {
-    BarNormalSubtype,
-    BarStackedSubtype,
-    BarPercentSubtype,
-
-    LineNormalSubtype,
-    LineStackedSubtype,
-    LinePercentSubtype
+    NormalChartSubtype,
+    StackedChartSubtype,
+    PercentChartSubtype,
 } OdfChartSubtype;
 
 // Data direction

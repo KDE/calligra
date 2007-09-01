@@ -63,10 +63,13 @@ public slots:
     void  barsChart();
     void  lineChart();
     void  areasChart();
+#if 0
     void  hiLoChart();
+#endif
     void  ringChart();
-    void  polarChart();
-    void  bwChart();
+    void  radarChart();
+    void  stockChart();
+
     void  print(KPrinter &);
     void  setupPrinter(KPrinter &);
 

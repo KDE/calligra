@@ -34,6 +34,8 @@
 class QAbstractItemModel;
 
 
+//enum ChartType { NoType, Bar, Line, Pie, Ring, Polar };
+
 namespace KDChart
 {
     class Chart;
@@ -60,13 +62,19 @@ public:
     /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
+    OdfChartType chartType() const;
+
+
  public Q_SLOTS:
     /// Set new chart type and subtype.
-    void setChartType( OdfChartType newType );
-    void setChartType( OdfChartType newType, OdfChartSubtype newSubType );
+    void setChartType( OdfChartType newType, 
+		       OdfChartSubtype newSubType = NormalChartSubtype );
 
 
 private:
+
+    //static bool  isCartesian( OdfChartType type );
+    //static bool  isPolar( OdfChartType type );
     Q_DISABLE_COPY( ChartShape )
 
     class Private;

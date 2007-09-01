@@ -59,7 +59,7 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     buttonGroup->setExclusive(true);
     //buttonGroup->hide();
 
-    Button* button = new Button(this, i18n("Bar"), KIcon("chart_bar"));
+    Button* button = new Button(this, i18n("Bars"), KIcon("chart_bar"));
     layout->addWidget(button, 0, 0);
     buttonGroup->addButton(button, BarChartType);
 
@@ -72,27 +72,37 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     layout->addWidget(button, 0, 2);
     buttonGroup->addButton(button, AreaChartType);
 
+#if 0
+    // FIXME: Name change of icon
     button = new Button(this, i18n("HiLo"), KIcon("chart_hilo"));
-    button->setEnabled(false); // TODO not supported yet
+    button->setEnabled(false); // FIXME: not supported yet
     layout->addWidget(button, 1, 0);
-    buttonGroup->addButton(button, HiLoChartType);
+    buttonGroup->addButton(button, StockChartType);
+#endif
 
-    button = new Button(this, i18n("Box && Whisker"), KIcon("chart_boxwhisker"));
+    // FIXME: Name change of icon
+    button = new Button(this, i18n("Stock"), KIcon("chart_boxwhisker"));
     button->setEnabled(false); // TODO not supported yet
-    layout->addWidget(button, 1, 1, 1, 2);
-    buttonGroup->addButton(button, BoxWhiskerChartType);
+    //layout->addWidget(button, 1, 1, 1, 2);
+    layout->addWidget(button, 1, 0 );
+    buttonGroup->addButton(button, StockChartType);
 
+    // FIXME: Must rename chart_pie into chart_circle (or should we?)
     button = new Button(this, i18n("Pie"), KIcon("chart_pie"));
+    button->setEnabled(false); // FIXME: not supported yet
     layout->addWidget(button, 2, 0);
-    buttonGroup->addButton(button, PieChartType);
+    buttonGroup->addButton(button, CircleChartType);
 
     button = new Button(this, i18n("Ring"), KIcon("chart_ring"));
+    button->setEnabled(false); // FIXME: not supported yet
     layout->addWidget(button, 2, 1);
     buttonGroup->addButton(button, RingChartType);
 
+    // FIXME: Must rename chart_polar into chart_radar (or should we?)
     button = new Button(this, i18n("Polar"), KIcon("chart_polar"));
+    button->setEnabled(false); // FIXME: not supported yet
     layout->addWidget(button, 2, 2);
-    buttonGroup->addButton(button, PolarChartType);
+    buttonGroup->addButton(button, RadarChartType);
 
     // Make the button for the current type selected.
 //     QPushButton *current = ((QPushButton*)buttonGroup->button( d->shape->params()->chartType() ));
