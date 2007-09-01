@@ -838,6 +838,8 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                         drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
                     }
 
+                    QFontMetrics metrics( fmt.font() );
+                    double y = line.position().y() + line.ascent() + metrics.underlinePos();
                     KoCharacterStyle::LineStyle fontUnderLineStyle = (KoCharacterStyle::LineStyle)
                     fmt.intProperty(KoCharacterStyle::UnderlineStyle);
                     KoCharacterStyle::LineType fontUnderLineType = (KoCharacterStyle::LineType)
@@ -852,6 +854,10 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                         
                         drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
                     }
+
+                    bool misspelled = fmt.boolProperty(KoCharacterStyle::Spelling);
+                    if (misspelled)
+                        drawDecorationLine (painter, QColor(255,0,0), KoCharacterStyle::SingleLine, KoCharacterStyle::WaveLine, x1, x2, y);
                 }
             }
         }

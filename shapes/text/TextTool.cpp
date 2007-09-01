@@ -120,7 +120,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_allowAddUndoCommand(true),
     m_trackChanges(false),
     m_allowResourceProviderUpdates(true),
+    m_needSpellChecking(true),
     m_prevCursorPosition(-1),
+    m_spellcheckPlugin(0),
     m_currentCommand(0),
     m_currentCommandHasChildren(false),
     m_specialCharacterDocker(0)
@@ -340,7 +342,13 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
             kWarning(32500) << "Duplicate id for textEditingPlugin, ignoring one! (" << factory->id() << ")\n";
             continue;
         }
-        m_textEditingPlugins.insert(factory->id(), factory->create());
+        QString factoryId = factory->id();
+        KoTextEditingPlugin *plugin = factory->create();
+        if (factoryId == "spellcheck") {
+            kDebug() << "KOffice SpellCheck plugin found";
+            m_spellcheckPlugin = plugin;
+        }
+        m_textEditingPlugins.insert(factory->id(), plugin);
     }
 
     foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins.values()) {
@@ -996,6 +1004,18 @@ void TextTool::activate (bool temporary) {
             break;
         }
     }
+
+    if (m_needSpellChecking && m_spellcheckPlugin) {
+        foreach (KoShape *shape, m_canvas->shapeManager()->shapes()) {
+            TextShape *textShape = dynamic_cast<TextShape*>(shape);
+            if (textShape) {
+                KoTextShapeData *textShapeData = static_cast<KoTextShapeData*>(textShape->userData());
+                m_spellcheckPlugin->checkSection(textShapeData->document(), 0, -1);
+            }
+        }
+        m_needSpellChecking = false;
+    }
+
     m_textShape->repaint();
 
     updateSelectionHandler();

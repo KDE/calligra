@@ -200,6 +200,7 @@ private:
     bool m_allowAddUndoCommand;
     bool m_trackChanges;
     bool m_allowResourceProviderUpdates;
+    bool m_needSpellChecking;
     int m_prevCursorPosition; /// used by editingPluginEvents
 
     QAction *m_actionFormatBold;
@@ -219,6 +220,7 @@ private:
     KoColorSetAction *m_actionFormatTextColor;
 
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
+    KoTextEditingPlugin *m_spellcheckPlugin;
 
     QUndoCommand *m_currentCommand;
     bool m_currentCommandHasChildren;
