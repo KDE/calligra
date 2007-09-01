@@ -1,7 +1,6 @@
 /*
 *
-* Copyright (C) 2005  Fredrik Edemar
-*                     f_edemar@linux.se
+* Copyright (C) 2005  Fredrik Edemar   <f_edemar@linux.se>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,8 +19,8 @@
 *
 */
 
-#ifndef KCPRINTDIALOG_INCLUDED
-#define KCPRINTDIALOG_INCLUDED
+#ifndef KCPRINTERDIALOG
+#define KCPRINTERDIALOG
 
 #include <QLabel>
 
@@ -51,4 +50,5 @@ class KCPrinterDialog : public KPrintDialogPage
 
 }  //namespace KChart
 
-#endif //kchartprinterdlg_included
+
+#endif // KCPRINTERDIALOG

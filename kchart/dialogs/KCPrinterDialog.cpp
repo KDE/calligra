@@ -20,6 +20,10 @@
 *
 */
 
+
+// Local
+#include "KCPrinterDialog.h"
+
 // Qt includes
 #include <QLayout>
 #include <QLabel>
@@ -29,8 +33,6 @@
 #include <kdialog.h>
 #include <klocale.h>
 
-// local includes
-#include "KCPrinterDialog.h"
 
 namespace KChart
 {

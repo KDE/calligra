@@ -1,4 +1,5 @@
 /* This file is part of the KDE libraries
+
     Copyright (C) 2001, 2002, 2003, 2004 Laurent Montel <montel@kde.org>
     Copyright (C) 2006 Fredrik Edemar <f_edemar@linux.se>
 
@@ -20,8 +21,8 @@
 
 
 
-#ifndef KCHART_PARAMS_IFACE_H
-#define KCHART_PARAMS_IFACE_H
+#ifndef KCHARTPARAMSADAPTOR_H
+#define KCHARTPARAMSADAPTOR_H
 
 
 #include <QObject>
@@ -162,4 +163,5 @@ private:
 
 }  //KChart namespace
 
-#endif
+
+#endif // KCHARTPARAMSADAPTOR_H

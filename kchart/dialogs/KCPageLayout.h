@@ -20,6 +20,7 @@
 #ifndef __KCPAGELAYOUT__
 #define __KCPAGELAYOUT__
 
+
 #include <kdialog.h>
 
 class QLineEdit;
@@ -27,8 +28,9 @@ class QLineEdit;
 namespace KChart
 {
 
+class KChartPart;
 class KChartView;
-//class KChartParams;
+
 
 class KCPageLayout : public KDialog
 {
