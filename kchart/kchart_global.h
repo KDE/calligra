@@ -46,7 +46,7 @@ typedef enum {
 typedef enum {
     NormalChartSubtype,
     StackedChartSubtype,
-    PercentChartSubtype,
+    PercentChartSubtype
 } OdfChartSubtype;
 
 // Data direction
