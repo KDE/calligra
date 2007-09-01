@@ -1,8 +1,29 @@
-/**
- *
- * Kalle Dalheimer <kalle@kde.org>
- */
+/* This file is part of the KDE project
 
+   Copyright 1999-2007  Kalle Dalheimer <kalle@kde.org>
+   Copyright 2005-2007  Inge Wallin <inge@lysator.liu.se>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+
+// Local
+#include "kchart_part.h"
+
+// Posix
 #include <float.h> // For basic data types characteristics.
 
 // For debugging
@@ -12,18 +33,20 @@
 using std::cout;
 using std::cerr;
 
+// Qt
 #include <QStandardItemModel>
+#include <qdom.h>
+#include <qtextstream.h>
+#include <qbuffer.h>
+#include <qpainter.h>
 
+// KDE
 #include <klocale.h>
+#include <kstandarddirs.h>
+#include <kglobal.h>
+#include <kdebug.h>
 
-#include "kchart_part.h"
-#include "kchart_view.h"
-#include "kchart_factory.h"
-#include "KDChartChart"
-#include "KDChartAbstractDiagram" // Base class for the diagrams
-#include "KDChartAbstractCoordinatePlane"
-#include "KDChartBarDiagram"
-
+// KOffice
 #include <KoDom.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -31,14 +54,16 @@ using std::cerr;
 #include <KoOasisStore.h>
 #include <KoOasisLoadingContext.h>
 
-#include <kstandarddirs.h>
-#include <kglobal.h>
-#include <kdebug.h>
+// KDChart
+#include "KDChartChart"
+#include "KDChartAbstractDiagram" // Base class for the diagrams
+#include "KDChartAbstractCoordinatePlane"
+#include "KDChartBarDiagram"
 
-#include <qdom.h>
-#include <qtextstream.h>
-#include <qbuffer.h>
-#include <qpainter.h>
+// KChart
+#include "kchart_view.h"
+#include "kchart_factory.h"
+
 
 using namespace std;
 
