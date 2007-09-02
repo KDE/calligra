@@ -29,7 +29,7 @@ public:
     : KPrShapeAnimation( shape, step, Appear )        
     {}
 
-    bool animate( QPainter &painter ) { Q_UNUSED( painter ); return true; }
+    bool animate( QPainter &painter, const KoViewConverter &converter ) { Q_UNUSED( painter ); Q_UNUSED( converter ); return true; }
 
     void animateRect( QRectF & rect ) { Q_UNUSED( rect ); }
 
@@ -45,7 +45,7 @@ public:
     : KPrShapeAnimation( shape, step, Disappear )        
     {}
 
-    bool animate( QPainter &painter ) { Q_UNUSED( painter ); return true; }
+    bool animate( QPainter &painter, const KoViewConverter &converter ) { Q_UNUSED( painter ); Q_UNUSED( converter ); return true; }
 
     void animateRect( QRectF & rect ) { Q_UNUSED( rect ); }
 

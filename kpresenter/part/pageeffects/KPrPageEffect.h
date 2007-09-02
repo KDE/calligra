@@ -61,6 +61,8 @@ public:
      */
     void finish();
 
+    bool isFinished();
+
     /**
      * Get the duration of the page effect.
      *

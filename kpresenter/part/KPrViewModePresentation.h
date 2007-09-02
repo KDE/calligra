@@ -32,6 +32,8 @@ public:
 	KPrViewModePresentation( KoPAView * view, KoPACanvas * m_canvas );
     ~KPrViewModePresentation();
 
+    KoViewConverter * viewConverter();
+
     void paintEvent( QPaintEvent* event );
     void tabletEvent( QTabletEvent *event, const QPointF &point );
     void mousePressEvent( QMouseEvent *event, const QPointF &point );

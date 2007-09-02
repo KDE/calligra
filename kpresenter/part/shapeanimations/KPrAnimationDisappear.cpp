@@ -39,7 +39,7 @@ KPrAnimationDisappear::~KPrAnimationDisappear()
 {
 }
 
-bool KPrAnimationDisappear::animate( QPainter &painter )
+bool KPrAnimationDisappear::animate( QPainter &painter, const KoViewConverter &converter )
 {
     painter.translate( m_translate );
     return m_finished;

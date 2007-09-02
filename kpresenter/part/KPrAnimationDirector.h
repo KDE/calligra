@@ -56,6 +56,8 @@ public:
 
     void paintEvent( QPaintEvent* event );
 
+    KoViewConverter * viewConverter();
+
     /**
      * do the next step in the presentation
      */
@@ -94,13 +96,23 @@ protected:
     // paint the given step to the painter
     void paintStep( QPainter & painter );
 
+    /**
+     * Finish the running shape animations
+     */
+    void finishAnimations();
+
+    /**
+     * Start the timeline
+     */
+    void startTimeLine( int duration );
+
+    void animateShapes( int currentTime );
+
 protected slots:
     // update the zoom value
     void updateZoom( const QSize & size );
     // set the animations to the current m_stepIndex
     void updateAnimations();
-
-private slots:
     // acts on the time line event
     void animate();
 
@@ -119,6 +131,7 @@ private:
     int m_pageIndex;
     int m_stepIndex;
     QList<int> m_steps;
+    int m_maxShapeDuration;
 };
 
 #endif /* KPRANIMATIONDIRECTOR_H */

@@ -45,6 +45,12 @@ KPrViewModePresentation::~KPrViewModePresentation()
     delete m_tool;
 }
 
+KoViewConverter * KPrViewModePresentation::viewConverter()
+{
+    // this is dangerous as m_animationDirector might be 0
+    return m_animationDirector->viewConverter();
+}
+
 void KPrViewModePresentation::paintEvent( QPaintEvent* event )
 {
     if ( m_animationDirector )

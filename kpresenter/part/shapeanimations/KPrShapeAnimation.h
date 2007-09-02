@@ -28,6 +28,7 @@ class QPainter;
 class QRectF;
 class KoShape;
 class KoCanvasBase;
+class KoViewConverter;
 
 class KPRESENTER_TEST_EXPORT KPrShapeAnimation
 {
@@ -49,7 +50,7 @@ public:
      *
      * @return true when the animations is finished
      */
-    virtual bool animate( QPainter &painter ) = 0;
+    virtual bool animate( QPainter &painter, const KoViewConverter &converter ) = 0;
 
     /**
      * @brief Update the bounding rect of the shape in the animation

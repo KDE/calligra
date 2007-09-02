@@ -50,6 +50,11 @@ void KPrPageEffect::finish()
     m_widget->update();
 }
 
+bool KPrPageEffect::isFinished()
+{
+    return m_finish;
+}
+
 int KPrPageEffect::duration()
 {
     return m_timeLine.duration();

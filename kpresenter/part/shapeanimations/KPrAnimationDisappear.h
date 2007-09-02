@@ -31,7 +31,7 @@ public:
     KPrAnimationDisappear( KoShape * shape, int step );
     virtual ~KPrAnimationDisappear();
 
-    virtual bool animate( QPainter &painter );
+    virtual bool animate( QPainter &painter, const KoViewConverter &converter );
     virtual void animateRect( QRectF & rect );
     virtual void next( int currentTime, KoCanvasBase * canvas );
     virtual void finish( KoCanvasBase * canvas );

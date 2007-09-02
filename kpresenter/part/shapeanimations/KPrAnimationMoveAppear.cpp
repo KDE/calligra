@@ -22,6 +22,8 @@
 #include <QPainter>
 #include <KoCanvasBase.h>
 #include <KoShape.h>
+#include <KoViewConverter.h>
+#include <kdebug.h>
 
 #define TIMEFACTOR 1000.0
 
@@ -39,9 +41,9 @@ KPrAnimationMoveAppear::~KPrAnimationMoveAppear()
 {
 }
 
-bool KPrAnimationMoveAppear::animate( QPainter &painter )
+bool KPrAnimationMoveAppear::animate( QPainter &painter, const KoViewConverter &converter )
 {
-    painter.translate( m_translate );
+    painter.translate( converter.documentToView( m_translate ) );
     return m_finished;
 }
 
@@ -56,6 +58,7 @@ void KPrAnimationMoveAppear::next( int currentTime, KoCanvasBase * canvas )
     m_translate.setX( m_timeLine.frameForTime( currentTime ) / TIMEFACTOR );
     canvas->updateCanvas( m_shapeRect.translated( m_translate ) );
     m_finished = m_translate.x() == 0;
+    kDebug() << currentTime << m_translate << m_finished << m_shapeRect;
 }
 
 void KPrAnimationMoveAppear::finish( KoCanvasBase * canvas )

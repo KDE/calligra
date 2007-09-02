@@ -27,6 +27,8 @@
 #include "KPrAnimationDirector.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
+#include "kdebug.h"
+
 KPrShapeManagerAnimationStrategy::KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationDirector * animationDirector )
 : KoShapeManagerPaintingStrategy( shapeManager )
 , m_animationDirector( animationDirector )
@@ -40,12 +42,13 @@ KPrShapeManagerAnimationStrategy::~KPrShapeManagerAnimationStrategy()
 void KPrShapeManagerAnimationStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
 {
     if ( m_animationDirector->shapeShown( shape ) ) {
+        //kDebug() << shape;
         painter.save();
         painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
         // animate shape
         KPrShapeAnimation * animation = m_animationDirector->shapeAnimation( shape );
         if ( animation ) {
-            animation->animate( painter );
+            animation->animate( painter, converter );
         }
         // paint shape
         shapeManager()->paintShape( shape, painter, converter, forPrint );
@@ -57,6 +60,7 @@ void KPrShapeManagerAnimationStrategy::adapt( KoShape * shape, QRectF & rect )
 {
     KPrShapeAnimation * animation = m_animationDirector->shapeAnimation( shape );
     if ( animation ) {
+        QRectF oldRect = rect;
         animation->animateRect( rect );
     }
 }
