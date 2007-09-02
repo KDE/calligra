@@ -14,5 +14,6 @@ Name[x-test]=xxPath Shapesxx
 Name[zh_TW]=路徑形狀
 ServiceTypes=KOffice/Shape
 Type=Service
-X-Flake-Version=1
 X-KDE-Library=pathshapes
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

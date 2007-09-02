@@ -14,4 +14,5 @@ Name[zh_TW]=文字形狀
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=textshape
-X-Flake-Version=1
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

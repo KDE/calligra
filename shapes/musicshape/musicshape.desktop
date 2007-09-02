@@ -14,4 +14,5 @@ Name[zh_TW]=音樂形狀
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=musicshape
-X-Flake-Version=1
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

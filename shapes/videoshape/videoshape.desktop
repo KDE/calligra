@@ -14,4 +14,5 @@ Name[zh_TW]=影像形狀
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=videoshape
-X-Flake-Version=1
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

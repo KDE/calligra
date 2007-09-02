@@ -12,4 +12,5 @@ Name[zh_TW]=DivineProportion 形狀
 ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=divineproportionshape
-X-Flake-Version=1
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
