@@ -153,7 +153,7 @@ on any new pages.</para></tip></listitem>
 
 
 
-<para>If you place a mark in the check box labled <guilabel>Changes will be applied to all
+<para>If you place a mark in the check box labeled <guilabel>Changes will be applied to all
 frames in frameset</guilabel>, then any changes made in the frame properties dialog box
 will automatically be applied to all frames within the frameset.</para>
 

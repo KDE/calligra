@@ -211,7 +211,7 @@ do this quickly and easily.</para>
 <para>First, enter the modifier value into any spare cell on your spreadsheet 
 and <guimenuitem>Copy</guimenuitem> it. Then select the area of cells you want 
 to change, choose <guimenuitem>Special Paste...</guimenuitem> from the 
-<guimenu>Edit</guimenu> or <mousebutton>right</mousebutton> mouse button menu 
+<guimenu>Edit</guimenu> or the context menu 
 and select <guilabel>Addition</guilabel>, <guilabel>Subtraction</guilabel>, 
 <guilabel>Multiplication</guilabel> or <guilabel>Division</guilabel> from the 
 <guilabel>Operation</guilabel> section of the dialog box.</para>
@@ -236,10 +236,10 @@ equal 4 ?</emphasis></para>
 <para>For this example you could enter <userinput>=A2+A2*A2</userinput>
 into A1 then either try different values in A2 until the result in A1 is as 
 close as you wish to <emphasis>4</emphasis> or, preferably, use &kspread;'s  
-<guimenuitem>Goal Seek</guimenuitem> feature which automatically adjusts the 
+<guimenuitem>Goal Seek...</guimenuitem> feature which automatically adjusts the 
 value in one cell to try to make the value in another cell as close as 
 possible to a target value.</para>
-<para>It is invoked by selecting <guimenuitem>Goal Seek</guimenuitem> from 
+<para>It is invoked by selecting <guimenuitem>Goal Seek...</guimenuitem> from 
 the <guimenu>Data</guimenu> menu. This brings up a dialog box in which you 
 should enter the reference of the target value cell (<userinput>A1</userinput> 
 in this case) into the <guilabel>Set cell:</guilabel> box, the target value 

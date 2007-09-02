@@ -93,7 +93,7 @@ labeled <guilabel>Start at:</guilabel>.  If you have selected a bulleted list st
 </sect3>
 <sect3 id="list-depth"><title>Multi-level lists</title>
 
-<para>The spin box labled <guilabel>Depth:</guilabel> is used to add subsections to your list.  By selecting a depth greater than one,
+<para>The spin box labeled <guilabel>Depth:</guilabel> is used to add subsections to your list.  By selecting a depth greater than one,
 you are adding a subsection to the list.  </para>
 
 <para>Example of a multilevel enumerated list:</para>

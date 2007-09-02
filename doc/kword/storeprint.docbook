@@ -402,15 +402,15 @@ select the desired printer.</para>
 <para>If you want to print your output into a postscript file, to a PDF file, 
 a fax modem (to send it as a fax) or email the file as a PDF file, select
 the appropriate option from the combo box labeled <guilabel>Name</guilabel>. Once that option has been selected, enter
-the filename into the text box labled <guilabel>Output file:</guilabel>.</para>
+the filename into the text box labeled <guilabel>Output file:</guilabel>.</para>
 
-<para>The line labled <guilabel>State</guilabel> tells you if your printer is currently connected and if it is printing another page. You can not change any information on this line.</para>
+<para>The line labeled <guilabel>State</guilabel> tells you if your printer is currently connected and if it is printing another page. You can not change any information on this line.</para>
 
-<para>The lines labled <guilabel>Type</guilabel> and <guilabel>Location</guilabel> tells you what type of printer is currently selected and where that printer is located. You can not change any information on these lines.</para>
+<para>The lines labeled <guilabel>Type</guilabel> and <guilabel>Location</guilabel> tells you what type of printer is currently selected and where that printer is located. You can not change any information on these lines.</para>
 
 
 
-<para>The line labled <guilabel>Comment</guilabel> describes how
+<para>The line labeled <guilabel>Comment</guilabel> describes how
 &kword; interacts with your computer (what driver and print system it is using). You can not change anything on this line.  Complete setup of the &kde;
 printing system is beyond the scope of this document.  For more information see the &kde; 
 print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para>

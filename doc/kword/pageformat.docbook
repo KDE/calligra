@@ -64,7 +64,7 @@ you use for your document rulers. (In this example, we are using
 inches.)  To change the units, follow the instructions in the section entitled
 <link linkend="rulers">Using Rulers</link>.</para>
 
-<para>The dialog section labled <guilabel>Page Size</guilabel> is used to specify
+<para>The dialog section labeled <guilabel>Page Size</guilabel> is used to specify
 the paper size for the document.  </para>
 <para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
 box labeled <guilabel>Size</guilabel>.</para>
@@ -215,10 +215,10 @@ you use for your document rulers. (In this example, we are using
 inches.)  To change the units, follow the instructions in the section entitled
 <link linkend="rulers">Using Rulers</link>.</para>
 
-<para>The dialog section labled <guilabel>Page Size</guilabel> is used to specify
+<para>The dialog section labeled <guilabel>Page Size</guilabel> is used to specify
 the paper size for the document.  </para>
 <para>&kword; includes many predefined paper sizes.  Select the appropriate paper size with the drop down
-box labled <guilabel>Size</guilabel>.</para>
+box labeled <guilabel>Size</guilabel>.</para>
 
 <para>In addition to standard paper sizes, there are two selections that
 deserve special mention.</para>

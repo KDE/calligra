@@ -68,7 +68,7 @@
 	</action> from the menu.
       </para>
       <para>
-	Each child window has a titlebar with buttons for maximizing,
+	Each child window has a title bar with buttons for maximizing,
 	minimizing and closing it.  They can also be moved and resized
 	within the main window in the normal way (for example, they
 	can be moved by clicking and dragging the title bar).

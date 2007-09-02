@@ -953,8 +953,8 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <row><entry>&Microsoft; Word</entry><entry>Yes</entry><entry>No</entry></row>
 <row><entry>&Microsoft; Write</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>Oasis OpenDocument</entry><entry>Yes</entry><entry>Yes</entry></row>
-<row><entry>Openoffice.org Presentation</entry><entry>Yes</entry><entry>No</entry></row>
-<row><entry>Openoffice.org Text Document</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>OpenOffice.org Presentation</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>OpenOffice.org Text Document</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>Palm Document</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>PDF</entry><entry>Yes</entry><entry>No</entry></row>
 <row><entry>Plain Text</entry><entry>Yes</entry><entry>Yes</entry></row>
@@ -962,7 +962,7 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <row><entry>SGML</entry><entry>No</entry><entry>Yes</entry></row>
 <row><entry>TeX Document</entry><entry>No</entry><entry>Yes</entry></row>
 <row><entry>WML</entry><entry>Yes</entry><entry>Yes</entry></row>
-<row><entry>Wordperfect</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>WordPerfect</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>&XML;</entry><entry>Yes</entry><entry>No</entry></row>
 </tbody>
 </tgroup>
