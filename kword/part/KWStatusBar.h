@@ -49,8 +49,8 @@ public:
     */
     virtual ~KWStatusBar();
 
-private Q_SLOTS:
-    void slotModifiedChanged(bool);
+private slots:
+    void slotModifiedChanged(bool modified);
     void slotPagesChanged();
     void slotMousePositionChanged(const QPoint&);
     void slotResourceChanged(int, const QVariant&);
