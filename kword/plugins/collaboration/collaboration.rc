@@ -1,9 +1,0 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KWordPluginCollaboration" library="collaborationmodulekword" version="6">
-<MenuBar>
-	<Menu name="collaboration"><text>&amp;Collaboration</text>
-		<Separator/>
-		<Action name="connect_to"/>
-		<Action name="share_current_document"/>
-	</Menu>
-</MenuBar>
