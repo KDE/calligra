@@ -2509,9 +2509,9 @@ void CellView::Private::calculateHorizontalTextSize(const QFont& font, const QFo
                 break; // forever
             line.setLineWidth(width);
             textHeight += leading + line.height();
-            if (textHeight > (height - 2 * s_borderSpace
-                              - 0.5 * style.topBorderPen().width()
-                              - 0.5 * style.bottomBorderPen().width()))
+            if ((textHeight - fontMetrics.descent()) > (height - 2 * s_borderSpace
+                                                        - 0.5 * style.topBorderPen().width()
+                                                        - 0.5 * style.bottomBorderPen().width()))
             {
                 fittingHeight = false;
                 break; // forever
