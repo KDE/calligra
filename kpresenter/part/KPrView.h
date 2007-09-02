@@ -34,15 +34,19 @@ public:
     explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
     ~KPrView();
 
-protected:    
+    virtual KoViewConverter * viewConverter();
+
+protected:
     void initGUI();
     void initActions();
 
 protected slots:
     void startPresentation();
+    void createAnimation();
 
 private:
     KAction *m_actionStartPresentation;
+    KAction *m_actionCreateAnimation;
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;
 };

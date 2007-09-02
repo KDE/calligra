@@ -8,6 +8,8 @@
             <Separator/>
             <Action name="edit_insertpage"/>
             <Action name="edit_deletepage"/>
+            <Separator/>
+            <Action name="edit_createanimation"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>

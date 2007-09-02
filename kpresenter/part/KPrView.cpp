@@ -19,17 +19,26 @@
 
 #include "KPrView.h"
 
-#include <KPrDocument.h>
-#include <KPrViewModePresentation.h>
-
 #include <klocale.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 
+#include <KoSelection.h>
+#include <KoShapeManager.h>
+#include <KoPACanvas.h>
+
+#include "KPrAnimationController.h"
+#include "KPrDocument.h"
+#include "KPrPage.h"
+#include "KPrMasterPage.h"
+#include "KPrViewModePresentation.h"
+#include "commands/KPrAnimationCreateCommand.h"
+#include "shapeanimations/KPrAnimationMoveAppear.h"
+
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoPAView( document, parent )
-, m_presentationMode( new KPrViewModePresentation( this, m_canvas ))                       
-, m_normalMode( 0 )    
+, m_presentationMode( new KPrViewModePresentation( this, m_canvas ))
+, m_normalMode( 0 )
 {
     initActions();
 }
@@ -38,6 +47,12 @@ KPrView::~KPrView()
 {
 }
 
+KoViewConverter * KPrView::viewConverter()
+{
+    KPrViewModePresentation * mode = dynamic_cast<KPrViewModePresentation *>( viewMode() );
+
+    return mode ? mode->viewConverter() : KoPAView::viewConverter();
+}
 
 void KPrView::initGUI()
 {
@@ -53,14 +68,34 @@ void KPrView::initActions()
        setXMLFile( "kpresenter.rc" );
 
     // do special kpresenter stuff here
-    m_actionStartPresentation  = new KAction( i18n( "Start Presentation" ), this );
+    m_actionStartPresentation = new KAction( i18n( "Start Presentation" ), this );
     actionCollection()->addAction( "view_mode", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+
+    m_actionCreateAnimation = new KAction( "Create Animation", this );
+    actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
+    connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
 }
 
 void KPrView::startPresentation()
 {
     setViewMode( m_presentationMode );
+}
+
+void KPrView::createAnimation()
+{
+    KoSelection * selection = m_canvas->shapeManager()->selection();
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    foreach( KoShape * shape, selectedShapes )
+    {
+        static int animationcount = 0;
+        KPrShapeAnimation * animation = new KPrAnimationMoveAppear( shape, animationcount );
+        animationcount = ( animationcount + 1 ) % 3;
+        KPrAnimationController * controller = dynamic_cast<KPrAnimationController *>( m_activePage );
+        Q_ASSERT( controller );
+        KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( controller, animation );
+        m_canvas->addCommand( command );
+    }
 }
 
 
