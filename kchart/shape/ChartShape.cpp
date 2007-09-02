@@ -100,6 +100,7 @@ ChartShape::ChartShape()
     d->chartData = new QStandardItemModel();
     d->diagram->setModel( d->chartData );
     d->chart->coordinatePlane()->replaceDiagram(d->diagram); // FIXME
+    d->chartType = BarChartType;
 
     AbstractCartesianDiagram  *diagram = static_cast<AbstractCartesianDiagram*>(d->diagram);
     CartesianAxis  *xAxis = new CartesianAxis( diagram );
@@ -180,17 +181,20 @@ Chart* ChartShape::chart() const
 void ChartShape::setChartType( OdfChartType    newType,
                                OdfChartSubtype newSubType )
 {
-    AbstractDiagram  *new_diagram;
+    AbstractDiagram* new_diagram;
+    CartesianCoordinatePlane* cartPlane = 0;
+    PolarCoordinatePlane* polPlane = 0;
 
     if (d->chartType == newType)
         return;
+
     // FIXME: Take care of subtype too.
     switch (newType) {
     case BarChartType:
-        new_diagram = new BarDiagram();
+        new_diagram = new BarDiagram( d->chart, cartPlane );
         break;
     case LineChartType:
-        new_diagram = new LineDiagram();
+        new_diagram = new LineDiagram( d->chart, cartPlane );
         break;
     case AreaChartType:
         new_diagram = new LineDiagram();
@@ -198,21 +202,19 @@ void ChartShape::setChartType( OdfChartType    newType,
         ((LineDiagram*) new_diagram)->setType( LineDiagram::Stacked );
         break;
     case CircleChartType:
-        new_diagram = new PieDiagram();
+        new_diagram = new PieDiagram(d->chart, polPlane);
         break;
     case RingChartType:
-        new_diagram = new RingDiagram();
+        new_diagram = new RingDiagram(d->chart, polPlane);
         break;
     case ScatterChartType:
 	// FIXME
 	return;
         break;
     case RadarChartType:
-        // FIXME
-        return;
+//        new_diagram = new PolarDiagram(d->chart, polPlane);
         break;
     case StockChartType:
-        // FIXME
         return;
         break;
     case BubbleChartType:
@@ -228,14 +230,45 @@ void ChartShape::setChartType( OdfChartType    newType,
         return;
         break;
     }
+    if ( new_diagram != NULL )
+    {
+        if ( isPolar( d->chartType ) && isCartesian( newType ) )
+        {
+            cartPlane = new CartesianCoordinatePlane( d->chart );
+            d->chart->replaceCoordinatePlane( cartPlane );
+        }
+        else if ( isCartesian( d->chartType ) && isPolar( newType ) )
+        {
+            polPlane = new PolarCoordinatePlane( d->chart );
+            d->chart->replaceCoordinatePlane( polPlane );
+        }
+        else if ( isCartesian( d->chartType ) && isCartesian( newType ) )
+        {
+            AbstractCartesianDiagram *old =
+                    qobject_cast<AbstractCartesianDiagram*>( d->chart->coordinatePlane()->diagram() );
+            Q_FOREACH( CartesianAxis* axis, old->axes() ) {
+                old->takeAxis( axis );
+                qobject_cast<AbstractCartesianDiagram*>(new_diagram)->addAxis( axis );
+            }
+        }
+        //FIXME:No clue why this doesnt work but it makes a crash sometimes
+//         LegendList legends = d->chart->legends();
+//         Q_FOREACH(Legend* l, legends)
+//             l->setDiagram( new_diagram );
 
-    //that's how, IMO, should work:
-    d->diagram = new_diagram;
-    d->diagram->setModel( d->chartData );
-    d->diagram->update();
-    d->chart->coordinatePlane()->replaceDiagram( d->diagram ); // FIXME
-    d->chart->update();
-    repaint();
+        new_diagram->setModel( d->chartData );
+        //FIXME:Aren't we leaking memory bot doing this?, 
+        //although causes a crash
+//         delete d->diagram;
+        d->diagram = new_diagram;
+        d->diagram->update();
+
+        d->chart->coordinatePlane()->replaceDiagram( new_diagram ); // FIXME
+        d->chart->update();
+        repaint();
+
+        d->chartType = newType;
+    }
 }
 
 
@@ -326,4 +359,3 @@ void ChartShape::initNullChart()
 {
 } 
 #endif
-

@@ -79,6 +79,7 @@ private:
 
     class Private;
     Private * const d;
+
 };
 
 } // namespace KChart
