@@ -190,7 +190,7 @@ void KWStatistics::updateData() {
                 continue;
             QChar lastchar = s.at(s.length() - 1);
             if(! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
-                s = s + ".";
+                s = s + '.';
             }
             re.setPattern("[.?!]+");         // count "..." as only one "."
             s.replace(re, ".");

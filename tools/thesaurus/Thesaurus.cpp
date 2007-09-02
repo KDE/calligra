@@ -46,13 +46,13 @@ NOT TODO:
 #include <QToolButton>
 #include <QByteArray>
 #include <QTextCursor>
-#include <QTabWidget>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QGroupBox>
 
+#include <KTabWidget>
 #include <kglobal.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
@@ -109,11 +109,11 @@ Thesaurus::Thesaurus()
     row1->addWidget(m_search, 0);
     m_back = new QToolButton(page);
     m_back->setIcon(KIcon(QString::fromLatin1("go-previous")));
-    m_back->setToolTip(i18nc("@action:button", "Back"));
+    m_back->setToolTip(i18nc("@action:button Go back to the previous word in history", "Back"));
     row1->addWidget(m_back, 0);
     m_forward = new QToolButton(page);
     m_forward->setIcon(KIcon(QString::fromLatin1("go-next")));
-    m_forward->setToolTip(i18nc("@action:button", "Back"));
+    m_forward->setToolTip(i18nc("@action:button Go forward to the next word in history", "Forward"));
     row1->addWidget(m_forward, 0);
 
     KPushButton *lang = new KPushButton(i18n("Change Language..."), page);
@@ -123,7 +123,7 @@ Thesaurus::Thesaurus()
     connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
     connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
 
-    m_tabWidget = new QTabWidget(page);
+    m_tabWidget = new KTabWidget(page);
     topLayout->addWidget(m_tabWidget);
 
     //
