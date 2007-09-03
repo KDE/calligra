@@ -20,13 +20,14 @@
 #ifndef _KARBONTOOLSPLUGIN_H_
 #define _KARBONTOOLSPLUGIN_H_
 
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 class KarbonToolsPlugin : public QObject {
     Q_OBJECT
 
 public:
-    KarbonToolsPlugin(QObject * parent,  const QStringList & );
+    KarbonToolsPlugin(QObject * parent,  const QVariantList & );
     ~KarbonToolsPlugin() {}
 
 };

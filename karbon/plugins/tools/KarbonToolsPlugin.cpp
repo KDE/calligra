@@ -23,11 +23,14 @@
 #include "KarbonPatternToolFactory.h"
 
 #include <KoToolRegistry.h>
-#include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(karbontools, KGenericFactory<KarbonToolsPlugin>( "KarbonTools" ) )
+#include <KPluginFactory>
+#include <KPluginLoader>
 
-KarbonToolsPlugin::KarbonToolsPlugin( QObject *parent, const QStringList& )
+K_PLUGIN_FACTORY( KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>(); )
+K_EXPORT_PLUGIN( KarbonToolsPluginFactory("KarbonTools") )
+
+KarbonToolsPlugin::KarbonToolsPlugin( QObject *parent, const QVariantList& )
     : QObject(parent)
 {
     KoToolRegistry::instance()->add( new KarbonPencilToolFactory( parent ) );

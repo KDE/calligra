@@ -20,14 +20,15 @@
 #ifndef KARBON_DOCKERS_PLUGIN_H
 #define KARBON_DOCKERS_PLUGIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 class KarbonDockersPlugin : public QObject 
 {
     Q_OBJECT
 
 public:
-    KarbonDockersPlugin( QObject * parent,  const QStringList & );
+    KarbonDockersPlugin( QObject * parent,  const QVariantList & );
     ~KarbonDockersPlugin() {}
 };
 

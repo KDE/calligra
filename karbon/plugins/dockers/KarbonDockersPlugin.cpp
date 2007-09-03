@@ -22,14 +22,15 @@
 
 #include <KoDockRegistry.h>
 
-#include <kgenericfactory.h>
+#include <KPluginFactory>
+#include <KPluginLoader>
 
-K_EXPORT_COMPONENT_FACTORY(karbondockersplugin, KGenericFactory<KarbonDockersPlugin>( "KarbonDockersPlugin" ) )
+K_PLUGIN_FACTORY( KarbonDockersPluginFactory, registerPlugin<KarbonDockersPlugin>(); )
+K_EXPORT_PLUGIN( KarbonDockersPluginFactory("KarbonDockersPlugin") )
 
-KarbonDockersPlugin::KarbonDockersPlugin( QObject *parent, const QStringList& )
+KarbonDockersPlugin::KarbonDockersPlugin( QObject *parent, const QVariantList& )
     : QObject(parent)
 {
-    Q_UNUSED(parent);
     KoDockRegistry::instance()->add( new KarbonStrokeDockerFactory() );
 }
 
