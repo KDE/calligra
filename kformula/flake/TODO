@@ -1,17 +1,24 @@
-- implement the inferred row and row element classes
-- introduce the FormulaToolOptions widget to have a nive gui to work with
-- implement the input infrastructure -> namely stuff in KoFormulaTool
+short term goals:
+- test rendering of implemented elements and create a list of errors
+- try to fix the rendering errors of previously tested elements
+- make FormulaCursor class able to insert elements
+- add functionality to FormulaToolOptions so that user can insert elements
 
-- fill the single element classes with functionality ( mostly painting )
-- get rid of the ContextStyle class
-- introduce a class that holds default setting values ( default font color and so on )
-- implement the rest of event methods in FormulaTool
-- reenable and rework all cursor methods of the single elements
-*done - clean up BasicElement class
-*done - finish the attribute system
-*done - factor out the old loading system and make it a filter
-*done - cleanup the FormulaCursor class
-*done - rework the kformulacommand class to use KoCommand and simplify and reduce the commands
-- implement correct selecting in FormulaCursor - the old implementation was not totally correct
+long term goals:
+- add selecting to FormulaCursor class
 
-09.22.06 - not sorted by priority
+02/09/2007
+
+RowElement:
+	* layout works
+	* nothing to paint
+	- implement insertChild()
+	- implement removeChild()
+
+RootElement:
+	- correct layout
+	- correct painting
+	-> current code does not work correct
+
+FractionElement:
+	
