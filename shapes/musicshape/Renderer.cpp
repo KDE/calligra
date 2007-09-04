@@ -426,8 +426,15 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
                 }
                 beamEnd.setY(beamEnd.y() + endChord->staff()->top());
                 
-                painter.setPen(m_style->beamPen(color));
-                painter.drawLine(ref + beamStart, ref + beamEnd);
+                painter.setPen(QPen(Qt::NoPen));
+                painter.setBrush(QBrush(color));
+                QPointF dir(0, (stemsUp ? 1 : -1) * m_style->beamLineWidth());
+                QPointF p[4];
+                p[0] = ref + beamStart;
+                p[1] = ref + beamEnd;
+                p[2] = p[1] + dir;
+                p[3] = p[0] + dir;
+                painter.drawConvexPolygon(p, 4);
             }
         }
 

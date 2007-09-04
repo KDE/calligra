@@ -31,14 +31,11 @@ MusicStyle::MusicStyle()
     m_staffLinePen.setCapStyle(Qt::RoundCap);
     m_staffLinePen.setColor(Qt::black);
     m_stemPen.setWidthF(0.7);
-    m_stemPen.setCapStyle(Qt::RoundCap);
+    m_stemPen.setCapStyle(Qt::FlatCap);
     m_stemPen.setColor(Qt::black);
     m_noteDotPen.setWidthF(1.9);
     m_noteDotPen.setCapStyle(Qt::RoundCap);
     m_noteDotPen.setColor(Qt::black);
-    m_beamPen.setWidthF(3.0);
-    m_beamPen.setCapStyle(Qt::RoundCap);
-    m_beamPen.setColor(Qt::black);
 }
 
 MusicStyle::~MusicStyle()
@@ -63,10 +60,9 @@ QPen MusicStyle::noteDotPen(const QColor& color)
     return m_noteDotPen;
 }
 
-QPen MusicStyle::beamPen(const QColor& color)
+double MusicStyle::beamLineWidth()
 {
-    m_beamPen.setColor(color);
-    return m_beamPen;
+    return 3.0;
 }
 
 void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Duration duration, const QColor& color)
