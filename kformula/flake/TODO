@@ -1,8 +1,12 @@
 short term goals:
 - test rendering of implemented elements and create a list of errors
+- create SquareRootElement class to reflect differences between Root and SquareRoot
 - try to fix the rendering errors of previously tested elements
 - make FormulaCursor class able to insert elements
 - add functionality to FormulaToolOptions so that user can insert elements
+- add description to main APIDOX page
+- implement cursor movement with acceptCursor() method
+- update APIDOX according to new cursor handling
 
 long term goals:
 - add selecting to FormulaCursor class
