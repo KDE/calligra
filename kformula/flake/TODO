@@ -1,6 +1,6 @@
 short term goals:
 - test rendering of implemented elements and create a list of errors
-- create SquareRootElement class to reflect differences between Root and SquareRoot
+*done create SquareRootElement class to reflect differences between Root and SquareRoot
 - try to fix the rendering errors of previously tested elements
 - make FormulaCursor class able to insert elements
 - add functionality to FormulaToolOptions so that user can insert elements
@@ -23,6 +23,11 @@ RootElement:
 	- correct layout
 	- correct painting
 	-> current code does not work correct
+	- correct saving/ loading
+
+SquareRootElement:
+	- correct layout
+	- correct painting
 
 FractionElement:
 	
