@@ -20,13 +20,15 @@
 #include "ThesaurusPlugin.h"
 #include "ThesaurusFactory.h"
 
+#include <KPluginFactory>
+#include <KPluginLoader>
+
 #include <KoTextEditingRegistry.h>
-#include <kgenericfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(thesaurustool,
-        KGenericFactory<ThesaurusPlugin>("ThesaurusPlugin"))
+K_PLUGIN_FACTORY( ThesaurusPluginFactory, registerPlugin<ThesaurusPlugin>(); );
+K_EXPORT_PLUGIN( ThesaurusPluginFactory("ThesaurusPlugin") );
 
-ThesaurusPlugin::ThesaurusPlugin(QObject *parent, const QStringList&)
+ThesaurusPlugin::ThesaurusPlugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
     KoTextEditingRegistry::instance()->add(new ThesaurusFactory(parent));

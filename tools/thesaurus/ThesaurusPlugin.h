@@ -20,13 +20,14 @@
 #ifndef THESAURUSPLUGIN_H
 #define THESAURUSPLUGIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
+#include <QtCore/QVariant>
 
 class ThesaurusPlugin : public QObject {
     Q_OBJECT
 
 public:
-    ThesaurusPlugin(QObject * parent,  const QStringList &);
+    ThesaurusPlugin(QObject * parent,  const QVariantList &);
     ~ThesaurusPlugin() {}
 };
 
