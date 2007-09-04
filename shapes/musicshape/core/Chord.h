@@ -55,6 +55,15 @@ public:
         StemUp,
         StemDown
     };
+    
+    enum BeamType {
+        BeamStart,
+        BeamContinue,
+        BeamEnd,
+        BeamFlag,
+        BeamForwardHook,
+        BeamBackwardHook
+    };
 
     /**
      * Creates a new Chord instance, not specifying the staff on which the chord should be placed. Add this note to
@@ -170,6 +179,12 @@ public:
      */
     double stemLength() const;
     void setStemLength(double stemLength);
+    
+    int beamCount() const;
+    Chord* beamStart(int index);
+    Chord* beamEnd(int index);
+    BeamType beamType(int index);
+    void setBeam(int index, Chord* beamStart, Chord* beamEnd);
 public slots:
     /**
      * Changes the duration of the chord.

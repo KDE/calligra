@@ -26,6 +26,15 @@
 
 namespace MusicCore {
 
+namespace {
+    struct Beam {
+        Beam(Chord* chord) : beamStart(chord), beamEnd(chord), beamType(Chord::BeamFlag) {}
+        Chord* beamStart;
+        Chord* beamEnd;
+        Chord::BeamType beamType;
+    };
+}
+
 class Chord::Private {
 public:
     Chord::Duration duration;
@@ -33,6 +42,7 @@ public:
     QList<Note*> notes;
     Chord::StemDirection stemDirection;
     double stemLength;
+    QList<Beam> beams;
 };
 
 static double calcStemLength(Chord::Duration duration)
@@ -276,6 +286,50 @@ double Chord::stemLength() const
 void Chord::setStemLength(double stemLength)
 {
     d->stemLength = stemLength;
+}
+
+int Chord::beamCount() const
+{
+    switch (d->duration) {
+        case HundredTwentyEighth:   return 5;
+        case SixtyFourth:           return 4;
+        case ThirtySecond:          return 3;
+        case Sixteenth:             return 2;
+        case Eighth:                return 1;
+        default:                    return 0;
+    }            
+}
+
+Chord* Chord::beamStart(int index)
+{
+    if (d->beams.size() <= index) return this;
+    return d->beams[index].beamStart;
+}
+
+Chord* Chord::beamEnd(int index)
+{
+    if (d->beams.size() <= index) return this;
+    return d->beams[index].beamEnd;
+}
+
+Chord::BeamType Chord::beamType(int index)
+{
+    if (d->beams.size() <= index) return BeamFlag;
+    return d->beams[index].beamType;
+}
+
+void Chord::setBeam(int index, Chord* beamStart, Chord* beamEnd)
+{
+    Q_ASSERT( index < beamCount() );
+    while (d->beams.size() <= index) {
+        d->beams.append(Beam(this));
+    }
+    d->beams[index].beamStart = beamStart;
+    d->beams[index].beamEnd = beamEnd;
+    if (beamStart == this && beamEnd == this) d->beams[index].beamType = BeamFlag;
+    else if (beamStart == this) d->beams[index].beamType = BeamStart;
+    else if (beamEnd == this) d->beams[index].beamType = BeamEnd;
+    else d->beams[index].beamType = BeamContinue;
 }
 
 } // namespace MusicCore
