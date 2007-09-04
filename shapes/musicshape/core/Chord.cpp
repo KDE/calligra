@@ -268,6 +268,95 @@ double Chord::height() const
     return bottom - top;
 }
 
+double Chord::stemX(double xScale) const
+{
+    return x() * xScale + (d->stemDirection == StemUp ? 6 : 0);
+}
+
+double Chord::topNoteY() const
+{
+    if (d->notes.size() == 0) {
+        return staff()->lineSpacing() * 2 + staff()->top();
+    }
+    
+    double top = 1e9;
+    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+    
+    foreach (Note* n, d->notes) {
+        int line = 10;
+        if (clef) line = clef->pitchToLine(n->pitch());
+        
+        Staff* s = n->staff();
+        double y = s->top() + line * s->lineSpacing() / 2;
+        if (y < top) top = y;
+    }
+    return top;
+}
+
+double Chord::bottomNoteY() const
+{
+    if (d->notes.size() == 0) {
+        return staff()->lineSpacing() * 2 + staff()->top();
+    }
+    
+    double bottom = -1e9;
+    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+    
+    foreach (Note* n, d->notes) {
+        int line = 10;
+        if (clef) line = clef->pitchToLine(n->pitch());
+        
+        Staff* s = n->staff();
+        double y = s->top() + line * s->lineSpacing() / 2;
+        if (y > bottom) bottom = y;
+    }
+    return bottom;
+}
+
+double Chord::stemEndY(double xScale) const
+{
+    if (d->notes.size() == 0) return staff()->center();
+    
+    if (beamType(0) == BeamContinue) {
+        // in the middle of a beam, interpolate stem length from beam
+        double sx = beamStart(0)->stemX(xScale), ex = beamEnd(0)->stemX(xScale);
+        double sy = beamStart(0)->stemEndY(xScale), ey = beamEnd(0)->stemEndY(xScale);
+        double dydx = (ey-sy) / (ex-sx);
+        
+        return (stemX(xScale) - sx) * dydx + sy;
+    }
+    
+    Staff* topStaff = NULL;
+    Staff* bottomStaff = NULL;
+    double top = 1e9, bottom = -1e9;
+    Clef* clef = staff()->lastClefChange(voiceBar()->bar(), 0);
+
+    foreach (Note* n, d->notes) {
+        int line = 10;
+        if (clef) line = clef->pitchToLine(n->pitch());
+        
+        Staff* s = n->staff();
+        double y = s->top() + line * s->lineSpacing() / 2;
+        if (y > bottom) {
+            bottom = y;
+            bottomStaff = s;
+        }
+        if (y < top) {
+            top = y;
+            topStaff = s;
+        }
+    }
+    
+    Q_ASSERT( topStaff );
+    Q_ASSERT( bottomStaff );
+    
+    if (stemDirection() == StemUp) {
+        return top - topStaff->lineSpacing() * stemLength();
+    } else {
+        return bottom + bottomStaff->lineSpacing() * stemLength();
+    }
+}
+
 Chord::StemDirection Chord::stemDirection() const
 {
     return d->stemDirection;
@@ -300,19 +389,19 @@ int Chord::beamCount() const
     }            
 }
 
-Chord* Chord::beamStart(int index)
+const Chord* Chord::beamStart(int index) const
 {
     if (d->beams.size() <= index) return this;
     return d->beams[index].beamStart;
 }
 
-Chord* Chord::beamEnd(int index)
+const Chord* Chord::beamEnd(int index) const
 {
     if (d->beams.size() <= index) return this;
     return d->beams[index].beamEnd;
 }
 
-Chord::BeamType Chord::beamType(int index)
+Chord::BeamType Chord::beamType(int index) const
 {
     if (d->beams.size() <= index) return BeamFlag;
     return d->beams[index].beamType;

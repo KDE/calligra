@@ -171,6 +171,11 @@ public:
      */
     virtual double height() const;
     
+    double stemX(double xScale) const;
+    double topNoteY() const;
+    double bottomNoteY() const;
+    double stemEndY(double xScale) const;
+    
     StemDirection stemDirection() const;
     void setStemDirection(StemDirection direction);
     
@@ -181,9 +186,9 @@ public:
     void setStemLength(double stemLength);
     
     int beamCount() const;
-    Chord* beamStart(int index);
-    Chord* beamEnd(int index);
-    BeamType beamType(int index);
+    const Chord* beamStart(int index) const;
+    const Chord* beamEnd(int index) const;
+    BeamType beamType(int index) const;
     void setBeam(int index, Chord* beamStart, Chord* beamEnd);
 public slots:
     /**

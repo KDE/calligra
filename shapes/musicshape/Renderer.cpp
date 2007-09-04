@@ -393,38 +393,33 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         
         painter.setPen(m_style->stemPen(color));
         if (stemsUp) {
-            painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2),
-                             ref + QPointF(stemX, /*chord->y() +*/ bottomStaff->top() + bottomLine * bottomStaff->lineSpacing() / 2));
+            painter.drawLine(ref + QPointF(stemX, chord->stemEndY(xScale)),
+                             ref + QPointF(stemX, bottomStaff->top() + bottomLine * bottomStaff->lineSpacing() / 2));
             if (chord->beamType(0) == Chord::BeamFlag) {
-                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + /*chord->y() +*/ topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
+                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + topStaff->top() + (topLine - stemLen) * topStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
             }
         } else {
-            painter.drawLine(ref + QPointF(stemX, /*chord->y() +*/ topStaff->top() + topLine * topStaff->lineSpacing() / 2),
-                             ref + QPointF(stemX, /*chord->y() +*/ bottomStaff->top() + (bottomLine + stemLen) * bottomStaff->lineSpacing() / 2));
+            painter.drawLine(ref + QPointF(stemX, topStaff->top() + topLine * topStaff->lineSpacing() / 2),
+                             ref + QPointF(stemX, chord->stemEndY(xScale)));
             if (chord->beamType(0) == Chord::BeamFlag) {
-                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + /*chord->y() +*/ bottomStaff->top() + (bottomLine + stemLen) * bottomStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
+                m_style->renderNoteFlags( painter, ref.x() + stemX, ref.y() + bottomStaff->top() + (bottomLine + stemLen) * bottomStaff->lineSpacing() / 2, chord->duration(), stemsUp, color );
             }
         }
 
         for (int i = 0; i < chord->beamCount(); i++) {
             if (chord->beamType(i) == Chord::BeamStart) {
-                QPointF beamStart, beamEnd;
-                if (stemsUp) {
-                    beamStart = QPointF(stemX, topStaff->top() + (topLine - stemLen + i*2) * topStaff->lineSpacing() / 2);
-                } else {
-                    beamStart = QPointF(stemX, bottomStaff->top() + (bottomLine + stemLen - i*2) * bottomStaff->lineSpacing() / 2);
-                }
+                const Chord* endChord = chord->beamEnd(i);
                 
-                Chord* endChord = chord->beamEnd(i);
-                bool endStemsUp = endChord->stemDirection() == Chord::StemUp;
-                double endStemX = endChord->x() * xScale + (endStemsUp ? 6 : 0);
-                double endStemLen = endChord->stemLength();
-                if (endStemsUp) {
-                    beamEnd = QPointF(endStemX, endChord->y() - (endStemLen - 0.5 - i) * topStaff->lineSpacing());
+                QPointF beamStart(chord->stemX(xScale), chord->stemEndY(xScale));
+                QPointF beamEnd(endChord->stemX(xScale), endChord->stemEndY(xScale));
+                if (stemsUp) {
+                    beamStart += QPointF(0, topStaff->lineSpacing() * i);
+                    beamEnd += QPointF(0, topStaff->lineSpacing() * i);
                 } else {
-                    beamEnd = QPointF(endStemX, endChord->y() + endChord->height() + (endStemLen - 0.5 - i) * bottomStaff->lineSpacing());
+                    beamStart -= QPointF(0, bottomStaff->lineSpacing() * i);
+                    beamEnd -= QPointF(0, bottomStaff->lineSpacing() * i);
                 }
-                beamEnd.setY(beamEnd.y() + endChord->staff()->top());
+
                 
                 painter.setPen(QPen(Qt::NoPen));
                 painter.setBrush(QBrush(color));
