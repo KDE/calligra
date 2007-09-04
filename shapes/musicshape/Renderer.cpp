@@ -420,7 +420,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
                 double endStemX = endChord->x() * xScale + (endStemsUp ? 6 : 0);
                 double endStemLen = endChord->stemLength();
                 if (endStemsUp) {
-                    beamEnd = QPointF(endStemX, endChord->y() - (endStemLen - 0.5 + i) * topStaff->lineSpacing());
+                    beamEnd = QPointF(endStemX, endChord->y() - (endStemLen - 0.5 - i) * topStaff->lineSpacing());
                 } else {
                     beamEnd = QPointF(endStemX, endChord->y() + endChord->height() + (endStemLen - 0.5 - i) * bottomStaff->lineSpacing());
                 }

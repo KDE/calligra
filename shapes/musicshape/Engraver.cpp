@@ -248,25 +248,31 @@ void Engraver::engraveBar(Bar* bar)
                     // also depend on other chord in other voices in the same staff
                     Chord* c = dynamic_cast<Chord*>(voices[i]->element(nextIndex[i]));
                     if (c) {
-                        int topLine = 0, bottomLine = 0;
-                        double topy = 1e9, bottomy = -1e9;
-                        for (int n = 0; n < c->noteCount(); n++) {
-                            Note* note = c->note(n);
-                            Staff * s = note->staff();
-                            Clef* clef = s->lastClefChange(barIdx);
-                            int line = clef->pitchToLine(note->pitch());
-                            double ypos = s->top() + line * s->lineSpacing() / 2;
-                            if (ypos < topy) {
-                                topy = ypos;
-                                topLine = line;
+                        // if this is the continuation or end of a beam, the first chord in the beam has the
+                        // correct stem direction already
+                        if (c->beamType(0) == Chord::BeamContinue || c->beamType(0) == Chord::BeamEnd) {
+                            c->setStemDirection(c->beamStart(0)->stemDirection());
+                        } else {
+                            int topLine = 0, bottomLine = 0;
+                            double topy = 1e9, bottomy = -1e9;
+                            for (int n = 0; n < c->noteCount(); n++) {
+                                Note* note = c->note(n);
+                                Staff * s = note->staff();
+                                Clef* clef = s->lastClefChange(barIdx);
+                                int line = clef->pitchToLine(note->pitch());
+                                double ypos = s->top() + line * s->lineSpacing() / 2;
+                                if (ypos < topy) {
+                                    topy = ypos;
+                                    topLine = line;
+                                }
+                                if (ypos > bottomy) {
+                                    bottomy = ypos;
+                                    bottomLine = line;
+                                }        
                             }
-                            if (ypos > bottomy) {
-                                bottomy = ypos;
-                                bottomLine = line;
-                            }        
+                            double center = (bottomLine + topLine) * 0.5;
+                            c->setStemDirection(center < 4 ? Chord::StemDown : Chord::StemUp);
                         }
-                        double center = (bottomLine + topLine) * 0.5;
-                        c->setStemDirection(center < 4 ? Chord::StemDown : Chord::StemUp);
                     }
                     
                     double xpos = x + 15;
