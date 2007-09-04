@@ -40,6 +40,9 @@ const QList<BasicElement*> TokenElement::childElements()
 
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
+     // TODO change it to use attribute colors
+     painter.setPen( Qt::black );
+     painter.setBrush( Qt::SolidPattern );
      painter.drawPath( m_contentPath );        // draw content 
 
      foreach( BasicElement* tmp, m_content )   // draw possible mglyph elements
