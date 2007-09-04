@@ -180,6 +180,9 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
             bar = sheet->bar(curBar);
         }
 
+        QList<QList<Chord*> > beams;
+        for (int i = 0; i < 6; i++) beams.append(QList<Chord*>());
+        
         KoXmlElement e;
         forEachElement(e, barElem) {
             if (!checkNamespace(e)) continue;
@@ -248,7 +251,6 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                         part->addVoice();
                     }
                     
-                    //TODO dots
                     int nDots = 0;
                     KoXmlElement dot;
                     forEachElement(dot, e) {
@@ -259,6 +261,31 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                     lastNote = new Chord(staff, duration, nDots);
                     Voice* voice = part->voice(voiceId);
                     voice->bar(bar)->addElement(lastNote);
+                    
+                    KoXmlElement beam;
+                    forEachElement(beam, e) if (checkNamespace(beam) && beam.localName() == "beam") {
+                        int number = beam.attribute("number").toInt() - 1;
+                        if (number < 0 || number > 5) continue;
+                        QString type = beam.text();
+                        if (type == "begin") {
+                            beams[number].clear();
+                            beams[number].append(lastNote);
+                        } else if (type == "continue") {
+                            beams[number].append(lastNote);
+                        } else if (type == "end") {
+                            beams[number].append(lastNote);
+                            Chord* startNote = beams[number][0];
+                            foreach (Chord* c, beams[number]) {
+                                c->setBeam(number, startNote, lastNote);
+                            }
+                            beams[number].clear();
+                        } else if (type == "forward hook") {
+                            beams[number].clear();
+                        } else if (type == "backward hook") {
+                            beams[number].clear();
+                        }
+                    }
+                    
                 }
 
                 KoXmlElement pitch = namedItem(e, "pitch");
