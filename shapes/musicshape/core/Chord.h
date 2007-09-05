@@ -175,7 +175,8 @@ public:
     double topNoteY() const;
     double bottomNoteY() const;
     double stemEndY(double xScale) const;
-    
+    double beamDirection(double xScale) const;
+
     StemDirection stemDirection() const;
     void setStemDirection(StemDirection direction);
     
@@ -189,7 +190,7 @@ public:
     const Chord* beamStart(int index) const;
     const Chord* beamEnd(int index) const;
     BeamType beamType(int index) const;
-    void setBeam(int index, Chord* beamStart, Chord* beamEnd);
+    void setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type = BeamContinue);
 public slots:
     /**
      * Changes the duration of the chord.

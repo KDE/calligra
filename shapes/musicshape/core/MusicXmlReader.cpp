@@ -280,8 +280,10 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                             }
                             beams[number].clear();
                         } else if (type == "forward hook") {
+                            lastNote->setBeam(number, lastNote, lastNote, Chord::BeamForwardHook);
                             beams[number].clear();
                         } else if (type == "backward hook") {
+                            lastNote->setBeam(number, lastNote, lastNote, Chord::BeamBackwardHook);
                             beams[number].clear();
                         }
                     }

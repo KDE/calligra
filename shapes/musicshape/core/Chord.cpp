@@ -357,6 +357,18 @@ double Chord::stemEndY(double xScale) const
     }
 }
 
+double Chord::beamDirection(double xScale) const
+{
+    if (beamType(0) == BeamStart || beamType(0) == BeamEnd || beamType(0) == BeamContinue) {
+        double sx = beamStart(0)->stemX(xScale), ex = beamEnd(0)->stemX(xScale);
+        double sy = beamStart(0)->stemEndY(xScale), ey = beamEnd(0)->stemEndY(xScale);
+        double dydx = (ey-sy) / (ex-sx);        
+        return dydx;
+    } else {
+        return 0;
+    }
+}
+
 Chord::StemDirection Chord::stemDirection() const
 {
     return d->stemDirection;
@@ -407,7 +419,7 @@ Chord::BeamType Chord::beamType(int index) const
     return d->beams[index].beamType;
 }
 
-void Chord::setBeam(int index, Chord* beamStart, Chord* beamEnd)
+void Chord::setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type)
 {
     Q_ASSERT( index < beamCount() );
     while (d->beams.size() <= index) {
@@ -415,8 +427,10 @@ void Chord::setBeam(int index, Chord* beamStart, Chord* beamEnd)
     }
     d->beams[index].beamStart = beamStart;
     d->beams[index].beamEnd = beamEnd;
-    if (beamStart == this && beamEnd == this) d->beams[index].beamType = BeamFlag;
-    else if (beamStart == this) d->beams[index].beamType = BeamStart;
+    if (beamStart == this && beamEnd == this) {
+        if (type != BeamFlag && type != BeamForwardHook && type != BeamBackwardHook) type = BeamFlag;
+        d->beams[index].beamType = type;
+    } else if (beamStart == this) d->beams[index].beamType = BeamStart;
     else if (beamEnd == this) d->beams[index].beamType = BeamEnd;
     else d->beams[index].beamType = BeamContinue;
 }

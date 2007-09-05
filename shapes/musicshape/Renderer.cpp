@@ -406,6 +406,8 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
             }
         }
 
+        painter.setPen(QPen(Qt::NoPen));
+        painter.setBrush(QBrush(color));
         for (int i = 0; i < chord->beamCount(); i++) {
             if (chord->beamType(i) == Chord::BeamStart) {
                 const Chord* endChord = chord->beamEnd(i);
@@ -421,8 +423,6 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
                 }
 
                 
-                painter.setPen(QPen(Qt::NoPen));
-                painter.setBrush(QBrush(color));
                 QPointF dir(0, (stemsUp ? 1 : -1) * m_style->beamLineWidth());
                 QPointF p[4];
                 p[0] = ref + beamStart;
@@ -430,6 +430,25 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
                 p[2] = p[1] + dir;
                 p[3] = p[0] + dir;
                 painter.drawConvexPolygon(p, 4);
+            } else if (chord->beamType(i) == Chord::BeamForwardHook || chord->beamType(i) == Chord::BeamBackwardHook) {
+                QPointF beamStart(chord->stemX(xScale), chord->stemEndY(xScale));
+                double dir = 6;
+                if (chord->beamType(i) == Chord::BeamBackwardHook) dir = -dir;
+                if (stemsUp) {
+                    beamStart += QPointF(0, topStaff->lineSpacing() * i);
+                } else {
+                    beamStart -= QPointF(0, bottomStaff->lineSpacing() * i);
+                }
+                
+                QPointF beamEnd = beamStart + QPointF(dir, dir * chord->beamDirection(xScale));
+                
+                QPointF bdir(0, (stemsUp ? 1 : -1) * m_style->beamLineWidth());
+                QPointF p[4];
+                p[0] = ref + beamStart;
+                p[1] = ref + beamEnd;
+                p[2] = p[1] + bdir;
+                p[3] = p[0] + bdir;
+                painter.drawConvexPolygon(p, 4);                
             }
         }
 
