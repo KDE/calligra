@@ -208,7 +208,7 @@ KexiRelationViewConnection::connectionRect()
 
 
 //	return QRect(sx - 1, sy - 1, (rx + m_detailsTable->width()) - sx + 1, ry - sy + 1);
-	QRect rect(left - 150, top - 150, dx + 150, dy + 150);
+	QRect rect(left - 30, top - 30, dx + 60, dy + 60);
 //	kdDebug() << "KexiRelationViewConnection::connectionRect():" << m_oldRect << "," << rect << endl;
 	
 	m_oldRect = rect;
