@@ -1532,14 +1532,15 @@ void QuerySchema::computeFieldsExpanded()
 			if (!boundField)
 				continue;
 			const QValueList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
-			Field *visibleColumn = 0;
 			// for single visible column, just add it as-is
 			if (visibleColumns.count() == 1) {
-				visibleColumn = lookupQueryFieldsExpanded[ visibleColumns.first() ]->field;
-				const QString key( lookupColumnKey(ci->field, visibleColumn) );
-				uint *index = lookup_dict[ key ];
-				if (index)
-					ci->setIndexForVisibleLookupValue( d->fieldsExpanded->size() + *index );
+				if (lookupQueryFieldsExpanded.count() > visibleColumns.first()) {
+					Field *visibleColumn = lookupQueryFieldsExpanded[ visibleColumns.first() ]->field;
+					const QString key( lookupColumnKey(ci->field, visibleColumn) );
+					uint *index = lookup_dict[ key ];
+					if (index)
+						ci->setIndexForVisibleLookupValue( d->fieldsExpanded->size() + *index );
+				}
 			}
 			else {
 				const QString key( QString::fromLatin1("[multiple_visible_fields_%1]_%2.%3")
