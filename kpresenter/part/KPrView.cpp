@@ -84,18 +84,18 @@ void KPrView::startPresentation()
 
 void KPrView::createAnimation()
 {
+    static int animationcount = 0;
     KoSelection * selection = m_canvas->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes();
     foreach( KoShape * shape, selectedShapes )
     {
-        static int animationcount = 0;
         KPrShapeAnimation * animation = new KPrAnimationMoveAppear( shape, animationcount );
-        animationcount = ( animationcount + 1 ) % 3;
         KPrAnimationController * controller = dynamic_cast<KPrAnimationController *>( m_activePage );
         Q_ASSERT( controller );
         KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( controller, animation );
         m_canvas->addCommand( command );
     }
+    animationcount = ( animationcount + 1 ) % 3;
 }
 
 
