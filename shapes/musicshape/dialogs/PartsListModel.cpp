@@ -41,7 +41,9 @@ int PartsListModel::rowCount(const QModelIndex& parent) const
 QVariant PartsListModel::data(const QModelIndex& index, int role) const
 {
     if (role == Qt::DisplayRole) {
-        return m_sheet->part(index.row())->name();
+        int row = index.row();
+        if (row < 0 || row >= m_sheet->partCount()) return QString("invalid");
+        return m_sheet->part(row)->name();
     }
     return QVariant();
 }
