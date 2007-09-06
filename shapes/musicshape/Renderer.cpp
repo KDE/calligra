@@ -318,6 +318,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
     double mainNoteX = (chord->stemDirection() == Chord::StemUp ? x : chord->stemX(xScale));
     double alternateNoteX = mainNoteX + (chord->stemDirection() == Chord::StemUp ? 6 : -6);
     bool prevAlternate = false;
+    double maxNoteX = 0;
     
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
@@ -341,6 +342,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
             }
         }
         prevAlternate = noteX != mainNoteX;
+        if (noteX > maxNoteX) maxNoteX = noteX;
         
         if (line > 9) { // lines under the bar
             painter.setPen(m_style->staffLinePen(color));
@@ -395,12 +397,20 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         if (n->accidentals() != curAccidentals) {
             m_style->renderAccidental( painter, ref.x() + x - 10, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, n->accidentals(), color );
         }
-
+    }
+    
+    for (int i = 0; i < chord->noteCount(); i++) {
+        Note *n = chord->note(i);
+        Staff * s = n->staff();
+        Clef* clef = s->lastClefChange(barIdx);
+        int line = 10;
+        if (clef) line = clef->pitchToLine(n->pitch());
+        
         // render dots of notes
-        double dotX = x + 11; // TODO somehow figure out if this needs to be larger
+        double dotX = maxNoteX + 11;
         painter.setPen(m_style->noteDotPen(color));
         for (int i = 0; i < chord->dots(); i++) {
-            painter.drawPoint(ref + QPointF(dotX, /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2));
+            painter.drawPoint(ref + QPointF(dotX, s->top() + line * s->lineSpacing() / 2));
             dotX += 3;
         }
     }
