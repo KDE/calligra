@@ -107,6 +107,21 @@ void TestStatisticalFunctions::initTestCase()
 
     // Test case data set
 
+    // A19:A29
+    storage->setValue(1,19, Value(    1 ) );
+    storage->setValue(1,20, Value(    2 ) );
+    storage->setValue(1,21, Value(    4 ) );
+    storage->setValue(1,22, Value(    8 ) );
+    storage->setValue(1,23, Value(   16 ) );
+    storage->setValue(1,24, Value(   32 ) );
+    storage->setValue(1,25, Value(   64 ) );
+    storage->setValue(1,26, Value(  128 ) );
+    storage->setValue(1,27, Value(  256 ) );
+    storage->setValue(1,28, Value(  512 ) );
+    storage->setValue(1,29, Value( 1024 ) );
+    storage->setValue(1,30, Value( 2048 ) );
+    storage->setValue(1,31, Value( 4096 ) );
+
     // B3:B17
     storage->setValue(2, 3, Value(     "7"   ) );
     storage->setValue(2, 4, Value(      2    ) );
@@ -138,7 +153,8 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(3,16, Value( 2 ) );
     storage->setValue(3,17, Value( 1 ) );
 
-    // C20:25
+    // C19:25
+    storage->setValue(3,19, Value( 0 ) );
     storage->setValue(3,20, Value( 5 ) );
     storage->setValue(3,21, Value( 2 ) );
     storage->setValue(3,22, Value( 5 ) );
@@ -514,26 +530,25 @@ void TestStatisticalFunctions::testPHI()
     //       |   
 
     // ODF-tests
-    CHECK_EVAL("PHI(C23/10)",  Value( 0.381387815 ) ); //
-    CHECK_EVAL("PHI(-C23/10)", Value( 0.381387815 ) ); //
-    CHECK_EVAL("PHI(0)",       Value( 0.398942280 ) ); //
+    CHECK_EVAL_SHORT("PHI(C23/10)",  Value( 0.381387815 ) ); // TODO - be more precise /
+    CHECK_EVAL_SHORT("PHI(-C23/10)", Value( 0.381387815 ) ); // TODO - be more precise /
+    CHECK_EVAL_SHORT("PHI(0)",       Value( 0.398942280 ) ); // TODO - be more precise /
 }
 
 void TestStatisticalFunctions::testPOISSON()
 {
     // ODF-tests
-    CHECK_EVAL("POISSON(0,1,FALSE())",  Value( 0.367880 ) ); //
-    CHECK_EVAL("POISSON(0,2,FALSE())", Value( 0.135335 ) ); //
-  
+    CHECK_EVAL_SHORT("POISSON(0;1;FALSE())", Value( 0.367880 ) ); // TODO - be more precise /
+    CHECK_EVAL_SHORT("POISSON(0;2;FALSE())", Value( 0.135335 ) ); // TODO - be more precise /
 }
 
 void TestStatisticalFunctions::testSKEW()
 {
     // ODF-tests
-    CHECK_EVAL("SKEW( 1; 2; 4 )", Value( 0.935219 ) ); // Expectation value: 2.333333
+    CHECK_EVAL_SHORT("SKEW( 1; 2; 4 )", Value( 0.935219 ) ); // TODO - be more precise / Expectation value: 2.333333
                                                        // Standard deviation: 1.257525
                                                        // Third central moment: 0.740741
-    CHECK_EVAL("SKEW(A19:A23)",   Value( 1.325315 ) ); //
+    CHECK_EVAL_SHORT("SKEW(A19:A23)",   Value( 1.325315 ) ); // TODO - be more precise /
     CHECK_EVAL("SKEW( 1; 2 )",    Value::errorNUM() ); // At least three numbers.
 }
 
@@ -541,7 +556,7 @@ void TestStatisticalFunctions::testSLOPE()
 {
     // ODF-tests
     CHECK_EVAL("SLOPE(B4:B5;C4:C5)",     Value( 1        ) ); // 
-    CHECK_EVAL("SLOPE(A19:A24;A26:A31)", Value( 0.007813 ) ); //
+    CHECK_EVAL_SHORT("SLOPE(A19:A24;A26:A31)", Value( 0.007813 ) ); // TODO - be more precise /
 }
 
 void TestStatisticalFunctions::testSMALL()
@@ -577,32 +592,32 @@ void TestStatisticalFunctions::testSTDEVA()
 {
     // ODF-tests
     CHECK_EVAL("STDEVA(2;4)/SQRT(2)",      Value(        1 ) ); // The sample standard deviation of (2;4) is SQRT(2).
-    CHECK_EVAL("STDEVA(B5:C6)",            Value( 2.581989 ) ); // TODO expand - Logicals (referenced) are converted to numbers.
-    CHECK_EVAL("STDEVA( TRUE();FALSE() )", Value( 0.707107 ) ); // Logicals (inlined) are converted to numbers.
+    CHECK_EVAL_SHORT("STDEVA(B5:C6)",            Value( 2.581989 ) ); // TODO - be more precise / Logicals (referenced) are converted to numbers.
+    CHECK_EVAL_SHORT("STDEVA( TRUE();FALSE() )", Value( 0.707107 ) ); // TODO - be more precise / Logicals (inlined) are converted to numbers.
     CHECK_EVAL("STDEVA(1)",                Value::errorNUM() ); // Logicals (inlined) are converted to numbers.
 }
 
 void TestStatisticalFunctions::testSTDEVP()
 {
     // ODF-tests
-    CHECK_EVAL("STDEVP(2;4)",      Value( 1 ) ); // The standard deviation of the set for (2;4) is 1.
-    CHECK_EVAL("STDEVP(B4:B5)*2)", Value( 1 ) ); // The standard deviation of the set for (2;3) is 0.5.
-    CHECK_EVAL("STDEVP(B3:B5)*2",  Value( 1 ) ); // Strings are not converted to numbers and are ignored.
-    CHECK_EVAL("STDEVP(1)",        Value( 0 ) ); // STDEVP(1) is 0.
+    CHECK_EVAL("STDEVP(2;4)",     Value( 1 ) ); // The standard deviation of the set for (2;4) is 1.
+    CHECK_EVAL("STDEVP(B4:B5)*2", Value( 1 ) ); // The standard deviation of the set for (2;3) is 0.5.
+    CHECK_EVAL("STDEVP(B3:B5)*2", Value( 1 ) ); // Strings are not converted to numbers and are ignored.
+    CHECK_EVAL("STDEVP(1)",       Value( 0 ) ); // STDEVP(1) is 0.
 }
 
 void TestStatisticalFunctions::testSTDEVPA()
 {
     // ODF-tests
     CHECK_EVAL("STDEVPA(2;4)",            Value( 1        ) ); // The sample standard deviation of (2;4) is 1.
-    CHECK_EVAL("STDEVPA(B5:C6)",          Value( 2.236068 ) ); // Logicals (referenced) are converted to numbers.
+    CHECK_EVAL_SHORT("STDEVPA(B5:C6)",          Value( 2.236068 ) ); // TODO - be more precise / Logicals (referenced) are converted to numbers.
     CHECK_EVAL("STDEVPA(TRUE();FALSE())", Value( 0.5      ) ); // Logicals (inlined) are converted to numbers.
 }
 
 void TestStatisticalFunctions::testSTEYX()
 {
     // ODF-tests
-    CHECK_EVAL("STEYX(C19:C23;A19:A23)", Value( 2.370953 ) ); //
+    CHECK_EVAL_SHORT("STEYX(C19:C23;A19:A23)", Value( 2.370953 ) ); // TODO - be more precise
     CHECK_EVAL("STEYX(A19:A23;A25:A29)", Value( 0        ) ); //
     CHECK_EVAL("STEYX(B4:B5;C4:C5)",     Value::errorNUM() ); // at least three number per sequence
 }
@@ -614,9 +629,9 @@ void TestStatisticalFunctions::testTDIST()
     // 2 = two tailed distribution
 
     // ODF-tests
-    CHECK_EVAL("TDIST( 0.5; 1; 1 )",  Value( 0.352416 ) ); //
-    CHECK_EVAL("TDIST( -1.5; 2; 2 )", Value( 0.272393 ) ); //
-    CHECK_EVAL("TDIST( 0.5; 5; 1 )",  Value( 0.319149 ) ); // 
+    CHECK_EVAL_SHORT("TDIST( 0.5; 1; 1 )",  Value( 0.352416 ) ); // TODO - be more precise
+    CHECK_EVAL_SHORT("TDIST( -1.5; 2; 2 )", Value( 0.272393 ) ); // TODO - be more precise
+    CHECK_EVAL_SHORT("TDIST( 0.5; 5; 1 )",  Value( 0.319149 ) ); // TODO - be more precise 
     CHECK_EVAL("TDIST( 1; 1; 3 )",    Value::errorNUM() ); // mode = { 1; 2 }
     CHECK_EVAL("TDIST( 1; 0; 1 )",    Value::errorNUM() ); // degreeOfFreedom >= 1
 }
@@ -644,10 +659,10 @@ void TestStatisticalFunctions::testVAR()
 void TestStatisticalFunctions::testVARA()
 {
     // ODF-tests
-    CHECK_EVAL("VARA(2;4)",            Value(        2 ) ); // The sample variance of (2;4) is 2.
-    CHECK_EVAL("VARA(B5:C6)",          Value( 6.666667 ) ); // Logicals (referenced) are converted to numbers.
-    CHECK_EVAL("VARA(TRUE();FALSE())", Value(        1 ) ); // Logicals (inlined) are converted to numbers.
-    CHECK_EVAL("VARA(1)",              Value::errorNUM() ); // Two numbers at least.
+    CHECK_EVAL("VARA(2;4)",            Value(            2 ) ); // The sample variance of (2;4) is 2.
+    CHECK_EVAL("VARA(B5:C6)",          Value( 6.6666666667 ) ); // Logicals (referenced) are converted to numbers.
+    CHECK_EVAL("VARA(TRUE();FALSE())", Value(            1 ) ); // Logicals (inlined) are converted to numbers.
+    CHECK_EVAL("VARA(1)",              Value::errorNUM()     ); // Two numbers at least.
 }
 
 void TestStatisticalFunctions::testVARP()
