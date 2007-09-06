@@ -35,7 +35,9 @@ class TestStatisticalFunctions : public QObject
 Q_OBJECT
 
 private slots:
+
     void initTestCase();
+
 //     void testARRANG();
 //     void testAVEDEV();
 //     void testAVERAGE();
@@ -61,50 +63,60 @@ private slots:
 //     void testGROWTH(); // TODO check implemented?
     void testGEOMEAN();
     void testHARMEAN();
-//     void testHYPGEOMDIST();
+    void testHYPGEOMDIST();
 //     void testINTERCEPT();
 //     void testINVBINO();
-//     void testKURT();
-//     void testLARGE();
-//     void testLOGINV();
-//     void testLOGNORMDIST();
+    void testKURT();
+    void testLARGE();
+//     void testLINEST(); // ???
+//     void testLOGEST(); // ???
+    void testLOGINV();
+    void testLOGNORMDIST();
+    void testMAX();
+    void testMAXA();
 //     void testMEDIAN();
-//     void testMODE();
-//     void testNEGBINOMDIST();
-//     void testNORMDIST();
-//     void testNORMINV();
+    void testMIN();
+    void testMINA();
+    void testMODE();
+    void testNEGBINOMDIST();
+    void testNORMDIST();
+    void testNORMINV();
 //     void testNORMSDIST();
 //     void testLEGACYNORMSDIST(); // same as NORMSDIST required for OpenFormula compliance
 //     void testPEARSON();
-//     void testPERMUT();
-//     void testPHI();
-//     void testPOISSON();
-//     void testSKEW();
-//     void testSLOPE();
-//     void testSMALL();
-//     void testSTANDARDIZE();
-//     void testSTDEV();
-//     void testSTDEVA();
-//     void testSTDEVP();
-//     void testSTDEVPA();
-//     void testSTEYX();
+    void testPERMUT();
+    void testPHI();
+    void testPOISSON();
+//     void testPROB();     // ???
+//     void testQUARTILE(); // ???
+//     void testRANK();     // ???
+//     void testRSQ();      // ???
+    void testSKEW();
+//     void testSKEWP();
+    void testSLOPE();
+    void testSMALL();
+    void testSTANDARDIZE();
+    void testSTDEV();
+    void testSTDEVA();
+    void testSTDEVP();
+    void testSTDEVPA();
+    void testSTEYX();
 //     void testSUMXMY2();
 //     void testSUMPRODUCT();
 //     void testSUMX2PY2();
 //     void testSUMX2MY2();
-//     void testTDIST();
-//     void testTTEST();
+    void testTDIST();
+//     void testTINV();     // ???
+//     void testTREND();    // ???
+//     void testTRIMMEAN(); // ???
+    void testTTEST();
 //     void testVARIANCE();
-//     void testVAR();
-//     void testVARP();
-//     void testVARA();
-//     void testVARPA();
-//     void testWEIBULL();
-//     void testZTEST();
-
-    
-    void testMAXA();
-    void testMINA();
+    void testVAR();
+    void testVARA();
+    void testVARP();
+    void testVARPA();
+    void testWEIBULL();
+    void testZTEST();
 
     void cleanupTestCase();
 
