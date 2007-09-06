@@ -976,7 +976,7 @@ static double taylor_helper (double* pPolynom, uint nMax, double x)
 Value ValueCalc::gauss (Value xx)
 // this is a weird function
 {
-  Number x = converter->toFloat (xx);
+  double x = converter->toFloat ( xx );
 
   double t0[] =
     { 0.39894228040143268, -0.06649038006690545,  0.00997355701003582,
@@ -1002,8 +1002,8 @@ Value ValueCalc::gauss (Value xx)
       0.00000000000361422,  0.00000000000143638, -0.00000000000045848 };
   double asympt[] = { -1.0, 1.0, -3.0, 15.0, -105.0 };
 
-  double xAbs = numToDouble (::abs(x));
-  uint xShort = static_cast<uint>(floor(xAbs));
+  double xAbs = fabs(x);
+  uint xShort = static_cast<uint>(approxFloor(xAbs)); // approxFloor taken from OOo
   double nVal = 0.0;
   if (xShort == 0)
     nVal = taylor_helper(t0, 11, (xAbs * xAbs)) * xAbs;
