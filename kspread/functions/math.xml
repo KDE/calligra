@@ -875,8 +875,18 @@
 	<Comment>Significance (optional)</Comment>
 	<Type>Float</Type>
       </Parameter>
+      <Parameter optional="true">
+	<Comment>Mode (optional)</Comment>
+	<Type>Float</Type>
+      </Parameter>
       <Help>
-	<Text>The FLOOR() function rounds x down (towards zero)to the nearest mutiple of Significance. The default value for Significance is 1 (or -1 if the value is negative), which means rounding up to the nearest integer. Note that this does not match the normal mathematic definition of a floor function.</Text>
+	<Text>Round a number x down to the nearest multiple of the second parameter, Significance.</Text>
+	<Text>The FLOOR() function rounds x down (towards zero) to the nearest mutiple of Significance.
+	The default value for Significance is 1, if x is positive. It is -1, if the value is negative,
+	which means rounding up to the nearest integer.
+	If mode is given and not equal to zero, the amount of x is rounded toward zero to a multiple
+	of significance and then the sign applied. Otherwise, it rounds toward negative infinity.
+	If any of the two parameters x or Significance is zero, the result is zero.</Text>
 	<Syntax>FLOOR(x)</Syntax>
 	<Example>FLOOR(12.5) equals 12</Example>
 	<Example>FLOOR(-12.5) equals -12</Example>

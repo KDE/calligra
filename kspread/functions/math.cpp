@@ -148,7 +148,7 @@ void RegisterMathFunctions()
   f = new Function ("FIB",           func_fib); // KSpread-specific, like Quattro-Pro's FIB
   repo->add (f);
   f = new Function ("FLOOR",         func_floor);
-  f->setParamCount (1, 2);
+  f->setParamCount (1, 3);
   repo->add (f);
   f = new Function ("GAMMA",         func_gamma);
   repo->add (f);
@@ -460,31 +460,37 @@ Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: FLOOR
 Value func_floor (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value number = args[0];
+    if (calc->approxEqual(args[0], Value(0.0)))
+        return Value(0);
+    Number number = args[0].asFloat();
 
-  Value res;
-  if ( args.count() == 2 )
-  { // we have the optional "resolution" ("significance") argument
-    res = args[1];
-  } else {
-    // use 1 or -1, depending on the sign of the first argument
-    res = calc->gequal( number,  Value( 0.0 ) ) ? Value( 1.0 ) : Value( -1.0 );
-  }
-  if ( calc->isZero( res ) )
-    return Value::errorDIV0();
+    Number significance;
+    if (args.count() >= 2) // we have the optional "significance" argument
+    {
+        significance = args[1].asFloat();
+        // Sign of number and significance must match.
+        if (calc->gequal(args[0], Value(0.0)) != calc->gequal(args[1], Value(0.0)))
+            return Value::errorVALUE();
+    }
+    else // use 1 or -1, depending on the sign of the first argument
+        significance = calc->gequal(args[0], Value(0.0)) ? 1.0 : -1.0;
+    if (calc->approxEqual(Value(significance), Value(0.0)))
+        return Value(0);
 
-  Value d = calc->div( number, res );
-  if ( calc->greater( Value( 0 ), d ) ) {
-    // the sign of the arguments is different
-    return Value::errorVALUE();
-  }
-  Value rud = calc->roundUp( d );
-  if ( calc->approxEqual( rud, res ) )
-    d = calc->mul( rud, res );
-  else
-    d = calc->mul( calc->roundDown( d ), res );
+    const bool mode = (args.count() == 3) ? (args[2].asFloat() != 0.0) : false;
 
-  return d;
+    Number result;
+    if (mode) // round towards zero
+         result = ((int)(number / significance)) * significance;
+    else // round towards negative infinity
+    {
+        result = number / significance; // always positive, because signs match
+        if (calc->gequal(args[0], Value(0.0))) // positive values
+            result = floor(result) * significance;
+        else // negative values
+            result = ceil(result) * significance;
+    }
+    return Value(result);
 }
 
 // Function: GAMMA
@@ -903,7 +909,7 @@ Value func_mround (valVector args, ValueCalc *calc, FuncExtra *)
   Value div = calc->sub (d, mod);
 
   Value result = div;
-  if (calc->greater (mod, calc->div (m, Value(2))))  // mod > m/2
+  if (calc->gequal(mod, calc->div(m, Value(2))))  // mod >= m/2
     result = calc->add (result, m);     // result += m
   result = calc->mul (result, sign);    // add the sign
 
@@ -963,9 +969,14 @@ Value func_odd (valVector args, ValueCalc *calc, FuncExtra *)
 
 Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  if (args.count() == 1)
-    return calc->roundDown (args[0]);
-  return calc->roundDown (args[0], args[1]);
+    Q_UNUSED(calc)
+    Number result = args[0].asFloat();
+    if (args.count() == 2)
+        result = result * ::pow(10, (int)args[1].asInteger());
+    result = (args[0].asFloat() < 0) ? -(qint64)(-result) : (qint64)result;
+    if (args.count() == 2)
+        result = result * ::pow(10, -(int)args[1].asInteger());
+    return Value(result);
 }
 
 // Function: COUNT

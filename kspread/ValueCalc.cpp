@@ -525,7 +525,7 @@ Value ValueCalc::roundDown (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = mul (val, 10);
   if (digits < 0)
-    for (int i = 0; i < digits; ++i)
+    for (int i = 0; i > digits; --i)
       val = div (val, 10);
 
   val = Value (floor (numToDouble (converter->toFloat (val))));
@@ -534,7 +534,7 @@ Value ValueCalc::roundDown (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
   if (digits < 0)
-    for (int i = 0; i < digits; ++i)
+    for (int i = 0; i > digits; --i)
       val = mul (val, 10);
   return val;
 }
@@ -547,7 +547,7 @@ Value ValueCalc::roundUp (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = mul (val, 10);
   if (digits < 0)
-    for (int i = 0; i < digits; ++i)
+    for (int i = 0; i > digits; --i)
       val = div (val, 10);
 
   val = Value (ceil (numToDouble (converter->toFloat (val))));
@@ -556,7 +556,7 @@ Value ValueCalc::roundUp (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
   if (digits < 0)
-    for (int i = 0; i < digits; ++i)
+    for (int i = 0; i > digits; --i)
       val = mul (val, 10);
   return val;
 }
@@ -569,16 +569,16 @@ Value ValueCalc::round (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = mul (val, 10);
   if (digits < 0)
-    for (int i = 0; i < digits; ++i)
+    for (int i = 0; i > digits; --i)
       val = div (val, 10);
 
-  val = Value (converter->toInteger (Value (converter->toFloat (val)+0.5)));
+  val = Value((lower(val, 0) ? -1 : 1) * qRound(qAbs(converter->toFloat(val))));
 
   if (digits > 0)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
   if (digits < 0)
-    for (int i = 0; i < digits; ++i)
+    for (int i = 0; i > digits; --i)
       val = mul (val, 10);
   return val;
 }

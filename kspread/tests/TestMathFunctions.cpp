@@ -456,6 +456,21 @@ void TestMathFunctions::testFIB()
   CHECK_EVAL( "FIB(\"text\")", Value::errorVALUE() );
 }
 
+void TestMathFunctions::testFLOOR()
+{
+    // ODF-Tests
+    CHECK_EVAL("=FLOOR(2; 1)",       Value(2));
+    CHECK_EVAL("=FLOOR(2.5; 1)",     Value(2));
+    CHECK_EVAL("=FLOOR(5; 2)",       Value(4));
+    CHECK_EVAL("=FLOOR(5; 2.2)",     Value(4.4));
+    CHECK_EVAL("=FLOOR(-2.5;1)",     Value::errorVALUE());
+    CHECK_EVAL("=FLOOR(-2.5; -1)",   Value(-3));
+    CHECK_EVAL("=FLOOR(-2.5; -1;1)", Value(-2));
+    CHECK_EVAL("=FLOOR(-2.5;0)",     Value(0));
+    CHECK_EVAL("=FLOOR(0;-1)",       Value(0));
+    CHECK_EVAL("=FLOOR(-1.1)",       Value(-2));
+}
+
 void TestMathFunctions::testGAMMA()
 {
   // ODF-Tests
@@ -500,6 +515,17 @@ void TestMathFunctions::testGESTEP()
   CHECK_EVAL( "GESTEP(1.3;1.2)",  Value( 1 ) ); // Floating point values where X is greater than Step.
   CHECK_EVAL( "GESTEP(-2;\"xxx\")", Value::errorNUM() ); //
   CHECK_EVAL( "GESTEP(\"xxx\";-2)", Value::errorNUM() ); //
+}
+
+void TestMathFunctions::testINT()
+{
+    // ODF-tests
+    CHECK_EVAL("=INT(2)",       Value( 2));
+    CHECK_EVAL("=INT(-3)",      Value(-3));
+    CHECK_EVAL("=INT(1.2)",     Value( 1));
+    CHECK_EVAL("=INT(1.7)",     Value( 1));
+    CHECK_EVAL("=INT(-1.2)",    Value(-2));
+    CHECK_EVAL("=INT((1/3)*3)", Value( 1));
 }
 
 void TestMathFunctions::testLCM()
@@ -606,6 +632,15 @@ void TestMathFunctions::testMOD()
     CHECK_EVAL( "MOD(10;0)", Value::errorDIV0() ); // Division by zero is not allowed
 }
 
+void TestMathFunctions::testMROUND()
+{
+    // ODF-tests
+    CHECK_EVAL("=MROUND(1564;100)", Value(1600));
+    CHECK_EVAL("=MROUND(1520;100)", Value(1500));
+    CHECK_EVAL("=MROUND(1550;100)", Value(1600));
+    CHECK_EVAL("=MROUND(41.89;8)",  Value(40));
+}
+
 void TestMathFunctions::testMUNIT()
 {
     CHECK_EVAL( "MUNIT(2)", evaluate( "{1;0|0;1}" ) );
@@ -670,6 +705,49 @@ void TestMathFunctions::testRANDBETWEEN()
     CHECK_EVAL( "RANDBETWEEN(15;5)<=15", Value( true ) ); // Must return value in range
 }
 
+void TestMathFunctions::testROUND()
+{
+    // ODF-tests
+    CHECK_EVAL("=ROUND(10.1; 0)",   Value(10));
+    CHECK_EVAL("=ROUND(9.8;0)",     Value( 10));
+    CHECK_EVAL("=ROUND(0.5; 0)",    Value(1));
+    CHECK_EVAL("=ROUND(1/3;0) ",    Value(0));
+    CHECK_EVAL("=ROUND(1/3;1)",     Value(0.3));
+    CHECK_EVAL("=ROUND(1/3;2)",     Value(0.33));
+    CHECK_EVAL("=ROUND(1/3;2.9)",   Value(0.33));
+    CHECK_EVAL("=ROUND(5555;-1)",   Value(5560));
+    CHECK_EVAL("=ROUND(-1.1; 0)",   Value(-1));
+    CHECK_EVAL("=ROUND(-1.5; 0)",   Value(-2));
+    CHECK_EVAL("=ROUND(-1.5)",      Value(-2));
+    CHECK_EVAL("=ROUND(1.1)",       Value(1));
+    CHECK_EVAL("=ROUND(9.8)",       Value(10));
+}
+
+void TestMathFunctions::testROUNDDOWN()
+{
+    // ODF-tests
+    CHECK_EVAL("=ROUNDDOWN(1.45673; 2)",    Value(1.45));
+    CHECK_EVAL("=ROUNDDOWN(1;0)",           Value(1));
+    CHECK_EVAL("=ROUNDDOWN(1)",             Value(1));
+    CHECK_EVAL("=ROUNDDOWN(9;-1)",          Value(0));
+    CHECK_EVAL("=ROUNDDOWN(9;0)",           Value(9));
+    CHECK_EVAL("=ROUNDDOWN(-1.1)",          Value(-2));
+    CHECK_EVAL("=ROUNDDOWN(-1.9)",          Value(-2));
+}
+
+void TestMathFunctions::testROUNDUP()
+{
+    // ODF-tests
+    CHECK_EVAL("=ROUNDUP(1.45673; 2)",  Value(1.46));
+    CHECK_EVAL("=ROUNDUP(1.1;0)",       Value(2));
+    CHECK_EVAL("=ROUNDUP(1.9;0)",       Value(2));
+    CHECK_EVAL("=ROUNDUP(1)",           Value(1));
+    CHECK_EVAL("=ROUNDUP(9;-1)",        Value(10));
+    CHECK_EVAL("=ROUNDUP(9;0)",         Value(9));
+    CHECK_EVAL("=ROUNDUP(-1.1)",        Value(-1));
+    CHECK_EVAL("=ROUNDUP(-1.9)",        Value(-1));
+}
+
 void TestMathFunctions::testSERIESSUM()
 {
     CHECK_EVAL( "SERIESSUM(2;0;2;{1;2})",           Value(        9 ) ); // 
@@ -727,6 +805,20 @@ void TestMathFunctions::testSUMSQ()
 {
     CHECK_EVAL( "SUMSQ(1;2;3)",      Value( 14 ) ); // Simple sum.
     CHECK_EVAL( "SUMSQ(TRUE();2;3)", Value( 14 ) ); // TRUE() is 1.
+}
+
+void TestMathFunctions::testTRUNC()
+{
+    // ODF-tests
+    CHECK_EVAL("=TRUNC(10.1)",     Value(10));
+    CHECK_EVAL("=TRUNC(0.5)",      Value(0));
+    CHECK_EVAL("=TRUNC(1/3;0)",    Value(0));
+    CHECK_EVAL("=TRUNC(1/3;1)",    Value(0.3));
+    CHECK_EVAL("=TRUNC(1/3;2)",    Value(0.33));
+    CHECK_EVAL("=TRUNC(1/3;2.9)",  Value(0.33));
+    CHECK_EVAL("=TRUNC(5555;-1)",  Value(5550));
+    CHECK_EVAL("=TRUNC(-1.1)",     Value(-1));
+    CHECK_EVAL("=TRUNC(-1.5)",     Value(-1));
 }
 
 QTEST_KDEMAIN(TestMathFunctions, GUI)

@@ -69,10 +69,12 @@ private slots:
   void testFACT();
   void testFACTDOUBLE();
   void testFIB();
+  void testFLOOR();
   void testGAMMA();
   void testGAMMALN();
   void testGCD();
   void testGESTEP();
+  void testINT();
   void testLCM();
   void testLN();
   void testLOG();
@@ -81,6 +83,7 @@ private slots:
   void testMINVERSE();
   void testMMULT();
   void testMOD();
+  void testMROUND();
 //   void testMULTINOMINAL();
   void testMUNIT();
   void testODD();
@@ -91,6 +94,9 @@ private slots:
   void testRADIANS();
   void testRAND();
   void testRANDBETWEEN();
+  void testROUND();
+  void testROUNDDOWN();
+  void testROUNDUP();
   void testSERIESSUM();
   void testSIGN();
   void testSQRT();
@@ -99,6 +105,7 @@ private slots:
   void testSUMA();
   void testSUMIF();
   void testSUMSQ();
+  void testTRUNC();
 
 private:
   Value TestDouble(const QString& formula, const Value& v2, int accuracy);
