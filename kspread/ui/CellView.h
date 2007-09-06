@@ -183,23 +183,6 @@ private:
 
   /**
    * \ingroup Layout
-   * Determines the space needed for the text to be displayed.
-   *
-   * This depends on the following variables:
-   * \li text direction (horizontal or vertical)
-   * \li text angle
-   * \li wether the text is underlined
-   * \li vertical alignment
-   *
-   * There's a special treatment for bottom aligned, underlined text. For
-   * all other combinations of these two variables the dimension is the same.
-   *
-   * \internal Called from makeLayout().
-   */
-  void textSize( const QFontMetricsF& fontMetrics );
-
-  /**
-   * \ingroup Layout
    * Determines the text offset relative to the cell's top left corner.
    *
    * This depends on the following variables:
@@ -215,15 +198,6 @@ private:
    * \internal Called from makeLayout().
    */
   void textOffset( const QFontMetricsF& fontMetrics, const Cell& cell );
-
-  /**
-   * \ingroup Layout
-   * Checks wether the cell text could be wrapped
-   * and does so, if it's necessary.
-   *
-   * \internal Called from makeLayout().
-   */
-  void breakLines( const QFontMetricsF& fontMetrics );
 
   /**
    * \ingroup Layout
