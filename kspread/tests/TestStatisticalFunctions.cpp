@@ -292,8 +292,10 @@ void TestStatisticalFunctions::testGAMMADIST()
 void TestStatisticalFunctions::testGAUSS()
 {
     // ODF-tests
-    CHECK_EVAL("GAUSS(0)", Value(           0 ) ); // Mean of one value.
-    CHECK_EVAL("GAUSS(1)", Value( 0.341344746 ) ); // Multiple equivalent values.
+    CHECK_EVAL("GAUSS(0)",     Value(            0  ) ); // Mean of one value.
+    CHECK_EVAL("GAUSS(1)",     Value(  0.341344746  ) ); // Multiple equivalent values.
+    // my test
+    CHECK_EVAL("GAUSS(-0.25)", Value( -0.0987063257 ) ); // check neg. values. test for fixes gauss_func
 }
 
 void TestStatisticalFunctions::testGEOMEAN()
@@ -472,29 +474,28 @@ void TestStatisticalFunctions::testNEGBINOMDIST()
 {
     // TODO check complete function
     // bettersolutions.com
-//     CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25  ) ); //
-//     CHECK_EVAL("NEGBINOMDIST(0;1;0.5)",  Value( 0.5   ) ); //
-    CHECK_EVAL("NEGBINOMDIST(1;6;0.5)",  Value( 0.047 ) ); //
-//     CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25 ) ); //
-//     CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25 ) ); //
-//     CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25 ) ); //
+    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
+    CHECK_EVAL("NEGBINOMDIST(0;1;0.5)",  Value( 0.5      ) ); //
+    CHECK_EVAL("NEGBINOMDIST(1;6;0.5)",  Value( 0.047875 ) ); //
+    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
+    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
+    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
 }
 
 void TestStatisticalFunctions::testNORMDIST()
 {
     // ODF-tests
-    CHECK_EVAL("NORMDIST(0;1;4;TRUE())",         Value( 0.401293 ) ); //
-    CHECK_EVAL("NORMDIST(0;0;1;FALSE())",        Value( 0.398942 ) ); //
-    CHECK_EVAL("NORMDIST(0;0;1;TRUE())",         Value( 0.5      ) ); //
-    CHECK_EVAL("NORMDIST(0;1;4;FALSE())",        Value( 0.096667 ) ); //
-    CHECK_EVAL("NORMDIST(0;1;4;TRUE())",         Value( 0.401293 ) ); //
-    CHECK_EVAL("NORMDIST(0;-1;4;FALSE())",       Value( 0.096667 ) ); //
-    CHECK_EVAL("NORMDIST(0;-1;4;TRUE())",        Value( 0.598706 ) ); //
-    CHECK_EVAL("NORMDIST(1;-1;4;FALSE())",       Value( 0.088016 ) ); //
-    CHECK_EVAL("NORMDIST(1;-1;4;TRUE())",        Value( 0.691462 ) ); //
-    CHECK_EVAL("NORMDIST(1.281552;0;1;TRUE())",  Value( 0.9      ) ); //
-    CHECK_EVAL("NORMDIST(0;-1.281552;1;TRUE())", Value( 0.9      ) ); //
-    CHECK_EVAL("NORMDIST(0;0;-1;FALSE())",       Value::errorNUM() ); //
+    CHECK_EVAL("NORMDIST(0;1;4;TRUE())",         Value( 0.4012936743 ) ); //
+    CHECK_EVAL("NORMDIST(0;0;1;FALSE())",        Value( 0.3989422804 ) ); //
+    CHECK_EVAL("NORMDIST(0;0;1;TRUE())",         Value( 0.5          ) ); //
+    CHECK_EVAL("NORMDIST(0;1;4;FALSE())",        Value( 0.0966670292 ) ); //
+    CHECK_EVAL("NORMDIST(0;-1;4;FALSE())",       Value( 0.0966670292 ) ); //
+    CHECK_EVAL("NORMDIST(0;-1;4;TRUE())",        Value( 0.5987063257 ) ); //
+    CHECK_EVAL("NORMDIST(1;-1;4;FALSE())",       Value( 0.0880163317 ) ); //
+    CHECK_EVAL("NORMDIST(1;-1;4;TRUE())",        Value( 0.6914624613 ) ); //
+    CHECK_EVAL("NORMDIST(1.281552;0;1;TRUE())",  Value( 0.9000000762 ) ); //
+    CHECK_EVAL("NORMDIST(0;-1.281552;1;TRUE())", Value( 0.9000000762 ) ); //
+    CHECK_EVAL("NORMDIST(0;0;-1;FALSE())",       Value::errorNUM()     ); //
 }
 
 void TestStatisticalFunctions::testNORMINV()
@@ -707,11 +708,11 @@ void TestStatisticalFunctions::testWEIBULL()
 void TestStatisticalFunctions::testZTEST()
 {
     // ODF-tests
-    CHECK_EVAL("ZTEST(B4:C5; 3.5      )", Value( 0        ) ); // mean = average, estimated standard deviation: fits well
-    CHECK_EVAL("ZTEST(B4:C5; 3  ; 2   )", Value( 0.382925 ) ); // TODO res=0 - mean near average, standard deviation greater than estimate: probable
-    CHECK_EVAL("ZTEST(B4:C5; 4  ; 0.5 )", Value( 0.954500 ) ); // mean near the average, but small deviation: not probable
-    CHECK_EVAL("ZTEST(B4:C5; 5        )", Value( 0.979863 ) ); // mean at a border value, standard deviation ~ 1,3: nearly improbable
-    CHECK_EVAL("ZTEST(B4:C5; 5  ; 0.1 )", Value( 1        ) ); // mean at a border value, small standard deviation: improbable
+    CHECK_EVAL("ZTEST(B4:C5; 3.5      )", Value( 0            ) ); // mean = average, estimated standard deviation: fits well
+    CHECK_EVAL("ZTEST(B4:C5; 3  ; 2   )", Value( 0.3829249225 ) ); // mean near average, standard deviation greater than estimate: probable
+    CHECK_EVAL("ZTEST(B4:C5; 4  ; 0.5 )", Value( 0.9544997361 ) ); // mean near the average, but small deviation: not probable
+    CHECK_EVAL("ZTEST(B4:C5; 5        )", Value( 0.9798632484 ) ); // mean at a border value, standard deviation ~ 1,3: nearly improbable
+    CHECK_EVAL("ZTEST(B4:C5; 5  ; 0.1 )", Value( 1            ) ); // mean at a border value, small standard deviation: improbable
 }
 
 void TestStatisticalFunctions::cleanupTestCase()
