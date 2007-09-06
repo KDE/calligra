@@ -148,10 +148,12 @@ void Engraver::engraveBar(Bar* bar)
 
     // collect all voices in all parts
     QList<VoiceBar*> voices;
+    QList<int> voiceIds;
     for (int p = 0; p < sheet->partCount(); p++) {
         Part* part = sheet->part(p);
         for (int v = 0; v < part->voiceCount(); v++) {
             voices.append(bar->voice(part->voice(v)));
+            voiceIds.append(v);
         }
     }
 
@@ -178,6 +180,14 @@ void Engraver::engraveBar(Bar* bar)
             for (int i = 0; i < bar->staffElementCount(staff); i++) {
                 staffElements[st].append(bar->staffElement(staff, i));
             }
+        }
+    }
+    
+    QMultiMap<Staff*, VoiceBar*> staffVoices;
+    foreach (VoiceBar* vb, voices) {
+        for (int e = 0; e < vb->elementCount(); e++) {
+            Staff* s = vb->element(e)->staff();
+            if (!staffVoices.contains(s, vb)) staffVoices.insert(s, vb);
         }
     }
 
@@ -253,25 +263,31 @@ void Engraver::engraveBar(Bar* bar)
                         if (c->beamType(0) == Chord::BeamContinue || c->beamType(0) == Chord::BeamEnd) {
                             c->setStemDirection(c->beamStart(0)->stemDirection());
                         } else {
-                            int topLine = 0, bottomLine = 0;
-                            double topy = 1e9, bottomy = -1e9;
-                            for (int n = 0; n < c->noteCount(); n++) {
-                                Note* note = c->note(n);
-                                Staff * s = note->staff();
-                                Clef* clef = s->lastClefChange(barIdx);
-                                int line = clef->pitchToLine(note->pitch());
-                                double ypos = s->top() + line * s->lineSpacing() / 2;
-                                if (ypos < topy) {
-                                    topy = ypos;
-                                    topLine = line;
+                            Staff* staff = c->staff();
+                            if (staffVoices.count(staff) > 1) {
+                                int voiceIdx = voiceIds[i];
+                                c->setStemDirection(voiceIdx & 1 ? Chord::StemDown : Chord::StemUp);
+                            } else {
+                                int topLine = 0, bottomLine = 0;
+                                double topy = 1e9, bottomy = -1e9;
+                                for (int n = 0; n < c->noteCount(); n++) {
+                                    Note* note = c->note(n);
+                                    Staff * s = note->staff();
+                                    Clef* clef = s->lastClefChange(barIdx);
+                                    int line = clef->pitchToLine(note->pitch());
+                                    double ypos = s->top() + line * s->lineSpacing() / 2;
+                                    if (ypos < topy) {
+                                        topy = ypos;
+                                        topLine = line;
+                                    }
+                                    if (ypos > bottomy) {
+                                        bottomy = ypos;
+                                        bottomLine = line;
+                                    }        
                                 }
-                                if (ypos > bottomy) {
-                                    bottomy = ypos;
-                                    bottomLine = line;
-                                }        
+                                double center = (bottomLine + topLine) * 0.5;
+                                c->setStemDirection(center < 4 ? Chord::StemDown : Chord::StemUp);
                             }
-                            double center = (bottomLine + topLine) * 0.5;
-                            c->setStemDirection(center < 4 ? Chord::StemDown : Chord::StemUp);
                         }
                     }
                     
