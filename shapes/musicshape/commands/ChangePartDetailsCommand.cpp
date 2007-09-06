@@ -27,6 +27,7 @@
 #include "../core/VoiceElement.h"
 #include "../core/Chord.h"
 #include "../core/Note.h"
+#include "../core/TimeSignature.h"
 
 #include "../MusicShape.h"
 
@@ -42,9 +43,15 @@ ChangePartDetailsCommand::ChangePartDetailsCommand(MusicShape* shape, Part* part
     setText("Change part details");
     
     if (m_newStaffCount > m_oldStaffCount) {
+        TimeSignature* ts = m_part->staff(0)->lastTimeSignatureChange(0);
         for (int i = 0; i < m_newStaffCount - m_oldStaffCount; i++) {
             Staff* s = new Staff(m_part);
             m_part->sheet()->bar(0)->addStaffElement(new Clef(s, 0, Clef::GClef, 2));
+            if (ts) {
+                m_part->sheet()->bar(0)->addStaffElement(new TimeSignature(s, 0, ts->beats(), ts->beat(), ts->type()));
+            } else {
+                m_part->sheet()->bar(0)->addStaffElement(new TimeSignature(s, 0, 4, 4));
+            }
             m_staves.append(s);
         }
     } else if (m_newStaffCount < m_oldStaffCount) {

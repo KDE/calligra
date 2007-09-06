@@ -28,6 +28,7 @@ class Part;
 class Clef;
 class Bar;
 class KeySignature;
+class TimeSignature;
 
 /**
  * A Staff is purely used for displaying/formatting. The staff class is used to indicate on what staff
@@ -103,6 +104,8 @@ public:
     Clef* lastClefChange(Bar* bar, int time = -1, Clef* oldClef = 0);
     KeySignature* lastKeySignatureChange(int bar);
     KeySignature* lastKeySignatureChange(Bar* bar);
+    TimeSignature* lastTimeSignatureChange(int bar);
+    TimeSignature* lastTimeSignatureChange(Bar* bar);
 
 public slots:
     /**

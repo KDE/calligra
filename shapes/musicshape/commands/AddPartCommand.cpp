@@ -22,6 +22,8 @@
 #include "../core/Part.h"
 #include "../core/Clef.h"
 #include "../core/Bar.h"
+#include "../core/Staff.h"
+#include "../core/TimeSignature.h"
 
 #include "../MusicShape.h"
 
@@ -37,6 +39,18 @@ AddPartCommand::AddPartCommand(MusicShape* shape)
     m_part = new Part(m_sheet, QString("Part %1").arg(m_sheet->partCount() + 1));
     Staff* s = m_part->addStaff();
     m_part->sheet()->bar(0)->addStaffElement(new Clef(s, 0, Clef::GClef, 2));
+    // figure out time signature
+    if (m_sheet->partCount() == 0) {
+        m_part->sheet()->bar(0)->addStaffElement(new TimeSignature(s, 0, 4, 4));
+    } else {
+        Staff* curStaff = m_sheet->part(0)->staff(0);
+        TimeSignature* ts = curStaff->lastTimeSignatureChange(0);
+        if (!ts) {
+            m_part->sheet()->bar(0)->addStaffElement(new TimeSignature(s, 0, 4, 4));
+        } else {
+            m_part->sheet()->bar(0)->addStaffElement(new TimeSignature(s, 0, ts->beats(), ts->beat(), ts->type()));
+        }
+    }
 }
 
 void AddPartCommand::redo()

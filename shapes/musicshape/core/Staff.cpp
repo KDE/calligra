@@ -23,6 +23,7 @@
 #include "StaffElement.h"
 #include "Clef.h"
 #include "KeySignature.h"
+#include "TimeSignature.h"
 
 #include <math.h>
 #include <limits.h>
@@ -168,6 +169,26 @@ KeySignature* Staff::lastKeySignatureChange(int bar)
 KeySignature* Staff::lastKeySignatureChange(Bar* bar)
 {
     return lastKeySignatureChange(d->part->sheet()->indexOfBar(bar));
+}
+
+TimeSignature* Staff::lastTimeSignatureChange(int bar)
+{
+    if (!d->part) return NULL;
+    
+    for (int b = bar; b >= 0; b--) {
+        Bar* curBar = part()->sheet()->bar(b);
+        for (int i = curBar->staffElementCount(this)-1; i >= 0; i--) {
+            StaffElement* e = curBar->staffElement(this, i);
+            TimeSignature* ts = dynamic_cast<TimeSignature*>(e);
+            if (ts) return ts;
+        }
+    }
+    return 0;
+}
+
+TimeSignature* Staff::lastTimeSignatureChange(Bar* bar)
+{
+    return lastTimeSignatureChange(d->part->sheet()->indexOfBar(bar));
 }
 
 } // namespace MusicCore
