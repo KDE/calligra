@@ -24,6 +24,8 @@
 
 #include <QtCore/QList>
 
+#include <climits>
+
 namespace MusicCore {
 
 namespace {
@@ -106,6 +108,30 @@ Chord::~Chord()
     delete d;
 }
 
+double Chord::width() const
+{
+    double w = 7;
+    
+    int lastPitch = INT_MIN;
+    bool hasConflict = false;
+    foreach (Note* n, d->notes) {
+        int pitch = n->pitch();
+        if (pitch == lastPitch+1) {
+            hasConflict = true;
+            break;
+        }
+        lastPitch = pitch;
+    }
+    
+    if (hasConflict) w += 6;
+    
+    if (d->dots) {
+        w += 2 + 3*d->dots;
+    }
+    
+    return w;
+}
+
 Chord::Duration Chord::duration() const
 {
     return d->duration;
@@ -157,14 +183,19 @@ Note* Chord::note(int index)
 Note* Chord::addNote(Staff* staff, int pitch, int accidentals)
 {
     Note *n = new Note(staff, pitch, accidentals);
-    d->notes.append(n);
-    if (!this->staff()) setStaff(staff);
+    addNote(n);
     return n;
 }
 
 void Chord::addNote(Note* note)
 {
     if (!staff()) setStaff(note->staff());
+    for (int i = 0; i < d->notes.size(); i++) {
+        if (d->notes[i]->pitch() > note->pitch()) {
+            d->notes.insert(i, note);
+            return;
+        }
+    }
     d->notes.append(note);
 }
 
@@ -270,7 +301,21 @@ double Chord::height() const
 
 double Chord::stemX(double xScale) const
 {
-    return x() * xScale + (d->stemDirection == StemUp ? 6 : 0);
+    int lastPitch = INT_MIN;
+    bool hasConflict = false;
+    foreach (Note* n, d->notes) {
+        int pitch = n->pitch();
+        if (pitch == lastPitch+1) {
+            hasConflict = true;
+            break;
+        }
+        lastPitch = pitch;
+    }
+    if (hasConflict) {
+        return x() * xScale + 6;
+    } else {
+        return x() * xScale + (d->stemDirection == StemUp ? 6 : 0);
+    }
 }
 
 double Chord::topNoteY() const

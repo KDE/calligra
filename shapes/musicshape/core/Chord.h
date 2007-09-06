@@ -170,6 +170,7 @@ public:
      * the notes in this chord.
      */
     virtual double height() const;
+    virtual double width() const;
     
     double stemX(double xScale) const;
     double topNoteY() const;

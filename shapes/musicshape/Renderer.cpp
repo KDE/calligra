@@ -34,7 +34,7 @@
 
 using namespace MusicCore;
 
-MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(false)
+MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(true)
 {
 }
 
@@ -315,6 +315,10 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
     double topy = 1e9, bottomy = -1e9;
     Staff* topStaff = 0, *bottomStaff = 0;
     
+    double mainNoteX = (chord->stemDirection() == Chord::StemUp ? x : chord->stemX(xScale));
+    double alternateNoteX = mainNoteX + (chord->stemDirection() == Chord::StemUp ? 6 : -6);
+    bool prevAlternate = false;
+    
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
         Staff * s = n->staff();
@@ -322,17 +326,33 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         int line = 10;
         if (clef) line = clef->pitchToLine(n->pitch());
 
+        double noteX = mainNoteX;
+        if (i > 0) {
+            int prevPitch = chord->note(i-1)->pitch();
+            if (abs(prevPitch - n->pitch()) <= 1 && !prevAlternate) {
+                noteX = alternateNoteX;
+            }
+        }
+        if (i < chord->noteCount()-1 && chord->stemDirection() == Chord::StemDown) {
+            int pitch = n->pitch();
+            int nPitch = chord->note(i+1)->pitch();
+            if (abs(pitch - nPitch) <= 1 && !prevAlternate) {
+                noteX = alternateNoteX;
+            }
+        }
+        prevAlternate = noteX != mainNoteX;
+        
         if (line > 9) { // lines under the bar
             painter.setPen(m_style->staffLinePen(color));
             for (int i = 10; i <= line; i+= 2) {
                 double y = s->top() + i * s->lineSpacing() / 2;
-                painter.drawLine(ref + QPointF(x - 4, y), ref + QPointF(x + 10, y));
+                painter.drawLine(ref + QPointF(noteX - 4, y), ref + QPointF(noteX + 10, y));
             }
         } else if (line < -1) { // lines above the bar
             painter.setPen(m_style->staffLinePen(color));
             for (int i = -2; i >= line; i-= 2) {
                 double y = s->top() + i * s->lineSpacing() / 2;
-                painter.drawLine(ref + QPointF(x - 4, y), ref + QPointF(x + 10, y));
+                painter.drawLine(ref + QPointF(noteX - 4, y), ref + QPointF(noteX + 10, y));
             }
         }
 
@@ -348,7 +368,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
             bottomStaff = s;
         }        
         
-        m_style->renderNoteHead( painter, ref.x() + x, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
+        m_style->renderNoteHead( painter, ref.x() + noteX, ref.y() + s->top() + line * s->lineSpacing() / 2, chord->duration(), color );
 
         // render accidentals
         // TODO I think this could really use some improvements
@@ -377,7 +397,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         }
 
         // render dots of notes
-        double dotX = x + 11;
+        double dotX = x + 11; // TODO somehow figure out if this needs to be larger
         painter.setPen(m_style->noteDotPen(color));
         for (int i = 0; i < chord->dots(); i++) {
             painter.drawPoint(ref + QPointF(dotX, /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2));
@@ -387,9 +407,8 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
 
     double stemLen = chord->stemLength() * 2;
     if (stemLen != 0.0 && stemLen != -0.0) {
-        double stemX = x + 6;
+        double stemX = chord->stemX(xScale);
         bool stemsUp = chord->stemDirection() == Chord::StemUp;
-        if (!stemsUp) { stemX = x; }
         
         painter.setPen(m_style->stemPen(color));
         if (stemsUp) {
