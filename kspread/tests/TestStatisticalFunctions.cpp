@@ -441,7 +441,7 @@ void TestStatisticalFunctions::testMINA()
 // TODO check function - inline Text must be converted, but not Text in Cells
 //     CHECK_EVAL("MINA(B3:B5)",    Value(        0 ) ); // Cell text is converted to 0.
 
-    CHECK_EVAL("MINA(B6:C6)",    Value(        1 ) ); // The value ¡§True¡¨ is considered equivalent to 1.
+    CHECK_EVAL("MINA(B6:C6)",    Value(        1 ) ); // The value "True" is considered equivalent to 1.
 }
 
 void TestStatisticalFunctions::testMODE()
