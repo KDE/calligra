@@ -27,6 +27,7 @@
 #include "core/Staff.h"
 #include "core/StaffSystem.h"
 #include "core/KeySignature.h"
+#include "core/TimeSignature.h"
 #include "core/Chord.h"
 #include "core/Note.h"
 
@@ -153,10 +154,12 @@ void Engraver::engraveBar(Bar* bar)
         Part* part = sheet->part(p);
         for (int v = 0; v < part->voiceCount(); v++) {
             voices.append(bar->voice(part->voice(v)));
+            rebeamBar(part, bar->voice(part->voice(v)));
             voiceIds.append(v);
         }
     }
 
+    
     QVarLengthArray<int> nextTime(voices.size());
     QVarLengthArray<int> nextIndex(voices.size());
     // initialize stuff to 0
@@ -305,4 +308,122 @@ void Engraver::engraveBar(Bar* bar)
     }
     if (x < 30) x = 30;
     bar->setDesiredSize(x + 15);
+}
+
+void Engraver::rebeamBar(Part* part, VoiceBar* vb)
+{
+    Bar* bar = vb->bar();
+    TimeSignature* ts = part->staff(0)->lastTimeSignatureChange(bar);
+    if (!ts) return;
+    
+    QList<int> beats = ts->beatLengths();
+    int nextBeat = 0;
+    int passedBeats = 0;
+    
+    int curTime = 0;
+    int beamStartTime = 0;
+    for (int i = 0, beamStart = -1; i < vb->elementCount(); i++) {
+        VoiceElement* ve = vb->element(i);
+        Chord* c = dynamic_cast<Chord*>(ve);
+        if (!c) continue;
+        curTime += ve->length();
+        
+        if (c->duration() <= Chord::Eighth && beamStart < 0) {
+            beamStart = i;
+            beamStartTime = curTime - ve->length();
+            for (int b = 0; b < c->beamCount(); b++) {
+                c->setBeam(b, c, c, Chord::BeamFlag);
+            }
+        }
+        
+        int beatEnd = beats[nextBeat] + passedBeats;
+        if (curTime >= beatEnd || c->noteCount() == 0 || c->duration() > Chord::Eighth || i == vb->elementCount()-1) {
+            int beamEnd = i;
+            if (c->duration() > Chord::Eighth || c->noteCount() == 0) {
+                beamEnd--;
+            }
+            
+            if (beamEnd > beamStart && beamStart >= 0) {
+                Chord* sChord = dynamic_cast<Chord*>(vb->element(beamStart));
+                Chord* eChord = dynamic_cast<Chord*>(vb->element(beamEnd));
+                
+                int start[6] = {-1, -1, -1, -1, -1, -1};
+                int startTime[6];
+                
+                for (int j = beamStart, beamTime = beamStartTime; j <= beamEnd; j++) {
+                    Chord* chord = dynamic_cast<Chord*>(vb->element(j));
+                    if (chord) {
+                        int factor = VoiceElement::Note8Length;
+                        for (int b = 1; b < chord->beamCount(); b++) {
+                            if (start[b] == -1) {
+                                start[b] = j;
+                                startTime[b] = beamTime;
+                            }
+                            factor /= 2;
+                        }
+                        for (int b = chord->beamCount(); b < 6; b++) {
+                            if (start[b] != -1) {
+                                Chord* sc = static_cast<Chord*>(vb->element(start[b]));
+                                Chord* ec = static_cast<Chord*>(vb->element(j-1));
+                                if (sc == ec) {
+                                    int sTime = startTime[b];
+                                    int eTime = sTime + sc->length();
+                                    int preSTime = (sTime / factor) * factor; // largest multiple of factor <= sTime
+                                    int postETime = ((eTime + factor - 1) / factor) * factor; // smalles multiple of factor >= eTime
+                                    if (sTime - preSTime < postETime - eTime) {
+                                        sc->setBeam(b, sc, ec, Chord::BeamForwardHook);
+                                    } else {
+                                        sc->setBeam(b, sc, ec, Chord::BeamBackwardHook);
+                                    }
+                                } else {
+                                    for (int k = start[b]; k < j; k++) {
+                                        Chord* chord = dynamic_cast<Chord*>(vb->element(k));
+                                        if (chord) chord->setBeam(b, sc, ec);
+                                    }
+                                }
+                                start[b] = -1;
+                            }
+                            factor /= 2;
+                        }
+                        
+                        chord->setBeam(0, sChord, eChord);
+                        beamTime += chord->length();
+                    }
+                }
+                int factor = VoiceElement::Note8Length;
+                for (int b = 1; b < 6; b++) {
+                    if (start[b] != -1) {
+                        Chord* sc = static_cast<Chord*>(vb->element(start[b]));
+                        Chord* ec = static_cast<Chord*>(vb->element(beamEnd));
+                        if (sc == ec) {
+                            int sTime = startTime[b];
+                            int eTime = sTime + sc->length();
+                            int preSTime = (sTime / factor) * factor; // largest multiple of factor <= sTime
+                            int postETime = ((eTime + factor - 1) / factor) * factor; // smalles multiple of factor >= eTime
+                            if (sTime - preSTime < postETime - eTime) {
+                                sc->setBeam(b, sc, ec, Chord::BeamForwardHook);
+                            } else {
+                                sc->setBeam(b, sc, ec, Chord::BeamBackwardHook);
+                            }
+                        } else {
+                            for (int k = start[b]; k <= beamEnd; k++) {
+                                Chord* chord = dynamic_cast<Chord*>(vb->element(k));
+                                if (chord) chord->setBeam(b, sc, ec);
+                            }
+                        }
+                        start[b] = -1;
+                    }
+                    factor /= 2;
+                }
+            }
+            
+            beamStart = -1;
+            while (curTime >= beatEnd) {
+                passedBeats += beats[nextBeat];
+                nextBeat++;
+                if (nextBeat >= beats.size()) nextBeat = 0;
+                beatEnd = passedBeats + beats[nextBeat];
+            }
+        }
+    }
 }

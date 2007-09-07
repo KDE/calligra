@@ -23,7 +23,9 @@
 
 namespace MusicCore {
     class Bar;
+    class VoiceBar;
     class Sheet;
+    class Part;
 }
 
 /**
@@ -35,6 +37,7 @@ class Engraver {
         Engraver();
         void engraveSheet(MusicCore::Sheet* sheet, QSizeF size, bool engraveBars = true);
         void engraveBar(MusicCore::Bar* bar);
+        void rebeamBar(MusicCore::Part* part, MusicCore::VoiceBar* bar);
 };
 
 #endif // MUSIC_ENGRAVER_H

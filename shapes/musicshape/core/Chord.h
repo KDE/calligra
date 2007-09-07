@@ -191,7 +191,7 @@ public:
     const Chord* beamStart(int index) const;
     const Chord* beamEnd(int index) const;
     BeamType beamType(int index) const;
-    void setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type = BeamContinue);
+    void setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type = BeamFlag);
 public slots:
     /**
      * Changes the duration of the chord.

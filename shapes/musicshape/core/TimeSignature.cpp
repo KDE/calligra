@@ -17,6 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TimeSignature.h"
+#include "VoiceElement.h"
+
 #include <QtCore/QString>
 
 namespace MusicCore {
@@ -69,6 +71,7 @@ int TimeSignature::beat() const
 void TimeSignature::setBeat(int beat)
 {
     if (d->beat == beat) return;
+    Q_ASSERT( (beat & (beat-1)) == 0 );
     d->beat = beat;
     int beatsLen = QString::number(d->beats).length();
     int beatLen = QString::number(d->beat).length();
@@ -86,6 +89,42 @@ void TimeSignature::setType(TimeSignatureType type)
     if (d->type == type) return;
     d->type = type;
     emit typeChanged(type);
+}
+
+QList<int> TimeSignature::beatLengths() const
+{
+    int beatLength;
+    QList<int> res;
+    switch (d->beat) {
+        case 1: beatLength = VoiceElement::WholeLength; break;
+        case 2: beatLength = VoiceElement::HalfLength; break;
+        case 4: beatLength = VoiceElement::QuarterLength; break;
+        case 8: beatLength = VoiceElement::Note8Length; break;
+        case 16: beatLength = VoiceElement::Note16Length; break;
+        case 32: beatLength = VoiceElement::Note32Length; break;
+        case 64: beatLength = VoiceElement::Note64Length; break;
+        case 128: beatLength = VoiceElement::Note128Length; break;
+        default: beatLength = VoiceElement::QuarterLength;
+    }
+    if (d->beats % 3 == 0) {
+        for (int i = 0; i < d->beats / 3; i++) {
+            res.append(beatLength*3);
+        }
+    } else {
+        int totalLength = beatLength * d->beats;
+        int groupLength = beatLength;
+        if (d->beat >= 8) groupLength = 4*beatLength;
+        while (totalLength > 0) {
+            if (totalLength >= groupLength) {
+                res.append(groupLength);
+            } else {
+                res.append(totalLength);
+            }
+            totalLength -= groupLength;
+        }
+    }
+    
+    return res;
 }
 
 } // namespace MusicCore
