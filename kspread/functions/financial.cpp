@@ -1461,8 +1461,8 @@ Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() > 7)
     basis = calc->conv()->asInteger (args[7]).asInteger();
 
-  kDebug(36002)<<"ODDLPRICE";
-  kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
+//   kDebug(36002)<<"ODDLPRICE";
+//   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" yield="<<yield<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
   // TODO check frequency
   if( yield <= 0.0 || rate <= 0.0 || maturity <= settlement || settlement <= last)
@@ -1478,7 +1478,7 @@ Value func_oddlprice (valVector args, ValueCalc *calc, FuncExtra *)
   res /= dsci * yield / freq + 1.0;
   res -= ai * 100.0 * rate / freq;
   
-  kDebug(36002)<<"res ="<<res;
+//   kDebug(36002)<<"res ="<<res;
   return Value(res);
 }
 
@@ -1501,8 +1501,8 @@ Value func_oddlyield (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() > 7)
     basis = calc->conv()->asInteger (args[7]).asInteger();
 
-  kDebug(36002)<<"ODDLYIELD";
-  kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
+//   kDebug(36002)<<"ODDLYIELD";
+//   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" last="<<last<<" rate="<<rate<<" price="<<price<<" redemp="<<redemp<<" freq="<<freq<<" basis="<<basis;
 
   // TODO check frequency
   if( rate < 0.0 || price <= 0.0 || maturity <= settlement || settlement <= last)
@@ -1519,7 +1519,7 @@ Value func_oddlyield (valVector args, ValueCalc *calc, FuncExtra *)
   res --;
   res *= freq / dsci;
   
-  kDebug(36002)<<"res ="<<res;
+//   kDebug(36002)<<"res ="<<res;
   return Value(res);
 }
 
@@ -1983,14 +1983,14 @@ Value func_xnpv (valVector args, ValueCalc *calc, FuncExtra *)
   if ( rate < -1.0 )
     return Value::errorNUM();
 
-  kDebug(36002)<<"XNPV";
-  kDebug(36002)<<"rate ="<<rate<<" numValues ="<<numValues<<" numDates ="<<numDates;
+//   kDebug(36002)<<"XNPV";
+//   kDebug(36002)<<"rate ="<<rate<<" numValues ="<<numValues<<" numDates ="<<numDates;
 
   QDate date0 = calc->conv()->asDate (args[2].element( 0 )).asDate( calc->doc() );
   double val;
   QDate date;
 
-  kDebug(36002)<<"date0 ="<<date0; 
+//   kDebug(36002)<<"date0 ="<<date0; 
 
   for ( int i = 0; i < numValues; ++i )
   {
@@ -2005,10 +2005,10 @@ Value func_xnpv (valVector args, ValueCalc *calc, FuncExtra *)
       return Value::errorNUM();
 
     // debug
-    kDebug(36002)<<"val ="<<val<<" date ="<<date; 
+//     kDebug(36002)<<"val ="<<val<<" date ="<<date; 
 
     int days = date0.daysTo( date );
-    kDebug(36002)<<"days ="<<days;
+//     kDebug(36002)<<"days ="<<days;
 
     res += val / pow( rate, days / 365.0 );
   }
@@ -2032,8 +2032,8 @@ Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() > 4) 
     basis = calc->conv()->asInteger (args[4]).asInteger();
 
-  kDebug(36002)<<"YIELDDISC";
-  kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" price="<<price<<" redemp="<<redemp<<" basis="<<basis;
+//   kDebug(36002)<<"YIELDDISC";
+//   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" price="<<price<<" redemp="<<redemp<<" basis="<<basis;
 
   if( price <= 0.0 || redemp <= 0.0 || settlement >= maturity )
     return Value::errorVALUE();
@@ -2043,7 +2043,7 @@ Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *)
   double res = ( redemp / price ) - 1.0;
   res /= yearFrac(date0, settlement, maturity, basis);
 
-  kDebug(36002)<<"res ="<<res;
+//   kDebug(36002)<<"res ="<<res;
   return Value(res);
 }
 
@@ -2064,8 +2064,8 @@ Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() > 5)
     basis = calc->conv()->asInteger (args[5]).asInteger();
 
-  kDebug(36002)<<"YIELDMAT";
-  kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" price="<<price<<" basis="<<basis;
+//   kDebug(36002)<<"YIELDMAT";
+//   kDebug(36002)<<"settlement ="<<settlement<<" maturity="<<maturity<<" issue="<<issue<<" rate="<<rate<<" price="<<price<<" basis="<<basis;
 
   if( price <= 0.0 || rate <= 0.0 || settlement >= maturity )
     return Value::errorVALUE();
@@ -2081,7 +2081,7 @@ Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *)
   res--;
   res /= setMat;
 
-  kDebug(36002)<<"res ="<<res;
+//   kDebug(36002)<<"res ="<<res;
   return Value(res);
 }
 

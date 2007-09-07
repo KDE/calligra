@@ -263,7 +263,7 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
 
   int days = date0.daysTo(date2) - date0.daysTo(date1);
 
-  kDebug(36002) <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
+//   kDebug(36002) <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
 
   double res=0;
   double peryear=0;
@@ -281,19 +281,19 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
       
       if ( nYears )
       {
-        kDebug()<<" tmp("<<date2.year()<<","<<date1.month()<<","<<date1.day();
+//         kDebug(36002)<<" tmp("<<date2.year()<<","<<date1.month()<<","<<date1.day();
         QDate tmp(date2.year(), date1.month(), 1);
         tmp.addDays(date1.day()-1);
-        kDebug()<<" jul1 ="<<date2.toJulianDay()<<"  - jul2 ="<<tmp.toJulianDay();
+//         kDebug(36002)<<" jul1 ="<<date2.toJulianDay()<<"  - jul2 ="<<tmp.toJulianDay();
         days = date2.toJulianDay() - tmp.toJulianDay();
-        kDebug()<<" days ="<<date2.daysTo(tmp);      
+//         kDebug(36002)<<" days ="<<date2.daysTo(tmp);      
       }
       else
         days = date2.toJulianDay() - date1.toJulianDay();
       if ( days < 0 )
         days += peryear;
 
-      kDebug(36002) <<"nYears =" << nYears <<"    peryear =" << peryear <<"    days =" << days;
+//       kDebug(36002) <<"nYears =" << nYears <<"    peryear =" << peryear <<"    days =" << days;
       break;
 
       // old code
@@ -358,7 +358,7 @@ double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QD
   }
 
   res = double(nYears) + (double)days / peryear;
-  kDebug()<<"getYearFrac res="<<res;
+//   kDebug(36002)<<"getYearFrac res="<<res;
   return res;
 }
 
@@ -377,8 +377,8 @@ const double& coup_, const double& yield_, const int& freq, const int& basis, co
   double yield = yield_;
   double coup = coup_;
 
-  kDebug(36002)<<"DURATION_HELPER";
-  kDebug(36002)<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
+//   kDebug(36002)<<"DURATION_HELPER";
+//   kDebug(36002)<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
 
 
   double yearfrac = yearFrac( refDate, settlement, maturity, basis);
