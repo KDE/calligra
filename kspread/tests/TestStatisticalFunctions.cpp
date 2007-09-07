@@ -450,22 +450,24 @@ void TestStatisticalFunctions::testLOGINV()
     // ODF-tests
     CHECK_EVAL("LOGNORMDIST(LOGINV(0.1;0;1);0;1;TRUE())", Value( 0.1 ) ); //
     CHECK_EVAL("LOGNORMDIST(LOGINV(0.3;0;1);0;1;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGNORMDIST(LOGINV(0.5;0;1);0;1;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGNORMDIST(LOGINV(0.7;0;1);0;1;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGNORMDIST(LOGINV(0.9;0;1);0;1;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGNORMDIST(LOGINV(0.1;1;4);1;4;TRUE())", Value( 0.3 ) ); //
+    CHECK_EVAL("LOGNORMDIST(LOGINV(0.5;0;1);0;1;TRUE())", Value( 0.5 ) ); //
+    CHECK_EVAL("LOGNORMDIST(LOGINV(0.7;0;1);0;1;TRUE())", Value( 0.7 ) ); //
+    CHECK_EVAL("LOGNORMDIST(LOGINV(0.9;0;1);0;1;TRUE())", Value( 0.9 ) ); //
+    CHECK_EVAL("LOGNORMDIST(LOGINV(0.1;1;4);1;4;TRUE())", Value( 0.1 ) ); //
     CHECK_EVAL("LOGNORMDIST(LOGINV(0.3;1;4);1;4;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGNORMDIST(LOGINV(0.5;1;4);1;4;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGNORMDIST(LOGINV(0.7;1;4);1;4;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGNORMDIST(LOGINV(0.9;1;4);1;4;TRUE())", Value( 0.3 ) ); //
-    CHECK_EVAL("LOGINV(0.5)",                             Value( 0.3 ) ); //
+    CHECK_EVAL("LOGNORMDIST(LOGINV(0.5;1;4);1;4;TRUE())", Value( 0.5 ) ); //
+    CHECK_EVAL("LOGNORMDIST(LOGINV(0.7;1;4);1;4;TRUE())", Value( 0.7 ) ); //
+    CHECK_EVAL("LOGNORMDIST(LOGINV(0.9;1;4);1;4;TRUE())", Value( 0.9 ) ); //
+    CHECK_EVAL("LOGINV(0.5)",                             Value( 1   ) ); //
 }
 
 void TestStatisticalFunctions::testLOGNORMDIST()
 {
+    // TODO - implement cumulative calculation
+
     // ODF-tests
     CHECK_EVAL("LOGNORMDIST(1)",              Value( 0.5      ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;1;4))",         Value( 0.401294 ) ); //
+    CHECK_EVAL("LOGNORMDIST(1;1;4)",          Value( 0.401294 ) ); //
     CHECK_EVAL("LOGNORMDIST(1;0;1;FALSE())",  Value( 0.398942 ) ); //
     CHECK_EVAL("LOGNORMDIST(1;0;1;TRUE())",   Value( 0.5      ) ); //
     CHECK_EVAL("LOGNORMDIST(1;1;4;FALSE())",  Value( 0.096667 ) ); //
@@ -566,14 +568,16 @@ void TestStatisticalFunctions::testMODE()
 
 void TestStatisticalFunctions::testNEGBINOMDIST()
 {
-    // TODO check complete function
+    // ODF-test
+//     CHECK_EVAL("NEGBINOMDIST(F20;I29;H6)", Value( 0.000130947 ) ); //
+
     // bettersolutions.com
-    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
-    CHECK_EVAL("NEGBINOMDIST(0;1;0.5)",  Value( 0.5      ) ); //
-    CHECK_EVAL("NEGBINOMDIST(1;6;0.5)",  Value( 0.047875 ) ); //
-    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
-    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
-    CHECK_EVAL("NEGBINOMDIST(0;1;0.25)", Value( 0.25     ) ); //
+    CHECK_EVAL("NEGBINOMDIST( 0;1; 0.25)", Value( 0.25         ) ); //
+    CHECK_EVAL("NEGBINOMDIST( 0;1; 0.5)",  Value( 0.5          ) ); //
+    CHECK_EVAL("NEGBINOMDIST( 1;6; 0.5)",  Value( 0.046875     ) ); //
+    CHECK_EVAL("NEGBINOMDIST(10;5; 0.25)", Value( 0.0550486604 ) ); //
+    CHECK_EVAL("NEGBINOMDIST(10;5;-4)",    Value::errorNUM()     ); //
+//     CHECK_EVAL("NEGBINOMDIST(10;"text";0.25)", Value::NUM() ); //
 }
 
 void TestStatisticalFunctions::testNORMDIST()
