@@ -292,29 +292,28 @@ void TestStatisticalFunctions::testEXPONDIST()
 //     CHECK_EVAL_SHORT("EXPONDIST(1;1)",          Value( 0.632121 ) ); // TODO check logical[=true]? - =EXPONDIST(1;1;TRUE())
 }
 
-// void TestStatisticalFunctions::testFDIST()
-// {
-//     // ODF-tests
-//     CHECK_EVAL_SHORT("FDIST(1;4;5)",          Value( 0.514343 ) ); //
-//     CHECK_EVAL_SHORT("FDIST(2;5;4)",          Value( 0.739202 ) ); //
-//     CHECK_EVAL_SHORT("FDIST(0;4;5)",          Value(        0 ) ); // 
-//     CHECK_EVAL_SHORT("FDIST(-1;4;5)",         Value(        0 ) ); // 
-//     CHECK_EVAL_SHORT("FDIST(1;4;5;FALSE())",  Value( 0.397614 ) ); //
-//     CHECK_EVAL_SHORT("FDIST(2;5;4;FALSE())",  Value( 0.154000 ) ); //
-//     CHECK_EVAL_SHORT("FDIST(0;4;5;FALSE())",  Value(        0 ) ); //
-//     CHECK_EVAL_SHORT("FDIST(-1;4;5;FALSE())", Value(        0 ) ); //
-//     CHECK_EVAL_SHORT("FDIST(1;4;5;TRUE())",   Value( 0.514343 ) ); // =FDIST(1;4;5)
-// }
-// 
-// void TestStatisticalFunctions::testLEGACY_FDIST()
-// {
-// // TODO exchange FDIST -> LEGACY.FDIST or LEGACY_FDIST ?
-//     // ODF-tests
-//     CHECK_EVAL_SHORT("LEGACY_FDIST(1;4;5)",          Value( 0.485657 ) ); //
-//     CHECK_EVAL_SHORT("LEGACY_FDIST(2;5;4)",          Value( 0.260798 ) ); //
-//     CHECK_EVAL_SHORT("LEGACY_FDIST(0;4;5)",          Value(        1 ) ); // 
-//     CHECK_EVAL_SHORT("LEGACY_FDIST(-1;4;5)",         Value::errorNUM() ); // 
-// }
+void TestStatisticalFunctions::testFDIST()
+{
+    // ODF-tests
+    CHECK_EVAL_SHORT("FDIST(1;4;5)",          Value( 0.514343 ) ); //
+    CHECK_EVAL_SHORT("FDIST(2;5;4)",          Value( 0.739202 ) ); //
+    CHECK_EVAL_SHORT("FDIST(0;4;5)",          Value(        0 ) ); // 
+    CHECK_EVAL_SHORT("FDIST(-1;4;5)",         Value(        0 ) ); // 
+    CHECK_EVAL_SHORT("FDIST(1;4;5;FALSE())",  Value( 0.397614 ) ); //
+    CHECK_EVAL_SHORT("FDIST(2;5;4;FALSE())",  Value( 0.154000 ) ); //
+    CHECK_EVAL_SHORT("FDIST(0;4;5;FALSE())",  Value(        0 ) ); //
+    CHECK_EVAL_SHORT("FDIST(-1;4;5;FALSE())", Value(        0 ) ); //
+    CHECK_EVAL_SHORT("FDIST(1;4;5;TRUE())",   Value( 0.514343 ) ); // =FDIST(1;4;5)
+}
+
+void TestStatisticalFunctions::testLEGACYFDIST()
+{
+    // ODF-tests
+    CHECK_EVAL_SHORT("LEGACYFDIST(1;4;5)",          Value( 0.485657 ) ); //
+    CHECK_EVAL_SHORT("LEGACYFDIST(2;5;4)",          Value( 0.260798 ) ); //
+    CHECK_EVAL_SHORT("LEGACYFDIST(0;4;5)",          Value(        1 ) ); // 
+    CHECK_EVAL_SHORT("LEGACYFDIST(-1;4;5)",         Value::errorNUM() ); // 
+}
 
 void TestStatisticalFunctions::testFISHER()
 {

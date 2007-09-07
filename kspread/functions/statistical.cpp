@@ -202,7 +202,7 @@ void RegisterStatisticalFunctions()
   f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
-  f = new Function ("LEGACY_FDIST", func_legacyfdist);
+  f = new Function ("LEGACYFDIST", func_legacyfdist);
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("LOGINV", func_loginv);
@@ -1324,7 +1324,7 @@ Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
   Value alpha = calc->div (fF2, 2.0);
   // beta = fF1/2.0
   Value beta = calc->div (fF1, 2.0);
-  return calc->GetBeta (arg, alpha, beta);
+  return calc->sub(Value(1), calc->GetBeta (arg, alpha, beta));
 }
 
 // Function: legacy.fdist
