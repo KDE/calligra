@@ -50,6 +50,7 @@ Value func_devsq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_devsqa (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_expondist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_frequency (valVector args, ValueCalc *calc, FuncExtra *);
@@ -181,7 +182,7 @@ void RegisterStatisticalFunctions()
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("HYPGEOMDIST", func_hypgeomdist);
-  f->setParamCount (4);
+  f->setParamCount (4,5);
   repo->add (f);
   f = new Function ("INTERCEPT", func_intercept);
   f->setParamCount (2);
@@ -200,6 +201,9 @@ void RegisterStatisticalFunctions()
   f = new Function ("LARGE", func_large);
   f->setParamCount (2);
   f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("LEGACY_FDIST", func_legacyfdist);
+  f->setParamCount (3);
   repo->add (f);
   f = new Function ("LOGINV", func_loginv);
   f->setParamCount (3);
@@ -712,18 +716,41 @@ Value func_hypgeomdist (valVector args, ValueCalc *calc, FuncExtra *)
   int M = calc->conv()->asInteger (args[2]).asInteger();
   int N = calc->conv()->asInteger (args[3]).asInteger();
 
+  double res = 0.0;
+
+  bool kum = false;
+  if (args.count() > 4)
+    kum = calc->conv()->asInteger (args[4]).asInteger();
+
   if ( x < 0 || n < 0 || M < 0 || N < 0 )
     return Value::errorVALUE();
 
   if ( x > M || n > N )
     return Value::errorVALUE();
 
-  Value d1 = calc->combin (M, x);
-  Value d2 = calc->combin (N - M, n - x);
-  Value d3 = calc->combin (N, n);
+  if ( kum )
+  {
+    for ( int i=0; i<x+1; i++ )
+    {
+      Value d1 = calc->combin (M, i);
+      Value d2 = calc->combin (N - M, n - i);
+      Value d3 = calc->combin (N, n);
 
-  // d1 * d2 / d3
-  return calc->div (calc->mul (d1, d2), d3);
+      // d1 * d2 / d3
+      res += calc->div (calc->mul (d1, d2), d3).asFloat();
+    }
+  }
+  else
+  {
+    Value d1 = calc->combin (M, x);
+    Value d2 = calc->combin (N - M, n - x);
+    Value d3 = calc->combin (N, n);
+
+    // d1 * d2 / d3
+    res =  calc->div (calc->mul (d1, d2), d3).asFloat();
+  }
+
+  return Value(res);
 }
 
 Value func_negbinomdist (valVector args, ValueCalc *calc, FuncExtra *)
@@ -1256,6 +1283,28 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
 
 // Function: fdist
 Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the f-distribution
+
+  Value x = args[0];
+  Value fF1 = args[1];
+  Value fF2 = args[2];
+
+  // x < 0.0 || fF1 < 1 || fF2 < 1 || fF1 >= 1.0E10 || fF2 >= 1.0E10
+  if (calc->lower (x, Value(0.0)) || calc->lower (fF1, Value(1)) || calc->lower (fF2, Value(1)) ||
+      (!calc->lower (fF1, Value(1.0E10))) || (!calc->lower (fF2, Value(1.0E10))))
+    return Value::errorVALUE();
+
+  // arg = fF2 / (fF2 + fF1 * x)
+  Value arg = calc->div (fF2, calc->add (fF2, calc->mul (fF1, x)));
+  // alpha = fF2/2.0
+  Value alpha = calc->div (fF2, 2.0);
+  // beta = fF1/2.0
+  Value beta = calc->div (fF1, 2.0);
+  return calc->GetBeta (arg, alpha, beta);
+}
+
+// Function: legacy.fdist
+Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *) {
   //returns the f-distribution
 
   Value x = args[0];

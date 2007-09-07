@@ -319,19 +319,19 @@ void TestStatisticalFunctions::testEXPONDIST()
 void TestStatisticalFunctions::testFISHER()
 {
     // ODF-tests
-    CHECK_EVAL("FISHER(0)",                     Value(          0 ) ); // Fisher of 0.
-    CHECK_EVAL("FISHER((EXP(1)-1)/(EXP(1)+1))", Value( 0.5        ) ); // Argument chosen so that ln=1
-    CHECK_EVAL_SHORT("FISHER(0.5)",                   Value( 0.54930614 ) ); // TODO - be more precise - Some random value.
-    CHECK_EVAL("FISHER(0.47)+FISHER(-0.47)",    Value(          0 ) ); // Function is symetrical.
+    CHECK_EVAL("FISHER(0)",                        Value(          0 ) ); // Fisher of 0.
+    CHECK_EVAL("FISHER((EXP(1)-1)/(EXP(1)+1))",    Value( 0.5        ) ); // Argument chosen so that ln=1
+    CHECK_EVAL_SHORT("FISHER(0.5)",                Value( 0.54930614 ) ); // TODO - be more precise - Some random value.
+    CHECK_EVAL("FISHER(0.47)+FISHER(-0.47)",       Value(          0 ) ); // Function is symetrical.
 }
 
 void TestStatisticalFunctions::testFISHERINV()
 {
     // ODF-tests
-    CHECK_EVAL("FISHERINV(0)",                     Value(        0 ) ); // Fisherinv of 0.
-    CHECK_EVAL("FISHERINV(LN(2))",                 Value( 0.6 ) ); // e^(2*ln(2))=4
-    CHECK_EVAL("FISHERINV(FISHER(0.5))",           Value( 0.5 ) ); // Some random value.
-    CHECK_EVAL("FISHERINV(0.47)+FISHERINV(-0.47)", Value(        0 ) ); // Function is symetrical.
+    CHECK_EVAL("FISHERINV(0)",                     Value(          0 ) ); // Fisherinv of 0.
+    CHECK_EVAL("FISHERINV(LN(2))",                 Value( 0.6        ) ); // e^(2*ln(2))=4
+    CHECK_EVAL("FISHERINV(FISHER(0.5))",           Value( 0.5        ) ); // Some random value.
+    CHECK_EVAL("FISHERINV(0.47)+FISHERINV(-0.47)", Value(          0 ) ); // Function is symetrical.
 }
 
 void TestStatisticalFunctions::testFREQUENCY()
@@ -347,6 +347,14 @@ void TestStatisticalFunctions::testFREQUENCY()
     // an empty second arg returns the overall number count
     CHECK_EVAL( "FREQUENCY({1;2;3;4;5;6;7;8;9;10};)", Value( 10 ) );
 }
+
+// void TestStatisticalFunctions::testFTEST()
+// {
+//     // ODF-tests
+//     CHECK_EVAL("FTEST(B14:B17; C14:C17)", Value(           1 ) ); // Same data (second reversed),
+//     CHECK_EVAL("FTEST(B14:B15; C13:C14)", Value( 0.311916521 ) ); // Significantly different variances,
+//                                                                   // so less likely to come from same data set.
+// }
 
 void TestStatisticalFunctions::testGAMMADIST()
 {
@@ -399,19 +407,17 @@ void TestStatisticalFunctions::testHARMEAN()
 
 void TestStatisticalFunctions::testHYPGEOMDIST()
 {
-    // TODO check function
-
     // ODF-tests 
-    CHECK_EVAL("HYPGEOMDIST(2;3;3;6;FALSE())", Value(     0.45 ) ); // If an urn contains 3 red balls and 3 green balls, the probability 
-                                                                    // that 2 red balls will be selected after 3 selections without replacement. 
-                                                                    // (0.45=27/60).
-    CHECK_EVAL("HYPGEOMDIST(2;3;3;6)",         Value(     0.45 ) ); // The default for cumulative is FALSE().
-    CHECK_EVAL("HYPGEOMDIST(0;3;3;6)",         Value(     0.05 ) ); // There is a small (5%) chance of selecting only green balls.
-    CHECK_EVAL("HYPGEOMDIST(2;3;3;6;TRUE())",  Value(     0.95 ) ); // The probability of selecting at most two red balls (i.e 0, 1 or 2).
-    CHECK_EVAL("HYPGEOMDIST(4;3;3;6)",         Value::errorNUM() ); // X must be <= M
-    CHECK_EVAL("HYPGEOMDIST(2.8;3;3;6)",       Value(     0.45 ) ); // Non-integers are truncated.
-    CHECK_EVAL("HYPGEOMDIST(-2;3;3;6)",        Value::errorNUM() ); // Values must be >= 0.
-    CHECK_EVAL("HYPGEOMDIST(0;0;0;0)",         Value(     1    ) ); //
+    CHECK_EVAL("HYPGEOMDIST( 2  ;3;3;6;FALSE())", Value(     0.45 ) ); // If an urn contains 3 red balls and 3 green balls, the probability 
+                                                                       // that 2 red balls will be selected after 3 selections without replacement. 
+                                                                       // (0.45=27/60).
+    CHECK_EVAL("HYPGEOMDIST( 2  ;3;3;6)",         Value(     0.45 ) ); // The default for cumulative is FALSE().
+    CHECK_EVAL("HYPGEOMDIST( 0  ;3;3;6)",         Value(     0.05 ) ); // There is a small (5%) chance of selecting only green balls.
+    CHECK_EVAL("HYPGEOMDIST( 2  ;3;3;6;TRUE())",  Value(     0.95 ) ); // The probability of selecting at most two red balls (i.e 0, 1 or 2).
+    CHECK_EVAL("HYPGEOMDIST( 4  ;3;3;6)",         Value::errorNUM() ); // X must be <= M
+    CHECK_EVAL("HYPGEOMDIST( 2.8;3;3;6)",         Value(     0.45 ) ); // Non-integers are truncated.
+    CHECK_EVAL("HYPGEOMDIST(-2  ;3;3;6)",         Value::errorNUM() ); // Values must be >= 0.
+    CHECK_EVAL("HYPGEOMDIST( 0  ;0;0;0)",         Value(     1    ) ); //
 }
 
 void TestStatisticalFunctions::testKURT()

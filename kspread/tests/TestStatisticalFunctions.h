@@ -58,6 +58,7 @@ private slots:
     void testFISHER();
     void testFISHERINV();
     void testFREQUENCY();
+//     void testFTEST(); // to be implemented
     void testGAMMADIST();
 //     void testGAMMALN(); in -> TestMathFunctions
     void testGAUSS();
