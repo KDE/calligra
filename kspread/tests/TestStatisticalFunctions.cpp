@@ -259,6 +259,63 @@ void TestStatisticalFunctions::testCOVAR()
     CHECK_EVAL("COVAR(B14:B17;C13:C17)", Value::errorNUM()      ); // TODO should we check for "array sizes don't match" or "value counts" in array?.
 }
 
+void TestStatisticalFunctions::testDEVSQ()
+{
+    // ODF-tests
+    CHECK_EVAL("DEVSQ(4)",         Value(             0 ) ); // One value - no deviation.
+    CHECK_EVAL("DEVSQ(5;5;5;5)",   Value(             0 ) ); // Identical values - no deviation.
+    CHECK_EVAL("DEVSQ(2;4)",       Value(             2 ) ); // Each value deviates by 1.
+    CHECK_EVAL("DEVSQ(-5;5;-1;1)", Value(            52 ) ); // Average=0 must work properly.
+    CHECK_EVAL("DEVSQ(C11:C17)",   Value( 34.8571428571 ) ); // Test values.
+    CHECK_EVAL("DEVSQ(B14:B17)",   Value(  5.00         ) ); // Test values.
+    CHECK_EVAL("DEVSQ(B14)",       Value(             0 ) ); // One value - no deviation.
+}
+
+// void TestStatisticalFunctions::testDEVSQA()
+// {
+//     // no test available
+// }
+
+void TestStatisticalFunctions::testEXPONDIST()
+{
+    // TODO - be more precise
+
+    // ODF-tests
+    CHECK_EVAL_SHORT("EXPONDIST(1;1;TRUE())",   Value( 0.632121 ) ); //
+    CHECK_EVAL_SHORT("EXPONDIST(2;2;TRUE())",   Value( 0.981684 ) ); //
+    CHECK_EVAL_SHORT("EXPONDIST(0;1;TRUE())",   Value(        0 ) ); // 
+    CHECK_EVAL_SHORT("EXPONDIST(-1;1;TRUE())",  Value(        0 ) ); // 
+    CHECK_EVAL_SHORT("EXPONDIST(1;1;FALSE())",  Value( 0.367879 ) ); //
+    CHECK_EVAL_SHORT("EXPONDIST(2;2;FALSE())",  Value( 0.036631 ) ); //
+    CHECK_EVAL_SHORT("EXPONDIST(0;1;FALSE())",  Value(        1 ) ); //
+    CHECK_EVAL_SHORT("EXPONDIST(-1;1;FALSE())", Value(        0 ) ); //
+//     CHECK_EVAL_SHORT("EXPONDIST(1;1)",          Value( 0.632121 ) ); // TODO check logical[=true]? - =EXPONDIST(1;1;TRUE())
+}
+
+// void TestStatisticalFunctions::testFDIST()
+// {
+//     // ODF-tests
+//     CHECK_EVAL_SHORT("FDIST(1;4;5)",          Value( 0.514343 ) ); //
+//     CHECK_EVAL_SHORT("FDIST(2;5;4)",          Value( 0.739202 ) ); //
+//     CHECK_EVAL_SHORT("FDIST(0;4;5)",          Value(        0 ) ); // 
+//     CHECK_EVAL_SHORT("FDIST(-1;4;5)",         Value(        0 ) ); // 
+//     CHECK_EVAL_SHORT("FDIST(1;4;5;FALSE())",  Value( 0.397614 ) ); //
+//     CHECK_EVAL_SHORT("FDIST(2;5;4;FALSE())",  Value( 0.154000 ) ); //
+//     CHECK_EVAL_SHORT("FDIST(0;4;5;FALSE())",  Value(        0 ) ); //
+//     CHECK_EVAL_SHORT("FDIST(-1;4;5;FALSE())", Value(        0 ) ); //
+//     CHECK_EVAL_SHORT("FDIST(1;4;5;TRUE())",   Value( 0.514343 ) ); // =FDIST(1;4;5)
+// }
+// 
+// void TestStatisticalFunctions::testLEGACY_FDIST()
+// {
+// // TODO exchange FDIST -> LEGACY.FDIST or LEGACY_FDIST ?
+//     // ODF-tests
+//     CHECK_EVAL_SHORT("LEGACY_FDIST(1;4;5)",          Value( 0.485657 ) ); //
+//     CHECK_EVAL_SHORT("LEGACY_FDIST(2;5;4)",          Value( 0.260798 ) ); //
+//     CHECK_EVAL_SHORT("LEGACY_FDIST(0;4;5)",          Value(        1 ) ); // 
+//     CHECK_EVAL_SHORT("LEGACY_FDIST(-1;4;5)",         Value::errorNUM() ); // 
+// }
+
 void TestStatisticalFunctions::testFREQUENCY()
 {
     Value result( Value::Array );
@@ -276,7 +333,7 @@ void TestStatisticalFunctions::testFREQUENCY()
 void TestStatisticalFunctions::testGAMMADIST()
 {
     // ODF-tests
-    CHECK_EVAL("GAMMADIST(0;3;4)",           Value(        0 ) );
+    CHECK_EVAL("GAMMADIST(0  ;3;4)",         Value(        0 ) );
     CHECK_EVAL("GAMMADIST(0.5;3;4)",         Value( 0.001724 ) ); // TODO res=Value::error()
     CHECK_EVAL("GAMMADIST(9  ;4;3)",         Value( 0.066698 ) );
     CHECK_EVAL("GAMMADIST(0  ;3;4;FALSE())", Value(        0 ) );

@@ -50,10 +50,11 @@ private slots:
     void testCONFIDENCE();
     void testCORREL();
     void testCOVAR();
-//     void testDEVSQ();
+    void testDEVSQ();
 //     void testDEVSQA();
-//     void testEXPONDIST();
+    void testEXPONDIST();
 //     void testFDIST();
+//     void testLEGACY_FDIST();
 //     void testFISHER();
 //     void testFISHERINV();
     void testFREQUENCY();
