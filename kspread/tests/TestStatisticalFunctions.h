@@ -55,8 +55,8 @@ private slots:
     void testEXPONDIST();
 //     void testFDIST();
 //     void testLEGACY_FDIST();
-//     void testFISHER();
-//     void testFISHERINV();
+    void testFISHER();
+    void testFISHERINV();
     void testFREQUENCY();
     void testGAMMADIST();
 //     void testGAMMALN(); in -> TestMathFunctions
