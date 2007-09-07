@@ -561,6 +561,8 @@ void TextTool::setShapeData(KoTextShapeData *data) {
             m_changeTracker = new ChangeTracker(this);
         m_changeTracker->setDocument(m_textShapeData->document());
     }
+    if(m_textShapeData && m_spellcheckPlugin)
+        m_spellcheckPlugin->checkSection(m_textShapeData->document(), 0, 0);
 }
 
 void TextTool::updateSelectionHandler() {
