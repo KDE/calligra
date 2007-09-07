@@ -156,7 +156,7 @@ void RegisterStatisticalFunctions()
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("FDIST", func_fdist);
-  f->setParamCount (3);
+  f->setParamCount (3,4);
   repo->add (f);
   f = new Function ("FISHER", func_fisher);
   repo->add (f);
@@ -1313,18 +1313,47 @@ Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
   Value fF1 = args[1];
   Value fF2 = args[2];
 
+  bool kum = true;
+  if ( args.count() > 3 )
+    kum = calc->conv()->asInteger (args[3]).asInteger();
+
   // x < 0.0 || fF1 < 1 || fF2 < 1 || fF1 >= 1.0E10 || fF2 >= 1.0E10
   if (calc->lower (x, Value(0.0)) || calc->lower (fF1, Value(1)) || calc->lower (fF2, Value(1)) ||
       (!calc->lower (fF1, Value(1.0E10))) || (!calc->lower (fF2, Value(1.0E10))))
     return Value::errorVALUE();
 
-  // arg = fF2 / (fF2 + fF1 * x)
-  Value arg = calc->div (fF2, calc->add (fF2, calc->mul (fF1, x)));
-  // alpha = fF2/2.0
-  Value alpha = calc->div (fF2, 2.0);
-  // beta = fF1/2.0
-  Value beta = calc->div (fF1, 2.0);
-  return calc->sub(Value(1), calc->GetBeta (arg, alpha, beta));
+  if ( kum )
+  {
+    // arg = fF2 / (fF2 + fF1 * x)
+    Value arg = calc->div (fF2, calc->add (fF2, calc->mul (fF1, x)));
+    // alpha = fF2/2.0
+    Value alpha = calc->div (fF2, 2.0);
+    // beta = fF1/2.0
+    Value beta = calc->div (fF1, 2.0);
+    return calc->sub(Value(1), calc->GetBeta (arg, alpha, beta));
+  }
+  else
+  {
+    // TODO implement non-cumulative calc
+    if ( calc->lower(x, Value(0.0)) )
+      return Value(0);
+    else
+    {
+      double res = 0.0;
+      double f1 = calc->conv()->asFloat (args[1]).asFloat();
+      double f2 = calc->conv()->asFloat (args[2]).asFloat();
+      double xx = calc->conv()->asFloat (args[0]).asFloat();
+
+
+      double tmp1 = (f1/2)*log(f1) + (f2/2)*log(f2);
+      double tmp2 = calc->GetLogGamma( Value((f1+f2)/2) ).asFloat();
+      double tmp3 = calc->GetLogGamma( Value(f1/2)      ).asFloat();
+      double tmp4 = calc->GetLogGamma( Value(f2/2)      ).asFloat();
+
+      res = exp(tmp1+tmp2-tmp3-tmp4) * pow(xx, (f1/2)-1) * pow(f2+f1*xx, (-f1/2)-(f2/2));
+      return Value(res);
+    }
+  }
 }
 
 // Function: legacy.fdist

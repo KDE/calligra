@@ -294,6 +294,8 @@ void TestStatisticalFunctions::testEXPONDIST()
 
 void TestStatisticalFunctions::testFDIST()
 {
+    // TODO - be more precise
+
     // ODF-tests
     CHECK_EVAL_SHORT("FDIST(1;4;5)",          Value( 0.514343 ) ); //
     CHECK_EVAL_SHORT("FDIST(2;5;4)",          Value( 0.739202 ) ); //
@@ -308,6 +310,8 @@ void TestStatisticalFunctions::testFDIST()
 
 void TestStatisticalFunctions::testLEGACYFDIST()
 {
+    // TODO - be more precise
+
     // ODF-tests
     CHECK_EVAL_SHORT("LEGACYFDIST(1;4;5)",          Value( 0.485657 ) ); //
     CHECK_EVAL_SHORT("LEGACYFDIST(2;5;4)",          Value( 0.260798 ) ); //
