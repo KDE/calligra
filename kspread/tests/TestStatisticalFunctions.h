@@ -66,7 +66,7 @@ private slots:
     void testGEOMEAN();
     void testHARMEAN();
     void testHYPGEOMDIST();
-//     void testINTERCEPT();
+    void testINTERCEPT();
 //     void testINVBINO();
     void testKURT();
     void testLARGE();
@@ -94,7 +94,7 @@ private slots:
 //     void testRANK();     // ???
 //     void testRSQ();      // ???
     void testSKEW();
-//     void testSKEWP();
+    void testSKEWP();
     void testSLOPE();
     void testSMALL();
     void testSTANDARDIZE();

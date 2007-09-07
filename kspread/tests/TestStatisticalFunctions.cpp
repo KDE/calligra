@@ -423,6 +423,15 @@ void TestStatisticalFunctions::testHYPGEOMDIST()
     CHECK_EVAL("HYPGEOMDIST( 0  ;0;0;0)",         Value(     1    ) ); //
 }
 
+void TestStatisticalFunctions::testINTERCEPT()
+{
+    // bettersolution.com
+    CHECK_EVAL_SHORT("INTERCEPT({2;3;9;1;8};{6;5;11;7;5})", Value( 0.048387097 ) ); // TODO - be more precise
+//     CHECK_EVAL_SHORT("INTERCEPT({2;4;6};{6;3;8})",          Value( 2.21053     ) ); // TODO - be more precise
+    CHECK_EVAL("INTERCEPT({2;3;9};{6;5;11;7;5})",     Value::errorNUM()    ); //
+    CHECK_EVAL("INTERCEPT(\"text\";{6;5;11;7;5})",    Value::errorNUM()    ); // text is not allowed
+}
+
 void TestStatisticalFunctions::testKURT()
 {
     // TODO check function 
@@ -651,6 +660,16 @@ void TestStatisticalFunctions::testSKEW()
                                                        // Standard deviation: 1.257525
                                                        // Third central moment: 0.740741
     CHECK_EVAL_SHORT("SKEW(A19:A23)",   Value( 1.325315 ) ); // TODO - be more precise /
+    CHECK_EVAL("SKEW( 1; 2 )",    Value::errorNUM() ); // At least three numbers.
+}
+
+void TestStatisticalFunctions::testSKEWP()
+{
+    // ODF-tests
+    CHECK_EVAL_SHORT("SKEWP( 1; 2; 4 )", Value( 0.381802 ) ); // TODO - be more precise / Expectation value: 2.333333
+                                                       // Standard deviation: 1.247219
+                                                       // Third central moment: 0.740741
+    CHECK_EVAL_SHORT("SKEWP(A19:A23)",   Value( 0.889048 ) ); // TODO - be more precise /
     CHECK_EVAL("SKEW( 1; 2 )",    Value::errorNUM() ); // At least three numbers.
 }
 
