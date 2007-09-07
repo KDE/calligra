@@ -438,6 +438,19 @@ void TestStatisticalFunctions::testMAXA()
     CHECK_EVAL("MAXA(B6:B7)",    Value(          1 ) ); // Logicals are considered numbers.
 }
 
+void TestStatisticalFunctions::testMEDIAN()
+{
+    // ODF-tests
+    CHECK_EVAL("=MEDIAN(10.5;7.2)",        Value(8.85));
+    CHECK_EVAL("=MEDIAN(7.2;200;5.4;45)",  Value(26.1));
+    CHECK_EVAL("=MEDIAN(7.2;200;5.4;8.1)", Value(7.65));
+    CHECK_EVAL("=MEDIAN(1;3;13;14;15)",    Value(13.0));
+    CHECK_EVAL("=MEDIAN(1;3;13;14;15;35)", Value(13.5));
+    // Bug 148574: MEDIAN function gives incorrect results
+    CHECK_EVAL("=MEDIAN(1;2;3)",     Value(2));
+    CHECK_EVAL("=MEDIAN(1;2;3;4;5)", Value(3));
+}
+
 void TestStatisticalFunctions::testMIN()
 {
     // ODF-tests

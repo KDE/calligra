@@ -74,7 +74,7 @@ private slots:
     void testLOGNORMDIST();
     void testMAX();
     void testMAXA();
-//     void testMEDIAN();
+    void testMEDIAN();
     void testMIN();
     void testMINA();
     void testMODE();

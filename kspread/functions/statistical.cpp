@@ -780,21 +780,25 @@ Value func_avedev (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->div (result, calc->count (args));
 }
 
-// Function: median
+// Function: MEDIAN
 Value func_median (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // does NOT support anything other than doubles !!!
   List array;
-  int number = 1;
+  int number = 0;
 
   for (int i = 0; i < args.count(); ++i)
     func_array_helper (args[i], calc, array, number);
 
-  if ( number / 2 + number % 2 >= array.count() )
+  if (number == 0)
     return Value::errorVALUE();
 
   qSort(array);
-  double d = array.at(number / 2 + number % 2);
+  double d;
+  if (number % 2) // odd
+      d = array.at((number - 1) / 2);
+  else // even
+      d = 0.5 * (array.at(number / 2 - 1) + array.at(number / 2));
   return Value (d);
 }
 
