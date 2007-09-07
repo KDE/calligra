@@ -209,7 +209,7 @@ void RegisterStatisticalFunctions()
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("LOGNORMDIST", func_lognormdist);
-  f->setParamCount (3);
+  f->setParamCount (1, 4);
   repo->add (f);
   f = new Function ("MEDIAN", func_median);
   f->setParamCount (1, -1);
@@ -755,21 +755,35 @@ Value func_hypgeomdist (valVector args, ValueCalc *calc, FuncExtra *)
 
 Value func_negbinomdist (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  int x = calc->conv()->asInteger (args[0]).asInteger();
-  int r = calc->conv()->asInteger (args[1]).asInteger();
-  Value p = args[2];
-
-  if ((x + r - 1) <= 0)
-    return Value::errorVALUE();
-  if (calc->lower (p, Value(0)) || calc->greater (p, Value(1)))
+  double x = calc->conv()->asFloat (args[0]).asFloat();
+  double r = calc->conv()->asFloat (args[1]).asFloat();
+  double p = calc->conv()->asFloat (args[2]).asFloat();
+  
+  if ( r < 0.0 || x < 0.0 || p < 0.0 || p > 1.0 )
     return Value::errorVALUE();
 
-  Value d1 = calc->combin (x + r - 1, r - 1);
-  // d2 = pow (p, r) * pow (1 - p, x)
-  Value d2 = calc->mul (calc->pow (p, r),
-      calc->pow (calc->sub (Value(1), p), x));
+  double q = 1.0 - p;
+  double res = pow(p,r);
 
-  return calc->mul (d1, d2);
+  for (double i = 0.0; i < x; i++)
+    res *= (i+r)/(i+1.0)*q;
+
+  return Value(res);
+//   int x = calc->conv()->asInteger (args[0]).asInteger();
+//   int r = calc->conv()->asInteger (args[1]).asInteger();
+//   Value p = args[2];
+// 
+//   if ((x + r - 1) <= 0)
+//     return Value::errorVALUE();
+//   if (calc->lower (p, Value(0)) || calc->greater (p, Value(1)))
+//     return Value::errorVALUE();
+// 
+//   Value d1 = calc->combin (x + r - 1, r - 1);
+//   // d2 = pow (p, r) * pow (1 - p, x)
+//   Value d2 = calc->mul (calc->pow (p, r),
+//       calc->pow (calc->sub (Value(1), p), x));
+// 
+//   return calc->mul (d1, d2);
 }
 
 // Function: permut
@@ -1082,9 +1096,19 @@ Value func_normdist (valVector args, ValueCalc *calc, FuncExtra *) {
 // Function: lognormdist
 Value func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *) {
   //returns the cumulative lognormal distribution
+
+  // defaults
+  Value mue = Value(0);
+  Value sigma = Value(1);
+  bool kum = true;
+
   Value x = args[0];
-  Value mue = args[1];
-  Value sigma = args[2];
+  if ( args.count() > 1)
+    Value mue = args[1];
+  if ( args.count() > 2)
+    Value sigma = args[2];
+  if (args.count() > 3)
+    kum = calc->conv()->asInteger (args[3]).asInteger();
 
   if (!calc->greater (sigma, 0.0) || (!calc->greater (x, 0.0)))
     return Value::errorVALUE();

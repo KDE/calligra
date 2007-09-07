@@ -662,7 +662,7 @@ Value func_min (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: MINA
 Value func_mina (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value m = calc->min (args);
+  Value m = calc->min (args, true);
   return m.isEmpty() ? Value(0.0) : m;
 }
 
