@@ -459,13 +459,30 @@ Value func_mode (valVector args, ValueCalc *calc, FuncExtra *)
   // retrieve value with max.count
   int maxcount = 0;
   double max = 0.0;
+  
   ContentSheet::iterator it;
+
+  // check if there is a difference in frequency
+  it = sh.begin();
+  double last = it.value(); // init last with 1st value
+  bool   nodiff = true;     // reset flag
+
   for (it = sh.begin(); it != sh.end(); ++it)
-    if (it.value() > maxcount) {
+  {
+    if (it.value() > maxcount)
+    {
       max = it.key();
       maxcount = it.value();
     }
-  return Value (max);
+    if ( last != it.value() )
+      nodiff = false; // set flag
+  }
+
+  // if no diff return error
+  if ( nodiff )
+    return Value::errorNUM();
+  else
+    return Value (max);
 }
 
 Value func_covar_helper (Value range1, Value range2,
@@ -1334,7 +1351,7 @@ Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
   }
   else
   {
-    // TODO implement non-cumulative calc
+    // non-cumulative calculation
     if ( calc->lower(x, Value(0.0)) )
       return Value(0);
     else
