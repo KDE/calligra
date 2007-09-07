@@ -756,7 +756,7 @@ void TestStatisticalFunctions::testVARA()
     // ODF-tests
     CHECK_EVAL("VARA(2;4)",            Value(            2 ) ); // The sample variance of (2;4) is 2.
     CHECK_EVAL("VARA(B5:C6)",          Value( 6.6666666667 ) ); // Logicals (referenced) are converted to numbers.
-    CHECK_EVAL("VARA(TRUE();FALSE())", Value(            1 ) ); // Logicals (inlined) are converted to numbers.
+    CHECK_EVAL("VARA(TRUE();FALSE())", Value(          0.5 ) ); // Logicals (inlined) are converted to numbers.
     CHECK_EVAL("VARA(1)",              Value::errorNUM()     ); // Two numbers at least.
 }
 
@@ -783,8 +783,8 @@ void TestStatisticalFunctions::testVARPA()
 
     // ODF-tests
     CHECK_EVAL("VARPA(2;4)",            Value( 1   ) ); // The sample variance of (2;4) is 1.
-    CHECK_EVAL("VARPA(B5:C6)",          Value( 4   ) ); // Logicals (referenced) are converted to numbers.
-    CHECK_EVAL("VARPA(TRUE();FALSE())", Value( 0.5 ) ); // Logicals (inlined) are converted to numbers.
+    CHECK_EVAL("VARPA(B5:C6)",          Value( 5   ) ); // Logicals (referenced) are converted to numbers.
+    CHECK_EVAL("VARPA(TRUE();FALSE())", Value( 0.25 ) ); // Logicals (inlined) are converted to numbers.
 }
 
 void TestStatisticalFunctions::testWEIBULL()

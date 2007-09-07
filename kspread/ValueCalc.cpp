@@ -48,13 +48,13 @@ void awSumA (ValueCalc *c, Value &res, Value val, Value)
 
 void awSumSq (ValueCalc *c, Value &res, Value val, Value)
 {
-  if (!val.isEmpty())
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
     res = c->add (res, c->sqr (val));
 }
 
 void awSumSqA (ValueCalc *c, Value &res, Value val, Value)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  if (!val.isEmpty())
     res = c->add (res, c->sqr (val));
 }
 
@@ -128,7 +128,7 @@ void awProdA (ValueCalc *c, Value &res, Value val, Value)
 void awDevSq (ValueCalc *c, Value &res, Value val,
     Value avg)
 {
-  if (!val.isEmpty())
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
     res = c->add (res, c->sqr (c->sub (val, avg)));
 }
 
@@ -136,7 +136,7 @@ void awDevSq (ValueCalc *c, Value &res, Value val,
 void awDevSqA (ValueCalc *c, Value &res, Value val,
     Value avg)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  if (!val.isEmpty())
     res = c->add (res, c->sqr (c->sub (val, avg)));
 }
 
@@ -164,7 +164,7 @@ ValueCalc::ValueCalc (ValueConverter* c): converter( c )
   registerAwFunc ("prod", awProd);
   registerAwFunc ("proda", awProdA);
   registerAwFunc ("devsq", awDevSq);
-  registerAwFunc ("devsqa", awDevSq);
+  registerAwFunc ("devsqa", awDevSqA);
 }
 
 Value ValueCalc::add (const Value &a, const Value &b)
