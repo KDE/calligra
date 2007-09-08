@@ -90,6 +90,7 @@ Value func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_trimmean (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ttest (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variance (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variancea (valVector args, ValueCalc *calc, FuncExtra *);
@@ -313,6 +314,10 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("TDIST", func_tdist);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("TRIMMEAN", func_trimmean);
+  f->setParamCount (2);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("TTEST", func_ttest);
   f->setParamCount (4);
@@ -1320,6 +1325,40 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
   if (flag == 1)
     return R;
   return calc->mul (R, 2);   // flag is 2 here
+}
+
+// Function: trimmean
+Value func_trimmean (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value dataSet    = args[0];
+  Value cutOffFrac = args[1];
+
+  // constrains 0 <= cutOffFrac < 1
+  if ( calc->lower (cutOffFrac, Value(0)) || !calc->lower (cutOffFrac, Value(1)) )
+    return Value::errorVALUE();
+
+  // cutOff = floor( n*cutOffFrac/2)
+  int cutOff = floor( calc->div( calc->mul( cutOffFrac , Value( (int)dataSet.count() ) ), 2 ).asFloat() );
+
+  double res = 0.0;
+
+  // sort parameter into QList array
+  List array;
+  int valCount = 0; // stores the number of values in array
+
+  func_array_helper (args[0], calc, array, valCount);
+
+  if (valCount == 0)
+    return Value::errorVALUE();
+
+  qSort(array);
+  
+  for( int i = cutOff; i < valCount-cutOff ; i++)
+    res += array[i];
+  
+  res /= (valCount-2* cutOff);
+
+  return Value(res);
 }
 
 // Function: fdist

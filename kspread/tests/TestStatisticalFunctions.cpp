@@ -757,6 +757,17 @@ void TestStatisticalFunctions::testTDIST()
     CHECK_EVAL("TDIST( 1; 0; 1 )",    Value::errorNUM() ); // degreeOfFreedom >= 1
 }
 
+void TestStatisticalFunctions::testTRIMMEAN()
+{
+    // ODF-tests
+    CHECK_EVAL("TRIMMEAN(A19:A23; 0.8 )",      Value( 4            ) ); // cutOff = 2
+    CHECK_EVAL("TRIMMEAN(A19:A23; 0.6 )",      Value( 4.6666666666 ) ); // cutOff = FLOOR(5 * 0.6/ 2) = FLOOR(1.5) = 1;
+                                                                        // result = 14 / 3
+    CHECK_EVAL("TRIMMEAN(A19:A23; 0.19 )",     Value( 6.2          ) ); // cutOff = 0
+    CHECK_EVAL("TRIMMEAN(A19:A23; 0.999999 )", Value( 4            ) ); // cutOff = 2
+    CHECK_EVAL("TRIMMEAN(A19:A23; 1)",         Value::errorNUM()     ); // 0 <= cutOffFraction < 1
+}
+
 void TestStatisticalFunctions::testTTEST()
 {
     // ODF-tests
@@ -784,6 +795,17 @@ void TestStatisticalFunctions::testVARA()
     CHECK_EVAL("VARA(B5:C6)",          Value( 6.6666666667 ) ); // Logicals (referenced) are converted to numbers.
     CHECK_EVAL("VARA(TRUE();FALSE())", Value(          0.5 ) ); // Logicals (inlined) are converted to numbers.
     CHECK_EVAL("VARA(1)",              Value::errorNUM()     ); // Two numbers at least.
+}
+
+void TestStatisticalFunctions::testVARIANCE()
+{
+    // same as VAR
+
+    // ODF-tests
+    CHECK_EVAL("VARIANCE(2;4)",     Value(        2 ) ); // The sample variance of (2;4) is 2.
+    CHECK_EVAL("VARIANCE(B4:B5)*2", Value(        1 ) ); // The sample variance of (2;3) is 0.5.
+    CHECK_EVAL("VARIANCE(B3:B5)*2", Value(        1 ) ); // Strings are not converted to numbers and are ignored.
+    CHECK_EVAL("VARIANCE(1)",       Value::errorNUM() ); // At least two numbers must be included
 }
 
 void TestStatisticalFunctions::testVARP()

@@ -110,11 +110,11 @@ private slots:
     void testTDIST();
 //     void testTINV();     // ???
 //     void testTREND();    // ???
-//     void testTRIMMEAN(); // ???
+    void testTRIMMEAN();
     void testTTEST();
-//     void testVARIANCE();
     void testVAR();
     void testVARA();
+    void testVARIANCE();
     void testVARP();
     void testVARPA();
     void testWEIBULL();
