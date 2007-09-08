@@ -4241,9 +4241,12 @@
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F259]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E259]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D259]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C259]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F259]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E259]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D259]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C259]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row table:style-name="ro3">
@@ -4254,9 +4257,12 @@
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F260]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E260]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D260]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C260]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F260]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E260]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D260]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C260]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row table:style-name="ro3">
@@ -5256,9 +5262,12 @@
   <table:table-cell office:value-type="string" office:string-value="Stefan" table:style-name="ce6">
    <text:p>Stefan</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F331]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E331]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D331]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C331]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F331]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E331]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D331]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C331]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row table:style-name="ro3">
@@ -5372,9 +5381,12 @@
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F340]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E340]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D340]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C340]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F340]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E340]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D340]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C340]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row table:style-name="ro3">
@@ -5485,9 +5497,12 @@
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F349]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E349]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D349]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C349]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F349]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E349]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D349]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C349]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row table:style-name="ro3">
@@ -5606,9 +5621,12 @@
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F358]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E358]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D358]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C358]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F358]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E358]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D358]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C358]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row table:style-name="ro3">
@@ -5789,9 +5807,16 @@
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F370]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E370]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D370]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C370]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F370]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E370]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D370]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C370]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
  <table:table-row table:style-name="ro3">
@@ -6755,8 +6780,8 @@
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce5">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="37" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5:.K6])">
-   <text:p>37</text:p>
+  <table:table-cell office:value-type="float" office:value="36" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5:.K6])">
+   <text:p>36</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.L5:.M6])">
    <text:p>0</text:p>
@@ -6767,8 +6792,8 @@
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.P5:.Q6])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="43" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.R5:.S6])">
-   <text:p>43</text:p>
+  <table:table-cell office:value-type="float" office:value="44" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.R5:.S6])">
+   <text:p>44</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="91" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5:.J6])">
    <text:p>91</text:p>
@@ -6923,14 +6948,14 @@
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.M3:.M4])-SUM([.C4:.C7])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="29" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.O3:.O4])-SUM([.D4:.D7])">
-   <text:p>29</text:p>
+  <table:table-cell office:value-type="float" office:value="23" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.O3:.O4])-SUM([.D4:.D7])">
+   <text:p>23</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="12" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.Q3:.Q4])-SUM([.E4:.E7])">
    <text:p>12</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="95" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.S3:.S4])-SUM([.F4:.F7])">
-   <text:p>95</text:p>
+  <table:table-cell office:value-type="float" office:value="101" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.S3:.S4])-SUM([.F4:.F7])">
+   <text:p>101</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="142" table:style-name="ce7" table:formula="=[.G9]-SUM([.G4:.G7])">
    <text:p>142</text:p>
@@ -6971,20 +6996,20 @@
   <table:table-cell office:value-type="string" office:string-value="all" table:style-name="ce5">
    <text:p>all</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="71" table:style-name="ce5" table:formula="=SUM([.B4:.B8])">
-   <text:p>71</text:p>
+  <table:table-cell office:value-type="float" office:value="70" table:style-name="ce5" table:formula="=SUM([.B4:.B8])">
+   <text:p>70</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=SUM([.C4:.C8])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="77" table:style-name="ce5" table:formula="=SUM([.D4:.D8])">
-   <text:p>77</text:p>
+  <table:table-cell office:value-type="float" office:value="71" table:style-name="ce5" table:formula="=SUM([.D4:.D8])">
+   <text:p>71</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="12" table:style-name="ce5" table:formula="=SUM([.E4:.E8])">
    <text:p>12</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="227" table:style-name="ce5" table:formula="=SUM([.F4:.F8])">
-   <text:p>227</text:p>
+  <table:table-cell office:value-type="float" office:value="234" table:style-name="ce5" table:formula="=SUM([.F4:.F8])">
+   <text:p>234</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="387" table:style-name="ce5" table:formula="=COUNTA(Status)">
    <text:p>387</text:p>
@@ -7109,8 +7134,8 @@
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce5">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.406593406593407" table:style-name="ce13" table:formula="=[.B5]/[.$G5]">
-   <text:p>40.66 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.395604395604396" table:style-name="ce13" table:formula="=[.B5]/[.$G5]">
+   <text:p>39.56 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C5]/[.$G5]">
    <text:p>0.00 %</text:p>
@@ -7121,8 +7146,8 @@
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.E5]/[.$G5]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.472527472527473" table:style-name="ce13" table:formula="=[.F5]/[.$G5]">
-   <text:p>47.25 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.483516483516484" table:style-name="ce13" table:formula="=[.F5]/[.$G5]">
+   <text:p>48.35 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0.235142118863049" table:style-name="ce13" table:formula="=[.G5]/[.$G$9]">
    <text:p>23.51 %</text:p>
@@ -7187,14 +7212,14 @@
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C8]/[.$G8]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.204225352112676" table:style-name="ce13" table:formula="=[.D8]/[.$G8]">
-   <text:p>20.42 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.161971830985915" table:style-name="ce13" table:formula="=[.D8]/[.$G8]">
+   <text:p>16.20 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0.0845070422535211" table:style-name="ce13" table:formula="=[.E8]/[.$G8]">
    <text:p>8.45 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.669014084507042" table:style-name="ce13" table:formula="=[.F8]/[.$G8]">
-   <text:p>66.90 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.711267605633803" table:style-name="ce13" table:formula="=[.F8]/[.$G8]">
+   <text:p>71.13 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0.366925064599483" table:style-name="ce13" table:formula="=[.G8]/[.$G$9]">
    <text:p>36.69 %</text:p>
@@ -7205,20 +7230,20 @@
   <table:table-cell office:value-type="string" office:string-value="all" table:style-name="ce5">
    <text:p>all</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.183462532299742" table:style-name="ce13" table:formula="=[.B9]/[.$G9]">
-   <text:p>18.35 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.180878552971576" table:style-name="ce13" table:formula="=[.B9]/[.$G9]">
+   <text:p>18.09 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C9]/[.$G9]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.198966408268734" table:style-name="ce13" table:formula="=[.D9]/[.$G9]">
-   <text:p>19.90 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.183462532299742" table:style-name="ce13" table:formula="=[.D9]/[.$G9]">
+   <text:p>18.35 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0.0310077519379845" table:style-name="ce13" table:formula="=[.E9]/[.$G9]">
    <text:p>3.10 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.58656330749354" table:style-name="ce13" table:formula="=[.F9]/[.$G9]">
-   <text:p>58.66 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.604651162790698" table:style-name="ce13" table:formula="=[.F9]/[.$G9]">
+   <text:p>60.47 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="1" table:style-name="ce13" table:formula="=SUM([.G4:.G8])/[.$G$9]">
    <text:p>100.00 %</text:p>
