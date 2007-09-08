@@ -626,9 +626,9 @@ void TestStatisticalFunctions::testNORMINV()
 void TestStatisticalFunctions::testPERMUT()
 {
     // ODF-tests
-    CHECK_EVAL("PERMUT(2;2)",     Value(      0.1 ) ); //
-    CHECK_EVAL("PERMUT(4;2)",     Value(      0.3 ) ); //
-    CHECK_EVAL("PERMUT(4.3;2.1)", Value(      0.3 ) ); // =PERMUT(4;2)
+    CHECK_EVAL("PERMUT(2;2)",     Value(        2 ) ); // =2!/(2-2)!
+    CHECK_EVAL("PERMUT(4;2)",     Value(       12 ) ); // =4!/(4-2)!
+    CHECK_EVAL("PERMUT(4.3;2.1)", Value(       12 ) ); // =PERMUT(4;2)
     CHECK_EVAL("PERMUT(-4;2)",    Value::errorNUM() ); //
     CHECK_EVAL("PERMUT(4;-2)",    Value::errorNUM() ); //
 }
