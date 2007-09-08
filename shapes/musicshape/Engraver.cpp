@@ -318,6 +318,86 @@ void Engraver::engraveBar(Bar* bar)
     }
     if (x < 30) x = 30;
     bar->setDesiredSize(x + 15);
+    
+    // finally calculate correct stem lengths for all beamed groups of notes
+    foreach (VoiceBar* vb, voices) {
+        for (int i = 0; i < vb->elementCount(); i++) {
+            Chord* c = dynamic_cast<Chord*>(vb->element(i));
+            if (!c) continue;
+            if (c->beamType(0) == Chord::BeamStart) {
+                // fetch all chords in the beam
+                QList<Chord*> chords;
+                QList<QPointF> stemEnds;
+                for (int j = i; j < vb->elementCount(); j++) {
+                    Chord* chord = dynamic_cast<Chord*>(vb->element(j));
+                    if (!chord) continue;
+                    if (chord->beamStart(0) == c) {
+                        chord->setStemLength(chord->desiredStemLength());
+                        chords.append(chord);
+                        stemEnds.append(QPointF(chord->stemX(1), chord->stemEndY(1, false)));
+                    }
+                    if (chord == c->beamEnd(0)) {
+                        break;
+                    }
+                }
+
+                for (int j = stemEnds.size()-1; j >= 0; j--) {
+                    stemEnds[j] -= stemEnds[0];
+                }
+                if (c->stemDirection() == Chord::StemUp) {
+                    for (int j = 0; j < stemEnds.size(); j++) {
+                        stemEnds[j].setY(-stemEnds[j].y());
+                    }
+                }
+                
+                // now somehow fit a line through all those points...
+                double bestError = 1e99;
+                double bestK = 0, bestL = 0;
+                for (int a = 0; a < stemEnds.size(); a++) {
+                    for (int b = a+1; b < stemEnds.size(); b++) {
+                        // assume a line that passes through stemEnds[a] and stemEnds[b]
+                        // line is in form of k*x + l
+                        double k = (stemEnds[b].y() - stemEnds[a].y()) / (stemEnds[b].x() - stemEnds[a].x());
+                        double l = stemEnds[a].y() - (stemEnds[a].x() * k);
+                        
+                        //kDebug() << "a:" << stemEnds[a] << ", b:" << stemEnds[b] << ", k:" << k << ", l:" << l;
+                        
+                        //for (int j = 0; j < stemEnds.size(); j++) {
+                        //    kDebug() << "    " << stemEnds[j] << "; " << (k * stemEnds[j].x() + l);
+                        //}
+                        // check if it is entirely above all stemEnds, and calculate sum of distances to stemEnds
+                        bool validLine = true;
+                        double error = 0;
+                        for (int j = 0; j < stemEnds.size(); j++) {
+                            double y = k * stemEnds[j].x() + l;
+                            if (y < stemEnds[j].y() - 1e-9) {
+                                validLine = false;
+                                break;
+                            } else {
+                                error += y - stemEnds[j].y();
+                            }
+                        }
+                        if (validLine) {
+                            if (error < bestError) {
+                                bestError = error;
+                                bestK = k;
+                                bestL = l;
+                            }
+                        }
+                    }
+                }
+                
+                //kDebug() << "bestError:" << bestError << "bestK:" << bestK << "bestL:" << bestL;
+                
+                c->setStemLength(c->desiredStemLength() + bestL / c->staff()->lineSpacing());
+                Chord* endChord = c->beamEnd(0);
+                double endY = stemEnds[stemEnds.size()-1].x() * bestK + bestL;
+                //kDebug() << "old y:" << stemEnds[stemEnds.size()-1].y() << "new y:" << endY;
+                double extra = endY - stemEnds[stemEnds.size()-1].y();
+                endChord->setStemLength(endChord->desiredStemLength() + extra / endChord->staff()->lineSpacing());
+            }
+        }
+    }
 }
 
 void Engraver::rebeamBar(Part* part, VoiceBar* vb)

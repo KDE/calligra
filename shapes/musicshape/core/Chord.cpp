@@ -360,11 +360,11 @@ double Chord::bottomNoteY() const
     return bottom;
 }
 
-double Chord::stemEndY(double xScale) const
+double Chord::stemEndY(double xScale, bool interpolateBeams) const
 {
     if (d->notes.size() == 0) return staff()->center();
     
-    if (beamType(0) == BeamContinue) {
+    if (beamType(0) == BeamContinue && interpolateBeams) {
         // in the middle of a beam, interpolate stem length from beam
         double sx = beamStart(0)->stemX(xScale), ex = beamEnd(0)->stemX(xScale);
         double sy = beamStart(0)->stemEndY(xScale), ey = beamEnd(0)->stemEndY(xScale);
@@ -463,6 +463,11 @@ void Chord::setStemLength(double stemLength)
     d->stemLength = stemLength;
 }
 
+double Chord::desiredStemLength() const
+{
+    return calcStemLength(d->duration);
+}
+
 int Chord::beamCount() const
 {
     switch (d->duration) {
@@ -482,6 +487,18 @@ const Chord* Chord::beamStart(int index) const
 }
 
 const Chord* Chord::beamEnd(int index) const
+{
+    if (d->beams.size() <= index) return this;
+    return d->beams[index].beamEnd;
+}
+
+Chord* Chord::beamStart(int index)
+{
+    if (d->beams.size() <= index) return this;
+    return d->beams[index].beamStart;
+}
+
+Chord* Chord::beamEnd(int index)
 {
     if (d->beams.size() <= index) return this;
     return d->beams[index].beamEnd;

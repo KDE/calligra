@@ -175,7 +175,7 @@ public:
     double stemX(double xScale) const;
     double topNoteY() const;
     double bottomNoteY() const;
-    double stemEndY(double xScale) const;
+    double stemEndY(double xScale, bool interpolateBeams = true) const;
     double beamDirection(double xScale) const;
 
     StemDirection stemDirection() const;
@@ -187,10 +187,13 @@ public:
      */
     double stemLength() const;
     void setStemLength(double stemLength);
+    double desiredStemLength() const;
     
     int beamCount() const;
     const Chord* beamStart(int index) const;
     const Chord* beamEnd(int index) const;
+    Chord* beamStart(int index);
+    Chord* beamEnd(int index);
     BeamType beamType(int index) const;
     void setBeam(int index, Chord* beamStart, Chord* beamEnd, BeamType type = BeamFlag);
 public slots:
