@@ -21,41 +21,26 @@
 
 #include <QWidget>
 
-KPrPageEffect::KPrPageEffect( const QPixmap &px1, const QPixmap &px2, QWidget * w )
-: m_px1( px1 )
-, m_px2( px2 )
-, m_widget( w )
-, m_finish( false )
-, m_lastPos( 0, 0 )
+KPrPageEffect::KPrPageEffect()
+: m_duration( 5000 )
 {
-    Q_ASSERT( px1.size() == px2.size() );
-    Q_ASSERT( px1.size() == m_widget->size() );
-    m_widget->setAttribute( Qt::WA_OpaquePaintEvent );
 }
 
 KPrPageEffect::~KPrPageEffect()
 {
-    m_widget->setAttribute( Qt::WA_OpaquePaintEvent, false );
 }
 
-void KPrPageEffect::next( int currentTime )
+void KPrPageEffect::next( const Data &data )
 {
-    Q_UNUSED( currentTime );
-    m_widget->update();
+    data.m_widget->update();
 }
 
-void KPrPageEffect::finish()
+void KPrPageEffect::finish( const Data &data )
 {
-    m_finish = true;
-    m_widget->update();
-}
-
-bool KPrPageEffect::isFinished()
-{
-    return m_finish;
+    data.m_widget->update();
 }
 
 int KPrPageEffect::duration()
 {
-    return m_timeLine.duration();
+    return m_duration;
 }

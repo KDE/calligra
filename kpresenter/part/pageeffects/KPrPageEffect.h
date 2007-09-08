@@ -20,12 +20,10 @@
 #ifndef KPRPAGEEFFECT_H
 #define KPRPAGEEFFECT_H
 
-#include <QPoint>
-#include <QTimeLine>
 #include <QPixmap>
+#include <QTimeLine>
 
 class QPainter;
-class QWidget;
 
 /**
  * This is the base class for all page effects.
@@ -35,8 +33,30 @@ class QWidget;
 class KPrPageEffect
 {
 public:
-	KPrPageEffect( const QPixmap &px1, const QPixmap &px2, QWidget * w );
+    struct Data
+    {
+        Data( const QPixmap &oldPage, const QPixmap &newPage, QWidget *w )
+        : m_oldPage( oldPage )
+        , m_newPage( newPage )
+        , m_widget( w )
+        , m_finished( false )
+        , m_currentTime( 0 )
+        , m_lastTime( 0 )
+        {}
+
+        QPixmap m_oldPage;
+        QPixmap m_newPage;
+        QWidget * m_widget;
+        QTimeLine m_timeLine;
+        bool m_finished;
+        int m_currentTime;
+        int m_lastTime;
+    };
+
+    KPrPageEffect();
     virtual ~KPrPageEffect();
+
+    virtual void setup( const Data &data, QTimeLine &timeLine ) = 0;
 
     /**
      * Paint the page effect
@@ -45,23 +65,21 @@ public:
      * @param currentTime The time for which the effect should be painted.
      * @return true if the effect is finished, false otherwise
      */
-    virtual bool paint( QPainter &painter, int currentTime ) = 0;
+    virtual bool paint( QPainter &painter, const Data &data ) = 0;
 
     /**
      * Trigger the next paint paint event.
      *
      * @param currentTime The current time.
      */
-    void next( int currentTime );
+    void next( const Data &data );
 
     /**
      * Finish the the page effect.
      *
      * This only set the m_finish flag to true and triggers an update of the widget.
      */
-    void finish();
-
-    bool isFinished();
+    void finish( const Data &data );
 
     /**
      * Get the duration of the page effect.
@@ -70,14 +88,9 @@ public:
      */
     int duration();
 
-protected:    
-    QPixmap m_px1;
-    QPixmap m_px2;
-    QWidget * m_widget;
-
-    bool m_finish;
-    QPoint m_lastPos;
-    QTimeLine m_timeLine;
+protected:
+    int m_duration;
 };
 
-#endif // KPRPAGEEFFECT_H
+#endif // KPRPAGEEFFECT2_H
+

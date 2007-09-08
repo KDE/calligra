@@ -32,6 +32,7 @@
 #include <KoPAView.h>
 #include "KPrPage.h"
 #include "KPrShapeManagerAnimationStrategy.h"
+#include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "pageeffects/KPrCoverDownEffect.h"
 #include "shapeanimations/KPrShapeAnimation.h"
@@ -40,7 +41,7 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
 : m_view( view )
 , m_canvas( view->kopaCanvas() )
 , m_pages( pages )
-, m_pageEffect( 0 )
+, m_pageEffectRunner( 0 )
 , m_pageIndex( 0 )
 , m_stepIndex( 0 )
 , m_maxShapeDuration( 0 )
@@ -79,13 +80,14 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
 {
     QPainter painter( m_canvas );
 
-    if ( m_pageEffect )
+    if ( m_pageEffectRunner )
     {
-        bool finished = m_pageEffect->isFinished();
-        if ( !m_pageEffect->paint( painter, m_timeLine.currentTime() ) )
+        bool finished = m_pageEffectRunner->isFinished();
+        //if ( !m_pageEffectRunner->paint( painter, m_timeLine.currentTime() ) )
+        if ( !m_pageEffectRunner->paint( painter ) )
         {
-            delete m_pageEffect;
-            m_pageEffect = 0;
+            delete m_pageEffectRunner;
+            m_pageEffectRunner = 0;
 
             // check if there where a animation to start
             QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.begin() );
@@ -132,8 +134,8 @@ KoViewConverter * KPrAnimationDirector::viewConverter()
 
 bool KPrAnimationDirector::navigate( Navigation navigation )
 {
-    if ( m_pageEffect ) {
-        m_pageEffect->finish();
+    if ( m_pageEffectRunner ) {
+        m_pageEffectRunner->finish();
         finishAnimations();
         // finish on first step
         m_timeLine.stop();
@@ -163,8 +165,10 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
             newPainter.setClipRect( m_pageRect );
             newPainter.setRenderHint( QPainter::Antialiasing );
             paintStep( newPainter );
-            m_pageEffect = new KPrCoverDownEffect( oldPage, newPage, m_canvas );
-            startTimeLine( m_pageEffect->duration() );
+
+            // TODO read effect from page
+            m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, &m_pageEffect );
+            startTimeLine( m_pageEffect.duration() );
         }
         else {
             // todo what happens on a new substep
@@ -268,8 +272,8 @@ void KPrAnimationDirector::updateAnimations()
 
 void KPrAnimationDirector::animate()
 {
-    if ( m_pageEffect ) {
-        m_pageEffect->next( m_timeLine.currentTime() );
+    if ( m_pageEffectRunner ) {
+        m_pageEffectRunner->next( m_timeLine.currentTime() );
     }
     else if ( ! m_animations.empty() ) { //if there are animnations
         animateShapes( m_timeLine.currentTime() );

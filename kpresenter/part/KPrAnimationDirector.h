@@ -27,6 +27,9 @@
 
 #include <KoZoomHandler.h>
 
+// TODO remove see where it is used
+#include "pageeffects/KPrCoverDownEffect.h"
+
 class QPainter;
 class QPaintEvent;
 class KoViewConverter;
@@ -35,6 +38,7 @@ class KoPACanvas;
 class KoPAPageBase;
 class KoPAView;
 class KPrPageEffect;
+class KPrPageEffectRunner;
 class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject
@@ -125,7 +129,9 @@ private:
     QPoint m_offset;
     QRect m_pageRect;
 
-    KPrPageEffect * m_pageEffect;
+    KPrPageEffectRunner * m_pageEffectRunner;
+    // TODO remove when we read the effect from the page
+    KPrCoverDownEffect m_pageEffect;
     QMap<KoShape *, KPrShapeAnimation *> m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;

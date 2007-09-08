@@ -24,41 +24,46 @@
 #include <QWidget>
 #include <QDebug>
 
-KPrCoverDownEffect::KPrCoverDownEffect( const QPixmap &px1, const QPixmap &px2, QWidget * w )
-: KPrPageEffect( px1, px2, w )    
-, m_count( 0 )    
+KPrCoverDownEffect::KPrCoverDownEffect()
+: KPrPageEffect()
+, m_count( 0 )
 {
-    m_timeLine.setDuration( 5000 );
-    m_timeLine.setFrameRange( 0, px1.height() );
-    QObject::connect( &m_timeLine, SIGNAL( frameChanged( int ) ), w, SLOT( update() ) );
-    m_timeLine.setCurveShape( QTimeLine::LinearCurve ); 
 }
 
-bool KPrCoverDownEffect::paint( QPainter &p, int currentTime )
+void KPrCoverDownEffect::setup( const Data &data, QTimeLine &timeLine )
 {
-    int height = m_widget->height();
+    timeLine.setDuration( m_duration );
+    timeLine.setFrameRange( 0, data.m_widget->height() );
+    timeLine.setCurveShape( QTimeLine::LinearCurve );
+}
+
+bool KPrCoverDownEffect::paint( QPainter &p, const Data &data )
+{
+    int height = data.m_widget->height();
     ++m_count;
 
-    m_lastPos.setY( m_timeLine.frameForTime( currentTime ) );
+    int m_lastPos = data.m_timeLine.frameForTime( data.m_currentTime );
 
-    if ( m_lastPos.y() >= height )
+    bool finish = data.m_finished;
+
+    if ( m_lastPos >= height )
     {
-        m_finish = true;
+        finish = true;
     }
 
-    if ( ! m_finish )
+    if ( ! finish )
     {
-        int width = m_widget->width();
-        QRect rect1( 0, m_lastPos.y(), width, height - m_lastPos.y() );
-        QRect rect2( 0, height - m_lastPos.y(), width, m_lastPos.y() );
-        p.drawPixmap( QPoint( 0, m_lastPos.y() ), m_px1, rect1 );
-        p.drawPixmap( QPoint( 0, 0 ), m_px2, rect2 );
+        int width = data.m_widget->width();
+        QRect rect1( 0, m_lastPos, width, height - m_lastPos );
+        QRect rect2( 0, height - m_lastPos, width, m_lastPos );
+        p.drawPixmap( QPoint( 0, m_lastPos ), data.m_oldPage, rect1 );
+        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect2 );
     }
     else
     {
-        p.drawPixmap( 0, 0, m_px2 );
+        p.drawPixmap( 0, 0, data.m_newPage );
         qDebug() << "m_count" << m_count;
     }
 
-    return !m_finish;
+    return !finish;
 }

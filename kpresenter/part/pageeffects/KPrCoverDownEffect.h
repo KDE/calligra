@@ -25,12 +25,14 @@
 class KPrCoverDownEffect : public KPrPageEffect
 {
 public:
-	KPrCoverDownEffect( const QPixmap &px1, const QPixmap &px2, QWidget * w );
+    KPrCoverDownEffect();
 
-    virtual bool paint( QPainter &p, int currentTime );
+    virtual void setup( const Data &data, QTimeLine &timeLine );
+
+    virtual bool paint( QPainter &p, const Data &data );
+
 private:
     int m_count;
 };
 
 #endif // KPRCOVERDOWNEFFECT_H
-
