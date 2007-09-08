@@ -32,6 +32,10 @@
 #include "core/TimeSignature.h"
 #include "core/StaffSystem.h"
 
+#include <QMultiMap>
+
+#include <climits>
+
 using namespace MusicCore;
 
 MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(false)
@@ -320,6 +324,8 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
     bool prevAlternate = false;
     double maxNoteX = 0;
     
+    QMultiMap<Staff*, int> dots;
+    
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
         Staff * s = n->staff();
@@ -397,21 +403,49 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         if (n->accidentals() != curAccidentals) {
             m_style->renderAccidental( painter, ref.x() + x - 10, ref.y() + /*chord->y() +*/ s->top() + line * s->lineSpacing() / 2, n->accidentals(), color );
         }
+        
+        dots.insert(s, line);
     }
     
-    for (int i = 0; i < chord->noteCount(); i++) {
-        Note *n = chord->note(i);
-        Staff * s = n->staff();
-        Clef* clef = s->lastClefChange(barIdx);
-        int line = 10;
-        if (clef) line = clef->pitchToLine(n->pitch());
+    // calculate correct positioning of dots
+    // render dots of notes
+    painter.setPen(m_style->noteDotPen(color));
+    foreach (Staff* s, dots.keys()) {
+        QList<int> lines = dots.values(s);
+        qSort(lines);
+
+        int lastLine = INT_MIN;
+        bool moveGroupDown = true;
+        for (int i = 0; i < lines.size(); i++) {
+            int line = lines[i];
+            if (line % 2 == 0) {
+                line--;
+            }
+            if (line == lastLine) {
+                if (moveGroupDown) {
+                    lines[i-1] += 2;
+                    for (int j = i-2; j >= 0; j--) {
+                        if (lines[j] == lines[j+1]) {
+                            lines[j] += 2;
+                        } else {
+                            break;
+                        }
+                    }
+                } else {
+                    line -= 2;
+                }
+                moveGroupDown = !moveGroupDown;
+            }
+            lines[i] = line;
+            lastLine = line;
+        }
         
-        // render dots of notes
-        double dotX = maxNoteX + 11;
-        painter.setPen(m_style->noteDotPen(color));
-        for (int i = 0; i < chord->dots(); i++) {
-            painter.drawPoint(ref + QPointF(dotX, s->top() + line * s->lineSpacing() / 2));
-            dotX += 3;
+        foreach (int line, lines) {
+            double dotX = maxNoteX + 11;
+            for (int i = 0; i < chord->dots(); i++) {
+                painter.drawPoint(ref + QPointF(dotX, s->top() + line * s->lineSpacing() / 2));
+                dotX += 3;
+            }
         }
     }
 
