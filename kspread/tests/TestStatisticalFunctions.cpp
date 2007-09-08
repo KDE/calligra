@@ -757,6 +757,13 @@ void TestStatisticalFunctions::testTDIST()
     CHECK_EVAL("TDIST( 1; 0; 1 )",    Value::errorNUM() ); // degreeOfFreedom >= 1
 }
 
+void TestStatisticalFunctions::testTREND()
+{
+    // ODF-tests
+    CHECK_EVAL("TREND(A19:A23; C19:C23; 1)",     Value( 4.755556 ) ); //
+    CHECK_EVAL("TREND(A19:A23; C19:C23; 1; 0 )", Value( 0        ) ); //
+}
+
 void TestStatisticalFunctions::testTRIMMEAN()
 {
     // ODF-tests

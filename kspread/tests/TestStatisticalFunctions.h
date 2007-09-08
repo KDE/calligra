@@ -109,7 +109,7 @@ private slots:
 //     void testSUMX2MY2();
     void testTDIST();
 //     void testTINV();     // ???
-//     void testTREND();    // ???
+    void testTREND();    // ???
     void testTRIMMEAN();
     void testTTEST();
     void testVAR();
