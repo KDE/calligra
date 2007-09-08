@@ -72,7 +72,12 @@ void awCountA (ValueCalc *c, Value &res, Value val, Value)
 
 void awMax (ValueCalc *c, Value &res, Value val, Value)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  // propagate error values
+  if (res.isError())
+    return;
+  if (val.isError())
+    res = val;
+  else if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
     if (res.isEmpty())
       res = val;
     else
@@ -81,7 +86,12 @@ void awMax (ValueCalc *c, Value &res, Value val, Value)
 
 void awMaxA (ValueCalc *c, Value &res, Value val, Value)
 {
-  if (!val.isEmpty())
+  // propagate error values
+  if (res.isError())
+    return;
+  if (val.isError())
+    res = val;
+  else if (!val.isEmpty())
     if (res.isEmpty())
       // convert to number, so that we don't return string/bool
       res = c->conv()->asNumeric (val);
