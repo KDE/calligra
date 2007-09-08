@@ -19,7 +19,7 @@
 #ifndef MUSIC_RENDERER_H
 #define MUSIC_RENDERER_H
 
-#include "core/Chord.h"
+#include "core/Global.h"
 #include <QColor>
 #include <QPointF>
 
@@ -58,8 +58,8 @@ public:
     void renderKeySignature(QPainter& painter, MusicCore::KeySignature* keySignature, const QPointF& pos, RenderState& state, double xScale);
     void renderTimeSignature(QPainter& painter, MusicCore::TimeSignature* timeSignature, const QPointF& pos, double xScale);
     void renderChord(QPainter& painter, MusicCore::Chord* chord, const QPointF& ref, double xScale, const QColor& color = Qt::black);
-    void renderRest(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, const QColor& color = Qt::black);
-    void renderNote(QPainter& painter, MusicCore::Chord::Duration duration, const QPointF& pos, double stemLength, const QColor& color = Qt::black);
+    void renderRest(QPainter& painter, MusicCore::Duration duration, const QPointF& pos, const QColor& color = Qt::black);
+    void renderNote(QPainter& painter, MusicCore::Duration duration, const QPointF& pos, double stemLength, const QColor& color = Qt::black);
     void renderAccidental(QPainter& painter, int accidentals, const QPointF& pos, const QColor& color = Qt::black);
 private:
     MusicStyle* m_style;

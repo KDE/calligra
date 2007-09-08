@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TimeSignature.h"
-#include "VoiceElement.h"
+#include "Global.h"
 
 #include <QtCore/QString>
 
@@ -96,15 +96,15 @@ QList<int> TimeSignature::beatLengths() const
     int beatLength;
     QList<int> res;
     switch (d->beat) {
-        case 1: beatLength = VoiceElement::WholeLength; break;
-        case 2: beatLength = VoiceElement::HalfLength; break;
-        case 4: beatLength = VoiceElement::QuarterLength; break;
-        case 8: beatLength = VoiceElement::Note8Length; break;
-        case 16: beatLength = VoiceElement::Note16Length; break;
-        case 32: beatLength = VoiceElement::Note32Length; break;
-        case 64: beatLength = VoiceElement::Note64Length; break;
-        case 128: beatLength = VoiceElement::Note128Length; break;
-        default: beatLength = VoiceElement::QuarterLength;
+        case 1: beatLength = WholeLength; break;
+        case 2: beatLength = HalfLength; break;
+        case 4: beatLength = QuarterLength; break;
+        case 8: beatLength = Note8Length; break;
+        case 16: beatLength = Note16Length; break;
+        case 32: beatLength = Note32Length; break;
+        case 64: beatLength = Note64Length; break;
+        case 128: beatLength = Note128Length; break;
+        default: beatLength = QuarterLength;
     }
     if (d->beats % 3 == 0) {
         for (int i = 0; i < d->beats / 3; i++) {

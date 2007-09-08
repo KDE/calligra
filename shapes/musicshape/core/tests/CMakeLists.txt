@@ -5,6 +5,7 @@ add_definitions( -DKDESRCDIR=\\"${CMAKE_CURRENT_SOURCE_DIR}\\" )
 
 set(SheetTest_test_SRCS
     SheetTest.cpp
+    ../Global.cpp
     ../Part.cpp
     ../Sheet.cpp
     ../PartGroup.cpp
@@ -28,6 +29,7 @@ target_link_libraries(SheetTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 set(VoiceBarTest_test_SRCS
     VoiceBarTest.cpp
+    ../Global.cpp
     ../VoiceBar.cpp
     ../VoiceElement.cpp
     ../Sheet.cpp
@@ -50,6 +52,7 @@ target_link_libraries(VoiceBarTest  ${KDE4_KDECORE_LIBS} ${QT_QTTEST_LIBRARY})
 
 set(MusicXmlWriterTest_test_SRCS
     MusicXmlWriterTest.cpp
+    ../Global.cpp
     ../MusicXmlWriter.cpp
     ../Part.cpp
     ../Sheet.cpp

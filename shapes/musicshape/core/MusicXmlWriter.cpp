@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "MusicXmlWriter.h"
+#include "Global.h"
 #include "Sheet.h"
 #include "Part.h"
 #include "PartGroup.h"
@@ -116,7 +117,7 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part, i
         w.endElement(); // music:voice
         
         w.startElement("music:type");
-        w.addTextNode(Chord::durationToString(chord->duration()));
+        w.addTextNode(durationToString(chord->duration()));
         w.endElement(); // music:type
         
         for (int i = 0; i < chord->dots(); i++) {
@@ -167,7 +168,7 @@ static void writeChord(KoXmlWriter& w, Chord* chord, Voice* voice, Part* part, i
         w.endElement(); // music:voice
         
         w.startElement("music:type");
-        w.addTextNode(Chord::durationToString(chord->duration()));
+        w.addTextNode(durationToString(chord->duration()));
         w.endElement(); // music:type
         
         for (int i = 0; i < chord->dots(); i++) {
@@ -290,7 +291,7 @@ static void writePart(KoXmlWriter& w, int id, Part* part)
         if (i == 0) {
             w.startElement("music:attributes");
             w.startElement("music:divisions");
-            w.addTextNode(QString::number(VoiceElement::QuarterLength));
+            w.addTextNode(QString::number(QuarterLength));
             w.endElement(); // music:divisions
             inAttributes = true;
         }

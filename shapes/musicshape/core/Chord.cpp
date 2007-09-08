@@ -32,40 +32,40 @@ namespace MusicCore {
 
 namespace {
     struct Beam {
-        Beam(Chord* chord) : beamStart(chord), beamEnd(chord), beamType(Chord::BeamFlag) {}
+        Beam(Chord* chord) : beamStart(chord), beamEnd(chord), beamType(BeamFlag) {}
         Chord* beamStart;
         Chord* beamEnd;
-        Chord::BeamType beamType;
+        BeamType beamType;
     };
 }
 
 class Chord::Private {
 public:
-    Chord::Duration duration;
+    Duration duration;
     int dots;
     QList<Note*> notes;
-    Chord::StemDirection stemDirection;
+    StemDirection stemDirection;
     double stemLength;
     QList<Beam> beams;
 };
 
-static double calcStemLength(Chord::Duration duration)
+static double calcStemLength(Duration duration)
 {
     switch (duration) {
-        case Chord::Breve:
-        case Chord::Whole:
+        case BreveNote:
+        case WholeNote:
             return 0;
-        case Chord::Half:
-        case Chord::Quarter:
-        case Chord::Eighth:
+        case HalfNote:
+        case QuarterNote:
+        case EighthNote:
             return 3.5;
-        case Chord::Sixteenth:
+        case SixteenthNote:
             return 4;
-        case Chord::ThirtySecond:
+        case ThirtySecondNote:
             return 4.75;
-        case Chord::SixtyFourth:
+        case SixtyFourthNote:
             return 5.5;
-        case Chord::HundredTwentyEighth:
+        case HundredTwentyEighthNote:
             return 6.25;
     }
     return 0;
@@ -134,7 +134,7 @@ double Chord::width() const
     return w;
 }
 
-Chord::Duration Chord::duration() const
+Duration Chord::duration() const
 {
     return d->duration;
 }
@@ -216,38 +216,6 @@ void Chord::removeNote(Note* note, bool deleteNote)
     int index = d->notes.indexOf(note);
     Q_ASSERT( index != -1 );
     removeNote(index, deleteNote);
-}
-
-int Chord::durationToTicks(Duration duration)
-{
-    switch (duration) {
-        case HundredTwentyEighth: return Note128Length;
-        case SixtyFourth:         return Note64Length;
-        case ThirtySecond:        return Note32Length;
-        case Sixteenth:           return Note16Length;
-        case Eighth:              return Note8Length;
-        case Quarter:             return QuarterLength;
-        case Half:                return HalfLength;
-        case Whole:               return WholeLength;
-        case Breve:               return DoubleWholeLength;
-    }
-    return 0;
-}
-
-QString Chord::durationToString(Duration duration)
-{
-    switch (duration) {
-        case HundredTwentyEighth:   return "128th";
-        case SixtyFourth:           return "64th";
-        case ThirtySecond:          return "32nd";
-        case Sixteenth:             return "16th";
-        case Eighth:                return "eighth";
-        case Quarter:               return "quarter";
-        case Half:                  return "half";
-        case Whole:                 return "whole";
-        case Breve:                 return "breve";
-    }
-    return "[unknown note length]";
 }
 
 double Chord::y() const
@@ -416,7 +384,7 @@ double Chord::beamDirection(double xScale) const
     }
 }
 
-Chord::StemDirection Chord::stemDirection() const
+StemDirection Chord::stemDirection() const
 {
     return d->stemDirection;
 }
@@ -426,7 +394,7 @@ void Chord::setStemDirection(StemDirection direction)
     d->stemDirection = direction;
 }
 
-Chord::StemDirection Chord::desiredStemDirection() const
+StemDirection Chord::desiredStemDirection() const
 {
     VoiceBar* vb = voiceBar();
     Bar* bar = vb->bar();
@@ -450,7 +418,7 @@ Chord::StemDirection Chord::desiredStemDirection() const
         }        
     }
     double center = (bottomLine + topLine) * 0.5;
-    return (center < 4 ? Chord::StemDown : Chord::StemUp);    
+    return (center < 4 ? StemDown : StemUp);    
 }
 
 double Chord::stemLength() const
@@ -471,12 +439,12 @@ double Chord::desiredStemLength() const
 int Chord::beamCount() const
 {
     switch (d->duration) {
-        case HundredTwentyEighth:   return 5;
-        case SixtyFourth:           return 4;
-        case ThirtySecond:          return 3;
-        case Sixteenth:             return 2;
-        case Eighth:                return 1;
-        default:                    return 0;
+        case HundredTwentyEighthNote:   return 5;
+        case SixtyFourthNote:           return 4;
+        case ThirtySecondNote:          return 3;
+        case SixteenthNote:             return 2;
+        case EighthNote:                return 1;
+        default:                        return 0;
     }            
 }
 
@@ -504,7 +472,7 @@ Chord* Chord::beamEnd(int index)
     return d->beams[index].beamEnd;
 }
 
-Chord::BeamType Chord::beamType(int index) const
+BeamType Chord::beamType(int index) const
 {
     if (d->beams.size() <= index) return BeamFlag;
     return d->beams[index].beamType;

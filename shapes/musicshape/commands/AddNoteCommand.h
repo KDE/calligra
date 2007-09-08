@@ -21,23 +21,24 @@
 
 #include <QUndoCommand>
 
-#include "../core/Chord.h"
+#include "../core/Global.h"
 
 namespace MusicCore {
     class Staff;
     class Note;
+    class Chord;
 }
 class MusicShape;
 
 class AddNoteCommand : public QUndoCommand {
 public:
-    AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int pitch, int accidentals=0);
+    AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Duration duration, int pitch, int accidentals=0);
     virtual void redo();
     virtual void undo();
 private:
     MusicShape* m_shape;
     MusicCore::Chord* m_chord;
-    MusicCore::Chord::Duration m_oldDuration, m_newDuration;
+    MusicCore::Duration m_oldDuration, m_newDuration;
     int m_oldDots;
     MusicCore::Note* m_note;
 };

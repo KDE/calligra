@@ -20,6 +20,8 @@
 #define MUSIC_CORE_CHORD_H
 
 #include "VoiceElement.h"
+#include "Global.h"
+
 #include <QtCore/QString>
 
 namespace MusicCore {
@@ -36,35 +38,6 @@ class Chord : public VoiceElement
 {
     Q_OBJECT
 public:
-    /**
-     * This enum represents the various supported durations for chords/rests.
-     */
-    enum Duration {
-        HundredTwentyEighth,
-        SixtyFourth,
-        ThirtySecond,
-        Sixteenth,
-        Eighth,
-        Quarter,
-        Half,
-        Whole,
-        Breve
-    };
-    
-    enum StemDirection {
-        StemUp,
-        StemDown
-    };
-    
-    enum BeamType {
-        BeamStart,
-        BeamContinue,
-        BeamEnd,
-        BeamFlag,
-        BeamForwardHook,
-        BeamBackwardHook
-    };
-
     /**
      * Creates a new Chord instance, not specifying the staff on which the chord should be placed. Add this note to
      * a VoiceBar instance using the addElement method.
@@ -145,20 +118,6 @@ public:
      */
     void removeNote(Note* note, bool deleteNote = true);
     
-    /**
-     * Convert a duration to a number of ticks.
-     *
-     * @param duration the duration to convert to ticks
-     */
-    static int durationToTicks(Duration duration);
-    
-    /**
-     * Concert a duration to a string representation as it is expected when written to a MusicXML file.
-     *
-     * @param duration the duration to convert to a string
-     */
-    static QString durationToString(Duration duration);
-
     /**
      * This overrides the method in the VoiceElement class to return the correct y position based on pitch
      * of the notes this chord contains.

@@ -65,63 +65,63 @@ double MusicStyle::beamLineWidth()
     return 3.0;
 }
 
-void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Chord::Duration duration, const QColor& color)
+void MusicStyle::renderNoteHead(QPainter& painter, double x, double y, Duration duration, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (duration) {
-        case Chord::HundredTwentyEighth:
-        case Chord::SixtyFourth:
-        case Chord::ThirtySecond:
-        case Chord::Sixteenth:
-        case Chord::Eighth:
-        case Chord::Quarter:
+        case HundredTwentyEighthNote:
+        case SixtyFourthNote:
+        case ThirtySecondNote:
+        case SixteenthNote:
+        case EighthNote:
+        case QuarterNote:
             painter.drawText(p, QString(0xE125));
             break;
-        case Chord::Half:
+        case HalfNote:
             painter.drawText(p, QString(0xE124));
             break;
-        case Chord::Whole:
+        case WholeNote:
             painter.drawText(p, QString(0xE123));
             break;
-        case Chord::Breve:
+        case BreveNote:
             painter.drawText(p, QString(0xE122));
             break;
     }
 }
 
-void MusicStyle::renderRest(QPainter& painter, double x, double y, Chord::Duration duration, const QColor& color)
+void MusicStyle::renderRest(QPainter& painter, double x, double y, Duration duration, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
     QPointF p(x, y);
     switch (duration) {
-        case Chord::HundredTwentyEighth:
+        case HundredTwentyEighthNote:
             painter.drawText(p, QString(0xE10D));
             break;
-        case Chord::SixtyFourth:
+        case SixtyFourthNote:
             painter.drawText(p, QString(0xE10C));
             break;
-        case Chord::ThirtySecond:
+        case ThirtySecondNote:
             painter.drawText(p, QString(0xE10B));
             break;
-        case Chord::Sixteenth:
+        case SixteenthNote:
             painter.drawText(p, QString(0xE10A));
             break;
-        case Chord::Eighth:
+        case EighthNote:
             painter.drawText(p, QString(0xE109));
             break;
-        case Chord::Quarter:
+        case QuarterNote:
             painter.drawText(p, QString(0xE107));
             break;
-        case Chord::Half:
+        case HalfNote:
             painter.drawText(p, QString(0xE101));
             break;
-        case Chord::Whole:
+        case WholeNote:
             painter.drawText(p, QString(0xE100));
             break;
-        case Chord::Breve:
+        case BreveNote:
             painter.drawText(p, QString(0xE106));
             break;
     }
@@ -179,27 +179,27 @@ void MusicStyle::renderTimeSignatureNumber(QPainter& painter, double x, double y
     painter.drawText(QPointF(x + (w - m.width(txt))/2, y), txt);
 }
 
-void MusicStyle::renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, bool stemsUp, const QColor& color)
+void MusicStyle::renderNoteFlags(QPainter& painter, double x, double y, Duration duration, bool stemsUp, const QColor& color)
 {
     painter.setPen(QPen(color));
     painter.setFont(m_font);
     QPointF p(x + 0.4, y);
     switch (duration) {
-        case Chord::HundredTwentyEighth:
+        case HundredTwentyEighthNote:
             // no 128 flag in emmentaler, so stack 16th and 32nd on top of each other...
             painter.drawText(p, QString(stemsUp ? 0xE189 : 0xE18F));
             painter.drawText(p + QPointF(0, stemsUp ? 13 : -13), QString(stemsUp ? 0xE188 : 0xE18E));
             break;
-        case Chord::SixtyFourth:
+        case SixtyFourthNote:
             painter.drawText(p, QString(stemsUp ? 0xE18A : 0xE190));
             break;
-        case Chord::ThirtySecond:
+        case ThirtySecondNote:
             painter.drawText(p, QString(stemsUp ? 0xE189 : 0xE18F));
             break;
-        case Chord::Sixteenth:
+        case SixteenthNote:
             painter.drawText(p, QString(stemsUp ? 0xE188 : 0xE18E));
             break;
-        case Chord::Eighth:
+        case EighthNote:
             painter.drawText(p, QString(stemsUp ? 0xE187 : 0xE18B));
             break;
         default:

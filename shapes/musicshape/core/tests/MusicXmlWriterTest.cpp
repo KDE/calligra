@@ -114,13 +114,13 @@ private slots:
         Staff* staff = part->addStaff();
         VoiceBar* vb = bar->voice(voice);
         
-        for (Chord::Duration d = Chord::HundredTwentyEighth; d <= Chord::Breve; d = (Chord::Duration)(d + 1)) {
+        for (Duration d = HundredTwentyEighthNote; d <= BreveNote; d = (Duration)(d + 1)) {
             Chord* c = new Chord(d);
             c->addNote(staff, 0);
             vb->addElement(c);
         }
         for (int i = 1; i < 4; i++) {
-            Chord* c = new Chord(Chord::Quarter, i);
+            Chord* c = new Chord(QuarterNote, i);
             c->addNote(staff, 0);
             vb->addElement(c);
         }
@@ -139,7 +139,7 @@ private slots:
         VoiceBar* vb = bar->voice(voice);
         
         for (int p = -20; p <= 20; p++) {
-            Chord* c = new Chord(Chord::Quarter);
+            Chord* c = new Chord(QuarterNote);
             c->addNote(staff, p);
             vb->addElement(c);
         }
@@ -158,7 +158,7 @@ private slots:
         VoiceBar* vb = bar->voice(voice);
         
         for (int a = -2; a <= 2; a++) {
-            Chord* c = new Chord(Chord::Quarter);
+            Chord* c = new Chord(QuarterNote);
             c->addNote(staff, 0, a);
             vb->addElement(c);
         }

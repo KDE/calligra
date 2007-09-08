@@ -263,14 +263,14 @@ void Engraver::engraveBar(Bar* bar)
                     if (c) {
                         // if this is the continuation or end of a beam, the first chord in the beam has the
                         // correct stem direction already
-                        if (c->beamType(0) == Chord::BeamContinue || c->beamType(0) == Chord::BeamEnd) {
+                        if (c->beamType(0) == BeamContinue || c->beamType(0) == BeamEnd) {
                             c->setStemDirection(c->beamStart(0)->stemDirection());
-                        } else if (c->beamType(0) == Chord::BeamStart) {
+                        } else if (c->beamType(0) == BeamStart) {
                             // for the start of a beam, check all the other chords in the beam to determine
                             // the correct direction
                             if (staffVoices.count(c->staff()) > 1) {
                                 int voiceIdx = voiceIds[i];
-                                c->setStemDirection(voiceIdx & 1 ? Chord::StemDown : Chord::StemUp);
+                                c->setStemDirection(voiceIdx & 1 ? StemDown : StemUp);
                             } else {
                                 int numUp = 0;
                                 int numDown = 0;
@@ -278,7 +278,7 @@ void Engraver::engraveBar(Bar* bar)
                                 for (int j = nextIndex[i]; j < voices[i]->elementCount(); j++) {
                                     Chord* chord = dynamic_cast<Chord*>(voices[i]->element(j));
                                     if (!chord) continue;
-                                    if (chord->desiredStemDirection() == Chord::StemUp) {
+                                    if (chord->desiredStemDirection() == StemUp) {
                                         numUp++;
                                     } else {
                                         numDown++;
@@ -286,9 +286,9 @@ void Engraver::engraveBar(Bar* bar)
                                     if (chord == endChord) break;
                                 }
                                 if (numUp > numDown) {
-                                    c->setStemDirection(Chord::StemUp);
+                                    c->setStemDirection(StemUp);
                                 } else if (numUp < numDown) {
-                                    c->setStemDirection(Chord::StemDown);
+                                    c->setStemDirection(StemDown);
                                 } else {
                                     c->setStemDirection(c->desiredStemDirection());
                                 }
@@ -297,7 +297,7 @@ void Engraver::engraveBar(Bar* bar)
                             Staff* staff = c->staff();
                             if (staffVoices.count(staff) > 1) {
                                 int voiceIdx = voiceIds[i];
-                                c->setStemDirection(voiceIdx & 1 ? Chord::StemDown : Chord::StemUp);
+                                c->setStemDirection(voiceIdx & 1 ? StemDown : StemUp);
                             } else {
                                 c->setStemDirection(c->desiredStemDirection());
                             }
@@ -324,7 +324,7 @@ void Engraver::engraveBar(Bar* bar)
         for (int i = 0; i < vb->elementCount(); i++) {
             Chord* c = dynamic_cast<Chord*>(vb->element(i));
             if (!c) continue;
-            if (c->beamType(0) == Chord::BeamStart) {
+            if (c->beamType(0) == BeamStart) {
                 // fetch all chords in the beam
                 QList<Chord*> chords;
                 QList<QPointF> stemEnds;
@@ -344,7 +344,7 @@ void Engraver::engraveBar(Bar* bar)
                 for (int j = stemEnds.size()-1; j >= 0; j--) {
                     stemEnds[j] -= stemEnds[0];
                 }
-                if (c->stemDirection() == Chord::StemUp) {
+                if (c->stemDirection() == StemUp) {
                     for (int j = 0; j < stemEnds.size(); j++) {
                         stemEnds[j].setY(-stemEnds[j].y());
                     }
@@ -418,18 +418,18 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
         if (!c) continue;
         curTime += ve->length();
         
-        if (c->duration() <= Chord::Eighth && beamStart < 0) {
+        if (c->duration() <= EighthNote && beamStart < 0) {
             beamStart = i;
             beamStartTime = curTime - ve->length();
             for (int b = 0; b < c->beamCount(); b++) {
-                c->setBeam(b, c, c, Chord::BeamFlag);
+                c->setBeam(b, c, c, BeamFlag);
             }
         }
         
         int beatEnd = beats[nextBeat] + passedBeats;
-        if (curTime >= beatEnd || c->noteCount() == 0 || c->duration() > Chord::Eighth || i == vb->elementCount()-1) {
+        if (curTime >= beatEnd || c->noteCount() == 0 || c->duration() > EighthNote || i == vb->elementCount()-1) {
             int beamEnd = i;
-            if (c->duration() > Chord::Eighth || c->noteCount() == 0) {
+            if (c->duration() > EighthNote || c->noteCount() == 0) {
                 beamEnd--;
             }
             
@@ -443,7 +443,7 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                 for (int j = beamStart, beamTime = beamStartTime; j <= beamEnd; j++) {
                     Chord* chord = dynamic_cast<Chord*>(vb->element(j));
                     if (chord) {
-                        int factor = VoiceElement::Note8Length;
+                        int factor = Note8Length;
                         for (int b = 1; b < chord->beamCount(); b++) {
                             if (start[b] == -1) {
                                 start[b] = j;
@@ -461,9 +461,9 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                                     int preSTime = (sTime / factor) * factor; // largest multiple of factor <= sTime
                                     int postETime = ((eTime + factor - 1) / factor) * factor; // smalles multiple of factor >= eTime
                                     if (sTime - preSTime < postETime - eTime) {
-                                        sc->setBeam(b, sc, ec, Chord::BeamForwardHook);
+                                        sc->setBeam(b, sc, ec, BeamForwardHook);
                                     } else {
-                                        sc->setBeam(b, sc, ec, Chord::BeamBackwardHook);
+                                        sc->setBeam(b, sc, ec, BeamBackwardHook);
                                     }
                                 } else {
                                     for (int k = start[b]; k < j; k++) {
@@ -480,7 +480,7 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                         beamTime += chord->length();
                     }
                 }
-                int factor = VoiceElement::Note8Length;
+                int factor = Note8Length;
                 for (int b = 1; b < 6; b++) {
                     if (start[b] != -1) {
                         Chord* sc = static_cast<Chord*>(vb->element(start[b]));
@@ -491,9 +491,9 @@ void Engraver::rebeamBar(Part* part, VoiceBar* vb)
                             int preSTime = (sTime / factor) * factor; // largest multiple of factor <= sTime
                             int postETime = ((eTime + factor - 1) / factor) * factor; // smalles multiple of factor >= eTime
                             if (sTime - preSTime < postETime - eTime) {
-                                sc->setBeam(b, sc, ec, Chord::BeamForwardHook);
+                                sc->setBeam(b, sc, ec, BeamForwardHook);
                             } else {
-                                sc->setBeam(b, sc, ec, Chord::BeamBackwardHook);
+                                sc->setBeam(b, sc, ec, BeamBackwardHook);
                             }
                         } else {
                             for (int k = start[b]; k <= beamEnd; k++) {

@@ -19,7 +19,7 @@
 #ifndef MUSIC_STYLE_H
 #define MUSIC_STYLE_H
 
-#include "core/Chord.h"
+#include "core/Global.h"
 #include "core/Clef.h"
 
 #include <QtGui/QPen>
@@ -37,12 +37,12 @@ public:
     virtual QPen stemPen(const QColor& color = Qt::black);
     virtual QPen noteDotPen(const QColor& color = Qt::black);
     virtual double beamLineWidth();
-    virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
-    virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, const QColor& color = Qt::black);
+    virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Duration duration, const QColor& color = Qt::black);
+    virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Duration duration, const QColor& color = Qt::black);
     virtual void renderClef(QPainter& painter, double x, double y, MusicCore::Clef::ClefShape shape, const QColor& color = Qt::black);
     virtual void renderAccidental(QPainter& painter, double x, double y, int accidental, const QColor& color = Qt::black);
     virtual void renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, const QColor& color = Qt::black);
-    virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Chord::Duration duration, bool stemsUp, const QColor& color = Qt::black);
+    virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Duration duration, bool stemsUp, const QColor& color = Qt::black);
 private:
     QPen m_staffLinePen, m_stemPen, m_noteDotPen;
     QFont m_font;

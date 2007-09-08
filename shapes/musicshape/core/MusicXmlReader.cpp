@@ -42,31 +42,31 @@ MusicXmlReader::MusicXmlReader(const char* musicNamespace)
 {
 }
 
-static Chord::Duration parseDuration(const QString& type, int length, int div)
+static Duration parseDuration(const QString& type, int length, int div)
 {
-    if (type == "128th")        return Chord::HundredTwentyEighth;
-    else if (type == "64th")    return Chord::SixtyFourth;
-    else if (type == "32nd")    return Chord::ThirtySecond;
-    else if (type == "16th")    return Chord::Sixteenth;
-    else if (type == "eighth")  return Chord::Eighth;
-    else if (type == "quarter") return Chord::Quarter;
-    else if (type == "half")    return Chord::Half;
-    else if (type == "whole")   return Chord::Whole;
-    else if (type == "breve")   return Chord::Breve;
+    if (type == "128th")        return HundredTwentyEighthNote;
+    else if (type == "64th")    return SixtyFourthNote;
+    else if (type == "32nd")    return ThirtySecondNote;
+    else if (type == "16th")    return SixteenthNote;
+    else if (type == "eighth")  return EighthNote;
+    else if (type == "quarter") return QuarterNote;
+    else if (type == "half")    return HalfNote;
+    else if (type == "whole")   return WholeNote;
+    else if (type == "breve")   return BreveNote;
     
     // else try to parse it from length
     double fact = 26880.0 / div;
     int ticks = (int) round(length * fact);
     // TODO: take number of dots into account
-    if (ticks <= VoiceElement::Note128Length)       return Chord::HundredTwentyEighth;
-    else if (ticks <= VoiceElement::Note64Length)   return Chord::SixtyFourth;
-    else if (ticks <= VoiceElement::Note32Length)   return Chord::ThirtySecond;
-    else if (ticks <= VoiceElement::Note16Length)   return Chord::Sixteenth;
-    else if (ticks <= VoiceElement::Note8Length)    return Chord::Eighth;
-    else if (ticks <= VoiceElement::QuarterLength)  return Chord::Quarter;
-    else if (ticks <= VoiceElement::HalfLength)     return Chord::Half;
-    else if (ticks <= VoiceElement::WholeLength)    return Chord::Whole;
-    else                                            return Chord::Breve;
+    if (ticks <= Note128Length)       return HundredTwentyEighthNote;
+    else if (ticks <= Note64Length)   return SixtyFourthNote;
+    else if (ticks <= Note32Length)   return ThirtySecondNote;
+    else if (ticks <= Note16Length)   return SixteenthNote;
+    else if (ticks <= Note8Length)    return EighthNote;
+    else if (ticks <= QuarterLength)  return QuarterNote;
+    else if (ticks <= HalfLength)     return HalfNote;
+    else if (ticks <= WholeLength)    return WholeNote;
+    else                                            return BreveNote;
 }
 
 Sheet* MusicXmlReader::loadSheet(const KoXmlElement& scoreElement)
@@ -242,7 +242,7 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                     // no chord element, so this is the start of a new chord
                     int length = getProperty(e, "duration").toInt();
                     QString type = getProperty(e, "type");
-                    Chord::Duration duration = parseDuration(type, length, curDivisions);
+                    Duration duration = parseDuration(type, length, curDivisions);
                     
                     QString voiceStr = getProperty(e, "voice");
                     int voiceId = 0;
@@ -280,10 +280,10 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                             }
                             beams[number].clear();
                         } else if (type == "forward hook") {
-                            lastNote->setBeam(number, lastNote, lastNote, Chord::BeamForwardHook);
+                            lastNote->setBeam(number, lastNote, lastNote, BeamForwardHook);
                             beams[number].clear();
                         } else if (type == "backward hook") {
-                            lastNote->setBeam(number, lastNote, lastNote, Chord::BeamBackwardHook);
+                            lastNote->setBeam(number, lastNote, lastNote, BeamBackwardHook);
                             beams[number].clear();
                         }
                     }

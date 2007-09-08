@@ -85,23 +85,6 @@ public:
      * Returns the duration of this musical elements in ticks.
      */
     int length() const;
-
-    /**
-     * This enum contains constants representing the lengths of various notes. The length of a 128th note is
-     * 1*2*3*4*5*7 ticks to allow n-tuples with n from 3..10. The length of the other notes are mutliples of
-     * this number. All durations and time-stamps are calculated in these units.
-     */
-    enum NoteLength {
-        Note128Length = 1*2*3*4*5*7,
-        Note64Length = Note128Length * 2,
-        Note32Length = Note64Length * 2,
-        Note16Length = Note32Length * 2,
-        Note8Length = Note16Length * 2,
-        QuarterLength = Note8Length * 2,
-        HalfLength = QuarterLength * 2,
-        WholeLength = HalfLength * 2,
-        DoubleWholeLength = WholeLength * 2
-    };
 public slots:
     /**
      * Sets the x position of this musical element.

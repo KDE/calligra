@@ -21,18 +21,19 @@
 
 #include <QUndoCommand>
 
-#include "../core/Chord.h"
+#include "../core/Global.h"
 
 namespace MusicCore {
     class Staff;
     class VoiceBar;
+    class Chord;
 }
 class MusicShape;
 
 class CreateChordCommand : public QUndoCommand {
 public:
-    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int before, int pitch, int accidentals);
-    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Chord::Duration duration, int before);
+    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before, int pitch, int accidentals);
+    CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before);
     virtual void redo();
     virtual void undo();
 private:

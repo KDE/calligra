@@ -19,6 +19,7 @@
 #include "CreateChordCommand.h"
 
 #include "../core/VoiceBar.h"
+#include "../core/Chord.h"
 #include "../MusicShape.h"
 
 #include <klocale.h>
@@ -26,7 +27,7 @@
 using namespace MusicCore;
 
 
-CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Chord::Duration duration, int before, int pitch, int accidentals)
+CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Duration duration, int before, int pitch, int accidentals)
     : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
     setText(i18n("Add chord"));
@@ -34,7 +35,7 @@ CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, St
     m_chord->addNote(staff, pitch, accidentals);
 }
 
-CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Chord::Duration duration, int before)
+CreateChordCommand::CreateChordCommand(MusicShape* shape, VoiceBar* voiceBar, Staff* staff, Duration duration, int before)
     : m_shape(shape), m_voiceBar(voiceBar), m_before(before)
 {
     setText(i18n("Add rest"));

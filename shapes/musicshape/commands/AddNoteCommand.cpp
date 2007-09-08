@@ -19,13 +19,14 @@
 #include "AddNoteCommand.h"
 
 #include "../core/Note.h"
+#include "../core/Chord.h"
 #include "../MusicShape.h"
 
 #include <klocale.h>
 
 using namespace MusicCore;
 
-AddNoteCommand::AddNoteCommand(MusicShape* shape, Chord* chord, Staff* staff, Chord::Duration duration, int pitch, int accidentals)
+AddNoteCommand::AddNoteCommand(MusicShape* shape, Chord* chord, Staff* staff, Duration duration, int pitch, int accidentals)
     : m_shape(shape), m_chord(chord), m_oldDuration(chord->duration()), m_newDuration(duration), m_oldDots(chord->dots()), m_note(0)
 {
     bool exists = false;

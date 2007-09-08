@@ -7,6 +7,7 @@ include_directories( ${KOGUIUTILS_INCLUDES} )
 ########### Flake Plugin library ###############
 
 set( musiccore_SRCS
+    core/Global.cpp
     core/Sheet.cpp
     core/Part.cpp
     core/PartGroup.cpp

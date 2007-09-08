@@ -91,75 +91,75 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     addAction("add_bars", addBars);
     connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
 
-    AbstractMusicAction* actionBreveNote = new NoteEntryAction(Chord::Breve, false, this);
+    AbstractMusicAction* actionBreveNote = new NoteEntryAction(BreveNote, false, this);
     addAction("note_breve", actionBreveNote);
     actionGroup->addAction(actionBreveNote);
 
-    AbstractMusicAction* actionWholeNote = new NoteEntryAction(Chord::Whole, false, this);
+    AbstractMusicAction* actionWholeNote = new NoteEntryAction(WholeNote, false, this);
     addAction("note_whole", actionWholeNote);
     actionGroup->addAction(actionWholeNote);
 
-    AbstractMusicAction* actionHalfNote = new NoteEntryAction(Chord::Half, false, this);
+    AbstractMusicAction* actionHalfNote = new NoteEntryAction(HalfNote, false, this);
     addAction("note_half", actionHalfNote);
     actionGroup->addAction(actionHalfNote);
 
-    AbstractMusicAction* actionQuarterNote = new NoteEntryAction(Chord::Quarter, false, this);
+    AbstractMusicAction* actionQuarterNote = new NoteEntryAction(QuarterNote, false, this);
     addAction("note_quarter", actionQuarterNote);
     actionGroup->addAction(actionQuarterNote);
 
-    AbstractMusicAction* actionNote8 = new NoteEntryAction(Chord::Eighth, false, this);
+    AbstractMusicAction* actionNote8 = new NoteEntryAction(EighthNote, false, this);
     addAction("note_eighth", actionNote8);
     actionGroup->addAction(actionNote8);
 
-    AbstractMusicAction* actionNote16 = new NoteEntryAction(Chord::Sixteenth, false, this);
+    AbstractMusicAction* actionNote16 = new NoteEntryAction(SixteenthNote, false, this);
     addAction("note_16th", actionNote16);
     actionGroup->addAction(actionNote16);
 
-    AbstractMusicAction* actionNote32 = new NoteEntryAction(Chord::ThirtySecond, false, this);
+    AbstractMusicAction* actionNote32 = new NoteEntryAction(ThirtySecondNote, false, this);
     addAction("note_32nd", actionNote32);
     actionGroup->addAction(actionNote32);
 
-    AbstractMusicAction* actionNote64 = new NoteEntryAction(Chord::SixtyFourth, false, this);
+    AbstractMusicAction* actionNote64 = new NoteEntryAction(SixtyFourthNote, false, this);
     addAction("note_64th", actionNote64);
     actionGroup->addAction(actionNote64);
 
-    AbstractMusicAction* actionNote128 = new NoteEntryAction(Chord::HundredTwentyEighth, false, this);
+    AbstractMusicAction* actionNote128 = new NoteEntryAction(HundredTwentyEighthNote, false, this);
     addAction("note_128th", actionNote128);
     actionGroup->addAction(actionNote128);
 
-    AbstractMusicAction* actionBreveRest = new NoteEntryAction(Chord::Breve, true, this);
+    AbstractMusicAction* actionBreveRest = new NoteEntryAction(BreveNote, true, this);
     addAction("rest_breve", actionBreveRest);
     actionGroup->addAction(actionBreveRest);
 
-    AbstractMusicAction* actionWholeRest = new NoteEntryAction(Chord::Whole, true, this);
+    AbstractMusicAction* actionWholeRest = new NoteEntryAction(WholeNote, true, this);
     addAction("rest_whole", actionWholeRest);
     actionGroup->addAction(actionWholeRest);
 
-    AbstractMusicAction* actionHalfRest = new NoteEntryAction(Chord::Half, true, this);
+    AbstractMusicAction* actionHalfRest = new NoteEntryAction(HalfNote, true, this);
     addAction("rest_half", actionHalfRest);
     actionGroup->addAction(actionHalfRest);
 
-    AbstractMusicAction* actionQuarterRest = new NoteEntryAction(Chord::Quarter, true, this);
+    AbstractMusicAction* actionQuarterRest = new NoteEntryAction(QuarterNote, true, this);
     addAction("rest_quarter", actionQuarterRest);
     actionGroup->addAction(actionQuarterRest);
 
-    AbstractMusicAction* actionRest8 = new NoteEntryAction(Chord::Eighth, true, this);
+    AbstractMusicAction* actionRest8 = new NoteEntryAction(EighthNote, true, this);
     addAction("rest_eighth", actionRest8);
     actionGroup->addAction(actionRest8);
 
-    AbstractMusicAction* actionRest16 = new NoteEntryAction(Chord::Sixteenth, true, this);
+    AbstractMusicAction* actionRest16 = new NoteEntryAction(SixteenthNote, true, this);
     addAction("rest_16th", actionRest16);
     actionGroup->addAction(actionRest16);
 
-    AbstractMusicAction* actionRest32 = new NoteEntryAction(Chord::ThirtySecond, true, this);
+    AbstractMusicAction* actionRest32 = new NoteEntryAction(ThirtySecondNote, true, this);
     addAction("rest_32nd", actionRest32);
     actionGroup->addAction(actionRest32);
 
-    AbstractMusicAction* actionRest64 = new NoteEntryAction(Chord::SixtyFourth, true, this);
+    AbstractMusicAction* actionRest64 = new NoteEntryAction(SixtyFourthNote, true, this);
     addAction("rest_64th", actionRest64);
     actionGroup->addAction(actionRest64);
 
-    AbstractMusicAction* actionRest128 = new NoteEntryAction(Chord::HundredTwentyEighth, true, this);
+    AbstractMusicAction* actionRest128 = new NoteEntryAction(HundredTwentyEighthNote, true, this);
     addAction("rest_128th", actionRest128);
     actionGroup->addAction(actionRest128);
 

@@ -20,17 +20,17 @@
 #define NOTEENTRYACTION_H
 
 #include "AbstractMusicAction.h"
-#include "../core/Chord.h"
+#include "../core/Global.h"
 
 class NoteEntryAction : public AbstractMusicAction
 {
 public:
-    NoteEntryAction(MusicCore::Chord::Duration duration, bool isRest, SimpleEntryTool* tool);
+    NoteEntryAction(MusicCore::Duration duration, bool isRest, SimpleEntryTool* tool);
 
     virtual void renderPreview(QPainter& painter, const QPointF& point);
     virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
 private:
-    MusicCore::Chord::Duration m_duration;
+    MusicCore::Duration m_duration;
     bool m_isRest;
 };
 
