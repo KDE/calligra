@@ -109,7 +109,7 @@ public:
      *
      * @param index the index of the note to return
      */
-    Note* note(int index);
+    Note* note(int index) const;
 
     /**
      * Adds a new note to this chord. The note will be drawn on the given staff and will have the given pitch and
@@ -179,6 +179,7 @@ public:
     double beamDirection(double xScale) const;
 
     StemDirection stemDirection() const;
+    StemDirection desiredStemDirection() const;
     void setStemDirection(StemDirection direction);
     
     /**

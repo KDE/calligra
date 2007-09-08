@@ -265,31 +265,41 @@ void Engraver::engraveBar(Bar* bar)
                         // correct stem direction already
                         if (c->beamType(0) == Chord::BeamContinue || c->beamType(0) == Chord::BeamEnd) {
                             c->setStemDirection(c->beamStart(0)->stemDirection());
+                        } else if (c->beamType(0) == Chord::BeamStart) {
+                            // for the start of a beam, check all the other chords in the beam to determine
+                            // the correct direction
+                            if (staffVoices.count(c->staff()) > 1) {
+                                int voiceIdx = voiceIds[i];
+                                c->setStemDirection(voiceIdx & 1 ? Chord::StemDown : Chord::StemUp);
+                            } else {
+                                int numUp = 0;
+                                int numDown = 0;
+                                const Chord* endChord = c->beamEnd(0);
+                                for (int j = nextIndex[i]; j < voices[i]->elementCount(); j++) {
+                                    Chord* chord = dynamic_cast<Chord*>(voices[i]->element(j));
+                                    if (!chord) continue;
+                                    if (chord->desiredStemDirection() == Chord::StemUp) {
+                                        numUp++;
+                                    } else {
+                                        numDown++;
+                                    }
+                                    if (chord == endChord) break;
+                                }
+                                if (numUp > numDown) {
+                                    c->setStemDirection(Chord::StemUp);
+                                } else if (numUp < numDown) {
+                                    c->setStemDirection(Chord::StemDown);
+                                } else {
+                                    c->setStemDirection(c->desiredStemDirection());
+                                }
+                            }
                         } else {
                             Staff* staff = c->staff();
                             if (staffVoices.count(staff) > 1) {
                                 int voiceIdx = voiceIds[i];
                                 c->setStemDirection(voiceIdx & 1 ? Chord::StemDown : Chord::StemUp);
                             } else {
-                                int topLine = 0, bottomLine = 0;
-                                double topy = 1e9, bottomy = -1e9;
-                                for (int n = 0; n < c->noteCount(); n++) {
-                                    Note* note = c->note(n);
-                                    Staff * s = note->staff();
-                                    Clef* clef = s->lastClefChange(barIdx);
-                                    int line = clef->pitchToLine(note->pitch());
-                                    double ypos = s->top() + line * s->lineSpacing() / 2;
-                                    if (ypos < topy) {
-                                        topy = ypos;
-                                        topLine = line;
-                                    }
-                                    if (ypos > bottomy) {
-                                        bottomy = ypos;
-                                        bottomLine = line;
-                                    }        
-                                }
-                                double center = (bottomLine + topLine) * 0.5;
-                                c->setStemDirection(center < 4 ? Chord::StemDown : Chord::StemUp);
+                                c->setStemDirection(c->desiredStemDirection());
                             }
                         }
                     }

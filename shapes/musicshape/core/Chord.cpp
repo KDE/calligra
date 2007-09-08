@@ -21,6 +21,8 @@
 #include "Staff.h"
 #include "VoiceBar.h"
 #include "Clef.h"
+#include "Bar.h"
+#include "Sheet.h"
 
 #include <QtCore/QList>
 
@@ -174,7 +176,7 @@ int Chord::noteCount() const
     return d->notes.size();
 }
 
-Note* Chord::note(int index)
+Note* Chord::note(int index) const
 {
     Q_ASSERT( index >= 0 && index < noteCount() );
     return d->notes[index];
@@ -422,6 +424,33 @@ Chord::StemDirection Chord::stemDirection() const
 void Chord::setStemDirection(StemDirection direction)
 {
     d->stemDirection = direction;
+}
+
+Chord::StemDirection Chord::desiredStemDirection() const
+{
+    VoiceBar* vb = voiceBar();
+    Bar* bar = vb->bar();
+    int barIdx = bar->sheet()->indexOfBar(bar);
+    
+    int topLine = 0, bottomLine = 0;
+    double topy = 1e9, bottomy = -1e9;
+    for (int n = 0; n < noteCount(); n++) {
+        Note* note = this->note(n);
+        Staff * s = note->staff();
+        Clef* clef = s->lastClefChange(barIdx);
+        int line = clef->pitchToLine(note->pitch());
+        double ypos = s->top() + line * s->lineSpacing() / 2;
+        if (ypos < topy) {
+            topy = ypos;
+            topLine = line;
+        }
+        if (ypos > bottomy) {
+            bottomy = ypos;
+            bottomLine = line;
+        }        
+    }
+    double center = (bottomLine + topLine) * 0.5;
+    return (center < 4 ? Chord::StemDown : Chord::StemUp);    
 }
 
 double Chord::stemLength() const
