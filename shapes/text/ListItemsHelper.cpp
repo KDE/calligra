@@ -332,12 +332,12 @@ Q_ASSERT(otherData);
                     width = width * (percent / 100.0);
                 break;
             }
-            case KoListStyle::KoListStyle::CustomCharItem:
+            case KoListStyle::CustomCharItem:
                 calcWidth = false;
                 item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
                 width = m_fm.width(item);
                 break;
-            case KoListStyle::KoListStyle::NoItem:
+            case KoListStyle::NoItem:
                 calcWidth = false;
                 width =  10.0; // simple indenting
                 break;

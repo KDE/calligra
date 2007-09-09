@@ -144,8 +144,8 @@ void ParagraphBulletsNumbers::styleChanged(int index) {
         case KoListStyle::DiscItem:
         case KoListStyle::CircleItem:
         case KoListStyle::BoxItem:
-        case KoListStyle::KoListStyle::CustomCharItem:
-        case KoListStyle::KoListStyle::NoItem:
+        case KoListStyle::CustomCharItem:
+        case KoListStyle::NoItem:
             widget.startValue->setCounterType(KoListStyle::DecimalItem);
             widget.startValue->setValue(1);
             widget.startValue->setEnabled(false);
