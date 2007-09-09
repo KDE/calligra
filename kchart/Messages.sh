@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT rc.cpp *.cc kchart_aboutdata.h kdchart*/*.cpp kdchart*/src/*.cpp dialogs/*.cc -o $podir/kchart.pot
+$XGETTEXT *.cpp kchart_aboutdata.h kdchart*/*.cpp kdchart*/src/*.cpp dialogs/*.cpp commands/*.cpp shape/*.cpp -o $podir/kchart.pot
