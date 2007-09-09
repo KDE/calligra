@@ -1,4 +1,3 @@
-add_subdirectory(api)
 if(SHOULD_BUILD_KARBON)
 	add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)

@@ -32,8 +32,6 @@ set(liboofilter_SRCS
 set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
 
 add_subdirectory( generic_wrapper )
-add_subdirectory( libdialogfilter )
-add_subdirectory( liboofilter )
 add_subdirectory( libkowmf )
 # macro_optional_add_subdirectory(kchart)
 macro_optional_add_subdirectory(kword)
