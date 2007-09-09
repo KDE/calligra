@@ -46,7 +46,7 @@ public slots:
     void activate( bool temporary = false );
     void deactivate();
 
-private:    
+private:
     KPrViewModePresentation & m_viewMode;
 };
 

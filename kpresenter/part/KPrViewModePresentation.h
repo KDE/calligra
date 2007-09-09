@@ -29,7 +29,7 @@ class KPrPresentationTool;
 class KPrViewModePresentation : public KoPAViewMode
 {
 public:
-	KPrViewModePresentation( KoPAView * view, KoPACanvas * m_canvas );
+    KPrViewModePresentation( KoPAView * view, KoPACanvas * m_canvas );
     ~KPrViewModePresentation();
 
     KoViewConverter * viewConverter();

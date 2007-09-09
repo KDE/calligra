@@ -46,7 +46,7 @@ typedef boost::multi_index_container<
             shape_step_key
         >,
         boost::multi_index::ordered_non_unique<
-            boost::multi_index::const_mem_fun<KPrShapeAnimation, int, &KPrShapeAnimation::step> 
+            boost::multi_index::const_mem_fun<KPrShapeAnimation, int, &KPrShapeAnimation::step>
         >
     >
 > ShapeAnimations;
@@ -56,7 +56,7 @@ typedef boost::multi_index::nth_index<ShapeAnimations,1>::type ShapeAnimationsBy
 class KPRESENTER_TEST_EXPORT KPrShapeAnimations
 {
 public:
-	KPrShapeAnimations();
+    KPrShapeAnimations();
     ~KPrShapeAnimations();
 
     /**
@@ -92,7 +92,7 @@ public:
      */
     QList<int> steps() const;
 
-private:    
+private:
     ShapeAnimations m_shapeAnimations;
 };
 

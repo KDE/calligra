@@ -23,7 +23,7 @@ KPrShapeAnimation::KPrShapeAnimation( KoShape * shape, int step, Type type )
 : m_shape( shape )
 , m_step( step )
 , m_type( type )
-, m_finished( false )                
+, m_finished( false )
 {
     // TODO make setable
     m_timeLine.setDuration( 5000 );

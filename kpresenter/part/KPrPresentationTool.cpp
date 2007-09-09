@@ -35,9 +35,9 @@ KPrPresentationTool::~KPrPresentationTool()
 {
 }
 
-bool KPrPresentationTool::wantsAutoScroll() 
-{ 
-    return false; 
+bool KPrPresentationTool::wantsAutoScroll()
+{
+    return false;
 }
 void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
@@ -83,14 +83,14 @@ void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
         case Qt::Key_Space:
             m_viewMode.navigate( KPrAnimationDirector::NextStep );
             break;
-        case Qt::Key_Down:            
+        case Qt::Key_Down:
         case Qt::Key_PageDown:
             m_viewMode.navigate( KPrAnimationDirector::NextPage );
             break;
         case Qt::Key_End:
             m_viewMode.navigate( KPrAnimationDirector::LastPage );
             break;
-        default:    
+        default:
             event->ignore();
             break;
     }

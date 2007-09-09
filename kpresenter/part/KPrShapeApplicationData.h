@@ -34,7 +34,7 @@ public:
    ~KPrShapeApplicationData();
 
    QSet<KPrShapeAnimation *> & animations();
-   
+
 private:
    // stores the animations of a shape
    QSet<KPrShapeAnimation *> m_animations;

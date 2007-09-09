@@ -24,14 +24,14 @@
 #include <KoShape.h>
 
 KPrAnimationDisappear::KPrAnimationDisappear( KoShape * shape, int step )
-: KPrShapeAnimation( shape, step, Disappear )    
+: KPrShapeAnimation( shape, step, Disappear )
 {
     m_timeLine.setDuration( 1 );
 
     // TODO use bounding rect + shadow
     m_shapeRect = m_shape->boundingRect();
     // the 2.0 is because of the anitialiasing
-    double x = m_shapeRect.x() + m_shapeRect.width() + 2.0; 
+    double x = m_shapeRect.x() + m_shapeRect.width() + 2.0;
     m_translate = QPointF( -x, 0 );
 }
 

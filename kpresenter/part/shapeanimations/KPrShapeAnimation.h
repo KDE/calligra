@@ -33,7 +33,7 @@ class KoViewConverter;
 class KPRESENTER_TEST_EXPORT KPrShapeAnimation
 {
 public:
-    enum Type 
+    enum Type
     {
         Appear,
         Disappear
@@ -107,7 +107,7 @@ protected:
      *
      * Only to be called form derived classes
      */
-	KPrShapeAnimation( KoShape * shape, int step, Type type );
+    KPrShapeAnimation( KoShape * shape, int step, Type type );
 
     // the shape for which is aminated
     KoShape * m_shape;

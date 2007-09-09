@@ -28,7 +28,7 @@
 #define TIMEFACTOR 1000.0
 
 KPrAnimationMoveAppear::KPrAnimationMoveAppear( KoShape * shape, int step )
-: KPrShapeAnimation( shape, step, Appear )    
+: KPrShapeAnimation( shape, step, Appear )
 {
     // TODO use bounding rect + shadow
     m_shapeRect = m_shape->boundingRect();
