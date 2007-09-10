@@ -90,6 +90,7 @@ Value func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_trend (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trimmean (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ttest (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_variance (valVector args, ValueCalc *calc, FuncExtra *);
@@ -314,6 +315,10 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("TDIST", func_tdist);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("TREND", func_trend);
+  f->setParamCount (1,4);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("TRIMMEAN", func_trimmean);
   f->setParamCount (2);
@@ -1325,6 +1330,120 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
   if (flag == 1)
     return R;
   return calc->mul (R, 2);   // flag is 2 here
+}
+
+//
+// Function: trend
+//
+// TREND ( knownY [; [knownX] [; [newX] [; allowOsset = TRUE() ] ] ] )
+//
+// TODO implement no offset
+//
+Value func_trend (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  // default
+  bool withOffset = true;
+
+  if (args.count() > 3)
+    withOffset = calc->conv()->asInteger (args[3]).asInteger();
+
+  List knownY, knownX, newX;
+  int  knownYcount, knownXcount, newXcount;
+
+  //
+  // knownX
+  //
+  if (args[1].isEmpty())
+  {
+    // if knownX is empty it has to be set to the sequence 1,2,3... n (n number of counts knownY) 
+    for (uint i=1; i < args[0].count()+1; i++)
+      knownX.append(i);
+  }
+  else
+  {
+    // check constraints / TODO if 2d array, then we must check dimension row&col?
+    if (args[0].count() != args[1].count())
+      return Value::errorNUM();
+
+    // copy array to list
+    func_array_helper (args[1], calc, knownX, knownXcount);
+  }
+
+  //
+  // newX
+  //
+  if (args[2].isEmpty())
+  {
+    for (uint i=1; i < args[0].count()+1; i++)
+      newX.append(i);
+  }
+  else
+  {
+    // copy array to list
+    func_array_helper (args[2], calc, newX, newXcount);
+  }
+
+  // create the resulting matrix
+  Value res( Value::Array );
+
+  // arrays for slope und intercept
+  Value Y( Value::Array );
+  Value X( Value::Array );
+
+  Value sumXX(0.0); // stores sum of xi*xi
+  Value sumYX(0.0); // stores sum of yi*xi
+
+  // copy data in arrays
+  for ( uint i = 0; i < args[0].count(); ++i)
+  {
+    X.setElement(i,0, Value((double)knownX[i]) );
+    sumXX = calc->add( sumXX, calc->mul(Value((double)knownX[i]),Value((double)knownX[i])) );
+  }
+
+  for ( uint i = 0; i < args[0].count(); ++i)
+  {
+    Y.setElement(i,0, Value(args[0].element(i))); 
+    // sum yi*xi
+    sumYX = calc->add( sumYX, calc->mul(Value(args[0].element(i)), Value((double)knownX[i])) );
+  }
+
+  // TODO - check do we need 2d arrays?
+
+  // create parameter for func_slope and func_intercept calls
+  valVector param;
+    
+  param.append(Y);
+  param.append(X);
+
+  // a1 = [xy]/[x*x]
+  Value a1 = calc->div( sumYX, sumXX );
+
+  // v2 = INTERCEPT = b
+  Value v2 = func_intercept(param, calc, 0); // v2 is const, we only need to calc it once
+
+  // fill array up with values
+  for (uint i = 0; i < args[2].count(); ++i)
+  {
+    Value trend;
+    Value v1;
+    
+    if ( withOffset )
+    {
+      v1 = calc->mul( func_slope(param,calc,0), Value(newX[i]) );
+      trend = Value(calc->add(  v1  , v2   ));
+    }
+    else
+    {
+      // b=0
+      // x*a1 
+      trend = calc->mul( a1, Value(newX[i]) );
+    }
+    
+    // set value in res array
+    res.setElement (i, 0, trend);
+  }
+
+  return (res);   // return array
 }
 
 // Function: trimmean
