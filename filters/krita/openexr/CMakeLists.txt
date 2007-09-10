@@ -1,4 +1,4 @@
-
+project(openexr)
 
 include_directories(
 	${OPENEXR_INCLUDE_DIR}
@@ -12,6 +12,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/krita/colorspaces/rgb_f16half/
 	)
 
+add_definitions(${OPENEXR_DEFINITIONS})
 
 ########### next target ###############
 
