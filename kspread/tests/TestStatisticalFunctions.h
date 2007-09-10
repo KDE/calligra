@@ -69,6 +69,7 @@ private slots:
     void testINTERCEPT();
 //     void testINVBINO();
     void testKURT();
+//     void testKURTP(); // ???
     void testLARGE();
 //     void testLINEST(); // ???
 //     void testLOGEST(); // ???
@@ -84,8 +85,9 @@ private slots:
     void testNORMDIST();
     void testNORMINV();
 //     void testNORMSDIST();
+//     void testNORMSINV();
 //     void testLEGACYNORMSDIST(); // same as NORMSDIST required for OpenFormula compliance
-//     void testPEARSON();
+    void testPEARSON();
     void testPERMUT();
     void testPHI();
     void testPOISSON();
@@ -103,7 +105,7 @@ private slots:
     void testSTDEVP();
     void testSTDEVPA();
     void testSTEYX();
-//     void testSUMXMY2();
+//     void testSUMXMY2(); // deprecated
 //     void testSUMPRODUCT();
 //     void testSUMX2PY2();
 //     void testSUMX2MY2();

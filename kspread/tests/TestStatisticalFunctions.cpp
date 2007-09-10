@@ -105,7 +105,10 @@ void TestStatisticalFunctions::initTestCase()
     Sheet* sheet = m_doc->map()->sheet(0);
     CellStorage* storage = sheet->cellStorage();
 
+    //
     // Test case data set
+    //
+
 
     // A19:A29
     storage->setValue(1,19, Value(    1 ) );
@@ -121,6 +124,7 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(1,29, Value( 1024 ) );
     storage->setValue(1,30, Value( 2048 ) );
     storage->setValue(1,31, Value( 4096 ) );
+
 
     // B3:B17
     storage->setValue(2, 3, Value(     "7"   ) );
@@ -139,11 +143,11 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(2,16, Value(      3    ) );
     storage->setValue(2,17, Value(      4    ) );
 
+
     // C4:C6
     storage->setValue(3, 4, Value( 4 ) );
     storage->setValue(3, 5, Value( 5 ) );
     storage->setValue(3, 6, Value( 7 ) );
-
     // C11:C17
     storage->setValue(3,11, Value( 5 ) );
     storage->setValue(3,12, Value( 6 ) );
@@ -152,8 +156,7 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(3,15, Value( 3 ) );
     storage->setValue(3,16, Value( 2 ) );
     storage->setValue(3,17, Value( 1 ) );
-
-    // C19:25
+    // C19:C31
     storage->setValue(3,19, Value( 0 ) );
     storage->setValue(3,20, Value( 5 ) );
     storage->setValue(3,21, Value( 2 ) );
@@ -161,6 +164,31 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(3,23, Value( 3 ) );
     storage->setValue(3,24, Value( 4 ) );
     storage->setValue(3,25, Value( 4 ) );
+    storage->setValue(3,26, Value( 0 ) );
+    storage->setValue(3,27, Value( 8 ) );
+    storage->setValue(3,28, Value( 1 ) );
+    storage->setValue(3,29, Value( 9 ) );
+    storage->setValue(3,30, Value( 6 ) );
+    storage->setValue(3,31, Value( 2 ) );
+    // C51:C57
+    storage->setValue(3,51, Value(  7 ) );
+    storage->setValue(3,52, Value(  9 ) );
+    storage->setValue(3,53, Value( 11 ) );
+    storage->setValue(3,54, Value( 12 ) );
+    storage->setValue(3,55, Value( 15 ) );
+    storage->setValue(3,56, Value( 17 ) );
+    storage->setValue(3,57, Value( 19 ) );
+
+
+    // D51:D57
+    storage->setValue(4,51, Value( 100 ) );
+    storage->setValue(4,52, Value( 105 ) );
+    storage->setValue(4,53, Value( 104 ) );
+    storage->setValue(4,54, Value( 108 ) );
+    storage->setValue(4,55, Value( 111 ) );
+    storage->setValue(4,56, Value( 120 ) );
+    storage->setValue(4,57, Value( 133 ) );
+
 
     // F51:F60
     storage->setValue(6,51, Value( 3 ) );
@@ -173,6 +201,7 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(6,58, Value( 6 ) );
     storage->setValue(6,59, Value( 4 ) );
     storage->setValue(6,60, Value( 7 ) );
+
 
     // G51:G60
     storage->setValue(7,51, Value( 23 ) );
@@ -623,6 +652,30 @@ void TestStatisticalFunctions::testNORMINV()
     CHECK_EVAL("NORMDIST(NORMINV(0.9;1;4);1;4;TRUE())", Value( 0.9 ) ); //
 }
 
+void TestStatisticalFunctions::testPEARSON()
+{
+    //  Cell | Value       Cell | Value       Cell | Value       Cell | Value
+    // ------+-------     ------+-------     ------+-------     ------+-------
+    //  A19  |    1        C19  |  0           C51 |   7          D51 |  100
+    //  A20  |    2        C20  |  5           C51 |   9          D52 |  105
+    //  A21  |    4        C21  |  2           C53 |  11          D53 |  104
+    //  A22  |    8        C22  |  5           C54 |  12          D54 |  108
+    //  A23  |   16        C23  |  3           C55 |  15          D55 |  111
+    //  A24  |   32        C24  |  4           C56 |  17          D56 |  120
+    //  A25  |   64        C25  |  4           C57 |  19          D57 |  133
+    //  A26  |  128        C26  |  0
+    //  A27  |  256        C27  |  8
+    //  A28  |  512        C28  |  1
+    //  A29  | 1024        C29  |  9
+    //  A30  | 2048        C30  |  6
+    //  A31  | 4096        C31  |  2
+
+    // ODF-tests
+    CHECK_EVAL_SHORT("PEARSON(A19:A31;C19:C31)", Value( 0.045989147 ) ); // 
+    CHECK_EVAL_SHORT("PEARSON(C51:C57;D51:D57)", Value( 0.930164207 ) ); // 
+    CHECK_EVAL("PEARSON(C51:C57;D51:D56)", Value::errorNUM()    ); // 
+}
+
 void TestStatisticalFunctions::testPERMUT()
 {
     // ODF-tests
@@ -759,10 +812,19 @@ void TestStatisticalFunctions::testTDIST()
 
 void TestStatisticalFunctions::testTREND()
 {
-// TODO how to check returned arrays?
+    // TODO how to check returned arrays?
+
+    //  Cell | Value      Cell | Value
+    // ------+------     ------+------
+    //  A19  |   1        C19  |  0
+    //  A20  |   2        C20  |  5
+    //  A21  |   4        C21  |  2
+    //  A22  |   8        C22  |  5
+    //  A23  |  16        C23  |  3
+
     // ODF-tests
-//     CHECK_EVAL("TREND(A19:A23; C19:C23; 1)     ", Value( 4.7555555555 ) ); //
-    CHECK_EVAL("TREND(A19:A23; C19:C23; 1; 0 ) ", Value( 1.6825396825 ) ); //
+    CHECK_EVAL("TREND(A19:A23; C19:C23; 1)     ", Value( 4.7555555555 ) ); // with    offset
+    CHECK_EVAL("TREND(A19:A23; C19:C23; 1; 0 ) ", Value( 1.6825396825 ) ); // without offset
 }
 
 void TestStatisticalFunctions::testTRIMMEAN()

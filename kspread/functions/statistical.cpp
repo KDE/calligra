@@ -1337,7 +1337,7 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // TREND ( knownY [; [knownX] [; [newX] [; allowOsset = TRUE() ] ] ] )
 //
-// TODO implement no offset
+// TODO - check do we need 2d arrays?
 //
 Value func_trend (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -1406,8 +1406,6 @@ Value func_trend (valVector args, ValueCalc *calc, FuncExtra *)
     // sum yi*xi
     sumYX = calc->add( sumYX, calc->mul(Value(args[0].element(i)), Value((double)knownX[i])) );
   }
-
-  // TODO - check do we need 2d arrays?
 
   // create parameter for func_slope and func_intercept calls
   valVector param;
