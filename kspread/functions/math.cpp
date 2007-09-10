@@ -338,43 +338,6 @@ void RegisterMathFunctions()
   repo->add (f);
 }
 
-////////////////////////////////////////////////////////////
-
-//
-// helper: gammaHelper
-//
-// args[0] = value
-// args[1] = & reflect
-//
-static double gammaHelper( double& x, bool& reflect )
-{
-  double c[6] = { 76.18009173, -86.50532033    , 24.01409822,
-                  -1.231739516,   0.120858003E-2, -0.536382E-5};
-  if (x >= 1.0)
-  {
-     reflect = false;
-     x -= 1.0;
-  }
-  else
-  {
-    reflect = true;
-    x = 1.0 - x;
-  }
-  double res, anum;
-  res = 1.0;
-  anum = x;
-  for (int i = 0; i < 6; i++)
-  {
-    anum += 1.0;
-    res += c[i]/anum;
-  }
-  res *= 2.506628275; // sqrt(2*PI)
-
-  return res;
-}
-
-////////////////////////////////////////////////////////////
-
 // Function: SQRT
 Value func_sqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -496,18 +459,7 @@ Value func_floor (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: GAMMA
 Value func_gamma (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  double val = calc->conv()->asFloat (args[0]).asFloat();
-
-  bool reflect;
-
-  double gamma = gammaHelper( val, reflect);
-  
-  gamma = pow(val+5.5, val+0.5) * gamma/exp(val+5.5);
-
-  if (reflect)
-    gamma = M_PI*val/(gamma*sin(M_PI*val));
-
-  return Value( gamma );
+   return calc->GetGamma( args[0] );
 }
 
 // Function: ln

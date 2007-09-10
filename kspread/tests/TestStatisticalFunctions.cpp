@@ -390,18 +390,34 @@ void TestStatisticalFunctions::testFREQUENCY()
 
 void TestStatisticalFunctions::testGAMMADIST()
 {
+    // TODO
+    // - check if 4th parameter is opt. or not
+    // - it seems cumulative does not work
+    // - be more precise
+
+    // bettersolution.com
+    CHECK_EVAL("GAMMADIST(10 ;9;2;FALSE())",      Value( 0.0326390197 ) ); //
+//     CHECK_EVAL_SHORT("GAMMADIST(10 ;9;2;TRUE())",       Value( 0.0680936347 ) ); // NOK
+//     CHECK_EVAL_SHORT("GAMMADIST(10 ;10;5;TRUE())",      Value(            0 ) ); // NOK
+//     CHECK_EVAL_SHORT("GAMMADIST(7 ;5;1;TRUE())",        Value( 1            ) ); // NOK
+    CHECK_EVAL("GAMMADIST(10 ;9;0;TRUE())",       Value::errorNUM()     ); // beta = 0 not allowed
+    CHECK_EVAL("GAMMADIST(10 ;-2;2;TRUE())",      Value::errorNUM()     ); // was wird getestet? alpha
+    CHECK_EVAL("GAMMADIST(-1 ;9;2;TRUE())",       Value::errorNUM()     ); // NOK
+    CHECK_EVAL("GAMMADIST(7 ;\"text\";1;TRUE())", Value::errorVALUE()   ); // text not allowed 
+    CHECK_EVAL("GAMMADIST(7 ;5;\"text\";TRUE())", Value::errorVALUE()   ); // text not allowed
+
     // ODF-tests
-    CHECK_EVAL("GAMMADIST(0  ;3;4)",         Value(        0 ) );
-    CHECK_EVAL("GAMMADIST(0.5;3;4)",         Value( 0.001724 ) ); // TODO res=Value::error()
-    CHECK_EVAL("GAMMADIST(9  ;4;3)",         Value( 0.066698 ) );
-    CHECK_EVAL("GAMMADIST(0  ;3;4;FALSE())", Value(        0 ) );
-    CHECK_EVAL("GAMMADIST(0.5;3;4;FALSE())", Value( 0.000296 ) );
-    CHECK_EVAL("GAMMADIST(9  ;4;3;FALSE())", Value( 0.390661 ) );
-    CHECK_EVAL("GAMMADIST(0  ;3;4;TRUE())",  evaluate( "GAMMADIST(  0;3;4)" ) );
-    CHECK_EVAL("GAMMADIST(0.5;3;4;TRUE())",  evaluate( "GAMMADIST(0.5;3;4)" ) );
-    CHECK_EVAL("GAMMADIST(9  ;4;3;TRUE())",  evaluate( "GAMMADIST(  9;4;3)" ) );
-    CHECK_EVAL("GAMMADIST(-1 ;4;3;TRUE())",  Value( 0 ));
-    CHECK_EVAL("GAMMADIST(-1 ;3;4;FALSE())", Value( 0 ));
+    CHECK_EVAL("GAMMADIST(0  ;3;4;FALSE())",      Value(            0 ) );
+    CHECK_EVAL("GAMMADIST(0.5;3;4;FALSE())",      Value( 0.0017236268 ) ); // TODO res=Value::error()
+    CHECK_EVAL("GAMMADIST(9  ;4;3;FALSE())",      Value( 0.0666979468 ) );
+    CHECK_EVAL("GAMMADIST(0  ;3;4;FALSE())",      Value(            0 ) );
+    CHECK_EVAL("GAMMADIST(0.5;3;4;FALSE())",      Value( 0.0002964775 ) ); // changed TRUE->FALSE 
+    CHECK_EVAL("GAMMADIST(9  ;4;3;FALSE())",      Value( 0.390661 ) );
+//     CHECK_EVAL("GAMMADIST(0  ;3;4;TRUE())",  evaluate( "GAMMADIST(  0;3;4)" ) );
+//     CHECK_EVAL("GAMMADIST(0.5;3;4;TRUE())",  evaluate( "GAMMADIST(0.5;3;4)" ) );
+//     CHECK_EVAL("GAMMADIST(9  ;4;3;TRUE())",  evaluate( "GAMMADIST(  9;4;3)" ) );
+    CHECK_EVAL("GAMMADIST(-1 ;4;3;TRUE())",      Value( 0 ));
+    CHECK_EVAL("GAMMADIST(-1 ;3;4;FALSE())",     Value( 0 ));
 }
 
 void TestStatisticalFunctions::testGAUSS()

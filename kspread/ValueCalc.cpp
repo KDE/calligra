@@ -32,6 +32,39 @@
 using namespace KSpread;
 
 
+//
+// helper: gammaHelper
+//
+// args[0] = value
+// args[1] = & reflect
+//
+static double GammaHelp( double& x, bool& reflect )
+{
+  double c[6] = { 76.18009173, -86.50532033    , 24.01409822,
+                  -1.231739516,   0.120858003E-2, -0.536382E-5};
+  if (x >= 1.0)
+  {
+     reflect = false;
+     x -= 1.0;
+  }
+  else
+  {
+    reflect = true;
+    x = 1.0 - x;
+  }
+  double res, anum;
+  res = 1.0;
+  anum = x;
+  for (int i = 0; i < 6; i++)
+  {
+    anum += 1.0;
+    res += c[i]/anum;
+  }
+  res *= 2.506628275; // sqrt(2*PI)
+
+  return res;
+}
+
 // Array-walk functions registered on ValueCalc object
 
 void awSum (ValueCalc *c, Value &res, Value val, Value)
@@ -1207,43 +1240,23 @@ Value ValueCalc::gaussinv (Value xx)
   return Value (z);
 }
 
-//helper for GetGamma and GetLogGamma
-static double GammaHelp(double& x, bool& bReflect)
+//
+// GetGamma
+//
+Value ValueCalc::GetGamma ( Value value )
 {
-  double c[6] = {76.18009173, -86.50532033, 24.01409822,
-                 -1.231739516, 0.120858003E-2, -0.536382E-5};
-  if (x >= 1.0)
-    {
-      bReflect = false;
-      x -= 1.0;
-    }
-  else
-    {
-      bReflect = true;
-      x = 1.0 - x;
-    }
-  double s, anum;
-  s = 1.0;
-  anum = x;
-  for (uint i = 0; i < 6; i++)
-    {
-      anum += 1.0;
-      s += c[i]/anum;
-    }
-  s *= 2.506628275;   // sqrt(2*PI)
-  return s;
-}
+  double val = conv()->asFloat (value).asFloat();
 
-Value ValueCalc::GetGamma (Value _x)
-{
-  double x = numToDouble (converter->toFloat (_x));
+  bool reflect;
 
-  bool bReflect;
-  double G = GammaHelp(x, bReflect);
-  G = ::pow(x+5.5,x+0.5)*G/::exp(x+5.5);
-  if (bReflect)
-    G = M_PI*x/(G*::sin(M_PI*x));
-  return Value (G);
+  double gamma = GammaHelp( val, reflect);
+  
+  gamma = ::pow(val+5.5, val+0.5) * gamma/::exp(val+5.5);
+
+  if (reflect)
+    gamma = M_PI*val/(gamma*::sin(M_PI*val));
+
+  return Value( gamma );
 }
 
 Value ValueCalc::GetLogGamma (Value _x)
