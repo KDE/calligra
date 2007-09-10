@@ -47,7 +47,7 @@ static KIcon getIcon(Clef::ClefShape shape)
 static QString getText(Clef::ClefShape shape, int line)
 {
     switch (shape) {
-        case Clef::GClef: return i18nc("Trebble clef", "Trebble");
+        case Clef::GClef: return i18nc("Treble clef", "Treble");
         case Clef::FClef: return i18nc("Bass clef", "Bass");
         case Clef::CClef:
             switch (line) {
