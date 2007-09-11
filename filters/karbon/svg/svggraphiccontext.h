@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003, The Karbon Developers
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,32 +18,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __SVGGRAPHICSCONTEXT_H__
-#define __SVGGRAPHICSCONTEXT_H__
+#ifndef SVGGRAPHICSCONTEXT_H
+#define SVGGRAPHICSCONTEXT_H
 
-#include <core/vfill.h>
-#include <core/vstroke.h>
-#include <core/vfillrule.h>
+#include <KoLineBorder.h>
+#include <QtGui/QBrush>
 
 class SvgGraphicsContext
 {
 public:
-	SvgGraphicsContext()
-	{
-		stroke.setType( VStroke::none ); // default is no stroke
-		stroke.setLineWidth( 1.0 );
-		stroke.setLineCap( VStroke::capButt );
-		stroke.setLineJoin( VStroke::joinMiter );
-		fill.setColor( VColor( Qt::black ) );
-		fillRule = winding;
-		color = Qt::black;
-	}
-	VFill		fill;
-	VFillRule	fillRule;
-	VStroke		stroke;
-	QMatrix	matrix;
-	QFont		font;
-	QColor		color;
+    SvgGraphicsContext()
+    {
+        stroke.setLineStyle( Qt::NoPen, QVector<qreal>() ); // default is no stroke
+        stroke.setLineWidth( 1.0 );
+        stroke.setCapStyle( Qt::FlatCap );
+        stroke.setJoinStyle( Qt::MiterJoin );
+        fill = QBrush( Qt::black ); // default is black fill as per svg spec
+        fillRule = Qt::WindingFill;
+        color = Qt::black;
+    }
+    QBrush       fill;
+    Qt::FillRule fillRule;
+    KoLineBorder stroke;
+    QMatrix      matrix;
+    QFont        font;
+    QColor       color;
 };
 
 #endif

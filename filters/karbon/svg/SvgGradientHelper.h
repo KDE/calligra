@@ -1,0 +1,66 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+
+#ifndef SVGGRADIENTHELPER_H
+#define SVGGRADIENTHELPER_H
+
+#include <QtGui/QGradient>
+#include <QtGui/QConicalGradient>
+#include <QtGui/QLinearGradient>
+#include <QtGui/QRadialGradient>
+
+#include <kdebug.h>
+
+class SvgGradientHelper
+{
+public:
+    SvgGradientHelper();
+    ~SvgGradientHelper();
+    /// Copy constructor
+    SvgGradientHelper( const SvgGradientHelper &other );
+    /// Enables using bounding box units
+    void setBoundboxUnits( bool on );
+    /// Returns state of bounding box units
+    bool boundboxUnits() const;
+
+    /// Sets the gradient
+    void setGradient( QGradient * g );
+    /// Retrurns the gradient
+    QGradient * gradient();
+
+    /// Copies the given gradient
+    void copyGradient( QGradient * g );
+
+    /// Returns fill adjusted to the given bounding box
+    QBrush adjustedFill( const QRectF &bound );
+
+    /// Returns the gradient transformation
+    QMatrix transform() const;
+    /// Sets the gradient transformation
+    void setTransform( const QMatrix &transform );
+
+    /// Assigment operator
+    SvgGradientHelper & operator = ( const SvgGradientHelper & rhs );
+private:
+    QGradient * m_gradient;
+    bool m_bbox;
+    QMatrix m_gradientTransform;
+};
+
+#endif // SVGGRADIENTHELPER_H

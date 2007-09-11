@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,88 +18,80 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __SVGIMPORT_H__
-#define __SVGIMPORT_H__
+#ifndef SVGIMPORT_H
+#define SVGIMPORT_H
 
-#include <KoFilter.h>
-#include <qdom.h>
-#include <QMap>
-#include <q3ptrstack.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <core/vdocument.h>
-#include <core/vgradient.h>
-#include <core/vfill.h>
-#include <core/vstroke.h>
-#include <core/vfillrule.h>
+#include "SvgGradientHelper.h"
 #include "svggraphiccontext.h"
 
-#include <vobject.h>
+#include <core/vdocument.h>
 
-class VGroup;
-class VPath;
+#include <KoFilter.h>
+
+#include <QtGui/QGradient>
+#include <QtCore/QMap>
+#include <QtCore/QStack>
+#include <QtCore/QVariant>
+
+class KoShape;
+class KoShapeContainer;
+class KoShapeGroup;
 
 class SvgImport : public KoFilter
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	SvgImport(QObject* parent, const QStringList&);
-	virtual ~SvgImport();
+    SvgImport(QObject* parent, const QVariantList&);
+    virtual ~SvgImport();
 
-	virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
 
 protected:
-	class GradientHelper
-	{
-	public:
-		GradientHelper()
-		{
-			bbox = true;
-		}
-		VGradient	gradient;
-		bool		bbox;
-		QMatrix	gradientTransform;
-	};
 
-	void parseGroup( VGroup *, const QDomElement & );
-	void parseDefs( const QDomElement & );
-	void parseUse( VGroup *, const QDomElement & );
-	void parseStyle( VObject *, const QDomElement & );
-	void parsePA( VObject *, SvgGraphicsContext *, const QString &, const QString & );
-	void parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
-	void parseColorStops( VGradient *, const QDomElement & );
-	double parseUnit( const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect() );
-	void parseColor( VColor &, const QString & );
-	QColor parseColor( const QString & );
-	double toPercentage( QString );
-	double fromPercentage( QString );
-	void setupTransform( const QDomElement & );
-	void addGraphicContext();
-	QDomDocument inpdoc;
-	QDomDocument outdoc;
-	void convert();
-	void createObject( VGroup *grp, const QDomElement &, VObject::VState state = VObject::normal, const QDomElement &style = QDomElement() );
-	void createText( VGroup *, const QDomElement & );
-	void parseFont( const QDomElement & );
-	// find object with given id in document
-	VObject* findObject( const QString &name );
-	// find object with given id in given group
-	VObject* findObject( const QString &name, VGroup * );
-	// find gradient with given id in gradient map
-	GradientHelper* findGradient( const QString &id, const QString &href = 0 );
+    QList<KoShape*> parseGroup( const QDomElement & );
+    void parseDefs( const QDomElement & );
+    QList<KoShape*> parseUse( const QDomElement & );
+    void parseStyle( KoShape *, const QDomElement & );
+    void parsePA( KoShape *, SvgGraphicsContext *, const QString &, const QString & );
+    void parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
+    void parseColorStops( QGradient *, const QDomElement & );
+    double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
+    void parseColor( QColor &, const QString & );
+    QColor parseColor( const QString & );
+    QMatrix parseTransform( const QString &transform );
 
-	// Determine scaling factor from given matrix
-	double getScalingFromMatrix( QMatrix &matrix );
+    double toPercentage( QString );
+    double fromPercentage( QString );
+    void setupTransform( const QDomElement & );
+    void addGraphicContext();
+    void removeGraphicContext();
+    void convert();
+    KoShape * createObject( const QDomElement &, const QDomElement &style = QDomElement() );
+    //void createText( KoShapeContainer *, const QDomElement & );
+    void parseFont( const QDomElement & );
+    // find object with given id in document
+    KoShape * findObject( const QString &name );
+    // find object with given id in given group
+    KoShape * findObject( const QString &name, KoShapeContainer * );
+    // find gradient with given id in gradient map
+    SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
 
-	QDomElement mergeStyles( const QDomElement &, const QDomElement & );
+    // Determine scaling factor from given matrix
+    double getScalingFromMatrix( QMatrix &matrix );
 
+    QDomElement mergeStyles( const QDomElement &, const QDomElement & );
+
+    void addToGroup( QList<KoShape*> shapes, KoShapeGroup * group );
+
+    int nextZIndex();
 private:
-	VDocument						m_document;
-	Q3PtrStack<SvgGraphicsContext>	m_gc;
-	QMap<QString, GradientHelper>	m_gradients;
-	QMap<QString, QDomElement>		m_defs;
-	KoRect							m_outerRect;
+    VDocument                      m_document;
+    QStack<SvgGraphicsContext*>    m_gc;
+    QMap<QString, SvgGradientHelper>  m_gradients;
+    QMap<QString, QDomElement>     m_defs;
+    QRectF                         m_outerRect;
+    QDomDocument inpdoc;
 };
 
 #endif

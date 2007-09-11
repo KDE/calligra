@@ -6,3 +6,5 @@ SVG import
 - units (cm, mm)
 - trafo's
 - fix text
+- embedded svg elements
+- visibility

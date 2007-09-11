@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/karbon/visitors ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
@@ -13,54 +13,20 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-#set(karbonsvgimport_PART_SRCS svgimport.cc )
+set(SHAPES_SOURCES ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ )
 
-#kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
+set(karbonsvgimport_PART_SRCS 
+    svgimport.cc
+    SvgGradientHelper.cpp
+    ${SHAPES_SOURCES}/ellipse/KoEllipseShape.cpp 
+    ${SHAPES_SOURCES}/rectangle/KoRectangleShape.cpp)
 
-#target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
+kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
 
-#install(TARGETS karbonsvgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
+
+install(TARGETS karbonsvgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-#install( FILES  karbon_svg_export.desktop karbon_svg_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  karbon_svg_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-
-
-
-#original Makefile.am contents follow:
-
-#kde_module_LTLIBRARIES = libkarbonsvgexport.la libkarbonsvgimport.la
-#
-#libkarbonsvgexport_la_LDFLAGS = $(KDE_PLUGIN)
-#libkarbonsvgexport_la_LIBADD = \
-#	$(LIB_KOGUIUTILS) \
-#	../../../karbon/libkarboncommon.la
-#
-#libkarbonsvgimport_la_LDFLAGS = $(KDE_PLUGIN)
-#libkarbonsvgimport_la_LIBADD = \
-#	$(LIB_KOGUIUTILS) \
-#	../../../karbon/libkarboncommon.la
-#
-#INCLUDES = \
-#	$(KOFFICE_INCLUDES) \
-#	$(KOPAINTER_INCLUDES) \
-#	-I$(top_srcdir)/karbon \
-#	-I$(top_srcdir)/karbon/core \
-#	-I$(top_srcdir)/karbon/visitors \
-#	$(all_includes)
-#
-#service_DATA = karbon_svg_export.desktop karbon_svg_import.desktop
-#servicedir = $(kde_servicesdir)
-#
-#noinst_HEADERS = \
-#	svgexport.h
-#
-#libkarbonsvgexport_la_SOURCES = \
-#	svgexport.cc
-#
-#METASOURCES = AUTO
-#
-#libkarbonsvgimport_la_SOURCES = \
-#	svgimport.cc
-#
+install( FILES  karbon_svg_export.desktop karbon_svg_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
