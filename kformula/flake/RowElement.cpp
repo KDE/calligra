@@ -36,8 +36,6 @@ RowElement::~RowElement()
 
 void RowElement::layout( const AttributeManager* am )
 {
-    kDebug(39001) <<"layout Row";
-
     Q_UNUSED( am )          // there are no attributes that can be processed here
 
     if( m_childElements.isEmpty() )  // do not do anything if there are no children
@@ -47,11 +45,12 @@ void RowElement::layout( const AttributeManager* am )
     double width = 0.0;
     double topToBaseline = 0.0;
     double baselineToBottom = 0.0;
-    foreach( BasicElement* child, m_childElements  )  // iterate through the children
+    foreach( BasicElement* child, m_childElements ) // iterate through the children and
+        topToBaseline = qMax( topToBaseline, child->baseLine() );  // find max baseline
+
+    foreach( BasicElement* child, m_childElements )  // iterate through the children
     {
-        kDebug(39001) <<"new origin:" << QPointF( width, 0.0 );
-        child->setOrigin( QPointF( width, 0.0 ) );    // set their origin
-        topToBaseline = qMax( topToBaseline, child->baseLine() );
+        child->setOrigin( QPointF( width, topToBaseline - child->baseLine() ) );
         baselineToBottom = qMax( baselineToBottom, child->height()-child->baseLine() );
         width += child->width();       // add their width
     }
