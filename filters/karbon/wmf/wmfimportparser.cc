@@ -150,7 +150,7 @@ void WMFImportParser::setWindowOrg( int left, int top ) {
 
 void WMFImportParser::setWindowExt( int width, int height ) {
     // the wmf file can change width/height during the drawing
-    if ( (width != 0) && (height != 0) ) {  
+    if ( (width != 0) && (height != 0) ) {
         mScaleX = mDoc->pageSize().width() / (double)width;
         mScaleY = mDoc->pageSize().height() / (double)height;
     }
@@ -192,6 +192,7 @@ void WMFImportParser::drawRect( int left, int top, int width, int height ) {
     KoRectangleShape * rectangle = new KoRectangleShape();
     rectangle->setPosition( QPointF( coordX(left), coordY(top) ) );
     rectangle->setSize( QSizeF( scaleW(width), scaleH(height) ) );
+    rectangle->setScale( width < 0 ? -1.0 : 1.0, height < 0 ? -1.0 : 1.0 );
 
     appendPen( *rectangle );
     appendBrush( *rectangle );
@@ -204,10 +205,9 @@ void WMFImportParser::drawRoundRect( int left, int top, int width, int height, i
     KoRectangleShape * rectangle = new KoRectangleShape();
     rectangle->setPosition( QPointF( coordX(left), coordY(top) ) );
     rectangle->setSize( QSizeF( scaleW(width), scaleH(height) ) );
-    double radiusX = 100.0 * roundw / (0.5*rectangle->size().width());
-    rectangle->setCornerRadiusX( radiusX );
-    double radiusY = 100.0 * roundh / (0.5*rectangle->size().height());
-    rectangle->setCornerRadiusX( radiusY );
+    rectangle->setCornerRadiusX( 2.0 * qAbs( roundw )  );
+    rectangle->setCornerRadiusY( 2.0 * qAbs( roundh ) );
+    rectangle->setScale( width < 0 ? -1.0 : 1.0, height < 0 ? -1.0 : 1.0 );
 
     appendPen( *rectangle );
     appendBrush( *rectangle );
@@ -220,6 +220,7 @@ void WMFImportParser::drawEllipse( int left, int top, int width, int height ) {
     KoEllipseShape *ellipse = new KoEllipseShape();
     ellipse->setPosition( QPointF( coordX(left), coordY(top) ) );
     ellipse->setSize( QSizeF( scaleW(width), scaleH(height) ) );
+    ellipse->setScale( width < 0 ? -1.0 : 1.0, height < 0 ? -1.0 : 1.0 );
 
     appendPen( *ellipse );
     appendBrush( *ellipse );
@@ -239,6 +240,7 @@ void WMFImportParser::drawArc( int x, int y, int w, int h, int aStart, int aLen 
     arc->setEndAngle( end );
     arc->setPosition( QPointF( coordX(x), coordY(y) ) );
     arc->setSize( QSizeF( scaleW(w), scaleH(h) ) );
+    arc->setScale( w < 0 ? -1.0 : 1.0, h < 0 ? -1.0 : 1.0 );
 
     appendPen( *arc );
     //appendBrush( *arc );
@@ -258,6 +260,7 @@ void WMFImportParser::drawPie( int x, int y, int w, int h, int aStart, int aLen 
     pie->setEndAngle( end );
     pie->setPosition( QPointF( coordX(x), coordY(y) ) );
     pie->setSize( QSizeF( scaleW(w), scaleH(h) ) );
+    pie->setScale( w < 0 ? -1.0 : 1.0, h < 0 ? -1.0 : 1.0 );
 
     appendPen( *pie );
     appendBrush( *pie );
@@ -277,6 +280,7 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
     chord->setEndAngle( end );
     chord->setPosition( QPointF( coordX(x), coordY(y) ) );
     chord->setSize( QSizeF( scaleW(w), scaleH(h) ) );
+    chord->setScale( w < 0 ? -1.0 : 1.0, h < 0 ? -1.0 : 1.0 );
 
     appendPen( *chord );
     appendBrush( *chord );
@@ -333,7 +337,9 @@ void WMFImportParser::drawImage( int , int , const QImage &, int , int , int , i
 }
 
 
-void WMFImportParser::drawText( int , int , int , int , int , const QString& , double ) {}
+void WMFImportParser::drawText( int , int , int , int , int , const QString& , double ) {
+    kDebug() << "importing text is not supported";
+}
 
 
 //-----------------------------------------------------------------------------
