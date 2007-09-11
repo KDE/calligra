@@ -23,6 +23,7 @@
 #include <QList>
 #include <QMap>
 #include <QObject>
+#include <QPair>
 #include <QTimeLine>
 
 #include <KoZoomHandler.h>
@@ -39,6 +40,7 @@ class KoPAPageBase;
 class KoPAView;
 class KPrPageEffect;
 class KPrPageEffectRunner;
+class KPrAnimationData;
 class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject
@@ -76,15 +78,12 @@ public:
     bool shapeShown( KoShape * shape );
 
     /**
-     * Animate the shape by manipulating the painter matrix
-     *
-     * This checks if the shape has to be animated and if so it 
-     * manipulated the painter.
+     * Get the animation for the shape
      *
      * @param shape which should be animated
-     * @painter painter to manipulate the shape position
+     * @return pair of the animation and the animation data for the shape or a 0, 0 if there is no animation
      */
-    KPrShapeAnimation * shapeAnimation( KoShape * shape );
+    QPair<KPrShapeAnimation *, KPrAnimationData *> shapeAnimation( KoShape * shape );
 
 protected:
     // set the page to be shon and update the UI
@@ -132,7 +131,7 @@ private:
     KPrPageEffectRunner * m_pageEffectRunner;
     // TODO remove when we read the effect from the page
     KPrCoverDownEffect m_pageEffect;
-    QMap<KoShape *, KPrShapeAnimation *> m_animations;
+    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> > m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;
     int m_stepIndex;

@@ -17,25 +17,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATIONDISAPPEAR_H
-#define KPRANIMATIONDISAPPEAR_H
+#ifndef KPRTRANSLATEANIMATION_H
+#define KPRTRANSLATEANIMATION_H
 
 #include "KPrShapeAnimation.h"
 
-#include <QPointF>
-#include <QRectF>
-
-class KPrAnimationDisappear : public KPrShapeAnimation
+/**
+ * This is the base class for all animations which are animated by
+ * translating the painter.
+ */
+class KPrTranslateAnimation : public KPrShapeAnimation
 {
 public:
-    KPrAnimationDisappear( KoShape * shape, int step );
-    virtual ~KPrAnimationDisappear();
+    KPrTranslateAnimation( KoShape * shape, int step, Type type );
+    virtual ~KPrTranslateAnimation();
 
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas );
+    /// reimplemented
+    virtual KPrAnimationData * animationData( KoCanvasBase * canvas ) = 0;
+    /// reimplemented
     virtual bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData );
+    /// reimplemented
     virtual void animateRect( QRectF & rect, KPrAnimationData * animationData );
-    virtual void next( int currentTime, KPrAnimationData * animationData );
-    virtual void finish( KPrAnimationData * animationData );
+    /// reimplemented
+    virtual void next( int currentTime, KPrAnimationData * animationData ) = 0;
+    /// reimplemented
+    virtual void finish( KPrAnimationData * animationData ) = 0;
 };
 
-#endif /* KPRANIMATIONDISAPPEAR_H */
+#endif /* KPRTRANSLATEANIMATION_H */

@@ -29,7 +29,18 @@ class QRectF;
 class KoShape;
 class KoCanvasBase;
 class KoViewConverter;
+class KPrAnimationData;
 
+/**
+ * This is the base class for shape animations.
+ *
+ * In the animtion itself the state of the animation is not stored.
+ * With this design it is possible to use the same animation object 
+ * for running the same animation e.g. on different views or at a 
+ * different time.
+ * The state of the animation is kept in the animationData and is 
+ * passed to the ainmation when it is run e.g. on a special view.
+ */
 class KPRESENTER_TEST_EXPORT KPrShapeAnimation
 {
 public:
@@ -42,37 +53,54 @@ public:
     virtual ~KPrShapeAnimation();
 
     /**
+     * Get a animation data object
+     *
+     * The object is created on the heap by new so the caller of this function
+     * has to make sure to delete the object when he no longer needs it to 
+     * avoid leaking memory. The object holds the data needed for running an 
+     * animation.
+     *
+     * @param canvas The canvas on which the animation will take place
+     * @return animationData the caller has to delete the animationData when
+     *                       it is no longer used.
+     */
+    virtual KPrAnimationData * animationData( KoCanvasBase * canvas ) = 0;
+
+    /**
      * @brief Animate the shape
      *
      * This is done by maniplating the painter used for painting the shape.
      *
      * @param painter The painter used for painting the shape
+     * @param converter The converter to convert between internal and view coordinates
+     * @param animationData The data needed for running the animation
      *
      * @return true when the animations is finished
      */
-    virtual bool animate( QPainter &painter, const KoViewConverter &converter ) = 0;
+    virtual bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData ) = 0;
 
     /**
      * @brief Update the bounding rect of the shape in the animation
      *
      * @param rect The bounding rect of the shape to update
+     * @param animationData The data needed for running the animation
      */
-    virtual void animateRect( QRectF & rect ) = 0;
+    virtual void animateRect( QRectF & rect, KPrAnimationData * animationData ) = 0;
 
     /**
      * @brief Trigger an update of the canvas needed for the given time
      *
      * @param currentTime
-     * @param canvas The canvas on which the animation is shown
+     * @param animationData The data needed for running the animation
      */
-    virtual void next( int currentTime, KoCanvasBase * canvas ) = 0;
+    virtual void next( int currentTime, KPrAnimationData * animationData ) = 0;
 
     /**
      * @brief Finish the shape animation
      *
-     * @param canvas The canvas on which the animation is shown
+     * @param animationData The data needed for running the animation
      */
-    virtual void finish( KoCanvasBase * canvas ) = 0;
+    virtual void finish( KPrAnimationData * animationData ) = 0;
 
     /**
      * Get the duration of the shape animation

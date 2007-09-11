@@ -17,22 +17,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATIONMOVEAPPEAR_H
-#define KPRANIMATIONMOVEAPPEAR_H
-
 #include "KPrTranslateAnimation.h"
 
-#include <QRectF>
+#include <QPainter>
 
-class KPrAnimationMoveAppear : public KPrTranslateAnimation
+#include <KoViewConverter.h>
+
+#include "KPrAnimationData.h"
+
+KPrTranslateAnimation::KPrTranslateAnimation( KoShape * shape, int step, Type type )
+: KPrShapeAnimation( shape, step, type )
 {
-public:
-    KPrAnimationMoveAppear( KoShape * shape, int step );
-    virtual ~KPrAnimationMoveAppear();
+}
 
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas );
-    virtual void next( int currentTime, KPrAnimationData * animationData );
-    virtual void finish( KPrAnimationData * animationData );
-};
+KPrTranslateAnimation::~KPrTranslateAnimation()
+{
+}
 
-#endif /* KPRANIMATIONMOVEAPPEAR_H */
+bool KPrTranslateAnimation::animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData )
+{
+    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
+    Q_ASSERT( data );
+    painter.translate( converter.documentToView( data->m_translate ) );
+    return data->m_finished;
+}
+
+void KPrTranslateAnimation::animateRect( QRectF & rect, KPrAnimationData * animationData )
+{
+    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
+    Q_ASSERT( data );
+    rect.translate( data->m_translate );
+}

@@ -25,33 +25,71 @@
 class MockAppearAnimation : public KPrShapeAnimation
 {
 public:
-	MockAppearAnimation( KoShape * shape, int step )
-    : KPrShapeAnimation( shape, step, Appear )        
+    MockAppearAnimation( KoShape * shape, int step )
+    : KPrShapeAnimation( shape, step, Appear )
     {}
 
-    bool animate( QPainter &painter, const KoViewConverter &converter ) { Q_UNUSED( painter ); Q_UNUSED( converter ); return true; }
+    KPrAnimationData * animationData( KoCanvasBase * canvas ) { Q_UNUSED( canvas ); return 0; }
 
-    void animateRect( QRectF & rect ) { Q_UNUSED( rect ); }
+    bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData )
+    {
+        Q_UNUSED( painter );
+        Q_UNUSED( converter );
+        Q_UNUSED( animationData );
+        return true;
+    }
 
-    void next( int currentTime, KoCanvasBase * canvas ) { Q_UNUSED( currentTime ); Q_UNUSED( canvas ); }
-    
-    void finish( KoCanvasBase * canvas ) { Q_UNUSED(canvas); }
+    void animateRect( QRectF & rect, KPrAnimationData * animationData )
+    {
+        Q_UNUSED( rect );
+        Q_UNUSED( animationData );
+    }
+
+    void next( int currentTime, KPrAnimationData * animationData )
+    {
+        Q_UNUSED( currentTime );
+        Q_UNUSED( animationData );
+    }
+
+    void finish( KPrAnimationData * animationData )
+    {
+        Q_UNUSED(animationData);
+    }
 };
 
 class MockDisappearAnimation : public KPrShapeAnimation
 {
 public:
-	MockDisappearAnimation( KoShape * shape, int step )
-    : KPrShapeAnimation( shape, step, Disappear )        
+    MockDisappearAnimation( KoShape * shape, int step )
+    : KPrShapeAnimation( shape, step, Disappear )
     {}
 
-    bool animate( QPainter &painter, const KoViewConverter &converter ) { Q_UNUSED( painter ); Q_UNUSED( converter ); return true; }
+    KPrAnimationData * animationData( KoCanvasBase * canvas ) { Q_UNUSED( canvas ); return 0; }
 
-    void animateRect( QRectF & rect ) { Q_UNUSED( rect ); }
+    bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData )
+    {
+        Q_UNUSED( painter );
+        Q_UNUSED( converter );
+        Q_UNUSED( animationData );
+        return true;
+    }
 
-    void next( int currentTime, KoCanvasBase * canvas ) { Q_UNUSED( currentTime ); Q_UNUSED( canvas ); }
-    
-    void finish( KoCanvasBase * canvas ) { Q_UNUSED(canvas); }
+    void animateRect( QRectF & rect, KPrAnimationData * animationData )
+    {
+        Q_UNUSED( rect );
+        Q_UNUSED( animationData );
+    }
+
+    void next( int currentTime, KPrAnimationData * animationData )
+    {
+        Q_UNUSED( currentTime );
+        Q_UNUSED( animationData );
+    }
+
+    void finish( KPrAnimationData * animationData )
+    {
+        Q_UNUSED(animationData);
+    }
 };
 
 

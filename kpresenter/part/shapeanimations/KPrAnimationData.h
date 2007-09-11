@@ -17,25 +17,42 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRANIMATIONDISAPPEAR_H
-#define KPRANIMATIONDISAPPEAR_H
+#ifndef KPRANIMATIONDATA_H
+#define KPRANIMATIONDATA_H
 
-#include "KPrShapeAnimation.h"
-
-#include <QPointF>
+#include <QTimeLine>
 #include <QRectF>
+#include <QPointF>
 
-class KPrAnimationDisappear : public KPrShapeAnimation
+class KoCanvasBase;
+
+class KPrAnimationData
 {
 public:
-    KPrAnimationDisappear( KoShape * shape, int step );
-    virtual ~KPrAnimationDisappear();
+    KPrAnimationData( KoCanvasBase * canvas, QRectF boundingRect )
+    : m_canvas( canvas )
+    , m_boundingRect( boundingRect )
+    , m_finished( false )
+    {}
 
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas );
-    virtual bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData );
-    virtual void animateRect( QRectF & rect, KPrAnimationData * animationData );
-    virtual void next( int currentTime, KPrAnimationData * animationData );
-    virtual void finish( KPrAnimationData * animationData );
+    virtual ~KPrAnimationData() {}
+
+    KoCanvasBase * m_canvas;
+    QTimeLine m_timeLine;
+    QRectF m_boundingRect;
+    bool m_finished;
 };
 
-#endif /* KPRANIMATIONDISAPPEAR_H */
+class KPrAnimationDataTranslate : public KPrAnimationData
+{
+public:
+    KPrAnimationDataTranslate( KoCanvasBase * canvas, QRectF boundingRect )
+    : KPrAnimationData( canvas, boundingRect )
+    {}
+
+    virtual ~KPrAnimationDataTranslate() {}
+
+    QPointF m_translate;
+};
+
+#endif /* KPRANIMATIONDATA_H */

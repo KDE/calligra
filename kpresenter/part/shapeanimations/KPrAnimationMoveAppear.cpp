@@ -25,45 +25,47 @@
 #include <KoViewConverter.h>
 #include <kdebug.h>
 
+#include "KPrAnimationData.h"
+
 #define TIMEFACTOR 1000.0
 
 KPrAnimationMoveAppear::KPrAnimationMoveAppear( KoShape * shape, int step )
-: KPrShapeAnimation( shape, step, Appear )
+: KPrTranslateAnimation( shape, step, Appear )
 {
-    // TODO use bounding rect + shadow
-    m_shapeRect = m_shape->boundingRect();
-    double x = m_shapeRect.x() + m_shapeRect.width();
-    m_translate = QPointF( -x, 0 );
-    m_timeLine.setFrameRange( int( -x * TIMEFACTOR ), 0 );
 }
 
 KPrAnimationMoveAppear::~KPrAnimationMoveAppear()
 {
 }
 
-bool KPrAnimationMoveAppear::animate( QPainter &painter, const KoViewConverter &converter )
+KPrAnimationData * KPrAnimationMoveAppear::animationData( KoCanvasBase * canvas )
 {
-    painter.translate( converter.documentToView( m_translate ) );
-    return m_finished;
+    KPrAnimationDataTranslate * data = new KPrAnimationDataTranslate( canvas, m_shape->boundingRect() );
+    // TODO use bounding rect + shadow
+    double x = data->m_boundingRect.x() + data->m_boundingRect.width();
+    data->m_translate = QPointF( -x, 0 );
+    data->m_timeLine.setDuration( 5000 );
+    data->m_timeLine.setCurveShape( QTimeLine::LinearCurve );
+    data->m_timeLine.setFrameRange( int( -x * TIMEFACTOR ), 0 );
+    return data;
 }
 
-void KPrAnimationMoveAppear::animateRect( QRectF & rect )
+void KPrAnimationMoveAppear::next( int currentTime, KPrAnimationData * animationData )
 {
-    rect.translate( m_translate );
+    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
+    Q_ASSERT( data );
+    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
+    data->m_translate.setX( data->m_timeLine.frameForTime( currentTime ) / TIMEFACTOR );
+    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
+    data->m_finished = data->m_translate.x() == 0;
+    kDebug() << currentTime << data->m_translate << data->m_finished << data->m_boundingRect;
 }
 
-void KPrAnimationMoveAppear::next( int currentTime, KoCanvasBase * canvas )
+void KPrAnimationMoveAppear::finish( KPrAnimationData * animationData )
 {
-    canvas->updateCanvas( m_shapeRect.translated( m_translate ) );
-    m_translate.setX( m_timeLine.frameForTime( currentTime ) / TIMEFACTOR );
-    canvas->updateCanvas( m_shapeRect.translated( m_translate ) );
-    m_finished = m_translate.x() == 0;
-    kDebug() << currentTime << m_translate << m_finished << m_shapeRect;
-}
-
-void KPrAnimationMoveAppear::finish( KoCanvasBase * canvas )
-{
-    canvas->updateCanvas( m_shapeRect.translated( m_translate ) );
-    m_translate.setX( 0 );
-    canvas->updateCanvas( m_shapeRect );
+    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
+    Q_ASSERT( data );
+    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
+    data->m_translate.setX( 0 );
+    data->m_canvas->updateCanvas( data->m_boundingRect );
 }

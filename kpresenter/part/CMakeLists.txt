@@ -29,6 +29,7 @@ set( kpresenterprivate_LIB_SRCS
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrCoverDownEffect.cpp
      shapeanimations/KPrShapeAnimation.cpp
+     shapeanimations/KPrTranslateAnimation.cpp
      shapeanimations/KPrAnimationMoveAppear.cpp
      shapeanimations/KPrAnimationDisappear.cpp
    )

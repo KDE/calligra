@@ -35,6 +35,7 @@
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "pageeffects/KPrCoverDownEffect.h"
+#include "shapeanimations/KPrAnimationData.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
 KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages )
@@ -59,9 +60,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
     // TODO also set for the master shape manager
     m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), this ) );
 
-    QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.begin() );
+    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
     for ( ; it != m_animations.end(); ++it ) {
-        KPrShapeAnimation * animation = it.value();
+        KPrShapeAnimation * animation = it.value().first;
         if ( animation ) {
             startTimeLine( m_maxShapeDuration );
             break;
@@ -90,9 +91,9 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
             m_pageEffectRunner = 0;
 
             // check if there where a animation to start
-            QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.begin() );
+            QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
             for ( ; it != m_animations.end(); ++it ) {
-                KPrShapeAnimation * animation = it.value();
+                KPrShapeAnimation * animation = it.value().first;
                 if ( animation ) {
                     // if the pageeffect was ended by a keypress also end the animations of
                     // step 0
@@ -181,14 +182,14 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
 
 bool KPrAnimationDirector::shapeShown( KoShape * shape )
 {
-    return !m_animations.contains( shape ) || m_animations[shape] != 0;
+    return !m_animations.contains( shape ) || m_animations[shape].first != 0;
 }
 
-KPrShapeAnimation * KPrAnimationDirector::shapeAnimation( KoShape * shape )
+QPair<KPrShapeAnimation *, KPrAnimationData *> KPrAnimationDirector::shapeAnimation( KoShape * shape )
 {
-    QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.find( shape ) );
+    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.find( shape ) );
 
-    return ( it != m_animations.end() ) ? it.value() : 0;
+    return ( it != m_animations.end() ) ? it.value() : QPair<KPrShapeAnimation *, KPrAnimationData *>( 0, 0 );
 }
 
 
@@ -252,18 +253,28 @@ bool KPrAnimationDirector::nextStep()
 
 void KPrAnimationDirector::updateAnimations()
 {
+    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
+    for ( ; it != m_animations.end(); ++it ) {
+        delete it.value().second;
+    }
     m_animations.clear();
     // TODO also get the animations for the master page
     KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( m_pages[m_pageIndex] );
     Q_ASSERT( controller );
     if ( m_steps.size() > m_stepIndex ) {
-        m_animations = controller->animations().animations( m_steps[m_stepIndex] );
+        QMap<KoShape *, KPrShapeAnimation *> animations = controller->animations().animations( m_steps[m_stepIndex] );
         m_maxShapeDuration = 0;
-        QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.begin() );
-        for ( ; it != m_animations.end(); ++it ) {
+        QMap<KoShape *, KPrShapeAnimation *>::iterator it( animations.begin() );
+        for ( ; it != animations.end(); ++it ) {
             KPrShapeAnimation * animation = it.value();
-            if ( animation && animation->duration() > m_maxShapeDuration ) {
-                m_maxShapeDuration = animation->duration();
+            if ( animation ) {
+                m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas ) ) );
+                if ( animation->duration() > m_maxShapeDuration ) {
+                    m_maxShapeDuration = animation->duration();
+                }
+            }
+            else {
+                m_animations.insert( it.key(), QPair<KPrShapeAnimation *, KPrAnimationData *>( 0, 0 ) );
             }
         }
         kDebug() << "animations:" << m_animations.size();
@@ -282,11 +293,12 @@ void KPrAnimationDirector::animate()
 
 void KPrAnimationDirector::finishAnimations()
 {
-    QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.begin() );
+    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
     for ( ; it != m_animations.end(); ++it ) {
-        KPrShapeAnimation * animation = it.value();
+        KPrShapeAnimation * animation = it.value().first;
         if ( animation ) {
-            animation->finish( m_canvas );
+            animation->finish( it.value().second );
+            //TODO for shapes on master pages a different shape manager has to be used
             m_canvas->shapeManager()->notifyShapeChanged( it.key() );
         }
     }
@@ -295,11 +307,11 @@ void KPrAnimationDirector::finishAnimations()
 
 void KPrAnimationDirector::animateShapes( int currentTime )
 {
-    QMap<KoShape *, KPrShapeAnimation *>::iterator it( m_animations.begin() );
+    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
     for ( ; it != m_animations.end(); ++it ) {
-        KPrShapeAnimation * animation = it.value();
+        KPrShapeAnimation * animation = it.value().first;
         if ( animation ) {
-            animation->next( currentTime, m_canvas );
+            animation->next( currentTime, it.value().second );
             m_canvas->shapeManager()->notifyShapeChanged( it.key() );
         }
     }
