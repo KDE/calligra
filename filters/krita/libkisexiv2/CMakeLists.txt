@@ -9,4 +9,5 @@ set(libkisexiv2_LIB_SRCS
 kde4_add_library(kisexiv2 SHARED ${libkisexiv2_LIB_SRCS})
 
 target_link_libraries(kisexiv2 kritaimage exiv2)
+set_target_properties(kisexiv2 PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kisexiv2 DESTINATION ${LIB_INSTALL_DIR})
