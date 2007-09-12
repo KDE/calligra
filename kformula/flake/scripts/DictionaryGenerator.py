@@ -22,8 +22,11 @@
 """
 This script generates the Dictionaty.cpp file which serves as an operator dictionary.
 The source of information for generation is the operator.list file. This is copied
-from the appendix of the MathML spec with whitespace striped.
-The second 
+from the appendix of the MathML spec with whitespace striped. The url is:
+http://www.w3.org/TR/2003/REC-MathML2-20031021/appendixf.html .
+Further this script generates the entity mapping which maps MathML entities to unicode
+characters. The raw data in entities.list is taken from the MathML specification
+http://www.w3.org/TR/2003/REC-MathML2-20031021/byalpha.html .
 """
 
 import codecs
@@ -72,11 +75,19 @@ Dictionary::Dictionary()
     m_movablelimits = false;
     m_accent = false;
 }
-
 '''
 
-#def write_entity_mapping( file ):
-
+def write_entity_mapping( file ):
+	print >> file, 'QChar Dictionary::mapEntity( const QString& entity )'
+	print >> file, '{\n    if( entity.isEmpty() ) return QChar();'
+	entity_list = open( 'entities.list' )
+	for line in entity_list:
+		tokens = line.split( ',' )
+		if tokens[ 1 ].find( '-' ) > -1 :
+			continue
+                file.write( '    else if( entity == "' + tokens[ 0 ] + '" ) return QChar( 0x' )
+                file.write( tokens[ 1 ].strip()[1:]  +  ' );\n' )
+	print >> file, '    else return QChar();\n}\n'
 
 def write_operator_dictionary( file ):
 	print >> file, 'bool Dictionary::queryOperator( const QString& queriedOperator, Form form )'
@@ -108,6 +119,6 @@ def parse_token( token ):
 if __name__ == '__main__':
 	source_file = codecs.open( '../Dictionary.cpp', 'w', 'utf-8' )
 	write_file_header( source_file )
-     #   write_entity_mapping( source_file )
+        write_entity_mapping( source_file )
 	write_operator_dictionary( source_file )
 	source_file.close()

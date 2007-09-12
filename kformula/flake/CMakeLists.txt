@@ -15,7 +15,6 @@ set( kformulalib_PART_SRCS
    GlyphElement.cpp
    IdentifierElement.cpp
    OperatorElement.cpp
-   OperatorDictionary.cpp
    Entities.cpp
    ElementFactory.cpp 
    MultiscriptElement.cpp
@@ -34,6 +33,8 @@ set( kformulalib_PART_SRCS
    NumberElement.cpp
    StringElement.cpp
    PhantomElement.cpp
+   SquareRootElement.cpp
+   Dictionary.cpp
 )
 
 
