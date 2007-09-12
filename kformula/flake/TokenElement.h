@@ -53,13 +53,13 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am );
 
     /**
      * Implement the cursor behaviour for the element
@@ -73,10 +73,10 @@ protected:
     bool readMathMLContent( const KoXmlElement& parent );
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    virtual void writeMathMLContent( KoXmlWriter* writer ) const;
+    void writeMathMLContent( KoXmlWriter* writer ) const;
 
-    /// @return The string to be painted - probably a parsed rawString
-    virtual QString stringToRender( const QString& rawString ) const;
+    /// Process @p raw and render it to @p path
+    virtual void renderToPath( const QString& raw, QPainterPath& path ) const = 0;
 
 private:
     /// The raw string like it is read and written from MathML

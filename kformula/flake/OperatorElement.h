@@ -21,23 +21,30 @@
 #define OPERATORELEMENT_H
 
 #include "TokenElement.h"
+#include "AttributeManager.h"
 #include "kformula_export.h"
 
 /**
  * @short Implementation of the MathML mo element
  *
- * 
+ * The mo element uses the Dictionary class to look up the attributes of the single
+ * operator. Processed in the renderToPath method the operator element renders its
+ * contents to the path. It also respects the right and left spaces. 
  */
 class KOFORMULA_EXPORT OperatorElement : public TokenElement {
 public:
     /// The standart constructor
     OperatorElement( BasicElement* parent = 0 );
 
-    /// @return The string to be painted - probably a parsed rawString
-    QString stringToRender( const QString& rawString ) const;
-
     /// @return The element's ElementType
     ElementType elementType() const;
+
+protected:
+    /// Process @p raw and render it to @p path
+    void renderToPath( const QString& raw, QPainterPath& path ) const;
+
+private:
+    Form determineOperatorForm() const;
 };
 
 #endif // OPERATORELEMENT_H

@@ -18,23 +18,26 @@
 */
 
 #include "IdentifierElement.h"
-#include "Entities.h"
-#include <algorithm>
-#include <kdebug.h>
+#include "Dictionary.h"
 
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-QString IdentifierElement::stringToRender( const QString& rawString ) const
+void IdentifierElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
-    const entityMap* begin = entities;
-    const entityMap* end = entities + entityMap::size();
-    const entityMap* pos = std::lower_bound( begin, end, rawString.toAscii() );
+    AttributeManager manager;
 
-    if ( pos == end || QString( pos->name ) != rawString )
-         kWarning(DEBUGID) << "Invalid entity refererence: " << rawString;
+    if( raw.startsWith( "&" ) && raw.endsWith( ";" ) ) {
+        Dictionary dict;
+        QChar mappedEntity = dict.mapEntity( raw );
+        path.addText( path.currentPosition(), manager.font( this ), mappedEntity ); 
+    }
     else
-         return QChar( pos->unicode );
-
-    return rawString;
+        path.addText( path.currentPosition(), manager.font( this ), raw );
 }
+
+ElementType IdentifierElement::elementType() const
+{ 
+    return Identifier;
+}
+

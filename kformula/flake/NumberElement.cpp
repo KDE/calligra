@@ -23,6 +23,9 @@
 NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
+void NumberElement::renderToPath( const QString& rawString, QPainterPath& path ) const
+{}
+
 ElementType NumberElement::elementType() const
 {
     return Number;

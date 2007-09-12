@@ -35,11 +35,10 @@ public:
     IdentifierElement( BasicElement* parent = 0 );
 
     /// @return The element's ElementType
-    virtual ElementType elementType() const { return Identifier; }
+    ElementType elementType() const;
     
-protected:
-    /// @return The string to be painted - probably a parsed rawString
-    QString stringToRender( const QString& rawString ) const;   
+protected:   
+    void renderToPath( const QString& rawString, QPainterPath& path ) const;
 };
 
 #endif // IDENTIFIERELEMENT_H

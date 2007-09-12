@@ -43,25 +43,20 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
      // TODO change it to use attribute colors
      painter.setPen( Qt::black );
      painter.setBrush( Qt::SolidPattern );
-     painter.drawPath( m_contentPath );        // draw content 
-
-     foreach( BasicElement* tmp, m_content )   // draw possible mglyph elements
-         if( tmp != this )
-             tmp->paint( painter, am );
+     painter.drawPath( m_contentPath );  // draw content which is buffered as path
 }
 
 void TokenElement::layout( const AttributeManager* am )
 {
-    m_contentPath = QPainterPath();
+    m_contentPath = QPainterPath();             // save the token in an empty path
     int rawCounter = 0;
     foreach( BasicElement* tmp, m_content )
-        if( tmp == this )
+        if( tmp == this )                       // a normal token
         {
-            m_contentPath.addText( 0.0, 0.0, am->font( this ),
-                                   stringToRender( m_rawStringList[ rawCounter ] ) );
+            renderToPath( m_rawStringList[ rawCounter ], m_contentPath );
             rawCounter++;
         }
-        else
+        else                                    // a mglyph element
         {
             tmp->setOrigin( QPointF( m_contentPath.boundingRect().width(), 0.0 ) );
             m_contentPath.moveTo( tmp->origin().x() + tmp->width(), 0.0 );
@@ -69,11 +64,13 @@ void TokenElement::layout( const AttributeManager* am )
 
     setWidth( m_contentPath.boundingRect().width() );
     setHeight( m_contentPath.boundingRect().height() );
-    setBaseLine( height() );  // TODO is this correct ??
 
-    QMatrix tmpMatrix;
-    tmpMatrix.translate( 0, m_contentPath.boundingRect().height() );
+    // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
+    // elements bounding rect, while translating it down the text's baseline moves too
+    QMatrix tmpMatrix;                          // translate path to fit into origin
+    tmpMatrix.translate( 0, m_contentPath.boundingRect().y() );
     m_contentPath = tmpMatrix.map( m_contentPath );
+    setBaseLine( qAbs( m_contentPath.boundingRect().y() ) ); // set baseline accordingly
 }
 
 BasicElement* TokenElement::acceptCursor( CursorDirection direction )
@@ -116,7 +113,3 @@ void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
             tmp->writeMathML( writer );
 }
 
-QString TokenElement::stringToRender( const QString& rawString ) const
-{
-    return rawString;
-}

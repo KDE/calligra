@@ -43,6 +43,7 @@
 #include "StyleElement.h"
 #include "TextElement.h"
 #include "UnderOverElement.h"
+#include "SquareRootElement.h"
 
 #include <kdebug.h>
 
@@ -57,7 +58,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if ( tagName == "mn" )
         return new NumberElement( parent );
     else if ( tagName == "mtext" )
-        return new TokenElement( parent );
+        return new TextElement( parent );
     else if ( tagName == "ms" )
         return new StringElement( parent );
     else if ( tagName == "mspace" )
@@ -68,7 +69,9 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
           return new RowElement( parent );
     else if ( tagName == "mfrac" )
           return new FractionElement( parent );
-    else if ( tagName == "msqrt" || tagName == "mroot" )
+    else if ( tagName == "msqrt" )
+          return new SquareRootElement( parent );
+    else if ( tagName == "mroot" )
           return new RootElement( parent );
     else if ( tagName == "mstyle" )
           return new StyleElement( parent );

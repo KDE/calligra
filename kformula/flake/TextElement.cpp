@@ -28,6 +28,10 @@
 TextElement::TextElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
+void TextElement::renderToPath( const QString& raw, QPainterPath& path ) const
+{
+}
+
 ElementType TextElement::elementType() const
 {
     return Text;

@@ -18,13 +18,32 @@
 */
 
 #include "OperatorElement.h"
+#include "RowElement.h"
+#include "Dictionary.h"
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-QString OperatorElement::stringToRender( const QString& rawString ) const
+void OperatorElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
-   
+    Dictionary dict;
+    dict.queryOperator( raw, determineOperatorForm() );
+}
+
+Form OperatorElement::determineOperatorForm() const
+{
+    // a bit of a hack - determine the operator's form with its position inside the
+    // parent's element list. This is with the assumption that the parent is an 
+    // ( inferred ) row element. If that is not the case return standart Prefix ( ? )
+ 
+    if( dynamic_cast<RowElement*>( parentElement() ) == 0 )
+        return Prefix;
+    else if( parentElement()->childElements().first() == this )
+        return Prefix;
+    else if( parentElement()->childElements().last() == this )
+        return Postfix;
+    else
+        return Infix;
 }
 
 ElementType OperatorElement::elementType() const
