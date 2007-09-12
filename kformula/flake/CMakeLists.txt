@@ -6,6 +6,7 @@ set( kformulalib_PART_SRCS
    AttributeManager.cpp
    FormulaRenderer.cpp
    FormulaCursor.cpp 
+   ElementFactory.cpp 
    BasicElement.cpp 
    RowElement.cpp
    FormulaElement.cpp 
@@ -15,8 +16,6 @@ set( kformulalib_PART_SRCS
    GlyphElement.cpp
    IdentifierElement.cpp
    OperatorElement.cpp
-   Entities.cpp
-   ElementFactory.cpp 
    MultiscriptElement.cpp
    UnderOverElement.cpp
    FencedElement.cpp 
