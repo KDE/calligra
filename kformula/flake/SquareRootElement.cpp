@@ -34,36 +34,38 @@ SquareRootElement::~SquareRootElement()
 void SquareRootElement::paint( QPainter& painter, AttributeManager* am )
 {
     QPen pen( painter.pen() );
-    pen.setWidth( 1 );
-
-    painter.save();
+    pen.setWidth( 2 );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
-    painter.restore();
 }
 
 void SquareRootElement::layout( const AttributeManager* am )
 {
-/*    QPointF tmp;
+    RowElement::layout( am );
+
+    kDebug() << "Width: " << width();
+    kDebug() << "Height: " << height();
+
+    QPointF tmp;
     double distY = am->mathSpaceValue( "thinmathspace" );
-    setHeight( 2*distY + m_radicand->height() );
+    setHeight( 2*distY + height() );
 
     m_rootSymbol = QPainterPath();
     tmp += QPointF( 0.0, 2/3 * height() );
-    m_rootSymbol.moveTo( tmp );
-    tmp += QPointF( m_exponent->width(), 2/3 * height() );
     m_rootSymbol.moveTo( tmp );
     tmp += QPointF( 1/6 * height(), 1/3 * height() );
     m_rootSymbol.moveTo( tmp );
     tmp = QPointF( tmp.x() + 1/6 * height(), 0.0 );
     m_rootSymbol.moveTo( tmp );
-    m_radicand->setOrigin( tmp + QPointF( 0.0, distY ) );
-    tmp += QPointF( m_radicand->width(), 0.0 );
+    
+    foreach( BasicElement* element, childElements() )
+        element->setOrigin( element->origin() + tmp + QPointF( 0.0, distY ) );
+
+    tmp += QPointF( width(), 0.0 );
     m_rootSymbol.moveTo( tmp );
     
-    m_exponent->setOrigin( QPointF( 0.0, distY ) );
     setWidth( m_rootSymbol.boundingRect().width() );
-    setBaseLine( m_radicand->baseLine() + m_radicand->origin().y() ); */
+    setBaseLine( baseLine() + origin().y() );
 }
 
 ElementType SquareRootElement::elementType() const
