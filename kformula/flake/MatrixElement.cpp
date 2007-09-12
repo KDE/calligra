@@ -73,37 +73,38 @@ BasicElement* MatrixElement::acceptCursor( CursorDirection direction )
 
 QString MatrixElement::attributesDefaultValue( const QString& attribute ) const
 {
-/*    if( attribute == "align" )
-        return "axis";
-    else if( attribute == "rowalign" )
-        return "baseline";
-    else if( attribute == "columnalign" )
-        return "center";
-    else if( attribute == "groupalign" )
-        return "{left}";
-    else if( attribute == "alignmentscope" )
-        return "true";
-    else if( attribute == "columnwidth" ) 
-        return "auto";
-    else if( attribute == "width" ) 
-        return "auto";
-    else if( attribute == "rowspacing" ) 
-        return "1.0ex";
-    else if( attribute == "columnspacing" ) 
-        return "0.8em";
+    if( attribute == "align" )
+        return "axis";
+    else if( attribute == "rowalign" )
+        return "baseline";
+    else if( attribute == "columnalign" )
+        return "center";
+    else if( attribute == "groupalign" )
+        return "left";
+    else if( attribute == "alignmentscope" )
+        return "true";
+    else if( attribute == "columnwidth" )
+        return "auto";
+    else if( attribute == "width" )
+        return "auto";
+    else if( attribute == "rowspacing" )
+        return "1.0ex";
+    else if( attribute == "columnspacing" )
+        return "0.8em";
     else if( attribute == "rowlines" || attribute == "columnlines" ||
-             attribute == "frame" ) 
-        return "none";
-    else if( attribute == "framespacing" ) 
-        return "0.4em 0.5ex";
-    else if( attribute == "equalrows" || attribute == "equalcolumns" ||
+             attribute == "frame" )
+        return "none";
+    else if( attribute == "framespacing" )
+        return "0.4em 0.5ex";
+    else if( attribute == "equalrows" || attribute == "equalcolumns" ||
              attribute == "displaystyle" )
-        return "false";
-    else if( attribute == "side" )
-        return "right";
-    else if( attribute == "minlabelspacing" )
-        return "0.8em";*/
-    return QString();
+        return "false";
+    else if( attribute == "side" )
+        return "right";
+    else if( attribute == "minlabelspacing" )
+        return "0.8em";
+    else
+        return QString();
 }
 
 bool MatrixElement::readMathMLContent( const KoXmlElement& element )
