@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=KPresenter Old File Format Filter
 Name[bg]=Филтър за стария файлов формат на KPresenter
+Name[ca]=Filtre d'exportació BMP per al KPresenter
 Name[de]=KPresenter Filter für altes Dateiformat
 Name[el]=Φίλτρο παλιάς μορφής αρχείου του KPresenter
 Name[es]=Filtro de KPresenter del antiguo formato de fichero

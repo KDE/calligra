@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=KOffice Spreadsheet Component
 Name[bg]=Компонент за електронна таблица за KOffice
-Name[ca]=Component de full de càlcul de KOffice
+Name[ca]=Component de full de càlcul del KOffice
 Name[cy]=Cydran Taenlen KOffice 
 Name[da]=KOffice regnearkkomponent
 Name[de]=KOffice-Komponente für Tabellenkalkulation
@@ -53,7 +53,7 @@ GenericName=Spreadsheets
 GenericName[af]=Spreiblad
 GenericName[bg]=Електронна таблица
 GenericName[br]=Logerioù
-GenericName[ca]=Full de càlcul
+GenericName[ca]=Fulls de càlcul
 GenericName[cs]=Tabulky
 GenericName[cy]=Taenlenni
 GenericName[da]=Regneark

@@ -3,6 +3,7 @@ Encoding=UTF-8
 Type=Service
 Name=Karbon WPG Import Filter
 Name[bg]=Филтър за импортиране от WPG в Karbon
+Name[ca]=Filtre d'importació SVG per al Karbon
 Name[de]=Karbon14 WPG-Importfilter
 Name[el]=Φίλτρο εισαγωγής WPG του Karbon
 Name[es]=Filtro de Karbon de importación de SVG
