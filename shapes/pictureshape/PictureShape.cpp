@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -55,10 +56,18 @@ void PictureShape::paint( QPainter& painter, const KoViewConverter& converter ) 
 
 void PictureShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    // make sure we have a valid image data pointer before saving
+    KoImageData * data = m_imageData;
+    if( data != userData() )
+        data = dynamic_cast<KoImageData*> (userData());
+    if(data == 0)
+        return;
+
     KoXmlWriter &writer = context.xmlWriter();
     writer.startElement("draw:image");
+    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QString name = context.addImageForSaving( m_imageData->pixmap() );
+    QString name = context.addImageForSaving( data->pixmap() );
     writer.addAttribute("xlink:href", name);
     writer.endElement();
 }
@@ -73,12 +82,20 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
     double y = KoUnit::parseValue( element.attribute("y") );
     double width = KoUnit::parseValue( element.attribute("width") );
     double height = KoUnit::parseValue( element.attribute("height") );
-    int zindex = qMax(0, QVariant( element.attribute("z-index") ).toInt() ) + 1;
+    int zindex = qMax(0, element.attribute("z-index").toInt() ) + 1;
 
     setPosition( QPointF(x,y) );
     setSize( QSizeF(width,height) );
     setZIndex(zindex);
 
+    if( context.imageCollection() )
+    {
+        const QString href = element.attribute("href");
+
+        KoImageData * data = new KoImageData( context.imageCollection() );
+        data->setStoreHref( href );
+        setUserData( data );
+    }
 /*
     QDomNamedNodeMap attrs = element.attributes();
     for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++)

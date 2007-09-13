@@ -32,6 +32,7 @@ public:
 
     virtual KoShape* createDefaultShape() const;
     virtual KoShape* createShape( const KoProperties* params ) const;
+    virtual bool supports(const KoXmlElement & e) const;
 };
 
 #endif

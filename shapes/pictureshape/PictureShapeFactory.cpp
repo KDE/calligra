@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +21,7 @@
 #include "PictureShapeFactory.h"
 
 #include "PictureShape.h"
-
+#include <KoXmlNS.h>
 #include <klocale.h>
 
 PictureShapeFactory::PictureShapeFactory( QObject* parent)
@@ -29,6 +30,8 @@ PictureShapeFactory::PictureShapeFactory( QObject* parent)
     setToolTip( i18n( "A shape which displays a picture" ) );
     ///@todo setIcon( "pictureshape" );
     setIcon( "image" );
+    setOdfElementNames( KoXmlNS::draw, QStringList( "image" ) );
+    setLoadingPriority( 1 );
 }
 
 KoShape* PictureShapeFactory::createDefaultShape() const
@@ -40,5 +43,10 @@ KoShape* PictureShapeFactory::createShape( const KoProperties* params ) const
 {
     Q_UNUSED(params);
     return createDefaultShape();
+}
+
+bool PictureShapeFactory::supports(const KoXmlElement & e) const
+{
+    return ( e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw );
 }
 
