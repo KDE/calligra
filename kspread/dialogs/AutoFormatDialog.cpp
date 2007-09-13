@@ -46,7 +46,6 @@
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "Undo.h"
 #include "View.h"
 #include "Selection.h"
 

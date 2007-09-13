@@ -22,14 +22,16 @@
 */
 
 #include "PaperLayoutDialog.h"
+
 #include <Doc.h>
 #include "Map.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
-#include <Undo.h>
 #include <Util.h>
 #include <View.h>
 #include <Selection.h>
+
+#include "commands/Undo.h"
 
 #include <QApplication>
 #include <QCheckBox>

@@ -76,7 +76,6 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
-#include "Undo.h"
 #include "Util.h"
 #include "Validity.h"
 #include "ValueConverter.h"
@@ -88,6 +87,7 @@
 #include "commands/EmbeddedObjectCommands.h"
 #include "commands/MergeCommand.h"
 #include "commands/RowColumnManipulators.h"
+#include "commands/Undo.h"
 
 // D-Bus
 #include "interfaces/SheetAdaptor.h"

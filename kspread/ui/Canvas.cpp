@@ -106,7 +106,6 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetView.h"
-#include "Undo.h"
 #include "Util.h"
 #include "Validity.h"
 #include "View.h"
@@ -115,6 +114,7 @@
 #include "commands/DeleteCommand.h"
 #include "commands/EmbeddedObjectCommands.h"
 #include "commands/StyleCommand.h"
+#include "commands/Undo.h"
 
 #define MIN_SIZE 10
 

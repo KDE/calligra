@@ -144,7 +144,6 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
-#include "Undo.h"
 #include "Util.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -165,6 +164,7 @@
 #include "commands/SheetCommands.h"
 #include "commands/SortManipulator.h"
 #include "commands/StyleCommand.h"
+#include "commands/Undo.h"
 #include "commands/ValidityCommand.h"
 
 // dialogs
@@ -198,7 +198,6 @@
 #include "dialogs/FindDialog.h"
 
 #include "PropertyEditor.h"
-#include "GeneralProperty.h"
 #include "dialogs/SheetSelectPage.h"
 #include "dialogs/LinkDialog.h"
 #include "dialogs/SheetPropertiesDialog.h"

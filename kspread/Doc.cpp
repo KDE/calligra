@@ -90,7 +90,6 @@
 #include "SheetShapeContainer.h"
 #include "SheetView.h"
 #include "StyleManager.h"
-#include "Undo.h"
 #include "Util.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"

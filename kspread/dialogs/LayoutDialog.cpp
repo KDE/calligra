@@ -70,7 +70,6 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
-#include "Undo.h"
 #include "Selection.h"
 #include "ValueFormatter.h"
 

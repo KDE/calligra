@@ -47,7 +47,6 @@
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include <Sheet.h>
-#include <Undo.h>
 #include <View.h>
 
 // commands

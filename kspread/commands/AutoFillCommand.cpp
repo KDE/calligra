@@ -33,7 +33,6 @@
 #include "Doc.h"
 #include "Localization.h"
 #include "Sheet.h"
-#include "Undo.h"
 #include "Value.h"
 #include "ValueConverter.h"
 

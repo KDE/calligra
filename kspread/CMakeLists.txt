@@ -59,6 +59,7 @@ SET (commands_DIR_SRCS
 	commands/SheetCommands.cpp
 	commands/SortManipulator.cpp
 	commands/StyleCommand.cpp
+	commands/Undo.cpp
 	commands/UndoWrapperCommand.cpp
 	commands/ValidityCommand.cpp
 	)
@@ -169,7 +170,7 @@ SET (kspreadcommon_LIB_SRCS
 	Format.cpp
 	Formula.cpp
 	Functions.cpp
-	GeneralProperty.cpp
+# 	GeneralProperty.cpp
 	GenValidationStyle.cpp
 # 	Handler.cpp
 	Localization.cpp
@@ -190,7 +191,6 @@ SET (kspreadcommon_LIB_SRCS
 	StyleManager.cpp
 	StyleStorage.cpp
 # 	Toolbox.cpp
-	Undo.cpp
 	Util.cpp
 	Validity.cpp
 	Value.cpp

@@ -26,8 +26,9 @@
 #include "Doc.h"
 #include "Sheet.h"
 #include "Util.h"
-#include "Undo.h"
 #include "View.h"
+
+#include "commands/Undo.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>
