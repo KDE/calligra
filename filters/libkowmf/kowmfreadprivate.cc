@@ -109,6 +109,7 @@ bool KoWmfReadPrivate::load( const QByteArray& array )
         st >> pheader.checksum;
         checksum = calcCheckSum( &pheader );
         if ( pheader.checksum!=checksum ) {
+            kWarning() << "Checksum for placeable metafile header is incorrect ( actual checksum" << pheader.checksum << ", expected checksum" << checksum << ")"; 
             return false;
         }
         st >> header.fileType;
@@ -454,8 +455,8 @@ void KoWmfReadPrivate::polyPolygon( quint32, QDataStream& stream )
     }
 
     // list of point array
-    foreach ( QPolygon pa, listPa ) {
-        pointArray( stream, pa );
+    for ( int i=0; i < numberPoly; i++ ) {
+        pointArray( stream, listPa[i] );
     }
 
     // draw polygon's
