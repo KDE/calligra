@@ -47,6 +47,7 @@
 #include <KoDocument.h>
 #include <KoSavingContext.h>
 #include <KoShapeStyleWriter.h>
+#include <KoImageCollection.h>
 
 #include <ktemporaryfile.h>
 #include <kdebug.h>
@@ -68,7 +69,9 @@ public:
     {
         delete( selection );
         qDeleteAll( layers );
+        layers.clear();
         qDeleteAll( objects );
+        objects.clear();
     }
 
     QSizeF pageSize; ///< the documents page size
@@ -80,6 +83,7 @@ public:
     VSelectionMode selectionMode; ///< The selectionMode
 
     KoUnit unit; ///< The unit.
+    KoImageCollection imageCollection; ///< the image collection
 
     // TODO this flag is used nowhere, can we remove it?
     bool saveAsPath;
@@ -227,6 +231,8 @@ bool VDocument::loadXML( const KoXmlElement& doc )
 
     qDeleteAll( d->layers );
     d->layers.clear();
+    qDeleteAll( d->objects );
+    d->objects.clear();
 
     d->pageSize.setWidth( doc.attribute( "width", "800.0" ).toDouble() );
     d->pageSize.setHeight( doc.attribute( "height", "550.0" ).toDouble() );
@@ -263,6 +269,8 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
     d->layers.clear();
     qDeleteAll( d->objects );
     d->objects.clear();
+
+    context.setImageCollection( &d->imageCollection );
 
     KoXmlElement layerElement;
     forEachElement( layerElement, context.koLoadingContext().oasisStyles().layerSet() )
@@ -379,6 +387,11 @@ void VDocument::setUnit( KoUnit unit )
 const VLayerList& VDocument::layers() const
 {
     return d->layers;
+}
+
+KoImageCollection * VDocument::imageCollection()
+{
+    return &d->imageCollection;
 }
 
 //#############################################################################

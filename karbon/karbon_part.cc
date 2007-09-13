@@ -63,6 +63,7 @@
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
+#include <KoImageCollection.h>
 
 #include <kconfig.h>
 #include <kdebug.h>
@@ -304,6 +305,11 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
     loadOasisSettings( settings );
 
     return true;
+}
+
+bool KarbonPart::completeLoading( KoStore* store )
+{
+    return m_doc.imageCollection()->loadFromStore( store );
 }
 
 void

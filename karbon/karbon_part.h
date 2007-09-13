@@ -62,6 +62,7 @@ public:
 	virtual bool loadXML( QIODevice*, const KoXmlDocument& document );
     virtual bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
                             const KoXmlDocument & settings, KoStore* store );
+    virtual bool completeLoading( KoStore* store );
 
 	/// file-> save and file-> save as call this method
 	virtual QDomDocument saveXML();
