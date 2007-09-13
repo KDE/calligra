@@ -24,8 +24,11 @@
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <KoShapeLayer.h>
-#include <rectangle/KoRectangleShape.h>
-#include <ellipse/KoEllipseShape.h>
+#include <KoImageData.h>
+
+#include <pathshapes/rectangle/KoRectangleShape.h>
+#include <pathshapes/ellipse/KoEllipseShape.h>
+#include <pictureshape/PictureShape.h>
 
 #include <kdebug.h>
 
@@ -332,8 +335,22 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 }
 
 
-void WMFImportParser::drawImage( int , int , const QImage &, int , int , int , int  ) {
-    kDebug() << "importing images is not supported";
+void WMFImportParser::drawImage( int x, int y, const QImage &image, int , int , int sw, int sh ) {
+    KoImageData * data = new KoImageData( mDoc->imageCollection() );
+    data->setImage( image );
+
+    PictureShape * pic = new PictureShape();
+    pic->setUserData( data );
+    pic->setPosition( QPointF(x,y) );
+    if( sw < 0 )
+        sw = image.width();
+    if( sh < 0 )
+        sh = image.height();
+    pic->setSize( QSizeF(sw,sh) );
+
+    kDebug() << "image data size =" << data->pixmap().size();
+
+    mDoc->add( pic );
 }
 
 

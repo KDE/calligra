@@ -1,14 +1,15 @@
 
-include_directories( ${KWMF_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon/commands/ ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ )
+include_directories( ${KWMF_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon/commands/ ${CMAKE_SOURCE_DIR}/shapes/ )
 
 ########### next target ###############
 
-set(SHAPES_SOURCES ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ )
+set(SHAPES_SOURCES ${CMAKE_SOURCE_DIR}/shapes/ )
 set(wmfimport_PART_SRCS 
     wmfimport.cc 
     wmfimportparser.cc 
-    ${SHAPES_SOURCES}/ellipse/KoEllipseShape.cpp 
-    ${SHAPES_SOURCES}/rectangle/KoRectangleShape.cpp)
+    ${SHAPES_SOURCES}/pathshapes/ellipse/KoEllipseShape.cpp 
+    ${SHAPES_SOURCES}/pathshapes/rectangle/KoRectangleShape.cpp
+    ${SHAPES_SOURCES}/pictureshape/PictureShape.cpp)
 
 
 kde4_add_plugin(wmfimport WITH_PREFIX ${wmfimport_PART_SRCS})
