@@ -27,6 +27,7 @@
 class QPainter;
 class QRectF;
 class KoShape;
+class KoShapeManager;
 class KoCanvasBase;
 class KoViewConverter;
 class KPrAnimationData;
@@ -64,7 +65,7 @@ public:
      * @return animationData the caller has to delete the animationData when
      *                       it is no longer used.
      */
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas ) = 0;
+    virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager ) = 0;
 
     /**
      * @brief Animate the shape

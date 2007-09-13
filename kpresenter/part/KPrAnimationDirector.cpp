@@ -31,6 +31,7 @@
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
 #include "KPrPage.h"
+#include "KPrMasterPage.h"
 #include "KPrShapeManagerAnimationStrategy.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
@@ -57,8 +58,8 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
     m_timeLine.setCurveShape( QTimeLine::LinearCurve );
     m_timeLine.setUpdateInterval( 20 );
     // set the animation strategy in the KoShapeManagers
-    // TODO also set for the master shape manager
     m_canvas->shapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->shapeManager(), this ) );
+    m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), this ) );
 
     QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
     for ( ; it != m_animations.end(); ++it ) {
@@ -73,8 +74,8 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
 KPrAnimationDirector::~KPrAnimationDirector()
 {
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
-    // TODO also set for the master shape manager
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
+    m_canvas->masterShapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->masterShapeManager() ) );
 }
 
 void KPrAnimationDirector::paintEvent( QPaintEvent* event )
@@ -200,10 +201,13 @@ void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
     // the zoom when we change the page
     updateZoom( m_canvas->size() );
 
-    KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( m_pages[m_pageIndex] );
+    KPrPage * kprPage = dynamic_cast<KPrPage *>( page );
+    Q_ASSERT( kprPage );
+    KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( kprPage->masterPage() );
     Q_ASSERT( controller );
-    // TODO also add steps from masterpage
-    m_steps = controller->animations().steps();
+    QSet<int> steps = kprPage->animations().steps().toSet();
+    steps.unite( controller->animations().steps().toSet() );
+    m_steps = steps.toList();
 }
 
 void KPrAnimationDirector::updateZoom( const QSize & size )
@@ -258,26 +262,34 @@ void KPrAnimationDirector::updateAnimations()
         delete it.value().second;
     }
     m_animations.clear();
-    // TODO also get the animations for the master page
-    KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( m_pages[m_pageIndex] );
-    Q_ASSERT( controller );
     if ( m_steps.size() > m_stepIndex ) {
-        QMap<KoShape *, KPrShapeAnimation *> animations = controller->animations().animations( m_steps[m_stepIndex] );
         m_maxShapeDuration = 0;
-        QMap<KoShape *, KPrShapeAnimation *>::iterator it( animations.begin() );
-        for ( ; it != animations.end(); ++it ) {
-            KPrShapeAnimation * animation = it.value();
-            if ( animation ) {
-                m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas ) ) );
-                if ( animation->duration() > m_maxShapeDuration ) {
-                    m_maxShapeDuration = animation->duration();
-                }
-            }
-            else {
-                m_animations.insert( it.key(), QPair<KPrShapeAnimation *, KPrAnimationData *>( 0, 0 ) );
+
+        KPrPage * page = dynamic_cast<KPrPage *>( m_pages[m_pageIndex] );
+        KPrAnimationController * controller = dynamic_cast<KPrAnimationController*>( page->masterPage() );
+        Q_ASSERT( page );
+        Q_ASSERT( controller );
+
+        insertAnimations( page, m_canvas->shapeManager() );
+        insertAnimations( controller, m_canvas->masterShapeManager() );
+    }
+}
+
+void KPrAnimationDirector::insertAnimations( KPrAnimationController * controller, KoShapeManager * shapeManager )
+{
+    QMap<KoShape *, KPrShapeAnimation *> animations = controller->animations().animations( m_steps[m_stepIndex] );
+    QMap<KoShape *, KPrShapeAnimation *>::iterator it( animations.begin() );
+    for ( ; it != animations.end(); ++it ) {
+        KPrShapeAnimation * animation = it.value();
+        if ( animation ) {
+            m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas, shapeManager ) ) );
+            if ( animation->duration() > m_maxShapeDuration ) {
+                m_maxShapeDuration = animation->duration();
             }
         }
-        kDebug() << "animations:" << m_animations.size();
+        else {
+            m_animations.insert( it.key(), QPair<KPrShapeAnimation *, KPrAnimationData *>( 0, 0 ) );
+        }
     }
 }
 
@@ -298,8 +310,7 @@ void KPrAnimationDirector::finishAnimations()
         KPrShapeAnimation * animation = it.value().first;
         if ( animation ) {
             animation->finish( it.value().second );
-            //TODO for shapes on master pages a different shape manager has to be used
-            m_canvas->shapeManager()->notifyShapeChanged( it.key() );
+            it.value().second->m_shapeManager->notifyShapeChanged( it.key() );
         }
     }
 }
@@ -312,7 +323,7 @@ void KPrAnimationDirector::animateShapes( int currentTime )
         KPrShapeAnimation * animation = it.value().first;
         if ( animation ) {
             animation->next( currentTime, it.value().second );
-            m_canvas->shapeManager()->notifyShapeChanged( it.key() );
+            it.value().second->m_shapeManager->notifyShapeChanged( it.key() );
         }
     }
 }

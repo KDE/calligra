@@ -30,7 +30,7 @@ public:
     KPrAnimationMoveAppear( KoShape * shape, int step );
     virtual ~KPrAnimationMoveAppear();
 
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas );
+    virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager );
     virtual void next( int currentTime, KPrAnimationData * animationData );
     virtual void finish( KPrAnimationData * animationData );
 };

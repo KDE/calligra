@@ -35,9 +35,9 @@ KPrAnimationDisappear::~KPrAnimationDisappear()
 {
 }
 
-KPrAnimationData * KPrAnimationDisappear::animationData( KoCanvasBase * canvas )
+KPrAnimationData * KPrAnimationDisappear::animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager )
 {
-    KPrAnimationDataTranslate * data = new KPrAnimationDataTranslate( canvas, m_shape->boundingRect() );
+    KPrAnimationDataTranslate * data = new KPrAnimationDataTranslate( canvas, shapeManager, m_shape->boundingRect() );
     double x = data->m_boundingRect.x() + data->m_boundingRect.width() + 2.0;
     data->m_translate = QPointF( -x, 0 );
     data->m_timeLine.setDuration( 1 );

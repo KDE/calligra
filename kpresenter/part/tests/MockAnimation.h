@@ -29,7 +29,12 @@ public:
     : KPrShapeAnimation( shape, step, Appear )
     {}
 
-    KPrAnimationData * animationData( KoCanvasBase * canvas ) { Q_UNUSED( canvas ); return 0; }
+    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager )
+    {
+        Q_UNUSED( canvas );
+        Q_UNUSED( shapeManager );
+        return 0;
+    }
 
     bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData )
     {
@@ -64,7 +69,12 @@ public:
     : KPrShapeAnimation( shape, step, Disappear )
     {}
 
-    KPrAnimationData * animationData( KoCanvasBase * canvas ) { Q_UNUSED( canvas ); return 0; }
+    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager )
+    {
+        Q_UNUSED( canvas );
+        Q_UNUSED( shapeManager );
+        return 0;
+    }
 
     bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData )
     {

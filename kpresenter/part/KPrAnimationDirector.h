@@ -35,12 +35,14 @@ class QPainter;
 class QPaintEvent;
 class KoViewConverter;
 class KoShape;
+class KoShapeManager;
 class KoPACanvas;
 class KoPAPageBase;
 class KoPAView;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrAnimationData;
+class KPrAnimationController;
 class KPrShapeAnimation;
 
 class KPrAnimationDirector : public QObject
@@ -111,11 +113,15 @@ protected:
 
     void animateShapes( int currentTime );
 
+    // set the animations to the current m_stepIndex
+    void updateAnimations();
+
+    // helper method for updateAnimations
+    void insertAnimations( KPrAnimationController * controller, KoShapeManager * shapeManager );
+
 protected slots:
     // update the zoom value
     void updateZoom( const QSize & size );
-    // set the animations to the current m_stepIndex
-    void updateAnimations();
     // acts on the time line event
     void animate();
 
