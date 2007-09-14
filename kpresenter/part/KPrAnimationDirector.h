@@ -92,6 +92,12 @@ protected:
     void updateActivePage( KoPAPageBase * page );
 
     /**
+     * change the page
+     * @return true when there was a change
+     */
+    bool changePage( Navigation navigation );
+
+    /**
      * Update to the next step
      *
      * @return true if the next step switched to a new page
@@ -118,6 +124,9 @@ protected:
 
     // helper method for updateAnimations
     void insertAnimations( KPrAnimationController * controller, KoShapeManager * shapeManager );
+
+    // check if there is a set animation in m_animations
+    bool hasAnimation();
 
 protected slots:
     // update the zoom value
