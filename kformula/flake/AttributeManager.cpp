@@ -152,6 +152,13 @@ QString AttributeManager::stringOf( const QString& attribute, BasicElement* elem
     return findValue( attribute, element );
 }
 
+QStringList AttributeManager::stringListOf( const QString& attribute,
+                                            BasicElement* element ) const
+{
+    // TODO implement parsing
+    return QStringList();
+}
+
 Align AttributeManager::alignOf( const QString& attribute, BasicElement* element ) const
 {
     return parseAlign( findValue( attribute, element ) );

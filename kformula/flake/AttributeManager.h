@@ -146,6 +146,8 @@ public:
      */
     QString stringOf( const QString& attribute, BasicElement* element ) const;
 
+    QStringList stringListOf( const QString& attribute, BasicElement* element ) const;
+
     Align alignOf( const QString& attribute, BasicElement* element ) const;
 
     QList<Align> alignListOf( const QString& attribute, BasicElement* element ) const;

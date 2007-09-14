@@ -57,7 +57,7 @@ public:
     
 private:
     /// The buffer the element paints its visual content
-    QPainterPath m_buffer;
+    QPainterPath m_fence;
 };
 
 #endif // FENCEDELEMENT_H
