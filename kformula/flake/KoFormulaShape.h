@@ -21,12 +21,6 @@
 #define KOFORMULASHAPE_H
 
 #include <KoShape.h>
-#include <QDomDocument>
-
-class KUrl;
-class KoXmlWriter;
-class KFormulaPartDocument;
-
 #define KoFormulaShapeId "FormulaShapeID"
 
 class BasicElement;
@@ -34,6 +28,14 @@ class FormulaRenderer;
 
 /**
  * @short The flake shape for a formula
+ *
+ * This class is basically the container for the formula and has also methods to paint,
+ * load and save the formula. The formulaRenderer instance that is part of this class
+ * serves to paint and layout the formula. The acutal formula data means the tree of
+ * elements is accessible through the root element which is constructed and destroyed
+ * by this class that holds a pointer to it. Everything that goes into the area of
+ * editing the formula data is implemented in KoFormulaTool respectivly FormulaCursor.
+ *
  * @author Martin Pfeiffer <hubipete@gmx.net>
  */
 class KoFormulaShape : public KoShape {
@@ -63,25 +65,20 @@ public:
     BasicElement* formulaElement() const;
 
     /**
-     * Load the formula from the specified file containing MathML
-     * @param doc The DomDocument to load from
-     * @param oasisFormat If true the formula is read from OASIS conform MathML
-     */
-    void loadMathML( const QDomDocument &doc, bool oasisFormat = false );
+     * Load a shape from odf - reimplemented from KoShape
+     * @param context the KoShapeLoadingContext used for loading
+     * @param element element which represents the shape in odf
+     * @return false if loading failed
+     */ 
+    bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context );
 
     /**
-     * Save the formula as MathML
-     * @param writer
-     * @param oasisFormat If true the MathMl is saved to OASIS conform MathML
-     */
-    void saveMathML( KoXmlWriter* writer, bool oasisFormat = false );
-
-    void importFormula( const KUrl& url);
-
-    /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
-    // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+     * @brief store the shape data as ODF XML. - reimplemented from KoShape
+     * This is the method that will be called when saving a shape as a described in
+     * OpenDocument 9.2 Drawing Shapes.
+     * @see saveOdfAttributes
+     */ 
+    void saveOdf( KoShapeSavingContext& context ) const;
 
 private:
     /// The element at the highest level in the formula tree, contains all other elements
@@ -89,8 +86,6 @@ private:
 
     /// The renderer that takes care of painting the shape's formula
     FormulaRenderer* m_formulaRenderer;
-
-    KFormulaPartDocument* m_document;
 };
 
 #endif // KOFORMULASHAPE_H

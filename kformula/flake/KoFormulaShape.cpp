@@ -20,10 +20,10 @@
 #include "KoFormulaShape.h"
 #include "FormulaElement.h"
 #include "FormulaRenderer.h"
-#include "KFormulaPartDocument.h"
+#include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 
-KoFormulaShape::KoFormulaShape() :  m_document( 0 ), m_formulaElement( 0 )
+KoFormulaShape::KoFormulaShape()
 {
     m_formulaElement = new FormulaElement();
     m_formulaRenderer = new FormulaRenderer();
@@ -67,47 +67,34 @@ BasicElement* KoFormulaShape::formulaElement() const
 
 bool KoFormulaShape::loadOdf( const KoXmlElement& element, KoShapeLoadingContext &context )
 {
-    delete m_formulaElement;                                // delete the old formula
-    m_formulaElement = new FormulaElement();                // create a new root element
-    m_formulaElement->readMathML( element );  // and load the new formula
+    Q_UNUSED( context )
+
+    delete m_formulaElement;                     // delete the old formula
+    m_formulaElement = new FormulaElement();     // create a new root element
+    m_formulaElement->readMathML( element );     // and load the new formula
     return true;
 }
 
-void KoFormulaShape::saveMathML( KoXmlWriter* writer, bool oasisFormat )
+void KoFormulaShape::saveOdf( KoShapeSavingContext& context ) const
 {
     if( m_formulaElement->childElements().isEmpty() )  // if the formula is empty
 	return;                                        // do not save it
 
-/*
-    if( oasisFormat )
-    {
-        writer->startElement( "math:semantics" )
-    } // TODO write the correct namespace that is inherited to all children
+    bool odfFormat = true;
+    if( context.xmlWriter().tagHierarchy().isEmpty() ) // hack to determine if saving is
+        odfFormat = false;                             // for odf or not
+
+    if( odfFormat )
+        context.xmlWriter().startElement( "math:semantics" );
+        // TODO add some namespace magic to avoid adding "math:" namespace everywhere
     else
-        writer->startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
+        context.xmlWriter().startDocument( "math", "http://www.w3.org/1998/Math/MathML" );
 
-	inherited::writeMathMLContent( writer, oasisFormat);
+    m_formulaElement->writeMathML( &context.xmlWriter() );
 
-    m_formulaElement->writeMathML( writer );
-
-    if( oasisFormat )
-        writer->endElement();
+    if( odfFormat )
+        context.xmlWriter().endElement();
     else
-        writer->endDocument();*/
+        context.xmlWriter().endDocument();       
 }
-
-void KoFormulaShape::importFormula( const KUrl& url )
-{
-    delete m_document;
-	delete m_formulaElement;
-    m_document = new KFormulaPartDocument();
-    m_document->openUrl(url);
-	m_formulaElement = m_document->formulaElement();
-	m_formulaRenderer->layoutElement( m_formulaElement );
-}
-
-void KoFormulaShape::saveOdf( KoShapeSavingContext & context ) const {
-    // TODO
-}
-
 
