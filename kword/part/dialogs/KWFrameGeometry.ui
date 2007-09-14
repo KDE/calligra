@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>KWFrameGeometry</class>
  <widget class="QWidget" name="KWFrameGeometry" >
   <property name="geometry" >
@@ -9,18 +6,27 @@
     <x>0</x>
     <y>0</y>
     <width>378</width>
-    <height>276</height>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string/>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
+   </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
    </property>
    <item>
     <widget class="QCheckBox" name="protectSize" >
@@ -35,13 +41,25 @@
       <string>Position</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
        <number>6</number>
       </property>
-      <item rowspan="2" row="0" column="4" >
+      <property name="verticalSpacing" >
+       <number>6</number>
+      </property>
+      <item rowspan="2" row="0" column="5" >
        <spacer>
         <property name="orientation" >
          <enum>Qt::Horizontal</enum>
@@ -54,7 +72,7 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="0" >
+      <item row="0" column="1" >
        <widget class="QLabel" name="label" >
         <property name="text" >
          <string>Left:</string>
@@ -64,7 +82,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
+      <item row="1" column="1" >
        <widget class="QLabel" name="label_3" >
         <property name="text" >
          <string>Width:</string>
@@ -74,7 +92,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="2" >
+      <item row="0" column="3" >
        <widget class="QLabel" name="label_4" >
         <property name="text" >
          <string>Top:</string>
@@ -84,7 +102,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
+      <item row="1" column="3" >
        <widget class="QLabel" name="label_5" >
         <property name="text" >
          <string>Height:</string>
@@ -94,17 +112,20 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
+      <item row="0" column="2" >
        <widget class="KoUnitDoubleSpinBox" name="left" />
       </item>
-      <item row="0" column="3" >
+      <item row="0" column="4" >
        <widget class="KoUnitDoubleSpinBox" name="top" />
       </item>
-      <item row="1" column="1" >
+      <item row="1" column="2" >
        <widget class="KoUnitDoubleSpinBox" name="width" />
       </item>
-      <item row="1" column="3" >
+      <item row="1" column="4" >
        <widget class="KoUnitDoubleSpinBox" name="height" />
+      </item>
+      <item rowspan="2" row="0" column="0" >
+       <widget class="KWPositionSelector" native="1" name="positionSelector" />
       </item>
      </layout>
     </widget>
@@ -115,10 +136,22 @@
       <string>Margins</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>6</number>
       </property>
       <item rowspan="2" row="1" column="4" >
@@ -211,18 +244,19 @@
    </item>
   </layout>
  </widget>
- <layoutfunction spacing="KDialog::spacingHint()" margin="KDialog::marginHint()" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>KoUnitDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>KoUnitDoubleSpinBox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
+  </customwidget>
+  <customwidget>
+   <class>KWPositionSelector</class>
+   <extends>QWidget</extends>
+   <header>dialogs/KWPositionSelector.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
- <includes/>
  <resources/>
  <connections/>
 </ui>
