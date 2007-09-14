@@ -52,6 +52,11 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 
 void RootElement::layout( const AttributeManager* am )
 {
+    kDebug() << "Radicand height: " << m_radicand->height();
+    kDebug() << "Radicand width: " << m_radicand->width();
+    kDebug() << "Exponent height: " << m_exponent->height();
+    kDebug() << "Exponent width: " << m_exponent->width();
+
     QPointF tmp;
     double distY = am->mathSpaceValue( "thinmathspace" );
     setHeight( 2*distY + m_radicand->height() );
@@ -136,7 +141,6 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
 void RootElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_radicand->writeMathML( writer );
-    if ( m_exponent )
-        m_exponent->writeMathML( writer );
+    m_exponent->writeMathML( writer );
 }
 
