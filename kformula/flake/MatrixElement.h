@@ -24,6 +24,7 @@
 
 #include "BasicElement.h"
 #include "kformula_export.h"
+#include <QPainterPath>
 
 class MatrixRowElement;
 class MatrixEntryElement;
@@ -47,8 +48,9 @@ public:
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter ) const;
+    void paint( QPainter& painter, AttributeManager* am );
 
     /**
      * Calculate the size of the element and the positions of its children
@@ -95,6 +97,9 @@ private:
     
     /// The rows a matrix contains
     QList<MatrixRowElement*> m_matrixRowElements;
+
+    /// Path to store borders and grid to be painted
+    QPainterPath m_matrixPath;
 };
 
 #endif // MATRIXELEMENT_H

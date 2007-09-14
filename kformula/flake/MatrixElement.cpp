@@ -26,17 +26,16 @@
 #include <QPainter>
 
 MatrixElement::MatrixElement( BasicElement* parent ) : BasicElement( parent )
-{
-}
+{}
 
 MatrixElement::~MatrixElement()
-{
-}
+{}
 
-void MatrixElement::paint( QPainter& painter ) const
+void MatrixElement::paint( QPainter& painter, AttributeManager* am )
 {
-    // TODO paint the frame, rowlines, columnlines
-    // eventually paint the frame
+    // TODO lookup attributes according to the thickness of the frame...
+    painter.setPen( QPen() );
+    painter.drawPath( m_matrixPath );
 }
 
 void MatrixElement::layout( const AttributeManager* am )
