@@ -68,9 +68,18 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
     
     // NOTE: must match switch in ok()
     QStringList lst;
-    lst << i18n( "Resource editor" )
-            << i18n( "Task editor" )
-            << i18n( "Task status" );
+    lst << i18n( "Resource Editor" )
+            << i18n( "Task Editor" )
+            << i18n( "Work & Vacation Editor" )
+            << i18n( "Accounts Editor" )
+            << i18n( "Dependency Editor" )
+            << i18n( "Schedule Handler" )
+            << i18n( "Task Status" )
+            << i18n( "Gantt View" )
+            << i18n( "Resource Assignments" )
+            << i18n( "Cost Breakdown" )
+            << i18n( "Performance Chart" )
+            << i18n( "Tasks by Resources" );
     widget.viewtype->addItems( lst );
     
     foreach ( ViewListItem *item, m_viewlist.categories() ) {
@@ -100,8 +109,35 @@ bool AddViewPanel::ok()
         case 1: // Task editor
             m_view->createTaskEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 2: // Task status
+        case 2: // Work & Vacation Editor
+            m_view->createCalendarEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 3: // Accounts Editor
+            m_view->createAccountsEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 4: // Dependency Editor
+            m_view->createDependencyEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 5: // Schedules Handler
+            m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 6: // Task status
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 7: // Gantt View
+            m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 8: // Resource Assignments
+            m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 9: // Cost Breakdown
+            m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 10: // Performance Chart
+            m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 11: // Tasks by Resources
+            m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
         default:
             kError()<<"Unknown view type!";

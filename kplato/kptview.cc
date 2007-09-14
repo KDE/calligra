@@ -390,6 +390,7 @@ void View::createViews()
                     QString tag = e1.attribute( "tag" );
                     QString name = e1.attribute( "name" );
                     QString tip = e1.attribute( "tooltip" );
+                    //FIXME: Remove KPlato:: from type
                     if ( type == "KPlato::CalendarEditor" ) {
                         v = createCalendarEditor( cat, tag, name, tip );
                     } else if ( type == "KPlato::AccountsEditor" ) {
