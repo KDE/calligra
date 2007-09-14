@@ -18,6 +18,7 @@
 */
 
 #include "kptviewlistdialog.h"
+#include "viewlist/kptviewlist.h"
 #include "kptview.h"
 
 #include <kiconloader.h>

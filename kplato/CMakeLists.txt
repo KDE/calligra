@@ -26,6 +26,10 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
+    viewlist/kptviewlistdocker.cc
+    viewlist/kptviewlist.cc
+    viewlist/kptviewlistdialog.cc
+    
     kptitemviewsettup.cc
     kptsplitterview.cc
     kptnodeitemmodel.cc
@@ -103,10 +107,10 @@ set(kplatoprivate_LIB_SRCS
     kptchartwidget.cc
     kptchart.cc
     kptchartview.cc
-    kptviewlistdialog.cc
 )
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
-    kptviewlistaddview.ui
+    viewlist/kptviewlistaddview.ui
+    
     kptcpmwidget.ui
     kptitemviewsettings.ui
     kptdurationwidget.ui

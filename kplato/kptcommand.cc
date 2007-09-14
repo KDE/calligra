@@ -27,6 +27,7 @@
 #include "kptrelation.h"
 #include "kptresource.h"
 #include "kptview.h"
+#include "viewlist/kptviewlist.h"
 
 #include <kdebug.h>
 #include <klocale.h>
