@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,7 +24,8 @@
 
 KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
     : m_state(state),
-    m_frame(0)
+    m_frame(0),
+    m_blockSignals(false)
 {
     m_state->addUser();
     widget.setupUi(this);
@@ -42,6 +43,9 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
     connect(widget.rightMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
     connect(widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
     connect(widget.topMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
+
+    connect(widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(widthChanged(double)));
+    connect(widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(heightChanged(double)));
 }
 
 KWFrameGeometry::~KWFrameGeometry() {
@@ -55,12 +59,12 @@ void KWFrameGeometry::open(KWFrame* frame) {
 }
 
 void KWFrameGeometry::open(KoShape *shape) {
-    mOriginalPosition = shape->absolutePosition();
-    mOriginalSize = shape->size();
-    widget.left->changeValue(mOriginalPosition.x());
-    widget.top->changeValue(mOriginalPosition.y());
-    widget.width->changeValue(mOriginalSize.width());
-    widget.height->changeValue(mOriginalSize.height());
+    m_originalPosition = shape->absolutePosition();
+    m_originalSize = shape->size();
+    widget.left->changeValue(m_originalPosition.x());
+    widget.top->changeValue(m_originalPosition.y());
+    widget.width->changeValue(m_originalSize.width());
+    widget.height->changeValue(m_originalSize.height());
 
     connect(widget.protectSize, SIGNAL(stateChanged(int)),
             this, SLOT(protectSizeChanged(int)));
@@ -127,11 +131,28 @@ void KWFrameGeometry::cancel() {
         m_state->markFrameUsed();
     }
     Q_ASSERT(frame);
-    frame->shape()->setAbsolutePosition(mOriginalPosition);
-    frame->shape()->setSize(mOriginalSize);
+    frame->shape()->setAbsolutePosition(m_originalPosition);
+    frame->shape()->setSize(m_originalSize);
+}
+
+void KWFrameGeometry::widthChanged(double value) {
+    if(! m_state->protectAspectRatio())  return;
+    if(m_blockSignals) return;
+    m_blockSignals = true;
+    widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * value);
+    m_blockSignals = false;
+}
+
+void KWFrameGeometry::heightChanged(double value) {
+    if(! m_state->protectAspectRatio())  return;
+    if(m_blockSignals) return;
+    m_blockSignals = true;
+    widget.width->changeValue(m_originalSize.width() / m_originalSize.height() * value);
+    m_blockSignals = false;
 }
 
 void KWFrameGeometry::setUnit(KoUnit unit) {
+kDebug() << "setUnit";
     widget.left->setUnit(unit);
     widget.top->setUnit(unit);
     widget.width->setUnit(unit);

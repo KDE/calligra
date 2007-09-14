@@ -91,6 +91,7 @@ bool KWGeneralFramePropertiesFactory::showForShapeId(const QString &id) const {
 FrameConfigSharedState::FrameConfigSharedState(KWDocument *document)
     : m_refcount(0),
     m_deleteFrame(false),
+    m_protectAspectRatio(false),
     m_frame(0),
     m_document(document)
 {

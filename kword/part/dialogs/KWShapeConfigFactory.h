@@ -42,9 +42,13 @@ public:
 
     KWDocument *document() const { return m_document; }
 
+    bool protectAspectRatio() const { return m_protectAspectRatio; }
+    void setProtectAspectRatio(bool on) { m_protectAspectRatio = on; }
+
 private:
     int m_refcount;
     bool m_deleteFrame;
+    bool m_protectAspectRatio; // states if the user has this boolean set right now.
     KWFrame *m_frame;
     KWDocument *m_document;
 };

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,7 +48,7 @@ public:
     /// reimplemented
     virtual void setUnit(KoUnit unit);
 
-    /// reimplemented 
+    /// reimplemented
     virtual bool showOnShapeCreate() { return true; }
 
 private slots:
@@ -56,12 +56,16 @@ private slots:
     void protectSizeChanged(int protectSizeState);
     void syncMargins(double value);
 
+    void widthChanged(double value);
+    void heightChanged(double value);
+
 private:
     Ui::KWFrameGeometry widget;
     FrameConfigSharedState *m_state;
     KWFrame *m_frame;
-    QPointF mOriginalPosition;
-    QSizeF mOriginalSize;
+    QPointF m_originalPosition;
+    QSizeF m_originalSize;
+    bool m_blockSignals;
 };
 
 #endif

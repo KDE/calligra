@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
 #include <QCheckBox>
 
 class KWFrameConnectSelector;
-class KoShapeGeometry;
+class KWFrameGeometry;
 class KWFrameRunaroundProperties;
 class KWGeneralFrameProperties;
 class KWFrame;
@@ -60,7 +60,7 @@ private slots:
 
 private:
     KWFrameConnectSelector *m_frameConnectSelector;
-    KoShapeGeometry *m_frameGeometry;
+    KWFrameGeometry *m_frameGeometry;
     KWFrameRunaroundProperties *m_frameRunaroundProperties;
     KWGeneralFrameProperties *m_generalFrameProperties;
     FrameConfigSharedState *m_state;

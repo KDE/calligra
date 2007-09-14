@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +25,7 @@
 #include "KWGeneralFrameProperties.h"
 #include "frames/KWFrame.h"
 
-#include "KoShapeGeometry.h"
+#include "KWFrameGeometry.h"
 
 KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *document, QWidget *parent)
     : KPageDialog(parent),
@@ -42,14 +42,15 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
     if(frames.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
         KWFrame *frame = frames.first();
+        m_state->setProtectAspectRatio(frame->shape()->keepAspectRatio());
         if(m_frameConnectSelector->open(frame))
             addPage(m_frameConnectSelector, i18n("Connect Text Frames"));
         else {
             delete m_frameConnectSelector;
             m_frameConnectSelector = 0;
         }
-        m_frameGeometry = new KoShapeGeometry();
-        m_frameGeometry->open(frame->shape());
+        m_frameGeometry = new KWFrameGeometry(m_state);
+        m_frameGeometry->open(frame);
         addPage(m_frameGeometry, i18n("Geometry"));
     }
 

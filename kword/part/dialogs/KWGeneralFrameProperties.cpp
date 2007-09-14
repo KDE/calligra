@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
     m_newPageGroup->addButton(widget.placeCopy, KWord::CopyNewFrame);
 
     connect(m_newPageGroup, SIGNAL(buttonClicked(int)), this, SLOT(newPageGroupUpdated(int)));
+    connect(widget.keepAspectRatio, SIGNAL(clicked()), this, SLOT(keepAspectChanged()));
 }
 
 void KWGeneralFrameProperties::open(KoShape *shape) {
@@ -47,8 +48,11 @@ void KWGeneralFrameProperties::open(KoShape *shape) {
     widget.allFrames->setVisible(false);
     widget.resizeLastFrame->setChecked(true);
     widget.isCopyOfPrevious->setVisible(false);
-    if(shape->shapeId() == TextShape_SHAPEID)
+    widget.keepAspectRatio->setChecked(shape->keepAspectRatio());
+    if(shape->shapeId() == TextShape_SHAPEID) {
         widget.reconnect->setChecked(true);
+        widget.keepAspectRatio->setVisible(false);
+    }
     else {
         widget.noFollowup->setChecked(true);
         widget.reconnect->setVisible(false);
@@ -60,7 +64,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
     m_state->addUser();
     m_frames = frames;
     // checkboxes
-    GuiHelper copyFrame, allFrames, protectContent, evenOdd;
+    GuiHelper copyFrame, allFrames, protectContent, evenOdd, keepAspect;
     // radioGroups
     GuiHelper::State newFrame = GuiHelper::Unset, frameBehavior = GuiHelper::Unset;
     KWord::NewFrameBehavior nfb = KWord::ReconnectNewFrame;
@@ -90,6 +94,8 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
         KWTextFrameSet *textFs = dynamic_cast<KWTextFrameSet *> (frame->frameSet());
         if(textFs)
             protectContent.addState(textFs->protectContent() ? GuiHelper::On : GuiHelper::Off);
+        else
+            keepAspect.addState(frame->shape()->keepAspectRatio() ? GuiHelper::On : GuiHelper::Off);
     }
 
     // update the GUI
@@ -97,6 +103,7 @@ void KWGeneralFrameProperties::open(const QList<KWFrame*> &frames) {
     widget.isCopyOfPrevious->setEnabled(false);
     allFrames.updateCheckBox(widget.allFrames, true);
     protectContent.updateCheckBox(widget.protectContent, true);
+    keepAspect.updateCheckBox(widget.keepAspectRatio, true);
     evenOdd.updateCheckBox(widget.evenOdd, false);
     // unfortunately the datamodel is reversed :)
     widget.evenOdd->setChecked( ! widget.evenOdd->isChecked());
@@ -125,6 +132,8 @@ void KWGeneralFrameProperties::save() {
         m_frames.append(frame);
     }
     foreach(KWFrame *frame, m_frames) {
+        if(widget.keepAspectRatio->checkState() != Qt::PartiallyChecked)
+            frame->shape()->setKeepAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
         if(m_textGroup->checkedId() != -1) {
             KWord::FrameBehavior fb = static_cast<KWord::FrameBehavior> (m_textGroup->checkedId());
             frame->setFrameBehavior(fb);
@@ -155,6 +164,10 @@ void KWGeneralFrameProperties::save() {
 
 void KWGeneralFrameProperties::newPageGroupUpdated(int which) {
     widget.createNewPage->setEnabled(which == KWord::ReconnectNewFrame);
+}
+
+void KWGeneralFrameProperties::keepAspectChanged() {
+    m_state->setProtectAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
 }
 
 #include "KWGeneralFrameProperties.moc"
