@@ -423,12 +423,12 @@ void KWDocument::setPageSettings(const KWPageSettings &newPageSettings) {
         if(tfs->textFrameSetType() != KWord::MainTextFrameSet) continue;
         // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
-        QList<KWPage*> coveredPages;
+        QSet<KWPage*> coveredPages;
         foreach(KWFrame *frame, tfs->frames()) {
             KWPage *page = pageManager()->page(frame->shape());
             if(page) {
                 if(! coveredPages.contains(page)) {
-                    coveredPages.append(page);
+                    coveredPages += page;
                     continue; // keep one frame per page.
                 }
             }
