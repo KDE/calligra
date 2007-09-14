@@ -44,7 +44,8 @@ private slots:
     void testAVERAGEA();
     void testBETADIST();
 //     void testBINO();
-//     void testCHIDIST();
+    void testCHIDIST();
+    void testLEGACYCHIDIST();
 //     void testCOMBIN();  // in -> TestMathFunctions
 //     void testCOMBINA(); // in -> TestMathFunctions
     void testCONFIDENCE();
@@ -60,6 +61,7 @@ private slots:
     void testFREQUENCY();
 //     void testFTEST(); // to be implemented
     void testGAMMADIST();
+    void testGAMMAINV(); // to be implemented
 //     void testGAMMALN(); in -> TestMathFunctions
     void testGAUSS();
 //     void testGROWTH(); // TODO check implemented?
