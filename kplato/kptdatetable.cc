@@ -43,6 +43,7 @@
 #include <QDesktopWidget>
 
 #include <kglobalsettings.h>
+#include <kcolorscheme.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -104,7 +105,7 @@ DateTable::DateTable(QWidget *parent, const QDate& _date, const char* name, Qt::
 
     setHScrollBarMode(AlwaysOff);
     setVScrollBarMode(AlwaysOff);
-    viewport()->setEraseColor(KGlobalSettings::baseColor());
+    viewport()->setEraseColor(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
     setDate(date_); // this initializes firstday, numdays, numDaysPrevMonth
 
     colorBackgroundHoliday = QColor(0, 245, 255, QColor::Hsv);
@@ -114,8 +115,8 @@ DateTable::DateTable(QWidget *parent, const QDate& _date, const char* name, Qt::
     colorTextHoliday = Qt::black;
     colorTextWorkday = Qt::black;
     colorLine = Qt::black;
-    backgroundSelectColor = KGlobalSettings::highlightColor();
-    penSelectColor=KGlobalSettings::baseColor();
+    backgroundSelectColor = KColorScheme(QPalette::Active, KColorScheme::Selection).background().color();
+    penSelectColor = KColorScheme(QPalette::Active, KColorScheme::View).background().color();
 
 }
 
@@ -134,10 +135,10 @@ void DateTable::paintWeekday(QPainter *painter, int col) {
 
     //kDebug()<<" col="<<col<<" day="<<day<<" name="<<daystr;
 
-    painter->setBrush(KGlobalSettings::baseColor());
-    painter->setPen(KGlobalSettings::baseColor());
+    painter->setBrush(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
+    painter->setPen(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
     painter->drawRect(0, 0, w, h);
-    painter->setPen(KGlobalSettings::textColor());
+    painter->setPen(KColorScheme(QPalette::Active, KColorScheme::Selection).foreground().color());
 
     if (m_markedWeekdays.state(day) == CalendarDay::Working) {
         painter->setPen(colorBackgroundWorkday);
@@ -178,10 +179,10 @@ void DateTable::paintWeekNumber(QPainter *painter, int row) {
         font.setItalic(true);
     painter->setFont(font);
 
-    painter->setBrush(KGlobalSettings::baseColor());
-    painter->setPen(KGlobalSettings::baseColor());
+    painter->setBrush(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
+    painter->setPen(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
     painter->drawRect(0, 0, w, h);
-    painter->setPen(KGlobalSettings::textColor());
+    painter->setPen(KColorScheme(QPalette::Active, KColorScheme::Selection).foreground().color());
 
     painter->drawText(0, 0, w, h-1, Qt::AlignCenter, QString("%1").arg(m_weeks[row].first), -1, &rect);
     painter->setPen(colorLine);
@@ -205,8 +206,8 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
 
     QDate d = getDate(position(row, col));
 
-    painter->setBrush(KGlobalSettings::baseColor());
-    painter->setPen(KGlobalSettings::baseColor());
+    painter->setBrush(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
+    painter->setPen(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
     painter->drawRect(0, 0, w, h);
 
     // First paint the dates background
@@ -243,7 +244,7 @@ void DateTable::paintDay(QPainter *painter, int row, int col) {
     }
 
     // and now the day number
-    d.month() == date.month() ? painter->setPen(KGlobalSettings::textColor()) : painter->setPen(Qt::gray);
+    d.month() == date.month() ? painter->setPen(KColorScheme(QPalette::Active, KColorScheme::Selection).foreground().color()) : painter->setPen(Qt::gray);
     painter->drawText(0, 0, w, h, Qt::AlignCenter, QString().setNum(d.day()), -1, &rect);
 
     if(rect.width()>maxCell.width()) maxCell.setWidth(rect.width());
@@ -257,7 +258,7 @@ void DateTable::paintCell(QPainter *painter, int row, int col) {
         int w=cellWidth();
         int h=cellHeight();
         painter->setPen(colorLine);
-        painter->setBrush(KGlobalSettings::baseColor());
+        painter->setBrush(KColorScheme(QPalette::Active, KColorScheme::View).background().color());
         painter->drawLine(w-1, 0, w-1, h-1);
         painter->drawLine(w-1, h-1, 0, h-1);
         painter->restore();
@@ -792,7 +793,7 @@ DateInternalMonthPicker::DateInternalMonthPicker
   setNumCols(3);
   // enable to find drawing failures:
   // setTableFlags(Tbl_clipCellPainting);
-  viewport()->setEraseColor(KGlobalSettings::baseColor()); // for consistency with the datepicker
+  viewport()->setEraseColor(KColorScheme(QPalette::Active, KColorScheme::View).background().color()); // for consistency with the datepicker
   // ----- find the preferred size
   //       (this is slow, possibly, but unfortunately it is needed here):
   QFontMetrics metrics(font);
@@ -821,7 +822,7 @@ DateInternalMonthPicker::getResult() const
 void
 DateInternalMonthPicker::setupPainter(QPainter *p)
 {
-  p->setPen(KGlobalSettings::textColor());
+  p->setPen(KColorScheme(QPalette::Active, KColorScheme::Selection).foreground().color());
 }
 
 void
