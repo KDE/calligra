@@ -417,15 +417,22 @@ void KWDocument::removeFrame(KWFrame *frame) {
 
 void KWDocument::setPageSettings(const KWPageSettings &newPageSettings) {
     m_pageSettings = newPageSettings;
-    // TODO be much more intelligent about removing
-    // only frames that are not needed anymore in the new settings should be removed.
     foreach(KWFrameSet *fs, m_frameSets) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
         if(tfs == 0) continue;
-        if(tfs->textFrameSetType() == KWord::OtherTextFrameSet) continue;
+        if(tfs->textFrameSetType() != KWord::MainTextFrameSet) continue;
         // we switch to the interaction tool to avoid crashes if the tool was editing a frame.
         KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
+        QList<KWPage*> coveredPages;
         foreach(KWFrame *frame, tfs->frames()) {
+            KWPage *page = pageManager()->page(frame->shape());
+            if(page) {
+                if(! coveredPages.contains(page)) {
+                    coveredPages.append(page);
+                    continue; // keep one frame per page.
+                }
+            }
+
             foreach(KoView *view, views()) {
                 KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
                 canvas->shapeManager()->remove(frame->shape());
