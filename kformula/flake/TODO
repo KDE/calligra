@@ -1,6 +1,6 @@
 short term goals:
-- correct the TokenElement class rendering wise to create OperatorElement
-- implement scripts to generator Dictionary.cpp file
+*done correct the TokenElement class rendering wise to create OperatorElement
+*done implement scripts to generator Dictionary.cpp file
 - test rendering of implemented elements and create a list of errors
 *done create SquareRootElement class to reflect differences between Root and SquareRoot
 - try to fix the rendering errors of previously tested elements
