@@ -22,6 +22,7 @@
 #include <QRadioButton>
 #include <QGridLayout>
 #include <QButtonGroup>
+#include <QButtonGroup>
 
 #include <KDebug>
 
@@ -39,7 +40,7 @@ public:
 
     QRadioButton *createButton() {
         QRadioButton *b = new QRadioButton();
-        b->setContentsMargins(0, 0, -10, -10);
+        //b->setContentsMargins(0, 0, -10, -10);
         buttonGroup.addButton(b);
         return b;
     }
@@ -49,20 +50,103 @@ public:
     KWPositionSelector::Position position;
 };
 
+class RadioLayout : public QLayout {
+public:
+    RadioLayout(QWidget *parent)
+        : QLayout(parent)
+    {
+    }
+
+    void setGeometry (const QRect &geom) {
+//kDebug() << "geom: " << geom;
+        QSize prefSize;
+        int maxRow = 0, maxCol = 0;
+        foreach(Item item, items) {
+            if(prefSize.isEmpty()) {
+                QAbstractButton *but = dynamic_cast<QAbstractButton*> (item.child->widget());
+                Q_ASSERT(but);
+                prefSize = but->iconSize();
+            }
+            maxRow = qMax(maxRow, item.row);
+            maxCol = qMax(maxRow, item.column);
+        }
+        maxCol++; maxRow++; // due to being zero-based.
+        preferred = QSize(maxCol * prefSize.width() + (maxCol-1) * 5, maxRow * prefSize.height() + (maxRow-1) * 5);
+        minimum = QSize(maxCol * prefSize.width(), maxRow * prefSize.height());
+//kDebug() << "pref: " << preferred << ", min: " << minimum;
+
+        const int columnWidth = qRound(geom.width() / ((double) maxCol + 1));
+        const int rowHeight = qRound(geom.height() / ((double) maxRow + 1));
+        foreach(Item item, items) {
+            QPoint point( item.column * columnWidth, item.row * rowHeight );
+            QRect rect(point + geom.topLeft(), prefSize);
+            item.child->setGeometry(rect);
+        }
+    }
+
+    QLayoutItem *itemAt (int index) const {
+        return items.at(index).child;
+    }
+
+    QLayoutItem *takeAt (int index) {
+        Q_ASSERT(index < count());
+        Item item = items.takeAt(index);
+        return item.child;
+    }
+
+    int count () const {
+        return items.count();
+    }
+
+    void addItem(QLayoutItem *item) {
+        Q_ASSERT(0);
+    }
+
+    QSize sizeHint() const {
+        return preferred;
+    }
+
+    QSize minimumSize() const {
+        return minimum;
+    }
+
+/*
+    QSize maximumSize() const {
+        return preferred;
+    }
+*/
+
+    void addWidget(QRadioButton *widget, int row, int column) {
+        Item newItem;
+        newItem.child = new QWidgetItem(widget);
+        newItem.row = row;
+        newItem.column = column;
+        items.append(newItem);
+        widget->setParent(parentWidget());
+    }
+
+private:
+    struct Item {
+        QLayoutItem *child;
+        int column;
+        int row;
+    };
+    QList<Item> items;
+    QSize preferred, minimum;
+};
+
 KWPositionSelector::KWPositionSelector(QWidget *parent)
     : QWidget(parent),
     d(new Private())
 {
-    QGridLayout *grid = new QGridLayout(this);
-    grid->addWidget(d->topLeft, 0, 0);
-    grid->addWidget(d->topRight, 0, 2);
-    grid->addWidget(d->center, 1, 1);
-    grid->addWidget(d->bottomRight, 2, 2);
-    grid->addWidget(d->bottomLeft, 2, 0);
-    grid->setMargin(0);
-    grid->setSpacing(0);
-d->topLeft->setContentsMargins(0, 0, -10, -10);
-    setLayout(grid);
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    RadioLayout *lay = new RadioLayout(this);
+    lay->addWidget(d->topLeft, 0, 0);
+    lay->addWidget(d->topRight, 0, 2);
+    lay->addWidget(d->center, 1, 1);
+    lay->addWidget(d->bottomRight, 2, 2);
+    lay->addWidget(d->bottomLeft, 2, 0);
+    setLayout(lay);
 
     connect(d->topLeft, SIGNAL(clicked()), this, SLOT(positionChanged()));
     connect(d->topRight, SIGNAL(clicked()), this, SLOT(positionChanged()));
