@@ -38,8 +38,9 @@ KPrAnimationMoveAppear::~KPrAnimationMoveAppear()
 {
 }
 
-KPrAnimationData * KPrAnimationMoveAppear::animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager )
+KPrAnimationData * KPrAnimationMoveAppear::animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )
 {
+    Q_UNUSED( pageRect );
     KPrAnimationDataTranslate * data = new KPrAnimationDataTranslate( canvas, shapeManager, m_shape->boundingRect() );
     // TODO use bounding rect + shadow
     double x = data->m_boundingRect.x() + data->m_boundingRect.width();

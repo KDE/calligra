@@ -33,7 +33,7 @@ public:
     virtual ~KPrTranslateAnimation();
 
     /// reimplemented
-    virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager ) = 0;
+    virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect ) = 0;
     /// reimplemented
     virtual bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData );
     /// reimplemented

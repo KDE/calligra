@@ -29,10 +29,11 @@ public:
     : KPrShapeAnimation( shape, step, Appear )
     {}
 
-    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager )
+    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )
     {
         Q_UNUSED( canvas );
         Q_UNUSED( shapeManager );
+        Q_UNUSED( pageRect );
         return 0;
     }
 
@@ -69,10 +70,11 @@ public:
     : KPrShapeAnimation( shape, step, Disappear )
     {}
 
-    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager )
+    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )
     {
         Q_UNUSED( canvas );
         Q_UNUSED( shapeManager );
+        Q_UNUSED( pageRect );
         return 0;
     }
 

@@ -318,12 +318,15 @@ void KPrAnimationDirector::updateAnimations()
 
 void KPrAnimationDirector::insertAnimations( KPrAnimationController * controller, KoShapeManager * shapeManager )
 {
+    KoPageLayout pageLayout = m_view->activePage()->pageLayout();
+    QRectF pageRect( 0, 0, pageLayout.width, pageLayout.height );
+
     QMap<KoShape *, KPrShapeAnimation *> animations = controller->animations().animations( m_steps[m_stepIndex] );
     QMap<KoShape *, KPrShapeAnimation *>::iterator it( animations.begin() );
     for ( ; it != animations.end(); ++it ) {
         KPrShapeAnimation * animation = it.value();
         if ( animation ) {
-            m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas, shapeManager ) ) );
+            m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas, shapeManager, pageRect ) ) );
             if ( animation->duration() > m_maxShapeDuration ) {
                 m_maxShapeDuration = animation->duration();
             }
