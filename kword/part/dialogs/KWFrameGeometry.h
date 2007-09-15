@@ -58,6 +58,11 @@ private slots:
 
     void widthChanged(double value);
     void heightChanged(double value);
+    void setGeometryAlignment(KoFlake::Position position);
+
+private:
+    double leftPos() const;
+    double topPos() const;
 
 private:
     Ui::KWFrameGeometry widget;

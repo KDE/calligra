@@ -21,6 +21,7 @@
 #define KWPOSITIONSELECTOR_H
 
 #include <QWidget>
+#include <KoFlake.h>
 
 /**
  * Widget to show a set of radio buttons so the user can select a position.
@@ -28,21 +29,14 @@
 class KWPositionSelector : public QWidget {
     Q_OBJECT
 public:
-    enum Position {
-        TopLeft,
-        TopRight,
-        Center,
-        BottomLeft,
-        BottomRight
-    };
     KWPositionSelector(QWidget *parent);
     ~KWPositionSelector();
 
-    KWPositionSelector::Position position() const;
-    void setPosition(KWPositionSelector::Position position);
+    KoFlake::Position position() const;
+    void setPosition(KoFlake::Position position);
 
 signals:
-    void positionSelected(KWPositionSelector::Position position);
+    void positionSelected(KoFlake::Position position);
 
 protected:
     /// reimplemented
