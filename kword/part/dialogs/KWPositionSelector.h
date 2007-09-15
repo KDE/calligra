@@ -22,6 +22,9 @@
 
 #include <QWidget>
 
+/**
+ * Widget to show a set of radio buttons so the user can select a position.
+ */
 class KWPositionSelector : public QWidget {
     Q_OBJECT
 public:
@@ -41,8 +44,12 @@ public:
 signals:
     void positionSelected(KWPositionSelector::Position position);
 
+protected:
+    /// reimplemented
+    virtual void paintEvent (QPaintEvent *event);
+
 private slots:
-    void positionChanged();
+    void positionChanged(int position);
 
 private:
     class Private;

@@ -23,6 +23,7 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QButtonGroup>
+#include <QPainter>
 
 #include <KDebug>
 
@@ -31,17 +32,17 @@ public:
     Private()
         : position(KWPositionSelector::TopLeft)
     {
-        topLeft = createButton();
-        topRight = createButton();
-        center = createButton();
-        bottomRight = createButton();
-        bottomLeft = createButton();
+        topLeft = createButton(KWPositionSelector::TopLeft);
+        topLeft->setChecked(true);
+        topRight = createButton(KWPositionSelector::TopRight);
+        center = createButton(KWPositionSelector::Center);
+        bottomRight = createButton(KWPositionSelector::BottomRight);
+        bottomLeft = createButton(KWPositionSelector::BottomLeft);
     }
 
-    QRadioButton *createButton() {
+    QRadioButton *createButton(int id) {
         QRadioButton *b = new QRadioButton();
-        //b->setContentsMargins(0, 0, -10, -10);
-        buttonGroup.addButton(b);
+        buttonGroup.addButton(b, id);
         return b;
     }
 
@@ -58,9 +59,21 @@ public:
     }
 
     void setGeometry (const QRect &geom) {
-//kDebug() << "geom: " << geom;
+        QSize prefSize = calcSizes();
+
+        const int columnWidth = qRound(geom.width() / ((double) maxCol + 1));
+        const int rowHeight = qRound(geom.height() / ((double) maxRow + 1));
+        foreach(Item item, items) {
+            QPoint point( item.column * columnWidth, item.row * rowHeight );
+            QRect rect(point + geom.topLeft(), prefSize);
+            item.child->setGeometry(rect);
+        }
+    }
+
+    QSize calcSizes() {
         QSize prefSize;
-        int maxRow = 0, maxCol = 0;
+        maxRow = 0;
+        maxCol = 0;
         foreach(Item item, items) {
             if(prefSize.isEmpty()) {
                 QAbstractButton *but = dynamic_cast<QAbstractButton*> (item.child->widget());
@@ -73,15 +86,7 @@ public:
         maxCol++; maxRow++; // due to being zero-based.
         preferred = QSize(maxCol * prefSize.width() + (maxCol-1) * 5, maxRow * prefSize.height() + (maxRow-1) * 5);
         minimum = QSize(maxCol * prefSize.width(), maxRow * prefSize.height());
-//kDebug() << "pref: " << preferred << ", min: " << minimum;
-
-        const int columnWidth = qRound(geom.width() / ((double) maxCol + 1));
-        const int rowHeight = qRound(geom.height() / ((double) maxRow + 1));
-        foreach(Item item, items) {
-            QPoint point( item.column * columnWidth, item.row * rowHeight );
-            QRect rect(point + geom.topLeft(), prefSize);
-            item.child->setGeometry(rect);
-        }
+        return prefSize;
     }
 
     QLayoutItem *itemAt (int index) const {
@@ -98,23 +103,21 @@ public:
         return items.count();
     }
 
-    void addItem(QLayoutItem *item) {
+    void addItem(QLayoutItem *) {
         Q_ASSERT(0);
     }
 
     QSize sizeHint() const {
+        if(preferred.isEmpty())
+            const_cast<RadioLayout*> (this)->calcSizes();
         return preferred;
     }
 
     QSize minimumSize() const {
+        if(minimum.isEmpty())
+            const_cast<RadioLayout*> (this)->calcSizes();
         return minimum;
     }
-
-/*
-    QSize maximumSize() const {
-        return preferred;
-    }
-*/
 
     void addWidget(QRadioButton *widget, int row, int column) {
         Item newItem;
@@ -133,13 +136,14 @@ private:
     };
     QList<Item> items;
     QSize preferred, minimum;
+    int maxCol, maxRow;
 };
 
 KWPositionSelector::KWPositionSelector(QWidget *parent)
     : QWidget(parent),
     d(new Private())
 {
-    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     RadioLayout *lay = new RadioLayout(this);
     lay->addWidget(d->topLeft, 0, 0);
     lay->addWidget(d->topRight, 0, 2);
@@ -148,11 +152,7 @@ KWPositionSelector::KWPositionSelector(QWidget *parent)
     lay->addWidget(d->bottomLeft, 2, 0);
     setLayout(lay);
 
-    connect(d->topLeft, SIGNAL(clicked()), this, SLOT(positionChanged()));
-    connect(d->topRight, SIGNAL(clicked()), this, SLOT(positionChanged()));
-    connect(d->center, SIGNAL(clicked()), this, SLOT(positionChanged()));
-    connect(d->bottomRight, SIGNAL(clicked()), this, SLOT(positionChanged()));
-    connect(d->bottomLeft, SIGNAL(clicked()), this, SLOT(positionChanged()));
+    connect(&d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(positionChanged(int)));
 }
 
 KWPositionSelector::~KWPositionSelector() {
@@ -184,8 +184,16 @@ void KWPositionSelector::setPosition(KWPositionSelector::Position position) {
     }
 }
 
-void KWPositionSelector::positionChanged() {
-    // TODO
-    //emit positionSelected(KWPositionSelector::Position position);
+void KWPositionSelector::positionChanged(int position) {
+    emit positionSelected(static_cast<KWPositionSelector::Position> (position));
+}
+
+void KWPositionSelector::paintEvent (QPaintEvent *) {
+    QPainter painter( this );
+    QPen pen(Qt::black);
+    pen.setWidth(3);
+    painter.setPen(pen);
+    painter.drawRect(d->topLeft->width() / 2 - 2, d->topLeft->height() / 2, d->bottomRight->x(), d->bottomRight->y());
+    painter.end();
 }
 
