@@ -38,6 +38,7 @@ KWGeneralFrameProperties::KWGeneralFrameProperties(FrameConfigSharedState *state
 
     connect(m_newPageGroup, SIGNAL(buttonClicked(int)), this, SLOT(newPageGroupUpdated(int)));
     connect(widget.keepAspectRatio, SIGNAL(clicked()), this, SLOT(keepAspectChanged()));
+    connect(m_state, SIGNAL(keepAspectRatioChanged(bool)), widget.keepAspectRatio, SLOT(setChecked(bool)));
 }
 
 void KWGeneralFrameProperties::open(KoShape *shape) {
@@ -167,7 +168,7 @@ void KWGeneralFrameProperties::newPageGroupUpdated(int which) {
 }
 
 void KWGeneralFrameProperties::keepAspectChanged() {
-    m_state->setProtectAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
+    m_state->setKeepAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
 }
 
 #include "KWGeneralFrameProperties.moc"

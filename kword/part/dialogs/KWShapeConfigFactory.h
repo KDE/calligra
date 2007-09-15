@@ -22,12 +22,15 @@
 
 #include <KoShapeConfigFactory.h>
 
+#include <QObject>
+
 class KoShape;
 class KWFrame;
 class KWDocument;
 
 /// \internal
-class FrameConfigSharedState {
+class FrameConfigSharedState : public QObject {
+    Q_OBJECT
 public:
     explicit FrameConfigSharedState(KWDocument *document);
     ~FrameConfigSharedState();
@@ -42,8 +45,11 @@ public:
 
     KWDocument *document() const { return m_document; }
 
-    bool protectAspectRatio() const { return m_protectAspectRatio; }
-    void setProtectAspectRatio(bool on) { m_protectAspectRatio = on; }
+    bool keepAspectRatio() const { return m_protectAspectRatio; }
+    void setKeepAspectRatio(bool on);
+
+signals:
+    void keepAspectRatioChanged(bool keep);
 
 private:
     int m_refcount;

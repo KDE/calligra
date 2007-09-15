@@ -120,3 +120,12 @@ KWFrame *FrameConfigSharedState::createFrame(KoShape *shape) {
     }
     return m_frame;
 }
+
+void FrameConfigSharedState::setKeepAspectRatio(bool on) {
+    if(m_protectAspectRatio == on)
+        return;
+    m_protectAspectRatio = on;
+    emit keepAspectRatioChanged(on);
+}
+
+#include "KWShapeConfigFactory.moc"

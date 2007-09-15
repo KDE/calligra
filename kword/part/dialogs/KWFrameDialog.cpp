@@ -42,7 +42,7 @@ KWFrameDialog::KWFrameDialog (const QList<KWFrame*> &frames, KWDocument *documen
     if(frames.count() == 1) {
         m_frameConnectSelector = new KWFrameConnectSelector(m_state);
         KWFrame *frame = frames.first();
-        m_state->setProtectAspectRatio(frame->shape()->keepAspectRatio());
+        m_state->setKeepAspectRatio(frame->shape()->keepAspectRatio());
         if(m_frameConnectSelector->open(frame))
             addPage(m_frameConnectSelector, i18n("Connect Text Frames"));
         else {

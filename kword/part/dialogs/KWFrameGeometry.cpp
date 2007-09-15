@@ -39,6 +39,8 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
     widget.bottomMargin->setMinimum(0.0);
     widget.topMargin->setMinimum(0.0);
 
+    widget.keepAspect->setKeepAspectRatio(m_state->keepAspectRatio());
+
     connect(widget.leftMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
     connect(widget.rightMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
     connect(widget.bottomMargin, SIGNAL(valueChangedPt(double)), this, SLOT(syncMargins(double)));
@@ -47,8 +49,12 @@ KWFrameGeometry::KWFrameGeometry(FrameConfigSharedState *state)
     connect(widget.width, SIGNAL(valueChangedPt(double)), this, SLOT(widthChanged(double)));
     connect(widget.height, SIGNAL(valueChangedPt(double)), this, SLOT(heightChanged(double)));
 
+    connect(m_state, SIGNAL(keepAspectRatioChanged(bool)), widget.keepAspect, SLOT(setKeepAspectRatio(bool)));
+    connect(widget.keepAspect, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(updateAspectRatio(bool)));
+
     connect(widget.positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
         this, SLOT(setGeometryAlignment(KoFlake::Position)));
+
 }
 
 KWFrameGeometry::~KWFrameGeometry() {
@@ -141,7 +147,7 @@ void KWFrameGeometry::cancel() {
 }
 
 void KWFrameGeometry::widthChanged(double value) {
-    if(! m_state->protectAspectRatio())  return;
+    if(! m_state->keepAspectRatio())  return;
     if(m_blockSignals) return;
     m_blockSignals = true;
     widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * value);
@@ -149,7 +155,7 @@ void KWFrameGeometry::widthChanged(double value) {
 }
 
 void KWFrameGeometry::heightChanged(double value) {
-    if(! m_state->protectAspectRatio())  return;
+    if(! m_state->keepAspectRatio())  return;
     if(m_blockSignals) return;
     m_blockSignals = true;
     widget.width->changeValue(m_originalSize.width() / m_originalSize.height() * value);
@@ -173,6 +179,12 @@ void KWFrameGeometry::setGeometryAlignment(KoFlake::Position position) {
     widget.xPos->changeValue(pos.x());
     widget.yPos->changeValue(pos.y());
     m_blockSignals = false;
+}
+
+void KWFrameGeometry::updateAspectRatio(bool keep) {
+    m_state->setKeepAspectRatio(keep);
+    if(keep)
+        widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * widget.width->value());
 }
 
 #include "KWFrameGeometry.moc"

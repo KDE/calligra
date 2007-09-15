@@ -59,6 +59,7 @@ private slots:
     void widthChanged(double value);
     void heightChanged(double value);
     void setGeometryAlignment(KoFlake::Position position);
+    void updateAspectRatio(bool);
 
 private:
     double leftPos() const;

@@ -88,19 +88,6 @@
       <item row="2" column="1" >
        <widget class="KoUnitDoubleSpinBox" name="width" />
       </item>
-      <item rowspan="2" row="2" column="2" >
-       <widget class="QToolButton" name="keepAspect" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Minimum" hsizetype="Maximum" >
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text" >
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
       <item rowspan="2" row="2" column="3" colspan="2" >
        <spacer>
         <property name="orientation" >
@@ -126,6 +113,13 @@
       </item>
       <item row="3" column="1" >
        <widget class="KoUnitDoubleSpinBox" name="height" />
+      </item>
+      <item rowspan="2" row="2" column="2" >
+       <widget class="KoAspectButton" name="keepAspect" >
+        <property name="text" >
+         <string/>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -237,6 +231,11 @@
    <extends>QWidget</extends>
    <header>dialogs/KWPositionSelector.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QLabel</extends>
+   <header>KoAspectButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
