@@ -889,7 +889,7 @@
 	If any of the two parameters x or Significance is zero, the result is zero.</Text>
 	<Syntax>FLOOR(x)</Syntax>
 	<Example>FLOOR(12.5) equals 12</Example>
-	<Example>FLOOR(-12.5) equals -12</Example>
+	<Example>FLOOR(-12.5) equals -13</Example>
 	<Example>FLOOR(5; 2) equals 4</Example>
 	<Example>FLOOR(5; 2.2) equals 4.4</Example>
 	<Related>CEIL</Related>
