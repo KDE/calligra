@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ ${KDE4_INCLUDES}  )
+include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/shapes/ ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 
@@ -13,17 +13,14 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(SHAPES_SOURCES ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ )
-
 set(karbonsvgimport_PART_SRCS 
     svgimport.cc
     SvgGradientHelper.cpp
-    ${SHAPES_SOURCES}/ellipse/KoEllipseShape.cpp 
-    ${SHAPES_SOURCES}/rectangle/KoRectangleShape.cpp)
+    ${SHAPES_SOURCES} )
 
 kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
 
-target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
+target_link_libraries(karbonsvgimport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon kotext )
 
 install(TARGETS karbonsvgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
