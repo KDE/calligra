@@ -23,6 +23,7 @@
 #define ELEMENTFACTORY_H
 
 #include <QString>
+#include "kformula_export.h"
 
 class BasicElement;
 
@@ -71,7 +72,7 @@ enum ElementType {
  *
  * @author Martin Pfeiffer
  */
-class ElementFactory {
+class KOFORMULA_EXPORT ElementFactory {
 public:
     /// The default constructor
     ElementFactory();

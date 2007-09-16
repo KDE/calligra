@@ -20,16 +20,27 @@
 #include "FormulaToolOptions.h"
 #include "KoFormulaTool.h"
 #include "KoFormulaShape.h"
+#include "ElementFactory.h"
+#include "AttributeManager.h"
+#include "BasicElement.h"
+#include "FormulaRenderer.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOasisLoadingContext.h>
+#include <KoSavingContext.h>
 #include <KoOasisStyles.h>
+#include <KoGenStyles.h>
 
 #include <KFileDialog>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <QPainter>
+#include <QPixmap>
 #include <QFile>
+#include <QBuffer>
 #include <QPushButton>
 #include <QComboBox>
 #include <QListWidget>
@@ -39,11 +50,16 @@ FormulaToolOptions::FormulaToolOptions( QWidget* parent, Qt::WindowFlags f )
                   : QWidget( parent, f )
 {
     m_templateCombo = new QComboBox( this );
+    m_templateCombo->setInsertPolicy( QComboBox::NoInsert );
     m_templateCombo->addItem( "General" );
     m_templateCombo->addItem( "Operators" );
     m_templateCombo->addItem( "Functions" );
+    m_templateCombo->addItem( "Custom" );
 
     m_templateList = new QListWidget( this );
+    m_templateList->setViewMode( QListView::IconMode );
+    m_templateList->setSelectionMode( QAbstractItemView::SingleSelection );
+    m_templateList->setDragEnabled( true );
     m_loadFormula = new QPushButton( this );
     m_loadFormula->setText( "Load Formula" );
     m_saveFormula = new QPushButton( this );
@@ -96,11 +112,85 @@ void FormulaToolOptions::slotSaveFormula()
 
     QFile file( url.path() );
     KoXmlWriter writer( &file );
-//    m_tool->shape()->saveOdf( );
+    KoGenStyles styles;
+    KoSavingContext savingContext( styles );
+    KoShapeSavingContext shapeSavingContext( writer, savingContext );
+
+    m_tool->shape()->saveOdf( shapeSavingContext );
 }
 
 void FormulaToolOptions::slotTemplateComboIndexChange( int index )
 {
+    m_templateList->clear();                  // empty the current list
+    QList<QListWidgetItem*> tmpList;
+    QString path;
+    switch( index ) {
+        case 0:                               // General selected
+            tmpList = m_general;
+            path = KStandardDirs::locate( "data", "general.xml" );
+            break;
+        case 1:                               // Operators selected
+            tmpList = m_operators;
+            path = KStandardDirs::locate( "data", "operators.xml" );
+            break;
+        case 2:                               // Functions selected
+            tmpList = m_functions;
+            path = KStandardDirs::locate( "data", "functions.xml" );
+            break;
+        case 3:                               // Custom selected
+            tmpList = m_custom;
+            path = KStandardDirs::locate( "data", "custom.xml" );
+            break;
+    }
+
+    if( tmpList.isEmpty() )                  // optionally load templates first
+        loadTemplates( &tmpList, path );
+
+    foreach( QListWidgetItem* item, tmpList ) // refill template list
+        m_templateList->addItem( item );
+}
+
+void FormulaToolOptions::loadTemplates( QList<QListWidgetItem*>* list, const QString& p )
+{
+    QFile file( p );  // open template file
+    if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
+        KMessageBox::error( this, "Could not find all template files.",
+                                  "Formula shape template error" );
+        return;
+    }
+
+    KoXmlDocument tmpDocument;  // setup DOM for parsing templates
+    tmpDocument.setContent( &file, false, 0, 0, 0 );
+    if( tmpDocument.documentElement().tagName() != "formulashapetemplates" ) {
+        // TODO error not a formula template
+    }
+
+    QBuffer buffer;
+    KoXmlWriter writer( &buffer );
+    QPixmap tmpPixmap;
+    QPainter painter( &tmpPixmap );
+    AttributeManager manager;
+    FormulaRenderer renderer;
+    QListWidgetItem* tmpItem = 0;
+    BasicElement* tmpElement = 0;
+    KoXmlElement tmp;
+    forEachElement( tmpDocument.documentElement(), tmp ) {
+        if( tmp.tagName() != "template" )
+            return;
+        tmp = tmp.firstChild().toElement();
+        buffer.open( QBuffer::ReadWrite );
+        tmpElement = ElementFactory::createElement( tmp.tagName(), 0 );
+        tmpElement->readMathML( tmp );
+        tmpElement->writeMathML( &writer ); 
+        renderer.layoutElement( tmpElement );
+        renderer.paintElement( painter, tmpElement );
+        tmpItem = new QListWidgetItem( m_templateList );
+        tmpItem->setIcon( QIcon( tmpPixmap ) );
+        tmpItem->setData( Qt::UserRole, QString( buffer.data() ) );
+        list->append( tmpItem );
+        delete tmpElement;
+        buffer.close();
+    }
 }
 
 void FormulaToolOptions::setFormulaTool( KoFormulaTool* tool )
