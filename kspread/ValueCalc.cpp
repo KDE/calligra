@@ -1350,7 +1350,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
   double beta  = numToDouble (converter->toFloat (_beta));  // beta
 
   // debug info
-  kDebug()<<"GetGammaDist( x="<<x<<", alpha="<<alpha<<", beta="<<beta<<" )";
+//   kDebug()<<"GetGammaDist( x="<<x<<", alpha="<<alpha<<", beta="<<beta<<" )";
 
   int lower_tail=1; //
   int pearson;      // flag is set if pearson was used
@@ -1376,7 +1376,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
 
     pearson = 1; // set flag -> use pearson's series expansion.
     res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha + 1.0)).asFloat());
-    kDebug()<<"Pearson  res="<<res;
+//     kDebug()<<"Pearson  res="<<res;
 
     //                 x           x           x
     // sum = 1.0 + --------- +  --------- * --------- + ...
@@ -1398,7 +1398,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
 
     res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha)).asFloat());
 
-    kDebug()<<"Continued fraction expression res="<<res;
+//     kDebug()<<"Continued fraction expression res="<<res;
 
     //
     //  
@@ -1419,7 +1419,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
       an = a * n;
       pn5 = b * pn3 - an * pn1;
       pn6 = b * pn4 - an * pn2;
-      kDebug()<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
+//       kDebug()<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
       if (fabs(pn6) > 0.0) 
       {
         osum = sum;
