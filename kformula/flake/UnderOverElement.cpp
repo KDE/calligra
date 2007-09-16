@@ -64,33 +64,28 @@ QString UnderOverElement::attributesDefaultValue( const QString& attribute ) con
 
 bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
 {
-    KoXmlElement child = parent.firstChild().toElement();
     QString name = parent.tagName().toLower();
-    
-    if ( child.isNull() ) {
-        kWarning( 39001 ) << "Empty content in " << name << " element\n";
-        return false;
-    }
-    delete m_baseElement;
-    m_baseElement = ElementFactory::createElement( child.tagName(), this );
+    BasicElement* tmpElement = 0;
+    KoXmlElement tmp;
+    forEachElement( tmp, parent ) { 
+        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
+        if( !tmpElement->readMathML( tmp ) )
+            return false;
 
-    if( name.contains( "under" ) ) {
-        child = child.nextSibling().toElement();
-        if ( child.isNull() ) {
-            kWarning( 39001 ) << "Empty underscript in " << name << " element\n";
-            return false;
+        if( m_baseElement->elementType() == Basic ) {
+            delete m_baseElement; 
+            m_baseElement = tmpElement;
         }
-        delete m_underElement;
-        m_underElement = ElementFactory::createElement( child.tagName(), this );
-    }
-    if ( name.contains( "over" ) ) {
-        child = child.nextSibling().toElement();
-        if ( child.isNull() ) {
-            kWarning( 39001 ) << "Empty overscript in " << name << " element\n";
-            return false;
+        else if( m_underElement->elementType() == Basic && name.contains( "under" ) ) {
+            delete m_underElement;
+            m_underElement = tmpElement;
         }
-        delete m_overElement;
-        m_overElement = ElementFactory::createElement( child.tagName(), this );
+        else if( m_overElement->elementType() == Basic && name.contains( "over" ) ) {
+            delete m_overElement;
+            m_overElement = tmpElement;
+        }
+        else
+            return false;
     }
     return true;
 } 
