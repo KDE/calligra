@@ -122,7 +122,7 @@ void RegisterStatisticalFunctions()
   f->setAcceptArray ();
   repo->add (f);
   f = new Function ("BETADIST", func_betadist);
-  f->setParamCount (3, 5);
+  f->setParamCount (3, 6);
   repo->add (f);
   f = new Function ("BINO", func_bino);
   f->setParamCount (3);
@@ -1026,20 +1026,39 @@ Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
   Value alpha = args[1];
   Value beta = args[2];
 
+  // default values parameter 4 - 6
   Value fA(0.0);
   Value fB(1.0);
-  if (args.count() > 3) fA = args[3];
-  if (args.count() == 5) fB = args[4];
+  bool kum = true;
 
-  //x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0
+  if (args.count() > 3) fA = args[3];
+  if (args.count() > 4) fB = args[4];
+  if (args.count() > 5) 
+    kum = calc->conv()->asInteger (args[5]).asInteger();  // 0 or 1
+
+  // x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0
   if (calc->lower (x, fA) || calc->greater (x, fB) || calc->equal (fA, fB) ||
       (!calc->greater (alpha, 0.0)) || (!calc->greater (beta, 0.0)))
+  {
+    kDebug()<<"betadist: error constraints    x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0";
+    kDebug()<<"x= " << x << " alpha= " << alpha << " beta= " << beta << " fA=" << fA << " fB= " << fB;
     return Value::errorVALUE();
+  }
 
-  // xx = (x - fA) / (fB - fA)  // scaling
-  Value xx = calc->div (calc->sub (x, fA), calc->sub (fB, fA));
+  // scale = (x - fA) / (fB - fA)  // prescaling
+  Value scale = calc->div (calc->sub (x, fA), calc->sub (fB, fA));
 
-  return calc->GetBeta (xx, alpha, beta);
+  if ( kum )
+    return calc->GetBeta ( scale, alpha, beta);
+  else
+  {
+    Value res = calc->div(  calc->mul(calc->GetGamma(alpha), calc->GetGamma(beta)),
+                            calc->GetGamma(calc->add(alpha,beta))   );
+    Value b1  = calc->pow( scale, calc->sub(alpha,Value(1.0)));
+    Value b2  = calc->pow( calc->sub(Value(1.0),scale), calc->sub(beta,Value(1.0)));
+
+    return calc->mul(calc->mul(res,b1),b2);
+  }
 }
 
 // Function: fisher
