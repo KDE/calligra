@@ -1,8 +1,10 @@
 short term goals:
+- create template files - decide what kind of templates should be in place
+- implement rendering in all token elements
 *done correct the TokenElement class rendering wise to create OperatorElement
 *done implement scripts to generator Dictionary.cpp file
-- test rendering of implemented elements and create a list of errors
 *done create SquareRootElement class to reflect differences between Root and SquareRoot
+- test rendering of implemented elements and create a list of errors
 - try to fix the rendering errors of previously tested elements
 - make FormulaCursor class able to insert elements
 - add functionality to FormulaToolOptions so that user can insert elements
