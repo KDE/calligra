@@ -28,6 +28,7 @@
 
 // For debugging
 #include <iostream>
+
 //Added by qt3to4:
 #include <Q3ValueList>
 using std::cout;
@@ -85,12 +86,8 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			QObject* parent,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
-#if 0
-    m_params( 0 ),
-#else
     m_chart( 0 ),
     m_currentData( 0 ),
-#endif
     m_rowLabels(), m_colLabels(),
     m_parentWidget( parentWidget )
 {
@@ -118,6 +115,8 @@ KChartPart::KChartPart( QWidget *parentWidget,
 	// Handle data in columns by default
 	m_params->setDataDirection( KChartParams::DataColumns );
 #else
+	// FIXME: Make the default chart look like the default chart
+	//        in KChart 1.x
         m_type    = BarChartType;
         m_subtype = NormalChartSubtype;
 
@@ -146,13 +145,8 @@ KChartPart::KChartPart( QWidget *parentWidget,
 
 KChartPart::~KChartPart()
 {
-    //kDebug(35001) <<"Part is going to be destroyed now!!!";
-#if 0
-    delete m_params;
-#else
     delete m_currentData;
     delete m_chart;
-#endif
 }
 
 

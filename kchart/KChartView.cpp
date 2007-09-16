@@ -54,8 +54,6 @@
 #include <KoTemplateCreateDia.h>
 #include <KoViewAdaptor.h>
 
-//#include "KDChart.h"
-
 // KChart
 #include "kchart_factory.h"
 #include "KChartPart.h"

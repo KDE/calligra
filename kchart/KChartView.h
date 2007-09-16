@@ -24,17 +24,16 @@
 #define KCHART_VIEW
 
 
-#include <KoView.h>
-//Added by qt3to4:
+// Qt
 #include <QMouseEvent>
-#include <QPaintEvent>
 
-//#include "KDChartAxisParams.h"
+// KOffice
+#include <KoView.h>
 
 
+class QPaintEvent;
 class KAction;
 class KToggleAction;
-class QPaintEvent;
 
 
 namespace KChart
@@ -102,7 +101,8 @@ private:
     KToggleAction  *m_chartring;
     KToggleAction  *m_chartpolar;
     KToggleAction  *m_chartbw;
-    ViewAdaptor *m_dbus;
+
+    ViewAdaptor    *m_dbus;
 
     // This is used for a workaround for a bug in the kdchart code, see #101490.
     bool m_logarithmicScale;

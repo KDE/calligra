@@ -24,22 +24,27 @@
 #define KCHARTPART_H
 
 
+// Local
 #include "kchart_global.h"
 
+// Qt
+#include <QPixmap>
 #include <QStandardItemModel>
 
+// KDE
 #include <kconfig.h>
-#include <KoXmlReader.h>
 
+// KOffice
+#include <KoXmlReader.h>
 #include <koChart.h>
 
+// KDChart
 #include "KDChartChart.h"
 
+// KChart
 #include "kchart_export.h"
-//Added by qt3to4:
-#include <QPixmap>
 
-//class KDChartTableData;
+// Some class references that don't need real includes.
 class QStandardItemModel;
 class KoXmlWriter;
 class KoGenStyles;
@@ -73,17 +78,10 @@ public:
 
     // ----------------------------------------------------------------
 
-#if 0
-    void  analyzeHeaders( const KDChartTableData & data );
-    void  doSetData( const KDChartTableData&  data,
-		     bool  firstRowHeader,
-		     bool  firstColHeader );
-#else
     void  analyzeHeaders( const QStandardItemModel &data );
     void  doSetData( const QStandardItemModel &data,
 		     bool  firstRowHeader,
 		     bool  firstColHeader );
-#endif
 
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
@@ -92,11 +90,8 @@ public:
 
     OdfChartType         chartType() const       { return m_type;       }
     QStandardItemModel  *data()                  { return m_currentData; }
-#if 0
-    KChartParams      *params()    const       { return m_params;     }
-#else
-    KDChart::Chart    *chart()     const       { return m_chart;      }
-#endif
+    KDChart::Chart      *chart()     const       { return m_chart;      }
+
 
     // Data in rows or columns.
     DataDirection  dataDirection() const    { return m_dataDirection; }
@@ -169,10 +164,6 @@ private:
     // The chart and its contents
     OdfChartType             m_type;
     OdfChartSubtype          m_subtype;
-#if 0
-    KChartParams            *m_params;      // Everything about the chart
-    KDChartTableData         m_currentData; // The data in the chart.
-#else
     KDChart::Chart          *m_chart;
     QStandardItemModel      *m_currentData;
 
@@ -180,7 +171,6 @@ private:
     DataDirection  m_dataDirection; // Rows or Columns
     bool           m_firstRowAsLabel;
     bool           m_firstColAsLabel;
-#endif
 
     QStringList              m_rowLabels;
     QStringList              m_colLabels;
@@ -193,11 +183,7 @@ private:
     QWidget                 *m_parentWidget;
 
     // Used when displaying.
-#if 0
-    KDChartTableData         m_displayData;
-#else
     QStandardItemModel       m_displayData;
-#endif
 
     QPixmap                  m_bufferPixmap;
 };
