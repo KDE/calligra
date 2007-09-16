@@ -75,7 +75,6 @@ public:
     /**
      * Implement the cursor behaviour for the element
      * @param direction Indicates whether the cursor moves up, down, right or left
-     * @param upHirachy True if the cursor comes from a child element
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     BasicElement* acceptCursor( CursorDirection direction );
