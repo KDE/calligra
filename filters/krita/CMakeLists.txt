@@ -1,3 +1,5 @@
+project(kritafilters)
+
 macro_optional_find_package(PNG)
 macro_optional_find_package(OpenEXR)
 macro_optional_find_package(TIFF)
@@ -6,47 +8,43 @@ macro_optional_find_package(JPEG)
 macro_optional_find_package(GraphicsMagick)
 macro_optional_find_package(PopplerQt4)
 
+macro_log_feature(JPEG_FOUND "jpeg" "The Krita JPEG filter will not be built" "http://www.ijg.org" FALSE "")
+macro_log_feature(EXIV2_FOUND "Exiv2" "The Krita JPEG filter will not be built" "http://www.exiv2.org" FALSE "")
+macro_log_feature(TIFF_FOUND "tiff" "The Krita TIFF filter will not be built" "http://www.remotesensing.org/libtiff" FALSE "")
+macro_log_feature(PNG_FOUND "png" "The Krita PNG filter will not be built" "http://www.libpng.org/pub/png/libpng.html" FALSE "")
+macro_log_feature(OPENEXR_FOUND "OpenEXR" "The Krita OpenEXR filter will not be built" "http://www.openexr.com" FALSE "")
+macro_log_feature(GRAPHICSMAGICK_FOUND "GraphicsMagick" "The Krita GraphicsMagick filter for various file formats (including PSD, XCF) will not be built" "http://www.graphicsmagick.org" FALSE "")
+macro_log_feature(POPPLER_QT4_FOUND "poppler-qt4" "The Krita PDF filter will not be built" "http://poppler.freedesktop.org" FALSE "")
+
 include_directories(${KRITA_INCLUDES})
 
 message("Port RAW filter to libkdcraw")
 #add_subdirectory( raw )
 
 if(EXIV2_FOUND)
-  add_subdirectory(libkisexiv2)
+    add_subdirectory(libkisexiv2)
 endif(EXIV2_FOUND)
 
 if(JPEG_FOUND AND EXIV2_FOUND)
 	add_subdirectory(jpeg)
-else(JPEG_FOUND AND EXIV2_FOUND)
-  message(STATUS "Could not find the Jpeg and/or Exiv2 library. The Krita JPEG filter will not be built.")
 endif(JPEG_FOUND AND EXIV2_FOUND)
 
-if(TIFF_FOUND )
+if(TIFF_FOUND)
 	add_subdirectory(tiff)
-else(TIFF_FOUND)
-  message(STATUS "Could not find the Tiff library. The Krita TIFF filter will not be built.")
 endif(TIFF_FOUND )
 
 if(PNG_FOUND)
     add_subdirectory(png)
-else(PNG_FOUND)
-  message(STATUS "Could not find the PNG library. The Krita PNG filter will not be built.")
 endif(PNG_FOUND)
 
 if(OPENEXR_FOUND)
     add_subdirectory(openexr)
-else(OPENEXR_FOUND)
-  message(STATUS "Could not find the OpenEXR library. The Krita EXR filter will not be built.")
 endif(OPENEXR_FOUND)
 
 if(GRAPHICSMAGICK_FOUND)
     add_subdirectory(gmagick)
-else(GRAPHICSMAGICK_FOUND)
-  message(STATUS "Could not find the graphicsmagick library. The Krita filters for various file formats (including PSD, XCF) will not be built.")
 endif(GRAPHICSMAGICK_FOUND)
 
 if(POPPLER_QT4_FOUND)
     add_subdirectory(pdf)
-else(POPPLER_QT4_FOUND)
-  message(STATUS "Could not find the poppler-qt4 library. The Krita PDF filter will not be built.")
 endif(POPPLER_QT4_FOUND)
