@@ -158,7 +158,7 @@ QString ElementFactory::elementName( ElementType type )
         case Basic:
             return "mrow";
         default:
-            kWarning( DEBUGID ) << "Invalid elemnet type\n";
+            kWarning( DEBUGID ) << "Invalid element type\n";
     }
 
     return QString();
