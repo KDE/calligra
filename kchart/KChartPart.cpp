@@ -63,7 +63,7 @@ using std::cerr;
 
 // KChart
 #include "KChartView.h"
-#include "kchart_factory.h"
+#include "KChartFactory.h"
 
 
 using namespace std;

@@ -19,7 +19,7 @@ include_directories(
 ########### next target ###############
 
 set(kchartcommon_LIB_SRCS 
-   kchart_factory.cpp
+   KChartFactory.cpp
    KChartPart.cpp
    KChartView.cpp
    KChartViewAdaptor.cpp
@@ -44,7 +44,7 @@ install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############
 
-set(kchartpart_PART_SRCS kchart_factory_init.cpp )
+set(kchartpart_PART_SRCS KChartFactoryInit.cpp )
 
 
 kde4_add_plugin(kchartpart WITH_PREFIX ${kchartpart_PART_SRCS})

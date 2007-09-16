@@ -17,6 +17,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "kchart_factory.h"
+#include "KChartFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY( libkchartpart, KChart::KChartFactory )

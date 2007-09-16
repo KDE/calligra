@@ -21,7 +21,7 @@
 
 
 // Local
-#include "kchart_factory.h"
+#include "KChartFactory.h"
 
 // KDE
 #include <klocale.h>
@@ -111,4 +111,4 @@ KIconLoader* KChartFactory::iconLoader()
 
 }  //namespace KChart
 
-#include <kchart_factory.moc>
+#include <KChartFactory.moc>

@@ -55,7 +55,7 @@
 #include <KoViewAdaptor.h>
 
 // KChart
-#include "kchart_factory.h"
+#include "KChartFactory.h"
 #include "KChartPart.h"
 #include "KChartViewAdaptor.h"
 
