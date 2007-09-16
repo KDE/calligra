@@ -151,6 +151,8 @@ QString FractionElement::attributesDefaultValue( const QString& attribute ) cons
         return "center";
     else if( attribute == "bevelled" )
         return "false";
+    else
+        return QString();
 }
 
 bool FractionElement::readMathMLContent( const KoXmlElement& parent )
