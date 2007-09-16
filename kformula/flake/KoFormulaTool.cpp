@@ -193,6 +193,14 @@ void KoFormulaTool::remove( bool backSpace )
         m_formulaCursor->remove( backSpace );
 }
 
+void KoFormulaTool::insertAtCursor( BasicElement* element )
+{
+}
+
+void KoFormulaTool::insertAtCursor( QList<BasicElement*> elements )
+{
+}
+
 QWidget* KoFormulaTool::createOptionWidget()
 {
     FormulaToolOptions* options = new FormulaToolOptions();
