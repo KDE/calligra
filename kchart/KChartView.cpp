@@ -666,9 +666,7 @@ void KChartView::extraCreateTemplate()
     KoTemplateCreateDia::createTemplate( "kchart_template", KChartFactory::global(),
                                          tempFile.fileName(), pix, this );
 
-    KChartFactory::global().dirs()->addResourceType("kchart_template",
-                                                    KStandardDirs::kde_default( "data" ) +
-                                                    "kchart/templates/");
+    KChartFactory::global().dirs()->addResourceType( "kchart_template", "data", "kchart/templates/" );
 }
 
 

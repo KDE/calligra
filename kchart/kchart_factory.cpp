@@ -90,8 +90,7 @@ const KComponentData &KChartFactory::global()
 {
     if ( !s_global ) {
          s_global = new KComponentData(aboutData());
-         s_global->dirs()->addResourceType( "kchart_template",
-         KStandardDirs::kde_default("data") + "kchart/templates/");
+         s_global->dirs()->addResourceType( "kchart_template", "data", "kchart/templates/" );
     }
 
     return *s_global;
