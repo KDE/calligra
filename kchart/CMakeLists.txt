@@ -12,11 +12,12 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/src
 	${CMAKE_CURRENT_SOURCE_DIR}/kdchart/examples/tools
 	${CMAKE_CURRENT_SOURCE_DIR}/dialogs
+	${CMAKE_CURRENT_SOURCE_DIR}/shape
 	${CMAKE_SOURCE_DIR}/interfaces 
 	${KOGUIUTILS_INCLUDES} )
 
 
-########### next target ###############
+###########  target kchartcommon  ###############
 
 set(kchartcommon_LIB_SRCS 
    KChartFactory.cpp
@@ -36,27 +37,38 @@ set(kchartcommon_LIB_SRCS
 
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
-target_link_libraries(kchartcommon  ${KDE4_KDE3SUPPORT_LIBS} kochart koguiutils kdchart )
+target_link_libraries(kchartcommon
+	${KDE4_KDE3SUPPORT_LIBS}
+	kochart
+	koguiutils
+	kdchart
+	chartshapelib )
 
-set_target_properties(kchartcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kchartcommon
+	PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION}
+	SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION}
+)
+
 install(TARGETS kchartcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 
-########### next target ###############
+########### target kchartpart ###############
 
 set(kchartpart_PART_SRCS KChartFactoryInit.cpp )
-
 
 kde4_add_plugin(kchartpart WITH_PREFIX ${kchartpart_PART_SRCS})
 
 
-
-target_link_libraries(kchartpart  ${KDE4_KDECORE_LIBS} kchartcommon )
+target_link_libraries(kchartpart
+	${KDE4_KDECORE_LIBS}
+	kchartcommon
+	#chartshapelib
+)
 
 install(TARGETS kchartpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
-########### next target ###############
+########### target kchart ###############
 
 set(kchart_KDEINIT_SRCS main.cpp )
 

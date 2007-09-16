@@ -53,6 +53,8 @@ class KoGenStyles;
 namespace KChart
 {
 
+class ChartShape;
+
 
 class KCHART_EXPORT KChartPart : public KoChart::Part
 {
@@ -161,6 +163,12 @@ private:
     void         setChartDefaults();
 
 private:
+    ChartShape    *m_chartShape;
+
+    // ----------------------------------------------------------------
+    // FIXME: Most of the following is already in shape/ChartShape or
+    //        will move there soon.
+
     // The chart and its contents
     OdfChartType             m_type;
     OdfChartSubtype          m_subtype;

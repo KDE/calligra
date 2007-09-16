@@ -48,6 +48,7 @@ using std::cerr;
 #include <kdebug.h>
 
 // KOffice
+#include <KoZoomHandler.h>
 #include <KoDom.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -64,6 +65,7 @@ using std::cerr;
 // KChart
 #include "KChartView.h"
 #include "KChartFactory.h"
+#include "ChartShape.h"
 
 
 using namespace std;
@@ -86,6 +88,8 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			QObject* parent,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
+    m_chartShape( new ChartShape ),
+
     m_chart( 0 ),
     m_currentData( 0 ),
     m_rowLabels(), m_colLabels(),
@@ -344,6 +348,11 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
     KDChart::paint( &painter, m_params, &m_displayData, 0, &rect );
 
 #else
+    // Paint the shape that is the real chart.
+    KoZoomHandler  zoomHandler;
+    m_chartShape->paint( painter, zoomHandler );
+    return;
+
     // Ok, we have now created a data set for display, and params with
     // suitable legends and axis labels.  Now start the real painting.
 

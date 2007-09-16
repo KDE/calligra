@@ -14,8 +14,11 @@ SET (chartshape_LIB_SRCS
 	../commands/ChartTypeCommand.cpp
 	)
 
-kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})
+kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
+target_link_libraries(chartshapelib kdchart kochart flake)
+install(TARGETS chartshapelib DESTINATION ${LIB_INSTALL_DIR})
 
+kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})
 target_link_libraries(chartshape kdchart kochart flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
