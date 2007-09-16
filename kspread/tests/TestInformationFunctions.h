@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Brad Hards <bradh@frogmouth.net>
+   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,11 +34,48 @@ class TestInformationFunctions: public QObject
     Q_OBJECT
 
 private slots:
+
+    void initTestCase();
+
+    void testAREAS();
+    void testCELL(); // to be implemented
+    void testCOLUMN();
+    void testCOLUMNS();
+//     void testCOUNT();
+//     void testCOUNTA();
+//     void testCOUNTBLANK();
+//     void testCOUNTIF();
     void testERRORTYPE();
+//     void testFORMULA();
+//     void testINFO();
+//     void testISBLANK();
+//     void testISERR();
+//     void testISERR();
     void testISEVEN();
+//     void testISFORMULA();
+//     void testISLOGICAL();
+//     void testISNONTEXT();
+//     void testISNA();
+//     void testISNUMBER();
+//     void testISODD();
+//     void testISTEXT();
+//     void testISREF();
+//     void testN();
+//     void testNA();
+//     void testNUMBERVALUE();
+//     void testROW();
+//     void testROWS();
+//     void testSHEET();
+//     void testSHEETS();
+//     void testTYPE();
     void testVALUE();
+
+    void cleanupTestCase();
+
 private:
     Value evaluate(const QString&, Value& ex);
+
+    Doc* m_doc;
 };
 
 } // namespace KSpread

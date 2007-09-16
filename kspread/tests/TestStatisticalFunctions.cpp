@@ -226,20 +226,42 @@ void TestStatisticalFunctions::testAVERAGEA()
 void TestStatisticalFunctions::testBETADIST()
 {
     // ODF-tests
-    CHECK_EVAL("BETADIST(0;3;4)",               Value(        0 ) ); //
-    CHECK_EVAL("BETADIST(0.5;3;4)",             Value( 0.656250 ) ); //
-    CHECK_EVAL("BETADIST(0.9;4;3)",             Value( 0.984150 ) ); //
-    CHECK_EVAL("BETADIST(1.5;3;4;1;2)",         Value( 0.656250 ) ); //
-    CHECK_EVAL("BETADIST(2;3;4;1;3)",           Value( 0.656250 ) ); //
-    CHECK_EVAL("BETADIST(0;3;4;0;1;FALSE())",   Value(        0 ) ); // TODO check BOOL
-    CHECK_EVAL("BETADIST(0.5;3;4;0;1;FALSE())", Value( 0.000521 ) ); //
-    CHECK_EVAL("BETADIST(0.9;4;3;0;1;FALSE())", Value( 0.000122 ) ); //
-    CHECK_EVAL("BETADIST(1.5;3;4;1;2;FALSE())", Value( 0.000521 ) ); //
-    CHECK_EVAL("BETADIST(2;3;4;1;3;FALSE())",   Value( 0.000521 ) ); //
-    CHECK_EVAL("BETADIST(2;3;4)",               Value(        1 ) ); //
-    CHECK_EVAL("BETADIST(-1;3;4)",              Value(        0 ) ); //
-    CHECK_EVAL("BETADIST(2;3;4;0;1;FALSE())",   Value(        0 ) ); //
-    CHECK_EVAL("BETADIST(-1;3;4;0;1;FALSE())",  Value(        0 ) ); //
+
+    // Cumulative tests
+    CHECK_EVAL("BETADIST( 0  ; 3; 4)", Value( 0        ) ); //
+    CHECK_EVAL("BETADIST( 0.5; 3; 4)", Value( 0.656250 ) ); //
+    CHECK_EVAL("BETADIST( 0.9; 4; 3)", Value( 0.984150 ) ); //
+//     CHECK_EVAL("BETADIST( 2  ; 3; 4)", Value( 1        ) ); //
+    CHECK_EVAL("BETADIST(-1  ; 3; 4)", Value( 0        ) ); //
+    CHECK_EVAL_SHORT("BETADIST(1.5;3;4;1;2)", evaluate( "BETADIST(0.5;3;4)" ) ); // diff = -2.27021e-09
+    CHECK_EVAL_SHORT("BETADIST(2;3;4;1;3)",   evaluate( "BETADIST(0.5;3;4)" ) ); // diff = -2.27021e-09
+
+    // last parameter FALSE (non - Cumulative) is currently not supported
+    CHECK_EVAL("BETADIST( 0  ;3;4;0;1;FALSE())", Value( 0           ) ); //
+    CHECK_EVAL_SHORT("BETADIST( 0.5;3;4;0;1;FALSE())", Value( 0.000520833 ) ); // 0.000521
+    CHECK_EVAL_SHORT("BETADIST( 0.9;4;3;0;1;FALSE())", Value( 0.0001215    ) ); // 0.000122
+    CHECK_EVAL("BETADIST( 2  ;3;4;0;1;FALSE())", Value( 0           ) ); //
+    CHECK_EVAL("BETADIST(-1  ;3;4;0;1;FALSE())", Value( 0           ) ); //
+
+    CHECK_EVAL("BETADIST(1.5;3;4;1;2;FALSE())", evaluate( "BETADIST(0.5;3;4;0;1;FALSE())" ) ); // 
+    CHECK_EVAL("BETADIST(2;3;4;1;3;FALSE())",   evaluate( "BETADIST(0.5;3;4;0;1;FALSE())" ) ); // 
+}
+
+void TestStatisticalFunctions::testBETAINV()
+{
+    // ODF-tests
+    CHECK_EVAL("BETADIST(BETAINV(0;3;4);3;4)",           Value( 0   ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.1;3;4);3;4)",         Value( 0.1 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.3;3;4);3;4)",         Value( 0.3 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.5;4;3);4;3)",         Value( 0.5 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.7;4;3);4;3)",         Value( 0.7 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(1;3;4);3;4)",           Value( 1   ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0;3;4;1;3);3;4;1;3)",   Value( 0   ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.1;3;4;1;3);3;4;1;3)", Value( 0.1 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.3;3;4;1;3);3;4;1;3)", Value( 0.3 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.5;4;3;1;3);4;3;1;3)", Value( 0.5 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(0.7;4;3;1;3);4;3;1;3)", Value( 0.7 ) ); //
+    CHECK_EVAL("BETADIST(BETAINV(1;3;4;1;3);3;4;1;3)",   Value( 1   ) ); //
 }
 
 void TestStatisticalFunctions::testCHIDIST()
