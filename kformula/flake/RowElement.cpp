@@ -91,10 +91,9 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         m_childElements << tmpElement;
-        tmpElement->readMathML( tmp );
+        if( !tmpElement->readMathML( tmp ) )
+            return false;
     }
-
-    kWarning( DEBUGID ) << "Loaded " << m_childElements.count() << " inside Row element";
     return true;
 }
 

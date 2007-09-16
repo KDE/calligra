@@ -122,10 +122,10 @@ QString BasicElement::attributesDefaultValue( const QString& ) const
     return QString();  // do nothing
 }
 
-void BasicElement::readMathML( const KoXmlElement& element )
+bool BasicElement::readMathML( const KoXmlElement& element )
 {
     readMathMLAttributes( element );
-    readMathMLContent( element );
+    return readMathMLContent( element );
 }
 
 void BasicElement::readMathMLAttributes( const KoXmlElement& element )

@@ -171,7 +171,7 @@ public:
     virtual QString attributesDefaultValue( const QString& attribute ) const;
     
     /// Read the element from MathML
-    void readMathML( const KoXmlElement& element );
+    bool readMathML( const KoXmlElement& element );
 
     /// Save the element to MathML 
     void writeMathML( KoXmlWriter* writer ) const;
