@@ -1271,71 +1271,186 @@ Value ValueCalc::GetLogGamma (Value _x)
   return Value (G);
 }
 
-Value ValueCalc::GetGammaDist (Value _x, Value _alpha,
-    Value _beta)
-{
-  double x = numToDouble (converter->toFloat (_x));
-  double alpha = numToDouble (converter->toFloat (_alpha));
-  double beta = numToDouble (converter->toFloat (_beta));
+// Value ValueCalc::GetGammaDist (Value _x, Value _alpha,
+//     Value _beta)
+// {
+//   double x = numToDouble (converter->toFloat (_x));
+//   double alpha = numToDouble (converter->toFloat (_alpha));
+//   double beta = numToDouble (converter->toFloat (_beta));
+// 
+//   if (x == 0.0)
+//     return Value (0.0);
+// 
+//   x /= beta;
+//   double gamma = alpha;
+// 
+//   double c = 0.918938533204672741;
+//   double d[10] = {
+//     0.833333333333333333E-1,
+//     -0.277777777777777778E-2,
+//     0.793650793650793651E-3,
+//     -0.595238095238095238E-3,
+//     0.841750841750841751E-3,
+//     -0.191752691752691753E-2,
+//     0.641025641025641025E-2,
+//     -0.295506535947712418E-1,
+//     0.179644372368830573,
+//     -0.139243221690590111E1
+//   };
+// 
+//   double dx = x;
+//   double dgamma = gamma;
+//   int maxit = 10000;
+// 
+//   double z = dgamma;
+//   double den = 1.0;
+//   while ( z < 10.0 ) {
+//     den *= z;
+//     z += 1.0;
+//   }
+// 
+//   double z2 = z*z;
+//   double z3 = z*z2;
+//   double z4 = z2*z2;
+//   double z5 = z2*z3;
+//   double a = ( z - 0.5 ) * ::log10(z) - z + c;
+//   double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
+//     d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
+//   // double g = exp(a+b) / den;
+// 
+//   double sum = 1.0 / dgamma;
+//   double term = 1.0 / dgamma;
+//   double cut1 = dx - dgamma;
+//   double cut2 = dx * 10000000000.0;
+// 
+//   for ( int i=1; i<=maxit; i++ ) {
+//     double ai = i;
+//     term = dx * term / ( dgamma + ai );
+//     sum += term;
+//     double cutoff = cut1 + ( cut2 * term / sum );
+//     if ( ai > cutoff ) {
+//       double t = sum;
+//       // return pow( dx, dgamma ) * exp( -dx ) * t / g;
+//       return Value (::exp( dgamma * ::log(dx) - dx - a - b ) * t * den);
+//     }
+//   }
+// 
+//   return Value (1.0);             // should not happen ...
+// }
 
-  if (x == 0.0)
-    return Value (0.0);
+Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
+{
+  // Algorithm adopted from StatLib (http://lib.stat.cmu.edu/apstat/239):
+  // Algorithm AS 239: Chi-Squared and Incomplete Gamma Integral 
+  // B. L. Shea
+  // Applied Statistics, Vol. 37, No. 3 (1988), pp. 466-473
+
+  double x     = numToDouble (converter->toFloat (_x));     // x
+  double alpha = numToDouble (converter->toFloat (_alpha)); // alpha
+  double beta  = numToDouble (converter->toFloat (_beta));  // beta
+
+  // debug info
+  kDebug()<<"GetGammaDist( x="<<x<<", alpha="<<alpha<<", beta="<<beta<<" )";
+
+  int lower_tail=1; //
+  int pearson;      // flag is set if pearson was used
+  
+  const static double xlarge = 1.0e+37;
+
+  double res; // result
+  double pn1, pn2, pn3, pn4, pn5, pn6, a, b, c, an, osum, sum;
+  long n;
 
   x /= beta;
-  double gamma = alpha;
+  kDebug()<<"-> x=x/beta ="<<x;
 
-  double c = 0.918938533204672741;
-  double d[10] = {
-    0.833333333333333333E-1,
-    -0.277777777777777778E-2,
-    0.793650793650793651E-3,
-    -0.595238095238095238E-3,
-    0.841750841750841751E-3,
-    -0.191752691752691753E-2,
-    0.641025641025641025E-2,
-    -0.295506535947712418E-1,
-    0.179644372368830573,
-    -0.139243221690590111E1
-  };
+  // check constraints
+  if (x <= 0.0)
+    return Value(0.0);
 
-  double dx = x;
-  double dgamma = gamma;
-  int maxit = 10000;
+  if (x <= 1.0 || x < alpha) 
+  {
+    //
+    // Result = e^log(alpha * log(x) - x - log( gamma( alpha+1 ) ) )
+    //
 
-  double z = dgamma;
-  double den = 1.0;
-  while ( z < 10.0 ) {
-    den *= z;
-    z += 1.0;
+    pearson = 1; // set flag -> use pearson's series expansion.
+    res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha + 1.0)).asFloat());
+    kDebug()<<"Pearson  res="<<res;
+
+    //                 x           x           x
+    // sum = 1.0 + --------- +  --------- * --------- + ...
+    //              alpha+1      alpha+1     alpha+2
+    c   = 1.0;
+    sum = 1.0;
+    a = alpha;
+    do 
+    {
+      a += 1.0;
+      c *= x / a;
+      sum += c;
+    } while (c > DBL_EPSILON * sum);
   }
+  else 
+  { 
+    // x >= max( 1, alpha)
+    pearson = 0; // clear flag -> use a continued fraction expansion
 
-  double z2 = z*z;
-  double z3 = z*z2;
-  double z4 = z2*z2;
-  double z5 = z2*z3;
-  double a = ( z - 0.5 ) * ::log10(z) - z + c;
-  double b = d[0]/z + d[1]/z3 + d[2]/z5 + d[3]/(z2*z5) + d[4]/(z4*z5) +
-    d[5]/(z*z5*z5) + d[6]/(z3*z5*z5) + d[7]/(z5*z5*z5) + d[8]/(z2*z5*z5*z5);
-  // double g = exp(a+b) / den;
+    res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha)).asFloat());
 
-  double sum = 1.0 / dgamma;
-  double term = 1.0 / dgamma;
-  double cut1 = dx - dgamma;
-  double cut2 = dx * 10000000000.0;
+    kDebug()<<"Continued fraction expression res="<<res;
 
-  for ( int i=1; i<=maxit; i++ ) {
-    double ai = i;
-    term = dx * term / ( dgamma + ai );
-    sum += term;
-    double cutoff = cut1 + ( cut2 * term / sum );
-    if ( ai > cutoff ) {
-      double t = sum;
-      // return pow( dx, dgamma ) * exp( -dx ) * t / g;
-      return Value (::exp( dgamma * ::log(dx) - dx - a - b ) * t * den);
+    //
+    //  
+    //
+
+    a = 1.0 - alpha;
+    b = a + x + 1.0;
+    pn1 = 1.0;
+    pn2 = x;
+    pn3 = x + 1.0;
+    pn4 = x * b;
+    sum = pn3 / pn4;
+    for (n = 1; ; n++) 
+    {
+      kDebug()<<"n="<<n<<" sum="<< sum;
+      a += 1.0; // =   n+1 -alpha
+      b += 2.0; // = 2(n+1)-alph+x
+      an = a * n;
+      pn5 = b * pn3 - an * pn1;
+      pn6 = b * pn4 - an * pn2;
+      kDebug()<<"a ="<<a<<" an="<<an<<" b="<<b<<" pn5="<<pn5<<" pn6="<<pn6;
+      if (fabs(pn6) > 0.0) 
+      {
+        osum = sum;
+        sum = pn5 / pn6;
+        kDebug()<<"sum ="<<sum<<" osum="<<osum;
+        if (fabs(osum - sum) <= DBL_EPSILON * fmin(1.0, sum))
+          break;
+      }
+      pn1 = pn3;
+      pn2 = pn4;
+      pn3 = pn5;
+      pn4 = pn6;
+      if (fabs(pn5) >= xlarge) 
+      {
+        // re-scale the terms in continued fraction if they are large
+        kDebug()<<" [r] ";
+        pn1 /= xlarge;
+        pn2 /= xlarge;
+        pn3 /= xlarge;
+        pn4 /= xlarge;
+      }
     }
   }
 
-  return Value (1.0);             // should not happen ...
+  res += ::log(sum);
+  lower_tail = (lower_tail == pearson);
+
+  if ( lower_tail )
+    return Value( ::exp(res) );
+  else
+    return Value( -1 * ::expm1(res) );
 }
 
 Value ValueCalc::GetBeta (Value _x, Value _alpha,
