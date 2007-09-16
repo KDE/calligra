@@ -51,7 +51,7 @@ Item								   Prio Status
 * Port to KDE4
   + Fix changed calls                                                   ----
     - Fix KConfig							--
-    - KStandardDirs::kde_default is deprecated                          --
+    - KStandardDirs::kde_default is deprecated                          done
 
 
 * OpenDocument Support -- read and write all tags and attributes
