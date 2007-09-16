@@ -54,6 +54,11 @@ void FormulaCursor::paint( QPainter& painter ) const
 
 void FormulaCursor::insertText( const QString& text )
 {
+/*Filters for things that can be typed in with the keyboard
+- most important: numbers
+- second operators like: / *-+ |^%( )
+- text input is only allowed inside of text accepting elements
+*/
 }
 
 void FormulaCursor::insert( BasicElement* element )
