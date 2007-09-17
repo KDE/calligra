@@ -267,17 +267,20 @@ void TestStatisticalFunctions::testBETAINV()
 
 void TestStatisticalFunctions::testCHIDIST()
 {
-    // my test
-    CHECK_EVAL_SHORT("CHIDIST( 18.307;10)", Value( 0.050001 ) ); //
+    // bettersolution.com
+    CHECK_EVAL("CHIDIST( 18.307;10)",      Value( 0.0500005892 ) ); //
+    CHECK_EVAL("CHIDIST(      2;2)",       Value( 0.3678794412 ) ); // 
+    CHECK_EVAL("CHIDIST(     -1;2)",       Value( 1            ) ); // constraint x<0 TODO EXCEL return #NUM!
+//     CHECK_EVAL("CHIDIST(     4;\"texr\")", Value::VALUE()    ); // TODO
 }
 
 void TestStatisticalFunctions::testLEGACYCHIDIST()
 {
     // ODF-tests LEGACY.CHIDIST
-    CHECK_EVAL("CHIDIST(-1;2)", Value( 1 ) ); // constraint x<0
-    CHECK_EVAL("CHIDIST( 0;2)", Value( 1 ) ); // constraint x=0
-    CHECK_EVAL_SHORT("LEGACYCHIDIST( 2;2)", Value( 0.367879 ) ); //
-    CHECK_EVAL_SHORT("LEGACYCHIDIST( 4;4)", Value( 0.406006 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(-1;2)", Value( 1 ) ); // constraint x<0
+    CHECK_EVAL("LEGACYCHIDIST( 0;2)", Value( 1 ) ); // constraint x=0
+    CHECK_EVAL("LEGACYCHIDIST( 2;2)", Value( 0.3678794412 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST( 4;4)", Value( 0.4060058497 ) ); //
 }
 
 void TestStatisticalFunctions::testCONFIDENCE()
@@ -345,45 +348,47 @@ void TestStatisticalFunctions::testDEVSQ()
 
 void TestStatisticalFunctions::testEXPONDIST()
 {
-    // TODO - be more precise
-
     // ODF-tests
-    CHECK_EVAL_SHORT("EXPONDIST(1;1;TRUE())",   Value( 0.632121 ) ); //
-    CHECK_EVAL_SHORT("EXPONDIST(2;2;TRUE())",   Value( 0.981684 ) ); //
-    CHECK_EVAL_SHORT("EXPONDIST(0;1;TRUE())",   Value(        0 ) ); // 
-    CHECK_EVAL_SHORT("EXPONDIST(-1;1;TRUE())",  Value(        0 ) ); // 
-    CHECK_EVAL_SHORT("EXPONDIST(1;1;FALSE())",  Value( 0.367879 ) ); //
-    CHECK_EVAL_SHORT("EXPONDIST(2;2;FALSE())",  Value( 0.036631 ) ); //
-    CHECK_EVAL_SHORT("EXPONDIST(0;1;FALSE())",  Value(        1 ) ); //
-    CHECK_EVAL_SHORT("EXPONDIST(-1;1;FALSE())", Value(        0 ) ); //
-//     CHECK_EVAL_SHORT("EXPONDIST(1;1)",          Value( 0.632121 ) ); // TODO check logical[=true]? - =EXPONDIST(1;1;TRUE())
+    CHECK_EVAL("EXPONDIST( 1;1;TRUE())",   Value( 0.6321205588 ) ); //
+    CHECK_EVAL("EXPONDIST( 2;2;TRUE())",   Value( 0.9816843611 ) ); //
+    CHECK_EVAL("EXPONDIST( 0;1;TRUE())",   Value( 0            ) ); // 
+    CHECK_EVAL("EXPONDIST(-1;1;TRUE())",   Value( 0            ) ); // constraint x<0
+
+    CHECK_EVAL("EXPONDIST( 1;1;FALSE())",  Value( 0.3678794412 ) ); //
+    CHECK_EVAL("EXPONDIST( 2;2;FALSE())",  Value( 0.0366312778 ) ); //
+    CHECK_EVAL("EXPONDIST( 0;1;FALSE())",  Value( 1            ) ); //
+    CHECK_EVAL("EXPONDIST(-1;1;FALSE())",  Value( 0            ) ); // constraint x<0
+
+    // test disabled, because 3rd param. is not opt.!
+    //CHECK_EVAL("EXPONDIST(1;1)", evaluate("EXPONDIST(1;1;TRUE())") ); 
 }
 
 void TestStatisticalFunctions::testFDIST()
 {
-    // TODO - be more precise
-
     // ODF-tests
-    CHECK_EVAL_SHORT("FDIST(1;4;5)",          Value( 0.514343 ) ); //
-    CHECK_EVAL_SHORT("FDIST(2;5;4)",          Value( 0.739202 ) ); //
-    CHECK_EVAL_SHORT("FDIST(0;4;5)",          Value(        0 ) ); // 
-    CHECK_EVAL_SHORT("FDIST(-1;4;5)",         Value(        0 ) ); // 
-    CHECK_EVAL_SHORT("FDIST(1;4;5;FALSE())",  Value( 0.397614 ) ); //
-    CHECK_EVAL_SHORT("FDIST(2;5;4;FALSE())",  Value( 0.154000 ) ); //
-    CHECK_EVAL_SHORT("FDIST(0;4;5;FALSE())",  Value(        0 ) ); //
-    CHECK_EVAL_SHORT("FDIST(-1;4;5;FALSE())", Value(        0 ) ); //
-    CHECK_EVAL_SHORT("FDIST(1;4;5;TRUE())",   Value( 0.514343 ) ); // =FDIST(1;4;5)
+
+    // cumulative
+    CHECK_EVAL("FDIST( 1;4;5)", Value( 0.5143428033    ) ); //
+    CHECK_EVAL("FDIST( 2;5;4)", Value( 0.7392019723    ) ); //
+    CHECK_EVAL("FDIST( 0;4;5)", Value( 0               ) ); // 
+    CHECK_EVAL("FDIST(-1;4;5)", Value( 0               ) ); // 
+    
+    CHECK_EVAL_SHORT("FDIST( 1;4;5;TRUE())", evaluate("FDIST(1;4;5)") ); // diff = -1.39644e-09
+
+    // non-cumulative
+    CHECK_EVAL("FDIST( 1;4;5;FALSE())", Value( 0.3976140792 ) ); //
+    CHECK_EVAL("FDIST( 2;5;4;FALSE())", Value( 0.1540004108 ) ); //
+    CHECK_EVAL("FDIST( 0;4;5;FALSE())", Value( 0            ) ); //
+    CHECK_EVAL("FDIST(-1;4;5;FALSE())", Value( 0            ) ); //
 }
 
 void TestStatisticalFunctions::testLEGACYFDIST()
 {
-    // TODO - be more precise
-
     // ODF-tests
-    CHECK_EVAL_SHORT("LEGACYFDIST(1;4;5)",          Value( 0.485657 ) ); //
-    CHECK_EVAL_SHORT("LEGACYFDIST(2;5;4)",          Value( 0.260798 ) ); //
-    CHECK_EVAL_SHORT("LEGACYFDIST(0;4;5)",          Value(        1 ) ); // 
-    CHECK_EVAL_SHORT("LEGACYFDIST(-1;4;5)",         Value::errorNUM() ); // 
+    CHECK_EVAL("LEGACYFDIST( 1;4;5)", Value( 0.4856571967 ) ); //
+    CHECK_EVAL("LEGACYFDIST( 2;5;4)", Value( 0.2607980277 ) ); //
+    CHECK_EVAL("LEGACYFDIST( 0;4;5)", Value( 1            ) ); // 
+    CHECK_EVAL("LEGACYFDIST(-1;4;5)", Value::errorNUM()     ); // 
 }
 
 void TestStatisticalFunctions::testFISHER()
@@ -428,10 +433,6 @@ void TestStatisticalFunctions::testFTEST()
 
 void TestStatisticalFunctions::testGAMMADIST()
 {
-    // the 4th parameter is not optional
-    // - it seems cumulative does not work
-    // - be more precise
-
     // bettersolution.com non-cumulative
     CHECK_EVAL("GAMMADIST(10 ;9;2;FALSE())",      Value( 0.0326390197 ) ); //
     

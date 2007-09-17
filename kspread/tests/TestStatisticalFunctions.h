@@ -56,8 +56,8 @@ private slots:
 //     void testDEVSQA();
     void testEXPONDIST();
     void testFDIST();    
-    void testFTEST(); // to be implemented
     void testLEGACYFDIST();
+    void testFTEST(); // to be implemented
     void testFISHER();
     void testFISHERINV();
     void testFREQUENCY();
