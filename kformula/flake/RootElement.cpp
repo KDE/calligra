@@ -56,31 +56,45 @@ void RootElement::layout( const AttributeManager* am )
     kDebug() << "Exponent height: " << m_exponent->height();
     kDebug() << "Exponent width: " << m_exponent->width();
 
-    double distY = am->mathSpaceValue( "thinmathspace" );
+    double thinspace = am->mathSpaceValue( "thinmathspace" );
     
-    //In the unlikely case that the exponent is actually taller than the radicand, try to cope with that
-    double largestheight = qMax( 2*distY + m_radicand->height(), m_exponent->height() );
-    setHeight( largestheight );
+
+    double sqrtHeight  = m_radicand->baseLine() + thinspace;
+    
+    double tobaseline = sqrtHeight;
+
+    //See if the exponent sticks out over the top of the sqrt. If it does, we need to bring down the sqrt.
+    double exponent_sticks_out_by =  m_exponent->height() - 2.0*sqrtHeight/5.0;
+    if ( exponent_sticks_out_by < 0 ) exponent_sticks_out_by = 0;
+    tobaseline += exponent_sticks_out_by;
+   
+    double totalHeight = tobaseline + m_exponent->height() - m_exponent->baseLine(); 
+
+    setBaseLine( tobaseline );
+    setHeight(totalHeight);
+
+    double tickWidth = sqrtHeight / 3.0;  //The width of the tick part of the square root symbol
+
+    double xoffset = m_exponent->width() - tickWidth / 2.0;
+    if(xoffset < 0) xoffset = 0;
+
+    //Place the child in the correct place
+    m_radicand->setOrigin( QPointF(xoffset + tickWidth, exponent_sticks_out_by + thinspace) );
 
     m_rootSymbol = QPainterPath();
     
-    double offset = m_exponent->width() - height() / 6.0;
-    if(offset < 0) offset = 0;
-
     //Draw the root symbol bit
-    m_rootSymbol.moveTo( offset, 2.0 * height() / 3.0 );
-    m_rootSymbol.lineTo( offset + height() / 6.0, height());
-    m_rootSymbol.lineTo( offset + height() / 3.0, 0 );
+    m_rootSymbol.moveTo( xoffset, tobaseline - 1.0 * sqrtHeight / 3.0 );
+    m_rootSymbol.lineTo( xoffset + tickWidth/2.0, tobaseline);
+    m_rootSymbol.lineTo( xoffset + tickWidth, exponent_sticks_out_by );
     
-    //Place the child in the correct place
-    m_radicand->setOrigin( QPointF(offset + height() / 3.0, distY) );
-    //Draw a line over the child
-    m_rootSymbol.lineTo( offset + height() / 3.0 + m_radicand->width(), 0.0 );
+    //Draw a line over the child (aka radicand)
+    double totalWidth = xoffset +  tickWidth + m_radicand->width();
+    m_rootSymbol.lineTo( totalWidth, exponent_sticks_out_by );
    
     //Place the exponent in the correct place
     m_exponent->setOrigin( QPointF(0,0) );
-    setWidth( offset + height() / 3.0 + m_radicand->width() );
-    setBaseLine( m_radicand->baseLine() + m_radicand->origin().y() ); 
+    setWidth( totalWidth );
 }
 
 const QList<BasicElement*> RootElement::childElements()
