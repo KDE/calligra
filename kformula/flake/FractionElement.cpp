@@ -111,12 +111,20 @@ const QList<BasicElement*> FractionElement::childElements()
 
 BasicElement* FractionElement::acceptCursor( CursorDirection direction )
 {
-    return 0;
+    switch( direction ) {
+        case RightToChild:
+            return m_numerator;
+            break;
+        case LeftToChild:
+            return m_denominator;
+            break;
+        default:
+            return parentElement();
+    }
 }
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
-    /*
     BasicElement* tmp = cursor->currentElement();
     if( tmp == m_numerator && m_numerator->elementType() == Basic )
         m_numerator = child;
@@ -124,12 +132,10 @@ void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         m_denominator = child;
 
     delete tmp;       // finally delete the old BasicElement
-    */
 }
    
 void FractionElement::removeChild( BasicElement* element )
 {
-    /*
     if( element == m_numerator )         
     {
         delete m_numerator;                      // delete the numerator and
@@ -140,7 +146,6 @@ void FractionElement::removeChild( BasicElement* element )
         delete m_denominator;
         m_denominator = new BasicElement( this );
     }
-    */
 }
 
 QString FractionElement::attributesDefaultValue( const QString& attribute ) const

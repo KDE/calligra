@@ -54,7 +54,20 @@ void FormulaCursor::paint( QPainter& painter ) const
 
 void FormulaCursor::insertText( const QString& text )
 {
-/*Filters for things that can be typed in with the keyboard
+/*    if( text.size() != 1 ) // check for single char input after key press
+        // TODO check for text excapting element due to paste of text
+
+
+    QChar tmpChar( text );
+    if( tmpChar.isNumber() ) {
+        if( m_currentElement->elementType() == Number )
+            // TODO insert stuff somehow
+
+    }
+    else if( tmpChar.isSpace() )
+        // what to do ???
+    else if( tmpChar.isLetter() )
+ Filters for things that can be typed in with the keyboard
 - most important: numbers
 - second operators like: / *-+ |^%( )
 - text input is only allowed inside of text accepting elements
