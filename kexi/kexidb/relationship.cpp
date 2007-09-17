@@ -162,11 +162,11 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 		return;
 	Field::ListIterator it1(*masterIndex->fields());
 	Field::ListIterator it2(*detailsIndex->fields());
-	for (;it1.current() && it1.current(); ++it1, ++it2) {
+	for (;it1.current() && it2.current(); ++it1, ++it2) {
 		Field *f1 = it1.current(); //masterIndex->fields()->first();
 		Field *f2 = it2.current(); //detailsIndex->fields()->first();
 	//	while (f1 && f2) {
-		if (f1->type()!=f1->type() && f1->isIntegerType()!=f2->isIntegerType() && f1->isTextType()!=f2->isTextType()) {
+		if (f1->type()!=f2->type() && f1->isIntegerType()!=f2->isIntegerType() && f1->isTextType()!=f2->isTextType()) {
 			KexiDBWarn << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
@@ -175,7 +175,7 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 			return;
 		}
 #if 0 //too STRICT!
-		if ((f1->isUnsigned() && !f2->isUnsigned()) || (!f1->isUnsigned() && f1->isUnsigned())) {
+		if ((f1->isUnsigned() && !f2->isUnsigned()) || (!f1->isUnsigned() && f2->isUnsigned())) {
 			KexiDBWarn << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal signedness of field types: "
 			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
