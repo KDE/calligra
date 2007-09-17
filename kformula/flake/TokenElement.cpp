@@ -23,6 +23,7 @@
 #include <KoXmlReader.h>
 #include <QPainter>
 #include <QFontMetricsF>
+#include <kdebug.h>
 
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )
 {}
@@ -67,6 +68,7 @@ void TokenElement::layout( const AttributeManager* am )
 
     setWidth( m_contentPath.boundingRect().width() );
     setHeight( m_contentPath.boundingRect().height() );
+
 
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too

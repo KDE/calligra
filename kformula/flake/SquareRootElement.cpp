@@ -46,7 +46,6 @@ void SquareRootElement::layout( const AttributeManager* am )
     kDebug() << "Width: " << width();
     kDebug() << "Height: " << height();
 
-    QPointF tmp;
     double distY = am->mathSpaceValue( "thinmathspace" );
     setHeight( 2*distY + height() );
 
@@ -55,7 +54,7 @@ void SquareRootElement::layout( const AttributeManager* am )
     m_rootSymbol.lineTo( height() / 6.0, height());
     m_rootSymbol.lineTo( height() / 3.0, 0 );
    
-    tmp = QPointF(height() / 3.0, distY);
+    QPointF tmp(height() / 3.0, distY);
 
     foreach( BasicElement* element, childElements() )
         element->setOrigin( element->origin() + tmp );

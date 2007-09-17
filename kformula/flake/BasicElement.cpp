@@ -205,7 +205,7 @@ void BasicElement::setHeight( double height )
 
 void BasicElement::setOrigin( QPointF origin )
 {
-    m_boundingRect.setTopLeft( origin );
+    m_boundingRect.moveTopLeft( origin );
 }
 
 void BasicElement::setBaseLine( double baseLine )

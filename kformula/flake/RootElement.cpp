@@ -41,6 +41,7 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
+    Q_UNUSED(am)
     QPen pen( painter.pen() );
     pen.setWidth( 1 );
     painter.setPen( pen );
@@ -49,30 +50,36 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 
 void RootElement::layout( const AttributeManager* am )
 {
+    Q_UNUSED(am)
     kDebug() << "Radicand height: " << m_radicand->height();
     kDebug() << "Radicand width: " << m_radicand->width();
     kDebug() << "Exponent height: " << m_exponent->height();
     kDebug() << "Exponent width: " << m_exponent->width();
 
-    QPointF tmp;
     double distY = am->mathSpaceValue( "thinmathspace" );
-    setHeight( 2*distY + m_radicand->height() );
+    
+    //In the unlikely case that the exponent is actually taller than the radicand, try to cope with that
+    double largestheight = qMax( 2*distY + m_radicand->height(), m_exponent->height() );
+    setHeight( largestheight );
 
     m_rootSymbol = QPainterPath();
-    tmp += QPointF( 0.0, 2.0 * height() / 3.0 );
-    m_rootSymbol.moveTo( tmp );
-    tmp += QPointF( m_exponent->width(), 2.0 * height() / 3.0 );
-    m_rootSymbol.lineTo( tmp );
-    tmp += QPointF( height() / 6.0, height() / 3.0 );
-    m_rootSymbol.lineTo( tmp );
-    tmp = QPointF( tmp.x() + height() / 6.0, 0.0 );
-    m_rootSymbol.lineTo( tmp );
-    m_radicand->setOrigin( tmp + QPointF( 0.0, distY ) );
-    tmp += QPointF( m_radicand->width(), 0.0 );
-    m_rootSymbol.lineTo( tmp );
     
-    m_exponent->setOrigin( QPointF( 0.0, distY ) );
-    setWidth( m_rootSymbol.boundingRect().width() );
+    double offset = m_exponent->width() - height() / 6.0;
+    if(offset < 0) offset = 0;
+
+    //Draw the root symbol bit
+    m_rootSymbol.moveTo( offset, 2.0 * height() / 3.0 );
+    m_rootSymbol.lineTo( offset + height() / 6.0, height());
+    m_rootSymbol.lineTo( offset + height() / 3.0, 0 );
+    
+    //Place the child in the correct place
+    m_radicand->setOrigin( QPointF(offset + height() / 3.0, distY) );
+    //Draw a line over the child
+    m_rootSymbol.lineTo( offset + height() / 3.0 + m_radicand->width(), 0.0 );
+   
+    //Place the exponent in the correct place
+    m_exponent->setOrigin( QPointF(0,0) );
+    setWidth( offset + height() / 3.0 + m_radicand->width() );
     setBaseLine( m_radicand->baseLine() + m_radicand->origin().y() ); 
 }
 
@@ -126,10 +133,14 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
         if( m_radicand->elementType() == Basic ) {
             delete m_radicand;
             m_radicand = ElementFactory::createElement( tmp.tagName(), this );
-        }
+            if( !m_radicand->readMathML( tmp ) )
+                return false;
+	}
         else if( m_exponent->elementType() == Basic ) {
             delete m_exponent;
             m_exponent = ElementFactory::createElement( tmp.tagName(), this );
+            if( !m_exponent->readMathML( tmp ) )
+                return false;
         }
     }
     Q_ASSERT( m_radicand );
