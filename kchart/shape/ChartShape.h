@@ -26,6 +26,7 @@
 
 #include "koChart.h"
 
+#include "kchart_export.h"
 #include "kchart_global.h"
 
 #define ChartShapeId "ChartShape"
@@ -44,7 +45,7 @@ namespace KDChart
 namespace KChart
 {
 
-class ChartShape : public KoShape, public KoChart::ChartInterface
+class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
 {
 public:
     ChartShape();
