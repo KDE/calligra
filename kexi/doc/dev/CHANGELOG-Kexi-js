@@ -19,6 +19,13 @@ TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
 ===================== Kexi 2.0 Alpha =====================
+2007-07-16
+Kexi 1.x: Migration
+- fixed possible crash (CID 3921)
+Kexi 1.x: Main
+- fixed possible crash in compacting function (CID 3905)
+Kexi 1.x: General
+- thoushand objects can be handled by internal dictionaries now, not hundred
 
 2007-06-13
 Startup
