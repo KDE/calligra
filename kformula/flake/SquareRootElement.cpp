@@ -46,23 +46,35 @@ void SquareRootElement::layout( const AttributeManager* am )
     kDebug() << "Width: " << width();
     kDebug() << "Height: " << height();
 
-    double distY = am->mathSpaceValue( "thinmathspace" );
-    setHeight( 2*distY + height() );
+    double thinspace = am->mathSpaceValue( "thinmathspace" );
+
+    double sqrtHeight = baseLine();
+    double totalHeight = height();
+
+    sqrtHeight += thinspace;
+    totalHeight += thinspace;
+    setHeight(totalHeight);
+    setBaseLine(sqrtHeight);
+   
+    double tickWidth = sqrtHeight / 3.0;  //The width of the tick part of the square root symbol
+
+    //Place the child in the correct place
+    QPointF childOffset(tickWidth, thinspace);
+    foreach( BasicElement* element, childElements() )
+        element->setOrigin( element->origin() + childOffset );
 
     m_rootSymbol = QPainterPath();
-    m_rootSymbol.moveTo( 0.0, 2.0 * height() /3.0 );
-    m_rootSymbol.lineTo( height() / 6.0, height());
-    m_rootSymbol.lineTo( height() / 3.0, 0 );
-   
-    QPointF tmp(height() / 3.0, distY);
-
-    foreach( BasicElement* element, childElements() )
-        element->setOrigin( element->origin() + tmp );
-
-    m_rootSymbol.lineTo( height()/3.0 + width(), 0 );
     
-    setWidth( m_rootSymbol.boundingRect().width() );
-    setBaseLine( baseLine() + origin().y() );
+    //Draw the root symbol bit
+    m_rootSymbol.moveTo( 0, 2.0 * sqrtHeight / 3.0 );
+    m_rootSymbol.lineTo( 0 + tickWidth/2.0, sqrtHeight);
+    m_rootSymbol.lineTo( 0 + tickWidth, 0.0 );
+    
+    //Draw a line over the child (aka radicand)
+    double totalWidth = tickWidth + width();
+    m_rootSymbol.lineTo( totalWidth, 0.0 );
+   
+    setWidth( totalWidth );
 }
 
 ElementType SquareRootElement::elementType() const
