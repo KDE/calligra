@@ -64,7 +64,7 @@ void RootElement::layout( const AttributeManager* am )
     double tobaseline = rootHeight;
 
     //See if the exponent sticks out over the top of the root. If it does, we need to bring down the sqrt.
-    double exponent_sticks_out_by =  m_exponent->height() - 2.0*rootHeight/5.0;
+    double exponent_sticks_out_by =  m_exponent->height() - 3.0*rootHeight/5.0;
     if ( exponent_sticks_out_by < 0 ) exponent_sticks_out_by = 0;
     tobaseline += exponent_sticks_out_by;
    
