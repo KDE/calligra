@@ -9,7 +9,8 @@ Current "Roadmap" for mswritefilter Development:
 
     <<< WE ARE HERE >>>
 
-0.6 LibMSWrite API stabilises, performance enhancements, implement OLE?
+0.6 LibMSWrite is well-tested and API stabilizes (esp. against
+    invalid files), implement OLE?
 
 0.9 Preparation for final release + full stress testing
 1.0 Final release (unless bugs are found etc.)
