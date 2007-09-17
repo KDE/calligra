@@ -43,6 +43,7 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
      // TODO change it to use attribute colors
      painter.setPen( Qt::black );
      painter.setBrush( Qt::SolidPattern );
+     painter.translate( 0.0, baseLine() );
      painter.drawPath( m_contentPath );  // draw content which is buffered as path
 }
 
@@ -67,9 +68,6 @@ void TokenElement::layout( const AttributeManager* am )
 
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
-    QMatrix tmpMatrix;                          // translate path to fit into origin
-    tmpMatrix.translate( 0, m_contentPath.boundingRect().y() );
-    m_contentPath = tmpMatrix.map( m_contentPath );
     setBaseLine( qAbs( m_contentPath.boundingRect().y() ) ); // set baseline accordingly
 }
 
