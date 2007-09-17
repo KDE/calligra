@@ -59,12 +59,12 @@ void RootElement::layout( const AttributeManager* am )
     double thinspace = am->mathSpaceValue( "thinmathspace" );
     
 
-    double sqrtHeight  = m_radicand->baseLine() + thinspace;
+    double rootHeight  = m_radicand->baseLine() + thinspace;
     
-    double tobaseline = sqrtHeight;
+    double tobaseline = rootHeight;
 
-    //See if the exponent sticks out over the top of the sqrt. If it does, we need to bring down the sqrt.
-    double exponent_sticks_out_by =  m_exponent->height() - 2.0*sqrtHeight/5.0;
+    //See if the exponent sticks out over the top of the root. If it does, we need to bring down the sqrt.
+    double exponent_sticks_out_by =  m_exponent->height() - 2.0*rootHeight/5.0;
     if ( exponent_sticks_out_by < 0 ) exponent_sticks_out_by = 0;
     tobaseline += exponent_sticks_out_by;
    
@@ -73,7 +73,7 @@ void RootElement::layout( const AttributeManager* am )
     setBaseLine( tobaseline );
     setHeight(totalHeight);
 
-    double tickWidth = sqrtHeight / 3.0;  //The width of the tick part of the square root symbol
+    double tickWidth = rootHeight / 3.0;  //The width of the tick part of the square root symbol
 
     double xoffset = m_exponent->width() - tickWidth / 2.0;
     if(xoffset < 0) xoffset = 0;
@@ -84,7 +84,7 @@ void RootElement::layout( const AttributeManager* am )
     m_rootSymbol = QPainterPath();
     
     //Draw the root symbol bit
-    m_rootSymbol.moveTo( xoffset, tobaseline - 1.0 * sqrtHeight / 3.0 );
+    m_rootSymbol.moveTo( xoffset, tobaseline - 1.0 * rootHeight / 3.0 );
     m_rootSymbol.lineTo( xoffset + tickWidth/2.0, tobaseline);
     m_rootSymbol.lineTo( xoffset + tickWidth, exponent_sticks_out_by );
     
