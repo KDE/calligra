@@ -54,6 +54,14 @@ public:
     virtual void layout( const AttributeManager* am );
 
     /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
+     */
+    virtual void paint( QPainter& painter, AttributeManager* am );
+
+
+    /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */

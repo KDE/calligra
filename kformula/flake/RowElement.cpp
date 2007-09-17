@@ -34,6 +34,10 @@ RowElement::~RowElement()
     qDeleteAll( m_childElements );
 }
 
+void RowElement::paint( QPainter& painter, AttributeManager* )
+{
+}
+
 void RowElement::layout( const AttributeManager* am )
 {
     Q_UNUSED( am )          // there are no attributes that can be processed here
