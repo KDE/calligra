@@ -43,11 +43,8 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
     QPen pen( painter.pen() );
     pen.setWidth( 1 );
-
-    painter.save();
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
-    painter.restore();
 }
 
 void RootElement::layout( const AttributeManager* am )
