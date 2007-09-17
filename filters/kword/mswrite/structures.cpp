@@ -1,19 +1,28 @@
-/* This file is part of the LibMSWrite Library
-   Copyright (C) 2001-2003 Clarence Dang <clarencedang@users.sourceforge.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License Version 2 as published by the Free Software Foundation.
+/* This file is part of the LibMSWrite project
+   Copyright (c) 2001-2003, 2007 Clarence Dang <clarencedang@users.sf.net>
+   All rights reserved.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License Version 2 for more details.
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
 
-   You should have received a copy of the GNU Library General Public License
-   Version 2 along with this library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+   THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+   OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    LibMSWrite Project Website:
    http://sourceforge.net/projects/libmswrite/
@@ -683,34 +692,34 @@ namespace MSWrite
 			infoHeader.setCompression (0);	// BI_RGB (uncompressed)
 			infoHeader.setSizeImage (0);		// lazy
 			infoHeader.setXPixelsPerMeter (0), infoHeader.setYPixelsPerMeter (0);
-			infoHeader.setColoursUsed (1 << infoHeader.getBitsPerPixel ());
-			infoHeader.setColoursImportant (infoHeader.getColoursUsed ());
+			infoHeader.setColorsUsed (1 << infoHeader.getBitsPerPixel ());
+			infoHeader.setColorsImportant (infoHeader.getColorsUsed ());
 
-			if (infoHeader.getColoursUsed () != 2)
-				ErrorAndQuit (Error::InternalError, "colour bitmap???  Please email clarencedang@users.sourceforge.net this file\n");
+			if (infoHeader.getColorsUsed () != 2)
+				ErrorAndQuit (Error::InternalError, "color bitmap???  Please email this file to <clarencedang@users.sf.net>\n");
 
-			Word colourTableSize = infoHeader.getColoursUsed () * BMP_BitmapColourIndex::s_size;
+			Word colorTableSize = infoHeader.getColorsUsed () * BMP_BitmapColorIndex::s_size;
 
 			// fileHeader
 			BMP_BitmapFileHeader fileHeader;
 			DWord fileSize = BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-										+ colourTableSize
+										+ colorTableSize
 										+ (m_bmh->getHeight ()
 											* getBytesPerScanLine (m_bmh->getWidth (), m_bmh->getBitsPerPixel (), 4));
 
 			fileHeader.setTotalBytes (fileSize);
 			fileHeader.setActualImageOffset (BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-														+ colourTableSize);
+														+ colorTableSize);
 
-			// colourTable
-			BMP_BitmapColourIndex *colourIndex = new BMP_BitmapColourIndex [infoHeader.getColoursUsed ()];
-			if (!colourIndex)
-				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colourIndex[]\n");
+			// colorTable
+			BMP_BitmapColorIndex *colorIndex = new BMP_BitmapColorIndex [infoHeader.getColorsUsed ()];
+			if (!colorIndex)
+				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colorIndex[]\n");
 
 
 			// black and white...
-			colourIndex [0].setRed (0), colourIndex [0].setGreen (0), colourIndex [0].setBlue (0);
-			colourIndex [1].setRed (0xFF), colourIndex [1].setGreen (0xFF), colourIndex [1].setBlue (0xFF);
+			colorIndex [0].setRed (0), colorIndex [0].setGreen (0), colorIndex [0].setBlue (0);
+			colorIndex [1].setRed (0xFF), colorIndex [1].setGreen (0xFF), colorIndex [1].setBlue (0xFF);
 
 			m_externalImage = new Byte [m_externalImageSize = fileSize];
 			if (!m_externalImage)
@@ -724,11 +733,10 @@ namespace MSWrite
 			infoHeader.writeToDevice ();
 			for (int i = 0; i < 2; i++)
 			{
-				colourIndex [i].setDevice (&device);
-				colourIndex [i].writeToDevice ();
+				colorIndex [i].setDevice (&device);
+				colorIndex [i].writeToDevice ();
 			}
 
-			// write out each scanline
 			// (BMP padded to 4 bytes vs WRI input bitmap which is actually padded to 2)
 			Word scanLineWRILength = getBytesPerScanLine (infoHeader.getWidth (), infoHeader.getBitsPerPixel (), 2);
 			if (scanLineWRILength != m_bmh->getWidthBytes ())
@@ -739,6 +747,19 @@ namespace MSWrite
 			m_device->debug ("in: scanLineWRILength: ", scanLineWRILength);
 			m_device->debug ("out: scanLineBMPLength: ", scanLineBMPLength);
 		#endif
+
+			// sanity check
+			DWord expectedSize = DWord (infoHeader.getHeight ()) * DWord (scanLineWRILength);
+			if (expectedSize != getNumDataBytes ())
+			{
+				if (expectedSize > getNumDataBytes ())
+				{
+					// better quit instead of reading past end of internalData[]
+					ErrorAndQuit (Error::InvalidFormat, "infoHeader.getHeight () * scanLineWRILength > numDataBytes\n");
+				}
+				else
+					m_device->error (Error::Warn, "infoHeader.getHeight () * scanLineWRILength != numDataBytes\n");
+			}
 
 			Byte *padding = new Byte [scanLineBMPLength - scanLineWRILength];
 			if (!padding)
@@ -759,7 +780,7 @@ namespace MSWrite
 
 			device.setCache (NULL);
 
-			delete [] colourIndex;
+			delete [] colorIndex;
 			delete [] internalData;
 		}
 
@@ -790,6 +811,14 @@ namespace MSWrite
 		//Dump (horizontalScalingRel1000);
 		//Dump (verticalScalingRel1000);
 	#endif
+
+		// sanity checking
+		if (!m_externalImage || m_externalImageSize <= 0 ||
+				m_originalWidth <= 0 || m_originalHeight <= 0 ||
+				m_displayedWidth <= 0 || m_displayedHeight <= 0)
+		{
+			ErrorAndQuit (Error::InternalError, "uninitialised or invalid Image\n");
+		}
 
 		//
 		// write data
@@ -847,17 +876,17 @@ namespace MSWrite
 			if (!fileHeader.readFromDevice ()) return false;
 
 
-			/*Word colourTableSize = (1 << m_bmh->getNumPlanes ()) * BMP_BitmapColourIndex::s_size;
+			/*Word colorTableSize = (1 << m_bmh->getNumPlanes ()) * BMP_BitmapColorIndex::s_size;
 
 			// fileHeader
 			DWord fileSize = BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-												+ colourTableSize
+												+ colorTableSize
 												+ (m_bmh->getHeight ()
 													* getBytesPerScanLine (m_bmh->getWidth (), m_bmh->getBitsPerPixel (), 4));
 
 			fileHeader.setTotalBytes (fileSize);
 			fileHeader.setActualImageOffset (BMP_BitmapFileHeader::s_size + BMP_BitmapInfoHeader::s_size
-														+ colourTableSize);*/
+														+ colorTableSize);*/
 
 			// infoHeader
 			BMP_BitmapInfoHeader infoHeader;
@@ -869,10 +898,14 @@ namespace MSWrite
 			Word scanLineWRILength = getBytesPerScanLine (infoHeader.getWidth (), infoHeader.getBitsPerPixel (), 2);
 			Word scanLineBMPLength = getBytesPerScanLine (infoHeader.getWidth (), infoHeader.getBitsPerPixel (), 4);
 
+			if (infoHeader.getWidth () <= 0 || infoHeader.getHeight () <= 0)
+				ErrorAndQuit (Error::InvalidFormat, "infoHeader invalid dimensions\n");
+
+			// did the user lie about the dimensions of the BMP?
 			if (infoHeader.getWidth () != Word (Twip2Point (m_originalWidth)))
-				ErrorAndQuit (Error::Warn, "infoHeader width != m_originalWidth\n");
+				m_device->error (Error::Warn, "infoHeader width != m_originalWidth\n");
 			if (infoHeader.getHeight () != Word (Twip2Point (m_originalHeight)))
-				ErrorAndQuit (Error::Warn, "infoHeader.height != m_originalHeight\n");
+				m_device->error (Error::Warn, "infoHeader.height != m_originalHeight\n");
 
 			m_bmh->setWidth (infoHeader.getWidth ());
 			m_bmh->setHeight (infoHeader.getHeight ());
@@ -885,23 +918,23 @@ namespace MSWrite
 				ErrorAndQuit (Error::Unsupported, "compressed bitmaps unsupported\n");
 			//infoHeader.setSizeImage (0);		// lazy
 			//infoHeader.setXPixelsPerMeter (0), infoHeader.setYPixelsPerMeter (0);
-			infoHeader.setColoursUsed (1 << infoHeader.getBitsPerPixel ());	// make life easier
-			//infoHeader.setColoursImportant (infoHeader.getColoursUsed ());
+			infoHeader.setColorsUsed (1 << infoHeader.getBitsPerPixel ());	// make life easier
+			//infoHeader.setColorsImportant (infoHeader.getColorsUsed ());
 
-			if (infoHeader.getColoursUsed () != 2)
-				ErrorAndQuit (Error::Unsupported, "can't save colour BMPs, use WMFs for that purpose\n");
+			if (infoHeader.getColorsUsed () != 2)
+				ErrorAndQuit (Error::Unsupported, "can't save color BMPs, use WMFs for that purpose\n");
 
-			// colourTable
-			BMP_BitmapColourIndex *colourIndex = new BMP_BitmapColourIndex [infoHeader.getColoursUsed ()];
-			if (!colourIndex)
-				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colourIndex[]\n");
-			colourIndex [0].setDevice (m_device);
-			if (!colourIndex [0].readFromDevice ()) return false;
-			if (colourIndex [0].getRed () != 0 || colourIndex [0].getGreen () != 0 || colourIndex [0].getBlue () != 0)
+			// colorTable
+			BMP_BitmapColorIndex *colorIndex = new BMP_BitmapColorIndex [infoHeader.getColorsUsed ()];
+			if (!colorIndex)
+				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for colorIndex[]\n");
+			colorIndex [0].setDevice (m_device);
+			if (!colorIndex [0].readFromDevice ()) return false;
+			if (colorIndex [0].getRed () != 0 || colorIndex [0].getGreen () != 0 || colorIndex [0].getBlue () != 0)
 				m_device->error (Error::Warn, "black not black\n");
-			colourIndex [1].setDevice (m_device);
-			if (!colourIndex [1].readFromDevice ()) return false;
-			if (colourIndex [1].getRed () != 0xFF || colourIndex [1].getGreen () != 0xFF || colourIndex [1].getBlue () != 0xFF)
+			colorIndex [1].setDevice (m_device);
+			if (!colorIndex [1].readFromDevice ()) return false;
+			if (colorIndex [1].getRed () != 0xFF || colorIndex [1].getGreen () != 0xFF || colorIndex [1].getBlue () != 0xFF)
 				m_device->error (Error::Warn, "white not white\n");
 
 			// finish reading from m_externalImage
@@ -923,9 +956,23 @@ namespace MSWrite
 
 
 			// write header
-			setNumDataBytes (infoHeader.getHeight () * scanLineBMPLength);
+			setNumDataBytes (infoHeader.getHeight () * scanLineWRILength);
 			if (!ImageGenerated::writeToDevice ())
 				return false;
+
+			// sanity check
+			DWord expectedSize = DWord (infoHeader.getHeight ()) * DWord (scanLineBMPLength);
+			DWord imageSize = m_externalImageSize - fileHeader.getActualImageOffset ();
+			if (expectedSize != imageSize)
+			{
+				if (expectedSize > imageSize)
+				{
+					// better quit instead of reading past end of m_externalImage[]
+					ErrorAndQuit (Error::InvalidFormat, "infoHeader.getHeight () * scanLineBMPLength > imageSize\n");
+				}
+				else
+					m_device->error (Error::Warn, "infoHeader.getHeight () * scanLineBMPLength != imageSize\n");
+			}
 
 			// the DIB is upside-down...
 			Byte *bmpData = m_externalImage + fileHeader.getActualImageOffset () + (infoHeader.getHeight () - 1) * scanLineBMPLength;
@@ -939,7 +986,7 @@ namespace MSWrite
 				bmpData -= scanLineBMPLength;
 			}
 
-			delete [] colourIndex;
+			delete [] colorIndex;
 		}
 
 		return true;

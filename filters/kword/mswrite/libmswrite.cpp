@@ -1,19 +1,28 @@
-/* This file is part of the LibMSWrite Library
-   Copyright (C) 2001-2003 Clarence Dang <clarencedang@users.sourceforge.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License Version 2 as published by the Free Software Foundation.
+/* This file is part of the LibMSWrite project
+   Copyright (c) 2001-2003, 2007 Clarence Dang <clarencedang@users.sf.net>
+   All rights reserved.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License Version 2 for more details.
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
 
-   You should have received a copy of the GNU Library General Public License
-   Version 2 along with this library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+   THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+   OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    LibMSWrite Project Website:
    http://sourceforge.net/projects/libmswrite/
@@ -110,7 +119,7 @@ namespace MSWrite
 			fip.setHeader (m_header);
 			fip.setDevice (m_device);
 			fip.setType (m_type);
-			
+
 			if (m_type == ParaType)
 				fip.setMargins (m_leftMargin, m_rightMargin);
 			else	// if (m_type == CharType)
@@ -156,9 +165,9 @@ namespace MSWrite
 		#ifdef DEBUG_FORMATINFO
 			m_device->debug ("\tno formatting information pages, creating one\n");
 		#endif
-		
+
 			// --- but we should only get in here if numCharBytes = 0 ---
-			
+
 			if (m_header->getNumCharBytes ())
 			{
 				if (m_type == ParaType)
@@ -166,7 +175,7 @@ namespace MSWrite
 				else	// if (m_type == CharType)
 					m_device->error (Error::Warn, "data but no character formatting info\n");
 			}
-	
+
 			long currentOffset = m_device->tellInternal ();
 				if (!m_device->seekInternal (128 + m_header->getNumCharBytes (), SEEK_SET)) return false;
 				if (!add (defaultProperty, true/* force */)) return false;
@@ -182,7 +191,7 @@ namespace MSWrite
 			fip.setHeader (m_header);
 			fip.setDevice (m_device);
 			fip.setType (m_type);
-			
+
 			if (m_type == ParaType)
 				fip.setMargins (m_leftMargin, m_rightMargin);
 			else	// if (m_type == CharType)
@@ -268,9 +277,9 @@ namespace MSWrite
 	#ifdef DEBUG_FORMATINFO
 		m_device->debug (">>>> FormatInfo::add <<<<\n");
 	#endif
-	
+
 		DWord currentChar = m_device->tellInternal () - 128;
-		
+
 		// so that export filter writers can be lazy...
 		if (m_nextChar == currentChar && !force)
 		{
@@ -302,15 +311,15 @@ namespace MSWrite
 			#ifdef DEBUG_FORMATINFO
 				m_device->debug ("\tneedToAllocate=yes, FormatInfoPage::firstCharByte=", m_nextChar);
 			#endif
-				
+
 			if (!m_formatInfoPageList.addToBack ())
 				ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for new formatInfoPage\n");
-			
+
 			FormatInfoPage &fip = *m_formatInfoPageList.begin (false);
 			fip.setDevice (m_device);
 			fip.setFirstCharByte (m_nextChar);
 			fip.setType (m_type);
-			
+
 			if (m_type == ParaType)
 				fip.setMargins (m_leftMargin, m_rightMargin);
 			else	// if (m_type == CharType)
@@ -318,7 +327,7 @@ namespace MSWrite
 				assert (m_fontTable);
 				fip.setFontTable (m_fontTable);
 			}
-			
+
 			if (!fip.add (property))
 				return false;
 		}
@@ -363,7 +372,7 @@ namespace MSWrite
 				if (!writeText (outBuffer)) return false;
 				outBufferLen = 0;
 			}
-		
+
 			switch (*string)
 			{
 			// write text, generate signals for special characters, write more text...
@@ -487,6 +496,9 @@ namespace MSWrite
 		m_header->setDevice (m_device);
 		if (!m_header->readFromDevice ()) return false;
 		DWord numCharBytes = m_header->getNumCharBytes ();
+	#ifdef DEBUG_INTERNALPARSER
+		m_device->debug ("@@@ InternalParser: numCharBytes=", numCharBytes);
+	#endif
 
 		m_sectionTable->setHeader (m_header);
 		m_sectionTable->setDevice (m_device);
@@ -573,308 +585,340 @@ namespace MSWrite
 		if (!m_device->seekInternal (1 * 128, SEEK_SET))
 			return false;
 
+		// We are probably more permissive than MSWrite: we allow having no
+		// paragraph properties.  However, if there are paragraph properties,
+		// we enforce having character properties (code lower down).
 		FormatParaProperty *paraProp = (FormatParaProperty *) m_paragraphInfo->begin ();
 		if (m_device->bad ()) return false;
 		FormatCharProperty *charProp = (FormatCharProperty *) m_characterInfo->begin ();
 		if (m_device->bad ()) return false;
 		DWord paraStartByte = 0;
-		
-		if (numCharBytes) while (paraProp)	// loop if not empty document
+
+		// Not an empty document?
+		if (numCharBytes)
 		{
-		#ifdef DEBUG_INTERNALPARSER
-			m_device->debug ("@@@ InternalParser: Start of loop - section write\n");
-		#endif
-			//
-			// Section work
-			//
-
-			enum Section inWhatNext = InNothing;
-			if (paraProp->getIsFooter ())
-				inWhatNext = InFooter;
-			else if (paraProp->getIsHeader ())
-				inWhatNext = InHeader;
-			else
-				inWhatNext = InBody;
-
-			// beginning of a new section?
-			if (inWhatNext != inWhat)
-			{
-				// end last thing we were in
-				switch (inWhat)
-				{
-				case InFooter:	if (!m_generator->writeFooterEnd ()) return false; else break;
-				case InHeader:	if (!m_generator->writeHeaderEnd ()) return false; else break;
-				case InBody:	if (!m_generator->writeBodyEnd ()) return false; else break;
-				default:	break;	// keep compiler happy
-				}
-
-				// start next section
-				switch (inWhat = inWhatNext)
-				{
-				case InFooter:	if (!m_generator->writeFooterBegin ()) return false; else break;
-				case InHeader:	if (!m_generator->writeHeaderBegin ()) return false; else break;
-				case InBody:	if (!m_generator->writeBodyBegin ()) return false;
-					// if there's not pageTable, manually signal start of page for the first and last time
-					if (!pp)
-						if (!m_generator->writePageNew ())
-							return false;
-
-					wroteBody = true;
-				default:	break;	// keep compiler happy
-				}
-			}
-
-
-			//
-			// start paragraph
-			//
-
-			bool paraIsText = paraProp->getIsText ();
-			int objectType = ObjectType::NotObject;
-
-			DWord paraEndByte, paraAfterEndByte;
-			paraAfterEndByte = paraProp->getAfterEndCharByte ();
-			paraEndByte = paraAfterEndByte - 1;
-
-			if (paraIsText)
+			while (paraProp)
 			{
 			#ifdef DEBUG_INTERNALPARSER
-				m_device->debug ("@@@ InternalParser: Start of paragraph write\n");
+				m_device->debug ("@@@ InternalParser: Start of loop - section write"
+					" --------------------\n");
 			#endif
-
-				// signal paragraph
-				if (!m_generator->writeParaInfoBegin (paraProp, NULL, NULL)) return false;
-			}
-			else
-			{
 				//
-				// Determine whether the object is OLE or not
-				// Yes, I know this isn't entirely clean but
-				// name a cleaner and more efficient way of doing this...
+				// Section work
 				//
 
-				Byte data [2];
-				Word mappingMode;
+				enum Section inWhatNext = InNothing;
+				if (paraProp->getIsFooter ())
+					inWhatNext = InFooter;
+				else if (paraProp->getIsHeader ())
+					inWhatNext = InHeader;
+				else
+					inWhatNext = InBody;
 
-				if (!m_device->readInternal (data, 2)) return false;
-				ReadWord (mappingMode, data);
-				if (!m_device->seekInternal (-2, SEEK_CUR)) return false;	// ungetc()x2
-
-				switch (mappingMode)
+				// beginning of a new section?
+				if (inWhatNext != inWhat)
 				{
-				case 0xE4:
-					objectType = ObjectType::OLE;
-
-					m_ole = new OLE;
-					if (!m_ole)
-						ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for OLE object\n");
-
-					m_ole->setDevice (m_device);
-					if (!m_ole->readFromDevice ())
-						return false;
-
-					if (!m_generator->writeParaInfoBegin (paraProp, m_ole, NULL)) return false;
-					break;
-				case 0xE3:	// monochrome bitmap?
-					objectType = ObjectType::BMP;
-
-					m_image = new Image;
-					if (!m_image)
-						ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for BMP image object\n");
-
-					m_image->setDevice (m_device);
-					if (!m_image->readFromDevice ())
-						return false;
-
-					if (!m_generator->writeParaInfoBegin (paraProp, NULL, m_image)) return false;
-					break;
-				default:
-					objectType = ObjectType::WMF;
-
-					m_image = new Image;
-					if (!m_image)
-						ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for WMF image object\n");
-
-					m_image->setDevice (m_device);
-					if (!m_image->readFromDevice ())
-						return false;
-
-					if (!m_generator->writeParaInfoBegin (paraProp, NULL, m_image)) return false;
-					break;
-				}
-
-				// image: BMP/WMF
-				if (objectType != ObjectType::OLE)
-				{
-					if (m_image->getNumHeaderBytes () + m_image->getNumDataBytes ()
-							!= paraAfterEndByte - paraStartByte)
+					// end last thing we were in
+					switch (inWhat)
 					{
-						m_device->error (Error::Warn, "imageHeader: numHeaderBytes + numDataBytes != paragraph length\n");
+					case InFooter:	if (!m_generator->writeFooterEnd ()) return false; else break;
+					case InHeader:	if (!m_generator->writeHeaderEnd ()) return false; else break;
+					case InBody:	if (!m_generator->writeBodyEnd ()) return false; else break;
+					default:	break;	// keep compiler happy
+					}
 
-						// we had better seek to where the paragraphs expect us to be to avoid trouble
-						if (!m_device->seekInternal (paraAfterEndByte + 128, SEEK_SET)) return false;
+					// start next section
+					switch (inWhat = inWhatNext)
+					{
+					case InFooter:	if (!m_generator->writeFooterBegin ()) return false; else break;
+					case InHeader:	if (!m_generator->writeHeaderBegin ()) return false; else break;
+					case InBody:	if (!m_generator->writeBodyBegin ()) return false;
+						// if there's not pageTable, manually signal start of page for the first and last time
+						if (!pp)
+							if (!m_generator->writePageNew ())
+								return false;
+
+						wroteBody = true;
+					default:	break;	// keep compiler happy
 					}
 				}
-			}
 
-		#ifdef DEBUG_INTERNALPARSER
-			m_device->debug ("@@@ InternalParser: Start of text write\n");
-		#endif
 
-			DWord uptoByte = paraStartByte;
+				//
+				// start paragraph
+				//
 
-			// loop until we hit end of paragraph (getting one CharProperty on every iteration)
-			while (uptoByte < paraAfterEndByte)
-			{
-				if (charProp)
+				bool paraIsText = paraProp->getIsText ();
+				int objectType = ObjectType::NotObject;
+
+				DWord paraEndByte, paraAfterEndByte;
+				paraAfterEndByte = paraProp->getAfterEndCharByte ();
+				paraEndByte = paraAfterEndByte - 1;
+
+			#ifdef DEBUG_INTERNALPARSER
+				m_device->debug ("@@@ InternalParser: Start of paragraph write\n");
+				m_device->debug ("\tisText=", (int) paraIsText);
+				m_device->debug ("\tparaStartByte=", (int) paraStartByte);
+				m_device->debug ("\tparaEndByte=", (int) paraEndByte);
+			#endif
+
+				if (paraIsText)
 				{
+					// signal paragraph
+					if (!m_generator->writeParaInfoBegin (paraProp, NULL, NULL)) return false;
+				}
+				else
+				{
+					//
+					// Determine whether the object is OLE or not
+					// Yes, I know this isn't entirely clean but
+					// name a cleaner and more efficient way of doing this...
+					//
+
+					Byte data [2];
+					Word mappingMode;
+
+					if (!m_device->readInternal (data, 2)) return false;
+					ReadWord (mappingMode, data);
+					if (!m_device->seekInternal (-2, SEEK_CUR)) return false;	// ungetc()x2
+
+					switch (mappingMode)
+					{
+					case 0xE4:
+						objectType = ObjectType::OLE;
+
+						m_ole = new OLE;
+						if (!m_ole)
+							ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for OLE object\n");
+
+						m_ole->setDevice (m_device);
+						if (!m_ole->readFromDevice ())
+							return false;
+
+						if (!m_generator->writeParaInfoBegin (paraProp, m_ole, NULL)) return false;
+						break;
+					case 0xE3:	// monochrome bitmap?
+						objectType = ObjectType::BMP;
+
+						m_image = new Image;
+						if (!m_image)
+							ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for BMP image object\n");
+
+						m_image->setDevice (m_device);
+						if (!m_image->readFromDevice ())
+							return false;
+
+						if (!m_generator->writeParaInfoBegin (paraProp, NULL, m_image)) return false;
+						break;
+					default:
+						objectType = ObjectType::WMF;
+
+						m_image = new Image;
+						if (!m_image)
+							ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for WMF image object\n");
+
+						m_image->setDevice (m_device);
+						if (!m_image->readFromDevice ())
+							return false;
+
+						if (!m_generator->writeParaInfoBegin (paraProp, NULL, m_image)) return false;
+						break;
+					}
+
+					// image: BMP/WMF
+					if (objectType != ObjectType::OLE)
+					{
+						if (m_image->getNumHeaderBytes () + m_image->getNumDataBytes ()
+								!= paraAfterEndByte - paraStartByte)
+						{
+							m_device->error (Error::Warn, "imageHeader: numHeaderBytes + numDataBytes != paragraph length\n");
+
+							// we had better seek to where the paragraphs expect us to be to avoid trouble
+							if (!m_device->seekInternal (paraAfterEndByte + 128, SEEK_SET)) return false;
+						}
+					}
+				}
+
+			#ifdef DEBUG_INTERNALPARSER
+				m_device->debug ("@@@ InternalParser: Start of text write filePos=",
+					m_device->tell ());
+			#endif
+
+				DWord uptoByte = paraStartByte;
+
+				// loop until we hit end of paragraph (getting one CharProperty on every iteration)
+				while (uptoByte < paraAfterEndByte)
+				{
+				#ifdef DEBUG_INTERNALPARSER
+					m_device->debug ("@@@ Writing paragraph: uptoByte=", uptoByte);
+				#endif
+
+					if (!charProp)
+						ErrorAndQuit (Error::InvalidFormat, "missing character property\n");
+
 					if (uptoByte >= charProp->getAfterEndCharByte ())
 					{
 						charProp = (FormatCharProperty *) m_characterInfo->next ();
 						if (m_device->bad ()) return false;
+
+						if (!charProp)
+							ErrorAndQuit (Error::InvalidFormat, "missing character property (site 2)\n");
 					}
 
 				#ifdef DEBUG_INTERNALPARSER
 					m_device->debug ("@@@ InternalParser: character write\n");
+					m_device->debug ("@@@ Font=");
+					m_device->debug ((const char *) charProp->getFont ()->getName ());
+					m_device->debug (charProp->getFontSize ());
+					m_device->debug ("\n");
 				#endif
 
 					if (!m_generator->writeCharInfoBegin (charProp)) return false;
-				}
+					
 
-				// ultimately aim for end of CharProperty block; if that's not possible, aim for end of paragraph
-				DWord aimUltimateByte = charProp->getEndCharByte () > paraEndByte ? paraEndByte : charProp->getEndCharByte ();
+					// ultimately aim for end of CharProperty block; if that's not possible, aim for end of paragraph
+					DWord aimUltimateByte = charProp->getEndCharByte () > paraEndByte ? paraEndByte : charProp->getEndCharByte ();
+				#ifdef DEBUG_INTERNALPARSER
+					m_device->debug ("@@@ aimUltimateByte=", aimUltimateByte);
+				#endif
 
-				while (uptoByte <= aimUltimateByte)
-				{
-					// flag to tell us to generate pageNewWrite/pageTable signal, after writing some normal text
-					bool pageTableAck = false;
-
-					// short-term goal (before end of CharProperty, ParaProperty or page)
-					DWord aimByte = aimUltimateByte;
-
-					// we want to efficiently send pageNewWrite signals which might be sandwhiched inside
-					// a CharProperty block (note: we do NOT end and then restart a CharProperty block because of a writePageNew())
-					if (pp)
-					{
-						if (pp->getFirstCharByte () <= aimByte)
-						{
-							pageTableAck = true;
-							if (pp->getFirstCharByte ())
-								// - 1 is because we want the PageNew signal called before the character
-								aimByte = pp->getFirstCharByte () - 1;
-							else
-								aimByte = 0xFFFFFFFF;	// 0 - 1 :)
-
-						#ifdef DEBUG_INTERNALPARSER
-							m_device->debug ("@@@ InternalParser: writePageNew pending\n");
-						#endif
-						}
-					}
-
-					// write text (using buffering)
-					while (uptoByte <= aimByte && aimByte != 0xFFFFFFFF)
-					{
-						const DWord amountToRead = aimByte - uptoByte + 1 > 1023
-															? 1023 : aimByte - uptoByte + 1;
-
-						if (paraIsText)
-						{
-							Byte buffer [1024];
-
-							if (!m_device->readInternal (buffer, amountToRead)) return false;
-
-							buffer [amountToRead] = '\0';
-							if (!m_generator->processText (buffer, uptoByte + amountToRead - 1 == paraEndByte)) return false;
-						}
-
-						uptoByte += amountToRead;
-					}		// while (uptoByte <= aimByte && aimByte != 0xFFFFFFFF) {
-
-					// generate pageNewWrite/pageTable signal, if requested
-					if (pageTableAck)
+					while (uptoByte <= aimUltimateByte)
 					{
 					#ifdef DEBUG_INTERNALPARSER
-						m_device->debug ("@@@ InternalParser: writePageNew\n");
+						m_device->debug ("@@@ InternalParser: writing text uptoByte=", uptoByte);
 					#endif
 
-						if (!m_generator->writePageNew (pp->getPageNumber ())) return false;
+						// flag to tell us to generate pageNewWrite/pageTable signal, after writing some normal text
+						bool pageTableAck = false;
 
-						pp = m_pageTable->next ();
-						if (m_device->bad ()) return false;
-					}
-				}		// while (uptoByte <= aimUltimateByte) {
+						// short-term goal (before end of CharProperty, ParaProperty or page)
+						DWord aimByte = aimUltimateByte;
+
+						// we want to efficiently send pageNewWrite signals which might be sandwhiched inside
+						// a CharProperty block (note: we do NOT end and then restart a CharProperty block because of a writePageNew())
+						if (pp)
+						{
+							if (pp->getFirstCharByte () <= aimByte)
+							{
+								pageTableAck = true;
+								if (pp->getFirstCharByte ())
+									// - 1 is because we want the PageNew signal called before the character
+									aimByte = pp->getFirstCharByte () - 1;
+								else
+									aimByte = 0xFFFFFFFF;	// 0 - 1 :)
+
+							#ifdef DEBUG_INTERNALPARSER
+								m_device->debug ("@@@ InternalParser: writePageNew pending\n");
+							#endif
+							}
+						}
+
+						// write text (using buffering)
+						while (uptoByte <= aimByte && aimByte != 0xFFFFFFFF)
+						{
+							const DWord amountToRead = aimByte - uptoByte + 1 > 1023
+																? 1023 : aimByte - uptoByte + 1;
+
+							if (paraIsText)
+							{
+								Byte buffer [1024];
+
+								if (!m_device->readInternal (buffer, amountToRead)) return false;
+
+								buffer [amountToRead] = '\0';
+								if (!m_generator->processText (buffer, uptoByte + amountToRead - 1 == paraEndByte)) return false;
+							}
+
+							uptoByte += amountToRead;
+						}		// while (uptoByte <= aimByte && aimByte != 0xFFFFFFFF) {
+
+						// generate pageNewWrite/pageTable signal, if requested
+						if (pageTableAck)
+						{
+						#ifdef DEBUG_INTERNALPARSER
+							m_device->debug ("@@@ InternalParser: writePageNew\n");
+						#endif
+
+							if (!m_generator->writePageNew (pp->getPageNumber ())) return false;
+
+							pp = m_pageTable->next ();
+							if (m_device->bad ()) return false;
+						}
+					}		// while (uptoByte <= aimUltimateByte) {
 
 
 				#ifdef DEBUG_INTERNALPARSER
-					m_device->debug ("@@@ InternalParser: character end write\n");
+					m_device->debug ("@@@ InternalParser: character end write uptoByte=",
+						uptoByte);
 				#endif
 
-				// end char info
-				if (charProp)
-					if (!m_generator->writeCharInfoEnd (charProp, uptoByte == paraAfterEndByte))
-						return false;
+					// end char info
+					if (charProp)
+						if (!m_generator->writeCharInfoEnd (charProp, uptoByte == paraAfterEndByte))
+							return false;
 
-			}		// while (uptoByte < paraAfterEndByte) {
+				}		// while (uptoByte < paraAfterEndByte) {
 
 
-			//
-			// ouptut object
-			//
+				//
+				// ouptut object
+				//
 
-			if (!paraIsText)
-			{
-				if (objectType == ObjectType::OLE)
+				if (!paraIsText)
 				{
-					if (!m_generator->writeBinary (m_ole->getExternalObject (), m_ole->getExternalObjectSize ()))
-						return false;
+					if (objectType == ObjectType::OLE)
+					{
+						if (!m_generator->writeBinary (m_ole->getExternalObject (), m_ole->getExternalObjectSize ()))
+							return false;
+					}
+					else	// if (objectType == ObjectType::BMP || objectType == ObjectType::WMF)
+					{
+						if (!m_generator->writeBinary (m_image->getExternalImage (), m_image->getExternalImageSize ()))
+							return false;
+					}
 				}
-				else	// if (objectType == ObjectType::BMP || objectType == ObjectType::WMF)
-				{
-					if (!m_generator->writeBinary (m_image->getExternalImage (), m_image->getExternalImageSize ()))
-						return false;
-				}
-			}
 
-			//
-			// end paragraph
-			//
-
-			if (paraIsText)
-			{
+				//
 				// end paragraph
-				if (!m_generator->writeParaInfoEnd (paraProp, NULL)) return false;
-			}
-			else
-			{
-				switch (objectType)
+				//
+
+				if (paraIsText)
 				{
-				case ObjectType::OLE:
-					if (!m_generator->writeParaInfoEnd (paraProp, m_ole, NULL)) return false;
-					delete m_ole;
-					m_ole = NULL;
-					break;
-				case ObjectType::BMP:
-					if (!m_generator->writeParaInfoEnd (paraProp, NULL, m_image)) return false;
-					delete m_image;
-					m_image = NULL;
-					break;
-				case ObjectType::WMF:
-					if (!m_generator->writeParaInfoEnd (paraProp, NULL, m_image)) return false;
-					delete m_image;
-					m_image = NULL;
-					break;
+					// end paragraph
+					if (!m_generator->writeParaInfoEnd (paraProp, NULL)) return false;
 				}
-			}
+				else
+				{
+					switch (objectType)
+					{
+					case ObjectType::OLE:
+						if (!m_generator->writeParaInfoEnd (paraProp, m_ole, NULL)) return false;
+						delete m_ole;
+						m_ole = NULL;
+						break;
+					case ObjectType::BMP:
+						if (!m_generator->writeParaInfoEnd (paraProp, NULL, m_image)) return false;
+						delete m_image;
+						m_image = NULL;
+						break;
+					case ObjectType::WMF:
+						if (!m_generator->writeParaInfoEnd (paraProp, NULL, m_image)) return false;
+						delete m_image;
+						m_image = NULL;
+						break;
+					}
+				}
 
-			paraStartByte = paraAfterEndByte;
+				paraStartByte = paraAfterEndByte;
 
-			// numCharBytes != 0 because we checked it before we entered the loop
-			m_generator->sigProgress (paraStartByte * 100 / numCharBytes);
+				// numCharBytes != 0 because we checked it before we entered the loop
+				m_generator->sigProgress (paraStartByte * 100 / numCharBytes);
 
-			// get next paragraph properties
-			paraProp = (FormatParaProperty *) m_paragraphInfo->next ();
-			if (m_device->bad ()) return false;
-		}
+				// get next paragraph properties
+				paraProp = (FormatParaProperty *) m_paragraphInfo->next ();
+				if (m_device->bad ()) return false;
+			}  // for each paragraph...
+		}  // if not an empty document...
 
 		// end last thing we were in
 		switch (inWhat)
@@ -891,7 +935,7 @@ namespace MSWrite
 		#ifdef DEBUG_INTERNALPARSER
 			m_device->debug ("@@@ InternalParser: did not write body, writing one now\n");
 		#endif
-		
+
 			if (!m_generator->writeBodyBegin ()) return false;
 			if (!m_generator->writeBodyEnd ()) return false;
 		}
@@ -978,9 +1022,9 @@ namespace MSWrite
 			ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for characterInfo\n");
 		m_characterInfo->setType (CharType);
 		m_characterInfo->setDevice (m_device);
-		
+
 		*m_pageLayout = *pageLayout;
-		
+
 		// get ready to output text
 		if (!m_device->seekInternal (1 * 128, SEEK_SET)) return false;
 
@@ -1003,10 +1047,10 @@ namespace MSWrite
 		m_device->debug ("!!!! InternalGenerator: Write characterInfo; page=", m_device->tellInternal () / 128);
 	#endif
 		FormatCharProperty defaultCharProperty;
-		defaultCharProperty.setFontTable (m_fontTable);	
+		defaultCharProperty.setFontTable (m_fontTable);
 			Font defaultFont ((const Byte *) "Arial");	// better than "unknown", I guess
 		defaultCharProperty.setFont (&defaultFont);
-			
+
 		// write characterInfo pages
 		m_characterInfo->setDevice (m_device);
 		m_characterInfo->setHeader (m_header);
@@ -1020,9 +1064,9 @@ namespace MSWrite
 	#ifdef DEBUG_INTERNALGENERATOR
 		m_device->debug ("!!!! InternalGenerator: Write paragraphInfo; page=", m_device->tellInternal () / 128);
 	#endif
-		FormatParaProperty defaultParaProperty;	
+		FormatParaProperty defaultParaProperty;
 		defaultParaProperty.setMargins (m_pageLayout->getLeftMargin (), m_pageLayout->getRightMargin ());
-	
+
 		// write paragraphInfo pages
 		m_paragraphInfo->setDevice (m_device);
 		m_paragraphInfo->setHeader (m_header);
@@ -1157,7 +1201,7 @@ namespace MSWrite
 	#ifdef DEBUG_INTERNALGENERATOR
 		m_device->debug ("!!!! InternalGenerator: writeCharInfoBegin\n");
 	#endif
-		
+
 		return true;
 	}
 
