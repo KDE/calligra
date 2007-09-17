@@ -228,23 +228,24 @@ void TestStatisticalFunctions::testBETADIST()
     // ODF-tests
 
     // Cumulative tests
-    CHECK_EVAL("BETADIST( 0  ; 3; 4)", Value( 0        ) ); //
-    CHECK_EVAL("BETADIST( 0.5; 3; 4)", Value( 0.656250 ) ); //
-    CHECK_EVAL("BETADIST( 0.9; 4; 3)", Value( 0.984150 ) ); //
-//     CHECK_EVAL("BETADIST( 2  ; 3; 4)", Value( 1        ) ); //
-    CHECK_EVAL("BETADIST(-1  ; 3; 4)", Value( 0        ) ); //
-    CHECK_EVAL_SHORT("BETADIST(1.5;3;4;1;2)", evaluate( "BETADIST(0.5;3;4)" ) ); // diff = -2.27021e-09
-    CHECK_EVAL_SHORT("BETADIST(2;3;4;1;3)",   evaluate( "BETADIST(0.5;3;4)" ) ); // diff = -2.27021e-09
+    CHECK_EVAL("BETADIST( 0  ; 3; 4)",           Value( 0        ) ); // 
+    CHECK_EVAL("BETADIST( 0.5; 3; 4)",           Value( 0.656250 ) ); //
+    CHECK_EVAL("BETADIST( 0.9; 4; 3)",           Value( 0.984150 ) ); //
+    CHECK_EVAL("BETADIST( 2  ; 3; 4)",           Value( 1        ) ); // constraints x > b should be 1 if cumulative
+    CHECK_EVAL("BETADIST(-1  ; 3; 4)",           Value( 0        ) ); // constraints x < a
 
-    // last parameter FALSE (non - Cumulative) is currently not supported
-    CHECK_EVAL("BETADIST( 0  ;3;4;0;1;FALSE())", Value( 0           ) ); //
-    CHECK_EVAL_SHORT("BETADIST( 0.5;3;4;0;1;FALSE())", Value( 0.000520833 ) ); // 0.000521
-    CHECK_EVAL_SHORT("BETADIST( 0.9;4;3;0;1;FALSE())", Value( 0.0001215    ) ); // 0.000122
-    CHECK_EVAL("BETADIST( 2  ;3;4;0;1;FALSE())", Value( 0           ) ); //
-    CHECK_EVAL("BETADIST(-1  ;3;4;0;1;FALSE())", Value( 0           ) ); //
+    CHECK_EVAL_SHORT("BETADIST(1.5;3;4;1;2)",    evaluate( "BETADIST(0.5;3;4)" ) ); // diff = -2.27021e-09
+    CHECK_EVAL_SHORT("BETADIST(2;3;4;1;3)",      evaluate( "BETADIST(0.5;3;4)" ) ); // diff = -2.27021e-09
 
-    CHECK_EVAL("BETADIST(1.5;3;4;1;2;FALSE())", evaluate( "BETADIST(0.5;3;4;0;1;FALSE())" ) ); // 
-    CHECK_EVAL("BETADIST(2;3;4;1;3;FALSE())",   evaluate( "BETADIST(0.5;3;4;0;1;FALSE())" ) ); // 
+    // last parameter FALSE (non - Cumulative)
+    CHECK_EVAL("BETADIST( 0  ;3;4;0;1;FALSE())", Value( 0            ) ); //
+    CHECK_EVAL("BETADIST( 0.5;3;4;0;1;FALSE())", Value( 0.0005208333 ) ); // 0.000521
+    CHECK_EVAL("BETADIST( 0.9;4;3;0;1;FALSE())", Value( 0.0001215000 ) ); // 0.000122
+    CHECK_EVAL("BETADIST( 2  ;3;4;0;1;FALSE())", Value( 0            ) ); // constraints x > b should be 0 if non-cumulative
+    CHECK_EVAL("BETADIST(-1  ;3;4;0;1;FALSE())", Value( 0            ) ); // constraints x < a
+
+    CHECK_EVAL("BETADIST(1.5;3;4;1;2;FALSE())",  evaluate( "BETADIST(0.5;3;4;0;1;FALSE())" ) ); // 
+    CHECK_EVAL("BETADIST(2  ;3;4;1;3;FALSE())",  evaluate( "BETADIST(0.5;3;4;0;1;FALSE())" ) ); // 
 }
 
 void TestStatisticalFunctions::testBETAINV()
@@ -273,8 +274,8 @@ void TestStatisticalFunctions::testCHIDIST()
 void TestStatisticalFunctions::testLEGACYCHIDIST()
 {
     // ODF-tests LEGACY.CHIDIST
-//     CHECK_EVAL("CHIDIST(-1;2)", Value( 1 ) ); // TODO check return value if x<0 (vulue::errorNUM or 1)?
-//     CHECK_EVAL("CHIDIST( 0;2)", Value( 1 ) ); // 
+    CHECK_EVAL("CHIDIST(-1;2)", Value( 1 ) ); // constraint x<0
+    CHECK_EVAL("CHIDIST( 0;2)", Value( 1 ) ); // constraint x=0
     CHECK_EVAL_SHORT("LEGACYCHIDIST( 2;2)", Value( 0.367879 ) ); //
     CHECK_EVAL_SHORT("LEGACYCHIDIST( 4;4)", Value( 0.406006 ) ); //
 }
@@ -417,13 +418,13 @@ void TestStatisticalFunctions::testFREQUENCY()
     CHECK_EVAL( "FREQUENCY({1;2;3;4;5;6;7;8;9;10};)", Value( 10 ) );
 }
 
-// void TestStatisticalFunctions::testFTEST()
-// {
-//     // ODF-tests
-//     CHECK_EVAL("FTEST(B14:B17; C14:C17)", Value(           1 ) ); // Same data (second reversed),
-//     CHECK_EVAL("FTEST(B14:B15; C13:C14)", Value( 0.311916521 ) ); // Significantly different variances,
-//                                                                   // so less likely to come from same data set.
-// }
+void TestStatisticalFunctions::testFTEST()
+{
+    // ODF-tests
+    CHECK_EVAL("FTEST(B14:B17; C14:C17)", Value(           1 ) ); // Same data (second reversed),
+    CHECK_EVAL("FTEST(B14:B15; C13:C14)", Value( 0.311916521 ) ); // Significantly different variances,
+                                                                  // so less likely to come from same data set.
+}
 
 void TestStatisticalFunctions::testGAMMADIST()
 {
@@ -873,9 +874,9 @@ void TestStatisticalFunctions::testTDIST()
     // 2 = two tailed distribution
 
     // ODF-tests
-    CHECK_EVAL_SHORT("TDIST( 0.5; 1; 1 )",  Value( 0.352416 ) ); // TODO - be more precise
-    CHECK_EVAL_SHORT("TDIST( -1.5; 2; 2 )", Value( 0.272393 ) ); // TODO - be more precise
-    CHECK_EVAL_SHORT("TDIST( 0.5; 5; 1 )",  Value( 0.319149 ) ); // TODO - be more precise 
+    CHECK_EVAL("TDIST( 0.5; 1; 1 )",  Value( 0.3524163823 ) ); // ODF-specs -> 0.352416
+    CHECK_EVAL_SHORT("TDIST( -1.5; 2; 2 )", Value( 0.272393 ) ); //  TODO - be more precise / OOo-2.3.0 returns error!!!
+    CHECK_EVAL("TDIST( 0.5; 5; 1 )",  Value( 0.3191494358 ) ); // ODF-specs -> 0.319149
     CHECK_EVAL("TDIST( 1; 1; 3 )",    Value::errorNUM() ); // mode = { 1; 2 }
     CHECK_EVAL("TDIST( 1; 0; 1 )",    Value::errorNUM() ); // degreeOfFreedom >= 1
 }
@@ -893,8 +894,11 @@ void TestStatisticalFunctions::testTREND()
     //  A23  |  16        C23  |  3
 
     // ODF-tests
-    CHECK_EVAL("TREND(A19:A23; C19:C23; 1)     ", Value( 4.7555555555 ) ); // with    offset
-    CHECK_EVAL("TREND(A19:A23; C19:C23; 1; 0 ) ", Value( 1.6825396825 ) ); // without offset
+    Value res( Value::Array );
+    res.setElement(0, 0, Value( 4.7555555555 ) );
+    CHECK_EVAL("TREND(A19:A23; C19:C23; 1)     ", res ); // with    offset
+    res.setElement(0, 0, Value( 1.6825396825 ) );
+    CHECK_EVAL("TREND(A19:A23; C19:C23; 1; 0 ) ", res ); // without offset
 }
 
 void TestStatisticalFunctions::testTRIMMEAN()
