@@ -29,9 +29,10 @@
 #include <QPainterPath>
 
 /**
- * @short Implementation of an unknown element.  Used when we see a tag that we do not recognise.
- * 
- * This element draws nothing, takes up no space, and ignores any calls to insert children etc. 
+ * @short Implementation of an unknown element. 
+ *
+ * Used when we see a tag that we do not recognise. This element draws nothing, takes up
+ * no space, and ignores any calls to insert children etc. 
  */
 class KOFORMULA_EXPORT UnknownElement : public BasicElement {
 public:
