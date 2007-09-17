@@ -47,7 +47,7 @@ void FormulaCursor::paint( QPainter& painter ) const
     
     QPointF bottom = top + QPointF( 0, m_currentElement->height() );
     QPen pen;
-    pen.setWidth( 1 );
+    pen.setWidth( 0 );
     painter.setPen( pen );
     painter.drawLine( top, bottom );
 }
