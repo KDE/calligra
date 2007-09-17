@@ -40,8 +40,10 @@ const QList<BasicElement*> TokenElement::childElements()
 
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
-     // TODO change it to use attribute colors
-     painter.setPen( Qt::black );
+     // set the painter to use background and text colors
+     painter.setBackgroundMode( Qt::OpaqueMode  );
+     painter.setBackground( QBrush( am->mathBackground( this ) ) );
+     painter.setPen( am->mathColor( this ) );
      painter.setBrush( Qt::SolidPattern );
      painter.translate( 0.0, baseLine() );
      painter.drawPath( m_contentPath );  // draw content which is buffered as path
