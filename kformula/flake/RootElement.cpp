@@ -42,7 +42,7 @@ RootElement::~RootElement()
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
     Q_UNUSED(am)
-    QPen pen( painter.pen() );
+    QPen pen ( am->mathColor( this ) );
     pen.setWidth( 1 );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );

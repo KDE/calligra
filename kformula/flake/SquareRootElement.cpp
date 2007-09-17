@@ -33,8 +33,8 @@ SquareRootElement::~SquareRootElement()
 
 void SquareRootElement::paint( QPainter& painter, AttributeManager* am )
 {
-    QPen pen( painter.pen() );
-    pen.setWidth( 2 );
+    QPen pen ( am->mathColor( this ) );
+    pen.setWidth( 1 );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
 }
