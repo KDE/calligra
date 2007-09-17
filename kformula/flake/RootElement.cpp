@@ -59,17 +59,17 @@ void RootElement::layout( const AttributeManager* am )
     setHeight( 2*distY + m_radicand->height() );
 
     m_rootSymbol = QPainterPath();
-    tmp += QPointF( 0.0, 2/3 * height() );
+    tmp += QPointF( 0.0, 2.0 * height() / 3.0 );
     m_rootSymbol.moveTo( tmp );
-    tmp += QPointF( m_exponent->width(), 2/3 * height() );
-    m_rootSymbol.moveTo( tmp );
-    tmp += QPointF( 1/6 * height(), 1/3 * height() );
-    m_rootSymbol.moveTo( tmp );
-    tmp = QPointF( tmp.x() + 1/6 * height(), 0.0 );
-    m_rootSymbol.moveTo( tmp );
+    tmp += QPointF( m_exponent->width(), 2.0 * height() / 3.0 );
+    m_rootSymbol.lineTo( tmp );
+    tmp += QPointF( height() / 6.0, height() / 3.0 );
+    m_rootSymbol.lineTo( tmp );
+    tmp = QPointF( tmp.x() + height() / 6.0, 0.0 );
+    m_rootSymbol.lineTo( tmp );
     m_radicand->setOrigin( tmp + QPointF( 0.0, distY ) );
     tmp += QPointF( m_radicand->width(), 0.0 );
-    m_rootSymbol.moveTo( tmp );
+    m_rootSymbol.lineTo( tmp );
     
     m_exponent->setOrigin( QPointF( 0.0, distY ) );
     setWidth( m_rootSymbol.boundingRect().width() );
