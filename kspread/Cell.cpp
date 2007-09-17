@@ -1993,9 +1993,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
     else // old docs: do the ugly solution of parsing the text
     {
       // ...except for date/time
-      if (isDate() && ( t.contains('/') == 2 ))
+      if (isDate() && ( t.count('/') == 2 ))
         dataType = "Date";
-      else if (isTime() && ( t.contains(':') == 2 ) )
+      else if (isTime() && ( t.count(':') == 2 ) )
         dataType = "Time";
       else
       {

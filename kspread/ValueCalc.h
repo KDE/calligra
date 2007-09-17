@@ -27,6 +27,13 @@
 #include "Number.h"
 #include "Value.h"
 
+#ifdef max
+# undef max
+#endif
+#ifdef min
+# undef min
+#endif
+
 namespace KSpread
 {
 class Doc;
