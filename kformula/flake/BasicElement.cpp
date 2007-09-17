@@ -43,9 +43,9 @@ BasicElement::~BasicElement()
 
 void BasicElement::paint( QPainter& painter, AttributeManager* )
 { 
-    // draw a blue rectangle
-    painter.setPen( QPen( Qt::blue ) );
-    painter.drawRect( m_boundingRect );
+    // draw a blue rectangle for debugging
+//    painter.setPen( QPen( Qt::blue ) );
+//    painter.drawRect( m_boundingRect );
 }
 
 void BasicElement::layout( const AttributeManager* )
