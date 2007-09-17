@@ -64,30 +64,28 @@ void PictureShape::saveOdf( KoShapeSavingContext & context ) const
         return;
 
     KoXmlWriter &writer = context.xmlWriter();
+
+    const bool nestedInFrame = context.isSet(KoShapeSavingContext::FrameOpened);
+    if( ! nestedInFrame ) {
+        writer.startElement( "draw:frame" );
+        saveOdfFrameAttributes(context);
+    }
+    saveOdfAttributes(context, 0); // required to clear the 'frameOpened' attribute on KoShape
+
     writer.startElement("draw:image");
-    saveOdfAttributes(context, OdfMandatories | OdfSize | OdfPosition | OdfTransformation);
     // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
     QString name = context.addImageForSaving( data->pixmap() );
     writer.addAttribute("xlink:href", name);
     writer.endElement();
+    if(! nestedInFrame)
+        writer.endElement(); // draw-frame
 }
 
 bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
     Q_UNUSED(context);
 
-    //QPointF pos = position();
-    //double x = KoUnit::parseValue( element.attribute("x") ) + pos.x();
-    double x = KoUnit::parseValue( element.attribute("x") );
-    double y = KoUnit::parseValue( element.attribute("y") );
-    double width = KoUnit::parseValue( element.attribute("width") );
-    double height = KoUnit::parseValue( element.attribute("height") );
-    int zindex = qMax(0, element.attribute("z-index").toInt() ) + 1;
-
-    setPosition( QPointF(x,y) );
-    setSize( QSizeF(width,height) );
-    setZIndex(zindex);
-
+    // the frame attributes are loaded outside in the shape registry
     if( context.imageCollection() )
     {
         const QString href = element.attribute("href");
@@ -96,22 +94,6 @@ bool PictureShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext 
         data->setStoreHref( href );
         setUserData( data );
     }
-/*
-    QDomNamedNodeMap attrs = element.attributes();
-    for (int iAttr = 0 ; iAttr < attrs.count() ; iAttr++)
-        kDebug(32500) <<"PictureShape::loadOdf Attribute" << iAttr <<" :" << attrs.item(iAttr).nodeName() <<"\t" << attrs.item(iAttr).nodeValue();
-    //kDebug(32500) <<"PictureShape::loadOdf xlink:href=" << element.attribute("href");
-    KoStore* store = context.koLoadingContext().store();
-    Q_ASSERT(store);
-    //TODO use e.g. KWDocument::imageCollection() here rather then creating a new one
-    KoImageCollection* imagecollection = new KoImageCollection();
-    //imagecollection->loadFromStore(store)
-    KoImageData* imagedata = new KoImageData(imagecollection);
-    bool ok = imagedata->loadFromStore(new KoStoreDevice(store));
-    setUserData( imagedata );
-    return ok;
-*/
 
-    kDebug()<<"PictureShape::loadOdf x="<<x<<" y="<<y<<" width="<<width<<" height="<<height<<" zindex="<<zindex;
     return true;
 }
