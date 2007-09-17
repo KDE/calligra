@@ -1127,7 +1127,7 @@ protected:
     bool cellIsEmpty( const Cell& cell, TestType _type );
 
     QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                                    int NbCol, const QPoint& pos, bool isColumnFixed,
+                                    int NbCol, const QPoint& point, bool isColumnFixed,
                                     bool isRowFixed);
 
     static Sheet* find( int _id );
