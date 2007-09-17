@@ -1,19 +1,28 @@
-/* This file is part of the LibMSWrite Library
-   Copyright (C) 2001-2003 Clarence Dang <clarencedang@users.sourceforge.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License Version 2 as published by the Free Software Foundation.
+/* This file is part of the LibMSWrite project
+   Copyright (c) 2001-2003, 2007 Clarence Dang <clarencedang@users.sf.net>
+   All rights reserved.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License Version 2 for more details.
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
 
-   You should have received a copy of the GNU Library General Public License
-   Version 2 along with this library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+   THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+   OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    LibMSWrite Project Website:
    http://sourceforge.net/projects/libmswrite/
@@ -226,7 +235,7 @@ namespace MSWrite
 		{
 		}
 
-		
+
 		//
 		// Do _not_ try to override these functions!
 		// They are used internally by LibMSWrite so that reads/writes can
@@ -242,8 +251,8 @@ namespace MSWrite
 		 *
 		 * setting cache to NULL stops the Device from reading from the
 		 * last memory block specified.
-		 * @param cache points to the memory block
 		 *
+		 * @param cache points to the memory block
 		 */
 		bool setCache (Byte *const cache)
 		{
@@ -292,7 +301,7 @@ namespace MSWrite
 		bool writeInternal (const Byte *buf, const long numBytes)
 		{
 			bool ret;
-			
+
 			if (m_cacheCount)
 			{
 				memcpy (m_cache [m_cacheCount - 1], buf, numBytes);
@@ -407,7 +416,10 @@ namespace MSWrite
 			if (lineno)
 				fprintf (stderr, "%s:%i:", file, lineno);
 			
-			// TODO: why the \n?
+			// TODO: 1. debug() should implicitly \n as well
+			//       2. all _calls_ to error() et. al. should not \n
+			//       Reason why \n is here is because of Verify() specifying <val>
+			//       and the \n must come after <val>, not <message>.
 			if (token == NoToken)
 				fprintf (stderr, "%s\n", message);
 			else
@@ -500,44 +512,10 @@ namespace MSWrite
 	#endif
 
 	// [PRIVATE]
-	class UseThisMuchPrefixSize
-	{
-	private:
-		int m_val;
-
-	public:
-		UseThisMuchPrefixSize (const int val = 0)
-		{
-			setVal (val);
-		}
-
-		~UseThisMuchPrefixSize ()
-		{
-		}
-
-		bool operator== (const UseThisMuchPrefixSize &rhs)
-		{
-			return m_val == rhs.m_val;
-		}
-
-		UseThisMuchPrefixSize &operator= (const UseThisMuchPrefixSize &rhs)
-		{
-			if (this == &rhs)
-				return *this;
-
-			m_val = rhs.m_val;
-			return *this;
-		}
-
-		int getVal (void) const	{	return m_val;	}
-		void setVal (const int val)	{	m_val = val;	}
-	};
-	
-	// [PRIVATE]
 	class UseThisMuch
 	{
 	private:
-		List <UseThisMuchPrefixSize> m_notDefaultBits;
+		List <int> m_notDefaultBits;
 		
 	protected:
 		UseThisMuch &operator= (const UseThisMuch &rhs)
@@ -548,25 +526,25 @@ namespace MSWrite
 			this->m_notDefaultBits = rhs.m_notDefaultBits;
 			return *this;
 		}
-		
+
 		void signalHaveSetData (const bool isDefault, const int needNumBits)
 		{
 			if (isDefault)
 			{
 				// it's a delete operation then
-				List <UseThisMuchPrefixSize>::Iterator it = m_notDefaultBits.search (needNumBits);
-				if (it != m_notDefaultBits.end ()) m_notDefaultBits.erase (it);
+				List <int>::Iterator it = m_notDefaultBits.search (needNumBits);
+				if (it != m_notDefaultBits.end ())
+					m_notDefaultBits.erase (it);
 			}
 			// possibly a new value
 			else
 			{
-				List <UseThisMuchPrefixSize>::Iterator it = m_notDefaultBits.search (needNumBits);
+				List <int>::Iterator it = m_notDefaultBits.search (needNumBits);
 
 				// new value
 				if (it == m_notDefaultBits.end ())
 				{
-					UseThisMuchPrefixSize utmps (needNumBits);
-					m_notDefaultBits.addToBack (utmps);
+					m_notDefaultBits.addToBack (needNumBits);
 				}
 			}
 		}
@@ -575,11 +553,11 @@ namespace MSWrite
 		int getNeedNumDataBytes (void) const
 		{
 			int biggest = 0;
-			List <UseThisMuchPrefixSize>::Iterator it;
+			List <int>::Iterator it;
 			for (it = m_notDefaultBits.begin (); it != m_notDefaultBits.end (); it++)
 			{
-				if ((*it).getVal () > biggest)
-					biggest = (*it).getVal ();
+				if (*it > biggest)
+					biggest = *it;
 			}
 
 			if (biggest % 8)
@@ -597,7 +575,7 @@ namespace MSWrite
 		{
 		}
 	};
-	
+
 }	// namespace MSWrite	{
 
 #endif	// __LIBMSWRITE_DEFS_H__

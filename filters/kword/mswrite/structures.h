@@ -1,19 +1,28 @@
-/* This file is part of the LibMSWrite Library
-   Copyright (C) 2001-2003 Clarence Dang <clarencedang@users.sourceforge.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License Version 2 as published by the Free Software Foundation.
+/* This file is part of the LibMSWrite project
+   Copyright (c) 2001-2003, 2007 Clarence Dang <clarencedang@users.sf.net>
+   All rights reserved.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License Version 2 for more details.
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
 
-   You should have received a copy of the GNU Library General Public License
-   Version 2 along with this library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+   THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+   IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+   OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+   INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+   NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
    LibMSWrite Project Website:
    http://sourceforge.net/projects/libmswrite/
@@ -43,25 +52,6 @@ namespace MSWrite
 
 		bool readFromDevice (void);	friend class InternalGenerator;
 		bool writeToDevice (void);	friend class InternalParser;
-
-		// the defaults of course
-		static const Byte magic102Default = Byte (102);
-		static const Word magic512Default = Word (512);
-		static const Word pageHeightDefault = Word (Inch2Twip (11));
-		static const Word pageWidthDefault = Word (Inch2Twip (8.5));
-		static const Word pageNumberStartDefault = Word (1);
-		static const Word topMarginDefault = Word (Inch2Twip (1));
-		static const Word textHeightDefault = Word (Inch2Twip (9));
-		static const Word leftMarginDefault = Word (Inch2Twip (1.25));
-		static const Word textWidthDefault = Word (Inch2Twip (6));
-		static const Word magic256Default = Word (256);
-		static const Word headerFromTopDefault = Word (Inch2Twip (0.75));
-		static const Word footerFromTopDefault = Word (Inch2Twip (10.25 /*11.0 (m_pageHeight) - 0.75*/));
-		static const Word magic720Default = Word (720);
-		static const Word zeroDefault = Word (0);
-		static const Word magic1080Default = Word (1080);
-		// no reliable default for m_unknown
-		static const Word zero2Default = Word (0);
 
 	public:
 		PageLayout ();
@@ -162,8 +152,7 @@ namespace MSWrite
 			Decorative	= 0x50,	OldEnglish	= 0x50
 		};
 
-		explicit Font (const Byte *name = NULL, 
-			       const Byte family = DontCare);
+		explicit Font (const Byte *name = NULL, const Byte family = DontCare);
 		virtual ~Font ();
 
 		Font &operator= (const Font &rhs);
@@ -193,17 +182,17 @@ namespace MSWrite
 				strcpy ((char *) m_name, (const char *) s);
 
 			FontGenerated::m_numDataBytes = sizeof (m_family) + length;
-			
+
 			return m_name;
 		}
 
-		bool operator!= (const Font &rhs)
+		bool operator!= (const Font &rhs) const
 		{
 			// if their m_family's are different, it's not my problem...
 			return strcmp ((const char *) this->m_name, (const char *) rhs.m_name) != 0;
 		}
 
-		bool operator== (const Font &rhs)
+		bool operator== (const Font &rhs) const
 		{
 			// if their m_family's are different, it's not my problem...
 			return strcmp ((const char *) this->m_name, (const char *) rhs.m_name) == 0;
@@ -239,12 +228,12 @@ namespace MSWrite
 		friend class InternalGenerator;
 			bool readFromDevice (void);
 			bool writeToDevice (void);
-		
+
 			void setFontTable (FontTable *fontTable)	{	m_fontTable = fontTable;	}
-		
+
 			DWord getAfterEndCharByte (void) const	{	return m_afterEndCharByte;	}
 			void setAfterEndCharByte (const DWord b)	{	m_afterEndCharByte = b;	}
-		
+
 			// convenience functions
 			DWord getEndCharByte (void) const	{	return m_afterEndCharByte - 1;	}
 			void setEndCharByte (const DWord b)	{	m_afterEndCharByte = b + 1;	}
@@ -294,7 +283,7 @@ namespace MSWrite
 		bool operator== (FormatCharProperty &rhs);
 	};
 
-	
+
 	class FormatParaPropertyTabulator : public FormatParaPropertyTabulatorGenerated
 	{
 	private:
@@ -308,7 +297,7 @@ namespace MSWrite
 		virtual ~FormatParaPropertyTabulator ();
 
 		FormatParaPropertyTabulator &operator= (const FormatParaPropertyTabulator &rhs);
-		
+
 		// you can use getType()/setType() if you really want to...
 		bool getIsNormal (void) const	{	return m_type == 0;	}
 		void setIsNormal (const bool yes = true)	{	m_type = (yes ? 0 : 3);	}
@@ -356,7 +345,7 @@ namespace MSWrite
 		friend class InternalGenerator;
 			bool readFromDevice (void);
 			bool writeToDevice (void);
-			
+
 			void setMargins (const Word leftMargin, const Word rightMargin)
 			{
 				m_leftMargin = leftMargin;
@@ -375,11 +364,11 @@ namespace MSWrite
 		virtual ~FormatParaProperty ();
 
 		FormatParaProperty &operator= (const FormatParaProperty &rhs);
-		
+
 		// convenience functions
 		Byte getAlign (void) const	{	return getAlignment ();	}
 		void setAlign (const Byte val)	{	setAlignment (val);	}
-		
+
 		Short getLeftIndentFirstLine (const bool purist = false) const
 		{
 			// Write _always_ ignores "First Line Indent" if it's an object
@@ -420,13 +409,13 @@ namespace MSWrite
 
 			return true;
 		}
-		
+
 		bool getIsText (void) const	{	return !getIsObject ();	}
 		void setIsText (const bool val)	{	setIsObject (!val);	}
 
 		bool getIsNormalParagraph (void) const	{	return !getIsNotNormalParagraph ();	}
 		void setIsNormalParagraph (const bool val = true)	{	setIsNotNormalParagraph (!val);	}
-		
+
 		bool getIsHeader (void) const	{	return getIsNotNormalParagraph () && getHeaderOrFooter () == 0;	}
 		void setIsHeader (const bool val)
 		{
@@ -457,7 +446,7 @@ namespace MSWrite
 				m_addedTooManyTabs = true;
 				return true;
 			}
-	
+
 			*m_tab [m_numTabulators++] = *fpp;
 
 			// OPT: could use fewer bytes if Tabulator can do so
@@ -468,7 +457,7 @@ namespace MSWrite
 		// compares if the contents are the same (not if it points to the same place etc. etc.)
 		bool operator== (FormatParaProperty &rhs);
 	};
-	
+
 
 	class ObjectType
 	{
@@ -489,7 +478,7 @@ namespace MSWrite
 		// image dimensions in twips
 		double m_originalWidth, m_originalHeight;
 		double m_displayedWidth, m_displayedHeight;
-		
+
 		static int getBytesPerScanLine (const int width, const int bitsPerPixel, const int padBytes);
 
 		// these read and write an image stored in .WRI format
@@ -500,7 +489,7 @@ namespace MSWrite
 		virtual ~Image ();
 
 		Image &operator= (const Image &rhs);
-		
+
 		bool getIsWMF (void) const	{	return m_mappingMode != 0xE3;	}
 		bool getIsBMP (void) const	{	return m_mappingMode == 0xE3;	}
 
@@ -508,20 +497,20 @@ namespace MSWrite
 		void setIsWMF (const bool yes = true)	{	yes ? m_mappingMode = 0x88 : m_mappingMode = 0xE3;	}
 		void setIsBMP (const bool yes = true)	{	yes ? m_mappingMode = 0xE3 : m_mappingMode = 0x88;	}
 
-		
+
 		double getOriginalWidth (void) const	{	return m_originalWidth;	}
 		void setOriginalWidth (const double val)	{	m_originalWidth = val;	}
-		
+
 		double getOriginalHeight (void) const	{	return m_originalHeight;	}
 		void setOriginalHeight (const double val)	{	m_originalHeight = val;	}
-		
+
 		double getDisplayedWidth (void) const	{	return m_displayedWidth;	}
 		void setDisplayedWidth (const double val)	{	m_displayedWidth = val;	}
-		
+
 		double getDisplayedHeight (void) const	{	return m_displayedHeight;	}
 		void setDisplayedHeight (const double val)	{	m_displayedHeight = val;	}
 
-		
+
 		// these read and write an image stored in an external format
 		Byte *getExternalImage (void) const	{	return m_externalImage;	}
 		DWord getExternalImageSize (void) const	{	return m_externalImageSize;	}
@@ -536,13 +525,13 @@ namespace MSWrite
 				if (!m_externalImage)
 					ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for external image\n");
 			}
-			
+
 			if (m_externalImageUpto + size > m_externalImageSize)
 			{
 				Dump (externalImageUpto);
 				m_device->debug ("\tsize: ", size);
 				Dump (externalImageSize);
-				
+
 				ErrorAndQuit (Error::InternalError, "user overflowed setExternalImage(); attempt to write too much binary data\n");
 			}
 
@@ -599,7 +588,7 @@ namespace MSWrite
 				if (!m_externalObject)
 					ErrorAndQuit (Error::OutOfMemory, "could not allocate memory for external object\n");
 			}
-			
+
 			if (m_externalObjectUpto + size > m_externalObjectSize)
 			{
 				Dump (externalObjectUpto);
