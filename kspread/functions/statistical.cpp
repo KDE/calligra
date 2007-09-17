@@ -1586,10 +1586,12 @@ Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *) {
   Value fChi = args[0];
   Value fDF = args[1];
 
-  // fDF < 1 || fDF >= 1.0E5 || fChi < 0.0
-  if (calc->lower (fDF, Value(1)) || (!calc->lower (fDF, Value(1.0E5))) ||
-      calc->lower (fChi, Value(0.0)))
+  // fDF < 1 || fDF >= 1.0E5
+  if (calc->lower (fDF, Value(1)) || (!calc->lower (fDF, Value(1.0E5))) )
     return Value::errorVALUE();
+  // fChi <= 0.0
+  if (calc->lower (fChi, Value(0.0)) || (!calc->greater (fChi, Value(0.0))) )
+    return Value(1.0);
 
   // 1.0 - GetGammaDist (fChi / 2.0, fDF / 2.0, 1.0)
   return calc->sub (Value(1.0), calc->GetGammaDist (calc->div (fChi, 2.0),
@@ -1603,10 +1605,12 @@ Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *) {
   Value fChi = args[0];
   Value fDF = args[1];
 
-  // fDF < 1 || fDF >= 1.0E5 || fChi < 0.0
-  if (calc->lower (fDF, Value(1)) || (!calc->lower (fDF, Value(1.0E5))) ||
-      calc->lower (fChi, Value(0.0)))
+  // fDF < 1 || fDF >= 1.0E5
+  if (calc->lower (fDF, Value(1)) || (!calc->lower (fDF, Value(1.0E5))) )
     return Value::errorVALUE();
+  // fChi <= 0.0
+  if (calc->lower (fChi, Value(0.0)) || (!calc->greater (fChi, Value(0.0))) )
+    return Value(1.0);
 
   // 1.0 - GetGammaDist (fChi / 2.0, fDF / 2.0, 1.0)
   return calc->sub (Value(1.0), calc->GetGammaDist (calc->div (fChi, 2.0),
