@@ -152,6 +152,8 @@ private:
     int m_stepIndex;
     QList<int> m_steps;
     int m_maxShapeDuration;
+    // true when there is an animtion in this step
+    bool m_hasAnimation;
 };
 
 #endif /* KPRANIMATIONDIRECTOR_H */

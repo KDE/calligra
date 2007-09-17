@@ -47,6 +47,7 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
 , m_pageIndex( 0 )
 , m_stepIndex( 0 )
 , m_maxShapeDuration( 0 )
+, m_hasAnimation( false )
 {
     Q_ASSERT( !m_pages.empty() );
 
@@ -311,6 +312,7 @@ void KPrAnimationDirector::updateAnimations()
         Q_ASSERT( page );
         Q_ASSERT( controller );
 
+        m_hasAnimation = false;
         insertAnimations( page, m_canvas->shapeManager() );
         insertAnimations( controller, m_canvas->masterShapeManager() );
     }
@@ -327,6 +329,7 @@ void KPrAnimationDirector::insertAnimations( KPrAnimationController * controller
         KPrShapeAnimation * animation = it.value();
         if ( animation ) {
             m_animations.insert( it.key(), qMakePair( it.value(), animation->animationData( m_canvas, shapeManager, pageRect ) ) );
+            m_hasAnimation = true;
             if ( animation->duration() > m_maxShapeDuration ) {
                 m_maxShapeDuration = animation->duration();
             }
@@ -340,13 +343,7 @@ void KPrAnimationDirector::insertAnimations( KPrAnimationController * controller
 
 bool KPrAnimationDirector::hasAnimation()
 {
-    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
-    for ( ; it != m_animations.end(); ++it ) {
-        if ( it.value().first ) {
-            return true;
-        }
-    }
-    return false;
+    return m_hasAnimation;
 }
 
 void KPrAnimationDirector::animate()
