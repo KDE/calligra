@@ -45,7 +45,9 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
 { 
     // draw a blue rectangle for debugging
     painter.setPen( QPen( Qt::blue ) );
-    painter.drawRect( m_boundingRect );
+    QRectF box = m_boundingRect.adjusted( -origin().x(), -origin().y(), -origin().x(), -origin().y());
+    painter.drawRect( box  );
+    painter.drawLine( box.x(), box.y() + baseLine(), box.x() + m_boundingRect.right(), baseLine() + box.y());
 }
 
 void BasicElement::layout( const AttributeManager* )
