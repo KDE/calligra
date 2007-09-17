@@ -34,17 +34,25 @@ class FormulaCursor;
 class KoFormulaTool : public KoTool {
     Q_OBJECT
 public:
+    /// The standard constructor
     explicit KoFormulaTool( KoCanvasBase *canvas );
+
+    /// The standard destructor
     ~KoFormulaTool();
 
+    /// reimplemented
     void paint( QPainter &painter, const KoViewConverter &converter );
 
+    /// reimplemented
     void mousePressEvent( KoPointerEvent *event ) ;
     
+    /// reimplemented
     void mouseDoubleClickEvent( KoPointerEvent *event );
     
+    /// reimplemented
     void mouseMoveEvent( KoPointerEvent *event );
     
+    /// reimplemented
     void mouseReleaseEvent( KoPointerEvent *event );
     
     void keyPressEvent( QKeyEvent *event );
@@ -61,6 +69,7 @@ public:
 
     void remove( bool backSpace );
 
+    /// @return The currently manipulated KoFormulaShape
     KoFormulaShape* shape();
 
 public slots:
@@ -71,10 +80,8 @@ public slots:
     void deactivate();
 
 protected:
-    /*
-     * Create default option widget
-     */
-    virtual QWidget* createOptionWidget();
+    /// Create default option widget
+    QWidget* createOptionWidget();
 	
 private:
     /// The FormulaShape the tool is manipulating

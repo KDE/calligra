@@ -15,6 +15,7 @@ short term goals:
 
 long term goals:
 - add selecting to FormulaCursor class
+- iron the loading process out so that it won't crash on errors and report them
 
 02/09/2007
 
