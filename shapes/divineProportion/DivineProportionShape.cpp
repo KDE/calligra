@@ -27,7 +27,7 @@
 #include <math.h>
 
 DivineProportionShape::DivineProportionShape()
-    : DivineProportion( (1 + sqrt(5)) / 2.0),
+    : m_divineProportion( (1.0 + sqrt(5.0)) / 2.0),
     m_orientation(TopRight),
     m_printable(false)
 {
@@ -55,7 +55,7 @@ void DivineProportionShape::paintDecorations(QPainter &painter, const KoViewConv
 void DivineProportionShape::draw(QPainter &painter) {
     painter.setPen(QPen(QColor(172, 196, 206)));
     QRectF rect(QPointF(0,0), size());
-    bool top = top, left = left;
+    bool top, left;
     switch(m_orientation) {
         case BottomRight: top = false, left = false; break;
         case BottomLeft: top = false, left = true; break;
@@ -65,7 +65,7 @@ void DivineProportionShape::draw(QPainter &painter) {
     divideVertical(painter, rect, top, left);
 
     painter.setPen(QPen(QColor(173, 123, 134)));
-    const double x1 = rect.width() / DivineProportion;
+    const double x1 = rect.width() / m_divineProportion;
     const double x2 = rect.width() - x1;
     if(top && !left || !top && left) {
         painter.drawLine(rect.bottomLeft(), rect.topRight());
@@ -90,7 +90,7 @@ bool DivineProportionShape::loadOdf( const KoXmlElement & element, KoShapeLoadin
 void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &rect, bool top, bool left) {
     if(rect.height() < 2)
         return;
-    const double y = rect.height() / DivineProportion;
+    const double y = rect.height() / m_divineProportion;
     const double offset = top ? rect.bottom() - y : rect.top() + y;
 
     // draw horizontal line.
@@ -102,7 +102,7 @@ void DivineProportionShape::divideHorizontal(QPainter &painter, const QRectF &re
 void DivineProportionShape::divideVertical(QPainter &painter, const QRectF &rect, bool top, bool left) {
     if(rect.width() < 2)
         return;
-    const double x = rect.width() / DivineProportion;
+    const double x = rect.width() / m_divineProportion;
     const double offset = left ? rect.right() - x : rect.left() + x;
     // draw vertical line
     painter.drawLine(QPointF(offset, rect.top()), QPointF(offset, rect.bottom()));
