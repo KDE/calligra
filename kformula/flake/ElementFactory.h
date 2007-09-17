@@ -57,7 +57,8 @@ enum ElementType {
     String,
     Enclose,
     Phantom,
-    Action
+    Action,
+    Unknown
 };
 
 
@@ -86,7 +87,7 @@ public:
     static BasicElement* createElement( const QString& tagName, BasicElement* parent );
 
     /**
-     * Obtain the MathML name of a ElementType
+     * Obtain the MathML name of a ElementType.
      * @param type The given ElementType to get the MathML name from
      * @return The MathML name as QString
      */

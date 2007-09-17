@@ -90,6 +90,7 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
     forEachElement( tmp, parent )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
+        Q_ASSERT(tmpElement);
         m_childElements << tmpElement;
         if( !tmpElement->readMathML( tmp ) )
             return false;

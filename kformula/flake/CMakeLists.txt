@@ -33,6 +33,7 @@ set( kformulalib_PART_SRCS
    StringElement.cpp
    PhantomElement.cpp
    SquareRootElement.cpp
+   UnknownElement.cpp
    Dictionary.cpp
 )
 

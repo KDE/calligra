@@ -44,6 +44,7 @@
 #include "TextElement.h"
 #include "UnderOverElement.h"
 #include "SquareRootElement.h"
+#include "UnknownElement.h"
 
 #include <kdebug.h>
 
@@ -91,9 +92,9 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
           return new UnderOverElement( parent );
     else if ( tagName == "mmultiscripts" )
           return new MultiscriptElement( parent );
-
+    
     kWarning( DEBUGID ) << "Do not know how to create the following element: " << tagName;
-    return 0;
+    return new UnknownElement( parent );
 }
 
 QString ElementFactory::elementName( ElementType type )
