@@ -28,7 +28,6 @@ RowElement:
 RootElement:
 	- correct layout
 	- correct painting
-	-> current code does not work correct
 	- correct saving/ loading
 
 SquareRootElement:
