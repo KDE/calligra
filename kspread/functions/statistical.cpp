@@ -1022,9 +1022,9 @@ Value func_gammadist (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: betadist
 Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value x = args[0];
+  Value x     = args[0];
   Value alpha = args[1];
-  Value beta = args[2];
+  Value beta  = args[2];
 
   // default values parameter 4 - 6
   Value fA(0.0);
@@ -1036,13 +1036,18 @@ Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
   if (args.count() > 5) 
     kum = calc->conv()->asInteger (args[5]).asInteger();  // 0 or 1
 
-  // x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0
-  if (calc->lower (x, fA) || calc->greater (x, fB) || calc->equal (fA, fB) ||
-      (!calc->greater (alpha, 0.0)) || (!calc->greater (beta, 0.0)))
+  // constraints x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0
+  if (calc->lower (x, fA) || calc->equal (fA, fB) ||
+      (!calc->greater (alpha, 0.0)) || !calc->greater (beta, 0.0) )
+    return Value(0.0);
+
+  // constraints  x > b
+  if ( calc->greater (x, fB) )
   {
-    kDebug()<<"betadist: error constraints    x < fA || x > fB || fA == fB || alpha <= 0.0 || beta <= 0.0";
-    kDebug()<<"x= " << x << " alpha= " << alpha << " beta= " << beta << " fA=" << fA << " fB= " << fB;
-    return Value::errorVALUE();
+    if ( kum )
+      return Value(1.0);
+    else
+      return Value(0.0);
   }
 
   // scale = (x - fA) / (fB - fA)  // prescaling

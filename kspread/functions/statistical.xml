@@ -107,10 +107,14 @@
         <Comment>End</Comment>
         <Type>Float</Type>
       </Parameter>
+      <Parameter optional="true">
+        <Comment>Cumulative</Comment>
+        <Type>Bool</Type>
+      </Parameter>
       <Help>
         <Text>The BETADIST() function returns the cumulative beta probability density function.</Text>
-        <Text>The last two parameters are optional. They set the lower and upper bounds, otherwise defaulting to 0.0 and 1.0 respectively.</Text>
-        <Syntax>BETADIST(number;alpha;beta;start;end)</Syntax>
+        <Text>The third and fourth parameters are optional. They set the lower and upper bounds, otherwise defaulting to 0.0 and 1.0 respectively.</Text>
+        <Syntax>BETADIST(number;alpha;beta;start;end;[cumulative=TRUE])</Syntax>
         <Example>BETADIST(0.2859;0.2606;0.8105) equals 0.675444</Example>
         <Example>BETADIST(0.2859;0.2606;0.8105;0.2;0.9) equals 0.537856</Example>
       </Help>
