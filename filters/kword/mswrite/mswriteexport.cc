@@ -744,6 +744,7 @@ public:
 		}
 	};
 
+	// (from LibMSWrite's wmf.cpp)
 	class WMFRecord : public MSWrite::NeedsDevice
 	{
 	public:
@@ -863,6 +864,7 @@ public:
 	};
 
 	// converts a DIB to a Standard WMF
+	// (from LibMSWrite's wmf.cpp)
 	bool BMP2WMF (MSWrite::Device &readDevice, MSWrite::Device &writeDevice)
 	{
 		// read BMP's FileHeader
