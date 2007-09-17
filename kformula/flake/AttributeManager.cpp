@@ -115,6 +115,13 @@ MathVariant AttributeManager::mathVariant( BasicElement* element )
 
 QFont AttributeManager::font( const BasicElement* element ) const
 {
+    
+    // TODO process the mathvariant values partly
+    // normal -> do nothing.
+    // if contains bold -> font.setBold( true )
+    // if contains italic -> font.setItalic( true )
+    // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
+  
     return QFont();
 }
 

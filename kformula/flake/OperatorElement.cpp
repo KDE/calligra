@@ -33,6 +33,9 @@ void OperatorElement::renderToPath( const QString& raw, QPainterPath& path ) con
 {
     Dictionary dict;
     dict.queryOperator( raw, determineOperatorForm() );
+
+//    path.moveTo( path.currentPosition() + QPointF( lspace, 0.0 ) );
+//    path.moveTo( path.currentPosition() + QPointF( rspace, 0.0 ) );
 }
 
 Form OperatorElement::determineOperatorForm() const
