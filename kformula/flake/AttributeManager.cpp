@@ -191,6 +191,10 @@ bool AttributeManager::boolOf( const QString& attribute, const BasicElement* ele
 double AttributeManager::doubleOf( const QString& attribute, BasicElement* element ) const
 {
     QString tmpValue = findValue( attribute, element );
+    if( tmpValue.toInt() != 0 )  // test for value without unit
+        return tmpValue.toInt();
+
+    // process values with units
     QString unit = tmpValue.right( 2 );
 
     if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )

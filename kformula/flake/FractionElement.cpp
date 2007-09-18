@@ -40,17 +40,14 @@ FractionElement::~FractionElement()
 
 void FractionElement::paint( QPainter& painter, AttributeManager* am )
 {
-
-    painter.save();
     QPen pen;
     double linethickness = am->doubleOf( "linethickness", this );
-    linethickness = 1; // am is broken at the moment - when fixed, delete this line
     if( linethickness == 0 )
 	    return;  // specification says to not draw a line if thickness is 0
+
     pen.setWidth( linethickness );  // am is broken at the moment - when fixed, uncomment above line
     painter.setPen( pen );                           // set the line width
     painter.drawLine( m_fractionLine );              // draw the line
-    painter.restore();
 }
 
 void FractionElement::layout( const AttributeManager* am )
@@ -64,7 +61,6 @@ void FractionElement::layout( const AttributeManager* am )
     QPointF numeratorOrigin;
     QPointF denominatorOrigin;
     double linethickness = am->doubleOf( "linethickness", this );
-    linethickness = 1; // am is broken at the moment - when fixed delete this line
     double distY = am->mathSpaceValue( "thinmathspace" );
     Align numalign = am->alignOf( "numalign", this ); 
     Align denomalign = am->alignOf( "denomalign", this ); 
