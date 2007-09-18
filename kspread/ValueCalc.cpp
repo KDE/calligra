@@ -1345,6 +1345,8 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
   // B. L. Shea
   // Applied Statistics, Vol. 37, No. 3 (1988), pp. 466-473
 
+// TODO - normal approx
+
   double x     = numToDouble (converter->toFloat (_x));     // x
   double alpha = numToDouble (converter->toFloat (_alpha)); // alpha
   double beta  = numToDouble (converter->toFloat (_beta));  // beta
@@ -1396,6 +1398,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
     // x >= max( 1, alpha)
     pearson = 0; // clear flag -> use a continued fraction expansion
 
+// TODO use GetLogGamma?
     res = alpha * ::log(x) - x - ::log(GetGamma(Value(alpha)).asFloat());
 
 //     kDebug()<<"Continued fraction expression res="<<res;
@@ -1413,7 +1416,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
     sum = pn3 / pn4;
     for (n = 1; ; n++) 
     {
-      kDebug()<<"n="<<n<<" sum="<< sum;
+//       kDebug()<<"n="<<n<<" sum="<< sum;
       a += 1.0; // =   n+1 -alpha
       b += 2.0; // = 2(n+1)-alph+x
       an = a * n;
@@ -1424,7 +1427,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
       {
         osum = sum;
         sum = pn5 / pn6;
-        kDebug()<<"sum ="<<sum<<" osum="<<osum;
+//         kDebug()<<"sum ="<<sum<<" osum="<<osum;
         if (fabs(osum - sum) <= DBL_EPSILON * fmin(1.0, sum))
           break;
       }
@@ -1456,6 +1459,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
 Value ValueCalc::GetBeta (Value _x, Value _alpha,
     Value _beta)
 {
+//   kDebug()<<"GetBeta: x= " << _x << " alpha= " << _alpha << " beta=" << _beta;
   if (equal (_beta, Value(1.0)))
     return pow (_x, _alpha);
   else if (equal (_alpha, Value(1.0)))

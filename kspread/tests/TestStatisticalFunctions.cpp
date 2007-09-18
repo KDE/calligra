@@ -469,11 +469,11 @@ void TestStatisticalFunctions::testGAMMADIST()
 void TestStatisticalFunctions::testGAMMAINV()
 {
     // ODF-tests
-    CHECK_EVAL("GAMMADIST(GAMMAINV(0.1;3;4);3;4)",     Value( 0.1 ) ); // 
-    CHECK_EVAL("GAMMADIST(GAMMAINV(0.3;3;4);3;4)",     Value( 0.3 ) ); // 
-    CHECK_EVAL("GAMMADIST(GAMMAINV(0.5;3;4);3;4)",     Value( 0.5 ) ); // 
-    CHECK_EVAL("GAMMADIST(GAMMAINV(0.7;3;4);3;4)",     Value( 0.7 ) ); // 
-    CHECK_EVAL("GAMMADIST(GAMMAINV(0  ;3;4);3;4)",     Value( 0   ) ); // 
+    CHECK_EVAL("GAMMADIST(GAMMAINV(0.1;3;4);3;4;1)",     Value( 0.1 ) ); // 
+    CHECK_EVAL("GAMMADIST(GAMMAINV(0.3;3;4);3;4;1)",     Value( 0.3 ) ); // 
+    CHECK_EVAL("GAMMADIST(GAMMAINV(0.5;3;4);3;4;1)",     Value( 0.5 ) ); // 
+    CHECK_EVAL("GAMMADIST(GAMMAINV(0.7;3;4);3;4;1)",     Value( 0.7 ) ); // 
+    CHECK_EVAL("GAMMADIST(GAMMAINV(0  ;3;4);3;4;1)",     Value( 0   ) ); // 
 }
 
 void TestStatisticalFunctions::testGAUSS()
@@ -880,6 +880,20 @@ void TestStatisticalFunctions::testTDIST()
     CHECK_EVAL("TDIST( 0.5; 5; 1 )",  Value( 0.3191494358 ) ); // ODF-specs -> 0.319149
     CHECK_EVAL("TDIST( 1; 1; 3 )",    Value::errorNUM() ); // mode = { 1; 2 }
     CHECK_EVAL("TDIST( 1; 0; 1 )",    Value::errorNUM() ); // degreeOfFreedom >= 1
+}
+
+void TestStatisticalFunctions::testTINV()
+{
+    // TODO - be more precise
+
+    // ODF-tests
+    CHECK_EVAL("TINV( 1; 2 )",               Value( 0        ) ); // p=1 -> t=0
+    CHECK_EVAL_SHORT("TINV( 0.5; 2 )",       Value( 0.816497 ) ); //  
+    CHECK_EVAL("TDIST( TINV(0.25;3); 3;2 )", Value( 0.25     ) ); // 
+    CHECK_EVAL("TDIST( TINV(0.5 ;3); 3;2 )", Value( 0.5      ) ); // 
+    CHECK_EVAL("TDIST( TINV(0.75;3); 3;2 )", Value( 0.75     ) ); // 
+    CHECK_EVAL("TDIST( 2; 3 )",              Value::errorNUM() ); // 0 <= probability <= 1
+    CHECK_EVAL("TDIST( 1; 0 )",              Value::errorNUM() ); // degreeOfFreedom >= 1
 }
 
 void TestStatisticalFunctions::testTREND()

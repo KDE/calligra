@@ -43,7 +43,7 @@ private slots:
 //     void testAVERAGE();
     void testAVERAGEA();
     void testBETADIST();    
-    void testBETAINV(); // to be implemented
+    void testBETAINV();
 //     void testBINO();
     void testCHIDIST();
     void testLEGACYCHIDIST();
@@ -114,7 +114,7 @@ private slots:
 //     void testSUMX2PY2();
 //     void testSUMX2MY2();
     void testTDIST();
-//     void testTINV();     // ???
+    void testTINV();
     void testTREND(); 
     void testTRIMMEAN();
     void testTTEST();

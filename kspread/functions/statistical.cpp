@@ -25,6 +25,8 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
+#include <Formula.h>
+
 #include <kdebug.h>
 
 // needed for MODE
@@ -39,6 +41,7 @@ Value func_average (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_averagea (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_avedev (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_betainv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *);
@@ -56,6 +59,7 @@ Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_frequency (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammadist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_gammainv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammaln (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gauss (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_geomean (valVector args, ValueCalc *calc, FuncExtra *);
@@ -91,6 +95,7 @@ Value func_sumx2py2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumx2my2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_tinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trend (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_trimmean (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ttest (valVector args, ValueCalc *calc, FuncExtra *);
@@ -123,6 +128,9 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("BETADIST", func_betadist);
   f->setParamCount (3, 6);
+  repo->add (f);
+  f = new Function ("BETAINV", func_betainv);
+  f->setParamCount (3, 5);
   repo->add (f);
   f = new Function ("BINO", func_bino);
   f->setParamCount (3);
@@ -174,6 +182,9 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("GAMMADIST", func_gammadist);
   f->setParamCount (4);
+  repo->add (f);
+  f = new Function ("GAMMAINV", func_gammainv);
+  f->setParamCount (3);
   repo->add (f);
   f = new Function ("GAMMALN", func_gammaln);
   repo->add (f);
@@ -319,6 +330,9 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("TDIST", func_tdist);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("TINV", func_tinv);
+  f->setParamCount (2);
   repo->add (f);
   f = new Function ("TREND", func_trend);
   f->setParamCount (1,4);
@@ -1019,6 +1033,145 @@ Value func_gammadist (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (result);
 }
 
+static double GetValue( const QString formula, const double x )
+{  
+  Formula f;
+  QString expr = formula;
+  if ( expr[0] != '=' )
+    expr.prepend( '=' );
+
+  expr.replace( QString("x"), QString::number(x,'g',12) );
+
+  kDebug()<<"expr: "<<expr;
+  f.setExpression( expr );
+  Value result = f.eval();
+  
+  return result.asFloat();
+}
+
+static Value IterateInverse( const double unknown, const QString formula, double x0, double x1, bool& convergenceError)
+{
+  convergenceError = false; // reset error flag
+  double eps = 1.0E-7;      // define Epsilon
+  
+  kDebug()<<"searching for " << unknown <<" in interval x0=" << x0 << " x1=" << x1;
+
+  if ( x0>x1 )
+   kDebug()<<"IterateInverse: wrong interval";
+
+  double f0 = unknown-GetValue( formula, x0);
+  double f1 = unknown-GetValue( formula, x1);
+
+  kDebug()<<" f("<<x0<<") ="<<f0;
+  kDebug()<<" f("<<x1<<") ="<<f1;
+
+  double xs;
+  int i;
+  for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
+  {
+    kDebug()<<"i="<<i;
+    if (fabs(f0) <= fabs(f1))
+    {
+      xs = x0;
+      x0 += 2.0 * (x0 - x1);
+      if (x0 < 0.0)
+        x0 = 0.0;
+      x1 = xs;
+      f1 = f0;
+      f0 = unknown-GetValue( formula, x0);
+    }
+    else
+    {
+      xs = x1;
+      x1 += 2.0 * (x1 - x0);
+      x0 = xs;
+      f0 = f1;
+      f1 = unknown-GetValue( formula, x1);
+    }
+  }
+
+  if (f0 == 0.0)
+    return Value(x0);
+  if (f1 == 0.0)
+    return Value(x1);
+
+  // simple iteration
+  kDebug()<<"simple iteration f0="<<f0<<" f1="<<f1;
+
+  double x00 = x0;
+  double x11 = x1;
+  double fs;
+  for (i = 0; i < 100; i++)
+  {
+    xs = 0.5*(x0+x1);
+    if (fabs(f1-f0) >= eps)
+    {
+      fs = unknown-GetValue( formula, xs);
+      if (f0*fs <= 0.0)
+      {
+        x1 = xs;
+        f1 = fs;
+      }
+      else
+      {
+        x0 = xs;
+        f0 = fs;
+      }
+    }
+    else
+    {
+      //add one step of regula falsi to improve precision
+      if ( x0 != x1 )
+      {
+        double regxs = (f1-f0)/(x1-x0);
+        if ( regxs != 0.0)
+        {
+          double regx = x1 - f1/regxs;
+          if (regx >= x00 && regx <= x11)
+          {
+            double regfs = unknown-GetValue( formula, regx);
+            if ( fabs(regfs) < fabs(fs) )
+              xs = regx;
+          }
+        }
+      }
+      return Value(xs);
+    }
+  }
+
+  // error no convergence
+  convergenceError = TRUE;
+  return Value(0.0);
+}
+
+// Function: gammainv
+Value func_gammainv (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value p     = args[0];
+  Value alpha = args[1];
+  Value beta  = args[2];
+
+  Value result;
+
+  // constraints
+  if ( calc->lower(alpha, 0.0) || calc->lower (beta, 0.0) ||
+       calc->lower(p, 0.0)     || !calc->lower (p, 1.0)       )
+    return Value::errorVALUE();
+
+  bool convergenceError;
+  Value start = calc->mul(alpha, beta);
+
+  // create formula string
+  QString formula = QString("GAMMADIST(x;%1;%2;1)").arg(alpha.asFloat()).arg(beta.asFloat());
+
+  result = IterateInverse ( p.asFloat(), formula , start.asFloat()*0.5, start.asFloat(), convergenceError);
+
+  if ( convergenceError )
+    return Value::errorVALUE();
+
+  return result;
+}
+
 // Function: betadist
 Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
 {
@@ -1064,6 +1217,42 @@ Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *)
 
     return calc->mul(calc->mul(res,b1),b2);
   }
+}
+
+// Function: betainv
+Value func_betainv (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value p     = args[0];
+  Value alpha = args[1];
+  Value beta  = args[2];
+
+  // default values parameter 4 - 6
+  Value fA(0.0);
+  Value fB(1.0);
+
+  if (args.count() > 3) fA = args[3];
+  if (args.count() > 4) fB = args[4];
+
+  Value result;
+
+  // constraints
+  if (  calc->lower(alpha, 0.0) || calc->lower(beta, 0.0) ||
+        calc->greater(p, 1.0)   || calc->lower(p,0.0)     || calc->equal (fA, fB)  )
+    return Value::errorVALUE();
+
+  bool convergenceError;
+
+  // create formula string
+  QString formula = QString("BETADIST(x;%1;%2)").arg(alpha.asFloat()).arg(beta.asFloat());
+
+  result = IterateInverse ( p.asFloat(), formula , 0.0, 1.0, convergenceError);
+
+  if ( convergenceError )
+    return Value::errorVALUE();
+
+  result = calc->add(fA,calc->mul(result,calc->sub(fB,fA)));
+
+  return result;
 }
 
 // Function: fisher
@@ -1358,6 +1547,32 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
   if (flag == 1)
     return R;
   return calc->mul (R, 2);   // flag is 2 here
+}
+
+// Function: tinv
+Value func_tinv (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the inverse t-distribution
+  Value p  = args[0];
+  Value DF = args[1];
+
+  Value result;
+
+  // constraints
+  if (  calc->lower(DF, 1.0)  || calc->greater(DF, 1.0E5) ||
+        calc->greater(p, 1.0) || calc->lower(p,0.0)           )
+    return Value::errorVALUE();
+
+  bool convergenceError;
+
+  // create formula string
+  QString formula = QString("TDIST(x;%1;2)").arg(DF.asFloat());
+
+  result = IterateInverse ( p.asFloat(), formula , DF.asFloat()*0.5, DF.asFloat(), convergenceError);
+
+  if ( convergenceError )
+    return Value::errorVALUE();
+
+  return result;
 }
 
 //
