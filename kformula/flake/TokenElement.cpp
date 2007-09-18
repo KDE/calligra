@@ -47,9 +47,7 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.setBackground( QBrush( am->mathBackground( this ) ) );
     painter.setPen( am->mathColor( this ) );
     painter.setBrush( Qt::SolidPattern );
-    //Qt has a slight 'bug' (or feature) that the text drawn will be exactly half a point out.  This has been mentioned on the
-    //mailing lists many times, but no official response that I could find.  This translation here corrects for it.
-    painter.translate( -0.5, baseLine() );
+    painter.translate( 0, baseLine() );
     painter.drawPath( m_contentPath );  // draw content which is buffered as path
 }
 
@@ -65,11 +63,12 @@ void TokenElement::layout( const AttributeManager* am )
         }
         else                                    // a mglyph element
         {
-            tmp->setOrigin( QPointF( m_contentPath.boundingRect().width(), 0.0 ) );
-            m_contentPath.moveTo( tmp->origin().x() + tmp->width(), 0.0 );
+            tmp->setOrigin( QPointF( m_contentPath.boundingRect().right(), 0.0 ) );
+            m_contentPath.moveTo( tmp->origin().x()+ tmp->width(), 0.0 );
         }
     
-    setWidth( m_contentPath.boundingRect().width() );
+    kDebug() << "Bounding rect is at " << m_contentPath.boundingRect().x() << "," <<  m_contentPath.boundingRect().y();
+    setWidth( m_contentPath.boundingRect().right() );  //Qt includes a small space at the front of a letter.  Include this space
     setHeight( m_contentPath.boundingRect().height() );
 
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
