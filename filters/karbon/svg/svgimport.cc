@@ -101,7 +101,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     int line, col;
     QString errormessage;
 
-    const bool parsed=inpdoc.setContent( in, &errormessage, &line, &col );
+    const bool parsed = m_inpdoc.setContent( in, &errormessage, &line, &col );
 
     in->close();
     delete in;
@@ -149,7 +149,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
 void SvgImport::convert()
 {
     SvgGraphicsContext *gc = new SvgGraphicsContext;
-    QDomElement docElem = inpdoc.documentElement();
+    QDomElement docElem = m_inpdoc.documentElement();
 
     QRectF viewBox;
 
@@ -310,6 +310,13 @@ void SvgImport::addGraphicContext()
 void SvgImport::removeGraphicContext()
 {
     delete( m_gc.pop() );
+}
+
+void SvgImport::updateContext( const QDomElement &e )
+{
+    SvgGraphicsContext *gc = m_gc.top();
+    if( e.hasAttribute( "xml:base" ) )
+        gc->xmlBaseDir = e.attribute( "xml:base" );
 }
 
 void SvgImport::setupTransform( const QDomElement &e )
@@ -550,7 +557,7 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
     return value;
 }
 
-QColor SvgImport::parseColor( const QString &rgbColor )
+QColor SvgImport::stringToColor( const QString &rgbColor )
 {
     int r, g, b;
     keywordToRGB( rgbColor, r, g, b );
@@ -598,7 +605,7 @@ void SvgImport::parseColor( QColor &color, const QString &s )
         if( rgbColor.startsWith( '#' ) )
             color.setNamedColor( rgbColor );
         else
-            color = parseColor( rgbColor );
+            color = stringToColor( rgbColor );
     }
 }
 
@@ -1103,6 +1110,7 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
     {
         addGraphicContext();
         setupTransform( e );
+        updateContext( e );
 
         QString key = id.mid( 1 );
 
@@ -1164,6 +1172,7 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
         {
             addGraphicContext();
             setupTransform( b );
+            updateContext( b );
 
             KoShapeGroup * group = new KoShapeGroup();
             group->setZIndex( nextZIndex() );
@@ -1257,6 +1266,7 @@ KoShape * SvgImport::createText( const QDomElement &b )
 
     addGraphicContext();
     setupTransform( b );
+    updateContext( b );
 
     parseFont( b );
 
@@ -1428,6 +1438,7 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
 
     addGraphicContext();
     setupTransform( b );
+    updateContext( b );
 
     if( b.tagName() == "rect" )
     {
@@ -1528,7 +1539,7 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             if( ! img.loadFromData( QByteArray::fromBase64( fname.mid( start + 7 ).toLatin1() ) ) )
                 return 0;
         }
-        else if( ! img.load( absoluteFilePath( fname ) ) )
+        else if( ! img.load( absoluteFilePath( fname, m_gc.top()->xmlBaseDir ) ) )
             return 0;
 
         KoImageData * data = new KoImageData( m_document.imageCollection() );
@@ -1578,13 +1589,17 @@ int SvgImport::nextZIndex()
     return zIndex++;
 }
 
-QString SvgImport::absoluteFilePath( const QString &href )
+QString SvgImport::absoluteFilePath( const QString &href, const QString &xmlBase )
 {
     QFileInfo info( href );
     if( ! info.isRelative() )
         return href;
 
-    QFileInfo pathInfo( QFileInfo( m_chain->inputFile() ).filePath() );
+    QString baseDir = m_chain->inputFile();
+    if( ! xmlBase.isEmpty() )
+        baseDir = absoluteFilePath( xmlBase, QString() );
+
+    QFileInfo pathInfo( QFileInfo( baseDir ).filePath() );
 
     QString relFile = href;
     while( relFile.startsWith( "../" ) )

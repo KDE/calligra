@@ -49,43 +49,66 @@ public:
 
 protected:
 
+    /// The main entry point for the conversion
+    void convert();
+
+    /// Parses a group element, returning a list of child shapes
     QList<KoShape*> parseGroup( const QDomElement & );
-    void parseDefs( const QDomElement & );
+    /// Parses a use element, returning a list of child shapes
     QList<KoShape*> parseUse( const QDomElement & );
+    /// Parses definitions for later use
+    void parseDefs( const QDomElement & );
+    /// Parses style attributes, applying them to the given shape
     void parseStyle( KoShape *, const QDomElement & );
+    /// Parses a single style attribute
     void parsePA( KoShape *, SvgGraphicsContext *, const QString &, const QString & );
+    /// Parses a gradient element
     void parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
+    /// Parses gradient color stops
     void parseColorStops( QGradient *, const QDomElement & );
+    /// Parses a length attribute
     double parseUnit( const QString &, bool horiz = false, bool vert = false, QRectF bbox = QRectF() );
+    /// Parses a color attribute
     void parseColor( QColor &, const QString & );
-    QColor parseColor( const QString & );
+    /// Converts given string into a color
+    QColor stringToColor( const QString & );
+    /// Parses a transform attribute
     QMatrix parseTransform( const QString &transform );
 
     double toPercentage( QString );
     double fromPercentage( QString );
+
     void setupTransform( const QDomElement & );
+    void updateContext( const QDomElement & );
     void addGraphicContext();
     void removeGraphicContext();
-    void convert();
+
+    /// Creates an object from the given xml element
     KoShape * createObject( const QDomElement &, const QDomElement &style = QDomElement() );
+    /// Create text object from the given xml element
     KoShape * createText( const QDomElement & );
     void parseFont( const QDomElement & );
-    // find object with given id in document
+    /// find object with given id in document
     KoShape * findObject( const QString &name );
-    // find object with given id in given group
+    /// find object with given id in given group
     KoShape * findObject( const QString &name, KoShapeContainer * );
-    // find gradient with given id in gradient map
+    /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
 
-    // Determine scaling factor from given matrix
+    /// Determine scaling factor from given matrix
     double getScalingFromMatrix( QMatrix &matrix );
 
+    /// Merges two style elements, returning the merged style
     QDomElement mergeStyles( const QDomElement &, const QDomElement & );
 
+    /// Adds list of shapes to the given group shape
     void addToGroup( QList<KoShape*> shapes, KoShapeGroup * group );
 
+    /// Returns the next z-index
     int nextZIndex();
-    QString absoluteFilePath( const QString &href );
+
+    /// Constructs an absolute file path from the fiven href and base directory
+    QString absoluteFilePath( const QString &href, const QString &xmlBase );
 
 private:
     VDocument                      m_document;
@@ -93,7 +116,7 @@ private:
     QMap<QString, SvgGradientHelper>  m_gradients;
     QMap<QString, QDomElement>     m_defs;
     QRectF                         m_outerRect;
-    QDomDocument inpdoc;
+    QDomDocument                   m_inpdoc;
 };
 
 #endif

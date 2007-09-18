@@ -43,6 +43,7 @@ public:
     QMatrix      matrix;
     QFont        font;
     QColor       color;
+    QString      xmlBaseDir;
 };
 
 #endif
