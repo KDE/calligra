@@ -143,11 +143,15 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
             return false;
         }
     }
+    Q_ASSERT( m_radicand )
+    Q_ASSERT( m_exponent )
     return true;
 }
 
 void RootElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
+    Q_ASSERT( m_radicand )
+    Q_ASSERT( m_exponent )
     m_radicand->writeMathML( writer );
     m_exponent->writeMathML( writer );
 }
