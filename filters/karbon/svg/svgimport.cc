@@ -1446,8 +1446,15 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         double y = parseUnit( b.attribute( "y" ), false, true, m_outerRect );
         double w = parseUnit( b.attribute( "width" ), true, false, m_outerRect );
         double h = parseUnit( b.attribute( "height" ), false, true, m_outerRect );
-        double rx = b.attribute( "rx" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "rx" ) );
-        double ry = b.attribute( "ry" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "ry" ) );
+        bool hasRx = b.hasAttribute( "rx" );
+        bool hasRy = b.hasAttribute( "ry" );
+        double rx = hasRx ? parseUnit( b.attribute( "rx" ) ) : 0.0;
+        double ry = hasRy ? parseUnit( b.attribute( "ry" ) ) : 0.0;
+        if( hasRx && ! hasRy )
+            ry = rx;
+        if( ! hasRx && hasRy )
+            rx = ry;
+
         KoRectangleShape * rect = new KoRectangleShape();
         rect->setSize( QSizeF(w,h) );
         rect->setPosition( QPointF(x,y) );
