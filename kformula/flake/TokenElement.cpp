@@ -42,15 +42,12 @@ const QList<BasicElement*> TokenElement::childElements()
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
      // set the painter to use background and text colors
-    //BasicElement::paint(painter, am);
+    BasicElement::paint(painter, am);
     painter.setBackgroundMode( Qt::OpaqueMode  );
     painter.setBackground( QBrush( am->mathBackground( this ) ) );
     painter.setPen( am->mathColor( this ) );
-    //painter.setBrush( Qt::SolidPattern );
+    painter.setBrush( Qt::SolidPattern );
     painter.translate( 0, baseLine() );
-    painter.drawRect( boundingRect() );
-    painter.setPen( Qt::green );
-//    m_contentPath.addRect(0, -baseLine(), width(), baseLine() );
     painter.drawPath( m_contentPath );  // draw content which is buffered as path
 
 }
@@ -70,7 +67,7 @@ void TokenElement::layout( const AttributeManager* am )
             tmp->setOrigin( QPointF( m_contentPath.boundingRect().right(), 0.0 ) );
             m_contentPath.moveTo( tmp->origin().x()+ tmp->width(), 0.0 );
         }    
-
+    
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
     setBaseLine( -m_contentPath.boundingRect().y() ); // set baseline accordingly

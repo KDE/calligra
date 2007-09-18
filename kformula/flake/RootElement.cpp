@@ -41,7 +41,7 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
-    //BasicElement::paint(painter, am); // For debugging
+    BasicElement::paint(painter, am); // For debugging
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
@@ -61,7 +61,7 @@ void RootElement::layout( const AttributeManager* am )
     // The root symbol an xOffset and yOffset due to the exponent.
     double xOffset = m_exponent->width() - tickWidth/2;
     xOffset = xOffset < 0 ? 0 : xOffset; // no negative offset for the root symbol
-    double yOffset =  m_exponent->height() - 3.0*symbolHeight/5.0;
+    double yOffset =  m_exponent->height() - 2.0*symbolHeight/5.0;
     yOffset = yOffset < 0 ? 0 : yOffset;
 
     // Set the roots dimensions
