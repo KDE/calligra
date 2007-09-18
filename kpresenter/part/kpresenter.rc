@@ -30,6 +30,9 @@
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
         </Menu>
+        <Menu name="insert"><text>&amp;Insert</text>
+            <Action name="insert_variable"/> <!-- menu -->
+        </Menu>
     </MenuBar>
     <ToolBar name="mainToolBar">
         <Action name="view_zoom"/>
