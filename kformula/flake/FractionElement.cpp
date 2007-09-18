@@ -61,30 +61,32 @@ void FractionElement::layout( const AttributeManager* am )
     QPointF numeratorOrigin;
     QPointF denominatorOrigin;
     double linethickness = am->doubleOf( "linethickness", this );
+    linethickness = 1; // am is broken at the moment - when fixed delete this line
     double distY = am->mathSpaceValue( "thinmathspace" );
     Align numalign = am->alignOf( "numalign", this ); 
     Align denomalign = am->alignOf( "denomalign", this ); 
     denominatorOrigin.setY( m_numerator->height() + linethickness + 2*distY );
     
-    setWidth( qMax( m_numerator->width(), m_denominator->width() ) );
+    setWidth( qMax( m_numerator->width(), m_denominator->width() ) + linethickness*2 );
     setHeight( m_numerator->height() + m_denominator->height() +
                linethickness + 2*distY );
     setBaseLine( denominatorOrigin.y() );
  
     if( numalign == Right )  // for Left it is (0.0 /0.0)
-        numeratorOrigin.setX( width() - m_numerator->width() );
+        numeratorOrigin.setX( width() - m_numerator->width() - linethickness);
     else
 	numeratorOrigin.setX( ( width() - m_numerator->width() ) / 2 );
 
     if( denomalign == Right )
-        denominatorOrigin.setX( width() - m_denominator->width() );
+        denominatorOrigin.setX( width() - m_denominator->width() - linethickness);
     else
-	denominatorOrigin.setX( ( width() - m_denominator->width() ) / 2 );
+	denominatorOrigin.setX( ( width() - m_denominator->width() ) / 2);
 
     m_numerator->setOrigin( numeratorOrigin );
     m_denominator->setOrigin( denominatorOrigin );
-    m_fractionLine = QLineF( QPointF( 0.0, baseLine() ),
-                             QPointF( width(), baseLine() ) );
+    float fractionLineY =  m_numerator->height() + linethickness/2 + distY;
+    m_fractionLine = QLineF( QPointF( linethickness, fractionLineY ),
+                             QPointF( width()-linethickness, fractionLineY ) );
 }
 
 void FractionElement::layoutBevelledFraction( const AttributeManager* am )
