@@ -75,7 +75,8 @@ QColor AttributeManager::mathColor( BasicElement* element )
 
 QColor AttributeManager::mathBackground( BasicElement* element )
 {
-    return QColor( findValue( "mathbackground", element ) );
+    QString tmpColor = findValue( "mathbackground", element );
+    return tmpColor.isNull() ? QColor( "transparent" ) : QColor( tmpColor ); 
 }
 
 MathVariant AttributeManager::mathVariant( BasicElement* element )

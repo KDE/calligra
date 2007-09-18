@@ -33,7 +33,3 @@ RootElement:
 SquareRootElement:
 	- correct layout
 	- correct painting
-
-FractionElement:
-TokenElement:
-	- use attribute colors for painting	
