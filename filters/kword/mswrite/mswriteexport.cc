@@ -1237,12 +1237,12 @@ public:
 		image.setIsWMF (true);
 		if (!ignoreIndent)
 		{
-			if (paraPropIn->getAlignment () != MSWrite::Alignment::Centre)
+			if (paraPropIn->getAlignment () != MSWrite::Alignment::Center)
 				image.setIndent (MSWrite::Word (Point2Twip (frameAnchor.frame.left)) - m_leftMargin);
 			else
 			{
 				// TODO: what is the image offset relative to (it's not always rel. to the left margin)?
-				kdDebug (30509) << "\tCentred paragraph, cannot position image" << endl;
+				kdDebug (30509) << "\tCentered paragraph, cannot position image" << endl;
 			}
 		}
 
