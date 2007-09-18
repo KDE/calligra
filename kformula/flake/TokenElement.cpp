@@ -42,13 +42,16 @@ const QList<BasicElement*> TokenElement::childElements()
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
      // set the painter to use background and text colors
-    BasicElement::paint(painter, am);
+    //BasicElement::paint(painter, am);
     painter.setBackgroundMode( Qt::OpaqueMode  );
     painter.setBackground( QBrush( am->mathBackground( this ) ) );
     painter.setPen( am->mathColor( this ) );
-    painter.setBrush( Qt::SolidPattern );
+    //painter.setBrush( Qt::SolidPattern );
     painter.translate( 0, baseLine() );
+    painter.drawRect(0, -baseLine(), width(), baseLine() );
+    m_contentPath.addRect(0, -baseLine(), width(), baseLine() );
     painter.drawPath( m_contentPath );  // draw content which is buffered as path
+
 }
 
 void TokenElement::layout( const AttributeManager* am )
@@ -67,13 +70,18 @@ void TokenElement::layout( const AttributeManager* am )
             m_contentPath.moveTo( tmp->origin().x()+ tmp->width(), 0.0 );
         }
     
-    kDebug() << "Bounding rect is at " << m_contentPath.boundingRect().x() << "," <<  m_contentPath.boundingRect().y();
-    setWidth( m_contentPath.boundingRect().right() );  //Qt includes a small space at the front of a letter.  Include this space
-    setHeight( m_contentPath.boundingRect().height() );
 
+
+    kDebug() << "Bounding rect is at " << m_contentPath.boundingRect().x() << "," <<  m_contentPath.boundingRect().y();
+    kDebug() << "Bounding rect has right, bottom  " << m_contentPath.boundingRect().right() << "," <<  m_contentPath.boundingRect().bottom();
+    kDebug() << "Bounding rect has width, height  " << m_contentPath.boundingRect().width() << "," <<  m_contentPath.boundingRect().height();
+    kDebug() << "current position is  " << m_contentPath.currentPosition().x() << "," <<  m_contentPath.currentPosition().y();
+    setWidth( m_contentPath.boundingRect().right() );
+    setHeight( m_contentPath.boundingRect().height() );
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
-    setBaseLine( qAbs( m_contentPath.boundingRect().y() ) ); // set baseline accordingly
+    setBaseLine( -m_contentPath.boundingRect().y() ); // set baseline accordingly
+
 }
 
 BasicElement* TokenElement::acceptCursor( CursorDirection direction )

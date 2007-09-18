@@ -43,13 +43,10 @@ BasicElement::~BasicElement()
 
 void BasicElement::paint( QPainter& painter, AttributeManager* )
 { 
-    // draw a blue rectangle for debugging
     painter.setPen( QPen( Qt::blue ) );
-    QRectF box = m_boundingRect.adjusted( -origin().x(), -origin().y(),
-                                          -origin().x(), -origin().y());
-    painter.drawRect( box  );
-    painter.drawLine( box.x(), box.y() + baseLine(), box.x() + m_boundingRect.width(),
-                      baseLine() + box.y());
+    painter.drawRect( 0, 0, width(), height() );
+    painter.setPen( QPen( Qt::red, 0, Qt::DashLine ) );
+    painter.drawLine( 0, baseLine(), width(), baseLine());
 }
 
 void BasicElement::layout( const AttributeManager* )

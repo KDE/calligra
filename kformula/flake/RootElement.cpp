@@ -41,7 +41,7 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
-    BasicElement::paint(painter, am); // For debugging
+    //BasicElement::paint(painter, am); // For debugging
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
