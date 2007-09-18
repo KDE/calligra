@@ -49,7 +49,6 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.setBrush( Qt::SolidPattern );
     painter.translate( 0, baseLine() );
     painter.drawPath( m_contentPath );  // draw content which is buffered as path
-
 }
 
 void TokenElement::layout( const AttributeManager* am )
@@ -73,8 +72,6 @@ void TokenElement::layout( const AttributeManager* am )
     setBaseLine( -m_contentPath.boundingRect().y() ); // set baseline accordingly
     setWidth( m_contentPath.boundingRect().width() );
     setHeight( m_contentPath.boundingRect().height() );
-
-    m_contentPath.addRect( m_contentPath.boundingRect() );
 }
 
 BasicElement* TokenElement::acceptCursor( CursorDirection direction )
