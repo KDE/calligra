@@ -41,9 +41,11 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
-    Q_UNUSED(am)
+    BasicElement::paint(painter, am);
     QPen pen;
-    pen.setWidth( 1 );
+    double linethickness = am->doubleOf( "linethickness", this );
+    linethickness = 1; // am is broken at the moment - when fixed delete this line
+    pen.setWidth( linethickness );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
 }
@@ -54,6 +56,9 @@ void RootElement::layout( const AttributeManager* am )
     double thinSpace = am->mathSpaceValue( "thinmathspace" );
     double symbolHeight  = m_radicand->baseLine() + thinSpace;
     double tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
+    double linethickness = am->doubleOf( "linethickness", this );
+    linethickness = 1; // am is broken at the moment - when fixed delete this line
+
 
     // The root symbol has due to the exponent a xOffset value. And as the exponent can
     // be quite large it also has a yOffset sometimes.
@@ -73,10 +78,10 @@ void RootElement::layout( const AttributeManager* am )
 
     // Draw the actual root symbol to a path as buffer
     m_rootSymbol = QPainterPath();
-    m_rootSymbol.moveTo( xOffset, baseLine() - symbolHeight / 3.0 );
-    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, baseLine() );
-    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset );
-    m_rootSymbol.lineTo( width(), yOffset );
+    m_rootSymbol.moveTo( xOffset+linethickness, baseLine() - symbolHeight / 3.0 );
+    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, baseLine() - linethickness/2 );
+    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + linethickness/2 );
+    m_rootSymbol.lineTo( width()-linethickness/2, yOffset +linethickness/2);
 }
 
 const QList<BasicElement*> RootElement::childElements()
