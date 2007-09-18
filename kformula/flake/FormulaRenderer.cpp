@@ -34,12 +34,7 @@ FormulaRenderer::~FormulaRenderer()
 }
 
 void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
-{
-      // TODO add more general painting code like: background, scriptlevel and so on!
-      // p.setBrush( QBrush( m_attributeManager->valueOf( "mathbackground" ) ) );
-      // p.setPen( m_attributeManager->valueOf( "mathcolor" ) );
-      // p.setFont();
-    
+{   
     p.save();
     p.translate( element->origin() );
     kDebug(39001) << element->origin();

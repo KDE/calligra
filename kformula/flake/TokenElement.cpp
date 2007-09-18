@@ -48,8 +48,9 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.setPen( am->mathColor( this ) );
     //painter.setBrush( Qt::SolidPattern );
     painter.translate( 0, baseLine() );
-    painter.drawRect(0, -baseLine(), width(), baseLine() );
-    m_contentPath.addRect(0, -baseLine(), width(), baseLine() );
+    painter.drawRect( boundingRect() );
+    painter.setPen( Qt::green );
+//    m_contentPath.addRect(0, -baseLine(), width(), baseLine() );
     painter.drawPath( m_contentPath );  // draw content which is buffered as path
 
 }
@@ -68,20 +69,15 @@ void TokenElement::layout( const AttributeManager* am )
         {
             tmp->setOrigin( QPointF( m_contentPath.boundingRect().right(), 0.0 ) );
             m_contentPath.moveTo( tmp->origin().x()+ tmp->width(), 0.0 );
-        }
-    
+        }    
 
-
-    kDebug() << "Bounding rect is at " << m_contentPath.boundingRect().x() << "," <<  m_contentPath.boundingRect().y();
-    kDebug() << "Bounding rect has right, bottom  " << m_contentPath.boundingRect().right() << "," <<  m_contentPath.boundingRect().bottom();
-    kDebug() << "Bounding rect has width, height  " << m_contentPath.boundingRect().width() << "," <<  m_contentPath.boundingRect().height();
-    kDebug() << "current position is  " << m_contentPath.currentPosition().x() << "," <<  m_contentPath.currentPosition().y();
-    setWidth( m_contentPath.boundingRect().right() );
-    setHeight( m_contentPath.boundingRect().height() );
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
     setBaseLine( -m_contentPath.boundingRect().y() ); // set baseline accordingly
+    setWidth( m_contentPath.boundingRect().width() );
+    setHeight( m_contentPath.boundingRect().height() );
 
+    m_contentPath.addRect( m_contentPath.boundingRect() );
 }
 
 BasicElement* TokenElement::acceptCursor( CursorDirection direction )
