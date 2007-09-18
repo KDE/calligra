@@ -63,11 +63,12 @@ void FractionElement::layout( const AttributeManager* am )
     double distY = am->mathSpaceValue( "thinmathspace" );
     Align numalign = am->alignOf( "numalign", this ); 
     Align denomalign = am->alignOf( "denomalign", this ); 
+    denominatorOrigin.setY( m_numerator->height() + linethickness + 2*distY );
     
     setWidth( qMax( m_numerator->width(), m_denominator->width() ) );
     setHeight( m_numerator->height() + m_denominator->height() +
                linethickness + 2*distY );
-    setBaseLine( m_numerator->height() + distY + 0.5*linethickness );
+    setBaseLine( denominatorOrigin.y() );
  
     if( numalign == Right )  // for Left it is (0.0 /0.0)
         numeratorOrigin.setX( width() - m_numerator->width() );
@@ -79,7 +80,6 @@ void FractionElement::layout( const AttributeManager* am )
     else
 	denominatorOrigin.setX( ( width() - m_denominator->width() ) / 2 );
 
-    denominatorOrigin.setY( m_numerator->height() + linethickness + 2*distY );
     m_numerator->setOrigin( numeratorOrigin );
     m_denominator->setOrigin( denominatorOrigin );
     m_fractionLine = QLineF( QPointF( 0.0, baseLine() ),
