@@ -41,7 +41,7 @@ RootElement::~RootElement()
 
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
-    BasicElement::paint(painter, am);
+    BasicElement::paint(painter, am); // For debugging
     QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
@@ -52,20 +52,21 @@ void RootElement::layout( const AttributeManager* am )
 {
     // Calculate values to layout the root symbol
     double thinSpace = am->mathSpaceValue( "thinmathspace" );
-    double symbolHeight  = m_radicand->baseLine() + thinSpace;
+    double symbolHeight  = m_radicand->baseLine();
+    if( m_radicand->height() > symbolHeight*1.3 ) symbolHeight = m_radicand->height();
+    symbolHeight += thinSpace;
     double tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
     double linethickness = 1;
 
-    // The root symbol has due to the exponent a xOffset value. And as the exponent can
-    // be quite large it also has a yOffset sometimes.
-    double xOffset = m_exponent->width() - tickWidth*0.25;
+    // The root symbol an xOffset and yOffset due to the exponent.
+    double xOffset = m_exponent->width() - tickWidth/2;
     xOffset = xOffset < 0 ? 0 : xOffset; // no negative offset for the root symbol
     double yOffset =  m_exponent->height() - 3.0*symbolHeight/5.0;
     yOffset = yOffset < 0 ? 0 : yOffset;
 
     // Set the roots dimensions
-    setBaseLine( yOffset + symbolHeight );
-    setHeight( baseLine() + m_exponent->height() - m_exponent->baseLine() );
+    setBaseLine( yOffset + thinSpace + m_radicand->baseLine() );
+    setHeight( yOffset + thinSpace + m_radicand->height() );
     setWidth( xOffset + tickWidth + m_radicand->width() + thinSpace );
 
     // Place the children in the correct place
@@ -74,8 +75,8 @@ void RootElement::layout( const AttributeManager* am )
 
     // Draw the actual root symbol to a path as buffer
     m_rootSymbol = QPainterPath();
-    m_rootSymbol.moveTo( xOffset+linethickness, baseLine() - symbolHeight / 3.0 );
-    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, baseLine() - linethickness/2 );
+    m_rootSymbol.moveTo( xOffset+linethickness, yOffset +  2.0 * symbolHeight / 3.0 );
+    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + symbolHeight - linethickness/2 );
     m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset + linethickness/2 );
     m_rootSymbol.lineTo( width()-linethickness/2, yOffset +linethickness/2);
 }
