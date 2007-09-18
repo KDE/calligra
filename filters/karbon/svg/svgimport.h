@@ -68,7 +68,7 @@ protected:
     void removeGraphicContext();
     void convert();
     KoShape * createObject( const QDomElement &, const QDomElement &style = QDomElement() );
-    //void createText( KoShapeContainer *, const QDomElement & );
+    KoShape * createText( const QDomElement & );
     void parseFont( const QDomElement & );
     // find object with given id in document
     KoShape * findObject( const QString &name );
@@ -85,6 +85,8 @@ protected:
     void addToGroup( QList<KoShape*> shapes, KoShapeGroup * group );
 
     int nextZIndex();
+    QString absoluteFilePath( const QString &href );
+
 private:
     VDocument                      m_document;
     QStack<SvgGraphicsContext*>    m_gc;
