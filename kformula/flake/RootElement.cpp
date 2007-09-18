@@ -155,7 +155,9 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
             m_exponent = ElementFactory::createElement( tmp.tagName(), this );
             if( !m_exponent->readMathML( tmp ) )
                 return false;
-        }
+        } else {
+            kDebug() << "Too many arguments to mroot" << endl;
+	}
     }
     Q_ASSERT( m_radicand );
     Q_ASSERT( m_exponent );

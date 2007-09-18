@@ -24,6 +24,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
+#include <kdebug.h>
 
 FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -39,10 +40,10 @@ FractionElement::~FractionElement()
 
 void FractionElement::paint( QPainter& painter, AttributeManager* am )
 {
-    QPen pen( painter.pen() );
-    pen.setWidthF( am->doubleOf( "linethickness", this ) );
 
     painter.save();
+    QPen pen ( am->mathColor( this ) );
+    pen.setWidth( 1 );
     painter.setPen( pen );                           // set the line width
     painter.drawLine( m_fractionLine );              // draw the line
     painter.restore();
@@ -164,11 +165,22 @@ bool FractionElement::readMathMLContent( const KoXmlElement& parent )
 {
     KoXmlElement tmp;
     forEachElement( tmp, parent ) {
-        if( m_numerator->elementType() == Basic )
-            m_numerator->readMathML( tmp );
-        else
-           m_denominator->readMathML( tmp );
+        if( m_numerator->elementType() == Basic ) {
+            delete m_numerator;
+            m_numerator = ElementFactory::createElement( tmp.tagName(), this );
+            if( !m_numerator->readMathML( tmp ) )
+                return false;
+        } else if( m_denominator->elementType() == Basic ) {
+            delete m_denominator;
+            m_denominator = ElementFactory::createElement( tmp.tagName(), this );
+            if( !m_denominator->readMathML( tmp ) )
+                return false;
+        } else {
+            kDebug() << "Too many arguments to mfrac" << endl;
+	}
     }
+    Q_ASSERT( m_numerator );
+    Q_ASSERT( m_denominator );
 
     return true;
 }
