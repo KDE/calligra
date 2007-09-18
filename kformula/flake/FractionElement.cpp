@@ -42,8 +42,8 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
 {
 
     painter.save();
-    QPen pen ( am->mathColor( this ) );
-    pen.setWidth( 1 );
+    QPen pen;
+    pen.setWidth( am->doubleOf( "linethickness", this ) );
     painter.setPen( pen );                           // set the line width
     painter.drawLine( m_fractionLine );              // draw the line
     painter.restore();
