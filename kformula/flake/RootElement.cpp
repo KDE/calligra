@@ -43,9 +43,7 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
     BasicElement::paint(painter, am);
     QPen pen;
-    double linethickness = am->doubleOf( "linethickness", this );
-    linethickness = 1; // am is broken at the moment - when fixed delete this line
-    pen.setWidth( linethickness );
+    pen.setWidth( 1 );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
 }
@@ -56,9 +54,7 @@ void RootElement::layout( const AttributeManager* am )
     double thinSpace = am->mathSpaceValue( "thinmathspace" );
     double symbolHeight  = m_radicand->baseLine() + thinSpace;
     double tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
-    double linethickness = am->doubleOf( "linethickness", this );
-    linethickness = 1; // am is broken at the moment - when fixed delete this line
-
+    double linethickness = 1;
 
     // The root symbol has due to the exponent a xOffset value. And as the exponent can
     // be quite large it also has a yOffset sometimes.

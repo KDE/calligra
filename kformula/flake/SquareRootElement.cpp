@@ -48,11 +48,13 @@ void SquareRootElement::layout( const AttributeManager* am )
     kDebug() << "Height: " << height();
 
     double thinSpace = am->mathSpaceValue( "thinmathspace" );
-    double tickWidth = ( baseLine() + thinSpace ) / 3.0;
-    double linethickness = am->doubleOf( "linethickness", this );
-    linethickness = 1; // am is broken at the moment - when fixed delete this line
-  
-    // Set the sqrt dimesions 
+    double linethickness = 1;
+    double symbolHeight = baseLine();
+    if( height() > symbolHeight*1.3 ) symbolHeight = height();
+    symbolHeight += thinSpace;
+    double tickWidth = symbolHeight / 3.0;
+
+    // Set the sqrt dimensions 
     setWidth( tickWidth + width() + thinSpace );
     setHeight( height() + thinSpace );
     setBaseLine( baseLine() + thinSpace );
@@ -64,8 +66,8 @@ void SquareRootElement::layout( const AttributeManager* am )
 
     // Draw the sqrt symbol into a QPainterPath as buffer
     m_rootSymbol = QPainterPath();
-    m_rootSymbol.moveTo( linethickness, 2.0 * baseLine() / 3.0 );
-    m_rootSymbol.lineTo( 0 + tickWidth/2.0, baseLine()-linethickness/2 );
+    m_rootSymbol.moveTo( linethickness, 2.0 * symbolHeight / 3.0 );
+    m_rootSymbol.lineTo( 0 + tickWidth/2.0, symbolHeight-linethickness/2 );
     m_rootSymbol.lineTo( 0 + tickWidth, linethickness/2 );
     m_rootSymbol.lineTo( width() - linethickness/2, linethickness/2 );
 
