@@ -42,7 +42,7 @@ RootElement::~RootElement()
 void RootElement::paint( QPainter& painter, AttributeManager* am )
 {
     Q_UNUSED(am)
-    QPen pen ( am->mathColor( this ) );
+    QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
@@ -50,51 +50,33 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 
 void RootElement::layout( const AttributeManager* am )
 {
-    Q_UNUSED(am)
-    kDebug() << "Radicand height: " << m_radicand->height();
-    kDebug() << "Radicand width: " << m_radicand->width();
-    kDebug() << "Exponent height: " << m_exponent->height();
-    kDebug() << "Exponent width: " << m_exponent->width();
+    // Calculate values to layout the root symbol
+    double thinSpace = am->mathSpaceValue( "thinmathspace" );
+    double symbolHeight  = m_radicand->baseLine() + thinSpace;
+    double tickWidth = symbolHeight / 3.0;  // The width of the root symbol's tick part
 
-    double thinspace = am->mathSpaceValue( "thinmathspace" );
-    
+    // The root symbol has due to the exponent a xOffset value. And as the exponent can
+    // be quite large it also has a yOffset sometimes.
+    double xOffset = m_exponent->width() - tickWidth*0.25;
+    xOffset = xOffset < 0 ? 0 : xOffset; // no negative offset for the root symbol
+    double yOffset =  m_exponent->height() - 3.0*symbolHeight/5.0;
+    yOffset = yOffset < 0 ? 0 : yOffset;
 
-    double rootHeight  = m_radicand->baseLine() + thinspace;
-    
-    double tobaseline = rootHeight;
+    // Set the roots dimensions
+    setBaseLine( yOffset + symbolHeight );
+    setHeight( baseLine() + m_exponent->height() - m_exponent->baseLine() );
+    setWidth( xOffset + tickWidth + m_radicand->width() + thinSpace );
 
-    //See if the exponent sticks out over the top of the root. If it does, we need to bring down the sqrt.
-    double exponent_sticks_out_by =  m_exponent->height() - 3.0*rootHeight/5.0;
-    if ( exponent_sticks_out_by < 0 ) exponent_sticks_out_by = 0;
-    tobaseline += exponent_sticks_out_by;
-   
-    double totalHeight = tobaseline + m_exponent->height() - m_exponent->baseLine(); 
+    // Place the children in the correct place
+    m_radicand->setOrigin( QPointF( xOffset+tickWidth+thinSpace, yOffset+thinSpace ) );
+    m_exponent->setOrigin( QPointF( 0.0, 0.0 ) );
 
-    setBaseLine( tobaseline );
-    setHeight(totalHeight);
-
-    double tickWidth = rootHeight / 3.0;  //The width of the tick part of the square root symbol
-
-    double xoffset = m_exponent->width() - tickWidth / 2.0;
-    if(xoffset < 0) xoffset = 0;
-
-    //Place the child in the correct place
-    m_radicand->setOrigin( QPointF(xoffset + tickWidth, exponent_sticks_out_by + thinspace) );
-
+    // Draw the actual root symbol to a path as buffer
     m_rootSymbol = QPainterPath();
-    
-    //Draw the root symbol bit
-    m_rootSymbol.moveTo( xoffset, tobaseline - 1.0 * rootHeight / 3.0 );
-    m_rootSymbol.lineTo( xoffset + tickWidth/2.0, tobaseline);
-    m_rootSymbol.lineTo( xoffset + tickWidth, exponent_sticks_out_by );
-    
-    //Draw a line over the child (aka radicand)
-    double totalWidth = xoffset +  tickWidth + m_radicand->width();
-    m_rootSymbol.lineTo( totalWidth, exponent_sticks_out_by );
-   
-    //Place the exponent in the correct place
-    m_exponent->setOrigin( QPointF(0,0) );
-    setWidth( totalWidth );
+    m_rootSymbol.moveTo( xOffset, baseLine() - symbolHeight / 3.0 );
+    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, baseLine() );
+    m_rootSymbol.lineTo( m_rootSymbol.currentPosition().x()+tickWidth*0.5, yOffset );
+    m_rootSymbol.lineTo( width(), yOffset );
 }
 
 const QList<BasicElement*> RootElement::childElements()
@@ -155,19 +137,17 @@ bool RootElement::readMathMLContent( const KoXmlElement& element )
             m_exponent = ElementFactory::createElement( tmp.tagName(), this );
             if( !m_exponent->readMathML( tmp ) )
                 return false;
-        } else {
+        }
+        else {
             kDebug() << "Too many arguments to mroot" << endl;
-	}
+            return false;
+        }
     }
-    Q_ASSERT( m_radicand );
-    Q_ASSERT( m_exponent );
     return true;
 }
 
 void RootElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    Q_ASSERT( m_radicand );
-    Q_ASSERT( m_exponent );
     m_radicand->writeMathML( writer );
     m_exponent->writeMathML( writer );
 }

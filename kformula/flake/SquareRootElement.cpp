@@ -34,7 +34,7 @@ SquareRootElement::~SquareRootElement()
 void SquareRootElement::paint( QPainter& painter, AttributeManager* am )
 {
     BasicElement::paint(painter, am);
-    QPen pen ( am->mathColor( this ) );
+    QPen pen;
     pen.setWidth( 1 );
     painter.setPen( pen );
     painter.drawPath( m_rootSymbol );
@@ -47,35 +47,26 @@ void SquareRootElement::layout( const AttributeManager* am )
     kDebug() << "Width: " << width();
     kDebug() << "Height: " << height();
 
-    double thinspace = am->mathSpaceValue( "thinmathspace" );
-
-    double sqrtHeight = baseLine();
-    double totalHeight = height();
-
-    sqrtHeight += thinspace;
-    totalHeight += thinspace;
-    setHeight(totalHeight);
-    setBaseLine(sqrtHeight);
+    double thinSpace = am->mathSpaceValue( "thinmathspace" );
+    double tickWidth = ( baseLine() + thinSpace ) / 3.0;
+  
+    // Set the sqrt dimesions 
+    setWidth( tickWidth + width() + thinSpace );
+    setHeight( height() + thinSpace );
+    setBaseLine( baseLine() + thinSpace );
    
-    double tickWidth = sqrtHeight / 3.0;  //The width of the tick part of the square root symbol
-
-    //Place the child in the correct place
-    QPointF childOffset(tickWidth, thinspace);
+    // Adapt the children's positions to the new offset
+    QPointF childOffset( tickWidth + thinSpace, thinSpace );
     foreach( BasicElement* element, childElements() )
         element->setOrigin( element->origin() + childOffset );
 
+    // Draw the sqrt symbol into a QPainterPath as buffer
     m_rootSymbol = QPainterPath();
-    
-    //Draw the root symbol bit
-    m_rootSymbol.moveTo( 0, 2.0 * sqrtHeight / 3.0 );
-    m_rootSymbol.lineTo( 0 + tickWidth/2.0, sqrtHeight);
+    m_rootSymbol.moveTo( 0, 2.0 * baseLine() / 3.0 );
+    m_rootSymbol.lineTo( 0 + tickWidth/2.0, baseLine() );
     m_rootSymbol.lineTo( 0 + tickWidth, 0.0 );
-    
-    //Draw a line over the child (aka radicand)
-    double totalWidth = tickWidth + width();
-    m_rootSymbol.lineTo( totalWidth, 0.0 );
-   
-    setWidth( totalWidth );
+    m_rootSymbol.lineTo( width(), 0.0 );
+
 }
 
 ElementType SquareRootElement::elementType() const
