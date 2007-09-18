@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,11 +25,14 @@
 #include <KoProperties.h>
 #include <KoShape.h>
 #include <KoTextShapeData.h>
+#include <KoXmlNS.h>
 
 TextShapeFactory::TextShapeFactory(QObject *parent)
     : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A Shape That Shows Text"));
+    setOdfElementNames( KoXmlNS::draw, QStringList( "text-box" ) );
+    setLoadingPriority( 1 );
 
     KoShapeTemplate t;
     t.name = i18n("Text");
@@ -55,5 +59,11 @@ shape->addConnectionPoint(QPointF(0, 200));
 shape->addConnectionPoint(QPointF(300, 200));
     return shape;
 }
+
+bool TextShapeFactory::supports(const KoXmlElement & e) const
+{
+    return ( e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw );
+}
+
 
 #include "TextShapeFactory.moc"
