@@ -47,7 +47,9 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
     painter.setBackground( QBrush( am->mathBackground( this ) ) );
     painter.setPen( am->mathColor( this ) );
     painter.setBrush( Qt::SolidPattern );
-    painter.translate( 0.0, baseLine() );
+    //Qt has a slight 'bug' (or feature) that the text drawn will be exactly half a point out.  This has been mentioned on the
+    //mailing lists many times, but no official response that I could find.  This translation here corrects for it.
+    painter.translate( -0.5, baseLine() );
     painter.drawPath( m_contentPath );  // draw content which is buffered as path
 }
 

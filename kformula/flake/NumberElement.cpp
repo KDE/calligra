@@ -27,7 +27,7 @@ NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
 void NumberElement::renderToPath( const QString& rawString, QPainterPath& path ) const
 {
     AttributeManager manager;
-    path.addText( path.currentPosition() - QPointF(1.0, 0), manager.font( this ), rawString );
+    path.addText( path.currentPosition(), manager.font( this ), rawString );
 }
 
 ElementType NumberElement::elementType() const
