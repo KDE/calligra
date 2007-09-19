@@ -45,7 +45,7 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
     if( linethickness == 0 )
 	    return;  // specification says to not draw a line if thickness is 0
 
-    pen.setWidth( linethickness );  // am is broken at the moment - when fixed, uncomment above line
+    pen.setWidthF( linethickness );  // am is broken at the moment - when fixed, uncomment above line
     painter.setPen( pen );                           // set the line width
     painter.drawLine( m_fractionLine );              // draw the line
 }
