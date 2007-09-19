@@ -24,10 +24,12 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrShapeApplicationData.h"
+#include "KPrFactory.h"
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
 {
+    setComponentData(KPrFactory::componentData(), false);
     setTemplateType( "kpresenter_template" );
 }
 
