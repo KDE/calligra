@@ -24,7 +24,7 @@ Before release of KOffice 2.0.0
 Item								   Prio Status
 ------------------------------------------------------------------------------
 
-* Build the foundation                                                  ----
+* Build the foundation                                                  
  + Move the data editor to the attic                                    DONE
  + Move the wizard to the attic                                         DONE
  + Move the configuration dialog to the attic                           DONE
@@ -35,6 +35,8 @@ Item								   Prio Status
    - Start of ODF loading						--
    - Start of ODF saving						--
  + Remove KChartDocument                                                DONE
+ + Make KChart a real KOffice 2 app                                     DONE
+    - Make it use include a flake shape                                 done
 
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      	----
