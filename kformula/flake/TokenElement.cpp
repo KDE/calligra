@@ -43,9 +43,12 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
      // set the painter to use background and text colors
     BasicElement::paint(painter, am);
-    painter.setPen( am->mathBackground( this ) );
-    painter.setBrush( QBrush( painter.pen().color() ) );
-    painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
+    QColor color = am->mathBackground( this );
+    if(color != QColor("transparent")) {
+        painter.setPen( color );
+        painter.setBrush( QBrush( color ) );
+        painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
+    } 
     painter.setPen( am->mathColor( this ) );
     painter.setBrush( QBrush( painter.pen().color() ) );
     painter.translate( 0, baseLine() );
