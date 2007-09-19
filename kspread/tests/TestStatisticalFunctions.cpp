@@ -274,32 +274,6 @@ void TestStatisticalFunctions::testCHIDIST()
 //     CHECK_EVAL("CHIDIST(     4;\"texr\")", Value::VALUE()    ); // TODO
 }
 
-void TestStatisticalFunctions::testLEGACYCHIDIST()
-{
-    // ODF-tests LEGACY.CHIDIST
-    CHECK_EVAL("LEGACYCHIDIST(-1;2)", Value( 1 ) ); // constraint x<0
-    CHECK_EVAL("LEGACYCHIDIST( 0;2)", Value( 1 ) ); // constraint x=0
-    CHECK_EVAL("LEGACYCHIDIST( 2;2)", Value( 0.3678794412 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST( 4;4)", Value( 0.4060058497 ) ); //
-}
-
-void TestStatisticalFunctions::testLEGACYCHIINV()
-{
-    // ODF-tests LEGACY.CHIINV
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.1;3);3)",   Value( 0.1 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.3;3);3)",   Value( 0.3 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.5;3);3)",   Value( 0.5 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.7;3);3)",   Value( 0.7 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.9;3);3)",   Value( 0.9 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.1;20);20)", Value( 0.1 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.3;20);20)", Value( 0.3 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.5;20);20)", Value( 0.5 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.7;20);20)", Value( 0.7 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.9;20);20)", Value( 0.9 ) ); //
-    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(1.0;20);20)", Value( 1.0 ) ); //
-  
-}
-
 void TestStatisticalFunctions::testCONFIDENCE()
 {
     // ODF-tests
@@ -399,13 +373,14 @@ void TestStatisticalFunctions::testFDIST()
     CHECK_EVAL("FDIST(-1;4;5;FALSE())", Value( 0            ) ); //
 }
 
-void TestStatisticalFunctions::testLEGACYFDIST()
+void TestStatisticalFunctions::testFINV()
 {
     // ODF-tests
-    CHECK_EVAL("LEGACYFDIST( 1;4;5)", Value( 0.4856571967 ) ); //
-    CHECK_EVAL("LEGACYFDIST( 2;5;4)", Value( 0.2607980277 ) ); //
-    CHECK_EVAL("LEGACYFDIST( 0;4;5)", Value( 1            ) ); // 
-    CHECK_EVAL("LEGACYFDIST(-1;4;5)", Value::errorNUM()     ); // 
+    CHECK_EVAL("FDIST(FINV(0.1;3;4);3;4)", Value( 0.1 ) ); //
+    CHECK_EVAL("FDIST(FINV(0.3;3;4);3;4)", Value( 0.3 ) ); //
+    CHECK_EVAL("FDIST(FINV(0.5;3;4);3;4)", Value( 0.5 ) ); //
+    CHECK_EVAL("FDIST(FINV(0.7;3;4);3;4)", Value( 0.7 ) ); //
+    CHECK_EVAL("FDIST(FINV(0.0;3;4);3;4)", Value( 0.0 ) ); //
 }
 
 void TestStatisticalFunctions::testFISHER()
@@ -571,6 +546,50 @@ void TestStatisticalFunctions::testLARGE()
     CHECK_EVAL("LARGE(B14:B16;1)", Value( 3 ) );        //
     CHECK_EVAL("LARGE(B14:B16;3)", Value( 1 ) );        //
     CHECK_EVAL("LARGE(B14:B16;4)", Value::errorNUM() ); // N is greater than the length of the list
+}
+
+void TestStatisticalFunctions::testLEGACYCHIDIST()
+{
+    // ODF-tests LEGACY.CHIDIST
+    CHECK_EVAL("LEGACYCHIDIST(-1;2)", Value( 1 ) ); // constraint x<0
+    CHECK_EVAL("LEGACYCHIDIST( 0;2)", Value( 1 ) ); // constraint x=0
+    CHECK_EVAL("LEGACYCHIDIST( 2;2)", Value( 0.3678794412 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST( 4;4)", Value( 0.4060058497 ) ); //
+}
+
+void TestStatisticalFunctions::testLEGACYCHIINV()
+{
+    // ODF-tests LEGACY.CHIINV
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.1;3);3)",   Value( 0.1 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.3;3);3)",   Value( 0.3 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.5;3);3)",   Value( 0.5 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.7;3);3)",   Value( 0.7 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.9;3);3)",   Value( 0.9 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.1;20);20)", Value( 0.1 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.3;20);20)", Value( 0.3 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.5;20);20)", Value( 0.5 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.7;20);20)", Value( 0.7 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.9;20);20)", Value( 0.9 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(1.0;20);20)", Value( 1.0 ) ); //
+}
+
+void TestStatisticalFunctions::testLEGACYFDIST()
+{
+    // ODF-tests
+    CHECK_EVAL("LEGACYFDIST( 1;4;5)", Value( 0.4856571967 ) ); //
+    CHECK_EVAL("LEGACYFDIST( 2;5;4)", Value( 0.2607980277 ) ); //
+    CHECK_EVAL("LEGACYFDIST( 0;4;5)", Value( 1            ) ); // 
+    CHECK_EVAL("LEGACYFDIST(-1;4;5)", Value::errorNUM()     ); // 
+}
+
+void TestStatisticalFunctions::testLEGACYFINV()
+{
+    // ODF-tests
+    CHECK_EVAL("LEGACYFDIST(LEGACYFINV(0.1;3;4);3;4)", Value( 0.1 ) ); //
+    CHECK_EVAL("LEGACYFDIST(LEGACYFINV(0.3;3;4);3;4)", Value( 0.3 ) ); //
+    CHECK_EVAL("LEGACYFDIST(LEGACYFINV(0.5;3;4);3;4)", Value( 0.5 ) ); //
+    CHECK_EVAL("LEGACYFDIST(LEGACYFINV(0.7;3;4);3;4)", Value( 0.7 ) ); //
+    CHECK_EVAL("LEGACYFDIST(LEGACYFINV(1.0;3;4);3;4)", Value( 1.0 ) ); //
 }
 
 void TestStatisticalFunctions::testLOGINV()

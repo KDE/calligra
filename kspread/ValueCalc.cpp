@@ -1438,7 +1438,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
       if (fabs(pn5) >= xlarge) 
       {
         // re-scale the terms in continued fraction if they are large
-        kDebug()<<" [r] ";
+        kDebug()<<"the terms are to large -> rescaleling by "<<xlarge;
         pn1 /= xlarge;
         pn2 /= xlarge;
         pn3 /= xlarge;

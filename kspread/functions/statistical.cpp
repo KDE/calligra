@@ -44,8 +44,6 @@ Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betainv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combina (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_confidence (valVector args, ValueCalc *calc, FuncExtra *);
@@ -55,7 +53,7 @@ Value func_devsq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_devsqa (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_expondist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *);
-Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_finv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_frequency (valVector args, ValueCalc *calc, FuncExtra *);
@@ -70,6 +68,10 @@ Value func_intercept (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_kurtosis_est (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_kurtosis_pop (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_large (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacyfinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_loginv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_median (valVector args, ValueCalc *calc, FuncExtra *);
@@ -139,12 +141,6 @@ void RegisterStatisticalFunctions()
   f = new Function ("CHIDIST", func_chidist);
   f->setParamCount (2);
   repo->add (f);
-  f = new Function ("LEGACYCHIDIST", func_legacychidist);
-  f->setParamCount (2);
-  repo->add (f);
-  f = new Function ("LEGACYCHIINV", func_legacychiinv);
-  f->setParamCount (2);
-  repo->add (f);
   f = new Function ("COMBIN", func_combin);
   f->setParamCount (2);
   repo->add (f);
@@ -175,6 +171,9 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("FDIST", func_fdist);
   f->setParamCount (3,4);
+  repo->add (f);
+  f = new Function ("FINV", func_finv);
+  f->setParamCount (3);
   repo->add (f);
   f = new Function ("FISHER", func_fisher);
   repo->add (f);
@@ -223,8 +222,25 @@ void RegisterStatisticalFunctions()
   f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
+  f = new Function ("LEGACYCHIDIST", func_legacychidist);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("LEGACYCHIINV", func_legacychiinv);
+  f->setParamCount (2);
+  repo->add (f);
   f = new Function ("LEGACYFDIST", func_legacyfdist);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("LEGACYFINV", func_legacyfinv);
+  f->setParamCount (3);
+  repo->add (f);
+  // this is meant to be a copy of the function NORMSDIST.
+  // required for OpenFormula compliance.
+  f = new Function ("LEGACYNORMSDIST", func_stdnormdist);
+  repo->add (f);
+  // this is meant to be a copy of the function NORMSINV.
+  // required for OpenFormula compliance.
+  f = new Function ("LEGACYNORMSINV", func_normsinv);
   repo->add (f);
   f = new Function ("LOGINV", func_loginv);
   f->setParamCount (3);
@@ -251,15 +267,7 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("NORMSDIST", func_stdnormdist);
   repo->add (f);
-  // this is meant to be a copy of the function above.
-  // required for OpenFormula compliance.
-  f = new Function ("LEGACYNORMSDIST", func_stdnormdist);
-  repo->add (f);
   f = new Function ("NORMSINV", func_normsinv);
-  repo->add (f);
-  // this is meant to be a copy of the function above.
-  // required for OpenFormula compliance.
-  f = new Function ("LEGACYNORMSINV", func_normsinv);
   repo->add (f);
   f = new Function ("PEARSON", func_correl_pop);
   f->setParamCount (2);
@@ -1046,7 +1054,7 @@ static double GetValue( const QString formula, const double x )
 
   expr.replace( QString("x"), QString::number(x,'g',12) );
 
-  kDebug()<<"expr: "<<expr;
+  //kDebug()<<"expression"<<expr;
   f.setExpression( expr );
   Value result = f.eval();
   
@@ -1061,7 +1069,7 @@ static Value IterateInverse( const double unknown, const QString formula, double
   kDebug()<<"searching for " << unknown <<" in interval x0=" << x0 << " x1=" << x1;
 
   if ( x0>x1 )
-   kDebug()<<"IterateInverse: wrong interval";
+    kDebug()<<"IterateInverse: wrong interval";
 
   double f0 = unknown-GetValue( formula, x0);
   double f1 = unknown-GetValue( formula, x1);
@@ -1100,7 +1108,7 @@ static Value IterateInverse( const double unknown, const QString formula, double
     return Value(x1);
 
   // simple iteration
-  kDebug()<<"simple iteration f0="<<f0<<" f1="<<f1;
+  //kDebug()<<"simple iteration f0="<<f0<<" f1="<<f1;
 
   double x00 = x0;
   double x11 = x1;
@@ -1774,6 +1782,60 @@ Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
       return Value(res);
     }
   }
+}
+
+// Function: finv
+Value func_finv (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the inverse f-distribution
+  Value p  = args[0];
+  Value f1 = args[1];
+  Value f2 = args[2];
+
+  Value result;
+
+  //TODO constraints
+//   if (  calc->lower(DF, 1.0)  || calc->greater(DF, 1.0E5) ||
+//         calc->greater(p, 1.0) || calc->lower(p,0.0)           )
+//     return Value::errorVALUE();
+
+  bool convergenceError;
+
+  // create formula string
+  QString formula = QString("FDIST(x;%1;%2;1)").arg(f1.asFloat()).arg(f2.asFloat());
+
+  result = IterateInverse ( p.asFloat(), formula , f1.asFloat()*0.5, f1.asFloat(), convergenceError);
+
+  if ( convergenceError )
+    return Value::errorVALUE();
+
+  return result;
+}
+
+// Function: legacyfinv
+Value func_legacyfinv (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the inverse legacy f-distribution
+  Value p  = args[0];
+  Value f1 = args[1];
+  Value f2 = args[2];
+
+  Value result;
+
+  //TODO constraints
+//   if (  calc->lower(DF, 1.0)  || calc->greater(DF, 1.0E5) ||
+//         calc->greater(p, 1.0) || calc->lower(p,0.0)           )
+//     return Value::errorVALUE();
+
+  bool convergenceError;
+
+  // create formula string
+  QString formula = QString("LEGACYFDIST(x;%1;%2)").arg(f1.asFloat()).arg(f2.asFloat());
+
+  result = IterateInverse ( p.asFloat(), formula , f1.asFloat()*0.5, f1.asFloat(), convergenceError);
+
+  if ( convergenceError )
+    return Value::errorVALUE();
+
+  return result;
 }
 
 // Function: legacy.fdist

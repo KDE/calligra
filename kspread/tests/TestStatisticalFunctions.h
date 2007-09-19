@@ -46,8 +46,6 @@ private slots:
     void testBETAINV();
 //     void testBINO();
     void testCHIDIST();
-    void testLEGACYCHIDIST();
-    void testLEGACYCHIINV();
 //     void testCOMBIN();  // in -> TestMathFunctions
 //     void testCOMBINA(); // in -> TestMathFunctions
     void testCONFIDENCE();
@@ -57,8 +55,8 @@ private slots:
 //     void testDEVSQA();
     void testEXPONDIST();
     void testFDIST();    
-    void testLEGACYFDIST();
     void testFTEST(); // to be implemented
+    void testFINV();   
     void testFISHER();
     void testFISHERINV();
     void testFREQUENCY();
@@ -76,6 +74,15 @@ private slots:
     void testKURT();
 //     void testKURTP(); // ???
     void testLARGE();
+
+
+    void testLEGACYCHIDIST();
+    void testLEGACYCHIINV();
+    void testLEGACYFDIST();
+    void testLEGACYFINV();
+//     void testLEGACYNORMSDIST(); // same as NORMSDIST required for OpenFormula compliance
+
+
 //     void testLINEST(); // ???
 //     void testLOGEST(); // ???
     void testLOGINV();
@@ -91,7 +98,7 @@ private slots:
     void testNORMINV();
 //     void testNORMSDIST();
 //     void testNORMSINV();
-//     void testLEGACYNORMSDIST(); // same as NORMSDIST required for OpenFormula compliance
+
     void testPEARSON();
     void testPERMUT();
     void testPHI();
