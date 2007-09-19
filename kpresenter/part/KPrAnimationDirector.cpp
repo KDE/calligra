@@ -154,29 +154,7 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
             break;
         case NextStep:
             if ( !finished ) {
-                if ( nextStep() ) {
-                    // this only needs to be done if there is a new page
-                    QPixmap oldPage( m_canvas->size() );
-                    m_canvas->render( &oldPage );
-
-                    updateActivePage( m_pages[m_pageIndex] );
-                    updateAnimations();
-
-                    QPixmap newPage( m_canvas->size() );
-                    newPage.fill( Qt::white ); // TODO
-                    QPainter newPainter( &newPage );
-                    newPainter.setClipRect( m_pageRect );
-                    newPainter.setRenderHint( QPainter::Antialiasing );
-                    paintStep( newPainter );
-
-                    // TODO read effect from page
-                    m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, &m_pageEffect );
-                    startTimeLine( m_pageEffect.duration() );
-                }
-                else {
-                    // todo what happens on a new substep
-                    startTimeLine( m_maxShapeDuration );
-                }
+                nextStep();
             }
             break;
         default:
@@ -278,11 +256,8 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
     m_canvas->shapeManager()->paint( painter, m_zoomHandler, false );
 }
 
-bool KPrAnimationDirector::nextStep()
+void KPrAnimationDirector::nextStep()
 {
-    bool newPage = false;
-
-    // check if there are still substeps
     if ( ! m_steps.isEmpty() && m_stepIndex < m_steps.size() - 1 ) {
         // if there are sub steps go to the next substep
         ++m_stepIndex;
@@ -294,9 +269,24 @@ bool KPrAnimationDirector::nextStep()
         // first the current page has to be painted again for the page effect
         m_pageIndex = m_pageIndex < m_pages.size() - 1 ? m_pageIndex + 1 : 0;
         m_stepIndex = 0;
-        newPage = true;
+
+        QPixmap oldPage( m_canvas->size() );
+        m_canvas->render( &oldPage );
+
+        updateActivePage( m_pages[m_pageIndex] );
+        updateAnimations();
+
+        QPixmap newPage( m_canvas->size() );
+        newPage.fill( Qt::white ); // TODO
+        QPainter newPainter( &newPage );
+        newPainter.setClipRect( m_pageRect );
+        newPainter.setRenderHint( QPainter::Antialiasing );
+        paintStep( newPainter );
+
+        // TODO read effect from page
+        m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, &m_pageEffect );
     }
-    return newPage;
+    startTimeLine( m_maxShapeDuration );
 }
 
 void KPrAnimationDirector::previousStep()

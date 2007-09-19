@@ -99,10 +99,8 @@ protected:
 
     /**
      * Update to the next step
-     *
-     * @return true if the next step switched to a new page
      */
-    bool nextStep();
+    void nextStep();
 
     /**
      * Update to the previous step
