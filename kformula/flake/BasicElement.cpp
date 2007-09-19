@@ -30,10 +30,11 @@
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
-    m_baseLine = 0.0;
     m_boundingRect.setTopLeft( QPointF( 0.0, 0.0 ) );
-    m_boundingRect.setWidth( 10.0 );       // standard values
-    m_boundingRect.setHeight( 20.0 );
+    m_boundingRect.setWidth( 7.0 );       // standard values
+    m_boundingRect.setHeight( 10.0 );
+    setBaseLine( 10.0 );
+
 }
 
 BasicElement::~BasicElement()
