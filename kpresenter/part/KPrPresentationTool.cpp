@@ -21,6 +21,7 @@
 
 #include <QKeyEvent>
 
+#include <KoPointerEvent.h>
 #include <KoPACanvas.h>
 
 #include "KPrViewModePresentation.h"
@@ -45,6 +46,9 @@ void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &conve
 
 void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
 {
+    if ( event->button() & Qt::LeftButton ) {
+        m_viewMode.navigate( KPrAnimationDirector::NextStep );
+    }
 }
 
 void KPrPresentationTool::mouseDoubleClickEvent( KoPointerEvent *event )
