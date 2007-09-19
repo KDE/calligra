@@ -54,12 +54,16 @@ void MultiscriptElement::layout( const AttributeManager* am )
     // Get the minimum amount of shifting
     double subscriptshift   = am->doubleOf( "subscriptshift", this ); 
     double superscriptshift = am->doubleOf( "superscriptshift", this );
+    //Add half a thin space between both sup and superscript, so there is a minimum
+    //of a whole thin space between them.
+    double halfthinSpace   = am->mathSpaceValue( "thinmathspace" )/2.0;
+
     
     // The yOffset is the amount the base element is moved down to make
     // room for the superscript
     double yOffset = 0;
     if(m_postSuperscript) {
-        yOffset = m_postSuperscript->height() - m_baseElement->height()/2;
+        yOffset = m_postSuperscript->height() - m_baseElement->height()/2 + halfthinSpace;
         yOffset = qMax( yOffset, superscriptshift );
     }
     double largestWidth;
@@ -69,13 +73,15 @@ void MultiscriptElement::layout( const AttributeManager* am )
         largestWidth = qMax( largestWidth, m_postSuperscript->width());
         m_postSuperscript->setOrigin( QPointF( m_baseElement->width(), 0) );
     }
+
     setWidth( m_baseElement->width() + largestWidth );
-    
+    setBaseLine( yOffset + m_baseElement->height() );
     m_baseElement->setOrigin( QPointF( 0, yOffset ) );
+
 
     if(m_postSubscript) {
         double yPos = yOffset +
-	       	qMax( m_baseElement->height()/2, 
+	       	qMax( m_baseElement->height()/2 + halfthinSpace, 
 		      m_baseElement->height() - m_postSubscript->baseLine() 
 		          + subscriptshift );
         m_postSubscript->setOrigin( QPointF( m_baseElement->width(), yPos ) );
