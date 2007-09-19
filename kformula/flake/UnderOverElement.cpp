@@ -130,7 +130,8 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
         else
             return false;
     }
-    Q_ASSERT(m_baseElement);
+    Q_ASSERT(m_baseElement);  //We should have a least a BasicElement for the base
+    Q_ASSERT(m_underElement || m_overElement);
     return true;
 } 
 
