@@ -128,6 +128,9 @@ protected:
     // helper method for updateAnimations
     void insertAnimations( KPrAnimationController * controller, KoShapeManager * shapeManager );
 
+    // helper method for freeing the resources of the animations
+    void clearAnimations();
+
     // check if there is a set animation in m_animations
     bool hasAnimation();
 

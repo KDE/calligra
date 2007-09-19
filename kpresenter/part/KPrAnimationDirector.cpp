@@ -69,7 +69,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
 
 KPrAnimationDirector::~KPrAnimationDirector()
 {
-    // TODO delete all animations
+    // free used resources
+    delete m_pageEffectRunner;
+    clearAnimations();
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
     m_canvas->masterShapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->masterShapeManager() ) );
@@ -317,11 +319,7 @@ void KPrAnimationDirector::previousStep()
 
 void KPrAnimationDirector::updateAnimations()
 {
-    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
-    for ( ; it != m_animations.end(); ++it ) {
-        delete it.value().second;
-    }
-    m_animations.clear();
+    clearAnimations();
     if ( m_steps.size() > m_stepIndex ) {
         m_maxShapeDuration = 0;
 
@@ -358,6 +356,14 @@ void KPrAnimationDirector::insertAnimations( KPrAnimationController * controller
     }
 }
 
+void KPrAnimationDirector::clearAnimations()
+{
+    QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> >::iterator it( m_animations.begin() );
+    for ( ; it != m_animations.end(); ++it ) {
+        delete it.value().second;
+    }
+    m_animations.clear();
+}
 
 bool KPrAnimationDirector::hasAnimation()
 {
