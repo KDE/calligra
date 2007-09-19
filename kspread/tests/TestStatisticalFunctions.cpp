@@ -966,10 +966,10 @@ void TestStatisticalFunctions::testTRIMMEAN()
 void TestStatisticalFunctions::testTTEST()
 {
     // ODF-tests
-    CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 1 )", Value( 1        ) ); //
-    CHECK_EVAL("TTEST(A19:A23;A24:A28; 2; 1 )", Value( 0.085441 ) ); //
-    CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 2 )", Value( 0.029454 ) ); // 
-    CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 3 )", Value( 0.046213 ) ); //
+    CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 1 )", Value( 0.0427206184 ) ); //
+    CHECK_EVAL("TTEST(A19:A23;A24:A28; 2; 1 )", Value( 0.0854412368 ) ); //
+    CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 2 )", Value( 0.0294544970 ) ); // 
+    CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 3 )", Value( 0.0462125526 ) ); //
     CHECK_EVAL("TTEST(A19:A23;A24:A29; 1; 1 )", Value::errorNUM() ); // same amount of numbers for paired samples
     CHECK_EVAL("TTEST(A19:A19;A24:A24; 1; 3 )", Value::errorNUM() ); // two numbers at least for each sequence
 }
