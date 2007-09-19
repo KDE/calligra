@@ -47,6 +47,7 @@ private slots:
 //     void testBINO();
     void testCHIDIST();
     void testLEGACYCHIDIST();
+    void testLEGACYCHIINV();
 //     void testCOMBIN();  // in -> TestMathFunctions
 //     void testCOMBINA(); // in -> TestMathFunctions
     void testCONFIDENCE();

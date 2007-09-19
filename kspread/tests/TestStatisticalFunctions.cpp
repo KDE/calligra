@@ -283,6 +283,23 @@ void TestStatisticalFunctions::testLEGACYCHIDIST()
     CHECK_EVAL("LEGACYCHIDIST( 4;4)", Value( 0.4060058497 ) ); //
 }
 
+void TestStatisticalFunctions::testLEGACYCHIINV()
+{
+    // ODF-tests LEGACY.CHIINV
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.1;3);3)",   Value( 0.1 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.3;3);3)",   Value( 0.3 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.5;3);3)",   Value( 0.5 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.7;3);3)",   Value( 0.7 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.9;3);3)",   Value( 0.9 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.1;20);20)", Value( 0.1 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.3;20);20)", Value( 0.3 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.5;20);20)", Value( 0.5 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.7;20);20)", Value( 0.7 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(0.9;20);20)", Value( 0.9 ) ); //
+    CHECK_EVAL("LEGACYCHIDIST(LEGACYCHIINV(1.0;20);20)", Value( 1.0 ) ); //
+  
+}
+
 void TestStatisticalFunctions::testCONFIDENCE()
 {
     // ODF-tests

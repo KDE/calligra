@@ -45,6 +45,7 @@ Value func_betainv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combina (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_confidence (valVector args, ValueCalc *calc, FuncExtra *);
@@ -139,6 +140,9 @@ void RegisterStatisticalFunctions()
   f->setParamCount (2);
   repo->add (f);
   f = new Function ("LEGACYCHIDIST", func_legacychidist);
+  f->setParamCount (2);
+  repo->add (f);
+  f = new Function ("LEGACYCHIINV", func_legacychiinv);
   f->setParamCount (2);
   repo->add (f);
   f = new Function ("COMBIN", func_combin);
@@ -1831,6 +1835,33 @@ Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *) {
   return calc->sub (Value(1.0), calc->GetGammaDist (calc->div (fChi, 2.0),
       calc->div (fDF, 2.0), Value(1.0)));
 }
+
+// Function: legacaychiinv
+Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *) {
+  //returns the inverse chi-distribution
+  Value p  = args[0];
+  Value DF = args[1];
+
+  Value result;
+
+  // constraints
+  if (  calc->lower(DF, 1.0)  || calc->greater(DF, 1.0E5) ||
+        calc->greater(p, 1.0) || calc->lower(p,0.0)           )
+    return Value::errorVALUE();
+
+  bool convergenceError;
+
+  // create formula string
+  QString formula = QString("LEGACYCHIDIST(x;%1)").arg(DF.asFloat());
+
+  result = IterateInverse ( p.asFloat(), formula , DF.asFloat()*0.5, DF.asFloat(), convergenceError);
+
+  if ( convergenceError )
+    return Value::errorVALUE();
+
+  return result;
+}
+
 
 // two-array-walk functions used in the two-sum functions
 
