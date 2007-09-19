@@ -69,6 +69,7 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPag
 
 KPrAnimationDirector::~KPrAnimationDirector()
 {
+    // TODO delete all animations
     //set the KoShapeManagerPaintingStrategy in the KoShapeManagers
     m_canvas->shapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->shapeManager() ) );
     m_canvas->masterShapeManager()->setPaintingStrategy( new KoShapeManagerPaintingStrategy( m_canvas->masterShapeManager() ) );
@@ -149,6 +150,7 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
             changePage( navigation );
             break;
         case PreviousStep:
+            previousStep();
             break;
         case NextStep:
             if ( !finished ) {
@@ -295,6 +297,32 @@ bool KPrAnimationDirector::nextStep()
         newPage = true;
     }
     return newPage;
+}
+
+void KPrAnimationDirector::previousStep()
+{
+    if ( m_stepIndex > 0 ) {
+        --m_stepIndex;
+        // trigger a repaint of the running animations
+        finishAnimations();
+        updateAnimations();
+    }
+    else {
+        if ( m_pageIndex > 0 ) {
+            --m_pageIndex;
+            updateActivePage( m_pages[m_pageIndex] );
+            Q_ASSERT( m_steps.size() > 0 );
+            m_stepIndex = m_steps.size() - 1;
+            updateAnimations();
+            // trigger repaint
+            m_canvas->update();
+            // cancel a running page effect
+            delete m_pageEffectRunner;
+            m_pageEffectRunner = 0;
+        }
+    }
+    // when going back you allway go to the end of the effect
+    finishAnimations();
 }
 
 void KPrAnimationDirector::updateAnimations()

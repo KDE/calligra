@@ -104,6 +104,11 @@ protected:
      */
     bool nextStep();
 
+    /**
+     * Update to the previous step
+     */
+    void previousStep();
+
     // paint the given step to the painter
     void paintStep( QPainter & painter );
 
