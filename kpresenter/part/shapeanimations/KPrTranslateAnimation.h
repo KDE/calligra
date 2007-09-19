@@ -39,9 +39,9 @@ public:
     /// reimplemented
     virtual void animateRect( QRectF & rect, KPrAnimationData * animationData );
     /// reimplemented
-    virtual void next( int currentTime, KPrAnimationData * animationData ) = 0;
+    virtual void next( int currentTime, KPrAnimationData * animationData );
     /// reimplemented
-    virtual void finish( KPrAnimationData * animationData ) = 0;
+    virtual void finish( KPrAnimationData * animationData );
 };
 
 #endif /* KPRTRANSLATEANIMATION_H */

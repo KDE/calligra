@@ -19,15 +19,9 @@
 
 #include "KPrAnimationMoveAppear.h"
 
-#include <QPainter>
-#include <KoCanvasBase.h>
 #include <KoShape.h>
-#include <KoViewConverter.h>
-#include <kdebug.h>
 
 #include "KPrAnimationData.h"
-
-#define TIMEFACTOR 1000.0
 
 KPrAnimationMoveAppear::KPrAnimationMoveAppear( KoShape * shape, int step )
 : KPrTranslateAnimation( shape, step, Appear )
@@ -49,24 +43,4 @@ KPrAnimationData * KPrAnimationMoveAppear::animationData( KoCanvasBase * canvas,
     data->m_timeLine.setCurveShape( QTimeLine::LinearCurve );
     data->m_timeLine.setFrameRange( int( -x * TIMEFACTOR ), 0 );
     return data;
-}
-
-void KPrAnimationMoveAppear::next( int currentTime, KPrAnimationData * animationData )
-{
-    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
-    Q_ASSERT( data );
-    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
-    data->m_translate.setX( data->m_timeLine.frameForTime( currentTime ) / TIMEFACTOR );
-    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
-    data->m_finished = data->m_translate.x() == 0;
-    kDebug() << currentTime << data->m_translate << data->m_finished << data->m_boundingRect;
-}
-
-void KPrAnimationMoveAppear::finish( KPrAnimationData * animationData )
-{
-    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
-    Q_ASSERT( data );
-    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
-    data->m_translate.setX( 0 );
-    data->m_canvas->updateCanvas( data->m_boundingRect );
 }

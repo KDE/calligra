@@ -21,6 +21,8 @@
 
 #include <QPainter>
 
+#include <QPainter>
+#include <KoCanvasBase.h>
 #include <KoViewConverter.h>
 
 #include "KPrAnimationData.h"
@@ -47,4 +49,23 @@ void KPrTranslateAnimation::animateRect( QRectF & rect, KPrAnimationData * anima
     KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
     Q_ASSERT( data );
     rect.translate( data->m_translate );
+}
+
+void KPrTranslateAnimation::next( int currentTime, KPrAnimationData * animationData )
+{
+    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
+    Q_ASSERT( data );
+    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
+    data->m_translate.setX( data->m_timeLine.frameForTime( currentTime ) / TIMEFACTOR );
+    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
+    data->m_finished = data->m_timeLine.frameForTime( currentTime ) == data->m_timeLine.endFrame();
+}
+
+void KPrTranslateAnimation::finish( KPrAnimationData * animationData )
+{
+    KPrAnimationDataTranslate * data = dynamic_cast<KPrAnimationDataTranslate *>( animationData );
+    Q_ASSERT( data );
+    data->m_canvas->updateCanvas( data->m_boundingRect.translated( data->m_translate ) );
+    data->m_translate.setX( data->m_timeLine.endFrame() / TIMEFACTOR );
+    data->m_canvas->updateCanvas( data->m_boundingRect );
 }

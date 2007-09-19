@@ -31,8 +31,6 @@ public:
     virtual ~KPrAnimationMoveAppear();
 
     virtual KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect );
-    virtual void next( int currentTime, KPrAnimationData * animationData );
-    virtual void finish( KPrAnimationData * animationData );
 };
 
 #endif /* KPRANIMATIONMOVEAPPEAR_H */

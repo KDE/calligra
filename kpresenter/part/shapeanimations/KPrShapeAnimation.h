@@ -24,6 +24,8 @@
 
 #include "kpresenter_export.h"
 
+#define TIMEFACTOR 1000.0
+
 class QPainter;
 class QRectF;
 class KoShape;
