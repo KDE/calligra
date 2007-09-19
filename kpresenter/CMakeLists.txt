@@ -20,7 +20,7 @@ add_subdirectory( part )
 #
 #add_subdirectory( autoforms )
 add_subdirectory( pics )
-#add_subdirectory( templates )
+add_subdirectory( templates )
 #add_subdirectory( dtd )
 #add_subdirectory( slideshow )
 #add_subdirectory( toolbar )
