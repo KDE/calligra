@@ -46,6 +46,7 @@
 
 // Some class references that don't need real includes.
 class QStandardItemModel;
+
 class KoXmlWriter;
 class KoGenStyles;
 
@@ -90,10 +91,9 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    OdfChartType         chartType() const       { return m_type;       }
+    OdfChartType         chartType() const       { return m_type;        }
     QStandardItemModel  *data()                  { return m_currentData; }
-    KDChart::Chart      *chart()     const       { return m_chart;      }
-
+    KDChart::Chart      *chart()     const       { return m_chart;       }
 
     // Data in rows or columns.
     DataDirection  dataDirection() const    { return m_dataDirection; }
@@ -139,11 +139,7 @@ signals:
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
-#if 0
-    bool  loadOldXML( const KoXmlDocument& doc );
-    bool  loadAuxiliary( const KoXmlDocument& doc );
-    bool  loadData( const KoXmlDocument& doc/* , KDChartTableData& currentData*/ );
-#endif
+
     bool  loadOasisData( const KoXmlElement& tableElem );
     void  saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
     void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const;

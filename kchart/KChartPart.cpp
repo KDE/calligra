@@ -89,7 +89,6 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
     m_chartShape( new ChartShape ),
-
     m_chart( 0 ),
     m_currentData( 0 ),
     m_rowLabels(), m_colLabels(),
@@ -102,23 +101,6 @@ KChartPart::KChartPart( QWidget *parentWidget,
 
     // Init some members that need it.
     {
-#if 0
-	// Create the chart parameters and let the default be a bar chart
-	// with 3D looks.
-	m_params = new KChartParams( this );
-	m_params->setChartType( KChartParams::Bar );
-	m_params->setBarChartSubType( KChartParams::BarNormal );
-	m_params->setThreeDBars( true );
-
-        //Changed this to use columns rather than rows by default
-        //because I believe that this is the more common format for
-        //entering data (you can see this looking at the fact that
-        //most spreadsheet packages allow far more rows than columns)
-        //-- Robert Knight
-
-	// Handle data in columns by default
-	m_params->setDataDirection( KChartParams::DataColumns );
-#else
 	// FIXME: Make the default chart look like the default chart
 	//        in KChart 1.x
         m_type    = BarChartType;
@@ -133,7 +115,6 @@ KChartPart::KChartPart( QWidget *parentWidget,
         m_dataDirection   = DataRowsDirection;
         m_firstRowAsLabel = false;
         m_firstColAsLabel = false;
-#endif
     }
 
     m_bCanChangeValue = true;
@@ -174,11 +155,6 @@ void KChartPart::initNullChart()
 
     // Empty data.  Note, we don't use (0,0) or (1,1) for the size
     // here, because otherwise KDChart won't draw anything
-#if 0
-    m_currentData.expand(2, 2);
-    m_params->setFirstRowAsLabel(false);
-    m_params->setFirstColAsLabel(false);
-#else
     if ( m_currentData )
         delete m_currentData;
     m_currentData = new QStandardItemModel();
@@ -189,7 +165,6 @@ void KChartPart::initNullChart()
     m_currentData->setDataHasHorizontalHeaders( false );
 #endif
 
-#endif
     // Fill column and row labels.
     m_colLabels << QString("");
     m_rowLabels << QString("");
@@ -204,7 +179,6 @@ void KChartPart::initNullChart()
 
 void KChartPart::generateBarChartTemplate()
 {
-#if 1
     int  col;
     int  row;
 
@@ -220,7 +194,7 @@ void KChartPart::generateBarChartTemplate()
         m_currentData.setUsedCols( 4 );
 #endif
 
-#if 0
+#if 0                           // Not yet (and move to the shape
         m_currentData->beginInsertRows( QModelIndex(), 0, 3 );
         for (row = 0; row < 4; row++) {
             m_currentData->insertRow( row );
@@ -238,14 +212,9 @@ void KChartPart::generateBarChartTemplate()
 
             for (col = 0; col < 4; col++) {
                 kDebug() <<"row, col:" << row <<"," << col;
-#if 0
-                QModelIndex  index = m_currentData->index( row, col, QModelIndex() );
-                m_currentData->setData( index, static_cast <double>(row + col) ); 
-#else
-                m_currentData->setItem( row, col, 
-                                        new QStandardItem( QString::number( row + col ) ) );
-#endif
 
+                m_currentData->setItem( row, col,
+                                        new QStandardItem( QString::number( row + col ) ) );
 		// Fill column label, but only on the first iteration.
 		if (row == 0) {
                     m_currentData->setHeaderData( col, Qt::Horizontal,
@@ -258,9 +227,6 @@ void KChartPart::generateBarChartTemplate()
                                           i18n("Row %1", row + 1) );
 	}
     }
-#else
-    m_currentData->loadFromCSV( "test.csv" );
-#endif
 
     setChartDefaults();
 

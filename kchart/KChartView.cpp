@@ -67,8 +67,6 @@
 using namespace std;
 
 
-//#include "sheetdlg.h"
-
 namespace KChart
 {
 
@@ -187,11 +185,7 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 
 void KChartView::updateGuiTypeOfChart()
 {
-#if 0
-    KDChartParams* params = ((KChartPart*)koDocument())->params();
-#else
     KChartPart *part = qobject_cast<KChartPart*>( koDocument() );
-#endif
 
     switch(part->chartType()) {
     case BarChartType:
