@@ -48,8 +48,12 @@ const QList<BasicElement*> UnderOverElement::childElements()
     return tmp;
 }
 
-void UnderOverElement::paint( QPainter& , AttributeManager* )
-{ /*do nothing as UnderOverElement has no visual representance*/ }
+void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
+{
+    /*do nothing as UnderOverElement has no visual representance*/
+    Q_UNUSED(painter)
+    Q_UNUSED(am)
+}
 
 void UnderOverElement::layout( const AttributeManager* am )
 {
@@ -130,7 +134,7 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
         else
             return false;
     }
-    Q_ASSERT(m_baseElement);  //We should have a least a BasicElement for the base
+    Q_ASSERT(m_baseElement);  //We should have at least a BasicElement for the base
     Q_ASSERT(m_underElement || m_overElement);
     return true;
 } 

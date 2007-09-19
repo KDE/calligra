@@ -78,11 +78,14 @@ private:
     /// The BasicElement representing the base element of the multiscript
     BasicElement* m_baseElement;
 
+    //For now, we will only worry about msub, msup and msubsup
+    //All of these will need to become QList<BasicElement*> for mmultiscript support
+    
     /// The BasicElement representing the subscript left to the base element
-    BasicElement* m_preSubscript;
+    //BasicElement* m_preSubscript;
 
     /// The BasicElement representing the superscript left to the base element
-    BasicElement* m_preSuperscript;
+    //BasicElement* m_preSuperscript;
 
     /// The BasicElement representing the subscript right to the base element
     BasicElement* m_postSubscript;
