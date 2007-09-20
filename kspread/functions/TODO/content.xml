@@ -38,10 +38,7 @@
    <style:table-row-properties fo:break-before="auto" style:row-height="19pt"/>
   </style:style>
   <style:style style:name="ro2" style:family="table-row">
-   <style:table-row-properties fo:break-before="auto" style:row-height="14pt"/>
-  </style:style>
-  <style:style style:name="ro3" style:family="table-row">
-   <style:table-row-properties fo:break-before="auto" style:row-height="12pt"/>
+   <style:table-row-properties fo:break-before="auto" style:row-height="13pt"/>
   </style:style>
   <style:style style:name="ce1" style:family="table-cell">
    <style:table-cell-properties fo:background-color="#ffffff" style:cell-protect="none" style:vertical-align="middle"/>
@@ -155,7 +152,7 @@
    <text:p>Status</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell table:style-name="ce2"/>
   <table:table-cell table:style-name="ce3" table:number-columns-repeated="2"/>
   <table:table-cell table:style-name="ce4"/>
@@ -168,7 +165,7 @@
   </table:table-cell>
   <table:table-cell table:number-columns-repeated="6"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MDETERM" table:style-name="ce5">
    <text:p>MDETERM</text:p>
   </table:table-cell>
@@ -187,7 +184,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MINVERSE" table:style-name="ce5">
    <text:p>MINVERSE</text:p>
   </table:table-cell>
@@ -206,7 +203,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MMULT" table:style-name="ce5">
    <text:p>MMULT</text:p>
   </table:table-cell>
@@ -225,7 +222,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MUNIT" table:style-name="ce5">
    <text:p>MUNIT</text:p>
   </table:table-cell>
@@ -244,7 +241,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUMPRODUCT" table:style-name="ce5">
    <text:p>SUMPRODUCT</text:p>
   </table:table-cell>
@@ -260,7 +257,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUMX2MY2" table:style-name="ce5">
    <text:p>SUMX2MY2</text:p>
   </table:table-cell>
@@ -276,7 +273,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUMX2PY2" table:style-name="ce5">
    <text:p>SUMX2PY2</text:p>
   </table:table-cell>
@@ -292,7 +289,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUMXMY2" table:style-name="ce5">
    <text:p>SUMXMY2</text:p>
   </table:table-cell>
@@ -308,7 +305,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TRANSPOSE" table:style-name="ce5">
    <text:p>TRANSPOSE</text:p>
   </table:table-cell>
@@ -324,7 +321,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -334,7 +331,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BITAND" table:style-name="ce5">
    <text:p>BITAND</text:p>
   </table:table-cell>
@@ -353,7 +350,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BITLSHIFT" table:style-name="ce5">
    <text:p>BITLSHIFT</text:p>
   </table:table-cell>
@@ -372,7 +369,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BITOR" table:style-name="ce5">
    <text:p>BITOR</text:p>
   </table:table-cell>
@@ -391,7 +388,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BITRSHIFT" table:style-name="ce5">
    <text:p>BITRSHIFT</text:p>
   </table:table-cell>
@@ -410,7 +407,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BITXOR" table:style-name="ce5">
    <text:p>BITXOR</text:p>
   </table:table-cell>
@@ -429,7 +426,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="6"/>
   <table:table-cell table:style-name="ce7"/>
  </table:table-row>
@@ -440,7 +437,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FINDB" table:style-name="ce5">
    <text:p>FINDB</text:p>
   </table:table-cell>
@@ -452,7 +449,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEFTB" table:style-name="ce5">
    <text:p>LEFTB</text:p>
   </table:table-cell>
@@ -464,7 +461,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LENB" table:style-name="ce5">
    <text:p>LENB</text:p>
   </table:table-cell>
@@ -476,7 +473,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MIDB" table:style-name="ce5">
    <text:p>MIDB</text:p>
   </table:table-cell>
@@ -488,7 +485,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="REPLACEB" table:style-name="ce5">
    <text:p>REPLACEB</text:p>
   </table:table-cell>
@@ -500,7 +497,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RIGHTB" table:style-name="ce5">
    <text:p>RIGHTB</text:p>
   </table:table-cell>
@@ -512,7 +509,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SEARCHB" table:style-name="ce5">
    <text:p>SEARCHB</text:p>
   </table:table-cell>
@@ -524,7 +521,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -534,7 +531,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COMPLEX" table:style-name="ce5">
    <text:p>COMPLEX</text:p>
   </table:table-cell>
@@ -553,7 +550,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMABS" table:style-name="ce5">
    <text:p>IMABS</text:p>
   </table:table-cell>
@@ -572,7 +569,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMAGINARY" table:style-name="ce5">
    <text:p>IMAGINARY</text:p>
   </table:table-cell>
@@ -591,7 +588,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMARGUMENT" table:style-name="ce5">
    <text:p>IMARGUMENT</text:p>
   </table:table-cell>
@@ -610,7 +607,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMCONJUGATE" table:style-name="ce5">
    <text:p>IMCONJUGATE</text:p>
   </table:table-cell>
@@ -629,7 +626,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMCOS" table:style-name="ce5">
    <text:p>IMCOS</text:p>
   </table:table-cell>
@@ -648,7 +645,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMCOSH" table:style-name="ce10">
    <text:p>IMCOSH</text:p>
   </table:table-cell>
@@ -667,7 +664,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMDIV" table:style-name="ce5">
    <text:p>IMDIV</text:p>
   </table:table-cell>
@@ -686,7 +683,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMEXP" table:style-name="ce5">
    <text:p>IMEXP</text:p>
   </table:table-cell>
@@ -705,7 +702,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMLN" table:style-name="ce5">
    <text:p>IMLN</text:p>
   </table:table-cell>
@@ -724,7 +721,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMLOG10" table:style-name="ce5">
    <text:p>IMLOG10</text:p>
   </table:table-cell>
@@ -745,7 +742,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMLOG2" table:style-name="ce5">
    <text:p>IMLOG2</text:p>
   </table:table-cell>
@@ -766,7 +763,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMPOWER" table:style-name="ce5">
    <text:p>IMPOWER</text:p>
   </table:table-cell>
@@ -785,7 +782,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMPRODUCT" table:style-name="ce5">
    <text:p>IMPRODUCT</text:p>
   </table:table-cell>
@@ -804,7 +801,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMREAL" table:style-name="ce5">
    <text:p>IMREAL</text:p>
   </table:table-cell>
@@ -823,7 +820,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMSIN" table:style-name="ce5">
    <text:p>IMSIN</text:p>
   </table:table-cell>
@@ -842,7 +839,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMSINH" table:style-name="ce10">
    <text:p>IMSINH</text:p>
   </table:table-cell>
@@ -861,7 +858,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMSQRT" table:style-name="ce5">
    <text:p>IMSQRT</text:p>
   </table:table-cell>
@@ -880,7 +877,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMSUB" table:style-name="ce5">
    <text:p>IMSUB</text:p>
   </table:table-cell>
@@ -899,7 +896,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMSUM" table:style-name="ce5">
    <text:p>IMSUM</text:p>
   </table:table-cell>
@@ -918,7 +915,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMTAN" table:style-name="ce5">
    <text:p>IMTAN</text:p>
   </table:table-cell>
@@ -937,7 +934,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IMTANH" table:style-name="ce10">
    <text:p>IMTANH</text:p>
   </table:table-cell>
@@ -956,7 +953,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -966,7 +963,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DAVERAGE" table:style-name="ce5">
    <text:p>DAVERAGE</text:p>
   </table:table-cell>
@@ -985,7 +982,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DCOUNT" table:style-name="ce5">
    <text:p>DCOUNT</text:p>
   </table:table-cell>
@@ -1004,7 +1001,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DCOUNTA" table:style-name="ce5">
    <text:p>DCOUNTA</text:p>
   </table:table-cell>
@@ -1023,7 +1020,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DGET" table:style-name="ce5">
    <text:p>DGET</text:p>
   </table:table-cell>
@@ -1042,7 +1039,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DMAX" table:style-name="ce5">
    <text:p>DMAX</text:p>
   </table:table-cell>
@@ -1061,7 +1058,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DMIN" table:style-name="ce5">
    <text:p>DMIN</text:p>
   </table:table-cell>
@@ -1080,7 +1077,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DPRODUCT" table:style-name="ce5">
    <text:p>DPRODUCT</text:p>
   </table:table-cell>
@@ -1099,7 +1096,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DSTDEV" table:style-name="ce5">
    <text:p>DSTDEV</text:p>
   </table:table-cell>
@@ -1118,7 +1115,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DSTDEVP" table:style-name="ce5">
    <text:p>DSTDEVP</text:p>
   </table:table-cell>
@@ -1137,7 +1134,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DSUM" table:style-name="ce5">
    <text:p>DSUM</text:p>
   </table:table-cell>
@@ -1156,7 +1153,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DVAR" table:style-name="ce5">
    <text:p>DVAR</text:p>
   </table:table-cell>
@@ -1175,7 +1172,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DVARP" table:style-name="ce5">
    <text:p>DVARP</text:p>
   </table:table-cell>
@@ -1194,7 +1191,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -1204,7 +1201,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DATE" table:style-name="ce5">
    <text:p>DATE</text:p>
   </table:table-cell>
@@ -1223,7 +1220,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DATE2UNIX" table:style-name="ce5">
    <text:p>DATE2UNIX</text:p>
   </table:table-cell>
@@ -1246,7 +1243,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DATEDIF" table:style-name="ce5">
    <text:p>DATEDIF</text:p>
   </table:table-cell>
@@ -1267,7 +1264,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DATESTRING" table:style-name="ce5">
    <text:p>DATESTRING</text:p>
   </table:table-cell>
@@ -1279,7 +1276,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DATEVALUE" table:style-name="ce5">
    <text:p>DATEVALUE</text:p>
   </table:table-cell>
@@ -1298,7 +1295,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DAY" table:style-name="ce5">
    <text:p>DAY</text:p>
   </table:table-cell>
@@ -1317,7 +1314,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DAYS" table:style-name="ce5">
    <text:p>DAYS</text:p>
   </table:table-cell>
@@ -1336,7 +1333,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DAYS360" table:style-name="ce5">
    <text:p>DAYS360</text:p>
   </table:table-cell>
@@ -1355,7 +1352,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EDATE" table:style-name="ce5">
    <text:p>EDATE</text:p>
   </table:table-cell>
@@ -1374,7 +1371,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EOMONTH" table:style-name="ce5">
    <text:p>EOMONTH</text:p>
   </table:table-cell>
@@ -1393,7 +1390,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HOUR" table:style-name="ce5">
    <text:p>HOUR</text:p>
   </table:table-cell>
@@ -1412,7 +1409,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MINUTE" table:style-name="ce5">
    <text:p>MINUTE</text:p>
   </table:table-cell>
@@ -1431,7 +1428,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MONTH" table:style-name="ce5">
    <text:p>MONTH</text:p>
   </table:table-cell>
@@ -1450,7 +1447,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NETWORKDAYS" table:style-name="ce5">
    <text:p>NETWORKDAYS</text:p>
   </table:table-cell>
@@ -1469,7 +1466,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NOW" table:style-name="ce5">
    <text:p>NOW</text:p>
   </table:table-cell>
@@ -1488,7 +1485,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SECOND" table:style-name="ce5">
    <text:p>SECOND</text:p>
   </table:table-cell>
@@ -1507,7 +1504,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TIME" table:style-name="ce5">
    <text:p>TIME</text:p>
   </table:table-cell>
@@ -1526,7 +1523,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TIMEVALUE" table:style-name="ce5">
    <text:p>TIMEVALUE</text:p>
   </table:table-cell>
@@ -1545,7 +1542,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TODAY" table:style-name="ce5">
    <text:p>TODAY</text:p>
   </table:table-cell>
@@ -1564,7 +1561,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="UNIX2DATE" table:style-name="ce5">
    <text:p>UNIX2DATE</text:p>
   </table:table-cell>
@@ -1587,7 +1584,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="WEEKDAY" table:style-name="ce5">
    <text:p>WEEKDAY</text:p>
   </table:table-cell>
@@ -1606,7 +1603,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="WEEKNUM" table:style-name="ce5">
    <text:p>WEEKNUM</text:p>
   </table:table-cell>
@@ -1627,7 +1624,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="WORKDAY" table:style-name="ce5">
    <text:p>WORKDAY</text:p>
   </table:table-cell>
@@ -1646,7 +1643,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="YEAR" table:style-name="ce5">
    <text:p>YEAR</text:p>
   </table:table-cell>
@@ -1665,7 +1662,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="YEARFRAC" table:style-name="ce5">
    <text:p>YEARFRAC</text:p>
   </table:table-cell>
@@ -1686,7 +1683,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="6"/>
   <table:table-cell table:style-name="ce9"/>
  </table:table-row>
@@ -1697,7 +1694,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DDE" table:style-name="ce5">
    <text:p>DDE</text:p>
   </table:table-cell>
@@ -1709,7 +1706,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HYPERLINK" table:style-name="ce5">
    <text:p>HYPERLINK</text:p>
   </table:table-cell>
@@ -1721,7 +1718,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RTD" table:style-name="ce5">
    <text:p>RTD</text:p>
   </table:table-cell>
@@ -1733,7 +1730,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="6"/>
   <table:table-cell table:style-name="ce9"/>
  </table:table-row>
@@ -1744,7 +1741,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ACCRINT" table:style-name="ce5">
    <text:p>ACCRINT</text:p>
   </table:table-cell>
@@ -1760,7 +1757,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ACCRINTM" table:style-name="ce5">
    <text:p>ACCRINTM</text:p>
   </table:table-cell>
@@ -1779,7 +1776,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="AMORDEGRC" table:style-name="ce5">
    <text:p>AMORDEGRC</text:p>
   </table:table-cell>
@@ -1796,7 +1793,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="AMORLINC" table:style-name="ce5">
    <text:p>AMORLINC</text:p>
   </table:table-cell>
@@ -1815,7 +1812,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUPDAYBS" table:style-name="ce5">
    <text:p>COUPDAYBS</text:p>
   </table:table-cell>
@@ -1827,7 +1824,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUPDAYS" table:style-name="ce5">
    <text:p>COUPDAYS</text:p>
   </table:table-cell>
@@ -1839,7 +1836,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUPDAYSNC" table:style-name="ce5">
    <text:p>COUPDAYSNC</text:p>
   </table:table-cell>
@@ -1851,7 +1848,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUPNCD" table:style-name="ce5">
    <text:p>COUPNCD</text:p>
   </table:table-cell>
@@ -1863,7 +1860,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUPNUM" table:style-name="ce5">
    <text:p>COUPNUM</text:p>
   </table:table-cell>
@@ -1882,7 +1879,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUPPCD" table:style-name="ce5">
    <text:p>COUPPCD</text:p>
   </table:table-cell>
@@ -1894,7 +1891,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CUMIPMT" table:style-name="ce5">
    <text:p>CUMIPMT</text:p>
   </table:table-cell>
@@ -1910,7 +1907,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CUMPRINC" table:style-name="ce5">
    <text:p>CUMPRINC</text:p>
   </table:table-cell>
@@ -1926,7 +1923,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DB" table:style-name="ce5">
    <text:p>DB</text:p>
   </table:table-cell>
@@ -1945,7 +1942,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DDB" table:style-name="ce5">
    <text:p>DDB</text:p>
   </table:table-cell>
@@ -1964,7 +1961,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DISC" table:style-name="ce5">
    <text:p>DISC</text:p>
   </table:table-cell>
@@ -1983,7 +1980,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DOLLARDE" table:style-name="ce5">
    <text:p>DOLLARDE</text:p>
   </table:table-cell>
@@ -2002,7 +1999,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DOLLARFR" table:style-name="ce5">
    <text:p>DOLLARFR</text:p>
   </table:table-cell>
@@ -2021,7 +2018,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DURATION" table:style-name="ce5">
    <text:p>DURATION</text:p>
   </table:table-cell>
@@ -2040,7 +2037,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DURATION_ADD" table:style-name="ce5">
    <text:p>DURATION_ADD</text:p>
   </table:table-cell>
@@ -2059,7 +2056,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EFFECT" table:style-name="ce5">
    <text:p>EFFECT</text:p>
   </table:table-cell>
@@ -2078,7 +2075,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EURO" table:style-name="ce5">
    <text:p>EURO</text:p>
   </table:table-cell>
@@ -2097,7 +2094,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EUROCONVERT" table:style-name="ce5">
    <text:p>EUROCONVERT</text:p>
   </table:table-cell>
@@ -2116,7 +2113,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FV" table:style-name="ce5">
    <text:p>FV</text:p>
   </table:table-cell>
@@ -2132,7 +2129,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FVSCHEDULE" table:style-name="ce5">
    <text:p>FVSCHEDULE</text:p>
   </table:table-cell>
@@ -2144,7 +2141,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="INTRATE" table:style-name="ce5">
    <text:p>INTRATE</text:p>
   </table:table-cell>
@@ -2160,7 +2157,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IPMT" table:style-name="ce5">
    <text:p>IPMT</text:p>
   </table:table-cell>
@@ -2176,7 +2173,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IRR" table:style-name="ce5">
    <text:p>IRR</text:p>
   </table:table-cell>
@@ -2188,7 +2185,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISPMT" table:style-name="ce5">
    <text:p>ISPMT</text:p>
   </table:table-cell>
@@ -2204,7 +2201,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEVELCOUPON" table:style-name="ce5">
    <text:p>LEVELCOUPON</text:p>
   </table:table-cell>
@@ -2223,7 +2220,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MDURATION" table:style-name="ce5">
    <text:p>MDURATION</text:p>
   </table:table-cell>
@@ -2242,7 +2239,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MIRR" table:style-name="ce5">
    <text:p>MIRR</text:p>
   </table:table-cell>
@@ -2261,7 +2258,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NOMINAL" table:style-name="ce5">
    <text:p>NOMINAL</text:p>
   </table:table-cell>
@@ -2280,7 +2277,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NPER" table:style-name="ce5">
    <text:p>NPER</text:p>
   </table:table-cell>
@@ -2299,7 +2296,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NPV" table:style-name="ce5">
    <text:p>NPV</text:p>
   </table:table-cell>
@@ -2318,7 +2315,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ODDFPRICE" table:style-name="ce5">
    <text:p>ODDFPRICE</text:p>
   </table:table-cell>
@@ -2330,7 +2327,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ODDFYIELD" table:style-name="ce5">
    <text:p>ODDFYIELD</text:p>
   </table:table-cell>
@@ -2342,7 +2339,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ODDLPRICE" table:style-name="ce5">
    <text:p>ODDLPRICE</text:p>
   </table:table-cell>
@@ -2361,7 +2358,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ODDLYIELD" table:style-name="ce5">
    <text:p>ODDLYIELD</text:p>
   </table:table-cell>
@@ -2377,7 +2374,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PMT" table:style-name="ce5">
    <text:p>PMT</text:p>
   </table:table-cell>
@@ -2393,7 +2390,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PPMT" table:style-name="ce5">
    <text:p>PPMT</text:p>
   </table:table-cell>
@@ -2409,7 +2406,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PRICE" table:style-name="ce5">
    <text:p>PRICE</text:p>
   </table:table-cell>
@@ -2421,7 +2418,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PRICEDISC" table:style-name="ce5">
    <text:p>PRICEDISC</text:p>
   </table:table-cell>
@@ -2433,7 +2430,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PRICEMAT" table:style-name="ce5">
    <text:p>PRICEMAT</text:p>
   </table:table-cell>
@@ -2445,7 +2442,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PV" table:style-name="ce5">
    <text:p>PV</text:p>
   </table:table-cell>
@@ -2464,7 +2461,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RATE" table:style-name="ce5">
    <text:p>RATE</text:p>
   </table:table-cell>
@@ -2476,7 +2473,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RECEIVED" table:style-name="ce5">
    <text:p>RECEIVED</text:p>
   </table:table-cell>
@@ -2495,7 +2492,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RRI" table:style-name="ce5">
    <text:p>RRI</text:p>
   </table:table-cell>
@@ -2514,7 +2511,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SLN" table:style-name="ce5">
    <text:p>SLN</text:p>
   </table:table-cell>
@@ -2533,7 +2530,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SYD" table:style-name="ce5">
    <text:p>SYD</text:p>
   </table:table-cell>
@@ -2552,7 +2549,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TBILLEQ" table:style-name="ce5">
    <text:p>TBILLEQ</text:p>
   </table:table-cell>
@@ -2571,7 +2568,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TBILLPRICE" table:style-name="ce5">
    <text:p>TBILLPRICE</text:p>
   </table:table-cell>
@@ -2590,7 +2587,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TBILLYIELD" table:style-name="ce5">
    <text:p>TBILLYIELD</text:p>
   </table:table-cell>
@@ -2609,7 +2606,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VDB" table:style-name="ce5">
    <text:p>VDB</text:p>
   </table:table-cell>
@@ -2628,7 +2625,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="XIRR" table:style-name="ce5">
    <text:p>XIRR</text:p>
   </table:table-cell>
@@ -2647,7 +2644,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="XNPV" table:style-name="ce5">
    <text:p>XNPV</text:p>
   </table:table-cell>
@@ -2666,7 +2663,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="YIELD" table:style-name="ce5">
    <text:p>YIELD</text:p>
   </table:table-cell>
@@ -2678,7 +2675,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="YIELDDISC" table:style-name="ce5">
    <text:p>YIELDDISC</text:p>
   </table:table-cell>
@@ -2697,7 +2694,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="YIELDMAT" table:style-name="ce5">
    <text:p>YIELDMAT</text:p>
   </table:table-cell>
@@ -2716,7 +2713,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ZEROCOUPON" table:style-name="ce5">
    <text:p>ZEROCOUPON</text:p>
   </table:table-cell>
@@ -2735,7 +2732,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -2745,7 +2742,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="AREAS" table:style-name="ce5">
    <text:p>AREAS</text:p>
   </table:table-cell>
@@ -2761,7 +2758,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CELL" table:style-name="ce5">
    <text:p>CELL</text:p>
   </table:table-cell>
@@ -2773,7 +2770,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COLUMN" table:style-name="ce5">
    <text:p>COLUMN</text:p>
   </table:table-cell>
@@ -2789,7 +2786,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COLUMNS" table:style-name="ce5">
    <text:p>COLUMNS</text:p>
   </table:table-cell>
@@ -2805,7 +2802,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUNT" table:style-name="ce5">
    <text:p>COUNT</text:p>
   </table:table-cell>
@@ -2821,7 +2818,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUNTA" table:style-name="ce5">
    <text:p>COUNTA</text:p>
   </table:table-cell>
@@ -2837,7 +2834,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUNTBLANK" table:style-name="ce5">
    <text:p>COUNTBLANK</text:p>
   </table:table-cell>
@@ -2853,7 +2850,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COUNTIF" table:style-name="ce5">
    <text:p>COUNTIF</text:p>
   </table:table-cell>
@@ -2869,7 +2866,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CURRENT" table:style-name="ce5">
    <text:p>CURRENT</text:p>
   </table:table-cell>
@@ -2881,7 +2878,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ERROR.TYPE" table:style-name="ce5">
    <text:p>ERROR.TYPE</text:p>
   </table:table-cell>
@@ -2900,7 +2897,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FORMULA" table:style-name="ce5">
    <text:p>FORMULA</text:p>
   </table:table-cell>
@@ -2912,7 +2909,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="INFO" table:style-name="ce5">
    <text:p>INFO</text:p>
   </table:table-cell>
@@ -2928,7 +2925,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISBLANK" table:style-name="ce5">
    <text:p>ISBLANK</text:p>
   </table:table-cell>
@@ -2944,7 +2941,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISERR" table:style-name="ce5">
    <text:p>ISERR</text:p>
   </table:table-cell>
@@ -2960,7 +2957,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISERROR" table:style-name="ce5">
    <text:p>ISERROR</text:p>
   </table:table-cell>
@@ -2976,7 +2973,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISEVEN" table:style-name="ce5">
    <text:p>ISEVEN</text:p>
   </table:table-cell>
@@ -2995,7 +2992,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISFORMULA" table:style-name="ce5">
    <text:p>ISFORMULA</text:p>
   </table:table-cell>
@@ -3007,7 +3004,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISLOGICAL" table:style-name="ce5">
    <text:p>ISLOGICAL</text:p>
   </table:table-cell>
@@ -3023,7 +3020,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISNONTEXT" table:style-name="ce5">
    <text:p>ISNONTEXT</text:p>
   </table:table-cell>
@@ -3039,7 +3036,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISNA" table:style-name="ce5">
    <text:p>ISNA</text:p>
   </table:table-cell>
@@ -3055,7 +3052,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISNUMBER" table:style-name="ce5">
    <text:p>ISNUMBER</text:p>
   </table:table-cell>
@@ -3071,7 +3068,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISODD" table:style-name="ce5">
    <text:p>ISODD</text:p>
   </table:table-cell>
@@ -3087,7 +3084,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISTEXT" table:style-name="ce5">
    <text:p>ISTEXT</text:p>
   </table:table-cell>
@@ -3103,7 +3100,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ISREF" table:style-name="ce5">
    <text:p>ISREF</text:p>
   </table:table-cell>
@@ -3119,7 +3116,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="N" table:style-name="ce5">
    <text:p>N</text:p>
   </table:table-cell>
@@ -3135,7 +3132,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NA" table:style-name="ce5">
    <text:p>NA</text:p>
   </table:table-cell>
@@ -3151,7 +3148,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ROW" table:style-name="ce5">
    <text:p>ROW</text:p>
   </table:table-cell>
@@ -3167,7 +3164,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ROWS" table:style-name="ce5">
    <text:p>ROWS</text:p>
   </table:table-cell>
@@ -3183,7 +3180,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SHEET" table:style-name="ce5">
    <text:p>SHEET</text:p>
   </table:table-cell>
@@ -3195,7 +3192,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SHEETS" table:style-name="ce5">
    <text:p>SHEETS</text:p>
   </table:table-cell>
@@ -3207,7 +3204,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TYPE" table:style-name="ce5">
    <text:p>TYPE</text:p>
   </table:table-cell>
@@ -3223,7 +3220,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VALUE" table:style-name="ce5">
    <text:p>VALUE</text:p>
   </table:table-cell>
@@ -3239,7 +3236,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VALUEL" table:style-name="ce5">
    <text:p>VALUEL</text:p>
   </table:table-cell>
@@ -3251,7 +3248,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -3261,7 +3258,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ADDRESS" table:style-name="ce5">
    <text:p>ADDRESS</text:p>
   </table:table-cell>
@@ -3277,7 +3274,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CHOOSE" table:style-name="ce5">
    <text:p>CHOOSE</text:p>
   </table:table-cell>
@@ -3293,7 +3290,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GETPIVOTDATA" table:style-name="ce5">
    <text:p>GETPIVOTDATA</text:p>
   </table:table-cell>
@@ -3309,7 +3306,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HLOOKUP" table:style-name="ce5">
    <text:p>HLOOKUP</text:p>
   </table:table-cell>
@@ -3325,7 +3322,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="INDEX" table:style-name="ce5">
    <text:p>INDEX</text:p>
   </table:table-cell>
@@ -3341,7 +3338,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="INDIRECT" table:style-name="ce5">
    <text:p>INDIRECT</text:p>
   </table:table-cell>
@@ -3357,7 +3354,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LOOKUP" table:style-name="ce5">
    <text:p>LOOKUP</text:p>
   </table:table-cell>
@@ -3373,7 +3370,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MATCH" table:style-name="ce5">
    <text:p>MATCH</text:p>
   </table:table-cell>
@@ -3385,7 +3382,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="OFFSET" table:style-name="ce5">
    <text:p>OFFSET</text:p>
   </table:table-cell>
@@ -3397,7 +3394,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VLOOKUP" table:style-name="ce5">
    <text:p>VLOOKUP</text:p>
   </table:table-cell>
@@ -3413,7 +3410,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -3423,7 +3420,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="AND" table:style-name="ce5">
    <text:p>AND</text:p>
   </table:table-cell>
@@ -3442,7 +3439,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FALSE" table:style-name="ce5">
    <text:p>FALSE</text:p>
   </table:table-cell>
@@ -3461,7 +3458,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="IF" table:style-name="ce5">
    <text:p>IF</text:p>
   </table:table-cell>
@@ -3480,7 +3477,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NOT" table:style-name="ce5">
    <text:p>NOT</text:p>
   </table:table-cell>
@@ -3499,7 +3496,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="OR" table:style-name="ce5">
    <text:p>OR</text:p>
   </table:table-cell>
@@ -3518,7 +3515,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TRUE" table:style-name="ce5">
    <text:p>TRUE</text:p>
   </table:table-cell>
@@ -3537,7 +3534,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="XOR" table:style-name="ce5">
    <text:p>XOR</text:p>
   </table:table-cell>
@@ -3556,7 +3553,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -3566,7 +3563,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ABS" table:style-name="ce5">
    <text:p>ABS</text:p>
   </table:table-cell>
@@ -3582,7 +3579,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ACOS" table:style-name="ce5">
    <text:p>ACOS</text:p>
   </table:table-cell>
@@ -3598,7 +3595,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ACOSH" table:style-name="ce5">
    <text:p>ACOSH</text:p>
   </table:table-cell>
@@ -3617,7 +3614,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ACOT" table:style-name="ce5">
    <text:p>ACOT</text:p>
   </table:table-cell>
@@ -3633,7 +3630,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ACOTH" table:style-name="ce5">
    <text:p>ACOTH</text:p>
   </table:table-cell>
@@ -3652,7 +3649,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ASIN" table:style-name="ce5">
    <text:p>ASIN</text:p>
   </table:table-cell>
@@ -3668,7 +3665,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ASINH" table:style-name="ce5">
    <text:p>ASINH</text:p>
   </table:table-cell>
@@ -3687,7 +3684,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ATAN" table:style-name="ce5">
    <text:p>ATAN</text:p>
   </table:table-cell>
@@ -3703,7 +3700,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ATAN2" table:style-name="ce5">
    <text:p>ATAN2</text:p>
   </table:table-cell>
@@ -3719,7 +3716,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ATANH" table:style-name="ce5">
    <text:p>ATANH</text:p>
   </table:table-cell>
@@ -3738,11 +3735,14 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="AVERAGE" table:style-name="ce5">
    <text:p>AVERAGE</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -3751,7 +3751,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BESSELI" table:style-name="ce5">
    <text:p>BESSELI</text:p>
   </table:table-cell>
@@ -3770,7 +3770,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BESSELJ" table:style-name="ce5">
    <text:p>BESSELJ</text:p>
   </table:table-cell>
@@ -3789,7 +3789,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BESSELK" table:style-name="ce5">
    <text:p>BESSELK</text:p>
   </table:table-cell>
@@ -3808,7 +3808,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BESSELY" table:style-name="ce5">
    <text:p>BESSELY</text:p>
   </table:table-cell>
@@ -3827,7 +3827,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COMBINA" table:style-name="ce5">
    <text:p>COMBINA</text:p>
   </table:table-cell>
@@ -3846,7 +3846,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CONVERT" table:style-name="ce5">
    <text:p>CONVERT</text:p>
   </table:table-cell>
@@ -3862,7 +3862,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COMBIN" table:style-name="ce5">
    <text:p>COMBIN</text:p>
   </table:table-cell>
@@ -3878,7 +3878,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COS" table:style-name="ce5">
    <text:p>COS</text:p>
   </table:table-cell>
@@ -3894,7 +3894,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COSH" table:style-name="ce5">
    <text:p>COSH</text:p>
   </table:table-cell>
@@ -3910,7 +3910,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COT" table:style-name="ce5">
    <text:p>COT</text:p>
   </table:table-cell>
@@ -3929,7 +3929,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COTH" table:style-name="ce5">
    <text:p>COTH</text:p>
   </table:table-cell>
@@ -3948,7 +3948,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DEGREES" table:style-name="ce5">
    <text:p>DEGREES</text:p>
   </table:table-cell>
@@ -3964,7 +3964,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DELTA" table:style-name="ce5">
    <text:p>DELTA</text:p>
   </table:table-cell>
@@ -3980,7 +3980,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ERF" table:style-name="ce5">
    <text:p>ERF</text:p>
   </table:table-cell>
@@ -3996,7 +3996,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ERFC" table:style-name="ce5">
    <text:p>ERFC</text:p>
   </table:table-cell>
@@ -4012,7 +4012,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EVEN" table:style-name="ce5">
    <text:p>EVEN</text:p>
   </table:table-cell>
@@ -4028,7 +4028,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EXP" table:style-name="ce5">
    <text:p>EXP</text:p>
   </table:table-cell>
@@ -4044,7 +4044,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FACT" table:style-name="ce5">
    <text:p>FACT</text:p>
   </table:table-cell>
@@ -4062,7 +4062,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FACTDOUBLE" table:style-name="ce5">
    <text:p>FACTDOUBLE</text:p>
   </table:table-cell>
@@ -4080,7 +4080,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FIB" table:style-name="ce7">
    <text:p>FIB</text:p>
   </table:table-cell>
@@ -4096,7 +4096,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GAMMA" table:style-name="ce5">
    <text:p>GAMMA</text:p>
   </table:table-cell>
@@ -4115,7 +4115,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GAMMALN" table:style-name="ce5">
    <text:p>GAMMALN</text:p>
   </table:table-cell>
@@ -4131,7 +4131,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GCD" table:style-name="ce5">
    <text:p>GCD</text:p>
   </table:table-cell>
@@ -4149,7 +4149,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GESTEP" table:style-name="ce5">
    <text:p>GESTEP</text:p>
   </table:table-cell>
@@ -4165,7 +4165,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LCM" table:style-name="ce5">
    <text:p>LCM</text:p>
   </table:table-cell>
@@ -4183,7 +4183,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LN" table:style-name="ce5">
    <text:p>LN</text:p>
   </table:table-cell>
@@ -4199,7 +4199,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LOG" table:style-name="ce5">
    <text:p>LOG</text:p>
   </table:table-cell>
@@ -4217,7 +4217,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LOG10" table:style-name="ce5">
    <text:p>LOG10</text:p>
   </table:table-cell>
@@ -4233,7 +4233,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MAX" table:style-name="ce5">
    <text:p>MAX</text:p>
   </table:table-cell>
@@ -4249,7 +4249,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MAXA" table:style-name="ce5">
    <text:p>MAXA</text:p>
   </table:table-cell>
@@ -4265,7 +4265,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MIN" table:style-name="ce5">
    <text:p>MIN</text:p>
   </table:table-cell>
@@ -4281,7 +4281,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MINA" table:style-name="ce5">
    <text:p>MINA</text:p>
   </table:table-cell>
@@ -4297,7 +4297,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MOD" table:style-name="ce5">
    <text:p>MOD</text:p>
   </table:table-cell>
@@ -4313,11 +4313,14 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MULTINOMIAL" table:style-name="ce5">
    <text:p>MULTINOMIAL</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -4326,7 +4329,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ODD" table:style-name="ce5">
    <text:p>ODD</text:p>
   </table:table-cell>
@@ -4342,7 +4345,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PI" table:style-name="ce5">
    <text:p>PI</text:p>
   </table:table-cell>
@@ -4358,7 +4361,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="POWER" table:style-name="ce5">
    <text:p>POWER</text:p>
   </table:table-cell>
@@ -4374,7 +4377,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PRODUCT" table:style-name="ce5">
    <text:p>PRODUCT</text:p>
   </table:table-cell>
@@ -4390,7 +4393,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="QUOTIENT" table:style-name="ce5">
    <text:p>QUOTIENT</text:p>
   </table:table-cell>
@@ -4406,7 +4409,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RADIANS" table:style-name="ce5">
    <text:p>RADIANS</text:p>
   </table:table-cell>
@@ -4422,7 +4425,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RAND" table:style-name="ce5">
    <text:p>RAND</text:p>
   </table:table-cell>
@@ -4438,7 +4441,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RANDBETWEEN" table:style-name="ce5">
    <text:p>RANDBETWEEN</text:p>
   </table:table-cell>
@@ -4454,7 +4457,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SERIESSUM" table:style-name="ce5">
    <text:p>SERIESSUM</text:p>
   </table:table-cell>
@@ -4473,7 +4476,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SIGN" table:style-name="ce5">
    <text:p>SIGN</text:p>
   </table:table-cell>
@@ -4489,7 +4492,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SIN" table:style-name="ce5">
    <text:p>SIN</text:p>
   </table:table-cell>
@@ -4505,7 +4508,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SINH" table:style-name="ce5">
    <text:p>SINH</text:p>
   </table:table-cell>
@@ -4521,7 +4524,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SQRT" table:style-name="ce5">
    <text:p>SQRT</text:p>
   </table:table-cell>
@@ -4539,7 +4542,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SQRTPI" table:style-name="ce5">
    <text:p>SQRTPI</text:p>
   </table:table-cell>
@@ -4557,7 +4560,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUBTOTAL" table:style-name="ce5">
    <text:p>SUBTOTAL</text:p>
   </table:table-cell>
@@ -4573,11 +4576,14 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUM" table:style-name="ce5">
    <text:p>SUM</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Small" table:style-name="ce6">
+   <text:p>Small</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -4586,11 +4592,14 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUMIF" table:style-name="ce5">
    <text:p>SUMIF</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Small" table:style-name="ce6">
+   <text:p>Small</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -4599,7 +4608,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUMSQ" table:style-name="ce5">
    <text:p>SUMSQ</text:p>
   </table:table-cell>
@@ -4615,7 +4624,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TAN" table:style-name="ce5">
    <text:p>TAN</text:p>
   </table:table-cell>
@@ -4631,11 +4640,14 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TANH" table:style-name="ce5">
    <text:p>TANH</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -4644,7 +4656,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -4654,7 +4666,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row>
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CEIL" table:style-name="ce7">
    <text:p>CEIL</text:p>
   </table:table-cell>
@@ -4670,7 +4682,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CEILING" table:style-name="ce5">
    <text:p>CEILING</text:p>
   </table:table-cell>
@@ -4686,7 +4698,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="INT" table:style-name="ce5">
    <text:p>INT</text:p>
   </table:table-cell>
@@ -4704,7 +4716,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FLOOR" table:style-name="ce5">
    <text:p>FLOOR</text:p>
   </table:table-cell>
@@ -4722,7 +4734,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MROUND" table:style-name="ce5">
    <text:p>MROUND</text:p>
   </table:table-cell>
@@ -4738,7 +4750,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ROUND" table:style-name="ce5">
    <text:p>ROUND</text:p>
   </table:table-cell>
@@ -4754,7 +4766,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ROUNDDOWN" table:style-name="ce5">
    <text:p>ROUNDDOWN</text:p>
   </table:table-cell>
@@ -4770,7 +4782,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ROUNDUP" table:style-name="ce5">
    <text:p>ROUNDUP</text:p>
   </table:table-cell>
@@ -4786,7 +4798,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TRUNC" table:style-name="ce5">
    <text:p>TRUNC</text:p>
   </table:table-cell>
@@ -4802,7 +4814,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -4812,11 +4824,14 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="AVEDEV" table:style-name="ce5">
    <text:p>AVEDEV</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Small" table:style-name="ce6">
+   <text:p>Small</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -4825,7 +4840,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="AVERAGEA" table:style-name="ce5">
    <text:p>AVERAGEA</text:p>
   </table:table-cell>
@@ -4841,7 +4856,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="B" table:style-name="ce5">
    <text:p>B</text:p>
   </table:table-cell>
@@ -4853,32 +4868,45 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BETADIST" table:style-name="ce5">
    <text:p>BETADIST</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F301]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E301]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D301]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C301]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F301]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E301]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D301]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C301]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BETAINV" table:style-name="ce5">
    <text:p>BETAINV</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F302]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E302]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D302]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C302]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F302]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E302]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D302]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C302]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BINOMDIST" table:style-name="ce5">
    <text:p>BINOMDIST</text:p>
   </table:table-cell>
@@ -4890,43 +4918,64 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEGACY.CHIDIST" table:style-name="ce5">
    <text:p>LEGACY.CHIDIST</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F304]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E304]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D304]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C304]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F304]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E304]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D304]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C304]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CHISQDIST" table:style-name="ce5">
    <text:p>CHISQDIST</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F305]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E305]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D305]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C305]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F305]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E305]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D305]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C305]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEGACY.CHIINV" table:style-name="ce5">
    <text:p>LEGACY.CHIINV</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F306]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E306]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D306]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C306]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F306]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E306]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D306]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C306]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CHISQINV" table:style-name="ce5">
    <text:p>CHISQINV</text:p>
   </table:table-cell>
@@ -4938,7 +4987,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CHITEST" table:style-name="ce5">
    <text:p>CHITEST</text:p>
   </table:table-cell>
@@ -4950,7 +4999,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CONFIDENCE" table:style-name="ce5">
    <text:p>CONFIDENCE</text:p>
   </table:table-cell>
@@ -4966,7 +5015,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CORREL" table:style-name="ce5">
    <text:p>CORREL</text:p>
   </table:table-cell>
@@ -4982,7 +5031,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="COVAR" table:style-name="ce5">
    <text:p>COVAR</text:p>
   </table:table-cell>
@@ -4998,7 +5047,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CRITBINOMIAL" table:style-name="ce5">
    <text:p>CRITBINOMIAL</text:p>
   </table:table-cell>
@@ -5010,105 +5059,159 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DEVSQ" table:style-name="ce5">
    <text:p>DEVSQ</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F313]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E313]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D313]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C313]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F313]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E313]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D313]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C313]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EXPONDIST" table:style-name="ce5">
    <text:p>EXPONDIST</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F314]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E314]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D314]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C314]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F314]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E314]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D314]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C314]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FDIST" table:style-name="ce5">
    <text:p>FDIST</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F315]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E315]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D315]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C315]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F315]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E315]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D315]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C315]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEGACY.FDIST" table:style-name="ce5">
    <text:p>LEGACY.FDIST</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F316]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E316]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D316]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C316]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F316]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E316]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D316]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C316]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FINV" table:style-name="ce5">
    <text:p>FINV</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F317]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E317]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D317]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C317]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F317]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E317]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D317]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C317]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEGACY.FINV" table:style-name="ce5">
    <text:p>LEGACY.FINV</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F318]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E318]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D318]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C318]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F318]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E318]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D318]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C318]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FISHER" table:style-name="ce5">
    <text:p>FISHER</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F319]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E319]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D319]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C319]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F319]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E319]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D319]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C319]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FISHERINV" table:style-name="ce5">
    <text:p>FISHERINV</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F320]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E320]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D320]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C320]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F320]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E320]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D320]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C320]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FORECAST" table:style-name="ce5">
    <text:p>FORECAST</text:p>
   </table:table-cell>
@@ -5120,7 +5223,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FREQUENCY" table:style-name="ce5">
    <text:p>FREQUENCY</text:p>
   </table:table-cell>
@@ -5141,7 +5244,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FTEST" table:style-name="ce5">
    <text:p>FTEST</text:p>
   </table:table-cell>
@@ -5153,32 +5256,45 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GAMMADIST" table:style-name="ce5">
    <text:p>GAMMADIST</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F324]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E324]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D324]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C324]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F324]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E324]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D324]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C324]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GAMMAINV" table:style-name="ce5">
    <text:p>GAMMAINV</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F325]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E325]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D325]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C325]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F325]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E325]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D325]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C325]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GAUSS" table:style-name="ce5">
    <text:p>GAUSS</text:p>
   </table:table-cell>
@@ -5194,7 +5310,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GEOMEAN" table:style-name="ce5">
    <text:p>GEOMEAN</text:p>
   </table:table-cell>
@@ -5210,7 +5326,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="GROWTH" table:style-name="ce5">
    <text:p>GROWTH</text:p>
   </table:table-cell>
@@ -5222,7 +5338,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HARMEAN" table:style-name="ce5">
    <text:p>HARMEAN</text:p>
   </table:table-cell>
@@ -5238,7 +5354,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HYPGEOMDIST" table:style-name="ce5">
    <text:p>HYPGEOMDIST</text:p>
   </table:table-cell>
@@ -5254,7 +5370,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="INTERCEPT" table:style-name="ce5">
    <text:p>INTERCEPT</text:p>
   </table:table-cell>
@@ -5270,7 +5386,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="KURT" table:style-name="ce5">
    <text:p>KURT</text:p>
   </table:table-cell>
@@ -5282,7 +5398,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LARGE" table:style-name="ce5">
    <text:p>LARGE</text:p>
   </table:table-cell>
@@ -5301,7 +5417,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LINEST" table:style-name="ce5">
    <text:p>LINEST</text:p>
   </table:table-cell>
@@ -5313,7 +5429,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LOGEST" table:style-name="ce5">
    <text:p>LOGEST</text:p>
   </table:table-cell>
@@ -5322,11 +5438,14 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LOGINV" table:style-name="ce5">
    <text:p>LOGINV</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -5335,11 +5454,14 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LOGNORMDIST" table:style-name="ce5">
    <text:p>LOGNORMDIST</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -5348,7 +5470,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MEDIAN" table:style-name="ce5">
    <text:p>MEDIAN</text:p>
   </table:table-cell>
@@ -5364,7 +5486,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MNORMSINV" table:style-name="ce5">
    <text:p>MNORMSINV</text:p>
   </table:table-cell>
@@ -5373,7 +5495,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MODE" table:style-name="ce5">
    <text:p>MODE</text:p>
   </table:table-cell>
@@ -5389,20 +5511,26 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NEGBINOMDIST" table:style-name="ce5">
    <text:p>NEGBINOMDIST</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F341]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E341]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D341]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C341]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F341]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E341]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D341]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C341]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NORMDIST" table:style-name="ce5">
    <text:p>NORMDIST</text:p>
   </table:table-cell>
@@ -5418,7 +5546,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NORMINV" table:style-name="ce5">
    <text:p>NORMINV</text:p>
   </table:table-cell>
@@ -5434,7 +5562,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEGACY.NORMSDIST" table:style-name="ce5">
    <text:p>LEGACY.NORMSDIST</text:p>
   </table:table-cell>
@@ -5443,7 +5571,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEGACY.NORMSINV" table:style-name="ce5">
    <text:p>LEGACY.NORMSINV</text:p>
   </table:table-cell>
@@ -5452,20 +5580,26 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PEARSON" table:style-name="ce5">
    <text:p>PEARSON</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
-  <table:table-cell office:value-type="string" office:string-value="implemented" table:style-name="ce9" table:formula="=IF([.F346]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E346]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D346]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C346]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>implemented</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F346]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E346]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D346]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C346]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PERCENTILE" table:style-name="ce5">
    <text:p>PERCENTILE</text:p>
   </table:table-cell>
@@ -5477,7 +5611,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PERCENTRANK" table:style-name="ce5">
    <text:p>PERCENTRANK</text:p>
   </table:table-cell>
@@ -5489,7 +5623,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PERMUT" table:style-name="ce5">
    <text:p>PERMUT</text:p>
   </table:table-cell>
@@ -5505,16 +5639,19 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PERMUTATIONA" table:style-name="ce5">
    <text:p>PERMUTATIONA</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
   <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F350]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E350]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D350]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C350]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PHI" table:style-name="ce5">
    <text:p>PHI</text:p>
   </table:table-cell>
@@ -5530,7 +5667,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="POISSON" table:style-name="ce5">
    <text:p>POISSON</text:p>
   </table:table-cell>
@@ -5546,7 +5683,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PROB" table:style-name="ce5">
    <text:p>PROB</text:p>
   </table:table-cell>
@@ -5558,7 +5695,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="QUARTILE" table:style-name="ce5">
    <text:p>QUARTILE</text:p>
   </table:table-cell>
@@ -5570,7 +5707,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RANK" table:style-name="ce5">
    <text:p>RANK</text:p>
   </table:table-cell>
@@ -5582,7 +5719,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RSQ" table:style-name="ce5">
    <text:p>RSQ</text:p>
   </table:table-cell>
@@ -5594,7 +5731,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SKEW" table:style-name="ce5">
    <text:p>SKEW</text:p>
   </table:table-cell>
@@ -5613,7 +5750,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SKEWP" table:style-name="ce5">
    <text:p>SKEWP</text:p>
   </table:table-cell>
@@ -5629,7 +5766,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SLOPE" table:style-name="ce5">
    <text:p>SLOPE</text:p>
   </table:table-cell>
@@ -5645,7 +5782,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SMALL" table:style-name="ce5">
    <text:p>SMALL</text:p>
   </table:table-cell>
@@ -5661,7 +5798,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="STANDARDIZE" table:style-name="ce5">
    <text:p>STANDARDIZE</text:p>
   </table:table-cell>
@@ -5680,11 +5817,14 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="STDEV" table:style-name="ce5">
    <text:p>STDEV</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Small" table:style-name="ce6">
+   <text:p>Small</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -5693,7 +5833,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="STDEVA" table:style-name="ce5">
    <text:p>STDEVA</text:p>
   </table:table-cell>
@@ -5709,7 +5849,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="STDEVP" table:style-name="ce5">
    <text:p>STDEVP</text:p>
   </table:table-cell>
@@ -5725,7 +5865,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="STDEVPA" table:style-name="ce5">
    <text:p>STDEVPA</text:p>
   </table:table-cell>
@@ -5744,7 +5884,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="STEYX" table:style-name="ce5">
    <text:p>STEYX</text:p>
   </table:table-cell>
@@ -5760,7 +5900,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TDIST" table:style-name="ce5">
    <text:p>TDIST</text:p>
   </table:table-cell>
@@ -5776,31 +5916,45 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TINV" table:style-name="ce5">
    <text:p>TINV</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F368]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E368]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D368]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C368]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F368]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E368]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D368]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C368]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TREND" table:style-name="ce5">
    <text:p>TREND</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F369]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E369]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D369]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C369]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F369]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E369]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D369]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C369]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TRIMMEAN" table:style-name="ce5">
    <text:p>TRIMMEAN</text:p>
   </table:table-cell>
@@ -5819,19 +5973,26 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TTEST" table:style-name="ce5">
    <text:p>TTEST</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="4"/>
-  <table:table-cell office:value-type="string" office:string-value="missing" table:style-name="ce9" table:formula="=IF([.F371]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E371]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D371]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C371]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
-   <text:p>missing</text:p>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
+  <table:table-cell office:value-type="string" office:string-value="Sascha" table:style-name="ce6">
+   <text:p>Sascha</text:p>
+  </table:table-cell>
+  <table:table-cell office:value-type="string" office:string-value="tested" table:style-name="ce9" table:formula="=IF([.F371]&lt;&gt;&quot;&quot;;&quot;tested&quot;;IF([.E371]&lt;&gt;&quot;&quot;;&quot;reviewed&quot;;IF([.D371]&lt;&gt;&quot;&quot;;&quot;implemented&quot;;IF([.C371]&lt;&gt;&quot;&quot;;&quot;assigned&quot;;&quot;missing&quot;))))">
+   <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VAR" table:style-name="ce5">
    <text:p>VAR</text:p>
   </table:table-cell>
@@ -5847,7 +6008,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VARA" table:style-name="ce5">
    <text:p>VARA</text:p>
   </table:table-cell>
@@ -5866,7 +6027,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VARP" table:style-name="ce5">
    <text:p>VARP</text:p>
   </table:table-cell>
@@ -5882,7 +6043,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="VARPA" table:style-name="ce5">
    <text:p>VARPA</text:p>
   </table:table-cell>
@@ -5901,7 +6062,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="WEIBULL" table:style-name="ce5">
    <text:p>WEIBULL</text:p>
   </table:table-cell>
@@ -5920,7 +6081,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ZTEST" table:style-name="ce5">
    <text:p>ZTEST</text:p>
   </table:table-cell>
@@ -5939,7 +6100,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -5949,11 +6110,14 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ARABIC" table:style-name="ce5">
    <text:p>ARABIC</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -5962,7 +6126,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BAHTTEXT" table:style-name="ce5">
    <text:p>BAHTTEXT</text:p>
   </table:table-cell>
@@ -5974,11 +6138,14 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BASE" table:style-name="ce5">
    <text:p>BASE</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce6">
    <text:p>x</text:p>
   </table:table-cell>
@@ -5990,11 +6157,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BIN2DEC" table:style-name="ce5">
    <text:p>BIN2DEC</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6003,11 +6173,14 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BIN2HEX" table:style-name="ce5">
    <text:p>BIN2HEX</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6019,11 +6192,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="BIN2OCT" table:style-name="ce5">
    <text:p>BIN2OCT</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6035,11 +6211,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DEC2BIN" table:style-name="ce5">
    <text:p>DEC2BIN</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6051,11 +6230,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DEC2HEX" table:style-name="ce5">
    <text:p>DEC2HEX</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6067,11 +6249,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DEC2OCT" table:style-name="ce5">
    <text:p>DEC2OCT</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6083,7 +6268,7 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DECIMAL" table:style-name="ce5">
    <text:p>DECIMAL</text:p>
   </table:table-cell>
@@ -6095,11 +6280,14 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HEX2BIN" table:style-name="ce5">
    <text:p>HEX2BIN</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6111,11 +6299,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HEX2DEC" table:style-name="ce5">
    <text:p>HEX2DEC</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6124,11 +6315,14 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="HEX2OCT" table:style-name="ce5">
    <text:p>HEX2OCT</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6140,11 +6334,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="OCT2BIN" table:style-name="ce5">
    <text:p>OCT2BIN</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6156,11 +6353,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="OCT2DEC" table:style-name="ce5">
    <text:p>OCT2DEC</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6172,11 +6372,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="OCT2HEX" table:style-name="ce5">
    <text:p>OCT2HEX</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6188,11 +6391,14 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ROMAN" table:style-name="ce5">
    <text:p>ROMAN</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce6">
+   <text:p>Medium</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce6">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6204,7 +6410,7 @@
    <text:p>reviewed</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce6">
+ <table:table-row table:style-name="ro2" table:default-cell-style-name="ce6">
   <table:table-cell table:number-columns-repeated="7"/>
  </table:table-row>
  <table:table-row table:style-name="ro2">
@@ -6214,7 +6420,7 @@
   <table:table-cell table:style-name="ce6" table:number-columns-repeated="5"/>
   <table:table-cell table:style-name="ce2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="ASC" table:style-name="ce5">
    <text:p>ASC</text:p>
   </table:table-cell>
@@ -6226,7 +6432,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CHAR" table:style-name="ce5">
    <text:p>CHAR</text:p>
   </table:table-cell>
@@ -6242,7 +6448,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CLEAN" table:style-name="ce5">
    <text:p>CLEAN</text:p>
   </table:table-cell>
@@ -6258,7 +6464,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CODE" table:style-name="ce5">
    <text:p>CODE</text:p>
   </table:table-cell>
@@ -6274,7 +6480,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="CONCATENATE" table:style-name="ce5">
    <text:p>CONCATENATE</text:p>
   </table:table-cell>
@@ -6290,7 +6496,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="DOLLAR" table:style-name="ce5">
    <text:p>DOLLAR</text:p>
   </table:table-cell>
@@ -6303,7 +6509,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="EXACT" table:style-name="ce5">
    <text:p>EXACT</text:p>
   </table:table-cell>
@@ -6319,7 +6525,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FIND" table:style-name="ce5">
    <text:p>FIND</text:p>
   </table:table-cell>
@@ -6335,7 +6541,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="FIXED" table:style-name="ce5">
    <text:p>FIXED</text:p>
   </table:table-cell>
@@ -6351,7 +6557,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEFT" table:style-name="ce5">
    <text:p>LEFT</text:p>
   </table:table-cell>
@@ -6369,7 +6575,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LEN" table:style-name="ce5">
    <text:p>LEN</text:p>
   </table:table-cell>
@@ -6385,7 +6591,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="LOWER" table:style-name="ce5">
    <text:p>LOWER</text:p>
   </table:table-cell>
@@ -6401,7 +6607,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="MID" table:style-name="ce5">
    <text:p>MID</text:p>
   </table:table-cell>
@@ -6419,7 +6625,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="NUMBERSTRING" table:style-name="ce5">
    <text:p>NUMBERSTRING</text:p>
   </table:table-cell>
@@ -6431,7 +6637,7 @@
    <text:p>missing</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="PROPER" table:style-name="ce5">
    <text:p>PROPER</text:p>
   </table:table-cell>
@@ -6449,7 +6655,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="REPLACE" table:style-name="ce5">
    <text:p>REPLACE</text:p>
   </table:table-cell>
@@ -6465,7 +6671,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="REPT" table:style-name="ce5">
    <text:p>REPT</text:p>
   </table:table-cell>
@@ -6481,7 +6687,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="RIGHT" table:style-name="ce5">
    <text:p>RIGHT</text:p>
   </table:table-cell>
@@ -6499,7 +6705,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SEARCH" table:style-name="ce5">
    <text:p>SEARCH</text:p>
   </table:table-cell>
@@ -6515,7 +6721,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="SUBSTITUTE" table:style-name="ce5">
    <text:p>SUBSTITUTE</text:p>
   </table:table-cell>
@@ -6533,7 +6739,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="T" table:style-name="ce5">
    <text:p>T</text:p>
   </table:table-cell>
@@ -6551,11 +6757,14 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TEXT" table:style-name="ce5">
    <text:p>TEXT</text:p>
   </table:table-cell>
-  <table:table-cell table:style-name="ce6" table:number-columns-repeated="2"/>
+  <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce6">
+   <text:p>Large</text:p>
+  </table:table-cell>
+  <table:table-cell table:style-name="ce6"/>
   <table:table-cell office:value-type="string" office:string-value="x" table:style-name="ce8">
    <text:p>x</text:p>
   </table:table-cell>
@@ -6564,7 +6773,7 @@
    <text:p>implemented</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="TRIM" table:style-name="ce5">
    <text:p>TRIM</text:p>
   </table:table-cell>
@@ -6580,7 +6789,7 @@
    <text:p>tested</text:p>
   </table:table-cell>
  </table:table-row>
- <table:table-row table:style-name="ro3">
+ <table:table-row table:style-name="ro2">
   <table:table-cell office:value-type="string" office:string-value="UPPER" table:style-name="ce5">
    <text:p>UPPER</text:p>
   </table:table-cell>
@@ -6608,7 +6817,7 @@
  <table:table-row table:default-cell-style-name="ce3">
   <table:table-cell table:number-columns-repeated="2"/>
  </table:table-row>
- <table:table-row table:style-name="ro3" table:default-cell-style-name="ce3">
+ <table:table-row table:default-cell-style-name="ce3">
   <table:table-cell office:value-type="string" office:string-value="Name">
    <text:p>Name</text:p>
   </table:table-cell>
@@ -6732,8 +6941,8 @@
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.L3:.M4])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="23" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.N3:.O4])">
-   <text:p>23</text:p>
+  <table:table-cell office:value-type="float" office:value="27" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.N3:.O4])">
+   <text:p>27</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.P3:.Q4])">
    <text:p>0</text:p>
@@ -6741,8 +6950,8 @@
   <table:table-cell office:value-type="float" office:value="35" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.R3:.S4])">
    <text:p>35</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="61" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J3:.J4])">
-   <text:p>61</text:p>
+  <table:table-cell office:value-type="float" office:value="65" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J3:.J4])">
+   <text:p>65</text:p>
   </table:table-cell>
   <table:table-cell table:number-columns-repeated="2"/>
   <table:table-cell office:value-type="string" office:string-value="Small">
@@ -6780,23 +6989,23 @@
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce5">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="36" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5:.K6])">
-   <text:p>36</text:p>
+  <table:table-cell office:value-type="float" office:value="26" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5:.K6])">
+   <text:p>26</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.L5:.M6])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="11" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.N5:.O6])">
-   <text:p>11</text:p>
+  <table:table-cell office:value-type="float" office:value="15" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.N5:.O6])">
+   <text:p>15</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.P5:.Q6])">
-   <text:p>0</text:p>
+  <table:table-cell office:value-type="float" office:value="1" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.P5:.Q6])">
+   <text:p>1</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="44" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.R5:.S6])">
-   <text:p>44</text:p>
+  <table:table-cell office:value-type="float" office:value="64" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.R5:.S6])">
+   <text:p>64</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="91" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5:.J6])">
-   <text:p>91</text:p>
+  <table:table-cell office:value-type="float" office:value="106" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J5:.J6])">
+   <text:p>106</text:p>
   </table:table-cell>
   <table:table-cell table:number-columns-repeated="2"/>
   <table:table-cell office:value-type="string" office:string-value="OpenFormula Group">
@@ -6834,23 +7043,23 @@
   <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce5">
    <text:p>Large</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="24" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J7:.K8])">
-   <text:p>24</text:p>
+  <table:table-cell office:value-type="float" office:value="25" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J7:.K8])">
+   <text:p>25</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.L7:.M8])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="14" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.N7:.O8])">
-   <text:p>14</text:p>
+  <table:table-cell office:value-type="float" office:value="19" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.N7:.O8])">
+   <text:p>19</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.P7:.Q8])">
-   <text:p>0</text:p>
+  <table:table-cell office:value-type="float" office:value="11" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.P7:.Q8])">
+   <text:p>11</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="42" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.R7:.S8])">
    <text:p>42</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="80" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J7:.J8])">
-   <text:p>80</text:p>
+  <table:table-cell office:value-type="float" office:value="97" table:style-name="ce5" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.J7:.J8])">
+   <text:p>97</text:p>
   </table:table-cell>
   <table:table-cell table:number-columns-repeated="2"/>
   <table:table-cell office:value-type="string" office:string-value="Medium">
@@ -6942,23 +7151,23 @@
   <table:table-cell office:value-type="string" office:string-value="N/A" table:style-name="ce7">
    <text:p>N/A</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="6" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.K3:.K4])-SUM([.B4:.B7])">
-   <text:p>6</text:p>
+  <table:table-cell office:value-type="float" office:value="4" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.K3:.K4])-SUM([.B4:.B7])">
+   <text:p>4</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.M3:.M4])-SUM([.C4:.C7])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="23" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.O3:.O4])-SUM([.D4:.D7])">
-   <text:p>23</text:p>
+  <table:table-cell office:value-type="float" office:value="1" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.O3:.O4])-SUM([.D4:.D7])">
+   <text:p>1</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="12" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.Q3:.Q4])-SUM([.E4:.E7])">
-   <text:p>12</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.Q3:.Q4])-SUM([.E4:.E7])">
+   <text:p>0</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="101" table:style-name="ce7" table:formula="=DCOUNTA(functions;&quot;Status&quot;;[.S3:.S4])-SUM([.F4:.F7])">
    <text:p>101</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="142" table:style-name="ce7" table:formula="=[.G9]-SUM([.G4:.G7])">
-   <text:p>142</text:p>
+  <table:table-cell office:value-type="float" office:value="106" table:style-name="ce7" table:formula="=[.G9]-SUM([.G4:.G7])">
+   <text:p>106</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce7" table:number-columns-repeated="2"/>
   <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce5">
@@ -6996,20 +7205,20 @@
   <table:table-cell office:value-type="string" office:string-value="all" table:style-name="ce5">
    <text:p>all</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="70" table:style-name="ce5" table:formula="=SUM([.B4:.B8])">
-   <text:p>70</text:p>
+  <table:table-cell office:value-type="float" office:value="59" table:style-name="ce5" table:formula="=SUM([.B4:.B8])">
+   <text:p>59</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce5" table:formula="=SUM([.C4:.C8])">
    <text:p>0</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="71" table:style-name="ce5" table:formula="=SUM([.D4:.D8])">
-   <text:p>71</text:p>
+  <table:table-cell office:value-type="float" office:value="62" table:style-name="ce5" table:formula="=SUM([.D4:.D8])">
+   <text:p>62</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="12" table:style-name="ce5" table:formula="=SUM([.E4:.E8])">
    <text:p>12</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="234" table:style-name="ce5" table:formula="=SUM([.F4:.F8])">
-   <text:p>234</text:p>
+  <table:table-cell office:value-type="float" office:value="254" table:style-name="ce5" table:formula="=SUM([.F4:.F8])">
+   <text:p>254</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="387" table:style-name="ce5" table:formula="=COUNTA(Status)">
    <text:p>387</text:p>
@@ -7110,23 +7319,23 @@
   <table:table-cell office:value-type="string" office:string-value="Small" table:style-name="ce5">
    <text:p>Small</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0491803278688525" table:style-name="ce13" table:formula="=[.B4]/[.$G4]">
-   <text:p>4.92 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0461538461538462" table:style-name="ce13" table:formula="=[.B4]/[.$G4]">
+   <text:p>4.62 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C4]/[.$G4]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.377049180327869" table:style-name="ce13" table:formula="=[.D4]/[.$G4]">
-   <text:p>37.70 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.415384615384615" table:style-name="ce13" table:formula="=[.D4]/[.$G4]">
+   <text:p>41.54 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.E4]/[.$G4]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.573770491803279" table:style-name="ce13" table:formula="=[.F4]/[.$G4]">
-   <text:p>57.38 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.538461538461538" table:style-name="ce13" table:formula="=[.F4]/[.$G4]">
+   <text:p>53.85 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.157622739018088" table:style-name="ce13" table:formula="=[.G4]/[.$G$9]">
-   <text:p>15.76 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.167958656330749" table:style-name="ce13" table:formula="=[.G4]/[.$G$9]">
+   <text:p>16.80 %</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce13" table:number-columns-repeated="12"/>
  </table:table-row>
@@ -7134,23 +7343,23 @@
   <table:table-cell office:value-type="string" office:string-value="Medium" table:style-name="ce5">
    <text:p>Medium</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.395604395604396" table:style-name="ce13" table:formula="=[.B5]/[.$G5]">
-   <text:p>39.56 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.245283018867925" table:style-name="ce13" table:formula="=[.B5]/[.$G5]">
+   <text:p>24.53 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C5]/[.$G5]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.120879120879121" table:style-name="ce13" table:formula="=[.D5]/[.$G5]">
-   <text:p>12.09 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.141509433962264" table:style-name="ce13" table:formula="=[.D5]/[.$G5]">
+   <text:p>14.15 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.E5]/[.$G5]">
-   <text:p>0.00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.00943396226415094" table:style-name="ce13" table:formula="=[.E5]/[.$G5]">
+   <text:p>0.94 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.483516483516484" table:style-name="ce13" table:formula="=[.F5]/[.$G5]">
-   <text:p>48.35 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.60377358490566" table:style-name="ce13" table:formula="=[.F5]/[.$G5]">
+   <text:p>60.38 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.235142118863049" table:style-name="ce13" table:formula="=[.G5]/[.$G$9]">
-   <text:p>23.51 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.27390180878553" table:style-name="ce13" table:formula="=[.G5]/[.$G$9]">
+   <text:p>27.39 %</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce13" table:number-columns-repeated="12"/>
  </table:table-row>
@@ -7158,23 +7367,23 @@
   <table:table-cell office:value-type="string" office:string-value="Large" table:style-name="ce5">
    <text:p>Large</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.3" table:style-name="ce13" table:formula="=[.B6]/[.$G6]">
-   <text:p>30.00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.257731958762887" table:style-name="ce13" table:formula="=[.B6]/[.$G6]">
+   <text:p>25.77 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C6]/[.$G6]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.175" table:style-name="ce13" table:formula="=[.D6]/[.$G6]">
-   <text:p>17.50 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.195876288659794" table:style-name="ce13" table:formula="=[.D6]/[.$G6]">
+   <text:p>19.59 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.E6]/[.$G6]">
-   <text:p>0.00 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.11340206185567" table:style-name="ce13" table:formula="=[.E6]/[.$G6]">
+   <text:p>11.34 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.525" table:style-name="ce13" table:formula="=[.F6]/[.$G6]">
-   <text:p>52.50 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.43298969072165" table:style-name="ce13" table:formula="=[.F6]/[.$G6]">
+   <text:p>43.30 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.20671834625323" table:style-name="ce13" table:formula="=[.G6]/[.$G$9]">
-   <text:p>20.67 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.250645994832041" table:style-name="ce13" table:formula="=[.G6]/[.$G$9]">
+   <text:p>25.06 %</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce13" table:number-columns-repeated="12"/>
  </table:table-row>
@@ -7206,23 +7415,23 @@
   <table:table-cell office:value-type="string" office:string-value="N/A" table:style-name="ce7">
    <text:p>N/A</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0422535211267606" table:style-name="ce13" table:formula="=[.B8]/[.$G8]">
-   <text:p>4.23 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.0377358490566038" table:style-name="ce13" table:formula="=[.B8]/[.$G8]">
+   <text:p>3.77 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C8]/[.$G8]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.161971830985915" table:style-name="ce13" table:formula="=[.D8]/[.$G8]">
-   <text:p>16.20 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.00943396226415094" table:style-name="ce13" table:formula="=[.D8]/[.$G8]">
+   <text:p>0.94 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.0845070422535211" table:style-name="ce13" table:formula="=[.E8]/[.$G8]">
-   <text:p>8.45 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.E8]/[.$G8]">
+   <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.711267605633803" table:style-name="ce13" table:formula="=[.F8]/[.$G8]">
-   <text:p>71.13 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.952830188679245" table:style-name="ce13" table:formula="=[.F8]/[.$G8]">
+   <text:p>95.28 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.366925064599483" table:style-name="ce13" table:formula="=[.G8]/[.$G$9]">
-   <text:p>36.69 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.27390180878553" table:style-name="ce13" table:formula="=[.G8]/[.$G$9]">
+   <text:p>27.39 %</text:p>
   </table:table-cell>
   <table:table-cell table:style-name="ce13" table:number-columns-repeated="12"/>
  </table:table-row>
@@ -7230,20 +7439,20 @@
   <table:table-cell office:value-type="string" office:string-value="all" table:style-name="ce5">
    <text:p>all</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.180878552971576" table:style-name="ce13" table:formula="=[.B9]/[.$G9]">
-   <text:p>18.09 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.152454780361757" table:style-name="ce13" table:formula="=[.B9]/[.$G9]">
+   <text:p>15.25 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0" table:style-name="ce13" table:formula="=[.C9]/[.$G9]">
    <text:p>0.00 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.183462532299742" table:style-name="ce13" table:formula="=[.D9]/[.$G9]">
-   <text:p>18.35 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.160206718346253" table:style-name="ce13" table:formula="=[.D9]/[.$G9]">
+   <text:p>16.02 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="0.0310077519379845" table:style-name="ce13" table:formula="=[.E9]/[.$G9]">
    <text:p>3.10 %</text:p>
   </table:table-cell>
-  <table:table-cell office:value-type="float" office:value="0.604651162790698" table:style-name="ce13" table:formula="=[.F9]/[.$G9]">
-   <text:p>60.47 %</text:p>
+  <table:table-cell office:value-type="float" office:value="0.656330749354005" table:style-name="ce13" table:formula="=[.F9]/[.$G9]">
+   <text:p>65.63 %</text:p>
   </table:table-cell>
   <table:table-cell office:value-type="float" office:value="1" table:style-name="ce13" table:formula="=SUM([.G4:.G8])/[.$G$9]">
    <text:p>100.00 %</text:p>
