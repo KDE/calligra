@@ -1364,7 +1364,7 @@ Value ValueCalc::GetGammaDist (Value _x, Value _alpha, Value _beta)
   long n;
 
   x /= beta;
-  kDebug()<<"-> x=x/beta ="<<x;
+//   kDebug()<<"-> x=x/beta ="<<x;
 
   // check constraints
   if (x <= 0.0)
