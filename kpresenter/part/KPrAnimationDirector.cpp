@@ -264,6 +264,7 @@ void KPrAnimationDirector::nextStep()
         // if there are sub steps go to the next substep
         ++m_stepIndex;
         updateAnimations();
+        startTimeLine( m_maxShapeDuration );
     }
     else {
         // if there are no more sub steps go to the next page
@@ -287,8 +288,8 @@ void KPrAnimationDirector::nextStep()
 
         // TODO read effect from page
         m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, &m_pageEffect );
+        startTimeLine( m_pageEffect.duration() );
     }
-    startTimeLine( m_maxShapeDuration );
 }
 
 void KPrAnimationDirector::previousStep()
