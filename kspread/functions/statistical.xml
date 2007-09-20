@@ -349,24 +349,24 @@
     </Function>
 
     <Function>
-      <Name>LEGACYFDIST</Name>
+      <Name>FINV</Name>
       <Type>Float</Type>
       <Parameter>
         <Comment>Number</Comment>
         <Type>Float</Type>
       </Parameter>
       <Parameter>
-        <Comment>Degrees of freedom 1</Comment>
+        <Comment>Number r1</Comment>
         <Type>Int</Type>
       </Parameter>
       <Parameter>
-        <Comment>Degrees of freedom 2</Comment>
+        <Comment>Number r2</Comment>
         <Type>Int</Type>
       </Parameter>
       <Help>
-        <Text>The LEGACYFDIST() function returns the f-distribution.</Text>
-        <Syntax>LEGACYFDIST(number;degrees_freedom_1;degrees_freedom_2)</Syntax>
-        <Example>LEGACYFDIST(0.8;8;12) yields 0.61</Example>
+        <Text>The FINV() function returns the unique non-negative number x such that FDIST(x;r1;r2) = p.</Text>
+        <Syntax>FINV(number; r1; r2)</Syntax>
+        <Example>FDIST(FINV(0.1;3;4);3;4) equals 0.1</Example>
       </Help>
     </Function>
 
@@ -449,6 +449,30 @@
         <Example>GAMMADIST(0.758;0.1;0.35;1) equals 0.995450</Example>
         <Example>GAMMADIST(0.758;0.1;0.35;0) equals 0.017179</Example>
       </Help>
+    </Function>
+
+    <Function>
+      <Name>GAMMAINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The GAMMAINV() function returns the unique number x >= 0 such that GAMMAINV(x;alpha;beta;TRUE()) = p.</Text>
+        <Syntax>GAMMAINV(number;alpha;beta)</Syntax>
+        <Example>GAMMADIST(GAMMAINV(0.1;3;4);3;4) equals 0.1</Example>
+        <Example>GAMMADIST(GAMMAINV(0.3;3;4);3;4) equals 0.3</Example>
+      </Help>
+      <Related>GAMMADIST</Related>
     </Function>
 
     <Function>
@@ -651,6 +675,28 @@
         <Text>The LARGE() function returns the k-th largest value from the data set.</Text>
         <Syntax>LARGE(range; k)</Syntax>
         <Example>A1: 3, A2: 1, A3: 5 => LARGE(A1:A3; 2) returns 3</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>LEGACYFDIST</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Degrees of freedom 1</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Degrees of freedom 2</Comment>
+        <Type>Int</Type>
+      </Parameter>
+      <Help>
+        <Text>The LEGACYFDIST() function returns the f-distribution.</Text>
+        <Syntax>LEGACYFDIST(number;degrees_freedom_1;degrees_freedom_2)</Syntax>
+        <Example>LEGACYFDIST(0.8;8;12) yields 0.61</Example>
       </Help>
     </Function>
 
