@@ -122,6 +122,10 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     KoRect crectPt( topLeftPt, bottomRightPt );
 
     // Convert crect to view coords
+    Q_ASSERT(fs->currentViewMode());
+    if(!fs->currentViewMode()) {
+        return;
+    }
     QRect crect = fs->currentViewMode()->normalToView( zh->zoomRect( crectPt ) );
     // and add 1 to right and bottom, to avoid rounding errors (and due to qrect semantics)
     crect.rBottom() += 2; // HACK: 1 doesn't do it, it leaves a white line along window borders
