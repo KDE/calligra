@@ -497,7 +497,6 @@ static Value IterateInverse( const double unknown, const QString formula, double
   int i;
   for (i = 0; i < 1000 && f0*f1 > 0.0; i++)
   {
-    kDebug()<<"i="<<i;
     if (fabs(f0) <= fabs(f1))
     {
       xs = x0;
@@ -565,6 +564,7 @@ static Value IterateInverse( const double unknown, const QString formula, double
       }
       return Value(xs);
     }
+    kDebug()<<"probe no. "<<i<<" : "<<xs<<" error diff ="<<fs;
   }
 
   // error no convergence
@@ -643,7 +643,6 @@ void awKurtosis (ValueCalc *c, Value &res, Value val,
 // two-array-walk functions used in the two-sum functions
 //
 ///////////////////////////////////////////////////////////
-
 
 void tawSumproduct (ValueCalc *c, Value &res, Value v1,
     Value v2) {
@@ -833,9 +832,10 @@ Value func_bino (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: chidist
 //
-Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the chi-distribution
-
+// returns the chi-distribution
+//
+Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value fChi = args[0];
   Value fDF = args[1];
 
@@ -876,8 +876,10 @@ Value func_combina (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: confidence
 //
-Value func_confidence (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the confidence interval for a population mean
+// returns the confidence interval for a population mean
+//
+Value func_confidence (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value alpha = args[0];
   Value sigma = args[1];
   Value n = args[2];
@@ -949,8 +951,10 @@ Value func_devsqa (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: expondist
 //
-Value func_expondist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the exponential distribution
+// returns the exponential distribution
+//
+Value func_expondist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   Value lambda = args[1];
   Value kum = args[2];
@@ -978,9 +982,10 @@ Value func_expondist (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: fdist
 //
-Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the f-distribution
-
+// returns the f-distribution
+//
+Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   Value fF1 = args[1];
   Value fF2 = args[2];
@@ -1032,8 +1037,10 @@ Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: finv
 //
-Value func_finv (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the inverse f-distribution
+// returns the inverse f-distribution
+//
+Value func_finv (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value p  = args[0];
   Value f1 = args[1];
   Value f2 = args[2];
@@ -1061,9 +1068,10 @@ Value func_finv (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: fisher
 //
-Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the Fisher transformation for x
-
+// returns the Fisher transformation for x
+//
+Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *)
+{
   // 0.5 * ln ((1.0 + fVal) / (1.0 - fVal))
   Value fVal = args[0];
   Value num = calc->div (calc->add (fVal, 1.0), calc->sub (1.0, fVal));
@@ -1073,9 +1081,10 @@ Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: fisherinv
 //
-Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the inverse of the Fisher transformation for x
-
+// returns the inverse of the Fisher transformation for x
+//
+Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value fVal = args[0];
   // (exp (2.0 * fVal) - 1.0) / (exp (2.0 * fVal) + 1.0)
   Value ex = calc->exp (calc->mul (fVal, 2.0));
@@ -1190,9 +1199,10 @@ Value func_gammainv (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: gammaln
 //
-Value func_gammaln (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the natural logarithm of the gamma function
-
+// returns the natural logarithm of the gamma function
+//
+Value func_gammaln (valVector args, ValueCalc *calc, FuncExtra *)
+{
   if (calc->greater (args[0], Value(0.0)))
     return calc->GetLogGamma (args[0]);
   return Value::errorVALUE();
@@ -1381,9 +1391,10 @@ Value func_large (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: legacaychidist
 //
-Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the chi-distribution
-
+// returns the chi-distribution
+//
+Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value fChi = args[0];
   Value fDF = args[1];
 
@@ -1402,8 +1413,10 @@ Value func_legacychidist (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: legacaychiinv
 //
-Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the inverse chi-distribution
+// returns the inverse chi-distribution
+//
+Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value p  = args[0];
   Value DF = args[1];
 
@@ -1430,9 +1443,10 @@ Value func_legacychiinv (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: legacy.fdist
 //
-Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the f-distribution
-
+// returns the f-distribution
+//
+Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   Value fF1 = args[1];
   Value fF2 = args[2];
@@ -1454,8 +1468,10 @@ Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: legacyfinv
 //
-Value func_legacyfinv (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the inverse legacy f-distribution
+// returns the inverse legacy f-distribution
+//
+Value func_legacyfinv (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value p  = args[0];
   Value f1 = args[1];
   Value f2 = args[2];
@@ -1510,9 +1526,10 @@ Value func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: lognormdist
 //
-Value func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the cumulative lognormal distribution
-
+// returns the cumulative lognormal distribution
+//
+Value func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   // defaults
   Value mue = Value(0);
   Value sigma = Value(1);
@@ -1636,8 +1653,10 @@ Value func_negbinomdist (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: normdist
 //
-Value func_normdist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the normal cumulative distribution
+// returns the normal cumulative distribution
+//
+Value func_normdist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   Value mue = args[1];
   Value sigma = args[2];
@@ -1657,8 +1676,10 @@ Value func_normdist (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: norminv
 //
-Value func_norminv (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the inverse of the normal cumulative distribution
+// returns the inverse of the normal cumulative distribution
+//
+Value func_norminv (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   Value mue = args[1];
   Value sigma = args[2];
@@ -1675,9 +1696,10 @@ Value func_norminv (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: normsinv
 //
-Value func_normsinv (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the inverse of the standard normal cumulative distribution
-
+// returns the inverse of the standard normal cumulative distribution
+//
+Value func_normsinv (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   if (!(calc->greater (x, 0.0) && calc->lower (x, 1.0)))
     return Value::errorVALUE();
@@ -1688,8 +1710,9 @@ Value func_normsinv (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: phi
 //
+// distribution function for a standard normal distribution
+//
 Value func_phi (valVector args, ValueCalc *calc, FuncExtra *)
-//distribution function for a standard normal distribution
 {
   return calc->phi (args[0]);
 }
@@ -1697,9 +1720,10 @@ Value func_phi (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: poisson
 //
-Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the Poisson distribution
-
+// returns the Poisson distribution
+//
+Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   Value lambda = args[1];
   Value kum = args[2];
@@ -1953,9 +1977,10 @@ Value func_sumxmy2 (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: tdist
 //
-Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the t-distribution
-
+// returns the t-distribution
+//
+Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value T = args[0];
   Value fDF = args[1];
   int flag = calc->conv()->asInteger (args[2]).asInteger();
@@ -1977,8 +2002,10 @@ Value func_tdist (valVector args, ValueCalc *calc, FuncExtra *) {
 //
 // Function: tinv
 //
-Value func_tinv (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the inverse t-distribution
+// returns the inverse t-distribution
+//
+Value func_tinv (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value p  = args[0];
   Value DF = args[1];
 
@@ -2300,9 +2327,10 @@ Value func_variancepa (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: weibull
 //
-Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *) {
-  //returns the Weibull distribution
-
+// returns the Weibull distribution
+//
+Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *)
+{
   Value x = args[0];
   Value alpha = args[1];
   Value beta = args[2];
