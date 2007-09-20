@@ -121,6 +121,39 @@
     </Function>
 
     <Function>
+      <Name>BETAINV</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Number</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Alpha parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Beta parameter</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>Start</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>End</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The BETAINV() function returns the inverse of BETADIST(x;alpha;beta;a;b;TRUE()).</Text>
+        <Text>The start and end parameters are optional. They set the lower and upper bounds, otherwise defaulting to 0.0 and 1.0 respectively.</Text>
+        <Syntax>BETAINV(number;alpha;beta [; start=0 [; end=1]])</Syntax>
+        <Example>BETADIST(BETAINV(0.1;3;4);3;4) equals 0.1</Example>
+        <Example>BETADIST(BETAINV(0.3;3;4);3;4) equals 0.3</Example>
+      </Help>
+      <Related>BETADIST</Related>
+    </Function>
+
+    <Function>
       <Name>CHIDIST</Name>
       <Type>Float</Type>
       <Parameter>
