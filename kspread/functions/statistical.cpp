@@ -243,7 +243,7 @@ void RegisterStatisticalFunctions()
   f = new Function ("LEGACYNORMSINV", func_normsinv);
   repo->add (f);
   f = new Function ("LOGINV", func_loginv);
-  f->setParamCount (3);
+  f->setParamCount (1,3);
   repo->add (f);
   f = new Function ("LOGNORMDIST", func_lognormdist);
   f->setParamCount (1, 4);
@@ -1502,8 +1502,15 @@ Value func_legacyfinv (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value p = args[0];
-  Value m = args[1];
-  Value s = args[2];
+
+  // defaults
+  Value m = Value(0.0);
+  Value s = Value(1.0);
+
+  if ( args.count() > 1)
+    m = args[1];
+  if ( args.count() > 2)
+    s = args[2];
 
   if (calc->lower (p, Value(0)) || calc->greater (p, Value(1)))
     return Value::errorVALUE();
@@ -1531,24 +1538,39 @@ Value func_loginv (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_lognormdist (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // defaults
-  Value mue = Value(0);
+  Value mue   = Value(0);
   Value sigma = Value(1);
   bool kum = true;
 
   Value x = args[0];
   if ( args.count() > 1)
-    Value mue = args[1];
+    mue = args[1];
   if ( args.count() > 2)
-    Value sigma = args[2];
+    sigma = args[2];
   if (args.count() > 3)
     kum = calc->conv()->asInteger (args[3]).asInteger();
 
-  if (!calc->greater (sigma, 0.0) || (!calc->greater (x, 0.0)))
-    return Value::errorVALUE();
+  if ( !kum )
+  {
+    // TODO implement me !!!
+    return Value::errorVALUE();    
 
-  // (ln(x) - mue) / sigma
-  Value Y = calc->div (calc->sub (calc->ln (x), mue), sigma);
-  return calc->add (calc->gauss (Y), 0.5);
+    // check constraints
+    if (!calc->greater (sigma, 0.0) || (!calc->greater (x, 0.0)))
+      return Value::errorVALUE();
+  }
+  else
+  {
+    // non-cumulative
+    
+    // check constraints
+    if ( calc->lower( x, Value(0.0)) )
+      return Value(0.0);
+
+    // (ln(x) - mue) / sigma
+    Value Y = calc->div (calc->sub (calc->ln (x), mue), sigma);
+    return calc->add (calc->gauss (Y), 0.5);
+  }
 }
 
 //
