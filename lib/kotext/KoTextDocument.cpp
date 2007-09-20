@@ -1478,6 +1478,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
         }
         else if ( isTextNS && localName == "user-field-decls" )
         {
+            //kdDebug() << "Loading user-field-decls" << endl;
             QDomElement fd;
             forEachElement( fd, tag )
             {
@@ -1485,6 +1486,7 @@ KoTextParag* KoTextDocument::loadOasisText( const QDomElement& bodyElem, KoOasis
                 {
                     const QString name = fd.attributeNS( KoXmlNS::text, "name", QString::null );
                     const QString value = fd.attributeNS( KoXmlNS::office, "value", QString::null );
+                    //kdDebug() << "Loaded user-field-decl: " << name << " = " << value << endl;
                     if ( !name.isEmpty() )
                         context.variableCollection().setVariableValue( name, value );
                 }
@@ -1563,12 +1565,18 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
                 firstListItem->applyListStyle( context, restartNumbering, orderedList, isOutline, level );
                 p = p->next();
             }
+#if 0
             // Make text:h inside list-item (as non first child) unnumbered.
+            // This was added for kofficetests/documents/native/kword/text/oo_unnumbered_heading.odt
+            // but it works fine without this.
+            // And this code breaks loading OOo_1.odt (ODF camp 2007),
+            // all the numbers get lost.
             while ( p && p != lastParagraph->next() ) {
-                if ( p->counter() )
+                if ( p->counter() ) // AND it's a heading!
                     p->counter()->setNumbering( KoParagCounter::NUM_NONE );
                 p = p->next();
             }
+#endif
         }
     }
     if ( listOK )
