@@ -27,13 +27,13 @@
 /**
  * @short Implementation of the msub, msup, msubsup elements
  */
-class KOFORMULA_EXPORT MultiscriptElement : public BasicElement {
+class KOFORMULA_EXPORT SubSupElement : public BasicElement {
 public:
     /// The standard constructor
-    MultiscriptElement( BasicElement* parent = 0 );
+    SubSupElement( BasicElement* parent = 0 );
 
     /// The destructor
-    ~MultiscriptElement();
+    ~SubSupElement();
 
     /**
      * Obtain a list of all child elements of this element

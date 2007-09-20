@@ -17,23 +17,19 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "MultiscriptElement.h"
+#include "SubSupElement.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 
-MultiscriptElement::MultiscriptElement( BasicElement* parent ) : BasicElement( parent )
+SubSupElement::SubSupElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
-    //For now, we will only worry about msub, msup and msubsup
-    //All of these will need to become QList<BasicElement*> for mmultiscript support
-//    m_preSubscript = new BasicElement( this );
-//    m_preSuperscript = new BasicElement( this );
     m_postSubscript = new BasicElement( this );
     m_postSuperscript = new BasicElement( this );
 }
 
-MultiscriptElement::~MultiscriptElement()
+SubSupElement::~SubSupElement()
 {
     delete m_baseElement;
     //delete m_preSubscript;
@@ -42,14 +38,14 @@ MultiscriptElement::~MultiscriptElement()
     delete m_postSuperscript;
 }
 
-void MultiscriptElement::paint( QPainter& painter, AttributeManager* am )
+void SubSupElement::paint( QPainter& painter, AttributeManager* am )
 { 
     Q_UNUSED(painter)
     Q_UNUSED(am)
-    /*do nothing as UnderOverElement has no visual representance*/
+    /*do nothing as this element has no visual representation*/
 }
 
-void MultiscriptElement::layout( const AttributeManager* am )
+void SubSupElement::layout( const AttributeManager* am )
 {
     // Get the minimum amount of shifting
     double subscriptshift   = am->doubleOf( "subscriptshift", this ); 
@@ -90,12 +86,12 @@ void MultiscriptElement::layout( const AttributeManager* am )
         setHeight( yOffset + m_baseElement->height() );
 }
 
-BasicElement* MultiscriptElement::acceptCursor( CursorDirection direction )
+BasicElement* SubSupElement::acceptCursor( CursorDirection direction )
 {
     return 0;
 }
 
-const QList<BasicElement*> MultiscriptElement::childElements()
+const QList<BasicElement*> SubSupElement::childElements()
 {
     QList<BasicElement*> tmp;
     tmp << m_baseElement;
@@ -106,12 +102,12 @@ const QList<BasicElement*> MultiscriptElement::childElements()
     return tmp;
 }
 
-QString MultiscriptElement::attributesDefaultValue( const QString& attribute ) const
+QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
 {
     return QString();
 }
 
-ElementType MultiscriptElement::elementType() const
+ElementType SubSupElement::elementType() const
 {
     if( m_postSubscript && m_postSuperscript )
         return SubSupScript;
@@ -120,18 +116,15 @@ ElementType MultiscriptElement::elementType() const
     else if( m_postSuperscript )
         return SupScript;
     else
-        return MultiScript;
-    //multiscript not yet supported
-    //return MultiScripts;
+        return SubSupScript;
 }
 
-bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
+bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
 {
     QString name = parent.tagName().toLower();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
-
-    if(name == "mmultiscripts") return false;  //Not yet coded
+    //The possibilities are msub, msup and msubsup
     if(!name.contains( "sub" )) {
         delete m_postSubscript;
 	m_postSubscript = NULL;
@@ -167,7 +160,7 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
     return true;
 }
 
-void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
+void SubSupElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_baseElement->writeMathML( writer );        // Just save the children in
                                                  // the right order

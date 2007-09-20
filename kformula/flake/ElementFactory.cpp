@@ -41,6 +41,7 @@
 #include "SpaceElement.h"
 #include "StringElement.h"
 #include "StyleElement.h"
+#include "SubSupElement.h"
 #include "TextElement.h"
 #include "UnderOverElement.h"
 #include "SquareRootElement.h"
@@ -87,7 +88,7 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
     else if ( tagName == "menclose" )
           return new EncloseElement( parent );
     else if ( tagName == "msub" || tagName == "msup" || tagName == "msubsup" )
-          return new MultiscriptElement( parent );
+          return new SubSupElement( parent );
     else if ( tagName == "munder" || tagName == "mover" || tagName == "munderover" )
           return new UnderOverElement( parent );
     else if ( tagName == "mmultiscripts" )
@@ -158,8 +159,10 @@ QString ElementFactory::elementName( ElementType type )
             return "maction";
         case Basic:
             return "mrow";
+	case Formula:
+	    return "math";
         default:
-            kWarning( DEBUGID ) << "Invalid element type\n";
+            kWarning( DEBUGID ) << "Invalid element type " << type;
     }
 
     return QString();

@@ -17,6 +17,7 @@ set( kformulalib_PART_SRCS
    IdentifierElement.cpp
    OperatorElement.cpp
    MultiscriptElement.cpp
+   SubSupElement.cpp
    UnderOverElement.cpp
    FencedElement.cpp 
    MatrixElement.cpp
