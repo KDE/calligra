@@ -538,6 +538,8 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
             }
             new KRun(m_caret.charFormat().anchorHref(), 0);
         }
+        else
+            event->ignore(); // allow the event to be used by another
     }
 }
 
