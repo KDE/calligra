@@ -92,7 +92,7 @@ FlattenDlg::FlattenDlg( QWidget* parent, const char* name )
 {
     setObjectName(name);
     setModal(true);
-    setCaption( i18n( "&Flatten Path" ) );
+    setCaption( i18n( "Flatten Path" ) );
     setButtons( Ok | Cancel );
 
     // add input fields on the left:
