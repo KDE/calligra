@@ -49,6 +49,8 @@ protected:
     void loadGroup( KoShapeContainer * group, const KoXmlElement &e );
     void loadStyle( KoShape * shape, const KoXmlElement &e );
 
+    KoShape * loadPath( const KoXmlElement &element );
+
     double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue);
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);
 

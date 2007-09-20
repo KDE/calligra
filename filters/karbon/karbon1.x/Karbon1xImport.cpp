@@ -22,11 +22,17 @@
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStore.h>
+#include <KoOasisStyles.h>
 #include <KoGenStyles.h>
 #include <KoPageLayout.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLayer.h>
+#include <KoPathShape.h>
+#include <KoPathShapeLoader.h>
+#include <KoShapeGroup.h>
+#include <commands/KoShapeGroupCommand.h>
+#include <KoLineBorder.h>
 
 #include <kgenericfactory.h>
 
@@ -202,6 +208,8 @@ bool KarbonImport::convert( const KoXmlDocument &document )
 
     // TODO set page layout to the ouput document
 
+    // TODO apply global coordinate system transformation (y-mirroring)
+
     return success;
 }
 
@@ -260,16 +268,17 @@ void KarbonImport::loadGroup( KoShapeContainer * group, const KoXmlElement &elem
 {
     loadStyle( group, element );
 
+    QList<KoShape*> shapes;
+
     KoXmlElement e;
     forEachElement( e, element )
     {
-        /*
+        KoShape * shape = 0;
         if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" ) // TODO : remove COMPOSITE later
         {
-            VPath* composite = new VPath( this );
-            composite->load( e );
-            append( composite );
+            shape = loadPath( e );
         }
+        /*
         else if( e.tagName() == "ELLIPSE" )
         {
             VEllipse* ellipse = new VEllipse( this );
@@ -337,6 +346,23 @@ void KarbonImport::loadGroup( KoShapeContainer * group, const KoXmlElement &elem
             append( text );
         }
         */
+        if( shape )
+            shapes.append( shape );
+    }
+
+    foreach( KoShape * shape, shapes )
+        m_document.add( shape );
+
+    KoShapeGroup * g = dynamic_cast<KoShapeGroup*>( group );
+    if( g )
+    {
+        KoShapeGroupCommand cmd( g, shapes );
+        cmd.redo();
+    }
+    else
+    {
+        foreach( KoShape * shape, shapes )
+            group->addChild( shape );
     }
 }
 
@@ -344,8 +370,69 @@ void KarbonImport::loadStyle( KoShape * shape, const KoXmlElement &element )
 {
     // TODO load fill
     // TODO load stroke
+    shape->setBorder( new KoLineBorder() );
 
     if( ! element.attribute( "ID" ).isEmpty() )
         shape->setName( element.attribute( "ID" ) );
 }
 
+KoShape * KarbonImport::loadPath( const KoXmlElement &element )
+{
+    KoPathShape * path = new KoPathShape();
+
+    loadStyle( path, element );
+
+    QString data = element.attribute( "d" );
+    if( data.length() > 0 )
+    {
+        KoPathShapeLoader loader( path );
+        loader.parseSvg( data, true );
+    }
+
+    path->setFillRule( element.attribute( "fillRule" ) == 0 ? Qt::OddEvenFill : Qt::WindingFill );
+
+    KoXmlElement child;
+    forEachElement(child, element)
+    {
+        // backward compatibility for karbon before koffice 1.3.x
+        if( child.tagName() == "PATH" )
+        {
+            KoPathShape * subpath = new KoPathShape();
+
+            KoXmlElement segment;
+            forEachElement(segment, child)
+            {
+                if( segment.tagName() == "MOVE" )
+                {
+                    subpath->moveTo( QPointF( segment.attribute( "x" ).toDouble(), segment.attribute( "y" ).toDouble() ) );
+                }
+                else if( segment.tagName() == "LINE" )
+                {
+                    subpath->lineTo( QPointF( segment.attribute( "x" ).toDouble(), segment.attribute( "y" ).toDouble() ) );
+                }
+                else if( segment.tagName() == "CURVE" )
+                {
+                    QPointF p0( segment.attribute( "x1" ).toDouble(), segment.attribute( "y1" ).toDouble() );
+                    QPointF p1( segment.attribute( "x2" ).toDouble(), segment.attribute( "y2" ).toDouble() );
+                    QPointF p2( segment.attribute( "x3" ).toDouble(), segment.attribute( "y3" ).toDouble() );
+                    subpath->curveTo( p0, p1, p2 );
+                }
+            }
+
+            if( child.attribute( "isClosed" ) == 0 ? false : true )
+                path->close();
+
+            path->combine( subpath );
+        }
+        else
+        {
+            loadStyle( path, child );
+        }
+    }
+
+    QString trafo = element.attribute( "transform" );
+    if( !trafo.isEmpty() )
+        path->setTransformation( KoOasisStyles::loadTransformation( trafo ) );
+
+    return path;
+}
