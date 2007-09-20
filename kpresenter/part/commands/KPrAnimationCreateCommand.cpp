@@ -19,11 +19,11 @@
 
 #include "KPrAnimationCreateCommand.h"
 
-#include "KPrAnimationController.h"
+#include "KPrDocument.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
-KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrAnimationController * controller, KPrShapeAnimation * animation )
-: m_controller( controller )
+KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
+: m_doc( doc )
 , m_animation( animation )
 , m_deleteAnimation( true )
 {
@@ -38,12 +38,12 @@ KPrAnimationCreateCommand::~KPrAnimationCreateCommand()
 
 void KPrAnimationCreateCommand::redo ()
 {
-    m_controller->animations().add( m_animation );
+    m_doc->addAnimation( m_animation );
     m_deleteAnimation = false;
 }
 
 void KPrAnimationCreateCommand::undo ()
 {
-    m_controller->animations().remove( m_animation );
+    m_doc->removeAnimation( m_animation );
     m_deleteAnimation = true;
 }

@@ -74,7 +74,7 @@ protected:
     /**
      * @brief get the animations of the page
      */
-    KPrShapeAnimations * animationsByPage( KoPAPageBase * page );
+    KPrShapeAnimations & animationsByPage( KoPAPageBase * page );
 };
 
 #endif /* KPRDOCUMENT_H */

@@ -73,17 +73,16 @@ void KPrDocument::addAnimation( KPrShapeAnimation * animation )
 {
     KoShape * shape = animation->shape();
 
-    KPrShapeAnimations * animations( animationsByPage( pageByShape( shape ) ) );
-
-    Q_ASSERT( animations );
+    KPrShapeAnimations & animations( animationsByPage( pageByShape( shape ) ) );
 
     // add animation to the list of animations
-    animations->add( animation );
+    animations.add( animation );
 
     // add animation to the shape animation data so that it can be regenerated on delete shape and undo
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData == 0 ) {
         applicationData = new KPrShapeApplicationData();
+        shape->setApplicationData( applicationData );
     }
     applicationData->animations().insert( animation );
 }
@@ -92,12 +91,10 @@ void KPrDocument::removeAnimation( KPrShapeAnimation * animation, bool removeFro
 {
     KoShape * shape = animation->shape();
 
-    KPrShapeAnimations * animations( animationsByPage( pageByShape( shape ) ) );
-
-    Q_ASSERT( animations );
+    KPrShapeAnimations & animations( animationsByPage( pageByShape( shape ) ) );
 
     // remove animation from the list of animations
-    animations->remove( animation );
+    animations.remove( animation );
 
     if ( removeFromApplicationData ) {
         // remove animation from the shape animation data
@@ -131,22 +128,11 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     }
 }
 
-KPrShapeAnimations * KPrDocument::animationsByPage( KoPAPageBase * page )
+KPrShapeAnimations & KPrDocument::animationsByPage( KoPAPageBase * page )
 {
-    KPrShapeAnimations * animations = 0;
-
-    KPrPage * kprPage = dynamic_cast<KPrPage*>( page );
-    if ( kprPage ) {
-        animations = &( kprPage->animations() );
-    }
-    else {
-        KPrMasterPage * kprMasterPage = dynamic_cast<KPrMasterPage*>( page );
-        if ( kprMasterPage ) {
-            animations = &( kprMasterPage->animations() );
-        }
-    }
-
-    return animations;
+    KPrAnimationController * controller = dynamic_cast<KPrAnimationController *>( page );
+    Q_ASSERT( controller );
+    return controller->animations();
 }
 
 

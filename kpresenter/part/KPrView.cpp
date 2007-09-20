@@ -27,7 +27,6 @@
 #include <KoShapeManager.h>
 #include <KoPACanvas.h>
 
-#include "KPrAnimationController.h"
 #include "KPrDocument.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
@@ -90,9 +89,9 @@ void KPrView::createAnimation()
     foreach( KoShape * shape, selectedShapes )
     {
         KPrShapeAnimation * animation = new KPrAnimationMoveAppear( shape, animationcount );
-        KPrAnimationController * controller = dynamic_cast<KPrAnimationController *>( m_activePage );
-        Q_ASSERT( controller );
-        KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( controller, animation );
+        KPrDocument * doc = dynamic_cast<KPrDocument *>( m_doc );
+        Q_ASSERT( doc );
+        KPrAnimationCreateCommand * command = new KPrAnimationCreateCommand( doc, animation );
         m_canvas->addCommand( command );
     }
     animationcount = ( animationcount + 1 ) % 3;
