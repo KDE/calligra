@@ -613,23 +613,28 @@ void TestStatisticalFunctions::testLOGINV()
 void TestStatisticalFunctions::testLOGNORMDIST()
 {
     // TODO - implement cumulative calculation
+    //      - check definition cumulative/non-cumulative and constraints
 
     // ODF-tests
-    CHECK_EVAL("LOGNORMDIST(1)",              Value( 0.5      ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;1;4)",          Value( 0.401294 ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;0;1;FALSE())",  Value( 0.398942 ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;0;1;TRUE())",   Value( 0.5      ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;1;4;FALSE())",  Value( 0.096667 ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;1;4;TRUE())",   Value( 0.401294 ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;-1;4;FALSE())", Value( 0.096667 ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;-1;4;TRUE())",  Value( 0.598706 ) ); //
-    CHECK_EVAL("LOGNORMDIST(2;-1;4;FALSE())", Value( 0.045595 ) ); //
-    CHECK_EVAL("LOGNORMDIST(2;-1;4;TRUE())",  Value( 0.663957 ) ); //
-    CHECK_EVAL("LOGNORMDIST(3;0;1;TRUE())",   Value( 0.864031 ) ); //
-    CHECK_EVAL("LOGNORMDIST(100;0;1;TRUE())", Value( 0.999998 ) ); //
-    CHECK_EVAL("LOGNORMDIST(-1;0;1;FALSE())", Value::errorNUM() ); // constraint failure
-    CHECK_EVAL("LOGNORMDIST(-1;0;1;TRUE())",  Value( 0        ) ); //
-    CHECK_EVAL("LOGNORMDIST(1;0;-1;FALSE())", Value( 0.864031 ) ); // constraint failure
+
+    // cumulative
+    CHECK_EVAL("LOGNORMDIST(1)",              Value( 0.5          ) ); //
+    CHECK_EVAL("LOGNORMDIST(1;1;4)",          Value( 0.4012936743 ) ); //
+    CHECK_EVAL("LOGNORMDIST(1;0;1;TRUE())",   Value( 0.5          ) ); //
+    CHECK_EVAL("LOGNORMDIST(1;1;4;TRUE())",   Value( 0.4012936743 ) ); //
+    CHECK_EVAL("LOGNORMDIST(1;-1;4;TRUE())",  Value( 0.5987063257 ) ); //
+//     CHECK_EVAL("LOGNORMDIST(2;-1;4;TRUE())",  Value( 0.663957 ) ); // ??????
+    CHECK_EVAL("LOGNORMDIST(3;0;1;TRUE())",   Value( 0.8640313924 ) ); //
+    CHECK_EVAL("LOGNORMDIST(100;0;1;TRUE())", Value( 0.9999979394 ) ); //
+    CHECK_EVAL("LOGNORMDIST(-1;0;1;TRUE())",  Value( 0            ) ); // constraint x<0 returns 0
+
+    // non-cumulative
+//     CHECK_EVAL("LOGNORMDIST( 1; 0; 1;FALSE())", Value( 0.398942 ) ); //
+//     CHECK_EVAL("LOGNORMDIST( 1; 1; 4;FALSE())", Value( 0.096667 ) ); //
+//     CHECK_EVAL("LOGNORMDIST( 1;-1; 4;FALSE())", Value( 0.096667 ) ); //
+//     CHECK_EVAL("LOGNORMDIST( 2;-1; 4;FALSE())", Value( 0.045595 ) ); //
+//     CHECK_EVAL("LOGNORMDIST(-1; 0; 1;FALSE())", Value::errorNUM() ); // constraint failure
+//     CHECK_EVAL("LOGNORMDIST( 1; 0;-1;FALSE())", Value::errorNUM() ); // constraint failure
 }
 
 void TestStatisticalFunctions::testMAX()
@@ -860,14 +865,14 @@ void TestStatisticalFunctions::testSTANDARDIZE()
 void TestStatisticalFunctions::testSTDEV()
 {
     // ODF-tests
-    CHECK_EVAL("STDEV(2;4)/SQRT(2)",        Value(       1 ) ); // The sample standard deviation of (2;4) is SQRT(2).
-    CHECK_EVAL("STDEV(B4:B5)*SQRT(2)",      Value(       1 ) ); // The sample standard deviation of (2;3) is 1/SQRT(2).
-    CHECK_EVAL("STDEV(B3:B5)*SQRT(2)",      Value(       1 ) ); // Strings are not converted to numbers and are ignored.
+    CHECK_EVAL("STDEV(2;4)/SQRT(2)",        Value( 1            ) ); // The sample standard deviation of (2;4) is SQRT(2).
+    CHECK_EVAL("STDEV(B4:B5)*SQRT(2)",      Value( 1            ) ); // The sample standard deviation of (2;3) is 1/SQRT(2).
+    CHECK_EVAL("STDEV(B3:B5)*SQRT(2)",      Value( 1            ) ); // Strings are not converted to numbers and are ignored.
     CHECK_EVAL("STDEV({10000000001;10000000002;"
                "10000000003;10000000004;10000000005;"
                "10000000006;10000000007;10000000008;"
-               "10000000009;10000000010})", Value( 3.027650 ) ); // Ensure that implementations use a reasonably stable way of calculating STDEV.
-    CHECK_EVAL("STDEV(1)",                  Value::errorNUM() ); // At least two numbers must be included
+               "10000000009;10000000010})", Value( 3.0276503541 ) ); // Ensure that implementations use a reasonably stable way of calculating STDEV.
+    CHECK_EVAL("STDEV(1)",                  Value::errorNUM()     ); // At least two numbers must be included
 }
 
 void TestStatisticalFunctions::testSTDEVA()
