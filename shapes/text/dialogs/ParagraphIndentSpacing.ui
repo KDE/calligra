@@ -9,9 +9,6 @@
     <height>388</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Form</string>
-  </property>
   <property name="whatsThis" >
    <string>&lt;p>&lt;ul>&lt;li>&lt;b>Single&lt;/b>: The normal linespacing&lt;/li>&lt;/ul>&lt;/p> </string>
   </property>

@@ -9,9 +9,6 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>NewStyleWidget</string>
-  </property>
   <layout class="QHBoxLayout" >
    <property name="leftMargin" >
     <number>0</number>
