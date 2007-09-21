@@ -21,32 +21,28 @@
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <kdebug.h>
 
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
-    //For now, we will only worry about msub, msup and msubsup
-    //All of these will need to become QList<BasicElement*> for mmultiscript support
-//    m_preSubscript = new BasicElement( this );
-//    m_preSuperscript = new BasicElement( this );
-    m_postSubscript = new BasicElement( this );
-    m_postSuperscript = new BasicElement( this );
 }
 
 MultiscriptElement::~MultiscriptElement()
 {
     delete m_baseElement;
-    //delete m_preSubscript;
-    //	delete m_preSuperscript;
-    delete m_postSubscript;
-    delete m_postSuperscript;
+    //Delete all of the scripts
+    while (!m_preScripts.isEmpty())
+        delete m_preScripts.takeFirst();
+    while (!m_postScripts.isEmpty())
+        delete m_postScripts.takeFirst();
 }
 
 void MultiscriptElement::paint( QPainter& painter, AttributeManager* am )
 { 
     Q_UNUSED(painter)
     Q_UNUSED(am)
-    /*do nothing as UnderOverElement has no visual representance*/
+    /*do nothing as this element has no visual representation*/
 }
 
 void MultiscriptElement::layout( const AttributeManager* am )
@@ -56,38 +52,101 @@ void MultiscriptElement::layout( const AttributeManager* am )
     double superscriptshift = am->doubleOf( "superscriptshift", this );
     //Add half a thin space between both sup and superscript, so there is a minimum
     //of a whole thin space between them.
-    double halfthinSpace   = am->mathSpaceValue( "thinmathspace" )/2.0;
+    double halfthinspace   = am->mathSpaceValue( "thinmathspace" )/2.0;
 
     
-    // The yOffset is the amount the base element is moved down to make
+    bool isSuperscript = true;
+    // Go through all the superscripts (pre and post) and find the maximum heights;
+    // BaseLine is the distance from the top to the baseline.
+    // Depth is the distance from the baseline to the bottom
+    double maxSuperScriptDepth     = 0.0;
+    double maxSuperScriptBaseLine  = 0.0;
+    double maxSubScriptDepth       = 0.0;
+    double maxSubScriptBaseLine    = 0.0;
+    foreach( BasicElement *script, m_postScripts ) {
+        isSuperscript = !isSuperscript;  //Toggle each time
+        if(!script)
+            continue;  // Null means no element - just a blank
+        if(isSuperscript) {
+            maxSuperScriptDepth = qMax( script->height() - script->baseLine(), maxSuperScriptDepth );
+            maxSuperScriptBaseLine = qMax( script->baseLine(), maxSuperScriptBaseLine );
+        } else {
+            //Find out how much the subscript sticks below the baseline
+            maxSubScriptDepth = qMax( script->height() - script->baseLine(), maxSubScriptDepth );
+            maxSubScriptBaseLine = qMax( script->baseLine(), maxSubScriptBaseLine );
+        }
+    }
+    foreach( BasicElement *script, m_preScripts ) {
+        isSuperscript = !isSuperscript;  //Toggle each time
+        if(!script)
+            continue;  // Null means no element - just a blank
+        if(isSuperscript) {
+            maxSuperScriptDepth = qMax( script->height() - script->baseLine(), maxSuperScriptDepth );
+            maxSuperScriptBaseLine = qMax( script->baseLine(), maxSuperScriptBaseLine );
+        } else {
+            //Find out how much the subscript sticks below the baseline
+            maxSubScriptDepth = qMax( script->height() - script->baseLine(), maxSubScriptDepth );
+            maxSubScriptBaseLine = qMax( script->baseLine(), maxSubScriptBaseLine );
+        }
+    }
+    // The yOffsetBase is the amount the base element is moved down to make
     // room for the superscript
-    double yOffset = 0;
-    if(m_postSuperscript) {
-        yOffset = m_postSuperscript->height() - m_baseElement->height()/2 + halfthinSpace;
-        yOffset = qMax( yOffset, superscriptshift );
+    double yOffsetBase = 0;
+    if(maxSuperScriptDepth + maxSuperScriptBaseLine > 0) {
+        yOffsetBase = maxSuperScriptDepth + maxSuperScriptBaseLine - m_baseElement->height()/2.0 + halfthinspace;
+        yOffsetBase = qMax( yOffsetBase, superscriptshift );
     }
-    double largestWidth;
-    if(m_postSubscript)
-        largestWidth = m_postSubscript->width();
-    if(m_postSuperscript) {
-        largestWidth = qMax( largestWidth, m_postSuperscript->width());
-        m_postSuperscript->setOrigin( QPointF( m_baseElement->width(), 0) );
+    // The yOffsetSub is the amount the subscript elements /baseline/ are moved down.
+    double yOffsetSub = yOffsetBase +
+                qMax( m_baseElement->height()/2 + halfthinspace, 
+                      m_baseElement->height() - maxSubScriptBaseLine
+                          + subscriptshift );
+    kDebug() << "yOffsetSub is "  << yOffsetSub << " and baseElement height is " << m_baseElement->height() << " and yOffsetBase is " << yOffsetBase;
+    
+    double xOffset = 0.0;  //We increment this as we go along, to keep track of where to place elements
+    double lastSuperScriptWidth= 0.0;
+    // Now we have all the information needed to start putting elements in place.
+    // We start from the far left, and work to the far right.
+    for( int i = m_preScripts.size()-1; i >= 0; i--) {
+        //We start from the end, and work in.
+        //m_preScripts[0] is subscript etc.  So even i is subscript, odd i is superscript
+        if( i%2 == 0) {
+            // i is even, so subscript
+            if(!m_preScripts[i]) {
+                xOffset += halfthinspace + lastSuperScriptWidth;
+            } else {
+                // For a given vertical line, this is processed after the superscript
+                double offset = qMax(0.0, (lastSuperScriptWidth - m_preScripts[i]->width())/2.0);
+                m_preScripts[i]->setOrigin( QPointF( 
+                            offset + xOffset, 
+                            yOffsetSub + maxSubScriptBaseLine - m_preScripts[i]->baseLine() ) );
+                xOffset += halfthinspace + qMax(lastSuperScriptWidth, m_preScripts[i]->width());
+            }
+        } else {
+            // i is odd, so superscript
+            // For a given vertical line, we process the superscript first, then 
+            // the subscript.  We need to look at the subscript (i-1) as well
+            // to find out how to align them
+            if( !m_preScripts[i] )
+                lastSuperScriptWidth = 0.0;
+            else {
+                lastSuperScriptWidth = m_preScripts[i]->width();
+                double offset = 0.0;
+                if(m_preScripts[i-1]) //the subscript directly below us. 
+                    offset = qMax(0.0, (m_preScripts[i-1]->width() - lastSuperScriptWidth)/2.0);
+                m_preScripts[i]->setOrigin( QPointF(
+                            offset + xOffset,
+                            maxSuperScriptBaseLine - m_preScripts[i]->baseLine()));
+            }
+        }
     }
 
-    setWidth( m_baseElement->width() + largestWidth );
-    setBaseLine( yOffset + m_baseElement->height() );
-    m_baseElement->setOrigin( QPointF( 0, yOffset ) );
+    m_baseElement->setOrigin( QPointF( xOffset, yOffsetBase ) );
+    setHeight( yOffsetSub + maxSubScriptDepth );
+    xOffset += m_baseElement->width();
 
-
-    if(m_postSubscript) {
-        double yPos = yOffset +
-	       	qMax( m_baseElement->height()/2 + halfthinSpace, 
-		      m_baseElement->height() - m_postSubscript->baseLine() 
-		          + subscriptshift );
-        m_postSubscript->setOrigin( QPointF( m_baseElement->width(), yPos ) );
-	setHeight( yPos + m_postSubscript->height() );
-    } else
-        setHeight( yOffset + m_baseElement->height() );
+    setWidth( xOffset );
+    setBaseLine( yOffsetBase + m_baseElement->baseLine() );
 }
 
 BasicElement* MultiscriptElement::acceptCursor( CursorDirection direction )
@@ -97,13 +156,20 @@ BasicElement* MultiscriptElement::acceptCursor( CursorDirection direction )
 
 const QList<BasicElement*> MultiscriptElement::childElements()
 {
-    QList<BasicElement*> tmp;
-    tmp << m_baseElement;
-    if(m_postSubscript)
-	    tmp << m_postSubscript;
-    if(m_postSuperscript)
-	    tmp << m_postSuperscript;
-    return tmp;
+    QList<BasicElement*> list;
+    list << m_baseElement;
+    
+    foreach( BasicElement* tmp, m_postScripts ) {
+        if(tmp)
+            list << tmp;
+    }
+
+    foreach( BasicElement* tmp, m_preScripts ) {
+        if(tmp)
+            list << tmp;
+    }
+    
+    return list;
 }
 
 QString MultiscriptElement::attributesDefaultValue( const QString& attribute ) const
@@ -113,16 +179,7 @@ QString MultiscriptElement::attributesDefaultValue( const QString& attribute ) c
 
 ElementType MultiscriptElement::elementType() const
 {
-    if( m_postSubscript && m_postSuperscript )
-        return SubSupScript;
-    else if( m_postSubscript )
-        return SubScript;
-    else if( m_postSuperscript )
-        return SupScript;
-    else
-        return MultiScript;
-    //multiscript not yet supported
-    //return MultiScripts;
+    return MultiScript;
 }
 
 bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
@@ -130,40 +187,37 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
     QString name = parent.tagName().toLower();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
-
-    if(name == "mmultiscripts") return false;  //Not yet coded
-    if(!name.contains( "sub" )) {
-        delete m_postSubscript;
-	m_postSubscript = NULL;
-    }
-    if(!name.contains( "sup" )) {
-        delete m_postSuperscript;
-	m_postSuperscript = NULL;
-    }
+    bool prescript = false; //When we see a mprescripts tag, we enable this
     forEachElement( tmp, parent ) { 
+        if(tmp.tagName() == "none") {
+            //In mathml, we read subscript, then superscript, etc.  To skip one,
+            //you use "none"
+            //To represent "none" we use a NULL pointer
+            if(prescript)
+                m_preScripts.append(NULL);
+            else
+                m_postScripts.append(NULL);
+            continue;
+        } else if(tmp.tagName() == "mprescripts") {
+            prescript = true;  
+            //In mathml, when we see this tag, all the elements after it are
+            // for prescripts
+            continue;
+        }
+        
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         if( !tmpElement->readMathML( tmp ) )
             return false;
-
-        if( m_baseElement->elementType() == Basic ) {
+        if( m_baseElement->elementType() == Basic ) {  //Very first element is the base
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( m_postSubscript && m_postSubscript->elementType() == Basic ) {
-            delete m_postSubscript;
-            m_postSubscript = tmpElement;
-	    Q_ASSERT(m_postSubscript);
-        }
-        else if( m_postSuperscript && m_postSuperscript->elementType() == Basic ) {
-            delete m_postSuperscript;
-            m_postSuperscript = tmpElement;
-	    Q_ASSERT(m_postSuperscript);
-        }
-        else
-            return false;
+        else if( prescript)
+            m_preScripts.append( tmpElement );
+        else 
+            m_postScripts.append( tmpElement );
     }
     Q_ASSERT(m_baseElement);  //We should have at least a BasicElement for the base
-    Q_ASSERT(m_postSubscript || m_postSuperscript);
     return true;
 }
 
@@ -171,10 +225,28 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_baseElement->writeMathML( writer );        // Just save the children in
                                                  // the right order
-    if( m_postSubscript )
-        m_postSubscript->writeMathML( writer );
     
-    if( m_postSuperscript )
-        m_postSuperscript->writeMathML( writer );
+    foreach( BasicElement* tmp, m_postScripts ) {
+        if(tmp)
+            tmp->writeMathML( writer );
+        else {
+            //We need to use a none element for missing elements in the super/sub scripts
+            writer->startElement("none");
+            writer->endElement();
+        }
+    }
+    if( m_preScripts.isEmpty() ) return;
+    writer->startElement("mprescripts");
+    writer->endElement();
+    foreach( BasicElement* tmp, m_preScripts ) {
+        if(tmp)
+            tmp->writeMathML( writer );
+        else {
+            //We need to use a none element for missing elements in the super/sub scripts
+            writer->startElement("none");
+            writer->endElement();
+        }
+    }
+
 }
 

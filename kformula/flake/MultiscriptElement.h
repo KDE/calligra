@@ -25,7 +25,7 @@
 #include "kformula_export.h"
 
 /**
- * @short Implementation of the msub, msup, msubsup and mmultiscript element
+ * @short Implementation of the mmultiscript element
  */
 class KOFORMULA_EXPORT MultiscriptElement : public BasicElement {
 public:
@@ -78,20 +78,19 @@ private:
     /// The BasicElement representing the base element of the multiscript
     BasicElement* m_baseElement;
 
-    //For now, we will only worry about msub, msup and msubsup
-    //All of these will need to become QList<BasicElement*> for mmultiscript support
-    
-    /// The BasicElement representing the subscript left to the base element
-    //BasicElement* m_preSubscript;
+    /// A list of BasicElements representing the sub- and super-scripts left to the base
+    /// element.  The first item in the list is subscript, second is superscript, third
+    /// subscript and so on.
+    /// The first 2 items are drawn closest to the item, then moving increasingly
+    /// further away
+    QList<BasicElement*> m_preScripts;
 
-    /// The BasicElement representing the superscript left to the base element
-    //BasicElement* m_preSuperscript;
-
-    /// The BasicElement representing the subscript right to the base element
-    BasicElement* m_postSubscript;
-
-    /// The BasicElement representing the superscript right to the base element
-    BasicElement* m_postSuperscript;
+    /// A list of BasicElements representing the sub- and super-scripts right to the base
+    /// element.  The first item in the list is subscript, second is superscript, third
+    /// subscript and so on.
+    /// The first 2 items are drawn closest to the item, then moving increasingly
+    /// further away
+    QList<BasicElement*> m_postScripts;
 };
 
 #endif // MULTISCRIPTELEMENT_H
