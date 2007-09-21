@@ -34,6 +34,7 @@ FormulaCursor::FormulaCursor( BasicElement* element )
 
 void FormulaCursor::paint( QPainter& painter ) const
 {
+    Q_ASSERT(m_currentElement); if(!m_currentElement) return;
     QPointF top = m_currentElement->boundingRect().topLeft();
      
     if( m_currentElement->childElements().isEmpty() )  // set the cursor in the middle
