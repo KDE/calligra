@@ -30,6 +30,8 @@ TextElement::TextElement( BasicElement* parent ) : TokenElement( parent )
 
 void TextElement::renderToPath( const QString& raw, QPainterPath& path ) const
 {
+    AttributeManager manager;
+    path.addText( path.currentPosition(), manager.font( this ), raw );
 }
 
 ElementType TextElement::elementType() const
