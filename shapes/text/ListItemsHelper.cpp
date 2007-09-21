@@ -269,7 +269,10 @@ void ListItemsHelper::recalculate() {
                     TODO
                 } */
                 KoTextBlockData *otherData = dynamic_cast<KoTextBlockData*> (b.userData());
-Q_ASSERT(otherData);
+                if( ! otherData ) { //sebsauer, 2007-09-21, happens on loading the odf 1.1 draft odt in kword
+                    kWarning(32500)<<"Skipping textblock cause userData() does not contain a valid KoTextBlockData";
+                    continue;
+                }
                 if(tmpDisplayLevel-1 < otherLevel) { // can't just copy it fully since we are
                                                   // displaying less then the full counter
                     item += otherData->partialCounterText();
