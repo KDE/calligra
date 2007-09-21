@@ -141,11 +141,51 @@ void MultiscriptElement::layout( const AttributeManager* am )
         }
     }
 
+    //We have placed all the prescripts now.  So now place the base element
     m_baseElement->setOrigin( QPointF( xOffset, yOffsetBase ) );
-    setHeight( yOffsetSub + maxSubScriptDepth );
     xOffset += m_baseElement->width();
+    double lastSubScriptWidth = 0.0;
+    //Now we can draw the post scripts.  This code is very similar, but this time we will parse
+    //the subscript before the superscript
+    for( int i = 0; i < m_postScripts.size(); i++) {
+        //We start from the start, and work out.
+        //m_preScripts[0] is subscript etc.  So even i is subscript, odd i is superscript
+        if( i%2 == 0) {
+            // i is even, so subscript
+            // For a given vertical line, we process the subscript first, then 
+            // the superscript.  We need to look at the superscript (i+1) as well
+            // to find out how to align them
+ 
+            if(!m_postScripts[i]) {
+                lastSubScriptWidth = 0.0;
+            } else {
+                lastSubScriptWidth = m_postScripts[i]->width();
+                // For a given vertical line, this is processed after the superscript
+                double offset = 0.0;
+                if(m_postScripts.size() > i+1 && m_postScripts[i+1] != NULL) //the subscript directly below us. 
+                    offset = qMax(0.0, (m_postScripts[i+1]->width() - lastSubScriptWidth)/2.0);
+                m_postScripts[i]->setOrigin( QPointF( 
+                            offset + xOffset,
+                            yOffsetSub + maxSubScriptBaseLine - m_postScripts[i]->baseLine() ) );
+            }
+        } else {
+            // i is odd, so superscript
+           if( !m_postScripts[i] )
+                xOffset += halfthinspace + lastSubScriptWidth;
+           else {
+                double offset = qMax(0.0, (lastSubScriptWidth - m_postScripts[i]->width())/2.0);
+                m_postScripts[i]->setOrigin( QPointF(
+                            offset + xOffset,
+                            maxSuperScriptBaseLine - m_postScripts[i]->baseLine()));
+                xOffset += halfthinspace + qMax(lastSubScriptWidth, m_postScripts[i]->width());
+            }
+        }
+    }
 
+
+    //Finally, set our boundingbox
     setWidth( xOffset );
+    setHeight( yOffsetSub + maxSubScriptDepth );
     setBaseLine( yOffsetBase + m_baseElement->baseLine() );
 }
 
@@ -225,7 +265,6 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
     m_baseElement->writeMathML( writer );        // Just save the children in
                                                  // the right order
-    
     foreach( BasicElement* tmp, m_postScripts ) {
         if(tmp)
             tmp->writeMathML( writer );
@@ -234,6 +273,11 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
             writer->startElement("none");
             writer->endElement();
         }
+    }
+    if( m_postScripts.size() % 2 == 1) {
+        //There are an odd number of elements, so we need to add an extra "none" at the end
+        writer->startElement("none");
+        writer->endElement();
     }
     if( m_preScripts.isEmpty() ) return;
     writer->startElement("mprescripts");
@@ -247,6 +291,11 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
             writer->endElement();
         }
     }
-
+    if( m_preScripts.size() % 2 == 1) {
+        //There are an odd number of elements, so we need to add an extra "none" at the end
+        writer->startElement("none");
+        writer->endElement();
+    }
+ 
 }
 
