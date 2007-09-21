@@ -120,12 +120,12 @@ public:
     }
 
     void addWidget(QRadioButton *widget, int row, int column) {
+        addChildWidget(widget);
         Item newItem;
         newItem.child = new QWidgetItem(widget);
         newItem.row = row;
         newItem.column = column;
         items.append(newItem);
-        widget->setParent(parentWidget());
     }
 
 private:
