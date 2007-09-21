@@ -670,6 +670,7 @@ void TextTool::mouseDoubleClickEvent( KoPointerEvent *event ) {
         m_caret.movePosition(QTextCursor::WordRight, QTextCursor::KeepAnchor);
 
     repaintSelection();
+    updateSelectionHandler();
 }
 
 void TextTool::mouseMoveEvent( KoPointerEvent *event ) {
