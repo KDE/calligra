@@ -622,7 +622,7 @@ kDebug() <<"output:" << QString::fromUtf8(bytes);
 bool TextTool::paste() {
     const QMimeData *data = QApplication::clipboard()->mimeData();
 
-    if(data->hasFormat("application/vnd.oasi.opendocument.text")) {
+    if(data->hasFormat("application/vnd.oasis.opendocument.text")) {
         kDebug() <<"TODO load ODF style text!";
         // TODO create a KoTextShapeData::loadOdf() method and call it here.
     }
