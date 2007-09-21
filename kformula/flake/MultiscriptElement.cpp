@@ -45,6 +45,17 @@ void MultiscriptElement::paint( QPainter& painter, AttributeManager* am )
     /*do nothing as this element has no visual representation*/
 }
 
+void MultiscriptElement::ensureEvenNumberElements() {
+    if(m_postScripts.size() % 2 == 1) {
+        //Odd number - at a None element on the end
+        m_postScripts.append(NULL);
+    }
+    if(m_preScripts.size() % 2 == 1) {
+        //Odd number - at a None element on the end
+        m_preScripts.append(NULL);
+    }
+}
+
 void MultiscriptElement::layout( const AttributeManager* am )
 {
     // Get the minimum amount of shifting
@@ -54,8 +65,9 @@ void MultiscriptElement::layout( const AttributeManager* am )
     //of a whole thin space between them.
     double halfthinspace   = am->mathSpaceValue( "thinmathspace" )/2.0;
 
+    //First make sure that there are an even number of elements in both subscript and superscript
+    ensureEvenNumberElements();
     
-    bool isSuperscript = true;
     // Go through all the superscripts (pre and post) and find the maximum heights;
     // BaseLine is the distance from the top to the baseline.
     // Depth is the distance from the baseline to the bottom
@@ -63,6 +75,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
     double maxSuperScriptBaseLine  = 0.0;
     double maxSubScriptDepth       = 0.0;
     double maxSubScriptBaseLine    = 0.0;
+    bool isSuperscript = true;  //Toggle after each element time
     foreach( BasicElement *script, m_postScripts ) {
         isSuperscript = !isSuperscript;  //Toggle each time
         if(!script)
@@ -113,15 +126,17 @@ void MultiscriptElement::layout( const AttributeManager* am )
         if( i%2 == 0) {
             // i is even, so subscript
             if(!m_preScripts[i]) {
-                xOffset += halfthinspace + lastSuperScriptWidth;
+                xOffset += lastSuperScriptWidth;
             } else {
                 // For a given vertical line, this is processed after the superscript
                 double offset = qMax(0.0, (lastSuperScriptWidth - m_preScripts[i]->width())/2.0);
                 m_preScripts[i]->setOrigin( QPointF( 
                             offset + xOffset, 
                             yOffsetSub + maxSubScriptBaseLine - m_preScripts[i]->baseLine() ) );
-                xOffset += halfthinspace + qMax(lastSuperScriptWidth, m_preScripts[i]->width());
+                xOffset += qMax(lastSuperScriptWidth, m_preScripts[i]->width());
             }
+            if(i!=0)  //No halfthinspace between the first element and the base element
+                xOffset += halfthinspace;
         } else {
             // i is odd, so superscript
             // For a given vertical line, we process the superscript first, then 
@@ -171,14 +186,16 @@ void MultiscriptElement::layout( const AttributeManager* am )
         } else {
             // i is odd, so superscript
            if( !m_postScripts[i] )
-                xOffset += halfthinspace + lastSubScriptWidth;
+                xOffset += lastSubScriptWidth;
            else {
                 double offset = qMax(0.0, (lastSubScriptWidth - m_postScripts[i]->width())/2.0);
                 m_postScripts[i]->setOrigin( QPointF(
                             offset + xOffset,
                             maxSuperScriptBaseLine - m_postScripts[i]->baseLine()));
-                xOffset += halfthinspace + qMax(lastSubScriptWidth, m_postScripts[i]->width());
+                xOffset += qMax(lastSubScriptWidth, m_postScripts[i]->width());
             }
+           if(i != m_postScripts.size()-1)
+               xOffset += halfthinspace; //Don't add an unneeded space at the very end
         }
     }
 
@@ -257,6 +274,7 @@ bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
         else 
             m_postScripts.append( tmpElement );
     }
+    ensureEvenNumberElements();
     Q_ASSERT(m_baseElement);  //We should have at least a BasicElement for the base
     return true;
 }
@@ -274,11 +292,6 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
             writer->endElement();
         }
     }
-    if( m_postScripts.size() % 2 == 1) {
-        //There are an odd number of elements, so we need to add an extra "none" at the end
-        writer->startElement("none");
-        writer->endElement();
-    }
     if( m_preScripts.isEmpty() ) return;
     writer->startElement("mprescripts");
     writer->endElement();
@@ -291,11 +304,5 @@ void MultiscriptElement::writeMathMLContent( KoXmlWriter* writer ) const
             writer->endElement();
         }
     }
-    if( m_preScripts.size() % 2 == 1) {
-        //There are an odd number of elements, so we need to add an extra "none" at the end
-        writer->startElement("none");
-        writer->endElement();
-    }
- 
 }
 

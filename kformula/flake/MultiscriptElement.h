@@ -74,6 +74,10 @@ protected:
     /// Write all content to the KoXmlWriter
     void writeMathMLContent( KoXmlWriter* writer ) const;
 
+    /// Make sure that there are an even number of elements, as the spec says
+    /// there must be.
+    void ensureEvenNumberElements();
+
 private:
     /// The BasicElement representing the base element of the multiscript
     BasicElement* m_baseElement;
