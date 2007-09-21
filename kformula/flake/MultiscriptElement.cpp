@@ -21,7 +21,6 @@
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <kdebug.h>
 
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : BasicElement( parent )
 {
@@ -110,11 +109,10 @@ void MultiscriptElement::layout( const AttributeManager* am )
         yOffsetBase = qMax( yOffsetBase, superscriptshift );
     }
     // The yOffsetSub is the amount the subscript elements /baseline/ are moved down.
-    double yOffsetSub = yOffsetBase +
+    double yOffsetSub = yOffsetBase + maxSubScriptBaseLine +
                 qMax( m_baseElement->height()/2 + halfthinspace, 
                       m_baseElement->height() - maxSubScriptBaseLine
                           + subscriptshift );
-    kDebug() << "yOffsetSub is "  << yOffsetSub << " and baseElement height is " << m_baseElement->height() << " and yOffsetBase is " << yOffsetBase;
     
     double xOffset = 0.0;  //We increment this as we go along, to keep track of where to place elements
     double lastSuperScriptWidth= 0.0;
@@ -132,7 +130,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
                 double offset = qMax(0.0, (lastSuperScriptWidth - m_preScripts[i]->width())/2.0);
                 m_preScripts[i]->setOrigin( QPointF( 
                             offset + xOffset, 
-                            yOffsetSub + maxSubScriptBaseLine - m_preScripts[i]->baseLine() ) );
+                            yOffsetSub - m_preScripts[i]->baseLine() ) );
                 xOffset += qMax(lastSuperScriptWidth, m_preScripts[i]->width());
             }
             if(i!=0)  //No halfthinspace between the first element and the base element
@@ -181,7 +179,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
                     offset = qMax(0.0, (m_postScripts[i+1]->width() - lastSubScriptWidth)/2.0);
                 m_postScripts[i]->setOrigin( QPointF( 
                             offset + xOffset,
-                            yOffsetSub + maxSubScriptBaseLine - m_postScripts[i]->baseLine() ) );
+                            yOffsetSub - m_postScripts[i]->baseLine() ) );
             }
         } else {
             // i is odd, so superscript
@@ -206,7 +204,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
     setBaseLine( yOffsetBase + m_baseElement->baseLine() );
 }
 
-BasicElement* MultiscriptElement::acceptCursor( CursorDirection direction )
+BasicElement* MultiscriptEement::acceptCursor( CursorDirection direction )
 {
     return 0;
 }
