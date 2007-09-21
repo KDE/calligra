@@ -71,7 +71,7 @@ void SubSupElement::layout( const AttributeManager* am )
     }
 
     setWidth( m_baseElement->width() + largestWidth );
-    setBaseLine( yOffset + m_baseElement->height() );
+    setBaseLine( yOffset + m_baseElement->baseLine() );
     m_baseElement->setOrigin( QPointF( 0, yOffset ) );
 
 
