@@ -204,7 +204,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
     setBaseLine( yOffsetBase + m_baseElement->baseLine() );
 }
 
-BasicElement* MultiscriptEement::acceptCursor( CursorDirection direction )
+BasicElement* MultiscriptElement::acceptCursor( CursorDirection direction )
 {
     return 0;
 }
