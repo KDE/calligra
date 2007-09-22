@@ -22,6 +22,8 @@
 #include "KPrDocument.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
+#include <klocale.h>
+
 KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
 : m_doc( doc )
 , m_animation( animation )
