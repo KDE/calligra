@@ -27,6 +27,7 @@ KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShap
 , m_animation( animation )
 , m_deleteAnimation( true )
 {
+    setText( i18n( "Create shape animation" ) );
 }
 
 KPrAnimationCreateCommand::~KPrAnimationCreateCommand()
