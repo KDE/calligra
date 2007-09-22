@@ -16,6 +16,7 @@ SET (chartshape_LIB_SRCS
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
 target_link_libraries(chartshapelib kdchart kochart flake)
+set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS chartshapelib DESTINATION ${LIB_INSTALL_DIR})
 
 kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})
