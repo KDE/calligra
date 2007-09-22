@@ -273,24 +273,35 @@ void KPrAnimationDirector::nextStep()
         m_pageIndex = m_pageIndex < m_pages.size() - 1 ? m_pageIndex + 1 : 0;
         m_stepIndex = 0;
 
-        QPixmap oldPage( m_canvas->size() );
-        m_canvas->render( &oldPage );
-
-        updateActivePage( m_pages[m_pageIndex] );
-        updateAnimations();
-
-        QPixmap newPage( m_canvas->size() );
-        newPage.fill( Qt::white ); // TODO
-        QPainter newPainter( &newPage );
-        newPainter.setClipRect( m_pageRect );
-        newPainter.setRenderHint( QPainter::Antialiasing );
-        paintStep( newPainter );
-
-        // TODO read effect from page
         KPrPageEffect * effect = KPrPage::pageData( m_pages[m_pageIndex] )->pageEffect();
-        Q_ASSERT( effect );
-        m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, effect );
-        startTimeLine( effect->duration() );
+
+        // run page effect if there is one
+        if ( effect ) {
+            QPixmap oldPage( m_canvas->size() );
+            m_canvas->render( &oldPage );
+
+            updateActivePage( m_pages[m_pageIndex] );
+            updateAnimations();
+
+            QPixmap newPage( m_canvas->size() );
+            newPage.fill( Qt::white ); // TODO
+            QPainter newPainter( &newPage );
+            newPainter.setClipRect( m_pageRect );
+            newPainter.setRenderHint( QPainter::Antialiasing );
+            paintStep( newPainter );
+
+            m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, effect );
+            startTimeLine( effect->duration() );
+        }
+        else {
+            updateActivePage( m_pages[m_pageIndex] );
+            updateAnimations();
+
+            m_canvas->update();
+            if ( hasAnimation() ) {
+                startTimeLine( m_maxShapeDuration );
+            }
+        }
     }
 }
 
