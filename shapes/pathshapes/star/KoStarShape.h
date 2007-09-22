@@ -98,6 +98,14 @@ public:
     /// Returns if the star represents a regular polygon.
     bool convex() const;
 
+    /**
+     * Returns the star center point in shape coordinates.
+     *
+     * The star center is the weight center of the star and not necessarily
+     * coincident with the shape center point.
+     */
+    QPointF starCenter() const;
+
     /// reimplemented
     virtual void setSize( const QSizeF &newSize );
     /// reimplemented

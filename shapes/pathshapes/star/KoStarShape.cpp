@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "star/KoStarShape.h"
+#include "KoStarShape.h"
 
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
@@ -109,6 +109,11 @@ void KoStarShape::setConvex( bool convex )
 bool KoStarShape::convex() const
 {
     return m_convex;
+}
+
+QPointF KoStarShape::starCenter() const
+{
+    return m_center;
 }
 
 void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers )
@@ -224,6 +229,7 @@ void KoStarShape::createPath()
     m_handles.push_back( m_points.at(tip)->point() );
     if( ! m_convex )
         m_handles.push_back( m_points.at(base)->point() );
+    m_center = computeCenter();
 }
 
 void KoStarShape::setSize( const QSizeF &newSize )
