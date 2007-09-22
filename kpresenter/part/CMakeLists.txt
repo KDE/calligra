@@ -23,6 +23,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrAnimationController.cpp
      KPrPage.cpp
      KPrMasterPage.cpp
+     KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
      commands/KPrAnimationCreateCommand.cpp
      pageeffects/KPrPageEffectRunner.cpp

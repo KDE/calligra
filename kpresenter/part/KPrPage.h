@@ -25,11 +25,22 @@
 #include "KPrAnimationController.h"
 #include "KPrShapeAnimations.h"
 
+class KPrPageApplicationData;
+
 class KPrPage : public KoPAPage , public KPrAnimationController
 {
 public:
     explicit KPrPage( KoPAMasterPage * masterPage );
     virtual ~KPrPage();
+
+    /**
+     * Get the page data
+     *
+     * This method is static that you don't need to cast the page to a KPrPage first.
+     * As every KPrPage needs to have a KPrPageApplicationData this call fails with a
+     * assertion when it is not possible to retrieve.
+     */
+    static KPrPageApplicationData * pageData( KoPAPageBase * page );
 };
 
 #endif /* KPRPAGE_H */

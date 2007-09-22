@@ -32,10 +32,10 @@
 #include <KoPAView.h>
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
+#include "KPrPageApplicationData.h"
 #include "KPrShapeManagerAnimationStrategy.h"
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
-#include "pageeffects/KPrCoverDownEffect.h"
 #include "shapeanimations/KPrAnimationData.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
@@ -287,8 +287,10 @@ void KPrAnimationDirector::nextStep()
         paintStep( newPainter );
 
         // TODO read effect from page
-        m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, &m_pageEffect );
-        startTimeLine( m_pageEffect.duration() );
+        KPrPageEffect * effect = KPrPage::pageData( m_pages[m_pageIndex] )->pageEffect();
+        Q_ASSERT( effect );
+        m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, effect );
+        startTimeLine( effect->duration() );
     }
 }
 

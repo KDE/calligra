@@ -151,7 +151,6 @@ private:
 
     KPrPageEffectRunner * m_pageEffectRunner;
     // TODO remove when we read the effect from the page
-    KPrCoverDownEffect m_pageEffect;
     QMap<KoShape *, QPair<KPrShapeAnimation *, KPrAnimationData *> > m_animations;
     QTimeLine m_timeLine;
     int m_pageIndex;

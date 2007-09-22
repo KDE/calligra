@@ -19,11 +19,21 @@
 
 #include "KPrPage.h"
 
+#include "KPrPageApplicationData.h"
+
 KPrPage::KPrPage( KoPAMasterPage * masterPage )
 : KoPAPage( masterPage )
 {
+    setApplicationData( new KPrPageApplicationData() );
 }
 
 KPrPage::~KPrPage()
 {
+}
+
+KPrPageApplicationData * KPrPage::pageData( KoPAPageBase * page )
+{
+    KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( page->applicationData() );
+    Q_ASSERT( data );
+    return data;
 }
