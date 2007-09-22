@@ -36,6 +36,7 @@
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoImageData.h>
+#include <KoTextShapeData.h>
 #include <KoTextAnchor.h>
 #include <KoShapeContainer.h>
 #include <KoTextDocumentLayout.h>
@@ -274,7 +275,7 @@ bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles,
 
     // TODO check versions and mimetypes etc.
 
-    KoTextLoadingContext context( d->document, styles, store );
+    KoTextLoadingContext context( this, d->document, styles, store );
 
     KoColumns columns;
     columns.columns = 1;
@@ -390,19 +391,43 @@ bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles,
     fs->setName( i18n( "Main Text Frameset" ) );
     //fs->loadOasisContent( body, context );
 
+    // Get the factory for the TextShape
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
+    // Create a TextShape
     KoShape *shape = factory->createDefaultShape();
+    Q_ASSERT(shape);
+    // The TextShape will be displayed within a KWTextFrame
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     Q_UNUSED(frame);
     d->currentFramesetName = fs->name();
     d->document->addFrameSet(fs);
 
+
+
+
+    // Set the KWOpenDocumentFrameLoader which implements the KoTextFrameLoader to
+    // handle loading of frames (e.g. images) within KWord.
+    Q_ASSERT(! d->frameLoader);
+    d->frameLoader = new KWOpenDocumentFrameLoader(this);
+
+    // The KoTextShapeData does contain the data for our TextShape
+    KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+    Q_ASSERT(textShapeData);
+    textShapeData->setDocument( fs->document(), false /*transferOwnership*/ );
+    // Let the TextShape handle loading the body element.
+    KoShapeLoadingContext sc(context);
+    shape->loadOdf(body, sc);
+/*
     QTextCursor cursor( fs->document() );
 
     Q_ASSERT(! d->frameLoader);
     d->frameLoader = new KWOpenDocumentFrameLoader(this);
     loadBody(context, body, cursor);
+*/
+
+
+
 
 #endif
 

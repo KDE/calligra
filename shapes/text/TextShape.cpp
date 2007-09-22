@@ -245,7 +245,7 @@ void TextShape::saveOdf(KoShapeSavingContext & context) const {
 }
 
 bool TextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
+    return m_textShapeData->loadOdf(element, context);
 }
 
 QTextDocument *TextShape::footnoteDocument() {

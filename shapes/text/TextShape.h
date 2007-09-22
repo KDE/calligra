@@ -61,10 +61,26 @@ public:
     /// return if the content of this shape is demo text.
     bool demoText() const { return m_demoText; }
 
-    // reimplemented
-    virtual void saveOdf(KoShapeSavingContext & context) const;
-    // reimplemented
+    /**
+     * From KoShape reimplemented method to load the TextShape from ODF.
+     *
+     * This method redirects the call to the KoTextShapeData::loadOdf() method which
+     * in turn will call the KoTextLoader::loadBody() method that reads the element
+     * into a QTextCursor.
+     *
+     * @param context the KoShapeLoadingContext used for loading. Please note, that at
+     * the moment the context needs to be an instance of KoTextLoadingContext.
+     * @param element element which represents the shape in odf.
+     * @return false if loading failed.
+     */
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+
+    /**
+     * From KoShape reimplemented method to store the TextShape data as ODF.
+     *
+     * @param context the KoShapeSavingContext used for saving.
+     */
+    virtual void saveOdf(KoShapeSavingContext & context) const;
 
     KoTextShapeData *textShapeData() { return m_textShapeData; }
 
