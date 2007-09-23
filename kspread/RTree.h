@@ -319,12 +319,20 @@ RTree<T>::~RTree()
 template<typename T>
 void RTree<T>::insert( const QRectF& rect, const T& data )
 {
+  Q_ASSERT(rect.x()      - (int)rect.x()      == 0.0);
+  Q_ASSERT(rect.y()      - (int)rect.y()      == 0.0);
+  Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
+  Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
   KoRTree<T>::insert( rect.normalized().adjusted(0, 0, -0.1, -0.1), data );
 }
 
 template<typename T>
 void RTree<T>::remove( const QRectF& rect, const T& data )
 {
+  Q_ASSERT(rect.x()      - (int)rect.x()      == 0.0);
+  Q_ASSERT(rect.y()      - (int)rect.y()      == 0.0);
+  Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
+  Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
   dynamic_cast<Node*>(this->m_root)->remove( rect.normalized().adjusted(0, 0, -0.1, -0.1), data );
 }
 
@@ -337,6 +345,10 @@ QList<T> RTree<T>::contains( const QPointF& point ) const
 template<typename T>
 QList<T> RTree<T>::contains( const QRectF& rect ) const
 {
+    Q_ASSERT(rect.x()      - (int)rect.x()      == 0.0);
+    Q_ASSERT(rect.y()      - (int)rect.y()      == 0.0);
+    Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
+    Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
     QMap<int,T> result;
     dynamic_cast<Node*>(this->m_root)->contains( rect.normalized().adjusted(0, 0, -0.1, -0.1), result );
     return result.values();
@@ -345,12 +357,20 @@ QList<T> RTree<T>::contains( const QRectF& rect ) const
 template<typename T>
 QList<T> RTree<T>::intersects( const QRectF& rect ) const
 {
+    Q_ASSERT(rect.x()      - (int)rect.x()      == 0.0);
+    Q_ASSERT(rect.y()      - (int)rect.y()      == 0.0);
+    Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
+    Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
     return KoRTree<T>::intersects( rect.normalized().adjusted(0, 0, -0.1, -0.1) );
 }
 
 template<typename T>
 QMap<int, QPair<QRectF,T> > RTree<T>::intersectingPairs( const QRectF& rect ) const
 {
+    Q_ASSERT(rect.x()      - (int)rect.x()      == 0.0);
+    Q_ASSERT(rect.y()      - (int)rect.y()      == 0.0);
+    Q_ASSERT(rect.height() - (int)rect.height() == 0.0);
+    Q_ASSERT(rect.width()  - (int)rect.width()  == 0.0);
     QMap<int,QPair<QRectF,T> > result;
     dynamic_cast<Node*>(this->m_root)->intersectingPairs( rect.normalized().adjusted(0, 0, -0.1, -0.1), result );
     return result;

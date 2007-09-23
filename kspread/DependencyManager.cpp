@@ -313,12 +313,10 @@ void DependencyManager::regionMoved( const Region& movedRegion, const Cell& dest
     {
         Sheet* const sheet = (*it)->sheet();
         locationOffset.setSheet( ( sheet == destination.sheet() ) ? 0 : destination.sheet() );
-        const QRect range = (*it)->rect();
 
         if ( d->consumers.contains( sheet ) )
         {
-            const QRectF rangeF = QRectF( range ).adjusted( 0, 0, -0.1, -0.1 );
-            QList<Cell> dependentLocations = d->consumers[sheet]->intersects( rangeF );
+            QList<Cell> dependentLocations = d->consumers[sheet]->intersects((*it)->rect());
 
             for ( int i = 0; i < dependentLocations.count(); ++i )
             {
@@ -653,12 +651,11 @@ void DependencyManager::Private::computeDependencies( const Cell& cell, const Fo
                 providingRegion.add(region);
 
                 Sheet* sheet = region.firstSheet();
-                QRectF range = QRectF(region.firstRange()).adjusted(0, 0, -0.1, -0.1);
 
                 // create consumer tree, if not existing yet
                 if ( !consumers.contains( sheet ) ) consumers.insert( sheet, new RTree<Cell>() );
                 // add cell as consumer of the range
-                consumers[sheet]->insert( range, cell );
+                consumers[sheet]->insert(region.firstRange(), cell);
             }
         }
     }
