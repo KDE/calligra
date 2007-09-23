@@ -29,17 +29,19 @@ class SelectBookmark : public QWidget {
     Q_OBJECT
 public:
     explicit SelectBookmark(QList<QString> nameList, QWidget *parent = 0);
-    QString bookmarkName();
+    QString bookmarkName() const;
+    int bookmarkRow() const;
 
 signals:
     void bookmarkSelectionChanged(int currentRow);
     void bookmarkNameChanged(const QString &oldName, const QString &newName);
     void bookmarkItemDeleted(const QString &deletedName);
     void bookmarkItemDoubleClicked(QListWidgetItem *item);
-     
+
 private slots:
     void slotBookmarkRename();
     void slotBookmarkDelete();
+    void slotBookmarkItemActivated(QListWidgetItem *item);
 
 private:
     Ui::SelectBookmark widget;
