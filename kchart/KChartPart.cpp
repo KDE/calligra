@@ -46,6 +46,7 @@ using std::cerr;
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <kdebug.h>
+#include <ktemporaryfile.h>
 
 // KOffice
 #include <KoZoomHandler.h>
@@ -54,6 +55,10 @@ using std::cerr;
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOasisStore.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoSavingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoOasisLoadingContext.h>
 
 // KDChart
@@ -1188,55 +1193,200 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
 
 bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    Q_UNUSED( store );
-    Q_UNUSED( manifestWriter );
-#if 0
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    KoOasisStore oasisStore( store );
-
-    KoXmlWriter* contentWriter = oasisStore.contentWriter();
-    if ( !contentWriter )
+    // Check if we can create the content.xml file inside the store.
+    if ( !store->open( "content.xml" ) )
         return false;
 
-    KoGenStyles mainStyles;
+    // The saving will be done in three steps:
+    //  1. Write the contents of the document to a temporary 'file',
+    //     while at the same time creating the generated styles, also 
+    //     called 'automatic' styles.
+    //  2. Write the contents of the automatic styles to the main file.
+    //  3. Copy the contents in the temp file to the main file.
+    //
 
-    KoXmlWriter* bodyWriter = oasisStore.bodyWriter();
-    bodyWriter->startElement( "office:body" );
-    bodyWriter->startElement( "office:chart" );
-    bodyWriter->startElement( "chart:chart" );
+    // The main file.
+    KoStoreDevice  contentDev( store );
+    KoXmlWriter   *contentWriter = createOasisXmlWriter( &contentDev,
+                                                         "office:document-content" );
 
-    // Indent to indicate that this is inside some tags.
-    {
-        // Saves chart class, title, legend, plot-area
-        m_params->saveOasis( bodyWriter, mainStyles );
+    KoGenStyles      mainStyles;
+    KoSavingContext  savingContext( mainStyles, KoSavingContext::Store );
 
-	// Save the data table.
-        saveOasisData( bodyWriter, mainStyles );
+    // Create a temporary file for the document contents.
+    // Also check that it was successfully created.
+    KTemporaryFile contentTmpFile;
+    if ( !contentTmpFile.open() ) {
+        qWarning("Creation of temporary file to store document content failed.");
+        return false;
     }
 
-    bodyWriter->endElement(); // chart:chart
-    bodyWriter->endElement(); // office:chart
-    bodyWriter->endElement(); // office:body
+    // Start of phase 1: write contents to the temp file.
+    KoXmlWriter  contentTmpWriter( &contentTmpFile, 1 );
 
+    contentTmpWriter.startElement( "office:body" );
+    contentTmpWriter.startElement( "office:chart" );
+    contentTmpWriter.startElement( "chart:chart" );
+
+    KoShapeSavingContext  shapeSavingContext( contentTmpWriter, 
+                                              savingContext );
+    m_chartShape->saveOdf( shapeSavingContext );
+
+    contentTmpWriter.endElement(); // chart:chart
+    contentTmpWriter.endElement(); // office:chart
+    contentTmpWriter.endElement(); // office:body
+
+    // End of phase 1.
+    contentTmpFile.close();
+
+
+    // Start of phase 2: write out the automatic styles
     contentWriter->startElement( "office:automatic-styles" );
-    writeAutomaticStyles( *contentWriter, mainStyles );
+
+    // FIXME: Don't know how to do this yet.
+#if 0  // This code is from kspread
+    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_PAGE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_COLUMN_AUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_ROW_AUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_CELL_AUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericNumber );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericDate );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericTime );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericFraction );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericPercentage );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericCurrency );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericScientific );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
+    }
+#endif    // End code from kspread
+
+    // End of phase 2: write automatic styles
     contentWriter->endElement(); // office:automatic-styles
 
-    oasisStore.closeContentWriter();
+    // Start of phase 3: Add the contents to the file
+    contentWriter->addCompleteElement( &contentTmpFile );
 
-    // Done with content.xml
+    contentWriter->endElement(); // root element
+    contentWriter->endDocument();
+    delete contentWriter;
 
-#if 0
+    if ( !store->close() )
+        return false;
+
+    // Now we need to write the manifest, i.e. the list of files in
+    // the store.
+
+    // Add manifest line for content.xml
+    manifestWriter->addManifestEntry( "content.xml",  "text/xml" );
+
+    // Add manifest line for styles.xml
     if ( !store->open( "styles.xml" ) )
         return false;
-    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    saveOasisDocumentStyles( store, mainStyles, savingContext, saveFlag,
-			     headerFooterContent );
+    manifestWriter->addManifestEntry( "styles.xml",  "text/xml" );
+
+    // FIXME: Do we need this?
+    //saveOasisDocumentStyles( store, mainStyles );
+
     if ( !store->close() ) // done with styles.xml
         return false;
+
+
+    if(!store->open("settings.xml"))
+        return false;
+
+    // Write settings
+    // FIXME: Should we save any settings in KChart?
+    KoXmlWriter* settingsWriter = createOasisXmlWriter(&contentDev,
+                                                       "office:document-settings");
+    settingsWriter->startElement("office:settings");
+
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
+
+    KoUnit::saveOasis(settingsWriter, unit());
+
+    //saveOasisSettings( *settingsWriter );
+
+    settingsWriter->endElement(); // config:config-item-set
+
+#if 0
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "configuration-settings");
+    settingsWriter->addConfigItem("SpellCheckerIgnoreList", d->spellListIgnoreAll.join( "," ) );
+    settingsWriter->endElement(); // config:config-item-set
 #endif
 
-#endif
+    settingsWriter->endElement(); // office:settings
+
+    settingsWriter->endElement(); // Root:element
+    settingsWriter->endDocument();
+    delete settingsWriter;
+
+    if(!store->close())
+        return false;
+
+    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+
+    setModified( false );
+
     return true;
 }
 
