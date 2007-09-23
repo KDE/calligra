@@ -18,14 +18,11 @@
 */
 
 #include "KPrPageApplicationData.h"
-
-// TODO remove setting of page effect
-#include "pageeffects/KPrCoverDownEffect.h"
+#include "pageeffects/KPrPageEffect.h"
 
 KPrPageApplicationData::KPrPageApplicationData()
 : m_pageEffect( 0 )
 {
-    m_pageEffect = new KPrCoverDownEffect();
 }
 
 KPrPageApplicationData::~KPrPageApplicationData()
@@ -36,4 +33,9 @@ KPrPageApplicationData::~KPrPageApplicationData()
 KPrPageEffect * KPrPageApplicationData::pageEffect()
 {
     return m_pageEffect;
+}
+
+void KPrPageApplicationData::setPageEffect( KPrPageEffect * effect )
+{
+    m_pageEffect = effect;
 }

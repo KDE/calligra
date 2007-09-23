@@ -34,6 +34,11 @@ public:
     */
    KPrPageEffect * pageEffect();
 
+   /**
+    * Set the page effect used for this page
+    */
+   void setPageEffect( KPrPageEffect * effect );
+
 private:
    KPrPageEffect * m_pageEffect;
 };
