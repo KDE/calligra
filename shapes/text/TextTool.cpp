@@ -306,6 +306,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     action = new QAction(i18n("Bookmark..."), this);
     //action->setIcon(KIcon("bookmark-new"));
+    action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_G );
     addAction("add_bookmark", action);
     connect(action, SIGNAL(triggered()), this, SLOT( addBookmark() ));
 
