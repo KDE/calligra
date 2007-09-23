@@ -154,7 +154,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     kDebug() << "----------------------------------------------------------------";
     kDebug() << "Size is: " << handler.viewToDocument( size() );
     //part->shape()->setSize( handler.viewToDocument( size() ) );
-    part->shape()->setSize( QSize( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+    part->shape()->setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
     
     updateGuiTypeOfChart();
 }
