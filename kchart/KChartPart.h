@@ -143,7 +143,8 @@ protected:
 
     bool  loadOasisData( const KoXmlElement& tableElem );
     void  saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
-    void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const;
+    void writeAutomaticStyles( KoXmlWriter& contentWriter,
+                               KoGenStyles& mainStyles ) const;
 
 private:
     // Helper methods for painting.

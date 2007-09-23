@@ -1318,7 +1318,10 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     }
 #endif    // End code from kspread
 
-    //writeAutomaticStyles( contentWriter, mainStyles );
+    // Actually write the automatic styles.
+    // FIXME: There is a bug here: nothing gets written.
+    //        Is mainStyles empty or is it just not saved?
+    writeAutomaticStyles( *contentWriter, mainStyles );
 
     // End of phase 2: write automatic styles
     contentWriter->endElement(); // office:automatic-styles
@@ -1520,19 +1523,18 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
 #endif
 }
 
-void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles ) const
+void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, 
+                                       KoGenStyles& mainStyles ) const
 {
-    Q_UNUSED( contentWriter );
-    Q_UNUSED( mainStyles );
-#if 0
     Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name, "style:chart-properties" );
+    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it;
+    for ( it = styles.begin(); it != styles.end() ; ++it ) {
+        kDebug() << "Style: " << (*it).name;
+        (*it).style->writeStyle( &contentWriter, mainStyles, "style:style",
+                                 (*it).name, "style:chart-properties" );
     }
-
-#endif
 }
+
 
 // ----------------------------------------------------------------
 //             Save and Load old KChart file format

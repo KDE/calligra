@@ -59,11 +59,15 @@ public:
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
-    /// reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    /// reimplemented
+    virtual void saveOdf( KoShapeSavingContext & context ) const;
 
     OdfChartType chartType() const;
+
+ private:
+    virtual void saveOdfPlotArea( KoXmlWriter &xmlWriter,
+                                  KoGenStyles &mainStyles) const;
 
 
  public Q_SLOTS:
