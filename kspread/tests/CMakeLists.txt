@@ -2,6 +2,12 @@ include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} )
 
 ########### Core Functionality ###############
 
+set(TestDependencies_SRCS TestDependencies.cpp)
+kde4_add_unit_test(TestDependencies TESTNAME kspread-Dependencies ${TestDependencies_SRCS})
+target_link_libraries(TestDependencies kspreadcommon ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
 set(TestFormula_SRCS TestFormula.cpp)
 kde4_add_unit_test(TestFormula TESTNAME kspread-Formula  ${TestFormula_SRCS})
 target_link_libraries(TestFormula kspreadcommon ${QT_QTTEST_LIBRARY})

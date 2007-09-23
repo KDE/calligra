@@ -37,6 +37,7 @@ class Region;
 class KSPREAD_EXPORT DependencyManager : public QObject
 {
     Q_OBJECT
+    friend class TestDependencies;
     friend class RecalcManager;
 
 public:
