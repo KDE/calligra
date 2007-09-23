@@ -53,14 +53,15 @@
 #include <KoCsvImportDialog.h>
 #include <KoTemplateCreateDia.h>
 #include <KoViewAdaptor.h>
+#include <KoZoomHandler.h>
 
 // KChart
 #include "KChartFactory.h"
 #include "KChartPart.h"
 #include "KChartViewAdaptor.h"
-
 #include "KCPageLayout.h"
 #include "KCPrinterDialog.h"
+#include "ChartShape.h"
 
 #include "commands/ChartTypeCommand.h"
 
@@ -98,54 +99,62 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     actionCollection()->addAction("barschart", m_chartbars );
     connect(m_chartbars, SIGNAL(triggered(bool)), SLOT( barsChart() ));
     QActionGroup *charttypes = new QActionGroup( this );
-	charttypes->addAction(m_chartbars);
+    charttypes->addAction(m_chartbars);
 
     m_chartline  = new KToggleAction(KIcon("chart_line"), i18n("&Line"), this);
     actionCollection()->addAction("linechart", m_chartline );
     connect(m_chartline, SIGNAL(triggered(bool)), SLOT( lineChart() ));
-	charttypes->addAction(m_chartline);
+    charttypes->addAction(m_chartline);
 
     m_chartareas  = new KToggleAction(KIcon("chart_area"), i18n("&Area"), this);
     actionCollection()->addAction("areaschart", m_chartareas );
     connect(m_chartareas, SIGNAL(triggered(bool)), SLOT( areasChart() ));
-	charttypes->addAction(m_chartareas);
+    charttypes->addAction(m_chartareas);
     m_chartareas->setEnabled(false); // TODO not supported yet
 
     m_charthilo  = new KToggleAction(KIcon("chart_hilo"), i18n("&HiLo"), this);
     actionCollection()->addAction("hilochart", m_charthilo );
     connect(m_charthilo, SIGNAL(triggered(bool)), SLOT( hiLoChart() ));
-	charttypes->addAction(m_charthilo);
+    charttypes->addAction(m_charthilo);
     m_charthilo->setEnabled(false); // TODO not supported yet
 
     m_chartbw  = new KToggleAction(KIcon("chart_boxwhisker"), i18n("Bo&x && Whiskers"), this);
     actionCollection()->addAction("bwchart", m_chartbw );
- connect(m_chartbw, SIGNAL(triggered(bool)), SLOT( bwChart() ));
-	charttypes->addAction(m_chartbw);
+    connect(m_chartbw, SIGNAL(triggered(bool)), SLOT( bwChart() ));
+    charttypes->addAction(m_chartbw);
     m_chartbw->setEnabled(false); // TODO not supported yet
 
     m_chartpie  = new KToggleAction(KIcon("chart_pie"), i18n("&Pie"), this);
     actionCollection()->addAction("piechart", m_chartpie );
- connect(m_chartpie, SIGNAL(triggered(bool)), SLOT( pieChart() ));
+    connect(m_chartpie, SIGNAL(triggered(bool)), SLOT( pieChart() ));
     charttypes->addAction(m_chartpie);
     m_chartring  = new KToggleAction(KIcon("chart_ring"), i18n("&Ring"), this);
     actionCollection()->addAction("ringchart", m_chartring );
- connect(m_chartring, SIGNAL(triggered(bool)), SLOT( ringChart() ));
-	charttypes->addAction(m_chartring);
+    connect(m_chartring, SIGNAL(triggered(bool)), SLOT( ringChart() ));
+    charttypes->addAction(m_chartring);
     m_chartpolar  = new KToggleAction(KIcon("chart_polar"), i18n("&Polar"), this);
     actionCollection()->addAction("polarchart", m_chartpolar );
- connect(m_chartpolar, SIGNAL(triggered(bool)), SLOT( polarChart() ));
-	charttypes->addAction(m_chartpolar);
+    connect(m_chartpolar, SIGNAL(triggered(bool)), SLOT( polarChart() ));
+    charttypes->addAction(m_chartpolar);
 
     // initialize the configuration
     //    loadConfig();
 
+    //KChartPart *part = (KChartPart*)koDocument();
+
+	
     // Disable some things if we can't change the data, e.g. because
     // we are inside another application that provides the data for us.
-    if (!((KChartPart*)koDocument())->canChangeValue()) {
+    if (!part->canChangeValue()) {
 	m_edit->setEnabled(false);
 	m_importData->setEnabled(false);
     }
 
+    KoZoomHandler  handler;
+    kDebug() << "----------------------------------------------------------------";
+    kDebug() << "Size is: " << handler.viewToDocument( size() );
+    part->shape()->setSize( handler.viewToDocument( size() ) );
+    
     updateGuiTypeOfChart();
 }
 

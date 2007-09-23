@@ -68,8 +68,9 @@ public:
     ~KChartPart();
 
     // Methods inherited from KoDocument:
-
     virtual void  paintContent( QPainter& painter, const QRect& rect);
+
+    ChartShape *shape() const { return m_chartShape; }
 
     // Methods unique to KChart, and available in the new interface
     // (see /interfaces/koChart.h.)
