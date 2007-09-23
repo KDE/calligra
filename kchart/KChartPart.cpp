@@ -1197,7 +1197,7 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->open( "content.xml" ) )
         return false;
 
-    // The saving will be done in three steps:
+    // The saving is done in three steps:
     //  1. Write the contents of the document to a temporary 'file',
     //     while at the same time creating the generated styles, also 
     //     called 'automatic' styles.
@@ -1317,6 +1317,8 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
         (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
     }
 #endif    // End code from kspread
+
+    //writeAutomaticStyles( contentWriter, mainStyles );
 
     // End of phase 2: write automatic styles
     contentWriter->endElement(); // office:automatic-styles

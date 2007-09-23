@@ -91,6 +91,7 @@ ChartShape::ChartShape()
 {
     setShapeId( ChartShapeId );
 
+    // Default type and subtype
     d->chartType    = BarChartType;
     d->chartSubType = NormalChartSubtype;
 
@@ -105,18 +106,13 @@ ChartShape::ChartShape()
     AbstractCartesianDiagram  *diagram = static_cast<AbstractCartesianDiagram*>(d->diagram);
     CartesianAxis  *xAxis = new CartesianAxis( diagram );
     CartesianAxis  *yAxis = new CartesianAxis( diagram );
-    //CartesianAxis *axisTop = new CartesianAxis( diagram );
-    //CartesianAxis *axisRight = new CartesianAxis( diagram );
     xAxis->setPosition( CartesianAxis::Bottom );
     yAxis->setPosition( CartesianAxis::Left );
-    //axisTop->setPosition( CartesianAxis::Top );
-    //axisRight->setPosition( CartesianAxis::Right );
 
     diagram->addAxis( xAxis );
     diagram->addAxis( yAxis );
-    //diagram->addAxis( axisTop );
-    //diagram->addAxis( axisRight );
-    kDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
+
+    //kDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
 
 #if 0
     // diagram->coordinatePlane returns an abstract plane one.
