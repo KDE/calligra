@@ -19,6 +19,7 @@
 
 #include "SelectBookmarkDialog.h"
 
+#include <kmessagebox.h>
 #include <kinputdialog.h>
 
 static QString lastBookMarkItem;
@@ -63,17 +64,25 @@ int SelectBookmark::bookmarkRow() const
 void SelectBookmark::slotBookmarkRename()
 {
     QString curName = widget.bookmarkList->currentItem()->text();
-
-    QString newName = KInputDialog::getText( "Rename Bookmark",
-                                             "Please provide a new name for the bookmark",
-                                             widget.bookmarkList->currentItem()->text(),
-                                             0,
-                                             parentWidget);
-    if (!newName.isNull()) {
-        if (newName != curName) {
+    QString newName = widget.bookmarkList->currentItem()->text();
+    while (true) {
+        newName = KInputDialog::getText( i18n("Rename Bookmark"),
+                                         i18n("Please provide a new name for the bookmark"),
+                                         newName,
+                                         0,
+                                         parentWidget );
+        if (curName != newName && ! newName.isNull()) {
+            if (newName.isEmpty())
+                continue;
+            QList<QListWidgetItem *> items = widget.bookmarkList->findItems(newName, Qt::MatchExactly);
+            if (items.count() > 0) {
+                KMessageBox::error(parentWidget, i18n("There exist already a bookmark with the name \"%1\".", newName));
+                continue;
+            }
             widget.bookmarkList->currentItem()->setText( newName );
             emit bookmarkNameChanged( curName, newName );
         }
+        break;
     }
 }
 
