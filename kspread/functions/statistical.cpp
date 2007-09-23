@@ -43,6 +43,7 @@ Value func_avedev (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betadist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_betainv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bino (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_binomdist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_chidist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_combina (valVector args, ValueCalc *calc, FuncExtra *);
@@ -137,6 +138,9 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("BINO", func_bino);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("BINOMDIST", func_binomdist);
+  f->setParamCount (4);
   repo->add (f);
   f = new Function ("CHIDIST", func_chidist);
   f->setParamCount (2);
@@ -813,6 +817,8 @@ Value func_betainv (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // Function: bino
 //
+// kspread version
+//
 Value func_bino (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value n = args[0];
@@ -827,6 +833,98 @@ Value func_bino (valVector args, ValueCalc *calc, FuncExtra *)
   Value pow1 = calc->pow (prob, m);
   Value pow2 = calc->pow (calc->sub (1, prob), calc->sub (n, m));
   return calc->mul (comb, calc->mul (pow1, pow2));
+}
+
+//
+// Function: binomdist
+//
+// binomdist ( x, n, p, bool cumulative )
+//
+Value func_binomdist (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  // TODO using approxfloor
+  double x = calc->conv()->asFloat  (args[0]).asFloat();
+  double n = calc->conv()->asFloat  (args[1]).asFloat();
+  double p = calc->conv()->asFloat  (args[2]).asFloat();
+  bool kum = calc->conv()->asInteger(args[3]).asInteger();
+
+  kDebug()<<"x= "<<x<<" n= "<<n<<" p= "<<p;
+  
+  // check constraints
+  if ( n < 0.0 || x < 0.0 || x > n || p < 0.0 || p > 1.0 )
+    return Value::errorVALUE();
+
+  double res;
+  double factor;
+  double q;
+
+  if ( kum )
+  {
+    // calculation of binom-distribution
+    kDebug()<<"calc distribution";
+    if (n == x)
+      res = 1.0;
+    else
+    {
+      q = 1.0 - p;
+      factor = pow(q, n);
+      if (factor == 0.0)
+      {
+        factor = pow(p, n);
+        if (factor == 0.0)
+          return Value::errorNA(); //SetNoValue();
+        else
+        {
+          res = 1.0 - factor;
+          unsigned long max = (unsigned long) (n - x) - 1;
+          for (unsigned long i = 0; i < max && factor > 0.0; i++)
+          {
+            factor *= (n-i)/(i+1)*q/p;
+            res -= factor;
+          }
+          if (res < 0.0)
+            res = 0.0;
+        }
+      }
+      else
+      {
+        res = factor;
+        unsigned long max = (unsigned long) x;
+        for (unsigned long i = 0; i < max && factor > 0.0; i++)
+        {
+          factor *= (n-i)/(i+1)*p/q;
+          res += factor;
+        }
+      }
+    }
+  }
+  else
+  { // density
+    kDebug()<<"calc density";
+    q = 1.0 - p;
+    factor = pow(q, n);
+    if (factor == 0.0)
+    {
+      factor = pow(p, n);
+      if (factor == 0.0)
+        return Value::errorNA(); //SetNoValue();
+      else
+      {
+        unsigned long max = (unsigned long) (n - x);
+        for (unsigned long i = 0; i < max && factor > 0.0; i++)
+          factor *= (n-i)/(i+1)*q/p;
+        res = factor;
+      }
+    }
+    else
+    {
+      unsigned long max = (unsigned long) x;
+      for (unsigned long i = 0; i < max && factor > 0.0; i++)
+        factor *= (n-i)/(i+1)*p/q;
+      res = factor;
+    }
+  }
+  return Value(res);
 }
 
 //

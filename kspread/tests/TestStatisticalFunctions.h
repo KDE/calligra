@@ -38,13 +38,14 @@ private slots:
 
     void initTestCase();
 
-//     void testARRANG();
+//     void testARRANG(); // alias PERMUT
 //     void testAVEDEV();
 //     void testAVERAGE();
     void testAVERAGEA();
     void testBETADIST();    
     void testBETAINV();
-//     void testBINO();
+//     void testBINO(); // kspread version of BINOMDIST with 3 Parameters
+    void testBINOMDIST();
     void testCHIDIST();
 //     void testCOMBIN();  // in -> TestMathFunctions
 //     void testCOMBINA(); // in -> TestMathFunctions

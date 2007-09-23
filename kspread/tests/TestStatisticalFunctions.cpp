@@ -265,6 +265,22 @@ void TestStatisticalFunctions::testBETAINV()
     CHECK_EVAL("BETADIST(BETAINV(1;3;4;1;3);3;4;1;3)",   Value( 1   ) ); //
 }
 
+void TestStatisticalFunctions::testBINOMDIST()
+{
+    // bettersolution.com
+    CHECK_EVAL("BINOMDIST(10;10;  1  ;0)", Value( 1            ) ); // Prob.=100% - all trials successful
+    CHECK_EVAL("BINOMDIST(9 ; 1; 10  ;0)", Value( 0            ) ); // Prob. of -exactly- 9 trials successful is 0 then
+    CHECK_EVAL("BINOMDIST(10;10;  0.1;1)", Value( 1            ) ); // Sum of probabilities of 0..10 hits is 1.
+//     CHECK_EVAL("BINOMDIST(4 ;10;  0.4;1)", Value( 0.6331032576 ) ); // Some random values.
+    // my tests
+    CHECK_EVAL_SHORT("BINOMDIST(4 ;10;  0.4;1)", Value( 0.6331032576 ) ); // Some random values.
+    CHECK_EVAL_SHORT("BINOMDIST(5 ;10;  0.4;1)", Value( 0.8337613824 ) ); // Some random values.
+    CHECK_EVAL_SHORT("BINOMDIST(6 ;10;  0.4;1)", Value( 0.9452381184 ) ); // Some random values.
+    CHECK_EVAL_SHORT("BINOMDIST(4 ;10;  0.2;1)", Value( 0.9672065024 ) ); // Some random values.
+    CHECK_EVAL_SHORT("BINOMDIST(5 ;10;  0.2;1)", Value( 0.9936306176 ) ); // Some random values.
+    CHECK_EVAL_SHORT("BINOMDIST(6 ;10;  0.2;1)", Value( 0.9991356416 ) ); // Some random values.
+}
+
 void TestStatisticalFunctions::testCHIDIST()
 {
     // bettersolution.com
