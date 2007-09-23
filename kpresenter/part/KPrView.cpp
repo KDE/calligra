@@ -30,8 +30,11 @@
 #include "KPrDocument.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
+#include "KPrPageApplicationData.h"
 #include "KPrViewModePresentation.h"
 #include "commands/KPrAnimationCreateCommand.h"
+#include "commands/KPrPageEffectSetCommand.h"
+#include "pageeffects/KPrCoverDownEffect.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
@@ -71,9 +74,17 @@ void KPrView::initActions()
     actionCollection()->addAction( "view_mode", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
 
-    m_actionCreateAnimation = new KAction( "Create Animation", this );
+    m_actionCreateAnimation = new KAction( "Create Appear Animation", this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
     connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
+
+    m_actionCreatePageEffect = new KAction( "Create Page Effect", this );
+    actionCollection()->addAction( "edit_createpageeffect", m_actionCreatePageEffect );
+    connect( m_actionCreatePageEffect, SIGNAL( activated() ), this, SLOT( createPageEffect() ) );
+
+    m_actionDeletePageEffect = new KAction( "Delete Page Effect", this );
+    actionCollection()->addAction( "edit_deletepageeffect", m_actionDeletePageEffect );
+    connect( m_actionDeletePageEffect, SIGNAL( activated() ), this, SLOT( deletePageEffect() ) );
 }
 
 void KPrView::startPresentation()
@@ -97,5 +108,22 @@ void KPrView::createAnimation()
     animationcount = ( animationcount + 1 ) % 3;
 }
 
+void KPrView::createPageEffect()
+{
+    // this does not work n master pages
+    if ( dynamic_cast<KPrPage *>( activePage() ) ) {
+        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), new KPrCoverDownEffect() );
+        m_canvas->addCommand( command );
+    }
+}
+
+void KPrView::deletePageEffect()
+{
+    // this does not work n master pages
+    if ( dynamic_cast<KPrPage *>( activePage() ) && KPrPage::pageData( activePage() )->pageEffect() ) {
+        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), 0 );
+        m_canvas->addCommand( command );
+    }
+}
 
 #include "KPrView.moc"

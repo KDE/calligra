@@ -17,36 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrAnimationCreateCommand.h"
+#ifndef KPRPAGEEFFECTSETCOMMAND_H
+#define KPRPAGEEFFECTSETCOMMAND_H
 
-#include <klocale.h>
+#include <QUndoCommand>
 
-#include "KPrDocument.h"
-#include "shapeanimations/KPrShapeAnimation.h"
+class KoPAPageBase;
+class KPrPageEffect;
 
-KPrAnimationCreateCommand::KPrAnimationCreateCommand( KPrDocument * doc, KPrShapeAnimation * animation )
-: m_doc( doc )
-, m_animation( animation )
-, m_deleteAnimation( true )
+class KPrPageEffectSetCommand : public QUndoCommand
 {
-    setText( i18n( "Create shape animation" ) );
-}
+public:
+    KPrPageEffectSetCommand( KoPAPageBase * page, KPrPageEffect * pageEffect );
+    virtual ~KPrPageEffectSetCommand();
 
-KPrAnimationCreateCommand::~KPrAnimationCreateCommand()
-{
-    if ( m_deleteAnimation ) {
-        delete m_animation;
-    }
-}
+    /// redo the command
+    void redo();
+    /// revert the actions done in redo
+    void undo();
 
-void KPrAnimationCreateCommand::redo ()
-{
-    m_doc->addAnimation( m_animation );
-    m_deleteAnimation = false;
-}
+private:
+    KoPAPageBase * m_page;
+    KPrPageEffect * m_newPageEffect;
+    KPrPageEffect * m_oldPageEffect;
+    bool m_deleteNewPageEffect;
+};
 
-void KPrAnimationCreateCommand::undo ()
-{
-    m_doc->removeAnimation( m_animation );
-    m_deleteAnimation = true;
-}
+#endif /* KPRPAGEEFFECTSETCOMMAND_H */

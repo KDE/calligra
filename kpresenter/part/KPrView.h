@@ -43,10 +43,14 @@ protected:
 protected slots:
     void startPresentation();
     void createAnimation();
+    void createPageEffect();
+    void deletePageEffect();
 
 private:
     KAction *m_actionStartPresentation;
     KAction *m_actionCreateAnimation;
+    KAction *m_actionCreatePageEffect;
+    KAction *m_actionDeletePageEffect;
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;
 };
