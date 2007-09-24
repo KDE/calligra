@@ -329,9 +329,11 @@ def start(unoconfig, opts, args):
         if unoconfig.savefile:
             controller.saveDocument( "file://%s" % unoconfig.savefile )
 
-        outputstream = UnoDocument.OutputStream()
-        controller.writeDocument(outputstream)
-        outputstream.flush()
+        #TODO disabled for now
+        #outputstream = UnoDocument.OutputStream()
+        #controller.writeDocument(outputstream)
+        #outputstream.flush()
+
     finally:
         controller.disconnect()
 
