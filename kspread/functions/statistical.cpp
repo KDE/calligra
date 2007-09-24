@@ -58,6 +58,7 @@ Value func_finv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisher (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fisherinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_frequency (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ftest (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammadist (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammainv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_gammaln (valVector args, ValueCalc *calc, FuncExtra *);
@@ -184,6 +185,10 @@ void RegisterStatisticalFunctions()
   f = new Function ("FISHERINV", func_fisherinv);
   repo->add (f);
   f = new Function ("FREQUENCY", func_frequency);
+  f->setParamCount(2);
+  f->setAcceptArray();
+  repo->add (f);
+  f = new Function ("FTEST", func_ftest);
   f->setParamCount(2);
   f->setAcceptArray();
   repo->add (f);
@@ -1232,6 +1237,77 @@ Value func_frequency( valVector args, ValueCalc*, FuncExtra* )
     result.setElement( 0, bins.count(), Value( static_cast<qint64>( data.constEnd() - begin ) ) );
 
     return result;
+}
+
+//
+// Function: FTEST
+//
+Value func_ftest( valVector args, ValueCalc *calc, FuncExtra* )
+{
+  const Value matrixA = args[0];
+  const Value matrixB = args[1];
+
+  double val;    // stores current array value
+  double countA; //
+  double countB; //
+  double sumA, sumSqrA;
+  double sumB, sumSqrB;
+
+  // matrixA
+  for ( uint v = 0; v < matrixA.count(); ++v )
+  {
+    if ( matrixA.element( v ).isNumber() )
+    {
+      countA++;
+      val = numToDouble (matrixA.element( v ).asFloat());
+      sumA    += val;       // add sum
+      sumSqrA += val * val; // add square
+    }
+  }
+
+  // matrixB
+  for ( uint v = 0; v < matrixB.count(); ++v )
+  {
+    if ( matrixB.element( v ).isNumber() )
+    {
+      countB++;
+      val = numToDouble (matrixB.element( v ).asFloat());
+      sumB    += val;       // add sum
+      sumSqrB += val * val; // add square
+    }
+  }
+
+  // check constraints
+  if ( countA < 2 || countB < 2 )
+    return Value::errorNA();
+
+  double sA = (sumSqrA-sumA*sumA/countA)/(countA-1.0);
+  double sB = (sumSqrB-sumB*sumB/countB)/(countB-1.0);
+
+  if ( sA == 0.0 || sB == 0.0 )
+    return Value::errorNA();
+
+  double x,r1,r2;
+
+  if ( sA > sB )
+  {
+    x  = sA/sB;
+    r1 = countA-1.0;
+    r2 = countB-1.0;
+  }
+  else
+  {
+    x  = sB/sA;
+    r1 = countB-1.0;
+    r2 = countA-1.0;
+  }
+
+  valVector param;
+  param.append(Value(x ));
+  param.append(Value(r1));
+  param.append(Value(r2));
+ 
+  return calc->mul( Value(2.0), func_legacyfdist(param, calc,0) );
 }
 
 //

@@ -56,12 +56,11 @@ private slots:
 //     void testDEVSQA();
     void testEXPONDIST();
     void testFDIST();    
-    void testFTEST(); // to be implemented
     void testFINV();   
     void testFISHER();
     void testFISHERINV();
     void testFREQUENCY();
-//     void testFTEST(); // to be implemented
+    void testFTEST(); // to be implemented
     void testGAMMADIST();
     void testGAMMAINV(); // to be implemented
 //     void testGAMMALN(); in -> TestMathFunctions

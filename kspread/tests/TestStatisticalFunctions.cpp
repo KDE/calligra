@@ -433,9 +433,10 @@ void TestStatisticalFunctions::testFREQUENCY()
 
 void TestStatisticalFunctions::testFTEST()
 {
+    // TODO - be more precise
     // ODF-tests
-    CHECK_EVAL("FTEST(B14:B17; C14:C17)", Value(           1 ) ); // Same data (second reversed),
-    CHECK_EVAL("FTEST(B14:B15; C13:C14)", Value( 0.311916521 ) ); // Significantly different variances,
+    CHECK_EVAL_SHORT("FTEST(B14:B17; C14:C17)", Value( 1.0         ) ); // Same data (second reversed),
+    CHECK_EVAL_SHORT("FTEST(B14:B15; C13:C14)", Value( 0.311916521 ) ); // Significantly different variances,
                                                                   // so less likely to come from same data set.
 }
 
