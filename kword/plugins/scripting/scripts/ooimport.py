@@ -104,13 +104,16 @@ class Importer:
         progress = self.forms.showProgressDialog("Import...", options["loadfile"])
         progress.setRange(0,150)
         progress.setValue(0)
+        canceled = False
+        step = 0
         try:
             args = ["python", self.pyfile]
             args += [ "--%s=%s" % (n,options[n]) for n in options.keys() if not n.startswith('_') ]
             print "Execute: ", args, "\n"
-            proc = popen2.Popen3( args )
+            proc = popen2.Popen3( args, capturestderr = 1 )
+            if proc.childerr:
+                progress.addText("<b>%s</b>" % proc.childerr.read())
             fromchild = proc.fromchild.readline()
-            step = 0
             while fromchild:
                 step += 1
                 progress.setValue(step)
@@ -118,14 +121,20 @@ class Importer:
                     progress.addText(fromchild)
                 sys.stdout.write( fromchild )
                 sys.stdout.flush()
-                if progress.isCanceled():
+
+                if proc.childerr:
+                    progress.addText("<b>%s</b>" % proc.childerr.read())
+                canceled = progress.isCanceled()
+                if canceled:
                     break
                 #time.sleep(1)
                 fromchild = proc.fromchild.readline()
 
-            if not progress.isCanceled():
+            if not canceled:
                 if not os.path.isfile(savefile):
-                    progress.addText("<b>Error: Seems OpenOffice.org failed to write the intermedia file \"%s\"</b>" % savefile)
+                    if not proc.childerr:
+                        progress.addText("<b>Error: Seems OpenOffice.org failed to write the intermedia file \"%s\"</b>" % savefile)
+                    canceled = True
                 else:
                     progress.addText("KWord imports the intermedia file \"%s\" now" % savefile)
                     self.importFile(savefile, options)
@@ -135,10 +144,10 @@ class Importer:
                     os.remove(savefile)
             except:
                 pass
-            if progress.isCanceled():
-                progress.addText("<b>Import aborted.</b>")
+            if canceled:
+                progress.addText("<br><b>Import aborted.</b>")
             else:
-                progress.addText("<b>Import successful finished.</b>")
+                progress.addText("<br><b>Import successful finished.</b>")
             progress.exec_loop()
 
         #if self.dialog.exec_loop():

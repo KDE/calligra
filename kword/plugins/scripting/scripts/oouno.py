@@ -34,19 +34,20 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 
 import sys, os, getopt, time, traceback, popen2, subprocess, signal #, threading
 
-uno = __import__("uno")
-if not uno:
-    raise "Failed to import the OpenOffice.org PyUNO python module. This script requires the PyUNO python module to communicate with the OpenOffice.org server."
-
-from com.sun.star.connection import NoConnectException as UnoNoConnectException
-from com.sun.star.task import ErrorCodeIOException as UnoErrorCodeIOException
-#from com.sun.star import connection as UnoConnection
-from unohelper import Base as UnoBase
-#from unohelper import systemPathToFileUrl, absolutize
-from com.sun.star.beans import PropertyValue as UnoPropertyValue
-#from com.sun.star.uno import Exception as UnoException
-#from com.sun.star.io import IOException as UnoIOException
-from com.sun.star.io import XOutputStream as UnoXOutputStream
+try:
+    import uno
+    from com.sun.star.connection import NoConnectException as UnoNoConnectException
+    from com.sun.star.task import ErrorCodeIOException as UnoErrorCodeIOException
+    #from com.sun.star import connection as UnoConnection
+    from unohelper import Base as UnoBase
+    #from unohelper import systemPathToFileUrl, absolutize
+    from com.sun.star.beans import PropertyValue as UnoPropertyValue
+    #from com.sun.star.uno import Exception as UnoException
+    #from com.sun.star.io import IOException as UnoIOException
+    from com.sun.star.io import XOutputStream as UnoXOutputStream
+except ImportError, e:
+    print >> sys.stderr, "Failed to import the OpenOffice.org PyUNO python module. This script requires the PyUNO python module to communicate with the OpenOffice.org server."
+    raise e
 
 class UnoConfig:
     """ The configuration for to access the OpenOffice.org functionality. """
