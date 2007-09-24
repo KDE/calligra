@@ -190,9 +190,11 @@ class UnoServer:
 
     def __del__(self):
         if hasattr(self,'process'):
-            os.kill(self.process.pid, signal.SIGINT)
-            #os.kill(self.serverPID, signal.SIGKILL)
-            #os.kill(self.serverPID, 9)
+            os.kill(self.process, signal.SIGKILL)
+            #os.kill(self.process.pid, signal.SIGINT)
+            #killedpid, stat = os.waitpid(self.process, os.WNOHANG)
+            #if killedpid == 0:
+                #print >> sys.stderr, "Failed to kill OpenOffice.org Server process" 
 
 class UnoClient:
     """ Class that provides the client-functionality to deal with an OpenOffice.org
@@ -241,6 +243,8 @@ class UnoClient:
     def __del__(self):
         if self.unoServer:
             self.desktop.terminate()
+            time.sleep(1)
+            self.unoServer = None
 
 class UnoController:
     """ Class that offers high level access to control all aspects of OpenOffice.org
