@@ -30,7 +30,7 @@ class Importer:
         dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         openpage = dialog.addPage("Open","Import File","document-open")
-        startDirOrVariable = "/home/kde4/aaa.odt"#"kfiledialog:///kwordooimport"
+        startDirOrVariable = "kfiledialog:///kwordooimport"
         openwidget = self.forms.createFileWidget(openpage, startDirOrVariable)
         openwidget.setMode("Opening")
         filters = [
