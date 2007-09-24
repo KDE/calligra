@@ -93,6 +93,8 @@ public:
     QString typeToString( bool trans = false ) const;
     static QStringList typeToStringList( bool trans = false );
 
+    bool isScheduled() const;
+    
     /** Manage the resources in this list
      * <p>At some point we will have to look at not mixing types of resources
      * (e.g. you can't add a person to a list of computers
@@ -371,6 +373,7 @@ public:
     void setCurrentSchedule( long id ) { m_currentSchedule = findSchedule( id ); }
     Schedule *currentSchedule() const { return m_currentSchedule; }
 
+    bool isScheduled() const;
     QHash<long, Schedule*> &schedules() { return m_schedules; }
     Schedule *findSchedule( long id ) const
     {

@@ -1060,6 +1060,16 @@ void Node::generateWBS(int count, WBSDefinition &def, const QString& wbs) {
 
 }
 
+bool Node::isScheduled() const
+{
+    foreach ( Schedule *s, m_schedules ) {
+        if ( s->isScheduled() ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Node::setCurrentSchedule(long id) {
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {

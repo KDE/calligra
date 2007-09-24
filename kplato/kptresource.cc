@@ -111,6 +111,16 @@ void ResourceGroup::setProject( Project *project )
     }
 }
 
+bool ResourceGroup::isScheduled() const
+{
+    foreach ( Resource *r, m_resources ) {
+        if ( r->isScheduled() ) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void ResourceGroup::addResource(int index, Resource* resource, Risk*) {
     int i = index == -1 ? m_resources.count() : index;
     resource->setParentGroup( this );
@@ -476,6 +486,16 @@ void Resource::addAppointment(Schedule *node, DateTime &start, DateTime &end, do
 
 void Resource::initiateCalculation(Schedule &sch) {
     m_currentSchedule = createSchedule(&sch);
+}
+
+bool Resource::isScheduled() const
+{
+    foreach ( Schedule *s, m_schedules ) {
+        if ( s->isScheduled() ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void Resource::deleteSchedule(Schedule *schedule) {

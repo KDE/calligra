@@ -409,7 +409,9 @@ public:
     Schedule *currentSchedule() const { return m_currentSchedule; }
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
-    
+    /// Return true if this node has a valid schedule
+    bool isScheduled() const;
+    /// Return the list of schedules for this node
     QHash<long, Schedule*> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.
     Schedule *findSchedule(const QString name, const Schedule::Type type);

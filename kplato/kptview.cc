@@ -1507,8 +1507,17 @@ void View::slotTaskProgress()
 void View::slotDeleteTask( QList<Node*> lst )
 {
     //kDebug();
+    foreach ( Node *n, lst ) {
+        if ( n->isScheduled() ) {
+            int res = KMessageBox::warningContinueCancel( this, i18n( "A task that has been scheduled will be deleted. This will invalidate the schedule." ) );
+            if ( res == KMessageBox::Cancel ) {
+                return;
+            }
+            break;
+        }
+    }
     if ( lst.count() == 1 ) {
-        slotDeleteTask( lst.takeFirst() );
+        getPart()->addCommand( new NodeDeleteCmd( getPart(), lst.takeFirst(), i18n( "Delete Task" ) ) );
         return;
     }
     int num = 0;
@@ -1545,6 +1554,12 @@ void View::slotDeleteTask( Node *node )
     if ( node == 0 || node->parentNode() == 0 ) {
         kDebug() << ( node ?"Task is main project" :"No current task" );
         return ;
+    }
+    if ( node->isScheduled() ) {
+        int res = KMessageBox::warningContinueCancel( this, i18n( "This task has been scheduled. This will invalidate the schedule." ) );
+        if ( res == KMessageBox::Cancel ) {
+            return;
+        }
     }
     NodeDeleteCmd *cmd = new NodeDeleteCmd( getPart(), node, i18n( "Delete Task" ) );
     getPart() ->addCommand( cmd );
@@ -1760,6 +1775,24 @@ void View::slotDeleteResourceGroup( ResourceGroup *group )
 void View::slotDeleteResourceObjects( QObjectList lst )
 {
     //kDebug();
+    foreach ( QObject *o, lst ) {
+        Resource *r = qobject_cast<Resource*>( o );
+        if ( r && r->isScheduled() ) {
+            int res = KMessageBox::warningContinueCancel( this, i18n( "A resource that has been scheduled will be deleted. This will invalidate the schedule." ) );
+            if ( res == KMessageBox::Cancel ) {
+                return;
+            }
+            break;
+        }
+        ResourceGroup *g = qobject_cast<ResourceGroup*>( o );
+        if ( g && g->isScheduled() ) {
+            int res = KMessageBox::warningContinueCancel( this, i18n( "A resource that has been scheduled will be deleted. This will invalidate the schedule." ) );
+            if ( res == KMessageBox::Cancel ) {
+                return;
+            }
+            break;
+        }
+    }
     if ( lst.count() == 1 ) {
         Resource *r = qobject_cast<Resource*>( lst.first() );
         if ( r ) {
