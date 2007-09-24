@@ -1,3 +1,4 @@
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${CMAKE_SOURCE_DIR}/kspread ${KOGUIUTILS_INCLUDES} )
 
 ########### Core Functionality ###############
@@ -115,17 +116,17 @@ target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 ########### Benchmarks ###############
 
 # set(BenchmarkCluster_SRCS BenchmarkCluster.cpp ../Cluster.cpp) # explicit Cluster.cpp for no extra symbol visibility
-# kde4_add_test_executable(BenchmarkCluster ${BenchmarkCluster_SRCS})
+# kde4_add_executable(BenchmarkCluster TEST ${BenchmarkCluster_SRCS})
 # target_link_libraries(BenchmarkCluster kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
-kde4_add_test_executable(BenchmarkPointStorage ${BenchmarkPointStorage_SRCS})
+kde4_add_executable(BenchmarkPointStorage TEST ${BenchmarkPointStorage_SRCS})
 target_link_libraries(BenchmarkPointStorage ${QT_QTTEST_LIBRARY} ${QT_QTCORE_LIBRARY})
 
 ########### next target ###############
 
 set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
-kde4_add_test_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
+kde4_add_executable(BenchmarkRTree TEST ${BenchmarkRTree_SRCS})
 target_link_libraries(BenchmarkRTree ${KDE4_KDECORE_LIBS})

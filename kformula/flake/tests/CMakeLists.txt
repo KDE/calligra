@@ -1,3 +1,4 @@
+set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 ########### AttributeManager Test ###############
 
  set( TestAttributeManager_SRCS TestAttributeManager.cpp )
