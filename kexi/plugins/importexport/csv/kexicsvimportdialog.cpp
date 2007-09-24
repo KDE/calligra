@@ -1660,3 +1660,5 @@ void KexiCSVImportDialog::updateRowCountInfo()
 }
 
 #include "kexicsvimportdialog.moc"
+
+#undef _ERR

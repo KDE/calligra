@@ -269,3 +269,5 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	}
 	return true;
 }
+
+#undef _ERR

@@ -75,3 +75,5 @@ void KexiFrame::dropEvent( QDropEvent *e )
 #define SuperClassName QFrame
 #include "kexiframeutils_p.cpp"
 #include "kexiframe.moc"
+#undef ClassName
+#undef SuperClassName

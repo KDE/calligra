@@ -648,3 +648,5 @@ bool KexiDBLabel::shadowEnabled() const
 #define SuperClassName QLabel
 #include "kexiframeutils_p.cpp"
 #include "kexidblabel.moc"
+#undef ClassName
+#undef SuperClassName
