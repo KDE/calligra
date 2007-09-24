@@ -57,7 +57,7 @@ void DelayedCursorHandler::stop() {
 	QApplication::restoreOverrideCursor();
 }
 void DelayedCursorHandler::show() {
-	QApplication::setOverrideCursor( KCursor::waitCursor() );
+	QApplication::setOverrideCursor( KCursor::waitCursor(), true/*replace*/ );
 }
 
 DelayedCursorHandler _delayedCursorHandler;
@@ -89,7 +89,8 @@ WaitCursorRemover::WaitCursorRemover()
 
 WaitCursorRemover::~WaitCursorRemover()
 {
-	_delayedCursorHandler.start(true);
+	if (m_reactivateCursor)
+		_delayedCursorHandler.start(true);
 }
 
 //--------------------------------------------------------------------------------
