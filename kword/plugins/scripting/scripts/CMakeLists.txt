@@ -5,7 +5,7 @@ install(FILES scripts.rc DESTINATION ${DATA_INSTALL_DIR}/kword/scripts)
 install(FILES
     importfile.py
     importdoxyxml.py importdoxyxmloptions.ui importdoxyxmlstyle.ui
-    ooimport.py ooimportconfig.ui
+    ooimport.py ooimportconfig.ui ooimport.ui oouno.py
     exportfile.py
     kwreportlab.py
     xmlviewer.py

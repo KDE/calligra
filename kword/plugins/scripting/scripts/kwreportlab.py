@@ -241,7 +241,12 @@ class MyWriter:
         def __del__(self):
             if self.text:
                 #text = "<font size=\"%s\">%s</font>" % (style._size,text)
-                self.story.append( Paragraph("%s" % self.text, self.style) )
+                try:
+                    p = Paragraph("%s" % self.text, self.style)
+                except ValueError:
+                    parentStyle = self.styles['BodyText']
+                    p = Paragraph("%s" % self.text, parentStyle)
+                self.story.append(p)
 
     class MySpan:
         def __init__(self, myParagraph):
@@ -249,9 +254,8 @@ class MyWriter:
             self.reader = myParagraph.reader
             #self.styles = myParagraph.styles
             self.styleName = self.reader.attribute("text:style-name","Standard")
-            print "MySpan: name=%s namespaceURI=%s level=%s styleName=%s text=%s" % (self.reader.name(),self.reader.namespaceURI(),self.reader.level(),self.styleName,self.reader.text())
-
             text = self.reader.text()
+            print "MySpan: name=%s namespaceURI=%s level=%s styleName=%s text=%s" % (self.reader.name(),self.reader.namespaceURI(),self.reader.level(),self.styleName,text)
             if text:
                 text = text.replace('&','&amp;').replace('"','&quot;').replace('<','&gt;').replace('>','&lt;')
                 kwcharstyle = self.getCharacterStyle()
