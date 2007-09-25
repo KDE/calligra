@@ -189,7 +189,15 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(4,56, Value( 120 ) );
     storage->setValue(4,57, Value( 133 ) );
 
-
+    // F19:F26
+    storage->setValue(6,19, Value(  20 ) );
+    storage->setValue(6,20, Value(   5 ) );
+    storage->setValue(6,21, Value( -20 ) );
+    storage->setValue(6,22, Value( -60 ) );
+    storage->setValue(6,23, Value(  75 ) );
+    storage->setValue(6,24, Value( -29 ) );
+    storage->setValue(6,25, Value(  20 ) );
+    storage->setValue(6,26, Value(  30 ) );
     // F51:F60
     storage->setValue(6,51, Value( 3 ) );
     storage->setValue(6,52, Value( 4 ) );
@@ -869,8 +877,31 @@ void TestStatisticalFunctions::testPOISSON()
 void TestStatisticalFunctions::testRSQ()
 {
     // ODF-tests
-    CHECK_EVAL("RSQ (H19:H31;I19:I31)", Value( 0.075215010 ) ); //
-    CHECK_EVAL("RSQ (H19:H31;I19:I30)", Value::errorNA()     ); // array does not have the same size
+    CHECK_EVAL("RSQ(H19:H31;I19:I31)", Value( 0.075215010 ) ); //
+    CHECK_EVAL("RSQ(H19:H31;I19:I30)", Value::errorNA()     ); // array does not have the same size
+}
+
+void TestStatisticalFunctions::testQUARTILE()
+{
+    // flag:
+    //  0 equals MIN()
+    //  1 25th percentile
+    //  2 50th percentile equals MEDIAN()
+    //  3 75th percentile
+    //  4 equals MAX()
+
+    // ODF-tests
+    CHECK_EVAL("QUARTILE(A19:A25;3)",            Value(  24        ) ); //
+    CHECK_EVAL("QUARTILE(F19:F26;1)",            Value( -22.25     ) ); // 
+    CHECK_EVAL("QUARTILE(A10:A15;2)",            Value::errorVALUE() ); // 
+    CHECK_EVAL("QUARTILE(A19:A25;5)",            Value::errorVALUE() ); // flag > 4
+    CHECK_EVAL("QUARTILE(F19:F26;1.5)",          Value( -22.25     ) ); // 1.5 rounded down to 1 
+    CHECK_EVAL("QUARTILE({1;2;4;8;16;32;64};3)", Value(  24        ) ); //
+
+    // my tests
+    CHECK_EVAL("QUARTILE(A19:A25;0)",            Value(   1        ) ); // MIN()
+    CHECK_EVAL("QUARTILE(A19:A25;4)",            Value(  64        ) ); // MAX()
+
 }
 
 void TestStatisticalFunctions::testSKEW()

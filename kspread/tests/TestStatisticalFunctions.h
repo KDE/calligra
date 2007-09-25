@@ -104,7 +104,7 @@ private slots:
     void testPHI();
     void testPOISSON();
 //     void testPROB();     // ???
-//     void testQUARTILE(); // ???
+    void testQUARTILE();
 //     void testRANK();     // ???
     void testRSQ();
     void testSKEW();
