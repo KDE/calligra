@@ -85,6 +85,7 @@ Value func_normsinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rsq (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_quartile (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_est (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_slope (valVector args, ValueCalc *calc, FuncExtra *);
@@ -292,6 +293,10 @@ void RegisterStatisticalFunctions()
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("RSQ", func_rsq);
+  f->setParamCount (2);
+  f->setAcceptArray ();
+  repo->add (f);
+  f = new Function ("QUARTILE", func_quartile);
   f->setParamCount (2);
   f->setAcceptArray ();
   repo->add (f);
@@ -541,7 +546,7 @@ static Value IterateInverse( const double unknown, const QString formula, double
 
   double x00 = x0;
   double x11 = x1;
-  double fs;
+  double fs = 0.0;
   for (i = 0; i < 100; i++)
   {
     xs = 0.5*(x0+x1);
@@ -1147,7 +1152,7 @@ Value func_fdist (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // returns the inverse f-distribution
 //
-Value func_finv (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_finv (valVector args, ValueCalc *, FuncExtra *)
 {
   Value p  = args[0];
   Value f1 = args[1];
@@ -1253,11 +1258,11 @@ Value func_ftest( valVector args, ValueCalc *calc, FuncExtra* )
   const Value matrixA = args[0];
   const Value matrixB = args[1];
 
-  double val;    // stores current array value
-  double countA; //
-  double countB; //
-  double sumA, sumSqrA;
-  double sumB, sumSqrB;
+  double val    = 0.0; // stores current array value
+  double countA = 0.0; //
+  double countB = 0.0; //
+  double sumA   = 0.0, sumSqrA = 0.0;
+  double sumB   = 0.0, sumSqrB = 0.0;
 
   // matrixA
   for ( uint v = 0; v < matrixA.count(); ++v )
@@ -1650,7 +1655,7 @@ Value func_legacyfdist (valVector args, ValueCalc *calc, FuncExtra *)
 //
 // returns the inverse legacy f-distribution
 //
-Value func_legacyfinv (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_legacyfinv (valVector args, ValueCalc *, FuncExtra *)
 {
   Value p  = args[0];
   Value f1 = args[1];
@@ -1980,8 +1985,8 @@ Value func_rsq( valVector args, ValueCalc *calc, FuncExtra* )
   if ( matrixA.count() != matrixB.count() )
     return Value::errorVALUE();
 
-  double valA;  // stores current array value
-  double valB;  // stores current array value
+  double valA  = 0.0; // stores current array value
+  double valB  = 0.0; // stores current array value
   double count = 0.0; // count fields with numbers
   double sumA  = 0.0, sumSqrA = 0.0;
   double sumB  = 0.0, sumSqrB = 0.0;
@@ -1998,7 +2003,7 @@ Value func_rsq( valVector args, ValueCalc *calc, FuncExtra* )
       valA = calc->conv()->asFloat (matrixA.element( v )).asFloat();
       valB = calc->conv()->asFloat (matrixB.element( v )).asFloat(); 
       count++;
-      kDebug()<<"valA ="<<valA<<" valB ="<<valB;
+      //kDebug()<<"valA ="<<valA<<" valB ="<<valB;
       
       // value A
       sumA    += valA;        // add sum
@@ -2018,6 +2023,95 @@ Value func_rsq( valVector args, ValueCalc *calc, FuncExtra* )
     return Value( (count*sumAB   - sumA*sumB) * (count*sumAB   - sumA*sumB) /
                   (count*sumSqrA - sumA*sumA) / (count*sumSqrB - sumB*sumB)   );
 }
+
+//
+// Function: quartile
+//
+// QUARTILE( data set; flag )
+//
+// flag:
+//  0 equals MIN()
+//  1 25th percentile
+//  2 50th percentile equals MEDIAN()
+//  3 75th percentile
+//  4 equals MAX()
+//
+Value func_quartile( valVector args, ValueCalc *calc, FuncExtra* )
+{
+  int flag = calc->conv()->asInteger (args[1]).asInteger();
+
+  // create array - does NOT support anything other than doubles !!!
+  List array;
+  int number = 0;
+
+  func_array_helper (args[0], calc, array, number);
+
+  // check constraints - number of values must be > 0 and flag >0 <=4
+  if (number == 0)
+    return Value::errorNA(); // or VALUE?
+  if ( flag < 0 || flag > 4 )
+    return Value::errorVALUE();
+
+  // sort values
+  qSort(array);
+
+  if ( number == 1 )
+    return Value(array[0]); // only one value
+  else
+  {
+    //
+    // flag 0
+    //
+    if ( flag == 0 )
+      return Value(array[0]);
+    
+    //
+    // flag 1
+    //
+    else if ( flag == 1 )
+    {
+      int nIndex = ::floor(0.25*(number-1));
+      double diff = 0.25*(number-1) - ::floor(0.25*(number-1));
+
+      if ( diff == 0.0 )
+        return Value(array[nIndex]);
+      else
+        return Value(array[nIndex] + diff*(array[nIndex+1]-array[nIndex]) );
+    }
+
+    //
+    // flag 2
+    //
+    else if (flag == 2)
+    {
+      if ( number%2 == 0 )
+        return Value( (array[number/2-1]+array[number/2])/2.0 );
+      else
+        return Value( array[(number-1)/2] );
+    }
+
+    //
+    // flag 3
+    //
+    else if (flag == 3)
+    {
+      int nIndex = ::floor(0.75*(number-1));
+      double diff = 0.75*(number-1) - ::floor(0.75*(number-1));
+
+      if ( diff == 0.0 )
+        return Value(array[nIndex]);
+      else
+        return Value(array[nIndex] + diff*(array[nIndex+1]-array[nIndex]) );
+    }
+
+    //
+    // flag 4
+    //
+    else
+      return Value( array[number-1] );
+  } 
+}
+
 
 //
 // function: skew_est
