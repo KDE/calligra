@@ -37,6 +37,7 @@
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <q3whatsthis.h>
+#include <KColorScheme>
 #include <kglobalsettings.h>
 //Added by qt3to4:
 #include <QResizeEvent>
@@ -81,7 +82,8 @@
 #include <kexidb/cursor.h>
 
 KexiTableView::Appearance::Appearance(QWidget *widget)
- : alternateBackgroundColor( KGlobalSettings::alternateBackgroundColor() )
+ : alternateBackgroundColor( 
+	KColorScheme(QPalette::Active, KColorScheme::View).background(KColorScheme::AlternateBackground).color() )
 {
 	//set defaults
 	if (qApp) {
