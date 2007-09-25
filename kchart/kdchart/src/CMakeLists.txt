@@ -66,43 +66,6 @@ set(kdchart_LIB_SRCS
     KDChartSignalCompressor.cpp
 )
 
-# Generate separate moc files and compile them into the lib without
-# including them in the cpp files.
-qt4_wrap_cpp(kdchart_LIB_SRCS 
-#     KDChartAbstractArea.h
-#     KDChartAbstractAreaWidget.h
-#     KDChartAbstractAxis.h
-#     KDChartAbstractCartesianDiagram.h
-#     KDChartAbstractCoordinatePlane.h
-#     KDChartAbstractDiagram.h
-    KDChartAbstractDiagram_p.h
-#     KDChartAbstractPieDiagram.h
-#     KDChartAbstractPolarDiagram.h
-#     KDChartAbstractProxyModel.h
-#     KDChartAttributesModel.h
-#     KDChartBarDiagram.h
-#     KDChartCartesianAxis.h
-#     KDChartCartesianCoordinatePlane.h
-#     KDChartChart.h
-    KDChartChart_p.h
-#     KDChartDatasetProxyModel.h
-#     KDChartDatasetSelector.h
-#     KDChartDiagramObserver.h
-#     KDChartEnums.h
-#     KDChartHeaderFooter.h
-#     KDChartLegend.h
-#     KDChartLineDiagram.h
-#     KDChartPalette.h
-#     KDChartPieDiagram.h
-#     KDChartPolarCoordinatePlane.h
-#     KDChartPolarDiagram.h
-#     KDChartRingDiagram.h
-#     KDChartSignalCompressor.h
-#     KDChartTextArea.h
-#     KDChartWidget.h
-#     KDTextDocument.h
-)
-
 qt4_wrap_ui(kdchart_LIB_SRCS
     KDChartDatasetSelector.ui
 )
