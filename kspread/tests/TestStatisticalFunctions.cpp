@@ -214,6 +214,36 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(7,58, Value( 26 ) );
     storage->setValue(7,59, Value( 24 ) );
     storage->setValue(7,60, Value( 27 ) );
+
+    // H19:H31
+    storage->setValue(8,19, Value( "2005-03-12" ) );
+    storage->setValue(8,20, Value( "2002-02-03" ) );
+    storage->setValue(8,21, Value( "2005-03-08" ) );
+    storage->setValue(8,22, Value( "1991-03-27" ) );
+    storage->setValue(8,23, Value( "1967-07-05" ) );
+    storage->setValue(8,24, Value( "1912-12-23" ) );
+    storage->setValue(8,25, Value( "1992-02-06" ) );
+    storage->setValue(8,26, Value( "1934-07-04" ) );
+    storage->setValue(8,27, Value( "1909-01-08" ) );
+    storage->setValue(8,28, Value( "1989-11-28" ) );
+    storage->setValue(8,29, Value( "2000-02-22" ) );
+    storage->setValue(8,30, Value( "2004-03-29" ) );
+    storage->setValue(8,31, Value( "1946-07-13" ) );
+
+    // I19:I31
+    storage->setValue(9,19, Value( 13 ) );
+    storage->setValue(9,20, Value( 12 ) );
+    storage->setValue(9,21, Value( 11 ) );
+    storage->setValue(9,22, Value( 10 ) );
+    storage->setValue(9,23, Value(  9 ) );
+    storage->setValue(9,24, Value(  8 ) );
+    storage->setValue(9,25, Value(  7 ) );
+    storage->setValue(9,26, Value(  6 ) );
+    storage->setValue(9,27, Value(  5 ) );
+    storage->setValue(9,28, Value(  4 ) );
+    storage->setValue(9,29, Value(  3 ) );
+    storage->setValue(9,30, Value(  2 ) );
+    storage->setValue(9,31, Value(  1 ) );
 }
 
 void TestStatisticalFunctions::testAVERAGEA()
@@ -834,6 +864,13 @@ void TestStatisticalFunctions::testPOISSON()
     // ODF-tests
     CHECK_EVAL_SHORT("POISSON(0;1;FALSE())", Value( 0.367880 ) ); // TODO - be more precise /
     CHECK_EVAL_SHORT("POISSON(0;2;FALSE())", Value( 0.135335 ) ); // TODO - be more precise /
+}
+
+void TestStatisticalFunctions::testRSQ()
+{
+    // ODF-tests
+    CHECK_EVAL("RSQ (H19:H31;I19:I31)", Value( 0.075215010 ) ); //
+    CHECK_EVAL("RSQ (H19:H31;I19:I30)", Value::errorNA()     ); // array does not have the same size
 }
 
 void TestStatisticalFunctions::testSKEW()

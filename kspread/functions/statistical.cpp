@@ -84,6 +84,7 @@ Value func_norminv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_normsinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rsq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_est (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_pop (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_slope (valVector args, ValueCalc *calc, FuncExtra *);
@@ -289,6 +290,10 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("POISSON", func_poisson);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("RSQ", func_rsq);
+  f->setParamCount (2);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("SKEW", func_skew_est);
   f->setParamCount (1, -1);
@@ -1242,6 +1247,7 @@ Value func_frequency( valVector args, ValueCalc*, FuncExtra* )
 //
 // Function: FTEST
 //
+// TODO - check if parameters are arrays
 Value func_ftest( valVector args, ValueCalc *calc, FuncExtra* )
 {
   const Value matrixA = args[0];
@@ -1960,6 +1966,57 @@ Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *)
   }
 
   return result;
+}
+
+//
+// Function: rsq
+//
+Value func_rsq( valVector args, ValueCalc *calc, FuncExtra* )
+{
+  const Value matrixA = args[0];
+  const Value matrixB = args[1];
+
+  // check constraints - arrays must have the same size
+  if ( matrixA.count() != matrixB.count() )
+    return Value::errorVALUE();
+
+  double valA;  // stores current array value
+  double valB;  // stores current array value
+  double count = 0.0; // count fields with numbers
+  double sumA  = 0.0, sumSqrA = 0.0;
+  double sumB  = 0.0, sumSqrB = 0.0;
+  double sumAB = 0.0;
+
+  // calc sums
+  for ( uint v = 0; v < matrixA.count(); ++v )
+  {
+    Value vA (calc->conv()->asFloat (matrixA.element( v ) ));
+    Value vB (calc->conv()->asFloat (matrixB.element( v ) ));
+
+    if ( !vA.isError() && !vB.isError() )
+    {// only if numbers are in both fields
+      valA = calc->conv()->asFloat (matrixA.element( v )).asFloat();
+      valB = calc->conv()->asFloat (matrixB.element( v )).asFloat(); 
+      count++;
+      kDebug()<<"valA ="<<valA<<" valB ="<<valB;
+      
+      // value A
+      sumA    += valA;        // add sum
+      sumSqrA += valA * valA; // add square 
+      // value B
+      sumB    += valB;        // add sum 
+      sumSqrB += valB * valB; // add square
+
+      sumAB   += valA * valB;
+    }
+  }
+
+  // check constraints
+  if ( count < 2 )
+    return Value::errorNA();
+  else
+    return Value( (count*sumAB   - sumA*sumB) * (count*sumAB   - sumA*sumB) /
+                  (count*sumSqrA - sumA*sumA) / (count*sumSqrB - sumB*sumB)   );
 }
 
 //

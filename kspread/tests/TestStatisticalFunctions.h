@@ -60,7 +60,7 @@ private slots:
     void testFISHER();
     void testFISHERINV();
     void testFREQUENCY();
-    void testFTEST(); // to be implemented
+    void testFTEST();
     void testGAMMADIST();
     void testGAMMAINV(); // to be implemented
 //     void testGAMMALN(); in -> TestMathFunctions
@@ -80,7 +80,7 @@ private slots:
     void testLEGACYCHIINV();
     void testLEGACYFDIST();
     void testLEGACYFINV();
-//     void testLEGACYNORMSDIST(); // same as NORMSDIST required for OpenFormula compliance
+//     void testLEGACYNORMSDIST(); // same as NORMDIST required for OpenFormula compliance
 
 
 //     void testLINEST(); // ???
@@ -106,7 +106,7 @@ private slots:
 //     void testPROB();     // ???
 //     void testQUARTILE(); // ???
 //     void testRANK();     // ???
-//     void testRSQ();      // ???
+    void testRSQ();
     void testSKEW();
     void testSKEWP();
     void testSLOPE();
