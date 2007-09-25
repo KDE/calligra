@@ -111,8 +111,9 @@ class Importer:
             args += [ "--%s=%s" % (n,options[n]) for n in options.keys() if not n.startswith('_') ]
             print "Execute: ", args, "\n"
             proc = popen2.Popen3( args, capturestderr = 1 )
-            if proc.childerr:
-                progress.addText("<b>%s</b>" % proc.childerr.read())
+            errmsg = proc.childerr.read()
+            if errmsg:
+                progress.addText("<b>%s</b>" % errmsg)
             fromchild = proc.fromchild.readline()
             while fromchild:
                 step += 1
@@ -122,8 +123,9 @@ class Importer:
                 sys.stdout.write( fromchild )
                 sys.stdout.flush()
 
-                if proc.childerr:
-                    progress.addText("<b>%s</b>" % proc.childerr.read())
+                errmsg = proc.childerr.read()
+                if errmsg:
+                    progress.addText("<b>%s</b>" % errmsg)
                 canceled = progress.isCanceled()
                 if canceled:
                     break
