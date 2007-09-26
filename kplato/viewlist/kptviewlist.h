@@ -144,11 +144,12 @@ protected slots:
     void renameCategory();
     void slotCreatePart();
     void slotAddView();
+    void slotRemoveCategory();
     void slotRemoveView();
     void slotEditViewTitle();
     void slotEditDocumentTitle();
     void slotRemoveDocument();
-    void slotConfigureView();
+    void slotConfigureItem();
     
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );

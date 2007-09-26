@@ -111,6 +111,7 @@ set(kplatoprivate_LIB_SRCS
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
     viewlist/kptviewlistaddview.ui
     viewlist/kptviewlisteditview.ui
+    viewlist/kptviewlisteditcategory.ui
     
     kptcpmwidget.ui
     kptitemviewsettings.ui

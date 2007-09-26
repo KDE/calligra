@@ -22,6 +22,7 @@
 
 #include "ui_kptviewlistaddview.h"
 #include "ui_kptviewlisteditview.h"
+#include "ui_kptviewlisteditcategory.h"
 
 #include <kdialog.h>
 
@@ -37,6 +38,7 @@ class ViewListWidget;
 class ViewListItem;
 class AddViewPanel;
 class EditViewPanel;
+class EditCategoryPanel;
 
 class ViewListDialog : public KDialog
 {
@@ -54,30 +56,30 @@ private:
 class AddViewPanel : public QWidget
 {
     Q_OBJECT
-    public:
-        AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
+public:
+    AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
 
-        bool ok();
-    
-        Ui::AddViewPanel widget;
-    
-    signals:
-        void enableButtonOk( bool );
-    
-    protected slots:
-        void changed();
+    bool ok();
 
-    private:
-        View *m_view;
-        ViewListWidget &m_viewlist;
-        QMap<QString, QString> m_categories;
+    Ui::AddViewPanel widget;
+
+signals:
+    void enableButtonOk( bool );
+
+protected slots:
+    void changed();
+
+private:
+    View *m_view;
+    ViewListWidget &m_viewlist;
+    QMap<QString, QString> m_categories;
 };
 
-class ViewListEditDialog : public KDialog
+class ViewListEditViewDialog : public KDialog
 {
     Q_OBJECT
 public:
-    ViewListEditDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
+    ViewListEditViewDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
 
 protected slots:
     void slotOk();
@@ -102,12 +104,48 @@ signals:
 protected slots:
     void changed();
     void categoryChanged( int index );
-    void fillBefore( ViewListItem *cat );
+    void fillAfter( ViewListItem *cat );
 
 private:
     ViewListItem *m_item;
     ViewListWidget &m_viewlist;
 };
+
+class ViewListEditCategoryDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    ViewListEditCategoryDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
+
+protected slots:
+    void slotOk();
+
+private:
+    EditCategoryPanel *m_panel;
+};
+
+class EditCategoryPanel : public QWidget
+{
+    Q_OBJECT
+public:
+    EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent );
+
+    bool ok();
+
+    Ui::EditCategoryPanel widget;
+
+signals:
+    void enableButtonOk( bool );
+
+protected slots:
+    void changed();
+    void fillAfter();
+
+private:
+    ViewListItem *m_item;
+    ViewListWidget &m_viewlist;
+};
+
 
 } //KPlato namespace
 

@@ -153,7 +153,7 @@ void AddViewPanel::changed()
 }
 
 //------------------------
-ViewListEditDialog::ViewListEditDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
+ViewListEditViewDialog::ViewListEditViewDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
     : KDialog(parent)
 {
     setCaption( i18n("Configure View") );
@@ -171,7 +171,7 @@ ViewListEditDialog::ViewListEditDialog( ViewListWidget &viewlist, ViewListItem *
 }
 
 
-void ViewListEditDialog::slotOk() {
+void ViewListEditViewDialog::slotOk() {
     if ( m_panel->ok() ) {
         accept();
     }
@@ -195,7 +195,7 @@ EditViewPanel::EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWid
             widget.category->addItem( citem->text( 0 ), QVariant::fromValue( (void*)citem ) );
             if ( citem == item->parent() ) {
                 idx = i;
-                fillBefore( citem );
+                fillAfter( citem );
             }
         }
         widget.category->setCurrentIndex( idx );
@@ -232,11 +232,11 @@ void EditViewPanel::categoryChanged( int index )
 {
     kDebug();
     ViewListItem *cat = static_cast<ViewListItem*>( widget.category->itemData( index ).value<void*>() );
-    fillBefore( cat );
+    fillAfter( cat );
     changed();
 }
 
-void EditViewPanel::fillBefore( ViewListItem *cat )
+void EditViewPanel::fillAfter( ViewListItem *cat )
 {
     kDebug();
     widget.insertAfter->clear();
@@ -253,6 +253,83 @@ void EditViewPanel::fillBefore( ViewListItem *cat )
         }
         widget.insertAfter->setCurrentIndex( idx );
     }
+}
+
+//------------------------
+ViewListEditCategoryDialog::ViewListEditCategoryDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
+    : KDialog(parent)
+{
+    setCaption( i18n("Configure View") );
+    setButtons( KDialog::Ok | KDialog::Cancel );
+    setDefaultButton( Ok );
+
+    m_panel = new EditCategoryPanel( viewlist, item, this );
+
+    setMainWidget( m_panel );
+    
+    enableButtonOk(false);
+
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect( m_panel, SIGNAL( enableButtonOk( bool ) ), SLOT( enableButtonOk( bool ) ) );
+}
+
+
+void ViewListEditCategoryDialog::slotOk() {
+    if ( m_panel->ok() ) {
+        accept();
+    }
+}
+
+EditCategoryPanel::EditCategoryPanel( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent )
+    : QWidget( parent ),
+      m_item( item ),
+      m_viewlist( viewlist )
+{
+    widget.setupUi( this );
+    
+    widget.viewname->setText( item->text( 0 ) );
+    widget.tooltip->setText( item->toolTip( 0 ) );
+    
+    fillAfter();
+    
+    connect( widget.viewname, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
+    connect( widget.tooltip, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
+    connect( widget.insertAfter, SIGNAL( currentIndexChanged( int ) ), SLOT( changed() ) );
+}
+
+bool EditCategoryPanel::ok()
+{
+    m_item->setText( 0, widget.viewname->text() );
+    m_item->setToolTip( 0, widget.tooltip->text() );
+    m_viewlist.removeViewListItem( m_item );
+    int index = widget.insertAfter->currentIndex();
+    m_viewlist.addViewListItem( m_item, 0, index );
+    
+    return true;
+}
+
+void EditCategoryPanel::changed()
+{
+    bool disable = widget.viewname->text().isEmpty();
+    emit enableButtonOk( ! disable );
+}
+
+void EditCategoryPanel::fillAfter()
+{
+    kDebug();
+    widget.insertAfter->clear();
+    widget.insertAfter->addItem( i18n( "Top" ) );
+    int idx = 0;
+    QList<ViewListItem*> lst = m_viewlist.categories();
+    for ( int i = 0; i < lst.count(); ++i ) {
+        ViewListItem *itm = lst[ i ];
+        if ( m_item == itm ) {
+            idx = i;
+        } else {
+            widget.insertAfter->addItem( itm->text( 0 ), QVariant::fromValue( (void*)itm ) );
+        }
+    }
+    widget.insertAfter->setCurrentIndex( idx );
 }
 
 

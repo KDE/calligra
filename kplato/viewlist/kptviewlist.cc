@@ -199,10 +199,15 @@ void ViewListTreeWidget::handleMousePress( QTreeWidgetItem *item )
 }
 void ViewListTreeWidget::mousePressEvent ( QMouseEvent *event )
 {
-/*    if ( event->button() == Qt::RightButton ) {
-        event->accept();
-        return;
-    }*/
+    if ( event->button() == Qt::RightButton ) {
+        QTreeWidgetItem *item = itemAt( event->pos() );
+        if ( item && item->type() == ViewListItem::ItemType_Category ) {
+            setCurrentItem( item );
+            emit customContextMenuRequested( event->pos() );
+            event->accept();
+            return;
+        }
+    }
     QTreeWidget::mousePressEvent( event );
 }
 
@@ -470,6 +475,16 @@ void ViewListWidget::slotAddView()
     emit createView();
 }
 
+void ViewListWidget::slotRemoveCategory()
+{
+    if ( m_contextitem && m_contextitem->type() == ViewListItem::ItemType_Category ) {
+        kDebug()<<m_contextitem<<":"<<m_contextitem->type();
+        takeViewListItem( m_contextitem );
+        delete m_contextitem;
+        m_contextitem = 0;
+    }
+}
+
 void ViewListWidget::slotRemoveView()
 {
     if ( m_contextitem ) {
@@ -487,11 +502,20 @@ void ViewListWidget::slotEditViewTitle()
     }
 }
 
-void ViewListWidget::slotConfigureView()
+void ViewListWidget::slotConfigureItem()
 {
-    if ( m_contextitem ) {
+    if ( m_contextitem == 0 ) {
+        return;
+    }
+    if ( m_contextitem->type() == ViewListItem::ItemType_Category ) {
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
-        ViewListEditDialog dlg( *this, m_contextitem, this );
+        ViewListEditCategoryDialog dlg( *this, m_contextitem, this );
+        dlg.exec();
+    } else if ( m_contextitem->type() == ViewListItem::ItemType_SubView ) {
+        ViewListEditViewDialog dlg( *this, m_contextitem, this );
+        dlg.exec();
+    } else if ( m_contextitem->type() == ViewListItem::ItemType_ChildDocument ) {
+        ViewListEditViewDialog dlg( *this, m_contextitem, this );
         dlg.exec();
     }
 }
@@ -585,10 +609,14 @@ void ViewListWidget::setupContextMenus()
 
     // Category edit actions
     action = new QAction( KIcon( "editinput" ), i18n( "Rename" ), this );
-    m_editcategory.append( action );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );
-    //     action = new QAction( KIcon( "list-remove" ), i18n( "Remove Category" ), this );
-    //     m_editcategory.append( action );
+    m_editcategory.append( action );
+    action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveCategory() ) );
+    m_editcategory.append( action );
+    action = new QAction( KIcon( "configure" ), i18n( "Entry..." ), this );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
+    m_editcategory.append( action );
 
     // view edit actions
     action = new QAction( KIcon( "editinput" ), i18n( "Rename" ), this );
@@ -598,7 +626,7 @@ void ViewListWidget::setupContextMenus()
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveView() ) );
     m_editview.append( action );
     action = new QAction( KIcon( "configure" ), i18n( "Entry..." ), this );
-    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureView() ) );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_editview.append( action );
 
     // document edit actions
