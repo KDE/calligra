@@ -21,17 +21,22 @@
 #define KPTVIEWLISTDIALOG_H
 
 #include "ui_kptviewlistaddview.h"
+#include "ui_kptviewlisteditview.h"
 
 #include <kdialog.h>
 
 #include <QWidget>
+
+class KoView;
 
 namespace KPlato
 {
 
 class View;
 class ViewListWidget;
+class ViewListItem;
 class AddViewPanel;
+class EditViewPanel;
 
 class ViewListDialog : public KDialog
 {
@@ -49,23 +54,59 @@ private:
 class AddViewPanel : public QWidget
 {
     Q_OBJECT
-public:
-    AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
+    public:
+        AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *parent );
 
-    bool ok();
+        bool ok();
     
-    Ui::AddViewPanel widget;
+        Ui::AddViewPanel widget;
     
-signals:
-    void enableButtonOk( bool );
+    signals:
+        void enableButtonOk( bool );
     
+    protected slots:
+        void changed();
+
+    private:
+        View *m_view;
+        ViewListWidget &m_viewlist;
+        QMap<QString, QString> m_categories;
+};
+
+class ViewListEditDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    ViewListEditDialog( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent=0 );
+
 protected slots:
-    void changed();
+    void slotOk();
 
 private:
-    View *m_view;
+    EditViewPanel *m_panel;
+};
+
+class EditViewPanel : public QWidget
+{
+    Q_OBJECT
+public:
+    EditViewPanel( ViewListWidget &viewlist, ViewListItem *item, QWidget *parent );
+
+    bool ok();
+
+    Ui::EditViewPanel widget;
+
+signals:
+    void enableButtonOk( bool );
+
+protected slots:
+    void changed();
+    void categoryChanged( int index );
+    void fillBefore( ViewListItem *cat );
+
+private:
+    ViewListItem *m_item;
     ViewListWidget &m_viewlist;
-    QMap<QString, QString> m_categories;
 };
 
 } //KPlato namespace

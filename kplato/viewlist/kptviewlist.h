@@ -69,21 +69,24 @@ class ViewListItem : public QTreeWidgetItem
 class ViewListTreeWidget : public QTreeWidget
 {
     Q_OBJECT
-    public:
-        explicit ViewListTreeWidget( QWidget *parent );
-        ViewListItem *findCategory( const QString &cat );
+public:
+    explicit ViewListTreeWidget( QWidget *parent );
+    ViewListItem *findCategory( const QString &cat );
 
-        void save( QDomElement &element ) const;
+    /// Return the category of @p view
+    ViewListItem *category( const KoView *view ) const;
+    
+    void save( QDomElement &element ) const;
 
-    protected:
-        void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
-        virtual void mousePressEvent ( QMouseEvent *event );
+protected:
+    void drawRow( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    virtual void mousePressEvent ( QMouseEvent *event );
 
-    signals:
-        void activated( QTreeWidgetItem* );
+signals:
+    void activated( QTreeWidgetItem* );
 
-    private slots:
-        void handleMousePress( QTreeWidgetItem *item );
+private slots:
+    void handleMousePress( QTreeWidgetItem *item );
 };
 
 class ViewListWidget : public QWidget
@@ -98,6 +101,11 @@ public:
     /// Return a list of all categories
     QList<ViewListItem*> categories() const;
 
+    /// Return the category with @p tag
+    ViewListItem *findCategory( const QString &tag ) const;
+    /// Return the category of @p view
+    ViewListItem *category( const KoView *view ) const;
+    
     /// Create a unique tag
     QString uniqueTag( const QString &seed ) const;
     /// Add a sub-view
@@ -111,7 +119,14 @@ public:
     ViewListItem *findItem( const QString &tag, QTreeWidgetItem* parent ) const;
     ViewListItem *findItem( const QWidget *view, QTreeWidgetItem* parent = 0 ) const;
 
+    /// Remove @p item, don't emit signal
+    int removeViewListItem( ViewListItem *item );
+    /// Add @p item to @p parent at @index, don't emit signal
+    void addViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
+    
+    /// Remove @p item, emit signal
     int takeViewListItem( ViewListItem *item );
+    /// Add @p item to @p parent at @index, emit signal
     void insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index );
 
     void save( QDomElement &element ) const;
@@ -133,7 +148,8 @@ protected slots:
     void slotEditViewTitle();
     void slotEditDocumentTitle();
     void slotRemoveDocument();
-
+    void slotConfigureView();
+    
 protected:
     virtual void contextMenuEvent ( QContextMenuEvent *event );
 

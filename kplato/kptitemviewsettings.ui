@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>604</width>
-    <height>279</height>
+    <width>600</width>
+    <height>278</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -65,6 +65,7 @@
    </item>
   </layout>
  </widget>
+ <layoutdefault spacing="0" margin="0" />
  <customwidgets>
   <customwidget>
    <class>KActionSelector</class>
@@ -72,6 +73,7 @@
    <header>kactionselector.h</header>
   </customwidget>
  </customwidgets>
+ <includes/>
  <resources/>
  <connections/>
 </ui>

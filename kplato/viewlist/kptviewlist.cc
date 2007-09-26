@@ -252,6 +252,22 @@ ViewListItem *ViewListTreeWidget::findCategory( const QString &cat )
     return 0;
 }
 
+ViewListItem *ViewListTreeWidget::category( const KoView *view ) const
+{
+    QTreeWidgetItem * item;
+    int cnt = topLevelItemCount();
+    for ( int i = 0; i < cnt; ++i ) {
+        item = topLevelItem( i );
+        for ( int c = 0; c < item->childCount(); ++c ) {
+            if ( view == static_cast<ViewListItem*>( item->child( c ) )->view() ) {
+                return static_cast<ViewListItem*>( item );
+            }
+        }
+    }
+    return 0;
+}
+
+//-----------------------
 ViewListWidget::ViewListWidget( Part *part, QWidget *parent )//QString name, KXmlGuiWindow *parent )
 : QWidget( parent ),
 m_part( part )
@@ -318,6 +334,16 @@ QList<ViewListItem*> ViewListWidget::categories() const
             lst << static_cast<ViewListItem*>( item );
     }
     return lst;
+}
+
+ViewListItem *ViewListWidget::findCategory( const QString &tag ) const
+{
+    return m_viewlist->findCategory( tag );
+}
+
+ViewListItem *ViewListWidget::category( const KoView *view ) const
+{
+    return m_viewlist->category( view );
 }
 
 QString ViewListWidget::uniqueTag( const QString &seed ) const
@@ -461,6 +487,15 @@ void ViewListWidget::slotEditViewTitle()
     }
 }
 
+void ViewListWidget::slotConfigureView()
+{
+    if ( m_contextitem ) {
+        kDebug()<<m_contextitem<<":"<<m_contextitem->type();
+        ViewListEditDialog dlg( *this, m_contextitem, this );
+        dlg.exec();
+    }
+}
+
 void ViewListWidget::slotEditDocumentTitle()
 {
     //QTreeWidgetItem *item = m_viewlist->currentItem();
@@ -478,7 +513,7 @@ void ViewListWidget::slotRemoveDocument()
     }
 }
 
-int ViewListWidget::takeViewListItem( ViewListItem *item )
+int ViewListWidget::removeViewListItem( ViewListItem *item )
 {
     QTreeWidgetItem *p = item->parent();
     if ( p == 0 ) {
@@ -487,12 +522,11 @@ int ViewListWidget::takeViewListItem( ViewListItem *item )
     int i = p->indexOfChild( item );
     if ( i != -1 ) {
         p->takeChild( i );
-        emit viewListItemRemoved( item );
     }
     return i;
 }
 
-void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index )
+void ViewListWidget::addViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index )
 {
     QTreeWidgetItem *p = parent;
     if ( p == 0 ) {
@@ -502,6 +536,20 @@ void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *pa
         index = p->childCount();
     }
     p->insertChild( index, item );
+}
+
+int ViewListWidget::takeViewListItem( ViewListItem *item )
+{
+    int pos = removeViewListItem( item );
+    if ( pos != -1 ) {
+        emit viewListItemRemoved( item );
+    }
+    return pos;
+}
+
+void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *parent, int index )
+{
+    addViewListItem( item, parent, index );
     emit viewListItemInserted( item );
 }
 
@@ -548,6 +596,9 @@ void ViewListWidget::setupContextMenus()
     m_editview.append( action );
     action = new QAction( KIcon( "edit-delete" ), i18n( "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveView() ) );
+    m_editview.append( action );
+    action = new QAction( KIcon( "configure" ), i18n( "Entry..." ), this );
+    connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureView() ) );
     m_editview.append( action );
 
     // document edit actions
