@@ -19,6 +19,8 @@
 
 #include "Karbon1xImport.h"
 
+#include <vglobal.h>
+
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
 #include <KoOasisStore.h>
@@ -33,6 +35,11 @@
 #include <KoShapeGroup.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <KoLineBorder.h>
+#include <pathshapes/ellipse/KoEllipseShape.h>
+#include <pathshapes/rectangle/KoRectangleShape.h>
+#include <pathshapes/star/KoStarShape.h>
+#include <pictureshape/PictureShape.h>
+#include <KoImageData.h>
 
 #include <kgenericfactory.h>
 
@@ -242,6 +249,9 @@ bool KarbonImport::loadXML( const KoXmlElement& doc )
     m_document.setPageSize( QSizeF( width, height ) );
     m_document.setUnit( KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( m_document.unit() ) ) ) );
 
+    m_mirrorMatrix.scale( 1.0, -1.0 );
+    m_mirrorMatrix.translate( 0, -m_document.pageSize().height() );
+
     KoShapeLayer * defaulLayer = m_document.layers().first();
 
     KoXmlElement e;
@@ -264,88 +274,68 @@ bool KarbonImport::loadXML( const KoXmlElement& doc )
     return true;
 }
 
-void KarbonImport::loadGroup( KoShapeContainer * group, const KoXmlElement &element )
+void KarbonImport::loadGroup( KoShapeContainer * parent, const KoXmlElement &element )
 {
-    loadStyle( group, element );
-
     QList<KoShape*> shapes;
 
     KoXmlElement e;
     forEachElement( e, element )
     {
         KoShape * shape = 0;
-        if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" ) // TODO : remove COMPOSITE later
+        if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" )
         {
             shape = loadPath( e );
         }
-        /*
         else if( e.tagName() == "ELLIPSE" )
         {
-            VEllipse* ellipse = new VEllipse( this );
-            ellipse->load( e );
-            append( ellipse );
+            shape = loadEllipse( e );
         }
         else if( e.tagName() == "RECT" )
         {
-            VRectangle* rectangle = new VRectangle( this );
-            rectangle->load( e );
-            append( rectangle );
+            shape = loadRect( e );
         }
         else if( e.tagName() == "POLYLINE" )
         {
-            VPolyline* polyline = new VPolyline( this );
-            polyline->load( e );
-            append( polyline );
+           shape = loadPolyline( e );
         }
         else if( e.tagName() == "POLYGON" )
         {
-            VPolygon* polygon = new VPolygon( this );
-            polygon->load( e );
-            append( polygon );
+            shape = loadPolygon( e );
         }
         else if( e.tagName() == "SINUS" )
         {
-            VSinus* sinus = new VSinus( this );
-            sinus->load( e );
-            append( sinus );
+            shape = loadSinus( e );
         }
         else if( e.tagName() == "SPIRAL" )
         {
-            VSpiral* spiral = new VSpiral( this );
-            spiral->load( e );
-            append( spiral );
+            shape = loadSpiral( e );
         }
         else if( e.tagName() == "STAR" )
         {
-            VStar* star = new VStar( this );
-            star->load( e );
-            append( star );
+            shape = loadStar( e );
         }
         else if( e.tagName() == "GROUP" )
         {
-            VGroup* group = new VGroup( this );
-            group->load( e );
-            append( group );
+            KoShapeGroup * group = new KoShapeGroup();
+            loadGroup( group, e );
+            shape = group;
         }
+        /* TODO 
         else if( e.tagName() == "CLIP" )
         {
             VClipGroup* grp = new VClipGroup( this );
             grp->load( e );
             append( grp );
         }
+        */
         else if( e.tagName() == "IMAGE" )
         {
-            VImage* img = new VImage( this );
-            img->load( e );
-            append( img );
+            shape = loadImage( e );
         }
         else if( e.tagName() == "TEXT" )
         {
-            VText *text = new VText( this );
-            text->load( e );
-            append( text );
+            shape = loadText( e );
         }
-        */
         if( shape )
             shapes.append( shape );
     }
@@ -353,7 +343,7 @@ void KarbonImport::loadGroup( KoShapeContainer * group, const KoXmlElement &elem
     foreach( KoShape * shape, shapes )
         m_document.add( shape );
 
-    KoShapeGroup * g = dynamic_cast<KoShapeGroup*>( group );
+    KoShapeGroup * g = dynamic_cast<KoShapeGroup*>( parent );
     if( g )
     {
         KoShapeGroupCommand cmd( g, shapes );
@@ -362,31 +352,170 @@ void KarbonImport::loadGroup( KoShapeContainer * group, const KoXmlElement &elem
     else
     {
         foreach( KoShape * shape, shapes )
-            group->addChild( shape );
+            parent->addChild( shape );
     }
+
+    loadCommon( parent, element );
 }
 
 void KarbonImport::loadStyle( KoShape * shape, const KoXmlElement &element )
 {
-    // TODO load fill
-    // TODO load stroke
-    shape->setBorder( new KoLineBorder() );
+    KoXmlElement e;
+    forEachElement(e, element)
+    {
+        if( e.tagName() == "STROKE" )
+        {
+            loadStroke( shape, e );
+        }
+        else if( e.tagName() == "FILL" )
+        {
+            loadFill( shape, e );
+        }
+    }
+}
 
+QColor KarbonImport::loadColor( const KoXmlElement &element )
+{
+    enum ColorSpace
+    {
+        rgb  = 0,  // the RGB colorspace (red, green and blue components)
+        cmyk = 1,  // the CMYK colorspace (cyan, magenta, yellow and black components)
+        hsb  = 2,  // the HSB colorspace (hue, saturation and brightnes components)
+        gray = 3   // the Gray colorspace (gray from black to white)
+    };
+
+    ushort colorSpace = element.attribute( "colorSpace" ).toUShort();
+
+    double opacity = element.attribute( "opacity", "1.0" ).toDouble();
+
+    double value[4] = { 0 };
+
+    if( colorSpace == gray )
+        value[0] = element.attribute( "v", "0.0" ).toDouble();
+    else
+    {
+        value[0] = element.attribute( "v1", "0.0" ).toDouble();
+        value[1] = element.attribute( "v2", "0.0" ).toDouble();
+        value[2] = element.attribute( "v3", "0.0" ).toDouble();
+
+        if( colorSpace == cmyk )
+            value[3] = element.attribute( "v4", "0.0" ).toDouble();
+    }
+
+    if( value[0] < 0.0 || value[0] > 1.0 )
+        value[0] = 0.0;
+    if( value[1] < 0.0 || value[1] > 1.0 )
+        value[1] = 0.0;
+    if( value[2] < 0.0 || value[2] > 1.0 )
+        value[2] = 0.0;
+    if( value[3] < 0.0 || value[3] > 1.0 )
+        value[3] = 0.0;
+
+    QColor color;
+
+    if( colorSpace == hsb )
+        color.setHsvF( value[0], value[1], value[2], opacity );
+    else if( colorSpace == gray )
+        color.setRgbF( value[0], value[0], value[0], opacity );
+    else if( colorSpace == cmyk )
+        color.setCmykF( value[0], value[1], value[2], value[3], opacity );
+    else
+        color.setRgbF( value[0], value[1], value[2], opacity );
+
+    return color;
+}
+
+void KarbonImport::loadStroke( KoShape * shape, const KoXmlElement &element )
+{
+    // TODO load stroke
+    KoLineBorder * border = new KoLineBorder();
+
+    switch( element.attribute( "lineCap", "0" ).toUShort() )
+    {
+        case 1:
+            border->setCapStyle( Qt::RoundCap ); break;
+        case 2:
+            border->setCapStyle( Qt::SquareCap ); break;
+        default:
+            border->setCapStyle( Qt::FlatCap );
+    }
+
+    switch( element.attribute( "lineJoin", "0" ).toUShort() )
+    {
+        case 1:
+            border->setJoinStyle( Qt::RoundJoin );; break;
+        case 2:
+            border->setJoinStyle( Qt::BevelJoin ); break;
+        default:
+            border->setJoinStyle( Qt::MiterJoin );
+    }
+
+    border->setLineWidth( qMax( 0.0, element.attribute( "lineWidth", "1.0" ).toDouble() ) );
+    border->setMiterLimit( qMax( 0.0, element.attribute( "miterLimit", "10.0" ).toDouble() ) );
+
+    // load color:
+    KoXmlElement e;
+    forEachElement(e, element)
+    {
+        if( e.tagName() == "COLOR" )
+        {
+            border->setColor( loadColor( e ) );
+        }
+        /* TODO
+        else if( e.tagName() == "DASHPATTERN" )
+        {
+            m_dashPattern.load( e );
+        }
+        else if( e.tagName() == "GRADIENT" )
+        {
+            m_type = grad;
+            m_gradient.load( e );
+        }
+        else if( e.tagName() == "PATTERN" )
+        {
+            m_type = patt;
+            m_pattern.load( e );
+        }
+        */
+    }
+
+    shape->setBorder( border );
+}
+
+void KarbonImport::loadFill( KoShape * shape, const KoXmlElement &element )
+{
+    // TODO load fill
+    //shape->setBackground( QBrush( Qt::green ) );
+}
+
+void KarbonImport::loadCommon( KoShape * shape, const KoXmlElement &element )
+{
     if( ! element.attribute( "ID" ).isEmpty() )
         shape->setName( element.attribute( "ID" ) );
+
+    QString trafo = element.attribute( "transform" );
+    kDebug() << "transformation =" << trafo;
+
+    if( !trafo.isEmpty() )
+        shape->applyAbsoluteTransformation( KoOasisStyles::loadTransformation( trafo ) );
+
+    if( dynamic_cast<KoShapeContainer*>( shape ) )
+        return;
+
+    // apply mirroring
+    shape->applyAbsoluteTransformation( m_mirrorMatrix );
 }
 
 KoShape * KarbonImport::loadPath( const KoXmlElement &element )
 {
     KoPathShape * path = new KoPathShape();
 
-    loadStyle( path, element );
-
     QString data = element.attribute( "d" );
     if( data.length() > 0 )
     {
         KoPathShapeLoader loader( path );
         loader.parseSvg( data, true );
+        path->normalize();
     }
 
     path->setFillRule( element.attribute( "fillRule" ) == 0 ? Qt::OddEvenFill : Qt::WindingFill );
@@ -424,15 +553,557 @@ KoShape * KarbonImport::loadPath( const KoXmlElement &element )
 
             path->combine( subpath );
         }
-        else
-        {
-            loadStyle( path, child );
-        }
     }
 
-    QString trafo = element.attribute( "transform" );
-    if( !trafo.isEmpty() )
-        path->setTransformation( KoOasisStyles::loadTransformation( trafo ) );
+    loadCommon( path, element );
+    loadStyle( path, element );
 
     return path;
+}
+
+KoShape * KarbonImport::loadEllipse( const KoXmlElement &element )
+{
+    KoEllipseShape * ellipse = new KoEllipseShape();
+
+    double rx = KoUnit::parseValue( element.attribute( "rx" ) );
+    double ry = KoUnit::parseValue( element.attribute( "ry" ) );
+    ellipse->setSize( QSizeF( 2*rx, 2*ry ) );
+
+    ellipse->setStartAngle( element.attribute( "start-angle" ).toDouble() );
+    ellipse->setEndAngle( element.attribute( "end-angle" ).toDouble() );
+
+    if( element.attribute( "kind" ) == "cut" )
+        ellipse->setType( KoEllipseShape::Chord );
+    else if( element.attribute( "kind" ) == "section" )
+        ellipse->setType( KoEllipseShape::Pie );
+    else if( element.attribute( "kind" ) == "arc" )
+        ellipse->setType( KoEllipseShape::Arc );
+
+    QPointF center( KoUnit::parseValue( element.attribute( "cx" ) ), KoUnit::parseValue( element.attribute( "cy" ) ) );
+    ellipse->setAbsolutePosition( center );
+
+    loadCommon( ellipse, element );
+    loadStyle( ellipse, element );
+
+    return ellipse;
+}
+
+KoShape * KarbonImport::loadRect( const KoXmlElement &element )
+{
+    KoRectangleShape * rect = new KoRectangleShape();
+
+    double w  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
+    double h = KoUnit::parseValue( element.attribute( "height" ), 10.0 );
+    rect->setSize( QSizeF( w, h ) );
+
+    double x = KoUnit::parseValue( element.attribute( "x" ) );
+    double y = KoUnit::parseValue( element.attribute( "y" ) );
+    rect->setAbsolutePosition( QPointF( x, y ), KoFlake::BottomLeftCorner );
+    kDebug() << "rect position = " << QPointF(x,y);
+
+    double rx  = KoUnit::parseValue( element.attribute( "rx" ) );
+    double ry  = KoUnit::parseValue( element.attribute( "ry" ) );
+    rect->setCornerRadiusX( rx / ( 0.5 * w ) * 100.0 );
+    rect->setCornerRadiusY( ry / ( 0.5 * h ) * 100.0 );
+
+    loadCommon( rect, element );
+    loadStyle( rect, element );
+
+    return rect;
+}
+
+KoShape * KarbonImport::loadPolyline( const KoXmlElement &element )
+{
+    KoPathShape * polyline = new KoPathShape();
+
+    QString points = element.attribute( "points" ).simplified();
+
+    bool bFirst = true;
+
+    points.replace( ',', ' ' );
+    points.remove( '\r' );
+    points.remove( '\n' );
+    QStringList pointList = points.split( ' ' );
+    QStringList::Iterator end(pointList.end());
+    for( QStringList::Iterator it = pointList.begin(); it != end; ++it )
+    {
+        QPointF point;
+        point.setX( (*it).toDouble() );
+        point.setY( (*++it).toDouble() );
+        if( bFirst )
+        {
+            polyline->moveTo( point );
+            bFirst = false;
+        }
+        else
+            polyline->lineTo( point );
+    }
+
+    loadCommon( polyline, element );
+    loadStyle( polyline, element );
+
+    return polyline;
+}
+
+KoShape * KarbonImport::loadPolygon( const KoXmlElement &element )
+{
+    KoPathShape * polygon = new KoPathShape();
+
+    QString points = element.attribute( "points" ).simplified();
+
+    bool bFirst = true;
+
+    points.replace( ',', ' ' );
+    points.remove( '\r' );
+    points.remove( '\n' );
+    QStringList pointList = points.split( ' ' );
+    QStringList::Iterator end(pointList.end());
+    for( QStringList::Iterator it = pointList.begin(); it != end; ++it )
+    {
+        QPointF point;
+        point.setX( (*it).toDouble() );
+        point.setY( (*++it).toDouble() );
+        if( bFirst )
+        {
+            polygon->moveTo( point );
+            bFirst = false;
+        }
+        else
+            polygon->lineTo( point );
+    }
+    polygon->close();
+
+    double x = KoUnit::parseValue( element.attribute( "x" ) );
+    double y = KoUnit::parseValue( element.attribute( "y" ) );
+    polygon->setAbsolutePosition( QPointF( x, y ), KoFlake::TopLeftCorner );
+
+    loadCommon( polygon, element );
+    loadStyle( polygon, element );
+
+    return polygon;
+}
+
+KoShape * KarbonImport::loadSinus( const KoXmlElement &element )
+{
+    KoPathShape * sinus = new KoPathShape();
+
+    uint periods = element.attribute( "periods" ).toUInt();
+
+    QPointF p1, p2, p3;
+    sinus->moveTo( QPointF(0,0) );
+
+    for ( uint i = 0; i < periods; ++i )
+    {
+        p1.setX( i + 1.0/24.0 );
+        p1.setY( ( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p2.setX( i + 1.0/12.0 );
+        p2.setY( ( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p3.setX( i + 1.0/8.0 );
+        p3.setY( VGlobal::sqrt2 * 0.5 );
+        sinus->curveTo( p1, p2, p3 );
+
+        p1.setX( i + 1.0/6.0 );
+        p1.setY( ( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p2.setX( i + 5.0/24.0 );
+        p2.setY( 1.0 );
+        p3.setX( i + 1.0/4.0 );
+        p3.setY( 1.0 );
+        sinus->curveTo( p1, p2, p3 );
+
+        p1.setX( i + 7.0/24.0 );
+        p1.setY( 1.0 );
+        p2.setX( i + 1.0/3.0 );
+        p2.setY( ( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p3.setX( i + 3.0/8.0 );
+        p3.setY( VGlobal::sqrt2 * 0.5 );
+        sinus->curveTo( p1, p2, p3 );
+
+        p1.setX( i + 5.0/12.0 );
+        p1.setY( ( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p2.setX( i + 11.0/24.0 );
+        p2.setY( ( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p3.setX( i + 1.0/2.0 );
+        p3.setY( 0.0 );
+        sinus->curveTo( p1, p2, p3 );
+
+        p1.setX( i + 13.0/24.0 );
+        p1.setY( -( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p2.setX( i + 7.0/12.0 );
+        p2.setY( -( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p3.setX( i + 5.0/8.0 );
+        p3.setY( -VGlobal::sqrt2 * 0.5 );
+        sinus->curveTo( p1, p2, p3 );
+
+        p1.setX( i + 2.0/3.0 );
+        p1.setY( -( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p2.setX( i + 17.0/24.0 );
+        p2.setY( -1.0 );
+        p3.setX( i + 3.0/4.0 );
+        p3.setY( -1.0 );
+        sinus->curveTo( p1, p2, p3 );
+
+        p1.setX( i + 19.0/24.0 );
+        p1.setY( -1.0 );
+        p2.setX( i + 5.0/6.0 );
+        p2.setY( -( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p3.setX( i + 7.0/8.0 );
+        p3.setY( -VGlobal::sqrt2 * 0.5 );
+        sinus->curveTo( p1, p2, p3 );
+
+        p1.setX( i + 11.0/12.0 );
+        p1.setY( -( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p2.setX( i + 23.0/24.0 );
+        p2.setY( -( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p3.setX( i + 1.0 );
+        p3.setY( 0.0 );
+        sinus->curveTo( p1, p2, p3 );
+    }
+
+    sinus->normalize();
+
+    double x = KoUnit::parseValue( element.attribute( "x" ) );
+    double y = KoUnit::parseValue( element.attribute( "y" ) );
+
+    double w  = KoUnit::parseValue( element.attribute( "width" ), 10.0 );
+    double h = KoUnit::parseValue( element.attribute( "height" ), 10.0 );
+
+    sinus->setAbsolutePosition( QPointF( x, y - h )/*, KoFlake::TopLeftCorner*/ );
+    sinus->setSize( QSizeF( w/periods, h ) );
+
+    loadCommon( sinus, element );
+    loadStyle( sinus, element );
+
+    return sinus;
+}
+
+KoShape * KarbonImport::loadSpiral( const KoXmlElement &element )
+{
+    enum SpiralType { round, rectangular };
+
+    KoPathShape * spiral = new KoPathShape();
+
+    double radius  = qAbs( KoUnit::parseValue( element.attribute( "radius" ) ) );
+    double angle = element.attribute( "angle" ).toDouble();
+    double fade = element.attribute( "fade" ).toDouble();
+
+    double cx = KoUnit::parseValue( element.attribute( "cx" ) );
+    double cy = KoUnit::parseValue( element.attribute( "cy" ) );
+
+    uint segments  = element.attribute( "segments" ).toUInt();
+    int clockwise = element.attribute( "clockwise" ).toInt();
+    int type = element.attribute( "type" ).toInt();
+
+
+    // It makes sense to have at least one segment:
+    if( segments < 1 )
+        segments = 1;
+
+    // Fall back, when fade is out of range:
+    if( fade <= 0.0 || fade >= 1.0 )
+        fade = 0.5;
+
+    spiral->setFillRule( Qt::WindingFill );
+
+    // advance by pi/2 clockwise or cclockwise?
+    double adv_ang = ( clockwise ? 1.0 : -1.0 ) * 90.0;
+	double adv_rad = ( clockwise ? -1.0 : 1.0 ) * VGlobal::pi_2;
+    // radius of first segment is non-faded radius:
+    double r = radius;
+
+    QPointF oldP( 0.0, ( clockwise ? -1.0 : 1.0 ) * radius );
+    QPointF newP;
+    QPointF newCenter( 0.0, 0.0 );
+
+    spiral->moveTo( oldP );
+
+    double startAngle = clockwise ? 90.0 : -90.0;
+
+    for ( uint i = 0; i < segments; ++i )
+    {
+
+        if( type == round )
+        {
+            spiral->arcTo( r, r, startAngle, 90 );
+        }
+        else
+        {
+            newP.setX( r * cos( adv_rad * ( i + 2 ) ) + newCenter.x() );
+            newP.setY( r * sin( adv_rad * ( i + 2 ) ) + newCenter.y() );
+
+            spiral->lineTo( newP );
+
+            newCenter += ( newP - newCenter ) * ( 1.0 - fade );
+            oldP = newP;
+        }
+
+        r *= fade;
+        startAngle += adv_ang;
+    }
+
+    QPointF topLeft = spiral->outline().boundingRect().topLeft();
+    spiral->normalize();
+
+    QMatrix m;
+
+    // sadly it's not feasible to simply add angle while creation.
+    // make cw-spiral start at mouse-pointer
+    // one_pi_180 = 1/(pi/180) = 180/pi.
+    m.rotate( ( angle + ( clockwise ? VGlobal::pi : 0.0 ) ) * VGlobal::one_pi_180 );
+
+    spiral->applyAbsoluteTransformation( m );
+    spiral->setAbsolutePosition( spiral->absolutePosition() + QPointF( cx, cy ) );
+
+    loadCommon( spiral, element );
+    loadStyle( spiral, element );
+
+    return spiral;
+}
+
+KoShape * KarbonImport::loadStar( const KoXmlElement &element )
+{
+    enum StarType { star_outline, spoke, wheel, polygon, framed_star, star, gear };
+
+    double cx = KoUnit::parseValue( element.attribute( "cx" ) );
+    double cy = KoUnit::parseValue( element.attribute( "cy" ) );
+
+    double outerRadius  = qAbs( KoUnit::parseValue( element.attribute( "outerradius" ) ) );
+    double innerRadius  = qAbs( KoUnit::parseValue( element.attribute( "innerradius" ) ) );
+    uint edges  = qMax( element.attribute( "edges" ).toUInt(), static_cast<uint>(3) );
+
+    double innerAngle  = element.attribute( "innerangle" ).toUInt();
+    double angle = element.attribute( "angle" ).toDouble();
+
+    double roundness  = element.attribute( "roundness" ).toDouble();
+
+    int type = element.attribute( "type" ).toInt();
+
+    KoPathShape * starShape = 0;
+
+    if( type == star_outline || type == polygon )
+    {
+        KoStarShape * paramStar = new KoStarShape();
+
+        paramStar->setCornerCount( edges );
+        paramStar->setBaseRadius( innerRadius );
+        paramStar->setTipRadius( outerRadius );
+        paramStar->setBaseRoundness( roundness );
+        paramStar->setTipRoundness( roundness );
+        paramStar->setConvex( type == polygon );
+
+        QPointF centerPos = paramStar->absolutePosition( KoFlake::TopLeftCorner) + paramStar->starCenter();
+        QMatrix m;
+        m.translate( centerPos.x(), centerPos.y() );
+        m.rotate( ( angle + VGlobal::pi ) * VGlobal::one_pi_180 );
+        paramStar->applyAbsoluteTransformation( m );
+
+        starShape = paramStar;
+        // TODO the parameter star position seems to not 100 percent correct, fix that
+    }
+    else
+    {
+
+        KoPathShape * pathStar = new KoPathShape();
+
+        // We start at angle + VGlobal::pi_2:
+        QPointF p2, p3;
+        QPointF p(
+            outerRadius * cos( angle + VGlobal::pi_2 ),
+            outerRadius * sin( angle + VGlobal::pi_2 ) );
+        pathStar->moveTo( p );
+
+        double inAngle = VGlobal::twopi / 360 * innerAngle;
+
+        if( type == star )
+        {
+            int j = ( edges % 2 == 0 ) ? ( edges - 2 ) / 2 : ( edges - 1 ) / 2;
+            //innerRadius = getOptimalInnerRadius( outerRadius, edges, innerAngle );
+            int jumpto = 0;
+            bool discontinueous = ( edges % 4 == 2 );
+
+            double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
+            double nextOuterAngle;
+
+            for ( uint i = 1; i < edges + 1; ++i )
+            {
+                double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 );
+                p.setX( innerRadius * cos( nextInnerAngle ) );
+                p.setY( innerRadius * sin( nextInnerAngle ) );
+                if( roundness == 0.0 )
+                    pathStar->lineTo( p );
+                else
+                {
+                    nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+                    p2.setX( outerRadius * cos( nextOuterAngle ) -
+                        cos( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+                    p2.setY( outerRadius * sin( nextOuterAngle ) -
+                        sin( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+
+                    pathStar->curveTo( p2, p, p );
+                }
+
+                jumpto = ( i * j ) % edges;
+                nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 );
+                p.setX( innerRadius * cos( nextInnerAngle ) );
+                p.setY( innerRadius * sin( nextInnerAngle ) );
+                pathStar->lineTo( p );
+
+                nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+                p.setX( outerRadius * cos( nextOuterAngle ) );
+                p.setY( outerRadius * sin( nextOuterAngle ) );
+
+                if( roundness == 0.0 )
+                    pathStar->lineTo( p );
+                else
+                {
+                    p2.setX( innerRadius * cos( nextInnerAngle ) );
+                    p2.setY( innerRadius * sin( nextInnerAngle ) );
+
+                    p3.setX( outerRadius * cos( nextOuterAngle ) +
+                        cos( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+                    p3.setY( outerRadius * sin( nextOuterAngle ) +
+                        sin( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+
+                    pathStar->curveTo( p2, p3, p );
+                }
+                if( discontinueous && i == ( edges / 2 ) )
+                {
+                    angle += VGlobal::pi;
+                    nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+                    p.setX( outerRadius * cos( nextOuterAngle ) );
+                    p.setY( outerRadius * sin( nextOuterAngle ) );
+                    pathStar->moveTo( p );
+                }
+            }
+        }
+        else
+        {
+            if( type == wheel || type == spoke )
+                innerRadius = 0.0;
+
+            double innerRoundness = ( VGlobal::twopi * innerRadius * roundness ) / edges;
+            double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
+
+            for ( uint i = 0; i < edges; ++i )
+            {
+                double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 );
+                double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 );
+                if( type != polygon )
+                {
+                    p.setX( innerRadius * cos( nextInnerAngle ) );
+                    p.setY( innerRadius * sin( nextInnerAngle ) );
+
+                    if( roundness == 0.0 )
+                        pathStar->lineTo( p );
+                    else
+                    {
+                        p2.setX( outerRadius *
+                            cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i ) ) -
+                            cos( angle + VGlobal::twopi / edges * ( i ) ) * outerRoundness );
+                        p2.setY( outerRadius *
+                            sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i ) ) -
+                            sin( angle + VGlobal::twopi / edges * ( i ) ) * outerRoundness );
+
+                        p3.setX( innerRadius * cos( nextInnerAngle ) +
+                            cos( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+                        p3.setY( innerRadius * sin( nextInnerAngle ) +
+                            sin( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+
+                        if( type == gear )
+                        {
+                            pathStar->lineTo( p2 );
+                            pathStar->lineTo( p3 );
+                            pathStar->lineTo( p );
+                        }
+                        else
+                            pathStar->curveTo( p2, p3, p );
+                    }
+                }
+
+                p.setX( outerRadius * cos( nextOuterAngle ) );
+                p.setY( outerRadius * sin( nextOuterAngle ) );
+
+                if( roundness == 0.0 )
+                    pathStar->lineTo( p );
+                else
+                {
+                    p2.setX( innerRadius * cos( nextInnerAngle ) -
+                        cos( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+                    p2.setY( innerRadius * sin( nextInnerAngle ) -
+                        sin( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+
+                    p3.setX( outerRadius * cos( nextOuterAngle ) +
+                        cos( angle + VGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
+                    p3.setY( outerRadius * sin( nextOuterAngle ) +
+                        sin( angle + VGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
+
+                    if( type == gear )
+                    {
+                        pathStar->lineTo( p2 );
+                        pathStar->lineTo( p3 );
+                        pathStar->lineTo( p );
+                    }
+                    else
+                        pathStar->curveTo( p2, p3, p );
+                }
+            }
+        }
+        if( type == wheel || type == framed_star )
+        {
+            pathStar->close();
+            for ( int i = edges - 1; i >= 0; --i )
+            {
+                double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 );
+                p.setX( outerRadius * cos( nextOuterAngle ) );
+                p.setY( outerRadius * sin( nextOuterAngle ) );
+                pathStar->lineTo( p );
+            }
+        }
+        pathStar->close();
+        pathStar->normalize();
+
+        starShape = pathStar;
+    }
+
+    starShape->setFillRule( Qt::OddEvenFill );
+
+    // translate path to center:
+    QMatrix m;
+    m.translate( cx, cy );
+    starShape->applyAbsoluteTransformation( m );
+
+    loadCommon( starShape, element );
+    loadStyle( starShape, element );
+
+    return starShape;
+}
+
+KoShape * KarbonImport::loadImage( const KoXmlElement &element )
+{
+    QString fname = element.attribute( "fname" );
+    QMatrix m( element.attribute( "m11", "1.0" ).toDouble(),
+               element.attribute( "m12", "0.0" ).toDouble(),
+               element.attribute( "m21", "0.0" ).toDouble(),
+               element.attribute( "m22", "1.0" ).toDouble(),
+               element.attribute( "dx", "0.0" ).toDouble(),
+               element.attribute( "dy", "0.0" ).toDouble() );
+
+    QImage img( fname );
+
+    KoImageData * data = new KoImageData( m_document.imageCollection() );
+    data->setImage( QImage( fname ).mirrored( false, true ) );
+
+    PictureShape * picture = new PictureShape();
+    picture->setUserData( data );
+    picture->setSize( img.size() );
+    picture->setTransformation( m );
+
+    loadCommon( picture, element );
+
+    return picture;
+}
+
+KoShape * KarbonImport::loadText( const KoXmlElement &element )
+{
+    // TODO implement once the text shape supports loading
+    return 0;
 }

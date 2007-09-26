@@ -26,6 +26,7 @@
 #include <KoXmlReader.h>
 
 #include <QtCore/QVariant>
+#include <QtGui/QMatrix>
 
 class KoShape;
 class KoShapeContainer;
@@ -46,16 +47,30 @@ protected:
     bool convert( const KoXmlDocument & );
     bool loadXML( const KoXmlElement& doc );
 
-    void loadGroup( KoShapeContainer * group, const KoXmlElement &e );
-    void loadStyle( KoShape * shape, const KoXmlElement &e );
+    void loadGroup( KoShapeContainer * parent, const KoXmlElement &element );
+    void loadStyle( KoShape * shape, const KoXmlElement &element );
+    void loadCommon( KoShape * shape, const KoXmlElement &element );
+    void loadStroke( KoShape * shape, const KoXmlElement &element );
+    void loadFill( KoShape * shape, const KoXmlElement &element );
+    QColor loadColor( const KoXmlElement &element );
 
     KoShape * loadPath( const KoXmlElement &element );
+    KoShape * loadEllipse( const KoXmlElement &element );
+    KoShape * loadRect( const KoXmlElement &element );
+    KoShape * loadPolyline( const KoXmlElement &element );
+    KoShape * loadPolygon( const KoXmlElement &element );
+    KoShape * loadSinus( const KoXmlElement &element );
+    KoShape * loadSpiral( const KoXmlElement &element );
+    KoShape * loadStar( const KoXmlElement &element );
+    KoShape * loadImage( const KoXmlElement &element );
+    KoShape * loadText( const KoXmlElement &element );
 
     double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue);
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);
 
 private:
     VDocument m_document;
+    QMatrix m_mirrorMatrix;
 };
 
 #endif // KARBON_IMPORT_H
