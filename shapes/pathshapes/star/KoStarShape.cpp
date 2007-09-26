@@ -149,9 +149,9 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
         if( angle < 0.0 )
             angle += 2.0*M_PI;
         double diffAngle = angle-m_angles[handleId];
+        double radianStep = M_PI / static_cast<double>(m_cornerCount);
         if( handleId == tip )
         {
-            double radianStep = M_PI / static_cast<double>(m_cornerCount);
             m_angles[tip] += diffAngle-radianStep;
             m_angles[base] += diffAngle-radianStep;
         }
@@ -159,7 +159,7 @@ void KoStarShape::moveHandleAction( int handleId, const QPointF & point, Qt::Key
         {
             // control make the base point move freely
             if( modifiers & Qt::ControlModifier )
-                m_angles[base] += diffAngle;
+                m_angles[base] += diffAngle-2*radianStep;
             else
                 m_angles[base] = m_angles[tip];
         }
@@ -268,7 +268,10 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
 
     m_convex = (element.attributeNS( KoXmlNS::draw, "concave", "false" ) == "false" );
 
-    m_radius[tip] = qMax( 0.5 * size().width(), 0.5 * size().height() );
+    QSizeF loadedSize = size();
+    QPointF loadedPosition = position();
+
+    m_radius[tip] = qMax( 0.5 * loadedSize.width(), 0.5 * loadedSize.height() );
 
     if( m_convex )
     {
@@ -288,7 +291,8 @@ bool KoStarShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &
     }
 
     createPath();
-    setSize( size() );
+    setSize( loadedSize );
+    setPosition( loadedPosition );
 
     return true;
 }
@@ -298,11 +302,10 @@ void KoStarShape::saveOdf( KoShapeSavingContext & context ) const
     if( isParametricShape() )
     {
         context.xmlWriter().startElement("draw:regular-polygon");
-        saveOdfAttributes(context, OdfMandatories | OdfTransformation );
-        context.xmlWriter().addAttributePt( "svg:width", 2*m_radius[tip] );
-        context.xmlWriter().addAttributePt( "svg:height", 2*m_radius[tip] );
+        saveOdfAttributes(context, OdfMandatories | OdfTransformation | OdfSize );
         context.xmlWriter().addAttribute( "draw:corners", m_cornerCount );
         context.xmlWriter().addAttribute( "draw:concave", m_convex ? "false" : "true" );
+        // TODO saving the offset angle as rotation applied to the transformation
         if( ! m_convex )
         {
             // sharpness is radius of ellipse on which inner polygon points are located
