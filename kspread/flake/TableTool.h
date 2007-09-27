@@ -53,6 +53,9 @@ private Q_SLOTS:
     void changeUserInput(const QString& content);
     void applyUserInput();
 
+    void importDocument();
+    void exportDocument();
+
 private:
     virtual QWidget* createOptionWidget();
 

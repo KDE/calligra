@@ -29,6 +29,7 @@
 namespace KSpread
 {
 class Damage;
+class Doc;
 class Sheet;
 
 class TableShape : public QObject, public KoShape
@@ -52,6 +53,11 @@ public:
     virtual void saveOdf( KoShapeSavingContext & context ) const;
     // reimplemented
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+
+    /**
+     * \return the document containing the data for this shape
+     */
+    Doc* doc() const;
 
     /**
      * \return the sheet containing the data for this shape

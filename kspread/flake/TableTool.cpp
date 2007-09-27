@@ -25,10 +25,16 @@
 #include <QLabel>
 #include <QPainter>
 #include <QSpinBox>
+#include <QAction>
+#include <QToolBar>
+#include <QComboBox>
 
 #include <kdebug.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kicon.h>
+#include <kaction.h>
+#include <kfiledialog.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -40,6 +46,7 @@
 #include "Global.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "Map.h"
 
 #include "commands/DataManipulators.h"
 
@@ -89,12 +96,37 @@ TableTool::TableTool( KoCanvasBase* canvas )
     d->selection = new Selection(this);
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(changeSelection(const Region&)));
     d->tableShape = 0;
+
+    KAction* importAction = new KAction(KIcon("file-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+    importAction->setIconText(i18n("Import"));
+    addAction("import", importAction);
+    connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
+
+    KAction* exportAction = new KAction(KIcon("file-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    exportAction->setIconText(i18n("Export"));
+    addAction("export", exportAction);
+    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
 }
 
 TableTool::~TableTool()
 {
     delete d->selection;
     delete d;
+}
+
+void TableTool::importDocument()
+{
+    QString file = KFileDialog::getOpenFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
+    if (file.isEmpty()) return;
+    d->tableShape->doc()->setModified(false);
+    d->tableShape->doc()->import(file);
+}
+
+void TableTool::exportDocument()
+{
+    QString file = KFileDialog::getSaveFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
+    if (file.isEmpty()) return;
+    d->tableShape->doc()->exp0rt(file);
 }
 
 void TableTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
@@ -245,13 +277,30 @@ void TableTool::applyUserInput()
 QWidget* TableTool::createOptionWidget()
 {
     QWidget* optionWidget = new QWidget();
+    QVBoxLayout* l = new QVBoxLayout( optionWidget );
+    l->setMargin(0);
+    optionWidget->setLayout(l);
+
     QGridLayout* layout = new QGridLayout( optionWidget );
+    l->addLayout(layout);
 
     QLabel* label = 0;
     QSpinBox* spinBox = 0;
 
+    QComboBox* sheetComboBox = new QComboBox(optionWidget);
+    layout->addWidget(sheetComboBox, 0, 1);
+    Map *map = d->tableShape->doc()->map();
+    foreach(Sheet* s, map->sheetList()) {
+        sheetComboBox->addItem(s->sheetName());
+        //sheetComboBox->setCurrentIndex( sheetComboBox->count()-1 );
+    }
+    label = new QLabel(i18n("Sheet:"), optionWidget);
+    label->setBuddy(sheetComboBox);
+    label->setToolTip(i18n("Selected Sheet"));
+    layout->addWidget(label, 0, 0);
+
     KLineEdit* lineEdit = new KLineEdit(optionWidget);
-    layout->addWidget(lineEdit, 0, 1);
+    layout->addWidget(lineEdit, 1, 1);
     connect(lineEdit, SIGNAL(editingFinished()), this, SLOT(applyUserInput()));
     connect(lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(changeUserInput(const QString&)));
     connect(this, SIGNAL(userInputChanged(const QString&)), lineEdit, SLOT(setText(const QString&)));
@@ -260,7 +309,7 @@ QWidget* TableTool::createOptionWidget()
     label = new QLabel(i18n("Content:"), optionWidget);
     label->setBuddy(lineEdit);
     label->setToolTip(i18n("Cell content"));
-    layout->addWidget(label, 0, 0);
+    layout->addWidget(label, 1, 0);
 
     spinBox = new QSpinBox( optionWidget );
     spinBox->setRange( 1, KS_colMax );
@@ -284,8 +333,15 @@ QWidget* TableTool::createOptionWidget()
     label->setToolTip( i18n( "Number of rows" ) );
     layout->addWidget( label, 3, 0 );
 
-    layout->setColumnStretch( 1, 1 );
+//layout->setColumnStretch( 1, 1 );
     layout->setRowStretch( 4, 1 );
+
+    QToolBar* tb = new QToolBar(optionWidget);
+    l->addWidget(tb);
+    tb->setMovable(false);
+    tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    tb->addAction( action("import") );
+    tb->addAction( action("export") );
 
     return optionWidget;
 }

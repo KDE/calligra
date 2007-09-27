@@ -49,7 +49,6 @@ public:
     void adjustRowDimensions( double factor );
 };
 
-
 Sheet* TableShape::Private::sheet() const
 {
     return doc->map()->sheet( 0 );
@@ -159,6 +158,11 @@ void TableShape::setSize( const QSizeF& newSize )
     d->sheetView->invalidate();
 
     KoShape::setSize( newSize );
+}
+
+Doc* TableShape::doc() const
+{
+    return d->doc;
 }
 
 Sheet* TableShape::sheet() const
