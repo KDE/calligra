@@ -18,7 +18,7 @@ macro_log_feature(POPPLER_QT4_FOUND "poppler-qt4" "The Krita PDF filter will not
 
 include_directories(${KRITA_INCLUDES})
 
-message("Port RAW filter to libkdcraw")
+message("Krita: Port RAW filter to libkdcraw")
 #add_subdirectory( raw )
 
 if(EXIV2_FOUND)
