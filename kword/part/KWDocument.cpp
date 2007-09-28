@@ -230,8 +230,8 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
 
     contentWriter->startElement( "office:automatic-styles" );
     //saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles(KoGenStyle::StyleAuto, false);
-    Q3ValueList<KoGenStyles::NamedStyle>::iterator it;
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles(KoGenStyle::StyleAuto, false);
+    QList<KoGenStyles::NamedStyle>::iterator it;
     for ( it = styles.begin(); it != styles.end(); ++it ) {
         (*it).style->writeStyle(contentWriter, mainStyles, "style:style", (*it).name, "");
     }
