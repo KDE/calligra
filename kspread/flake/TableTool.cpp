@@ -120,15 +120,26 @@ TableTool::~TableTool()
 void TableTool::importDocument()
 {
     QString file = KFileDialog::getOpenFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
-    if (file.isEmpty()) return;
+    if (file.isEmpty())
+        return;
     d->tableShape->doc()->setModified(false);
-    d->tableShape->doc()->import(file);
+    if ( ! d->tableShape->doc()->import(file))
+        return;
+    Sheet* sheet = d->tableShape->sheet();
+    if (sheet) {
+        QRect area = sheet->usedArea();
+        if (area.width() > d->tableShape->columns())
+            d->tableShape->setColumns(area.width());
+        if (area.height() > d->tableShape->rows())
+            d->tableShape->setRows(area.height());
+    }
 }
 
 void TableTool::exportDocument()
 {
     QString file = KFileDialog::getSaveFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
-    if (file.isEmpty()) return;
+    if (file.isEmpty())
+        return;
     d->tableShape->doc()->exp0rt(file);
 }
 
