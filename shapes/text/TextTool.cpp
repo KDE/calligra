@@ -346,7 +346,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
         QString factoryId = factory->id();
         KoTextEditingPlugin *plugin = factory->create();
         if (factoryId == "spellcheck") {
-            kDebug() << "KOffice SpellCheck plugin found";
+            kDebug(32500) << "KOffice SpellCheck plugin found";
             m_spellcheckPlugin = plugin;
         }
         m_textEditingPlugins.insert(factory->id(), plugin);
@@ -624,7 +624,7 @@ bool TextTool::paste() {
     const QMimeData *data = QApplication::clipboard()->mimeData();
 
     if(data->hasFormat("application/vnd.oasis.opendocument.text")) {
-        kDebug() <<"TODO load ODF style text!";
+        kDebug(32500) <<"TODO load ODF style text!";
         // TODO create a KoTextShapeData::loadOdf() method and call it here.
     }
     else if(data->hasHtml()) {
@@ -1296,7 +1296,7 @@ void TextTool::decreaseIndent() {
 
 void TextTool::textDefaultFormat() {
     // TODO
-    kDebug() <<"TextTool::textDefaultFormat";
+    kDebug(32500) <<"TextTool::textDefaultFormat";
 }
 
 void TextTool::insertIndexMarker() {

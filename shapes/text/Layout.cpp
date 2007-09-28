@@ -1072,7 +1072,7 @@ bool Layout::previousParag() {
 
 KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
 #ifdef DEBUG_TABS
-    kDebug() <<"applyTabs (" << line.textStart() <<")--------------------";
+    kDebug(32500) <<"applyTabs (" << line.textStart() <<")--------------------";
 #endif
     Q_ASSERT(m_block.layout());
     QTextOption textOption = m_block.layout()->textOption();
@@ -1113,8 +1113,8 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
             line2 += ' ';
         line2 += ' '+ number;
     }
-    kDebug() << line1;
-    kDebug() << line2;
+    kDebug(32500) << line1;
+    kDebug(32500) << line2;
 }
 #endif
 
@@ -1129,12 +1129,12 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
             m_paragText(paragText) {}
 
         void insertTab(int cursorPosition) {
-//kDebug() <<"insertTab" << cursorPosition;
+//kDebug(32500) <<"insertTab" << cursorPosition;
             calculateTabSize(cursorPosition);
             if(! m_initialized) {
                 m_initialized = true;
                 foreach(QVariant tab, qvariant_cast<QList<QVariant> >(m_variant))
-{//KoText::Tab foo = tab.value<KoText::Tab>(); kDebug() <<"  found tab :" << foo.position;
+{//KoText::Tab foo = tab.value<KoText::Tab>(); kDebug(32500) <<"  found tab :" << foo.position;
                     m_tabs.append(tab.value<KoText::Tab>());
 }
             }
@@ -1164,12 +1164,12 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
       private:
         void calculateTabSize(int cursorPosition) {
             if(! m_dirty) return;
-//kDebug() <<"calculateTabSize cursor pos:" << m_previousPosition <<"|" << cursorPosition;
+//kDebug(32500) <<"calculateTabSize cursor pos:" << m_previousPosition <<"|" << cursorPosition;
             // the alignment is done on the block of text between the prev and current tab position
             const double startSection = m_line.cursorToX(m_previousPosition+1) + m_offset;
             const double endSection = m_line.cursorToX(cursorPosition) + m_offset;
             const bool currentNotInLine = cursorPosition > m_line.textStart() + m_line.textLength();
-//kDebug() <<"  startSection:" << startSection <<", endSection:" << endSection;
+//kDebug(32500) <<"  startSection:" << startSection <<", endSection:" << endSection;
 
             bool convertToSpace = false;
             if(startSection > m_line.width()) { // tab found will not end up in line.
@@ -1182,14 +1182,14 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
                 if(endSection > m_previousTab.position)
                     convertToSpace = true;
                 else {
-//kDebug() <<"" << m_previousTab.position <<"" << m_previousTab.position - (endSection - startSection);
+//kDebug(32500) <<"" << m_previousTab.position <<"" << m_previousTab.position - (endSection - startSection);
                     m_tabData.tabs.append(m_previousTab.position - (endSection - startSection));
                     m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) - m_offset);
                     m_offset += m_previousTab.position - endSection;
                 }
             }
             else if(m_previousTab.type == KoText::CenterTab) {
-//kDebug() <<"" << m_previousTab.position <<"" << m_previousTab.position - (endSection - startSection);
+//kDebug(32500) <<"" << m_previousTab.position <<"" << m_previousTab.position - (endSection - startSection);
                 // TODO check fit
                 m_tabData.tabs.append(m_previousTab.position - (endSection - startSection) / 2.0);
                 m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) + m_offset);
@@ -1265,8 +1265,8 @@ KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
                 line2 += ' ';
             line2 += ' '+ number;
         }
-        kDebug() << line1;
-        kDebug() << line2;
+        kDebug(32500) << line1;
+        kDebug(32500) << line2;
         }
 #endif
         textOption.setTabArray(m_lotsOfTabs);
