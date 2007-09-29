@@ -1,6 +1,7 @@
 set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ellipse/KoEllipseShape.cpp 
     ${CMAKE_SOURCE_DIR}/shapes/pathshapes/rectangle/KoRectangleShape.cpp
+    ${CMAKE_SOURCE_DIR}/shapes/pathshapes/star/KoStarShape.cpp
     ${CMAKE_SOURCE_DIR}/shapes/pictureshape/PictureShape.cpp
     ${CMAKE_SOURCE_DIR}/shapes/text/TextShape.cpp
     ${CMAKE_SOURCE_DIR}/shapes/text/Layout.cpp
@@ -23,7 +24,7 @@ add_subdirectory( png )
 add_subdirectory( svg )
 add_subdirectory( wpg )
 add_subdirectory( wmf )
-
+add_subdirectory( karbon1.x )
 
 # enable again when these filters are ported
 if(FALSE)

@@ -40,8 +40,15 @@
 #include <pathshapes/star/KoStarShape.h>
 #include <pictureshape/PictureShape.h>
 #include <KoImageData.h>
+#include <text/TextShape.h>
+#include <KoPathPoint.h>
+#include <KoZoomHandler.h>
 
 #include <kgenericfactory.h>
+
+#include <QtGui/QTextCursor>
+
+#include <math.h>
 
 K_PLUGIN_FACTORY( KarbonImportFactory, registerPlugin<KarbonImport>(); )
 K_EXPORT_PLUGIN( KarbonImportFactory( "kofficefilters" ) )
@@ -214,8 +221,6 @@ bool KarbonImport::convert( const KoXmlDocument &document )
     }
 
     // TODO set page layout to the ouput document
-
-    // TODO apply global coordinate system transformation (y-mirroring)
 
     return success;
 }
@@ -425,9 +430,151 @@ QColor KarbonImport::loadColor( const KoXmlElement &element )
     return color;
 }
 
+void KarbonImport::loadGradient( KoShape * shape, const KoXmlElement &element )
+{
+    enum GradientType { linear = 0, radial = 1, conic  = 2 };
+    enum GradientSpread { none = 0, reflect = 1, repeat  = 2 };
+
+    QPointF origin;
+    origin.setX( element.attribute( "originX", "0.0" ).toDouble() );
+    origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
+    origin = m_mirrorMatrix.map( origin ) - shape->position();
+
+    QPointF focal;
+    focal.setX( element.attribute( "focalX", "0.0" ).toDouble() );
+    focal.setY( element.attribute( "focalY", "0.0" ).toDouble() );
+    focal = m_mirrorMatrix.map( focal ) - shape->position();
+
+    QPointF vector;
+    vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
+    vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
+    vector = m_mirrorMatrix.map( vector ) - shape->position();
+
+    int type = element.attribute( "type", 0 ).toInt();
+    int spread = element.attribute( "repeatMethod", 0 ).toInt();
+
+    QGradient * gradient = 0;
+
+    switch( type )
+    {
+        case linear:
+        {
+            QLinearGradient * g = new QLinearGradient();
+            g->setStart( origin );
+            g->setFinalStop( vector );
+            gradient = g;
+            break;
+        }
+        case radial:
+        {
+            QPointF diffVec = origin - vector;
+            double radius = sqrt( diffVec.x()*diffVec.x() + diffVec.y()*diffVec.y() );
+
+            QRadialGradient * g = new QRadialGradient();
+            g->setCenter( origin );
+            g->setRadius( radius );
+            g->setFocalPoint( focal );
+            gradient = g;
+            break;
+        }
+        case conic:
+        {
+            QPointF dirVec = vector-origin;
+            double angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
+            QConicalGradient * g = new QConicalGradient();
+            g->setCenter( origin );
+            g->setAngle( angle );
+            gradient = g;
+            break;
+        }
+    }
+    if( ! gradient )
+        return;
+
+    QGradientStops stops;
+
+    // load stops
+    KoXmlElement colorstop;
+    forEachElement(colorstop, element)
+    {
+        if( colorstop.tagName() == "COLORSTOP" )
+        {
+            QColor color = loadColor( colorstop.firstChild().toElement() );
+            double stop = colorstop.attribute( "ramppoint", "0.0" ).toDouble();
+            stops.append( QGradientStop( stop, color ) );
+        }
+    }
+    gradient->setStops( stops );
+
+    switch( spread )
+    {
+        case reflect:
+            gradient->setSpread( QGradient::ReflectSpread );
+            break;
+        case repeat:
+            gradient->setSpread( QGradient::RepeatSpread );
+            break;
+        default:
+            gradient->setSpread( QGradient::PadSpread );
+            break;
+    }
+
+    shape->setBackground( QBrush( *gradient ) );
+    delete gradient;
+}
+
+void KarbonImport::loadPattern( KoShape * shape, const KoXmlElement &element )
+{
+    QPointF origin;
+    origin.setX( element.attribute( "originX", "0.0" ).toDouble() );
+    origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
+    origin = m_mirrorMatrix.map( origin ) - shape->position();
+
+    QPointF vector;
+    vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
+    vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
+    vector = m_mirrorMatrix.map( vector ) - shape->position();
+
+    QPointF dirVec = vector-origin;
+    double angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
+
+    QMatrix m;
+    m.translate( origin.x(), origin.y() );
+    m.rotate( angle );
+
+    QString fname = element.attribute( "tilename" );
+
+    QImage img;
+    if( ! img.load( fname ) )
+    {
+        kWarning() << "Failed to load pattern image" << fname;
+        return;
+    }
+    QBrush brush;
+    brush.setTextureImage( img.mirrored( false, true ) );
+    brush.setMatrix( m );
+
+    shape->setBackground( brush );
+}
+
+QVector<qreal> KarbonImport::loadDashes( const KoXmlElement& element )
+{
+    QVector<qreal> dashes;
+
+    KoXmlElement e;
+    forEachElement(e, element)
+    {
+        if( e.tagName() == "DASH" )
+        {
+            double value = qMax( 0.0, e.attribute( "l", "0.0" ).toDouble() );
+            dashes.append( value );
+        }
+    }
+    return dashes;
+}
+
 void KarbonImport::loadStroke( KoShape * shape, const KoXmlElement &element )
 {
-    // TODO load stroke
     KoLineBorder * border = new KoLineBorder();
 
     switch( element.attribute( "lineCap", "0" ).toUShort() )
@@ -453,7 +600,6 @@ void KarbonImport::loadStroke( KoShape * shape, const KoXmlElement &element )
     border->setLineWidth( qMax( 0.0, element.attribute( "lineWidth", "1.0" ).toDouble() ) );
     border->setMiterLimit( qMax( 0.0, element.attribute( "miterLimit", "10.0" ).toDouble() ) );
 
-    // load color:
     KoXmlElement e;
     forEachElement(e, element)
     {
@@ -461,11 +607,12 @@ void KarbonImport::loadStroke( KoShape * shape, const KoXmlElement &element )
         {
             border->setColor( loadColor( e ) );
         }
-        /* TODO
         else if( e.tagName() == "DASHPATTERN" )
         {
-            m_dashPattern.load( e );
+            double dashOffset = element.attribute( "offset", "0.0" ).toDouble();
+            border->setLineStyle( Qt::CustomDashLine, loadDashes( e ) );
         }
+        /* TODO gradient and pattern on stroke not yet implemented in flake
         else if( e.tagName() == "GRADIENT" )
         {
             m_type = grad;
@@ -484,8 +631,24 @@ void KarbonImport::loadStroke( KoShape * shape, const KoXmlElement &element )
 
 void KarbonImport::loadFill( KoShape * shape, const KoXmlElement &element )
 {
-    // TODO load fill
-    //shape->setBackground( QBrush( Qt::green ) );
+    QBrush fill;
+
+    KoXmlElement e;
+    forEachElement(e, element)
+    {
+        if( e.tagName() == "COLOR" )
+        {
+            shape->setBackground( QBrush( loadColor( e ) ) );
+        }
+        if( e.tagName() == "GRADIENT" )
+        {
+            loadGradient( shape, e );
+        }
+        else if( e.tagName() == "PATTERN" )
+        {
+            loadPattern( shape, e );
+        }
+    }
 }
 
 void KarbonImport::loadCommon( KoShape * shape, const KoXmlElement &element )
@@ -494,7 +657,6 @@ void KarbonImport::loadCommon( KoShape * shape, const KoXmlElement &element )
         shape->setName( element.attribute( "ID" ) );
 
     QString trafo = element.attribute( "transform" );
-    kDebug() << "transformation =" << trafo;
 
     if( !trafo.isEmpty() )
         shape->applyAbsoluteTransformation( KoOasisStyles::loadTransformation( trafo ) );
@@ -897,7 +1059,6 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
         paramStar->applyAbsoluteTransformation( m );
 
         starShape = paramStar;
-        // TODO the parameter star position seems to not 100 percent correct, fix that
     }
     else
     {
@@ -1104,6 +1265,63 @@ KoShape * KarbonImport::loadImage( const KoXmlElement &element )
 
 KoShape * KarbonImport::loadText( const KoXmlElement &element )
 {
-    // TODO implement once the text shape supports loading
-    return 0;
+    QFont font;
+    font.setFamily( element.attribute( "family", "Times" ) );
+    font.setPointSize( element.attribute( "size", "12" ).toInt() );
+    font.setItalic( element.attribute( "italic" ).toInt() == 1 );
+    font.setWeight( QFont::Normal );
+    font.setBold( element.attribute( "bold" ).toInt() == 1 );
+
+    enum Position { Above, On, Under };
+    enum Alignment { Left, Center, Right };
+
+    int position = element.attribute( "position", "0" ).toInt();
+    int alignment = element.attribute( "alignment", "0" ).toInt();
+    /* TODO reactivate when we have a shadow implementation
+    bool shadow = ( element.attribute( "shadow" ).toInt() == 1 );
+    bool translucentShadow = ( element.attribute( "translucentshadow" ).toInt() == 1 );
+    int shadowAngle = element.attribute( "shadowangle" ).toInt();
+    int shadowDistance = element.attribute( "shadowdist" ).toInt();
+    double offset = element.attribute( "offset" ).toDouble();
+    */
+
+    QString text = element.attribute( "text", "" );
+    QMatrix m;
+
+	KoXmlElement e = element.firstChild().toElement();
+    if( e.tagName() == "PATH" )
+    {
+        // as long as there is no text on path support, just try to get a transformation
+        // if the path is only a single line
+        KoPathShape * path = dynamic_cast<KoPathShape*>( loadPath( e ) );
+        if( path && path->pointCount() )
+        {
+            QPointF pos;
+            if( path->pointCount() > 0 )
+                pos = path->absoluteTransformation(0).map( path->pointByIndex( KoPathPointIndex( 0, 0 ) )->point() );
+            kDebug() << "text position =" << pos;
+            m.translate( pos.x(), pos.y() );
+        }
+        delete path;
+    }
+
+    TextShape * textShape = new TextShape();
+
+    QTextCharFormat format;
+    format.setFont( font );
+    format.setTextOutline( QPen( Qt::red ) );
+
+    QTextCursor cursor( textShape->textShapeData()->document() );
+    cursor.insertText( text, format );
+
+    textShape->setTransformation( m );
+
+    QFontMetrics metrics( font );
+    int w = metrics.width( text );
+    int h = metrics.height();
+
+    KoZoomHandler zoomHandler;
+    textShape->setSize( QSizeF( zoomHandler.viewToDocumentX( w+20 ), zoomHandler.viewToDocumentY( h+5 ) ) );
+
+    return textShape;
 }
