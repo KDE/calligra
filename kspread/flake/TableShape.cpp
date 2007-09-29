@@ -58,7 +58,7 @@ Sheet* TableShape::Private::sheet() const
 void TableShape::Private::adjustColumnDimensions( double factor )
 {
     doc->setDefaultColumnWidth( doc->defaultColumnFormat()->width() * factor );
-    for ( ColumnFormat* columnFormat = sheet()->firstCol(); columnFormat; columnFormat->next() )
+    for ( ColumnFormat* columnFormat = sheet()->firstCol(); columnFormat; columnFormat = columnFormat->next() )
     {
         if ( columnFormat->column() > columns )
             break;
@@ -69,7 +69,7 @@ void TableShape::Private::adjustColumnDimensions( double factor )
 void TableShape::Private::adjustRowDimensions( double factor )
 {
     doc->setDefaultRowHeight( doc->defaultRowFormat()->height() * factor );
-    for ( RowFormat* rowFormat = sheet()->firstRow(); rowFormat; rowFormat->next() )
+    for ( RowFormat* rowFormat = sheet()->firstRow(); rowFormat; rowFormat = rowFormat->next() )
     {
         if ( rowFormat->row() > rows )
             break;
