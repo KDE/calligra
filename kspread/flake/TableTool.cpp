@@ -73,6 +73,8 @@ public:
     Selection* selection;
     TableShape* tableShape;
 
+    QComboBox* sheetComboBox;
+
 public:
     QRectF cellCoordinatesToDocument(const QRect& cellRange) const;
 };
@@ -126,6 +128,7 @@ void TableTool::importDocument()
     d->tableShape->doc()->setModified(false);
     if ( ! d->tableShape->doc()->import(file))
         return;
+    updateSheetsList();
 /*TODO d->tableShape->updateSheetViewWithNewSheet();
     Sheet* sheet = d->tableShape->sheet();
     if (sheet) {
@@ -293,8 +296,22 @@ void TableTool::applyUserInput()
     manipulator->execute();
 }
 
+void TableTool::updateSheetsList()
+{
+d->sheetComboBox->blockSignals(true);
+    d->sheetComboBox->clear();
+    Map *map = d->tableShape->doc()->map();
+    foreach(Sheet* s, map->sheetList()) {
+        d->sheetComboBox->addItem(s->sheetName());
+        //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
+    }
+d->sheetComboBox->blockSignals(false);
+}
+
 void TableTool::sheetActivated(const QString& sheetName)
 {
+    if( d->tableShape )
+        d->tableShape->setSheet(sheetName);
 }
 
 void TableTool::sheetsBtnClicked()
@@ -327,21 +344,21 @@ QWidget* TableTool::createOptionWidget()
     sheetlayout->setMargin(0);
     sheetlayout->setSpacing(3);
     layout->addLayout(sheetlayout, 0, 1);
-    QComboBox* sheetComboBox = new QComboBox(optionWidget);
-    sheetlayout->addWidget(sheetComboBox, 1);
+    d->sheetComboBox = new QComboBox(optionWidget);
+    sheetlayout->addWidget(d->sheetComboBox, 1);
     Map *map = d->tableShape->doc()->map();
     foreach(Sheet* s, map->sheetList()) {
-        sheetComboBox->addItem(s->sheetName());
-        //sheetComboBox->setCurrentIndex( sheetComboBox->count()-1 );
+        d->sheetComboBox->addItem(s->sheetName());
+        //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
     }
-    connect(sheetComboBox, SIGNAL(activated(QString)), this, SLOT(sheetActivated(QString)));
+    connect(d->sheetComboBox, SIGNAL(activated(QString)), this, SLOT(sheetActivated(QString)));
 
     QPushButton *sheetbtn = new QPushButton(KIcon("table"), QString(), optionWidget);
-    sheetbtn->setFixedHeight( sheetComboBox->sizeHint().height() );
+    sheetbtn->setFixedHeight( d->sheetComboBox->sizeHint().height() );
     connect(sheetbtn, SIGNAL(clicked()), this, SLOT(sheetsBtnClicked()));
     sheetlayout->addWidget(sheetbtn);
     label = new QLabel(i18n("Sheet:"), optionWidget);
-    label->setBuddy(sheetComboBox);
+    label->setBuddy(d->sheetComboBox);
     label->setToolTip(i18n("Selected Sheet"));
     layout->addWidget(label, 0, 0);
 

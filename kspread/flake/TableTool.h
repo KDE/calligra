@@ -58,6 +58,7 @@ private Q_SLOTS:
     void exportDocument();
 
 private:
+    void updateSheetsList();
     virtual QWidget* createOptionWidget();
 
 private:

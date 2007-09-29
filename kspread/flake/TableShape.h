@@ -64,6 +64,11 @@ public:
      */
     Sheet* sheet() const;
 
+    /**
+     * Set the current sheet to the sheet with name \p sheetName .
+     */
+    void setSheet(const QString& sheetName);
+
 private Q_SLOTS:
     void handleDamages( const QList<Damage*>& damages );
 

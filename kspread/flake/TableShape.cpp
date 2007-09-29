@@ -21,7 +21,6 @@
 #include "TableShape.h"
 
 #include <QPainter>
-#include <QPointer>
 
 #include <kdebug.h>
 
@@ -42,23 +41,17 @@ public:
     int         columns;
     int         rows;
     Doc*        doc;
-    QPointer<SheetView>  sheetView;
+    SheetView*  sheetView;
 
 public:
-    Sheet* sheet() const;
     void adjustColumnDimensions( double factor );
     void adjustRowDimensions( double factor );
 };
 
-Sheet* TableShape::Private::sheet() const
-{
-    return doc->map()->sheet( 0 );
-}
-
 void TableShape::Private::adjustColumnDimensions( double factor )
 {
     doc->setDefaultColumnWidth( doc->defaultColumnFormat()->width() * factor );
-    for ( ColumnFormat* columnFormat = sheet()->firstCol(); columnFormat; columnFormat = columnFormat->next() )
+    for ( ColumnFormat* columnFormat = sheetView->sheet()->firstCol(); columnFormat; columnFormat = columnFormat->next() )
     {
         if ( columnFormat->column() > columns )
             break;
@@ -69,7 +62,7 @@ void TableShape::Private::adjustColumnDimensions( double factor )
 void TableShape::Private::adjustRowDimensions( double factor )
 {
     doc->setDefaultRowHeight( doc->defaultRowFormat()->height() * factor );
-    for ( RowFormat* rowFormat = sheet()->firstRow(); rowFormat; rowFormat = rowFormat->next() )
+    for ( RowFormat* rowFormat = sheetView->sheet()->firstRow(); rowFormat; rowFormat = rowFormat->next() )
     {
         if ( rowFormat->row() > rows )
             break;
@@ -86,7 +79,7 @@ TableShape::TableShape( int columns, int rows )
     d->rows     = 1;
     d->doc      = new Doc();
     d->doc->map()->addNewSheet();
-    d->sheetView = new SheetView( sheet() );
+    d->sheetView = new SheetView( d->doc->map()->sheet( 0 ) );
 
     // initialize the default column width / row height
     d->doc->setDefaultColumnWidth( size().width() );
@@ -168,7 +161,14 @@ Doc* TableShape::doc() const
 
 Sheet* TableShape::sheet() const
 {
-    return d->sheet();
+    return const_cast<Sheet*>( d->sheetView->sheet() );
+}
+
+void TableShape::setSheet(const QString& sheetName)
+{
+    delete d->sheetView;
+    d->sheetView = new SheetView( d->doc->map()->findSheet(sheetName) );
+    repaint();
 }
 
 void TableShape::saveOdf( KoShapeSavingContext & context ) const
