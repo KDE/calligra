@@ -19,7 +19,7 @@
 
 #include "OperatorElement.h"
 #include "RowElement.h"
-#include "Dictionary.h"
+#include "AttributeManager.h"
 
 OperatorElement::OperatorElement( BasicElement* parent ) : TokenElement( parent )
 {}
@@ -55,6 +55,52 @@ Form OperatorElement::determineOperatorForm() const
         return Postfix;
     else
         return Infix;
+}
+
+double OperatorElement::parseMathSpace( const QString& value )  const
+{
+/*    if( value == "negativeveryverythinmathspace" )
+        return -1*calculateEmExUnits( 0.055556, true );
+    else if( value == "negativeverythinmathspace" )
+        return -1*calculateEmExUnits( 0.111111, true );
+    else if( value == "negativethinmathspace" )
+        return -1*calculateEmExUnits( 0.166667, true );
+    else if( value == "negativemediummathspace" )
+        return -1*calculateEmExUnits( 0.222222, true );
+    else if( value == "negativethickmathspace" )
+        return -1*calculateEmExUnits( 0.277778, true );
+    else if( value == "negativeverythickmathspace" )
+        return -1*calculateEmExUnits( 0.333333, true );
+    else if( value == "negativeveryverythickmathspace" )
+        return -1*calculateEmExUnits( 0.388889, true );
+    else if( value == "veryverythinmathspace" )
+        return calculateEmExUnits( 0.055556, true );
+    else if( value == "verythinmathspace" )
+        return calculateEmExUnits( 0.111111, true );
+    else if( value == "thinmathspace" )
+        return calculateEmExUnits( 0.166667, true );
+    else if( value == "mediummathspace" )
+        return calculateEmExUnits( 0.222222, true );
+    else if( value == "thickmathspace" )
+        return calculateEmExUnits( 0.277778, true );
+    else if( value == "verythickmathspace" )
+        return calculateEmExUnits( 0.333333, true );
+    else if( value == "veryverythickmathspace" )
+        return calculateEmExUnits( 0.388889, true );
+    else*/
+        return -1.0;
+}
+
+Form OperatorElement::parseForm( const QString& value ) const
+{
+    if( value == "prefix" )
+        return Prefix;
+    else if( value == "infix" )
+        return Infix;
+    else if( value == "postfix" )
+        return Postfix;
+    else
+        return InvalidForm;
 }
 
 ElementType OperatorElement::elementType() const

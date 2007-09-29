@@ -47,7 +47,7 @@ void SquareRootElement::layout( const AttributeManager* am )
     kDebug() << "Width: " << width();
     kDebug() << "Height: " << height();
 
-    double thinSpace = am->mathSpaceValue( "thinmathspace" );
+    double thinSpace = am->layoutSpacing( this );
     double linethickness = 1;
     double symbolHeight = baseLine();
     if( height() > symbolHeight*1.3 ) symbolHeight = height();

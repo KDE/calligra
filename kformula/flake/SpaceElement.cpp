@@ -32,7 +32,7 @@ SpaceElement::SpaceElement( BasicElement* parent ) : BasicElement( parent )
 void SpaceElement::paint( QPainter& painter, AttributeManager* )
 {
     painter.setBrush( QBrush( Qt::lightGray, Qt::DiagCrossPattern ) );
-    painter.drawRect( QRectF(0.0, 0.0, width(), height()) );
+    painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
 }
 
 void SpaceElement::layout( const AttributeManager* am )

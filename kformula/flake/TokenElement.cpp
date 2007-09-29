@@ -41,30 +41,35 @@ const QList<BasicElement*> TokenElement::childElements()
 
 void TokenElement::paint( QPainter& painter, AttributeManager* am )
 {
-     // set the painter to use background and text colors
-    BasicElement::paint(painter, am);
-    QColor color = am->mathBackground( this );
-    painter.setPen( color );
-    painter.setBrush( QBrush( color ) );
+    // set the painter to background color and paint it
+    painter.setPen( am->colorOf( "mathbackground", this ) );
+    painter.setBrush( QBrush( painter.pen().color() ) );
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
-    painter.setPen( am->mathColor( this ) );
+
+    // set the painter to foreground color and paint the text in the content path
+    painter.setPen( am->colorOf( "mathcolor", this ) );
     painter.setBrush( QBrush( painter.pen().color() ) );
     painter.translate( 0, baseLine() );
-    painter.drawPath( m_contentPath );  // draw content which is buffered as path
+    painter.drawPath( m_contentPath );
 }
 
 void TokenElement::layout( const AttributeManager* am )
 {
+    kDebug( DEBUGID ) << "TokenElement::layout()";
+    kDebug( DEBUGID ) << m_content.count();
+
     m_contentPath = QPainterPath();             // save the token in an empty path
     int rawCounter = 0;
     foreach( BasicElement* tmp, m_content )
         if( tmp == this )                       // a normal token
         {
+            kDebug( DEBUGID ) << "renderToPath";
             renderToPath( m_rawStringList[ rawCounter ], m_contentPath );
             rawCounter++;
         }
         else                                    // a mglyph element
         {
+            kDebug() << "glyph element ???";
             tmp->setOrigin( QPointF( m_contentPath.boundingRect().right(), 0.0 ) );
             m_contentPath.moveTo( tmp->origin().x()+ tmp->width(), 0.0 );
         }    
@@ -84,18 +89,18 @@ BasicElement* TokenElement::acceptCursor( CursorDirection direction )
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
 {
     BasicElement* tmpGlyph;
+    kDebug() << "child element count: " << element.childNodesCount();
     KoXmlNode node = element.firstChild();
-    while (! node.isNull() ) {
-        if( node.isElement() )
-        {
+    while( !node.isNull() ) {
+        if( node.isElement() ) {
             KoXmlElement tmp = node.toElement();
             tmpGlyph = ElementFactory::createElement( tmp.tagName(), this );
             m_content << tmpGlyph;
             tmpGlyph->readMathML( tmp );
         }
-        else
-        {
+        else {
             m_rawStringList << node.toText().data().trimmed();
+            kDebug() << "Node text: " << node.toText().data().trimmed();
             m_content << this;
         }
         node = node.nextSibling();

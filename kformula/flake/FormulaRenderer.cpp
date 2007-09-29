@@ -36,10 +36,11 @@ FormulaRenderer::~FormulaRenderer()
 void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 {   
     p.save();
-    p.translate( element->origin() );
-    kDebug(39001) << element->origin();
-    element->paint( p, m_attributeManager );
+    p.translate( element->origin() );          // setup painter
+    p.scale( element->scaleFactor(), element->scaleFactor() );
+    element->paint( p, m_attributeManager );   // let element paint itsself
 
+    // eventually paint all its children
     if( element->childElements().isEmpty() || element->elementType() == Phantom )
     {
         p.restore();
@@ -54,10 +55,12 @@ void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 
 void FormulaRenderer::layoutElement( BasicElement* element )
 {
-    foreach( BasicElement* tmp, element->childElements() )
+    foreach( BasicElement* tmp, element->childElements() ) {
+        // TODO set displaystyle...
+        tmp->setScaleFactor( m_attributeManager->scriptLevelScaling( element ) );
         layoutElement( tmp );              // first layout all children
+    }
 
-    kDebug(39001) <<"layoutElement";
     element->layout( m_attributeManager );      // actually layout the element
 }
 
@@ -86,4 +89,10 @@ void FormulaRenderer::updateElementLayout( BasicElement* element )
         else
             tmpElement = tmpElement->parentElement();   // prepare layouting the parent
     }
+}
+
+double FormulaRenderer::elementScaleFactor( BasicElement* element ) const
+{
+    AttributeManager am;
+
 }

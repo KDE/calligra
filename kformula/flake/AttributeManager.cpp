@@ -28,7 +28,6 @@
 AttributeManager::AttributeManager()
 {
     m_viewConverter = 0;
-    m_currentElement = 0;
 }
 
 AttributeManager::~AttributeManager()
@@ -36,8 +35,6 @@ AttributeManager::~AttributeManager()
 
 QString AttributeManager::findValue( const QString& attribute, const BasicElement* element ) const
 {
-    m_currentElement = element;
-
     // check if the current element has a value assigned
     QString value = element->attribute( attribute );
     if( !value.isEmpty() )
@@ -58,113 +55,46 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
     return element->attributesDefaultValue( attribute );
 }
 
-double AttributeManager::mathSize( BasicElement* element )
+bool AttributeManager::boolOf( const QString& attribute, const BasicElement* element ) const
 {
-    QString value = findValue( "mathsize", element );
-/*    if( value == "small" )
-    else if( value == "normal" )
-    else if( value == "big" )
-     | number v-unit*/
-    return 0.0;
+    return findValue( attribute, element ) == "true";
 }
 
-QColor AttributeManager::mathColor( BasicElement* element )
+double AttributeManager::doubleOf( const QString& attribute,
+                                   const BasicElement* element ) const
 {
-    return QColor( findValue( "mathcolor", element ) );
-}
+    // lookup value
+    QString tmpValue = findValue( attribute, element );
 
-QColor AttributeManager::mathBackground( BasicElement* element )
-{
-    QString tmpColor = findValue( "mathbackground", element );
-    return tmpColor.isNull() ? Qt::transparent : QColor( tmpColor ); 
-}
+    // test for value without unit
+    if( tmpValue.toDouble() != 0 )
+        return tmpValue.toDouble();
 
-MathVariant AttributeManager::mathVariant( BasicElement* element )
-{
-    QString value = findValue( "mathvariant", element );
-    if( value == "normal" )
-        return Normal;
-    else if( value == "bold" )
-        return Bold;
-    else if( value == "italic" )
-        return Italic;
-    else if( value == "bold-italic" )
-        return BoldItalic;
-    else if( value == "double-struck" )
-        return DoubleStruck;
-    else if( value == "bold-fraktur" )
-        return BoldFraktur;
-    else if( value == "script" )
-        return Script;
-    else if( value == "bold-script" )
-        return BoldScript;
-    else if( value == "fraktur" )
-        return Fraktur;
-    else if( value == "sans-serif" )
-        return SansSerif;
-    else if( value == "bold-sans-serif" )
-        return BoldSansSerif;
-    else if( value == "sans-serif-italic" )
-        return SansSerifItalic;
-    else if( value == "sans-serif-bold-italic" )
-        return SansSerifBoldItalic;
-    else if( value == "monospace" )
-        return Monospace;
+    // process values with units
+    QString unit = tmpValue.right( 2 );
+    tmpValue.endsWith( "%" ) ? tmpValue.chop( 1 ) : tmpValue.chop( 2 );
+
+    if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )
+        return KoUnit::parseValue( tmpValue + unit );
+//    else if( tmpValue.endsWith( '%' ) )
+//        return defaultValueOf( m_attribute ) * ( tmpValue.toDouble()/100 );
+    else if( unit == "em" )
+        return calculateEmEx( font( element ), tmpValue.toDouble(), true );
+    else if( unit == "ex" )
+        return calculateEmEx( font( element ), tmpValue.toDouble(), false );
+    else if( unit == "px" )
+        return m_viewConverter->viewToDocumentX( tmpValue.toInt() );
     else
-        return InvalidMathVariant;   // Invalid
+        return 0.0;   // actually a value should never be 0.0
 }
 
-QFont AttributeManager::font( const BasicElement* element ) const
+QColor AttributeManager::colorOf( const QString& attribute, BasicElement* element ) const
 {
-    
-    // TODO process the mathvariant values partly
-    // normal -> do nothing.
-    // if contains bold -> font.setBold( true )
-    // if contains italic -> font.setItalic( true )
-    // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
-  
-    return QFont();
-}
+    QString tmpColor = findValue( attribute, element );
+    if( attribute == "mathbackground" && tmpColor.isEmpty() )
+        return Qt::transparent;
 
-bool AttributeManager::displayStyle( BasicElement* element ) const
-{
-    return true;   // TODO replace this dummy
-}
-
-int AttributeManager::scriptLevel( BasicElement* element )
-{
-    if( element->parentElement() == m_currentElement )  // the asking element is a child
-    {
-        m_currentElement = element;
-        parseScriptLevel( element );     // only parse for this element
-        return m_cachedScriptLevel;
-    }
-
-    BasicElement* tmpParent = element->parentElement();
-    QList<BasicElement*> tmpList;
-    while( tmpParent )
-    {
-        tmpList.prepend( tmpParent );
-        tmpParent = tmpParent->parentElement();
-    }
-
-    m_cachedScriptLevel = 0;
-    foreach( BasicElement* tmp, tmpList )
-        parseScriptLevel( tmp );
-
-    return m_cachedScriptLevel;
-}
-
-QString AttributeManager::stringOf( const QString& attribute, BasicElement* element ) const
-{
-    return findValue( attribute, element );
-}
-
-QStringList AttributeManager::stringListOf( const QString& attribute,
-                                            BasicElement* element ) const
-{
-    // TODO implement parsing
-    return QStringList();
+    return QColor( tmpColor );
 }
 
 Align AttributeManager::alignOf( const QString& attribute, BasicElement* element ) const
@@ -184,54 +114,66 @@ QList<Align> AttributeManager::alignListOf( const QString& attribute,
     return alignList;
 }
 
-bool AttributeManager::boolOf( const QString& attribute, const BasicElement* element ) const
+double AttributeManager::scriptLevelScaling( const BasicElement* element ) const
 {
-    return findValue( attribute, element ) == "true";
-}
-
-double AttributeManager::doubleOf( const QString& attribute, BasicElement* element ) const
-{
-    QString tmpValue = findValue( attribute, element );
-    if( tmpValue.toInt() != 0 )  // test for value without unit
-        return tmpValue.toInt();
-
-    // process values with units
-    QString unit = tmpValue.right( 2 );
-
-    if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )
-        return KoUnit::parseValue( tmpValue );
-    else if( tmpValue.endsWith( '%' ) )
-    {
-   /*     tmpValue.chop( 1 );
-        return defaultValueOf( m_attribute ) * (tmpValue.toDouble()/100);  */
+    double multiplier = doubleOf( "scriptsizemultiplier", element );
+    if( multiplier == 0.0 )
+        multiplier = 0.71;
+/* 
+    ElementType parentType = element->parentElement()->elementType();
+    if( element->elementType() == Formula ) // Outermost element has scriptlevel 0
+        return 1.0;
+    else if( parentType == Fraction && displayStyle == false )
+        return multiplier;
+    else if( parentType == Sub || parentType == Sup || parentType == SubSup )
+        return multiplier;
+    else if( parentType == Under && accentunder == false )
+    else if( parentType == Over && accent == false )
+    else if( parentType == UnderOver && accent == false && is over )
+        return multiplier;
+    else if( parentType == UnderOver && accentunder == false && is under )
+        return multiplier;
+    else if( parentType == MultiScript )
+        return multiplier ^ ;
+    else if( parentType == Root && element->childElements().indexOf( element ) ==  )
+        return multiplier ^ ;
+    else if( parentType == Table )
+        return multiplier ^ ;
+    else if( element->elementType() == Style ) {
+        QString tmp = element->attribute( "scriptlevel" );
+        if( tmp.startsWith( "+" ) || tmp.startsWith( "-" ) )
+            return multiplier^tmp.remove( 0, 1 ).toInt()
+        else
+            return multiplier^tmp.toInt() / element->parentElement()->scaleFactor(); 
     }
-
-    tmpValue.chop( 2 );
-    if( unit == "em" )
-        return calculateEmExUnits( tmpValue.toDouble(), true );
-    else if( unit == "ex" )
-        return calculateEmExUnits( tmpValue.toDouble(), false );
-    else if( unit == "px" )
-        return m_viewConverter->viewToDocumentX( tmpValue.toInt() );
-    else
-        return 0.0;   // actually a value should never be 0.0
+    else*/
+        return 1.0;
 }
 
-int AttributeManager::intOf( const QString& attribute, BasicElement* element ) const
+QFont AttributeManager::font( const BasicElement* element ) const
 {
-    return findValue( attribute, element ).toInt();
+    
+    // TODO process the mathvariant values partly
+    // normal -> do nothing.
+    // if contains bold -> font.setBold( true )
+    // if contains italic -> font.setItalic( true )
+    // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
+  
+    return QFont();
 }
 
-Form AttributeManager::parseForm( const QString& value ) const
+double AttributeManager::layoutSpacing( const BasicElement* element ) const
 {
-    if( value == "prefix" )
-        return Prefix;
-    else if( value == "infix" )
-        return Infix;
-    else if( value == "postfix" )
-        return Postfix;
-    else
-        return InvalidForm;
+    // return a thinmathspace which is a good value for layouting
+    return calculateEmEx( font( element ), 0.166667, true );
+}
+
+double AttributeManager::calculateEmEx( QFont font, double value, bool isEm ) const
+{
+    // use a postscript paint device so that font metrics returns postscript points
+    KoPostscriptPaintDevice paintDevice;
+    QFontMetricsF fm( font, &paintDevice );
+    return isEm ? value*fm.width( 'm' ) : value*fm.xHeight();
 }
 
 Align AttributeManager::parseAlign( const QString& value ) const
@@ -254,81 +196,42 @@ Align AttributeManager::parseAlign( const QString& value ) const
         return InvalidAlign;
 }
 
-void AttributeManager::parseScriptLevel( BasicElement* element )
-{
-    // set the scriptlevel explicitly
-    QString value = element->attribute( "scriptlevel" );
-    if( !value.isEmpty() )
-    {
-        if( value.startsWith( '+' ) )
-            m_cachedScriptLevel += value.remove( 0, 1 ).toInt();
-        else if( value.startsWith( '-' ) )
-            m_cachedScriptLevel -= value.remove( 0, 1 ).toInt();
-        else
-            m_cachedScriptLevel = value.toInt();
-    }
-    else if( element->elementType() == Formula ) 
-        m_cachedScriptLevel = 0;
-
-    ElementType parentType = element->parentElement()->elementType();
-    if( parentType == UnderOver || parentType == Under || parentType == Over )
-        m_cachedScriptLevel++;
-    else if( parentType == MultiScript || parentType == SupScript ||
-             parentType == SubScript || parentType == SubSupScript )
-        m_cachedScriptLevel++;
-    else if( parentType == Fraction && displayStyle( element ) )
-        m_cachedScriptLevel++;
-    else if( parentType == Root && 
-             element == element->parentElement()->childElements().value( 1 ) )
-        m_cachedScriptLevel += 2;     // only for roots index
-}
-
-double AttributeManager::mathSpaceValue( const QString& value )  const
-{
-    if( value == "negativeveryverythinmathspace" )
-        return -1*calculateEmExUnits( 0.055556, true );
-    else if( value == "negativeverythinmathspace" )
-        return -1*calculateEmExUnits( 0.111111, true );
-    else if( value == "negativethinmathspace" )
-        return -1*calculateEmExUnits( 0.166667, true );
-    else if( value == "negativemediummathspace" )
-        return -1*calculateEmExUnits( 0.222222, true );
-    else if( value == "negativethickmathspace" )
-        return -1*calculateEmExUnits( 0.277778, true );
-    else if( value == "negativeverythickmathspace" )
-        return -1*calculateEmExUnits( 0.333333, true );
-    else if( value == "negativeveryverythickmathspace" )
-        return -1*calculateEmExUnits( 0.388889, true );
-    else if( value == "veryverythinmathspace" )
-        return calculateEmExUnits( 0.055556, true );
-    else if( value == "verythinmathspace" )
-        return calculateEmExUnits( 0.111111, true );
-    else if( value == "thinmathspace" )
-        return calculateEmExUnits( 0.166667, true );
-    else if( value == "mediummathspace" )
-        return calculateEmExUnits( 0.222222, true );
-    else if( value == "thickmathspace" )
-        return calculateEmExUnits( 0.277778, true );
-    else if( value == "verythickmathspace" )
-        return calculateEmExUnits( 0.333333, true );
-    else if( value == "veryverythickmathspace" )
-        return calculateEmExUnits( 0.388889, true );
-    else
-        return -1.0;
-}
-
-double AttributeManager::calculateEmExUnits( double value, bool isEm ) const
-{
-    // use a postscript paint device so that font metrics returns postscript points
-    KoPostscriptPaintDevice paintDevice;
-    QFontMetricsF fm( font( m_currentElement ), &paintDevice );
-    if( isEm )
-        return value* fm.width( 'm' );
-    else
-        return value* fm.xHeight();
-}
-
 void AttributeManager::setViewConverter( KoViewConverter* converter )
 {
     m_viewConverter = converter;
 }
+
+
+
+
+double AttributeManager::mathSize( BasicElement* element )
+{
+    QString value = findValue( "mathsize", element );
+/*    if( value == "small" )
+    else if( value == "normal" )
+    else if( value == "big" )
+     | number v-unit*/
+    return 0.0;
+}
+
+QString AttributeManager::stringOf( const QString& attribute, BasicElement* element ) const
+{
+    return findValue( attribute, element );
+}
+
+QStringList AttributeManager::stringListOf( const QString& attribute,
+                                            BasicElement* element ) const
+{
+    // TODO implement parsing
+    return QStringList();
+}
+
+
+
+
+
+int AttributeManager::intOf( const QString& attribute, BasicElement* element ) const
+{
+    return findValue( attribute, element ).toInt();
+}
+

@@ -38,37 +38,8 @@ public:
     /// The standard constructor
     FormulaElement();
 
-    /**
-     * Move the FormulaCursor left
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveLeft( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor right 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveRight( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor up 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveUp( FormulaCursor* cursor, BasicElement* from );
-
-    /**
-     * Move the FormulaCursor down 
-     * @param cursor The FormulaCursor to be moved
-     * @param from The BasicElement which was the last owner of the FormulaCursor
-     */
-    void moveDown( FormulaCursor* cursor, BasicElement* from );
-    
     /// @return The element's ElementType
     ElementType elementType() const;
-
 };
 
 #endif // FORMULAELEMENT_H

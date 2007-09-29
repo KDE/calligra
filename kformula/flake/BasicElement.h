@@ -80,7 +80,7 @@ public:
     BasicElement* childElementAt( const QPointF& p );
 
     /**
-     * Obtain a list of all child elements of this element
+     * Obtain a list of all child elements of this element - sorted in saving order
      * @return a QList with pointers to all child elements
      */
     virtual const QList<BasicElement*> childElements();
@@ -116,7 +116,7 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    virtual BasicElement* acceptCursor( CursorDirection direction );
+    virtual BasicElement* acceptCursor( FormulaCursor* cursor );
 
     /// @return The element's ElementType
     virtual ElementType elementType() const;
@@ -136,6 +136,9 @@ public:
     /// @return The bounding rectangle of the element
     const QRectF& boundingRect() const;
 
+    /// @return The elements scale factor
+    double scaleFactor() const;
+
     /// Set the element's width to @p width
     void setWidth( double width );
 
@@ -150,6 +153,9 @@ public:
 
     /// Set the element's m_parentElement to @p parent
     void setParentElement( BasicElement* parent );
+
+    /// Set the element's m_scaleFactor to @p scaleFactor
+    void setScaleFactor( double scaleFactor );
 
     /// @return The parent element of this BasicElement
     BasicElement* parentElement() const;
@@ -198,9 +204,15 @@ private:
 
     /// The boundingRect storing the element's width, height, x and y
     QRectF m_boundingRect;
-   
+
     /// The position of our base line from the upper border
     double m_baseLine;
+   
+    /// Factor with which this element is scaled down
+    double m_scaleFactor;
+
+    /// Indicates whether this element has displaystyle set
+    bool m_displayStyle;
 };
 
 #endif // BASICELEMENT_H

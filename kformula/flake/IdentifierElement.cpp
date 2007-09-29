@@ -18,7 +18,10 @@
 */
 
 #include "IdentifierElement.h"
+#include "AttributeManager.h"
 #include "Dictionary.h"
+
+#include <kdebug.h>
 
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}
@@ -30,10 +33,11 @@ void IdentifierElement::renderToPath( const QString& raw, QPainterPath& path ) c
     if( raw.startsWith( "&" ) && raw.endsWith( ";" ) ) {
         Dictionary dict;
         QChar mappedEntity = dict.mapEntity( raw );
+        kDebug() << "mappenEntity: " << mappedEntity;
         path.addText( path.currentPosition(), manager.font( this ), mappedEntity ); 
     }
     else
-        path.addText( path.currentPosition(), manager.font( this ), raw );
+        path.addText( path.currentPosition(), manager.font( this ), "hallo" );
 }
 
 ElementType IdentifierElement::elementType() const

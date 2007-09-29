@@ -21,8 +21,8 @@
 #define OPERATORELEMENT_H
 
 #include "TokenElement.h"
-#include "AttributeManager.h"
 #include "kformula_export.h"
+#include "Dictionary.h"
 
 /**
  * @short Implementation of the MathML mo element
@@ -50,6 +50,11 @@ public:
 protected:
     /// Process @p raw and render it to @p path
     void renderToPath( const QString& raw, QPainterPath& path ) const;
+
+    /// @return The Form value that was passed as QString @p value
+    Form parseForm( const QString& value ) const;
+
+    double parseMathSpace( const QString& value ) const;
 
 private:
     Form determineOperatorForm() const;

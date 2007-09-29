@@ -22,46 +22,9 @@
 
 #include <QFont>
 #include "kformula_export.h"
+
 class KoViewConverter;
-class QPaintDevice;
-
 class BasicElement;
-	
-enum MathVariant {
-    Normal,
-    Bold,
-    Italic,
-    BoldItalic,
-    DoubleStruck,
-    BoldFraktur,
-    Script,
-    BoldScript,
-    Fraktur,
-    SansSerif,
-    BoldSansSerif,
-    SansSerifItalic,
-    SansSerifBoldItalic,
-    Monospace,
-    InvalidMathVariant
-};
-
-enum NamedSpaces { 
-    NegativeVeryVeryThinMathSpace,
-    NegativeVeryThinMathSpace,
-    NegativeThinMathSpace,
-    NegativeMediumMathSpace,
-    NegativeThickMathSpace,
-    NegativeVeryThickMathSpace,
-    NegativeVeryVeryThickMathSpace,
-    VeryVeryThinMathSpace,
-    VeryThinMathSpace,
-    ThinMathSpace,
-    MediumMathSpace,
-    ThickMathSpace,
-    VeryThickMathSpace,
-    VeryVeryThickMathSpace,
-    InvalidNameSpace
-};
 
 /** Enum encoding all possibilities to align */
 enum Align {
@@ -73,25 +36,6 @@ enum Align {
     BaseLine /**< Align to the baseline*/,
     Axis /**< Align to the axis*/,
     InvalidAlign
-};
-
-/** Enum encoding all states of  mo's form attribute */
-enum Form {
-    Prefix /**< mo is a prefix*/,
-    Infix /**< mo is a infix - used for all cases where it's not prefix or postfix*/,
-    Postfix /**< mo is a postfix*/,
-    InvalidForm
-};
-
-/** Enum encoding all states of mspace's linebreak attribute */
-enum LineBreak {
-    Auto /**< Renderer should use default linebreaking algorithm*/,
-    NewLine /**< Start a new line and do not indent*/,
-    IndentingNewLine /**< Start a new line and do indent*/,
-    NoBreak /**< Do not allow a linebreak here*/,
-    GoodBreak /**< If a linebreak is needed on the line, here is a good spot*/,
-    BadBreak /**< If a linebreak is needed on the line, try to avoid breaking here*/,
-    InvalidLineBreak
 };
 
 /**
@@ -118,90 +62,111 @@ public:
     /// The destructor
     ~AttributeManager();
 
-    /// @return The MathVariant value for @p element
-    MathVariant mathVariant( BasicElement* element );
-
-    /// @return The foreground color for @p element
-    QColor mathColor( BasicElement* element );
-
-    /// @return The background color for @p element
-    QColor mathBackground( BasicElement* element );
-
-    /// @return The value of the mathSize attribute for @p element
-    double mathSize( BasicElement* element );
-
-    /// @return The current font style - just a dummy atm
-    QFont font( const BasicElement* element ) const;
-
-    /// @return Obtain the current scriptlevel
-    int scriptLevel( BasicElement* element );
- 
-    /// @return Obtain the current displaystyle
-    bool displayStyle( BasicElement* element ) const;
+    /**
+     * Obtain the @p attribute's value as color
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
+    QColor colorOf( const QString& attribute, BasicElement* element ) const;
 
     /**
-     * Obtain a value for attribute
+     * Obtain the @p attribute's value as boolean
      * @param attribute A string with the attribute to look up
-     * @return QVariant with the value
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
+    bool boolOf( const QString& attribute, const BasicElement* element ) const;
+
+    /**
+     * Obtain the @p attribute's value as double
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
+    double doubleOf( const QString& attribute, const BasicElement* element ) const;
+
+    /**
+     * Obtain the @p attribute's value as string
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
      */
     QString stringOf( const QString& attribute, BasicElement* element ) const;
 
+    /**
+     * Obtain the @p attribute's value as string list
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
     QStringList stringListOf( const QString& attribute, BasicElement* element ) const;
 
+    /**
+     * Obtain the @p attribute's value as align
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
     Align alignOf( const QString& attribute, BasicElement* element ) const;
 
+    /**
+     * Obtain the @p attribute's value as list of aligns
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
     QList<Align> alignListOf( const QString& attribute, BasicElement* element ) const;
 
-    bool boolOf( const QString& attribute, const BasicElement* element ) const;
+    /**
+     * Obtain @p element's scaling factor based on the script level
+     * @param element The element which scaling is determined
+     * @return The scaling factor
+     */
+    double scriptLevelScaling( const BasicElement* element ) const;
 
-    double doubleOf( const QString& attribute, BasicElement* element ) const;
+    /// @return The font used for @p element
+    QFont font( const BasicElement* element ) const;
 
-    int intOf( const QString& attribute, BasicElement* element ) const;
-/*
-    Qt::PenStyle lineOf( const QString& attribute, const BasicElement* element );
-
-    QList< Qt::PenStyle > lineListOf( const QString attribute,
-                                      const BasicElement* element );
-*/
-    /// @return Obtain the value 
-    double mathSpaceValue( const QString& value ) const;
-
-    /// Set the KoViewConverter to use
-    void setViewConverter( KoViewConverter* converter );
-
-protected:
-    /// Find a value for @p attribute that applies to @p element
-    QString findValue( const QString& attribute, const BasicElement* element ) const;
-
-    /// @return The Form value that was passed as QString @p value
-    Form parseForm( const QString& value ) const;
-
-    /// @return The Align value that was passed as QString @p value
-    Align parseAlign( const QString& value ) const;
-
-    /// Parse the given @p element according to its affect on the scriptlevel
-    void parseScriptLevel( BasicElement* element );
+    /// @return A value used for spacing tasks during layouting
+    double layoutSpacing( const BasicElement* element ) const;
 
     /**
      * Calculates the pt values of a passes em or ex value
+     * @param font The font used as base for the calculation
      * @param value The em or ex value to be used for calculation
      * @param isEm Indicates whether to calculate an ex or em value
      * @return The calculated pt value
      */
-    double calculateEmExUnits( double value, bool isEm ) const;
+    double calculateEmEx( QFont font, double value, bool isEm ) const;
+
+
+
+
+
+    /// @return The value of the mathSize attribute for @p element
+    double mathSize( BasicElement* element );
+
+    /**
+     * Obtain the @p attribute's value as integer
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
+    int intOf( const QString& attribute, BasicElement* element ) const;
+
+    /// Set the KoViewConverter to use
+    void setViewConverter( KoViewConverter* converter );
 
 private:
-    /// The current BasicElement that asks for a value
-    mutable BasicElement const* m_currentElement;
+    /// Find a value for @p attribute that applies to @p element
+    QString findValue( const QString& attribute, const BasicElement* element ) const;
 
-    /// The last calculated scriptLevel
-    int m_cachedScriptLevel;
+    /// @return The Align value that was passed as QString @p value
+    Align parseAlign( const QString& value ) const;
 
     /// The KoViewConverter used to determine the point values of pixels
     KoViewConverter* m_viewConverter;
-
-    /// The QPaintDevice we are currently painting on - needed for em/ ex units
-    QPaintDevice* m_paintDevice;
 };
 
 #endif // ATTRIBUTEMANAGER_H

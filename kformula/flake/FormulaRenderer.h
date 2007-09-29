@@ -78,6 +78,8 @@ public:
     void updateElementLayout( BasicElement* element );
 
 private:
+    double elementScaleFactor( BasicElement* element ) const;
+
     /// The attribute manager used for renderering and layouting
     AttributeManager* m_attributeManager;
 

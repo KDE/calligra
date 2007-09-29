@@ -51,7 +51,7 @@ void RootElement::paint( QPainter& painter, AttributeManager* am )
 void RootElement::layout( const AttributeManager* am )
 {
     // Calculate values to layout the root symbol
-    double thinSpace = am->mathSpaceValue( "thinmathspace" );
+    double thinSpace = am->layoutSpacing( this );
     double symbolHeight  = m_radicand->baseLine();
     if( m_radicand->height() > symbolHeight*1.3 ) symbolHeight = m_radicand->height();
     symbolHeight += thinSpace;

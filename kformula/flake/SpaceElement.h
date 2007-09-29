@@ -26,6 +26,17 @@
 #include "BasicElement.h"
 #include "kformula_export.h"
 
+/** Enum encoding all states of mspace's linebreak attribute */
+enum LineBreak {
+    Auto /**< Renderer should use default linebreaking algorithm*/,
+    NewLine /**< Start a new line and do not indent*/,
+    IndentingNewLine /**< Start a new line and do indent*/,
+    NoBreak /**< Do not allow a linebreak here*/,
+    GoodBreak /**< If a linebreak is needed on the line, here is a good spot*/,
+    BadBreak /**< If a linebreak is needed on the line, try to avoid breaking here*/,
+    InvalidLineBreak
+};
+
 /**
  * @short Implementation of the MathML mspace element
  *

@@ -45,9 +45,9 @@ void FractionElement::paint( QPainter& painter, AttributeManager* am )
     if( linethickness == 0 )
 	    return;  // specification says to not draw a line if thickness is 0
 
-    pen.setWidthF( linethickness );  // am is broken at the moment - when fixed, uncomment above line
-    painter.setPen( pen );                           // set the line width
-    painter.drawLine( m_fractionLine );              // draw the line
+    pen.setWidthF( linethickness );
+    painter.setPen( pen );                 // set the line width
+    painter.drawLine( m_fractionLine );    // draw the line
 }
 
 void FractionElement::layout( const AttributeManager* am )
@@ -61,7 +61,7 @@ void FractionElement::layout( const AttributeManager* am )
     QPointF numeratorOrigin;
     QPointF denominatorOrigin;
     double linethickness = am->doubleOf( "linethickness", this );
-    double distY = am->mathSpaceValue( "thinmathspace" );
+    double distY = am->layoutSpacing( this );
     Align numalign = am->alignOf( "numalign", this ); 
     Align denomalign = am->alignOf( "denomalign", this ); 
     denominatorOrigin.setY( m_numerator->height() + linethickness + 2*distY );
@@ -95,7 +95,7 @@ void FractionElement::layoutBevelledFraction( const AttributeManager* am )
     // the shown line should have a width that has 1/3 of the height
     // the line is heigher as the content by 2*thinmathspace = 2*borderY
 
-    double borderY = am->mathSpaceValue( "thinmathspace" );
+    double borderY = am->layoutSpacing( this );
     setHeight( m_numerator->height() + m_denominator->height() + 2*borderY );
     setWidth( m_numerator->width() + m_denominator->width() + height()/3 );
     setBaseLine( height()/2 );

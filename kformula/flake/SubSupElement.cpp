@@ -52,7 +52,7 @@ void SubSupElement::layout( const AttributeManager* am )
     double superscriptshift = am->doubleOf( "superscriptshift", this );
     //Add half a thin space between both sup and superscript, so there is a minimum
     //of a whole thin space between them.
-    double halfthinSpace   = am->mathSpaceValue( "thinmathspace" )/2.0;
+    double halfthinSpace   = am->layoutSpacing( this )/2.0;
 
     
     // The yOffset is the amount the base element is moved down to make

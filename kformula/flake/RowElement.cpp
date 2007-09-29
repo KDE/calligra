@@ -35,8 +35,7 @@ RowElement::~RowElement()
 }
 
 void RowElement::paint( QPainter& painter, AttributeManager* )
-{
-}
+{ /* RowElement has no visual representance so paint nothing */ }
 
 void RowElement::layout( const AttributeManager* am )
 {

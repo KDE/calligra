@@ -36,7 +36,8 @@ enum CursorDirection {
     UpToParent,
     UpToChild,
     DownToParent,
-    DownToChild
+    DownToChild,
+    NoDirection
 };
 
 /**
@@ -117,6 +118,9 @@ public:
     /// @return The current position in m_currentElement
     int position() const;
 
+    /// @return The current direction the cursor is moving in
+    CursorDirection direction() const;
+
     /**
      * Make the cursor selecting
      * @param selecting When true the cursor is selecting
@@ -143,6 +147,8 @@ private:
 
     /// Indicates whether the cursor is currently selecting
     bool m_selecting;
+
+    CursorDirection m_direction;
 };
 
 #endif // FORMULACURSOR_H

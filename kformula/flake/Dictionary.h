@@ -22,7 +22,14 @@
 
 #include <QString>
 #include <QChar>
-#include "AttributeManager.h"
+
+/** Enum encoding all states of  mo's form attribute */
+enum Form {
+    Prefix /**< mo is a prefix*/,
+    Infix /**< mo is a infix - used for all cases where it's not prefix or postfix*/,
+    Postfix /**< mo is a postfix*/,
+    InvalidForm
+};
 
 /**
  * @short Dictionary to look up operator attributes and entity mappings

@@ -29,30 +29,6 @@ FormulaElement::FormulaElement() : RowElement( 0 )
 {
 }
 
-void FormulaElement::moveLeft( FormulaCursor* cursor, BasicElement* from )
-{
-    Q_UNUSED( cursor )
-    Q_UNUSED( from )
-}
-
-void FormulaElement::moveRight( FormulaCursor* cursor, BasicElement* from )
-{
-    Q_UNUSED( cursor )
-    Q_UNUSED( from )
-}
-
-void FormulaElement::moveUp( FormulaCursor* cursor, BasicElement* from )
-{
-    Q_UNUSED( cursor )
-    Q_UNUSED( from )
-}
-
-void FormulaElement::moveDown( FormulaCursor* cursor, BasicElement* from )
-{
-    Q_UNUSED( cursor )
-    Q_UNUSED( from )
-}
-
 ElementType FormulaElement::elementType() const
 {
     return Formula;

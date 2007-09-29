@@ -57,7 +57,7 @@ void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
 
 void UnderOverElement::layout( const AttributeManager* am )
 {
-    double thinSpace   = am->mathSpaceValue( "thinmathspace" );
+    double thinSpace   = am->layoutSpacing( this );
     double accent      = am->boolOf( "accent", this );  //Whether to add a space above
     double accentunder = am->boolOf( "accentunder", this );//Whether to add a space below
     double yOffset = 0.0;

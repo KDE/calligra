@@ -62,7 +62,7 @@ void MultiscriptElement::layout( const AttributeManager* am )
     double superscriptshift = am->doubleOf( "superscriptshift", this );
     //Add half a thin space between both sup and superscript, so there is a minimum
     //of a whole thin space between them.
-    double halfthinspace   = am->mathSpaceValue( "thinmathspace" )/2.0;
+    double halfthinspace   = am->layoutSpacing( this )/2.0;
 
     //First make sure that there are an even number of elements in both subscript and superscript
     ensureEvenNumberElements();

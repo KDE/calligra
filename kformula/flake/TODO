@@ -1,6 +1,11 @@
-short term goals:
+- add defaultAttributevalues to mstyle
+*done add PenStyle parsing to mtable element
+- solve KoViewConverter issue in AttributeManager, make it always set...
+- correct mathspace parsing in operator element.
+
 - create template files - decide what kind of templates should be in place
 - implement rendering in all token elements
+
 *done correct the TokenElement class rendering wise to create OperatorElement
 *done implement scripts to generator Dictionary.cpp file
 *done create SquareRootElement class to reflect differences between Root and SquareRoot
@@ -18,6 +23,14 @@ long term goals:
 - iron the loading process out so that it won't crash on errors and report them
 
 02/09/2007
+
+SpaceElement:
+	* painting implemented
+	* linebreaking not implemented, move parsing and enum to SpaceElement??
+	-> how to implement that ??
+	* not tested yet...
+	* make it derive from TokenElement?
+	* loading and saving not present...
 
 RowElement:
 	* layout works

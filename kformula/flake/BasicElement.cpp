@@ -30,6 +30,7 @@
 
 BasicElement::BasicElement( BasicElement* p ) : m_parentElement( p )
 {
+    m_scaleFactor = 1.0;
     m_boundingRect.setTopLeft( QPointF( 0.0, 0.0 ) );
     m_boundingRect.setWidth( 7.0 );       // standard values
     m_boundingRect.setHeight( 10.0 );
@@ -53,9 +54,9 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
 void BasicElement::layout( const AttributeManager* )
 { /* do nothing */ }
 
-BasicElement* BasicElement::acceptCursor( CursorDirection direction )
+BasicElement* BasicElement::acceptCursor( FormulaCursor* cursor )
 {
-    Q_UNUSED( direction )
+    Q_UNUSED( cursor )
     return 0;
 }
 
@@ -177,22 +178,32 @@ const QRectF& BasicElement::boundingRect() const
 
 double BasicElement::height() const
 {
-    return m_boundingRect.height();
+    return m_boundingRect.height()*m_scaleFactor;
 }
 
 double BasicElement::width() const
 {
-    return m_boundingRect.width();
+    return m_boundingRect.width()*m_scaleFactor;
 }
 
 double BasicElement::baseLine() const
 {
-    return m_baseLine;
+    return m_baseLine*m_scaleFactor;
 }
 
 QPointF BasicElement::origin() const
 {
     return m_boundingRect.topLeft();
+}
+
+BasicElement* BasicElement::parentElement() const
+{
+    return m_parentElement;
+}
+
+double BasicElement::scaleFactor() const
+{
+    return m_scaleFactor;
 }
 
 void BasicElement::setWidth( double width )
@@ -220,7 +231,8 @@ void BasicElement::setParentElement( BasicElement* parent )
     m_parentElement = parent;
 }
 
-BasicElement* BasicElement::parentElement() const
+void BasicElement::setScaleFactor( double scaleFactor )
 {
-    return m_parentElement;
+    m_scaleFactor = scaleFactor;
 }
+

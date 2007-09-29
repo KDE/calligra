@@ -22,6 +22,7 @@
 
 #include "FencedElement.h"
 #include "OperatorElement.h"
+#include "AttributeManager.h"
 #include <QPainter>
 
 FencedElement::FencedElement( BasicElement* parent ) : RowElement( parent )

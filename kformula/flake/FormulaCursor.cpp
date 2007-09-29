@@ -30,6 +30,7 @@ FormulaCursor::FormulaCursor( BasicElement* element )
               : m_currentElement( element )
 {
     m_positionInElement = 0;
+    m_direction = NoDirection;
 }
 
 void FormulaCursor::paint( QPainter& painter ) const
@@ -89,14 +90,16 @@ void FormulaCursor::moveLeft()
     if( isHome() )
     {
         tmp = m_currentElement->parentElement();
-        while( tmp != tmp->acceptCursor( LeftToParent ) && tmp->elementType() != Formula )
-            tmp = tmp->acceptCursor( LeftToParent );
+        m_direction = LeftToParent;
+        while( tmp != tmp->acceptCursor( this ) && tmp->elementType() != Formula )
+            tmp = tmp->acceptCursor( this );
     }
     else
     {
         tmp = m_currentElement;
-        while( tmp != m_currentElement->acceptCursor( LeftToChild ) )
-            tmp = tmp->acceptCursor( LeftToChild );
+        m_direction = LeftToChild;
+        while( tmp != m_currentElement->acceptCursor( this ) )
+            tmp = tmp->acceptCursor( this );
     }
 
     if( !isHome() && tmp == m_currentElement )
@@ -111,15 +114,16 @@ void FormulaCursor::moveRight()
     if( isEnd() )
     {
         tmp = m_currentElement->parentElement();
-        while( tmp != tmp->acceptCursor( RightToParent ) &&
-               tmp->elementType() != Formula )
-            tmp = tmp->acceptCursor( RightToParent );
+        m_direction = RightToParent;
+        while( tmp != tmp->acceptCursor( this ) && tmp->elementType() != Formula )
+            tmp = tmp->acceptCursor( this );
     }
     else
     {
         tmp = m_currentElement;
-        while( tmp != m_currentElement->acceptCursor( RightToChild ) )
-            tmp = tmp->acceptCursor( RightToChild );
+        m_direction = RightToChild;
+        while( tmp != m_currentElement->acceptCursor( this ) )
+            tmp = tmp->acceptCursor( this );
     }
 
     if( !isEnd() && tmp == m_currentElement )
@@ -172,7 +176,10 @@ int FormulaCursor::position() const
     return m_positionInElement;
 }
 
-
+CursorDirection FormulaCursor::direction() const
+{
+    return m_direction;
+}
 
 bool FormulaCursor::hasSelection() const
 {
