@@ -25,6 +25,7 @@
 namespace KSpread
 {
     class TableShape;
+    class Sheet;
 
     class SheetsEditor : public QWidget
     {
@@ -32,6 +33,11 @@ namespace KSpread
         public:
             explicit SheetsEditor(TableShape* tableShape, QWidget* parent = 0);
             virtual ~SheetsEditor();
+        private Q_SLOTS:
+            void sheetAdded(Sheet*);
+            void selectionChanged();
+            void addClicked();
+            void removeClicked();
         private:
             Q_DISABLE_COPY( SheetsEditor )
             class Private;

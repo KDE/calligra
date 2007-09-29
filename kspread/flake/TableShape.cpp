@@ -166,8 +166,11 @@ Sheet* TableShape::sheet() const
 
 void TableShape::setSheet(const QString& sheetName)
 {
+    Sheet* sheet = d->doc->map()->findSheet(sheetName);
+    if ( ! sheet )
+        return;
     delete d->sheetView;
-    d->sheetView = new SheetView( d->doc->map()->findSheet(sheetName) );
+    d->sheetView = new SheetView(sheet);
     setColumns(d->columns);
     setRows(d->rows);
     repaint();

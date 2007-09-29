@@ -129,16 +129,13 @@ void TableTool::importDocument()
     if ( ! d->tableShape->doc()->import(file))
         return;
     updateSheetsList();
-/*TODO d->tableShape->updateSheetViewWithNewSheet();
-    Sheet* sheet = d->tableShape->sheet();
-    if (sheet) {
+    if (Sheet* sheet = d->tableShape->sheet()) {
         QRect area = sheet->usedArea();
         if (area.width() > d->tableShape->columns())
             d->tableShape->setColumns(area.width());
         if (area.height() > d->tableShape->rows())
             d->tableShape->setRows(area.height());
     }
-*/
 }
 
 void TableTool::exportDocument()
@@ -317,13 +314,13 @@ void TableTool::sheetActivated(const QString& sheetName)
 void TableTool::sheetsBtnClicked()
 {
     KPageDialog* dialog = new KPageDialog();
-    dialog->setFaceType(KPageDialog::Plain);
     dialog->setCaption(i18n("Sheets"));
+    dialog->setButtons( KDialog::Ok );
+    dialog->setFaceType(KPageDialog::Plain);
     SheetsEditor* editor = new SheetsEditor(d->tableShape);
     dialog->setMainWidget(editor);
-    if( dialog->exec() == QDialog::Accepted ) {
-        //TODO
-    }
+    dialog->exec();
+    updateSheetsList();
     delete dialog;
 }
 
