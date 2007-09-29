@@ -126,7 +126,7 @@ void TableTool::importDocument()
     d->tableShape->doc()->setModified(false);
     if ( ! d->tableShape->doc()->import(file))
         return;
-//TODO d->tableShape->updateSheetViewWithNewSheet();
+/*TODO d->tableShape->updateSheetViewWithNewSheet();
     Sheet* sheet = d->tableShape->sheet();
     if (sheet) {
         QRect area = sheet->usedArea();
@@ -135,6 +135,7 @@ void TableTool::importDocument()
         if (area.height() > d->tableShape->rows())
             d->tableShape->setRows(area.height());
     }
+*/
 }
 
 void TableTool::exportDocument()
