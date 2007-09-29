@@ -105,11 +105,12 @@ KChartPart::KChartPart( QWidget *parentWidget,
     setTemplateType( "kchart_template" );
 
     // Init some members that need it.
+#if 1
     {
 	// FIXME: Make the default chart look like the default chart
 	//        in KChart 1.x
-        m_type    = BarChartType;
-        m_subtype = NormalChartSubtype;
+        //m_type    = BarChartType;
+        //m_subtype = NormalChartSubtype;
 
         m_chart       = new KDChart::Chart();
         m_chart->coordinatePlane()->replaceDiagram(new KDChart::BarDiagram()); // FIXME
@@ -121,7 +122,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
         m_firstRowAsLabel = false;
         m_firstColAsLabel = false;
     }
-
+#endif
     m_bCanChangeValue = true;
 
     // Display parameters
@@ -1228,9 +1229,13 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:chart" );
     contentTmpWriter.startElement( "chart:chart" );
 
+    // Write the chart itself.
     KoShapeSavingContext  shapeSavingContext( contentTmpWriter, 
                                               savingContext );
     m_chartShape->saveOdf( shapeSavingContext );
+
+    // Write the data
+    saveOdfData( contentTmpWriter, mainStyles );
 
     contentTmpWriter.endElement(); // chart:chart
     contentTmpWriter.endElement(); // office:chart
@@ -1396,48 +1401,42 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 }
 
 
-void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
-				KoGenStyles& mainStyles ) const
+void KChartPart::saveOdfData( KoXmlWriter& bodyWriter,
+                              KoGenStyles& mainStyles ) const
 {
-    Q_UNUSED( bodyWriter );
+    QAbstractItemModel  *chartData = m_chartShape->model();
 
-    Q_UNUSED( mainStyles );
-#if 0
+    const int cols = chartData->columnCount();
+    const int rows = chartData->rowCount();
 
-    const int cols = m_currentData.usedCols()
-                     ? qMin(m_currentData.usedCols(), m_currentData.cols())
-                     : m_currentData.cols();
-    const int rows = m_currentData.usedRows()
-                     ? qMin(m_currentData.usedRows(), m_currentData.rows())
-                     : m_currentData.rows();
-
-    bodyWriter->startElement( "table:table" );
-    bodyWriter->addAttribute( "table:name", "local-table" );
+    bodyWriter.startElement( "table:table" );
+    bodyWriter.addAttribute( "table:name", "local-table" );
 
     // Exactly one header column, always.
-    bodyWriter->startElement( "table:table-header-columns" );
-    bodyWriter->startElement( "table:table-column" );
-    bodyWriter->endElement(); // table:table-column
-    bodyWriter->endElement(); // table:table-header-columns
+    bodyWriter.startElement( "table:table-header-columns" );
+    bodyWriter.startElement( "table:table-column" );
+    bodyWriter.endElement(); // table:table-column
+    bodyWriter.endElement(); // table:table-header-columns
 
     // Then "cols" columns
-    bodyWriter->startElement( "table:table-columns" );
-    bodyWriter->startElement( "table:table-column" );
-    bodyWriter->addAttribute( "table:number-columns-repeated", cols );
-    bodyWriter->endElement(); // table:table-column
-    bodyWriter->endElement(); // table:table-columns
+    bodyWriter.startElement( "table:table-columns" );
+    bodyWriter.startElement( "table:table-column" );
+    bodyWriter.addAttribute( "table:number-columns-repeated", cols );
+    bodyWriter.endElement(); // table:table-column
+    bodyWriter.endElement(); // table:table-columns
 
     // Exactly one header row, always.
-    bodyWriter->startElement( "table:table-header-rows" );
-    bodyWriter->startElement( "table:table-row" );
+    bodyWriter.startElement( "table:table-header-rows" );
+    bodyWriter.startElement( "table:table-row" );
 
     // The first column in header row is just the header column - no title needed
-    bodyWriter->startElement( "table:table-cell" );
-    bodyWriter->addAttribute( "office:value-type", "string" );
-    bodyWriter->startElement( "text:p" );
-    bodyWriter->endElement(); // text:p
-    bodyWriter->endElement(); // table:table-cell
+    bodyWriter.startElement( "table:table-cell" );
+    bodyWriter.addAttribute( "office:value-type", "string" );
+    bodyWriter.startElement( "text:p" );
+    bodyWriter.endElement(); // text:p
+    bodyWriter.endElement(); // table:table-cell
 
+#if 0
     // Save column labels in the first header row, for instance:
     //          <table:table-cell office:value-type="string">
     //            <text:p>Column 1 </text:p>
@@ -1445,39 +1444,42 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
     QStringList::const_iterator colLabelIt = m_colLabels.begin();
     for ( int col = 0; col < cols ; ++col ) {
         if ( colLabelIt != m_colLabels.end() ) {
-            bodyWriter->startElement( "table:table-cell" );
-            bodyWriter->addAttribute( "office:value-type", "string" );
-            bodyWriter->startElement( "text:p" );
-            bodyWriter->addTextNode( *colLabelIt );
-            bodyWriter->endElement(); // text:p
-            bodyWriter->endElement(); // table:table-cell
+            bodyWriter.startElement( "table:table-cell" );
+            bodyWriter.addAttribute( "office:value-type", "string" );
+            bodyWriter.startElement( "text:p" );
+            bodyWriter.addTextNode( *colLabelIt );
+            bodyWriter.endElement(); // text:p
+            bodyWriter.endElement(); // table:table-cell
             ++colLabelIt;
         }
     }
+#endif
+    bodyWriter.endElement(); // table:table-row
+    bodyWriter.endElement(); // table:table-header-rows
 
-    bodyWriter->endElement(); // table:table-row
-    bodyWriter->endElement(); // table:table-header-rows
-    bodyWriter->startElement( "table:table-rows" );
-
-    QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
+    bodyWriter.startElement( "table:table-rows" );
+    //QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
     for ( int row = 0; row < rows ; ++row ) {
-        bodyWriter->startElement( "table:table-row" );
-
+        bodyWriter.startElement( "table:table-row" );
+#if 0
         if ( rowLabelIt != m_rowLabels.end() ) {
             // Save row labels, similar to column labels
-            bodyWriter->startElement( "table:table-cell" );
-            bodyWriter->addAttribute( "office:value-type", "string" );
+            bodyWriter.startElement( "table:table-cell" );
+            bodyWriter.addAttribute( "office:value-type", "string" );
 
-            bodyWriter->startElement( "text:p" );
-            bodyWriter->addTextNode( *rowLabelIt );
-            bodyWriter->endElement(); // text:p
+            bodyWriter.startElement( "text:p" );
+            bodyWriter.addTextNode( *rowLabelIt );
+            bodyWriter.endElement(); // text:p
 
-            bodyWriter->endElement(); // table:table-cell
+            bodyWriter.endElement(); // table:table-cell
             ++rowLabelIt;
         }
-
+#endif
         for ( int col = 0; col < cols; ++col ) {
-            QVariant value( m_currentData.cellVal( row, col ) );
+            //QVariant value( m_currentData.cellVal( row, col ) );
+            QModelIndex  index = chartData->index( row, col );
+            QVariant     value = chartData->data( index );
+
             QString  valType;
             QString  valStr;
 
@@ -1503,24 +1505,23 @@ void KChartPart::saveOasisData( KoXmlWriter* bodyWriter,
             }
 
 	    // Add the value type and the string to the XML tree.
-            bodyWriter->startElement( "table:table-cell" );
+            bodyWriter.startElement( "table:table-cell" );
             if ( !valType.isEmpty() ) {
-                bodyWriter->addAttribute( "office:value-type", valType );
+                bodyWriter.addAttribute( "office:value-type", valType );
                 if ( value.type() == QVariant::Double )
-                    bodyWriter->addAttribute( "office:value", valStr );
+                    bodyWriter.addAttribute( "office:value", valStr );
 
-                bodyWriter->startElement( "text:p" );
-                bodyWriter->addTextNode( valStr );
-                bodyWriter->endElement(); // text:p
+                bodyWriter.startElement( "text:p" );
+                bodyWriter.addTextNode( valStr );
+                bodyWriter.endElement(); // text:p
             }
-	    bodyWriter->endElement(); // table:table-cell
+	    bodyWriter.endElement(); // table:table-cell
         }
-        bodyWriter->endElement(); // table:table-row
+        bodyWriter.endElement(); // table:table-row
     }
 
-    bodyWriter->endElement(); // table:table-rows
-    bodyWriter->endElement(); // table:table
-#endif
+    bodyWriter.endElement(); // table:table-rows
+    bodyWriter.endElement(); // table:table
 }
 
 void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, 

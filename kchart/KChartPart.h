@@ -43,6 +43,8 @@
 
 // KChart
 #include "kchart_export.h"
+#include "ChartShape.h"
+
 
 // Some class references that don't need real includes.
 class QStandardItemModel;
@@ -54,7 +56,6 @@ class KoGenStyles;
 namespace KChart
 {
 
-class ChartShape;
 
 
 class KCHART_EXPORT KChartPart : public KoChart::Part
@@ -92,7 +93,7 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    OdfChartType         chartType() const       { return m_type;        }
+    OdfChartType         chartType() const       { return m_chartShape->chartType();        }
     QStandardItemModel  *data()                  { return m_currentData; }
     KDChart::Chart      *chart()     const       { return m_chart;       }
 
@@ -142,7 +143,8 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent );
 
     bool  loadOasisData( const KoXmlElement& tableElem );
-    void  saveOasisData( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const;
+    void  saveOdfData( KoXmlWriter& bodyWriter, 
+                       KoGenStyles& mainStyles ) const;
     void writeAutomaticStyles( KoXmlWriter& contentWriter,
                                KoGenStyles& mainStyles ) const;
 
@@ -168,8 +170,8 @@ private:
     //        will move there soon.
 
     // The chart and its contents
-    OdfChartType             m_type;
-    OdfChartSubtype          m_subtype;
+    //OdfChartType             m_type;
+    //OdfChartSubtype          m_subtype;
     KDChart::Chart          *m_chart;
     QStandardItemModel      *m_currentData;
 

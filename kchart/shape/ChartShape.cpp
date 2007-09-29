@@ -310,6 +310,16 @@ void ChartShape::setModel( QAbstractItemModel* model )
     kDebug() <<" END";
 }
 
+QAbstractItemModel *ChartShape::model()
+{
+    return d->chartData;
+}
+
+OdfChartType ChartShape::chartType() const
+{
+    return d->chartType;
+}
+
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {

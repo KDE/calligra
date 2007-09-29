@@ -55,7 +55,8 @@ public:
 
     /// reimplemented
     virtual void setModel( QAbstractItemModel* model );
-
+    QAbstractItemModel *model();
+    
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
     /// reimplemented
