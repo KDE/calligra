@@ -75,6 +75,7 @@ void TableShape::Private::adjustRowDimensions( double factor )
 TableShape::TableShape( int columns, int rows )
     : d( new Private )
 {
+    setObjectName("TableShape");
     d->columns  = 1;
     d->rows     = 1;
     d->doc      = new Doc();

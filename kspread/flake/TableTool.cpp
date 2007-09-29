@@ -99,6 +99,8 @@ TableTool::TableTool( KoCanvasBase* canvas )
     : KoTool( canvas )
     , d( new Private )
 {
+    setObjectName("TableTool");
+
     d->selection = new Selection(this);
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(changeSelection(const Region&)));
     d->tableShape = 0;
@@ -298,8 +300,10 @@ void TableTool::updateSheetsList()
 d->sheetComboBox->blockSignals(true);
     d->sheetComboBox->clear();
     Map *map = d->tableShape->doc()->map();
-    foreach(Sheet* s, map->sheetList()) {
-        d->sheetComboBox->addItem(s->sheetName());
+    foreach(Sheet* sheet, map->sheetList()) {
+        if (sheet->isHidden())
+            continue;
+        d->sheetComboBox->addItem( sheet->sheetName() );
         //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
     }
 d->sheetComboBox->blockSignals(false);

@@ -21,6 +21,7 @@
 #define KSPREAD_TABLE_SHEETSEDITOR
 
 #include <QWidget>
+#include <QListWidgetItem>
 
 namespace KSpread
 {
@@ -33,13 +34,21 @@ namespace KSpread
         public:
             explicit SheetsEditor(TableShape* tableShape, QWidget* parent = 0);
             virtual ~SheetsEditor();
+
         private Q_SLOTS:
-            void sheetAdded(Sheet*);
+            void sheetAdded(Sheet* sheet);
+            void sheetNameChanged(Sheet* sheet, const QString& old_name);
+
             void selectionChanged();
+            void itemChanged(QListWidgetItem* item);
+
+            void renameClicked();
             void addClicked();
             void removeClicked();
+
         private:
             Q_DISABLE_COPY( SheetsEditor )
+
             class Private;
             Private * const d;
     };

@@ -25,6 +25,8 @@
 #include <QListWidget>
 #include <QPushButton>
 
+#include <KInputDialog>
+
 #include "TableShape.h"
 #include "Doc.h"
 #include "Sheet.h"
@@ -37,14 +39,14 @@ class SheetsEditor::Private
     public:
         TableShape* tableShape;
         QListWidget* list;
-        QPushButton* addbtn;
-        QPushButton* rembtn;
+        QPushButton *renamebtn, *addbtn, *rembtn;
 };
 
 SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     : QWidget(parent)
     , d(new Private)
 {
+    setObjectName("SheetsEditor");
     d->tableShape = tableShape;
 
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -53,15 +55,21 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
 
     d->list = new QListWidget(this);
     connect(d->list, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
+    connect(d->list, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(itemChanged(QListWidgetItem*)));
     layout->addWidget(d->list);
 
     Map *map = d->tableShape->doc()->map();
-    connect(map, SIGNAL(sig_addSheet(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
     foreach(Sheet* sheet, map->sheetList())
-        d->list->addItem( sheet->sheetName() );
+        sheetAdded(sheet);
+    connect(map, SIGNAL(sig_addSheet(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
 
     QVBoxLayout* btnlayout = new QVBoxLayout(this);
     layout->addLayout(btnlayout);
+
+    d->renamebtn = new QPushButton(/*KIcon("rename"),*/ i18n("Rename"), this);
+    connect(d->renamebtn, SIGNAL(clicked()), this, SLOT(renameClicked()));
+    btnlayout->addWidget(d->renamebtn);
+
     d->addbtn = new QPushButton(/*KIcon("edit-add"),*/ i18n("Add"), this);
     connect(d->addbtn, SIGNAL(clicked()), this, SLOT(addClicked()));
     btnlayout->addWidget(d->addbtn);
@@ -81,12 +89,49 @@ SheetsEditor::~SheetsEditor()
 
 void SheetsEditor::sheetAdded(Sheet* sheet)
 {
-    d->list->addItem(sheet->sheetName());
+    Q_ASSERT(sheet);
+    QListWidgetItem* item = new QListWidgetItem(sheet->sheetName());
+    item->setCheckState( sheet->isHidden() ? Qt::Unchecked : Qt::Checked );
+    d->list->addItem(item);
+    connect(sheet, SIGNAL(sig_nameChanged(Sheet*,QString)), this, SLOT(sheetNameChanged(Sheet*,QString)));
+}
+
+void SheetsEditor::sheetNameChanged(Sheet* sheet, const QString& old_name)
+{
+    for(int i = 0; i < d->list->count(); ++i)
+        if( d->list->item(i)->text() == old_name )
+            d->list->item(i)->setText( sheet->sheetName() );
 }
 
 void SheetsEditor::selectionChanged()
 {
+    d->renamebtn->setEnabled( d->list->currentItem() );
+
     d->rembtn->setEnabled( d->list->currentItem() );
+}
+
+void SheetsEditor::itemChanged(QListWidgetItem* item)
+{
+    Q_ASSERT(item);
+    Map *map = d->tableShape->doc()->map();
+    Sheet* sheet = map->findSheet( item->text() );
+    if( sheet )
+        sheet->setHidden( item->checkState() != Qt::Checked );
+}
+
+void SheetsEditor::renameClicked()
+{
+    QListWidgetItem* item = d->list->currentItem();
+    if( ! item )
+        return;
+    Map *map = d->tableShape->doc()->map();
+    Sheet* sheet = map->findSheet( item->text() );
+    if( ! sheet )
+        return;
+    QString name = KInputDialog::getText(i18n("Rename"), i18n("Enter Name:"), sheet->sheetName());
+    if( name.isEmpty() )
+        return;
+    sheet->setSheetName(name);
 }
 
 void SheetsEditor::addClicked()
