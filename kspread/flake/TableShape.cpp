@@ -21,6 +21,7 @@
 #include "TableShape.h"
 
 #include <QPainter>
+#include <QPointer>
 
 #include <kdebug.h>
 
@@ -41,7 +42,7 @@ public:
     int         columns;
     int         rows;
     Doc*        doc;
-    SheetView*  sheetView;
+    QPointer<SheetView>  sheetView;
 
 public:
     Sheet* sheet() const;

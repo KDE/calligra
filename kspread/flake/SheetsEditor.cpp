@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2007 Sebastian Sauer <mail@dipe.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,65 +18,60 @@
 */
 
 // Local
-#include "TableTool.h"
 #include "SheetsEditor.h"
 
-#include <QApplication>
-#include <QGridLayout>
-#include <QLabel>
-#include <QPainter>
-#include <QSpinBox>
-#include <QAction>
-#include <QToolBar>
-#include <QComboBox>
-#include <QPushButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QListWidget>
+#include <QPushButton>
 
-#include <kdebug.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <kicon.h>
-#include <kaction.h>
-#include <kfiledialog.h>
-#include <kpagedialog.h>
-
-#include <KoCanvasBase.h>
-#include <KoPointerEvent.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
-
-#include "Cell.h"
+#include "TableShape.h"
 #include "Doc.h"
-#include "Global.h"
-#include "Selection.h"
 #include "Sheet.h"
 #include "Map.h"
 
-#include "commands/DataManipulators.h"
-
-#include "TableShape.h"
-
 using namespace KSpread;
 
-class TableTool::Private
+class SheetsEditor::Private
 {
-public:
-    // If the user is dragging around with the mouse then this tells us what he is doing.
-    // The user may want to mark cells or he started in the lower right corner
-    // of the marker which is something special. The values for the 2 above
-    // methods are called 'Mark' and 'Merge' or 'AutoFill' depending
-    // on the mouse button used. By default this variable holds
-    // the value 'None'.
-    enum { None, Mark, Merge, AutoFill, Resize } mouseAction : 3;
-
-    QString userInput;
-    Selection* selection;
-    TableShape* tableShape;
-
-public:
-    QRectF cellCoordinatesToDocument(const QRect& cellRange) const;
+    public:
+        TableShape* tableShape;
 };
 
+SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
+    : QWidget(parent)
+    , d(new Private)
+{
+    d->tableShape = tableShape;
+
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setMargin(0);
+    setLayout(layout);
+
+    QListWidget* list = new QListWidget(this);
+    layout->addWidget(list);
+
+    Map *map = d->tableShape->doc()->map();
+    foreach(Sheet* s, map->sheetList())
+        list->addItem(s->sheetName());
+
+    QVBoxLayout* btnlayout = new QVBoxLayout(this);
+    layout->addLayout(btnlayout);
+    QPushButton* addbtn = new QPushButton(/*KIcon("edit-add"),*/ i18n("Add"), this);
+    addbtn->setEnabled(false);
+    btnlayout->addWidget(addbtn);
+    QPushButton* rembtn = new QPushButton(/*KIcon("edit-delete"),*/ i18n("Remove"), this);
+    rembtn->setEnabled(false);
+    btnlayout->addWidget(rembtn);
+    btnlayout->addStretch(1);
+}
+
+SheetsEditor::~SheetsEditor()
+{
+    delete d;
+}
+
+#if 0
 // TODO Stefan: Copied from Canvas. Share it somewhere.
 QRectF TableTool::Private::cellCoordinatesToDocument( const QRect& cellRange ) const
 {
@@ -126,7 +121,6 @@ void TableTool::importDocument()
     d->tableShape->doc()->setModified(false);
     if ( ! d->tableShape->doc()->import(file))
         return;
-//TODO d->tableShape->updateSheetViewWithNewSheet();
     Sheet* sheet = d->tableShape->sheet();
     if (sheet) {
         QRect area = sheet->usedArea();
@@ -292,17 +286,30 @@ void TableTool::applyUserInput()
     manipulator->execute();
 }
 
-void TableTool::sheetActivated(const QString& sheetName)
-{
-}
-
 void TableTool::sheetsBtnClicked()
 {
     KPageDialog* dialog = new KPageDialog();
     dialog->setFaceType(KPageDialog::Plain);
     dialog->setCaption(i18n("Sheets"));
-    SheetsEditor* editor = new SheetsEditor(d->tableShape);
-    dialog->setMainWidget(editor);
+    QWidget *w = new QWidget();
+    QHBoxLayout* l = new QHBoxLayout(w);
+    w->setLayout(l);
+    l->setMargin(0);
+    QListWidget* list = new QListWidget(w);
+    l->addWidget(list);
+    dialog->setMainWidget(w);
+    Map *map = d->tableShape->doc()->map();
+    foreach(Sheet* s, map->sheetList())
+        list->addItem(s->sheetName());
+    QVBoxLayout* btnlayout = new QVBoxLayout(w);
+    QPushButton* addbtn = new QPushButton(KIcon("edit-add"), i18n("Add"), w);
+    addbtn->setEnabled(false);
+    btnlayout->addWidget(addbtn);
+    QPushButton* rembtn = new QPushButton(KIcon("edit-delete"), i18n("Remove"), w);
+    rembtn->setEnabled(false);
+    btnlayout->addWidget(rembtn);
+    btnlayout->addStretch(1);
+    l->addLayout(btnlayout);
     if( dialog->exec() == QDialog::Accepted ) {
         //TODO
     }
@@ -333,8 +340,6 @@ QWidget* TableTool::createOptionWidget()
         sheetComboBox->addItem(s->sheetName());
         //sheetComboBox->setCurrentIndex( sheetComboBox->count()-1 );
     }
-    connect(sheetComboBox, SIGNAL(activated(QString)), this, SLOT(sheetActivated(QString)));
-
     QPushButton *sheetbtn = new QPushButton(KIcon("table"), QString(), optionWidget);
     sheetbtn->setFixedHeight( sheetComboBox->sizeHint().height() );
     connect(sheetbtn, SIGNAL(clicked()), this, SLOT(sheetsBtnClicked()));
@@ -390,5 +395,6 @@ QWidget* TableTool::createOptionWidget()
 
     return optionWidget;
 }
+#endif
 
-#include "TableTool.moc"
+#include "SheetsEditor.moc"

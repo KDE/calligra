@@ -52,6 +52,7 @@ private Q_SLOTS:
     void changeSelection(const Region& changedRegion);
     void changeUserInput(const QString& content);
     void applyUserInput();
+    void sheetActivated(const QString& sheetName);
     void sheetsBtnClicked();
     void importDocument();
     void exportDocument();

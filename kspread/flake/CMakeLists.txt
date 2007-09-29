@@ -7,11 +7,12 @@ include_directories(
 ########### Flake Plugin library ###############
 
 SET (tableshape_LIB_SRCS
-	TableShape.cpp
-	TableShapeFactory.cpp
-	TableTool.cpp
-	TableToolFactory.cpp
-	)
+    TableShape.cpp
+    TableShapeFactory.cpp
+    TableTool.cpp
+    TableToolFactory.cpp
+    SheetsEditor.cpp
+    )
 
 kde4_add_plugin(tableshape ${tableshape_LIB_SRCS})
 
