@@ -26,15 +26,14 @@
 // Posix
 #include <float.h> // For basic data types characteristics.
 
-// For debugging
+// C++, for debugging
 #include <iostream>
 
-//Added by qt3to4:
-#include <Q3ValueList>
 using std::cout;
 using std::cerr;
 
 // Qt
+#include <QList>
 #include <QStandardItemModel>
 #include <qdom.h>
 #include <qtextstream.h>
@@ -1245,81 +1244,6 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     // Start of phase 2: write out the automatic styles
     contentWriter->startElement( "office:automatic-styles" );
 
-    // FIXME: Do we need any of this?
-#if 0  // This code is from kspread
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_PAGE );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_COLUMN_AUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_ROW_AUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_CELL_AUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericNumber );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericDate );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericTime );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericFraction );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericPercentage );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericCurrency );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericScientific );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-#endif    // End code from kspread
-
     // Actually write the automatic styles.
     writeAutomaticStyles( *contentWriter, mainStyles );
 
@@ -1399,13 +1323,88 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, 
                                        KoGenStyles& mainStyles ) const
 {
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it;
-    for ( it = styles.begin(); it != styles.end() ; ++it ) {
+    QList<KoGenStyles::NamedStyle>  styles = mainStyles.styles( KoGenStyle::StyleAuto );
+    QList<KoGenStyles::NamedStyle>::const_iterator  it;
+    for ( it = styles.begin(); it != styles.end(); ++it ) {
         kDebug() << "Style: " << (*it).name;
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style",
                                  (*it).name, "style:chart-properties" );
     }
+
+    // FIXME: Do we need any of this?
+#if 0  // This code is from kspread
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_PAGE );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_COLUMN_AUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_ROW_AUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
+    }
+
+    styles = mainStyles.styles( STYLE_CELL_AUTO );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericNumber );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericDate );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericTime );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericFraction );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericPercentage );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericCurrency );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 );
+    }
+
+    styles = mainStyles.styles( KoGenStyle::StyleNumericScientific );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
+    }
+#endif    // End code from kspread
 }
 
 
