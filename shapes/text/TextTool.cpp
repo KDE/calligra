@@ -774,7 +774,8 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             fn->setText("Lorem ipsum dolor sit amet, XgXgectetuer adiXiscing elit, sed diam nonummy");
             fn->setLabel("1");
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
-           lay->inlineObjectTextManager()->insertInlineObject(m_caret, fn);
+            Q_ASSERT(lay);
+            lay->inlineObjectTextManager()->insertInlineObject(m_caret, fn);
         }
 #endif
         else if((event->modifiers() & (Qt::ControlModifier | Qt::AltModifier)) || event->text().length() == 0) {

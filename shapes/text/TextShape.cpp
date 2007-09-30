@@ -108,6 +108,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
             lay->setLayout(new Layout(lay));
         return;
     }
+    Q_ASSERT(lay);
     applyConversion(painter, converter);
     QAbstractTextDocumentLayout::PaintContext pc;
     KoTextDocumentLayout::PaintContext context;

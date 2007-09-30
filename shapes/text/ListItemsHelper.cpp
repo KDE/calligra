@@ -376,6 +376,7 @@ void ListItemsHelper::recalculate() {
     for(int i=0; i < m_textList->count(); i++) {
         QTextBlock tb = m_textList->item(i);
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (tb.userData());
+        Q_ASSERT(data);
         data->setCounterWidth(width);
         data->setCounterSpacing(counterSpacing);
         //kDebug(32500) << data->counterText() <<"" << tb.text();
