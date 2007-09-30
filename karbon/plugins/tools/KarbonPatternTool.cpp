@@ -269,12 +269,12 @@ void KarbonPatternTool::slotButtonClicked( int button )
 void KarbonPatternTool::patternSelected( QTableWidgetItem* item )
 {
     m_pattern = dynamic_cast<VPattern*>( item );
-    if( ! m_pattern || ! m_pattern->isValid() )
+    if( ! m_pattern || ! m_pattern->valid() )
         return;
 
     QAbstractButton * removeButton = m_buttonGroup->button( Button_Remove );
     if( removeButton )
-        removeButton->setEnabled( QFileInfo( m_pattern->tilename() ).isWritable() );
+        removeButton->setEnabled( QFileInfo( m_pattern->filename() ).isWritable() );
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
     QBrush newBrush( m_pattern->pixmap() );

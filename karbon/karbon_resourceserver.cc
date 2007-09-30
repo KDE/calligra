@@ -78,7 +78,7 @@ KarbonResourceServer::KarbonResourceServer()
 
 	// image formats
 	QStringList formats;
-	formats << "*.png" << "*.tif" << "*.xpm" << "*.bmp" << "*.jpg" << "*.gif";
+	formats << "*.png" << "*.tif" << "*.xpm" << "*.bmp" << "*.jpg" << "*.gif" << "*.pat";
 
 	// init vars
 	QStringList lst;
@@ -179,7 +179,7 @@ KarbonResourceServer::loadPattern( const QString& filename )
 {
 	VPattern* pattern = new VPattern( filename );
 
-	if( pattern->isValid() )
+	if( pattern->valid() )
 		m_patterns.append( pattern );
 	else
 	{
@@ -243,7 +243,7 @@ KarbonResourceServer::addPattern( const QString& tilename )
 void
 KarbonResourceServer::removePattern( VPattern* pattern )
 {
-	QFile file( pattern->tilename() );
+	QFile file( pattern->filename() );
 
 	if( file.remove() )
 		m_patterns.remove( pattern );

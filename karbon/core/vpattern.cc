@@ -20,42 +20,25 @@
 #include <qdom.h>
 
 #include "vpattern.h"
-#include <qpixmap.h>
 #include <QString>
 #define THUMB_SIZE 30
 
 #include "vglobal.h"
 
-VPattern::VPattern()
+VPattern::VPattern() : KoPattern("")
 {
-	m_valid = false;
 }
 
-VPattern::VPattern( const QString &tilename )
+VPattern::VPattern( const QString &filename ) : KoPattern(filename)
 {
-	load( tilename );
-}
-
-void
-VPattern::load( const QString &tilename )
-{
-	m_tilename = tilename;
-	bool ok = m_image.load( tilename );
-
-	if( !ok )
-	{
-		m_valid = false;
-		return;
-	}
- 
-	m_image = m_image.convertToFormat( QImage::Format_ARGB32 );
-	m_pixmap = QPixmap::fromImage(m_image, Qt::AutoColor);
-	if( m_image.width() > THUMB_SIZE || m_image.height() > THUMB_SIZE )
+	load();
+	m_pixmap = QPixmap::fromImage(img(), Qt::AutoColor);
+	if( img().width() > THUMB_SIZE || img().height() > THUMB_SIZE )
 	{
 		int xsize = THUMB_SIZE;
 		int ysize = THUMB_SIZE;
-		int picW  = m_image.width();
-		int picH  = m_image.height();
+		int picW  = img().width();
+		int picH  = img().height();
 		if( picW > picH )
 		{
 			float yFactor = (float)((float)(float)picH/(float)picW);
@@ -69,30 +52,12 @@ VPattern::load( const QString &tilename )
 			if(xsize > 30) xsize = 30;
 		}
 
-		QImage thumbImg = m_image.scaled( xsize, ysize, Qt::IgnoreAspectRatio );
+		QImage thumbImg = img().scaled( xsize, ysize, Qt::IgnoreAspectRatio );
 		setIcon(QIcon(QPixmap::fromImage( thumbImg )));
 	}
-	m_valid = !m_image.isNull();
 }
 
-unsigned char *
-VPattern::pixels()
-{
-	return m_image.bits();
-}
-
-unsigned int
-VPattern::tileWidth() const
-{
-	return m_image.width();
-}
-
-unsigned int
-VPattern::tileHeight() const
-{
-	return m_image.height();
-}
-
+#if 0
 void
 VPattern::save( QDomElement& element ) const
 {
@@ -119,6 +84,7 @@ VPattern::load( const KoXmlElement& element )
 	m_tilename = element.attribute( "tilename" );
 	load( m_tilename );
 }
+#endif
 
 void
 VPattern::transform( const QMatrix &m )
@@ -129,7 +95,7 @@ VPattern::transform( const QMatrix &m )
 
 QPixmap& VPattern::pixmap() const
 {
-	return (QPixmap&)m_pixmap;
+        return (QPixmap&)m_pixmap;
 }
 
 

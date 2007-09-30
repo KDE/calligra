@@ -97,7 +97,7 @@ VStroke::save( QDomElement& element ) const
 	else if( m_type == patt )
 	{
 		// save pattern:
-		m_pattern.save( me );
+// 		m_pattern.save( me );
 	}
 
 	// save dashpattern:
@@ -216,7 +216,7 @@ VStroke::load( const KoXmlElement& element )
 			else if( e.tagName() == "PATTERN" )
 			{
 				m_type = patt;
-				m_pattern.load( e );
+// 				m_pattern.load( e );
 			}
 	}
 }

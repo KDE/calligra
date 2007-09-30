@@ -22,22 +22,18 @@
 
 #include <QPointF>
 #include <QTableWidgetItem>
-#include <qimage.h>
-#include <qpixmap.h>
+#include <QPixmap>
 #include <karbon_export.h>
 
+#include <KoPattern.h>
 #include <KoXmlReader.h>
 
 
-class KARBONBASE_EXPORT VPattern : public QTableWidgetItem
+class KARBONBASE_EXPORT VPattern : public QTableWidgetItem, public KoPattern
 {
 public:
 	VPattern();
-	VPattern( const QString &tilename );
-
-	unsigned char *pixels();
-	unsigned int tileWidth() const;
-	unsigned int tileHeight() const;
+	VPattern( const QString &filename );
 
 	QPointF origin() const { return m_origin; }
 	void setOrigin( const QPointF &origin ) { m_origin = origin; }
@@ -45,28 +41,19 @@ public:
 	QPointF vector() const { return m_vector; }
 	void setVector( const QPointF &vector ) { m_vector = vector; }
 
-	void load( const QString &tilename );
-
-	void save( QDomElement& element ) const;
-	void load( const KoXmlElement& element );
+// 	void save( QDomElement& element ) const;
+// 	void load( const KoXmlElement& element );
 
 	void transform( const QMatrix& m );
 
         QPixmap& pixmap() const ;
 
-	bool isValid() const { return m_valid; }
-
-	QString tilename() const { return m_tilename; }
-
 private:
 	// coordinates:
 	QPointF m_origin;
 	QPointF m_vector;
-	QImage m_image;
 	QPixmap m_pixmap;
 	QPixmap m_pixmapThumb;
-	QString m_tilename;
-	bool m_valid;
 };
 
 #endif
