@@ -28,7 +28,7 @@ the user wants to edit the embedded document, the KPart for that
 embedded document gets enabled inside the application of the embedding
 document.  This makes the whole GUI change, and it also changes back when
 the embedded component is no longer active.  So, when KSpread embeds a
-chart and the user double clicks the chart to edit it, the KSpread gui
+chart and the user double clicks the chart to edit it, the KSpread GUI
 changes to the KChart one.
 
 
@@ -167,19 +167,19 @@ So here are the main classes for KChart 2:
  - KChartPart : public KoDocument
 
        A KPart that will let Konqueror and other browsers embed and
-       preview charts.  This class also will either embed a ChartShape
-       or contain the ChartDocument directly.
+       preview charts.  This class also will embed a ChartShape
+       directly.
 
  - KChartView : public KoView
 
        The view that implements the main GUI of the KChart
        application.
 
-Boudewijn rempt summed it all up this way:
+Boudewijn Rempt summed it all up this way:
 
  - "Look at KWord: It's a KPart that contains a view and a document.
     The document contains the shape and the shape draws itself on the
-    view and aösp contains the data."
+    view and also contains the data."
 
 I will meditate on that, and will surely understand it myself some
 day.  :-)
@@ -212,7 +212,7 @@ kchart/attic, where code can be copied from it to implement features
 like ODF reading/writing and similar low-level things..
 
 Much of kchart 1.x is useless, e.g. the old configuration dialogs.
-These features will insted be implemented using Flake Tools, and qt
+These features will instead be implemented using Flake Tools, and qt
 designer .ui files will be mandatory.
 
 
