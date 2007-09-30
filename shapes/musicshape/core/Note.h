@@ -60,7 +60,7 @@ public:
     int pitch() const;
 
     /**
-     * Returns the accidentaaals for this note.
+     * Returns the accidentals for this note.
      */
     int accidentals() const;
 
