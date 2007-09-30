@@ -26,7 +26,7 @@ applications, like Konqueror.
 When one document embeds another, e.g. a chart in a spreadsheet, and
 the user wants to edit the embedded document, the KPart for that
 embedded document gets enabled inside the application of the embedding
-document.  This makes the whole GUI change, and it changes back when
+document.  This makes the whole GUI change, and it also changes back when
 the embedded component is no longer active.  So, when KSpread embeds a
 chart and the user double clicks the chart to edit it, the KSpread gui
 changes to the KChart one.
@@ -113,19 +113,27 @@ other KDE application.
 
 We will also have to provide a main KChart application whose only
 purpose will be to embed the chart shape and host the tools to
-manipulate it. 
+manipulate it. This application will contain a KChartView that
+inherits KoView.
 
 So, to summarize we will provide:
 
  - ChartShape : public KoShape
        the class that implements the Chart Flake Shape.  This will
-       make the chart embeddable into any KOffice application
+       make the chart embeddable into any KOffice application.  In
+       addition to the shape, there will also be a number of Flake
+       Tools to manipulate the chart.
 
- - KChartPart
+ - KChartPart : public KoDocument
        a KPart that lets KChart be embedded into other KDE
-       applications.  It is not yet clear whether KChartPart will
-       simply embed a ChartShape or if it will implement it's own
-       chart painting without going through the flake classes.
+       applications.  This KPart will embed a ChartShape and let the
+       user change its size and manipulate it in other ways.
+
+ - KChartView : public KoView
+       A standard KOffice view, containing toolbars and all the
+       actions that are needed to save and load the document and do
+       all the other tasks that the user should be able to do.  This
+       basically defines the KChart application.
 
 
 2.2 Internals of KChart 2.x
@@ -171,7 +179,7 @@ Boudewijn rempt summed it all up this way:
 
  - "Look at KWord: It's a KPart that contains a view and a document.
     The document contains the shape and the shape draws itself on the
-    view and contains the tet data."
+    view and aösp contains the data."
 
 I will meditate on that, and will surely understand it myself some
 day.  :-)
@@ -180,7 +188,7 @@ day.  :-)
 3. Some Notes About the Work Towards KChart 2.0
 -----------------------------------------------
 
-The most important class is KChartDocument.  This class will be
+The most important class is the  ChartShape.  This class will be
 responsible for holding the whole chart and perform the following
 duties:
 
