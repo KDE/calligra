@@ -62,7 +62,7 @@ void SubSupElement::layout( const AttributeManager* am )
         yOffset = m_postSuperscript->height() - m_baseElement->height()/2 + halfthinSpace;
         yOffset = qMax( yOffset, superscriptshift );
     }
-    double largestWidth;
+    double largestWidth = 0;
     if(m_postSubscript)
         largestWidth = m_postSubscript->width();
     if(m_postSuperscript) {
