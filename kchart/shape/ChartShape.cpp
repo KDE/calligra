@@ -85,9 +85,9 @@ public:
     OdfChartType        chartType;
     OdfChartSubtype     chartSubType;
 
-    KDChart::Chart      *chart;
+    KDChart::Chart            *chart;
     KDChart::AbstractDiagram  *diagram;
-    QAbstractItemModel  *chartData;
+    QStandardItemModel        *chartData;
 };
 
 
@@ -184,6 +184,27 @@ void ChartShape::setChartDefaults()
 
 void ChartShape::createDefaultData()
 {
+    // Fill cells with data if there is none.
+    d->chartData->setRowCount( 4 );
+    d->chartData->setColumnCount( 4 );
+
+    // Insert example data
+    for (uint row = 0; row < 4; row++) {
+        for (uint col = 0; col < 4; col++) {
+
+            d->chartData->setItem( row, col,
+                                   new QStandardItem( QString::number( row + col ) ) );
+            // Fill column label, but only on the first iteration.
+            if (row == 0) {
+                d->chartData->setHeaderData( col, Qt::Horizontal,
+                                             i18n("Column %1", col + 1) );
+            }
+        }
+
+        // Fill row label.
+        d->chartData->setHeaderData( row, Qt::Vertical,
+                                     i18n("Row %1", row + 1) );
+    }
 }
 
 
@@ -280,7 +301,7 @@ void ChartShape::setChartType( OdfChartType    newType,
 }
 
 
-void ChartShape::setModel( QAbstractItemModel* model )
+void ChartShape::setModel( QStandardItemModel* model )
 {
     kDebug() << "BEGIN";
     d->chartData = model;
@@ -320,7 +341,7 @@ void ChartShape::setModel( QAbstractItemModel* model )
     kDebug() <<" END";
 }
 
-QAbstractItemModel *ChartShape::model()
+QStandardItemModel *ChartShape::model()
 {
     return d->chartData;
 }
@@ -843,7 +864,7 @@ void ChartShape::saveOdfData( KoXmlWriter& bodyWriter,
         }
 #endif
         for ( int col = 0; col < cols; ++col ) {
-            //QVariant value( m_currentData.cellVal( row, col ) );
+            //QVariant value( d->chartData.cellVal( row, col ) );
             QModelIndex  index = d->chartData->index( row, col );
             QVariant     value = d->chartData->data( index );
 

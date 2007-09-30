@@ -182,18 +182,9 @@ void KChartPart::generateBarChartTemplate()
     int  col;
     int  row;
 
-    kDebug()<<"KChartPart::generateBarChartTemplate()";
-
     // Fill cells with data if there is none.
-    kDebug() <<"rowCount:" << m_currentData->rowCount();
     if ( m_currentData->rowCount() == 0 ) {
         //kDebug(35001) <<"Initialize with some data!!!";
-#if 0
-        m_currentData.expand( 4, 4 );
-        m_currentData.setUsedRows( 4 );
-        m_currentData.setUsedCols( 4 );
-#endif
-
 #if 0                           // Not yet (and move to the shape
         m_currentData->beginInsertRows( QModelIndex(), 0, 3 );
         for (row = 0; row < 4; row++) {
@@ -229,9 +220,6 @@ void KChartPart::generateBarChartTemplate()
     }
 
     setChartDefaults();
-
-    // FIXME: Should this go into setChartDefaults()?
-    //m_params->setDrawSolidExcessArrows(true);
 }
 
 

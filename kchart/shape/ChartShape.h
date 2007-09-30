@@ -32,7 +32,7 @@
 #define ChartShapeId "ChartShape"
 
 
-class QAbstractItemModel;
+class QStandardItemModel;
 
 
 //enum ChartType { NoType, Bar, Line, Pie, Ring, Polar };
@@ -54,8 +54,8 @@ public:
     KDChart::Chart* chart() const;
 
     /// reimplemented
-    virtual void setModel( QAbstractItemModel* model );
-    QAbstractItemModel *model();
+    virtual void setModel( QStandardItemModel* model );
+    QStandardItemModel *model();
     
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
