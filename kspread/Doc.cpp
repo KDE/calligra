@@ -688,8 +688,8 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     contentWriter->startElement( "office:automatic-styles" );
 
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
@@ -885,8 +885,8 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
     stylesWriter->startElement( "office:styles" );
-    Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleUser );
-    Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
+    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleUser );
+    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
