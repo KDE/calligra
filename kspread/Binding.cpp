@@ -66,7 +66,7 @@ bool Binding::isEmpty() const
     return d->model->region().isEmpty();
 }
 
-QAbstractItemModel* Binding::model() const
+QStandardItemModel* Binding::model() const
 {
     return d->model;
 }
@@ -120,7 +120,7 @@ bool Binding::operator<(const Binding& other) const
 
 
 BindingModel::BindingModel(const Region& region)
-    : QAbstractTableModel()
+    : QStandardItemModel()
     , m_region(region)
 {
 }
