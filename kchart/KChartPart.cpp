@@ -106,11 +106,6 @@ KChartPart::KChartPart( QWidget *parentWidget,
     // Init some members that need it.
 #if 1
     {
-	// FIXME: Make the default chart look like the default chart
-	//        in KChart 1.x
-        //m_type    = BarChartType;
-        //m_subtype = NormalChartSubtype;
-
         m_chart       = new KDChart::Chart();
         m_chart->coordinatePlane()->replaceDiagram(new KDChart::BarDiagram()); // FIXME
         m_currentData = new QStandardItemModel();

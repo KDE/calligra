@@ -62,7 +62,7 @@
 
 
 using namespace KChart;
-using namespace KDChart;
+//using namespace KDChart;
 
 
 static bool isPolar( OdfChartType type )
@@ -85,8 +85,8 @@ public:
     OdfChartType        chartType;
     OdfChartSubtype     chartSubType;
 
-    Chart               *chart;
-    AbstractDiagram     *diagram;
+    KDChart::Chart      *chart;
+    KDChart::AbstractDiagram  *diagram;
     QAbstractItemModel  *chartData;
 };
 
@@ -101,24 +101,23 @@ ChartShape::ChartShape()
     d->chartSubType = NormalChartSubtype;
 
     // Initialize a basic chart.
-    d->chart     = new Chart();
-    d->diagram   = new BarDiagram();
+    d->chart     = new KDChart::Chart();
+    d->diagram   = new KDChart::BarDiagram();
+    d->chart->coordinatePlane()->replaceDiagram(d->diagram);
     d->chartData = new QStandardItemModel();
     d->diagram->setModel( d->chartData );
-    d->chart->coordinatePlane()->replaceDiagram(d->diagram); // FIXME
-    d->chartType = BarChartType;
 
-    AbstractCartesianDiagram  *diagram = static_cast<AbstractCartesianDiagram*>(d->diagram);
-    CartesianAxis  *xAxis = new CartesianAxis( diagram );
-    CartesianAxis  *yAxis = new CartesianAxis( diagram );
-    xAxis->setPosition( CartesianAxis::Bottom );
-    yAxis->setPosition( CartesianAxis::Left );
-
+    // Add axes to the diagram
+    KDChart::AbstractCartesianDiagram  *diagram = static_cast<KDChart::AbstractCartesianDiagram*>(d->diagram);
+    KDChart::CartesianAxis  *xAxis = new KDChart::CartesianAxis( diagram );
+    KDChart::CartesianAxis  *yAxis = new KDChart::CartesianAxis( diagram );
+    xAxis->setPosition( KDChart::CartesianAxis::Bottom );
+    yAxis->setPosition( KDChart::CartesianAxis::Left );
     diagram->addAxis( xAxis );
     diagram->addAxis( yAxis );
 
-    //kDebug() << d->chart->coordinatePlane()->diagram()->metaObject()->className();
-
+    setChartDefaults();
+    createDefaultData();
 #if 0
     // diagram->coordinatePlane returns an abstract plane one.
     // if we want to specify the orientation we need to cast
@@ -173,18 +172,27 @@ ChartShape::~ChartShape()
     delete d;
 }
 
-Chart* ChartShape::chart() const
+KDChart::Chart* ChartShape::chart() const
 {
     return d->chart;
+}
+
+
+void ChartShape::setChartDefaults()
+{
+}
+
+void ChartShape::createDefaultData()
+{
 }
 
 
 void ChartShape::setChartType( OdfChartType    newType,
                                OdfChartSubtype newSubType )
 {
-    AbstractDiagram* new_diagram;
-    CartesianCoordinatePlane* cartPlane = 0;
-    PolarCoordinatePlane* polPlane = 0;
+    KDChart::AbstractDiagram           *new_diagram;
+    KDChart::CartesianCoordinatePlane  *cartPlane = 0;
+    KDChart::PolarCoordinatePlane      *polPlane  = 0;
 
     if (d->chartType == newType)
         return;
@@ -192,28 +200,28 @@ void ChartShape::setChartType( OdfChartType    newType,
     // FIXME: Take care of subtype too.
     switch (newType) {
     case BarChartType:
-        new_diagram = new BarDiagram( d->chart, cartPlane );
+        new_diagram = new KDChart::BarDiagram( d->chart, cartPlane );
         break;
     case LineChartType:
-        new_diagram = new LineDiagram( d->chart, cartPlane );
+        new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
         break;
     case AreaChartType:
-        new_diagram = new LineDiagram();
+        new_diagram = new KDChart::LineDiagram();
         //FIXME: is this the right thing to do? a type-cast?
-        ((LineDiagram*) new_diagram)->setType( LineDiagram::Stacked );
+        ((KDChart::LineDiagram*) new_diagram)->setType( KDChart::LineDiagram::Stacked );
         break;
     case CircleChartType:
-        new_diagram = new PieDiagram(d->chart, polPlane);
+        new_diagram = new KDChart::PieDiagram(d->chart, polPlane);
         break;
     case RingChartType:
-        new_diagram = new RingDiagram(d->chart, polPlane);
+        new_diagram = new KDChart::RingDiagram(d->chart, polPlane);
         break;
     case ScatterChartType:
 	// FIXME
 	return;
         break;
     case RadarChartType:
-//        new_diagram = new PolarDiagram(d->chart, polPlane);
+//        new_diagram = new KDChart::PolarDiagram(d->chart, polPlane);
         break;
     case StockChartType:
         return;
@@ -233,25 +241,23 @@ void ChartShape::setChartType( OdfChartType    newType,
     }
 
     if ( new_diagram != NULL ) {
-        if ( isPolar( d->chartType ) && isCartesian( newType ) )
-        {
-            cartPlane = new CartesianCoordinatePlane( d->chart );
+        if ( isPolar( d->chartType ) && isCartesian( newType ) ) {
+            cartPlane = new KDChart::CartesianCoordinatePlane( d->chart );
             d->chart->replaceCoordinatePlane( cartPlane );
         }
-        else if ( isCartesian( d->chartType ) && isPolar( newType ) )
-        {
-            polPlane = new PolarCoordinatePlane( d->chart );
+        else if ( isCartesian( d->chartType ) && isPolar( newType ) ) {
+            polPlane = new KDChart::PolarCoordinatePlane( d->chart );
             d->chart->replaceCoordinatePlane( polPlane );
         }
-        else if ( isCartesian( d->chartType ) && isCartesian( newType ) )
-        {
-            AbstractCartesianDiagram *old =
-                    qobject_cast<AbstractCartesianDiagram*>( d->chart->coordinatePlane()->diagram() );
-            Q_FOREACH( CartesianAxis* axis, old->axes() ) {
+        else if ( isCartesian( d->chartType ) && isCartesian( newType ) ) {
+            KDChart::AbstractCartesianDiagram *old =
+                    qobject_cast<KDChart::AbstractCartesianDiagram*>( d->chart->coordinatePlane()->diagram() );
+            Q_FOREACH( KDChart::CartesianAxis* axis, old->axes() ) {
                 old->takeAxis( axis );
-                qobject_cast<AbstractCartesianDiagram*>(new_diagram)->addAxis( axis );
+                qobject_cast<KDChart::AbstractCartesianDiagram*>(new_diagram)->addAxis( axis );
             }
         }
+
         //FIXME:No clue why this doesnt work but it makes a crash sometimes
 //         LegendList legends = d->chart->legends();
 //         Q_FOREACH(Legend* l, legends)
@@ -268,6 +274,7 @@ void ChartShape::setChartType( OdfChartType    newType,
         d->chart->update();
         repaint();
 
+        // Update local data
         d->chartType = newType;
     }
 }
@@ -301,14 +308,14 @@ void ChartShape::setModel( QAbstractItemModel* model )
     d->chart->setBackgroundAttributes( baChart );
 */
     // Set up the legend
-    Legend* m_legend;
-    m_legend = new Legend( d->diagram, d->chart );
-    m_legend->setPosition( Position::East );
-    m_legend->setAlignment( Qt::AlignRight );
-    m_legend->setShowLines( false );
-    m_legend->setTitleText( i18n( "Legend" ) );
-    m_legend->setOrientation( Qt::Horizontal );
-    d->chart->addLegend( m_legend );
+    KDChart::Legend* legend;
+    legend = new KDChart::Legend( d->diagram, d->chart );
+    legend->setPosition( KDChart::Position::East );
+    legend->setAlignment( Qt::AlignRight );
+    legend->setShowLines( false );
+    legend->setTitleText( i18n( "Legend" ) );
+    legend->setOrientation( Qt::Horizontal );
+    d->chart->addLegend( legend );
 
     kDebug() <<" END";
 }

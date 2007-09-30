@@ -79,12 +79,15 @@ public:
 		       OdfChartSubtype newSubType = NormalChartSubtype );
 
 
-private:
+ private:
+    void setChartDefaults();
+    void createDefaultData();
 
     //static bool  isCartesian( OdfChartType type );
     //static bool  isPolar( OdfChartType type );
     Q_DISABLE_COPY( ChartShape )
 
+ private:
     class Private;
     Private * const d;
 
