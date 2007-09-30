@@ -984,11 +984,13 @@ void KChartPart::saveConfig( KConfig *config )
 //              Save and Load OpenDocument file format
 
 
-bool KChartPart::loadOasis( const KoXmlDocument& doc,
-			    KoOasisStyles&      oasisStyles,
-			    const KoXmlDocument& /*settings*/,
-			    KoStore            *store )
+bool KChartPart::loadOasis( const KoXmlDocument& doc,         // content.xml
+			    KoOasisStyles&       oasisStyles, // Styles
+			    const KoXmlDocument& settings,
+			    KoStore             *store )      // pics, etc
 {
+    Q_UNUSED( settings );
+
     Q_UNUSED( doc );
     Q_UNUSED( oasisStyles );
     Q_UNUSED( store );
@@ -1227,17 +1229,12 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:chart" );
-    contentTmpWriter.startElement( "chart:chart" );
 
     // Write the chart itself.
     KoShapeSavingContext  shapeSavingContext( contentTmpWriter, 
                                               savingContext );
     m_chartShape->saveOdf( shapeSavingContext );
 
-    // Write the data
-    saveOdfData( contentTmpWriter, mainStyles );
-
-    contentTmpWriter.endElement(); // chart:chart
     contentTmpWriter.endElement(); // office:chart
     contentTmpWriter.endElement(); // office:body
 
@@ -1248,7 +1245,7 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     // Start of phase 2: write out the automatic styles
     contentWriter->startElement( "office:automatic-styles" );
 
-    // FIXME: Don't know how to do this yet.
+    // FIXME: Do we need any of this?
 #if 0  // This code is from kspread
     Q3ValueList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
     Q3ValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
@@ -1324,14 +1321,12 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 #endif    // End code from kspread
 
     // Actually write the automatic styles.
-    // FIXME: There is a bug here: nothing gets written.
-    //        Is mainStyles empty or is it just not saved?
     writeAutomaticStyles( *contentWriter, mainStyles );
 
     // End of phase 2: write automatic styles
     contentWriter->endElement(); // office:automatic-styles
 
-    // Start of phase 3: Add the contents to the file
+    // Phase 3: Add the contents to the file
     contentWriter->addCompleteElement( &contentTmpFile );
 
     contentWriter->endElement(); // root element
@@ -1400,129 +1395,6 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
-
-void KChartPart::saveOdfData( KoXmlWriter& bodyWriter,
-                              KoGenStyles& mainStyles ) const
-{
-    QAbstractItemModel  *chartData = m_chartShape->model();
-
-    const int cols = chartData->columnCount();
-    const int rows = chartData->rowCount();
-
-    bodyWriter.startElement( "table:table" );
-    bodyWriter.addAttribute( "table:name", "local-table" );
-
-    // Exactly one header column, always.
-    bodyWriter.startElement( "table:table-header-columns" );
-    bodyWriter.startElement( "table:table-column" );
-    bodyWriter.endElement(); // table:table-column
-    bodyWriter.endElement(); // table:table-header-columns
-
-    // Then "cols" columns
-    bodyWriter.startElement( "table:table-columns" );
-    bodyWriter.startElement( "table:table-column" );
-    bodyWriter.addAttribute( "table:number-columns-repeated", cols );
-    bodyWriter.endElement(); // table:table-column
-    bodyWriter.endElement(); // table:table-columns
-
-    // Exactly one header row, always.
-    bodyWriter.startElement( "table:table-header-rows" );
-    bodyWriter.startElement( "table:table-row" );
-
-    // The first column in header row is just the header column - no title needed
-    bodyWriter.startElement( "table:table-cell" );
-    bodyWriter.addAttribute( "office:value-type", "string" );
-    bodyWriter.startElement( "text:p" );
-    bodyWriter.endElement(); // text:p
-    bodyWriter.endElement(); // table:table-cell
-
-#if 0
-    // Save column labels in the first header row, for instance:
-    //          <table:table-cell office:value-type="string">
-    //            <text:p>Column 1 </text:p>
-    //          </table:table-cell>
-    QStringList::const_iterator colLabelIt = m_colLabels.begin();
-    for ( int col = 0; col < cols ; ++col ) {
-        if ( colLabelIt != m_colLabels.end() ) {
-            bodyWriter.startElement( "table:table-cell" );
-            bodyWriter.addAttribute( "office:value-type", "string" );
-            bodyWriter.startElement( "text:p" );
-            bodyWriter.addTextNode( *colLabelIt );
-            bodyWriter.endElement(); // text:p
-            bodyWriter.endElement(); // table:table-cell
-            ++colLabelIt;
-        }
-    }
-#endif
-    bodyWriter.endElement(); // table:table-row
-    bodyWriter.endElement(); // table:table-header-rows
-
-    bodyWriter.startElement( "table:table-rows" );
-    //QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
-    for ( int row = 0; row < rows ; ++row ) {
-        bodyWriter.startElement( "table:table-row" );
-#if 0
-        if ( rowLabelIt != m_rowLabels.end() ) {
-            // Save row labels, similar to column labels
-            bodyWriter.startElement( "table:table-cell" );
-            bodyWriter.addAttribute( "office:value-type", "string" );
-
-            bodyWriter.startElement( "text:p" );
-            bodyWriter.addTextNode( *rowLabelIt );
-            bodyWriter.endElement(); // text:p
-
-            bodyWriter.endElement(); // table:table-cell
-            ++rowLabelIt;
-        }
-#endif
-        for ( int col = 0; col < cols; ++col ) {
-            //QVariant value( m_currentData.cellVal( row, col ) );
-            QModelIndex  index = chartData->index( row, col );
-            QVariant     value = chartData->data( index );
-
-            QString  valType;
-            QString  valStr;
-
-            switch ( value.type() ) {
-            case QVariant::Invalid:
-		break;
-            case QVariant::String:
-		valType = "string";
-		valStr  = value.toString();
-		break;
-            case QVariant::Double:
-		valType = "float";
-		valStr  = QString::number( value.toDouble(), 'g', DBL_DIG );
-		break;
-            case QVariant::DateTime:
-		valType = "date";
-		valStr  = ""; /* like in saveXML, but why? */
-		break;
-            default: {
-                kDebug(35001) <<"ERROR: cell" << row <<"," << col
-                               << " has unknown type." << endl;
-                }
-            }
-
-	    // Add the value type and the string to the XML tree.
-            bodyWriter.startElement( "table:table-cell" );
-            if ( !valType.isEmpty() ) {
-                bodyWriter.addAttribute( "office:value-type", valType );
-                if ( value.type() == QVariant::Double )
-                    bodyWriter.addAttribute( "office:value", valStr );
-
-                bodyWriter.startElement( "text:p" );
-                bodyWriter.addTextNode( valStr );
-                bodyWriter.endElement(); // text:p
-            }
-	    bodyWriter.endElement(); // table:table-cell
-        }
-        bodyWriter.endElement(); // table:table-row
-    }
-
-    bodyWriter.endElement(); // table:table-rows
-    bodyWriter.endElement(); // table:table
-}
 
 void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter, 
                                        KoGenStyles& mainStyles ) const

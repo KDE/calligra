@@ -67,8 +67,10 @@ public:
     OdfChartType chartType() const;
 
  private:
-    virtual void saveOdfPlotArea( KoXmlWriter &xmlWriter,
-                                  KoGenStyles &mainStyles) const;
+    void saveOdfPlotArea( KoXmlWriter &xmlWriter,
+                          KoGenStyles &mainStyles) const;
+    void saveOdfData( KoXmlWriter& bodyWriter,
+                      KoGenStyles& mainStyles ) const;
 
 
  public Q_SLOTS:

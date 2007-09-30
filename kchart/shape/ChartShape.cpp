@@ -22,6 +22,9 @@
 // Local
 #include "ChartShape.h"
 
+// Posix
+#include <float.h> // For basic data types characteristics.
+
 // Qt
 //#include <QAbstractItemModel>
 #include <QStandardItemModel>
@@ -228,8 +231,8 @@ void ChartShape::setChartType( OdfChartType    newType,
         return;
         break;
     }
-    if ( new_diagram != NULL )
-    {
+
+    if ( new_diagram != NULL ) {
         if ( isPolar( d->chartType ) && isCartesian( newType ) )
         {
             cartPlane = new CartesianCoordinatePlane( d->chart );
@@ -387,20 +390,25 @@ bool ChartShape::loadOdf( const KoXmlElement &element,
 
 void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 {
-    KoXmlWriter&  xmlWriter = context.xmlWriter();
+    KoXmlWriter&  bodyWriter = context.xmlWriter();
     KoGenStyles&  mainStyles( context.mainStyles() );
+
+    kError(32001) << "----------------------------------------------------------------";
+
+    bodyWriter.startElement( "chart:chart" );
 
     // 1. Write the chart type.
     bool knownType = false;
     for ( unsigned int i = 0 ; i < numOdfChartTypes ; ++i ) {
         if ( d->chartType == odfChartTypes[i].chartType ) {
-            xmlWriter.addAttribute( "chart:class", odfChartTypes[i].odfName );
+            bodyWriter.addAttribute( "chart:class", odfChartTypes[i].odfName );
             knownType = true;
             break;
         }
     }
     if ( !knownType ) {
-        kError(32001) << "Unknown chart type in ChartShape::saveOdf!" << endl;
+        kError(32001) << "Unknown chart type in ChartShape::saveOdf:"
+                      << (int) d->chartType << endl;
     }
 
     // 2. Write the title.
@@ -416,11 +424,14 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     // FIXME
 
     // 6. Write the plot area (this is where the real action is!).
-    xmlWriter.startElement( "chart:plot-area" );
-    saveOdfPlotArea( xmlWriter, mainStyles );
-    xmlWriter.endElement();
+    bodyWriter.startElement( "chart:plot-area" );
+    saveOdfPlotArea( bodyWriter, mainStyles );
+    bodyWriter.endElement();
 
-    return;
+    // Save the data
+    saveOdfData( bodyWriter, mainStyles );
+
+    bodyWriter.endElement(); // chart:chart
 }
 
 
@@ -573,8 +584,6 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles )
     bodyWriter->startElement( "chart:plot-area" );
     saveOasisPlotArea( bodyWriter, mainStyles );
     bodyWriter->endElement();
-
-    // TODO...
 }
 #endif
 
@@ -752,6 +761,128 @@ QString KChartParams::saveOasisFont( KoGenStyles& mainStyles, const QFont& font,
     return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
 }
 #endif
+
+
+void ChartShape::saveOdfData( KoXmlWriter& bodyWriter,
+                              KoGenStyles& mainStyles ) const
+{
+    const int cols = d->chartData->columnCount();
+    const int rows = d->chartData->rowCount();
+
+    bodyWriter.startElement( "table:table" );
+    bodyWriter.addAttribute( "table:name", "local-table" );
+
+    // Exactly one header column, always.
+    bodyWriter.startElement( "table:table-header-columns" );
+    bodyWriter.startElement( "table:table-column" );
+    bodyWriter.endElement(); // table:table-column
+    bodyWriter.endElement(); // table:table-header-columns
+
+    // Then "cols" columns
+    bodyWriter.startElement( "table:table-columns" );
+    bodyWriter.startElement( "table:table-column" );
+    bodyWriter.addAttribute( "table:number-columns-repeated", cols );
+    bodyWriter.endElement(); // table:table-column
+    bodyWriter.endElement(); // table:table-columns
+
+    // Exactly one header row, always.
+    bodyWriter.startElement( "table:table-header-rows" );
+    bodyWriter.startElement( "table:table-row" );
+
+    // The first column in header row is just the header column - no title needed
+    bodyWriter.startElement( "table:table-cell" );
+    bodyWriter.addAttribute( "office:value-type", "string" );
+    bodyWriter.startElement( "text:p" );
+    bodyWriter.endElement(); // text:p
+    bodyWriter.endElement(); // table:table-cell
+
+#if 0
+    // Save column labels in the first header row, for instance:
+    //          <table:table-cell office:value-type="string">
+    //            <text:p>Column 1 </text:p>
+    //          </table:table-cell>
+    QStringList::const_iterator colLabelIt = m_colLabels.begin();
+    for ( int col = 0; col < cols ; ++col ) {
+        if ( colLabelIt != m_colLabels.end() ) {
+            bodyWriter.startElement( "table:table-cell" );
+            bodyWriter.addAttribute( "office:value-type", "string" );
+            bodyWriter.startElement( "text:p" );
+            bodyWriter.addTextNode( *colLabelIt );
+            bodyWriter.endElement(); // text:p
+            bodyWriter.endElement(); // table:table-cell
+            ++colLabelIt;
+        }
+    }
+#endif
+    bodyWriter.endElement(); // table:table-row
+    bodyWriter.endElement(); // table:table-header-rows
+
+    bodyWriter.startElement( "table:table-rows" );
+    //QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
+    for ( int row = 0; row < rows ; ++row ) {
+        bodyWriter.startElement( "table:table-row" );
+#if 0
+        if ( rowLabelIt != m_rowLabels.end() ) {
+            // Save row labels, similar to column labels
+            bodyWriter.startElement( "table:table-cell" );
+            bodyWriter.addAttribute( "office:value-type", "string" );
+
+            bodyWriter.startElement( "text:p" );
+            bodyWriter.addTextNode( *rowLabelIt );
+            bodyWriter.endElement(); // text:p
+
+            bodyWriter.endElement(); // table:table-cell
+            ++rowLabelIt;
+        }
+#endif
+        for ( int col = 0; col < cols; ++col ) {
+            //QVariant value( m_currentData.cellVal( row, col ) );
+            QModelIndex  index = d->chartData->index( row, col );
+            QVariant     value = d->chartData->data( index );
+
+            QString  valType;
+            QString  valStr;
+
+            switch ( value.type() ) {
+            case QVariant::Invalid:
+		break;
+            case QVariant::String:
+		valType = "string";
+		valStr  = value.toString();
+		break;
+            case QVariant::Double:
+		valType = "float";
+		valStr  = QString::number( value.toDouble(), 'g', DBL_DIG );
+		break;
+            case QVariant::DateTime:
+		valType = "date";
+		valStr  = ""; /* like in saveXML, but why? */
+		break;
+            default: {
+                kDebug(35001) <<"ERROR: cell" << row <<"," << col
+                               << " has unknown type." << endl;
+                }
+            }
+
+	    // Add the value type and the string to the XML tree.
+            bodyWriter.startElement( "table:table-cell" );
+            if ( !valType.isEmpty() ) {
+                bodyWriter.addAttribute( "office:value-type", valType );
+                if ( value.type() == QVariant::Double )
+                    bodyWriter.addAttribute( "office:value", valStr );
+
+                bodyWriter.startElement( "text:p" );
+                bodyWriter.addTextNode( valStr );
+                bodyWriter.endElement(); // text:p
+            }
+	    bodyWriter.endElement(); // table:table-cell
+        }
+        bodyWriter.endElement(); // table:table-row
+    }
+
+    bodyWriter.endElement(); // table:table-rows
+    bodyWriter.endElement(); // table:table
+}
 
 
 // ================================================================
