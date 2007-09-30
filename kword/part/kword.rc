@@ -168,6 +168,7 @@
   <Menu name="SpellCheck"><text>Spellcheck</text>
 	  <Action name="tool_auto_spellcheck"/>
 	  <Action name="extra_spellcheck"/>
+	  <Action name="tool_configure_spellcheck"/>
   </Menu>
   <Menu name="AutoFormat"><text>Autocorrection</text>
 	<Action name="enable_autocorrection"/>
