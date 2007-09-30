@@ -144,9 +144,9 @@ KarbonPathFlattenCommand::KarbonPathFlattenCommand( KoPathShape * path, double f
     {
         QList<PointData> subpathData;
 
-        uint pointCount = d->path->pointCountSubpath( subpathIndex );
+        int pointCount = d->path->pointCountSubpath( subpathIndex );
         // iterate over all the points/segments
-        for( uint pointIndex = 0; pointIndex < pointCount; ++pointIndex )
+        for( int pointIndex = 0; pointIndex < pointCount; ++pointIndex )
         {
             KoPathPoint * curr = d->path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );
 
@@ -221,9 +221,9 @@ void KarbonPathFlattenCommand::redo()
                 // adjust the point index offset
                 insertedPointOffset += achievedSplitCount;
             }
-            uint newPointCount = d->path->pointCountSubpath( subpathIndex );
+            int newPointCount = d->path->pointCountSubpath( subpathIndex );
             // now remove all the control points from the subpath
-            for( uint pointIndex = 0; pointIndex < newPointCount; ++pointIndex )
+            for (int pointIndex = 0; pointIndex < newPointCount; ++pointIndex )
             {
                 KoPathPoint * point = d->path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );
                 point->unsetProperty( KoPathPoint::HasControlPoint1 );
