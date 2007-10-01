@@ -26,9 +26,8 @@ class QPainter;
 class QButtonGroup;
 class QTableWidgetItem;
 class KoPatternChooser;
-class VPattern;
 class KarbonPatternEditStrategy;
-
+class KarbonPatternItem;
 
 class KarbonPatternTool : public KoTool
 {
@@ -63,7 +62,7 @@ private:
 
     KoPatternChooser * m_patternChooser;
     QButtonGroup * m_buttonGroup;
-    VPattern * m_pattern;
+    KarbonPatternItem * m_currentPattern;
 
     QList<KarbonPatternEditStrategy*> m_patterns;  ///< the list of editing strategies, one for each shape
     KarbonPatternEditStrategy * m_currentStrategy; ///< the current editing strategy

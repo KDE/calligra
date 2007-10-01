@@ -19,10 +19,10 @@
 
 #include "KarbonPatternTool.h"
 #include "KarbonPatternEditStrategy.h"
+#include "KarbonPatternItem.h"
 
 #include <karbon_factory.h>
 #include <karbon_resourceserver.h>
-#include <core/vpattern.h>
 
 #include <KoResourceChooser.h>
 #include <KoCanvasBase.h>
@@ -32,6 +32,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
+#include <KoPattern.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -45,12 +46,9 @@
 #include <QFileInfo>
 #include <QUndoCommand>
 
-#include <Q3PtrList>
-
-
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
 : KoTool( canvas ), m_patternChooser( 0 ), m_buttonGroup( 0 )
-, m_pattern( 0 ), m_currentStrategy( 0 )
+, m_currentPattern( 0 ), m_currentStrategy( 0 )
 {
 }
 
@@ -223,7 +221,12 @@ QWidget * KarbonPatternTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QGridLayout* layout = new QGridLayout( optionWidget );
 
-    m_patternChooser = new KoPatternChooser( KarbonFactory::rServer()->patterns(), optionWidget );
+    QList<KoPattern*> patterns = KarbonFactory::rServer()->patterns();
+    QList<QTableWidgetItem*> items;
+    foreach( KoPattern* p, patterns )
+        items.append( static_cast<QTableWidgetItem*>( new KarbonPatternItem( p ) ) );
+
+    m_patternChooser = new KoPatternChooser( items, optionWidget );
     //m_patternChooser->setFixedSize( 180, 120 );
     layout->addWidget( m_patternChooser, 0, 0, 1, 3 );
 
@@ -253,7 +256,7 @@ QWidget * KarbonPatternTool::createOptionWidget()
     connect( m_buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
     connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem* ) ), this, SLOT( patternSelected( QTableWidgetItem* ) ) );
 
-    m_pattern = (VPattern*)KarbonFactory::rServer()->patterns().first();
+    m_currentPattern = static_cast<KarbonPatternItem*>( items.first() );
 
     return optionWidget;
 }
@@ -268,16 +271,16 @@ void KarbonPatternTool::slotButtonClicked( int button )
 
 void KarbonPatternTool::patternSelected( QTableWidgetItem* item )
 {
-    m_pattern = dynamic_cast<VPattern*>( item );
-    if( ! m_pattern || ! m_pattern->valid() )
+    m_currentPattern = dynamic_cast<KarbonPatternItem*>( item );
+    if( ! m_currentPattern || ! m_currentPattern->pattern()->valid() )
         return;
 
     QAbstractButton * removeButton = m_buttonGroup->button( Button_Remove );
     if( removeButton )
-        removeButton->setEnabled( QFileInfo( m_pattern->filename() ).isWritable() );
+        removeButton->setEnabled( QFileInfo( m_currentPattern->pattern()->filename() ).isWritable() );
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
-    QBrush newBrush( m_pattern->pixmap() );
+    QBrush newBrush( m_currentPattern->pattern()->img() );
     m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
     initialize();
 }
@@ -285,16 +288,18 @@ void KarbonPatternTool::patternSelected( QTableWidgetItem* item )
 void KarbonPatternTool::importPattern()
 {
     QString filter( "*.jpg *.gif *.png *.tif *.xpm *.bmp" );
-    VPattern* pattern = KarbonFactory::rServer()->addPattern(
+    KoPattern* pattern = KarbonFactory::rServer()->addPattern(
         KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Pattern to Add" ) ) );
     if( pattern )
-        m_patternChooser->addPattern( pattern );
+        m_patternChooser->addPattern( new KarbonPatternItem( pattern ) );
 }
 
 void KarbonPatternTool::deletePattern()
 {
-    KarbonFactory::rServer()->removePattern( m_pattern );
-    m_pattern = static_cast<VPattern*>( m_patternChooser->currentPattern() );
+    KoPattern * pattern = m_currentPattern->pattern();
+    m_patternChooser->removePattern( m_currentPattern );
+    KarbonFactory::rServer()->removePattern( pattern );
+    m_currentPattern = static_cast<KarbonPatternItem*>( m_patternChooser->currentPattern() );
 }
 
 #include "KarbonPatternTool.moc"

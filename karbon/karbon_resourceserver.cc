@@ -57,7 +57,6 @@
 #include "vgroup.h"
 #include "vobject.h"
 #include "vtext.h"
-#include "vqpainter.h"
 #include "vtransformcmd.h"
 #include "shapes/vellipse.h"
 #include "shapes/vsinus.h"
@@ -65,6 +64,8 @@
 #include "shapes/vstar.h"
 #include "shapes/vpolyline.h"
 #include "shapes/vpolygon.h"
+
+#include <KoPattern.h>
 
 #include <math.h>
 
@@ -74,7 +75,6 @@ KarbonResourceServer::KarbonResourceServer()
 
 	// PATTERNS
 	kDebug(38000) <<"Loading patterns:";
-	m_patterns.setAutoDelete( true );
 
 	// image formats
 	QStringList formats;
@@ -167,86 +167,98 @@ KarbonResourceServer::KarbonResourceServer()
 
 KarbonResourceServer::~KarbonResourceServer()
 {
-	m_patterns.clear();
+    qDeleteAll( m_patterns );
 	m_gradients->clear();
 	delete m_gradients;
 	m_cliparts->clear();
 	delete m_cliparts;
 } // KarbonResourceServer::~KarbonResourceServer
 
-const VPattern*
-KarbonResourceServer::loadPattern( const QString& filename )
+int KarbonResourceServer::patternCount() const
 {
-	VPattern* pattern = new VPattern( filename );
-
-	if( pattern->valid() )
-		m_patterns.append( pattern );
-	else
-	{
-		delete pattern;
-		pattern = 0L;
-	}
-
-	return pattern;
+    return m_patterns.count();
 }
 
-VPattern*
-KarbonResourceServer::addPattern( const QString& tilename )
+QList<KoPattern*> KarbonResourceServer::patterns()
 {
-	int i = 1;
-	QFileInfo fi;
-	fi.setFile( tilename );
+    return m_patterns;
+}
 
-	if( fi.exists() == false )
-		return 0L;
+const KoPattern * KarbonResourceServer::loadPattern( const QString& filename )
+{
+    KoPattern * pattern = new KoPattern( filename );
 
-	QString name = fi.baseName();
+    if( pattern->load() )
+        m_patterns.append( pattern );
+    else
+    {
+        delete pattern;
+        pattern = 0L;
+    }
 
-	QString ext = '.' + fi.suffix();
+    return pattern;
+}
 
-	QString filename = KarbonFactory::componentData().dirs()->saveLocation(
-						   "kis_pattern" ) + name + ext;
+KoPattern * KarbonResourceServer::addPattern( const QString& tilename )
+{
+    int i = 1;
+    QFileInfo fi;
+    fi.setFile( tilename );
 
-	i = 1;
+    if( fi.exists() == false )
+        return 0L;
 
-	fi.setFile( filename );
+    QString name = fi.baseName();
 
-	while( fi.exists() == true )
-	{
-		filename = KarbonFactory::componentData().dirs()->saveLocation("kis_pattern" ) + name + i + ext;
-		fi.setFile( filename );
-		kDebug(38000) << fi.fileName();
-	}
+    QString ext = '.' + fi.suffix();
 
-	char buffer[ 1024 ];
-	QFile in( tilename );
-	in.open( QIODevice::ReadOnly );
-	QFile out( filename );
-	out.open( QIODevice::WriteOnly );
+    QString filename = KarbonFactory::componentData().dirs()->saveLocation(
+                        "kis_pattern" ) + name + ext;
 
-	while( !in.atEnd() )
-		out.write( buffer, in.read( buffer, 1024 ) );
+    i = 1;
 
-	out.close();
-	in.close();
+    fi.setFile( filename );
 
-	const VPattern* pattern = loadPattern( filename );
+    while( fi.exists() == true )
+    {
+        filename = KarbonFactory::componentData().dirs()->saveLocation("kis_pattern" ) + name + i + ext;
+        fi.setFile( filename );
+        kDebug(38000) << fi.fileName();
+    }
 
-	if( pattern )
-	{
-		return static_cast<VPattern*>( m_patterns.last() );
-	}
+    char buffer[ 1024 ];
+    QFile in( tilename );
+    in.open( QIODevice::ReadOnly );
+    QFile out( filename );
+    out.open( QIODevice::WriteOnly );
 
-	return 0;
+    while( !in.atEnd() )
+        out.write( buffer, in.read( buffer, 1024 ) );
+
+    out.close();
+    in.close();
+
+    const KoPattern* pattern = loadPattern( filename );
+
+    if( pattern )
+        return m_patterns.last();
+
+    return 0;
 } // KarbonResourceServer::addPattern
 
-void
-KarbonResourceServer::removePattern( VPattern* pattern )
+void KarbonResourceServer::removePattern( KoPattern* pattern )
 {
-	QFile file( pattern->filename() );
+    int index = m_patterns.indexOf( pattern );
+    if( index < 0 )
+        return;
 
-	if( file.remove() )
-		m_patterns.remove( pattern );
+    QFile file( pattern->filename() );
+
+    if( file.remove() )
+    {
+        m_patterns.removeAt( index );
+        delete pattern;
+    }
 } // KarbonResourceServer::removePattern
 
 VGradientListItem*
@@ -542,6 +554,7 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 	m_clipart->setState( VObject::normal );
 
 	m_pixmap = QPixmap( 64, 64 );
+    /*
 	VQPainter p( &m_pixmap, 64, 64 );
 	QMatrix mat( 64., 0, 0, 64., 0, 0 );
 
@@ -568,7 +581,7 @@ VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double
 	trafo.visit( *m_clipart );
 
 	p2.end();
-
+    */
 	m_delete = QFileInfo( filename ).isWritable();
 }
 

@@ -5,7 +5,7 @@
 
    Copyright (c) 1999 Matthias Elter <elter@kde.org>
    Copyright (C) 2002-2004 Rob Buis <buis@kde.org>
-   Copyright (C) 2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2002 Benoï¿½t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2005-2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
@@ -41,15 +41,15 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-//#include "vgradient.h"
-#include "vpattern.h"
 #include <karbon_export.h>
+
+#include <QtGui/QTableWidgetItem>
 
 class VGradient;
 class VGradientListItem;
 class VClipartIconItem;
 class VObject;
-
+class KoPattern;
 
 class KARBONCOMMON_EXPORT KarbonResourceServer
 {
@@ -58,18 +58,17 @@ public:
 	KarbonResourceServer();
 	virtual ~KarbonResourceServer();
 
-	int patternCount()
-	{
-		return m_patterns.count();
-	}
+    /// Returns number of loaded patterns
+    int patternCount() const;
 
-	Q3PtrList<QTableWidgetItem> patterns()
-	{
-		return m_patterns;
-	}
+    /// Returns list of patterns.
+    QList<KoPattern*> patterns();
 
-	VPattern* addPattern( const QString& tilename );
-	void removePattern( VPattern* pattern );
+    /// Adds new pattern from given file
+    KoPattern * addPattern( const QString& tilename );
+
+    /// Removes given pattern
+    void removePattern( KoPattern * pattern );
 
 	int gradientCount()
 	{
@@ -100,7 +99,8 @@ public:
 	QPixmap *cachePixmap( const QString &key, int group_or_size );
 
 protected:
-	const VPattern* loadPattern( const QString& filename );
+    /// Loads pattern from given file name
+    const KoPattern* loadPattern( const QString& filename );
 
 	void loadGradient( const QString& filename );
 	void saveGradient( VGradient* gradient, const QString& filename );
@@ -109,7 +109,7 @@ protected:
 	void saveClipart( VObject* object, double width, double height, const QString& filename );
 
 private:
-	Q3PtrList<QTableWidgetItem> m_patterns;
+    QList<KoPattern*> m_patterns; ///< the loaded patterns
 	Q3PtrList<VGradientListItem>* m_gradients;
 	Q3PtrList<VClipartIconItem>* m_cliparts;
 	Q3Dict<QPixmap> m_pixmaps;
@@ -120,7 +120,7 @@ class VClipartIconItem : public QTableWidgetItem
 public:
 	VClipartIconItem( const VObject* clipart, double width, double height, const QString & filename );
 	VClipartIconItem( const VClipartIconItem& item );
-	~VClipartIconItem();
+	virtual ~VClipartIconItem();
 
 	virtual QPixmap& thumbPixmap() const
 	{
