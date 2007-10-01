@@ -60,15 +60,11 @@
 #include "KarbonLayerDocker.h"
 #include "KarbonStylePreviewDocker.h"
 
-// Statusbar
-#include "vsmallpreview.h"
-
 // The rest.
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "vglobal.h"
 #include "vselection.h"
-#include "vpainterfactory.h"
 #include "KarbonCanvas.h"
 #include "karbon_drag.h"
 
@@ -201,9 +197,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
              this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
-    m_smallPreview = new VSmallPreview( this );
-    addStatusBarItem( m_smallPreview );
-
     // layout:
     QGridLayout *layout = new QGridLayout();
     layout->setMargin(0);
@@ -250,9 +243,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     updateRuler();
 
-    // set up factory
-	m_painterFactory = new VPainterFactory;
-
 	if( shell() )
 	{
 		KoToolManager::instance()->addController( m_canvasController );
@@ -295,14 +285,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
 KarbonView::~KarbonView()
 {
-	debugView("KarbonView::~KarbonView()");
+    debugView("KarbonView::~KarbonView()");
 
-	// widgets:
-	delete m_smallPreview;
-	delete m_status;
-	delete m_cursorCoords;
-
-	delete m_painterFactory;
+    // widgets:
+    delete m_status;
+    delete m_cursorCoords;
 
     KoToolManager::instance()->removeCanvasController( m_canvasController );
 }
@@ -1332,7 +1319,6 @@ KarbonView::selectionChanged()
             if ( shell() ) {
                 //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
                     m_stylePreview->updateStyle( shape->border(), shape->background() );
-                    //m_smallPreview->update( *obj->stroke(), *obj->fill() );
                 //}
             }
         }
@@ -1341,7 +1327,6 @@ KarbonView::selectionChanged()
             if ( shell() ) {
                 //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
                     m_stylePreview->updateStyle( 0, QBrush( Qt::NoBrush ) );
-                    //m_smallPreview->update( *obj->stroke(), *obj->fill() );
                 //}
             }
         }

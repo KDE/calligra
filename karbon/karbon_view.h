@@ -67,7 +67,6 @@ class KarbonTransformDocker;
 class KarbonLayerDocker;
 
 class VPainterFactory;
-class VSmallPreview;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
@@ -237,7 +236,6 @@ private:
 	//Status Bar
 	QLabel				*m_status;       // Ordinary status
 	QLabel				*m_cursorCoords; // Cursor coordinates
-	VSmallPreview		*m_smallPreview; // Stroke and Fill
 
     KoZoomController * m_zoomController;
 };
