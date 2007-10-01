@@ -51,7 +51,7 @@ class KEXIEXTWIDGETS_EXPORT PixmapCollection : public QObject
 		~PixmapCollection() {;}
 
 		QString addPixmapPath(const KUrl &url);
-		QString addPixmapName(const QString &name, int size = K3Icon::SizeMedium);
+		QString addPixmapName(const QString &name, int size = KIconLoader::SizeMedium);
 		void removePixmap(const QString &name);
 
 		bool   contains(const QString &name);

@@ -73,7 +73,7 @@ ConnectionDialog::ConnectionDialog(QWidget *parent)
 
 	m_pixmapLabel = new QLabel(details);
 	detailsLyr->addWidget(m_pixmapLabel);
-	m_pixmapLabel->setFixedWidth( int(IconSize(K3Icon::Desktop) * 1.5) );
+	m_pixmapLabel->setFixedWidth( int(IconSize(KIconLoader::Desktop) * 1.5) );
 	m_pixmapLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
 	m_textLabel = new QLabel(details);

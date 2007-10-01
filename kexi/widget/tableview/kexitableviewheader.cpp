@@ -157,7 +157,7 @@ bool KexiTableViewHeader::eventFilter(QObject * watched, QEvent * e)
 					+ style()->pixelMetric( QStyle::PM_HeaderMargin );
 				QIcon *iset = iconSet( section );
 				if (iset)
-					minWidth += (2+iset->pixmap( IconSize(K3Icon::Small) ).width()); //taken from QHeader::sectionSizeHint()
+					minWidth += (2+iset->pixmap( IconSize(KIconLoader::Small) ).width()); //taken from QHeader::sectionSizeHint()
 				if (minWidth > sectionSize( section ))
 					tip = label( section );
 			}

@@ -325,7 +325,7 @@ QSize KexiRelationViewTable::sizeHint() const
 //		<< ", " << fm.width(schema()->name()+"  ") << endl; 
 
 	int maxWidth = -1;
-	const int iconWidth = IconSize(K3Icon::Small) + fm.width("i")+20;
+	const int iconWidth = IconSize(KIconLoader::Small) + fm.width("i")+20;
 	for (Q3ListViewItem *item = firstChild(); item; item = item->nextSibling())
 		maxWidth = qMax(maxWidth, iconWidth + fm.width(item->text(0)));
 

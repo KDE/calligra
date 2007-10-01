@@ -314,7 +314,7 @@ QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& pa
 			palette.color(QPalette::Active, QPalette::ButtonText) ) );
 }
 
-QPixmap KexiUtils::emptyIcon(K3Icon::Group iconGroup)
+QPixmap KexiUtils::emptyIcon(KIconLoader::Group iconGroup)
 {
 	QPixmap noIcon( IconSize( iconGroup ), IconSize( iconGroup ) );
 	QBitmap bmpNoIcon(noIcon.size());

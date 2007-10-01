@@ -42,13 +42,13 @@ KFConfig::KFConfig( KFormulaPartView* parent )
     KVBox* page1 = new KVBox();
     p1 = addPage( page1, i18n( "Formula" ) );
     p1->setHeader(  i18n( "Formula Settings" ) );
-    p1->setIcon( KIcon(BarIcon( "kformula", K3Icon::SizeMedium )));
+    p1->setIcon( KIcon(BarIcon( "kformula", KIconLoader::SizeMedium )));
     _page = new KFormula::ConfigurePage( parent->document()->getDocument(), this,
                                          KFormulaFactory::global()->config(),
                                          page1 );
     addpage( p1 );
 //     QVBox* page2 = addVBoxPage( i18n( "Math Fonts" ), i18n( "Math Fonts Settings" ),
-//                                BarIcon( "kformula", K3Icon::SizeMedium ) );
+//                                BarIcon( "kformula", KIconLoader::SizeMedium ) );
 //     _mathFontPage = new KFormula::MathFontsConfigurePage( parent->document()->getDocument(), this,
 //                                          KFormulaFactory::global()->config(),
 //                                          page2 );

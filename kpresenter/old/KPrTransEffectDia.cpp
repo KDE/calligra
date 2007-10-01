@@ -299,13 +299,13 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
              this, SLOT( slotSoundFileChanged( const QString& ) ) );
 
     buttonTestPlaySoundEffect = new QPushButton( soundgrp );
-    buttonTestPlaySoundEffect->setPixmap( BarIcon("arrow-right", K3Icon::SizeSmall) );
+    buttonTestPlaySoundEffect->setPixmap( BarIcon("arrow-right", KIconLoader::SizeSmall) );
     buttonTestPlaySoundEffect->setToolTip( i18n("Play") );
 
     connect( buttonTestPlaySoundEffect, SIGNAL( clicked() ), this, SLOT( playSound() ) );
 
     buttonTestStopSoundEffect = new QPushButton( soundgrp );
-    buttonTestStopSoundEffect->setPixmap( BarIcon("media-playback-stop", K3Icon::SizeSmall) );
+    buttonTestStopSoundEffect->setPixmap( BarIcon("media-playback-stop", KIconLoader::SizeSmall) );
     buttonTestStopSoundEffect->setToolTip( i18n("Stop") );
 
     connect( buttonTestStopSoundEffect, SIGNAL( clicked() ), this, SLOT( stopSound() ) );

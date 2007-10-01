@@ -3511,7 +3511,7 @@ tristate KexiMainWindow::getNewObjectInfo(
 	d->nameDialog->widget()->setCaptionText(partItem->caption());
 	d->nameDialog->widget()->setNameText(partItem->name());
 	d->nameDialog->setCaption(i18n("Save Object As"));
-	d->nameDialog->setDialogIcon( DesktopIcon( info->itemIcon(), K3Icon::SizeMedium ) );
+	d->nameDialog->setDialogIcon( DesktopIcon( info->itemIcon(), KIconLoader::SizeMedium ) );
 	allowOverwriting = false;
 	bool found;
 	do {

@@ -71,32 +71,32 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
   connect(this, SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
   KVBox *page2 = new KVBox();
   p2 = addPage(page2, i18n("Locale Settings"));
-  p2->setIcon( KIcon( BarIcon("go-home",K3Icon::SizeMedium) ) );
+  p2->setIcon( KIcon( BarIcon("go-home",KIconLoader::SizeMedium) ) );
  _localePage=new parameterLocale(parent,page2 );
 
   KVBox *page3 = new KVBox();
   p3 = addPage(page3, i18n("Interface"));
-  p3->setIcon( KIcon( BarIcon("signature",K3Icon::SizeMedium) ) );
+  p3->setIcon( KIcon( BarIcon("signature",KIconLoader::SizeMedium) ) );
   _configure = new  configure(parent,page3 );
 
   KVBox *page4 = new KVBox();
   p4 = addPage(page4, i18n("Misc"));
-  p4->setIcon( KIcon( BarIcon("edit",K3Icon::SizeMedium) ) );
+  p4->setIcon( KIcon( BarIcon("edit",KIconLoader::SizeMedium) ) );
   _miscParameter = new  miscParameters(parent,page4 );
 
   KVBox *page5 = new KVBox();
   p5 = addPage(page5, i18n("Color"));
-  p5->setIcon( KIcon( BarIcon("color-fill",K3Icon::SizeMedium) ) );
+  p5->setIcon( KIcon( BarIcon("color-fill",KIconLoader::SizeMedium) ) );
   _colorParameter=new colorParameters(parent,page5 );
 
   KVBox *page6 = new KVBox();
   p6 = addPage(page6, i18n("Page Layout"));
-  p6->setIcon( KIcon( BarIcon("datashow",K3Icon::SizeMedium) ) );
+  p6->setIcon( KIcon( BarIcon("datashow",KIconLoader::SizeMedium) ) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
   KVBox *page7 = new KVBox();
   p7 = addPage(page7,  i18n("Spelling") );
-  p7->setIcon( KIcon( BarIcon("tools-check-spelling",K3Icon::SizeMedium) ) );
+  p7->setIcon( KIcon( BarIcon("tools-check-spelling",KIconLoader::SizeMedium) ) );
   p7->setHeader( i18n("Spell Checker Behavior") );
   _spellPage=new configureSpellPage(parent,page7);
 

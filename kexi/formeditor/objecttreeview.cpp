@@ -95,9 +95,9 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 		{
 			QString iconName 
 				= ((ObjectTreeView*)listView())->iconNameForClass(m_item->widget()->className());
-			p->drawPixmap(margin, (height() - IconSize(K3Icon::Small))/2 , SmallIcon(iconName));
+			p->drawPixmap(margin, (height() - IconSize(KIconLoader::Small))/2 , SmallIcon(iconName));
 			p->drawText(
-				QRect(2*margin + IconSize(K3Icon::Small),0,width, height()-1), 
+				QRect(2*margin + IconSize(KIconLoader::Small),0,width, height()-1), 
 				Qt::AlignVCenter, m_item->name());
 		}
 		else
@@ -140,7 +140,7 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 		QString iconName 
 			= ((ObjectTreeView*)listView())->iconNameForClass(item->m_item->widget()->className());
 		p->drawPixmap(
-			(w - IconSize(K3Icon::Small))/2, (item->height() - IconSize(K3Icon::Small))/2 , 
+			(w - IconSize(KIconLoader::Small))/2, (item->height() - IconSize(KIconLoader::Small))/2 , 
 			SmallIcon(iconName));
 
 		p->translate(0, item->totalHeight());

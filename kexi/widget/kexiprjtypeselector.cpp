@@ -32,7 +32,7 @@ KexiPrjTypeSelector::KexiPrjTypeSelector( QWidget* parent )
 	icon_file->setPixmap( 
 		KIconLoader::global()->loadMimeTypeIcon( 
 			KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName(),
-			K3Icon::Desktop, 48
+			KIconLoader::Desktop, 48
 		)
 	);
 	icon_file->setFixedSize(icon_file->pixmap()->size()/2);

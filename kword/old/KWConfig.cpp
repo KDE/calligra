@@ -82,7 +82,7 @@ using namespace KSpell2;
 // (Note: KDialogBase should have version of the methods that take a QString for the icon name)
 static inline QPixmap loadIcon( const char * name ) {
   return KGlobal::mainComponent().iconLoader()
-    ->loadIcon( QString::fromLatin1(name), K3Icon::NoGroup, K3Icon::SizeMedium );
+    ->loadIcon( QString::fromLatin1(name), KIconLoader::NoGroup, KIconLoader::SizeMedium );
 }
 
 KWConfig::KWConfig( KWView* parent )

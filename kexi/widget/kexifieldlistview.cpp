@@ -48,7 +48,7 @@ KexiFieldListView::KexiFieldListView(QWidget *parent, int options)
  : K3ListView(parent)
  , m_schema(0)
  , m_keyIcon(SmallIcon("key"))
- , m_noIcon(KexiUtils::emptyIcon(K3Icon::Small))
+ , m_noIcon(KexiUtils::emptyIcon(KIconLoader::Small))
  , m_options(options)
  , m_allColumnsItem(0)
 {

@@ -85,7 +85,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 //TODO    d->keepLocation = false;
 //TODO    d->operationMode = Opening;
     setMode(KFile::File | KFile::ExistingOnly); //(js) default: open action
-    setIcon( KGlobal::iconLoader()->loadIcon("document-open", K3Icon::Desktop) );
+    setIcon( KGlobal::iconLoader()->loadIcon("document-open", KIconLoader::Desktop) );
 		setDir(QDir(startDir));
 //TODO    d->hasDefaultFilter = false;
 //TODO    d->hasView = false;
@@ -123,12 +123,12 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     u.setPath( QDir::rootPath() );
     QString text = i18n("Root Directory: %1").arg( u.path() );
     d->pathCombo->addDefaultURL( u,
-                                 KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
+                                 KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                  text );
 
     u.setPath( QDir::homePath() );
     text = i18n("Home Directory: %1").arg( u.path( +1 ) );
-    d->pathCombo->addDefaultURL( u, KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
+    d->pathCombo->addDefaultURL( u, KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                  text );
 
     KUrl docPath;
@@ -136,14 +136,14 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     if ( u.path(+1) != docPath.path(+1) ) {
         text = i18n("Documents: %1").arg( docPath.path( +1 ) );
         d->pathCombo->addDefaultURL( u,
-                                     KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
+                                     KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                      text );
     }
 
     u.setPath( KGlobalSettings::desktopPath() );
     text = i18n("Desktop: %1").arg( u.path( +1 ) );
     d->pathCombo->addDefaultURL( u,
-                                 KMimeType::pixmapForURL( u, 0, K3Icon::Small ),
+                                 KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                  text );
 
     u.setPath( "/tmp" );
@@ -388,7 +388,7 @@ void KexiStartupFileDialogBase::setOperationMode( KFileDialog::OperationMode mod
   //  d->keepLocation = (mode == Saving);
     if (mode == KFileDialog::Saving) {
       setMode( KFile::File );
-      setIcon( KGlobal::iconLoader()->loadIcon("document-save", K3Icon::Desktop) );
+      setIcon( KGlobal::iconLoader()->loadIcon("document-save", KIconLoader::Desktop) );
     }
 //(js)    filterWidget->setEditable( !d->hasDefaultFilter || mode != Saving );
 //(js)    d->okButton->setGuiItem( (mode == Saving) ? KStandardGuiItem::save() : KStandardGuiItem::ok() );

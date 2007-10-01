@@ -254,7 +254,7 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 #if 0 //moved to mainwindow's actions
 	d->menu_id_addRecord = m_contextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
 	d->menu_id_removeRecord = m_contextMenu->insertItem(
-		KIconLoader::global()->loadIcon("dialog-cancel", K3Icon::Small),
+		KIconLoader::global()->loadIcon("dialog-cancel", KIconLoader::Small),
 		i18n("Remove Record"), this, SLOT(removeRecord()), Qt::CTRL+Qt::Key_Delete);
 #endif
 

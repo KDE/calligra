@@ -85,7 +85,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 #endif
 	m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_widgetDSLabel->setMargin(2);
-	m_widgetDSLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
+	m_widgetDSLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
 	m_widgetDSLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_widgetDSLabel);
 
@@ -115,7 +115,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 	m_dataSourceLabel = new QLabel(i18n("Form's data source:"), contents);
 	m_dataSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_dataSourceLabel->setMargin(2);
-	m_dataSourceLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
+	m_dataSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
 	m_dataSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(m_dataSourceLabel);
 
@@ -185,7 +185,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 	m_availableFieldsLabel = new QLabel(i18n("Available fields:"), contents);
 	m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_availableFieldsLabel->setMargin(2);
-	m_availableFieldsLabel->setMinimumHeight(IconSize(K3Icon::Small));
+	m_availableFieldsLabel->setMinimumHeight(IconSize(KIconLoader::Small));
 	hlyr->addWidget(m_availableFieldsLabel);
 
 	m_addField = new KexiSmallToolButton(

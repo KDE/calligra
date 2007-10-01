@@ -127,7 +127,7 @@ ShadowPreview::paintEvent( QPaintEvent* )
 
 	VFill fill;
 	KIconLoader il;
-	fill.pattern() = VPattern( il.iconPath( "karbon.png", K3Icon::Small ) );
+	fill.pattern() = VPattern( il.iconPath( "karbon.png", KIconLoader::Small ) );
 	fill.setType( VFill::patt );
 
 	p.newPath();

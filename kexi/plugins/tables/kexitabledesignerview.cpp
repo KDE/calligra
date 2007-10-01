@@ -282,7 +282,7 @@ void KexiTableDesignerView::initData()
 	}
 
 	//column widths
-	d->view->setColumnWidth(COLUMN_ID_ICON, IconSize( K3Icon::Small ) + 10);
+	d->view->setColumnWidth(COLUMN_ID_ICON, IconSize( KIconLoader::Small ) + 10);
 	d->view->adjustColumnWidthToContents(COLUMN_ID_CAPTION); //adjust column width
 	d->view->setColumnWidth(COLUMN_ID_TYPE, d->maxTypeNameTextWidth + 2 * d->view->rowHeight());
 	d->view->setColumnStretchEnabled( true, COLUMN_ID_DESC ); //last column occupies the rest of the area

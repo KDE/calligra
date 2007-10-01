@@ -333,7 +333,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
-    m_pFrame->addTab( v, KGlobal::iconLoader()->loadIcon( m_documentEntry.service()->icon(), K3Icon::Small ), i18n("Untitled") );
+    m_pFrame->addTab( v, KGlobal::iconLoader()->loadIcon( m_documentEntry.service()->icon(), KIconLoader::Small ), i18n("Untitled") );
     
     // Create a new page for this doc
     Page page;
@@ -659,8 +659,8 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
 {
   KMenu menu;
   KIconLoader il;
-  QAction *mnuSave = menu.addAction( il.loadIconSet( "document-save", K3Icon::Small ), i18n("Save") );
-  QAction *mnuClose = menu.addAction( il.loadIcon( "window-close", K3Icon::Small ), i18n("Close") );
+  QAction *mnuSave = menu.addAction( il.loadIconSet( "document-save", KIconLoader::Small ), i18n("Save") );
+  QAction *mnuClose = menu.addAction( il.loadIcon( "window-close", KIconLoader::Small ), i18n("Close") );
   
   int tabnr = m_pFrame->indexOf( w );
   Page page = m_lstPages[tabnr];

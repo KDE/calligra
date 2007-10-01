@@ -6013,7 +6013,7 @@ void KWView::documentModified( bool b )
         return;
 
     if ( b )
-        m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", K3Icon::Small ) );
+        m_sbModifiedLabel->setPixmap( KGlobal::iconLoader()->loadIcon( "action-modified", KIconLoader::Small ) );
     else
         m_sbModifiedLabel->setText( "   " );
 }

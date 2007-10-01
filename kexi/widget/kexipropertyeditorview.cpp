@@ -39,7 +39,7 @@ KexiObjectInfoLabel::KexiObjectInfoLabel(QWidget* parent)
 	Q3HBoxLayout *hlyr = new Q3HBoxLayout(this);
 	m_objectIconLabel = new QLabel(this);
 	m_objectIconLabel->setMargin(2);
-	setFixedHeight( IconSize(K3Icon::Small) + 2 + 2 );
+	setFixedHeight( IconSize(KIconLoader::Small) + 2 + 2 );
 	hlyr->addWidget(m_objectIconLabel);
 	m_objectNameLabel = new QLabel(this);
 	m_objectNameLabel->setMargin(2);
@@ -57,7 +57,7 @@ void KexiObjectInfoLabel::setObjectClassIcon(const QString& name)
 	if (m_classIcon.isEmpty())
 		m_objectIconLabel->setFixedWidth( 0 );
 	else
-		m_objectIconLabel->setFixedWidth( IconSize(K3Icon::Small) + 2 + 2 );
+		m_objectIconLabel->setFixedWidth( IconSize(KIconLoader::Small) + 2 + 2 );
 	m_objectIconLabel->setPixmap( SmallIcon(name) );
 }
 
@@ -125,7 +125,7 @@ KexiPropertyEditorView::KexiPropertyEditorView(QWidget* parent)
 	QHBoxLayout *vlyr = new QHBoxLayout(lyr);
 	d->objectIcon = new QLabel(this);
 	d->objectIcon->setMargin(2);
-	d->objectIcon->setFixedHeight( IconSize(K3Icon::Small) + 2 + 2 );
+	d->objectIcon->setFixedHeight( IconSize(KIconLoader::Small) + 2 + 2 );
 	vlyr->addWidget(d->objectIcon);
 	d->objectClassName = new QLabel(this);
 	d->objectClassName->setMargin(2);

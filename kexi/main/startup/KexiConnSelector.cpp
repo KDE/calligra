@@ -124,7 +124,7 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	d->fileAccessType = fileAccessType;
 	QString iconname = KMimeType::mimeType( 
 		KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName();
-	//const QPixmap icon = KIconLoader::global()->loadIcon( iconname, K3Icon::Desktop, 48 );
+	//const QPixmap icon = KIconLoader::global()->loadIcon( iconname, KIconLoader::Desktop, 48 );
 	setWindowIcon( KIcon(iconname) );
 
 	QBoxLayout* globalLyr = new QVBoxLayout( this );

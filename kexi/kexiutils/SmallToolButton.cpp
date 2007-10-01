@@ -26,6 +26,7 @@
 #include <QPointer>
 #include <QAction>
 
+#include <KIcon>
 #include <KIconLoader>
 #include <KGlobalSettings>
 #include <KDebug>
@@ -152,7 +153,7 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
 			setToolTip(text);
 	}
 	if (!icon.isNull()) {
-		width += IconSize(K3Icon::Small);
+		width += IconSize(KIconLoader::Small);
 		QToolButton::setIcon(icon);
 	}
 	QStyleOption opt;

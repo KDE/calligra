@@ -147,7 +147,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->rowSourceLabel = new QLabel(i18n("Row source:"), contents);
 	d->rowSourceLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->rowSourceLabel->setMargin(2);
-	d->rowSourceLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
+	d->rowSourceLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
 	d->rowSourceLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(d->rowSourceLabel);
 
@@ -179,7 +179,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->boundColumnLabel = new QLabel(i18n("Bound column:"), contents);
 	d->boundColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->boundColumnLabel->setMargin(2);
-	d->boundColumnLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
+	d->boundColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
 	d->boundColumnLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(d->boundColumnLabel);
 
@@ -203,7 +203,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	d->visibleColumnLabel = new QLabel(i18n("Visible column:"), contents);
 	d->visibleColumnLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	d->visibleColumnLabel->setMargin(2);
-	d->visibleColumnLabel->setMinimumHeight(IconSize(K3Icon::Small)+4);
+	d->visibleColumnLabel->setMinimumHeight(IconSize(KIconLoader::Small)+4);
 	d->visibleColumnLabel->setAlignment(Qt::AlignLeft|Qt::AlignBottom);
 	hlyr->addWidget(d->visibleColumnLabel);
 

@@ -671,22 +671,22 @@ KWDocStructRootItem::KWDocStructRootItem(Q3ListView* parent, const QString& text
 {
     switch ( type ) {
         case Arrangement: {
-            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "tree_arrange", K3Icon::Small ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "tree_arrange", KIconLoader::Small ) );
         } break;
         case TextFrames: {
-            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "insert-object", K3Icon::Small ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "insert-object", KIconLoader::Small ) );
         } break;
         case FormulaFrames: {
-            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_formula", K3Icon::Small ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_formula", KIconLoader::Small ) );
         }break;
         case Tables: {
-            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "inline_table", K3Icon::Small ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "inline_table", KIconLoader::Small ) );
         } break;
         case Pictures: {
-            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_image", K3Icon::Small ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_image", KIconLoader::Small ) );
         } break;
         case Embedded: {
-            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_query", K3Icon::Small ) );
+            setPixmap( 0, KGlobal::iconLoader()->loadIcon( "frame_query", KIconLoader::Small ) );
         } break;
     }
 }

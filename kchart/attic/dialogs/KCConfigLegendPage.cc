@@ -272,8 +272,8 @@ QPushButton* KCConfigLegendPage::addButton( QGridLayout* layout,
   button->setCheckable( true );
   bg->addButton( button );
   button->setIcon( BarIcon( icon,
-			    K3Icon::SizeMedium,
-			    K3Icon::DefaultState ) );
+			    KIconLoader::SizeMedium,
+			    KIconLoader::DefaultState ) );
   button->setToolTip( toolTipText );
   layout->addWidget( button, posY, posX );
 

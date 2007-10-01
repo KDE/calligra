@@ -93,7 +93,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 //	helpToolBar->setFont(Kexi::smallFont());
 /*
 	helpToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-	helpToolBar->setIconSize( QSize(IconSize(K3Icon::Small), IconSize(K3Icon::Small)) );
+	helpToolBar->setIconSize( QSize(IconSize(KIconLoader::Small), IconSize(KIconLoader::Small)) );
 	a = d->ac->action("help_whats_this");
 	helpToolBar->addAction(a);
 	a = d->ac->action("help_contents");

@@ -77,10 +77,10 @@ public:
 		result = -1;
 		QString iconname(
 			KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName() );
-		kexi_sqlite_icon = KIconLoader::global()->loadMimeTypeIcon( iconname, K3Icon::Desktop );
+		kexi_sqlite_icon = KIconLoader::global()->loadMimeTypeIcon( iconname, KIconLoader::Desktop );
 		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->iconName();
 		kexi_shortcut_icon = KIconLoader::global()->loadMimeTypeIcon(
-			iconname, K3Icon::Desktop );
+			iconname, KIconLoader::Desktop );
 		prj_selector = 0;
 		chkDoNotShow = 0;
 		openExistingConnWidget = 0;

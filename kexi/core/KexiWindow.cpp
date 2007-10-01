@@ -240,7 +240,7 @@ void KexiWindow::createSubwidgets()
 //	d->topBarLyr->setContentsMargins(KDialog::marginHint()/2,KDialog::marginHint()/2,0,0);
 //	d->topBar = new KToolBar(this);
 //	d->topBar->setFont( Kexi::smallFont() ); 
-//	d->topBar->setIconDimensions( IconSize( K3Icon::Small ) );
+//	d->topBar->setIconDimensions( IconSize( KIconLoader::Small ) );
 //	d->topBar->setToolButtonStyle( Qt::ToolButtonTextBesideIcon ); 
 //	d->mainLyr->addWidget( d->topBar );
 

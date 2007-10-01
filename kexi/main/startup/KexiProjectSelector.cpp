@@ -109,7 +109,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget( QWidget* parent,
 	d->showConnectionColumns = showConnectionColumns;
 	const QString iconname( 
 		KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName() );
-	d->fileicon = KIconLoader::global()->loadMimeTypeIcon( iconname, K3Icon::Desktop );
+	d->fileicon = KIconLoader::global()->loadMimeTypeIcon( iconname, KIconLoader::Desktop );
 	setWindowIcon( KIcon(iconname) );
 	d->dbicon = SmallIcon("database");
 //	list->setHScrollBarMode( QScrollView::AlwaysOn );

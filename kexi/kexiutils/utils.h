@@ -29,8 +29,7 @@
 #include <QFont>
 
 #include <KMimeType>
-#include <K3Icon>
-#include <KIcon>
+#include <kiconloader.h>
 
 class QColor;
 class QMetaProperty;
@@ -229,7 +228,7 @@ namespace KexiUtils
 	KEXIUTILS_EXPORT QIcon colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette);
 
 	/*! \return empty (fully transparent) pixmap that can be used as a place for icon of size \a iconGroup */
-	KEXIUTILS_EXPORT QPixmap emptyIcon(K3Icon::Group iconGroup);
+	KEXIUTILS_EXPORT QPixmap emptyIcon(KIconLoader::Group iconGroup);
 
 	/*! Serializes \a map to \a array.
 	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */

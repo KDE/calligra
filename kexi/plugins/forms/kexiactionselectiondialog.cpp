@@ -128,7 +128,7 @@ KActionsListViewBase::~KActionsListViewBase() {}
 void KActionsListViewBase::init()
 {
 	setSorting(0);
-	const QPixmap noIcon( KexiUtils::emptyIcon(K3Icon::Small) );
+	const QPixmap noIcon( KexiUtils::emptyIcon(KIconLoader::Small) );
 	QList<QAction*> sharedActions( KexiMainWindowIface::global()->allActions() );
 	const Kexi::ActionCategories *acat = Kexi::actionCategories();
 	foreach (QAction *action, sharedActions) {
@@ -196,7 +196,7 @@ public:
 	{
 		Q3ListViewItem *item = new ActionSelectorDialogListItem(
 			"noaction", this, i18n("No action") );
-		const QPixmap noIcon( KexiUtils::emptyIcon(K3Icon::Small) );
+		const QPixmap noIcon( KexiUtils::emptyIcon(KIconLoader::Small) );
 		item->setPixmap(0, noIcon);
 		item = new ActionSelectorDialogListItem("kaction", this, i18n("Application actions") );
 		item->setPixmap(0, SmallIcon("form_action"));
@@ -268,7 +268,7 @@ class ActionToExecuteListView : public ActionsListViewBase
 				return;
 			int supportedViewModes = part->supportedViewModes();
 			ActionSelectorDialogListItem *item;
-			const QPixmap noIcon( KexiUtils::emptyIcon(K3Icon::Small) );
+			const QPixmap noIcon( KexiUtils::emptyIcon(KIconLoader::Small) );
 			if (supportedViewModes & Kexi::DataViewMode) {
 				item = new ActionSelectorDialogListItem("open", this, i18n("Open in Data View"));
 				item->setPixmap(0, SmallIcon("document-open"));

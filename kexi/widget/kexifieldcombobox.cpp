@@ -55,7 +55,7 @@ class KexiFieldComboBox::Private
 		Private()
 //		 : schema(0)
 		 : keyIcon( SmallIcon("key") )
-		 , noIcon( KexiUtils::emptyIcon(K3Icon::Small) )
+		 , noIcon( KexiUtils::emptyIcon(KIconLoader::Small) )
 		 , table(true)
 		{
 		}

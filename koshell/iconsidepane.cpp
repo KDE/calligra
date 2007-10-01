@@ -74,7 +74,7 @@ void EntryItem::reloadPixmap()
 {
   int size = (int)navigator()->viewMode();
   if ( size != 0 )
-    mPixmap = KGlobal::iconLoader()->loadIcon( mPixmapName, K3Icon::Desktop, size );
+    mPixmap = KGlobal::iconLoader()->loadIcon( mPixmapName, KIconLoader::Desktop, size );
   else
     mPixmap = QPixmap();
 }

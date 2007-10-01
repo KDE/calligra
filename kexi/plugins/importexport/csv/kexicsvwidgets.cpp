@@ -248,7 +248,7 @@ void KexiCSVInfoLabel::setFileName( const QString& fileName )
 	m_fnameLbl->setText( QDir::convertSeparators(fileName) );
 	if (!fileName.isEmpty()) {
 		m_iconLbl->setPixmap( 
-			KIO::pixmapForUrl(KUrl(fileName), 0, K3Icon::Desktop) );
+			KIO::pixmapForUrl(KUrl(fileName), 0, KIconLoader::Desktop) );
 	}
 }
 

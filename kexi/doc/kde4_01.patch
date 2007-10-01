@@ -44,14 +44,14 @@ Index: main/startup/KexiStartupDialog.cpp
 +               if( ! defmime )
 +                   defmime = KMimeType::defaultMimeTypePtr();
 +               iconname = defmime->icon(none,0);
-                kexi_sqlite_icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
+                kexi_sqlite_icon = KGlobal::iconLoader()->loadIcon( iconname, KIconLoader::Desktop );
 -               iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->icon(none,0);
 +
 +               KMimeType::Ptr shortcutmime = KMimeType::mimeType("application/x-kexiproject-shortcut");
 +               if( ! shortcutmime )
 +                   shortcutmime = KMimeType::defaultMimeTypePtr();
 +               iconname = shortcutmime->icon(none,0);
-                kexi_shortcut_icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
+                kexi_shortcut_icon = KGlobal::iconLoader()->loadIcon( iconname, KIconLoader::Desktop );
                 prj_selector = 0;
                 chkDoNotShow = 0;
 Index: main/startup/KexiStartupFileDialog.cpp
@@ -81,7 +81,7 @@ Index: main/startup/KexiConnSelector.cpp
 +       if ( ! mime )
 +           mime = KMimeType::defaultMimeTypePtr();
 +       QString none, iconname = mime->icon(none,0);
-        const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
+        const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, KIconLoader::Desktop );
         setIcon( icon );
 
 Index: main/startup/KexiNewProjectWizard.cpp
@@ -94,14 +94,14 @@ Index: main/startup/KexiNewProjectWizard.cpp
         d->lvi_file = new K3ListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
 -       d->lvi_file->setPixmap(0,
 -               KGlobal::iconLoader()->loadIcon( KMimeType::mimeType(
--                       KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), K3Icon::Desktop
+-                       KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIconLoader::Desktop
 -               )
 -       );
 +
 +       KMimeType::Ptr mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
 +        if ( ! mime )
 +           mime = KMimeType::defaultMimeTypePtr();
-+       d->lvi_file->setPixmap(0, KGlobal::iconLoader()->loadIcon( mime->icon(none,0), K3Icon::Desktop ) );
++       d->lvi_file->setPixmap(0, KGlobal::iconLoader()->loadIcon( mime->icon(none,0), KIconLoader::Desktop ) );
 +
         d->lvi_file->setMultiLinesEnabled( true );
         d->lvi_server = new K3ListViewItem( m_prjtype_sel->lv_types, d->lvi_file,
@@ -119,7 +119,7 @@ Index: main/startup/KexiProjectSelector.cpp
 +       if ( ! mime )
 +           mime = KMimeType::defaultMimeTypePtr();
 +       QString none, iconname = mime->icon(none,0);
-        d->fileicon = KGlobal::iconLoader()->loadIcon( iconname, K3Icon::Desktop );
+        d->fileicon = KGlobal::iconLoader()->loadIcon( iconname, KIconLoader::Desktop );
         setIcon( d->fileicon );
         d->dbicon = SmallIcon("database");
 Index: migration/importwizard.cpp

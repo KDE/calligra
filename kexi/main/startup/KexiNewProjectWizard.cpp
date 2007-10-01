@@ -131,7 +131,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	d->lvi_file->setPixmap(0, 
 		KIconLoader::global()->loadMimeTypeIcon( KMimeType::mimeType( 
 			KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName(),
-			K3Icon::Desktop 
+			KIconLoader::Desktop 
 		)
 	);
 	d->lvi_file->setMultiLinesEnabled( true );

@@ -104,7 +104,7 @@ PixmapCollection::getPixmap(const QString &name)
 	if(m_pixmaps[name].second != 0)
 	{
 		return KIconLoader::global()->loadIcon(
-			m_pixmaps[name].first, K3Icon::NoGroup, m_pixmaps[name].second);
+			m_pixmaps[name].first, KIconLoader::NoGroup, m_pixmaps[name].second);
 	}
 	else
 		return QPixmap(m_pixmaps[name].first);
@@ -187,7 +187,7 @@ LoadIconDialog::LoadIconDialog(QWidget *parent)
 	// Icon chooser button
 	m_button = new KIconButton(frame);
 	m_button->setIcon("kexi");
-	m_button->setIconSize(K3Icon::SizeMedium);
+	m_button->setIconSize(KIconLoader::SizeMedium);
 	l->addMultiCellWidget(m_button, 0, 1, 2, 2);
 	connect(m_button, SIGNAL(iconChanged(QString)), this, SLOT(updateIconName(QString)));
 	connect(m_nameInput, SIGNAL(textChanged(const QString &)), this, SLOT(setIcon(const QString &)));
@@ -208,15 +208,15 @@ LoadIconDialog::setIcon(const QString &icon)
 void
 LoadIconDialog::changeIconSize(int index)
 {
-	int size = K3Icon::SizeMedium;
+	int size = KIconLoader::SizeMedium;
 	switch(index)
 	{
-		case 0: size = K3Icon::SizeSmall; break;
-		//case 1: size = K3Icon::SizeSmallMedium; break;
-		case 1: size = K3Icon::SizeMedium; break;
-		case 2: size = K3Icon::SizeLarge; break;
+		case 0: size = KIconLoader::SizeSmall; break;
+		//case 1: size = KIconLoader::SizeSmallMedium; break;
+		case 1: size = KIconLoader::SizeMedium; break;
+		case 2: size = KIconLoader::SizeLarge; break;
 #if !defined(Q_WS_WIN) 
-		case 3: size = K3Icon::SizeHuge; break;
+		case 3: size = KIconLoader::SizeHuge; break;
 #endif
 		default:;
 	}

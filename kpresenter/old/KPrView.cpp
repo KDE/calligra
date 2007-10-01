@@ -6418,7 +6418,7 @@ void KPrView::documentModified( bool b )
         return;
 
     if ( b )
-        m_sbModifiedLabel->setPixmap( KIconLoader::global()->loadIcon( "action-modified", K3Icon::Small ) );
+        m_sbModifiedLabel->setPixmap( KIconLoader::global()->loadIcon( "action-modified", KIconLoader::Small ) );
     else
         m_sbModifiedLabel->setText( "   " );
 }
