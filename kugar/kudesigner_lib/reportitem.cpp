@@ -19,7 +19,7 @@
 #include "reportitem.h"
 
 #include <klocale.h>
-#include <kglobalsettings.h>
+#include <KColorScheme>
 
 #include <qrect.h>
 #include <qpainter.h>
@@ -145,7 +145,7 @@ void ReportItem::drawHolders( QPainter &painter )
 {
     painter.setPen( QColor( 0, 0, 0 ) );
 
-    painter.setBrush( KGlobalSettings::highlightColor() );
+    painter.setBrush( KColorScheme( QPalette::Active, KColorScheme::Selection ).background().color() );
 
     Q3CanvasItemList list = collisions( false );
     Q3CanvasItemList::iterator it = list.begin();

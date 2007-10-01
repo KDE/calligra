@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <qrect.h>
 #include <qpainter.h>
 
-#include <kglobalsettings.h>
+#include <KColorScheme>
 
 #include "propertyserializer.h"
 #include "kugartemplate.h"
@@ -109,7 +109,7 @@ int Band::isInHolder( const QPoint p )
 void Band::drawHolders( QPainter &painter )
 {
     painter.setPen( QColor( 0, 0, 0 ) );
-    painter.setBrush( KGlobalSettings::highlightColor() );
+    painter.setBrush( KColorScheme( QPalette::Active, KColorScheme::Selection ).background().color() );
     painter.drawRect( bottomMiddleResizableRect() );
 }
 
