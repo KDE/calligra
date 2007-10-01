@@ -324,19 +324,21 @@ void SQLiteCursor::drv_getNextRecord()
 	}
 	
 	//debug
-/*
-	if (m_result == FetchOK && d->curr_coldata) {
+/*	if (((int)m_result == (int)FetchOK) && d->curr_coldata) {
 		for (uint i=0;i<m_fieldCount;i++) {
 			KexiDBDrvDbg<<"col."<< i<<": "<< d->curr_colname[i]<<" "<< d->curr_colname[m_fieldCount+i]
 			<< " = " << (d->curr_coldata[i] ? QString::fromLocal8Bit(d->curr_coldata[i]) : "(NULL)") <<endl;
 		}
-//		KexiDBDrvDbg << "SQLiteCursor::drv_getNextRecord(): "<<m_fieldCount<<" col(s) fetched"<<endl;
+		KexiDBDrvDbg << "SQLiteCursor::drv_getNextRecord(): "<<m_fieldCount<<" col(s) fetched"<<endl;
 	}*/
 }
 
 void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 {
 //	KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer():" <<endl;
+	if (!d->curr_coldata)
+			return;
+
 	if (!d->cols_pointers_mem_size)
 		d->cols_pointers_mem_size = m_fieldCount * sizeof(char*);
 	const char **record = (const char**)malloc(d->cols_pointers_mem_size);

@@ -19,6 +19,11 @@ TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
 ===================== Kexi 2.0 Alpha =====================
+2007-10-01
+Kexi 1.x:
+KexiDB
+- SQLite driver: fixed possible crash for buffered mode
+
 2007-07-16
 Kexi 1.x: Migration
 - fixed possible crash (CID 3921)
