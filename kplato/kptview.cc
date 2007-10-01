@@ -411,6 +411,8 @@ void View::createViews()
                         v = createTaskStatusView( cat, tag, name, tip );
                     } else if ( type == "KPlato::GanttView" ) {
                         v = createGanttView( cat, tag, name, tip );
+                    } else if ( type == "KPlato::MilestoneGanttView" ) {
+                        v = createMilestoneGanttView( cat, tag, name, tip );
                     } else if ( type == "KPlato::ResourceAppointmentsView" ) {
                         v = createResourceAppointmentsView( cat, tag, name, tip );
                     } else if ( type == "KPlato::AccountsView" ) {
@@ -460,6 +462,8 @@ void View::createViews()
         createTaskStatusView( cat, "TaskStatusView", i18n( "Task Status" ), i18n( "View task progress information" ) );
         
         createGanttView( cat, "GanttView", i18n( "Gantt" ), i18n( "View gantt chart" ) );
+        
+        createMilestoneGanttView( cat, "MilestoneGanttView", i18n( "Milestone Gantt" ), i18n( "View milestone gantt chart" ) );
         
         createResourceAppointmentsView( cat, "ResourceAppointmentsView", i18n( "Resource Assignments" ), i18n( "View resource assignments" ) );
 
@@ -696,6 +700,26 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
     connect( ganttview, SIGNAL( modifyRelation( Relation* ) ), SLOT( slotModifyRelation( Relation* ) ) );
     connect( ganttview, SIGNAL( itemDoubleClicked() ), SLOT( slotOpenNode() ) );
     connect( ganttview, SIGNAL( itemRenamed( Node*, const QString& ) ), this, SLOT( slotRenameNode( Node*, const QString& ) ) );*/
+    
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), ganttview, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
+    connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
+    return ganttview;
+}
+
+ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+{
+    MilestoneGanttView *ganttview = new MilestoneGanttView( getPart(), m_tab, getPart()->isReadWrite() );
+    m_tab->addWidget( ganttview );
+
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart" );
+    i->setToolTip( 0, tip );
+
+    ganttview->setProject( &( getProject() ) );
+    ganttview->setScheduleManager( currentScheduleManager() );
+
+    connect( ganttview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), ganttview, SLOT( setScheduleManager( ScheduleManager* ) ) );
     

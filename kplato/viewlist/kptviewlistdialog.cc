@@ -76,6 +76,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Schedule Handler" )
             << i18n( "Task Status" )
             << i18n( "Gantt View" )
+            << i18n( "Milestone Gantt View" )
             << i18n( "Resource Assignments" )
             << i18n( "Cost Breakdown" )
             << i18n( "Performance Chart" )
@@ -127,16 +128,19 @@ bool AddViewPanel::ok()
         case 7: // Gantt View
             m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 8: // Resource Assignments
+        case 8: // Milestone Gantt View
+            m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 9: // Resource Assignments
             m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 9: // Cost Breakdown
+        case 10: // Cost Breakdown
             m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 10: // Performance Chart
+        case 11: // Performance Chart
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 11: // Tasks by Resources
+        case 12: // Tasks by Resources
             m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
         default:

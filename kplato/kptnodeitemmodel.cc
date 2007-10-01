@@ -2172,6 +2172,675 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
     return QModelIndex();
 }
 
+//----------------------------
+MilestoneItemModel::MilestoneItemModel( Part *part, QObject *parent )
+    : ItemModelBase( part, parent )
+{
+}
+
+MilestoneItemModel::~MilestoneItemModel()
+{
+}
+    
+void MilestoneItemModel::slotNodeToBeInserted( Node *parent, int row )
+{
+}
+
+void MilestoneItemModel::slotNodeInserted( Node *node )
+{
+    //kDebug()<<node->name()<<endl;
+    if ( node && node->type() == Node::Type_Milestone && m_mslist.indexOf( node ) == -1 ) {
+        beginInsertRows( QModelIndex(), m_mslist.count(), m_mslist.count() );
+        m_mslist.append( node );
+        endInsertRows();
+        //kDebug()<<node->name()<<": "<<m_mslist.count()<<endl;
+    }
+}
+
+void MilestoneItemModel::slotNodeToBeRemoved( Node *node )
+{
+    //kDebug()<<node->name();
+    int row = m_mslist.indexOf( node );
+    if ( row != -1 ) {
+        beginRemoveRows( QModelIndex(), row, row );
+        m_mslist.removeAt( row );
+        endRemoveRows();
+    }
+}
+
+void MilestoneItemModel::slotNodeRemoved( Node *node )
+{
+}
+
+void MilestoneItemModel::slotLayoutChanged()
+{
+    //kDebug()<<node->name()<<endl;
+    emit layoutAboutToBeChanged();
+    emit layoutChanged();
+}
+
+void MilestoneItemModel::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+        
+        disconnect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        disconnect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+    }
+    m_project = project;
+    kDebug()<<m_project<<"->"<<project<<endl;
+    m_nodemodel.setProject( project );
+    if ( project ) {
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
+        connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
+        connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
+    
+        connect( m_project, SIGNAL( nodeAdded( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
+        connect( m_project, SIGNAL( nodeRemoved( Node* ) ), this, SLOT( slotNodeRemoved( Node* ) ) );
+    }
+    resetModel();
+}
+
+void MilestoneItemModel::setManager( ScheduleManager *sm )
+{
+    if ( m_nodemodel.manager() ) {
+    }
+    m_nodemodel.setManager( sm );
+    if ( sm ) {
+    }
+    kDebug()<<sm<<endl;
+    reset();
+}
+    
+void MilestoneItemModel::resetModel()
+{
+    m_mslist.clear();
+    if ( m_project != 0 ) {
+        foreach ( Node *n, m_project->allNodes() ) {
+            if ( n->type() == Node::Type_Milestone ) {
+                m_mslist.append( n );
+            }
+        }
+    }
+    reset();
+}
+
+Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
+{
+    Qt::ItemFlags flags = QAbstractItemModel::flags( index );
+    if ( !index.isValid() ) {
+        if ( m_readWrite ) {
+            flags |= Qt::ItemIsDropEnabled;
+        }
+        return flags;
+    }
+    if ( m_readWrite ) {
+        flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        switch ( index.column() ) {
+            case 0: // name
+                flags |= Qt::ItemIsEditable;
+                break;
+            case 1: break; // Node type
+            case 2: // Responsible
+                flags |= Qt::ItemIsEditable;
+                break;
+/*            case 3: // allocation
+            case 4: // estimateType
+            case 5: // estimate
+            case 6: // optimisticRatio
+            case 7: // pessimisticRatio
+            case 8: // risktype*/
+            case 9: // constraint type
+                flags |= Qt::ItemIsEditable;
+                break;
+            case 10: { // constraint start
+                Node *n = node( index );
+                if ( n == 0 )
+                    break;
+                int c = n->constraint();
+                if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
+            case 11: { // constraint end
+                Node *n = node( index );
+                if ( n == 0 )
+                    break;
+                int c = n->constraint();
+                if ( c == Node::MustFinishOn || c == Node::FinishNotLater || c ==  Node::FixedInterval ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
+//            case 12: // running account
+            case 13: // startup account
+            case 14: // startup cost
+            case 15: // shutdown account
+            case 16: { // shutdown cost
+                Node *n = node( index );
+                if ( n && (n->type() == Node::Type_Task || n->type() == Node::Type_Milestone) ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
+            case 17: // description
+                break;
+            default: 
+                flags &= ~Qt::ItemIsEditable;
+        }
+    }
+    return flags;
+}
+
+QModelIndex MilestoneItemModel::parent( const QModelIndex &index ) const
+{
+    return QModelIndex();
+}
+
+bool MilestoneItemModel::hasChildren( const QModelIndex &parent ) const
+{
+    //kDebug()<<parent<<rowCount();
+    return rowCount( parent ) > 0;
+}
+
+QModelIndex MilestoneItemModel::index( int row, int column, const QModelIndex &parent ) const
+{
+    //kDebug()<<parent<<row<<", "<<m_mslist.count();
+    if ( m_project == 0 || row < 0 || column < 0 ) {
+        kDebug()<<"No project or illegal row, column";
+        return QModelIndex();
+    }
+    if ( parent.isValid() || row >= m_mslist.count() ) {
+        //kDebug()<<"No index for"<<parent<<row<<","<<column;
+        return QModelIndex();
+    }
+    return createIndex( row, column, m_mslist[row] );
+}
+
+QModelIndex MilestoneItemModel::index( const Node *node ) const
+{
+    if ( m_project == 0 || node == 0 ) {
+        return QModelIndex();
+    }
+    return createIndex( m_mslist.indexOf( const_cast<Node*>( node ) ), 0, const_cast<Node*>(node) );
+}
+
+bool MilestoneItemModel::setName( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            if ( value.toString() == node->name() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyNameCmd( m_part, *node, value.toString(), "Modify task name" ) );
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setLeader( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            if ( value.toString() == node->leader() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyLeaderCmd( m_part, *node, value.toString(), "Modify task responsible" ) );
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setDescription( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            if ( value.toString() == node->description() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyDescriptionCmd( m_part, *node, value.toString(), "Modify task description" ) );
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setType( Node *, const QVariant &, int )
+{
+    return false;
+}
+
+bool MilestoneItemModel::setConstraint( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            Node::ConstraintType v = Node::ConstraintType( value.toInt() );
+            //kDebug()<<v;
+            if ( v == node->constraint() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyConstraintCmd( m_part, *node, v, "Modify constraint type" ) );
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setConstraintStartTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyConstraintStartTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint start time" ) );
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setConstraintEndTime( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyConstraintEndTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint end time" ) );
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setRunningAccount( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            //kDebug()<<node->name();
+            QStringList lst = m_nodemodel.runningAccount( node, Role::EnumList ).toStringList();
+            if ( value.toInt() >= lst.count() ) {
+                return false;
+            }
+            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            Account *old = node->runningAccount();
+            if ( old != a ) {
+                m_part->addCommand( new NodeModifyRunningAccountCmd( m_part, *node, old, a, i18n( "Modify Running Account" ) ) );
+            }
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setStartupAccount( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            //kDebug()<<node->name();
+            QStringList lst = m_nodemodel.startupAccount( node, Role::EnumList ).toStringList();
+            if ( value.toInt() >= lst.count() ) {
+                return false;
+            }
+            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            Account *old = node->startupAccount();
+            //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
+            if ( old != a ) {
+                m_part->addCommand( new NodeModifyStartupAccountCmd( m_part, *node, old, a, i18n( "Modify Startup Account" ) ) );
+            }
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setStartupCost( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            double v = KGlobal::locale()->readMoney( value.toString() );
+            if ( v == node->startupCost() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyStartupCostCmd( m_part, *node, v, i18n( "Modify Startup Cost" ) ) );
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setShutdownAccount( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            //kDebug()<<node->name();
+            QStringList lst = m_nodemodel.shutdownAccount( node, Role::EnumList ).toStringList();
+            if ( value.toInt() >= lst.count() ) {
+                return false;
+            }
+            Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
+            Account *old = node->shutdownAccount();
+            if ( old != a ) {
+                m_part->addCommand( new NodeModifyShutdownAccountCmd( m_part, *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+            }
+            return true;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::setShutdownCost( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            double v = KGlobal::locale()->readMoney( value.toString() );
+            if ( v == node->shutdownCost() ) {
+                return false;
+            }
+            m_part->addCommand( new NodeModifyShutdownCostCmd( m_part, *node, v, i18n( "Modify Shutdown Cost" ) ) );
+            return true;
+    }
+    return false;
+}
+
+QVariant MilestoneItemModel::data( const QModelIndex &index, int role ) const
+{
+    QVariant result;
+    Node *n = node( index );
+    if ( n != 0 ) {
+        // Special for kdgantt
+        if ( index.column() == 18 && role ==  KDGantt::StartTimeRole ) {
+            QDateTime t = n->startTime( m_nodemodel.id() ).dateTime();
+            //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t<<endl;
+            return t;
+        }
+        if ( index.column() == 19 && role == KDGantt::EndTimeRole ) {
+            QDateTime t = n->endTime( m_nodemodel.id() ).dateTime();
+            //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t<<endl;
+            return t;
+        }
+
+        result = m_nodemodel.data( n, index.column(), role );
+    }
+    if ( result.isValid() ) {
+        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
+            // HACK to show focus in empty cells
+            result = " ";
+        }
+        return result;
+    }
+    return result;
+}
+
+bool MilestoneItemModel::setData( const QModelIndex &index, const QVariant &value, int role )
+{
+    if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
+        return false;
+    }
+    Node *n = node( index );
+    switch (index.column()) {
+        case 0: return setName( n, value, role );
+        case 1: return setType( n, value, role );
+        case 2: return setLeader( n, value, role );
+        case 3: return false;
+        case 9: return setConstraint( n, value, role );
+        case 10: return setConstraintStartTime( n, value, role );
+        case 11: return setConstraintEndTime( n, value, role );
+        case 12: return setRunningAccount( n, value, role );
+        case 13: return setStartupAccount( n, value, role );
+        case 14: return setStartupCost( n, value, role );
+        case 15: return setShutdownAccount( n, value, role );
+        case 16: return setShutdownCost( n, value, role );
+        case 17: return setDescription( n, value, role );
+        default:
+            qWarning("data: invalid display value column %d", index.column());
+            return false;
+    }
+    return false;
+}
+
+QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
+{
+    if ( orientation == Qt::Horizontal ) {
+        if ( role == Qt::DisplayRole ) {
+            return m_nodemodel.headerData( section, role );
+        } else if ( role == Qt::TextAlignmentRole ) {
+            switch (section) {
+                case 1: return Qt::AlignCenter;
+                default: return QVariant();
+            }
+        }
+    }
+    if ( role == Qt::ToolTipRole ) {
+        return NodeModel::headerData( section, role );
+    }
+    return ItemModelBase::headerData(section, orientation, role);
+}
+
+QItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
+{
+    switch ( column ) {
+        case 9: return new EnumDelegate( parent );
+        case 12: return new EnumDelegate( parent );
+        case 13: return new EnumDelegate( parent );
+        case 14: return new MoneyDelegate( parent );
+        case 15: return new EnumDelegate( parent );
+        case 16: return new MoneyDelegate( parent );
+        default: return 0;
+    }
+    return 0;
+}
+
+int MilestoneItemModel::columnCount( const QModelIndex &/*parent*/ ) const
+{
+    return m_nodemodel.propertyCount();
+}
+
+int MilestoneItemModel::rowCount( const QModelIndex &parent ) const
+{
+    //kDebug()<<parent;
+    if ( parent.isValid() ) {
+        return 0;
+    }
+    //kDebug()<<m_mslist.count();
+    return m_mslist.count();
+}
+
+Qt::DropActions MilestoneItemModel::supportedDropActions() const
+{
+    return Qt::CopyAction | Qt::MoveAction;
+}
+
+
+QStringList MilestoneItemModel::mimeTypes() const
+{
+    return QStringList();
+}
+
+QMimeData *MilestoneItemModel::mimeData( const QModelIndexList & indexes ) const
+{
+    QMimeData *m = new QMimeData();
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    QList<int> rows;
+    foreach (QModelIndex index, indexes) {
+        if ( index.isValid() && !rows.contains( index.row() ) ) {
+            //kDebug()<<index.row();
+            Node *n = node( index );
+            if ( n ) {
+                rows << index.row();
+                stream << n->id();
+            }
+        }
+    }
+    m->setData("application/x-vnd.kde.kplato.nodeitemmodel.internal", encodedData);
+    return m;
+}
+
+bool MilestoneItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data )
+{
+    //kDebug();
+    Node *dn = node( index );
+    if ( dn == 0 ) {
+        kError()<<"no node to drop on!"<<endl;
+        return false; // hmmm
+    }
+    switch ( dropIndicatorPosition ) {
+        case TreeViewBase::AboveItem:
+        case TreeViewBase::BelowItem:
+            // dn == sibling
+            return dropAllowed( dn->parentNode(), data );
+        case TreeViewBase::OnItem:
+            // dn == new parent
+            return dropAllowed( dn, data );
+        default:
+            break;
+    }
+    return false;
+}
+
+bool MilestoneItemModel::dropAllowed( Node *on, const QMimeData *data )
+{
+    if ( !data->hasFormat("application/x-vnd.kde.kplato.nodeitemmodel.internal") ) {
+        return false;
+    }
+    if ( on == m_project ) {
+        return true;
+    }
+    QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+    QList<Node*> lst = nodeList( stream );
+    foreach ( Node *n, lst ) {
+        if ( on == n || on->isChildOf( n ) ) {
+            return false;
+        }
+    }
+    lst = removeChildNodes( lst );
+    foreach ( Node *n, lst ) {
+        if ( ! m_project->canMoveTask( n, on ) ) {
+            return false;
+        }
+    }
+    return true;
+}
+
+QList<Node*> MilestoneItemModel::nodeList( QDataStream &stream )
+{
+    QList<Node*> lst;
+    while (!stream.atEnd()) {
+        QString id;
+        stream >> id;
+        Node *node = m_project->findNode( id );
+        if ( node ) {
+            lst << node;
+        }
+    }
+    return lst;
+}
+
+QList<Node*> MilestoneItemModel::removeChildNodes( QList<Node*> nodes )
+{
+    QList<Node*> lst;
+    foreach ( Node *node, nodes ) {
+        bool ins = true;
+        foreach ( Node *n, lst ) {
+            if ( node->isChildOf( n ) ) {
+                //kDebug()<<node->name()<<" is child of"<<n->name();
+                ins = false;
+                break;
+            }
+        }
+        if ( ins ) {
+            //kDebug()<<" insert"<<node->name();
+            lst << node;
+        }
+    }
+    QList<Node*> nl = lst;
+    QList<Node*> nlst = lst;
+    foreach ( Node *node, nl ) {
+        foreach ( Node *n, nlst ) {
+            if ( n->isChildOf( node ) ) {
+                //kDebug()<<n->name()<<" is child of"<<node->name();
+                int i = nodes.indexOf( n );
+                lst.removeAt( i );
+            }
+        }
+    }
+    return lst;
+}
+
+bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int /*column*/, const QModelIndex &parent )
+{
+    //kDebug()<<action;
+    if (action == Qt::IgnoreAction) {
+        return true;
+    }
+    if ( !data->hasFormat( "application/x-vnd.kde.kplato.nodeitemmodel.internal" ) ) {
+        return false;
+    }
+    if ( action == Qt::MoveAction ) {
+        //kDebug()<<"MoveAction";
+        
+        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.nodeitemmodel.internal" );
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        Node *par = 0;
+        if ( parent.isValid() ) {
+            par = node( parent );
+        } else {
+            par = m_project;
+        }
+        QList<Node*> lst = nodeList( stream );
+        QList<Node*> nodes = removeChildNodes( lst ); // children goes with their parent
+        foreach ( Node *n, nodes ) {
+            if ( ! m_project->canMoveTask( n, par ) ) {
+                //kDebug()<<"Can't move task:"<<n->name();
+                return false;
+            }
+        }
+        int offset = 0;
+        K3MacroCommand *cmd = 0;
+        foreach ( Node *n, nodes ) {
+            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Move tasks" ) );
+            cmd->addCommand( new NodeMoveCmd( m_part, m_project, n, par, row + offset ) );
+            offset++;
+        }
+        if ( cmd ) {
+            m_part->addCommand( cmd );
+        }
+        //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
+        return true;
+    }
+    return false;
+}
+
+Node *MilestoneItemModel::node( const QModelIndex &index ) const
+{
+    Node *n = m_project;
+    if ( index.isValid() ) {
+        //kDebug()<<index;
+        n = static_cast<Node*>( index.internalPointer() );
+    }
+    return n;
+}
+
+void MilestoneItemModel::slotNodeChanged( Node *node )
+{
+    //kDebug()<<node->name();
+    if ( node == 0 ) {
+        return;
+    }
+    if ( node->type() != Node::Type_Milestone ) {
+        // Type may have changed from Milestone, so try to remove
+        slotNodeToBeRemoved( node );
+        return;
+    }
+    int row = m_mslist.indexOf( node );
+    if ( row == -1 ) {
+        // Type may have changed to Milestone, so insert
+        slotNodeInserted( node );
+        return;
+    }
+    //kDebug()<<node->name()<<": "<<row;
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+}
+
+
 } //namespace KPlato
 
 #include "kptnodeitemmodel.moc"

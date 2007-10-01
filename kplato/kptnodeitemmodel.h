@@ -202,6 +202,87 @@ private:
     NodeModel m_nodemodel;
 };
 
+class MilestoneItemModel : public ItemModelBase
+{
+    Q_OBJECT
+public:
+    explicit MilestoneItemModel( Part *part, QObject *parent = 0 );
+    ~MilestoneItemModel();
+
+    virtual void setProject( Project *project );
+    void setManager( ScheduleManager *sm );
+
+    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+
+    virtual QModelIndex parent( const QModelIndex & index ) const;
+    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
+    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    virtual QModelIndex index( const Node *node ) const;
+
+    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+
+
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
+    virtual QStringList mimeTypes () const;
+    virtual Qt::DropActions supportedDropActions() const;
+    virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+
+    Node *node( const QModelIndex &index ) const;
+    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+
+    QModelIndex insertTask( Node *node, Node *after );
+    QModelIndex insertSubtask( Node *node, Node *parent );
+
+    QList<Node*> nodeList( QDataStream &stream );
+    static QList<Node*> removeChildNodes( const QList<Node*> nodes );
+    bool dropAllowed( Node *on, const QMimeData *data );
+
+    virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
+
+protected slots:
+    void slotNodeChanged( Node* );
+    void slotNodeToBeInserted( Node *node, int row );
+    void slotNodeInserted( Node *node );
+    void slotNodeToBeRemoved( Node *node );
+    void slotNodeRemoved( Node *node );
+
+    void slotLayoutChanged();
+
+protected:
+    bool setName( Node *node, const QVariant &value, int role );
+    bool setLeader( Node *node, const QVariant &value, int role );
+    QVariant allocation( const Node *node, int role ) const;
+    bool setAllocation( Node *node, const QVariant &value, int role );
+    bool setDescription( Node *node, const QVariant &value, int role );
+    bool setType( Node *node, const QVariant &value, int role );
+    bool setConstraint( Node *node, const QVariant &value, int role );
+    bool setConstraintStartTime( Node *node, const QVariant &value, int role );
+    bool setConstraintEndTime( Node *node, const QVariant &value, int role );
+    bool setEstimateType( Node *node, const QVariant &value, int role );
+    bool setEstimate( Node *node, const QVariant &value, int role );
+    bool setOptimisticRatio( Node *node, const QVariant &value, int role );
+    bool setPessimisticRatio( Node *node, const QVariant &value, int role );
+    bool setRiskType( Node *node, const QVariant &value, int role );
+    bool setRunningAccount( Node *node, const QVariant &value, int role );
+    bool setStartupAccount( Node *node, const QVariant &value, int role );
+    bool setStartupCost( Node *node, const QVariant &value, int role );
+    bool setShutdownAccount( Node *node, const QVariant &value, int role );
+    bool setShutdownCost( Node *node, const QVariant &value, int role );
+
+protected:
+    void resetModel();
+    
+private:
+    NodeModel m_nodemodel;
+    QList<Node*> m_mslist;
+};
+
 } //namespace KPlato
 
 #endif //NODEITEMMODEL_H

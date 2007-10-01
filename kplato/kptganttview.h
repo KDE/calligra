@@ -30,13 +30,13 @@
 class QPoint;
 class QSplitter;
 
-
 namespace KPlato
 {
 
 class TaskAppointmentsView;
 
 class Node;
+class MilestoneItemModel;
 class NodeItemModel;
 class Task;
 class Part;
@@ -143,6 +143,82 @@ private:
     bool m_showCriticalPath;
     bool m_showNoInformation;
     bool m_showAppointments;
+    Project *m_project;
+};
+
+class MilestoneKDGanttView : public KDGantt::View
+{
+    Q_OBJECT
+public:
+    MilestoneKDGanttView( Part *part, QWidget *parent );
+
+    MilestoneItemModel *itemModel() const { return m_model; }
+    void setProject( Project *project );
+    void setScheduleManager( ScheduleManager *sm );
+    void update();
+
+public slots:
+    void slotProjectCalculated( ScheduleManager *sm );
+
+protected:
+    Project *m_project;
+    ScheduleManager *m_manager;
+    MilestoneItemModel *m_model;
+};
+
+class MilestoneGanttView : public ViewBase
+{
+    Q_OBJECT
+public:
+    MilestoneGanttView( Part *part, QWidget *parent, bool readWrite = true );
+
+    virtual void setZoom( double zoom );
+    void show();
+    virtual void setProject( Project *project );
+    virtual void draw( Project &project );
+    virtual void drawChanges( Project &project );
+
+    Node *currentNode() const;
+
+    void clear();
+
+    virtual bool loadContext( const KoXmlElement &context );
+    virtual void saveContext( QDomElement &context ) const;
+
+    void setReadWriteMode( bool on );
+    bool isReadWriteMode() const { return m_readWrite; }
+
+    bool showNoInformation() const { return m_showNoInformation; }
+
+signals:
+    void itemDoubleClicked();
+
+    /**
+     * Requests a specific type of popup menu.
+     * Usually a KPlato::View object is connected to this signal.
+     */
+    void requestPopupMenu( const QString& menuname, const QPoint & pos );
+
+public slots:
+    void setScheduleManager( ScheduleManager *sm );
+
+    void setShowTaskName( bool on ) { m_showTaskName = on; }
+    void setShowProgress( bool on ) { m_showProgress = on; }
+    void setShowPositiveFloat( bool on ) { m_showPositiveFloat = on; }
+    void setShowCriticalTasks( bool on ) { m_showCriticalTasks = on; }
+    void setShowNoInformation( bool on ) { m_showNoInformation = on; }
+    void update();
+
+private:
+    bool m_readWrite;
+    int m_defaultFontSize;
+    QSplitter *m_splitter;
+    MilestoneKDGanttView *m_gantt;
+    bool m_showTaskName;
+    bool m_showProgress;
+    bool m_showPositiveFloat;
+    bool m_showCriticalTasks;
+    bool m_showNoInformation;
     Project *m_project;
 };
 

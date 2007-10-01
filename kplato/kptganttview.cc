@@ -321,6 +321,152 @@ void GanttView::update()
     kDebug()<<"POULOU";
 }
 
+//------------------------
+MilestoneKDGanttView::MilestoneKDGanttView( Part *part, QWidget *parent )
+    : KDGantt::View( parent ),
+    m_project( 0 ),
+    m_manager( 0 ),
+    m_model( new MilestoneItemModel( part, this ) )
+{
+    kDebug()<<"------------------- create MilestoneKDGanttView -----------------------"<<endl;
+    KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
+    //m->setColumn( KDGantt::ItemTypeRole, 1 );
+    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
+    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
+    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
+    m->setColumn( KDGantt::StartTimeRole, 18 );
+    m->setColumn( KDGantt::EndTimeRole, 19 );
+    setModel( m_model );
+    QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
+    if ( tv ) {
+        tv->header()->setStretchLastSection( true );
+        // Only show name in treeview ;)
+        for ( int i = 1; i < m_model->columnCount(); ++i ) {
+            tv->hideColumn( i );
+        }
+    } else kDebug()<<"No treeview !!!"<<endl;
+}
+
+void MilestoneKDGanttView::update()
+{
+}
+
+void MilestoneKDGanttView::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+    }
+    m_model->setProject( project );
+    m_project = project;
+    if ( m_project ) {
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
+    }
+}
+
+void MilestoneKDGanttView::slotProjectCalculated( ScheduleManager *sm )
+{
+    if ( m_manager == sm ) {
+        setScheduleManager( sm );
+    }
+}
+
+void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug()<<id<<endl;
+    m_model->setManager( sm );
+    m_manager = sm;
+}
+
+
+//------------------------------------------
+
+MilestoneGanttView::MilestoneGanttView( Part *part, QWidget *parent, bool readWrite )
+    : ViewBase( part, parent ),
+        m_readWrite( readWrite ),
+        m_project( 0 )
+{
+    kDebug() <<" ---------------- KPlato: Creating Milesone GanttView ----------------";
+
+    QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin( 0 );
+    m_splitter = new QSplitter( this );
+    l->addWidget( m_splitter );
+    m_splitter->setOrientation( Qt::Vertical );
+
+    m_gantt = new MilestoneKDGanttView( part, m_splitter );
+
+    m_showTaskName = false; // FIXME
+    m_showProgress = false; //FIXME
+    m_showPositiveFloat = false; //FIXME
+    m_showCriticalTasks = false; //FIXME
+    m_showNoInformation = false; //FIXME
+
+    setReadWriteMode( readWrite );
+}
+
+void MilestoneGanttView::setZoom( double )
+{
+    //kDebug() <<"setting gantt zoom:" << zoom;
+    //m_gantt->setZoomFactor(zoom,true); NO!!! setZoomFactor() is something else
+}
+
+void MilestoneGanttView::show()
+{
+}
+
+void MilestoneGanttView::clear()
+{
+}
+
+void MilestoneGanttView::setProject( Project *project )
+{
+    m_gantt->setProject( project );
+}
+
+void MilestoneGanttView::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug()<<id<<endl;
+    m_gantt->setScheduleManager( sm );
+}
+
+void MilestoneGanttView::draw( Project &project )
+{
+    setProject( &project );
+}
+
+void MilestoneGanttView::drawChanges( Project &project )
+{
+    if ( m_project != &project ) {
+        setProject( &project );
+    }
+}
+
+Node *MilestoneGanttView::currentNode() const
+{
+//    return getNode( m_currentItem );
+    return 0;
+}
+
+bool MilestoneGanttView::loadContext( const KoXmlElement &settings )
+{
+    kDebug()<<endl;
+    return true;
+}
+
+void MilestoneGanttView::saveContext( QDomElement &settings ) const
+{
+    kDebug()<<endl;
+}
+
+void MilestoneGanttView::setReadWriteMode( bool on )
+{
+    m_readWrite = on;
+}
+
+void MilestoneGanttView::update()
+{
+}
+
 }  //KPlato namespace
 
 #include "kptganttview.moc"
