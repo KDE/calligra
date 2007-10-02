@@ -337,7 +337,7 @@ namespace KexiUtils
 		public:
 			ContainerDeleter(Container& container) : m_container(container) {}
 			~ContainerDeleter() { clear(); }
-			void clear() { qDeleteAll(container); container.clear(); }
+			void clear() { qDeleteAll(m_container); m_container.clear(); }
 		private:
 			Container& m_container;
 	};
