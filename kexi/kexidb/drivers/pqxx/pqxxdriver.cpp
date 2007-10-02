@@ -157,7 +157,7 @@ QString pqxxSqlDriver::drv_escapeIdentifier( const QString& str) const
 //
 QByteArray pqxxSqlDriver::drv_escapeIdentifier( const QByteArray& str) const
 {
-	return QByteArray(str.toLatin1()).replace( '"', "\"\"" );
+	return QByteArray(str).replace( '"', "\"\"" );
 }
 
 //==================================================================================

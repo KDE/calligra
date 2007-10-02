@@ -83,12 +83,12 @@ bool pqxxSqlCursor::drv_open()
 		return false;
 	}
 		
-	QByteArray cur_name;
+	//QByteArray cur_name;
 	//Set up a transaction
 	try
 	{
 		//m_tran = new pqxx::work(*my_conn, "cursor_open");
-		cur_name.sprintf("cursor_transaction%d", pqxxSqlCursor_trans_num++);
+		//cur_name.sprintf("cursor_transaction%d", pqxxSqlCursor_trans_num++);
 		
 //		m_tran = new pqxx::nontransaction(*my_conn, (const char*)cur_name);
 		if (!((pqxxSqlConnection*)connection())->m_trans) {
@@ -215,7 +215,7 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 		return QVariant();
 	}
 
-	KexiDB::Field *f = (m_fieldsExpanded && pos<qMin(m_fieldsExpanded->count(), m_fieldCount)) 
+	KexiDB::Field *f = (m_fieldsExpanded && pos<qMin((uint)m_fieldsExpanded->count(), m_fieldCount)) 
 		? m_fieldsExpanded->at(pos)->field : 0;
 
 //	KexiDBDrvDbg << "pqxxSqlCursor::value(" << pos << ")" << endl;
@@ -291,6 +291,7 @@ bool pqxxSqlCursor::drv_storeCurrentRow(RecordData &data) const
 
 	for (uint i=0; i<m_fieldsToStoreInRow; i++)
 		data[i] = pValue(i);
+	return true;
 }
 
 //==================================================================================

@@ -430,13 +430,13 @@ namespace KexiUtils
 		public:
 			CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
 			~CaseInsensitiveHash() { if (m_autoDelete) qDeleteAll(*this); }
-			typename QList<T>::iterator find(const Key& key) const { return QHash<Key, T>::find( key.toLower() ); }
-			typename QList<T>::const_iterator constFind(const Key& key) const { return QHash<Key, T>::constFind( key.toLower() ); }
+			typename QHash<Key, T>::iterator find(const Key& key) const { return QHash<Key, T>::find( key.toLower() ); }
+			typename QHash<Key, T>::const_iterator constFind(const Key& key) const { return QHash<Key, T>::constFind( key.toLower() ); }
 			bool contains(const Key& key) const { return QHash<Key, T>::contains( key.toLower() ); }
 			int count(const Key& key) const { return QHash<Key, T>::count( key.toLower() ); }
-			typename QList<T>::iterator insert(const Key& key, const T& value) { 
+			typename QHash<Key, T>::iterator insert(const Key& key, const T& value) { 
 				return QHash<Key, T>::insert( key.toLower(), value ); }
-			typename QList<T>::iterator insertMulti(const Key& key, const T& value) { 
+			typename QHash<Key, T>::iterator insertMulti(const Key& key, const T& value) { 
 				return QHash<Key, T>::insertMulti( key.toLower(), value ); }
 			const Key key(const T& value, const Key& defaultKey) const { 
 				return QHash<Key, T>::key( value, key.toLower() ); }
