@@ -44,8 +44,6 @@
 #include "karbon_factory.h"
 #include "karbon_view.h"
 #include "vglobal.h"
-#include "vpainter.h"
-#include "vpainterfactory.h"
 #include "vselection.h"
 #include "KarbonCanvas.h"
 #include "vdocumentdocker.h"
@@ -362,47 +360,14 @@ KarbonPart::repaintAllViews( bool /*repaint*/ )
 		static_cast<KarbonView*>( view )->canvasWidget()->repaintAll( repaint );*/
 }
 
-void
-KarbonPart::paintContent( QPainter& painter, const QRect& rect)
+void KarbonPart::paintContent( QPainter& painter, const QRect& rect)
 {
-	kDebug(38000) <<"**** part->paintContent()";
+    kDebug(38000) <<"**** part->paintContent()";
 
-	QRectF r = rect;
-	double zoomFactorX = double( r.width() ) / double( document().pageSize().width() );
-	double zoomFactorY = double( r.height() ) / double( document().pageSize().height() );
-	double zoomFactor = qMin( zoomFactorX, zoomFactorY );
-
-	painter.eraseRect( rect );
-	VPainterFactory *painterFactory = new VPainterFactory;
-	//QPaintDeviceMetrics metrics( painter.device() );
-	painterFactory->setPainter( painter.device(), rect.width(), rect.height() );
-	VPainter *p = painterFactory->painter();
-	//VPainter *p = new VQPainter( painter.device() );
-	p->begin();
-	p->setZoomFactor( zoomFactor );
-	kDebug(38000) <<"painter.worldMatrix().dx() :" << painter.matrix().dx();
-	kDebug(38000) <<"painter.worldMatrix().dy() :" << painter.matrix().dy();
-	kDebug(38000) <<"rect.x() :"<< rect.x();
-	kDebug(38000) <<"rect.y() :"<< rect.y();
-	kDebug(38000) <<"rect.width() :"<< rect.width();
-	kDebug(38000) <<"rect.height() :"<< rect.height();
-	r = document().boundingBox();
-	QMatrix mat = painter.matrix();
-	mat.scale( 1, -1 );
-	mat.translate( 0, -r.height() * zoomFactor );
-	p->setMatrix( mat );
-
-	m_doc.selection()->clear();
-	/*
-	Q3PtrListIterator<VLayer> itr( m_doc.layers() );
-
-	for( ; itr.current(); ++itr )
-	{
-		itr.current()->draw( p, &r );
-	}
-	*/
-	p->end();
-	delete painterFactory;
+    QRectF r = rect;
+    double zoomFactorX = double( r.width() ) / double( document().pageSize().width() );
+    double zoomFactorY = double( r.height() ) / double( document().pageSize().height() );
+    double zoomFactor = qMin( zoomFactorX, zoomFactorY );
 }
 
 void
