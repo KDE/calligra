@@ -356,7 +356,7 @@ namespace KexiUtils
 	};
 
 	//! @short Autodeleted list
-	template <class T>
+	template <typename T>
 	class KEXIUTILS_EXPORT AutodeletedList : public QList<T> {
 		public:
 			AutodeletedList(const AutodeletedList& other)
@@ -371,9 +371,17 @@ namespace KexiUtils
 			void replace(int i, const T& value) {
 				T item = takeAt(i); insert(i, value); if (m_autoDelete) delete item; }
 			void insert(int i, const T& value) { QList<T>::insert(i, value); }
-			iterator erase(iterator pos) {
-				T item = *pos; iterator res = QList<T>::erase(pos); if (m_autoDelete) delete item; return res; }
-			iterator erase(iterator afirst, iterator alast) {
+			typename QList<T>::iterator erase(typename QList<T>::iterator pos) {
+				T item = *pos;
+				typename QList<T>::iterator res = QList<T>::erase(pos);
+				if (m_autoDelete)
+					delete item;
+				return res;
+			}
+			typename QList<T>::iterator erase(
+				typename QList<T>::iterator afirst, 
+				typename QList<T>::iterator alast)
+			{
 				if (!m_autoDelete)
 					return QList<T>::erase(afirst, alast);
 				while (afirst != alast) {
@@ -388,7 +396,7 @@ namespace KexiUtils
 			int removeAll(const T& value) {
 				if (!m_autoDelete)
 					return QList<T>::removeAll(value);
-				iterator it( begin() );
+				typename QList<T>::iterator it( begin() );
 				int removedCount = 0;
 				while (it != end()) {
 					if (*it == value) {
@@ -417,18 +425,18 @@ namespace KexiUtils
 
 	//! @short Case insensitive hash container supporting QString or QByteArray keys. 
 	//! Keys are turned to lowercase before inserting. Also supports option for autodeletion.
-	template <class Key, class T>
+	template <typename Key, typename T>
 	class KEXIUTILS_EXPORT CaseInsensitiveHash : public QHash<Key, T> {
 		public:
 			CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
 			~CaseInsensitiveHash() { if (m_autoDelete) qDeleteAll(*this); }
-			iterator find(const Key& key) const { return QHash<Key, T>::find( key.toLower() ); }
-			const_iterator constFind(const Key& key) const { return QHash<Key, T>::constFind( key.toLower() ); }
+			typename QList<T>::iterator find(const Key& key) const { return QHash<Key, T>::find( key.toLower() ); }
+			typename QList<T>::const_iterator constFind(const Key& key) const { return QHash<Key, T>::constFind( key.toLower() ); }
 			bool contains(const Key& key) const { return QHash<Key, T>::contains( key.toLower() ); }
 			int count(const Key& key) const { return QHash<Key, T>::count( key.toLower() ); }
-			iterator insert(const Key& key, const T& value) { 
+			typename QList<T>::iterator insert(const Key& key, const T& value) { 
 				return QHash<Key, T>::insert( key.toLower(), value ); }
-			iterator insertMulti(const Key& key, const T& value) { 
+			typename QList<T>::iterator insertMulti(const Key& key, const T& value) { 
 				return QHash<Key, T>::insertMulti( key.toLower(), value ); }
 			const Key key(const T& value, const Key& defaultKey) const { 
 				return QHash<Key, T>::key( value, key.toLower() ); }
