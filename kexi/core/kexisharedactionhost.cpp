@@ -34,19 +34,20 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <kicon.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 KexiSharedActionHostPrivate::KexiSharedActionHostPrivate(KexiSharedActionHost *h)
 : QObject()
-, actionProxies(401)
 , actionMapper( this )
-, volatileActions(401)
 , host(h)
 {
 	setObjectName("KexiSharedActionHostPrivate");
-	volatileActions.setAutoDelete(true);
 	connect(&actionMapper, SIGNAL(mapped(const QString &)), this, SLOT(slotAction(const QString &)));
+}
+
+KexiSharedActionHostPrivate::~KexiSharedActionHostPrivate()
+{
+	qDeleteAll(volatileActions);
+	volatileActions.clear();
 }
 
 void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
@@ -55,14 +56,14 @@ void KexiSharedActionHostPrivate::slotAction(const QString& act_id)
 //	while (w && !w->inherits("KexiWindow") && !w->inherits("KexiDockBase"))
 //		w = w->parentWidget();
 
-	KexiActionProxy *proxy = w ? actionProxies[ w ] : 0;
+	KexiActionProxy *proxy = w ? actionProxies.value( w ) : 0;
 
 	if (!proxy || !proxy->activateSharedAction(act_id.toLatin1())) {
 		//also try to find previous enabler
-		w = enablers.contains(act_id) ? enablers[act_id] : 0;
+		w = enablers.contains(act_id) ? enablers.value(act_id) : 0;
 		if (!w)
 			return;
-		proxy = actionProxies[ w ];
+		proxy = actionProxies.value( w );
 		if (!proxy)
 			return;
 		proxy->activateSharedAction(act_id.toLatin1());
@@ -157,7 +158,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 	bool insideKexiWindow = o 
 		&& (o->inherits("KexiWindow") || 0 != KexiUtils::findParent<KexiWindow*>(o));
 
-	KexiActionProxy *p = o ? d->actionProxies[ o ] : 0;
+	KexiActionProxy *p = o ? d->actionProxies.value( o ) : 0;
 	foreach(KAction* a, d->sharedActions) {
 		//setActionAvailable((*it)->name(),p && p->isAvailable((*it)->name()));
 #ifdef __GNUC__
@@ -175,7 +176,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 #endif
 //todo		}
 		const bool avail = p && p->isAvailable(a->objectName());
-		KexiVolatileActionData *va = d->volatileActions[ a ];
+		KexiVolatileActionData *va = d->volatileActions.value( a );
 		if (va != 0) {
 			if (p && p->isSupported(a->objectName())) {
 				QList<KAction*> actions_list;
@@ -201,7 +202,7 @@ void KexiSharedActionHost::invalidateSharedActions(QObject *o)
 
 KexiActionProxy* KexiSharedActionHost::actionProxyFor(QObject *o) const
 {
-	return d->actionProxies[ o ];
+	return d->actionProxies.value( o );
 }
 
 KexiActionProxy* KexiSharedActionHost::takeActionProxyFor(QObject *o)
@@ -330,12 +331,12 @@ void KexiSharedActionHost::setActionVolatile( KAction *a, bool set )
 {
 	if (!set) {
 		d->volatileActions.remove( a );
+		delete a;
 		return;
 	}
-	if (d->volatileActions[ a ])
+	if (d->volatileActions.value( a ))
 		return;
 	d->volatileActions.insert( a, new KexiVolatileActionData() );
 }
 
 #include "kexisharedactionhost_p.moc"
-

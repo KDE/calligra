@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,10 +20,8 @@
 #ifndef KEXIDB_INDEX_H
 #define KEXIDB_INDEX_H
 
-#include <q3valuelist.h>
-#include <qstring.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QList>
+#include <QString>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -45,8 +43,8 @@ class Relationship;
 class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 {
 	public:
-		typedef Q3PtrList<IndexSchema> List;
-		typedef Q3PtrListIterator<IndexSchema> ListIterator;
+		typedef QList<IndexSchema*> List;
+		typedef QList<IndexSchema*>::ConstIterator ListIterator;
 
 		/*! Constructs empty index schema object 
 		 that is assigned to \a table, and will be owned by this table.
@@ -183,11 +181,10 @@ class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 
 		TableSchema *m_tableSchema; //! table on that index is built
 
-		/*! a list of master relationships for the table (of this index),
+		/*! A set of master relationships for the table (of this index),
 		 this index is a master key for these relationships
 		 and therefore - owner of these */
-
-		Relationship::List m_master_owned_rels; 
+		QSet<Relationship*> m_master_owned_rels; 
 
 		/*! a list of master relationships that are not owned by this schema */
 		Relationship::List m_master_rels; 

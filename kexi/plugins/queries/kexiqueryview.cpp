@@ -73,7 +73,7 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 	KexiDB::Cursor *oldCursor = d->cursor;
 	KexiDB::debug( query->parameters() );
 	bool ok;
-	Q3ValueList<QVariant> params;
+	QList<QVariant> params;
 	{
 		KexiUtils::WaitCursorRemover remover;
 		params = KexiQueryParameters::getParameters(this, 

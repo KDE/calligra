@@ -21,6 +21,8 @@
 #ifndef KEXIMAINWINDOW_P_H
 #define KEXIMAINWINDOW_P_H
 
+#define KEXI_NO_PROCESS_EVENTS
+
 #ifdef KEXI_NO_PROCESS_EVENTS
 # define KEXI_NO_PENDING_DIALOGS
 #endif
@@ -56,6 +58,27 @@ class KexiTabbedToolBar : public KTabWidget
 		Private * const d;
 };
 
+//! @internal window container created to speedup opening new tabs
+class KexiWindowContainer : public QWidget
+{
+	public:
+		KexiWindowContainer(QWidget* parent)
+			: QWidget(parent)
+			, window(0)
+			, lyr( new QVBoxLayout(this) )
+		{
+			lyr->setContentsMargins(0,0,0,0);
+		}
+		void setWindow(KexiWindow* w) {
+			window = w;
+			if (w)
+				lyr->addWidget(w);
+		}
+		KexiWindow *window;
+	private:
+		QVBoxLayout *lyr;
+};
+
 //! @internal
 class KexiTabbedToolBar::Private
 {
@@ -64,7 +87,7 @@ class KexiTabbedToolBar::Private
 		 : createId(-1), createWidgetToolBar(0), tabToRaise(-1)
 		{
 			tabRaiseTimer.setSingleShot(true);
-			tabRaiseTimer.setInterval(500);
+			tabRaiseTimer.setInterval(300);
 		}
 		KActionCollection *ac;
 		int createId;
@@ -204,6 +227,12 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 */
 
 	connect(this, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentChanged(int)));
+/*tmp
+	QPalette pal(palette());
+	QBrush bg( pal.brush( backgroundRole() ) );
+	bg.setColor( Qt::red ); //pal.color( QPalette::Button ) );
+	pal.setColor( QPalette::Window, Qt::red );
+	setPalette( pal );*/
 }
 
 KexiTabbedToolBar::~KexiTabbedToolBar()
@@ -390,12 +419,12 @@ bool KexiMainWidget::queryExit()
 
 void KexiMainWidget::slotCurrentTabIndexChanged(int index)
 {
-	KexiWindow* w = dynamic_cast<KexiWindow*>( m_tabWidget->widget(index) );
-	if ((KexiWindow*)m_previouslyActiveWindow == w)
+	KexiWindowContainer* cont = dynamic_cast<KexiWindowContainer*>( m_tabWidget->widget(index) );
+	if ((KexiWindow*)m_previouslyActiveWindow == cont->window)
 		return;
 	if (m_mainWindow)
-		m_mainWindow->activeWindowChanged( w, (KexiWindow*)m_previouslyActiveWindow );
-	m_previouslyActiveWindow = w;
+		m_mainWindow->activeWindowChanged( cont->window, (KexiWindow*)m_previouslyActiveWindow );
+	m_previouslyActiveWindow = cont->window;
 }
 
 //------------------------------------------
@@ -661,7 +690,9 @@ void updatePropEditorDockWidthInfo() {
 	void updatePropEditorVisibility(Kexi::ViewMode viewMode)
 	{
 		if (propEditorDockWidget) {
-			propEditorDockWidget->setVisible( wnd->currentWindow() && wnd->currentWindow()->propertySet() );
+			bool visible = wnd->currentWindow() && wnd->currentWindow()->propertySet();
+			kDebug() << "updatePropEditorVisibility(): visible == " << visible;
+			propEditorDockWidget->setVisible( visible );
 		}
 
 #ifdef __GNUC__

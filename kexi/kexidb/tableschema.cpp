@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,9 +26,8 @@
 #include <assert.h>
 #include <kdebug.h>
 
-#include <q3ptrdict.h>
-
 namespace KexiDB {
+
 //! @internal
 class TableSchema::Private
 {
@@ -45,17 +44,13 @@ public:
 
 	void clearLookupFields()
 	{
-		for (QMap<const Field*, LookupFieldSchema*>::ConstIterator it = lookupFields.constBegin(); 
-			it!=lookupFields.constEnd(); ++it)
-		{
-			delete it.value();
-		}
+		qDeleteAll(lookupFields);
 		lookupFields.clear();
 	}
 
 	Field *anyNonPKField;
-	QMap<const Field*, LookupFieldSchema*> lookupFields;
-	Q3PtrVector<LookupFieldSchema> lookupFieldsList;
+	QHash<const Field*, LookupFieldSchema*> lookupFields;
+	QVector<LookupFieldSchema*> lookupFieldsList;
 };
 }
 //-------------------------------------
@@ -114,18 +109,20 @@ TableSchema::TableSchema(Connection *conn, const QString & name)
 	, m_query(0)
 	, m_isKexiDBSystem(false)
 {
-	d = new Private();
+//moved	d = new Private();
 	assert(conn);
 	m_name = name;
-	m_indices.setAutoDelete( true );
-	m_pkey = new IndexSchema(this);
-	m_indices.append(m_pkey);
+	init();
+//Qt 4	m_indices.setAutoDelete( true );
+//moved	m_pkey = new IndexSchema(this);
+//moved	m_indices.append(m_pkey);
 }
 
 TableSchema::~TableSchema()
 {
 	if (m_conn)
 		m_conn->removeMe( this );
+	qDeleteAll(m_indices);
 	delete m_query;
 	delete d;
 }
@@ -133,7 +130,7 @@ TableSchema::~TableSchema()
 void TableSchema::init()
 {
 	d = new Private();
-	m_indices.setAutoDelete( true );
+//Qt 4	m_indices.setAutoDelete( true );
 	m_pkey = new IndexSchema(this);
 	m_indices.append(m_pkey);
 }
@@ -145,16 +142,15 @@ void TableSchema::init(const TableSchema& ts, bool copyId)
 	m_isKexiDBSystem = false;
 	d = new Private();
 	m_name = ts.m_name;
-	m_indices.setAutoDelete( true );
+//Qt 4	m_indices.setAutoDelete( true );
 	m_pkey = 0; //will be copied
 	if (!copyId)
 		m_id = -1;
 
 	//deep copy all members
-	IndexSchema::ListIterator idx_it(ts.m_indices);
-	for (;idx_it.current();++idx_it) {
+	foreach( IndexSchema* otherIdx, ts.m_indices) {
 		IndexSchema *idx = new IndexSchema(
-			*idx_it.current(), *this /*fields from _this_ table will be assigned to the index*/);
+			*otherIdx, *this /*fields from _this_ table will be assigned to the index*/);
 		if (idx->isPrimaryKey()) {//assign pkey
 			m_pkey = idx;
 		}
@@ -166,7 +162,7 @@ void TableSchema::setPrimaryKey(IndexSchema *pkey)
 {
 	if (m_pkey && m_pkey!=pkey) {
 		if (m_pkey->fieldCount()==0) {//this is empty key, probably default - remove it
-			m_indices.remove(m_pkey);
+			m_indices.removeAt( m_indices.indexOf(m_pkey) );
 		}
 		else {
 			m_pkey->setPrimaryKey(false); //there can be only one pkey..
@@ -187,14 +183,14 @@ FieldList& TableSchema::insertField(uint index, Field *field)
 {
 	assert(field);
 	FieldList::insertField(index, field);
-	if (!field || index>m_fields.count())
+	if (!field || index > (uint)m_fields.count())
 		return *this;
 	field->setTable(this);
 	field->m_order = index; //m_fields.count();
 	//update order for next next fields
-	Field *f = m_fields.at(index+1);
-	for (int i=index+1; f; i++, f = m_fields.next())
-		f->m_order = i;
+	uint fieldsCount = m_fields.count();
+	for (uint i=index+1; i < fieldsCount; i++)
+		m_fields.at(i)->m_order = i;
 
 	//Check for auto-generated indices:
 	IndexSchema *idx = 0;
@@ -228,8 +224,7 @@ void TableSchema::removeField(KexiDB::Field *field)
 {
 	if (d->anyNonPKField && field == d->anyNonPKField) //d->anyNonPKField will be removed!
 		d->anyNonPKField = 0;
-	delete d->lookupFields[field];
-	d->lookupFields.remove(field);
+	delete d->lookupFields.take(field);
 	FieldList::removeField(field);
 }
 
@@ -337,8 +332,7 @@ QString TableSchema::debugString(bool includeTableName)
 		s = QString("TABLE ") + schemaDataDebugString() + "\n";
 	s.append( FieldList::debugString() );
 
-	Field *f;
-	for (Field::ListIterator it(m_fields); (f = it.current()); ++it) {
+	foreach (Field *f, m_fields) {
 		LookupFieldSchema *lookupSchema = lookupFieldSchema( *f );
 		if (lookupSchema)
 			s.append( QString("\n") + lookupSchema->debugString() );
@@ -380,9 +374,8 @@ Field* TableSchema::anyNonPKField()
 {
 	if (!d->anyNonPKField) {
 		Field *f;
-		Field::ListIterator it(m_fields);
-		it.toLast(); //from the end (higher chances to find)
-		for (; (f = it.current()); --it) {
+		for (QListIterator<Field*> it(m_fields); it.hasPrevious();) {
+			f = it.previous();
 			if (!f->isPrimaryKey() && (!m_pkey || !m_pkey->hasField(f)))
 				break;
 		}
@@ -401,17 +394,15 @@ bool TableSchema::setLookupFieldSchema( const QString& fieldName, LookupFieldSch
 	}
 	if (lookupFieldSchema)
 		d->lookupFields.insert( f, lookupFieldSchema );
-	else {
-		delete d->lookupFields[f];
-		d->lookupFields.remove( f );
-	}
+	else
+		delete d->lookupFields.take( f );
 	d->lookupFieldsList.clear(); //this will force to rebuid the internal cache
 	return true;
 }
 
 LookupFieldSchema *TableSchema::lookupFieldSchema( const Field& field ) const
 {
-	return d->lookupFields[ &field ];
+	return d->lookupFields.value( &field );
 }
 
 LookupFieldSchema *TableSchema::lookupFieldSchema( const QString& fieldName )
@@ -422,7 +413,7 @@ LookupFieldSchema *TableSchema::lookupFieldSchema( const QString& fieldName )
 	return lookupFieldSchema( *f );
 }
 
-const Q3PtrVector<LookupFieldSchema>& TableSchema::lookupFieldsList()
+const QVector<LookupFieldSchema*>& TableSchema::lookupFieldsList()
 {
 	if (d->lookupFields.isEmpty())
 		return d->lookupFieldsList;
@@ -432,8 +423,8 @@ const Q3PtrVector<LookupFieldSchema>& TableSchema::lookupFieldsList()
 	d->lookupFieldsList.clear();
 	d->lookupFieldsList.resize( d->lookupFields.count() );
 	uint i = 0;
-	for (Field::ListIterator it(m_fields); it.current(); ++it) {
-		QMap<const Field*, LookupFieldSchema*>::ConstIterator itMap = d->lookupFields.find( it.current() );
+	foreach (Field* f, m_fields) {
+		QHash<const Field*, LookupFieldSchema*>::ConstIterator itMap = d->lookupFields.find( f );
 		if (itMap != d->lookupFields.constEnd()) {
 			d->lookupFieldsList.insert( i, itMap.value() );
 			i++;

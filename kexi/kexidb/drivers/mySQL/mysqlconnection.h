@@ -26,7 +26,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <kexidb/connection.h>
 #include "mysqlcursor.h"
-#include <q3dict.h>
 
 namespace KexiDB {
 

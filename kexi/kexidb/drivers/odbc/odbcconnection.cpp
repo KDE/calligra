@@ -25,8 +25,6 @@
 //QT Includes 
 #include <qfile.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 //KDE Includes
 #include <kgenericfactory.h>
@@ -71,7 +69,7 @@ QString ODBCConnection::escapeString(const QString& str) const
 	return str;
 }
 
-Q3CString ODBCConnection::escapeString(const Q3CString& str) const
+QByteArray ODBCConnection::escapeString(const QByteArray& str) const
 {
 	return str;
 }

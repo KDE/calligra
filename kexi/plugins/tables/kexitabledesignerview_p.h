@@ -130,7 +130,7 @@ class KexiTableDesignerViewPrivate
 		/*! Updates icon in the first column, depending on property set \a set.
 		 For example, when "rowSource" and "rowSourceType" propertiesa are not empty, 
 		 "combo" icon appears. */
-		void updateIconForItem(KexiTableItem &item, KoProperty::Set& set);
+		void updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set& set);
 
 		KexiTableDesignerView* designerView;
 

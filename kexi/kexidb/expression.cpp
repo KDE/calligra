@@ -30,11 +30,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
-
 KEXI_DB_EXPORT QString KexiDB::exprClassName(int c)
 {
 	if (c==KexiDBExpr_Unary)
@@ -128,14 +123,14 @@ NArgExpr::NArgExpr(int aClass, int token)
  : BaseExpr(token)
 {
 	m_cl = aClass;
-	list.setAutoDelete(true);
+//Qt 4	list.setAutoDelete(true);
 }
 
 NArgExpr::NArgExpr(const NArgExpr& expr)
  : BaseExpr(expr)
 {
-	foreach_list (BaseExpr::ListIterator, it, expr.list)
-		add( it.current()->copy() );
+	foreach (BaseExpr* e, expr.list)
+		add( e->copy() );
 }
 
 NArgExpr::~NArgExpr()
@@ -151,9 +146,9 @@ QString NArgExpr::debugString()
 {
 	QString s = QString("NArgExpr(")
 		+ "class=" + exprClassName(m_cl);
-	for ( BaseExpr::ListIterator it(list); it.current(); ++it ) {
+	foreach ( BaseExpr *expr, list) {
 		s+=", ";
-		s+=it.current()->debugString();
+		s+=expr->debugString();
 	}
 	s+=")";
 	return s;
@@ -163,18 +158,18 @@ QString NArgExpr::toString( QuerySchemaParameterValueListIterator* params )
 {
 	QString s;
 	s.reserve(256);
-	foreach_list( BaseExpr::ListIterator, it, list) {
+	foreach ( BaseExpr* e, list) {
 		if (!s.isEmpty())
 			s+=", ";
-		s+=it.current()->toString(params);
+		s += e->toString(params);
 	}
 	return s;
 }
 
 void NArgExpr::getQueryParameters(QuerySchemaParameterList& params)
 {
-	foreach_list( BaseExpr::ListIterator, it, list)
-		it.current()->getQueryParameters(params);
+	foreach ( BaseExpr *e, list)
+		e->getQueryParameters(params);
 }
 
 BaseExpr* NArgExpr::arg(int nr)
@@ -204,8 +199,8 @@ bool NArgExpr::validate(ParseInfo& parseInfo)
 	if (!BaseExpr::validate(parseInfo))
 		return false;
 
-	foreach_list(BaseExpr::ListIterator, it, list) {
-		if (!it.current()->validate(parseInfo))
+	foreach (BaseExpr *e, list) {
+		if (!e->validate(parseInfo))
 			return false;
 	}
 	return true;
@@ -711,8 +706,8 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 
 		//find first table that has this field
 		Field *firstField = 0;
-		foreach_list(TableSchema::ListIterator, it, *parseInfo.querySchema->tables()) {
-			Field *f = it.current()->field(fieldName);
+		foreach (TableSchema *table, *parseInfo.querySchema->tables()) {
+			Field *f = table->field(fieldName);
 			if (f) {
 				if (!firstField) {
 					firstField = f;
@@ -744,14 +739,15 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 	TableSchema *ts = parseInfo.querySchema->table( tableName );
 	if (ts) {//table.fieldname
 		//check if "table" is covered by an alias
-		const Q3ValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
-		Q3ValueList<int>::ConstIterator it = tPositions.constBegin();
-		Q3CString tableAlias;
+		const QList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
+		QByteArray tableAlias;
 		bool covered = true;
-		for (; it!=tPositions.constEnd() && covered; ++it) {
-			tableAlias = parseInfo.querySchema->tableAlias(*it);
-			if (tableAlias.isEmpty() || tableAlias.toLower()==tableName.toLatin1())
+		foreach (int position, tPositions) {
+			tableAlias = parseInfo.querySchema->tableAlias(position);
+			if (tableAlias.isEmpty() || tableAlias.toLower()==tableName.toLatin1()) {
 				covered = false; //uncovered
+				break;
+			}
 			KexiDBDbg << " --" << "covered by " << tableAlias << " alias" << endl;
 		}
 		if (covered) {
@@ -779,15 +775,15 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 		return false;
 	}
 
-	Q3ValueList<int> *positionsList = parseInfo.repeatedTablesAndAliases[ tableName ];
-	if (!positionsList) { //for sanity
+	if (!parseInfo.repeatedTablesAndAliases.contains( tableName )) {//for sanity
 		IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
 		return false;
 	}
+	const QList<int> positionsList( parseInfo.repeatedTablesAndAliases.value( tableName ) );
 
 	//it's a table.*
 	if (fieldName=="*") {
-		if (positionsList->count()>1) {
+		if (positionsList.count()>1) {
 			parseInfo.errMsg = i18n("Ambiguous \"%1.*\" expression", tableName);
 			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined", tableName);
 			return false;
@@ -808,13 +804,11 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 	// check if table or alias is used twice and both have the same column
 	// (so the column is ambiguous)
 	int numberOfTheSameFields = 0;
-	for (Q3ValueList<int>::iterator it = positionsList->begin();
-		it!=positionsList->end();++it)
-	{
-		TableSchema *otherTS = parseInfo.querySchema->tables()->at(*it);
+	foreach (int position, positionsList) {
+		TableSchema *otherTS = parseInfo.querySchema->tables()->at(position);
 		if (otherTS->field(fieldName))
 			numberOfTheSameFields++;
-		if (numberOfTheSameFields>1) {
+		if (numberOfTheSameFields > 1) {
 			parseInfo.errMsg = i18n("Ambiguous \"%1.%2\" expression", tableName, fieldName);
 			parseInfo.errDescr = i18n("More than one \"%1\" table or alias defined containing \"%2\" field",
 				tableName, fieldName);
@@ -829,18 +823,22 @@ bool VariableExpr::validate(ParseInfo& parseInfo)
 }
 
 //=========================================
-static Q3ValueList<Q3CString> FunctionExpr_builtIns;
+
 static const char* FunctionExpr_builtIns_[] =
 {"SUM", "MIN", "MAX", "AVG", "COUNT", "STD", "STDDEV", "VARIANCE", 0 };
 
-Q3ValueList<Q3CString> FunctionExpr::builtInAggregates()
+class BuiltInAggregates : public QSet<QByteArray>
 {
-	if (FunctionExpr_builtIns.isEmpty()) {
-		for (const char **p = FunctionExpr_builtIns_; *p; p++)
-			FunctionExpr_builtIns << *p;
-	}
-	return FunctionExpr_builtIns;
-}
+	public:
+		BuiltInAggregates() : QSet<QByteArray>() {
+			for (const char **p = FunctionExpr_builtIns_; *p; p++)
+				insert(QByteArray::fromRawData(*p, qstrlen(*p)));
+		}
+};
+
+K_GLOBAL_STATIC(BuiltInAggregates, _builtInAggregates)
+
+//=========================================
 
 FunctionExpr::FunctionExpr( const QString& _name, NArgExpr* args_ )
  : BaseExpr( 0/*undefined*/ )
@@ -908,7 +906,7 @@ bool FunctionExpr::validate(ParseInfo& parseInfo)
 	return args ? args->validate(parseInfo) : true;
 }
 
-bool FunctionExpr::isBuiltInAggregate(const Q3CString& fname)
+bool FunctionExpr::isBuiltInAggregate(const QByteArray& fname)
 {
-	return builtInAggregates().contains(fname.toUpper());
+	return _builtInAggregates->contains(fname.toUpper());
 }

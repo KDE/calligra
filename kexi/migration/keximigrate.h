@@ -205,7 +205,7 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		 \a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
 		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
-			KexiDB::RowData& data, bool &firstRecord)
+			KexiDB::RecordData& data, bool &firstRecord)
 		 { Q_UNUSED(sqlStatement); Q_UNUSED(data); Q_UNUSED(firstRecord);
 		   return cancelled; }
 

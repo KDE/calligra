@@ -21,16 +21,12 @@
 #ifndef _KEXIBLOBTABLEEDIT_H_
 #define _KEXIBLOBTABLEEDIT_H_
 
-#include <q3cstring.h>
-#include <q3cache.h>
-
 #include <KUrl>
 
 #include "kexitableedit.h"
 #include "kexicelleditorfactory.h"
 
 class KTemporaryFile;
-class Q3TextEdit;
 
 class KexiBlobTableEdit : public KexiTableEdit
 {
@@ -116,7 +112,7 @@ class KexiBlobTableEdit : public KexiTableEdit
 		Private *d;
 //todo		KTemporaryFile* m_tempFile;
 //todo		KProcess* m_proc;
-//todo		Q3TextEdit *m_content;
+//todo		QTextEdit *m_content;
 };
 
 KEXI_DECLARE_CELLEDITOR_FACTORY_ITEM(KexiBlobEditorFactoryItem)

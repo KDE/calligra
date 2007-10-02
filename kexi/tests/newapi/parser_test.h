@@ -33,7 +33,7 @@ int parserTest(const QString &st, const QStringList &params)
 
 	const bool ok = parser.parse( st );
 	KexiDB::QuerySchema *q = parser.query();
-	Q3ValueList<QVariant> variantParams;
+	QList<QVariant> variantParams;
 	foreach( const QString param, params )
 		variantParams.append(param.toLocal8Bit());
 	if (ok && q) {

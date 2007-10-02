@@ -29,8 +29,6 @@
 #include "sqliteadmin.h"
 
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -73,8 +71,7 @@ SQLiteDriver::SQLiteDriver( QObject *parent, const QStringList &args )
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=true;
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
 	beh->SELECT_1_SUBQUERY_SUPPORTED = true;
-	beh->SQL_KEYWORDS = keywords;
-	initSQLKeywords(29);
+	initDriverSpecificKeywords(keywords);
 
 	//predefined properties
 	d->properties["client_library_version"] = sqlite_libversion();
@@ -130,9 +127,9 @@ QString SQLiteDriver::escapeString(const QString& str) const
 	return QString("'")+QString(str).replace( '\'', "''" ) + "'";
 }
 
-Q3CString SQLiteDriver::escapeString(const Q3CString& str) const
+QByteArray SQLiteDriver::escapeString(const QByteArray& str) const
 {
-	return Q3CString("'")+Q3CString(str).replace( '\'', "''" )+"'";
+	return QByteArray("'")+QByteArray(str).replace( '\'', "''" )+"'";
 }
 
 QString SQLiteDriver::escapeBLOB(const QByteArray& array) const
@@ -145,9 +142,9 @@ QString SQLiteDriver::drv_escapeIdentifier( const QString& str) const
 	return QString(str).replace( '"', "\"\"" );
 }
 
-Q3CString SQLiteDriver::drv_escapeIdentifier( const Q3CString& str) const
+QByteArray SQLiteDriver::drv_escapeIdentifier( const QByteArray& str) const
 {
-	return Q3CString(str).replace( '"', "\"\"" );
+	return QByteArray(str).replace( '"', "\"\"" );
 }
 
 AdminTools* SQLiteDriver::drv_createAdminTools() const

@@ -244,14 +244,15 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray
 		if (name_required && obj_name.isEmpty())
 			continue;
 
-		KexiProjectData::ObjectInfo info;
-		info["name"]=obj_name;
-		info["type"]=type_name;
-		info["action"]=action_name;
-		//ok, now add info for this object
 		atLeastOneFound = true;
-		if (projectData())
+		if (projectData()) {
+			KexiProjectData::ObjectInfo* info = new KexiProjectData::ObjectInfo();
+			info->insert("name", obj_name);
+			info->insert("type", type_name);
+			info->insert("action", action_name);
+			//ok, now add info for this object
 			projectData()->autoopenObjects.append( info );
+		}
 		else
 			return true; //no need to find more because we do not have projectData() anyway
 	} //for

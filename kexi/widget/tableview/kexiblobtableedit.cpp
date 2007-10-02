@@ -33,6 +33,7 @@
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <qbuffer.h>
+#include <QCache>
 
 #include <kdebug.h>
 #include <ktemporaryfile.h>
@@ -85,8 +86,8 @@ KexiBlobTableEdit::KexiBlobTableEdit(KexiTableViewColumn &column, QWidget *paren
 
 	d->menu = new KexiImageContextMenu(this);
 	d->menu->installEventFilter(this);
-	if (column.columnInfo)
-		KexiImageContextMenu::updateTitle( d->menu, column.columnInfo->captionOrAliasOrName(),
+	if (column.columnInfo())
+		KexiImageContextMenu::updateTitle( d->menu, column.columnInfo()->captionOrAliasOrName(),
 //! @todo pixmaplabel icon is hardcoded...
 			"pixmaplabel" );
 	d->button->setMenu( d->menu );
@@ -475,13 +476,13 @@ class KexiKIconTableEdit::Private
 {
 public:
 	Private()
-	 : pixmapCache(17, 17, false)
+	 : pixmapCache(17)
 	{
 	}
 	//! We've no editor widget that would store current value, so we do this here
 	QVariant currentValue;
 
-	Q3Cache<QPixmap> pixmapCache;
+	QCache<QString, QPixmap> pixmapCache;
 };
 
 KexiKIconTableEdit::KexiKIconTableEdit(KexiTableViewColumn &column, QWidget *parent)
@@ -499,7 +500,6 @@ KexiKIconTableEdit::~KexiKIconTableEdit()
 void KexiKIconTableEdit::init()
 {
 	m_hasFocusableWidget = false;
-	d->pixmapCache.setAutoDelete(true);
 }
 	
 void KexiKIconTableEdit::setValueInternal(const QVariant& /*add*/, bool /*removeOld*/)
@@ -560,21 +560,23 @@ void KexiKIconTableEdit::setupContents( QPainter *p, bool /*focused*/, const QVa
 	}
 #endif
 
-	QString key = val.toString();
-	QPixmap *pix = 0;
-	if (!key.isEmpty() && !(pix = d->pixmapCache[ key ])) {
-		//cache pixmap
-		QPixmap pm = KIconLoader::global()->loadIcon( key, KIconLoader::Small, 
-			0, KIconLoader::DefaultState , QStringList() , 0L, true/*canReturnNull*/ );
-		if (!pm.isNull()) {
-			pix = new QPixmap(pm);
-			d->pixmapCache.insert(key, pix);
+	QString key( val.toString() );
+	QPixmap pm;
+	if (!key.isEmpty()) {
+		QPixmap *cached = d->pixmapCache[ key ];
+		if (cached)
+			pm = *cached;
+		if (pm.isNull()) {
+			//cache pixmap
+			pm = KIconLoader::global()->loadIcon( key, KIconLoader::Small, 
+				0, KIconLoader::DefaultState , QStringList() , 0L, true/*canReturnNull*/ );
+			if (!pm.isNull())
+				d->pixmapCache.insert(key, new QPixmap(pm));
 		}
 	}
 
-	if (p && pix) {
-		p->drawPixmap( (w-pix->width())/2, (h-pix->height())/2, *pix );
-	}
+	if (p && !pm.isNull())
+		p->drawPixmap( (w - pm.width())/2, (h - pm.height())/2, pm );
 }
 
 void KexiKIconTableEdit::handleCopyAction(const QVariant& value, const QVariant& visibleValue)

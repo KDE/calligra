@@ -51,15 +51,16 @@ class KEXIUTILS_EXPORT Validator : public QValidator
 		enum Result { Error = 0, Ok = 1, Warning = 2 };
 
 		Validator(QObject * parent = 0);
+
 		virtual ~Validator();
 
 		/*! Sets accepting empty values on (true) or off (false). 
 		 By default the validator does not accepts empty values. */
-		void setAcceptsEmptyValue( bool set ) { m_acceptsEmptyValue = set; }
+		void setAcceptsEmptyValue( bool set );
 
 		/*! \return true if the validator accepts empty values
 			@see setAcceptsEmptyValue() */
-		bool acceptsEmptyValue() const { return m_acceptsEmptyValue; }
+		bool acceptsEmptyValue() const;
 
 		/*! Checks if value \a v is ok and returns one of \a Result value:
 		 - \a Error is returned on error;
@@ -76,10 +77,8 @@ class KEXIUTILS_EXPORT Validator : public QValidator
 		/*! This implementation always returns value QValidator::Acceptable. */
 		virtual QValidator::State validate ( QString & input, int & pos ) const;
 
-		//! A generic error/warning message
-		static const QString msgColumnNotEmpty() {
-			return I18N_NOOP("\"%1\" value has to be entered.");
-		}
+		//! A generic error/warning message "... value has to be entered."
+		static const QString msgColumnNotEmpty();
 
 		//! Adds a child validator \a v
 		void addChildValidator( Validator* v );
@@ -89,9 +88,11 @@ class KEXIUTILS_EXPORT Validator : public QValidator
 		virtual Result internalCheck(const QString &valueName, const QVariant& v, 
 			QString &message, QString &details);
 
-		bool m_acceptsEmptyValue : 1;
-
 	friend class MultiValidator;
+
+	private:
+		class Private;
+		Private* const d;
 };
 
 //! @short A validator groupping multiple QValidators
@@ -132,6 +133,8 @@ class KEXIUTILS_EXPORT MultiValidator : public Validator
 		 You can add more validators with addSubvalidator(). */
 		MultiValidator(QValidator *validator, QObject * parent = 0);
 
+		~MultiValidator();
+
 		/*! Adds validator \a validator as another subvalidator.
 		 Subvalidator will be owned by this multivalidator if \a owned is true
 		 and its parent is NULL. */
@@ -150,10 +153,8 @@ class KEXIUTILS_EXPORT MultiValidator : public Validator
 			const QString &valueName, const QVariant& v, 
 			QString &message, QString &details);
 
-
-	protected:
-		Q3PtrList<QValidator> m_ownedSubValidators;
-		Q3ValueList<QValidator*> m_subValidators;
+		class Private;
+		Private* const d;
 };
 
 }

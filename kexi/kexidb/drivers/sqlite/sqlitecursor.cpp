@@ -33,10 +33,9 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <q3ptrvector.h>
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QVector>
+#include <QDateTime>
+#include <QByteArray>
 
 using namespace KexiDB;
 
@@ -86,7 +85,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		}
 #endif*/
 
-		Q3CString st;
+		QByteArray st;
 		//for sqlite:
 //		sqlite_struct *data; //! taken from SQLiteConnection
 #ifdef SQLITE2
@@ -123,7 +122,7 @@ class KexiDB::SQLiteCursorData : public SQLiteConnectionInternal
 		const char **prev_colname;*/
 		
 		uint cols_pointers_mem_size; //! size of record's array of pointers to values
-		Q3PtrVector<const char*> records;//! buffer data
+		QVector<const char**> records;//! buffer data
 //#ifdef SQLITE3
 //		bool rowDataReadyToFetch : 1;
 //#endif
@@ -236,7 +235,7 @@ bool SQLiteCursor::drv_open()
 	d->st = m_sql.toLocal8Bit();
 	d->res = sqlite_compile(
 		d->data,
-		d->st.data(),
+		d->st.constData(),
 		(const char**)&d->utail,
 		&d->prepared_st_handle,
 		&d->errmsg_p );
@@ -244,7 +243,7 @@ bool SQLiteCursor::drv_open()
 	d->st = m_sql.toUtf8();
 	d->res = sqlite3_prepare(
 		d->data,            /* Database handle */
-		d->st.data(),       /* SQL statement, UTF-8 encoded */
+		d->st.constData(),       /* SQL statement, UTF-8 encoded */
 		d->st.length(),             /* Length of zSql in bytes. */
 		&d->prepared_st_handle,  /* OUT: Statement handle */
 		0/*const char **pzTail*/     /* OUT: Pointer to unused portion of zSql */
@@ -312,6 +311,7 @@ void SQLiteCursor::drv_getNextRecord()
 //      // -- just set a flag that we've a data not fetched but available
 //		d->rowDataReadyToFetch = true;
 #endif
+		m_fieldsToStoreInRow = m_fieldCount;
 		//(m_logicalFieldCount introduced) m_fieldCount -= (m_containsROWIDInfo ? 1 : 0);
 	} else {
 //#ifdef SQLITE3
@@ -325,7 +325,7 @@ void SQLiteCursor::drv_getNextRecord()
 	
 	//debug
 /*
-	if (m_result == FetchOK && d->curr_coldata) {
+	if ((int)m_result == (int)FetchOK && d->curr_coldata) {
 		for (uint i=0;i<m_fieldCount;i++) {
 			KexiDBDrvDbg<<"col."<< i<<": "<< d->curr_colname[i]<<" "<< d->curr_colname[m_fieldCount+i]
 			<< " = " << (d->curr_coldata[i] ? QString::fromLocal8Bit(d->curr_coldata[i]) : "(NULL)") <<endl;
@@ -347,7 +347,7 @@ void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 //		KexiDBDrvDbg << "src_col: " << src_col << endl;
 		*dest_col = *src_col ? strdup(*src_col) : 0;
 	}
-	d->records.insert(m_records_in_buf,record);
+	d->records[m_records_in_buf] = record;
 //	KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer() ok." <<endl;
 }
 
@@ -422,13 +422,13 @@ const char ** SQLiteCursor::rowData() const
 	return d->curr_coldata;
 }
 
-void SQLiteCursor::storeCurrentRow(RowData &data) const
+bool SQLiteCursor::drv_storeCurrentRow(RecordData &data) const
 {
 #ifdef SQLITE2
 	const char **col = d->curr_coldata;
 #endif
 	//const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
-	data.resize(m_fieldCount);
+//not needed	data.resize(m_fieldCount);
 	if (!m_fieldsExpanded) {//simple version: without types
 		for( uint i=0; i<m_fieldCount; i++ ) {
 #ifdef SQLITE2
@@ -438,11 +438,11 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			data[i] = QString::fromUtf8( (const char*)sqlite3_column_text(d->prepared_st_handle, i) );
 #endif
 		}
-		return;
+		return true;
 	}
 
 	//const uint fieldsExpandedCount = m_fieldsExpanded->count();
-	const uint maxCount = qMin(m_fieldCount, m_fieldsExpanded->count());
+	const uint maxCount = qMin(m_fieldCount, (uint)m_fieldsExpanded->count());
 	// i - visible field's index, j - physical index
 	for( uint i=0, j=0; i<m_fieldCount; i++, j++ ) {
 //		while (j < m_detailedVisibility.count() && !m_detailedVisibility[j]) //!m_query->isColumnVisible(j))
@@ -467,16 +467,16 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 			data[i] = QVariant( *col ); //only latin1
 # endif
 		else if (f && f->isFPNumericType())
-			data[i] = QVariant( Q3CString(*col).toDouble() );
+			data[i] = QVariant( QByteArray(*col).toDouble() );
 		else {
 			switch (f ? f->type() : Field::Integer/*ROWINFO*/) {
 //todo: use short, etc.
 			case Field::Byte:
 			case Field::ShortInteger:
 			case Field::Integer:
-				data[i] = QVariant( Q3CString(*col).toInt() );
+				data[i] = QVariant( QByteArray(*col).toInt() );
 			case Field::BigInteger:
-				data[i] = QVariant( QString::fromLatin1(*col).toLongLong() );
+				data[i] = QVariant( QByteArray(*col).toLongLong() );
 			case Field::Boolean:
 				data[i] = sqliteStringToBool(QString::fromLatin1(*col));
 				break;
@@ -503,6 +503,7 @@ void SQLiteCursor::storeCurrentRow(RowData &data) const
 		data[i] = d->getValue(f, i); //, !f /*!f means ROWID*/);
 #endif
 	}
+	return true;
 }
 
 QVariant SQLiteCursor::value(uint i)
@@ -512,17 +513,17 @@ QVariant SQLiteCursor::value(uint i)
 		return QVariant();
 //TODO: allow disable range checking! - performance reasons
 //	const KexiDB::Field *f = m_query ? m_query->field(i) : 0;
-	KexiDB::Field *f = (m_fieldsExpanded && i<m_fieldsExpanded->count())
+	KexiDB::Field *f = (m_fieldsExpanded && i<(uint)m_fieldsExpanded->count())
 		? m_fieldsExpanded->at(i)->field : 0;
 #ifdef SQLITE2
 	//from most to least frequently used types:
 //(m_logicalFieldCount introduced) 	if (i==m_fieldCount || f && f->isIntegerType())
 	if (!f || f->isIntegerType())
-		return QVariant( Q3CString(d->curr_coldata[i]).toInt() );
+		return QVariant( QByteArray(d->curr_coldata[i]).toInt() );
 	else if (!f || f->isTextType())
 		return QVariant( d->curr_coldata[i] );
 	else if (f->isFPNumericType())
-		return QVariant( Q3CString(d->curr_coldata[i]).toDouble() );
+		return QVariant( QByteArray(d->curr_coldata[i]).toDouble() );
 
 	return QVariant( d->curr_coldata[i] ); //default
 #else

@@ -23,9 +23,9 @@
 #include <kexidb/connection.h>
 #include <kexidb/driver.h>
 
-#include <kaboutdata.h>
+#include <KAboutData>
 
-struct KCmdLineOptions;
+class KCmdLineOptions;
 class KComponentData;
 
 namespace KexiDB
@@ -49,7 +49,7 @@ namespace KexiDB
 		public:
 			SimpleCommandLineApp(
 				int argc, char** argv,
-                                const KCmdLineOptions &options, const char *programName, 
+				const KCmdLineOptions &options, const char *programName, 
 				const char *version, const char *shortDescription=0, 
 				KAboutData::LicenseKey licenseType=KAboutData::License_Unknown, 
 				const char *copyrightStatement=0, const char *text=0, 

@@ -27,26 +27,20 @@
 using namespace KexiDB;
 
 FieldList::FieldList(bool owner)
- //reasonable sizes: TODO
- : m_fields_by_name(101, false)
+ : m_fields(owner)
+ , m_autoinc_fields(0)
 {
-	m_fields.setAutoDelete( owner );
-	m_fields_by_name.setAutoDelete( false );
-	m_autoinc_fields = 0;
 }
 
 FieldList::FieldList(const FieldList& fl, bool deepCopyFields)
- : m_fields_by_name( fl.m_fields_by_name.size() )
+ : m_fields(fl.m_fields.autoDelete())
+ , m_autoinc_fields(0)
 {
-	m_fields.setAutoDelete( fl.m_fields.autoDelete() );
-	m_fields_by_name.setAutoDelete( false );
-	m_autoinc_fields = 0;
-
 	if (deepCopyFields) {
 		//deep copy for the fields
-		for (Field::ListIterator f_it(fl.m_fields); f_it.current(); ++f_it) {
-			Field *f = f_it.current()->copy();
-			if (f_it.current()->m_parent == &fl)
+		foreach (Field *origField, fl.m_fields) {
+			Field *f = origField->copy();
+			if (origField->m_parent == &fl)
 				f->m_parent = this;
 			addField( f );
 		}
@@ -61,11 +55,11 @@ FieldList::~FieldList()
 void FieldList::clear()
 {
 //	m_name.clear();
-	m_fields.clear();
 	m_fields_by_name.clear();
-	m_sqlFields.clear();
 	delete m_autoinc_fields;
 	m_autoinc_fields = 0;
+	m_fields.clear();
+	m_sqlFields.clear();
 }
 
 FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
@@ -73,12 +67,11 @@ FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 	assert(field);
 	if (!field)
 		return *this;
-	if (index>m_fields.count()) {
+	if (index > (uint)m_fields.count()) {
 		KexiDBFatal << "FieldList::insertField(): index (" << index << ") out of range" << endl;
 		return *this;
 	}
-	if (!m_fields.insert(index, field))
-		return *this;
+	m_fields.insert(index, field);
 	if (!field->name().isEmpty())
 		m_fields_by_name.insert(field->name().toLower(),field);
 	m_sqlFields.clear();
@@ -87,19 +80,30 @@ FieldList& FieldList::insertField(uint index, KexiDB::Field *field)
 
 void FieldList::renameField(const QString& oldName, const QString& newName)
 {
-	renameField( m_fields_by_name[ oldName ], newName );
+	Field *field = m_fields_by_name.value( oldName.toLower() );
+	if (!field) {
+		KexiDBFatal << "FieldList::renameField() no field found " 
+			<< QString("\"%1\"").arg(oldName) << endl;
+		return;
+	}
+	renameFieldInternal( field, newName.toLower() );
 }
 
 void FieldList::renameField(KexiDB::Field *field, const QString& newName)
 {
-	if (!field || field != m_fields_by_name[ field->name() ]) {
+	if (!field || field != m_fields_by_name.value( field->name().toLower() )) {
 		KexiDBFatal << "FieldList::renameField() no field found " 
 			<< (field ? QString("\"%1\"").arg(field->name()) : QString()) << endl;
 		return;
 	}
-	m_fields_by_name.take( field->name() );
-	field->setName( newName );
-	m_fields_by_name.insert( field->name(), field );
+	renameFieldInternal( field, newName.toLower() );
+}
+
+void FieldList::renameFieldInternal(KexiDB::Field *field, const QString& newNameLower)
+{
+	m_fields_by_name.remove( field->name().toLower() );
+	field->setName( newNameLower );
+	m_fields_by_name.insert( newNameLower, field );
 }
 
 
@@ -113,26 +117,24 @@ void FieldList::removeField(KexiDB::Field *field)
 	assert(field);
 	if (!field)
 		return;
-	m_fields_by_name.remove(field->name());
-	m_fields.remove(field);
+	m_fields_by_name.remove(field->name().toLower());
+	m_fields.removeAt( m_fields.indexOf(field) );
 	m_sqlFields.clear();
 }
 
 Field* FieldList::field(const QString& name)
 {
-	return m_fields_by_name[name];
+	return m_fields_by_name.value(name.toLower());
 }
 
 QString FieldList::debugString()
 {
+	if (m_fields.isEmpty())
+		return "<NO FIELDS>";
 	QString dbg;
 	dbg.reserve(512);
-	Field::ListIterator it( m_fields );
-	Field *field;
 	bool start = true;
-	if (!it.current())
-		dbg = "<NO FIELDS>";
-	for (; (field = it.current())!=0; ++it) {
+	foreach (Field *field, m_fields) {
 		if (!start)
 			dbg += ",\n";
 		else
@@ -151,7 +153,7 @@ void FieldList::debug()
 #define _ADD_FIELD(fname) \
 { \
 	if (fname.isEmpty()) return fl; \
-	f = m_fields_by_name[fname]; \
+	f = m_fields_by_name.value(fname.toLower()); \
 	if (!f) { KexiDBWarn << subListWarning1(fname) << endl; delete fl; return 0; } \
 	fl->addField(f); \
 }
@@ -205,16 +207,14 @@ FieldList* FieldList::subList(const QStringList& list)
 	return fl;
 }
 
-FieldList* FieldList::subList(const Q3ValueList<uint>& list)
+FieldList* FieldList::subList(const QList<uint>& list)
 {
 	Field *f;
 	FieldList *fl = new FieldList(false);
-	for (Q3ValueList<uint>::ConstIterator it(list.constBegin());
-		it!=list.constEnd(); ++it)
-	{
-		f = field(*it);
+	foreach (uint index, list) {
+		f = field(index);
 		if (!f) {
-			KexiDBWarn << QString("FieldList::subList() could not find field at position %1").arg(*it) << endl;
+			KexiDBWarn << QString("FieldList::subList() could not find field at position %1").arg(index) << endl;
 			delete fl;
 			return 0;
 		}
@@ -229,8 +229,8 @@ QStringList FieldList::names() const
 //	for (QDictIterator<Field> it(m_fields_by_name);it.current();++it) {
 //		r += it.currentKey().toLower();
 //	}
-	for (Field::ListIterator it(m_fields); it.current(); ++it) {
-		r += it.current()->name().toLower();
+	foreach (Field *f, m_fields) {
+		r += f->name().toLower();
 	}
 	return r;
 }
@@ -245,12 +245,12 @@ QString FieldList::sqlFieldsList(Field::List* list, Driver *driver,
 	result.reserve(256);
 	bool start = true;
 	const QString tableAliasAndDot( tableAlias.isEmpty() ? QString() : (tableAlias + ".") );
-	for (Field::ListIterator it( *list ); it.current(); ++it) {
+	foreach (Field *f, *list) {
 		if (!start)
 			result += separator;
 		else
 			start = false;
-		result += (tableAliasAndDot + driver->escapeIdentifier( it.current()->name(), drvEscaping ));
+		result += (tableAliasAndDot + driver->escapeIdentifier( f->name(), drvEscaping ));
 	}
 	return result;
 }
@@ -267,13 +267,13 @@ QString FieldList::sqlFieldsList(Driver *driver,
 
 Field::List* FieldList::autoIncrementFields()
 {
-	if (!m_autoinc_fields) {
-		m_autoinc_fields = new Field::List();
-		Field *f;
-		for (Field::ListIterator f_it(m_fields); (f = f_it.current()); ++f_it) {
-			if (f->isAutoIncrement()) {
-				m_autoinc_fields->append( f_it.current() );
-			}
+	if (m_autoinc_fields)
+		return m_autoinc_fields;
+
+	m_autoinc_fields = new Field::List();
+	foreach (Field *f, m_fields) {
+		if (f->isAutoIncrement()) {
+			m_autoinc_fields->append( f );
 		}
 	}
 	return m_autoinc_fields;

@@ -281,7 +281,7 @@ bool MDBMigrate::drv_copyTable( const QString& srcTable,
 
 	bool ok = true;
 	while(mdb_fetch_row(tableDef)) {
-		Q3ValueList<QVariant> vals = Q3ValueList<QVariant>();
+		QList<QVariant> vals;
 
 //    kDebug() << kdLoc << "Copying " << tableDef->num_cols << " cols" << endl;
 		for (unsigned int i = 0; i < tableDef->num_cols; i++) {

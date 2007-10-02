@@ -50,6 +50,7 @@ set(kexidb_LIB_SRCS
    utils.cpp 
    expression.cpp 
    connectiondata.cpp 
+   RecordData.cpp
    fieldlist.cpp 
    tableschema.cpp 
    cursor.cpp 

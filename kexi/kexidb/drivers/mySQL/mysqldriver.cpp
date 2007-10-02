@@ -26,11 +26,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <mysql.h>
 #define BOOL bool
 
-#include <qvariant.h>
-#include <qfile.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QVariant>
+#include <QFile>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -69,8 +66,7 @@ MySqlDriver::MySqlDriver(QObject *parent, const QStringList &args) :
 	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
 	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER='`';
-	beh->SQL_KEYWORDS = keywords;
-	initSQLKeywords(331);
+	initDriverSpecificKeywords(keywords);
 	
 	//predefined properties
 #if MYSQL_VERSION_ID < 40000
@@ -188,27 +184,29 @@ QString MySqlDriver::escapeBLOB(const QByteArray& array) const
 	return KexiDB::escapeBLOB(array, KexiDB::BLOBEscape0xHex);
 }
 
-Q3CString MySqlDriver::escapeString(const Q3CString& str) const
+QByteArray MySqlDriver::escapeString(const QByteArray& str) const
 {
 //! @todo optimize using mysql_real_escape_string()?
 //! see http://dev.mysql.com/doc/refman/5.0/en/string-syntax.html
 
-	return Q3CString("'")+Q3CString(str)
+	return QByteArray("'")+QByteArray(str)
 		.replace( '\\', "\\\\" )
 		.replace( '\'', "\\''" )
 		.replace( '"', "\\\"" )
-		+ Q3CString("'");
+		+ QByteArray("'");
 }
 
 /*! Add back-ticks to an identifier, and replace any back-ticks within
  * the name with single quotes.
  */
-QString MySqlDriver::drv_escapeIdentifier( const QString& str) const {
+QString MySqlDriver::drv_escapeIdentifier(const QString& str) const
+{
 	return QString(str).replace('`', "'");
 }
 
-Q3CString MySqlDriver::drv_escapeIdentifier( const Q3CString& str) const {
-	return Q3CString(str).replace('`', "'");
+QByteArray MySqlDriver::drv_escapeIdentifier(const QByteArray& str) const
+{
+	return QByteArray(str).replace('`', "'");
 }
 
 #include "mysqldriver.moc"

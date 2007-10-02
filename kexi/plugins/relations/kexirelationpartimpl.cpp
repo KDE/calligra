@@ -20,9 +20,9 @@
 #include "kexirelationmaindlg.h"
 #include "kexirelationpartimpl.h"
 
-#include <kexirelationwidget.h>
-#include <KexiWindow.h>
-#include <KexiMainWindowIface.h>
+#include <widget/relations/KexiRelationsView.h>
+#include <core/KexiWindow.h>
+#include <core/KexiMainWindowIface.h>
 
 #include <kgenericfactory.h>
 #include <kiconloader.h>

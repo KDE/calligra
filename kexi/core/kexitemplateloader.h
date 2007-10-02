@@ -25,13 +25,17 @@
 #include "kexiprojectdata.h"
 
 //! A structure providing information about single kexi database template file
-struct KEXICORE_EXPORT KexiTemplateInfo
+class KEXICORE_EXPORT KexiTemplateInfo
 {
-	typedef QList<KexiTemplateInfo> List;
+	public:
+		typedef QList<KexiTemplateInfo> List;
 
-	QString filename, name, description;
-	QPixmap icon;
-	QList<KexiProjectData::ObjectInfo> autoopenObjects;
+		KexiTemplateInfo();
+		~KexiTemplateInfo();
+
+		QString filename, name, description;
+		QPixmap icon;
+		KexiProjectData::AutoOpenObjects autoopenObjects;
 };
 
 //! Handles retrieving information about templates

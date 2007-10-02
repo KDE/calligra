@@ -38,7 +38,6 @@
 #include <kfiledialog.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
-#include <kimageeffect.h>
 #include <kstdaccel.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
@@ -667,8 +666,14 @@ void KexiDBImageBox::paintEvent( QPaintEvent *pe )
 		else
 			imagBoxPm = KexiDBImageBox_static->pixmap;
 		QImage img(imagBoxPm->toImage());
+#ifdef __GNUC__
+#warning Qt4 TODO KexiDBImageBox::paintEvent()
+#else
+#pragma WARNING( Qt4 TODO KexiDBImageBox::paintEvent() )
+#endif 
+/* TODO
 		img = KImageEffect::flatten(img, bg.dark(150),
-			qGray( bg.rgb() ) <= 20 ? QColor(Qt::gray).dark(150) : bg.light(105));
+			qGray( bg.rgb() ) <= 20 ? QColor(Qt::gray).dark(150) : bg.light(105));*/
 
 		QPixmap converted( QPixmap::fromImage(img) );
 //		if (tooLarge)

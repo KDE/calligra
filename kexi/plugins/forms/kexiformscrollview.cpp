@@ -41,7 +41,7 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 {
 	m_currentLocalSortColumn = -1; /* no column */
 	m_localSortingOrder = -1; /* no sorting */
-	m_previousItem = 0;
+	m_previousRecord = 0;
 	m_navPanel = m_scrollViewNavPanel; //copy this pointer from KexiScrollView
 	if (preview) {
 		setRecordNavigatorVisible(true);
@@ -100,13 +100,13 @@ void KexiFormScrollView::selectCellInternal()
 {
 	//m_currentItem is already set by KexiDataAwareObjectInterface::setCursorPosition()
 	if (m_currentItem) {
-		if (m_currentItem!=m_previousItem) {
+		if (m_currentItem!=m_previousRecord) {
 			fillDataItems(*m_currentItem, cursorAtNewRow());
-			m_previousItem = m_currentItem;
+			m_previousRecord = m_currentItem;
 		}
 	}
 	else {
-		m_previousItem = 0;
+		m_previousRecord = 0;
 	}
 }
 
@@ -232,7 +232,7 @@ void KexiFormScrollView::createEditor(int row, int col, const QString& addText,
 			//'insert' row editing: show another row after that:
 			m_data->append( m_insertItem );
 			//new empty insert item
-			m_insertItem = m_data->createItem(); //new KexiTableItem(dataColumns());
+			m_insertItem = m_data->createItem();
 //			updateContents();
 			if (m_verticalHeader)
 				m_verticalHeader->addLabel();
@@ -344,9 +344,9 @@ void KexiFormScrollView::updateWidgetScrollBars()
 	//! @todo
 }
 
-void KexiFormScrollView::slotRowRepaintRequested(KexiTableItem& item)
+void KexiFormScrollView::slotRowRepaintRequested(KexiDB::RecordData& record)
 {
-	Q_UNUSED( item );
+	Q_UNUSED( record );
 	//! @todo
 }
 
@@ -361,16 +361,16 @@ void KexiFormScrollView::slotRowRepaintRequested(KexiTableItem& item)
 	//! @todo
 }*/
 
-void KexiFormScrollView::slotRowInserted(KexiTableItem *item, bool repaint)
+void KexiFormScrollView::slotRowInserted(KexiDB::RecordData* record, bool repaint)
 {
-	Q_UNUSED( item );
+	Q_UNUSED( record );
 	Q_UNUSED( repaint );
 	//! @todo
 }
 
-void KexiFormScrollView::slotRowInserted(KexiTableItem *item, uint row, bool repaint)
+void KexiFormScrollView::slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint)
 {
-	Q_UNUSED( item );
+	Q_UNUSED( record );
 	Q_UNUSED( row );
 	Q_UNUSED( repaint );
 	//! @todo
@@ -535,7 +535,7 @@ void KexiFormScrollView::updateAfterAcceptRowEdit()
 	dbFormWidget()->editedItem = 0;
 	//update visible data because there could be auto-filled (eg. autonumber) fields
 	fillDataItems(*m_currentItem, cursorAtNewRow());
-	m_previousItem = m_currentItem;
+	m_previousRecord = m_currentItem;
 }
 
 void KexiFormScrollView::beforeSwitchView()

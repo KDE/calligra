@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,8 +30,6 @@
 #include <klocale.h>
 
 #include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include <assert.h>
 
@@ -177,7 +175,7 @@ QVariant::Type Field::variantType(uint type)
 QString Field::typeName(uint type)
 {
 	m_typeNames.init();
-	return (type <= LastType) ? m_typeNames.at(type) : QString::number(type);
+	return m_typeNames.value(type, QString::number(type));
 }
 
 QStringList Field::typeNames()
@@ -205,26 +203,19 @@ QStringList Field::typeGroupNames()
 QString Field::typeGroupString(uint typeGroup)
 {
 	m_typeGroupNames.init();
-	return (typeGroup <= LastTypeGroup)
-		? m_typeGroupNames.at((int)LastTypeGroup+1 + typeGroup) : QString("TypeGroup%1").arg(typeGroup);
+	return m_typeGroupNames.value((int)LastTypeGroup + 1 + typeGroup, QString("TypeGroup%1").arg(typeGroup));
 }
 
 Field::Type Field::typeForString(const QString& typeString)
 {
 	m_typeNames.init();
-	QMap<QString,Type>::ConstIterator it = m_typeNames.str2num.find(typeString.toLower());
-	if (it==m_typeNames.str2num.end())
-		return InvalidType;
-	return it.value();
+	return m_typeNames.str2num.value(typeString.toLower(), InvalidType);
 }
 
 Field::TypeGroup Field::typeGroupForString(const QString& typeGroupString)
 {
 	m_typeGroupNames.init();
-	QMap<QString,TypeGroup>::ConstIterator it = m_typeGroupNames.str2num.find(typeGroupString.toLower());
-	if (it==m_typeGroupNames.str2num.end())
-		return InvalidGroup;
-	return it.value();
+	return m_typeGroupNames.str2num.value(typeGroupString.toLower(), InvalidGroup);
 }
 
 bool Field::isIntegerType( uint type )
@@ -664,10 +655,7 @@ QVariant Field::customProperty(const QByteArray& propertyName,
 {
 	if (!m_customProperties)
 		return defaultValue;
-	CustomPropertiesMap::ConstIterator it(m_customProperties->find(propertyName));
-	if (it==m_customProperties->constEnd())
-		return defaultValue;
-	return it.value();
+	return m_customProperties->value(propertyName, defaultValue);
 }
 
 void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& value)
@@ -680,17 +668,19 @@ void Field::setCustomProperty(const QByteArray& propertyName, const QVariant& va
 }
 
 //-------------------------------------------------------
-#define ADDTYPE(type, i18, str) this->at(Field::type) = i18; \
-	this->at(Field::type+Field::LastType+1) = str; \
-	str2num.insert(QString::fromLatin1(str).toLower(), type); \
+#define ADDTYPE(type, i18, str) \
+	(*this)[Field::type] = i18; \
+	(*this)[Field::type+Field::LastType+1] = str; \
+	str2num[ QString::fromLatin1(str).toLower() ] = type; \
 	names.append(i18)
-#define ADDGROUP(type, i18, str) this->at(Field::type) = i18; \
-	this->at(Field::type+Field::LastTypeGroup+1) = str; \
-	str2num.insert(QString::fromLatin1(str).toLower(), type); \
+#define ADDGROUP(type, i18, str) \
+	(*this)[Field::type] = i18; \
+	(*this)[Field::type+Field::LastTypeGroup+1] = str; \
+	str2num[ QString::fromLatin1(str).toLower() ] = type; \
 	names.append(i18)
 
 Field::FieldTypeNames::FieldTypeNames()
- : Q3ValueVector<QString>()
+ : QVector<QString>()
  , m_initialized(false)
 {
 }
@@ -721,7 +711,7 @@ void Field::FieldTypeNames::init()
 //-------------------------------------------------------
 
 Field::FieldTypeGroupNames::FieldTypeGroupNames()
- : Q3ValueVector<QString>()
+ : QVector<QString>()
  , m_initialized(false)
 {
 }

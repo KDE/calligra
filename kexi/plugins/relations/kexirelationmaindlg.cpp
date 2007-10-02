@@ -31,8 +31,7 @@
 
 #include <KexiMainWindowIface.h>
 #include "kexiproject.h"
-#include "kexirelationwidget.h"
-#include "kexirelationview.h"
+#include <widget/relations/KexiRelationsView.h>
 
 KexiRelationMainDlg::KexiRelationMainDlg(QWidget *parent)
  : KexiView(parent)
@@ -43,10 +42,10 @@ KexiRelationMainDlg::KexiRelationMainDlg(QWidget *parent)
 	setCaption( i18n("Relationships") );
 //	setDocID( win->generatePrivateDocID() );
 
-	m_rel = new KexiRelationWidget(this);
+	m_rel = new KexiRelationsView(this);
 	//the view can receive some our actions
 	addActionProxyChild( m_rel );
-//	addActionProxyChild( m_view->relationView() );
+//	addActionProxyChild( m_view->relationsView() );
 	
 	Q3VBoxLayout *g = new Q3VBoxLayout(this);
 	g->addWidget(m_rel);
@@ -80,4 +79,3 @@ QString KexiRelationMainDlg::itemIcon()
 }
 
 #include "kexirelationmaindlg.moc"
-

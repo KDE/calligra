@@ -165,4 +165,3 @@ class KEXICORE_EXPORT KexiSharedActionHost
 };
 
 #endif
-

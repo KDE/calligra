@@ -52,8 +52,7 @@ class KEXIDATATABLE_EXPORT KexiCellEditorFactory
 		 If still no item found, the default is tried. Eventually, may return NULL. */
 		static KexiCellEditorFactoryItem* item( uint type, const QString& subType = QString() );
 
-//		static KexiTableEdit* createEditor(KexiDB::Field &f, Q3ScrollView* parent = 0);
-		/*! Creates a new editor for \a column. If \a parent is of Q3ScrollView, the new editor
+		/*! Creates a new editor for \a column. If \a parent is of QScrollArea, the new editor
 		 will be created inside parent->viewport() instead. */
 		static KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0);
 
@@ -70,7 +69,6 @@ class KEXIDATATABLE_EXPORT KexiCellEditorFactoryItem
 		QString className() { return m_className; }
 
 	protected:
-//		virtual KexiTableEdit* createEditor(KexiDB::Field &f, Q3ScrollView* parent = 0) = 0;
 		virtual KexiTableEdit* createEditor(KexiTableViewColumn &column, QWidget* parent = 0) = 0;
 
 		QString m_className;

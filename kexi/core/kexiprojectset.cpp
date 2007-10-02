@@ -35,7 +35,6 @@ class KexiProjectSetPrivate
 public:
 	KexiProjectSetPrivate()
 	{
-//		list.setAutoDelete(true);
 	}
 	KexiProjectData::List list;
 //	KexiDB::MessageHandler* msgHandler;
@@ -102,11 +101,10 @@ KexiProjectData::List KexiProjectSet::list() const
 
 KexiProjectData* KexiProjectSet::findProject(const QString &dbName) const
 {
-	const QString _dbName = dbName.toLower();
-	Q3PtrListIterator<KexiProjectData> it( d->list );
-	for (;it.current();++it) {
-		if (it.current()->databaseName().toLower()==_dbName)
-			return it.current();
+	const QString _dbName( dbName.toLower() );
+	foreach (KexiProjectData* data, d->list) {
+		if (data->databaseName().toLower() == _dbName)
+			return data;
 	}
 	return 0;
 }

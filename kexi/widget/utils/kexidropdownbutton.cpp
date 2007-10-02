@@ -27,6 +27,8 @@
 #include <QApplication>
 #include <QKeyEvent>
 
+#include <kexi_global.h>
+
 #ifdef __GNUC__
 #warning KexiDropDownButton ported but not tested
 #else

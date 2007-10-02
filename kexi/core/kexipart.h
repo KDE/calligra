@@ -336,6 +336,11 @@ class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalProper
 	friend class GUIClient;
 };
 
+/*! \return full caption for item \a item and part \a part.
+ If \a part is provided, the captions will be in a form of "name : inctancetype", e.g. "Employees : Table",
+ otherwise it will be in a form of "name", e.g. "Employees". */
+KEXICORE_EXPORT QString fullCaptionForItem(KexiPart::Item& item, KexiPart::Part *part);
+
 }
 
 #endif

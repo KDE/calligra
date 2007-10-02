@@ -105,11 +105,11 @@ bool KexiDataTableView::setData(KexiDB::Cursor *cursor)
 
 	KexiTableViewData *tv_data = new KexiTableViewData(m_cursor);
 
-	QString caption = m_cursor->query()->caption();
-	if (caption.isEmpty())
-		caption = m_cursor->query()->name();
+	QString windowTitle( m_cursor->query()->caption() );
+	if (windowTitle.isEmpty())
+		windowTitle = m_cursor->query()->name();
 
-	setCaption( caption );
+	setWindowTitle( windowTitle );
 
 	//PRIMITIVE!! data setting:
 	tv_data->preloadAllRows();

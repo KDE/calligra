@@ -457,7 +457,7 @@ tristate PqxxMigrate::drv_queryStringListFromSQL(
 }
 
 tristate PqxxMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement, 
-    KexiDB::RowData& data, bool &firstRecord)
+    KexiDB::RecordData& data, bool &firstRecord)
 {
 	if (firstRecord || !m_res) {
 		if (m_res)
@@ -497,7 +497,7 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
 	//Loop round each row, reading into a vector of strings
 	const KexiDB::QueryColumnInfo::Vector fieldsExpanded( dstTable->query()->fieldsExpanded() );
 	for (int n=0; (stream >> R); ++n) {
-		Q3ValueList<QVariant> vals;
+		QList<QVariant> vals;
 		std::vector<std::string>::const_iterator i, end( R.end() );
 		int index = 0;
 		for ( i = R.begin(); i != end; ++i, index++) {

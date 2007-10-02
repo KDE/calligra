@@ -248,7 +248,7 @@ void ImportWizard::setupDstType()
 	m_dstTypePage = new QWidget(this);
 
 	KexiDB::DriverManager manager;
-	KexiDB::Driver::InfoMap drvs = manager.driversInfo();
+	KexiDB::Driver::InfoHash drvs = manager.driversInfo();
 
 	Q3VBoxLayout *vbox = new Q3VBoxLayout(m_dstTypePage, KDialog::marginHint());
 

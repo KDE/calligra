@@ -26,8 +26,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <limits.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #define BOOL bool
 
@@ -61,8 +59,9 @@ bool MySqlCursor::drv_open() {
 	// queries can have binary data - but strlen does not allow binary data.
 	if(mysql_real_query(d->mysql, m_sql.toUtf8(), strlen(m_sql.toUtf8())) == 0) {
 		if(mysql_errno(d->mysql) == 0) {
-			d->mysqlres= mysql_store_result(d->mysql);
-			m_fieldCount=mysql_num_fields(d->mysqlres);
+			d->mysqlres = mysql_store_result(d->mysql);
+			m_fieldCount = mysql_num_fields(d->mysqlres);
+			m_fieldsToStoreInRow = m_fieldCount;
 			d->numRows=mysql_num_rows(d->mysqlres);
 			m_at=0;
 			
@@ -136,18 +135,17 @@ QVariant MySqlCursor::value(uint pos) {
 /* As with sqlite, the DB library returns all values (including numbers) as
    strings. So just put that string in a QVariant and let KexiDB deal with it.
  */
-void MySqlCursor::storeCurrentRow(RowData &data) const
+bool MySqlCursor::drv_storeCurrentRow(RecordData& data) const
 {
 //	KexiDBDrvDbg << "MySqlCursor::storeCurrentRow: Position is " << (long)m_at<< endl;
 	if (d->numRows<=0)
-		return;
+		return false;
 
 //! @todo js: use MYSQL_FIELD::type here!
 //!	          see SQLiteCursor::storeCurrentRow()
 
-	data.resize(m_fieldCount);
 	const uint fieldsExpandedCount = m_fieldsExpanded ? m_fieldsExpanded->count() : UINT_MAX;
-	const uint realCount = qMin(fieldsExpandedCount, m_fieldCount);
+	const uint realCount = qMin(fieldsExpandedCount, m_fieldsToStoreInRow);
 	for( uint i=0; i<realCount; i++) {
 		Field *f = m_fieldsExpanded ? m_fieldsExpanded->at(i)->field : 0;
 		if (m_fieldsExpanded && !f)
@@ -164,6 +162,7 @@ void MySqlCursor::storeCurrentRow(RowData &data) const
 			data[i] = QVariant(QString::fromUtf8((const char*)d->mysqlrow[i], d->lengths[i]));
 		}*/
 	}
+	return true;
 }
 
 void MySqlCursor::drv_appendCurrentRecordToBuffer() {

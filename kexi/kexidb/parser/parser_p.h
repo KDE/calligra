@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,10 +20,11 @@
 #ifndef KEXIDB_PARSER_P_H
 #define KEXIDB_PARSER_P_H
 
-#include <q3valuelist.h>
-#include <q3dict.h>
-#include <q3asciicache.h>
-#include <qstring.h>
+#include <QList>
+#include <QHash>
+#include <QByteArray>
+#include <QCache>
+#include <QString>
 
 #include <kexidb/queryschema.h>
 #include <kexidb/tableschema.h>
@@ -35,11 +36,11 @@
 namespace KexiDB {
 
 //! @internal
-class ParserPrivate
+class Parser::Private
 {
 	public:
-		ParserPrivate();
-		~ParserPrivate();
+		Private();
+		~Private();
 
 		void clear();
 
@@ -49,7 +50,6 @@ class ParserPrivate
 		Connection *db;
 		QString statement;
 		ParserError error;
-		Q3AsciiCache<char> reservedKeywords;
 		bool initialized : 1;
 };
 
@@ -62,7 +62,7 @@ class ParseInfo
 		~ParseInfo();
 
 		//! collects positions of tables/aliases with the same names
-		Q3Dict< Q3ValueList<int> > repeatedTablesAndAliases;
+		QHash< QString, QList<int> > repeatedTablesAndAliases;
 
 		QString errMsg, errDescr; //helpers
 		QuerySchema *querySchema;

@@ -22,7 +22,6 @@
 
 #include <kexi_export.h>
 
-#include <qstring.h>
 #include <kexidb/connectiondata.h>
 
 class KexiDBConnectionSetPrivate;

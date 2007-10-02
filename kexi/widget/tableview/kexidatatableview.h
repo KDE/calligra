@@ -24,8 +24,6 @@
 
 #include "kexitableview.h"
 
-class KexiTableItem;
-
 namespace KexiDB {
 	class Cursor;
 }
@@ -77,7 +75,7 @@ class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
 		void init();
 
 		/*! Reimplemented: called by deleteItem() - we are deleting data associated with \a item. */
-//		virtual bool beforeDeleteItem(KexiTableItem *item);
+//		virtual bool beforeDeleteItem(KexiDB::RecordData *record);
 
 	protected slots:
 //		void slotClearData();
@@ -86,7 +84,7 @@ class KEXIDATATABLE_EXPORT KexiDataTableView : public KexiTableView
 		//db stuff
 		KexiDB::Cursor	*m_cursor;
 
-//		QMap<KexiDBUpdateRecord*,KexiTableItem*> m_insertMapping;
+//		QMap<KexiDBUpdateRecord*,KexiDB::RecordData*> m_insertMapping;
 };
 
 #endif

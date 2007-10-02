@@ -21,9 +21,8 @@
 #ifndef KEXIDBPARSER_H
 #define KEXIDBPARSER_H
 
-#include <qobject.h>
-#include <q3ptrlist.h>
-#include <qvariant.h>
+#include <QObject>
+#include <QVariant>
 
 #include <kexidb/field.h>
 #include <kexidb/expression.h>
@@ -84,8 +83,6 @@ class KEXI_DB_EXPORT ParserError
 		int m_at;
 //		bool	m_isNull;
 };
-
-class ParserPrivate;
 
 /**
  * Parser for SQL statements.
@@ -224,13 +221,14 @@ class KEXI_DB_EXPORT Parser
 		 * keyword (see tokens.cpp for a list of reserved
 		 * keywords).
 		 */
-		bool isReservedKeyword(const char *str);
+		bool isReservedKeyword(const QByteArray& str);
 
 	protected:
 		void init();
 
 		ParserError m_error; //!< detailed information about last error.
-		ParserPrivate *d; //!< \internal d-pointer class.
+		class Private;
+		Private * const d; //!< \internal d-pointer class.
 };
 
 }

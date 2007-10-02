@@ -26,6 +26,7 @@
 #include <qbuffer.h>
 //Added by qt3to4:
 #include <QPixmap>
+#include <QHash>
 
 #include <kdebug.h>
 #include <kimageio.h>
@@ -42,16 +43,22 @@ class KexiBLOBBuffer::Private
 	public:
 		Private()
 		 : maxId(0)
-		 , inMemoryItems(1009)
-		 , storedItems(1009)
-		 , itemsByURL(1009)
 		{
+		}
+		~Private()
+		{
+			foreach(Item* item, inMemoryItems)
+				delete item;
+			inMemoryItems.clear();
+			foreach(Item* item, storedItems)
+				delete item;
+			storedItems.clear();
 		}
 		Id_t maxId; //!< Used to compute maximal recently used identifier for unstored BLOB
 //! @todo will be changed to QHash<quint64, Item>
-		Q3IntDict<Item> inMemoryItems; //!< for unstored BLOBs
-		Q3IntDict<Item> storedItems; //!< for stored items
-		Q3Dict<Item> itemsByURL;
+		QHash<Id_t, Item*> inMemoryItems; //!< for unstored BLOBs
+		QHash<Id_t, Item*> storedItems; //!< for stored items
+		QHash<QString, Item*> itemsByURL;
 		QPointer<KexiDB::Connection> conn;
 };
 
@@ -180,8 +187,6 @@ KexiBLOBBuffer::KexiBLOBBuffer()
  , d(new Private())
 {
 //	Q_ASSERT(!_buffer);
-	d->inMemoryItems.setAutoDelete(true);
-	d->storedItems.setAutoDelete(true);
 }
 
 KexiBLOBBuffer::~KexiBLOBBuffer()
@@ -198,7 +203,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 		return KexiBLOBBuffer::Handle();
 	}
 //! @todo what about searching by filename only and then compare data?
-	Item * item = d->itemsByURL.find(url.prettyUrl());
+	Item * item = d->itemsByURL.value(url.prettyUrl());
 	if (item)
 		return KexiBLOBBuffer::Handle(item);
 
@@ -227,7 +232,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::insertPixmap(const KUrl& url)
 
 	//cache
 	item->prettyURL = url.prettyUrl();
-	d->itemsByURL.replace(url.prettyUrl(), item);
+	d->itemsByURL.insert(url.prettyUrl(), item);
 	return KexiBLOBBuffer::Handle(item);
 }
 
@@ -269,7 +274,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 	if (id<=0)
 		return KexiBLOBBuffer::Handle();
 	if (stored) {
-		Item *item = d->storedItems.find(id);
+		Item *item = d->storedItems.value(id);
 		if (item || !d->conn)
 			return KexiBLOBBuffer::Handle(item);
 		//retrieve stored BLOB:
@@ -294,27 +299,27 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 		schema.addField( blobsTable->field("o_folder_id") );
 		schema.addToWhereExpression(blobsTable->field("o_id"), QVariant((qint64)id));
 
-		KexiDB::RowData rowData;
+		KexiDB::RecordData recordData;
 		tristate res = d->conn->querySingleRecord(
 			schema,
 //			QString::fromLatin1("SELECT o_data, o_name, o_caption, o_mime FROM kexi__blobs where o_id=")
 //			+QString::number(id), 
-			rowData); 
-		if (res!=true || rowData.size()<4) {
+			recordData); 
+		if (res!=true || recordData.size()<4) {
 		//! @todo err msg
 			kWarning() << "KexiBLOBBuffer::objectForId("<<id<<","<<stored
-			<<"): res!=true || rowData.size()<4; res=="<<res.toString()<<" rowData.size()=="<<rowData.size()<< endl;
+			<<"): res!=true || recordData.size()<4; res=="<<res.toString()<<" recordData.size()=="<<recordData.size()<< endl;
 			return KexiBLOBBuffer::Handle();
 		}
 
 		item = new Item(
-			rowData[0].toByteArray(),
+			recordData.at(0).toByteArray(),
 			id, 
 			true, //stored
-			rowData[1].toString(),
-			rowData[2].toString(),
-			rowData[3].toString(),
-			(Id_t)rowData[4].toInt() //!< @todo folder id: fix Id_t for Qt4
+			recordData.at(1).toString(),
+			recordData.at(2).toString(),
+			recordData.at(3).toString(),
+			(Id_t)recordData.at(4).toInt() //!< @todo folder id: fix Id_t for Qt4
 		);
 
 		insertItem(item);
@@ -322,7 +327,7 @@ KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id, bool stored)
 //#endif
 	}
 	else
-		return KexiBLOBBuffer::Handle(d->inMemoryItems.find(id));
+		return KexiBLOBBuffer::Handle(d->inMemoryItems.value(id));
 }
 
 KexiBLOBBuffer::Handle KexiBLOBBuffer::objectForId(Id_t id)

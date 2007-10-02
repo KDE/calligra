@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,12 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIRELATIONWIDGET_H
-#define KEXIRELATIONWIDGET_H
+#ifndef KexiRelationsView_H
+#define KexiRelationsView_H
 
-#include <Q3CString>
 #include <KexiView.h>
-#include "kexirelationview.h"
+#include "KexiRelationsScrollArea.h"
 
 class KComboBox;
 class KPushButton;
@@ -36,39 +35,44 @@ namespace KexiDB
 {
 	class Connection;
 	class TableSchema;
+	class TableOrQuerySchema;
 }
 
-class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiView
+//! A Kexi view for displaying relationships.
+/*! It is used for within Query Designer
+ Note: it will be also reused in Database Relationships view. */
+class KEXIRELATIONSVIEW_EXPORT KexiRelationsView : public KexiView
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationWidget(QWidget *parent);
-		virtual ~KexiRelationWidget();
+		KexiRelationsView(QWidget *parent);
+		virtual ~KexiRelationsView();
 
-		//! \return a dictionary of added tables
-		TablesDict* tables() const;
-		KexiRelationViewTableContainer* table(const QString& name) const;
-		const ConnectionList* connections() const;
+		//! \return a hash of added tables
+		TablesHash* tables() const;
+		
+		KexiRelationsTableContainer* table(const QString& name) const;
 
-//		KexiRelationView	*relationView() const { return m_relationView; }
+		const ConnectionSet* connections() const;
+
 		void addTable(const QString& t);
-
-//		void openTable(KexiDB::TableSchema* table, bool designMode);
 
 		virtual QSize sizeHint() const;
 
 		/*! Used to add newly created object information to the combo box. */
-		void objectCreated(const Q3CString &mime, const Q3CString& name);
-		void objectDeleted(const Q3CString &mime, const Q3CString& name);
-		void objectRenamed(const Q3CString &mime, const Q3CString& name, const Q3CString& newName);
+		void objectCreated(const QString &mime, const QString& name);
+
+		void objectDeleted(const QString &mime, const QString& name);
+		
+		void objectRenamed(const QString &mime, const QString& name, const QString& newName);
 
 	signals:
 		void tableAdded(KexiDB::TableSchema& t);
 		void tableHidden(KexiDB::TableSchema& t);
-		void tablePositionChanged(KexiRelationViewTableContainer*);
-		void aboutConnectionRemove(KexiRelationViewConnection*);
-		void tableFieldDoubleClicked( KexiDB::TableSchema* table, const QString& fieldName );
+		void tablePositionChanged(KexiRelationsTableContainer*);
+		void aboutConnectionRemove(KexiRelationsConnection*);
+		void appendFields( KexiDB::TableOrQuerySchema& tableOrQuery, const QStringList& fieldNames );
 	
 	public slots:
 		/*! Adds a table \a t to the area. This changes only visual representation.
@@ -98,11 +102,11 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiView
 		void tableContextMenuRequest(const QPoint& pos);
 		void connectionContextMenuRequest(const QPoint& pos);
 		void emptyAreaContextMenuRequest( const QPoint& pos );
+		void appendSelectedFields();
 		void openSelectedTable();
 		void designSelectedTable();
 		void slotTableHidden(KexiDB::TableSchema &table);
 		void aboutToShowPopupMenu();
-		void slotTableFieldDoubleClicked(Q3ListViewItem *i,const QPoint&,int);
 
 	protected:
 		/*! executes popup menu at \a pos, or, 
@@ -117,16 +121,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationWidget : public KexiView
 		void fillTablesCombo();
 
 	private:
-		KComboBox *m_tableCombo;
-		KPushButton *m_btnAdd;
-		KexiRelationView *m_relationView;
-		KexiDB::Connection *m_conn;
-
-		KMenu *m_tableQueryPopup //over table/query
-			, *m_connectionPopup //over connection
-			, *m_areaPopup; //over outer area
-		KAction *m_openSelectedTableAction, *m_designSelectedTableAction;
-		QAction *m_tableQueryPopupTitle, *m_connectionPopupTitle;
+		class Private;
+		Private* const d;
 };
 
 #endif

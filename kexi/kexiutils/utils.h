@@ -329,6 +329,137 @@ namespace KexiUtils
 	//! Used in KexiDBImageBox and KexiBlobTableEdit.
 	KEXIUTILS_EXPORT void drawPixmap( QPainter& p, const WidgetMargins& margins, const QRect& rect,
 		const QPixmap& pixmap, Qt::Alignment alignment, bool scaledContents, bool keepAspectRatio);
+
+	//! A helper for automatic deleting of contents of containers.
+	template <typename Container>
+	class KEXIUTILS_EXPORT ContainerDeleter
+	{
+		public:
+			ContainerDeleter(Container& container) : m_container(container) {}
+			~ContainerDeleter() { clear(); }
+			void clear() { qDeleteAll(container); container.clear(); }
+		private:
+			Container& m_container;
+	};
+
+	//! @short Autodeleted hash
+	template <class Key, class T>
+	class KEXIUTILS_EXPORT AutodeletedHash : public QHash<Key, T> {
+		public:
+			AutodeletedHash(const AutodeletedHash& other) : QHash<Key, T>(other), m_autoDelete(false) {}
+			AutodeletedHash(bool autoDelete = true) : QHash<Key, T>(), m_autoDelete(autoDelete) {}
+			void setAutoDelete(bool set) { m_autoDelete = set; }
+			bool autoDelete() const { return m_autoDelete; }
+			~AutodeletedHash() { if (m_autoDelete) qDeleteAll(*this); }
+		private:
+			bool m_autoDelete : 1;
+	};
+
+	//! @short Autodeleted list
+	template <class T>
+	class KEXIUTILS_EXPORT AutodeletedList : public QList<T> {
+		public:
+			AutodeletedList(const AutodeletedList& other)
+				: QList<T>(other), m_autoDelete(false) {}
+			AutodeletedList(bool autoDelete = true) : QList<T>(), m_autoDelete(autoDelete) {}
+			~AutodeletedList() { if (m_autoDelete) qDeleteAll(*this); }
+			void setAutoDelete(bool set) { m_autoDelete = set; }
+			bool autoDelete() const { return m_autoDelete; }
+			void removeAt(int i) { T item = takeAt(i); if (m_autoDelete) delete item; }
+			void removeFirst() { T item = takeFirst(); if (m_autoDelete) delete item; }
+			void removeLast() { T item = takeLast(); if (m_autoDelete) delete item; }
+			void replace(int i, const T& value) {
+				T item = takeAt(i); insert(i, value); if (m_autoDelete) delete item; }
+			void insert(int i, const T& value) { QList<T>::insert(i, value); }
+			iterator erase(iterator pos) {
+				T item = *pos; iterator res = QList<T>::erase(pos); if (m_autoDelete) delete item; return res; }
+			iterator erase(iterator afirst, iterator alast) {
+				if (!m_autoDelete)
+					return QList<T>::erase(afirst, alast);
+				while (afirst != alast) {
+					T item = *afirst;
+					afirst = QList<T>::erase(afirst);
+					delete item;
+				}
+				return alast;
+			}
+			void pop_back() { removeLast(); }
+			void pop_front() { removeFirst(); }
+			int removeAll(const T& value) {
+				if (!m_autoDelete)
+					return QList<T>::removeAll(value);
+				iterator it( begin() );
+				int removedCount = 0;
+				while (it != end()) {
+					if (*it == value) {
+						T item = *it;
+						it = QList<T>::erase(it);
+						delete item;
+						removedCount++;
+					}
+					else
+						++it;
+				}
+				return removedCount;
+			}
+			void clear() {
+				if (!m_autoDelete)
+					return QList<T>::clear();
+				while (!isEmpty()) {
+					T item = takeFirst();
+					delete item;
+				}
+			}
+
+		private:
+			bool m_autoDelete : 1;
+	};
+
+	//! @short Case insensitive hash container supporting QString or QByteArray keys. 
+	//! Keys are turned to lowercase before inserting. Also supports option for autodeletion.
+	template <class Key, class T>
+	class KEXIUTILS_EXPORT CaseInsensitiveHash : public QHash<Key, T> {
+		public:
+			CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
+			~CaseInsensitiveHash() { if (m_autoDelete) qDeleteAll(*this); }
+			iterator find(const Key& key) const { return QHash<Key, T>::find( key.toLower() ); }
+			const_iterator constFind(const Key& key) const { return QHash<Key, T>::constFind( key.toLower() ); }
+			bool contains(const Key& key) const { return QHash<Key, T>::contains( key.toLower() ); }
+			int count(const Key& key) const { return QHash<Key, T>::count( key.toLower() ); }
+			iterator insert(const Key& key, const T& value) { 
+				return QHash<Key, T>::insert( key.toLower(), value ); }
+			iterator insertMulti(const Key& key, const T& value) { 
+				return QHash<Key, T>::insertMulti( key.toLower(), value ); }
+			const Key key(const T& value, const Key& defaultKey) const { 
+				return QHash<Key, T>::key( value, key.toLower() ); }
+			int remove(const Key& key) { return QHash<Key, T>::remove( key.toLower() ); }
+			const T take(const Key& key) { return QHash<Key, T>::take( key.toLower() ); }
+			const T value(const Key& key) const { return QHash<Key, T>::value( key.toLower() ); }
+			const T value(const Key& key, const T& defaultValue) const
+				{ return QHash<Key, T>::value( key.toLower(), defaultValue ); }
+			QList<T> values(const Key& key) const { return QHash<Key, T>::values( key.toLower() ); }
+			T& operator[](const Key& key) { return QHash<Key, T>::operator[]( key.toLower() ); }
+			const T operator[](const Key& key) const { return QHash<Key, T>::operator[]( key.toLower() ); }
+			//! Controls autodeletion flag.
+			void setAutoDelete(bool set) { m_autoDelete = set; }
+		private:
+			bool m_autoDelete : 1;
+	};
+
+	//! A set created from static (0-terminated) array of raw null-terminated strings.
+	class KEXIUTILS_EXPORT StaticSetOfStrings
+	{
+		public:
+			StaticSetOfStrings();
+			StaticSetOfStrings(const char* array[]);
+			~StaticSetOfStrings();
+			void setStrings(const char* array[]);
+			bool isEmpty() const;
+			bool contains( const QByteArray& string ) const;
+		private:
+			class Private;
+			Private * const d;
+	};
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here

@@ -182,8 +182,7 @@ void KexiProjectSelectorWidget::setProjectSet( KexiProjectSet* prj_set )
 	}
 	KexiDB::DriverManager manager;
 	KexiProjectData::List prjlist = m_prj_set->list();
-	KexiProjectData *data = prjlist.first();
-	while (data) {
+	foreach (KexiProjectData* data, prjlist) {
 		KexiDB::Driver::Info info = manager.driverInfo(data->constConnectionData()->driverName);
 		if (!info.name.isEmpty()) {
 			ProjectDataLVItem *item = new ProjectDataLVItem(data, info, this);
@@ -198,7 +197,6 @@ void KexiProjectSelectorWidget::setProjectSet( KexiProjectSet* prj_set )
 			kWarning() << "KexiProjectSelector::KexiProjectSelector(): no driver found for '" 
 				<< data->constConnectionData()->driverName << "'!" << endl;
 		}
-		data=prjlist.next();
 	}
 	if (list->firstChild()) {
 		list->setSelected(list->firstChild(),true);

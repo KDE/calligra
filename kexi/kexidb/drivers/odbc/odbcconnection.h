@@ -20,9 +20,7 @@
 #ifndef KEXIDB_CONN_ODBC_H
 #define KEXIDB_CONN_ODBC_H
 
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QStringList>
 
 #include <kexidb/connection.h>
 #include <kexidb/tableschema.h>
@@ -47,7 +45,7 @@ class ODBCConnection : public Connection
 
 		virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
 		virtual QString escapeString(const QString& str) const;
-		virtual Q3CString escapeString(const Q3CString& str) const;
+		virtual QByteArray escapeString(const QByteArray& str) const;
 
 	protected:
 		/*! Used by driver */

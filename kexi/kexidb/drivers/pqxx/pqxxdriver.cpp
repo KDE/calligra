@@ -26,8 +26,6 @@
 #include <string>
 
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -50,8 +48,7 @@ pqxxSqlDriver::pqxxSqlDriver( QObject *parent, const QStringList &args )
 	beh->AUTO_INCREMENT_PK_FIELD_OPTION = "PRIMARY KEY";
 	beh->ALWAYS_AVAILABLE_DATABASE_NAME = "template1";
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER = '"';
-	beh->SQL_KEYWORDS = keywords;
-	initSQLKeywords(233);
+	initDriverSpecificKeywords(keywords);
 
 	//predefined properties
 	d->properties["client_library_version"] = "";//TODO
@@ -142,23 +139,25 @@ QString pqxxSqlDriver::escapeString( const QString& str) const
 
 //==================================================================================
 //
-Q3CString pqxxSqlDriver::escapeString( const Q3CString& str) const
+QByteArray pqxxSqlDriver::escapeString( const QByteArray& str) const
 {
-    return Q3CString("'")
-    	+ Q3CString( pqxx::sqlesc(QString(str).toAscii()).c_str() )
-    	+ Q3CString("'");
+    return QByteArray("'")
+		+ QByteArray( pqxx::sqlesc(str).c_str() )
+    	+ QByteArray("'");
 }
 
 //==================================================================================
 //
-QString pqxxSqlDriver::drv_escapeIdentifier( const QString& str) const {
-	return QString(str).replace( '"', "\"\"" );
+QString pqxxSqlDriver::drv_escapeIdentifier( const QString& str) const
+{
+	return QByteArray(str.toLatin1()).replace( '"', "\"\"" );
 }
 
 //==================================================================================
 //
-Q3CString pqxxSqlDriver::drv_escapeIdentifier( const Q3CString& str) const {
-	return Q3CString(str).replace( '"', "\"\"" );
+QByteArray pqxxSqlDriver::drv_escapeIdentifier( const QByteArray& str) const
+{
+	return QByteArray(str.toLatin1()).replace( '"', "\"\"" );
 }
 
 //==================================================================================

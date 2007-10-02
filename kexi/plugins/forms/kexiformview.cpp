@@ -52,7 +52,6 @@
 #include <kexidb/cursor.h>
 #include <kexidb/utils.h>
 #include <kexidb/preparedstatement.h>
-#include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <widget/kexipropertyeditorview.h>
 #include <widget/kexiqueryparameters.h>
@@ -692,7 +691,7 @@ void KexiFormView::initDataSource()
 		else {
 			KexiDB::debug( m_query->parameters() );
 			// like in KexiQueryView::executeQuery()
-			Q3ValueList<QVariant> params;
+			QList<QVariant> params;
 			{
 				KexiUtils::WaitCursorRemover remover;
 				params = KexiQueryParameters::getParameters(this, *conn->driver(), *m_query, ok);

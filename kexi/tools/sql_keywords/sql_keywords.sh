@@ -28,9 +28,9 @@ progname="sql_keywords.sh"
 
 ################################################################################
 # C++ file generator
-# params : array - scoped name of the array to generate
+# params : array   - scoped datatype and name of the array to generate
 #          include - a file to include (or "" if none)
-#          inFile - file containing raw keywords
+#          inFile  - file containing raw keywords
 #          outfile - file to write 
 header () {
   local array="$1"
@@ -53,7 +53,7 @@ EOF1
   cat <<EOF2 >> "$outFile";
 
 namespace KexiDB {
-  const char* ${array}[] = {
+  ${array}[] = {
 EOF2
 }
 
@@ -236,7 +236,7 @@ checkTarballs () {
   fi
   if [ "$appVer.all" -nt "$appVer.new" ] ; then
     getDriverKeywords "kexi.all" "$appVer.all" "$appVer.new"
-    header "${appName}Driver::keywords" "${filePrefix}driver.h" "$inFile" "${filePrefix}keywords.cpp"
+    header "const char* ${appName}Driver::keywords" "${filePrefix}driver.h" "$inFile" "${filePrefix}keywords.cpp"
     body   "$appVer.new" "${filePrefix}keywords.cpp"
     footer "${filePrefix}keywords.cpp"
   fi
@@ -256,7 +256,7 @@ checkTarballs () {
 
        if [ "$appVer.all" -nt "$appVer.new" ] ; then
          getDriverKeywords "kexi.all" "$appVer.all" "$appVer.new"
-         header "${appName}Driver::keywords" "${filePrefix}driver.h" "$appVer/$pathInTar" "${filePrefix}keywords.cpp"
+         header "const char* ${appName}Driver::keywords" "${filePrefix}driver.h" "$appVer/$pathInTar" "${filePrefix}keywords.cpp"
          body   "$appVer.new" "${filePrefix}keywords.cpp"
          footer "${filePrefix}keywords.cpp"
        fi
@@ -275,7 +275,7 @@ checkTarballs () {
 
        if [ "$appVer.all" -nt "$appVer.new" ] ; then
          getDriverKeywords "kexi.all" "$appVer.all" "$appVer.new"
-         header "${appName}Driver::keywords" "${filePrefix}driver.h" "$appVer/$pathInTar" "${filePrefix}keywords.cpp"
+         header "const char* ${appName}Driver::keywords" "${filePrefix}driver.h" "$appVer/$pathInTar" "${filePrefix}keywords.cpp"
          body   "$appVer.new" "${filePrefix}keywords.cpp"
          footer "${filePrefix}keywords.cpp"
        fi
@@ -290,8 +290,8 @@ checkTarballs () {
 
 checkKexiKeywords
 src=`printf "koffice/kexi/kexidb/parser/sqlscanner.l\n"\
-" * and koffice/kexi/tools/sql_keywords/kexi__reserved"`
-header "DriverPrivate::kexiSQLKeywords" "driver_p.h" "$src" "keywords.cpp"
+" * and koffice/kexi/tools/sql_keywords/kexi_reserved"`
+header "const char* DriverPrivate::kexiSQLKeywords" "driver_p.h" "$src" "keywords.cpp"
 body "kexi.all" "keywords.cpp"
 footer "keywords.cpp"
 

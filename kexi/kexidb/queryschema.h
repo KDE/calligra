@@ -20,13 +20,11 @@
 #ifndef KEXIDB_QUERY_H
 #define KEXIDB_QUERY_H
 
-#include <q3valuevector.h>
-#include <qstring.h>
-#include <qmap.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
+#include <QVector>
+#include <QString>
+#include <QHash>
+#include <QList>
+#include <QByteArray>
 
 #include "fieldlist.h"
 #include "schemadata.h"
@@ -39,7 +37,7 @@ class Connection;
 class QueryAsterisk;
 class QuerySchemaPrivate;
 class QuerySchemaParameter;
-typedef Q3ValueList<QuerySchemaParameter> QuerySchemaParameterList;
+typedef QList<QuerySchemaParameter> QuerySchemaParameterList;
 
 //! @short Helper class that assigns additional information for the column in a query
 /*! The following information is assigned:
@@ -51,19 +49,19 @@ typedef Q3ValueList<QuerySchemaParameter> QuerySchemaParameterList;
 class KEXI_DB_EXPORT QueryColumnInfo
 {
 	public:
-		typedef Q3PtrVector<QueryColumnInfo> Vector;
-		typedef Q3PtrList<QueryColumnInfo> List;
-		typedef Q3PtrListIterator<QueryColumnInfo> ListIterator;
+		typedef QVector<QueryColumnInfo*> Vector;
+		typedef QList<QueryColumnInfo*> List;
+		typedef QList<QueryColumnInfo*>::ConstIterator ListIterator;
 
-		QueryColumnInfo(Field *f, const Q3CString& _alias, bool _visible, QueryColumnInfo *foreignColumn = 0);
+		QueryColumnInfo(Field *f, const QByteArray& _alias, bool _visible, QueryColumnInfo *foreignColumn = 0);
 		~QueryColumnInfo();
 
 		//! \return alias if it is not empty, field's name otherwise.
-		inline Q3CString aliasOrName() const {
+		inline QByteArray aliasOrName() const {
 			if ( alias.isEmpty() ) {
-				return Q3CString( field->name().toLatin1() );
+				return field->name().toLatin1();
 			} else {
-				return Q3CString( (const char*)alias );
+				return QByteArray( (const char*)alias );
 			}
 		}
 
@@ -73,7 +71,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 			return field->caption().isEmpty() ? QString(aliasOrName()) : field->caption(); }
 
 		Field *field;
-		Q3CString alias;
+		QByteArray alias;
 
 		/*! \return index of column with visible lookup value within the 'fields expanded' vector.
 		 -1 means no visible lookup value is available because there is no lookup for the column defined.
@@ -107,7 +105,7 @@ class KEXI_DB_EXPORT QueryColumnInfo
 class KEXI_DB_EXPORT OrderByColumn
 {
 	public:
-		typedef Q3ValueListConstIterator<OrderByColumn> ListConstIterator;
+		typedef QList<OrderByColumn*>::ConstIterator ListConstIterator;
 		OrderByColumn();
 		OrderByColumn(QueryColumnInfo& column, bool ascending = true, int pos = -1);
 		
@@ -159,7 +157,7 @@ class KEXI_DB_EXPORT OrderByColumn
 };
 
 //! A base for KexiDB::OrderByColumnList
-typedef Q3ValueList<OrderByColumn> OrderByColumnListBase;
+typedef QList<OrderByColumn*> OrderByColumnListBase;
 
 //! @short KexiDB::OrderByColumnList provides list of sorted columns for a query schema
 class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
@@ -169,6 +167,24 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		OrderByColumnList();
 
 		~OrderByColumnList();
+
+		class KEXI_DB_EXPORT const_iterator : public OrderByColumnListBase::const_iterator
+		{
+			public:
+				inline const_iterator()
+					: OrderByColumnListBase::const_iterator() {}
+				inline const_iterator(const OrderByColumnListBase::const_iterator &o)
+					: OrderByColumnListBase::const_iterator(o) {}
+		};
+
+		class KEXI_DB_EXPORT iterator : public OrderByColumnListBase::iterator
+		{
+			public:
+				inline iterator()
+					: OrderByColumnListBase::iterator() {}
+				inline iterator(const OrderByColumnListBase::iterator &o)
+					: OrderByColumnListBase::iterator(o) {}
+		};
 
 		/*! Appends multiple fields for sorting. \a querySchema 
 		 is used to find appropriate field or alias name.
@@ -211,8 +227,10 @@ class KEXI_DB_EXPORT OrderByColumnList : protected OrderByColumnListBase
 		/*! Removes all elements from the list. */
 		void clear() { OrderByColumnListBase::clear(); }
 
-		const_iterator constBegin () const { return OrderByColumnListBase::constBegin(); }
-		const_iterator constEnd () const { return OrderByColumnListBase::constEnd(); }
+		iterator begin() { return OrderByColumnListBase::begin(); }
+		iterator end() { return OrderByColumnListBase::end(); }
+		const_iterator constBegin() const { return OrderByColumnListBase::constBegin(); }
+		const_iterator constEnd() const { return OrderByColumnListBase::constEnd(); }
 
 		/*! \return string for debugging purposes. */
 		QString debugString() const;
@@ -359,7 +377,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 if \a alias is not empty, it will be assigned to this table
 		 using setTableAlias(position, alias)
 		*/
-		void addTable(TableSchema *table, const Q3CString& alias = Q3CString());
+		void addTable(TableSchema *table, const QByteArray& alias = QByteArray());
 
 		/*! Removes \a table schema from this query. 
 		 This does not destroy \a table object but only takes it out of the list. 
@@ -399,7 +417,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 If the column is an expression and has no alias defined, 
 		 a new unique alias will be generated automatically on this call.
 		*/
-		Q3CString columnAlias(uint position) const;
+		QByteArray columnAlias(uint position) const;
 		
 		/*! Provided for convenience. 
 		 \return true if a column at \a position has non empty alias defined 
@@ -410,7 +428,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! Sets \a alias for a column at \a position, within the query. 
 		 Passing empty string to \a alias clears alias for a given column. */
-		void setColumnAlias(uint position, const Q3CString& alias);
+		void setColumnAlias(uint position, const QByteArray& alias);
 
 		/*! \return a table position (within FROM section), 
 		 that is bound to column at \a columnPosition (within SELECT section).
@@ -438,7 +456,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		/*! \return alias of a table at \a position (within FROM section) 
 		 or null string if there is no alias for this table
 		 or if there is no such table within the query defined. */
-		Q3CString tableAlias(uint position) const;
+		QByteArray tableAlias(uint position) const;
 		
 		/*! \return table position (within FROM section) that has attached 
 		 alias \a name.
@@ -451,7 +469,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 e.g. "SELECT 1 from table1 t, table2 t" is ok
 		 but "SELECT t.id from table1 t, table2 t" is not.
 		*/
-		int tablePositionForAlias(const Q3CString& name) const;
+		int tablePositionForAlias(const QByteArray& name) const;
 
 		/*! \return table position (within FROM section) for \a tableName.
 		 -1 is returend if there's no such table declared in the FROM section.
@@ -465,7 +483,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 in the FROM section at all.
 		 \sa tablePosition()
 		*/
-		Q3ValueList<int> tablePositions(const QString& tableName) const;
+		QList<int> tablePositions(const QString& tableName) const;
 
 		/*! Provided for convenience. 
 		 \return true if a table at \a position (within FROM section of the the query)
@@ -476,13 +494,13 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 
 		/*! \return column position that has defined alias \a name.
 		 If there is no such alias, -1 is returned. */
-		int columnPositionForAlias(const Q3CString& name) const;
+		int columnPositionForAlias(const QByteArray& name) const;
 
 		/*! Sets \a alias for a table at \a position (within FROM section 
 		 of the the query).
 		 Passing empty sting to \a alias clears alias for a given table
 		 (only for specified \a position). */
-		void setTableAlias(uint position, const Q3CString& alias);
+		void setTableAlias(uint position, const QByteArray& alias);
 
 		/*! \return a list of relationships defined for this query */
 		Relationship::List* relationships() const;
@@ -610,7 +628,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 			ExpandedList                    //!< A map for expanded list is created
 		};
 
-		/*! \return a map for fast lookup of query columns' order.
+		/*! \return a hash for fast lookup of query columns' order.
 		 - If \a options is UnexpandedList, each QueryColumnInfo pointer is mapped to the index
 		   within (unexpanded) list of fields, i.e. "*" or "table.*" asterisks are considered 
 		   to be single items.
@@ -639,7 +657,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 - columnsOrder(UnexpandedListWithoutAsterisks) will return the following map: 
 		   QueryColumnInfo(id)->0,
 		*/
-		QMap<QueryColumnInfo*,int> columnsOrder(ColumnsOrderOptions options = ExpandedList);
+		QHash<QueryColumnInfo*,int> columnsOrder(ColumnsOrderOptions options = ExpandedList);
 
 		/*! \return table describing order of primary key (PKEY) fields within the query.
 		 Indexing is performed against vector returned by fieldsExpanded().
@@ -663,7 +681,7 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 @see example for pkeyFieldsCount().
 @todo js: UPDATE CACHE!
 		*/
-		Q3ValueVector<int> pkeyFieldsOrder();
+		QVector<int> pkeyFieldsOrder();
 
 		/*! \return number of master table's primary key fields included in this query.
 		 This method is useful to quickly check whether the vector returned by pkeyFieldsOrder()

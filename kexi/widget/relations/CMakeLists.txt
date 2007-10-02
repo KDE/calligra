@@ -6,10 +6,12 @@ include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/core ${KD
 ########### next target ###############
 
 set(kexirelationsview_LIB_SRCS 
-   kexirelationview.cpp 
-   kexirelationviewconnection.cpp 
-   kexirelationviewtable.cpp 
-   kexirelationwidget.cpp )
+   KexiRelationsScrollArea.cpp
+   KexiRelationsConnection.cpp
+   KexiRelationsTableContainer.cpp
+   KexiRelationsTableContainer_p.cpp
+   KexiRelationsView.cpp
+)
 
 
 kde4_add_library(kexirelationsview SHARED ${kexirelationsview_LIB_SRCS})

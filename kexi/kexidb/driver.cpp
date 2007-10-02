@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,26 +27,33 @@
 #include "connectiondata.h"
 #include "admin.h"
 
-#include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
-
 #include <klocale.h>
 #include <kdebug.h>
 
 #include <assert.h>
-#include <q3tl.h>
 
 using namespace KexiDB;
 
-/*! used when we do not have Driver instance yet,
- or when we cannot get one */
-Q3ValueVector<QString> dflt_typeNames;
-
+/*! @internal Used in Driver::defaultSQLTypeName(int) 
+ when we do not have Driver instance yet, or when we cannot get one */
+static const char* KexiDB_defaultSQLTypeNames[] = {
+	"InvalidType",
+	"Byte",
+	"ShortInteger",
+	"Integer",
+	"BigInteger",
+	"Boolean",
+	"Date",
+	"DateTime",
+	"Time",
+	"Float",
+	"Double",
+	"Text",
+	"LongText",
+	"BLOB"
+};
 
 //---------------------------------------------
-
 
 DriverBehaviour::DriverBehaviour()
 	: UNSIGNED_TYPE_KEYWORD("UNSIGNED")
@@ -59,7 +66,6 @@ DriverBehaviour::DriverBehaviour()
 	, USING_DATABASE_REQUIRED_TO_CONNECT(true)
 	, _1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY(false)
 	, SELECT_1_SUBQUERY_SUPPORTED(false)
-	, SQL_KEYWORDS(0)
 {
 }
 
@@ -80,10 +86,7 @@ Driver::Driver( QObject *parent, const QStringList & )
 	, d( new DriverPrivate() )
 {
 	d->typeNames.resize(Field::LastType + 1);
-
-	d->initKexiKeywords();
 }
-
 
 Driver::~Driver()
 {
@@ -205,26 +208,9 @@ Connection* Driver::removeConnection( Connection *conn )
 
 QString Driver::defaultSQLTypeName(int id_t)
 {
-	if (id_t>=Field::Null)
-		return "Null";
-	if (dflt_typeNames.isEmpty()) {
-		dflt_typeNames.resize(Field::LastType + 1);
-		dflt_typeNames[Field::InvalidType]="InvalidType";
-		dflt_typeNames[Field::Byte]="Byte";
-		dflt_typeNames[Field::ShortInteger]="ShortInteger";
-		dflt_typeNames[Field::Integer]="Integer";
-		dflt_typeNames[Field::BigInteger]="BigInteger";
-		dflt_typeNames[Field::Boolean]="Boolean";
-		dflt_typeNames[Field::Date]="Date";
-		dflt_typeNames[Field::DateTime]="DateTime";
-		dflt_typeNames[Field::Time]="Time";
-		dflt_typeNames[Field::Float]="Float";
-		dflt_typeNames[Field::Double]="Double";
-		dflt_typeNames[Field::Text]="Text";
-		dflt_typeNames[Field::LongText]="LongText";
-		dflt_typeNames[Field::BLOB]="BLOB";
-	}
-	return dflt_typeNames[id_t];
+	if (id_t < 0 || id_t > (Field::LastType + 1))
+		return QString::fromLatin1("Null");
+	return QString::fromLatin1( KexiDB_defaultSQLTypeNames[id_t] );
 }
 
 bool Driver::isSystemObjectName( const QString& n ) const
@@ -297,30 +283,30 @@ QString Driver::valueToSQL( uint ftype, const QVariant& v ) const
 	return QString();
 }
 
-QVariant Driver::propertyValue( const Q3CString& propName ) const
+QVariant Driver::propertyValue( const QByteArray& propName ) const
 {
-	return d->properties[propName.toLower()];
+	return d->properties.value(propName.toLower());
 }
 
-QString Driver::propertyCaption( const Q3CString& propName ) const
+QString Driver::propertyCaption( const QByteArray& propName ) const
 {
-	return d->propertyCaptions[propName.toLower()];
+	return d->propertyCaptions.value(propName.toLower());
 }
 
-Q3ValueList<Q3CString> Driver::propertyNames() const
+QList<QByteArray> Driver::propertyNames() const
 {
-	Q3ValueList<Q3CString> names = d->properties.keys();
-	qHeapSort(names);
+	QList<QByteArray> names( d->properties.keys() );
+	qSort(names);
 	return names;
 }
 
 QString Driver::escapeIdentifier(const QString& str, int options) const
 {
-	Q3CString cstr = str.toLatin1();
+	QByteArray cstr( str.toLatin1() );
 	return QString(escapeIdentifier(cstr, options));
 }
 
-Q3CString Driver::escapeIdentifier(const Q3CString& str, int options) const
+QByteArray Driver::escapeIdentifier(const QByteArray& str, int options) const
 {
 	bool needOuterQuotes = false;
 
@@ -330,16 +316,15 @@ Q3CString Driver::escapeIdentifier(const Q3CString& str, int options) const
 		needOuterQuotes = true;
 
 // ... or if the driver does not have a list of keywords,
-	else if(!d->driverSQLDict)
+	else if(d->driverSpecificSQLKeywords.isEmpty())
 		needOuterQuotes = true;
 
 // ... or if it's a keyword in Kexi's SQL dialect,
-	else if(d->kexiSQLDict->find(str))
+	else if(KexiDB::isKexiSQLKeyword(str))
 		needOuterQuotes = true;
 
 // ... or if it's a keyword in the backends SQL dialect,
-// (have already checked !d->driverSQLDict)
-	else if((options & EscapeDriver) && d->driverSQLDict->find(str))
+	else if((options & EscapeDriver) && d->driverSpecificSQLKeywords.contains(str))
 		needOuterQuotes = true;
 
 // ... or if the identifier has a space in it...
@@ -348,7 +333,7 @@ Q3CString Driver::escapeIdentifier(const Q3CString& str, int options) const
 
 	if(needOuterQuotes && (options & EscapeKexi)) {
 		const char quote = '"';
-		return quote + Q3CString(str).replace( quote, "\"\"" ) + quote;
+		return quote + QByteArray(str).replace( quote, "\"\"" ) + quote;
 	}
 	else if (needOuterQuotes) {
 		const char quote = beh->QUOTATION_MARKS_FOR_IDENTIFIER.toLatin1();
@@ -358,11 +343,23 @@ Q3CString Driver::escapeIdentifier(const Q3CString& str, int options) const
 	}
 }
 
-void Driver::initSQLKeywords(int hashSize) {
+void Driver::initDriverSpecificKeywords(const char** keywords)
+{
+	d->driverSpecificSQLKeywords.setStrings(keywords);
+}
 
-	if(!d->driverSQLDict && beh->SQL_KEYWORDS != 0) {
-	  d->initDriverKeywords(beh->SQL_KEYWORDS, hashSize);
-	}
+bool Driver::isDriverSpecificKeyword( const QByteArray& word ) const
+{
+	return d->driverSpecificSQLKeywords.contains( word );
+}
+
+//---------------
+
+K_GLOBAL_STATIC_WITH_ARGS(KexiUtils::StaticSetOfStrings, KexiDB_kexiSQLKeywords, (DriverPrivate::kexiSQLKeywords))
+
+KEXI_DB_EXPORT bool KexiDB::isKexiSQLKeyword( const QByteArray& word )
+{
+	return KexiDB_kexiSQLKeywords->contains( word );
 }
 
 #include "driver.moc"

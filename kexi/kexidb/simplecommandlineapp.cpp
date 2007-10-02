@@ -19,13 +19,13 @@
 
 #include "simplecommandlineapp.h"
 
-#include <qfileinfo.h>
-#include <qtextstream.h>
+#include <QFileInfo>
+#include <QTextStream>
 
-#include <kcmdlineargs.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kcomponentdata.h>
+#include <KCmdLineArgs>
+#include <KDebug>
+#include <KLocale>
+#include <KComponentData>
 
 #include <kexidb/connectiondata.h>
 #include <kexidb/drivermanager.h>
@@ -67,7 +67,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
  , d( new Private() )
 {
 	QFileInfo fi(argv[0]);
-	Q3CString appName( fi.baseName().toLatin1() );
+	QByteArray appName( fi.baseName().toLatin1() );
 	KCmdLineArgs::init(argc, argv, 
 		new KAboutData( appName, 0, ki18n(programName),
 			version, ki18n(shortDescription), licenseType, ki18n(copyrightStatement), ki18n(text), 

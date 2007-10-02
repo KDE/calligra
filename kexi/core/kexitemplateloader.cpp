@@ -29,6 +29,15 @@
 
 #include <qdir.h>
 
+KexiTemplateInfo::KexiTemplateInfo()
+{
+}
+
+KexiTemplateInfo::~KexiTemplateInfo()
+{
+	qDeleteAll(autoopenObjects);
+}
+
 //static
 KexiTemplateInfo::List KexiTemplateLoader::loadListInfo()
 {
@@ -108,17 +117,17 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
 		info.icon = DesktopIcon("kexiproject_sqlite"); //default
 	QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
 	foreach( QString autoopenObjectString, autoopenObjectsString) {
-		KexiProjectData::ObjectInfo autoopenObject;
+		KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();
 		QStringList autoopenObjectNameSplitted( autoopenObjectString.split(':') );
 		if (autoopenObjectNameSplitted.count()>1) {
-			autoopenObject["type"] = autoopenObjectNameSplitted[0];
-			autoopenObject["name"] = autoopenObjectNameSplitted[1];
+			autoopenObject->insert("type", autoopenObjectNameSplitted[0]);
+			autoopenObject->insert("name", autoopenObjectNameSplitted[1]);
 		}
 		else {
-			autoopenObject["type"] = "table";
-			autoopenObject["name"] = autoopenObjectNameSplitted[0];
+			autoopenObject->insert("type", "table");
+			autoopenObject->insert("name", autoopenObjectNameSplitted[0]);
 		}
-		autoopenObject["action"] = "open";
+		autoopenObject->insert("action", "open");
 		info.autoopenObjects.append( autoopenObject );
 	}
 	return info;

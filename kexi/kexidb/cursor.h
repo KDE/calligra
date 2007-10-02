@@ -20,10 +20,8 @@
 #ifndef KEXIDB_CURSOR_H
 #define KEXIDB_CURSOR_H
 
-#include <qstring.h>
-#include <qvariant.h>
-#include <q3ptrvector.h>
-#include <q3valuevector.h>
+#include <QString>
+#include <QVariant>
 
 #include <kexidb/connection.h>
 #include <kexidb/object.h>
@@ -103,10 +101,10 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		inline QuerySchema *query() const { return m_query; }
 
 		//! \return query parameters assigned to this cursor
-		Q3ValueList<QVariant> queryParameters() const;
+		QList<QVariant> queryParameters() const;
 
 		//! Sets query parameters \a params for this cursor.
-		void setQueryParameters(const Q3ValueList<QVariant>& params);
+		void setQueryParameters(const QList<QVariant>& params);
 
 		/*! \return raw query statement used to define this cursor
 		 or null string if raw statement instead (but QuerySchema is defined instead). */
@@ -147,17 +145,17 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		virtual bool movePrev();
 
 		/*! \return true if current position is after last record. */
-		bool eof() const;
+		inline bool eof() const { return m_afterLast; }
 
 		/*! \return true if current position is before first record. */
-		bool bof() const;
+		inline bool bof() const { return m_at==0; }
 
 		/*! \return current internal position of the cursor's query. 
 		 We are counting records from 0.
 		 Value -1 means that cursor does not point to any valid record
 		 (this happens eg. after open(), close(), 
 		 and after moving after last record or before first one. */
-		qint64 at() const;
+		inline qint64 at() const { return m_readAhead ? 0 : (m_at - 1); }
 
 		/*! \return number of fields available for this cursor. 
 		 This never includes ROWID column or other internal coluns (e.g. lookup). */
@@ -207,18 +205,31 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		 @see setOrderBy(const QStringList&) */
 		QueryColumnInfo::Vector orderByColumnList() const;
 
-		/*! Puts current record's data into \a data (makes a deep copy).
-		 This have unspecified behaviour if the cursor is not at valid record.
-		 Note: For reimplementation in driver's code. Shortly, this method translates
-		 a row data from internal representation (probably also used in buffer)
-		 to simple public RecordData representation. */
-		virtual void storeCurrentRow(RowData &data) const = 0;
+		/*! Allocates a new RecordData and stores data in it (makes a deep copy of each field).
+		 If the cursor is not at valid record, the result is undefined. 
+		 \return newly created record data object or 0 on error. */
+		inline RecordData* storeCurrentRow() const {
+			RecordData* data = new RecordData(m_fieldsToStoreInRow);
+			if (!drv_storeCurrentRow(*data)) {
+				delete data;
+				return 0;
+			}
+			return data;
+		}
 
-		bool updateRow(RowData& data, RowEditBuffer& buf, bool useROWID = false);
+		/*! Puts current record's data into \a data (makes a deep copy of each field).
+		 If the cursor is not at valid record, the result is undefined. 
+		 \return true on success. */
+		inline bool storeCurrentRow(RecordData& data) const {
+			data.resize(m_fieldsToStoreInRow);
+			return drv_storeCurrentRow(data);
+		}
 
-		bool insertRow(RowData& data, RowEditBuffer& buf, bool getROWID = false);
+		bool updateRow(RecordData& data, RowEditBuffer& buf, bool useROWID = false);
 
-		bool deleteRow(RowData& data, bool useROWID = false);
+		bool insertRow(RecordData& data, RowEditBuffer& buf, bool getROWID = false);
+
+		bool deleteRow(RecordData& data, bool useROWID = false);
 
 		bool deleteAllRows();
 
@@ -318,6 +329,14 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		 the same that is returend by serverResult(). */
 		virtual void drv_clearServerResult() = 0;
 
+		/*! Puts current record's data into \a data (makes a deep copy of each field).
+		 This method has unspecified behaviour if the cursor is not at valid record.
+		 \return true on success.
+		 Note: For reimplementation in driver's code. Shortly, this method translates
+		 a row data from internal representation (probably also used in buffer)
+		 to simple public RecordData representation. */
+		virtual bool drv_storeCurrentRow(RecordData& data) const = 0;
+
 		QPointer<Connection> m_conn;
 		QuerySchema *m_query;
 //		CursorData *m_data;
@@ -331,6 +350,9 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		bool m_containsROWIDInfo : 1;
 		qint64 m_at;
 		uint m_fieldCount; //!< cached field count information
+		uint m_fieldsToStoreInRow; //!< Used by storeCurrentRow(), reimplement if needed 
+		                           //!< (e.g. PostgreSQL driver, when m_containsROWIDInfo==true 
+		                           //!< sets m_fieldCount+1 here)
 		uint m_logicalFieldCount;  //!< logical field count, i.e. without intrernal values like ROWID or lookup
 		uint m_options; //!< cursor options that describes its behaviour
 		char m_result; //!< result of a row fetching
@@ -346,9 +368,10 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		//! Used by setOrderByColumnList()
 		QueryColumnInfo::Vector* m_orderByColumnList;
 
-		Q3ValueList<QVariant>* m_queryParameters;
+		QList<QVariant>* m_queryParameters;
 
 	private:
+
 		bool m_readAhead : 1;
 		
 		//<members related to buffering>

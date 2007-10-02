@@ -35,6 +35,8 @@
 #include <kmimetype.h>
 #include <kio/global.h>
 
+#include <kexi_global.h>
+
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
 
 #ifdef Q_WS_WIN

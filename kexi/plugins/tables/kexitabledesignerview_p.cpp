@@ -283,7 +283,7 @@ QString KexiTableDesignerViewPrivate::messageForSavingChanges(bool &emptyTable, 
 		designerView->window()).toString()) );
 }
 
-void KexiTableDesignerViewPrivate::updateIconForItem(KexiTableItem &item, KoProperty::Set& set)
+void KexiTableDesignerViewPrivate::updateIconForRecord(KexiDB::RecordData &record, KoProperty::Set& set)
 {
 	QVariant icon;
 	if (!set["rowSource"].value().toString().isEmpty()
@@ -293,8 +293,8 @@ void KexiTableDesignerViewPrivate::updateIconForItem(KexiTableItem &item, KoProp
 	}
 	//show/hide icon in the table
 	view->data()->clearRowEditBuffer();
-	view->data()->updateRowEditBuffer(&item, COLUMN_ID_ICON, icon);
-	view->data()->saveRowChanges(item, true);
+	view->data()->updateRowEditBuffer(&record, COLUMN_ID_ICON, icon);
+	view->data()->saveRowChanges(record, true);
 }
 
 #include "kexitabledesignerview_p.moc"

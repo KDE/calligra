@@ -34,7 +34,6 @@ class KexiSimplePrintingSettings;
 #include <q3paintdevicemetrics.h>
 #include <qfontmetrics.h>
 #include <qfont.h>
-#include <Q3PtrList>
 
 //! @short Settings data for simple printing engine.
 class KexiSimplePrintingSettings
@@ -94,7 +93,7 @@ class KexiSimplePrintingEngine : public QObject
 		void paintPage(int pageNumber, QPainter& painter, bool paint = true);
 
 	protected:
-		void paintRecord(QPainter& painter, KexiTableItem *item, 
+		void paintRecord(QPainter& painter, KexiDB::RecordData *record, 
 			int cellMargin, double &y, uint paintedRows, bool paint, bool printing);
 
 		const KexiSimplePrintingSettings* m_settings;
@@ -109,7 +108,7 @@ class KexiSimplePrintingEngine : public QObject
 		KexiDB::Cursor *m_cursor;
 		KexiTableViewData *m_data;
 //		KexiTableViewData::Iterator *m_dataIterator;
-		Q3PtrList<uint> m_dataOffsets;
+		QList<uint> m_dataOffsets;
 		QString m_headerText;
 		QString m_dateTimeText;
 		uint m_dateTimeWidth;

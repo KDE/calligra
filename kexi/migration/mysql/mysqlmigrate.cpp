@@ -197,7 +197,7 @@ tristate MySQLMigrate::drv_queryStringListFromSQL(
 /*! Fetches single record from result obtained 
  by running \a sqlStatement. */
 tristate MySQLMigrate::drv_fetchRecordFromSQL(const QString& sqlStatement, 
-	KexiDB::RowData& data, bool &firstRecord)
+	KexiDB::RecordData& data, bool &firstRecord)
 {
 	if (firstRecord || !m_mysqlres) {
 		if (m_mysqlres) {
@@ -246,7 +246,7 @@ bool MySQLMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 	const KexiDB::QueryColumnInfo::Vector fieldsExpanded( dstTable->query()->fieldsExpanded() );
 	while ((row = mysql_fetch_row(res))) {
 		const int numFields = qMin((int)fieldsExpanded.count(), (int)mysql_num_fields(res));
-		Q3ValueList<QVariant> vals;
+		QList<QVariant> vals;
 		unsigned long *lengths = mysql_fetch_lengths(res);
 		if (!lengths) {
 			mysql_free_result(res);
@@ -406,10 +406,10 @@ KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
 		// Doesn't matter how big it is, it's binary
 		return KexiDB::Field::BLOB;
 	}
-	else if (mysqlType.contains("text", Qt::CaseInsensitive)) {
+/*	else if (mysqlType.contains("text", Qt::CaseInsensitive)) {
 		// All the TEXT types are too big for Kexi text.
 		return KexiDB::Field::BLOB;
-	}
+	}*/
 	else if (fld->length < 200) {
 		return KexiDB::Field::Text;
 	}

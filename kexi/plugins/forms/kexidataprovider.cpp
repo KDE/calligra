@@ -24,7 +24,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <widget/tableview/kexitableitem.h>
 #include <widget/tableview/kexitableviewdata.h>
 #include <widget/tableview/kexicomboboxbase.h>
 #include <kexidb/queryschema.h>
@@ -88,9 +87,9 @@ void KexiFormDataProvider::setMainDataSourceWidget(QWidget* mainWidget)
 	}
 }
 
-void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow)
+void KexiFormDataProvider::fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow)
 {
-	kexipluginsdbg << "KexiFormDataProvider::fillDataItems() cnt=" << row.count() << endl;
+	kexipluginsdbg << "KexiFormDataProvider::fillDataItems() cnt=" << record.count() << endl;
 	for (KexiFormDataItemInterfaceToIntMap::ConstIterator it
 		 = m_fieldNumbersForDataItems.constBegin(); 
 		it!=m_fieldNumbersForDataItems.constEnd(); ++it)
@@ -103,12 +102,12 @@ void KexiFormDataProvider::fillDataItems(KexiTableItem& row, bool cursorAtNewRow
 		}
 		//1. Is this a value with a combo box (lookup)?
 		int indexForVisibleLookupValue = itemIface->columnInfo()->indexForVisibleLookupValue();
-		if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue>=(int)row.count()) //sanity
+		if (indexForVisibleLookupValue<0 && indexForVisibleLookupValue>=(int)record.count()) //sanity
 			indexForVisibleLookupValue = -1; //no
-		const QVariant value( row.at(it.value()) );
+		const QVariant value( record.at(it.value()) );
 		QVariant visibleLookupValue;
-		if (indexForVisibleLookupValue!=-1 && (int)row.size()>indexForVisibleLookupValue)
-			visibleLookupValue = row.at(indexForVisibleLookupValue);
+		if (indexForVisibleLookupValue!=-1 && (int)record.size()>indexForVisibleLookupValue)
+			visibleLookupValue = record.at(indexForVisibleLookupValue);
 		kexipluginsdbg << "fill data of '" << itemIface->dataSource() <<  "' at idx=" << it.value() 
 			<< " data=" << value << (indexForVisibleLookupValue!=-1 
 				? QString(" SPECIAL: indexForVisibleLookupValue=%1 visibleValue=%2")
@@ -193,9 +192,10 @@ void KexiFormDataProvider::invalidateDataSources( const QSet<QString>& invalidSo
 	if (query) {
 		fieldsExpanded = query->fieldsExpanded( KexiDB::QuerySchema::WithInternalFields );
 //		dataFieldsCount = fieldsExpanded.count();
-		QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( query->columnsOrder() );
-		for (QMap<KexiDB::QueryColumnInfo*,int>::const_iterator it
-			 = columnsOrder.constBegin(); it!=columnsOrder.constEnd(); ++it) {
+		QHash<KexiDB::QueryColumnInfo*,int> columnsOrder( query->columnsOrder() );
+		for (QHash<KexiDB::QueryColumnInfo*,int>::const_iterator it
+			 = columnsOrder.constBegin(); it!=columnsOrder.constEnd(); ++it)
+		{
 			kexipluginsdbg << "query->columnsOrder()[ " << it.key()->field->name() << " ] = "
 				<< it.value() << endl;
 		}

@@ -131,7 +131,8 @@ class KEXICORE_EXPORT KexiActionProxy
 		/*! Like above, but creates alternative action as a copy of \a action_name,
 		 with \a alternativeText set. When this action is activated, just original action
 		 specified by \a action_name is activated. The aternative action has autmatically set name as:
-		 action_name + "_alt". 
+		 action_name + "_alt". The new action's owner is \a w. You can delete 
+		 this action without informing action proxy about this.
 		 \return newly created action or 0 if \a action_name not found. */
 		KAction* plugSharedAction(const QString& action_name, const QString& alternativeText, QWidget* w);
 

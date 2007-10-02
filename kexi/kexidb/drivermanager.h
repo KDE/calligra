@@ -22,11 +22,6 @@
 #ifndef KEXIDB_DRIVER_MNGR_H
 #define KEXIDB_DRIVER_MNGR_H
 
-#include <qobject.h>
-#include <q3cstring.h>
-#include <qmap.h>
-#include <q3dict.h>
-
 #include <klibloader.h>
 #include <kservice.h>
 
@@ -41,7 +36,7 @@ class Connection;
 class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 {
 	public:
-		typedef QMap<QString, KService::Ptr> ServicesMap;
+		typedef QHash<QString, KService::Ptr> ServicesHash;
 
 		DriverManager();
 		virtual ~DriverManager();
@@ -57,7 +52,7 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 
 		/*! returns information list of available drivers. 
 			That drivers can be loaded by first use of driver() method. */
-		const KexiDB::Driver::InfoMap driversInfo();
+		const KexiDB::Driver::InfoHash driversInfo();
 
 		/*! \return information about driver's named with \a name.
 			The name is case insensitive. 
@@ -70,8 +65,8 @@ class KEXI_DB_EXPORT DriverManager : public QObject, public KexiDB::Object
 			In most cases you can use driverInfo() instead. */
 		KService::Ptr serviceInfo(const QString &name);
 
-		/*! \return a map structure of the services. Not necessary for everyday use. */
-		const ServicesMap& services();
+		/*! \return a hash structure of the services. Not necessary for everyday use. */
+		const ServicesHash& services();
 
 		/*! Looks up a drivers list by MIME type of database file.
 		 Only file-based database drivers are checked.

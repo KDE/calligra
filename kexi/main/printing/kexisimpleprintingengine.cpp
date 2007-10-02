@@ -33,7 +33,7 @@
 #include <qlayout.h>
 #include <qpainter.h>
 #include <qcheckbox.h>
-#include <q3whatsthis.h>
+#include <QWhatsThis>
 #include <q3paintdevicemetrics.h>
 #include <QPixmap>
 #include <qimage.h>
@@ -126,7 +126,7 @@ KexiSimplePrintingEngine::KexiSimplePrintingEngine(
 	m_cursor = 0;
 	m_data = 0;
 	m_visibleFieldsCount = 0;
-	m_dataOffsets.setAutoDelete(true);
+//qt 4	m_dataOffsets.setAutoDelete(true);
 	clear();
 }
 
@@ -197,7 +197,7 @@ void KexiSimplePrintingEngine::clear()
 	m_eof = false;
 	m_pagesCount = 0;
 	m_dataOffsets.clear();
-	m_dataOffsets.append(new uint(0));
+	m_dataOffsets.append(0);
 	m_paintInitialized = false;
 }
 
@@ -205,7 +205,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 {
 	uint offset = 0;
 	if (pageNumber < (int)m_dataOffsets.count()) {
-		offset = *m_dataOffsets.at(pageNumber);
+		offset = m_dataOffsets.at(pageNumber);
 	}
 
 	double y = 0.0;
@@ -349,8 +349,7 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 	}
 
 	//--print records
-	KexiDB::RowData row;
-	KexiTableItem *item;
+	KexiDB::RecordData *record;
 //	const uint count = m_fieldsExpanded.count();
 //	const uint count = m_cursor->query()->fieldsExpanded().count(); //real fields count without internals
 	const uint rows = m_data->count();
@@ -358,11 +357,11 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		painter.fontMetrics().width("i") : 0;
 	uint paintedRows = 0;
 	for (;offset < rows; ++offset) {
-		item = m_data->at(offset);
+		record = m_data->at(offset);
 
 		//compute height of this record
 		double newY = y;
-		paintRecord(painter, item, cellMargin, newY, paintedRows, false, printing);
+		paintRecord(painter, record, cellMargin, newY, paintedRows, false, printing);
 //		if ((int(m_topMargin + m_pageHeight-newY-m_footerHeight)) < 0 /*(1)*/ && paintedRows > 0/*(2)*/) {
 		if (newY > (m_topMargin + m_pageHeight - m_mainLineSpacing*2 + m_mainLineSpacing) /*(1)*/ && paintedRows > 0/*(2)*/) {
 			//(1) do not break records between pages
@@ -377,19 +376,19 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		}*/
 //		kDebug() << " -------- " << y << " / " << m_pageHeight << endl;
 		if (paint)
-			paintRecord(painter, item, cellMargin, y, paintedRows, paint, printing);
+			paintRecord(painter, record, cellMargin, y, paintedRows, paint, printing);
 		else
 			y = newY; //speedup
 		paintedRows++;
 	}
 
 	if (int(m_dataOffsets.count()-1)==pageNumber) {//this was next page
-		m_dataOffsets.append(new uint(offset));
+		m_dataOffsets.append(offset);
 	}
 	m_eof = offset == rows;
 }
 
-void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *item, 
+void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData *record, 
 	int cellMargin, double &y, uint paintedRows, bool paint, bool printing)
 {
 	if (paintedRows>0 && !m_settings->addTableBorders) {//separator
@@ -415,14 +414,14 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *ite
 		//get real column and real index to get the visible value
 		KexiDB::QueryColumnInfo* ci;
 		int indexForVisibleLookupValue = m_fieldsExpanded[i]->indexForVisibleLookupValue();
-		if (-1 != indexForVisibleLookupValue && indexForVisibleLookupValue < (int)item->count()/*sanity*/)
+		if (-1 != indexForVisibleLookupValue && indexForVisibleLookupValue < (int)record->count()/*sanity*/)
 			ci = m_fieldsExpanded[ indexForVisibleLookupValue ];
 		else {
 			ci = m_fieldsExpanded[ i ];
 			indexForVisibleLookupValue = i;
 		}
 
-		QVariant v(item->at( indexForVisibleLookupValue ));
+		QVariant v(record->at( indexForVisibleLookupValue ));
 		KexiDB::Field::Type ftype = ci->field->type();
 		QRect rect( (int)m_leftMargin + m_maxFieldNameWidth + cellMargin, (int)y,
 			m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - (int)y);

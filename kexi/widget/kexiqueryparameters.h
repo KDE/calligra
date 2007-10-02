@@ -38,7 +38,7 @@ class KEXIEXTWIDGETS_EXPORT KexiQueryParameters
 	//! @todo support defaults 
 	//! @todo support validation rules, e.g. min/max value, unsigned
 	//! @todo support Enum type (list of strings, need support for keys and user-visible strings)
-		static Q3ValueList<QVariant> getParameters(QWidget *parent, const KexiDB::Driver &driver, 
+		static QList<QVariant> getParameters(QWidget *parent, const KexiDB::Driver &driver, 
 			KexiDB::QuerySchema& querySchema, bool &ok);
 };
 

@@ -3,7 +3,7 @@
 
 dir=`dirname $0`
 cd $dir
-lex -osqlscanner.cpp sqlscanner.l
+flex -osqlscanner.cpp sqlscanner.l
 bison -dv sqlparser.y
 echo '#ifndef _SQLPARSER_H_
 #define _SQLPARSER_H_

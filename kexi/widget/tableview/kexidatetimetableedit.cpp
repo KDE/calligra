@@ -33,7 +33,6 @@
 #include <qpoint.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
-#include <q3datetimeedit.h>
 #include <qclipboard.h>
 
 #include <kdebug.h>

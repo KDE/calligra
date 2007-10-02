@@ -91,8 +91,8 @@ bool KexiDBFieldList::setFields(QObject* fieldlist) {
     if( ! list ) return false;
     list->clear();
     ::KexiDB::FieldList* fl = list->fieldlist();
-    for(::KexiDB::Field::ListIterator it = *fl->fields(); it.current(); ++it)
-        m_fieldlist->addField( it.current() );
+    foreach( ::KexiDB::Field *field, *fl->fields())
+        m_fieldlist->addField( field );
     return true;
 }
 

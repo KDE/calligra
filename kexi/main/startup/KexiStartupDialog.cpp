@@ -772,10 +772,10 @@ void KexiStartupDialog::templateSelected(const QString& fileName)
 		accept();
 }
 
-Q3ValueList<KexiProjectData::ObjectInfo> KexiStartupDialog::autoopenObjects() const
+const KexiProjectData::AutoOpenObjects& KexiStartupDialog::autoopenObjects() const
 {
 	if (d->result != CreateFromTemplateResult || !d->viewTemplates)
-		Q3ValueList<KexiProjectData::ObjectInfo>();
+		KexiProjectData::AutoOpenObjects();
 
 	return d->viewTemplates->autoopenObjectsForSelectedTemplate();
 }

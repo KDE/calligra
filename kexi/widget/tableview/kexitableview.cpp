@@ -24,37 +24,30 @@
    Original Project: buX (www.bux.at)
 */
 
-#include <qpainter.h>
-#include <qnamespace.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qmatrix.h>
-#include <qtimer.h>
-#include <q3popupmenu.h>
-#include <qcursor.h>
-#include <qstyle.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-#include <q3whatsthis.h>
+#include <QPainter>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QMatrix>
+#include <QTimer>
+#include <QMenu>
+#include <QCursor>
+#include <QStyle>
+#include <QLayout>
+#include <QLabel>
+#include <QToolTip>
+#include <Q3WhatsThis>
 #include <KColorScheme>
-#include <kglobalsettings.h>
-//Added by qt3to4:
+#include <KGlobalSettings>
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <QFocusEvent>
-#include <Q3MemArray>
 #include <QShowEvent>
-#include <Q3Frame>
 #include <QKeyEvent>
 #include <QEvent>
 #include <QDragMoveEvent>
-#include <Q3CString>
 #include <QDragLeaveEvent>
-#include <Q3ValueList>
 #include <QDropEvent>
 #include <QPixmap>
-#include <q3tl.h>
 #include <QDesktopWidget>
 #include <QMatrix>
 
@@ -110,6 +103,7 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 //-----------------------------------------
 
 //! @internal A special What's This class displaying information about a given column
+//! @todo port to QWhatsThis
 class KexiTableView::WhatsThis : public Q3WhatsThis
 {
 	public:
@@ -170,8 +164,8 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 	if (col>=0 && row>=0) {
 		KexiTableEdit *editor = m_tableView->tableEditorWidget( col );
 		const bool insertRowSelected = m_tableView->isInsertingEnabled() && row==m_tableView->rows();
-		KexiTableItem *item = insertRowSelected ? m_tableView->m_insertItem : m_tableView->itemAt( row );
-		if (editor && item && (col < (int)item->count())) {
+		KexiDB::RecordData *record = insertRowSelected ? m_tableView->m_insertItem : m_tableView->itemAt( row );
+		if (editor && record && (col < (int)record->count())) {
 			int w = m_tableView->columnWidth( col );
 			int h = m_tableView->rowHeight();
 			int x = 0;
@@ -180,14 +174,14 @@ void KexiTableViewCellToolTip::maybeTip( const QPoint & p )
 			QString txtValue;
 			QVariant cellValue;
 			KexiTableViewColumn *tvcol = m_tableView->column(col);
-			if (!m_tableView->getVisibleLookupValue(cellValue, editor, item, tvcol))
-				cellValue = insertRowSelected ? editor->displayedField()->defaultValue() : item->at(col); //display default value if available
-			const bool focused = m_tableView->selectedItem() == item && col == m_tableView->currentColumn();
+			if (!m_tableView->getVisibleLookupValue(cellValue, editor, record, tvcol))
+				cellValue = insertRowSelected ? editor->displayedField()->defaultValue() : record->at(col); //display default value if available
+			const bool focused = m_tableView->selectedItem() == record && col == m_tableView->currentColumn();
 			editor->setupContents( 0, focused, cellValue, txtValue, align, x, y_offset, w, h );
 			QRect realRect(m_tableView->columnPos(col)-m_tableView->contentsX(), 
 				m_tableView->rowPos(row)-m_tableView->contentsY(), w, h); //m_tableView->cellGeometry( row, col ));
 			if (editor->showToolTipIfNeeded(
-				txtValue.isEmpty() ? item->at(col) : QVariant(txtValue), 
+				txtValue.isEmpty() ? record->at(col) : QVariant(txtValue), 
 				realRect, m_tableView->fontMetrics(), focused))
 			{
 				QString squeezedTxtValue;
@@ -252,7 +246,8 @@ KexiTableView::KexiTableView(KexiTableViewData* data, QWidget* parent, const cha
 	m_contextMenu = new KMenu(this);
 	m_contextMenu->setObjectName("m_contextMenu");
 #if 0 //moved to mainwindow's actions
-	d->menu_id_addRecord = m_contextMenu->insertItem(i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
+	d->menu_id_addRecord = m_contextMenu->insertItem(
+		i18n("Add Record"), this, SLOT(addRecord()), Qt::CTRL+Qt::Key_Insert);
 	d->menu_id_removeRecord = m_contextMenu->insertItem(
 		KIconLoader::global()->loadIcon("dialog-cancel", KIconLoader::Small),
 		i18n("Remove Record"), this, SLOT(removeRecord()), Qt::CTRL+Qt::Key_Delete);
@@ -408,7 +403,7 @@ void KexiTableView::updateWidgetContentsSize()
 	resizeContents(s.width(), s.height());
 }
 
-void KexiTableView::slotRowsDeleted( const Q3ValueList<int> &rows )
+void KexiTableView::slotRowsDeleted( const QList<int> &rows )
 {
 	viewport()->repaint();
 	updateWidgetContentsSize();
@@ -586,11 +581,11 @@ void KexiTableView::createBuffer(int width, int height)
 #endif
 
 //internal
-inline void KexiTableView::paintRow(KexiTableItem *item,
+inline void KexiTableView::paintRow(KexiDB::RecordData *record,
 	QPainter *pb, int r, int rowp, int cx, int cy, 
 	int colfirst, int collast, int maxwc)
 {
-	if (!item)
+	if (!record)
 		return;
 	// Go through the columns in the row r
 	// if we know from where to where, go through [colfirst, collast],
@@ -631,7 +626,7 @@ inline void KexiTableView::paintRow(KexiTableItem *item,
 		// Translate painter and draw the cell
 		const QMatrix oldMx = pb->worldMatrix();
 		pb->translate(translx, transly);
-			paintCell( pb, item, c, r, QRect(colp, rowp, colw, d->rowHeight));
+			paintCell( pb, record, c, r, QRect(colp, rowp, colw, d->rowHeight));
 		pb->setWorldMatrix( oldMx );
 	}
 
@@ -725,11 +720,11 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 		rowp = rowPos(r); // 'insert' row's position
 	}
 	else {
-		Q3PtrListIterator<KexiTableItem> it = m_data->iterator();
+		QList<KexiDB::RecordData*>::ConstIterator it( m_data->constBegin() );
 		it += rowfirst;//move to 1st row
 		rowp = rowPos(rowfirst); // row position 
 		for (r = rowfirst;r <= rowlast; r++, ++it, rowp+=d->rowHeight) {
-			paintRow(it.current(), p, r, rowp, cx, cy, colfirst, collast, maxwc);
+			paintRow(*it, p, r, rowp, cx, cy, colfirst, collast, maxwc);
 		}
 	}
 
@@ -745,9 +740,9 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 	paintEmptyArea(p, cx, cy, cw, ch);
 }
 
-bool KexiTableView::isDefaultValueDisplayed(KexiTableItem *item, int col, QVariant* value)
+bool KexiTableView::isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value)
 {
-	const bool cursorAtInsertRowOrEditingNewRow = (item == m_insertItem || (m_newRowEditing && m_currentItem == item));
+	const bool cursorAtInsertRowOrEditingNewRow = (record == m_insertItem || (m_newRowEditing && m_currentItem == record));
 	KexiTableViewColumn *tvcol;
 	if (cursorAtInsertRowOrEditingNewRow 
 		&& (tvcol = m_data->column(col)) 
@@ -761,7 +756,7 @@ bool KexiTableView::isDefaultValueDisplayed(KexiTableItem *item, int col, QVaria
 	return false;
 }
 
-void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print)
+void KexiTableView::paintCell(QPainter* p, KexiDB::RecordData *record, int col, int row, const QRect &cr, bool print)
 {
 	p->save();
 	Q_UNUSED(print);
@@ -804,8 +799,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	KexiTableViewColumn *tvcol = m_data->column(col);
 
 	QVariant cellValue;
-	if (col < (int)item->count()) {
-		if (m_currentItem == item) {
+	if (col < (int)record->count()) {
+		if (m_currentItem == record) {
 			if (m_editor && row == m_curRow && col == m_curCol 
 				&& !m_editor->hasFocusableWidget())
 			{
@@ -821,13 +816,13 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 			}
 		}
 		else {
-			cellValue = item->at(col);
+			cellValue = record->at(col);
 		}
 	}
 
-	bool defaultValueDisplayed = isDefaultValueDisplayed(item, col);
+	bool defaultValueDisplayed = isDefaultValueDisplayed(record, col);
 
-	if ((item == m_insertItem /*|| m_newRowEditing*/) && cellValue.isNull()) {
+	if ((record == m_insertItem /*|| m_newRowEditing*/) && cellValue.isNull()) {
 		if (!tvcol->field()->isAutoIncrement() && !tvcol->field()->defaultValue().isNull()) {
 			//display default value in the "insert row", if available
 			//(but not if there is autoincrement flag set)
@@ -860,7 +855,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	{
 		defaultPen = d->appearance.textColor; //special case for full row selection
 	}
-	else if (m_currentItem == item && col == m_curCol && !columnReadOnly 
+	else if (m_currentItem == record && col == m_curCol && !columnReadOnly 
 		&& !dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted
 		&& usesSelectedTextColor)
 	{
@@ -887,9 +882,9 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 		p->setPen( defaultPen );
 
 		//get visible lookup value if available
-		getVisibleLookupValue(cellValue, edit, item, tvcol);
+		getVisibleLookupValue(cellValue, edit, record, tvcol);
 
-		edit->setupContents( p, m_currentItem == item && col == m_curCol, 
+		edit->setupContents( p, m_currentItem == record && col == m_curCol, 
 			cellValue, txt, align, x, y_offset, w, h );
 	}
 	if (!d->appearance.gridEnabled)
@@ -898,7 +893,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	if (d->appearance.fullRowSelection && d->appearance.fullRowSelection) {
 //		p->fillRect(x, y_offset, x+w-1, y_offset+h-1, red);
 	}
-	if (m_currentItem == item && (col == m_curCol || d->appearance.fullRowSelection)) {
+	if (m_currentItem == record && (col == m_curCol || d->appearance.fullRowSelection)) {
 		if (edit && ((d->appearance.rowHighlightingEnabled && !d->appearance.fullRowSelection) || (row == m_curRow && d->highlightedRow==-1 && d->appearance.fullRowSelection))) //!dontPaintNonpersistentSelectionBecauseDifferentRowHasBeenHighlighted)
 			edit->paintSelectionBackground( p, isEnabled(), txt, align, x, y_offset, w, h,
 				isEnabled() ? colorGroup().highlight() : QColor(200,200,200),//d->grayColor,
@@ -910,7 +905,7 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 //	If we are in the focus cell, draw indication
-	if(m_currentItem == item && col == m_curCol //js: && !d->recordIndicator)
+	if(m_currentItem == record && col == m_curCol //js: && !d->recordIndicator)
 		&& !d->appearance.fullRowSelection) 
 	{
 //		kexidbg << ">>> CURRENT CELL ("<<m_curCol<<"," << m_curRow<<") focus="<<has_focus<<endl;
@@ -930,8 +925,8 @@ void KexiTableView::paintCell(QPainter* p, KexiTableItem *item, int col, int row
 	}
 
 ///	bool autonumber = false;
-	if ((!m_newRowEditing && item == m_insertItem) 
-		|| (m_newRowEditing && item == m_currentItem && cellValue.isNull())) {
+	if ((!m_newRowEditing && record == m_insertItem) 
+		|| (m_newRowEditing && record == m_currentItem && cellValue.isNull())) {
 		//we're in "insert row"
 		if (tvcol->field()->isAutoIncrement()) {
 			//"autonumber" column
@@ -1011,15 +1006,13 @@ void KexiTableView::paintEmptyArea( QPainter *p, int cx, int cy, int cw, int ch 
 //	reg = reg.subtract( QRect( QPoint( 0, 0 ), ts ) );
 
 	// And draw the rectangles (transformed inc contents coordinates as needed)
-	Q3MemArray<QRect> r = reg.rects();
-	for ( int i = 0; i < (int)r.count(); i++ ) {
-		QRect rect( viewportToContents2(r[i].topLeft()), r[i].size() );
+	const QVector<QRect> rects( reg.rects() );
+	foreach ( const QRect& rect, rects) {
+		QRect realRect( viewportToContents2(rect.topLeft()), rect.size() );
 /*		kDebug(44021) << QString("- pEA: p->fillRect(x:%1 y:%2 w:%3 h:%4)")
 			.arg(rect.x()).arg(rect.y())
 			.arg(rect.width()).arg(rect.height()) << endl;*/
-//		p->fillRect( QRect(viewportToContents2(r[i].topLeft()),r[i].size()), d->emptyAreaColor );
-		p->fillRect( rect, d->appearance.emptyAreaColor );
-//		p->fillRect( QRect(viewportToContents2(r[i].topLeft()),r[i].size()), viewport()->backgroundBrush() );
+		p->fillRect( realRect, d->appearance.emptyAreaColor );
 	}
 }
 
@@ -1276,7 +1269,7 @@ static bool overrideEditorShortcutNeeded(QKeyEvent *e)
 bool KexiTableView::shortCutPressed( QKeyEvent *e, const QString &action_name )
 {
 	const int k = e->key();
-	KAction *action = dynamic_cast<KAction*>( m_sharedActions[action_name] );
+	KAction *action = dynamic_cast<KAction*>( m_sharedActions.value(action_name) );
 	if (action) {
 		if (!action->isEnabled())//this action is disabled - don't process it!
 			return false;
@@ -1536,7 +1529,7 @@ KexiDataItemInterface *KexiTableView::editor( int col, bool ignoreMissingEditor 
 //	int t = tvcol->field->type();
 
 	//find the editor for this column
-	KexiTableEdit *editor = d->editors[ tvcol ];
+	KexiTableEdit *editor = d->editors.value( tvcol );
 	if (editor)
 		return editor;
 
@@ -1753,13 +1746,12 @@ void KexiTableView::contentsDragMoveEvent(QDragMoveEvent *e)
 	if (m_dropsAtRowEnabled) {
 		QPoint p = e->pos();
 		int row = rowAt(p.y());
-		KexiTableItem *item = 0;
 //		if (row==(rows()-1) && (p.y() % d->rowHeight) > (d->rowHeight*2/3) ) {
 		if ((p.y() % d->rowHeight) > (d->rowHeight*2/3) ) {
 			row++;
 		}
-		item = m_data->at(row);
-		emit dragOverRow(item, row, e);
+		KexiDB::RecordData *record = m_data->at(row);
+		emit dragOverRow(record, row, e);
 		if (e->isAccepted()) {
 			if (m_dragIndicatorLine>=0 && m_dragIndicatorLine != row) {
 				//erase old indicator
@@ -1808,12 +1800,12 @@ void KexiTableView::contentsDropEvent(QDropEvent *e)
 		if ((p.y() % d->rowHeight) > (d->rowHeight*2/3) ) {
 			row++;
 		}
-		KexiTableItem *item = m_data->at(row);
-		KexiTableItem *newItem = 0;
-		emit droppedAtRow(item, row, e, newItem);
-		if (newItem) {
+		KexiDB::RecordData *record = m_data->at(row);
+		KexiDB::RecordData *newRecord = 0;
+		emit droppedAtRow(record, row, e, newRecord);
+		if (newRecord) {
 			const int realRow = (row==m_curRow ? -1 : row);
-			insertItem(newItem, realRow);
+			insertItem(newRecord, realRow);
 			setCursorPosition(row, 0);
 //			m_currentItem = newItem;
 		}
@@ -2070,22 +2062,22 @@ void KexiTableView::updateAfterAcceptRowEdit()
 }
 
 bool KexiTableView::getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit, 
-	KexiTableItem *item, KexiTableViewColumn *tvcol) const
+	KexiDB::RecordData *record, KexiTableViewColumn *tvcol) const
 {
 	if (edit->columnInfo() && edit->columnInfo()->indexForVisibleLookupValue()!=-1
-		&& edit->columnInfo()->indexForVisibleLookupValue() < (int)item->count())
+		&& edit->columnInfo()->indexForVisibleLookupValue() < (int)record->count())
 	{
 		const QVariant *visibleFieldValue = 0;
-		if (m_currentItem == item && m_data->rowEditBuffer()) {
+		if (m_currentItem == record && m_data->rowEditBuffer()) {
 			visibleFieldValue = m_data->rowEditBuffer()->at( 
-				*tvcol->visibleLookupColumnInfo, false/*!useDefaultValueIfPossible*/ );
+				*tvcol->visibleLookupColumnInfo(), false/*!useDefaultValueIfPossible*/ );
 		}
 		
 		if (visibleFieldValue)
 			//(use bufferedValueAt() - try to get buffered visible value for lookup field)
 			cellValue = *visibleFieldValue; //txt = visibleFieldValue->toString();
 		else
-			cellValue /*txt*/ = item->at( edit->columnInfo()->indexForVisibleLookupValue() ); //.toString();
+			cellValue /*txt*/ = record->at( edit->columnInfo()->indexForVisibleLookupValue() ); //.toString();
 		return true;
 	}
 	return false;
@@ -2100,9 +2092,9 @@ void KexiTableView::removeEditor()
 	viewport()->setFocus();
 }
 
-void KexiTableView::slotRowRepaintRequested(KexiTableItem& item)
+void KexiTableView::slotRowRepaintRequested(KexiDB::RecordData& record)
 {
-	updateRow( m_data->findRef(&item) );
+	updateRow( m_data->indexOf(&record) );
 }
 
 //(js) unused
@@ -2145,7 +2137,7 @@ KexiTableView::print(KPrinter &/*printer*/)
 
 	QPainter p(&printer);
 
-	KexiTableItem *i;
+	KexiDB::RecordData *i;
 	int width = leftMargin;
 	for(int col=0; col < columns(); col++)
 	{
@@ -2221,16 +2213,16 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 		return;
 	}
 
-	int indexOfVisibleColumn = (m_data->column(colNum) && m_data->column(colNum)->columnInfo) 
-		? m_data->column(colNum)->columnInfo->indexForVisibleLookupValue() : -1;
+	int indexOfVisibleColumn = (m_data->column(colNum) && m_data->column(colNum)->columnInfo()) 
+		? m_data->column(colNum)->columnInfo()->indexForVisibleLookupValue() : -1;
 	if (-1==indexOfVisibleColumn)
 		indexOfVisibleColumn = colNum;
 
 	if (indexOfVisibleColumn < 0)
 		return;
 
-	Q3PtrListIterator<KexiTableItem> it = m_data->iterator();
-	if (it.current() && it.current()->count()<=indexOfVisibleColumn)
+	QList<KexiDB::RecordData*>::ConstIterator it( m_data->constBegin() );
+	if (it!=m_data->constEnd() && (*it)->count() <= indexOfVisibleColumn)
 		return;
 
 	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item( columnType(indexOfVisibleColumn) );
@@ -2246,8 +2238,8 @@ void KexiTableView::adjustColumnWidthToContents(int colNum)
 
 	KexiTableEdit *ed = tableEditorWidget( colNum/* not indexOfVisibleColumn*/ );
 	if (ed) {
-		for (it = m_data->iterator(); it.current(); ++it) {
-			const int wfw = ed->widthForValue( it.current()->at( indexOfVisibleColumn ), fm );
+		for (it = m_data->constBegin(); it!=m_data->constEnd(); ++it) {
+			const int wfw = ed->widthForValue( (*it)->at( indexOfVisibleColumn ), fm );
 			maxw = qMax( maxw, wfw );
 		}
 		const bool focused = currentColumn() == colNum;
@@ -2269,7 +2261,7 @@ void KexiTableView::setColumnWidth(int colNum, int width)
 	slotTopHeaderSizeChange( colNum, oldWidth, m_horizontalHeader->sectionSize( colNum ) );
 }
 
-void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
+void KexiTableView::maximizeColumnsWidth( const QList<int> &columnList )
 {
 	if (!isVisible()) {
 		d->maximizeColumnsWidthOnShow += columnList;
@@ -2278,12 +2270,11 @@ void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
 	if (width() <= m_horizontalHeader->headerWidth())
 		return;
 	//sort the list and make it unique
-	Q3ValueList<int> cl, sortedList = columnList;
-	qHeapSort(sortedList);
+	QList<int> cl, sortedList( columnList );
+	qSort(sortedList);
 	int i=-999;
-	Q3ValueList<int>::const_iterator it, end( sortedList.constEnd() );
-
-	for (it=sortedList.constBegin(); it!=end; ++it) {
+	QList<int>::ConstIterator it(sortedList.constBegin()), end( sortedList.constEnd() );
+	for (; it!=end; ++it) {
 		if (i!=(*it)) {
 			cl += (*it);
 			i = (*it);
@@ -2291,7 +2282,7 @@ void KexiTableView::maximizeColumnsWidth( const Q3ValueList<int> &columnList )
 	}
 	//resize
 	int sizeToAdd = (width() - m_horizontalHeader->headerWidth()) / cl.count() - verticalHeader()->width();
-	if (sizeToAdd<=0)
+	if (sizeToAdd <= 0)
 		return;
 	end = cl.constEnd();
 	for ( it = cl.constBegin(); it != end; ++it) {
@@ -2643,7 +2634,7 @@ void KexiTableView::setHighlightedRow(int row)
 	}
 }
 
-KexiTableItem *KexiTableView::highlightedItem() const
+KexiDB::RecordData *KexiTableView::highlightedItem() const
 {
 	return d->highlightedRow == -1 ? 0 : m_data->at(d->highlightedRow);
 }

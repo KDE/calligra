@@ -140,14 +140,14 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		virtual void scrollBarTipTimeout() { KexiDataAwareObjectInterface::scrollBarTipTimeout(); }
 
 	signals:
-		virtual void itemChanged(KexiTableItem *, int row, int col);
-		virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
-		virtual void itemDeleteRequest(KexiTableItem *, int row, int col);
+		virtual void itemChanged(KexiDB::RecordData*, int row, int col);
+		virtual void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue);
+		virtual void itemDeleteRequest(KexiDB::RecordData*, int row, int col);
 		virtual void currentItemDeleteRequest();
 		virtual void newItemAppendedForAfterDeletingInSpreadSheetMode(); //!< does nothing
 		virtual void dataRefreshed();
 		virtual void dataSet( KexiTableViewData *data );
-		virtual void itemSelected(KexiTableItem *);
+		virtual void itemSelected(KexiDB::RecordData*);
 		virtual void cellSelected(int col, int row);
 		virtual void sortedColumnChanged(int col);
 		virtual void rowEditStarted(int row);
@@ -158,20 +158,20 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		void slotResizingStarted();
 
 		//! Handles KexiTableViewData::rowRepaintRequested() signal
-		virtual void slotRowRepaintRequested(KexiTableItem& item);
+		virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
 		//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint)
-		{ KexiDataAwareObjectInterface::slotAboutToDeleteRow(item, result, repaint); }
+		virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint)
+		{ KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint); }
 
 		//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
 		virtual void slotRowDeleted() { KexiDataAwareObjectInterface::slotRowDeleted(); }
 
 		//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
-		virtual void slotRowInserted(KexiTableItem *item, bool repaint);
+		virtual void slotRowInserted(KexiDB::RecordData* record, bool repaint);
 
 		//! Like above, not db-aware version
-		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
+		virtual void slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint);
 
 		virtual void slotRowsDeleted( const QList<int>& );
 
@@ -291,7 +291,7 @@ class KEXIFORMUTILS_EXPORT KexiFormScrollView :
 		KFormDesigner::Form *m_form;
 		int m_currentLocalSortColumn, m_localSortingOrder;
 		//! Used in selectCellInternal() to avoid fetching the same record twice
-		KexiTableItem *m_previousItem;
+		KexiDB::RecordData *m_previousRecord;
 };
 
 #endif

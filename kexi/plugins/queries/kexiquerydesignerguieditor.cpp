@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,8 +24,7 @@
 #include <qpainter.h>
 #include <qdom.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QSplitter>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <Q3ValueList>
@@ -48,15 +47,14 @@
 #include <KexiMainWindowIface.h>
 #include <kexiinternalpart.h>
 #include <kexitableview.h>
-#include <kexitableitem.h>
 #include <kexitableviewdata.h>
 #include <kexidragobjects.h>
 #include <kexidatatable.h>
 #include <kexi.h>
 #include <kexisectionheader.h>
 #include <widget/tableview/kexidataawarepropertyset.h>
-#include <widget/relations/kexirelationwidget.h>
-#include <widget/relations/kexirelationviewtable.h>
+#include <widget/relations/KexiRelationsView.h>
+#include <widget/relations/KexiRelationsTableContainer.h>
 #include <koproperty/property.h>
 #include <koproperty/set.h>
 #include "kexiquerypart.h"
@@ -87,19 +85,19 @@ public:
 	Private()
 		: fieldColumnIdentifiers(101, false/*case insens.*/)
 	{
-		droppedNewItem = 0;
+		droppedNewRecord = 0;
 		slotTableAdded_enabled = true;
 	}
 
-	bool changeSingleCellValue(KexiTableItem &item, int columnNumber, 
+	bool changeSingleCellValue(KexiDB::RecordData &record, int columnNumber, 
 		const QVariant& value, KexiDB::ResultInfo* result)
 	{
 		data->clearRowEditBuffer();
-		if (!data->updateRowEditBuffer(&item, columnNumber, value)
-			|| !data->saveRowChanges(item, true))
+		if (!data->updateRowEditBuffer(&record, columnNumber, value)
+			|| !data->saveRowChanges(record, true))
 		{
 			if (result)
-				*result = *data->result();
+				*result = data->result();
 			return false;
 		}
 		return true;
@@ -109,7 +107,7 @@ public:
 	KexiDataTable *dataTable;
 	QPointer<KexiDB::Connection> conn;
 
-	KexiRelationWidget *relations;
+	KexiRelationsView *relations;
 	KexiSectionHeader *head;
 	QSplitter *spl;
 
@@ -127,7 +125,7 @@ public:
 	Q3Dict<char> fieldColumnIdentifiers;
 
 	KexiDataAwarePropertySet* sets;
-	KexiTableItem *droppedNewItem;
+	KexiDB::RecordData *droppedNewRecord;
 
 	QString droppedNewTable, droppedNewField;
 
@@ -155,17 +153,18 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
 	d->spl = new QSplitter(Qt::Vertical, this);
 	d->spl->setChildrenCollapsible(false);
-	d->relations = new KexiRelationWidget(d->spl);
+	d->relations = new KexiRelationsView(d->spl);
 	d->relations->setObjectName("relations");
 	connect(d->relations, SIGNAL(tableAdded(KexiDB::TableSchema&)),
 		this, SLOT(slotTableAdded(KexiDB::TableSchema&)));
 	connect(d->relations, SIGNAL(tableHidden(KexiDB::TableSchema&)),
 		this, SLOT(slotTableHidden(KexiDB::TableSchema&)));
-	connect(d->relations, SIGNAL(tableFieldDoubleClicked(KexiDB::TableSchema*,const QString&)),
-		this, SLOT(slotTableFieldDoubleClicked(KexiDB::TableSchema*,const QString&)));
+	connect(d->relations, SIGNAL(appendFields(KexiDB::TableOrQuerySchema&,const QStringList&)),
+		this, SLOT(slotAppendFields(KexiDB::TableOrQuerySchema&,const QStringList&)));
 
 	d->head = new KexiSectionHeader(i18n("Query Columns"), Qt::Vertical, d->spl);
 	d->dataTable = new KexiDataTable(d->head, false);
+	d->head->setWidget( d->dataTable );
 	d->dataTable->setObjectName("guieditor_dataTable");
 	d->dataTable->dataAwareObject()->setSpreadSheetMode();
 
@@ -181,21 +180,21 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 		d->dataTable->tableView()->adjustColumnWidthToContents(COLUMN_ID_SORTING);
 		d->dataTable->tableView()->maximizeColumnsWidth( c );
 		d->dataTable->tableView()->setDropsAtRowEnabled(true);
-		connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiTableItem*,int,QDragMoveEvent*)),
-			this, SLOT(slotDragOverTableRow(KexiTableItem*,int,QDragMoveEvent*)));
-		connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)),
-			this, SLOT(slotDroppedAtRow(KexiTableItem*,int,QDropEvent*,KexiTableItem*&)));
+		connect(d->dataTable->tableView(), SIGNAL(dragOverRow(KexiDB::RecordData*,int,QDragMoveEvent*)),
+			this, SLOT(slotDragOverTableRow(KexiDB::RecordData*,int,QDragMoveEvent*)));
+		connect(d->dataTable->tableView(), SIGNAL(droppedAtRow(KexiDB::RecordData*,int,QDropEvent*,KexiDB::RecordData*&)),
+			this, SLOT(slotDroppedAtRow(KexiDB::RecordData*,int,QDropEvent*,KexiDB::RecordData*&)));
 		connect(d->dataTable->tableView(), SIGNAL(newItemAppendedForAfterDeletingInSpreadSheetMode()),
 			this, SLOT(slotNewItemAppendedForAfterDeletingInSpreadSheetMode()));
 	}
-	connect(d->data, SIGNAL(aboutToChangeCell(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)),
-		this, SLOT(slotBeforeCellChanged(KexiTableItem*,int,QVariant&,KexiDB::ResultInfo*)));
-	connect(d->data, SIGNAL(rowInserted(KexiTableItem*,uint,bool)),
-		this, SLOT(slotRowInserted(KexiTableItem*,uint,bool)));
-	connect(d->relations, SIGNAL(tablePositionChanged(KexiRelationViewTableContainer*)),
-		this, SLOT(slotTablePositionChanged(KexiRelationViewTableContainer*)));
-	connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationViewConnection*)),
-		this, SLOT(slotAboutConnectionRemove(KexiRelationViewConnection*)));
+	connect(d->data, SIGNAL(aboutToChangeCell(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)),
+		this, SLOT(slotBeforeCellChanged(KexiDB::RecordData*,int,QVariant&,KexiDB::ResultInfo*)));
+	connect(d->data, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
+		this, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool)));
+	connect(d->relations, SIGNAL(tablePositionChanged(KexiRelationsTableContainer*)),
+		this, SLOT(slotTablePositionChanged(KexiRelationsTableContainer*)));
+	connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
+		this, SLOT(slotAboutConnectionRemove(KexiRelationsConnection*)));
 
 	Q3VBoxLayout *l = new Q3VBoxLayout(this);
 	l->addWidget(d->spl);
@@ -239,7 +238,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 #ifndef KEXI_NO_QUERY_TOTALS
 	KexiTableViewColumn *col4 = new KexiTableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
 		i18n("Describes a way of computing totals for a given field or expression."));
-	Q3ValueVector<QString> totalsTypes;
+	QVector<QString> totalsTypes;
 	totalsTypes.append( i18n("Group by") );
 	totalsTypes.append( i18n("Sum") );
 	totalsTypes.append( i18n("Average") );
@@ -252,7 +251,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 
 	KexiTableViewColumn *col5 = new KexiTableViewColumn("sort", KexiDB::Field::Enum, i18n("Sorting"),
 		i18n("Describes a way of sorting for a given field."));
-	Q3ValueVector<QString> sortTypes;
+	QVector<QString> sortTypes;
 	sortTypes.append( "" );
 	sortTypes.append( i18n("Ascending") );
 	sortTypes.append( i18n("Descending") );
@@ -272,9 +271,9 @@ void KexiQueryDesignerGuiEditor::initTableRows()
 	d->data->deleteAllRows();
 	//const int columns = d->data->columnsCount();
 	for (int i=0; i<(int)d->sets->size(); i++) {
-		KexiTableItem* item;
-		d->data->append(item = d->data->createItem());
-		item->at(COLUMN_ID_VISIBLE) = QVariant(false);
+		KexiDB::RecordData* record;
+		d->data->append(record = d->data->createItem());
+		(*record)[COLUMN_ID_VISIBLE] = QVariant(false);
 	}
 	d->dataTable->dataAwareObject()->setData(d->data);
 
@@ -286,12 +285,12 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 	d->dataTable->dataAwareObject()->acceptRowEdit();
 
 	QStringList sortedTableNames;
-	for (TablesDictIterator it(*d->relations->tables());it.current();++it)
-		sortedTableNames += it.current()->schema()->name();
+	foreach (KexiRelationsTableContainer* cont, *d->relations->tables())
+		sortedTableNames += cont->schema()->name();
 	qHeapSort( sortedTableNames );
 
 	//several tables can be hidden now, so remove rows for these tables
-	Q3ValueList<int> rowsToDelete;
+	QList<int> rowsToDelete;
 	for (int r = 0; r<(int)d->sets->size(); r++) {
 		KoProperty::Set *set = d->sets->at(r);
 		if (set) {
@@ -315,43 +314,42 @@ void KexiQueryDesignerGuiEditor::updateColumnsData()
 	d->fieldColumnData->deleteAllRows();
 	d->fieldColumnIdentifiers.clear();
 
-	KexiTableItem *item = d->fieldColumnData->createItem(); //new KexiTableItem(2);
-	(*item)[COLUMN_ID_COLUMN]="*";
-	(*item)[COLUMN_ID_TABLE]="*";
-	d->fieldColumnData->append( item );
-	d->fieldColumnIdentifiers.insert((*item)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
+	KexiDB::RecordData *record = d->fieldColumnData->createItem();
+	(*record)[COLUMN_ID_COLUMN]="*";
+	(*record)[COLUMN_ID_TABLE]="*";
+	d->fieldColumnData->append( record );
+	d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
 
 //	tempData()->clearQuery();
 	tempData()->unregisterForTablesSchemaChanges();
-	for (QStringList::const_iterator it = sortedTableNames.constBegin();
-		it!=sortedTableNames.constEnd(); ++it)
-	{
+	foreach (const QString& tableName, sortedTableNames) {
 		//table
 /*! @todo what about query? */
-		KexiDB::TableSchema *table = d->relations->tables()->find(*it)->schema()->table();
+		KexiDB::TableSchema *table = d->relations->tables()->value(tableName)->schema()->table();
 		d->conn->registerForTableSchemaChanges(*tempData(), *table); //this table will be used
-		item = d->tablesColumnData->createItem(); //new KexiTableItem(2);
-		(*item)[COLUMN_ID_COLUMN]=table->name();
-		(*item)[COLUMN_ID_TABLE]=(*item)[COLUMN_ID_COLUMN];
-		d->tablesColumnData->append( item );
+		record = d->tablesColumnData->createItem();
+		(*record)[COLUMN_ID_COLUMN]=table->name();
+		(*record)[COLUMN_ID_TABLE]=(*record)[COLUMN_ID_COLUMN];
+		d->tablesColumnData->append( record );
 		//fields
-		item = d->fieldColumnData->createItem(); //new KexiTableItem(2);
-		(*item)[COLUMN_ID_COLUMN]=table->name()+".*";
-		(*item)[COLUMN_ID_TABLE]=(*item)[COLUMN_ID_COLUMN];
-		d->fieldColumnData->append( item );
-		d->fieldColumnIdentifiers.insert((*item)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
-		for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
-			item = d->fieldColumnData->createItem(); // new KexiTableItem(2);
-			(*item)[COLUMN_ID_COLUMN]=table->name()+"."+t_it.current()->name();
-			(*item)[COLUMN_ID_TABLE]=QString("  ") + t_it.current()->name();
-			d->fieldColumnData->append( item );
-			d->fieldColumnIdentifiers.insert((*item)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
+		record = d->fieldColumnData->createItem();
+		(*record)[COLUMN_ID_COLUMN]=table->name()+".*";
+		(*record)[COLUMN_ID_TABLE]=(*record)[COLUMN_ID_COLUMN];
+		d->fieldColumnData->append( record );
+		d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
+//		for (KexiDB::Field::ListIterator t_it = table->fieldsIterator();t_it.current();++t_it) {
+		foreach (KexiDB::Field *field, *table->fields()) {
+			record = d->fieldColumnData->createItem();
+			(*record)[COLUMN_ID_COLUMN]=table->name()+"."+field->name();
+			(*record)[COLUMN_ID_TABLE]=QString("  ") + field->name();
+			d->fieldColumnData->append( record );
+			d->fieldColumnIdentifiers.insert((*record)[COLUMN_ID_COLUMN].toString(), (char*)1); //cache
 		}
 	}
 //TODO
 }
 
-KexiRelationWidget *KexiQueryDesignerGuiEditor::relationView() const
+KexiRelationsView *KexiQueryDesignerGuiEditor::relationsView() const
 {
 	return d->relations;
 }
@@ -379,9 +377,9 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	}
 
 	//add tables
-	for (TablesDictIterator it(*d->relations->tables()); it.current(); ++it) {
+	foreach (KexiRelationsTableContainer* cont, *d->relations->tables()) {
 /*! @todo what about query? */
-		temp->query()->addTable( it.current()->schema()->table() );
+		temp->query()->addTable( cont->schema()->table() );
 	}
 
 	//add fields, also build:
@@ -390,17 +388,17 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	KexiDB::BaseExpr *whereExpr = 0;
 	const uint count = qMin(d->data->count(), d->sets->size());
 	bool fieldsFound = false;
-	KexiTableViewData::Iterator it(d->data->iterator());
-	for (uint i=0; i<count && it.current(); ++it, i++) {
-		if (!it.current()->at(COLUMN_ID_TABLE).isNull() 
-			&& it.current()->at(COLUMN_ID_COLUMN).isNull())
+	KexiTableViewData::Iterator it(d->data->constBegin());
+	for (uint i=0; i<count && it!=d->data->constEnd(); ++it, i++) {
+		if (!(**it)[COLUMN_ID_TABLE].isNull() 
+			&& (**it)[COLUMN_ID_COLUMN].isNull())
 		{
 			//show message about missing field name, and set focus to that cell
 			kexipluginsdbg << "no field provided!" << endl;
 			d->dataTable->dataAwareObject()->setCursorPosition(i,0);
 			if (errMsg)
 				*errMsg = i18n("Select column for table \"%1\"",
-					it.current()->at(COLUMN_ID_TABLE).toString());
+					(**it)[COLUMN_ID_TABLE].toString());
 			return false;
 		}
 
@@ -415,7 +413,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 				fieldAndTableName.prepend(tableName+".");
 			const bool fieldVisible = (*set)["visible"].value().toBool();
 			QString criteriaStr = (*set)["criteria"].value().toString();
-			Q3CString alias = (*set)["alias"].value().toCString();
+			QByteArray alias( (*set)["alias"].value().toByteArray() );
 			if (!criteriaStr.isEmpty()) {
 				int token;
 				KexiDB::BaseExpr *criteriaExpr = parseExpressionString(criteriaStr, token, 
@@ -496,7 +494,7 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 			}
 		}
 		else {//!set
-			kexipluginsdbg << it.current()->at(COLUMN_ID_TABLE).toString() << endl;
+			kexipluginsdbg << (**it)[COLUMN_ID_TABLE].toString() << endl;
 		}
 	}
 	if (!fieldsFound) {
@@ -513,22 +511,22 @@ KexiQueryDesignerGuiEditor::buildSchema(QString *errMsg)
 	temp->query()->setWhereExpression( whereExpr );
 
 	//add relations (looking for connections)
-	for (ConnectionListIterator it(*d->relations->connections()); it.current(); ++it) {
-		KexiRelationViewTableContainer *masterTable = it.current()->masterTable();
-		KexiRelationViewTableContainer *detailsTable = it.current()->detailsTable();
+	foreach (KexiRelationsConnection* conn, *d->relations->connections()) {
+		KexiRelationsTableContainer *masterTable = conn->masterTable();
+		KexiRelationsTableContainer *detailsTable = conn->detailsTable();
 
 /*! @todo what about query? */
 		temp->query()->addRelationship(
-			masterTable->schema()->table()->field(it.current()->masterField()),
-			detailsTable->schema()->table()->field(it.current()->detailsField()) );
+			masterTable->schema()->table()->field(conn->masterField()),
+			detailsTable->schema()->table()->field(conn->detailsField()) );
 	}
 
 	// Add sorting information (ORDER BY) - we can do that only now
 	//  after all QueryColumnInfo items are instantiated
 	KexiDB::OrderByColumnList orderByColumns;
-	it = d->data->iterator();
+	it = d->data->constBegin();
 	int fieldNumber = -1; //field number (empty rows are omitted)
-	for (uint i=0/*row number*/; i<count && it.current(); ++it, i++) {
+	for (uint i=0/*row number*/; i<count && it!=d->data->constEnd(); ++it, i++) {
 		KoProperty::Set *set = d->sets->at(i);
 		if (!set)
 			continue;
@@ -765,8 +763,8 @@ void KexiQueryDesignerGuiEditor::showTablesForQuery(KexiDB::QuerySchema *query)
 	d->slotTableAdded_enabled = false; //speedup
 	d->relations->removeAllConnections(); //connections will be recreated
 	d->relations->hideAllTablesExcept( query->tables() );
-	for (KexiDB::TableSchema::ListIterator it(*query->tables()); it.current(); ++it) {
-		d->relations->addTable( it.current() );
+	foreach (KexiDB::TableSchema* table, *query->tables()) {
+		d->relations->addTable( table );
 	}
 
 	d->slotTableAdded_enabled = true;
@@ -808,10 +806,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 
 	//1. Show explicitly declared relations:
 	if (showRelations) {
-		KexiDB::Relationship *rel;
-		for (KexiDB::Relationship::ListIterator it(*query->relationships());
-			(rel=it.current()); ++it)
-		{
+		foreach (KexiDB::Relationship *rel, *query->relationships()) {
 //! @todo: now only sigle-field relationships are implemented!
 			KexiDB::Field *masterField = rel->masterIndex()->fields()->first();
 			KexiDB::Field *detailsField = rel->detailsIndex()->fields()->first();
@@ -822,7 +817,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 	//2. Collect information about criterias
 	// --this must be top level chain of AND's
 	// --this will also show joins as: [table1.]field1 = [table2.]field2
-	Q3Dict<KexiDB::BaseExpr> criterias(101, false);
+	KexiUtils::CaseInsensitiveHash<QString, KexiDB::BaseExpr*> criterias;
 	KexiDB::BaseExpr* e = query->whereExpression();
 	KexiDB::BaseExpr* eItem = 0;
 	while (e) {
@@ -888,14 +883,12 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		return;
 
 	//3. show fields (including * and table.*)
-	uint row_num = 0;
-	KexiDB::Field *field;
-	Q3PtrDict<char> usedCriterias(101); // <-- used criterias will be saved here
-	                                   //     so in step 4. we will be able to add 
-	                                   //     remaining invisible columns with criterias
-	for (KexiDB::Field::ListIterator it(*query->fields());
-		(field = it.current()); ++it, row_num++)
-	{
+	uint row_num = -1;
+	QSet<KexiDB::BaseExpr*> usedCriterias; // <-- used criterias will be saved here
+                                            //     so in step 4. we will be able to add 
+	                                        //     remaining invisible columns with criterias
+	foreach (KexiDB::Field* field, *query->fields()) {
+		row_num++;
 		//append a new row
 		QString tableName, fieldName, columnAlias, criteriaString;
 		KexiDB::BinaryExpr *criteriaExpr = 0;
@@ -925,27 +918,27 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 			else {
 				tableName = field->table()->name();
 				fieldName = field->name();
-				criteriaArgument = criterias[fieldName];
+				criteriaArgument = criterias.value(fieldName);
 				if (!criteriaArgument) {//try table.field
-					criteriaArgument = criterias[tableName+"."+fieldName];
+					criteriaArgument = criterias.value(tableName+"."+fieldName);
 				}
 				if (criteriaArgument) {//criteria expression is just a parent of argument
 					criteriaExpr = criteriaArgument->parent()->toBinary();
-					usedCriterias.insert(criteriaArgument, (char*)1); //save info. about used criteria
+					usedCriterias.insert(criteriaArgument); //save info. about used criteria
 				}
 			}
 		}
 		//create new row data
-		KexiTableItem *newItem = createNewRow(tableName, fieldName, true /* visible*/);
+		KexiDB::RecordData *newRecord = createNewRow(tableName, fieldName, true /* visible*/);
 		if (criteriaExpr) {
 //! @todo fix for !INFIX operators
 			if (criteriaExpr->token()=='=')
 				criteriaString = criteriaArgument->toString();
 			else
 				criteriaString = criteriaExpr->tokenToString() + " " + criteriaArgument->toString();
-			(*newItem)[COLUMN_ID_CRITERIA] = criteriaString;
+			(*newRecord)[COLUMN_ID_CRITERIA] = criteriaString;
 		}
-		d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
+		d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
 		//OK, row inserted: create a new set for it
 		KoProperty::Set &set = *createPropertySet( row_num, tableName, fieldName, true/*new one*/ );
 		if (!columnAlias.isEmpty())
@@ -953,8 +946,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		if (!criteriaString.isEmpty())
 			set["criteria"].setValue( criteriaString, false );
 		if (field->isExpression()) {
-//			(*newItem)[COLUMN_ID_COLUMN] = ;
-			if (!d->changeSingleCellValue(*newItem, COLUMN_ID_COLUMN, 
+			if (!d->changeSingleCellValue(*newRecord, COLUMN_ID_COLUMN, 
 					QVariant(columnAlias + ": " + field->expression()->toString()), &result))
 				return; //problems with setting column expression
 		}
@@ -962,57 +954,60 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 
 	//4. show ORDER BY information
 	d->data->clearRowEditBuffer();
-	KexiDB::OrderByColumnList &orderByColumns = query->orderByColumnList();
-	QMap<KexiDB::QueryColumnInfo*,int> columnsOrder( 
+	const KexiDB::OrderByColumnList orderByColumns( query->orderByColumnList() );
+	QHash<KexiDB::QueryColumnInfo*,int> columnsOrder( 
 		query->columnsOrder(KexiDB::QuerySchema::UnexpandedListWithoutAsterisks) );
-	for (KexiDB::OrderByColumn::ListConstIterator orderByColumnsIt( orderByColumns.constBegin() );
-		orderByColumnsIt!=orderByColumns.constEnd(); ++orderByColumnsIt)
+	for (KexiDB::OrderByColumn::ListConstIterator orderByColumnIt(orderByColumns.constBegin()); 
+		orderByColumnIt!=orderByColumns.constEnd(); ++orderByColumnIt)
 	{
-		KexiDB::QueryColumnInfo *column = (*orderByColumnsIt).column();
-		KexiTableItem *rowItem = 0;
+		KexiDB::OrderByColumn* orderByColumn = *orderByColumnIt;
+		KexiDB::QueryColumnInfo *column = orderByColumn->column();
+		KexiDB::RecordData *record = 0;
 		KoProperty::Set *rowPropertySet = 0;
 		if (column) {
 			//sorting for visible column
 			if (column->visible) {
 				if (columnsOrder.contains(column)) {
-					const int columnPosition = columnsOrder[ column ];
-					rowItem = d->data->at( columnPosition );
+					const int columnPosition = columnsOrder.value( column );
+					record = d->data->at( columnPosition );
 					rowPropertySet = d->sets->at( columnPosition );
 					kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
-						"Setting \"" << (*orderByColumnsIt).debugString() << "\" sorting for row #" 
+						"Setting \"" << orderByColumn->debugString() << "\" sorting for row #" 
 						<< columnPosition << endl;
 				}
 			}
 		}
-		else if ((*orderByColumnsIt).field()) {
+		else if (orderByColumn->field()) {
 			//this will be presented as invisible field: create new row
-			field = (*orderByColumnsIt).field();
+			KexiDB::Field* field = orderByColumn->field();
 			QString tableName( field->table() ? field->table()->name() : QString() );
-			rowItem = createNewRow( tableName, field->name(), false /* !visible*/);
-			d->dataTable->dataAwareObject()->insertItem(rowItem, row_num);
+			record = createNewRow( tableName, field->name(), false /* !visible*/);
+			d->dataTable->dataAwareObject()->insertItem(record, row_num);
 			rowPropertySet = createPropertySet( row_num, tableName, field->name(), true /*newOne*/ );
 			propertySetSwitched();
 			kexipluginsdbg << "KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal():\n\t"
-				"Setting \"" << (*orderByColumnsIt).debugString() << "\" sorting for invisible field " 
+				"Setting \"" << orderByColumn->debugString() << "\" sorting for invisible field " 
 				<< field->name() << ", table " << tableName << " -row #" << row_num << endl;
 			row_num++;
 		}
 		//alter sorting for either existing or new row
-		if (rowItem && rowPropertySet) {
-			d->data->updateRowEditBuffer(rowItem, COLUMN_ID_SORTING,
-				(*orderByColumnsIt).ascending() ? 1 : 2); // this will automatically update "sorting" property
+		if (record && rowPropertySet) {
+			d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING,
+				orderByColumn->ascending() ? 1 : 2); // this will automatically update "sorting" property
 						                                        // in slotBeforeCellChanged()
-			d->data->saveRowChanges(*rowItem, true);
+			d->data->saveRowChanges(*record, true);
 			(*rowPropertySet)["sorting"].clearModifiedFlag(); // this property should look "fresh"
-			if (!rowItem->at(COLUMN_ID_VISIBLE).toBool()) //update
+			if (!(*record)[COLUMN_ID_VISIBLE].toBool()) //update
 				(*rowPropertySet)["visible"].setValue(QVariant(false), false/*rememberOldValue*/); 
 		}
 	}
 
 	//5. Show fields for unused criterias (with "Visible" column set to false)
-	KexiDB::BaseExpr *criteriaArgument; // <-- contains field or table.field
-	for (Q3DictIterator<KexiDB::BaseExpr> it(criterias); (criteriaArgument = it.current()); ++it) {
-		if (usedCriterias[it.current()])
+	foreach (
+		KexiDB::BaseExpr *criteriaArgument, // <-- contains field or table.field
+		criterias)
+	{
+		if (usedCriterias.contains(criteriaArgument))
 			continue;
 		//unused: append a new row
 		KexiDB::BinaryExpr *criteriaExpr = criteriaArgument->parent()->toBinary();
@@ -1049,16 +1044,16 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		tableName = field->table()->name();
 		fieldName = field->name();
 		//create new row data
-		KexiTableItem *newItem = createNewRow(tableName, fieldName, false /* !visible*/);
+		KexiDB::RecordData *newRecord = createNewRow(tableName, fieldName, false /* !visible*/);
 		if (criteriaExpr) {
 //! @todo fix for !INFIX operators
 			if (criteriaExpr->token()=='=')
 				criteriaString = criteriaArgument->toString();
 			else
 				criteriaString = criteriaExpr->tokenToString() + " " + criteriaArgument->toString();
-			(*newItem)[COLUMN_ID_CRITERIA] = criteriaString;
+			(*newRecord)[COLUMN_ID_CRITERIA] = criteriaString;
 		}
-		d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
+		d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
 		//OK, row inserted: create a new set for it
 		KoProperty::Set &set = *createPropertySet( row_num++, tableName, fieldName, true/*new one*/ );
 //! @todo		if (!columnAlias.isEmpty())
@@ -1090,7 +1085,7 @@ bool KexiQueryDesignerGuiEditor::loadLayout()
 		//in a case when query layout was not saved, build layout by hand
 		// -- dynamic cast because of a need for handling invalid queries
 		//    (as in KexiQueryDesignerGuiEditor::afterSwitchFrom()):
-		KexiDB::QuerySchema * q =	dynamic_cast<KexiDB::QuerySchema *>(window()->schemaData());
+		KexiDB::QuerySchema * q = dynamic_cast<KexiDB::QuerySchema *>(window()->schemaData());
 		if (q) {
 			showTablesForQuery( q );
 			KexiDB::ResultInfo result;
@@ -1160,24 +1155,23 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 
 	//serialize detailed XML query definition
 	QString xml = "<query_layout>", tmp;
-	for (TablesDictIterator it(*d->relations->tables()); it.current(); ++it) {
-		KexiRelationViewTableContainer *table_cont = it.current();
+	foreach (KexiRelationsTableContainer* cont, *d->relations->tables()) {
 /*! @todo what about query? */
-		tmp = QString("<table name=\"")+QString(table_cont->schema()->name())+"\" x=\""
-		 +QString::number(table_cont->x())
-		 +"\" y=\""+QString::number(table_cont->y())
-		 +"\" width=\""+QString::number(table_cont->width())
-		 +"\" height=\""+QString::number(table_cont->height())
+		tmp = QString("<table name=\"")+QString(cont->schema()->name())+"\" x=\""
+		 +QString::number(cont->x())
+		 +"\" y=\""+QString::number(cont->y())
+		 +"\" width=\""+QString::number(cont->width())
+		 +"\" height=\""+QString::number(cont->height())
 		 +"\"/>";
 		xml += tmp;
 	}
 
-	KexiRelationViewConnection *con;
-	for (ConnectionListIterator it(*d->relations->connections()); (con = it.current()); ++it) {
-		tmp = QString("<conn mtable=\"") + QString(con->masterTable()->schema()->name())
-			+ "\" mfield=\"" + con->masterField() + "\" dtable=\""
-			+ QString(con->detailsTable()->schema()->name())
-			+ "\" dfield=\"" + con->detailsField() + "\"/>";
+	
+	foreach (KexiRelationsConnection *conn, *d->relations->connections()) {
+		tmp = QString("<conn mtable=\"") + QString(conn->masterTable()->schema()->name())
+			+ "\" mfield=\"" + conn->masterField() + "\" dtable=\""
+			+ QString(conn->detailsTable()->schema()->name())
+			+ "\" dfield=\"" + conn->detailsField() + "\"/>";
 		xml += tmp;
 	}
 	xml += "</query_layout>";
@@ -1194,11 +1188,11 @@ QSize KexiQueryDesignerGuiEditor::sizeHint() const
 	return QSize(qMax(s1.width(),s2.width()), s1.height()+s2.height());
 }
 
-KexiTableItem*
+KexiDB::RecordData*
 KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString& fieldName,
 	bool visible) const
 {
-	KexiTableItem *newItem = d->data->createItem();
+	KexiDB::RecordData *newRecord = d->data->createItem();
 	QString key;
 	if (tableName=="*")
 		key="*";
@@ -1207,17 +1201,17 @@ KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString
 			key = (tableName+".");
 		key += fieldName;
 	}
-	(*newItem)[COLUMN_ID_COLUMN]=key;
-	(*newItem)[COLUMN_ID_TABLE]=tableName;
-	(*newItem)[COLUMN_ID_VISIBLE]=QVariant(visible);
+	(*newRecord)[COLUMN_ID_COLUMN]=key;
+	(*newRecord)[COLUMN_ID_TABLE]=tableName;
+	(*newRecord)[COLUMN_ID_VISIBLE]=QVariant(visible);
 #ifndef KEXI_NO_QUERY_TOTALS
-	(*newItem)[COLUMN_ID_TOTALS]=QVariant(0);
+	(*newRecord)[COLUMN_ID_TOTALS]=QVariant(0);
 #endif
-	return newItem;
+	return newRecord;
 }
 
 void KexiQueryDesignerGuiEditor::slotDragOverTableRow(
-	KexiTableItem * /*item*/, int /*row*/, QDragMoveEvent* e)
+	KexiDB::RecordData * /*record*/, int /*row*/, QDragMoveEvent* e)
 {
 	if (e->provides("kexi/field")) {
 		e->acceptAction(true);
@@ -1225,8 +1219,8 @@ void KexiQueryDesignerGuiEditor::slotDragOverTableRow(
 }
 
 void
-KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row*/,
-	QDropEvent *ev, KexiTableItem*& newItem)
+KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiDB::RecordData * /*record*/, int /*row*/,
+	QDropEvent *ev, KexiDB::RecordData*& newRecord)
 {
 	QString sourceMimeType;
 	QString srcTable;
@@ -1235,8 +1229,8 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row
 	if (!KexiFieldDrag::decodeSingle(ev,sourceMimeType,srcTable,srcField))
 		return;
 	//insert new row at specific place
-	newItem = createNewRow(srcTable, srcField, true /* visible*/);
-	d->droppedNewItem = newItem;
+	newRecord = createNewRow(srcTable, srcField, true /* visible*/);
+	d->droppedNewRecord = newRecord;
 	d->droppedNewTable = srcTable;
 	d->droppedNewField = srcField;
 	//TODO
@@ -1244,17 +1238,17 @@ KexiQueryDesignerGuiEditor::slotDroppedAtRow(KexiTableItem * /*item*/, int /*row
 
 void KexiQueryDesignerGuiEditor::slotNewItemAppendedForAfterDeletingInSpreadSheetMode()
 {
-	KexiTableItem *item = d->data->last();
-	if (item)
-		item->at(COLUMN_ID_VISIBLE) = QVariant(false); //the same init as in initTableRows()
+	KexiDB::RecordData *record = d->data->last();
+	if (record)
+		(*record)[COLUMN_ID_VISIBLE] = QVariant(false); //the same init as in initTableRows()
 }
 
-void KexiQueryDesignerGuiEditor::slotRowInserted(KexiTableItem* item, uint row, bool /*repaint*/)
+void KexiQueryDesignerGuiEditor::slotRowInserted(KexiDB::RecordData* record, uint row, bool /*repaint*/)
 {
-	if (d->droppedNewItem && d->droppedNewItem==item) {
+	if (d->droppedNewRecord && d->droppedNewRecord == record) {
 		createPropertySet( row, d->droppedNewTable, d->droppedNewField, true );
 		propertySetSwitched();
-		d->droppedNewItem=0;
+		d->droppedNewRecord=0;
 	}
 }
 
@@ -1273,28 +1267,29 @@ void KexiQueryDesignerGuiEditor::slotTableHidden(KexiDB::TableSchema & /*t*/)
 	setDirty();
 }
 
-/*! @internal generates smallest unique alias */
-Q3CString KexiQueryDesignerGuiEditor::generateUniqueAlias() const
+QByteArray KexiQueryDesignerGuiEditor::generateUniqueAlias() const
 {
-//TODO: add option for using non-i18n'd "expr" prefix?
-	const Q3CString expStr
-		= i18nc("short for 'expression' word (only latin letters, please)", "expr").toLatin1();
-//TODO: optimization: cache it?
-	Q3AsciiDict<char> aliases(101);
-	for (int r = 0; r<(int)d->sets->size(); r++) {
+//! @todo add option for using non-i18n'd "expr" prefix?
+	const QByteArray expStr(
+		i18nc("short for 'expression' word (only latin letters, please)", "expr").toLatin1() );
+//! @todo optimization: cache it?
+	QSet<QByteArray> aliases;
+	const int setsSize = d->sets->size();
+	for (int r = 0; r < setsSize; r++) {
+//! @todo use iterator here
 		KoProperty::Set *set = d->sets->at(r);
 		if (set) {
-			const Q3CString a = (*set)["alias"].value().toCString().toLower();
+			const QByteArray a( (*set)["alias"].value().toByteArray().toLower() );
 			if (!a.isEmpty())
-				aliases.insert(a,(char*)1);
+				aliases.insert(a);
 		}
 	}
-	int aliasNr=1;
+	int aliasNr = 1;
 	for (;;aliasNr++) {
-		if (!aliases[expStr+QString::number(aliasNr).toLatin1()])
+		if (!aliases.contains( expStr + QByteArray::number(aliasNr) ))
 			break;
 	}
-	return expStr+QString::number(aliasNr).toLatin1();
+	return expStr + QByteArray::number(aliasNr);
 }
 
 //! @todo this is primitive, temporary: reuse SQL parser
@@ -1413,10 +1408,10 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 			return 0;
 		valueExpr = new KexiDB::VariableExpr(str);
 		//find first matching field for name 'str':
-		for (TablesDictIterator it(*d->relations->tables()); it.current(); ++it) {
+		foreach (KexiRelationsTableContainer *cont, *d->relations->tables()) {
 /*! @todo what about query? */
-			if (it.current()->schema()->table() && it.current()->schema()->table()->field(str)) {
-				valueExpr->toVariable()->field = it.current()->schema()->table()->field(str);
+			if (cont->schema()->table() && cont->schema()->table()->field(str)) {
+				valueExpr->toVariable()->field = cont->schema()->table()->field(str);
 				break;
 			}
 		}
@@ -1424,26 +1419,26 @@ KexiQueryDesignerGuiEditor::parseExpressionString(const QString& fullString, int
 	return valueExpr;
 }
 
-void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int colnum,
+void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiDB::RecordData *record, int colnum,
 	QVariant& newValue, KexiDB::ResultInfo* result)
 {
 	if (colnum == COLUMN_ID_COLUMN) {
 		if (newValue.isNull()) {
-			d->data->updateRowEditBuffer(item, COLUMN_ID_TABLE, QVariant(), false/*!allowSignals*/);
-			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(false));//invisible
-			d->data->updateRowEditBuffer(item, COLUMN_ID_SORTING, QVariant());
+			d->data->updateRowEditBuffer(record, COLUMN_ID_TABLE, QVariant(), false/*!allowSignals*/);
+			d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(false));//invisible
+			d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING, QVariant());
 #ifndef KEXI_NO_QUERY_TOTALS
-			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant());//remove totals
+			d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant());//remove totals
 #endif
-			d->data->updateRowEditBuffer(item, COLUMN_ID_CRITERIA, QVariant());//remove crit.
-			d->sets->removeCurrentPropertySet();
+			d->data->updateRowEditBuffer(record, COLUMN_ID_CRITERIA, QVariant());//remove crit.
+			d->sets->eraseCurrentPropertySet();
 		}
 		else {
 			//auto fill 'table' column
 			QString fieldId( newValue.toString().trimmed() ); //tmp, can look like "table.field"
 			QString fieldName; //"field" part of "table.field" or expression string
 			QString tableName; //empty for expressions
-			Q3CString alias;
+			QByteArray alias;
 			QString columnValueForExpr; //for setting pretty printed "alias: expr" in 1st column
 			const bool isExpression = !d->fieldColumnIdentifiers[fieldId];
 			if (isExpression) {
@@ -1497,10 +1492,10 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				}
 			}
 			bool saveOldValue = true;
-			KoProperty::Set *set = d->sets->findPropertySetForItem(*item); //*propertyBuffer();
+			KoProperty::Set *set = d->sets->findPropertySetForItem(*record); //*propertyBuffer();
 			if (!set) {
 				saveOldValue = false; // no old val.
-				const int row = d->data->findRef(item);
+				const int row = d->data->indexOf(record);
 				if (row<0) {
 					result->success = false;
 					return;
@@ -1508,22 +1503,22 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 				set = createPropertySet( row, tableName, fieldName, true );
 				propertySetSwitched();
 			}
-			d->data->updateRowEditBuffer(item, COLUMN_ID_TABLE, QVariant(tableName), false/*!allowSignals*/);
-			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(true));
+			d->data->updateRowEditBuffer(record, COLUMN_ID_TABLE, QVariant(tableName), false/*!allowSignals*/);
+			d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(true));
 #ifndef KEXI_NO_QUERY_TOTALS
-			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant(0));
+			d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));
 #endif
 			if (!sortingAllowed(fieldName, tableName)) {
 				// sorting is not available for "*" or "table.*" rows
 //! @todo what about expressions?
-				d->data->updateRowEditBuffer(item, COLUMN_ID_SORTING, QVariant());
+				d->data->updateRowEditBuffer(record, COLUMN_ID_SORTING, QVariant());
 			}
 			//update properties
 			(*set)["field"].setValue(fieldName, saveOldValue);
 			if (isExpression) {
 				//-no alias but it's needed:
 				if (alias.isEmpty()) //-try oto get old alias
-					alias = (*set)["alias"].value().toCString();
+					alias = (*set)["alias"].value().toByteArray();
 				if (alias.isEmpty()) //-generate smallest unique alias
 					alias = generateUniqueAlias();
 			}
@@ -1540,17 +1535,17 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 	}
 	else if (colnum==COLUMN_ID_TABLE) {
 		if (newValue.isNull()) {
-			if (!item->at(COLUMN_ID_COLUMN).toString().isEmpty())
-				d->data->updateRowEditBuffer(item, COLUMN_ID_COLUMN, QVariant(), false/*!allowSignals*/);
-			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(false));//invisible
+			if (!(*record)[COLUMN_ID_COLUMN].toString().isEmpty())
+				d->data->updateRowEditBuffer(record, COLUMN_ID_COLUMN, QVariant(), false/*!allowSignals*/);
+			d->data->updateRowEditBuffer(record, COLUMN_ID_VISIBLE, QVariant(false));//invisible
 #ifndef KEXI_NO_QUERY_TOTALS
-			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant());//remove totals
+			d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant());//remove totals
 #endif
-			d->data->updateRowEditBuffer(item, COLUMN_ID_CRITERIA, QVariant());//remove crit.
-			d->sets->removeCurrentPropertySet();
+			d->data->updateRowEditBuffer(record, COLUMN_ID_CRITERIA, QVariant());//remove crit.
+			d->sets->eraseCurrentPropertySet();
 		}
 		//update property
-		KoProperty::Set *set = d->sets->findPropertySetForItem(*item);
+		KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
 		if (set) {
 			if ((*set)["isExpression"].value().toBool()==false) {
 				(*set)["table"] = newValue;
@@ -1569,9 +1564,9 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		if (!propertySet()) {
 			saveOldValue = false;
 			createPropertySet( d->dataTable->dataAwareObject()->currentRow(),
-				item->at(COLUMN_ID_TABLE).toString(), item->at(COLUMN_ID_COLUMN).toString(), true );
+				(*record)[COLUMN_ID_TABLE].toString(), (*record)[COLUMN_ID_COLUMN].toString(), true );
 #ifndef KEXI_NO_QUERY_TOTALS
-			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant(0));//totals
+			d->data->updateRowEditBuffer(record, COLUMN_ID_TOTALS, QVariant(0));//totals
 #endif
 			propertySetSwitched();
 		}
@@ -1586,7 +1581,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 	}
 #endif
 	else if (colnum==COLUMN_ID_SORTING) {
-		KoProperty::Set *set = d->sets->findPropertySetForItem(*item);
+		KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
 		QString table( set->property("table").value().toString() );
 		QString field( set->property("field").value().toString() );
 		if (newValue.toInt()==0 || sortingAllowed(field, table)) {
@@ -1610,7 +1605,7 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		const QString str = newValue.toString().trimmed();
 		int token;
 		QString field, table;
-		KoProperty::Set *set = d->sets->findPropertySetForItem(*item);
+		KoProperty::Set *set = d->sets->findPropertySetForItem(*record);
 		if (set) {
 			field = (*set)["field"].value().toString();
 			table = (*set)["table"].value().toString();
@@ -1653,20 +1648,25 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 	}
 }
 
-void KexiQueryDesignerGuiEditor::slotTablePositionChanged(KexiRelationViewTableContainer*)
+void KexiQueryDesignerGuiEditor::slotTablePositionChanged(KexiRelationsTableContainer*)
 {
 	setDirty(true);
 }
 
-void KexiQueryDesignerGuiEditor::slotAboutConnectionRemove(KexiRelationViewConnection*)
+void KexiQueryDesignerGuiEditor::slotAboutConnectionRemove(KexiRelationsConnection*)
 {
 	setDirty(true);
 }
 
-void KexiQueryDesignerGuiEditor::slotTableFieldDoubleClicked(
-	KexiDB::TableSchema* table, const QString& fieldName )
+void KexiQueryDesignerGuiEditor::slotAppendFields(
+	KexiDB::TableOrQuerySchema& tableOrQuery,const QStringList& fieldNames)
 {
-	if (!table || (!table->field(fieldName) && fieldName!="*"))
+//! @todo how about query columns and multiple fields?
+	KexiDB::TableSchema *table = tableOrQuery.table();
+	if (!table || fieldNames.isEmpty())
+		return;
+	QString fieldName( fieldNames.first() );
+	if (fieldName!="*" && !table->field(fieldName))
 		return;
 	int row_num;
 	//find last filled row in the GUI table
@@ -1674,8 +1674,8 @@ void KexiQueryDesignerGuiEditor::slotTableFieldDoubleClicked(
 		;
 	row_num++; //after
 	//add row
-	KexiTableItem *newItem = createNewRow(table->name(), fieldName, true /* visible*/);
-	d->dataTable->dataAwareObject()->insertItem(newItem, row_num);
+	KexiDB::RecordData *newRecord = createNewRow(table->name(), fieldName, true /* visible*/);
+	d->dataTable->dataAwareObject()->insertItem(newRecord, row_num);
 	d->dataTable->dataAwareObject()->setCursorPosition(row_num, 0);
 	//create buffer
 	createPropertySet( row_num, table->name(), fieldName, true/*new one*/ );
@@ -1755,7 +1755,7 @@ KexiQueryDesignerGuiEditor::createPropertySet( int row,
 	connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
 		this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 
-	d->sets->insert(row, set, newOne);
+	d->sets->set(row, set, newOne);
 
 	updatePropertiesVisibility(*set);
 	return set;
@@ -1768,7 +1768,7 @@ void KexiQueryDesignerGuiEditor::setFocus()
 
 void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
-	const Q3CString& pname = property.name();
+	const QByteArray pname( property.name() );
 /*
  * TODO (js) use KexiProperty::setValidator(QString) when implemented as described in TODO #60
  */
@@ -1796,17 +1796,17 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
 
 void KexiQueryDesignerGuiEditor::slotNewItemStored(KexiPart::Item& item)
 {
-	d->relations->objectCreated(item.mimeType().toLatin1(), item.name().toLatin1());
+	d->relations->objectCreated(item.mimeType(), item.name());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRemoved(const KexiPart::Item& item)
 {
-	d->relations->objectDeleted(item.mimeType().toLatin1(), item.name().toLatin1());
+	d->relations->objectDeleted(item.mimeType(), item.name());
 }
 
-void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName)
+void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const QString& oldName)
 {
-	d->relations->objectRenamed(item.mimeType().toLatin1(), oldName, item.name().toLatin1());
+	d->relations->objectRenamed(item.mimeType(), oldName, item.name());
 }
 
 #include "kexiquerydesignerguieditor.moc"

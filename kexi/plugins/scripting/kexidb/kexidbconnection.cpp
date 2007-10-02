@@ -100,17 +100,14 @@ QObject* KexiDBConnection::executeQuerySchema(KexiDBQuerySchema* queryschema)
     return cursor ? new KexiDBCursor(this, cursor, true) : 0;
 }
 
-bool KexiDBConnection::insertRecord(QObject* obj, QVariantList values)
+bool KexiDBConnection::insertRecord(QObject* obj, const QVariantList& values)
 {
-    Q3ValueList<QVariant> list;
-    foreach(QVariant v, values)
-        list << v;
     KexiDBFieldList* fieldlist = dynamic_cast< KexiDBFieldList* >(obj);
     if( fieldlist )
-        return m_connection->insertRecord(*fieldlist->fieldlist(), list);
+        return m_connection->insertRecord(*fieldlist->fieldlist(), values);
     KexiDBTableSchema* tableschema = dynamic_cast< KexiDBTableSchema* >(obj);
     if( tableschema )
-        return m_connection->insertRecord(*tableschema->tableschema(), list);
+        return m_connection->insertRecord(*tableschema->tableschema(), values);
     return false;
 }
 

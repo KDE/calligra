@@ -20,9 +20,6 @@
 #ifndef KEXIDB_SCHEMADATA_H
 #define KEXIDB_SCHEMADATA_H
 
-#include <q3valuelist.h>
-#include <qstring.h>
-
 #include <kexidb/global.h>
 #include <kexidb/field.h>
 

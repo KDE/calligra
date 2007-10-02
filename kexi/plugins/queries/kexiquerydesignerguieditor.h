@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,20 +21,14 @@
 #ifndef KEXIQUERYDESIGNERGUIEDITOR_H
 #define KEXIQUERYDESIGNERGUIEDITOR_H
 
-#include <qpointer.h>
-#include <qsplitter.h>
-//Added by qt3to4:
-#include <QDragMoveEvent>
-#include <Q3CString>
-#include <QDropEvent>
-
 #include <KexiView.h>
 #include "kexiquerypart.h"
 
-class KexiTableItem;
-class KexiRelationWidget;
-class KexiRelationViewTableContainer;
-class KexiRelationViewConnection;
+class QDragMoveEvent;
+class QDropEvent;
+class KexiRelationsView;
+class KexiRelationsTableContainer;
+class KexiRelationsConnection;
 
 namespace KexiPart
 {
@@ -51,7 +45,9 @@ namespace KexiDB
 	class Connection;
 	class QuerySchema;
 	class TableSchema;
+	class TableOrQuerySchema;
 	class ResultInfo;
+	class RecordData;
 }
 
 //! Design view of the Query Designer
@@ -65,7 +61,7 @@ class KexiQueryDesignerGuiEditor : public KexiView
 
 //		KexiDB::QuerySchema	*schema();
 
-		KexiRelationWidget *relationView() const;
+		KexiRelationsView *relationsView() const;
 
 		virtual QSize sizeHint() const;
 
@@ -105,32 +101,34 @@ class KexiQueryDesignerGuiEditor : public KexiView
 		/*! Helper: allocates and initializes new table view's row. Doesn't insert it, just returns. 
 		 \a tableName and \a fieldName shoudl be provided. 
 		 \a visible flag sets value for "Visible" column. */
-		KexiTableItem* createNewRow(const QString& tableName, const QString& fieldName,
+		KexiDB::RecordData* createNewRow(const QString& tableName, const QString& fieldName,
 			bool visible) const;
 
 		KexiDB::BaseExpr* parseExpressionString(const QString& fullString, int& token,
 			bool allowRelationalOperator);
 
-		Q3CString generateUniqueAlias() const;
+		/*! @internal generates smallest unique alias */
+		QByteArray generateUniqueAlias() const;
+
 		void updatePropertiesVisibility(KoProperty::Set& buf);
 
 	protected slots:
-		void slotDragOverTableRow(KexiTableItem *item, int row, QDragMoveEvent* e);
-		void slotDroppedAtRow(KexiTableItem *item, int row,
-			QDropEvent *ev, KexiTableItem*& newItem);
+		void slotDragOverTableRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
+		void slotDroppedAtRow(KexiDB::RecordData *record, int row,
+			QDropEvent *ev, KexiDB::RecordData*& newRecord);
 		//! Reaction on appending a new item after deleting one
 		void slotNewItemAppendedForAfterDeletingInSpreadSheetMode();
 		void slotTableAdded(KexiDB::TableSchema &t);
 		void slotTableHidden(KexiDB::TableSchema &t);
 
 		//! Called before cell change in tableview.
-		void slotBeforeCellChanged(KexiTableItem *item, int colnum,
+		void slotBeforeCellChanged(KexiDB::RecordData* record, int colnum,
 			QVariant& newValue, KexiDB::ResultInfo* result);
 
-		void slotRowInserted(KexiTableItem* item, uint row, bool repaint);
-		void slotTablePositionChanged(KexiRelationViewTableContainer*);
-		void slotAboutConnectionRemove(KexiRelationViewConnection*);
-		void slotTableFieldDoubleClicked( KexiDB::TableSchema* table, const QString& fieldName );
+		void slotRowInserted(KexiDB::RecordData* record, uint row, bool repaint);
+		void slotTablePositionChanged(KexiRelationsTableContainer*);
+		void slotAboutConnectionRemove(KexiRelationsConnection*);
+		void slotAppendFields(KexiDB::TableOrQuerySchema& tableOrQuery,const QStringList& fieldNames);
 
 		/*! Loads layout of relation GUI diagram. */
 		bool loadLayout();
@@ -153,10 +151,10 @@ class KexiQueryDesignerGuiEditor : public KexiView
 
 		void slotPropertyChanged(KoProperty::Set& list, KoProperty::Property& property);
 
-//		void slotObjectCreated(const QCString &mime, const QCString& name);
+//		void slotObjectCreated(const QString &mime, const QString& name);
 		void slotNewItemStored(KexiPart::Item&);
 		void slotItemRemoved(const KexiPart::Item& item);
-		void slotItemRenamed(const KexiPart::Item& item, const Q3CString& oldName);
+		void slotItemRenamed(const KexiPart::Item& item, const QString& oldName);
 
 	private:
 		class Private;
@@ -166,4 +164,3 @@ class KexiQueryDesignerGuiEditor : public KexiView
 };
 
 #endif
-

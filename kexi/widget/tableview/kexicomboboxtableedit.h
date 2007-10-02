@@ -31,7 +31,6 @@
 #include <QEvent>
 
 class KexiComboBoxPopup;
-class KexiTableItem;
 class KexiTableViewColumn;
 
 /*! @short Drop-down cell editor.
@@ -83,7 +82,7 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 		/*! Used to handle key press events for the item. */
 		virtual bool handleKeyPress( QKeyEvent *ke, bool editorActive );
 
-		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
+		virtual int widthForValue( const QVariant &val, const QFontMetrics &fm );
 	
 		virtual void hide();
 		virtual void show();
@@ -113,8 +112,8 @@ class KexiComboBoxTableEdit : public KexiInputTableEdit, public KexiComboBoxBase
 
 	protected slots:
 		void slotButtonClicked();
-		void slotRowAccepted(KexiTableItem *item, int row) { KexiComboBoxBase::slotRowAccepted(item, row); }
-		void slotItemSelected(KexiTableItem* item) { KexiComboBoxBase::slotItemSelected(item); }
+		void slotRowAccepted(KexiDB::RecordData *record, int row) { KexiComboBoxBase::slotRowAccepted(record, row); }
+		void slotItemSelected(KexiDB::RecordData* record) { KexiComboBoxBase::slotItemSelected(record); }
 		void slotInternalEditorValueChanged(const QVariant& v)
 			{ KexiComboBoxBase::slotInternalEditorValueChanged(v); }
 		void slotLineEditTextChanged(const QString& s);

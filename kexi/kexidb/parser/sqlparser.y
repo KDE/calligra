@@ -464,17 +464,17 @@
 # include <malloc.h>
 #endif
 
-#include <qobject.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <qlist.h>
-#include <q3cstring.h>
-#include <qvariant.h>
+#include <QObject>
+#include <QList>
+#include <QVariant>
 
-#include <connection.h>
-#include <queryschema.h>
-#include <field.h>
-#include <tableschema.h>
+#include <KDebug>
+#include <KLocale>
+
+#include <kexidb/connection.h>
+#include <kexidb/queryschema.h>
+#include <kexidb/field.h>
+#include <kexidb/tableschema.h>
 
 #include "parser.h"
 #include "parser_p.h"

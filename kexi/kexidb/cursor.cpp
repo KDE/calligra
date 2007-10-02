@@ -95,10 +95,12 @@ void Cursor::init()
 		m_logicalFieldCount = m_fieldsExpanded->count() 
 			- m_query->internalFields().count() - (m_containsROWIDInfo?1:0);
 		m_fieldCount = m_fieldsExpanded->count();
+		m_fieldsToStoreInRow = m_fieldCount;
 	} else {
 		m_fieldsExpanded = 0;
 		m_logicalFieldCount = 0;
 		m_fieldCount = 0;
+		m_fieldsToStoreInRow = 0;
 	}
 	m_orderByColumnList = 0;
 	m_queryParameters = 0;
@@ -191,6 +193,7 @@ bool Cursor::close()
 	m_afterLast = false;
 	m_readAhead = false;
 	m_fieldCount = 0;
+	m_fieldsToStoreInRow = 0;
 	m_logicalFieldCount = 0;
 	m_at = -1;
 
@@ -339,23 +342,6 @@ bool Cursor::movePrev()
 	return true;
 }
 
-bool Cursor::eof() const
-{
-	return m_afterLast;
-}
-
-bool Cursor::bof() const
-{
-	return m_at==0;
-}
-
-qint64 Cursor::at() const
-{
-	if (m_readAhead)
-		return 0;
-	return m_at - 1;
-}
-
 bool Cursor::isBuffered() const
 {
 	return m_options & Buffered;
@@ -461,7 +447,7 @@ bool Cursor::getNextRecord()
 	return true;
 }
 
-bool Cursor::updateRow(RowData& data, RowEditBuffer& buf, bool useROWID)
+bool Cursor::updateRow(RecordData& data, RowEditBuffer& buf, bool useROWID)
 {
 //! @todo doesn't update cursor's buffer YET!
 	clearError();
@@ -470,7 +456,7 @@ bool Cursor::updateRow(RowData& data, RowEditBuffer& buf, bool useROWID)
 	return m_conn->updateRow(*m_query, data, buf, useROWID);
 }
 
-bool Cursor::insertRow(RowData& data, RowEditBuffer& buf, bool getROWID)
+bool Cursor::insertRow(RecordData& data, RowEditBuffer& buf, bool getROWID)
 {
 //! @todo doesn't update cursor's buffer YET!
 	clearError();
@@ -479,7 +465,7 @@ bool Cursor::insertRow(RowData& data, RowEditBuffer& buf, bool getROWID)
 	return m_conn->insertRow(*m_query, data, buf, getROWID);
 }
 
-bool Cursor::deleteRow(RowData& data, bool useROWID)
+bool Cursor::deleteRow(RecordData& data, bool useROWID)
 {
 //! @todo doesn't update cursor's buffer YET!
 	clearError();
@@ -558,15 +544,15 @@ QueryColumnInfo::Vector Cursor::orderByColumnList() const
 	return m_orderByColumnList ? *m_orderByColumnList: QueryColumnInfo::Vector();
 }
 
-Q3ValueList<QVariant> Cursor::queryParameters() const
+QList<QVariant> Cursor::queryParameters() const
 {
-	return m_queryParameters ? *m_queryParameters : Q3ValueList<QVariant>();
+	return m_queryParameters ? *m_queryParameters : QList<QVariant>();
 }
 
-void Cursor::setQueryParameters(const Q3ValueList<QVariant>& params)
+void Cursor::setQueryParameters(const QList<QVariant>& params)
 {
 	if (!m_queryParameters)
-		m_queryParameters = new Q3ValueList<QVariant>(params);
+		m_queryParameters = new QList<QVariant>(params);
 	else
 		*m_queryParameters = params;
 }

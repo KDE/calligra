@@ -66,7 +66,7 @@ class MySQLMigrate : public KexiMigrate
 			QStringList& stringList, int numRecords = -1);
 
 		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
-			KexiDB::RowData& data, bool &firstRecord);
+			KexiDB::RecordData& data, bool &firstRecord);
 
 		virtual bool drv_copyTable(const QString& srcTable, 
 			KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);

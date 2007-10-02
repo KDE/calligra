@@ -24,9 +24,9 @@
 #include <QSet>
 #include <QList>
 
-class KexiTableItem;
 namespace KexiDB {
 	class QuerySchema;
+	class RecordData;
 }
 
 //! @short The KexiFormDataProvider class is a data provider for Kexi Forms
@@ -58,7 +58,7 @@ class KEXIFORMUTILS_EXPORT KexiFormDataProvider : public KexiDataItemChangesList
 
 		/*! Fills data items with appropriate data fetched from \a cursor. 
 		 \a newRowEditing == true means that we are at new (not yet inserted) database row. */
-		void fillDataItems(KexiTableItem& row, bool cursorAtNewRow);
+		void fillDataItems(KexiDB::RecordData& record, bool cursorAtNewRow);
 
 		/*! Implementation for KexiDataItemChangesListener. 
 		 Reaction for change of \a item. Does nothing here. */

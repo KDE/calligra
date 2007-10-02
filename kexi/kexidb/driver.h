@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,12 +20,10 @@
 #ifndef KEXIDB_DRIVER_H
 #define KEXIDB_DRIVER_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qdatetime.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
+#include <QList>
+#include <QByteArray>
 
 #include <kexidb/global.h>
 #include <kexidb/object.h>
@@ -83,7 +81,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			 Used for migration. */
 			bool allowImportingTo : 1;
 		};
-		typedef QMap<QString,Info> InfoMap;
+		typedef QHash<QString,Info> InfoHash;
 		
 		/*! Features supported by driver (sum of few Features enum items). */
 		enum Features {
@@ -186,6 +184,10 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		bool isSystemFieldName( const QString& n ) const;
 
+		/*! \return true if \a word is a driver-specific keyword.
+		 @see KexiDB::isKexiSQLKeyword(const QByteArray&) */
+		bool isDriverSpecificKeyword( const QByteArray& word ) const;
+
 		/*! \return Driver's features that are combination of Driver::Features
 		enum. */
 		int features() const;
@@ -258,7 +260,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! This is overloaded version of escapeString( const QString& str )
 		 to be implemented in the same way.
 		*/
-		virtual Q3CString escapeString( const Q3CString& str ) const = 0;
+		virtual QByteArray escapeString( const QByteArray& str ) const = 0;
 		
 		/*! Driver-specific SQL BLOB value escaping.
 		 Implement escaping for any character like " or ' and \\0 as your 
@@ -282,19 +284,19 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		QString escapeIdentifier( const QString& str, 
 			int options = EscapeDriver|EscapeAsNecessary) const;
 
-		Q3CString escapeIdentifier( const Q3CString& str, 
+		QByteArray escapeIdentifier( const QByteArray& str, 
 			int options = EscapeDriver|EscapeAsNecessary) const;
 
 		//! \return property value for \a propeName available for this driver. 
 		//! If there's no such property defined for driver, Null QVariant value is returned.
-		QVariant propertyValue( const Q3CString& propName ) const;
+		QVariant propertyValue( const QByteArray& propName ) const;
 
 		//! \return translated property caption for \a propeName. 
 		//! If there's no such property defined for driver, empty string value is returned.
-		QString propertyCaption( const Q3CString& propName ) const;
+		QString propertyCaption( const QByteArray& propName ) const;
 
 		//! \return a list of property names available for this driver.
-		Q3ValueList<Q3CString> propertyNames() const;
+		QList<QByteArray> propertyNames() const;
 
 	protected:
 		/*! Used by DriverManager. 
@@ -328,7 +330,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! This is overloaded version of drv_escapeIdentifier( const QString& str )
 		 to be implemented in the same way.
 		*/
-		virtual Q3CString drv_escapeIdentifier( const Q3CString& str ) const = 0;
+		virtual QByteArray drv_escapeIdentifier( const QByteArray& str ) const = 0;
 		
 		/*! \return true if \a n is a system field's name, build-in system 
 		 field that cannot be used or created by a user,
@@ -345,26 +347,28 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 @see adminTools() */
 		virtual AdminTools* drv_createAdminTools() const;
 
-		/*! \return connection \a conn , do not deletes it nor affect.
+		/*! \return connection \a conn, does not delete it nor affect.
 		 Returns 0 if \a conn is not owned by this driver.
 		 After this, you are owner of \a conn object, so you should
 		 eventually delete it. Better use Connection destructor. */
 		Connection* removeConnection( Connection *conn );
 
+		/*! Used to initialise the dictionary of driver-specific keywords.
+			Should be called by the Driver's constructor.
+			\a keywords should be 0-terminated array of null-terminated strings. */
+		void initDriverSpecificKeywords(const char** keywords);
+
 	friend class Connection;
 	friend class Cursor;
 	friend class DriverManagerInternal;
 
-
-	/*! Used to initialise the dictionary of driver-specific keywords.
-	    Should be called by the Driver's constructor.
-	    \a hashSize is the number of buckets to use in the dictionary.
-	    \sa DriverPrivate::SQL_KEYWORDS. */
-	void initSQLKeywords(int hashSize = 17);
-
 	DriverBehaviour *beh;
 	DriverPrivate *d;
 };
+
+/*! \return true if the \a word is an reserved KexiSQL's keyword
+ (see keywords.cpp for a list of reserved keywords). */
+KEXI_DB_EXPORT bool isKexiSQLKeyword( const QByteArray& word );
 
 } //namespace KexiDB
 

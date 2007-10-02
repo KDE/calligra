@@ -29,7 +29,9 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class KexiTableItem;
+namespace KexiDB {
+	class RecordData;
+}
 class KexiTableDesignerViewPrivate;
 class K3Command;
 class CommandGroup;
@@ -139,18 +141,18 @@ class KexiTableDesignerView : public KexiDataTable, public KexiTableDesignerInte
 		void slotAboutToShowContextMenu();
 
 		//! Called before cell change in tableview.
-		void slotBeforeCellChanged(KexiTableItem *item, int colnum,
+		void slotBeforeCellChanged(KexiDB::RecordData *record, int colnum,
 			QVariant& newValue, KexiDB::ResultInfo* result);
 
 		//! Called on row change in a tableview.
-		void slotRowUpdated(KexiTableItem *item);
+		void slotRowUpdated(KexiDB::RecordData *record);
 
 		//! Called before row inserting in tableview.
 		void slotRowInserted();
-//		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
+//		void slotAboutToInsertRow(KexiDB::RecordData* record, KexiDB::ResultInfo* result, bool repaint);
 
 		//! Called before row deleting in tableview.
-		void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
+		void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint);
 
 		/*! Called after any property has been changed in the current property set,
 		 to perform some actions (like updating other dependent properties) */

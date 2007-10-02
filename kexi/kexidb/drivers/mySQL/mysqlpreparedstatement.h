@@ -22,8 +22,6 @@
 
 #include <kexidb/preparedstatement.h>
 #include "mysqlconnection_p.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 //todo 1.1 - unfinished: #define KEXI_USE_MYSQL_STMT
 // for 1.0 we're using unoptimized version
@@ -41,7 +39,7 @@ class MySqlPreparedStatement : public PreparedStatement, public MySqlConnectionI
 
 		virtual bool execute();
 
-		Q3CString m_tempStatementString;
+		QByteArray m_tempStatementString;
 
 #ifdef KEXI_USE_MYSQL_STMT
 		int m_realParamCount;

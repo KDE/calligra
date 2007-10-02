@@ -24,12 +24,17 @@
 #include "parser_p.h"
 #include "sqlparser.h"
 
-extern const char * reserved_keywords[];
+/*moved to Driver 
+#include "tokens.cpp"
+K_GLOBAL_STATIC_WITH_ARGS(StaticSetOfStrings, _reservedKeywords, (_tokens))
+*/
+
+//--------------------
 
 using namespace KexiDB;
 
 Parser::Parser(Connection *db)
- : d(new ParserPrivate)
+ : d(new Private)
 {
 	d->db = db;
 }
@@ -102,15 +107,15 @@ void Parser::init()
 {
 	if (d->initialized)
 		return;
-#define INS(p) d->reservedKeywords.insert(p, (char*)1, 0)
-#include "tokens.cpp"
+	// nothing to do
 	d->initialized = true;
 }
 
-bool Parser::isReservedKeyword(const char *str)
+/*moved to Driver 
+bool Parser::isReservedKeyword(const QByteArray& str)
 {
-	return d->reservedKeywords.find(str);
-}
+	return _reservedKeywords->contains(str.toUpper());
+}*/
 
 bool
 Parser::parse(const QString &statement)

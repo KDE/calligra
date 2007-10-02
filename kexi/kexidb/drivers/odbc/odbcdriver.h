@@ -20,13 +20,7 @@
 #ifndef KEXIDB_DRIVER_ODBC_H
 #define KEXIDB_DRIVER_ODBC_H
 
-//Kexi Includes
 #include <kexidb/driver.h>
-//Added by qt3to4:
-#include <Q3CString>
-
-class Q3CString;
-class QString;
 
 namespace KexiDB
 {
@@ -61,7 +55,7 @@ class ODBCDriver : public Driver
 		virtual bool isSystemFieldName( const QString& name ) const;
 		
 		virtual QString escapeString( const QString& str ) const;
-		virtual Q3CString escapeString( const Q3CString& str ) const;
+		virtual QByteArray escapeString( const QByteArray& str ) const;
 
 	protected:
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );

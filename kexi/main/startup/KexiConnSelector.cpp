@@ -208,8 +208,8 @@ void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
 			d->conn_sel_shown=true;
 		
 			//show connections (on demand):
-			for (KexiDB::ConnectionData::ListIterator it(d->conn_set->list()); it.current(); ++it) {
-				addConnectionData( it.current() );
+			foreach (KexiDB::ConnectionData* connData, d->conn_set->list()) {
+				addConnectionData( connData );
 	//			else {
 	//this error should be more verbose:
 	//				kWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!" << endl;

@@ -33,7 +33,6 @@
 #include <QResizeEvent>
 
 #include <kdebug.h>
-#include <kimageeffect.h>
 
 #include <kexidb/field.h>
 #include <kexiutils/utils.h>

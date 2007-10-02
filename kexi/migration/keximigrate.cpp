@@ -247,7 +247,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 		foreach (const QString& tableName, kexiDBTables) {
 			//load the schema from kexi__objects and kexi__fields
 			TableSchema *t = new TableSchema();
-			RowData data;
+			RecordData data;
 			bool firstRecord = true;
 			if (true == drv_fetchRecordFromSQL(
 					QString::fromLatin1(

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,18 +24,18 @@
 # error "Do not include: this is KexiDB internal file"
 #endif
 
-#include <qstring.h>
-#include <qvariant.h>
-#include <qmap.h>
-#include <q3ptrdict.h>
-#include <q3asciidict.h>
-#include <q3valuevector.h>
-#include <Q3CString>
+#include <QString>
+#include <QVariant>
+#include <QHash>
+#include <QVector>
+#include <QByteArray>
 #include <QSet>
-#include <kgenericfactory.h>
+
+#include <KGenericFactory>
 
 #include "connection.h"
 #include "admin.h"
+#include <kexiutils/utils.h>
 
 class KService;
 
@@ -134,10 +134,6 @@ class KEXI_DB_EXPORT DriverBehaviour
 	/*! True if "SELECT 1 from (subquery)" is supported. False by default.
 	 Used in Connection::resultExists() for optimization. It's set to true for SQLite driver. */
 	bool SELECT_1_SUBQUERY_SUPPORTED : 1;
-
-	/*! Keywords that need to be escaped for the driver.  Set this before calling
-	    Driver::initSQLKeywords. */
-	const char** SQL_KEYWORDS;
 };
 
 /*! Private driver's data members. Available for implementation. */
@@ -188,55 +184,41 @@ class DriverPrivate
 		int features;
 
 		//! real type names for this engine
-		Q3ValueVector<QString> typeNames;
+		QVector<QString> typeNames;
 
 		/*! Driver properties dictionary (indexed by name), 
 		 useful for presenting properties to the user. 
 		 Set available properties here in driver implementation. */
-		QMap<Q3CString,QVariant> properties;
+		QHash<QByteArray, QVariant> properties;
 
 		/*! i18n'd captions for properties. You do not need 
 		 to set predefined properties' caption in driver implementation 
 		 -it's done automatically. */
-		QMap<Q3CString,QString> propertyCaptions;
+		QHash<QByteArray, QString> propertyCaptions;
 
 		/*! Provides a number of database administration tools for the driver. */
 		AdminTools *adminTools;
 
-	/*! Kexi SQL keywords that need to be escaped if used as an identifier (e.g.
-	    for a table or column name).  These keywords will be escaped by the
-	    front-end, even if they are not recognised by the backend to provide
-	    UI consistency and to allow DB migration without changing the queries.
-	    \sa DriverPrivate::initKexiKeywords(), KexiDB::kexiSQLKeywords.
-	*/
-	static Q3AsciiDict<bool>* kexiSQLDict;
-	static const char *kexiSQLKeywords[];
-	
-	/*! Driver-specific SQL keywords that need to be escaped if used as an
-	    identifier (e.g. for a table or column name) that aren't also Kexi SQL 
-	    keywords.  These don't neccesarily need to be escaped when displayed by
-	    the front-end, because they won't confuse the parser.  However, they do
-	    need to be escaped before sending to the DB-backend which will have
-	    it's own parser. 
-	
-	    \sa DriverBehaviour::SQL_KEYWORDS.
-	*/	
-	Q3AsciiDict<bool>* driverSQLDict;
-	
-	/*! Initialise the dictionary of Kexi SQL keywords used for escaping. */
-	void initKexiKeywords();
-	/*! Initialise the dictionary of driver-specific keywords used for escaping.
-	    \a hashSize is the number of buckets to use in the dictionary.
-	    \sa Driver::initSQLKeywords(). */
-	void initDriverKeywords(const char* keywords[], int hashSize);
-	
+		/*! Driver-specific SQL keywords that need to be escaped if used as an
+			identifier (e.g. for a table or column name) that aren't also Kexi SQL 
+			keywords.  These don't neccesarily need to be escaped when displayed by
+			the front-end, because they won't confuse the parser.  However, they do
+			need to be escaped before sending to the DB-backend which will have
+			it's own parser. 
+		*/	
+		KexiUtils::StaticSetOfStrings driverSpecificSQLKeywords;
+
+		/*! Kexi SQL keywords that need to be escaped if used as an identifier (e.g.
+		for a table or column name).  These keywords will be escaped by the
+		front-end, even if they are not recognised by the backend to provide
+		UI consistency and to allow DB migration without changing the queries.
+		*/
+		static const char* kexiSQLKeywords[];
+
 	protected:
 		/*! Used by driver manager to initialize properties taken using internal
 	      driver flags. */
 		void initInternalProperties();
-	
-	private:
-		void initKeywords(const char* keywords[], Q3AsciiDict<bool>& dict);
 	
 	friend class DriverManagerInternal;
 };

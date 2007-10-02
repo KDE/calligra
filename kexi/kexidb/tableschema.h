@@ -21,11 +21,10 @@
 #ifndef KEXIDB_TABLE_H
 #define KEXIDB_TABLE_H
 
-#include <q3valuelist.h>
-#include <q3ptrlist.h>
-#include <qstring.h>
-#include <qpointer.h>
-#include <q3ptrvector.h>
+#include <QList>
+#include <QString>
+#include <QPointer>
+#include <QVector>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -43,8 +42,8 @@ class LookupFieldSchema;
 class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 {
 	public:
-		typedef Q3PtrList<TableSchema> List; //!< Type of tables list
-		typedef Q3PtrListIterator<TableSchema> ListIterator; //!< Iterator for tables list
+		typedef QList<TableSchema*> List; //!< Type of tables list
+		typedef QList<TableSchema>::ConstIterator ListIterator; //!< Iterator for tables list
 
 		TableSchema(const QString & name);
 		TableSchema(const SchemaData& sdata);
@@ -89,9 +88,9 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		void setPrimaryKey(IndexSchema *pkey);
 
 		const IndexSchema::ListIterator indicesIterator() const 
-			{ return IndexSchema::ListIterator(m_indices); }
+			{ return IndexSchema::ListIterator(m_indices.constBegin()); }
 
-		const IndexSchema::List* indices() { return &m_indices; }
+		const IndexSchema::List* indices() const { return &m_indices; }
 
 		/*! Removes all fields from the list, clears name and all other properties. 
 			\sa FieldList::clear() */
@@ -165,7 +164,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		/*! \return list of lookup field schemas for this table. 
 		 The order is the same as the order of fields within the table. */
-		const Q3PtrVector<LookupFieldSchema>& lookupFieldsList();
+		const QVector<LookupFieldSchema*>& lookupFieldsList();
 
 	protected:
 		/*! Automatically retrieves table schema via connection. */

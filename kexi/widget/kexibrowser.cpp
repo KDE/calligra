@@ -39,7 +39,6 @@
 #include <k3listview.h>
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <kimageeffect.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <KActionCollection>

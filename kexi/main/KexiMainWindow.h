@@ -158,7 +158,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 as KexiPart::Part::supportedUserViewModes() for \a  item. */
 		bool openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode);
 
-		virtual bool eventFilter( QObject *obj, QEvent * e );
+//TODO REMOVE?		virtual bool eventFilter( QObject *obj, QEvent * e );
 
 		//! \return popup menu for \a popupName name.
 //2.0 disabled		virtual Q3PopupMenu* findPopupMenu(const char *popupName);
@@ -269,7 +269,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		  directly if there's no porject opened in the current Kexi main window. */
 		tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata, 
 			const QString& dbName = QString(),
-			const Q3ValueList<KexiProjectData::ObjectInfo>& autoopenObjects = Q3ValueList<KexiProjectData::ObjectInfo>());
+			const KexiProjectData::AutoOpenObjects& autoopenObjects = KexiProjectData::AutoOpenObjects());
 
 		/*! Helper. Opens project pointed by \a aFileName.
 		 Like above but \a fileNameForConnectionData can be passed instead of 

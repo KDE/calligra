@@ -32,6 +32,7 @@
 #include <kactioncollection.h>
 #include <QEvent>
 #include <QCloseEvent>
+#include <QApplication>
 
 class KexiView::Private
 {
@@ -270,9 +271,14 @@ bool KexiView::eventFilter( QObject *o, QEvent *e )
 	if (e->type()==QEvent::FocusIn || e->type()==QEvent::FocusOut) {// && o->inherits("QWidget")) {
 //		//hp==true if currently focused widget is a child of this table view
 //		const bool hp = Kexi::hasParent( static_cast<QWidget*>(o), focusWidget());
-//		kexidbg << "KexiView::eventFilter(): " << o->name() << " " << e->type() << endl;
-		if (KexiUtils::hasParent( this, static_cast<QWidget*>(o))) {
-			if (e->type()==QEvent::FocusOut && focusWidget() && !KexiUtils::hasParent( this, focusWidget())) {
+		kexidbg << "KexiView::eventFilter(): this=[" << o->metaObject()->className() 
+			<< " " << objectName() << "] o=["<<o->metaObject()->className()<< " " << o->objectName() 
+			<< "] focusWidget=["<<(qApp->focusWidget()?qApp->focusWidget()->metaObject()->className():QString())<<" "
+			<< (qApp->focusWidget()?qApp->focusWidget()->objectName():QString())<<"] ev.type=" << e->type() << endl;
+		if (KexiUtils::hasParent( this, o)) {
+			if (e->type()==QEvent::FocusOut && qApp->focusWidget() 
+				&& !KexiUtils::hasParent( this, qApp->focusWidget()))
+			{
 				//focus out: when currently focused widget is not a parent of this view
 				emit focus(false);
 			} else if (e->type()==QEvent::FocusIn) {

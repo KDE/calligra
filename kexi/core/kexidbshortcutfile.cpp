@@ -28,6 +28,8 @@
 #include <qstringlist.h>
 #include <qdir.h>
 
+#include <kexi_global.h>
+
 //! Version of the KexiDBShortcutFile format.
 #define KexiDBShortcutFile_version 2
 /* CHANGELOG:

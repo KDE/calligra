@@ -40,6 +40,7 @@ namespace KexiDB
 	class FieldList;
 }
 
+class Q3CString;
 class KexiDataSourcePage;
 
 //! Kexi Form Plugin

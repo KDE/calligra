@@ -39,9 +39,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 #include <KexiWindow.h>
-//Added by qt3to4:
 #include <Q3CString>
-#include <Q3PtrList>
 
 //! @internal
 class KexiTablePart::Private
@@ -180,15 +178,14 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(
 	QWidget *parent, KexiDB::Connection& conn, 
 	KexiDB::TableSchema& table, const QString& msg)
 {
-	Q3PtrList<KexiDB::Connection::TableSchemaChangeListenerInterface>* listeners
+	QSet<KexiDB::Connection::TableSchemaChangeListenerInterface*>* listeners
 		= conn.tableSchemaChangeListeners(table);
 	if (!listeners || listeners->isEmpty())
 		return true;
 	
 	QString openedObjectsStr = "<ul>";
-	for (Q3PtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> it(*listeners);
-		it.current(); ++it)	{
-			openedObjectsStr += QString("<li>%1</li>").arg(it.current()->listenerInfoString);
+	foreach (KexiDB::Connection::TableSchemaChangeListenerInterface* iface, *listeners) {
+		openedObjectsStr += QString("<li>%1</li>").arg(iface->listenerInfoString);
 	}
 	openedObjectsStr += "</ul>";
 	int r = KMessageBox::questionYesNo(parent, 

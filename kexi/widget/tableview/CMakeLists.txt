@@ -13,7 +13,7 @@ set(kexidatatable_LIB_SRCS
    kexicelleditorfactory.cpp 
    kexitableedit.cpp 
    kexitableviewheader.cpp 
-   kexitableitem.cpp 
+   KexiTableViewColumn.cpp
    kexitableviewdata.cpp 
    kexiinputtableedit.cpp 
    kexiblobtableedit.cpp 

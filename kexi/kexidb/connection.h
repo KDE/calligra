@@ -20,17 +20,12 @@
 #ifndef KEXIDB_CONNECTION_H
 #define KEXIDB_CONNECTION_H
 
-#include <qobject.h>
-#include <qstringlist.h>
-#include <q3intdict.h>
-#include <q3dict.h>
-#include <q3ptrdict.h>
-#include <q3valuevector.h>
-#include <q3valuelist.h>
-#include <qvariant.h>
-#include <qpointer.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <QObject>
+#include <QStringList>
+#include <QHash>
+#include <QVector>
+#include <QVariant>
+#include <QPointer>
 
 #include <kexidb/object.h>
 #include <kexidb/connectiondata.h>
@@ -40,13 +35,11 @@
 #include <kexidb/transaction.h>
 #include <kexidb/driver.h>
 #include <kexidb/preparedstatement.h>
+#include <kexidb/RecordData.h>
 
 #include <kexiutils/tristate.h>
 
 namespace KexiDB {
-
-//! structure for storing single record with type information
-typedef Q3ValueVector<QVariant> RowData; 
 
 class Cursor;
 class ConnectionPrivate;
@@ -208,16 +201,16 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 If \a also_system_tables is true, 
 		 Internal KexiDB system tables (kexi__*) are not available here 
 		 because these have no identifiers assigned (more formally: id=-1). */
-		Q3ValueList<int> tableIds();
+		QList<int> tableIds();
 
 		/*! \return ids of all database query schemas stored in currently 
 		 used database. These ids can be later used as argument for querySchema().
 		 This is a shortcut for objectIds(TableObjectType). */
-		Q3ValueList<int> queryIds();
+		QList<int> queryIds();
 
 		/*! \return names of all schemas of object with \a objType type 
 		 that are stored in currently used database. */
-		Q3ValueList<int> objectIds(int objType);
+		QList<int> objectIds(int objType);
 
 		/*! \brief Creates new transaction handle and starts a new transaction.
 		 \return KexiDB::Transaction object if transaction has been started 
@@ -285,7 +278,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Use Transaction::active() to check that. Inactive transaction 
 		 handle is useless and can be safely dropped.
 		*/
-		const Q3ValueList<Transaction>& transactions();
+		const QList<Transaction>& transactions();
 
 		/*! \return true if "auto commit" option is on. 
 
@@ -347,10 +340,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 (passing \a query and \a cursor_options to it's constructor).
 		 Kexi SQL and driver-specific escaping is performed on table names.
 		*/
-		Cursor* prepareQuery( QuerySchema& query, const Q3ValueList<QVariant>& params, 
+		Cursor* prepareQuery( QuerySchema& query, const QList<QVariant>& params, 
 			uint cursor_options = 0 );
 
-		/*! \overload prepareQuery( QuerySchema& query, const Q3ValueList<QVariant>& params, 
+		/*! \overload prepareQuery( QuerySchema& query, const QList<QVariant>& params, 
 			uint cursor_options = 0 )
 		 Prepares query described by \a query schema without parameters.
 		*/
@@ -377,10 +370,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		 Statement is build from data provided by \a query schema. 
 		 Kexi SQL and driver-specific escaping is performed on table names. */
-		Cursor* executeQuery( QuerySchema& query, const Q3ValueList<QVariant>& params, 
+		Cursor* executeQuery( QuerySchema& query, const QList<QVariant>& params, 
 			uint cursor_options = 0 );
 
-		/*! \overload executeQuery( QuerySchema& query, const Q3ValueList<QVariant>& params, 
+		/*! \overload executeQuery( QuerySchema& query, const QList<QVariant>& params, 
 			uint cursor_options = 0 ) */
 		Cursor* executeQuery( QuerySchema& query, uint cursor_options = 0 );
 
@@ -437,12 +430,12 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 so \a sql should not include one already.
 		 \return true if query was successfully executed and first record has been found,
 		 false on data retrieving failure, and cancelled if there's no single record available. */
-		tristate querySingleRecord(const QString& sql, RowData &data, bool addLimitTo1 = true);
+		tristate querySingleRecord(const QString& sql, RecordData &data, bool addLimitTo1 = true);
 
-		/*! Like tristate querySingleRecord(const QString& sql, RowData &data)
+		/*! Like tristate querySingleRecord(const QString& sql, RecordData &data)
 		 but uses QuerySchema object. 
 		 If \a addLimitTo1 is true (the default), adds a LIMIT clause to the query. */
-		tristate querySingleRecord(QuerySchema& query, RowData &data, bool addLimitTo1 = true);
+		tristate querySingleRecord(QuerySchema& query, RecordData &data, bool addLimitTo1 = true);
 
 		/*! Executes \a sql query and stores first record's field's (number \a column) string value 
 		 inside \a value. For efficiency it's recommended that a query defined by \a sql
@@ -512,9 +505,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		#undef H_INS_REC
 		#undef A
 		
-		bool insertRecord(TableSchema &tableSchema, Q3ValueList<QVariant>& values);
+		bool insertRecord(TableSchema &tableSchema, const QList<QVariant>& values);
 		
-		bool insertRecord(FieldList& fields, Q3ValueList<QVariant>& values);
+		bool insertRecord(FieldList& fields, const QList<QVariant>& values);
 
 		/*! Creates table defined by \a tableSchema.
 		 Schema information is also added into kexi system tables, for later reuse.
@@ -586,9 +579,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! \return first field from \a fieldlist that has system name, 
 		 null if there are no such field.
-		 For checking Driver::isSystemFieldName() is used, so this check can 
+		 For checking, Driver::isSystemFieldName() is used, so this check can 
 		 be driver-dependent. */
-		Field* findSystemFieldName(FieldList *fieldlist);
+		Field* findSystemFieldName(const FieldList& fieldlist);
 
 		/*! \return name of any (e.g. first found) database for this connection.
 		 This method does not close or open this connection. The method can be used
@@ -690,18 +683,18 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return "SELECT ..." statement's string needed for executing query 
 		 defined by \a querySchema and \a params. */
 		QString selectStatement( QuerySchema& querySchema, 
-			const Q3ValueList<QVariant>& params, 
+			const QList<QVariant>& params, 
 			const SelectStatementOptions& options = SelectStatementOptions() ) const;
 
 		/*! \overload QString selectStatement( QuerySchema& querySchema, 
-			Q3ValueList<QVariant> params = Q3ValueList<QVariant>(), 
+			QList<QVariant> params = QList<QVariant>(), 
 			const SelectStatementOptions& options = SelectStatementOptions() ) const;
 		 \return "SELECT ..." statement's string needed for executing query 
 		 defined by \a querySchema. */
 		inline QString selectStatement( QuerySchema& querySchema, 
 			const SelectStatementOptions& options = SelectStatementOptions() ) const
 		{
-			return selectStatement(querySchema, Q3ValueList<QVariant>(), options);
+			return selectStatement(querySchema, QList<QVariant>(), options);
 		}
 
 		/*! Stores object's schema data (id, name, caption, help text)
@@ -716,7 +709,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool storeObjectSchemaData( SchemaData &sdata, bool newObject );
 
 		/*! Added for convenience. 
-		 \sa setupObjectSchemaData( const KexiDB::RowData &data, SchemaData &sdata ).
+		 \sa setupObjectSchemaData( const KexiDB::RecordData &data, SchemaData &sdata ).
 		 \return true on success, false on failure and cancelled when such object couldn't */
 		tristate loadObjectSchemaData( int objectID, SchemaData &sdata );
 
@@ -752,6 +745,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			public:
 				TableSchemaChangeListenerInterface() {}
 				virtual ~TableSchemaChangeListenerInterface() {}
+
 				/*! Closes listening object so it will be deleted and thus no longer use 
 				 a conflicting table schema. */
 				virtual tristate closeListener() = 0;
@@ -771,21 +765,10 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		void unregisterForTablesSchemaChanges(TableSchemaChangeListenerInterface& listener);
 
-		Q3PtrList<Connection::TableSchemaChangeListenerInterface>*
+		QSet<Connection::TableSchemaChangeListenerInterface*>*
 			tableSchemaChangeListeners(TableSchema& tableSchema) const;
 
 		tristate closeAllTableSchemaChangeListeners(TableSchema& tableSchema);
-
-		/*! @internal Removes \a tableSchema from internal structures and 
-		 destroys it. Does not make any change at the backend. */
-		void removeTableSchemaInternal(KexiDB::TableSchema *tableSchema);
-
-		/*! @internal. Inserts internal table to Connection's structures, so it can be found by name.
-		 This method is used for example in KexiProject to insert information about "kexi__blobs" 
-		 table schema. Use createTable() to physically create table. After createTable() 
-		 calling insertInternalTableSchema() is not required.
-		 Also used internally by newKexiDBSystemTableSchema(const QString& tsname) */
-		void insertInternalTableSchema(TableSchema *tableSchema);
 
 //! @todo move this somewhere to low level class (MIGRATION?)
 		/*! LOW LEVEL METHOD. For reimplemenation: returns true if table 
@@ -840,7 +823,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			Moved to public for KexiMigrate
 			@todo fix this after refatoring
 		*/
-		bool setupObjectSchemaData( const RowData &data, SchemaData &sdata );
+		bool setupObjectSchemaData( const RecordData &data, SchemaData &sdata );
 
 		/*! \return a new field table schema for a table retrieved from \a data.
 		 Used internally by tableSchema(). 
@@ -848,7 +831,14 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 			Moved to public for KexiMigrate
 			@todo fix this after refatoring
 		*/
-		KexiDB::Field* setupField( const RowData &data );
+		KexiDB::Field* setupField( const RecordData &data );
+
+		/*! @internal. Inserts internal table to Connection's structures, so it can be found by name.
+		 This method is used for example in KexiProject to insert information about "kexi__blobs" 
+		 table schema. Use createTable() to physically create table. After createTable() 
+		 calling insertInternalTable() is not required.
+		 Also used internally by Connection::newKexiDBSystemTableSchema(const QString&) */
+		void insertInternalTable(TableSchema& tableSchema);
 
 	protected:
 		/*! Used by Driver */
@@ -1082,18 +1072,18 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! \return a full table schema for a table retrieved using 'kexi__*' system tables. 
 		 Used internally by tableSchema() methods. */
-		TableSchema* setupTableSchema( const RowData &data );
+		TableSchema* setupTableSchema( const RecordData &data );
 
 		/*! \return a full query schema for a query using 'kexi__*' system tables. 
 		 Used internally by querySchema() methods. */
-		QuerySchema* setupQuerySchema( const RowData &data );
+		QuerySchema* setupQuerySchema( const RecordData &data );
 
 		/*! Update a row. */
-		bool updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool useROWID = false);
+		bool updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& buf, bool useROWID = false);
 		/*! Insert a new row. */
-		bool insertRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool getROWID = false);
+		bool insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& buf, bool getROWID = false);
 		/*! Delete an existing row. */
-		bool deleteRow(QuerySchema &query, RowData& data, bool useROWID = false);
+		bool deleteRow(QuerySchema &query, RecordData& data, bool useROWID = false);
 		/*! Delete all existing rows. */
 		bool deleteAllRows(QuerySchema &query);
 
@@ -1139,7 +1129,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! @internal used by querySingleRecord() methods.
 		 Note: "LIMIT 1" is appended to \a sql statement if \a addLimitTo1 is true (the default). */
-		tristate querySingleRecordInternal(RowData &data, const QString* sql, 
+		tristate querySingleRecordInternal(RecordData &data, const QString* sql, 
 			QuerySchema* query, bool addLimitTo1 = true);
 
 		/*! @internal used by Driver::createConnection(). 

@@ -27,10 +27,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-//Added by qt3to4:
-#include <Q3CString>
 using namespace KexiDB;
-
 
 unsigned int pqxxSqlCursor_trans_num=0; //!< debug helper
 
@@ -86,7 +83,7 @@ bool pqxxSqlCursor::drv_open()
 		return false;
 	}
 		
-	Q3CString cur_name;
+	QByteArray cur_name;
 	//Set up a transaction
 	try
 	{
@@ -108,7 +105,9 @@ bool pqxxSqlCursor::drv_open()
 //		KexiDBDrvDbg << "pqxxSqlCursor::drv_open: trans. committed: " << cur_name <<endl;
 
 		//We should now be placed before the first row, if any
-		m_fieldCount = m_res->columns() - (m_containsROWIDInfo ? 1 : 0);
+		m_fieldsToStoreInRow = m_res->columns();
+		m_fieldCount = m_fieldsToStoreInRow - (m_containsROWIDInfo ? 1 : 0);
+
 //js		m_opened=true;
 		m_afterLast=false;
 		m_records_in_buf = m_res->size();
@@ -211,8 +210,7 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 		return QVariant();
 	}
 
-	if (pos>=(m_fieldCount+(m_containsROWIDInfo ? 1 : 0)))
-	{
+	if (pos>=m_fieldsToStoreInRow) {
 //		KexiDBDrvWarn << "pqxxSqlCursor::value - ERROR: requested position is greater than the number of fields" << endl;
 		return QVariant();
 	}
@@ -281,20 +279,18 @@ const char** pqxxSqlCursor::rowData() const
 
 //==================================================================================
 //Store the current record in [data]
-void pqxxSqlCursor::storeCurrentRow(RowData &data) const
+bool pqxxSqlCursor::drv_storeCurrentRow(RecordData &data) const
 {
 //	KexiDBDrvDbg << "pqxxSqlCursor::storeCurrentRow: POSITION IS " << (long)m_at<< endl;
 
 	if (m_res->size()<=0)
-		return;
+		return false;
 
-	const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
-	data.resize(realCount);
+//	const uint realCount = m_fieldCount + (m_containsROWIDInfo ? 1 : 0);
+//not needed	data.resize(realCount);
 
-	for( uint i=0; i<realCount; i++)
-	{
+	for (uint i=0; i<m_fieldsToStoreInRow; i++)
 		data[i] = pValue(i);
-	}
 }
 
 //==================================================================================

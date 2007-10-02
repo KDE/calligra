@@ -147,12 +147,16 @@ void KexiSmallToolButton::update(const QString& text, const QIcon& icon, bool ti
 		QFont f(KGlobalSettings::toolBarFont());
 		f.setPixelSize(KexiUtils::smallFont().pixelSize());
 		width += QFontMetrics(f).width(text+" ");
-		QToolButton::setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+		if (toolButtonStyle() != Qt::ToolButtonTextOnly)
+			QToolButton::setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 		QToolButton::setText(text);
 		if (tipToo)
 			setToolTip(text);
 	}
-	if (!icon.isNull()) {
+	if (toolButtonStyle() == Qt::ToolButtonTextOnly) {
+		QToolButton::setIcon(QIcon());
+	}
+	else if (!icon.isNull()) {
 		width += IconSize(KIconLoader::Small);
 		QToolButton::setIcon(icon);
 	}

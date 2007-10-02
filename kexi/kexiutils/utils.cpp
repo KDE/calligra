@@ -35,7 +35,6 @@
 #include <kcursor.h>
 #include <kapplication.h>
 #include <kiconeffect.h>
-#include <kpixmapeffect.h>
 #include <kiconloader.h>
 #include <KGlobalSettings>
 
@@ -57,6 +56,7 @@ void DelayedCursorHandler::stop() {
 	QApplication::restoreOverrideCursor();
 }
 void DelayedCursorHandler::show() {
+	QApplication::restoreOverrideCursor();
 	QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 }
 
@@ -89,7 +89,8 @@ WaitCursorRemover::WaitCursorRemover()
 
 WaitCursorRemover::~WaitCursorRemover()
 {
-	_delayedCursorHandler->start(true);
+	if (m_reactivateCursor)
+		_delayedCursorHandler->start(true);
 }
 
 //--------------------------------------------------------------------------------
@@ -305,13 +306,16 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 
 QIcon KexiUtils::colorizeIconToTextColor(const QPixmap& icon, const QPalette& palette)
 {
+#ifdef __GNUC__
+#warning KexiUtils::colorizeIconToTextColor OK?
+#else
+#pragma WARNING(port KexiUtils::colorizeIconToTextColor OK?)
+#endif
 	QPixmap pm(
 		KIconEffect().apply( icon, KIconEffect::Colorize, 1.0f,
 			palette.color(QPalette::Active, QPalette::ButtonText), false ) );
-
-	return QIcon(
-		KPixmapEffect::fade( pm, 0.33, 
-			palette.color(QPalette::Active, QPalette::ButtonText) ) );
+	KIconEffect::semiTransparent( pm );
+	return QIcon(pm);
 }
 
 QPixmap KexiUtils::emptyIcon(KIconLoader::Group iconGroup)
@@ -597,6 +601,55 @@ QFont KexiUtils::smallFont(QWidget *init)
 		_smallFont->setPixelSize( size );
 	}
 	return *_smallFont;
+}
+
+//---------
+
+//! @internal
+class StaticSetOfStrings::Private {
+	public:
+		Private() : array(0), set(0) {}
+		~Private() { delete set; }
+	const char** array;
+	QSet<QByteArray> *set;
+};
+
+StaticSetOfStrings::StaticSetOfStrings()
+ : d( new Private )
+{
+}
+
+StaticSetOfStrings::StaticSetOfStrings(const char* array[])
+ : d( new Private )
+{
+	setStrings(array);
+}
+
+StaticSetOfStrings::~StaticSetOfStrings()
+{
+	delete d;
+}
+
+void StaticSetOfStrings::setStrings(const char* array[])
+{
+	delete d->set;
+	d->set = 0;
+	d->array = array;
+}
+
+bool StaticSetOfStrings::isEmpty() const
+{
+	return d->array == 0;
+}
+
+bool StaticSetOfStrings::contains( const QByteArray& string ) const
+{
+	if (!d->set) {
+		d->set = new QSet<QByteArray>();
+		for (const char ** p = d->array;*p;p++)
+			d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)+1));
+	}
+	return d->set->contains(string);
 }
 
 #include "utils_p.moc"

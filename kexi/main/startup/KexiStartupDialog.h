@@ -117,7 +117,7 @@ class KEXIMAIN_EXPORT KexiStartupDialog : public KPageDialog
 	
 		/*! \return "autoopen" objects defined for selected template. 
 		Only makes sense if template was used. */
-		Q3ValueList<KexiProjectData::ObjectInfo> autoopenObjects() const;
+		const KexiProjectData::AutoOpenObjects& autoopenObjects() const;
 	
 		/*! \return a pointer to selected Kexi connection data.
 			(if "Open Existing" tab was selected and this connection data was clicked).

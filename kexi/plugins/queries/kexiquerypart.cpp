@@ -34,8 +34,6 @@
 #include "kexiqueryview.h"
 #include "kexiquerydesignerguieditor.h"
 #include "kexiquerydesignersql.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 //------------------------------------------------
 
@@ -89,8 +87,8 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
 			view, SLOT(slotNewItemStored(KexiPart::Item&)));
 		connect(prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 			view, SLOT(slotItemRemoved(const KexiPart::Item&)));
-		connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const Q3CString&)),
-			view, SLOT(slotItemRenamed(const KexiPart::Item&, const Q3CString&)));
+		connect(prj, SIGNAL(itemRenamed(const KexiPart::Item&, const QString&)),
+			view, SLOT(slotItemRenamed(const KexiPart::Item&, const QString&)));
 
 //		connect(KexiMainWindowIface::global()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
 //			view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
@@ -252,10 +250,8 @@ void KexiQueryPart::TempData::registerTableSchemaChanges(KexiDB::QuerySchema *q)
 {
 	if (!q)
 		return;
-	for (KexiDB::TableSchema::ListIterator it(*q->tables());
-		it.current(); ++it)
-	{
-		conn->registerForTableSchemaChanges(*this, *it.current());
+	foreach (KexiDB::TableSchema* table, *q->tables()) {
+		conn->registerForTableSchemaChanges(*this, *table);
 	}
 }
 

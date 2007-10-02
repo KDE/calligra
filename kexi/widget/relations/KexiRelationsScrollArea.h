@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
-   Copyright (C) 2003-2004, 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,24 +18,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIRELATIONVIEW_H
-#define KEXIRELATIONVIEW_H
+#ifndef KexiRelationsScrollArea_H
+#define KexiRelationsScrollArea_H
 
-#include <qpointer.h>
-#include <q3scrollview.h>
-#include <q3ptrlist.h>
-#include <q3dict.h>
-//Added by qt3to4:
+#include <QScrollArea>
+#include <QSet>
+#include <QMutableSetIterator>
+#include <QHash>
+#include <QMutableHashIterator>
 #include <QMouseEvent>
-#include <Q3Frame>
 #include <QKeyEvent>
 
 #include <kexidb/tableschema.h>
 
-#include "kexirelationviewconnection.h"
-#include "kexirelationviewtable.h"
-
-class Q3Frame;
+#include "KexiRelationsConnection.h"
+#include "KexiRelationsTableContainer.h"
 
 class KexiRelationViewTable;
 
@@ -44,11 +41,14 @@ namespace KexiDB
 	class Connection;
 }
 
-typedef Q3Dict<KexiRelationViewTableContainer> TablesDict;
-typedef Q3DictIterator<KexiRelationViewTableContainer> TablesDictIterator;
-typedef Q3PtrList<KexiRelationViewConnection> ConnectionList;
-typedef Q3PtrListIterator<KexiRelationViewConnection> ConnectionListIterator;
+typedef QHash<QString, KexiRelationsTableContainer*> TablesHash;
+typedef QMutableHashIterator<QString, KexiRelationsTableContainer*> TablesHashMutableIterator;
+typedef QHash<QString, KexiRelationsTableContainer*>::ConstIterator TablesHashConstIterator;
+typedef QSet<KexiRelationsConnection*> ConnectionSet;
+typedef QMutableSetIterator<KexiRelationsConnection*> ConnectionSetMutableIterator;
+typedef QSet<KexiRelationsConnection*>::ConstIterator ConnectionSetIterator;
 
+//! A data structure describing connection
 struct SourceConnection
 {
 	QString masterTable;
@@ -57,7 +57,7 @@ struct SourceConnection
 	QString detailsField;
 };
 
-/*! @short provides a view for displaying relations between database tables.
+/*! @short Provides a view for displaying relations between database tables.
 
  It is currently used for two purposes:
  - displaying global database relations
@@ -66,41 +66,45 @@ struct SourceConnection
  The class is for displaying only - retrieving data and updating data on the backend side is implemented 
  in KexiRelationWidget, and more specifically in: Kexi Relation Part and Kexi Query Part.
 */
-class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public Q3ScrollView
+class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
 {
 	Q_OBJECT
 
 	public:
-		KexiRelationView(QWidget *parent, const char *name=0);
-		virtual ~KexiRelationView();
+		KexiRelationsScrollArea(QWidget *parent);
+		virtual ~KexiRelationsScrollArea();
 
-		//! \return a dictionary of added tables
-		TablesDict* tables() { return &m_tables; }
+		//! \return a hash of added tables
+		TablesHash* tables() const;
 
 		/*! Adds a table \a t to the area. This changes only visual representation.
 		 If \a rect is valid, table widget geometry will be initialized.
 		 \return added table container or 0 on failure.
 		 */
-		KexiRelationViewTableContainer* addTableContainer(KexiDB::TableSchema *t, 
+		KexiRelationsTableContainer* addTableContainer(KexiDB::TableSchema *t, 
 			const QRect &rect = QRect());
 
 		/*! \return table container for table \a t. */
-		KexiRelationViewTableContainer * tableContainer(KexiDB::TableSchema *t) const;
+		KexiRelationsTableContainer * tableContainer(KexiDB::TableSchema *t) const;
 
-		//! Adds a connection \a con to the area. This changes only visual representation.
+		//! Adds a connection \a _conn to the area. This changes only visual representation.
 		void addConnection(const SourceConnection& _conn /*, bool interactive=true*/);
 
 		void setReadOnly(bool);
 
-		inline KexiRelationViewConnection* selectedConnection() const { return m_selectedConnection; }
+		KexiRelationsConnection* selectedConnection() const;
 
-		inline KexiRelationViewTableContainer* focusedTableView() const { return m_focusedTableView; }
+		KexiRelationsTableContainer* focusedTableContainer() const;
 
 		virtual QSize sizeHint() const;
 
-		const ConnectionList* connections() const { return &m_connectionViews; }
+		const ConnectionSet* connections() const;
 
-//		KexiRelationViewTableContainer* containerForTable(KexiDB::TableSchema* tableSchema);
+		//! @internal Handles mouse press event for area widget
+		void handleMousePressEvent(QMouseEvent *ev);
+
+		//! @internal Handles paint event for area widget
+		void handlePaintEvent( QPaintEvent *event );
 
 	signals:
 		void tableContextMenuRequest( const QPoint& pos );
@@ -110,8 +114,8 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public Q3ScrollView
 		void connectionViewGotFocus();
 		void emptyAreaGotFocus();
 		void tableHidden(KexiDB::TableSchema& t);
-		void tablePositionChanged(KexiRelationViewTableContainer*);
-		void aboutConnectionRemove(KexiRelationViewConnection*);
+		void tablePositionChanged(KexiRelationsTableContainer*);
+		void aboutConnectionRemove(KexiRelationsConnection*);
 
 	public slots:
 		//! Clears current selection - table/query or connection
@@ -127,42 +131,40 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationView : public Q3ScrollView
 		/*! Hides all tables except \a tables. */
 		void hideAllTablesExcept( KexiDB::TableSchema::List* tables );
 
-		void slotTableScrolling(const QString&);
+//unused		void slotTableScrolling(const QString&);
 
 		//! removes selected table or connection
 		void removeSelectedObject();
 
-
 	protected slots:
-		void containerMoved(KexiRelationViewTableContainer *c);
+		void containerMoved(KexiRelationsTableContainer *c);
 		void slotListUpdate(QObject *s);
 		void slotTableViewEndDrag();
 		void slotTableViewGotFocus();
+		void slotAutoScrollTimeout();
 
 	protected:
-//		/*! executes popup menu at \a pos, or, 
-//		 if \a pos not specified: at center of selected table view (if any selected),
-//		 or at center point of the relations view. */
-//		void executePopup( QPoint pos = QPoint(-1,-1) );
-
-		void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
+		//! Reimplemented to draw connections.
+	//	virtual void paintEvent( QPaintEvent *event );
+//Qt 4		void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void contentsMousePressEvent(QMouseEvent *ev);
 		virtual void keyPressEvent(QKeyEvent *ev);
 
-		void recalculateSize(int width, int height);
-		void stretchExpandSize();
-//		void		invalidateActions();
-//		void clearTableSelection();
-//		void clearConnSelection();
+//unused		void recalculateSize(int width, int height);
+//unused		void stretchExpandSize();
 
-		void hideTable(KexiRelationViewTableContainer* tableView);
-		void removeConnection(KexiRelationViewConnection *conn);
+		void hideTable(KexiRelationsTableContainer* tableView);
+		void removeConnection(KexiRelationsConnection *conn);
 
-		TablesDict m_tables;
-		bool m_readOnly;
-		ConnectionList m_connectionViews;
-		KexiRelationViewConnection* m_selectedConnection;
-		QPointer<KexiRelationViewTableContainer> m_focusedTableView;
+		//! Removes current value of iterator \a it, also deleted the container object.
+		void hideTableInternal(TablesHashMutableIterator& it);
+
+		//! Removes current value of iterator \a it, also deleted the connection object.
+		void removeConnectionInternal(ConnectionSetMutableIterator& it);
+
+	private:
+		class Private;
+		Private* const d;
 };
 
 #endif

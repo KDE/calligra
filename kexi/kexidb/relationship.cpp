@@ -34,7 +34,7 @@ Relationship::Relationship()
 	, m_masterIndexOwned(false)
 	, m_detailsIndexOwned(false)
 {
-	m_pairs.setAutoDelete(true);
+//Qt 4	m_pairs.setAutoDelete(true);
 }
 
 Relationship::Relationship(IndexSchema* masterIndex, IndexSchema* detailsIndex)
@@ -43,7 +43,7 @@ Relationship::Relationship(IndexSchema* masterIndex, IndexSchema* detailsIndex)
 	, m_masterIndexOwned(false)
 	, m_detailsIndexOwned(false)
 {
-	m_pairs.setAutoDelete(true);
+//Qt 4	m_pairs.setAutoDelete(true);
 	setIndices(masterIndex, detailsIndex);
 }
 
@@ -53,12 +53,13 @@ Relationship::Relationship( QuerySchema *query, Field *field1, Field *field2 )
 	, m_masterIndexOwned(false)
 	, m_detailsIndexOwned(false)
 {
-	m_pairs.setAutoDelete(true);
+//Qt 4	m_pairs.setAutoDelete(true);
 	createIndices( query, field1, field2 );
 }
 
 Relationship::~Relationship()
 {
+	qDeleteAll(m_pairs);
 	if (m_masterIndexOwned)
 		delete m_masterIndex;
 	if (m_detailsIndexOwned)
@@ -156,35 +157,47 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 {
 	m_masterIndex = 0;
 	m_detailsIndex = 0;
+	qDeleteAll(m_pairs);
 	m_pairs.clear();
 	if (!masterIndex || !detailsIndex || !masterIndex->table() || !detailsIndex->table() 
 	|| masterIndex->table()==detailsIndex->table() || masterIndex->fieldCount()!=detailsIndex->fieldCount())
 		return;
-	Field::ListIterator it1(*masterIndex->fields());
-	Field::ListIterator it2(*detailsIndex->fields());
-	for (;it1.current() && it1.current(); ++it1, ++it2) {
-		Field *f1 = it1.current(); //masterIndex->fields()->first();
-		Field *f2 = it2.current(); //detailsIndex->fields()->first();
+	const Field::List* masterIndexFields = masterIndex->fields();
+	const Field::List* detailsIndexFields = detailsIndex->fields();
+	Field::ListIterator masterIt(masterIndexFields->constBegin());
+	Field::ListIterator detailsIt(detailsIndexFields->constBegin());
+	for (;masterIt!=masterIndexFields->constEnd() && detailsIt!=detailsIndexFields->constEnd(); 
+		++masterIt, ++detailsIt)
+	{
+		Field *masterField = *masterIt;
+		Field *detailsField = *detailsIt;
 	//	while (f1 && f2) {
-		if (f1->type()!=f1->type() && f1->isIntegerType()!=f2->isIntegerType() && f1->isTextType()!=f2->isTextType()) {
+		if (masterField->type()!=detailsField->type()
+			&& masterField->isIntegerType()!=detailsField->isIntegerType()
+			&& masterField->isTextType()!=detailsField->isTextType())
+		{
 			KexiDBWarn << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal field types: "
-			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
-			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
+			<<Driver::defaultSQLTypeName(masterField->type())<<" "<<masterField->name()<<", "
+			<<Driver::defaultSQLTypeName(detailsField->type())<<" "<<detailsField->name() <<endl;
+			qDeleteAll(m_pairs);
 			m_pairs.clear();
 			return;
 		}
 #if 0 //too STRICT!
-		if ((f1->isUnsigned() && !f2->isUnsigned()) || (!f1->isUnsigned() && f1->isUnsigned())) {
+		if ((masterField->isUnsigned() && !detailsField->isUnsigned())
+			|| (!masterField->isUnsigned() && detailsField->isUnsigned()))
+		{
 			KexiDBWarn << "Relationship::setIndices(INDEX on '"<<masterIndex->table()->name()
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal signedness of field types: "
-			<<Driver::defaultSQLTypeName(f1->type())<<" "<<f1->name()<<", "
-			<<Driver::defaultSQLTypeName(f2->type())<<" "<<f2->name() <<endl;
+			<<Driver::defaultSQLTypeName(masterField->type())<<" "<<masterField->name()<<", "
+			<<Driver::defaultSQLTypeName(detailsField->type())<<" "<<detailsField->name() <<endl;
+			qDeleteAll(m_pairs);
 			m_pairs.clear();
 			return;
 		}
 #endif
-		m_pairs.append( new Field::Pair(f1,f2) );
+		m_pairs.append( new Field::Pair(masterField, detailsField) );
 	}
 	//ok: update information
 	if (m_masterIndex) {//detach yourself
@@ -198,4 +211,3 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 	m_masterIndex->attachRelationship(this, ownedByMaster);
 	m_detailsIndex->attachRelationship(this, ownedByMaster);
 }
-

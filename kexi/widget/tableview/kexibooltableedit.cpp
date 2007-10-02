@@ -103,7 +103,7 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool focused, const QVariant
 		int s = qMax(h - 5, 12);
 		s = qMin( h-3, s );
 		s = qMin( w-3, s );//avoid too large box
-		QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s, s);
+		QRect r( qMax( w/2 - s/2, 0 ) , h/2 - s/2 /*- 1*/, s - 1, s - 1);
 //already set ouotside:		p->setPen(QPen(colorGroup().text(), 1));
 		p->drawRect(r);
 		if (val.isNull()) { // && !field()->isNotNull()) {
@@ -111,7 +111,7 @@ void KexiBoolTableEdit::setupContents( QPainter *p, bool focused, const QVariant
 		}
 		else if (val.toBool()) {
 			p->drawLine(r.x(), r.y(), r.right(), r.bottom());
-			p->drawLine(r.x(), r.bottom(), r.right(), r.y());
+			p->drawLine(r.x(), r.bottom() + 1, r.right(), r.y() + 1);
 		}
 	}
 }
@@ -165,7 +165,7 @@ void KexiBoolTableEdit::handleCopyAction(const QVariant& value, const QVariant& 
 		qApp->clipboard()->setText(QString());
 }
 
-int KexiBoolTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
+int KexiBoolTableEdit::widthForValue( const QVariant &val, const QFontMetrics &fm )
 {
 	Q_UNUSED(fm);
 	return val.value<QPixmap>().width();

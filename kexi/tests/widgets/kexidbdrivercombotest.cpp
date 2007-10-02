@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
   // Look for installed database drivers
   KexiDB::DriverManager manager;
-  KexiDB::Driver::InfoMap drvs = manager.driversInfo();
+  KexiDB::Driver::InfoHash drvs = manager.driversInfo();
 
   // Set up a combo box and a quit widget in a new container
   QWidget* vbox = new QWidget();

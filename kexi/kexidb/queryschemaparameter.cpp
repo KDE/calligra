@@ -51,22 +51,23 @@ void KexiDB::debug(const QuerySchemaParameterList& list)
 class QuerySchemaParameterValueListIterator::Private
 {
 	public:
-		Private(Driver& aDriver, const Q3ValueList<QVariant>& aParams)
+		Private(Driver& aDriver, const QList<QVariant>& aParams)
 		 : driver(&aDriver)
 		 , params(aParams)
 		{
 			//move to last item, as the order is reversed due to parser's internals
-			paramsIt = params.fromLast(); //constBegin();
+			paramsIt = params.constEnd(); //fromLast();
+			--paramsIt;
 			paramsItPosition = params.count();
 		}
 		QPointer<Driver> driver;
-		const Q3ValueList<QVariant> params;
-		Q3ValueList<QVariant>::ConstIterator paramsIt;
+		const QList<QVariant> params;
+		QList<QVariant>::ConstIterator paramsIt;
 		uint paramsItPosition;
 };
 
 QuerySchemaParameterValueListIterator::QuerySchemaParameterValueListIterator(
-	Driver& driver, const Q3ValueList<QVariant>& params)
+	Driver& driver, const QList<QVariant>& params)
  : d( new Private(driver, params) )
 {
 }

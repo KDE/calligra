@@ -28,10 +28,8 @@
 
 #include <kdebug.h>
 #include "global.h"
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
-#include <Q3PtrList>
+#include <QList>
+#include <QByteArray>
 
 namespace KexiDB {
 
@@ -70,8 +68,8 @@ class QuerySchemaParameterValueListIterator;
 class KEXI_DB_EXPORT BaseExpr
 {
 public:
-	typedef Q3PtrList<BaseExpr> List;
-	typedef Q3PtrListIterator<BaseExpr> ListIterator;
+	typedef QList<BaseExpr*> List;
+	typedef QList<BaseExpr*>::ConstIterator ListIterator;
 
 	BaseExpr(int token);
 	virtual ~BaseExpr();
@@ -303,8 +301,8 @@ public:
 	virtual void getQueryParameters(QuerySchemaParameterList& params);
 	virtual bool validate(ParseInfo& parseInfo);
 
-	static Q3ValueList<Q3CString> builtInAggregates();
-	static bool isBuiltInAggregate(const Q3CString& fname);
+	static QList<QByteArray> builtInAggregates();
+	static bool isBuiltInAggregate(const QByteArray& fname);
 
 	QString name;
 	NArgExpr* args;

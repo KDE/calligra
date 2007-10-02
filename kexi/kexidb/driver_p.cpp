@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-    Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+    Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
     Copyright (C) 2004 Martin Ellis <martin.ellis@kdemail.net>
 
    This program is free software; you can redistribute it and/or
@@ -18,30 +18,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kdebug.h>
-#include <q3dict.h>
-#include <q3valuevector.h>
+#include <KDebug>
 #include "driver_p.h"
 
 using namespace KexiDB;
-
-namespace KexiDB {
-	Q3AsciiDict<bool>* DriverPrivate::kexiSQLDict = 0;
-	
-	/*! QAsciiDict keys need to be a pointer to *something*.  Used
-	    for SQL keyword dictionaries
-	*/
-  static bool _dummy;
-}
-
 
 DriverPrivate::DriverPrivate()
  : isFileDriver(false)
  , isDBOpenedAfterCreate(false)
  , features(Driver::NoFeatures)
 {
-	kexiSQLDict = 0;
-	driverSQLDict = 0;
 	adminTools = 0;
 
 	properties["client_library_version"] = "";
@@ -92,33 +78,10 @@ void DriverPrivate::initInternalProperties()
 
 DriverPrivate::~DriverPrivate()
 {
-	delete driverSQLDict;
 	delete adminTools;
 }
 
-
-void DriverPrivate::initKexiKeywords() {
-	// QAsciiDict constructor args:
-	//   size (preferable prime)
-	//   case sensitive flag (false)
-	//   copy strings (false)
-	if(!kexiSQLDict) {
-		kexiSQLDict = new Q3AsciiDict<bool>(79, false, false);
-		initKeywords(kexiSQLKeywords, *kexiSQLDict);
-	}
-}
-
-void DriverPrivate::initDriverKeywords(const char* keywords[], int hashSize) {
-	driverSQLDict = new Q3AsciiDict<bool>(hashSize, false, false);
-	initKeywords(keywords, *driverSQLDict);
-}
-
-void DriverPrivate::initKeywords(const char* keywords[], 
-    Q3AsciiDict<bool>& dict) {
-	for(int i = 0; keywords[i] != 0; i++) {
-		dict.insert(keywords[i], &_dummy);
-	}
-}
+//--------------------------
 
 AdminTools::Private::Private()
 {

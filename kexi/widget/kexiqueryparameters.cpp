@@ -34,13 +34,13 @@
 #endif
 
 //static
-Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent, 
+QList<QVariant> KexiQueryParameters::getParameters(QWidget *parent, 
 	const KexiDB::Driver &driver, KexiDB::QuerySchema& querySchema, bool &ok)
 {
 	Q_UNUSED(driver);
 	ok = false;
 	const KexiDB::QuerySchemaParameterList params( querySchema.parameters() );
-	Q3ValueList<QVariant> values;
+	QList<QVariant> values;
 	const QString caption( i18nc("Enter Query Parameter Value", "Enter Parameter Value") );
 	for(KexiDB::QuerySchemaParameterListConstIterator it = params.constBegin();
 		it!=params.constEnd(); ++it)
@@ -57,7 +57,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			const int result = KInputDialog::getInteger(
 				caption, (*it).message, 0, minValue, maxValue, 1/*step*/, 10/*base*/, &ok, parent);
 			if (!ok)
-				return Q3ValueList<QVariant>(); //cancelled
+				return QList<QVariant>(); //cancelled
 			values.append(result);
 			break;
 		}
@@ -67,7 +67,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			const QString result = KInputDialog::getItem(
 				caption, (*it).message, list, 0/*current*/, false /*!editable*/, &ok, parent);
 			if (!ok || result.isEmpty())
-				return Q3ValueList<QVariant>(); //cancelled
+				return QList<QVariant>(); //cancelled
 			values.append( QVariant( result==list.first(), 1 ) );
 			break;
 		}
@@ -84,7 +84,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 //! @todo add validator
 				0/*validator*/, df.inputMask() );
 			if (!ok)
-				return Q3ValueList<QVariant>(); //cancelled
+				return QList<QVariant>(); //cancelled
 			values.append( df.stringToDate(result) );
 #endif
 			break;
@@ -103,7 +103,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 //! @todo add validator
 				0/*validator*/, dateTimeInputMask(df, tf) );
 			if (!ok)
-				return Q3ValueList<QVariant>(); //cancelled
+				return QList<QVariant>(); //cancelled
 			values.append( stringToDateTime(df, tf, result) );
 #endif
 			break;
@@ -121,7 +121,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 //! @todo add validator
 				0/*validator*/, tf.inputMask() );
 			if (!ok)
-				return Q3ValueList<QVariant>(); //cancelled
+				return QList<QVariant>(); //cancelled
 			values.append( tf.stringToTime(result) );
 #endif
 			break;
@@ -134,12 +134,12 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 				KInputDialog::getText( caption, (*it).message, QString(),
 					&ok, parent, &validator) );
 			if (!ok || textResult.isEmpty())
-				return Q3ValueList<QVariant>(); //cancelled
+				return QList<QVariant>(); //cancelled
 //! @todo this value will be still rounded: consider storing them as a decimal type 
 //! 			(e.g. using a special qint64+decimalplace class)
 			const double result = textResult.toDouble(&ok); //this is also good for float (to avoid rounding)
 			if (!ok)
-				return Q3ValueList<QVariant>();
+				return QList<QVariant>();
 			values.append( result );
 			break;
 		}
@@ -148,7 +148,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 			const QString result = KInputDialog::getText( 
 				caption, (*it).message, QString(), &ok, parent);
 			if (!ok)
-				return Q3ValueList<QVariant>(); //cancelled
+				return QList<QVariant>(); //cancelled
 			values.append( result );
 			break;
 		}
@@ -159,7 +159,7 @@ Q3ValueList<QVariant> KexiQueryParameters::getParameters(QWidget *parent,
 		default:
 			kexiwarn << "KexiQueryParameters::getParameters() unsupported type " << KexiDB::Field::typeName((*it).type)
 			<< " for parameter \"" << (*it).message << "\" - aborting query execution!" << endl;
-			return Q3ValueList<QVariant>();
+			return QList<QVariant>();
 		}
 	}
 	ok = true;

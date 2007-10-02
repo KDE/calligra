@@ -26,9 +26,9 @@ class KexiComboBoxPopupPrivate;
 class KexiTableView;
 class KexiTableViewData;
 class KexiTableViewColumn;
-class KexiTableItem;
 namespace KexiDB {
 	class Field;
+	class RecordData;
 }
 class QEvent;
 
@@ -63,7 +63,7 @@ class KexiComboBoxPopup : public QFrame
 		virtual bool eventFilter( QObject *o, QEvent *e );
 
 	signals:
-		void rowAccepted(KexiTableItem *item, int row);
+		void rowAccepted(KexiDB::RecordData *record, int row);
 		void cancelled();
 		void hidden();
 
@@ -72,7 +72,7 @@ class KexiComboBoxPopup : public QFrame
 		void updateSize(int minWidth = 0);
 
 	protected slots:
-		void slotTVItemAccepted(KexiTableItem *item, int row, int col);
+		void slotTVItemAccepted(KexiDB::RecordData *record, int row, int col);
 		void slotDataReloadRequested();
 
 	protected:

@@ -120,7 +120,7 @@ namespace Scripting {
 
             /** Inserts a new record with the as argument passed \p values values. The
             \p obj could be a \a KexiDBFieldList or a \a KexiDBTableSchema object. */
-            bool insertRecord(QObject* obj, QVariantList values);
+            bool insertRecord(QObject* obj, const QVariantList& values);
 
             /** Creates new database with the as argument passed databasename. */
             bool createDatabase(const QString& dbname);

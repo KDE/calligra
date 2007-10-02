@@ -69,10 +69,10 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 
 		static KexiDB::DriverManagerInternal* s_self;
 
-		DriverManager::ServicesMap m_services; //! services map
-		DriverManager::ServicesMap m_services_lcase; //! as above but service names in lowercase
-		DriverManager::ServicesMap m_services_by_mimetype;
-		Driver::InfoMap m_driversInfo; //! used to store drivers information
+		DriverManager::ServicesHash m_services; //! services map
+		DriverManager::ServicesHash m_services_lcase; //! as above but service names in lowercase
+		DriverManager::ServicesHash m_services_by_mimetype;
+		Driver::InfoHash m_driversInfo; //! used to store drivers information
 		QHash<QString, KexiDB::Driver*> m_drivers;
 		ulong m_refCount;
 
@@ -80,7 +80,7 @@ class KEXI_DB_EXPORT DriverManagerInternal : public QObject, public KexiDB::Obje
 		int m_serverResultNum;
 		QString m_serverResultName;
 		//! result names for KParts::ComponentFactory::ComponentLoadingError
-		QMap<int,QString> m_componentLoadingErrors;
+		QHash<int,QString> m_componentLoadingErrors;
 
 		QStringList possibleProblems;
 

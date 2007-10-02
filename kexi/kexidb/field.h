@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,16 +22,16 @@
 #ifndef KEXIDB_FIELD_H
 #define KEXIDB_FIELD_H
 
-#include <qvariant.h>
-#include <qstring.h>
-#include <qpair.h>
-#include <q3valuevector.h>
-#include <q3ptrvector.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
+#include <QVariant>
+#include <QString>
+#include <QPair>
+#include <QVector>
 #include <QStringList>
-#include "kexidb/kexidb_export.h"
+#include <QHash>
+
+#include <kexiutils/utils.h>
+#include <kexidb/kexidb_export.h>
+
 namespace KexiDB {
 
 class TableSchema;
@@ -76,11 +76,11 @@ class BaseExpr;
 class KEXI_DB_EXPORT Field
 {
 	public:
-		typedef Q3PtrList<Field> List; //!< list of fields 
-		typedef Q3PtrVector<Field> Vector; //!< vector of fields 
-		typedef Q3PtrListIterator<Field> ListIterator; //!< iterator for list of fields 
+		typedef KexiUtils::AutodeletedList<Field*> List; //!< list of fields 
+		typedef QVector<Field*> Vector; //!< vector of fields 
+		typedef QList<Field*>::ConstIterator ListIterator; //!< iterator for list of fields 
 		typedef QPair<Field*,Field*> Pair; //!< fields pair
-		typedef Q3PtrList<Pair> PairList; //!< list of fields pair
+		typedef QList<Pair*> PairList; //!< list of fields pair
 
 		/*! Unified (most common used) types of fields. */
 		enum Type
@@ -549,10 +549,10 @@ class KEXI_DB_EXPORT Field
 
 //<TMP>
 		/*! \return the hints for enum fields. */
-		Q3ValueVector<QString> enumHints() const { return m_hints; }
+		QVector<QString> enumHints() const { return m_hints; }
 		QString enumHint(uint num) { return (num < (uint)m_hints.size()) ? m_hints.at(num) : QString(); }
 		/*! sets the hint for enum fields */
-		void setEnumHints(const Q3ValueVector<QString> &l) { m_hints = l; }
+		void setEnumHints(const QVector<QString> &l) { m_hints = l; }
 //</TMP>
 
 		/*! \return custom property \a propertyName.
@@ -564,7 +564,7 @@ class KEXI_DB_EXPORT Field
 		void setCustomProperty(const QByteArray& propertyName, const QVariant& value);
 
 		//! A data type used for handling custom properties of a field
-		typedef QMap<QByteArray,QVariant> CustomPropertiesMap;
+		typedef QHash<QByteArray,QVariant> CustomPropertiesMap;
 
 		//! \return all custom properties
 		inline const CustomPropertiesMap customProperties() const {
@@ -598,28 +598,28 @@ class KEXI_DB_EXPORT Field
 		QString m_caption;
 		QString m_desc;
 		uint m_width;
-		Q3ValueVector<QString> m_hints;
+		QVector<QString> m_hints;
 
 		KexiDB::BaseExpr *m_expr;
 		CustomPropertiesMap* m_customProperties;
 
 		//! @internal Used in m_typeNames member to handle i18n'd type names
-		class KEXI_DB_EXPORT FieldTypeNames : public Q3ValueVector<QString> {
+		class KEXI_DB_EXPORT FieldTypeNames : public QVector<QString> {
 			public:
 				FieldTypeNames();
 				void init();
-			QMap<QString,Type> str2num;
+			QHash<QString,Type> str2num;
 			QStringList names;
 			protected:
 				bool m_initialized : 1;
 		};
 
 		//! @internal Used in m_typeGroupNames member to handle i18n'd type group names
-		class KEXI_DB_EXPORT FieldTypeGroupNames : public Q3ValueVector<QString> {
+		class KEXI_DB_EXPORT FieldTypeGroupNames : public QVector<QString> {
 			public: 
 				FieldTypeGroupNames();
 				void init();
-			QMap<QString,TypeGroup> str2num;
+			QHash<QString,TypeGroup> str2num;
 			QStringList names;
 			protected:
 				bool m_initialized : 1;

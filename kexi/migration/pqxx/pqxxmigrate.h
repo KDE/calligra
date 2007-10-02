@@ -66,7 +66,7 @@ class PqxxMigrate : public KexiMigrate
 		\a data is resized to appropriate size. cancelled is returned on EOF. */
 //! @todo SQL-dependent!
 		virtual tristate drv_fetchRecordFromSQL(const QString& sqlStatement, 
-			KexiDB::RowData& data, bool &firstRecord);
+			KexiDB::RecordData& data, bool &firstRecord);
 
 		virtual bool drv_copyTable(const QString& srcTable, 
 			KexiDB::Connection *destConn, KexiDB::TableSchema* dstTable);

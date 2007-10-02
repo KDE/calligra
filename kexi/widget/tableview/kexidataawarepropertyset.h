@@ -23,14 +23,14 @@
 #include <kexi_export.h>
 #include <QPointer>
 #include <QVector>
-#include <Q3ValueList>
-#include <Q3CString>
+#include <QList>
+#include <QByteArray>
 #include <koproperty/set.h>
+#include <kexidb/RecordData.h>
 
 typedef QVector<KoProperty::Set*> SetVector;
 
 class KexiView;
-class KexiTableItem;
 class KexiTableViewData;
 class KexiDataAwareObjectInterface;
 
@@ -75,15 +75,15 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 
 		inline KoProperty::Set* at(uint row) const { return m_sets[row]; }
 
-		/*! \return a pointer to property set assigned for \a item or null if \a item has no
+		/*! \return a pointer to property set assigned for \a record or null if \a item has no
 		 property set assigned or it's not owned by assigned table view or
 		 if assigned table view has no data set. */
-		KoProperty::Set* findPropertySetForItem(KexiTableItem& item);
+		KoProperty::Set* findPropertySetForItem(KexiDB::RecordData& record);
 
 		/*! \return number of the first row containing \a propertyName property equal to \a value.
 		 This is used e.g. in the Table Designer to find a row by field name. 
 		 If no such row has been found, -1 is returned. */
-		int findRowForPropertyValue(const Q3CString& propertyName, const QVariant& value);
+		int findRowForPropertyValue(const QByteArray& propertyName, const QVariant& value);
 
 	signals:
 		/*! Emmited when row is deleted.
@@ -97,7 +97,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		void rowInserted();
 
 	public slots:
-		void removeCurrentPropertySet();
+		void eraseCurrentPropertySet();
 
 		void clear(uint minimumSize = 0);
 
@@ -110,13 +110,13 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		 delete this property set by hand but call removeCurrentPropertySet()
 		 or remove(uint) instead.
 		 Note that property set's parent (QObject::parent()) must be null
-		 or qual to this KexiDataAwarePropertySet object, otherwise this method
+		 or equal to this KexiDataAwarePropertySet object, otherwise this method
 		 will fail with a warning.
 		*/
-		void insert(uint row, KoProperty::Set* set, bool newOne = false);
+		void set(uint row, KoProperty::Set* set, bool newOne = false);
 
-		/*! Removes a property set at \a row position. */
-		void remove(uint row);
+		/*! Erases a property set at \a row position. */
+		void eraseAt(uint row);
 
 	protected slots:
 		/*! Handles table view's data source changes. */
@@ -126,10 +126,10 @@ class KEXIDATATABLE_EXPORT KexiDataAwarePropertySet : public QObject
 		void slotRowDeleted();
 
 		//! Called on multiple rows delete in a tableview.
-		void slotRowsDeleted( const Q3ValueList<int> &rows );
+		void slotRowsDeleted( const QList<int> &rows );
 
 		//! Called on \a row insertion in a tableview.
-		void slotRowInserted(KexiTableItem* item, uint row, bool repaint);
+		void slotRowInserted(KexiDB::RecordData* record, uint pos, bool repaint);
 
 		//! Called on selecting another cell in a tableview.
 		void slotCellSelected(int, int row);

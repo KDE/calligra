@@ -29,7 +29,7 @@
 #include <qtimer.h>
 #include <qpointer.h>
 #include <qlabel.h>
-#include <Q3ValueList>
+#include <QList>
 
 #include <kdebug.h>
 #include <widget/utils/kexiarrowtip.h>
@@ -39,7 +39,6 @@
 class QObject;
 class QScrollBar;
 class KMenu;
-class KexiTableItem;
 class KexiTableViewData;
 class KexiRecordMarker;
 class KexiTableViewHeader;
@@ -48,6 +47,7 @@ class KexiRecordNavigator;
 
 namespace KexiDB {
 	class RowEditBuffer;
+	class RecordData;
 }
 
 //! default column width in pixels
@@ -95,8 +95,8 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 if there are no rows. */
 		virtual int lastVisibleRow() const = 0;
 
-		/*! \return currently selected item (row data) or null. */
-		KexiTableItem *selectedItem() const { return m_currentItem; }
+		/*! \return currently selected record data or null. */
+		KexiDB::RecordData *selectedItem() const { return m_currentItem; }
 
 		/*! \return number of rows in this view. */
 		int rows() const;
@@ -242,27 +242,27 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 is cancelled before deleting.  */
 		virtual void deleteCurrentRow();
 
-		/*! Inserts one empty row above row \a row. If \a row is -1 (the default),
-		 new row is inserted above the current row (or above 1st row if there is no current).
-		 A new item becomes current if row is -1 or if row is equal currentRow().
+		/*! Inserts one empty record above \a pos. If \a pos is -1 (the default),
+		 new record is inserted above the current record (or above 1st record if there is no current).
+		 A new record becomes current if \a pos is -1 or if \a pos is equal currentRow().
 		 This method does nothing if:
 		 -inserting flag is disabled (see isInsertingEnabled())
 		 -read-only flag is set (see isReadOnly())
-		 \ return inserted row's data
+		 \return inserted record's data
 		*/
-		virtual KexiTableItem *insertEmptyRow(int row = -1);
+		virtual KexiDB::RecordData *insertEmptyRow(int pos = -1);
 
 		/*! For reimplementation: called by deleteItem(). If returns false, deleting is aborted.
 		 Default implementation just returns true. */
-		virtual bool beforeDeleteItem(KexiTableItem *item);
+		virtual bool beforeDeleteItem(KexiDB::RecordData *record);
 
-		/*! Deletes \a item. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting, 
+		/*! Deletes \a record. Used by deleteCurrentRow(). Calls beforeDeleteItem() before deleting, 
 		 to double-check if deleting is allowed. 
 		 \return true on success. */
-		bool deleteItem(KexiTableItem *item);//, bool moveCursor=true);
+		bool deleteItem(KexiDB::RecordData *record);//, bool moveCursor=true);
 
-		/*! Inserts newItem at \a row. -1 means current row. Used by insertEmptyRow(). */
-		void insertItem(KexiTableItem *newItem, int row = -1);
+		/*! Inserts newRecord at position \a pos. -1 means current record. Used by insertEmptyRow(). */
+		void insertItem(KexiDB::RecordData *newRecord, int pos = -1);
 
 		/*! Clears entire table data, its visible representation 
 		 and deletes data at database backend (if this is db-aware object). 
@@ -373,7 +373,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 In most cases delete is not accepted immediately but "row editing" mode is just started. */
 		virtual void deleteAndStartEditCurrentCell();
 
-		inline KexiTableItem *itemAt(int row) const;
+		inline KexiDB::RecordData *itemAt(int pos) const;
 
 		/*! \return column information for column number \a col. 
 		 Default implementation just returns column # col,
@@ -409,9 +409,9 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		inline KexiRecordMarker* verticalHeader() const { return m_verticalHeader; }
 
 		//! signals
-		virtual void itemChanged(KexiTableItem *, int row, int col) = 0;
-		virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue) = 0;
-		virtual void itemDeleteRequest(KexiTableItem *, int row, int col) = 0;
+		virtual void itemChanged(KexiDB::RecordData*, int row, int col) = 0;
+		virtual void itemChanged(KexiDB::RecordData*, int row, int col, QVariant oldValue) = 0;
+		virtual void itemDeleteRequest(KexiDB::RecordData*, int row, int col) = 0;
 		virtual void currentItemDeleteRequest() = 0;
 		//! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
 		virtual void newItemAppendedForAfterDeletingInSpreadSheetMode() = 0;
@@ -608,7 +608,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void reloadData();
 
 		/*! for implementation as a signal */
-		virtual void itemSelected(KexiTableItem *) = 0;
+		virtual void itemSelected(KexiDB::RecordData *) = 0;
 
 		/*! for implementation as a signal */
 		virtual void cellSelected(int col, int row) = 0;
@@ -664,22 +664,22 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		virtual void updateAfterAcceptRowEdit();
 
 		//! Handles KexiTableViewData::rowRepaintRequested() signal
-		virtual void slotRowRepaintRequested(KexiTableItem& item) { Q_UNUSED( item ); }
+		virtual void slotRowRepaintRequested(KexiDB::RecordData& record) { Q_UNUSED( record ); }
 
 		//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-		virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, 
+		virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, 
 			bool repaint);
 
 		//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
 		virtual void slotRowDeleted();
 
 		//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
-		virtual void slotRowInserted(KexiTableItem *item, bool repaint);
+		virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint);
 
 		//! Like above, not db-aware version
-		virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint);
+		virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint);
 
-		virtual void slotRowsDeleted( const Q3ValueList<int> & ) {}
+		virtual void slotRowsDeleted( const QList<int> & ) {}
 
 		//! for sanity checks (return true if m_data is present; else: outputs warning)
 		inline bool hasData() const;
@@ -713,7 +713,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		 message box or "queryYesNo" if resultInfo->allowToDiscardChanges is true. 
 		 \return code of button clicked: KMessageBox::Ok in case of "sorry" or "detailedSorry" messages
 		 and KMessageBox::Yes or KMessageBox::No in case of "queryYesNo" message. */
-		int showErrorMessageForResult(KexiDB::ResultInfo* resultInfo);
+		int showErrorMessageForResult(const KexiDB::ResultInfo& resultInfo);
 
 		/*! Prepares array of indices of visible values to search within.
 		 This is per-interface global cache. 
@@ -731,14 +731,14 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		//! cursor position
 		int m_curRow, m_curCol;
 
-		//! current data item
-		KexiTableItem *m_currentItem;
+		//! current record's data 
+		KexiDB::RecordData *m_currentItem;
 
-		//! data item's iterator
-		KexiTableViewData::Iterator *m_itemIterator;
+		//! data iterator
+		KexiTableViewData::Iterator m_itemIterator;
 
-		//! item data for inserting
-		KexiTableItem *m_insertItem;
+		//! record's data for inserting
+		KexiDB::RecordData *m_insertItem;
 
 		//! when (current or new) row is edited - changed field values are temporary stored here
 //		KexiDB::RowEditBuffer *m_rowEditBuffer; 
@@ -847,7 +847,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		bool m_alsoUpdateNextRow : 1;
 
 		/*! Row number (>=0 or -1 == no row) that will be deleted in deleteRow().
-		 It is set in slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)) slot
+		 It is set in slotAboutToDeleteRow(KexiDB::RecordData&,KexiDB::ResultInfo*,bool)) slot
 		 received from KexiTableViewData member. 
 		 This value will be used in slotRowDeleted() after rowDeleted() signal 
 		 is received from KexiTableViewData member and then cleared (set to -1). */
@@ -889,7 +889,7 @@ class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 		KexiSearchAndReplaceViewInterface::Options::SearchDirection m_recentSearchDirection;
 
 		//! Setup by updateIndicesForVisibleValues() and used by find()
-		Q3ValueVector<uint> m_indicesForVisibleValues;
+		QVector<uint> m_indicesForVisibleValues;
 };
 
 inline bool KexiDataAwareObjectInterface::hasData() const
@@ -899,18 +899,18 @@ inline bool KexiDataAwareObjectInterface::hasData() const
 	return m_data!=0;
 }
 
-inline KexiTableItem *KexiDataAwareObjectInterface::itemAt(int row) const
+inline KexiDB::RecordData *KexiDataAwareObjectInterface::itemAt(int pos) const
 {
-	KexiTableItem *item = m_data->at(row);
-	if (!item)
-		kDebug() << "KexiTableView::itemAt(" << row << "): NO ITEM!!" << endl;
+	KexiDB::RecordData *record = m_data->at(pos);
+	if (!record)
+		kDebug() << "KexiTableView::itemAt(" << pos << "): NO ITEM!!" << endl;
 	else {
 /*		kDebug() << "KexiTableView::itemAt(" << row << "):" << endl;
 		int i=1;
 		for (KexiTableItem::Iterator it = item->begin();it!=item->end();++it,i++)
 			kDebug() << i<<": " << (*it).toString()<< endl;*/
 	}
-	return item;
+	return record;
 }
 
 //! Convenience macro used for KexiDataAwareObjectInterface implementations.

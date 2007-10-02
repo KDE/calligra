@@ -22,9 +22,9 @@
 
 #include <kexidb/kexidb_export.h>
 
-#include <qobject.h>
-#include <qstring.h>
-#include <q3ptrlist.h>
+#include <QObject>
+#include <QString>
+#include <QList>
 
 #include "kexidb/kexidb_export.h"
 
@@ -164,8 +164,8 @@ class ConnectionDataBase
 class KEXI_DB_EXPORT ConnectionData : public QObject, public ConnectionDataBase
 {
 	public:
-		typedef Q3PtrList<ConnectionData> List;
-		typedef Q3PtrListIterator<ConnectionData> ListIterator;
+		typedef QList<ConnectionData*> List;
+		typedef QListIterator<ConnectionData*> ListIterator;
 
 		ConnectionData();
 

@@ -49,24 +49,38 @@ class TemplateItem : public K3ListViewItem
 	public:
 		TemplateItem(Q3ListView* parent, const QString& aFilename, 
 			const QString& name, const QString& description, const QPixmap& icon, 
-			const QList<KexiProjectData::ObjectInfo>& aAutoopenObjects)
+			const KexiProjectData::AutoOpenObjects& aAutoopenObjects)
 		: K3ListViewItem(parent, name + "\n" + description)
-		, autoopenObjects(aAutoopenObjects)
+		, autoopenObjects(&aAutoopenObjects)
 		, filename(aFilename)
 		{
 			setPixmap(0, icon);
 		}
 		~TemplateItem() {}
 
-	QList<KexiProjectData::ObjectInfo> autoopenObjects;
+	const KexiProjectData::AutoOpenObjects* autoopenObjects;
 	QString filename;
 };
 
 //-----------------------
 
+class KexiStartupDialogTemplatesPage::Private
+{
+	public:
+		Private()
+		 : popuplated(false)
+		{
+		}
+
+		KexiProjectData::AutoOpenObjects dummyAutoOpenObject;
+		bool popuplated : 1;
+};
+
+//-----------------------
+
 KexiStartupDialogTemplatesPage::KexiStartupDialogTemplatesPage( QWidget * parent )
-	: K3ListView(parent)
-	, m_popuplated(false)
+ : K3ListView(parent)
+ , d( new Private )
 {
 	setObjectName("KexiStartupDialogTemplatesPage");
 	addColumn(QString());
@@ -79,13 +93,14 @@ KexiStartupDialogTemplatesPage::KexiStartupDialogTemplatesPage( QWidget * parent
 
 KexiStartupDialogTemplatesPage::~KexiStartupDialogTemplatesPage()
 {
+	delete d;
 }
 
 void KexiStartupDialogTemplatesPage::populate()
 {
-	if (m_popuplated)
+	if (d->popuplated)
 		return;
-	m_popuplated = true;
+	d->popuplated = true;
 	KexiTemplateInfo::List list = KexiTemplateLoader::loadListInfo();
 	foreach( const KexiTemplateInfo& info, list ) {
 		new TemplateItem(this, info.filename, info.name, 
@@ -134,11 +149,11 @@ QString KexiStartupDialogTemplatesPage::selectedFileName() const
 	return templateItem ? templateItem->filename : QString();
 }
 
-QList<KexiProjectData::ObjectInfo>
+const KexiProjectData::AutoOpenObjects&
 KexiStartupDialogTemplatesPage::autoopenObjectsForSelectedTemplate() const
 {
 	TemplateItem* templateItem = static_cast<TemplateItem*>(selectedItem());
-	return templateItem ? templateItem->autoopenObjects : QList<KexiProjectData::ObjectInfo>();
+	return templateItem ? *templateItem->autoopenObjects : d->dummyAutoOpenObject;
 }
 
 void KexiStartupDialogTemplatesPage::slotExecuted(Q3ListViewItem* item)

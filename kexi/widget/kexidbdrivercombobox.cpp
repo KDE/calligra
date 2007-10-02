@@ -20,7 +20,7 @@
 #include "kexidbdrivercombobox.h"
 
 KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent, 
-	const KexiDB::Driver::InfoMap& driversInfo, Options options)
+	const KexiDB::Driver::InfoHash& driversInfo, Options options)
  : KComboBox(parent)
 {
 	//retrieve list of drivers and sort it: file-based first, then server-based

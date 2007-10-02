@@ -144,7 +144,7 @@ class KexiWindow::Private
 		int id;
 		QPointer<KexiPart::Part> part;
 		KexiPart::Item *item;
-		QString origCaption; //!< helper
+//		QString origCaption; //!< helper
 		KexiDB::SchemaData* schemaData;
 		QPointer<KexiView> newlySelectedView; //!< Used in isDirty(), temporary set in switchToViewMode()
 		                                   //!< during view setup, when a new view is not yet raised.
@@ -339,7 +339,7 @@ void KexiWindow::createViewModeToggleButtons()
 	}
 	if (supportsViewMode(Kexi::TextViewMode)) {
 		a = new KexiToggleViewModeAction(Kexi::TextViewMode, d->viewModeGroup, 
-			this, SIGNAL(switchToViewModeInternal(Kexi::ViewMode)));
+			this, SLOT(switchToViewModeInternal(Kexi::ViewMode)));
 		QString customTextViewModeCaption( d->part->internalPropertyValue("textViewModeCaption").toString() );
 		if (!customTextViewModeCaption.isEmpty())
 			a->setText( customTextViewModeCaption );
@@ -821,33 +821,10 @@ void KexiWindow::dirtyChanged(KexiView* view)
 
 void KexiWindow::updateCaption()
 {
-	if (!d->item || !d->part || !d->origCaption.isEmpty())
+	if (!d->item || !d->part)
 		return;
-	QString capt = d->item->name();
-	QString fullCapt = capt;
-	if (d->part)
-		fullCapt += (" : " + d->part->instanceCaption());
-#ifdef __GNUC__
-#warning TODO KexiWindow::updateCaption()
-#else
-#pragma WARNING( TODO KexiWindow::updateCaption() )
-#endif
-	if (isDirty()) {
-		setWindowTitle(fullCapt+"*");
-	}
-	else {
-		setWindowTitle(fullCapt);
-	}
-#if 0 //TODO
-	if (isDirty()) {
-		QWidget::setCaption(fullCapt+"*");
-		QWidget::setTabCaption(capt+"*");
-	}
-	else {
-		QWidget::setCaption(fullCapt);
-		QWidget::setTabCaption(capt);
-	}
-#endif
+	QString fullCapt( KexiPart::fullCaptionForItem(*d->item, d->part) );
+	setWindowTitle(fullCapt + (isDirty() ? "*" : ""));
 }
 
 bool KexiWindow::neverSaved() const

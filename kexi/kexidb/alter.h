@@ -20,12 +20,13 @@
 #ifndef KEXIDB_ALTER_H
 #define KEXIDB_ALTER_H
 
-#include "connection.h"
 
-#include <q3valuelist.h>
-#include <q3asciidict.h>
+#include <QList>
+#include <QHash>
 
-#include <kdebug.h>
+#include <KDebug>
+#include <kexidb/connection.h>
+#include <kexiutils/utils.h>
 
 namespace KexiDB
 {
@@ -140,17 +141,18 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 		};
 
 		class ActionBase;
-		typedef Q3AsciiDict<ActionBase> ActionDict; //!< for collecting actions related to a single field
-		typedef Q3IntDict<ActionDict> ActionDictDict; //!< for collecting groups of actions by field UID
-		typedef Q3AsciiDictIterator<ActionBase> ActionDictIterator;
-		typedef Q3IntDictIterator<ActionDict> ActionDictDictIterator;
-		typedef Q3PtrVector<ActionBase> ActionVector; //!< for collecting actions related to a single field
+		//! For collecting actions related to a single field
+		typedef KexiUtils::AutodeletedHash<QByteArray, ActionBase*> ActionDict;
+		typedef KexiUtils::AutodeletedHash<int, ActionDict*> ActionDictDict; //!< for collecting groups of actions by field UID
+		typedef QHash<QByteArray,ActionBase*>::ConstIterator ActionDictIterator;
+		typedef QHash<int, ActionDict*>::ConstIterator ActionDictDictIterator;
+		typedef QVector<ActionBase*> ActionsVector; //!< for collecting actions related to a single field
 
 		//! Defines a type for action list.
-		typedef Q3PtrList<ActionBase> ActionList;
+		typedef QList<ActionBase*> ActionList;
 
 		//! Defines a type for action list's iterator.
-		typedef Q3PtrListIterator<ActionBase> ActionListIterator;
+		typedef QList<ActionBase*>::ConstIterator ActionListIterator;
 
 		//! Abstract base class used for implementing all the AlterTable actions.
 		class KEXI_DB_EXPORT ActionBase {
@@ -209,8 +211,8 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 					Q_UNUSED(fieldActions); return false; }
 
 				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
-					QMap<QString, QString>& fieldMap) 
-					{ Q_UNUSED(table); Q_UNUSED(field); Q_UNUSED(fieldMap); return true; }
+					QHash<QString, QString>& fieldHash) 
+					{ Q_UNUSED(table); Q_UNUSED(field); Q_UNUSED(fieldHash); return true; }
 
 			private:
 				//! Performs physical execution of this action.
@@ -284,7 +286,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual bool shouldBeRemoved(ActionDictDict &fieldActions);
 
 				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
-					QMap<QString, QString>& fieldMap);
+					QHash<QString, QString>& fieldHash);
 
 			protected:
 				virtual void updateAlteringRequirements();
@@ -308,7 +310,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
 				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
-					QMap<QString, QString>& fieldMap);
+					QHash<QString, QString>& fieldHash);
 
 			protected:
 				virtual void updateAlteringRequirements();
@@ -335,7 +337,7 @@ class KEXI_DB_EXPORT AlterTableHandler : public Object
 				virtual void simplifyActions(ActionDictDict &fieldActions);
 
 				virtual tristate updateTableSchema(TableSchema &table, Field* field, 
-					QMap<QString, QString>& fieldMap);
+					QHash<QString, QString>& fieldHash);
 
 			protected:
 				virtual void updateAlteringRequirements();

@@ -320,12 +320,12 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
 {
 	if (!dataAwareObject() || !dataAwareObject()->data())
 		return false;
-	KexiTableViewColumn::List columns( dataAwareObject()->data()->columns );
-	for (KexiTableViewColumn::ListIterator it(columns); it.current(); ++it) {
-		if (!it.current()->visible())
+	const KexiTableViewColumn::List columns( dataAwareObject()->data()->columns() );
+	foreach (KexiTableViewColumn *col, columns) {
+		if (!col->isVisible())
 			continue;
-		columnNames.append( it.current()->field()->name() );
-		columnCaptions.append( it.current()->captionAliasOrName() );
+		columnNames.append( col->field()->name() );
+		columnCaptions.append( col->captionAliasOrName() );
 	}
 
 	//update "look in" selection if there was any

@@ -212,7 +212,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		return 0;
 	}
 
-	KService::Ptr ptr= *(m_services_lcase.find( name.toLower() ));
+	KService::Ptr ptr = m_services_lcase.value( name.toLower() );
 	QString srv_name = ptr->property("X-Kexi-DriverName").toString();
 
 	KexiDBDbg << "KexiDBInterfaceManager::driver(): library: "<<ptr->library()<<endl;
@@ -246,7 +246,7 @@ Driver* DriverManagerInternal::driver(const QString& name)
 		delete drv;
 		return 0;
 	}
-	m_drivers.insert(name.lower(), drv); //cache it
+	m_drivers.insert(name.toLower(), drv); //cache it
 	return drv;
 }
 
@@ -311,17 +311,15 @@ DriverManager::~DriverManager()
 	KexiDBDbg << "DriverManager::~DriverManager() ok" << endl;
 }
 
-const KexiDB::Driver::InfoMap DriverManager::driversInfo()
+const KexiDB::Driver::InfoHash DriverManager::driversInfo()
 {
 	if (!d_int->lookupDrivers())
-		return KexiDB::Driver::InfoMap();
+		return KexiDB::Driver::InfoHash();
 
 	if (!d_int->m_driversInfo.isEmpty())
 		return d_int->m_driversInfo;
-	ServicesMap::ConstIterator it;
-	for ( it=d_int->m_services.constBegin() ; it != d_int->m_services.constEnd(); ++it ) {
+	foreach ( KService::Ptr ptr, d_int->m_services ) {
 		Driver::Info info;
-		KService::Ptr ptr = it.value();
 		info.name = ptr->property("X-Kexi-DriverName").toString();
 		info.caption = ptr->property("Name").toString();
 		info.comment = ptr->property("Comment").toString();
@@ -364,15 +362,14 @@ KService::Ptr DriverManager::serviceInfo(const QString &name)
 	}
 
 	clearError();
-	if (d_int->m_services_lcase.contains( name.toLower() ) ) {
-		return *d_int->m_services_lcase.find( name.toLower() );
-	} else {
-		setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".", name) );
-		return KService::Ptr();
-	}
+	KService::Ptr ptr = d_int->m_services_lcase.value( name.toLower() );
+	if (ptr)
+		return ptr;
+	setError(ERR_DRIVERMANAGER, i18n("No such driver service: \"%1\".", name) );
+	return KService::Ptr();
 }
 
-const DriverManager::ServicesMap& DriverManager::services()
+const DriverManager::ServicesHash& DriverManager::services()
 {
 	d_int->lookupDrivers();
 	return d_int->m_services;

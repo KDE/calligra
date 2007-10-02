@@ -20,9 +20,9 @@
 #ifndef KEXIDB_FIELDLIST_H
 #define KEXIDB_FIELDLIST_H
 
-#include <q3valuelist.h>
-#include <q3dict.h>
-#include <qstring.h>
+#include <QList>
+#include <QHash>
+#include <QString>
 
 #include <kexidb/field.h>
 #include <kexidb/driver.h>
@@ -73,24 +73,25 @@ class KEXI_DB_EXPORT FieldList
 		virtual void removeField(KexiDB::Field *field);
 
 		/*! \return field id or NULL if there is no such a field. */
-		inline Field* field(uint id) { return (id < m_fields.count()) ? m_fields.at(id) : 0; }
+		inline Field* field(uint id) { return m_fields.value(id); }
 		
 		/*! \return field with name \a name or NULL if there is no such a field. */
 		virtual Field* field(const QString& name);
 
 		/*! \return true if this list contains given \a field. */
-		inline bool hasField(const Field* field) { return m_fields.findRef(field)!=-1; }
+		inline bool hasField(Field* field) const { return m_fields.contains(field); }
 
 		/*! \return first occurrence of \a field in the list 
 		 or -1 if this list does not contain this field. */
-		inline int indexOf(const Field* field) { return m_fields.findRef(field); }
+		inline int indexOf(Field* field) const { return m_fields.indexOf(field); }
 
 		/*! \return list of field names for this list. */
 		QStringList names() const;
 		
-		Field::ListIterator fieldsIterator() const { return Field::ListIterator(m_fields); }
+		inline Field::ListIterator fieldsIterator() const { return m_fields.constBegin(); }
+		inline Field::ListIterator fieldsIteratorConstEnd() const { return m_fields.constEnd(); }
 
-		inline Field::List* fields() { return &m_fields; }
+		inline const Field::List* fields() { return &m_fields; }
 
 		/*! \return list of autoincremented fields. The list is owned by this FieldList object. */
 		Field::List* autoIncrementFields();
@@ -130,7 +131,7 @@ class KEXI_DB_EXPORT FieldList
 		FieldList* subList(const QStringList& list);
 
 		/*! Like above, but with a list of field indices */
-		FieldList* subList(const Q3ValueList<uint>& list);
+		FieldList* subList(const QList<uint>& list);
 
 		/*! \return a string that is a result of all field names concatenated 
 		 and with \a separator. This is usable e.g. as argument like "field1,field2" 
@@ -162,11 +163,13 @@ class KEXI_DB_EXPORT FieldList
 
 	protected:
 		Field::List m_fields;
-		Q3Dict<Field> m_fields_by_name; //!< Fields collected by name. Not used by QuerySchema.
+		QHash<QString, Field*> m_fields_by_name; //!< Fields collected by name. Not used by QuerySchema.
 		Field::List *m_autoinc_fields;
 	
 	private:
-		//! cached
+		void renameFieldInternal(KexiDB::Field *field, const QString& newNameLower);
+
+	//! cached
 		QString m_sqlFields;
 };
 

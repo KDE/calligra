@@ -112,7 +112,7 @@ bool KexiCSVExport::exportData(KexiDB::TableOrQuerySchema& tableOrQuery,
 	const bool copyToClipboard = options.mode==Clipboard;
 	if (copyToClipboard) {
 //! @todo (during exporting): enlarge bufSize by factor of 2 when it became too small
-		uint bufSize = qMin((rowCount<0 ? 10 : rowCount) * fields.count() * 20, (uint)128000);
+		uint bufSize = qMin( uint(rowCount<0 ? 10 : rowCount) * fields.count() * 20, (uint)128000 );
 		buffer.reserve( bufSize );
 		if ((uint)buffer.capacity() < bufSize) {
 			kWarning() << "KexiCSVExportWizard::exportData() cannot allocate memory for " << bufSize 

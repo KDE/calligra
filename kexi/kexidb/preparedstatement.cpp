@@ -22,8 +22,6 @@
 #include <kexidb/connection.h>
 #include <kexidb/connection_p.h>
 #include <kdebug.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -32,7 +30,7 @@ PreparedStatement::PreparedStatement(StatementType type, ConnectionInternal& con
  : KShared()
  , m_type(type)
  , m_fields(&fields)
- , m_where(where.isEmpty() ? new QStringList(where) : 0)
+ , m_where(where)
  , m_whereFields(0)
 {
 	Q_UNUSED(conn);
@@ -40,44 +38,42 @@ PreparedStatement::PreparedStatement(StatementType type, ConnectionInternal& con
 
 PreparedStatement::~PreparedStatement()
 {
-	delete m_where;
 	delete m_whereFields;
 }
 
-Q3CString PreparedStatement::generateStatementString()
+QByteArray PreparedStatement::generateStatementString()
 {
-	Q3CString s(1024);
+	QByteArray s;
+	s.reserve(1024);
 	if (m_type == SelectStatement) {
 //! @todo only tables and trivial queries supported for select...
 		s = "SELECT ";
 		bool first = true;
-//		for (uint i=0; i<m_fields->fieldCount(); i++) {
-		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {
+		foreach (Field *f, *m_fields->fields()) {
 			if (first)
 				first = false;
 			else
 				s.append(", ");
-			s.append(it.current()->name().toLatin1());
+			s.append(f->name().toLatin1());
 		}
-		first = true;
-		s.append(" WHERE ");
-//		for (uint i=0; i<m_fields->fieldCount(); i++) {
-
+		if (!m_where.isEmpty())
+			s.append(" WHERE ");
+		delete m_whereFields;
 		m_whereFields = new Field::List();
-		for (QStringList::ConstIterator it=m_where->constBegin(); it!=m_where->constEnd(); ++it) {
-//		for (Field::ListIterator it(m_fields->fieldsIterator()); it.current(); ++it) {
+		first = true;
+		foreach (const QString& whereItem, m_where) {
 			if (first)
 				first = false;
 			else
 				s.append(" AND ");
-			Field *f = m_fields->field(*it);
+			Field *f = m_fields->field(whereItem);
 			if (!f) {
 				KexiDBWarn << "PreparedStatement::generateStatementString(): no '" 
-					<< *it << "' field found" << endl;
+					<< whereItem << "' field found" << endl;
 				continue;
 			}
 			m_whereFields->append(f);
-			s.append((*it).toLatin1());
+			s.append(whereItem.toLatin1());
 			s.append("=?");
 		}
 	}
@@ -88,24 +84,23 @@ Q3CString PreparedStatement::generateStatementString()
 		if (!table)
 			return ""; //err
 
-		Q3CString namesList;
+		QByteArray namesList;
 		bool first = true;
 		const bool allTableFieldsUsed = dynamic_cast<TableSchema*>(m_fields); //we are using a selection of fields only
-		Field::ListIterator it = m_fields->fieldsIterator();
-		for (uint i=0; i<m_fields->fieldCount(); i++, ++it) {
+		foreach (Field* f, *m_fields->fields()) {
 			if (first) {
 				s.append( "?" );
 				if (!allTableFieldsUsed)
-					namesList = it.current()->name().toLatin1();
+					namesList = f->name().toLatin1();
 				first = false;
 			} else {
 				s.append( ",?" );
 				if (!allTableFieldsUsed)
-					namesList.append(Q3CString(", ")+it.current()->name().toLatin1());
+					namesList.append(QByteArray(", ") + f->name().toLatin1());
 			}
 		}
 		s.append(")");
-		s.prepend(Q3CString("INSERT INTO ") + table->name().toLatin1()
+		s.prepend(QByteArray("INSERT INTO ") + table->name().toLatin1()
 			+ (allTableFieldsUsed ? "" : (" (" + namesList + ")"))
 			+ " VALUES (");
 	}
@@ -135,4 +130,3 @@ void PreparedStatement::clearArguments()
 {
 	m_args.clear();
 }
-

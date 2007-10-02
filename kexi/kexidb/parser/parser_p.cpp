@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004, 2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,14 +20,11 @@
 #include "parser_p.h"
 #include "sqlparser.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QRegExp>
+#include <QMutableListIterator>
 
-#include <qregexp.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
-#include <Q3PtrList>
+#include <KDebug>
+#include <KLocale>
 
 #include <assert.h>
 
@@ -36,15 +33,14 @@ using namespace KexiDB;
 Parser *parser = 0;
 Field *field = 0;
 //bool requiresTable;
-Q3PtrList<Field> fieldList;
+QList<Field*> fieldList;
 int current = 0;
-QString ctoken = "";
+QByteArray ctoken;
 
 //-------------------------------------
 
-ParserPrivate::ParserPrivate()
- : reservedKeywords(997, 997, false)
- , initialized(false)
+Parser::Private::Private()
+ : initialized(false)
 {
 	clear();
 	table = 0;
@@ -52,13 +48,13 @@ ParserPrivate::ParserPrivate()
 	db = 0;
 }
 
-ParserPrivate::~ParserPrivate()
+Parser::Private::~Private()
 {
 	delete select;
 	delete table;
 }
 
-void ParserPrivate::clear()
+void Parser::Private::clear()
 {
 	operation = Parser::OP_None;
 	error = ParserError();
@@ -67,10 +63,9 @@ void ParserPrivate::clear()
 //-------------------------------------
 
 ParseInfo::ParseInfo(KexiDB::QuerySchema *query)
- : repeatedTablesAndAliases(997, false)
- , querySchema(query)
+ : querySchema(query)
 {
-	repeatedTablesAndAliases.setAutoDelete(true);
+//Qt 4	repeatedTablesAndAliases.setAutoDelete(true);
 }
 
 ParseInfo::~ParseInfo()
@@ -144,13 +139,13 @@ void yyerror(const char *str)
 			if (!lexerErr.isEmpty())
 				lexerErr.prepend(": ");
 
-			if ( parser->isReservedKeyword( ctoken.toLatin1() ) )
+			if ( KexiDB::isKexiSQLKeyword( ctoken ) )
 				parser->setError( ParserError(i18n("Syntax Error"),
-					i18n("\"%1\" is a reserved keyword", ctoken ) + lexerErr,
+					i18n("\"%1\" is a reserved keyword", QString(ctoken) ) + lexerErr,
 					ctoken, current) );
 			else
 				parser->setError( ParserError(i18n("Syntax Error"),
-					i18n("Syntax Error near \"%1\"", ctoken ) + lexerErr,
+					i18n("Syntax Error near \"%1\"", QString(ctoken) ) + lexerErr,
 					ctoken, current) );
 		}
 	}
@@ -284,8 +279,8 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 		else {
 			//find first table that has this field
 			Field *firstField = 0;
-			for (TableSchema::ListIterator it(*parseInfo.querySchema->tables()); it.current(); ++it) {
-				Field *f = it.current()->field(fieldName);
+			foreach (TableSchema *ts, *parseInfo.querySchema->tables()) {
+				Field *f = ts->field(fieldName);
 				if (f) {
 					if (!firstField) {
 						firstField = f;
@@ -314,14 +309,16 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 		TableSchema *ts = parseInfo.querySchema->table( tableName );
 		if (ts) {//table.fieldname
 			//check if "table" is covered by an alias
-			const Q3ValueList<int> tPositions = parseInfo.querySchema->tablePositions(tableName);
-			Q3ValueList<int>::ConstIterator it = tPositions.constBegin();
-			Q3CString tableAlias;
+			const QList<int> tPositions( parseInfo.querySchema->tablePositions(tableName) );
+			QList<int>::ConstIterator it = tPositions.constBegin();
+			QByteArray tableAlias;
 			bool covered = true;
-			for (; it!=tPositions.constEnd() && covered; ++it) {
-				tableAlias = parseInfo.querySchema->tableAlias(*it).toLower();
-				if (tableAlias.isEmpty() || tableAlias == tableName.toLatin1())
+			foreach (int position, tPositions) {
+				tableAlias = parseInfo.querySchema->tableAlias(position).toLower();
+				if (tableAlias.isEmpty() || tableAlias == tableName.toLatin1()) {
 					covered = false; //uncovered
+					break;
+				}
 				KexiDBDbg << " --" << "covered by " << tableAlias << " alias" << endl;
 			}
 			if (covered) {
@@ -348,14 +345,14 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 
 
 		if (ts) {
-			Q3ValueList<int> *positionsList = repeatedTablesAndAliases[ tableName ];
-			if (!positionsList) {
+			if (!repeatedTablesAndAliases.contains( tableName )) {
 				IMPL_ERROR(tableName + "." + fieldName + ", !positionsList ");
 				return false;
 			}
+			const QList<int> positionsList( repeatedTablesAndAliases.value( tableName ) );
 
 			if (fieldName=="*") {
-				if (positionsList->count()>1) {
+				if (positionsList.count()>1) {
 					setError(i18n("Ambiguous \"%1.*\" expression").arg(tableName),
 						i18n("More than one \"%1\" table or alias defined").arg(tableName));
 					return false;
@@ -369,10 +366,8 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 					// check if table or alias is used twice and both have the same column
 					// (so the column is ambiguous)
 					int numberOfTheSameFields = 0;
-					for (Q3ValueList<int>::iterator it = positionsList->begin();
-						it!=positionsList->end();++it)
-					{
-						TableSchema *otherTS = parseInfo.querySchema->tables()->at(*it);
+					foreach (int position, positionsList) {
+						TableSchema *otherTS = parseInfo.querySchema->tables()->at(position);
 						if (otherTS->field(fieldName))
 							numberOfTheSameFields++;
 						if (numberOfTheSameFields>1) {
@@ -458,18 +453,9 @@ QuerySchema* buildSelectQuery(
 			}
 			// 1. collect information about first repeated table name or alias
 			//    (potential ambiguity)
-			Q3ValueList<int> *list = parseInfo.repeatedTablesAndAliases[tableOrAliasName];
-			if (list) {
-				//another table/alias with the same name
-				list->append( i );
-//				KexiDBDbg << "- another table/alias with name: " << tableOrAliasName << endl;
-			}
-			else {
-				list = new Q3ValueList<int>();
-				list->append( i );
-				parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
-//				KexiDBDbg << "- first table/alias with name: " << tableOrAliasName << endl;
-			}
+			QList<int> list( parseInfo.repeatedTablesAndAliases.value(tableOrAliasName) );
+			list.append( i );
+			parseInfo.repeatedTablesAndAliases.insert( tableOrAliasName, list );
 	/*		if (repeatedTableNameOrTableAlias.isEmpty()) {
 				if (tableNamesAndTableAliases[tname])
 					repeatedTableNameOrTableAlias=tname;
@@ -500,14 +486,10 @@ QuerySchema* buildSelectQuery(
 
 	//-------add fields
 	if (colViews) {
-		BaseExpr *e;
 		columnNum = 0;
-		const uint colCount = colViews->list.count();
-//		for (BaseExpr::ListIterator it(colViews->list);(e = it.current()); columnNum++)
-		colViews->list.first();
-		for (; columnNum<colCount; columnNum++) {
-			e = colViews->list.current();
-			bool moveNext = true; //used to avoid ++it when an item is taken from the list
+		for (QMutableListIterator<BaseExpr*> it(colViews->list); it.hasNext(); columnNum++) {
+			BaseExpr *e = it.next();
+//Qt4			bool moveNext = true; //used to avoid ++it when an item is taken from the list
 			BaseExpr *columnExpr = e;
 			VariableExpr* aliasVariable = 0;
 			if (e->exprClass() == KexiDBExpr_SpecialBinary && e->toBinary()
@@ -542,8 +524,8 @@ QuerySchema* buildSelectQuery(
 			else if (isExpressionField) {
 				//expression object will be reused, take, will be owned, do not destroy
 //		KexiDBDbg << colViews->list.count() << " " << it.current()->debugString() << endl;
-				colViews->list.take(); //take() doesn't work
-				moveNext = false;
+				it.remove();
+//Qt4				moveNext = false;
 			}
 			else if (aliasVariable) {
 				//take first (left) argument of the special binary expr, will be owned, do not destroy
@@ -580,10 +562,9 @@ QuerySchema* buildSelectQuery(
 				querySchema->setColumnAlias(columnNum, aliasVariable->name.toLatin1());
 			}*/
 
-			if (moveNext) {
-				colViews->list.next();
-//				++it;
-			}
+//Qt4			if (moveNext) {
+//Qt4				colViews->list.next();
+//Qt4			}
 		}
 	}
 	//----- SELECT options
@@ -600,10 +581,10 @@ QuerySchema* buildSelectQuery(
 		//----- ORDER BY
 		if (options->orderByColumns) {
 			OrderByColumnList &orderByColumnList = querySchema->orderByColumnList();
-			OrderByColumnInternal::ListConstIterator it = options->orderByColumns->constEnd();
 			uint count = options->orderByColumns->count();
+			OrderByColumnInternal::ListConstIterator it( options->orderByColumns->constEnd() );
 			--it;
-			for (;count>0; --it, --count) 
+			for (;count > 0; --it, --count)
 				/*opposite direction due to parser specifics*/
 			{
 				//first, try to find a column name or alias (outside of asterisks)

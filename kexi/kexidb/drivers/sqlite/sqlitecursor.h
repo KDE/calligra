@@ -43,9 +43,9 @@ class SQLiteCursor : public Cursor
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
 		virtual const char ** rowData() const;
 
-		virtual void storeCurrentRow(RowData &data) const;
+		virtual bool drv_storeCurrentRow(RecordData &data) const;
 
-//		virtual bool save(RowData& data, RowEditBuffer& buf);
+//		virtual bool save(RecordData& data, RowEditBuffer& buf);
 
 		virtual int serverResult();
 		virtual QString serverResultName();

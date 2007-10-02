@@ -36,7 +36,7 @@ class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public K3ListView
 
 		QString selectedFileName() const;
 
-		QList<KexiProjectData::ObjectInfo> autoopenObjectsForSelectedTemplate() const;
+		const KexiProjectData::AutoOpenObjects& autoopenObjectsForSelectedTemplate() const;
 
 		void populate();
 
@@ -49,7 +49,8 @@ class KEXIMAIN_EXPORT KexiStartupDialogTemplatesPage : public K3ListView
 //		void itemClicked(QIconViewItem *item);
 	
 	private:
-		bool m_popuplated : 1;
+		class Private;
+		Private* const d;
 //		KIconView *templates;
 //		KTextBrowser *info;
 };

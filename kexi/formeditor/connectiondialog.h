@@ -33,12 +33,12 @@
 
 namespace KexiDB {
 	class ResultInfo;
+	class RecordData;
 }
 
 class QLabel;
 class KexiTableView;
 class KexiTableViewData;
-class KexiTableItem;
 
 namespace KFormDesigner {
 
@@ -62,26 +62,26 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
 
 	protected:
 		/*! Used when connection is ok. Displays a message in details widget and changes icon in 'OK?' column. */
-		void setStatusOk(KexiTableItem *item = 0);
+		void setStatusOk(KexiDB::RecordData *record = 0);
 		/*! Used when connection is wrong. Displays a message in details widget and changes icon in 'OK?' column. \a msg is
 		  the message explaining what's wrong. */
-		void setStatusError(const QString &msg, KexiTableItem *item = 0);
+		void setStatusError(const QString &msg, KexiDB::RecordData *record = 0);
 		//! Inits table data, columns, etc.
 		void initTable();
 		/*! Updates the widget list (shown in receiver and sender columns). Then fill in the table with the connections in m_buffer. */
 		void updateTableData();
 		/*! Updates the slot list, according to the receiver name, and only shows those who are compatible with signal args. */
-		void updateSlotList(KexiTableItem *item);
+		void updateSlotList(KexiDB::RecordData *record);
 		//! Updates the signal list, according to the sender name.
-		void updateSignalList(KexiTableItem *item);
+		void updateSignalList(KexiDB::RecordData *record);
 
 	protected slots:
 		/*! Slot called when the user modifies a cell. Signal and/or slot cells are cleared if necessary (not valid anymore). */
-		void slotCellChanged(KexiTableItem*, int, QVariant&, KexiDB::ResultInfo*);
-		/*! This function checks if the connection represented by KexiTableItem \a item is valid. It checks if all args (sender, receiver, signal and slot)
+		void slotCellChanged(KexiDB::RecordData *, int, QVariant&, KexiDB::ResultInfo*);
+		/*! This function checks if the connection represented by \a record is valid. It checks if all args (sender, receiver, signal and slot)
 		 are given, and then if signal/slot args are compatible (should be always true, as we don't show non-compatible slots). It calls \ref setStatusOk()
 		 or \ref setStatusError() following the result of checks. */
-		void checkConnection(KexiTableItem *item);
+		void checkConnection(KexiDB::RecordData *record);
 
 		/*! Hides the dialog and allow the user to create the Connection by drag-and-drop in the Form itself. Currently disabled in the GUI.
 		 \sa FormManager::startCreatingConnection()  */
@@ -98,7 +98,7 @@ class KFORMEDITOR_EXPORT ConnectionDialog : public KDialog
 		void slotConnectionAborted(KFormDesigner::Form *form);
 
 		void slotCellSelected(int col, int row);
-		void slotRowInserted(KexiTableItem*,bool);
+		void slotRowInserted(KexiDB::RecordData*,bool);
 
 		/*! Slot called when the user presses 'Ok' button. The Form::connectionBuffer() is deleted, created again and filled with Connection.
 		 If the user presses 'Cancel', nothing happens. */

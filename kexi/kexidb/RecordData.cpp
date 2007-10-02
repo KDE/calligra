@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002   Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2003   Daniel Molkentin <molkentin@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,42 +22,24 @@
    Original Project: buX (www.bux.at)
 */
 
-#include "kexitableitem.h"
-#include <kexi_global.h>
+#include "RecordData.h"
+#include "global.h"
+#include <KDebug>
 
-#include <kdebug.h>
+using namespace KexiDB;
 
-KexiTableItem::KexiTableItem(int numCols)
-: KexiTableItemBase(numCols)
+QString RecordData::debugString() const
 {
-//js	m_userData=0;
-//js	m_columns.resize(numCols);
-//js	m_insertItem = false;
-//js	m_pTable = 0;
+	QString s( QString("RECORD DATA (%1 columns)").arg(size()) );
+	int i = 0;
+	foreach (const QVariant& value, *this) {
+		i++;
+		s.append( QString::number(i)+":["+value.typeName()+"]"+value.toString()+" " );
+	}
+	return s;
 }
 
-KexiTableItem::~KexiTableItem()
+void RecordData::debug() const
 {
-}
-
-void
-KexiTableItem::init(int numCols)
-{
-	clear();
-	resize(numCols);
-}
-
-void
-KexiTableItem::clearValues()
-{
-	init(count());
-}
-
-void
-KexiTableItem::debug() const
-{
-	QString s = QString("KexiTableItem (%1 items)").arg(size());
-	for (int i = 0; i < size(); i++)
-		s.append( QString::number(i)+":"+at(i).toString()+" " );
-	kexidbg << s << endl;
+	KexiDBDbg << debugString();
 }

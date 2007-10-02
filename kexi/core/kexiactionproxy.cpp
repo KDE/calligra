@@ -170,7 +170,7 @@ KAction* KexiActionProxy::plugSharedAction(const QString& action_name, const QSt
 	alt_act->setIcon(KIcon(ka->icon()));
 	alt_act->setShortcut(ka->shortcut());
 
-	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(activate()));
+	QObject::connect(alt_act, SIGNAL(activated()), a, SLOT(trigger()));
 	w->addAction(alt_act);
 
 	//OK?

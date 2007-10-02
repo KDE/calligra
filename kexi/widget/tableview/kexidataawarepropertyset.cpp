@@ -24,7 +24,6 @@
 #include <kexi_global.h>
 #include <koproperty/property.h>
 #include <KexiView.h>
-#include <Q3ValueList>
 
 #define MAX_FIELDS 101 //nice prime number (default prop. set vector size)
 
@@ -66,26 +65,26 @@ void KexiDataAwarePropertySet::slotDataSet( KexiTableViewData *data )
 	m_currentTVData = data;
 	if (!m_currentTVData.isNull()) {
 		connect(m_currentTVData, SIGNAL(rowDeleted()), this, SLOT(slotRowDeleted()));
-		connect(m_currentTVData, SIGNAL(rowsDeleted( const Q3ValueList<int> & )),
-			this, SLOT(slotRowsDeleted( const Q3ValueList<int> & )));
-		connect(m_currentTVData, SIGNAL(rowInserted(KexiTableItem*,uint,bool)),
-			this, SLOT(slotRowInserted(KexiTableItem*,uint,bool)));
+		connect(m_currentTVData, SIGNAL(rowsDeleted( const QList<int> & )),
+			this, SLOT(slotRowsDeleted( const QList<int> & )));
+		connect(m_currentTVData, SIGNAL(rowInserted(KexiDB::RecordData*,uint,bool)),
+			this, SLOT(slotRowInserted(KexiDB::RecordData*,uint,bool)));
 		connect(m_currentTVData, SIGNAL(reloadRequested()),
 			this, SLOT(slotReloadRequested()));
 	}
 }
 
-void KexiDataAwarePropertySet::removeCurrentPropertySet()
+void KexiDataAwarePropertySet::eraseCurrentPropertySet()
 {
-	remove( m_dataObject->currentRow() );
+	eraseAt( m_dataObject->currentRow() );
 }
 
-void KexiDataAwarePropertySet::remove(uint row)
+void KexiDataAwarePropertySet::eraseAt(uint row)
 {
 	KoProperty::Set *set = m_sets.at(row);
 	if (!set)
 		return;
-	m_sets.remove(row);
+	m_sets[row] = 0;
 	set->debug();
 	delete set;
 	m_view->setDirty();
@@ -110,18 +109,18 @@ void KexiDataAwarePropertySet::slotReloadRequested()
 	clear();
 }
 
-void KexiDataAwarePropertySet::insert(uint row, KoProperty::Set* set, bool newOne)
+void KexiDataAwarePropertySet::set(uint row, KoProperty::Set* set, bool newOne)
 {
 	if (!set || row >= (uint)m_sets.size()) {
-		kexiwarn << "KexiDataAwarePropertySet::insert() invalid args: rew="<< row<< " propertyset="<< set<< endl;
+		kexiwarn << "KexiDataAwarePropertySet::set() invalid args: rew="<< row<< " propertyset="<< set<< endl;
 		return;
 	}
 	if (set->parent() && set->parent()!=this) {
-		kexiwarn << "KexiDataAwarePropertySet::insert() propertyset's parent must be NULL or this KexiDataAwarePropertySet" << endl;
+		kexiwarn << "KexiDataAwarePropertySet::set() propertyset's parent must be NULL or this KexiDataAwarePropertySet" << endl;
 		return;
 	}
 
-	m_sets.insert(row, set);
+	m_sets[row] = set;
 
 	connect(set, SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)), m_view, SLOT(setDirty()));
 
@@ -148,44 +147,50 @@ uint KexiDataAwarePropertySet::currentRow() const
 void KexiDataAwarePropertySet::slotRowDeleted()
 {
 	m_view->setDirty();
+
+/* Qt4 : not needed
 	removeCurrentPropertySet();
 
 	//let's move up all property sets that are below that deleted
 	const int r = m_dataObject->currentRow();
-	for (int i=r;i<int(m_sets.size()-1);i++) {
-		KoProperty::Set *set = m_sets[i+1];
-		m_sets.insert( i , set );
-	}
-	m_sets.insert( m_sets.size()-1, 0 );
+	const int size = int(m_sets.size()) - 1;
+	for (int i = r; i<size; i++)
+		m_sets[ i ] = m_sets.at(i+1);
+	m_sets[ size ] = 0;*/
+
+	// It's simplified in Qt4:
+	m_sets.remove( m_dataObject->currentRow() );
 
 	m_view->propertySetSwitched();
 	emit rowDeleted();
 }
 
-void KexiDataAwarePropertySet::slotRowsDeleted( const Q3ValueList<int> &rows )
+void KexiDataAwarePropertySet::slotRowsDeleted( const QList<int> &rows )
 {
 	//let's move most property sets up & delete unwanted
 	const int orig_size = size();
 	int prev_r = -1;
 	int num_removed = 0, cur_r = -1;
-	for (Q3ValueList<int>::ConstIterator r_it = rows.constBegin(); r_it!=rows.constEnd() && *r_it < orig_size; ++r_it) {
-		cur_r = *r_it;// - num_removed;
+	for (QList<int>::ConstIterator r_it = rows.constBegin(); r_it!=rows.constEnd() && *r_it < orig_size; ++r_it) {
+		cur_r = *r_it;
 		if (prev_r>=0) {
 //			kDebug() << "move " << prev_r+num_removed-1 << ".." << cur_r-1 << " to " << prev_r+num_removed-1 << ".." << cur_r-2 << endl;
 			int i=prev_r;
 			KoProperty::Set *set = m_sets.at(i+num_removed);
-			if (set)
-				m_sets.remove(i+num_removed);
+//Qt4			if (set)
+			m_sets.remove(i+num_removed);
 			kDebug() << "property set " << i+num_removed << " deleted" << endl;
 			delete set;
 			num_removed++;
+/* Qt4 : not needed
 			for (; (i+num_removed)<cur_r; i++) {
-				m_sets.insert( i, m_sets[i+num_removed] );
+				m_sets[ i ] = m_sets.at(i+num_removed);
 				kDebug() << i << " <- " << i+num_removed << endl;
-			}
+			}*/
 		}
 		prev_r = cur_r - num_removed;
 	}
+/* Qt4 : not needed
 	//move remaining buffers up
 	if (cur_r>=0) {
 		KoProperty::Set *set = m_sets.at(cur_r);
@@ -195,37 +200,45 @@ void KexiDataAwarePropertySet::slotRowsDeleted( const Q3ValueList<int> &rows )
 		delete set;
 		num_removed++;
 		for (int i=prev_r; (i+num_removed)<orig_size; i++) {
-			m_sets.insert( i, m_sets[i+num_removed] );
+			m_sets[ i ] = m_sets.at(i+num_removed);
 			kDebug() << i << " <- " << i+num_removed << endl;
 		}
 	}
+	*/
+/* Qt4 : not needed
 	//finally: clear last rows
 	for (int i=orig_size-num_removed; i<orig_size; i++) {
 		kDebug() << i << " <- zero" << endl;
-		m_sets.insert( i, 0 );
+		m_sets[ i ] = 0;
 	}
+	for (int i=orig_size-num_removed; i<orig_size; i++) {
+		kDebug() << i << " <- zero" << endl;
+		m_sets[ i ] = 0;
+	}*/
+	//(Qt4) finally: add empty rows
+	m_sets.insert( size(), num_removed, 0 );
 
-	if (num_removed>0)
+	if (num_removed > 0)
 		m_view->setDirty();
 	m_view->propertySetSwitched();
 }
 
-//void KexiDataAwarePropertySet::slotEmptyRowInserted(KexiTableItem*, uint /*index*/)
-void KexiDataAwarePropertySet::slotRowInserted(KexiTableItem*, uint row, bool /*repaint*/)
+void KexiDataAwarePropertySet::slotRowInserted(KexiDB::RecordData*, uint pos, bool /*repaint*/)
 {
 	m_view->setDirty();
 
 	//let's move down all property set that are below
 //	const int r = m_dataObject->currentRow();
+/* Qt4 : not needed
 	m_sets.resize(m_sets.size()+1);
-	for (int i=int(m_sets.size())-1; i>(int)row; i--) {
-		KoProperty::Set *set = m_sets[i-1];
-		m_sets.insert( i , set );
-	}
-	m_sets.insert( row, 0 );
+	for (int i=int(m_sets.size())-1; i>(int)row; i--)
+		m_sets[i] = m_sets.at(i-1);
+	m_sets[row] = 0;*/
+
+	// It's simplified in Qt4:
+	m_sets.insert(pos, 0);
 	
 	m_view->propertySetSwitched();
-
 	emit rowInserted();
 }
 
@@ -237,22 +250,22 @@ void KexiDataAwarePropertySet::slotCellSelected(int, int row)
 	m_view->propertySetSwitched();
 }
 
-KoProperty::Set* KexiDataAwarePropertySet::findPropertySetForItem(KexiTableItem& item)
+KoProperty::Set* KexiDataAwarePropertySet::findPropertySetForItem(KexiDB::RecordData& record)
 {
 	if (m_currentTVData.isNull())
 		return 0;
-	int idx = m_currentTVData->findRef(&item);
+	int idx = m_currentTVData->indexOf(&record);
 	if (idx<0)
 		return 0;
-	return m_sets[idx];
+	return m_sets.at(idx);
 }
 
 int KexiDataAwarePropertySet::findRowForPropertyValue(
-	const Q3CString& propertyName, const QVariant& value)
+	const QByteArray& propertyName, const QVariant& value)
 {
 	const int size = m_sets.size();
 	for (int i=0; i<size; i++) {
-		KoProperty::Set *set = m_sets[i];
+		KoProperty::Set *set = m_sets.at(i);
 		if (!set || !set->contains(propertyName))
 			continue;
 		if (set->property(propertyName).value() == value)

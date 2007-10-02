@@ -18,12 +18,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-#include <q3cstring.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qfile.h>
+#include <QByteArray>
+#include <QStringList>
+#include <QFile>
 
-#include <kdebug.h>
+#include <KDebug>
 
 #include "mysqlconnection_p.h"
 
@@ -75,7 +74,7 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 		return false;
 
 	KexiDBDrvDbg << "MySqlConnectionInternal::connect()" << endl;
-	Q3CString localSocket;
+	QByteArray localSocket;
 	QString hostName = data.hostName;
 	if (hostName.isEmpty() || hostName.toLower()=="localhost") {
 		if (data.useLocalSocketFile) {
@@ -87,10 +86,9 @@ bool MySqlConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 				sockets.append("/var/run/mysqld/mysqld.sock");
 				sockets.append("/tmp/mysql.sock");
 		
-				for(QStringList::ConstIterator it = sockets.constBegin(); it != sockets.constEnd(); it++)
-				{
-					if(QFile(*it).exists()) {
-						localSocket = ((QString)(*it)).toLocal8Bit();
+				foreach (const QString& socket, sockets) {
+					if (QFile(socket).exists()) {
+						localSocket = socket.toLatin1();
 						break;
 					}
 				}
@@ -131,29 +129,30 @@ bool MySqlConnectionInternal::db_disconnect()
 /* ************************************************************************** */
 /*! Selects dbName as the active database so it can be used.
  */
-bool MySqlConnectionInternal::useDatabase(const QString &dbName) {
+bool MySqlConnectionInternal::useDatabase(const QString &dbName)
+{
 //TODO is here escaping needed?
 	return executeSQL("USE " + dbName);
 }
 
 /*! Executes the given SQL statement on the server.
  */
-bool MySqlConnectionInternal::executeSQL(const QString& statement) {
+bool MySqlConnectionInternal::executeSQL(const QString& statement)
+{
 //	KexiDBDrvDbg << "MySqlConnectionInternal::executeSQL: "
 //	             << statement << endl;
-	Q3CString queryStr=statement.toUtf8();
-	const char *query=queryStr;
-	if(mysql_real_query(mysql, query, strlen(query)) == 0)
-	{
+	QByteArray queryStr( statement.toUtf8() );
+	const char *query = queryStr.constData();
+	if (mysql_real_query(mysql, query, qstrlen(query)) == 0)
 		return true;
-	}
 
 	storeResult();
 //	setError(ERR_DB_SPECIFIC,mysql_error(m_mysql));
 	return false;
 }
 
-QString MySqlConnectionInternal::escapeIdentifier(const QString& str) const {
+QString MySqlConnectionInternal::escapeIdentifier(const QString& str) const
+{
 	return QString(str).replace('`', "'");
 }
 

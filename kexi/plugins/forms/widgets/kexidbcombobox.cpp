@@ -551,10 +551,10 @@ void KexiDBComboBox::acceptRequested()
 	signalValueChanged();
 }
 
-void KexiDBComboBox::slotRowAccepted(KexiTableItem *item, int row)
+void KexiDBComboBox::slotRowAccepted(KexiDB::RecordData *record, int row)
 {
 	d->dataEnteredByHand = false;
-	KexiComboBoxBase::slotRowAccepted(item, row);
+	KexiComboBoxBase::slotRowAccepted(record, row);
 	d->dataEnteredByHand = true;
 }
 

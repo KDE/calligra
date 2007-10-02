@@ -18,13 +18,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qtoolbutton.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qvalidator.h>
-#include <qtooltip.h>
-#include <q3scrollview.h>
-//Added by qt3to4:
+#include <QLabel.h>
+#include <QIntValidator>
+#include <Q3ScrollView>
 #include <QPixmap>
 #include <QFocusEvent>
 #include <QKeyEvent>
@@ -94,10 +90,9 @@ KexiRecordNavigator::KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentVi
  : QWidget(parent)
  , d( new Private )
 {
-	setAttribute(Qt::WA_OpaquePaintEvent, true);
+	setAutoFillBackground(true);
 	if (parentView)
 		setParentView( parentView );
-//	setFrameStyle(QFrame::NoFrame);
 	d->lyr = new QHBoxLayout(this);
 	d->lyr->setContentsMargins(0,0,0,0);
 	d->lyr->setSpacing(2);
@@ -468,8 +463,8 @@ void KexiRecordNavigator::showEditingIndicator(bool show)
 
 void KexiRecordNavigator::paintEvent(QPaintEvent* pe)
 {
+	QWidget::paintEvent(pe);
 	QPainter p(this);
-	p.fillRect(rect(), palette().window());
 	// add frame on top
 	QStyleOptionFrameV2 option;
 	option.initFrom(this);

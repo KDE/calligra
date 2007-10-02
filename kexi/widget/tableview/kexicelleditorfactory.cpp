@@ -19,9 +19,9 @@
 
 #include "kexicelleditorfactory.h"
 
-#include <q3ptrdict.h>
-#include <q3intdict.h>
-#include <kglobal.h>
+#include <QSet>
+#include <QHash>
+#include <KGlobal>
 
 #include <kexidb/indexschema.h>
 #include <kexidb/tableschema.h>
@@ -64,12 +64,7 @@ class KexiCellEditorFactoryPrivate
 {
 	public:
 		KexiCellEditorFactoryPrivate()
-		 : items(101)
-		 , items_by_type(101, false)
 		{
-			items.setAutoDelete( true );
-			items_by_type.setAutoDelete( false );
-
 			// Initialize standard editor cell editor factories
 			registerItem( *new KexiBlobEditorFactoryItem(), KexiDB::Field::BLOB );
 #ifdef __GNUC__
@@ -93,7 +88,10 @@ class KexiCellEditorFactoryPrivate
 			//default type
 			registerItem( *new KexiInputEditorFactoryItem(), KexiDB::Field::InvalidType );
 		}
-		~KexiCellEditorFactoryPrivate() {}
+		~KexiCellEditorFactoryPrivate()
+		{
+			qDeleteAll(items);
+		}
 
 		QString key(uint type, const QString& subType) const
 		{
@@ -105,26 +103,26 @@ class KexiCellEditorFactoryPrivate
 
 		void registerItem( KexiCellEditorFactoryItem& item, uint type, const QString& subType = QString() )
 		{
-			if (!items[ &item ])
-				items.insert( &item, &item );
+			if (!items.contains( &item ))
+				items.insert( &item );
 
 			items_by_type.insert( key(type, subType), &item );
 		}
 		
 		KexiCellEditorFactoryItem *findItem(uint type, const QString& subType)
 		{
-			KexiCellEditorFactoryItem *item = items_by_type[ key(type, subType) ];
+			KexiCellEditorFactoryItem *item = items_by_type.value( key(type, subType) );
 			if (item)
 				return item;
-			item = items_by_type[ key(type, QString()) ];
+			item = items_by_type.value( key(type, QString()) );
 			if (item)
 				return item;
-			return items_by_type[ key( KexiDB::Field::InvalidType, QString() ) ];
+			return items_by_type.value( key( KexiDB::Field::InvalidType, QString() ) );
 		}
 
-		Q3PtrDict<KexiCellEditorFactoryItem> items; //!< list of editor factory items (for later destroy)
+		QSet<KexiCellEditorFactoryItem*> items; //!< list of editor factory items (for later destroy)
 
-		Q3Dict<KexiCellEditorFactoryItem> items_by_type; //!< editor factory items accessed by a key
+		QHash<QString, KexiCellEditorFactoryItem*> items_by_type; //!< editor factory items accessed by a key
 };
 
 K_GLOBAL_STATIC(KexiCellEditorFactoryPrivate, KexiCellEditorFactory_static)
@@ -163,8 +161,8 @@ static bool hasEnumType( const KexiTableViewColumn &column )
 KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, QWidget* parent)
 {
 	KexiDB::Field *realField;
-	if (column.visibleLookupColumnInfo) {
-		realField = column.visibleLookupColumnInfo->field;
+	if (column.visibleLookupColumnInfo()) {
+		realField = column.visibleLookupColumnInfo()->field;
 	}
 	else {
 		realField = column.field();
@@ -189,7 +187,7 @@ KexiTableEdit* KexiCellEditorFactory::createEditor(KexiTableViewColumn &column, 
 		KexiDB::IndexSchema::ListIterator it = table->indicesIterator();
 		for (;it.current();++it) {
 			KexiDB::IndexSchema *idx = it.current();
-			if (idx->fields()->findRef(&f)!=-1) {
+			if (idx->fields()->contains(&f)) {
 				//find details-side rel. for this index
 				KexiDB::Relationship *rel = idx->detailsRelationships()->first();
 				if (rel) {

@@ -21,10 +21,10 @@
 
 #include "kexidatatableview.h"
 #include "kexitableview_p.h"
-#include "kexitableitem.h"
 #include "kexitableedit.h"
 
 #include <kexi_global.h>
+#include <kexidb/connection.h>
 #include <kexidb/lookupfieldschema.h>
 #include <kexidb/expression.h>
 #include <kexidb/parser/sqlparser.h>
@@ -138,14 +138,14 @@ void KexiComboBoxPopup::init()
 	d->tv = new KexiComboBoxPopup_KexiTableView(this);
 	installEventFilter(this);
 	
-	connect(d->tv, SIGNAL(itemReturnPressed(KexiTableItem*,int,int)),
-		this, SLOT(slotTVItemAccepted(KexiTableItem*,int,int)));
+	connect(d->tv, SIGNAL(itemReturnPressed(KexiDB::RecordData*,int,int)),
+		this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 
-	connect(d->tv, SIGNAL(itemMouseReleased(KexiTableItem*,int,int)),
-		this, SLOT(slotTVItemAccepted(KexiTableItem*,int,int)));
+	connect(d->tv, SIGNAL(itemMouseReleased(KexiDB::RecordData*,int,int)),
+		this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 
-	connect(d->tv, SIGNAL(itemDblClicked(KexiTableItem*,int,int)),
-		this, SLOT(slotTVItemAccepted(KexiTableItem*,int,int)));
+	connect(d->tv, SIGNAL(itemDblClicked(KexiDB::RecordData*,int,int)),
+		this, SLOT(slotTVItemAccepted(KexiDB::RecordData*,int,int)));
 }
 
 void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *field)
@@ -170,7 +170,7 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 	delete d->privateQuery;
 	d->privateQuery = 0;
 	if (lookupFieldSchema) {
-		const Q3ValueList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
+		const QList<uint> visibleColumns( lookupFieldSchema->visibleColumns() );
 		const bool multipleLookupColumnJoined = visibleColumns.count() > 1;
 //! @todo support more RowSourceType's, not only table and query
 		KexiDB::Cursor *cursor = 0;
@@ -214,8 +214,8 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 			const KexiDB::QueryColumnInfo::Vector fieldsExpanded( d->privateQuery->fieldsExpanded() );
 			uint fieldsExpandedSize( fieldsExpanded.size() );
 			KexiDB::BaseExpr *expr = 0;
-			int count = visibleColumns.count();
-			for (Q3ValueList<uint>::ConstIterator it( visibleColumns.at(count-1) ); count>0; count--, --it) {
+			QList<uint>::ConstIterator it( visibleColumns.constBegin() );
+			for (it += visibleColumns.count()-1; it!=visibleColumns.constEnd(); --it) {
 				KexiDB::QueryColumnInfo *ci = ((*it) < fieldsExpandedSize) ? fieldsExpanded.at( *it ) : 0;
 				if (!ci) {
 					kWarning() << "KexiComboBoxPopup::setData(): " << *it << " >= fieldsExpandedSize" << endl;
@@ -278,10 +278,10 @@ void KexiComboBoxPopup::setData(KexiTableViewColumn *column, KexiDB::Field *fiel
 	data->addColumn( new KexiTableViewColumn( *d->int_f ) );
 	const QVector<QString> hints( field->enumHints() );
 	for(int i=0; i < hints.size(); i++) {
-		KexiTableItem *item = data->createItem();//new KexiTableItem(1);
-		(*item)[0]=QVariant(hints[i]);
+		KexiDB::RecordData *record = data->createItem();
+		(*record)[0]=QVariant(hints[i]);
 		kDebug() << "added: '" << hints[i] <<"'"<<endl;
-		data->append( item );
+		data->append( record );
 	}
 	setDataInternal( data, true );
 }
@@ -339,10 +339,10 @@ int KexiComboBoxPopup::maxRows() const
 	return d->max_rows;
 }
 
-void KexiComboBoxPopup::slotTVItemAccepted(KexiTableItem *item, int row, int)
+void KexiComboBoxPopup::slotTVItemAccepted(KexiDB::RecordData *record, int row, int)
 {
 	hide();
-	emit rowAccepted(item, row);
+	emit rowAccepted(record, row);
 }
 
 bool KexiComboBoxPopup::eventFilter( QObject *o, QEvent *e )

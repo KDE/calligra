@@ -27,14 +27,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #endif
 #include <mysql_version.h>
 #include <mysql.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 typedef struct st_mysql MYSQL;
 #undef bool
-
-class Q3CString;
-class QString;
 
 #ifdef MYSQLMIGRATE_H
 #define NAMESPACE KexiMigration

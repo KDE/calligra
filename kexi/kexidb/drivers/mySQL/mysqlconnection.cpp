@@ -20,10 +20,9 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
 
-#include <qvariant.h>
-#include <qfile.h>
-#include <q3dict.h>
-#include <qregexp.h>
+#include <QVariant>
+#include <QFile>
+#include <QRegExp>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>

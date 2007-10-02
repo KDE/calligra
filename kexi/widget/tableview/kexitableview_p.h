@@ -32,20 +32,19 @@
 #include <kexidb/roweditbuffer.h>
 #include <widget/utils/kexidisplayutils.h>
 
-#include <qevent.h>
-#include <qtimer.h>
-#include <qvalidator.h>
-#include <q3asciidict.h>
-//Added by qt3to4:
+#include <QEvent>
+#include <QTimer>
+#include <QValidator>
 #include <QPixmap>
 #include <QLabel>
-#include <Q3ValueList>
+#include <QList>
+#include <QHash>
 
 #include <kpushbutton.h>
 
-#include <klineedit.h>
-#include <kmenu.h>
-#include <kaction.h>
+#include <KLineEdit>
+#include <KMenu>
+#include <KAction>
 
 class KexiTableEdit;
 class QLabel;
@@ -77,7 +76,7 @@ class KexiTableViewPrivate
 	KexiTableView *tv;
 
 	//! editors: one for each column (indexed by KexiTableViewColumn)
-	Q3PtrDict<KexiTableEdit> editors;
+	QHash<KexiTableViewColumn*, KexiTableEdit*> editors;
 
 	int rowHeight;
 
@@ -129,7 +128,7 @@ class KexiTableViewPrivate
 	KexiDisplayUtils::DisplayParameters defaultValueDisplayParameters;
 
 	//! Used by delayed mode of maximizeColumnsWidth() 
-	Q3ValueList<int> maximizeColumnsWidthOnShow;
+	QList<int> maximizeColumnsWidthOnShow;
 
 	/*! Used for delayed call of ensureCellVisible() after show().
 	 It's equal to (-1,-1) if ensureCellVisible() shouldn't e called. */

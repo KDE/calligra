@@ -505,6 +505,13 @@ void Part::setSupportedUserViewModes(Kexi::ViewModes modes)
 	d->supportedUserViewModes = modes;
 }
 
+KEXICORE_EXPORT QString KexiPart::fullCaptionForItem(KexiPart::Item& item, KexiPart::Part *part)
+{
+	if (part)
+		return item.name() + " : " + part->instanceCaption();
+	return item.name();
+}
+
 //-------------------------------------------------------------------------
 
 GUIClient::GUIClient(Part* part, bool partInstanceClient, const char* nameSuffix)

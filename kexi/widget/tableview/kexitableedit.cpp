@@ -80,8 +80,8 @@ KexiTableEdit::~KexiTableEdit()
 
 KexiDB::Field *KexiTableEdit::displayedField() const
 {
-	if (m_column->visibleLookupColumnInfo)
-		return m_column->visibleLookupColumnInfo->field; //mainly for lookup field in KexiComboBoxTableEdit:
+	if (m_column->visibleLookupColumnInfo())
+		return m_column->visibleLookupColumnInfo()->field; //mainly for lookup field in KexiComboBoxTableEdit:
 
 	return m_column->field(); //typical case
 }
@@ -211,7 +211,7 @@ void KexiTableEdit::paintSelectionBackground( QPainter *p, bool /*focused*/,
 	}
 }
 
-int KexiTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
+int KexiTableEdit::widthForValue( const QVariant &val, const QFontMetrics &fm )
 {
 	return fm.width( val.toString() );
 }

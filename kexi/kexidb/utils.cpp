@@ -21,6 +21,7 @@
 #include "cursor.h"
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
+#include "kexi_global.h"
 
 #include <QMap>
 #include <QHash>
@@ -51,9 +52,9 @@ struct TypeCache
 			TypeGroupList list;
 			QStringList name_list, str_list;
 			if (tlist.contains( tg )) {
-				list = tlist[ tg ];
-				name_list = nlist[ tg ];
-				str_list = slist[ tg ];
+				list = tlist.value( tg );
+				name_list = nlist.value( tg );
+				str_list = slist.value( tg );
 			}
 			list += t;
 			name_list += KexiDB::Field::typeName( t );
@@ -82,22 +83,22 @@ K_GLOBAL_STATIC(TypeCache, KexiDB_typeCache)
 
 const TypeGroupList KexiDB::typesForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	return KexiDB_typeCache->tlist[ typeGroup ];
+	return KexiDB_typeCache->tlist.value( typeGroup );
 }
 
 QStringList KexiDB::typeNamesForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	return KexiDB_typeCache->nlist[ typeGroup ];
+	return KexiDB_typeCache->nlist.value( typeGroup );
 }
 
 QStringList KexiDB::typeStringsForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	return KexiDB_typeCache->slist[ typeGroup ];
+	return KexiDB_typeCache->slist.value( typeGroup );
 }
 
 KexiDB::Field::Type KexiDB::defaultTypeForGroup(KexiDB::Field::TypeGroup typeGroup)
 {
-	return (typeGroup <= Field::LastTypeGroup) ? KexiDB_typeCache->def_tlist[ typeGroup ] : Field::InvalidType;
+	return (typeGroup <= Field::LastTypeGroup) ? KexiDB_typeCache->def_tlist.value( typeGroup ) : Field::InvalidType;
 }
 
 void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
@@ -168,7 +169,7 @@ void KexiDB::getHTMLErrorMesage(Object* obj, ResultInfo *result)
 
 int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objType )
 {
-	RowData data;
+	RecordData data;
 	if (true!=conn.querySingleRecord(
 		QString::fromLatin1("select o_id from kexi__objects where lower(o_name)='%1' and o_type=%2")
 		.arg(objName.toLower()).arg(objType), data))
@@ -680,9 +681,9 @@ bool KexiDB::isBuiltinTableFieldProperty( const QByteArray& propertyName )
 	return KexiDB_builtinFieldProperties->set.contains( propertyName );
 }
 
-bool KexiDB::setFieldProperties( Field& field, const QMap<QByteArray, QVariant>& values )
+bool KexiDB::setFieldProperties( Field& field, const QHash<QByteArray, QVariant>& values )
 {
-	QMap<QByteArray, QVariant>::ConstIterator it;
+	QHash<QByteArray, QVariant>::ConstIterator it;
 	if ( (it = values.find("type")) != values.constEnd() ) {
 		if (!setIntToFieldType(field, *it))
 			return false;
@@ -1237,13 +1238,6 @@ void KexiDB::getLimitsForType(Field::Type type, int &minValue, int &maxValue)
 		minValue = (int)-0x07FFFFFFF;
 		maxValue = (int)(0x080000000-1);
 	}
-}
-
-void KexiDB::debugRowData(const RowData& rowData)
-{
-	KexiDBDbg << QString("ROW DATA (%1 columns):").arg(rowData.count()) << endl;
-	foreach (const QVariant& value, rowData)
-		KexiDBDbg << "- " << value << endl;
 }
 
 Field::Type KexiDB::maximumForIntegerTypes(Field::Type t1, Field::Type t2)

@@ -20,11 +20,11 @@
 #ifndef SQLTYPES_H
 #define SQLTYPES_H
 
-#include <qvariant.h>
-#include <qlist.h>
+#include <QVariant>
+#include <QList>
 
 extern int current;
-extern QString ctoken;
+extern QByteArray ctoken;
 
 struct dateType
 {

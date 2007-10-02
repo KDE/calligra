@@ -25,11 +25,8 @@
 #include <kexidb/connectiondata.h>
 #include <kexidb/schemadata.h>
 
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
-#include <Q3PtrList>
+#include <QDateTime>
+#include <QList>
 
 class KexiProjectDataPrivate;
 
@@ -44,9 +41,24 @@ class KexiProjectDataPrivate;
 class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaData
 {
 	public:
-		typedef Q3PtrList<KexiProjectData> List;
-		typedef QMap<Q3CString,QString> ObjectInfo;
-		
+		typedef QList<KexiProjectData*> List;
+		typedef QHash<QByteArray,QString> ObjectInfo;
+
+		//! A list of autoopen objects allowing deep copies
+		class KEXICORE_EXPORT AutoOpenObjects : public QList<ObjectInfo*>
+		{
+			public:
+				AutoOpenObjects();
+
+				~AutoOpenObjects();
+
+				//! Construct autoopen objects list as a deep copy of \a other
+				AutoOpenObjects(const AutoOpenObjects& other);
+
+				//! Assigns a deep copy of \a other
+				AutoOpenObjects& operator=(const AutoOpenObjects& other);
+		};
+
 		KexiProjectData();
 
 		KexiProjectData( const KexiDB::ConnectionData &cdata, 
@@ -81,6 +93,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 		QString infoString(bool nobr = true) const;
 
 		QDateTime lastOpened() const;
+
 		void setLastOpened(const QDateTime& lastOpened);
 
 		QString description() const;
@@ -97,7 +110,7 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
 		/*! objects to open on startup (come from command line "-open" option)
 		 It's public for convenience */
-		Q3ValueList<ObjectInfo> autoopenObjects;
+		AutoOpenObjects autoopenObjects;
 
 		/*! @internal
 		 Format version used when saving the data to a shortcut file.

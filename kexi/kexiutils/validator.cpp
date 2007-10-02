@@ -21,23 +21,58 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
+namespace KexiUtils {
+class Validator::Private
+{
+	public:
+		Private()
+		 : acceptsEmptyValue(false)
+		{
+		}
+		bool acceptsEmptyValue : 1;
+};
+}
+
+//-----------------------------------------------------------
+
+namespace KexiUtils {
+class MultiValidator::Private
+{
+	public:
+		Private()
+		{
+		}
+		~Private()
+		{
+			qDeleteAll(ownedSubValidators);
+			ownedSubValidators.clear();
+		}
+
+		QList<QValidator*> ownedSubValidators;
+		QList<QValidator*> subValidators;
+};
+}
+
+//-----------------------------------------------------------
+
 using namespace KexiUtils;
 
 Validator::Validator(QObject * parent)
-: QValidator(parent)
-, m_acceptsEmptyValue(false)
+ : QValidator(parent)
+ , d( new Private )
 {
 }
 
 Validator::~Validator()
 {
+	delete d;
 }
 
 Validator::Result Validator::check(const QString &valueName, const QVariant& v, 
 	QString &message, QString &details)
 {
 	if (v.isNull() || v.type()==QVariant::String && v.toString().isEmpty()) {
-		if (!m_acceptsEmptyValue) {
+		if (!d->acceptsEmptyValue) {
 			message = Validator::msgColumnNotEmpty().arg(valueName);
 			return Error;
 		}
@@ -57,34 +92,48 @@ QValidator::State Validator::validate ( QString & , int & ) const
 	return QValidator::Acceptable;
 }
 
+void Validator::setAcceptsEmptyValue( bool set ) { d->acceptsEmptyValue = set; }
+
+bool Validator::acceptsEmptyValue() const { return d->acceptsEmptyValue; }
+
+const QString Validator::msgColumnNotEmpty()
+{
+	return I18N_NOOP("\"%1\" value has to be entered.");
+}
+
 //-----------------------------------------------------------
 
 MultiValidator::MultiValidator(QObject* parent)
  : Validator(parent)
+ , d( new Private )
 {
-	m_ownedSubValidators.setAutoDelete(true);
 }
 
 MultiValidator::MultiValidator(QValidator *validator, QObject * parent)
  : Validator(parent)
+ , d( new Private )
 {
 	addSubvalidator(validator);
 }
 
+MultiValidator::~MultiValidator()
+{
+	delete d;
+}
 
 void MultiValidator::addSubvalidator( QValidator* validator, bool owned )
 {
 	if (!validator)
 		return;
-	m_subValidators.append(validator);
+	d->subValidators.append(validator);
 	if (owned && !validator->parent())
-		m_ownedSubValidators.append(validator);
+		d->ownedSubValidators.append(validator);
 }
 
 QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 {
 	State s;
-	foreach ( QValidator* validator, m_subValidators ) {
+	foreach ( QValidator* validator, d->subValidators ) {
 		s = validator->validate(input, pos);
 		if (s==Intermediate || s==Invalid)
 			return s;
@@ -94,7 +143,7 @@ QValidator::State MultiValidator::validate( QString & input, int & pos ) const
 
 void MultiValidator::fixup ( QString & input ) const
 {
-	foreach ( QValidator* validator, m_subValidators )
+	foreach ( QValidator* validator, d->subValidators )
 		validator->fixup(input);
 }
 
@@ -104,7 +153,7 @@ Validator::Result MultiValidator::internalCheck(
 {
 	Result r;
 	bool warning = false;
-	foreach ( QValidator* validator, m_subValidators ) {
+	foreach ( QValidator* validator, d->subValidators ) {
 		if (dynamic_cast<Validator*>(validator))
 			r = dynamic_cast<Validator*>(validator)->internalCheck(valueName, v, message, details);
 		else

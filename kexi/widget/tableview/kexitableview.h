@@ -27,20 +27,15 @@
 #ifndef KEXITABLEVIEW_H
 #define KEXITABLEVIEW_H
 
-#include <q3scrollview.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <q3ptrlist.h>
+#include <Q3ScrollView>
+#include <QVariant>
+#include <QToolTip>
 #include <q3header.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include <QFocusEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
-#include <QEvent>
 #include <QKeyEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
 #include <QShowEvent>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -57,7 +52,6 @@
 class KPrinter;
 class KAction;
 
-class KexiTableItem;
 class KexiTableView;
 class KexiTableEdit;
 class KexiTableViewPrivate;
@@ -262,7 +256,7 @@ public:
 	 @see Appearance::rowHighlightingEnabled setHighlightedRow() */
 	int highlightedRow() const;
 
-	KexiTableItem *highlightedItem() const;
+	KexiDB::RecordData *highlightedItem() const;
 
 	/*! \return vertical scrollbar. Implemented for KexiDataAwareObjectInterface. */
 	virtual QScrollBar* verticalScrollBar() const { return Q3ScrollView::verticalScrollBar(); }
@@ -290,7 +284,7 @@ public slots:
 	 header has maximum overall width. Each selected column's width will be increased 
 	 by the same value. Does nothing if \a columnList is empty or there is no free space 
 	 to resize columns. If this table view is not visible, resizing will be performed on showing. */
-	void maximizeColumnsWidth( const Q3ValueList<int> &columnList );
+	void maximizeColumnsWidth( const QList<int> &columnList );
 
 	/*! Adjusts the size of the sections to fit the size of the horizontal header 
 	 as completely as possible. Only sections for which column stretch is enabled will be resized.
@@ -326,8 +320,8 @@ public slots:
 	 -read-only flag is set (see isReadOnly())
 	 \ return inserted row's data
 	*/
-	virtual KexiTableItem *insertEmptyRow(int row = -1) 
-		{ return KexiDataAwareObjectInterface::insertEmptyRow(row); }
+	virtual KexiDB::RecordData *insertEmptyRow(int pos = -1) 
+		{ return KexiDataAwareObjectInterface::insertEmptyRow(pos); }
 
 	/*! Used when Return key is pressed on cell or "+" nav. button is clicked.
 	 Also used when we want to continue editing a cell after "invalid value" message
@@ -373,27 +367,27 @@ public slots:
 signals:
 	virtual void dataSet( KexiTableViewData *data );
 
-	virtual void itemSelected(KexiTableItem *);
+	virtual void itemSelected(KexiDB::RecordData *);
 	virtual void cellSelected(int col, int row);
 
-	void itemReturnPressed(KexiTableItem *, int row, int col);
-	void itemDblClicked(KexiTableItem *, int row, int col);
-	void itemMouseReleased(KexiTableItem *, int row, int col);
+	void itemReturnPressed(KexiDB::RecordData *, int row, int col);
+	void itemDblClicked(KexiDB::RecordData *, int row, int col);
+	void itemMouseReleased(KexiDB::RecordData *, int row, int col);
 
-	void dragOverRow(KexiTableItem *item, int row, QDragMoveEvent* e);
-	void droppedAtRow(KexiTableItem *item, int row, QDropEvent *e, KexiTableItem*& newItem);
+	void dragOverRow(KexiDB::RecordData *record, int row, QDragMoveEvent* e);
+	void droppedAtRow(KexiDB::RecordData *record, int row, QDropEvent *e, KexiDB::RecordData*& newRecord);
 
 	/*! Data has been refreshed on-screen - emitted from initDataContents(). */
 	virtual void dataRefreshed();
 
-	virtual void itemChanged(KexiTableItem *, int row, int col);
-	virtual void itemChanged(KexiTableItem *, int row, int col, QVariant oldValue);
-	virtual void itemDeleteRequest(KexiTableItem *, int row, int col);
+	virtual void itemChanged(KexiDB::RecordData *, int row, int col);
+	virtual void itemChanged(KexiDB::RecordData *, int row, int col, QVariant oldValue);
+	virtual void itemDeleteRequest(KexiDB::RecordData *, int row, int col);
 	virtual void currentItemDeleteRequest();
 	//! Emitted for spreadsheet mode when an item was deleted and a new item has been appended
 	virtual void newItemAppendedForAfterDeletingInSpreadSheetMode();
 //	void addRecordRequest();
-//	void contextMenuRequested(KexiTableItem *,  int row, int col, const QPoint &);
+//	void contextMenuRequested(KexiDB::RecordData *,  int row, int col, const QPoint &);
 	void sortedColumnChanged(int col);
 
 	//! emmited when row editing is started (for updating or inserting)
@@ -412,7 +406,7 @@ protected slots:
 
 	virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
 
-	virtual void slotRowsDeleted( const Q3ValueList<int> & ); 
+	virtual void slotRowsDeleted( const QList<int> & ); 
 
 	//! updates display after many rows deletion
 	void slotColumnWidthChanged( int col, int os, int ns );
@@ -437,22 +431,22 @@ protected slots:
 	virtual void reloadData();
 
 	//! Handles KexiTableViewData::rowRepaintRequested() signal
-	virtual void slotRowRepaintRequested(KexiTableItem& item);
+	virtual void slotRowRepaintRequested(KexiDB::RecordData& record);
 
 	//! Handles KexiTableViewData::aboutToDeleteRow() signal. Prepares info for slotRowDeleted().
-	virtual void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint)
-	{ KexiDataAwareObjectInterface::slotAboutToDeleteRow(item, result, repaint); }
+	virtual void slotAboutToDeleteRow(KexiDB::RecordData& record, KexiDB::ResultInfo* result, bool repaint)
+	{ KexiDataAwareObjectInterface::slotAboutToDeleteRow(record, result, repaint); }
 
 	//! Handles KexiTableViewData::rowDeleted() signal to repaint when needed.
 	virtual void slotRowDeleted() { KexiDataAwareObjectInterface::slotRowDeleted(); }
 
 	//! Handles KexiTableViewData::rowInserted() signal to repaint when needed.
-	virtual void slotRowInserted(KexiTableItem *item, bool repaint)
-	{ KexiDataAwareObjectInterface::slotRowInserted(item, repaint); }
+	virtual void slotRowInserted(KexiDB::RecordData *record, bool repaint)
+	{ KexiDataAwareObjectInterface::slotRowInserted(record, repaint); }
 
 	//! Like above, not db-aware version
-	virtual void slotRowInserted(KexiTableItem *item, uint row, bool repaint)
-	{ KexiDataAwareObjectInterface::slotRowInserted(item, row, repaint); }
+	virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint)
+	{ KexiDataAwareObjectInterface::slotRowInserted(record, row, repaint); }
 
 	/*! Handles verticalScrollBar()'s valueChanged(int) signal. 
 	 Called when vscrollbar's value has been changed. */
@@ -507,15 +501,15 @@ protected:
 	virtual void addHeaderColumn(const QString& caption, const QString& description, 
 		const QIconSet& icon, int size);
 
-	/*! @internal \return true if the row defined by \a item has default 
+	/*! @internal \return true if the row defined by \a record has default 
 	 value at column \a col. If this is the case and \a value is not NULL,
 	 *value is set to the default value. */
-	bool isDefaultValueDisplayed(KexiTableItem *item, int col, QVariant* value = 0);
+	bool isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value = 0);
 
 	//! painting and layout
 	void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 	void createBuffer(int width, int height);
-	void paintCell(QPainter* p, KexiTableItem *item, int col, int row, const QRect &cr, bool print=false);
+	void paintCell(QPainter* p, KexiDB::RecordData *record, int col, int row, const QRect &cr, bool print=false);
 	void paintEmptyArea(QPainter *p, int cx, int cy, int cw, int ch);
 	void updateGeometries();
 
@@ -579,7 +573,7 @@ protected:
 	void showContextMenu( const QPoint& pos = QPoint(-1,-1) );
 
 	/*! internal */
-	inline void paintRow(KexiTableItem *item,
+	inline void paintRow(KexiDB::RecordData *record,
 		QPainter *pb, int r, int rowp, int cx, int cy, 
 		int colfirst, int collast, int maxwc);
 
@@ -628,11 +622,11 @@ protected:
 	void updateAfterCancelRowEdit();
 	void updateAfterAcceptRowEdit();
 
-	/*! Sets \a cellValue if there is a lookup value for the cell \a item.
+	/*! Sets \a cellValue if there is a lookup value for the cell \a record.
 	 Used in KexiTableView::paintCell() and KexiTableViewCellToolTip::maybeTip()
 	 \return true is \a cellValue has been found. */
 	bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit, 
-		KexiTableItem *item, KexiTableViewColumn *tvcol) const;
+		KexiDB::RecordData *record, KexiTableViewColumn *tvcol) const;
 
 //	//! Called to repaint contents after a row is deleted.
 //	void repaintAfterDelete();
@@ -640,7 +634,7 @@ protected:
 	KexiTableViewPrivate *d;
 
 	class WhatsThis;
-	friend class KexiTableItem;
+//Qt 4	friend class KexiTableItem;
 	friend class WhatsThis;
 	friend class KexiTableViewCellToolTip;
 };

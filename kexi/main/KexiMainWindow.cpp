@@ -100,8 +100,6 @@
 #include "kexisearchandreplaceiface.h"
 #include <kexi_global.h>
 
-//#include "kde2_closebutton.xpm"
-
 #include <widget/kexibrowser.h>
 #include <widget/kexipropertyeditorview.h>
 #include <widget/utils/kexirecordnavigator.h>
@@ -171,7 +169,6 @@ class KexiDockWidget : public QDockWidget
 	private:
 		QSize m_hint;
 };
-
 
 //-------------------------------------------------
 
@@ -614,7 +611,13 @@ KActionCollection *KexiMainWindow::actionCollection() const
 
 KexiWindow* KexiMainWindow::currentWindow() const
 {
-	return d->mainWidget->tabWidget() ? qobject_cast<KexiWindow*>(d->mainWidget->tabWidget()->currentWidget()) : 0;
+	if (!d->mainWidget->tabWidget())
+		return 0;
+	KexiWindowContainer *windowContainer
+		= dynamic_cast<KexiWindowContainer*>(d->mainWidget->tabWidget()->currentWidget());
+	if (!windowContainer)
+		return 0;
+	return windowContainer->window;
 }
 
 void KexiMainWindow::setupActions()
@@ -1690,29 +1693,25 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 	bool openingCancelled;
 	//ok, now open "autoopen: objects
 	if (d->prj) {
-		for (Q3ValueList<KexiProjectData::ObjectInfo>::ConstIterator it = 
-				d->prj->data()->autoopenObjects.constBegin();
-			it != d->prj->data()->autoopenObjects.constEnd(); ++it )
-		{
-			KexiProjectData::ObjectInfo info = *it;
+		foreach (KexiProjectData::ObjectInfo* info, d->prj->data()->autoopenObjects) {
 			KexiPart::Info *i = Kexi::partManager().infoForMimeType( 
-				Q3CString("kexi/")+info["type"].toLower().toLatin1() );
+				Q3CString("kexi/")+info->value("type").toLower().toLatin1() );
 			if (!i) {
 				not_found_msg += "<li>";
-				if (!info["name"].isEmpty())
-					not_found_msg += (QString("\"") + info["name"] + "\" - ");
-				if (info["action"]=="new")
-					not_found_msg += i18n("cannot create object - unknown object type \"%1\"", info["type"]);
+				if (!info->value("name").isEmpty())
+					not_found_msg += (QString("\"") + info->value("name") + "\" - ");
+				if (info->value("action")=="new")
+					not_found_msg += i18n("cannot create object - unknown object type \"%1\"", info->value("type"));
 				else
-					not_found_msg += i18n("unknown object type \"%1\"", info["type"]);
+					not_found_msg += i18n("unknown object type \"%1\"", info->value("type"));
 				not_found_msg += internalReason(&Kexi::partManager())+"<br></li>";
 				continue;
 			}
 			// * NEW
-			if (info["action"]=="new") {
+			if (info->value("action")=="new") {
 				if (!newObject( i, openingCancelled) && !openingCancelled) {
 					not_found_msg += "<li>";
-					not_found_msg += (i18n("cannot create object of type \"%1\"", info["type"])+
+					not_found_msg += (i18n("cannot create object of type \"%1\"", info->value("type"))+
 						internalReason(d->prj)+"<br></li>");
 				}
 				else
@@ -1720,27 +1719,27 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 				continue;
 			}
 
-			KexiPart::Item *item = d->prj->item(i, info["name"]);
+			KexiPart::Item *item = d->prj->item(i, info->value("name"));
 
 			if (!item) {
 				QString taskName;
-				if (info["action"]=="print-preview")
+				if (info->value("action")=="print-preview")
 					taskName = i18n("making print preview for");
-				else if (info["action"]=="print")
+				else if (info->value("action")=="print")
 					taskName = i18n("printing");
-				else if (info["action"]=="execute")
+				else if (info->value("action")=="execute")
 					taskName = i18nc("\"executing object\" action", "executing");
 				else 
 					taskName = i18n("opening");
 
-				not_found_msg += (QString("<li>")+ taskName + " \"" + info["name"] + "\" - ");
-				if ("table"==info["type"].toLower())
+				not_found_msg += (QString("<li>")+ taskName + " \"" + info->value("name") + "\" - ");
+				if ("table"==info->value("type").toLower())
 					not_found_msg += i18n("table not found");
-				else if ("query"==info["type"].toLower())
+				else if ("query"==info->value("type").toLower())
 					not_found_msg += i18n("query not found");
-				else if ("macro"==info["type"].toLower())
+				else if ("macro"==info->value("type").toLower())
 					not_found_msg += i18n("macro not found");
-				else if ("script"==info["type"].toLower())
+				else if ("script"==info->value("type").toLower())
 					not_found_msg += i18n("script not found");
 				else
 					not_found_msg += i18n("object not found");
@@ -1748,37 +1747,37 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 				continue;
 			}
 			// * EXECUTE, PRINT, PRINT PREVIEW
-			if (info["action"]=="execute") {
+			if (info->value("action")=="execute") {
 				tristate res = executeItem(item);
 				if (false == res) {
-					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot execute object")+
+					not_found_msg += ( QString("<li>\"")+ info->value("name") + "\" - " + i18n("cannot execute object")+
 					internalReason(d->prj)+"<br></li>" );
 				}
 				continue;
 			}
-			else if (info["action"]=="print") {
+			else if (info->value("action")=="print") {
 				tristate res = printItem(item);
 				if (false == res) {
-					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot print object")+
+					not_found_msg += ( QString("<li>\"")+ info->value("name") + "\" - " + i18n("cannot print object")+
 					internalReason(d->prj)+"<br></li>" );
 				}
 				continue;
 			}
-			else if (info["action"]=="print-preview") {
+			else if (info->value("action")=="print-preview") {
 				tristate res = printPreviewForItem(item);
 				if (false == res) {
-					not_found_msg += ( QString("<li>\"")+ info["name"] + "\" - " + i18n("cannot make print preview of object")+
+					not_found_msg += ( QString("<li>\"")+ info->value("name") + "\" - " + i18n("cannot make print preview of object")+
 					internalReason(d->prj)+"<br></li>" );
 				}
 				continue;
 			}
 
 			Kexi::ViewMode viewMode;
-			if (info["action"]=="open")
+			if (info->value("action")=="open")
 				viewMode = Kexi::DataViewMode;
-			else if (info["action"]=="design")
+			else if (info->value("action")=="design")
 				viewMode = Kexi::DesignViewMode;
-			else if (info["action"]=="edittext")
+			else if (info->value("action")=="edittext")
 				viewMode = Kexi::TextViewMode;
 			else
 				continue; //sanity
@@ -1787,7 +1786,7 @@ void KexiMainWindow::slotAutoOpenObjectsLater()
 			if (!openObject(item, viewMode, openingCancelled, 0, &openObjectMessage) 
 				&& (!openingCancelled || !openObjectMessage.isEmpty()))
 			{
-				not_found_msg += (QString("<li>\"")+ info["name"] + "\" - ");
+				not_found_msg += (QString("<li>\"")+ info->value("name") + "\" - ");
 				if (openObjectMessage.isEmpty())
 					not_found_msg += i18n("cannot open object");
 				else
@@ -2009,7 +2008,7 @@ void KexiMainWindow::setupProjectNavigator()
 		);
 
 		d->nav = new KexiBrowser(d->navDockWidget);
-		d->nav->installEventFilter(this);
+//TODO REMOVE?		d->nav->installEventFilter(this);
 		d->navDockWidget->setWindowTitle(d->nav->windowTitle());
 		d->navDockWidget->setWidget( d->nav );
 
@@ -2114,7 +2113,7 @@ void KexiMainWindow::setupPropertyEditor()
 		d->propEditor = new KexiPropertyEditorView(d->propEditorTabWidget);
 		d->propEditorTabWidget->setWindowTitle(d->propEditor->windowTitle());
 		d->propEditorTabWidget->addTab(d->propEditor, i18n("Properties"));
-		d->propEditor->installEventFilter(this);
+//TODO REMOVE?		d->propEditor->installEventFilter(this);
 
 		KConfigGroup propertyEditorGroup( d->config->group("PropertyEditor") );
 		int size = propertyEditorGroup.readEntry<int>("FontSize", -1);
@@ -2825,7 +2824,7 @@ KexiMainWindow::activateWindow(KexiWindow& window)
 	kDebug() << "KexiMainWindow::activateWindow(KexiWindow&)" << endl;
 
 	d->focus_before_popup = &window;
-	d->mainWidget->tabWidget()->setCurrentWidget(&window);
+	d->mainWidget->tabWidget()->setCurrentWidget(window.parentWidget()/*container*/);
 	window.activate();
 	return true;
 }
@@ -3048,7 +3047,7 @@ tristate KexiMainWindow::openProject(const QString& aFileName,
 
 tristate KexiMainWindow::openProject(const QString& aFileName, 
 	KexiDB::ConnectionData *cdata, const QString& dbName,
-	const Q3ValueList<KexiProjectData::ObjectInfo>& autoopenObjects)
+	const KexiProjectData::AutoOpenObjects& autoopenObjects)
 {
 	if (d->prj) {
 		return openProjectInExternalKexiInstance(aFileName, cdata, dbName);
@@ -3718,7 +3717,9 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 	}
 
 	d->removeWindow(window_id); //don't remove -KMDI will do that
-	d->mainWidget->tabWidget()->removeTab( d->mainWidget->tabWidget()->indexOf( window ) );
+	QWidget *windowContainer = window->parentWidget();
+	d->mainWidget->tabWidget()->removeTab( 
+		d->mainWidget->tabWidget()->indexOf( windowContainer ) );
 
 	//also remove from 'print setup dialogs' cache, if needed
 	int printedObjectID = 0;
@@ -3768,6 +3769,7 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 #else
 #pragma WARNING( TODO	KMdiMainFrm::closeWindow(window, layoutTaskBar); )
 #endif
+	delete windowContainer;
 
 	//focus navigator if nothing else available
 	if (d->openedWindowsCount()==0) {
@@ -3837,6 +3839,7 @@ bool KexiMainWindow::acceptsSharedActions(QObject *w)
 	return w->inherits("KexiWindow") || w->inherits("KexiView");
 }
 
+#if 0 // remove?
 bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 {
 	//KexiVDebug << "eventFilter: " <<e->type() << " " <<obj->name()<<endl;
@@ -4013,6 +4016,7 @@ bool KexiMainWindow::eventFilter( QObject *obj, QEvent * e )
 //2.0: unused		return false;
 	return KexiMainWindowSuper::eventFilter(obj,e);//let KMDI do its work
 }
+#endif
 
 bool KexiMainWindow::openingAllowed(KexiPart::Item* item, Kexi::ViewMode viewMode)
 {
@@ -4064,6 +4068,7 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 
 	bool needsUpdateViewGUIClient = true;
 	bool alreadyOpened = false;
+	KexiWindowContainer *windowContainer = 0;
 	if (window) {
 		//window->activate();
 		if (viewMode!=window->currentViewMode()) {
@@ -4083,16 +4088,36 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 			currentWindow() ? currentWindow()->currentViewMode() : Kexi::NoViewMode,
 			part, viewMode);
 
+		// open new tab earlier
+		windowContainer = new KexiWindowContainer(d->mainWidget->tabWidget());
+		d->mainWidget->tabWidget()->addTab( windowContainer, 
+			KIcon(part ? part->info()->itemIcon() : QString()), KexiPart::fullCaptionForItem(*item, part) );
+		d->mainWidget->tabWidget()->setCurrentWidget(windowContainer);
+
 #ifndef KEXI_NO_PENDING_DIALOGS
 		d->addItemToPendingWindows(item, Private::WindowOpeningJob);
 #endif
-		window = d->prj->openObject(d->mainWidget->tabWidget(), *item, viewMode, staticObjectArgs);
+//		window = d->prj->openObject(d->mainWidget->tabWidget(), *item, viewMode, staticObjectArgs);
+		window = d->prj->openObject(windowContainer, *item, viewMode, staticObjectArgs);
+		if (window) {
+			windowContainer->setWindow(window);
+			// update text and icon
+			d->mainWidget->tabWidget()->setTabText(
+				d->mainWidget->tabWidget()->indexOf( windowContainer ),
+        window->windowTitle() );
+			d->mainWidget->tabWidget()->setTabIcon(
+				d->mainWidget->tabWidget()->indexOf( windowContainer ),
+        window->windowIcon() );
+		}
 	}
 
 	if (!window || !activateWindow(*window)) {
 #ifndef KEXI_NO_PENDING_DIALOGS
 		d->removePendingWindow(item->identifier());
 #endif
+		d->mainWidget->tabWidget()->removeTab( 
+			d->mainWidget->tabWidget()->indexOf( windowContainer ) );
+		delete windowContainer;
 		updateCustomPropertyPanelTabs(0, Kexi::NoViewMode); //revert
 		//js TODO: add error msg...
 		return 0;
@@ -4122,8 +4147,8 @@ KexiMainWindow::openObject(KexiPart::Item* item, Kexi::ViewMode viewMode, bool &
 	if (window && !alreadyOpened) {
 //		window->setParent(d->tabWidget);
 //		KexiWindow* previousWindow = currentWindow();
-		d->mainWidget->tabWidget()->addTab(window, window->windowIcon(), window->windowTitle());
-		d->mainWidget->tabWidget()->setCurrentWidget(window);
+//moved		d->mainWidget->tabWidget()->addTab(window, window->windowIcon(), window->windowTitle());
+//moved		d->mainWidget->tabWidget()->setCurrentWidget(window);
 		// Call switchToViewMode() and propertySetSwitched() again here because 
 		// this is the time when then new window is the current one - previous call did nothing.
 		switchToViewMode(*window, window->currentViewMode());
@@ -4303,7 +4328,6 @@ void KexiMainWindow::renameObject( KexiPart::Item *item, const QString& _newName
 		success = false;
 		return;
 	}
-	d->pendingWindowsExist();
 	QString newName = _newName.trimmed();
 	if (newName.isEmpty()) {
 		showSorryMessage( i18n("Could not set empty name for this object.") );
@@ -4318,7 +4342,6 @@ void KexiMainWindow::renameObject( KexiPart::Item *item, const QString& _newName
 		success = false;
 		return;
 	}
-	d->pendingWindowsExist();
 }
 
 void KexiMainWindow::slotObjectRenamed(const KexiPart::Item &item, const QString& /*oldName*/)
@@ -4379,7 +4402,7 @@ void KexiMainWindow::slotDirtyFlagChanged(KexiWindow* window)
 	invalidateActions();
 	updateAppCaption();
 	d->mainWidget->tabWidget()->setTabText(
-		d->mainWidget->tabWidget()->indexOf(window), 
+		d->mainWidget->tabWidget()->indexOf( window->parentWidget() ), 
 		window->windowTitle() );
 }
 

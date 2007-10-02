@@ -21,8 +21,8 @@
 #ifndef KEXIDB_UTILS_H
 #define KEXIDB_UTILS_H
 
-#include <q3valuelist.h>
-#include <qvariant.h>
+#include <QList>
+#include <QVariant>
 #include <QByteArray>
 
 #include <kexidb/connection.h>
@@ -84,7 +84,7 @@ namespace KexiDB
 			+ conn.driver()->valueToSQL( ftype, val) + ")");
 	}
 
-	typedef Q3ValueList<uint> TypeGroupList;
+	typedef QList<uint> TypeGroupList;
 
 	/*! \return list of types for type group \a typeGroup. */
 	KEXI_DB_EXPORT const TypeGroupList typesForGroup(Field::TypeGroup typeGroup);
@@ -326,7 +326,7 @@ namespace KexiDB
 	 Properties coming from extended schema are also supported.
 	 This function is used e.g. by AlterTableHandler when property information comes in form of text.
 	 */
-	KEXI_DB_EXPORT bool setFieldProperties( Field& field, const QMap<QByteArray, QVariant>& values );
+	KEXI_DB_EXPORT bool setFieldProperties( Field& field, const QHash<QByteArray, QVariant>& values );
 
 	/*! Sets property value for \a field. \return true if the property has been found and 
 	 the value is valid for this property. On failure contents of \a field is undefined.
@@ -435,9 +435,6 @@ namespace KexiDB
 	 Signed integers are assumed. */
 //! @todo add support for unsigned flag
 	KEXI_DB_EXPORT void getLimitsForType(Field::Type type, int &minValue, int &maxValue);
-
-	/*! Shows debug information about \a rowData row data. */
-	KEXI_DB_EXPORT void debugRowData(const RowData& rowData);
 
 	/*! \return type that's maximum of two integer types \a t1 and \a t2, e.g. Integer for (Byte, Integer). 
 	 If one of the types is not of the integer group, Field::InvalidType is returned. */

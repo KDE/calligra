@@ -33,7 +33,6 @@
 #include <widget/utils/kexicomboboxdropdownbutton.h>
 #include "kexicomboboxpopup.h"
 #include "kexitableview.h"
-#include "kexitableitem.h"
 #include "kexi.h"
 
 #include <klineedit.h>
@@ -109,9 +108,9 @@ KexiComboBoxTableEdit::~KexiComboBoxTableEdit()
 
 void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
 {
-	if (!m_column->visibleLookupColumnInfo || d->visibleTableViewColumn/*sanity*/)
+	if (!m_column->visibleLookupColumnInfo() || d->visibleTableViewColumn/*sanity*/)
 		return;
-	const KexiDB::Field::Type t = m_column->visibleLookupColumnInfo->field->type();
+	const KexiDB::Field::Type t = m_column->visibleLookupColumnInfo()->field->type();
 //! @todo subtype?
 	KexiCellEditorFactoryItem *item = KexiCellEditorFactory::item(t);
 	if (!item || item->className()=="KexiInputTableEdit")
@@ -119,7 +118,7 @@ void KexiComboBoxTableEdit::createInternalEditor(KexiDB::QuerySchema& schema)
 	//special cases: BLOB, Bool datatypes
 //todo
 	//find real type to display
-	KexiDB::QueryColumnInfo *ci = m_column->visibleLookupColumnInfo;
+	KexiDB::QueryColumnInfo *ci = m_column->visibleLookupColumnInfo();
 	KexiDB::QueryColumnInfo *visibleLookupColumnInfo = 0;
 	if (ci->indexForVisibleLookupValue() != -1) {
 		//Lookup field is defined
@@ -191,7 +190,7 @@ QVariant KexiComboBoxTableEdit::visibleValue()
 /*	KexiDB::LookupFieldSchema *lookupFieldSchema = this->lookupFieldSchema();
 	if (!popup() || !lookupFieldSchema)
 		return QVariant();
-	KexiTableItem *it = popup()->tableView()->selectedItem();
+	KexiDB::RecordData *it = popup()->tableView()->selectedItem();
 	return it ? it->at( lookupFieldSchema->visibleColumn() ) : QVariant();*/
 }
 
@@ -240,7 +239,7 @@ void KexiComboBoxTableEdit::setupContents( QPainter *p, bool focused, const QVar
 		else if ((lookupFieldSchema = this->lookupFieldSchema())) {
 		/* handled at at KexiTableView level
 			if (popup()) {
-				KexiTableItem *it = popup()->tableView()->selectedItem();
+				KexiDB::RecordData *it = popup()->tableView()->selectedItem();
 				if (it && lookupFieldSchema->visibleColumn()!=-1 && (int)it->size() >= lookupFieldSchema->visibleColumn())
 					txt = it->at( lookupFieldSchema->visibleColumn() ).toString();
 			}*/
@@ -327,7 +326,7 @@ void KexiComboBoxTableEdit::slotLineEditTextChanged(const QString& s)
 	slotInternalEditorValueChanged(s);
 }
 
-int KexiComboBoxTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm )
+int KexiComboBoxTableEdit::widthForValue( const QVariant &val, const QFontMetrics &fm )
 {
 	KexiTableViewData *relData = column() ? column()->relatedData() : 0;
 	if (lookupFieldSchema() || relData) {
@@ -337,13 +336,13 @@ int KexiComboBoxTableEdit::widthForValue( QVariant &val, const QFontMetrics &fm 
 		return qMax(KEXITV_MINIMUM_COLUMN_WIDTH, fm.width(val.toString()));
 	}
 	//use 'enum hints' model
-	Q3ValueVector<QString> hints = field()->enumHints();
+	QVector<QString> hints = field()->enumHints();
 	bool ok;
 	int idx = val.toInt(&ok);
 	if (!ok || idx < 0 || idx > int(hints.size()-1))
 		return KEXITV_MINIMUM_COLUMN_WIDTH;
-	QString txt = hints.at( idx, &ok );
-	if (!ok)
+	QString txt = hints.value( idx );
+	if (txt.isEmpty())
 		return KEXITV_MINIMUM_COLUMN_WIDTH;
 	return fm.width( txt );
 }

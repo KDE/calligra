@@ -20,10 +20,9 @@
 #ifndef KEXIDB_LOOKUPFIELDSCHEMA_H
 #define KEXIDB_LOOKUPFIELDSCHEMA_H
 
-#include <q3valuelist.h>
-#include <qstringlist.h>
 #include <kexidb/global.h>
 
+class QStringList;
 class QDomElement;
 class QDomDocument;
 class QVariant;
@@ -76,10 +75,10 @@ class KEXI_DB_EXPORT LookupFieldSchema
 				/*! @return row source type: table, query, anonymous; in the future it will 
 				 be also fixed value list and field list. The latter is basically a list 
 				 of column names of a table/query, "Field List" in MSA. */
-				Type type() const { return m_type; }
+				Type type() const;
 
 				/*! Sets row source type to \a type. */
-				void setType(Type type) { m_type = type; }
+				void setType(Type type);
 
 				/*! @return row source type name. @see setTypeByName() */
 				QString typeName() const;
@@ -93,7 +92,7 @@ class KEXI_DB_EXPORT LookupFieldSchema
 				 provided as KEXISQL string. If rowSourceType() is a ValueList, 
 				 rowSourceValues() should be used instead. If rowSourceType() is a FieldList,
 				 rowSource() should return table or query name. */
-				QString name() const { return m_name; }
+				QString name() const;
 
 				/*! Sets row source value. @see value() */
 				void setName(const QString& name);
@@ -105,15 +104,17 @@ class KEXI_DB_EXPORT LookupFieldSchema
 				 Using it clears name (see name()). */
 				void setValues(const QStringList& values);
 
+				//! Assigns other to this row source and returns a reference to this row source.
+				RowSource& operator=(const RowSource& other);
+
 				/*! \return String for debugging purposes. */
 				QString debugString() const;
 
 				/*! Shows debug information. */ 
 				void debug() const;
 			private:
-				Type m_type;
-				QString m_name;
-				QStringList *m_values;
+				class Private;
+				Private * const d;
 		};
 
 		LookupFieldSchema();
@@ -121,59 +122,52 @@ class KEXI_DB_EXPORT LookupFieldSchema
 		~LookupFieldSchema();
 
 		/*! @return row source information for the lookup field schema */
-		RowSource& rowSource() { return m_rowSource; }
+		RowSource& rowSource() const;
 
 		/*! Sets row source for the lookup field schema */
-		void setRowSource(const RowSource& rowSource) { m_rowSource = rowSource; }
+		void setRowSource(const RowSource& rowSource);
 
 		/*! @return bound column: an integer specifying a column that is bound 
 		 (counted from 0). -1 means unspecified value. */
 //! @todo in later implementation there can be more columns
-		int boundColumn() const { return m_boundColumn; }
+		int boundColumn() const;
 
 		/*! Sets bound column number to \a column. @see boundColumn() */
-		void setBoundColumn(int column) { m_boundColumn = column>=0 ? column : -1; }
+		void setBoundColumn(int column);
 
 		/*! @return a list of visible column: a list of integers specifying a column that has 
 		 to be visible in the combo box (counted from 0). 
 		 Empty list means unspecified value. */
-		Q3ValueList<uint> visibleColumns() const { return m_visibleColumns; }
+		QList<uint> visibleColumns() const;
 
 		/*! Sets a list of visible columns to \a list. 
 		 Columns will be separated with a single space character when displayed. */
-		void setVisibleColumns(const Q3ValueList<uint>& list) { m_visibleColumns = list; }
+		void setVisibleColumns(const QList<uint>& list);
 
 		/*! A helper method.
 		 If visibleColumns() contains one item, this item is returned (a typical case).
 		 If visibleColumns() contains no item, -1 is returned.
 		 If visibleColumns() multiple items, \a fieldsCount - 1 is returned. */
-		inline int visibleColumn(uint fieldsCount) const {
-			if (m_visibleColumns.count()==1)
-				return (m_visibleColumns.first() < fieldsCount) 
-					? (int)m_visibleColumns.first() : -1;
-			if (m_visibleColumns.isEmpty())
-				return -1;
-			return fieldsCount - 1;
-		}
+		int visibleColumn(uint fieldsCount) const;
 
 		/*! @return a number of ordered integers specifying column widths;
 		 -1 means 'default width' for a given column. */
-		const Q3ValueList<int> columnWidths() const { return m_columnWidths; }
+		QList<int> columnWidths() const;
 
 		/*! Sets column widths. @see columnWidths */
-		void setColumnWidths(const Q3ValueList<int>& widths) { m_columnWidths = widths; }
+		void setColumnWidths(const QList<int>& widths);
 
 		/*! @return true if column headers are visible in the associated 
 		 combo box popup or the list view. The default is false. */
-		bool columnHeadersVisible() const { return m_columnHeadersVisible; }
+		bool columnHeadersVisible() const;
 
 		/*! Sets "column headers visibility" flag. @see columnHeadersVisible() */
-		void setColumnHeadersVisible(bool set) { m_columnHeadersVisible = set; }
+		void setColumnHeadersVisible(bool set);
 
 		/*! @return integer property specifying a maximum number of rows 
 		 that can be displayed in a combo box popup or a list box. The default is 
 		 equal to KEXIDB_LOOKUP_FIELD_DEFAULT_LIST_ROWS constant. */
-		uint maximumListRows() const { return m_maximumListRows; }
+		uint maximumListRows() const;
 
 		/*! Sets maximum number of rows that can be displayed in a combo box popup 
 		 or a list box. If \a rows is 0, KEXIDB_LOOKUP_FIELD_DEFAULT_LIST_ROWS is set.
@@ -183,10 +177,10 @@ class KEXI_DB_EXPORT LookupFieldSchema
 
 		/*! @return true if , only values present on the list can be selected using
 		 the combo box. The default is true. */
-		bool limitToList() const { return m_limitToList; }
+		bool limitToList() const;
 
 		/*! Sets "limit to list" flag. @see limitToList() */
-		void setLimitToList(bool set) { m_limitToList = set; }
+		void setLimitToList(bool set);
 
 		//! used in displayWidget()
 		enum DisplayWidget {
@@ -197,10 +191,10 @@ class KEXI_DB_EXPORT LookupFieldSchema
 		/*! @return the widget type that should be displayed within 
 		 the forms for this lookup field. The default is ComboBox. 
 		 For the Table View, combo box is always displayed. */
-		DisplayWidget displayWidget() const { return m_displayWidget; }
+		DisplayWidget displayWidget() const;
 
 		/*! Sets type of widget to display within the forms for this lookup field. @see displayWidget() */
-		void setDisplayWidget(DisplayWidget widget) { m_displayWidget = widget; }
+		void setDisplayWidget(DisplayWidget widget);
 
 		/*! \return String for debugging purposes. */
 		QString debugString() const;
@@ -223,14 +217,8 @@ class KEXI_DB_EXPORT LookupFieldSchema
 			const QVariant& value );
 
 	protected:
-		RowSource m_rowSource;
-		int m_boundColumn;
-		Q3ValueList<uint> m_visibleColumns;
-		Q3ValueList<int> m_columnWidths;
-		uint m_maximumListRows;
-		DisplayWidget m_displayWidget;
-		bool m_columnHeadersVisible : 1;
-		bool m_limitToList : 1;
+		class Private;
+		Private * const d;
 };
 
 } //namespace KexiDB

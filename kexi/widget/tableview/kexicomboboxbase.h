@@ -24,9 +24,9 @@
 #include "kexidb/field.h"
 #include "kexiinputtableedit.h"
 #include <kexidb/lookupfieldschema.h>
+#include <kexiutils/tristate.h>
 
 class KexiComboBoxPopup;
-class KexiTableItem;
 class KexiTableViewColumn;
 
 /*! @short A base class for handling data-aware combo boxes.
@@ -67,10 +67,10 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 		void showPopup();
 		
 		//! Call this from slot
-		virtual void slotRowAccepted(KexiTableItem *item, int row);
+		virtual void slotRowAccepted(KexiDB::RecordData *record, int row);
 		
 		//! Call this from slot
-		virtual void slotItemSelected(KexiTableItem*);
+		virtual void slotItemSelected(KexiDB::RecordData*);
 
 		//! Call this from slot
 		void slotInternalEditorValueChanged(const QVariant &v);
@@ -83,7 +83,7 @@ class KEXIDATATABLE_EXPORT KexiComboBoxBase
 
 		//! Used to select row item for an user-entered value \a v.
 		//! Only for "lookup table" mode.
-		KexiTableItem* selectItemForEnteredValueInLookupTable(const QVariant& v);
+		KexiDB::RecordData* selectItemForEnteredValueInLookupTable(const QVariant& v);
 
 		/*! \return value from \a returnFromColumn related to \a str value from column \a lookInColumn.
 		 If \a allowNulls is true, NULL is returend if no matched column found, else: 

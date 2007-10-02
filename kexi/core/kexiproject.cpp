@@ -373,7 +373,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 	//*** create global BLOB container, if not present
 	if (containsKexi__blobsTable) {
 		//! just insert this schema
-		d->connection->insertInternalTableSchema(t_blobs);
+		d->connection->insertInternalTable(*t_blobs);
 		if (add_folder_id_column && !d->connection->isReadOnly()) {
 			// 2. "kexi__blobs" table contains no "o_folder_id" column -> add it 
 			//    (by copying table to avoid data loss)
@@ -426,7 +426,7 @@ bool KexiProject::createInternalStructures(bool insideTransaction)
 	bool partsTableOk = true;
 	if (containsKexi__partsTable) {
 		//! just insert this schema
-		d->connection->insertInternalTableSchema(t_parts);
+		d->connection->insertInternalTable(*t_parts);
 	}
 	else {
 		if (!d->connection->isReadOnly()) {
@@ -610,8 +610,8 @@ KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
 	KexiPart::ItemDict* dict = items(i);
 	if (!dict)
 		return;
-	for (KexiPart::ItemDict::const_iterator it(dict->constBegin()); it!=dict->constEnd(); ++it)
-		list.append(it.value());
+	foreach (KexiPart::Item *item, *dict)
+		list.append(item);
 }
 
 void
@@ -642,10 +642,10 @@ KexiProject::itemForMimeType(const QString &mimeType, const QString &name)
 		kexiwarn << "KexiProject::itemForMimeType() no mimetype="<<mimeType<<endl;
 		return 0;
 	}
-	const QString l_name = name.toLower();
-	for (KexiPart::ItemDict::const_iterator it(dict->constBegin()); it!=dict->constEnd(); ++it) {
-		if (it.value()->name().toLower()==l_name)
-			return it.value();
+	const QString nameToLower( name.toLower() );
+	foreach (KexiPart::Item *item, *dict) {
+		if (item->name().toLower()==nameToLower)
+			return item;
 	}
 	kexiwarn << "KexiProject::itemForMimeType() no name="<<name<<endl;
 	return 0;
@@ -658,9 +658,9 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 	if (!dict)
 		return 0;
 	const QString l_name = name.toLower();
-	for (KexiPart::ItemDict::const_iterator it( dict->constBegin() ); it!=dict->constEnd(); ++it) {
-		if (it.value()->name().toLower()==l_name)
-			return it.value();
+	foreach (KexiPart::Item* item, *dict) {
+		if (item->name().toLower()==l_name)
+			return item;
 	}
 	return 0;
 }
@@ -876,17 +876,12 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 
 	KexiPart::ItemDict *dict = items(info);
 	QSet<QString> storedItemNames;
-	for (KexiPart::ItemDict::const_iterator storedIt( dict->constBegin() ); 
-		storedIt!=dict->constEnd(); ++storedIt)
-	{
-		storedItemNames.insert( storedIt.value()->name().toLower() );
-	}
+	foreach (KexiPart::Item* item, *dict)
+		storedItemNames.insert( item->name().toLower() );
+
 	QSet<QString> unstoredItemNames;
-	for (QSet<KexiPart::Item*>::ConstIterator itUnstored( d->unstoredItems.constBegin() );
-		itUnstored != d->unstoredItems.constEnd(); ++itUnstored)
-	{
-		unstoredItemNames.insert( (*itUnstored)->name().toLower() );
-	}
+	foreach (KexiPart::Item* item, d->unstoredItems)
+		unstoredItemNames.insert( item->name().toLower() );
 
 	//find new, unique default name for this item
 	int n;

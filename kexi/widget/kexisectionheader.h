@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,7 +26,7 @@ class QEvent;
 class KIcon;
 
 //! @short A section header widget acting as a splitter with caption and buttons
-/*! see KexiQueryDesignerGuiEditor for example useage. */
+/*! see KexiQueryDesignerGuiEditor for example use. */
 class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 {
 	Q_OBJECT
@@ -50,11 +50,9 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 	public slots:
 		void slotFocus(bool in);
 
-	protected:
+	private:
 		class Private;
 		Private * const d;
-		class BoxLayout;
-		friend class BoxLayout;
 };
 
 #endif

@@ -21,8 +21,6 @@
 
 #include <kdebug.h>
 #include <assert.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace KexiDB;
 
@@ -81,23 +79,22 @@ bool SQLitePreparedStatement::execute()
 		m_resetRequired = false;
 	}
 
-	int arg=1; //arg index counted from 1
-	KexiDB::Field *field;
-
-	Field::List _dummy;
-	Field::ListIterator itFields(_dummy);
 	//for INSERT, we're iterating over inserting values
 	//for SELECT, we're iterating over WHERE conditions
+	const Field::List *fieldList = 0;
 	if (m_type == SelectStatement)
-		itFields = *m_whereFields;
+		fieldList = m_whereFields;
 	else if (m_type == InsertStatement)
-		itFields = m_fields->fieldsIterator();
+		fieldList = m_fields->fields();
 	else
 		assert(0); //impl. error
 
-	for (Q3ValueListConstIterator<QVariant> it = m_args.constBegin(); 
-		(field = itFields.current()); ++it, ++itFields, arg++)
+	int arg=1; //arg index counted from 1
+	Field::ListIterator itFields(fieldList->constBegin());
+	for (QList<QVariant>::ConstIterator it = m_args.constBegin(); 
+		itFields!=fieldList->constEnd(); ++it, ++itFields, arg++)
 	{
+		KexiDB::Field *field = *itFields;
 		if (it==m_args.constEnd() || (*it).isNull()) {//no value to bind or the value is null: bind NULL
 			res = sqlite3_bind_null(prepared_st_handle, arg);
 			if (SQLITE_OK != res) {
@@ -108,7 +105,7 @@ bool SQLitePreparedStatement::execute()
 		}
 		if (field->isTextType()) {
 			//! @todo optimize: make a static copy so SQLITE_STATIC can be used
-			Q3CString utf8String((*it).toString().toUtf8());
+			QByteArray utf8String((*it).toString().toUtf8());
 			res = sqlite3_bind_text(prepared_st_handle, arg, 
 				(const char*)utf8String, utf8String.length(), SQLITE_TRANSIENT /*??*/);
 			if (SQLITE_OK != res) {
@@ -116,116 +113,118 @@ bool SQLitePreparedStatement::execute()
 				return false;
 			}
 		}
-		else switch (field->type()) {
-		case KexiDB::Field::Byte:
-		case KexiDB::Field::ShortInteger:
-		case KexiDB::Field::Integer:
-		{
-//! @todo what about unsigned > INT_MAX ?
-			bool ok;
-			const int value = (*it).toInt(&ok);
-			if (ok) {
-				res = sqlite3_bind_int(prepared_st_handle, arg, value);
+		else {
+			switch (field->type()) {
+			case KexiDB::Field::Byte:
+			case KexiDB::Field::ShortInteger:
+			case KexiDB::Field::Integer:
+			{
+	//! @todo what about unsigned > INT_MAX ?
+				bool ok;
+				const int value = (*it).toInt(&ok);
+				if (ok) {
+					res = sqlite3_bind_int(prepared_st_handle, arg, value);
+					if (SQLITE_OK != res) {
+						//! @todo msg?
+						return false;
+					}
+				}
+				else {
+					res = sqlite3_bind_null(prepared_st_handle, arg);
+					if (SQLITE_OK != res) {
+						//! @todo msg?
+						return false;
+					}
+				}
+				break;
+			}
+			case KexiDB::Field::Float:
+			case KexiDB::Field::Double:
+				res = sqlite3_bind_double(prepared_st_handle, arg, (*it).toDouble());
 				if (SQLITE_OK != res) {
 					//! @todo msg?
 					return false;
 				}
+				break;
+			case KexiDB::Field::BigInteger:
+			{
+	//! @todo what about unsigned > LLONG_MAX ?
+				bool ok;
+				qint64 value = (*it).toLongLong(&ok);
+				if (ok) {
+					res = sqlite3_bind_int64(prepared_st_handle, arg, value);
+					if (SQLITE_OK != res) {
+						//! @todo msg?
+						return false;
+					}
+				}
+				else {
+					res = sqlite3_bind_null(prepared_st_handle, arg);
+					if (SQLITE_OK != res) {
+						//! @todo msg?
+						return false;
+					}
+				}
+				break;
 			}
-			else {
+			case KexiDB::Field::Boolean:
+				res = sqlite3_bind_text(prepared_st_handle, arg, 
+					QString::number((*it).toBool() ? 1 : 0).toLatin1(), 
+					1, SQLITE_TRANSIENT /*??*/);
+				if (SQLITE_OK != res) {
+					//! @todo msg?
+					return false;
+				}
+				break;
+			case KexiDB::Field::Time:
+				res = sqlite3_bind_text(prepared_st_handle, arg, 
+					(*it).toTime().toString(Qt::ISODate).toLatin1(), 
+					sizeof("HH:MM:SS"), SQLITE_TRANSIENT /*??*/);
+				if (SQLITE_OK != res) {
+					//! @todo msg?
+					return false;
+				}
+				break;
+			case KexiDB::Field::Date:
+				res = sqlite3_bind_text(prepared_st_handle, arg, 
+					(*it).toDate().toString(Qt::ISODate).toLatin1(), 
+					sizeof("YYYY-MM-DD"), SQLITE_TRANSIENT /*??*/);
+				if (SQLITE_OK != res) {
+					//! @todo msg?
+					return false;
+				}
+				break;
+			case KexiDB::Field::DateTime:
+				res = sqlite3_bind_text(prepared_st_handle, arg, 
+					(*it).toDateTime().toString(Qt::ISODate).toLatin1(), 
+					sizeof("YYYY-MM-DDTHH:MM:SS"), SQLITE_TRANSIENT /*??*/);
+				if (SQLITE_OK != res) {
+					//! @todo msg?
+					return false;
+				}
+				break;
+			case KexiDB::Field::BLOB:
+			{
+				const QByteArray byteArray((*it).toByteArray());
+				res = sqlite3_bind_blob(prepared_st_handle, arg, 
+					(const char*)byteArray, byteArray.size(), SQLITE_TRANSIENT /*??*/);
+				if (SQLITE_OK != res) {
+					//! @todo msg?
+					return false;
+				}
+				break;
+			}
+			default:
+				KexiDBWarn << "PreparedStatement::execute(): unsupported field type: " 
+					<< field->type() << " - NULL value bound to column #" << arg << endl;
 				res = sqlite3_bind_null(prepared_st_handle, arg);
 				if (SQLITE_OK != res) {
 					//! @todo msg?
 					return false;
 				}
-			}
-			break;
-		}
-		case KexiDB::Field::Float:
-		case KexiDB::Field::Double:
-			res = sqlite3_bind_double(prepared_st_handle, arg, (*it).toDouble());
-			if (SQLITE_OK != res) {
-				//! @todo msg?
-				return false;
-			}
-			break;
-		case KexiDB::Field::BigInteger:
-		{
-//! @todo what about unsigned > LLONG_MAX ?
-			bool ok;
-			qint64 value = (*it).toLongLong(&ok);
-			if (ok) {
-				res = sqlite3_bind_int64(prepared_st_handle, arg, value);
-				if (SQLITE_OK != res) {
-					//! @todo msg?
-					return false;
-				}
-			}
-			else {
-				res = sqlite3_bind_null(prepared_st_handle, arg);
-				if (SQLITE_OK != res) {
-					//! @todo msg?
-					return false;
-				}
-			}
-			break;
-		}
-		case KexiDB::Field::Boolean:
-			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				QString::number((*it).toBool() ? 1 : 0).toLatin1(), 
-				1, SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res) {
-				//! @todo msg?
-				return false;
-			}
-			break;
-		case KexiDB::Field::Time:
-			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				(*it).toTime().toString(Qt::ISODate).toLatin1(), 
-				sizeof("HH:MM:SS"), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res) {
-				//! @todo msg?
-				return false;
-			}
-			break;
-		case KexiDB::Field::Date:
-			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				(*it).toDate().toString(Qt::ISODate).toLatin1(), 
-				sizeof("YYYY-MM-DD"), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res) {
-				//! @todo msg?
-				return false;
-			}
-			break;
-		case KexiDB::Field::DateTime:
-			res = sqlite3_bind_text(prepared_st_handle, arg, 
-				(*it).toDateTime().toString(Qt::ISODate).toLatin1(), 
-				sizeof("YYYY-MM-DDTHH:MM:SS"), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res) {
-				//! @todo msg?
-				return false;
-			}
-			break;
-		case KexiDB::Field::BLOB:
-		{
-			const QByteArray byteArray((*it).toByteArray());
-			res = sqlite3_bind_blob(prepared_st_handle, arg, 
-				(const char*)byteArray, byteArray.size(), SQLITE_TRANSIENT /*??*/);
-			if (SQLITE_OK != res) {
-				//! @todo msg?
-				return false;
-			}
-			break;
-		}
-		default:
-			KexiDBWarn << "PreparedStatement::execute(): unsupported field type: " 
-				<< field->type() << " - NULL value bound to column #" << arg << endl;
-			res = sqlite3_bind_null(prepared_st_handle, arg);
-			if (SQLITE_OK != res) {
-				//! @todo msg?
-				return false;
-			}
-		} //switch
-	}
+			} //switch
+		}//else
+	}//for
 
 	//real execution
 	res = sqlite3_step(prepared_st_handle);
@@ -241,4 +240,3 @@ bool SQLitePreparedStatement::execute()
 #endif
 	return false;
 }
-

@@ -21,8 +21,6 @@
 #define KEXIDB_RELATIONSHIP_H
 
 #include <kexidb/field.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 namespace KexiDB {
 
@@ -79,8 +77,8 @@ class QuerySchema;
 class KEXI_DB_EXPORT Relationship
 {
 	public:
-		typedef Q3PtrList<Relationship> List;
-		typedef Q3PtrListIterator<Relationship> ListIterator;
+		typedef KexiUtils::AutodeletedList<Relationship*> List;
+		typedef QList<Relationship*>::ConstIterator ListIterator;
 
 		/*! Creates uninitialized Relationship object. 
 			setIndices() will be required to call.

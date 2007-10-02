@@ -130,7 +130,7 @@ namespace Scripting {
         private:
             class Record {
                 public:
-                    ::KexiDB::RowData rowdata;
+                    ::KexiDB::RecordData rowdata;
                     ::KexiDB::RowEditBuffer* buffer;
                     Record(::KexiDB::Cursor* cursor)
                         : buffer( new ::KexiDB::RowEditBuffer(true) )

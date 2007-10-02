@@ -54,7 +54,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 		/*! A rich field information for db-aware data. 
 		 For not-db-aware data it is always 0 (use field() instead. */
-		virtual KexiDB::QueryColumnInfo *columnInfo() const { return m_column->columnInfo; }
+		virtual KexiDB::QueryColumnInfo *columnInfo() const { return m_column->columnInfo(); }
 
 		//! Implemented for KexiDataItemInterface.
 		//! Does nothing because instead KexiTableViewColumn is used to get field's schema.
@@ -153,7 +153,7 @@ class KEXIDATATABLE_EXPORT KexiTableEdit : public QWidget, public KexiDataItemIn
 
 		/*! \return width of \a value. For the default implementation \a val is converted to a string 
 		 and width of this string is returned. */
-		virtual int widthForValue( QVariant &val, const QFontMetrics &fm );
+		virtual int widthForValue( const QVariant &val, const QFontMetrics &fm );
 
 		/*! \return total size of this editor, including any buttons, etc. (if present). 
 		 Reimpelment this if you want to return more appropriate size. This impelmentation just

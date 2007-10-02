@@ -41,7 +41,7 @@ public:
 
 	virtual QVariant value(uint i);
 	virtual const char** rowData() const;
-	virtual void storeCurrentRow(RowData &data) const;
+	virtual bool drv_storeCurrentRow(RecordData &data) const;
 
 //TODO		virtual const char *** bufferData()
 		

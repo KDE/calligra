@@ -52,7 +52,6 @@ SQLiteConnectionInternal::SQLiteConnectionInternal(Connection *connection)
  , data_owned(true)
  , errmsg_p(0)
  , res(SQLITE_OK)
- , temp_st(0x10000)
 #ifdef SQLITE3
  , result_name(0)
 #endif

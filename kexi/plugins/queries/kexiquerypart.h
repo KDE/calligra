@@ -22,7 +22,6 @@
 #define KEXIQUERYPART_H
 
 #include <QMap>
-#include <Q3CString>
 
 #include <kexipart.h>
 #include <kexipartitem.h>

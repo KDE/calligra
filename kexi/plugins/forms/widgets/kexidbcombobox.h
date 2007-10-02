@@ -92,8 +92,8 @@ class KEXIFORMUTILS_EXPORT KexiDBComboBox :
 		virtual void undoChanges();
 
 	public slots:
-		void slotRowAccepted(KexiTableItem *item, int row);
-		void slotItemSelected(KexiTableItem* item) { KexiComboBoxBase::slotItemSelected(item); }
+		void slotRowAccepted(KexiDB::RecordData *record, int row);
+		void slotItemSelected(KexiDB::RecordData *record) { KexiComboBoxBase::slotItemSelected(record); }
 
 	protected slots:
 		void slotInternalEditorValueChanged(const QVariant& v)

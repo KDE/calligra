@@ -22,7 +22,7 @@
 
 #include <KexiView.h>
 
-class KexiRelationWidget;
+class KexiRelationsView;
 
 class KexiRelationMainDlg : public KexiView
 {
@@ -39,8 +39,7 @@ class KexiRelationMainDlg : public KexiView
 		virtual QString itemIcon();
 
 	private:
-		KexiRelationWidget	*m_rel;
+		KexiRelationsView *m_rel;
 };
 
 #endif
-

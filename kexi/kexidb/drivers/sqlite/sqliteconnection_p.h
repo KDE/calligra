@@ -23,8 +23,6 @@
 #include <kexidb/connection_p.h>
 
 #include "sqlite.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 //for compatibility
 #ifdef _SQLITE3_H_
@@ -64,7 +62,7 @@ class SQLiteConnectionInternal : public ConnectionInternal
 		char *errmsg_p; //<! temporary: server-specific message of last operation
 		int res; //<! result code of last operation on server
 
-		Q3CString temp_st;
+		QByteArray temp_st;
 #ifdef SQLITE3
 		const char *result_name;
 #endif

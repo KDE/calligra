@@ -55,6 +55,33 @@ public:
 
 //---------------------------------------
 
+KexiProjectData::AutoOpenObjects::AutoOpenObjects()
+ : QList<ObjectInfo*>()
+{
+}
+
+KexiProjectData::AutoOpenObjects::AutoOpenObjects(const KexiProjectData::AutoOpenObjects& other)
+ : QList<ObjectInfo*>()
+{
+	*this = other;
+}
+
+KexiProjectData::AutoOpenObjects::~AutoOpenObjects()
+{
+	qDeleteAll(*this);
+}
+
+KexiProjectData::AutoOpenObjects& KexiProjectData::AutoOpenObjects::operator=(
+	const KexiProjectData::AutoOpenObjects& other)
+{
+	clear();
+	for (QListIterator<ObjectInfo*> it(other);it.hasNext();) //deep copy
+		append( new ObjectInfo(*it.next()) );
+	return *this;
+}
+
+//---------------------------------------
+
 KexiProjectData::KexiProjectData()
  : QObject(0)
  , KexiDB::SchemaData()

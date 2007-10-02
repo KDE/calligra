@@ -24,20 +24,19 @@
 #include <kstandarddirs.h>
 
 #include <QFile>
-#include <QMap>
+#include <QHash>
 
 //! @internal
 class KexiDBConnectionSetPrivate
 {
 public:
 	KexiDBConnectionSetPrivate()
+	 : maxid(-1)
 	{
-		list.setAutoDelete(true);
-		maxid=-1;
 	}
 	KexiDB::ConnectionData::List list;
-	QMap<KexiDB::ConnectionData*, QString> filenamesForData;
-	QMap<QString, KexiDB::ConnectionData*> dataForFilenames;
+	QHash<KexiDB::ConnectionData*, QString> filenamesForData;
+	QHash<QString, KexiDB::ConnectionData*> dataForFilenames;
 	int maxid;
 };
 
@@ -65,7 +64,7 @@ bool KexiDBConnectionSet::addConnectionData(KexiDB::ConnectionData *data, const 
 
 	QString filename( _filename );
 	bool generateUniqueFilename = filename.isEmpty() 
-		|| !filename.isEmpty() && data==d->dataForFilenames[filename];
+		|| !filename.isEmpty() && data==d->dataForFilenames.value(filename);
 
 	if (generateUniqueFilename) {
 		QString dir = KGlobal::dirs()->saveLocation("data", "kexi/connections/", false /*!create*/);
@@ -101,10 +100,9 @@ bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
 {
 	if (!oldData || !newData)
 		return false;
-	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( oldData );
-	if (it == d->filenamesForData.constEnd() || it.value().isEmpty())
+	const QString filename( d->filenamesForData.value( oldData ) );
+	if (filename.isEmpty())
 		return false;
-	const QString filename( it.value() );
 	KexiDBConnShortcutFile shortcutFile(filename);
 	if (!shortcutFile.saveConnectionData(*newData, newData->savePassword)) // true/*savePassword*/))
 		return false;
@@ -115,21 +113,21 @@ bool KexiDBConnectionSet::saveConnectionData(KexiDB::ConnectionData *oldData,
 
 void KexiDBConnectionSet::removeConnectionDataInternal(KexiDB::ConnectionData *data)
 {
-	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
-	const QString filename( it.value() );
+	const QString filename( d->filenamesForData.value( data ) );
 	d->filenamesForData.remove(data);
 	d->dataForFilenames.remove(filename);
-	d->list.removeRef(data);
+	d->list.removeAt( d->list.indexOf(data) );
+	delete data;
 }
 
 bool KexiDBConnectionSet::removeConnectionData(KexiDB::ConnectionData *data)
 {
 	if (!data)
 		return false;
-	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
-	if (it == d->filenamesForData.constEnd() || it.value().isEmpty())
+	const QString filename( d->filenamesForData.value( data ) );
+	if (filename.isEmpty())
 		return false;
-	QFile file( it.value() );
+	QFile file( filename );
 	if (!file.remove())
 		return false;
 	removeConnectionDataInternal(data);
@@ -173,11 +171,10 @@ QString KexiDBConnectionSet::fileNameForConnectionData(KexiDB::ConnectionData *d
 {
 	if (!data)
 		return QString();
-	QMap<KexiDB::ConnectionData*, QString>::ConstIterator it = d->filenamesForData.find( data );
-	return (it == d->filenamesForData.constEnd()) ? QString() : it.value();
+	return d->filenamesForData.value( data );
 }
 
 KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const
 {
-	return d->dataForFilenames[fileName];
+	return d->dataForFilenames.value(fileName);
 }
