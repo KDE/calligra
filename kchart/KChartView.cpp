@@ -31,6 +31,7 @@
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QPaintEvent>
+#include <QGridLayout>
 
 // KDE
 #include <kicon.h>
@@ -51,9 +52,13 @@
 
 // KOffice
 #include <KoCsvImportDialog.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
 #include <KoTemplateCreateDia.h>
 #include <KoViewAdaptor.h>
+#include <KoZoomAction.h>
 #include <KoZoomHandler.h>
+#include <KoCanvasController.h>
 
 // KChart
 #include "KChartFactory.h"
@@ -62,6 +67,9 @@
 #include "KCPageLayout.h"
 #include "KCPrinterDialog.h"
 #include "ChartShape.h"
+#include "KChartCanvas.h"
+
+#include "prefs.h"
 
 #include "commands/ChartTypeCommand.h"
 
@@ -137,6 +145,45 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     connect(m_chartpolar, SIGNAL(triggered(bool)), SLOT( polarChart() ));
     charttypes->addAction(m_chartpolar);
 
+    m_canvas = new KChartCanvas( this, part );
+
+    m_canvasController = new KoCanvasController( this );
+    m_canvasController->setCanvas( m_canvas );
+    m_canvasController->setCanvasMode( KoCanvasController::Centered );
+    m_canvasController->show();
+
+    connect( m_canvasController, SIGNAL( moveDocumentOffset( const QPoint& ) ),
+             m_canvas, SLOT( setDocumentOffset( const QPoint& ) ) );
+
+    QGridLayout *layout = new QGridLayout;
+    layout->setMargin( 0 );
+    layout->addWidget( m_canvasController, 0, 0 );
+
+    setLayout( layout );
+
+    m_zoomHandler = new KoZoomHandler;
+    m_zoomController = new KoZoomController( m_canvasController, m_zoomHandler, actionCollection(), true );
+
+    KoZoomAction *zoomAction = m_zoomController->zoomAction();
+
+    // Initially, zoom is at 100%
+    m_zoomController->setZoom( KoZoomMode::ZOOM_CONSTANT, 100 );
+    m_zoomHandler->setZoom( 100 );
+
+    //kDebug() << "----------------------------------------------------------------";
+    //kDebug() << "Size is: " << m_zoomHandler->viewToDocument( size() );
+    //kDebug() << "size() is: " << size();
+    //part->shape()->setSize( m_zoomHandler->viewToDocument( size() ) );
+    part->shape()->setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+
+    m_zoomController->setPageSize( m_canvas->documentViewRect().size() );
+    m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
+
+    addStatusBarItem( zoomAction->createWidget( ( QWidget* )statusBar() ), 0 );
+    connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
+             this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
+    //m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
+
     // initialize the configuration
     //    loadConfig();
 
@@ -150,11 +197,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 	m_importData->setEnabled(false);
     }
 
-    KoZoomHandler  handler;
-    kDebug() << "----------------------------------------------------------------";
-    kDebug() << "Size is: " << handler.viewToDocument( size() );
-    //part->shape()->setSize( handler.viewToDocument( size() ) );
-    part->shape()->setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+    connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
     
     updateGuiTypeOfChart();
 }
@@ -174,13 +217,15 @@ ViewAdaptor* KChartView::dbusObject()
 
 void KChartView::paintEvent( QPaintEvent* /*ev*/ )
 {
-    QPainter painter( this );
+    //QPainter painter( this );
+    //QRect clipRect = 
 
     // ### TODO: Scaling
 
     // Let the document do the drawing
     // This calls KChartPart::paintContent, basically.
-    koDocument()->paintEverything( painter, rect(), this );
+    //koDocument()->paintEverything( painter, rect(), this );
+    //m_canvas->shapeManager()->paint( painter, KoZoomHandler(), true );
 }
 
 
@@ -245,7 +290,7 @@ void KChartView::slotRepaint()
 void KChartView::saveConfig()
 {
     kDebug(35001) <<"Save config...";
-    ((KChartPart*)koDocument())->saveConfig( KGlobal::config().data() );
+    //((KChartPart*)koDocument())->saveConfig( KGlobal::config().data() );
 }
 
 
@@ -253,8 +298,8 @@ void KChartView::loadConfig()
 {
     kDebug(35001) <<"Load config...";
 
-    KGlobal::config()->reparseConfiguration();
-    ((KChartPart*)koDocument())->loadConfig( KGlobal::config().data() );
+    //KGlobal::config()->reparseConfiguration();
+    //((KChartPart*)koDocument())->loadConfig( KGlobal::config().data() );
 
     updateGuiTypeOfChart();
     //refresh chart when you load config
@@ -264,7 +309,7 @@ void KChartView::loadConfig()
 
 void KChartView::defaultConfig()
 {
-    ((KChartPart*)koDocument())->defaultConfig(  );
+    //((KChartPart*)koDocument())->defaultConfig(  );
     updateGuiTypeOfChart();
     update();
 }
@@ -671,6 +716,18 @@ void KChartView::extraCreateTemplate()
     KChartFactory::global().dirs()->addResourceType( "kchart_template", "data", "kchart/templates/" );
 }
 
+void KChartView::selectionChanged()
+{
+}
+
+void KChartView::zoomChanged( KoZoomMode::Mode mode, double zoom )
+{
+    QRectF documentViewRect = m_zoomHandler->documentToView( m_canvas->documentViewRect() );
+    //m_canvas->adjustOrigin();
+    m_canvasController->setPreferredCenter( documentViewRect.center().toPoint() );
+    // canvas should get updated by the canvas controller
+    //m_canvas->update();
+}
 
 }  //KChart namespace
 

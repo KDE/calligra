@@ -359,7 +359,7 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
     applyConversion( painter, converter );
     painter.setClipRect( paintRect, Qt::IntersectClip );
 
-    kDebug() << "Painting chart into " << paintRect << endl;
+    //kDebug() << "Painting chart into " << paintRect << endl;
     // painting chart contents
     painter.fillRect(paintRect, KApplication::palette().base());
     d->chart->paint( &painter, paintRect.toRect() );

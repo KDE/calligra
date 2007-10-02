@@ -54,6 +54,8 @@ using std::cerr;
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoOasisStore.h>
+#include <KoShape.h>
+#include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoSavingContext.h>
@@ -67,9 +69,12 @@ using std::cerr;
 #include "KDChartBarDiagram"
 
 // KChart
+#include "KChartCanvas.h"
 #include "KChartView.h"
 #include "KChartFactory.h"
 #include "ChartShape.h"
+
+#include "prefs.h"
 
 
 using namespace std;
@@ -303,20 +308,21 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
 
 #else
     // Paint the shape that is the real chart.
-    KoZoomHandler  zoomHandler;
-    m_chartShape->paint( painter, zoomHandler );
+    kDebug() << "################## Painting!";
+    //KoZoomHandler  zoomHandler;
+    //m_chartShape->paint( painter, zoomHandler );
     return;
 
     // Ok, we have now created a data set for display, and params with
     // suitable legends and axis labels.  Now start the real painting.
 
     // Make the chart use our model.
-    kDebug(35001) <<"Painting!!";
+    //kDebug(35001) <<"Painting!!";
 
    // ## TODO: support zooming
 
     // We only need to draw the document rectangle "rect".
-    m_chart->paint( &painter, rect );
+    //m_chart->paint( &painter, rect );
 #endif
 }
 
@@ -664,6 +670,20 @@ void KChartPart::doSetData( const QStandardItemModel &data,
 #endif
 }
 
+
+
+void KChartPart::addShape( KoShape *shape )
+{
+    foreach( KoView* view, views() )
+    {
+        KChartCanvas *canvas = ( ( KChartView* )view )->canvasWidget();
+        canvas->shapeManager()->add( shape );
+    }
+}
+
+void KChartPart::removeShape( KoShape* )
+{
+}
 
 // ----------------------------------------------------------------
 //                    The public interface

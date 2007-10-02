@@ -23,6 +23,7 @@ set(kchartcommon_LIB_SRCS
    KChartFactory.cpp
    KChartPart.cpp
    KChartView.cpp
+   KChartCanvas.cpp
    KChartViewAdaptor.cpp
 
    commands/ChartTypeCommand.cpp
@@ -34,6 +35,7 @@ set(kchartcommon_LIB_SRCS
    kdchart/examples/tools/TableModel.cpp
 )
 
+kde4_add_kcfg_files(kchartcommon_LIB_SRCS prefs.kcfgc)
 
 kde4_add_library(kchartcommon SHARED ${kchartcommon_LIB_SRCS})
 
@@ -86,5 +88,4 @@ install(TARGETS kchart  DESTINATION ${BIN_INSTALL_DIR})
 install( FILES  kchartpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kchart.rc kchart_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kchart)
 install( FILES  kchart.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-
-
+install( FILES  kchart.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )

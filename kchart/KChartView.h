@@ -29,17 +29,24 @@
 
 // KOffice
 #include <KoView.h>
+#include <KoViewConverter.h>
+#include <KoZoomController.h>
+#include <KoZoomHandler.h>
+#include <KoZoomMode.h>
 
 
 class QPaintEvent;
 class KAction;
 class KToggleAction;
+class KoCanvasBase;
+class KoCanvasController;
 
 
 namespace KChart
 {
 
 class KChartPart;
+class KChartCanvas;
 class ViewAdaptor;
 
 class KChartView : public KoView
@@ -51,6 +58,8 @@ public:
 
     void updateGuiTypeOfChart();
     virtual ViewAdaptor* dbusObject();
+    KoViewConverter *viewConverter() const { return m_zoomHandler; }
+    KChartCanvas *canvasWidget() const { return m_canvas; }
     void config(int flag);
 
 public slots:
@@ -78,6 +87,10 @@ public slots:
     void  importData();
     void  extraCreateTemplate();
 
+    void selectionChanged();
+
+    void zoomChanged( KoZoomMode::Mode mode, double zoom );
+
 protected:
     void          paintEvent( QPaintEvent* );
 
@@ -103,6 +116,12 @@ private:
     KToggleAction  *m_chartbw;
 
     ViewAdaptor    *m_dbus;
+
+    KoZoomHandler    *m_zoomHandler;
+    KoZoomController *m_zoomController;
+
+    KChartCanvas       *m_canvas;
+    KoCanvasController *m_canvasController;
 
     // This is used for a workaround for a bug in the kdchart code, see #101490.
     bool m_logarithmicScale;

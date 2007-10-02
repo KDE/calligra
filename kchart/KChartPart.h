@@ -37,6 +37,7 @@
 // KOffice
 #include <KoXmlReader.h>
 #include <koChart.h>
+#include <KoShapeControllerBase.h>
 
 // KDChart
 #include "KDChartChart.h"
@@ -52,13 +53,15 @@ class QStandardItemModel;
 class KoXmlWriter;
 class KoGenStyles;
 
+class KoShape;
+
 
 namespace KChart
 {
 
 
 
-class KCHART_EXPORT KChartPart : public KoChart::Part
+class KCHART_EXPORT KChartPart : public KoChart::Part, public KoShapeControllerBase
 {
     Q_OBJECT
 
@@ -72,6 +75,9 @@ public:
     virtual void  paintContent( QPainter& painter, const QRect& rect);
 
     ChartShape *shape() const { return m_chartShape; }
+
+    virtual void addShape( KoShape* );
+    virtual void removeShape( KoShape* );
 
     // Methods unique to KChart, and available in the new interface
     // (see /interfaces/koChart.h.)

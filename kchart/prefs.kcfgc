@@ -1,0 +1,4 @@
+File=kchart.kcfg
+ClassName=Prefs
+Singleton=true
+Mutators=true
