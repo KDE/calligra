@@ -187,3 +187,4 @@ private:
 } // namespace MusicCore
 
 #endif // MUSIC_CORE_CHORD_H
+

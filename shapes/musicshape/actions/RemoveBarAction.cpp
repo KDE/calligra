@@ -44,3 +44,4 @@ void RemoveBarAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
     
     m_tool->addCommand(new RemoveBarCommand(m_tool->shape(), barIdx));
 }
+
