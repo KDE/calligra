@@ -365,11 +365,11 @@ namespace KexiUtils
 			~AutodeletedList() { if (m_autoDelete) qDeleteAll(*this); }
 			void setAutoDelete(bool set) { m_autoDelete = set; }
 			bool autoDelete() const { return m_autoDelete; }
-			void removeAt(int i) { T item = takeAt(i); if (m_autoDelete) delete item; }
-			void removeFirst() { T item = takeFirst(); if (m_autoDelete) delete item; }
-			void removeLast() { T item = takeLast(); if (m_autoDelete) delete item; }
+			void removeAt(int i) { T item = QList<T>::takeAt(i); if (m_autoDelete) delete item; }
+			void removeFirst() { T item = QList<T>::takeFirst(); if (m_autoDelete) delete item; }
+			void removeLast() { T item = QList<T>::takeLast(); if (m_autoDelete) delete item; }
 			void replace(int i, const T& value) {
-				T item = takeAt(i); insert(i, value); if (m_autoDelete) delete item; }
+				T item = QList<T>::takeAt(i); insert(i, value); if (m_autoDelete) delete item; }
 			void insert(int i, const T& value) { QList<T>::insert(i, value); }
 			typename QList<T>::iterator erase(typename QList<T>::iterator pos) {
 				T item = *pos;
@@ -396,9 +396,9 @@ namespace KexiUtils
 			int removeAll(const T& value) {
 				if (!m_autoDelete)
 					return QList<T>::removeAll(value);
-				typename QList<T>::iterator it( begin() );
+				typename QList<T>::iterator it( QList<T>::begin() );
 				int removedCount = 0;
-				while (it != end()) {
+				while (it != QList<T>::end()) {
 					if (*it == value) {
 						T item = *it;
 						it = QList<T>::erase(it);
@@ -413,8 +413,8 @@ namespace KexiUtils
 			void clear() {
 				if (!m_autoDelete)
 					return QList<T>::clear();
-				while (!isEmpty()) {
-					T item = takeFirst();
+				while (!QList<T>::isEmpty()) {
+					T item = QList<T>::takeFirst();
 					delete item;
 				}
 			}
