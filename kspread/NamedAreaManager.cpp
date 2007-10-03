@@ -216,7 +216,6 @@ void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
 {
     if (d->namedAreas.isEmpty())
         return;
-    QString sheetName;
     Region region;
     xmlWriter.startElement("table:named-expressions");
     const QList<NamedArea> namedAreas = d->namedAreas.values();
@@ -225,7 +224,7 @@ void NamedAreaManager::saveOdf(KoXmlWriter& xmlWriter) const
         region = Region(namedAreas[i].range, namedAreas[i].sheet);
         xmlWriter.startElement("table:named-range");
         xmlWriter.addAttribute("table:name", namedAreas[i].name);
-        xmlWriter.addAttribute("table:base-cell-address", region.saveOdf());
+        xmlWriter.addAttribute("table:base-cell-address", Region(1, 1, namedAreas[i].sheet).saveOdf());
         xmlWriter.addAttribute("table:cell-range-address", region.saveOdf());
         xmlWriter.endElement();
     }
