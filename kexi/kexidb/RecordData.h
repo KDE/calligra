@@ -27,7 +27,7 @@
 
 #include <QVector>
 #include <QVariant>
-#include <kexidb/kexidb_export.h>
+#include "kexidb_export.h"
 
 namespace KexiDB {
 

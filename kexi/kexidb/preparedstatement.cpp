@@ -18,9 +18,8 @@
 */
 
 #include "preparedstatement.h"
-
-#include <kexidb/connection.h>
-#include <kexidb/connection_p.h>
+#include "connection.h"
+#include "connection_p.h"
 #include <kdebug.h>
 
 using namespace KexiDB;

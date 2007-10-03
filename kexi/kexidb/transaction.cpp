@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/transaction.h>
-#include <kexidb/connection.h>
+#include "transaction.h"
+#include "connection.h"
 
 #include <kdebug.h>
 

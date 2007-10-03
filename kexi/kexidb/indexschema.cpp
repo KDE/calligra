@@ -17,11 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/indexschema.h>
-
-#include <kexidb/driver.h>
-#include <kexidb/connection.h>
-#include <kexidb/tableschema.h>
+#include "indexschema.h"
+#include "driver.h"
+#include "connection.h"
+#include "tableschema.h"
 
 #include <assert.h>
 

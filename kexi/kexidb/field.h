@@ -30,7 +30,7 @@
 #include <QHash>
 
 #include <kexiutils/utils.h>
-#include <kexidb/kexidb_export.h>
+#include "kexidb_export.h"
 
 namespace KexiDB {
 

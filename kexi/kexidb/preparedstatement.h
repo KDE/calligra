@@ -24,7 +24,7 @@
 #include <QStringList>
 #include <KSharedPtr>
 
-#include <kexidb/field.h>
+#include "field.h"
 
 namespace KexiDB {
 

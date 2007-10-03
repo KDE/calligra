@@ -26,10 +26,10 @@
 #include <QPointer>
 #include <QVector>
 
-#include <kexidb/fieldlist.h>
-#include <kexidb/schemadata.h>
-#include <kexidb/indexschema.h>
-#include <kexidb/relationship.h>
+#include "fieldlist.h"
+#include "schemadata.h"
+#include "indexschema.h"
+#include "relationship.h"
 
 namespace KexiDB {
 

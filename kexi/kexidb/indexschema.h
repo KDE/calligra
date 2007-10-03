@@ -23,9 +23,9 @@
 #include <QList>
 #include <QString>
 
-#include <kexidb/fieldlist.h>
-#include <kexidb/schemadata.h>
-#include <kexidb/relationship.h>
+#include "fieldlist.h"
+#include "schemadata.h"
+#include "relationship.h"
 
 namespace KexiDB {
 

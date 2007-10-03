@@ -25,7 +25,7 @@
 #include <klibloader.h>
 #include <kservice.h>
 
-#include <kexidb/driver.h>
+#include "driver.h"
 
 namespace KexiDB {
 

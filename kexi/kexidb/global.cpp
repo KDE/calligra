@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/global.h>
+#include "global.h"
 
 using namespace KexiDB;
 

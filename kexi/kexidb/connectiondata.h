@@ -20,13 +20,11 @@
 #ifndef KEXIDB_CONNECTION_DATA_H
 #define KEXIDB_CONNECTION_DATA_H
 
-#include <kexidb/kexidb_export.h>
+#include "kexidb_export.h"
 
 #include <QObject>
 #include <QString>
 #include <QList>
-
-#include "kexidb/kexidb_export.h"
 
 namespace KexiDB {
 

@@ -24,8 +24,8 @@
 #include <QHash>
 #include <QString>
 
-#include <kexidb/field.h>
-#include <kexidb/driver.h>
+#include "field.h"
+#include "driver.h"
 
 namespace KexiDB {
 

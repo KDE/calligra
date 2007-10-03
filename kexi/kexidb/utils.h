@@ -25,8 +25,8 @@
 #include <QVariant>
 #include <QByteArray>
 
-#include <kexidb/connection.h>
-#include <kexidb/driver.h>
+#include "connection.h"
+#include "driver.h"
 
 class QDomNode;
 class QDomElement;

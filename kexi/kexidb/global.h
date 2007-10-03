@@ -20,7 +20,7 @@
 #ifndef KEXIDB_GLOBAL_H
 #define KEXIDB_GLOBAL_H
 
-#include <kexidb/kexidb_export.h>
+#include "kexidb_export.h"
 #include <qstring.h>
 
 //global public definitions

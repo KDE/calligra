@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/schemadata.h>
-#include <kexidb/connection.h>
+#include "schemadata.h"
+#include "connection.h"
 
 #include <kdebug.h>
 

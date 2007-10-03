@@ -17,9 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/connectiondata.h>
-
-#include <kexidb/drivermanager.h>
+#include "connectiondata.h"
+#include "drivermanager.h"
 
 #include <qfileinfo.h>
 #include <qdir.h>

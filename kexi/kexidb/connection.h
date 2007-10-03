@@ -27,15 +27,15 @@
 #include <QVariant>
 #include <QPointer>
 
-#include <kexidb/object.h>
-#include <kexidb/connectiondata.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/queryschemaparameter.h>
-#include <kexidb/transaction.h>
-#include <kexidb/driver.h>
-#include <kexidb/preparedstatement.h>
-#include <kexidb/RecordData.h>
+#include "object.h"
+#include "connectiondata.h"
+#include "tableschema.h"
+#include "queryschema.h"
+#include "queryschemaparameter.h"
+#include "transaction.h"
+#include "driver.h"
+#include "preparedstatement.h"
+#include "RecordData.h"
 
 #include <kexiutils/tristate.h>
 

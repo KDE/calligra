@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/fieldlist.h>
-#include <kexidb/object.h>
+#include "fieldlist.h"
+#include "object.h"
 
 #include <kdebug.h>
 

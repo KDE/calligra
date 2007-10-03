@@ -20,7 +20,7 @@
 #ifndef KEXIDB_DRIVER_MNGR_P_H
 #define KEXIDB_DRIVER_MNGR_P_H
 
-#include <kexidb/object.h>
+#include "object.h"
 
 #include <qobject.h>
 #include <q3asciidict.h>

@@ -20,12 +20,12 @@
 #ifndef KEXIDB_ALTER_H
 #define KEXIDB_ALTER_H
 
+#include "connection.h"
 
 #include <QList>
 #include <QHash>
 
 #include <KDebug>
-#include <kexidb/connection.h>
 #include <kexiutils/utils.h>
 
 namespace KexiDB

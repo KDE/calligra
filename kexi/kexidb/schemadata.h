@@ -20,8 +20,8 @@
 #ifndef KEXIDB_SCHEMADATA_H
 #define KEXIDB_SCHEMADATA_H
 
-#include <kexidb/global.h>
-#include <kexidb/field.h>
+#include "global.h"
+#include "field.h"
 
 namespace KexiDB {
 

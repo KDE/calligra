@@ -22,8 +22,8 @@
 
 #include <qmap.h>
 
-#include <kexidb/field.h>
-#include <kexidb/queryschema.h>
+#include "field.h"
+#include "queryschema.h"
 
 namespace KexiDB {
 

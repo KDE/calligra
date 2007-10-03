@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/object.h>
-#include <kexidb/error.h>
-#include <kexidb/msghandler.h>
+#include "object.h"
+#include "error.h"
+#include "msghandler.h"
 
 #include <klocale.h>
 #include <kdebug.h>

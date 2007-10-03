@@ -23,7 +23,7 @@
 #include <q3valuelist.h>
 #include <qstring.h>
 
-#include <kexidb/field.h>
+#include "field.h"
 
 namespace KexiDB {
 

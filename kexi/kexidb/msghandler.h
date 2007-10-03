@@ -20,7 +20,7 @@
 #ifndef KEXIDB_MSGHANDLER_H
 #define KEXIDB_MSGHANDLER_H
 
-#include <kexidb/object.h>
+#include "object.h"
 #include <qpointer.h>
 #include <qwidget.h>
 

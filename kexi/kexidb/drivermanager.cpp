@@ -19,12 +19,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/drivermanager.h>
-#include <kexidb/drivermanager_p.h>
-
-#include <kexidb/driver.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/error.h>
+#include "drivermanager.h"
+#include "drivermanager_p.h"
+#include "driver.h"
+#include "driver_p.h"
+#include "error.h"
 
 #include <klibloader.h>
 #include <kservicetypetrader.h>

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/msghandler.h>
+#include "msghandler.h"
 
 using namespace KexiDB;
 

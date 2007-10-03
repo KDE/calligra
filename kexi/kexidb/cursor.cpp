@@ -17,13 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kexidb/cursor.h>
-
-#include <kexidb/driver.h>
-#include <kexidb/driver_p.h>
-#include <kexidb/error.h>
-#include <kexidb/roweditbuffer.h>
-#include <kexiutils/utils.h>
+#include "cursor.h"
+#include "driver.h"
+#include "driver_p.h"
+#include "error.h"
+#include "roweditbuffer.h"
+#include "utils.h"
 
 #include <kdebug.h>
 #include <klocale.h>

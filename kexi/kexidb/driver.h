@@ -25,9 +25,9 @@
 #include <QList>
 #include <QByteArray>
 
-#include <kexidb/global.h>
-#include <kexidb/object.h>
-#include <kexidb/field.h>
+#include "global.h"
+#include "object.h"
+#include "field.h"
 
 class KService;
 

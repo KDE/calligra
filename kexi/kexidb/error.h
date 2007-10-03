@@ -22,8 +22,8 @@
 #define _KEXI_ERROR_H_
 
 #include <qstring.h>
-#include <kexidb/global.h>
-#include <kexidb/kexidb_export.h>
+#include "global.h"
+#include "kexidb_export.h"
 
 /*! Fine-grained KexiDB error codes */
 

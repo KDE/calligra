@@ -20,7 +20,7 @@
 #ifndef KEXIDB_QUERYSCHEMAPARAMETER_H
 #define KEXIDB_QUERYSCHEMAPARAMETER_H
 
-#include <kexidb/queryschema.h>
+#include "queryschema.h"
 
 namespace KexiDB
 {

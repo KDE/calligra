@@ -20,7 +20,7 @@
 #ifndef KEXIDB_OBJECT_H
 #define KEXIDB_OBJECT_H
 
-#include <kexidb/error.h>
+#include "error.h"
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>
 #include <qstring.h>

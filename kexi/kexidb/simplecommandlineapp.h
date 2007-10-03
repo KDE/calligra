@@ -20,8 +20,8 @@
 #ifndef KEXIDB_SIMPLECMDLINEAPP_H
 #define KEXIDB_SIMPLECMDLINEAPP_H
 
-#include <kexidb/connection.h>
-#include <kexidb/driver.h>
+#include "connection.h"
+#include "driver.h"
 
 #include <KAboutData>
 

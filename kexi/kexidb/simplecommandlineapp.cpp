@@ -27,8 +27,8 @@
 #include <KLocale>
 #include <KComponentData>
 
-#include <kexidb/connectiondata.h>
-#include <kexidb/drivermanager.h>
+#include "connectiondata.h"
+#include "drivermanager.h"
 
 using namespace KexiDB;
 

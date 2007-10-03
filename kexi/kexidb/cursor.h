@@ -23,8 +23,8 @@
 #include <QString>
 #include <QVariant>
 
-#include <kexidb/connection.h>
-#include <kexidb/object.h>
+#include "connection.h"
+#include "object.h"
 
 namespace KexiDB {
 
