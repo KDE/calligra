@@ -68,7 +68,6 @@ KChartCanvas::~KChartCanvas()
 void KChartCanvas::paintEvent( QPaintEvent *ev )
 {
     QPainter painter( this );
-    kDebug() << "origin: " << m_origin;
     //painter.translate( -m_documentOffset );
 
     QRect clipRect = ev->rect();//.translated( m_documentOffset );
@@ -92,9 +91,7 @@ bool KChartCanvas::snapToGrid() const
 
 void KChartCanvas::addCommand( QUndoCommand* )
 {
-    kDebug() << "####### addCommand()";
     adjustOrigin();
-    //update();
 }
 
 KoShapeManager *KChartCanvas::shapeManager() const
@@ -126,15 +123,12 @@ void KChartCanvas::updateInputMethodInfo()
 
 void KChartCanvas::adjustOrigin()
 {
-    kDebug() << "######### adjustOrigin()";
     QRect documentRect = m_view->viewConverter()->documentToView( documentViewRect() ).toRect();
 
     QPoint origin = m_origin;
     
     m_origin = -documentRect.topLeft();
 
-    kDebug() << "### size() = " << size();
-    kDebug() << "### documentRect().size() = " << documentRect.size();
     int widthDiff = size().width() - documentRect.width();
     if(widthDiff > 0)
         m_origin.rx() += widthDiff;
@@ -149,7 +143,6 @@ void KChartCanvas::adjustOrigin()
 
 void KChartCanvas::setDocumentOffset( const QPoint &point )
 {
-    kDebug() << "setDocumentOffset: point = " << point;
     m_documentOffset = point;
 }
 
@@ -157,7 +150,6 @@ QRectF KChartCanvas::documentViewRect()
 {
     // TODO for now, we only have one shape. That will probably change in the future.
     // FIXME Apply viewing margin
-    kDebug() << "documentViewRect()";
     QRectF documentRect = m_documentRect;
     m_documentRect = m_part->shape()->boundingRect();
     m_documentRect = m_documentRect.united( QRectF( QPointF( 0.0, 0.0 ), m_documentRect.size() ) );

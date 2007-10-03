@@ -739,12 +739,10 @@ void KChartView::extraCreateTemplate()
 
 void KChartView::selectionChanged()
 {
-    kDebug() << "selectionChanged()";
 }
 
 void KChartView::documentViewRectChanged( const QRectF &viewRect )
 {
-    kDebug() << "documentViewRectChanged";
     m_zoomController->setDocumentSize( viewRect.size() );
     m_canvas->update();
     m_canvasController->ensureVisible( m_canvas->shapeManager()->selection()->boundingRect() );
@@ -752,11 +750,9 @@ void KChartView::documentViewRectChanged( const QRectF &viewRect )
 
 void KChartView::zoomChanged( KoZoomMode::Mode mode, double zoom )
 {
-    QRectF documentViewRect = m_zoomHandler->documentToView( m_canvas->documentViewRect() );
-    //m_canvas->adjustOrigin();
-    m_canvasController->setPreferredCenter( documentViewRect.center().toPoint() );
-    // canvas should get updated by the canvas controller
-    //m_canvas->update();
+    QRectF documentViewRect = m_canvas->documentViewRect();
+    m_zoomController->setDocumentSize( documentViewRect.size() );
+    m_canvasController->setPreferredCenter( m_zoomHandler->documentToView( documentViewRect ).center().toPoint() );
 }
 
 }  //KChart namespace
