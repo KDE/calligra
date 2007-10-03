@@ -47,13 +47,18 @@ KChartCanvas::KChartCanvas( KChartView *view, KChartPart *parent )
     m_view = view;
     m_shapeManager = new KoShapeManager( this );
     m_shapeManager->add( m_part->shape() );
+    m_toolProxy = new KoToolProxy( this );
 
-    setBackgroundRole(QPalette::Base);
-    setAutoFillBackground(true);
-    setMouseTracking(true);
-    setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
-    //adjustOrigin();
-    setAttribute(Qt::WA_InputMethodEnabled, true);
+    setBackgroundRole( QPalette::Base );
+    setAutoFillBackground( true );
+    setMouseTracking( true );
+    setFocusPolicy( Qt::ClickFocus ); // allow to receive keyboard input
+    adjustOrigin();
+    setAttribute( Qt::WA_InputMethodEnabled, true );
+
+    m_documentRect = m_part->shape()->boundingRect();
+
+    connect(m_shapeManager, SIGNAL( selectionChanged() ), this, SLOT( adjustOrigin() ) );
 }
 
 KChartCanvas::~KChartCanvas()
@@ -63,13 +68,15 @@ KChartCanvas::~KChartCanvas()
 void KChartCanvas::paintEvent( QPaintEvent *ev )
 {
     QPainter painter( this );
-    painter.translate( m_origin );
-    painter.translate( -m_documentOffset );
+    kDebug() << "origin: " << m_origin;
+    //painter.translate( -m_documentOffset );
 
-    QRect clipRect = ev->rect().translated( m_documentOffset );
+    QRect clipRect = ev->rect();//.translated( m_documentOffset );
     painter.setClipRect( clipRect );
+    painter.translate( m_origin );
     // KChartView::viewConverter() returns the view's KoZoomHandler instance
     shapeManager()->paint( painter, *( m_view->viewConverter() ), false );
+    m_toolProxy->paint( painter, *( m_view->viewConverter() ) );
 
     painter.end();
 }
@@ -85,6 +92,9 @@ bool KChartCanvas::snapToGrid() const
 
 void KChartCanvas::addCommand( QUndoCommand* )
 {
+    kDebug() << "####### addCommand()";
+    adjustOrigin();
+    //update();
 }
 
 KoShapeManager *KChartCanvas::shapeManager() const
@@ -98,7 +108,7 @@ void KChartCanvas::updateCanvas( const QRectF& )
 
 KoToolProxy *KChartCanvas::toolProxy() const
 {
-    return 0;
+    return m_toolProxy;
 }
 
 const KoViewConverter *KChartCanvas::viewConverter() const
@@ -116,12 +126,30 @@ void KChartCanvas::updateInputMethodInfo()
 
 void KChartCanvas::adjustOrigin()
 {
+    kDebug() << "######### adjustOrigin()";
     QRect documentRect = m_view->viewConverter()->documentToView( documentViewRect() ).toRect();
-    m_origin = documentRect.topLeft();
+
+    QPoint origin = m_origin;
+    
+    m_origin = -documentRect.topLeft();
+
+    kDebug() << "### size() = " << size();
+    kDebug() << "### documentRect().size() = " << documentRect.size();
+    int widthDiff = size().width() - documentRect.width();
+    if(widthDiff > 0)
+        m_origin.rx() += widthDiff;
+    int heightDiff = size().height() - documentRect.height();
+    if(heightDiff > 0)
+        m_origin.rx() += heightDiff;
+
+    if( origin != m_origin )
+        emit documentOriginChanged( m_origin );
+    update();
 }
 
 void KChartCanvas::setDocumentOffset( const QPoint &point )
 {
+    kDebug() << "setDocumentOffset: point = " << point;
     m_documentOffset = point;
 }
 
@@ -129,8 +157,70 @@ QRectF KChartCanvas::documentViewRect()
 {
     // TODO for now, we only have one shape. That will probably change in the future.
     // FIXME Apply viewing margin
-    return m_part->shape()->boundingRect();
+    kDebug() << "documentViewRect()";
+    QRectF documentRect = m_documentRect;
+    m_documentRect = m_part->shape()->boundingRect();
+    m_documentRect = m_documentRect.united( QRectF( QPointF( 0.0, 0.0 ), m_documentRect.size() ) );
+    if( documentRect != m_documentRect )
+        emit documentViewRectChanged( m_documentRect );
+
+    return m_documentRect;
 }
+
+QPoint KChartCanvas::widgetToView( const QPoint &p )
+{
+    return p - m_origin;
+}
+
+void KChartCanvas::mouseReleaseEvent(QMouseEvent *e)
+{
+    m_toolProxy->mouseReleaseEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
+}
+
+void KChartCanvas::keyReleaseEvent (QKeyEvent *e)
+{
+    m_toolProxy->keyReleaseEvent( e );
+}
+
+void KChartCanvas::keyPressEvent (QKeyEvent *e)
+{
+    m_toolProxy->keyPressEvent( e );
+}
+
+void KChartCanvas::mouseMoveEvent(QMouseEvent *e)
+{
+    m_toolProxy->mouseMoveEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
+    update();
+}
+
+void KChartCanvas::mousePressEvent(QMouseEvent *e)
+{
+    m_toolProxy->mousePressEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
+    update();
+}
+
+void KChartCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    m_toolProxy->mouseDoubleClickEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
+    update();
+}
+
+void KChartCanvas::tabletEvent( QTabletEvent *e )
+{
+    m_toolProxy->tabletEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
+}
+
+void KChartCanvas::wheelEvent( QWheelEvent *e )
+{
+    m_toolProxy->wheelEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
+    update();
+}
+
+void KChartCanvas::resizeEvent( QResizeEvent *e )
+{
+    adjustOrigin();
+}
+
 
 }
 

@@ -88,7 +88,7 @@ public slots:
     void  extraCreateTemplate();
 
     void selectionChanged();
-
+    void documentViewRectChanged( const QRectF &viewRect );
     void zoomChanged( KoZoomMode::Mode mode, double zoom );
 
 protected:

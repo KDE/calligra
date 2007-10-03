@@ -25,17 +25,6 @@
 <!-- <Separator/>
  <Action name="copy"/>-->
 </ToolBar>
-<ToolBar name="KChartTypes" position="left"><Text>Types</Text>
- <Action name="barschart"/>
- <Action name="linechart"/>
- <Action name="areaschart"/>
- <Action name="barlineschart"/>
- <Action name="hilochart"/>
- <Action name="bwchart"/>
- <Action name="piechart"/>
- <Action name="ringchart"/>
- <Action name="polarchart"/>
-</ToolBar>
 <Menu name="action_popup">
  <Action name="editdata"/>
 </Menu>

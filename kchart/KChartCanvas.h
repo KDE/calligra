@@ -53,8 +53,6 @@ public:
     KChartCanvas( KChartView *view, KChartPart *parent );
     ~KChartCanvas();
 
-    void paintEvent( QPaintEvent *e );
-
     virtual void gridSize( double*, double* ) const;
     virtual bool snapToGrid() const;
     virtual void addCommand( QUndoCommand* );
@@ -66,6 +64,7 @@ public:
     virtual void updateInputMethodInfo();
 
     QRectF documentViewRect();
+    QPoint widgetToView( const QPoint &p );
 
     QWidget *canvasWidget() { return this; }
 
@@ -73,11 +72,29 @@ public slots:
     void adjustOrigin();
     void setDocumentOffset( const QPoint &point );
 
+signals:
+    void documentViewRectChanged( const QRectF &viewRect );
+    void documentOriginChanged( const QPoint &origin );
+
+protected:
+    void paintEvent(QPaintEvent * ev);
+    void mouseReleaseEvent(QMouseEvent *e);
+    void keyReleaseEvent (QKeyEvent *e);
+    void keyPressEvent (QKeyEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *e);
+    void tabletEvent( QTabletEvent *e );
+    void wheelEvent( QWheelEvent *e );
+    void resizeEvent( QResizeEvent *e );
+
 private:
     KChartPart     *m_part;
     KChartView     *m_view;
     KoShapeManager *m_shapeManager;
+    KoToolProxy    *m_toolProxy;
 
+    QRectF m_documentRect;
     QPoint m_origin;
     QPoint m_documentOffset;
 };
