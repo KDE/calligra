@@ -55,6 +55,8 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoTemplateCreateDia.h>
+#include <KoToolBoxFactory.h>
+#include <KoToolManager.h>
 #include <KoViewAdaptor.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
@@ -188,7 +190,11 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     //    loadConfig();
 
     //KChartPart *part = (KChartPart*)koDocument();
+    
+    KoToolManager::instance()->addController( m_canvasController );
 
+    KoToolBoxFactory toolBoxFactory( m_canvasController, "KChart" );
+    createDockWidget( &toolBoxFactory );
 	
     // Disable some things if we can't change the data, e.g. because
     // we are inside another application that provides the data for us.
