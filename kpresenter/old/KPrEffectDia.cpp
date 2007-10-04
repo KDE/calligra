@@ -188,7 +188,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
              this, SLOT( slotAppearFileChanged( const QString& ) ) );
 
     buttonTestPlaySoundEffect1 = new QPushButton( grp1 );
-    buttonTestPlaySoundEffect1->setIconSet( KIcon("arrow-right") );
+    buttonTestPlaySoundEffect1->setIconSet( KIcon("media-playback-start") );
     buttonTestPlaySoundEffect1->setToolTip( i18n("Play") );
     upperRow->addWidget( buttonTestPlaySoundEffect1, 6, 2 );
 
@@ -295,7 +295,7 @@ KPrEffectDia::KPrEffectDia( QWidget* parent, const char* name, const Q3PtrList<K
              this, SLOT( slotDisappearFileChanged( const QString& ) ) );
 
     buttonTestPlaySoundEffect2 = new QPushButton( grp2 );
-    buttonTestPlaySoundEffect2->setIconSet( KIcon("arrow-right") );
+    buttonTestPlaySoundEffect2->setIconSet( KIcon("media-playback-start") );
     buttonTestPlaySoundEffect2->setToolTip( i18n("Play") );
     lowerRow->addWidget( buttonTestPlaySoundEffect2, 5, 2 );
 

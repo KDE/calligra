@@ -299,7 +299,7 @@ KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
              this, SLOT( slotSoundFileChanged( const QString& ) ) );
 
     buttonTestPlaySoundEffect = new QPushButton( soundgrp );
-    buttonTestPlaySoundEffect->setPixmap( BarIcon("arrow-right", KIconLoader::SizeSmall) );
+    buttonTestPlaySoundEffect->setPixmap( BarIcon("media-playback-start", KIconLoader::SizeSmall) );
     buttonTestPlaySoundEffect->setToolTip( i18n("Play") );
 
     connect( buttonTestPlaySoundEffect, SIGNAL( clicked() ), this, SLOT( playSound() ) );

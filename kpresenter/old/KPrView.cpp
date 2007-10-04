@@ -2570,18 +2570,18 @@ void KPrView::setupActions()
 
 
 	QActionGroup* alignGroup = new QActionGroup( this );
-    actionTextAlignLeft = new KToggleAction(KIcon("text_left"),  i18n( "Align &Left" ), actionCollection(), "text_alignleft" );
+    actionTextAlignLeft = new KToggleAction(KIcon("format-justify-left"),  i18n( "Align &Left" ), actionCollection(), "text_alignleft" );
     connect(actionTextAlignLeft, SIGNAL(triggered(bool)), SLOT( textAlignLeft() ));
     actionTextAlignLeft->setShortcut(QKeySequence(Qt::ALT + Qt::Key_L));
     actionTextAlignLeft->setActionGroup( alignGroup );
     actionTextAlignLeft->setChecked( true );
 
-    actionTextAlignCenter = new KToggleAction(KIcon("text_center"),  i18n( "Align &Center" ), actionCollection(), "text_aligncenter" );
+    actionTextAlignCenter = new KToggleAction(KIcon("format-justify-center"),  i18n( "Align &Center" ), actionCollection(), "text_aligncenter" );
     connect(actionTextAlignCenter, SIGNAL(triggered(bool)), SLOT( textAlignCenter() ));
     actionTextAlignCenter->setShortcut(QKeySequence(Qt::ALT + Qt::Key_C));
     actionTextAlignCenter->setActionGroup( alignGroup );
 
-    actionTextAlignRight = new KToggleAction(KIcon("text_right"),  i18n( "Align &Right" ), actionCollection(), "text_alignright" );
+    actionTextAlignRight = new KToggleAction(KIcon("format-justify-right"),  i18n( "Align &Right" ), actionCollection(), "text_alignright" );
     connect(actionTextAlignRight, SIGNAL(triggered(bool)), SLOT( textAlignRight() ));
     actionTextAlignRight->setShortcut(QKeySequence(Qt::ALT + Qt::Key_R));
     actionTextAlignRight->setActionGroup( alignGroup );
@@ -2616,11 +2616,11 @@ void KPrView::setupActions()
         else
             actionFormatNumber->addAction( act );
     }
-    actionTextDepthPlus = new KAction(KIcon(QApplication::isRightToLeft() ?"format_decreaseindent" : "format_increaseindent"),  i18n( "&Increase Depth" ), actionCollection(), "text_depthPlus" );
+    actionTextDepthPlus = new KAction(KIcon(QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more"),  i18n( "&Increase Depth" ), actionCollection(), "text_depthPlus" );
     connect(actionTextDepthPlus, SIGNAL(triggered(bool) ), SLOT( textDepthPlus() ));
     actionTextDepthPlus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
 
-    actionTextDepthMinus = new KAction(KIcon(QApplication::isRightToLeft() ?"format_increaseindent" : "format_decreaseindent"),  i18n( "&Decrease Depth" ), actionCollection(), "text_depthMinus" );
+    actionTextDepthMinus = new KAction(KIcon(QApplication::isRightToLeft() ?"format-indent-more" : "format-indent-less"),  i18n( "&Decrease Depth" ), actionCollection(), "text_depthMinus" );
     connect(actionTextDepthMinus, SIGNAL(triggered(bool) ), SLOT( textDepthMinus() ));
     actionTextDepthMinus->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
 
@@ -2630,7 +2630,7 @@ void KPrView::setupActions()
     actionTextExtendObj2Cont = new KAction( i18n( "&Extend Object to Fit Contents" ), actionCollection(), "text_obj2cont" );
     connect(actionTextExtendObj2Cont, SIGNAL(triggered(bool)), SLOT( textObjectToContents() ));
 
-    actionTextInsertPageNum = new KAction(KIcon("pgnum"),  i18n( "&Insert Slide Number" ), actionCollection(), "text_inspgnum" );
+    actionTextInsertPageNum = new KAction(KIcon("insert-page-number"),  i18n( "&Insert Slide Number" ), actionCollection(), "text_inspgnum" );
     connect(actionTextInsertPageNum, SIGNAL(triggered(bool) ), SLOT( textInsertPageNum() ));
 
     // ----------------- format actions
@@ -2664,22 +2664,22 @@ void KPrView::setupActions()
     actionExtraShadow = new KAction(KIcon("shadow"),  i18n( "&Shadow Objects..." ), actionCollection(), "extra_shadow" );
     connect(actionExtraShadow, SIGNAL(triggered(bool) ), SLOT( extraShadow() ));
 
-    actionExtraAlignObjLeft = new KAction(KIcon("aoleft"),  i18n( "Align &Left" ), actionCollection(), "extra_alignleft" );
+    actionExtraAlignObjLeft = new KAction(KIcon("object-align-left"),  i18n( "Align &Left" ), actionCollection(), "extra_alignleft" );
     connect(actionExtraAlignObjLeft, SIGNAL(triggered(bool) ), SLOT( extraAlignObjLeft() ));
 
-    actionExtraAlignObjCenterH = new KAction(KIcon("aocenterh"),  i18n( "Align Center (&horizontally)" ), actionCollection(), "extra_aligncenterh" );
+    actionExtraAlignObjCenterH = new KAction(KIcon("object-align-center-horizontal"),  i18n( "Align Center (&horizontally)" ), actionCollection(), "extra_aligncenterh" );
     connect(actionExtraAlignObjCenterH, SIGNAL(triggered(bool) ), SLOT( extraAlignObjCenterH() ));
 
-    actionExtraAlignObjRight = new KAction(KIcon("aoright"),  i18n( "Align &Right" ), actionCollection(), "extra_alignright" );
+    actionExtraAlignObjRight = new KAction(KIcon("object-align-right"),  i18n( "Align &Right" ), actionCollection(), "extra_alignright" );
     connect(actionExtraAlignObjRight, SIGNAL(triggered(bool) ), SLOT( extraAlignObjRight() ));
 
-    actionExtraAlignObjTop = new KAction(KIcon("aotop"),  i18n( "Align &Top" ), actionCollection(), "extra_aligntop" );
+    actionExtraAlignObjTop = new KAction(KIcon("object-align-top"),  i18n( "Align &Top" ), actionCollection(), "extra_aligntop" );
     connect(actionExtraAlignObjTop, SIGNAL(triggered(bool) ), SLOT( extraAlignObjTop() ));
 
-    actionExtraAlignObjCenterV = new KAction(KIcon("aocenterv"),  i18n( "Align Center (&vertically)" ), actionCollection(), "extra_aligncenterv" );
+    actionExtraAlignObjCenterV = new KAction(KIcon("object-align-center-vertical"),  i18n( "Align Center (&vertically)" ), actionCollection(), "extra_aligncenterv" );
     connect(actionExtraAlignObjCenterV, SIGNAL(triggered(bool) ), SLOT( extraAlignObjCenterV() ));
 
-    actionExtraAlignObjBottom = new KAction(KIcon("aobottom"),  i18n( "Align &Bottom" ), actionCollection(), "extra_alignbottom" );
+    actionExtraAlignObjBottom = new KAction(KIcon("object-align-bottom"),  i18n( "Align &Bottom" ), actionCollection(), "extra_alignbottom" );
     connect(actionExtraAlignObjBottom, SIGNAL(triggered(bool) ), SLOT( extraAlignObjBottom() ));
 
 
@@ -2716,7 +2716,7 @@ void KPrView::setupActions()
     actionExtraDefaultTemplate = new KAction( i18n( "Use Current Slide as Default Template" ), actionCollection(), "extra_defaulttemplate" );
     connect(actionExtraDefaultTemplate, SIGNAL(triggered(bool)), SLOT( extraDefaultTemplate() ));
 
-    actionExtraAlignObjsPopup = new KActionMenu( KIcon("alignobjs"),i18n("Align O&bjects"),
+    actionExtraAlignObjsPopup = new KActionMenu( KIcon("object-align"),i18n("Align O&bjects"),
                                             actionCollection(), "extra_alignobjs" );
     actionExtraAlignObjsPopup->setDelayed( false );
 
@@ -2761,11 +2761,11 @@ void KPrView::setupActions()
     connect(actionScreenTransEffect, SIGNAL(triggered(bool) ), SLOT( screenTransEffect() ));
 
 
-    actionScreenStart = new KAction(KIcon("arrow-right-double"),  i18n( "&Start" ), actionCollection(), "screen_start" );
+    actionScreenStart = new KAction(KIcon("media-seek-forward"),  i18n( "&Start" ), actionCollection(), "screen_start" );
     connect(actionScreenStart, SIGNAL(triggered(bool) ), SLOT( screenStart() ));
     actionScreenStart->setShortcut(QKeySequence(Qt::Key_F12));
 
-    actionScreenStartFromFirst = new KAction(KIcon("arrow-right"),  i18n( "Start From &First Slide" ), actionCollection(), "screen_startfromfirst" );
+    actionScreenStartFromFirst = new KAction(KIcon("media-start"),  i18n( "Start From &First Slide" ), actionCollection(), "screen_startfromfirst" );
     connect(actionScreenStartFromFirst, SIGNAL(triggered(bool) ), SLOT( screenStartFromFirst() ));
 
     actionScreenFirst = new KAction(KIcon("go-first"),  i18n( "&Go to Start" ), actionCollection(), "screen_first" );
@@ -2782,7 +2782,7 @@ void KPrView::setupActions()
     actionScreenLast = new KAction(KIcon("go-last"),  i18n( "Go to &End" ), actionCollection(), "screen_last" );
     connect(actionScreenLast, SIGNAL(triggered(bool) ), SLOT( screenLast() ));
 
-    actionScreenSkip = new KAction(KIcon("goto-page"),  i18n( "Goto &Slide..." ), actionCollection(), "screen_skip" );
+    actionScreenSkip = new KAction(KIcon("go-jump"),  i18n( "Goto &Slide..." ), actionCollection(), "screen_skip" );
     connect(actionScreenSkip, SIGNAL(triggered(bool) ), SLOT( screenSkip() ));
 
     // ----------------- colorbar(Brush and Pen) action
@@ -2831,10 +2831,10 @@ void KPrView::setupActions()
     connect(actionImageEffect, SIGNAL(triggered(bool)), SLOT(imageEffect()));
 
 	QActionGroup* valignGroup = new QActionGroup( this );
-    actionFormatSuper = new KToggleAction(KIcon("super"),  i18n( "Superscript" ), actionCollection(), "format_super" );
+    actionFormatSuper = new KToggleAction(KIcon("format-text-superscript"),  i18n( "Superscript" ), actionCollection(), "format_super" );
     connect(actionFormatSuper, SIGNAL(triggered(bool)), SLOT( textSuperScript() ));
     actionFormatSuper->setActionGroup(valignGroup );
-    actionFormatSub = new KToggleAction(KIcon("sub"),  i18n( "Subscript" ), actionCollection(), "format_sub" );
+    actionFormatSub = new KToggleAction(KIcon("format-text-subscript"),  i18n( "Subscript" ), actionCollection(), "format_sub" );
     connect(actionFormatSub, SIGNAL(triggered(bool)), SLOT( textSubScript() ));
     actionFormatSub->setActionGroup(valignGroup );
 
@@ -2907,10 +2907,10 @@ void KPrView::setupActions()
     connect(actionRefreshAllVariable, SIGNAL(triggered(bool)), SLOT( refreshAllVariable() ));
     actionInsertVariable->addAction(actionRefreshAllVariable);
 
-    actionIncreaseFontSize = new KAction(KIcon("fontsizeup"),  i18n("Increase Font Size"), actionCollection(), "increaseFontSize" );
+    actionIncreaseFontSize = new KAction(KIcon("format-font-size-more"),  i18n("Increase Font Size"), actionCollection(), "increaseFontSize" );
     connect(actionIncreaseFontSize, SIGNAL(triggered(bool) ), SLOT( increaseFontSize() ));
 
-    actionDecreaseFontSize = new KAction(KIcon("fontsizedown"),  i18n("Decrease Font Size"), actionCollection(), "decreaseFontSize" );
+    actionDecreaseFontSize = new KAction(KIcon("format-font-size-less"),  i18n("Decrease Font Size"), actionCollection(), "decreaseFontSize" );
     connect(actionDecreaseFontSize, SIGNAL(triggered(bool) ), SLOT( decreaseFontSize() ));
 
     actionChangeCase = new KAction( i18n( "Change Case..." ), actionCollection(), "change_case" );
@@ -2993,7 +2993,7 @@ void KPrView::setupActions()
 
     actionZoomMinus = new KAction( i18n( "Zoom Slide Width" ), actionCollection(), "zoom_page_width" );
     connect(actionZoomMinus, SIGNAL(triggered(bool)), SLOT( zoomPageWidth() ));
-    actionZoomSelectedObject = new KAction(KIcon("zoom-best-fit"),  i18n( "Zoom Selected Objects" ), actionCollection(), "zoom_selected_object" );
+    actionZoomSelectedObject = new KAction(KIcon("zoom-fit-best"),  i18n( "Zoom Selected Objects" ), actionCollection(), "zoom_selected_object" );
     connect(actionZoomSelectedObject, SIGNAL(triggered(bool) ), SLOT( zoomSelectedObject() ));
     actionZoomPageHeight = new KAction( i18n( "Zoom Slide Height" ), actionCollection(), "zoom_page_height" );
     connect(actionZoomPageHeight, SIGNAL(triggered(bool)), SLOT( zoomPageHeight() ));
