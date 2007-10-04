@@ -151,21 +151,21 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect( m_actionFormatStrikeOut, SIGNAL(triggered(bool)), &m_selectionHandler, SLOT(strikeOut(bool)) );
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
-    m_actionAlignLeft  = new QAction(KIcon("text-left"), i18n("Align Left"), this);
+    m_actionAlignLeft  = new QAction(KIcon("format-justify-left"), i18n("Align Left"), this);
     addAction("format_alignleft", m_actionAlignLeft );
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
     connect(m_actionAlignLeft, SIGNAL(triggered(bool)), this, SLOT(alignLeft()));
 
-    m_actionAlignRight  = new QAction(KIcon("text-right"), i18n("Align Right"), this);
+    m_actionAlignRight  = new QAction(KIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight );
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
     connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
 
-    m_actionAlignCenter  = new QAction(KIcon("text-center"), i18n("Align Center"), this);
+    m_actionAlignCenter  = new QAction(KIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter );
     m_actionAlignCenter->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_C);
     m_actionAlignCenter->setCheckable(true);
@@ -179,12 +179,12 @@ TextTool::TextTool(KoCanvasBase *canvas)
     alignmentGroup->addAction(m_actionAlignBlock);
     connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
 
-    m_actionFormatSuper = new QAction(KIcon("text-super"), i18n("Superscript"), this);
+    m_actionFormatSuper = new QAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
     addAction("format_super", m_actionFormatSuper );
     m_actionFormatSuper->setCheckable(true);
     connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
 
-    m_actionFormatSub = new QAction(KIcon("text-sub"), i18n("Subscript"), this);
+    m_actionFormatSub = new QAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
     addAction("format_sub", m_actionFormatSub );
     m_actionFormatSub->setCheckable(true);
     connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
@@ -228,15 +228,15 @@ TextTool::TextTool(KoCanvasBase *canvas)
     // ----------------------- More format actions, for the toolbar only
     QActionGroup* spacingActionGroup = new QActionGroup( this );
     spacingActionGroup->setExclusive( true );
-    m_actionFormatSpacingSingle = new KToggleAction( i18n( "Line Spacing 1" ), "spacesimple", Qt::CTRL + Qt::Key_1,
+    m_actionFormatSpacingSingle = new KToggleAction( i18n( "Line Spacing 1" ), "format-line-spacing-simple", Qt::CTRL + Qt::Key_1,
             this, SLOT( textSpacingSingle() ),
             actionCollection(), "format_spacingsingle" );
     m_actionFormatSpacingSingle->setActionGroup( spacingActionGroup );
-    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "spacedouble", Qt::CTRL + Qt::Key_5,
+    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.5" ), "format-line-spacing-double", Qt::CTRL + Qt::Key_5,
             this, SLOT( textSpacingOneAndHalf() ),
             actionCollection(), "format_spacing15" );
     m_actionFormatSpacingOneAndHalf->setActionGroup( spacingActionGroup );
-    m_actionFormatSpacingDouble = new KToggleAction( i18n( "Line Spacing 2" ), "spacetriple", Qt::CTRL + Qt::Key_2,
+    m_actionFormatSpacingDouble = new KToggleAction( i18n( "Line Spacing 2" ), "format-line-spacing-triple", Qt::CTRL + Qt::Key_2,
             this, SLOT( textSpacingDouble() ),
             actionCollection(), "format_spacingdouble" );
     m_actionFormatSpacingDouble->setActionGroup( spacingActionGroup );
