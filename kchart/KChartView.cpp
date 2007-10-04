@@ -743,7 +743,9 @@ void KChartView::selectionChanged()
 
 void KChartView::documentViewRectChanged( const QRectF &viewRect )
 {
-    m_zoomController->setDocumentSize( viewRect.size() );
+    QSizeF size = viewRect.size();
+    m_zoomController->setDocumentSize( size );
+    m_zoomController->setPageSize( size );
     m_canvas->update();
     m_canvasController->ensureVisible( m_canvas->shapeManager()->selection()->boundingRect() );
 }

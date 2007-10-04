@@ -82,18 +82,15 @@ void KChartCanvas::paintEvent( QPaintEvent *ev )
 
 void KChartCanvas::gridSize( double*, double* ) const
 {
-    kDebug() << "gridSize";
 }
 
 bool KChartCanvas::snapToGrid() const
 {
-    kDebug() << "snapToGrid";
     return false;
 }
 
 void KChartCanvas::addCommand( QUndoCommand* )
 {
-    kDebug() << "addCommand";
     adjustOrigin();
 }
 
@@ -105,34 +102,28 @@ KoShapeManager *KChartCanvas::shapeManager() const
 
 void KChartCanvas::updateCanvas( const QRectF& )
 {
-    kDebug() << "updateCanvas";
 }
 
 KoToolProxy *KChartCanvas::toolProxy() const
 {
-    kDebug() << "toolProxy";
     return m_toolProxy;
 }
 
 const KoViewConverter *KChartCanvas::viewConverter() const
 {
-    kDebug() << "viewConverter";
     return m_view->viewConverter();
 }
 
 KoUnit KChartCanvas::unit() const
 {
-    kDebug() << "unit";
 }
 
 void KChartCanvas::updateInputMethodInfo()
 {
-    kDebug() << "updateInputMethodInfo";
 }
 
 void KChartCanvas::adjustOrigin()
 {
-    kDebug() << "adjustOrigin";
     QRect documentRect = m_view->viewConverter()->documentToView( documentViewRect() ).toRect();
 
     QPoint origin = m_origin;
@@ -153,13 +144,11 @@ void KChartCanvas::adjustOrigin()
 
 void KChartCanvas::setDocumentOffset( const QPoint &point )
 {
-    kDebug() << "setDocumentOffset";
     m_documentOffset = point;
 }
 
 QRectF KChartCanvas::documentViewRect()
 {
-    kDebug() << "documentViewRect";
     // TODO for now, we only have one shape. That will probably change in the future.
     // FIXME Apply viewing margin
     QRectF documentRect = m_documentRect;
@@ -173,65 +162,55 @@ QRectF KChartCanvas::documentViewRect()
 
 QPoint KChartCanvas::widgetToView( const QPoint &p )
 {
-    kDebug() << "widgetToView";
     return p - m_origin;
 }
 
 void KChartCanvas::mouseReleaseEvent(QMouseEvent *e)
 {
-    kDebug() << "mouseReleaseEvent";
     m_toolProxy->mouseReleaseEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
 }
 
 void KChartCanvas::keyReleaseEvent (QKeyEvent *e)
 {
-    kDebug() << "keyReleaseEvent";
     m_toolProxy->keyReleaseEvent( e );
 }
 
 void KChartCanvas::keyPressEvent (QKeyEvent *e)
 {
-    kDebug() << "keyPressEvent";
     m_toolProxy->keyPressEvent( e );
 }
 
 void KChartCanvas::mouseMoveEvent(QMouseEvent *e)
 {
-    kDebug() << "mouseMoveEvent";
     m_toolProxy->mouseMoveEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
     update();
 }
 
 void KChartCanvas::mousePressEvent(QMouseEvent *e)
 {
-    kDebug() << "mousePressEvent";
     m_toolProxy->mousePressEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
     update();
 }
 
 void KChartCanvas::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    kDebug() << "mouseDoubleClickEvent";
     m_toolProxy->mouseDoubleClickEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
     update();
 }
 
 void KChartCanvas::tabletEvent( QTabletEvent *e )
 {
-    kDebug() << "tabletEvent";
     m_toolProxy->tabletEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
 }
 
 void KChartCanvas::wheelEvent( QWheelEvent *e )
 {
-    kDebug() << "wheelEvent";
     m_toolProxy->wheelEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
     update();
 }
 
 void KChartCanvas::resizeEvent( QResizeEvent *e )
 {
-    kDebug() << "resizeEvent";
     adjustOrigin();
 }
 
