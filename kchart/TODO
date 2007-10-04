@@ -37,24 +37,17 @@ Item								   Prio Status
  + Remove KChartDocument                                                DONE
  + Make KChart a real KOffice 2 app                                     DONE
     - Make it use include a flake shape                                 done
+ + Make the chart shape communicate with the apps using a model		----
+    - Use a QAbstractItemModel as interface in the shape 		--
+    - Use a QStandardItemModel as data storage in kchart		--
 
 * Port to Qt4
-  + Get rid of all Qt3 support widgets				      	----
-    - Q3*Layout								done
-    - Q3ButtonGroup							done
-    - Q3ListBox / Q3ListBoxText						done
-    - Q3TabDialog							done
-    - Q3GroupBox							done
-    - Q3Wizard								done
-    - Q3Table								done
-    - Q3Valuelist                                                       --
+  + Get rid of all Qt3 support widgets				      	DONE
   + Remove code that does double buffering.			       	DONE
   + Get rid of warnings from deprecated calls 			       	DONE
 
 * Port to KDE4
-  + Fix changed calls                                                   ----
-    - Fix KConfig							--
-    - KStandardDirs::kde_default is deprecated                          done
+  + Fix changed calls                                                   DONE
 
 
 * OpenDocument Support -- read and write all tags and attributes
