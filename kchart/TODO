@@ -37,9 +37,7 @@ Item								   Prio Status
  + Remove KChartDocument                                                DONE
  + Make KChart a real KOffice 2 app                                     DONE
     - Make it use include a flake shape                                 done
- + Make the chart shape communicate with the apps using a model		----
-    - Use a QAbstractItemModel as interface in the shape 		--
-    - Use a QStandardItemModel as data storage in kchart		--
+ + Make the chart shape communicate with the apps using a model		DONE
 
 * Port to Qt4
   + Get rid of all Qt3 support widgets				      	DONE
