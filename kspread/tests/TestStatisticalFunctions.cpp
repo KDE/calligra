@@ -874,6 +874,24 @@ void TestStatisticalFunctions::testPOISSON()
     CHECK_EVAL_SHORT("POISSON(0;2;FALSE())", Value( 0.135335 ) ); // TODO - be more precise /
 }
 
+void TestStatisticalFunctions::testRANK()
+{
+    //  Cell | Value    
+    // ------+------
+    //  A19  |   1  
+    //  A20  |   2  
+    //  A21  |   4  
+    //  A22  |   8  
+    //  A23  |  16      
+    //  A24  |  32      
+    //  A25  |  64      
+
+    // ODF-tests
+    CHECK_EVAL("RANK(A20;A19:A25;1)", Value( 2 ) ); // ascending
+    CHECK_EVAL("RANK(A25;A19:A25;0)", Value( 1 ) ); // descending
+    CHECK_EVAL("RANK(A21;A19:A25  )", Value( 5 ) ); // ommitted equals descending order
+}
+
 void TestStatisticalFunctions::testRSQ()
 {
     // ODF-tests
@@ -1004,8 +1022,8 @@ void TestStatisticalFunctions::testTDIST()
     CHECK_EVAL("TDIST( 0.5; 1; 1 )",  Value( 0.3524163823 ) ); // ODF-specs -> 0.352416
     CHECK_EVAL_SHORT("TDIST( -1.5; 2; 2 )", Value( 0.272393 ) ); //  TODO - be more precise / OOo-2.3.0 returns error!!!
     CHECK_EVAL("TDIST( 0.5; 5; 1 )",  Value( 0.3191494358 ) ); // ODF-specs -> 0.319149
-    CHECK_EVAL("TDIST( 1; 1; 3 )",    Value::errorNUM() ); // mode = { 1; 2 }
-    CHECK_EVAL("TDIST( 1; 0; 1 )",    Value::errorNUM() ); // degreeOfFreedom >= 1
+    CHECK_EVAL("TDIST( 1; 1; 3 )",    Value::errorNUM()     ); // mode = { 1; 2 }
+    CHECK_EVAL("TDIST( 1; 0; 1 )",    Value::errorNUM()     ); // degreeOfFreedom >= 1
 }
 
 void TestStatisticalFunctions::testTINV()
@@ -1024,8 +1042,6 @@ void TestStatisticalFunctions::testTINV()
 
 void TestStatisticalFunctions::testTREND()
 {
-    // TODO how to check returned arrays?
-
     //  Cell | Value      Cell | Value
     // ------+------     ------+------
     //  A19  |   1        C19  |  0
@@ -1060,8 +1076,8 @@ void TestStatisticalFunctions::testTTEST()
     CHECK_EVAL("TTEST(A19:A23;A24:A28; 2; 1 )", Value( 0.0854412368 ) ); //
     CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 2 )", Value( 0.0294544970 ) ); // 
     CHECK_EVAL("TTEST(A19:A23;A24:A28; 1; 3 )", Value( 0.0462125526 ) ); //
-    CHECK_EVAL("TTEST(A19:A23;A24:A29; 1; 1 )", Value::errorNUM() ); // same amount of numbers for paired samples
-    CHECK_EVAL("TTEST(A19:A19;A24:A24; 1; 3 )", Value::errorNUM() ); // two numbers at least for each sequence
+    CHECK_EVAL("TTEST(A19:A23;A24:A29; 1; 1 )", Value::errorNUM()     ); // same amount of numbers for paired samples
+    CHECK_EVAL("TTEST(A19:A19;A24:A24; 1; 3 )", Value::errorNUM()     ); // two numbers at least for each sequence
 }
 
 void TestStatisticalFunctions::testVAR()
@@ -1115,8 +1131,8 @@ void TestStatisticalFunctions::testVARPA()
     //   B6  | true        C6  |  7
 
     // ODF-tests
-    CHECK_EVAL("VARPA(2;4)",            Value( 1   ) ); // The sample variance of (2;4) is 1.
-    CHECK_EVAL("VARPA(B5:C6)",          Value( 5   ) ); // Logicals (referenced) are converted to numbers.
+    CHECK_EVAL("VARPA(2;4)",            Value( 1    ) ); // The sample variance of (2;4) is 1.
+    CHECK_EVAL("VARPA(B5:C6)",          Value( 5    ) ); // Logicals (referenced) are converted to numbers.
     CHECK_EVAL("VARPA(TRUE();FALSE())", Value( 0.25 ) ); // Logicals (inlined) are converted to numbers.
 }
 

@@ -84,6 +84,7 @@ Value func_norminv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_normsinv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_phi (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rank (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rsq (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_quartile (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_skew_est (valVector args, ValueCalc *calc, FuncExtra *);
@@ -291,6 +292,10 @@ void RegisterStatisticalFunctions()
   repo->add (f);
   f = new Function ("POISSON", func_poisson);
   f->setParamCount (3);
+  repo->add (f);
+  f = new Function ("RANK", func_rank);
+  f->setParamCount (2, 3);
+  f->setAcceptArray ();
   repo->add (f);
   f = new Function ("RSQ", func_rsq);
   f->setParamCount (2);
@@ -1971,6 +1976,58 @@ Value func_poisson (valVector args, ValueCalc *calc, FuncExtra *)
   }
 
   return result;
+}
+
+//
+// Function: rank
+//
+// rank(rank; ref.;sort order)
+Value func_rank( valVector args, ValueCalc *calc, FuncExtra* )
+{
+  double x = calc->conv()->asFloat (args[0]).asFloat();
+
+  // default
+  bool descending = true;
+
+  double count = 1.0;
+  double val   = 0.0;
+  bool valid = false; // flag
+
+  // opt. parameter
+  if ( args.count() > 2 )
+    descending = !calc->conv()->asInteger (args[2]).asInteger();
+
+  // does NOT support anything other than doubles !!!
+  List array;
+  int number = 0;
+
+  func_array_helper (args[1], calc, array, number);
+
+  // sort array
+  qSort(array);
+
+  for ( int i = 0; i < array.count(); i++)
+  {
+    if( descending )
+      val = array[array.count()-count];
+    else
+      val = array[i];
+
+    //kDebug()<<"count ="<<count<<" val = "<<val<<" x = "<<x;
+    
+    if ( x == val )
+    {
+      valid = true;
+      break;
+    }
+    else if ( (!descending && x > val) || (descending && x < val) )
+      count++;
+  }
+  
+  if (valid)
+    return Value( count );
+  else
+    return Value::errorNA();
 }
 
 //
