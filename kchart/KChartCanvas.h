@@ -87,6 +87,8 @@ protected:
     void tabletEvent( QTabletEvent *e );
     void wheelEvent( QWheelEvent *e );
     void resizeEvent( QResizeEvent *e );
+    virtual QVariant inputMethodQuery( Qt::InputMethodQuery query );
+    virtual void inputMethodEvent( QInputMethodEvent *e );
 
 private:
     KChartPart     *m_part;

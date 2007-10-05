@@ -25,6 +25,7 @@
 
 // KOffice
 #include <KoShapeManager.h>
+#include <KoShapeCreateCommand.h>
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
@@ -89,8 +90,9 @@ bool KChartCanvas::snapToGrid() const
     return false;
 }
 
-void KChartCanvas::addCommand( QUndoCommand* )
+void KChartCanvas::addCommand( QUndoCommand *command )
 {
+    m_part->KoDocument::addCommand( command );
     adjustOrigin();
 }
 
@@ -120,6 +122,8 @@ KoUnit KChartCanvas::unit() const
 
 void KChartCanvas::updateInputMethodInfo()
 {
+    kDebug() << "updateInputMethodInfo";
+    updateMicroFocus();
 }
 
 void KChartCanvas::adjustOrigin()
@@ -165,34 +169,34 @@ QPoint KChartCanvas::widgetToView( const QPoint &p )
     return p - m_origin;
 }
 
-void KChartCanvas::mouseReleaseEvent(QMouseEvent *e)
+void KChartCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
     m_toolProxy->mouseReleaseEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() ) ) );
 }
 
-void KChartCanvas::keyReleaseEvent (QKeyEvent *e)
+void KChartCanvas::keyReleaseEvent ( QKeyEvent *e )
 {
     m_toolProxy->keyReleaseEvent( e );
 }
 
-void KChartCanvas::keyPressEvent (QKeyEvent *e)
+void KChartCanvas::keyPressEvent ( QKeyEvent *e )
 {
     m_toolProxy->keyPressEvent( e );
 }
 
-void KChartCanvas::mouseMoveEvent(QMouseEvent *e)
+void KChartCanvas::mouseMoveEvent( QMouseEvent *e )
 {
     m_toolProxy->mouseMoveEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
     update();
 }
 
-void KChartCanvas::mousePressEvent(QMouseEvent *e)
+void KChartCanvas::mousePressEvent( QMouseEvent *e )
 {
     m_toolProxy->mousePressEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
     update();
 }
 
-void KChartCanvas::mouseDoubleClickEvent(QMouseEvent *e)
+void KChartCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 {
     m_toolProxy->mouseDoubleClickEvent( e, m_view->viewConverter()->viewToDocument( widgetToView( e->pos() + m_documentOffset ) ) );
     update();
@@ -214,6 +218,17 @@ void KChartCanvas::resizeEvent( QResizeEvent *e )
     adjustOrigin();
 }
 
+QVariant KChartCanvas::inputMethodQuery( Qt::InputMethodQuery query )
+{
+    kDebug() << "inputMethodQuery";
+    return m_toolProxy->inputMethodQuery( query, *( viewConverter() ) );
+}
+
+void KChartCanvas::inputMethodEvent( QInputMethodEvent *e )
+{
+    kDebug() << "inputMethodEvent";
+    m_toolProxy->inputMethodEvent( e );
+}
 
 }
 

@@ -204,16 +204,17 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 
     KoToolDockerFactory toolDockerFactory;
     KoToolDocker *td =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-    connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), td, SLOT(newOptionWidget(QWidget*)));
+    connect( m_canvasController, SIGNAL( toolOptionWidgetChanged(QWidget* ) ), td, SLOT( newOptionWidget( QWidget* ) ) );
 
     KoToolBoxFactory toolBoxFactory( m_canvasController, "KChart" );
     createDockWidget( &toolBoxFactory );
 	
     // Disable some things if we can't change the data, e.g. because
     // we are inside another application that provides the data for us.
-    if (!part->canChangeValue()) {
-	m_edit->setEnabled(false);
-	m_importData->setEnabled(false);
+    if ( !part->canChangeValue() )
+    {
+        m_edit->setEnabled( false );
+        m_importData->setEnabled( false );
     }
 
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
@@ -739,6 +740,8 @@ void KChartView::extraCreateTemplate()
 
 void KChartView::selectionChanged()
 {
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    emit selectionChange();
 }
 
 void KChartView::documentViewRectChanged( const QRectF &viewRect )

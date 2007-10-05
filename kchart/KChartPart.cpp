@@ -73,6 +73,7 @@ using std::cerr;
 #include "KChartView.h"
 #include "KChartFactory.h"
 #include "ChartShape.h"
+#include "ChartShapeFactory.h"
 
 #include "prefs.h"
 

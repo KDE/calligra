@@ -91,6 +91,9 @@ public slots:
     void documentViewRectChanged( const QRectF &viewRect );
     void zoomChanged( KoZoomMode::Mode mode, double zoom );
 
+signals:
+    void selectionChange();
+
 protected:
     void          paintEvent( QPaintEvent* );
 
