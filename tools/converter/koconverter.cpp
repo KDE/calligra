@@ -30,7 +30,7 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <kio/netaccess.h>
-
+#include <kio/job.h>
 #include <KoFilterManager.h>
 
 
@@ -106,7 +106,8 @@ int main( int argc, char **argv )
                 kDebug() <<"Making backup...";;
                 KUrl backup( uOut );
                 backup.setPath( uOut.path() + '~' );
-                KIO::NetAccess::file_copy( uOut, backup, -1, true /*overwrite*/, false /*resume*/, 0L );
+                KIO::FileCopyJob *job = KIO::file_copy( uOut, backup,KIO::Overwrite | KIO::HideProgressInfo);
+                job->exec();
             }
         }
 
