@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KPlato WorkPackage Handler
+Name[x-test]=xxKPlato WorkPackage Handlerxx
+GenericName=Project Management
+Exec=kplatowork %u
+MimeType=application/x-vnd.kde.kplato.work
+Type=Application
+Icon=kplato
+X-KDE-NativeMimeType=application/x-vnd.kde.kplato.work
+DocPath=kplatowork/index.html
+Categories=Qt;KDE;Office;
+X-KDE-StartupNotify=true

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=KOffice Project Management Component
+X-KDE-Library=libkplatoworkpart
+MimeType=application/x-vnd.kde.kplato.work
+Type=Service
+ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-NativeMimeType=application/x-vnd.kde.kplato.work
+GenericName=Project Management
+Icon=kplato

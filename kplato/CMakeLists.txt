@@ -20,6 +20,7 @@ add_subdirectory( reports )
 add_subdirectory( toolbar )
 add_subdirectory( tests )
 
+add_subdirectory( workpackage )
 
 include_directories(${KPLATO_INCLUDES})
 

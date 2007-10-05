@@ -1,0 +1,23 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
+<kpartgui name="KPlatoWork" version="0">
+    <MenuBar>
+        <Menu name="edit"><text>&amp;Edit</text>
+            <Action name="edit_undo"/>
+            <Action name="edit_redo"/>
+            <Separator/>
+<!--            <Action name="edit_cut"/>
+            <Action name="edit_copy"/>
+            <Action name="edit_paste"/>
+            <Separator/> -->
+        </Menu>
+        <Menu name="view"><text>&amp;View</text>
+        </Menu>
+        <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="configure" group="settings_configure"/>
+        </Menu>
+    </MenuBar>
+    <ToolBar name="edit" position="top"><Text>Project</Text>
+        <Action name="edit_undo"/>
+        <Action name="edit_redo"/>
+    </ToolBar>
+</kpartgui>
