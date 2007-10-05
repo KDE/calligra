@@ -55,18 +55,13 @@ Item								   Prio Status
   Item							Load	Save
   ----------------------------------------------------------------------------
   + Handle all chart types				----	----
+    - Handle subtypes.
   + Plot area						----	----
     - Data in rows / columns				done	done
   + Legend						DONE	DONE
   + Axes						----	----
     - Axis labels					--      --
   + Data Series						----	----
-
-* Integration with rest of KOffice.
-  * Reintegrate the KPart and View into KOffice                         ----
-    - Make the view include the shape and also have a toolbar.          --
-  + Give KChart the same page layout dialog as KSpread.		        ----
-       (Kivio has a simpler variation with only one page.)
 
 * Scripting
   + Kross support                                                       ----

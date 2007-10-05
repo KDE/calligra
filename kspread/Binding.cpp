@@ -66,7 +66,7 @@ bool Binding::isEmpty() const
     return d->model->region().isEmpty();
 }
 
-QStandardItemModel* Binding::model() const
+QAbstractItemModel* Binding::model() const
 {
     return d->model;
 }
@@ -120,7 +120,7 @@ bool Binding::operator<(const Binding& other) const
 
 
 BindingModel::BindingModel(const Region& region)
-    : QStandardItemModel()
+    : QAbstractTableModel()
     , m_region(region)
 {
 }
@@ -190,7 +190,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
         default:
             break;
     }
-    kDebug() << index.column() <<"," << index.row() <<"," << variant;
+    //kDebug() << index.column() <<"," << index.row() <<"," << variant;
     return variant;
 }
 

@@ -26,7 +26,7 @@
 #include <float.h> // For basic data types characteristics.
 
 // Qt
-//#include <QAbstractItemModel>
+#include <QAbstractItemModel>
 #include <QStandardItemModel>
 #include <QPainter>
 
@@ -87,7 +87,9 @@ public:
 
     KDChart::Chart            *chart;
     KDChart::AbstractDiagram  *diagram;
-    QStandardItemModel        *chartData;
+    QAbstractItemModel        *chartData;
+
+    QStandardItemModel        defaultData; // This is never used after the first call to setModel()
 };
 
 
@@ -104,8 +106,12 @@ ChartShape::ChartShape()
     d->chart     = new KDChart::Chart();
     d->diagram   = new KDChart::BarDiagram();
     d->chart->coordinatePlane()->replaceDiagram(d->diagram);
-    d->chartData = new QStandardItemModel();
+#if 1
+    setModel( &d->defaultData );
+#else
+    d->chartData = &d->defaultData;
     d->diagram->setModel( d->chartData );
+#endif
 
     // Add axes to the diagram
     KDChart::AbstractCartesianDiagram  *diagram = static_cast<KDChart::AbstractCartesianDiagram*>(d->diagram);
@@ -117,7 +123,7 @@ ChartShape::ChartShape()
     diagram->addAxis( yAxis );
 
     setChartDefaults();
-    createDefaultData();
+    //createDefaultData();
 #if 0
     // diagram->coordinatePlane returns an abstract plane one.
     // if we want to specify the orientation we need to cast
@@ -180,31 +186,6 @@ KDChart::Chart* ChartShape::chart() const
 
 void ChartShape::setChartDefaults()
 {
-}
-
-void ChartShape::createDefaultData()
-{
-    // Fill cells with data if there is none.
-    d->chartData->setRowCount( 4 );
-    d->chartData->setColumnCount( 4 );
-
-    // Insert example data
-    for (uint row = 0; row < 4; row++) {
-        for (uint col = 0; col < 4; col++) {
-
-            d->chartData->setItem( row, col,
-                                   new QStandardItem( QString::number( row + col ) ) );
-            // Fill column label, but only on the first iteration.
-            if (row == 0) {
-                d->chartData->setHeaderData( col, Qt::Horizontal,
-                                             i18n("Column %1", col + 1) );
-            }
-        }
-
-        // Fill row label.
-        d->chartData->setHeaderData( row, Qt::Vertical,
-                                     i18n("Row %1", row + 1) );
-    }
 }
 
 
@@ -301,7 +282,7 @@ void ChartShape::setChartType( OdfChartType    newType,
 }
 
 
-void ChartShape::setModel( QStandardItemModel* model )
+void ChartShape::setModel( QAbstractItemModel* model )
 {
     kDebug() << "BEGIN";
     d->chartData = model;
@@ -341,7 +322,7 @@ void ChartShape::setModel( QStandardItemModel* model )
     kDebug() <<" END";
 }
 
-QStandardItemModel *ChartShape::model()
+QAbstractItemModel *ChartShape::model()
 {
     return d->chartData;
 }

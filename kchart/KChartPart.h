@@ -89,6 +89,9 @@ public:
 
     // ----------------------------------------------------------------
 
+    // Generate some default data so that the user can see something.
+    void  createDefaultData();
+
     void  analyzeHeaders( const QStandardItemModel &data );
     void  doSetData( const QStandardItemModel &data,
 		     bool  firstRowHeader,
@@ -133,9 +136,6 @@ public:
 
     void  initNullChart();
 
-    // Functions that generate templates (not used yet):
-    void  generateBarChartTemplate();
-
     virtual bool showEmbedInitDialog(QWidget* parent);
 
 public slots:
@@ -167,7 +167,8 @@ private:
     void         setChartDefaults();
 
 private:
-    ChartShape    *m_chartShape;
+    ChartShape         *m_chartShape;
+    QStandardItemModel *m_chartData;
 
     // ----------------------------------------------------------------
     // FIXME: Most of the following is already in shape/ChartShape or

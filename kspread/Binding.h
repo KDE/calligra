@@ -20,7 +20,7 @@
 #ifndef KSPREAD_BINDING
 #define KSPREAD_BINDING
 
-#include <QStandardItemModel>
+#include <QAbstractTableModel>
 #include <QSharedDataPointer>
 #include <QVariant>
 
@@ -30,7 +30,7 @@
 namespace KSpread
 {
 
-class BindingModel : public QStandardItemModel
+class BindingModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -69,7 +69,7 @@ public:
 
     bool isEmpty() const;
 
-    QStandardItemModel* model() const;
+    QAbstractItemModel* model() const;
 
     const Region& region() const;
     void setRegion(const Region& region);

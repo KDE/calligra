@@ -105,6 +105,11 @@ KChartPart::KChartPart( QWidget *parentWidget,
 {
     kDebug(35001) <<"Constructor started!";
 
+    // Initialize the chart shape with some data.
+    m_chartData = new QStandardItemModel();
+    createDefaultData();
+    m_chartShape->setModel( m_chartData );
+
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
 
@@ -143,10 +148,37 @@ KChartPart::~KChartPart()
 void KChartPart::initEmpty()
 {
     initNullChart();
-    generateBarChartTemplate();
 
     resetURL();
     setEmpty();
+}
+
+
+// Create a 4x4 table with some initial data in it.
+
+void KChartPart::createDefaultData()
+{
+    // Fill cells with data if there is none.
+    m_chartData->setRowCount( 4 );
+    m_chartData->setColumnCount( 4 );
+
+    // Insert example data
+    for (uint row = 0; row < 4; row++) {
+        for (uint col = 0; col < 4; col++) {
+
+            m_chartData->setItem( row, col,
+				  new QStandardItem( QString::number( row + col ) ) );
+            // Fill column label, but only on the first iteration.
+            if (row == 0) {
+                m_chartData->setHeaderData( col, Qt::Horizontal,
+					    i18n("Column %1", col + 1) );
+            }
+        }
+
+        // Fill row label.
+        m_chartData->setHeaderData( row, Qt::Vertical,
+				    i18n("Row %1", row + 1) );
+    }
 }
 
 
@@ -157,13 +189,6 @@ void KChartPart::initNullChart()
 {
     // Fill cells with data if there is none.
     //kDebug(35001) <<"Initialize null chart.";
-
-    // Empty data.  Note, we don't use (0,0) or (1,1) for the size
-    // here, because otherwise KDChart won't draw anything
-    if ( m_currentData )
-        delete m_currentData;
-    m_currentData = new QStandardItemModel();
-    m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
 
 #if 0
     m_currentData->setDataHasVerticalHeaders( false );
@@ -179,52 +204,6 @@ void KChartPart::initNullChart()
 #if 0
     m_params->setDrawSolidExcessArrows(true);
 #endif
-}
-
-
-void KChartPart::generateBarChartTemplate()
-{
-    int  col;
-    int  row;
-
-    // Fill cells with data if there is none.
-    if ( m_currentData->rowCount() == 0 ) {
-        //kDebug(35001) <<"Initialize with some data!!!";
-#if 0                           // Not yet (and move to the shape
-        m_currentData->beginInsertRows( QModelIndex(), 0, 3 );
-        for (row = 0; row < 4; row++) {
-            m_currentData->insertRow( row );
-        }
-        m_currentData->endInsertRows();
-
-        m_currentData->beginInsertColumns( QModelIndex(), 0, 3 );
-        for (col = 0; col < 4; col++) {
-            m_currentData->insertColumn( col );
-        }
-        m_currentData->endInsertColumns();
-#endif
-        for (row = 0; row < 4; row++) {
-            kDebug() <<"rowCount:" << m_currentData->rowCount();
-
-            for (col = 0; col < 4; col++) {
-                kDebug() <<"row, col:" << row <<"," << col;
-
-                m_currentData->setItem( row, col,
-                                        new QStandardItem( QString::number( row + col ) ) );
-		// Fill column label, but only on the first iteration.
-		if (row == 0) {
-                    m_currentData->setHeaderData( col, Qt::Horizontal,
-                                                  i18n("Column %1", col + 1) );
-		}
-            }
-
-	    // Fill row label.
-            m_currentData->setHeaderData( row, Qt::Vertical,
-                                          i18n("Row %1", row + 1) );
-	}
-    }
-
-    setChartDefaults();
 }
 
 
@@ -1333,81 +1312,6 @@ void KChartPart::writeAutomaticStyles( KoXmlWriter& contentWriter,
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style",
                                  (*it).name, "style:chart-properties" );
     }
-
-    // FIXME: Do we need any of this?
-#if 0  // This code is from kspread
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
-    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_PAGE );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_COLUMN_AUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_ROW_AUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
-    }
-
-    styles = mainStyles.styles( STYLE_CELL_AUTO );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericNumber );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericDate );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericTime );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericFraction );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericPercentage );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericCurrency );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericScientific );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-#endif    // End code from kspread
 }
 
 
