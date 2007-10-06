@@ -51,7 +51,7 @@ StyleManager::~StyleManager()
 void StyleManager::saveOasis( KoGenStyles &mainStyles )
 {
     kDebug(36003) <<"StyleManager: Saving default cell style";
-    KoGenStyle defStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+    KoGenStyle defStyle = KoGenStyle( KoGenStyle::StyleTableCell, "table-cell" );
     defaultStyle()->saveOasis(defStyle, mainStyles, this);
 
     m_oasisStyles.clear();
@@ -60,7 +60,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     for ( CustomStyles::ConstIterator it( m_styles.begin() ); it != end; ++it )
     {
         kDebug(36003) <<"StyleManager: Saving common cell style" << it.key();
-        KoGenStyle customStyle = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+        KoGenStyle customStyle = KoGenStyle( KoGenStyle::StyleTableCell, "table-cell" );
         const QString oasisName = (*it)->saveOasis(customStyle, mainStyles, this);
         m_oasisStyles[(*it)->name()] = oasisName;
     }

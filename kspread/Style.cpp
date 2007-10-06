@@ -1089,7 +1089,7 @@ QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
     {
         if (style.type() == 0)
         {
-            style = KoGenStyle( Doc::STYLE_CELL_USER, "table-cell" );
+            style = KoGenStyle( KoGenStyle::StyleTableCell, "table-cell" );
             style.setDefaultStyle(true);
             // don't i18n'ize "Default" in this case
             return "Default"; // mainStyles.lookup( style, "Default", KoGenStyles::DontForceNumbering );
@@ -1118,7 +1118,7 @@ QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
     // KSpread::Style is definitly an OASIS auto style,
     // but don't overwrite it, if it already exists
     if (style.type() == 0)
-        style = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
+        style = KoGenStyle( KoGenStyle::StyleAutoTableCell, "table-cell" );
 
     // doing the real work
     saveOasisStyle(keysToStore, style, mainStyles, manager);

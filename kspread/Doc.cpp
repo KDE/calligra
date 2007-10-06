@@ -666,13 +666,13 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     styleManager()->saveOasis( mainStyles );
 
     // Saving the default column style
-    KoGenStyle defaultColumnStyle( Doc::STYLE_COLUMN_USER, "table-column" );
+    KoGenStyle defaultColumnStyle( KoGenStyle::StyleTableColumn, "table-column" );
     defaultColumnStyle.addPropertyPt( "style:column-width", d->defaultColumnFormat->width() );
     defaultColumnStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering );
 
     // Saving the default row style
-    KoGenStyle defaultRowStyle( Doc::STYLE_ROW_USER, "table-row" );
+    KoGenStyle defaultRowStyle( KoGenStyle::StyleTableRow, "table-row" );
     defaultRowStyle.addPropertyPt( "style:row-height", d->defaultRowFormat->height() );
     defaultRowStyle.setDefaultStyle( true );
     mainStyles.lookup( defaultRowStyle, "Default", KoGenStyles::DontForceNumbering );
@@ -694,25 +694,25 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_PAGE );
+    styles = mainStyles.styles( KoGenStyle::StyleAutoTable );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_COLUMN_AUTO );
+    styles = mainStyles.styles( KoGenStyle::StyleAutoTableColumn );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_ROW_AUTO );
+    styles = mainStyles.styles( KoGenStyle::StyleAutoTableRow );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
     }
 
-    styles = mainStyles.styles( STYLE_CELL_AUTO );
+    styles = mainStyles.styles( KoGenStyle::StyleAutoTableCell );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
@@ -892,7 +892,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     }
 
     // Writing out the common column styles.
-    styles = mainStyles.styles( Doc::STYLE_COLUMN_USER );
+    styles = mainStyles.styles( KoGenStyle::StyleTableColumn );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
       if ( (*it).style->isDefaultStyle() ) {
@@ -904,7 +904,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     }
 
     // Writing out the row column styles.
-    styles = mainStyles.styles( Doc::STYLE_ROW_USER );
+    styles = mainStyles.styles( KoGenStyle::StyleTableRow );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
       if ( (*it).style->isDefaultStyle() ) {
@@ -916,7 +916,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     }
 
     // Writing out the common cell styles.
-    styles = mainStyles.styles( Doc::STYLE_CELL_USER );
+    styles = mainStyles.styles( KoGenStyle::StyleTableCell );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         if ( (*it).style->isDefaultStyle() ) {
@@ -952,7 +952,7 @@ void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) con
     //code from kword
     stylesWriter->startElement( "office:master-styles" );
 
-    styles = mainStyles.styles( Doc::STYLE_PAGEMASTER );
+    styles = mainStyles.styles( KoGenStyle::StyleMaster );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:master-page", (*it).name, "" );

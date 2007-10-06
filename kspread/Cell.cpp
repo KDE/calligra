@@ -1083,7 +1083,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
     if ( !conditions.isEmpty() )
     {
         // this has to be an automatic style
-        currentCellStyle = KoGenStyle( Doc::STYLE_CELL_AUTO, "table-cell" );
+        currentCellStyle = KoGenStyle( KoGenStyle::StyleAutoTableCell, "table-cell" );
         conditions.saveOasisConditions( currentCellStyle );
     }
     return style().saveOasis( currentCellStyle, mainStyles, d->sheet->doc()->styleManager() );

@@ -3669,9 +3669,9 @@ void Sheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
 
 QString Sheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
 {
-    KoGenStyle pageStyle( Doc::STYLE_PAGE, "table"/*FIXME I don't know if name is sheet*/ );
+    KoGenStyle pageStyle( KoGenStyle::StyleAutoTable, "table"/*FIXME I don't know if name is sheet*/ );
 
-    KoGenStyle pageMaster( Doc::STYLE_PAGEMASTER );
+    KoGenStyle pageMaster( KoGenStyle::StyleMaster );
     pageMaster.addAttribute( "style:page-layout-name", print()->saveOasisSheetStyleLayout( mainStyles ) );
 
     QBuffer buffer;
@@ -3769,7 +3769,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         xmlWriter.startElement( "table:table-column" );
         if (!column->isDefault())
         {
-            KoGenStyle currentColumnStyle(Doc::STYLE_COLUMN_AUTO, "table-column");
+            KoGenStyle currentColumnStyle(KoGenStyle::StyleAutoTableColumn, "table-column");
             currentColumnStyle.addPropertyPt("style:column-width", column->width());
             currentColumnStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
             xmlWriter.addAttribute("table:style-name", mainStyles.lookup(currentColumnStyle, "co"));
@@ -3812,7 +3812,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         if (!row->isDefault())
         {
-            KoGenStyle currentRowStyle(Doc::STYLE_ROW_AUTO, "table-row");
+            KoGenStyle currentRowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
             currentRowStyle.addPropertyPt("style:row-height", row->height());
             currentRowStyle.addProperty("fo:break-before", "auto");/*FIXME auto or not ?*/
             xmlWriter.addAttribute("table:style-name", mainStyles.lookup(currentRowStyle, "ro"));

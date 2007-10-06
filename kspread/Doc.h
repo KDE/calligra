@@ -119,22 +119,6 @@ public:
   ~Doc();
 
   /**
-   * Possible values for the "type" argument of the KoGenStyle constructor.
-   */
-  enum
-  {
-    STYLE_PAGE = KoGenStyle::StyleFirstCustom,      /**< table styles */
-    STYLE_COLUMN_USER,    /**< commmon column styles */
-    STYLE_COLUMN_AUTO,    /**< auto column styles */
-    STYLE_ROW_USER,       /**< common row styles */
-    STYLE_ROW_AUTO,       /**< auto row styles */
-    STYLE_CELL_USER,      /**< common cell styles (used in StyleManager) */
-    STYLE_CELL_AUTO,      /**< auto cell styles */
-    STYLE_PAGEMASTER,     /**< master pages */
-    STYLE_NUMERIC_NUMBER  /**< number styles */
-  };
-
-  /**
    * \ingroup OpenDocument
    */
   enum SaveFlag { SaveAll, SaveSelected }; // kpresenter and kword have have SavePage too
