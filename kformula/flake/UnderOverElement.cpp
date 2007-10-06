@@ -22,6 +22,7 @@
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <kdebug.h>
+#include <QPainter>
 
 UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( parent )
 {

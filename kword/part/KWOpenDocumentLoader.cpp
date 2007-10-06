@@ -51,6 +51,7 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <klocale.h>
+#include <kdebug.h>
 
 /**
 * The KWOpenDocumentFrameLoader class implements a KoTextFrameLoader to

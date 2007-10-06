@@ -22,6 +22,7 @@
 
 #include <QList>
 #include <QString>
+#include <QSet>
 
 #include "fieldlist.h"
 #include "schemadata.h"

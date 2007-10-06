@@ -24,6 +24,7 @@
 #include <qimage.h>
 #include <qwidget.h>
 
+#include <kglobal.h>
 #include <klocale.h>
 
 // a color for displaying default values or autonumbers

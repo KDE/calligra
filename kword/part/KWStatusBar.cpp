@@ -29,6 +29,7 @@
 #include <kstatusbar.h>
 #include <klocale.h>
 #include <kactioncollection.h>
+#include <kdebug.h>
 //#include <klocalizedstring.h>
 
 #include <KoMainWindow.h>

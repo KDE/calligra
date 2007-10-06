@@ -28,6 +28,7 @@
 #include <QPointer>
 #include <QSignalMapper>
 
+#include <kdebug.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoTextSelectionHandler.h>

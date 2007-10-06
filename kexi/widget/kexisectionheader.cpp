@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QBoxLayout>
 #include <khbox.h>
+#include <kdebug.h>
 #include <QEvent>
 #include <QApplication>
 

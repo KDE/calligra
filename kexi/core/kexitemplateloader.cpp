@@ -23,6 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <kapplication.h>

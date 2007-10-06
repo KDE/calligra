@@ -25,6 +25,7 @@
 //Added by qt3to4:
 #include <QByteArray>
 #include <kurl.h>
+#include <kconfiggroup.h>
 
 class KoStoreDevice;
 class KConfig;
@@ -39,6 +40,7 @@ class XSLTExportDia : public XSLTDialog
     KUrl _currentFile;
     QByteArray _format;
     KConfig* _config;
+    KConfigGroup grp;
     /** List of the most recent xslt file used. */
     QStringList _recentList;
 

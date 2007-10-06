@@ -24,6 +24,7 @@
 // Qt includes
 // KDE includes
 #include <kprinter.h>
+#include <kdebug.h>
 
 // KOffice includes
 // KSpread includes

@@ -22,6 +22,7 @@
 
 #include "kapplication.h"
 #include <kfiledialog.h>
+#include <kconfiggroup.h>
 #include <KoStore.h>
 #include "xsltdialog.h"
 //Added by qt3to4:
@@ -39,6 +40,7 @@ class XSLTImportDia : public XSLTDialog
 	KUrl _currentFile;
 	QByteArray _format;
 	KConfig* _config;
+    KConfigGroup grp;
 	/** List of the most recent xslt file used. */
 	QStringList _recentList;
 

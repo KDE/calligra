@@ -23,6 +23,9 @@
 // Qt
 #include <QPaintEvent>
 
+// KDE
+#include <KDebug>
+
 // KOffice
 #include <KoShapeManager.h>
 #include <KoShapeCreateCommand.h>

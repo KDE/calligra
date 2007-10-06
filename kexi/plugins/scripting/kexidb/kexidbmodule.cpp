@@ -32,6 +32,7 @@
 
 #include <kdebug.h>
 #include <kmimetype.h>
+#include <kconfiggroup.h>
 
 // The as version() published versionnumber of this kross-module.
 #define KROSS_KEXIDB_VERSION 1
@@ -113,10 +114,10 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
         mimename = KMimeType::findByUrl(filename)->name();
 
     if(mimename == "application/x-kexiproject-shortcut" || mimename == "application/x-kexi-connectiondata") {
-        KConfig config(filename, KConfig::NoGlobals);
+        KConfig _config(filename, KConfig::NoGlobals);
 
         QString groupkey;
-        foreach(QString s, config.groupList()) {
+        foreach(QString s, _config.groupList()) {
             if(s.toLower()!="file information") {
                 groupkey = s;
                 break;
@@ -127,7 +128,7 @@ QObject* KexiDBModule::createConnectionDataByFile(const QString& filename)
             return 0;
         }
 
-        config.setGroup(groupkey);
+	KConfigGroup config(&_config, groupkey);
         //QString type( config.readEntry("type", "database").toLower() );
         //bool isDatabaseShortcut = (type == "database");
 

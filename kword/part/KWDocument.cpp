@@ -61,6 +61,7 @@
 #include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kaction.h>
+#include <kdebug.h>
 #include <KTemporaryFile>
 #include <QIODevice>
 #include <QTimer>

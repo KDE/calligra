@@ -23,6 +23,7 @@
 #include <kexiutils/utils.h>
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 
 #include <qstringlist.h>

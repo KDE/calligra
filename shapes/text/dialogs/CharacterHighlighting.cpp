@@ -23,6 +23,8 @@
 #include <KoText.h>
 #include <KoCharacterStyle.h>
 
+#include <kdebug.h>
+
 CharacterHighlighting::CharacterHighlighting( QWidget* parent)
     : QWidget ( parent)
 {

@@ -41,6 +41,7 @@
 // KDE + Qt includes
 #include <QTextBlock>
 #include <klocale.h>
+#include <kdebug.h>
 
 KWDLoader::KWDLoader(KWDocument *parent)
     : m_document(parent),

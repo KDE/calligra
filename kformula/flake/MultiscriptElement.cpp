@@ -21,6 +21,7 @@
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <QPainter>
 
 MultiscriptElement::MultiscriptElement( BasicElement* parent ) : BasicElement( parent )
 {

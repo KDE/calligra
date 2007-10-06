@@ -22,6 +22,7 @@
 #include "kptfactory.h"
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kcomponentdata.h>
 
@@ -50,21 +51,21 @@ void Config::load() {
     if( config->hasGroup("Task defaults"))
     {
         //TODO: make this default stuff timezone neutral, use LocalZone for now
-        config->setGroup("Task defaults");
-        m_taskDefaults.setLeader(config->readEntry("Leader"));
-        m_taskDefaults.setDescription(config->readEntry("Description"));
-        m_taskDefaults.setConstraint((Node::ConstraintType)config->readEntry("ConstraintType",0));
+        KConfigGroup grp(config, "Task defaults");
+        m_taskDefaults.setLeader(grp.readEntry("Leader"));
+        m_taskDefaults.setDescription(grp.readEntry("Description"));
+        m_taskDefaults.setConstraint((Node::ConstraintType)grp.readEntry("ConstraintType",0));
         
-        QDateTime dt = config->readEntry("ConstraintStartTime",QDateTime());
+        QDateTime dt = grp.readEntry("ConstraintStartTime",QDateTime());
         m_taskDefaults.setConstraintStartTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
         
-        dt = config->readEntry("ConstraintEndTime",QDateTime());
+        dt = grp.readEntry("ConstraintEndTime",QDateTime());
         m_taskDefaults.setConstraintEndTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
         
-        m_taskDefaults.estimate()->setType((Estimate::Type)config->readEntry("EstimateType",0));
-        m_taskDefaults.estimate()->set(Duration((qint64)(config->readEntry("ExpectedEstimate",0))*1000)); //FIXME
-        m_taskDefaults.estimate()->setPessimisticRatio(config->readEntry("PessimisticEstimate",0));
-        m_taskDefaults.estimate()->setOptimisticRatio(config->readEntry("OptimisticEstimate",0));
+        m_taskDefaults.estimate()->setType((Estimate::Type)grp.readEntry("EstimateType",0));
+        m_taskDefaults.estimate()->set(Duration((qint64)(grp.readEntry("ExpectedEstimate",0))*1000)); //FIXME
+        m_taskDefaults.estimate()->setPessimisticRatio(grp.readEntry("PessimisticEstimate",0));
+        m_taskDefaults.estimate()->setOptimisticRatio(grp.readEntry("OptimisticEstimate",0));
     }
 }
 

@@ -21,6 +21,7 @@
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <QPainter>
 
 SubSupElement::SubSupElement( BasicElement* parent ) : BasicElement( parent )
 {

@@ -25,6 +25,8 @@
 
 #include <kdebug.h>
 
+#include <QtCore/QDateTime>
+
 // ---- Generic convertion functions ---- //
 
 // Convert an exiv value to a KisMetaData value

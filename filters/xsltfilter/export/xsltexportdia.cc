@@ -30,6 +30,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kdeversion.h>
 #include <kstandarddirs.h>
 #include <krecentdocument.h>
@@ -62,11 +64,11 @@ XSLTExportDia::XSLTExportDia(KoStoreDevice* in, const QByteArray &format, QWidge
 
 	/* Recent files */
 	_config = new KConfig("xsltdialog");
-	_config->setGroup( "XSLT export filter" );
+    grp = KConfigGroup(_config, "XSLT export filter");
 	QString value;
 	while(i < 10)
 	{
-		value = _config->readPathEntry( QString("Recent%1").arg(i) );
+		value = grp.readPathEntry( QString("Recent%1").arg(i) );
 		kDebug() <<"recent :" << value;
 		if(!value.isEmpty())
 		{
@@ -228,7 +230,7 @@ void XSLTExportDia::okSlot()
 		while(_recentList.size() > 0)
 		{
 			kDebug() <<"save :" << _recentList.first();
-			_config->writePathEntry( QString("Recent%1").arg(i), _recentList.first());
+			grp.writePathEntry( QString("Recent%1").arg(i), _recentList.first());
 			_recentList.pop_front();
 			i = i + 1;
 		}

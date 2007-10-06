@@ -37,6 +37,7 @@
 #include "ValueConverter.h"
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 
 #include <QList>

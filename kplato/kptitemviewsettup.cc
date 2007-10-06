@@ -25,6 +25,7 @@
 #include <QHeaderView>
 
 #include <kactionselector.h>
+#include <kdebug.h>
 
 namespace KPlato
 {

@@ -57,11 +57,11 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 	
 	/* Recent files */
 	_config = new KConfig("xsltdialog");
-	_config->setGroup( "XSLT import filter" );
+    grp = KConfigGroup(_config, "XSLT import filter");
 	QString value;
 	while(i < 10)
 	{
-		value = _config->readPathEntry( QString("Recent%1").arg(i) );
+		value = grp.readPathEntry( QString("Recent%1").arg(i) );
 		kDebug() <<"recent :" << value;
 		if(!value.isEmpty())
 		{
@@ -227,7 +227,7 @@ void XSLTImportDia::okSlot()
 		while(_recentList.size() > 0)
 		{
 			kDebug() <<"save :" << _recentList.first();
-			_config->writePathEntry( QString("Recent%1").arg(i), _recentList.first());
+			grp.writePathEntry( QString("Recent%1").arg(i), _recentList.first());
 			_recentList.pop_front();
 			i = i + 1;
 		}

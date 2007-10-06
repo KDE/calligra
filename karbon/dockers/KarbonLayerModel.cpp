@@ -39,6 +39,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMimeData>

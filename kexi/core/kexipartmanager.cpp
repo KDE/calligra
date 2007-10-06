@@ -23,6 +23,7 @@
 #include <KMimeTypeTrader>
 #include <kdebug.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kparts/componentfactory.h>
 
 #include "kexipartmanager.h"
