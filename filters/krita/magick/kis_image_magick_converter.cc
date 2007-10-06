@@ -457,7 +457,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KURL& uri, bool isB
 
             for (Q_UINT32 y = 0; y < image->rows; y ++)
             {
-                const PixelPacket *pp = AcquireCacheView(vi, 0, y, image->columns, 1, &ei);
+                const PixelPacket *pp = AcquireCacheViewPixels(vi, 0, y, image->columns, 1, &ei);
 
                 if(!pp)
                 {
