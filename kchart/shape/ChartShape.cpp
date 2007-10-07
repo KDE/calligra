@@ -85,11 +85,18 @@ public:
     OdfChartType        chartType;
     OdfChartSubtype     chartSubType;
 
+    // The underlying engine
     KDChart::Chart            *chart;
     KDChart::AbstractDiagram  *diagram;
+
+    // About the data
+    bool                       firstRowAsLabel;
+    bool                       firstColAsLabel;
     QAbstractItemModel        *chartData;
 
-    QStandardItemModel        defaultData; // This is never used after the first call to setModel()
+    // Default data to be used until the first call to setModel().
+    // After that, it is never used again.
+    QStandardItemModel         defaultData;
 };
 
 
@@ -112,6 +119,8 @@ ChartShape::ChartShape()
     d->chartData = &d->defaultData;
     d->diagram->setModel( d->chartData );
 #endif
+    d->firstRowAsLabel = false;
+    d->firstColAsLabel = false;
 
     // Add axes to the diagram
     KDChart::AbstractCartesianDiagram  *diagram = static_cast<KDChart::AbstractCartesianDiagram*>(d->diagram);
@@ -121,6 +130,15 @@ ChartShape::ChartShape()
     yAxis->setPosition( KDChart::CartesianAxis::Left );
     diagram->addAxis( xAxis );
     diagram->addAxis( yAxis );
+
+    // Add a legend
+    KDChart::Legend  *legend = new KDChart::Legend( d->diagram, d->chart );
+    legend->setPosition( KDChart::Position::East );
+    legend->setAlignment( Qt::AlignRight );
+    legend->setShowLines( false );
+    legend->setTitleText( i18n( "Legend" ) );
+    legend->setOrientation( Qt::Vertical );
+    d->chart->addLegend( legend );
 
     setChartDefaults();
     //createDefaultData();
@@ -309,16 +327,6 @@ void ChartShape::setModel( QAbstractItemModel* model )
     baChart.setBrush( QColor(0xd0,0xd0,0xff) );
     d->chart->setBackgroundAttributes( baChart );
 */
-    // Set up the legend
-    KDChart::Legend* legend;
-    legend = new KDChart::Legend( d->diagram, d->chart );
-    legend->setPosition( KDChart::Position::East );
-    legend->setAlignment( Qt::AlignRight );
-    legend->setShowLines( false );
-    legend->setTitleText( i18n( "Legend" ) );
-    legend->setOrientation( Qt::Horizontal );
-    d->chart->addLegend( legend );
-
     kDebug() <<" END";
 }
 
@@ -376,7 +384,7 @@ static const unsigned int  numOdfChartTypes = ( sizeof odfChartTypes
 //                             Loading
 
 
-bool ChartShape::loadOdf( const KoXmlElement &element, 
+bool ChartShape::loadOdf( const KoXmlElement    &element, 
 			  KoShapeLoadingContext &context )
 {
 
