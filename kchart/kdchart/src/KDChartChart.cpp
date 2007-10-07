@@ -1361,3 +1361,7 @@ void Chart::Private::slotAdjustTopBottomRowsForOverlappingLabels(
     }
 }
 */
+
+#include "KDChartChart.moc"
+#include "KDChartChart_p.moc"
+
