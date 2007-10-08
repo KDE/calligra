@@ -175,53 +175,8 @@ VGradient::save( QDomElement& element ) const
 QString
 VGradient::saveOasis( KoGenStyles &mainStyles ) const
 {
-	bool radial = m_type == VGradient::radial;
-	KoGenStyle gradientStyle( radial ? VDocument::STYLE_RADIAL_GRADIENT : VDocument::STYLE_LINEAR_GRADIENT /*no family name*/);
-	if( radial )
-	{
-		gradientStyle.addAttribute( "draw:style", "radial" );
-		gradientStyle.addAttributePt( "svg:cx", m_origin.x() );
-		gradientStyle.addAttributePt( "svg:cy", m_origin.y() );
-		double dx = m_vector.x() - m_origin.x();
-		double dy = m_vector.y() - m_origin.y();
-		gradientStyle.addAttributePt( "svg:r",  sqrt( dx * dx + dy * dy ) );
-		gradientStyle.addAttributePt( "svg:fx", m_focalPoint.x() );
-		gradientStyle.addAttributePt( "svg:fy", m_focalPoint.y() );
-	}
-	else
-	{
-		gradientStyle.addAttribute( "draw:style", "linear" );
-		gradientStyle.addAttributePt( "svg:x1", m_origin.x() );
-		gradientStyle.addAttributePt( "svg:y1", m_origin.y() );
-		gradientStyle.addAttributePt( "svg:x2", m_vector.x() );
-		gradientStyle.addAttributePt( "svg:y2", m_vector.y() );
-	}
-	if( m_repeatMethod == VGradient::repeat )
-		gradientStyle.addAttribute( "svg:spreadMethod", "repeat" );
-	else if( m_repeatMethod == VGradient::reflect )
-		gradientStyle.addAttribute( "svg:spreadMethod", "reflect" );
-	else
-		gradientStyle.addAttribute( "svg:spreadMethod", "pad" );
-	QBuffer buffer;
-	buffer.open( QIODevice::WriteOnly );
-	KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-
-	// save stops
-	VColorStop* colorstop;
-	Q3PtrList<VColorStop>& colorStops = const_cast<VColorStopList&>( m_colorStops );
-	for( colorstop = colorStops.first(); colorstop; colorstop = colorStops.next() )
-	{
-		elementWriter.startElement( "svg:stop" );
-		elementWriter.addAttribute( "svg:offset", QString( "%1" ).arg( colorstop->rampPoint ) );
-		elementWriter.addAttribute( "svg:color", QColor( colorstop->color ).name() );
-		if( colorstop->color.opacity() < 1 )
-			elementWriter.addAttribute( "svg:stop-opacity", QString( "%1" ).arg( colorstop->color.opacity() ) );
-		elementWriter.endElement();
-	}
-
-	QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
-	gradientStyle.addChildElement( "svg:stop", elementContents );
-	return mainStyles.lookup( gradientStyle, "gradient" );
+    // no longer used
+    return "";
 }
 
 void

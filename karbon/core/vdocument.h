@@ -182,7 +182,6 @@ public:
     void saveOasis( KoShapeSavingContext & context ) const;
     bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenStyles &mainStyles );
 
-	enum { STYLE_LINEAR_GRADIENT = KoGenStyle::StyleFirstCustom, STYLE_RADIAL_GRADIENT };
 	bool loadXML( const KoXmlElement& doc );
     virtual bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
 	virtual void save( QDomElement& element ) const;
