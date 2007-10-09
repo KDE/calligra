@@ -38,7 +38,7 @@ class Project;
 class Node;
 class Estimate;
 
-class KPLATO_EXPORT NodeModel : public QObject
+class KPLATOMODELS_EXPORT NodeModel : public QObject
 {
     Q_OBJECT
 public:
@@ -126,7 +126,7 @@ private:
     int m_prec;
 };
 
-class KPLATO_EXPORT NodeItemModel : public ItemModelBase
+class KPLATOMODELS_EXPORT NodeItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
@@ -204,7 +204,7 @@ private:
     NodeModel m_nodemodel;
 };
 
-class KPLATO_EXPORT MilestoneItemModel : public ItemModelBase
+class KPLATOMODELS_EXPORT MilestoneItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:

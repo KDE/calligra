@@ -21,7 +21,7 @@
 
 #include <kdatetime.h>
 
-#include "kplato_export.h"
+#include "kplatokernel_export.h"
 #include "kptduration.h"
 
 /// The main namespace.
@@ -37,7 +37,7 @@ class Duration;
  * Exception to this is the calendar related dates and times which has
  * their own time zone specification.
  */
-class KPLATO_EXPORT DateTime : public KDateTime {
+class KPLATOKERNEL_EXPORT DateTime : public KDateTime {
 
 public:
     /// Create a DateTime.

@@ -20,7 +20,7 @@
 #ifndef KPTWBSDEFINITION_H
 #define KPTWBSDEFINITION_H
 
-#include "kplato_export.h"
+#include "kplatokernel_export.h"
 
 #include <QString>
 #include <QMap>
@@ -33,13 +33,13 @@ namespace KPlato
 {
 
 
-class KPLATO_EXPORT WBSDefinition {
+class KPLATOKERNEL_EXPORT WBSDefinition {
 
 public:
     WBSDefinition();
     ~WBSDefinition();
 
-    class KPLATO_EXPORT CodeDef {
+    class KPLATOKERNEL_EXPORT CodeDef {
         public:
             CodeDef() {}
             CodeDef(QString c, QString s) { code = c; separator = s; }

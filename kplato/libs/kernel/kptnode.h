@@ -21,7 +21,7 @@
 #ifndef KPTNODE_H
 #define KPTNODE_H
 
-#include "kplato_export.h"
+#include "kplatokernel_export.h"
 
 #include "kptglobal.h"
 #include "kptrelation.h"
@@ -57,7 +57,7 @@ class EffortCostMap;
  * a subproject or any task.
  * This class is basically an abstract interface to make the design more OO.
  */
-class KPLATO_EXPORT Node : public QObject
+class KPLATOKERNEL_EXPORT Node : public QObject
 {
     Q_OBJECT
 public:
@@ -598,7 +598,7 @@ public:
   * estimate which is needed to complete the node is not simply a timespan but
   * is stored as an optimistic, a pessimistic and an expected timespan.
   */
-class KPLATO_EXPORT Estimate {
+class KPLATOKERNEL_EXPORT Estimate {
 public:
     explicit Estimate ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
 

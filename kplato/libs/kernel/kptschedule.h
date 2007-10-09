@@ -20,7 +20,7 @@
 #ifndef KPTSCHEDULE_H
 #define KPTSCHEDULE_H
 
-#include "kplato_export.h"
+#include "kplatokernel_export.h"
 
 #include "kptcalendar.h"
 #include "kpteffortcostmap.h"
@@ -58,7 +58,7 @@ class XMLLoaderObject;
  * NodeSchedule     Used by all other nodes (tasks).
  * ResourceSchedule Used by resources.
  */
-class KPLATO_EXPORT Schedule
+class KPLATOKERNEL_EXPORT Schedule
 {
 public:
     //NOTE: Must match Effort::Use atm.
@@ -266,7 +266,7 @@ public:
  * NodeSchedule holds scheduling information for a node (task).
  * 
  */
-class KPLATO_EXPORT NodeSchedule : public Schedule
+class KPLATOKERNEL_EXPORT NodeSchedule : public Schedule
 {
 public:
     NodeSchedule();
@@ -304,7 +304,7 @@ public:
  * ResourceSchedule holds scheduling information for a resource.
  * 
  */
-class KPLATO_EXPORT ResourceSchedule : public Schedule
+class KPLATOKERNEL_EXPORT ResourceSchedule : public Schedule
 {
 public:
     ResourceSchedule();
@@ -340,7 +340,7 @@ public:
  * MainSchedule holds scheduling information for the main project node.
  * 
  */
-class KPLATO_EXPORT MainSchedule : public NodeSchedule
+class KPLATOKERNEL_EXPORT MainSchedule : public NodeSchedule
 {
 public:
     MainSchedule();
@@ -426,7 +426,7 @@ public:
  * Expected-, Optimistic- and Pessimistic schedules.
  * A ScheduleManager can also have child manager(s).
  */
-class KPLATO_EXPORT ScheduleManager
+class KPLATOKERNEL_EXPORT ScheduleManager
 {
 public:
     explicit ScheduleManager( Project &project, const QString name = QString() );

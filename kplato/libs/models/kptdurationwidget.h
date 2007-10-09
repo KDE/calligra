@@ -20,7 +20,7 @@
 #ifndef KPTDURATIONWIDGET_H
 #define KPTDURATIONWIDGET_H
 
-#include "kplato_export.h"
+#include "kplatomodels_export.h"
 
 #include "ui_kptdurationwidget.h"
 
@@ -36,7 +36,7 @@ class QString;
 namespace KPlato
 {
 
-class KPLATO_EXPORT DurationWidget : public QFrame, public Ui_DurationWidget
+class KPLATOMODELS_EXPORT DurationWidget : public QFrame, public Ui_DurationWidget
 {
     Q_OBJECT
 public:

@@ -21,7 +21,7 @@
 #ifndef KPTRELATION_H
 #define KPTRELATION_H
 
-#include "kplato_export.h"
+#include "kplatokernel_export.h"
 
 #include "kptduration.h"
 
@@ -45,7 +45,7 @@ class Project;
   * the roof can't be put up if the walls are not there yet.
   * We actually have a number of relationtypes so this relation can be used in different manners.
   */
-class KPLATO_EXPORT Relation {
+class KPLATOKERNEL_EXPORT Relation {
 public:
     enum Type { None, FinishStart, FinishFinish, StartStart };
 
@@ -97,7 +97,7 @@ public:
 
 };
 
-class KPLATO_EXPORT ProxyRelation : public Relation
+class KPLATOKERNEL_EXPORT ProxyRelation : public Relation
 {
 public:
     ProxyRelation(Node *parent, Node *child, Relation::Type type, Duration lag) 

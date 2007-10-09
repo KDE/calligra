@@ -21,6 +21,7 @@
 #define KPLATO_DURATIONSPINBOX_H
 
 #include "kptduration.h"
+#include "kplatomodels_export.h"
 
 #include <QtGui/qspinbox.h>
 #include <QVariantList>
@@ -38,7 +39,7 @@ namespace KPlato
  *
  * The scales to use for conversion between the different units can be set with setScales().
  */
-class KPLATO_EXPORT DurationSpinBox : public QDoubleSpinBox
+class KPLATOMODELS_EXPORT DurationSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 public:

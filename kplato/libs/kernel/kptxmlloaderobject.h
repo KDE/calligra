@@ -20,7 +20,7 @@
 #ifndef XMLLOADEROBJECT_H
 #define XMLLOADEROBJECT_H
 
-#include "kplato_export.h"
+#include "kplatokernel_export.h"
 
 #include "kptproject.h"
 #include "kptdatetime.h"
@@ -32,7 +32,7 @@
 namespace KPlato 
 {
 
-class KPLATO_EXPORT XMLLoaderObject {
+class KPLATOKERNEL_EXPORT XMLLoaderObject {
 public:
     enum Severity { None=0, Errors=1, Warnings=2, Diagnostics=3, Debug=4 };
     XMLLoaderObject()

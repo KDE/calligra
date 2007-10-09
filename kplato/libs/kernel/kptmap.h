@@ -20,7 +20,7 @@
 #ifndef KPTMAP_H
 #define KPTMAP_H
 
-#include "kplato_export.h"
+#include "kplatokernel_export.h"
 #include "kptcalendar.h"
 
 #include <QMap>
@@ -37,7 +37,7 @@ namespace KPlato
 {
 
 typedef QMap<QString, int> DateMapType;
-class KPLATO_EXPORT DateMap : public DateMapType
+class KPLATOKERNEL_EXPORT DateMap : public DateMapType
 {
 public:
     DateMap() {}
@@ -94,7 +94,7 @@ public:
 };
 
 typedef QMap<int, int> IntMapType;
-class KPLATO_EXPORT IntMap : public IntMapType
+class KPLATOKERNEL_EXPORT IntMap : public IntMapType
 {
 public:
     IntMap() {}
@@ -133,7 +133,7 @@ public:
     }
 };
 
-class KPLATO_EXPORT WeekMap : public IntMap
+class KPLATOKERNEL_EXPORT WeekMap : public IntMap
 {
 public:
     bool contains(int week, int year) { return IntMap::contains(week*10000 + year); }

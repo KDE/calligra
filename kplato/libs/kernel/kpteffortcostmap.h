@@ -30,7 +30,7 @@
 namespace KPlato
 {
 
-class KPLATO_EXPORT EffortCost
+class KPLATOKERNEL_EXPORT EffortCost
 {
 public:
     EffortCost()
