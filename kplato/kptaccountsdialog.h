@@ -24,7 +24,6 @@
 
 class QWidget;
 
-class K3Command;
 
 namespace KPlato
 {
@@ -32,13 +31,14 @@ namespace KPlato
 class Accounts;
 class AccountsPanel;
 class Part;
+class MacroCommand;
 
 class AccountsDialog : public KDialog {
     Q_OBJECT
 public:
     explicit AccountsDialog(Accounts &acc, QWidget *parent=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

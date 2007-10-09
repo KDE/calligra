@@ -32,7 +32,6 @@
 #include <knuminput.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -43,6 +42,7 @@
 #include "kptresource.h"
 #include "kptdurationspinbox.h"
 #include "kptschedule.h"
+#include "kptproject.h"
 
 namespace KPlato
 {
@@ -126,29 +126,29 @@ bool TaskProgressPanel::ok() {
     return true;
 }
 
-K3Command *TaskProgressPanel::buildCommand(Part *part) {
-    K3MacroCommand *cmd = 0;
+MacroCommand *TaskProgressPanel::buildCommand(Part *part) {
+    MacroCommand *cmd = 0;
     QString c = i18n("Modify task completion");
     
     if ( m_original.entrymode() != m_completion.entrymode() ) {
-        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionEntrymodeCmd(part, m_original, m_completion.entrymode() ) );
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionEntrymodeCmd(m_original, m_completion.entrymode() ) );
     }
     if ( m_original.isStarted() != started->isChecked() ) {
-        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartedCmd(part, m_original, started->isChecked() ) );
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionStartedCmd(m_original, started->isChecked() ) );
     }
     if ( m_original.isFinished() != finished->isChecked() ) {
-        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_original, finished->isChecked() ) );
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishedCmd(m_original, finished->isChecked() ) );
     }
     if ( m_original.startTime().dateTime() != startTime->dateTime() ) {
-        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartTimeCmd(part, m_original, startTime->dateTime() ) );
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionStartTimeCmd(m_original, startTime->dateTime() ) );
     }
     if ( m_original.finishTime().dateTime() != finishTime->dateTime() ) {
-        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_original, finishTime->dateTime() ) );
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd(m_original, finishTime->dateTime() ) );
     }
     QList<QDate> org = m_original.entries().keys();
     QList<QDate> curr = m_completion.entries().keys();
@@ -157,22 +157,22 @@ K3Command *TaskProgressPanel::buildCommand(Part *part) {
             if ( m_completion.entry( d ) == m_original.entry( d ) ) {
                 continue;
             }
-            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
+            if ( cmd == 0 ) cmd = new MacroCommand( c );
             kDebug()<<"modify entry "<<d<<endl;
             Completion::Entry *e = new Completion::Entry( *( m_completion.entry( d ) ) );
-            cmd->addCommand( new ModifyCompletionEntryCmd(part, m_original, d, e ) );
+            cmd->addCommand( new ModifyCompletionEntryCmd(m_original, d, e ) );
         } else {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
+            if ( cmd == 0 ) cmd = new MacroCommand( c );
             kDebug()<<"remove entry "<<d<<endl;
-            cmd->addCommand( new RemoveCompletionEntryCmd(part, m_original, d ) );
+            cmd->addCommand( new RemoveCompletionEntryCmd(m_original, d ) );
         }
     }
     foreach ( QDate d, curr ) {
         if ( ! org.contains( d ) ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
+            if ( cmd == 0 ) cmd = new MacroCommand( c );
             Completion::Entry *e = new Completion::Entry( * ( m_completion.entry( d ) ) );
             kDebug()<<"add entry "<<d<<e<<endl;
-            cmd->addCommand( new AddCompletionEntryCmd(part, m_original, d, e ) );
+            cmd->addCommand( new AddCompletionEntryCmd(m_original, d, e ) );
         }
     }
     const Completion::ResourceUsedEffortMap &map = m_completion.usedEffortMap();
@@ -182,8 +182,8 @@ K3Command *TaskProgressPanel::buildCommand(Part *part) {
             continue;
         }
         if ( m_original.usedEffort( r ) == 0 || *ue != *(m_original.usedEffort( r )) ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-            cmd->addCommand( new AddCompletionUsedEffortCmd( part, m_original, r, new Completion::UsedEffort( *ue ) ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( c );
+            cmd->addCommand( new AddCompletionUsedEffortCmd( m_original, r, new Completion::UsedEffort( *ue ) ) );
         }
     }
     return cmd;

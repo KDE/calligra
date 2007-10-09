@@ -23,6 +23,8 @@
 #ifndef KPTTASK_H
 #define KPTTASK_H
 
+#include "kplato_export.h"
+
 #include "kptnode.h"
 #include "kptdatetime.h"
 #include "kptduration.h"
@@ -39,14 +41,14 @@ namespace KPlato
 /**
  * The Completion class holds information about the tasks progress.
  */
-class Completion
+class KPLATO_EXPORT Completion
 {
     
 public:
-    class UsedEffort
+    class KPLATO_EXPORT UsedEffort
     {
         public:
-            class ActualEffort : public QPair<Duration, Duration>
+            class KPLATO_EXPORT ActualEffort : public QPair<Duration, Duration>
             {
                 public:
                     explicit ActualEffort( const Duration &ne = Duration::zeroDuration, const Duration oe = Duration::zeroDuration )
@@ -90,7 +92,7 @@ public:
     };
     typedef QMap<QDate, UsedEffort::ActualEffort*> DateUsedEffortMap;
     
-    class Entry
+    class KPLATO_EXPORT Entry
     {
         public:
             Entry()
@@ -219,7 +221,7 @@ public:
   * can be anything from 'build house' to 'drill hole' It will always mean
   * an activity.
   */
-class KPLATO_TEST_EXPORT Task : public Node {
+class KPLATO_EXPORT Task : public Node {
     Q_OBJECT
 public:
     Task(Node *parent = 0);

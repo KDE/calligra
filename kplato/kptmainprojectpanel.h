@@ -26,13 +26,13 @@
 
 #include <QWidget>
 
-class K3Command;
 
 namespace KPlato
 {
 
 class Project;
 class Part;
+class MacroCommand;
 
 class MainProjectPanelImpl : public QWidget, public Ui_MainProjectPanelBase {
     Q_OBJECT
@@ -60,7 +60,7 @@ class MainProjectPanel : public MainProjectPanelImpl {
 public:
     explicit MainProjectPanel(Project &project, QWidget *parent=0, const char *name=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
     
     bool ok();
 

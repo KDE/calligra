@@ -23,12 +23,12 @@
 #include "ui_kptmilestoneprogresspanelbase.h"
 #include "kpttask.h"
 
-class K3Command;
 
 namespace KPlato
 {
 
 class Part;
+class MacroCommand;
 
 class MilestoneProgressPanelImpl : public QWidget, public Ui_MilestoneProgressPanelBase {
     Q_OBJECT
@@ -50,7 +50,7 @@ class MilestoneProgressPanel : public MilestoneProgressPanelImpl {
 public:
     explicit MilestoneProgressPanel(Task &task, QWidget *parent=0, const char *name=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
     
     bool ok();
 

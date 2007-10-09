@@ -20,6 +20,8 @@
 #ifndef KPTAPPOINTMENT_H
 #define KPTAPPOINTMENT_H
 
+#include "kplato_export.h"
+
 #include "kptglobal.h"
 
 #include "kptduration.h"
@@ -47,7 +49,7 @@ class Schedule;
 class XMLLoaderObject;
 
 
-class AppointmentInterval {
+class KPLATO_EXPORT AppointmentInterval {
 public:
     AppointmentInterval();
     AppointmentInterval(const AppointmentInterval &AppointmentInterval);
@@ -88,7 +90,7 @@ private:
  * The intervals do not overlap, an interval does not start before the
  * previous interval ends.
  */
-class AppointmentIntervalList : public QMap<QString, AppointmentInterval*> {
+class KPLATO_EXPORT AppointmentIntervalList : public QMap<QString, AppointmentInterval*> {
 public:
     void inSort(AppointmentInterval *a);
 };
@@ -105,7 +107,7 @@ typedef QListIterator<AppointmentInterval*> AppointmentIntervalListIterator;
  * previous interval ends.
  * An interval is a countinous time interval with the same load. It can span dates.
  */
-class Appointment {
+class KPLATO_EXPORT Appointment {
 public:
     explicit Appointment();
     Appointment(Schedule *resource, Schedule *node, DateTime start, DateTime end, double load);

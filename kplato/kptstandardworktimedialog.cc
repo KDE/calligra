@@ -74,10 +74,11 @@ public:
         day->setState(st+1);
     }
     
-    K3Command *save(Part *part) {
-        K3Command *cmd=0;
+    MacroCommand *save(Part *part) {
+        MacroCommand *cmd=0;
         if (*original != *day) {
-            cmd = new CalendarModifyWeekdayCmd(part, calendar, weekday, day);
+            cmd = new MacroCommand();
+            cmd->addCommand( new CalendarModifyWeekdayCmd(calendar, weekday, day) );
             day = 0;
         }
         return cmd;
@@ -108,25 +109,25 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
-K3MacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
+MacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
     //kDebug();
     QString n = i18n("Modify Standard Worktime");
-    K3MacroCommand *cmd = 0;
+    MacroCommand *cmd = 0;
     if (m_original->year() != dia->inYear()) {
-        if (cmd == 0) cmd = new K3MacroCommand(n);
-        cmd->addCommand(new ModifyStandardWorktimeYearCmd(part, m_original, m_original->year(), dia->inYear()));
+        if (cmd == 0) cmd = new MacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeYearCmd(m_original, m_original->year(), dia->inYear()));
     }
     if (m_original->month() != dia->inMonth()) {
-        if (cmd == 0) cmd = new K3MacroCommand(n);
-        cmd->addCommand(new ModifyStandardWorktimeMonthCmd(part, m_original, m_original->month(), dia->inMonth()));
+        if (cmd == 0) cmd = new MacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeMonthCmd(m_original, m_original->month(), dia->inMonth()));
     }
     if (m_original->week() != dia->inWeek()) {
-        if (cmd == 0) cmd = new K3MacroCommand(n);
-        cmd->addCommand(new ModifyStandardWorktimeWeekCmd(part, m_original, m_original->week(), dia->inWeek()));
+        if (cmd == 0) cmd = new MacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeWeekCmd(m_original, m_original->week(), dia->inWeek()));
     }
     if (m_original->day() != dia->inDay()) {
-        if (cmd == 0) cmd = new K3MacroCommand(n);
-        cmd->addCommand(new ModifyStandardWorktimeDayCmd(part, m_original, m_original->day(), dia->inDay()));
+        if (cmd == 0) cmd = new MacroCommand(n);
+        cmd->addCommand(new ModifyStandardWorktimeDayCmd(m_original, m_original->day(), dia->inDay()));
     }
     return cmd;
 

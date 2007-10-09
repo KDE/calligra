@@ -29,7 +29,6 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <k3command.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -84,8 +83,10 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, const QString& c
     connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
 }
 
-K3Command *AddRelationDialog::buildCommand(Part *part) {
-    return new AddRelationCmd(part, m_relation, i18n("Add Relation"));
+MacroCommand *AddRelationDialog::buildCommand(Part *part) {
+    MacroCommand *c = new MacroCommand( i18n("Add Relation") );
+    c->addCommand( new AddRelationCmd(part->getProject(), m_relation ) );
+    return c;
 }
 
 void AddRelationDialog::slotOk() {
@@ -143,19 +144,19 @@ void ModifyRelationDialog::slotUser1() {
     accept();
 }
 
-K3Command *ModifyRelationDialog::buildCommand(Part *part) {
-    K3MacroCommand *cmd=0;
+MacroCommand *ModifyRelationDialog::buildCommand(Part *part) {
+    MacroCommand *cmd=0;
     if (selectedRelationType() != m_relation->type()) {
         if (cmd == 0)
-            cmd = new K3MacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new ModifyRelationTypeCmd(part, m_relation, (Relation::Type)(selectedRelationType())));
+            cmd = new MacroCommand(i18n("Modify Relation"));
+        cmd->addCommand(new ModifyRelationTypeCmd(m_relation, (Relation::Type)(selectedRelationType())));
         
         //kDebug()<<m_panel->relationType->selectedId();
     }
     if (m_relation->lag() != m_panel->lag->value()) {
         if (cmd == 0)
-            cmd = new K3MacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new ModifyRelationLagCmd(part, m_relation, m_panel->lag->value()));
+            cmd = new MacroCommand(i18n("Modify Relation"));
+        cmd->addCommand(new ModifyRelationLagCmd(m_relation, m_panel->lag->value()));
     }
     return cmd;
 }

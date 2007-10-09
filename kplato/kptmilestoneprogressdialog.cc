@@ -20,13 +20,14 @@
 #include "kptmilestoneprogressdialog.h"
 #include "kptmilestoneprogresspanel.h"
 
-#include <k3command.h>
 #include <klocale.h>
 
 #include <kdebug.h>
 
 namespace KPlato
 {
+
+class MacroCommand;
 
 MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
     : KDialog(p)
@@ -49,7 +50,7 @@ void MilestoneProgressDialog::slotChanged() {
     enableButtonOk(true);
 }
 
-K3Command *MilestoneProgressDialog::buildCommand(Part *part) {
+MacroCommand *MilestoneProgressDialog::buildCommand(Part *part) {
     return m_panel->buildCommand(part);;
 }
 

@@ -21,6 +21,7 @@
 #include "kptaccount.h"
 #include "kptcommand.h"
 #include "kptproject.h"
+#include "kptpart.h"
 
 #include <QComboBox>
 #include <QHeaderView>
@@ -271,71 +272,71 @@ void AccountsPanel::slotSubBtn() {
     accountList->editItem(n);
 }
 
-K3Command *AccountsPanel::buildCommand(Part *part) {
-    K3MacroCommand *cmd = 0;
+MacroCommand *AccountsPanel::buildCommand(Part *part) {
+    MacroCommand *cmd = 0;
     // First remove
     while (!m_removedItems.isEmpty()) {
         AccountItem *item = static_cast<AccountItem*>(m_removedItems.takeFirst());
         //kDebug()<<"Removed item";
-        if (!cmd) cmd = new K3MacroCommand(i18n("Modify Accounts"));
-        cmd->addCommand(new RemoveAccountCmd(part, part->getProject(), item->account));
+        if (!cmd) cmd = new MacroCommand(i18n("Modify Accounts"));
+        cmd->addCommand(new RemoveAccountCmd(part->getProject(), item->account));
         delete item;
     }
     // Then add/modify
-    K3Command *c = save(part, part->getProject());
+    MacroCommand *c = save(part, part->getProject());
     if (c) {
-        if (!cmd) cmd = new K3MacroCommand(i18n("Modify Accounts"));
+        if (!cmd) cmd = new MacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(c);
     }
     return cmd;
 }
 
-K3Command *AccountsPanel::save(Part *part, Project &project) {
-    K3MacroCommand *cmd=0;
+MacroCommand *AccountsPanel::save(Part *part, Project &project) {
+    MacroCommand *cmd=0;
     int cnt = accountList->topLevelItemCount();
     for (int i=0; i < cnt; ++i) {
-        K3Command *c = save(part, project, accountList->topLevelItem(i));
+        MacroCommand *c = save(part, project, accountList->topLevelItem(i));
         if (c) {
-            if (!cmd) cmd = new K3MacroCommand("");
+            if (!cmd) cmd = new MacroCommand("");
             cmd->addCommand(c);
         }
     }
     return cmd;
 }
 
-K3Command *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) {
-    K3MacroCommand *cmd=0;
+MacroCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) {
+    MacroCommand *cmd=0;
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
         if (!item->text(0).isEmpty()) {
             kDebug()<<"New account:"<<item->text(0);
-            if (!cmd) cmd = new K3MacroCommand("");
+            if (!cmd) cmd = new MacroCommand("");
             item->account = new Account(item->text(0), item->text(1));
             if (item->parent()) {
                 kDebug()<<"New account:"<<item->text(0);
-                cmd->addCommand(new AddAccountCmd(part, project, item->account, item->parent()->text(0)));
+                cmd->addCommand(new AddAccountCmd(project, item->account, item->parent()->text(0)));
             } else {
-                cmd->addCommand(new AddAccountCmd(part, project, item->account));
+                cmd->addCommand(new AddAccountCmd(project, item->account));
             }
         }
     } else {
         if (!item->text(0).isEmpty() && (item->text(0) != item->account->name())) {
-            if (!cmd) cmd = new K3MacroCommand("");
+            if (!cmd) cmd = new MacroCommand("");
             //kDebug()<<"Renamed:"<<item->account->name()<<" to"<<item->text(0);
-            cmd->addCommand(new RenameAccountCmd(part, item->account, item->text(0)));
+            cmd->addCommand(new RenameAccountCmd(item->account, item->text(0)));
         }
         if (item->text(1) != item->account->description()) {
-            if (!cmd) cmd = new K3MacroCommand("");
+            if (!cmd) cmd = new MacroCommand("");
             //kDebug()<<"New description:"<<item->account->description()<<" to"<<item->text(1);
-            cmd->addCommand(new ModifyAccountDescriptionCmd(part, item->account, item->text(1)));
+            cmd->addCommand(new ModifyAccountDescriptionCmd(item->account, item->text(1)));
         }
     }
     int cnt = item->childCount();
     for (int i=0; i < cnt; ++i) {
         QTreeWidgetItem *myChild = item->child(i);
-        K3Command *c = save(part, project, myChild);
+        MacroCommand *c = save(part, project, myChild);
         if (c) {
-            if (!cmd) cmd = new K3MacroCommand("");
+            if (!cmd) cmd = new MacroCommand("");
             cmd->addCommand(c);
         }
     }
@@ -345,8 +346,8 @@ K3Command *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i)
         newDefaultAccount = ai->account;
     }
     if (m_oldDefaultAccount != newDefaultAccount) {
-        if (!cmd) cmd = new K3MacroCommand("");
-        cmd->addCommand(new ModifyDefaultAccountCmd(part, m_accounts, m_oldDefaultAccount, newDefaultAccount));
+        if (!cmd) cmd = new MacroCommand("");
+        cmd->addCommand(new ModifyDefaultAccountCmd(m_accounts, m_oldDefaultAccount, newDefaultAccount));
     }
     return cmd;
 }

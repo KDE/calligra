@@ -26,6 +26,8 @@
 #include <QDate>
 #include <QItemDelegate>
 
+class KoDocument;
+
 class QMimeData;
 class QModelIndex;
 
@@ -36,7 +38,7 @@ class Project;
 class Node;
 class Estimate;
 
-class NodeModel : public QObject
+class KPLATO_EXPORT NodeModel : public QObject
 {
     Q_OBJECT
 public:
@@ -124,11 +126,11 @@ private:
     int m_prec;
 };
 
-class NodeItemModel : public ItemModelBase
+class KPLATO_EXPORT NodeItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit NodeItemModel( Part *part, QObject *parent = 0 );
+    explicit NodeItemModel( KoDocument *part, QObject *parent = 0 );
     ~NodeItemModel();
     
     virtual void setProject( Project *project );
@@ -202,11 +204,11 @@ private:
     NodeModel m_nodemodel;
 };
 
-class MilestoneItemModel : public ItemModelBase
+class KPLATO_EXPORT MilestoneItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit MilestoneItemModel( Part *part, QObject *parent = 0 );
+    explicit MilestoneItemModel( KoDocument *part, QObject *parent = 0 );
     ~MilestoneItemModel();
 
     virtual void setProject( Project *project );

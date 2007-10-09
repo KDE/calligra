@@ -29,13 +29,13 @@
 #include <QString>
 #include <QWidget>
 
-class K3MacroCommand;
 
 namespace KPlato
 {
 
 class Project;
 class Part;
+class MacroCommand;
 
 class StandardWorktimeDialogImpl : public QWidget, public Ui::StandardWorktimeDialogBase {
     Q_OBJECT
@@ -74,7 +74,7 @@ class StandardWorktimeDialog : public KDialog {
 public:
     explicit StandardWorktimeDialog(Project &project, QWidget *parent=0);
     
-    K3MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

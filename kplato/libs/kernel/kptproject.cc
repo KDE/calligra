@@ -24,10 +24,9 @@
 #include "kptappointment.h"
 #include "kpttask.h"
 #include "kptdatetime.h"
-#include "kptpart.h"
-#include "kptconfig.h"
 #include "kpteffortcostmap.h"
 #include "kptschedule.h"
+#include "kptwbsdefinition.h"
 #include "kptxmlloaderobject.h"
 
 #include <KoXmlReader.h>

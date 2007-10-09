@@ -23,7 +23,6 @@
 #include "ui_kptconfigtaskpanelbase.h"
 #include "kptduration.h"
 
-class K3MacroCommand;
 
 namespace KPlato
 {
@@ -32,6 +31,7 @@ class DateTime;
 class Part;
 class Task;
 class StandardWorktime;
+class MacroCommand;
 
 class ConfigTaskPanelImpl : public QWidget, public Ui_ConfigTaskPanelBase
 {
@@ -93,7 +93,7 @@ class TaskDefaultPanel : public ConfigTaskPanelImpl {
 public:
     explicit TaskDefaultPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    K3MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
     bool ok();
 

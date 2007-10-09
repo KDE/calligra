@@ -27,7 +27,6 @@
 #include <klineedit.h>
 #include <kcombobox.h>
 #include <klocale.h>
-#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -76,33 +75,33 @@ void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
     }
 }
 
-K3Command *TaskCostPanel::buildCommand(Part *part) {
-    K3MacroCommand *cmd = new K3MacroCommand(i18n("Modify Task Cost"));
+MacroCommand *TaskCostPanel::buildCommand(Part *part) {
+    MacroCommand *cmd = new MacroCommand(i18n("Modify Task Cost"));
     bool modified = false;
     
     if ((m_oldrunning == 0 && runningAccount->currentItem() != 0) ||
         (m_oldrunning && m_oldrunning->name() != runningAccount->currentText())) {
-        cmd->addCommand(new NodeModifyRunningAccountCmd(part, m_task, m_oldrunning, m_accounts.findAccount(runningAccount->currentText())));
+        cmd->addCommand(new NodeModifyRunningAccountCmd(m_task, m_oldrunning, m_accounts.findAccount(runningAccount->currentText())));
         modified = true;
     }
     if ((m_oldstartup == 0 && startupAccount->currentItem() != 0) ||
         (m_oldstartup && m_oldstartup->name() != startupAccount->currentText())) {
-        cmd->addCommand(new NodeModifyStartupAccountCmd(part, m_task, m_oldstartup,  m_accounts.findAccount(startupAccount->currentText())));
+        cmd->addCommand(new NodeModifyStartupAccountCmd(m_task, m_oldstartup,  m_accounts.findAccount(startupAccount->currentText())));
         modified = true;
     }
     if ((m_oldshutdown == 0 && shutdownAccount->currentItem() != 0) ||
         (m_oldshutdown && m_oldshutdown->name() != shutdownAccount->currentText())) {
-        cmd->addCommand(new NodeModifyShutdownAccountCmd(part, m_task, m_oldshutdown,  m_accounts.findAccount(shutdownAccount->currentText())));
+        cmd->addCommand(new NodeModifyShutdownAccountCmd(m_task, m_oldshutdown,  m_accounts.findAccount(shutdownAccount->currentText())));
         modified = true;
     }
     double money = KGlobal::locale()->readMoney(startupCost->text());
     if (money != m_task.startupCost()) {
-        cmd->addCommand(new NodeModifyStartupCostCmd(part, m_task, money));
+        cmd->addCommand(new NodeModifyStartupCostCmd(m_task, money));
         modified = true;
     }
     money = KGlobal::locale()->readMoney(shutdownCost->text());
     if (money != m_task.shutdownCost()) {
-        cmd->addCommand(new NodeModifyShutdownCostCmd(part, m_task, money));
+        cmd->addCommand(new NodeModifyShutdownCostCmd(m_task, money));
         modified = true;
     }
     if (!modified) {

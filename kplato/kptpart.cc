@@ -38,14 +38,13 @@
 #include <qpainter.h>
 #include <qfileinfo.h>
 #include <QTimer>
+#include <QUndoCommand>
 
 #include <kdebug.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <k3command.h>
-#include <k3command.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
 
@@ -61,9 +60,6 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         m_project( 0 ), m_projectDialog( 0 ), m_parentWidget( parentWidget ), m_view( 0 ),
         m_context( 0 ), m_xmlLoader()
 {
-    m_update = m_calculate = false;
-    m_commandHistory = new K3CommandHistory( actionCollection() );
-
     setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
@@ -72,16 +68,12 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     delete m_project;
     m_project = new Project(); // after config is loaded
 
-    connect( m_commandHistory, SIGNAL( commandExecuted( K3Command * ) ), SLOT( slotCommandExecuted( K3Command * ) ) );
-    connect( m_commandHistory, SIGNAL( documentRestored() ), SLOT( slotDocumentRestored() ) );
-
 }
 
 
 Part::~Part()
 {
     m_config.save();
-    delete m_commandHistory; // before project, in case of dependencies...
     delete m_project;
     delete m_projectDialog;
 }
@@ -208,8 +200,6 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
     // do some sanity checking on document.
     emit sigProgress( -1 );
 
-    m_commandHistory->clear();
-    m_commandHistory->documentSaved();
     setModified( false );
     if ( m_view )
         m_view->slotUpdate();
@@ -247,56 +237,17 @@ QDomDocument Part::saveXML()
             doc.appendChild( el );
         }
     }
-    
-    m_commandHistory->documentSaved();
     return document;
 }
-
-
-void Part::slotDocumentRestored()
-{
-    //kDebug();
-    setModified( false );
-}
-
 
 void Part::paintContent( QPainter &, const QRect &)
 {
     // Don't embed this app!!!
 }
 
-
-void Part::addCommand( K3Command * cmd, bool execute )
-{
-    m_commandHistory->addCommand( cmd, execute );
-}
-
-void Part::slotCommandExecuted( K3Command * )
-{
-    //kDebug();
-    setModified( true );
-    kDebug() <<"------- KPlato, is embedded:" << isEmbedded();
-    if ( m_view == NULL )
-        return ;
-
-    if ( m_update )
-        m_view->slotUpdate();
-
-    m_update = m_calculate = false;
-}
-
 void Part::slotViewDestroyed()
 {
     m_view = NULL;
-}
-
-void Part::setCommandType( int type )
-{
-    //kDebug()<<"type="<<type;
-    if ( type == 0 )
-        m_update = true;
-    else if ( type == 1 )
-        m_calculate = true;
 }
 
 void Part::generateWBS()

@@ -349,18 +349,18 @@ CalendarEditDialog::~CalendarEditDialog()
     delete calendar;
 }
 
-K3Command *CalendarEditDialog::buildCommand(Part *part) {
+MacroCommand *CalendarEditDialog::buildCommand(Part *part) {
     //kDebug();
-    K3MacroCommand *macro=0;
+    MacroCommand *macro=0;
     if (original->name() != calendar->name()) {
-        if (macro == 0) macro = new K3MacroCommand("");
-        macro->addCommand(new CalendarModifyNameCmd(part, original, calendar->name()));
+        if (macro == 0) macro = new MacroCommand("");
+        macro->addCommand(new CalendarModifyNameCmd(original, calendar->name()));
     }
     //kDebug()<<"Check for days deleted:"<<calendar->name();
     foreach (CalendarDay *day, original->days()) {
         if (calendar->findDay(day->date()) == 0) {
-            if (macro == 0) macro = new K3MacroCommand("");
-            macro->addCommand(new CalendarRemoveDayCmd(part, original, day->date()));
+            if (macro == 0) macro = new MacroCommand("");
+            macro->addCommand(new CalendarRemoveDayCmd(original, day->date()));
             //kDebug()<<"Removed day"<<day->date();
         }
     }
@@ -368,15 +368,15 @@ K3Command *CalendarEditDialog::buildCommand(Part *part) {
     foreach (CalendarDay *c, calendar->days()) {
         CalendarDay *day = original->findDay(c->date());
         if (day == 0) {
-            if (macro == 0) macro = new K3MacroCommand("");
+            if (macro == 0) macro = new MacroCommand("");
             // added
             //kDebug()<<"Added day"<<c->date();
-            macro->addCommand(new CalendarAddDayCmd(part, original, new CalendarDay(c)));
+            macro->addCommand(new CalendarAddDayCmd(original, new CalendarDay(c)));
         } else if (*day != c) {
-            if (macro == 0) macro = new K3MacroCommand("");
+            if (macro == 0) macro = new MacroCommand("");
             // modified
             //kDebug()<<"Modified day"<<c->date();
-            macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(c)));
+            macro->addCommand(new CalendarModifyDayCmd(original, new CalendarDay(c)));
         }
     }
     //kDebug()<<"Check for weekdays modified:"<<calendar->name();
@@ -386,9 +386,9 @@ K3Command *CalendarEditDialog::buildCommand(Part *part) {
         org = original->weekdays()->weekday(i);
         if (day && org) {
             if (*org != *day) {
-                if (macro == 0) macro = new K3MacroCommand("");
+                if (macro == 0) macro = new MacroCommand("");
                 //kDebug()<<"Weekday["<<i<<"] modified";
-                macro->addCommand(new CalendarModifyWeekdayCmd(part, original, i, new CalendarDay(day)));
+                macro->addCommand(new CalendarModifyWeekdayCmd(original, i, new CalendarDay(day)));
             }
         } else if (day) {
             // shouldn't happen: hmmm, add day to original??
@@ -400,11 +400,11 @@ K3Command *CalendarEditDialog::buildCommand(Part *part) {
     }
     // timezone
     if ( original->timeZone() != calendar->timeZone() ) {
-        if (macro == 0) macro = new K3MacroCommand("");
-        macro->addCommand( new CalendarModifyTimeZoneCmd( part, original, calendar->timeZone() ) );
+        if (macro == 0) macro = new MacroCommand("");
+        macro->addCommand( new CalendarModifyTimeZoneCmd( original, calendar->timeZone() ) );
     }
     if (macro) {
-        macro->setName(i18n("Modify Calendar"));
+        macro->setText(i18n("Modify Calendar"));
     }
     return macro;
 }

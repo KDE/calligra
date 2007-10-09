@@ -34,7 +34,7 @@ namespace KPlato
  * The Duration class can be used to store a timespan in a convenient format.
  * The timespan can be in length in many many hours down to milliseconds.
  */
-class KPLATO_TEST_EXPORT Duration {
+class KPLATO_EXPORT Duration {
     public:
         /**
          * DayTime  = d hh:mm:ss.sss

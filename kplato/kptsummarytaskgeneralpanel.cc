@@ -76,25 +76,25 @@ void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
     emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty());
 }
 
-K3MacroCommand *SummaryTaskGeneralPanel::buildCommand(Part *part) {
-    K3MacroCommand *cmd = new K3MacroCommand(i18n("Modify Task"));
+MacroCommand *SummaryTaskGeneralPanel::buildCommand(Part *part) {
+    MacroCommand *cmd = new MacroCommand(i18n("Modify Task"));
     bool modified = false;
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {
-        cmd->addCommand(new NodeModifyNameCmd(part, m_task, namefield->text()));
+        cmd->addCommand(new NodeModifyNameCmd(m_task, namefield->text()));
         modified = true;
     }
     if (!leaderfield->isHidden() && m_task.leader() != leaderfield->text()) {
-        cmd->addCommand(new NodeModifyLeaderCmd(part, m_task, leaderfield->text()));
+        cmd->addCommand(new NodeModifyLeaderCmd(m_task, leaderfield->text()));
         modified = true;
     }
     if (!descriptionfield->isHidden() && 
         m_task.description() != descriptionfield->text()) {
-        cmd->addCommand(new NodeModifyDescriptionCmd(part, m_task, descriptionfield->text()));
+        cmd->addCommand(new NodeModifyDescriptionCmd(m_task, descriptionfield->text()));
         modified = true;
     }
     if (!idfield->isHidden() && idfield->text() != m_task.id()) {
-        cmd->addCommand(new NodeModifyIdCmd(part, m_task, idfield->text()));
+        cmd->addCommand(new NodeModifyIdCmd(m_task, idfield->text()));
         modified = true;
     }
     if (!modified) {

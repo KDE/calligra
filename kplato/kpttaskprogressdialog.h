@@ -22,7 +22,6 @@
 
 #include <kdialog.h>
 
-class K3Command;
 
 namespace KPlato
 {
@@ -32,13 +31,14 @@ class Task;
 class Part;
 class StandardWorktime;
 class ScheduleManager;
+class MacroCommand;
 
 class TaskProgressDialog : public KDialog {
     Q_OBJECT
 public:
     TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotChanged();

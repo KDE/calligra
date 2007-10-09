@@ -24,6 +24,7 @@
 #include "kptcommand.h"
 #include "kptfactory.h"
 #include "kptproject.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptitemviewsettup.h"
 

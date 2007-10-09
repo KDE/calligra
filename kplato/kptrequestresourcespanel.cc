@@ -215,9 +215,9 @@ void RequestResourcesPanel::unitsChanged(int units) {
     }
 }
 
-K3Command *RequestResourcesPanel::buildCommand(Part *part) {
+MacroCommand *RequestResourcesPanel::buildCommand(Part *part) {
     //kDebug();
-    K3MacroCommand *cmd = 0;
+    MacroCommand *cmd = 0;
     if (selectedGroup) {
         selectedGroup->update();
     }
@@ -226,20 +226,20 @@ K3Command *RequestResourcesPanel::buildCommand(Part *part) {
         GroupLVItem *grp = static_cast<GroupLVItem*>(item);
         foreach (ResourceTableItem *r, grp->resources()) {
             if (r->isChecked() != r->isOrigChecked()) {
-                if (!cmd) cmd = new K3MacroCommand("");
+                if (!cmd) cmd = new MacroCommand("");
                 if (r->isChecked()) {
                     if (!grp->m_request) {
                         grp->m_request = new ResourceGroupRequest(grp->m_group, grp->m_units);
-                        cmd->addCommand(new AddResourceGroupRequestCmd(part, m_task, grp->m_request));
+                        cmd->addCommand(new AddResourceGroupRequestCmd(m_task, grp->m_request));
                     }
-                    cmd->addCommand(new AddResourceRequestCmd(part, grp->m_request, new ResourceRequest(r->resource(), r->units())));
+                    cmd->addCommand(new AddResourceRequestCmd(grp->m_request, new ResourceRequest(r->resource(), r->units())));
 
                     continue;
                 }
                 if (grp->m_request && r->request()) {
-                    cmd->addCommand(new RemoveResourceRequestCmd(part, grp->m_request, r->request()));
+                    cmd->addCommand(new RemoveResourceRequestCmd(grp->m_request, r->request()));
                     if (grp->isNull()) {
-                        cmd->addCommand(new RemoveResourceGroupRequestCmd(part, m_task, grp->m_request));
+                        cmd->addCommand(new RemoveResourceGroupRequestCmd(m_task, grp->m_request));
                     }
                 } else {
                     kError()<<"Remove failed"<<endl;

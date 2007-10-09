@@ -20,9 +20,9 @@
 #include "kptwbsdefinitiondialog.h"
 #include "kptwbsdefinitionpanel.h"
 #include "kptwbsdefinition.h"
+#include <kptcommand.h>
 
 #include <klocale.h>
-#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -45,10 +45,10 @@ WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p)
 }
 
 
-K3MacroCommand *WBSDefinitionDialog::buildCommand(Part *part) {
-    K3MacroCommand *m = new K3MacroCommand(i18n("Modify WBS Definition"));
+MacroCommand *WBSDefinitionDialog::buildCommand(Part *part) {
+    MacroCommand *m = new MacroCommand(i18n("Modify WBS Definition"));
     bool modified = false;
-    K3Command *cmd = m_panel->buildCommand(part);
+    MacroCommand *cmd = m_panel->buildCommand(part);
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

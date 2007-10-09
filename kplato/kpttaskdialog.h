@@ -24,7 +24,6 @@
 #include <kpagedialog.h>
 
 
-class K3Command;
 
 
 //TODO ui files are not in the KPlato namespace!!
@@ -39,6 +38,7 @@ class TaskCostPanel;
 class Part;
 class Task;
 class StandardWorktime;
+class MacroCommand;
 
 /**
  * The dialog that shows and allows you to alter any task.
@@ -55,7 +55,7 @@ public:
      */
     TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime=0, QWidget *parent=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

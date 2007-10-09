@@ -29,7 +29,6 @@
 #include <QString>
 #include <QList>
 
-class K3Command;
 
 namespace KPlato
 {
@@ -37,6 +36,7 @@ namespace KPlato
 class CalendarListViewItem;
 class Project;
 class Part;
+class MacroCommand;
 
 class CalendarListDialogImpl : public CalendarListDialogBase {
     Q_OBJECT
@@ -89,7 +89,7 @@ class CalendarListDialog : public KDialog {
 public:
     explicit CalendarListDialog(Project &project, QWidget *parent=0);
     
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

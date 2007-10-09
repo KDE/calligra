@@ -26,6 +26,7 @@
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptfactory.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
@@ -782,17 +783,17 @@ bool ResourceAppointmentsItemModel::dropMimeData( const QMimeData *data, Qt::Dro
         return false;
     }
     //kDebug()<<data->formats()<<endl;
-    K3MacroCommand *m = 0;
+    MacroCommand *m = 0;
     if ( data->hasFormat( "text/x-vcard" ) ) {
         QByteArray vcard = data->data( "text/x-vcard" );
         KABC::VCardConverter vc;
         KABC::Addressee::List lst = vc.parseVCards( vcard );
         foreach( KABC::Addressee a, lst ) {
-            if ( m == 0 ) m = new K3MacroCommand( i18np( "Add resource from addressbook", "Add %n resources from addressbook", lst.count() ) );
+            if ( m == 0 ) m = new MacroCommand( i18np( "Add resource from addressbook", "Add %n resources from addressbook", lst.count() ) );
             Resource *r = new Resource();
             r->setName( a.formattedName() );
             r->setEmail( a.preferredEmail() );
-            m->addCommand( new AddResourceCmd( m_part, g, r ) );
+            m->addCommand( new AddResourceCmd( g, r ) );
         }
     }
     if ( m ) {

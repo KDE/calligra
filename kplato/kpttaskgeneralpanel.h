@@ -25,7 +25,6 @@
 
 #include <QWidget>
 
-class K3MacroCommand;
 
 namespace KPlato
 {
@@ -36,6 +35,7 @@ class Task;
 class StandardWorktime;
 class DurationWidget;
 class DateTime;
+class MacroCommand;
         
 class TaskGeneralPanelImpl : public QWidget, public Ui_TaskGeneralPanelBase
 {
@@ -99,7 +99,7 @@ class TaskGeneralPanel : public TaskGeneralPanelImpl {
 public:
     explicit TaskGeneralPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    K3MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
     bool ok();
 

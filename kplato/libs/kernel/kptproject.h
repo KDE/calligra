@@ -23,6 +23,8 @@
 #ifndef KPTPROJECT_H
 #define KPTPROJECT_H
 
+#include "kplato_export.h"
+
 #include "kptnode.h"
 
 #include "kptaccount.h"
@@ -64,7 +66,7 @@ class XMLLoaderObject;
  * Note that a projects datetimes are always displayed/modified in the timezone
  * it was originally created, not necessarly in your current local timezone.
  */
-class KPLATO_TEST_EXPORT Project : public Node
+class KPLATO_EXPORT Project : public Node
 {
     Q_OBJECT
 public:

@@ -23,7 +23,6 @@
 #include "kpttask.h"
 #include "kptappointment.h"
 #include "kptproject.h"
-#include "kpttaskdialog.h"
 #include "kptduration.h"
 #include "kptrelation.h"
 #include "kptdatetime.h"

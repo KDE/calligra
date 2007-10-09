@@ -24,10 +24,10 @@
 #include <kdatetimewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <k3command.h>
 
 #include <kdebug.h>
 
+#include "kptpart.h"
 #include "kpttask.h"
 #include "kptcommand.h"
 
@@ -52,21 +52,21 @@ bool MilestoneProgressPanel::ok() {
     return true;
 }
 
-K3Command *MilestoneProgressPanel::buildCommand(Part *part) {
-    K3MacroCommand *cmd = 0;
+MacroCommand *MilestoneProgressPanel::buildCommand(Part *part) {
+    MacroCommand *cmd = 0;
     QString c = i18n("Modify milestone completion");
     
     if ( m_completion.isFinished() != finished->isChecked() ) {
-        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishedCmd(part, m_completion, finished->isChecked()) );
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishedCmd( m_completion, finished->isChecked()) );
     }
     if ( m_completion.finishTime().dateTime() != finishTime->dateTime() ) {
-        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd(part, m_completion, finishTime->dateTime() ) );
+        if ( cmd == 0 ) cmd = new MacroCommand( c );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd( m_completion, finishTime->dateTime() ) );
     }
     if ( finished->isChecked() && finishTime->dateTime().isValid() ) {
         Completion::Entry *e = new Completion::Entry( 100, Duration::zeroDuration, Duration::zeroDuration );
-        cmd->addCommand( new AddCompletionEntryCmd( part, m_completion, finishTime->dateTime().date(), e ) );
+        cmd->addCommand( new AddCompletionEntryCmd( m_completion, finishTime->dateTime().date(), e ) );
     } else {
         // TODO: Remove ??
     }

@@ -28,8 +28,6 @@
 #include <QMap>
 #include <QComboBox>
 
-class K3Command;
-
 class QString;
 
 namespace KPlato
@@ -39,6 +37,7 @@ class Part;
 class Project;
 class Resource;
 class Calendar;
+class MacroCommand;
 
 class ResourceDialogImpl : public QWidget, public Ui_ResourceDialogBase {
     Q_OBJECT
@@ -67,9 +66,9 @@ public:
     bool calculationNeeded() {  return m_calculationNeeded; }
 
     Calendar *calendar() { return m_calendars[dia->calendarList->currentIndex()]; }
-    K3Command *buildCommand(Part *part = 0);
+    MacroCommand *buildCommand(Part *part = 0);
     
-    static K3Command *buildCommand(Resource *original, Resource &resource, Part *part);
+    static MacroCommand *buildCommand(Resource *original, Resource &resource, Part *part);
     
 protected slots:
     void enableButtonOk();

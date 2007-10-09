@@ -25,8 +25,6 @@
 
 #include <QString>
 
-class K3Command;
-
 namespace KPlato
 {
 
@@ -34,6 +32,7 @@ class Project;
 class GroupItem;
 class ResourcesPanelGroupLVItem;
 class Part;
+class MacroCommand;
 
 class ResourcesPanelBase : public QWidget, public Ui::ResourcesPanelBase
 {
@@ -51,7 +50,7 @@ public:
     ~ResourcesPanel();
     
     bool ok();
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotAddGroup();

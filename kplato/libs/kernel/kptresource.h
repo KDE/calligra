@@ -21,6 +21,8 @@
 #ifndef KPTRESOURCE_H
 #define KPTRESOURCE_H
 
+#include "kplato_export.h"
+
 #include "kptglobal.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
@@ -71,7 +73,7 @@ class XMLLoaderObject;
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
  
-class KPLATO_TEST_EXPORT ResourceGroup : public QObject
+class KPLATO_EXPORT ResourceGroup : public QObject
 {
     Q_OBJECT
 public:
@@ -207,7 +209,7 @@ private:
   * See also @ref ResourceGroup
   */
 
-class KPLATO_TEST_EXPORT Resource : public QObject
+class KPLATO_EXPORT Resource : public QObject
 {
     Q_OBJECT
 public:
@@ -463,7 +465,7 @@ private:
     RiskType m_riskType;
 };
 
-class ResourceRequest
+class KPLATO_EXPORT ResourceRequest
 {
 public:
     explicit ResourceRequest( Resource *resource = 0, int units = 1 );
@@ -521,7 +523,7 @@ public:
 #endif
 };
 
-class ResourceGroupRequest
+class KPLATO_EXPORT ResourceGroupRequest
 {
 public:
     explicit ResourceGroupRequest( ResourceGroup *group = 0, int units = 0 );
@@ -608,7 +610,7 @@ public:
 #endif
 };
 
-class ResourceRequestCollection
+class KPLATO_EXPORT ResourceRequestCollection
 {
 public:
     ResourceRequestCollection( Task &task );

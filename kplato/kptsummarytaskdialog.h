@@ -23,14 +23,13 @@
 
 #include <kdialog.h>
 
-class K3Command;
-
 namespace KPlato
 {
 
 class SummaryTaskGeneralPanel;
 class Part;
 class Task;
+class MacroCommand;
 
 /**
  * The dialog that shows and allows you to alter summary tasks.
@@ -45,7 +44,7 @@ public:
      */
     explicit SummaryTaskDialog(Task &task,  QWidget *parent=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

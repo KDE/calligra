@@ -20,6 +20,8 @@
 #ifndef KPTACCOUNT_H
 #define KPTACCOUNT_H
 
+#include "kplato_export.h"
+
 #include <qdatetime.h>
 #include <QMap>
 #include <QList>
@@ -47,7 +49,7 @@ class Account;
  *  An account can have any number of sub-accounts.
  *  Account names must be unique.
  */
-class Account
+class KPLATO_EXPORT Account
 {
 public:
 
@@ -175,7 +177,7 @@ typedef QListIterator<Account*> AccountListIterator;
  *  Accounts administrates all accounts.
  */
 
-class Accounts : public QObject
+class KPLATO_EXPORT Accounts : public QObject
 {
     Q_OBJECT
 public:

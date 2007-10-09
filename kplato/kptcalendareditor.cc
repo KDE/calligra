@@ -24,6 +24,7 @@
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptfactory.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
@@ -46,6 +47,7 @@
 #include <QSplitter>
 #include <QVBoxLayout>
 
+#include <kaction.h>
 #include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -310,7 +312,7 @@ bool CalendarItemModel::setName( Calendar *a, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
-                m_part->addCommand( new CalendarModifyNameCmd( m_part, a, value.toString(), "Modify Calendar Name" ) );
+                m_part->addCommand( new CalendarModifyNameCmd( a, value.toString(), "Modify Calendar Name" ) );
             }
             return true;
     }
@@ -360,7 +362,7 @@ bool CalendarItemModel::setTimeZone( Calendar *a, const QVariant &value, int rol
             if ( !tz.isValid() ) {
                 return false;
             }
-            m_part->addCommand( new CalendarModifyTimeZoneCmd( m_part, a, tz, "Modify Calendar Timezone" ) );
+            m_part->addCommand( new CalendarModifyTimeZoneCmd( a, tz, "Modify Calendar Timezone" ) );
             return true;
         }
     }
@@ -502,11 +504,11 @@ bool CalendarItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         if ( parent.isValid() ) {
             par = calendar( parent );
         }
-        K3MacroCommand *cmd = 0;
+        MacroCommand *cmd = 0;
         QList<Calendar*> lst = calendarList( stream );
         foreach ( Calendar *c, lst ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Re-parent Calendar" ) );
-            cmd->addCommand( new CalendarModifyParentCmd( m_part, m_project, c, par ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Re-parent Calendar" ) );
+            cmd->addCommand( new CalendarModifyParentCmd( m_project, c, par ) );
         }
         if ( cmd ) {
             m_part->addCommand( cmd );
@@ -553,7 +555,7 @@ bool CalendarItemModel::dropAllowed( Calendar *on, const QMimeData *data )
 QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, Calendar *parent )
 {
     //kDebug();
-    m_part->addCommand( new CalendarAddCmd( m_part, m_project, calendar, parent, i18n( "Add Calendar" ) ) );
+    m_part->addCommand( new CalendarAddCmd( m_project, calendar, parent, i18n( "Add Calendar" ) ) );
     int row = -1;
     if ( parent ) {
         row = parent->indexOf( calendar );
@@ -569,7 +571,7 @@ QModelIndex CalendarItemModel::insertCalendar ( Calendar *calendar, Calendar *pa
 
 void CalendarItemModel::removeCalendar( QList<Calendar *> /*lst*/ )
 {
-/*    K3MacroCommand *cmd = 0;
+/*    MacroCommand *cmd = 0;
     QString s = lst.count() > 1 ? i18n( "Delete Calendars" ) : i18n( "Delete Calendar" );
     while ( ! lst.isEmpty() ) {
         bool del = true;
@@ -581,8 +583,8 @@ void CalendarItemModel::removeCalendar( QList<Calendar *> /*lst*/ )
             }
         }
         if ( del ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( s );
-            cmd->addCommand( new CalendarRemoveCmd( m_part, m_project, c ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( s );
+            cmd->addCommand( new CalendarRemoveCmd( m_project, c ) );
         }
     }
     if ( cmd )
@@ -594,7 +596,7 @@ void CalendarItemModel::removeCalendar( Calendar *calendar )
     if ( calendar == 0 ) {
         return;
     }
-    m_part->addCommand( new CalendarRemoveCmd( m_part, m_project, calendar, i18n( "Delete Calendar" ) ) );
+    m_part->addCommand( new CalendarRemoveCmd( m_project, calendar, i18n( "Delete Calendar" ) ) );
 }
 
 
@@ -965,7 +967,7 @@ bool CalendarDayItemModel::setDate( CalendarDay *d, const QVariant &value, int r
                 return false;
             }
             //kDebug()<<d;
-            m_part->addCommand( new CalendarModifyDateCmd( m_part, m_calendar, d, date,  "Modify Calendar Date" ) );
+            m_part->addCommand( new CalendarModifyDateCmd( m_calendar, d, date,  "Modify Calendar Date" ) );
             return true;
         }
     }
@@ -1032,7 +1034,7 @@ bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, i
                 if ( v >= CalendarDay::Undefined )
                     v++; // Undefined not in list
             }
-            m_part->addCommand( new CalendarModifyStateCmd( m_part, m_calendar, d, static_cast<CalendarDay::State>( v ), "Modify Calendar State" ) );
+            m_part->addCommand( new CalendarModifyStateCmd( m_calendar, d, static_cast<CalendarDay::State>( v ), "Modify Calendar State" ) );
             return true;
     }
     return false;
@@ -1081,7 +1083,7 @@ bool CalendarDayItemModel::setIntervalStart( TimeInterval *ti, const QVariant &v
             if ( start > t.second ) {
                 t.second = start;
             }
-            m_part->addCommand( new CalendarModifyTimeIntervalCmd( m_part, m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
+            m_part->addCommand( new CalendarModifyTimeIntervalCmd( m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
             return true;
         }
     }
@@ -1131,7 +1133,7 @@ bool CalendarDayItemModel::setIntervalEnd( TimeInterval *ti, const QVariant &val
             if ( end < t.first ) {
                 t.first = end;
             }
-            m_part->addCommand( new CalendarModifyTimeIntervalCmd( m_part, m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
+            m_part->addCommand( new CalendarModifyTimeIntervalCmd( m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
             return true;
         }
     }
@@ -1360,7 +1362,7 @@ QModelIndex CalendarDayItemModel::insertInterval( TimeInterval *ti, CalendarDay 
 {
     //kDebug();
     if ( day->state() == CalendarDay::Working ) {
-        m_part->addCommand( new CalendarAddTimeIntervalCmd( m_part, m_calendar, day, ti, i18n( "Add Work Interval" ) ) );
+        m_part->addCommand( new CalendarAddTimeIntervalCmd( m_calendar, day, ti, i18n( "Add Work Interval" ) ) );
         int row = day->indexOf( ti );
         if ( row != -1 ) {
             return createIndex( row, 0, ti );
@@ -1376,13 +1378,13 @@ void CalendarDayItemModel::removeInterval( TimeInterval *ti )
     if ( d == 0 ) {
         return;
     }
-    m_part->addCommand( new CalendarRemoveTimeIntervalCmd( m_part, m_calendar, d, ti, i18n( "Remove Work Interval" ) ) );
+    m_part->addCommand( new CalendarRemoveTimeIntervalCmd( m_calendar, d, ti, i18n( "Remove Work Interval" ) ) );
 }
 
 QModelIndex CalendarDayItemModel::insertDay( CalendarDay *day )
 {
     //kDebug();
-    m_part->addCommand( new CalendarAddDayCmd( m_part, m_calendar, day, i18n( "Add Calendar Day" ) ) );
+    m_part->addCommand( new CalendarAddDayCmd( m_calendar, day, i18n( "Add Calendar Day" ) ) );
     int row = m_calendar->indexOf( day );
     if ( row != -1 ) {
         return createIndex( row, 0, day );
@@ -1393,7 +1395,7 @@ QModelIndex CalendarDayItemModel::insertDay( CalendarDay *day )
 void CalendarDayItemModel::removeDay( CalendarDay *day )
 {
     //kDebug();
-    m_part->addCommand( new CalendarRemoveDayCmd( m_part, m_calendar, day, i18n( "Remove Calendar Day" ) ) );
+    m_part->addCommand( new CalendarRemoveDayCmd( m_calendar, day, i18n( "Remove Calendar Day" ) ) );
 }
 
 void CalendarDayItemModel::setDayMap( Calendar *calendar ) {

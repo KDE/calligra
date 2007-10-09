@@ -22,7 +22,6 @@
 
 #include "ui_kpttaskcostpanelbase.h"
 
-class K3Command;
 
 namespace KPlato
 {
@@ -32,6 +31,7 @@ class Account;
 class Accounts;
 class Part;
 class Task;
+class MacroCommand;
 
 class TaskCostPanelImpl : public QWidget, public Ui_TaskCostPanelBase {
     Q_OBJECT
@@ -50,7 +50,7 @@ class TaskCostPanel : public TaskCostPanelImpl {
 public:
     TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent=0, const char *name=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
     bool ok();
 

@@ -31,8 +31,6 @@
 #include <KoDocumentChild.h>
 
 class KoView;
-class K3CommandHistory;
-class K3Command;
 
 /// The main namespace.
 namespace KPlato
@@ -72,10 +70,6 @@ public:
     bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
     bool loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * );
 
-    void addCommand( K3Command * cmd, bool execute = true );
-
-    void setCommandType( int type );
-
     Config &config() { return m_config; }
     Context *context() const { return m_context; }
     
@@ -98,8 +92,6 @@ protected:
 
 
 protected slots:
-    void slotDocumentRestored();
-    void slotCommandExecuted( K3Command * );
     void slotViewDestroyed();
 
 private:
@@ -111,9 +103,6 @@ private:
     MainProjectDialog *m_projectDialog;
     QWidget* m_parentWidget;
     View *m_view;
-
-    K3CommandHistory *m_commandHistory;
-    bool m_update, m_calculate;
 
     Config m_config;
     Context *m_context;

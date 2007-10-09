@@ -1,0 +1,1430 @@
+/* This file is part of the KDE project
+  Copyright (C) 2004-2007 Dag Andersen <danders@get2net.dk>
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+* Boston, MA 02110-1301, USA.
+*/
+
+#ifndef KPTCOMMAND_H
+#define KPTCOMMAND_H
+
+#include "kplato_export.h"
+
+#include <QUndoCommand>
+
+#include "kptappointment.h"
+#include "kptnode.h"
+#include "kptduration.h"
+#include "kpttask.h"
+
+class QString;
+/**
+ * @file
+ * This file includes undo/redo commands for kernel data structures
+ */
+
+/// The main namespace
+namespace KPlato
+{
+
+class Account;
+class Accounts;
+class Project;
+class Task;
+class Calendar;
+class CalendarDay;
+class Relation;
+class ResourceGroupRequest;
+class ResourceRequest;
+class ResourceGroup;
+class Resource;
+class Schedule;
+class StandardWorktime;
+
+class KPLATO_EXPORT NamedCommand : public QUndoCommand
+{
+public:
+    NamedCommand( const QString& name )
+        : QUndoCommand( name )
+    {}
+    virtual void redo() { execute(); }
+    virtual void undo() { unexecute(); }
+
+    virtual void execute() = 0;
+    virtual void unexecute() = 0;
+
+protected:
+    void setSchDeleted();
+    void setSchDeleted( bool state );
+    void setSchScheduled();
+    void setSchScheduled( bool state );
+    void addSchScheduled( Schedule *sch );
+    void addSchDeleted( Schedule *sch );
+
+    QMap<Schedule*, bool> m_schedules;
+
+};
+
+class KPLATO_EXPORT MacroCommand : public QUndoCommand
+{
+public:
+    MacroCommand( const QString& name = QString() )
+        : QUndoCommand( name )
+    {}
+    ~MacroCommand();
+    
+    void addCommand( QUndoCommand *cmd );
+    
+    virtual void redo() { execute(); }
+    virtual void undo() { unexecute(); }
+
+    virtual void execute();
+    virtual void unexecute();
+    
+protected:
+    QList<QUndoCommand*> cmds;
+};
+
+
+class KPLATO_EXPORT CalendarAddCmd : public NamedCommand
+{
+public:
+    CalendarAddCmd( Project *project, Calendar *cal, Calendar *parent, const QString& name = QString() );
+    ~CalendarAddCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Calendar *m_cal;
+    Calendar *m_parent;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT CalendarRemoveCmd : public NamedCommand
+{
+public:
+    CalendarRemoveCmd( Project *project, Calendar *cal, const QString& name = QString() );
+    ~CalendarRemoveCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Calendar *m_parent;
+    Calendar *m_cal;
+    bool m_mine;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT CalendarModifyNameCmd : public NamedCommand
+{
+public:
+    CalendarModifyNameCmd( Calendar *cal, const QString& newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+
+class KPLATO_EXPORT CalendarModifyParentCmd : public NamedCommand
+{
+public:
+    CalendarModifyParentCmd( Project *project, Calendar *cal, Calendar *newvalue, const QString& name = QString() );
+    ~CalendarModifyParentCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Calendar *m_cal;
+    Calendar *m_newvalue;
+    Calendar *m_oldvalue;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT CalendarModifyTimeZoneCmd : public NamedCommand
+{
+public:
+    CalendarModifyTimeZoneCmd( Calendar *cal, const KTimeZone &value, const QString& name = QString() );
+    ~CalendarModifyTimeZoneCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    KTimeZone m_newvalue;
+    KTimeZone m_oldvalue;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT CalendarAddDayCmd : public NamedCommand
+{
+public:
+    CalendarAddDayCmd( Calendar *cal, CalendarDay *newvalue, const QString& name = QString() );
+    ~CalendarAddDayCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    Calendar *m_cal;
+    CalendarDay *m_newvalue;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT CalendarRemoveDayCmd : public NamedCommand
+{
+public:
+    CalendarRemoveDayCmd( Calendar *cal, CalendarDay *day, const QString& name = QString() );
+    CalendarRemoveDayCmd( Calendar *cal, const QDate &day, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+protected:
+    Calendar *m_cal;
+    CalendarDay *m_value;
+    bool m_mine;
+
+private:
+    void init();
+};
+
+class KPLATO_EXPORT CalendarModifyDayCmd : public NamedCommand
+{
+public:
+    CalendarModifyDayCmd( Calendar *cal, CalendarDay *value, const QString& name = QString() );
+    ~CalendarModifyDayCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    CalendarDay *m_newvalue;
+    CalendarDay *m_oldvalue;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT CalendarModifyStateCmd : public NamedCommand
+{
+public:
+    CalendarModifyStateCmd( Calendar *calendar, CalendarDay *day, CalendarDay::State value, const QString& name = QString() );
+    ~CalendarModifyStateCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_calendar;
+    CalendarDay *m_day;
+    CalendarDay::State m_newvalue;
+    CalendarDay::State m_oldvalue;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT CalendarModifyTimeIntervalCmd : public NamedCommand
+{
+public:
+    CalendarModifyTimeIntervalCmd( Calendar *calendar, TimeInterval &newvalue, TimeInterval *value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_calendar;
+    TimeInterval *m_value;
+    TimeInterval m_newvalue;
+    TimeInterval m_oldvalue;
+};
+
+class KPLATO_EXPORT CalendarAddTimeIntervalCmd : public NamedCommand
+{
+public:
+    CalendarAddTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
+    ~CalendarAddTimeIntervalCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    Calendar *m_calendar;
+    CalendarDay *m_day;
+    TimeInterval *m_value;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT CalendarRemoveTimeIntervalCmd : public CalendarAddTimeIntervalCmd
+{
+public:
+    CalendarRemoveTimeIntervalCmd( Calendar *calendar, CalendarDay *day, TimeInterval *value, const QString& name = QString() );
+    
+    void execute();
+    void unexecute();
+};
+
+class KPLATO_EXPORT CalendarModifyWeekdayCmd : public NamedCommand
+{
+public:
+    CalendarModifyWeekdayCmd( Calendar *cal, int weekday, CalendarDay *value, const QString& name = QString() );
+    ~CalendarModifyWeekdayCmd();
+    void execute();
+    void unexecute();
+
+private:
+    int m_weekday;
+    Calendar *m_cal;
+    CalendarDay *m_value;
+    CalendarDay m_orig;
+};
+
+class KPLATO_EXPORT CalendarModifyDateCmd : public NamedCommand
+{
+public:
+    CalendarModifyDateCmd( Calendar *cal, CalendarDay *day, QDate &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    CalendarDay *m_day;
+    QDate m_newvalue, m_oldvalue;
+};
+
+class KPLATO_EXPORT ProjectModifyDefaultCalendarCmd : public NamedCommand
+{
+public:
+    ProjectModifyDefaultCalendarCmd( Project *project, Calendar *cal, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Calendar *m_newvalue, *m_oldvalue;
+};
+
+
+class KPLATO_EXPORT NodeDeleteCmd : public NamedCommand
+{
+public:
+    NodeDeleteCmd( Node *node, const QString& name = QString() );
+    ~NodeDeleteCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Node *m_node;
+    Node *m_parent;
+    Project *m_project;
+    int m_index;
+    bool m_mine;
+    QList<Appointment*> m_appointments;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT TaskAddCmd : public NamedCommand
+{
+public:
+    TaskAddCmd( Project *project, Node *node, Node *after, const QString& name = QString() );
+    ~TaskAddCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Node *m_node;
+    Node *m_after;
+    bool m_added;
+};
+
+class KPLATO_EXPORT SubtaskAddCmd : public NamedCommand
+{
+public:
+    SubtaskAddCmd( Project *project, Node *node, Node *parent, const QString& name = QString() );
+    ~SubtaskAddCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Node *m_node;
+    Node *m_parent;
+    bool m_added;
+    MacroCommand *m_cmd;
+};
+
+
+class KPLATO_EXPORT NodeModifyNameCmd : public NamedCommand
+{
+public:
+    NodeModifyNameCmd( Node &node, const QString& nodename, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QString newName;
+    QString oldName;
+};
+
+class KPLATO_EXPORT NodeModifyLeaderCmd : public NamedCommand
+{
+public:
+    NodeModifyLeaderCmd( Node &node, const QString& leader, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QString newLeader;
+    QString oldLeader;
+};
+
+class KPLATO_EXPORT NodeModifyDescriptionCmd : public NamedCommand
+{
+public:
+    NodeModifyDescriptionCmd( Node &node, const QString& description, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QString newDescription;
+    QString oldDescription;
+};
+
+class KPLATO_EXPORT NodeModifyConstraintCmd : public NamedCommand
+{
+public:
+    NodeModifyConstraintCmd( Node &node, Node::ConstraintType c, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Node::ConstraintType newConstraint;
+    Node::ConstraintType oldConstraint;
+
+};
+
+class KPLATO_EXPORT NodeModifyConstraintStartTimeCmd : public NamedCommand
+{
+public:
+    NodeModifyConstraintStartTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QDateTime newTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
+};
+class KPLATO_EXPORT NodeModifyConstraintEndTimeCmd : public NamedCommand
+{
+public:
+    NodeModifyConstraintEndTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QDateTime newTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
+};
+class KPLATO_EXPORT NodeModifyStartTimeCmd : public NamedCommand
+{
+public:
+    NodeModifyStartTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QDateTime newTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
+};
+class KPLATO_EXPORT NodeModifyEndTimeCmd : public NamedCommand
+{
+public:
+    NodeModifyEndTimeCmd( Node &node, const QDateTime& dt, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QDateTime newTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
+};
+class KPLATO_EXPORT NodeModifyIdCmd : public NamedCommand
+{
+public:
+    NodeModifyIdCmd( Node &node, const QString& id, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    QString newId;
+    QString oldId;
+};
+
+class KPLATO_EXPORT NodeIndentCmd : public NamedCommand
+{
+public:
+    NodeIndentCmd( Node &node, const QString& name = QString() );
+    ~NodeIndentCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Node *m_oldparent, *m_newparent;
+    int m_oldindex, m_newindex;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT NodeUnindentCmd : public NamedCommand
+{
+public:
+    NodeUnindentCmd( Node &node, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Node *m_oldparent, *m_newparent;
+    int m_oldindex, m_newindex;
+};
+
+class KPLATO_EXPORT NodeMoveUpCmd : public NamedCommand
+{
+public:
+    NodeMoveUpCmd( Node &node, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Project *m_project;
+    bool m_moved;
+};
+
+class KPLATO_EXPORT NodeMoveDownCmd : public NamedCommand
+{
+public:
+    NodeMoveDownCmd( Node &node, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Project *m_project;
+    bool m_moved;
+};
+
+class KPLATO_EXPORT NodeMoveCmd : public NamedCommand
+{
+public:
+    NodeMoveCmd( Project *project, Node *node, Node *newParent, int newPos, const QString& name = QString() );
+    ~NodeMoveCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Node *m_node;
+    Node *m_newparent;
+    Node *m_oldparent;
+    int m_newpos;
+    int m_oldpos;
+    bool m_moved;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT AddRelationCmd : public NamedCommand
+{
+public:
+    AddRelationCmd( Project &project, Relation *rel, const QString& name = QString() );
+    ~AddRelationCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Relation *m_rel;
+    Project &m_project;
+    bool m_taken;
+
+};
+
+class KPLATO_EXPORT DeleteRelationCmd : public NamedCommand
+{
+public:
+    DeleteRelationCmd( Project &project, Relation *rel, const QString& name = QString() );
+    ~DeleteRelationCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Relation *m_rel;
+    Project &m_project;
+    bool m_taken;
+
+};
+
+class KPLATO_EXPORT ModifyRelationTypeCmd : public NamedCommand
+{
+public:
+    ModifyRelationTypeCmd( Relation *rel, Relation::Type type, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Relation *m_rel;
+    Relation::Type m_newtype;
+    Relation::Type m_oldtype;
+
+};
+
+class KPLATO_EXPORT ModifyRelationLagCmd : public NamedCommand
+{
+public:
+    ModifyRelationLagCmd( Relation *rel, Duration lag, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project *m_project;
+    Relation *m_rel;
+    Duration m_newlag;
+    Duration m_oldlag;
+
+};
+
+class KPLATO_EXPORT AddResourceRequestCmd : public NamedCommand
+{
+public:
+    AddResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const QString& name = QString() );
+    ~AddResourceRequestCmd();
+    void execute();
+    void unexecute();
+
+private:
+    ResourceGroupRequest *m_group;
+    ResourceRequest *m_request;
+    bool m_mine;
+
+};
+
+class KPLATO_EXPORT RemoveResourceRequestCmd : public NamedCommand
+{
+public:
+    RemoveResourceRequestCmd( ResourceGroupRequest *group, ResourceRequest *request, const QString& name = QString() );
+    ~RemoveResourceRequestCmd();
+    void execute();
+    void unexecute();
+
+private:
+    ResourceGroupRequest *m_group;
+    ResourceRequest *m_request;
+    bool m_mine;
+
+};
+
+class KPLATO_EXPORT ModifyEstimateCmd : public NamedCommand
+{
+public:
+    ModifyEstimateCmd( Node &node, Duration oldvalue, Duration newvalue, const QString& name = QString() );
+    ~ModifyEstimateCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Estimate *m_estimate;
+    Duration m_oldvalue, m_newvalue;
+    MacroCommand *m_cmd;
+
+};
+
+class KPLATO_EXPORT EstimateModifyOptimisticRatioCmd : public NamedCommand
+{
+public:
+    EstimateModifyOptimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Estimate *m_estimate;
+    int m_oldvalue, m_newvalue;
+
+};
+
+class KPLATO_EXPORT EstimateModifyPessimisticRatioCmd : public NamedCommand
+{
+public:
+    EstimateModifyPessimisticRatioCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Estimate *m_estimate;
+    int m_oldvalue, m_newvalue;
+
+};
+
+class KPLATO_EXPORT ModifyEstimateTypeCmd : public NamedCommand
+{
+public:
+    ModifyEstimateTypeCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Estimate *m_estimate;
+    int m_oldvalue, m_newvalue;
+
+};
+
+class KPLATO_EXPORT ModifyEstimateUnitCmd : public NamedCommand
+{
+public:
+    ModifyEstimateUnitCmd( Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Estimate *m_estimate;
+    Duration::Unit m_oldvalue, m_newvalue;
+};
+
+class KPLATO_EXPORT EstimateModifyRiskCmd : public NamedCommand
+{
+public:
+    EstimateModifyRiskCmd( Node &node, int oldvalue, int newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Estimate *m_estimate;
+    int m_oldvalue, m_newvalue;
+
+};
+
+class KPLATO_EXPORT AddResourceGroupRequestCmd : public NamedCommand
+{
+public:
+    AddResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Task &m_task;
+    ResourceGroupRequest *m_request;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT RemoveResourceGroupRequestCmd : public NamedCommand
+{
+public:
+    RemoveResourceGroupRequestCmd( ResourceGroupRequest *request, const QString& name = QString() );
+    RemoveResourceGroupRequestCmd( Task &task, ResourceGroupRequest *request, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Task &m_task;
+    ResourceGroupRequest *m_request;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT AddResourceCmd : public NamedCommand
+{
+public:
+    AddResourceCmd( ResourceGroup *group, Resource *resource, const QString& name = QString() );
+    ~AddResourceCmd();
+    void execute();
+    void unexecute();
+
+protected:
+
+    ResourceGroup *m_group;
+    Resource *m_resource;
+    int m_index;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT RemoveResourceCmd : public AddResourceCmd
+{
+public:
+    RemoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name = QString() );
+    ~RemoveResourceCmd();
+    void execute();
+    void unexecute();
+
+private:
+    QList<ResourceRequest*> m_requests;
+    QList<Appointment*> m_appointments;
+};
+
+class KPLATO_EXPORT ModifyResourceNameCmd : public NamedCommand
+{
+public:
+    ModifyResourceNameCmd( Resource *resource, const QString& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+
+    Resource *m_resource;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+class KPLATO_EXPORT ModifyResourceInitialsCmd : public NamedCommand
+{
+public:
+    ModifyResourceInitialsCmd( Resource *resource, const QString& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+class KPLATO_EXPORT ModifyResourceEmailCmd : public NamedCommand
+{
+public:
+    ModifyResourceEmailCmd( Resource *resource, const QString& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+class KPLATO_EXPORT ModifyResourceTypeCmd : public NamedCommand
+{
+public:
+    ModifyResourceTypeCmd( Resource *resource, int value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    int m_newvalue;
+    int m_oldvalue;
+};
+
+class KPLATO_EXPORT ModifyResourceUnitsCmd : public NamedCommand
+{
+public:
+    ModifyResourceUnitsCmd( Resource *resource, int value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    int m_newvalue;
+    int m_oldvalue;
+};
+
+class KPLATO_EXPORT ModifyResourceAvailableFromCmd : public NamedCommand
+{
+public:
+    ModifyResourceAvailableFromCmd( Resource *resource, const QDateTime& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    QDateTime m_newvalue;
+    DateTime m_oldvalue;
+    KDateTime::Spec m_spec;
+};
+class KPLATO_EXPORT ModifyResourceAvailableUntilCmd : public NamedCommand
+{
+public:
+    ModifyResourceAvailableUntilCmd( Resource *resource, const QDateTime& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    QDateTime m_newvalue;
+    DateTime m_oldvalue;
+    KDateTime::Spec m_spec;
+};
+
+class KPLATO_EXPORT ModifyResourceNormalRateCmd : public NamedCommand
+{
+public:
+    ModifyResourceNormalRateCmd( Resource *resource, double value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    double m_newvalue;
+    double m_oldvalue;
+};
+class KPLATO_EXPORT ModifyResourceOvertimeRateCmd : public NamedCommand
+{
+public:
+    ModifyResourceOvertimeRateCmd( Resource *resource, double value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    double m_newvalue;
+    double m_oldvalue;
+};
+class KPLATO_EXPORT ModifyResourceCalendarCmd : public NamedCommand
+{
+public:
+    ModifyResourceCalendarCmd( Resource *resource, Calendar *value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    Calendar *m_newvalue;
+    Calendar *m_oldvalue;
+};
+
+class KPLATO_EXPORT RemoveResourceGroupCmd : public NamedCommand
+{
+public:
+    RemoveResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name = QString() );
+    ~RemoveResourceGroupCmd();
+    void execute();
+    void unexecute();
+
+protected:
+
+    ResourceGroup *m_group;
+    Project *m_project;
+    int m_index;
+    bool m_mine;
+    MacroCommand *m_cmd;
+};
+
+class KPLATO_EXPORT AddResourceGroupCmd : public RemoveResourceGroupCmd
+{
+public:
+    AddResourceGroupCmd( Project *project, ResourceGroup *group, const QString& name = QString() );
+    void execute();
+    void unexecute();
+};
+
+class KPLATO_EXPORT ModifyResourceGroupNameCmd : public NamedCommand
+{
+public:
+    ModifyResourceGroupNameCmd( ResourceGroup *group, const QString& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    ResourceGroup *m_group;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+
+class KPLATO_EXPORT ModifyResourceGroupTypeCmd : public NamedCommand
+{
+    public:
+        ModifyResourceGroupTypeCmd( ResourceGroup *group, int value, const QString& name = QString() );
+        void execute();
+        void unexecute();
+
+    private:
+        ResourceGroup *m_group;
+        int m_newvalue;
+        int m_oldvalue;
+};
+
+class KPLATO_EXPORT ModifyCompletionEntrymodeCmd : public NamedCommand
+{
+public:
+    ModifyCompletionEntrymodeCmd( Completion &completion, Completion::Entrymode value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    Completion::Entrymode oldvalue;
+    Completion::Entrymode newvalue;
+};
+
+class KPLATO_EXPORT ModifyCompletionStartedCmd : public NamedCommand
+{
+public:
+    ModifyCompletionStartedCmd( Completion &completion, bool value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    bool oldvalue;
+    bool newvalue;
+};
+
+class KPLATO_EXPORT ModifyCompletionFinishedCmd : public NamedCommand
+{
+public:
+    ModifyCompletionFinishedCmd( Completion &completion, bool value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    bool oldvalue;
+    bool newvalue;
+};
+
+class KPLATO_EXPORT ModifyCompletionStartTimeCmd : public NamedCommand
+{
+public:
+    ModifyCompletionStartTimeCmd( Completion &completion, const QDateTime &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    DateTime oldvalue;
+    QDateTime newvalue;
+    KDateTime::Spec m_spec;
+};
+
+class KPLATO_EXPORT ModifyCompletionFinishTimeCmd : public NamedCommand
+{
+public:
+    ModifyCompletionFinishTimeCmd( Completion &completion, const QDateTime &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    DateTime oldvalue;
+    QDateTime newvalue;
+    KDateTime::Spec m_spec;
+};
+
+class KPLATO_EXPORT AddCompletionEntryCmd : public NamedCommand
+{
+public:
+    AddCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
+    ~AddCompletionEntryCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDate m_date;
+    Completion::Entry *newvalue;
+    bool m_newmine;
+};
+
+class KPLATO_EXPORT RemoveCompletionEntryCmd : public NamedCommand
+{
+public:
+    RemoveCompletionEntryCmd( Completion &completion, const QDate& date, const QString& name = QString() );
+    ~RemoveCompletionEntryCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDate m_date;
+    Completion::Entry *value;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT ModifyCompletionEntryCmd : public NamedCommand
+{
+public:
+    ModifyCompletionEntryCmd( Completion &completion, const QDate &date, Completion::Entry *value, const QString& name = QString() );
+    ~ModifyCompletionEntryCmd();
+    void execute();
+    void unexecute();
+
+private:
+    MacroCommand *cmd;
+};
+
+class KPLATO_EXPORT AddCompletionUsedEffortCmd : public NamedCommand
+{
+public:
+    AddCompletionUsedEffortCmd( Completion &completion, const Resource *resource, Completion::UsedEffort *value, const QString& name = QString() );
+    ~AddCompletionUsedEffortCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    const Resource *m_resource;
+    Completion::UsedEffort *oldvalue;
+    Completion::UsedEffort *newvalue;
+    bool m_newmine, m_oldmine;
+};
+
+class KPLATO_EXPORT AddCompletionActualEffortCmd : public NamedCommand
+{
+public:
+    AddCompletionActualEffortCmd( Completion::UsedEffort &ue, const QDate &date, Completion::UsedEffort::ActualEffort *value, const QString& name = QString() );
+    ~AddCompletionActualEffortCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Completion::UsedEffort &m_usedEffort;
+    QDate m_date;
+    Completion::UsedEffort::ActualEffort *oldvalue;
+    Completion::UsedEffort::ActualEffort *newvalue;
+    bool m_newmine, m_oldmine;
+};
+
+
+class KPLATO_EXPORT AddAccountCmd : public NamedCommand
+{
+public:
+    AddAccountCmd( Project &project, Account *account, Account *parent = 0, const QString& name = QString() );
+    AddAccountCmd( Project &project, Account *account, const QString& parent, const QString& name = QString() );
+    ~AddAccountCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    bool m_mine;
+
+private:
+    Project &m_project;
+    Account *m_account;
+    Account *m_parent;
+    QString m_parentName;
+};
+
+class KPLATO_EXPORT RemoveAccountCmd : public NamedCommand
+{
+public:
+    RemoveAccountCmd( Project &project, Account *account, const QString& name = QString() );
+    ~RemoveAccountCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_project;
+    Account *m_account;
+    Account *m_parent;
+    int m_index;
+    bool m_isDefault;
+    bool m_mine;
+
+};
+
+class KPLATO_EXPORT RenameAccountCmd : public NamedCommand
+{
+public:
+    RenameAccountCmd( Account *account, const QString& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Account *m_account;
+    QString m_oldvalue;
+    QString m_newvalue;
+};
+
+class KPLATO_EXPORT ModifyAccountDescriptionCmd : public NamedCommand
+{
+public:
+    ModifyAccountDescriptionCmd( Account *account, const QString& value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Account *m_account;
+    QString m_oldvalue;
+    QString m_newvalue;
+};
+
+class KPLATO_EXPORT NodeModifyStartupCostCmd : public NamedCommand
+{
+public:
+    NodeModifyStartupCostCmd( Node &node, double value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class KPLATO_EXPORT NodeModifyShutdownCostCmd : public NamedCommand
+{
+public:
+    NodeModifyShutdownCostCmd( Node &node, double value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class KPLATO_EXPORT NodeModifyRunningAccountCmd : public NamedCommand
+{
+public:
+    NodeModifyRunningAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Account *m_oldvalue;
+    Account *m_newvalue;
+};
+
+class KPLATO_EXPORT NodeModifyStartupAccountCmd : public NamedCommand
+{
+public:
+    NodeModifyStartupAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Account *m_oldvalue;
+    Account *m_newvalue;
+};
+
+class KPLATO_EXPORT NodeModifyShutdownAccountCmd : public NamedCommand
+{
+public:
+    NodeModifyShutdownAccountCmd( Node &node, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Node &m_node;
+    Account *m_oldvalue;
+    Account *m_newvalue;
+};
+
+class KPLATO_EXPORT ModifyDefaultAccountCmd : public NamedCommand
+{
+public:
+    ModifyDefaultAccountCmd( Accounts &acc, Account *oldvalue, Account *newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Accounts &m_accounts;
+    Account *m_oldvalue;
+    Account *m_newvalue;
+};
+
+class KPLATO_EXPORT ProjectModifyConstraintCmd : public NamedCommand
+{
+public:
+    ProjectModifyConstraintCmd( Project &node, Node::ConstraintType c, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    Node::ConstraintType newConstraint;
+    Node::ConstraintType oldConstraint;
+
+};
+
+class KPLATO_EXPORT ProjectModifyStartTimeCmd : public NamedCommand
+{
+public:
+    ProjectModifyStartTimeCmd( Project &node, const QDateTime& dt, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    QDateTime newTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
+};
+
+class KPLATO_EXPORT ProjectModifyEndTimeCmd : public NamedCommand
+{
+public:
+    ProjectModifyEndTimeCmd( Project &project, const QDateTime& dt, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    QDateTime newTime;
+    DateTime oldTime;
+    KDateTime::Spec m_spec;
+};
+
+
+class KPLATO_EXPORT AddScheduleManagerCmd : public NamedCommand
+{
+public:
+    AddScheduleManagerCmd( Project &project, ScheduleManager *sm, const QString& name = 0 );
+    AddScheduleManagerCmd( ScheduleManager *parent, ScheduleManager *sm, const QString& name = 0 );
+    ~AddScheduleManagerCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    Project &m_node;
+    ScheduleManager *m_parent;
+    ScheduleManager *m_sm;
+    int m_index;
+    MainSchedule *m_exp, *m_opt, *m_pess;
+    bool m_mine;
+};
+
+class KPLATO_EXPORT DeleteScheduleManagerCmd : public AddScheduleManagerCmd
+{
+public:
+    DeleteScheduleManagerCmd( Project &project, ScheduleManager *sm, const QString& name = 0 );
+    void execute();
+    void unexecute();
+};
+
+class KPLATO_EXPORT ModifyScheduleManagerNameCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    QString oldvalue, newvalue;
+};
+
+class KPLATO_EXPORT ModifyScheduleManagerAllowOverbookingCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerAllowOverbookingCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    bool oldvalue, newvalue;
+};
+
+class KPLATO_EXPORT ModifyScheduleManagerDistributionCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerDistributionCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    bool oldvalue, newvalue;
+};
+
+class KPLATO_EXPORT ModifyScheduleManagerCalculateAllCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerCalculateAllCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    bool oldvalue, newvalue;
+};
+
+class KPLATO_EXPORT CalculateScheduleCmd : public NamedCommand
+{
+public:
+    CalculateScheduleCmd( Project &project, ScheduleManager &sm, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    Project &m_node;
+    ScheduleManager &m_sm;
+    bool m_first;
+    MainSchedule *m_oldexpected;
+    MainSchedule *m_oldoptimistic;
+    MainSchedule *m_oldpessimistic;
+    MainSchedule *m_newexpected;
+    MainSchedule *m_newoptimistic;
+    MainSchedule *m_newpessimistic;
+};
+
+class KPLATO_EXPORT ModifyStandardWorktimeYearCmd : public NamedCommand
+{
+public:
+    ModifyStandardWorktimeYearCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class KPLATO_EXPORT ModifyStandardWorktimeMonthCmd : public NamedCommand
+{
+public:
+    ModifyStandardWorktimeMonthCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class KPLATO_EXPORT ModifyStandardWorktimeWeekCmd : public NamedCommand
+{
+public:
+    ModifyStandardWorktimeWeekCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
+};
+
+class KPLATO_EXPORT ModifyStandardWorktimeDayCmd : public NamedCommand
+{
+    public:
+        ModifyStandardWorktimeDayCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+        void execute();
+        void unexecute();
+    private:
+        StandardWorktime *swt;
+        double m_oldvalue;
+        double m_newvalue;
+};
+
+}  //KPlato namespace
+
+#endif //COMMAND_H

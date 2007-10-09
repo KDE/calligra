@@ -38,7 +38,7 @@ namespace KPlato
  *
  * The scales to use for conversion between the different units can be set with setScales().
  */
-class DurationSpinBox : public QDoubleSpinBox
+class KPLATO_EXPORT DurationSpinBox : public QDoubleSpinBox
 {
     Q_OBJECT
 public:

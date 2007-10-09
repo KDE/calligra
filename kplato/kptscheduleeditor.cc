@@ -24,7 +24,7 @@
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptfactory.h"
-//#include "kptresourceappointmentsview.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
@@ -46,6 +46,7 @@
 #include <QVBoxLayout>
 
 
+#include <kaction.h>
 #include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -290,7 +291,7 @@ bool ScheduleItemModel::setName( const QModelIndex &index, const QVariant &value
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerNameCmd( m_part, *sm, value.toString(), "Modify Schedule Name" ) );
+            m_part->addCommand(new ModifyScheduleManagerNameCmd( *sm, value.toString(), "Modify Schedule Name" ) );
             return true;
     }
     return false;
@@ -365,7 +366,7 @@ bool ScheduleItemModel::setAllowOverbooking( const QModelIndex &index, const QVa
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerAllowOverbookingCmd( m_part, *sm, value.toBool(), "Modify Schedule Allow Overbooking" ) );
+            m_part->addCommand(new ModifyScheduleManagerAllowOverbookingCmd( *sm, value.toBool(), "Modify Schedule Allow Overbooking" ) );
             return true;
     }
     return false;
@@ -405,7 +406,7 @@ bool ScheduleItemModel::setUsePert( const QModelIndex &index, const QVariant &va
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerDistributionCmd( m_part, *sm, value.toBool(), "Modify Schedule Distribution" ) );
+            m_part->addCommand(new ModifyScheduleManagerDistributionCmd( *sm, value.toBool(), "Modify Schedule Distribution" ) );
             emit slotManagerChanged( static_cast<ScheduleManager*>( sm ) );
             return true;
     }
@@ -445,7 +446,7 @@ bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVarian
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerCalculateAllCmd( m_part, *sm, value.toBool(), "Modify Schedule Calculate" ) );
+            m_part->addCommand(new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify Schedule Calculate" ) );
             return true;
     }
     return false;
@@ -817,7 +818,7 @@ void ScheduleEditor::slotAddSchedule()
     if ( sm && sm->parentManager() ) {
         sm = sm->parentManager();
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        m_view->part()->addCommand( new AddScheduleManagerCmd( m_view->part(), sm, m, i18n( "Create sub-schedule" ) ) );
+        m_view->part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
         emit addScheduleManager( m_view->project() );
     }
@@ -830,7 +831,7 @@ void ScheduleEditor::slotAddSubSchedule()
     if ( sm ) {
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
         
-        m_view->part()->addCommand( new AddScheduleManagerCmd( m_view->part(), sm, m, i18n( "Create sub-schedule" ) ) );
+        m_view->part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
         emit addScheduleManager( m_view->project() );
     }

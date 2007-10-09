@@ -24,7 +24,7 @@
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptfactory.h"
-//#include "kptresourceappointmentsview.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
@@ -49,6 +49,7 @@
 #include <QVBoxLayout>
 
 
+#include <kaction.h>
 #include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -362,7 +363,7 @@ bool ResourceItemModel::setName( Resource *res, const QVariant &value, int role 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceNameCmd( m_part, res, value.toString(), "Modify resource name" ) );
+            m_part->addCommand( new ModifyResourceNameCmd( res, value.toString(), "Modify resource name" ) );
             return true;
     }
     return false;
@@ -375,7 +376,7 @@ bool ResourceItemModel::setName( ResourceGroup *res, const QVariant &value, int 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceGroupNameCmd( m_part, res, value.toString(), "Modify resourcegroup name" ) );
+            m_part->addCommand( new ModifyResourceGroupNameCmd( res, value.toString(), "Modify resourcegroup name" ) );
             return true;
     }
     return false;
@@ -429,7 +430,7 @@ bool ResourceItemModel::setType( Resource *res, const QVariant &value, int role 
             if ( v == res->type() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceTypeCmd( m_part, res, v, "Modify resource type" ) );
+            m_part->addCommand( new ModifyResourceTypeCmd( res, v, "Modify resource type" ) );
             return true;
     }
     return false;
@@ -443,7 +444,7 @@ bool ResourceItemModel::setType( ResourceGroup *res, const QVariant &value, int 
             if ( v == res->type() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceGroupTypeCmd( m_part, res, v, "Modify resourcegroup type" ) );
+            m_part->addCommand( new ModifyResourceGroupTypeCmd( res, v, "Modify resourcegroup type" ) );
             return true;
     }
     return false;
@@ -472,7 +473,7 @@ bool ResourceItemModel::setInitials( Resource *res, const QVariant &value, int r
             if ( value.toString() == res->initials() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceInitialsCmd( m_part, res, value.toString(), "Modify resource initials" ) );
+            m_part->addCommand( new ModifyResourceInitialsCmd( res, value.toString(), "Modify resource initials" ) );
             return true;
     }
     return false;
@@ -501,7 +502,7 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
             if ( value.toString() == res->email() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceEmailCmd( m_part, res, value.toString(), "Modify resource email" ) );
+            m_part->addCommand( new ModifyResourceEmailCmd( res, value.toString(), "Modify resource email" ) );
             return true;
     }
     return false;
@@ -562,7 +563,7 @@ bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int r
             if ( c == res->calendar( true ) ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceCalendarCmd( m_part, res, c, "Modify resource calendar" ) );
+            m_part->addCommand( new ModifyResourceCalendarCmd( res, c, "Modify resource calendar" ) );
             return true;
         }
     }
@@ -593,7 +594,7 @@ bool ResourceItemModel::setUnits( Resource *res, const QVariant &value, int role
             if ( value.toInt() == res->units() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceUnitsCmd( m_part, res, value.toInt(), "Modify resource available units" ) );
+            m_part->addCommand( new ModifyResourceUnitsCmd( res, value.toInt(), "Modify resource available units" ) );
             return true;
     }
     return false;
@@ -624,7 +625,7 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
             if ( value.toDateTime() == res->availableFrom().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceAvailableFromCmd( m_part, res, value.toDateTime(), "Modify resource available from" ) );
+            m_part->addCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), "Modify resource available from" ) );
             return true;
     }
     return false;
@@ -655,7 +656,7 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
             if ( value.toDateTime() == res->availableUntil().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceAvailableUntilCmd( m_part, res, value.toDateTime(), "Modify resource available until" ) );
+            m_part->addCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), "Modify resource available until" ) );
             return true;
     }
     return false;
@@ -685,7 +686,7 @@ bool ResourceItemModel::setNormalRate( Resource *res, const QVariant &value, int
             if ( value.toDouble() == res->normalRate() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceNormalRateCmd( m_part, res, value.toDouble(), "Modify resource normal rate" ) );
+            m_part->addCommand( new ModifyResourceNormalRateCmd( res, value.toDouble(), "Modify resource normal rate" ) );
             return true;
     }
     return false;
@@ -716,7 +717,7 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
             if ( value.toDouble() == res->overtimeRate() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceOvertimeRateCmd( m_part, res, value.toDouble(), "Modify resource overtime rate" ) );
+            m_part->addCommand( new ModifyResourceOvertimeRateCmd( res, value.toDouble(), "Modify resource overtime rate" ) );
             return true;
     }
     return false;
@@ -955,17 +956,17 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return false;
     }
     //kDebug()<<data->formats();
-    K3MacroCommand *m = 0;
+    MacroCommand *m = 0;
     if ( data->hasFormat( "text/x-vcard" ) ) {
         QByteArray vcard = data->data( "text/x-vcard" );
         KABC::VCardConverter vc;
         KABC::Addressee::List lst = vc.parseVCards( vcard );
         foreach( KABC::Addressee a, lst ) {
-            if ( m == 0 ) m = new K3MacroCommand( i18np( "Add resource from addressbook", "Add %n resources from addressbook", lst.count() ) );
+            if ( m == 0 ) m = new MacroCommand( i18np( "Add resource from addressbook", "Add %n resources from addressbook", lst.count() ) );
             Resource *r = new Resource();
             r->setName( a.formattedName() );
             r->setEmail( a.preferredEmail() );
-            m->addCommand( new AddResourceCmd( m_part, g, r ) );
+            m->addCommand( new AddResourceCmd( g, r ) );
         }
     }
     if ( m ) {
@@ -977,7 +978,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
     //kDebug();
-    m_part->addCommand( new AddResourceGroupCmd( m_part, m_project, g, i18n( "Add resource group" ) ) );
+    m_part->addCommand( new AddResourceGroupCmd( m_project, g, i18n( "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
         return createIndex( row, 0, g );
@@ -988,7 +989,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource */*after*/ )
 {
     //kDebug();
-    m_part->addCommand( new AddResourceCmd( m_part, g, r, i18n( "Add resource" ) ) );
+    m_part->addCommand( new AddResourceCmd( g, r, i18n( "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
         return createIndex( row, 0, r );

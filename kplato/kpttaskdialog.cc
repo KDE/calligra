@@ -22,9 +22,9 @@
 #include "kpttaskcostpanel.h"
 #include "kpttaskgeneralpanel.h"
 #include "kptrequestresourcespanel.h"
+#include "kptcommand.h"
 
 #include <klocale.h>
-#include <k3command.h>
 
 #include <kvbox.h>
 #include <kdebug.h>
@@ -65,10 +65,10 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTim
 }
 
 
-K3Command *TaskDialog::buildCommand(Part *part) {
-    K3MacroCommand *m = new K3MacroCommand(i18n("Modify Task"));
+MacroCommand *TaskDialog::buildCommand(Part *part) {
+    MacroCommand *m = new MacroCommand(i18n("Modify Task"));
     bool modified = false;
-    K3Command *cmd = m_generalTab->buildCommand(part);
+    MacroCommand *cmd = m_generalTab->buildCommand(part);
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

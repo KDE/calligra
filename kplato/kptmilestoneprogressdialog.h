@@ -22,7 +22,6 @@
 
 #include <kdialog.h>
 
-class K3Command;
 
 namespace KPlato
 {
@@ -30,13 +29,14 @@ namespace KPlato
 class MilestoneProgressPanel;
 class Task;
 class Part;
+class MacroCommand;
 
 class MilestoneProgressDialog : public KDialog {
     Q_OBJECT
 public:
     explicit MilestoneProgressDialog(Task &task, QWidget *parent=0);
 
-    K3Command *buildCommand(Part *part);
+    MacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotChanged();

@@ -103,69 +103,69 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     namefield->setFocus();
 }
 
-K3MacroCommand *TaskGeneralPanel::buildCommand(Part *part) {
-    K3MacroCommand *cmd = new K3MacroCommand(i18n("Modify Task"));
+MacroCommand *TaskGeneralPanel::buildCommand(Part *part) {
+    MacroCommand *cmd = new MacroCommand(i18n("Modify Task"));
     bool modified = false;
 
     Duration dt = Duration();
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {
-        cmd->addCommand(new NodeModifyNameCmd(part, m_task, namefield->text()));
+        cmd->addCommand(new NodeModifyNameCmd(m_task, namefield->text()));
         modified = true;
     }
     if (!leaderfield->isHidden() && m_task.leader() != leaderfield->text()) {
-        cmd->addCommand(new NodeModifyLeaderCmd(part, m_task, leaderfield->text()));
+        cmd->addCommand(new NodeModifyLeaderCmd(m_task, leaderfield->text()));
         modified = true;
     }
     if (!descriptionfield->isHidden() &&
         m_task.description() != descriptionfield->text()) {
-        cmd->addCommand(new NodeModifyDescriptionCmd(part, m_task, descriptionfield->text()));
+        cmd->addCommand(new NodeModifyDescriptionCmd(m_task, descriptionfield->text()));
         modified = true;
     }
     Node::ConstraintType c = (Node::ConstraintType)schedulingType();
     if (c != m_task.constraint()) {
-        cmd->addCommand(new NodeModifyConstraintCmd(part, m_task, c));
+        cmd->addCommand(new NodeModifyConstraintCmd(m_task, c));
         modified = true;
     }
     if (startDateTime() != m_task.constraintStartTime().dateTime() &&
         (c == Node::FixedInterval || c == Node::StartNotEarlier || c == Node::MustStartOn)) {
-        cmd->addCommand(new NodeModifyConstraintStartTimeCmd(part, m_task, startDateTime()));
+        cmd->addCommand(new NodeModifyConstraintStartTimeCmd(m_task, startDateTime()));
         modified = true;
     }
     if (endDateTime() != m_task.constraintEndTime().dateTime() &&
         (c == Node::FinishNotLater || c == Node::FixedInterval || c == Node::MustFinishOn)) {
-        cmd->addCommand(new NodeModifyConstraintEndTimeCmd(part, m_task, endDateTime()));
+        cmd->addCommand(new NodeModifyConstraintEndTimeCmd(m_task, endDateTime()));
         modified = true;
     }
     if (!idfield->isHidden() && idfield->text() != m_task.id()) {
 
-        cmd->addCommand(new NodeModifyIdCmd(part, m_task, idfield->text()));
+        cmd->addCommand(new NodeModifyIdCmd(m_task, idfield->text()));
         modified = true;
     }
     int et = estimationType();
     if (et != m_task.estimate()->type()) {
-        cmd->addCommand(new ModifyEstimateTypeCmd(part, m_task,  m_task.estimate()->type(), et));
+        cmd->addCommand(new ModifyEstimateTypeCmd(m_task,  m_task.estimate()->type(), et));
         modified = true;
     }
     dt = estimationValue();
     kDebug()<<"Estimate:"<<dt.toString();
     bool expchanged = dt != m_task.estimate()->expected();
     if ( expchanged ) {
-        cmd->addCommand(new ModifyEstimateCmd(part, m_task, m_task.estimate()->expected(), dt));
+        cmd->addCommand(new ModifyEstimateCmd(m_task, m_task.estimate()->expected(), dt));
         modified = true;
     }
     int x = optimistic();
     if ( x != m_task.estimate()->optimisticRatio() || expchanged) {
-        cmd->addCommand(new EstimateModifyOptimisticRatioCmd(part, m_task, m_task.estimate()->optimisticRatio(), x));
+        cmd->addCommand(new EstimateModifyOptimisticRatioCmd(m_task, m_task.estimate()->optimisticRatio(), x));
         modified = true;
     }
     x = pessimistic();
     if ( x != m_task.estimate()->pessimisticRatio() || expchanged) {
-        cmd->addCommand(new EstimateModifyPessimisticRatioCmd(part, m_task, m_task.estimate()->pessimisticRatio(), x));
+        cmd->addCommand(new EstimateModifyPessimisticRatioCmd(m_task, m_task.estimate()->pessimisticRatio(), x));
         modified = true;
     }
     if (m_task.estimate()->risktype() != risktype()) {
-        cmd->addCommand(new EstimateModifyRiskCmd(part, m_task, m_task.estimate()->risktype(), risktype()));
+        cmd->addCommand(new EstimateModifyRiskCmd(m_task, m_task.estimate()->risktype(), risktype()));
         modified = true;
     }
     if (!modified) {

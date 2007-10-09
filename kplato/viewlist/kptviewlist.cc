@@ -32,7 +32,7 @@
 
 #include "KoDocument.h"
 
-#include "kptcommand.h"
+#include "kptviewlistcommand.h"
 #include "kptviewbase.h"
 #include "kptpart.h"
 #include "kptviewlistdialog.h"
@@ -533,7 +533,7 @@ void ViewListWidget::slotRemoveDocument()
 {
     if ( m_contextitem ) {
         kDebug()<<m_contextitem<<":"<<m_contextitem->type();
-        m_part->addCommand( new DeleteEmbeddedDocumentCmd( m_part, this, m_contextitem, i18n( "Remove Document" ) ) );
+        m_part->addCommand( new DeleteEmbeddedDocumentCmd( this, m_contextitem, i18n( "Remove Document" ) ) );
     }
 }
 

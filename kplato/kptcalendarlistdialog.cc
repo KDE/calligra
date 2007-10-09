@@ -80,32 +80,32 @@ public:
         if (!base) return false;
         return base == item || base->hasBaseCalendar(item);
     }
-    K3MacroCommand *buildCommand(Part *part, Project &p) {
-        K3MacroCommand *macro=0;
+    MacroCommand *buildCommand(Part *part, Project &p) {
+        MacroCommand *macro=0;
         if (state & New) {
-            if (macro == 0) macro = new K3MacroCommand("");
+            if (macro == 0) macro = new MacroCommand("");
             //kDebug()<<"add:"<<calendar->name()<<" p="<<&p;
             Calendar *par = base ? base->baseCalendar() : 0;
-            macro->addCommand(new CalendarAddCmd(part, &p, calendar, par));
+            macro->addCommand(new CalendarAddCmd(&p, calendar, par));
             calendar = 0;
         } else if (state & Modified) {
             //kDebug()<<"modified:"<<calendar->name();
             if (original->name() != calendar->name()) {
-                if (macro == 0) macro = new K3MacroCommand("");
-                macro->addCommand(new CalendarModifyNameCmd(part, original, calendar->name()));
+                if (macro == 0) macro = new MacroCommand("");
+                macro->addCommand(new CalendarModifyNameCmd(original, calendar->name()));
             }
             Calendar *c = base ? base->baseCalendar() : 0;
             if (c != original->parentCal()) {
-                if (macro == 0) macro = new K3MacroCommand("");
-                macro->addCommand(new CalendarModifyParentCmd(part, original->project(), original, c));
+                if (macro == 0) macro = new MacroCommand("");
+                macro->addCommand(new CalendarModifyParentCmd(original->project(), original, c));
                 //kDebug()<<"Base modified:"<<c->name();
             }
 
             //kDebug()<<"Check for days deleted:"<<calendar->name();
             foreach (CalendarDay *day, original->days()) {
                 if (calendar->findDay(day->date()) == 0) {
-                    if (macro == 0) macro = new K3MacroCommand("");
-                    macro->addCommand(new CalendarRemoveDayCmd(part, original, day->date()));
+                    if (macro == 0) macro = new MacroCommand("");
+                    macro->addCommand(new CalendarRemoveDayCmd(original, day->date()));
                     //kDebug()<<"Removed day"<<day->date();
                 }
             }
@@ -113,15 +113,15 @@ public:
             foreach (CalendarDay *c, calendar->days()) {
                 CalendarDay *day = original->findDay(c->date());
                 if (day == 0) {
-                    if (macro == 0) macro = new K3MacroCommand("");
+                    if (macro == 0) macro = new MacroCommand("");
                     // added
                     //kDebug()<<"Added day"<<c->date();
-                    macro->addCommand(new CalendarAddDayCmd(part, original, new CalendarDay(c)));
+                    macro->addCommand(new CalendarAddDayCmd(original, new CalendarDay(c)));
                 } else if (*day != c) {
-                    if (macro == 0) macro = new K3MacroCommand("");
+                    if (macro == 0) macro = new MacroCommand("");
                     // modified
                     //kDebug()<<"Modified day"<<c->date();
-                    macro->addCommand(new CalendarModifyDayCmd(part, original, new CalendarDay(c)));
+                    macro->addCommand(new CalendarModifyDayCmd(original, new CalendarDay(c)));
                 }
             }
             //kDebug()<<"Check for weekdays modified:"<<calendar->name();
@@ -131,9 +131,9 @@ public:
                 org = original->weekdays()->weekday(i);
                 if (day && org) {
                     if (*org != *day) {
-                        if (macro == 0) macro = new K3MacroCommand("");
+                        if (macro == 0) macro = new MacroCommand("");
                         //kDebug()<<"Weekday["<<i<<"] modified";
-                        macro->addCommand(new CalendarModifyWeekdayCmd(part, original, i, new CalendarDay(day)));
+                        macro->addCommand(new CalendarModifyWeekdayCmd(original, i, new CalendarDay(day)));
                     }
                 } else if (day) {
                     // shouldn't happen: hmmm, add day to original??
@@ -144,8 +144,8 @@ public:
                 }
             }
             if ( original->timeZone() != calendar->timeZone() ) {
-                if (macro == 0) macro = new K3MacroCommand("");
-                macro->addCommand( new CalendarModifyTimeZoneCmd( part, original, calendar->timeZone() ) );
+                if (macro == 0) macro = new MacroCommand("");
+                macro->addCommand( new CalendarModifyTimeZoneCmd( original, calendar->timeZone() ) );
             }
         }
         return macro;
@@ -207,28 +207,28 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent)
     connect(dia->calendarList, SIGNAL(itemChanged(QTreeWidgetItem*, int)), dia, SLOT(slotItemChanged(QTreeWidgetItem*, int)));
 }
 
-K3Command *CalendarListDialog::buildCommand(Part *part) {
+MacroCommand *CalendarListDialog::buildCommand(Part *part) {
     //kDebug();
-    K3MacroCommand *cmd = 0;
+    MacroCommand *cmd = 0;
     int c = dia->calendarList->topLevelItemCount();
     for (int i=0; i < c; ++i) {
         CalendarListViewItem *item = static_cast<CalendarListViewItem *>(dia->calendarList->topLevelItem(i));
         //kDebug()<<item->text(0);
-        K3MacroCommand *c = item->buildCommand(part, project);
+        MacroCommand *c = item->buildCommand(part, project);
         if (c != 0) {
-            if (cmd == 0) cmd = new K3MacroCommand("");
+            if (cmd == 0) cmd = new MacroCommand("");
             cmd->addCommand(c);
         }
     }
     foreach (CalendarListViewItem *item, dia->deletedItems()) {
         //kDebug()<<"deleted:"<<item->calendar->name();
         if (item->original) {
-            if (cmd == 0) cmd = new K3MacroCommand("");
-            cmd->addCommand(new CalendarRemoveCmd(part, &(part->getProject()), item->original));
+            if (cmd == 0) cmd = new MacroCommand("");
+            cmd->addCommand(new CalendarRemoveCmd(&(part->getProject()), item->original));
         }
     }
     if (cmd) {
-        cmd->setName(i18n("Modify Calendars"));
+        cmd->setText(i18n("Modify Calendars"));
     }
     return cmd;
 }

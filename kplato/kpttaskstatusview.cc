@@ -26,6 +26,7 @@
 #include "kptfactory.h"
 #include "kptproject.h"
 #include "kptview.h"
+#include "kptpart.h"
 
 #include <QAbstractItemModel>
 #include <QApplication>

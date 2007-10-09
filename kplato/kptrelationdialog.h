@@ -26,7 +26,6 @@
 #include <kdialog.h>
 
 class Q3ButtonGroup;
-class K3Command;
 
 namespace KPlato
 {
@@ -36,6 +35,7 @@ class DurationWidget;
 
 class Relation;
 class Part;
+class MacroCommand;
 
 class RelationPanel : public QWidget, public Ui_RelationPanel
 {
@@ -52,7 +52,7 @@ class AddRelationDialog : public KDialog
 public:
     AddRelationDialog(Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel);
 
-    virtual K3Command *buildCommand(Part *part);
+    virtual MacroCommand *buildCommand(Part *part);
     int selectedRelationType() const;
     
 protected slots:
@@ -77,7 +77,7 @@ class ModifyRelationDialog : public AddRelationDialog
 public:
     explicit ModifyRelationDialog(Relation *rel, QWidget *p=0);
 
-    virtual K3Command *buildCommand(Part *part);
+    virtual MacroCommand *buildCommand(Part *part);
     bool relationIsDeleted() { return m_deleted; }
 
 protected slots:

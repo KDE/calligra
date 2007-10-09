@@ -37,7 +37,7 @@ class Duration;
  * Exception to this is the calendar related dates and times which has
  * their own time zone specification.
  */
-class KPLATO_TEST_EXPORT DateTime : public KDateTime {
+class KPLATO_EXPORT DateTime : public KDateTime {
 
 public:
     /// Create a DateTime.

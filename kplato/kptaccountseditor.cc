@@ -24,6 +24,7 @@
 #include "kptcalendar.h"
 #include "kptduration.h"
 #include "kptfactory.h"
+#include "kptpart.h"
 #include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
@@ -47,6 +48,7 @@
 #include <QVBoxLayout>
 
 
+#include <kaction.h>
 #include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -267,7 +269,7 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
-                m_part->addCommand( new RenameAccountCmd( m_part, a, value.toString(), "Modify account name" ) );
+                m_part->addCommand( new RenameAccountCmd( a, value.toString(), "Modify account name" ) );
             }
             return true;
     }
@@ -295,7 +297,7 @@ bool AccountItemModel::setDescription( Account *a, const QVariant &value, int ro
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->description() ) {
-                m_part->addCommand( new ModifyAccountDescriptionCmd( m_part, a, value.toString(), "Modify account description" ) );
+                m_part->addCommand( new ModifyAccountDescriptionCmd( a, value.toString(), "Modify account description" ) );
             }
             return true;
     }
@@ -395,7 +397,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
         account->setName( m_project->accounts().uniqueId( s ) );
         //m_project->accounts().insertId( account );
     }
-    m_part->addCommand( new AddAccountCmd( m_part, *m_project, account, parent, i18n( "Add account" ) ) );
+    m_part->addCommand( new AddAccountCmd( *m_project, account, parent, i18n( "Add account" ) ) );
     int row = -1;
     if ( parent ) {
         row = parent->accountList().indexOf( account );
@@ -412,7 +414,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
 
 void AccountItemModel::removeAccounts( QList<Account*> lst )
 {
-    K3MacroCommand *cmd = 0;
+    MacroCommand *cmd = 0;
     QString c = lst.count() > 1 ? i18n( "Delete Accounts" ) : i18n( "Delete Account" );
     while ( ! lst.isEmpty() ) {
         bool del = true;
@@ -424,8 +426,8 @@ void AccountItemModel::removeAccounts( QList<Account*> lst )
             }
         }
         if ( del ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-            cmd->addCommand( new RemoveAccountCmd( m_part, *m_project, acc ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( c );
+            cmd->addCommand( new RemoveAccountCmd( *m_project, acc ) );
         }
     }
     if ( cmd )

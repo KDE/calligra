@@ -21,9 +21,11 @@
 
 #include "kptglobal.h"
 #include "kptcommand.h"
-#include "kptfactory.h"
+#include "kptduration.h"
 #include "kptproject.h"
-#include "kptview.h"
+#include "kptnode.h"
+
+#include <KoDocument.h>
 
 #include <QAbstractItemModel>
 #include <QApplication>
@@ -1270,7 +1272,7 @@ QVariant NodeModel::headerData( int section, int role )
 }
 
 //----------------------------
-NodeItemModel::NodeItemModel( Part *part, QObject *parent )
+NodeItemModel::NodeItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_node( 0 )
 {
@@ -1504,7 +1506,7 @@ bool NodeItemModel::setName( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->name() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyNameCmd( m_part, *node, value.toString(), "Modify task name" ) );
+            m_part->addCommand( new NodeModifyNameCmd( *node, value.toString(), "Modify task name" ) );
             return true;
     }
     return false;
@@ -1517,7 +1519,7 @@ bool NodeItemModel::setLeader( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->leader() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyLeaderCmd( m_part, *node, value.toString(), "Modify task responsible" ) );
+            m_part->addCommand( new NodeModifyLeaderCmd( *node, value.toString(), "Modify task responsible" ) );
             return true;
     }
     return false;
@@ -1532,7 +1534,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
         {
-            K3MacroCommand *cmd = 0;
+            MacroCommand *cmd = 0;
             QStringList res = m_project->resourceNameList();
             QStringList req = node->requestNameList();
             QStringList alloc;
@@ -1546,16 +1548,16 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 if ( r != 0 ) {
                     continue;
                 }
-                if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Add Resource" ) );
+                if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Add Resource" ) );
                 if ( pargr == 0 ) {
                     pargr = new ResourceGroup();
                     pargr->setName( i18n( "Resources" ) );
-                    cmd->addCommand( new AddResourceGroupCmd( m_part, m_project, pargr ) );
+                    cmd->addCommand( new AddResourceGroupCmd( m_project, pargr ) );
                     //kDebug()<<"add group:"<<pargr->name();
                 }
                 r = new Resource();
                 r->setName( s.trimmed() );
-                cmd->addCommand( new AddResourceCmd( m_part, pargr, r ) );
+                cmd->addCommand( new AddResourceCmd( pargr, r ) );
                 //kDebug()<<"add resource:"<<r->name();
                 m_part->addCommand( cmd );
                 cmd = 0;
@@ -1569,9 +1571,9 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     // remove removed resource request
                     ResourceRequest *r = node->resourceRequest( s );
                     if ( r ) {
-                        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
+                        if ( cmd == 0 ) cmd = new MacroCommand( c );
                         //kDebug()<<"delete request:"<<r->resource()->name()<<" group:"<<r->parent()->group()->name();
-                        cmd->addCommand( new RemoveResourceRequestCmd( m_part, r->parent(), r ) );
+                        cmd->addCommand( new RemoveResourceRequestCmd( r->parent(), r ) );
                     }
                 }
             }
@@ -1587,12 +1589,12 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                         if ( pargr == 0 ) {
                             pargr = new ResourceGroup();
                             pargr->setName( i18n( "Resources" ) );
-                            cmd->addCommand( new AddResourceGroupCmd( m_part, m_project, pargr ) );
+                            cmd->addCommand( new AddResourceGroupCmd( m_project, pargr ) );
                             //kDebug()<<"add group:"<<pargr->name();
                         }
                         r = new Resource();
                         r->setName( s );
-                        cmd->addCommand( new AddResourceCmd( m_part, pargr, r ) );
+                        cmd->addCommand( new AddResourceCmd( pargr, r ) );
                         //kDebug()<<"add resource:"<<r->name();
                         m_part->addCommand( cmd );
                         cmd = 0;
@@ -1604,13 +1606,13 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                     ResourceGroupRequest *g = node->resourceGroupRequest( pargr );
                     if ( g == 0 ) {
                         // create a group request
-                        if ( cmd == 0 ) cmd = new K3MacroCommand( c );
+                        if ( cmd == 0 ) cmd = new MacroCommand( c );
                         g = new ResourceGroupRequest( pargr );
-                        cmd->addCommand( new AddResourceGroupRequestCmd( m_part, *task, g ) );
+                        cmd->addCommand( new AddResourceGroupRequestCmd( *task, g ) );
                         //kDebug()<<"add group request:"<<g;
                     }
-                    if ( cmd == 0 ) cmd = new K3MacroCommand( c );
-                    cmd->addCommand( new AddResourceRequestCmd( m_part, g, new ResourceRequest( r, 100 ) ) );
+                    if ( cmd == 0 ) cmd = new MacroCommand( c );
+                    cmd->addCommand( new AddResourceRequestCmd( g, new ResourceRequest( r, 100 ) ) );
                     //kDebug()<<"add request:"<<r->name()<<" group:"<<g;
                 }
             }
@@ -1630,7 +1632,7 @@ bool NodeItemModel::setDescription( Node *node, const QVariant &value, int role 
             if ( value.toString() == node->description() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyDescriptionCmd( m_part, *node, value.toString(), "Modify task description" ) );
+            m_part->addCommand( new NodeModifyDescriptionCmd( *node, value.toString(), "Modify task description" ) );
             return true;
     }
     return false;
@@ -1650,7 +1652,7 @@ bool NodeItemModel::setConstraint( Node *node, const QVariant &value, int role )
             if ( v == node->constraint() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintCmd( m_part, *node, v, "Modify constraint type" ) );
+            m_part->addCommand( new NodeModifyConstraintCmd( *node, v, "Modify constraint type" ) );
             return true;
     }
     return false;
@@ -1663,7 +1665,7 @@ bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, i
             if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintStartTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint start time" ) );
+            m_part->addCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
             return true;
     }
     return false;
@@ -1676,7 +1678,7 @@ bool NodeItemModel::setConstraintEndTime( Node *node, const QVariant &value, int
             if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintEndTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint end time" ) );
+            m_part->addCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
             return true;
     }
     return false;
@@ -1690,7 +1692,7 @@ bool NodeItemModel::setEstimateType( Node *node, const QVariant &value, int role
             if ( v == node->estimate()->type() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyEstimateTypeCmd( m_part, *node, node->estimate()->type(), v, "Modify estimate type" ) );
+            m_part->addCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, "Modify estimate type" ) );
             return true;
     }
     return false;
@@ -1706,9 +1708,9 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
             if ( d == node->estimate()->expected() ) {
                 return false;
             }
-            K3MacroCommand *cmd = new K3MacroCommand( i18n( "Modify estimate" ) );
-            cmd->addCommand( new ModifyEstimateCmd( m_part, *node, node->estimate()->expected(), d ) );
-            cmd->addCommand( new ModifyEstimateUnitCmd( m_part, *node, node->estimate()->displayUnit(), unit ) );
+            MacroCommand *cmd = new MacroCommand( i18n( "Modify estimate" ) );
+            cmd->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expected(), d ) );
+            cmd->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->displayUnit(), unit ) );
             m_part->addCommand( cmd );
             return true;
     }
@@ -1722,7 +1724,7 @@ bool NodeItemModel::setOptimisticRatio( Node *node, const QVariant &value, int r
             if ( value.toInt() == node->estimate()->optimisticRatio() ) {
                 return false;
             }
-            m_part->addCommand( new EstimateModifyOptimisticRatioCmd( m_part, *node, node->estimate()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
+            m_part->addCommand( new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
     return false;
@@ -1735,7 +1737,7 @@ bool NodeItemModel::setPessimisticRatio( Node *node, const QVariant &value, int 
             if ( value.toInt() == node->estimate()->pessimisticRatio() ) {
                 return false;
             }
-            m_part->addCommand( new EstimateModifyPessimisticRatioCmd( m_part, *node, node->estimate()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
+            m_part->addCommand( new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
     return false;
@@ -1749,7 +1751,7 @@ bool NodeItemModel::setRiskType( Node *node, const QVariant &value, int role )
                 return false;
             }
             Estimate::Risktype v = Estimate::Risktype( value.toInt() );
-            m_part->addCommand( new EstimateModifyRiskCmd( m_part, *node, node->estimate()->risktype(), v, "Modify Risk Type" ) );
+            m_part->addCommand( new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, "Modify Risk Type" ) );
             return true;
     }
     return false;
@@ -1767,7 +1769,7 @@ bool NodeItemModel::setRunningAccount( Node *node, const QVariant &value, int ro
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyRunningAccountCmd( m_part, *node, old, a, i18n( "Modify Running Account" ) ) );
+                m_part->addCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
             }
             return true;
     }
@@ -1787,7 +1789,7 @@ bool NodeItemModel::setStartupAccount( Node *node, const QVariant &value, int ro
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyStartupAccountCmd( m_part, *node, old, a, i18n( "Modify Startup Account" ) ) );
+                m_part->addCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
             }
             return true;
     }
@@ -1802,7 +1804,7 @@ bool NodeItemModel::setStartupCost( Node *node, const QVariant &value, int role 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyStartupCostCmd( m_part, *node, v, i18n( "Modify Startup Cost" ) ) );
+            m_part->addCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
             return true;
     }
     return false;
@@ -1820,7 +1822,7 @@ bool NodeItemModel::setShutdownAccount( Node *node, const QVariant &value, int r
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyShutdownAccountCmd( m_part, *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+                m_part->addCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
             }
             return true;
     }
@@ -1835,7 +1837,7 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyShutdownCostCmd( m_part, *node, v, i18n( "Modify Shutdown Cost" ) ) );
+            m_part->addCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
             return true;
     }
     return false;
@@ -2103,10 +2105,10 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
             }
         }
         int offset = 0;
-        K3MacroCommand *cmd = 0;
+        MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Move tasks" ) );
-            cmd->addCommand( new NodeMoveCmd( m_part, m_project, n, par, row + offset ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Move tasks" ) );
+            cmd->addCommand( new NodeMoveCmd( m_project, n, par, row + offset ) );
             offset++;
         }
         if ( cmd ) {
@@ -2143,7 +2145,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
-    m_part->addCommand( new TaskAddCmd( m_part, m_project, node, after, i18n( "Add Task") ) );
+    m_part->addCommand( new TaskAddCmd( m_project, node, after, i18n( "Add Task") ) );
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
@@ -2158,7 +2160,7 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 
 QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
-    m_part->addCommand( new SubtaskAddCmd( m_part, m_project, node, parent, i18n( "Add Subtask" ) ) );
+    m_part->addCommand( new SubtaskAddCmd( m_project, node, parent, i18n( "Add Subtask" ) ) );
     reset();
     int row = -1;
     if ( node->parentNode() ) {
@@ -2173,7 +2175,7 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 }
 
 //----------------------------
-MilestoneItemModel::MilestoneItemModel( Part *part, QObject *parent )
+MilestoneItemModel::MilestoneItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent )
 {
 }
@@ -2375,7 +2377,7 @@ bool MilestoneItemModel::setName( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->name() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyNameCmd( m_part, *node, value.toString(), "Modify task name" ) );
+            m_part->addCommand( new NodeModifyNameCmd( *node, value.toString(), "Modify task name" ) );
             return true;
     }
     return false;
@@ -2388,7 +2390,7 @@ bool MilestoneItemModel::setLeader( Node *node, const QVariant &value, int role 
             if ( value.toString() == node->leader() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyLeaderCmd( m_part, *node, value.toString(), "Modify task responsible" ) );
+            m_part->addCommand( new NodeModifyLeaderCmd( *node, value.toString(), "Modify task responsible" ) );
             return true;
     }
     return false;
@@ -2401,7 +2403,7 @@ bool MilestoneItemModel::setDescription( Node *node, const QVariant &value, int 
             if ( value.toString() == node->description() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyDescriptionCmd( m_part, *node, value.toString(), "Modify task description" ) );
+            m_part->addCommand( new NodeModifyDescriptionCmd( *node, value.toString(), "Modify task description" ) );
             return true;
     }
     return false;
@@ -2421,7 +2423,7 @@ bool MilestoneItemModel::setConstraint( Node *node, const QVariant &value, int r
             if ( v == node->constraint() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintCmd( m_part, *node, v, "Modify constraint type" ) );
+            m_part->addCommand( new NodeModifyConstraintCmd( *node, v, "Modify constraint type" ) );
             return true;
     }
     return false;
@@ -2434,7 +2436,7 @@ bool MilestoneItemModel::setConstraintStartTime( Node *node, const QVariant &val
             if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintStartTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint start time" ) );
+            m_part->addCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
             return true;
     }
     return false;
@@ -2447,7 +2449,7 @@ bool MilestoneItemModel::setConstraintEndTime( Node *node, const QVariant &value
             if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintEndTimeCmd( m_part, *node, value.toDateTime(), "Modify constraint end time" ) );
+            m_part->addCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
             return true;
     }
     return false;
@@ -2465,7 +2467,7 @@ bool MilestoneItemModel::setRunningAccount( Node *node, const QVariant &value, i
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyRunningAccountCmd( m_part, *node, old, a, i18n( "Modify Running Account" ) ) );
+                m_part->addCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
             }
             return true;
     }
@@ -2485,7 +2487,7 @@ bool MilestoneItemModel::setStartupAccount( Node *node, const QVariant &value, i
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyStartupAccountCmd( m_part, *node, old, a, i18n( "Modify Startup Account" ) ) );
+                m_part->addCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
             }
             return true;
     }
@@ -2500,7 +2502,7 @@ bool MilestoneItemModel::setStartupCost( Node *node, const QVariant &value, int 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyStartupCostCmd( m_part, *node, v, i18n( "Modify Startup Cost" ) ) );
+            m_part->addCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
             return true;
     }
     return false;
@@ -2518,7 +2520,7 @@ bool MilestoneItemModel::setShutdownAccount( Node *node, const QVariant &value, 
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyShutdownAccountCmd( m_part, *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+                m_part->addCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
             }
             return true;
     }
@@ -2533,7 +2535,7 @@ bool MilestoneItemModel::setShutdownCost( Node *node, const QVariant &value, int
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyShutdownCostCmd( m_part, *node, v, i18n( "Modify Shutdown Cost" ) ) );
+            m_part->addCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
             return true;
     }
     return false;
@@ -2794,10 +2796,10 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
             }
         }
         int offset = 0;
-        K3MacroCommand *cmd = 0;
+        MacroCommand *cmd = 0;
         foreach ( Node *n, nodes ) {
-            if ( cmd == 0 ) cmd = new K3MacroCommand( i18n( "Move tasks" ) );
-            cmd->addCommand( new NodeMoveCmd( m_part, m_project, n, par, row + offset ) );
+            if ( cmd == 0 ) cmd = new MacroCommand( i18n( "Move tasks" ) );
+            cmd->addCommand( new NodeMoveCmd( m_project, n, par, row + offset ) );
             offset++;
         }
         if ( cmd ) {

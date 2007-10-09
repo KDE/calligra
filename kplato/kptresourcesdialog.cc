@@ -18,7 +18,6 @@
 */
 
 #include <klocale.h>
-#include <k3command.h>
 
 #include <kdebug.h>
 
@@ -26,6 +25,7 @@
 #include "kptproject.h"
 #include "kptresourcespanel.h"
 #include "kptresource.h"
+#include "kptcommand.h"
 
 namespace KPlato
 {
@@ -58,12 +58,12 @@ void ResourcesDialog::slotOk() {
     accept();
 }
 
-K3Command *ResourcesDialog::buildCommand(Part *part) {
-    K3MacroCommand *m = 0;
+MacroCommand *ResourcesDialog::buildCommand(Part *part) {
+    MacroCommand *m = 0;
     QString c = i18n("Modify resources");
-    K3Command *cmd = panel->buildCommand(part);
+    MacroCommand *cmd = panel->buildCommand(part);
     if (cmd) {
-        if (!m) m = new K3MacroCommand(c);
+        if (!m) m = new MacroCommand(c);
         m->addCommand(cmd);
     }
     return m;

@@ -91,40 +91,40 @@ bool MainProjectPanel::ok() {
     return true;
 }
 
-K3Command *MainProjectPanel::buildCommand(Part *part) {
-    K3MacroCommand *m = 0;
+MacroCommand *MainProjectPanel::buildCommand(Part *part) {
+    MacroCommand *m = 0;
     QString c = i18n("Modify main project");
     if (project.name() != namefield->text()) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new NodeModifyNameCmd(part, project, namefield->text()));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new NodeModifyNameCmd(project, namefield->text()));
     }
     if (project.id() != idfield->text()) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new NodeModifyIdCmd(part, project, idfield->text()));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new NodeModifyIdCmd(project, idfield->text()));
     }
     if (project.leader() != leaderfield->text()) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new NodeModifyLeaderCmd(part, project, leaderfield->text()));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new NodeModifyLeaderCmd(project, leaderfield->text()));
     }
     if (project.description() != descriptionfield->text()) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new NodeModifyDescriptionCmd(part, project, descriptionfield->text()));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new NodeModifyDescriptionCmd(project, descriptionfield->text()));
     }
     if (bStartDate->isChecked() && project.constraint() != Node::MustStartOn) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustStartOn));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new ProjectModifyConstraintCmd(project, Node::MustStartOn));
     }
     if (bEndDate->isChecked() && project.constraint() != Node::MustFinishOn) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new ProjectModifyConstraintCmd(part, project, Node::MustFinishOn));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new ProjectModifyConstraintCmd(project, Node::MustFinishOn));
     }
     if (bStartDate->isChecked() && startDateTime() != project.constraintStartTime().dateTime()) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new ProjectModifyStartTimeCmd(part, project, startDateTime()));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new ProjectModifyStartTimeCmd(project, startDateTime()));
     }
     if (bEndDate->isChecked() && endDateTime() != project.constraintEndTime().dateTime()) {
-        if (!m) m = new K3MacroCommand(c);
-        m->addCommand(new ProjectModifyEndTimeCmd(part, project, endDateTime()));
+        if (!m) m = new MacroCommand(c);
+        m->addCommand(new ProjectModifyEndTimeCmd(project, endDateTime()));
     }
     return m;
 }

@@ -9,10 +9,14 @@ endif(KDE4_BUILD_TESTS)
 include (../kdgantt/CMakeLists.txt)
 
 set( KPLATO_INCLUDES
+    ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
+    ${CMAKE_SOURCE_DIR}/kplato/libs/models
     ${KOGUIUTILS_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
 )
+
+add_subdirectory( libs )
 
 add_subdirectory( templates )
 add_subdirectory( pics )
@@ -30,28 +34,23 @@ set(kplatoprivate_LIB_SRCS
     viewlist/kptviewlistdocker.cc
     viewlist/kptviewlist.cc
     viewlist/kptviewlistdialog.cc
+    viewlist/kptviewlistcommand.cc
     
     kptitemviewsettup.cc
     kptsplitterview.cc
-    kptnodeitemmodel.cc
     kptdependencyeditor.cc
     kptusedefforteditor.cc
     kpttaskstatusview.cc
     kptcalendareditor.cc
-    kptdurationspinbox.cc
     kptviewbase.cc
-    kptitemmodelbase.cc
     kptaccountseditor.cc
     kptperteditor.cc
     kptpertresult.cc
     kpttaskeditor.cc
     kptresourceeditor.cc
     kptscheduleeditor.cc
-    kptdurationwidget.cc
     kptsummarytaskdialog.cc
     kptsummarytaskgeneralpanel.cc
-    kptschedule.cc
-    kptappointment.cc
     kptresourceappointmentsview.cc
     kpttaskappointmentsview.cc
     kptdoublelistviewbase.cc
@@ -60,15 +59,8 @@ set(kplatoprivate_LIB_SRCS
     kpttaskcostpanel.cc
     kptmilestoneprogresspanel.cc
     kptmilestoneprogressdialog.cc
-    kptaccount.cc
     kptaccountsdialog.cc
     kptaccountspanel.cc
-    kptnode.cc
-    kptproject.cc
-    kptrelation.cc
-    kptresource.cc
-    kpttask.cc
-    kptduration.cc
     kptfactory.cc
     kptpart.cc
     kptview.cc
@@ -80,15 +72,12 @@ set(kplatoprivate_LIB_SRCS
     kptrelationdialog.cc
     kptrequestresourcespanel.cc
     kptresourcedialog.cc
-    kptdatetime.cc
-    kptcalendar.cc
     kptcalendaredit.cc
     kptcalendarlistdialog.cc
     kptcalendarpanel.cc
     kptdatetable.cc
     kptcalendarlistdialogbase.cc
     kptcalendareditbase.cc
-    kptcommand.cc
     kptstandardworktimedialog.cc
     kptintervaledit.cc
     kpttaskgeneralpanel.cc
@@ -101,7 +90,6 @@ set(kplatoprivate_LIB_SRCS
     kptresourcesdialog.cc
     kptwbsdefinitiondialog.cc
     kptwbsdefinitionpanel.cc
-    kptwbsdefinition.cc
     KPtViewAdaptor.cc
     kptresourceassignmentview.cc
     kptchartpanel.cc
@@ -116,7 +104,6 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     
     kptcpmwidget.ui
     kptitemviewsettings.ui
-    kptdurationwidget.ui
     kptpertresult.ui
     standardworktimedialogbase.ui
     kptwbsdefinitionpanelbase.ui
@@ -141,9 +128,9 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptresourceassignmentview.ui
 )
 
-kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS}) #${libkdgantt_SRCS})
+kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS})
 
-target_link_libraries(kplatoprivate koguiutils)
+target_link_libraries(kplatoprivate kplatokernel kplatomodels koguiutils  )
 
 set_target_properties(kplatoprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

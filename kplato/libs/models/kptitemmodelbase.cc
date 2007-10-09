@@ -19,10 +19,11 @@
 
 #include "kptitemmodelbase.h"
 
-#include "kptpart.h"
 #include "kptproject.h"
 #include "kptdurationwidget.h"
 #include "kptdurationspinbox.h"
+
+#include "KoDocument.h"
 
 #include <QComboBox>
 #include <QHeaderView>
@@ -372,11 +373,11 @@ void TimeDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
 }
 
 //--------------------------
-ItemModelBase::ItemModelBase( Part *part, QObject *parent )
+ItemModelBase::ItemModelBase( KoDocument *part, QObject *parent )
     : QAbstractItemModel( parent ),
     m_part(part),
     m_project(0),
-    m_readWrite( part->isReadWrite() )
+    m_readWrite( false )//part->isReadWrite() )
 {
 }
 
