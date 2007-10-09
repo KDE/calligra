@@ -48,6 +48,7 @@
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kogradientmanager.h>
+#include <KoStopGradient.h>
 
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
@@ -122,7 +123,7 @@ KarbonResourceServer::KarbonResourceServer()
 							"karbon_gradient", format, KStandardDirs::NoDuplicates);
 		lst += l;
 	}
-
+kDebug(38000) << lst.count() <<" gradients found.";
 	// load Gradients
 	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
 	{
@@ -300,95 +301,16 @@ KarbonResourceServer::removeGradient( VGradientListItem* gradient )
 void
 KarbonResourceServer::loadGradient( const QString& filename )
 {
-    KoGradientManager gradLoader;
-
-    KoGradient* grad = gradLoader.loadGradient(filename);
-
-    if( !grad )
+    KoStopGradient grad(filename);
+    grad.load();
+    if(!grad.valid())
         return;
 
-    if( grad->colorStops.count() > 1 )
-    {
-        QGradient * gradient = 0;
+    QGradient* gradient = grad.toQGradient();
+    if(!gradient)
+        return;
 
-        switch(grad->gradientType)
-        {
-            case KoGradientManager::gradient_type_linear:
-            {
-                QPointF start( grad->originX, grad->originY );
-                QPointF stop( grad->vectorX, grad->vectorY );
-                gradient = new QLinearGradient( start, stop );
-                break;
-            }
-            case KoGradientManager::gradient_type_radial:
-            {
-                QPointF center( grad->originX, grad->originY );
-                QPointF stop( grad->vectorX, grad->vectorY );
-                QPointF focal( grad->focalpointX, grad->focalpointY );
-                QPointF diff = stop-center;
-                double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
-                gradient = new QRadialGradient( center, radius, focal );
-                break;
-            }
-            case KoGradientManager::gradient_type_conic:
-            {
-                QPointF center( grad->originX, grad->originY );
-                QPointF stop( grad->vectorX, grad->vectorY );
-                QPointF diff = stop-center;
-                double angle = atan2( center.y(), center.x() ) * 180.0 / M_PI;
-                if( angle < 0.0 )
-                    angle += 360.0;
-                gradient = new QConicalGradient( center, angle );
-                break;
-            }
-            default:
-                delete gradient;
-                return;
-        }
-
-        switch(grad->gradientRepeatMethod)
-        {
-            case KoGradientManager::repeat_method_none:
-                gradient->setSpread(QGradient::PadSpread);
-                break;
-            case KoGradientManager::repeat_method_reflect:
-                gradient->setSpread(QGradient::ReflectSpread);
-                break;
-            case KoGradientManager::repeat_method_repeat:
-                gradient->setSpread(QGradient::RepeatSpread);
-                break;
-            default:
-                delete gradient;
-                return;
-        }
-
-        KoColorStop *colstop;
-        for(colstop = grad->colorStops.first(); colstop; colstop = grad->colorStops.next())
-        {
-            QColor color;
-
-            switch(colstop->colorType)
-            {
-                case KoGradientManager::color_type_hsv_ccw:
-                case KoGradientManager::color_type_hsv_cw:
-                    color.setHsvF( colstop->color1, colstop->color2, colstop->color3 );
-                    break;
-                case KoGradientManager::color_type_gray:
-                    color.setRgbF( colstop->color1, colstop->color1, colstop->color1 );
-                    break;
-                case KoGradientManager::color_type_cmyk:
-                    color.setCmykF( colstop->color1, colstop->color2, colstop->color3, colstop->color4);
-                    break;
-                case KoGradientManager::color_type_rgb:
-                default:
-                    color.setRgbF( colstop->color1, colstop->color2, colstop->color3 );
-            }
-            color.setAlphaF( colstop->opacity );
-
-            gradient->setColorAt( colstop->offset, color );
-        }
-        m_gradients->append( new VGradientListItem( gradient, filename ) );
-    }
+    m_gradients->append( new VGradientListItem( gradient, filename ) );
 } // KarbonResourceServer::loadGradient
 
 void
