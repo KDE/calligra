@@ -53,7 +53,6 @@
 #include <KoZoomAction.h>
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
-#include <KoToolBox.h>
 #include <KoTextShapeData.h>
 #include <KoTextSelectionHandler.h>
 #include <KoInlineObjectRegistry.h>
