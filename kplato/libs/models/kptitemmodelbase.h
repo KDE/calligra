@@ -201,6 +201,8 @@ public:
     
     explicit TreeViewBase( QWidget *parent );
 
+    void setReadWrite( bool rw );
+    
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
@@ -254,6 +256,7 @@ protected:
     bool m_arrowKeyNavigation;
     bool m_acceptDropsOnView;
     QList<int> m_hideList;
+    bool m_readWrite;
 };
 
 
@@ -264,6 +267,8 @@ public:
     explicit DoubleTreeViewBase( QWidget *parent );
     DoubleTreeViewBase( bool mode, QWidget *parent );
     ~DoubleTreeViewBase();
+    
+    void setReadWrite( bool rw );
     
     void setModel( ItemModelBase *model );
     ItemModelBase *model() const;
@@ -347,6 +352,7 @@ protected:
     ItemModelBase *m_model;
     QItemSelectionModel *m_selectionmodel;
     bool m_arrowKeyNavigation;
+    bool m_readWrite;
 };
 
 

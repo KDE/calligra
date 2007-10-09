@@ -117,6 +117,13 @@ m_tag( tag )
 {
 }
 
+void ViewListItem::setReadWrite( bool rw )
+{
+    if ( type() == ItemType_SubView ) {
+        static_cast<ViewBase*>( view() )->updateReadWrite( rw );
+    }
+}
+
 void ViewListItem::setView( KoView *view )
 {
     setData( 0, ViewListItem::DataRole_View,  qVariantFromValue(static_cast<QWidget*>( view ) ) );
@@ -293,6 +300,15 @@ m_part( part )
 
 ViewListWidget::~ViewListWidget()
 {
+}
+
+void ViewListWidget::setReadWrite( bool rw )
+{
+    foreach ( ViewListItem *c, categories() ) {
+        for ( int i = 0; i < c->childCount(); ++i ) {
+            static_cast<ViewListItem*>( c->child( i ) )->setReadWrite( rw );
+        }
+    }
 }
 
 void ViewListWidget::slotItemChanged( QTreeWidgetItem *item, int col )

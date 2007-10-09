@@ -793,6 +793,11 @@ void ScheduleEditor::setupGui()
     addContextAction( actionOptions );
 }
 
+void ScheduleEditor::updateReadWrite( bool readwrite )
+{
+    m_view->setReadWrite( readwrite );
+}
+
 void ScheduleEditor::slotOptions()
 {
     kDebug()<<endl;

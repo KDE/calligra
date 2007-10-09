@@ -83,8 +83,13 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
     // connects used to refresh the kactionselector after an undo/redo
     connect( m_project, SIGNAL( relationRemoved(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );
     connect( m_project, SIGNAL( relationAdded(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );
-    connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );}
+    connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+}
 
+void PertEditor::updateReadWrite( bool rw )
+{
+    //TODO
+}
 
 void PertEditor::dispAvailableTasks( Relation *rel ){
     dispAvailableTasks();

@@ -24,6 +24,7 @@
 #include "kptdurationspinbox.h"
 
 #include "KoDocument.h"
+#include <kparts/part.h>
 
 #include <QComboBox>
 #include <QHeaderView>
@@ -419,13 +420,22 @@ bool ItemModelBase::dropAllowed( const QModelIndex &index, int, const QMimeData 
 TreeViewBase::TreeViewBase( QWidget *parent )
     : QTreeView( parent ),
     m_arrowKeyNavigation( true ),
-    m_acceptDropsOnView( false )
+    m_acceptDropsOnView( false ),
+    m_readWrite( false )
+
 {
     setAlternatingRowColors ( true );
 
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
 
     connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+void TreeViewBase::setReadWrite( bool rw )
+{
+    if ( itemModel() ) {
+        itemModel()->setReadWrite( rw );
+    }
 }
 
 void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
@@ -611,6 +621,7 @@ void TreeViewBase::setModel( QAbstractItemModel *model )
     if ( selectionModel() ) {
         connect( selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( slotCurrentChanged( const QModelIndex&, const QModelIndex& ) ) );
     }
+    setReadWrite( m_readWrite );
 }
 
 void TreeViewBase::setSelectionModel( QItemSelectionModel *model )
@@ -725,7 +736,8 @@ DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
     : QSplitter( parent ),
     m_rightview( 0 ),
     m_model( 0 ),
-    m_selectionmodel( 0 )
+    m_selectionmodel( 0 ),
+    m_readWrite( false )
 {
     init( mode );
 }
@@ -811,6 +823,14 @@ void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
     }
 }
 
+void DoubleTreeViewBase::setReadWrite( bool rw )
+{
+    m_readWrite = rw;
+    if ( model() ) {
+        model()->setReadWrite( rw );
+    }
+}
+
 void DoubleTreeViewBase::setModel( ItemModelBase *model )
 {
     m_model = model;
@@ -832,6 +852,7 @@ void DoubleTreeViewBase::setModel( ItemModelBase *model )
 
     connect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
     
+    setReadWrite( m_readWrite );
 }
 
 ItemModelBase *DoubleTreeViewBase::model() const

@@ -62,6 +62,8 @@ class ViewListItem : public QTreeWidgetItem
         QString tag() const { return m_tag; }
         void save( QDomElement &element ) const;
 
+        void setReadWrite( bool rw );
+        
     private:
         QString m_tag;
 };
@@ -96,6 +98,8 @@ public:
     ViewListWidget( Part *part, QWidget *parent );//QString name, KXmlGuiWindow *parent );
     ~ViewListWidget();
 
+    /// Set read/write permission on all views.
+    void setReadWrite( bool rw ); 
     /// Add a category if it does not already exist
     ViewListItem *addCategory( const QString &tag, const QString& name );
     /// Return a list of all categories

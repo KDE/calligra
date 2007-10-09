@@ -191,7 +191,7 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
     m_taskView = new TaskAppointmentsView( m_splitter );
     m_taskView->hide();
 
-    setReadWriteMode( readWrite );
+    updateReadWrite( readWrite );
     //connect( m_gantt->constraintModel(), SIGNAL( constraintAdded( const Constraint& )), this, SLOT( update() ) );
     kDebug() <<m_gantt->constraintModel();
 }
@@ -310,8 +310,9 @@ void GanttView::saveContext( QDomElement &settings ) const
     context.showNoInformation = m_showNoInformation;*/
 }
 
-void GanttView::setReadWriteMode( bool on )
+void GanttView::updateReadWrite( bool on )
 {
+    // TODO: KDGanttView needs read/write mode
     m_readWrite = on;
 }
 
@@ -401,7 +402,7 @@ MilestoneGanttView::MilestoneGanttView( Part *part, QWidget *parent, bool readWr
     m_showCriticalTasks = false; //FIXME
     m_showNoInformation = false; //FIXME
 
-    setReadWriteMode( readWrite );
+    updateReadWrite( readWrite );
 }
 
 void MilestoneGanttView::setZoom( double )
@@ -458,7 +459,7 @@ void MilestoneGanttView::saveContext( QDomElement &settings ) const
     kDebug()<<endl;
 }
 
-void MilestoneGanttView::setReadWriteMode( bool on )
+void MilestoneGanttView::updateReadWrite( bool on )
 {
     m_readWrite = on;
 }

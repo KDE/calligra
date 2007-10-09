@@ -1868,6 +1868,12 @@ void CalendarEditor::setupGui()
     
 }
 
+void CalendarEditor::updateReadWrite( bool readwrite )
+{
+    m_calendarview->setReadWrite( readwrite );
+    m_dayview->setReadWrite( readwrite );
+}
+
 void CalendarEditor::slotAddCalendar ()
 {
     //kDebug();

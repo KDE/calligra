@@ -79,7 +79,7 @@ public:
     QList<Node*> selectedNodes() const ;
     Node *selectedNode() const;
 
-    virtual void updateReadWrite( bool /*readwrite*/ ) {}
+    virtual void updateReadWrite( bool readwrite );
 
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ );

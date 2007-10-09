@@ -578,6 +578,11 @@ void TaskStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
     }
 }
 
+void TaskStatusView::updateReadWrite( bool rw )
+{
+    m_view->setReadWrite( rw );
+}
+
 void TaskStatusView::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
 {
     //kDebug()<<endl;

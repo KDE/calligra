@@ -57,7 +57,7 @@ namespace KPlato
 
 Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         : KoDocument( parentWidget, parent, singleViewMode ),
-        m_project( 0 ), m_projectDialog( 0 ), m_parentWidget( parentWidget ), m_view( 0 ),
+        m_project( 0 ), m_parentWidget( parentWidget ),
         m_context( 0 ), m_xmlLoader()
 {
     setComponentData( Factory::global() );
@@ -65,9 +65,7 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
     m_config.load();
 
-    delete m_project;
-    m_project = new Project(); // after config is loaded
-
+    setProject( new Project() ); // after config is loaded
 }
 
 
@@ -75,48 +73,31 @@ Part::~Part()
 {
     m_config.save();
     delete m_project;
-    delete m_projectDialog;
 }
 
+void Part::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+        delete m_project;
+    }
+    m_project = project;
+    if ( m_project ) {
+        connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+    }
+    emit changed();
+}
 
 KoView *Part::createViewInstance( QWidget *parent )
 {
-    m_view = new View( this, parent );
-    connect( m_view, SIGNAL( destroyed() ), this, SLOT( slotViewDestroyed() ) );
-
-    // If there is a project dialog this should be deleted so it will
-    // use the m_view as parent. If the dialog will be needed again,
-    // it will be made at that point
-    if ( m_projectDialog != 0 ) {
-        kDebug() <<"Deleting m_projectDialog because of new ViewInstance";
-        delete m_projectDialog;
-        m_projectDialog = 0;
-    }
-/*    if ( m_context ) {
-        m_view->loadContext( m_context->context() );
-    }*/
-    //m_view->setBaselineMode(getProject().isBaselined()); FIXME: Removed for this release
-    return m_view;
-}
-
-
-void Part::editProject()
-{
-
-    QWidget * parent = m_parentWidget;
-    if ( m_view )
-        parent = m_view;
-
-    if ( m_projectDialog == 0 )
-        // Make the dialog
-        m_projectDialog = new MainProjectDialog( *m_project, parent );
-
-    m_projectDialog->exec();
+    View *view = new View( this, parent );
+    connect( view, SIGNAL( destroyed() ), this, SLOT( slotViewDestroyed() ) );
+    return view;
 }
 
 bool Part::loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * )
 {
-    kDebug();
+    kWarning()<< "Oasis not supported, let's try native xml format";
     return loadXML( 0, doc ); // We have only one format, so try to load that!
 }
 
@@ -178,10 +159,7 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
             m_xmlLoader.setProject( newProject );
             if ( newProject->load( e, m_xmlLoader ) ) {
                 // The load went fine. Throw out the old project
-                delete m_project;
-                m_project = newProject;
-                delete m_projectDialog;
-                m_projectDialog = 0;
+                setProject( newProject );
             } else {
                 delete newProject;
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of project failed" );
@@ -201,8 +179,7 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
     emit sigProgress( -1 );
 
     setModified( false );
-    if ( m_view )
-        m_view->slotUpdate();
+    emit changed();
     return true;
 }
 
@@ -247,7 +224,6 @@ void Part::paintContent( QPainter &, const QRect &)
 
 void Part::slotViewDestroyed()
 {
-    m_view = NULL;
 }
 
 void Part::generateWBS()
@@ -320,12 +296,14 @@ bool Part::completeSaving( KoStore *store )
 {
     delete m_context;
     m_context = 0;
-    if ( m_view ) {
+    // Seems like a hack, but imo the best to do
+    View *view = dynamic_cast<View*>( views().value( 0 ) );
+    if ( view ) {
         m_context = new Context();
-        m_context->save( m_view );
+        m_context->save( view );
         if ( store->open( "context.xml" ) )
         {
-            QDomDocument doc = m_context->save( m_view );
+            QDomDocument doc = m_context->save( view );
             KoStoreDevice dev( store );
 
             QByteArray s = doc.toByteArray(); // this is already Utf8!

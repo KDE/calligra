@@ -127,7 +127,8 @@ namespace KPlato
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
         m_currentEstimateType( Estimate::Use_Expected ),
-        m_manager( 0 )
+        m_manager( 0 ),
+        m_readWrite( false )
 {
     //kDebug();
 //    getProject().setCurrentSchedule( Schedule::Expected );
@@ -341,6 +342,8 @@ View::View( Part* part, QWidget* parent )
     
     loadContext();
     
+    connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
+    
     //kDebug()<<" end";
 }
 
@@ -492,6 +495,7 @@ ViewBase *View::createResourceAppointmentsView( ViewListItem *cat, const QString
 
     v->setProject( &( getProject() ) );
     v->setScheduleManager( currentScheduleManager() );
+    v->updateReadWrite( m_readWrite );
     return v;
 }
 
@@ -510,6 +514,7 @@ ViewBase *View::createResourcEditor( ViewListItem *cat, const QString tag, const
     connect( resourceeditor, SIGNAL( deleteObjectList( QObjectList ) ), SLOT( slotDeleteResourceObjects( QObjectList ) ) );
 
     connect( resourceeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    resourceeditor->updateReadWrite( m_readWrite );
     return resourceeditor;
 }
 
@@ -539,6 +544,7 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
 
 
     connect( taskeditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    taskeditor->updateReadWrite( m_readWrite );
     return taskeditor;
 }
 
@@ -553,6 +559,7 @@ ViewBase *View::createAccountsEditor( ViewListItem *cat, const QString tag, cons
     ae->draw( getProject() );
 
     connect( ae, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    ae->updateReadWrite( m_readWrite );
     return ae;
 }
 
@@ -569,6 +576,7 @@ ViewBase *View::createCalendarEditor( ViewListItem *cat, const QString tag, cons
     connect( calendareditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( calendareditor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    calendareditor->updateReadWrite( m_readWrite );
     return calendareditor;
 }
 
@@ -590,6 +598,7 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), handler, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ) );
     
     handler->draw( getProject() );
+    handler->updateReadWrite( m_readWrite );
     return handler;
 }
 
@@ -602,6 +611,7 @@ ScheduleEditor *View::createScheduleEditor( QWidget *parent )
 
     connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
+    scheduleeditor->updateReadWrite( m_readWrite );
     return scheduleeditor;
 }
 
@@ -621,6 +631,7 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
     connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
 
     connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+    scheduleeditor->updateReadWrite( m_readWrite );
     return scheduleeditor;
 }
 
@@ -648,6 +659,7 @@ ViewBase *View::createDependencyEditor( ViewListItem *cat, const QString tag, co
     connect( editor, SIGNAL( deleteTaskList( QList<Node*> ) ), SLOT( slotDeleteTask( QList<Node*> ) ) );
 
     connect( editor, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    editor->updateReadWrite( m_readWrite );
     return editor;
 }
 
@@ -663,6 +675,7 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
 
     connect( perteditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     m_updatePertEditor = true;
+    perteditor->updateReadWrite( m_readWrite );
     return perteditor;
 }
 
@@ -679,6 +692,7 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskstatusview, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
     
     connect( taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    taskstatusview->updateReadWrite( m_readWrite );
     return taskstatusview;
 }
 
@@ -705,7 +719,7 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), ganttview, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
     connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
+    ganttview->updateReadWrite( m_readWrite );
     return ganttview;
 }
 
@@ -725,7 +739,7 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), ganttview, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
     connect( ganttview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-
+    ganttview->updateReadWrite( m_readWrite );
     return ganttview;
 }
 
@@ -742,6 +756,7 @@ ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), accountsview, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
     connect( accountsview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    accountsview->updateReadWrite( m_readWrite );
     return accountsview;
 }
 
@@ -759,6 +774,7 @@ ViewBase *View::createResourceAssignmentView( ViewListItem *cat, const QString t
     connect( resourceAssignmentView, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( resourceAssignmentView, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    resourceAssignmentView->updateReadWrite( m_readWrite );
     return resourceAssignmentView;
 }
 
@@ -773,6 +789,7 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
     v->setProject( &( getProject() ) );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+    v->updateReadWrite( m_readWrite );
     return v;
 
 }
@@ -1857,8 +1874,11 @@ void View::slotDeleteResourceObjects( QObjectList lst )
 }
 
 
-void View::updateReadWrite( bool /*readwrite*/ )
-{}
+void View::updateReadWrite( bool readwrite )
+{
+    m_readWrite = readwrite;
+    m_viewlist->setReadWrite( readwrite );
+}
 
 Part *View::getPart() const
 {
@@ -1887,7 +1907,6 @@ void View::slotUpdate()
 {
     //kDebug()<<"calculate="<<calculate;
 
-    m_updateGanttview = true;
 //    m_updateResourceview = true;
     m_updateAccountsview = true;
     m_updateResourceAssignmentView = true;

@@ -22,6 +22,8 @@
 #include "kptviewlist.h"
 #include "kptpart.h"
 
+#include "KoView.h"
+
 #include <kdebug.h>
 #include <klocale.h>
 

@@ -162,7 +162,7 @@ public:
     virtual void draw( Project &project );
     virtual void draw();
 
-    virtual void updateReadWrite( bool /*readwrite*/ ) {}
+    virtual void updateReadWrite( bool readwrite );
 
     virtual Resource *currentResource() const;
     virtual ResourceGroup *currentResourceGroup() const;

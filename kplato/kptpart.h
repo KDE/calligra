@@ -37,9 +37,7 @@ namespace KPlato
 {
 
 class DocumentChild;
-class View;
 class Project;
-class MainProjectDialog;
 class Context;
 class GanttView;
 
@@ -55,12 +53,8 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
-    /**
-     * Edit the settings of the project
-     */
-    void editProject();
-
-    Project &getProject() { return * m_project; }
+    void setProject( Project *project );
+    Project &getProject() { return *m_project; }
     const Project &getProject() const { return * m_project; }
 
     // The load and save functions. Look in the file kplato.dtd for info
@@ -81,6 +75,9 @@ public:
     void activate( QWidget *w = 0 );
     DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
     
+signals:
+    void changed();
+    
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
     virtual bool loadChildren( KoStore* );
@@ -100,9 +97,7 @@ private:
     
 private:
     Project *m_project;
-    MainProjectDialog *m_projectDialog;
     QWidget* m_parentWidget;
-    View *m_view;
 
     Config m_config;
     Context *m_context;

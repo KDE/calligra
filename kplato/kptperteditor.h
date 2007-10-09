@@ -77,6 +77,7 @@ class PertEditor : public ViewBase
 public:
 
     PertEditor( Part *part, QWidget *parent );
+    virtual void updateReadWrite( bool readwrite );
     void draw( Project &project);
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
     void loadRequiredTasksList(Node * taskNode);

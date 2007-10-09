@@ -291,6 +291,8 @@ private:
     QMap<QAction*, Schedule*> m_scheduleActions;
     ScheduleManager *m_manager;
     
+    bool m_readWrite;
+    
     // ------ Edit
     QAction *actionCut;
     QAction *actionCopy;

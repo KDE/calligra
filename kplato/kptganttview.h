@@ -90,8 +90,7 @@ public:
     virtual bool loadContext( const KoXmlElement &context );
     virtual void saveContext( QDomElement &context ) const;
 
-    void setReadWriteMode( bool on );
-    bool isReadWriteMode() const { return m_readWrite; }
+    void updateReadWrite( bool on );
 
     bool showNoInformation() const { return m_showNoInformation; }
 
@@ -185,8 +184,7 @@ public:
     virtual bool loadContext( const KoXmlElement &context );
     virtual void saveContext( QDomElement &context ) const;
 
-    void setReadWriteMode( bool on );
-    bool isReadWriteMode() const { return m_readWrite; }
+    void updateReadWrite( bool on );
 
     bool showNoInformation() const { return m_showNoInformation; }
 

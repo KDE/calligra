@@ -163,7 +163,7 @@ public:
     void setupGui();
     virtual void draw( Project &project );
     virtual void draw();
-    virtual void updateReadWrite( bool /*readwrite*/ ) {}
+    virtual void updateReadWrite( bool readwrite );
 
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ );

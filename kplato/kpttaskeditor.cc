@@ -111,6 +111,11 @@ TaskEditor::TaskEditor( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
+void TaskEditor::updateReadWrite( bool rw )
+{
+    m_view->setReadWrite( rw );
+}
+
 void TaskEditor::draw( Project &project )
 {
     m_view->setProject( &project );

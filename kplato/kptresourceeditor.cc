@@ -1086,6 +1086,11 @@ ResourceEditor::ResourceEditor( Part *part, QWidget *parent )
 
 }
 
+void ResourceEditor::updateReadWrite( bool readwrite )
+{
+    m_view->setReadWrite( readwrite );
+}
+
 void ResourceEditor::draw( Project &project )
 {
     m_view->setProject( &project );

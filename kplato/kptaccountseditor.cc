@@ -531,6 +531,11 @@ AccountsEditor::AccountsEditor( Part *part, QWidget *parent )
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
 }
 
+void AccountsEditor::updateReadWrite( bool readwrite )
+{
+    m_view->setReadWrite( readwrite );
+}
+
 void AccountsEditor::draw( Project &project )
 {
     m_view->setProject( &project );
