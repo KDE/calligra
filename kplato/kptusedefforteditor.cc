@@ -388,6 +388,7 @@ CompletionEntryItemModel::CompletionEntryItemModel ( QWidget *parent )
     m_completion( 0 )
 {
     m_headers << i18n( "Date" )
+            // xgettext: no-c-format
             << i18n( "% Completed" )
             << i18n( "Used Effort" )
             << i18n( "Remaining Effort" )

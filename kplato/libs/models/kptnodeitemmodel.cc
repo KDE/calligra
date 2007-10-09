@@ -1194,6 +1194,7 @@ QVariant NodeModel::headerData( int section, int role )
 
             // Completion
             case 37: return i18n( "Status" );
+            // xgettext: no-c-format
             case 38: return i18n( "% Completed" );
             case 39: return i18n( "Planned Effort" );
             case 40: return i18n( "Actual Effort" );
