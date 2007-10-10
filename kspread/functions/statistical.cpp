@@ -588,10 +588,10 @@ static Value IterateInverse( const double unknown, const QString formula, double
       }
       return Value(xs);
     }
-    kDebug()<<"probe no. "<<i<<" : "<<xs<<" error diff ="<<fs;
+    // kDebug()<<"probe no. "<<i<<" : "<<xs<<" error diff ="<<fs;
   }
 
-  // error no convergence
+  // error no convergence - set flag
   convergenceError = TRUE;
   return Value(0.0);
 }
@@ -2117,13 +2117,13 @@ Value func_quartile( valVector args, ValueCalc *calc, FuncExtra* )
   else
   {
     //
-    // flag 0
+    // flag 0 -> MIN()
     //
     if ( flag == 0 )
       return Value(array[0]);
     
     //
-    // flag 1
+    // flag 1 -> 25th percentile
     //
     else if ( flag == 1 )
     {
@@ -2137,7 +2137,7 @@ Value func_quartile( valVector args, ValueCalc *calc, FuncExtra* )
     }
 
     //
-    // flag 2
+    // flag 2 -> 50th percentile equals MEDIAN()
     //
     else if (flag == 2)
     {
@@ -2148,7 +2148,7 @@ Value func_quartile( valVector args, ValueCalc *calc, FuncExtra* )
     }
 
     //
-    // flag 3
+    // flag 3 -> 75thpercentile
     //
     else if (flag == 3)
     {
@@ -2162,7 +2162,7 @@ Value func_quartile( valVector args, ValueCalc *calc, FuncExtra* )
     }
 
     //
-    // flag 4
+    // flag 4 -> equals MAX()
     //
     else
       return Value( array[number-1] );
