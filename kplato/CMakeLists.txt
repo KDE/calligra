@@ -11,6 +11,7 @@ include (../kdgantt/CMakeLists.txt)
 set( KPLATO_INCLUDES
     ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
     ${CMAKE_SOURCE_DIR}/kplato/libs/models
+    ${CMAKE_BINARY_DIR}/kplato/libs/models
     ${KOGUIUTILS_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
