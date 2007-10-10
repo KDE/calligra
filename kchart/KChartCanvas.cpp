@@ -44,8 +44,8 @@ namespace KChart
 KChartCanvas::KChartCanvas( KChartView *view, KChartPart *parent )
     : QWidget(),
       KoCanvasBase( parent ),
-      m_documentOffset( 0, 0 ),
-      m_origin( 0, 0 )
+      m_origin( 0, 0 ),
+      m_documentOffset( 0, 0 )
 {
     m_part = parent;
     m_view = view;

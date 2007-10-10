@@ -96,9 +96,9 @@ private:
     KoShapeManager *m_shapeManager;
     KoToolProxy    *m_toolProxy;
 
-    QRectF m_documentRect;
-    QPoint m_origin;
-    QPoint m_documentOffset;
+    QRectF          m_documentRect;
+    QPoint          m_origin;
+    QPoint          m_documentOffset;
 };
 
 }
