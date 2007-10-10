@@ -983,6 +983,49 @@
     </Function>
 
     <Function>
+      <Name>RANK</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>Value</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>Data (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>Order</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The RANK() function returns the rank of a number in a list of numbers.</Text>
+        <Text>Order specifies how to rank the numbers:</Text>
+        <Text>If 0 or omitted, Data is ranked in descending order.</Text>
+        <Text>If not 0, Data is ranked in descending order.</Text>
+        <Syntax>RSQ(Value; Data; Order)</Syntax>
+        <Example>RANK (2;{1;2;3}) equals 2</Example>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>RSQ</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>known Y (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>known X (array)</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The RSQ() function returns the square of the Pearson product moment correlation coefficient through data points in known_y's and known_x's.</Text>
+        <Text>If "arrayY" and "arrayX" are empty or have a different number of data points, then #N/A is returned.</Text>
+        <Syntax>RSQ(known Y; known X)</Syntax>
+      </Help>
+    </Function>
+
+    <Function>
       <Name>SKEW</Name>
       <Type>Float</Type>
       <Parameter>
