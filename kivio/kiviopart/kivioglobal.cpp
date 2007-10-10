@@ -105,8 +105,6 @@ KoUnit Kivio::convToKoUnit(int tkUnit)
       return KoUnit::Pica;
     case 4:
       return KoUnit::Centimeter;
-    case 5:
-      return KoUnit::Didot;
     case 6:
       return KoUnit::Cicero;
   }
