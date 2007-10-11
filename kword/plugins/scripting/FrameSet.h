@@ -92,7 +92,7 @@ namespace Scripting {
             /** Add and return a new \a Frame to this frameset using the shape
             defined with the \p shapeId identifier. */
             QObject* addFrame(const QString& shapeId) {
-                KoShapeFactory *factory = KoShapeRegistry::instance()->get(shapeId);
+                KoShapeFactory *factory = KoShapeRegistry::instance()->value(shapeId);
                 if( ! factory ) {
                     kWarning(32010) << "Scripting::Module::addFrame() Invalid shapeId: " << shapeId << endl;
                     return 0;
