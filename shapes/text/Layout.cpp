@@ -286,14 +286,34 @@ bool Layout::nextParag() {
     }
     m_y += topMargin();
     layout = m_block.layout();
-    QTextOption options = layout->textOption();
-    options.setWrapMode(QTextOption::WordWrap);
-    options.setAlignment( QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, m_format.alignment()) );
+    QTextOption option = layout->textOption();
+    option.setWrapMode(QTextOption::WordWrap);
+    option.setTabStop (m_defaultTabSizing);
+
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
+    // tabs
+    QList<QTextOption::Tab> tabs;
+    QList<KoText::Tab> koTabs;
+    QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
+    if(! variant.isNull())
+        foreach(QVariant tv, qvariant_cast<QList<QVariant> >(variant)) {
+            KoText::Tab koTab = tv.value<KoText::Tab>();
+            QTextOption::Tab tab;
+            tab.position = koTab.position;
+kDebug() << "Pos: " << tab.position;
+            tab.type = koTab.type;
+            tab.delimiter = koTab.delimiter;
+            tabs.append(tab);
+        }
+    option.setTabs(tabs);
+#endif
+
+    option.setAlignment( QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, m_format.alignment()) );
     if(m_isRtl)
-        options.setTextDirection(Qt::RightToLeft);
+        option.setTextDirection(Qt::RightToLeft);
     else
-        options.setTextDirection(Qt::LeftToRight);
-    layout->setTextOption(options);
+        option.setTextDirection(Qt::LeftToRight);
+    layout->setTextOption(option);
 
     layout->beginLayout();
     m_fragmentIterator = m_block.begin();
@@ -677,7 +697,6 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
 void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
     // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs, etc. :/
     QTextLayout *layout = block.layout();
-    KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     QTextOption textOption = layout->textOption();
 
     QTextBlockFormat bf = block.blockFormat();
@@ -686,7 +705,6 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         painter->fillRect(layout->boundingRect(), bf.background());
 
     for(int i=0; i < layout->lineCount(); i++) {
-        const double xOffset = bf.leftMargin() + (i==0?bf.textIndent():0.);
         QTextLine line = layout->lineAt(i);
         if(line.textLength() == 0) continue;
         if(line.textStart() < selectionEnd && line.textStart() + line.textLength() > selectionStart) {
