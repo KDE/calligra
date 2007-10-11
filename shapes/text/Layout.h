@@ -71,10 +71,8 @@ public:
     /// reimplemented from superclass
     virtual void clearTillEnd();
 
-    /// reimplemented from superclass
+    /// set default tab size for this document
     virtual void setTabSpacing(double spacing) { m_defaultTabSizing = spacing; }
-
-    KoTextBlockData::TabLineData applyTabs(QTextLine &line);
 
 private:
     void updateBorders();

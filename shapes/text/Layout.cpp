@@ -39,8 +39,6 @@
 #include <QTextList>
 #include <QStyle>
 
-// #define DEBUG_TABS
-
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
    : m_styleManager(0),
@@ -54,8 +52,6 @@ Layout::Layout(KoTextDocumentLayout *parent)
 {
     m_parent = parent;
     layout = 0;
-    for(int i=0; i < 2000; i++)
-        m_lotsOfTabs.append((double)i);
 }
 
 bool Layout::start() {
@@ -110,8 +106,6 @@ double Layout::docOffsetInShape() const {
 }
 
 bool Layout::addLine(QTextLine &line) {
-    m_currentParagTabsData.append(applyTabs(line));
-
     double height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     double objectHeight = 0.0;
     bool useFixedLineHeight = height != 0.0;
@@ -215,29 +209,14 @@ bool Layout::nextParag() {
             borderBottom = m_y; // don't inlude the bottom margin!
             m_y += m_format.bottomMargin();
         }
-        if(m_blockData == 0) { // see if one is needed due to tabs data
-            bool dataRequired = false;
-            foreach(KoTextBlockData::TabLineData tab, m_currentParagTabsData) {
-                if(tab.tabs.count() > 0) {
-                    dataRequired = true;
-                    break;
-                }
-            }
-            if(dataRequired) {
-                m_blockData = new KoTextBlockData();
-                m_block.previous().setUserData(m_blockData);
-            }
-        }
 
         if(m_blockData) {
-            m_blockData->setTabLineData(m_currentParagTabsData);
             if(m_blockData->border())
                 m_blockData->border()->setParagraphBottom(borderBottom);
         }
     }
     layout = 0;
     m_blockData = 0;
-    m_currentParagTabsData.clear();
     if(m_data == 0) // no shape to layout, so stop here.
         return true;
     if(! m_block.isValid()) {
@@ -308,7 +287,6 @@ bool Layout::nextParag() {
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption options = layout->textOption();
-    options.setTabArray(m_lotsOfTabs);
     options.setWrapMode(QTextOption::WordWrap);
     options.setAlignment( QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, m_format.alignment()) );
     if(m_isRtl)
@@ -592,8 +570,8 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
             decorateParagraph(painter, block);
             painter->restore();
 
-#if 0       // code for drawing using the normal QTextLayout::draw().  Can't use it due to tabs.
-
+//#if QT_VERSION > KDE_MAKE_VERSION(4,4,0) // code for drawing using the normal QTextLayout::draw().  Can't use it due to tabs before Qt4.4.
+#if 0
             QVector<QTextLayout::FormatRange> selections;
             foreach(QAbstractTextDocumentLayout::Selection selection, context.textContext.selections) {
                 QTextCursor cursor = selection.cursor;
@@ -611,8 +589,9 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
                 selections.append(fr);
             }
             layout->draw(painter, QPointF(0,0), selections);
-#endif
+#else
             drawParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
+#endif
 
             KoTextBlockBorderData *border = 0;
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
@@ -698,17 +677,8 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
 void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
     // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs, etc. :/
     QTextLayout *layout = block.layout();
-    QList<KoTextBlockData::TabLineData> tabsData;
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
-    if(data)
-        tabsData = data->tabLineData();
     QTextOption textOption = layout->textOption();
-
-    QList<KoText::Tab> tabFormat;
-    QVariant variant = block.blockFormat().property(KoParagraphStyle::TabPositions);
-    if(! variant.isNull())
-        foreach(QVariant tab, qvariant_cast<QList<QVariant> >(variant))
-            tabFormat.append(tab.value<KoText::Tab>());
 
     QTextBlockFormat bf = block.blockFormat();
 
@@ -717,13 +687,6 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
 
     for(int i=0; i < layout->lineCount(); i++) {
         const double xOffset = bf.leftMargin() + (i==0?bf.textIndent():0.);
-        KoTextBlockData::TabLineData tabs;
-        if(tabsData.count() > i) {
-            // set the tabs per every line again to emulate right-aligned-tabs
-            tabs = tabsData[i];
-            textOption.setTabArray(tabs.tabs);
-            layout->setTextOption(textOption);
-        }
         QTextLine line = layout->lineAt(i);
         if(line.textLength() == 0) continue;
         if(line.textStart() < selectionEnd && line.textStart() + line.textLength() > selectionStart) {
@@ -755,56 +718,6 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
         painter->save();
         line.draw(painter, layout->position());
         painter->restore();
-
-        for(int x=0; x < tabs.tabLength.count(); x++) { // fill tab-gaps for the current line
-            const double tabStop = tabs.tabs[x];
-            const double pos = tabStop - tabs.tabLength[x];
-            QRectF tabArea(layout->position() + line.position() + QPointF(pos, 0),
-                    QSizeF(tabs.tabLength[x], line.ascent()));
-
-            KoText::Tab tab;
-            // choose the one with a position just bigger (or equal) to tabstop.
-            for(int counter = tabFormat.count()-1; counter >= 0; counter--) {
-                KoText::Tab t = tabFormat[counter];
-                if(tabStop > t.position)
-                    break;
-                tab = t;
-            }
-            if(tab.position == 0) // can't do anything if there is no tab-defintion
-                continue;
-
-            QPen pen;
-            switch(tab.leaderStyle) {
-            case QTextCharFormat::SingleUnderline: pen = QPen(Qt::SolidLine); break;
-            case QTextCharFormat::DashUnderline: pen = QPen(Qt::DashLine); break;
-            case QTextCharFormat::DotLine: pen = QPen(Qt::DotLine); break;
-            case QTextCharFormat::DashDotLine: pen = QPen(Qt::DashDotLine); break;
-            case QTextCharFormat::DashDotDotLine: pen = QPen(Qt::DashDotDotLine); break;
-            case QTextCharFormat::WaveUnderline:
-                // TODO
-                continue;
-            case QTextCharFormat::NoUnderline:
-                // fall through
-            default:
-                continue; // do nothing!
-            }
-
-            painter->save();
-            pen.setCapStyle(Qt::FlatCap);
-            pen.setWidthF(1.); // TODO set proper width
-            if(tab.leaderColor.isValid())
-                pen.setColor(tab.leaderColor);
-            else { // fetch color from text
-                QTextCursor cursor(block);
-                cursor.setPosition(line.xToCursor(tabArea.left()));
-                QTextCharFormat cf = cursor.blockCharFormat();
-                pen.setColor(cf.foreground().color());
-            }
-            painter->setPen(pen);
-            const int y = qRound(tabArea.bottom() - pen.widthF() / 2.0);
-            painter->drawLine(qRound(tabArea.left() - xOffset), y, qRound(tabArea.right() - xOffset), y);
-            painter->restore();
-        }
     }
 
     QTextBlock::iterator it;
@@ -817,7 +730,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                 offset = currentFragment.position();
             int firstLine = layout->lineForTextPosition(currentFragment.position() - offset).lineNumber();
             int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - offset).lineNumber();
-            
+
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - offset)) {
@@ -834,7 +747,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                         QColor color = fmt.colorProperty(KoCharacterStyle::StrikeOutColor);
                         if (!color.isValid())
                             color = fmt.foreground().color();
-    
+
                         drawDecorationLine (painter, color, fontStrikeOutType, fontStrikeOutStyle, x1, x2, y);
                     }
 
@@ -851,7 +764,7 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
                         QColor color = fmt.colorProperty(KoCharacterStyle::UnderlineColor);
                         if (!color.isValid())
                             color = fmt.foreground().color();
-                        
+
                         drawDecorationLine (painter, color, fontUnderLineType, fontUnderLineStyle, x1, x2, y);
                     }
 
@@ -1068,212 +981,6 @@ bool Layout::previousParag() {
     updateBorders(); // fill the border inset member vars.
     layout->beginLayout();
     return true;
-}
-
-KoTextBlockData::TabLineData Layout::applyTabs(QTextLine &line) {
-#ifdef DEBUG_TABS
-    kDebug(32500) <<"applyTabs (" << line.textStart() <<")--------------------";
-#endif
-    Q_ASSERT(m_block.layout());
-    QTextOption textOption = m_block.layout()->textOption();
-    QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
-    if(variant.isNull()) {
-        KoTextBlockData::TabLineData data;
-        if(m_block.text().mid(line.textStart(), line.textLength()).contains('\t')) {
-            QList<double> tabs;
-            for(double i =m_defaultTabSizing; i <= line.width(); i+= m_defaultTabSizing)
-                tabs.append(i);
-            data.tabs = tabs;
-            textOption.setTabArray(data.tabs);
-            m_block.layout()->setTextOption(textOption);
-
-            line.setLineWidth(line.width()); // relayout line
-        }
-        return data;
-    }
-    Qt::Alignment paragAlign = textOption.alignment();
-    if(paragAlign != Qt::AlignLeft) {
-        textOption.setAlignment(Qt::AlignLeft);
-        layout->setTextOption(textOption);
-    }
-
-#ifdef DEBUG_TABS
-{
-    QString line1, line2;
-    const int end = line.textStart() + line.textLength();
-    for(int i=line.textStart(); i < end; i++) {
-        QChar c= m_block.text().at(i);
-        if(c == '\t')
-            c = QChar(' ');
-        line1 += "   " + QString(c);
-        QString number = QString::number(line.cursorToX(i));
-        if(number.length() == 1)
-            line2 += "  ";
-        else if(number.length() == 2)
-            line2 += ' ';
-        line2 += ' '+ number;
-    }
-    kDebug(32500) << line1;
-    kDebug(32500) << line2;
-}
-#endif
-
-    class TabsHelper {
-      public:
-        TabsHelper(const QTextLine &line, const QVariant &variant, const QString &paragText)
-            : m_line(line),
-            m_initialized(false),
-            m_dirty(false),
-            m_variant(variant),
-            m_offset(0.),
-            m_paragText(paragText) {}
-
-        void insertTab(int cursorPosition) {
-//kDebug(32500) <<"insertTab" << cursorPosition;
-            calculateTabSize(cursorPosition);
-            if(! m_initialized) {
-                m_initialized = true;
-                foreach(QVariant tab, qvariant_cast<QList<QVariant> >(m_variant))
-{//KoText::Tab foo = tab.value<KoText::Tab>(); kDebug(32500) <<"  found tab :" << foo.position;
-                    m_tabs.append(tab.value<KoText::Tab>());
-}
-            }
-            double pos = m_line.cursorToX(cursorPosition) + m_offset;
-            foreach(KoText::Tab tab, m_tabs) {
-                if(tab.position >= pos) {
-                    if(tab.type == KoText::LeftTab) {
-                        m_tabData.tabs.append(tab.position);
-                        const double length = tab.position - pos;
-                        m_tabData.tabLength.append(length);
-                        m_offset += length;
-                        return;
-                    }
-                    // delay the rest until we know where the break off point is.
-                    m_dirty = true;
-                    m_previousPosition = cursorPosition;
-                    m_previousTab = tab;
-                }
-            }
-        }
-
-        const KoTextBlockData::TabLineData &tabLineData() {
-            calculateTabSize(m_line.textStart() + m_line.textLength());
-            return m_tabData;
-        }
-
-      private:
-        void calculateTabSize(int cursorPosition) {
-            if(! m_dirty) return;
-//kDebug(32500) <<"calculateTabSize cursor pos:" << m_previousPosition <<"|" << cursorPosition;
-            // the alignment is done on the block of text between the prev and current tab position
-            const double startSection = m_line.cursorToX(m_previousPosition+1) + m_offset;
-            const double endSection = m_line.cursorToX(cursorPosition) + m_offset;
-            const bool currentNotInLine = cursorPosition > m_line.textStart() + m_line.textLength();
-//kDebug(32500) <<"  startSection:" << startSection <<", endSection:" << endSection;
-
-            bool convertToSpace = false;
-            if(startSection > m_line.width()) { // tab found will not end up in line.
-                m_tabData.tabs.append(m_line.width());
-                m_tabData.tabLength.append(0);
-            }
-            else if(currentNotInLine) // aligned portion is too big for line
-                convertToSpace = true;
-            else if(m_previousTab.type == KoText::RightTab) {
-                if(endSection > m_previousTab.position)
-                    convertToSpace = true;
-                else {
-//kDebug(32500) <<"" << m_previousTab.position <<"" << m_previousTab.position - (endSection - startSection);
-                    m_tabData.tabs.append(m_previousTab.position - (endSection - startSection));
-                    m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) - m_offset);
-                    m_offset += m_previousTab.position - endSection;
-                }
-            }
-            else if(m_previousTab.type == KoText::CenterTab) {
-//kDebug(32500) <<"" << m_previousTab.position <<"" << m_previousTab.position - (endSection - startSection);
-                // TODO check fit
-                m_tabData.tabs.append(m_previousTab.position - (endSection - startSection) / 2.0);
-                m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) + m_offset);
-                m_offset += m_previousTab.position + (endSection - startSection) / 2.0 - endSection;
-            }
-            else if(m_previousTab.type == KoText::DelimiterTab) {
-                // TODO check fit
-                const int index = m_paragText.indexOf(m_previousTab.delimiter, m_previousPosition);
-                const double charPos = m_line.cursorToX(index);
-                const double wantedPos = m_offset + charPos + (m_line.cursorToX(index + 1) - charPos)  / 2.0; // half on the char
-                m_tabData.tabs.append(m_previousTab.position - (wantedPos - startSection));
-                m_tabData.tabLength.append(m_tabData.tabs.last() - m_line.cursorToX(m_previousPosition) + m_offset);
-                m_offset += m_tabData.tabLength.last() - 1;
-            }
-
-            if(convertToSpace) { // aligned text doesn't fit, so make the tab a normal space.
-                m_tabData.tabs.append(startSection + 4); // TODO replace 4 with width of a space
-                m_tabData.tabLength.append(4);
-                m_offset += 4 - 1;
-            }
-
-            m_dirty = false;
-        }
-
-        QTextLine m_line;
-        bool m_initialized, m_dirty;
-        QVariant m_variant;
-        QList<KoText::Tab> m_tabs;
-        KoText::Tab m_previousTab;
-        int m_previousPosition;
-        double m_offset;
-        KoTextBlockData::TabLineData m_tabData;
-        const QString m_paragText;
-    };
-
-    QString paragText = m_block.text();
-    TabsHelper tabsHelper(line, variant, paragText);
-
-    const int end = line.textStart() + line.textLength();
-    for(int i=line.textStart(); i < paragText.length(); i++) {
-        if(paragText.at(i) == '\t') {
-            tabsHelper.insertTab(i);
-            if(i >= end)
-                break;
-        }
-    }
-
-    if(paragAlign != Qt::AlignLeft || tabsHelper.tabLineData().tabs.count() > 0) {
-#ifdef DEBUG_TABS
-{ KoTextBlockData::TabLineData foo = tabsHelper.tabLineData(); Q_ASSERT(foo.tabs.count() == foo.tabLength.count());
- for(int i=0; i < foo.tabs.count(); i++){ printf("tab: %0.4f, length: %0.4f\n", foo.tabs[i], foo.tabLength[i]); }
-}
-#endif
-        textOption.setTabArray(tabsHelper.tabLineData().tabs);
-        textOption.setAlignment(paragAlign);
-        m_block.layout()->setTextOption(textOption);
-
-        line.setLineWidth(line.width()); // relayout line
-
-#ifdef DEBUG_TABS
-        {
-        QString line1, line2;
-        const int end = line.textStart() + line.textLength();
-        for(int i=line.textStart(); i < end; i++) {
-            QChar c= m_block.text().at(i);
-            if(c == '\t')
-                c = QChar(' ');
-            line1 += "   " + QString(c);
-            QString number = QString::number(line.cursorToX(i));
-            if(number.length() == 1)
-                line2 += "  ";
-            else if(number.length() == 2)
-                line2 += ' ';
-            line2 += ' '+ number;
-        }
-        kDebug(32500) << line1;
-        kDebug(32500) << line2;
-        }
-#endif
-        textOption.setTabArray(m_lotsOfTabs);
-        m_block.layout()->setTextOption(textOption);
-    }
-
-    return tabsHelper.tabLineData();
 }
 
 void Layout::registerInlineObject(const QTextInlineObject &inlineObject) {
