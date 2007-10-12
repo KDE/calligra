@@ -184,6 +184,7 @@ bool Layout::addLine(QTextLine &line) {
 
     return false;
 }
+extern int qt_defaultDpiX();
 
 bool Layout::nextParag() {
     m_inlineObjectHeights.clear();
@@ -299,8 +300,7 @@ bool Layout::nextParag() {
         foreach(QVariant tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
-            tab.position = koTab.position;
-kDebug() << "Pos: " << tab.position;
+            tab.position = koTab.position * qt_defaultDpiX() / 72.; // convertion here is required because Qt thinks in device units and we don't
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);
