@@ -67,6 +67,8 @@ public:
     OdfChartType chartType() const;
 
  private:
+    void saveLegend( KoXmlWriter &bodyWriter,
+		     KoGenStyles &mainStyles ) const;
     void saveOdfPlotArea( KoXmlWriter &xmlWriter,
                           KoGenStyles &mainStyles) const;
     void saveOdfData( KoXmlWriter& bodyWriter,

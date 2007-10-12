@@ -438,7 +438,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     // FIXME
 
     // 5. Write the legend.
-    // FIXME
+    saveLegend( bodyWriter, mainStyles );
 
     // 6. Write the plot area (this is where the real action is!).
     bodyWriter.startElement( "chart:plot-area" );
@@ -449,6 +449,12 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfData( bodyWriter, mainStyles );
 
     bodyWriter.endElement(); // chart:chart
+}
+
+
+void ChartShape::saveLegend( KoXmlWriter &bodyWriter,
+			     KoGenStyles& mainStyles ) const
+{
 }
 
 
