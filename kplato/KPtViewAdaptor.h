@@ -46,8 +46,6 @@ public Q_SLOTS:
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
-    void slotViewGantt();
-    void slotViewResources();
     void slotAddTask();
     void slotAddSubTask();
     void slotAddMilestone();

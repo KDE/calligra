@@ -62,16 +62,6 @@ void ViewAdaptor::slotEditPaste()
   m_view->slotEditPaste();
 }
 
-void ViewAdaptor::slotViewGantt()
-{
-  m_view->slotViewGantt();
-}
-
-void ViewAdaptor::slotViewResources()
-{
-//  m_view->slotViewResources();
-}
-
 void ViewAdaptor::slotAddTask()
 {
   m_view->slotAddTask();

@@ -140,25 +140,6 @@ public slots:
     void slotEditPaste();
     void slotViewSelector( bool show );
 
-    void slotViewGantt();
-    void slotViewGanttResources();
-    void slotViewGanttTaskName();
-    void slotViewGanttTaskLinks();
-    void slotViewGanttProgress();
-    void slotViewGanttFloat();
-    void slotViewGanttCriticalTasks();
-    void slotViewGanttCriticalPath();
-    void slotViewGanttNoInformation();
-    void slotViewTaskAppointments();
-
-//    void slotViewResources();
-    void slotViewResourceAppointments();
-
-    void slotViewAccounts();
-
-    void slotViewCalendarEditor();
-
-    void slotViewTaskEditor();
     void slotAddTask();
     void slotAddSubTask();
     void slotAddMilestone();
@@ -166,8 +147,6 @@ public slots:
     void slotDefineWBS();
     void slotGenerateWBS();
 
-    void slotViewTaskStatusView();
-    
     void slotCreateView();
     void slotCreateKofficeDocument( KoDocumentEntry& );
 
@@ -276,8 +255,6 @@ private:
     int m_defaultFontSize;
     int m_currentEstimateType;
 
-    bool m_updateGanttview;
-//    bool m_updateResourceview;
     bool m_updateAccountsview;
     bool m_updateResourceAssignmentView;
     bool m_updatePertEditor;
@@ -300,16 +277,6 @@ private:
 
     // ------ View
     KToggleAction *actionViewSelector;
-
-    KToggleAction *actionViewGanttResources;
-    KToggleAction *actionViewGanttTaskName;
-    KToggleAction *actionViewGanttTaskLinks;
-    KToggleAction *actionViewGanttProgress;
-    KToggleAction *actionViewGanttFloat;
-    KToggleAction *actionViewGanttCriticalTasks;
-    KToggleAction *actionViewGanttCriticalPath;
-    KToggleAction *actionViewGanttNotScheduled;
-    KToggleAction *actionViewTaskAppointments;
 
     KToggleAction *actionViewResourceAppointments;
 

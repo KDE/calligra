@@ -175,6 +175,8 @@ GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
 
     m_gantt = new MyKDGanttView( part, m_splitter );
 
+    setupGui();
+    
     m_showExpected = true;
     m_showOptimistic = false;
     m_showPessimistic = false;
@@ -203,9 +205,38 @@ void GanttView::setZoom( double )
     //m_taskView->setZoom( zoom );
 }
 
-void GanttView::show()
+void GanttView::setupGui()
 {
-    //m_gantt->show();
+/*    actionViewGanttResources  = new KToggleAction(i18n("Resources"), this);
+    actionCollection()->addAction("view_gantt_showResources", actionViewGanttResources );
+    connect( actionViewGanttResources, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttResources() ) );
+    actionViewGanttTaskName  = new KToggleAction(i18n("Task Name"), this);
+    actionCollection()->addAction("view_gantt_showTaskName", actionViewGanttTaskName );
+    connect( actionViewGanttTaskName, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskName() ) );
+    actionViewGanttTaskLinks  = new KToggleAction(i18n("Task Links"), this);
+    actionCollection()->addAction("view_gantt_showTaskLinks", actionViewGanttTaskLinks );
+    connect( actionViewGanttTaskLinks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskLinks() ) );
+    actionViewGanttProgress  = new KToggleAction(i18n("Progress"), this);
+    actionCollection()->addAction("view_gantt_showProgress", actionViewGanttProgress );
+    connect( actionViewGanttProgress, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttProgress() ) );
+    actionViewGanttFloat  = new KToggleAction(i18n("Float"), this);
+    actionCollection()->addAction("view_gantt_showFloat", actionViewGanttFloat );
+    connect( actionViewGanttFloat, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttFloat() ) );
+    actionViewGanttCriticalTasks  = new KToggleAction(i18n("Critical Tasks"), this);
+    actionCollection()->addAction("view_gantt_showCriticalTasks", actionViewGanttCriticalTasks );
+    connect( actionViewGanttCriticalTasks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalTasks() ) );
+    actionViewGanttCriticalPath  = new KToggleAction(i18n("Critical Path"), this);
+    actionCollection()->addAction("view_gantt_showCriticalPath", actionViewGanttCriticalPath );
+    connect( actionViewGanttCriticalPath, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalPath() ) );
+
+    actionViewGanttNotScheduled  = new KToggleAction(i18n("Not Scheduled"), this);
+    actionCollection()->addAction("view_gantt_showNotScheduled", actionViewGanttNotScheduled );
+    connect(actionViewGanttNotScheduled, SIGNAL(triggered(bool)), this, SLOT(slotViewGanttNotScheduled()));
+
+    actionViewTaskAppointments  = new KToggleAction(i18n("Show allocations"), this);
+    actionCollection()->addAction("view_task_appointments", actionViewTaskAppointments );
+    connect( actionViewTaskAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewTaskAppointments() ) );
+*/
 }
 
 void GanttView::clear()

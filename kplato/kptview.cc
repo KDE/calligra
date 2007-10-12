@@ -182,36 +182,6 @@ View::View( Part* part, QWidget* parent )
     m_scheduleActionGroup->setExclusive( true );
     connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
 
-    actionViewGanttResources  = new KToggleAction(i18n("Resources"), this);
-    actionCollection()->addAction("view_gantt_showResources", actionViewGanttResources );
-    connect( actionViewGanttResources, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttResources() ) );
-    actionViewGanttTaskName  = new KToggleAction(i18n("Task Name"), this);
-    actionCollection()->addAction("view_gantt_showTaskName", actionViewGanttTaskName );
-    connect( actionViewGanttTaskName, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskName() ) );
-    actionViewGanttTaskLinks  = new KToggleAction(i18n("Task Links"), this);
-    actionCollection()->addAction("view_gantt_showTaskLinks", actionViewGanttTaskLinks );
-    connect( actionViewGanttTaskLinks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskLinks() ) );
-    actionViewGanttProgress  = new KToggleAction(i18n("Progress"), this);
-    actionCollection()->addAction("view_gantt_showProgress", actionViewGanttProgress );
-    connect( actionViewGanttProgress, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttProgress() ) );
-    actionViewGanttFloat  = new KToggleAction(i18n("Float"), this);
-    actionCollection()->addAction("view_gantt_showFloat", actionViewGanttFloat );
-    connect( actionViewGanttFloat, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttFloat() ) );
-    actionViewGanttCriticalTasks  = new KToggleAction(i18n("Critical Tasks"), this);
-    actionCollection()->addAction("view_gantt_showCriticalTasks", actionViewGanttCriticalTasks );
-    connect( actionViewGanttCriticalTasks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalTasks() ) );
-    actionViewGanttCriticalPath  = new KToggleAction(i18n("Critical Path"), this);
-    actionCollection()->addAction("view_gantt_showCriticalPath", actionViewGanttCriticalPath );
-    connect( actionViewGanttCriticalPath, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalPath() ) );
-
-    // actionViewGanttNotScheduled  = new KToggleAction(i18n("Not Scheduled"), this);
-    // actionCollection()->addAction("view_gantt_showNotScheduled", actionViewGanttNotScheduled );
-    // connect(actionViewGanttNotScheduled, SIGNAL(triggered(bool)), this, SLOT(slotViewGanttNotScheduled()));
-
-    actionViewTaskAppointments  = new KToggleAction(i18n("Show allocations"), this);
-    actionCollection()->addAction("view_task_appointments", actionViewTaskAppointments );
-    connect( actionViewTaskAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewTaskAppointments() ) );
-
     actionViewResourceAppointments  = new KToggleAction(i18n("Show allocations"), this);
     actionCollection()->addAction("view_resource_appointments", actionViewResourceAppointments );
     connect( actionViewResourceAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewResourceAppointments() ) );
@@ -296,13 +266,6 @@ View::View( Part* part, QWidget* parent )
     // Viewlist popup
     connect( m_viewlist, SIGNAL( createView() ), SLOT( slotCreateView() ) );
     connect( m_viewlist, SIGNAL( createKofficeDocument( KoDocumentEntry& ) ), SLOT( slotCreateKofficeDocument( KoDocumentEntry& ) ) );
-
-    // ------------------- Actions with a key binding and no GUI item
-    // Temporary, till we get a menu entry
-    actNoInformation  = new KAction(i18n("Toggle no information"), this);
-    actionCollection()->addAction("show_noinformation", actNoInformation );
-    connect( actNoInformation, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttNoInformation() ) );
-    actNoInformation->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_T ) );
 
 #ifndef NDEBUG
     //new KAction("Print Debug", CTRL+Qt::SHIFT+Qt::Key_P, this, SLOT( slotPrintDebug()), actionCollection(), "print_debug");
@@ -700,7 +663,6 @@ ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QSt
 {
     GanttView *ganttview = new GanttView( getPart(), m_tab, getPart()->isReadWrite() );
     m_tab->addWidget( ganttview );
-    m_updateGanttview = false;
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, ganttview, getPart(), "gantt_chart" );
     i->setToolTip( 0, tip );
@@ -850,161 +812,10 @@ void View::slotEditPaste()
     //kDebug();
 }
 
-void View::slotViewGanttResources()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowResources( actionViewGanttResources->isChecked() );
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewGanttTaskName()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowTaskName( actionViewGanttTaskName->isChecked() );
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewGanttTaskLinks()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowTaskLinks( actionViewGanttTaskLinks->isChecked() );
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewGanttProgress()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowProgress( actionViewGanttProgress->isChecked() );
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewGanttFloat()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowPositiveFloat( actionViewGanttFloat->isChecked() );
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewGanttCriticalTasks()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowCriticalTasks( actionViewGanttCriticalTasks->isChecked() );
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewGanttCriticalPath()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowCriticalPath( actionViewGanttCriticalPath->isChecked() );
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewGanttNoInformation()
-{
-    //kDebug() << ganttview->showNoInformation();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowNoInformation( !v->showNoInformation() ); //Toggle
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
-void View::slotViewTaskAppointments()
-{
-    //kDebug();
-    GanttView *v = dynamic_cast<GanttView*>( m_viewlist->findView( "Ganttview" ) );
-    if ( v == 0 ) {
-        return;
-    }
-    v->setShowAppointments( actionViewTaskAppointments->isChecked() );
-    m_updateGanttview = true;
-    if ( m_tab->currentWidget() == v )
-        slotUpdate();
-}
-
 void View::slotViewSelector( bool show )
 {
     //kDebug();
     m_viewlist->setVisible( show );
-}
-
-void View::slotViewGantt()
-{
-    //kDebug();
-    m_viewlist->setSelected( m_viewlist->findItem( "Ganttview" ) );
-}
-
-// void View::slotViewResources()
-// {
-//     //kDebug();
-//     m_viewlist->setSelected( m_viewlist->findItem( "ResourceView" ) );
-// }
-
-void View::slotViewResourceAppointments()
-{
-    //kDebug();
-
-}
-
-void View::slotViewAccounts()
-{
-    //kDebug();
-    m_viewlist->setSelected( m_viewlist->findItem( "AccountsView" ) );
-}
-
-void View::slotViewTaskEditor()
-{
-    //kDebug();
-    m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
-}
-
-void View::slotViewCalendarEditor()
-{
-    //kDebug();
-    m_viewlist->setSelected( m_viewlist->findItem( "CalendarEditor" ) );
-}
-
-void View::slotViewTaskStatusView()
-{
-    //kDebug();
-    m_viewlist->setSelected( m_viewlist->findItem( "TaskStatusView" ) );
 }
 
 
@@ -1906,7 +1717,6 @@ void View::slotUpdate()
     //kDebug()<<"calculate="<<calculate;
 
 //    m_updateResourceview = true;
-    m_updateAccountsview = true;
     m_updateResourceAssignmentView = true;
     m_updatePertEditor = true;
     updateView( m_tab->currentWidget() );
@@ -2134,13 +1944,7 @@ void View::updateView( QWidget * )
     QApplication::setOverrideCursor( Qt::WaitCursor );
     //setScheduleActionsEnabled();
 
-    mainWindow() ->toolBar( "report" ) ->hide();
     QWidget *widget2;
-
-    widget2 = m_viewlist->findView( "ResourceView" ) ;
-//     if ( m_updateResourceview )
-//         static_cast<ViewBase*>( widget2 ) ->draw( getPart() ->getProject() );
-//     m_updateResourceview = false;
 
     widget2 = m_viewlist->findView( "AccountsView" );
     if ( m_updateAccountsview )

@@ -1387,7 +1387,7 @@ void PertResult::slotProjectCalculated( ScheduleManager *sm )
 {
     if ( sm && sm == model()->manager() ) {
         //draw();
-        model()->setManager( sm );
+        slotScheduleSelectionChanged( sm );
     }
 }
 
@@ -1400,12 +1400,21 @@ void PertResult::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
     }
 }
 
+void PertResult::slotScheduleManagerChanged( ScheduleManager *sm )
+{
+    kDebug();
+    if ( current_schedule && current_schedule == sm ) {
+        slotScheduleSelectionChanged( sm );
+    }
+}
+
 void PertResult::setProject( Project *project )
 {
     if ( m_project ) {
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotScheduleManagerChanged( ScheduleManager* ) ) );
     }
     m_project = project;
     widget.treeWidgetTaskResult->model()->setProject( m_project );
@@ -1413,6 +1422,7 @@ void PertResult::setProject( Project *project )
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotScheduleManagerChanged( ScheduleManager* ) ) );
     }
     draw();
 }
@@ -1438,8 +1448,7 @@ PertCpmView::PertCpmView( Part *part, QWidget *parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertCpmView ----------------" << endl;
     widget.setupUi(this);
-    widget.finishTime->setEnabled( false );
-    widget.probability->setEnabled( false );
+    widget.probabilityFrame->setVisible( false );
 
     widget.cpmTable->setStretchLastSection ( false );
     CriticalPathItemModel *m = new CriticalPathItemModel( part );
@@ -1502,8 +1511,8 @@ void PertCpmView::slotOptions()
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
     kDebug()<<sm<<endl;
-    widget.finishTime->setEnabled( sm != 0 );
-    widget.probability->setEnabled( sm != 0 );
+    bool enbl = sm && sm->isScheduled() && sm->usePert();
+    widget.probabilityFrame->setVisible( enbl );
     current_schedule = sm;
     model()->setManager( sm );
     draw();
@@ -1512,7 +1521,15 @@ void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )
 void PertCpmView::slotProjectCalculated( ScheduleManager *sm )
 {
     if ( sm && sm == model()->manager() ) {
-        model()->setManager( sm );
+        slotScheduleSelectionChanged( sm );
+    }
+}
+
+void PertCpmView::slotScheduleManagerChanged( ScheduleManager *sm )
+{
+    kDebug();
+    if ( current_schedule == sm ) {
+        slotScheduleSelectionChanged( sm );
     }
 }
 
@@ -1521,8 +1538,7 @@ void PertCpmView::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
     if ( sm == current_schedule ) {
         current_schedule = 0;
         model()->setManager( 0 );
-        widget.finishTime->setEnabled( false );
-        widget.probability->setEnabled( false );
+        widget.probabilityFrame->setVisible( false );
     }
 }
 
@@ -1532,6 +1548,7 @@ void PertCpmView::setProject( Project *project )
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         disconnect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotScheduleManagerChanged( ScheduleManager* ) ) );
     }
     m_project = project;
     widget.cpmTable->model()->setProject( m_project );
@@ -1539,6 +1556,7 @@ void PertCpmView::setProject( Project *project )
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
         connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotProjectCalculated( ScheduleManager* ) ) );
         connect( m_project, SIGNAL( scheduleManagerToBeRemoved( const ScheduleManager* ) ), this, SLOT( slotScheduleManagerToBeRemoved( const ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( scheduleManagerChanged( ScheduleManager* ) ), this, SLOT( slotScheduleManagerChanged( ScheduleManager* ) ) );
     }
     draw();
 }
@@ -1639,8 +1657,6 @@ void PertCpmView::saveContext( QDomElement &context ) const
 {
     widget.cpmTable->saveContext( context );
 }
-
-
 
 } // namespace KPlato
 

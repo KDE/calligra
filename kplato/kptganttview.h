@@ -78,7 +78,7 @@ public:
     //~GanttView();
 
     virtual void setZoom( double zoom );
-    void show();
+    void setupGui();
     virtual void setProject( Project *project );
     virtual void draw( Project &project );
     virtual void drawChanges( Project &project );

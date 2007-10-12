@@ -66,40 +66,64 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>Probability of finishing before</string>
+      <widget class="QFrame" name="probabilityFrame" >
+       <property name="frameShape" >
+        <enum>QFrame::NoFrame</enum>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDateTimeEdit" name="finishTime" >
-       <property name="calendarPopup" >
-        <bool>true</bool>
+       <property name="frameShadow" >
+        <enum>QFrame::Raised</enum>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>is</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="probability" >
-       <property name="suffix" >
-        <string>%</string>
-       </property>
-       <property name="minimum" >
-        <number>1</number>
-       </property>
+       <layout class="QHBoxLayout" >
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="label" >
+          <property name="text" >
+           <string>Probability of finishing before</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDateTimeEdit" name="finishTime" >
+          <property name="calendarPopup" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>is</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="probability" >
+          <property name="suffix" >
+           <string>%</string>
+          </property>
+          <property name="minimum" >
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>

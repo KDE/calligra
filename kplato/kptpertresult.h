@@ -239,6 +239,7 @@ public slots:
 protected slots:
     void slotProjectCalculated( ScheduleManager *sm );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
+    void slotScheduleManagerChanged( ScheduleManager *sm );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     
     void slotOptions();
@@ -287,6 +288,7 @@ public slots:
 protected slots:
     void slotProjectCalculated( ScheduleManager *sm );
     void slotScheduleManagerToBeRemoved( const ScheduleManager *sm );
+    void slotScheduleManagerChanged( ScheduleManager *sm );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     
     void slotOptions();
