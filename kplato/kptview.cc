@@ -787,6 +787,8 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
     i->setToolTip( 0, tip );
 
     v->setProject( &( getProject() ) );
+    
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
 
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
     v->updateReadWrite( m_readWrite );

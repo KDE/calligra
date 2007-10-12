@@ -124,6 +124,7 @@ void Project::calculate( const DateTime &dt )
         cs->notScheduled = false;
         calcFreeFloat();
         emit scheduleChanged( cs );
+        emit changed();
     } else if ( type() == Type_Subproject ) {
         kWarning() << "Subprojects not implemented" << endl;
     } else {
@@ -154,6 +155,7 @@ void Project::calculate( ScheduleManager &sm )
     emit sigProgress( 100 );
     emit sigProgress( -1 );
     emit projectCalculated( &sm );
+    emit changed();
 }
 
 void Project::calculate( Schedule *schedule )
@@ -207,6 +209,7 @@ void Project::calculate()
         cs->notScheduled = false;
         calcFreeFloat();
         emit scheduleChanged( cs );
+        emit changed();
     } else if ( type() == Type_Subproject ) {
         kWarning() << "Subprojects not implemented" << endl;
     } else {
@@ -775,6 +778,7 @@ void Project::addResourceGroup( ResourceGroup *group, int index )
         r->setProject( this );
     }
     emit resourceGroupAdded( group );
+    emit changed();
 }
 
 ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
@@ -794,6 +798,7 @@ ResourceGroup *Project::takeResourceGroup( ResourceGroup *group )
         removeResourceId( r->id() );
     }
     emit resourceGroupRemoved( g );
+    emit changed();
     return g;
 }
 
@@ -809,6 +814,7 @@ void Project::addResource( ResourceGroup *group, Resource *resource, int index )
     group->addResource( i, resource, 0 );
     setResourceId( resource );
     emit resourceAdded( resource );
+    emit changed();
 }
 
 Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
@@ -818,6 +824,7 @@ Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
     emit resourceRemoved( resource );
+    emit changed();
     return r;
 }
 
@@ -873,6 +880,7 @@ bool Project::addSubTask( Node* task, int index, Node* parent )
     emit nodeToBeAdded( p, i );
     p->insertChildNode( i, task );
     emit nodeAdded( task );
+    emit changed();
     return true;
 }
 
@@ -887,6 +895,7 @@ void Project::takeTask( Node *node )
     emit nodeToBeRemoved( node );
     parent->takeChildNode( node );
     emit nodeRemoved( node );
+    emit changed();
 }
 
 bool Project::canMoveTask( Node* node, Node *newParent )
@@ -1444,6 +1453,7 @@ void Project::addCalendar( Calendar *calendar, Calendar *parent )
     }
     setCalendarId( calendar );
     emit calendarAdded( calendar );
+    emit changed();
 }
 
 void Project::takeCalendar( Calendar *calendar )
@@ -1462,6 +1472,7 @@ void Project::takeCalendar( Calendar *calendar )
         calendar->setParentCal( 0 );
     }
     emit calendarRemoved( calendar );
+    emit changed();
 }
 
 int Project::indexOf( const Calendar *calendar ) const
@@ -1547,6 +1558,7 @@ void Project::setDefaultCalendar( Calendar *cal )
         cal->setDefault( true );
     }
     emit defaultCalendarChanged( cal );
+    emit changed();
 }
 
 void Project::setStandardWorktime( StandardWorktime * worktime )
@@ -1634,6 +1646,7 @@ void Project::setCurrentSchedule( long id )
         r->setCurrentSchedule( id );
     }
     emit currentScheduleChanged();
+    emit changed();
 }
 
 ScheduleManager *Project::findScheduleManager( const QString &name ) const
@@ -1687,6 +1700,7 @@ void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent )
         sm->setParentManager( parent );
     }
     emit scheduleManagerAdded( sm );
+    emit changed();
     //kDebug()<<"Added:"<<sm->name()<<", now"<<m_managers.count();
 }
 
@@ -1699,6 +1713,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
             emit scheduleManagerToBeRemoved( sm );
             sm->setParentManager( 0 );
             emit scheduleManagerRemoved( sm );
+            emit changed();
         }
     } else {
         index = indexOf( sm );
@@ -1706,6 +1721,7 @@ int Project::takeScheduleManager( ScheduleManager *sm )
             emit scheduleManagerToBeRemoved( sm );
             m_managers.removeAt( indexOf( sm ) );
             emit scheduleManagerRemoved( sm );
+            emit changed();
         }
     }
     return index;
@@ -1779,6 +1795,7 @@ void Project::changed( Node *node )
 {
     if ( m_parent == 0 ) {
         emit nodeChanged( node );
+        emit changed();
         return;
     }
     Node::changed( node );
@@ -1788,17 +1805,20 @@ void Project::changed( ResourceGroup *group )
 {
     //kDebug();
     emit resourceGroupChanged( group );
+    emit changed();
 }
 
 void Project::changed( ScheduleManager *sm )
 {
     emit scheduleManagerChanged( sm );
+    emit changed();
 }
 
 void Project::changed( MainSchedule *sch )
 {
     //kDebug()<<sch->id();
     emit scheduleChanged( sch );
+    emit changed();
 }
 
 void Project::sendScheduleToBeAdded( const ScheduleManager *sm, int row )
@@ -1810,6 +1830,7 @@ void Project::sendScheduleAdded( const MainSchedule *sch )
 {
     //kDebug()<<sch->id();
     emit scheduleAdded( sch );
+    emit changed();
 }
 
 void Project::sendScheduleToBeRemoved( const MainSchedule *sch )
@@ -1821,16 +1842,19 @@ void Project::sendScheduleRemoved( const MainSchedule *sch )
 {
     //kDebug()<<sch->id();
     emit scheduleRemoved( sch );
+    emit changed();
 }
 
 void Project::changed( Resource *resource )
 {
     emit resourceChanged( resource );
+    emit changed();
 }
 
 void Project::changed( Calendar *cal )
 {
     emit calendarChanged( cal );
+    emit changed();
 }
 
 bool Project::addRelation( Relation *rel, bool check )
@@ -1845,6 +1869,7 @@ bool Project::addRelation( Relation *rel, bool check )
     rel->parent()->addDependChildNode( rel );
     rel->child()->addDependParentNode( rel );
     emit relationAdded( rel );
+    emit changed();
     return true;
 }
 
@@ -1854,18 +1879,21 @@ void Project::takeRelation( Relation *rel )
     rel->parent() ->takeDependChildNode( rel );
     rel->child() ->takeDependParentNode( rel );
     emit relationRemoved( rel );
+    emit changed();
 }
 
 void Project::setRelationType( Relation *rel, Relation::Type type )
 {
     rel->setType( type );
     emit relationModified( rel );
+    emit changed();
 }
 
 void Project::setRelationLag( Relation *rel, const Duration &lag )
 {
     rel->setLag( lag );
     emit relationModified( rel );
+    emit changed();
 }
 
 #ifndef NDEBUG

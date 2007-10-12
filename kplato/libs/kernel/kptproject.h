@@ -435,11 +435,13 @@ public:
     QList<Node*> criticalPath( long id = -1, int index = 0 );
 
 signals:
-    /// TODO: Emitted when anything in the project is changed
+    /// Emitted when anything in the project is changed (use with care)
     void changed();
     /// Emitted when a schedule has been calculated
     void projectCalculated( ScheduleManager *sm );
+    /// Emitted when the pointer to the current schedule has been changed
     void currentScheduleChanged();
+    /// Use to show progress during calculation
     void sigProgress( int );
     
     /// This signal is emitted when one of the nodes members is changed.

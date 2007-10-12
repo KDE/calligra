@@ -50,9 +50,10 @@ void ChartView::setProject( Project *project )
     m_project = project;
     if ( project ) {
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
-    }
-    if ( m_manager != 0 ) {
-        m_panel->draw( *project, *m_manager );
+        
+        if ( m_manager != 0 ) {
+            m_panel->draw( *project, *m_manager );
+        }
     }
 }
 
@@ -67,8 +68,8 @@ void ChartView::setScheduleManager( ScheduleManager *sm )
 
 void ChartView::slotNodeChanged( Node* )
 {
+    //kDebug()<<m_project<<m_manager;
     if ( m_project && m_manager) {
-        kDebug()<<endl;
         m_panel->draw( *m_project, *m_manager );
     }
 }
