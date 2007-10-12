@@ -120,6 +120,10 @@ namespace ToolTip
     static QString ScheduleDistribution = i18n( "The distribution to be used during scheduling" );
     static QString ScheduleCalculate = i18n( "Defines the schedules to be calculated" );
 
+    static QString DocumentUrl = i18n( "The url of the document" );
+    static QString DocumentType = i18n( "The type of the document" );
+    static QString DocumentStatus = i18n( "The status of the document" );
+
 } //namespace ToolTip
 
 namespace WhatsThis

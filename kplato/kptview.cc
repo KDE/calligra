@@ -794,13 +794,6 @@ ViewBase *View::createChartView( ViewListItem *cat, const QString tag, const QSt
 
 }
 
-// TODO
-// QDockWidget *View::createToolBox() {
-//     m_toolbox = KoToolManager::instance()->toolBox("KPlato");
-//     m_toolbox->hide();
-//     return m_toolbox;
-// }
-
 Project& View::getProject() const
 {
     return getPart() ->getProject();
@@ -1288,7 +1281,7 @@ void View::slotAddSubTask()
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
-            QUndoCommand * m = dia->buildCommand( getPart() );
+            QUndoCommand *m = dia->buildCommand( getPart() );
             m->redo(); // do changes to task
             delete m;
             SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Subtask" ) );
@@ -1442,7 +1435,8 @@ void View::slotOpenNode( Node *node )
             //TODO
             break;
         case Node::Type_Task: {
-                Task *task = dynamic_cast<Task *>( node );
+            kDebug()<<0;
+            Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
@@ -1451,7 +1445,9 @@ void View::slotOpenNode( Node *node )
                         getPart() ->addCommand( m );
                     }
                 }
+                kDebug()<<1;
                 delete dia;
+                kDebug()<<2;
                 break;
             }
         case Node::Type_Milestone: {

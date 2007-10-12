@@ -24,16 +24,13 @@
 #include <kpagedialog.h>
 
 
-
-
-//TODO ui files are not in the KPlato namespace!!
-
 namespace KPlato
 {
 
 class Accounts;
 class TaskGeneralPanel;
 class RequestResourcesPanel;
+class DocumentsPanel;
 class TaskCostPanel;
 class Part;
 class Task;
@@ -63,6 +60,7 @@ protected slots:
 private:
     TaskGeneralPanel *m_generalTab;
     RequestResourcesPanel *m_resourcesTab;
+    DocumentsPanel *m_documentsTab;
     TaskCostPanel *m_costTab;
 };
 

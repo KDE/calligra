@@ -25,6 +25,7 @@
 #include "kptcalendar.h"
 #include "kptrelation.h"
 #include "kptresource.h"
+#include "kptdocuments.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -2801,5 +2802,112 @@ void ModifyStandardWorktimeDayCmd::unexecute()
     swt->setDay( m_oldvalue );
 
 }
+
+//----------------
+DocumentAddCmd::DocumentAddCmd( Documents &docs, Document *value, const QString& name )
+    : NamedCommand( name ),
+    m_docs( docs ),
+    m_mine( true )
+{
+    Q_ASSERT( value );
+    m_value = value;
+}
+DocumentAddCmd::~DocumentAddCmd()
+{
+    //kDebug();
+    if ( m_mine )
+        delete m_value;
+}
+void DocumentAddCmd::execute()
+{
+    m_docs.addDocument( m_value );
+    m_mine = false;
+}
+void DocumentAddCmd::unexecute()
+{
+    m_docs.takeDocument( m_value );
+    m_mine = true;
+}
+
+//----------------
+DocumentRemoveCmd::DocumentRemoveCmd( Documents &docs, Document *value, const QString& name )
+    : NamedCommand( name ),
+    m_docs( docs ),
+    m_mine( false )
+{
+    Q_ASSERT( value );
+    m_value = value;
+}
+DocumentRemoveCmd::~DocumentRemoveCmd()
+{
+    //kDebug();
+    if ( m_mine )
+        delete m_value;
+}
+void DocumentRemoveCmd::execute()
+{
+    m_docs.takeDocument( m_value );
+    m_mine = true;
+}
+void DocumentRemoveCmd::unexecute()
+{
+    m_docs.addDocument( m_value );
+    m_mine = false;
+}
+
+//----------------
+DocumentModifyUrlCmd::DocumentModifyUrlCmd( Document *doc, const KUrl &value, const QString& name )
+    : NamedCommand( name ),
+    m_doc( doc )
+{
+    Q_ASSERT( doc );
+    m_value = value;
+    m_oldvalue = doc->url();
+}
+void DocumentModifyUrlCmd::execute()
+{
+    m_doc->setUrl( m_value );
+}
+void DocumentModifyUrlCmd::unexecute()
+{
+    m_doc->setUrl( m_oldvalue );
+}
+
+//----------------
+DocumentModifyTypeCmd::DocumentModifyTypeCmd( Document *doc, Document::Type value, const QString& name )
+    : NamedCommand( name ),
+    m_doc( doc )
+{
+    Q_ASSERT( doc );
+    m_value = value;
+    m_oldvalue = doc->type();
+}
+void DocumentModifyTypeCmd::execute()
+{
+    m_doc->setType( m_value );
+}
+void DocumentModifyTypeCmd::unexecute()
+{
+    m_doc->setType( m_oldvalue );
+}
+
+//----------------
+DocumentModifyStatusCmd::DocumentModifyStatusCmd( Document *doc, const QString &value, const QString& name )
+    : NamedCommand( name ),
+    m_doc( doc )
+{
+    Q_ASSERT( doc );
+    m_value = value;
+    m_oldvalue = doc->type();
+}
+void DocumentModifyStatusCmd::execute()
+{
+    m_doc->setStatus( m_value );
+}
+void DocumentModifyStatusCmd::unexecute()
+{
+    m_doc->setStatus( m_oldvalue );
+}
+
 
 }  //KPlato namespace

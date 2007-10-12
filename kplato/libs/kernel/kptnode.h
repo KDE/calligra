@@ -28,6 +28,7 @@
 #include "kptduration.h"
 #include "kptdatetime.h"
 #include "kptschedule.h"
+#include "kptdocuments.h"
 
 #include <QObject>
 #include <QHash>
@@ -442,6 +443,8 @@ public:
     
     virtual uint state( long ) const { return State_None; }
     
+    Documents &documents() { return m_documents; }
+    
 public:
     // These shouldn't be available to other than those who inherits
     /// Calculate the critical path
@@ -581,6 +584,8 @@ protected:
     Account *m_shutdownAccount;
     Account *m_runningAccount;
     
+    Documents m_documents;
+    
 private:
     void init();
         
@@ -698,7 +703,6 @@ private:
     Risktype m_risktype;
     
     Duration::Unit m_displayUnit;
-    
     
 #ifndef NDEBUG
 public:

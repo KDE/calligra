@@ -1415,15 +1415,78 @@ private:
 
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeDayCmd : public NamedCommand
 {
-    public:
-        ModifyStandardWorktimeDayCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
-        void execute();
-        void unexecute();
-    private:
-        StandardWorktime *swt;
-        double m_oldvalue;
-        double m_newvalue;
+public:
+    ModifyStandardWorktimeDayCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    StandardWorktime *swt;
+    double m_oldvalue;
+    double m_newvalue;
 };
+
+class KPLATOKERNEL_EXPORT DocumentAddCmd : public NamedCommand
+{
+public:
+    DocumentAddCmd( Documents& docs, Document *value, const QString& name = QString() );
+    ~DocumentAddCmd();
+    void execute();
+    void unexecute();
+private:
+    Documents& m_docs;
+    Document *m_value;
+    bool m_mine;
+};
+
+class KPLATOKERNEL_EXPORT DocumentRemoveCmd : public NamedCommand
+{
+public:
+    DocumentRemoveCmd( Documents& docs, Document *value, const QString& name = QString() );
+    ~DocumentRemoveCmd();
+    void execute();
+    void unexecute();
+private:
+    Documents& m_docs;
+    Document *m_value;
+    bool m_mine;
+};
+
+class KPLATOKERNEL_EXPORT DocumentModifyUrlCmd : public NamedCommand
+{
+public:
+    DocumentModifyUrlCmd( Document *doc, const KUrl &url, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    Document *m_doc;
+    KUrl m_value;
+    KUrl m_oldvalue;
+};
+
+class KPLATOKERNEL_EXPORT DocumentModifyTypeCmd : public NamedCommand
+{
+public:
+    DocumentModifyTypeCmd( Document *doc, Document::Type value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    Document *m_doc;
+    Document::Type m_value;
+    Document::Type m_oldvalue;
+};
+
+class KPLATOKERNEL_EXPORT DocumentModifyStatusCmd : public NamedCommand
+{
+public:
+    DocumentModifyStatusCmd( Document *doc, const QString &value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    Document *m_doc;
+    QString  m_value;
+    QString  m_oldvalue;
+};
+
 
 }  //KPlato namespace
 

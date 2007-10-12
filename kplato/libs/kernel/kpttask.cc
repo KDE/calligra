@@ -293,6 +293,8 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                     }
                 }
             }
+        } else if (e.tagName() == "documents") {
+            m_documents.load( e, status );
         }
     }
     //kDebug()<<m_name<<" loaded";
@@ -333,6 +335,9 @@ void Task::save(QDomElement &element)  const {
     if (m_requests) {
         m_requests->save(me);
     }
+    
+    m_documents.save( me );
+    
     for (int i=0; i<numChildren(); i++) {
         childNode(i)->save(me);
     }

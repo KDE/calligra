@@ -22,6 +22,7 @@
 #include "kpttaskcostpanel.h"
 #include "kpttaskgeneralpanel.h"
 #include "kptrequestresourcespanel.h"
+#include "kptdocumentspanel.h"
 #include "kptcommand.h"
 
 #include <klocale.h>
@@ -48,19 +49,23 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTim
     m_generalTab = new TaskGeneralPanel(task, workTime, page);
 
     page =  new KVBox();
-
     addPage(page, i18n("&Resources"));
     m_resourcesTab = new RequestResourcesPanel(page, task);
+    
+    page =  new KVBox();
+    addPage(page, i18n("&Documents"));
+    m_documentsTab = new DocumentsPanel( task, page );
+    
     page =  new KVBox();
     addPage(page, i18n("&Cost"));
     m_costTab = new TaskCostPanel(task, accounts, page);
 
-    // Set the state of all the child widgets.
     enableButtonOk(false);
 
     connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
     connect(m_generalTab, SIGNAL( obligatedFieldsFilled(bool) ), this, SLOT( enableButtonOk(bool) ));
     connect(m_resourcesTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
+    connect(m_documentsTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
     connect(m_costTab, SIGNAL( changed() ), m_generalTab, SLOT( checkAllFieldsFilled() ));
 }
 
@@ -74,6 +79,11 @@ MacroCommand *TaskDialog::buildCommand(Part *part) {
         modified = true;
     }
     cmd = m_resourcesTab->buildCommand(part);
+    if (cmd) {
+        m->addCommand(cmd);
+        modified = true;
+    }
+    cmd = m_documentsTab->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;
