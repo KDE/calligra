@@ -154,9 +154,9 @@ private slots:
     /// add a KoDocument wide undo command which will call undo on the qtextdocument.
     void addUndoCommand();
 
-    /// signal for when a series of commands is started that together need to become 1 undo action.
+    /// slot to call when a series of commands is started that together need to become 1 undo action.
     void startMacro(const QString &title);
-    /// signal for when a series of commands has ended that together should be 1 undo action.
+    /// slot to call when a series of commands has ended that together should be 1 undo action.
     void stopMacro();
 
     /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
@@ -186,6 +186,8 @@ private:
     void finishedWord();
     void finishedParagraph();
 
+    void startKeyPressMacro();
+
 private:
     friend class UndoTextCommand;
     friend class TextCommandBase;
@@ -201,6 +203,7 @@ private:
     bool m_trackChanges;
     bool m_allowResourceProviderUpdates;
     bool m_needSpellChecking;
+    bool m_processingKeyPress; // all undo commands generated from key-presses should be combined.
     int m_prevCursorPosition; /// used by editingPluginEvents
 
     QAction *m_actionFormatBold;

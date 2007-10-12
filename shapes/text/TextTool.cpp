@@ -121,6 +121,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_trackChanges(false),
     m_allowResourceProviderUpdates(true),
     m_needSpellChecking(true),
+    m_processingKeyPress(false),
     m_prevCursorPosition(-1),
     m_spellcheckPlugin(0),
     m_currentCommand(0),
@@ -546,10 +547,10 @@ void TextTool::mousePressEvent( KoPointerEvent *event ) {
 void TextTool::setShapeData(KoTextShapeData *data) {
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
     if(m_textShapeData && docChanged)
-        disconnect(m_textShapeData->document(), SIGNAL(undoAvailable(bool)), this, SLOT(addUndoCommand()));
+        disconnect(m_textShapeData->document(), SIGNAL(undoCommandAdded()), this, SLOT(addUndoCommand()));
     m_textShapeData = data;
     if(m_textShapeData && docChanged) {
-        connect(m_textShapeData->document(), SIGNAL(undoAvailable(bool)), this, SLOT(addUndoCommand()));
+        connect(m_textShapeData->document(), SIGNAL(undoCommandAdded()), this, SLOT(addUndoCommand()));
         m_caret = QTextCursor(m_textShapeData->document());
 
         if(m_textShape->demoText()) {
@@ -782,6 +783,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             return;
         }
         else if(event->text().at(0) == '\r') {
+            startKeyPressMacro();
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             QTextBlockFormat format = m_caret.blockFormat();
@@ -809,6 +811,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
             ensureCursorVisible();
         }
         else if(event->key() == Qt::Key_Tab || ! (event->text().length() == 1 && !event->text().at(0).isPrint())) { // insert the text
+            startKeyPressMacro();
             if (m_caret.hasSelection())
                 m_selectionHandler.deleteInlineObjects();
             m_prevCursorPosition = m_caret.position();
@@ -1175,9 +1178,10 @@ void TextTool::addUndoCommand() {
             if(m_document.isNull())
                 return;
             if(! m_tool.isNull()) {
+                m_tool->stopMacro();
                 m_tool->m_allowAddUndoCommand = false;
-                if(m_tool->m_changeTracker)
-                    m_tool->m_changeTracker->notifyForUndo();
+               if(m_tool->m_changeTracker)
+                   m_tool->m_changeTracker->notifyForUndo();
                 m_document->undo(&m_tool->m_caret);
             }
             else
@@ -1189,9 +1193,10 @@ void TextTool::addUndoCommand() {
         void redo () {
             if(m_document.isNull())
                 return;
+
             if(! m_tool.isNull()) {
                 m_tool->m_allowAddUndoCommand = false;
-                 m_document->redo(&m_tool->m_caret);
+                m_document->redo(&m_tool->m_caret);
             }
             else
                 m_document->redo();
@@ -1204,6 +1209,8 @@ void TextTool::addUndoCommand() {
     };
     if(m_currentCommand) {
         new UndoTextCommand(m_textShapeData->document(), this, m_currentCommand);
+        if (! m_currentCommandHasChildren)
+            m_canvas->addCommand(m_currentCommand);
         m_currentCommandHasChildren = true;
     }
     else
@@ -1468,15 +1475,15 @@ void TextTool::startMacro(const QString &title) {
     };
     m_currentCommand = new MacroCommand(title);
     m_currentCommandHasChildren = false;
+    m_processingKeyPress = false;
 }
 
 void TextTool::stopMacro() {
     if(m_currentCommand == 0) return;
-    if(m_currentCommandHasChildren)
-        m_canvas->addCommand(m_currentCommand);
-    else
+    if (! m_currentCommandHasChildren)
         delete m_currentCommand;
     m_currentCommand = 0;
+    m_processingKeyPress = false;
 }
 
 void TextTool::showStyleManager() {
@@ -1628,5 +1635,28 @@ void TextTool::setTextColor(const KoColor &color)
 {
     m_selectionHandler.setTextColor(color.toQColor());
 }
+
+
+void TextTool::startKeyPressMacro() {
+/* we have a little state machine here;
+    As soon as the user presses a key (i.e. we enter the keyPressEvent) this method should be
+    called and we make sure that all commands from that point on are combined into one so things like
+    spell checking will not create extra undo states :)  [state a]
+    As soon as the user does a different action, like executing a menu option, we create new undo states
+    again, separating them into different user-undoable actions.  [state b]
+
+    Then there is the 'macro' function that plugins etc can start;  which is [state c].
+*/
+
+    if (m_currentCommand) {
+        if (m_processingKeyPress) // already have a key-press macro
+            return;
+        stopMacro();
+    }
+
+    startMacro(i18n("Key press"));
+    m_processingKeyPress = true;
+}
+
 
 #include "TextTool.moc"
