@@ -41,6 +41,7 @@
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_annotation.h"
 #include "KoColorSpaceRegistry.h"
@@ -150,6 +151,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         }
     }
 
+    image->addLayer(layer, image->rootLayer(), 0 );
     layer->setDirty();
     doc -> setCurrentImage(image);
     doc -> undoAdapter() -> setUndo(true);
