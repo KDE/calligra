@@ -48,6 +48,16 @@ KisPNGExport::~KisPNGExport()
 {
 }
 
+bool hasVisibleWidgets()
+{
+    QWidgetList wl = QApplication::allWidgets();
+    foreach(QWidget* w, wl)
+    {
+        if(w->isVisible()) return true;
+    }
+    return false;
+}
+
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
     kDebug(41008) <<"Png export! From:" << from <<", To:" << to <<"";
@@ -63,7 +73,6 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
-
 
     KDialog* kdb = new KDialog(0);
     kdb->setCaption( i18n("PNG Export Options") );
@@ -93,9 +102,12 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     wdg->alpha->setEnabled(isThereAlpha);
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
-    if(kdb->exec() == QDialog::Rejected)
+    if( hasVisibleWidgets())
     {
-        return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        if(kdb->exec() == QDialog::Rejected)
+        {
+            return KoFilter::OK; // FIXME Cancel doesn't exist :(
+        }
     }
 
     bool alpha = wdg->alpha->isChecked();
