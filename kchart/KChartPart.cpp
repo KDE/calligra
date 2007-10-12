@@ -55,11 +55,13 @@ using std::cerr;
 #include <KoXmlReader.h>
 #include <KoOasisStore.h>
 #include <KoShape.h>
+#include <KoShapeCreateCommand.h>
 #include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 #include <KoSavingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoToolManager.h>
 #include <KoOasisLoadingContext.h>
 
 // KDChart
@@ -210,7 +212,15 @@ void KChartPart::initNullChart()
 
 KoView* KChartPart::createViewInstance( QWidget* parent )
 {
-    return new KChartView( this, parent );
+    KChartView *view = new KChartView( this, parent );
+    addView( view );
+    m_chartShape = new ChartShape;
+    KoShapeCreateCommand *shapeCreateCmd = new KoShapeCreateCommand( this, m_chartShape );
+    addCommand( shapeCreateCmd );
+    QList<KoShape*> list;
+    list.append( m_chartShape );
+
+    return view;
 }
 
 

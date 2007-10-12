@@ -54,6 +54,7 @@
 #include <KoCsvImportDialog.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoShapeCreateCommand.h>
 #include <KoTemplateCreateDia.h>
 #include <KoToolBoxFactory.h>
 #include <KoToolDockerFactory.h>
@@ -184,7 +185,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     //kDebug() << "Size is: " << m_zoomHandler->viewToDocument( size() );
     //kDebug() << "size() is: " << size();
     //part->shape()->setSize( m_zoomHandler->viewToDocument( size() ) );
-    part->shape()->setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+    //part->shape()->setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 
     m_zoomController->setPageSize( m_canvas->documentViewRect().size() );
     m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
@@ -216,7 +217,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
         m_edit->setEnabled( false );
         m_importData->setEnabled( false );
     }
-
+    //m_canvas->shapeManager()->add( part->shape() );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
     
     //updateGuiTypeOfChart();

@@ -40,6 +40,7 @@ class QAbstractItemModel;
 namespace KDChart
 {
     class Chart;
+    class AbstractDiagram;
 }
 
 namespace KChart
@@ -65,6 +66,7 @@ public:
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 
     OdfChartType chartType() const;
+    OdfChartSubtype chartSubtype() const;
 
  private:
     void saveLegend( KoXmlWriter &bodyWriter,
@@ -78,7 +80,8 @@ public:
  public Q_SLOTS:
     /// Set new chart type and subtype.
     void setChartType( OdfChartType newType, 
-		       OdfChartSubtype newSubType = NormalChartSubtype );
+		       OdfChartSubtype newSubtype = NormalChartSubtype );
+    void setChartSubtype( OdfChartSubtype newSubtype );
 
 
  private:

@@ -27,11 +27,13 @@
 #include <KDebug>
 
 // KOffice
+#include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShapeCreateCommand.h>
 #include <KoToolProxy.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
+#include <KoToolManager.h>
 
 // KChart
 #include "ChartShape.h"
@@ -50,7 +52,7 @@ KChartCanvas::KChartCanvas( KChartView *view, KChartPart *parent )
     m_part = parent;
     m_view = view;
     m_shapeManager = new KoShapeManager( this );
-    m_shapeManager->add( m_part->shape() );
+    //m_shapeManager->add( m_part->shape() );
     m_toolProxy = new KoToolProxy( this );
 
     setBackgroundRole( QPalette::Base );
@@ -125,7 +127,6 @@ KoUnit KChartCanvas::unit() const
 
 void KChartCanvas::updateInputMethodInfo()
 {
-    kDebug() << "updateInputMethodInfo";
     updateMicroFocus();
 }
 
@@ -223,13 +224,11 @@ void KChartCanvas::resizeEvent( QResizeEvent *e )
 
 QVariant KChartCanvas::inputMethodQuery( Qt::InputMethodQuery query )
 {
-    kDebug() << "inputMethodQuery";
     return m_toolProxy->inputMethodQuery( query, *( viewConverter() ) );
 }
 
 void KChartCanvas::inputMethodEvent( QInputMethodEvent *e )
 {
-    kDebug() << "inputMethodEvent";
     m_toolProxy->inputMethodEvent( e );
 }
 

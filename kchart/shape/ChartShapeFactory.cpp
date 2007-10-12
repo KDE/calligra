@@ -20,7 +20,9 @@
 // Local
 #include "ChartShapeFactory.h"
 
+// QT
 #include <QStringList>
+#include <QStandardItemModel>
 
 #include <kiconloader.h>
 #include <kgenericfactory.h>
@@ -63,6 +65,29 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
 KoShape* ChartShapeFactory::createDefaultShape() const
 {
     ChartShape* shape = new ChartShape();
+    // Fill cells with data if there is none.
+    QStandardItemModel *m_chartData = new QStandardItemModel();
+    m_chartData->setRowCount( 4 );
+    m_chartData->setColumnCount( 4 );
+
+    // Insert example data
+    for (uint row = 0; row < 4; row++) {
+        for (uint col = 0; col < 4; col++) {
+
+            m_chartData->setItem( row, col,
+                  new QStandardItem( QString::number( row + col ) ) );
+            // Fill column label, but only on the first iteration.
+            if (row == 0) {
+                m_chartData->setHeaderData( col, Qt::Horizontal,
+                        i18n("Column %1", col + 1) );
+            }
+        }
+
+        // Fill row label.
+        m_chartData->setHeaderData( row, Qt::Vertical,
+                    i18n("Row %1", row + 1) );
+    }
+    shape->setModel( m_chartData );
     return shape;
 }
 
@@ -75,6 +100,7 @@ KoShape* ChartShapeFactory::createShape( const KoProperties* params ) const
 
 QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 {
+    kDebug() << "### createShapeOptionPanels";
     QList<KoShapeConfigWidgetBase*> answer;
     answer.append(new ChartTypeConfigWidget());
     // TODO Stefan: SubType

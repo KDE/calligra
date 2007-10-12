@@ -51,11 +51,13 @@
 #include "KDChartCartesianCoordinatePlane.h"
 #include "KDChartChart.h"
 #include "KDChartPieDiagram.h"
+#include "KDChartPolarDiagram.h"
 #include "KDChartRingDiagram.h"
 #include "KDChartFrameAttributes.h"
 #include "KDChartGridAttributes.h"
 #include "KDChartLegend.h"
 #include "KDChartHeaderFooter.h"
+#include "KDChartLineAttributes.h"
 
 // KChart
 #include "kchart_global.h"
@@ -83,7 +85,7 @@ class ChartShape::Private
 public:
     // The chart and its contents
     OdfChartType        chartType;
-    OdfChartSubtype     chartSubType;
+    OdfChartSubtype     chartSubtype;
 
     // The underlying engine
     KDChart::Chart            *chart;
@@ -107,7 +109,7 @@ ChartShape::ChartShape()
 
     // Default type and subtype
     d->chartType    = BarChartType;
-    d->chartSubType = NormalChartSubtype;
+    d->chartSubtype = NormalChartSubtype;
 
     // Initialize a basic chart.
     d->chart     = new KDChart::Chart();
@@ -206,19 +208,38 @@ void ChartShape::setChartDefaults()
 {
 }
 
+void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
+{
+    if( d->chartType != LineChartType && d->chartType != BarChartType && d->chartType != AreaChartType )
+        return;
+
+    switch ( newSubtype ) {
+        case KChart::StackedChartSubtype:
+            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Stacked );
+            break;
+        case KChart::PercentChartSubtype:
+            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Percent );
+            break;
+        default:
+            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Normal );
+    }
+    d->chartSubtype = newSubtype;
+    d->diagram->update();
+    d->chart->update();
+    repaint();
+}
 
 void ChartShape::setChartType( OdfChartType    newType,
-                               OdfChartSubtype newSubType )
+                               OdfChartSubtype newSubtype )
 {
     KDChart::AbstractDiagram           *new_diagram;
     KDChart::CartesianCoordinatePlane  *cartPlane = 0;
     KDChart::PolarCoordinatePlane      *polPlane  = 0;
 
-    if (d->chartType == newType)
+    if (d->chartType == newType && d->chartSubtype == newSubtype)
         return;
 
-    // FIXME: Take care of subtype too.
-    switch (newType) {
+    switch ( newType ) {
     case BarChartType:
         new_diagram = new KDChart::BarDiagram( d->chart, cartPlane );
         break;
@@ -227,8 +248,6 @@ void ChartShape::setChartType( OdfChartType    newType,
         break;
     case AreaChartType:
         new_diagram = new KDChart::LineDiagram();
-        //FIXME: is this the right thing to do? a type-cast?
-        ((KDChart::LineDiagram*) new_diagram)->setType( KDChart::LineDiagram::Stacked );
         break;
     case CircleChartType:
         new_diagram = new KDChart::PieDiagram(d->chart, polPlane);
@@ -241,7 +260,7 @@ void ChartShape::setChartType( OdfChartType    newType,
 	return;
         break;
     case RadarChartType:
-//        new_diagram = new KDChart::PolarDiagram(d->chart, polPlane);
+        new_diagram = new KDChart::PolarDiagram(d->chart, polPlane);
         break;
     case StockChartType:
         return;
@@ -284,6 +303,14 @@ void ChartShape::setChartType( OdfChartType    newType,
 //             l->setDiagram( new_diagram );
 
         new_diagram->setModel( d->chartData );
+
+        if( newType == AreaChartType ) {
+            KDChart::LineAttributes attributes;
+            attributes = ((KDChart::LineDiagram*) new_diagram)->lineAttributes();
+            attributes.setDisplayArea( true );
+            ((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
+        }
+
         //FIXME:Aren't we leaking memory bot doing this?, 
         //although causes a crash
 //         delete d->diagram;
@@ -297,6 +324,8 @@ void ChartShape::setChartType( OdfChartType    newType,
         // Update local data
         d->chartType = newType;
     }
+
+    setChartSubtype( newSubtype );
 }
 
 
@@ -308,6 +337,7 @@ void ChartShape::setModel( QAbstractItemModel* model )
     d->diagram->setModel( model );
     d->diagram->update();
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
+    d->chart->update();
 
 #if 0
     for ( int col = 0; col < d->diagram->model()->columnCount(); ++col ) {
@@ -338,6 +368,11 @@ QAbstractItemModel *ChartShape::model()
 OdfChartType ChartShape::chartType() const
 {
     return d->chartType;
+}
+
+OdfChartSubtype ChartShape::chartSubtype() const
+{
+    return d->chartSubtype;
 }
 
 
@@ -632,7 +667,7 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
 
     switch ( d->chartType ) {
     case BarChartType:
-        switch( d->chartSubType ) {
+        switch( d->chartSubtype ) {
         case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;

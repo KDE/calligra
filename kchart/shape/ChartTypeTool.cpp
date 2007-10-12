@@ -128,16 +128,26 @@ void ChartTypeTool::updateActions()
 QWidget *ChartTypeTool::createOptionWidget()
 {
     ChartTypeConfigWidget *widget = new ChartTypeConfigWidget();
-    connect( widget, SIGNAL(chartTypeChange(KChart::OdfChartType)),
-	     this,   SLOT(setChartType(KChart::OdfChartType)) );
+    connect( widget, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
+	     this,   SLOT( setChartType( KChart::OdfChartType ) ) );
+    connect( widget, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
+         this,   SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
 
     return widget;
 }
 
 
-void ChartTypeTool::setChartType(OdfChartType type)
+void ChartTypeTool::setChartType( OdfChartType type )
 {
-    m_currentShape->setChartType( type );
+    if( m_currentShape != 0 )
+        m_currentShape->setChartType( type, m_currentShape->chartSubtype() );
+}
+
+
+void ChartTypeTool::setChartSubtype( OdfChartSubtype subtype )
+{
+    if( m_currentShape != 0 )
+        m_currentShape->setChartSubtype( subtype );
 }
 
 

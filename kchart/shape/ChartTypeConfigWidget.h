@@ -31,10 +31,12 @@ public:
     virtual bool showOnShapeCreate() { return true; }
 
 private Q_SLOTS:
+    void chartSubtypeSelected( int type );
     void chartTypeSelected( int type );
 
 Q_SIGNALS:
-    void chartTypeChange(KChart::OdfChartType);
+    void chartTypeChange( KChart::OdfChartType );
+    void chartSubtypeChange( KChart::OdfChartSubtype );
 
 private:
     class Private;
