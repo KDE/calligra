@@ -212,6 +212,18 @@ void KChartPart::initNullChart()
 
 KoView* KChartPart::createViewInstance( QWidget* parent )
 {
+    return new KChartView( this, parent );
+
+    // Why was this ever done?  Everything is strange about it:
+    //  1. KChart should of course always have a chart, the creation
+    //     of it should not be undoable
+    //  2. createViewInstance() should only create a new view, not add
+    //     new data to it, in this case a new ChartShape. ...or at least
+    //     I think it should.
+    //  3. What's the list for? 
+    //
+    // Johannes, can you explain your idea behind it?
+    //
     KChartView *view = new KChartView( this, parent );
     addView( view );
     m_chartShape = new ChartShape;

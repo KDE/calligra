@@ -185,7 +185,10 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     //kDebug() << "Size is: " << m_zoomHandler->viewToDocument( size() );
     //kDebug() << "size() is: " << size();
     //part->shape()->setSize( m_zoomHandler->viewToDocument( size() ) );
-    //part->shape()->setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+
+    // This is probably a good default size for a chart.
+    part->shape()->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
+    //m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     m_zoomController->setPageSize( m_canvas->documentViewRect().size() );
     m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
@@ -193,7 +196,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     addStatusBarItem( zoomAction->createWidget( ( QWidget* )statusBar() ), 0 );
     connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
              this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
-    //m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
+    m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     // initialize the configuration
     //    loadConfig();
@@ -217,7 +220,8 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
         m_edit->setEnabled( false );
         m_importData->setEnabled( false );
     }
-    //m_canvas->shapeManager()->add( part->shape() );
+
+    m_canvas->shapeManager()->add( part->shape() );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
     
     //updateGuiTypeOfChart();
