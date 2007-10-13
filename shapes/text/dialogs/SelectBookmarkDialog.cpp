@@ -43,11 +43,12 @@ SelectBookmark::SelectBookmark(QList<QString> nameList, QWidget *parent)
         widget.bookmarkList->setCurrentRow(row);
     }
 
-    connect( widget.bookmarkList, SIGNAL( currentRowChanged(int) ), this, SIGNAL( bookmarkSelectionChanged(int) ) );
+    connect( widget.bookmarkList, SIGNAL( currentRowChanged(int) ), this, SLOT( selectionChanged(int) ) );
     connect( widget.buttonRename, SIGNAL( clicked() ), this, SLOT( slotBookmarkRename() ) );
     connect( widget.buttonDelete, SIGNAL( clicked() ), this, SLOT( slotBookmarkDelete() ) );
     connect( widget.bookmarkList, SIGNAL( itemActivated(QListWidgetItem *) ),
              this, SLOT( slotBookmarkItemActivated(QListWidgetItem *) ) );
+    selectionChanged( bookmarkRow() );
 }
 
 QString SelectBookmark::bookmarkName() const
@@ -61,10 +62,19 @@ int SelectBookmark::bookmarkRow() const
     return widget.bookmarkList->currentRow();
 }
 
+void SelectBookmark::selectionChanged(int currentRow)
+{
+    widget.buttonRename->setEnabled( currentRow != -1 );
+    widget.buttonDelete->setEnabled( currentRow != -1 );
+    emit bookmarkSelectionChanged(currentRow);
+}
+
 void SelectBookmark::slotBookmarkRename()
 {
-    QString curName = widget.bookmarkList->currentItem()->text();
-    QString newName = widget.bookmarkList->currentItem()->text();
+    QListWidgetItem* item = widget.bookmarkList->currentItem();
+    Q_ASSERT( item );
+    QString curName = item->text();
+    QString newName = item->text();
     while (true) {
         newName = KInputDialog::getText( i18n("Rename Bookmark"),
                                          i18n("Please provide a new name for the bookmark"),
@@ -79,7 +89,7 @@ void SelectBookmark::slotBookmarkRename()
                 KMessageBox::error(parentWidget, i18n("There exist already a bookmark with the name \"%1\".", newName));
                 continue;
             }
-            widget.bookmarkList->currentItem()->setText( newName );
+            item->setText( newName );
             emit bookmarkNameChanged( curName, newName );
         }
         break;
@@ -89,6 +99,7 @@ void SelectBookmark::slotBookmarkRename()
 void SelectBookmark::slotBookmarkDelete()
 {
     int currentRow = widget.bookmarkList->currentRow();
+    Q_ASSERT( currentRow >= 0 );
     QListWidgetItem *deletedItem = widget.bookmarkList->takeItem(currentRow);
     QString deletedName = deletedItem->text();
     emit bookmarkItemDeleted( deletedName );
@@ -129,10 +140,7 @@ QString SelectBookmarkDialog::selectedBookmarkName()
 
 void SelectBookmarkDialog::selectionChanged(int currentRow)
 {
-    if (currentRow != -1)
-        enableButtonOk( true );
-    else
-        enableButtonOk( false );
+    enableButtonOk( currentRow != -1 );
 }
 
 void SelectBookmarkDialog::bookmarkDoubleClicked(QListWidgetItem *item) {

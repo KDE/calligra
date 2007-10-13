@@ -39,6 +39,7 @@ signals:
     void bookmarkItemDoubleClicked(QListWidgetItem *item);
 
 private slots:
+    void selectionChanged(int currentRow);
     void slotBookmarkRename();
     void slotBookmarkDelete();
     void slotBookmarkItemActivated(QListWidgetItem *item);
