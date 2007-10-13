@@ -241,8 +241,6 @@ public:
 private:
 
     void saveOasisSettings( KoStore * store );
-    void saveOasisDocumentStyles( KoStore * store, KoShapeSavingContext &context );
-    void saveOasisAutomaticStyles( KoXmlWriter * contentWriter, KoGenStyles& mainStyles, bool forStylesXml );
 
     class Private;
     Private * const d;
