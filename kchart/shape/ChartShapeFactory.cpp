@@ -65,6 +65,7 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
 KoShape* ChartShapeFactory::createDefaultShape() const
 {
     ChartShape* shape = new ChartShape();
+
     // Fill cells with data if there is none.
     QStandardItemModel *m_chartData = new QStandardItemModel();
     m_chartData->setRowCount( 4 );

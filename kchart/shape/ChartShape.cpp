@@ -115,12 +115,8 @@ ChartShape::ChartShape()
     d->chart     = new KDChart::Chart();
     d->diagram   = new KDChart::BarDiagram();
     d->chart->coordinatePlane()->replaceDiagram(d->diagram);
-#if 1
     setModel( &d->defaultData );
-#else
-    d->chartData = &d->defaultData;
-    d->diagram->setModel( d->chartData );
-#endif
+
     d->firstRowAsLabel = false;
     d->firstColAsLabel = false;
 
@@ -239,46 +235,69 @@ void ChartShape::setChartType( OdfChartType    newType,
     if (d->chartType == newType && d->chartSubtype == newSubtype)
         return;
 
-    switch ( newType ) {
-    case BarChartType:
-        new_diagram = new KDChart::BarDiagram( d->chart, cartPlane );
-        break;
-    case LineChartType:
-        new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
-        break;
-    case AreaChartType:
-        new_diagram = new KDChart::LineDiagram();
-        break;
-    case CircleChartType:
-        new_diagram = new KDChart::PieDiagram(d->chart, polPlane);
-        break;
-    case RingChartType:
-        new_diagram = new KDChart::RingDiagram(d->chart, polPlane);
-        break;
-    case ScatterChartType:
-	// FIXME
-	return;
-        break;
-    case RadarChartType:
-        new_diagram = new KDChart::PolarDiagram(d->chart, polPlane);
-        break;
-    case StockChartType:
-        return;
-        break;
-    case BubbleChartType:
-        // FIXME
-        return;
-        break;
-    case SurfaceChartType:
-        // FIXME
-        return;
-        break;
-    case GanttChartType:
-        // FIXME
-        return;
-        break;
+    if ( d->chartType != newType ) {
+	switch ( newType ) {
+	case BarChartType:
+	    new_diagram = new KDChart::BarDiagram( d->chart, cartPlane );
+	    break;
+
+	case LineChartType:
+	    new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
+	    break;
+
+	case AreaChartType:
+	    new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
+
+	    // This is the way that KDChart represents an area chart:
+	    //   a line chart with the displayArea attribute set to true.
+	    {
+		KDChart::LineAttributes attributes;
+		attributes = ((KDChart::LineDiagram*) new_diagram)->lineAttributes();
+		attributes.setDisplayArea( true );
+		((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
+	    }
+	    break;
+
+	case CircleChartType:
+	    new_diagram = new KDChart::PieDiagram(d->chart, polPlane);
+	    break;
+
+	case RingChartType:
+	    new_diagram = new KDChart::RingDiagram(d->chart, polPlane);
+	    break;
+
+	case ScatterChartType:
+	    // FIXME
+	    return;
+	    break;
+
+	case RadarChartType:
+	    new_diagram = new KDChart::PolarDiagram(d->chart, polPlane);
+	    break;
+
+	case StockChartType:
+	    return;
+	    break;
+
+	case BubbleChartType:
+	    // FIXME
+	    return;
+	    break;
+
+	case SurfaceChartType:
+	    // FIXME
+	    return;
+	    break;
+
+	case GanttChartType:
+	    // FIXME
+	    return;
+	    break;
+	}
     }
 
+    // Check if we need another type of coordinate plane than we
+    // already have before.
     if ( new_diagram != NULL ) {
         if ( isPolar( d->chartType ) && isCartesian( newType ) ) {
             cartPlane = new KDChart::CartesianCoordinatePlane( d->chart );
@@ -304,13 +323,6 @@ void ChartShape::setChartType( OdfChartType    newType,
 
         new_diagram->setModel( d->chartData );
 
-        if( newType == AreaChartType ) {
-            KDChart::LineAttributes attributes;
-            attributes = ((KDChart::LineDiagram*) new_diagram)->lineAttributes();
-            attributes.setDisplayArea( true );
-            ((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
-        }
-
         //FIXME:Aren't we leaking memory bot doing this?, 
         //although causes a crash
 //         delete d->diagram;
@@ -319,7 +331,7 @@ void ChartShape::setChartType( OdfChartType    newType,
 
         d->chart->coordinatePlane()->replaceDiagram( new_diagram ); // FIXME
         d->chart->update();
-        repaint();
+        //repaint(); Not needed
 
         // Update local data
         d->chartType = newType;
