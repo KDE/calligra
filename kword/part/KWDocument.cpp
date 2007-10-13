@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -229,14 +230,7 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
 
     contentTmpFile.close();
 
-    contentWriter->startElement( "office:automatic-styles" );
-    //saveOdfAutomaticStyles( *contentWriter, mainStyles, false );
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles(KoGenStyle::StyleAuto, false);
-    QList<KoGenStyles::NamedStyle>::iterator it;
-    for ( it = styles.begin(); it != styles.end(); ++it ) {
-        (*it).style->writeStyle(contentWriter, mainStyles, "style:style", (*it).name, "");
-    }
-    contentWriter->endElement();
+    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
     // And now we can copy over the contents from the tempfile to the real one
     contentWriter->addCompleteElement( &contentTmpFile );
@@ -251,24 +245,9 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
-    if ( !store->open( "styles.xml" ) )
+    if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
         return false;
-    //saveOdfDocumentStyles( store, mainStyles, &masterStyles );
-    KoStoreDevice stylesDev( store );
-    KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
-    stylesWriter->startElement("office:styles");
-    styles = mainStyles.styles(KoGenStyle::StyleUser, true);
-    for ( it = styles.begin(); it != styles.end(); ++it ) {
-        (*it).style->writeStyle(stylesWriter, mainStyles, "style:style", (*it).name, "");
-    }
-    stylesWriter->endElement(); // "office:styles"
-    stylesWriter->endElement(); // "office:document-styles"
-    stylesWriter->endDocument();
-    
-    if ( !store->close() ) // done with styles.xml
-        return false;
-    manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
-    
+
     if (!context.saveImages(store, manifestWriter))
         return false;
     return true;
