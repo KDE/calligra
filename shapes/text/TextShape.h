@@ -68,8 +68,7 @@ public:
      * in turn will call the KoTextLoader::loadBody() method that reads the element
      * into a QTextCursor.
      *
-     * @param context the KoShapeLoadingContext used for loading. Please note, that at
-     * the moment the context needs to be an instance of KoTextLoadingContext.
+     * @param context the KoShapeLoadingContext used for loading.
      * @param element element which represents the shape in odf.
      * @return false if loading failed.
      */
