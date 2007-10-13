@@ -160,6 +160,9 @@ QString SheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
     pageLayout.addPropertyPt( "fo:margin-bottom", bottomBorder() );
     //necessary for print setup
     m_pSheet->saveOasisPrintStyleLayout( pageLayout );
+    // this is called from Sheet::saveOasisSheetStyleName for writing the SytleMaster so 
+    // the style has to be in the styles.xml file and only there
+    pageLayout.setAutoStyleInStylesDotXml( true );
 
     return mainStyles.lookup( pageLayout, "pm" );
 }

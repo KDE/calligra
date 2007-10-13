@@ -516,12 +516,6 @@ public:
 
   /**
    * \ingroup OpenDocument
-   * Saves the docment styles.
-   */
-  void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const;
-
-  /**
-   * \ingroup OpenDocument
    * Main loading method.
    * @see Map::loadOasis
    */

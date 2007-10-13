@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright 2005-2006 Inge Wallin <inge@lysator.liu.se>
    Copyright 2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
@@ -683,88 +684,12 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     d->namedAreaManager->saveOdf(contentTmpWriter);
     d->databaseManager->saveOdf(contentTmpWriter);
     contentTmpWriter.endElement(); ////office:spreadsheet
-  contentTmpWriter.endElement(); ////office:body
+    contentTmpWriter.endElement(); ////office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    contentWriter->startElement( "office:automatic-styles" );
+    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleAuto );
-    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleAutoTable );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleAutoTableColumn );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleAutoTableRow );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleAutoTableCell );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericNumber );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-      (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericDate );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:date-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericTime );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:time-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericFraction );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericPercentage );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:percentage-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericCurrency );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:currency-style", (*it).name, 0 );
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleNumericScientific );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( contentWriter, mainStyles, "number:number-style", (*it).name, 0 );
-    }
-
-
-    contentWriter->endElement(); // office:automatic-styles
-
-
-   // And now we can copy over the contents from the tempfile to the real one
+    // And now we can copy over the contents from the tempfile to the real one
     contentTmpFile.close();
     contentWriter->addCompleteElement( &contentTmpFile );
 
@@ -777,15 +702,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml",  "text/xml" );
 
-    //todo add manifest line for style.xml
-    if ( !store->open( "styles.xml" ) )
-        return false;
-
-    manifestWriter->addManifestEntry( "styles.xml",  "text/xml" );
-    saveOasisDocumentStyles( store, mainStyles );
-
-    if ( !store->close() ) // done with styles.xml
-        return false;
+    mainStyles.saveOdfStylesDotXml( store, manifestWriter );
 
 #if 0 // KSPREAD_KOPART_EMBEDDING
     makeUsedPixmapList();
@@ -878,93 +795,6 @@ void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
     }
 }
 
-
-void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
-{
-    KoStoreDevice stylesDev( store );
-    KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
-
-    stylesWriter->startElement( "office:styles" );
-    QList<KoGenStyles::NamedStyle> styles = mainStyles.styles( KoGenStyle::StyleUser );
-    QList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
-    }
-
-    // Writing out the common column styles.
-    styles = mainStyles.styles( KoGenStyle::StyleTableColumn );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-      if ( (*it).style->isDefaultStyle() ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-column-properties" );
-      }
-      else {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-column-properties" );
-      }
-    }
-
-    // Writing out the row column styles.
-    styles = mainStyles.styles( KoGenStyle::StyleTableRow );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-      if ( (*it).style->isDefaultStyle() ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-row-properties" );
-      }
-      else {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-row-properties" );
-      }
-    }
-
-    // Writing out the common cell styles.
-    styles = mainStyles.styles( KoGenStyle::StyleTableCell );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        if ( (*it).style->isDefaultStyle() ) {
-          (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-cell-properties" );
-        }
-        else {
-          (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
-        }
-    }
-
-    styles = mainStyles.styles( KoGenStyle::StyleHatch );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "draw:hatch", (*it).name, "style:graphic-properties" ,  true,  true /*add draw:name*/);
-    }
-    styles = mainStyles.styles( KoGenStyle::StyleGraphicAuto );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
-    }
-
-    stylesWriter->endElement(); // office:styles
-
-    stylesWriter->startElement( "office:automatic-styles" );
-    styles = mainStyles.styles( KoGenStyle::StylePageLayout );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
-        stylesWriter->endElement();
-    }
-
-    stylesWriter->endElement(); // office:automatic-styles
-    //code from kword
-    stylesWriter->startElement( "office:master-styles" );
-
-    styles = mainStyles.styles( KoGenStyle::StyleMaster );
-    it = styles.begin();
-    for ( ; it != styles.end() ; ++it ) {
-        (*it).style->writeStyle( stylesWriter, mainStyles, "style:master-page", (*it).name, "" );
-    }
-
-    stylesWriter->endElement(); // office:master-style
-
-
-    stylesWriter->endElement(); // root element (office:document-styles)
-    stylesWriter->endDocument();
-    delete stylesWriter;;
-}
 
 bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const KoXmlDocument& settings, KoStore* store)
 {
