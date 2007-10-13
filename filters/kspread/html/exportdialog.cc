@@ -36,7 +36,7 @@ ExportDialog::ExportDialog( QWidget *parent )
 {
   setCaption( i18n("Export Sheet to HTML") );
   setButtons( Ok|Cancel );
-  setDefaultButton(KDialog::No);
+  setDefaultButton(KDialog::Cancel);
   kapp->restoreOverrideCursor();
 
   connect( m_mainwidget->mCustomButton, SIGNAL( toggled( bool ) ),
