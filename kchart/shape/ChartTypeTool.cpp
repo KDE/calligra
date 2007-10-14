@@ -114,7 +114,7 @@ void ChartTypeTool::deactivate()
 
 void ChartTypeTool::updateActions()
 {
-#if 0
+#if 0 // Taken from DivineProportion
     switch(m_currentShape->orientation()) {
         case ChartTypeShape::BottomRight: m_bottomRightOrientation->setChecked(true); break;
         case ChartTypeShape::BottomLeft: m_bottomLeftOrientation->setChecked(true); break;
@@ -127,11 +127,12 @@ void ChartTypeTool::updateActions()
 
 QWidget *ChartTypeTool::createOptionWidget()
 {
-    ChartTypeConfigWidget *widget = new ChartTypeConfigWidget();
+    ChartTypeConfigWidget  *widget = new ChartTypeConfigWidget();
+
     connect( widget, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
 	     this,   SLOT( setChartType( KChart::OdfChartType ) ) );
     connect( widget, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
-         this,   SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
+             this,   SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
 
     return widget;
 }

@@ -62,7 +62,7 @@ KChartCanvas::KChartCanvas( KChartView *view, KChartPart *parent )
     adjustOrigin();
     setAttribute( Qt::WA_InputMethodEnabled, true );
 
-    m_documentRect = m_part->shape()->boundingRect();
+    m_documentRect = m_part->chart()->boundingRect();
 
     connect(m_shapeManager, SIGNAL( selectionChanged() ), this, SLOT( adjustOrigin() ) );
 }
@@ -160,7 +160,7 @@ QRectF KChartCanvas::documentViewRect()
     // TODO for now, we only have one shape. That will probably change in the future.
     // FIXME Apply viewing margin
     QRectF documentRect = m_documentRect;
-    m_documentRect = m_part->shape()->boundingRect();
+    m_documentRect = m_part->chart()->boundingRect();
     m_documentRect = m_documentRect.united( QRectF( QPointF( 0.0, 0.0 ), m_documentRect.size() ) );
     if( documentRect != m_documentRect )
         emit documentViewRectChanged( m_documentRect );

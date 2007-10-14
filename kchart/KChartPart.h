@@ -100,14 +100,16 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    OdfChartType        chartType() const { return m_chartShape->chartType(); }
+    ChartShape         *chart()     const { return m_chartShape;  }
     QStandardItemModel *data()      const { return m_chartData; }
-    // FIXME: Rename into chart() when m_chart is removed.
-    ChartShape         *shape()     const { return m_chartShape;  }
+
+    // Types
+    OdfChartType     chartType()    const { return m_chartShape->chartType(); }
+    OdfChartSubtype  chartSubtype() const { return m_chartShape->chartSubtype(); }
 
     // Data in rows or columns.
-    DataDirection  dataDirection() const    { return m_dataDirection; }
-    void           setDataDirection( DataDirection _dir ) {
+    DataDirection    dataDirection() const { return m_dataDirection; }
+    void             setDataDirection( DataDirection _dir ) {
 	m_dataDirection = _dir;
     }
 
@@ -117,7 +119,7 @@ public:
     bool       firstColAsLabel() const { return m_firstColAsLabel; }
     void       setFirstColAsLabel( bool _val );
 
-    // 
+    // Labels
     QStringList       &rowLabelTexts()         { return m_rowLabels;  }
     QStringList       &colLabelTexts()         { return m_colLabels;  }
 

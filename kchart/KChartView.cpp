@@ -187,7 +187,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     //part->shape()->setSize( m_zoomHandler->viewToDocument( size() ) );
 
     // This is probably a good default size for a chart.
-    part->shape()->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
+    part->chart()->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
     //m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     m_zoomController->setPageSize( m_canvas->documentViewRect().size() );
@@ -221,7 +221,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
         m_importData->setEnabled( false );
     }
 
-    m_canvas->shapeManager()->add( part->shape() );
+    m_canvas->shapeManager()->add( part->chart() );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
     
     //updateGuiTypeOfChart();
@@ -361,7 +361,7 @@ void KChartView::pieChart()
     else
         m_chartpie->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
     command->setChartType(CircleChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
@@ -403,7 +403,7 @@ void KChartView::lineChart()
     else
 	m_chartline->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
     command->setChartType(LineChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
@@ -429,7 +429,7 @@ void KChartView::barsChart()
     else
 	m_chartbars->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
     command->setChartType(BarChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
@@ -454,7 +454,7 @@ void KChartView::areasChart()
     else
 	m_chartareas->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
     command->setChartType(AreaChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
@@ -504,7 +504,7 @@ void KChartView::ringChart()
     else
 	m_chartring->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
     command->setChartType(RingChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
@@ -528,7 +528,7 @@ void KChartView::radarChart()
     else
         m_chartpolar->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
     command->setChartType(RadarChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
@@ -552,7 +552,7 @@ void KChartView::stockChart()
     else
         m_chartbw->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
     // FIXME: Use a subtype suitable for stock charts when those are created
     command->setChartType(StockChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
