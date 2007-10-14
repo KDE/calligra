@@ -19,10 +19,10 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "MatrixElement.h"
+#include "TableElement.h"
 #include "AttributeManager.h"
-#include "MatrixRowElement.h"
-#include "MatrixEntryElement.h"
+#include "TableRowElement.h"
+#include "TableEntryElement.h"
 #include <KoXmlReader.h>
 #include <QPainter>
 

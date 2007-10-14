@@ -19,7 +19,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "MatrixEntryElement.h"
+#include "TableEntryElement.h"
 #include <KoXmlWriter.h>
 
 MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : RowElement( parent )

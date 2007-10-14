@@ -20,9 +20,9 @@ set( kformulalib_PART_SRCS
    SubSupElement.cpp
    UnderOverElement.cpp
    FencedElement.cpp 
-   MatrixElement.cpp
-   MatrixRowElement.cpp
-   MatrixEntryElement.cpp
+   TableElement.cpp
+   TableRowElement.cpp
+   TableEntryElement.cpp
    RootElement.cpp
    EncloseElement.cpp
    ActionElement.cpp

@@ -34,19 +34,14 @@ UnderOverElement::UnderOverElement( BasicElement* parent ) : BasicElement( paren
 UnderOverElement::~UnderOverElement()
 {
     delete m_baseElement;
-    if(m_underElement)
-        delete m_underElement;
-    if(m_overElement)
-        delete m_overElement;
+    delete m_underElement;
+    delete m_overElement;
 }
 
 const QList<BasicElement*> UnderOverElement::childElements()
 {
     QList<BasicElement*> tmp;
-    tmp << m_baseElement;
-    if(m_underElement) tmp << m_underElement;
-    if(m_overElement)  tmp << m_overElement;
-    return tmp;
+    return tmp << m_baseElement << m_underElement << m_overElement;
 }
 
 void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
@@ -59,33 +54,27 @@ void UnderOverElement::paint( QPainter& painter, AttributeManager* am)
 void UnderOverElement::layout( const AttributeManager* am )
 {
     double thinSpace   = am->layoutSpacing( this );
-    double accent      = am->boolOf( "accent", this );  //Whether to add a space above
-    double accentunder = am->boolOf( "accentunder", this );//Whether to add a space below
-    double yOffset = 0.0;
-    double largestWidth = m_baseElement->width();
-    if(m_underElement) 
-        largestWidth = qMax(m_underElement->width(), largestWidth);
-    if(m_overElement) {
-        yOffset = m_overElement->height();
-        if(accent) yOffset += thinSpace;
-        largestWidth = qMax(m_overElement->width(), largestWidth);
-        m_overElement->setOrigin( 
-			QPointF((largestWidth - m_overElement->width())/2.0, 0.0));
-    }
-    m_baseElement->setOrigin(
-		    QPointF((largestWidth - m_baseElement->width())/2.0, yOffset));
-    setWidth(largestWidth);
-    setBaseLine( yOffset + m_baseElement->baseLine() );
-    yOffset += m_baseElement->height();
+    double accent      = am->boolOf( "accent", this );     //Whether to add a space above
+    double accentUnder = am->boolOf( "accentunder", this );//Whether to add a space below
 
-    if(m_underElement) {
-        if(accentunder) yOffset += thinSpace;
-        m_underElement->setOrigin( 
-			QPointF( (largestWidth - m_underElement->width())/2.0, yOffset));
-	yOffset += m_underElement->height();
-    }
-    setHeight(yOffset);
-   
+    double largestWidth = m_baseElement->width();
+    largestWidth = qMax( m_underElement->width(), largestWidth );
+    largestWidth = qMax( m_overElement->width(), largestWidth );
+
+    QPointF origin( ( largestWidth - m_overElement->width() ) / 2.0, 0.0 );
+    m_overElement->setOrigin( origin );
+
+    origin.setX( ( largestWidth - m_baseElement->width() ) / 2.0 );
+    origin.setY( ( accent && m_overElement->height() != 0 ) ? 2*thinSpace : thinSpace );
+    m_baseElement->setOrigin( origin );
+
+    origin.setX( ( largestWidth - m_underElement->width())/2.0 );
+    origin.setY( origin.y() + accentUnder ? 2*thinSpace : thinSpace );
+    m_underElement->setOrigin( origin );
+
+    setWidth( largestWidth );
+    setHeight( origin.y() + m_underElement->height() );
+    setBaseLine( m_baseElement->origin().y() + m_baseElement->baseLine() );
 }
 
 BasicElement* UnderOverElement::acceptCursor( CursorDirection direction )
@@ -105,14 +94,6 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
     QString name = parent.tagName().toLower();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
-    if(!name.contains( "under" )) {
-        delete m_underElement;
-	m_underElement = NULL;
-    }
-    if(!name.contains( "over" )) {
-        delete m_overElement;
-	m_overElement = NULL;
-    }
     forEachElement( tmp, parent ) { 
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         if( !tmpElement->readMathML( tmp ) )
@@ -122,42 +103,36 @@ bool UnderOverElement::readMathMLContent( const KoXmlElement& parent )
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( m_underElement && m_underElement->elementType() == Basic ) {
+        else if( name.contains( "under" ) && m_underElement->elementType() == Basic ) {
             delete m_underElement;
             m_underElement = tmpElement;
-	    Q_ASSERT(m_underElement);
         }
-        else if( m_overElement && m_overElement->elementType() == Basic ) {
+        else if( name.contains( "over" ) && m_overElement->elementType() == Basic ) {
             delete m_overElement;
             m_overElement = tmpElement;
-	    Q_ASSERT(m_overElement);
         }
         else
             return false;
     }
-    Q_ASSERT(m_baseElement);  //We should have at least a BasicElement for the base
-    Q_ASSERT(m_underElement || m_overElement);
+    Q_ASSERT( m_baseElement );  // We should have at least a BasicElement for the base
+    Q_ASSERT( m_underElement || m_overElement );
     return true;
 } 
 
 void UnderOverElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    m_baseElement->writeMathML( writer );        // Just save the children in
-                                                 // the right order
-    if( m_underElement )
-        m_underElement->writeMathML( writer );
-    
-    if( m_overElement )
-        m_overElement->writeMathML( writer );
+    m_baseElement->writeMathML( writer );   // Just save the children in
+    m_underElement->writeMathML( writer );  // the right order
+    m_overElement->writeMathML( writer );
 }
 
 ElementType UnderOverElement::elementType() const
 {
-    if( m_underElement && m_overElement )
+    if( m_underElement->elementType() != Basic && m_overElement->elementType() != Basic )
         return UnderOver;
-    else if( m_underElement )
+    else if( m_underElement->elementType() != Basic )
         return Under;
-    else if( m_overElement )
+    else if( m_overElement->elementType() != Basic )
         return Over;
     else
         return UnderOver;
