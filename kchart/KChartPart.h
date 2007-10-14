@@ -101,11 +101,9 @@ public:
     void defaultConfig();
 
     OdfChartType        chartType() const { return m_chartShape->chartType(); }
-    QStandardItemModel *data()      const { return m_currentData; }
+    QStandardItemModel *data()      const { return m_chartData; }
     // FIXME: Rename into chart() when m_chart is removed.
     ChartShape         *shape()     const { return m_chartShape;  }
-
-    KDChart::Chart      *chart()     const       { return m_chart;       }
 
     // Data in rows or columns.
     DataDirection  dataDirection() const    { return m_dataDirection; }
@@ -171,35 +169,25 @@ private:
     ChartShape         *m_chartShape;
     QStandardItemModel *m_chartData;
 
-    // ----------------------------------------------------------------
-    // FIXME: Most of the following is already in shape/ChartShape or
-    //        will move there soon.
-
-    // The chart and its contents
-    //OdfChartType             m_type;
-    //OdfChartSubtype          m_subtype;
-    KDChart::Chart          *m_chart;
-    QStandardItemModel      *m_currentData;
-
     // Info about the data.
-    DataDirection  m_dataDirection; // Rows or Columns
-    bool           m_firstRowAsLabel;
-    bool           m_firstColAsLabel;
+    DataDirection       m_dataDirection; // Rows or Columns
+    bool                m_firstRowAsLabel;
+    bool                m_firstColAsLabel;
 
-    QStringList              m_rowLabels;
-    QStringList              m_colLabels;
-    //QString                  m_regionName;
+    QStringList         m_rowLabels;
+    QStringList         m_colLabels;
+    //QString             m_regionName;
 
     // Other auxiliary values
-    bool                     m_bCanChangeValue;
+    bool                m_bCanChangeValue;
 
     // Graphics
-    QWidget                 *m_parentWidget;
+    QWidget            *m_parentWidget;
 
     // Used when displaying.
-    QStandardItemModel       m_displayData;
+    QStandardItemModel  m_displayData;
 
-    QPixmap                  m_bufferPixmap;
+    QPixmap             m_bufferPixmap;
 };
 
 

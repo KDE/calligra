@@ -101,8 +101,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
     m_chartShape( new ChartShape ),
-    m_chart( 0 ),
-    m_currentData( 0 ),
+    m_chartData( 0 ),
     m_rowLabels(), m_colLabels(),
     m_parentWidget( parentWidget )
 {
@@ -117,19 +116,10 @@ KChartPart::KChartPart( QWidget *parentWidget,
     setTemplateType( "kchart_template" );
 
     // Init some members that need it.
-#if 1
-    {
-        m_chart       = new KDChart::Chart();
-        m_chart->coordinatePlane()->replaceDiagram(new KDChart::BarDiagram()); // FIXME
-        m_currentData = new QStandardItemModel();
-        m_chart->coordinatePlane()->diagram()->setModel( m_currentData );
+    m_dataDirection   = DataRowsDirection;
+    m_firstRowAsLabel = false;
+    m_firstColAsLabel = false;
 
-	// Handle data in columns by default
-        m_dataDirection   = DataRowsDirection;
-        m_firstRowAsLabel = false;
-        m_firstColAsLabel = false;
-    }
-#endif
     m_bCanChangeValue = true;
 
     // Display parameters
@@ -143,8 +133,8 @@ KChartPart::KChartPart( QWidget *parentWidget,
 
 KChartPart::~KChartPart()
 {
-    delete m_currentData;
-    delete m_chart;
+    delete m_chartData;
+    //delete m_chart;
 }
 
 
@@ -543,7 +533,7 @@ void KChartPart::analyzeHeaders()
 #if 0
     analyzeHeaders( m_currentData );
 #else
-    doSetData( *m_currentData, firstRowAsLabel(), firstColAsLabel() );
+    doSetData( *m_chartData, firstRowAsLabel(), firstColAsLabel() );
 #endif
 }
 
