@@ -25,16 +25,23 @@
 
 // KChart
 #include "kchart_global.h"
+//#include "ChartShape.h"
 
+
+#if 0
 namespace KDChart
 {
 class AbstractCoordinatePlane;
 class AbstractDiagram;
 class Chart;
 }
+#endif
+
 
 namespace KChart
 {
+
+class ChartShape;
 
 /**
  * Chart type replacement command.
@@ -45,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    ChartTypeCommand(KDChart::Chart* chart);
+    ChartTypeCommand(ChartShape* chart);
 
     /**
      * Destructor.
@@ -65,18 +72,18 @@ public:
     /**
      * Sets the new chart type.
      */
-    void setChartType(OdfChartType type);
+    void setChartType(OdfChartType type, OdfChartSubtype subType);
+
 
 private:
-    void replaceCoordinatePlane(OdfChartType type);
-    void replaceDiagram(OdfChartType type);
-
-private:
-    KDChart::Chart* m_chart;
-    OdfChartType m_oldType;
-    OdfChartType m_newType;
-    KDChart::AbstractCoordinatePlane* m_oldCoordinatePlane;
-    KDChart::AbstractDiagram* m_oldDiagram;
+    ChartShape                        *m_chart;
+    //KDChart::Chart                    *m_chart;
+    OdfChartType                       m_oldType;
+    OdfChartType                       m_newType;
+    OdfChartSubtype                    m_oldSubtype;
+    OdfChartSubtype                    m_newSubtype;
+    //KDChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
+    //KDChart::AbstractDiagram          *m_oldDiagram;
 };
 
 } // namespace KChart

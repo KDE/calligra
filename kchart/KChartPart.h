@@ -74,8 +74,6 @@ public:
     // Methods inherited from KoDocument:
     virtual void  paintContent( QPainter& painter, const QRect& rect);
 
-    ChartShape *shape() const { return m_chartShape; }
-
     virtual void addShape( KoShape* );
     virtual void removeShape( KoShape* );
 
@@ -102,8 +100,11 @@ public:
     void saveConfig(KConfig *conf);
     void defaultConfig();
 
-    OdfChartType         chartType() const       { return m_chartShape->chartType();        }
-    QStandardItemModel  *data()                  { return m_currentData; }
+    OdfChartType        chartType() const { return m_chartShape->chartType(); }
+    QStandardItemModel *data()      const { return m_currentData; }
+    // FIXME: Rename into chart() when m_chart is removed.
+    ChartShape         *shape()     const { return m_chartShape;  }
+
     KDChart::Chart      *chart()     const       { return m_chart;       }
 
     // Data in rows or columns.

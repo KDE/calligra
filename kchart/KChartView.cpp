@@ -361,8 +361,8 @@ void KChartView::pieChart()
     else
         m_chartpie->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(CircleChartType);
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    command->setChartType(CircleChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
 #endif
@@ -403,8 +403,8 @@ void KChartView::lineChart()
     else
 	m_chartline->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(LineChartType);
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    command->setChartType(LineChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
 #endif
@@ -429,8 +429,8 @@ void KChartView::barsChart()
     else
 	m_chartbars->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(BarChartType);
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    command->setChartType(BarChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
 #endif
@@ -454,8 +454,8 @@ void KChartView::areasChart()
     else
 	m_chartareas->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(AreaChartType);
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    command->setChartType(AreaChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
 #endif
@@ -504,8 +504,8 @@ void KChartView::ringChart()
     else
 	m_chartring->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(RingChartType);
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    command->setChartType(RingChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
 #endif
@@ -528,8 +528,8 @@ void KChartView::radarChart()
     else
         m_chartpolar->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(RadarChartType);
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    command->setChartType(RadarChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
 #endif
@@ -552,8 +552,9 @@ void KChartView::stockChart()
     else
         m_chartbw->setChecked( true ); // always one has to be checked !
 #else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(StockChartType);
+    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->shape());
+    // FIXME: Use a subtype suitable for stock charts when those are created
+    command->setChartType(StockChartType, NormalChartSubtype);
     koDocument()->addCommand(command);
     update();
 #endif

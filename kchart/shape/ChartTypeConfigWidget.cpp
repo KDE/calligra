@@ -192,8 +192,8 @@ void ChartTypeConfigWidget::open( KoShape* shape )
 
 void ChartTypeConfigWidget::save()
 {
-    ChartTypeCommand  command(d->shape->chart());
-    command.setChartType(d->type);
+    ChartTypeCommand  command( d->shape );
+    command.setChartType( d->type, d->subtype );
     command.redo();
 }
 

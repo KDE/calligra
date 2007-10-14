@@ -32,32 +32,19 @@
 #include "KDChartPolarDiagram.h"
 #include "KDChartRingDiagram.h"
 
+// KChart
+#include "ChartShape.h"
+
 using namespace KChart;
 using namespace KDChart;
 
-static OdfChartType chartType(AbstractDiagram* diagram)
-{
-#if 0  //Temporarily disabled
-    if (qobject_cast<BarDiagram*>(diagram))
-        return BarChartType;
-    else if (qobject_cast<LineDiagram*>(diagram))
-        return LineChartType;
-    else if (qobject_cast<PieDiagram*>(diagram))
-        return PieChartType;
-    else if (qobject_cast<RingDiagram*>(diagram))
-        return RingChartType;
-    else if (qobject_cast<PolarDiagram*>(diagram))
-        return PolarChartType;
-    return BoxWhiskerChartType; // unsupported until now
-#endif
-}
 
-ChartTypeCommand::ChartTypeCommand(Chart* chart)
+ChartTypeCommand::ChartTypeCommand(ChartShape* chart)
     : m_chart(chart)
-    , m_oldType(BarChartType)
-    , m_newType(BarChartType)
-    , m_oldCoordinatePlane(0)
-    , m_oldDiagram(0)
+    , m_oldType( BarChartType )
+    , m_newType( BarChartType )
+    , m_oldSubtype( NormalChartSubtype )
+    , m_newSubtype( NormalChartSubtype )
 {
 }
 
@@ -68,42 +55,31 @@ ChartTypeCommand::~ChartTypeCommand()
 void ChartTypeCommand::redo()
 {
     kDebug() << m_newType;
-    // save the old type
-    m_oldType = chartType(m_chart->coordinatePlane()->diagram());
-    if (m_oldType == m_newType)
+ 
+   // save the old type
+    m_oldType    = m_chart->chartType();
+    m_oldSubtype = m_chart->chartSubtype();
+    if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
         return;
-    // save the model
-    QAbstractItemModel* model = m_chart->coordinatePlane()->diagram()->model();
-    // set a proper coordinate plane
-    replaceCoordinatePlane(m_newType);
-    // set the new type
-    replaceDiagram(m_newType);
-    // transfer the model
-    m_chart->coordinatePlane()->diagram()->setModel(model);
-    m_chart->coordinatePlane()->relayout();
+
+    // Actually do the work
+    m_chart->setChartType( m_newType, m_newSubtype );
 }
 
 void ChartTypeCommand::undo()
 {
-    if (m_oldType == m_newType)
+    if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
         return;
+
     kDebug() << m_oldType;
-    // save the model
-    QAbstractItemModel* model = m_chart->coordinatePlane()->diagram()->model();
-    // restore the old coordinate plane
-    m_chart->replaceCoordinatePlane(m_oldCoordinatePlane);
-    m_oldCoordinatePlane = 0;
-    // restore the old diagram
-    m_chart->coordinatePlane()->replaceDiagram(m_oldDiagram);
-    m_oldDiagram = 0;
-    // transfer the model
-    m_chart->coordinatePlane()->diagram()->setModel(model);
-    m_chart->coordinatePlane()->relayout();
+    m_chart->setChartType( m_oldType, m_oldSubtype );
 }
 
-void ChartTypeCommand::setChartType(OdfChartType type)
+
+void ChartTypeCommand::setChartType(OdfChartType type, OdfChartSubtype subtype)
 {
-    m_newType = type;
+    m_newType    = type;
+    m_newSubtype = subtype;
 
     switch (type) {
     case BarChartType:
@@ -130,13 +106,8 @@ void ChartTypeCommand::setChartType(OdfChartType type)
     case StockChartType:
         setText(i18n("Stock Chart"));
         break;
-#if 0  // Temporarily disabled
-    case HiLoChartType:
-        setText(i18n("HiLo Chart"));
-        break;
-#endif
     case BubbleChartType:
-        setText(i18n("Scatter Chart"));
+        setText(i18n("Bubble Chart"));
         break;
     case SurfaceChartType:
         setText(i18n("Surface Chart"));
@@ -144,97 +115,5 @@ void ChartTypeCommand::setChartType(OdfChartType type)
     case GanttChartType:
         setText(i18n("Gantt Chart"));
         break;
-
-    }
-}
-
-void ChartTypeCommand::replaceCoordinatePlane(OdfChartType type)
-{
-    switch (type) {
-	// The cartesian types
-    case BarChartType:
-    case LineChartType:
-    case AreaChartType:
-        if (!qobject_cast<CartesianCoordinatePlane*>(m_chart->coordinatePlane()))
-        {
-            kDebug() << "replacing coordinate plane by a cartesian coordinate plane";
-            m_oldCoordinatePlane = m_chart->coordinatePlane();
-            m_chart->takeCoordinatePlane(m_oldCoordinatePlane);
-            AbstractCoordinatePlane* coordinatePlane = new CartesianCoordinatePlane();
-            m_chart->addCoordinatePlane(coordinatePlane);
-        }
-        break;
-
-	// The polar types
-    case CircleChartType:
-    case RingChartType:
-    case RadarChartType:
-        if (!qobject_cast<PolarCoordinatePlane*>(m_chart->coordinatePlane())) {
-            kDebug() << "replacing coordinate plane by a polar coordinate plane";
-            m_oldCoordinatePlane = m_chart->coordinatePlane();
-            m_chart->takeCoordinatePlane(m_oldCoordinatePlane);
-            AbstractCoordinatePlane* coordinatePlane = new PolarCoordinatePlane();
-            m_chart->addCoordinatePlane(coordinatePlane);
-        }
-        break;
-
-	// FIXME: Sort these in where applicable when we start to support them.
-    case ScatterChartType:
-    case StockChartType:
-    case BubbleChartType:
-    case SurfaceChartType:
-    case GanttChartType:
-        // not supported yet
-        break;
-    }
-}
-
-void ChartTypeCommand::replaceDiagram(OdfChartType type)
-{
-    Q_ASSERT(m_chart->coordinatePlane());
-    AbstractDiagram* diagram = 0;
-    switch (type) {
-    case BarChartType:
-        diagram = new BarDiagram();
-        break;
-    case LineChartType:
-        diagram = new LineDiagram();
-        break;
-    case AreaChartType:
-        kDebug() << "Area not supported yet";
-        break;
-    case CircleChartType:
-        diagram = new PieDiagram();
-        break;
-    case RingChartType:
-        diagram = new RingDiagram();
-        break;
-    case ScatterChartType:
-        kDebug() << "Scatter chart not supported yet";
-	break;
-    case RadarChartType:
-        diagram = new PolarDiagram();
-        break;
-    case StockChartType:
-        kDebug() << "Stock chart not supported yet";
-        break;
-    case BubbleChartType:
-        kDebug() << "Bubble chart not supported yet";
-        break;
-    case SurfaceChartType:
-        kDebug() << "Surface chart not supported yet";
-        break;
-    case GanttChartType:
-        kDebug() << "Gantt chart not supported yet";
-        break;
-    }
-
-    if (diagram) {
-        // save the old diagram
-        m_oldDiagram = m_chart->coordinatePlane()->diagram();
-        // remove but do not delete old diagram
-        m_chart->coordinatePlane()->takeDiagram(m_oldDiagram);
-        // set the new diagram
-        m_chart->coordinatePlane()->replaceDiagram(diagram);
     }
 }
