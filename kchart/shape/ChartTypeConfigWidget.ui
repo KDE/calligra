@@ -1,0 +1,66 @@
+<ui version="4.0" >
+ <class>ChartTypeConfigWidget</class>
+ <widget class="QWidget" name="ChartTypeConfigWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>325</width>
+    <height>176</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <widget class="QComboBox" name="typeCombobox" />
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="subtypeBox" >
+     <property name="title" >
+      <string>Subtypes</string>
+     </property>
+     <layout class="QGridLayout" >
+      <item row="2" column="0" >
+       <widget class="QRadioButton" name="subtypePercent" >
+        <property name="text" >
+         <string>Percent</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QRadioButton" name="subtypeNormal" >
+        <property name="text" >
+         <string>Normal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="subtypeStacked" >
+        <property name="text" >
+         <string>Stacked</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

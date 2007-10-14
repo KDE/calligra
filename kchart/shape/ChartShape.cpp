@@ -248,69 +248,55 @@ void ChartShape::setChartType( OdfChartType    newType,
         return;
 
     if ( d->chartType != newType ) {
-	switch ( newType ) {
-	case BarChartType:
-	    new_diagram = new KDChart::BarDiagram( d->chart, cartPlane );
-	    break;
-
-	case LineChartType:
-	    new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
-	    break;
-
-	case AreaChartType:
-	    new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
-
-	    // This is the way that KDChart represents an area chart:
-	    //   a line chart with the displayArea attribute set to true.
-	    {
-		KDChart::LineAttributes attributes;
-		attributes = ((KDChart::LineDiagram*) new_diagram)->lineAttributes();
-		attributes.setDisplayArea( true );
-		((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
-	    }
-	    break;
-
-	case CircleChartType:
-	    new_diagram = new KDChart::PieDiagram(d->chart, polPlane);
-	    break;
-
-	case RingChartType:
-	    new_diagram = new KDChart::RingDiagram(d->chart, polPlane);
-	    break;
-
-	case ScatterChartType:
-	    // FIXME
-	    return;
-	    break;
-
-	case RadarChartType:
-	    new_diagram = new KDChart::PolarDiagram(d->chart, polPlane);
-	    break;
-
-	case StockChartType:
-	    return;
-	    break;
-
-	case BubbleChartType:
-	    // FIXME
-	    return;
-	    break;
-
-	case SurfaceChartType:
-	    // FIXME
-	    return;
-	    break;
-
-	case GanttChartType:
-	    // FIXME
-	    return;
-	    break;
-
-        case LastChartType:
-        default:
+        switch ( newType ) {
+        case BarChartType:
+            new_diagram = new KDChart::BarDiagram( d->chart, cartPlane );
+            break;
+        
+        case LineChartType:
+            new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
+            break;
+        
+        case AreaChartType:
+            new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
+            break;
+        
+        case CircleChartType:
+            new_diagram = new KDChart::PieDiagram( d->chart, polPlane );
+            break;
+        
+        case RingChartType:
+            new_diagram = new KDChart::RingDiagram( d->chart, polPlane );
+            break;
+        
+        case ScatterChartType:
+            // FIXME
             return;
             break;
-	}
+        
+        case RadarChartType:
+            new_diagram = new KDChart::PolarDiagram( d->chart, polPlane );
+            break;
+        
+        case StockChartType:
+            return;
+            break;
+        
+        case BubbleChartType:
+            // FIXME
+            return;
+            break;
+        
+        case SurfaceChartType:
+            // FIXME
+            return;
+            break;
+        
+        case GanttChartType:
+            // FIXME
+            return;
+            break;
+        }
     }
 
     // Check if we need another type of coordinate plane than we
@@ -339,6 +325,15 @@ void ChartShape::setChartType( OdfChartType    newType,
 //             l->setDiagram( new_diagram );
 
         new_diagram->setModel( d->chartData );
+
+        // KDChart::LineDiagram::setLineAttributes() needs a model to be set,
+        // so I moved this code snippet to this point.
+        if( newType != d->chartType && newType == AreaChartType ) {
+            KDChart::LineAttributes attributes;
+            attributes = ((KDChart::LineDiagram*) new_diagram)->lineAttributes();
+            attributes.setDisplayArea( true );
+            ((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
+        }
 
         //FIXME:Aren't we leaking memory bot doing this?, 
         //although causes a crash

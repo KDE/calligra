@@ -87,17 +87,17 @@ void ChartTypeTool::mouseReleaseEvent( KoPointerEvent *event )
     event->ignore();
 }
 
-void ChartTypeTool::activate (bool)
+void ChartTypeTool::activate( bool )
 {
     // Get the shape that the tool is working on. 
     // Let m_currentShape point to it.
     KoSelection *selection = m_canvas->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes()) {
-        m_currentShape = dynamic_cast<ChartShape*>(shape);
-        if (m_currentShape)
+    foreach ( KoShape *shape, selection->selectedShapes() ) {
+        m_currentShape = dynamic_cast<ChartShape*>( shape );
+        if ( m_currentShape )
             break;
     }
-    if (!m_currentShape) { // none found
+    if ( !m_currentShape ) { // none found
         emit done();
         return;
     }

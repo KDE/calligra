@@ -6,6 +6,8 @@
 
 #include "kchart_global.h"
 
+#include "ui_ChartTypeConfigWidget.h"
+
 class KoShape;
 
 namespace KChart
