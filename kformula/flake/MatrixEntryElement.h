@@ -43,7 +43,10 @@ public:
     void layout( const AttributeManager* am );
 
     /// @return The element's ElementType
-    ElementType elementType() const;   
+    ElementType elementType() const;
+
+    /// @return The default value of the attribute for this element
+    QString attributesDefaultValue( const QString& attribute ) const; 
 };
 
 #endif // MATRIXENTRYELEMENT_H

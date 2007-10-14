@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
+                 2007 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,14 @@ MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : RowElement( par
 
 void MatrixEntryElement::layout( const AttributeManager* am )
 {}
+
+QString MatrixEntryElement::attributesDefaultValue( const QString& attribute ) const
+{
+    if( attribute == "rowspan" || attribute == "columnspan" )
+        return "1";
+    else
+        return QString();
+} 
 
 ElementType MatrixEntryElement::elementType() const
 {
