@@ -343,7 +343,7 @@ void ChartShape::setChartType( OdfChartType    newType,
 
         d->chart->coordinatePlane()->replaceDiagram( new_diagram ); // FIXME
         d->chart->update();
-        //repaint(); Not needed
+        repaint();
 
         // Update local data
         d->chartType = newType;
@@ -417,6 +417,8 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
 
     d->diagram->update();
     d->chart->update();
+
+    repaint();
 }
 
 
