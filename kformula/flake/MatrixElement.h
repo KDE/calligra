@@ -40,7 +40,7 @@ class MatrixEntryElement;
 class KOFORMULA_EXPORT MatrixElement : public BasicElement {
 public:
     /// The standard constructor
-    MatrixElement( BasicElement* parent = 0);
+    MatrixElement( BasicElement* parent = 0 );
     
     /// The standard destructor
     ~MatrixElement();
@@ -69,20 +69,10 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( CursorDirection direction );
+    BasicElement* acceptCursor( FormulaCursor* cursor );
 
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
-
-    /// Return the number of the rows of this matrix
-/*    int rows() const;
-
-    /// Return the number of the columns of this matrix
-    int cols() const;
-               
-    /// Obtain a pointer to the element at @p row and @p col in the matrix
-    MatrixEntryElement* matrixEntryAt( int row, int col );
-  */  
 
 protected:
     /// Read all content from the node - reimplemented by child elements
@@ -92,6 +82,11 @@ protected:
     void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
+    /// @return The base line computed out of the align attribute
+    double parseTableAlign() const;
+
+    Qt::PenStyle parsePenStyle( const QString& value ) const;
+
     /// @return The index of @p row in m_matrixRowElements
     int indexOfRow( BasicElement* row ) const;
     
@@ -100,6 +95,9 @@ private:
 
     /// Path to store borders and grid to be painted
     QPainterPath m_matrixPath;
+
+    /// Buffer for the pen style used for the table's frame
+    Qt::PenStyle m_framePenStyle;
 };
 
 #endif // MATRIXELEMENT_H

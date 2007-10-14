@@ -20,13 +20,16 @@
 */
 
 #include "MatrixElement.h"
+#include "AttributeManager.h"
 #include "MatrixRowElement.h"
 #include "MatrixEntryElement.h"
 #include <KoXmlReader.h>
 #include <QPainter>
 
 MatrixElement::MatrixElement( BasicElement* parent ) : BasicElement( parent )
-{}
+{
+    m_framePenStyle = Qt::NoPen;
+}
 
 MatrixElement::~MatrixElement()
 {}
@@ -34,27 +37,50 @@ MatrixElement::~MatrixElement()
 void MatrixElement::paint( QPainter& painter, AttributeManager* am )
 {
     // TODO lookup attributes according to the thickness of the frame...
-    painter.setPen( QPen() );
+
+    // draw frame
+    if( m_framePenStyle != Qt::NoPen ) {
+        painter.setPen( QPen( m_framePenStyle ) );
+        painter.drawRect( 0.0, 0.0, width(), height() );
+    }
+
     painter.drawPath( m_matrixPath );
 }
 
 void MatrixElement::layout( const AttributeManager* am )
 {
+    m_framePenStyle = parsePenStyle( am->stringOf( "frame", this ) );
+
+/*    
+
+    QList<Align> columnAlign = am->alignListOf( "", this );
+
+
+    setBaseLine( parseTableAlign() );
+
+
+    // get attributes
+    rowspacing
+    columnspacin
+    rowlines
+    columnlines
+    rowalign
+    columnalign
+
     // TODO implement rowspacing
     double tmpHeight = 0.0;
     double tmpWidth = 0.0;
     QPointF tmpOrigin = origin();
+    for( int col = 0; col < m_matrixRowElement.first()->childElements().count(); col++ )
     foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
     {
-        tmpRow->layout( am );
         tmpWidth = qMax( tmpRow->width(), tmpWidth );
 	tmpHeight += tmpRow->height();
 	tmpRow->setOrigin( tmpOrigin );
 	tmpOrigin = origin() + QPointF( 0, tmpHeight ); 
     }
     setHeight( tmpHeight );
-    setWidth( tmpWidth );
-    setBaseLine( tmpHeight/2 + parentElement()->height()/2 );
+    setWidth( tmpWidth );*/
 }
 
 const QList<BasicElement*> MatrixElement::childElements()
@@ -65,7 +91,7 @@ const QList<BasicElement*> MatrixElement::childElements()
     return tmp;
 }
 
-BasicElement* MatrixElement::acceptCursor( CursorDirection direction )
+BasicElement* MatrixElement::acceptCursor( FormulaCursor* cursor )
 {
     return 0;
 }
@@ -104,6 +130,11 @@ QString MatrixElement::attributesDefaultValue( const QString& attribute ) const
         return "0.8em";
     else
         return QString();
+}
+
+Qt::PenStyle MatrixElement::parsePenStyle( const QString& value ) const
+{
+    return Qt::NoPen;
 }
 
 bool MatrixElement::readMathMLContent( const KoXmlElement& element )
