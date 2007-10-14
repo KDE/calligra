@@ -66,9 +66,5 @@ Item								   Prio Status
   + DBUS for data manipulation					        ----
   + DBUS for chart manipulation					        ----
 
-Large items
------------
-
-* Create a Flake shape of KChart                                        DONE
-
-* Integrate KDChart 2.0                                                 DONE
+* Infrastructure
+  + Switch KDChart to version 2.1                                       ----
