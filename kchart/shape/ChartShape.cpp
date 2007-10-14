@@ -83,6 +83,9 @@ static bool isCartesian( OdfChartType type )
 class ChartShape::Private
 {
 public:
+    Private();
+
+public:
     // The chart and its contents
     OdfChartType        chartType;
     OdfChartSubtype     chartSubtype;
@@ -96,10 +99,40 @@ public:
     bool                       firstColAsLabel;
     QAbstractItemModel        *chartData;
 
+    // ----------------------------------------------------------------
+    // Data that are not immediately applicable to the chart itself.
+
+    // The last subtype that each main type had when it was last used.
+    OdfChartSubtype  lastSubtype[NUM_CHARTTYPES];
+
     // Default data to be used until the first call to setModel().
     // After that, it is never used again.
     QStandardItemModel         defaultData;
 };
+
+
+const OdfChartSubtype  defaultSubtypes[NUM_CHARTTYPES] = {
+    NormalChartSubtype,     // Bar
+    NormalChartSubtype,     // Line
+    NormalChartSubtype,     // Area
+    NoChartSubtype,         // Circle
+    NoChartSubtype,         // Ring
+    NoChartSubtype,         // Scatter
+    NoChartSubtype,         // radar
+    NoChartSubtype,         // Stock
+    NoChartSubtype,         // Bubble
+    NoChartSubtype,         // Surface
+    NoChartSubtype          // Gantt
+};
+
+ChartShape::Private::Private()
+{
+    for ( int i = 0; i < NUM_CHARTTYPES; ++i )
+        lastSubtype[i] = defaultSubtypes[i];  
+}
+
+
+// ================================================================
 
 
 ChartShape::ChartShape()
@@ -204,27 +237,6 @@ void ChartShape::setChartDefaults()
 {
 }
 
-void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
-{
-    if( d->chartType != LineChartType && d->chartType != BarChartType && d->chartType != AreaChartType )
-        return;
-
-    switch ( newSubtype ) {
-        case KChart::StackedChartSubtype:
-            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Stacked );
-            break;
-        case KChart::PercentChartSubtype:
-            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Percent );
-            break;
-        default:
-            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Normal );
-    }
-    d->chartSubtype = newSubtype;
-    d->diagram->update();
-    d->chart->update();
-    repaint();
-}
-
 void ChartShape::setChartType( OdfChartType    newType,
                                OdfChartSubtype newSubtype )
 {
@@ -293,6 +305,11 @@ void ChartShape::setChartType( OdfChartType    newType,
 	    // FIXME
 	    return;
 	    break;
+
+        case LastChartType:
+        default:
+            return;
+            break;
 	}
     }
 
@@ -338,6 +355,82 @@ void ChartShape::setChartType( OdfChartType    newType,
     }
 
     setChartSubtype( newSubtype );
+}
+
+void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
+{
+    // Nothing to do if no change.
+    if ( d->chartSubtype == newSubtype )
+        return;
+
+    // Convert between ODF subtypes and KDChart subtypes..
+    
+    switch ( d->chartType ) {
+    case BarChartType:
+        switch ( newSubtype ) {
+        case NoChartSubtype:
+            break;
+        case NormalChartSubtype:
+            ( ( KDChart::BarDiagram* ) d->diagram )->setType( KDChart::BarDiagram::Normal );
+            break;
+        case StackedChartSubtype:
+            ( ( KDChart::BarDiagram* ) d->diagram )->setType( KDChart::BarDiagram::Stacked );
+            break;
+        case PercentChartSubtype:
+            ( ( KDChart::BarDiagram* ) d->diagram )->setType( KDChart::BarDiagram::Percent );
+            break;
+        }
+
+    case LineChartType:
+    case AreaChartType:
+        switch ( newSubtype ) {
+        case NoChartSubtype:
+            break;
+        case NormalChartSubtype:
+            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Normal );
+            break;
+        case StackedChartSubtype:
+            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Stacked );
+            break;
+        case PercentChartSubtype:
+            ( ( KDChart::LineDiagram* ) d->diagram )->setType( KDChart::LineDiagram::Percent );
+            break;
+        }
+
+    case CircleChartType:
+        break;
+    case RingChartType:
+        break;
+    case ScatterChartType:
+        break;
+    case RadarChartType:
+        break;
+    case StockChartType:
+        break;
+    case BubbleChartType:
+        break;
+    case SurfaceChartType:
+        break;
+    case GanttChartType:
+        break;
+    default:
+        break;
+    }
+
+    d->chartSubtype = newSubtype;
+    d->lastSubtype[d->chartType] = newSubtype;
+
+    d->diagram->update();
+    d->chart->update();
+}
+
+
+OdfChartSubtype ChartShape::lastChartSubtype(OdfChartType type) const
+{
+    if ( BarChartType <= type && type < LastChartType )
+        return d->lastSubtype[(int) type];
+
+    return NoChartSubtype;
 }
 
 

@@ -65,8 +65,10 @@ public:
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 
-    OdfChartType chartType() const;
+    OdfChartType    chartType() const;
     OdfChartSubtype chartSubtype() const;
+
+    OdfChartSubtype lastChartSubtype(OdfChartType type) const;
 
  private:
     void saveLegend( KoXmlWriter &bodyWriter,
