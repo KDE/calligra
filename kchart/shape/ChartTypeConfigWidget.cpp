@@ -57,7 +57,7 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     : d(new Private)
 {
     d->shape = 0;
-    d->type = KChart::LineChartType;
+    d->type = KChart::BarChartType;
     d->subtype = KChart::NormalChartSubtype;
     setObjectName("Chart Type");
     d->ui.setupUi( this );
@@ -104,7 +104,7 @@ void ChartTypeConfigWidget::open( KoShape* shape )
 
 void ChartTypeConfigWidget::save()
 {
-    ChartTypeCommand  command( d->shape );
+    ChartTypeCommand command( d->shape );
     command.setChartType( d->type, d->subtype );
     command.redo();
 }

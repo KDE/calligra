@@ -250,7 +250,7 @@ void ChartShape::setChartDefaults()
 void ChartShape::setChartType( OdfChartType    newType,
                                OdfChartSubtype newSubtype )
 {
-    KDChart::AbstractDiagram           *new_diagram;
+    KDChart::AbstractDiagram           *new_diagram = 0;
     KDChart::CartesianCoordinatePlane  *cartPlane = 0;
     KDChart::PolarCoordinatePlane      *polPlane  = 0;
 
@@ -324,19 +324,20 @@ void ChartShape::setChartType( OdfChartType    newType,
         }
         else if ( isCartesian( d->chartType ) && isCartesian( newType ) ) {
             KDChart::AbstractCartesianDiagram *old =
-                    qobject_cast<KDChart::AbstractCartesianDiagram*>( d->chart->coordinatePlane()->diagram() );
-            Q_FOREACH( KDChart::CartesianAxis* axis, old->axes() ) {
+                    ( KDChart::AbstractCartesianDiagram* )( d->chart->coordinatePlane()->diagram() );
+            foreach ( KDChart::CartesianAxis* axis, old->axes() ) {
                 old->takeAxis( axis );
-                qobject_cast<KDChart::AbstractCartesianDiagram*>(new_diagram)->addAxis( axis );
+                ( ( KDChart::AbstractCartesianDiagram* ) new_diagram )->addAxis( axis );
             }
         }
 
-        //FIXME:No clue why this doesnt work but it makes a crash sometimes
-//         LegendList legends = d->chart->legends();
-//         Q_FOREACH(Legend* l, legends)
-//             l->setDiagram( new_diagram );
-
         new_diagram->setModel( d->chartData );
+
+        // This will crash if the new model for new_diagram is not set.
+        // Thus, put it after new_diagram->setModel().
+        KDChart::LegendList legends = d->chart->legends();
+        foreach ( KDChart::Legend* legend, legends )
+            legend->setDiagram( new_diagram );
 
         // KDChart::LineDiagram::setLineAttributes() needs a model to be set,
         // so I moved this code snippet to this point.
@@ -347,9 +348,10 @@ void ChartShape::setChartType( OdfChartType    newType,
             ((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
         }
 
-        //FIXME:Aren't we leaking memory bot doing this?, 
-        //although causes a crash
-//         delete d->diagram;
+        // FIXME: Aren't we leaking memory by not doing this?
+        // KDChartAbstractDiagram::~KDChartAbstractDiagram() will try to delete
+        // its KDChartAttributesModel instance, which would cause a crash.
+        // delete d->diagram;
         d->diagram = new_diagram;
         d->diagram->update();
 
