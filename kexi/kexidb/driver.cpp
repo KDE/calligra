@@ -135,15 +135,6 @@ const QSet<Connection*> Driver::connections() const
 QString Driver::fileDBDriverMimeType() const
 { return d->fileDBDriverMimeType; }
 
-QString Driver::defaultFileBasedDriverMimeType()
-{ return QString::fromLatin1("application/x-kexiproject-sqlite3"); }
-
-QString Driver::defaultFileBasedDriverName()
-{
-	DriverManager dm;
-	return dm.lookupByMime(Driver::defaultFileBasedDriverMimeType()).toLower();
-}
-
 const KService* Driver::service() const
 { return d->service; }
 

@@ -21,6 +21,7 @@
 #define _KEXIDB_EXPORT_H_
 
 #include <kdemacros.h>
+#include <kexi_global.h>
 
 #ifndef KEXI_DB_EXPORT
 # ifdef MAKE_KEXI_DB_LIB
@@ -39,10 +40,6 @@
 #endif
 
 /* -- compile-time settings -- */
-#if defined(Q_WS_WIN) || defined(KEXI_OPTIONS)
-/* defined in a .pro file or 'KEXI_OPTIONS' env. variable */
-#else
-#endif
 
 /* Might want to add GUI defines here if widgets are to be
  * distributed as part of kexidb - mart */

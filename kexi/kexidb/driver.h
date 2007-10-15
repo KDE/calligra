@@ -139,13 +139,6 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		*/
 		QString fileDBDriverMimeType() const;
 
-		/*! \return default file-based driver mime type 
-		 (typically something like "application/x-kexiproject-sqlite") */
-		static QString defaultFileBasedDriverMimeType();
-
-		/*! \return default file-based driver name (currently, "sqlite3"). */
-		static QString defaultFileBasedDriverName();
-
 		/*! Info about the driver as a service. */
 		const KService* service() const;
 

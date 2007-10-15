@@ -89,6 +89,7 @@ class ConnectionPrivate
 		 , default_trans_started_inside(false)
 		 , isConnected(false)
 		 , autoCommit(true)
+		 , takeTableEnabled(true)
 		{
 //Qt 4			tableSchemaChangeListeners.setAutoDelete(true);
 //Qt 4			obsoleteQueries.setAutoDelete(true);
@@ -154,6 +155,8 @@ class ConnectionPrivate
 		}
 
 		inline void takeTable(TableSchema& tableSchema) {
+			if (!takeTableEnabled)
+				return;
 			tables.take(tableSchema.id());
 			tables_byname.take(tableSchema.name());
 		}
@@ -174,7 +177,10 @@ class ConnectionPrivate
 			tables_byname.clear();
 			qDeleteAll(_kexiDBSystemTables);
 			_kexiDBSystemTables.clear();
+			takeTableEnabled = false; //!< needed because otherwise 'tables' hash will 
+			                          //!< be touched by takeTable() what's not allowed during qDeleteAll()
 			qDeleteAll(tables);
+			takeTableEnabled = true;
 			tables.clear();
 		}
 
@@ -278,6 +284,8 @@ class ConnectionPrivate
 		//! Query schemas retrieved on demand with querySchema()
 		QHash<int, QuerySchema*> queries;
 		QHash<QString, QuerySchema*> queries_byname;
+		bool takeTableEnabled : 1; //!< used by takeTable() needed because otherwise 'tables' hash will 
+			                         //!< be touched by takeTable() what's not allowed during qDeleteAll()
 };
 
 }//namespace KexiDB

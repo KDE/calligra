@@ -466,6 +466,18 @@ namespace KexiDB
 			return QVariant();
 		return result;
 	}
+
+	/*! \return default file-based driver mime type 
+	 (typically something like "application/x-kexiproject-sqlite") */
+	KEXI_DB_EXPORT QString defaultFileBasedDriverMimeType();
+
+	/*! \return icon name for default file-based driver
+	 (typically icon for something like "application/x-kexiproject-sqlite").
+	 @see KexiDB::defaultFileBasedDriverMimeType() */
+	KEXI_DB_EXPORT QString defaultFileBasedDriverIcon();
+
+	/*! \return default file-based driver name (currently, "sqlite3"). */
+	KEXI_DB_EXPORT QString defaultFileBasedDriverName();
 }
 
 #endif

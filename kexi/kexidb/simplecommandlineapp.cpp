@@ -29,6 +29,7 @@
 
 #include "connectiondata.h"
 #include "drivermanager.h"
+#include "utils.h"
 
 using namespace KexiDB;
 
@@ -78,7 +79,7 @@ SimpleCommandLineApp::SimpleCommandLineApp(
 	KCmdLineOptions allOptions;
 
 	// add predefined options
-	allOptions.add("drv", KLocalizedString(), KexiDB::Driver::defaultFileBasedDriverName().toUtf8());
+	allOptions.add("drv", KLocalizedString(), KexiDB::defaultFileBasedDriverName().toUtf8());
 	allOptions.add("driver <name>", ki18n("Database driver name"));
 	allOptions.add("u");
 	allOptions.add("user <name>", ki18n("Database user name"));

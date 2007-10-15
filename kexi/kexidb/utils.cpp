@@ -1266,4 +1266,21 @@ QString KexiDB::simplifiedTypeName(const Field& field)
 	return field.typeGroupName();
 }
 
+QString KexiDB::defaultFileBasedDriverMimeType()
+{
+	return QString::fromLatin1("application/x-kexiproject-sqlite3");
+}
+
+QString KexiDB::defaultFileBasedDriverIcon()
+{
+	return KMimeType::mimeType( 
+		KexiDB::defaultFileBasedDriverMimeType() )->iconName();
+}
+
+QString KexiDB::defaultFileBasedDriverName()
+{
+	DriverManager dm;
+	return dm.lookupByMime(KexiDB::defaultFileBasedDriverMimeType()).toLower();
+}
+
 #include "utils_p.moc"
