@@ -83,15 +83,13 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     subtypeButtonGroup->addButton( d->ui.subtypePercent, PercentChartSubtype );
 
     // The default chart is a BarChartType, so let's prepare for that
-    d->ui.threeDLook2->hide();
+    d->ui.threeDLook->show();
 
     connect( subtypeButtonGroup, SIGNAL( buttonClicked( int ) ),
              this, SLOT( chartSubtypeSelected( int ) ) );
 
-    connect( d->ui.threeDLook1, SIGNAL( toggled( bool ) ),
-             this, SLOT( toggleThreeDMode( bool ) ) );
-    connect( d->ui.threeDLook2, SIGNAL( toggled( bool ) ),
-             this, SLOT( toggleThreeDMode( bool ) ) );
+    connect( d->ui.threeDLook, SIGNAL( toggled( bool ) ),
+             this, SLOT( setThreeDMode( bool ) ) );
 }
 
 ChartTypeConfigWidget::~ChartTypeConfigWidget()
@@ -118,35 +116,38 @@ KAction* ChartTypeConfigWidget::createAction()
 
 void ChartTypeConfigWidget::chartTypeSelected( int type )
 {
-    d->type = (OdfChartType) type;
+    d->type = ( OdfChartType )type;
     emit chartTypeChange( d->type );
 
-    switch ( d->shape->lastChartSubtype( d->type ) ) {
-        case NormalChartSubtype:
-            d->ui.subtypeNormal->setChecked( true );
-            break;
-        case StackedChartSubtype:
-            d->ui.subtypeStacked->setChecked( true );
-            break;
-        case PercentChartSubtype:
-            d->ui.subtypePercent->setChecked( true );
-            break;
-    }
-
-    if( type != BarChartType && type != LineChartType && type != AreaChartType ) {
-        d->ui.optionsBox->hide();
-        d->ui.threeDLook2->show();
-    } else {
-        d->ui.optionsBox->show();
-        d->ui.threeDLook2->hide();
-        if( type == BarChartType ) {
+    switch ( type ) {
+        case BarChartType:
+            d->ui.optionsBox->show();
             d->ui.linesInBarChart->show();
             d->ui.linesInBarChartArea->show();
-        } else {
+            d->ui.threeDLook->setEnabled( true );
+            break;
+        case LineChartType:
+            d->ui.optionsBox->show();
             d->ui.linesInBarChart->hide();
             d->ui.linesInBarChartArea->hide();
-        }
+            d->ui.threeDLook->setEnabled( true );
+            break;
+        case AreaChartType:
+            d->ui.optionsBox->show();
+            d->ui.linesInBarChart->hide();
+            d->ui.linesInBarChartArea->hide();
+            d->ui.threeDLook->setEnabled( false );
+            break;
+        case CircleChartType:
+            d->ui.optionsBox->hide();
+            d->ui.threeDLook->setEnabled( true );
+            break;
+        default:
+            d->ui.optionsBox->hide();
+            d->ui.threeDLook->setEnabled( false );
+            break;
     }
+    updateChartTypeOptions( d->shape->chartTypeOptions( d->type ) );
 }
 
 void ChartTypeConfigWidget::chartSubtypeSelected( int type )
@@ -155,10 +156,32 @@ void ChartTypeConfigWidget::chartSubtypeSelected( int type )
     emit chartSubtypeChange( d->subtype );
 }
 
-void ChartTypeConfigWidget::toggleThreeDMode( bool threeD )
+void ChartTypeConfigWidget::setThreeDMode( bool threeD )
 {
     d->threeDMode = threeD;
     emit threeDModeToggled( threeD );
+}
+
+void ChartTypeConfigWidget::updateChartTypeOptions( ChartTypeOptions options )
+{
+    switch ( options.subtype ) {
+        case NormalChartSubtype:
+            d->ui.subtypeNormal->blockSignals( true );
+            d->ui.subtypeNormal->setChecked( true );
+            d->ui.subtypeNormal->blockSignals( false );
+            break;
+        case StackedChartSubtype:
+            d->ui.subtypeStacked->blockSignals( true );
+            d->ui.subtypeStacked->setChecked( true );
+            d->ui.subtypeStacked->blockSignals( false );
+            break;
+        case PercentChartSubtype:
+            d->ui.subtypePercent->blockSignals( true );
+            d->ui.subtypePercent->setChecked( true );
+            d->ui.subtypePercent->blockSignals( false );
+            break;
+    }
+    d->ui.threeDLook->setChecked( d->shape->threeDMode() );
 }
 
 #include "ChartTypeConfigWidget.moc"

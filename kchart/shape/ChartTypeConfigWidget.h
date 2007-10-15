@@ -35,7 +35,8 @@ public:
 private Q_SLOTS:
     void chartSubtypeSelected( int type );
     void chartTypeSelected( int type );
-    void toggleThreeDMode( bool threeD );
+    void setThreeDMode( bool threeD );
+    void updateChartTypeOptions( ChartTypeOptions options );
 
 Q_SIGNALS:
     void chartTypeChange( KChart::OdfChartType );

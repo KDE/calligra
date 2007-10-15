@@ -63,7 +63,7 @@ public:
 private slots:
     void setChartType( KChart::OdfChartType type );
     void setChartSubtype( KChart::OdfChartSubtype subtype );
-    void toggleThreeDMode( bool );
+    void setThreeDMode( bool );
 #if 0
     void catchFoo(bool on);
     void catchBar(bool on);

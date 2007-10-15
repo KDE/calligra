@@ -43,13 +43,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QCheckBox" name="threeDLook1" >
-        <property name="text" >
-         <string>3D</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0" colspan="2" >
        <widget class="QCheckBox" name="linesInBarChart" >
         <property name="text" >
@@ -68,7 +61,7 @@
     </widget>
    </item>
    <item row="2" column="0" >
-    <widget class="QCheckBox" name="threeDLook2" >
+    <widget class="QCheckBox" name="threeDLook" >
      <property name="text" >
       <string>3D Appearance</string>
      </property>

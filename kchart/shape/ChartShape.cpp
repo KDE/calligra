@@ -86,7 +86,6 @@ static bool isCartesian( OdfChartType type )
     return !isPolar( type );
 }
 
-
 class ChartShape::Private
 {
 public:
@@ -113,7 +112,7 @@ public:
     // Data that are not immediately applicable to the chart itself.
 
     // The last subtype that each main type had when it was last used.
-    OdfChartSubtype  lastSubtype[NUM_CHARTTYPES];
+    ChartTypeOptions  chartTypeOptions[NUM_CHARTTYPES];
 
     // Default data to be used until the first call to setModel().
     // After that, it is never used again.
@@ -138,7 +137,8 @@ const OdfChartSubtype  defaultSubtypes[NUM_CHARTTYPES] = {
 ChartShape::Private::Private()
 {
     for ( int i = 0; i < NUM_CHARTTYPES; ++i )
-        lastSubtype[i] = defaultSubtypes[i];  
+        chartTypeOptions[i].subtype = defaultSubtypes[i];  
+    threeDMode = false;
 }
 
 
@@ -157,14 +157,14 @@ ChartShape::ChartShape()
     // Initialize a basic chart.
     d->chart     = new KDChart::Chart();
     d->diagram   = new KDChart::BarDiagram();
-    d->chart->coordinatePlane()->replaceDiagram(d->diagram);
+    d->chart->coordinatePlane()->replaceDiagram( d->diagram );
     setModel( &d->defaultData );
 
     d->firstRowAsLabel = false;
     d->firstColAsLabel = false;
 
     // Add axes to the diagram
-    KDChart::AbstractCartesianDiagram  *diagram = static_cast<KDChart::AbstractCartesianDiagram*>(d->diagram);
+    KDChart::AbstractCartesianDiagram  *diagram = static_cast<KDChart::AbstractCartesianDiagram*>( d->diagram );
     KDChart::CartesianAxis  *xAxis = new KDChart::CartesianAxis( diagram );
     KDChart::CartesianAxis  *yAxis = new KDChart::CartesianAxis( diagram );
     xAxis->setPosition( KDChart::CartesianAxis::Bottom );
@@ -256,6 +256,8 @@ void ChartShape::setChartType( OdfChartType    newType,
 
     if (d->chartType == newType && d->chartSubtype == newSubtype)
         return;
+
+    saveChartTypeOptions();
 
     if ( d->chartType != newType ) {
         switch ( newType ) {
@@ -363,7 +365,12 @@ void ChartShape::setChartType( OdfChartType    newType,
         d->chartSubtype = NoChartSubtype;
     }
 
-    setChartSubtype( newSubtype );
+    restoreChartTypeOptions( d->chartType );
+
+    // Only set the new subtype if it's valid, and if the argument
+    // was provided ( that is, if the argument is not at it's default defined in ChartShape.h )
+    if( newSubtype != NoChartSubtype )
+        setChartSubtype( newSubtype );
 }
 
 void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
@@ -427,7 +434,6 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
     }
 
     d->chartSubtype = newSubtype;
-    d->lastSubtype[d->chartType] = newSubtype;
 
     d->diagram->update();
     d->chart->update();
@@ -435,11 +441,8 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
     repaint();
 }
 
-void ChartShape::toggleThreeDMode( bool threeD )
+void ChartShape::setThreeDMode( bool threeD )
 {
-    if ( threeD == d->threeDMode )
-        return;
-
     switch ( d->chartType ) {
         case BarChartType:
             {
@@ -447,34 +450,48 @@ void ChartShape::toggleThreeDMode( bool threeD )
                 attributes.setEnabled( threeD );
                 ( ( KDChart::BarDiagram* )d->diagram )->setThreeDBarAttributes( attributes );
             }
-        break;
+            break;
         case LineChartType:
             {
                 KDChart::ThreeDLineAttributes attributes( ( ( KDChart::LineDiagram* )d->diagram )->threeDLineAttributes() );
                 attributes.setEnabled( threeD );
                 ( ( KDChart::LineDiagram* )d->diagram )->setThreeDLineAttributes( attributes );
             }
-        break;
+            break;
         case CircleChartType:
             {
                 KDChart::ThreeDPieAttributes attributes( ( ( KDChart::PieDiagram* )d->diagram )->threeDPieAttributes() );
                 attributes.setEnabled( threeD );
                 ( ( KDChart::PieDiagram* )d->diagram )->setThreeDPieAttributes( attributes );
             }
-        break;
+            break;
+        default:
+            return;
     }
+    d->threeDMode = threeD;
+
     d->chart->update();
     repaint();
 }
 
-OdfChartSubtype ChartShape::lastChartSubtype(OdfChartType type) const
+void ChartShape::saveChartTypeOptions()
 {
-    if ( BarChartType <= type && type < LastChartType )
-        return d->lastSubtype[(int) type];
+    // Check if the int value is in range of the OdfChartType enumeration
+    if( d->chartType < BarChartType && d->chartType >= LastChartType )
+        return;
 
-    return NoChartSubtype;
+    d->chartTypeOptions[( int )d->chartType].subtype = d->chartSubtype;
 }
 
+void ChartShape::restoreChartTypeOptions( OdfChartType type )
+{
+    // Check if the int value is in range of the OdfChartType enumeration
+    if( type < BarChartType && type >= LastChartType )
+        return;
+
+    setChartSubtype( d->chartTypeOptions[( int )type].subtype );
+    setThreeDMode( d->threeDMode );
+}
 
 void ChartShape::setModel( QAbstractItemModel* model )
 {
@@ -525,6 +542,12 @@ OdfChartSubtype ChartShape::chartSubtype() const
 bool ChartShape::threeDMode() const
 {
     return d->threeDMode;
+}
+
+ChartTypeOptions ChartShape::chartTypeOptions( OdfChartType type ) const
+{
+    if( type >= BarChartType && type < LastChartType)
+        return d->chartTypeOptions[( int )type];
 }
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )

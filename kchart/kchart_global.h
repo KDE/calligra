@@ -53,6 +53,11 @@ typedef enum {
     PercentChartSubtype
 } OdfChartSubtype;
 
+struct ChartTypeOptions
+{
+    OdfChartSubtype subtype;
+};
+
 // Data direction
 typedef  enum {
     DataRowsDirection    = 0,

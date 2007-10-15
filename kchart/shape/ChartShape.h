@@ -48,7 +48,7 @@ namespace KChart
 
 class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
 {
-public:
+ public:
     ChartShape();
     virtual ~ChartShape();
 
@@ -69,7 +69,7 @@ public:
     OdfChartSubtype chartSubtype() const;
     bool            threeDMode() const;
 
-    OdfChartSubtype lastChartSubtype(OdfChartType type) const;
+    ChartTypeOptions chartTypeOptions( OdfChartType type ) const;
 
  private:
     void saveLegend( KoXmlWriter &bodyWriter,
@@ -83,10 +83,12 @@ public:
  public Q_SLOTS:
     /// Set new chart type and subtype.
     void setChartType( OdfChartType newType, 
-		       OdfChartSubtype newSubtype = NormalChartSubtype );
+		       OdfChartSubtype newSubtype = NoChartSubtype );
     void setChartSubtype( OdfChartSubtype newSubtype );
-    void toggleThreeDMode( bool );
+    void setThreeDMode( bool );
 
+    void saveChartTypeOptions();
+    void restoreChartTypeOptions( OdfChartType type );
 
  private:
     void setChartDefaults();
