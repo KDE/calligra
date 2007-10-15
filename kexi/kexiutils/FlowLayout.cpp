@@ -23,9 +23,9 @@
 #include <KDebug>
 
 #ifdef __GNUC__
-#warning KexiFlowLayout ported to Qt4 but not tested
+#warning vertical KexiFlowLayout ported to Qt4 but not tested
 #else
-#pragma WARNING( KexiFlowLayout ported to Qt4 but not tested )
+#pragma WARNING( vertical KexiFlowLayout ported to Qt4 but not tested )
 #endif
 
 /* 2.0 removed
@@ -345,6 +345,56 @@ int KexiFlowLayout::doHorizontalLayout(const QRect &r, bool testOnly)
 	return y + h - r.y();
 }
 
+inline void doVerticalLayoutForLine(const QRect &r, const QList<QLayoutItem*>& currentLine, 
+	int spacing, bool justify, int& x, int& w, int& availableSpace, int& expandingWidgets, 
+	int& sizeHintHeight, int& minSizeHeight, int& colMinWidth, bool testOnly)
+{
+	QListIterator<QLayoutItem*> it2(currentLine);
+	int wy = r.y();
+	sizeHintHeight = 0 - spacing;
+	minSizeHeight = 0 - spacing;
+	colMinWidth = 0;
+	while( it2.hasNext() ) {
+		QLayoutItem *item = it2.next();
+		QSize itemSizeHint = item->sizeHint(); // we cache these ones because it can take
+		QSize itemMinSize = item->minimumSize(); // a while to get them
+		QSize s;
+		if (justify) {
+			if (expandingWidgets != 0) {
+				if(item->expandingDirections() & Qt::Vertical)
+					s = QSize(
+						itemSizeHint.width(),
+						qMin(itemSizeHint.height() + availableSpace/expandingWidgets, r.height())
+					);
+				else
+					s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
+			}
+			else
+				s = QSize(
+					itemSizeHint.width(),
+					qMin(itemSizeHint.height() + availableSpace/(int)currentLine.count(), r.height())
+				);
+		}
+		else
+			s = QSize (  itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
+		if (!testOnly) {
+			// adjust horizontal position depending on vertical alignment
+			int add_x;
+			if (item->alignment() & Qt::AlignRight)
+				add_x = w - s.width() - 1;
+			else if (item->alignment() & Qt::AlignHCenter)
+				add_x = (w - s.width() - 1)/2;
+			else
+				add_x = 0; // Qt::AlignLeft
+			item->setGeometry( QRect(QPoint(x + add_x, wy), s) );
+		}
+		wy = wy + s.height() + spacing;
+		minSizeHeight = minSizeHeight + spacing + itemMinSize.height();
+		sizeHintHeight = sizeHintHeight + spacing + itemSizeHint.height();
+		colMinWidth = qMax( colMinWidth, itemMinSize.width() );
+	}
+}
+
 int KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 {
 	int x = r.x();
@@ -366,39 +416,11 @@ int KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 		                                 // a while to get it (eg for child layouts)
 		if (y + oSizeHint.height() > r.bottom() && w > 0) {
 			// do the layout of current line
-			QListIterator<QLayoutItem*> it2(currentLine);
-			int wy = r.y();
-			int sizeHintHeight = 0 - spacing(), minSizeHeight = 0 - spacing(), colMinWidth=0;
-			while( it2.hasNext() ) {
-				QLayoutItem *item = it2.next();
-				QSize itemSizeHint = item->sizeHint(); // we cache these ones because it can take
-				QSize itemMinSize = item->minimumSize(); // a while to get them
-				QSize s;
-				if (m_justify) {
-					if(expandingWidgets != 0) {
-						if(item->expandingDirections() & Qt::Vertical)
-							s = QSize(
-								itemSizeHint.width(),
-								qMin(itemSizeHint.height() + availableSpace/expandingWidgets, r.height())
-							);
-						else
-							s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
-					}
-					else
-						s = QSize(
-							itemSizeHint.width(),
-							qMin(itemSizeHint.height() + availableSpace/(int)currentLine.count(), r.height())
-						);
-				}
-				else
-					s = QSize (  itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
-				if(!testOnly)
-					item->setGeometry( QRect(QPoint(x, wy), s) );
-				wy = wy + s.height() + spacing();
-				minSizeHeight = minSizeHeight + spacing() + itemMinSize.height();
-				sizeHintHeight = sizeHintHeight + spacing() + itemSizeHint.height();
-				colMinWidth = qMax( colMinWidth, itemMinSize.width() );
-			}
+			int sizeHintHeight, minSizeHeight, colMinWidth;
+			doVerticalLayoutForLine(r, currentLine, 
+				spacing(), m_justify, y, w, availableSpace, expandingWidgets, 
+				sizeHintHeight, minSizeHeight, colMinWidth, testOnly);
+
 			sizeHint = sizeHint.expandedTo( QSize(0, sizeHintHeight) );
 			minSize = minSize.expandedTo( QSize(0, minSizeHeight) );
 			minSizeWidth = minSizeWidth + spacing() + colMinWidth;
@@ -420,39 +442,11 @@ int KexiFlowLayout::doVerticalLayout(const QRect &r, bool testOnly)
 	}
 
 	// don't forget to layout the last line
-	QListIterator<QLayoutItem*> it2(currentLine);
-	int wy = r.y();
-	int sizeHintHeight = 0 - spacing(), minSizeHeight = 0 - spacing(), colMinWidth=0;
-	while( it2.hasNext() ) {
-		QLayoutItem *item = it2.next();
-		QSize itemSizeHint = item->sizeHint(); // we cache these ones because it can take
-		QSize itemMinSize = item->minimumSize(); // a while to get them
-		QSize s;
-		if (m_justify) {
-			if(expandingWidgets != 0) {
-				if(item->expandingDirections() & Qt::Vertical)
-					s = QSize(
-						itemSizeHint.width(),
-						qMin(itemSizeHint.height() + availableSpace/expandingWidgets, r.height())
-					);
-				else
-					s = QSize( itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
-			}
-			else
-				s = QSize(
-					itemSizeHint.width(),
-					qMin(itemSizeHint.height() + availableSpace/(int)currentLine.count(), r.height())
-				);
-		}
-		else
-			s = QSize ( itemSizeHint.width(), qMin(itemSizeHint.height(), r.height()) );
-		if(!testOnly)
-			item->setGeometry( QRect(QPoint(x, wy), s) );
-		wy = wy + s.height() + spacing();
-		minSizeHeight = minSizeHeight + spacing() + itemMinSize.height();
-		sizeHintHeight = sizeHintHeight + spacing() + itemSizeHint.height();
-		colMinWidth = qMax( colMinWidth, itemMinSize.width() );
-	}
+	int sizeHintHeight, minSizeHeight, colMinWidth;
+	doVerticalLayoutForLine(r, currentLine, 
+		spacing(), m_justify, y, w, availableSpace, expandingWidgets, 
+		sizeHintHeight, minSizeHeight, colMinWidth, testOnly);
+
 	sizeHint = sizeHint.expandedTo( QSize( x + spacing() + w, sizeHintHeight) );
 	minSizeWidth = minSizeWidth + spacing() + colMinWidth;
 	minSize = minSize.expandedTo( QSize(minSizeWidth, minSizeHeight) );
