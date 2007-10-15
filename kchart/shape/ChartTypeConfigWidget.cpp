@@ -112,10 +112,27 @@ void ChartTypeConfigWidget::chartTypeSelected( int type )
     d->type = (OdfChartType) type;
     emit chartTypeChange( d->type );
 
-    if( type != BarChartType && type != LineChartType && type != AreaChartType )
-        d->ui.subtypeBox->setVisible( false );
-    else
-        d->ui.subtypeBox->setVisible( true );
+    switch ( d->shape->lastChartSubtype( d->type ) ) {
+        case NormalChartSubtype:
+            d->ui.subtypeNormal->setChecked( true );
+            break;
+        case StackedChartSubtype:
+            d->ui.subtypeStacked->setChecked( true );
+            break;
+        case PercentChartSubtype:
+            d->ui.subtypePercent->setChecked( true );
+            break;
+    }
+
+    if( type != BarChartType && type != LineChartType && type != AreaChartType ) {
+        d->ui.subtypeNormal->setEnabled( false );
+        d->ui.subtypeStacked->setEnabled( false );
+        d->ui.subtypePercent->setEnabled( false );
+    } else {
+        d->ui.subtypeNormal->setEnabled( true );
+        d->ui.subtypeStacked->setEnabled( true );
+        d->ui.subtypePercent->setEnabled( true );
+    }
 }
 
 void ChartTypeConfigWidget::chartSubtypeSelected( int type )

@@ -347,6 +347,10 @@ void ChartShape::setChartType( OdfChartType    newType,
 
         // Update local data
         d->chartType = newType;
+        // Reset the chart subtype to make sure setChartSubtype() will
+        // set the subtype of the new chart to the old one. Otherwise,
+        // it'll return because there apparently is nothing to change.
+        d->chartSubtype = NoChartSubtype;
     }
 
     setChartSubtype( newSubtype );
