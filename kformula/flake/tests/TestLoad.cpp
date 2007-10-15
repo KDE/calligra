@@ -45,9 +45,9 @@
 #include "EncloseElement.h"
 #include "MultiscriptElement.h"
 #include "UnderOverElement.h"
-#include "MatrixElement.h"
-#include "MatrixRowElement.h"
-#include "MatrixEntryElement.h"
+#include "TableElement.h"
+#include "TableRowElement.h"
+#include "TableEntryElement.h"
 #include "ActionElement.h"
 
 static void load(BasicElement* element, const QString& input)
