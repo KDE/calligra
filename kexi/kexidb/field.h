@@ -507,7 +507,7 @@ class KEXI_DB_EXPORT Field
 		 Every QueryAsterisk object returns true here,
 		 and every Field object returns false.
 		*/
-		virtual bool isQueryAsterisk() const { return false; }
+		inline bool isQueryAsterisk() const { return m_type == Field::Asterisk; }
 		
 		/*! \return string for debugging purposes. */
 		virtual QString debugString() const;
