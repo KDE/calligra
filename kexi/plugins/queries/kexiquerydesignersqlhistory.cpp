@@ -115,8 +115,8 @@ void KexiQueryDesignerSQLHistory::contentsMouseDoubleClickEvent(QMouseEvent * e)
 
 void KexiQueryDesignerSQLHistory::addEvent(const QString& q, bool s, const QString &error)
 {
-	HistoryEntry *he = m_history->last();
-	if (he) {
+	if (!m_history->isEmpty()) {
+		HistoryEntry *he = m_history->last();
 		if (he->statement()==q) {
 			he->updateTime(QTime::currentTime());
 			repaint();

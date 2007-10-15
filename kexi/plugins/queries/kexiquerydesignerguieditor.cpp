@@ -28,7 +28,7 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <Q3ValueList>
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <q3tl.h>
 
 #include <kdebug.h>
@@ -154,6 +154,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	d->spl = new QSplitter(Qt::Vertical, this);
 	d->spl->setChildrenCollapsible(false);
 	d->relations = new KexiRelationsView(d->spl);
+	d->spl->addWidget( d->relations );
 	d->relations->setObjectName("relations");
 	connect(d->relations, SIGNAL(tableAdded(KexiDB::TableSchema&)),
 		this, SLOT(slotTableAdded(KexiDB::TableSchema&)));
@@ -163,6 +164,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 		this, SLOT(slotAppendFields(KexiDB::TableOrQuerySchema&,const QStringList&)));
 
 	d->head = new KexiSectionHeader(i18n("Query Columns"), Qt::Vertical, d->spl);
+	d->spl->addWidget( d->head );
 	d->dataTable = new KexiDataTable(d->head, false);
 	d->head->setWidget( d->dataTable );
 	d->dataTable->setObjectName("guieditor_dataTable");
@@ -196,12 +198,14 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 	connect(d->relations, SIGNAL(aboutConnectionRemove(KexiRelationsConnection*)),
 		this, SLOT(slotAboutConnectionRemove(KexiRelationsConnection*)));
 
-	Q3VBoxLayout *l = new Q3VBoxLayout(this);
-	l->addWidget(d->spl);
+//	QVBoxLayout *l = new QVBoxLayout(this);
+//	l->addWidget(d->spl);
 
 	addChildView(d->relations);
 	addChildView(d->dataTable);
-	setViewWidget(d->dataTable, true);
+	//setViewWidget(d->dataTable, true);
+	setViewWidget(d->spl, false/* no focus proxy*/);
+	setFocusProxy(d->dataTable);
 	d->relations->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 	d->head->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 	updateGeometry();

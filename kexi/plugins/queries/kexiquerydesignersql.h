@@ -21,9 +21,10 @@
 #ifndef KEXIQUERYDESIGNERSQL_H
 #define KEXIQUERYDESIGNERSQL_H
 
-#include <KexiView.h>
 #include "kexiquerypart.h"
-//Added by qt3to4:
+
+#include <KexiView.h>
+#include <KTitleWidget>
 #include <QEvent>
 
 class KexiQueryDesignerSQLEditor;

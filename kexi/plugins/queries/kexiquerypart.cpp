@@ -20,8 +20,9 @@
 
 #include "kexiquerypart.h"
 
-#include <kdebug.h>
-#include <kgenericfactory.h>
+#include <KDebug>
+#include <KGenericFactory>
+#include <KToggleAction>
 
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
@@ -48,7 +49,8 @@ KexiQueryPart::KexiQueryPart(QObject *parent, const QStringList &l)
 	setInternalPropertyValue("instanceCaption", i18n("Query"));
 	setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new query"));
 	setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new query."));
-	setInternalPropertyValue("textViewModeCaption", i18n("&SQL View"));
+//	setInternalPropertyValue("textViewModeCaption", i18n("&SQL View"));
+	setInternalPropertyValue("textViewModeCaption", i18n("SQL"));
 	setSupportedViewModes( Kexi::DataViewMode | Kexi::DesignViewMode | Kexi::TextViewMode );
 }
 
@@ -73,13 +75,13 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
 
 	kDebug() << "KexiQueryPart::createView()" << endl;
 
+	KexiView* view = 0;
 	if (viewMode == Kexi::DataViewMode) {
-		KexiQueryView *view = new KexiQueryView(parent);
+		view = new KexiQueryView(parent);
 		view->setObjectName("dataview");
-		return view;
 	}
 	else if (viewMode == Kexi::DesignViewMode) {
-		KexiQueryDesignerGuiEditor* view = new KexiQueryDesignerGuiEditor(parent);
+		view = new KexiQueryDesignerGuiEditor(parent);
 		view->setObjectName("guieditor");
 		//needed for updating tables combo box:
 		KexiProject *prj = KexiMainWindowIface::global()->project();
@@ -92,14 +94,12 @@ KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPar
 
 //		connect(KexiMainWindowIface::global()->project(), SIGNAL(tableCreated(KexiDB::TableSchema&)),
 //			view, SLOT(slotTableCreated(KexiDB::TableSchema&)));
-		return view;
 	}
 	else if (viewMode == Kexi::TextViewMode) {
-		KexiQueryDesignerSQLView *view = new KexiQueryDesignerSQLView(parent);
+		view = new KexiQueryDesignerSQLView(parent);
 		view->setObjectName("sqldesigner");
 	}
-
-	return 0;
+	return view;
 }
 
 bool KexiQueryPart::remove(KexiPart::Item &item)
@@ -149,16 +149,18 @@ void KexiQueryPart::initInstanceActions()
 //	new KAction(i18n("Check Query"), "test_it", 0, this, SLOT(slotCheckQuery()), 
 //		m_instanceGuiClients[Kexi::DesignViewMode]->actionCollection(), "querypart_check_query");
 
+/*2.0: moved to KexiView::createViewActions()
 	KAction *a = createSharedAction(Kexi::TextViewMode, i18n("Check Query"), "test_it", 
 		KShortcut(Qt::Key_F9), "querypart_check_query");
 	a->setToolTip(i18n("Check Query"));
 	a->setWhatsThis(i18n("Checks query for validity."));
 
 	a = createSharedToggleAction(
-		Kexi::TextViewMode, i18n("Show SQL History"), "view_top_bottom"/*TODO other icon*/,
+//! @todo other icon
+		Kexi::TextViewMode, i18n("Show SQL History"), "view_top_bottom",
 		KShortcut(), "querypart_view_toggle_history");
 	a->setWhatsThis(i18n("Shows or hides SQL editor's history."));
-
+*/
 //	setActionAvailable("querypart_check_query", true);
 }
 
