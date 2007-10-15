@@ -35,10 +35,12 @@ public:
 private Q_SLOTS:
     void chartSubtypeSelected( int type );
     void chartTypeSelected( int type );
+    void toggleThreeDMode( bool threeD );
 
 Q_SIGNALS:
     void chartTypeChange( KChart::OdfChartType );
     void chartSubtypeChange( KChart::OdfChartSubtype );
+    void threeDModeToggled( bool threeD );
 
 private:
     class Private;

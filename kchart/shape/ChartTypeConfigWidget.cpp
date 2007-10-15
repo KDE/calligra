@@ -47,6 +47,7 @@ public:
     ChartShape* shape;
     OdfChartType type;
     OdfChartSubtype subtype;
+    bool threeDMode;
     QVBoxLayout* leftLayout;
     QVBoxLayout* rightLayout;
     Ui::ChartTypeConfigWidget ui;
@@ -81,8 +82,16 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     subtypeButtonGroup->addButton( d->ui.subtypeStacked, StackedChartSubtype );
     subtypeButtonGroup->addButton( d->ui.subtypePercent, PercentChartSubtype );
 
+    // The default chart is a BarChartType, so let's prepare for that
+    d->ui.threeDLook2->hide();
+
     connect( subtypeButtonGroup, SIGNAL( buttonClicked( int ) ),
              this, SLOT( chartSubtypeSelected( int ) ) );
+
+    connect( d->ui.threeDLook1, SIGNAL( toggled( bool ) ),
+             this, SLOT( toggleThreeDMode( bool ) ) );
+    connect( d->ui.threeDLook2, SIGNAL( toggled( bool ) ),
+             this, SLOT( toggleThreeDMode( bool ) ) );
 }
 
 ChartTypeConfigWidget::~ChartTypeConfigWidget()
@@ -125,13 +134,18 @@ void ChartTypeConfigWidget::chartTypeSelected( int type )
     }
 
     if( type != BarChartType && type != LineChartType && type != AreaChartType ) {
-        d->ui.subtypeNormal->setEnabled( false );
-        d->ui.subtypeStacked->setEnabled( false );
-        d->ui.subtypePercent->setEnabled( false );
+        d->ui.optionsBox->hide();
+        d->ui.threeDLook2->show();
     } else {
-        d->ui.subtypeNormal->setEnabled( true );
-        d->ui.subtypeStacked->setEnabled( true );
-        d->ui.subtypePercent->setEnabled( true );
+        d->ui.optionsBox->show();
+        d->ui.threeDLook2->hide();
+        if( type == BarChartType ) {
+            d->ui.linesInBarChart->show();
+            d->ui.linesInBarChartArea->show();
+        } else {
+            d->ui.linesInBarChart->hide();
+            d->ui.linesInBarChartArea->hide();
+        }
     }
 }
 
@@ -139,6 +153,12 @@ void ChartTypeConfigWidget::chartSubtypeSelected( int type )
 {
     d->subtype = (OdfChartSubtype) type;
     emit chartSubtypeChange( d->subtype );
+}
+
+void ChartTypeConfigWidget::toggleThreeDMode( bool threeD )
+{
+    d->threeDMode = threeD;
+    emit threeDModeToggled( threeD );
 }
 
 #include "ChartTypeConfigWidget.moc"

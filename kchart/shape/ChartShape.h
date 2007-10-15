@@ -67,6 +67,7 @@ public:
 
     OdfChartType    chartType() const;
     OdfChartSubtype chartSubtype() const;
+    bool            threeDMode() const;
 
     OdfChartSubtype lastChartSubtype(OdfChartType type) const;
 
@@ -84,6 +85,7 @@ public:
     void setChartType( OdfChartType newType, 
 		       OdfChartSubtype newSubtype = NormalChartSubtype );
     void setChartSubtype( OdfChartSubtype newSubtype );
+    void toggleThreeDMode( bool );
 
 
  private:

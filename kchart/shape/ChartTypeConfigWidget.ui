@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>325</width>
-    <height>176</height>
+    <width>243</width>
+    <height>238</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,22 +17,22 @@
     <widget class="QComboBox" name="typeCombobox" />
    </item>
    <item row="1" column="0" >
-    <widget class="QGroupBox" name="subtypeBox" >
+    <widget class="QGroupBox" name="optionsBox" >
      <property name="title" >
-      <string>Subtypes</string>
+      <string>Options</string>
      </property>
      <layout class="QGridLayout" >
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="subtypePercent" >
-        <property name="text" >
-         <string>Percent</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0" >
        <widget class="QRadioButton" name="subtypeNormal" >
         <property name="text" >
          <string>Normal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QRadioButton" name="subtypePercent" >
+        <property name="text" >
+         <string>Percent</string>
         </property>
        </widget>
       </item>
@@ -43,10 +43,38 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="threeDLook1" >
+        <property name="text" >
+         <string>3D</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2" >
+       <widget class="QCheckBox" name="linesInBarChart" >
+        <property name="text" >
+         <string>Display Data Series as Lines:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2" >
+       <widget class="QLineEdit" name="linesInBarChartArea" >
+        <property name="text" >
+         <string>Sheet1!A7:C15</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item row="2" column="0" >
+    <widget class="QCheckBox" name="threeDLook2" >
+     <property name="text" >
+      <string>3D Appearance</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>

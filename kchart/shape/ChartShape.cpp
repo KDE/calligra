@@ -59,6 +59,13 @@
 #include "KDChartHeaderFooter.h"
 #include "KDChartLineAttributes.h"
 
+#include "KDChartBarAttributes.h"
+#include "KDChartThreeDBarAttributes.h"
+#include "KDChartLineAttributes.h"
+#include "KDChartThreeDLineAttributes.h"
+#include "KDChartPieAttributes.h"
+#include "KDChartThreeDPieAttributes.h"
+
 // KChart
 #include "kchart_global.h"
 
@@ -89,6 +96,9 @@ public:
     // The chart and its contents
     OdfChartType        chartType;
     OdfChartSubtype     chartSubtype;
+
+    // Whether we're in 2D or 3D mode
+    bool threeDMode;
 
     // The underlying engine
     KDChart::Chart            *chart;
@@ -425,6 +435,37 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
     repaint();
 }
 
+void ChartShape::toggleThreeDMode( bool threeD )
+{
+    if ( threeD == d->threeDMode )
+        return;
+
+    switch ( d->chartType ) {
+        case BarChartType:
+            {
+                KDChart::ThreeDBarAttributes attributes( ( ( KDChart::BarDiagram* )d->diagram )->threeDBarAttributes() );
+                attributes.setEnabled( threeD );
+                ( ( KDChart::BarDiagram* )d->diagram )->setThreeDBarAttributes( attributes );
+            }
+        break;
+        case LineChartType:
+            {
+                KDChart::ThreeDLineAttributes attributes( ( ( KDChart::LineDiagram* )d->diagram )->threeDLineAttributes() );
+                attributes.setEnabled( threeD );
+                ( ( KDChart::LineDiagram* )d->diagram )->setThreeDLineAttributes( attributes );
+            }
+        break;
+        case CircleChartType:
+            {
+                KDChart::ThreeDPieAttributes attributes( ( ( KDChart::PieDiagram* )d->diagram )->threeDPieAttributes() );
+                attributes.setEnabled( threeD );
+                ( ( KDChart::PieDiagram* )d->diagram )->setThreeDPieAttributes( attributes );
+            }
+        break;
+    }
+    d->chart->update();
+    repaint();
+}
 
 OdfChartSubtype ChartShape::lastChartSubtype(OdfChartType type) const
 {
@@ -481,6 +522,10 @@ OdfChartSubtype ChartShape::chartSubtype() const
     return d->chartSubtype;
 }
 
+bool ChartShape::threeDMode() const
+{
+    return d->threeDMode;
+}
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {

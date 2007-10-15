@@ -134,6 +134,8 @@ QWidget *ChartTypeTool::createOptionWidget()
 	     this,   SLOT( setChartType( KChart::OdfChartType ) ) );
     connect( widget, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
              this,   SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
+    connect( widget, SIGNAL( threeDModeToggled( bool ) ),
+             this,   SLOT( toggleThreeDMode( bool ) ) );
 
     return widget;
 }
@@ -152,5 +154,9 @@ void ChartTypeTool::setChartSubtype( OdfChartSubtype subtype )
         m_currentShape->setChartSubtype( subtype );
 }
 
+void ChartTypeTool::toggleThreeDMode( bool threeD ) {
+    if( m_currentShape != 0 )
+        m_currentShape->toggleThreeDMode( threeD );
+}
 
 #include "ChartTypeTool.moc"
