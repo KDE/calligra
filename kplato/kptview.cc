@@ -20,7 +20,7 @@
 
 #include "kptview.h"
 
-#include <kprinter.h>
+//#include <kprinter.h>
 #include <kmessagebox.h>
 
 #include "KoDocumentInfo.h"
@@ -768,20 +768,20 @@ void View::setZoom( double )
     //TODO
 }
 
-void View::setupPrinter( KPrinter & /*printer*/ )
+void View::setupPrinter( QPrinter & /*printer*/ )
 {
     //kDebug();
 }
 
-void View::print( KPrinter &printer )
+void View::print( QPrinter &/*printer*/ )
 {
     //kDebug();
-    if ( printer.previewOnly() ) {
+/*    if ( printer.previewOnly() ) {
         //HACK: KoMainWindow shows setup on print, but not on print preview!
         if ( !printer.setup() ) {
             return ;
         }
-    }
+    }*/
 /* TODO
     if ( m_tab->currentWidget() == ganttview ) {
         ganttview->print( printer );

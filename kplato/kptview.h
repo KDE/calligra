@@ -34,6 +34,7 @@
 class QProgressBar;
 class QStackedWidget;
 class QSplitter;
+class QPrinter;
 
 class KPrinter;
 class KAction;
@@ -93,8 +94,8 @@ public:
 
     Project& getProject() const;
 
-    virtual void setupPrinter( KPrinter &printer );
-    virtual void print( KPrinter &printer );
+    virtual void setupPrinter( QPrinter &printer );
+    virtual void print( QPrinter &printer );
 
     QMenu *popupMenu( const QString& name );
 
