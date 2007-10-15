@@ -180,9 +180,9 @@ recalcFrom = 0; // TODO ????
     } while(state->previousParag());
 
     // set the shape to the proper position based on the data
-    m_anchor->shape()->repaint();
+    m_anchor->shape()->update();
     m_anchor->shape()->setPosition(newPosition);
-    m_anchor->shape()->repaint();
+    m_anchor->shape()->update();
     return true;
 }
 

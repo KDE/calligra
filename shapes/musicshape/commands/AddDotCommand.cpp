@@ -34,12 +34,12 @@ void AddDotCommand::redo()
 {
     m_chord->setDots(m_chord->dots() + 1);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void AddDotCommand::undo()
 {
     m_chord->setDots(m_chord->dots() - 1);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

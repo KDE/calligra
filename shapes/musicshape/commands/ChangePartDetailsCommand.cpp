@@ -109,7 +109,7 @@ void ChangePartDetailsCommand::redo()
     if (m_newStaffCount != m_oldStaffCount) {
         m_shape->sheet()->setStaffSystemCount(0);
         m_shape->engrave();
-        m_shape->repaint();
+        m_shape->update();
     }        
 }
 
@@ -135,6 +135,6 @@ void ChangePartDetailsCommand::undo()
     if (m_newStaffCount != m_oldStaffCount) {
         m_shape->sheet()->setStaffSystemCount(0);
         m_shape->engrave();
-        m_shape->repaint();
+        m_shape->update();
     }        
 }

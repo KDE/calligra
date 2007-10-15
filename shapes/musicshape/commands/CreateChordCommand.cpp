@@ -46,7 +46,7 @@ void CreateChordCommand::redo()
 {
     m_voiceBar->insertElement(m_chord, m_before);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 
 }
 
@@ -54,5 +54,5 @@ void CreateChordCommand::undo()
 {
     m_voiceBar->removeElement(m_chord, false);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

@@ -147,7 +147,7 @@ void KWTextFrameSet::requestMoreFrames(double textHeight) {
         QPointF orig = shape->absolutePosition(KoFlake::TopLeftCorner);
         shape->setSize(QSizeF(size.width(), size.height() + textHeight));
         shape->setAbsolutePosition(orig, KoFlake::TopLeftCorner);
-        shape->repaint(QRectF(0.0, size.height(), size.width(), textHeight));
+        shape->update(QRectF(0.0, size.height(), size.width(), textHeight));
         lastFrame->allowToGrow();
     }
 }

@@ -269,7 +269,7 @@ void KarbonLayerModel::setProperties( KoShape* shape, const PropertyList &proper
     shape->setLocked( properties.at( 1 ).state.toBool() );
 
     if( ( oldVisibleState != shape->isVisible() ) || ( oldLockedState != shape->isLocked() ) )
-        shape->repaint();
+        shape->update();
 }
 
 QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const

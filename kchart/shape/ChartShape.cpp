@@ -357,7 +357,7 @@ void ChartShape::setChartType( OdfChartType    newType,
 
         d->chart->coordinatePlane()->replaceDiagram( new_diagram ); // FIXME
         d->chart->update();
-        repaint();
+        update();
 
         // Update local data
         d->chartType = newType;
@@ -440,7 +440,7 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
     d->diagram->update();
     d->chart->update();
 
-    repaint();
+    update();
 }
 
 void ChartShape::setThreeDMode( bool threeD )
@@ -473,7 +473,7 @@ void ChartShape::setThreeDMode( bool threeD )
     d->threeDMode = threeD;
 
     d->chart->update();
-    repaint();
+    update();
 }
 
 void ChartShape::saveChartTypeOptions()

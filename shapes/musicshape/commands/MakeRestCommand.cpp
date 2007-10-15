@@ -40,7 +40,7 @@ void MakeRestCommand::redo()
         m_chord->removeNote(n, false);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void MakeRestCommand::undo()
@@ -49,5 +49,5 @@ void MakeRestCommand::undo()
         m_chord->addNote(n);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

@@ -149,7 +149,7 @@ void SetKeySignatureCommand::redo()
         p.first->addStaffElement(p.second);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void SetKeySignatureCommand::undo()
@@ -161,5 +161,5 @@ void SetKeySignatureCommand::undo()
         p.first->addStaffElement(p.second);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

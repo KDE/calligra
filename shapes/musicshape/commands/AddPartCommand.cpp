@@ -58,7 +58,7 @@ void AddPartCommand::redo()
     m_sheet->addPart(m_part);
     m_sheet->setStaffSystemCount(0);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void AddPartCommand::undo()
@@ -66,5 +66,5 @@ void AddPartCommand::undo()
     m_sheet->removePart(m_part, false);
     m_sheet->setStaffSystemCount(0);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

@@ -39,12 +39,12 @@ void RemoveStaffElementCommand::redo()
 {
     m_bar->removeStaffElement(m_element, false);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void RemoveStaffElementCommand::undo()
 {
     m_bar->addStaffElement(m_element, m_index);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

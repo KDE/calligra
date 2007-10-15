@@ -97,12 +97,12 @@ void KWFrameGeometry::updateShape() {
         m_state->markFrameUsed();
     }
     Q_ASSERT(frame);
-    frame->shape()->repaint();
+    frame->shape()->update();
     QPointF pos(widget.xPos->value(), widget.yPos->value());
     frame->shape()->setAbsolutePosition(pos, widget.positionSelector->position());
     QSizeF size(widget.width->value(), widget.height->value());
     frame->shape()->setSize(size);
-    frame->shape()->repaint();
+    frame->shape()->update();
 }
 
 void KWFrameGeometry::protectSizeChanged(int protectSizeState)

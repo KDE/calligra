@@ -221,7 +221,7 @@ void TableTool::mousePressEvent(KoPointerEvent* event)
         default:
             break;
     }
-    d->tableShape->repaint();
+    d->tableShape->update();
 }
 
 void TableTool::mouseMoveEvent( KoPointerEvent* )
@@ -251,7 +251,7 @@ void TableTool::activate( bool temporary )
     d->selection->setActiveSheet(d->tableShape->sheet());
     d->selection->setOriginSheet(d->tableShape->sheet());
     useCursor( Qt::ArrowCursor, true );
-    d->tableShape->repaint();
+    d->tableShape->update();
 }
 
 void TableTool::deactivate()
@@ -262,13 +262,13 @@ void TableTool::deactivate()
 void TableTool::changeColumns( int num )
 {
     d->tableShape->setColumns( num );
-    d->tableShape->repaint();
+    d->tableShape->update();
 }
 
 void TableTool::changeRows( int num )
 {
     d->tableShape->setRows( num );
-    d->tableShape->repaint();
+    d->tableShape->update();
 }
 
 void TableTool::changeSelection(const Region& changedRegion)

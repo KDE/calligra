@@ -145,7 +145,7 @@ namespace Scripting {
             void setRunAroundDistance(double runarounddistance) { m_frame->setRunAroundDistance(runarounddistance); }
 
             /** Request a repaint to be queued. */
-            void repaint() const { m_frame->shape()->repaint(); }
+            void update() const { m_frame->shape()->update(); }
 
             /** Returns current visibility state of this shape. */
             bool isVisible() const { return m_frame->shape()->isVisible(); }

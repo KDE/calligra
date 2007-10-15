@@ -35,12 +35,12 @@ void RemoveBarCommand::redo()
 {
     m_bar->sheet()->removeBar(m_index, false);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void RemoveBarCommand::undo()
 {
     m_bar->sheet()->insertBar(m_index, m_bar);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

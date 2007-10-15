@@ -142,7 +142,7 @@ QUndoCommand * KarbonPatternEditStrategy::createCommand()
 
 void KarbonPatternEditStrategy::repaint() const
 {
-    m_shape->repaint();
+    m_shape->update();
 }
 
 QRectF KarbonPatternEditStrategy::boundingRect() const

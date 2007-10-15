@@ -114,13 +114,13 @@ void DivineProportionShape::setOrientation(Orientation orientation) {
     if(m_orientation == orientation)
         return;
     m_orientation = orientation;
-    repaint();
+    update();
 }
 
 void DivineProportionShape::setPrintable(bool on) {
     if(m_printable == on)
         return;
     m_printable = on;
-    repaint();
+    update();
 }
 

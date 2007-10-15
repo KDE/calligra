@@ -39,26 +39,26 @@ void RectangleShapeConfigCommand::redo()
 {
     QUndoCommand::redo();
 
-    m_rectangle->repaint();
+    m_rectangle->update();
 
     if( m_oldCornerRadiusX != m_newCornerRadiusX )
         m_rectangle->setCornerRadiusX( m_newCornerRadiusX );
     if( m_oldCornerRadiusY != m_newCornerRadiusY )
         m_rectangle->setCornerRadiusY( m_newCornerRadiusY );
 
-    m_rectangle->repaint();
+    m_rectangle->update();
 }
 
 void RectangleShapeConfigCommand::undo()
 {
     QUndoCommand::undo();
 
-    m_rectangle->repaint();
+    m_rectangle->update();
 
     if( m_oldCornerRadiusX != m_newCornerRadiusX )
         m_rectangle->setCornerRadiusX( m_oldCornerRadiusX );
     if( m_oldCornerRadiusY != m_newCornerRadiusY )
         m_rectangle->setCornerRadiusY( m_oldCornerRadiusY );
 
-    m_rectangle->repaint();
+    m_rectangle->update();
 }

@@ -118,7 +118,7 @@ QRectF GradientStrategy::boundingRect() const
 
 void GradientStrategy::repaint() const
 {
-    m_shape->repaint();
+    m_shape->update();
 }
 
 const QGradient * GradientStrategy::gradient()

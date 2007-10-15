@@ -59,7 +59,7 @@ void SetTimeSignatureCommand::redo()
         m_bar->addStaffElement(ts);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void SetTimeSignatureCommand::undo()
@@ -71,5 +71,5 @@ void SetTimeSignatureCommand::undo()
         m_bar->addStaffElement(ts);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

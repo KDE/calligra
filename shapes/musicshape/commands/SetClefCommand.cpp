@@ -45,7 +45,7 @@ void SetClefCommand::redo()
     if (m_oldClef) m_bar->removeStaffElement(m_oldClef, false);
     m_bar->addStaffElement(m_clef);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void SetClefCommand::undo()
@@ -53,5 +53,5 @@ void SetClefCommand::undo()
     m_bar->removeStaffElement(m_clef, false);
     if (m_oldClef) m_bar->addStaffElement(m_oldClef);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

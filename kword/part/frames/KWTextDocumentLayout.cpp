@@ -443,7 +443,7 @@ void KWTextDocumentLayout::layout() {
             }
             bool moreText = m_state->nextParag();
             if(m_state->shape && m_state->y() > posY)
-                m_state->shape->repaint(QRectF(0, posY,
+                m_state->shape->update(QRectF(0, posY,
                             m_state->shape->size().width(), m_state->y() - posY));
 
             if(! moreText) {
@@ -478,7 +478,7 @@ void KWTextDocumentLayout::layout() {
                 // encountered a 'end of page' break but we don't have any more pages(/shapes)
                 m_state->clearTillEnd();
                 m_frameSet->requestMoreFrames(0); // new page, please.
-                currentShape->repaint();
+                currentShape->update();
                 return;
             }
             newParagraph = true;
@@ -554,7 +554,7 @@ void KWTextDocumentLayout::layout() {
         repaintRect.moveTop(repaintRect.y() - m_state->docOffsetInShape());
         repaintRect.setX(0.0); // just take full width since we can't force a repaint of
         repaintRect.setWidth(m_state->shape->size().width()); // where lines were before layout.
-        m_state->shape->repaint(repaintRect);
+        m_state->shape->update(repaintRect);
     }
     if(requestFrameResize)
         m_frameSet->requestMoreFrames(m_dummyShape->size().height());

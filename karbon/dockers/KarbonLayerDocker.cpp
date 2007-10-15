@@ -178,7 +178,7 @@ void KarbonLayerDocker::itemClicked( const QModelIndex &index )
 
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     foreach( KoShape* shape, selection->selectedShapes() )
-        shape->repaint();
+        shape->update();
 
     selection->deselectAll();
 
@@ -187,7 +187,7 @@ void KarbonLayerDocker::itemClicked( const QModelIndex &index )
         if( shape )
         {
             selection->select( shape );
-            shape->repaint();
+            shape->update();
         }
     }
 }

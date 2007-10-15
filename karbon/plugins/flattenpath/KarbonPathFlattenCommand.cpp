@@ -237,7 +237,7 @@ void KarbonPathFlattenCommand::redo()
     {
         QUndoCommand::redo();
     }
-    d->path->repaint();
+    d->path->update();
 }
 
 void KarbonPathFlattenCommand::undo()
@@ -273,6 +273,6 @@ void KarbonPathFlattenCommand::undo()
         d->path->normalize();
     }
 
-    d->path->repaint();
+    d->path->update();
 }
 

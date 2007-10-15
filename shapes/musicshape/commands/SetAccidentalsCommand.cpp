@@ -33,11 +33,11 @@ SetAccidentalsCommand::SetAccidentalsCommand(MusicShape* shape, MusicCore::Note*
 void SetAccidentalsCommand::redo()
 {
     m_note->setAccidentals(m_newAccidentals);
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void SetAccidentalsCommand::undo()
 {
     m_note->setAccidentals(m_oldAccidentals);
-    m_shape->repaint();
+    m_shape->update();
 }

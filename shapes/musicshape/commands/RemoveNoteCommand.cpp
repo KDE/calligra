@@ -35,12 +35,12 @@ void RemoveNoteCommand::redo()
 {
     m_chord->removeNote(m_note, false);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void RemoveNoteCommand::undo()
 {
     m_chord->addNote(m_note);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

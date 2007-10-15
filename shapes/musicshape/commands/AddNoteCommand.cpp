@@ -53,7 +53,7 @@ void AddNoteCommand::redo()
         m_chord->addNote(m_note);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 
 }
 
@@ -65,5 +65,5 @@ void AddNoteCommand::undo()
         m_chord->removeNote(m_note, false);
     }
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

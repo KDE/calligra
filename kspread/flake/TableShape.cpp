@@ -174,7 +174,7 @@ void TableShape::setSheet(const QString& sheetName)
     d->sheetView = new SheetView(sheet);
     setColumns(d->columns);
     setRows(d->rows);
-    repaint();
+    update();
 }
 
 void TableShape::saveOdf( KoShapeSavingContext & context ) const
@@ -213,7 +213,7 @@ void TableShape::handleDamages( const QList<Damage*>& damages )
         }
     }
 
-    repaint();
+    update();
     // FIXME Stefan: Where's the corresponding emitBeginOperation()?
     d->doc->emitEndOperation();
 }

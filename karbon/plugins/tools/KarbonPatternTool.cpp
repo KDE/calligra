@@ -195,7 +195,7 @@ void KarbonPatternTool::deactivate()
     }
     m_patterns.clear();
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
-        shape->repaint();
+        shape->update();
 }
 
 void KarbonPatternTool::resourceChanged( int key, const QVariant & res )

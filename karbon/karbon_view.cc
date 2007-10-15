@@ -488,7 +488,7 @@ void KarbonView::editSelectAll()
     foreach( KoShape* shape, shapes )
     {
         selection->select( shape );
-        shape->repaint();
+        shape->update();
     }
 
     selectionChanged();

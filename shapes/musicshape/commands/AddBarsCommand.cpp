@@ -34,12 +34,12 @@ void AddBarsCommand::redo()
 {
     m_sheet->addBars(m_bars);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void AddBarsCommand::undo()
 {
     m_sheet->removeBars(m_sheet->barCount() - m_bars, m_bars);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

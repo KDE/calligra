@@ -43,7 +43,7 @@ void StarShapeConfigCommand::redo()
 {
     QUndoCommand::redo();
 
-    m_star->repaint();
+    m_star->update();
 
     QPointF position = m_star->absolutePosition();
 
@@ -58,14 +58,14 @@ void StarShapeConfigCommand::redo()
 
     m_star->setAbsolutePosition( position );
 
-    m_star->repaint();
+    m_star->update();
 }
 
 void StarShapeConfigCommand::undo()
 {
     QUndoCommand::undo();
 
-    m_star->repaint();
+    m_star->update();
 
     QPointF position = m_star->absolutePosition();
 
@@ -80,5 +80,5 @@ void StarShapeConfigCommand::undo()
 
     m_star->setAbsolutePosition( position );
 
-    m_star->repaint();
+    m_star->update();
 }

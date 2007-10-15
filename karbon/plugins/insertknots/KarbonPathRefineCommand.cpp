@@ -85,12 +85,12 @@ void KarbonPathRefineCommand::redo()
     {
         QUndoCommand::redo();
     }
-    d->path->repaint();
+    d->path->update();
 }
 
 void KarbonPathRefineCommand::undo()
 {
     QUndoCommand::undo();
-    d->path->repaint();
+    d->path->update();
 }
 

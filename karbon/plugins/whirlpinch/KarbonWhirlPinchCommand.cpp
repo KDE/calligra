@@ -130,7 +130,7 @@ KarbonWhirlPinchCommand::~KarbonWhirlPinchCommand()
 
 void KarbonWhirlPinchCommand::redo()
 {
-    d->pathShape->repaint();
+    d->pathShape->update();
     uint subpathCount = d->pathData.count();
     for( uint subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
     {
@@ -146,14 +146,14 @@ void KarbonWhirlPinchCommand::redo()
         }
     }
     d->pathShape->normalize();
-    d->pathShape->repaint();
+    d->pathShape->update();
 
     QUndoCommand::redo();
 }
 
 void KarbonWhirlPinchCommand::undo()
 {
-    d->pathShape->repaint();
+    d->pathShape->update();
     uint subpathCount = d->pathData.count();
     for( uint subpathIndex = 0; subpathIndex < subpathCount; ++subpathIndex )
     {
@@ -165,7 +165,7 @@ void KarbonWhirlPinchCommand::undo()
         }
     }
     d->pathShape->normalize();
-    d->pathShape->repaint();
+    d->pathShape->update();
 
     QUndoCommand::undo();
 }

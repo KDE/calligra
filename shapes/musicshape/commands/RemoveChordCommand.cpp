@@ -39,12 +39,12 @@ void RemoveChordCommand::redo()
 {
     m_chord->voiceBar()->removeElement(m_chord, false);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }
 
 void RemoveChordCommand::undo()
 {
     m_chord->voiceBar()->insertElement(m_chord, m_index);
     m_shape->engrave();
-    m_shape->repaint();
+    m_shape->update();
 }

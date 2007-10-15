@@ -443,7 +443,7 @@ void SimpleEntryTool::activeActionChanged(QAction* action)
 void SimpleEntryTool::voiceChanged(int voice)
 {
     m_voice = voice;
-    m_musicshape->repaint();
+    m_musicshape->update();
 }
 
 void SimpleEntryTool::addBars()
@@ -484,7 +484,7 @@ void SimpleEntryTool::importSheet()
     Sheet* sheet = MusicXmlReader(0).loadSheet(doc.documentElement());
     if (sheet) {
         m_musicshape->setSheet(sheet);
-        m_musicshape->repaint();
+        m_musicshape->update();
     }
 }
 

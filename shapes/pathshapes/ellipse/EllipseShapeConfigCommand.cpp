@@ -40,7 +40,7 @@ void EllipseShapeConfigCommand::redo()
 {
     QUndoCommand::redo();
 
-    m_ellipse->repaint();
+    m_ellipse->update();
 
     if( m_oldType != m_newType )
         m_ellipse->setType( m_newType );
@@ -49,14 +49,14 @@ void EllipseShapeConfigCommand::redo()
     if( m_oldEndAngle != m_newEndAngle )
         m_ellipse->setEndAngle( m_newEndAngle );
 
-    m_ellipse->repaint();
+    m_ellipse->update();
 }
 
 void EllipseShapeConfigCommand::undo()
 {
     QUndoCommand::undo();
 
-    m_ellipse->repaint();
+    m_ellipse->update();
 
     if( m_oldType != m_newType )
         m_ellipse->setType( m_oldType );
@@ -65,5 +65,5 @@ void EllipseShapeConfigCommand::undo()
     if( m_oldEndAngle != m_newEndAngle )
         m_ellipse->setEndAngle( m_oldEndAngle );
 
-    m_ellipse->repaint();
+    m_ellipse->update();
 }

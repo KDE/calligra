@@ -317,7 +317,7 @@ void KWDocument::removeFrameSet( KWFrameSet *fs ) {
     m_frameSets.removeAt( m_frameSets.indexOf(fs) );
     setModified( true );
     foreach(KWFrame *frame, fs->frames()) {
-        frame->shape()->repaint();
+        frame->shape()->update();
         foreach(KoView *view, views()) {
             KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
             canvas->shapeManager()->remove(frame->shape());
@@ -374,7 +374,7 @@ void KWDocument::addFrame(KWFrame *frame) {
             canvas->shapeManager()->add(frame->shape());
         canvas->resourceProvider()->setResource(KWord::CurrentFrameSetCount, m_frameSets.count());
     }
-    frame->shape()->repaint();
+    frame->shape()->update();
 }
 
 void KWDocument::removeFrame(KWFrame *frame) {
