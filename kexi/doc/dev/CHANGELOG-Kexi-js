@@ -59,6 +59,10 @@ HINT:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2007-10-15
+KexiDB
+- a fix for possible compiler problem (see http://bugs.kde.org/show_bug.cgi?id=150388)
+
 2007-10-05
 Query Designer
 - fixed SQL View

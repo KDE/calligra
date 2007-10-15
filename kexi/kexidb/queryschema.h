@@ -828,9 +828,6 @@ class KEXI_DB_EXPORT QueryAsterisk : public Field
 		 \a table may be NULL - then the asterisk becames "all-tables" type asterisk. */
 		virtual void setTable(TableSchema *table);
 
-		/*! Reimplemented. */
-		virtual bool isQueryAsterisk() const  { return true; }
-
 		/*! This is convenience method that returns true 
 		 if the asterisk has "all-tables" type (2nd type).*/
 		bool isSingleTableAsterisk() const { return m_table!=NULL; }
