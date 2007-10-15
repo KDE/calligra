@@ -29,6 +29,7 @@
 #include "kexiprojectset.h"
 #include "kexiguimsghandler.h"
 
+#include <kexidb/utils.h>
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
 #include "KexiStartupDialog.h"
@@ -295,7 +296,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	}
 
 //	if (cdata.driverName.isEmpty())
-//		cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
+//		cdata.driverName = KexiDB::defaultFileBasedDriverName();
 	if (!args->getOption("host").isEmpty())
 		cdata.hostName = args->getOption("host");
 	if (!args->getOption("local-socket").isEmpty())
@@ -436,7 +437,7 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 		if (createDB) {
 			if (cdata.driverName.isEmpty())
-				cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
+				cdata.driverName = KexiDB::defaultFileBasedDriverName();
 			m_projectData = new KexiProjectData(cdata, prjName); //dummy
 		}
 		else {

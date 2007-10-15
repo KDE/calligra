@@ -188,8 +188,17 @@ KexiTableDesignerView::KexiTableDesignerView(QWidget *parent)
 	connect(d->view->contextMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(slotAboutToShowContextMenu()));
 
-	plugSharedAction("tablepart_toggle_pkey", this, SLOT(slotTogglePrimaryKey()));
-	d->action_toggle_pkey = static_cast<KToggleAction*>( sharedAction("tablepart_toggle_pkey") );
+	// - setup local actions
+	QList<QAction*> viewActions;
+	QAction* a;
+	viewActions << (d->action_toggle_pkey = new KToggleAction(KIcon("key"), i18n("Primary Key"), this ));
+	a = d->action_toggle_pkey;
+	a->setObjectName("tablepart_toggle_pkey");
+	a->setToolTip(i18n("Sets or removes primary key"));
+	a->setWhatsThis(i18n("Sets or removes primary key for currently selected field."));
+	connect(a, SIGNAL(triggered()), this, SLOT(slotTogglePrimaryKey()));
+	setViewActions(viewActions);
+
 	d->view->contextMenu()->insertAction(
 		d->view->contextMenu()->actions()[1], d->action_toggle_pkey); //add at the beginning as 2nd
 //	d->action_toggle_pkey->plug(d->view->contextMenu(), 1); //add at the beginning as 2nd

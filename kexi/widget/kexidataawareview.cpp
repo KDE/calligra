@@ -21,6 +21,8 @@
 
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
+#include <core/KexiMainWindowIface.h>
+#include <KActionCollection>
 
 #include <qlayout.h>
 #include <Q3VBoxLayout>
@@ -60,8 +62,8 @@ void KexiDataAwareView::init( QWidget* viewWidget, KexiSharedActionClient* actio
 		m_dataAwareObject->connectReloadActionsSignal(this, SLOT(reloadActions()));
 	}
 
-	Q3VBoxLayout *box = new Q3VBoxLayout(this);
-	box->addWidget(m_internalView);
+//2.0	Q3VBoxLayout *box = new Q3VBoxLayout(this);
+//2.0	box->addWidget(m_internalView);
 
 	setMinimumSize(m_internalView->minimumSizeHint().width(), 
 		m_internalView->minimumSizeHint().height());
@@ -76,6 +78,22 @@ void KexiDataAwareView::init( QWidget* viewWidget, KexiSharedActionClient* actio
 
 void KexiDataAwareView::initActions()
 {
+	// - setup local actions
+	QList<QAction*> viewActions;
+	KAction* a;
+	if (m_dataAwareObject->isSortingEnabled()) {
+//		a = new KAction(this);
+//		a->setSeparator(true);
+//		viewActions << a;
+		viewActions << (a = dynamic_cast<KAction*>( sharedAction("data_sort_az") ));
+		connect(a, SIGNAL(triggered()), this, SLOT(sortAscending()));
+		viewActions << (a = dynamic_cast<KAction*>( sharedAction("data_sort_za") ));
+		connect(a, SIGNAL(triggered()), this, SLOT(sortDescending()));
+	}
+	KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
+	viewActions << (a = dynamic_cast<KAction*>( ac->action("edit_find") ));
+	setViewActions(viewActions);
+
 	plugSharedAction("edit_delete_row", this, SLOT(deleteCurrentRow()));
 	m_actionClient->plugSharedAction(sharedAction("edit_delete_row")); //for proper shortcut
 
@@ -91,10 +109,10 @@ void KexiDataAwareView::initActions()
 	plugSharedAction("data_cancel_row_changes", this, SLOT(cancelRowEdit()));
 	m_actionClient->plugSharedAction(sharedAction("data_cancel_row_changes")); //for proper shortcut
 
-	if (m_dataAwareObject->isSortingEnabled()) {
-		plugSharedAction("data_sort_az", this, SLOT(sortAscending()));
-		plugSharedAction("data_sort_za", this, SLOT(sortDescending()));
-	}
+//	if (m_dataAwareObject->isSortingEnabled()) {
+//moved up		plugSharedAction("data_sort_az", this, SLOT(sortAscending()));
+//moved up		plugSharedAction("data_sort_za", this, SLOT(sortDescending()));
+//	}
 
 	m_actionClient->plugSharedAction(sharedAction("edit_insert_empty_row")); //for proper shortcut
 

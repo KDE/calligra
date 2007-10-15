@@ -27,28 +27,66 @@
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
 #include <kexiutils/utils.h>
+#include <kexiutils/SmallToolButton.h>
+#include <kexiutils/FlowLayout.h>
 
-#include <kdebug.h>
-#include <kactioncollection.h>
+#include <KDebug>
+#include <KDialog>
+#include <KActionCollection>
 #include <QEvent>
 #include <QCloseEvent>
 #include <QApplication>
+#include <QVBoxLayout>
+#include <QLabel>
 
 class KexiView::Private
 {
 	public:
 		Private()
+		//: viewModeGroup(0)
 		: viewWidget(0)
 		, parentView(0)
 		, newlyAssignedID(-1)
 		, viewMode(Kexi::NoViewMode) //unknown!
 		, isDirty(false)
+		, slotSwitchToViewModeInternalEnabled(true)
 		{
 		}
+
+		~Private()
+		{
+/*			qDeleteAll(viewActions); */
+/*			foreach(KAction* action, viewActions) {
+				//only delete action if it is not shared (otherwise, window itself will delete it)
+				if (!window->sharedViewAction(action->name()))
+					delete action;
+			}*/
+		}
+
+		void toggleViewModeButtonBack(Kexi::ViewMode mode)
+		{
+			QAction *a = toggleViewModeActions.value(mode);
+			if (a) {
+				slotSwitchToViewModeInternalEnabled = false;
+				a->setChecked(viewMode == mode);
+				slotSwitchToViewModeInternalEnabled = true;
+			}
+		}
+
+		QVBoxLayout* mainLyr;
+		QWidget *topBarHWidget;
+		KexiFlowLayout *topBarLyr;
+		//QActionGroup* viewModeGroup;
+		QHash<Kexi::ViewMode, QAction*> toggleViewModeActions;
+
+		KexiSmallToolButton* saveDesignButton;
+		KexiToolBarSeparator* saveDesignButtonSeparator;
+
 		QString defaultIconName;
 		KexiWindow *window;
 		QWidget *viewWidget;
 		KexiView *parentView;
+
 		QPointer<QWidget> lastFocusedChildBeforeFocusOut;
 
 		/*! Member set to newly assigned object's ID in storeNewData()
@@ -65,7 +103,13 @@ class KexiView::Private
 
 		QList<KexiView*> children;
 
+		/*! View-level actions (not shared), owned by the view. */
+		QList<QAction*> viewActions;
+		QHash<QByteArray, QAction*> viewActionsHash;
+
 		bool isDirty : 1;
+		//! Used in slotSwitchToViewModeInternal()
+		bool slotSwitchToViewModeInternalEnabled : 1;
 };
 
 //----------------------------------------------------------
@@ -84,8 +128,62 @@ KexiView::KexiView(QWidget *parent)
 		if (d->window->supportsViewMode(d->window->creatingViewsMode()))
 			d->viewMode = d->window->creatingViewsMode();
 	}
+	setObjectName(
+		QString("%1_for_%2_object")
+		.arg(Kexi::nameForViewMode(d->viewMode).replace(" ", "_"))
+		.arg(d->window ? d->window->partItem()->name() : QString("??")) );
 
 	installEventFilter(this);
+
+	QLayout *l = layout();
+	d->mainLyr = new QVBoxLayout(this);
+	d->mainLyr->setContentsMargins(0,KDialog::marginHint()/3,0,0);
+
+	if (parentWidget()->inherits("KexiWindow")) {
+		d->topBarHWidget = new QWidget(this);
+		d->topBarHWidget->setFont( KexiUtils::smallFont() );
+		d->mainLyr->addWidget( d->topBarHWidget );
+		QHBoxLayout *topBarHLyr = new QHBoxLayout(d->topBarHWidget); //needed unless KexiFlowLayout properly handles contents margins
+		topBarHLyr->setContentsMargins(0,0,0,0);
+		topBarHLyr->addSpacing(KDialog::marginHint()/2);
+		d->topBarLyr = new KexiFlowLayout(topBarHLyr, KDialog::marginHint()/2, 2);
+
+		const bool userMode = KexiMainWindowIface::global()->userMode();
+
+		if (userMode
+			|| d->window->supportedViewModes() == Kexi::DataViewMode
+			|| d->window->supportedViewModes() == Kexi::DesignViewMode
+			|| d->window->supportedViewModes() == Kexi::TextViewMode)
+		{
+			// nothing to do: only single view mode supported
+		}
+		else {
+			if (parentWidget()->inherits("KexiWindow")) {
+				createViewModeToggleButtons();
+				d->topBarLyr->addWidget( new KexiToolBarSeparator(d->topBarHWidget));
+			}
+		}
+
+		QAction * a;
+		if (d->viewMode == Kexi::DesignViewMode || d->viewMode == Kexi::TextViewMode ) {
+			a = sharedAction("project_save");
+			d->saveDesignButton = new KexiSmallToolButton(a, d->topBarHWidget);
+			d->saveDesignButton->setText(i18n("Save Design"));
+			d->saveDesignButton->setToolTip(i18n("Save current design"));
+			d->saveDesignButton->setWhatsThis(i18n("Saves changes made to the current design."));
+			d->topBarLyr->addWidget(d->saveDesignButton);
+			d->topBarLyr->addWidget( d->saveDesignButtonSeparator = new KexiToolBarSeparator(d->topBarHWidget));
+		}
+		else {
+			d->saveDesignButton = 0;
+		}
+	}
+	else {
+		// no toolbar
+		d->saveDesignButton = 0;
+		d->topBarHWidget = 0;
+		d->topBarLyr = 0;
+	}
 }
 
 KexiView::~KexiView()
@@ -181,6 +279,8 @@ void KexiView::setDirty(bool set)
 	const bool changed = (d->isDirty != set);
 	d->isDirty = set;
 	d->isDirty = isDirty();
+	if (d->saveDesignButton)
+		d->saveDesignButton->setEnabled( d->isDirty );
 	if (d->parentView) {
 		d->parentView->setDirty(d->isDirty);
 	}
@@ -310,10 +410,15 @@ void KexiView::setViewWidget(QWidget* w, bool focusProxy)
 		return;
 	if (d->viewWidget) {
 		d->viewWidget->removeEventFilter(this);
+		d->mainLyr->removeWidget(d->viewWidget);
 	}
 	d->viewWidget = w;
 	if (d->viewWidget) {
-		d->viewWidget->installEventFilter(this);
+		//if (!d->children.contains(dynamic_cast<KexiView*>(d->viewWidget))) {
+			d->viewWidget->setParent(this);
+			d->mainLyr->addWidget(d->viewWidget);
+			d->viewWidget->installEventFilter(this);
+		//}
 		if (focusProxy)
 			setFocusProxy(d->viewWidget); //js: ok?
 	}
@@ -324,10 +429,13 @@ void KexiView::addChildView( KexiView* childView )
 	d->children.append( childView );
 	addActionProxyChild( childView );
 	childView->d->parentView = this;
+
+	//childView->setParent(this);
+	//d->mainLyr->addWidget(childView);
+
 //	if (d->parentView)
 //		childView->installEventFilter(d->parentView);
 	childView->installEventFilter(this);
-
 }
 
 void KexiView::setFocus()
@@ -380,5 +488,103 @@ void KexiView::updateActions(bool activated)
 		view->updateActions(activated);
 }
 
-#include "KexiView.moc"
+void KexiView::setViewActions( const QList<QAction*>& actions )
+{
+	d->viewActions = actions;
+	d->viewActionsHash.clear();
+	foreach(QAction* action, d->viewActions)
+		d->viewActionsHash.insert( action->objectName().toLatin1(), action );
+}
 
+QAction* KexiView::viewAction(const char* name) const
+{
+	return d->viewActionsHash.value(name);
+}
+
+QList<QAction*> KexiView::viewActions() const
+{
+	return d->viewActions;
+}
+
+void KexiView::toggleViewModeButtonBack()
+{
+//	d->switchToViewModeInternalEnabled = false;
+	d->toggleViewModeButtonBack(Kexi::DataViewMode);
+	d->toggleViewModeButtonBack(Kexi::DesignViewMode);
+	d->toggleViewModeButtonBack(Kexi::TextViewMode);
+//	d->switchToViewModeInternalEnabled = true;
+}
+
+void KexiView::createViewModeToggleButtons()
+{
+	KAction * a;
+	KexiSmallToolButton *btn;
+//	d->viewModeGroup = new QActionGroup(this);
+	QLabel *showLabel = new QLabel(i18n("Show:"), d->topBarHWidget);
+	d->topBarLyr->addWidget(showLabel);
+	d->topBarLyr->setAlignment(showLabel, Qt::AlignVCenter|Qt::AlignLeft);
+	if (d->window->supportsViewMode(Kexi::DataViewMode)) {
+		a = new KexiToggleViewModeAction(Kexi::DataViewMode, this, //d->viewModeGroup, 
+			this, SLOT(slotSwitchToViewModeInternal(Kexi::ViewMode)));
+		d->toggleViewModeActions.insert( Kexi::DataViewMode, a );
+//		d->viewModeGroup->addAction(a);
+		btn = new KexiSmallToolButton(a, d->topBarHWidget);
+		btn->setText(i18n("Data"));
+		d->topBarLyr->addWidget(btn);
+	}
+	if (d->window->supportsViewMode(Kexi::DesignViewMode)) {
+		a = new KexiToggleViewModeAction(Kexi::DesignViewMode, this, //d->viewModeGroup, 
+			this, SLOT(slotSwitchToViewModeInternal(Kexi::ViewMode)));
+		d->toggleViewModeActions.insert( Kexi::DesignViewMode, a );
+//		d->viewModeGroup->addAction(a);
+		btn = new KexiSmallToolButton(a, d->topBarHWidget);
+		btn->setText(i18n("Design"));
+		d->topBarLyr->addWidget(btn);
+	}
+	if (d->window->supportsViewMode(Kexi::TextViewMode)) {
+		a = new KexiToggleViewModeAction(Kexi::TextViewMode, this, //d->viewModeGroup, 
+			this, SLOT(slotSwitchToViewModeInternal(Kexi::ViewMode)));
+		QString customTextViewModeCaption( d->window->internalPropertyValue("textViewModeCaption").toString() );
+		if (!customTextViewModeCaption.isEmpty())
+			a->setText( customTextViewModeCaption );
+		d->toggleViewModeActions.insert( Kexi::TextViewMode, a );
+//		d->viewModeGroup->addAction(a);
+		btn = new KexiSmallToolButton(a, d->topBarHWidget);
+		d->topBarLyr->addWidget(btn);
+	}
+	toggleViewModeButtonBack();
+}
+
+void KexiView::slotSwitchToViewModeInternal(Kexi::ViewMode mode)
+{
+	if (!d->slotSwitchToViewModeInternalEnabled)
+		return;
+	d->window->switchToViewModeInternal(mode);
+	if (d->viewMode != mode) {
+		//switch back visually
+		QAction *a = d->toggleViewModeActions.value(d->viewMode);
+		d->slotSwitchToViewModeInternalEnabled = false;
+		a->setChecked(true);
+		d->slotSwitchToViewModeInternalEnabled = true;
+	}
+}
+
+void KexiView::initViewActions()
+{
+	if (!d->topBarLyr)
+		return;
+	foreach(QAction* action, d->viewActions) {
+		if (action->isSeparator()) {
+			d->topBarLyr->addWidget( new KexiToolBarSeparator(d->topBarHWidget));
+		}
+		else {
+			KexiSmallToolButton *btn = new KexiSmallToolButton(action, d->topBarHWidget);
+			btn->setText(action->text());
+			btn->setToolTip(action->toolTip());
+			btn->setWhatsThis(action->whatsThis());
+			d->topBarLyr->addWidget(btn);
+		}
+	}
+}
+
+#include "KexiView.moc"

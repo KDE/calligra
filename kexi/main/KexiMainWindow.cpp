@@ -1604,7 +1604,7 @@ tristate KexiMainWindow::openProject(const KexiProjectData& projectData)
 tristate KexiMainWindow::createProjectFromTemplate(const KexiProjectData& projectData)
 {
 	QStringList mimetypes;
-	mimetypes.append( KexiDB::Driver::defaultFileBasedDriverMimeType() );
+	mimetypes.append( KexiDB::defaultFileBasedDriverMimeType() );
 	QString fname;
 	const QString startDir("kfiledialog:///OpenExistingOrCreateNewProject"/*as in KexiNewProjectWizard*/);
 	const QString caption( i18n("Select New Project's Location") );
@@ -2977,7 +2977,7 @@ KexiMainWindow::createBlankProjectData(bool &cancelled, bool confirmOverwrites,
 		//file-based project
 		KexiDB::ConnectionData cdata;
 		cdata.caption = wiz.projectCaption();
-		cdata.driverName = KexiDB::Driver::defaultFileBasedDriverName();
+		cdata.driverName = KexiDB::defaultFileBasedDriverName();
 		cdata.setFileName( wiz.projectDBName() );
 		new_data = new KexiProjectData( cdata, wiz.projectDBName(), wiz.projectCaption() );
 	}

@@ -24,6 +24,10 @@
 
 #include <KexiView.h>
 
+namespace KTextEditor {
+class Document;
+}
+
 //! An text editor view that uses both KTextEditor and KTextEdit
 /*! It is used for SQL and script editor. */
 class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiView
@@ -90,6 +94,9 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiView
 		void setText(const QString &text);
 		/*! Display the configuration-dialog. Only avaiable if isAdvancedEditor() returns true. */
 		void slotConfigureEditor();
+
+	protected slots:
+		void slotTextChanged(KTextEditor::Document *);
 
 	protected:
 		/*! Update the actions. This call is redirected to \a KexiView::updateActions */

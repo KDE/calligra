@@ -248,6 +248,19 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		 Implement it if you want to perform some appropriate actions. */
 		virtual void windowAttached() {}
 
+		/*! Assigns a list of view-level actions. Used by KexiView ctor. */
+		void setViewActions( const QList<QAction*>& actions );
+
+		/*! @return a list of view-level actions. */
+		QList<QAction*> viewActions() const;
+
+		/*! @return view-level action for name @a name or 0 if there is no such action. */
+		QAction* viewAction(const char* name) const;
+
+		void initViewActions();
+
+		void toggleViewModeButtonBack();
+
 		QString m_defaultIconName;
 
 #ifdef __GNUC__
@@ -283,6 +296,11 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		Q3PtrList<KexiView> m_children;
 
 		bool m_dirty : 1; */
+	private slots:
+		void slotSwitchToViewModeInternal(Kexi::ViewMode mode);
+
+	private:
+		void createViewModeToggleButtons();
 
 	class Private;
 	Private * const d;
@@ -290,4 +308,3 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 };
 
 #endif
-

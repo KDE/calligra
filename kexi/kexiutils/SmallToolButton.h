@@ -30,7 +30,6 @@ class KIcon;
 class KEXIUTILS_EXPORT KexiSmallToolButton : public QToolButton
 {
 	Q_OBJECT
-
 	public:
 		KexiSmallToolButton(QWidget* parent = 0);
 
@@ -48,8 +47,8 @@ class KEXIUTILS_EXPORT KexiSmallToolButton : public QToolButton
 		virtual void setIcon( const QString& icon );
 		virtual void setText( const QString& text );
 		void setToolButtonStyle(Qt::ToolButtonStyle style);
-
 		virtual QSize sizeHint() const;
+		QAction* action() const;
 
 	protected slots:
 		void slotActionChanged();
@@ -73,6 +72,8 @@ class KEXIUTILS_EXPORT KexiToolBarSeparator : public QWidget
 	Q_OBJECT
 	public:
 		KexiToolBarSeparator(QWidget *parent);
+		virtual ~KexiToolBarSeparator();
+
 		QSize sizeHint() const;
 		Qt::Orientation orientation() const;
 	public slots:

@@ -819,6 +819,7 @@ KexiBrowserListView::KexiBrowserListView(QWidget *parent)
  , enableExecuteArea(true)
 {
 	setObjectName("KexiBrowserListView");
+	setAlternateBackground(Qt::red);
 }
 
 KexiBrowserListView::~KexiBrowserListView()

@@ -309,6 +309,14 @@ class KEXICORE_EXPORT KexiWindow
 		/*! Sets temporary data shared between views. */
 		void setData(KexiWindowData* data);
 
+		/*! @return action for name @a name, shared between views. 
+		 @since 2.0 */
+//		KAction* sharedViewAction(const char* name) const;
+
+		//! Used by KexiView
+		QVariant internalPropertyValue(const QByteArray& name, 
+			const QVariant& defaultValue = QVariant()) const;
+
 	private slots:
 		/*! Helper, calls KexiMainWindowIface::switchToViewMode() which in turn calls KexiWindow::switchToViewMode()
 		 to get error handling and reporting as well on main window level. */
@@ -316,8 +324,9 @@ class KEXICORE_EXPORT KexiWindow
 
 	private:
 		void createSubwidgets();
-		void createViewModeToggleButtons();
+//moved to KexiView		void createViewModeToggleButtons();
 		void showSaveDesignButton(bool show);
+//moved to KexiView		void initViewActions(KexiView* view, Kexi::ViewMode mode);
 
 		class Private;
 		Private * d;

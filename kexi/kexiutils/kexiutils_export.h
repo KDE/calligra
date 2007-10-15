@@ -21,6 +21,7 @@
 #define _KEXIUTILS_EXPORT_H_
 
 #include <kdemacros.h>
+#include <kexi_global.h>
 
 #ifdef MAKE_KEXIUTILS_LIB
 # define KEXIUTILS_EXPORT KDE_EXPORT

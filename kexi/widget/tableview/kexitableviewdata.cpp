@@ -602,7 +602,7 @@ bool KexiTableViewData::saveRow(KexiDB::RecordData& record, bool insert, bool re
 	KexiTableViewColumn::ListIterator it_f(m_columns.constBegin());
 	KexiDB::RecordData::ConstIterator it_r = record.constBegin();
 	int col = 0;
-	const QVariant *val;
+	const QVariant *val = 0;
 	for (;it_f!=m_columns.constEnd() && it_r!=record.constEnd();++it_f,++it_r,col++) {
 		KexiDB::Field *f = (*it_f)->field();
 		if (f->isNotNull()) {

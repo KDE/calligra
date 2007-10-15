@@ -28,6 +28,7 @@
 #include "KexiStartupFileWidget.h"
 #include "kexi.h"
 
+#include <kexidb/utils.h>
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
 #include <kexiguimsghandler.h>
@@ -128,16 +129,11 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	QString none;
 	d->lvi_file = new K3ListViewItem(
 		m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
-	d->lvi_file->setPixmap(0, 
-		KIconLoader::global()->loadMimeTypeIcon( KMimeType::mimeType( 
-			KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName(),
-			KIconLoader::Desktop 
-		)
-	);
+	d->lvi_file->setPixmap(0, DesktopIcon( KexiDB::defaultFileBasedDriverIcon() ));
 	d->lvi_file->setMultiLinesEnabled( true );
 	d->lvi_server = new K3ListViewItem( m_prjtype_sel->lv_types, d->lvi_file, 
 		i18n("New Project Stored on Database Server") );
-	d->lvi_server->setPixmap(0, DesktopIcon("network-wired") );
+	d->lvi_server->setPixmap(0, DesktopIcon(KEXI_ICON_DATABASE_SERVER) );
 	d->lvi_server->setMultiLinesEnabled( true );
 //	m_prjtype_sel->lv_types->resize(d->m_prjtype_sel->lv_types->width(), d->lvi_file->height()*3);
 	m_prjtype_sel->lv_types->setFocus();

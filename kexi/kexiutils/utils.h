@@ -202,8 +202,9 @@ namespace KexiUtils
 	KEXIUTILS_EXPORT QString fileDialogFilterStrings(const QStringList& mimeStrings, bool kdeFormat);
 
 	/*! A global setting for minimal readable font.
-	 Note: this is defined because KDE has no such setting yet.
-	 \a init is a widget that should be passed if no qApp->mainWidget() is available yet. */
+	 \a init is a widget that should be passed if no qApp->mainWidget() is available yet. 
+	 The size of font is not smaller than he one returned by 
+	 KGlobalSettings::smallestReadableFont(). */
 	KEXIUTILS_EXPORT QFont smallFont(QWidget *init = 0);
 
 	/*! \return a color being a result of blending \a c1 with \a c2 with \a factor1 

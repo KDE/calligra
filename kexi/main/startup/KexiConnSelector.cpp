@@ -22,8 +22,9 @@
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/connectiondata.h>
+#include <kexidb/utils.h>
 
-#include <kexi.h>
+#include <core/kexi.h>
 #include <widget/kexiprjtypeselector.h>
 #include <widget/kexidbconnectionwidget.h>
 
@@ -122,9 +123,7 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 	d->conn_set = &conn_set;
 	d->startDirOrVariable = startDirOrVariable;
 	d->fileAccessType = fileAccessType;
-	QString iconname = KMimeType::mimeType( 
-		KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName();
-	//const QPixmap icon = KIconLoader::global()->loadIcon( iconname, KIconLoader::Desktop, 48 );
+	QString iconname( KexiDB::defaultFileBasedDriverIcon() );
 	setWindowIcon( KIcon(iconname) );
 
 	QBoxLayout* globalLyr = new QVBoxLayout( this );
@@ -160,7 +159,7 @@ KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set,
 
 	m_remote = new KexiConnSelectorBase(d->stack);
 	m_remote->setObjectName("conn_sel");
-	m_remote->lblIcon->setPixmap( DesktopIcon("network-wired") );
+	m_remote->lblIcon->setPixmap( DesktopIcon(KEXI_ICON_DATABASE_SERVER) );
 	m_remote->lblIcon->setFixedSize( m_remote->lblIcon->pixmap()->size() );
 //	m_remote->btn_back->setIconSet( KIcon("arrow-up") );
 	connect(m_remote->btn_add, SIGNAL(clicked()), this, SLOT(slotRemoteAddBtnClicked()));

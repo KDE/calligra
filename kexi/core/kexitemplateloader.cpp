@@ -18,6 +18,8 @@
 */
 
 #include "kexitemplateloader.h"
+#include "kexi.h"
+#include <kexidb/utils.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -115,7 +117,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
 	if (!iconFileName.isEmpty())
 		info.icon = QPixmap(directory+'/'+iconFileName);
 	if (info.icon.isNull())
-		info.icon = DesktopIcon("kexiproject_sqlite"); //default
+		info.icon = DesktopIcon( KexiDB::defaultFileBasedDriverIcon() );
 	QStringList autoopenObjectsString = cg.readEntry("AutoOpenObjects", QStringList());
 	foreach( QString autoopenObjectString, autoopenObjectsString) {
 		KexiProjectData::ObjectInfo* autoopenObject = new KexiProjectData::ObjectInfo();

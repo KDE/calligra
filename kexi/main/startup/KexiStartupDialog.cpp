@@ -24,6 +24,7 @@
 #include "KexiConnSelector.h"
 #include "KexiStartupFileWidget.h"
 #include <kexiutils/utils.h>
+#include <kexidb/utils.h>
 #include <kexi_global.h>
 
 #include <qlayout.h>
@@ -75,8 +76,7 @@ public:
 //		, pageOpenRecentID(-1)
 	{
 		result = -1;
-		QString iconname(
-			KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName() );
+		QString iconname( KexiDB::defaultFileBasedDriverIcon() );
 		kexi_sqlite_icon = KIconLoader::global()->loadMimeTypeIcon( iconname, KIconLoader::Desktop );
 		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->iconName();
 		kexi_shortcut_icon = KIconLoader::global()->loadMimeTypeIcon(
@@ -368,8 +368,7 @@ void KexiStartupDialog::setupPageTemplates()
 	//- page "templates"
 //	d->templatesSectionID_templates = itemID++;
 	QString none;
-	QString kexi_sqlite_icon_name 
-		= KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName();
+	QString kexi_sqlite_icon_name( KexiDB::defaultFileBasedDriverIcon() );
 	templPageWidget = new QFrame(d->templatesWidget); 
 	d->templPageWidgetItem_CreateFromTemplate = d->templatesWidget->addPage(templPageWidget, 
 		i18nc("Keep this text narrow: split to multiple rows if needed", "Create From\nTemplate"));

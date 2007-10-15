@@ -21,7 +21,8 @@
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/connectiondata.h>
-#include "core/kexi.h"
+#include <kexidb/utils.h>
+#include <core/kexi.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -107,8 +108,7 @@ KexiProjectSelectorWidget::KexiProjectSelectorWidget( QWidget* parent,
 	setObjectName("KexiProjectSelectorWidget");
 	d->showProjectNameColumn = showProjectNameColumn;
 	d->showConnectionColumns = showConnectionColumns;
-	const QString iconname( 
-		KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->iconName() );
+	const QString iconname( KexiDB::defaultFileBasedDriverIcon() );
 	d->fileicon = KIconLoader::global()->loadMimeTypeIcon( iconname, KIconLoader::Desktop );
 	setWindowIcon( KIcon(iconname) );
 	d->dbicon = SmallIcon("database");

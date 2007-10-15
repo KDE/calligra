@@ -27,6 +27,9 @@
  */
 //#define KEXI_STANDALONE 1
 
+/* remove before release: */
+#define KEXI_DEBUG_GUI
+
 #include <kexi_export.h>
 #include <config-kexi.h>
 

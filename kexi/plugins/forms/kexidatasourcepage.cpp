@@ -90,7 +90,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 	hlyr->addWidget(m_widgetDSLabel);
 
 	m_clearWidgetDSButton = new KexiSmallToolButton(
-		KIcon("clear_left"), QString(), contents);
+		KIcon("clear-left"), QString(), contents);
 	m_clearWidgetDSButton->setObjectName("clearWidgetDSButton");
 	m_clearWidgetDSButton->setMinimumHeight(m_widgetDSLabel->minimumHeight());
 	m_clearWidgetDSButton->setToolTip( i18n("Clear widget's data source"));
@@ -128,7 +128,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent)
 	connect(m_gotoButton, SIGNAL(clicked()), this, SLOT(slotGotoSelected()));
 
 	m_clearDSButton = new KexiSmallToolButton(
-		KIcon("clear_left"), QString(), contents);
+		KIcon("clear-left"), QString(), contents);
 	m_clearDSButton->setObjectName("clearDSButton");
 	m_clearDSButton->setMinimumHeight(m_dataSourceLabel->minimumHeight());
 	m_clearDSButton->setToolTip( i18n("Clear form's data source"));

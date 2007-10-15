@@ -21,6 +21,7 @@
 #include <kexi_global.h>
 
 #include <kexidb/driver.h>
+#include <kexidb/utils.h>
 #include <core/kexi.h>
 #include <kexiutils/utils.h>
 
@@ -174,7 +175,7 @@ void KexiStartupFileWidget::updateFilters()
 	const bool normalSavingMode = d->mode & SavingFileBasedDB && !(d->mode & Custom);
 
 	if (normalOpeningMode || normalSavingMode) {
-		mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
+		mime = KMimeType::mimeType( KexiDB::defaultFileBasedDriverMimeType() );
 		if (mime && !d->excludedMimeTypes.contains(mime->name().toLower())) {
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();

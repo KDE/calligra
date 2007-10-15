@@ -136,6 +136,9 @@ namespace Kexi
 
 }//namespace Kexi
 
+//! Icon name for database servers
+#define KEXI_ICON_DATABASE_SERVER "network-local"
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 
 //! Displays information that feature "feature_name" is not availabe in the current application version

@@ -90,7 +90,7 @@ KexiEditor::KexiEditor(QWidget *parent)
 	: KexiView(parent)
 	, d(new Private())
 {
-	Q3VBoxLayout *layout = new Q3VBoxLayout(this);
+//	Q3VBoxLayout *layout = new Q3VBoxLayout(this);
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 	d->view = new KTextEdit( "", QString(), this );
 	//adjust font
@@ -101,11 +101,11 @@ KexiEditor::KexiEditor(QWidget *parent)
 	d->view->setFont( f );
 	d->view->setCheckSpellingEnabled(false);
 #else
-	Q3Frame *fr = new Q3Frame(this);
-	fr->setFrameStyle(Q3Frame::Sunken|Q3Frame::WinPanel);
-	layout->addWidget(fr);
-	layout = new Q3VBoxLayout(fr);
-	layout->setMargin( 2 );
+	QFrame *fr = new QFrame(this);
+	fr->setFrameStyle(QFrame::Sunken|QFrame::StyledPanel);
+//	layout->addWidget(fr);
+	QVBoxLayout *layout = new QVBoxLayout(fr);
+	layout->setContentsMargins( 2,2,2,2 );
 
 	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
 	if (!editor)
@@ -136,14 +136,16 @@ KexiEditor::KexiEditor(QWidget *parent)
 		}
 	}*/
 
-	connect(d->doc, SIGNAL(textChanged()), this, SIGNAL(textChanged()));
+	connect(d->doc, SIGNAL(textChanged(KTextEditor::Document *)), 
+		this, SLOT(slotTextChanged(KTextEditor::Document *)));
 #endif
 	KexiEditorSharedActionConnector c(this, d->view);
 	d->view->installEventFilter(this);
 
 	layout->addWidget(d->view);
-	setViewWidget(d->view, true/*focus*/);
-	d->view->show();
+	setViewWidget(fr, false/*!focus*/);
+	setFocusProxy(d->view);
+//	d->view->show();
 }
 
 KexiEditor::~KexiEditor()
@@ -285,6 +287,11 @@ void KexiEditor::clearUndoRedo()
 	u->clearUndo();
 	u->clearRedo();*/
 #endif
+}
+
+void KexiEditor::slotTextChanged(KTextEditor::Document *)
+{
+	emit textChanged();
 }
 
 #include "kexieditor.moc"

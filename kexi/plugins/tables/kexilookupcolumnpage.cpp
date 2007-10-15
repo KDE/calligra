@@ -160,7 +160,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	connect(d->gotoRowSourceButton, SIGNAL(clicked()), this, SLOT(slotGotoSelectedRowSource()));
 
 	d->clearRowSourceButton = new KexiSmallToolButton(
-		KIcon("clear_left"), QString(), contents);
+		KIcon("clear-left"), QString(), contents);
 	d->clearRowSourceButton->setObjectName("clearRowSourceButton");
 	d->clearRowSourceButton->setMinimumHeight(d->rowSourceLabel->minimumHeight());
 	d->clearRowSourceButton->setToolTip(i18n("Clear row source"));
@@ -184,7 +184,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	hlyr->addWidget(d->boundColumnLabel);
 
 	d->clearBoundColumnButton = new KexiSmallToolButton(
-		KIcon("clear_left"), QString(), contents);
+		KIcon("clear-left"), QString(), contents);
 	d->clearBoundColumnButton->setObjectName("clearBoundColumnButton");
 	d->clearBoundColumnButton->setMinimumHeight(d->boundColumnLabel->minimumHeight());
 	d->clearBoundColumnButton->setToolTip(i18n("Clear bound column"));
@@ -208,7 +208,7 @@ KexiLookupColumnPage::KexiLookupColumnPage(QWidget *parent)
 	hlyr->addWidget(d->visibleColumnLabel);
 
 	d->clearVisibleColumnButton = new KexiSmallToolButton(
-		KIcon("clear_left"), QString(), contents);
+		KIcon("clear-left"), QString(), contents);
 	d->clearVisibleColumnButton->setObjectName("clearVisibleColumnButton");
 	d->clearVisibleColumnButton->setMinimumHeight(d->visibleColumnLabel->minimumHeight());
 	d->clearVisibleColumnButton->setToolTip(i18n("Clear visible column"));

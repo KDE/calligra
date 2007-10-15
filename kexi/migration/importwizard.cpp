@@ -221,7 +221,7 @@ void ImportWizard::setupSrcConn()
 
 	QSet<QString> excludedFilters;
 //! @todo remove when support for kexi files as source prj is added in migration
-	excludedFilters += KexiDB::Driver::defaultFileBasedDriverMimeType();
+	excludedFilters += KexiDB::defaultFileBasedDriverMimeType();
 	excludedFilters += "application/x-kexiproject-shortcut";
 	excludedFilters += "application/x-kexi-connectiondata";
 	m_srcConn->fileWidget->setExcludedFilters(excludedFilters);
@@ -672,7 +672,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	// Get a driver to the destination database
 	KexiDB::Driver *destDriver = manager.driver(
 		m_dstConn->selectedConnectionData() ? m_dstConn->selectedConnectionData()->driverName //server based
-		 : KexiDB::Driver::defaultFileBasedDriverName()
+		 : KexiDB::defaultFileBasedDriverName()
 		// : m_dstTypeCombo->currentText() //file based
 	);
 	if (!destDriver || manager.error())
@@ -696,14 +696,14 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 			cdata = m_dstConn->selectedConnectionData();
 			dbname = m_dstNewDBNameLineEdit->text();
 		}
-		else // if (m_dstTypeCombo->currentText().toLower() == KexiDB::Driver::defaultFileBasedDriverName()) 
+		else // if (m_dstTypeCombo->currentText().toLower() == KexiDB::defaultFileBasedDriverName()) 
 		{
 			//file-based project
 			kDebug() << "File Destination..." << endl;
 			cdata = new KexiDB::ConnectionData();
 			cdataOwned = true;
 			cdata->caption = m_dstNewDBNameLineEdit->text();
-			cdata->driverName = KexiDB::Driver::defaultFileBasedDriverName();
+			cdata->driverName = KexiDB::defaultFileBasedDriverName();
 			dbname = m_dstConn->selectedFileName();
 			cdata->setFileName( dbname );
 			kDebug() << "Current file name: " << dbname << endl;

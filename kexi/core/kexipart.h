@@ -327,6 +327,15 @@ class KEXICORE_EXPORT Part : public QObject, protected KexiUtils::InternalProper
 		/*! Sets supported view modes for this part. */
 		void setSupportedViewModes(Kexi::ViewModes modes);
 
+		/*! Creates actions for view mode @a mode. The action are appended in the local toolbar(s).
+		 For implementation.
+		 @since 2.0 */
+//		virtual QList<KAction*> createViewActions(Kexi::ViewMode mode) { return QList<KAction*>(); };
+
+		/*! @return action for name @a name, shared between views. 
+		 @since 2.0 */
+//		KAction* sharedViewAction(const char* name) const;
+
 	private:
 		class Private;
 		Private * const d;

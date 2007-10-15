@@ -71,33 +71,37 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
  : KexiView(parent)
  , d( new Private )
 {
-	QGridLayout *g = new QGridLayout(this);
+	QWidget *mainWidget = new QWidget(this);
+	QGridLayout *g = new QGridLayout(mainWidget);
 	g->setContentsMargins(0, 0, 0, 0);
 	g->setSpacing(KDialog::spacingHint());
-	QHBoxLayout *hlyr = new QHBoxLayout(this);
-	hlyr->setContentsMargins(0, 0, 0, 0);
-	g->addLayout( hlyr, 0, 0 );
 
-	d->tableCombo = new KComboBox(this);
+	QWidget *horWidget = new QWidget(mainWidget);
+	QHBoxLayout *hlyr = new QHBoxLayout(horWidget);
+	hlyr->setContentsMargins(0, 0, 0, 0);
+	g->addWidget( horWidget, 0, 0 );
+
+	d->tableCombo = new KComboBox(horWidget);
 	d->tableCombo->setObjectName("tables_combo");
 	d->tableCombo->setMinimumWidth(QFontMetrics(font()).width("w")*20);
 	d->tableCombo->setInsertPolicy(QComboBox::NoInsert);
 	d->tableCombo->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred));
-	QLabel *lbl = new QLabel(i18n("Table:"), this);
+	QLabel *lbl = new QLabel(i18n("Table:"), horWidget);
 	lbl->setBuddy(d->tableCombo);
 	lbl->setIndent(3);
 	hlyr->addWidget(lbl);
 	hlyr->addWidget(d->tableCombo);
 	fillTablesCombo();
 
-	d->btnAdd = new KPushButton(i18nc("Insert table/query into relations view", "&Insert"), this);
+	d->btnAdd = new KPushButton(i18nc("Insert table/query into relations view", "&Insert"), horWidget);
 	hlyr->addWidget(d->btnAdd);
 	hlyr->addStretch(1);
 	connect(d->btnAdd, SIGNAL(clicked()), this, SLOT(slotAddTable()));
 
-	d->scrollArea = new KexiRelationsScrollArea(this);
+	d->scrollArea = new KexiRelationsScrollArea(mainWidget);
 	d->scrollArea->setObjectName("scroll_area");
-	setViewWidget(d->scrollArea);
+	setViewWidget(mainWidget, false/* no focus proxy */);
+	setFocusProxy(d->scrollArea);
 	g->addWidget(d->scrollArea, 1, 0);
 
 	//actions

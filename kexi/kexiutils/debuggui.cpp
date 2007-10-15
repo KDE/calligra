@@ -64,11 +64,12 @@ void KexiUtils::addKexiDBDebug(const QString& text)
 		QHBoxLayout *hbox = new QHBoxLayout(page);
 		vbox->addLayout(hbox);
 		hbox->addStretch(1);
-		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
+		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear-left"), page);
 		hbox->addWidget(btn_clear);
 
 		kexiDBDebugPage = new K3ListView(page);
 		kexiDBDebugPage->setObjectName("kexiDbDebugPage");
+		kexiDBDebugPage->setFont( KexiUtils::smallFont(kexiDBDebugPage) );
 		QObject::connect(btn_clear, SIGNAL(clicked()), kexiDBDebugPage, SLOT(clear()));
 		vbox->addWidget(kexiDBDebugPage);
 		kexiDBDebugPage->addColumn("");
@@ -102,13 +103,14 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "document-save"), page);
 		btn_exec->setObjectName("executeRealAlterTable");
 		hbox->addWidget(btn_exec);
-		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear_left"), page);
+		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear-left"), page);
 		hbox->addWidget(btn_clear);
 		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "exec"), page);
 		btn_sim->setObjectName("simulateAlterTableExecution");
 		hbox->addWidget(btn_sim);
 
 		kexiAlterTableActionDebugPage = new K3ListView(page);
+		kexiAlterTableActionDebugPage->setFont( KexiUtils::smallFont(kexiAlterTableActionDebugPage) );
 		kexiAlterTableActionDebugPage->setObjectName("kexiAlterTableActionDebugPage");
 		QObject::connect(btn_clear, SIGNAL(clicked()), kexiAlterTableActionDebugPage, SLOT(clear()));
 		vbox->addWidget(kexiAlterTableActionDebugPage);

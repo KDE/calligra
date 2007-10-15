@@ -72,7 +72,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent )
 {
 	setupUi(this);
 	setObjectName("KexiConnSelectorWidget");
-	iconLabel->setPixmap(DesktopIcon("network-wired"));
+	iconLabel->setPixmap(DesktopIcon(KEXI_ICON_DATABASE_SERVER));
 
 	Q3VBoxLayout *driversComboLyr = new Q3VBoxLayout(frmEngine);
 	m_driversCombo = new KexiDBDriverComboBox(frmEngine, Kexi::driverManager().driversInfo(), 

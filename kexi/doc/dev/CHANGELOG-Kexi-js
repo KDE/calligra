@@ -59,6 +59,18 @@ HINT:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2007-10-05
+Query Designer
+- fixed SQL View
+General
+- updated icon names and set up installation of application-x-kexiproject-sqlite* icons
+KexiDB
+- removed crash on closing db connection
+- mimetype-related API improvements
+GUI
+- local toolbars now entirely belong to KexiViews, not to KexiWindows, for smoother GUI updates
+- flow layout: it is now possible to set vertical/horizontal alignment of items
+
 2007-09-17
 - Fixes for BUG #149906
 
