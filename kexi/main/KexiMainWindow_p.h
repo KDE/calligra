@@ -50,6 +50,7 @@ class KexiTabbedToolBar : public KTabWidget
 	protected slots:
 		void slotCurrentChanged(int index);
 		void slotDelayedTabRaise();
+		void slotSettingsChanged(int category);
 	private:
 		void addAction(KToolBar *tbar, const char* actionName);
 		void addSeparatorAndAction(KToolBar *tbar, const char* actionName);
@@ -112,6 +113,9 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 	QAction* a;
 
 	KexiUtils::smallFont(this/*init*/);
+	slotSettingsChanged( KGlobalSettings::FontChanged );
+	connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(slotSettingsChanged(int)));
+
 //	KToolBar* helpToolBar = new KToolBar(this);
 //	helpToolBar->setFont(Kexi::smallFont());
 /*
@@ -238,6 +242,13 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 KexiTabbedToolBar::~KexiTabbedToolBar()
 {
 	delete d;
+}
+
+void KexiTabbedToolBar::slotSettingsChanged(int category)
+{
+	if (category == KGlobalSettings::FontChanged) {
+		setFont( KGlobalSettings::menuFont() ); // toolbar acts like a menu
+	}
 }
 
 KToolBar* KexiTabbedToolBar::createWidgetToolBar() const
