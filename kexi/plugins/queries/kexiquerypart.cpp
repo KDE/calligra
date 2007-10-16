@@ -200,7 +200,6 @@ KexiDB::SchemaData* KexiQueryPart::loadSchemaData(
 
 KLocalizedString KexiQueryPart::i18nMessage(const QString& englishMessage, KexiWindow* window) const
 {
-	Q_UNUSED(window);
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return ki18n(I18N_NOOP("Design of query \"%1\" has been modified."));
 	if (englishMessage=="Object \"%1\" already exists.")

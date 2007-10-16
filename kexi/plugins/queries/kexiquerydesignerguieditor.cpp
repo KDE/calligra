@@ -873,12 +873,12 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 			else if (binary->left()->toVariable()) {
 				//this is: variable , op , argument
 				//store variable -> argument:
-				criterias.insert(binary->left()->toVariable()->name, binary->right());
+				criterias.insertMulti(binary->left()->toVariable()->name, binary->right());
 			}
 			else if (binary->right()->toVariable()) {
 				//this is: argument , op , variable
 				//store variable -> argument:
-				criterias.insert(binary->right()->toVariable()->name, binary->left());
+				criterias.insertMulti(binary->right()->toVariable()->name, binary->left());
 			}
 		}
 	} //while
@@ -887,12 +887,14 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 		return;
 
 	//3. show fields (including * and table.*)
-	uint row_num = -1;
+	uint row_num = 0;
 	QSet<KexiDB::BaseExpr*> usedCriterias; // <-- used criterias will be saved here
                                             //     so in step 4. we will be able to add 
 	                                        //     remaining invisible columns with criterias
+	query->debug();
+	foreach (KexiDB::Field* field, *query->fields())
+		field->debug();
 	foreach (KexiDB::Field* field, *query->fields()) {
-		row_num++;
 		//append a new row
 		QString tableName, fieldName, columnAlias, criteriaString;
 		KexiDB::BinaryExpr *criteriaExpr = 0;
@@ -954,6 +956,7 @@ void KexiQueryDesignerGuiEditor::showFieldsOrRelationsForQueryInternal(
 					QVariant(columnAlias + ": " + field->expression()->toString()), &result))
 				return; //problems with setting column expression
 		}
+		row_num++;
 	}
 
 	//4. show ORDER BY information
