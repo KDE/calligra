@@ -21,7 +21,6 @@
 #define _KEXIDB_EXPORT_H_
 
 #include <kdemacros.h>
-#include <kexi_global.h>
 
 #ifndef KEXI_DB_EXPORT
 # ifdef MAKE_KEXI_DB_LIB

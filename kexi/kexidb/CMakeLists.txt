@@ -1,4 +1,7 @@
 
+IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+	INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
 
 #add_subdirectory( parser )
 add_subdirectory( drivers )
