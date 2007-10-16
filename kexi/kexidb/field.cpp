@@ -33,7 +33,7 @@
 
 #include <assert.h>
 
-#include "kexi_global.h"
+#include "kexidb_global.h"
 
 using namespace KexiDB;
 

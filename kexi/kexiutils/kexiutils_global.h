@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,18 +17,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KEXIUTILS_EXPORT_H_
-#define _KEXIUTILS_EXPORT_H_
+#ifndef _KEXIUTILS_GLOBAL_H_
+#define _KEXIUTILS_GLOBAL_H_
 
-#include <kdemacros.h>
-#include "kexiutils_global.h"
+#ifndef WARNING
+#ifdef _MSC_VER
+/* WARNING preprocessor directive
+ Reserved: preprocessor needs two indirections to replace __LINE__ with actual
+ string
+*/
+#define _MSG0(msg)     #msg
+/* Preprocessor needs two indirections to replace __LINE__ or __FILE__
+ with actual string. */
+#define _MSG1(msg)    _MSG0(msg)
 
-#ifdef MAKE_KEXIUTILS_LIB
-# define KEXIUTILS_EXPORT KDE_EXPORT
-#elif defined(KDE_MAKE_LIB)
-# define KEXIUTILS_EXPORT KDE_IMPORT
-#else
-# define KEXIUTILS_EXPORT
-#endif
+/*! Creates message prolog with the name of the source file and the line
+   number where a preprocessor message has been inserted.
+
+  Example:
+     #pragma KMESSAGE(Your message)
+  Output:
+     C:\MyCode.cpp(111) : Your message
+*/
+# define _MSGLINENO __FILE__ "(" _MSG1(__LINE__) ") : warning: "
+# define WARNING(msg) message(_MSGLINENO #msg)
+#endif /*_MSC_VER*/
+#endif /*WARNING*/
 
 #endif

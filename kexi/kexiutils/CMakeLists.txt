@@ -25,7 +25,7 @@ set_target_properties(kexiutils PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION
 
 install(TARGETS kexiutils  DESTINATION ${LIB_INSTALL_DIR})
 
-install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h
+install( FILES  tristate.h identifier.h validator.h utils.h kexiutils_export.h kexiutils_global.h
   styleproxy.h longlongvalidator.h InternalPropertyMap.h 
   SmallToolButton.h FlowLayout.h
   DESTINATION ${INCLUDE_INSTALL_DIR}/kexiutils)

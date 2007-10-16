@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2003-2005 Kexi Team
+   Copyright (c) 2003-2007 Kexi Team
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -54,6 +54,7 @@
 # define FUTURE_I18N_NOOP(x) (x)
 #endif
 
+#ifndef WARNING
 #ifdef _MSC_VER
 /* WARNING preprocessor directive
  Reserved: preprocessor needs two indirections to replace __LINE__ with actual
@@ -75,5 +76,6 @@
 # define _MSGLINENO __FILE__ "(" _MSG1(__LINE__) ") : warning: "
 # define WARNING(msg) message(_MSGLINENO #msg)
 #endif /*_MSC_VER*/
+#endif /*WARNING*/
 
 #endif /* _KEXI_GLOBAL_ */

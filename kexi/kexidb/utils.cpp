@@ -21,7 +21,7 @@
 #include "cursor.h"
 #include "drivermanager.h"
 #include "lookupfieldschema.h"
-#include "kexi_global.h"
+#include "kexidb_global.h"
 
 #include <QMap>
 #include <QHash>

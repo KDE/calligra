@@ -19,7 +19,7 @@
 
 #include "utils.h"
 #include "utils_p.h"
-#include <kexi_global.h>
+#include "kexiutils_global.h"
 
 #include <qregexp.h>
 #include <qpainter.h>

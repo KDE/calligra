@@ -18,7 +18,7 @@
 */
 
 #include "FlowLayout.h"
-#include <kexi_global.h>
+#include "kexiutils_global.h"
 
 #include <KDebug>
 
