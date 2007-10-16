@@ -20,16 +20,6 @@
 #ifndef _KEXI_GLOBAL_
 #define _KEXI_GLOBAL_
 
-/*! Only defined for standalone releases, 
- should be commented out for releases bundled with KOffice. *
- Affects translation file names: "kexi.po" becomes "standalone_kexi.po" (used in main.cpp)
- and "kformdesigner.po" becomes "standalone_kformdesigner.po" (used in FormManager)
- */
-//#define KEXI_STANDALONE 1
-
-/* remove before release: */
-#define KEXI_DEBUG_GUI
-
 #include <kexi_export.h>
 #include <config-kexi.h>
 
