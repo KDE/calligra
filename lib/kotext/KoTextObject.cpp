@@ -303,11 +303,12 @@ void KoTextObject::UndoRedoInfo::clear()
                 KoTextDocCommand * cmd = textobj->deleteTextCommand( textdoc, id, index, text.rawData(), customItemsMap, oldParagLayouts );
                 textdoc->addCommand( cmd );
                 Q_ASSERT( placeHolderCmd );
-                placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
-                // Deleting any custom items -> let them add their command
-                if ( !customItemsMap.isEmpty() )
-                {
-                    customItemsMap.deleteAll( placeHolderCmd );
+                if (placeHolderCmd) {
+                    placeHolderCmd->addCommand( new KoTextCommand( textobj, /*cmd, */QString::null ) );
+                    // Deleting any custom items -> let them add their command
+                    if ( !customItemsMap.isEmpty() ) {
+                        customItemsMap.deleteAll( placeHolderCmd );
+                    }
                 }
            } break;
             case Invalid:
