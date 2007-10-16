@@ -274,6 +274,11 @@ class KSPREAD_EXPORT Value
     QString asString() const;
 
     /**
+     * Returns the data as a QVariant
+     */
+    QVariant data() const;
+
+    /**
      * Returns the date/time representation of this value.
      */
     QDateTime asDateTime( const Doc* doc ) const;

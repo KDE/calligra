@@ -407,6 +407,43 @@ QString Value::asString() const
   return result;
 }
 
+// get the value as QVariant
+QVariant Value::data() const
+{
+  QVariant result;
+
+  switch ( d->type )
+    {
+        case Value::Empty:
+        default:
+            result = 0;
+            break;
+        case Value::Boolean:
+            result = d->b;
+            break;
+        case Value::Integer:
+            result = d->i;
+            break;
+        case Value::Float:
+            result = d->f;
+            break;
+        case Value::Complex:
+            // FIXME: add support for complex numbers
+            // pc = new complex<Number>( *o.pc );
+            break;
+        case Value::String:
+        case Value::Error:
+            result = d->ps;
+            break;
+        case Value::Array:
+            // FIXME: not supported yet
+            //result = ValueArray( d->pa );
+            break;
+    }
+
+  return result;
+}
+
 // set error message
 void Value::setError( const QString& msg )
 {

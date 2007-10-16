@@ -127,15 +127,14 @@ BindingModel::BindingModel(const Region& region)
 
 QVariant BindingModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    Q_UNUSED(role);
-    if (m_region.isEmpty())
+    if (m_region.isEmpty() || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
     const QPoint offset = m_region.firstRange().topLeft();
     const int col = (orientation == Qt::Vertical) ? offset.x() : offset.x() + section;
     const int row = (orientation == Qt::Vertical) ? offset.y() + section : offset.y();
     const Sheet* sheet = m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(col, row);
-    return QVariant(value.asString());
+    return value.data();
 }
 
 int BindingModel::rowCount(const QModelIndex& parent) const
@@ -152,8 +151,7 @@ int BindingModel::columnCount(const QModelIndex& parent) const
 
 QVariant BindingModel::data(const QModelIndex& index, int role) const
 {
-    Q_UNUSED(role);
-    if (m_region.isEmpty())
+    if (m_region.isEmpty() || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
     const QPoint offset = m_region.firstRange().topLeft();
     const Sheet* sheet = m_region.firstSheet();
