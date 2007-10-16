@@ -121,6 +121,9 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 		void slotSaveShortcutFileChanges();
 //		void slotShowConnectionDetails();
 
+		//! Reaction to application's quit, needed because it is safer to destroy filewidget-related GUIs before
+		void slotAboutToAppQuit();
+
 	protected:
 		bool getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name);
 

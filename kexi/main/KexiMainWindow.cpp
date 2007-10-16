@@ -1514,16 +1514,7 @@ tristate KexiMainWindow::startup()
 			Kexi::startupHandler().importActionData().fileName
 		);
 	default:;
-#ifdef __GNUC__
-#warning TODO		if (d->propEditor)
-#else
-#pragma WARNING( TODO		if (d->propEditor) )
-#endif
-#ifdef __GNUC__
-#warning TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
-#else
-#pragma WARNING( TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) ); )
-#endif
+		d->updatePropEditorVisibility(Kexi::NoViewMode);
 	}
 	return true;
 }
@@ -3654,19 +3645,23 @@ tristate KexiMainWindow::closeWindow(KexiWindow *window, bool layoutTaskBar, boo
 		//--adidional message, e.g. table designer will return 
 		//  "Note: This table is already filled with data which will be removed."
 		//  if the window is in design view mode.
-		QString additionalMessage = 
-			window->part()->i18nMessage(":additional message before saving design", window).toString();
-		if (additionalMessage.startsWith(":"))
-			additionalMessage.clear();
+		const KLocalizedString additionalMessage(	
+			window->part()->i18nMessage(":additional message before saving design", window) );
+		QString additionalMessageString;
 		if (!additionalMessage.isEmpty())
-			additionalMessage = "<p>"+additionalMessage+"</p>";
+			additionalMessageString = additionalMessage.toString();
+
+		if (additionalMessageString.startsWith(":"))
+			additionalMessageString.clear();
+		if (!additionalMessageString.isEmpty())
+			additionalMessageString = "<p>"+additionalMessageString+"</p>";
 
 		const int questionRes = KMessageBox::warningYesNoCancel( this,
 			"<p>"
 			+window->part()->i18nMessage("Design of object \"%1\" has been modified.", window)
 			 .subs(window->partItem()->name()).toString()
 			+"</p><p>"+i18n("Do you want to save changes?")+"</p>"
-			+ additionalMessage /*may be empty*/,
+			+ additionalMessageString /*may be empty*/,
 			QString(),
 			saveChanges,
 			discardChanges);

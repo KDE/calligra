@@ -74,11 +74,16 @@ class KexiStartupHandler::Private
 		{
 		}
 
-		~Private()
-		{
+		~Private() {
+			destroyGui();
+		}
+		void destroyGui() {
 			delete passwordDialog;
+			passwordDialog = 0;
 			delete connDialog;
+			connDialog = 0;
 			delete startupDialog;
+			startupDialog = 0;
 		}
 
 		KexiDBPasswordDialog* passwordDialog;
@@ -195,11 +200,17 @@ KexiStartupHandler::KexiStartupHandler()
  , KexiStartupData()
  , d( new Private() )
 {
+	connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(slotAboutToAppQuit()));
 }
 
 KexiStartupHandler::~KexiStartupHandler()
 {
 	delete d;
+}
+
+void KexiStartupHandler::slotAboutToAppQuit()
+{
+	d->destroyGui();
 }
 
 bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QByteArray &action_name)
