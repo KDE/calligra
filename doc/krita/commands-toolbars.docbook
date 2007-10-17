@@ -262,7 +262,7 @@ You can drag these handles to change the direction of the curve in that point.
 <para>
 You can click on a previously inserted control point to modify it. With an intermediate
 control point (&ie; a point that is not the starting point and not the ending
-point), you can move the direction handles seperately to have the curve enter
+point), you can move the direction handles separately to have the curve enter
 and leave the point in different directions. After editing a point, you can
 just click on the canvas to continue adding points to the curve.
 </para>
