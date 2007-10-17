@@ -408,7 +408,7 @@ QString Value::asString() const
 }
 
 // get the value as QVariant
-QVariant Value::data() const
+QVariant Value::asVariant() const
 {
   QVariant result;
 

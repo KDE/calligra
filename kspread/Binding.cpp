@@ -134,7 +134,7 @@ QVariant BindingModel::headerData(int section, Qt::Orientation orientation, int 
     const int row = (orientation == Qt::Vertical) ? offset.y() + section : offset.y();
     const Sheet* sheet = m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(col, row);
-    return value.data();
+    return value.asVariant();
 }
 
 int BindingModel::rowCount(const QModelIndex& parent) const

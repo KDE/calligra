@@ -276,7 +276,7 @@ class KSPREAD_EXPORT Value
     /**
      * Returns the data as a QVariant
      */
-    QVariant data() const;
+    QVariant asVariant() const;
 
     /**
      * Returns the date/time representation of this value.
