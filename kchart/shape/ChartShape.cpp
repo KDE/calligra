@@ -68,6 +68,7 @@
 
 // KChart
 #include "kchart_global.h"
+#include "ChartProxyModel.h"
 
 
 using namespace KChart;
@@ -106,7 +107,8 @@ public:
     // About the data
     bool                       firstRowAsLabel;
     bool                       firstColAsLabel;
-    QAbstractItemModel        *chartData;
+    // Proxy model that holds the actual QAbstractItemModel
+    ChartProxyModel           *chartData;
 
     // ----------------------------------------------------------------
     // Data that are not immediately applicable to the chart itself.
@@ -139,6 +141,7 @@ ChartShape::Private::Private()
     for ( int i = 0; i < NUM_CHARTTYPES; ++i )
         chartTypeOptions[i].subtype = defaultSubtypes[i];  
     threeDMode = false;
+    chartData = new ChartProxyModel;
 }
 
 
@@ -158,7 +161,8 @@ ChartShape::ChartShape()
     d->chart     = new KDChart::Chart();
     d->diagram   = new KDChart::BarDiagram();
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
-    setModel( &d->defaultData );
+    d->chartData->setSourceModel( &d->defaultData );
+    d->diagram->setModel( d->chartData );
 
     d->firstRowAsLabel = false;
     d->firstColAsLabel = false;
@@ -497,10 +501,11 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
 
 void ChartShape::setModel( QAbstractItemModel* model )
 {
-    kDebug() << "BEGIN";
-    d->chartData = model;
+    d->chartData->setSourceModel( model );
     d->chart->coordinatePlane()->takeDiagram( d->diagram );
-    d->diagram->setModel( model );
+    // No need to call this method anymore since the diagram
+    // now only has to deal with our ChartProxyModel
+    // d->diagram->setModel( model );
     d->diagram->update();
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
     d->chart->update();
@@ -523,7 +528,6 @@ void ChartShape::setModel( QAbstractItemModel* model )
     baChart.setBrush( QColor(0xd0,0xd0,0xff) );
     d->chart->setBackgroundAttributes( baChart );
 */
-    kDebug() <<" END";
 }
 
 QAbstractItemModel *ChartShape::model()

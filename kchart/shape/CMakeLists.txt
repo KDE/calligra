@@ -6,6 +6,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
 ########### Flake Plugin library ###############
 
 SET (chartshape_LIB_SRCS
+    ChartProxyModel.cpp
 	ChartShape.cpp
 	ChartShapeFactory.cpp
         ChartTypeTool.cpp
