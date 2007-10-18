@@ -48,8 +48,15 @@ public slots:
     virtual QModelIndex mapFromSource( const QModelIndex &sourceIndex ) const;
     virtual QModelIndex mapToSource( const QModelIndex &proxyIndex ) const;
 
+    Qt::Orientation mapFromSource( Qt::Orientation orientation ) const;
+    Qt::Orientation mapToSource( Qt::Orientation orientation ) const;
+
     virtual int rowCount( const QModelIndex &parent = QModelIndex() ) const;
     virtual int columnCount( const QModelIndex &parent = QModelIndex() ) const;
+
+    void setFirstRowIsHeader( bool b );
+    void setFirstColumnIsHeader( bool b );
+    void setDataDirection( Qt::Orientation orientation );
 
 private:
     class Private;

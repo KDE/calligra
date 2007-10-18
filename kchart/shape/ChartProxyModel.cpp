@@ -27,10 +27,18 @@ namespace KChart {
 class ChartProxyModel::Private {
 public:
     Private();
+
+    bool firstRowIsHeader;
+    bool firstColumnIsHeader;
+    Qt::Orientation dataDirection;
 };
 
 ChartProxyModel::Private::Private()
 {
+    firstRowIsHeader    = false;
+    firstColumnIsHeader = false;
+
+    dataDirection = Qt::Vertical;
 }
 
 ChartProxyModel::ChartProxyModel( QObject *parent /* = 0 */ )
@@ -49,7 +57,7 @@ QVariant ChartProxyModel::data( const QModelIndex &index,
     if ( sourceModel() == 0 )
         return QVariant();
 
-    return sourceModel()->data( sourceModel()->index( index.row(), index.column() ), role );
+    return sourceModel()->data( mapToSource( index ), role );
 }
 
 QVariant ChartProxyModel::headerData( int section,
@@ -59,7 +67,29 @@ QVariant ChartProxyModel::headerData( int section,
     if ( sourceModel() == 0 )
         return QVariant();
 
-    return sourceModel()->headerData( section, orientation, role );
+    orientation = mapToSource( orientation );
+
+    int row    = 0;
+    int column = 0;
+
+    if ( orientation == Qt::Vertical ) {
+        if ( !d->firstColumnIsHeader )
+            return QVariant();
+
+        // Return the first column in the section-th row
+        row = section;
+    }
+    else if ( orientation == Qt::Horizontal ) {
+        if( !d->firstRowIsHeader )
+            return QVariant();
+
+        // Return the section-th column in the first row
+        column = section;
+    }
+
+    
+
+    return sourceModel()->data( sourceModel()->index( row, column ), role );
 }
 
 QMap<int, QVariant> ChartProxyModel::itemData( const QModelIndex &index ) const
@@ -81,12 +111,76 @@ QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
 
 QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
 {
-    return QModelIndex();
+    int row, column;
+    if ( d->dataDirection == Qt::Vertical ) {
+        row = sourceIndex.row();
+        column = sourceIndex.column();
+
+        if ( d->firstRowIsHeader )
+            row--;
+        if ( d->firstColumnIsHeader )
+            column--;
+    }
+    else {
+        row = sourceIndex.column();
+        column = sourceIndex.row();
+
+        if ( d->firstRowIsHeader )
+            column--;
+        if ( d->firstColumnIsHeader )
+            row--;
+    }
+    return sourceModel()->index( row, column );
 }
 
 QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 {
-    return QModelIndex();
+    int row, column;
+    if ( d->dataDirection == Qt::Vertical ) {
+        row = proxyIndex.row();
+        column = proxyIndex.column();
+
+        if ( d->firstRowIsHeader )
+            row++;
+        if ( d->firstColumnIsHeader )
+            column++;
+    }
+    else {
+        row = proxyIndex.column();
+        column = proxyIndex.row();
+
+        if ( d->firstRowIsHeader )
+            row++;
+        if ( d->firstColumnIsHeader )
+            column++;
+    }
+    return sourceModel()->index( row, column );
+}
+
+Qt::Orientation ChartProxyModel::mapFromSource( Qt::Orientation orientation ) const
+{
+    // In fact, this method does exactly the same thing as mapToSource( Qt::Orientation ),
+    // but replacing the code with a call to mapToSource() would just confuse at this point.
+    if ( d->dataDirection == Qt::Vertical )
+        return orientation;
+
+    // orientation is Qt::Horizontal
+    // Thus, we need to return the opposite of orientation.
+    if ( orientation == Qt::Vertical )
+        return Qt::Horizontal;
+    return Qt::Vertical;
+}
+
+Qt::Orientation ChartProxyModel::mapToSource( Qt::Orientation orientation ) const
+{
+    if ( d->dataDirection == Qt::Vertical )
+        return orientation;
+
+    // orientation is Qt::Horizontal
+    // Thus, we need to return the opposite of orientation.
+    if ( orientation == Qt::Vertical )
+        return Qt::Horizontal;
+    return Qt::Vertical;
 }
 
 int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
@@ -94,7 +188,22 @@ int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ )
     if ( sourceModel() == 0 )
         return 0;
 
-    return sourceModel()->rowCount( parent );
+    int rowCount;
+    if ( d->dataDirection == Qt::Vertical )
+        rowCount = sourceModel()->rowCount( parent );
+    else
+        rowCount = sourceModel()->columnCount( parent );
+    // Even if the first row is a header - if the data table is empty,
+    // we still have 0 rows, not -1
+
+    bool firstRowIsHeader = d->firstRowIsHeader;
+    if ( d->dataDirection == Qt::Horizontal )
+        firstRowIsHeader = d->firstColumnIsHeader;
+
+    if ( rowCount > 0 && firstRowIsHeader )
+        rowCount--;
+
+    return rowCount;
 }
 
 int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
@@ -102,7 +211,37 @@ int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() *
     if ( sourceModel() == 0 )
         return 0;
 
-    return sourceModel()->columnCount( parent );
+    int columnCount;
+    if ( d->dataDirection == Qt::Vertical )
+        columnCount = sourceModel()->columnCount( parent );
+    else
+        columnCount = sourceModel()->rowCount( parent );
+    // Even if the first column is a header - if the data table is empty,
+    // we still have 0 columns, not -1
+
+    bool firstColumnIsHeader = d->firstColumnIsHeader;
+    if ( d->dataDirection == Qt::Horizontal )
+        firstColumnIsHeader = d->firstRowIsHeader;
+
+    if ( columnCount > 0 && firstColumnIsHeader )
+        columnCount--;
+
+    return columnCount;
+}
+
+void ChartProxyModel::setFirstRowIsHeader( bool b )
+{
+    d->firstRowIsHeader = b;
+}
+
+void ChartProxyModel::setFirstColumnIsHeader( bool b )
+{
+    d->firstColumnIsHeader = b;
+}
+
+void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
+{
+    d->dataDirection = orientation;
 }
 
 } // namespace KChart

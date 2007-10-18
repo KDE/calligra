@@ -480,6 +480,21 @@ void ChartShape::setThreeDMode( bool threeD )
     update();
 }
 
+void ChartShape::setFirstRowIsHeader( bool b )
+{
+    d->chartData->setFirstRowIsHeader( b );
+}
+
+void ChartShape::setFirstColumnIsHeader( bool b )
+{
+    d->chartData->setFirstColumnIsHeader( b );
+}
+
+void ChartShape::setDataDirection( Qt::Orientation orientation )
+{
+    d->chartData->setDataDirection( orientation );
+}
+
 void ChartShape::saveChartTypeOptions()
 {
     // Check if the int value is in range of the OdfChartType enumeration

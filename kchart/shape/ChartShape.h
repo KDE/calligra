@@ -85,7 +85,10 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     void setChartType( OdfChartType newType, 
 		       OdfChartSubtype newSubtype = NoChartSubtype );
     void setChartSubtype( OdfChartSubtype newSubtype );
-    void setThreeDMode( bool );
+    void setThreeDMode( bool threeD );
+    void setFirstRowIsHeader( bool b );
+    void setFirstColumnIsHeader( bool b);
+    void setDataDirection( Qt::Orientation orientation );
 
     void saveChartTypeOptions();
     void restoreChartTypeOptions( OdfChartType type );
