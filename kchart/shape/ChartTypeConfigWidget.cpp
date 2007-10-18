@@ -66,6 +66,7 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     d->ui.typeCombobox->addItem( KIcon("chart_area"), i18n("Area Chart"), AreaChartType );
     d->ui.typeCombobox->addItem( KIcon("chart_pie"), i18n("Pie Chart"), CircleChartType );
     d->ui.typeCombobox->addItem( KIcon("chart_ring"), i18n("Ring Chart"), RingChartType );
+    d->ui.typeCombobox->addItem( KIcon("chart_point"), i18n("Scatter Chart"), ScatterChartType );
     d->ui.typeCombobox->addItem( KIcon("chart_pie"), i18n("Radar Chart"), RadarChartType );
 
     connect( d->ui.typeCombobox, SIGNAL( currentIndexChanged( int ) ),
@@ -122,8 +123,13 @@ void ChartTypeConfigWidget::chartTypeSelected( int type )
     switch ( type ) {
         case BarChartType:
             d->ui.optionsBox->show();
+            // Hide them for now, as the functionality for it is not yet implemented
+            /*
             d->ui.linesInBarChart->show();
             d->ui.linesInBarChartArea->show();
+            */
+            d->ui.linesInBarChart->hide();
+            d->ui.linesInBarChartArea->hide();
             d->ui.threeDLook->setEnabled( true );
             break;
         case LineChartType:
@@ -131,6 +137,12 @@ void ChartTypeConfigWidget::chartTypeSelected( int type )
             d->ui.linesInBarChart->hide();
             d->ui.linesInBarChartArea->hide();
             d->ui.threeDLook->setEnabled( true );
+            break;
+        case ScatterChartType:
+            d->ui.optionsBox->hide();
+            d->ui.linesInBarChart->hide();
+            d->ui.linesInBarChartArea->hide();
+            d->ui.threeDLook->setEnabled( false );
             break;
         case AreaChartType:
             d->ui.optionsBox->show();

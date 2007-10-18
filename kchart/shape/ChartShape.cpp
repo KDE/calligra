@@ -58,6 +58,9 @@
 #include "KDChartLegend.h"
 #include "KDChartHeaderFooter.h"
 #include "KDChartLineAttributes.h"
+#include "KDChartDataValueAttributes.h"
+#include "KDChartMarkerAttributes.h"
+#include "KDChartTextAttributes.h"
 
 #include "KDChartBarAttributes.h"
 #include "KDChartThreeDBarAttributes.h"
@@ -286,8 +289,7 @@ void ChartShape::setChartType( OdfChartType    newType,
             break;
         
         case ScatterChartType:
-            // FIXME
-            return;
+            new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
             break;
         
         case RadarChartType:
@@ -350,6 +352,20 @@ void ChartShape::setChartType( OdfChartType    newType,
             attributes = ((KDChart::LineDiagram*) new_diagram)->lineAttributes();
             attributes.setDisplayArea( true );
             ((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
+        }
+        else if( newType != d->chartType && newType == ScatterChartType ) {
+            KDChart::DataValueAttributes attributes = ((KDChart::LineDiagram*) new_diagram)->dataValueAttributes();
+            KDChart::MarkerAttributes markerAttributes = attributes.markerAttributes();
+            KDChart::TextAttributes   textAttributes   = attributes.textAttributes();
+            markerAttributes.setVisible( true );
+            textAttributes.setVisible( false );
+            attributes.setTextAttributes( textAttributes );
+            attributes.setMarkerAttributes( markerAttributes );
+            attributes.setVisible( true );
+
+            ((KDChart::LineDiagram*) new_diagram)->setDataValueAttributes( attributes );
+
+            ((KDChart::LineDiagram*) new_diagram)->setPen( Qt::NoPen );
         }
 
         // FIXME: Aren't we leaking memory by not doing this?
