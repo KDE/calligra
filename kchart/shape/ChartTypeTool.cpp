@@ -129,7 +129,6 @@ void ChartTypeTool::updateActions()
 
 QWidget *ChartTypeTool::createOptionWidget()
 {
-
     QTabWidget  *tabWidget = new QTabWidget();
     
     ChartDataConfigWidget  *widget1 = new ChartDataConfigWidget();
@@ -141,11 +140,11 @@ QWidget *ChartTypeTool::createOptionWidget()
     tabWidget->addTab( widget2, i18n( "Type" ) );
 
     connect( widget2, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
-	     this,   SLOT( setChartType( KChart::OdfChartType ) ) );
+	     this,    SLOT( setChartType( KChart::OdfChartType ) ) );
     connect( widget2, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
-             this,   SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
+             this,    SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
     connect( widget2, SIGNAL( threeDModeToggled( bool ) ),
-             this,   SLOT( setThreeDMode( bool ) ) );
+             this,    SLOT( setThreeDMode( bool ) ) );
 
     //return widget;
     return tabWidget;

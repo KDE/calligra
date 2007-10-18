@@ -49,6 +49,9 @@ public:
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
 
+ private Q_SLOTS:
+    void dataInRows( bool );
+
 private:
     class Private;
     Private * const d;

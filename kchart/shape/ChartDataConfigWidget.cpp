@@ -18,10 +18,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Local
 #include "ChartDataConfigWidget.h"
 
+// KDE
+#include "kdebug.h"
+
+// KOffice
 #include "KoCanvasResourceProvider.h"
 
+// KChart
 #include "ui_ChartDataConfigWidget.h"
 #include "ChartShape.h"
 
@@ -42,6 +48,11 @@ ChartDataConfigWidget::ChartDataConfigWidget()
 {
     d->chart = 0;
     d->ui.setupUi(this);
+
+    // We need only connect one of the data direction buttons, since
+    // they are mutually exclusive.
+    connect( d->ui.m_dataInRows, SIGNAL( toggled( bool ) ),
+	     this,               SLOT( dataInRows( bool ) ) );
 }
 
 ChartDataConfigWidget::~ChartDataConfigWidget()
@@ -63,5 +74,18 @@ KAction* ChartDataConfigWidget::createAction()
 {
     return 0;
 }
+
+
+void ChartDataConfigWidget::dataInRows( bool checked )
+{
+    kDebug() << "dataInRows:" << checked;
+    if ( checked )
+	d->chart->setDataDirection( Qt::Horizontal );
+    else
+	d->chart->setDataDirection( Qt::Vertical );
+
+    d->chart->update();
+}
+
 
 #include "ChartDataConfigWidget.moc"
