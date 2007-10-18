@@ -27,13 +27,10 @@ namespace KChart {
 class ChartProxyModel::Private {
 public:
     Private();
-
-    QAbstractItemModel *sourceModel;
 };
 
 ChartProxyModel::Private::Private()
 {
-    sourceModel = 0;
 }
 
 ChartProxyModel::ChartProxyModel( QObject *parent /* = 0 */ )
@@ -46,33 +43,28 @@ ChartProxyModel::~ChartProxyModel()
 {
 }
 
-void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
-{
-    d->sourceModel = sourceModel;
-}
-
-QAbstractItemModel *ChartProxyModel::sourceModel()
-{
-    return d->sourceModel;
-}
-
 QVariant ChartProxyModel::data( const QModelIndex &index,
                                 int role /* = Qt::DisplayRole */ ) const
 {
-    if ( d->sourceModel == 0 )
+    if ( sourceModel() == 0 )
         return QVariant();
 
-    return d->sourceModel->data( index, role );
+    return sourceModel()->data( sourceModel()->index( index.row(), index.column() ), role );
 }
 
 QVariant ChartProxyModel::headerData( int section,
                                       Qt::Orientation orientation,
                                       int role /* = Qt::DisplayRole */ ) const
 {
-    if ( d->sourceModel == 0 )
+    if ( sourceModel() == 0 )
         return QVariant();
 
-    return d->sourceModel->headerData( section, orientation, role );
+    return sourceModel()->headerData( section, orientation, role );
+}
+
+QMap<int, QVariant> ChartProxyModel::itemData( const QModelIndex &index ) const
+{
+    return sourceModel()->itemData( index );
 }
 
 QModelIndex ChartProxyModel::index( int row,
@@ -99,18 +91,18 @@ QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 
 int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    if ( d->sourceModel == 0 )
+    if ( sourceModel() == 0 )
         return 0;
 
-    return d->sourceModel->rowCount( parent );
+    return sourceModel()->rowCount( parent );
 }
 
 int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    if ( d->sourceModel == 0 )
+    if ( sourceModel() == 0 )
         return 0;
 
-    return d->sourceModel->columnCount( parent );
+    return sourceModel()->columnCount( parent );
 }
 
 } // namespace KChart

@@ -502,12 +502,12 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
 void ChartShape::setModel( QAbstractItemModel* model )
 {
     d->chartData->setSourceModel( model );
-    d->chart->coordinatePlane()->takeDiagram( d->diagram );
-    // No need to call this method anymore since the diagram
+    // No need to call these methods anymore since the diagram
     // now only has to deal with our ChartProxyModel
-    // d->diagram->setModel( model );
+    // d->chart->coordinatePlane()->takeDiagram( d->diagram );
+    // d->diagram->setModel( d->chartData );
+    // d->chart->coordinatePlane()->replaceDiagram( d->diagram );
     d->diagram->update();
-    d->chart->coordinatePlane()->replaceDiagram( d->diagram );
     d->chart->update();
 
 #if 0
