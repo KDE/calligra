@@ -517,21 +517,11 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
 void ChartShape::setModel( QAbstractItemModel* model )
 {
     d->chartData->setSourceModel( model );
-    // No need to call these methods anymore since the diagram
-    // now only has to deal with our ChartProxyModel
-    // d->chart->coordinatePlane()->takeDiagram( d->diagram );
-    // d->diagram->setModel( d->chartData );
-    // d->chart->coordinatePlane()->replaceDiagram( d->diagram );
-    // d->diagram->update();
-    // d->chart->update();
 
-    // FIXME: There must be a better way to trigger the repaint
-    // of the diagram for the new model
-    OdfChartType    chartType    = d->chartType;
-    OdfChartSubtype chartSubtype = d->chartSubtype;
-    d->chartType    = LastChartType;
-    d->chartSubtype = NoChartSubtype;
-    setChartType( chartType, chartSubtype );
+    // Tell the diagram that the entire set of data changed
+    d->diagram->dataChanged( d->chartData->index( 0, 0 ),
+                             d->chartData->index( d->chartData->rowCount() - 1,
+                                                  d->chartData->columnCount() - 1 ) );
 
 #if 0
     for ( int col = 0; col < d->diagram->model()->columnCount(); ++col ) {
