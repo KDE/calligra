@@ -7,15 +7,19 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
 
 SET (chartshape_LIB_SRCS
     ChartProxyModel.cpp
-	ChartShape.cpp
-	ChartShapeFactory.cpp
-        ChartTypeTool.cpp
-        ChartTypeToolFactory.cpp
-	ChartTypeConfigWidget.cpp
-	../commands/ChartTypeCommand.cpp
-	)
+    ChartShape.cpp
+    ChartShapeFactory.cpp
+    ChartTypeTool.cpp
+    ChartTypeToolFactory.cpp
+    ChartTypeConfigWidget.cpp
+    ChartDataConfigWidget.cpp
+    ../commands/ChartTypeCommand.cpp
+)
 
-kde4_add_ui_files(chartshape_LIB_SRCS ChartTypeConfigWidget.ui)
+kde4_add_ui_files(chartshape_LIB_SRCS
+    ChartTypeConfigWidget.ui
+    ChartDataConfigWidget.ui
+)
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
 target_link_libraries(chartshapelib kdchart kochart flake)

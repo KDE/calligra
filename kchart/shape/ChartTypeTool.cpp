@@ -25,6 +25,7 @@
 #include <QGridLayout>
 #include <QToolButton>
 #include <QCheckBox>
+#include <QTabWidget>
 
 // KDE
 #include <KLocale>
@@ -37,6 +38,7 @@
 #include <KoPointerEvent.h>
 
 // ChartShape
+#include "ChartDataConfigWidget.h"
 #include "ChartTypeConfigWidget.h"
 
 
@@ -127,17 +129,26 @@ void ChartTypeTool::updateActions()
 
 QWidget *ChartTypeTool::createOptionWidget()
 {
-    ChartTypeConfigWidget  *widget = new ChartTypeConfigWidget();
-    widget->open( m_currentShape );
 
-    connect( widget, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
+    QTabWidget  *tabWidget = new QTabWidget();
+    
+    ChartDataConfigWidget  *widget1 = new ChartDataConfigWidget();
+    widget1->open( m_currentShape );
+    tabWidget->addTab( widget1, i18n( "Data" ) );
+
+    ChartTypeConfigWidget  *widget2 = new ChartTypeConfigWidget();
+    widget2->open( m_currentShape );
+    tabWidget->addTab( widget2, i18n( "Type" ) );
+
+    connect( widget2, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
 	     this,   SLOT( setChartType( KChart::OdfChartType ) ) );
-    connect( widget, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
+    connect( widget2, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
              this,   SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
-    connect( widget, SIGNAL( threeDModeToggled( bool ) ),
+    connect( widget2, SIGNAL( threeDModeToggled( bool ) ),
              this,   SLOT( setThreeDMode( bool ) ) );
 
-    return widget;
+    //return widget;
+    return tabWidget;
 }
 
 
