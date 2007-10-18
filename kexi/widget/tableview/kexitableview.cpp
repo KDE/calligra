@@ -724,6 +724,7 @@ void KexiTableView::drawContents( QPainter *p, int cx, int cy, int cw, int ch)
 		it += rowfirst;//move to 1st row
 		rowp = rowPos(rowfirst); // row position 
 		for (r = rowfirst;r <= rowlast; r++, ++it, rowp+=d->rowHeight) {
+//			(*it)->debug();
 			paintRow(*it, p, r, rowp, cx, cy, colfirst, collast, maxwc);
 		}
 	}

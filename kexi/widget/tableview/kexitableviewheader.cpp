@@ -49,7 +49,7 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 			//QPainter *p, const QRect &r, const QColorGroup &cg, SFlags flags = Style_Default,
 			//const QStyleOption& option = QStyleOption::Default ) const
 		{
-			if (ce == CE_HeaderSection && option) {
+			if (ce == CE_Header/*CE_HeaderSection*/ && option) {
 				QStyleOptionHeader newOption(*qstyleoption_cast<const QStyleOptionHeader*>(option));
 				newOption.palette.setColor(QPalette::Button, m_backgroundColor);
 				//set background color as well (e.g. for thinkeramik)
