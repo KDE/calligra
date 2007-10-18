@@ -146,26 +146,26 @@ QWidget *ChartTypeTool::createOptionWidget()
     connect( widget2, SIGNAL( threeDModeToggled( bool ) ),
              this,    SLOT( setThreeDMode( bool ) ) );
 
-    //return widget;
     return tabWidget;
 }
 
 
 void ChartTypeTool::setChartType( OdfChartType type )
 {
-    if( m_currentShape != 0 )
+    if ( m_currentShape != 0 )
         m_currentShape->setChartType( type );
 }
 
 
 void ChartTypeTool::setChartSubtype( OdfChartSubtype subtype )
 {
-    if( m_currentShape != 0 )
+    if ( m_currentShape != 0 )
         m_currentShape->setChartSubtype( subtype );
 }
 
-void ChartTypeTool::setThreeDMode( bool threeD ) {
-    if( m_currentShape != 0 )
+void ChartTypeTool::setThreeDMode( bool threeD )
+{
+    if ( m_currentShape != 0 )
         m_currentShape->setThreeDMode( threeD );
 }
 
