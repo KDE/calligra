@@ -522,8 +522,16 @@ void ChartShape::setModel( QAbstractItemModel* model )
     // d->chart->coordinatePlane()->takeDiagram( d->diagram );
     // d->diagram->setModel( d->chartData );
     // d->chart->coordinatePlane()->replaceDiagram( d->diagram );
-    d->diagram->update();
-    d->chart->update();
+    // d->diagram->update();
+    // d->chart->update();
+
+    // FIXME: There must be a better way to trigger the repaint
+    // of the diagram for the new model
+    OdfChartType    chartType    = d->chartType;
+    OdfChartSubtype chartSubtype = d->chartSubtype;
+    d->chartType    = LastChartType;
+    d->chartSubtype = NoChartSubtype;
+    setChartType( chartType, chartSubtype );
 
 #if 0
     for ( int col = 0; col < d->diagram->model()->columnCount(); ++col ) {
