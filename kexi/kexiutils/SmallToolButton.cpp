@@ -222,8 +222,8 @@ void KexiSmallToolButton::slotButtonToggled(bool checked)
 		.arg(checked).arg(d->action ? d->action->text() : QString())
 		.arg(view ? view->objectName() : QString("??") );
 	d->enableSlotActionToggled = false;
-	if (d->action)
-		d->action->setChecked(checked);
+//	if (d->action)
+//		d->action->setChecked(checked);
 	d->enableSlotActionToggled = true;
 }
 

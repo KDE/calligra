@@ -21,22 +21,23 @@
 #include "utils_p.h"
 #include "kexiutils_global.h"
 
-#include <qregexp.h>
-#include <qpainter.h>
-#include <qimage.h>
-#include <qwmatrix.h>
-#include <qicon.h>
+#include <QRegExp>
+#include <QPainter>
+#include <QImage>
+#include <QIcon>
 #include <QMetaProperty>
 #include <QBitmap>
 #include <QFocusEvent>
-#include <qfile.h>
+#include <QFile>
+#include <QStyle>
 
-#include <kdebug.h>
-#include <kcursor.h>
-#include <kapplication.h>
-#include <kiconeffect.h>
-#include <kiconloader.h>
+#include <KDebug>
+#include <KCursor>
+#include <KApplication>
+#include <KIconEffect>
+#include <KIconLoader>
 #include <KGlobalSettings>
+#include <KAction>
 
 using namespace KexiUtils;
 
@@ -651,6 +652,25 @@ bool StaticSetOfStrings::contains( const QByteArray& string ) const
 			d->set->insert(QByteArray::fromRawData(*p, qstrlen(*p)+1));
 	}
 	return d->set->contains(string);
+}
+
+//---------------------
+
+KTextEditorFrame::KTextEditorFrame( QWidget * parent, Qt::WindowFlags f )
+ : QFrame(parent, f)
+{
+	QEvent dummy(QEvent::StyleChange);
+	changeEvent(&dummy);
+};
+
+void KTextEditorFrame::changeEvent(QEvent *event)
+{
+	if (event->type()==QEvent::StyleChange) {
+		if (style()->objectName()!="oxygen") // oxygen already nicely paints the frame
+			setFrameStyle(QFrame::Sunken|QFrame::StyledPanel);
+		else
+			setFrameStyle(QFrame::NoFrame);
+	}
 }
 
 #include "utils_p.moc"

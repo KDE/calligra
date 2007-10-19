@@ -27,12 +27,14 @@
 #include <QDateTime>
 #include <QMetaMethod>
 #include <QFont>
+#include <QFrame>
 
 #include <KMimeType>
 #include <kiconloader.h>
 
 class QColor;
 class QMetaProperty;
+class KAction;
 
 //! @short General Utils
 namespace KexiUtils
@@ -345,7 +347,8 @@ namespace KexiUtils
 
 	//! @short Autodeleted hash
 	template <class Key, class T>
-	class KEXIUTILS_EXPORT AutodeletedHash : public QHash<Key, T> {
+	class KEXIUTILS_EXPORT AutodeletedHash : public QHash<Key, T>
+	{
 		public:
 			AutodeletedHash(const AutodeletedHash& other) : QHash<Key, T>(other), m_autoDelete(false) {}
 			AutodeletedHash(bool autoDelete = true) : QHash<Key, T>(), m_autoDelete(autoDelete) {}
@@ -358,7 +361,8 @@ namespace KexiUtils
 
 	//! @short Autodeleted list
 	template <typename T>
-	class KEXIUTILS_EXPORT AutodeletedList : public QList<T> {
+	class KEXIUTILS_EXPORT AutodeletedList : public QList<T>
+	{
 		public:
 			AutodeletedList(const AutodeletedList& other)
 				: QList<T>(other), m_autoDelete(false) {}
@@ -427,7 +431,8 @@ namespace KexiUtils
 	//! @short Case insensitive hash container supporting QString or QByteArray keys. 
 	//! Keys are turned to lowercase before inserting. Also supports option for autodeletion.
 	template <typename Key, typename T>
-	class KEXIUTILS_EXPORT CaseInsensitiveHash : public QHash<Key, T> {
+	class KEXIUTILS_EXPORT CaseInsensitiveHash : public QHash<Key, T>
+	{
 		public:
 			CaseInsensitiveHash() : QHash<Key, T>(), m_autoDelete(false) {}
 			~CaseInsensitiveHash() { if (m_autoDelete) qDeleteAll(*this); }
@@ -468,6 +473,16 @@ namespace KexiUtils
 		private:
 			class Private;
 			Private * const d;
+	};
+
+	/*! A modified QFrame which sets up sunken styled panel frame style depending 
+	 on the current widget style. The widget also reacts on style changes. */
+	class KEXIUTILS_EXPORT KTextEditorFrame : public QFrame
+	{
+		public:
+			KTextEditorFrame( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+		protected:
+			virtual void changeEvent(QEvent *event);
 	};
 }
 
