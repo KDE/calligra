@@ -52,7 +52,7 @@ void ChangeTracker::contentsChange (int from, int charsRemoves, int charsAdded) 
         QTextCursor cursor(m_document);
         cursor.setPosition(from);
         cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
-        kDebug(32500) <<"   added text: \"" << cursor.selectedText() <<"\"";
+        kDebug(32500) <<"   added text:" << cursor.selectedText();
     }
     else {
         bool prev = m_tool->m_allowAddUndoCommand;
@@ -68,8 +68,8 @@ void ChangeTracker::contentsChange (int from, int charsRemoves, int charsAdded) 
         cursor.setPosition(from);
         cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
 
-        kDebug(32500) <<"   - \"" << previousText <<"\"";
-        kDebug(32500) <<"   + \"" << cursor.selectedText() <<"\"";
+        kDebug(32500) <<"   - " << previousText;
+        kDebug(32500) <<"   + " << cursor.selectedText();
     }
 
     m_enableSignals = true;
