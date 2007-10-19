@@ -54,10 +54,10 @@ class KexiTableViewHeaderStyle : public KexiUtils::StyleProxy
 				newOption.palette.setColor(QPalette::Button, m_backgroundColor);
 				//set background color as well (e.g. for thinkeramik)
 				newOption.palette.setColor(QPalette::Window, m_backgroundColor);
-				m_style->drawControl( ce, &newOption, painter, widget );
+				StyleProxy::drawControl( ce, &newOption, painter, widget );
 				return;
 			}
-			m_style->drawControl( ce, option, painter, widget );
+			StyleProxy::drawControl( ce, option, painter, widget );
 		}
 
 		void setBackgroundColor( const QColor& color ) { m_backgroundColor = color; }

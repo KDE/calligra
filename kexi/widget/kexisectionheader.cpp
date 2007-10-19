@@ -19,6 +19,7 @@
 
 #include "kexisectionheader.h"
 #include <kexiutils/utils.h>
+#include <kexiutils/SmallToolButton.h>
 #include <KexiView.h>
 
 #include <QLabel>
@@ -90,7 +91,8 @@ KexiSectionHeader::KexiSectionHeader(const QString &caption,
 
 	d->lbl_b = new KHBox(this);
 	d->lyr->addWidget(d->lbl_b);
-	d->lbl = new QLabel(QString(" ")+caption, d->lbl_b);
+	d->lbl = new QLabel(caption, d->lbl_b);
+	d->lbl->setContentsMargins(6,0,0,0);
 	d->lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
 	//d->lbl->setFocusPolicy(Qt::StrongFocus);
 	d->lbl->setAutoFillBackground(true);
@@ -124,18 +126,16 @@ void KexiSectionHeader::setWidget( QWidget * widget )
 void KexiSectionHeader::addButton(const KIcon& icon, const QString& toolTip,
 	const QObject * receiver, const char * member)
 {
-	KPushButton *btn = new KPushButton(icon, QString(), d->lbl_b);
-	btn->setFlat(true);
-	btn->setFocusPolicy(Qt::NoFocus);
-	btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+	KexiSmallToolButton *btn = new KexiSmallToolButton(icon, QString(), d->lbl_b);
+//	btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 	if (receiver && member) {
 		connect(btn, SIGNAL(clicked()), receiver, member);
 	}
 
-	if (!icon.isNull()) {
+/*	if (!icon.isNull()) {
 		QFontMetrics fm(d->lbl->font());
 		btn->setMaximumHeight( qMax(fm.height(), 16) );
-	}
+	}*/
 	if (!toolTip.isEmpty())
 		btn->setToolTip( toolTip);
 }
@@ -172,6 +172,16 @@ QSize KexiSectionHeader::sizeHint() const
 		return QWidget::sizeHint();
 	QSize s( item->widget()->sizeHint() );
 	return QSize(s.width(), d->lbl->sizeHint().height() + s.height());
+}
+
+void KexiSectionHeader::setCaption(const QString& caption)
+{
+	d->lbl->setText(caption);
+}
+
+QString KexiSectionHeader::caption() const
+{
+	return d->lbl->text();
 }
 
 /*void KexiSectionHeader::setFocus()

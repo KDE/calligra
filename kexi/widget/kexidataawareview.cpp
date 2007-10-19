@@ -22,6 +22,7 @@
 #include <kexidataawareobjectiface.h>
 #include <utils/kexisharedactionclient.h>
 #include <core/KexiMainWindowIface.h>
+#include <core/KexiStandardAction.h>
 #include <KActionCollection>
 
 #include <qlayout.h>
@@ -85,10 +86,9 @@ void KexiDataAwareView::initActions()
 //		a = new KAction(this);
 //		a->setSeparator(true);
 //		viewActions << a;
-		viewActions << (a = dynamic_cast<KAction*>( sharedAction("data_sort_az") ));
-		connect(a, SIGNAL(triggered()), this, SLOT(sortAscending()));
-		viewActions << (a = dynamic_cast<KAction*>( sharedAction("data_sort_za") ));
-		connect(a, SIGNAL(triggered()), this, SLOT(sortDescending()));
+		viewActions
+			<< KexiStandardAction::sortAscending(this, SLOT(sortAscending()), this)
+			<< KexiStandardAction::sortDescending(this, SLOT(sortDescending()), this);
 	}
 	KActionCollection *ac = KexiMainWindowIface::global()->actionCollection();
 	viewActions << (a = dynamic_cast<KAction*>( ac->action("edit_find") ));

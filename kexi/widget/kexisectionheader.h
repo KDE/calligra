@@ -47,6 +47,9 @@ class KEXIEXTWIDGETS_EXPORT KexiSectionHeader : public QWidget
 
 		virtual QSize sizeHint() const;
 
+		void setCaption(const QString& caption);
+		QString caption() const;
+
 	public slots:
 		void slotFocus(bool in);
 

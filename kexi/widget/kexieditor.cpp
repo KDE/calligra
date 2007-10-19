@@ -22,16 +22,12 @@
 #include "kexieditor.h"
 
 #include <KexiMainWindowIface.h>
+#include <kexiutils/utils.h>
 
-#include <qlayout.h>
-#include <q3frame.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3ValueList>
-#include <Q3CString>
-#include <Q3PopupMenu>
-#include <klocale.h>
-#include <kdebug.h>
+#include <QLayout>
+#include <QList>
+#include <QMenu>
+#include <KDebug>
 
 //uncomment this to enable KTextEdit-based editor
 //#define KTEXTEDIT_BASED_SQL_EDITOR
@@ -62,7 +58,7 @@ public:
 		plugSharedAction("edit_redo", SLOT(redo()));
                 plugSharedAction("edit_select_all", SLOT(selectAll()));
 #else
-		Q3ValueList<Q3CString> actions;
+		QList<QByteArray> actions;
 		actions << "edit_cut" << "edit_copy" << "edit_paste" << "edit_clear"
 			<< "edit_undo" << "edit_redo" << "edit_select_all";
 #ifdef __GNUC__
@@ -101,9 +97,7 @@ KexiEditor::KexiEditor(QWidget *parent)
 	d->view->setFont( f );
 	d->view->setCheckSpellingEnabled(false);
 #else
-	QFrame *fr = new QFrame(this);
-	fr->setFrameStyle(QFrame::Sunken|QFrame::StyledPanel);
-//	layout->addWidget(fr);
+	KexiUtils::KTextEditorFrame *fr = new KexiUtils::KTextEditorFrame(this);
 	QVBoxLayout *layout = new QVBoxLayout(fr);
 	layout->setContentsMargins( 2,2,2,2 );
 
