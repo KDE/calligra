@@ -1104,3 +1104,13 @@ TODO
 
 TODO
 - implement more mimetypes for blob fields
+
+== TODOs for 2.0 ==
+Query Designer
+- fix selecting table items with mouse click
+- fix painting for sql history
+Table Designer
+- update state of "PK" button when user moves cursor between table rows
+Table View
+- set inital scroll to (0,0)
+- fix displaying cells when scrolled vertically

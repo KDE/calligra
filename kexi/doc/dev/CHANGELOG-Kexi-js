@@ -58,6 +58,24 @@ HINT:
   removeCurrentPropertySet() is now called eraseCurrentPropertySet()
 
 ===================== Kexi 2.0 Alpha =====================
+2007-10-18..19
+Table View
+- fixed highlighting current table column
+- fixed regression: a crash when could not find item using "Find" dialog
+Main Window
+= do not display property editor initially
+Core
+- KexiStandardAction introduced, usable when putting local, nonshared actions into individual panes/windows
+- fixed behaviour of switching between views
+Query Designer
+- fixed layout and painting for sql history (incomplete)
+
+2007-10-16
+Main Window
+- tabbed toolbar now honours menuFont and toolBarFont KDE settings as well as reacts to changes of these
+- hide property editor if there is no project opened
+Query Designer
+- fixed regression in loading condition info
 
 2007-10-15
 KexiDB
