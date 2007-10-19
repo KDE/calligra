@@ -54,7 +54,6 @@ void KWFrameSet::removeFrame(KWFrame *frame) {
 
 #ifndef NDEBUG
 void KWFrameSet::printDebug() {
-    //kDebug(32001) <<" |  Visible:" << isVisible();
     int i=1;
     foreach(KWFrame *frame, frames()) {
         kDebug(32001) <<" +-- Frame" << i++ <<" of"<< frameCount() <<"    (" << frame <<")" <<
@@ -80,6 +79,7 @@ void KWFrameSet::printDebug(KWFrame *frame) {
     }
     kDebug(32001) <<"     frameOnBothSheets:"<< frame->frameOnBothSheets();
     kDebug(32001) <<"     Z Order:" << frame->shape()->zIndex();
+    kDebug(32001) <<"     Visible:" << frame->shape()->isVisible();
 
     //kDebug(32001) <<"     minFrameHeight"<< frame->minimumFrameHeight();
     //QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
