@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,16 +37,19 @@
 KexiQueryDesignerSQLHistory::KexiQueryDesignerSQLHistory(QWidget *parent)
  : Q3ScrollView(parent)
 {
-	QPalette pal(viewport()->palette());
+/*Qt 3	QPalette pal(viewport()->palette());
 	pal.setBrush(QPalette::Active, QPalette::Background, QBrush(Qt::white));
-	viewport()->setPalette(pal);
+	viewport()->setPalette(pal);*/
+	viewport()->setBackgroundRole(QPalette::Base);
 
 	m_selected = 0;
+	m_prevColorGroup = QPalette::Active;
 	m_history = new History();
 
 	m_popup = new KMenu(this);
 	m_popup->addAction(KIcon("edit-copy"), i18n("Copy to Clipboard"),
 		this, SLOT(slotToClipboard()));
+	installEventFilter(this);
 }
 
 KexiQueryDesignerSQLHistory::~KexiQueryDesignerSQLHistory()
@@ -59,15 +62,15 @@ void KexiQueryDesignerSQLHistory::drawContents(QPainter *p, int cx, int cy, int 
 {
 	QRect clipping(cx, cy, cw, ch);
 
-	qreal y = 0.0;
+	qreal y = cy;
 	foreach (HistoryEntry *historyEntry, *m_history) {
-		if (clipping.intersects(historyEntry->geometry((int)y, visibleWidth(), fontMetrics()))) {
+//		if (clipping.intersects(historyEntry->geometry((int)y, visibleWidth(), fontMetrics()))) {
 			//Qt3 p->saveWorldMatrix();
 			p->translate(0.0, y);
-			historyEntry->drawItem(p, visibleWidth(), colorGroup());
+			historyEntry->drawItem(p, visibleWidth());
 			//Qt3 p->restoreWorldMatrix();
 			p->resetTransform();
-		}
+//		}
 		y += qreal( historyEntry->geometry(y, visibleWidth(), fontMetrics()).height() ) + 5.0;
 	}
 }
@@ -80,7 +83,7 @@ void KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 	foreach (HistoryEntry *historyEntry, *m_history) {
 		if (historyEntry->isSelected()) {
 			//clear
-			historyEntry->setSelected(false, colorGroup());
+			historyEntry->setSelected(false);
 			updateContents(historyEntry->geometry(y, visibleWidth(), fontMetrics()));
 		}
 
@@ -94,11 +97,11 @@ void KexiQueryDesignerSQLHistory::contentsMousePressEvent(QMouseEvent * e)
 	//now do update
 	if (popupHistory) {
 		if (m_selected && m_selected != popupHistory) {
-			m_selected->setSelected(false, colorGroup());
+			m_selected->setSelected(false);
 			updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
 		}
 		m_selected = popupHistory;
-		m_selected->setSelected(true, colorGroup());
+		m_selected->setSelected(true);
 		updateContents(m_selected->geometry(pos, visibleWidth(), fontMetrics()));
 		if(e->button() == Qt::RightButton) {
 			m_popup->exec(e->globalPos());
@@ -118,12 +121,12 @@ void KexiQueryDesignerSQLHistory::addEvent(const QString& q, bool s, const QStri
 	if (!m_history->isEmpty()) {
 		HistoryEntry *he = m_history->last();
 		if (he->statement()==q) {
-			he->updateTime(QTime::currentTime());
+			he->setTime(QTime::currentTime());
 			repaint();
 			return;
 		}
 	}
-	addEntry(new HistoryEntry(s, QTime::currentTime(), q, error));
+	addEntry(new HistoryEntry(this, s, QTime::currentTime(), q, error));
 }
 
 void KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
@@ -138,10 +141,10 @@ void KexiQueryDesignerSQLHistory::addEntry(HistoryEntry *e)
 
 	resizeContents(visibleWidth() - 1, y);
 	if (m_selected) {
-		m_selected->setSelected(false, colorGroup());
+		m_selected->setSelected(false);
 	}
 	m_selected = e;
-	m_selected->setSelected(true, colorGroup());
+	m_selected->setSelected(true);
 	ensureVisible(0,y+5);
 	updateContents();
 /*	ensureVisible(0, 0);
@@ -198,6 +201,7 @@ void KexiQueryDesignerSQLHistory::clear()
 {
 	m_selected = 0;
 	qDeleteAll(*m_history);
+	m_history->clear();
 	updateContents();
 }
 
@@ -206,17 +210,34 @@ KMenu* KexiQueryDesignerSQLHistory::popupMenu() const
 	return m_popup;
 }
 
+bool KexiQueryDesignerSQLHistory::eventFilter(QObject *obj, QEvent *event)
+{
+	const bool res = Q3ScrollView::eventFilter(obj, event);
+	if (m_selected && (event->type() == QEvent::FocusIn || event->type() == QEvent::FocusOut
+		|| event->type() == QEvent::WindowActivate || event->type() == QEvent::WindowDeactivate))
+	{
+		if (m_prevColorGroup != palette().currentColorGroup()) {
+			// update palette of selected text
+			m_selected->highlight();
+			m_prevColorGroup = palette().currentColorGroup();
+		}
+	}
+	return res;
+}
+
 //==================================
 
-HistoryEntry::HistoryEntry(bool succeed, const QTime &execTime, 
+HistoryEntry::HistoryEntry(KexiQueryDesignerSQLHistory *parent, bool succeed, const QTime &execTime, 
 	const QString &statement, /*int ,*/ const QString &err)
 {
-	m_succeed = succeed;
+	m_parent = parent;
+	m_formated = 0;
+	m_succeeded = succeed;
 	m_execTime = execTime;
 	m_statement = statement;
 	m_error = err;
 	m_selected = false;
-	highlight(QColorGroup());
+	highlight();
 }
 
 HistoryEntry::~HistoryEntry()
@@ -224,44 +245,54 @@ HistoryEntry::~HistoryEntry()
 	delete m_formated;
 }
 
-void HistoryEntry::drawItem(QPainter *p, int width, const QColorGroup &cg)
+void HistoryEntry::drawItem(QPainter *p, int width)
 {
-	p->setPen(QColor(200, 200, 200));
-	p->setBrush(QColor(200, 200, 200));
-	p->drawRect(2, 2, 200, 20);
-	p->setPen(QColor(0, 0, 0));
+	QBrush bgBrush, fgBrush;
+	QBrush textBrush, highlightedTextBrush, highlightedBgBrush;
+	bgBrush = m_parent->palette().brush( QPalette::Button );
+	fgBrush = m_parent->palette().brush( QPalette::ButtonText );
+	textBrush = m_parent->palette().brush( QPalette::Text );
+	highlightedTextBrush = m_parent->palette().brush( QPalette::HighlightedText );
+	highlightedBgBrush = m_parent->palette().brush( QPalette::Highlight );
 
-	if(m_succeed)
+	p->setBrush(bgBrush);
+	p->setPen(Qt::transparent);
+	int lineHeight = QFontMetrics(p->font()).height();
+	p->drawRect(2, 2, 150, lineHeight);
+
+	if(m_succeeded)
 		p->drawPixmap(4, 4, SmallIcon("dialog-ok"));
 	else
-		p->drawPixmap(4, 4, SmallIcon("dialog-cancel"));
+		p->drawPixmap(4, 4, SmallIcon("dialog-error"));
 
-	p->drawText(22, 2, 180, 20, Qt::AlignLeft | Qt::AlignVCenter, m_execTime.toString());
-	p->setPen(QColor(200, 200, 200));
-	p->setBrush(QColor(255, 255, 255));
+	p->setPen(fgBrush.color());
+	p->setBrush(fgBrush);
+	p->drawText(22, 2, 150, lineHeight, Qt::AlignLeft | Qt::AlignVCenter, m_execTimeString);
+	p->setPen(bgBrush.color());
+	p->setBrush(bgBrush);
 	m_formated->setWidth(width - 2);
-	QRect content(2, 21, width - 2, m_formated->height());
+	QRect content(2, lineHeight+1, width - 2, m_formated->height());
 //	QRect content = p->fontMetrics().boundingRect(2, 21, width - 2, 0, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
 //	QRect content(2, 21, width - 2, p->fontMetrics().height() + 4);
 //	content = QRect(2, 21, width - 2, m_for.height());
 
-	if(m_selected)
-		p->setBrush(cg.highlight());
-
+	if (m_selected)
+		p->setBrush(highlightedBgBrush);
+	
 	p->drawRect(content);
 
-	if(!m_selected)
-		p->setPen(cg.text());
+	if (m_selected)
+		p->setPen( highlightedTextBrush.color() );
 	else
-		p->setPen(cg.highlightedText());
+		p->setPen( textBrush.color() );
 
 	content.setX(content.x() + 2);
 	content.setWidth(content.width() - 2);
 //	p->drawText(content, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement);
-	m_formated->draw(p, content.x(), content.y(), content, cg);
+	m_formated->draw(p, content.x(), content.y(), content, QColorGroup(m_parent->palette()));
 }
 
-void HistoryEntry::highlight(const QColorGroup &cg)
+void HistoryEntry::highlight()
 {
 	QString text;
 	bool quote = false;
@@ -309,13 +340,15 @@ void HistoryEntry::highlight(const QColorGroup &cg)
 		}
 	}
 	else {
-		text = QString("<font color=\"%1\">%2").arg(cg.highlightedText().name()).arg(statement);
+		QColor highlightedTextColor = m_parent->palette().color( 
+			m_parent->palette().currentColorGroup()==QPalette::Active ? QPalette::HighlightedText : QPalette::Text );
+		text = QString("<font color=\"%1\">").arg(highlightedTextColor.name()) + statement;
 	}
 
 //! @todo reuse KTextEditor's SQL highlighting or KexiDB parser's set of reserved words
 	QRegExp keywords("\\b(SELECT|UPDATE|INSERT|DELETE|DROP|FROM|WHERE|AND|OR|NOT|"
 		"NULL|JOIN|LEFT|RIGHT|ON|INTO|TABLE)\\b");
-	keywords.setCaseSensitive(false);
+	keywords.setCaseSensitivity(Qt::CaseInsensitive);
 	text = text.replace(keywords, "<b>\\1</b>");
 
 	if (!m_error.isEmpty()) {
@@ -325,33 +358,31 @@ void HistoryEntry::highlight(const QColorGroup &cg)
 			+ QString("\">") + i18n("Error: %1", m_error) + "</font>";
 	}
 
-	kDebug() << "HistoryEntry::highlight() text:" << text << endl;
-//	m_formated = new QSimpleRichText(text, QFont("courier", 8));
+	//kDebug() << "HistoryEntry::highlight() text:" << text << endl;
+	delete m_formated;
 	m_formated = new Q3SimpleRichText(text, KGlobalSettings::fixedFont());
-
 }
 
 void
-HistoryEntry::setSelected(bool selected, const QColorGroup &cg)
+HistoryEntry::setSelected(bool selected)
 {
 	m_selected = selected;
-	highlight(cg);
+	highlight();
 }
 
-QRect
-HistoryEntry::geometry(int y, int width, QFontMetrics f)
+QRect HistoryEntry::geometry(int y, int width, const QFontMetrics& f)
 {
-	Q_UNUSED( f );
-
 //	int h = 21 + f.boundingRect(2, 21, width - 2, 0, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter, m_statement).height();
 //	return QRect(0, y, width, h);
+	int lineHeight = f.height();
 	m_formated->setWidth(width - 2);
-	return QRect(0, y, width, m_formated->height() + 21);
+	return QRect(0, y, width, m_formated->height() + lineHeight + 1);
 }
 
-void HistoryEntry::updateTime(const QTime &execTime)
+void HistoryEntry::setTime(const QTime &execTime)
 {
 	m_execTime = execTime;
+	m_execTimeString = KGlobal::locale()->formatTime(m_execTime);
 }
 
 #include "kexiquerydesignersqlhistory.moc"

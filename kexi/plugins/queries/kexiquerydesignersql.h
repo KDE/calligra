@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@ class KexiQueryDesignerSQLView : public KexiView
 		QString sqlText() const;
 		KexiQueryDesignerSQLEditor *editor() const;
 
-		virtual bool eventFilter ( QObject *o, QEvent *e );
+//		virtual bool eventFilter ( QObject *o, QEvent *e );
 
 	protected:
 		KexiQueryPart::TempData * tempData() const;

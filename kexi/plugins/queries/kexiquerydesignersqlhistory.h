@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2007 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,33 +29,36 @@
 
 class Q3SimpleRichText;
 class KMenu;
+class KexiQueryDesignerSQLHistory;
 
 class HistoryEntry
 {
 	public:
-		HistoryEntry(bool success, const QTime &time, 
+		HistoryEntry(KexiQueryDesignerSQLHistory *parent, bool success, const QTime &time, 
 			const QString &statement, /*int y,*/ const QString &error = QString());
 		~HistoryEntry();
 
-		QRect	geometry(int y, int width, QFontMetrics f);
-		void	drawItem(QPainter *p, int width, const QColorGroup &cg);
+		QRect geometry(int y, int width, const QFontMetrics& f);
+		void drawItem(QPainter *p, int width);
 
-		void	setSelected(bool selected, const QColorGroup &cg);
-		bool	isSelected() const { return m_selected; }
-		void	highlight(const QColorGroup &selected);
+		void setSelected(bool selected);
+		bool isSelected() const { return m_selected; }
+		void highlight();
 
-		QString	statement() { return m_statement; }
-		void updateTime(const QTime &execTime);
+		QString statement() const { return m_statement; }
+		void setTime(const QTime &execTime);
 
 	private:
-		bool	m_succeed;
-		QTime	m_execTime;
-		QString	m_statement;
+		QTime m_execTime;
+		QString m_execTimeString;
+		QString m_statement;
 		QString m_error;
-		Q3SimpleRichText	*m_formated;
+		Q3SimpleRichText *m_formated;
+		KexiQueryDesignerSQLHistory *m_parent;
 
-		int	m_y;
-		bool	m_selected;
+		int m_y;
+		bool m_succeeded : 1;
+		bool m_selected : 1;
 };
 
 typedef QList<HistoryEntry*> History;
@@ -91,6 +94,7 @@ class KexiQueryDesignerSQLHistory : public Q3ScrollView
 		virtual void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		virtual void contentsMousePressEvent(QMouseEvent * e);
 		virtual void contentsMouseDoubleClickEvent(QMouseEvent * e);
+		virtual bool eventFilter(QObject *obj, QEvent *event);
 
 	signals:
 		void editRequested(const QString &text);
@@ -99,6 +103,7 @@ class KexiQueryDesignerSQLHistory : public Q3ScrollView
 	private:
 		History *m_history;
 		HistoryEntry *m_selected;
+		QPalette::ColorGroup m_prevColorGroup;
 		KMenu *m_popup;
 };
 
