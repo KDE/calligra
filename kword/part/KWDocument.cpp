@@ -514,6 +514,11 @@ void KWDocument::clear() {
 
 bool KWDocument::loadOasis(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store) {
     clear();
+    foreach(KoView *view, views()) {
+        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, true);
+    }
+
     KWOpenDocumentLoader loader(this);
     bool rc = loader.load(doc, styles, settings, store);
     if (rc)
@@ -522,8 +527,12 @@ bool KWDocument::loadOasis(const KoXmlDocument& doc, KoOasisStyles& styles, cons
 }
 
 bool KWDocument::loadXML( QIODevice *, const KoXmlDocument & doc ) {
-    KoXmlElement root = doc.documentElement();
+    foreach(KoView *view, views()) {
+        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, true);
+    }
     clear();
+    KoXmlElement root = doc.documentElement();
     KWDLoader loader(this);
     bool rc = loader.load(root);
     if (rc)
@@ -649,9 +658,12 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 }
 
 bool KWDocument::completeLoading (KoStore *store) {
-    if(! m_imageCollection->loadFromStore(store))
-        return false;
-    return true;
+    const bool ok = m_imageCollection->loadFromStore(store);
+    foreach(KoView *view, views()) {
+        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, false);
+    }
+    return ok;
 }
 
 
