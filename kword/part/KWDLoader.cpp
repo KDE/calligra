@@ -1009,10 +1009,12 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
     else if(side == "right")
         frame->setRunAroundSide(KWord::RightRunAroundSide);
 
-    frame->shape()->setZIndex(frameElem.attribute("z-index", "1").toInt());
+    int zIndex = frameElem.attribute("z-index", "0").toInt();
 
     KWTextFrame *tf = dynamic_cast<KWTextFrame*> (frame);
     if(tf) {
+        if (zIndex <= 0 && static_cast<KWTextFrameSet*> (tf->frameSet())->textFrameSetType() == KWord::OtherTextFrameSet)
+            zIndex = 1; // OtherTextFrameSet types always live on top of the main frames.
         KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*> (frame->shape()->userData());
         Q_ASSERT(textShapeData);
         KoInsets margins;
@@ -1023,6 +1025,10 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
 
         textShapeData->setShapeMargins(margins);
     }
+    else
+        zIndex = qMax(zIndex, 1); // non-text types always live on top of the main frames.
+
+    frame->shape()->setZIndex(zIndex);
 }
 
 void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement) {
