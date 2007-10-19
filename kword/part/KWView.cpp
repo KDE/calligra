@@ -1045,9 +1045,12 @@ void KWView::selectionChanged()
     KoShape *shape = kwcanvas()->shapeManager()->selection()-> firstSelectedShape();
     m_actionFormatFrameSet->setEnabled( shape != 0 );
     if(shape) {
-        m_currentPage = m_document->pageManager()->page(shape);
-        m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage->pageNumber());
-        m_zoomController->setPageSize(m_currentPage->rect().size());
+        KWPage *currentPage = m_document->pageManager()->page(shape);
+        if (currentPage != m_currentPage) {
+            m_currentPage = currentPage;
+            m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage->pageNumber());
+            m_zoomController->setPageSize(m_currentPage->rect().size());
+        }
     }
     // actions need at least one shape selected
     actionCollection()->action("create_linked_frame")->setEnabled(shape);
