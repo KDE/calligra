@@ -661,7 +661,7 @@ KTextEditorFrame::KTextEditorFrame( QWidget * parent, Qt::WindowFlags f )
 {
 	QEvent dummy(QEvent::StyleChange);
 	changeEvent(&dummy);
-};
+}
 
 void KTextEditorFrame::changeEvent(QEvent *event)
 {
