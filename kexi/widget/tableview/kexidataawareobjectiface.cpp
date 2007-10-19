@@ -2078,8 +2078,8 @@ tristate KexiDataAwareObjectInterface::find(const QVariant& valueToFind,
 
 	// search
 	const int prevRow = m_curRow;
-	KexiDB::RecordData *record;
-	while ( (record = *it) ) {
+	KexiDB::RecordData *record = 0;
+	while ( (it != m_data->constEnd() && (record = *it)) ) {
 		for (; forward ? col <= lastColumn : col >= lastColumn; 
 			col = forward ? (col+1) : (col-1))
 		{
