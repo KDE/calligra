@@ -49,55 +49,6 @@
 #include <KActionCollection>
 #include <KDialog>
 
-class KexiToggleViewModeAction::Private
-{
-	public:
-		Private()
-		{
-		}
-	Kexi::ViewMode mode;
-};
-
-KexiToggleViewModeAction::KexiToggleViewModeAction(
-	Kexi::ViewMode mode, QObject* parent, QObject* receiver, const char* slot)
- : KAction(
-	KIcon( Kexi::iconNameForViewMode(mode) ), 
-	Kexi::nameForViewMode( mode, true/*withAmpersand*/),
-	parent )
- , d( new Private )
-{
-	d->mode = mode;
-	connect(this, SIGNAL(toggled(bool)), this, SLOT(slotToggled(bool)));
-	if (receiver && slot)
-		connect(this, SIGNAL(switchedTo(Kexi::ViewMode)), receiver, slot);
-	setCheckable(true);
-	if (d->mode == Kexi::DataViewMode) {
-		setObjectName("view_data_mode");
-		setToolTip(i18n("Switch to data view"));
-		setWhatsThis(i18n("Switches to data view."));
-	}
-	else if (d->mode == Kexi::DesignViewMode) {
-		setObjectName("view_design_mode");
-		setToolTip(i18n("Switch to design view"));
-		setWhatsThis(i18n("Switches to design view."));
-	}
-	else if (d->mode == Kexi::TextViewMode) {
-		setObjectName("view_text_mode");
-		setToolTip(i18n("Switch to text view"));
-		setWhatsThis(i18n("Switches to text view."));
-	}
-	else {
-		kexiwarn << "KexiToggleViewModeAction: invalid mode " << mode << endl;
-	}
-}
-
-void KexiToggleViewModeAction::slotToggled(bool checked)
-{
-	if (!checked)
-		return;
-	emit switchedTo(d->mode);
-}
-
 //----------------------------------------------------------
 
 //! @internal

@@ -36,6 +36,24 @@ namespace KexiDB {
 	class SchemaData;
 }
 
+//! @short action for toggling view mode
+class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
+{
+	//Q_OBJECT
+	public:
+		//! Creates action for toggling to view mode @a mode. @a slot should have signature 
+		//! matching switchedTo(Kexi::ViewMode mode) signal.
+		KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent);//, QObject* receiver, const char* slot);
+/*	signals:
+		void switchedTo(Kexi::ViewMode mode);
+	private slots:
+		void slotToggled(bool);
+
+	private:
+		class Private;
+		Private * const d;*/
+};
+
 //! Base class for single view embeddable in KexiWindow.
 /*! This class automatically works as a proxy for shared (application-wide) actions.
  KexiView has 'dirty' flag to indicate that view's data has changed.
@@ -298,6 +316,9 @@ class KEXICORE_EXPORT KexiView : public QWidget, public KexiActionProxy
 		bool m_dirty : 1; */
 	private slots:
 		void slotSwitchToViewModeInternal(Kexi::ViewMode mode);
+		void slotSwitchToDataViewModeInternal(bool);
+		void slotSwitchToDesignViewModeInternal(bool);
+		void slotSwitchToTextViewModeInternal(bool);
 
 	private:
 		void createViewModeToggleButtons();

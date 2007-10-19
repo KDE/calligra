@@ -12,8 +12,8 @@ set(kexicore_LIB_SRCS
    kexi_global.cpp 
    kexi.cpp 
    kexiaboutdata.cpp 
-#   keximdi.cpp
    KexiMainWindowIface.cpp
+   KexiStandardAction.cpp
    kexidbconnectionset.cpp 
    kexiprojectset.cpp 
    kexiactionproxy.cpp 

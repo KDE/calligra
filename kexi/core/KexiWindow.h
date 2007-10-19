@@ -47,24 +47,6 @@ namespace KoProperty {
 	class Set;
 }
 
-//! @short action for toggling view mode
-class KEXICORE_EXPORT KexiToggleViewModeAction : public KAction
-{
-	Q_OBJECT
-	public:
-		//! Creates action for toggling to view mode @a mode. @a slot should have signature 
-		//! matching switchedTo(Kexi::ViewMode mode) signal.
-		KexiToggleViewModeAction(Kexi::ViewMode mode, QObject* parent, QObject* receiver, const char* slot);
-	signals:
-		void switchedTo(Kexi::ViewMode mode);
-	private slots:
-		void slotToggled(bool);
-
-	private:
-		class Private;
-		Private * const d;
-};
-
 //! Base class for child window of Kexi's main application window.
 /*! This class can contain a number of configurable views, switchable using toggle action.
  It also automatically works as a proxy for shared (application-wide) actions. */
