@@ -763,6 +763,23 @@ QWidget* KWDocument::createCustomDocumentWidget(QWidget *parent) {
     return new KWStartupWidget(parent, this, columns);
 }
 
+void KWDocument::saveConfig()
+{
+    if ( !isReadWrite() )
+        return;
+//   KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
+//   group.writeEntry( "PersonalDict", m_spellCheckPersonalDict );
+
+    if (isEmbedded() )
+        return;
+    m_config.save();
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup interface = config->group( "Interface" );
+    interface.writeEntry( "ResolutionX", gridData().gridX() );
+    interface.writeEntry( "ResolutionY", gridData().gridY() );
+}
+
+
 // ************* PageProcessingQueue ************
 PageProcessingQueue::PageProcessingQueue(KWDocument *parent) {
     m_document = parent;
@@ -784,21 +801,4 @@ void PageProcessingQueue::process() {
     m_pages.clear();
     deleteLater();
 }
-
-void KWDocument::saveConfig()
-{
-    if ( !isReadWrite() )
-        return;
-//   KConfigGroup group( KoGlobal::kofficeConfig(), "Spelling" );
-//   group.writeEntry( "PersonalDict", m_spellCheckPersonalDict );
-
-    if (isEmbedded() )
-        return;
-    m_config.save();
-    KSharedConfigPtr config = KGlobal::config();
-    KConfigGroup interface = config->group( "Interface" );
-    interface.writeEntry( "ResolutionX", gridData().gridX() );
-    interface.writeEntry( "ResolutionY", gridData().gridY() );
-}
-
 #include "KWDocument.moc"
