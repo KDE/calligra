@@ -214,11 +214,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QStringList &)
 #endif
 
 /*
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	KexiDataAwareWidgetInfo *wDate = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateWidget");
-#else
-	KexiDataAwareWidgetInfo *wDate = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QDateEdit");
-#endif
 	wDate->setPixmap("dateedit");
 	wDate->setClassName("KexiDBDateEdit");
 	wDate->addAlternateClassName("QDateEdit", true);//override
@@ -229,11 +225,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QStringList &)
 	wDate->setDescription(i18n("A widget to input and display a date"));
 	addClass(wDate);
 
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	KexiDataAwareWidgetInfo *wTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KTimeWidget");
-#else
-	KexiDataAwareWidgetInfo *wTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "QTimeEdit");
-#endif
 	wTime->setPixmap("timeedit");
 	wTime->setClassName("KexiDBTimeEdit");
 	wTime->addAlternateClassName("QTimeEdit", true);//override
@@ -244,11 +236,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const QStringList &)
 	wTime->setDescription(i18n("A widget to input and display a time"));
 	addClass(wTime);
 
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
 	KexiDataAwareWidgetInfo *wDateTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateTimeWidget");
-#else
-	KexiDataAwareWidgetInfo *wDateTime = new KexiDataAwareWidgetInfo(this, "stdwidgets", "KDateTimeWidget");
-#endif
 	wDateTime->setPixmap("datetimeedit");
 	wDateTime->setClassName("KexiDBDateTimeEdit");
 	wDateTime->addAlternateClassName("QDateTimeEdit", true);//override

@@ -55,9 +55,7 @@
 #include <KPageDialog>
 
 #include <kdeversion.h>
-//#if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9) && !defined(Q_WS_WIN)
-# include <kactioncollection.h>
-//#endif
+#include <kactioncollection.h>
 
 #include "widgetpropertyset.h"
 #include "objecttree.h"
