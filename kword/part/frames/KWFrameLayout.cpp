@@ -52,6 +52,8 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
 //kDebug() <<"createNewFramesForPage" << pageNumber;
     m_setup=false; // force reindexing of types
     KWPage *page = m_pageManager->page(pageNumber);
+    if (page == 0) // page already deleted, probably.
+        return;
 
     // Header footer handling.
     // first make a list of all types.
