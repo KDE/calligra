@@ -234,10 +234,10 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
 	const QString msg_back( i18n("Back to Selected Query"));
 	const QString msg_clear( i18n("Clear History") );
 	d->historyHead->addButton(KIcon("go-jump"), msg_back, this, SLOT(slotSelectQuery()));
-	d->historyHead->addButton(KIcon("clear-left"), msg_clear, d->history, SLOT(clear()));
+	d->historyHead->addButton(KIcon("edit-clear-locationbar-rtl"), msg_clear, d->history, SLOT(clear()));
 	d->history->popupMenu()->addAction(KIcon("go-jump"), msg_back,
 		this, SLOT(slotSelectQuery()));
-	d->history->popupMenu()->addAction(KIcon("clear-left"), msg_clear, 
+	d->history->popupMenu()->addAction(KIcon("edit-clear-locationbar-rtl"), msg_clear, 
 		d->history, SLOT(clear()));
 	connect(d->history, SIGNAL(currentItemDoubleClicked()), this, SLOT(slotSelectQuery()));
 

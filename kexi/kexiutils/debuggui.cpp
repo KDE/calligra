@@ -64,7 +64,7 @@ void KexiUtils::addKexiDBDebug(const QString& text)
 		QHBoxLayout *hbox = new QHBoxLayout(page);
 		vbox->addLayout(hbox);
 		hbox->addStretch(1);
-		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear-left"), page);
+		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "edit-clear-locationbar-rtl"), page);
 		hbox->addWidget(btn_clear);
 
 		kexiDBDebugPage = new K3ListView(page);
@@ -103,7 +103,7 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		KPushButton *btn_exec = new KPushButton(KGuiItem("Real Alter Table", "document-save"), page);
 		btn_exec->setObjectName("executeRealAlterTable");
 		hbox->addWidget(btn_exec);
-		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "clear-left"), page);
+		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "edit-clear-locationbar-rtl"), page);
 		hbox->addWidget(btn_clear);
 		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "exec"), page);
 		btn_sim->setObjectName("simulateAlterTableExecution");
