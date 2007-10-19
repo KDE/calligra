@@ -118,7 +118,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_changeTracker(0),
     m_allowActions(true),
     m_allowAddUndoCommand(true),
-    m_trackChanges(false),
+    m_trackChanges(true),
     m_allowResourceProviderUpdates(true),
     m_needSpellChecking(true),
     m_processingKeyPress(false),
@@ -349,6 +349,8 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
         if (factoryId == "spellcheck") {
             kDebug(32500) << "KOffice SpellCheck plugin found";
             m_spellcheckPlugin = plugin;
+            connect(m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+                m_spellcheckPlugin, SLOT(resourceChanged(int, const QVariant &)));
         }
         m_textEditingPlugins.insert(factory->id(), plugin);
     }
@@ -1180,7 +1182,7 @@ void TextTool::addUndoCommand() {
             if(! m_tool.isNull()) {
                 m_tool->stopMacro();
                 m_tool->m_allowAddUndoCommand = false;
-               if(m_tool->m_changeTracker)
+               if(m_tool->m_changeTracker && !m_tool->m_canvas->resourceProvider()->boolResource(KoCanvasResource::DocumentIsLoading))
                    m_tool->m_changeTracker->notifyForUndo();
                 m_document->undo(&m_tool->m_caret);
             }
