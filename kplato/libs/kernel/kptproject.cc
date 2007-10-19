@@ -274,10 +274,7 @@ void Project::calcCriticalPathList( MainSchedule *cs, Node *node )
 
 const QList< QList<Node*> > *Project::criticalPathList( long id )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s == 0 ) {
         kDebug()<<"No schedule with id="<<id<<endl;
         return 0;
@@ -292,10 +289,7 @@ const QList< QList<Node*> > *Project::criticalPathList( long id )
 
 QList<Node*> Project::criticalPath( long id, int index )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s == 0 ) {
         kDebug()<<"No schedule with id="<<id<<endl;
         return QList<Node*>();
@@ -310,19 +304,13 @@ QList<Node*> Project::criticalPath( long id, int index )
 
 DateTime Project::startTime( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->startTime : m_constraintStartTime;
 }
 
 DateTime Project::endTime(  long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->endTime : m_constraintEndTime;
 }
 

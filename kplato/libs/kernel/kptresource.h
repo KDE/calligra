@@ -377,12 +377,17 @@ public:
 
     bool isScheduled() const;
     QHash<long, Schedule*> &schedules() { return m_schedules; }
-    Schedule *findSchedule( long id ) const
-    {
-        if ( m_schedules.contains( id ) )
-            return m_schedules[ id ];
-        return 0;
-    }
+    /**
+     * Return schedule with @id
+     * If @id == -1, return m_currentSchedule
+     * Return 0 if schedule with @id doesn't exist.
+     */
+    Schedule *schedule( long id = -1 ) const;
+    /**
+     * Return schedule with @id
+     * Return 0 if schedule with @id doesn't exist.
+     */
+    Schedule *findSchedule( long id ) const;
     /// Take, and delete.
     void deleteSchedule( Schedule *schedule );
     /// Take, don't delete.

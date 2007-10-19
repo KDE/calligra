@@ -426,10 +426,7 @@ void Node::calcResourceOverbooked() {
 // Returns the (previously) calculated duration
 const Duration& Node::duration( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->duration : Duration::zeroDuration;
 }
 
@@ -441,10 +438,7 @@ double Node::variance( long id, Duration::Unit unit ) const
 
 double Node::deviation( long id, Duration::Unit unit ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     double d = 0.0;
     if ( s && m_estimate ) {
         d = s->duration.toDouble( unit );
@@ -457,193 +451,131 @@ double Node::deviation( long id, Duration::Unit unit ) const
 
 DateTime Node::startTime( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->startTime : DateTime();
 }
 DateTime Node::endTime( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->endTime : DateTime();
 }
     
 void Node::setEarlyStart(const DateTime &dt, long id )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) s->earlyStart = dt;
 }
 
 DateTime Node::earlyStart( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->earlyStart : DateTime();
 }
 
 void Node::setLateStart(const DateTime &dt, long id )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) s->lateStart = dt;
 }
 
 DateTime Node::lateStart( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->lateStart : DateTime();
 }
     
 void Node::setEarlyFinish(const DateTime &dt, long id )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) s->earlyFinish = dt;
 }
 
 DateTime Node::earlyFinish( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->earlyFinish : DateTime();
 }
 
 void Node::setLateFinish(const DateTime &dt, long id )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) s->lateFinish = dt;
 }
 
 DateTime Node::lateFinish( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->lateFinish : DateTime();
 }
     
 DateTime Node::workStartTime( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->workStartTime : DateTime();
 }
 
 void Node::setWorkStartTime(const DateTime &dt, long id )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
-
-     if ( s ) s->workStartTime = dt;
+    Schedule *s = schedule( id );
+    if ( s ) s->workStartTime = dt;
 }
 
 DateTime Node::workEndTime( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->workEndTime : DateTime();
 }
 
 void Node::setWorkEndTime(const DateTime &dt, long id )
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) s->workEndTime = dt;
 }
     
 bool Node::inCriticalPath( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->inCriticalPath : false;
 }
 
 bool Node::resourceError( long id ) const 
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->resourceError : false;
 }
     
 bool Node::resourceOverbooked( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->resourceOverbooked : false;
 }
     
 bool Node::resourceNotAvailable( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->resourceNotAvailable : false;
 }
     
 bool Node::schedulingError( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s ? s->schedulingError : false;
 }
 
 bool Node::notScheduled( long id ) const
 {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     return s == 0 || s->isDeleted() || s->notScheduled;
 }
 
-QStringList Node::overbookedResources( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+QStringList Node::overbookedResources( long id ) const
+{
+    Schedule *s = schedule( id );
     return s ? s->overbookedResources() : QStringList();
 }
 
-void Node::saveRelations(QDomElement &element) const {
+void Node::saveRelations(QDomElement &element) const
+{
     QListIterator<Relation*> it(m_dependChildNodes);
     while (it.hasNext()) {
         it.next()->save(element);
@@ -860,20 +792,16 @@ bool Node::setId(const QString& id) {
     return true;
 }
 
-void Node::setStartTime(DateTime startTime, long id ) { 
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+void Node::setStartTime(DateTime startTime, long id )
+{ 
+    Schedule *s = schedule( id );
     if ( s )
         s->startTime = startTime;
 }
 
-void Node::setEndTime(DateTime endTime, long id ) { 
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+void Node::setEndTime(DateTime endTime, long id )
+{
+    Schedule *s = schedule( id );
     if ( s )
         s->endTime = endTime;
 }
@@ -886,11 +814,9 @@ void Node::saveAppointments(QDomElement &element, long id) const {
     }
 }
 
-QList<Appointment*> Node::appointments( long id ) {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+QList<Appointment*> Node::appointments( long id )
+{
+    Schedule *s = schedule( id );
     QList<Appointment*> lst;
     if ( s )
         lst = s->appointments();
@@ -954,6 +880,11 @@ Schedule *Node::createSchedule(Schedule *parent) {
     NodeSchedule *sch = new NodeSchedule(parent, this);
     addSchedule(sch);
     return sch;
+}
+
+Schedule *Node::schedule( long id ) const
+{
+    return id == -1 ? m_currentSchedule : findSchedule( id );
 }
 
 Schedule *Node::findSchedule( long id ) const
@@ -1060,14 +991,18 @@ void Node::generateWBS(int count, WBSDefinition &def, const QString& wbs) {
 
 }
 
-bool Node::isScheduled() const
+bool Node::isScheduled( long id ) const
 {
-    foreach ( Schedule *s, m_schedules ) {
-        if ( s->isScheduled() ) {
-            return true;
+    if ( id == -1 ) {
+        foreach ( Schedule *s, m_schedules ) {
+            if ( s->isScheduled() ) {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
+    Schedule *s = findSchedule( id );
+    return s != 0 && s->isScheduled();
 }
 
 void Node::setCurrentSchedule(long id) {

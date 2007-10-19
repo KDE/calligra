@@ -438,10 +438,7 @@ bool Resource::isAvailable(Task */*task*/) {
 }
 
 QList<Appointment*> Resource::appointments( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s == 0 ) {
         return QList<Appointment*>();
     }
@@ -486,6 +483,18 @@ void Resource::addAppointment(Schedule *node, DateTime &start, DateTime &end, do
 
 void Resource::initiateCalculation(Schedule &sch) {
     m_currentSchedule = createSchedule(&sch);
+}
+
+Schedule *Resource::schedule( long id ) const
+{
+    return id == -1 ? m_currentSchedule : findSchedule( id );
+}
+
+Schedule *Resource::findSchedule( long id ) const
+{
+    if ( m_schedules.contains( id ) )
+        return m_schedules[ id ];
+    return 0;
 }
 
 bool Resource::isScheduled() const

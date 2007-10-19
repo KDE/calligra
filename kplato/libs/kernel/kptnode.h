@@ -408,12 +408,18 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc);
 
+    /**
+     * Return schedule with @id
+     * If @id == -1, return m_currentSchedule
+     * Return 0 if schedule with @id doesn't exist.
+     */
+    Schedule *schedule( long id = -1 ) const;
     /// Return current schedule
     Schedule *currentSchedule() const { return m_currentSchedule; }
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
-    /// Return true if this node has a valid schedule
-    bool isScheduled() const;
+    /// Return true if this node has a valid schedule with identity == @id
+    bool isScheduled( long id = -1 ) const;
     /// Return the list of schedules for this node
     QHash<long, Schedule*> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.

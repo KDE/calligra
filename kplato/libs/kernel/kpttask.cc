@@ -356,10 +356,7 @@ void Task::saveAppointments(QDomElement &element, long id) const {
 
 EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
     //kDebug()<<m_name;
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) {
         return s->plannedEffortCostPrDay(start, end);
     }
@@ -376,10 +373,7 @@ Duration Task::plannedEffort( long id ) const {
         }
         return eff;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) {
         eff = s->plannedEffort();
     }
@@ -396,10 +390,7 @@ Duration Task::plannedEffort(const QDate &date, long id ) const {
         }
         return eff;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) {
         eff = s->plannedEffort(date);
     }
@@ -416,10 +407,7 @@ Duration Task::plannedEffortTo(const QDate &date, long id) const {
         }
         return eff;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) {
         eff = s->plannedEffortTo(date);
     }
@@ -473,10 +461,7 @@ double Task::plannedCost( long id ) const {
         }
         return c;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) {
         c = s->plannedCost();
     }
@@ -492,10 +477,7 @@ double Task::plannedCost(const QDate &date, long id) const {
         }
         return c;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) {
         c = s->plannedCost(date);
     }
@@ -511,10 +493,7 @@ double Task::plannedCostTo(const QDate &date, long id) const {
         }
         return c;
     }
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+    Schedule *s = schedule( id );
     if ( s ) {
         c = s->plannedCostTo(date);
     }
@@ -1835,7 +1814,8 @@ DateTime Task::workStartAfter(const DateTime &dt) {
     return dt;
 }
 
-DateTime Task::workFinishBefore(const DateTime &dt) {
+DateTime Task::workFinishBefore(const DateTime &dt)
+{
     if (m_requests) {
         DateTime t = m_requests->availableBefore(dt, m_currentSchedule);
         //kDebug()<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
@@ -1844,55 +1824,44 @@ DateTime Task::workFinishBefore(const DateTime &dt) {
     return dt;
 }
 
-Duration Task::positiveFloat( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+Duration Task::positiveFloat( long id ) const
+{
+    Schedule *s = schedule( id );
     return s == 0 ? Duration::zeroDuration : s->positiveFloat;
 }
 
-Duration Task::negativeFloat( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+Duration Task::negativeFloat( long id ) const
+{
+    Schedule *s = schedule( id );
     return s == 0 ? Duration::zeroDuration : s->negativeFloat;
 }
 
-Duration Task::freeFloat( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+Duration Task::freeFloat( long id ) const
+{
+    Schedule *s = schedule( id );
     return s == 0 ? Duration::zeroDuration : s->freeFloat;
 }
 
-Duration Task::startFloat( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+Duration Task::startFloat( long id ) const
+{
+    Schedule *s = schedule( id );
     return s == 0 ? Duration::zeroDuration : ( s->earlyStart - s->lateStart );
 }
 
-Duration Task::finishFloat( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+Duration Task::finishFloat( long id ) const
+{
+    Schedule *s = schedule( id );
     return s == 0 ? Duration::zeroDuration : ( s->lateFinish - s->earlyFinish );
 }
 
-bool Task::isCritical( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+bool Task::isCritical( long id ) const
+{
+    Schedule *s = schedule( id );
     return s == 0 ? false : s->isCritical();
 }
 
-bool Task::calcCriticalPath(bool fromEnd) {
+bool Task::calcCriticalPath(bool fromEnd)
+{
     if (m_currentSchedule == 0)
         return false;
     //kDebug()<<m_name<<" fromEnd="<<fromEnd<<" cp="<<m_currentSchedule->inCriticalPath;
@@ -1974,11 +1943,9 @@ void Task::setCurrentSchedule(long id) {
     Node::setCurrentSchedule(id);
 }
 
-bool Task::effortMetError( long id ) const {
-    Schedule *s = m_currentSchedule;
-    if ( id != -1 ) {
-        s = findSchedule( id );
-    }
+bool Task::effortMetError( long id ) const
+{
+    Schedule *s = schedule( id );
     if (s == 0 || s->notScheduled || m_estimate->type() != Estimate::Type_Effort) {
         return false;
     }
