@@ -80,11 +80,6 @@ void KexiStatusBar::activePartChanged(KParts::Part *part)
 		if ((m_viewmsgIface = dynamic_cast<KTextEditor::ViewStatusMsgInterface*>(part->widget()))) {
 			connect( part->widget(), SIGNAL( viewStatusMsg( const QString & ) ),
 				this, SLOT( setStatus( const QString & ) ) );
-
-#  if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-			changeItem(m_map[ m_activePart ], m_msgID);
-//			m_status->setText( m_map[ m_activePart ] );
-#  endif
 		}
 		else if ((m_cursorIface = dynamic_cast<KTextEditor::ViewCursorInterface*>(part->widget()))) {
 			connect(part->widget(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
@@ -116,12 +111,6 @@ void KexiStatusBar::setStatus(const QString &str)
 	kDebug() << "KexiStatusBar::setStatus(" << str << ")" << endl;
 //	m_status->setText(str);
 	changeItem(str, m_msgID);
-
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-	m_map[m_activePart] = str;
-# endif
-#endif
 }
 
 void KexiStatusBar::setCursorPosition(int line, int col)

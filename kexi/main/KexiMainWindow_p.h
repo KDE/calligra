@@ -746,8 +746,6 @@ void updatePropEditorDockWidthInfo() {
 //				ds->setKeepSize(true);
 
 				config->setGroup("MainWindow");
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,4,0)
-
 				if (wasAutoOpen) //(dw2->isVisible())
 //				ds->setSeparatorPosInPercent( 100 * nav->width() / wnd->width() );
 					ds->setSeparatorPosInPercent(
@@ -759,10 +757,6 @@ void updatePropEditorDockWidthInfo() {
 					qMax(20, config->readEntry("LeftDockPosition", 20/* % */)));
 
 	//			dw->resize( d->config->readEntry("LeftDockPosition", 115/* % */), dw->height() );
-# else
-				//there were problems on KDE < 3.4
-				ds->setSeparatorPosInPercent( 20 );
-# endif
 				//if (!wasAutoOpen) //(dw2->isVisible())
 //					ds->setSeparatorPos( ds->separatorPos(), true );
 			}

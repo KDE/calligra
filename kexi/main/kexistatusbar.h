@@ -66,13 +66,6 @@ class KexiStatusBar : public KStatusBar
 	KTextEditor::ViewStatusMsgInterface * m_viewmsgIface;
 #endif
 	KParts::Part *m_activePart;
-
-// still hoping for a fix for KDE-3.1
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION < KDE_MAKE_VERSION(3,1,90)
-	QMap<KParts::Part*, QString> m_map;
-# endif
-#endif
 };
 
 #endif

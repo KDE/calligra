@@ -1009,6 +1009,7 @@ void KexiMainWindow::setupActions()
 //	action->setWhatsThis(i18n("")); //todo
 
 //	setSharedMenu("data_sort");
+/* moved to KexiStandardAction
 	action = createSharedAction(i18n("&Ascending"), "sort_az", KShortcut(), "data_sort_az");
 //temp. disable because of problems with volatile actions	setActionVolatile( action, true );
 	action->setToolTip(i18n("Sort data in ascending order"));
@@ -1018,7 +1019,7 @@ void KexiMainWindow::setupActions()
 //temp. disable because of problems with volatile actions	setActionVolatile( action, true );
 	action->setToolTip(i18n("Sort data in descending order"));
 	action->setWhatsThis(i18n("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."));
-
+*/
 	// - record-navigation related actions
 	createSharedAction( KexiRecordNavigator::Actions::moveToFirstRecord(), KShortcut(), "data_go_to_first_record");
 	createSharedAction( KexiRecordNavigator::Actions::moveToPreviousRecord(), KShortcut(), "data_go_to_previous_record");
@@ -1493,16 +1494,7 @@ tristate KexiMainWindow::startup()
 {
 	switch (Kexi::startupHandler().action()) {
 	case KexiStartupHandler::CreateBlankProject:
-#ifdef __GNUC__
-#warning TODO		if (d->propEditor)
-#else
-#pragma WARNING( TODO		if (d->propEditor) )
-#endif
-#ifdef __GNUC__
-#warning TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
-#else
-#pragma WARNING( TODO			makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) ); )
-#endif
+		d->updatePropEditorVisibility(Kexi::NoViewMode);
 		return createBlankProject();
 	case KexiStartupHandler::CreateFromTemplate:
 		return createProjectFromTemplate(*Kexi::startupHandler().projectData());
@@ -2088,7 +2080,6 @@ void KexiMainWindow::setupPropertyEditor()
 {
 	if (!d->propEditor) {
 //TODO: FIX LAYOUT PROBLEMS
-		
 		d->propEditorDockWidget = new KexiDockWidget(i18n("Property Editor"), d->mainWidget);
 		d->propEditorDockWidget->setObjectName("PropertyEditorDockWidget");
 		d->mainWidget->addDockWidget( Qt::RightDockWidgetArea, d->propEditorDockWidget, Qt::Vertical );
@@ -2124,6 +2115,7 @@ void KexiMainWindow::setupPropertyEditor()
 			ds->setSeparatorPosInPercent(d->config->readEntry("RightDockPosition", 80));
 	#endif
 		}*/
+		d->propEditorDockWidget->setVisible(false);
 	}
 }
 
