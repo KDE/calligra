@@ -24,25 +24,24 @@
 
 #include <QLabel>
 
-#include <kdeprint/kprintdialogpage.h>
 #include <knuminput.h>
 
 namespace KChart
 {
 
-class KCPrinterDialog : public KPrintDialogPage
+class KCPrinterDialog : public QWidget
 {
   Q_OBJECT
   public:
 	/// Getting the common arguments.
     explicit KCPrinterDialog( QWidget *parent = 0, const char *name = 0 );
 
-	/// Reimplemented.
-    void getOptions( QMap<QString, QString>& opts, bool include_def = false );
-	/// Reimplemented
-    void setOptions( const QMap<QString, QString>& opts );
-	/// The check box for the option.
-  
+  int printSizeX();
+  void setPrintSizeX( int sizeX );
+
+  int printSizeY();
+  void setPrintSizeY( int sizeY );
+
   private:
     KIntNumInput *txtSizex;
     KIntNumInput *txtSizey;

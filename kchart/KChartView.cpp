@@ -32,6 +32,7 @@
 #include <QPixmap>
 #include <QPaintEvent>
 #include <QGridLayout>
+#include <QtGui/QPrinter>
 
 // KDE
 #include <kicon.h>
@@ -40,7 +41,6 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kprinter.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <kcomponentdata.h>
@@ -600,14 +600,16 @@ void KChartView::slotConfigPageLayout()
 }
 
 
-void KChartView::setupPrinter( KPrinter &printer )
+void KChartView::setupPrinter( QPrinter &printer )
 {
+/*  In Qt dialogs get added to QPrintDialog, when prinitn gets ativated again will need to fix
   if ( !printer.previewOnly() )
     printer.addDialogPage( new KCPrinterDialog( 0, "KChart page" ) );
+*/
 }
 
 
-void KChartView::print(KPrinter &printer)
+void KChartView::print(QPrinter &printer)
 {
     Q_UNUSED( printer );
 #if 0                           // Disable printing for now.

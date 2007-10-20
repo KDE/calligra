@@ -78,8 +78,8 @@ public slots:
     void  radarChart();
     void  stockChart();
 
-    void  print(KPrinter &);
-    void  setupPrinter(KPrinter &);
+    void  print(QPrinter &);
+    void  setupPrinter(QPrinter &);
 
     void  slotRepaint();
 

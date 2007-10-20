@@ -38,11 +38,11 @@ namespace KChart
 {
 
 KCPrinterDialog::KCPrinterDialog( QWidget *parent, const char *name )
-  : KPrintDialogPage( parent )
+  : QWidget( parent )
 {
   Q_UNUSED( name );
 
-  setTitle( i18n( "KChart Options" ) );
+  setWindowTitle( i18n( "KChart Options" ) );
   QVBoxLayout *layout = new QVBoxLayout( this );
   layout->setMargin( KDialog::marginHint() );
   layout->setSpacing( KDialog::spacingHint() );
@@ -67,22 +67,24 @@ KCPrinterDialog::KCPrinterDialog( QWidget *parent, const char *name )
   layout->addStretch( 1 );
 }
 
-void KCPrinterDialog::getOptions( QMap<QString, QString>& opts, bool )
+int KCPrinterDialog::printSizeX()
 {
-  opts["kde-kchart-printsizex"] = QString::number(txtSizex->value());
-  opts["kde-kchart-printsizey"] = QString::number(txtSizey->value());
+  return txtSizex->value();
 }
 
-void KCPrinterDialog::setOptions( const QMap<QString, QString>& opts )
+void KCPrinterDialog::setPrintSizeX( int sizeX )
 {
-  if ( opts["kde-kchart-printsizex"].isEmpty() )
-    txtSizex->setValue(100);
-  else
-    txtSizex->setValue((opts["kde-kchart-printsizex"]).toInt());
-  if ( opts["kde-kchart-printsizey"].isEmpty() )
-    txtSizey->setValue(100);
-  else
-    txtSizey->setValue((opts["kde-kchart-printsizey"]).toInt());
+  txtSizex->setValue( sizeX );
+}
+
+int KCPrinterDialog::printSizeY()
+{
+  return txtSizey->value();
+}
+
+void KCPrinterDialog::setPrintSizeY( int sizeY )
+{
+  txtSizey->setValue( sizeY );
 }
 
 }  //namespace KChart
