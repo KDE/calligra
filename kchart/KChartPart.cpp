@@ -63,6 +63,7 @@ using std::cerr;
 #include <KoShapeSavingContext.h>
 #include <KoToolManager.h>
 #include <KoOasisLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 
 // KDChart
 #include "KDChartChart"
@@ -964,6 +965,68 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,         // content.xml
 			    const KoXmlDocument& settings,
 			    KoStore             *store )      // pics, etc
 {
+    KoXmlElement  content = doc.documentElement();
+
+    // Find office:body
+    KoXmlElement  realBody ( KoDom::namedItemNS( content, 
+                                                 KoXmlNS::office, "body" ) );
+    if ( realBody.isNull() ) {
+        setErrorMessage( i18n( "Invalid OpenDocument file. No office:body tag found." ));
+        return false;
+    }
+
+    // Find office:chart
+    KoXmlElement bodyElement = KoDom::namedItemNS( realBody,
+                                                   KoXmlNS::office, "chart" );
+    if ( bodyElement.isNull() ) {
+        kError(32001) << "No office:chart found!" << endl;
+
+        KoXmlElement  childElem;
+        QString       localName;
+        forEachElement( childElem, realBody ) {
+            localName = childElem.localName();
+        }
+        if ( localName.isEmpty() )
+            setErrorMessage( i18n( "Invalid OpenDocument file. No tag found inside office:body." ) );
+        else
+            setErrorMessage( i18n( "This document is not a chart, but %1. Please try opening it with the appropriate application.",
+                                   KoDocument::tagNameToDocumentType( localName ) ) );
+        return false;
+    }
+
+    // Find chart:chart
+    KoXmlElement chartElement = KoDom::namedItemNS( bodyElement, 
+                                                    KoXmlNS::chart, "chart" );
+    if ( chartElement.isNull() ) {
+        setErrorMessage( i18n( "No chart found in the file" ) );
+        return false;
+    }
+
+    // Load styles first
+#if 0
+    loadAllStyles( context );
+    styleManager()->loadOasisStyleTemplate( oasisStyles, this );
+#endif
+
+    KoOasisLoadingContext  context( this, oasisStyles, store );
+    KoShapeLoadingContext  shapeContext( context );
+
+    // ----------------------------------------------------------------
+    // FIXME: Load chart here.
+    // ----------------------------------------------------------------
+    if ( !m_chartShape->loadOdf( chartElement, shapeContext ) )
+        return false;
+
+#if 0     // Load settings later.
+    if ( !settings.isNull() ) {
+        loadOasisSettings( settings );
+    }
+#endif
+
+    return true;
+
+    // ----------------------------------------------------------------
+
     Q_UNUSED( settings );
 
     Q_UNUSED( doc );

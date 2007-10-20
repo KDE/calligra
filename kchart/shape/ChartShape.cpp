@@ -641,15 +641,16 @@ static const unsigned int  numOdfChartTypes = ( sizeof odfChartTypes
 bool ChartShape::loadOdf( const KoXmlElement    &element, 
 			  KoShapeLoadingContext &context )
 {
+     if ( element.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
+         kDebug() << " ---------------------------------------------------------------- " ;
+         kDebug() << " Chart class: " 
+                  <<  element.attributeNS( KoXmlNS::chart, "class" );
+     }
+     else
+         return false;
 
-//     if( element.hasAttributeNS( KoXmlNS::chart, "title" ) ) {
-//         HeaderFooter Header;
-//         KoXmlElement title = element.attributeNS( KoXmlNS::chart, "title" );
-//         QPointF pos( KoUnit::parseValue( title.attributeNS( KoXmlNS::svg, "x", QString() ) ),
-//                      KoUnit::parseValue( title.attributeNS( KoXmlNS::svg, "y", QString() ) ) );
-//     }
 
-    return false;
+    return true;
 }
 
 
