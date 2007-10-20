@@ -118,7 +118,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_changeTracker(0),
     m_allowActions(true),
     m_allowAddUndoCommand(true),
-    m_trackChanges(true),
+    m_trackChanges(false),
     m_allowResourceProviderUpdates(true),
     m_needSpellChecking(true),
     m_processingKeyPress(false),
