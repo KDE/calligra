@@ -520,6 +520,7 @@ void ChartShape::modelChanged()
     d->diagram->dataChanged( d->chartData->index( 0, 0 ),
                              d->chartData->index( d->chartData->rowCount() - 1,
                                                   d->chartData->columnCount() - 1 ) );
+    d->diagram->doItemsLayout();
     update();
 }
 
