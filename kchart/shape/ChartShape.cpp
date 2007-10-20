@@ -499,17 +499,32 @@ void ChartShape::setThreeDMode( bool threeD )
 void ChartShape::setFirstRowIsHeader( bool b )
 {
     d->chartData->setFirstRowIsHeader( b );
+    modelChanged();
 }
 
 void ChartShape::setFirstColumnIsHeader( bool b )
 {
     d->chartData->setFirstColumnIsHeader( b );
+    modelChanged();
 }
 
 void ChartShape::setDataDirection( Qt::Orientation orientation )
 {
     d->chartData->setDataDirection( orientation );
+    modelChanged();
 }
+
+void ChartShape::modelChanged()
+{
+    // Tell the diagram that the entire set of data changed
+    d->diagram->dataChanged( d->chartData->index( 0, 0 ),
+                             d->chartData->index( d->chartData->rowCount() - 1,
+                                                  d->chartData->columnCount() - 1 ) );
+    update();
+}
+
+
+
 
 void ChartShape::saveChartTypeOptions()
 {
@@ -533,11 +548,7 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
 void ChartShape::setModel( QAbstractItemModel* model )
 {
     d->chartData->setSourceModel( model );
-
-    // Tell the diagram that the entire set of data changed
-    d->diagram->dataChanged( d->chartData->index( 0, 0 ),
-                             d->chartData->index( d->chartData->rowCount() - 1,
-                                                  d->chartData->columnCount() - 1 ) );
+    modelChanged();
 
 #if 0
     for ( int col = 0; col < d->diagram->model()->columnCount(); ++col ) {

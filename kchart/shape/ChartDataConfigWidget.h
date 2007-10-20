@@ -51,6 +51,8 @@ public:
 
  private Q_SLOTS:
     void dataInRows( bool );
+    void firstRowIsHeader( bool );
+    void firstColumnIsHeader( bool );
 
 private:
     class Private;

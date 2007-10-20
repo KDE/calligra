@@ -53,6 +53,10 @@ ChartDataConfigWidget::ChartDataConfigWidget()
     // they are mutually exclusive.
     connect( d->ui.m_dataInRows, SIGNAL( toggled( bool ) ),
 	     this,               SLOT( dataInRows( bool ) ) );
+    connect( d->ui.m_firstRowAsLabel, SIGNAL( toggled( bool ) ),
+             this, SLOT( firstRowIsHeader( bool ) ) );
+    connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
+             this, SLOT( firstColumnIsHeader( bool ) ) );
 }
 
 ChartDataConfigWidget::~ChartDataConfigWidget()
@@ -84,8 +88,19 @@ void ChartDataConfigWidget::dataInRows( bool checked )
     else
 	d->chart->setDataDirection( Qt::Vertical );
 
-    d->chart->update();
+    // No need to call ChartShape::update() Here.
+    // It will update itself when the data changes in any way.
+    // d->chart->update();
 }
 
+void ChartDataConfigWidget::firstRowIsHeader( bool checked )
+{
+    d->chart->setFirstRowIsHeader( checked );
+}
+
+void ChartDataConfigWidget::firstColumnIsHeader( bool checked )
+{
+    d->chart->setFirstColumnIsHeader( checked );
+}
 
 #include "ChartDataConfigWidget.moc"

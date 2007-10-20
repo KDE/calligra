@@ -89,6 +89,7 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     void setFirstRowIsHeader( bool b );
     void setFirstColumnIsHeader( bool b);
     void setDataDirection( Qt::Orientation orientation );
+    void modelChanged();
 
     void saveChartTypeOptions();
     void restoreChartTypeOptions( OdfChartType type );
