@@ -149,11 +149,11 @@ void KFormulaPartView::resizeEvent( QResizeEvent * )
     m_canvasController->setGeometry( 0, 0, width(), height() );
 }
 
-void KFormulaPartView::setupPrinter( KPrinter& )
+void KFormulaPartView::setupPrinter( QPrinter& )
 {
 }
 
-void KFormulaPartView::print( KPrinter& printer )
+void KFormulaPartView::print( QPrinter& printer )
 {
     Q_UNUSED( printer );
 }
