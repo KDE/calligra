@@ -115,5 +115,8 @@ void ChartTypeCommand::setChartType(OdfChartType type, OdfChartSubtype subtype)
     case GanttChartType:
         setText(i18n("Gantt Chart"));
         break;
+    case LastChartType:
+    default:
+        break;
     }
 }

@@ -194,6 +194,9 @@ void ChartTypeConfigWidget::updateChartTypeOptions( ChartTypeOptions options )
             d->ui.subtypePercent->setChecked( true );
             d->ui.subtypePercent->blockSignals( false );
             break;
+        case NoChartSubtype:
+        default:
+            break;
     }
     d->ui.threeDLook->setChecked( d->shape->threeDMode() );
 }

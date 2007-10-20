@@ -105,11 +105,15 @@ QModelIndex ChartProxyModel::index( int row,
                                     int column,
                                     const QModelIndex &parent /* = QModelIndex() */ ) const
 {
+    Q_UNUSED( parent );
+
     return QAbstractItemModel::createIndex( row, column, 0 );
 }
 
 QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
 {
+    Q_UNUSED( index );
+
     return QModelIndex();
 }
 

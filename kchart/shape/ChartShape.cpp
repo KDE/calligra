@@ -314,6 +314,12 @@ void ChartShape::setChartType( OdfChartType    newType,
             // FIXME
             return;
             break;
+
+        case LastChartType:
+        default:
+            return;
+            break;
+
         }
     }
 
@@ -583,8 +589,10 @@ bool ChartShape::threeDMode() const
 
 ChartTypeOptions ChartShape::chartTypeOptions( OdfChartType type ) const
 {
-    if( type >= BarChartType && type < LastChartType)
+    if ( type >= BarChartType && type < LastChartType)
         return d->chartTypeOptions[( int )type];
+
+    return ChartTypeOptions();
 }
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -879,18 +887,15 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
     switch ( d->chartType ) {
     case BarChartType:
         switch( d->chartSubtype ) {
+        case NoChartSubtype:
+        case NormalChartSubtype:
+            break;
         case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
         case PercentChartSubtype:
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
-        case NormalChartSubtype:
-            break;
-#if 0
-	case BarMultiRows:
-	    break;
-#endif
         }
         plotAreaStyle.addProperty( "chart:vertical", "false" ); // #### always?
         plotAreaStyle.addProperty( "chart:lines-used", 0 ); // FIXME: for now
@@ -898,25 +903,38 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
 #if 0
 	if ( threeDBars() )
 	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
-    case Line:
-        switch( lineChartSubType() ) {
-        case LineStacked:
+        break;
+#endif
+
+    case LineChartType:
+        // FIXME
+        break;
+
+        switch( d->chartSubtype ) {
+        case NoChartSubtype:
+        case NormalChartSubtype:
+            break;
+        case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
-        case LinePercent:
+        case PercentChartSubtype:
             plotAreaStyle.addProperty( "chart:percentage", "true" );
-            break;
-        case LineNormal:
             break;
         }
         plotAreaStyle.addProperty( "chart:symbol-type", "automatic" );
 
+#if 0
 	if ( threeDLines() )
 	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+#endif
 
         break;
 
-    case Area:
+    case AreaChartType:
+        // FIXME
+        break;
+
+#if 0
         switch( areaChartSubType() ) {
         case AreaStacked:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
@@ -927,32 +945,40 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
         case AreaNormal:
             break;
         }
+#endif
         //plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
 
-        // TODO - very similar
 
-    case Pie:
+    case CircleChartType:
+        // FIXME
+        break;
+
+#if 0
 	if ( threeDPies() )
 	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
-
-	break;
-
-    case HiLo:
-	break;
-
-    case Ring:
-	break;
-
-    case Polar:
-	break;
-
-    case BoxWhisker:
-	break;
 #endif
+	break;
+
+    case RingChartType:
+    case ScatterChartType:
+    case RadarChartType:
+    case StockChartType:
+    case BubbleChartType:
+    case SurfaceChartType:
+    case GanttChartType:
+        // FIXME
+        break;
+
+        // This is not a valid type, but needs to be handled to avoid
+        // a warning from gcc.
+    case LastChartType:
+    default:
+        // FIXME
+        break;
     }
 
 #if 0
-    // chart:series-source
+    // Data direction
     plotAreaStyle.addProperty( "chart:series-source",
 			       ( dataDirection() == DataRows ) ? "rows" : "columns" );
 #endif
