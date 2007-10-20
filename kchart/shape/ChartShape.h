@@ -81,6 +81,8 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
 
 
  public Q_SLOTS:
+    virtual void update();
+
     /// Set new chart type and subtype.
     void setChartType( OdfChartType newType, 
 		       OdfChartSubtype newSubtype = NoChartSubtype );

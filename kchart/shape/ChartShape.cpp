@@ -373,10 +373,8 @@ void ChartShape::setChartType( OdfChartType    newType,
         // its KDChartAttributesModel instance, which would cause a crash.
         // delete d->diagram;
         d->diagram = new_diagram;
-        d->diagram->update();
 
         d->chart->coordinatePlane()->replaceDiagram( new_diagram ); // FIXME
-        d->chart->update();
         update();
 
         // Update local data
@@ -457,9 +455,6 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
 
     d->chartSubtype = newSubtype;
 
-    d->diagram->update();
-    d->chart->update();
-
     update();
 }
 
@@ -492,7 +487,6 @@ void ChartShape::setThreeDMode( bool threeD )
     }
     d->threeDMode = threeD;
 
-    d->chart->update();
     update();
 }
 
@@ -520,12 +514,8 @@ void ChartShape::modelChanged()
     d->diagram->dataChanged( d->chartData->index( 0, 0 ),
                              d->chartData->index( d->chartData->rowCount() - 1,
                                                   d->chartData->columnCount() - 1 ) );
-    d->diagram->doItemsLayout();
     update();
 }
-
-
-
 
 void ChartShape::saveChartTypeOptions()
 {
@@ -1173,3 +1163,12 @@ void ChartShape::initNullChart()
 {
 } 
 #endif
+
+
+void ChartShape::update()
+{
+    d->diagram->doItemsLayout();
+    d->diagram->update();
+    d->chart->update();
+    KoShape::update();
+}

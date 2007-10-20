@@ -89,6 +89,8 @@ KoShape* ChartShapeFactory::createDefaultShape() const
                     i18n("Row %1", row + 1) );
     }
     shape->setModel( m_chartData );
+    shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
+
     return shape;
 }
 
