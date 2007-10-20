@@ -14,26 +14,45 @@
    <string>ProjectPanelBase</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
    </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
+   </property>
    <item>
     <layout class="QGridLayout" >
-     <property name="margin" >
+     <property name="leftMargin" >
       <number>0</number>
      </property>
-     <property name="spacing" >
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
+     </property>
+     <property name="horizontalSpacing" >
+      <number>6</number>
+     </property>
+     <property name="verticalSpacing" >
       <number>6</number>
      </property>
      <item row="2" column="1" colspan="4" >
-      <widget class="KLineEdit" native="1" name="leaderfield" >
+      <widget class="KLineEdit" name="leaderfield" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -63,11 +82,9 @@
       </widget>
      </item>
      <item row="1" column="1" colspan="5" >
-      <widget class="KLineEdit" native="1" name="namefield" >
+      <widget class="KLineEdit" name="namefield" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -158,11 +175,9 @@
       </widget>
      </item>
      <item row="0" column="4" colspan="2" >
-      <widget class="KLineEdit" native="1" name="idfield" >
+      <widget class="KLineEdit" name="idfield" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -187,22 +202,31 @@
    <item>
     <widget class="QGroupBox" name="schedulingGroup" >
      <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Here you define when the project shall start or end.&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If start time is defined, the project is scheduled forward from this time. When the project has been calculated, end time shows when the project is planned to end.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">If end time is defined, the project is scheduled backwards from this time. When the project has been calculated, start time shows when the project must start in order to finish in time.&lt;/p>&lt;/body>&lt;/html></string>
+      <string>Here you define when the project shall start or end.
+
+If start time is defined, the project is scheduled forward from this time. When the project has been calculated, end time shows when the project is planned to end.
+If end time is defined, the project is scheduled backwards from this time. When the project has been calculated, start time shows when the project must start in order to finish in time.</string>
      </property>
      <property name="title" >
       <string>Scheduling</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>6</number>
       </property>
       <item row="0" column="0" >
@@ -259,11 +283,9 @@ Here you can enter any additional text you want to be stored with the project. T
     </widget>
    </item>
    <item>
-    <widget class="KTextEdit" native="1" name="descriptionfield" >
+    <widget class="KTextEdit" name="descriptionfield" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>7</vsizetype>
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -282,13 +304,13 @@ Here you can enter any additional text you want to be stored with the project. T
  <customwidgets>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QWidget</extends>
+   <extends>QLineEdit</extends>
    <header>klineedit.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>
-   <extends>QWidget</extends>
+   <extends>QTextEdit</extends>
    <header>ktextedit.h</header>
    <container>1</container>
   </customwidget>

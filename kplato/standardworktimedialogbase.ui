@@ -17,18 +17,28 @@
    <string>These values are used when you estimate the effort needed to complete a task.</string>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>9</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>6</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>6</number>
    </property>
    <item row="3" column="1" >
     <widget class="KDoubleSpinBox" name="day" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -40,20 +50,14 @@
       <string>Number of working hours in a normal day.</string>
      </property>
      <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">These values are used when you estimate the effort needed to complete a task.&lt;/p>&lt;/body>&lt;/html></string>
+      <string>These values are used when you estimate the effort needed to complete a task.</string>
      </property>
     </widget>
    </item>
    <item row="3" column="0" >
     <widget class="QLabel" name="textLabel4" >
      <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">These values are used when you estimate the effort needed to complete a task.&lt;/p>&lt;/body>&lt;/html></string>
+      <string>These values are used when you estimate the effort needed to complete a task.</string>
      </property>
      <property name="text" >
       <string>Hours per day:</string>

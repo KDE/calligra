@@ -14,27 +14,54 @@
    <string>TaskGeneralPanelBase</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>0</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
    </property>
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
      </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
+     </property>
      <item>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
+       </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
        </property>
        <item>
         <widget class="QLabel" name="wbslabel" >
@@ -92,19 +119,37 @@ This is not limited to persons available in a resource group but can be anyone. 
      </item>
      <item>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
        <property name="spacing" >
         <number>6</number>
        </property>
+       <property name="leftMargin" >
+        <number>0</number>
+       </property>
+       <property name="topMargin" >
+        <number>0</number>
+       </property>
+       <property name="rightMargin" >
+        <number>0</number>
+       </property>
+       <property name="bottomMargin" >
+        <number>0</number>
+       </property>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
+         </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="wbsfield" >
@@ -149,12 +194,12 @@ This is not limited to persons available in a resource group but can be anyone. 
           </widget>
          </item>
          <item>
-          <widget class="KLineEdit" native="1" name="idfield" />
+          <widget class="KLineEdit" name="idfield" />
          </item>
         </layout>
        </item>
        <item>
-        <widget class="KLineEdit" native="1" name="namefield" >
+        <widget class="KLineEdit" name="namefield" >
          <property name="whatsThis" >
           <string>The name of the Task.</string>
          </property>
@@ -162,14 +207,23 @@ This is not limited to persons available in a resource group but can be anyone. 
        </item>
        <item>
         <layout class="QHBoxLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
          <property name="spacing" >
           <number>6</number>
          </property>
+         <property name="leftMargin" >
+          <number>0</number>
+         </property>
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
          <item>
-          <widget class="KLineEdit" native="1" name="leaderfield" >
+          <widget class="KLineEdit" name="leaderfield" >
            <property name="whatsThis" >
             <string>The person responsible for this task.
 
@@ -202,22 +256,28 @@ This is not limited to persons available in a resource group but can be anyone. 
    <item>
     <widget class="QGroupBox" name="groupBox" >
      <property name="whatsThis" >
-      <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Scheduling Configuration. These settings affect the actual scheduling of the task.&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">The estimation can be either effort based or duration based. If it is effort based, the final duration will depend on the resources assigned to the task. For duration based estimation, the assigned resources don't affect the fixed duration of the task, but only the costs.&lt;/p>&lt;/body>&lt;/html></string>
+      <string>Scheduling Configuration. These settings affect the actual scheduling of the task.
+
+The estimation can be either effort based or duration based. If it is effort based, the final duration will depend on the resources assigned to the task. For duration based estimation, the assigned resources don't affect the fixed duration of the task, but only the costs.</string>
      </property>
      <property name="title" >
       <string>Timing</string>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
       <property name="spacing" >
        <number>6</number>
+      </property>
+      <property name="leftMargin" >
+       <number>9</number>
+      </property>
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
       </property>
       <item>
        <widget class="QFrame" name="frame" >
@@ -228,18 +288,28 @@ p, li { white-space: pre-wrap; }
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QGridLayout" >
-         <property name="margin" >
+         <property name="leftMargin" >
           <number>0</number>
          </property>
-         <property name="spacing" >
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
+         <property name="horizontalSpacing" >
+          <number>6</number>
+         </property>
+         <property name="verticalSpacing" >
           <number>6</number>
          </property>
          <item row="0" column="0" >
           <widget class="QLabel" name="textLabel3" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>0</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -258,9 +328,7 @@ p, li { white-space: pre-wrap; }
          <item row="0" column="1" >
           <widget class="KComboBox" name="scheduleType" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -303,11 +371,9 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="0" column="2" >
-          <widget class="KDateWidget" native="1" name="scheduleStartDate" >
+          <widget class="KDateWidget" name="scheduleStartDate" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -321,11 +387,9 @@ p, li { white-space: pre-wrap; }
           <widget class="QTimeEdit" name="scheduleStartTime" />
          </item>
          <item row="1" column="2" >
-          <widget class="KDateWidget" native="1" name="scheduleEndDate" >
+          <widget class="KDateWidget" name="scheduleEndDate" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -350,26 +414,45 @@ p, li { white-space: pre-wrap; }
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QGridLayout" >
-         <property name="margin" >
+         <property name="leftMargin" >
           <number>0</number>
          </property>
-         <property name="spacing" >
+         <property name="topMargin" >
+          <number>0</number>
+         </property>
+         <property name="rightMargin" >
+          <number>0</number>
+         </property>
+         <property name="bottomMargin" >
+          <number>0</number>
+         </property>
+         <property name="horizontalSpacing" >
+          <number>6</number>
+         </property>
+         <property name="verticalSpacing" >
           <number>6</number>
          </property>
          <item rowspan="2" row="0" column="0" >
           <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="textLabel3_2" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -385,9 +468,7 @@ p, li { white-space: pre-wrap; }
            <item>
             <widget class="QLabel" name="textLabel3_2_3" >
              <property name="sizePolicy" >
-              <sizepolicy>
-               <hsizetype>0</hsizetype>
-               <vsizetype>5</vsizetype>
+              <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -417,9 +498,7 @@ p, li { white-space: pre-wrap; }
          <item row="0" column="1" >
           <widget class="KComboBox" name="estimateType" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -442,9 +521,7 @@ p, li { white-space: pre-wrap; }
          <item row="0" column="2" >
           <widget class="QWidget" native="1" name="durationHolder" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>3</hsizetype>
-             <vsizetype>5</vsizetype>
+            <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -460,9 +537,7 @@ p, li { white-space: pre-wrap; }
          <item row="1" column="1" >
           <widget class="KComboBox" name="risk" >
            <property name="sizePolicy" >
-            <sizepolicy>
-             <hsizetype>5</hsizetype>
-             <vsizetype>0</vsizetype>
+            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -498,11 +573,20 @@ p, li { white-space: pre-wrap; }
          </item>
          <item row="1" column="2" >
           <layout class="QHBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
            <property name="spacing" >
             <number>6</number>
+           </property>
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="rightMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
+            <number>0</number>
            </property>
            <item>
             <widget class="QLabel" name="textLabel1_2" >
@@ -522,11 +606,11 @@ p, li { white-space: pre-wrap; }
              <property name="suffix" >
               <string>%</string>
              </property>
-             <property name="maximum" >
-              <number>0</number>
-             </property>
              <property name="minimum" >
               <number>-99</number>
+             </property>
+             <property name="maximum" >
+              <number>0</number>
              </property>
             </widget>
            </item>
@@ -567,9 +651,7 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="QLabel" name="descriptionlabell6" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>0</hsizetype>
-       <vsizetype>5</vsizetype>
+      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -586,7 +668,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item>
-    <widget class="KTextEdit" native="1" name="descriptionfield" />
+    <widget class="KTextEdit" name="descriptionfield" />
    </item>
   </layout>
  </widget>
@@ -605,13 +687,13 @@ p, li { white-space: pre-wrap; }
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QWidget</extends>
+   <extends>QLineEdit</extends>
    <header>klineedit.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>
-   <extends>QWidget</extends>
+   <extends>QTextEdit</extends>
    <header>ktextedit.h</header>
    <container>1</container>
   </customwidget>
