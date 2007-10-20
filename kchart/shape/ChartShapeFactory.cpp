@@ -68,27 +68,29 @@ KoShape* ChartShapeFactory::createDefaultShape() const
 
     // Fill cells with data if there is none.
     QStandardItemModel *m_chartData = new QStandardItemModel();
-    m_chartData->setRowCount( 3 );
-    m_chartData->setColumnCount( 4 );
+    m_chartData->setRowCount( 4 );
+    m_chartData->setColumnCount( 5 );
 
     // Insert example data
-    for (uint row = 0; row < 3; row++) {
-        for (uint col = 0; col < 4; col++) {
-
-            m_chartData->setItem( row, col,
-                  new QStandardItem( QString::number( row + col ) ) );
-            // Fill column label, but only on the first iteration.
-            if (row == 0) {
-                m_chartData->setHeaderData( col, Qt::Horizontal,
-                        i18n("Column %1", col + 1) );
-            }
-        }
-
+    for (uint row = 0; row < 4; row++) {
         // Fill row label.
-        m_chartData->setHeaderData( row, Qt::Vertical,
-                    i18n("Row %1", row + 1) );
+        if ( row > 0 )
+            m_chartData->setItem( row, 0,
+                new QStandardItem( i18n( "Row %1", row ) ) );
+
+        for (uint col = 0; col < 5; col++) {
+            if ( row == 0 && col > 0 )
+                m_chartData->setItem( 0, col,
+                    new QStandardItem ( i18n( "Column %1", col ) ) );
+            else
+                m_chartData->setItem( row, col,
+                    new QStandardItem( QString::number( row + col ) ) );
+            // Fill column label, but only on the first iteration.
+        }
     }
     shape->setModel( m_chartData );
+    shape->setFirstRowIsLabel( true );
+    shape->setFirstColumnIsLabel( true );
     shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
 
     return shape;
