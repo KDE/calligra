@@ -110,22 +110,40 @@ const KoViewConverter *KWCanvas::viewConverter() const {
 
 void KWCanvas::clipToDocument(const KoShape *shape, QPointF &move) const {
     Q_ASSERT(shape);
-    QPointF absPos = shape->absolutePosition();
-    double y = qMax(0.1, absPos.y() + move.y());
-    KWPage *page = m_document->pageManager()->page(QPointF(absPos.x(), y));
-    Q_ASSERT(page);
-    QRectF pageRect (page->rect().adjusted(5, 5, -5, -5));
-    QRectF movedRect = pageRect;
-    QPainterPath path (shape->absoluteTransformation(0).map(shape->outline()));
+    const QPointF absPos = shape->absolutePosition();
+    const QPointF destination = absPos + move;
 
-    movedRect.moveLeft(pageRect.x() - move.x());
-    if(! path.intersects(movedRect))
+    double bottomOfPage = 0.0;
+    KWPage *page = 0;
+    foreach(KWPage *p, m_document->pageManager()->pages()) {
+        bottomOfPage += p->height();
+        if(bottomOfPage >= absPos.y())
+            page = p;
+        if(bottomOfPage >= destination.y()) {
+            page = p;
+            break;
+        }
+    }
+    if (page == 0) { // shape was not in any page to begin with, can't propose anything sane...
         move.setX(0);
-    movedRect.moveTopLeft(pageRect.topLeft() - move);
-    if(path.intersects(movedRect))
+        move.setY(0);
         return;
+    }
+    QRectF pageRect (page->rect().adjusted(5, 5, -5, -5));
+    QPainterPath path (shape->absoluteTransformation(0).map(shape->outline()));
+    QRectF shapeBounds = path.boundingRect();
+    shapeBounds.moveTopLeft(shapeBounds.topLeft() + move);
+    if (!shapeBounds.intersects(pageRect)) {
+        if (shapeBounds.left() > pageRect.right()) // need to move to the left some
+            move.setX( move.x() + (pageRect.right() - shapeBounds.left()) );
+        else if (shapeBounds.right() < pageRect.left()) // need to move to the right some
+            move.setX( move.x() + pageRect.left() - shapeBounds.right());
 
-    move.setY(0);
+        if (shapeBounds.top() > pageRect.bottom()) // need to move up some
+            move.setY( move.y() + (pageRect.bottom() - shapeBounds.top()) );
+        else if (shapeBounds.bottom() < pageRect.top()) // need to move down some
+            move.setY( move.y() + pageRect.top() - shapeBounds.bottom());
+    }
 }
 
 void KWCanvas::mouseMoveEvent(QMouseEvent *e) {

@@ -23,6 +23,7 @@
 #define KWCANVAS_H
 
 #include "KWDocument.h"
+#include "kword_export.h"
 
 #include <KoCanvasBase.h>
 
@@ -39,7 +40,7 @@ class KoToolProxy;
  * the screen as well as the interaction with the user via mouse
  * and keyboard. There is one per view.
  */
-class KWCanvas : public QWidget, public KoCanvasBase {
+class KWORD_TEST_EXPORT KWCanvas : public QWidget, public KoCanvasBase {
     Q_OBJECT
 
 public:

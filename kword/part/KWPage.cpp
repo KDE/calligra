@@ -176,3 +176,11 @@ void KWPage::setPageLayout(const KoPageLayout &layout) {
     setMarginClosestBinding(layout.bindingSide);
     setPageEdgeMargin(layout.pageEdge);
 }
+
+KWPage *KWPage::next() {
+    return m_parent->page(m_pageNum + m_pageSide == PageSpread ? 2 : 1);
+}
+
+KWPage *KWPage::previous() {
+    return m_parent->page(m_pageNum -1);
+}

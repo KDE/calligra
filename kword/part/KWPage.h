@@ -160,6 +160,9 @@ public:
      */
     KoText::Direction directionHint() const { return m_textDirectionHint; }
 
+    KWPage *next();
+    KWPage *previous();
+
 private:
     /** private constructor, only for our friends
      * @param parent the KWPageManager that we belong to.
