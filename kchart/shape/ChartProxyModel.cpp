@@ -78,6 +78,8 @@ QVariant ChartProxyModel::headerData( int section,
 
         // Return the first column in the section-th row
         row = section;
+        if ( d->firstRowIsHeader )
+            row++;
     }
     else if ( orientation == Qt::Horizontal ) {
         if( !d->firstRowIsHeader )
@@ -85,6 +87,8 @@ QVariant ChartProxyModel::headerData( int section,
 
         // Return the section-th column in the first row
         column = section;
+        if ( d->firstColumnIsHeader )
+            column++;
     }
 
     
