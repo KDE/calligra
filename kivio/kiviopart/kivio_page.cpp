@@ -138,7 +138,7 @@ KivioPage* KivioPage::find( int _id )
   return (*s_mapPages)[ _id ];
 }
 
-void KivioPage::print( QPainter &/*painter*/, KPrinter */*_printer*/ )
+void KivioPage::print( QPainter &/*painter*/, QPrinter */*_printer*/ )
 {
 }
 

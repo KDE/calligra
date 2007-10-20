@@ -21,6 +21,7 @@
 #include <qbuffer.h>
 #include <qtabwidget.h>
 #include <qpaintdevicemetrics.h>
+#include <QtGui/QPrinter>
 
 #include "kivio_doc.h"
 #include "kivio_page.h"
@@ -46,7 +47,6 @@
 #include <unistd.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <kprinter.h>
 #include <kdebug.h>
 #include <kurl.h>
 #include <kapplication.h>
@@ -632,11 +632,23 @@ void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool tran
   page->paintContent(painter,rect,transparent,p0,zoom, drawConnectorTargets, drawSelection);
 }
 
-void KivioDoc::printContent( KPrinter &prn )
+void KivioDoc::printContent( QPrinter &prn )
 {
   KivioScreenPainter p;
-  QValueList<int> pages = prn.pageList();
+  // Not supported in Qt
+  //QValueList<int> pages = prn.pageList();
   KivioPage *pPage;
+
+  //Qt doesn't support non-continuous ranges
+  int startPage, endPage;
+  if (printer->printRange() == QPrinter::PageRange)
+  {
+    startPage = printer->fromPage();
+    endPage = printer->toPage();
+  } else {
+    startPage = 1;
+    endPage = m_pMap->count();
+  }
 
   // ### HACK: disable zooming-when-printing if embedded parts are used.
   // No koffice app supports zooming in paintContent currently.
@@ -651,13 +663,13 @@ void KivioDoc::printContent( KPrinter &prn )
   p.painter()->scale( (double)metrics.logicalDpiX() / (double)dpiX,
     (double)metrics.logicalDpiY() / (double)dpiY );
 
-  QValueList<int>::iterator it;
+  int it;
 
-  for(it = pages.begin(); it != pages.end(); ++it) {
+  for(it = startPage; it != endPage; ++it) {
     pPage = m_pMap->pageList().at((*it)-1);
     pPage->printContent(p, dpiX, dpiY);
 
-    if( it != (--pages.end()) ) {
+    if( it != (--endPage) ) {
       prn.newPage();
     }
   }

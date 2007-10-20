@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-#include <kprinter.h> // has to be first
+#include <QtGui/QPrinter> // has to be first
 
 #include <iostream>
 #include <stdlib.h>
@@ -835,7 +835,7 @@ int KivioView::canvasYOffset() const
   return canvasWidget()->yOffset();
 }
 
-void KivioView::print(KPrinter& ptr)
+void KivioView::print(QPrinter& ptr)
 {
   ptr.setFullPage(true);
   m_pDoc->printContent( ptr );
@@ -1756,16 +1756,16 @@ void KivioView::toggleViewManager(bool b)
     TOGGLE_ACTION("viewManager")->setChecked(b);
 }
 
-void KivioView::setupPrinter(KPrinter &p)
+void KivioView::setupPrinter(QPrinter &p)
 {
   p.setMinMax(1, m_pDoc->map()->pageList().count());
   KoPageLayout pl = activePage()->paperLayout();
-  p.setPageSize( static_cast<KPrinter::PageSize>( KoPageFormat::printerPageSize( pl.format ) ) );
+  p.setPageSize( static_cast<QPrinter::PageSize>( KoPageFormat::printerPageSize( pl.format ) ) );
 
   if ( pl.orientation == KoPageFormat::Lansdscape || pl.format == KoPageFormat::ScreenSize ) {
-    p.setOrientation( KPrinter::Landscape );
+    p.setOrientation( QPrinter::Landscape );
   } else {
-    p.setOrientation( KPrinter::Portrait );
+    p.setOrientation( QPrinter::Portrait );
   }
 }
 

@@ -48,7 +48,7 @@ class DCOPObject;
 #include "kivio_stencil.h"
 #include <koffice_export.h>
 class KivioPainter;
-class KPrinter;
+class QPrinter;
 class KivioView;
 class KoZoomHandler;
 class KoRect;
@@ -103,7 +103,7 @@ class KIVIO_EXPORT KivioPage : public QObject
 
     KivioPage *findPage( const QString & _name );
 
-    void print( QPainter &painter, KPrinter *_printer );
+    void print( QPainter &painter, QPrinter *_printer );
     void update();
     int id()const { return m_id; }
     static KivioPage* find( int _id );

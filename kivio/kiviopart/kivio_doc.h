@@ -53,7 +53,7 @@ class DCOPObject;
 class KoCommandHistory;
 
 class QPainter;
-class KPrinter;
+class QPrinter;
 class KCommand;
 class KoZoomHandler;
 class QFont;
@@ -121,7 +121,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void paintContent(KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page,
                       QPoint, KoZoomHandler*, bool, bool);
 
-    void printContent( KPrinter& prn );
+    void printContent( QPrinter& prn );
 
     static QPtrList<KivioDoc>& documents();
 
