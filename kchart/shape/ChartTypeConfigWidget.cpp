@@ -85,6 +85,8 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
 
     // The default chart is a BarChartType, so let's prepare for that
     d->ui.threeDLook->show();
+    d->ui.linesInBarChart->hide();
+    d->ui.linesInBarChartArea->hide();
 
     connect( subtypeButtonGroup, SIGNAL( buttonClicked( int ) ),
              this, SLOT( chartSubtypeSelected( int ) ) );

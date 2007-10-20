@@ -68,11 +68,11 @@ KoShape* ChartShapeFactory::createDefaultShape() const
 
     // Fill cells with data if there is none.
     QStandardItemModel *m_chartData = new QStandardItemModel();
-    m_chartData->setRowCount( 4 );
+    m_chartData->setRowCount( 3 );
     m_chartData->setColumnCount( 4 );
 
     // Insert example data
-    for (uint row = 0; row < 4; row++) {
+    for (uint row = 0; row < 3; row++) {
         for (uint col = 0; col < 4; col++) {
 
             m_chartData->setItem( row, col,
