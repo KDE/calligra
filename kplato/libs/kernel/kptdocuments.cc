@@ -185,6 +185,7 @@ bool Documents::load( KoXmlElement &element, XMLLoaderObject &status )
             }
         }
     }
+    return true;
 }
 
 void Documents::save(QDomElement &element) const
