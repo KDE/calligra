@@ -54,9 +54,9 @@ ChartDataConfigWidget::ChartDataConfigWidget()
     connect( d->ui.m_dataInRows, SIGNAL( toggled( bool ) ),
 	     this,               SLOT( dataInRows( bool ) ) );
     connect( d->ui.m_firstRowAsLabel, SIGNAL( toggled( bool ) ),
-             this, SLOT( firstRowIsHeader( bool ) ) );
+             this,                    SLOT( firstRowIsLabel( bool ) ) );
     connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
-             this, SLOT( firstColumnIsHeader( bool ) ) );
+             this,                       SLOT( firstColumnIsLabel( bool ) ) );
 }
 
 ChartDataConfigWidget::~ChartDataConfigWidget()
@@ -93,14 +93,14 @@ void ChartDataConfigWidget::dataInRows( bool checked )
     // d->chart->update();
 }
 
-void ChartDataConfigWidget::firstRowIsHeader( bool checked )
+void ChartDataConfigWidget::setFirstRowIsLabel( bool checked )
 {
-    d->chart->setFirstRowIsHeader( checked );
+    d->chart->setFirstRowIsLabel( checked );
 }
 
-void ChartDataConfigWidget::firstColumnIsHeader( bool checked )
+void ChartDataConfigWidget::setFirstColumnIsLabel( bool checked )
 {
-    d->chart->setFirstColumnIsHeader( checked );
+    d->chart->setFirstColumnIsLabel( checked );
 }
 
 #include "ChartDataConfigWidget.moc"

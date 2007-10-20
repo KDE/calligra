@@ -28,15 +28,15 @@ class ChartProxyModel::Private {
 public:
     Private();
 
-    bool firstRowIsHeader;
-    bool firstColumnIsHeader;
+    bool firstRowIsLabel;
+    bool firstColumnIsLabel;
     Qt::Orientation dataDirection;
 };
 
 ChartProxyModel::Private::Private()
 {
-    firstRowIsHeader    = false;
-    firstColumnIsHeader = false;
+    firstRowIsLabel    = false;
+    firstColumnIsLabel = false;
 
     dataDirection = Qt::Vertical;
 }
@@ -73,21 +73,21 @@ QVariant ChartProxyModel::headerData( int section,
     int column = 0;
 
     if ( orientation == Qt::Vertical ) {
-        if ( !d->firstColumnIsHeader )
+        if ( !d->firstColumnIsLabel )
             return QVariant();
 
         // Return the first column in the section-th row
         row = section;
-        if ( d->firstRowIsHeader )
+        if ( d->firstRowIsLabel )
             row++;
     }
     else if ( orientation == Qt::Horizontal ) {
-        if( !d->firstRowIsHeader )
+        if( !d->firstRowIsLabel )
             return QVariant();
 
         // Return the section-th column in the first row
         column = section;
-        if ( d->firstColumnIsHeader )
+        if ( d->firstColumnIsLabel )
             column++;
     }
 
@@ -120,18 +120,18 @@ QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) con
         row = sourceIndex.row();
         column = sourceIndex.column();
 
-        if ( d->firstRowIsHeader )
+        if ( d->firstRowIsLabel )
             row--;
-        if ( d->firstColumnIsHeader )
+        if ( d->firstColumnIsLabel )
             column--;
     }
     else {
         row = sourceIndex.column();
         column = sourceIndex.row();
 
-        if ( d->firstRowIsHeader )
+        if ( d->firstRowIsLabel )
             column--;
-        if ( d->firstColumnIsHeader )
+        if ( d->firstColumnIsLabel )
             row--;
     }
     return sourceModel()->index( row, column );
@@ -144,18 +144,18 @@ QModelIndex ChartProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
         row = proxyIndex.row();
         column = proxyIndex.column();
 
-        if ( d->firstRowIsHeader )
+        if ( d->firstRowIsLabel )
             row++;
-        if ( d->firstColumnIsHeader )
+        if ( d->firstColumnIsLabel )
             column++;
     }
     else {
         row = proxyIndex.column();
         column = proxyIndex.row();
 
-        if ( d->firstRowIsHeader )
+        if ( d->firstRowIsLabel )
             row++;
-        if ( d->firstColumnIsHeader )
+        if ( d->firstColumnIsLabel )
             column++;
     }
     return sourceModel()->index( row, column );
@@ -200,11 +200,11 @@ int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ )
     // Even if the first row is a header - if the data table is empty,
     // we still have 0 rows, not -1
 
-    bool firstRowIsHeader = d->firstRowIsHeader;
+    bool firstRowIsLabel = d->firstRowIsLabel;
     if ( d->dataDirection == Qt::Horizontal )
-        firstRowIsHeader = d->firstColumnIsHeader;
+        firstRowIsLabel = d->firstColumnIsLabel;
 
-    if ( rowCount > 0 && firstRowIsHeader )
+    if ( rowCount > 0 && firstRowIsLabel )
         rowCount--;
 
     return rowCount;
@@ -223,24 +223,24 @@ int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() *
     // Even if the first column is a header - if the data table is empty,
     // we still have 0 columns, not -1
 
-    bool firstColumnIsHeader = d->firstColumnIsHeader;
+    bool firstColumnIsLabel = d->firstColumnIsLabel;
     if ( d->dataDirection == Qt::Horizontal )
-        firstColumnIsHeader = d->firstRowIsHeader;
+        firstColumnIsLabel = d->firstRowIsLabel;
 
-    if ( columnCount > 0 && firstColumnIsHeader )
+    if ( columnCount > 0 && firstColumnIsLabel )
         columnCount--;
 
     return columnCount;
 }
 
-void ChartProxyModel::setFirstRowIsHeader( bool b )
+void ChartProxyModel::setFirstRowIsLabel( bool b )
 {
-    d->firstRowIsHeader = b;
+    d->firstRowIsLabel = b;
 }
 
-void ChartProxyModel::setFirstColumnIsHeader( bool b )
+void ChartProxyModel::setFirstColumnIsLabel( bool b )
 {
-    d->firstColumnIsHeader = b;
+    d->firstColumnIsLabel = b;
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )

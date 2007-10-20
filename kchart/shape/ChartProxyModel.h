@@ -54,8 +54,8 @@ public slots:
     virtual int rowCount( const QModelIndex &parent = QModelIndex() ) const;
     virtual int columnCount( const QModelIndex &parent = QModelIndex() ) const;
 
-    void setFirstRowIsHeader( bool b );
-    void setFirstColumnIsHeader( bool b );
+    void setFirstRowIsLabel( bool b );
+    void setFirstColumnIsLabel( bool b );
     void setDataDirection( Qt::Orientation orientation );
 
 private:

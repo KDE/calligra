@@ -108,8 +108,8 @@ public:
     KDChart::AbstractDiagram  *diagram;
 
     // About the data
-    bool                       firstRowAsLabel;
-    bool                       firstColAsLabel;
+    bool                       firstRowIsLabel;
+    bool                       firstColIsLabel;
     // Proxy model that holds the actual QAbstractItemModel
     ChartProxyModel           *chartData;
 
@@ -167,8 +167,8 @@ ChartShape::ChartShape()
     d->chartData->setSourceModel( &d->defaultData );
     d->diagram->setModel( d->chartData );
 
-    d->firstRowAsLabel = false;
-    d->firstColAsLabel = false;
+    d->firstRowIsLabel = false;
+    d->firstColIsLabel = false;
 
     // Add axes to the diagram
     KDChart::AbstractCartesianDiagram  *diagram = static_cast<KDChart::AbstractCartesianDiagram*>( d->diagram );
@@ -490,15 +490,15 @@ void ChartShape::setThreeDMode( bool threeD )
     update();
 }
 
-void ChartShape::setFirstRowIsHeader( bool b )
+void ChartShape::setFirstRowIsLabel( bool b )
 {
-    d->chartData->setFirstRowIsHeader( b );
+    d->chartData->setFirstRowIsLabel( b );
     modelChanged();
 }
 
-void ChartShape::setFirstColumnIsHeader( bool b )
+void ChartShape::setFirstColumnIsLabel( bool b )
 {
-    d->chartData->setFirstColumnIsHeader( b );
+    d->chartData->setFirstColumnIsLabel( b );
     modelChanged();
 }
 
@@ -861,13 +861,13 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
 {
 #if 0
     QString dataSourceHasLabels;
-    if ( m_firstRowAsLabel )
-        if ( m_firstColAsLabel )
+    if ( m_firstRowIsLabel )
+        if ( m_firstColIsLabel )
             dataSourceHasLabels = "both";
         else
             dataSourceHasLabels = "row";
     else
-        if ( m_firstColAsLabel )
+        if ( m_firstColIsLabel )
             dataSourceHasLabels = "column";
         else
             dataSourceHasLabels = "none";
