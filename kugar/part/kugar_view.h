@@ -35,8 +35,8 @@ public:
     }
 
 
-    virtual void setupPrinter( KPrinter &printer );
-    virtual void print( KPrinter &printer );
+    virtual void setupPrinter( QPrinter &printer );
+    virtual void print( QPrinter &printer );
 
 
 

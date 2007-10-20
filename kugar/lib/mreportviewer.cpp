@@ -12,8 +12,8 @@
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QPaintEvent>
+#include <QtGui/QPrinter>
 #include <kmessagebox.h>
-#include <kprinter.h>
 #include <klocale.h>
 
 #include "mreportviewer.h"
@@ -160,10 +160,12 @@ void MReportViewer::printReport()
     }
 
     // Set the printer dialog
-    KPrinter printer;
+    QPrinter printer;
 
     setupPrinter( printer );
-    if ( printer.setup( this ) )
+
+    QPrintDialog printDialog(&printer, this);
+    if (printDialog.exec())
         printReport( printer );
 }
 
@@ -280,7 +282,7 @@ QSize MReportViewer::sizeHint() const
     return scroller -> sizeHint();
 }
 
-void MReportViewer::printReport( KPrinter &printer )
+void MReportViewer::printReport( QPrinter &printer )
 {
     // Check for a report
     if ( !report )
@@ -305,14 +307,23 @@ void MReportViewer::printReport( KPrinter &printer )
     int viewIdx = report->getCurrentIndex();
 
     // Check the order we are printing the pages
-    if ( printer.pageOrder() == KPrinter::FirstPageFirst )
+    if ( printer.pageOrder() == QPrinter::FirstPageFirst )
         printRev = false;
     else
         printRev = true;
 
+    //Qt doesn't support non-continuous ranges
+    int printFrom, printTo;
+    if (printer->printRange() == QPrinter::PageRange)
+    {
+      printFrom = printer->fromPage() - 1;
+      printTo = printer->toPage();
+    } else {
+      printFrom = 0;
+      printTo = report->pageCount();;
+    }
+
     // Get the count of pages and copies to print
-    int printFrom = printer.fromPage() - 1;
-    int printTo = printer.toPage();
     int printCnt = ( printTo - printFrom );
     int printCopies = printer.numCopies();
     int totalSteps = printCnt * printCopies;
@@ -369,14 +380,14 @@ void MReportViewer::printReport( KPrinter &printer )
     report->setCurrentPage( viewIdx );
 }
 
-void MReportViewer::setupPrinter( KPrinter &printer )
+void MReportViewer::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 {
     int cnt = report->pageCount();
 
-    printer.setPageSize( ( KPrinter::PageSize ) report->pageSize() );
-    printer.setOrientation( ( KPrinter::Orientation ) report->pageOrientation() );
-    printer.setMinMax( 1, cnt );
-    printer.setFromTo( 1, cnt );
+    printer.setPageSize( ( QPrinter::PageSize ) report->pageSize() );
+    printer.setOrientation( ( QPrinter::Orientation ) report->pageOrientation() );
+    printDialog.setMinMax( 1, cnt );
+    printDialog.setFromTo( 1, cnt );
     printer.setFullPage( true );
 }
 
@@ -391,11 +402,10 @@ void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopi
         printCopies = 1;
 
 
-    printer = new KPrinter();
+    printer = new QPrinter();
 
-    printer->setPageSize( ( KPrinter::PageSize ) report->pageSize() );
-    printer->setOrientation( ( KPrinter::Orientation ) report->pageOrientation() );
-    printer->setMinMax( 1, cnt );
+    printer->setPageSize( ( QPrinter::PageSize ) report->pageSize() );
+    printer->setOrientation( ( QPrinter::Orientation ) report->pageOrientation() );
     printer->setFullPage( true );
     printer->setNumCopies( printCopies );
     printer->setFromTo( printFrom, printTo );
