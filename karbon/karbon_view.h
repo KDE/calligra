@@ -48,6 +48,7 @@ class QLabel;
 class QDropEvent;
 class QResizeEvent;
 class QRectF;
+class QPrinter;
 
 class KAction;
 class KarbonPart;
@@ -88,8 +89,8 @@ public:
 
 
 	// printing support, override from KoView
-	virtual void setupPrinter( KPrinter &/*printer*/ ) {}
-	virtual void print( KPrinter& printer );
+	virtual void setupPrinter( QPrinter &/*printer*/ ) {}
+	virtual void print( QPrinter& printer );
 
 	KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
 

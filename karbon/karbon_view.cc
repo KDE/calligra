@@ -109,7 +109,6 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
-#include <kprinter.h>
 #include <kcomponentdata.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
@@ -133,7 +132,7 @@
 #include <QtCore/QEvent>
 #include <Qt3Support/q3dragobject.h>
 #include <Qt3Support/q3popupmenu.h>
-
+#include <QtGui/QPrinter>
 
 
 #include <unistd.h>
@@ -366,9 +365,9 @@ void KarbonView::dropEvent( QDropEvent *e )
     }
 }
 
-void KarbonView::print( KPrinter &printer )
+void KarbonView::print( QPrinter &printer )
 {
-    debugView("KarbonView::print(KPrinter)");
+    debugView("KarbonView::print(QPrinter)");
 
     const int resolution = 600;
     printer.setResolution( resolution );
