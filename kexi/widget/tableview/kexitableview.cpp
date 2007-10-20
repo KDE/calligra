@@ -59,7 +59,7 @@
 #include <kmessagebox.h>
 
 #ifndef KEXI_NO_PRINT
-# include <kprinter.h>
+#include <QtGui/QPrinter>
 #endif
 
 #include "kexitableview.h"
@@ -2126,7 +2126,7 @@ void KexiTableView::slotAutoScroll()
 
 #ifndef KEXI_NO_PRINT
 void
-KexiTableView::print(KPrinter &/*printer*/)
+KexiTableView::print(QPrinter &/*printer*/)
 {
 //	printer.setFullPage(true);
 #if 0

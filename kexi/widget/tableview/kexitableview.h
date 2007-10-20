@@ -49,7 +49,8 @@
 #include <widget/utils/kexisharedactionclient.h>
 #include "kexidataawareobjectiface.h"
 
-class KPrinter;
+class QPrinter;
+
 class KAction;
 
 class KexiTableView;
@@ -220,7 +221,7 @@ public:
 #ifndef KEXI_NO_PRINT
 	// printing
 //	void		setupPrinter(KPrinter &printer);
-	void		print(KPrinter &printer);
+	void		print(QPrinter &printer);
 #endif
 
 	// reimplemented for internal reasons

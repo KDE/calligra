@@ -32,7 +32,6 @@
 #include <kurllabel.h>
 #include <kdebug.h>
 #include <klineedit.h>
-#include <kprinter.h>
 #include <kpushbutton.h>
 #include <kdeversion.h>
 
@@ -99,7 +98,8 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 	}
 
 	//setup printing
-#ifdef Q_WS_WIN
+// Port to use QPrinter on all platforms
+//#ifdef Q_WS_WIN
 	QPrinter printer(QPrinter::HighResolution);
 	printer.setOrientation( m_settings.pageLayout.orientation == PG_PORTRAIT 
 		? QPrinter::Portrait : QPrinter::Landscape );
@@ -110,13 +110,13 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 	// we cannot use real from/to values in setMinMax() and setFromTo() 
 	// because page count is known after obtaining print settings
 	printer.setFromTo(1,1);
-#else
+/*#else
 	KPrinter printer;
 	printer.setOrientation( m_settings.pageLayout.orientation == PG_PORTRAIT 
 		? KPrinter::Portrait : KPrinter::Landscape );
 	printer.setPageSize( 
 		(KPrinter::PageSize)KoPageFormat::printerPageSize( m_settings.pageLayout.format ) );
-#endif
+#endif*/
 
 	printer.setFullPage(true);
 	QString docName( titleText );
@@ -140,7 +140,8 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 	uint loops, loopsPerPage;
 	Q3ValueList<int> pagesToPrint;
 	int fromPage = 0;
-#ifdef Q_WS_WIN
+// Port to use QPrinter on all platforms
+//#ifdef Q_WS_WIN
 	int toPage = 0;
 	if (QPrinter::PageRange == printer.printRange()) {
 		fromPage = printer.fromPage();
@@ -163,7 +164,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 	// on win32 the OS does perform buffering (only when collation is off, each copy needs to be repeated)
 	loops = 1;
 	loopsPerPage = printer.collateCopies() ? 1 : printer.numCopies();
-#else
+/*#else
 	// on !win32 print QPrinter::numCopies() times (the OS does not perform buffering)
 	pagesToPrint = printer.pageList();
 	kDebug() << pagesToPrint << endl;
@@ -186,7 +187,7 @@ bool KexiSimplePrintingCommand::print(const QString& aTitleText)
 		loopsPerPage = printer.numCopies();
 	}
 //! @todo also look at printer.pageSet() option : all/odd/even pages
-#endif
+#endif*/
 	// now, total number of printed pages is printer.numCopies()*printer.pageList().count()
 
 	kDebug() << "printing..." << endl;
