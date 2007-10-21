@@ -32,10 +32,10 @@ class ChartTypeToolFactory : public KoToolFactory
     Q_OBJECT
 
 public:
-    explicit ChartTypeToolFactory(QObject *parent);
+    explicit ChartTypeToolFactory( QObject *parent );
     ~ChartTypeToolFactory();
 
-    KoTool * createTool(KoCanvasBase *canvas);
+    KoTool * createTool( KoCanvasBase *canvas );
 };
 
 } // namespace KChart

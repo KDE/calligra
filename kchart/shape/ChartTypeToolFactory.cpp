@@ -21,29 +21,29 @@
 #include "ChartTypeTool.h"
 #include "ChartShape.h"
 
-#include <klocale.h>
+#include <KLocale>
 
 
 using namespace KChart;
 
 
-ChartTypeToolFactory::ChartTypeToolFactory(QObject *parent)
-    : KoToolFactory(parent, "ChartTypeToolFactory_ID", i18n("ChartType tool"))
+ChartTypeToolFactory::ChartTypeToolFactory( QObject *parent )
+    : KoToolFactory( parent, "ChartTypeToolFactory_ID", i18n( "ChartType tool" ) )
 {
-    setToolTip (i18n("ChartType editing tool"));
-    setToolType (dynamicToolType());
+    setToolTip ( i18n( "ChartType editing tool" ) );
+    setToolType ( dynamicToolType() );
     //setIcon ("");
-    setPriority (1);
-    setActivationShapeId (ChartShapeId);
+    setPriority ( 1 );
+    setActivationShapeId ( ChartShapeId );
 }
 
 ChartTypeToolFactory::~ChartTypeToolFactory()
 {
 }
 
-KoTool * ChartTypeToolFactory::createTool(KoCanvasBase *canvas)
+KoTool *ChartTypeToolFactory::createTool( KoCanvasBase *canvas )
 {
-    return new ChartTypeTool(canvas);
+    return new ChartTypeTool( canvas );
 }
 
 

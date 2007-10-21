@@ -34,8 +34,10 @@
 
 #include "ChartShape.h"
 #include "ChartTypeToolFactory.h"
+#include "ChartLegendToolFactory.h"
 //#include "ChartDataConfigFactory.h"
 #include "ChartTypeConfigWidget.h"
+#include "ChartLegendConfigWidget.h"
 
 using namespace KChart;
 
@@ -46,6 +48,7 @@ ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
     KoShapeRegistry::instance()->add( new ChartShapeFactory( parent ) );
 
     KoToolRegistry::instance()->add( new ChartTypeToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new ChartLegendToolFactory( parent ) );
 }
 
 
@@ -108,8 +111,7 @@ QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
     kDebug() << "### createShapeOptionPanels";
     QList<KoShapeConfigWidgetBase*> answer;
     answer.append(new ChartTypeConfigWidget());
-    // TODO Stefan: SubType
-    // TODO Stefan: Labels/Legend
+    answer.append(new ChartLegendConfigWidget());
     // TODO Stefan: Axes
     return answer;
 }

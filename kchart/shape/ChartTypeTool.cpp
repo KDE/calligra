@@ -45,9 +45,9 @@
 using namespace KChart;
 
 
-ChartTypeTool::ChartTypeTool(KoCanvasBase *canvas)
-    : KoTool(canvas),
-      m_currentShape(0)
+ChartTypeTool::ChartTypeTool( KoCanvasBase *canvas )
+    : KoTool( canvas ),
+      m_currentShape( 0 )
 {
     // Create QActions here.
 #if 0

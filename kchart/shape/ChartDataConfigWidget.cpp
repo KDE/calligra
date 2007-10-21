@@ -47,7 +47,7 @@ ChartDataConfigWidget::ChartDataConfigWidget()
     , d( new Private )
 {
     d->chart = 0;
-    d->ui.setupUi(this);
+    d->ui.setupUi( this );
 
     d->ui.m_firstRowAsLabel->setChecked( true );
     d->ui.m_firstColumnAsLabel->setChecked( true );
@@ -55,7 +55,7 @@ ChartDataConfigWidget::ChartDataConfigWidget()
     // We need only connect one of the data direction buttons, since
     // they are mutually exclusive.
     connect( d->ui.m_dataInRows, SIGNAL( toggled( bool ) ),
-	     this,               SLOT( dataInRows( bool ) ) );
+             this,               SLOT( dataInRows( bool ) ) );
     connect( d->ui.m_firstRowAsLabel, SIGNAL( toggled( bool ) ),
              this,                    SLOT( setFirstRowIsLabel( bool ) ) );
     connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
@@ -67,7 +67,7 @@ ChartDataConfigWidget::~ChartDataConfigWidget()
     delete d;
 }
 
-void ChartDataConfigWidget::open(KoShape* chart)
+void ChartDataConfigWidget::open( KoShape* chart )
 {
     d->chart = dynamic_cast<ChartShape*>( chart );
 }
@@ -85,15 +85,10 @@ KAction* ChartDataConfigWidget::createAction()
 
 void ChartDataConfigWidget::dataInRows( bool checked )
 {
-    kDebug() << "dataInRows:" << checked;
     if ( checked )
-	d->chart->setDataDirection( Qt::Horizontal );
+        d->chart->setDataDirection( Qt::Horizontal );
     else
-	d->chart->setDataDirection( Qt::Vertical );
-
-    // No need to call ChartShape::update() Here.
-    // It will update itself when the data changes in any way.
-    // d->chart->update();
+        d->chart->setDataDirection( Qt::Vertical );
 }
 
 void ChartDataConfigWidget::setFirstRowIsLabel( bool checked )

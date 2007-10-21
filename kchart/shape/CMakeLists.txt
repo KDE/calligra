@@ -13,12 +13,16 @@ SET (chartshape_LIB_SRCS
     ChartTypeToolFactory.cpp
     ChartTypeConfigWidget.cpp
     ChartDataConfigWidget.cpp
+    ChartLegendTool.cpp
+    ChartLegendToolFactory.cpp
+    ChartLegendConfigWidget.cpp
     ../commands/ChartTypeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
     ChartTypeConfigWidget.ui
     ChartDataConfigWidget.ui
+    ChartLegendConfigWidget.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
