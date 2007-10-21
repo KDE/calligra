@@ -57,23 +57,37 @@
         <widget class="QFontComboBox" name="font" />
        </item>
        <item row="2" column="0" colspan="2" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Font Size:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" >
+        <widget class="QSpinBox" name="fontSize" >
+         <property name="value" >
+          <number>12</number>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2" >
         <widget class="QLabel" name="label_5" >
          <property name="text" >
           <string>Spacing:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2" >
+       <item row="3" column="2" >
         <widget class="QSpinBox" name="spacing" />
        </item>
-       <item row="3" column="0" colspan="2" >
+       <item row="4" column="0" colspan="2" >
         <widget class="QCheckBox" name="showLines_2" >
          <property name="text" >
           <string>Show Lines</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0" >
+       <item row="5" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>

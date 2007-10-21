@@ -101,6 +101,8 @@ QWidget *ChartLegendTool::createOptionWidget()
        this, SLOT( setLegendFont( const QFont& ) ) );
     connect( widget, SIGNAL( legendSpacingChanged( int ) ),
        this, SLOT( setLegendSpacing( int ) ) );
+    connect( widget, SIGNAL( legendFontSizeChanged( int ) ),
+       this, SLOT( setLegendFontSize( int ) ) );
 
     return widget;
 }
@@ -118,4 +120,9 @@ void ChartLegendTool::setLegendFont( const QFont &font )
 void ChartLegendTool::setLegendSpacing( int spacing )
 {
     m_currentShape->setLegendSpacing( spacing );
+}
+
+void ChartLegendTool::setLegendFontSize( int size )
+{
+    m_currentShape->setLegendFontSize( size );
 }

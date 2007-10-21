@@ -74,6 +74,8 @@ void ChartLegendConfigWidget::setupUi()
              this,       SIGNAL( legendFontChanged( const QFont& ) ) );
     connect (d->ui.spacing, SIGNAL( valueChanged( int ) ),
              this,       SIGNAL( legendSpacingChanged( int ) ) );
+    connect (d->ui.fontSize, SIGNAL( valueChanged( int ) ),
+             this,           SIGNAL( legendFontSizeChanged( int ) ) );
 }
 
 void ChartLegendConfigWidget::open( KoShape* chart )

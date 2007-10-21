@@ -529,6 +529,14 @@ void ChartShape::setLegendFont( const QFont& font )
     update();
 }
 
+void ChartShape::setLegendFontSize( int size )
+{
+    KDChart::TextAttributes attributes = d->legend->textAttributes();
+    attributes.setFontSize( size );
+    d->legend->setTextAttributes( attributes );
+    update();
+}
+
 void ChartShape::setLegendSpacing( int spacing )
 {
     d->legend->setSpacing( ( uint )spacing );
