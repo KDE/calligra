@@ -23,21 +23,6 @@ Before release of KOffice 2.0.0
 Item                                                                   Prio Status
 ------------------------------------------------------------------------------
 
-* Build the foundation                                                  
- + Move the data editor to the attic                                    DONE
- + Move the wizard to the attic                                         DONE
- + Move the configuration dialog to the attic                           DONE
- + Add KChart coding standards.                                         DONE
- + Rename all C++ files to .cpp instead of .cc to follow the KDE        DONE
-   coding standards.
- + Move code from kchart_part.{h,cpp} to ChartShape to make ODF work    DONE
-   - Start of ODF loading                                               done
-   - Start of ODF saving                                                done
- + Remove KChartDocument                                                DONE
- + Make KChart a real KOffice 2 app                                     DONE
-    - Make it use include a flake shape                                 done
- + Make the chart shape communicate with the apps using a model         DONE
-
 * KChart, the application
   + Make tools work                                                     ----
   + Import data (should this be in ChartShape?)                         ----
