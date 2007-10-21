@@ -5,117 +5,300 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>294</width>
-    <height>250</height>
+    <width>306</width>
+    <height>276</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
   <layout class="QGridLayout" >
-   <item row="3" column="0" >
+   <item rowspan="2" row="0" column="0" colspan="2" >
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="layoutDirection" >
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="currentIndex" >
+      <number>2</number>
+     </property>
+     <widget class="QWidget" name="tabGeneral" >
+      <attribute name="title" >
+       <string>General</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <layout class="QHBoxLayout" >
+         <item>
+          <widget class="QLabel" name="label_4" >
+           <property name="text" >
+            <string>Title:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="title" />
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QGroupBox" name="groupBox_2" >
+         <property name="title" >
+          <string>Appearance</string>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="1" >
+           <widget class="QFontComboBox" name="font" />
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="label" >
+            <property name="text" >
+             <string>Font:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2" >
+           <widget class="QCheckBox" name="showLines" >
+            <property name="text" >
+             <string>Show Lines</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabGeometry" >
+      <attribute name="title" >
+       <string>Geometry</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>Orientation:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QComboBox" name="orientation" >
+         <item>
+          <property name="text" >
+           <string>Horizontal</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Vertical</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>Alignment:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QComboBox" name="alignment" >
+         <item>
+          <property name="text" >
+           <string>Left</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Center</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Right</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="QGroupBox" name="fixedPosition" >
+         <property name="toolTip" >
+          <string>Note: Instead of using a pre-defined position, you can drag the legend to any point in the chart.</string>
+         </property>
+         <property name="title" >
+          <string>Use pre-defined position</string>
+         </property>
+         <property name="flat" >
+          <bool>false</bool>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QToolButton" name="toolButton" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_topleft.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="toolButton_2" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_top.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QToolButton" name="toolButton_8" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_topright.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QToolButton" name="toolButton_3" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_left.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2" >
+           <widget class="QToolButton" name="toolButton_7" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_right.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" >
+           <widget class="QToolButton" name="toolButton_4" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_bottomleft.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" >
+           <widget class="QToolButton" name="toolButton_5" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_bottom.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <widget class="QToolButton" name="toolButton_6" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="icon" >
+             <iconset>../pics/chart_legend_bottomright.png</iconset>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabLabels" >
+      <attribute name="title" >
+       <string>Labels</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QTextBrowser" name="textBrowser" >
+         <property name="html" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">This tab will have a list of all the elements in the legend. I chose the word "Labels" because the meaning of it is more obvious to the user than "Elements", which could be anything.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Settings include the label's&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">* Color&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">* Title&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">* ?&lt;/p>&lt;/body>&lt;/html></string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>288</width>
+       <height>16</height>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="title" >
-      <string>Appearance</string>
-     </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="1" >
-       <widget class="QFontComboBox" name="fontComboBox" />
-      </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Font:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2" >
-       <widget class="QCheckBox" name="checkBox" >
-        <property name="text" >
-         <string>Show Lines</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <layout class="QHBoxLayout" >
-     <item>
-      <widget class="QLabel" name="label_4" >
-       <property name="text" >
-        <string>Title:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit" />
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
-      <string>Geometry</string>
-     </property>
-     <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label_3" >
-        <property name="text" >
-         <string>Orientation:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" >
-       <widget class="QComboBox" name="comboBox_2" >
-        <item>
-         <property name="text" >
-          <string>Horizontal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Vertical</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label_2" >
-        <property name="text" >
-         <string>Alignment:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QComboBox" name="comboBox" >
-        <item>
-         <property name="text" >
-          <string>Left</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Right</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </widget>
    </item>
   </layout>
  </widget>
