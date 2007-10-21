@@ -61,7 +61,8 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    virtual bool loadOdf( const KoXmlElement    &chartElement,
+                          KoShapeLoadingContext &context );
     /// reimplemented
     virtual void saveOdf( KoShapeSavingContext & context ) const;
 

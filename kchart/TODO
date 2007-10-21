@@ -30,8 +30,8 @@ Item                                                                   Prio Stat
  + Add KChart coding standards.                                         DONE
  + Rename all C++ files to .cpp instead of .cc to follow the KDE        DONE
    coding standards.
- + Move code from kchart_part.{h,cpp} to ChartShape to make ODF work    ----
-   - Start of ODF loading                                                --
+ + Move code from kchart_part.{h,cpp} to ChartShape to make ODF work    DONE
+   - Start of ODF loading                                               done
    - Start of ODF saving                                                done
  + Remove KChartDocument                                                DONE
  + Make KChart a real KOffice 2 app                                     DONE
@@ -69,8 +69,8 @@ Item                                                                   Prio Stat
 
   Item                                                          Load    Save
   ----------------------------------------------------------------------------
-  + Handle all chart types                                      INGE    INGE
-    - Handle subtypes                                           --      --
+  + Handle all chart types                                      DONE    DONE
+  + Handle subtypes                                             --      --
   + Plot area                                                   ----    ----
     - title                                                     --      --
     - subtitle                                                  --      --

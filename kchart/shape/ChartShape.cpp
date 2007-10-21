@@ -638,17 +638,224 @@ static const unsigned int  numOdfChartTypes = ( sizeof odfChartTypes
 //                             Loading
 
 
-bool ChartShape::loadOdf( const KoXmlElement    &element, 
+bool ChartShape::loadOdf( const KoXmlElement    &chartElement, 
 			  KoShapeLoadingContext &context )
 {
-     if ( element.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
-         kDebug() << " ---------------------------------------------------------------- " ;
-         kDebug() << " Chart class: " 
-                  <<  element.attributeNS( KoXmlNS::chart, "class" );
-     }
-     else
-         return false;
+    if ( chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
+        kDebug() << " ---------------------------------------------------------------- " ;
+        kDebug() << " Chart class: " 
+                 <<  chartElement.attributeNS( KoXmlNS::chart, "class" );
+    }
+    else
+        return false;
 
+
+    // 1. Load the chart type.
+    const QString chartClass = chartElement.attributeNS( KoXmlNS::chart,
+                                                         "class", QString() );
+
+    // Find out what charttype the chart class corresponds to.
+    bool  knownType = false;
+    for ( unsigned int i = 0 ; i < numOdfChartTypes ; ++i ) {
+        if ( chartClass == odfChartTypes[i].odfName ) {
+            kDebug(35001) <<"found chart of type" << chartClass;
+
+            setChartType( odfChartTypes[i].chartType );
+            knownType = true;
+            break;
+        }
+    }
+
+    // If we can't find out what charttype it is, we might as well end here.
+    if ( !knownType ) {
+        // FIXME: Find out what the equivalent of
+        //        KoDocument::setErrorMessage() is for KoShape.
+        //setErrorMessage( i18n( "Unknown chart type %1" ,chartClass ) );
+        return false;
+    }
+
+    // 2. Load the title.
+    // FIXME
+
+    // 3. Load the subtitle.
+    // FIXME
+
+    // 4. Load the footer.
+    // FIXME
+
+    // 5. Load the legend.
+     //loadLegend( ... );
+
+    // 6. Load the plot area (this is where the real action is!).
+
+    // Load the data
+    //loadOdfData(  );
+
+#if 0  // Taken from old kchart_params.cpp: Use what we can from here
+       // and throw away the rest.
+
+    // Title TODO (more details, e.g. font, placement etc)
+    KoXmlElement titleElem = KoXml::namedItemNS( chartElem,
+						 KoXmlNS::chart, "title" );
+    if ( !titleElem.isNull() ) {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( titleElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        setHeaderFooterFont( KDChartParams::HdFtPosHeader, font, true, font.pointSize() );
+        setHeaderFooterColor( KDChartParams::HdFtPosHeader, color );
+        loadingContext.styleStack().restore();
+
+	KoXmlElement  pElem = KoXml::namedItemNS( titleElem,
+						 KoXmlNS::text, "p" );
+	setHeader1Text( pElem.text() );
+    }
+
+    // Subtitle TODO (more details)
+    KoXmlElement subtitleElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
+						   "subtitle" );
+    if ( !subtitleElem.isNull() ) {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( subtitleElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        setHeaderFooterFont( KDChartParams::HdFtPosHeader2, font, true, font.pointSize() );
+        setHeaderFooterColor( KDChartParams::HdFtPosHeader2, color );
+        loadingContext.styleStack().restore();
+
+	KoXmlElement  pElem = KoXml::namedItemNS( subtitleElem,
+						 KoXmlNS::text, "p" );
+	setHeader2Text( pElem.text() );
+    }
+
+    // Footer TODO (more details)
+    KoXmlElement footerElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
+						 "footer" );
+    if ( !footerElem.isNull() ) {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( footerElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        setHeaderFooterFont( KDChartParams::HdFtPosFooter, font, true, font.pointSize() );
+        setHeaderFooterColor( KDChartParams::HdFtPosFooter, color );
+        loadingContext.styleStack().restore();
+
+	KoXmlElement  pElem = KoXml::namedItemNS( footerElem,
+						 KoXmlNS::text, "p" );
+	setFooterText( pElem.text() );
+    }
+
+    // TODO: Get legend settings
+    KoXmlElement legendElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
+						 "legend" );
+    if ( !legendElem.isNull() )
+    {
+        loadingContext.styleStack().save();
+        loadingContext.fillStyleStack( legendElem, KoXmlNS::chart, "style-name", "chart" );
+        QFont font;
+        QColor color;
+        loadOasisFont( loadingContext, font, color );
+        //tz I didn't find that Oasis support separate font/colors for the title and the rest of the legend
+        setLegendFont( font, true );
+        setLegendTitleFont( font, true );
+        setLegendTextColor( color );
+        setLegendTitleTextColor( color );
+        loadingContext.styleStack().restore();
+        QString lp;
+        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-position" ) )
+        {
+            lp = legendElem.attributeNS( KoXmlNS::chart, "legend-position", QString() );
+        }
+        QString lalign;
+        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-align" ) )
+        {
+            lalign = legendElem.attributeNS( KoXmlNS::chart, "legend-align", QString() );
+        }
+
+        LegendPosition lpos = NoLegend;
+        int align = 1;
+        if ( lalign == "start" )
+        {
+            align = 0;
+        }
+        else if ( lalign == "end" )
+        {
+            align = 2;
+        }
+
+        if ( lp == "start" )
+        {
+            lpos = LegendLeft;
+            if ( align == 0 )
+                lpos = LegendTopLeftLeft;
+            else if ( align == 2 )    
+                lpos = LegendBottomLeftLeft;
+        }
+        else if ( lp == "end" )
+        {
+            lpos = LegendRight;
+            if ( align == 0 )
+                lpos = LegendTopRightRight;
+            else if ( align == 2 )    
+                lpos = LegendBottomRightRight;
+        }
+        else if ( lp == "top" )
+        {
+            lpos = LegendTop;
+            if ( align == 0 )
+                lpos = LegendTopLeftTop;
+            else if ( align == 2 )    
+                lpos = LegendTopRightTop;
+        }
+        else if ( lp == "bottom" )
+        {
+            lpos = LegendBottom;
+            if ( align == 0 )
+                lpos = LegendBottomLeftBottom;
+            else if ( align == 2 )    
+                lpos = LegendBottomRightBottom;
+        }
+        else if ( lp == "top-start" )
+        {
+            lpos = LegendTopLeft;
+        }
+        else if ( lp == "bottom-start" )
+        {
+            lpos = LegendBottomLeft;
+        }
+        else if ( lp == "top-end" )
+        {
+            lpos = LegendTopRight;
+        }
+        else if ( lp == "bottom-end" )
+        {
+            lpos = LegendBottomRight;
+        }
+
+        setLegendPosition( lpos );
+        //bodyWriter->addAttribute( "koffice:title", legendTitleText() );
+        if ( legendElem.hasAttributeNS( KoXmlNS::koffice, "title" ) )
+        {
+            setLegendTitleText( legendElem.attributeNS( KoXmlNS::koffice, "title", QString() ) );
+        }
+    }
+    else
+    {
+        setLegendPosition( NoLegend );
+    }
+
+    // Get the plot-area.  This is where the action is.
+    KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElem,
+						    KoXmlNS::chart, "plot-area" );
+    if ( !plotareaElem.isNull() ) {
+	return loadOasisPlotarea( plotareaElem, loadingContext, errorMessage );
+    }
+
+    return false;
+#endif
 
     return true;
 }
@@ -714,21 +921,9 @@ void ChartShape::saveLegend( KoXmlWriter &bodyWriter,
 
 
 #if 0
-void KChartParams::saveOasis( KoXmlWriter* bodyWriter, KoGenStyles& mainStyles ) const
+void KChartParams::saveOasis( KoXmlWriter* bodyWriter, 
+                              KoGenStyles& mainStyles ) const
 {
-    bool knownType = false;
-    for ( unsigned int i = 0 ; i < numOasisChartTypes ; ++i ) {
-        if ( m_chartType == oasisChartTypes[i].chartType ) {
-            bodyWriter->addAttribute( "chart:class", oasisChartTypes[i].oasisClass );
-            knownType = true;
-            break;
-        }
-    }
-
-    if ( !knownType ) {
-        kError(32001) << "Unknown chart type in KChartParams::saveOasis, extend oasisChartTypes!" << endl;
-    }
-
     bodyWriter->startElement( "chart:title" );
     QRect rect( headerFooterRect( KDChartParams::HdFtPosHeader ) );
     bodyWriter->addAttributePt( "svg:x", rect.x() );
@@ -1043,7 +1238,9 @@ void KChartParams::saveOasisAxis( KoXmlWriter* bodyWriter,
 }
 
 
-QString KChartParams::saveOasisFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color ) const
+QString KChartParams::saveOasisFont( KoGenStyles& mainStyles, 
+                                     const QFont& font,
+                                     const QColor& color ) const
 {
     KoGenStyle::PropertyType tt = KoGenStyle::TextType;
     KoGenStyle autoStyle( KoGenStyle::StyleAuto, "chart", 0 );
