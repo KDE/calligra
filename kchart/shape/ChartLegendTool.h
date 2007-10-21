@@ -56,7 +56,9 @@ public:
     virtual QWidget *createOptionWidget();
 
 private slots:
-    void setLegendTitle( QString& title );
+    void setLegendTitle( const QString& title );
+    void setLegendFont( const QFont& font );
+    void setLegendSpacing( int spacing );
 
 private:
     void updateActions();

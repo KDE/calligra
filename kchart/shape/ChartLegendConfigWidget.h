@@ -47,12 +47,11 @@ public:
 
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
-
-private slots:
-    void setLegendTitle( QString &title );
     
 signals:
-    void legendTitleChanged( QString& );
+    void legendTitleChanged( const QString& );
+    void legendFontChanged( const QFont& font );
+    void legendSpacingChanged( int spacing );
 
 private:
     class Private;

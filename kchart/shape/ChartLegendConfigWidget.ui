@@ -25,7 +25,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral" >
       <attribute name="title" >
@@ -39,8 +39,12 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QLineEdit" name="title" />
+       <item row="0" column="1" colspan="2" >
+        <widget class="QLineEdit" name="title" >
+         <property name="text" >
+          <string>Legend</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0" >
         <widget class="QLabel" name="label" >
@@ -49,17 +53,27 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
-        <widget class="QFontComboBox" name="font_2" />
+       <item row="1" column="1" colspan="2" >
+        <widget class="QFontComboBox" name="font" />
        </item>
        <item row="2" column="0" colspan="2" >
+        <widget class="QLabel" name="label_5" >
+         <property name="text" >
+          <string>Spacing:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" >
+        <widget class="QSpinBox" name="spacing" />
+       </item>
+       <item row="3" column="0" colspan="2" >
         <widget class="QCheckBox" name="showLines_2" >
          <property name="text" >
           <string>Show Lines</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0" >
+       <item row="4" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>

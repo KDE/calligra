@@ -106,6 +106,7 @@ public:
     // The underlying engine
     KDChart::Chart            *chart;
     KDChart::AbstractDiagram  *diagram;
+    KDChart::Legend           *legend;
 
     // About the data
     bool                       firstRowIsLabel;
@@ -180,13 +181,13 @@ ChartShape::ChartShape()
     diagram->addAxis( yAxis );
 
     // Add a legend
-    KDChart::Legend  *legend = new KDChart::Legend( d->diagram, d->chart );
-    legend->setPosition( KDChart::Position::East );
-    legend->setAlignment( Qt::AlignRight );
-    legend->setShowLines( false );
-    legend->setTitleText( i18n( "Legend" ) );
-    legend->setOrientation( Qt::Vertical );
-    d->chart->addLegend( legend );
+    d->legend = new KDChart::Legend( d->diagram, d->chart );
+    d->legend->setPosition( KDChart::Position::East );
+    d->legend->setAlignment( Qt::AlignRight );
+    d->legend->setShowLines( false );
+    d->legend->setTitleText( i18n( "Legend" ) );
+    d->legend->setOrientation( Qt::Vertical );
+    d->chart->addLegend( d->legend );
 
     setChartDefaults();
     //createDefaultData();
@@ -512,6 +513,26 @@ void ChartShape::setDataDirection( Qt::Orientation orientation )
 {
     d->chartData->setDataDirection( orientation );
     modelChanged();
+}
+
+void ChartShape::setLegendTitle( const QString &title )
+{
+    d->legend->setTitleText( title );
+    update();
+}
+
+void ChartShape::setLegendFont( const QFont& font )
+{
+    KDChart::TextAttributes attributes = d->legend->textAttributes();
+    attributes.setFont( font );
+    d->legend->setTextAttributes( attributes );
+    update();
+}
+
+void ChartShape::setLegendSpacing( int spacing )
+{
+    d->legend->setSpacing( ( uint )spacing );
+    update();
 }
 
 void ChartShape::modelChanged()

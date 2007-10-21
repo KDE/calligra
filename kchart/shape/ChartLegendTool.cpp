@@ -95,12 +95,27 @@ QWidget *ChartLegendTool::createOptionWidget()
 {
     ChartLegendConfigWidget *widget = new ChartLegendConfigWidget();
 
-    connect( widget, SIGNAL( legendTitleChanged( QString& ) ),
-       this, SLOT( setLegendTitle( QString& ) ) );
+    connect( widget, SIGNAL( legendTitleChanged( const QString& ) ),
+       this, SLOT( setLegendTitle( const QString& ) ) );
+    connect( widget, SIGNAL( legendFontChanged( const QFont& ) ),
+       this, SLOT( setLegendFont( const QFont& ) ) );
+    connect( widget, SIGNAL( legendSpacingChanged( int ) ),
+       this, SLOT( setLegendSpacing( int ) ) );
 
     return widget;
 }
 
-void ChartLegendTool::setLegendTitle( QString &title )
+void ChartLegendTool::setLegendTitle( const QString &title )
 {
+    m_currentShape->setLegendTitle( title );
+}
+
+void ChartLegendTool::setLegendFont( const QFont &font )
+{
+    m_currentShape->setLegendFont( font );
+}
+
+void ChartLegendTool::setLegendSpacing( int spacing )
+{
+    m_currentShape->setLegendSpacing( spacing );
 }

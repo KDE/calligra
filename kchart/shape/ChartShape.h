@@ -92,6 +92,9 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b);
     void setDataDirection( Qt::Orientation orientation );
+    void setLegendTitle( const QString& title );
+    void setLegendFont( const QFont& font );
+    void setLegendSpacing( int spacing );
     void modelChanged();
 
     void saveChartTypeOptions();

@@ -67,6 +67,13 @@ void ChartLegendConfigWidget::setupUi()
     d->ui.positionNorthEast->setIcon( KIcon( "chart_legend_topright" ) );
     d->ui.positionSouthWest->setIcon( KIcon( "chart_legend_bottomleft" ) );
     d->ui.positionSouthEast->setIcon( KIcon( "chart_legend_bottomright" ) );
+    
+    connect( d->ui.title, SIGNAL( textChanged( const QString& ) ),
+             this,        SIGNAL( legendTitleChanged( const QString& ) ) );
+    connect (d->ui.font, SIGNAL( currentFontChanged( const QFont& ) ),
+             this,       SIGNAL( legendFontChanged( const QFont& ) ) );
+    connect (d->ui.spacing, SIGNAL( valueChanged( int ) ),
+             this,       SIGNAL( legendSpacingChanged( int ) ) );
 }
 
 void ChartLegendConfigWidget::open( KoShape* chart )
@@ -81,11 +88,6 @@ void ChartLegendConfigWidget::save()
 KAction* ChartLegendConfigWidget::createAction()
 {
     return 0;
-}
-
-void ChartLegendConfigWidget::setLegendTitle( QString &title )
-{
-    emit legendTitleChanged( title );
 }
 
 #include "ChartLegendConfigWidget.moc"
