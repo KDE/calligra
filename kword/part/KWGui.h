@@ -84,6 +84,7 @@ private slots:
     void pageSetupChanged();
     void updateMousePos(const QPoint &point);
     void shapeSelectionChanged();
+    void setupUnitActions();
 
 private:
     KWView *m_view;

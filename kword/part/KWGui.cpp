@@ -36,7 +36,10 @@
 #include <KoToolDockerFactory.h>
 #include <KoRulerController.h>
 
+#include <KActionCollection>
 #include <QGridLayout>
+#include <QTimer>
+#include <QAction>
 
 KWGui::KWGui( const QString& viewMode, KWView *parent )
   : QWidget( parent),
@@ -50,7 +53,6 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_view->viewConverter());
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(m_view->kwdocument()->unit());
-    m_horizontalRuler->setPopupActionList(parent->createChangeUnitActions());
     m_verticalRuler = new KoRuler(this, Qt::Vertical, m_view->viewConverter());
     m_verticalRuler->setUnit(m_view->kwdocument()->unit());
     m_verticalRuler->setShowMousePosition(true);
@@ -91,6 +93,8 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
     pageSetupChanged();
+
+    QTimer::singleShot(0, this, SLOT(setupUnitActions()));
 }
 
 KWGui::~KWGui() {
@@ -154,6 +158,15 @@ void KWGui::shapeSelectionChanged() {
     }
     m_horizontalRuler->setActiveRange(start.x(), end.x());
     m_verticalRuler->setActiveRange(start.y(), end.y());
+}
+
+void KWGui::setupUnitActions() {
+    QList<QAction*> unitActions = m_view->createChangeUnitActions();
+    QAction *separator = new QAction(this);
+    separator->setSeparator(true);
+    unitActions.append(separator);
+    unitActions.append(m_view->actionCollection()->action("format_page"));
+    m_horizontalRuler->setPopupActionList(unitActions);
 }
 
 #include "KWGui.moc"
