@@ -2331,7 +2331,7 @@ void  KChartPart::slotModified()
 }
 
 
-bool KChartPart::showEmbedInitDialog(QWidget* /*parent*/)
+bool KChartPart::showEmbedInitDialog( QWidget* /*parent*/ )
 {
   // Don't show an embed dialog
   return true;
