@@ -96,6 +96,7 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     void setLegendFont( const QFont& font );
     void setLegendFontSize( int size );
     void setLegendSpacing( int spacing );
+    void setLegendShowLines( bool b );
     void modelChanged();
 
     void saveChartTypeOptions();

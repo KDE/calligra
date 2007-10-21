@@ -543,6 +543,12 @@ void ChartShape::setLegendSpacing( int spacing )
     update();
 }
 
+void ChartShape::setLegendShowLines( bool b )
+{
+    d->legend->setShowLines( b );
+    update();
+}
+
 void ChartShape::modelChanged()
 {
     // Tell the diagram that the entire set of data changed

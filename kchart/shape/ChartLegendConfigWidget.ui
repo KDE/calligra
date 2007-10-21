@@ -81,7 +81,7 @@
         <widget class="QSpinBox" name="spacing" />
        </item>
        <item row="4" column="0" colspan="2" >
-        <widget class="QCheckBox" name="showLines_2" >
+        <widget class="QCheckBox" name="showLines" >
          <property name="text" >
           <string>Show Lines</string>
          </property>

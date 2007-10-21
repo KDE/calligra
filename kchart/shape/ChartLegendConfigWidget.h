@@ -53,6 +53,7 @@ signals:
     void legendFontChanged( const QFont& font );
     void legendFontSizeChanged( int size );
     void legendSpacingChanged( int spacing );
+    void legendShowLinesToggled( bool toggled );
 
 private:
     class Private;
