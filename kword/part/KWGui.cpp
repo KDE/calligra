@@ -50,6 +50,7 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     m_horizontalRuler = new KoRuler(this, Qt::Horizontal, m_view->viewConverter());
     m_horizontalRuler->setShowMousePosition(true);
     m_horizontalRuler->setUnit(m_view->kwdocument()->unit());
+    m_horizontalRuler->setPopupActionList(parent->createChangeUnitActions());
     m_verticalRuler = new KoRuler(this, Qt::Vertical, m_view->viewConverter());
     m_verticalRuler->setUnit(m_view->kwdocument()->unit());
     m_verticalRuler->setShowMousePosition(true);
