@@ -16,6 +16,8 @@ kspr	This subtask must be fixed in KSpread
 
 INGE	Inge has taken this task
 inge	Inge has taken this subtask
+JOSI    Johannes Simon has taken this task
+josi    Johannes Simon has taken this subtask
 
 
 Before release of KOffice 2.0.0
@@ -39,27 +41,56 @@ Item								   Prio Status
     - Make it use include a flake shape                                 done
  + Make the chart shape communicate with the apps using a model		DONE
 
-* Port to Qt4
-  + Get rid of all Qt3 support widgets				      	DONE
-  + Remove code that does double buffering.			       	DONE
-  + Get rid of warnings from deprecated calls 			       	DONE
+* KChart, the application
+  + Make tools work                                                     ----
+  + Import data (should this be in ChartShape?)                         ----
+  + Drag&drop a chart                                                   ----
+  + Export                                                              ----
+     - SVG                                                              --
+     - PNG and other bitmap formats                                     --
+     - old kchart format                                                --
+  + Import                                                              ----
+     - old kchart format                                                --
+     - excel                                                            --
 
-* Port to KDE4
-  + Fix changed calls                                                   DONE
+* ChartShape
+  + Handle all chart types                                              ----
+     - bar                                                              done
+     - line                                                             done
+     - area                                                             done
+     - (bars+lines)                                                     --
+     - circle (pie)                                                     --
+     - ring                                                             --
+     - radar                                                            --
+     - scatter                                                          --
+     - stock                                                            --
+     - bubble                                                           --
+     - gantt                                                            --
+  + Commands so that undo/redo will work                                ----
 
-
-* OpenDocument Support -- read and write all tags and attributes
+* OpenDocument Support for current features
 
   Item							Load	Save
   ----------------------------------------------------------------------------
-  + Handle all chart types				----	----
-    - Handle subtypes.
+  + Handle all chart types				INGE	INGE
+    - Handle subtypes                                   --      --
   + Plot area						----	----
+    - title                                             --      --
+    - subtitle                                          --      --
+    - footer                                            --      --
     - Data in rows / columns				done	done
-  + Legend						DONE	DONE
+  + Legend						----    ----
+    - title                                             --      --
+    - orientation                                       --      --
+    - font                                              --      --
   + Axes						----	----
     - Axis labels					--      --
   + Data Series						----	----
+  + Data                                                INGE    INGE
+
+* Configuration with tools
+  + Legend                                                              JOSI
+  + Data editor                                                         ----
 
 * Scripting
   + Kross support                                                       ----
@@ -68,3 +99,34 @@ Item								   Prio Status
 
 * Infrastructure
   + Switch KDChart to version 2.1                                       ----
+
+* External programs and embedding
+  + KChart itself                                                       ----
+     - Create KoChartModel                                              --
+     - Edit the interface in koffice/interfaces                         --
+     - Document interface                                               --
+     - Function that tells the chart to use own data or external        --
+  + KSpread                                                             ----
+     - Make it possible to have > 1 chart and edit the selected one     --
+     - Make it possible to delete a chart                               --
+     - Make the chart selected when it is created                       --
+     - Save correct ODF (as embedded document and not just drawing?)    --
+  + KWord                                                               ----
+     - Set chartshape to use own data                                   --
+
+* OpenDocument 1.0 Support -- read and write all tags and attributes    ----
+  + ...
+
+
+Before release of KOffice 2.0.1
+-------------------------------
+
+
+
+Before release of KOffice 2.1.0
+===============================
+
+* OpenDocument 1.1 support                                              ----
+
+* OpenDocument 1.2 support                                              ----
+
