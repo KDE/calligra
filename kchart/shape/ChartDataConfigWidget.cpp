@@ -49,14 +49,17 @@ ChartDataConfigWidget::ChartDataConfigWidget()
     d->chart = 0;
     d->ui.setupUi(this);
 
+    d->ui.m_firstRowAsLabel->setChecked( true );
+    d->ui.m_firstColumnAsLabel->setChecked( true );
+
     // We need only connect one of the data direction buttons, since
     // they are mutually exclusive.
     connect( d->ui.m_dataInRows, SIGNAL( toggled( bool ) ),
 	     this,               SLOT( dataInRows( bool ) ) );
     connect( d->ui.m_firstRowAsLabel, SIGNAL( toggled( bool ) ),
-             this,                    SLOT( firstRowIsLabel( bool ) ) );
+             this,                    SLOT( setFirstRowIsLabel( bool ) ) );
     connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
-             this,                       SLOT( firstColumnIsLabel( bool ) ) );
+             this,                       SLOT( setFirstColumnIsLabel( bool ) ) );
 }
 
 ChartDataConfigWidget::~ChartDataConfigWidget()
