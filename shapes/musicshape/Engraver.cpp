@@ -67,8 +67,11 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
     QPointF p(0, sheet->staffSystem(curSystem)->top() - deltay);
     int lastStart = firstBar;
     double lineWidth = size.width();
-    double indent = 0;
-    bool prevPrefixPlaced = false;
+    double indent = sheet->staffSystem(curSystem)->indent();
+    if (firstBar > 0) {
+        p.setX(indent - sheet->bar(firstBar-1)->prefix());
+    }
+    bool prevPrefixPlaced = true;
     for (int i = firstBar; i < sheet->barCount(); i++) {
         Bar* bar = sheet->bar(i);
         bool prefixPlaced = false;
@@ -102,10 +105,6 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
             curSystem++;
             p.setY(sheet->staffSystem(curSystem)->top() - deltay);
             sheet->staffSystem(curSystem)->setFirstBar(i);
-            if (p.y() >= size.height()) {
-                *lastSystem = curSystem-1;
-                break;
-            }
 
             indent = 0;
             QList<Clef*> clefs;
@@ -130,6 +129,11 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
             sheet->staffSystem(curSystem)->setClefs(clefs);
             lineWidth = size.width() - indent;
             p.setX(indent - bar->prefix());
+            
+            if (p.y() >= size.height()) {
+                *lastSystem = curSystem-1;
+                break;
+            }
         }
         sheet->bar(i)->setPosition(p + QPointF(bar->prefix(), 0), !prefixPlaced);
         sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
