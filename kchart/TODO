@@ -1,21 +1,18 @@
-NOTE:	This TODO file is outdated, and need to be fixed.
-
-
 Legend
 ======
 
-----	Not yet done (for main tasks, parts of it may be done)
-DONE	Task is all done
-KDCH	Must be fixed in KDChart (new version will be out before 1.4).
-KSPR	Must be fixed in KSpread
+----    Not yet done (for main tasks, parts of it may be done)
+DONE    Task is all done
+KDCH    Must be fixed in KDChart (new version will be out before 1.4).
+KSPR    Must be fixed in KSpread
 
---	This subtask is not done
-done	This subtask is done
-kdch	This subtask must be fixed in KDChart
-kspr	This subtask must be fixed in KSpread
+--      This subtask is not done
+done    This subtask is done
+kdch    This subtask must be fixed in KDChart
+kspr    This subtask must be fixed in KSpread
 
-INGE	Inge has taken this task
-inge	Inge has taken this subtask
+INGE    Inge has taken this task
+inge    Inge has taken this subtask
 JOSI    Johannes Simon has taken this task
 josi    Johannes Simon has taken this subtask
 
@@ -23,23 +20,23 @@ josi    Johannes Simon has taken this subtask
 Before release of KOffice 2.0.0
 ===============================
 
-Item								   Prio Status
+Item                                                                   Prio Status
 ------------------------------------------------------------------------------
 
 * Build the foundation                                                  
  + Move the data editor to the attic                                    DONE
  + Move the wizard to the attic                                         DONE
  + Move the configuration dialog to the attic                           DONE
- + Add KChart coding standards.						DONE
+ + Add KChart coding standards.                                         DONE
  + Rename all C++ files to .cpp instead of .cc to follow the KDE        DONE
    coding standards.
  + Move code from kchart_part.{h,cpp} to ChartShape to make ODF work    ----
-   - Start of ODF loading						--
-   - Start of ODF saving						done
+   - Start of ODF loading                                                --
+   - Start of ODF saving                                                done
  + Remove KChartDocument                                                DONE
  + Make KChart a real KOffice 2 app                                     DONE
     - Make it use include a flake shape                                 done
- + Make the chart shape communicate with the apps using a model		DONE
+ + Make the chart shape communicate with the apps using a model         DONE
 
 * KChart, the application
   + Make tools work                                                     ----
@@ -70,23 +67,23 @@ Item								   Prio Status
 
 * OpenDocument Support for current features
 
-  Item							Load	Save
+  Item                                                          Load    Save
   ----------------------------------------------------------------------------
-  + Handle all chart types				INGE	INGE
-    - Handle subtypes                                   --      --
-  + Plot area						----	----
-    - title                                             --      --
-    - subtitle                                          --      --
-    - footer                                            --      --
-    - Data in rows / columns				done	done
-  + Legend						----    ----
-    - title                                             --      --
-    - orientation                                       --      --
-    - font                                              --      --
-  + Axes						----	----
-    - Axis labels					--      --
-  + Data Series						----	----
-  + Data                                                INGE    INGE
+  + Handle all chart types                                      INGE    INGE
+    - Handle subtypes                                           --      --
+  + Plot area                                                   ----    ----
+    - title                                                     --      --
+    - subtitle                                                  --      --
+    - footer                                                    --      --
+    - Data in rows / columns                                    done    done
+  + Legend                                                      ----    ----
+    - title                                                     --      --
+    - orientation                                               --      --
+    - font                                                      --      --
+  + Axes                                                        ----    ----
+    - Axis labels                                               --      --
+  + Data Series                                                 ----    ----
+  + Data                                                        INGE    INGE
 
 * Configuration with tools
   + Legend                                                              JOSI
@@ -125,8 +122,8 @@ Before release of KOffice 2.1.0
 
 * Scripting
   + Kross support                                                       ----
-  + DBUS for data manipulation					        ----
-  + DBUS for chart manipulation					        ----
+  + DBUS for data manipulation                                          ----
+  + DBUS for chart manipulation                                         ----
 
 * OpenDocument 1.2 support                                              ----
 
