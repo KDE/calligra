@@ -44,23 +44,32 @@ Engraver::Engraver()
 {
 }
 
-void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
+void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool engraveBars, int* lastSystem)
 {
+    *lastSystem = 0;
+    int firstBar = 0;
+    if (firstSystem != 0) {
+        firstBar = sheet->staffSystem(firstSystem)->firstBar();
+    }
+
+    kDebug() << "Engraving from firstSystem:" << firstSystem << "firstBar:" << firstBar;
+    
     if (engraveBars) {
         // engrave all bars in the sheet
-        for (int i = 0; i < sheet->barCount(); i++) {
+        for (int i = firstBar; i < sheet->barCount(); i++) {
             engraveBar(sheet->bar(i));
         }
     }
 
     // now layout bars in staff systems
-    int curSystem = 0;
-    QPointF p(0, sheet->staffSystem(curSystem)->top());
-    int lastStart = 0;
+    int curSystem = firstSystem;
+    double deltay = sheet->staffSystem(firstSystem)->top() - sheet->staffSystem(0)->top();
+    QPointF p(0, sheet->staffSystem(curSystem)->top() - deltay);
+    int lastStart = firstBar;
     double lineWidth = size.width();
     double indent = 0;
     bool prevPrefixPlaced = false;
-    for (int i = 0; i < sheet->barCount(); i++) {
+    for (int i = firstBar; i < sheet->barCount(); i++) {
         Bar* bar = sheet->bar(i);
         bool prefixPlaced = false;
         if (i > 0 && p.x() + bar->desiredSize() + bar->prefix() - indent > lineWidth) {
@@ -91,8 +100,12 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
             prevPrefixPlaced = prefixPlaced;
 
             curSystem++;
-            p.setY(sheet->staffSystem(curSystem)->top());
+            p.setY(sheet->staffSystem(curSystem)->top() - deltay);
             sheet->staffSystem(curSystem)->setFirstBar(i);
+            if (p.y() >= size.height()) {
+                *lastSystem = curSystem-1;
+                break;
+            }
 
             indent = 0;
             QList<Clef*> clefs;
@@ -122,6 +135,7 @@ void Engraver::engraveSheet(Sheet* sheet, QSizeF size, bool engraveBars)
         sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
         p.setX(p.x() + sheet->bar(i)->size() + bar->prefix());
     }
+    if (*lastSystem == 0) *lastSystem = curSystem;
     // potentially scale last staff system if it is too wide
     if (p.x() - indent > lineWidth) {
         double scalable = 0, fixed = 0;

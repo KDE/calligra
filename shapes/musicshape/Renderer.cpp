@@ -42,12 +42,18 @@ MusicRenderer::MusicRenderer(MusicStyle* style) : m_style(style), m_debug(false)
 {
 }
 
-void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet)
+void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet, int firstSystem, int lastSystem)
 {
-    for (int i = 0; i < sheet->partCount(); i++) {
-        renderPart(painter, sheet->part(i));
+    int firstBar = sheet->staffSystem(firstSystem)->firstBar();
+    int lastBar = INT_MAX;
+    if (lastSystem < sheet->staffSystemCount()-1) {
+        lastBar = sheet->staffSystem(lastSystem+1)->firstBar()-1;
     }
-    for (int i = 0; i < sheet->staffSystemCount(); i++) {
+    
+    for (int i = 0; i < sheet->partCount(); i++) {
+        renderPart(painter, sheet->part(i), firstBar, lastBar);
+    }
+    for (int i = firstSystem; i <= lastSystem && i < sheet->staffSystemCount(); i++) {
         StaffSystem* ss = sheet->staffSystem(i);
         if (ss->indent() == 0) continue;
         int b = ss->firstBar();
@@ -83,15 +89,15 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet)
     }
 }
 
-void MusicRenderer::renderPart(QPainter& painter, Part* part)
+void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int lastBar)
 {
     for (int i = 0; i < part->staffCount(); i++) {
-        renderStaff(painter, part->staff(i));
+        renderStaff(painter, part->staff(i), firstBar, lastBar);
     }
     double firstStaff = part->staff(0)->top();
     int c = part->staffCount()-1;
     double lastStaff = part->staff(c)->bottom();
-    for (int b = 0; b < part->sheet()->barCount(); b++) {
+    for (int b = firstBar; b <= lastBar && b < part->sheet()->barCount(); b++) {
         Bar* bar = part->sheet()->bar(b);
         QPointF p = bar->position();
         painter.drawLine(QPointF(p.x() + bar->size(), p.y() + firstStaff), QPointF(p.x() + bar->size(), p.y() + lastStaff));
@@ -120,15 +126,15 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part)
         }
     }
     for (int i = 0; i < part->voiceCount(); i++) {
-        renderVoice(painter, part->voice(i));
+        renderVoice(painter, part->voice(i), firstBar, lastBar);
     }
 }
 
-void MusicRenderer::renderStaff(QPainter& painter, Staff *staff )
+void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, int lastBar)
 {
     double dy = staff->lineSpacing();
     double y = staff->top();
-    for (int b = 0; b < staff->part()->sheet()->barCount(); b++) {
+    for (int b = firstBar; b <= lastBar && b < staff->part()->sheet()->barCount(); b++) {
         Bar* bar = staff->part()->sheet()->bar(b);
         QPointF p = bar->position();
         QPointF prep = bar->prefixPosition() + QPointF(bar->prefix(), 0);
@@ -154,11 +160,11 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff )
     }
 }
 
-void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, const QColor& color)
+void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, int firstBar, int lastBar, const QColor& color)
 {
     RenderState state;
     state.clef = 0;
-    for (int b = 0; b < voice->part()->sheet()->barCount(); b++) {
+    for (int b = firstBar; b <= lastBar && b < voice->part()->sheet()->barCount(); b++) {
         Bar* bar = voice->part()->sheet()->bar(b);
         QPointF p = bar->position();
         VoiceBar* vb = voice->bar(bar);

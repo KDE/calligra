@@ -47,10 +47,10 @@ public:
 
     MusicRenderer(MusicStyle* style);
 
-    void renderSheet(QPainter& painter, MusicCore::Sheet* sheet);
-    void renderPart(QPainter& painter, MusicCore::Part* part);
-    void renderStaff(QPainter& painter, MusicCore::Staff* staff);
-    void renderVoice(QPainter& painter, MusicCore::Voice* voice, const QColor& color = Qt::black);
+    void renderSheet(QPainter& painter, MusicCore::Sheet* sheet, int firstSystem, int lastSystem);
+    void renderPart(QPainter& painter, MusicCore::Part* part, int firstBar, int lastBar);
+    void renderStaff(QPainter& painter, MusicCore::Staff* staff, int firstBar, int lastBar);
+    void renderVoice(QPainter& painter, MusicCore::Voice* voice, int firstBar, int lastBar, const QColor& color = Qt::black);
     void renderElement(QPainter& painter, MusicCore::VoiceElement* element, const QPointF& pos, RenderState& state, double xScale, const QColor& color = Qt::black);
     void renderStaffElement(QPainter& painter, MusicCore::StaffElement* element, const QPointF& pos, RenderState& state, double xScale);
 

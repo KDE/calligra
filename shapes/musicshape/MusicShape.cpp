@@ -44,36 +44,51 @@
 
 using namespace MusicCore;
 
+static MusicShape* firstShape = 0;
+
 MusicShape::MusicShape()
-    : m_style(new MusicStyle),
+    : m_firstSystem(0),
+    m_style(new MusicStyle),
     m_engraver(new Engraver()),
-    m_renderer(new MusicRenderer(m_style))
+    m_renderer(new MusicRenderer(m_style)),
+    m_successor(0)
 {
-    m_sheet = new Sheet();
-    Bar* bar = m_sheet->addBar();
+    if (firstShape) {
+        firstShape->m_successor = this;
+        m_sheet = firstShape->m_sheet;
+        m_firstSystem = firstShape->m_lastSystem+1;
+        m_engraver->engraveSheet(m_sheet, m_firstSystem, QSizeF(1e9, 1e9), true, &m_lastSystem);
+    } else {
+        firstShape = this;
+        m_sheet = new Sheet();
+        Bar* bar = m_sheet->addBar();
 
-    Part* part = m_sheet->addPart("Part 1");
-    Staff* staff = part->addStaff();
-    part->addVoice();
-    bar->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
-    bar->addStaffElement(new TimeSignature(staff, 0, 4, 4));
+        Part* part = m_sheet->addPart("Part 1");
+        Staff* staff = part->addStaff();
+        part->addVoice();
+        bar->addStaffElement(new Clef(staff, 0, Clef::Trebble, 2, 0));
+        bar->addStaffElement(new TimeSignature(staff, 0, 4, 4));
 
-    m_engraver->engraveSheet(m_sheet, QSizeF(1e9, 1e9), true);
+        m_engraver->engraveSheet(m_sheet, 0, QSizeF(1e9, 1e9), true, &m_lastSystem);
+    }
 }
 
 MusicShape::~MusicShape()
 {
-    delete m_sheet;
+    if (this == firstShape) {
+        delete m_sheet;
+    }
     delete m_style;
     delete m_engraver;
     delete m_renderer;
+    if (this == firstShape) firstShape = 0;
 }
 
 void MusicShape::setSize( const QSizeF &newSize )
 {
     KoShape::setSize(newSize);
 
-    m_engraver->engraveSheet(m_sheet, newSize, false);
+    engrave(false);
 }
 
 void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -83,7 +98,7 @@ void MusicShape::paint( QPainter& painter, const KoViewConverter& converter )
     painter.setClipping(true);
     painter.setClipRect(QRectF(0, 0, size().width(), size().height()));
 
-    m_renderer->renderSheet( painter, m_sheet );
+    m_renderer->renderSheet( painter, m_sheet, m_firstSystem, m_lastSystem );
 }
 
 void MusicShape::saveOdf( KoShapeSavingContext & context ) const
@@ -109,9 +124,11 @@ bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &c
     }
     Sheet* sheet = MusicXmlReader().loadSheet(score);
     if (sheet) {
-        delete m_sheet;
+        if (this == firstShape) {
+            delete m_sheet;
+        }
         m_sheet = sheet;
-        m_engraver->engraveSheet(m_sheet, size(), true);
+        m_engraver->engraveSheet(m_sheet, m_firstSystem, size(), true, &m_lastSystem);
         return true;
     }
     return false;
@@ -122,11 +139,26 @@ Sheet* MusicShape::sheet()
     return m_sheet;
 }
 
-void MusicShape::setSheet(Sheet* sheet)
+void MusicShape::setSheet(Sheet* sheet, int firstSystem)
 {
-    delete m_sheet;
+    if (this == firstShape) {
+        delete m_sheet;
+    }
     m_sheet = sheet;
-    m_engraver->engraveSheet(m_sheet, size(), true);
+    m_firstSystem = firstSystem;
+    m_engraver->engraveSheet(m_sheet, m_firstSystem, size(), true, &m_lastSystem);
+}
+
+int MusicShape::firstSystem() const
+{
+    return m_firstSystem;
+}
+
+void MusicShape::setFirstSystem(int system)
+{
+    m_firstSystem = system;
+    engrave();
+    update();
 }
 
 MusicRenderer* MusicShape::renderer()
@@ -134,9 +166,12 @@ MusicRenderer* MusicShape::renderer()
     return m_renderer;
 }
 
-void MusicShape::engrave()
+void MusicShape::engrave(bool engraveBars)
 {
-    m_engraver->engraveSheet(m_sheet, size());
+    m_engraver->engraveSheet(m_sheet, m_firstSystem, size(), engraveBars, &m_lastSystem);
+    if (m_successor) {
+        m_successor->setFirstSystem(m_lastSystem+1);
+    }
 }
 
 MusicStyle* MusicShape::style()

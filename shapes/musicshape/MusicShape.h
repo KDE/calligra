@@ -49,15 +49,20 @@ public:
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
 
     MusicCore::Sheet* sheet();
-    void setSheet(MusicCore::Sheet* sheet);
+    void setSheet(MusicCore::Sheet* sheet, int firstSystem);
+    int firstSystem() const;
+    void setFirstSystem(int system);
     MusicRenderer* renderer();
     MusicStyle* style();
-    void engrave();
+    void engrave(bool engraveBars=true);
 private:
     MusicCore::Sheet* m_sheet;
+    int m_firstSystem;
+    int m_lastSystem;
     MusicStyle* m_style;
     Engraver* m_engraver;
     MusicRenderer* m_renderer;
+    MusicShape* m_successor;
 };
 
 

@@ -316,7 +316,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
     for (int i = 0; i < sheet->partCount(); i++) {
         Part* p = sheet->part(i);
         if (p->voiceCount() > m_voice) {
-            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), Qt::red);
+            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), 0, INT_MAX, Qt::red);
         }
     }
 
@@ -483,7 +483,7 @@ void SimpleEntryTool::importSheet()
     kDebug() << e.localName() << e.nodeName();
     Sheet* sheet = MusicXmlReader(0).loadSheet(doc.documentElement());
     if (sheet) {
-        m_musicshape->setSheet(sheet);
+        m_musicshape->setSheet(sheet, 0);
         m_musicshape->update();
     }
 }

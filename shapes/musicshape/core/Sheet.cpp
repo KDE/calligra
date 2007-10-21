@@ -219,7 +219,7 @@ StaffSystem* Sheet::staffSystem(int index)
     int idx = d->staffSystems.size();
     while (index >= d->staffSystems.size()) {
         StaffSystem *ss = new StaffSystem(this);
-        if (idx > 0) {
+        if (idx > 0 && partCount() > 0) {
             Part* prt = part(partCount() - 1);
             ss->setTop(d->staffSystems[idx-1]->top() + prt->staff(prt->staffCount() - 1)->bottom() + 30);
         }
