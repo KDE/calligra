@@ -92,11 +92,6 @@ Item								   Prio Status
   + Legend                                                              JOSI
   + Data editor                                                         ----
 
-* Scripting
-  + Kross support                                                       ----
-  + DBUS for data manipulation					        ----
-  + DBUS for chart manipulation					        ----
-
 * Infrastructure
   + Switch KDChart to version 2.1                                       ----
 
@@ -127,6 +122,11 @@ Before release of KOffice 2.1.0
 ===============================
 
 * OpenDocument 1.1 support                                              ----
+
+* Scripting
+  + Kross support                                                       ----
+  + DBUS for data manipulation					        ----
+  + DBUS for chart manipulation					        ----
 
 * OpenDocument 1.2 support                                              ----
 
