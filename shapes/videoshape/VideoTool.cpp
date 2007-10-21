@@ -96,7 +96,7 @@ QWidget * VideoTool::createOptionWidget()
     QToolButton *button = 0;
 
     button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("find-previous") );
+    button->setIcon( SmallIcon("edit-find-previous") );
     button->setToolTip( i18n( "Previous" ) );
     layout->addWidget( button, 0, 0 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotPrevious() ) );
@@ -121,7 +121,7 @@ QWidget * VideoTool::createOptionWidget()
  
 
     button = new QToolButton( optionWidget );
-    button->setIcon( SmallIcon("find-next") );
+    button->setIcon( SmallIcon("edit-find-next") );
     button->setToolTip( i18n( "Next" ) );
     layout->addWidget( button, 0, 4 );
     connect( button, SIGNAL( clicked( bool ) ), this, SLOT( slotNext() ) );

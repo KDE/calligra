@@ -225,14 +225,14 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	m_navToolbar->addConnection(m_idFirst, SIGNAL(clicked()), this, SLOT(slotFirstClicked()));
 	m_navToolbar->insertSeparator();
 
-	m_idPrevious = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("find-previous"), i18n("Previous Page"), m_navToolbar));
+	m_idPrevious = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("edit-find-previous"), i18n("Previous Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idPrevious, SIGNAL(clicked()), this, SLOT(slotPreviousClicked()));
 	m_navToolbar->insertSeparator();
 
 	m_idPageNumberLabel = m_navToolbar->insertWidget( -1, 0, new QLabel(m_navToolbar));
 	m_navToolbar->insertSeparator();
 
-	m_idNext = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("find-next"), i18n("Next Page"), m_navToolbar));
+	m_idNext = m_navToolbar->insertWidget( -1, 0, new KPushButton(KIcon("edit-find-next"), i18n("Next Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idNext, SIGNAL(clicked()), this, SLOT(slotNextClicked()));
 	m_navToolbar->insertSeparator();
 

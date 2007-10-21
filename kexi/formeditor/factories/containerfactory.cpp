@@ -707,11 +707,11 @@ ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w,
 		if(stack->children().count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(KIcon("find-next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
+		id = menu->insertItem(KIcon("edit-find-next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget())+1))
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(KIcon("find-previous"), i18n("Jump to Previous Page"), this, SLOT(prevStackPage()));
+		id = menu->insertItem(KIcon("edit-find-previous"), i18n("Jump to Previous Page"), this, SLOT(prevStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget()) -1) )
 			menu->setItemEnabled(id, false);
 		return true;
