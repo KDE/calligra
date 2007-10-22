@@ -36,6 +36,8 @@ public:
     ~StaffSystem();
 
     double top() const;
+    double height() const;
+    void setHeight(double height);
     int firstBar() const;
     double indent() const;
     void setIndent(double indent);

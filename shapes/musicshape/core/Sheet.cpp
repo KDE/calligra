@@ -217,8 +217,14 @@ StaffSystem* Sheet::staffSystem(int index)
 {
     Q_ASSERT( index >= 0 );
     int idx = d->staffSystems.size();
+    double ssHeight = 0;
+    if (partCount() > 0) {
+        Part* prt = part(partCount() - 1);
+        ssHeight = prt->staff(prt->staffCount() - 1)->bottom() + 30;
+    }
     while (index >= d->staffSystems.size()) {
         StaffSystem *ss = new StaffSystem(this);
+        ss->setHeight(ssHeight);
         if (idx > 0 && partCount() > 0) {
             Part* prt = part(partCount() - 1);
             ss->setTop(d->staffSystems[idx-1]->top() + prt->staff(prt->staffCount() - 1)->bottom() + 30);

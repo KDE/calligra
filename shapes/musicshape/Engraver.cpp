@@ -130,7 +130,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
             lineWidth = size.width() - indent;
             p.setX(indent - bar->prefix());
             
-            if (p.y() >= size.height()) {
+            if (p.y() + sheet->staffSystem(curSystem)->height() >= size.height()) {
                 *lastSystem = curSystem-1;
                 break;
             }

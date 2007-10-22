@@ -26,6 +26,7 @@ class StaffSystem::Private
 public:
     Sheet* sheet;
     double top;
+    double height;
     int firstBar;
     double indent;
     double lineWidth;
@@ -37,6 +38,7 @@ StaffSystem::StaffSystem(Sheet* sheet)
 {
     d->sheet = sheet;
     d->top = 0.0;
+    d->height = 100.0;
     d->firstBar = 0;
     d->indent = 0;
     d->lineWidth = 100;
@@ -50,6 +52,16 @@ StaffSystem::~StaffSystem()
 double StaffSystem::top() const
 {
     return d->top;
+}
+
+double StaffSystem::height() const
+{
+    return d->height;
+}
+
+void StaffSystem::setHeight(double height)
+{
+    d->height = height;
 }
 
 void StaffSystem::setTop(double top)
