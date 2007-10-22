@@ -8,6 +8,5 @@ flake. The list is in no particular order.
 - Add some method of editing music with your normal keyboard, perhaps similar to Finale's
   Speedy entry tool.
 - Implement selections and cut/copy/paste.
-- Implement beams to join multiple notes.
 - Implement all kinds of other dynamics and stuff.
 
