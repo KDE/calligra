@@ -35,6 +35,7 @@ class QProgressBar;
 class QStackedWidget;
 class QSplitter;
 class QPrinter;
+class QPrintDialog;
 
 class KPrinter;
 class KAction;

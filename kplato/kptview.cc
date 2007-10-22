@@ -47,6 +47,8 @@
 #include <QItemDelegate>
 #include <QStyle>
 #include <QVariant>
+#include <QPrinter>
+#include <QPrintDialog>
 
 #include <kicon.h>
 #include <kaction.h>
