@@ -37,8 +37,6 @@ public:
     explicit ViewAdaptor( KChartView *view_ );
 
 public Q_SLOTS: // METHODS
-    virtual void updateGuiTypeOfChart();
-
     virtual void saveConfig();
     virtual void loadConfig();
     virtual void defaultConfig();

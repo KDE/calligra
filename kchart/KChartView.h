@@ -56,27 +56,15 @@ public:
     explicit KChartView( KChartPart* part, QWidget* parent = 0 );
     ~KChartView();
 
-    void updateGuiTypeOfChart();
     virtual ViewAdaptor* dbusObject();
     KoViewConverter *viewConverter() const { return m_zoomHandler; }
-    KChartCanvas *canvasWidget() const { return m_canvas; }
+    KChartCanvas    *canvasWidget()  const { return m_canvas; }
     void config(int flag);
 
 public slots:
     void  saveConfig();
     void  loadConfig();
     void  defaultConfig();
-
-    void  pieChart();
-    void  barsChart();
-    void  lineChart();
-    void  areasChart();
-#if 0
-    void  hiLoChart();
-#endif
-    void  ringChart();
-    void  radarChart();
-    void  stockChart();
 
     void  print(QPrinter &printer, QPrintDialog &printDialog);
     void  setupPrinter(QPrinter &printer, QPrintDialog &printDialog);
@@ -100,7 +88,6 @@ protected:
     virtual void  updateReadWrite( bool readwrite );
 
     virtual void  mousePressEvent ( QMouseEvent * );
-    void          updateButton();
 
 private:
     KAction  *m_importData;
@@ -109,16 +96,7 @@ private:
     KAction  *m_loadconfig;
     KAction  *m_defaultconfig;
 
-    KToggleAction  *m_chartpie;
-    KToggleAction  *m_chartareas;
-    KToggleAction  *m_chartbars;
-    KToggleAction  *m_chartline;
-    KToggleAction  *m_charthilo;
-    KToggleAction  *m_chartring;
-    KToggleAction  *m_chartpolar;
-    KToggleAction  *m_chartbw;
-
-    ViewAdaptor    *m_dbus;
+    ViewAdaptor      *m_dbus;
 
     KoZoomHandler    *m_zoomHandler;
     KoZoomController *m_zoomController;
@@ -128,7 +106,6 @@ private:
 
     // This is used for a workaround for a bug in the kdchart code, see #101490.
     bool m_logarithmicScale;
-    void forceAxisParams(bool lineMode);
 };
 
 }  //KChart namespace

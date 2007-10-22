@@ -106,58 +106,14 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     actionCollection()->addAction("editdata", m_edit );
     connect(m_edit, SIGNAL(triggered(bool) ), SLOT( editData() ));
 
-    /*
-    // One KToggleAction per chart type
-    m_chartbars  = new KToggleAction(KIcon("chart_bar_3d"), i18n("&Bar"), this);
-    actionCollection()->addAction("barschart", m_chartbars );
-    connect(m_chartbars, SIGNAL(triggered(bool)), SLOT( barsChart() ));
-    QActionGroup *charttypes = new QActionGroup( this );
-    charttypes->addAction(m_chartbars);
-
-    m_chartline  = new KToggleAction(KIcon("chart_line"), i18n("&Line"), this);
-    actionCollection()->addAction("linechart", m_chartline );
-    connect(m_chartline, SIGNAL(triggered(bool)), SLOT( lineChart() ));
-    charttypes->addAction(m_chartline);
-
-    m_chartareas  = new KToggleAction(KIcon("chart_area"), i18n("&Area"), this);
-    actionCollection()->addAction("areaschart", m_chartareas );
-    connect(m_chartareas, SIGNAL(triggered(bool)), SLOT( areasChart() ));
-    charttypes->addAction(m_chartareas);
-    m_chartareas->setEnabled(false); // TODO not supported yet
-
-    m_charthilo  = new KToggleAction(KIcon("chart_hilo"), i18n("&HiLo"), this);
-    actionCollection()->addAction("hilochart", m_charthilo );
-    connect(m_charthilo, SIGNAL(triggered(bool)), SLOT( hiLoChart() ));
-    charttypes->addAction(m_charthilo);
-    m_charthilo->setEnabled(false); // TODO not supported yet
-
-    m_chartbw  = new KToggleAction(KIcon("chart_boxwhisker"), i18n("Bo&x && Whiskers"), this);
-    actionCollection()->addAction("bwchart", m_chartbw );
-    connect(m_chartbw, SIGNAL(triggered(bool)), SLOT( bwChart() ));
-    charttypes->addAction(m_chartbw);
-    m_chartbw->setEnabled(false); // TODO not supported yet
-
-    m_chartpie  = new KToggleAction(KIcon("chart_pie"), i18n("&Pie"), this);
-    actionCollection()->addAction("piechart", m_chartpie );
-    connect(m_chartpie, SIGNAL(triggered(bool)), SLOT( pieChart() ));
-    charttypes->addAction(m_chartpie);
-    m_chartring  = new KToggleAction(KIcon("chart_ring"), i18n("&Ring"), this);
-    actionCollection()->addAction("ringchart", m_chartring );
-    connect(m_chartring, SIGNAL(triggered(bool)), SLOT( ringChart() ));
-    charttypes->addAction(m_chartring);
-    m_chartpolar  = new KToggleAction(KIcon("chart_polar"), i18n("&Polar"), this);
-    actionCollection()->addAction("polarchart", m_chartpolar );
-    connect(m_chartpolar, SIGNAL(triggered(bool)), SLOT( polarChart() ));
-    charttypes->addAction(m_chartpolar);
-    */
-
-    // the KChartCanvas class requires an instanciated KoZoomHandler, so we'll do that first
+    // The KChartCanvas class requires an instanciated KoZoomHandler,
+    // so we'll do that first.
     m_zoomHandler = new KoZoomHandler;
 
     m_canvas = new KChartCanvas( this, part );
 
     connect( m_canvas, SIGNAL( documentViewRectChanged( const QRectF& ) ),
-        this, SLOT( documentViewRectChanged( const QRectF& ) ) );
+	     this,     SLOT( documentViewRectChanged( const QRectF& ) ) );
 
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
@@ -223,8 +179,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 
     m_canvas->shapeManager()->add( part->chart() );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
-    
-    //updateGuiTypeOfChart();
 }
 
 
@@ -263,50 +217,6 @@ void KChartView::updateReadWrite( bool /*readwrite*/ )
 
 
 
-void KChartView::updateGuiTypeOfChart()
-{
-    // FIXME
-    return;
-    KChartPart *part = qobject_cast<KChartPart*>( koDocument() );
-
-    switch(part->chartType()) {
-    case BarChartType:
-	m_chartbars->setChecked(true);
-	break;
-    case LineChartType:
-	m_chartline->setChecked(true);
-	break;
-    case AreaChartType:
-	m_chartareas->setChecked(true);
-	break;
-    case CircleChartType:
-	m_chartpie->setChecked(true);
-	break;
-#if 0 //Temporarily disabled because this is a stock chart and so is BoxWhiskers
-    case HiLoChartType:
-	m_charthilo->setChecked(true);
-	break;
-#endif
-    case RingChartType:
-	m_chartring->setChecked(true);
-	break;
-    case RadarChartType:
-        m_chartpolar->setChecked(true);
-        break;
-    case StockChartType:
-        m_chartbw->setChecked( true );
-        break;
-    default:
-	//todo
-	break;
-    }
-
-    // Disable subtype configuration button if appropriate.
-    updateButton();
-}
-
-
-
 void KChartView::slotRepaint()
 {
     ((KChartPart*)koDocument())->setModified(true);
@@ -328,7 +238,6 @@ void KChartView::loadConfig()
     //KGlobal::config()->reparseConfiguration();
     //((KChartPart*)koDocument())->loadConfig( KGlobal::config().data() );
 
-    //updateGuiTypeOfChart();
     //refresh chart when you load config
     update();
 }
@@ -337,227 +246,7 @@ void KChartView::loadConfig()
 void KChartView::defaultConfig()
 {
     //((KChartPart*)koDocument())->defaultConfig(  );
-    //updateGuiTypeOfChart();
     update();
-}
-
-
-void KChartView::pieChart()
-{
-#if 0
-    if ( m_chartpie->isChecked() ) {
-	forceAxisParams(false);
-	KChartParams  *params = ((KChartPart*)koDocument())->params();
-
-	params->setChartType( KChartParams::Pie );
-	params->setThreeDPies(params->threeDBars());
-	params->setExplodeFactor( 0 );
-	params->setExplode( true );
-
-	updateButton();
-	update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-        m_chartpie->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(CircleChartType, NormalChartSubtype);
-    koDocument()->addCommand(command);
-    update();
-#endif
-}
-
-void KChartView::forceAxisParams(bool lineMode)
-{
-    Q_UNUSED( lineMode );
-#if 0
-    KChartParams  *params = ((KChartPart*)koDocument())->params();
-    KDChartAxisParams  axisParams;
-    axisParams = params->axisParams( KDChartAxisParams::AxisPosLeft );
-    if(params->chartType() == KChartParams::Line)
-        m_logarithmicScale = axisParams.axisCalcMode();
-    if(lineMode) {
-        if(m_logarithmicScale)
-            axisParams.setAxisCalcMode(KDChartAxisParams::AxisCalcLogarithmic);
-    } else
-        axisParams.setAxisCalcMode(KDChartAxisParams::AxisCalcLinear);
-    params->setAxisParams( KDChartAxisParams::AxisPosLeft, axisParams );
-#endif
-}
-
-void KChartView::lineChart()
-{
-#if 0
-    if ( m_chartline->isChecked() ) {
-	forceAxisParams(true);
-	KChartParams* params = ((KChartPart*)koDocument())->params();
-
-	params->setChartType( KChartParams::Line );
-	params->setLineChartSubType( KDChartParams::LineNormal );
-
-	updateButton();
-	update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-	m_chartline->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(LineChartType, NormalChartSubtype);
-    koDocument()->addCommand(command);
-    update();
-#endif
-}
-
-
-void KChartView::barsChart()
-{
-#if 0
-    if ( m_chartbars->isChecked() ) {
-	forceAxisParams(false);
-	KChartParams* params = ((KChartPart*)koDocument())->params();
-
-	params->setChartType( KChartParams::Bar );
-	params->setBarChartSubType( KDChartParams::BarNormal );
-
-	updateButton();
-    params->setThreeDBars( params->threeDPies() );
-	update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-	m_chartbars->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(BarChartType, NormalChartSubtype);
-    koDocument()->addCommand(command);
-    update();
-#endif
-}
-
-
-void KChartView::areasChart()
-{
-#if 0
-    if ( m_chartareas->isChecked() ) {
-	forceAxisParams(false);
-	KChartParams* params = ((KChartPart*)koDocument())->params();
-
-	params->setChartType( KChartParams::Area );
-	params->setAreaChartSubType( KDChartParams::AreaNormal );
-
-	updateButton();
-	update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-	m_chartareas->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(AreaChartType, NormalChartSubtype);
-    koDocument()->addCommand(command);
-    update();
-#endif
-}
-
-
-#if 0  // Temporarily disabled because there is no type HiLo in ODF
-void KChartView::hiLoChart()
-{
-#if 0
-    if ( m_charthilo->isChecked() ) {
-	forceAxisParams(false);
-	KChartParams* params = ((KChartPart*)koDocument())->params();
-
-	params->setChartType( KChartParams::HiLo );
-	params->setHiLoChartSubType( KDChartParams::HiLoNormal );
-
-	updateButton();
-	update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-	m_charthilo->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-//     command->setChartType(HiLoChartType);
-    koDocument()->addCommand(command);
-    update();
-#endif
-}
-#endif
-
-void KChartView::ringChart()
-{
-#if 0
-    if ( m_chartring->isChecked() ) {
-	forceAxisParams(false);
-	KChartParams* params = ((KChartPart*)koDocument())->params();
-
-	params->setChartType( KChartParams::Ring );
-
-	updateButton();
-	update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-	m_chartring->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(RingChartType, NormalChartSubtype);
-    koDocument()->addCommand(command);
-    update();
-#endif
-}
-
-
-void KChartView::radarChart()
-{
-#if 0
-    if ( m_chartpolar->isChecked() ) {
-	forceAxisParams(false);
-        KDChartParams* params = ((KChartPart*)koDocument())->params();
-
-        params->setChartType( KDChartParams::Polar );
-        params->setPolarChartSubType( KDChartParams::PolarNormal );
-
-        update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-        m_chartpolar->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    command->setChartType(RadarChartType, NormalChartSubtype);
-    koDocument()->addCommand(command);
-    update();
-#endif
-}
-
-
-void KChartView::stockChart()
-{
-#if 0
-    if ( m_chartbw->isChecked() ) {
-	forceAxisParams(false);
-        KDChartParams* params = ((KChartPart*)koDocument())->params();
-
-        params->setChartType( KDChartParams::BoxWhisker );
-        params->setBWChartSubType( KDChartParams::BWNormal );
-
-        update();
-	((KChartPart*)koDocument())->setModified(true);
-    }
-    else
-        m_chartbw->setChecked( true ); // always one has to be checked !
-#else
-    ChartTypeCommand* command = new ChartTypeCommand(qobject_cast<KChartPart*>(koDocument())->chart());
-    // FIXME: Use a subtype suitable for stock charts when those are created
-    command->setChartType(StockChartType, NormalChartSubtype);
-    koDocument()->addCommand(command);
-    update();
-#endif
 }
 
 
@@ -567,23 +256,6 @@ void KChartView::mousePressEvent ( QMouseEvent *e )
         return;
     if ( e->button() == Qt::RightButton )
         ((QMenu*)factory()->container("action_popup",this))->popup(QCursor::pos());
-}
-
-
-// FIXME: Rename into something suitable.
-void KChartView::updateButton()
-{
-#if 0
-    // Disable sub chart config item.
-    KChartPart* part = qobject_cast<KChartPart*>(koDocument());
-
-    bool state=(part->chartType() == BarChartType ||
-                part->chartType() == AreaChartType ||
-                part->chartType() == LineChartType ||
-                part->chartType() == HiLoChartType ||
-                part->chartType() == PolarChartType);
-    m_subTypeChartConfig->setEnabled(state);
-#endif
 }
 
 

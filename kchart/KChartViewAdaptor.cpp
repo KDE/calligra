@@ -32,11 +32,6 @@ ViewAdaptor::ViewAdaptor( KChartView *view_ )
     view = view_;
 }
 
-void ViewAdaptor::updateGuiTypeOfChart()
-{
-    view->updateGuiTypeOfChart();
-}
-
 void ViewAdaptor::saveConfig()
 {
     view->saveConfig();
