@@ -37,7 +37,6 @@
 #include <kfinddialog.h>
 #include <kreplace.h>
 #include <kreplacedialog.h>
-#include <kprinter.h>
 #include <kurl.h>
 
 #include <KoDom.h>
