@@ -103,9 +103,6 @@ private:
 
     KChartCanvas       *m_canvas;
     KoCanvasController *m_canvasController;
-
-    // This is used for a workaround for a bug in the kdchart code, see #101490.
-    bool m_logarithmicScale;
 };
 
 }  //KChart namespace
