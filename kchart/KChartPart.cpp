@@ -117,10 +117,6 @@ KChartPart::KChartPart( QWidget *parentWidget,
     setTemplateType( "kchart_template" );
 
     // Init some members that need it.
-    m_dataDirection   = DataRowsDirection;
-    m_firstRowAsLabel = false;
-    m_firstColAsLabel = false;
-
     m_bCanChangeValue = true;
 
     // Display parameters
@@ -514,7 +510,7 @@ void KChartPart::analyzeHeaders()
 {
 #if 0
     analyzeHeaders( m_currentData );
-#else
+//#else
     doSetData( *m_chartData, firstRowAsLabel(), firstColAsLabel() );
 #endif
 }
@@ -648,9 +644,8 @@ void KChartPart::doSetData( const QStandardItemModel &data,
 
 void KChartPart::addShape( KoShape *shape )
 {
-    foreach( KoView* view, views() )
-    {
-        KChartCanvas *canvas = ( ( KChartView* )view )->canvasWidget();
+    foreach( KoView* view, views() ) {
+        KChartCanvas  *canvas = ( ( KChartView* )view )->canvasWidget();
         canvas->shapeManager()->add( shape );
     }
 }

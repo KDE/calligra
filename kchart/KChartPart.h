@@ -103,21 +103,9 @@ public:
     ChartShape         *chart()     const { return m_chartShape;  }
     QStandardItemModel *data()      const { return m_chartData; }
 
-    // Types
+    // Convenience functions: Types
     OdfChartType     chartType()    const { return m_chartShape->chartType(); }
     OdfChartSubtype  chartSubtype() const { return m_chartShape->chartSubtype(); }
-
-    // Data in rows or columns.
-    DataDirection    dataDirection() const { return m_dataDirection; }
-    void             setDataDirection( DataDirection _dir ) {
-	m_dataDirection = _dir;
-    }
-
-    // First row / column as data or label?
-    bool       firstRowAsLabel() const { return m_firstRowAsLabel; }
-    void       setFirstRowAsLabel( bool _val );
-    bool       firstColAsLabel() const { return m_firstColAsLabel; }
-    void       setFirstColAsLabel( bool _val );
 
     // Labels
     QStringList       &rowLabelTexts()         { return m_rowLabels;  }
@@ -171,14 +159,9 @@ private:
     ChartShape         *m_chartShape;
     QStandardItemModel *m_chartData;
 
-    // Info about the data.
-    DataDirection       m_dataDirection; // Rows or Columns
-    bool                m_firstRowAsLabel;
-    bool                m_firstColAsLabel;
-
+    // Labels for axes.
     QStringList         m_rowLabels;
     QStringList         m_colLabels;
-    //QString             m_regionName;
 
     // Other auxiliary values
     bool                m_bCanChangeValue;
