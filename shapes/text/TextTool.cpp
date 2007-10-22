@@ -746,7 +746,7 @@ void TextTool::keyPressEvent(QKeyEvent *event) {
     else {
         // check for shortcuts.
         QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
-        if(hit(item, KStandardShortcut::Home))
+        if(hit(item, KStandardShortcut::Begin))
             // Goto beginning of the document. Default: Ctrl-Home
             destinationPosition = 0;
         else if(hit(item, KStandardShortcut::End)) {
