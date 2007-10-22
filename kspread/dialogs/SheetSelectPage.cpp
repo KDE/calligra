@@ -23,7 +23,6 @@
 // standard C/C++ includes
 // Qt includes
 // KDE includes
-#include <kprinter.h>
 #include <kdebug.h>
 
 // KOffice includes
@@ -40,10 +39,10 @@ class SheetSelectWidget : public QWidget, public Ui::SheetSelectWidget
 };
 
 SheetSelectPage::SheetSelectPage( QWidget *parent )
-: KPrintDialogPage(parent),
+: QWidget(parent),
   gui(new SheetSelectWidget(this))
 {
-  setTitle(gui->windowTitle());
+  setWindowTitle(gui->windowTitle());
 
   //disabling automated sorting
   gui->ListViewAvailable->setSorting(-1);
@@ -76,7 +75,8 @@ SheetSelectPage::SheetSelectPage( QWidget *parent )
 // {
 // }
 
-void SheetSelectPage::getOptions( QMap<QString,QString>& opts, bool /*incldef*/ )
+/*
+void SheetSelectPage::getOptions( QMap<QString,QString>& opts, bool incldef )
 {
   QStringList sheetlist = this->selectedSheets();
   QStringList::iterator it;
@@ -102,6 +102,18 @@ void SheetSelectPage::setOptions( const QMap<QString,QString>& opts )
     kDebug() <<" adding sheet to list of printed sheets:" << *it;
     this->prependSelectedSheet(*it);
   }
+}
+*/
+
+void SheetSelectPage::setAvailableSheets(QStringList sheetlist)
+{
+  QStringList::iterator it;
+  for (it = sheetlist.begin(); it != sheetlist.end(); ++it)
+  {
+    kDebug() <<" adding sheet to list of printed sheets:" << *it;
+    this->prependSelectedSheet(*it);
+  }
+
 }
 
 bool SheetSelectPage::isValid(QString& /*msg*/)
@@ -148,7 +160,8 @@ QStringList SheetSelectPage::selectedSheets()
   return list;
 }
 
-QStringList SheetSelectPage::selectedSheets(KPrinter &prt)
+/*
+QStringList SheetSelectPage::selectedSheets(QPrinter &prt)
 {
   QStringList list;
   unsigned int index;
@@ -159,6 +172,7 @@ QStringList SheetSelectPage::selectedSheets(KPrinter &prt)
   }
   return list;
 }
+*/
 
 void SheetSelectPage::clearSelection()
 {

@@ -63,13 +63,13 @@ public:
      * Setup the printer to use
      * @param printer a reference to the QPrinter to use
      */
-    virtual void setupPrinter( QPrinter &printer );
+    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
 
     /**
      * Prints the view using the @p printer
      * @param printer the printer to use
      */
-    virtual void print( QPrinter &printer );
+    virtual void print( QPrinter &printer, QPrintDialog &printDialog );
 
     /**
      * Use this function to obtain the associated @ref KFormulaPartDocument

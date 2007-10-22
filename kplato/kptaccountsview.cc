@@ -40,11 +40,12 @@
 #include <q3paintdevicemetrics.h>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QtGui/QPrinter>
+#include <QtGui/QPrintDialog>
 
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kprinter.h>
 
 #include <kdebug.h>
 
@@ -377,7 +378,7 @@ void AccountsView::slotUpdate()
     QApplication::restoreOverrideCursor();
 }
 
-void AccountsView::print( KPrinter &printer )
+void AccountsView::print( QPrinter &printer, QPrintDialog &printDialog )
 {
     //kDebug();
     uint top, left, bottom, right;

@@ -161,12 +161,12 @@ void MReportViewer::printReport()
 
     // Set the printer dialog
     QPrinter printer;
-
-    setupPrinter( printer );
-
     QPrintDialog printDialog(&printer, this);
+
+    setupPrinter( printer, printDialog );
+
     if (printDialog.exec())
-        printReport( printer );
+        printReport( printer, printDialog );
 }
 
 /** Shows the first page in the report */
@@ -282,7 +282,7 @@ QSize MReportViewer::sizeHint() const
     return scroller -> sizeHint();
 }
 
-void MReportViewer::printReport( QPrinter &printer )
+void MReportViewer::printReport( QPrinter &printer, QPrintDialog &printDialog )
 {
     // Check for a report
     if ( !report )
@@ -403,6 +403,7 @@ void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopi
 
 
     printer = new QPrinter();
+    QPrintDialog *printDialog = new QPrintDialog(&printer,this);
 
     printer->setPageSize( ( QPrinter::PageSize ) report->pageSize() );
     printer->setOrientation( ( QPrinter::Orientation ) report->pageOrientation() );
@@ -412,9 +413,10 @@ void MReportViewer::printReportSilent( int printFrom, int printTo, int printCopi
     if ( !printerName.isEmpty() )
         printer->setPrinterName( printerName );
 
-    printReport( *printer );
+    printReport( *printer, &printDialog );
 
     delete printer;
+    delete printDialog;
 }
 
 }

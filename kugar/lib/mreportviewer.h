@@ -57,7 +57,7 @@ public:
     bool renderReport();
     void clearReport();
     void printReport();
-    void printReport( QPrinter &printer );
+    void printReport( QPrinter &printer, QPrintDialog &printDialog );
     void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
     void printReportSilent( int printFrom = -1, int printTo = -1, int printCopies = -1, QString printerName = QString::null );
 

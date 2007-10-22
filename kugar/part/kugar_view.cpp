@@ -59,14 +59,14 @@ KugarView::KugarView( KugarPart *part, QWidget *parent)
 KugarView::~KugarView()
 {}
 
-void KugarView::setupPrinter( QPrinter &printer )
+void KugarView::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 {
     view->setupPrinter( printer );
 }
 
 void KugarView::print( QPrinter &printer )
 {
-    view->printReport( printer );
+    view->printReport( printer, QPrintDialog &printDialog );
 }
 
 

@@ -30,7 +30,8 @@
 
 #include <k3listview.h>
 
-class KPrinter;
+class QPrinter;
+class QPrintDialog;
 
 namespace Kugar
 {
@@ -65,8 +66,8 @@ class ReportView : public QSplitter
     void draw(const QString &report);
     View *mainView() const { return m_mainview; }
 
-    void setup(KPrinter &printer);
-    void print(KPrinter &printer);
+    void setup(QPrinter &printer, QPrintDialog &printDialog);
+    void print(QPrinter &printer, QPrintDialog &printDialog);
 
     void setReportData();
 

@@ -20,8 +20,7 @@
 #ifndef KSPREAD_SHEETSELECTPAGE
 #define KSPREAD_SHEETSELECTPAGE
 
-#include <kprinter.h>
-#include <kdeprint/kprintdialogpage.h>
+#include <QWidget>
 
 namespace KSpread
 {
@@ -37,23 +36,17 @@ class SheetSelectWidget;
  * to select the sheets that should be printed and in which order
  * they should be printed.
  */
-class SheetSelectPage : public KPrintDialogPage
+class SheetSelectPage : public QWidget
 {
   Q_OBJECT
   public:
     SheetSelectPage( QWidget *parent = 0 );
 //     ~SheetSelectPage();
 
-//     //reimplement virtual functions
     /**
      * @see printOptionPrefix()
      */
-    void getOptions( QMap<QString,QString>& opts, bool incldef = false );
-
-    /**
-     * @see printOptionPrefix()
-     */
-    void setOptions( const QMap<QString,QString>& opts );
+    void setAvailableSheets(QStringList sheetlist);
 
     /**
      * @return false if no sheet is selected for printing.
@@ -82,12 +75,6 @@ class SheetSelectPage : public KPrintDialogPage
      * @return the string that is used in the printoption for given index
      */
     static QString printOptionForIndex(unsigned int index);
-
-    /**
-     * @param prt the printer from which the options should be read.
-     * @return list of sheets to print in correct order configured for given printer.
-     */
-    static QStringList selectedSheets(KPrinter &prt);
 
   public slots:
 

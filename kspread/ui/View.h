@@ -33,9 +33,7 @@
 #include <QPoint>
 #include <QString>
 #include <QStringList>
-
-#include <kprinter.h>
-#include <kdeprint/kprintdialogpage.h>
+#include <QtGui/QPrinter>
 
 #include <QPointF>
 #include <KoView.h>
@@ -187,8 +185,9 @@ public:
 
    // void insertPicture( const QRect& _geometry, KUrl& _file );
 
-    virtual void print( KPrinter &printer );
-    virtual void setupPrinter( KPrinter &printer );
+    virtual void print( QPrinter &printer, QPrintDialog &printDialog );
+    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
+    virtual QList<QWidget*> printDialogPages();
 
     /**
      * Fills the @ref EditWidget with the current cells

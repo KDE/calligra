@@ -25,8 +25,8 @@
 #include <QList>
 #include <QObject>
 #include <QPixmap>
+#include <QtGui/QPrinter>
 
-#include <kprinter.h>
 #include <kmessagebox.h>
 
 #include <KoDocumentInfo.h>
@@ -63,7 +63,7 @@ public:
     /**
      * @return false if nothing to print.
      */
-    bool print( QPainter &painter, KPrinter *_printer );
+    bool print( QPainter &painter, QPrinter *_printer );
 
     /**
      * @return the prinsheet width of the paper in millimeters.

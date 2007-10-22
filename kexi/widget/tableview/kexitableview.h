@@ -50,6 +50,7 @@
 #include "kexidataawareobjectiface.h"
 
 class QPrinter;
+class QPrintDialog;
 
 class KAction;
 
@@ -220,8 +221,8 @@ public:
 
 #ifndef KEXI_NO_PRINT
 	// printing
-//	void		setupPrinter(KPrinter &printer);
-	void		print(QPrinter &printer);
+//	void		setupPrinter(KPrinter &printer, QPrintDialog &printDialog);
+	void		print(QPrinter &printer, QPrintDialog &printDialog);
 #endif
 
 	// reimplemented for internal reasons

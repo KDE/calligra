@@ -38,7 +38,7 @@ class QPushButton;
 
 class QTreeWidget;
 class QTreeWidgetItem;
-class KPrinter;
+class QPrinter;
 
 namespace KPlato
 {
@@ -61,7 +61,7 @@ public:
     virtual void setZoom( double zoom );
     virtual void setProject( Project *project );
     virtual void draw();
-    void print( KPrinter &printer );
+    void print( QPrinter &printer, QPrintDialog &printDialog );
 
     virtual bool loadContext( const KoXmlElement &context );
     virtual void saveContext( QDomElement *context ) const;

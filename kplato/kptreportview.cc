@@ -248,14 +248,14 @@ void ReportView::draw(const QString &report) {
     enableNavigationBtn();
 }
 
-void ReportView::setup(KPrinter &printer) {
+void ReportView::setup(QPrinter &printer, QPrintDialog &printDialog) {
     //kDebug();
-    m_reportview->setupPrinter(printer);
+    m_reportview->setupPrinter(printer, printDialog);
 }
 
-void ReportView::print(KPrinter &printer) {
+void ReportView::print(QPrinter &printer, QPrintDialog &printDialog) {
     //kDebug();
-	m_reportview->printReport(printer);
+	m_reportview->printReport(printer, printDialog);
 }
 
 // Generate report data based on info from the template file

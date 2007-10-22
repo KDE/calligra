@@ -2126,7 +2126,7 @@ void KexiTableView::slotAutoScroll()
 
 #ifndef KEXI_NO_PRINT
 void
-KexiTableView::print(QPrinter &/*printer*/)
+KexiTableView::print(QPrinter &printer, QPrintDialog &printDialog)
 {
 //	printer.setFullPage(true);
 #if 0

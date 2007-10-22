@@ -600,7 +600,7 @@ void KChartView::slotConfigPageLayout()
 }
 
 
-void KChartView::setupPrinter( QPrinter &printer )
+void KChartView::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 {
 /*  In Qt dialogs get added to QPrintDialog, when prinitn gets ativated again will need to fix
   if ( !printer.previewOnly() )
@@ -609,7 +609,7 @@ void KChartView::setupPrinter( QPrinter &printer )
 }
 
 
-void KChartView::print(QPrinter &printer)
+void KChartView::print(QPrinter &printer, QPrintDialog &printDialog)
 {
     Q_UNUSED( printer );
 #if 0                           // Disable printing for now.

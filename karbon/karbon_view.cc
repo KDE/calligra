@@ -365,7 +365,7 @@ void KarbonView::dropEvent( QDropEvent *e )
     }
 }
 
-void KarbonView::print( QPrinter &printer )
+void KarbonView::print( QPrinter &printer, QPrintDialog &printDialog )
 {
     debugView("KarbonView::print(QPrinter)");
 

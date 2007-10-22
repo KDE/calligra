@@ -768,12 +768,12 @@ void View::setZoom( double )
     //TODO
 }
 
-void View::setupPrinter( QPrinter & /*printer*/ )
+void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 {
     //kDebug();
 }
 
-void View::print( QPrinter &/*printer*/ )
+void View::print( QPrinter &printer, QPrintDialog &printDialog )
 {
     //kDebug();
 /*    if ( printer.previewOnly() ) {

@@ -94,8 +94,8 @@ public:
 
     Project& getProject() const;
 
-    virtual void setupPrinter( QPrinter &printer );
-    virtual void print( QPrinter &printer );
+    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
+    virtual void print( QPrinter &printer, QPrintDialog &printDialog );
 
     QMenu *popupMenu( const QString& name );
 

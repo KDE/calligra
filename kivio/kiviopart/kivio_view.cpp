@@ -835,7 +835,7 @@ int KivioView::canvasYOffset() const
   return canvasWidget()->yOffset();
 }
 
-void KivioView::print(QPrinter& ptr)
+void KivioView::print(QPrinter& ptr, QPrintDialog &printDialog)
 {
   ptr.setFullPage(true);
   m_pDoc->printContent( ptr );

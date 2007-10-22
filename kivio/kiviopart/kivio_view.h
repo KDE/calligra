@@ -102,8 +102,8 @@ class KIVIO_EXPORT KivioView : public KoView
     KoTabBar* tabBar()const { return  m_pTabBar;}
     void updateMenuPage( );
 
-    virtual void setupPrinter(QPrinter&);
-    virtual void print(QPrinter&);
+    virtual void setupPrinter(QPrinter&printer, QPrintDialog &printDialog);
+    virtual void print(QPrinter&)printer, QPrintDialog &printDialog;
 
     virtual QWidget* canvas() const;
     virtual int canvasXOffset() const;

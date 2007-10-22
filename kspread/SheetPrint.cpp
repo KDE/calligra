@@ -23,8 +23,6 @@
 // Local
 #include "SheetPrint.h"
 
-#include <kprinter.h>
-
 #include <kdebug.h>
 #include <kmessagebox.h>
 
@@ -265,7 +263,7 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
     return false;
 }
 
-bool SheetPrint::print( QPainter &painter, KPrinter *_printer )
+bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
 {
     kDebug(36001)<<"PRINTING ....";
 
@@ -1185,9 +1183,9 @@ const char* SheetPrint::orientationString() const
 {
     switch( m_orientation )
     {
-    case KPrinter::Portrait:
+    case QPrinter::Portrait:
         return "Portrait";
-    case KPrinter::Landscape:
+    case QPrinter::Landscape:
         return "Landscape";
     }
 
