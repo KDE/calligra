@@ -19,9 +19,7 @@
 
 #include "kptviewbase.h"
 
-#include "kptpart.h"
 #include "kptproject.h"
-#include "kptview.h"
 
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
@@ -33,14 +31,14 @@ namespace KPlato
 {
     
 //--------------
-ViewBase::ViewBase(Part *doc, QWidget *parent)
+ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
     : KoView( doc, parent )
 {
 }
     
-Part *ViewBase::part() const
+KoDocument *ViewBase::part() const
 {
-     return static_cast<Part*>( koDocument() );
+     return koDocument();
 }
 
 void ViewBase::updateReadWrite( bool /*readwrite*/ )

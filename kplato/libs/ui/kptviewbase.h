@@ -26,12 +26,12 @@
 
 class QWidget;
 
+class KoDocument;
+
 /// The main namespace
 namespace KPlato
 {
 
-class View;
-class Part;
 class Project;
 class Node;
 class Resource;
@@ -49,11 +49,11 @@ class ViewBase : public KoView
     Q_OBJECT
 public:
     /// Contructor
-    ViewBase(Part *doc, QWidget *parent);
+    ViewBase(KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~ViewBase() {}
     /// Return the part (document) this view handles
-    Part *part() const;
+    KoDocument *part() const;
     
     /// Return the type of view this is (class name)
     QString viewType() const { return metaObject()->className(); }

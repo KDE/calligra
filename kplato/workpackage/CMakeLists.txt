@@ -20,7 +20,7 @@ kde4_add_ui_files(kplatoworkprivate_LIB_SRCS
 
 kde4_add_library(kplatoworkprivate SHARED ${kplatoworkprivate_LIB_SRCS})
 
-target_link_libraries(kplatoworkprivate koguiutils)
+target_link_libraries(kplatoworkprivate koguiutils kplatokernel)
 
 set_target_properties(kplatoworkprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

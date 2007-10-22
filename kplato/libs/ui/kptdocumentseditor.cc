@@ -21,11 +21,7 @@
 
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"
-#include "kptcalendar.h"
 #include "kptduration.h"
-#include "kptfactory.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
@@ -53,21 +49,18 @@
 #include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kprinter.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
-
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
 
 #include <kdebug.h>
+
+#include <KoDocument.h>
 
 namespace KPlato
 {
 
 
 //--------------------
-DocumentTreeView::DocumentTreeView( Part *part, QWidget *parent )
+    DocumentTreeView::DocumentTreeView( KoDocument *part, QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -111,7 +104,7 @@ QList<Document*> DocumentTreeView::selectedDocuments() const
 }
 
 //-----------------------------------
-DocumentsEditor::DocumentsEditor( Part *part, QWidget *parent )
+DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();

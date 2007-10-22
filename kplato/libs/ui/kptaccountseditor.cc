@@ -23,9 +23,6 @@
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
 #include "kptduration.h"
-#include "kptfactory.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
@@ -54,17 +51,13 @@
 #include <klocale.h>
 #include <kprinter.h>
 #include <kactioncollection.h>
-#include <kxmlguifactory.h>
-
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
 
 #include <kdebug.h>
 
 namespace KPlato
 {
 
-AccountItemModel::AccountItemModel( Part *part, QObject *parent )
+    AccountItemModel::AccountItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_account( 0 )
 {

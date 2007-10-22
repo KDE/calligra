@@ -41,7 +41,7 @@ class AccountItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit AccountItemModel( Part *part, QObject *parent = 0 );
+    explicit AccountItemModel( KoDocument *part, QObject *parent = 0 );
     ~AccountItemModel();
 
     virtual void setProject( Project *project );
@@ -88,7 +88,7 @@ class AccountTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    AccountTreeView( Part *part, QWidget *parent );
+    AccountTreeView( KoDocument *part, QWidget *parent );
 
     AccountItemModel *itemModel() const { return static_cast<AccountItemModel*>( model() ); }
 
@@ -121,7 +121,7 @@ class AccountsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    AccountsEditor( Part *part, QWidget *parent );
+    AccountsEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );

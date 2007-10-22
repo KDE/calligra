@@ -28,19 +28,19 @@
 
 #include "kptcontext.h"
 
+
 class QPoint;
 
+class KoDocument;
 
 namespace KPlato
 {
-
-class View;
 
 class DocumentTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    DocumentTreeView( Part *part, QWidget *parent );
+    DocumentTreeView( KoDocument *part, QWidget *parent );
 
     DocumentItemModel *itemModel() const { return static_cast<DocumentItemModel*>( model() ); }
 
@@ -59,7 +59,7 @@ class DocumentsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    DocumentsEditor( Part *part, QWidget *parent );
+    DocumentsEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Documents &docs );
