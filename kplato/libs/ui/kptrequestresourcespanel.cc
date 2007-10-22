@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -215,7 +215,7 @@ void RequestResourcesPanel::unitsChanged(int units) {
     }
 }
 
-MacroCommand *RequestResourcesPanel::buildCommand(Part *part) {
+MacroCommand *RequestResourcesPanel::buildCommand() {
     //kDebug();
     MacroCommand *cmd = 0;
     if (selectedGroup) {

@@ -20,6 +20,8 @@
 #ifndef KPTTASKPROGRESSDIALOG_H
 #define KPTTASKPROGRESSDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kdialog.h>
 
 
@@ -28,17 +30,16 @@ namespace KPlato
 
 class TaskProgressPanel;
 class Task;
-class Part;
 class StandardWorktime;
 class ScheduleManager;
 class MacroCommand;
 
-class TaskProgressDialog : public KDialog {
+class KPLATOUI_EXPORT TaskProgressDialog : public KDialog {
     Q_OBJECT
 public:
     TaskProgressDialog(Task &task, ScheduleManager *sm, StandardWorktime *workTime, QWidget *parent=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotChanged();

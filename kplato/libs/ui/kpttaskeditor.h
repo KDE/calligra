@@ -20,6 +20,8 @@
 #ifndef TASKEDTIOR_H
 #define TASKEDTIOR_H
 
+#include "kplatoui_export.h"
+
 #include "kptglobal.h"
 #include "kptnodeitemmodel.h"
 #include "kptviewbase.h"
@@ -27,11 +29,14 @@
 #include <QAbstractItemModel>
 #include <QFrame>
 #include <QItemDelegate>
+#include <QMenu>
 #include <QTreeView>
 
 #include <klocale.h>
 
 #include "KoView.h"
+
+class KoDocument;
 
 class QModelIndex;
 
@@ -44,11 +49,11 @@ class Project;
 class Node;
 class NodeItemModel;
 
-class NodeTreeView : public DoubleTreeViewBase
+class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    NodeTreeView( Part *part, QWidget *parent );
+    NodeTreeView( KoDocument *part, QWidget *parent );
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
@@ -65,11 +70,11 @@ protected slots:
     
 };
 
-class TaskEditor : public ViewBase
+class KPLATOUI_EXPORT TaskEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskEditor( Part *part, QWidget *parent );
+    TaskEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );

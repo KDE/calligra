@@ -19,7 +19,6 @@
 
 #include "kptresourcedialog.h"
 #include "kptcommand.h"
-#include "kptpart.h"
 #include "kptproject.h"
 #include "kptresource.h"
 #include "kptcalendar.h"
@@ -190,12 +189,12 @@ void ResourceDialog::slotCalendarChanged(int /*cal*/) {
 
 }
 
-MacroCommand *ResourceDialog::buildCommand(Part *part) {
-    return buildCommand(m_original, m_resource, part);
+MacroCommand *ResourceDialog::buildCommand() {
+    return buildCommand(m_original, m_resource);
 }
 
 // static
-MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource, Part *part) {
+MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource) {
     MacroCommand *m=0;
     QString n = i18n("Modify Resource");
     if (resource.name() != original->name()) {

@@ -22,11 +22,10 @@
 #include "kptglobal.h"
 #include "kptnodeitemmodel.h"
 #include "kptcommand.h"
-#include "kptfactory.h"
 #include "kptproject.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptitemviewsettup.h"
+
+#include <KoDocument.h>
 
 #include <QAbstractItemModel>
 #include <QApplication>
@@ -60,7 +59,7 @@ namespace KPlato
 {
 
 //--------------------
-NodeTreeView::NodeTreeView( Part *part, QWidget *parent )
+NodeTreeView::NodeTreeView( KoDocument *part, QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setModel( new NodeItemModel( part ) );
@@ -85,7 +84,7 @@ void NodeTreeView::slotActivated( const QModelIndex index )
 }
 
 //-----------------------------------
-TaskEditor::TaskEditor( Part *part, QWidget *parent )
+TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();
@@ -313,7 +312,7 @@ void TaskEditor::slotAddTask()
     kDebug();
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
-        Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
+        Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ m_view->project() );
         edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
 	kDebug()<<"test"<<t->type();
         return;
@@ -322,7 +321,7 @@ void TaskEditor::slotAddTask()
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->parentNode() );
+    Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ sib->parentNode() );
     edit( m_view->itemModel()->insertTask( t, sib ) );
 }
 
@@ -331,7 +330,7 @@ void TaskEditor::slotAddMilestone()
     kDebug();
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
-        Task *t = m_view->project()->createTask( part()->config().taskDefaults(), m_view->project() );
+        Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ m_view->project() );
         t->estimate()->set( Duration::zeroDuration );
         edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
         return;
@@ -340,7 +339,7 @@ void TaskEditor::slotAddMilestone()
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), sib->parentNode() );
+    Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ sib->parentNode() );
     t->estimate()->set( Duration::zeroDuration );
     edit( m_view->itemModel()->insertTask( t, sib ) );
 }
@@ -352,7 +351,7 @@ void TaskEditor::slotAddSubtask()
     if ( parent == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( part()->config().taskDefaults(), parent );
+    Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ parent );
     edit( m_view->itemModel()->insertSubtask( t, parent ) );
 }
 

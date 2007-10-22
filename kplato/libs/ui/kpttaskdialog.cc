@@ -70,15 +70,15 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTim
 }
 
 
-MacroCommand *TaskDialog::buildCommand(Part *part) {
+MacroCommand *TaskDialog::buildCommand() {
     MacroCommand *m = new MacroCommand(i18n("Modify Task"));
     bool modified = false;
-    MacroCommand *cmd = m_generalTab->buildCommand(part);
+    MacroCommand *cmd = m_generalTab->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;
     }
-    cmd = m_resourcesTab->buildCommand(part);
+    cmd = m_resourcesTab->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;
@@ -88,7 +88,7 @@ MacroCommand *TaskDialog::buildCommand(Part *part) {
         m->addCommand(cmd);
         modified = true;
     }
-    cmd = m_costTab->buildCommand(part);
+    cmd = m_costTab->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

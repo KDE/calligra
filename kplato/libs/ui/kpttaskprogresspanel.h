@@ -20,6 +20,8 @@
 #ifndef KPTTASKPROGRESSPANEL_H
 #define KPTTASKPROGRESSPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kpttaskprogresspanelbase.h"
 #include "kpttask.h"
 
@@ -31,7 +33,6 @@ namespace KPlato
 {
 
 class DurationWidget;
-class Part;
 class StandardWorktime;
 class Duration;
 class ScheduleManager;
@@ -77,7 +78,7 @@ class TaskProgressPanel : public TaskProgressPanelImpl {
 public:
     explicit TaskProgressPanel( Task &task, ScheduleManager *sm, StandardWorktime *workTime=0, QWidget *parent=0 );
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
     
     bool ok();
 

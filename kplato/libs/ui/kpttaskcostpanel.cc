@@ -21,7 +21,6 @@
 #include "kptaccount.h"
 #include "kpttask.h"
 #include "kptcommand.h"
-#include "kptpart.h"
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -75,7 +74,7 @@ void TaskCostPanel::setCurrentItem(QComboBox *box, const QString& name) {
     }
 }
 
-MacroCommand *TaskCostPanel::buildCommand(Part *part) {
+MacroCommand *TaskCostPanel::buildCommand() {
     MacroCommand *cmd = new MacroCommand(i18n("Modify Task Cost"));
     bool modified = false;
     

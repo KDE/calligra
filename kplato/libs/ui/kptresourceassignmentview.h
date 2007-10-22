@@ -20,8 +20,9 @@
 #ifndef KPTRESOURCEASSIGNMENTVIEW_H
 #define KPTRESOURCEASSIGNMENTVIEW_H
 
+#include "kplatoui_export.h"
+
 #include "kptviewbase.h"
-#include "kptcontext.h"
 
 #include <q3ptrlist.h>
 #include <QTreeWidget>
@@ -58,9 +59,7 @@
 
 #include <kactionselector.h>
 
-#include "kptpart.h"
 #include "kpttask.h"
-#include "kptcontext.h"
 #include "kpttaskeditor.h"
 
 #include "kptcommand.h"
@@ -77,7 +76,7 @@
 #include "ui_kptresourceassignmentview.h"
 
 
-
+class KoDocument;
 
 class QPoint;
 class QLineEdit;
@@ -90,57 +89,58 @@ class QTreeWidgetItem;
  
 namespace KPlato
 {
-    class ResourcesList;
-    
-    
-    class ResourcesList : public QTreeWidget
-    {
-        Q_OBJECT
 
-    public:
-        ResourcesList( QWidget * parent = 0 );
+class ResourcesList;
 
-    };
 
-    class ResourceAssignmentView : public ViewBase
-    {
-        Q_OBJECT
+class KPLATOUI_EXPORT ResourcesList : public QTreeWidget
+{
+    Q_OBJECT
 
-        public:
-            ResourceAssignmentView( Part *part, QWidget *parent);
-            void draw( Project &project );
-            void drawResourcesName( QTreeWidgetItem *parent, ResourceGroup *group );
-            void drawTasksAttributedToAResource (Resource *res, QTreeWidgetItem *parent);
-            void drawTasksAttributedToAGroup (ResourceGroup *group, QTreeWidgetItem *parent);
+public:
+    ResourcesList( QWidget * parent = 0 );
 
-        private:
-            QSplitter *m_splitter;
-            ResourcesList *m_resList;
-	    Project * m_project;
-            ResourcesList *m_taskList;
-            QTreeWidgetItem *m_selectedItem;
-            QTreeWidgetItem *m_tasktreeroot;
-            Part *m_part;
-    	    ::Ui::ResourceAssignmentView widget;
+};
 
-            void updateTasks();
+class KPLATOUI_EXPORT ResourceAssignmentView : public ViewBase
+{
+    Q_OBJECT
 
-	signals:
-        void requestPopupMenu( QString s, const QPoint&);
+public:
+    ResourceAssignmentView( KoDocument *part, QWidget *parent);
+    void draw( Project &project );
+    void drawResourcesName( QTreeWidgetItem *parent, ResourceGroup *group );
+    void drawTasksAttributedToAResource (Resource *res, QTreeWidgetItem *parent);
+    void drawTasksAttributedToAGroup (ResourceGroup *group, QTreeWidgetItem *parent);
 
-        protected slots:
-            void resSelectionChanged();
-            void resSelectionChanged( QTreeWidgetItem *item );
+private:
+    QSplitter *m_splitter;
+    ResourcesList *m_resList;
+    Project *m_project;
+    ResourcesList *m_taskList;
+    QTreeWidgetItem *m_selectedItem;
+    QTreeWidgetItem *m_tasktreeroot;
+    KoDocument *m_part;
+    ::Ui::ResourceAssignmentView widget;
 
-        private slots:
-            void slotRequestPopupMenu( const QPoint &p );
-	    void slotUpdate();
+    void updateTasks();
 
-        public slots:
-            /// Activate/deactivate the gui
-            virtual void setGuiActive( bool activate );
+signals:
+    void requestPopupMenu( QString s, const QPoint&);
 
-    };
+protected slots:
+    void resSelectionChanged();
+    void resSelectionChanged( QTreeWidgetItem *item );
+
+private slots:
+    void slotRequestPopupMenu( const QPoint &p );
+void slotUpdate();
+
+public slots:
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
+
+};
 
 
 }  //KPlato namespace

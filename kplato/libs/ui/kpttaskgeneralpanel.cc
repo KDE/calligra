@@ -25,8 +25,6 @@
 #include "kptdurationwidget.h"
 #include "kptcalendar.h"
 #include "kptdatetime.h"
-#include "kptconfig.h"
-#include "kptpart.h"
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -103,7 +101,7 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     namefield->setFocus();
 }
 
-MacroCommand *TaskGeneralPanel::buildCommand(Part *part) {
+MacroCommand *TaskGeneralPanel::buildCommand() {
     MacroCommand *cmd = new MacroCommand(i18n("Modify Task"));
     bool modified = false;
 

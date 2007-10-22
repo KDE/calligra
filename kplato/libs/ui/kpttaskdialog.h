@@ -21,6 +21,8 @@
 #ifndef KPTTASKDIALOG_H
 #define KPTTASKDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kpagedialog.h>
 
 
@@ -32,7 +34,6 @@ class TaskGeneralPanel;
 class RequestResourcesPanel;
 class DocumentsPanel;
 class TaskCostPanel;
-class Part;
 class Task;
 class StandardWorktime;
 class MacroCommand;
@@ -40,7 +41,7 @@ class MacroCommand;
 /**
  * The dialog that shows and allows you to alter any task.
  */
-class TaskDialog : public KPageDialog {
+class KPLATOUI_EXPORT TaskDialog : public KPageDialog {
     Q_OBJECT
 public:
     /**
@@ -52,7 +53,7 @@ public:
      */
     TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime=0, QWidget *parent=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

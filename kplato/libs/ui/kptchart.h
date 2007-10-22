@@ -28,41 +28,41 @@
 #include <QVector>
 #include <QDate>
 #include "kptproject.h"
-#include "kptview.h"
 
 namespace KPlato
 {
 class ScheduleManager;
 
-    class Chart
-    {
-        private:
-            float totalYPercent;
-            float totalCostPlanned;
-            float totalTimePlanned;
-            int totalWeek;
-        public:
+class Chart
+{
 
-            Chart();
-            void init_display(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>&, int);
-            void api(QVector<QPointF>& data, QVector<QPointF>& display, const QSize &size );
-            void reCalculateY(QVector<QPointF> &data, QVector<QPointF> &display, int height);
-            void reCalculateX(QVector<QPointF> &data,QVector<QPointF> &display, int width);
-            void setMaxCost(QVector<QPointF>);
-            //void setMaxTime(QVector<QDate>);
-            float setMaxYPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
+private:
+    float totalYPercent;
+    float totalCostPlanned;
+    float totalTimePlanned;
+    int totalWeek;
+public:
 
-            void costToPercent(QVector<QPointF>&);
-            void timeToPercent(QVector<QPointF>&);
+    Chart();
+    void init_display(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>&, int);
+    void api(QVector<QPointF>& data, QVector<QPointF>& display, const QSize &size );
+    void reCalculateY(QVector<QPointF> &data, QVector<QPointF> &display, int height);
+    void reCalculateX(QVector<QPointF> &data,QVector<QPointF> &display, int width);
+    void setMaxCost(QVector<QPointF>);
+    //void setMaxTime(QVector<QDate>);
+    float setMaxYPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
 
-            void calculatePlannedCost(QVector<QPointF> &,QVector<QDate> ,Project &,  ScheduleManager &);
-            void calculateActualCost(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
-            void calculateBCWP(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
+    void costToPercent(QVector<QPointF>&);
+    void timeToPercent(QVector<QPointF>&);
 
-            void initXCurvesVectors(QVector<QDate> ,QVector<QPointF> & , QVector<QPointF> & , QVector<QPointF> & );
-            void calculateWeeks(QVector<QDate> & ,Project &, ScheduleManager & );
+    void calculatePlannedCost(QVector<QPointF> &,QVector<QDate> ,Project &,  ScheduleManager &);
+    void calculateActualCost(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
+    void calculateBCWP(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
 
-    };
+    void initXCurvesVectors(QVector<QDate> ,QVector<QPointF> & , QVector<QPointF> & , QVector<QPointF> & );
+    void calculateWeeks(QVector<QDate> & ,Project &, ScheduleManager & );
+
+};
 
 } //namespace KPlato
 

@@ -23,14 +23,12 @@
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
 #include "kptduration.h"
-#include "kptfactory.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptdatetime.h"
-#include "kptcontext.h"
+
+#include <KoDocument.h>
 
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -67,7 +65,7 @@ namespace KPlato
 
 
 //-----------------------------------------
-CalendarDayItemModelBase::CalendarDayItemModelBase( Part *part, QObject *parent )
+CalendarDayItemModelBase::CalendarDayItemModelBase( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_calendar( 0 )
 {
@@ -104,7 +102,7 @@ void CalendarDayItemModelBase::setProject( Project *project )
 
 
 //-------------------------------------
-CalendarItemModel::CalendarItemModel( Part *part, QObject *parent )
+CalendarItemModel::CalendarItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_calendar( 0 )
 {
@@ -601,7 +599,7 @@ void CalendarItemModel::removeCalendar( Calendar *calendar )
 
 
 //------------------------------------------
-CalendarDayItemModel::CalendarDayItemModel( Part *part, QObject *parent )
+CalendarDayItemModel::CalendarDayItemModel( KoDocument *part, QObject *parent )
     : CalendarDayItemModelBase( part, parent )
 {
     typeWeekday = new TopLevelType( i18n( "Weekdays" ) );
@@ -1437,7 +1435,7 @@ void CalendarDayItemModel::clearDayMap( CalendarDay *day )
 
 
 //--------------------
-CalendarTreeView::CalendarTreeView( Part *part, QWidget *parent )
+CalendarTreeView::CalendarTreeView( KoDocument *part, QWidget *parent )
     : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -1570,7 +1568,7 @@ void CalendarTreeView::dragMoveEvent(QDragMoveEvent *event)
 
 
 //--------------------
-CalendarDayView::CalendarDayView( Part *part, QWidget *parent )
+CalendarDayView::CalendarDayView( KoDocument *part, QWidget *parent )
     : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -1664,7 +1662,7 @@ TimeInterval *CalendarDayView::selectedInterval() const
 }
 
 //-----------------------------------
-CalendarEditor::CalendarEditor( Part *part, QWidget *parent )
+CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();

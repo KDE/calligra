@@ -28,7 +28,6 @@
 #include <kdatewidget.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <k3command.h>
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
@@ -91,7 +90,7 @@ bool MainProjectPanel::ok() {
     return true;
 }
 
-MacroCommand *MainProjectPanel::buildCommand(Part *part) {
+MacroCommand *MainProjectPanel::buildCommand() {
     MacroCommand *m = 0;
     QString c = i18n("Modify main project");
     if (project.name() != namefield->text()) {

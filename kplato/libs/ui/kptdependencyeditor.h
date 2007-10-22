@@ -20,6 +20,8 @@
 #ifndef DEPENDENCYEDTIOR_H
 #define DEPENDENCYEDTIOR_H
 
+#include "kplatoui_export.h"
+
 #include "kptglobal.h"
 #include "kptitemmodelbase.h"
 #include "kpttaskeditor.h"
@@ -53,7 +55,7 @@ class DependencyConnectorItem;
 class DependencyNodeItem;
 class DependencyScene;
 
-class DependencyLinkItemBase : public QGraphicsPathItem
+class KPLATOUI_EXPORT DependencyLinkItemBase : public QGraphicsPathItem
 {
 public:
     explicit DependencyLinkItemBase ( QGraphicsItem * parent = 0 );
@@ -76,7 +78,7 @@ public:
     QGraphicsPathItem *m_arrow;
 };
 
-class DependencyLinkItem : public DependencyLinkItemBase
+class KPLATOUI_EXPORT DependencyLinkItem : public DependencyLinkItemBase
 {
 public:
     explicit DependencyLinkItem ( DependencyNodeItem *predecessor, DependencyNodeItem *successor, Relation *rel, QGraphicsItem * parent = 0 );
@@ -103,7 +105,7 @@ private:
     QPen m_pen;
 };
 
-class DependencyCreatorItem : public DependencyLinkItemBase
+class KPLATOUI_EXPORT DependencyCreatorItem : public DependencyLinkItemBase
 {
 public:
     explicit DependencyCreatorItem ( QGraphicsItem * parent = 0 );
@@ -132,7 +134,7 @@ public:
 
 //-----------------------
 
-class DependencyNodeItem : public QGraphicsRectItem
+class KPLATOUI_EXPORT DependencyNodeItem : public QGraphicsRectItem
 {
 public:
     DependencyNodeItem( Node *node, DependencyNodeItem *parent = 0 );
@@ -204,7 +206,7 @@ private:
 };
 
 //-----------------------
-class DependencyConnectorItem : public QGraphicsRectItem
+class KPLATOUI_EXPORT DependencyConnectorItem : public QGraphicsRectItem
 {
 public:
     DependencyConnectorItem( DependencyNodeItem::ConnectorType type, DependencyNodeItem *parent );
@@ -230,7 +232,7 @@ private:
 };
 
 //-----------------------
-class DependencyScene : public QGraphicsScene
+class KPLATOUI_EXPORT DependencyScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
@@ -312,7 +314,7 @@ private:
 
 
 //-----------------------
-class DependencyView : public QGraphicsView
+class KPLATOUI_EXPORT DependencyView : public QGraphicsView
 {
     Q_OBJECT
 public:
@@ -358,11 +360,11 @@ private:
 };
 
 //------------------------------
-class DependencyEditor : public ViewBase
+class KPLATOUI_EXPORT DependencyEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    DependencyEditor( Part *part, QWidget *parent );
+    DependencyEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );

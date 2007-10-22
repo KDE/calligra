@@ -12,6 +12,8 @@ set( KPLATO_INCLUDES
     ${CMAKE_BINARY_DIR}/kplato/libs/models
     ${CMAKE_SOURCE_DIR}/kplato/libs/ui
     ${CMAKE_BINARY_DIR}/kplato/libs/ui
+    ${CMAKE_SOURCE_DIR}/kdgantt
+    ${CMAKE_BINARY_DIR}/kdgantt
     ${KOGUIUTILS_INCLUDES}
 )
 
@@ -30,9 +32,28 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
+    kptviewlistdocker.cc
+    kptviewlist.cc
+    kptviewlistdialog.cc
+    kptviewlistcommand.cc
+    
+    kptconfigdialog.cc
+    kptconfig.cc
+
+    kptcontext.cc
+
     kptfactory.cc
     kptpart.cc
     kptview.cc
+    KPtViewAdaptor.cc
+)
+
+kde4_add_ui_files(kplatoprivate_LIB_SRCS
+    kptviewlistaddview.ui
+    kptviewlisteditview.ui
+    kptviewlisteditcategory.ui
+
+    kptconfigtaskpanelbase.ui
 )
 
 kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS})

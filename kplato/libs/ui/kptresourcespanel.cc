@@ -44,7 +44,6 @@ namespace KPlato
 class GroupItem;
 class ResourcesPanelGroupLVItem;
 class ResourcesPanelResourceItem;
-class Part;
 
 class ResourcesPanelResourceItem {
 public:
@@ -80,13 +79,13 @@ public:
         m_resource = 0;
         return r;
     }
-    MacroCommand *saveResource(Part *part, ResourceGroup *group);
+    MacroCommand *saveResource(ResourceGroup *group);
 
     Resource *m_originalResource;
     Resource *m_resource; // work on a local copy
     State m_state;
 };
-MacroCommand *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup *group) {
+MacroCommand *ResourcesPanelResourceItem::saveResource(ResourceGroup *group) {
     MacroCommand *m=0;
     if (m_state == New) {
         //kDebug()<<"Add resource:"<<m_resource->name();
@@ -94,7 +93,7 @@ MacroCommand *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup
         m->addCommand(new AddResourceCmd(group, takeResource()));
     } else if (m_state == Modified) {
         //kDebug()<<"Modify resource:"<<m_originalResource->name();
-        MacroCommand *cmd = ResourceDialog::buildCommand(m_originalResource, *m_resource, part);
+        MacroCommand *cmd = ResourceDialog::buildCommand(m_originalResource, *m_resource);
         if (cmd) {
             if (!m) m = new MacroCommand("Modify resource");
             m->addCommand(cmd);
@@ -391,7 +390,7 @@ bool ResourcesPanel::ok() {
     return true;
 }
 
-MacroCommand *ResourcesPanel::buildCommand(Part *part) {
+MacroCommand *ResourcesPanel::buildCommand() {
     MacroCommand *m=0;
 
     QString cmdName = "Modify resourcegroups";
@@ -427,7 +426,7 @@ MacroCommand *ResourcesPanel::buildCommand(Part *part) {
             }
         }
         foreach (ResourcesPanelResourceItem *item, gitem->m_resourceItems) {
-            MacroCommand *cmd = item->saveResource(part, rg);
+            MacroCommand *cmd = item->saveResource(rg);
             if (cmd) {
                 if (!m) m = new MacroCommand(cmdName);
                 m->addCommand(cmd);

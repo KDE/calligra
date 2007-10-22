@@ -23,7 +23,6 @@
 #include "kptcalendar.h"
 #include "kptcommand.h"
 #include "kptintervaledit.h"
-#include "kptpart.h"
 
 #include <QGroupBox>
 #include <QHeaderView>
@@ -74,7 +73,7 @@ public:
         day->setState(st+1);
     }
     
-    MacroCommand *save(Part *part) {
+    MacroCommand *save() {
         MacroCommand *cmd=0;
         if (*original != *day) {
             cmd = new MacroCommand();
@@ -109,7 +108,7 @@ StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent)
     connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
 }
 
-MacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
+MacroCommand *StandardWorktimeDialog::buildCommand() {
     //kDebug();
     QString n = i18n("Modify Standard Worktime");
     MacroCommand *cmd = 0;

@@ -21,20 +21,21 @@
 #ifndef KPTSUMMARYSUMMARYTASKDIALOG_H
 #define KPTSUMMARYSUMMARYTASKDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kdialog.h>
 
 namespace KPlato
 {
 
 class SummaryTaskGeneralPanel;
-class Part;
 class Task;
 class MacroCommand;
 
 /**
  * The dialog that shows and allows you to alter summary tasks.
  */
-class SummaryTaskDialog : public KDialog {
+class KPLATOUI_EXPORT SummaryTaskDialog : public KDialog {
     Q_OBJECT
 public:
     /**
@@ -44,7 +45,7 @@ public:
      */
     explicit SummaryTaskDialog(Task &task,  QWidget *parent=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

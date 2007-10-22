@@ -23,17 +23,15 @@
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
 #include "kptduration.h"
-#include "kptfactory.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptschedule.h"
 #include "kptdatetime.h"
-#include "kptcontext.h"
 #include "kptpertresult.h"
 #include "kptitemviewsettup.h"
+
+#include <KoDocument.h>
 
 #include <QMenu>
 #include <QPainter>
@@ -59,7 +57,7 @@
 namespace KPlato
 {
 
-ScheduleItemModel::ScheduleItemModel( Part *part, QObject *parent )
+ScheduleItemModel::ScheduleItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_manager( 0 )
 {
@@ -613,7 +611,7 @@ ScheduleManager *ScheduleItemModel::manager( const QModelIndex &index ) const
 
 
 //--------------------
-ScheduleTreeView::ScheduleTreeView( Part *part, QWidget *parent )
+ScheduleTreeView::ScheduleTreeView( KoDocument *part, QWidget *parent )
     : TreeViewBase( parent ),
     m_part( part )
 {
@@ -670,7 +668,7 @@ ScheduleManager *ScheduleTreeView::currentManager() const
 }
 
 //-----------------------------------
-ScheduleEditor::ScheduleEditor( Part *part, QWidget *parent )
+ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();
@@ -865,7 +863,7 @@ void ScheduleEditor::saveContext( QDomElement &context ) const
 
 //---------------------------
 
-ScheduleHandlerView::ScheduleHandlerView( Part *part, QWidget *parent )
+ScheduleHandlerView::ScheduleHandlerView( KoDocument *part, QWidget *parent )
     : SplitterView( part, parent )
 {
     m_scheduleEditor = new ScheduleEditor( part, this );

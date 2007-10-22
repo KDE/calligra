@@ -20,6 +20,8 @@
 #ifndef KPLATO_VIEWBASE
 #define KPLATO_VIEWBASE
 
+#include "kplatoui_export.h"
+
 #include <KoView.h>
 #include <QMap>
 
@@ -44,7 +46,7 @@ class Context;
  ViewBase is the baseclass of all sub-views to View.
 
 */
-class ViewBase : public KoView
+class KPLATOUI_EXPORT ViewBase : public KoView
 {
     Q_OBJECT
 public:

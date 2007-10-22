@@ -50,8 +50,8 @@ void MilestoneProgressDialog::slotChanged() {
     enableButtonOk(true);
 }
 
-MacroCommand *MilestoneProgressDialog::buildCommand(Part *part) {
-    return m_panel->buildCommand(part);;
+MacroCommand *MilestoneProgressDialog::buildCommand() {
+    return m_panel->buildCommand();;
 }
 
 void MilestoneProgressDialog::slotOk() {

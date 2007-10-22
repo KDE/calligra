@@ -25,16 +25,14 @@
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
 #include "kptduration.h"
-#include "kptfactory.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
-#include "kptcontext.h"
 #include "kptitemviewsettup.h"
+
+#include <KoDocument.h>
 
 #include <QDate>
 #include <QDragEnterEvent>
@@ -67,7 +65,7 @@
 namespace KPlato
 {
 
-ResourceAppointmentsItemModel::ResourceAppointmentsItemModel( Part *part, QObject *parent )
+ResourceAppointmentsItemModel::ResourceAppointmentsItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_columnCount( 3 ),
     m_group( 0 ),
@@ -804,7 +802,7 @@ bool ResourceAppointmentsItemModel::dropMimeData( const QMimeData *data, Qt::Dro
 
 
 //--------------------
-ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( Part *part, QWidget *parent )
+ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( KoDocument *part, QWidget *parent )
     : DoubleTreeViewBase( true, parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -842,7 +840,7 @@ void ResourceAppointmentsTreeView::slotRefreshed()
 }
 
 //-----------------------------------
-ResourceAppointmentsView::ResourceAppointmentsView( Part *part, QWidget *parent )
+ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     kDebug()<<"------------------- ResourceAppointmentsView -----------------------"<<endl;

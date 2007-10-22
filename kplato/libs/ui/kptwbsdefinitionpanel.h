@@ -20,6 +20,8 @@
 #ifndef KPTWBSDEFINITIONPANEL_H
 #define KPTWBSDEFINITIONPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptwbsdefinitionpanelbase.h"
 
 #include <QItemDelegate>
@@ -29,7 +31,6 @@
 namespace KPlato
 {
 
-class Part;
 class WBSDefinition;
 class MacroCommand;
 
@@ -57,11 +58,11 @@ class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase {
 public:
     explicit WBSDefinitionPanel(WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
     bool ok();
 
-    void setStartValues(Part *part);
+    void setStartValues();
 
 signals:
     void changed(bool enable);

@@ -21,6 +21,8 @@
 #ifndef KPTRELATIONDIALOG_H
 #define KPTRELATIONDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include "ui_relationpanel.h"
 #include <QWidget>
 #include <kdialog.h>
@@ -34,7 +36,7 @@ class RelationPanel;
 class DurationWidget;
 
 class Relation;
-class Part;
+class Project;
 class MacroCommand;
 
 class RelationPanel : public QWidget, public Ui_RelationPanel
@@ -46,13 +48,13 @@ public:
     DurationWidget *lag;
 };
 
-class AddRelationDialog : public KDialog
+class KPLATOUI_EXPORT AddRelationDialog : public KDialog
 {
     Q_OBJECT
 public:
-    AddRelationDialog(Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel);
+    AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption=QString(), ButtonCodes buttons=Ok|Cancel);
 
-    virtual MacroCommand *buildCommand(Part *part);
+    virtual MacroCommand *buildCommand();
     int selectedRelationType() const;
     
 protected slots:
@@ -64,6 +66,7 @@ protected slots:
     void slotStartStartToggled(bool);
 
 protected:
+    Project &m_project;
     RelationPanel *m_panel;
     Q3ButtonGroup *relationType;
     Relation *m_relation;
@@ -71,13 +74,13 @@ protected:
 };
 
 
-class ModifyRelationDialog : public AddRelationDialog
+class KPLATOUI_EXPORT ModifyRelationDialog : public AddRelationDialog
 {
     Q_OBJECT
 public:
-    explicit ModifyRelationDialog(Relation *rel, QWidget *p=0);
+    explicit ModifyRelationDialog(Project &project, Relation *rel, QWidget *p=0);
 
-    virtual MacroCommand *buildCommand(Part *part);
+    virtual MacroCommand *buildCommand();
     bool relationIsDeleted() { return m_deleted; }
 
 protected slots:

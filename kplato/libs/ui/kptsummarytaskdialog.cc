@@ -45,10 +45,10 @@ SummaryTaskDialog::SummaryTaskDialog(Task &task, QWidget *p)
 }
 
 
-MacroCommand *SummaryTaskDialog::buildCommand(Part *part) {
+MacroCommand *SummaryTaskDialog::buildCommand() {
     MacroCommand *m = new MacroCommand(i18n("Modify Summary Task"));
     bool modified = false;
-    MacroCommand *cmd = m_generalTab->buildCommand(part);
+    MacroCommand *cmd = m_generalTab->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

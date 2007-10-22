@@ -20,14 +20,16 @@
 #ifndef KPTACCOUNTSVIEW_H
 #define KPTACCOUNTSVIEW_H
 
+#include "kplatoui_export.h"
+
 #include "kptviewbase.h"
-#include "kptview.h"
+
+#include <KoDocument.h>
 
 #include <QDate>
 #include <QLabel>
 
 #include "kptaccount.h"
-#include "kptcontext.h"
 #include "kpteffortcostmap.h"
 #include "kptdoublelistviewbase.h"
 
@@ -44,17 +46,16 @@ namespace KPlato
 {
 
 class Account;
-class View;
 class Project;
 class Resource;
 class ScheduleManager;
 
-class AccountsView : public ViewBase
+class KPLATOUI_EXPORT AccountsView : public ViewBase
 {
     Q_OBJECT
 public:
 
-    AccountsView( Project *project, Part *part, QWidget *parent );
+    AccountsView( Project *project, KoDocument *part, QWidget *parent );
 
     //~AccountsView();
 
@@ -77,11 +78,11 @@ protected slots:
     void slotUpdate();
     
 protected:
-    void getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const;
-    void setContextClosedItems( const Context::Accountsview &context );
+//    void getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const;
+//    void setContextClosedItems( const Context::Accountsview &context );
 
 private:
-    class AccountItem : public DoubleListViewBase::MasterListItem
+    class KPLATOUI_EXPORT AccountItem : public DoubleListViewBase::MasterListItem
     {
     public:
         AccountItem( Account *a, QTreeWidget *parent, bool highlight = false );

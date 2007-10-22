@@ -58,10 +58,10 @@ void ResourcesDialog::slotOk() {
     accept();
 }
 
-MacroCommand *ResourcesDialog::buildCommand(Part *part) {
+MacroCommand *ResourcesDialog::buildCommand() {
     MacroCommand *m = 0;
     QString c = i18n("Modify resources");
-    MacroCommand *cmd = panel->buildCommand(part);
+    MacroCommand *cmd = panel->buildCommand();
     if (cmd) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(cmd);

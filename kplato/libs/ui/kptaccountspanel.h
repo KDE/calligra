@@ -20,6 +20,8 @@
 #ifndef KPTACCOUNTSPANEL_H
 #define KPTACCOUNTSPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptaccountspanelbase.h"
 
 #include <QList>
@@ -35,7 +37,6 @@ namespace KPlato
 
 class Account;
 class Accounts;
-class Part;
 class Project;
 class MacroCommand;
 
@@ -48,12 +49,12 @@ public:
 };
 
 
-class AccountsPanel : public AccountsPanelBase {
+class KPLATOUI_EXPORT AccountsPanel : public AccountsPanelBase {
     Q_OBJECT
 public:
-    explicit AccountsPanel(Accounts &acc, QWidget *parent=0);
+    explicit AccountsPanel(Project &project, Accounts &acc, QWidget *parent=0);
     
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
     
     bool isUnique(QTreeWidgetItem *item);
     void renameStopped(QTreeWidgetItem *item);
@@ -81,10 +82,11 @@ protected:
     void removeElement(const QString& key);
     void removeElement(QTreeWidgetItem *item);
     void refreshDefaultAccount();
-    MacroCommand *save(Part *part, Project &project);
-    MacroCommand *save(Part *part, Project &project, QTreeWidgetItem *item);
+    MacroCommand *save(Project &project);
+    MacroCommand *save(Project &project, QTreeWidgetItem *item);
     
 private:
+    Project &m_project;
     Accounts &m_accounts;
     
     QList<QTreeWidgetItem*> m_removedItems;

@@ -20,13 +20,14 @@
 #ifndef KPTSUMMARYTASKGENERALPANEL_H
 #define KPTSUMMARYTASKGENERALPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptsummarytaskgeneralpanelbase.h"
 
 namespace KPlato
 {
 
 class SummaryTaskGeneralPanel;
-class Part;
 class Task;
 class MacroCommand;
 
@@ -35,7 +36,7 @@ class SummaryTaskGeneralPanel : public QWidget, public Ui_SummaryTaskGeneralPane
 public:
     explicit SummaryTaskGeneralPanel(Task &task, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
     bool ok();
 

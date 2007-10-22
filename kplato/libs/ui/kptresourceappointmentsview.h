@@ -20,13 +20,15 @@
 #ifndef KPTRESOURCEAPPOINTMENTSVIEW_H
 #define KPTRESOURCEAPPOINTMENTSVIEW_H
 
+#include "kplatoui_export.h"
+
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
+#include "kpteffortcostmap.h"
 
 #include <QTreeWidget>
 
-#include "kptcontext.h"
-#include "kpteffortcostmap.h"
+class KoDocument;
 
 class QPoint;
 class QTreeWidgetItem;
@@ -48,11 +50,11 @@ class Resource;
 class ResourceGroup;
 class ScheduleManager;
 
-class ResourceAppointmentsItemModel : public ItemModelBase
+class KPLATOUI_EXPORT ResourceAppointmentsItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit ResourceAppointmentsItemModel( Part *part, QObject *parent = 0 );
+    explicit ResourceAppointmentsItemModel( KoDocument *part, QObject *parent = 0 );
     ~ResourceAppointmentsItemModel();
 
     virtual void setProject( Project *project );
@@ -135,11 +137,11 @@ protected:
     ScheduleManager *m_manager;
   };
   
-class ResourceAppointmentsTreeView : public DoubleTreeViewBase
+class KPLATOUI_EXPORT ResourceAppointmentsTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsTreeView( Part *part, QWidget *parent );
+    ResourceAppointmentsTreeView( KoDocument *part, QWidget *parent );
 
     ResourceAppointmentsItemModel *itemModel() const { return static_cast<ResourceAppointmentsItemModel*>( model() ); }
 
@@ -154,11 +156,11 @@ protected slots:
     void slotRefreshed();
 };
 
-class ResourceAppointmentsView : public ViewBase
+class KPLATOUI_EXPORT ResourceAppointmentsView : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsView( Part *part, QWidget *parent );
+    ResourceAppointmentsView( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void setProject( Project *project );

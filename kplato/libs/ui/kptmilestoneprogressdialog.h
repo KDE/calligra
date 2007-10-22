@@ -20,6 +20,8 @@
 #ifndef KPTMILESTONEPROGRESSDIALOG_H
 #define KPTMILESTONEPROGRESSDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kdialog.h>
 
 
@@ -28,15 +30,14 @@ namespace KPlato
 
 class MilestoneProgressPanel;
 class Task;
-class Part;
 class MacroCommand;
 
-class MilestoneProgressDialog : public KDialog {
+class KPLATOUI_EXPORT MilestoneProgressDialog : public KDialog {
     Q_OBJECT
 public:
     explicit MilestoneProgressDialog(Task &task, QWidget *parent=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotChanged();

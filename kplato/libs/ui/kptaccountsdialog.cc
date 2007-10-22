@@ -27,14 +27,14 @@
 namespace KPlato
 {
 
-AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p)
+AccountsDialog::AccountsDialog(Project &project, Accounts &acc, QWidget *p)
     : KDialog(p)
 {
     setCaption( i18n("Edit Accounts") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
     showButtonSeparator( true );
-    m_panel = new AccountsPanel(acc, this);
+    m_panel = new AccountsPanel(project, acc, this);
     setMainWidget(m_panel);
 
     enableButtonOk(false);
@@ -43,8 +43,8 @@ AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p)
 }
 
 
-MacroCommand *AccountsDialog::buildCommand(Part *part) {
-    return m_panel->buildCommand(part);
+MacroCommand *AccountsDialog::buildCommand() {
+    return m_panel->buildCommand();
 }
 
 void AccountsDialog::slotOk() {

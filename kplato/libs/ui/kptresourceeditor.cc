@@ -23,16 +23,14 @@
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
 #include "kptduration.h"
-#include "kptfactory.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
-#include "kptcontext.h"
 #include "kptitemviewsettup.h"
+
+#include <KoDocument.h>
 
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -65,7 +63,7 @@
 namespace KPlato
 {
 
-ResourceItemModel::ResourceItemModel( Part *part, QObject *parent )
+ResourceItemModel::ResourceItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_group( 0 ),
     m_resource( 0 )
@@ -999,7 +997,7 @@ QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Re
 
 
 //--------------------
-ResourceTreeView::ResourceTreeView( Part *part, QWidget *parent )
+ResourceTreeView::ResourceTreeView( KoDocument *part, QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -1064,7 +1062,7 @@ QList<Resource*> ResourceTreeView::selectedResources() const
 }
 
 //-----------------------------------
-ResourceEditor::ResourceEditor( Part *part, QWidget *parent )
+ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();

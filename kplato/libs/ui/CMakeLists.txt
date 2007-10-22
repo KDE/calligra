@@ -5,9 +5,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kplato/libs/kernel
     ${CMAKE_SOURCE_DIR}/kplato/libs/models
     ${CMAKE_BINARY_DIR}/kplato/libs/models
-    ${KOGUIUTILS_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
     ${CMAKE_BINARY_DIR}/kdgantt
+    ${KOGUIUTILS_INCLUDES}
 )
 
 #add_subdirectory( tests )
@@ -17,11 +17,6 @@ include_directories(
 set(kplatoui_LIB_SRCS
     kptdocumentseditor.cc
     kptdocumentspanel.cc
-    
-    kptviewlistdocker.cc
-    kptviewlist.cc
-    kptviewlistdialog.cc
-    kptviewlistcommand.cc
     
     kptitemviewsettup.cc
     kptsplitterview.cc
@@ -66,11 +61,8 @@ set(kplatoui_LIB_SRCS
     kptintervaledit.cc
     kpttaskgeneralpanel.cc
     kpttaskdefaultpanel.cc
-    kptconfigdialog.cc
     kpttaskprogresspanel.cc
     kpttaskprogressdialog.cc
-    kptconfig.cc
-    kptcontext.cc
     kptresourcesdialog.cc
     kptwbsdefinitiondialog.cc
     kptwbsdefinitionpanel.cc
@@ -82,10 +74,6 @@ set(kplatoui_LIB_SRCS
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
     kptdocumentspanel.ui
-    
-    kptviewlistaddview.ui
-    kptviewlisteditview.ui
-    kptviewlisteditcategory.ui
     
     kptcpmwidget.ui
     kptitemviewsettings.ui
@@ -107,7 +95,6 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     relationpanel.ui
     kpttaskgeneralpanelbase.ui
     kpttaskprogresspanelbase.ui
-    kptconfigtaskpanelbase.ui
     kptperteditor.ui
     kptchartpanelbase.ui
     kptresourceassignmentview.ui

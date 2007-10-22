@@ -20,11 +20,15 @@
 #ifndef KPLATO_SPLITTERVIEW
 #define KPLATO_SPLITTERVIEW
 
+#include "kplatoui_export.h"
+
 #include "kptviewbase.h"
 
 #include <KoXmlReaderForward.h>
 
 #include <QMap>
+
+class KoDocument;
 
 class QSplitter;
 class QTabWidget;
@@ -33,8 +37,6 @@ class QTabWidget;
 namespace KPlato
 {
 
-class View;
-class Part;
 class Project;
 class Resource;
 class Context;
@@ -49,12 +51,12 @@ class Context;
  * To have context info loaded, views added to this splitter must have a
  * unique objectName().
 */
-class SplitterView : public ViewBase
+class KPLATOUI_EXPORT SplitterView : public ViewBase
 {
     Q_OBJECT
 public:
     /// Contructor
-    SplitterView(Part *doc, QWidget *parent);
+    SplitterView(KoDocument *doc, QWidget *parent);
     /// Destructor
     virtual ~SplitterView() {}
     

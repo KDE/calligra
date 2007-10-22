@@ -21,11 +21,14 @@
 #ifndef KPTGANTTVIEW_H
 #define KPTGANTTVIEW_H
 
+#include "kplatoui_export.h"
+
 #include "kptviewbase.h"
-#include "kptcontext.h"
 
 #include <kdganttglobal.h>
 #include <kdganttview.h>
+
+class KoDocument;
 
 class QPoint;
 class QSplitter;
@@ -39,7 +42,6 @@ class Node;
 class MilestoneItemModel;
 class NodeItemModel;
 class Task;
-class Part;
 class Project;
 class Relation;
 class ScheduleManager;
@@ -48,7 +50,7 @@ class MyKDGanttView : public KDGantt::View
 {
     Q_OBJECT
 public:
-    MyKDGanttView( Part *part, QWidget *parent );
+    MyKDGanttView( KoDocument *part, QWidget *parent );
     
     NodeItemModel *itemModel() const { return m_model; }
     void setProject( Project *project );
@@ -69,11 +71,11 @@ protected:
     ScheduleManager *m_manager;
 };
 
-class GanttView : public ViewBase
+class KPLATOUI_EXPORT GanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    GanttView( Part *part, QWidget *parent, bool readWrite = true );
+    GanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
 
     //~GanttView();
 
@@ -145,11 +147,11 @@ private:
     Project *m_project;
 };
 
-class MilestoneKDGanttView : public KDGantt::View
+class KPLATOUI_EXPORT MilestoneKDGanttView : public KDGantt::View
 {
     Q_OBJECT
 public:
-    MilestoneKDGanttView( Part *part, QWidget *parent );
+    MilestoneKDGanttView( KoDocument *part, QWidget *parent );
 
     MilestoneItemModel *itemModel() const { return m_model; }
     void setProject( Project *project );
@@ -165,11 +167,11 @@ protected:
     MilestoneItemModel *m_model;
 };
 
-class MilestoneGanttView : public ViewBase
+class KPLATOUI_EXPORT MilestoneGanttView : public ViewBase
 {
     Q_OBJECT
 public:
-    MilestoneGanttView( Part *part, QWidget *parent, bool readWrite = true );
+    MilestoneGanttView( KoDocument *part, QWidget *parent, bool readWrite = true );
 
     virtual void setZoom( double zoom );
     void show();

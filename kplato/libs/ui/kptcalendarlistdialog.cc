@@ -21,7 +21,6 @@
 #include "kptproject.h"
 #include "kptcalendar.h"
 #include "kptcommand.h"
-#include "kptpart.h"
 
 #include <QPushButton>
 #include <QComboBox>
@@ -80,7 +79,7 @@ public:
         if (!base) return false;
         return base == item || base->hasBaseCalendar(item);
     }
-    MacroCommand *buildCommand(Part *part, Project &p) {
+    MacroCommand *buildCommand(Project &p) {
         MacroCommand *macro=0;
         if (state & New) {
             if (macro == 0) macro = new MacroCommand("");
@@ -207,14 +206,14 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent)
     connect(dia->calendarList, SIGNAL(itemChanged(QTreeWidgetItem*, int)), dia, SLOT(slotItemChanged(QTreeWidgetItem*, int)));
 }
 
-MacroCommand *CalendarListDialog::buildCommand(Part *part) {
+MacroCommand *CalendarListDialog::buildCommand() {
     //kDebug();
     MacroCommand *cmd = 0;
     int c = dia->calendarList->topLevelItemCount();
     for (int i=0; i < c; ++i) {
         CalendarListViewItem *item = static_cast<CalendarListViewItem *>(dia->calendarList->topLevelItem(i));
         //kDebug()<<item->text(0);
-        MacroCommand *c = item->buildCommand(part, project);
+        MacroCommand *c = item->buildCommand(project);
         if (c != 0) {
             if (cmd == 0) cmd = new MacroCommand("");
             cmd->addCommand(c);
@@ -224,7 +223,7 @@ MacroCommand *CalendarListDialog::buildCommand(Part *part) {
         //kDebug()<<"deleted:"<<item->calendar->name();
         if (item->original) {
             if (cmd == 0) cmd = new MacroCommand("");
-            cmd->addCommand(new CalendarRemoveCmd(&(part->getProject()), item->original));
+            cmd->addCommand(new CalendarRemoveCmd(&project, item->original));
         }
     }
     if (cmd) {

@@ -23,10 +23,9 @@
 #include "kptitemmodelbase.h"
 #include "kptitemviewsettup.h"
 #include "kptcommand.h"
-#include "kptfactory.h"
 #include "kptproject.h"
-#include "kptview.h"
-#include "kptpart.h"
+
+#include <KoDocument.h>
 
 #include <QAbstractItemModel>
 #include <QApplication>
@@ -40,6 +39,7 @@
 #include <QItemSelectionModel>
 #include <QLineEdit>
 #include <QMap>
+#include <QMenu>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
 #include <QVBoxLayout>
@@ -60,7 +60,7 @@ namespace KPlato
 {
 
 
-TaskStatusItemModel::TaskStatusItemModel( Part *part, QObject *parent )
+TaskStatusItemModel::TaskStatusItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_period( 7 )
 {
@@ -483,7 +483,7 @@ void TaskStatusItemModel::slotNodeChanged( Node *)
 }
 
 //--------------------
-TaskStatusTreeView::TaskStatusTreeView( Part *part, QWidget *parent )
+TaskStatusTreeView::TaskStatusTreeView( KoDocument *part, QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -550,7 +550,7 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
 
 
 //-----------------------------------
-TaskStatusView::TaskStatusView( Part *part, QWidget *parent )
+TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_id( -1 )
 {
@@ -562,8 +562,6 @@ TaskStatusView::TaskStatusView( Part *part, QWidget *parent )
     m_view = new TaskStatusTreeView( part, this );
     l->addWidget( m_view );
 
-    m_view->itemModel()->setProject( &(part->getProject()) );
-    
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
     
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
@@ -601,6 +599,7 @@ Node *TaskStatusView::currentNode() const
 void TaskStatusView::draw( Project &project )
 {
     m_project = &project;
+    m_view->itemModel()->setProject( m_project );
     draw();
 }
 

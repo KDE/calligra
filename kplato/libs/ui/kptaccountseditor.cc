@@ -28,7 +28,8 @@
 #include "kpttask.h"
 #include "kptaccount.h"
 #include "kptdatetime.h"
-#include "kptcontext.h"
+
+#include <KoDocument.h>
 
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -428,7 +429,7 @@ void AccountItemModel::removeAccounts( QList<Account*> lst )
 }
 
 //--------------------
-AccountTreeView::AccountTreeView( Part *part, QWidget *parent )
+AccountTreeView::AccountTreeView( KoDocument *part, QWidget *parent )
     : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -506,7 +507,7 @@ QList<Account*> AccountTreeView::selectedAccounts() const
 
 
 //-----------------------------------
-AccountsEditor::AccountsEditor( Part *part, QWidget *parent )
+AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();

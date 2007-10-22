@@ -20,7 +20,6 @@
 #include "kptrelationdialog.h"
 #include "kptrelation.h"
 #include "kptnode.h"
-#include "kptpart.h"
 #include "kptcommand.h"
 #include "kptdurationwidget.h"
 
@@ -44,8 +43,9 @@ RelationPanel::RelationPanel(QWidget *parent)
         l->addWidget(lag);
 }
     
-AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons)
-    : KDialog(p)
+AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons)
+    : KDialog(p),
+    m_project( project )
 {
     setCaption( caption );
     setButtons( buttons );
@@ -83,9 +83,9 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, const QString& c
     connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
 }
 
-MacroCommand *AddRelationDialog::buildCommand(Part *part) {
+MacroCommand *AddRelationDialog::buildCommand() {
     MacroCommand *c = new MacroCommand( i18n("Add Relation") );
-    c->addCommand( new AddRelationCmd(part->getProject(), m_relation ) );
+    c->addCommand( new AddRelationCmd(m_project, m_relation ) );
     return c;
 }
 
@@ -128,8 +128,8 @@ int AddRelationDialog::selectedRelationType() const {
 
 //////////////////
 
-ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p)
-    : AddRelationDialog(rel, p, i18n("Edit Relationship"), Ok|Cancel|User1)
+ModifyRelationDialog::ModifyRelationDialog(Project &project, Relation *rel, QWidget *p)
+    : AddRelationDialog(project, rel, p, i18n("Edit Relationship"), Ok|Cancel|User1)
 {
     setButtonText( KDialog::User1, i18n("Delete") );
     m_deleted = false;
@@ -144,7 +144,7 @@ void ModifyRelationDialog::slotUser1() {
     accept();
 }
 
-MacroCommand *ModifyRelationDialog::buildCommand(Part *part) {
+MacroCommand *ModifyRelationDialog::buildCommand() {
     MacroCommand *cmd=0;
     if (selectedRelationType() != m_relation->type()) {
         if (cmd == 0)

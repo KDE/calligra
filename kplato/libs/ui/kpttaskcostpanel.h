@@ -20,6 +20,8 @@
 #ifndef KPTTASKCOSTPANEL_H
 #define KPTTASKCOSTPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kpttaskcostpanelbase.h"
 
 
@@ -29,7 +31,6 @@ namespace KPlato
 class TaskCostPanel;
 class Account;
 class Accounts;
-class Part;
 class Task;
 class MacroCommand;
 
@@ -50,7 +51,7 @@ class TaskCostPanel : public TaskCostPanelImpl {
 public:
     TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
     bool ok();
 

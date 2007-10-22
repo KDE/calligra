@@ -20,6 +20,8 @@
 #ifndef KPTMAINPROJECTDIALOG_H
 #define KPTMAINPROJECTDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kdialog.h>
 
 
@@ -28,16 +30,15 @@ namespace KPlato
 
 class Project;
 class MainProjectPanel;
-class Part;
 class MacroCommand;
 
 
-class MainProjectDialog : public KDialog {
+class KPLATOUI_EXPORT MainProjectDialog : public KDialog {
     Q_OBJECT
 public:
     explicit MainProjectDialog(Project &project, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
     
 protected slots:
     void slotOk();

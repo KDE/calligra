@@ -20,10 +20,13 @@
 #ifndef TASKSTATUSVIEW_H
 #define TASKSTATUSVIEW_H
 
+#include "kplatoui_export.h"
+
 #include "kptitemmodelbase.h"
 #include "kptnodeitemmodel.h"
 #include "kptviewbase.h"
 
+class KoDocument;
 
 class KAction;
 
@@ -36,11 +39,11 @@ class Task;
 
 typedef QList<Node*> NodeList;
 
-class TaskStatusItemModel : public ItemModelBase
+class KPLATOUI_EXPORT TaskStatusItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit TaskStatusItemModel( Part *part, QObject *parent = 0 );
+    explicit TaskStatusItemModel( KoDocument *part, QObject *parent = 0 );
     ~TaskStatusItemModel();
     
     virtual void setProject( Project *project );
@@ -111,11 +114,11 @@ private:
 };
 
 
-class TaskStatusTreeView : public DoubleTreeViewBase
+class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusTreeView( Part *part, QWidget *parent );
+    TaskStatusTreeView( KoDocument *part, QWidget *parent );
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
@@ -133,11 +136,11 @@ protected:
 };
 
 
-class TaskStatusView : public ViewBase
+class KPLATOUI_EXPORT TaskStatusView : public ViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusView( Part *part, QWidget *parent );
+    TaskStatusView( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );

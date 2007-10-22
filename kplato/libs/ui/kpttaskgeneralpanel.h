@@ -20,6 +20,8 @@
 #ifndef KPTTASKGENERALPANEL_H
 #define KPTTASKGENERALPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kpttaskgeneralpanelbase.h"
 #include "kptduration.h"
 
@@ -30,7 +32,6 @@ namespace KPlato
 {
 
 class TaskGeneralPanel;
-class Part;
 class Task;
 class StandardWorktime;
 class DurationWidget;
@@ -99,7 +100,7 @@ class TaskGeneralPanel : public TaskGeneralPanelImpl {
 public:
     explicit TaskGeneralPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
     bool ok();
 

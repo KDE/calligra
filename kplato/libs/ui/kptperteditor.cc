@@ -17,17 +17,47 @@
   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301, USA.
 */
+
 #include "kptperteditor.h"
+#include "kptproject.h"
+
+#include <KoDocument.h>
 
 namespace KPlato
 {
 
+void PertEditor::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( relationRemoved(Relation *) ), this, SLOT( dispAvailableTasks(Relation *) ) );
+        disconnect( m_project, SIGNAL( relationAdded(Relation *) ), this, SLOT( dispAvailableTasks(Relation *) ) );
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+    m_project = project;
+    m_node = project; // TODO: review
+    if ( m_project ) {
+        connect( m_project, SIGNAL( relationRemoved(Relation *) ), this, SLOT( dispAvailableTasks(Relation *) ) );
+        connect( m_project, SIGNAL( relationAdded(Relation *) ), this, SLOT( dispAvailableTasks(Relation *) ) );
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+    draw();
+}
+
 void PertEditor::draw( Project &project)
 {
+    setProject( &project );
+    draw();
+}
+
+void PertEditor::draw()
+{
     m_tasktree->clear();
+    if ( m_project == 0 ) {
+        return;
+    }
     
-    foreach(Node * currentNode, project.projectNode()->childNodeIterator()){
-	kDebug() << currentNode->type();
+    foreach(Node * currentNode, m_project->projectNode()->childNodeIterator()){
+        kDebug() << currentNode->type();
         if (currentNode->type()!=4){
             QTreeWidgetItem * item = new QTreeWidgetItem( m_tasktree );
             item->setText( 0, currentNode->name());
@@ -55,7 +85,10 @@ void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
 
 
 //-----------------------------------
-PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
+PertEditor::PertEditor( KoDocument *part, QWidget *parent ) 
+    : ViewBase( part, parent ),
+    m_node( 0 ),
+    m_project( 0 )
 {
     kDebug() <<" ---------------- KPlato: Creating PertEditor ----------------";
     widget.setupUi(this);
@@ -68,22 +101,16 @@ PertEditor::PertEditor( Part *part, QWidget *parent ) : ViewBase( part, parent )
     m_tasktree = widget.tableTaskWidget;
     m_assignList = widget.assignList;
     m_part = part;
-    m_project = &m_part->getProject();
-    m_node = m_part->getProject().projectNode();
     
-    draw( part->getProject() );  
     for (int i=0;i< list_nodeNotView.size();i++)
-	list_nodeNotView.removeFirst();
-	
+        list_nodeNotView.removeFirst();
+
     connect( m_tasktree, SIGNAL( itemSelectionChanged() ), SLOT( dispAvailableTasks() ) );
     connect( this, SIGNAL( refreshAvailableTaskList() ), SLOT( dispAvailableTasks() ) );
     connect( m_assignList, SIGNAL(added(QListWidgetItem *)), this, SLOT(addTaskInRequiredList(QListWidgetItem * )) );
     connect( m_assignList, SIGNAL(removed(QListWidgetItem *)), this, SLOT(removeTaskFromRequiredList(QListWidgetItem * )) );
 
     // connects used to refresh the kactionselector after an undo/redo
-    connect( m_project, SIGNAL( relationRemoved(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );
-    connect( m_project, SIGNAL( relationAdded(Relation *) ), SLOT( dispAvailableTasks(Relation *) ) );
-    connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
 }
 
 void PertEditor::updateReadWrite( bool rw )
@@ -211,8 +238,9 @@ void PertEditor::loadRequiredTasksList(Node * taskNode){
 
 void PertEditor::slotUpdate(){
 
- draw(m_part->getProject());
+ draw();
 }
+
 } // namespace KPlato
 
 #include "kptperteditor.moc"

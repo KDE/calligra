@@ -20,6 +20,8 @@
 #ifndef KPTRESOURCEDIALOG_H
 #define KPTRESOURCEDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include "ui_resourcedialogbase.h"
 #include "kptresource.h"
 
@@ -33,7 +35,6 @@ class QString;
 namespace KPlato
 {
 
-class Part;
 class Project;
 class Resource;
 class Calendar;
@@ -58,7 +59,7 @@ protected slots:
     void slotAvailableUntilChanged(const QDateTime& dt);
 };
 
-class ResourceDialog : public KDialog {
+class KPLATOUI_EXPORT ResourceDialog : public KDialog {
     Q_OBJECT
 public:
     ResourceDialog(Project &project, Resource *resource, QWidget *parent=0, const char *name=0);
@@ -66,9 +67,9 @@ public:
     bool calculationNeeded() {  return m_calculationNeeded; }
 
     Calendar *calendar() { return m_calendars[dia->calendarList->currentIndex()]; }
-    MacroCommand *buildCommand(Part *part = 0);
+    MacroCommand *buildCommand();
     
-    static MacroCommand *buildCommand(Resource *original, Resource &resource, Part *part);
+    static MacroCommand *buildCommand(Resource *original, Resource &resource);
     
 protected slots:
     void enableButtonOk();

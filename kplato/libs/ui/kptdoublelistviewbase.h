@@ -20,6 +20,8 @@
 #ifndef KPTDOUBLELISTVIEWBASE_H
 #define KPTDOUBLELISTVIEWBASE_H
 
+#include "kplatoui_export.h"
+
 #include <QMap>
 #include <QSplitter>
 #include <QTreeWidget>
@@ -34,9 +36,7 @@ class KPrinter;
 namespace KPlato
 {
 
-class View;
-
-class ListView : public QTreeWidget
+class KPLATOUI_EXPORT ListView : public QTreeWidget
 {
 public:
     explicit ListView(QWidget *parent)
@@ -54,7 +54,7 @@ public:
  * This makes it possible to scroll the slave listview and still see the values
  * in the master listview.
  */
-class DoubleListViewBase : public QSplitter
+class KPLATOUI_EXPORT DoubleListViewBase : public QSplitter
 {
     Q_OBJECT
 public:

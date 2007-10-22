@@ -19,17 +19,19 @@
 
 #include "kptsplitterview.h"
 
-#include "kptpart.h"
+#include "KoDocument.h"
 
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QTabWidget>
 
+#include <kdebug.h>
+
 namespace KPlato
 {
 
-SplitterView::SplitterView(Part *doc, QWidget *parent)
+SplitterView::SplitterView(KoDocument *doc, QWidget *parent)
     : ViewBase( doc, parent ),
     m_activeview( 0 )
 {

@@ -79,7 +79,7 @@ void ConfigDialog::slotApply() {
         return;
 /*    if (!m_behaviorPage->ok())
         return;*/
-    MacroCommand *cmd = m_taskDefaultPage->buildCommand(0);
+    MacroCommand *cmd = m_taskDefaultPage->buildCommand();
     if (cmd)
         cmd->execute();
 

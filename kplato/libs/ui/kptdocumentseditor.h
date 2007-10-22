@@ -20,13 +20,13 @@
 #ifndef KPTDOCUMENTSEDITOR_H
 #define KPTDOCUMENTSEDITOR_H
 
+#include "kplatoui_export.h"
+
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 #include <kptdocumentmodel.h>
 
 #include <QTreeWidget>
-
-#include "kptcontext.h"
 
 
 class QPoint;
@@ -36,7 +36,7 @@ class KoDocument;
 namespace KPlato
 {
 
-class DocumentTreeView : public DoubleTreeViewBase
+class KPLATOUI_EXPORT DocumentTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
@@ -55,7 +55,7 @@ protected slots:
 
 };
 
-class DocumentsEditor : public ViewBase
+class KPLATOUI_EXPORT DocumentsEditor : public ViewBase
 {
     Q_OBJECT
 public:

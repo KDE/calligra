@@ -20,7 +20,6 @@
 #include "kptdoublelistviewbase.h"
 
 #include "kptproject.h"
-#include "kptview.h"
 
 #include <QPainter>
 #include <QLayout>

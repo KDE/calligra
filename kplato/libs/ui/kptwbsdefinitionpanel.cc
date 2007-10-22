@@ -20,7 +20,6 @@
 #include "kptwbsdefinitionpanel.h"
 #include "kptwbsdefinition.h"
 #include "kptcommand.h"
-#include "kptpart.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -127,10 +126,10 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     removeBtn->setEnabled(false);
 }
 
-void WBSDefinitionPanel::setStartValues(Part */*part*/) {
+void WBSDefinitionPanel::setStartValues() {
 }
 
-MacroCommand *WBSDefinitionPanel::buildCommand(Part */*part*/) {
+MacroCommand *WBSDefinitionPanel::buildCommand() {
     MacroCommand *cmd = new MacroCommand(i18n("Modify WBS Definition"));
 
     return cmd;

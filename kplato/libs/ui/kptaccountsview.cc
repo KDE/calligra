@@ -20,24 +20,21 @@
 #include "kptaccountsview.h"
 
 #include "kptaccountsviewconfigdialog.h"
-#include "kptcontext.h"
 #include "kptdatetime.h"
-#include "kptpart.h"
 #include "kptproject.h"
 #include "kpteffortcostmap.h"
+
+#include <KoDocument.h>
 
 #include <QApplication>
 #include <QComboBox>
 #include <QDateTime>
-#include <q3datetimeedit.h>
 #include <QLabel>
 #include <QLayout>
 #include <QPainter>
 #include <qpalette.h>
 #include <QPushButton>
-#include <q3popupmenu.h>
 #include <QSizePolicy>
-#include <q3paintdevicemetrics.h>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtGui/QPrinter>
@@ -86,7 +83,7 @@ void AccountsView::AccountItem::add
         m_slaveItem->setText( col, KGlobal::locale() ->formatMoney( cm.cost(), "", 0 ) );
 }
 
-AccountsView::AccountsView( Project *project, Part *part, QWidget *parent )
+AccountsView::AccountsView( Project *project, KoDocument *part, QWidget *parent )
         : ViewBase( part, parent ),
         m_project(0),
         m_manager( 0 )
@@ -167,10 +164,10 @@ void AccountsView::draw()
         return;
     }
     //kDebug();
-    Context::Accountsview context;
-    getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
+/*    Context::Accountsview context;
+    getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );*/
     initAccList( m_project->accounts().accountList() );
-    setContextClosedItems( context );
+//    setContextClosedItems( context );
     slotUpdate();
 }
 
@@ -421,20 +418,20 @@ bool AccountsView::loadContext( const KoXmlElement &context )
     return true;
 }
 
-void AccountsView::setContextClosedItems( const Context::Accountsview &context )
-{
-    for ( QStringList::ConstIterator it = context.closedItems.begin(); it != context.closedItems.end(); ++it ) {
-        /*        if (m_accounts.findAccount(*it)) {
-                    QTreeWidgetItemIterator lit(m_dlv->masterListView());
-                    for (; lit.current(); ++lit) {
-                        if (lit.current()->text(0) == (*it)) {
-                            m_dlv->setOpen(lit.current(), false);
-                            break;
-                        }
-                    }
-                }*/
-    }
-}
+// void AccountsView::setContextClosedItems( const Context::Accountsview &context )
+// {
+//     for ( QStringList::ConstIterator it = context.closedItems.begin(); it != context.closedItems.end(); ++it ) {
+//                 if (m_accounts.findAccount(*it)) {
+//                     QTreeWidgetItemIterator lit(m_dlv->masterListView());
+//                     for (; lit.current(); ++lit) {
+//                         if (lit.current()->text(0) == (*it)) {
+//                             m_dlv->setOpen(lit.current(), false);
+//                             break;
+//                         }
+//                     }
+//                 }
+//     }
+// }
 
 void AccountsView::saveContext( QDomElement *context ) const
 {
@@ -451,18 +448,18 @@ void AccountsView::saveContext( QDomElement *context ) const
     //getContextClosedItems( context, m_dlv->masterListView() ->topLevelItem( 0 ) );
 }
 
-void AccountsView::getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const
-{
-    if ( item == 0 )
-        return ;
-    /*    for (QTreeWidgetItem *i = item; i; i = i->nextSibling()) {
-            if (!i->isOpen()) {
-                context.closedItems.append(i->text(0));
-                //kDebug()<<"add closed"<<i->text(0);
-            }
-            getContextClosedItems(context, i->firstChild());
-        }*/
-}
+// void AccountsView::getContextClosedItems( Context::Accountsview &context, QTreeWidgetItem *item ) const
+// {
+//     if ( item == 0 )
+//         return ;
+//         for (QTreeWidgetItem *i = item; i; i = i->nextSibling()) {
+//             if (!i->isOpen()) {
+//                 context.closedItems.append(i->text(0));
+//                 kDebug()<<"add closed"<<i->text(0);
+//             }
+//             getContextClosedItems(context, i->firstChild());
+//         }
+// }
 
 void AccountsView::slotConfigure()
 {

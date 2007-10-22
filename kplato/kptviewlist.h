@@ -20,6 +20,8 @@
 #ifndef KPLATO_VIEWLIST_H
 #define KPLATO_VIEWLIST_H
 
+#include "kplatoui_export.h"
+
 #include <QTreeWidget>
 #include <Q3ValueList>
 
@@ -42,7 +44,7 @@ class Part;
 class DocumentChild;
 class Context;
 
-class ViewListItem : public QTreeWidgetItem
+class KPLATOUI_EXPORT ViewListItem : public QTreeWidgetItem
 {
     public:
         enum ItemType { ItemType_Category = Type, ItemType_SubView = UserType, ItemType_ChildDocument };
@@ -68,7 +70,7 @@ class ViewListItem : public QTreeWidgetItem
         QString m_tag;
 };
 
-class ViewListTreeWidget : public QTreeWidget
+class KPLATOUI_EXPORT ViewListTreeWidget : public QTreeWidget
 {
     Q_OBJECT
 public:
@@ -91,7 +93,7 @@ private slots:
     void handleMousePress( QTreeWidgetItem *item );
 };
 
-class ViewListWidget : public QWidget
+class KPLATOUI_EXPORT ViewListWidget : public QWidget
 {
 Q_OBJECT
 public:

@@ -20,6 +20,8 @@
 #ifndef KPTWBSDEFINITIONDIALOG_H
 #define KPTWBSDEFINITIONDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kdialog.h>
 
 
@@ -28,15 +30,14 @@ namespace KPlato
 
 class WBSDefinitionPanel;
 class WBSDefinition;
-class Part;
 class MacroCommand;
 
-class WBSDefinitionDialog : public KDialog {
+class KPLATOUI_EXPORT WBSDefinitionDialog : public KDialog {
     Q_OBJECT
 public:
     explicit WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

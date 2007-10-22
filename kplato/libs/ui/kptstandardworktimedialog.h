@@ -20,6 +20,8 @@
 #ifndef KPTSTANDARDWORKTIMEDIALOG_H
 #define KPTSTANDARDWORKTIMEDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include "ui_standardworktimedialogbase.h"
 
 #include "kptcalendar.h"
@@ -34,7 +36,6 @@ namespace KPlato
 {
 
 class Project;
-class Part;
 class MacroCommand;
 
 class StandardWorktimeDialogImpl : public QWidget, public Ui::StandardWorktimeDialogBase {
@@ -69,12 +70,12 @@ private:
     double m_day;
 };
 
-class StandardWorktimeDialog : public KDialog {
+class KPLATOUI_EXPORT StandardWorktimeDialog : public KDialog {
     Q_OBJECT
 public:
     explicit StandardWorktimeDialog(Project &project, QWidget *parent=0);
     
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

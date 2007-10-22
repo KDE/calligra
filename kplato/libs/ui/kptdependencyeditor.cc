@@ -22,9 +22,7 @@
 #include "kptglobal.h"
 #include "kptitemmodelbase.h"
 #include "kptcommand.h"
-#include "kptfactory.h"
 #include "kptproject.h"
-#include "kptview.h"
 #include "kptrelation.h"
 
 #include <QAbstractItemModel>
@@ -1158,7 +1156,7 @@ void DependencyView::createLinks()
 }
 
 //-----------------------------------
-DependencyEditor::DependencyEditor( Part *part, QWidget *parent )
+DependencyEditor::DependencyEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_currentnode( 0 )
 {

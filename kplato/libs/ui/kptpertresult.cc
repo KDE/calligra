@@ -19,12 +19,13 @@
 * Boston, MA 02110-1301, USA.
 */
 #include "kptpertresult.h"
-#include "kptitemmodelbase.h"
 #include "kptitemviewsettup.h"
-#include "kptpart.h"
+#include "kptproject.h"
 #include "kpttask.h"
 #include "kptnode.h"
 #include "kptschedule.h"
+
+#include <KoDocument.h>
 
 #include <QTreeView>
 #include <QStringList>
@@ -49,7 +50,7 @@ class Task;
 
 typedef QList<Node*> NodeList;
 
-CriticalPathItemModel::CriticalPathItemModel( Part *part, QObject *parent )
+CriticalPathItemModel::CriticalPathItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_manager( 0 )
 {
@@ -514,7 +515,7 @@ void CriticalPathItemModel::slotNodeChanged( Node *node )
 
 
 //-----------------------------
-PertResultItemModel::PertResultItemModel( Part *part, QObject *parent )
+PertResultItemModel::PertResultItemModel( KoDocument *part, QObject *parent )
     : ItemModelBase( part, parent ),
     m_manager( 0 )
 {
@@ -1134,7 +1135,10 @@ void PertResultItemModel::slotNodeChanged( Node *)
 }
 
 //-----------------------------------
-PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
+PertResult::PertResult( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent ),
+    m_node( 0 ),
+    m_project( 0 )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
     widget.setupUi(this);
@@ -1147,8 +1151,6 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     
     current_schedule=0;
     m_part = part;
-    m_project = &m_part->getProject();
-    m_node = m_project;
 
         
     QList<int> lst1; lst1 << 1 << -1;
@@ -1159,15 +1161,13 @@ PertResult::PertResult( Part *part, QWidget *parent ) : ViewBase( part, parent )
     lst2 << 33 << -1;
     widget.treeWidgetTaskResult->hideColumns( lst1, lst2 );
     
-    draw( part->getProject() );
-
     connect( widget.treeWidgetTaskResult, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void PertResult::draw( Project &project)
 {
     setProject( &project );
-//    draw();
+    draw();
 }
   
 void PertResult::draw()
@@ -1372,7 +1372,7 @@ void PertResult::slotOptions()
 
 void PertResult::slotUpdate(){
 
-    draw(m_part->getProject());
+    draw();
 }
 
 void PertResult::slotScheduleSelectionChanged( ScheduleManager *sm )
@@ -1440,7 +1440,7 @@ void PertResult::saveContext( QDomElement &context ) const
 
 
 //--------------------
-PertCpmView::PertCpmView( Part *part, QWidget *parent ) 
+PertCpmView::PertCpmView( KoDocument *part, QWidget *parent ) 
     : ViewBase( part, parent ),
     m_project( 0 ),
     current_schedule( 0 ),
@@ -1475,8 +1475,6 @@ PertCpmView::PertCpmView( Part *part, QWidget *parent )
     widget.cpmTable->slaveView()->mapToSection( 20, 7 );
     widget.cpmTable->slaveView()->mapToSection( 21, 8 );
     
-    setProject( &( part->getProject() ) );
-
     connect( widget.cpmTable, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
     
     connect( widget.finishTime, SIGNAL( dateTimeChanged( const QDateTime& ) ), SLOT( slotFinishTimeChanged( const QDateTime& ) ) );

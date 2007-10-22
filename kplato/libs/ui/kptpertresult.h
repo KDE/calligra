@@ -22,6 +22,8 @@
 #ifndef KPTPERTRESULT_H
 #define KPTPERTRESULT_H
 
+#include "kplatoui_export.h"
+
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 #include <kptnodeitemmodel.h>
@@ -35,6 +37,8 @@
 
 #include "ui_kptpertresult.h"
 #include "ui_kptcpmwidget.h"
+
+class KoDocument;
 
 class KAction;
 class KIcon;
@@ -54,11 +58,11 @@ class View;
 
 typedef QList<Node*> NodeList;
 
-class CriticalPathItemModel : public ItemModelBase
+class KPLATOUI_EXPORT CriticalPathItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CriticalPathItemModel( Part *part, QObject *parent = 0 );
+    explicit CriticalPathItemModel( KoDocument *part, QObject *parent = 0 );
     ~CriticalPathItemModel();
     
     virtual void setProject( Project *project );
@@ -122,11 +126,11 @@ private:
 /**
  This model displays results from project scheduling.
 */
-class PertResultItemModel : public ItemModelBase
+class KPLATOUI_EXPORT PertResultItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit PertResultItemModel( Part *part, QObject *parent = 0 );
+    explicit PertResultItemModel( KoDocument *part, QObject *parent = 0 );
     ~PertResultItemModel();
     
     virtual void setProject( Project *project );
@@ -204,11 +208,11 @@ private:
 };
 
 //--------------------
-class PertResult : public ViewBase
+class KPLATOUI_EXPORT PertResult : public ViewBase
 {
     Q_OBJECT
 public:
-    PertResult( Part *part, QWidget *parent = 0 );
+    PertResult( KoDocument *part, QWidget *parent = 0 );
     
     void setupGui();
     void setProject( Project *project );
@@ -246,7 +250,7 @@ protected slots:
     
 private:
     Node * m_node;
-    Part * m_part;
+    KoDocument * m_part;
     Project * m_project;
     bool complexGraph;
     QList<Node *> m_criticalPath;
@@ -262,11 +266,11 @@ private slots:
 };
 
 //--------------------
-class PertCpmView : public ViewBase
+class KPLATOUI_EXPORT PertCpmView : public ViewBase
 {
     Q_OBJECT
 public:
-    PertCpmView( Part *part, QWidget *parent = 0 );
+    PertCpmView( KoDocument *part, QWidget *parent = 0 );
     
     void setupGui();
     void setProject( Project *project );

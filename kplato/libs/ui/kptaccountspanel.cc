@@ -21,7 +21,6 @@
 #include "kptaccount.h"
 #include "kptcommand.h"
 #include "kptproject.h"
-#include "kptpart.h"
 
 #include <QComboBox>
 #include <QHeaderView>
@@ -75,8 +74,9 @@ private:
     }
 };
 
-AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p)
+AccountsPanel::AccountsPanel(Project &project, Accounts &acc, QWidget *p)
     : AccountsPanelBase(p),
+      m_project(project),
       m_accounts(acc),
       m_currentIndex(0),
       m_renameItem(0)
@@ -272,18 +272,18 @@ void AccountsPanel::slotSubBtn() {
     accountList->editItem(n);
 }
 
-MacroCommand *AccountsPanel::buildCommand(Part *part) {
+MacroCommand *AccountsPanel::buildCommand() {
     MacroCommand *cmd = 0;
     // First remove
     while (!m_removedItems.isEmpty()) {
         AccountItem *item = static_cast<AccountItem*>(m_removedItems.takeFirst());
         //kDebug()<<"Removed item";
         if (!cmd) cmd = new MacroCommand(i18n("Modify Accounts"));
-        cmd->addCommand(new RemoveAccountCmd(part->getProject(), item->account));
+        cmd->addCommand(new RemoveAccountCmd(m_project, item->account));
         delete item;
     }
     // Then add/modify
-    MacroCommand *c = save(part, part->getProject());
+    MacroCommand *c = save(m_project);
     if (c) {
         if (!cmd) cmd = new MacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(c);
@@ -291,11 +291,11 @@ MacroCommand *AccountsPanel::buildCommand(Part *part) {
     return cmd;
 }
 
-MacroCommand *AccountsPanel::save(Part *part, Project &project) {
+MacroCommand *AccountsPanel::save(Project &project) {
     MacroCommand *cmd=0;
     int cnt = accountList->topLevelItemCount();
     for (int i=0; i < cnt; ++i) {
-        MacroCommand *c = save(part, project, accountList->topLevelItem(i));
+        MacroCommand *c = save(project, accountList->topLevelItem(i));
         if (c) {
             if (!cmd) cmd = new MacroCommand("");
             cmd->addCommand(c);
@@ -304,7 +304,7 @@ MacroCommand *AccountsPanel::save(Part *part, Project &project) {
     return cmd;
 }
 
-MacroCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem *i) {
+MacroCommand *AccountsPanel::save(Project &project, QTreeWidgetItem *i) {
     MacroCommand *cmd=0;
     AccountItem *item = static_cast<AccountItem*>(i);
     if (item->account == 0) {
@@ -334,7 +334,7 @@ MacroCommand *AccountsPanel::save(Part *part, Project &project, QTreeWidgetItem 
     int cnt = item->childCount();
     for (int i=0; i < cnt; ++i) {
         QTreeWidgetItem *myChild = item->child(i);
-        MacroCommand *c = save(part, project, myChild);
+        MacroCommand *c = save(project, myChild);
         if (c) {
             if (!cmd) cmd = new MacroCommand("");
             cmd->addCommand(c);

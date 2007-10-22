@@ -20,7 +20,11 @@
 #ifndef KPTCHARTVIEW_H
 #define KPTCHARTVIEW_H
 
+#include "kplatoui_export.h"
+
 #include "kptviewbase.h"
+
+class KoDocument;
 
 class QWidget;
 
@@ -28,15 +32,14 @@ namespace KPlato
 {
 
 class ChartPanel;
-class Part;
 class Project;
 class ScheduleManager;
 
-class ChartView : public ViewBase 
+class KPLATOUI_EXPORT ChartView : public ViewBase 
 {
     Q_OBJECT
 public:
-    explicit ChartView( Part *part, QWidget *parent=0 );
+    explicit ChartView( KoDocument *part, QWidget *parent=0 );
     
     virtual void setProject( Project *project );
     

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Thomas Zander <zander@kde.org>
+   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,8 @@
 #ifndef KPTPRESOURCESPANEL_H
 #define KPTPRESOURCESPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "kptresource.h"
 #include "ui_resourcespanelbase.h"
 
@@ -31,7 +34,6 @@ namespace KPlato
 class Project;
 class GroupItem;
 class ResourcesPanelGroupLVItem;
-class Part;
 class MacroCommand;
 
 class ResourcesPanelBase : public QWidget, public Ui::ResourcesPanelBase
@@ -50,7 +52,7 @@ public:
     ~ResourcesPanel();
     
     bool ok();
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotAddGroup();

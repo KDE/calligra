@@ -20,6 +20,8 @@
 #ifndef KPTACCOUNTSDIALOG_H
 #define KPTACCOUNTSDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kdialog.h>
 
 class QWidget;
@@ -29,16 +31,16 @@ namespace KPlato
 {
 
 class Accounts;
+class Project;
 class AccountsPanel;
-class Part;
 class MacroCommand;
 
-class AccountsDialog : public KDialog {
+class KPLATOUI_EXPORT AccountsDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit AccountsDialog(Accounts &acc, QWidget *parent=0);
+    explicit AccountsDialog(Project &project, Accounts &acc, QWidget *parent=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

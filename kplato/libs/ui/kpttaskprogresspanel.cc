@@ -126,7 +126,7 @@ bool TaskProgressPanel::ok() {
     return true;
 }
 
-MacroCommand *TaskProgressPanel::buildCommand(Part *part) {
+MacroCommand *TaskProgressPanel::buildCommand() {
     MacroCommand *cmd = 0;
     QString c = i18n("Modify task completion");
     

@@ -55,10 +55,10 @@ void MainProjectDialog::slotOk() {
     accept();
 }
 
-MacroCommand *MainProjectDialog::buildCommand(Part *part) {
+MacroCommand *MainProjectDialog::buildCommand() {
     MacroCommand *m = 0;
     QString c = i18n("Modify main project");
-    MacroCommand *cmd = panel->buildCommand(part);
+    MacroCommand *cmd = panel->buildCommand();
     if (cmd) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(cmd);

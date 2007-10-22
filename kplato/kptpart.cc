@@ -23,10 +23,8 @@
 #include "kptview.h"
 #include "kptfactory.h"
 #include "kptproject.h"
-#include "kptmainprojectdialog.h"
 #include "kptresource.h"
 #include "kptcontext.h"
-#include "kptganttview.h"
 //#include "KDGanttViewTaskLink.h"
 
 #include <KoZoomHandler.h>

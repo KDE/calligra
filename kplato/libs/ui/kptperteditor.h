@@ -21,6 +21,8 @@
 #ifndef KPTPERTEDITOR_H
 #define KPTPERTEDITOR_H
 
+#include "kplatoui_export.h"
+
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 
@@ -43,15 +45,11 @@
 
 #include <kactionselector.h>
 
-#include "kptpart.h"
-#include "kpttask.h"
-#include "kptcontext.h"
 #include "kpttaskeditor.h"
 #include <ui_kptperteditor.h>
 
 #include "kptcommand.h"
 
-#include "kptview.h"
 #include "kptnode.h"
 
 #include <kicon.h>
@@ -62,6 +60,9 @@
 #include <kactioncollection.h>
 
 #include <kdebug.h>
+
+class KoDocument;
+
 class QTreeWidgetItem;
 
 
@@ -71,14 +72,16 @@ namespace KPlato
 class View;
 class Project;
 
-class PertEditor : public ViewBase
+class KPLATOUI_EXPORT PertEditor : public ViewBase
 {
     Q_OBJECT
 public:
 
-    PertEditor( Part *part, QWidget *parent );
+    PertEditor( KoDocument *part, QWidget *parent );
     virtual void updateReadWrite( bool readwrite );
-    void draw( Project &project);
+    void setProject( Project *project );
+    void draw( Project &project );
+    void draw();
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
     void loadRequiredTasksList(Node * taskNode);
     Node * itemToNode(QString itemName, Node * startNode);
@@ -98,7 +101,7 @@ private slots:
 private:
     QTreeWidget * m_tasktree;
     KActionSelector * m_assignList;
-    Part * m_part;
+    KoDocument * m_part;
     Node * m_node;
     Project * m_project;
     QList<Node *> list_nodeNotView;

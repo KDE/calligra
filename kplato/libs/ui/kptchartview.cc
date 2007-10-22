@@ -19,8 +19,9 @@
 
 #include "kptchartview.h"
 #include "kptchartpanel.h"
-#include "kptpart.h"
 #include "kptproject.h"
+
+#include <KoDocument.h>
 
 #include <klocale.h>
 
@@ -29,7 +30,7 @@
 namespace KPlato
 {
 
-ChartView::ChartView( Part *part, QWidget *parent )
+ChartView::ChartView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_project( 0 ),
     m_manager( 0 )
@@ -38,7 +39,6 @@ ChartView::ChartView( Part *part, QWidget *parent )
     l->setContentsMargins( 0, 0, 0, 0 );
     m_panel = new ChartPanel( this );
     l->addWidget( m_panel );
-    setProject( &( part->getProject() ) );
 }
 
 void ChartView::setProject( Project *project )

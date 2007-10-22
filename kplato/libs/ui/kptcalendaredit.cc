@@ -349,7 +349,7 @@ CalendarEditDialog::~CalendarEditDialog()
     delete calendar;
 }
 
-MacroCommand *CalendarEditDialog::buildCommand(Part *part) {
+MacroCommand *CalendarEditDialog::buildCommand() {
     //kDebug();
     MacroCommand *macro=0;
     if (original->name() != calendar->name()) {

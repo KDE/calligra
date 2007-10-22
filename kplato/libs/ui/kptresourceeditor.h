@@ -20,12 +20,14 @@
 #ifndef KPTRESOURCEEDITOR_H
 #define KPTRESOURCEEDITOR_H
 
+#include "kplatoui_export.h"
+
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 
 #include <QTreeWidget>
 
-#include "kptcontext.h"
+class KoDocument;
 
 class QPoint;
 
@@ -33,16 +35,15 @@ class QPoint;
 namespace KPlato
 {
 
-class View;
 class Project;
 class Resource;
 class ResourceGroup;
 
-class ResourceItemModel : public ItemModelBase
+class KPLATOUI_EXPORT ResourceItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit ResourceItemModel( Part *part, QObject *parent = 0 );
+    explicit ResourceItemModel( KoDocument *part, QObject *parent = 0 );
     ~ResourceItemModel();
 
     virtual void setProject( Project *project );
@@ -131,11 +132,11 @@ private:
     Resource *m_resource; // Used for sanity checks
 };
 
-class ResourceTreeView : public DoubleTreeViewBase
+class KPLATOUI_EXPORT ResourceTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceTreeView( Part *part, QWidget *parent );
+    ResourceTreeView( KoDocument *part, QWidget *parent );
 
     ResourceItemModel *itemModel() const { return static_cast<ResourceItemModel*>( model() ); }
 
@@ -152,11 +153,11 @@ protected slots:
 
 };
 
-class ResourceEditor : public ViewBase
+class KPLATOUI_EXPORT ResourceEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    ResourceEditor( Part *part, QWidget *parent );
+    ResourceEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );

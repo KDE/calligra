@@ -18,15 +18,14 @@
 */
 
 #include "kptresourceassignmentview.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptdatetime.h"
 #include "kptrelation.h"
-#include "kptcontext.h"
+
+#include <KoDocument.h>
 
 #include <kdebug.h>
 
@@ -67,6 +66,7 @@ void ResourceAssignmentView::slotRequestPopupMenu( const QPoint &p )
 
 void ResourceAssignmentView::draw( Project &project )
 {
+    m_project = &project;
     m_resList->clear();
 
     foreach ( ResourceGroup * gr, project.resourceGroups() ) {
@@ -74,11 +74,8 @@ void ResourceAssignmentView::draw( Project &project )
         item->setText( 0, gr->name() );
         drawResourcesName( item, gr );
 
-	kDebug() <<"[void KPlato::ResourceAssignmentView::draw( Project &project )] GROUP FOUNDED";
-
+        kDebug() <<"GROUP FOUND";
     }
-    
-
 }
 
 /*This function is called for the left panel*/
@@ -106,7 +103,9 @@ void ResourceAssignmentView::drawResourcesName( QTreeWidgetItem *parent, Resourc
 
 
 /*Constructor*/
-ResourceAssignmentView::ResourceAssignmentView( Part *part, QWidget *parent): ViewBase( part, parent )
+ResourceAssignmentView::ResourceAssignmentView( KoDocument *part, QWidget *parent)
+    : ViewBase( part, parent ),
+    m_project( 0 )
 {
     kDebug() <<" ---------------- KPlato: Creating ResourceAssignmentView ----------------";
 
@@ -144,8 +143,6 @@ ResourceAssignmentView::ResourceAssignmentView( Part *part, QWidget *parent): Vi
     m_taskList = (ResourcesList *)widget.m_taskList;
     m_part = part;
     m_tasktreeroot = new QTreeWidgetItem ( m_taskList );
-    m_project = &m_part->getProject();
-    draw(m_part->getProject());
 
     connect( m_resList, SIGNAL( itemSelectionChanged() ), SLOT( resSelectionChanged() ) );
     connect( m_taskList, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotRequestPopupMenu( const QPoint& ) ) );
@@ -185,30 +182,31 @@ void ResourceAssignmentView::updateTasks()
     QString name = m_selectedItem->text(0);
     QString type = m_selectedItem->text(1);
     if(type != ""){
-        kDebug() <<"[void KPlato::ResourceAssignmentView::updateTasks()] Item Selected:" << name <<" / Type:" << type;
+        kDebug() <<"Item Selected:" << name <<" / Type:" << type;
     }
     else{
-        kDebug() <<"[void KPlato::ResourceAssignmentView::updateTasks()] Group Selected:" << name;
+        kDebug() <<"Group Selected:" << name;
     }
-
-
     m_taskList->clear();
-
+    if ( m_project == 0 ) {
+        return;
+    }
+    
     /*Find tasks attributed to the selected item*/
 
     /*The selected item is a resource*/
     if(type != "")
     {
-        foreach ( ResourceGroup * gr, ((m_part->getProject()).resourceGroups()) ) {
+        foreach ( ResourceGroup * gr, m_project->resourceGroups() ) {
             foreach ( Resource * res, gr->resources() ) {
                 if (name == res->name())
                 {
                     ItemRes = res;
-                    kDebug() <<"[void KPlato::ResourceAssignmentView::updateTasks()] Selected Resource founded";
+                    kDebug() <<"Selected Resource found";
                 }
                 else
                 {
-                kDebug() <<"[void KPlato::ResourceAssignmentView::updateTasks()] Not founded";
+                    kDebug() <<"Not found";
                 }
             }
         }
@@ -217,7 +215,7 @@ void ResourceAssignmentView::updateTasks()
     else
     /*The selected item is a group*/
     {
-        foreach ( ResourceGroup * gr, ((m_part->getProject()).resourceGroups()) ) {
+        foreach ( ResourceGroup * gr, m_project->resourceGroups() ) {
             if (name == gr->name())
             {
                 ItemGrp = gr;
@@ -418,7 +416,7 @@ void ResourceAssignmentView::setGuiActive( bool activate )
 
 void ResourceAssignmentView::slotUpdate(){
 
- draw(m_part->getProject());
+ draw(*m_project);
 }
 
 }  //KPlato namespace

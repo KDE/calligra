@@ -21,8 +21,6 @@
 #include "kptsummarytaskdialog.h"
 #include "kpttask.h"
 #include "kptcommand.h"
-#include "kptconfig.h"
-#include "kptpart.h"
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -30,7 +28,6 @@
 #include <kcombobox.h>
 #include <kdatetimewidget.h>
 #include <klocale.h>
-#include <k3command.h>
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
@@ -76,7 +73,7 @@ void SummaryTaskGeneralPanel::slotObligatedFieldsFilled() {
     emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty());
 }
 
-MacroCommand *SummaryTaskGeneralPanel::buildCommand(Part *part) {
+MacroCommand *SummaryTaskGeneralPanel::buildCommand() {
     MacroCommand *cmd = new MacroCommand(i18n("Modify Task"));
     bool modified = false;
 

@@ -20,6 +20,8 @@
 #ifndef KPTCALENDAREDITOR_H
 #define KPTCALENDAREDITOR_H
 
+#include "kplatoui_export.h"
+
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
@@ -27,7 +29,7 @@
 #include <QTreeWidget>
 #include <QAbstractProxyModel>
 
-#include "kptcontext.h"
+class KoDocument;
 
 class QPoint;
 class QDragMoveEvent;
@@ -41,11 +43,11 @@ class Project;
 class Calendar;
 class CalendarDay;
 
-class CalendarDayItemModelBase : public ItemModelBase
+class KPLATOUI_EXPORT CalendarDayItemModelBase : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CalendarDayItemModelBase( Part *part, QObject *parent = 0 );
+    explicit CalendarDayItemModelBase( KoDocument *part, QObject *parent = 0 );
     ~CalendarDayItemModelBase();
 
     virtual void setCalendar( Calendar *calendar );
@@ -69,11 +71,11 @@ protected:
 };
 
 
-class CalendarItemModel : public ItemModelBase
+class KPLATOUI_EXPORT CalendarItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CalendarItemModel( Part *part, QObject *parent = 0 );
+    explicit CalendarItemModel( KoDocument *part, QObject *parent = 0 );
     ~CalendarItemModel();
 
     virtual void setProject( Project *project );
@@ -126,11 +128,11 @@ private:
     Calendar *m_calendar; // test for sane operation
 };
 
-class CalendarDayItemModel : public CalendarDayItemModelBase
+class KPLATOUI_EXPORT CalendarDayItemModel : public CalendarDayItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CalendarDayItemModel( Part *part, QObject *parent = 0 );
+    explicit CalendarDayItemModel( KoDocument *part, QObject *parent = 0 );
     ~CalendarDayItemModel();
 
     virtual void setCalendar( Calendar *calendar );
@@ -216,11 +218,11 @@ private:
     TopLevelType *typeDate;
 };
 
-class CalendarTreeView : public TreeViewBase
+class KPLATOUI_EXPORT CalendarTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    CalendarTreeView( Part *part, QWidget *parent );
+    CalendarTreeView( KoDocument *part, QWidget *parent );
 
     CalendarItemModel *itemModel() const { return static_cast<CalendarItemModel*>( model() ); }
 
@@ -253,11 +255,11 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
 };
 
-class CalendarDayView : public TreeViewBase
+class KPLATOUI_EXPORT CalendarDayView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    CalendarDayView( Part *part, QWidget *parent );
+    CalendarDayView( KoDocument *part, QWidget *parent );
 
     CalendarDayItemModel *itemModel() const { return m_model; }
 
@@ -293,11 +295,11 @@ private:
     CalendarDayItemModel *m_model;
 };
 
-class CalendarEditor : public ViewBase
+class KPLATOUI_EXPORT CalendarEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    CalendarEditor( Part *part, QWidget *parent );
+    CalendarEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );

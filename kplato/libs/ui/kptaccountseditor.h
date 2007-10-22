@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+/* This file is KoDocument of the KDE project
   Copyright (C) 2007 Dag Andersen <kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
@@ -20,12 +20,14 @@
 #ifndef KPTACCOUNTSEDITOR_H
 #define KPTACCOUNTSEDITOR_H
 
+#include "kplatoui_export.h"
+
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 
 #include <QTreeWidget>
 
-#include "kptcontext.h"
+class KoDocument;
 
 class QPoint;
 
@@ -33,15 +35,14 @@ class QPoint;
 namespace KPlato
 {
 
-class View;
 class Project;
 class Account;
 
-class AccountItemModel : public ItemModelBase
+class KPLATOUI_EXPORT AccountItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit AccountItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit AccountItemModel( KoDocument *KoDocument, QObject *parent = 0 );
     ~AccountItemModel();
 
     virtual void setProject( Project *project );
@@ -84,11 +85,11 @@ private:
     Account *m_account; // test for sane operation
 };
 
-class AccountTreeView : public TreeViewBase
+class KPLATOUI_EXPORT AccountTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    AccountTreeView( KoDocument *part, QWidget *parent );
+    AccountTreeView( KoDocument *KoDocument, QWidget *parent );
 
     AccountItemModel *itemModel() const { return static_cast<AccountItemModel*>( model() ); }
 
@@ -117,11 +118,11 @@ protected:
     
 };
 
-class AccountsEditor : public ViewBase
+class KPLATOUI_EXPORT AccountsEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    AccountsEditor( KoDocument *part, QWidget *parent );
+    AccountsEditor( KoDocument *KoDocument, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );

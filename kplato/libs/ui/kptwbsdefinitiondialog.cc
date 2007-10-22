@@ -45,10 +45,10 @@ WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p)
 }
 
 
-MacroCommand *WBSDefinitionDialog::buildCommand(Part *part) {
+MacroCommand *WBSDefinitionDialog::buildCommand() {
     MacroCommand *m = new MacroCommand(i18n("Modify WBS Definition"));
     bool modified = false;
-    MacroCommand *cmd = m_panel->buildCommand(part);
+    MacroCommand *cmd = m_panel->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

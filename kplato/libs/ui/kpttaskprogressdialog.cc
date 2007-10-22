@@ -49,10 +49,10 @@ void TaskProgressDialog::slotChanged() {
     enableButtonOk(true);
 }
 
-MacroCommand *TaskProgressDialog::buildCommand(Part *part) {
+MacroCommand *TaskProgressDialog::buildCommand() {
     MacroCommand *m = new MacroCommand(i18n("Modify Task Progress"));
     bool modified = false;
-    MacroCommand *cmd = m_panel->buildCommand(part);
+    MacroCommand *cmd = m_panel->buildCommand();
     if (cmd) {
         m->addCommand(cmd);
         modified = true;

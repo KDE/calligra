@@ -20,6 +20,8 @@
 #ifndef KPTRESOURCESDIALOG_H
 #define KPTRESOURCESDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include <kdialog.h>
 
 
@@ -28,15 +30,14 @@ namespace KPlato
 
 class Project;
 class ResourcesPanel;
-class Part;
 class MacroCommand;
 
-class ResourcesDialog : public KDialog {
+class KPLATOUI_EXPORT ResourcesDialog : public KDialog {
     Q_OBJECT
 public:
     explicit ResourcesDialog(Project &project, QWidget *parent=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
     
 protected slots:
     void slotChanged();

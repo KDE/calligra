@@ -20,6 +20,8 @@
 #ifndef KPTCALENDAREDIT_H
 #define KPTCALENDAREDIT_H
 
+#include "kplatoui_export.h"
+
 #include "kptcalendareditbase.h"
 
 #include <q3ptrlist.h>
@@ -32,11 +34,10 @@ namespace KPlato
 {
 
 class Calendar;
-class Part;
 class Project;
 class MacroCommand;
 
-class CalendarEdit : public CalendarEditBase {
+class KPLATOUI_EXPORT CalendarEdit : public CalendarEditBase {
     Q_OBJECT
 public:
     explicit CalendarEdit (QWidget *parent=0);
@@ -71,14 +72,14 @@ private:
 };
 
 //------------------------------
-class CalendarEditDialog : public KDialog
+class KPLATOUI_EXPORT CalendarEditDialog : public KDialog
 {
     Q_OBJECT
 public:
     CalendarEditDialog(Project &project, Calendar *calendar, QWidget *parent=0);
     ~CalendarEditDialog();
     
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

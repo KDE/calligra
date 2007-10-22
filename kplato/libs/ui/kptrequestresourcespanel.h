@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 
 #ifndef KPTREQUESTRESOURCESPANEL_H
 #define KPTREQUESTRESOURCESPANEL_H
+
+#include "kplatoui_export.h"
 
 #include "ui_kpttaskresourcespanelbase.h"
 #include "kptduration.h"
@@ -41,7 +43,6 @@ class Resource;
 class ResourceGroupRequest;
 class ResourceRequest;
 class StandardWorktime;
-class Part;
 class MacroCommand;
 
 class ResourceTableItem {
@@ -101,7 +102,7 @@ class RequestResourcesPanel : public TaskResourcesPanelBase {
 public:
     RequestResourcesPanel(QWidget *parent, Task &task, bool baseline=false);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
     
     bool ok();
     

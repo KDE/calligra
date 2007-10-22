@@ -20,7 +20,8 @@
 #ifndef KPTTASKAPPOINTMENTSVIEW_H
 #define KPTTASKAPPOINTMENTSVIEW_H
 
-#include "kptcontext.h"
+#include "kplatoui_export.h"
+
 #include "kptdoublelistviewbase.h"
 #include "kpteffortcostmap.h"
 
@@ -38,7 +39,7 @@ class Task;
 
 class Resource;
 
-class TaskAppointmentsView : public DoubleListViewBase
+class KPLATOUI_EXPORT TaskAppointmentsView : public DoubleListViewBase
 {
     Q_OBJECT
 public:

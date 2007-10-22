@@ -20,7 +20,8 @@
 #ifndef KPTSCHEDULEEDITOR_H
 #define KPTSCHEDULEEDITOR_H
 
-#include "kptcontext.h"
+#include "kplatoui_export.h"
+
 #include <kptviewbase.h>
 #include <kptitemmodelbase.h>
 #include "kptsplitterview.h"
@@ -29,7 +30,7 @@
 
 #include <QTreeWidget>
 
-
+class KoDocument;
 
 class QPoint;
 
@@ -44,11 +45,11 @@ class MainSchedule;
 class Schedule;
 
 
-class ScheduleItemModel : public ItemModelBase
+class KPLATOUI_EXPORT ScheduleItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit ScheduleItemModel( Part *part, QObject *parent = 0 );
+    explicit ScheduleItemModel( KoDocument *part, QObject *parent = 0 );
     ~ScheduleItemModel();
 
     virtual void setProject( Project *project );
@@ -116,11 +117,11 @@ private:
     
 };
 
-class ScheduleTreeView : public TreeViewBase
+class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    ScheduleTreeView( Part *part, QWidget *parent );
+    ScheduleTreeView( KoDocument *part, QWidget *parent );
 
     ScheduleItemModel *itemModel() const { return static_cast<ScheduleItemModel*>( model() ); }
 
@@ -132,7 +133,7 @@ public:
 
     ScheduleManager *currentManager() const;
 
-    Part *part() const { return m_part; }
+    KoDocument *part() const { return m_part; }
     
 signals:
     void currentChanged( const QModelIndex& );
@@ -151,14 +152,14 @@ protected:
 
 private:
     bool m_arrowKeyNavigation;
-    Part *m_part;
+    KoDocument *m_part;
 };
 
-class ScheduleEditor : public ViewBase
+class KPLATOUI_EXPORT ScheduleEditor : public ViewBase
 {
     Q_OBJECT
 public:
-    ScheduleEditor( Part *part, QWidget *parent );
+    ScheduleEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
     virtual void draw( Project &project );
@@ -215,11 +216,11 @@ private:
 
 
 //-----------------------------
-class ScheduleHandlerView : public SplitterView
+class KPLATOUI_EXPORT ScheduleHandlerView : public SplitterView
 {
     Q_OBJECT
 public:
-    ScheduleHandlerView( Part *part, QWidget *parent );
+    ScheduleHandlerView( KoDocument *part, QWidget *parent );
     
     ScheduleEditor *scheduleEditor() const { return m_scheduleEditor; }
 

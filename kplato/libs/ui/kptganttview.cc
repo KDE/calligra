@@ -21,8 +21,6 @@
 #include "kptganttview.h"
 #include "kptnodeitemmodel.h"
 #include "kptappointment.h"
-#include "kptpart.h"
-#include "kptview.h"
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
@@ -30,11 +28,12 @@
 #include "kptdatetime.h"
 #include "kpttaskappointmentsview.h"
 #include "kptrelation.h"
-#include "kptcontext.h"
 #include "kptschedule.h"
 
 #include <kdganttproxymodel.h>
 #include <kdganttconstraintmodel.h>
+
+#include <KoDocument.h>
 
 #include <kdebug.h>
 
@@ -50,7 +49,7 @@
 namespace KPlato
 {
 
-MyKDGanttView::MyKDGanttView( Part *part, QWidget *parent )
+MyKDGanttView::MyKDGanttView( KoDocument *part, QWidget *parent )
     : KDGantt::View( parent ),
     m_project( 0 ),
     m_manager( 0 )
@@ -159,7 +158,7 @@ void MyKDGanttView::createDependencies()
 
 //------------------------------------------
 
-GanttView::GanttView( Part *part, QWidget *parent, bool readWrite )
+GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
         : ViewBase( part, parent ),
         m_readWrite( readWrite ),
         m_taskView( 0 ),
@@ -354,7 +353,7 @@ void GanttView::update()
 }
 
 //------------------------
-MilestoneKDGanttView::MilestoneKDGanttView( Part *part, QWidget *parent )
+MilestoneKDGanttView::MilestoneKDGanttView( KoDocument *part, QWidget *parent )
     : KDGantt::View( parent ),
     m_project( 0 ),
     m_manager( 0 ),
@@ -412,7 +411,7 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
 
 //------------------------------------------
 
-MilestoneGanttView::MilestoneGanttView( Part *part, QWidget *parent, bool readWrite )
+MilestoneGanttView::MilestoneGanttView( KoDocument *part, QWidget *parent, bool readWrite )
     : ViewBase( part, parent ),
         m_readWrite( readWrite ),
         m_project( 0 )

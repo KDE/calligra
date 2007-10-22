@@ -20,6 +20,8 @@
 #ifndef KPTCALENDARLISTDIALOG_H
 #define KPTCALENDARLISTDIALOG_H
 
+#include "kplatoui_export.h"
+
 #include "kptcalendarlistdialogbase.h"
 #include "kptcalendaredit.h"
 #include "kptcalendar.h"
@@ -35,7 +37,6 @@ namespace KPlato
 
 class CalendarListViewItem;
 class Project;
-class Part;
 class MacroCommand;
 
 class CalendarListDialogImpl : public CalendarListDialogBase {
@@ -84,12 +85,12 @@ private:
     QTreeWidgetItem *m_renameItem;
 };
 
-class CalendarListDialog : public KDialog {
+class KPLATOUI_EXPORT CalendarListDialog : public KDialog {
     Q_OBJECT
 public:
     explicit CalendarListDialog(Project &project, QWidget *parent=0);
     
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
 protected slots:
     void slotOk();

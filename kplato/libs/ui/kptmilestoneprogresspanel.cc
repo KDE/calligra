@@ -27,7 +27,6 @@
 
 #include <kdebug.h>
 
-#include "kptpart.h"
 #include "kpttask.h"
 #include "kptcommand.h"
 
@@ -52,7 +51,7 @@ bool MilestoneProgressPanel::ok() {
     return true;
 }
 
-MacroCommand *MilestoneProgressPanel::buildCommand(Part *part) {
+MacroCommand *MilestoneProgressPanel::buildCommand() {
     MacroCommand *cmd = 0;
     QString c = i18n("Modify milestone completion");
     

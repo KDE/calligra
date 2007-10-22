@@ -113,10 +113,10 @@
 #include "kptsplitterview.h"
 #include "kptpertresult.h"
 
-#include "viewlist/kptviewlistdialog.h"
-#include "viewlist/kptviewlistdocker.h"
-#include "viewlist/kptviewlist.h"
-#include "viewlist/kptviewlistcommand.h"
+#include "kptviewlistdialog.h"
+#include "kptviewlistdocker.h"
+#include "kptviewlist.h"
+#include "kptviewlistcommand.h"
 
 #include "KPtViewAdaptor.h"
 
@@ -825,7 +825,7 @@ void View::slotProjectEdit()
 {
     MainProjectDialog * dia = new MainProjectDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             getPart() ->addCommand( cmd );
         }
@@ -845,7 +845,7 @@ void View::slotEditCalendar( Calendar *calendar )
     }
     CalendarEditDialog * dia = new CalendarEditDialog( getProject(), calendar );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying calendar";
             getPart() ->addCommand( cmd ); //also executes
@@ -858,7 +858,7 @@ void View::slotProjectCalendar()
 {
     CalendarListDialog * dia = new CalendarListDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
@@ -869,9 +869,9 @@ void View::slotProjectCalendar()
 
 void View::slotProjectAccounts()
 {
-    AccountsDialog * dia = new AccountsDialog( getProject().accounts() );
+    AccountsDialog * dia = new AccountsDialog( getProject(), getProject().accounts() );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying account(s)";
             getPart() ->addCommand( cmd ); //also executes
@@ -884,7 +884,7 @@ void View::slotProjectWorktime()
 {
     StandardWorktimeDialog * dia = new StandardWorktimeDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying calendar(s)";
             getPart() ->addCommand( cmd ); //also executes
@@ -897,7 +897,7 @@ void View::slotProjectResources()
 {
     ResourcesDialog * dia = new ResourcesDialog( getProject() );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             //kDebug()<<"Modifying resources";
             getPart() ->addCommand( cmd ); //also executes
@@ -1096,7 +1096,7 @@ void View::slotAddSubTask()
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
-            QUndoCommand *m = dia->buildCommand( getPart() );
+            QUndoCommand *m = dia->buildCommand();
             m->redo(); // do changes to task
             delete m;
             SubtaskAddCmd *cmd = new SubtaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Subtask" ) );
@@ -1117,7 +1117,7 @@ void View::slotAddTask()
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
-            QUndoCommand * m = dia->buildCommand( getPart() );
+            QUndoCommand * m = dia->buildCommand();
             m->redo(); // do changes to task
             delete m;
             TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Task" ) );
@@ -1140,7 +1140,7 @@ void View::slotAddMilestone()
     if ( dia->exec() == QDialog::Accepted ) {
         Node * currNode = currentTask();
         if ( currNode ) {
-            QUndoCommand * m = dia->buildCommand( getPart() );
+            QUndoCommand * m = dia->buildCommand();
             m->redo(); // do changes to task
             delete m;
             TaskAddCmd *cmd = new TaskAddCmd( &( getProject() ), node, currNode, i18n( "Add Milestone" ) );
@@ -1238,7 +1238,7 @@ void View::slotOpenNode( Node *node )
                 Project * project = dynamic_cast<Project *>( node );
                 MainProjectDialog *dia = new MainProjectDialog( *project );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand( getPart() );
+                    QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1255,7 +1255,7 @@ void View::slotOpenNode( Node *node )
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand( getPart() );
+                    QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1274,7 +1274,7 @@ void View::slotOpenNode( Node *node )
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand( getPart() );
+                    QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1287,7 +1287,7 @@ void View::slotOpenNode( Node *node )
                 Q_ASSERT( task );
                 SummaryTaskDialog *dia = new SummaryTaskDialog( *task );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand( getPart() );
+                    QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1328,7 +1328,7 @@ void View::slotTaskProgress()
                 Q_ASSERT( task );
                 TaskProgressDialog *dia = new TaskProgressDialog( *task, currentScheduleManager(),  getProject().standardWorktime() );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand( getPart() );
+                    QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1340,7 +1340,7 @@ void View::slotTaskProgress()
                 Task *task = dynamic_cast<Task *>( node );
                 MilestoneProgressDialog *dia = new MilestoneProgressDialog( *task );
                 if ( dia->exec()  == QDialog::Accepted) {
-                    QUndoCommand * m = dia->buildCommand( getPart() );
+                    QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
                         getPart() ->addCommand( m );
                     }
@@ -1499,9 +1499,9 @@ void View::slotAddRelation( Node *par, Node *child )
 {
     //kDebug();
     Relation * rel = new Relation( par, child );
-    AddRelationDialog *dia = new AddRelationDialog( rel, this );
+    AddRelationDialog *dia = new AddRelationDialog( getProject(), rel, this );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd )
             getPart() ->addCommand( cmd );
     } else {
@@ -1526,12 +1526,12 @@ void View::slotAddRelation( Node *par, Node *child, int linkType )
 void View::slotModifyRelation( Relation *rel )
 {
     //kDebug();
-    ModifyRelationDialog * dia = new ModifyRelationDialog( rel, this );
+    ModifyRelationDialog * dia = new ModifyRelationDialog( getProject(), rel, this );
     if ( dia->exec()  == QDialog::Accepted) {
         if ( dia->relationIsDeleted() ) {
             getPart() ->addCommand( new DeleteRelationCmd( getProject(), rel, i18n( "Delete Relation" ) ) );
         } else {
-            QUndoCommand *cmd = dia->buildCommand( getPart() );
+            QUndoCommand *cmd = dia->buildCommand();
             if ( cmd ) {
                 getPart() ->addCommand( cmd );
             }
@@ -1587,7 +1587,7 @@ void View::slotAddResource( ResourceGroup *group )
     if ( dia->exec()  == QDialog::Accepted) {
         MacroCommand *m = new MacroCommand( i18n( "Add resource" ) );
         m->addCommand( new AddResourceCmd( group, r ) );
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd ) {
             m->addCommand( cmd );
         }
@@ -1608,7 +1608,7 @@ void View::slotEditResource()
     }
     ResourceDialog *dia = new ResourceDialog( getProject(), r );
     if ( dia->exec()  == QDialog::Accepted) {
-        QUndoCommand * cmd = dia->buildCommand( getPart() );
+        QUndoCommand * cmd = dia->buildCommand();
         if ( cmd )
             getPart() ->addCommand( cmd );
     }

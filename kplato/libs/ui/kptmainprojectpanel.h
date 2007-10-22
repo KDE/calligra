@@ -20,6 +20,8 @@
 #ifndef KPTMAINPROJECTPANEL_H
 #define KPTMAINPROJECTPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptmainprojectpanelbase.h"
 
 #include "kptdatetime.h"
@@ -31,7 +33,6 @@ namespace KPlato
 {
 
 class Project;
-class Part;
 class MacroCommand;
 
 class MainProjectPanelImpl : public QWidget, public Ui_MainProjectPanelBase {
@@ -60,7 +61,7 @@ class MainProjectPanel : public MainProjectPanelImpl {
 public:
     explicit MainProjectPanel(Project &project, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
     
     bool ok();
 

@@ -20,6 +20,8 @@
 #ifndef KPTTASKDEFAULTPANEL_H
 #define KPTTASKDEFAULTPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptconfigtaskpanelbase.h"
 #include "kptduration.h"
 
@@ -28,7 +30,6 @@ namespace KPlato
 {
 
 class DateTime;
-class Part;
 class Task;
 class StandardWorktime;
 class MacroCommand;
@@ -88,12 +89,12 @@ protected:
     bool useTime;
 };
 
-class TaskDefaultPanel : public ConfigTaskPanelImpl {
+class KPLATOUI_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl {
     Q_OBJECT
 public:
     explicit TaskDefaultPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand(Part *part);
+    MacroCommand *buildCommand();
 
     bool ok();
 
