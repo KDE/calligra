@@ -21,6 +21,9 @@
 // Local
 #include "ChartLegendConfigWidget.h"
 
+// Qt
+#include <QButtonGroup>
+
 // KDE
 #include <KDebug>
 #include <KIconLoader>
@@ -42,6 +45,17 @@ public:
     Ui::ChartLegendConfigWidget  ui;
 };
 
+const KDChart::Position buttonIndexToFixedPosition[] =
+{
+    KDChart::Position::North,
+    KDChart::Position::East,
+    KDChart::Position::South,
+    KDChart::Position::West,
+    KDChart::Position::NorthWest,
+    KDChart::Position::NorthEast,
+    KDChart::Position::SouthWest,
+    KDChart::Position::SouthEast
+};
 
 ChartLegendConfigWidget::ChartLegendConfigWidget()
     : KoShapeConfigWidgetBase()
@@ -58,14 +72,26 @@ ChartLegendConfigWidget::~ChartLegendConfigWidget()
 void ChartLegendConfigWidget::setupUi()
 {
     d->ui.setupUi( this );
+
+    QButtonGroup *buttonGroup = new QButtonGroup;
+    buttonGroup->setExclusive( true );
+
+    buttonGroup->addButton( d->ui.positionNorth, 0 );
     d->ui.positionNorth->setIcon( KIcon( "chart_legend_top" ) );
+    buttonGroup->addButton( d->ui.positionEast,  1 );
     d->ui.positionEast->setIcon( KIcon( "chart_legend_right" ) );
+    buttonGroup->addButton( d->ui.positionSouth, 2 );
     d->ui.positionSouth->setIcon( KIcon( "chart_legend_top" ) );
+    buttonGroup->addButton( d->ui.positionWest,  3 );
     d->ui.positionWest->setIcon( KIcon( "chart_legend_left" ) );
     
+    buttonGroup->addButton( d->ui.positionNorthWest, 4 );
     d->ui.positionNorthWest->setIcon( KIcon( "chart_legend_topleft" ) );
+    buttonGroup->addButton( d->ui.positionNorthEast, 5 );
     d->ui.positionNorthEast->setIcon( KIcon( "chart_legend_topright" ) );
+    buttonGroup->addButton( d->ui.positionSouthWest, 6 );
     d->ui.positionSouthWest->setIcon( KIcon( "chart_legend_bottomleft" ) );
+    buttonGroup->addButton( d->ui.positionSouthEast, 7 );
     d->ui.positionSouthEast->setIcon( KIcon( "chart_legend_bottomright" ) );
 
     d->ui.orientation->addItem( i18n( "Horizontal" ), Qt::Horizontal );
@@ -80,19 +106,22 @@ void ChartLegendConfigWidget::setupUi()
     
     connect( d->ui.title, SIGNAL( textChanged( const QString& ) ),
              this,        SIGNAL( legendTitleChanged( const QString& ) ) );
-    connect (d->ui.titleFont, SIGNAL( fontSelected( const QFont& ) ),
+    connect( d->ui.titleFont, SIGNAL( fontSelected( const QFont& ) ),
              this,       SIGNAL( legendTitleFontChanged( const QFont& ) ) );
-    connect (d->ui.font, SIGNAL( fontSelected( const QFont& ) ),
+    connect( d->ui.font, SIGNAL( fontSelected( const QFont& ) ),
              this,       SIGNAL( legendFontChanged( const QFont& ) ) );
-    connect (d->ui.spacing, SIGNAL( valueChanged( int ) ),
+    connect( d->ui.spacing, SIGNAL( valueChanged( int ) ),
              this,       SIGNAL( legendSpacingChanged( int ) ) );
-    connect (d->ui.showLines, SIGNAL( toggled( bool ) ),
+    connect( d->ui.showLines, SIGNAL( toggled( bool ) ),
              this,            SIGNAL( legendShowLinesToggled( bool ) ) );
 
-    connect (d->ui.orientation, SIGNAL( currentIndexChanged( int ) ),
+    connect( d->ui.orientation, SIGNAL( currentIndexChanged( int ) ),
              this,              SLOT( setLegendOrientation( int ) ) );
-    connect (d->ui.alignment, SIGNAL( currentIndexChanged( int ) ),
+    connect( d->ui.alignment, SIGNAL( currentIndexChanged( int ) ),
              this,            SLOT( setLegendAlignment( int ) ) );
+
+    connect ( buttonGroup, SIGNAL( buttonClicked( int ) ),
+              this,        SLOT( setLegendFixedPosition( int ) ) );
 }
 
 void ChartLegendConfigWidget::setLegendOrientation( int boxEntryIndex )
@@ -103,6 +132,11 @@ void ChartLegendConfigWidget::setLegendOrientation( int boxEntryIndex )
 void ChartLegendConfigWidget::setLegendAlignment( int boxEntryIndex )
 {
     emit legendAlignmentChanged( ( Qt::Alignment ) ( d->ui.alignment->itemData( boxEntryIndex ).toInt() ) );
+}
+
+void ChartLegendConfigWidget::setLegendFixedPosition( int buttonGroupIndex )
+{
+    emit legendFixedPositionChanged( buttonIndexToFixedPosition[ buttonGroupIndex ] );
 }
 
 void ChartLegendConfigWidget::open( KoShape* chart )

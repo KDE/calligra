@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>298</width>
-    <height>310</height>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -138,22 +138,6 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" >
-          <item row="2" column="0" >
-           <widget class="QPushButton" name="positionSouthWest" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-            <property name="flat" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0" >
            <widget class="QPushButton" name="positionNorthWest" >
             <property name="sizePolicy" >
@@ -173,40 +157,24 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="2" >
-           <widget class="QPushButton" name="positionNorthEast" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-            <property name="flat" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2" >
-           <widget class="QPushButton" name="positionSouthEast" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string/>
-            </property>
-            <property name="flat" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="1" >
            <widget class="QPushButton" name="positionNorth" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="flat" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" >
+           <widget class="QPushButton" name="positionNorthEast" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
@@ -253,8 +221,40 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="0" >
+           <widget class="QPushButton" name="positionSouthWest" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="flat" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="1" >
            <widget class="QPushButton" name="positionSouth" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="flat" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" >
+           <widget class="QPushButton" name="positionSouthEast" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>

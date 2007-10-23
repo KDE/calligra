@@ -24,6 +24,9 @@
 // KOffice
 #include <KoShapeConfigWidgetBase.h>
 
+// KDChart
+#include "KDChartPosition.h"
+
 
 namespace KChart
 {
@@ -51,6 +54,7 @@ public:
 public slots:
     void setLegendOrientation( int boxEntryIndex );
     void setLegendAlignment( int boxEntryIndex );
+    void setLegendFixedPosition( int buttonGroupIndex );
     
 signals:
     void legendTitleChanged( const QString& );
@@ -59,8 +63,9 @@ signals:
     void legendFontSizeChanged( int size );
     void legendSpacingChanged( int spacing );
     void legendShowLinesToggled( bool toggled );
-    void legendOrientationChanged( Qt::Orientation );
-    void legendAlignmentChanged( Qt::Alignment );
+    void legendOrientationChanged( Qt::Orientation orientation );
+    void legendAlignmentChanged( Qt::Alignment alignment );
+    void legendFixedPositionChanged( KDChart::Position position );
 
 private:
     class Private;

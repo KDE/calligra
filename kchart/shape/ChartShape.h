@@ -22,15 +22,18 @@
 #ifndef KCHART_CHART_SHAPE
 #define KCHART_CHART_SHAPE
 
+// KOffice
 #include <KoShape.h>
-
 #include "koChart.h"
 
+// KDChart
+#include "KDChartPosition.h"
+
+// KChart
 #include "kchart_export.h"
 #include "kchart_global.h"
 
 #define ChartShapeId "ChartShape"
-
 
 class QAbstractItemModel;
 
@@ -100,6 +103,7 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     void setLegendShowLines( bool b );
     void setLegendOrientation( Qt::Orientation orientation );
     void setLegendAlignment( Qt::Alignment alignment );
+    void setLegendFixedPosition( KDChart::Position position );
     void modelChanged();
 
     void saveChartTypeOptions();

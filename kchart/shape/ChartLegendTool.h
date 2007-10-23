@@ -24,6 +24,9 @@
 // KOffice
 #include <KoTool.h>
 
+// KDChart
+#include "KDChartPosition.h"
+
 // KChart
 #include "ChartShape.h"
 
@@ -64,6 +67,7 @@ private slots:
     void setLegendShowLines( bool b );
     void setLegendOrientation( Qt::Orientation );
     void setLegendAlignment( Qt::Alignment );
+    void setLegendFixedPosition( KDChart::Position position );
 
 private:
     void updateActions();

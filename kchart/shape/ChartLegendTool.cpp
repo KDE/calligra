@@ -21,6 +21,9 @@
 // Local
 #include "ChartLegendTool.h"
 
+// KDE
+#include <KDebug>
+
 // KOffice
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -96,22 +99,25 @@ QWidget *ChartLegendTool::createOptionWidget()
     ChartLegendConfigWidget *widget = new ChartLegendConfigWidget();
 
     connect( widget, SIGNAL( legendTitleChanged( const QString& ) ),
-       this, SLOT( setLegendTitle( const QString& ) ) );
+             this,   SLOT( setLegendTitle( const QString& ) ) );
     connect( widget, SIGNAL( legendTitleFontChanged( const QFont& ) ),
-       this, SLOT( setLegendTitleFont( const QFont& ) ) );
+             this,   SLOT( setLegendTitleFont( const QFont& ) ) );
     connect( widget, SIGNAL( legendFontChanged( const QFont& ) ),
-       this, SLOT( setLegendFont( const QFont& ) ) );
+             this,   SLOT( setLegendFont( const QFont& ) ) );
     connect( widget, SIGNAL( legendSpacingChanged( int ) ),
-       this, SLOT( setLegendSpacing( int ) ) );
+             this,   SLOT( setLegendSpacing( int ) ) );
     connect( widget, SIGNAL( legendFontSizeChanged( int ) ),
-       this, SLOT( setLegendFontSize( int ) ) );
+             this,   SLOT( setLegendFontSize( int ) ) );
     connect( widget, SIGNAL( legendShowLinesToggled( bool ) ),
-       this, SLOT( setLegendShowLines( bool ) ) );
+             this,   SLOT( setLegendShowLines( bool ) ) );
 
     connect( widget, SIGNAL( legendOrientationChanged( Qt::Orientation ) ),
-       this, SLOT( setLegendOrientation( Qt::Orientation ) ) );
+             this,   SLOT( setLegendOrientation( Qt::Orientation ) ) );
     connect( widget, SIGNAL( legendAlignmentChanged( Qt::Alignment ) ),
-       this, SLOT( setLegendAlignment( Qt::Alignment ) ) );
+             this,   SLOT( setLegendAlignment( Qt::Alignment ) ) );
+
+    connect( widget, SIGNAL( legendFixedPositionChanged( KDChart::Position ) ),
+             this,   SLOT( setLegendFixedPosition( KDChart::Position ) ) );
 
     return widget;
 }
@@ -154,4 +160,9 @@ void ChartLegendTool::setLegendOrientation( Qt::Orientation orientation )
 void ChartLegendTool::setLegendAlignment( Qt::Alignment alignment )
 {
     m_currentShape->setLegendAlignment( alignment );
+}
+
+void ChartLegendTool::setLegendFixedPosition( KDChart::Position position )
+{
+    m_currentShape->setLegendFixedPosition( position );
 }

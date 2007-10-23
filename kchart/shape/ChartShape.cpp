@@ -583,6 +583,12 @@ void ChartShape::setLegendAlignment( Qt::Alignment alignment )
     update();
 }
 
+void ChartShape::setLegendFixedPosition( KDChart::Position position )
+{
+    d->legend->setPosition( position );
+    update();
+}
+
 void ChartShape::modelChanged()
 {
     // Tell the diagram that the entire set of data changed
