@@ -62,6 +62,8 @@ private slots:
     void setLegendFontSize( int size );
     void setLegendSpacing( int spacing );
     void setLegendShowLines( bool b );
+    void setLegendOrientation( Qt::Orientation );
+    void setLegendAlignment( Qt::Alignment );
 
 private:
     void updateActions();

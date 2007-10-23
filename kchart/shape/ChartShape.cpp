@@ -571,6 +571,18 @@ void ChartShape::setLegendShowLines( bool b )
     update();
 }
 
+void ChartShape::setLegendOrientation( Qt::Orientation orientation )
+{
+    d->legend->setOrientation( orientation );
+    update();
+}
+
+void ChartShape::setLegendAlignment( Qt::Alignment alignment )
+{
+    d->legend->setAlignment( alignment );
+    update();
+}
+
 void ChartShape::modelChanged()
 {
     // Tell the diagram that the entire set of data changed

@@ -68,6 +68,14 @@ void ChartLegendConfigWidget::setupUi()
     d->ui.positionSouthWest->setIcon( KIcon( "chart_legend_bottomleft" ) );
     d->ui.positionSouthEast->setIcon( KIcon( "chart_legend_bottomright" ) );
 
+    d->ui.orientation->addItem( i18n( "Horizontal" ), Qt::Horizontal );
+    d->ui.orientation->addItem( i18n( "Vertical" ), Qt::Vertical );
+    d->ui.orientation->setCurrentIndex( 1 );
+
+    d->ui.alignment->addItem( i18n( "Left" ), Qt::AlignLeft );
+    d->ui.alignment->addItem( i18n( "Center" ), Qt::AlignCenter );
+    d->ui.alignment->addItem( i18n( "Right" ), Qt::AlignRight );
+
     d->ui.font->setSampleText( i18n( "ABC" ) );
     
     connect( d->ui.title, SIGNAL( textChanged( const QString& ) ),
@@ -80,6 +88,21 @@ void ChartLegendConfigWidget::setupUi()
              this,       SIGNAL( legendSpacingChanged( int ) ) );
     connect (d->ui.showLines, SIGNAL( toggled( bool ) ),
              this,            SIGNAL( legendShowLinesToggled( bool ) ) );
+
+    connect (d->ui.orientation, SIGNAL( currentIndexChanged( int ) ),
+             this,              SLOT( setLegendOrientation( int ) ) );
+    connect (d->ui.alignment, SIGNAL( currentIndexChanged( int ) ),
+             this,            SLOT( setLegendAlignment( int ) ) );
+}
+
+void ChartLegendConfigWidget::setLegendOrientation( int boxEntryIndex )
+{
+    emit legendOrientationChanged( ( Qt::Orientation ) ( d->ui.orientation->itemData( boxEntryIndex ).toInt() ) );
+}
+
+void ChartLegendConfigWidget::setLegendAlignment( int boxEntryIndex )
+{
+    emit legendAlignmentChanged( ( Qt::Alignment ) ( d->ui.alignment->itemData( boxEntryIndex ).toInt() ) );
 }
 
 void ChartLegendConfigWidget::open( KoShape* chart )

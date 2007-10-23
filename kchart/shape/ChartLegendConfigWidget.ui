@@ -25,7 +25,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral" >
       <attribute name="title" >
@@ -98,51 +98,24 @@
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="0" >
-        <widget class="QLabel" name="label_3" >
+        <widget class="QLabel" name="orientation_2" >
          <property name="text" >
           <string>Orientation:</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1" >
-        <widget class="QComboBox" name="orientation" >
-         <item>
-          <property name="text" >
-           <string>Horizontal</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Vertical</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QComboBox" name="orientation" />
        </item>
        <item row="1" column="0" >
-        <widget class="QLabel" name="label_2" >
+        <widget class="QLabel" name="alignment_2" >
          <property name="text" >
           <string>Alignment:</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1" >
-        <widget class="QComboBox" name="alignment" >
-         <item>
-          <property name="text" >
-           <string>Left</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Center</string>
-          </property>
-         </item>
-         <item>
-          <property name="text" >
-           <string>Right</string>
-          </property>
-         </item>
-        </widget>
+        <widget class="QComboBox" name="alignment" />
        </item>
        <item row="2" column="0" colspan="2" >
         <widget class="QGroupBox" name="fixedPosition" >

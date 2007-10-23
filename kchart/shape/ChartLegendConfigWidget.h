@@ -47,6 +47,10 @@ public:
 
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
+
+public slots:
+    void setLegendOrientation( int boxEntryIndex );
+    void setLegendAlignment( int boxEntryIndex );
     
 signals:
     void legendTitleChanged( const QString& );
@@ -55,6 +59,8 @@ signals:
     void legendFontSizeChanged( int size );
     void legendSpacingChanged( int spacing );
     void legendShowLinesToggled( bool toggled );
+    void legendOrientationChanged( Qt::Orientation );
+    void legendAlignmentChanged( Qt::Alignment );
 
 private:
     class Private;

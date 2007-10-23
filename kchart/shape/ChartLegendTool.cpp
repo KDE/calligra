@@ -108,6 +108,11 @@ QWidget *ChartLegendTool::createOptionWidget()
     connect( widget, SIGNAL( legendShowLinesToggled( bool ) ),
        this, SLOT( setLegendShowLines( bool ) ) );
 
+    connect( widget, SIGNAL( legendOrientationChanged( Qt::Orientation ) ),
+       this, SLOT( setLegendOrientation( Qt::Orientation ) ) );
+    connect( widget, SIGNAL( legendAlignmentChanged( Qt::Alignment ) ),
+       this, SLOT( setLegendAlignment( Qt::Alignment ) ) );
+
     return widget;
 }
 
@@ -139,4 +144,14 @@ void ChartLegendTool::setLegendFontSize( int size )
 void ChartLegendTool::setLegendShowLines( bool b )
 {
     m_currentShape->setLegendShowLines( b );
+}
+
+void ChartLegendTool::setLegendOrientation( Qt::Orientation orientation )
+{
+    m_currentShape->setLegendOrientation( orientation );
+}
+
+void ChartLegendTool::setLegendAlignment( Qt::Alignment alignment )
+{
+    m_currentShape->setLegendAlignment( alignment );
 }
