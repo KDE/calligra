@@ -67,15 +67,17 @@ void ChartLegendConfigWidget::setupUi()
     d->ui.positionNorthEast->setIcon( KIcon( "chart_legend_topright" ) );
     d->ui.positionSouthWest->setIcon( KIcon( "chart_legend_bottomleft" ) );
     d->ui.positionSouthEast->setIcon( KIcon( "chart_legend_bottomright" ) );
+
+    d->ui.font->setSampleText( i18n( "ABC" ) );
     
     connect( d->ui.title, SIGNAL( textChanged( const QString& ) ),
              this,        SIGNAL( legendTitleChanged( const QString& ) ) );
-    connect (d->ui.font, SIGNAL( currentFontChanged( const QFont& ) ),
+    connect (d->ui.titleFont, SIGNAL( fontSelected( const QFont& ) ),
+             this,       SIGNAL( legendTitleFontChanged( const QFont& ) ) );
+    connect (d->ui.font, SIGNAL( fontSelected( const QFont& ) ),
              this,       SIGNAL( legendFontChanged( const QFont& ) ) );
     connect (d->ui.spacing, SIGNAL( valueChanged( int ) ),
              this,       SIGNAL( legendSpacingChanged( int ) ) );
-    connect (d->ui.fontSize, SIGNAL( valueChanged( int ) ),
-             this,           SIGNAL( legendFontSizeChanged( int ) ) );
     connect (d->ui.showLines, SIGNAL( toggled( bool ) ),
              this,            SIGNAL( legendShowLinesToggled( bool ) ) );
 }

@@ -51,6 +51,7 @@ public:
 signals:
     void legendTitleChanged( const QString& );
     void legendFontChanged( const QFont& font );
+    void legendTitleFontChanged( const QFont& font );
     void legendFontSizeChanged( int size );
     void legendSpacingChanged( int spacing );
     void legendShowLinesToggled( bool toggled );

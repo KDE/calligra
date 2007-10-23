@@ -26,6 +26,7 @@
 
 // Qt
 #include <QMouseEvent>
+#include <QPrintDialog>
 
 // KOffice
 #include <KoView.h>

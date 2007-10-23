@@ -61,6 +61,7 @@
 #include "KDChartDataValueAttributes.h"
 #include "KDChartMarkerAttributes.h"
 #include "KDChartTextAttributes.h"
+#include "KDChartAttributesModel.h"
 
 #include "KDChartBarAttributes.h"
 #include "KDChartThreeDBarAttributes.h"
@@ -164,8 +165,10 @@ ChartShape::ChartShape()
     // Initialize a basic chart.
     d->chart     = new KDChart::Chart();
     d->diagram   = new KDChart::BarDiagram();
+
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
     d->chartData->setSourceModel( &d->defaultData );
+
     d->diagram->setModel( d->chartData );
 
     d->firstRowIsLabel = false;
@@ -182,11 +185,6 @@ ChartShape::ChartShape()
 
     // Add a legend
     d->legend = new KDChart::Legend( d->diagram, d->chart );
-    d->legend->setPosition( KDChart::Position::East );
-    d->legend->setAlignment( Qt::AlignRight );
-    d->legend->setShowLines( false );
-    d->legend->setTitleText( i18n( "Legend" ) );
-    d->legend->setOrientation( Qt::Vertical );
     d->chart->addLegend( d->legend );
 
     setChartDefaults();
@@ -253,6 +251,19 @@ KDChart::Chart* ChartShape::chart() const
 
 void ChartShape::setChartDefaults()
 {
+    d->legend->setPosition( KDChart::Position::East );
+    d->legend->setAlignment( Qt::AlignRight );
+    d->legend->setShowLines( false );
+    d->legend->setTitleText( i18n( "Legend" ) );
+    d->legend->setOrientation( Qt::Vertical );
+
+    setDiagramDefaults( d->chartType );
+}
+
+void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
+{
+    if ( type != LineChartType && type != ScatterChartType )
+        d->diagram->setPen( QPen( Qt::black, 0.4 ) );
 }
 
 void ChartShape::setChartType( OdfChartType    newType,
@@ -378,10 +389,13 @@ void ChartShape::setChartType( OdfChartType    newType,
         // FIXME: Aren't we leaking memory by not doing this?
         // KDChartAbstractDiagram::~KDChartAbstractDiagram() will try to delete
         // its KDChartAttributesModel instance, which would cause a crash.
-        // delete d->diagram;
-        d->diagram = new_diagram;
+        if( new_diagram != 0 ) {
+            d->chart->coordinatePlane()->replaceDiagram( new_diagram );
+            d->diagram = new_diagram;
+            setDiagramDefaults( newType );
+            //delete new_diagram;
+        }
 
-        d->chart->coordinatePlane()->replaceDiagram( new_diagram ); // FIXME
         update();
 
         // Update local data
@@ -518,6 +532,14 @@ void ChartShape::setDataDirection( Qt::Orientation orientation )
 void ChartShape::setLegendTitle( const QString &title )
 {
     d->legend->setTitleText( title );
+    update();
+}
+
+void ChartShape::setLegendTitleFont( const QFont& font )
+{
+    KDChart::TextAttributes attributes = d->legend->titleTextAttributes();
+    attributes.setFont( font );
+    d->legend->setTitleTextAttributes( attributes );
     update();
 }
 

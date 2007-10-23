@@ -93,6 +93,7 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     void setFirstColumnIsLabel( bool b);
     void setDataDirection( Qt::Orientation orientation );
     void setLegendTitle( const QString& title );
+    void setLegendTitleFont( const QFont& font );
     void setLegendFont( const QFont& font );
     void setLegendFontSize( int size );
     void setLegendSpacing( int spacing );
@@ -104,6 +105,7 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
 
  private:
     void setChartDefaults();
+    void setDiagramDefaults( OdfChartType type = LastChartType );
     void createDefaultData();
 
     //static bool  isCartesian( OdfChartType type );

@@ -57,6 +57,7 @@ public:
 
 private slots:
     void setLegendTitle( const QString& title );
+    void setLegendTitleFont( const QFont& font );
     void setLegendFont( const QFont& font );
     void setLegendFontSize( int size );
     void setLegendSpacing( int spacing );

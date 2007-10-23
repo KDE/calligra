@@ -83,11 +83,11 @@ KoShape* ChartShapeFactory::createDefaultShape() const
 
         for (uint col = 0; col < 5; col++) {
             if ( row == 0 && col > 0 )
-                m_chartData->setItem( 0, col,
-                    new QStandardItem ( i18n( "Column %1", col ) ) );
+                m_chartData->setData( m_chartData->index( 0, col ),
+                    i18n( "Column %1", col ), Qt::EditRole | Qt::DisplayRole );
             else
-                m_chartData->setItem( row, col,
-                    new QStandardItem( QString::number( row + col ) ) );
+                m_chartData->setData( m_chartData->index( row, col ),
+                    QString::number( row + col ), Qt::EditRole | Qt::DisplayRole );
             // Fill column label, but only on the first iteration.
         }
     }
