@@ -39,6 +39,7 @@ set(kplatoprivate_LIB_SRCS
     
     kptconfigdialog.cc
     kptconfig.cc
+    kpttaskdefaultpanel.cc
 
     kptcontext.cc
 

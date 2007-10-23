@@ -20,7 +20,7 @@
 #ifndef KPTTASKDEFAULTPANEL_H
 #define KPTTASKDEFAULTPANEL_H
 
-#include "kplatoui_export.h"
+#include "kplato_export.h"
 
 #include "ui_kptconfigtaskpanelbase.h"
 #include "kptduration.h"
@@ -89,7 +89,7 @@ protected:
     bool useTime;
 };
 
-class KPLATOUI_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl {
+class KPLATO_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl {
     Q_OBJECT
 public:
     explicit TaskDefaultPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);

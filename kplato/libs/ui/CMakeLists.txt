@@ -60,7 +60,6 @@ set(kplatoui_LIB_SRCS
     kptstandardworktimedialog.cc
     kptintervaledit.cc
     kpttaskgeneralpanel.cc
-    kpttaskdefaultpanel.cc
     kpttaskprogresspanel.cc
     kpttaskprogressdialog.cc
     kptresourcesdialog.cc
