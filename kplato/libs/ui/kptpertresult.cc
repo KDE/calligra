@@ -941,7 +941,7 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
         }
         return QVariant();
     }
-    if ( n->type() == Node::Type_Task ) {
+    if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
         result = m_nodemodel.data( n, index.column(), role );
 /*        Task *t = static_cast<Task*>( n );
         switch ( index.column() ) {
