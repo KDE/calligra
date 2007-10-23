@@ -657,7 +657,9 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskstatusview, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
     
     connect( taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    
     taskstatusview->updateReadWrite( m_readWrite );
+    taskstatusview->draw( getProject() );
     return taskstatusview;
 }
 

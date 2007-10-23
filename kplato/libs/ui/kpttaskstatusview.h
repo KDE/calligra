@@ -143,8 +143,8 @@ public:
     TaskStatusView( KoDocument *part, QWidget *parent );
     
     void setupGui();
+    virtual void setProject( Project *project );
     virtual void draw( Project &project );
-    virtual void draw();
 
     virtual void updateReadWrite( bool readwrite );
     virtual Node *currentNode() const;

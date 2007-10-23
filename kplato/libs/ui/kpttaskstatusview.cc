@@ -596,18 +596,15 @@ Node *TaskStatusView::currentNode() const
     return n;
 }
 
-void TaskStatusView::draw( Project &project )
+void TaskStatusView::setProject( Project *project )
 {
-    m_project = &project;
+    m_project = project;
     m_view->itemModel()->setProject( m_project );
-    draw();
 }
 
-void TaskStatusView::draw()
+void TaskStatusView::draw( Project &project )
 {
-    if ( m_project == 0 ) {
-        return;
-    }
+    setProject( &project );
 }
 
 void TaskStatusView::setGuiActive( bool activate )
