@@ -112,7 +112,7 @@ void SplitterView::setZoom(double zoom)
             QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
             if (tw ) {
                 for ( int j = 0; j < tw->count(); ++j ) {
-                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    v = dynamic_cast<ViewBase*>( tw->widget( j ) );
                     if ( v ) {
                         v->setZoom( zoom );
                     }
@@ -132,7 +132,7 @@ void SplitterView::setProject( Project *project )
             QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
             if (tw ) {
                 for ( int j = 0; j < tw->count(); ++j ) {
-                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    v = dynamic_cast<ViewBase*>( tw->widget( j ) );
                     if ( v ) {
                         v->setProject( project );
                     }
@@ -152,7 +152,7 @@ void SplitterView::draw()
             QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
             if (tw ) {
                 for ( int j = 0; j < tw->count(); ++j ) {
-                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    v = dynamic_cast<ViewBase*>( tw->widget( j ) );
                     if ( v ) {
                         v->draw();
                     }
@@ -172,7 +172,7 @@ void SplitterView::draw( Project &project )
             QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
             if (tw ) {
                 for ( int j = 0; j < tw->count(); ++j ) {
-                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    v = dynamic_cast<ViewBase*>( tw->widget( j ) );
                     if ( v ) {
                         v->draw( project );
                     }
@@ -193,7 +193,7 @@ void SplitterView::updateReadWrite( bool mode )
             QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
             if (tw ) {
                 for ( int j = 0; j < tw->count(); ++j ) {
-                    v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                    v = dynamic_cast<ViewBase*>( tw->widget( j ) );
                     if ( v ) {
                         v->updateReadWrite( mode );
                     }
