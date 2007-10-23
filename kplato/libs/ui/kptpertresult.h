@@ -274,6 +274,7 @@ public:
     
     void setupGui();
     void setProject( Project *project );
+    void draw( Project &project );
     void draw();
     
     CriticalPathItemModel *model() const { return static_cast<CriticalPathItemModel*>( widget.cpmTable->model() ); }

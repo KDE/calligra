@@ -64,24 +64,24 @@ CriticalPathItemModel::~CriticalPathItemModel()
     
 void CriticalPathItemModel::slotNodeToBeInserted( Node *, int )
 {
-    //kDebug()<<node->name()<<endl;
+    //kDebug()<<node->name();
 }
 
 void CriticalPathItemModel::slotNodeInserted( Node */*node*/ )
 {
-    //kDebug()<<node->getParent->name()<<"-->"<<node->name()<<endl;
+    //kDebug()<<node->getParent->name()<<"-->"<<node->name();
 }
 
 void CriticalPathItemModel::slotNodeToBeRemoved( Node *node )
 {
-    //kDebug()<<node->name()<<endl;
+    //kDebug()<<node->name();
 /*    if ( m_path.contains( node ) ) {
     }*/
 }
 
 void CriticalPathItemModel::slotNodeRemoved( Node *node )
 {
-    //kDebug()<<node->name()<<endl;
+    //kDebug()<<node->name();
 }
 
 void CriticalPathItemModel::setProject( Project *project )
@@ -113,7 +113,7 @@ void CriticalPathItemModel::setProject( Project *project )
 
 void CriticalPathItemModel::setManager( ScheduleManager *sm )
 {
-    kDebug()<<this<<endl;
+    kDebug()<<this;
     m_manager = sm;
     m_nodemodel.setManager( sm );
     if ( m_project == 0 || m_manager == 0 ) {
@@ -121,7 +121,7 @@ void CriticalPathItemModel::setManager( ScheduleManager *sm )
     } else {
         m_path = m_project->criticalPath( m_manager->id(), 0 );
     }
-    kDebug()<<m_path<<endl;
+    kDebug()<<m_path;
     reset();
 }
 
@@ -184,7 +184,7 @@ QVariant CriticalPathItemModel::duration( const Node *node, int role ) const
                     // rest is default
                 }
                 double v = Estimate::scale( node->duration( m_manager->id() ), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             }
             break;
@@ -216,7 +216,7 @@ QVariant CriticalPathItemModel::variance( const Node *node, int role ) const
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = presentationUnit();
                 double v = node->variance( m_manager->id(), unit );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             }
             break;
@@ -233,7 +233,7 @@ QVariant CriticalPathItemModel::variance( const Estimate *est, int role ) const
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
                 double v = est->variance( presentationUnit() );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
                 return KGlobal::locale()->formatNumber( v );
             break;
         }
@@ -300,7 +300,7 @@ QVariant CriticalPathItemModel::optimistic( const Estimate *est, int role ) cons
                     // rest is default
                 }
                 double v = Estimate::scale( est->optimistic(), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             break;
         }
@@ -325,7 +325,7 @@ QVariant CriticalPathItemModel::estimate( const Node *node, int role ) const
                     // rest is default
                 }
                 double v = Estimate::scale( node->estimate()->expected(), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             }
             break;
@@ -388,7 +388,7 @@ QVariant CriticalPathItemModel::pessimistic( const Node *node, int role ) const
                 Duration d = node->duration( m_manager->id() );
                 d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
                 double v = d.toDouble( presentationUnit() );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( presentationUnit(), true );
             break;
         }
@@ -411,7 +411,7 @@ QVariant CriticalPathItemModel::pessimistic( const Estimate *est, int role ) con
                     // rest is default
                 }
                 double v = Estimate::scale( est->pessimistic(), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
                 return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
             break;
         }
@@ -505,7 +505,7 @@ Node *CriticalPathItemModel::node( const QModelIndex &index ) const
 
 void CriticalPathItemModel::slotNodeChanged( Node *node )
 {
-    kDebug()<<endl;
+    kDebug();
     if ( node == 0 || node->type() == Node::Type_Project || ! m_path.contains( node ) ) {
         return;
     }
@@ -529,37 +529,37 @@ PertResultItemModel::~PertResultItemModel()
     
 void PertResultItemModel::slotAboutToBeReset()
 {
-    kDebug()<<endl;
+    kDebug();
     clear();
 }
 
 void PertResultItemModel::slotReset()
 {
-    kDebug()<<endl;
+    kDebug();
     refresh();
 }
 
 void PertResultItemModel::slotNodeToBeInserted( Node *, int )
 {
-    //kDebug()<<node->name()<<endl;
+    //kDebug()<<node->name();
     clear();
 }
 
 void PertResultItemModel::slotNodeInserted( Node */*node*/ )
 {
-    //kDebug()<<node->getParent->name()<<"-->"<<node->name()<<endl;
+    //kDebug()<<node->getParent->name()<<"-->"<<node->name();
     refresh();
 }
 
 void PertResultItemModel::slotNodeToBeRemoved( Node */*node*/ )
 {
-    //kDebug()<<node->name()<<endl;
+    //kDebug()<<node->name();
     clear();
 }
 
 void PertResultItemModel::slotNodeRemoved( Node */*node*/ )
 {
-    //kDebug()<<node->name()<<endl;
+    //kDebug()<<node->name();
     refresh();
 }
 
@@ -600,14 +600,14 @@ void PertResultItemModel::setManager( ScheduleManager *sm )
 
 void PertResultItemModel::clear()
 {
-    kDebug()<<this<<endl;
+    kDebug()<<this;
     foreach ( NodeList *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
             // FIXME: gives error msg:
             // Can't select indexes from different model or with different parents
             QModelIndex i = index( l );
-            kDebug()<<i<<": "<<c<<endl;
+            kDebug()<<i<<": "<<c;
 //            beginRemoveRows( i, 0, c-1 );
 //            endRemoveRows();
         }
@@ -629,7 +629,7 @@ void PertResultItemModel::refresh()
         return;
     }
     long id = m_manager == 0 ? -1 : m_manager->id();
-    kDebug()<<id<<endl;
+    kDebug()<<id;
     if ( id == -1 ) {
         return;
     }
@@ -640,9 +640,9 @@ void PertResultItemModel::refresh()
         for ( int i = 0; i < lst->count(); ++i ) {
             m_topNames << i18n( "Critical Path" );
             m_top.append( const_cast<NodeList*>( &( lst->at( i ) ) ) );
-            kDebug()<<m_topNames.last()<<lst->at( i )<<endl;
+            kDebug()<<m_topNames.last()<<lst->at( i );
         }
-        if ( lst->isEmpty() ) kDebug()<<"No critical path"<<endl;
+        if ( lst->isEmpty() ) kDebug()<<"No critical path";
     }
     foreach( Node* n, m_project->allNodes() ) {
         if ( n->type() != Node::Type_Task && n->type() != Node::Type_Milestone ) {
@@ -666,7 +666,7 @@ void PertResultItemModel::refresh()
         m_top.append(&m_noncritical );
     }
     if ( ! m_top.isEmpty() ) {
-        kDebug()<<m_top<<endl;
+        kDebug()<<m_top;
         beginInsertRows( QModelIndex(), 0, m_top.count() -1 );
         endInsertRows();
         foreach ( NodeList *l, m_top ) {
@@ -692,7 +692,7 @@ QModelIndex PertResultItemModel::parent( const QModelIndex &index ) const
     if ( !index.isValid() ) {
         return QModelIndex();
     }
-    //kDebug()<<index.internalPointer()<<": "<<index.row()<<", "<<index.column()<<endl;
+    //kDebug()<<index.internalPointer()<<": "<<index.row()<<", "<<index.column();
     int row = index.internalId();
     if ( row < 0 ) {
         return QModelIndex(); // top level has no parent
@@ -717,7 +717,7 @@ QModelIndex PertResultItemModel::index( int row, int column, const QModelIndex &
             return QModelIndex(); // shouldn't happend
         }
         QModelIndex idx = createIndex(row, column, -1 );
-        //kDebug()<<parent<<", "<<idx<<endl;
+        //kDebug()<<parent<<", "<<idx;
         return idx;
     }
     if ( parent.row() == 0 ) {
@@ -956,7 +956,7 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
             case 8: result = startFloat( t, role ); break;
             case 9: result = finishFloat( t, role ); break;
             default:
-                kDebug()<<"data: invalid display value column "<<index.column()<<endl;;
+                kDebug()<<"data: invalid display value column "<<index.column();
                 return QVariant();
         }*/
     }
@@ -971,7 +971,7 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
             case 5: result = positiveFloat( p, role ); break;
             case 6: result = freeFloat( p, role ); break;*/
             default:
-                //kDebug()<<"data: invalid display value column "<<index.column()<<endl;;
+                //kDebug()<<"data: invalid display value column "<<index.column();
                 return QVariant();
         }
     }
@@ -1056,15 +1056,15 @@ int PertResultItemModel::columnCount( const QModelIndex & ) const
 int PertResultItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //kDebug()<<"top="<<m_top.count()<<endl;
+        //kDebug()<<"top="<<m_top.count();
         return m_top.count();
     }
     NodeList *l = list( parent );
     if ( l ) {
-        //kDebug()<<"list "<<parent.row()<<": "<<l->count()<<endl;
+        //kDebug()<<"list "<<parent.row()<<": "<<l->count();
         return l->count();
     }
-    //kDebug()<<"node "<<parent.row()<<endl;
+    //kDebug()<<"node "<<parent.row();
     return 0; // nodes don't have children
 }
 
@@ -1098,10 +1098,10 @@ bool PertResultItemModel::dropMimeData( const QMimeData *, Qt::DropAction , int 
 NodeList *PertResultItemModel::list( const QModelIndex &index ) const
 {
     if ( index.isValid() && index.internalId() == -1 ) {
-        //kDebug()<<index<<"is list: "<<m_top.value( index.row() )<<endl;
+        //kDebug()<<index<<"is list: "<<m_top.value( index.row() );
         return m_top.value( index.row() );
     }
-    //kDebug()<<index<<"is not list"<<endl;
+    //kDebug()<<index<<"is not list";
     return 0;
 }
 
@@ -1125,7 +1125,7 @@ Node *PertResultItemModel::node( const QModelIndex &index ) const
 
 void PertResultItemModel::slotNodeChanged( Node *)
 {
-    kDebug()<<endl;
+    kDebug();
     refresh();
 /*    if ( node == 0 || node->type() == Node::Type_Project ) {
         return;
@@ -1167,11 +1167,12 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
 void PertResult::draw( Project &project)
 {
     setProject( &project );
-    draw();
+    //draw();
 }
   
 void PertResult::draw()
 {
+    kDebug()<<m_project;
     widget.scheduleName->setText( i18n( "None" ) );
     widget.totalFloat->clear();
     if ( m_project && model()->manager() && model()->manager()->isScheduled() ) {
@@ -1356,7 +1357,7 @@ void PertResult::setupGui()
 
 void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<endl;
+    kDebug();
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -1365,7 +1366,7 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void PertResult::slotOptions()
 {
-    kDebug()<<endl;
+    kDebug();
     ItemViewSettupDialog dlg( widget.treeWidgetTaskResult->slaveView() );
     dlg.exec();
 }
@@ -1377,7 +1378,6 @@ void PertResult::slotUpdate(){
 
 void PertResult::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
-    kDebug()<<sm;
     current_schedule = sm;
     model()->setManager( sm );
     draw();
@@ -1402,7 +1402,6 @@ void PertResult::slotScheduleManagerToBeRemoved( const ScheduleManager *sm )
 
 void PertResult::slotScheduleManagerChanged( ScheduleManager *sm )
 {
-    kDebug();
     if ( current_schedule && current_schedule == sm ) {
         slotScheduleSelectionChanged( sm );
     }
@@ -1429,7 +1428,7 @@ void PertResult::setProject( Project *project )
 
 bool PertResult::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
+    kDebug();
     return widget.treeWidgetTaskResult->loadContext( context );
 }
 
@@ -1492,7 +1491,7 @@ void PertCpmView::setupGui()
 
 void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<endl;
+    kDebug();
     QList<QAction*> lst = contextActionList();
     if ( ! lst.isEmpty() ) {
         QMenu::exec( lst, pos,  lst.first() );
@@ -1501,14 +1500,13 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 
 void PertCpmView::slotOptions()
 {
-    kDebug()<<endl;
+    kDebug();
     ItemViewSettupDialog dlg( widget.cpmTable->slaveView() );
     dlg.exec();
 }
 
 void PertCpmView::slotScheduleSelectionChanged( ScheduleManager *sm )
 {
-    kDebug()<<sm<<endl;
     bool enbl = sm && sm->isScheduled() && sm->usePert();
     widget.probabilityFrame->setVisible( enbl );
     current_schedule = sm;
@@ -1525,7 +1523,6 @@ void PertCpmView::slotProjectCalculated( ScheduleManager *sm )
 
 void PertCpmView::slotScheduleManagerChanged( ScheduleManager *sm )
 {
-    kDebug();
     if ( current_schedule == sm ) {
         slotScheduleSelectionChanged( sm );
     }
@@ -1559,6 +1556,12 @@ void PertCpmView::setProject( Project *project )
     draw();
 }
 
+void PertCpmView::draw( Project &project )
+{
+    setProject( &project );
+    // draw()
+}
+
 void PertCpmView::draw()
 {
     widget.scheduleName->setText( i18n( "None" ) );
@@ -1574,7 +1577,7 @@ void PertCpmView::draw()
 
 void PertCpmView::slotFinishTimeChanged( const QDateTime &dt )
 {
-    kDebug()<<dt<<endl;
+    kDebug()<<dt;
     if ( block || m_project == 0 || current_schedule == 0 ) {
         return;
     }
@@ -1588,13 +1591,13 @@ void PertCpmView::slotFinishTimeChanged( const QDateTime &dt )
     double z = d / dev;
     double v = probability( z );
     widget.probability->setValue( (int)( v * 100 ) );
-    kDebug()<<z<<", "<<v<<endl;
+    kDebug()<<z<<", "<<v;
     block = false;
 }
 
 void PertCpmView::slotProbabilityChanged( int value )
 {
-    kDebug()<<value<<endl;
+    kDebug()<<value;
     if ( value == 0 || block || m_project == 0 || current_schedule == 0 ) {
         return;
     }
@@ -1605,7 +1608,7 @@ void PertCpmView::slotProbabilityChanged( int value )
     double p = valueZ( value );
     DateTime t = et + Duration( qint64( p * dev ) );
     widget.finishTime->setDateTime( t.dateTime() );
-    kDebug()<<p<<", "<<t.toString()<<endl;
+    kDebug()<<p<<", "<<t.toString();
     block = false;
 }
 
@@ -1647,7 +1650,7 @@ void PertCpmView::slotUpdate()
 
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<objectName()<<endl;
+    kDebug()<<objectName();
     return widget.cpmTable->loadContext( context );
 }
 
