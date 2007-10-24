@@ -27,7 +27,7 @@
 #include "koChart.h"
 
 // KDChart
-#include "KDChartPosition.h"
+#include <KDChartPosition.h>
 
 // KChart
 #include "kchart_export.h"

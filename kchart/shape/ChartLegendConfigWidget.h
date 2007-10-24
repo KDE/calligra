@@ -25,7 +25,7 @@
 #include <KoShapeConfigWidgetBase.h>
 
 // KDChart
-#include "KDChartPosition.h"
+#include <KDChartPosition.h>
 
 
 namespace KChart
@@ -55,6 +55,7 @@ public slots:
     void setLegendOrientation( int boxEntryIndex );
     void setLegendAlignment( int boxEntryIndex );
     void setLegendFixedPosition( int buttonGroupIndex );
+    void updateFixedPosition( const KDChart::Position );
     
 signals:
     void legendTitleChanged( const QString& );

@@ -25,7 +25,7 @@
 #include <KoTool.h>
 
 // KDChart
-#include "KDChartPosition.h"
+#include <KDChartPosition.h>
 
 // KChart
 #include "ChartShape.h"

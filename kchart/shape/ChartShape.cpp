@@ -1467,6 +1467,7 @@ void ChartShape::initNullChart()
 void ChartShape::update()
 {
     d->diagram->doItemsLayout();
+    d->legend->update();
     d->diagram->update();
     d->chart->update();
     KoShape::update();

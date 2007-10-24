@@ -165,4 +165,5 @@ void ChartLegendTool::setLegendAlignment( Qt::Alignment alignment )
 void ChartLegendTool::setLegendFixedPosition( KDChart::Position position )
 {
     m_currentShape->setLegendFixedPosition( position );
+    ( ( ChartLegendConfigWidget* ) optionWidget() )->updateFixedPosition( position );
 }

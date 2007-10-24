@@ -43,9 +43,12 @@ class ChartLegendConfigWidget::Private
 public:
     ChartShape                  *chart;
     Ui::ChartLegendConfigWidget  ui;
+    QButtonGroup                *positionButtonGroup;
 };
 
-const KDChart::Position buttonIndexToFixedPosition[] =
+const int NUM_FIXED_POSITIONS = 8;
+
+const KDChart::Position buttonIndexToFixedPosition[NUM_FIXED_POSITIONS] =
 {
     KDChart::Position::North,
     KDChart::Position::East,
@@ -73,25 +76,25 @@ void ChartLegendConfigWidget::setupUi()
 {
     d->ui.setupUi( this );
 
-    QButtonGroup *buttonGroup = new QButtonGroup;
-    buttonGroup->setExclusive( true );
+    d->positionButtonGroup = new QButtonGroup;
+    d->positionButtonGroup->setExclusive( true );
 
-    buttonGroup->addButton( d->ui.positionNorth, 0 );
+    d->positionButtonGroup->addButton( d->ui.positionNorth, 0 );
     d->ui.positionNorth->setIcon( KIcon( "chart_legend_top" ) );
-    buttonGroup->addButton( d->ui.positionEast,  1 );
+    d->positionButtonGroup->addButton( d->ui.positionEast,  1 );
     d->ui.positionEast->setIcon( KIcon( "chart_legend_right" ) );
-    buttonGroup->addButton( d->ui.positionSouth, 2 );
+    d->positionButtonGroup->addButton( d->ui.positionSouth, 2 );
     d->ui.positionSouth->setIcon( KIcon( "chart_legend_top" ) );
-    buttonGroup->addButton( d->ui.positionWest,  3 );
+    d->positionButtonGroup->addButton( d->ui.positionWest,  3 );
     d->ui.positionWest->setIcon( KIcon( "chart_legend_left" ) );
     
-    buttonGroup->addButton( d->ui.positionNorthWest, 4 );
+    d->positionButtonGroup->addButton( d->ui.positionNorthWest, 4 );
     d->ui.positionNorthWest->setIcon( KIcon( "chart_legend_topleft" ) );
-    buttonGroup->addButton( d->ui.positionNorthEast, 5 );
+    d->positionButtonGroup->addButton( d->ui.positionNorthEast, 5 );
     d->ui.positionNorthEast->setIcon( KIcon( "chart_legend_topright" ) );
-    buttonGroup->addButton( d->ui.positionSouthWest, 6 );
+    d->positionButtonGroup->addButton( d->ui.positionSouthWest, 6 );
     d->ui.positionSouthWest->setIcon( KIcon( "chart_legend_bottomleft" ) );
-    buttonGroup->addButton( d->ui.positionSouthEast, 7 );
+    d->positionButtonGroup->addButton( d->ui.positionSouthEast, 7 );
     d->ui.positionSouthEast->setIcon( KIcon( "chart_legend_bottomright" ) );
 
     d->ui.orientation->addItem( i18n( "Horizontal" ), Qt::Horizontal );
@@ -120,8 +123,8 @@ void ChartLegendConfigWidget::setupUi()
     connect( d->ui.alignment, SIGNAL( currentIndexChanged( int ) ),
              this,            SLOT( setLegendAlignment( int ) ) );
 
-    connect ( buttonGroup, SIGNAL( buttonClicked( int ) ),
-              this,        SLOT( setLegendFixedPosition( int ) ) );
+    connect ( d->positionButtonGroup, SIGNAL( buttonClicked( int ) ),
+              this,                   SLOT( setLegendFixedPosition( int ) ) );
 }
 
 void ChartLegendConfigWidget::setLegendOrientation( int boxEntryIndex )
@@ -137,6 +140,37 @@ void ChartLegendConfigWidget::setLegendAlignment( int boxEntryIndex )
 void ChartLegendConfigWidget::setLegendFixedPosition( int buttonGroupIndex )
 {
     emit legendFixedPositionChanged( buttonIndexToFixedPosition[ buttonGroupIndex ] );
+}
+
+void ChartLegendConfigWidget::updateFixedPosition( const KDChart::Position position )
+{
+    if (    position == KDChart::Position::North
+         || position == KDChart::Position::South ) {
+        d->ui.alignment->setEnabled( true );
+        d->ui.alignment->setItemText( 0, i18n( "Left" ) );
+        d->ui.alignment->setItemData( 0, Qt::AlignLeft );
+        d->ui.alignment->setItemData( 1, Qt::AlignCenter );
+        d->ui.alignment->setItemText( 2, i18n( "Right" ) );
+        d->ui.alignment->setItemData( 2, Qt::AlignRight );
+    } else if (    position == KDChart::Position::East
+                || position == KDChart::Position::West ) {
+        d->ui.alignment->setEnabled( true );
+        d->ui.alignment->setItemText( 0, i18n( "Top" ) );
+        d->ui.alignment->setItemData( 0, Qt::AlignTop );
+        d->ui.alignment->setItemData( 1, Qt::AlignVCenter );
+        d->ui.alignment->setItemText( 2, i18n( "Bottom" ) );
+        d->ui.alignment->setItemData( 2, Qt::AlignBottom );
+    } else {
+        d->ui.alignment->setEnabled( false );
+    }
+
+    for( int i = 0; i < NUM_FIXED_POSITIONS; i++ ) {
+        if( position == buttonIndexToFixedPosition[i] ) {
+            if ( d->positionButtonGroup->checkedId() != i )
+                d->positionButtonGroup->button( i )->setChecked( true );
+            break;
+        }
+    }
 }
 
 void ChartLegendConfigWidget::open( KoShape* chart )
