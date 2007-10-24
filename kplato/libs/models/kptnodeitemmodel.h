@@ -119,6 +119,19 @@ public:
     QVariant actualCostTo( const Node *node, int role ) const;
     QVariant note( const Node *node, int role ) const;
 
+    /// Set if the node has not been scheduled
+    QVariant nodeIsNotScheduled( const Node *node, int role ) const;
+    /// Set if EffortType == Effort, but no resource is requested
+    QVariant resourceIsMissing( const Node *node, int role ) const;
+    /// Set if the assigned resource is overbooked
+    QVariant resourceIsOverbooked( const Node *node, int role ) const;
+    /// Set if the requested resource is not available
+    QVariant resourceIsNotAvailable( const Node *node, int role ) const;
+    /// Set if the task cannot be scheduled to fullfill all the constraints
+    QVariant schedulingConstraintsError( const Node *node, int role ) const;
+    /// Resources could not fullfill estimate
+    QVariant effortNotMet( const Node *node, int role ) const;
+
 private:
     Project *m_project;
     ScheduleManager *m_manager;

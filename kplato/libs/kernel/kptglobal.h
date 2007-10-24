@@ -99,6 +99,13 @@ namespace ToolTip
     static QString PessimisticRatio = i18n( "Pessimistic estimate" );
     static QString RiskType = i18n( "Type of risk" );
 
+    static QString NodeNotScheduled = i18n( "The node has not been scheduled" );
+    static QString NodeAssigmentMissing = i18n( "An effort has been estimated, but no resource has been assigned" );
+    static QString NodeResourceOverbooked = i18n( "A resource assigned to this task is overbooked" );
+    static QString NodeResourceUnavailable = i18n( "A resource assigned to this task is not available" );
+    static QString NodeConstraintsError = i18n( "A timing constraint could not be met" );
+    static QString NodeEffortNotMet = i18n( "The assigned resource could not meet the estimated effort" );
+
     static QString ResourceName = i18n( "The name of the resource or resource group" );
     static QString ResourceType = i18n( "The type of the resource or resource group" );
     static QString ResourceInitials = i18n( "The initials of the resource" );

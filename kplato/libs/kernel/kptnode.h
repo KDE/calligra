@@ -256,6 +256,8 @@ public:
     bool notScheduled( long id = -1 ) const;
     /// Return a list of overbooked resources
     virtual QStringList overbookedResources( long id = -1 ) const;
+    /// The assigned resources can not fullfill the estimated effort.
+    virtual bool effortMetError( long /*id*/ = -1 ) const { return false; }
     
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = -1 ) const=0;
         
