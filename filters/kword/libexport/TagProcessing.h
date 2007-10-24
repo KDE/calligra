@@ -109,7 +109,7 @@ public:
      * @brief Old constructor (without type checking)
      * @deprecated do not use for new code
      */
-    KDE_DEPRECATED AttrProcessing ( const QString& n, const QString& t, void *d );
+    KDE_CONSTRUCTOR_DEPRECATED AttrProcessing ( const QString& n, const QString& t, void *d );
 
     /**
      * @brief No-op constructor
