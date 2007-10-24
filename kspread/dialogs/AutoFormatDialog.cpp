@@ -105,7 +105,7 @@ AutoFormatDialog::AutoFormatDialog(View* view)
     QStringList::Iterator it = lst.begin();
     for(; it != lst.end(); ++it)
     {
-        KConfig config(*it, KConfig::OnlyLocal);
+        KConfig config(*it, KConfig::SimpleConfig);
         const KConfigGroup sheetStyleGroup = config.group("Sheet-Style");
 
         Entry e;

@@ -838,7 +838,7 @@ void KChartPart::loadConfig( KConfig *config )
     setChartType( (ChartType)conf.readEntry( "type", int(chartType() )) );
     //   other_threshold = conf.readEntry("other_threshold", other_threshold);
 
-    //   backgroundPixmapName = conf.readPathEntry( "backgroundPixmapName" );
+    //   backgroundPixmapName = conf.readPathEntry( "backgroundPixmapName", QString() );
     //   if( !backgroundPixmapName.isNull() ) {
     //     backgroundPixmap.load( KStandardDirs::locate( "wallpaper", backgroundPixmapName ));
     //     backgroundPixmapIsDirty = true;

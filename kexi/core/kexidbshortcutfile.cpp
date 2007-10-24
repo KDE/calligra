@@ -70,7 +70,7 @@ bool KexiDBShortcutFile::loadProjectData(KexiProjectData& data, QString* _groupK
 #else
 #pragma WARNING( KexiDBShortcutFile::loadProjectData: how about readOnly arg? )
 #endif
-	KConfig config(d->fileName, KConfig::OnlyLocal );
+	KConfig config(d->fileName, KConfig::SimpleConfig );
 	KConfigGroup cg = config.group("File Information");
 	data.formatVersion = cg.readEntry("version", KexiDBShortcutFile_version);
 
@@ -171,7 +171,7 @@ bool KexiDBShortcutFile::saveProjectData(const KexiProjectData& data,
 #else
 #pragma WARNING( KexiDBShortcutFile::saveProjectData: how about readOnly arg? )
 #endif
-	KConfig config(d->fileName, KConfig::OnlyLocal );
+	KConfig config(d->fileName, KConfig::SimpleConfig );
 	KConfigGroup cg = config.group("File Information");
 
 	uint realFormatVersion = data.formatVersion;

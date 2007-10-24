@@ -106,7 +106,7 @@ void AFChoose::setupTabs()
                         QString icon=config.readEntry("Icon");
                         if(icon[0]!='/') // allow absolute paths for icons
                             icon=path + icon;
-                        QString filename=config.readPathEntry("URL");
+                        QString filename=config.readPathEntry("URL", QString());
                         if(filename[0]!='/') {
                             if(filename.left(6)=="file:/") // I doubt this will happen
                                 filename=filename.right(filename.length()-6);

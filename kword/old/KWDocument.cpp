@@ -408,8 +408,8 @@ void KWDocument::initConfig()
   {
       config->setGroup( "Kword Path" );
       if ( config->hasKey( "expression path" ) )
-          m_personalExpressionPath = config->readPathListEntry( "expression path" );
-      setBackupPath(config->readPathEntry( "backup path" ));
+          m_personalExpressionPath = config->readPathEntry( "expression path", QStringList() );
+      setBackupPath(config->readPathEntry( "backup path", QString() ));
   }
 
   // Load personal dict

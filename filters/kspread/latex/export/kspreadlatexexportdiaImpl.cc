@@ -68,7 +68,7 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 	QString value;
 	while(i < 10)
 	{
-		/*value = _config->readPathEntry( QString("Recent%1").arg(i) );
+		/*value = _config->readPathEntry( QString("Recent%1").arg(i), QString() );
 		kDebug(30522) <<"recent :" << value;
 		if(!value.isEmpty())
 		{

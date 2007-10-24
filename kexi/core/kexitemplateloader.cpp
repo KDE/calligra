@@ -94,7 +94,7 @@ KexiTemplateInfo KexiTemplateLoader::loadInfo(const QString& directory)
 	}
 	if (!QFileInfo(directory+"/info.txt").isReadable())
 		return KexiTemplateInfo();
-	KConfig infoTxt(directory+"/info.txt", KConfig::OnlyLocal);
+	KConfig infoTxt(directory+"/info.txt", KConfig::SimpleConfig);
 	KConfigGroup cg = infoTxt.group(QString());
 
 	KexiTemplateInfo info;

@@ -384,7 +384,7 @@ void KPrDocument::initConfig()
     {
         config->setGroup( "Kpresenter Path" );
         m_picturePath=config->readPathEntry( "picture path",KGlobalSettings::documentPath());
-        setBackupPath(config->readPathEntry( "backup path" ));
+        setBackupPath(config->readPathEntry( "backup path", QString() ));
     }
 
     // Load personal dict

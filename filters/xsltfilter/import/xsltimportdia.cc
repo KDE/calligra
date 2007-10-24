@@ -61,7 +61,7 @@ XSLTImportDia::XSLTImportDia(KoStore* out, const QByteArray &format, QWidget* pa
 	QString value;
 	while(i < 10)
 	{
-		value = grp.readPathEntry( QString("Recent%1").arg(i) );
+		value = grp.readPathEntry( QString("Recent%1").arg(i), QString() );
 		kDebug() <<"recent :" << value;
 		if(!value.isEmpty())
 		{

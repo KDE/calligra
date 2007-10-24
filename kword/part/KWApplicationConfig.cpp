@@ -105,9 +105,9 @@ void KWApplicationConfig::load(KWDocument *document) {
     if(path.exists())
     {
 //        if ( path.hasKey( "expression path" ) )
-//            m_personalExpressionPath = path.readPathListEntry( "expression path" );
+//            m_personalExpressionPath = path.readPathEntry( "expression path", QStringList() );
         if(document)
-            document->setBackupPath(path.readPathEntry( "backup path" ));
+            document->setBackupPath(path.readPathEntry( "backup path", QString() ));
     }
 
     // Load personal dict
