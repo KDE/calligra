@@ -64,7 +64,7 @@ KSpreadLatexExportDiaImpl::KSpreadLatexExportDiaImpl(KoStore* in, QWidget* paren
 
 	/* Recent files */
 	_config = new KConfig("kspreadlatexexportdialog");
-	_config->setGroup( "KSpread latex export filter" );
+	//_config->setGroup( "KSpread latex export filter" );
 	QString value;
 	while(i < 10)
 	{
