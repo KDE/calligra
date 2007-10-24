@@ -180,7 +180,7 @@ void DependencyLinkItemBase::createPath( const QPointF &sp, int starttype, const
 DependencyLinkItem::DependencyLinkItem( DependencyNodeItem *predecessor, DependencyNodeItem *successor, Relation *rel, QGraphicsItem *parent )
     : DependencyLinkItemBase( predecessor, successor, rel, parent )
 {
-    setZValue( 500.0 );
+    setZValue( 100.0 );
     setAcceptsHoverEvents( true );
     //kDebug()<<predecessor->text()<<"("<<predecessor->column()<<") -"<<successor->text();
     predItem->addChildRelation( this );
@@ -377,7 +377,7 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
 {
     setCursor( Qt::UpArrowCursor );
     setAcceptsHoverEvents( true );
-    setZValue( 200.0 );
+    setZValue( 500.0 );
 }
 
 DependencyScene *DependencyConnectorItem::itemScene() const
@@ -447,7 +447,8 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     m_node( node ),
     m_parent( 0 )
 {
-    setZValue( 100.0 );
+    setAcceptsHoverEvents( true );
+    setZValue( 400.0 );
     setParentItem( parent );
     m_start = new DependencyConnectorItem( DependencyNodeItem::Start, this );
     m_finish = new DependencyConnectorItem( DependencyNodeItem::Finish, this );
@@ -1092,6 +1093,7 @@ void DependencyView::slotNodeAdded( Node *node )
     if ( item == 0 ) {
         item = createItem( node );
     } else {
+        kDebug()<<node->name();
         itemScene()->setItemVisible( item, true );
     }
 }
@@ -1100,6 +1102,7 @@ void DependencyView::slotNodeRemoved( Node *node )
 {
     DependencyNodeItem *item = findItem( node );
     if ( item ) {
+        kDebug()<<node->name();
         itemScene()->setItemVisible( item, false );
         //kDebug();
     } else kDebug()<<"Node does not exist!";
