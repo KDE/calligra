@@ -45,7 +45,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 #include <kdebug.h>
-
+#include <QDoubleSpinBox>
 #include <QtGui/QLabel>
 #include <QtGui/QWidget>
 #include <QtGui/QDockWidget>
@@ -79,9 +79,9 @@ public:
     KoUnitDoubleSpinBox * y;
     KoUnitDoubleSpinBox * width;
     KoUnitDoubleSpinBox * height;
-    KDoubleSpinBox * rotate;
-    KDoubleSpinBox * shearX;
-    KDoubleSpinBox * shearY;
+    QDoubleSpinBox * rotate;
+    QDoubleSpinBox * shearX;
+    QDoubleSpinBox * shearY;
 
     QLabel * xLabel;
     QLabel * yLabel;
@@ -145,19 +145,33 @@ KarbonTransformDocker::KarbonTransformDocker()
 
     //ROTATE:
     d->rLabel = new QLabel( i18n ( "R:" ), mainWidget );
-    d->rotate = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
+    d->rotate = new QDoubleSpinBox( mainWidget );
+    d->rotate->setMinimum (-360.0);
+    d->rotate->setMaximum (360.0);
+    d->rotate->setSingleStep(1.0);
+    d->rotate->setValue(10.0);
     d->rotate->setToolTip( i18n("Rotate actual selection") );
     connect( d->rotate, SIGNAL( editingFinished() ), this, SLOT( rotate() ) );
 
     //X-Shear:
     d->sxLabel = new QLabel( i18n ( "SX:" ), mainWidget );
-    d->shearX = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
+    d->shearX = new QDoubleSpinBox( mainWidget );
+    d->shearX->setMinimum (-360.0);
+    d->shearX->setMaximum (360.0);
+    d->shearX->setSingleStep(1.0);
+    d->shearX->setValue(10.0);
+
     d->shearX->setToolTip( i18n("Shear actual selection in x-direction") );
     connect( d->shearX, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
 
     //Y-Shear:
     d->syLabel = new QLabel( i18n ( "SY:" ), mainWidget );
-    d->shearY = new KDoubleSpinBox( -360.0, 360.0, 1.0, 10.0, mainWidget, 1 );
+    d->shearY = new QDoubleSpinBox( mainWidget );
+    d->shearY->setMinimum (-360.0);
+    d->shearY->setMaximum (360.0);
+    d->shearY->setSingleStep(1.0);
+    d->shearY->setValue(10.0);
+
     d->shearY->setToolTip( i18n("Shear actual selection in y-direction") );
     connect( d->shearY, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
 

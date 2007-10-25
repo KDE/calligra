@@ -31,7 +31,7 @@
 #include <KoDockFactory.h>
 #include <QtGui/QDockWidget>
 
-class KDoubleSpinBox;
+class QDoubleSpinBox;
 class KoUnitDoubleSpinBox;
 class KoDockFactory;
 
