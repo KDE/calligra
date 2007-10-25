@@ -124,6 +124,7 @@ public:
     ViewBase *createDependencyEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createPertEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
+    ViewBase *createTaskView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createMilestoneGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createResourceAppointmentsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );

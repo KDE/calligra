@@ -381,6 +381,8 @@ void View::createViews()
                         v = createScheduleHandler( cat, tag, name, tip );
                     } else if ( type == "KPlato::TaskStatusView" ) {
                         v = createTaskStatusView( cat, tag, name, tip );
+                    } else if ( type == "KPlato::TaskView" ) {
+                        v = createTaskView( cat, tag, name, tip );
                     } else if ( type == "KPlato::GanttView" ) {
                         v = createGanttView( cat, tag, name, tip );
                     } else if ( type == "KPlato::MilestoneGanttView" ) {
@@ -432,6 +434,8 @@ void View::createViews()
     
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
         createTaskStatusView( cat, "TaskStatusView", i18n( "Task Status" ), i18n( "View task progress information" ) );
+        
+        createTaskView( cat, "TaskView", i18n( "Task Execution" ), i18n( "View task execution information" ) );
         
         createGanttView( cat, "GanttView", i18n( "Gantt" ), i18n( "View gantt chart" ) );
         
@@ -664,6 +668,25 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
     taskstatusview->updateReadWrite( m_readWrite );
     taskstatusview->draw( getProject() );
     return taskstatusview;
+}
+
+ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+{
+    TaskView *v = new TaskView( getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "task_view" );
+    i->setToolTip( 0, tip );
+
+    v->draw( getProject() );
+
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
+    
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    v->updateReadWrite( m_readWrite );
+    return v;
 }
 
 ViewBase *View::createGanttView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )

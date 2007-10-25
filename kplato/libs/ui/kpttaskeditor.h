@@ -152,6 +152,58 @@ private:
     KAction *actionOptions;
 };
 
+class KPLATOUI_EXPORT TaskView : public ViewBase
+{
+    Q_OBJECT
+public:
+    TaskView( KoDocument *part, QWidget *parent );
+
+    void setupGui();
+    virtual void draw( Project &project );
+    virtual void draw();
+
+    virtual Node *currentNode() const;
+    QList<Node*> selectedNodes() const ;
+    Node *selectedNode() const;
+
+    virtual void updateReadWrite( bool readwrite );
+
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
+signals:
+    void requestPopupMenu( const QString&, const QPoint & );
+    void openNode();
+
+public slots:
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
+
+    void slotCurrentScheduleManagerChanged( ScheduleManager *sm );
+
+protected:
+    void updateActionsEnabled( bool on );
+    int selectedNodeCount() const;
+
+private slots:
+    void slotSelectionChanged( const QModelIndexList );
+    void slotCurrentChanged( const QModelIndex&, const QModelIndex& );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
+
+    void slotEnableActions();
+
+    void slotOptions();
+
+    void slotHeaderContextMenuRequested( const QPoint& );
+
+private:
+    NodeTreeView *m_view;
+
+    // View options context menu
+    KAction *actionOptions;
+};
 
 } //namespace KPlato
 

@@ -73,9 +73,6 @@ NodeTreeView::NodeTreeView( KoDocument *part, QWidget *parent )
             setItemDelegateForColumn( c, delegate );
         }
     }
-    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0 << 18 << -1;
-    hideColumns( lst1, lst2 );
 }
 
 void NodeTreeView::slotActivated( const QModelIndex index )
@@ -94,6 +91,10 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     m_view = new NodeTreeView( part, this );
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0 << 18 << -1;
+    m_view->hideColumns( lst1, lst2 );
+
 
     m_view->setDragDropMode( QAbstractItemView::InternalMove );
     m_view->setDropIndicatorShown( true );
@@ -426,6 +427,193 @@ void TaskEditor::saveContext( QDomElement &context ) const
 {
    m_view->saveContext( context );
 }
+
+//-----------------------------------
+TaskView::TaskView( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent )
+{
+    setupGui();
+
+    QVBoxLayout * l = new QVBoxLayout( this );
+    l->setMargin( 0 );
+    m_view = new NodeTreeView( part, this );
+    l->addWidget( m_view );
+    //m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0 << 1 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 16<< 18 << 19 << 20 << 21 << 22 << 23 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 33 << 34 << 35 <<  36 << 39 << -1;
+    m_view->hideColumns( lst1, lst2 );
+    
+    m_view->slaveView()->mapToSection( 37, 1 );
+    m_view->slaveView()->mapToSection( 38, 2 );
+    m_view->slaveView()->mapToSection( 2, 3 );
+    m_view->slaveView()->mapToSection( 3, 4 );
+    m_view->slaveView()->mapToSection( 17, 5 );
+
+    m_view->setDragDropMode( QAbstractItemView::InternalMove );
+    m_view->setDropIndicatorShown( false );
+    m_view->setDragEnabled ( true );
+    m_view->setAcceptDrops( false );
+    m_view->setAcceptDropsOnView( false );
+    
+    connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
+
+    connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
+    
+    connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
+
+    connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+}
+
+void TaskView::updateReadWrite( bool rw )
+{
+    m_view->setReadWrite( rw );
+}
+
+void TaskView::draw( Project &project )
+{
+    m_view->setProject( &project );
+}
+
+void TaskView::draw()
+{
+}
+
+void TaskView::setGuiActive( bool activate )
+{
+    kDebug()<<activate;
+    updateActionsEnabled( true );
+    ViewBase::setGuiActive( activate );
+    if ( activate && !m_view->selectionModel()->currentIndex().isValid() ) {
+        m_view->selectionModel()->setCurrentIndex(m_view->model()->index( 0, 0 ), QItemSelectionModel::NoUpdate);
+    }
+}
+
+void TaskView::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
+{
+    kDebug()<<curr.row()<<","<<curr.column();
+    slotEnableActions();
+}
+
+void TaskView::slotSelectionChanged( const QModelIndexList list)
+{
+    kDebug()<<list.count();
+    slotEnableActions();
+}
+
+int TaskView::selectedNodeCount() const
+{
+    QItemSelectionModel* sm = m_view->selectionModel();
+    return sm->selectedRows().count();
+}
+
+QList<Node*> TaskView::selectedNodes() const {
+    QList<Node*> lst;
+    QItemSelectionModel* sm = m_view->selectionModel();
+    if ( sm == 0 ) {
+        return lst;
+    }
+    foreach ( QModelIndex i, sm->selectedRows() ) {
+        Node * n = m_view->itemModel()->node( i );
+        if ( n != 0 && n->type() != Node::Type_Project ) {
+            lst.append( n );
+        }
+    }
+    return lst;
+}
+
+Node *TaskView::selectedNode() const
+{
+    QList<Node*> lst = selectedNodes();
+    if ( lst.count() != 1 ) {
+        return 0;
+    }
+    return lst.first();
+}
+
+Node *TaskView::currentNode() const {
+    Node * n = m_view->itemModel()->node( m_view->selectionModel()->currentIndex() );
+    if ( n == 0 || n->type() == Node::Type_Project ) {
+        return 0;
+    }
+    return n;
+}
+
+void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
+{
+/*    Node *node = m_view->itemModel()->node( index );
+    if ( node == 0 ) {
+        return;
+    }
+    kDebug()<<node->name()<<" :"<<pos;
+    QString name;
+    switch ( node->type() ) {
+        case Node::Type_Task:
+        case Node::Type_Milestone:
+            name = "task_popup";
+            break;
+        case Node::Type_Summarytask:
+            name = "summarytask_popup";
+            break;
+        default:
+            name = "node_popup";
+    }
+    kDebug()<<name;
+    emit requestPopupMenu( name, pos );*/
+}
+
+void TaskView::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
+{
+    //kDebug()<<endl;
+    static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );
+}
+
+void TaskView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
+void TaskView::slotEnableActions()
+{
+    updateActionsEnabled( true );
+}
+
+void TaskView::updateActionsEnabled( bool on )
+{
+    
+}
+
+void TaskView::setupGui()
+{
+    KActionCollection *coll = actionCollection();
+    
+    // Add the context menu actions for the view options
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
+
+void TaskView::slotOptions()
+{
+    kDebug();
+    ItemViewSettupDialog dlg( m_view->slaveView() );
+    dlg.exec();
+}
+
+bool TaskView::loadContext( const KoXmlElement &context )
+{
+    kDebug()<<endl;
+    return m_view->loadContext( context );
+}
+
+void TaskView::saveContext( QDomElement &context ) const
+{
+    m_view->saveContext( context );
+}
+
 
 } // namespace KPlato
 

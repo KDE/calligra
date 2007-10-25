@@ -75,6 +75,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Dependency Editor" )
             << i18n( "Schedule Handler" )
             << i18n( "Task Status" )
+            << i18n( "Task View" )
             << i18n( "Gantt View" )
             << i18n( "Milestone Gantt View" )
             << i18n( "Resource Assignments" )
@@ -125,22 +126,25 @@ bool AddViewPanel::ok()
         case 6: // Task status
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 7: // Gantt View
+        case 7: // Task status
+            m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 8: // Gantt View
             m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 8: // Milestone Gantt View
+        case 9: // Milestone Gantt View
             m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 9: // Resource Assignments
+        case 10: // Resource Assignments
             m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 10: // Cost Breakdown
+        case 11: // Cost Breakdown
             m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 11: // Performance Chart
+        case 12: // Performance Chart
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 12: // Tasks by Resources
+        case 13: // Tasks by Resources
             m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
         default:
