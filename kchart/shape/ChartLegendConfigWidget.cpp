@@ -41,10 +41,30 @@ using namespace KChart;
 class ChartLegendConfigWidget::Private
 {
 public:
+    Private();
+    ~Private();
+
     ChartShape                  *chart;
     Ui::ChartLegendConfigWidget  ui;
     QButtonGroup                *positionButtonGroup;
+    int                          lastHorizontalAlignment;
+    int                          lastVerticalAlignment;
+    KDChart::Position            fixedPosition;
+    KDChart::Position            lastFixedPosition;
 };
+
+ChartLegendConfigWidget::Private::Private()
+{
+    lastHorizontalAlignment = 1; // Qt::AlignCenter
+    lastVerticalAlignment   = 1; // Qt::AlignCenter
+    fixedPosition           = KDChart::Position::East;
+    lastFixedPosition       = KDChart::Position::East;
+}
+
+ChartLegendConfigWidget::Private::~Private()
+{
+    delete positionButtonGroup;
+}
 
 const int NUM_FIXED_POSITIONS = 8;
 
@@ -101,9 +121,11 @@ void ChartLegendConfigWidget::setupUi()
     d->ui.orientation->addItem( i18n( "Vertical" ), Qt::Vertical );
     d->ui.orientation->setCurrentIndex( 1 );
 
-    d->ui.alignment->addItem( i18n( "Left" ), Qt::AlignLeft );
+    d->ui.alignment->addItem( i18n( "Top" ), Qt::AlignTop );
     d->ui.alignment->addItem( i18n( "Center" ), Qt::AlignCenter );
-    d->ui.alignment->addItem( i18n( "Right" ), Qt::AlignRight );
+    d->ui.alignment->addItem( i18n( "Bottom" ), Qt::AlignBottom );
+
+    d->ui.alignment->setCurrentIndex( 1 );
 
     d->ui.font->setSampleText( i18n( "ABC" ) );
     
@@ -134,11 +156,20 @@ void ChartLegendConfigWidget::setLegendOrientation( int boxEntryIndex )
 
 void ChartLegendConfigWidget::setLegendAlignment( int boxEntryIndex )
 {
+    if (    d->fixedPosition == KDChart::Position::North
+         || d->fixedPosition == KDChart::Position::South ) {
+        d->lastHorizontalAlignment = d->ui.alignment->currentIndex();
+     } else if (   d->fixedPosition == KDChart::Position::East
+                || d->fixedPosition == KDChart::Position::West ) {
+        d->lastVerticalAlignment = d->ui.alignment->currentIndex();
+    }
     emit legendAlignmentChanged( ( Qt::Alignment ) ( d->ui.alignment->itemData( boxEntryIndex ).toInt() ) );
 }
 
 void ChartLegendConfigWidget::setLegendFixedPosition( int buttonGroupIndex )
 {
+    d->lastFixedPosition = d->fixedPosition;
+    d->fixedPosition = buttonIndexToFixedPosition[ buttonGroupIndex ];
     emit legendFixedPositionChanged( buttonIndexToFixedPosition[ buttonGroupIndex ] );
 }
 
@@ -152,14 +183,36 @@ void ChartLegendConfigWidget::updateFixedPosition( const KDChart::Position posit
         d->ui.alignment->setItemData( 1, Qt::AlignCenter );
         d->ui.alignment->setItemText( 2, i18n( "Right" ) );
         d->ui.alignment->setItemData( 2, Qt::AlignRight );
+        // Set the alignment to the one last used for horizontal legend alignment
+        if (    d->lastFixedPosition != KDChart::Position::North
+             && d->lastFixedPosition != KDChart::Position::South ) {
+            // Make sure that the combobox gets updated. Since we changed the values of the entries,
+            // same index doesn't mean same value, though it will think so. Solution: Select no entry first
+            d->ui.alignment->blockSignals( true );
+            d->ui.alignment->setCurrentIndex( -1 );
+            d->ui.alignment->blockSignals( false );
+
+            d->ui.alignment->setCurrentIndex( d->lastHorizontalAlignment );
+        }
     } else if (    position == KDChart::Position::East
                 || position == KDChart::Position::West ) {
         d->ui.alignment->setEnabled( true );
         d->ui.alignment->setItemText( 0, i18n( "Top" ) );
         d->ui.alignment->setItemData( 0, Qt::AlignTop );
-        d->ui.alignment->setItemData( 1, Qt::AlignVCenter );
+        d->ui.alignment->setItemData( 1, Qt::AlignCenter );
         d->ui.alignment->setItemText( 2, i18n( "Bottom" ) );
         d->ui.alignment->setItemData( 2, Qt::AlignBottom );
+        // Set the alignment to the one last used for vertical legend alignment
+        if (    d->lastFixedPosition != KDChart::Position::East
+             && d->lastFixedPosition != KDChart::Position::West ) {
+            // Make sure that the combobox gets updated. Since we changed the values of the entries,
+            // same index doesn't mean same value, though it will think so. Solution: Select no entry first
+            d->ui.alignment->blockSignals( true );
+            d->ui.alignment->setCurrentIndex( -1 );
+            d->ui.alignment->blockSignals( false );
+
+            d->ui.alignment->setCurrentIndex( d->lastVerticalAlignment );
+        }
     } else {
         d->ui.alignment->setEnabled( false );
     }
