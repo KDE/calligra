@@ -15,6 +15,7 @@ set(kplatomodels_LIB_SRCS
     kptnodeitemmodel.cpp
     kptdurationwidget.cpp
     kptdurationspinbox.cpp
+    kpttaskstatusmodel.cpp
 )
 
 kde4_add_ui_files(kplatomodels_LIB_SRCS

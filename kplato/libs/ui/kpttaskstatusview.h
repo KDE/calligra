@@ -22,8 +22,8 @@
 
 #include "kplatoui_export.h"
 
-#include "kptitemmodelbase.h"
-#include "kptnodeitemmodel.h"
+#include "kptitemmodelbase.h" //DoubleTreeViewBase
+
 #include "kptviewbase.h"
 
 class KoDocument;
@@ -36,82 +36,10 @@ namespace KPlato
 class Project;
 class Node;
 class Task;
+class ScheduleManager;
+class TaskStatusItemModel;
 
 typedef QList<Node*> NodeList;
-
-class KPLATOUI_EXPORT TaskStatusItemModel : public ItemModelBase
-{
-    Q_OBJECT
-public:
-    explicit TaskStatusItemModel( KoDocument *part, QObject *parent = 0 );
-    ~TaskStatusItemModel();
-    
-    virtual void setProject( Project *project );
-    void setManager( ScheduleManager *sm );
-    
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex index( const Node *node ) const;
-    virtual QModelIndex index( const NodeList *lst ) const;
-    
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
-    
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-
-    
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    
-    virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
-    virtual QStringList mimeTypes () const;
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
-
-    NodeList *list( const QModelIndex &index ) const;
-    Node *node( const QModelIndex &index ) const;
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
-    
-    NodeList nodeList( QDataStream &stream );
-    static NodeList removeChildNodes( const NodeList nodes );
-    bool dropAllowed( Node *on, const QMimeData *data );
-    
-    void clear();
-    void refresh();
-    
-    void setNow( const QDate &date ) { m_nodemodel.setNow( date ); }
-    void setPeriod( int days ) { m_period = days; }
-    
-protected slots:
-    void slotAboutToBeReset();
-    void slotReset();
-
-    void slotNodeChanged( Node* );
-    void slotNodeToBeInserted( Node *node, int row );
-    void slotNodeInserted( Node *node );
-    void slotNodeToBeRemoved( Node *node );
-    void slotNodeRemoved( Node *node );
-
-protected:
-    QVariant alignment( int column ) const;
-    
-    QVariant name( int row, int role ) const;
-
-private:
-    NodeModel m_nodemodel;
-    QStringList m_topNames;
-    QList<NodeList*> m_top;
-    NodeList m_notstarted;
-    NodeList m_running;
-    NodeList m_finished;
-    NodeList m_upcomming;
-    
-    long m_id; // schedule id
-    int m_period;
-};
 
 
 class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
@@ -122,10 +50,10 @@ public:
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
-    TaskStatusItemModel *itemModel() const { return static_cast<TaskStatusItemModel*>( model() ); }
+    TaskStatusItemModel *itemModel() const;
     
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
+    Project *project() const;
+    void setProject( Project *project );
     
 protected slots:
     void slotActivated( const QModelIndex index );
