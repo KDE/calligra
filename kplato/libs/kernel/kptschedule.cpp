@@ -1392,6 +1392,25 @@ void ScheduleManager::saveXML( QDomElement &element ) const
 
 }
 
+void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node ) const
+{
+    QDomElement el = element.ownerDocument().createElement( "plan" );
+    element.appendChild( el );
+    el.setAttribute( "name", m_name );
+    el.setAttribute( "distribution", m_usePert );
+    el.setAttribute( "overbooking", m_allowOverbooking );
+    if ( m_expected && ! m_expected->isDeleted() ) {
+        QDomElement schs = el.ownerDocument().createElement( "schedule" );
+        el.appendChild( schs );
+        m_expected->saveXML( schs );
+        Schedule *s = node.findSchedule( m_expected->id() );
+        if ( s && ! s->isDeleted() ) {
+            s->saveAppointments( schs );
+        }
+    }
+}
+
+
 #ifndef NDEBUG
 void Schedule::printDebug( const QString& indent )
 {

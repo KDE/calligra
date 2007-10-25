@@ -354,6 +354,37 @@ void Task::saveAppointments(QDomElement &element, long id) const {
     }
 }
 
+void Task::saveWorkPackageXML(QDomElement &element, long id )  const
+{
+    QDomElement me = element.ownerDocument().createElement("task");
+    element.appendChild(me);
+
+    me.setAttribute("id", m_id);
+    me.setAttribute("name", m_name);
+    me.setAttribute("leader", m_leader);
+    me.setAttribute("description", m_description);
+
+    me.setAttribute("scheduling",constraintToString());
+    me.setAttribute("constraint-starttime",m_constraintStartTime.toString( KDateTime::ISODate ));
+    me.setAttribute("constraint-endtime",m_constraintEndTime.toString( KDateTime::ISODate ));    
+
+    me.setAttribute("startup-cost", m_startupCost);
+    me.setAttribute("shutdown-cost", m_shutdownCost);
+    
+    me.setAttribute("wbs", m_wbs);
+    
+    m_estimate->save(me);
+
+    m_completion.saveXML( me );
+    
+    if ( m_schedules.contains( id ) && ! m_schedules[ id ]->isDeleted() ) {
+        QDomElement schs = me.ownerDocument().createElement("schedules");
+        me.appendChild(schs);
+        m_schedules[ id ]->saveXML( schs );
+    }
+    m_documents.save( me ); // TODO: copying documents
+}
+
 EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
     //kDebug()<<m_name;
     Schedule *s = schedule( id );

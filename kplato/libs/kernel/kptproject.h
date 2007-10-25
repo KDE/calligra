@@ -70,7 +70,7 @@ class KPLATOKERNEL_EXPORT Project : public Node
 {
     Q_OBJECT
 public:
-    Project( Node *parent = 0 );
+    explicit Project( Node *parent = 0 );
     ~Project();
 
     /// Returns the node type. Can be Type_Project or Type_Subproject.
@@ -103,6 +103,9 @@ public:
 
     virtual bool load( KoXmlElement &element, XMLLoaderObject &status );
     virtual void save( QDomElement &element ) const;
+    
+    /// Save a workpackage document containing @node with schedule identity @id
+    void saveWorkPackageXML( QDomElement &element, const Node *node, long id ) const;
 
     /**
      * Add the node @p task to the project, after node @p position
@@ -345,14 +348,6 @@ public:
 
     Accounts &accounts() { return m_accounts; }
 
-    /// Set current view schedule identity to id.
-    //void setCurrentViewScheduleId( long id );
-    /**
-     * Returns the id of the current view schedule.
-     * This is meant to be used by views when fetching data from nodes.
-     */
-    //long currentViewScheduleId() const { return m_currentViewScheduleId; }
-
     /**
      * Set current schedule to schedule with identity id, for me and my children
      * Note that this is used (and may be changed) when calculating schedules
@@ -367,6 +362,7 @@ public:
     /// Set parent schedule for my children
     virtual void setParentSchedule( Schedule *sch );
     
+    ScheduleManager *scheduleManager( long id ) const;
     QString uniqueScheduleName() const;
     ScheduleManager *createScheduleManager();
     ScheduleManager *createScheduleManager( const QString name );
@@ -547,7 +543,6 @@ protected:
 
 private:
     void init();
-//    long m_currentViewScheduleId;
     
     QHash<QString, ResourceGroup*> resourceGroupIdDict;
     QHash<QString, Resource*> resourceIdDict;

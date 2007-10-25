@@ -129,6 +129,7 @@ namespace KPlato
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
         m_currentEstimateType( Estimate::Use_Expected ),
+        m_scheduleActionGroup( new QActionGroup( this ) ),
         m_manager( 0 ),
         m_readWrite( false )
 {
@@ -157,6 +158,7 @@ View::View( Part* part, QWidget* parent )
     m_tab = new QStackedWidget( m_sp );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     // Add sub views
     createViews();
     // Add child documents
@@ -179,10 +181,6 @@ View::View( Part* part, QWidget* parent )
     actionViewSelector  = new KToggleAction(i18n("Show Selector"), this);
     actionCollection()->addAction("view_show_selector", actionViewSelector );
     connect( actionViewSelector, SIGNAL( triggered( bool ) ), SLOT( slotViewSelector( bool ) ) );
-
-    m_scheduleActionGroup = new QActionGroup( this );
-    m_scheduleActionGroup->setExclusive( true );
-    connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
 
     actionViewResourceAppointments  = new KToggleAction(i18n("Show allocations"), this);
     actionCollection()->addAction("view_resource_appointments", actionViewResourceAppointments );
@@ -249,6 +247,10 @@ View::View( Part* part, QWidget* parent )
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
+    
+    actionTaskWorkpackage  = new KAction(KIcon( "edit" ), i18n("Generate Work Package"), this);
+    actionCollection()->addAction("task_workpackage", actionTaskWorkpackage );
+    connect( actionTaskWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotTaskWorkpackage() ) );
 
     actionEditResource  = new KAction(KIcon( "edit" ), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
@@ -309,6 +311,8 @@ View::View( Part* part, QWidget* parent )
     
     connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
     
+    connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
+    
     //kDebug()<<" end";
 }
 
@@ -316,7 +320,6 @@ View::~View()
 {
     removeStatusBarItem( m_estlabel );
     delete m_estlabel;
-    delete m_scheduleActionGroup;
 }
 
 ViewAdaptor* View::dbusObject()
@@ -1304,11 +1307,14 @@ void View::slotOpenNode( Node *node )
 
 ScheduleManager *View::currentScheduleManager() const
 {
-/*    Schedule *s = getProject().findSchedule( getProject().currentViewScheduleId() );
-    if ( s == 0 ) {*/
-        return 0;
-/*    }
-    return s->manager();*/
+    Schedule *s = m_scheduleActions.value( m_scheduleActionGroup->checkedAction() );
+    return s == 0 ? 0 : s->manager();
+}
+
+long View::currentScheduleId() const
+{
+    Schedule *s = m_scheduleActions.value( m_scheduleActionGroup->checkedAction() );
+    return s == 0 ? -1 : s->id();
 }
 
 void View::slotTaskProgress()
@@ -1424,6 +1430,16 @@ void View::slotDeleteTask()
 {
     //kDebug();
     return slotDeleteTask( currentTask() );
+}
+
+void View::slotTaskWorkpackage()
+{
+    //kDebug();
+    Node *node = currentTask();
+    if ( node == 0 ) {
+        return;
+    }
+    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, currentScheduleId() );
 }
 
 void View::slotIndentTask()

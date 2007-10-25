@@ -33,6 +33,7 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
+#include <QApplication>
 #include <qpainter.h>
 #include <qfileinfo.h>
 #include <QTimer>
@@ -214,6 +215,143 @@ QDomDocument Part::saveXML()
     }
     return document;
 }
+
+QDomDocument Part::saveWorkPackageXML( const Node *node, long id )
+{
+    kDebug();
+    QDomDocument document( "kplato" );
+
+    document.appendChild( document.createProcessingInstruction(
+                "xml",
+    "version=\"1.0\" encoding=\"UTF-8\"" ) );
+
+    QDomElement doc = document.createElement( "kplatowork" );
+    doc.setAttribute( "editor", "KPlatoWork" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
+    doc.setAttribute( "version", "0.1" );
+    document.appendChild( doc );
+
+    // Save the project
+    m_project->saveWorkPackageXML( doc, node, id );
+    
+    if ( ! children().isEmpty() ) {
+        QDomElement el = document.createElement( "objects" );
+        foreach ( KoDocumentChild *ch, children() ) {
+            if ( ch->isDeleted() ) {
+                continue;
+            }
+            QDomElement e = ch->save( document, false );
+            el.appendChild( e );
+        }
+        if ( el.childNodes().count() > 0 ) {
+            doc.appendChild( el );
+        }
+    }
+    return document;
+}
+
+bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id )
+{
+    QDomDocument doc = saveWorkPackageXML( node, id );
+    // Save to buffer
+    QByteArray s = doc.toByteArray(); // utf8 already
+    dev->open( QIODevice::WriteOnly );
+    int nwritten = dev->write( s.data(), s.size() );
+    if ( nwritten != (int)s.size() )
+        kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size();
+    return nwritten == (int)s.size();
+}
+
+bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id  )
+{
+    kDebug() <<"Saving to store";
+
+    KoStore::Backend backend = KoStore::Zip;
+#ifdef QCA2
+/*    if ( d->m_specialOutputFlag == SaveEncrypted ) {
+        backend = KoStore::Encrypted;
+        kDebug() <<"Saving using encrypted backend.";
+    }*/
+#endif
+
+    QByteArray mimeType = "application/x-vnd.kde.kplato.work";
+    kDebug() <<"MimeType=" << mimeType;
+    
+    KoStore* store = KoStore::createStore( file, KoStore::Write, mimeType, backend );
+/*    if ( d->m_specialOutputFlag == SaveEncrypted && !d->m_password.isNull( ) ) {
+        store->setPassword( d->m_password );
+    }*/
+    if ( store->bad() ) {
+        setErrorMessage( i18n( "Could not create the workpackage file for saving" ) ); // more details needed?
+        delete store;
+        return false;
+    }
+    // Tell KoStore not to touch the file names
+    store->disallowNameExpansion();
+
+    if ( store->open( "root" ) ) {
+        KoStoreDevice dev( store );
+        if ( !saveWorkPackageToStream( &dev, node, id ) || !store->close() ) {
+            kDebug(30003) <<"saveToStream failed";
+            delete store;
+            return false;
+        }
+    } else {
+        setErrorMessage( i18n( "Not able to write '%1'. Partition full?", QString( "maindoc.xml") ) );
+        delete store;
+        return false;
+    }
+//     if ( store->open( "documentinfo.xml" ) )
+//     {
+//         QDomDocument doc = d->m_docInfo->save();
+//         KoStoreDevice dev( store );
+// 
+//         QByteArray s = doc.toByteArray(); // this is already Utf8!
+//         (void)dev.write( s.data(), s.size() );
+//         (void)store->close();
+//     }
+// 
+//     if ( store->open( "preview.png" ) )
+//     {
+//         // ### TODO: missing error checking (The partition could be full!)
+//         savePreview( store );
+//         (void)store->close();
+//     }
+
+    kDebug(30003) <<"Saving done of url:" << file;
+    if ( !store->finalize() ) {
+        delete store;
+        return false;
+    }
+    // Success
+    delete store;
+
+    return true;
+}
+
+bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  )
+{
+    kDebug()<<_url;
+
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+
+    emit statusBarMessage( i18n("Saving...") );
+    bool ret = false;
+    bool suppressErrorDialog = false;
+
+    ret = saveWorkPackageFormat( _url.url(), node, id );
+
+
+    QApplication::restoreOverrideCursor();
+    if ( ! ret ) {
+        if ( !suppressErrorDialog ) {
+            showSavingErrorDialog();
+        }
+    }
+    emit clearStatusBarMessage();
+    return ret;
+}
+
 
 void Part::paintContent( QPainter &, const QRect &)
 {

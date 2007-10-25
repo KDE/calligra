@@ -23,6 +23,9 @@
 #include "view.h"
 #include "factory.h"
 
+#include "kptnode.h"
+#include "kptproject.h"
+
 #include <KoZoomHandler.h>
 #include <KoStore.h>
 #include <KoXmlReader.h>
@@ -38,38 +41,49 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <k3command.h>
-#include <k3command.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
 
 #include <KoGlobal.h>
 
-#define CURRENT_SYNTAX_VERSION "0.6"
+#define CURRENT_SYNTAX_VERSION "0.1"
+
+using namespace KPlato;
 
 namespace KPlatoWork
 {
 
 Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
-        : KoDocument( parentWidget, parent, singleViewMode )
+        : KoDocument( parentWidget, parent, singleViewMode ),
+        m_project( 0 ), m_xmlLoader()
 {
-    m_commandHistory = new K3CommandHistory( actionCollection() );
-
     setComponentData( Factory::global() );
     setTemplateType( "kplatowork_template" );
 //     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
 //     m_config.load();
 
-    connect( m_commandHistory, SIGNAL( commandExecuted( K3Command * ) ), SLOT( slotCommandExecuted( K3Command * ) ) );
-    connect( m_commandHistory, SIGNAL( documentRestored() ), SLOT( slotDocumentRestored() ) );
-
+    setProject( new Project() ); // after config is loaded
 }
 
 Part::~Part()
 {
 //    m_config.save();
-    delete m_commandHistory; // before project, in case of dependencies...
+    delete m_project;
 }
+
+void Part::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+        delete m_project;
+    }
+    m_project = project;
+    if ( m_project ) {
+        connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+    }
+    emit changed();
+}
+
 
 KoView *Part::createViewInstance( QWidget *parent )
 {
@@ -123,6 +137,40 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
 #else
     int numNodes = plan.childNodesCount();
 #endif
+    if ( numNodes > 2 ) {
+        //TODO: Make a proper bitching about this
+        kDebug() <<"*** Error ***";
+        kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
+        return false;
+    }
+    emit sigProgress( 100 ); // the rest is only processing, not loading
+
+    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
+
+    m_xmlLoader.startLoad();
+    KoXmlNode n = plan.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "project" ) {
+            Project * newProject = new Project();
+            m_xmlLoader.setProject( newProject );
+            if ( newProject->load( e, m_xmlLoader ) ) {
+                // The load went fine. Throw out the old project
+                setProject( newProject );
+            } else {
+                delete newProject;
+                m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
+                //TODO add some ui here
+            }
+        } else if ( e.tagName() == "objects" ) {
+            kDebug()<<"loadObjects";
+            //loadObjects( e );
+        }
+    }
+    m_xmlLoader.stopLoad();
     emit sigProgress( 100 ); // the rest is only processing, not loading
 
     kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
@@ -130,9 +178,8 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
     // do some sanity checking on document.
     emit sigProgress( -1 );
 
-    m_commandHistory->clear();
-    m_commandHistory->documentSaved();
     setModified( false );
+    emit changed();
     return true;
 }
 
@@ -146,45 +193,25 @@ QDomDocument Part::saveXML()
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
     QDomElement doc = document.createElement( "kplato-workpackage" );
-    doc.setAttribute( "editor", "KPlatoWP" );
+    doc.setAttribute( "editor", "KPlatoWork" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato.workpackage" );
     doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Save the project
     
-    m_commandHistory->documentSaved();
     return document;
 }
-
-void Part::slotDocumentRestored()
-{
-    //kDebug();
-    setModified( false );
-}
-
 
 void Part::paintContent( QPainter &, const QRect &)
 {
     // Don't embed this app!!!
 }
 
-
-void Part::addCommand( K3Command * cmd, bool execute )
-{
-    m_commandHistory->addCommand( cmd, execute );
-}
-
-void Part::slotCommandExecuted( K3Command * )
-{
-    //kDebug();
-    setModified( true );
-}
-
 void Part::slotViewDestroyed()
 {
 }
 
-}  //KPlato namespace
+}  //KPlatoWork namespace
 
 #include "part.moc"

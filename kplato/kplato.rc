@@ -124,6 +124,8 @@
         <Action name="move_task_down"/>
         <Separator/>
         <Action name="task_progress"/>
+        <Separator/>
+        <Action name="task_workpackage"/>
     </Menu>
     <Menu name="summarytask_popup">
         <Action name="node_properties"/>

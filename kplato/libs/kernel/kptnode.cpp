@@ -574,6 +574,11 @@ QStringList Node::overbookedResources( long id ) const
     return s ? s->overbookedResources() : QStringList();
 }
 
+void Node::saveWorkPackageXML( QDomElement &, long ) const
+{
+    return;
+}
+
 void Node::saveRelations(QDomElement &element) const
 {
     QListIterator<Relation*> it(m_dependChildNodes);
@@ -822,6 +827,18 @@ QList<Appointment*> Node::appointments( long id )
         lst = s->appointments();
     return lst;
 }
+
+QList<Resource*> Node::assignedResources( long id ) const {
+    Schedule *s = schedule( id );
+    QList<Resource*> res;
+    if ( s ) {
+        foreach ( Appointment *a, s->appointments() ) {
+            res << a->resource()->resource();
+        }
+    }
+    return res;
+}
+
 
 // Appointment *Node::findAppointment(Resource *resource) {
 //     if (m_currentSchedule)

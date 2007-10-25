@@ -488,6 +488,9 @@ public:
     bool loadXML( KoXmlElement &element, XMLLoaderObject &status );
     void saveXML( QDomElement &element ) const;
     
+    /// Save a workpackage document
+    void saveWorkPackageXML( QDomElement &element, const Node &node ) const;
+            
     void scheduleChanged( MainSchedule *sch );
     
 protected:

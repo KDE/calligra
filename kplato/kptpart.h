@@ -60,7 +60,9 @@ public:
     // The load and save functions. Look in the file kplato.dtd for info
     virtual bool loadXML( QIODevice *, const KoXmlDocument &document );
     virtual QDomDocument saveXML();
-
+    /// Save a workpackage file containing @node with schedule identity @id
+    QDomDocument saveWorkPackageXML( const Node *node, long id = -1 );
+    
     bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
     bool loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * );
 
@@ -75,6 +77,10 @@ public:
     void activate( QWidget *w = 0 );
     DocumentChild *createChild( KoDocument *doc, const QRect &geometry = QRect() );
     
+    bool saveWorkPackageToStream( QIODevice * dev, const Node *node, long id );
+    bool saveWorkPackageFormat( const QString &file, const Node *node, long id  );
+    bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  );
+
 signals:
     void changed();
     

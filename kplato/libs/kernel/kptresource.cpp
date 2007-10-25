@@ -197,6 +197,21 @@ void ResourceGroup::save(QDomElement &element)  const {
     }
 }
 
+void ResourceGroup::saveWorkPackageXML( QDomElement &element, const QList<Resource*> lst ) const
+{
+    QDomElement me = element.ownerDocument().createElement( "resource-group" );
+    element.appendChild( me );
+
+    me.setAttribute( "id", m_id );
+    me.setAttribute( "name", m_name );
+
+    foreach ( Resource *r, m_resources ) {
+        if ( lst.contains( r ) ) {
+            r->save( me );
+        }
+    }
+}
+
 void ResourceGroup::initiateCalculation(Schedule &sch) {
     foreach (Resource *r, m_resources) {
         r->initiateCalculation(sch);

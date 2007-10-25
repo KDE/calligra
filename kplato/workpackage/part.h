@@ -22,12 +22,19 @@
 #ifndef KPLATOWORK_PART_H
 #define KPLATOWORK_PART_H
 
+#include "kptxmlloaderobject.h"
+
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 
 class KoView;
-class K3CommandHistory;
-class K3Command;
+
+namespace KPlato
+{
+    class Project;
+}
+
+using namespace KPlato;
 
 /// The main namespace for KPlato WorkPackage Handler
 namespace KPlatoWork
@@ -36,15 +43,23 @@ namespace KPlatoWork
 class DocumentChild;
 class View;
 
+/**
+ This part handles a work package.
+ A work package file consists of a Project node and one Task node
+ along with scheduling information and assigned resources.
+*/
+
 class Part : public KoDocument
 {
     Q_OBJECT
 
 public:
-    explicit Part( QWidget *parentWidget = 0,
-          QObject* parent = 0,
-          bool singleViewMode = false );
+    explicit Part( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
     ~Part();
+
+    void setProject( Project *project );
+    Project &getProject() { return *m_project; }
+    const Project &getProject() const { return *m_project; }
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
@@ -55,21 +70,20 @@ public:
     bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
     bool loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * );
 
-    void addCommand( K3Command * cmd, bool execute = true );
-
     //Config &config() { return m_config; }
     
+signals:
+    void changed();
+
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
 
 protected slots:
-    void slotDocumentRestored();
-    void slotCommandExecuted( K3Command * );
     void slotViewDestroyed();
     
 private:
-    K3CommandHistory *m_commandHistory;
-
+    Project *m_project;
+    XMLLoaderObject m_xmlLoader;
     //Config m_config;
 };
 

@@ -60,7 +60,6 @@ Project::Project( Node *parent )
 
 void Project::init()
 {
-//    m_currentViewScheduleId = -1;
     m_spec = KDateTime::Spec::LocalZone();
     if ( !m_spec.timeZone().isValid() ) {
         m_spec.setType( KTimeZone() );
@@ -738,13 +737,49 @@ void Project::save( QDomElement &element ) const
     }
 }
 
-// void Project::setCurrentViewScheduleId( long id )
-// {
-//     if ( id != m_currentViewScheduleId ) {
-//         m_currentViewScheduleId = id;
-//         emit currentViewScheduleIdChanged( id );
-//     }
-// }
+void Project::saveWorkPackageXML( QDomElement &element, const Node *node, long id ) const
+{
+    QDomElement me = element.ownerDocument().createElement( "project" );
+    element.appendChild( me );
+
+    me.setAttribute( "name", m_name );
+    me.setAttribute( "leader", m_leader );
+    me.setAttribute( "id", m_id );
+    me.setAttribute( "description", m_description );
+    me.setAttribute( "timezone", m_spec.timeZone().name() );
+    
+    me.setAttribute( "scheduling", constraintToString() );
+    me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
+    me.setAttribute( "end-time", m_constraintEndTime.toString( KDateTime::ISODate ) );
+
+//    m_accounts.save( me );
+
+    // save calendars
+/*    foreach ( Calendar *c, calendarIdDict.values() ) {
+        c->save( me );
+    }*/
+    // save standard worktime
+//     if ( m_standardWorktime )
+//         m_standardWorktime->save( me );
+
+    // save project resources, must be after calendars
+    QListIterator<ResourceGroup*> git( m_resourceGroups );
+    while ( git.hasNext() ) {
+        git.next() ->saveWorkPackageXML( me, node->assignedResources( id ) );
+    }
+
+    if ( node == 0 ) {
+        return;
+    }
+    node->saveWorkPackageXML( me, id );
+
+    ScheduleManager *sm = scheduleManager( id );
+    if ( sm ) {
+        QDomElement el = me.ownerDocument().createElement( "schedules" );
+        me.appendChild( el );
+        sm->saveWorkPackageXML( el, *node );
+    }
+}
 
 void Project::setParentSchedule( Schedule *sch )
 {
@@ -1635,6 +1670,16 @@ void Project::setCurrentSchedule( long id )
     }
     emit currentScheduleChanged();
     emit changed();
+}
+
+ScheduleManager *Project::scheduleManager( long id ) const
+{
+    foreach ( ScheduleManager *sm, m_managers ) {
+        if ( sm->id() == id ) {
+            return sm;
+        }
+    }
+    return 0;
 }
 
 ScheduleManager *Project::findScheduleManager( const QString &name ) const

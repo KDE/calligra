@@ -113,6 +113,9 @@ public:
     /// Save me and my childrens relations.
     virtual void saveRelations(QDomElement &element) const;
 
+    /// Save a workpackage document containing @node with schedule identity @id
+    virtual void saveWorkPackageXML( QDomElement &element, long id ) const;
+
     // simple child node management
     // Child nodes are things like subtasks, basically a task can exists of
     // several sub-tasks. Creating a table has 4 subtasks, 1) measuring
@@ -351,6 +354,9 @@ public:
     QList<Appointment*> appointments( long id = -1 );
     /// Adds appointment to this node only (not to resource)
     virtual bool addAppointment(Appointment *appointment, Schedule &main);
+    
+    /// Return list of all resources with appointments to this task for schedule with @p id.
+    QList<Resource*> assignedResources( long id ) const;
     
     /// Find the node with my id
     virtual Node *findNode() const { return findNode(m_id); }

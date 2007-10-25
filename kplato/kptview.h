@@ -112,6 +112,7 @@ public:
     KoDocument *hitTest( const QPoint &viewPos );
 
     ScheduleManager *currentScheduleManager() const;
+    long currentScheduleId() const;
     
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
@@ -199,7 +200,8 @@ protected slots:
     void slotUnindentTask();
     void slotMoveTaskUp();
     void slotMoveTaskDown();
-
+    void slotTaskWorkpackage();
+    
     void slotConnectNode();
 
     void slotDeleteResource( Resource *resource );
@@ -308,6 +310,7 @@ private:
     KAction *actionOpenNode;
     KAction *actionTaskProgress;
     KAction *actionDeleteTask;
+    KAction *actionTaskWorkpackage;
     KAction *actionEditResource;
     KAction *actionEditCalendar;
     KAction *actionEditRelation;
