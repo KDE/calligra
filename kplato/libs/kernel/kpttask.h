@@ -254,6 +254,9 @@ public:
     virtual bool containsRequest( const QString &/*identity*/ ) const;
     virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const;
     
+    /// Return the list of resources assigned to this task
+    virtual QStringList assignedNameList( long id = -1 ) const;
+
     /**
      * Calculates if the assigned resource is overbooked 
      * within the duration of this task

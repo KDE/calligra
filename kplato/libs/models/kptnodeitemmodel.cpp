@@ -863,6 +863,24 @@ QVariant NodeModel::finishFloat( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::assignedResources( const Node *node, int role ) const
+{
+    if ( ! node->type() == Node::Type_Task ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return node->assignedNameList().join(",");
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+
 QVariant NodeModel::completed( const Node *node, int role ) const
 {
     if ( ! ( node->type() == Node::Type_Task || node->type() == Node::Type_Milestone ) ) {
@@ -1191,32 +1209,33 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case 30: result = negativeFloat( n, role ); break;
         case 31: result = startFloat( n, role ); break;
         case 32: result = finishFloat( n, role ); break;
+        case 33: result = assignedResources( n, role ); break;
 
         // Based on scheduled values
-        case 33: result = duration( n, role ); break;
-        case 34: result = varianceDuration( n, role ); break;
-        case 35: result = optimisticDuration( n, role ); break;
-        case 36: result = pessimisticDuration( n, role ); break;
+        case 34: result = duration( n, role ); break;
+        case 35: result = varianceDuration( n, role ); break;
+        case 36: result = optimisticDuration( n, role ); break;
+        case 37: result = pessimisticDuration( n, role ); break;
         
         // Completion
-        case 37: result = status( n, role ); break;
-        case 38: result = completed( n, role ); break;
-        case 39: result = plannedEffortTo( n, role ); break;
-        case 40: result = actualEffortTo( n, role ); break;
-        case 41: result = remainingEffort( n, role ); break;
-        case 42: result = plannedCostTo( n, role ); break;
-        case 43: result = actualCostTo( n, role ); break;
-        case 44: result = startedTime( n, role ); break;
-        case 45: result = finishedTime( n, role ); break;
-        case 46: result = note( n, role ); break;
+        case 38: result = status( n, role ); break;
+        case 39: result = completed( n, role ); break;
+        case 40: result = plannedEffortTo( n, role ); break;
+        case 41: result = actualEffortTo( n, role ); break;
+        case 42: result = remainingEffort( n, role ); break;
+        case 43: result = plannedCostTo( n, role ); break;
+        case 44: result = actualCostTo( n, role ); break;
+        case 45: result = startedTime( n, role ); break;
+        case 46: result = finishedTime( n, role ); break;
+        case 47: result = note( n, role ); break;
         
         // Scheduling errors
-        case 47: result = nodeIsNotScheduled( n, role ); break;
-        case 48: result = resourceIsMissing( n, role ); break;
-        case 49: result = resourceIsOverbooked( n, role ); break;
-        case 50: result = resourceIsNotAvailable( n, role ); break;
-        case 51: result = schedulingConstraintsError( n, role ); break;
-        case 52: result = effortNotMet( n, role ); break;
+        case 48: result = nodeIsNotScheduled( n, role ); break;
+        case 49: result = resourceIsMissing( n, role ); break;
+        case 50: result = resourceIsOverbooked( n, role ); break;
+        case 51: result = resourceIsNotAvailable( n, role ); break;
+        case 52: result = schedulingConstraintsError( n, role ); break;
+        case 53: result = effortNotMet( n, role ); break;
         
         default:
             //kDebug()<<"Invalid property number: "<<property<<endl;;
@@ -1227,7 +1246,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
 
 int NodeModel::propertyCount()
 {
-    return 53;
+    return 54;
 }
 
 bool NodeModel::setData( Node *node, int property, const QVariant & value, int role )
@@ -1276,33 +1295,34 @@ QVariant NodeModel::headerData( int section, int role )
             case 30: return i18n( "Negative Float" );
             case 31: return i18n( "Start Float" );
             case 32: return i18n( "Finish Float" );
+            case 33: return i18n( "Assigments" );
             
             // Based on scheduled values
-            case 33: return i18n( "Duration" );
-            case 34: return i18n( "Variance (Dur)" );
-            case 35: return i18n( "Optimistic" );
-            case 36: return i18n( "Pessimistic" );
+            case 34: return i18n( "Duration" );
+            case 35: return i18n( "Variance (Dur)" );
+            case 36: return i18n( "Optimistic" );
+            case 37: return i18n( "Pessimistic" );
 
             // Completion
-            case 37: return i18n( "Status" );
+            case 38: return i18n( "Status" );
             // xgettext: no-c-format
-            case 38: return i18n( "% Completed" );
-            case 39: return i18n( "Planned Effort" );
-            case 40: return i18n( "Actual Effort" );
-            case 41: return i18n( "Remaining Effort" );
-            case 42: return i18n( "Planned Cost" );
-            case 43: return i18n( "Actual Cost" );
-            case 44: return i18n( "Started" );
-            case 45: return i18n( "Finished" );
-            case 46: return i18n( "Status Note" );
+            case 39: return i18n( "% Completed" );
+            case 40: return i18n( "Planned Effort" );
+            case 41: return i18n( "Actual Effort" );
+            case 42: return i18n( "Remaining Effort" );
+            case 43: return i18n( "Planned Cost" );
+            case 44: return i18n( "Actual Cost" );
+            case 45: return i18n( "Started" );
+            case 46: return i18n( "Finished" );
+            case 47: return i18n( "Status Note" );
             
             // Scheduling errors
-            case 47: return i18n( "Not Scheduled" );
-            case 48: return i18n( "Assigment Missing" );
-            case 49: return i18n( "Resource Overbooked" );
-            case 50: return i18n( "Resource Unavailable" );
-            case 51: return i18n( "Constraints Error" );
-            case 52: return i18n( "Effort Not Met" );
+            case 48: return i18n( "Not Scheduled" );
+            case 49: return i18n( "Assigment Missing" );
+            case 50: return i18n( "Resource Overbooked" );
+            case 51: return i18n( "Resource Unavailable" );
+            case 52: return i18n( "Constraints Error" );
+            case 53: return i18n( "Effort Not Met" );
             
             default: return QVariant();
         }
@@ -1346,32 +1366,33 @@ QVariant NodeModel::headerData( int section, int role )
             case 30: return ToolTip::NodeNegativeFloat;
             case 31: return ToolTip::NodeStartFloat;
             case 32: return ToolTip::NodeFinishFloat;
+            case 33: return ToolTip::NodeAssignment;
 
             // Based on scheduled values
-            case 33: return ToolTip::NodeDuration;
-            case 34: return ToolTip::NodeVarianceDuration;
-            case 35: return ToolTip::NodeOptimisticDuration;
-            case 36: return ToolTip::NodePessimisticDuration;
+            case 34: return ToolTip::NodeDuration;
+            case 35: return ToolTip::NodeVarianceDuration;
+            case 36: return ToolTip::NodeOptimisticDuration;
+            case 37: return ToolTip::NodePessimisticDuration;
 
             // Completion
-            case 37: return ToolTip::NodeStatus;
-            case 38: return ToolTip::NodeCompletion;
-            case 39: return ToolTip::NodePlannedEffortTo;
-            case 40: return ToolTip::NodeActualEffortTo;
-            case 41: return ToolTip::NodeRemainingEffort;
-            case 42: return ToolTip::NodePlannedCostTo;
-            case 43: return ToolTip::NodeActualCostTo;
-            case 44: return ToolTip::CompletionStartedTime;
-            case 45: return ToolTip::CompletionFinishedTime;
-            case 46: return ToolTip::CompletionStatusNote;
+            case 38: return ToolTip::NodeStatus;
+            case 39: return ToolTip::NodeCompletion;
+            case 40: return ToolTip::NodePlannedEffortTo;
+            case 41: return ToolTip::NodeActualEffortTo;
+            case 42: return ToolTip::NodeRemainingEffort;
+            case 43: return ToolTip::NodePlannedCostTo;
+            case 44: return ToolTip::NodeActualCostTo;
+            case 45: return ToolTip::CompletionStartedTime;
+            case 46: return ToolTip::CompletionFinishedTime;
+            case 47: return ToolTip::CompletionStatusNote;
     
             // Scheduling errors
-            case 47: return ToolTip::NodeNotScheduled;
-            case 48: return ToolTip::NodeAssigmentMissing;
-            case 49: return ToolTip::NodeResourceOverbooked;
-            case 50: return ToolTip::NodeResourceUnavailable;
-            case 51: return ToolTip::NodeConstraintsError;
-            case 52: return ToolTip::NodeEffortNotMet;
+            case 48: return ToolTip::NodeNotScheduled;
+            case 49: return ToolTip::NodeAssigmentMissing;
+            case 50: return ToolTip::NodeResourceOverbooked;
+            case 51: return ToolTip::NodeResourceUnavailable;
+            case 52: return ToolTip::NodeConstraintsError;
+            case 53: return ToolTip::NodeEffortNotMet;
             
             default: return QVariant();
         }

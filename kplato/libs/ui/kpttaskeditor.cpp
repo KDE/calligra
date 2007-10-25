@@ -440,14 +440,15 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     l->addWidget( m_view );
     //m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
     QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0 << 1 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 16<< 18 << 19 << 20 << 21 << 22 << 23 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 33 << 34 << 35 <<  36 << 39 << -1;
+    QList<int> lst2; lst2 << 0 << 1 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 16<< 18 << 19 << 20 << 21 << 22 << 23 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 34 << 35 << 36 << 37 << 40 << -1;
     m_view->hideColumns( lst1, lst2 );
     
-    m_view->slaveView()->mapToSection( 37, 1 );
-    m_view->slaveView()->mapToSection( 38, 2 );
+    m_view->slaveView()->mapToSection( 38, 1 );
+    m_view->slaveView()->mapToSection( 39, 2 );
     m_view->slaveView()->mapToSection( 2, 3 );
     m_view->slaveView()->mapToSection( 3, 4 );
-    m_view->slaveView()->mapToSection( 17, 5 );
+    m_view->slaveView()->mapToSection( 33, 5 );
+    m_view->slaveView()->mapToSection( 17, 6 );
 
     m_view->setDragDropMode( QAbstractItemView::InternalMove );
     m_view->setDropIndicatorShown( false );

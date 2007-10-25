@@ -128,6 +128,9 @@ public:
     virtual bool isOverbooked( const QDateTime & /*start*/, const QDateTime & /*end*/ ) const { return false; }
     virtual QStringList overbookedResources() const;
 
+    /// Return the resource names that has appointments to this schedule
+    virtual QStringList resourceNameList() const;
+    
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
 
     /// Returns the total planned effort for this schedule
@@ -287,6 +290,9 @@ public:
 
     virtual Node *node() const { return m_node; }
     virtual void setNode( Node *n ) { m_node = n; }
+
+    /// Return the resource names that has appointments to this schedule
+    virtual QStringList resourceNameList() const;
 
 protected:
     void init();

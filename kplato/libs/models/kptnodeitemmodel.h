@@ -107,7 +107,8 @@ public:
     QVariant negativeFloat( const Node *node, int role ) const;
     QVariant startFloat( const Node *node, int role ) const;
     QVariant finishFloat( const Node *node, int role ) const;
-
+    QVariant assignedResources( const Node *node, int role ) const;
+    
     QVariant status( const Node *node, int role ) const;
     QVariant completed( const Node *node, int role ) const;
     QVariant startedTime( const Node *node, int role ) const;

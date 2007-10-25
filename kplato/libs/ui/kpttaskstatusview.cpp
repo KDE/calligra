@@ -74,10 +74,10 @@ TaskStatusTreeView::TaskStatusTreeView( KoDocument *part, QWidget *parent )
 
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> lst2;
-    for ( int i = 0; i < 37; ++i ) {
+    for ( int i = 0; i < 38; ++i ) {
         lst2 << i;
     }
-    lst2 << 47 << -1;
+    lst2 << 48 << -1;
     hideColumns( lst1, lst2 );
 }
 

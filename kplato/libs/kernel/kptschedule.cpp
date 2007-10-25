@@ -215,6 +215,11 @@ QStringList Schedule::overbookedResources() const
     return rl;
 }
 
+QStringList Schedule::resourceNameList() const
+{
+    return QStringList();
+}
+
 bool Schedule::loadXML( const KoXmlElement &sch )
 {
     m_name = sch.attribute( "name" );
@@ -665,6 +670,16 @@ void NodeSchedule::takeAppointment( Appointment *appointment, int mode )
     if ( appointment->resource() )
         appointment->resource() ->takeAppointment( appointment );
 }
+
+QStringList NodeSchedule::resourceNameList() const
+{
+    QStringList rl;
+    foreach( Appointment *a, m_appointments ) {
+        rl += a->resource() ->resource() ->name();
+    }
+    return rl;
+}
+
 
 //-----------------------------------------------
 ResourceSchedule::ResourceSchedule()

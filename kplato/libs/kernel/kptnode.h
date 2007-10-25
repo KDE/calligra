@@ -242,6 +242,9 @@ public:
     virtual bool containsRequest( const QString &/*identity*/ ) const { return false; }
     virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const { return 0; }
     
+    /// Return the list of resources assigned to this task
+    virtual QStringList assignedNameList( long /*id*/ = -1 ) const { return QStringList(); }
+    
     virtual void makeAppointments();
     /// Calculates if the assigned resource is overbooked 
     /// within the duration of this node

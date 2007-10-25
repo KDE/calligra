@@ -77,6 +77,7 @@ namespace ToolTip
     static QString NodeFreeFloat = i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task" );
     static QString NodeStartFloat = i18n( "The duration from Early Start to Late Start" );
     static QString NodeFinishFloat = i18n( "The duration from Early Finish to Late Finish" );
+    static QString NodeAssignment = i18n( "The resources assigned to the task" );
 
     static QString NodeStatus = i18n( "Task status" );
     static QString NodeCompletion = i18n( "Task completion" );

@@ -159,6 +159,14 @@ ResourceRequest *Task::resourceRequest( const QString &name ) const {
     return m_requests == 0 ? 0 : m_requests->resourceRequest( name );
 }
 
+QStringList Task::assignedNameList( long id) const {
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return QStringList();
+    }
+    return s->resourceNameList();
+}
+
 int Task::units() const {
     if (!m_requests)
         return 0;
