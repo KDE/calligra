@@ -131,11 +131,10 @@ class Cell : public Kross::Api::Class<Cell>
 		*/
 		const QString text() const;
 		/**
-		* Set the text of the cell. If asString is true, the text
-		* will be handled as string else we try to parse the
-		* string to the expected value.
+		* Set the text of the cell. the text
+		* will be handled as string
 		*/
-		bool setText(const QString& text, bool asString = false);
+		bool setText(const QString& text);
 
 		/**
 		* Return the textcolor as RGB-value in the format "#RRGGBB".

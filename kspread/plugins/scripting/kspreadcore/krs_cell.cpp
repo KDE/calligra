@@ -174,12 +174,7 @@ const QString Cell::text() const {
 	return m_cell->text();
 }
 
-bool Cell::setText(const QString& text, bool asString) {
-
-	//FIXME: there is some problem with asString parameter, when it's set
-	//to true KSpread says: ASSERT: "f" in Dependencies.cpp (621)
-	//kspread: Cell at row 6, col 1 marked as formula, but formula is NULL
-
+bool Cell::setText(const QString& text) {
 	KSpread::ProtectedCheck prot;
 	prot.setSheet (m_sheet);
 	prot.add (QPoint (m_col, m_row));
@@ -189,7 +184,7 @@ bool Cell::setText(const QString& text, bool asString) {
 	KSpread::DataManipulator *dm = new KSpread::DataManipulator ();
 	dm->setSheet (m_sheet);
 	dm->setValue (text);
-	dm->setParsing (!asString);
+	dm->setParsing (true);
 	dm->add (QPoint (m_col, m_row));
 	dm->execute ();
 
