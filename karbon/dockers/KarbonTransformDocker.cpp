@@ -150,6 +150,7 @@ KarbonTransformDocker::KarbonTransformDocker()
     d->rotate->setMaximum (360.0);
     d->rotate->setSingleStep(1.0);
     d->rotate->setValue(10.0);
+    d->rotate->setDecimals(1);
     d->rotate->setToolTip( i18n("Rotate actual selection") );
     connect( d->rotate, SIGNAL( editingFinished() ), this, SLOT( rotate() ) );
 
@@ -160,6 +161,7 @@ KarbonTransformDocker::KarbonTransformDocker()
     d->shearX->setMaximum (360.0);
     d->shearX->setSingleStep(1.0);
     d->shearX->setValue(10.0);
+    d->shearX->setDecimals(1);
 
     d->shearX->setToolTip( i18n("Shear actual selection in x-direction") );
     connect( d->shearX, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
@@ -171,7 +173,7 @@ KarbonTransformDocker::KarbonTransformDocker()
     d->shearY->setMaximum (360.0);
     d->shearY->setSingleStep(1.0);
     d->shearY->setValue(10.0);
-
+    d->shearY->setDecimals(1);
     d->shearY->setToolTip( i18n("Shear actual selection in y-direction") );
     connect( d->shearY, SIGNAL( editingFinished() ), this, SLOT( shear() ) );
 
