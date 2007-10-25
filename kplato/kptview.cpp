@@ -20,7 +20,7 @@
 
 #include "kptview.h"
 
-//#include <kmessagebox.h>
+#include <kmessagebox.h>
 
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
