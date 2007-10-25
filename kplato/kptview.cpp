@@ -20,8 +20,7 @@
 
 #include "kptview.h"
 
-//#include <kprinter.h>
-#include <kmessagebox.h>
+//#include <kmessagebox.h>
 
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>

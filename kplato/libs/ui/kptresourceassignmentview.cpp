@@ -45,7 +45,6 @@
 
 #include <klocale.h>
 #include <kglobal.h>
-#include <kprinter.h>
 #include <kmessagebox.h>
 
 namespace KPlato

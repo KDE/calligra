@@ -48,7 +48,6 @@
 #include <kicon.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kprinter.h>
 #include <kxmlguifactory.h>
 #include <kactioncollection.h>
 
