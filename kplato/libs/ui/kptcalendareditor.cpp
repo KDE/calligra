@@ -50,7 +50,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
-#include <kprinter.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <ksystemtimezone.h>
