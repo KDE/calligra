@@ -10,11 +10,11 @@ include_directories(
 ########### KPlato data models library ###############
 
 set(kplatomodels_LIB_SRCS
-    kptdocumentmodel.cc
-    kptitemmodelbase.cc
-    kptnodeitemmodel.cc
-    kptdurationwidget.cc
-    kptdurationspinbox.cc
+    kptdocumentmodel.cpp
+    kptitemmodelbase.cpp
+    kptnodeitemmodel.cpp
+    kptdurationwidget.cpp
+    kptdurationspinbox.cpp
 )
 
 kde4_add_ui_files(kplatomodels_LIB_SRCS

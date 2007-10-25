@@ -32,21 +32,21 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlato private library ###############
 
 set(kplatoprivate_LIB_SRCS
-    kptviewlistdocker.cc
-    kptviewlist.cc
-    kptviewlistdialog.cc
-    kptviewlistcommand.cc
+    kptviewlistdocker.cpp
+    kptviewlist.cpp
+    kptviewlistdialog.cpp
+    kptviewlistcommand.cpp
     
-    kptconfigdialog.cc
-    kptconfig.cc
-    kpttaskdefaultpanel.cc
+    kptconfigdialog.cpp
+    kptconfig.cpp
+    kpttaskdefaultpanel.cpp
 
-    kptcontext.cc
+    kptcontext.cpp
 
-    kptfactory.cc
-    kptpart.cc
-    kptview.cc
-    KPtViewAdaptor.cc
+    kptfactory.cpp
+    kptpart.cpp
+    kptview.cpp
+    KPtViewAdaptor.cpp
 )
 
 kde4_add_ui_files(kplatoprivate_LIB_SRCS
@@ -67,7 +67,7 @@ install(TARGETS kplatoprivate DESTINATION ${LIB_INSTALL_DIR})
 
 ########### KPlato part ###############
 
-set(kplatopart_PART_SRCS kptfactoryinit.cc )
+set(kplatopart_PART_SRCS kptfactoryinit.cpp )
 
 
 kde4_add_plugin(kplatopart WITH_PREFIX ${kplatopart_PART_SRCS})
@@ -79,7 +79,7 @@ install(TARGETS kplatopart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### KPlato executable ###############
 
-set(kplato_KDEINIT_SRCS main.cc )
+set(kplato_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kplato ${kplato_KDEINIT_SRCS})
 

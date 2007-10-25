@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cc -o $podir/kplatoui.pot
+$XGETTEXT *.cpp -o $podir/kplatoui.pot

@@ -6,20 +6,20 @@ include_directories(${KOSTORE_INCLUDES})
 ########### KPlato kernel library ###############
 
 set(kplatokernel_LIB_SRCS
-    kptdocuments.cc
-    kptaccount.cc
-    kptappointment.cc
-    kptnode.cc
-    kptproject.cc
-    kptrelation.cc
-    kptresource.cc
-    kpttask.cc
-    kptduration.cc
-    kptdatetime.cc
-    kptcalendar.cc
-    kptschedule.cc
-    kptwbsdefinition.cc
-    kptcommand.cc
+    kptdocuments.cpp
+    kptaccount.cpp
+    kptappointment.cpp
+    kptnode.cpp
+    kptproject.cpp
+    kptrelation.cpp
+    kptresource.cpp
+    kpttask.cpp
+    kptduration.cpp
+    kptdatetime.cpp
+    kptcalendar.cpp
+    kptschedule.cpp
+    kptwbsdefinition.cpp
+    kptcommand.cpp
 
 )
 

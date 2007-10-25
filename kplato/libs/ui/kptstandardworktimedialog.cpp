@@ -151,13 +151,9 @@ StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QW
     m_day = m_std->day();
 
     kDebug()<<"y="<<m_year<<" m="<<m_month<<" w="<<m_week<<" d="<<m_day;
-    year->setRange(1.0, 8784.0, 0.1, 1);
     year->setValue(m_year);
-    month->setRange(1.0, 744.0, 0.1, 1);
     month->setValue(m_month);
-    week->setRange(1.0, 168.0, 0.1, 1);
     week->setValue(m_week);
-    day->setRange(1.0, 24.0, 0.1, 1);
     day->setValue(m_day);
     
     connect(year, SIGNAL(valueChanged(double)), SLOT(slotYearChanged(double)));

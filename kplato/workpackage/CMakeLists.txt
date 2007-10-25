@@ -10,9 +10,9 @@ include_directories(${KPLATO_INCLUDES})
 ########### KPlatoWork private library ###############
 
 set(kplatoworkprivate_LIB_SRCS
-    factory.cc
-    part.cc
-    view.cc
+    factory.cpp
+    part.cpp
+    view.cpp
 )
 
 kde4_add_ui_files(kplatoworkprivate_LIB_SRCS
@@ -28,7 +28,7 @@ install(TARGETS kplatoworkprivate DESTINATION ${LIB_INSTALL_DIR})
 
 ########### KPlatoWork part ###############
 
-set(kplatoworkpart_PART_SRCS factoryinit.cc )
+set(kplatoworkpart_PART_SRCS factoryinit.cpp )
 
 
 kde4_add_plugin(kplatoworkpart WITH_PREFIX ${kplatoworkpart_PART_SRCS})
@@ -40,7 +40,7 @@ install(TARGETS kplatoworkpart DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### KPlatoWork executable ###############
 
-set(kplatowork_KDEINIT_SRCS main.cc )
+set(kplatowork_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kplatowork ${kplatowork_KDEINIT_SRCS})
 

@@ -29,6 +29,8 @@
 
 #include <kdebug.h>
 
+#include <qdatetime.h>
+
 namespace KPlato
 {
 
