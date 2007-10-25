@@ -22,7 +22,6 @@
 #include "factory.h"
 #include "part.h"
 
-#include <kprinter.h>
 #include <kmessagebox.h>
 
 #include "KoDocumentInfo.h"
