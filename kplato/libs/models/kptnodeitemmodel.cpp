@@ -872,7 +872,7 @@ QVariant NodeModel::assignedResources( const Node *node, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return node->assignedNameList().join(",");
+            return node->assignedNameList( id() ).join(",");
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
