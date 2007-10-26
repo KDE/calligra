@@ -37,6 +37,8 @@
 #include <minmax.h>
 #endif
 
+#include <cstring>
+
 ParagraphStyle::ParagraphStyle(WPXPropertyList *pPropList, const WPXPropertyListVector &xTabStops, const WPXString &sName) :
 	mpPropList(pPropList),
 	mxTabStops(xTabStops),
