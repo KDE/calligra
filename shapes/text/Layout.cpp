@@ -288,7 +288,7 @@ bool Layout::nextParag() {
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption option = layout->textOption();
-    option.setWrapMode(QTextOption::WordWrap);
+    option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere );
     option.setTabStop (m_defaultTabSizing);
 
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
