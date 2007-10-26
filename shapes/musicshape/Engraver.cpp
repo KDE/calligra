@@ -68,10 +68,11 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
     int lastStart = firstBar;
     double lineWidth = size.width();
     double indent = sheet->staffSystem(curSystem)->indent();
+    lineWidth -= indent;
     if (firstBar > 0) {
         p.setX(indent - sheet->bar(firstBar-1)->prefix());
     }
-    bool prevPrefixPlaced = true;
+    bool prevPrefixPlaced = firstBar != 0;
     for (int i = firstBar; i < sheet->barCount(); i++) {
         Bar* bar = sheet->bar(i);
         bool prefixPlaced = false;
