@@ -65,6 +65,9 @@ public:
     int accidentals() const;
 
     void setAccidentals(int accidentals);
+    
+    bool isStartTie() const;
+    void setStartTie(bool startTie);
 private:
     class Private;
     Private * const d;

@@ -271,6 +271,7 @@ double Chord::height() const
 
 double Chord::stemX(double xScale) const
 {
+    if (xScale == 0) xScale = voiceBar()->bar()->scale();
     int lastPitch = INT_MIN;
     bool hasConflict = false;
     foreach (Note* n, d->notes) {
@@ -286,6 +287,18 @@ double Chord::stemX(double xScale) const
     } else {
         return x() * xScale + (d->stemDirection == StemUp ? 6 : 0);
     }
+}
+
+double Chord::centerX(double xScale) const
+{
+    if (xScale == 0) xScale = voiceBar()->bar()->scale();
+    return x() * xScale + 3;
+}
+
+double Chord::xScaled(double xScale) const
+{
+    if (xScale == 0) xScale = voiceBar()->bar()->scale();
+    return x() * xScale;
 }
 
 double Chord::topNoteY() const
@@ -330,6 +343,7 @@ double Chord::bottomNoteY() const
 
 double Chord::stemEndY(double xScale, bool interpolateBeams) const
 {
+    if (xScale == 0) xScale = voiceBar()->bar()->scale();
     if (d->notes.size() == 0) return staff()->center();
     
     if (beamType(0) == BeamContinue && interpolateBeams) {
@@ -374,6 +388,7 @@ double Chord::stemEndY(double xScale, bool interpolateBeams) const
 
 double Chord::beamDirection(double xScale) const
 {
+    if (xScale == 0) xScale = voiceBar()->bar()->scale();
     if (beamType(0) == BeamStart || beamType(0) == BeamEnd || beamType(0) == BeamContinue) {
         double sx = beamStart(0)->stemX(xScale), ex = beamEnd(0)->stemX(xScale);
         double sy = beamStart(0)->stemEndY(xScale), ey = beamEnd(0)->stemEndY(xScale);

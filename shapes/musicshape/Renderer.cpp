@@ -172,12 +172,12 @@ void MusicRenderer::renderVoice(QPainter& painter, Voice *voice, int firstBar, i
             if (vb->element(e)->staff()) {
                 state.clef = vb->element(e)->staff()->lastClefChange(b, 0);
             }
-            renderElement(painter, vb->element(e), p, state, bar->scale(), color);
+            renderElement(painter, vb->element(e), voice, p, state, bar->scale(), color);
         }
     }
 }
 
-void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, const QPointF& pos, RenderState& state, double xScale, const QColor& color)
+void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, Voice* voice, const QPointF& pos, RenderState& state, double xScale, const QColor& color)
 {
     Q_UNUSED( state ); // unused for now, but will probably be used again in the future
     
@@ -194,7 +194,7 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, const QPo
 
     // TODO: make this less hacky
     Chord *c = dynamic_cast<Chord*>(me);
-    if (c) renderChord(painter, c, pos, xScale, color);
+    if (c) renderChord(painter, c, voice, pos, xScale, color);
 }
 
 void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, const QPointF& pos, RenderState& state, double xScale)
@@ -310,7 +310,7 @@ void MusicRenderer::renderRest(QPainter& painter, Duration duration, const QPoin
     m_style->renderRest(painter, pos.x(), pos.y(), duration, color);
 }
 
-void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& ref, double xScale, const QColor& color)
+void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, const QPointF& ref, double xScale, const QColor& color)
 {
     double x = chord->x() * xScale;
     if (chord->noteCount() == 0) { // a rest
@@ -321,6 +321,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
     int topLine = 0, bottomLine = 0;
     VoiceBar* vb = chord->voiceBar();
     Bar* bar = vb->bar();
+    Sheet* sheet = voice->part()->sheet();
     int barIdx = bar->sheet()->indexOfBar(bar);
     double topy = 1e9, bottomy = -1e9;
     Staff* topStaff = 0, *bottomStaff = 0;
@@ -331,6 +332,8 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
     double maxNoteX = 0;
     
     QMultiMap<Staff*, int> dots;
+    
+    Chord* nextChord = 0;
     
     for (int i = 0; i < chord->noteCount(); i++) {
         Note *n = chord->note(i);
@@ -411,6 +414,49 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, const QPointF& 
         }
         
         dots.insert(s, line);
+        
+        if (n->isStartTie()) {
+            // render tie for this note...
+            if (!nextChord) {
+                // figure out what the next chord in this voice is
+                bool afterCurrent = false;
+                for (int e = 0; e < vb->elementCount(); e++) {
+                    if (afterCurrent) {
+                        nextChord = dynamic_cast<Chord*>(vb->element(e));
+                        if (nextChord) break;
+                    } else {
+                        if (vb->element(e) == chord) {
+                            afterCurrent = true;
+                        }
+                    }
+                }
+                if (!nextChord) {
+                    // check the next bar
+                    int nextBar = sheet->indexOfBar(bar)+1;
+                    if (nextBar < sheet->barCount()) {
+                        VoiceBar* nextVB = voice->bar(nextBar);
+                        for (int e = 0; e < nextVB->elementCount(); e++) {
+                            nextChord = dynamic_cast<Chord*>(nextVB->element(e));
+                            if (nextChord) break;
+                        }
+                    }
+                }
+            }
+            
+            // okay, now nextChord is the chord to which the tie should go
+            if (nextChord) {
+                QPointF startPos = bar->position() + QPointF(1 + chord->xScaled() + chord->width(), ypos);
+                QPointF endPos = startPos + QPointF(-2 + nextChord->xScaled() - chord->xScaled() - chord->width(), 0);
+                QPointF c1 = startPos + QPointF(2, 4);
+                QPointF c2 = endPos + QPointF(-2, 4);
+                QPainterPath p;
+                p.moveTo(startPos);
+                p.cubicTo(c1, c2, endPos);
+                painter.setPen(QPen(color));
+                painter.setBrush(Qt::NoBrush);
+                painter.drawPath(p);
+            }
+        }
     }
     
     // calculate correct positioning of dots

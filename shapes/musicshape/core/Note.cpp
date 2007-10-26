@@ -25,6 +25,7 @@ public:
     Staff* staff;
     int pitch;
     int accidentals;
+    bool tied;
 };
 
 Note::Note(Staff* staff, int pitch, int accidentals) : d(new Private)
@@ -32,6 +33,7 @@ Note::Note(Staff* staff, int pitch, int accidentals) : d(new Private)
     d->staff = staff;
     d->pitch = pitch;
     d->accidentals = accidentals;
+    d->tied = false;
 }
 
 Note::~Note()
@@ -62,6 +64,16 @@ int Note::accidentals() const
 void Note::setAccidentals(int accidentals)
 {
     d->accidentals = accidentals;
+}
+
+bool Note::isStartTie() const
+{
+    return d->tied;
+}
+
+void Note::setStartTie(bool startTie)
+{
+    d->tied = startTie;
 }
 
 } // namespace MusicCore
