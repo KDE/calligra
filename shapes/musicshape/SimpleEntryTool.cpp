@@ -316,7 +316,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
     for (int i = 0; i < sheet->partCount(); i++) {
         Part* p = sheet->part(i);
         if (p->voiceCount() > m_voice) {
-            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), 0, INT_MAX, Qt::red);
+            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), m_musicshape->firstSystem(), m_musicshape->lastSystem(), Qt::red);
         }
     }
 

@@ -52,6 +52,7 @@ public:
     void setSheet(MusicCore::Sheet* sheet, int firstSystem);
     int firstSystem() const;
     void setFirstSystem(int system);
+    int lastSystem() const;
     MusicRenderer* renderer();
     MusicStyle* style();
     void engrave(bool engraveBars=true);

@@ -161,6 +161,11 @@ void MusicShape::setFirstSystem(int system)
     update();
 }
 
+int MusicShape::lastSystem() const
+{
+    return m_lastSystem;
+}
+
 MusicRenderer* MusicShape::renderer()
 {
     return m_renderer;
