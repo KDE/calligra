@@ -46,7 +46,7 @@ Engraver::Engraver()
 
 void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool engraveBars, int* lastSystem)
 {
-    *lastSystem = 0;
+    *lastSystem = -1;
     int firstBar = 0;
     if (firstSystem != 0) {
         firstBar = sheet->staffSystem(firstSystem)->firstBar();
@@ -139,7 +139,7 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
         sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
         p.setX(p.x() + sheet->bar(i)->size() + bar->prefix());
     }
-    if (*lastSystem == 0) *lastSystem = curSystem;
+    if (*lastSystem == -1) *lastSystem = curSystem;
     // potentially scale last staff system if it is too wide
     if (p.x() - indent > lineWidth) {
         double scalable = 0, fixed = 0;
