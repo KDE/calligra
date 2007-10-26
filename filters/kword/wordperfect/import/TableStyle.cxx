@@ -36,6 +36,8 @@
 #include <minmax.h>
 #endif
 
+#include <cstring>
+
 TableCellStyle::TableCellStyle(const WPXPropertyList &xPropList, const char *psName) :
 	Style(psName),
         mPropList(xPropList)
