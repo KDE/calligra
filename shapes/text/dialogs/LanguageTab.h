@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2001,2002,2003,2006 Montel Laurent <lmontel@mandrakesoft.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,39 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kofonttab_h__
-#define __kofonttab_h__
+#ifndef __kolanguagetab_h__
+#define __kolanguagetab_h__
 
-#include <QFont>
-#include <QWidget>
+#include <ui_LanguageTab.h>
 
-class KFontChooser;
-
-class KoFontTab : public QWidget
+class LanguageTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KoFontTab( uint fontListCriteria=0, QWidget* parent=0);
-    ~KoFontTab() {}
+    explicit LanguageTab( /*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/ QWidget* parent=0, Qt::WFlags fl=0 );
+    ~LanguageTab();
 
-    QFont font();
-
-public slots:
-    void setFont( const QFont &font );
-/*
-signals:
-    void familyChanged();
-    void boldChanged();
-    void italicChanged();
-    void sizeChanged();
-*/
+    QString getLanguage() const;
+    void setLanguage( const QString &item );
 
 signals:
-    void fontChanged( const QFont &font );
+    void languageChanged();
 
 private:
-    KFontChooser *m_fontChooser;
+    Ui::LanguageTab widget;
 };
 
 #endif

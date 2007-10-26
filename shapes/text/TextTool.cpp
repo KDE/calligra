@@ -27,6 +27,7 @@
 #include "dialogs/CreateNewBookmarkDialog.h"
 #include "dialogs/SelectBookmarkDialog.h"
 #include "dialogs/InsertCharacter.h"
+#include "dialogs/FontDia.h"
 #include "commands/TextCommandBase.h"
 #include "commands/ChangeListCommand.h"
 
@@ -322,7 +323,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
     action->setShortcut( Qt::ALT + Qt::CTRL + Qt::Key_F);
     action->setToolTip( i18n( "Change character size, font, boldface, italics etc." ) );
     action->setWhatsThis( i18n( "Change the attributes of the currently selected characters." ) );
-    connect(action, SIGNAL(triggered()), &m_selectionHandler, SLOT( selectFont() ));
+    connect(action, SIGNAL(triggered()), this, SLOT( selectFont() ));
 
     m_actionFormatFontSize = new KFontSizeAction( i18n( "Font Size" ), this);
     addAction("format_fontsize", m_actionFormatFontSize );
@@ -1597,6 +1598,13 @@ void TextTool::insertSpecialCharacter() {
     }
 
     m_specialCharacterDocker->show();
+}
+
+void TextTool::selectFont() {
+    FontDia *fontDlg = new FontDia( m_caret.charFormat());
+    fontDlg->exec();
+    fontDlg->style().applyStyle(&m_caret);
+    delete fontDlg;
 }
 
 // ---------- editing plugins methods.

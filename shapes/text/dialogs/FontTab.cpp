@@ -18,12 +18,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoFontTab.h"
+#include "FontTab.h"
 
 #include <kfontdialog.h>
 #include <QVBoxLayout>
 
-KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent)
+FontTab::FontTab( QWidget* parent)
         : QWidget( parent)
 {
     QLayout *layout = new QVBoxLayout(this);
@@ -39,18 +39,18 @@ KoFontTab::KoFontTab( uint fontListCriteria, QWidget* parent)
     connect( m_fontChooser, SIGNAL( fontSelected( const QFont & ) ), this, SIGNAL( fontChanged( const QFont & ) ) );
 }
 
-QFont KoFontTab::font()
+QFont FontTab::font()
 {
     return m_fontChooser->font();
 }
 
-void KoFontTab::setFont( const QFont &font )
+void FontTab::setFont( const QFont &font )
 {
     m_fontChooser->setFont( font );
 }
 
 /*
-void KoFontTab::slotFontChanged( const QFont &font )
+void FontTab::slotFontChanged( const QFont &font )
 {
     if ( comparisonFont.family() != font.family() ) emit familyChanged();
     if ( comparisonFont.bold() != font.bold() ) emit boldChanged();
@@ -60,4 +60,4 @@ void KoFontTab::slotFontChanged( const QFont &font )
 }
 */
 
-#include "KoFontTab.moc"
+#include "FontTab.moc"

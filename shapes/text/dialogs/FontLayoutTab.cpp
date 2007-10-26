@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoLayoutTab.h"
+#include "FontLayoutTab.h"
 #include "styles/KoCharacterStyle.h"
 
 #include <QButtonGroup>
@@ -30,8 +30,9 @@ enum Position {
     Custom
 };
 
-KoLayoutTab::KoLayoutTab( bool withSubSuperScript, QWidget* parent)
-        : QWidget( parent)
+FontLayoutTab::FontLayoutTab( bool withSubSuperScript, QWidget* parent)
+: QWidget( parent),
+m_style(0)
 {
     widget.setupUi(this);
 
@@ -49,23 +50,26 @@ KoLayoutTab::KoLayoutTab( bool withSubSuperScript, QWidget* parent)
     widget.offsetLabel->setVisible(false);
 }
 
-void KoLayoutTab::open(const QTextCharFormat &format) {
-    switch(format.verticalAlignment()) {
-        case QTextCharFormat::AlignSuperScript:
-            m_buttonGroup->button(Superscript)->setChecked(true);
-            break;
-        case QTextCharFormat::AlignSubScript:
-            m_buttonGroup->button(Subscript)->setChecked(true);
-            break;
-        default:
-            // TODO check if its custom instead.
-            m_buttonGroup->button(Normal)->setChecked(true);
+void FontLayoutTab::open(KoCharacterStyle *style) {
+    m_style = style;
+    Q_ASSERT(m_style);
+    switch(m_style->verticalAlignment()) {
+    case QTextCharFormat::AlignSuperScript:
+        m_buttonGroup->button(Superscript)->setChecked(true);
+        break;
+    case QTextCharFormat::AlignSubScript:
+        m_buttonGroup->button(Subscript)->setChecked(true);
+        break;
+    default:
+        // TODO check if its custom instead.
+        m_buttonGroup->button(Normal)->setChecked(true);
     }
 
-    widget.hyphenate->setChecked(format.boolProperty(KoCharacterStyle::HasHyphenation));
+    widget.hyphenate->setChecked(m_style->hasHyphenation());
 }
 
-void KoLayoutTab::save(QTextCharFormat &format) const {
+void FontLayoutTab::save() {
+    Q_ASSERT(m_style);
     QTextCharFormat::VerticalAlignment va;
 
     switch(m_buttonGroup->checkedId()) {
@@ -81,9 +85,9 @@ void KoLayoutTab::save(QTextCharFormat &format) const {
             va = QTextCharFormat::AlignNormal;
             // TODO also handle custom
     }
-    format.setVerticalAlignment(va);
+    m_style->setVerticalAlignment(va);
 
-    format.setProperty(KoCharacterStyle::HasHyphenation, widget.hyphenate->isChecked());
+    m_style->setHasHyphenation( widget.hyphenate->isChecked());
 }
 
-#include "KoLayoutTab.moc"
+#include "FontLayoutTab.moc"

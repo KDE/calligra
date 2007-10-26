@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoLanguageTab.h"
+#include "LanguageTab.h"
 #include "KoGlobal.h"
 
 #include <kcombobox.h>
@@ -26,16 +26,17 @@
 #include <QSet>
 #include <QStringList>
 
-#include "KoLanguageTab.moc"
+#include "LanguageTab.moc"
 
 
-KoLanguageTab::KoLanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, const char* name, Qt::WFlags fl ) 
-        : KoLanguageTabBase( parent )
+LanguageTab::LanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::WFlags fl ) 
+        : QWidget( parent )
 {
-    Q_UNUSED( name );
+    widget.setupUi(this);
+
     Q_UNUSED( fl );
 
-    languageListSearchLine->setListWidget(languageList);
+    widget.languageListSearchLine->setListWidget(widget.languageList);
 
     //TODO use fl
     const QStringList langNames = KoGlobal::listOfLanguages();
@@ -55,35 +56,35 @@ KoLanguageTab::KoLanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, 
             item->setText( *itName );
             item->setIcon( SmallIcon("tools-check-spelling") );
 
-            languageList->addItem(item); 
+            widget.languageList->addItem(item); 
         }
         else
-            languageList->addItem( *itName );
+            widget.languageList->addItem( *itName );
     }
-    connect( languageList, SIGNAL( currentItemChanged( QListWidgetItem*,QListWidgetItem* ) ), 
+    connect( widget.languageList, SIGNAL( currentItemChanged( QListWidgetItem*,QListWidgetItem* ) ), 
             this, SIGNAL( languageChanged() ) );
 }
 
-KoLanguageTab::~KoLanguageTab()
+LanguageTab::~LanguageTab()
 {
 }
 
-QString KoLanguageTab::getLanguage() const
+QString LanguageTab::getLanguage() const
 {
-    Q_ASSERT( languageList->currentItem() );
+    Q_ASSERT( widget.languageList->currentItem() );
 
-    return KoGlobal::tagOfLanguage( languageList->currentItem()->text() );
+    return KoGlobal::tagOfLanguage( widget.languageList->currentItem()->text() );
 }
 
-void KoLanguageTab::setLanguage( const QString &item )
+void LanguageTab::setLanguage( const QString &item )
 {
     const QString& name = KoGlobal::languageFromTag(item);
 
-    QList<QListWidgetItem*> items = languageList->findItems(name,
+    QList<QListWidgetItem*> items = widget.languageList->findItems(name,
                                                             Qt::MatchFixedString);
     if ( !items.isEmpty() )
     {
-        languageList->setCurrentItem(items.first());
-        languageList->scrollToItem(items.first());
+        widget.languageList->setCurrentItem(items.first());
+        widget.languageList->scrollToItem(items.first());
     }
 }

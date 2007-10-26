@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>KoDecorationTab</class>
- <widget class="QWidget" name="KoDecorationTab" >
+ <class>FontDecorations</class>
+ <widget class="QWidget" name="FontDecorations" >
   <property name="geometry" >
    <rect>
     <x>0</x>

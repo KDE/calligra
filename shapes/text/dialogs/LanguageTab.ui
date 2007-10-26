@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>KoLanguageTabBase</class>
- <widget class="QWidget" name="KoLanguageTabBase" >
+ <class>LanguageTab</class>
+ <widget class="QWidget" name="LanguageTab" >
   <property name="geometry" >
    <rect>
     <x>0</x>

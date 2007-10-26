@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,30 +18,44 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kohighlightingtab_h__
-#define __kohighlightingtab_h__
+#ifndef FONTDIA_H
+#define FONTDIA_H
 
-#include "ui_KoHighlightingTab.h"
+#include <kdialog.h>
+#include <KoCharacterStyle.h>
 
 #include <QTextCharFormat>
 
-class KoHighlightingTab : public QWidget
+class FontTab;
+class CharacterHighlighting;
+class FontDecorations;
+class FontLayoutTab;
+class LanguageTab;
+
+class FontDia : public KDialog
 {
     Q_OBJECT
-
 public:
-    explicit KoHighlightingTab(QWidget* parent=0);
-    ~KoHighlightingTab() {}
 
-    void open(const QTextCharFormat &format);
-    void save(QTextCharFormat &format) const;
+    /// If your application supports spell-checking, pass here the KSpell2 Loader
+    /// so that the font dialog can show which languages are supported for spellchecking.
+    explicit FontDia( const QTextCharFormat &format/* KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/, QWidget* parent = 0);
 
-private slots:
-    void underlineChanged( int item );
+    KoCharacterStyle style() const { return m_style; }
+
+protected slots:
+    void slotReset();
+    void slotApply();
+    void slotOk();
 
 private:
-    Ui::KoHighlightingTab widget;
+    FontTab *fontTab;
+    CharacterHighlighting *m_highlightingTab;
+    FontDecorations *m_decorationTab;
+    FontLayoutTab *m_layoutTab;
+    LanguageTab *languageTab;
+
+    KoCharacterStyle m_style;
 };
 
 #endif
-

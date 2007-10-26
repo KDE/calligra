@@ -21,7 +21,7 @@
 #ifndef CHARACTERSTYLEOPTIONS_H
 #define CHARACTERSTYLEOPTIONS_H
 
-#include "ui_KoLayoutTab.h"
+#include <ui_FontLayoutTab.h>
 
 class QButtonGroup;
 class KoCharacterStyle;
@@ -38,7 +38,7 @@ public:
     void save();
 
 private:
-    Ui::KoLayoutTabBase widget;
+    Ui::FontLayoutTab widget;
     QButtonGroup *m_buttonGroup;
 
     KoCharacterStyle *m_style;

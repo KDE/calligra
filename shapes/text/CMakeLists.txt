@@ -38,6 +38,11 @@ SET ( textshape_SRCS
     dialogs/CreateNewBookmarkDialog.cpp
     dialogs/SelectBookmarkDialog.cpp
     dialogs/InsertCharacter.cpp
+    dialogs/FontDia.cpp
+    dialogs/FontLayoutTab.cpp
+    dialogs/FontDecorations.cpp
+    dialogs/FontTab.cpp
+    dialogs/LanguageTab.cpp
 
     commands/ChangeListCommand.cpp
     commands/TextCommandBase.cpp
@@ -58,6 +63,10 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/CharacterStyleOptions.ui
     dialogs/CreateNewBookmark.ui
     dialogs/SelectBookmark.ui
+
+    dialogs/FontDecorations.ui
+    dialogs/FontLayoutTab.ui
+    dialogs/LanguageTab.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

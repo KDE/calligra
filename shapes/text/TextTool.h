@@ -170,6 +170,8 @@ private slots:
     /// method that will be called in the UI thread directly after the one above
     void updateParagraphDirectionUi();
 
+    void selectFont();
+
 private:
     void repaintCaret();
     void repaintSelection();

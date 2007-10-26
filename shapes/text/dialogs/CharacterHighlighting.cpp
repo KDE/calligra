@@ -74,6 +74,14 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
         widget.underlineStyle->setCurrentIndex(0);
     // TODO represent single and double lines.
 
+    switch(style->transform()) {
+        case KoCharacterStyle::NoTransform: widget.normal->setChecked(true); break;
+        case KoCharacterStyle::SmallCaps: widget.smallcaps->setChecked(true); break;
+        case KoCharacterStyle::Uppercase: widget.uppercase->setChecked(true); break;
+        case KoCharacterStyle::Lowercase: widget.lowercase->setChecked(true); break;
+        case KoCharacterStyle::Capitalize: widget.capitalize->setChecked(true); break;
+    }
+
     underlineChanged(widget.underlineStyle->currentIndex());
     widget.underlineColor->setColor(style->underlineColor());
 
@@ -118,6 +126,17 @@ void CharacterHighlighting::save() {
         m_style->setStrikeOutStyle(KoCharacterStyle::SolidLine);
     else
         m_style->setStrikeOutStyle(KoCharacterStyle::NoLineStyle);
+
+    if (widget.normal->isChecked())
+        m_style->setTransform(KoCharacterStyle::NoTransform);
+    else if (widget.smallcaps->isChecked())
+        m_style->setTransform(KoCharacterStyle::SmallCaps);
+    else if (widget.uppercase->isChecked())
+        m_style->setTransform(KoCharacterStyle::Uppercase);
+    else if (widget.lowercase->isChecked())
+        m_style->setTransform(KoCharacterStyle::Lowercase);
+    else if (widget.capitalize->isChecked())
+        m_style->setTransform(KoCharacterStyle::Capitalize);
 }
 
 #include "CharacterHighlighting.moc"

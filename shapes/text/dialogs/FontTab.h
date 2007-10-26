@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C)  2001,2002,2003,2006 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2006 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,34 +18,32 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kolanguagetab_h__
-#define __kolanguagetab_h__
+#ifndef __kofonttab_h__
+#define __kofonttab_h__
 
-#include <ui_kolanguagetabbase.h>
+#include <QFont>
+#include <QWidget>
 
+class KFontChooser;
 
-class KoLanguageTabBase : public QWidget, public Ui::KoLanguageTabBase
-{
-public:
-  explicit KoLanguageTabBase( QWidget *parent ) : QWidget( parent ) {
-    setupUi( this );
-  }
-};
-
-
-class KoLanguageTab : public KoLanguageTabBase
+class FontTab : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KoLanguageTab( /*KSpell2::Loader::Ptr loader = KSpell2::Loader::Ptr()*/ QWidget* parent=0, const char* name=0, Qt::WFlags fl=0 );
-    ~KoLanguageTab();
+    explicit FontTab(QWidget* parent=0);
+    ~FontTab() {}
 
-    QString getLanguage() const;
-    void setLanguage( const QString &item );
+    QFont font();
+
+public slots:
+    void setFont( const QFont &font );
 
 signals:
-    void languageChanged();
+    void fontChanged( const QFont &font );
+
+private:
+    KFontChooser *m_fontChooser;
 };
 
 #endif

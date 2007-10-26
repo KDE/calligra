@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,17 +18,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoFontDia.h"
+#include "FontDia.h"
+#include "FontTab.h"
+#include "CharacterHighlighting.h"
+#include "FontDecorations.h"
+#include "FontLayoutTab.h"
+#include "LanguageTab.h"
 
 #include <klocale.h>
 #include <kvbox.h>
 #include <kfontdialog.h>
 
-#include <QWidget>
-
-KoFontDia::KoFontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr loader,*/ QWidget* parent)
+FontDia::FontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr loader,*/ QWidget* parent)
     : KDialog(parent),
-    m_format(format)
+    m_style(format)
 {
     setCaption(i18n("Select Font") );
     setModal( true );
@@ -41,7 +44,8 @@ KoFontDia::KoFontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr load
     QTabWidget *fontTabWidget = new QTabWidget( mainHBox );
 
     // Font tab
-    fontTab = new KoFontTab( KFontChooser::SmoothScalableFonts, this );
+    fontTab = new FontTab( this );
+    fontTab->setFont( format.font() );
     fontTabWidget->addTab( fontTab, i18n( "Font" ) );
 
 /*  connect( fontTab, SIGNAL( familyChanged() ), this, SLOT( slotFontFamilyChanged() ) );
@@ -51,19 +55,22 @@ KoFontDia::KoFontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr load
 */
 
     //Highlighting tab
-    m_highlightingTab = new KoHighlightingTab( this );
+    m_highlightingTab = new CharacterHighlighting( this );
+    m_highlightingTab->open(&m_style);
     fontTabWidget->addTab( m_highlightingTab, i18n( "Highlighting" ) );
 
     //Decoration tab
-    m_decorationTab = new KoDecorationTab( this );
+    m_decorationTab = new FontDecorations( this );
+    m_decorationTab->open(&m_style);
     fontTabWidget->addTab( m_decorationTab, i18n( "Decoration" ) );
 
     //Layout tab
-    m_layoutTab = new KoLayoutTab( true, this );
+    m_layoutTab = new FontLayoutTab( true, this );
+    m_layoutTab->open(&m_style);
     fontTabWidget->addTab( m_layoutTab, i18n( "Layout" ) );
 
     //Language tab
-    languageTab = new KoLanguageTab( /*loader,*/ this );
+    languageTab = new LanguageTab( /*loader,*/ this );
     fontTabWidget->addTab( languageTab, i18n( "Language" ) );
     connect( languageTab, SIGNAL( languageChanged() ), this, SLOT( slotLanguageChanged() ) );
 
@@ -81,27 +88,33 @@ KoFontDia::KoFontDia( const QTextCharFormat &format, /*KSpell2::Loader::Ptr load
     slotReset();
 }
 
-void KoFontDia::slotApply()
+void FontDia::slotApply()
 {
-    m_format.setFont(fontTab->font());
-    m_highlightingTab->save( m_format );
-    m_decorationTab->save( m_format );
-    m_layoutTab->save( m_format );
+    QFont font = fontTab->font();
+    m_style.setFontFamily(font.family());
+    m_style.setFontPointSize(font.pointSize());
+    m_style.setFontWeight(font.weight());
+    m_style.setFontItalic(font.italic());
+    m_highlightingTab->save();
+    m_decorationTab->save();
+    m_layoutTab->save();
 }
 
-void KoFontDia::slotOk()
+void FontDia::slotOk()
 {
     slotApply();
     KDialog::accept();
 }
 
-void KoFontDia::slotReset()
+void FontDia::slotReset()
 {
+/*
     fontTab->setFont( m_format.font());
     m_highlightingTab->open( m_format );
     m_decorationTab->open( m_format );
     m_layoutTab->open( m_format );
+*/
 }
 
-#include "KoFontDia.moc"
+#include "FontDia.moc"
 

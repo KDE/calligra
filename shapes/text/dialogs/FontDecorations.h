@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001,2002,2003 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,29 +18,37 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kolayouttab_h__
-#define __kolayouttab_h__
+#ifndef FONTDECORATIONS_H
+#define FONTDECORATIONS_H
 
-#include "ui_KoLayoutTab.h"
+#include "ui_FontDecorations.h"
 
-#include <QTextCharFormat>
+#include <KoCharacterStyle.h>
 
-class QButtonGroup;
-
-class KoLayoutTab : public QWidget
+class FontDecorations : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit KoLayoutTab( bool withSubSuperScript, QWidget* parent=0);
-    ~KoLayoutTab() {}
+    explicit FontDecorations( QWidget* parent=0);
+    ~FontDecorations() {}
 
-    void open(const QTextCharFormat &format);
-    void save(QTextCharFormat &format) const;
+    void open(KoCharacterStyle *style);
+    void save() const;
+
+private slots:
+    void clearTextColor();
+    void clearBackgroundColor();
+    void textColorChanged() { m_textColorReset = false; m_textColorChanged = true; }
+    void backgroundColorChanged() { m_backgroundColorReset = false; m_backgroundColorChanged = true; }
 
 private:
-    Ui::KoLayoutTabBase widget;
-    QButtonGroup *m_buttonGroup;
+    Ui::FontDecorations widget;
+
+    bool m_textColorChanged, m_textColorReset;
+    bool m_backgroundColorChanged, m_backgroundColorReset;
+
+    KoCharacterStyle *m_style;
 };
 
 #endif

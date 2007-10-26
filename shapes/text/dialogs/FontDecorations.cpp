@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,10 +18,11 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KoDecorationTab.h"
+#include "FontDecorations.h"
 
-KoDecorationTab::KoDecorationTab( QWidget* parent )
-    : QWidget( parent )
+FontDecorations::FontDecorations( QWidget* parent )
+    : QWidget( parent ),
+    m_style(0)
 {
     widget.setupUi(this);
 
@@ -34,36 +35,38 @@ KoDecorationTab::KoDecorationTab( QWidget* parent )
     widget.shadowGroupBox->setVisible(false);
 }
 
-void KoDecorationTab::open(const QTextCharFormat &format) {
+void FontDecorations::open(KoCharacterStyle *style) {
+    m_style = style;
     m_textColorChanged = false;
     m_backgroundColorChanged = false;
-    m_textColorReset = ! format.hasProperty(QTextFormat::ForegroundBrush);
+    m_textColorReset = ! m_style->hasProperty(QTextFormat::ForegroundBrush);
     if(!m_textColorReset)
-        widget.textColor->setColor(format.foreground().color());
-    m_backgroundColorReset = ! format.hasProperty(QTextFormat::BackgroundBrush);
+        widget.textColor->setColor(m_style->foreground().color());
+    m_backgroundColorReset = ! m_style->hasProperty(QTextFormat::BackgroundBrush);
     if(!m_backgroundColorReset)
-        widget.backgroundColor->setColor(format.background().color());
+        widget.backgroundColor->setColor(m_style->background().color());
 }
 
-void KoDecorationTab::save(QTextCharFormat &format) const {
+void FontDecorations::save() const {
+    Q_ASSERT(m_style);
     if(m_backgroundColorReset)
-        format.clearBackground();
+        m_style->clearBackground();
     else if(m_backgroundColorChanged)
-        format.setBackground(QBrush(widget.backgroundColor->color()));
+        m_style->setBackground(QBrush(widget.backgroundColor->color()));
     if(m_textColorReset)
-        format.clearForeground();
+        m_style->clearForeground();
     else if(m_textColorChanged)
-        format.setForeground(QBrush(widget.textColor->color()));
+        m_style->setForeground(QBrush(widget.textColor->color()));
 }
 
-void KoDecorationTab::clearTextColor() {
+void FontDecorations::clearTextColor() {
     widget.textColor->setColor(widget.textColor->defaultColor());
     m_textColorReset = true;
 }
 
-void KoDecorationTab::clearBackgroundColor() {
+void FontDecorations::clearBackgroundColor() {
     widget.backgroundColor->setColor(widget.backgroundColor->defaultColor());
     m_backgroundColorReset = true;
 }
 
-#include "KoDecorationTab.moc"
+#include "FontDecorations.moc"

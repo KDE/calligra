@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>KoLayoutTabBase</class>
- <widget class="QWidget" name="KoLayoutTabBase" >
+ <class>FontLayoutTab</class>
+ <widget class="QWidget" name="FontLayoutTab" >
   <property name="geometry" >
    <rect>
     <x>0</x>
