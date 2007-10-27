@@ -26,6 +26,7 @@
 #include "Bar.h"
 #include "Clef.h"
 #include "TimeSignature.h"
+#include "Note.h"
 
 #include <KoXmlReader.h>
 
@@ -316,7 +317,14 @@ void MusicXmlReader::loadPart(const KoXmlElement& partElement, Part* part)
                         alter = -2;
                     }
                     
-                    lastNote->addNote(part->staff(staffId), note, alter);
+                    Note* theNote = lastNote->addNote(part->staff(staffId), note, alter);
+                    
+                    KoXmlElement tie = namedItem(e, "tie");
+                    if (!tie.isNull()) {
+                        if (tie.attribute("type") == "start") {
+                            theNote->setStartTie(true);
+                        }
+                    }                    
                 }
             }
         }
