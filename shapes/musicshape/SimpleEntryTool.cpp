@@ -445,8 +445,10 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
         m_contextMenuStaff = closestStaff;
         m_contextMenuBar = barIdx;
         m_contextMenuPoint = point;
+        event->ignore();
     } else {
         m_activeAction->mousePress(closestStaff, barIdx, point);
+        event->accept();
     }
 }
 
