@@ -447,13 +447,17 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             if (nextChord) {
                 QPointF startPos = bar->position() + QPointF(1 + chord->xScaled() + chord->width(), ypos);
                 QPointF endPos = startPos + QPointF(-2 + nextChord->xScaled() - chord->xScaled() - chord->width(), 0);
-                QPointF c1 = startPos + QPointF(2, 4);
-                QPointF c2 = endPos + QPointF(-2, 4);
+                QPointF c1a = startPos + QPointF(2, 4);
+                QPointF c2a = endPos + QPointF(-2, 4);
+                QPointF c1b = startPos + QPointF(2, 5);
+                QPointF c2b = endPos + QPointF(-2, 5);
+                
                 QPainterPath p;
                 p.moveTo(startPos);
-                p.cubicTo(c1, c2, endPos);
-                painter.setPen(m_style->slurPen(color));
-                painter.setBrush(Qt::NoBrush);
+                p.cubicTo(c1a, c2a, endPos);
+                p.cubicTo(c2b, c1b, startPos);
+                painter.setPen(Qt::NoPen);//m_style->slurPen(color));
+                painter.setBrush(QBrush(color));
                 painter.drawPath(p);
             }
         }
