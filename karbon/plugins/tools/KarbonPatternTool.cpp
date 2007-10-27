@@ -256,7 +256,8 @@ QWidget * KarbonPatternTool::createOptionWidget()
     connect( m_buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
     connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem* ) ), this, SLOT( patternSelected( QTableWidgetItem* ) ) );
 
-    m_currentPattern = static_cast<KarbonPatternItem*>( items.first() );
+    if( !items.isEmpty() )
+        m_currentPattern = static_cast<KarbonPatternItem*>( items.first() );
 
     return optionWidget;
 }
