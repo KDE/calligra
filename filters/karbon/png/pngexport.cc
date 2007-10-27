@@ -31,7 +31,7 @@
 
 #include <vdocument.h>
 #include <karbon_part.h>
-#include <KarbonShapePainter.h>
+#include <KoShapePainter.h>
 
 #include <KoFilter.h>
 #include <KoFilterChain.h>
@@ -65,7 +65,7 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
     if( ! karbonPart )
         return KoFilter::WrongFormat;
 
-    KarbonShapePainter painter;
+    KoShapePainter painter;
     painter.setShapes( karbonPart->document().shapes() );
 
     QRectF shapesRect = painter.contentRect();
