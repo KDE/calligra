@@ -55,6 +55,7 @@
 #include "actions/TimeSignatureAction.h"
 #include "actions/KeySignatureAction.h"
 #include "actions/RemoveBarAction.h"
+#include "actions/TiedNoteAction.h"
 
 #include "commands/AddBarsCommand.h"
 
@@ -190,6 +191,10 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
 
     action = new DotsAction(this);
     addAction("dots", action);
+    actionGroup->addAction(action);
+    
+    action = new TiedNoteAction(this);
+    addAction("tiednote", action);
     actionGroup->addAction(action);
 
     actionQuarterNote->setChecked(true);

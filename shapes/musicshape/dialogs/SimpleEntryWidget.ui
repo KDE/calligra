@@ -291,13 +291,20 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="2" >
-         <widget class="QToolButton" name="eraserButton" >
+        <item row="1" column="1" >
+         <widget class="QToolButton" name="tiedNoteButton" >
           <property name="text" >
            <string/>
           </property>
           <property name="autoRaise" >
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2" colspan="2" >
+         <widget class="QToolButton" name="eraserButton" >
+          <property name="text" >
+           <string/>
           </property>
          </widget>
         </item>

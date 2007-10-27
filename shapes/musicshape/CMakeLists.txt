@@ -55,6 +55,7 @@ SET (musicshape_LIB_SRCS
     actions/TimeSignatureAction.cpp
     actions/KeySignatureAction.cpp
     actions/RemoveBarAction.cpp
+    actions/TiedNoteAction.cpp
     
     commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp
@@ -72,6 +73,7 @@ SET (musicshape_LIB_SRCS
     commands/SetKeySignatureCommand.cpp
     commands/RemoveBarCommand.cpp
     commands/MakeRestCommand.cpp
+    commands/ToggleTiedNoteCommand.cpp
 
     ${musiccore_SRCS}
 )
