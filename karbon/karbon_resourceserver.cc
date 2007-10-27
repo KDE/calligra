@@ -49,6 +49,7 @@
 #include <kiconloader.h>
 #include <kogradientmanager.h>
 #include <KoStopGradient.h>
+#include <KoSegmentGradient.h>
 
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
@@ -301,16 +302,30 @@ KarbonResourceServer::removeGradient( VGradientListItem* gradient )
 void
 KarbonResourceServer::loadGradient( const QString& filename )
 {
-    KoStopGradient grad(filename);
-    grad.load();
-    if(!grad.valid())
+    KoAbstractGradient* grad;
+
+    QString fileExtension;
+    int index = filename.lastIndexOf('.');
+
+    if (index != -1)
+        fileExtension = filename.mid(index).toLower();
+
+    if(fileExtension == ".svg" || fileExtension == ".kgr")
+        grad = new KoStopGradient(filename);
+    else if(fileExtension == ".ggr" )
+        grad = new KoSegmentGradient(filename);
+
+    grad->load();
+    if(!grad->valid())
         return;
 
-    QGradient* gradient = grad.toQGradient();
+    QGradient* gradient = grad->toQGradient();
     if(!gradient)
         return;
 
     m_gradients->append( new VGradientListItem( gradient, filename ) );
+
+    delete grad;
 } // KarbonResourceServer::loadGradient
 
 void
