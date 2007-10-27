@@ -45,7 +45,6 @@
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
 #include <KoQueryTrader.h>
-#include <KoSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoStyleStack.h>
@@ -3640,8 +3639,7 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     const QRect usedArea = this->usedArea();
     saveOasisColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), valStyle );
 
-    KoSavingContext context( mainStyles );
-    KoShapeSavingContext shapeSavingContext( xmlWriter, context );
+    KoShapeSavingContext shapeSavingContext( xmlWriter, mainStyles );
     d->shapeContainer->saveOdf( shapeSavingContext );
 
     xmlWriter.endElement();

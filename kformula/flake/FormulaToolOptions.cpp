@@ -30,7 +30,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOasisLoadingContext.h>
-#include <KoSavingContext.h>
 #include <KoOasisStyles.h>
 #include <KoGenStyles.h>
 
@@ -113,8 +112,7 @@ void FormulaToolOptions::slotSaveFormula()
     QFile file( url.path() );
     KoXmlWriter writer( &file );
     KoGenStyles styles;
-    KoSavingContext savingContext( styles );
-    KoShapeSavingContext shapeSavingContext( writer, savingContext );
+    KoShapeSavingContext shapeSavingContext( writer, styles );
 
     m_tool->shape()->saveOdf( shapeSavingContext );
 }

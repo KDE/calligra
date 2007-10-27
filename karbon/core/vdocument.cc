@@ -46,7 +46,6 @@
 #include <KoShapeRegistry.h>
 #include <KoStoreDevice.h>
 #include <KoDocument.h>
-#include <KoSavingContext.h>
 #include <KoShapeStyleWriter.h>
 #include <KoImageCollection.h>
 
@@ -407,8 +406,6 @@ bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenSty
     KoStoreDevice storeDev( store );
     KoXmlWriter * docWriter = KoDocument::createOasisXmlWriter( &storeDev, "office:document-content" );
 
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
-
     // for office:master-styles
     KTemporaryFile masterStyles;
     masterStyles.open();
@@ -433,7 +430,7 @@ bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenSty
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:drawing" );
 
-    KoShapeSavingContext shapeContext( contentTmpWriter, savingContext );
+    KoShapeSavingContext shapeContext( contentTmpWriter, mainStyles );
     saveOasis( shapeContext ); // Save contents
 
     contentTmpWriter.endElement(); // office:drawing

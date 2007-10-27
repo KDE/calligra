@@ -49,7 +49,6 @@
 #include <KoStyleManager.h>
 #include <KoInteractionTool.h>
 #include <KoStoreDevice.h>
-#include <KoSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoImageCollection.h>
@@ -152,44 +151,24 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
     KoStoreDevice contentDev( store );
     KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
 
-    KoGenStyles mainStyles;
-    
-    KoSavingContext savingContext( mainStyles, KoSavingContext::Store );
-
     // for office:master-styles
     KTemporaryFile masterStyles;
     masterStyles.open();
     KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
 
-/*
-    KoPASavingContext paContext( masterStylesTmpWriter, savingContext, 1 );
-
-    paContext.setOptions( KoPASavingContext::DrawId | KoPASavingContext::AutoStyleInStyleXml );
-
-    masterStylesTmpWriter.startElement( "office:master-styles" );
-
-    // save master pages
-    foreach( KoPAPageBase *page, m_masterPages )
-    {
-        page->saveOdf( paContext );
-    }
-    masterStylesTmpWriter.endElement();
-
-    masterStyles.close();
-*/
     // for office:body
     KTemporaryFile contentTmpFile;
     contentTmpFile.open();
     KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
     contentTmpWriter.startElement( "office:body" );
-    
     contentTmpWriter.startElement( "office:text" );
 
-    KoShapeSavingContext context (contentTmpWriter, savingContext);
+    KoGenStyles mainStyles;
+    KoShapeSavingContext context (contentTmpWriter, mainStyles);
 
     KWTextFrameSet *mainTextFrame = 0;
-    
+
     foreach(KWFrameSet *fs, frameSets()) {
         // TODO loop over all non-autocreated frames and save them.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);

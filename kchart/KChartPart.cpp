@@ -59,7 +59,6 @@ using std::cerr;
 #include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <KoSavingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoToolManager.h>
 #include <KoOasisLoadingContext.h>
@@ -1246,9 +1245,6 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoXmlWriter   *contentWriter = createOasisXmlWriter( &contentDev,
                                                          "office:document-content" );
 
-    KoGenStyles      mainStyles;
-    KoSavingContext  savingContext( mainStyles, KoSavingContext::Store );
-
     // Create a temporary file for the document contents.
     // Also check that it was successfully created.
     KTemporaryFile contentTmpFile;
@@ -1264,8 +1260,8 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     contentTmpWriter.startElement( "office:chart" );
 
     // Write the chart itself.
-    KoShapeSavingContext  shapeSavingContext( contentTmpWriter, 
-                                              savingContext );
+    KoGenStyles      mainStyles;
+    KoShapeSavingContext shapeSavingContext( contentTmpWriter, mainStyles );
     m_chartShape->saveOdf( shapeSavingContext );
 
     contentTmpWriter.endElement(); // office:chart
