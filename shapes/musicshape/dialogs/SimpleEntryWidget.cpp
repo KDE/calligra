@@ -62,4 +62,9 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     connect(widget.voiceList, SIGNAL(currentIndexChanged(int)), this, SIGNAL(voiceChanged(int)));
 }
 
+void SimpleEntryWidget::setVoiceListEnabled(bool enabled)
+{
+    widget.voiceList->setEnabled(enabled);
+}
+
 #include "SimpleEntryWidget.moc"

@@ -80,6 +80,7 @@ NoteEntryAction::NoteEntryAction(Duration duration, bool isRest, SimpleEntryTool
     : AbstractMusicAction(getIcon(duration, isRest), getText(duration, isRest), tool)
     , m_duration(duration), m_isRest(isRest)
 {
+    m_isVoiceAware = true;
 }
 
 void NoteEntryAction::renderPreview(QPainter& painter, const QPointF& point)

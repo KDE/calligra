@@ -23,6 +23,7 @@
 
 AbstractMusicAction::AbstractMusicAction(const QIcon& icon, const QString& text, SimpleEntryTool* tool)
     : QAction(icon, text, tool)
+    , m_isVoiceAware(false)
     , m_tool(tool)
 {
     setCheckable(true);
@@ -30,6 +31,7 @@ AbstractMusicAction::AbstractMusicAction(const QIcon& icon, const QString& text,
 
 AbstractMusicAction::AbstractMusicAction(const QString& text, SimpleEntryTool* tool)
     : QAction(text, tool)
+    , m_isVoiceAware(false)
     , m_tool(tool)
 {
     setCheckable(true);
@@ -40,6 +42,11 @@ void AbstractMusicAction::renderPreview(QPainter& painter, const QPointF& point)
 {
     Q_UNUSED( painter );
     Q_UNUSED( point );
+}
+
+bool AbstractMusicAction::isVoiceAware()
+{
+    return m_isVoiceAware;
 }
 
 #include "AbstractMusicAction.moc"

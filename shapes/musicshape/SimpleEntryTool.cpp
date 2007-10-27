@@ -326,13 +326,15 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
         lastBar = sheet->staffSystem(lastSystem+1)->firstBar()-1;
     }
 
-    for (int i = 0; i < sheet->partCount(); i++) {
-        Part* p = sheet->part(i);
-        if (p->voiceCount() > m_voice) {
-            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), firstBar, lastBar, Qt::red);
+    if (m_activeAction->isVoiceAware()) {
+        for (int i = 0; i < sheet->partCount(); i++) {
+            Part* p = sheet->part(i);
+            if (p->voiceCount() > m_voice) {
+                m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), firstBar, lastBar, Qt::red);
+            }
         }
     }
-
+    
     m_activeAction->renderPreview(painter, m_point);
 }
 
@@ -450,7 +452,12 @@ QWidget * SimpleEntryTool::createOptionWidget()
 
 void SimpleEntryTool::activeActionChanged(QAction* action)
 {
+    bool oldVoiceAware = m_activeAction->isVoiceAware();
     m_activeAction = qobject_cast<AbstractMusicAction*>(action);
+    if (m_activeAction->isVoiceAware() != oldVoiceAware) {
+        m_musicshape->update();
+        reinterpret_cast<SimpleEntryWidget*>(optionWidget())->setVoiceListEnabled(m_activeAction->isVoiceAware());
+    }
 }
 
 void SimpleEntryTool::voiceChanged(int voice)
