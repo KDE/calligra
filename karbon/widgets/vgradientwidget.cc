@@ -126,10 +126,18 @@ void VGradientWidget::paintEvent( QPaintEvent* )
     m_gradient.setStart( QPointF( 2, 2 ) );
     m_gradient.setFinalStop( QPointF( width()-2, 2 ) );
 
-    // TODO draw a checker board as background?
+    QPixmap checker(8, 8);
+    QPainter p(&checker);
+    p.fillRect(0, 0, 4, 4, Qt::lightGray);
+    p.fillRect(4, 0, 4, 4, Qt::darkGray);
+    p.fillRect(0, 4, 4, 4, Qt::darkGray);
+    p.fillRect(4, 4, 4, 4, Qt::lightGray);
+    p.end();
+    painter.fillRect( QRectF( 2, 2, w, gh ), QBrush(checker));
+
     //painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
-    painter.setBrush( palette().base() );
-    painter.drawRect( QRectF( 2, 2, w, gh ) );
+//     painter.setBrush( palette().base() );
+//     painter.drawRect( QRectF( 2, 2, w, gh ) );
 
     painter.setBrush( QBrush( m_gradient ) );
     painter.drawRect( QRectF( 2, 2, w, gh ) );

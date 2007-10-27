@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2001-2002 Benoï¿½ Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
    Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
@@ -92,8 +92,18 @@ VGradientListItem::VGradientListItem( const QGradient * gradient, const QString 
     paintGradient.setStart( QPointF( 0, 0 ) );
     paintGradient.setFinalStop( QPointF( m_pixmap.width() - 1, 0 ) );
 
+    QPixmap checker(8, 8);
+    QPainter p(&checker);
+    p.fillRect(0, 0, 4, 4, Qt::lightGray);
+    p.fillRect(4, 0, 4, 4, Qt::darkGray);
+    p.fillRect(0, 4, 4, 4, Qt::darkGray);
+    p.fillRect(4, 4, 4, 4, Qt::lightGray);
+    p.end();
+
     QPainter painter( &m_pixmap );
-    painter.fillRect( QRect( 0, 0, m_pixmap.width(), m_pixmap.height() ), QBrush( paintGradient ) );
+    QRect rect = QRect( 0, 0, m_pixmap.width(), m_pixmap.height() );
+    painter.fillRect( rect, QBrush(checker));
+    painter.fillRect( rect, QBrush( paintGradient ) );
 
     m_delete = QFileInfo( filename ).isWritable();
 }
