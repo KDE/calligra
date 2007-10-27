@@ -446,7 +446,8 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             // okay, now nextChord is the chord to which the tie should go
             if (nextChord) {
                 QPointF startPos = bar->position() + QPointF(1 + chord->xScaled() + chord->width(), ypos);
-                QPointF endPos = startPos + QPointF(-2 + nextChord->xScaled() - chord->xScaled() - chord->width(), 0);
+                QPointF endPos = nextChord->voiceBar()->bar()->position() + QPointF(nextChord->xScaled() - 1, ypos);
+                endPos.setY(startPos.y());
                 QPointF c1a = startPos + QPointF(2, 4);
                 QPointF c2a = endPos + QPointF(-2, 4);
                 QPointF c1b = startPos + QPointF(2, 5);
