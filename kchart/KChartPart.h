@@ -100,10 +100,6 @@ public:
     OdfChartType     chartType()    const { return m_chartShape->chartType(); }
     OdfChartSubtype  chartSubtype() const { return m_chartShape->chartSubtype(); }
 
-    // Labels
-    QStringList       &rowLabelTexts()         { return m_rowLabels;  }
-    QStringList       &colLabelTexts()         { return m_colLabels;  }
-
     // Save and load
     virtual QDomDocument  saveXML();
     virtual bool          loadXML( QIODevice *, const KoXmlDocument& doc );
@@ -151,17 +147,8 @@ private:
     ChartShape         *m_chartShape;
     QStandardItemModel *m_chartData;
 
-    // Labels for axes.
-    QStringList         m_rowLabels;
-    QStringList         m_colLabels;
-
     // Other auxiliary values
     bool                m_bCanChangeValue;
-
-    // Graphics
-    QWidget            *m_parentWidget;
-
-    QPixmap             m_bufferPixmap;
 };
 
 

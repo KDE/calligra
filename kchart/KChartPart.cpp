@@ -92,9 +92,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
     m_chartShape( new ChartShape ),
-    m_chartData( 0 ),
-    m_rowLabels(), m_colLabels(),
-    m_parentWidget( parentWidget )
+    m_chartData( 0 )
 {
     kDebug(35001) <<"Constructor started!";
 
@@ -137,10 +135,6 @@ void KChartPart::initNullChart()
     m_currentData->setDataHasVerticalHeaders( false );
     m_currentData->setDataHasHorizontalHeaders( false );
 #endif
-
-    // Fill column and row labels.
-    m_colLabels << QString("");
-    m_rowLabels << QString("");
 
     setChartDefaults();
 
@@ -247,94 +241,6 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect)
     //m_chart->paint( &painter, rect );
 #endif
 }
-
-
-#if 0
-void KChartPart::createLabelsAndLegend( QStringList  &longLabels,
-					QStringList  &shortLabels )
-{
-    longLabels.clear();
-    shortLabels.clear();
-
-    const uint dataColumnCount  = m_currentData.cols();
-    const uint dataRowCount     = m_currentData.rows();
-    const uint columnLabelCount = m_colLabels.count();
-    const uint rowLabelCount    = m_rowLabels.count();
-
-    // Handle HiLo charts separately.
-    if ( chartType() == HiLo ) {
-
-      // FIXME: In a HiLo chart, the Legend should be the same as the
-      //        labels on the X Axis.  Should we disable one of them?
-
-	// Set the correct X axis labels and legend.
-	longLabels.clear();
-	shortLabels.clear();
-	if ( dataDirection() == DataRows ) {
-
-	    // If data are in rows, then the X axis labels should be
-	    // taken from the row headers.
-	    for ( uint row = 0; row < dataRowCount ; row++ ) {
-
-                QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString();
-
-                longLabels  << label;
-		shortLabels << label.left( 3 );
-	    }
-	}
-	else {
-	    // If data are in columns, then the X axis labels should
-	    // be taken from the column headers.
-	    for ( uint col = 0; col < dataColumnCount; col++ ) {
-
-                QString label = (col < columnLabelCount) ? m_colLabels[col] : QString();
-
-                longLabels  << m_colLabels[col];
-		shortLabels << m_colLabels[col].left( 3 );
-	    }
-	}
-    }
-    else if ( dataDirection() == DataRows ) {
-	// Data is handled in rows.  This is the way KDChart works also.
-
-	// Set X axis labels from column headers.
-	for ( uint col = 0; col < dataColumnCount; col++ ) {
-
-            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString();
-
-            longLabels  << label;
-	    shortLabels << label.left( 3 );
-	}
-
-	// Set legend from row headers.
-        for ( uint row = 0; row < dataRowCount; row++ ) {
-            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString();
-
-            m_params->setLegendText( row, label );
-        }
-    }
-    else {
-	// Data is handled in columns.
-
-	// Set X axis labels from row headers.
-	for ( uint row = 0; row < dataRowCount; row++ ) {
-
-            QString label = (row < rowLabelCount) ? m_rowLabels[row] : QString();
-
-            longLabels  << label;
-	    shortLabels << label.left( 3 );
-	}
-
-	// Set legend from column headers.
-        for ( uint col = 0; col < dataColumnCount ; col++ ) {
-            QString label = (col < columnLabelCount) ? m_colLabels[col] : QString();
-
-            m_params->setLegendText( col, label );
-        }
-    }
-}
-#endif
-
 
 
 // ================================================================
