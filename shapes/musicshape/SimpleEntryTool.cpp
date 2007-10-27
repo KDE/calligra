@@ -313,10 +313,18 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
     painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
 
     Sheet* sheet = m_musicshape->sheet();
+    int firstSystem = m_musicshape->firstSystem();
+    int lastSystem = m_musicshape->lastSystem();
+    int firstBar = sheet->staffSystem(firstSystem)->firstBar();
+    int lastBar = INT_MAX;
+    if (lastSystem < sheet->staffSystemCount()-1) {
+        lastBar = sheet->staffSystem(lastSystem+1)->firstBar()-1;
+    }
+
     for (int i = 0; i < sheet->partCount(); i++) {
         Part* p = sheet->part(i);
         if (p->voiceCount() > m_voice) {
-            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), m_musicshape->firstSystem(), m_musicshape->lastSystem(), Qt::red);
+            m_musicshape->renderer()->renderVoice(painter, p->voice(m_voice), firstBar, lastBar, Qt::red);
         }
     }
 
