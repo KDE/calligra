@@ -452,7 +452,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
                 QPainterPath p;
                 p.moveTo(startPos);
                 p.cubicTo(c1, c2, endPos);
-                painter.setPen(QPen(color));
+                painter.setPen(m_style->slurPen(color));
                 painter.setBrush(Qt::NoBrush);
                 painter.drawPath(p);
             }

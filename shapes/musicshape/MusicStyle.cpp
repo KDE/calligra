@@ -36,6 +36,9 @@ MusicStyle::MusicStyle()
     m_noteDotPen.setWidthF(1.9);
     m_noteDotPen.setCapStyle(Qt::RoundCap);
     m_noteDotPen.setColor(Qt::black);
+    m_slurPen.setWidthF(1.2);
+    m_slurPen.setCapStyle(Qt::RoundCap);
+    m_slurPen.setColor(Qt::black);
 }
 
 MusicStyle::~MusicStyle()
@@ -58,6 +61,12 @@ QPen MusicStyle::noteDotPen(const QColor& color)
 {
     m_noteDotPen.setColor(color);
     return m_noteDotPen;
+}
+
+QPen MusicStyle::slurPen(const QColor& color)
+{
+    m_slurPen.setColor(color);
+    return m_slurPen;
 }
 
 double MusicStyle::beamLineWidth()

@@ -36,6 +36,7 @@ public:
     virtual QPen staffLinePen(const QColor& color = Qt::black);
     virtual QPen stemPen(const QColor& color = Qt::black);
     virtual QPen noteDotPen(const QColor& color = Qt::black);
+    virtual QPen slurPen(const QColor& color = Qt::black);
     virtual double beamLineWidth();
     virtual void renderNoteHead(QPainter& painter, double x, double y, MusicCore::Duration duration, const QColor& color = Qt::black);
     virtual void renderRest(QPainter& painter, double x, double y, MusicCore::Duration duration, const QColor& color = Qt::black);
@@ -44,7 +45,7 @@ public:
     virtual void renderTimeSignatureNumber(QPainter& painter, double x, double y, double w, int number, const QColor& color = Qt::black);
     virtual void renderNoteFlags(QPainter& painter, double x, double y, MusicCore::Duration duration, bool stemsUp, const QColor& color = Qt::black);
 private:
-    QPen m_staffLinePen, m_stemPen, m_noteDotPen;
+    QPen m_staffLinePen, m_stemPen, m_noteDotPen, m_slurPen;
     QFont m_font;
 };
 
