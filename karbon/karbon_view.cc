@@ -290,6 +290,8 @@ KarbonView::~KarbonView()
     delete m_status;
     delete m_cursorCoords;
 
+    delete m_zoomController;
+
     KoToolManager::instance()->removeCanvasController( m_canvasController );
 }
 

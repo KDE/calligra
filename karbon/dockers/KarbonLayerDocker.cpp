@@ -129,6 +129,7 @@ KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VD
 
 KarbonLayerDocker::~KarbonLayerDocker()
 {
+    delete m_model;
 }
 
 void KarbonLayerDocker::updateView()
