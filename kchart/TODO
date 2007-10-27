@@ -46,7 +46,7 @@ Item                                                                   Prio Stat
      - radar                                                            --
      - scatter                                                          --
      - stock                                                            --
-     - bubble                                                           --
+     - bubble                                                           josi
      - gantt                                                            --
   + Commands so that undo/redo will work                                ----
 
