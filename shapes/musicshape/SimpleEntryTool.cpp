@@ -56,6 +56,7 @@
 #include "actions/KeySignatureAction.h"
 #include "actions/RemoveBarAction.h"
 #include "actions/TiedNoteAction.h"
+#include "actions/SelectionAction.h"
 
 #include "commands/AddBarsCommand.h"
 
@@ -75,7 +76,8 @@ using namespace MusicCore;
 SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     : KoTool( canvas ),
     m_musicshape(0),
-    m_voice(0)
+    m_voice(0),
+    m_selectionStart(-1)
 {
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
@@ -197,6 +199,10 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     addAction("tiednote", action);
     actionGroup->addAction(action);
 
+    action = new SelectionAction(this);
+    addAction("select", action);
+    actionGroup->addAction(action);
+    
     actionQuarterNote->setChecked(true);
     m_activeAction = actionQuarterNote;
 
@@ -324,6 +330,25 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
     int lastBar = INT_MAX;
     if (lastSystem < sheet->staffSystemCount()-1) {
         lastBar = sheet->staffSystem(lastSystem+1)->firstBar()-1;
+    }
+
+    // somehow check for selections
+    if (m_selectionStart >= 0) {
+        for (int b = m_selectionStart; b <= m_selectionEnd && b < sheet->barCount(); b++) {
+            Bar* bar = sheet->bar(b);
+            for (int p = 0; p < sheet->partCount(); p++) {
+                Part* part = sheet->part(p);
+                for (int s = 0; s < part->staffCount(); s++) {
+                    Staff* staff = part->staff(s);
+                    QPointF p1 = bar->position() + QPointF(0, staff->top());
+                    QPointF p2 = QPointF(p1.x() + bar->size(), p1.y() + (staff->lineCount()-1) * staff->lineSpacing());
+                    painter.setBrush(QBrush(Qt::yellow));
+                    painter.setPen(Qt::NoPen);
+                    painter.drawRect(QRectF(p1, p2));
+                }
+                m_musicshape->renderer()->renderPart(painter, part, m_selectionStart, m_selectionEnd, Qt::black);
+            }
+        }
     }
 
     if (m_activeAction->isVoiceAware()) {
@@ -489,6 +514,13 @@ MusicShape* SimpleEntryTool::shape()
 int SimpleEntryTool::voice()
 {
     return m_voice;
+}
+
+void SimpleEntryTool::setSelection(int firstBar, int lastBar)
+{
+    m_selectionStart = firstBar;
+    m_selectionEnd = lastBar;
+    m_musicshape->update();
 }
 
 void SimpleEntryTool::importSheet()

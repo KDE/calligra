@@ -56,6 +56,7 @@ SET (musicshape_LIB_SRCS
     actions/KeySignatureAction.cpp
     actions/RemoveBarAction.cpp
     actions/TiedNoteAction.cpp
+    actions/SelectionAction.cpp
     
     commands/AddPartCommand.cpp
     commands/RemovePartCommand.cpp

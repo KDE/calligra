@@ -50,10 +50,9 @@ public:
 
     MusicShape* shape();
     int voice();
+    
+    void setSelection(int startBar, int endBar);
 protected:
-    /*
-     * Create default option widget
-     */
     virtual QWidget * createOptionWidget();
 protected slots:
     void activeActionChanged(QAction* action);
@@ -71,6 +70,8 @@ private:
     MusicCore::Staff* m_contextMenuStaff;
     int m_contextMenuBar;
     QPointF m_contextMenuPoint;
+    
+    int m_selectionStart, m_selectionEnd;
 };
 
 #endif

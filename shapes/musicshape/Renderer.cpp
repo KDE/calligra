@@ -89,10 +89,10 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet, int firstSystem
     }
 }
 
-void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int lastBar)
+void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int lastBar, const QColor& color)
 {
     for (int i = 0; i < part->staffCount(); i++) {
-        renderStaff(painter, part->staff(i), firstBar, lastBar);
+        renderStaff(painter, part->staff(i), firstBar, lastBar, color);
     }
     double firstStaff = part->staff(0)->top();
     int c = part->staffCount()-1;
@@ -121,16 +121,16 @@ void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int 
             double w = bar->size();
             for (int sid = 0; sid < part->staffCount(); sid++) {
                 Staff* s = part->staff(sid);
-                renderRest(painter, WholeNote, pos + QPointF(w/2, s->top() + s->lineSpacing()), Qt::black);
+                renderRest(painter, WholeNote, pos + QPointF(w/2, s->top() + s->lineSpacing()), color);
             }
         }
     }
     for (int i = 0; i < part->voiceCount(); i++) {
-        renderVoice(painter, part->voice(i), firstBar, lastBar);
+        renderVoice(painter, part->voice(i), firstBar, lastBar, color);
     }
 }
 
-void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, int lastBar)
+void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, int lastBar, const QColor& color)
 {
     double dy = staff->lineSpacing();
     double y = staff->top();
@@ -138,7 +138,7 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, i
         Bar* bar = staff->part()->sheet()->bar(b);
         QPointF p = bar->position();
         QPointF prep = bar->prefixPosition() + QPointF(bar->prefix(), 0);
-        painter.setPen(m_style->staffLinePen());
+        painter.setPen(m_style->staffLinePen(color));
         for (int i = 0; i < staff->lineCount(); i++) {
             painter.drawLine(QPointF(p.x(), p.y() + y + i * dy), QPointF(p.x() + bar->size(), p.y() + y + i * dy));
         }
@@ -152,9 +152,9 @@ void MusicRenderer::renderStaff(QPainter& painter, Staff *staff, int firstBar, i
         for (int e = 0; e < bar->staffElementCount(staff); e++) {
             StaffElement* se = bar->staffElement(staff, e);
             if (se->startTime() == 0) {
-                renderStaffElement(painter, bar->staffElement(staff, e), prep, state, 1);
+                renderStaffElement(painter, bar->staffElement(staff, e), prep, state, 1, color);
             } else {
-                renderStaffElement(painter, bar->staffElement(staff, e), p, state, bar->scale());
+                renderStaffElement(painter, bar->staffElement(staff, e), p, state, bar->scale(), color);
             }
         }
     }
@@ -197,7 +197,7 @@ void MusicRenderer::renderElement(QPainter& painter, VoiceElement* me, Voice* vo
     if (c) renderChord(painter, c, voice, pos, xScale, color);
 }
 
-void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, const QPointF& pos, RenderState& state, double xScale)
+void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElement* se, const QPointF& pos, RenderState& state, double xScale, const QColor& color)
 {
     double top = 0;
     top += se->staff()->top();
@@ -211,22 +211,22 @@ void MusicRenderer::renderStaffElement(QPainter& painter, MusicCore::StaffElemen
     }
 
     Clef *cl = dynamic_cast<Clef*>(se);
-    if (cl) renderClef(painter, cl, pos, state, xScale);
+    if (cl) renderClef(painter, cl, pos, state, xScale, color);
     KeySignature *ks = dynamic_cast<KeySignature*>(se);
-    if (ks) renderKeySignature(painter, ks, pos, state, xScale);
+    if (ks) renderKeySignature(painter, ks, pos, state, xScale, color);
     TimeSignature* ts = dynamic_cast<TimeSignature*>(se);
-    if (ts) renderTimeSignature(painter, ts, pos, xScale);
+    if (ts) renderTimeSignature(painter, ts, pos, xScale, color);
 }
 
 
-void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, RenderState& state, double xScale)
+void MusicRenderer::renderClef(QPainter& painter, Clef *c, const QPointF& pos, RenderState& state, double xScale, const QColor& color)
 {
     state.clef = c;
     Staff* s = c->staff();
     m_style->renderClef(painter, pos.x() + c->x() * xScale, pos.y() + s->top() + (s->lineCount() - c->line()) * s->lineSpacing(), c->shape());
 }
 
-void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, const QPointF& pos, RenderState& state, double xScale)
+void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, const QPointF& pos, RenderState& state, double xScale, const QColor& color)
 {
     Staff * s = ks->staff();
     double curx = pos.x() + ks->x() * xScale;
@@ -297,7 +297,7 @@ void MusicRenderer::renderKeySignature(QPainter& painter, KeySignature* ks, cons
     }
 }
 
-void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, const QPointF& pos, double xScale)
+void MusicRenderer::renderTimeSignature(QPainter& painter, TimeSignature* ts, const QPointF& pos, double xScale, const QColor& color)
 {
     Staff* s = ts->staff();
     double hh = 0.5 * (s->lineCount() - 1) * s->lineSpacing();

@@ -210,6 +210,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" >
+     <property name="spacing" >
+      <number>0</number>
+     </property>
      <item>
       <widget class="QFrame" name="frame" >
        <layout class="QGridLayout" >
@@ -301,8 +304,15 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="2" colspan="2" >
+        <item row="1" column="2" >
          <widget class="QToolButton" name="eraserButton" >
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3" >
+         <widget class="QToolButton" name="selectButton" >
           <property name="text" >
            <string/>
           </property>
