@@ -20,7 +20,7 @@
 #include "KarbonLayerModel.h"
 
 #include <vdocument.h>
-#include <KarbonShapePainter.h>
+#include <KoShapePainter.h>
 
 #include <KoShapeManager.h>
 #include <KoShapeBorderModel.h>
@@ -274,7 +274,7 @@ void KarbonLayerModel::setProperties( KoShape* shape, const PropertyList &proper
 
 QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize ) const
 {
-    KarbonShapePainter painter;
+    KoShapePainter painter;
 
     QList<KoShape*> shapes;
 
