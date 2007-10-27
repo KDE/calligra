@@ -49,4 +49,8 @@ bool AbstractMusicAction::isVoiceAware()
     return m_isVoiceAware;
 }
 
+void AbstractMusicAction::mouseMove(MusicCore::Staff*, int, const QPointF&)
+{
+}
+
 #include "AbstractMusicAction.moc"

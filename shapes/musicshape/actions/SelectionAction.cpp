@@ -43,13 +43,14 @@ using namespace MusicCore;
 SelectionAction::SelectionAction(SimpleEntryTool* tool)
     : AbstractMusicAction(KIcon("select"), i18n("Select"), tool)
 {
+    m_firstBar = -1;
 }
 
 inline static double sqr(double a) { return a*a; }
 
 void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {
-    Part* part = staff->part();
+    /*Part* part = staff->part();
     Sheet* sheet = part->sheet();
     Bar* bar = sheet->bar(barIdx);
     
@@ -75,7 +76,13 @@ void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
                 chord = c;
             }
         }
-    }
+    }*/
     
+    m_firstBar = barIdx;
     m_tool->setSelection(barIdx, barIdx);
+}
+
+void SelectionAction::mouseMove(Staff* staff, int barIdx, const QPointF& pos)
+{
+    m_tool->setSelection(qMin(m_firstBar, barIdx), qMax(m_firstBar, barIdx));
 }

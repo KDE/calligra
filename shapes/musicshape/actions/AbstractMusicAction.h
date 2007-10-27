@@ -35,6 +35,7 @@ public:
 
     virtual void renderPreview(QPainter& painter, const QPointF& point);
     virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) = 0;
+    virtual void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos);
     bool isVoiceAware();
 protected:
     bool m_isVoiceAware;

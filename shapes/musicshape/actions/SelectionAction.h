@@ -27,6 +27,9 @@ public:
     SelectionAction(SimpleEntryTool* tool);
     
     virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    virtual void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos);
+private:
+    int m_firstBar;
 };
 
 #endif // SELECTIONACTION_H

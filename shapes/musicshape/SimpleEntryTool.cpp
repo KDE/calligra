@@ -456,6 +456,81 @@ void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
 {
     m_point = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
     m_canvas->updateCanvas(QRectF(QPointF(event->point.x() - 100, event->point.y() - 100), QSizeF(200, 200)));
+    if (event->buttons()) {
+        QPointF p = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
+        Sheet *sheet = m_musicshape->sheet();
+        
+        // find closest staff system
+        StaffSystem* system = 0;
+        for (int i = 0; i < sheet->staffSystemCount(); i++) {
+            StaffSystem* ss = sheet->staffSystem(i);
+            if (ss->top() > p.y()) break;
+            system = ss;
+        }
+        
+        if(system == 0) {
+            return;
+        }
+        
+        // find closest staff
+        Staff* closestStaff = 0;
+        double dist = 1e99;
+        double yrel = p.y() - system->top();
+        for (int prt = 0; prt < sheet->partCount(); prt++) {
+            Part* part = sheet->part(prt);
+            for (int st = 0; st < part->staffCount(); st++) {
+                Staff* staff = part->staff(st);
+                double top = staff->top();
+                double bot = staff->top() + (staff->lineCount() - 1) * staff->lineSpacing();
+                if (fabs(top - yrel) < dist) {
+                    closestStaff = staff;
+                    dist = fabs(top - yrel);
+                }
+                if (fabs(bot - yrel) < dist) {
+                    closestStaff = staff;
+                    dist = fabs(bot - yrel);
+                }
+            }
+        }
+        
+        //    int line = closestStaff->line(yrel - closestStaff->top());
+        //    kDebug() << "line: " << line << endl;
+        
+        Part* part = closestStaff->part();
+        for (int i = part->voiceCount(); i <= m_voice; i++) {
+            part->addVoice();
+        }
+        
+        // find correct bar
+        Bar* bar = 0;
+        int barIdx = -1;
+        bool inPrefix = false;
+        for (int b = system->firstBar(); b < sheet->barCount(); b++) {
+            Bar* bb = sheet->bar(b);
+            if (bb->position().x() <= p.x() && bb->position().x() + bb->size() >= p.x()) {
+                bar = bb;
+                barIdx = b;
+                break;
+            }
+            if (bb->prefixPosition().x() <= p.x() && bb->prefixPosition().x() + bb->prefix() >= p.x()) {
+                bar = bb;
+                barIdx = b;
+                inPrefix = true;
+                break;
+            }
+        }
+        
+        if (!bar) return;
+        
+        QPointF point;
+        if (inPrefix) {
+            point = QPointF(p.x() - bar->prefixPosition().x() - bar->prefix(), yrel - closestStaff->top());
+        } else {
+            point = QPointF((p.x() - bar->position().x()) / bar->scale(), yrel - closestStaff->top());
+        }
+        
+        m_activeAction->mouseMove(closestStaff, barIdx, point);
+    }
 }
 
 void SimpleEntryTool::mouseReleaseEvent( KoPointerEvent* )
