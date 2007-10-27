@@ -99,6 +99,7 @@ public:
     : canvas( new SimpleCanvas() )
     {
     }
+    ~Private() { delete canvas; }
     SimpleCanvas * canvas;
 };
 
