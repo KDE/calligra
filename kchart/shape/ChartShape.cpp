@@ -763,7 +763,7 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
 
     // 6. Load the plot area (this is where the real action is!).
 
-    // Load the data
+    // 7. Load the data
     //loadOdfData(  );
 
 #if 0  // Taken from old kchart_params.cpp: Use what we can from here
@@ -982,7 +982,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfPlotArea( bodyWriter, mainStyles );
     bodyWriter.endElement();
 
-    // Save the data
+    // 7. Save the data
     saveOdfData( bodyWriter, mainStyles );
 
     bodyWriter.endElement(); // chart:chart
@@ -1139,7 +1139,7 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
                                   KoGenStyles& mainStyles ) const
 {
 #if 0
-    QString dataSourceHasLabels;
+    QString  dataSourceHasLabels;
     if ( m_firstRowIsLabel )
         if ( m_firstColIsLabel )
             dataSourceHasLabels = "both";
@@ -1155,6 +1155,7 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
     // Prepare the style for the plot area
     KoGenStyle plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
 
+    // Save chart subtype
     switch ( d->chartType ) {
     case BarChartType:
         switch( d->chartSubtype ) {
@@ -1168,7 +1169,7 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
-        plotAreaStyle.addProperty( "chart:vertical", "false" ); // #### always?
+        plotAreaStyle.addProperty( "chart:vertical", "false" ); // FIXME
         plotAreaStyle.addProperty( "chart:lines-used", 0 ); // FIXME: for now
 
 #if 0
@@ -1192,6 +1193,7 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
+        // FIXME: What does this mean?
         plotAreaStyle.addProperty( "chart:symbol-type", "automatic" );
 
 #if 0

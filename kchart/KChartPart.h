@@ -82,7 +82,6 @@ public:
 
     virtual void  resizeData( int rows, int columns );
     virtual void  setCellData( int row, int column, const QVariant &);
-    virtual void  analyzeHeaders( );
     virtual void  setCanChangeValue( bool b )  { m_bCanChangeValue = b;    }
 
     // ----------------------------------------------------------------
@@ -91,9 +90,6 @@ public:
     void  createDefaultData();
 
     void  analyzeHeaders( const QStandardItemModel &data );
-    void  doSetData( const QStandardItemModel &data,
-		     bool  firstRowHeader,
-		     bool  firstColHeader );
 
     void initLabelAndLegend();
     void loadConfig(KConfig *conf);
@@ -143,7 +139,6 @@ protected:
 
 private:
     // Helper methods for painting.
-    int          createDisplayData();
     void         createLabelsAndLegend( QStringList  &longLabels,
 					QStringList  &shortLabels );
 
@@ -168,9 +163,6 @@ private:
 
     // Graphics
     QWidget            *m_parentWidget;
-
-    // Used when displaying.
-    QStandardItemModel  m_displayData;
 
     QPixmap             m_bufferPixmap;
 };
