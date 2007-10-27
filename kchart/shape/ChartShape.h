@@ -58,7 +58,7 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
     KDChart::Chart* chart() const;
 
     /// reimplemented
-    virtual void setModel( QAbstractItemModel* model );
+    virtual void setModel( QAbstractItemModel* model, bool takeOwnershipOfModel = false );
     QAbstractItemModel *model();
     
     /// reimplemented
@@ -112,7 +112,6 @@ class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
  private:
     void setChartDefaults();
     void setDiagramDefaults( OdfChartType type = LastChartType );
-    void createDefaultData();
 
     //static bool  isCartesian( OdfChartType type );
     //static bool  isPolar( OdfChartType type );

@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>298</width>
-    <height>304</height>
+    <height>395</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -32,10 +32,16 @@
        <string>General</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="0" column="0" colspan="2" >
-        <widget class="QGroupBox" name="groupBox" >
+       <item row="0" column="0" >
+        <widget class="QGroupBox" name="showTitle" >
+         <property name="toolTip" >
+          <string/>
+         </property>
          <property name="title" >
           <string>Title</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
          </property>
          <layout class="QGridLayout" >
           <item row="0" column="0" >
@@ -51,7 +57,7 @@
          </layout>
         </widget>
        </item>
-       <item rowspan="2" row="1" column="0" colspan="2" >
+       <item row="1" column="0" >
         <widget class="QGroupBox" name="groupBox_2" >
          <property name="title" >
           <string>Layout</string>
@@ -89,6 +95,67 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QGroupBox" name="groupBox" >
+         <property name="title" >
+          <string>Decoration</string>
+         </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QCheckBox" name="checkBox" >
+            <property name="text" >
+             <string>Background:</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QCheckBox" name="checkBox_2" >
+            <property name="text" >
+             <string>Frame:</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" >
+           <widget class="KColorButton" name="kcolorbutton" >
+            <property name="text" >
+             <string/>
+            </property>
+            <property name="color" >
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+            <property name="defaultColor" >
+             <color>
+              <red>255</red>
+              <green>255</green>
+              <blue>255</blue>
+             </color>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" >
+           <widget class="KColorButton" name="kcolorbutton_2" >
+            <property name="color" >
+             <color>
+              <red>0</red>
+              <green>0</green>
+              <blue>0</blue>
+             </color>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -150,7 +217,7 @@
              <string/>
             </property>
             <property name="icon" >
-             <iconset/>
+             <iconset>../../../../../.designer/backup</iconset>
             </property>
             <property name="flat" >
              <bool>true</bool>
@@ -322,6 +389,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
   <customwidget>
    <class>KFontRequester</class>
    <extends>QWidget</extends>

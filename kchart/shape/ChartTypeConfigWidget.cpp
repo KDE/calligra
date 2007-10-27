@@ -68,6 +68,8 @@ ChartTypeConfigWidget::ChartTypeConfigWidget()
     d->ui.typeCombobox->addItem( KIcon("chart_ring"), i18n("Ring Chart"), RingChartType );
     d->ui.typeCombobox->addItem( KIcon("chart_point"), i18n("Scatter Chart"), ScatterChartType );
     d->ui.typeCombobox->addItem( KIcon("chart_pie"), i18n("Radar Chart"), RadarChartType );
+    d->ui.typeCombobox->addItem( KIcon("chart_stock"), i18n("Stock Chart"), StockChartType );
+    d->ui.typeCombobox->addItem( KIcon("chart_bubble"), i18n("Bubble Chart"), BubbleChartType );
 
     connect( d->ui.typeCombobox, SIGNAL( currentIndexChanged( int ) ),
              this, SLOT( chartTypeSelected( int ) ) );
@@ -142,8 +144,6 @@ void ChartTypeConfigWidget::chartTypeSelected( int type )
             break;
         case ScatterChartType:
             d->ui.optionsBox->hide();
-            d->ui.linesInBarChart->hide();
-            d->ui.linesInBarChartArea->hide();
             d->ui.threeDLook->setEnabled( false );
             break;
         case AreaChartType:
@@ -153,6 +153,7 @@ void ChartTypeConfigWidget::chartTypeSelected( int type )
             d->ui.threeDLook->setEnabled( false );
             break;
         case CircleChartType:
+        case BubbleChartType:
             d->ui.optionsBox->hide();
             d->ui.threeDLook->setEnabled( true );
             break;

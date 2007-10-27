@@ -55,6 +55,7 @@ public slots:
     void setLegendOrientation( int boxEntryIndex );
     void setLegendAlignment( int boxEntryIndex );
     void setLegendFixedPosition( int buttonGroupIndex );
+    void setLegendShowTitle( bool toggled );
     void updateFixedPosition( const KDChart::Position );
     
 signals:

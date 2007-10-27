@@ -139,6 +139,8 @@ void ChartLegendConfigWidget::setupUi()
              this,       SIGNAL( legendSpacingChanged( int ) ) );
     connect( d->ui.showLines, SIGNAL( toggled( bool ) ),
              this,            SIGNAL( legendShowLinesToggled( bool ) ) );
+    connect( d->ui.showTitle, SIGNAL( toggled( bool ) ),
+             this,            SLOT( setLegendShowTitle( bool ) ) );
 
     connect( d->ui.orientation, SIGNAL( currentIndexChanged( int ) ),
              this,              SLOT( setLegendOrientation( int ) ) );
@@ -152,6 +154,15 @@ void ChartLegendConfigWidget::setupUi()
 void ChartLegendConfigWidget::setLegendOrientation( int boxEntryIndex )
 {
     emit legendOrientationChanged( ( Qt::Orientation ) ( d->ui.orientation->itemData( boxEntryIndex ).toInt() ) );
+}
+
+void ChartLegendConfigWidget::setLegendShowTitle( bool show )
+{
+    if ( show ) {
+        emit legendTitleChanged( d->ui.title->text() );
+    } else {
+        emit legendTitleChanged( "" );
+    }
 }
 
 void ChartLegendConfigWidget::setLegendAlignment( int boxEntryIndex )

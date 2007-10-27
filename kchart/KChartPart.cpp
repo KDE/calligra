@@ -98,11 +98,6 @@ KChartPart::KChartPart( QWidget *parentWidget,
 {
     kDebug(35001) <<"Constructor started!";
 
-    // Initialize the chart shape with some data.
-    m_chartData = new QStandardItemModel();
-    createDefaultData();
-    m_chartShape->setModel( m_chartData );
-
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
 
@@ -127,35 +122,6 @@ void KChartPart::initEmpty()
 
     resetURL();
     setEmpty();
-}
-
-
-// Create a 4x4 table with some initial data in it.
-
-void KChartPart::createDefaultData()
-{
-    m_chartData->setRowCount( 4 );
-    m_chartData->setColumnCount( 5 );
-
-    // Insert example data
-    for (uint row = 0; row < 4; row++) {
-        // Fill row label.
-        if ( row > 0 )
-            m_chartData->setItem( row, 0,
-                new QStandardItem( i18n( "Row %1", row ) ) );
-
-        for (uint col = 0; col < 5; col++) {
-            if ( row == 0 && col > 0 )
-                m_chartData->setItem( 0, col,
-                    new QStandardItem ( i18n( "Column %1", col ) ) );
-            else
-                m_chartData->setItem( row, col,
-                    new QStandardItem( QString::number( row + col ) ) );
-            // Fill column label, but only on the first iteration.
-        }
-    }
-    m_chartShape->setFirstRowIsLabel( true );
-    m_chartShape->setFirstColumnIsLabel( true );
 }
 
 

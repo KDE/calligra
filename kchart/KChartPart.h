@@ -86,9 +86,6 @@ public:
 
     // ----------------------------------------------------------------
 
-    // Generate some default data so that the user can see something.
-    void  createDefaultData();
-
     void  analyzeHeaders( const QStandardItemModel &data );
 
     void initLabelAndLegend();

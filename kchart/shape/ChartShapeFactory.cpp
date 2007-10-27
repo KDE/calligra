@@ -91,7 +91,7 @@ KoShape* ChartShapeFactory::createDefaultShape() const
             // Fill column label, but only on the first iteration.
         }
     }
-    shape->setModel( m_chartData );
+    shape->setModel( m_chartData, true );
     shape->setFirstRowIsLabel( true );
     shape->setFirstColumnIsLabel( true );
     shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
@@ -108,7 +108,6 @@ KoShape* ChartShapeFactory::createShape( const KoProperties* params ) const
 
 QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 {
-    kDebug() << "### createShapeOptionPanels";
     QList<KoShapeConfigWidgetBase*> answer;
     answer.append(new ChartTypeConfigWidget());
     answer.append(new ChartLegendConfigWidget());

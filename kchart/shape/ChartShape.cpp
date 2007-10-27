@@ -95,6 +95,7 @@ class ChartShape::Private
 {
 public:
     Private();
+    ~Private();
 
 public:
     // The chart and its contents
@@ -112,18 +113,15 @@ public:
     // About the data
     bool                       firstRowIsLabel;
     bool                       firstColIsLabel;
+
     // Proxy model that holds the actual QAbstractItemModel
     ChartProxyModel           *chartData;
-
+    bool                       takeOwnershipOfModel;
     // ----------------------------------------------------------------
     // Data that are not immediately applicable to the chart itself.
 
     // The last subtype that each main type had when it was last used.
     ChartTypeOptions  chartTypeOptions[NUM_CHARTTYPES];
-
-    // Default data to be used until the first call to setModel().
-    // After that, it is never used again.
-    QStandardItemModel         defaultData;
 };
 
 
@@ -145,10 +143,20 @@ ChartShape::Private::Private()
 {
     for ( int i = 0; i < NUM_CHARTTYPES; ++i )
         chartTypeOptions[i].subtype = defaultSubtypes[i];  
-    threeDMode = false;
-    chartData = new ChartProxyModel;
+    threeDMode           = false;
+    takeOwnershipOfModel = false;
+    chartData            = new ChartProxyModel;
 }
 
+
+ChartShape::Private::~Private()
+{
+    if ( takeOwnershipOfModel )
+        delete chartData->sourceModel();
+    delete chartData;
+    delete diagram;
+    delete chart;
+}
 
 // ================================================================
 
@@ -167,7 +175,6 @@ ChartShape::ChartShape()
     d->diagram   = new KDChart::BarDiagram();
 
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
-    d->chartData->setSourceModel( &d->defaultData );
 
     d->diagram->setModel( d->chartData );
 
@@ -188,7 +195,6 @@ ChartShape::ChartShape()
     d->chart->addLegend( d->legend );
 
     setChartDefaults();
-    //createDefaultData();
 #if 0
     // diagram->coordinatePlane returns an abstract plane one.
     // if we want to specify the orientation we need to cast
@@ -237,9 +243,6 @@ ChartShape::ChartShape()
 
 ChartShape::~ChartShape()
 {
-    delete d->chartData;
-    delete d->diagram;
-    delete d->chart;
     delete d;
 }
 
@@ -264,6 +267,59 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
 {
     if ( type != LineChartType && type != ScatterChartType )
         d->diagram->setPen( QPen( Qt::black, 0.4 ) );
+
+    switch ( type )
+    {
+        case AreaChartType:
+        {
+            KDChart::LineAttributes attributes;
+            attributes = ((KDChart::LineDiagram*) d->diagram)->lineAttributes();
+            attributes.setDisplayArea( true );
+            ((KDChart::LineDiagram*) d->diagram)->setLineAttributes( attributes );
+        }
+        break;
+
+        case ScatterChartType:
+        {
+            KDChart::DataValueAttributes attributes = ((KDChart::LineDiagram*) d->diagram)->dataValueAttributes();
+            KDChart::MarkerAttributes markerAttributes = attributes.markerAttributes();
+            KDChart::TextAttributes   textAttributes   = attributes.textAttributes();
+            markerAttributes.setVisible( true );
+            textAttributes.setVisible( false );
+            attributes.setTextAttributes( textAttributes );
+            attributes.setMarkerAttributes( markerAttributes );
+            attributes.setVisible( true );
+
+            ((KDChart::LineDiagram*) d->diagram)->setDataValueAttributes( attributes );
+
+            ((KDChart::LineDiagram*) d->diagram)->setPen( Qt::NoPen );
+        }
+        break;
+
+        case BubbleChartType:
+        {
+            KDChart::DataValueAttributes attributes       = ((KDChart::LineDiagram*) d->diagram)->dataValueAttributes();
+            KDChart::MarkerAttributes    markerAttributes = attributes.markerAttributes();
+            KDChart::TextAttributes      textAttributes   = attributes.textAttributes();
+
+            KDChart::LineAttributes      lineAttributes   = ((KDChart::LineDiagram*) d->diagram)->lineAttributes();
+
+            markerAttributes.setMarkerStyle( KDChart::MarkerAttributes::MarkerCircle );
+            markerAttributes.setVisible( true );
+            textAttributes.setVisible( false );
+            attributes.setTextAttributes( textAttributes );
+            attributes.setMarkerAttributes( markerAttributes );
+            attributes.setVisible( true );
+
+            ((KDChart::LineDiagram*) d->diagram)->setDataValueAttributes( attributes );
+
+            ((KDChart::LineDiagram*) d->diagram)->setPen( Qt::NoPen );
+        }
+        break;
+
+        default:
+        break;
+    };
 }
 
 void ChartShape::setChartType( OdfChartType    newType,
@@ -313,8 +369,7 @@ void ChartShape::setChartType( OdfChartType    newType,
             break;
         
         case BubbleChartType:
-            // FIXME
-            return;
+            new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
             break;
         
         case SurfaceChartType:
@@ -362,29 +417,6 @@ void ChartShape::setChartType( OdfChartType    newType,
         KDChart::LegendList legends = d->chart->legends();
         foreach ( KDChart::Legend* legend, legends )
             legend->setDiagram( new_diagram );
-
-        // KDChart::LineDiagram::setLineAttributes() needs a model to be set,
-        // so I moved this code snippet to this point.
-        if( newType != d->chartType && newType == AreaChartType ) {
-            KDChart::LineAttributes attributes;
-            attributes = ((KDChart::LineDiagram*) new_diagram)->lineAttributes();
-            attributes.setDisplayArea( true );
-            ((KDChart::LineDiagram*) new_diagram)->setLineAttributes( attributes );
-        }
-        else if( newType != d->chartType && newType == ScatterChartType ) {
-            KDChart::DataValueAttributes attributes = ((KDChart::LineDiagram*) new_diagram)->dataValueAttributes();
-            KDChart::MarkerAttributes markerAttributes = attributes.markerAttributes();
-            KDChart::TextAttributes   textAttributes   = attributes.textAttributes();
-            markerAttributes.setVisible( true );
-            textAttributes.setVisible( false );
-            attributes.setTextAttributes( textAttributes );
-            attributes.setMarkerAttributes( markerAttributes );
-            attributes.setVisible( true );
-
-            ((KDChart::LineDiagram*) new_diagram)->setDataValueAttributes( attributes );
-
-            ((KDChart::LineDiagram*) new_diagram)->setPen( Qt::NoPen );
-        }
 
         // FIXME: Aren't we leaking memory by not doing this?
         // KDChartAbstractDiagram::~KDChartAbstractDiagram() will try to delete
@@ -617,9 +649,10 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
     setThreeDMode( d->threeDMode );
 }
 
-void ChartShape::setModel( QAbstractItemModel* model )
+void ChartShape::setModel( QAbstractItemModel* model, bool takeOwnershipOfModel /* = false */ )
 {
     d->chartData->setSourceModel( model );
+    d->takeOwnershipOfModel = takeOwnershipOfModel;
     modelChanged();
 
 #if 0
