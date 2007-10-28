@@ -221,7 +221,7 @@ KexiStartupDialog::~KexiStartupDialog()
 bool KexiStartupDialog::shouldBeShown()
 {
 	KConfigGroup group = KGlobal::config()->group("Startup");
-	return group.readEntry<bool>("ShowStartupDialog", true);
+	return group.readEntry("ShowStartupDialog", true);
 }
 
 void KexiStartupDialog::showEvent( QShowEvent *e )

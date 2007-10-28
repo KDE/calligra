@@ -184,7 +184,7 @@ KexiMainWindowTabWidget::KexiMainWindowTabWidget(QWidget *parent, KexiMainWidget
 	// close-tab button:
 	QToolButton* rightWidget = new QToolButton( this );
 	connect( rightWidget, SIGNAL( clicked() ), this, SLOT( closeTab() ) );
-	rightWidget->setIcon( KIcon( "tab-remove" ) );
+	rightWidget->setIcon( KIcon( "tab-close" ) );
 	rightWidget->setAutoRaise(true);
 	rightWidget->adjustSize();
 	rightWidget->setToolTip( i18n("Close the current tab"));
@@ -253,7 +253,7 @@ int KexiMainWindow::create(int argc, char *argv[], KAboutData* aboutdata)
 		QApplication::setMainWidget(dummyWidget);*/
 #ifdef KEXI_DEBUG_GUI
 		KConfigGroup generalGroup = KGlobal::config()->group("General");
-		if (generalGroup.readEntry<bool>("showInternalDebugger", false)) {
+		if (generalGroup.readEntry("showInternalDebugger", false)) {
 			debugWindow = KexiUtils::createDebugWindow(0);
 		}
 #endif
@@ -1987,7 +1987,7 @@ void KexiMainWindow::setupProjectNavigator()
 
 		d->mainWidget->addDockWidget(
 			area, d->navDockWidget,
-			static_cast<Qt::Orientation>(mainWindowGroup.readEntry<int>("PropertyEditorOrientation", (int)Qt::Vertical))
+			static_cast<Qt::Orientation>(mainWindowGroup.readEntry("PropertyEditorOrientation", (int)Qt::Vertical))
 		);
 
 		d->nav = new KexiBrowser(d->navDockWidget);
@@ -2098,7 +2098,7 @@ void KexiMainWindow::setupPropertyEditor()
 //TODO REMOVE?		d->propEditor->installEventFilter(this);
 
 		KConfigGroup propertyEditorGroup( d->config->group("PropertyEditor") );
-		int size = propertyEditorGroup.readEntry<int>("FontSize", -1);
+		int size = propertyEditorGroup.readEntry("FontSize", -1);
 		QFont f( KexiUtils::smallFont() );
 		if (size>0)
 			f.setPixelSize( size );
@@ -2317,7 +2317,7 @@ KexiMainWindow::restoreSettings()
 
 //2.0:	int mdimode = d->config->readEntry("MDIMode", -1);
 
-	const bool showProjectNavigator	= mainWindowGroup.readEntry<bool>("ShowProjectNavigator", true);
+	const bool showProjectNavigator	= mainWindowGroup.readEntry("ShowProjectNavigator", true);
 
 /*2.0	switch(mdimode)
 	{
@@ -2405,7 +2405,7 @@ KexiMainWindow::storeSettings()
 		if (d->navWasVisibleBeforeProjectClosing)
 			mainWindowGroup.deleteEntry("ShowProjectNavigator");
 		else
-			mainWindowGroup.writeEntry<bool>("ShowProjectNavigator", false);
+			mainWindowGroup.writeEntry("ShowProjectNavigator", false);
 	}
 
 /*2.0:
@@ -2445,7 +2445,7 @@ KexiMainWindow::storeSettings()
 
 	if (d->propEditor) {
 		KConfigGroup propertyEditorGroup( d->config->group("PropertyEditor") );
-		propertyEditorGroup.writeEntry<int>("FontSize", d->propEditorTabWidget->font().pixelSize());
+		propertyEditorGroup.writeEntry("FontSize", d->propEditorTabWidget->font().pixelSize());
 	}
 }
 
