@@ -321,39 +321,6 @@ void KChartPart::removeShape( KoShape* )
 {
 }
 
-// ----------------------------------------------------------------
-//                    The public interface
-
-void KChartPart::resizeData( int rows, int cols )
-{
-    Q_UNUSED( rows );
-    Q_UNUSED( cols );
-#if 0
-    m_currentData.expand( rows, cols );
-    m_currentData.setUsedRows( rows );
-    m_currentData.setUsedCols( cols );
-#else
-# ifdef __GNUC__
-# warning FIXME
-# endif
-#endif
-}
-
-
-void KChartPart::setCellData( int row, int column, const QVariant &val)
-{
-    Q_UNUSED( row );
-    Q_UNUSED( column );
-    Q_UNUSED( val );
-#if 0
-    m_currentData.setCell( row, column, val );
-#else
-# ifdef __GNUC__
-# warning FIXME
-# endif
-#endif
-}
-
 
 // ----------------------------------------------------------------
 
