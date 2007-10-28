@@ -79,10 +79,11 @@ void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
     }*/
     
     m_firstBar = barIdx;
-    m_tool->setSelection(barIdx, barIdx);
+    m_startStaff = staff;
+    m_tool->setSelection(barIdx, barIdx, staff, staff);
 }
 
 void SelectionAction::mouseMove(Staff* staff, int barIdx, const QPointF& pos)
 {
-    m_tool->setSelection(qMin(m_firstBar, barIdx), qMax(m_firstBar, barIdx));
+    m_tool->setSelection(qMin(m_firstBar, barIdx), qMax(m_firstBar, barIdx), m_startStaff, staff);
 }

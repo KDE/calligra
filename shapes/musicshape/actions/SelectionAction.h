@@ -30,6 +30,7 @@ public:
     virtual void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos);
 private:
     int m_firstBar;
+    MusicCore::Staff* m_startStaff;
 };
 
 #endif // SELECTIONACTION_H

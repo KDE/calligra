@@ -27,6 +27,10 @@ class MusicShape;
 class QUndoCommand;
 class AbstractMusicAction;
 
+namespace MusicCore {
+    class Staff;
+}
+
 /**
  * Tool that provides functionality to insert/remove notes/rests. Named after Finale's Simple Entry tool.
  */
@@ -51,7 +55,7 @@ public:
     MusicShape* shape();
     int voice();
     
-    void setSelection(int startBar, int endBar);
+    void setSelection(int startBar, int endBar, MusicCore::Staff* startStaff, MusicCore::Staff* endStaff);
 protected:
     virtual QWidget * createOptionWidget();
 protected slots:
@@ -72,6 +76,7 @@ private:
     QPointF m_contextMenuPoint;
     
     int m_selectionStart, m_selectionEnd;
+    MusicCore::Staff *m_selectionStaffStart, *m_selectionStaffEnd;
 };
 
 #endif

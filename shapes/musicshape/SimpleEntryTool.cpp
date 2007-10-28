@@ -71,6 +71,8 @@
 #include "core/MusicXmlReader.h"
 #include "core/MusicXmlWriter.h"
 
+#include <algorithm>
+
 using namespace MusicCore;
 
 SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
@@ -343,15 +345,24 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
             
             for (int b = qMax(shape->firstBar(), m_selectionStart); b <= m_selectionEnd && b < sheet->barCount() && b <= shape->lastBar(); b++) {
                 Bar* bar = sheet->bar(b);
+                bool selectedStaff = false;
                 for (int p = 0; p < sheet->partCount(); p++) {
                     Part* part = sheet->part(p);
                     for (int s = 0; s < part->staffCount(); s++) {
                         Staff* staff = part->staff(s);
-                        QPointF p1 = bar->position() + QPointF(0, staff->top());
-                        QPointF p2 = QPointF(p1.x() + bar->size(), p1.y() + (staff->lineCount()-1) * staff->lineSpacing());
-                        painter.setBrush(QBrush(Qt::yellow));
-                        painter.setPen(Qt::NoPen);
-                        painter.drawRect(QRectF(p1, p2));
+                        if (staff == m_selectionStaffStart) {
+                            selectedStaff = true;
+                        }
+                        if (selectedStaff) {
+                            QPointF p1 = bar->position() + QPointF(0, staff->top());
+                            QPointF p2 = QPointF(p1.x() + bar->size(), p1.y() + (staff->lineCount()-1) * staff->lineSpacing());
+                            painter.setBrush(QBrush(Qt::yellow));
+                            painter.setPen(Qt::NoPen);
+                            painter.drawRect(QRectF(p1, p2));
+                        }
+                        if (staff == m_selectionStaffEnd) {
+                            selectedStaff = false;
+                        }
                     }
                 }
             }
@@ -644,11 +655,30 @@ int SimpleEntryTool::voice()
     return m_voice;
 }
 
-void SimpleEntryTool::setSelection(int firstBar, int lastBar)
+void SimpleEntryTool::setSelection(int firstBar, int lastBar, Staff* startStaff, Staff* endStaff)
 {
     kDebug() << "firstBar:" << firstBar << "lastBar:" << lastBar;
     m_selectionStart = firstBar;
     m_selectionEnd = lastBar;
+    m_selectionStaffStart = startStaff;
+    m_selectionStaffEnd = endStaff;
+    bool foundEnd = false;
+    Sheet* sheet = m_musicshape->sheet();
+    for (int p = 0; p < sheet->partCount(); p++) {
+        Part* part = sheet->part(p);
+        for (int s = 0; s < part->staffCount(); s++) {
+            Staff* staff = part->staff(s);
+            if (staff == m_selectionStaffStart) {
+                if (foundEnd) {
+                    std::swap(m_selectionStaffStart, m_selectionStaffEnd);
+                }
+                break;
+            }
+            if (staff == m_selectionStaffEnd) {
+                foundEnd = true;
+            }
+        }
+    }
     MusicShape* shape = m_musicshape;
     while (shape) {
         shape->update();
