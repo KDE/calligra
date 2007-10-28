@@ -201,6 +201,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 {
+	delete d;
 }
 
 void
