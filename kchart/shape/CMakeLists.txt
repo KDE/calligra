@@ -25,20 +25,14 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     ChartLegendConfigWidget.ui
 )
 
-# ----------------------------------------------------------------
-#                       Chart library
+kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
+target_link_libraries(chartshapelib kdchart kochart flake)
+set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 
-#kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})
-#target_link_libraries(chartshapelib kdchart kochart flake)
-#set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+install(TARGETS chartshapelib DESTINATION ${LIB_INSTALL_DIR})
 
-#install(TARGETS chartshapelib DESTINATION ${LIB_INSTALL_DIR})
-
-# ----------------------------------------------------------------
-#                        ChartShape
-
-kde4_add_plugin(chartshape ${chartshape_LIB_SRCS})
-target_link_libraries(chartshape kdchart kochart flake)
+kde4_add_plugin(chartshape WITH_PREFIX ChartShapeFactory.cpp)
+target_link_libraries(chartshape chartshapelib kdchart kochart flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

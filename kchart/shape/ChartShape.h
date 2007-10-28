@@ -37,7 +37,6 @@
 
 class QAbstractItemModel;
 
-
 //enum ChartType { NoType, Bar, Line, Pie, Ring, Polar };
 
 namespace KDChart
@@ -49,7 +48,7 @@ namespace KDChart
 namespace KChart
 {
 
-class KCHART_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
+class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
 {
  public:
     ChartShape();

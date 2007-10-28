@@ -54,14 +54,12 @@ class KoXmlWriter;
 class KoGenStyles;
 
 class KoShape;
-
+class KoOasisStyles;
 
 namespace KChart
 {
 
-
-
-class KCHART_EXPORT KChartPart : public KoChart::Part, public KoShapeControllerBase
+class KCHARTCOMMON_EXPORT KChartPart : public KoChart::Part, public KoShapeControllerBase
 {
     Q_OBJECT
 

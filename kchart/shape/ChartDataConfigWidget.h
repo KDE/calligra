@@ -25,13 +25,14 @@
 // KOffice
 #include <KoShapeConfigWidgetBase.h>
 
+#include "kchart_export.h"
 
 namespace KChart
 {
 
 /// A widget for selecting different aspects of the data in a chart.
 
-class ChartDataConfigWidget : public KoShapeConfigWidgetBase
+class CHARTSHAPELIB_EXPORT ChartDataConfigWidget : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 public:

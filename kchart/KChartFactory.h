@@ -34,7 +34,7 @@ class KAboutData;
 namespace KChart
 {
 
-class KCHART_EXPORT KChartFactory : public KoFactory
+class KCHARTCOMMON_EXPORT KChartFactory : public KoFactory
 {
     Q_OBJECT
 public:
@@ -52,11 +52,6 @@ public:
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
-
-private:
-    static KComponentData *s_global;
-    static KIconLoader  *s_iconLoader;
-    static KAboutData   *s_aboutData;
 };
 
 }  //namespace KChart

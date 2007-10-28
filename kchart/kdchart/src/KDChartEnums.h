@@ -43,13 +43,8 @@
   Project global class providing some enums needed both by KDChartParams
   and by KDChartCustomBox.
   */
-class KDCHART_EXPORT KDChartEnums :public QObject
+class KDCHART_EXPORT KDChartEnums
 {
-    Q_OBJECT
-    Q_ENUMS( TextLayoutPolicy )
-    Q_ENUMS( AreaName )
-    Q_ENUMS( PositionFlag )
-
 public:
     /**
       GranularitySequence specifies the values, that may be applied,

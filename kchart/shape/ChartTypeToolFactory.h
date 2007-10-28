@@ -20,6 +20,7 @@
 #ifndef CHARTTYPETOOLFACTORY_H
 #define CHARTTYPETOOLFACTORY_H
 
+#include "kchart_export.h"
 #include <KoToolFactory.h>
 
 #include <QStringList>
@@ -27,7 +28,7 @@
 namespace KChart
 {
 
-class ChartTypeToolFactory : public KoToolFactory
+class CHARTSHAPELIB_EXPORT ChartTypeToolFactory : public KoToolFactory
 {
     Q_OBJECT
 

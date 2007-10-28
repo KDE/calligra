@@ -4,6 +4,7 @@
 
 #include "KoShapeConfigWidgetBase.h"
 
+#include "kchart_export.h"
 #include "kchart_global.h"
 
 #include "ui_ChartTypeConfigWidget.h"
@@ -17,7 +18,7 @@ class ChartShape;
 /**
  * Chart type configuration widget.
  */
-class ChartTypeConfigWidget : public KoShapeConfigWidgetBase
+class CHARTSHAPELIB_EXPORT ChartTypeConfigWidget : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 

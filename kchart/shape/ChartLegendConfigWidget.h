@@ -25,13 +25,14 @@
 #include <KoShapeConfigWidgetBase.h>
 
 // KDChart
+#include "kchart_export.h"
 #include <KDChartPosition.h>
 
 
 namespace KChart
 {
 
-class ChartLegendConfigWidget : public KoShapeConfigWidgetBase
+class CHARTSHAPELIB_EXPORT ChartLegendConfigWidget : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 public:

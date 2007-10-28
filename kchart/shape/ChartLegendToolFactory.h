@@ -21,12 +21,13 @@
 #ifndef KCHART_CHART_LEGEND_TOOL_FACTORY
 #define KCHART_CHART_LEGEND_TOOL_FACTORY
 
+#include "kchart_export.h"
 #include <KoToolFactory.h>
 
 namespace KChart
 {
 
-class ChartLegendToolFactory : public KoToolFactory
+class CHARTSHAPELIB_EXPORT ChartLegendToolFactory : public KoToolFactory
 {
     Q_OBJECT
 

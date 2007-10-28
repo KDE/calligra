@@ -62,6 +62,7 @@ using std::cerr;
 #include <KoShapeSavingContext.h>
 #include <KoToolManager.h>
 #include <KoOasisLoadingContext.h>
+#include <KoOasisStyles.h>
 #include <KoShapeLoadingContext.h>
 
 // KDChart
@@ -332,7 +333,9 @@ void KChartPart::resizeData( int rows, int cols )
     m_currentData.setUsedRows( rows );
     m_currentData.setUsedCols( cols );
 #else
-#warning FIXME
+# ifdef __GNUC__
+# warning FIXME
+# endif
 #endif
 }
 
@@ -345,7 +348,9 @@ void KChartPart::setCellData( int row, int column, const QVariant &val)
 #if 0
     m_currentData.setCell( row, column, val );
 #else
-#warning FIXME
+# ifdef __GNUC__
+# warning FIXME
+# endif
 #endif
 }
 
