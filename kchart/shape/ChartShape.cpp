@@ -115,8 +115,11 @@ public:
     bool                       firstColIsLabel;
 
     // Proxy model that holds the actual QAbstractItemModel
-    ChartProxyModel           *chartData;
+    ChartProxyModel           *chartModel;
+    QAbstractItemModel        *internalModel;
+    QAbstractItemModel        *externalModel;
     bool                       takeOwnershipOfModel;
+    bool                       useExternalDataSource;
     // ----------------------------------------------------------------
     // Data that are not immediately applicable to the chart itself.
 
@@ -143,17 +146,22 @@ ChartShape::Private::Private()
 {
     for ( int i = 0; i < NUM_CHARTTYPES; ++i )
         chartTypeOptions[i].subtype = defaultSubtypes[i];  
-    threeDMode           = false;
-    takeOwnershipOfModel = false;
-    chartData            = new ChartProxyModel;
+    threeDMode            = false;
+    takeOwnershipOfModel  = false;
+    useExternalDataSource = false;
+    chartModel            = new ChartProxyModel;
+    internalModel         = 0;
+    externalModel         = 0;
 }
 
 
 ChartShape::Private::~Private()
 {
-    if ( takeOwnershipOfModel )
-        delete chartData->sourceModel();
-    delete chartData;
+    if ( takeOwnershipOfModel && externalModel != 0 )
+        delete externalModel;
+    if ( internalModel != 0 )
+        delete internalModel;
+    delete chartModel;
     delete diagram;
     delete chart;
 }
@@ -176,7 +184,7 @@ ChartShape::ChartShape()
 
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
 
-    d->diagram->setModel( d->chartData );
+    d->diagram->setModel( d->chartModel );
 
     d->firstRowIsLabel = false;
     d->firstColIsLabel = false;
@@ -410,7 +418,7 @@ void ChartShape::setChartType( OdfChartType    newType,
             }
         }
 
-        new_diagram->setModel( d->chartData );
+        new_diagram->setModel( d->chartModel );
 
         // This will crash if the new model for new_diagram is not set.
         // Thus, put it after new_diagram->setModel().
@@ -545,19 +553,19 @@ void ChartShape::setThreeDMode( bool threeD )
 
 void ChartShape::setFirstRowIsLabel( bool b )
 {
-    d->chartData->setFirstRowIsLabel( b );
+    d->chartModel->setFirstRowIsLabel( b );
     modelChanged();
 }
 
 void ChartShape::setFirstColumnIsLabel( bool b )
 {
-    d->chartData->setFirstColumnIsLabel( b );
+    d->chartModel->setFirstColumnIsLabel( b );
     modelChanged();
 }
 
 void ChartShape::setDataDirection( Qt::Orientation orientation )
 {
-    d->chartData->setDataDirection( orientation );
+    d->chartModel->setDataDirection( orientation );
     modelChanged();
 }
 
@@ -621,12 +629,27 @@ void ChartShape::setLegendFixedPosition( KDChart::Position position )
     update();
 }
 
+void ChartShape::setUseExternalDatasource( bool b )
+{
+    if ( b ) {
+        if ( d->externalModel != 0 ) {
+            d-> chartModel->setSourceModel( d->externalModel );
+            d->useExternalDataSource = true;
+        }
+    } else {
+        if ( d->internalModel != 0 ) {
+            d->chartModel->setSourceModel( d->internalModel );
+            d->useExternalDataSource = false;
+        }
+    }
+}
+
 void ChartShape::modelChanged()
 {
     // Tell the diagram that the entire set of data changed
-    d->diagram->dataChanged( d->chartData->index( 0, 0 ),
-                             d->chartData->index( d->chartData->rowCount() - 1,
-                                                  d->chartData->columnCount() - 1 ) );
+    d->diagram->dataChanged( d->chartModel->index( 0, 0 ),
+                             d->chartModel->index( d->chartModel->rowCount() - 1,
+                                                  d->chartModel->columnCount() - 1 ) );
     update();
 }
 
@@ -649,35 +672,24 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
     setThreeDMode( d->threeDMode );
 }
 
-void ChartShape::setModel( QAbstractItemModel* model, bool takeOwnershipOfModel /* = false */ )
+void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel /* = false */ )
 {
-    d->chartData->setSourceModel( model );
+    d->externalModel = model;
+    d->chartModel->setSourceModel( model );
     d->takeOwnershipOfModel = takeOwnershipOfModel;
     modelChanged();
+}
 
-#if 0
-    for ( int col = 0; col < d->diagram->model()->columnCount(); ++col ) {
-        QPen pen(d->diagram->pen( col ));
-        pen.setColor( Qt::black );
-        pen.setWidth(4);
-        d->diagram->setPen( iColumn, pen );
-    }
-#endif
-/*
-    KDChart::FrameAttributes faChart( d->chart->frameAttributes() );
-    faChart.setPen( QPen(QColor(0x60,0x60,0xb0), 8) );
-    d->chart->setFrameAttributes( faChart );
-
-    BackgroundAttributes baChart( d->chart->backgroundAttributes() );
-    baChart.setVisible( true );
-    baChart.setBrush( QColor(0xd0,0xd0,0xff) );
-    d->chart->setBackgroundAttributes( baChart );
-*/
+void ChartShape::setInternalModel( QAbstractItemModel *model )
+{
+    d->internalModel = model;
+    d->chartModel->setSourceModel( model );
+    modelChanged();
 }
 
 QAbstractItemModel *ChartShape::model()
 {
-    return d->chartData;
+    return d->chartModel;
 }
 
 OdfChartType ChartShape::chartType() const
@@ -706,7 +718,7 @@ ChartTypeOptions ChartShape::chartTypeOptions( OdfChartType type ) const
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
     QRectF clipRect  = converter.viewToDocument( painter.clipRegion().boundingRect() );
-    QRectF paintRect = QRectF( converter.documentToView( position() ), size() );
+    QRectF paintRect = QRectF( QPoint( 0.0, 0.0 ), size() );
     clipRect.intersect( paintRect );
 
     applyConversion( painter, converter );
@@ -1369,8 +1381,8 @@ QString KChartParams::saveOasisFont( KoGenStyles& mainStyles,
 void ChartShape::saveOdfData( KoXmlWriter& bodyWriter,
                               KoGenStyles& mainStyles ) const
 {
-    const int cols = d->chartData->columnCount();
-    const int rows = d->chartData->rowCount();
+    const int cols = d->chartModel->columnCount();
+    const int rows = d->chartModel->rowCount();
 
     bodyWriter.startElement( "table:table" );
     bodyWriter.addAttribute( "table:name", "local-table" );
@@ -1439,9 +1451,9 @@ void ChartShape::saveOdfData( KoXmlWriter& bodyWriter,
         }
 #endif
         for ( int col = 0; col < cols; ++col ) {
-            //QVariant value( d->chartData.cellVal( row, col ) );
-            QModelIndex  index = d->chartData->index( row, col );
-            QVariant     value = d->chartData->data( index );
+            //QVariant value( d->chartModel.cellVal( row, col ) );
+            QModelIndex  index = d->chartModel->index( row, col );
+            QVariant     value = d->chartModel->data( index );
 
             QString  valType;
             QString  valStr;

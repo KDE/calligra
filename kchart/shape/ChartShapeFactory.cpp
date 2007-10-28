@@ -91,7 +91,9 @@ KoShape* ChartShapeFactory::createDefaultShape() const
             // Fill column label, but only on the first iteration.
         }
     }
-    shape->setModel( m_chartData, true );
+
+    // We want KChart to take over and handle this model itself
+    shape->setInternalModel( m_chartData );
     shape->setFirstRowIsLabel( true );
     shape->setFirstColumnIsLabel( true );
     shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );

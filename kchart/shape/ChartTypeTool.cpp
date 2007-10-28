@@ -30,6 +30,7 @@
 // KDE
 #include <KLocale>
 #include <KIcon>
+#include <KDebug>
 
 // KOffice
 #include <KoCanvasBase.h>
@@ -139,6 +140,15 @@ QWidget *ChartTypeTool::createOptionWidget()
     widget2->open( m_currentShape );
     tabWidget->addTab( widget2, i18n( "Type" ) );
 
+    connect( widget1, SIGNAL( dataDirectionChanged( Qt::Orientation ) ),
+             this,    SLOT( setDataDirection( Qt::Orientation ) ) );
+    connect( widget1, SIGNAL( firstRowIsLabelChanged( bool ) ),
+             this,    SLOT( setFirstRowIsLabel( bool ) ) );
+    connect( widget1, SIGNAL( firstColumnIsLabelChanged( bool ) ),
+             this,    SLOT( setFirstColumnIsLabel( bool ) ) );
+    connect( widget1, SIGNAL( useExternalDatasourceChanged( bool ) ),
+             this,    SLOT( setUseExternalDatasource( bool ) ) );
+
     connect( widget2, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
 	     this,    SLOT( setChartType( KChart::OdfChartType ) ) );
     connect( widget2, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
@@ -167,6 +177,30 @@ void ChartTypeTool::setThreeDMode( bool threeD )
 {
     if ( m_currentShape != 0 )
         m_currentShape->setThreeDMode( threeD );
+}
+
+void ChartTypeTool::setDataDirection( Qt::Orientation direction )
+{
+    if ( m_currentShape != 0 )
+        m_currentShape->setDataDirection( direction );
+}
+
+void ChartTypeTool::setFirstRowIsLabel( bool b )
+{
+    if ( m_currentShape != 0 )
+        m_currentShape->setFirstRowIsLabel( b );
+}
+
+void ChartTypeTool::setFirstColumnIsLabel( bool b )
+{
+    if ( m_currentShape != 0 )
+        m_currentShape->setFirstColumnIsLabel( b );
+}
+
+void ChartTypeTool::setUseExternalDatasource( bool b )
+{
+    if ( m_currentShape != 0 )
+        m_currentShape->setUseExternalDatasource( b );
 }
 
 #include "ChartTypeTool.moc"

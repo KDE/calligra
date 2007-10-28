@@ -57,7 +57,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     KDChart::Chart* chart() const;
 
     /// reimplemented
-    virtual void setModel( QAbstractItemModel* model, bool takeOwnershipOfModel = false );
+    virtual void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
+    void setInternalModel( QAbstractItemModel *model );
     QAbstractItemModel *model();
     
     /// reimplemented
@@ -103,6 +104,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setLegendOrientation( Qt::Orientation orientation );
     void setLegendAlignment( Qt::Alignment alignment );
     void setLegendFixedPosition( KDChart::Position position );
+    void setUseExternalDatasource( bool b );
     void modelChanged();
 
     void saveChartTypeOptions();

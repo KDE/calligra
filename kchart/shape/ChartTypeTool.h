@@ -64,6 +64,10 @@ private slots:
     void setChartType( KChart::OdfChartType type );
     void setChartSubtype( KChart::OdfChartSubtype subtype );
     void setThreeDMode( bool );
+    void setDataDirection( Qt::Orientation );
+    void setFirstRowIsLabel( bool b );
+    void setFirstColumnIsLabel( bool b );
+    void setUseExternalDatasource( bool b );
 #if 0
     void catchFoo(bool on);
     void catchBar(bool on);

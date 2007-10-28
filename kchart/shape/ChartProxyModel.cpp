@@ -60,6 +60,18 @@ QVariant ChartProxyModel::data( const QModelIndex &index,
     return sourceModel()->data( mapToSource( index ), role );
 }
 
+bool ChartProxyModel::setData( const QModelIndex &index,
+                                   const QVariant &data,
+                                   int role /* = Qt::EditRole */ )
+{
+    if ( sourceModel() == 0 )
+        return false;
+    kDebug() << index;
+    kDebug() << data;
+    kDebug() << role;
+    return sourceModel()->setData( mapToSource( index ), data, role );
+}
+
 QVariant ChartProxyModel::headerData( int section,
                                       Qt::Orientation orientation,
                                       int role /* = Qt::DisplayRole */ ) const

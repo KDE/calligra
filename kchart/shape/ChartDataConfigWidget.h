@@ -40,6 +40,8 @@ public:
     explicit ChartDataConfigWidget( );
     ~ChartDataConfigWidget();
 
+    void createActions();
+
     /// reimplemented
     void open(KoShape *shape);
     /// reimplemented
@@ -50,10 +52,16 @@ public:
     /// reimplemented 
     virtual bool showOnShapeCreate() { return true; }
 
- private Q_SLOTS:
-    void dataInRows( bool );
-    void setFirstRowIsLabel( bool );
-    void setFirstColumnIsLabel( bool );
+signals:
+    void dataDirectionChanged( Qt::Orientation );
+    void firstRowIsLabelChanged( bool b );
+    void firstColumnIsLabelChanged( bool b );
+    void useExternalDatasourceChanged( bool b );
+
+private slots:
+    void setDataInRows( bool checked );
+    void setUseExternalDatasource( bool checked );
+    void slotShowTableEditor( bool show );
 
 private:
     class Private;
