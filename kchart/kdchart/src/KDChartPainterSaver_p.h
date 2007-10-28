@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -73,7 +73,14 @@ class PainterSaver {
     Q_DISABLE_COPY( PainterSaver )
 public:
     explicit PainterSaver( QPainter* p ) : painter( p ) { p->save(); }
+#if QT_VERSION == 0x040300 && defined Q_OS_WIN
+    // the use of setClipRect is a workaround for a bug in Qt 4.3 which could
+    // lead to an assert on Windows
+    ~PainterSaver() { painter->setClipRect( 0, 0, 2, 2 ); painter->restore(); }
+#else
     ~PainterSaver() { painter->restore(); }
+#endif
+
 
 private:
     QPainter* const painter;

@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -44,6 +44,7 @@
 
 
 class QObject;
+class QPaintDevice;
 
 namespace KDChart {
 
@@ -173,8 +174,19 @@ public:
      */
     static const QPair< qreal, qreal > currentFactors();
 
+    /**
+     * Sets the paint device usable for calculating fort metrics.
+     */
+    static void setPaintDevice( QPaintDevice* paintDevice );
+
+    /**
+     * Returns the paint device usable for calculating fort metrics.
+     */
+    static QPaintDevice* paintDevice();
+
 private:
     QStack< QPair< qreal, qreal > > mFactors;
+    QPaintDevice* m_paintDevice;
 };
 
 }

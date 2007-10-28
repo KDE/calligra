@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klar�vdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klar�vdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -349,7 +349,7 @@ QPointF PolarCoordinatePlane::zoomCenter() const
     return QPointF( d->coordinateTransformations[0].zoom.xCenter, d->coordinateTransformations[0].zoom.yCenter );
 }
 
-void PolarCoordinatePlane::setZoomCenter( QPointF center )
+void PolarCoordinatePlane::setZoomCenter( const QPointF& center )
 {
     d->coordinateTransformations[0].zoom.xCenter = center.x();
     d->coordinateTransformations[0].zoom.yCenter = center.y();

@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -86,6 +86,7 @@ protected:
 inline AbstractAxis::AbstractAxis( Private * p, AbstractDiagram* diagram )
     :  AbstractArea( p )
 {
+    Q_UNUSED( diagram );
     init();
     QTimer::singleShot(0, this, SLOT(delayedInit()));
 }

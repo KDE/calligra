@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -47,11 +47,15 @@
 
 #include <qglobal.h>
 #include <QMessageBox>
+#include <QMetaObject>
+// #include <QDomNodeList>
+#include <QMetaProperty>
 
 #define d d_func()
 
 using namespace KDChart;
 
+static const char* TagNameQtProperties = "properties";
 /**
   \class KDChart::DiagramsSerializer KDChartDiagramsSerializer.h
 
@@ -201,11 +205,12 @@ bool DiagramsSerializer::Private::doParseDiagram(
 {
     bool result = false;
 
-    LineDiagram*  lineDiag  = qobject_cast< LineDiagram*> (  diagramPtr );
-    BarDiagram*   barDiag   = qobject_cast< BarDiagram*> (   diagramPtr );
-    PieDiagram*   pieDiag   = qobject_cast< PieDiagram*> (   diagramPtr );
-    PolarDiagram* polarDiag = qobject_cast< PolarDiagram*> ( diagramPtr );
-    RingDiagram*  ringDiag  = qobject_cast< RingDiagram*> (  diagramPtr );
+    LineDiagram*  lineDiag  = qobject_cast< LineDiagram* >(  diagramPtr );
+    BarDiagram*   barDiag   = qobject_cast< BarDiagram* >(   diagramPtr );
+    PieDiagram*   pieDiag   = qobject_cast< PieDiagram* >(   diagramPtr );
+    PolarDiagram* polarDiag = qobject_cast< PolarDiagram* >( diagramPtr );
+    RingDiagram*  ringDiag  = qobject_cast< RingDiagram* >(  diagramPtr );
+    Plotter*      plotDiag  = qobject_cast< Plotter* >(      diagramPtr );
 
     if( lineDiag )
         result = parseLineDiagram(  container, *lineDiag );
@@ -217,6 +222,8 @@ bool DiagramsSerializer::Private::doParseDiagram(
         result = parsePolarDiagram( container, *polarDiag );
     else if( ringDiag )
         result = parseRingDiagram(  container, *ringDiag );
+    else if( plotDiag )
+        result = parsePlotter( container, *plotDiag );
 
     return result;
 }
@@ -239,7 +246,7 @@ void DiagramsSerializer::Private::saveDiagram(
 {
     if( p == 0 )
         return;
-    
+
     const LineDiagram*  lineDiag  = dynamic_cast<const LineDiagram*> (  p );
     const BarDiagram*   barDiag   = dynamic_cast<const BarDiagram*> (   p );
     const PieDiagram*   pieDiag   = dynamic_cast<const PieDiagram*> (   p );
@@ -424,6 +431,13 @@ bool DiagramsSerializer::Private::parseAbstractDiagram(
                     qDebug()<< "Could not parse AbstractDiagram. Element"
                             << tagName << "has invalid content.";
                 }
+            } else if ( tagName == TagNameQtProperties ) {
+                // now parse parent class properties:
+                if ( ! parseQtProperties( container, diagram ) ) {
+                    qDebug() << "Could not parse base class Qt properties. Element"
+                             << tagName << "has invalid content.";
+                    bOK = false;
+                }
             } else {
                 qDebug() << "Unknown subelement of AbstractDiagram found:" << tagName;
                 bOK = false;
@@ -499,6 +513,8 @@ void DiagramsSerializer::Private::saveAbstractDiagram(
                            diagram.percentMode() );
     KDXML::createIntNode( doc, diagElement, "DatasetDimension",
                           diagram.datasetDimension() );
+    // serialize Qt properties inherited from superclasses:
+    saveQtProperties( doc, diagElement, diagram );
 }
 
 
@@ -730,6 +746,67 @@ void DiagramsSerializer::Private::saveLineDiagram(
     KDXML::createStringNode( doc, diagElement, "LineType", s );
 }
 
+bool DiagramsSerializer::Private::parsePlotter(
+        const QDomElement& container, Plotter& diagram )const
+{
+    //qDebug() << "-------->" << container.tagName();
+
+    bool bOK = true;
+    if( !container.isNull() ) {
+        //qDebug() << "\n    DiagramsSerializer::parsePlotter() processing" << diagName;
+        QDomNode node = container.firstChild();
+        while( !node.isNull() ) {
+            QDomElement element = node.toElement();
+            if( !element.isNull() ) { // was really an element
+                QString tagName = element.tagName();
+                if( tagName == "kdchart:cartesian-coordinate-diagram" ) {
+                    if( ! parseCartCoordDiagram( element, diagram ) ){
+                        qDebug() << "Could not parse base class of Platter.";
+                        bOK = false;
+                    }
+                } else if( tagName == "PlotType" ) {
+                    QString s;
+                    if( KDXML::readStringNode( element, s ) ){
+                        if( s.compare("Normal", Qt::CaseInsensitive) == 0 )
+                            diagram.setType( Plotter::Normal );
+                        else{
+                            bOK = false;
+                            Q_ASSERT( false ); // all of the types need to be handled
+                        }
+                    }
+                    else
+                        bOK = false;
+                } else {
+                    qDebug() << "Unknown subelement of Plotter found:" << tagName;
+                    bOK = false;
+                }
+            }
+            node = node.nextSibling();
+        }
+    }
+    return bOK;
+}
+
+void DiagramsSerializer::Private::savePlotter(
+        QDomDocument& doc,
+        QDomElement& diagElement,
+        const Plotter& diagram )const
+{
+    // first save the information hold by the base class
+    saveCartCoordDiagram( doc, diagElement, diagram,
+                          "kdchart:cartesian-coordinate-diagram" );
+    // then save what is stored in the derived class
+    QString s;
+    switch( diagram.type() ){
+        case Plotter::Normal:
+                s = "Normal";
+                break;
+        default:
+            Q_ASSERT( false ); // all of the types need to be handled
+            break;
+    }
+    KDXML::createStringNode( doc, diagElement, "PlotType", s );
+}
 
 bool DiagramsSerializer::Private::parseBarDiagram(
         const QDomElement& container, BarDiagram& diagram )const
@@ -1118,4 +1195,57 @@ void DiagramsSerializer::Private::saveRingDiagram(
 
     // then save what is stored in the derived class
     KDXML::createBoolNode(  doc, diagElement, "RelativeThickness",   diagram.relativeThickness() );
+}
+
+void DiagramsSerializer::Private::saveQtProperties(
+    QDomDocument& doc,
+    QDomElement& e,
+    const AbstractDiagram& diagram ) const
+{   // this function saves all properties of a QObject that are in the
+    // white list, creating a element for the properties and one child
+    // element per property
+    static const QStringList SerializedPropertyWhiteList
+        ( QStringList() << "frameStyle" << "lineWidth" << "midLineWidth" );
+
+    QDomElement element = doc.createElement( TagNameQtProperties );
+    e.appendChild( element );
+    for ( int i = 0; i < diagram.metaObject()->propertyCount(); ++i ) {
+        QMetaProperty p = diagram.metaObject()->property( i );
+        if ( SerializedPropertyWhiteList.contains( p.name() ) ) {
+            QVariant value = diagram.property( p.name() );
+            KDXML::createQVariantNode( doc, element, p.name(), value );
+        }
+    }
+}
+
+bool DiagramsSerializer::Private::parseQtProperties(
+    const QDomElement& container,
+    AbstractDiagram& diagram ) const
+{
+    bool error = false;
+    QDomNodeList elements = container.elementsByTagName( "properties" );
+    if ( elements.size() != 1 ) {
+        qDebug() << "DiagramsSerializer::Private::parseQtProperties: XML syntax error, more than one properties elements";
+        error = true;
+    }
+    if ( elements.size() > 0 ) {
+        QDomElement properties = elements.at(0).toElement();
+
+        QDomNode n = properties.firstChild();
+        while ( !n.isNull() ) {
+            QDomElement e = n.toElement();
+            if ( !e.isNull() ) {
+                QVariant value;
+                QString name;
+                if ( ! KDXML::readQVariantNode( e, value, name ) ) {
+                    qDebug() << "DiagramsSerializer::Private::parseQtProperties: error parsing property" << e.tagName();
+                    error = true;
+                } else {
+                    diagram.setProperty( qPrintable( name ), value );
+                }
+            }
+            n = n.nextSibling();
+        }
+    }
+    return ! error;
 }

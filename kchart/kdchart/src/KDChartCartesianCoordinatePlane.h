@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -36,6 +36,9 @@ namespace KDChart {
     class CartesianAxis;
     class CartesianGrid;
 
+    /**
+      * @brief Cartesian coordinate plane
+      */
     class KDCHART_EXPORT CartesianCoordinatePlane : public AbstractCoordinatePlane
     {
         Q_OBJECT
@@ -84,7 +87,10 @@ namespace KDChart {
         /**
          * \sa zoomCenter, setZoomFactorX, setZoomFactorY
          */
-        virtual void setZoomCenter( QPointF center );
+        virtual void setZoomCenter( const QPointF& center );
+
+        void setFixedDataCoordinateSpaceRelation( bool fixed );
+        bool hasFixedDataCoordinateSpaceRelation() const;
 
 
         /**
@@ -98,9 +104,9 @@ namespace KDChart {
          * while on the other hand automatic adjusting will set these ranges.
          *
          * To disable use of this range you can either pass an empty pair by using the default
-         * constructor QPair() or you can set setting both values to the same which constitutes
+         * constructor QPair() or you can set both values to the same which constitutes
          * a null range.
-         * 
+         *
          * \note By default the visible data range often is larger than the
          * range calculated from the data model (or set by setHoriz.|Vert.Range(), resp.).
          * This is due to the built-in grid calculation feature: The visible start/end
@@ -304,7 +310,7 @@ namespace KDChart {
          * Disable / re-enable the built-in grid adjusting feature.
          *
          * By default additional lines will be drawn in a Linear grid when zooming in.
-         * 
+         *
          * \sa autoAdjustGridToZoom, setGridAttributes
          */
         void setAutoAdjustGridToZoom( bool autoAdjust );
@@ -329,6 +335,45 @@ namespace KDChart {
         /** reimpl */
         virtual void paint( QPainter* );
 
+        /** reimpl */
+        AbstractCoordinatePlane* sharedAxisMasterPlane( QPainter* p = 0 );
+
+        /**
+         * Returns the currently visible data range. Might be greater than the
+         * range of the grid.
+         */
+        QRectF visibleDataRange() const;
+
+        /**
+         * Sets whether the horizontal range should be reversed or not, i.e.
+         * small values to the left and large values to the right (the default)
+         * or vice versa.
+         * \param reverse Whether the horizontal range should be reversed or not
+         */
+        void setHorizontalRangeReversed( bool reverse );
+
+        /**
+         * \return Whether the horizontal range is reversed or not
+         */
+        bool isHorizontalRangeReversed() const;
+
+        /**
+         * Sets whether the vertical range should be reversed or not, i.e.
+         * small values at the bottom and large values at the top (the default)
+         * or vice versa.
+         * \param reverse Whether the vertical range should be reversed or not
+         */
+        void setVerticalRangeReversed( bool reverse );
+
+        /**
+         * \return Whether the vertical range is reversed or not
+         */
+        bool isVerticalRangeReversed() const;
+
+        /**
+         * reimplement from AbstractCoordinatePlane
+         */
+        void setGeometry( const QRect& r );
 
     public Q_SLOTS:
         /**
@@ -368,7 +413,9 @@ namespace KDChart {
         void layoutDiagrams();
         bool doneSetZoomFactorX( double factor );
         bool doneSetZoomFactorY( double factor );
-        bool doneSetZoomCenter( QPointF center );
+        bool doneSetZoomCenter( const QPointF& center );
+
+        void handleFixedDataCoordinateSpaceRelation( const QRectF& geometry );
 
     protected Q_SLOTS:
         void slotLayoutChanged( AbstractDiagram* );

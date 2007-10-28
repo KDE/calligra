@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -595,12 +595,13 @@ void Widget::justifyModelSize( int rows, int columns )
     const int currentRows = model.rowCount();
     const int currentCols = model.columnCount();
 
+    if ( currentCols < columns )
+        if ( ! model.insertColumns( currentCols, columns - currentCols ))
+            qDebug() << "justifyModelSize: could not increase model size.";
     if ( currentRows < rows )
         if ( ! model.insertRows( currentRows, rows - currentRows ))
             qDebug() << "justifyModelSize: could not increase model size.";
 
-    if ( currentCols < columns )
-        if ( ! model.insertColumns( currentCols, columns - currentCols ))
-            qDebug() << "justifyModelSize: could not increase model size.";
+    Q_ASSERT( model.rowCount() >= rows );
+    Q_ASSERT( model.columnCount() >= columns );
 }
-

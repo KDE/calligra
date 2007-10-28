@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -32,6 +32,9 @@
 
 namespace KDChart {
 
+/**
+  * @brief A set of attributes controlling the appearance of pie charts
+  */
 class KDCHART_EXPORT PieAttributes
 {
 public:

@@ -105,15 +105,34 @@ void LegendPropertiesWidget::readFromLegend( const Legend * legend )
 {
     mPositionCombo->setCurrentIndex( mPositionCombo->findData( QByteArray( legend->position().name() ) ) );
     titleTextED->setText( legend->titleText() );
-    if (  legend->orientation() == Qt::Horizontal ) {
-        horizontalRB->setChecked( true );
+
+    Position position = Position::fromName( legend->position().name() );
+    d->legend->setPosition( position );
+
+    if( position == Position::North ||
+        position == Position::South ) {
+        topLeftRB->setEnabled( true );
+        centerRB->setEnabled( true );
+        bottomRightRB->setEnabled( true );
+            
         topLeftRB->setText( tr( "Left" ) );
         bottomRightRB->setText( tr( "Right" ) );
-
-    } else {
-        verticalRB->setChecked( true );
+        slotAlignmentChanged( false );
+    }
+    else if( position == Position::West ||
+             position == Position::East ) {
+        topLeftRB->setEnabled( true );
+        centerRB->setEnabled( true );
+        bottomRightRB->setEnabled( true );
+            
         topLeftRB->setText( tr( "Top" ) );
         bottomRightRB->setText( tr( "Bottom" ) );
+        slotAlignmentChanged( false );
+    } else {
+        topLeftRB->setEnabled( false );
+        centerRB->setEnabled( false );
+        bottomRightRB->setEnabled( false );
+        slotAlignmentChanged( false );
     }
 
     if (  legend->alignment() == Qt::AlignLeft || legend->alignment() == Qt::AlignTop )
@@ -132,36 +151,71 @@ void LegendPropertiesWidget::readFromLegend( const Legend * legend )
 void LegendPropertiesWidget::writeToLegend( Legend * legend )
 {
     if ( !legend ) return;
-    legend->setPosition( Position::fromName( mPositionCombo->itemData( mPositionCombo->currentIndex() ).toByteArray() ) );
+    Position position = Position::fromName( mPositionCombo->itemData( mPositionCombo->currentIndex() ).toByteArray() );
+    legend->setPosition( position );
     legend->setTitleText( titleTextED->text() );
-    if (  horizontalRB->isChecked() ) {
+    if (  horizontalRB->isChecked() )
         legend->setOrientation( Qt::Horizontal );
+    else
+        legend->setOrientation( Qt::Vertical );
+    
+    if( position == Position::North ||
+        position == Position::South ) {
         if (  topLeftRB->isChecked() )
             legend->setAlignment(  Qt::AlignLeft );
         else if ( bottomRightRB->isChecked() )
             legend->setAlignment(  Qt::AlignRight );
         else
             legend->setAlignment(  Qt::AlignHCenter );
-    } else {
-        legend->setOrientation( Qt::Vertical );
+    }
+    else if( position == Position::West ||
+             position == Position::East ) {
         if (  topLeftRB->isChecked() )
             legend->setAlignment(  Qt::AlignTop );
         else if ( bottomRightRB->isChecked() )
             legend->setAlignment(  Qt::AlignBottom );
         else
             legend->setAlignment(  Qt::AlignVCenter );
+    } else {
+        legend->setAlignment( Qt::AlignCenter );
     }
-     if (  showLinesCB->isChecked() )
-            legend->setShowLines( true );
-        else
-            legend->setShowLines( false );
-
+    if (  showLinesCB->isChecked() )
+        legend->setShowLines( true );
+    else
+        legend->setShowLines( false );
 }
 
 void LegendPropertiesWidget::slotPositionChanged( int idx )
 {
     if ( d->legend && d->instantApply ) {
-        d->legend->setPosition( Position::fromName( mPositionCombo->itemData( idx ).toByteArray() ) );
+        Position position = Position::fromName( mPositionCombo->itemData( idx ).toByteArray() );
+        d->legend->setPosition( position );
+
+        if( position == Position::North ||
+            position == Position::South ) {
+            topLeftRB->setEnabled( true );
+            centerRB->setEnabled( true );
+            bottomRightRB->setEnabled( true );
+            
+            topLeftRB->setText( tr( "Left" ) );
+            bottomRightRB->setText( tr( "Right" ) );
+            slotAlignmentChanged( false );
+        }
+        else if( position == Position::West ||
+                 position == Position::East ) {
+            topLeftRB->setEnabled( true );
+            centerRB->setEnabled( true );
+            bottomRightRB->setEnabled( true );
+            
+            topLeftRB->setText( tr( "Top" ) );
+            bottomRightRB->setText( tr( "Bottom" ) );
+            slotAlignmentChanged( false );
+        } else {
+            topLeftRB->setEnabled( false );
+            centerRB->setEnabled( false );
+            bottomRightRB->setEnabled( false );
+            slotAlignmentChanged( false );
+        }
     } else {
         emit changed();
     }
@@ -172,20 +226,12 @@ void LegendPropertiesWidget::slotOrientationChanged( bool toggled )
     Q_UNUSED( toggled );
 
     if ( d->legend && d->instantApply ) {
-        if (  horizontalRB->isChecked() ) {
+        if (  horizontalRB->isChecked() )
             d->legend->setOrientation( Qt::Horizontal );
-            topLeftRB->setText( tr( "Left" ) );
-            bottomRightRB->setText( tr( "Right" ) );
-
-        } else {
+        else
             d->legend->setOrientation(  Qt::Vertical );
-            topLeftRB->setText( tr( "Top" ) );
-            bottomRightRB->setText( tr( "Bottom" ) );
-        }
-
     } else
         emit changed();
-
 }
 
 void LegendPropertiesWidget::slotAlignmentChanged( bool toggled )
@@ -193,20 +239,25 @@ void LegendPropertiesWidget::slotAlignmentChanged( bool toggled )
     Q_UNUSED( toggled );
 
     if ( d->legend && d->instantApply ) {
-        if (  horizontalRB->isChecked() ) {
-            if (  topLeftRB->isChecked() )
+        Position position = Position::fromName( mPositionCombo->currentText().toLatin1().constData() );
+        if (  position == Position::North ||
+              position == Position::South ) {
+            if ( topLeftRB->isChecked() )
                 d->legend->setAlignment(  Qt::AlignLeft );
             else if ( bottomRightRB->isChecked() )
                 d->legend->setAlignment(  Qt::AlignRight );
             else
                 d->legend->setAlignment(  Qt::AlignHCenter );
-        } else {
-            if (  topLeftRB->isChecked() )
+        } else if( position == Position::West ||
+                   position == Position::East ) {
+            if ( topLeftRB->isChecked() )
                 d->legend->setAlignment(  Qt::AlignTop );
             else if ( bottomRightRB->isChecked() )
                 d->legend->setAlignment(  Qt::AlignBottom );
             else
                 d->legend->setAlignment(  Qt::AlignVCenter );
+        } else {
+            d->legend->setAlignment( Qt::AlignCenter );
         }
 
     } else

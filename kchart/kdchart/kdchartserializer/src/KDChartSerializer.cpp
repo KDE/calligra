@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -120,25 +120,27 @@ void Serializer::init()
 void Serializer::registerBuiltInSerializerFactories( QObject* parent )
 {
     AbstractSerializerFactory* f = new DiagramSerializerFactory( parent );
-    registerElementSerializerFactory< LineDiagram >( f );
-    registerElementSerializerFactory< BarDiagram >( f );
-    registerElementSerializerFactory< PieDiagram >( f );
-    registerElementSerializerFactory< PolarDiagram >( f );
-    registerElementSerializerFactory< RingDiagram >( f );
+
+    registerElementSerializerFactory( LineDiagram::staticMetaObject.className(), f );
+    registerElementSerializerFactory( BarDiagram::staticMetaObject.className(), f );
+    registerElementSerializerFactory( PieDiagram::staticMetaObject.className(), f );
+    registerElementSerializerFactory( PolarDiagram::staticMetaObject.className(), f );
+    registerElementSerializerFactory( RingDiagram::staticMetaObject.className(), f );
+    registerElementSerializerFactory( Plotter::staticMetaObject.className(), f );
 
     f = new LegendSerializerFactory( parent );
-    Serializer::registerElementSerializerFactory< Legend >( f );
+    Serializer::registerElementSerializerFactory( Legend::staticMetaObject.className(), f );
 
     f = new TextAreaSerializerFactory( parent );
-    Serializer::registerElementSerializerFactory< HeaderFooter >( f );
+    Serializer::registerElementSerializerFactory( HeaderFooter::staticMetaObject.className(), f );
 
     f = new AxisSerializerFactory( parent );
-    Serializer::registerElementSerializerFactory< CartesianAxis >( f );
-//    Serializer::registerElementSerializerFactory< PolarAxis >( f );
+    Serializer::registerElementSerializerFactory( CartesianAxis::staticMetaObject.className(), f );
+//    Serializer::registerElementSerializerFactory( PolarAxis::staticMetaObject.className(), f );
 
     f = new CoordPlaneSerializerFactory( parent );
-    Serializer::registerElementSerializerFactory< CartesianCoordinatePlane >( f );
-    Serializer::registerElementSerializerFactory< PolarCoordinatePlane >( f );
+    Serializer::registerElementSerializerFactory( CartesianCoordinatePlane::staticMetaObject.className(), f );
+    Serializer::registerElementSerializerFactory( PolarCoordinatePlane::staticMetaObject.className(), f );
 }
 
 void Serializer::setModel(QAbstractItemModel * model)

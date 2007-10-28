@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -43,7 +43,9 @@ namespace KDChart {
     class AbstractDiagram;
     class PaintContext;
 
-    /** \internal
+    /** 
+     * Base class for all layout items of KD Chart
+     * \internal
      */
     class KDCHART_EXPORT AbstractLayoutItem : public QLayoutItem
     {
@@ -89,7 +91,9 @@ namespace KDChart {
         QLayout* mParentLayout;
     };
 
-    /** \internal
+    /**
+     * Layout item showing a text 
+     *\internal
      */
     class KDCHART_EXPORT TextLayoutItem : public AbstractLayoutItem
     {
@@ -149,7 +153,9 @@ namespace KDChart {
         mutable QFont cachedFont;
     };
 
-    /** \internal
+    /**
+     * Layout item showing a data point marker 
+     * \internal
      */
     class KDCHART_EXPORT MarkerLayoutItem : public AbstractLayoutItem
     {
@@ -186,7 +192,9 @@ namespace KDChart {
             QPen mPen;
     };
 
-    /** \internal
+    /**
+     * Layout item showing a coloured line
+     * \internal
      */
     class KDCHART_EXPORT LineLayoutItem : public AbstractLayoutItem
     {
@@ -218,7 +226,9 @@ namespace KDChart {
             QRect mRect;
     };
 
-    /** \internal
+    /** 
+     * Layout item showing a coloured line and a data point marker
+     * \internal
      */
     class KDCHART_EXPORT LineWithMarkerLayoutItem : public AbstractLayoutItem
     {
@@ -254,7 +264,9 @@ namespace KDChart {
     };
 
 
-    /** \internal
+    /**
+     * Layout item showing a horizontal line
+     * \internal
      */
     class KDCHART_EXPORT HorizontalLineLayoutItem : public AbstractLayoutItem
     {
@@ -275,7 +287,9 @@ namespace KDChart {
         QRect mRect;
     };
 
-    /** \internal
+    /**
+     * Layout item showing a vertial line
+     * \internal
      */
     class KDCHART_EXPORT VerticalLineLayoutItem : public AbstractLayoutItem
     {
@@ -296,7 +310,9 @@ namespace KDChart {
             QRect mRect;
     };
 
-    /** \internal
+    /** 
+     * @brief An empty layout item
+     * \internal
      *
      * The AutoSpacerLayoutItem is automatically put into each corner cell of
      * the planeLayout grid: one of its reference-layouts is a QVBoxLayout (for
@@ -395,4 +411,3 @@ namespace KDChart {
 }
 
 #endif /* KDCHARTLAYOUTITEMS_H */
-

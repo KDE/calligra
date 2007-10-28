@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -230,7 +230,11 @@ void AbstractAxis::connectSignals()
 */
 void AbstractAxis::setTextAttributes( const TextAttributes &a )
 {
+    if( d->textAttributes == a )
+        return;
+
     d->textAttributes = a;
+    update();
 }
 
 /**
@@ -262,7 +266,11 @@ TextAttributes AbstractAxis::textAttributes() const
 */
 void AbstractAxis::setLabels( const QStringList& list )
 {
+    if( d->hardLabels == list )
+        return;
+
     d->hardLabels = list;
+    update();
 }
 
 /**
@@ -288,7 +296,11 @@ QStringList AbstractAxis::labels() const
 */
 void AbstractAxis::setShortLabels( const QStringList& list )
 {
+    if( d->hardShortLabels == list )
+        return;
+
     d->hardShortLabels = list;
+    update();
 }
 
 /**

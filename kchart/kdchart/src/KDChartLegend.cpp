@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klar�vdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klar�vdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -198,6 +198,9 @@ Legend::LegendStyle Legend::legendStyle() const
     return d->legendStyle;
 }
 
+/**
+  * Creates an exact copy of this legend.
+  */
 Legend* Legend::clone() const
 {
     Legend* legend = new Legend( new Private( *d ), 0 );
@@ -405,6 +408,8 @@ void Legend::resetDiagram( AbstractDiagram* oldDiagram )
 
 void Legend::setVisible( bool visible )
 {
+    if( isVisible() == visible )
+        return;
     QWidget::setVisible( visible );
     emitPositionChanged();
 }
@@ -418,6 +423,8 @@ void Legend::setNeedRebuild()
 
 void Legend::setPosition( Position position )
 {
+    if( d->position == position )
+        return;
     d->position = position;
     emitPositionChanged();
 }
@@ -436,6 +443,8 @@ Position Legend::position() const
 
 void Legend::setAlignment( Qt::Alignment alignment )
 {
+    if( d->alignment == alignment )
+        return;
     d->alignment = alignment;
     emitPositionChanged();
 }
@@ -519,10 +528,8 @@ void Legend::setText( uint dataset, const QString& text )
 QString Legend::text( uint dataset ) const
 {
     if( d->texts.find( dataset ) != d->texts.end() ){
-        //qDebug() << "Legend::text(" << dataset << ") returning d->texts[" << dataset << "] :" << d->texts[ dataset ];
         return d->texts[ dataset ];
     }else{
-        //qDebug() << "Legend::text(" << dataset << ") returning d->modelLabels[" << dataset << "] :" << d->modelLabels[ dataset ];
         return d->modelLabels[ dataset ];
     }
 }
@@ -537,6 +544,7 @@ void Legend::setColor( uint dataset, const QColor& color )
     if( d->brushes[ dataset ] == color ) return;
     d->brushes[ dataset ] = color;
     setNeedRebuild();
+    update();
 }
 
 void Legend::setBrush( uint dataset, const QBrush& brush )
@@ -544,6 +552,7 @@ void Legend::setBrush( uint dataset, const QBrush& brush )
     if( d->brushes[ dataset ] == brush ) return;
     d->brushes[ dataset ] = brush;
     setNeedRebuild();
+    update();
 }
 
 QBrush Legend::brush( uint dataset ) const
@@ -570,8 +579,10 @@ void Legend::setBrushesFromDiagram( KDChart::AbstractDiagram* diagram )
             bChangesDone = true;
         }
     }
-    if( bChangesDone )
+    if( bChangesDone ) {
         setNeedRebuild();
+        update();
+    }
 }
 
 
@@ -580,6 +591,7 @@ void Legend::setPen( uint dataset, const QPen& pen )
     if( d->pens[dataset] == pen ) return;
     d->pens[dataset] = pen;
     setNeedRebuild();
+    update();
 }
 
 QPen Legend::pen( uint dataset ) const
@@ -601,6 +613,7 @@ void Legend::setMarkerAttributes( uint dataset, const MarkerAttributes& markerAt
     if( d->markerAttributes[dataset] == markerAttributes ) return;
     d->markerAttributes[ dataset ] = markerAttributes;
     setNeedRebuild();
+    update();
 }
 
 MarkerAttributes Legend::markerAttributes( uint dataset ) const
@@ -759,6 +772,7 @@ static const QColor SUBDUEDCOLORS[ NUM_SUBDUEDCOLORS ] = {
 
 void Legend::resizeEvent ( QResizeEvent * event )
 {
+    Q_UNUSED( event );
 #ifdef DEBUG_LEGEND_PAINT
     qDebug() << "Legend::resizeEvent() called";
 #endif
@@ -918,7 +932,7 @@ void Legend::buildLegend()
                         diagram(),
                         markerAttrs[dataset],
                         brush( dataset ),
-                        pen( dataset ),
+                        markerAttrs[dataset].pen(),
                         Qt::AlignLeft );
                 break;
             case( LinesOnly ):
@@ -936,7 +950,7 @@ void Legend::buildLegend()
                         markerOffsOnLine,
                         markerAttrs[dataset],
                         brush( dataset ),
-                        pen( dataset ),
+                        markerAttrs[dataset].pen(),
                         Qt::AlignCenter );
                 break;
             default:
@@ -1017,4 +1031,3 @@ void Legend::buildLegend()
     qDebug() << "leaving Legend::buildLegend()";
 #endif
 }
-

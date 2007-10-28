@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klar�vdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klar�vdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -83,9 +83,9 @@ void PolarDiagram::init()
     setShowLabelsAtPosition( Position::Floating, false );
 }
 
-
-
-
+/**
+  * Creates an exact copy of this diagram.
+  */
 PolarDiagram * PolarDiagram::clone() const
 {
     PolarDiagram* newDiagram = new PolarDiagram( new Private( *d ) );
@@ -212,6 +212,7 @@ double PolarDiagram::numberOfGridRings() const
 
 void PolarDiagram::setZeroDegreePosition( int degrees )
 {
+    Q_UNUSED( degrees );
     qWarning() << "Deprecated PolarDiagram::setZeroDegreePosition() called, setting ignored.";
 }
 

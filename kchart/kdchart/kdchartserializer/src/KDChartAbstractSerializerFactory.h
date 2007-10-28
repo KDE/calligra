@@ -45,7 +45,7 @@ namespace KDChart {
     {
         Q_DISABLE_COPY( AbstractSerializerFactory )
 
-        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( AbstractSerializerFactory );
+        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( AbstractSerializerFactory )
 
     public:
         AbstractSerializerFactory( QObject* parent = 0 );

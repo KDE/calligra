@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -65,6 +65,10 @@ namespace KDChart {
         */
         explicit DatasetProxyModel ( QObject* parent = 0 );
 
+        QModelIndex buddy( const QModelIndex& index ) const;
+
+        Qt::ItemFlags flags( const QModelIndex& index ) const;
+
         QModelIndex index( int row, int column,
                            const QModelIndex &parent = QModelIndex() ) const;
         QModelIndex parent(const QModelIndex &child ) const;
@@ -77,6 +81,9 @@ namespace KDChart {
 
         /** Overloaded from base class. */
         QVariant data(const QModelIndex &index, int role) const;
+
+        /** Overloaded from base class. */
+        bool setData( const QModelIndex& index, const QVariant& value, int role );
 
         /** Overloaded from base class. */
         QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
@@ -156,7 +163,8 @@ namespace KDChart {
             be unique (otherwise, a 1-to-1 mapping in both directions is
             impossible).
 
-            sourceCount is the number of columns in the source model. The proxy-to-source map has
+            sourceCount is the number of columns in the source model. 
+            The proxy-to-source map has 
             as many elements as the proxy has columns, the source-to-proxy map
             has as many elements as the source has columns. Same goes for rows
             (the mapping logic is the same).

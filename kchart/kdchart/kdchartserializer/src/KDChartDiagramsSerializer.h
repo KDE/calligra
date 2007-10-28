@@ -44,6 +44,7 @@
 #include <KDChartPieDiagram>
 #include <KDChartPolarDiagram>
 #include <KDChartRingDiagram>
+#include <KDChartPlotter>
 
 namespace KDChart {
 

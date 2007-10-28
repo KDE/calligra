@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klar�vdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klar�vdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -84,7 +84,7 @@ public:
     virtual Legend * clone() const;
 
     /**
-     * Returns true if both axes have the same settings.
+     * Returns true if both legends have the same settings.
      */
     bool compare( const Legend* other )const;
 

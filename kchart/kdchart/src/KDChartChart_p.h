@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -116,10 +116,12 @@ class Chart::Private : public QObject
 
         int globalLeadingLeft, globalLeadingRight, globalLeadingTop, globalLeadingBottom;
 
+        QList< AbstractCoordinatePlane* > mouseClickedPlanes;
+
         Private ( Chart* );
 
         virtual ~Private();
-        
+
         void removeDummyHeaderFooters();
 
         void createLayouts( QWidget * parent );

@@ -74,7 +74,7 @@
 #include <float.h>
 #define ISNAN(x ) _isnan(x )
 #define ISINF(x ) (!(_finite(x ) + _isnan(x ) ) )
-#elif defined Q_OS_DARWIN
+#elif defined (Q_OS_DARWIN) || defined (Q_OS_CYGWIN)
 #define ISNAN(x) std::isnan(x)
 #define ISINF(x) std::isinf(x)
 #else

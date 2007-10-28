@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2003 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2003 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -53,7 +53,7 @@ namespace KDChart {
         Q_OBJECT
         Q_DISABLE_COPY( Serializer )
 
-        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( Serializer );
+        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( Serializer )
 
     public:
         explicit Serializer( Chart* chart = 0,
@@ -130,9 +130,10 @@ namespace KDChart {
         static AbstractSerializerFactory* elementSerializerFactory( const QObject* element );
         static AbstractSerializerFactory* elementSerializerFactory( const QString& className );
 
-    protected:
         static void registerElementSerializerFactory( const char* name, AbstractSerializerFactory* factory );
         static void unregisterElementSerializerFactory( const char* name );
+
+    protected:
         static AbstractSerializerFactory* elementSerializerFactory( const char* className );
     };
 

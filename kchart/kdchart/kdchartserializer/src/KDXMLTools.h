@@ -42,6 +42,8 @@
 #include <QDateTime>
 #include <QModelIndex>
 
+class QVariant;
+
 #include "kdchartserializer_export.h"
 
 namespace KDXML {
@@ -56,77 +58,80 @@ namespace KDXML {
     Qt::BrushStyle KDCHARTSERIALIZER_EXPORT stringToBrushStyle( const QString& style );
 
     void KDCHARTSERIALIZER_EXPORT setBoolAttribute( QDomElement& element,
-            const QString& attrName, bool value );
+                                                    const QString& attrName, bool value );
     void KDCHARTSERIALIZER_EXPORT setDoubleAttribute( QDomElement& element,
-            const QString& attrName, double value );
+                                                      const QString& attrName, double value );
 
     void KDCHARTSERIALIZER_EXPORT createNodeWithAttribute( QDomDocument& doc, QDomNode& parent,
-                                  const QString& elementName,
-                                  const QString& attrName,
-                                  const QString& attrText );
+                                                           const QString& elementName,
+                                                           const QString& attrName,
+                                                           const QString& attrText );
 
     void KDCHARTSERIALIZER_EXPORT createBoolNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, bool value );
+                                                  const QString& elementName, bool value );
     void KDCHARTSERIALIZER_EXPORT createOrientationNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, Qt::Orientation value );
+                                                         const QString& elementName, Qt::Orientation value );
     void KDCHARTSERIALIZER_EXPORT createAlignmentNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, Qt::Alignment value );
+                                                       const QString& elementName, Qt::Alignment value );
     void KDCHARTSERIALIZER_EXPORT createBoxLayoutDirectionNode( QDomDocument& doc, QDomNode& parent,
-                                       const QString& elementName, QBoxLayout::Direction value );
+                                                                const QString& elementName, QBoxLayout::Direction value );
     void KDCHARTSERIALIZER_EXPORT createSizeNode( QDomDocument& doc, QDomNode& parent,
-                         const QString& elementName, const QSize& value );
+                                                  const QString& elementName, const QSize& value );
     void KDCHARTSERIALIZER_EXPORT createSizeFNode( QDomDocument& doc, QDomNode& parent,
-                          const QString& elementName, const QSizeF& value );
+                                                   const QString& elementName, const QSizeF& value );
     void KDCHARTSERIALIZER_EXPORT createIntNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, int value );
+                                                 const QString& elementName, int value );
     void KDCHARTSERIALIZER_EXPORT createDoubleNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName, double value );
+                                                    const QString& elementName, double value );
     void KDCHARTSERIALIZER_EXPORT createRealNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName, qreal value );
+                                                  const QString& elementName, qreal value );
     void KDCHARTSERIALIZER_EXPORT createStringNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName,
-                           const QString& text );
+                                                    const QString& elementName,
+                                                    const QString& text );
     void KDCHARTSERIALIZER_EXPORT createStringNodeIfContent( QDomDocument& doc, QDomNode& parent,
-                                    const QString& elementName,
-                                    const QString& text );
+                                                             const QString& elementName,
+                                                             const QString& text );
     void KDCHARTSERIALIZER_EXPORT createPointFNode( QDomDocument& doc, QDomNode& parent,
-                           const QString& elementName,
-                           const QPointF& point );
+                                                    const QString& elementName,
+                                                    const QPointF& point );
     void KDCHARTSERIALIZER_EXPORT createColorNode( QDomDocument& doc, QDomNode& parent,
-                          const QString& elementName, const QColor& color );
+                                                   const QString& elementName, const QColor& color );
     void KDCHARTSERIALIZER_EXPORT createBrushNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, const QBrush& brush );
+                                                   const QString& elementName, const QBrush& brush );
     void KDCHARTSERIALIZER_EXPORT createPixmapNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, const QPixmap& pixmap );
+                                                    const QString& elementName, const QPixmap& pixmap );
     void KDCHARTSERIALIZER_EXPORT createRectNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, const QRect& rect );
+                                                  const QString& elementName, const QRect& rect );
     void KDCHARTSERIALIZER_EXPORT createStringListNodes( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName,
-            const QStringList* thelist ); // PCH: This is required to avoid MSVC compiler warnings and errors.
+                                                         const QString& elementName,
+                                                         const QStringList* thelist ); // PCH: This is required to avoid MSVC compiler warnings and errors.
     void KDCHARTSERIALIZER_EXPORT createFontNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, const QFont& font );
+                                                  const QString& elementName, const QFont& font );
 
     void KDCHARTSERIALIZER_EXPORT createPenNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, const QPen& pen );
+                                                 const QString& elementName, const QPen& pen );
     void KDCHARTSERIALIZER_EXPORT createDateTimeNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName,
-            const QDateTime& datetime );
+                                                      const QString& elementName,
+                                                      const QDateTime& datetime );
     void KDCHARTSERIALIZER_EXPORT createDateNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, const QDate& date );
+                                                  const QString& elementName, const QDate& date );
     void KDCHARTSERIALIZER_EXPORT createTimeNode( QDomDocument& doc, QDomNode& parent,
-            const QString& elementName, const QTime& time );
+                                                  const QString& elementName, const QTime& time );
     void KDCHARTSERIALIZER_EXPORT createModelIndexNode( QDomDocument& doc, QDomNode& parent,
-                               const QString& elementName, const QModelIndex& idx );
+                                                        const QString& elementName, const QModelIndex& idx );
 
     void KDCHARTSERIALIZER_EXPORT createRealPairNode( QDomDocument& doc, QDomNode& parent,
-                             const QString& elementName, const QPair<qreal, qreal> & pair );
+                                                      const QString& elementName, const QPair<qreal, qreal> & pair );
 
     void KDCHARTSERIALIZER_EXPORT createPositionBooleansNode(
-            QDomDocument& doc, QDomNode& parent, const QString& elementName,
-            bool unknown, bool center,
-            bool northWest, bool north, bool northEast,
-            bool east, bool southEast, bool south, bool southWest, bool west,
-            bool floating );
+        QDomDocument& doc, QDomNode& parent, const QString& elementName,
+        bool unknown, bool center,
+        bool northWest, bool north, bool northEast,
+        bool east, bool southEast, bool south, bool southWest, bool west,
+        bool floating );
+
+    void KDCHARTSERIALIZER_EXPORT createQVariantNode(
+        QDomDocument& doc, QDomNode& parent, const QString& name, const QVariant& );
 
     bool KDCHARTSERIALIZER_EXPORT findStringAttribute( const QDomElement& e, const QString & name, QString& attr );
     bool KDCHARTSERIALIZER_EXPORT findIntAttribute(    const QDomElement& e, const QString & name, int&  attr );
@@ -142,7 +147,7 @@ namespace KDXML {
     bool KDCHARTSERIALIZER_EXPORT readOrientationNode( const QDomElement& element, Qt::Orientation& value );
     bool KDCHARTSERIALIZER_EXPORT readAlignmentNode(const QDomElement& element, Qt::Alignment& value );
     bool KDCHARTSERIALIZER_EXPORT readBoxLayoutDirectionNode(const QDomElement& element,
-                                     QBoxLayout::Direction& value );
+                                                             QBoxLayout::Direction& value );
     bool KDCHARTSERIALIZER_EXPORT readSizeNode( const QDomElement& element, QSize& value );
     bool KDCHARTSERIALIZER_EXPORT readSizeFNode( const QDomElement& element, QSizeF& value );
     bool KDCHARTSERIALIZER_EXPORT readPointFNode( const QDomElement& element, QPointF& value );
@@ -156,18 +161,19 @@ namespace KDXML {
     bool KDCHARTSERIALIZER_EXPORT readDateNode( const QDomElement& element, QDate& date );
     bool KDCHARTSERIALIZER_EXPORT readTimeNode( const QDomElement& element, QTime& time );
     bool KDCHARTSERIALIZER_EXPORT readRealPairNode( const QDomElement& element, QPair<qreal, qreal> & pair );
+    bool KDCHARTSERIALIZER_EXPORT readQVariantNode( const QDomElement& element, QVariant& v, QString& name );
     bool KDCHARTSERIALIZER_EXPORT readPositionBooleansNode(
-            const QDomElement& element,
-            bool& unknown, bool& center,
-            bool& northWest, bool& north, bool& northEast,
-            bool& east, bool& southEast, bool& south, bool& southWest, bool& west,
-            bool& floating );
+        const QDomElement& element,
+        bool& unknown, bool& center,
+        bool& northWest, bool& north, bool& northEast,
+        bool& east, bool& southEast, bool& south, bool& southWest, bool& west,
+        bool& floating );
     bool KDCHARTSERIALIZER_EXPORT readModelIndexNode(const QDomElement& element,
-                            const QAbstractItemModel& model,
-                            QModelIndex& idx );
+                                                     const QAbstractItemModel& model,
+                                                     QModelIndex& idx );
     bool KDCHARTSERIALIZER_EXPORT readModelIndexNode(const QDomElement& element,
-                            bool& isValid,
-                            int& column,
-                            int& row );
+                                                     bool& isValid,
+                                                     int& column,
+                                                     int& row );
 }
 #endif

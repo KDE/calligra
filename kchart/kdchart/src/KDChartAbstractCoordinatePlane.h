@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -41,7 +41,9 @@ namespace KDChart {
 
     typedef QList<DataDimension> DataDimensionsList;
 
-
+    /**
+      * @brief Base class common for all coordinate planes, CartesianCoordinatePlane, PolarCoordinatePlane, TernaryCoordinatePlane
+      */
     class KDCHART_EXPORT AbstractCoordinatePlane : public AbstractArea
     {
         Q_OBJECT
@@ -131,6 +133,16 @@ namespace KDChart {
         virtual QSizePolicy sizePolicy() const;
 
         /**
+         * @return Whether zooming with a rubber band using the mouse is enabled.
+         */
+        bool isRubberBandZoomingEnabled() const;
+
+        /**
+         * Enables or disables zooming with a rubber band using the mouse.
+         */
+        void setRubberBandZoomingEnabled( bool enable );
+
+        /**
          * @return The zoom factor in horizontal direction, that is applied
          * to all coordinate transformations.
          */
@@ -145,14 +157,16 @@ namespace KDChart {
         /**
          * Sets the zoom factor in horizontal direction, that is applied
          * to all coordinate transformations.
+         * @param factor The new zoom factor
          */
-        virtual void setZoomFactorX( double /* factor */ ) {}
+        virtual void setZoomFactorX( double  factor ) { Q_UNUSED( factor ); }
 
         /**
          * Sets the zoom factor in vertical direction, that is applied
          * to all coordinate transformations.
+         * @param factor The new zoom factor
          */
-        virtual void setZoomFactorY( double /* factor */ ) {}
+        virtual void setZoomFactorY( double factor ) { Q_UNUSED( factor ); }
 
         /**
          * @return The center point (in value coordinates) of the
@@ -165,7 +179,7 @@ namespace KDChart {
          * center point in zoom operations.
          * @param center The point to use.
          */
-        virtual void setZoomCenter( QPointF /* center */ ) {}
+        virtual void setZoomCenter( const QPointF& center ) { Q_UNUSED( center ); }
 
         /**
          * Set the grid attributes to be used by this coordinate plane.
@@ -233,6 +247,9 @@ namespace KDChart {
          */
         AbstractCoordinatePlane * referenceCoordinatePlane() const;
 
+        virtual AbstractCoordinatePlane* sharedAxisMasterPlane( QPainter* p = 0 );
+
+
         /** pure virtual in QLayoutItem */
         virtual bool isEmpty() const;
         /** pure virtual in QLayoutItem */
@@ -253,8 +270,10 @@ namespace KDChart {
         /** pure virtual in QLayoutItem */
         virtual QRect geometry() const;
 
-        /** reimp */
         void mousePressEvent( QMouseEvent* event );
+        void mouseDoubleClickEvent( QMouseEvent* event );
+        void mouseMoveEvent( QMouseEvent* event );
+        void mouseReleaseEvent( QMouseEvent* event );
 
         /**
           * Called internally by KDChart::Chart
@@ -379,6 +398,7 @@ namespace KDChart {
         bool operator!=( const DataDimension& other ) const
         { return !operator==( other ); }
 
+
         qreal start;
         qreal end;
         bool  isCalculated;
@@ -388,6 +408,9 @@ namespace KDChart {
         qreal subStepWidth;
     };
 
-}
+#if !defined(QT_NO_DEBUG_STREAM)
+    QDebug operator<<( QDebug stream, const DataDimension& r );
+#endif
 
+}
 #endif

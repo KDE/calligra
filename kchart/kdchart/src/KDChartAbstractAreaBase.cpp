@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -96,7 +96,11 @@ void AbstractAreaBase::alignToReferencePoint( const RelativePosition& position )
 
 void AbstractAreaBase::setFrameAttributes( const FrameAttributes &a )
 {
+    if( d->frameAttributes == a )
+        return;
+
     d->frameAttributes = a;
+    positionHasChanged();
 }
 
 FrameAttributes AbstractAreaBase::frameAttributes() const
@@ -106,7 +110,11 @@ FrameAttributes AbstractAreaBase::frameAttributes() const
 
 void AbstractAreaBase::setBackgroundAttributes( const BackgroundAttributes &a )
 {
+    if( d->backgroundAttributes == a )
+        return;
+
     d->backgroundAttributes = a;
+    positionHasChanged();
 }
 
 BackgroundAttributes AbstractAreaBase::backgroundAttributes() const

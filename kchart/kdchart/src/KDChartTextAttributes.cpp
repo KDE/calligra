@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -110,7 +110,7 @@ bool TextAttributes::operator==( const TextAttributes& r ) const
             minimalFontSize() == r.minimalFontSize() &&
             autoRotate() == r.autoRotate() &&
             autoShrink() == r.autoShrink() &&
-            rotation() == rotation() &&
+            rotation() == r.rotation() &&
             pen() == r.pen() );
 }
 

@@ -43,7 +43,7 @@ namespace KDChart {
         Q_OBJECT
         Q_DISABLE_COPY( AxisSerializerFactory )
 
-        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( AxisSerializerFactory );
+        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( AxisSerializerFactory )
 
     public:
         AxisSerializerFactory( QObject* parent = 0 );

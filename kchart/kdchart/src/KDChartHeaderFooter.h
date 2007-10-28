@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -38,6 +38,9 @@ namespace KDChart {
     class Chart;
     class TextAttributes;
 
+/**
+  * @brief A header or even footer displaying text above or below charts
+  */
 class KDCHART_EXPORT HeaderFooter : public TextArea
 {
     Q_OBJECT

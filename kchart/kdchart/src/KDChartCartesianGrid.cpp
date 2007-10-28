@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -24,7 +24,9 @@
  **********************************************************************/
 
 #include "KDChartCartesianGrid.h"
+#include "KDChartAbstractCartesianDiagram.h"
 #include "KDChartPaintContext.h"
+#include "KDChartPainterSaver_p.h"
 
 #include <QPainter>
 
@@ -39,8 +41,14 @@ void CartesianGrid::drawGrid( PaintContext* context )
     //qDebug() << "KDChart::CartesianGrid::drawGrid( PaintContext* context ) called";
 
     CartesianCoordinatePlane* plane = dynamic_cast<CartesianCoordinatePlane*>(context->coordinatePlane());
+   
+    // This plane is used for tranlating the coordinates - not for the data boundaries
+    PainterSaver p( context->painter() );
+    plane = dynamic_cast< CartesianCoordinatePlane* >( plane->sharedAxisMasterPlane( context->painter() ) );
+
     Q_ASSERT_X ( plane, "CartesianGrid::drawGrid",
                  "Bad function call: PaintContext::coodinatePlane() NOT a cartesian plane." );
+
 
     const GridAttributes gridAttrsX( plane->gridAttributes( Qt::Horizontal ) );
     const GridAttributes gridAttrsY( plane->gridAttributes( Qt::Vertical ) );
@@ -51,7 +59,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
 
     // important: Need to update the calculated mData,
     //            before we may use it!
-    updateData( plane );
+    updateData( context->coordinatePlane() );
 
     // test for programming errors: critical
     Q_ASSERT_X ( mData.count() == 2, "CartesianGrid::drawGrid",
@@ -61,7 +69,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
     if( !isBoundariesValid( mData ) ) return;
     //qDebug() << "B";
 
-    DataDimension& dimX = mData.first();
+    DataDimension dimX = mData.first();
     const DataDimension& dimY = mData.last();
     // test for other programming errors: critical
     Q_ASSERT_X ( dimX.stepWidth, "CartesianGrid::drawGrid",
@@ -98,8 +106,10 @@ void CartesianGrid::drawGrid( PaintContext* context )
      * by setting the grid attribute to false
      * Same Value as for Cartesian Axis
      */
-    const qreal MinimumPixelsBetweenLines = qMin( dimX.stepWidth,  dimY.stepWidth );//0.1
-    //qDebug() << "min step " << qMin( dimX.stepWidth,  dimY.stepWidth );
+    static const qreal GridLineDistanceTreshold = 4.0; // <Treshold> pixels between each grid line
+    const qreal MinimumPixelsBetweenLines =
+            GridLineDistanceTreshold;
+    //qDebug() << "x step " << dimX.stepWidth << "  y step " << dimY.stepWidth;
 
     //qreal unitFactorX = 1.0;
 //    qreal unitFactorY = 1.0;
@@ -157,6 +167,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
         context->painter()->setPen( gridAttrsX.subGridPen() );
         qreal f = minValueX;
         qreal fLogSubstep = minValueX;
+
         int logSubstep = 0;
         while ( f <= maxValueX ) {
             //qDebug() << "sub grid line X at" << f;
@@ -168,6 +179,9 @@ void CartesianGrid::drawGrid( PaintContext* context )
             if ( isLogarithmicX ){
                 if( logSubstep == 9 ){
                     fLogSubstep *= 10.0;
+                    if( fLogSubstep == 0.0 )
+                        fLogSubstep = 1.0;
+
                     logSubstep = 0;
                 }
                 f += fLogSubstep;
@@ -182,6 +196,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
         context->painter()->setPen( gridAttrsY.subGridPen() );
         qreal f = minValueY;
         qreal fLogSubstep = minValueY;
+
         int logSubstep = 0;
         while ( f <= maxValueY ) {
             //qDebug() << "sub grid line Y at" << f;
@@ -193,6 +208,9 @@ void CartesianGrid::drawGrid( PaintContext* context )
             if ( isLogarithmicY ){
                 if( logSubstep == 9 ){
                     fLogSubstep *= 10.0;
+                    if( fLogSubstep == 0.0 )
+                        fLogSubstep = 1.0;
+
                     logSubstep = 0;
                 }
                 f += fLogSubstep;
@@ -217,6 +235,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
 //        const qreal minX = dimX.start;
 
         qreal f = minValueX;
+
         while ( f <= maxValueX ) {
             // PENDING(khz) FIXME: make draving/not drawing of Zero line more sophisticated?:
             const bool zeroLineHere = drawXZeroLineX && (f == 0.0);
@@ -232,8 +251,11 @@ void CartesianGrid::drawGrid( PaintContext* context )
                 if ( zeroLineHere )
                     context->painter()->setPen( gridAttrsX.gridPen() );
             }
-            if ( isLogarithmicX )
+            if ( isLogarithmicX ) {
                 f *= 10.0;
+                if( f == 0.0 )
+                    f = 1.0;
+            }
             else
                 f += dimX.stepWidth;
         }
@@ -252,6 +274,7 @@ void CartesianGrid::drawGrid( PaintContext* context )
         //const qreal minY = dimY.start;
         //qDebug("minY: %f   maxValueY: %f   dimY.stepWidth: %f",minY,maxValueY,dimY.stepWidth);
         qreal f = minValueY;
+
         while ( f <= maxValueY ) {
             // PENDING(khz) FIXME: make draving/not drawing of Zero line more sophisticated?:
             //qDebug("main grid line Y at: %f",f);
@@ -267,8 +290,11 @@ void CartesianGrid::drawGrid( PaintContext* context )
                 if ( zeroLineHere )
                     context->painter()->setPen( gridAttrsY.gridPen() );
             }
-            if ( isLogarithmicY )
+            if ( isLogarithmicY ) {
                 f *= 10.0;
+                if( f == 0.0 )
+                    f = 1.0;
+            }
             else
                 f += dimY.stepWidth;
         }
@@ -318,6 +344,12 @@ DataDimensionsList CartesianGrid::calculateGrid(
             //qDebug("CartesianGrid::calculateGrid()   l.last().start:  %f   l.last().end:  %f", l.last().start, l.last().end);
             //qDebug("                                 l.first().start: %f   l.first().end: %f", l.first().start, l.first().end);
 
+            // one time for the min/max value
+            const DataDimension minMaxY
+                    = calculateGridXY( l.last(), Qt::Vertical,
+                                       gridAttrsY.adjustLowerBoundToGrid(),
+                                       gridAttrsY.adjustUpperBoundToGrid() );
+
             if( plane->autoAdjustGridToZoom()
                 && plane->axesCalcModeY() == CartesianCoordinatePlane::Linear
                 && plane->zoomFactorY() > 1.0 )
@@ -325,6 +357,7 @@ DataDimensionsList CartesianGrid::calculateGrid(
                 l.last().start = translatedBottomLeft.y();
                 l.last().end   = translatedTopRight.y();
             }
+            // and one other time for the step width
             const DataDimension dimY
                     = calculateGridXY( l.last(), Qt::Vertical,
                                        gridAttrsY.adjustLowerBoundToGrid(),
@@ -334,8 +367,8 @@ DataDimensionsList CartesianGrid::calculateGrid(
                 l.first().end          = dimX.end;
                 l.first().stepWidth    = dimX.stepWidth;
                 l.first().subStepWidth = dimX.subStepWidth;
-                l.last().start        = dimY.start;
-                l.last().end          = dimY.end;
+                l.last().start        = minMaxY.start;
+                l.last().end          = minMaxY.end;
                 l.last().stepWidth    = dimY.stepWidth;
                 //qDebug() << "CartesianGrid::calculateGrid()  final grid y-range:" << l.last().end - l.last().start << "   step width:" << l.last().stepWidth << endl;
                 // calculate some reasonable subSteps if the
@@ -490,6 +523,7 @@ void CartesianGrid::calculateStepWidth(
     qreal& stepWidth, qreal& subStepWidth,
     bool adjustLower, bool adjustUpper ) const
 {
+    Q_UNUSED( orientation );
 
     Q_ASSERT_X ( granularities.count(), "CartesianGrid::calculateStepWidth",
                  "Error: The list of GranularitySequence values is empty." );

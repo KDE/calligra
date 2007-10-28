@@ -76,14 +76,14 @@ namespace KDChart {
     template< class S, class T >
     void registerElementSerializer( QObject* parent )
     {
-        Serializer::registerElementSerializerFactory< T >( new SerializerRegistrator< S, T >( parent ) );
+        Serializer::registerElementSerializerFactory( T::staticMetaObject.className(), new SerializerRegistrator< S, T >( parent ) );
     }
 
     template< class S, class T >
     void unregisterElementSerializer()
     {
-        AbstractSerializerFactory* f = Serializer::elementSerializerFactory< T >();
-        Serializer::unregisterElementSerializerFactory< T >();
+        AbstractSerializerFactory* f = Serializer::elementSerializerFactory( QString::fromLatin1( T::staticMetaObject.className() ) );
+        Serializer::unregisterElementSerializerFactory( T::staticMetaObject.className() );
         delete f;
     }
 

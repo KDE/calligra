@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klar�vdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klar�vdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -67,6 +67,7 @@ HeaderFooter::~HeaderFooter()
 void HeaderFooter::setParent( QObject* parent )
 {
     QObject::setParent( parent );
+    setParentWidget( qobject_cast<QWidget*>( parent ) );
     if( parent && ! autoReferenceArea() )
         setAutoReferenceArea( parent );
 }
@@ -88,6 +89,9 @@ void HeaderFooter::init()
     setTextAttributes( ta );
 }
 
+/**
+  * Creates an exact copy of this header/footer.
+  */
 HeaderFooter * HeaderFooter::clone() const
 {
     HeaderFooter* headerFooter = new HeaderFooter( new Private( *d ), 0 );

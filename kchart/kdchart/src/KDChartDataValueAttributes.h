@@ -1,6 +1,5 @@
-
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -173,6 +172,7 @@ public:
 
  /**
    * \brief display a string label instead of the original data value label
+   * Supports HTML code.
    * \sa dataLabel
    */
   void setDataLabel( const QString label );
@@ -230,28 +230,28 @@ public:
     * a LineDiagram showing areas, or one bar in a BarDiagram, one pie slice ...
     *
    * \sa negativePosition
-   */  
+   */
   void setNegativePosition( const RelativePosition& relPosition );
-   
+
    /**
    * \brief Return the relative positioning of the data value labels
    * \sa setNegativePosition
    */
   const RelativePosition negativePosition() const;
-  
+
   /**
    * \brief Defines the relative position of the data value labels for positive values.
-   * 
+   *
    * The position is specified in relation to the respective data value point, or in
    * releation to the respective data representation area, that's one area segment in
    * a LineDiagram showing areas, or one bar in a BarDiagram, one pie slice ...
-   * 
+   *
    * \sa positivePosition
    */
   void setPositivePosition( const RelativePosition& relPosition );
 
    /**
-   * \brief Return the relative positioning of the data value labels 
+   * \brief Return the relative positioning of the data value labels
    * \sa setPositivePosition
    */
   const RelativePosition positivePosition() const;

@@ -3,7 +3,7 @@
   */
 
 /****************************************************************************
-** Copyright (C) 2005-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
 **
 ** This file is part of the KD Chart library.
 **
@@ -131,7 +131,10 @@ private:
 inline bool Position::operator!=( const Position & other ) const { return !operator==( other ); }
 inline bool Position::operator!=( int other ) const { return !operator==( other ); }
 
-
+/**
+  * @brief Stores the absolute target points of a Position
+  * \internal
+  */
 class KDCHART_EXPORT PositionPoints
 {
   public:

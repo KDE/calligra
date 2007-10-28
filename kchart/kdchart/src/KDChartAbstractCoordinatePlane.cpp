@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -25,6 +25,8 @@
 
 
 #include <QGridLayout>
+#include <QRubberBand>
+#include <QMouseEvent>
 
 #include "KDChartChart.h"
 #include "KDChartAbstractCoordinatePlane.h"
@@ -43,6 +45,8 @@ AbstractCoordinatePlane::Private::Private()
     , parent( 0 )
     , grid( 0 )
     , referenceCoordinatePlane( 0 )
+    , enableRubberBandZooming( false )
+    , rubberBand( 0 )
 {
     // this bloc left empty intentionally
 }
@@ -262,20 +266,167 @@ void KDChart::AbstractCoordinatePlane::layoutPlanes()
     emit needLayoutPlanes();
 }
 
+void KDChart::AbstractCoordinatePlane::setRubberBandZoomingEnabled( bool enable )
+{
+    d->enableRubberBandZooming = enable;
+
+    if( !enable && d->rubberBand != 0 )
+    {
+        delete d->rubberBand;
+        d->rubberBand = 0;
+    }
+}
+
+bool KDChart::AbstractCoordinatePlane::isRubberBandZoomingEnabled() const
+{
+    return d->enableRubberBandZooming;
+}
 
 void KDChart::AbstractCoordinatePlane::mousePressEvent( QMouseEvent* event )
 {
+    if( event->button() == Qt::LeftButton )
+    {
+        if( d->enableRubberBandZooming && d->rubberBand == 0 )
+            d->rubberBand = new QRubberBand( QRubberBand::Rectangle, qobject_cast< QWidget* >( parent() ) );
+
+        if( d->rubberBand != 0 )
+        {
+            d->rubberBandOrigin = event->pos();
+            d->rubberBand->setGeometry( QRect( event->pos(), QSize() ) );
+            d->rubberBand->show();
+
+            event->accept();
+        }
+    }
+    else if( event->button() == Qt::RightButton )
+    {
+        if( d->enableRubberBandZooming && !d->rubberBandZoomConfigHistory.isEmpty() )
+        {
+            // restore the last config from the stack
+            ZoomParameters config = d->rubberBandZoomConfigHistory.pop();
+            setZoomFactorX( config.xFactor );
+            setZoomFactorY( config.yFactor );
+            setZoomCenter( config.center() );
+
+            QWidget* const p = qobject_cast< QWidget* >( parent() );
+            if( p != 0 )
+                p->update();
+
+            event->accept();
+        }
+    }
+
     KDAB_FOREACH( AbstractDiagram * a, d->diagrams )
     {
         a->mousePressEvent( event );
     }
 }
 
+void KDChart::AbstractCoordinatePlane::mouseDoubleClickEvent( QMouseEvent* event )
+{
+    if( event->button() == Qt::RightButton )
+    {
+        // othewise the second click gets lost
+        // which is pretty annoying when zooming out fast
+        mousePressEvent( event );
+    }
+    KDAB_FOREACH( AbstractDiagram * a, d->diagrams )
+    {
+        a->mouseDoubleClickEvent( event );
+    }
+}
+
+void KDChart::AbstractCoordinatePlane::mouseReleaseEvent( QMouseEvent* event )
+{
+    if( d->rubberBand != 0 )
+    {
+        // save the old config on the stack
+        d->rubberBandZoomConfigHistory.push( ZoomParameters( zoomFactorX(), zoomFactorY(), zoomCenter() ) );
+
+        // this is the height/width of the rubber band in pixel space
+        const double rubberWidth = static_cast< double >( d->rubberBand->width() );
+        const double rubberHeight = static_cast< double >( d->rubberBand->height() );
+
+        // this is the center of the rubber band in pixel space
+        const double rubberCenterX = static_cast< double >( d->rubberBand->geometry().center().x() - geometry().x() );
+        const double rubberCenterY = static_cast< double >( d->rubberBand->geometry().center().y() - geometry().y() );
+
+        // this is the height/width of the plane in pixel space
+        const double myWidth = static_cast< double >( geometry().width() );
+        const double myHeight = static_cast< double >( geometry().height() );
+
+        // this describes the new center of zooming, relative to the plane pixel space
+        const double newCenterX = rubberCenterX / myWidth / zoomFactorX() + zoomCenter().x() - 0.5 / zoomFactorX();
+        const double newCenterY = rubberCenterY / myHeight / zoomFactorY() + zoomCenter().y() - 0.5 / zoomFactorY();
+
+        // this will be the new zoom factor
+        const double newZoomFactorX = zoomFactorX() * myWidth / rubberWidth;
+        const double newZoomFactorY = zoomFactorY() * myHeight / rubberHeight;
+
+        // and this the new center
+        const QPointF newZoomCenter( newCenterX, newCenterY );
+
+        setZoomFactorX( newZoomFactorX );
+        setZoomFactorY( newZoomFactorY );
+        setZoomCenter( newZoomCenter );
+
+
+        d->rubberBand->parentWidget()->update();
+        delete d->rubberBand;
+        d->rubberBand = 0;
+
+        event->accept();
+    }
+
+    KDAB_FOREACH( AbstractDiagram * a, d->diagrams )
+    {
+        a->mouseReleaseEvent( event );
+    }
+}
+
+void KDChart::AbstractCoordinatePlane::mouseMoveEvent( QMouseEvent* event )
+{
+    if( d->rubberBand != 0 )
+    {
+        const QRect normalized = QRect( d->rubberBandOrigin, event->pos() ).normalized();
+        d->rubberBand->setGeometry( normalized &  geometry() );
+
+        event->accept();
+    }
+
+    KDAB_FOREACH( AbstractDiagram * a, d->diagrams )
+    {
+        a->mouseMoveEvent( event );
+    }
+}
 
 const bool KDChart::AbstractCoordinatePlane::isVisiblePoint( const QPointF& point ) const
 {
     return d->isVisiblePoint( this, point );
 }
 
+AbstractCoordinatePlane* KDChart::AbstractCoordinatePlane::sharedAxisMasterPlane( QPainter* p )
+{
+    Q_UNUSED( p );
+    return this;
+}
+
+#if !defined(QT_NO_DEBUG_STREAM)
+#include "KDChartEnums.h"
+
+QDebug KDChart::operator<<( QDebug stream, const DataDimension& r )
+{
+    stream << "DataDimension("
+           << " start=" << r.start
+           << " end=" << r.end
+           << " sequence=" << KDChartEnums::granularitySequenceToString( r.sequence )
+           << " isCalculated=" << r.isCalculated
+           << " calcMode=" << ( r.calcMode == AbstractCoordinatePlane::Logarithmic ? "Logarithmic" : "Linear" )
+           << " stepWidth=" << r.stepWidth
+           << " subStepWidth=" << r.subStepWidth
+           << " )";
+    return stream;
+}
+#endif
 
 #undef d

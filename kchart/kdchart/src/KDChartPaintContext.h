@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -36,9 +36,11 @@ namespace KDChart {
 
     class AbstractCoordinatePlane;
 
-    // This class is internal (and mostly related to AbstractDiagram)
-    // but it's exported for examples/LineChart/SineFunctionPlotter.
-    class KDCHART_EXPORT PaintContext
+    /**
+      * @brief Stores information about painting diagrams
+      * \internal
+      */
+    class PaintContext
     {
     public:
         PaintContext();

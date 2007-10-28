@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -124,7 +124,7 @@ namespace KDChart {
                               Position position );
 
         /**
-          * Adds an existing header / footer object.
+          * Adds the existing header / footer object \a header.
           * \sa replaceHeaderFooter, takeHeaderFooter
         */
         void addHeaderFooter( HeaderFooter* header );
@@ -133,10 +133,10 @@ namespace KDChart {
          * Replaces the old header (or footer, resp.), or appends the
          * new header or footer, it there is none yet.
          *
-         * @param headerFooter The header or footer to be used instead of the old one.
+         * @param header The header or footer to be used instead of the old one.
          * This parameter must not be zero, or the method will do nothing.
          *
-         * @param oldHeaderFooter The header or footer to be removed by the new one. This
+         * @param oldHeader The header or footer to be removed by the new one. This
          * header or footer will be deleted automatically. If the parameter is omitted,
          * the very first header or footer will be replaced. In case, there was no
          * header and no footer yet, the new header or footer will just be added.

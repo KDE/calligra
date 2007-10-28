@@ -6,7 +6,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2006 Klaraelvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaraelvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KDChart library.
  **
@@ -34,19 +34,28 @@
 
 #include "KDChartGlobal.h"
 
-namespace KDChart {
-  class KDCHART_EXPORT AbstractProxyModel : public QAbstractProxyModel {
-    Q_OBJECT
-  public:
-    explicit AbstractProxyModel( QObject* parent = 0 );
+namespace KDChart
+{
+    /**
+      * @brief Base class for all proxy models used inside KD Chart
+      * \internal
+      */
+    class KDCHART_EXPORT AbstractProxyModel : public QAbstractProxyModel
+    {
+        Q_OBJECT
+    public:
+        explicit AbstractProxyModel( QObject* parent = 0 );
 
-    /*! \reimp*/ QModelIndex mapFromSource( const QModelIndex & sourceIndex ) const;
-    /*! \reimp*/ QModelIndex mapToSource( const QModelIndex &proxyIndex ) const;
+        /*! \reimpl */ 
+        QModelIndex mapFromSource( const QModelIndex & sourceIndex ) const;
+        /*! \reimpl */ 
+        QModelIndex mapToSource( const QModelIndex &proxyIndex ) const;
 
-    /*! \reimp*/ QModelIndex index( int row, int col, const QModelIndex& index ) const;
-    /*! \reimp*/ QModelIndex parent( const QModelIndex& index ) const;
-  };
+        /*! \reimpl */
+        QModelIndex index( int row, int col, const QModelIndex& index ) const;
+        /*! \reimpl */ 
+        QModelIndex parent( const QModelIndex& index ) const;
+    };
 }
 
 #endif /* KDCHARTABSTRACTPROXYMODEL_H */
-

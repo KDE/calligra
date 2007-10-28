@@ -1,3 +1,32 @@
+/* -*- Mode: C++ -*-
+   KDChart - a multi-platform charting engine
+   */
+
+/****************************************************************************
+ ** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KD Chart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KD Chart licenses may use this file in
+ ** accordance with the KD Chart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.kdab.net/kdchart for
+ **   information about KD Chart Commercial License Agreements.
+ **
+ ** Contact info@kdab.net if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
+
 #ifndef KDCHARTTEXTLABELCACHE_H
 #define KDCHARTTEXTLABELCACHE_H
 
@@ -5,8 +34,9 @@
 
 #include "KDChartEnums.h"
 
-// base class for prerendered elements like labels, pixmaps, markers,
-// etc
+/**
+  * @brief  base class for prerendered elements like labels, pixmaps, markers, etc.
+  */
 class PrerenderedElement {
 public:
     PrerenderedElement();
@@ -48,8 +78,10 @@ private:
     KDChartEnums::PositionValue m_referencePoint;
 };
 
-/** CachedLabel is an internal KDChart class that simplifies creation
+/** 
+    @brief PrerenderedLabel is an internal KDChart class that simplifies creation
     and caching of cached text labels.
+    
     It provides referenze points to anchor the text to other
     elements. Reference points use the positions defined in
     KDChartEnums.

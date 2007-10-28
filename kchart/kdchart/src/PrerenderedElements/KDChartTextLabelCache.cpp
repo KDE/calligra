@@ -1,3 +1,32 @@
+/* -*- Mode: C++ -*-
+   KDChart - a multi-platform charting engine
+   */
+
+/****************************************************************************
+ ** Copyright (C) 2005-2007 Klarälvdalens Datakonsult AB.  All rights reserved.
+ **
+ ** This file is part of the KD Chart library.
+ **
+ ** This file may be distributed and/or modified under the terms of the
+ ** GNU General Public License version 2 as published by the Free Software
+ ** Foundation and appearing in the file LICENSE.GPL included in the
+ ** packaging of this file.
+ **
+ ** Licensees holding valid commercial KD Chart licenses may use this file in
+ ** accordance with the KD Chart Commercial License Agreement provided with
+ ** the Software.
+ **
+ ** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ ** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ **
+ ** See http://www.kdab.net/kdchart for
+ **   information about KD Chart Commercial License Agreements.
+ **
+ ** Contact info@kdab.net if any conditions of this
+ ** licensing are not clear to you.
+ **
+ **********************************************************************/
+
 #include <cmath>
 
 #include <QtDebug>
@@ -67,50 +96,77 @@ PrerenderedLabel::~PrerenderedLabel()
     DUMP_CACHE_STATS;
 }
 
+/**
+  * Invalidates the preredendered data, forces re-rendering.
+  */
 void PrerenderedLabel::invalidate() const
 {
     m_dirty = true;
 }
 
+/**
+  * Sets the label's font to \a font.
+  */
 void PrerenderedLabel::setFont( const QFont& font )
 {
     m_font = font;
     invalidate();
 }
 
+/**
+  * @return the label's font.
+  */
 const QFont& PrerenderedLabel::font() const
 {
     return m_font;
 }
 
+/**
+  * Sets the label's text to \a text
+  */
 void PrerenderedLabel::setText( const QString& text )
 {
     m_text = text;
     invalidate();
 }
 
+/**
+  * @return the label's text
+  */
 const QString& PrerenderedLabel::text() const
 {
     return m_text;
 }
 
+/**
+  * Sets the label's brush to \a brush
+  */
 void PrerenderedLabel::setBrush( const QBrush& brush )
 {
     m_brush = brush;
     invalidate();
 }
 
+/**
+  * @return the label's brush
+  */
 const QBrush& PrerenderedLabel::brush() const
 {
     return m_brush;
 }
 
+/**
+  * Sets the angle of the label to \a angle degrees
+  */
 void PrerenderedLabel::setAngle( double angle )
 {
     m_angle = angle;
     invalidate();
 }
 
+/**
+  * @return the label's angle in degrees
+  */
 double PrerenderedLabel::angle() const
 {
     return m_angle;
@@ -270,4 +326,3 @@ QPointF PrerenderedLabel::referencePointLocation( KDChartEnums::PositionValue po
         return QPointF();
     }
 }
-

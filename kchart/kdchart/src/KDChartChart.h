@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -412,6 +412,12 @@ namespace KDChart {
 
         /** reimp */
         void mousePressEvent( QMouseEvent* event );
+        /** reimp */
+        void mouseDoubleClickEvent( QMouseEvent* event );
+        /** reimp */
+        void mouseMoveEvent( QMouseEvent* event );
+        /** reimp */
+        void mouseReleaseEvent( QMouseEvent* event );
     };
 
 // Here we have a few docu block to be included into the API documentation:
@@ -431,7 +437,7 @@ namespace KDChart {
      * directory may be directly used by your application.
      *
      * The recommended way to include classes of the KDChart API is including
- * them by class name, so instead of including KDChartChart.h you would say:
+     * them by class name, so instead of including KDChartChart.h you would say:
      *
     \verbatim
 #include <KDChartChart>
@@ -445,7 +451,7 @@ namespace KDChart {
      * @class QAbstractItemView "(do not include)"
      * @brief Class only listed here to document inheritance of some KDChart classes.
      *
- * Please consult the respective Qt documentation for details:
+     * Please consult the respective Qt documentation for details:
      * <A HREF="http://doc.trolltech.com/">http://doc.trolltech.com/</A>
  */
 /**
@@ -483,5 +489,27 @@ namespace KDChart {
  * Please consult the respective Qt documentation for details:
  * <A HREF="http://doc.trolltech.com/">http://doc.trolltech.com/</A>
  */
+/**
+ * @class QTextDocument "(do not include)"
+ * @brief Class only listed here to document inheritance of some KDChart classes.
+ *
+ * Please consult the respective Qt documentation for details:
+ * <A HREF="http://doc.trolltech.com/">http://doc.trolltech.com/</A>
+ */
+/**
+ * @class QLayoutItem "(do not include)"
+ * @brief Class only listed here to document inheritance of some KDChart classes.
+ *
+ * Please consult the respective Qt documentation for details:
+ * <A HREF="http://doc.trolltech.com/">http://doc.trolltech.com/</A>
+ */
+/**
+ * @class QGraphicsPolygonItem "(do not include)"
+ * @brief Class only listed here to document inheritance of some KDChart classes.
+ *
+ * Please consult the respective Qt documentation for details:
+ * <A HREF="http://doc.trolltech.com/">http://doc.trolltech.com/</A>
+ */
+
 
 #endif

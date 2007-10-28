@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -33,6 +33,9 @@ namespace KDChart {
     class Chart;
     class PaintContext;
 
+    /**
+      * @brief Polar coordinate plane
+      */
     class KDCHART_EXPORT PolarCoordinatePlane : public AbstractCoordinatePlane
     {
         Q_OBJECT
@@ -72,7 +75,7 @@ namespace KDChart {
 
         virtual QPointF zoomCenter() const;
 
-        virtual void setZoomCenter( QPointF center );
+        virtual void setZoomCenter( const QPointF& center );
 
         /**
          * Set the attributes to be used for grid lines drawn in circular

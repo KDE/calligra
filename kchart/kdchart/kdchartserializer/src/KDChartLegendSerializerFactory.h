@@ -43,7 +43,7 @@ namespace KDChart {
         Q_OBJECT
         Q_DISABLE_COPY( LegendSerializerFactory )
 
-        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( LegendSerializerFactory );
+        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( LegendSerializerFactory )
 
     public:
         LegendSerializerFactory( QObject* parent = 0 );

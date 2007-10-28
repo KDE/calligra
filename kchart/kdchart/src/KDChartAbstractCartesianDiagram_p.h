@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -40,6 +40,7 @@
 #include <KDChartAbstractDiagram_p.h>
 #include <KDChartAbstractThreeDAttributes.h>
 #include <KDChartGridAttributes.h>
+#include <KDChartCartesianDiagramDataCompressor_p.h>
 
 #include <KDABLibFakes>
 
@@ -71,6 +72,8 @@ public:
 
    AbstractCartesianDiagram* referenceDiagram;
    QPointF referenceDiagramOffset;
+
+   mutable CartesianDiagramDataCompressor compressor;
 };
 
 KDCHART_IMPL_DERIVED_DIAGRAM( AbstractCartesianDiagram, AbstractDiagram, CartesianCoordinatePlane )

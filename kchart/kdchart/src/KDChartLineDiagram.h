@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -32,6 +32,7 @@
 
 #include "KDChartAbstractCartesianDiagram.h"
 #include "KDChartLineAttributes.h"
+#include "KDChartValueTrackerAttributes.h"
 
 class QPainter;
 class QPolygonF;
@@ -40,15 +41,25 @@ namespace KDChart {
 
     class ThreeDLineAttributes;
 
+/**
+ * @brief LineDiagram defines a common line diagram.
+ * 
+ * It provides different subtypes which are set using \a setType.
+ */
 class KDCHART_EXPORT LineDiagram : public AbstractCartesianDiagram
 {
     Q_OBJECT
 
     Q_DISABLE_COPY( LineDiagram )
 //    KDCHART_DECLARE_PRIVATE_DERIVED_PARENT( LineDiagram, CartesianCoordinatePlane * )
+
     KDCHART_DECLARE_DERIVED_DIAGRAM( LineDiagram, CartesianCoordinatePlane )
 
+
 public:
+    class LineDiagramType;
+    friend class LineDiagramType;
+
     LineDiagram( QWidget* parent = 0, CartesianCoordinatePlane* plane = 0 );
     virtual ~LineDiagram();
 
@@ -57,7 +68,7 @@ public:
     /**
      * Returns true if both diagrams have the same settings.
      */
-    bool compare( const LineDiagram* other )const;
+    bool compare( const LineDiagram* other ) const;
 
     enum LineType {
         Normal =  0,
@@ -90,6 +101,10 @@ public:
     ThreeDLineAttributes threeDLineAttributes( int column ) const;
     ThreeDLineAttributes threeDLineAttributes( const QModelIndex & index ) const;
 
+    void setValueTrackerAttributes( const QModelIndex & index,
+                                    const ValueTrackerAttributes & a );
+    ValueTrackerAttributes valueTrackerAttributes( const QModelIndex & index ) const;
+
     // implement AbstractCartesianDiagram
     /* reimpl */
     const int numberOfAbscissaSegments () const;
@@ -103,6 +118,7 @@ public:
     void resize ( const QSizeF& area );
 
 protected:
+    // FIXME what does that mean?
     double valueForCellTesting( int row, int column,
                                 bool& bOK,
                                 bool showHiddenCellsAsInvalid = false ) const;
@@ -117,18 +133,6 @@ protected:
     virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const;
     void paintEvent ( QPaintEvent* );
     void resizeEvent ( QResizeEvent* );
-
-private:
-    void paintPolyline( PaintContext* ctx,
-                        const QBrush& brush, const QPen& pen,
-                        const QPolygonF& points ) const;
-    const QPointF project( QPointF point, QPointF maxLimits, double z, const QModelIndex& index ) const;
-    void paintThreeDLines( PaintContext* painter,const QModelIndex& index,
-                           const QPointF& from, const QPointF& to, const double depth );
-    void paintAreas( PaintContext* painter, const QModelIndex& index,
-                     const QPolygonF& area, const uint transparency );
-    void paintAreas( PaintContext* ctx, const QModelIndex& index,
-                     const QList<QPolygonF>& areas, const uint transparency );
 }; // End of class KDChartLineDiagram
 
 }

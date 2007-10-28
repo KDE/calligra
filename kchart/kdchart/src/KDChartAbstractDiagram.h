@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -32,7 +32,7 @@
 
 #include "KDChartGlobal.h"
 #include "KDChartMarkerAttributes.h"
-
+#include "KDChartAttributesModel.h"
 
 namespace KDChart {
 
@@ -100,7 +100,6 @@ namespace KDChart {
          */
         virtual void paint ( PaintContext* paintContext ) = 0;
 
-    public:
         /**
          * Called by the widget's sizeEvent. Adjust all internal structures,
          * that are calculated, dependending on the size of the widget.
@@ -229,7 +228,7 @@ namespace KDChart {
          * e.g. you could define a proxy model on top of your data model, and register
          * the proxy model calling setModel() instead of registering your real data model.
          *
-         * @param dataset The dataset to set the hidden status for.
+         * @param column The dataset to set the hidden status for.
          * @param hidden The hidden status to set.
          */
         void setHidden( int column, bool hidden );
@@ -259,7 +258,7 @@ namespace KDChart {
          * Retrieve the hidden status for the given dataset. This will fall
          * back automatically to what was set at diagram level, if there
          * are no dataset specific settings.
-         * @param dataset The dataset to retrieve the hidden status for.
+         * @param column The dataset to retrieve the hidden status for.
          * @return The hidden status for the given dataset.
          */
         bool isHidden( int column ) const;
@@ -307,7 +306,7 @@ namespace KDChart {
          * Retrieve the DataValueAttributes for the given dataset. This will fall
          * back automatically to what was set at model level, if there
          * are no dataset specific settings.
-         * @param dataset The dataset to retrieve the attributes for.
+         * @param column The dataset to retrieve the attributes for.
          * @return The DataValueAttributes for the given dataset.
          */
         DataValueAttributes dataValueAttributes( int column ) const;
@@ -374,7 +373,7 @@ namespace KDChart {
         /**
          * Set the brush to be used, for painting the given dataset.
          * @param dataset The dataset's column in the model.
-         * @param pen The brush to use.
+         * @param brush The brush to use.
          */
         void setBrush( int dataset, const QBrush& brush );
 
@@ -406,6 +405,66 @@ namespace KDChart {
          * @return The brush to use for painting.
          */
         QBrush brush( const QModelIndex& index ) const;
+
+        /*
+         * Set the unit prefix to be used on axes for one specific column.
+         * @param prefix The prefix to be used.
+         * @param column The column which should be set.
+         * @param orientation The orientation of the axis to use.
+         */
+        void setUnitPrefix( const QString& prefix, int column, Qt::Orientation orientation );
+        /*
+         * Set the unit prefix to be used on axes for all columns.
+         * @param prefix The prefix to be used.
+         * @param orientation The orientation of the axis to use.
+         */
+        void setUnitPrefix( const QString& prefix, Qt::Orientation orientation );
+
+        /*
+         * Set the unit prefix to be used on axes for one specific column.
+         * @param suffix The suffix to be used.
+         * @param column The column which should be set.
+         * @param orientation The orientation of the axis to use.
+         */
+        void setUnitSuffix( const QString& suffix, int column, Qt::Orientation orientation );
+        /*
+         * Set the unit prefix to be used on axes for all columns.
+         * @param suffix The suffix to be used.
+         * @param orientation The orientation of the axis to use.
+         */
+         void setUnitSuffix( const QString& suffix, Qt::Orientation orientation );
+
+        /*
+         * Retrieves the axis unit prefix for a specific column.
+         * @param column The column whose prefix should be retrieved.
+         * @param orientation The orientation of the axis.
+         * @param fallback If true, the prefix for all columns is returned, when 
+         *                 none is set for the selected column.
+         * @return The axis unit prefix.
+         */
+        QString unitPrefix( int column, Qt::Orientation orientation, bool fallback = false ) const;
+        /*
+         * Retrieves the axis unit prefix.
+         * @param orientation The orientation of the axis.
+         * @return The axis unit prefix.
+         */
+        QString unitPrefix( Qt::Orientation orientation ) const;
+
+        /*
+         * Retrieves the axis unit suffix for a specific column.
+         * @param column The column whose prefix should be retrieved.
+         * @param orientation The orientation of the axis.
+         * @param fallback If true, the suffix for all columns is returned, when 
+         *                 none is set for the selected column.
+         * @return The axis unit suffix.
+         */
+        QString unitSuffix( int column, Qt::Orientation orientation, bool fallback = false ) const;
+        /*
+         * Retrieves the axis unit suffix.
+         * @param orientation The orientation of the axis.
+         * @return The axis unit suffix.
+         */
+        QString unitSuffix( Qt::Orientation orientation ) const;
 
         /**
          * Set whether data value labels are allowed to overlap.
@@ -538,6 +597,12 @@ namespace KDChart {
         void paintDataValueText( QPainter* painter, const QModelIndex& index,
                                  const QPointF& pos, double value );
 
+        // reverse mapping:
+        /** This method is added alongside with indexAt from QAIM,
+        since in kdchart multiple indexes can be displayed at the same
+        spot. */
+        QModelIndexList indexesAt( const QPoint& point ) const;
+
     protected:
         virtual bool checkInvariants( bool justReturnTheStatus=false ) const;
         virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const = 0;
@@ -552,6 +617,7 @@ namespace KDChart {
          * @param row The row to query.
          * @param column The column to query.
          * @return The value of the display role at the given row and column as a double.
+         * @deprecated
          */
         double valueForCell( int row, int column ) const;
 
@@ -584,6 +650,15 @@ namespace KDChart {
     typedef QList<AbstractDiagram*> AbstractDiagramList;
     typedef QList<const AbstractDiagram*> ConstAbstractDiagramList;
 
+    /**
+      * @brief Internally used class just adding a special constructor used by AbstractDiagram
+      */
+    class PrivateAttributesModel : public AttributesModel {
+        Q_OBJECT
+    public:
+        explicit PrivateAttributesModel( QAbstractItemModel* model, QObject * parent = 0 )
+            : AttributesModel(model,parent) {}
+    };
 }
 
 #endif

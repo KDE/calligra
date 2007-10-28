@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -184,7 +184,7 @@ const QPointF RelativePosition::referencePoint() const
 
 const QPointF RelativePosition::calculatedPoint( const QSizeF& autoSize ) const
 {
-    QPointF pt( referencePoint() );
+    const QPointF pt( referencePoint() );
     const qreal dx = horizontalPadding().calculatedValue( autoSize, KDChartEnums::MeasureOrientationHorizontal );
     const qreal dy = verticalPadding()  .calculatedValue( autoSize, KDChartEnums::MeasureOrientationVertical );
     //qDebug() << "rect.center() " << rect.center();

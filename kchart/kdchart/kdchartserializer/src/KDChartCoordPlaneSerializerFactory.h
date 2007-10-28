@@ -43,7 +43,7 @@ namespace KDChart {
         Q_OBJECT
         Q_DISABLE_COPY( CoordPlaneSerializerFactory )
 
-        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( CoordPlaneSerializerFactory );
+        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( CoordPlaneSerializerFactory )
 
     public:
         CoordPlaneSerializerFactory( QObject* parent = 0 );

@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -101,6 +101,12 @@ public:
     unsigned int autoAdjustHorizontalRangeToData;
     unsigned int autoAdjustVerticalRangeToData;
     bool autoAdjustGridToZoom;
+
+    bool fixedDataCoordinateSpaceRelation;
+    QRectF fixedDataCoordinateSpaceRelationOldSize;
+    
+    bool reverseVerticalPlane;
+    bool reverseHorizontalPlane;
 };
 
 

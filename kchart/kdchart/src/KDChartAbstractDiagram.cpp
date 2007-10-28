@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarävdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -27,8 +27,10 @@
 #include <QDebug>
 #include <QApplication>
 #include <QAbstractProxyModel>
+#include <QAbstractTextDocumentLayout>
 #include <QStandardItemModel>
 #include <QSizeF>
+#include <QTextDocument>
 
 #include "KDChartAbstractCoordinatePlane.h"
 #include "KDChartChart.h"
@@ -44,7 +46,6 @@
 
 
 using namespace KDChart;
-
 
 AbstractDiagram::Private::Private()
   : plane( 0 )
@@ -111,6 +112,7 @@ AbstractDiagram::AbstractDiagram ( QWidget* parent, AbstractCoordinatePlane* pla
     : QAbstractItemView ( parent ), _d( new Private() )
 {
     _d->init( plane );
+    init();
 }
 
 AbstractDiagram::~AbstractDiagram()
@@ -120,6 +122,7 @@ AbstractDiagram::~AbstractDiagram()
 
 void AbstractDiagram::init()
 {
+    d->reverseMapper.setDiagram( this );
 }
 
 
@@ -182,7 +185,8 @@ bool AbstractDiagram::compare( const AbstractDiagram* other )const
             // compare QFrame properties
             (frameShadow()  == other->frameShadow()) &&
             (frameShape()   == other->frameShape()) &&
-            (frameWidth()   == other->frameWidth()) &&
+// frameWidth is a read-only property defined by the style, it should not be in here:
+            // (frameWidth()   == other->frameWidth()) &&
             (lineWidth()    == other->lineWidth()) &&
             (midLineWidth() == other->midLineWidth()) &&
             // compare QAbstractItemView properties
@@ -213,7 +217,6 @@ bool AbstractDiagram::compare( const AbstractDiagram* other )const
             (datasetDimension()               == other->datasetDimension());
 }
 
-
 AbstractCoordinatePlane* AbstractDiagram::coordinatePlane() const
 {
     return d->plane;
@@ -233,14 +236,14 @@ void AbstractDiagram::setDataBoundariesDirty() const
     d->databoundariesDirty = true;
 }
 
-void AbstractDiagram::setModel ( QAbstractItemModel * newModel )
+void AbstractDiagram::setModel( QAbstractItemModel * newModel )
 {
   QAbstractItemView::setModel( newModel );
   AttributesModel* amodel = new PrivateAttributesModel( newModel, this );
   amodel->initFrom( d->attributesModel );
   d->setAttributesModel(amodel);
   scheduleDelayedItemsLayout();
-  d->databoundariesDirty = true;
+  setDataBoundariesDirty();
   emit modelsChanged();
 }
 
@@ -264,7 +267,7 @@ void AbstractDiagram::setAttributesModel( AttributesModel* amodel )
     }
     d->setAttributesModel(amodel);
     scheduleDelayedItemsLayout();
-    d->databoundariesDirty = true;
+    setDataBoundariesDirty();
     emit modelsChanged();
 }
 
@@ -289,9 +292,9 @@ void AbstractDiagram::setRootIndex ( const QModelIndex& idx )
 /*! \internal */
 void AbstractDiagram::setAttributesModelRootIndex( const QModelIndex& idx )
 {
-  d->attributesModelRootIndex=idx;
-  d->databoundariesDirty = true;
-  scheduleDelayedItemsLayout();
+    d->attributesModelRootIndex=idx;
+    setDataBoundariesDirty();
+    scheduleDelayedItemsLayout();
 }
 
 /*! returns a QModelIndex pointing into the AttributesModel that corresponds to the
@@ -300,11 +303,11 @@ QModelIndex AbstractDiagram::attributesModelRootIndex() const
 {
     if ( !d->attributesModelRootIndex.isValid() )
         d->attributesModelRootIndex = d->attributesModel->mapFromSource( rootIndex() );
-  return d->attributesModelRootIndex;
+    return d->attributesModelRootIndex;
 }
 
 QModelIndex AbstractDiagram::columnToIndex( int column ) const
-{
+{   // FIXME (Mirko): shouldn't this be headerData? instead of the index for the first row?
     if( model() )
         return QModelIndex( model()->index( 0, column, rootIndex() ) );
     return QModelIndex();
@@ -327,9 +330,11 @@ void AbstractDiagram::doItemsLayout()
 void AbstractDiagram::dataChanged( const QModelIndex &topLeft,
                                    const QModelIndex &bottomRight )
 {
-  // We are still too dumb to do intelligent updates...
-  d->databoundariesDirty = true;
-  scheduleDelayedItemsLayout();
+    Q_UNUSED( topLeft );
+    Q_UNUSED( bottomRight );
+    // We are still too dumb to do intelligent updates...
+    setDataBoundariesDirty();
+    scheduleDelayedItemsLayout();
 }
 
 
@@ -417,7 +422,7 @@ DataValueAttributes AbstractDiagram::dataValueAttributes( const QModelIndex & in
 {
     return qVariantValue<DataValueAttributes>(
         attributesModel()->data( attributesModel()->mapFromSource(index),
-        KDChart::DataValueLabelAttributesRole ) );
+                                 KDChart::DataValueLabelAttributesRole ) );
 }
 
 void AbstractDiagram::setDataValueAttributes( const DataValueAttributes & a )
@@ -499,14 +504,23 @@ void AbstractDiagram::paintDataValueText( QPainter* painter,
         painter->drawLine( pos - QPointF(-1,1), pos + QPointF(-1,1) );
         */
 
-        // adjust the text start point position, if alignment is not Bottom/Left
+        QTextDocument doc;
+        if( Qt::mightBeRichText( roundedValue ) )
+            doc.setHtml( roundedValue );
+        else
+            doc.setPlainText( roundedValue );
+
         const RelativePosition relPos( a.position( value >= 0.0 ) );
         const Qt::Alignment alignBottomLeft = Qt::AlignBottom | Qt::AlignLeft;
         const QFont calculatedFont( ta.calculatedFont( d->plane, KDChartEnums::MeasureOrientationMinimum ) );
+        const QRectF boundRect( d->cachedFontMetrics( calculatedFont, painter->device() )->boundingRect( doc.toPlainText() ) );
+
+        // To place correctly
+        pt.ry() -= boundRect.height();
+
         //qDebug() << "calculatedFont's point size:" << calculatedFont.pointSizeF();
+        // adjust the text start point position, if alignment is not Bottom/Left
         if( (relPos.alignment() & alignBottomLeft) != alignBottomLeft ){
-            const QRectF boundRect(
-                    d->cachedFontMetrics( calculatedFont, this )->boundingRect( roundedValue ) );
             if( relPos.alignment() & Qt::AlignRight )
                 pt.rx() -= boundRect.width();
             else if( relPos.alignment() & Qt::AlignHCenter )
@@ -525,13 +539,18 @@ void AbstractDiagram::paintDataValueText( QPainter* painter,
              d->lastRoundedValue != roundedValue ) {
             d->lastRoundedValue = roundedValue;
             d->lastX = pos.x();
-
             PainterSaver painterSaver( painter );
-            painter->setPen( ta.pen() );
-            painter->setFont( calculatedFont );
+
+            doc.setDefaultFont( calculatedFont );
+            QAbstractTextDocumentLayout::PaintContext context;
+            context.palette = palette();
+            context.palette.setColor(QPalette::Text, ta.pen().color() );
+
             painter->translate( pt );
             painter->rotate( ta.rotation() );
-            painter->drawText( QPointF(0, 0), roundedValue );
+
+            QAbstractTextDocumentLayout* layout = doc.documentLayout();
+            layout->draw( painter, context );
         }
     }
 }
@@ -582,7 +601,6 @@ void AbstractDiagram::paintMarker( QPainter* painter,
                                    const QModelIndex& index,
                                    const QPointF& pos )
 {
-
     if ( !checkInvariants() ) return;
     DataValueAttributes a = dataValueAttributes(index);
     if ( !a.isVisible() ) return;
@@ -597,8 +615,14 @@ void AbstractDiagram::paintMarker( QPainter* painter,
         indexBrush.setColor( ma.markerColor() );
 
     paintMarker( painter, ma, indexBrush, indexPen, pos, maSize );
-}
 
+    // workaround: BC cannot be changed, otherwise we would pass the
+    // index down to next-lower paintMarker function. So far, we
+    // basically save a circle of radius maSize at pos in the
+    // reverseMapper. This means that ^^^ this version of paintMarker
+    // needs to be called to reverse-map the marker.
+    d->reverseMapper.addCircle( index.row(), index.column(), pos, 2 * maSize );
+}
 
 void AbstractDiagram::paintMarker( QPainter* painter,
                                    const MarkerAttributes& markerAttributes,
@@ -607,7 +631,6 @@ void AbstractDiagram::paintMarker( QPainter* painter,
                                    const QPointF& pos,
                                    const QSizeF& maSize )
 {
-
     const QPen oldPen( painter->pen() );
     // Pen is used to paint 4Pixels - 1 Pixel - Ring and FastCross types.
     // make sure to use the brush color - see above in those cases.
@@ -645,7 +668,6 @@ void AbstractDiagram::paintMarker( QPainter* painter,
                     QRectF rect( 0 - maSize.width()/2, 0 - maSize.height()/2,
                                 maSize.width(), maSize.height() );
                     painter->drawRect( rect );
-                    painter->fillRect( rect, brush.color() );
                     break;
                 }
             case MarkerAttributes::MarkerDiamond:
@@ -720,6 +742,8 @@ void AbstractDiagram::paintMarkers( QPainter* painter )
 
 void AbstractDiagram::setPen( const QModelIndex& index, const QPen& pen )
 {
+    if( datasetDimension() > 1 )
+        return setPen( index.column(), pen );
     attributesModel()->setData(
         attributesModel()->mapFromSource( index ),
         qVariantFromValue( pen ), DatasetPenRole );
@@ -735,6 +759,8 @@ void AbstractDiagram::setPen( const QPen& pen )
 
 void AbstractDiagram::setPen( int column,const QPen& pen )
 {
+    if( datasetDimension() > 1 )
+        column *= datasetDimension();
     attributesModel()->setHeaderData(
         column, Qt::Vertical,
         qVariantFromValue( pen ),
@@ -750,6 +776,9 @@ QPen AbstractDiagram::pen() const
 
 QPen AbstractDiagram::pen( int dataset ) const
 {
+    if( datasetDimension() > 1 )
+        dataset /= datasetDimension();
+
     return qVariantValue<QPen>(
         attributesModel()->data(
             attributesModel()->mapFromSource( columnToIndex( dataset ) ),
@@ -758,6 +787,8 @@ QPen AbstractDiagram::pen( int dataset ) const
 
 QPen AbstractDiagram::pen( const QModelIndex& index ) const
 {
+    if( datasetDimension() > 1 )
+        return pen( index.column() );
     return qVariantValue<QPen>(
         attributesModel()->data(
             attributesModel()->mapFromSource( index ),
@@ -796,6 +827,8 @@ QBrush AbstractDiagram::brush() const
 
 QBrush AbstractDiagram::brush( int dataset ) const
 {
+    if( datasetDimension() > 1 )
+        dataset /= datasetDimension();
     return qVariantValue<QBrush>(
         attributesModel()->data(
             attributesModel()->mapFromSource( columnToIndex( dataset ) ),
@@ -804,10 +837,100 @@ QBrush AbstractDiagram::brush( int dataset ) const
 
 QBrush AbstractDiagram::brush( const QModelIndex& index ) const
 {
+    if( datasetDimension() > 1 )
+        return brush( index.column() );
     return qVariantValue<QBrush>(
         attributesModel()->data(
             attributesModel()->mapFromSource( index ),
             DatasetBrushRole ) );
+}
+
+/**
+  * Sets the unit prefix for one value
+  * @param prefix the prefix to be set
+  * @param column the value using that prefix
+  * @param orientation the orientantion of the axis to set
+  */
+void AbstractDiagram::setUnitPrefix( const QString& prefix, int column, Qt::Orientation orientation )
+{
+    d->unitPrefixMap[ column ][ orientation ]= prefix;
+}
+
+/**
+  * Sets the unit prefix for all values
+  * @param prefix the prefix to be set
+  * @param orientation the orientantion of the axis to set
+  */
+void AbstractDiagram::setUnitPrefix( const QString& prefix, Qt::Orientation orientation )
+{
+    d->unitPrefix[ orientation ] = prefix;
+}
+
+/**
+  * Sets the unit suffix for one value
+  * @param suffix the suffix to be set
+  * @param column the value using that suffix
+  * @param orientation the orientantion of the axis to set
+  */
+void AbstractDiagram::setUnitSuffix( const QString& suffix, int column, Qt::Orientation orientation )
+{
+    d->unitSuffixMap[ column ][ orientation ]= suffix;
+}
+
+/**
+  * Sets the unit suffix for all values
+  * @param suffix the suffix to be set
+  * @param orientation the orientantion of the axis to set
+  */
+void AbstractDiagram::setUnitSuffix( const QString& suffix, Qt::Orientation orientation )
+{
+    d->unitSuffix[ orientation ] = suffix;
+}
+
+/**
+  * Returns the unit prefix for a special value
+  * @param column the value which's prefix is requested
+  * @param orientation the orientation of the axis
+  * @param fallback if true, the global prefix is return when no specific one is set for that value
+  * @return the unit prefix
+  */
+QString AbstractDiagram::unitPrefix( int column, Qt::Orientation orientation, bool fallback ) const
+{
+    if( !fallback || d->unitPrefixMap[ column ].contains( orientation ) )
+        return d->unitPrefixMap[ column ][ orientation ];
+    return d->unitPrefix[ orientation ];
+}
+
+/** Returns the global unit prefix
+  * @param orientation the orientation of the axis
+  * @return the unit prefix
+  */
+QString AbstractDiagram::unitPrefix( Qt::Orientation orientation ) const
+{
+    return d->unitPrefix[ orientation ];
+}
+
+/**
+  * Returns the unit suffix for a special value
+  * @param column the value which's suffix is requested
+  * @param orientation the orientation of the axis
+  * @param fallback if true, the global suffix is return when no specific one is set for that value
+  * @return the unit suffix
+  */
+QString AbstractDiagram::unitSuffix( int column, Qt::Orientation orientation, bool fallback ) const
+{
+    if( !fallback || d->unitSuffixMap[ column ].contains( orientation ) )
+        return d->unitSuffixMap[ column ][ orientation ];
+    return d->unitSuffix[ orientation ];
+}
+
+/** Returns the global unit suffix
+  * @param orientation the orientation of the axis
+  * @return the unit siffix
+  */
+QString AbstractDiagram::unitSuffix( Qt::Orientation orientation ) const
+{
+    return d->unitSuffix[ orientation ];
 }
 
 // implement QAbstractItemView:
@@ -819,8 +942,7 @@ QRect AbstractDiagram::visualRect(const QModelIndex &) const
 void AbstractDiagram::scrollTo(const QModelIndex &, ScrollHint )
 {}
 
-QModelIndex AbstractDiagram::indexAt(const QPoint &) const
-{ return QModelIndex(); }
+// indexAt ... down below
 
 QModelIndex AbstractDiagram::moveCursor(CursorAction, Qt::KeyboardModifiers )
 { return QModelIndex(); }
@@ -834,8 +956,16 @@ int AbstractDiagram::verticalOffset() const
 bool AbstractDiagram::isIndexHidden(const QModelIndex &) const
 { return true; }
 
-void AbstractDiagram::setSelection(const QRect &, QItemSelectionModel::SelectionFlags)
-{}
+void AbstractDiagram::setSelection(const QRect& rect , QItemSelectionModel::SelectionFlags command )
+{
+    const QModelIndexList indexes = d->indexesIn( rect );
+    QItemSelection selection;
+    KDAB_FOREACH( const QModelIndex& index, indexes )
+    {
+        selection.append( QItemSelectionRange( index ) );
+    }
+    selectionModel()->select( selection, command );
+}
 
 QRegion AbstractDiagram::visualRegionForSelection(const QItemSelection &) const
 { return QRegion(); }
@@ -859,11 +989,15 @@ void KDChart::AbstractDiagram::useRainbowColors( )
 QStringList AbstractDiagram::itemRowLabels() const
 {
     QStringList ret;
-    //qDebug() << "AbstractDiagram::itemRowLabels(): " << attributesModel()->rowCount(attributesModelRootIndex()) << "entries";
-    const int rowCount = attributesModel()->rowCount(attributesModelRootIndex());
-    for( int i = 0; i < rowCount; ++i ){
-        //qDebug() << "item row label: " << attributesModel()->headerData( i, Qt::Vertical, Qt::DisplayRole ).toString();
-        ret << attributesModel()->headerData( i, Qt::Vertical, Qt::DisplayRole ).toString();
+    if( model() ){
+        //qDebug() << "AbstractDiagram::itemRowLabels(): " << attributesModel()->rowCount(attributesModelRootIndex()) << "entries";
+        const int rowCount = attributesModel()->rowCount(attributesModelRootIndex());
+        for( int i = 0; i < rowCount; ++i ){
+            //qDebug() << "item row label: " << attributesModel()->headerData( i, Qt::Vertical, Qt::DisplayRole ).toString();
+            ret << unitPrefix( i, Qt::Horizontal, true ) +
+                   attributesModel()->headerData( i, Qt::Vertical, Qt::DisplayRole ).toString() +
+                   unitSuffix( i, Qt::Horizontal, true );
+        }
     }
     return ret;
 }
@@ -871,23 +1005,25 @@ QStringList AbstractDiagram::itemRowLabels() const
 QStringList AbstractDiagram::datasetLabels() const
 {
     QStringList ret;
-    //qDebug() << "AbstractDiagram::datasetLabels(): " << attributesModel()->columnCount(attributesModelRootIndex()) << "entries";
+    if( model() == 0 )
+        return ret;
+    
     const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = datasetDimension()-1; i < columnCount; i += datasetDimension() ){
-        //qDebug() << "dataset label: " << attributesModel()->headerData( i, Qt::Horizontal, Qt::DisplayRole ).toString();
+    for( int i = 0; i < columnCount / datasetDimension(); ++i )
         ret << attributesModel()->headerData( i, Qt::Horizontal, Qt::DisplayRole ).toString();
-    }
+    
     return ret;
 }
 
 QList<QBrush> AbstractDiagram::datasetBrushes() const
 {
     QList<QBrush> ret;
+    if( model() == 0 )
+        return ret;
+
     const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = datasetDimension()-1; i < columnCount; i += datasetDimension() ) {
-        QBrush brush = qVariantValue<QBrush>( attributesModel()->headerData( i, Qt::Vertical, DatasetBrushRole ) );
-        ret << brush;
-    }
+    for( int i = 0; i < columnCount / datasetDimension(); ++i )
+        ret << qVariantValue<QBrush>( attributesModel()->headerData( i, Qt::Vertical, DatasetBrushRole ) );
 
     return ret;
 }
@@ -895,23 +1031,28 @@ QList<QBrush> AbstractDiagram::datasetBrushes() const
 QList<QPen> AbstractDiagram::datasetPens() const
 {
     QList<QPen> ret;
+    if( model() == 0 )
+        return ret;
+    
     const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = datasetDimension()-1; i < columnCount; i += datasetDimension() ) {
-        QPen pen = qVariantValue<QPen>( attributesModel()->headerData( i, Qt::Vertical, DatasetPenRole ) );
-        ret << pen;
-    }
+    for( int i = 0; i < columnCount / datasetDimension(); ++i )
+        ret << qVariantValue<QPen>( attributesModel()->headerData( i, Qt::Vertical, DatasetPenRole ) );
+    
     return ret;
 }
 
 QList<MarkerAttributes> AbstractDiagram::datasetMarkers() const
 {
     QList<MarkerAttributes> ret;
+    if( model() == 0 )
+        return ret;
+    
     const int columnCount = attributesModel()->columnCount(attributesModelRootIndex());
-    for( int i = datasetDimension()-1; i < columnCount; i += datasetDimension() ) {
-        DataValueAttributes a =
+    for( int i = 0; i < columnCount / datasetDimension(); ++i )
+    {
+        const DataValueAttributes a =
             qVariantValue<DataValueAttributes>( attributesModel()->headerData( i, Qt::Vertical, DataValueLabelAttributesRole ) );
-        const MarkerAttributes &ma = a.markerAttributes();
-        ret << ma;
+        ret << a.markerAttributes();
     }
     return ret;
 }
@@ -937,7 +1078,7 @@ void AbstractDiagram::setDatasetDimension( int dimension )
 {
     if ( d->datasetDimension == dimension ) return;
     d->datasetDimension = dimension;
-    d->databoundariesDirty = true;
+    setDataBoundariesDirty();
     emit layoutChanged( this );
 }
 
@@ -953,3 +1094,14 @@ void AbstractDiagram::update() const
     if( d->plane )
         d->plane->update();
 }
+
+QModelIndex AbstractDiagram::indexAt( const QPoint& point ) const
+{
+    return d->indexAt( point );
+}
+
+QModelIndexList AbstractDiagram::indexesAt( const QPoint& point ) const
+{
+    return d->indexesAt( point );
+}
+

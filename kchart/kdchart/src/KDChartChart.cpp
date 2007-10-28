@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klar�vdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -221,7 +221,6 @@ void Chart::Private::layoutHeadersAndFooters()
     }
 }
 
-
 void Chart::Private::layoutLegends()
 {
     // To support more than one Legend, we first collect them all
@@ -398,7 +397,7 @@ QHash<AbstractCoordinatePlane*, PlaneInfo> Chart::Private::buildPlaneLayoutInfos
 
                         pi = planeInfos[i.plane];
                         if ( axis->position() == CartesianAxis::Top
-                            || axis->position() == CartesianAxis::Bottom  )
+                                || axis->position() == CartesianAxis::Bottom  )
                             pi.verticalOffset += 1;
 
                         planeInfos[i.plane] = pi;
@@ -420,7 +419,7 @@ QHash<AbstractCoordinatePlane*, PlaneInfo> Chart::Private::buildPlaneLayoutInfos
     return planeInfos;
 }
 
-template <typename T>
+    template <typename T>
 static T* findOrCreateLayoutByObjectName( QLayout * parentLayout, const char* name )
 {
     T *box = qFindChild<T*>( parentLayout, QString::fromLatin1( name ) );
@@ -436,6 +435,7 @@ static T* findOrCreateLayoutByObjectName( QLayout * parentLayout, const char* na
     return box;
 }
 
+#if 0
 static QVBoxLayout* findOrCreateVBoxLayoutByObjectName( QLayout* parentLayout, const char* name )
 {
     return findOrCreateLayoutByObjectName<QVBoxLayout>( parentLayout, name );
@@ -445,12 +445,13 @@ static QHBoxLayout* findOrCreateHBoxLayoutByObjectName( QLayout* parentLayout, c
 {
     return findOrCreateLayoutByObjectName<QHBoxLayout>( parentLayout, name );
 }
+#endif
 
 void Chart::Private::slotLayoutPlanes()
 {
     //qDebug() << "KDChart::Chart is layouting the planes";
     const QBoxLayout::Direction oldPlanesDirection =
-            planesLayout ? planesLayout->direction() : QBoxLayout::TopToBottom;
+        planesLayout ? planesLayout->direction() : QBoxLayout::TopToBottom;
     if ( planesLayout && dataAndLegendLayout )
         dataAndLegendLayout->removeItem( planesLayout );
 
@@ -510,19 +511,20 @@ void Chart::Private::slotLayoutPlanes()
         KDAB_FOREACH( AbstractDiagram* abstractDiagram, plane->diagrams() )
         {
             AbstractCartesianDiagram* diagram =
-                    dynamic_cast<AbstractCartesianDiagram*> ( abstractDiagram );
+                dynamic_cast<AbstractCartesianDiagram*> ( abstractDiagram );
             //qDebug() << "--------------- diagram ???????????????????? -----------------";
             if( !diagram ) continue;  // FIXME polar ?
             //qDebug() << "--------------- diagram ! ! ! ! ! ! ! ! ! !  -----------------";
+
             // collect all axes of a kind into sublayouts
-            if( ! topAxesLayout )
-                topAxesLayout = findOrCreateVBoxLayoutByObjectName( planeLayout, "topAxesLayout" );
-            if( ! bottomAxesLayout )
-                bottomAxesLayout = findOrCreateVBoxLayoutByObjectName( planeLayout, "bottomAxesLayout" );
-            if( ! leftAxesLayout )
-                leftAxesLayout = findOrCreateHBoxLayoutByObjectName( planeLayout, "leftAxesLayout" );
-            if( ! rightAxesLayout )
-                rightAxesLayout = findOrCreateHBoxLayoutByObjectName( planeLayout, "rightAxesLayout" );
+            topAxesLayout = new QVBoxLayout;
+            topAxesLayout->setObjectName( QString::fromLatin1( "topAxesLayout" ) );
+            bottomAxesLayout = new QVBoxLayout;
+            bottomAxesLayout->setObjectName( QString::fromLatin1( "bottomAxesLayout" ) );
+            leftAxesLayout = new QHBoxLayout;
+            leftAxesLayout->setObjectName( QString::fromLatin1( "leftAxesLayout" ) );
+            rightAxesLayout = new QHBoxLayout;
+            rightAxesLayout->setObjectName( QString::fromLatin1( "rightAxesLayout" ) );
 
             //leftAxesLayout->setSizeConstraint( QLayout::SetFixedSize );
 
@@ -536,13 +538,13 @@ void Chart::Private::slotLayoutPlanes()
                 // since we can not re-layout the planes each time when
                 // Qt layouting is calling sizeHint()
                 connect( axis, SIGNAL( needAdjustLeftRightColumnsForOverlappingLabels(
-                                CartesianAxis*, int, int ) ),
-                         this, SLOT( slotAdjustLeftRightColumnsForOverlappingLabels(
-                                 CartesianAxis*, int, int ) ) );
+                CartesianAxis*, int, int ) ),
+                this, SLOT( slotAdjustLeftRightColumnsForOverlappingLabels(
+                CartesianAxis*, int, int ) ) );
                 connect( axis, SIGNAL( needAdjustTopBottomRowsForOverlappingLabels(
-                                CartesianAxis*, int, int ) ),
-                         this, SLOT( slotAdjustTopBottomRowsForOverlappingLabels(
-                                 CartesianAxis*, int, int ) ) );
+                CartesianAxis*, int, int ) ),
+                this, SLOT( slotAdjustTopBottomRowsForOverlappingLabels(
+                CartesianAxis*, int, int ) ) );
                 */
                 switch ( axis->position() )
                 {
@@ -564,7 +566,7 @@ void Chart::Private::slotLayoutPlanes()
                         break;
                     default:
                         Q_ASSERT_X( false, "Chart::paintEvent",
-                                    "unknown axis position" );
+                                "unknown axis position" );
                         break;
                 };
                 axisInfos.insert( axis, AxisInfo() );
@@ -588,20 +590,20 @@ void Chart::Private::slotLayoutPlanes()
 
         // use up to four auto-spacer items in the corners around the diagrams:
 #define ADD_AUTO_SPACER_IF_NEEDED( \
-    spacerRow, spacerColumn, hLayoutIsAtTop, hLayout, vLayoutIsAtLeft, vLayout ) \
-{ \
-    if( hLayout || vLayout ) { \
-        AutoSpacerLayoutItem * spacer \
+        spacerRow, spacerColumn, hLayoutIsAtTop, hLayout, vLayoutIsAtLeft, vLayout ) \
+        { \
+            if( hLayout || vLayout ) { \
+                AutoSpacerLayoutItem * spacer \
                 = new AutoSpacerLayoutItem( hLayoutIsAtTop, hLayout, vLayoutIsAtLeft, vLayout ); \
-        planeLayout->addItem( spacer, spacerRow, spacerColumn, 1, 1 ); \
-        spacer->setParentLayout( planeLayout ); \
-        planeLayoutItems << spacer; \
-    } \
-}
+                planeLayout->addItem( spacer, spacerRow, spacerColumn, 1, 1 ); \
+                spacer->setParentLayout( planeLayout ); \
+                planeLayoutItems << spacer; \
+            } \
+        }
         ADD_AUTO_SPACER_IF_NEEDED( row-1, column-1, false, leftAxesLayout,  false, topAxesLayout )
-        ADD_AUTO_SPACER_IF_NEEDED( row+1, column-1, true,  leftAxesLayout,  false,  bottomAxesLayout )
-        ADD_AUTO_SPACER_IF_NEEDED( row-1, column+1, false, rightAxesLayout, true, topAxesLayout )
-        ADD_AUTO_SPACER_IF_NEEDED( row+1, column+1, true,  rightAxesLayout, true,  bottomAxesLayout )
+            ADD_AUTO_SPACER_IF_NEEDED( row+1, column-1, true,  leftAxesLayout,  false,  bottomAxesLayout )
+            ADD_AUTO_SPACER_IF_NEEDED( row-1, column+1, false, rightAxesLayout, true, topAxesLayout )
+            ADD_AUTO_SPACER_IF_NEEDED( row+1, column+1, true,  rightAxesLayout, true,  bottomAxesLayout )
     }
     // re-add our grid(s) to the chart's layout
     if ( dataAndLegendLayout ){
@@ -731,19 +733,19 @@ void Chart::Private::resizeLayout( const QSize& size )
     currentLayoutSize = size;
     //qDebug() << "Chart::resizeLayout(" << currentLayoutSize << ")";
 
-/*
+    /*
     // We need to make sure that the legend's layouts are populated,
     // so that setGeometry gets proper sizeHints from them and resizes them properly.
     KDAB_FOREACH( Legend *legend, legends ) {
-        // This forceRebuild will see a wrong areaGeometry, but I don't care about geometries yet,
-        // only about the fact that legends should have their contents populated.
-        // -> it would be better to dissociate "building contents" and "resizing" in Legend...
+    // This forceRebuild will see a wrong areaGeometry, but I don't care about geometries yet,
+    // only about the fact that legends should have their contents populated.
+    // -> it would be better to dissociate "building contents" and "resizing" in Legend...
 
-//        legend->forceRebuild();
+    //        legend->forceRebuild();
 
-        legend->resizeLayout( size );
+    legend->resizeLayout( size );
     }
-*/
+    */
     slotLayoutPlanes(); // includes slotRelayout
 
     //qDebug() << "Chart::resizeLayout done";
@@ -758,10 +760,10 @@ void Chart::Private::paintAll( QPainter* painter )
 
     // Paint the background (if any)
     KDChart::AbstractAreaBase::paintBackgroundAttributes(
-        *painter, rect, backgroundAttributes );
+            *painter, rect, backgroundAttributes );
     // Paint the frame (if any)
     KDChart::AbstractAreaBase::paintFrameAttributes(
-        *painter, rect, frameAttributes );
+            *painter, rect, frameAttributes );
 
     chart->reLayoutFloatingLegends();
 
@@ -769,7 +771,7 @@ void Chart::Private::paintAll( QPainter* painter )
         layoutItem->paintAll( *painter );
     }
     KDAB_FOREACH( KDChart::AbstractLayoutItem* planeLayoutItem, planeLayoutItems ) {
-		planeLayoutItem->paintAll( *painter );
+        planeLayoutItem->paintAll( *painter );
     }
     KDAB_FOREACH( KDChart::TextArea* textLayoutItem, textLayoutItems ) {
         textLayoutItem->paintAll( *painter );
@@ -942,11 +944,30 @@ void Chart::paint( QPainter* painter, const QRect& target )
     if( target.isEmpty() || !painter ) return;
     //qDebug() << "Chart::paint( ..," << target << ")";
 
-    GlobalMeasureScaling::instance()->setFactors(
-            static_cast<qreal>(target.width()) /
-            static_cast<qreal>(geometry().size().width()),
-            static_cast<qreal>(target.height()) /
-            static_cast<qreal>(geometry().size().height()) );
+    GlobalMeasureScaling::setPaintDevice( painter->device() );
+
+    // Output on a widget
+    if( dynamic_cast< QWidget* >( painter->device() ) != 0 )
+    {
+        GlobalMeasureScaling::setFactors(
+                static_cast< qreal >( target.width() ) /
+                static_cast< qreal >( geometry().size().width() ),
+                static_cast< qreal >( target.height() ) /
+                static_cast< qreal >( geometry().size().height() ) );
+    }
+    // Output onto a QPixmap 
+    else
+    {
+        const qreal resX = static_cast< qreal >( logicalDpiX() ) / static_cast< qreal >( painter->device()->logicalDpiX() );
+        const qreal resY = static_cast< qreal >( logicalDpiY() ) / static_cast< qreal >( painter->device()->logicalDpiY() );
+
+        GlobalMeasureScaling::setFactors( 
+                static_cast< qreal >( target.width() ) /
+                static_cast< qreal >( geometry().size().width() ) * resX,
+                static_cast< qreal >( target.height() ) /
+                static_cast< qreal >( geometry().size().height() ) * resY );
+    }
+
 
     if( target.size() != d->currentLayoutSize ){
         d->resizeLayout( target.size() );
@@ -1085,7 +1106,6 @@ HeaderFooterList Chart::headerFooters()
     return d->headerFooters;
 }
 
-
 void Chart::addLegend( Legend* legend )
 {
     if( ! legend ) return;
@@ -1176,21 +1196,24 @@ LegendList Chart::legends()
 
 void Chart::mousePressEvent( QMouseEvent* event )
 {
-    KDAB_FOREACH( AbstractCoordinatePlane* plane, d->coordinatePlanes ) {
-       if ( plane->geometry().contains( event->pos() ) ) {
-           if ( plane->diagrams().size() > 0 ) {
-               QPoint pos = plane->diagram()->mapFromGlobal( event->globalPos() );
-               QMouseEvent ev( QEvent::MouseButtonPress, pos, event->globalPos(),
-                               event->button(), event->buttons(),
-                               event->modifiers() );
-               plane->mousePressEvent( &ev );
+    const QPoint pos = mapFromGlobal( event->globalPos() );
+
+    KDAB_FOREACH( AbstractCoordinatePlane* plane, d->coordinatePlanes )
+    {
+        if ( plane->geometry().contains( event->pos() ) )
+        {
+            if ( plane->diagrams().size() > 0 )
+            {
+                QMouseEvent ev( QEvent::MouseButtonPress, pos, event->globalPos(),
+                                event->button(), event->buttons(),
+                                event->modifiers() );
+
+                plane->mousePressEvent( &ev );
+                d->mouseClickedPlanes.append( plane );
            }
        }
     }
 }
-
-
-
 
 /*
 // Unused code trying to use a push-model: This did not work
@@ -1362,6 +1385,75 @@ void Chart::Private::slotAdjustTopBottomRowsForOverlappingLabels(
 }
 */
 
-#include "KDChartChart.moc"
-#include "KDChartChart_p.moc"
+void Chart::mouseDoubleClickEvent( QMouseEvent* event )
+{
+    const QPoint pos = mapFromGlobal( event->globalPos() );
 
+    KDAB_FOREACH( AbstractCoordinatePlane* plane, d->coordinatePlanes )
+    {
+        if ( plane->geometry().contains( event->pos() ) )
+        {
+            if ( plane->diagrams().size() > 0 )
+            {
+                QMouseEvent ev( QEvent::MouseButtonPress, pos, event->globalPos(),
+                                event->button(), event->buttons(),
+                                event->modifiers() );
+                plane->mouseDoubleClickEvent( &ev );
+            }
+        }
+    }
+}
+
+void Chart::mouseMoveEvent( QMouseEvent* event )
+{
+    QSet< AbstractCoordinatePlane* > eventReceivers = QSet< AbstractCoordinatePlane* >::fromList( d->mouseClickedPlanes );
+
+    KDAB_FOREACH( AbstractCoordinatePlane* plane, d->coordinatePlanes )
+    {
+        if( plane->geometry().contains( event->pos() ) )
+        {
+            if( plane->diagrams().size() > 0 )
+            {
+                eventReceivers.insert( plane );
+            }
+        }
+    }
+
+    const QPoint pos = mapFromGlobal( event->globalPos() );
+
+    KDAB_FOREACH( AbstractCoordinatePlane* plane, eventReceivers )
+    {
+        QMouseEvent ev( QEvent::MouseMove, pos, event->globalPos(),
+                         event->button(), event->buttons(),
+                         event->modifiers() );
+        plane->mouseMoveEvent( &ev );
+    }
+}
+
+void Chart::mouseReleaseEvent( QMouseEvent* event )
+{
+    QSet< AbstractCoordinatePlane* > eventReceivers = QSet< AbstractCoordinatePlane* >::fromList( d->mouseClickedPlanes );
+
+    KDAB_FOREACH( AbstractCoordinatePlane* plane, d->coordinatePlanes )
+    {
+        if ( plane->geometry().contains( event->pos() ) )
+        {
+            if( plane->diagrams().size() > 0 )
+            {
+                eventReceivers.insert( plane );
+            }
+        }
+    }
+
+    const QPoint pos = mapFromGlobal( event->globalPos() );
+
+    KDAB_FOREACH( AbstractCoordinatePlane* plane, eventReceivers )
+    {
+        QMouseEvent ev( QEvent::MouseButtonRelease, pos, event->globalPos(),
+                         event->button(), event->buttons(),
+                         event->modifiers() );
+        plane->mouseReleaseEvent( &ev );
+    }
+
+    d->mouseClickedPlanes.clear();
+}

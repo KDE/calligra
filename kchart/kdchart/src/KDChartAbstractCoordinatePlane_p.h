@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -41,9 +41,13 @@
 #include <KDChartAbstractCoordinatePlane.h>
 #include <KDChartGridAttributes.h>
 #include <KDChartAbstractGrid.h>
+#include <KDChartZoomParameters.h>
 
 #include <KDABLibFakes>
 
+#include <QStack>
+
+class QRubberBand;
 
 namespace KDChart {
 
@@ -70,6 +74,8 @@ protected:
         const AbstractCoordinatePlane * plane,
         const QPointF& point ) const
     {
+        Q_UNUSED( plane );
+        Q_UNUSED( point );
         return true;
     }
 
@@ -79,6 +85,12 @@ protected:
     AbstractDiagramList diagrams;
     GridAttributes gridAttributes;
     AbstractCoordinatePlane *referenceCoordinatePlane;
+
+    bool enableRubberBandZooming;
+    QRubberBand* rubberBand;
+    QPoint rubberBandOrigin;
+
+    QStack< ZoomParameters > rubberBandZoomConfigHistory;
 };
 
 

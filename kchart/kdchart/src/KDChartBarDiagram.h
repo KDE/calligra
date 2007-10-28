@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -32,38 +32,53 @@
 
 #include "KDChartAbstractCartesianDiagram.h"
 #include "KDChartBarAttributes.h"
-#include "KDChartThreeDBarAttributes.h"
+//#include "KDChartThreeDBarAttributes.h"
 
 class QPainter;
 
 namespace KDChart {
 
+    class ThreeDBarAttributes;
+
+/**
+ * @brief BarDiagram defines a common bar diagram.
+ *
+ * It provides different subtypes which are set using \a setType.
+ */
 class KDCHART_EXPORT BarDiagram : public AbstractCartesianDiagram
 {
     Q_OBJECT
 
     Q_DISABLE_COPY( BarDiagram )
+
     KDCHART_DECLARE_DERIVED_DIAGRAM( BarDiagram, CartesianCoordinatePlane )
 
 public:
+    class BarDiagramType;
+    friend class BarDiagramType;
+
     explicit BarDiagram(
         QWidget* parent = 0, CartesianCoordinatePlane* plane = 0 );
     virtual ~BarDiagram();
 
     virtual BarDiagram * clone() const;
+    /**
+    * Returns true if both diagrams have the same settings.
+    */
+    bool compare( const BarDiagram* other )const;
 
     enum BarType { Normal,
                    Stacked,
                    Percent,
                    Rows };
 
-    void setType( BarType type );
+    void setType( const BarType type );
     BarType type() const;
 
     void setBarAttributes( const BarAttributes & a );
     void setBarAttributes( int column, const BarAttributes & a );
-    void setBarAttributes( const QModelIndex & index,
-                           const BarAttributes & a );
+    void setBarAttributes( const QModelIndex & index, const BarAttributes & a );
+
     BarAttributes barAttributes() const;
     BarAttributes barAttributes( int column ) const;
     BarAttributes barAttributes( const QModelIndex & index ) const;
@@ -110,10 +125,13 @@ protected:
     virtual double threeDItemDepth( int column ) const;
     /** \reimpl */
     const QPair<QPointF, QPointF> calculateDataBoundaries() const;
-    //void paintEvent ( QPaintEvent* );
+    void paintEvent ( QPaintEvent* );
     void resizeEvent ( QResizeEvent* );
 private:
+
+    /*
     void paintBars( PaintContext* ctx, const QModelIndex& index, const QRectF& bar, double& maxDepth );
+    */
     void calculateValueAndGapWidths( int rowCount, int colCount,
                                      double groupWidth,
                                      double& barWidth,

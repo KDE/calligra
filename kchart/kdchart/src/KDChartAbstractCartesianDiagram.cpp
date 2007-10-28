@@ -1,5 +1,5 @@
 /****************************************************************************
-** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
 **
 ** This file is part of the KD Chart library.
 **
@@ -41,13 +41,7 @@ AbstractCartesianDiagram::Private::Private()
 
 AbstractCartesianDiagram::Private::~Private()
 {
-
 }
-
-void AbstractCartesianDiagram::init()
-{
-}
-
 
 bool AbstractCartesianDiagram::compare( const AbstractCartesianDiagram* other )const
 {
@@ -76,6 +70,7 @@ bool AbstractCartesianDiagram::compare( const AbstractCartesianDiagram* other )c
 AbstractCartesianDiagram::AbstractCartesianDiagram ( QWidget* parent, CartesianCoordinatePlane* plane )
     : AbstractDiagram ( new Private(), parent, plane )
 {
+    init();
 }
 
 KDChart::AbstractCartesianDiagram::~AbstractCartesianDiagram()
@@ -84,6 +79,13 @@ KDChart::AbstractCartesianDiagram::~AbstractCartesianDiagram()
         axis->deleteObserver( this );
     }
     d->axesList.clear();
+}
+
+void AbstractCartesianDiagram::init()
+{
+    d->compressor.setModel( attributesModel() );
+    connect( this, SIGNAL( layoutChanged( AbstractDiagram* ) ),
+             &( d->compressor ), SLOT( slotDiagramLayoutChanged( AbstractDiagram* ) ) );
 }
 
 void AbstractCartesianDiagram::addAxis( CartesianAxis *axis )
@@ -151,4 +153,22 @@ AbstractCartesianDiagram* AbstractCartesianDiagram::referenceDiagram() const
 QPointF AbstractCartesianDiagram::referenceDiagramOffset() const
 {
     return d->referenceDiagramOffset;
+}
+
+void AbstractCartesianDiagram::setRootIndex( const QModelIndex& index )
+{
+    d->compressor.setRootIndex( index );
+    AbstractDiagram::setRootIndex( index );
+}
+
+void AbstractCartesianDiagram::setModel( QAbstractItemModel* model )
+{
+    AbstractDiagram::setModel( model );
+    d->compressor.setModel( attributesModel() );
+}
+
+void AbstractCartesianDiagram::setAttributesModel( AttributesModel* model )
+{
+    AbstractDiagram::setAttributesModel( model );
+    d->compressor.setModel( attributesModel() );
 }

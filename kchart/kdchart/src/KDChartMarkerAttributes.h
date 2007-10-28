@@ -3,7 +3,7 @@
 */
 
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -41,6 +41,9 @@ template <typename T, typename K> class QMap;
 
 namespace KDChart {
 
+    /**
+      * @brief A set of ottributes controlling the appearance of data set markers
+      */
     class KDCHART_EXPORT MarkerAttributes
     {
     public:
@@ -72,7 +75,7 @@ namespace KDChart {
         /**
          * Normally you need to specify a valid QSizeF here, but for Legends you can
          * use the invalid size QSizeF(), to enable automatic marker size calculation:
-         * 
+         *
          * For Markers shown in a Legend this means the marker size will be equal to
          * the font height used for the labels that are shown next to the markers.
          */
@@ -84,7 +87,6 @@ namespace KDChart {
 
         void setPen( const QPen& pen );
         QPen pen() const;
-
 
         bool operator==( const MarkerAttributes& ) const;
         bool operator!=( const MarkerAttributes& ) const;

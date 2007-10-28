@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -35,6 +35,16 @@ using namespace KDChart;
 DatasetProxyModel::DatasetProxyModel (QObject* parent)
     : QSortFilterProxyModel ( parent )
 {
+}
+
+QModelIndex DatasetProxyModel::buddy( const QModelIndex& index ) const
+{
+    return index;
+}
+
+Qt::ItemFlags DatasetProxyModel::flags( const QModelIndex& index ) const
+{
+    return sourceModel()->flags( mapToSource( index ) );
 }
 
 void DatasetProxyModel::setDatasetRowDescriptionVector (
@@ -75,7 +85,8 @@ QModelIndex DatasetProxyModel::index( int row, int column,
 
 QModelIndex DatasetProxyModel::parent( const QModelIndex& child ) const
 {
-    return mapFromSource( sourceModel()->parent( child ) );
+//    return mapFromSource( sourceModel()->parent( child ) );
+    return mapFromSource( sourceModel()->parent( mapToSource( child ) ) );
 }
 
 QModelIndex DatasetProxyModel::mapFromSource ( const QModelIndex & sourceIndex ) const
@@ -208,6 +219,11 @@ void DatasetProxyModel::resetDatasetDescriptions()
 QVariant DatasetProxyModel::data(const QModelIndex &index, int role) const
 {
    return sourceModel()->data( mapToSource ( index ), role );
+}
+
+bool DatasetProxyModel::setData( const QModelIndex& index, const QVariant& value, int role )
+{
+    return sourceModel()->setData( mapToSource( index ), value, role );
 }
 
 QVariant DatasetProxyModel::headerData ( int section, Qt::Orientation orientation, int role ) const

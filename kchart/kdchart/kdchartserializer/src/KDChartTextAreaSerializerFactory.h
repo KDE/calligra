@@ -43,7 +43,7 @@ namespace KDChart {
         Q_OBJECT
         Q_DISABLE_COPY( TextAreaSerializerFactory )
 
-        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( TextAreaSerializerFactory );
+        KDCHART_DECLARE_PRIVATE_BASE_POLYMORPHIC( TextAreaSerializerFactory )
 
     public:
         TextAreaSerializerFactory( QObject* parent = 0 );

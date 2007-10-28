@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2006 Klaraelvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -47,6 +47,7 @@
 #include <KDChartThreeDLineAttributes>
 #include <KDChartThreeDPieAttributes>
 #include <KDChartGridAttributes>
+#include <KDChartValueTrackerAttributes>
 
 #include <KDABLibFakes>
 
@@ -57,7 +58,9 @@ AttributesModel::AttributesModel( QAbstractItemModel* model, QObject * parent/* 
   : AbstractProxyModel( parent ),
     mPaletteType( PaletteTypeDefault )
 {
-  setSourceModel(model);
+    setSourceModel(model);
+    setDefaultForRole( KDChart::DataValueLabelAttributesRole,
+                       DataValueAttributes::defaultAttributesAsVariant() );
 }
 
 AttributesModel::~AttributesModel()
@@ -72,6 +75,7 @@ void AttributesModel::initFrom( const AttributesModel* other )
     mHorizontalHeaderDataMap = other->mHorizontalHeaderDataMap;
     mVerticalHeaderDataMap = other->mVerticalHeaderDataMap;
     mModelDataMap = other->mModelDataMap;
+    mDefaultsMap =  other->mDefaultsMap;
 
     setPaletteType( other->paletteType() );
 }
@@ -266,6 +270,9 @@ bool AttributesModel::compareAttributes(
             case ThreeDPieAttributesRole:
                 return (qVariantValue<ThreeDPieAttributes>( a ) ==
                         qVariantValue<ThreeDPieAttributes>( b ));
+            case ValueTrackerAttributesRole:
+                return (qVariantValue<ValueTrackerAttributes>( a ) ==
+                        qVariantValue<ValueTrackerAttributes>( b ));
             case DataHiddenRole:
                 return (qVariantValue<bool>( a ) ==
                         qVariantValue<bool>( b ));
@@ -365,31 +372,41 @@ QVariant AttributesModel::data( int column, int role ) const
 
 QVariant AttributesModel::data( const QModelIndex& index, int role ) const
 {
-  //qDebug() << "AttributesModel::data(" << index << role << ")";
-  if( index.isValid() ) {
-    Q_ASSERT( index.model() == this );
-  }
-  QVariant sourceData = sourceModel()->data( mapToSource(index), role );
-  if ( sourceData.isValid() )
-      return sourceData;
+    //qDebug() << "AttributesModel::data(" << index << role << ")";
+    if( index.isValid() ) {
+        Q_ASSERT( index.model() == this );
+    }
 
-  // check if we are storing a value for this role at this cell index
-  if ( mDataMap.contains( index.column() ) ) {
-      const QMap< int,  QMap< int, QVariant> > &colDataMap = mDataMap[ index.column() ];
-      if ( colDataMap.contains( index.row() ) ) {
-          const QMap<int, QVariant> &dataMap = colDataMap[ index.row() ];
-          if ( dataMap.contains( role ) ) {
-              QVariant v = dataMap[ role ];
+    if( sourceModel() == 0 )
+        return QVariant();
+
+    if( index.isValid() )
+    {
+        const QVariant sourceData = sourceModel()->data( mapToSource(index), role );
+        if( sourceData.isValid() )
+            return sourceData;
+    }
+
+    // check if we are storing a value for this role at this cell index
+    if( mDataMap.contains( index.column() ) )
+    {
+        const QMap< int,  QMap< int, QVariant > >& colDataMap = mDataMap[ index.column() ];
+        if( colDataMap.contains( index.row() ) ) 
+        {
+            const QMap< int, QVariant >& dataMap = colDataMap[ index.row() ];
+            if( dataMap.contains( role ) )
+            {
+              const QVariant v = dataMap[ role ];
               if( v.isValid() )
-                  return dataMap[ role ];
-          }
-      }
-  }
-  // check if there is something set for the column (dataset), or at global level
-  if( index.isValid() )
-      return data( index.column(), role ); // includes automatic fallback to default
+                  return v;
+            }
+        }
+    }
+    // check if there is something set for the column (dataset), or at global level
+    if( index.isValid() )
+        return data( index.column(), role ); // includes automatic fallback to default
 
-  return QVariant();
+    return QVariant();
 }
 
 
@@ -397,20 +414,21 @@ bool AttributesModel::isKnownAttributesRole( int role ) const
 {
     bool oneOfOurs = false;
     switch( role ) {
-      // fallthrough intended
-      case DataValueLabelAttributesRole:
-      case DatasetBrushRole:
-      case DatasetPenRole:
-      case ThreeDAttributesRole:
-      case LineAttributesRole:
-      case ThreeDLineAttributesRole:
-      case BarAttributesRole:
-      case ThreeDBarAttributesRole:
-      case PieAttributesRole:
-      case ThreeDPieAttributesRole:
-      case DataHiddenRole:
-            oneOfOurs = true;
-        default:
+        // fallthrough intended
+    case DataValueLabelAttributesRole:
+    case DatasetBrushRole:
+    case DatasetPenRole:
+    case ThreeDAttributesRole:
+    case LineAttributesRole:
+    case ThreeDLineAttributesRole:
+    case BarAttributesRole:
+    case ThreeDBarAttributesRole:
+    case PieAttributesRole:
+    case ThreeDPieAttributesRole:
+    case ValueTrackerAttributesRole:
+    case DataHiddenRole:
+        oneOfOurs = true;
+    default:
         break;
     }
     return oneOfOurs;
@@ -418,16 +436,8 @@ bool AttributesModel::isKnownAttributesRole( int role ) const
 
 QVariant AttributesModel::defaultsForRole( int role ) const
 {
-    switch ( role ) {
-        case KDChart::DataValueLabelAttributesRole:
-            return DataValueAttributes::defaultAttributesAsVariant();
-            // for the below there isn't a per-value default, since there's a per-column one
-        case KDChart::DatasetBrushRole:
-        case KDChart::DatasetPenRole:
-        default:
-            break;
-    }
-    return QVariant();
+    // returns default-constructed QVariant if not found
+    return mDefaultsMap.value( role );
 }
 
 bool AttributesModel::setData ( const QModelIndex & index, const QVariant & value, int role )
@@ -452,6 +462,8 @@ bool AttributesModel::resetData ( const QModelIndex & index, int role )
 bool AttributesModel::setHeaderData ( int section, Qt::Orientation orientation,
                                       const QVariant & value, int role )
 {
+    if( sourceModel() != 0 && headerData( section, orientation, role ) == value )
+        return true;
     if ( !isKnownAttributesRole( role ) ) {
         return sourceModel()->setHeaderData( section, orientation, value, role );
     } else {
@@ -459,8 +471,11 @@ bool AttributesModel::setHeaderData ( int section, Qt::Orientation orientation,
             = orientation == Qt::Horizontal ? mHorizontalHeaderDataMap : mVerticalHeaderDataMap;
         QMap<int, QVariant> &dataMap = sectionDataMap[ section ];
         dataMap.insert( role, value );
-        emit attributesChanged( index( 0, section, QModelIndex() ),
-                                index( rowCount( QModelIndex() ), section, QModelIndex() ) );
+        if( sourceModel() ){
+            emit attributesChanged( index( 0, section, QModelIndex() ),
+                                    index( rowCount( QModelIndex() ), section, QModelIndex() ) );
+            emit headerDataChanged( orientation, section, section );
+        }
         return true;
     }
 }
@@ -483,9 +498,11 @@ AttributesModel::PaletteType AttributesModel::paletteType() const
 bool KDChart::AttributesModel::setModelData( const QVariant value, int role )
 {
     mModelDataMap.insert( role, value );
-    emit attributesChanged( index( 0, 0, QModelIndex() ),
-                            index( rowCount( QModelIndex() ),
-                                    columnCount( QModelIndex() ), QModelIndex() ) );
+    if( sourceModel() ){
+        emit attributesChanged( index( 0, 0, QModelIndex() ),
+                                index( rowCount( QModelIndex() ),
+                                       columnCount( QModelIndex() ), QModelIndex() ) );
+    }
     return true;
 }
 
@@ -496,25 +513,51 @@ QVariant KDChart::AttributesModel::modelData( int role ) const
 
 int AttributesModel::rowCount( const QModelIndex& index ) const
 {
-    Q_ASSERT(sourceModel());
-    return sourceModel()->rowCount( mapToSource(index) );
+    if ( sourceModel() ) {
+        return sourceModel()->rowCount( mapToSource(index) );
+    } else {
+        return 0;
+    }
 }
 
 int AttributesModel::columnCount( const QModelIndex& index ) const
 {
-    Q_ASSERT(sourceModel());
-    return sourceModel()->columnCount( mapToSource(index) );
+    if ( sourceModel() ) {
+        return sourceModel()->columnCount( mapToSource(index) );
+    } else {
+        return 0;
+    }
 }
 
 void AttributesModel::setSourceModel( QAbstractItemModel* sourceModel )
 {
     if( this->sourceModel() != 0 )
+    {
         disconnect( this->sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex&)),
                                   this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex&)));
+        disconnect( this->sourceModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
+                                  this, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ) );
+        disconnect( this->sourceModel(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
+                                  this, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ) );
+        disconnect( this->sourceModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                                  this, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ) );
+        disconnect( this->sourceModel(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
+                                  this, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ) );
+    }
     QAbstractProxyModel::setSourceModel( sourceModel );
     if( this->sourceModel() != NULL )
+    {
         connect( this->sourceModel(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex&)),
                                 this, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex&)));
+        connect( this->sourceModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
+                                this, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ) );
+        connect( this->sourceModel(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
+                                this, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ) );
+        connect( this->sourceModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                                this, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ) );
+        connect( this->sourceModel(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
+                                this, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ) );
+    }
 }
 
 /** needed for serialization */
@@ -557,4 +600,19 @@ void AttributesModel::setVerticalHeaderDataMap( const QMap<int, QMap<int, QVaria
 void AttributesModel::setModelDataMap( const QMap<int, QVariant> map )
 {
     mModelDataMap = map;
+}
+
+void AttributesModel::setDefaultForRole( int role, const QVariant& value )
+{
+    if ( value.isValid() ) {
+        mDefaultsMap.insert( role, value );
+    } else {
+        // erase the possibily existing value to not let the map grow:
+        QMap<int, QVariant>::iterator it = mDefaultsMap.find( role );
+        if ( it != mDefaultsMap.end() ) {
+            mDefaultsMap.erase( it );
+        }
+    }
+
+    Q_ASSERT( defaultsForRole( role ) == value );
 }

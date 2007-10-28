@@ -62,8 +62,23 @@ set(kdchart_LIB_SRCS
     KDChartThreeDBarAttributes.cpp
     KDChartThreeDLineAttributes.cpp     
     KDChartThreeDPieAttributes.cpp
-    PrerenderedElements/KDChartTextLabelCache.cpp
     KDChartSignalCompressor.cpp
+    KDChartBarDiagram_p.cpp
+    KDChartCartesianDiagramDataCompressor_p.cpp
+    KDChartLineDiagram_p.cpp
+    KDChartNormalBarDiagram_p.cpp
+    KDChartNormalLineDiagram_p.cpp
+    KDChartNormalPlotter_p.cpp
+    KDChartPercentBarDiagram_p.cpp
+    KDChartPercentLineDiagram_p.cpp
+    KDChartPlotter.cpp
+    KDChartPlotter_p.cpp
+    KDChartStackedBarDiagram_p.cpp
+    KDChartStackedLineDiagram_p.cpp
+    KDChartValueTrackerAttributes.cpp
+    PrerenderedElements/KDChartTextLabelCache.cpp
+    Scenery/ReverseMapper.cpp
+    Scenery/ChartGraphicsItem.cpp
 )
 
 qt4_wrap_ui(kdchart_LIB_SRCS

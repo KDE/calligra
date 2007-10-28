@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2001-2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2001-2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -230,7 +230,7 @@ protected: \
     void swap( X& other ) { doSwap( other ); }
 
 #if defined(Q_OS_WIN) && defined(QT_DLL)
-#if _MSC_VER >= 1300
+#if defined(_MSC_VER) && _MSC_VER >= 1300
 // workaround http://support.microsoft.com/default.aspx?scid=kb;en-us;309801
 #include <QPointF>
 #include <QVector>
@@ -253,7 +253,8 @@ enum DisplayRoles {
   ThreeDBarAttributesRole,
   PieAttributesRole,
   ThreeDPieAttributesRole,
-  DataHiddenRole
+  DataHiddenRole,
+  ValueTrackerAttributesRole
 };
 }
 

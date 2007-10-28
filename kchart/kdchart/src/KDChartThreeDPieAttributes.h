@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klarälvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -32,6 +32,9 @@
 
 namespace KDChart {
 
+  /**
+    * @brief A set of 3D pie attributes
+    */
   class KDCHART_EXPORT ThreeDPieAttributes : public AbstractThreeDAttributes
   {
   public:

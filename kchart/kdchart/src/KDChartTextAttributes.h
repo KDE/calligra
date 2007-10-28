@@ -3,7 +3,7 @@
    */
 
 /****************************************************************************
- ** Copyright (C) 2005-2006 Klarävdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2005-2007 Klarävdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -178,7 +178,7 @@ public:
 
   /**
    * Set the pen to use for rendering the text.
-   * \param rotation The pen to use.
+   * \param pen The pen to use.
    */
   void setPen( const QPen& pen );
 

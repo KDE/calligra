@@ -1,5 +1,5 @@
 /****************************************************************************
- ** Copyright (C) 2006 Klarälvdalens Datakonsult AB.  All rights reserved.
+ ** Copyright (C) 2007 Klaralvdalens Datakonsult AB.  All rights reserved.
  **
  ** This file is part of the KD Chart library.
  **
@@ -36,13 +36,17 @@
 //
 // We mean it.
 //
+#include <QPainterPath>
 
 #include "KDChartAbstractCartesianDiagram_p.h"
+#include "KDChartThreeDBarAttributes.h"
 
 #include <KDABLibFakes>
 
 
 namespace KDChart {
+
+class PaintContext;
 
 /**
  * \internal
@@ -50,10 +54,15 @@ namespace KDChart {
 class BarDiagram::Private : public AbstractCartesianDiagram::Private
 {
     friend class BarDiagram;
+    friend class BarDiagramType;
+
 public:
     Private();
+    Private( const Private& rhs );
     ~Private();
 
+/* refactoring */
+/*
     Private( const Private& rhs ) :
         AbstractCartesianDiagram::Private( rhs ),
         barType( rhs.barType ),
@@ -66,16 +75,74 @@ public:
                                      double& barWidth,
                                      double& spaceBetweenBars,
                                      double& spaceBetweenGroups );
+*/
 
 
+    BarDiagram* diagram;
+    BarDiagramType* implementor; // the current type
+    BarDiagramType* normalDiagram;
+    BarDiagramType* stackedDiagram;
+    BarDiagramType* percentDiagram;
+
+/* refactoring */
+/*
     BarType barType;
 private:
     double maxDepth;
+*/
 };
 
 KDCHART_IMPL_DERIVED_DIAGRAM( BarDiagram, AbstractCartesianDiagram, CartesianCoordinatePlane )
 
+   // we inherit privately, so that derived classes cannot call the
+    // base class functions - those reference the wrong (unattached to
+    // a diagram) d
+    class BarDiagram::BarDiagramType : private BarDiagram::Private
+    {
+    public:
+        explicit BarDiagramType( BarDiagram* d )
+            : BarDiagram::Private()
+            , m_private( d->d_func() )
+        {
+        }
+        virtual ~BarDiagramType() {}
+        virtual BarDiagram::BarType type() const = 0;
+        virtual const QPair<QPointF,  QPointF> calculateDataBoundaries() const = 0;
+        virtual void paint(  PaintContext* ctx ) = 0;
+        BarDiagram* diagram() const;
+
+    protected:
+        // method that make elements of m_private available to derived
+        // classes:
+        AttributesModel* attributesModel() const;
+        QModelIndex attributesModelRootIndex() const;
+        ReverseMapper& reverseMapper();
+        CartesianDiagramDataCompressor& compressor() const;
+
+        void appendDataValueTextInfoToList(
+            AbstractDiagram * diagram,
+            DataValueTextInfoList & list,
+            const QModelIndex & index,
+            const PositionPoints& points,
+            const Position& autoPositionPositive,
+            const Position& autoPositionNegative,
+            const qreal value );
+        void paintDataValueTextsAndMarkers(
+            AbstractDiagram* diag,
+            PaintContext* ctx,
+            const DataValueTextInfoList & list,
+            bool paintMarkers );
+
+        void paintBars( PaintContext* ctx, const QModelIndex& index,
+            const QRectF& bar, double& maxDepth );
+        void calculateValueAndGapWidths( int rowCount, int colCount,
+            double groupWidth,
+            double& barWidth,
+            double& spaceBetweenBars,
+            double& spaceBetweenGroups );
+
+        BarDiagram::Private* m_private;
+    };
 }
 
 #endif /* KDCHARTBARDIAGRAM_P_H */
-
