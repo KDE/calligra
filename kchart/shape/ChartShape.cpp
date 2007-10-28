@@ -705,15 +705,15 @@ ChartTypeOptions ChartShape::chartTypeOptions( OdfChartType type ) const
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
-    const QRectF paintRect = QRectF( QPointF( 0.0, 0.0 ), size() );
+    QRectF clipRect  = converter.viewToDocument( painter.clipRegion().boundingRect() );
+    QRectF paintRect = QRectF( converter.documentToView( position() ), size() );
+    clipRect.intersect( paintRect );
 
     applyConversion( painter, converter );
-    painter.setClipRect( paintRect, Qt::IntersectClip );
+    painter.setClipRect( clipRect );
 
-    //kDebug() << "Painting chart into " << paintRect << endl;
-    // painting chart contents
-    painter.fillRect(paintRect, KApplication::palette().base());
-    d->chart->paint( &painter, paintRect.toRect() );
+    painter.fillRect( paintRect, KApplication::palette().base() );
+    d->chart->paint( &painter, QRect( QPoint( 0, 0 ), size().toSize() ) );
 }
 
 

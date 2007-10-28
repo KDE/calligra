@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>191</width>
-    <height>245</height>
+    <width>229</width>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,30 +19,41 @@
       <string>Data Area</string>
      </property>
      <layout class="QGridLayout" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="m_areaLabel" >
+      <item row="0" column="0" colspan="2" >
+       <widget class="QCheckBox" name="checkBox" >
+        <property name="text" >
+         <string>External Data Source</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label" >
         <property name="text" >
          <string>Area:</string>
         </property>
-        <property name="buddy" >
-         <cstring>m_cellRegion</cstring>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLineEdit" name="lineEdit" />
+      </item>
+      <item row="2" column="1" >
+       <widget class="QPushButton" name="pushButton" >
+        <property name="text" >
+         <string>Edit Data</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KLineEdit" name="m_cellRegion" />
-      </item>
-      <item row="1" column="0" colspan="2" >
+      <item row="3" column="0" colspan="2" >
        <widget class="QCheckBox" name="m_firstRowAsLabel" >
         <property name="text" >
-         <string>First row as label</string>
+         <string>First Row As Label</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2" >
+      <item row="4" column="0" colspan="2" >
        <widget class="QCheckBox" name="m_firstColumnAsLabel" >
         <property name="text" >
-         <string>First column as label</string>
+         <string>First Column As Label</string>
         </property>
        </widget>
       </item>
@@ -90,13 +101,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
