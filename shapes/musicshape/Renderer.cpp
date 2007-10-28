@@ -91,6 +91,8 @@ void MusicRenderer::renderSheet(QPainter& painter, Sheet* sheet, int firstSystem
 
 void MusicRenderer::renderPart(QPainter& painter, Part* part, int firstBar, int lastBar, const QColor& color)
 {
+    if (lastBar < firstBar) return;
+
     for (int i = 0; i < part->staffCount(); i++) {
         renderStaff(painter, part->staff(i), firstBar, lastBar, color);
     }

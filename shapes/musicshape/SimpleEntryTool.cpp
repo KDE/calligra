@@ -319,10 +319,6 @@ void SimpleEntryTool::deactivate()
 
 void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
 {
-    painter.setMatrix( m_musicshape->absoluteTransformation(&viewConverter) * painter.matrix() );
-    KoShape::applyConversion( painter, viewConverter );
-    painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
-
     Sheet* sheet = m_musicshape->sheet();
     int firstSystem = m_musicshape->firstSystem();
     int lastSystem = m_musicshape->lastSystem();
@@ -334,26 +330,44 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
 
     // somehow check for selections
     if (m_selectionStart >= 0) {
-        for (int b = qMax(m_musicshape->firstBar(), m_selectionStart); b <= m_selectionEnd && b < sheet->barCount() && b <= m_musicshape->lastBar(); b++) {
-            Bar* bar = sheet->bar(b);
-            for (int p = 0; p < sheet->partCount(); p++) {
-                Part* part = sheet->part(p);
-                for (int s = 0; s < part->staffCount(); s++) {
-                    Staff* staff = part->staff(s);
-                    QPointF p1 = bar->position() + QPointF(0, staff->top());
-                    QPointF p2 = QPointF(p1.x() + bar->size(), p1.y() + (staff->lineCount()-1) * staff->lineSpacing());
-                    painter.setBrush(QBrush(Qt::yellow));
-                    painter.setPen(Qt::NoPen);
-                    painter.drawRect(QRectF(p1, p2));
+        // find first shape
+        MusicShape* shape = m_musicshape;
+        while (shape->predecessor()) shape = shape->predecessor();
+        
+        // now loop over all shapes
+        while (shape) {
+            painter.save();
+            painter.setMatrix( shape->absoluteTransformation(&viewConverter) * painter.matrix() );
+            KoShape::applyConversion( painter, viewConverter );
+            painter.setClipRect(QRectF(QPointF(0, 0), shape->size()));            
+            
+            for (int b = qMax(shape->firstBar(), m_selectionStart); b <= m_selectionEnd && b < sheet->barCount() && b <= shape->lastBar(); b++) {
+                Bar* bar = sheet->bar(b);
+                for (int p = 0; p < sheet->partCount(); p++) {
+                    Part* part = sheet->part(p);
+                    for (int s = 0; s < part->staffCount(); s++) {
+                        Staff* staff = part->staff(s);
+                        QPointF p1 = bar->position() + QPointF(0, staff->top());
+                        QPointF p2 = QPointF(p1.x() + bar->size(), p1.y() + (staff->lineCount()-1) * staff->lineSpacing());
+                        painter.setBrush(QBrush(Qt::yellow));
+                        painter.setPen(Qt::NoPen);
+                        painter.drawRect(QRectF(p1, p2));
+                    }
                 }
             }
-        }
-        for (int p = 0; p < sheet->partCount(); p++) {
-            Part* part = sheet->part(p);
-            m_musicshape->renderer()->renderPart(painter, part, qMax(m_musicshape->firstBar(), m_selectionStart), qMin(m_musicshape->lastBar(), m_selectionEnd), Qt::black);
+            for (int p = 0; p < sheet->partCount(); p++) {
+                Part* part = sheet->part(p);
+                shape->renderer()->renderPart(painter, part, qMax(shape->firstBar(), m_selectionStart), qMin(shape->lastBar(), m_selectionEnd), Qt::black);
+            }
+            shape = shape->successor();
+            painter.restore();
         }
     }
 
+    painter.setMatrix( m_musicshape->absoluteTransformation(&viewConverter) * painter.matrix() );
+    KoShape::applyConversion( painter, viewConverter );
+    painter.setClipRect(QRectF(QPointF(0, 0), m_musicshape->size()));
+        
     if (m_activeAction->isVoiceAware()) {
         for (int i = 0; i < sheet->partCount(); i++) {
             Part* p = sheet->part(i);
@@ -635,7 +649,16 @@ void SimpleEntryTool::setSelection(int firstBar, int lastBar)
     kDebug() << "firstBar:" << firstBar << "lastBar:" << lastBar;
     m_selectionStart = firstBar;
     m_selectionEnd = lastBar;
-    m_musicshape->update();
+    MusicShape* shape = m_musicshape;
+    while (shape) {
+        shape->update();
+        shape = shape->predecessor();
+    }
+    shape = m_musicshape->successor();
+    while (shape) {
+        shape->update();
+        shape = shape->successor();
+    }
 }
 
 void SimpleEntryTool::importSheet()

@@ -36,7 +36,6 @@ class MusicShape : public KoShape
 public:
     MusicShape();
     virtual ~MusicShape();
-
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );
 
@@ -58,6 +57,9 @@ public:
     MusicRenderer* renderer();
     MusicStyle* style();
     void engrave(bool engraveBars=true);
+    
+    MusicShape* successor() { return m_successor; }
+    MusicShape* predecessor() { return m_predecessor; }
 private:
     MusicCore::Sheet* m_sheet;
     int m_firstSystem;
@@ -66,6 +68,7 @@ private:
     Engraver* m_engraver;
     MusicRenderer* m_renderer;
     MusicShape* m_successor;
+    MusicShape* m_predecessor;
 };
 
 

@@ -53,13 +53,17 @@ MusicShape::MusicShape()
     m_style(new MusicStyle),
     m_engraver(new Engraver()),
     m_renderer(new MusicRenderer(m_style)),
-    m_successor(0)
+    m_successor(0),
+    m_predecessor(0)
 {
+    kDebug() << "firstShape:" << firstShape << "this:" << this;
     if (firstShape) {
         firstShape->m_successor = this;
+        m_predecessor = firstShape;
         m_sheet = firstShape->m_sheet;
         m_firstSystem = firstShape->m_lastSystem+1;
         m_engraver->engraveSheet(m_sheet, m_firstSystem, QSizeF(1e9, 1e9), true, &m_lastSystem);
+        firstShape = this;
     } else {
         firstShape = this;
         m_sheet = new Sheet();
@@ -77,13 +81,14 @@ MusicShape::MusicShape()
 
 MusicShape::~MusicShape()
 {
-    if (this == firstShape) {
+    kDebug() << "destroying" << this;
+    if (!m_predecessor && !m_successor) {
         delete m_sheet;
     }
     delete m_style;
     delete m_engraver;
     delete m_renderer;
-    if (this == firstShape) firstShape = 0;
+    if (this == firstShape) firstShape = this->m_predecessor;
 }
 
 void MusicShape::setSize( const QSizeF &newSize )
@@ -126,7 +131,7 @@ bool MusicShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &c
     }
     Sheet* sheet = MusicXmlReader().loadSheet(score);
     if (sheet) {
-        if (this == firstShape) {
+        if (!m_predecessor && !m_successor) {
             delete m_sheet;
         }
         m_sheet = sheet;
@@ -143,7 +148,7 @@ Sheet* MusicShape::sheet()
 
 void MusicShape::setSheet(Sheet* sheet, int firstSystem)
 {
-    if (this == firstShape) {
+    if (!m_predecessor && !m_successor) {
         delete m_sheet;
     }
     m_sheet = sheet;
