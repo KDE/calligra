@@ -417,6 +417,7 @@ action->setShortcut( Qt::CTRL+ Qt::Key_T);
 
     connect(&m_selectionHandler, SIGNAL(startMacro(const QString&)), this, SLOT(startMacro(const QString&)));
     connect(&m_selectionHandler, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+    connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
 }
 
 TextTool::~TextTool() {
@@ -1603,6 +1604,20 @@ void TextTool::selectFont() {
     fontDlg->exec();
     fontDlg->style().applyStyle(&m_caret);
     delete fontDlg;
+}
+
+void TextTool::shapeAddedToCanvas() {
+    if (m_textShape) {
+        KoSelection *selection = m_canvas->shapeManager()->selection();
+        KoShape *shape = selection->firstSelectedShape();
+        if (shape != m_textShape) {
+            // this situation applies when someone, not us, changed the selection by selecting another
+            // text shape. Possibly by adding one.
+            // Deselect the new shape again, so we can keep editing what we were already editing
+            selection->select(m_textShape);
+            selection->deselect(shape);
+        }
+    }
 }
 
 // ---------- editing plugins methods.

@@ -171,6 +171,7 @@ private slots:
     void updateParagraphDirectionUi();
 
     void selectFont();
+    void shapeAddedToCanvas();
 
 private:
     void repaintCaret();
