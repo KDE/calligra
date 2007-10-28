@@ -148,17 +148,18 @@ from/to files.
 
 So here are the main classes for KChart 2:
 
- - ChartShape : public QObject, public KoShape
+ - ChartShape : public KoShape, public KoChart::ChartInterface
 
        This is the central class that holds all the chart data and
        configuration.  It contains all the configuration for the chart
-       as well as a pointer to a KDChart and a QStandardItemModel
-       based data class (details not yet decided).
+       as well as a pointer to a KDChart and a QAbstractItemModel
+       based data class (most likely a QStandardItemModel).
 
-       The Flake shape implementing KChart that was described above.
-       This class contains a KChartDocument that represents the actual
-       chart.  In connection to the shape, there are a number of
-       tools, as yet undecided.
+       In connection to the shape, there are a number of tools.  So
+       far, there is the ChartTypeTool (to be renamed into
+       ChartStandardTool), and the ChartLegendTool.  Soon there will
+       be at least a ChartDataSeriesTool to configure everything
+       regarding data series.
 
        This class will also have a Kross interface that will expose
        the chart to Kross scripts and a DBUS adaptor that will let the
