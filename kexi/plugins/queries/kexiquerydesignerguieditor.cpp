@@ -214,6 +214,7 @@ KexiQueryDesignerGuiEditor::KexiQueryDesignerGuiEditor(
 
 KexiQueryDesignerGuiEditor::~KexiQueryDesignerGuiEditor()
 {
+	delete d;
 }
 
 void
@@ -632,13 +633,12 @@ tristate
 KexiQueryDesignerGuiEditor::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	const bool was_dirty = isDirty();
-	KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 	if (mode==Kexi::NoViewMode || (mode==Kexi::DataViewMode && !tempData()->query())) {
 		//this is not a SWITCH but a fresh opening in this view mode
 		if (!window()->neverSaved()) {
 			if (!loadLayout()) {
 				//err msg
-				window()->setStatus(conn,
+				window()->setStatus(d->conn,
 					i18n("Query definition loading failed."),
 					i18n("Query design may be corrupted so it could not be opened even in text view.\n"
 						"You can delete the query and create it again."));
@@ -724,7 +724,7 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 	}
 	(KexiDB::SchemaData&)*temp->query() = sdata; //copy main attributes
 
-	bool ok = KexiMainWindowIface::global()->project()->dbConnection()->storeObjectSchemaData(
+	bool ok = d->conn->storeObjectSchemaData(
 		*temp->query(), true /*newObject*/ );
 	window()->setId( temp->query()->id() );
 
@@ -1148,14 +1148,13 @@ bool KexiQueryDesignerGuiEditor::storeLayout()
 	KexiQueryPart::TempData * temp = tempData();
 
 	// Save SQL without driver-escaped keywords.
-	KexiDB::Connection* dbConn = KexiMainWindowIface::global()->project()->dbConnection();
 	if (window()->schemaData()) //set this instance as obsolete (only if it's stored)
-		dbConn->setQuerySchemaObsolete( window()->schemaData()->name() );
+		d->conn->setQuerySchemaObsolete( window()->schemaData()->name() );
 
 	KexiDB::Connection::SelectStatementOptions options;
 	options.identifierEscaping = KexiDB::Driver::EscapeKexi|KexiDB::Driver::EscapeAsNecessary;
 	options.addVisibleLookupColumns = false;
-	QString sqlText = dbConn->selectStatement( *temp->query(), options );
+	QString sqlText = d->conn->selectStatement( *temp->query(), options );
 	if (!storeDataBlock( sqlText, "sql" )) {
 		return false;
 	}
