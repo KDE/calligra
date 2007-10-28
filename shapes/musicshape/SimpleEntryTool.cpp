@@ -334,7 +334,7 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
 
     // somehow check for selections
     if (m_selectionStart >= 0) {
-        for (int b = m_selectionStart; b <= m_selectionEnd && b < sheet->barCount(); b++) {
+        for (int b = qMax(m_musicshape->firstBar(), m_selectionStart); b <= m_selectionEnd && b < sheet->barCount() && b <= m_musicshape->lastBar(); b++) {
             Bar* bar = sheet->bar(b);
             for (int p = 0; p < sheet->partCount(); p++) {
                 Part* part = sheet->part(p);
@@ -346,8 +346,11 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
                     painter.setPen(Qt::NoPen);
                     painter.drawRect(QRectF(p1, p2));
                 }
-                m_musicshape->renderer()->renderPart(painter, part, m_selectionStart, m_selectionEnd, Qt::black);
             }
+        }
+        for (int p = 0; p < sheet->partCount(); p++) {
+            Part* part = sheet->part(p);
+            m_musicshape->renderer()->renderPart(painter, part, qMax(m_musicshape->firstBar(), m_selectionStart), qMin(m_musicshape->lastBar(), m_selectionEnd), Qt::black);
         }
     }
 
@@ -365,18 +368,36 @@ void SimpleEntryTool::paint( QPainter& painter, const KoViewConverter& viewConve
 
 void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 {
+    if(!m_musicshape->boundingRect().contains(event->point)) {
+        QRectF area(event->point, QSizeF(1,1));
+        foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
+            MusicShape *musicshape = dynamic_cast<MusicShape*>(shape);
+            if(musicshape) {
+                m_musicshape->update();
+                m_musicshape = musicshape;
+                m_musicshape->update();
+                break; // stop looking.
+            }
+        }
+    }
+    
     QPointF p = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
     Sheet *sheet = m_musicshape->sheet();
 
+    p.setY(p.y() + sheet->staffSystem(m_musicshape->firstSystem())->top());
+
+    kDebug() << "pos:" << p;
     // find closest staff system
     StaffSystem* system = 0;
-    for (int i = 0; i < sheet->staffSystemCount(); i++) {
+    for (int i = m_musicshape->firstSystem(); i <= m_musicshape->lastSystem() && i < sheet->staffSystemCount(); i++) {
         StaffSystem* ss = sheet->staffSystem(i);
+        kDebug() << "system" << i << "has top" << ss->top();
         if (ss->top() > p.y()) break;
         system = ss;
     }
 
     if(system == 0) {
+        kDebug() << "no staff system found";
         return;
     }
 
@@ -454,15 +475,31 @@ void SimpleEntryTool::mousePressEvent( KoPointerEvent* event )
 
 void SimpleEntryTool::mouseMoveEvent( KoPointerEvent* event )
 {
+    if(!m_musicshape->boundingRect().contains(event->point)) {
+        QRectF area(event->point, QSizeF(1,1));
+        foreach(KoShape *shape, m_canvas->shapeManager()->shapesAt(area, true)) {
+            MusicShape *musicshape = dynamic_cast<MusicShape*>(shape);
+            if(musicshape) {
+                if (musicshape->sheet() == m_musicshape->sheet() || !event->buttons()) {
+                    m_musicshape->update();
+                    m_musicshape = musicshape;
+                    m_musicshape->update();
+                    break; // stop looking.
+                }
+            }
+        }
+    }
+    
     m_point = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
     m_canvas->updateCanvas(QRectF(QPointF(event->point.x() - 100, event->point.y() - 100), QSizeF(200, 200)));
     if (event->buttons()) {
         QPointF p = m_musicshape->absoluteTransformation(0).inverted().map(event->point);
         Sheet *sheet = m_musicshape->sheet();
         
+        p.setY(p.y() + sheet->staffSystem(m_musicshape->firstSystem())->top());
         // find closest staff system
         StaffSystem* system = 0;
-        for (int i = 0; i < sheet->staffSystemCount(); i++) {
+        for (int i = m_musicshape->firstSystem(); i <= m_musicshape->lastSystem() && i < sheet->staffSystemCount(); i++) {
             StaffSystem* ss = sheet->staffSystem(i);
             if (ss->top() > p.y()) break;
             system = ss;
@@ -595,6 +632,7 @@ int SimpleEntryTool::voice()
 
 void SimpleEntryTool::setSelection(int firstBar, int lastBar)
 {
+    kDebug() << "firstBar:" << firstBar << "lastBar:" << lastBar;
     m_selectionStart = firstBar;
     m_selectionEnd = lastBar;
     m_musicshape->update();

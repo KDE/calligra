@@ -53,6 +53,8 @@ public:
     int firstSystem() const;
     void setFirstSystem(int system);
     int lastSystem() const;
+    int firstBar() const;
+    int lastBar() const;
     MusicRenderer* renderer();
     MusicStyle* style();
     void engrave(bool engraveBars=true);

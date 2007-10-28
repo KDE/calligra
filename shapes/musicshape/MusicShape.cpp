@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "MusicShape.h"
+#include <limits.h>
 #include <QPainter>
 #include <kdebug.h>
 #include <KoViewConverter.h>
@@ -37,6 +38,7 @@
 #include "core/TimeSignature.h"
 #include "core/MusicXmlWriter.h"
 #include "core/MusicXmlReader.h"
+#include "core/StaffSystem.h"
 
 #include "MusicStyle.h"
 #include "Engraver.h"
@@ -164,6 +166,20 @@ void MusicShape::setFirstSystem(int system)
 int MusicShape::lastSystem() const
 {
     return m_lastSystem;
+}
+
+int MusicShape::firstBar() const
+{
+    return m_sheet->staffSystem(m_firstSystem)->firstBar();    
+}
+
+int MusicShape::lastBar() const
+{
+    int lastBar = INT_MAX;
+    if (m_lastSystem < m_sheet->staffSystemCount()-1) {
+        lastBar = m_sheet->staffSystem(m_lastSystem+1)->firstBar()-1;
+    }
+    return lastBar;
 }
 
 MusicRenderer* MusicShape::renderer()
