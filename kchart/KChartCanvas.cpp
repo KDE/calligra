@@ -74,6 +74,8 @@ KChartCanvas::~KChartCanvas()
 void KChartCanvas::paintEvent( QPaintEvent *ev )
 {
     QPainter painter( this );
+    if (isAntialiased())
+        painter.setRenderHint(QPainter::Antialiasing);
     painter.translate( -m_documentOffset );
 
     QRect clipRect = ev->rect().translated( m_documentOffset );
@@ -123,6 +125,7 @@ const KoViewConverter *KChartCanvas::viewConverter() const
 
 KoUnit KChartCanvas::unit() const
 {
+    return KoUnit();
 }
 
 void KChartCanvas::updateInputMethodInfo()
