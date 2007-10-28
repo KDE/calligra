@@ -21,9 +21,6 @@
 #include "KarbonPatternEditStrategy.h"
 #include "KarbonPatternItem.h"
 
-#include <karbon_factory.h>
-#include <karbon_resourceserver.h>
-
 #include <KoResourceChooser.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
@@ -33,10 +30,16 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
 #include <KoPattern.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerRegistry.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kcomponentdata.h>
+#include <kstandarddirs.h>
 
 #include <QPainter>
 #include <QWidget>
@@ -221,10 +224,15 @@ QWidget * KarbonPatternTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QGridLayout* layout = new QGridLayout( optionWidget );
 
-    QList<KoPattern*> patterns = KarbonFactory::rServer()->patterns();
+    KoResourceServerBase* srv = KoResourceServerRegistry::instance()->value("PatternServer");
+    QList<KoResource*> patterns = srv->resources();
+
     QList<QTableWidgetItem*> items;
-    foreach( KoPattern* p, patterns )
-        items.append( static_cast<QTableWidgetItem*>( new KarbonPatternItem( p ) ) );
+    foreach( KoResource* resource, patterns ) {
+        KoPattern* pat = dynamic_cast<KoPattern*>(resource);
+        if(pat)
+            items.append( static_cast<QTableWidgetItem*>( new KarbonPatternItem( pat ) ) );
+    }
 
     m_patternChooser = new KoPatternChooser( items, optionWidget );
     //m_patternChooser->setFixedSize( 180, 120 );
@@ -289,8 +297,23 @@ void KarbonPatternTool::patternSelected( QTableWidgetItem* item )
 void KarbonPatternTool::importPattern()
 {
     QString filter( "*.jpg *.gif *.png *.tif *.xpm *.bmp" );
-    KoPattern* pattern = KarbonFactory::rServer()->addPattern(
-        KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Pattern to Add" ) ) );
+    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Pattern to Add" ) );
+
+    QFileInfo fi( filename );
+    if( fi.exists() == false )
+        return;
+
+    KoPattern* pattern = new KoPattern( filename );
+    pattern->load();
+    if( !pattern->valid())
+        return;
+
+    QString newFilename = KGlobal::mainComponent().dirs()->saveLocation("ko_patterns" ) + fi.baseName() + ".pat";
+    pattern->setFilename(newFilename);
+
+    KoResourceServerBase* srv = KoResourceServerRegistry::instance()->value("PatternServer");
+    srv->addResource(pattern);
+
     if( pattern )
         m_patternChooser->addPattern( new KarbonPatternItem( pattern ) );
 }
@@ -299,7 +322,7 @@ void KarbonPatternTool::deletePattern()
 {
     KoPattern * pattern = m_currentPattern->pattern();
     m_patternChooser->removePattern( m_currentPattern );
-    KarbonFactory::rServer()->removePattern( pattern );
+    KoResourceServerRegistry::instance()->value("PatternServer")->removeResource(pattern);
     m_currentPattern = static_cast<KarbonPatternItem*>( m_patternChooser->currentPattern() );
 }
 
