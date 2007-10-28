@@ -135,7 +135,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 
     // Initially, zoom is at 100%
     m_zoomController->setZoom( KoZoomMode::ZOOM_CONSTANT, 100 );
-    m_zoomHandler->setZoom( 100 );
+    m_zoomHandler->setZoom( 100.0 );
 
     //kDebug() << "----------------------------------------------------------------";
     //kDebug() << "Size is: " << m_zoomHandler->viewToDocument( size() );
