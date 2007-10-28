@@ -159,7 +159,7 @@ WidgetPropertySet::clearSet(bool dontSignalShowPropertySet)
 void
 WidgetPropertySet::saveModifiedProperties()
 {
-	QWidget * w = d->widgets.first();
+	QWidget * w = d->widgets.count() > 0 ? d->widgets.first() : 0;
 	if(!w || d->widgets.count() > 1 || !KFormDesigner::FormManager::self()->activeForm() || !KFormDesigner::FormManager::self()->activeForm()->objectTree())
 			return;
 	ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(w->objectName());
