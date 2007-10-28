@@ -62,6 +62,8 @@ KWCanvas::~KWCanvas()
 {
     delete m_shapeManager;
     m_shapeManager = 0;
+    delete m_viewMode;
+    m_viewMode = 0;
     m_toolProxy = 0;
 }
 

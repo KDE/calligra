@@ -121,6 +121,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
 }
 
 KWView::~KWView() {
+    delete m_zoomController;
 }
 
 KWCanvas *KWView::kwcanvas() const {

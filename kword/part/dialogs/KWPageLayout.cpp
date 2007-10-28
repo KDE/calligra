@@ -29,7 +29,7 @@ KWPageLayout::KWPageLayout(QWidget *parent, const KoPageLayout &layout)
 {
     widget.setupUi(this);
 
-    m_orientationGroup = new QButtonGroup();
+    m_orientationGroup = new QButtonGroup(this);
     m_orientationGroup->addButton(widget.portrait, KoPageFormat::Portrait);
     m_orientationGroup->addButton(widget.landscape, KoPageFormat::Landscape);
 
