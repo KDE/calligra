@@ -24,12 +24,12 @@
 #include <klocale.h>
 #include <KoApplication.h>
 
-#include "karbon_aboutdata.h"
+#include "karbon_factory.h"
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
 {
-	KCmdLineArgs::init( argc, argv, newKarbonAboutData() );
+	KCmdLineArgs::init( argc, argv, KarbonFactory::aboutData() );
 
 	KCmdLineOptions options;
 	options.add("+[file]", ki18n( "File to open" ));
