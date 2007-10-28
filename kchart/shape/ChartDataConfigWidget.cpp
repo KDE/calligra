@@ -66,7 +66,7 @@ ChartDataConfigWidget::ChartDataConfigWidget()
 
     d->ui.m_firstRowAsLabel->setChecked( true );
     d->ui.m_firstColumnAsLabel->setChecked( true );
-    d->ui.useExternalDataSource->setChecked( false );
+    d->ui.useExternalDatasource->setChecked( false );
     d->ui.areaLabel->hide();
     d->ui.area->hide();
 
@@ -80,7 +80,7 @@ ChartDataConfigWidget::ChartDataConfigWidget()
              this,                    SIGNAL( firstRowIsLabelChanged( bool ) ) );
     connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
              this,                       SIGNAL( firstColumnIsLabelChanged( bool ) ) );
-    connect( d->ui.useExternalDataSource, SIGNAL( toggled( bool ) ),
+    connect( d->ui.useExternalDatasource, SIGNAL( toggled( bool ) ),
              this,                        SLOT( setUseExternalDatasource( bool ) ) );
     connect( d->ui.editData, SIGNAL( clicked( bool ) ),
              this, SLOT( slotShowTableEditor( bool ) ) );
