@@ -47,6 +47,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 
 KPrView::~KPrView()
 {
+    delete m_presentationMode;
 }
 
 KoViewConverter * KPrView::viewConverter()
